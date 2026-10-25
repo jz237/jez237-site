@@ -67,6 +67,8 @@ jobs = [
  # The crowd gasping as a car rolls over or blows up (two takes, in turn).
  ('crowd-gasp', 'Gasping grandstand crowd at an outdoor demolition derby: a big shocked collective oooh as a car rolls over, rising and falling. Wordless crowd reaction only, no announcer, no music, no individual words or speech.', 2.5, False),
  ('crowd-gasp-2', 'Shocked outdoor stadium crowd: a sharp loud collective gasp and whoa as a car explodes in a demolition derby arena, then excited murmuring. Wordless crowd reaction only, no announcer, no music, no individual words or speech.', 2.5, False),
+ # The crowd booing a hard hit on a car that is already out.
+ ('crowd-boo', 'Booing grandstand crowd at an outdoor demolition derby: a loud disapproving collective boo rising and fading, some jeers. Wordless crowd reaction only, no announcer, no music, no individual words or speech.', 2.5, False),
 ]
 # Seconds cut from the start of a raw clip: metal-groan dips to silence early (it would drop out every loop) and
 # debris-2 opens with half a second of near silence (the layer would land late).

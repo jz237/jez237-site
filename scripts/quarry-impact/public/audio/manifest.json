@@ -1177,5 +1177,19 @@
     "sha256": "a4e70d87c3e9103ac34af4d2ef1e702e6b18d9ab483aa38ffdd8d48974d37ab7",
     "runtimeSha256": "2637ee669122370b902ab4f3bf1e9c1d3aa221a30c8d6c85b685d1c4aa4936f2",
     "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "crowd-boo",
+    "file": "crowd-boo.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Booing grandstand crowd at an outdoor demolition derby: a loud disapproving collective boo rising and fading, some jeers. Wordless crowd reaction only, no announcer, no music, no individual words or speech.",
+      "duration_seconds": 2.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "0fbae25d98f8255cc2124abd65c2bae7b4bd6d04a8304bd635fa70c1359095af",
+    "runtimeSha256": "fd19c795e1c9aca69f63f399a67e5adba2cd813805bb8f8a429b7037f5574ce0",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
   }
 ]

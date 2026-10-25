@@ -73,6 +73,9 @@ export const groanLevel=(pinTime:number)=>Number.isFinite(pinTime)&&pinTime>0?.5
 export const CROWD_CHEER={min:.5,gap:3.5,level:1} as const;
 /** The crowd gasps as a car rolls over or blows up: the recorded takes in turn, no more often than every gap seconds, at gain level. */
 export const CROWD_GASP={ids:['crowd-gasp','crowd-gasp-2'],gap:4,level:.85} as const;
+/** The crowd boos a real hit (closing at closing m/s or more) on a car that is already out (bad form at a derby), no more often than
+ * every gap seconds, at gain level. */
+export const CROWD_BOO={id:'crowd-boo',gap:8,level:.8,closing:4} as const;
 export class Sound {
   private acousticProbe=new TrackAcousticProbe();
   private reflections?:TrackReflections;
@@ -181,6 +184,7 @@ export class Sound {
   /** Crowd reaction to a big moment (0..1); silent until audio is unlocked, and when muted or paused. */
   private cheerAt=-10;
   private gaspAt=-10;private gaspTake=0;
+  private booAt=-10;
   crowd(intensity:number){
     if(!this.ready||this.muted||this.paused||!this.ctx||!this.ambientBus||this.ctx.state!=='running')return false;
     const cheer=this.buffers.get('crowd-cheer'),now=this.ctx.currentTime;
@@ -207,6 +211,12 @@ export class Sound {
     const ids=CROWD_GASP.ids.filter(id=>this.buffers.has(id)),now=this.ctx.currentTime;if(!ids.length||now-this.gaspAt<CROWD_GASP.gap)return false;this.gaspAt=now;
     const source=this.ctx.createBufferSource(),gain=this.ctx.createGain();source.buffer=this.buffers.get(ids[this.gaspTake++%ids.length])!;source.playbackRate.value=.96+Math.random()*.08;
     gain.gain.value=CROWD_GASP.level;source.connect(gain).connect(this.ambientBus);source.start();return true;
+  }
+  crowdBoo(){
+    if(!this.ready||this.muted||this.paused||!this.ctx||!this.ambientBus||this.ctx.state!=='running'||!this.buffers.has(CROWD_BOO.id))return false;
+    const now=this.ctx.currentTime;if(now-this.booAt<CROWD_BOO.gap)return false;this.booAt=now;
+    const source=this.ctx.createBufferSource(),gain=this.ctx.createGain();source.buffer=this.buffers.get(CROWD_BOO.id)!;source.playbackRate.value=.96+Math.random()*.08;
+    gain.gain.value=CROWD_BOO.level;source.connect(gain).connect(this.ambientBus);source.start();return true;
   }
   /** A soft looping rain hiss on the ambience bus while it rains. */
   rain(on:boolean){

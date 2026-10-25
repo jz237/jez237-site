@@ -105,6 +105,7 @@ import {swayDriver} from './driver-sway';
 import {duckDriver} from './driver-sway';
 import {rollCage,bendCage} from './roll-cage';
 import {lookYaw,turnHead} from './driver-look';
+import {CROWD_BOO} from './audio';
 import {LITTER,SHRED_TRAIL} from './crash-litter';
 import {derbyFlag,waveFlag,FLAG_COLOURS} from './derby-flag';
 import {CRUNCH,crunchVolume} from './litter-crunch';
@@ -1979,6 +1980,7 @@ function step(dt: number) {
       if(b){b.inflicted+=before-a.health;const wreck=eventAwards.hit(b.id,a.id,before-a.health,before>0&&a.health<=0,elapsed,closing);if(wreck)wreckedBy.set(a.id,b.id);if(wreck&&!online?.active&&closing>=WRECK_BURST.closing)a.wreckBurst(a.current.clone().sub(b.current));if(wreck)sound.crowd(b.id===0?1:.7);if(wreck&&b.id===0&&!demo&&!online?.active){slowMoUntil=clock+TAKEDOWN_SLOWMO.seconds;slowMoScale=TAKEDOWN_SLOWMO.scale;crowdFlashes(TAKEDOWN_FLASHES);}else if(before-a.health>=12)sound.crowd(b.id===0?.6:.4);if(wreck&&b.id===0){callout('TAKEDOWN',a);playerTakedown();}else if(b.id===0&&before-a.health>=12)callout('BIG HIT',a);combat.hit(b.id,a.id,before,a.health,elapsed);if(mode==='derby')combat.contact(scoreMotion[b.id],scoreMotion[a.id],before-a.health,elapsed);}
       if(b?.id===0)telemetry?.impact(a.id,before,a.health);
       smashLoss.a=before-a.health;
+      if(b?.id===0&&before<=0)hitTheWreck(closing);
     }
     if(b){
       const before=b.health;
@@ -1986,6 +1988,7 @@ function step(dt: number) {
       if(a){a.inflicted+=before-b.health;const wreck=eventAwards.hit(a.id,b.id,before-b.health,before>0&&b.health<=0,elapsed,closing);if(wreck)wreckedBy.set(b.id,a.id);if(wreck&&!online?.active&&closing>=WRECK_BURST.closing)b.wreckBurst(b.current.clone().sub(a.current));if(wreck)sound.crowd(a.id===0?1:.7);if(wreck&&a.id===0&&!demo&&!online?.active){slowMoUntil=clock+TAKEDOWN_SLOWMO.seconds;slowMoScale=TAKEDOWN_SLOWMO.scale;crowdFlashes(TAKEDOWN_FLASHES);}else if(before-b.health>=12)sound.crowd(a.id===0?.6:.4);if(wreck&&a.id===0){callout('TAKEDOWN',b);playerTakedown();}else if(a.id===0&&before-b.health>=12)callout('BIG HIT',b);combat.hit(a.id,b.id,before,b.health,elapsed);if(mode==='derby')combat.contact(scoreMotion[a.id],scoreMotion[b.id],before-b.health,elapsed);}
       if(a?.id===0)telemetry?.impact(b.id,before,b.health);
       smashLoss.b=before-b.health;
+      if(a?.id===0&&before<=0)hitTheWreck(closing);
     }
     // Engine out: the block dropped out of a car in this crash (offline).
     if(!online?.active)for(const [car,was] of [[a,engineInA],[b,engineInB]] as const)if(car&&was&&car.engineOut)eventAwards.failure(car.id,'ENGINE OUT',elapsed,34);
@@ -2158,7 +2161,9 @@ let hornHeats=0,endHorns=0;
 const bailClock=new WeakMap<object,number>(),bailed:T.Object3D[]=[];
 const BAIL_CHEER=.75;
 const shredClock=new WeakMap<object,number>();let shredChunks=0;
-const gaspSeen=new WeakMap<object,{rolls:number;blown:boolean}>();let gasps=0;
+const gaspSeen=new WeakMap<object,{rolls:number;blown:boolean}>();let gasps=0,boos=0;
+/** The player rammed a car that was already out: bad form at a derby, and the crowd lets them know (offline, a real hit). */
+function hitTheWreck(closing:number){if(online?.active||demo||closing<CROWD_BOO.closing)return;if(sound.crowdBoo()){boos++;toast('THE CROWD BOOS · THAT CAR WAS OUT',1.4);}}
 const smokeIn=new WeakMap<object,number>();
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
 function lookDriver(c:Vehicle,figure:T.Object3D,dt:number){
@@ -2750,6 +2755,7 @@ async function boot() {
     squealing: () => sound.squealing,
     creaking: () => sound.creaking,
     gasps: () => gasps,
+    boos: () => boos,
     /** QA: puncture a tyre as rolling over sharp debris does (it starts going down). */
     puncture: (id: number, wheel: number) => { const c = cars.find(x => x.id === id); if (!c?.tyreDamage || !(wheel >= 0 && wheel < 4)) return false; c.tyreDamage[wheel] = Math.max(c.tyreDamage[wheel], TYRE_LEAK_RANGE.onset + .05); return true; },
     cabinSmoke: (id: number) => { const c = cars.find(x => x.id === id); return c ? smokeIn.get(c) ?? 0 : null; },
