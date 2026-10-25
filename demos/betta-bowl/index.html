@@ -3,15 +3,48 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="data:," />
+    <!-- The betta's textures come from here (betta-atelier/src/fish.js, anonymous CORS): connect at once. -->
+    <link rel="preconnect" href="https://media.jez237.com" crossorigin />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Betta Bowl · Living Silk — Jez237</title>
     <meta name="description" content="A betta lives in a glass bowl simulated live on the GPU: feed it through its lid, tilt the water through its fins and watch it explore, rest, flare and gulp air at the surface. Built on Will Waltz’s WebGPU Globes." />
     <style>html,body{background:#020309;height:100%;margin:0;overflow:hidden}.globes-error{color:#c8d0ff;text-align:center;place-items:center;padding:24px;font:15px/1.5 system-ui,sans-serif;display:grid;position:fixed;inset:0}.site-links{z-index:100;left:max(12px, env(safe-area-inset-left));right:max(12px, env(safe-area-inset-right));bottom:max(10px, env(safe-area-inset-bottom));pointer-events:none;justify-content:space-between;gap:10px;font:12px/1.4 system-ui,sans-serif;display:flex;position:fixed}.site-links a{pointer-events:auto;color:#d9efff;touch-action:manipulation;background:#03111dcc;border:1px solid #8edcff33;border-radius:20px;padding:8px 10px;text-decoration:none}.site-links a:hover,.site-links a:focus-visible{color:#fff;outline:2px solid #8edcff}</style>
-    <script type="module" crossorigin src="./assets/betta-BnVksoJh.js"></script>
+    <script>
+      // The bowl's furnishings take longer to make than anything else the page waits for, so their
+      // worker (src/render/scape/scapeWorker.mjs) starts now, as the page is read, not once the
+      // app's script has loaded and run: render/scape/furnishings.ts takes over what it makes. It is
+      // asked what main.ts asks (FluidSim's BED_SOLIDS_N, the glass's inner radius, BED_SOLIDS_NONE,
+      // and the detail main.ts's LITE test picks), which furnishings.ts checks. (A build names the
+      // worker's file below, vite.config.ts; in development main.ts starts it.)
+      (() => {
+        const url = './assets/scapeWorker-C8s4QPKO.js';
+        if (!url.endsWith('.js')) return;
+        const tier = new URLSearchParams(location.search).get('lite');
+        const lite = tier === '1' ? true : tier === '0' ? false : matchMedia('(pointer: coarse)').matches && Math.min(screen.width, screen.height) < 1000;
+        const ask = { n: 256, extent: 0.99125, none: -1.2, detail: lite ? 0.5 : 1 };
+        const worker = new Worker(url, { type: 'module' });
+        const built = new Promise((resolve, reject) => {
+          worker.onmessage = (e) => {
+            worker.terminate();
+            resolve(e.data);
+          };
+          worker.onerror = (e) => {
+            worker.terminate();
+            reject(new Error(e.message || 'the furnishings worker failed'));
+          };
+        });
+        // (A failure is reported once furnishings.ts takes it over.)
+        built.catch(() => {});
+        worker.postMessage(ask);
+        window.globesFurnishing = { worker, ask, built };
+      })();
+    </script>
+    <script type="module" crossorigin src="./assets/betta-iWaHpxXC.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/betta-oNXAo348.css">
   </head>
   <body>
-    <div id="app"><div id="stage"></div></div>
+    <!-- (The splash, here so it shows as soon as the page does: app/ui.ts takes it over.) -->
+    <div id="app"><div id="stage"><div class="splash"><svg class="splash-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.25"/><path d="M3.6 13.4c2.1-1.15 3.9-1.15 6 0s3.9 1.15 6 0 3.6-1.05 4.8-.6"/></svg><span class="splash-bar"></span></div></div></div>
     <nav class="site-links" aria-label="Demo links"><a href="../page-3.html">← Demonstrations</a></nav>
   </body>
 </html>
