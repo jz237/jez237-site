@@ -1,7 +1,10 @@
 // The meniscus as the globe's renderer adds it (globes_meniscus: shaders.ts reads the water's
 // density through it). Its constants go to the kernels that find, for the ray tracing hardware,
 // where the renderer's march may meet the water (FluidSim: rt_regions.wgsl), which must look as
-// far down as the renderer reads near the glass.
+// far down as the renderer reads near the glass. Those kernels and the phone bowl's march band
+// (marchBand.ts) take the lift to lie between 0 and two capillary lengths, and to be nothing at
+// all more than six from the glass: a change to either bound must go to them too
+// (march-band.test.mjs holds globes_meniscus to both).
 
 import type { GlobeConfig } from '../config';
 

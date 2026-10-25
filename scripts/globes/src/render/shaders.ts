@@ -2160,7 +2160,9 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
       let q = p + dir * t;
 ${bowl?.lite ? `      // (The phone's bowl: where a sample could find nothing, it is not read, nor are those after
       // it that could not either: the march steps on past them at once, marchBand.ts. tSafe: how
-      // far along the ray that holds; out in the water, to where the ray leaves the open water.)
+      // far along the ray that holds; out in the water, to where the ray leaves the open water.
+      // The band takes the steps there to be whole ones, as the step rule below makes them from
+      // two steps over the sand on: march-band.test.mjs holds that rule to it.)
       if (!last) {
         var tSafe = -1.0;
         if (inWater) {

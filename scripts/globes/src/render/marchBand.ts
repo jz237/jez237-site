@@ -13,6 +13,10 @@
 // - w: the open water's reach from the middle, squared (in from the glass).
 // (Near the glass and the bed, where the density dips, every sample is read as before, and the
 // march decides there whether a dip is the water's edge: globes_boundarySliver.)
+// It holds only while the march reads and steps as this takes it to (march-band.test.mjs checks
+// that): the density from its red channel, read from lower down by the meniscus' lift
+// (meniscus.ts: between 0 and two capillary lengths, and none more than six from the glass); and
+// a whole step from two steps over the sand on (shaders.ts, the march's step).
 
 import type { FluidSim } from '../sim/FluidSim';
 
@@ -122,10 +126,11 @@ fn bandFinish() {
   // (A read blends the two layers round it: from a voxel over the top layer's, none of them is
   // wet; and from a voxel under the dry one's, all are. A voxel more for the filter's rounding;
   // the lift for the meniscus, which reads from lower down; and over the bed, a voxel more for
-  // the open water's reads, which must blend only voxels the columns looked at.)
+  // the open water's reads, which must blend only voxels the columns looked at. Both are at
+  // least two steps over the bed, so that the march's steps there are whole ones.)
   let air = select(ORIGIN.y + (f32(top) + 2.5) * VOXEL + LIFT, -1e9, top < 0);
   let water = select(ORIGIN.y + (f32(dry) - 1.5) * VOXEL, 1e9, dry >= N);
-  textureStore(band, vec2i(0), vec4f(max(air, bed + 2.0 * STEP), water, bedOpen + CLEAR + 2.0 * VOXEL, OPEN * OPEN));
+  textureStore(band, vec2i(0), vec4f(max(air, bed + 2.0 * STEP), water, max(bedOpen + CLEAR + 2.0 * VOXEL, bedOpen + 2.0 * STEP), OPEN * OPEN));
   atomicStore(&found[0], -1);
   atomicStore(&found[1], N);
   atomicStore(&found[2], i32(-1e9));
