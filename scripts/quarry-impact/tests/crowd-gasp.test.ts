@@ -18,3 +18,8 @@ test('the crowd boos the player for a real hit on a car that is already out (bad
  assert.ok(main.includes("      if(b?.id===0&&before<=0)hitTheWreck(closing);")&&main.includes("      if(a?.id===0&&before<=0)hitTheWreck(closing);"),'either side of a contact: the player hitting a car whose health was already gone');
  assert.ok(main.includes("function hitTheWreck(closing:number){if(online?.active||demo||closing<CROWD_BOO.closing)return;if(sound.crowdBoo()){boos++;toast('THE CROWD BOOS · THAT CAR WAS OUT',1.4);}}"));
 });
+test('the player can sound their horn with H: a short honk of the recorded horn, once per press, only while playing',()=>{
+ const main=read('src/main.ts').toString();
+ assert.ok(main.includes("if(e.code==='KeyH'&&!demo&&state==='playing'&&!e.repeat&&cars[0]){if(sound.clip('horn-stuck',cars[0].current,HONK.volume,HONK.length))honks++;}"),'a press, not a held repeat; not in demos (where H hides the HUD)');
+ assert.ok(main.includes("const HONK={length:.45,volume:.7} as const;"));
+});

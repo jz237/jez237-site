@@ -2161,7 +2161,9 @@ let hornHeats=0,endHorns=0;
 const bailClock=new WeakMap<object,number>(),bailed:T.Object3D[]=[];
 const BAIL_CHEER=.75;
 const shredClock=new WeakMap<object,number>();let shredChunks=0;
-const gaspSeen=new WeakMap<object,{rolls:number;blown:boolean}>();let gasps=0,boos=0;
+const gaspSeen=new WeakMap<object,{rolls:number;blown:boolean}>();let gasps=0,boos=0,honks=0;
+/** The player's horn on H: a honk of length seconds at volume. */
+const HONK={length:.45,volume:.7} as const;
 /** The player rammed a car that was already out: bad form at a derby, and the crowd lets them know (offline, a real hit). */
 function hitTheWreck(closing:number){if(online?.active||demo||closing<CROWD_BOO.closing)return;if(sound.crowdBoo()){boos++;toast('THE CROWD BOOS · THAT CAR WAS OUT',1.4);}}
 const smokeIn=new WeakMap<object,number>();
@@ -2531,6 +2533,8 @@ addEventListener('keydown', (e) => {
   if(demo&&e.code==='KeyH'){demoHudHidden=!demoHudHidden;ui.classList.toggle('demo-clean',demoHudHidden);return;}
   if (demo&&e.code==='Space'){e.preventDefault();state==='paused'?resume():pause();return;}
   if((demo||scoreSpectating())&&(e.code==='BracketLeft'||e.code==='BracketRight'))director.cycleCar(cars,e.code==='BracketLeft'?-1:1);
+  // H sounds the player's horn: a short honk of the recorded horn (a press, not a held repeat).
+  if(e.code==='KeyH'&&!demo&&state==='playing'&&!e.repeat&&cars[0]){if(sound.clip('horn-stuck',cars[0].current,HONK.volume,HONK.length))honks++;}
   if (e.code === 'KeyC') {if(demo)director.cycleView();else cycleDrivingCamera();}
   if (!demo && e.code === 'KeyR' && state === 'playing') recover();
   if(!demo&&e.code===EXTINGUISHER.key&&state==='playing'&&!Object.values(drivingControls.keys).some(binding=>binding.includes(e.code))){const p=cars[0];
@@ -2756,6 +2760,7 @@ async function boot() {
     creaking: () => sound.creaking,
     gasps: () => gasps,
     boos: () => boos,
+    honks: () => honks,
     /** QA: puncture a tyre as rolling over sharp debris does (it starts going down). */
     puncture: (id: number, wheel: number) => { const c = cars.find(x => x.id === id); if (!c?.tyreDamage || !(wheel >= 0 && wheel < 4)) return false; c.tyreDamage[wheel] = Math.max(c.tyreDamage[wheel], TYRE_LEAK_RANGE.onset + .05); return true; },
     cabinSmoke: (id: number) => { const c = cars.find(x => x.id === id); return c ? smokeIn.get(c) ?? 0 : null; },
