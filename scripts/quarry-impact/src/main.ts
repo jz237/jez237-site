@@ -2522,7 +2522,7 @@ function frame(now: number) {
   if(studio&&!studio.seeking){replaySlicks?.update(studio.time);replayFire?.fire.setGround(replaySlicks?[...replaySlicks.slicks.fires(),...replaySlicks.props.fires(studio.time,propPoints(replayPropMeshes.map(mesh=>({mesh}))))]:[],studio.time);replayFire?.update(studio.time,camera);replayPuddles?.update(studio.time);}
   if(!studio)for(const car of cars){car.wreckParts.pose(['playing','countdown'].includes(state)?dt:0,car.speed);car.wreckParts.wheelsPose();car.syncSuspension();}
   const effectsActive=['playing','countdown','wrecked'].includes(state)||(demo&&state==='result');
-  if(studio){sound.damageLoops([],camera.position);sound.stuckHorns([],camera.position);sound.bearingGrowls([],camera.position);sound.beltSqueals([],camera.position);sound.cabinWind(0,camera.position,0);sound.cabinRain(0,camera.position);}
+  if(studio){sound.damageLoops([],camera.position);sound.stuckHorns([],camera.position);sound.bearingGrowls([],camera.position);sound.beltSqueals([],camera.position);sound.cabinWind(0,camera.position,0);sound.cabinRain(0,camera.position);sound.cabin(false,0);}
   if(studio)sound.runningLoops([],camera.position);
   if(!studio&&vehicleFire){
     const props=propPoints(activeVenue.props);if(effectsActive&&!online?.active)for(const b of propFires.update(fx.slicks.clock,props,fx.slicks))drumBlast(new T.Vector3(b.p.x,b.p.y,b.p.z),b.index);
@@ -2542,7 +2542,9 @@ function frame(now: number) {
     sound.groundFire(effectsActive?nearest:null);
     sound.damageLoops(effectsActive&&!online?.active?cars:[],camera.position);sound.stuckHorns(effectsActive&&!online?.active?cars:[],camera.position);sound.bearingGrowls(effectsActive&&!online?.active?cars:[],camera.position);sound.beltSqueals(effectsActive&&!online?.active?cars:[],camera.position);{const p=cars[0];sound.cabinWind(p&&effectsActive&&!online?.active&&!demo&&p.extendedDamage?windRoar(p.openness,p.speed):0,p?.current??camera.position,p?.speed??0);
     // Rain drums on the roof heard from an in-car camera (an open cabin loses most of it).
-    sound.cabinRain(p&&effectsActive&&!online?.active&&!demo&&eventLighting==='rain'&&drivingCamera!=='chase'?1-ROOF_RAIN.open*Math.min(1,p.openness):0,p?.current??camera.position);}
+    sound.cabinRain(p&&effectsActive&&!online?.active&&!demo&&eventLighting==='rain'&&drivingCamera!=='chase'?1-ROOF_RAIN.open*Math.min(1,p.openness):0,p?.current??camera.position);
+    // and the world outside sounds muffled through the body from an in-car camera.
+    sound.cabin(!!p&&effectsActive&&!online?.active&&!demo&&drivingCamera!=='chase',p?.openness??0);}
     sound.runningLoops(effectsActive&&!online?.active?cars:[],camera.position);
   }
   // In the rain (offline) every wheel on the wet road throws a fine spray too.
@@ -2845,6 +2847,7 @@ async function boot() {
     swishing: () => sound.swishing,
     rainSound: () => sound.rainOn,
     drumming: () => sound.drumming,
+    cabinHz: () => sound.cabinHz,
     shake: (id = 0) => {const c = cars[id]; if (!c) return null; const w = c.wheels[0]; return {...c.engineShake.out, kicks: c.engineShake.kicks, wheel: w ? [w.position.x, w.position.z, w.parent === c.model] : null};},
     gasps: () => gasps,
     boos: () => boos,

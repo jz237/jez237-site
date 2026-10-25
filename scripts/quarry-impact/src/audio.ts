@@ -67,6 +67,11 @@ export const WET_TYRES={from:2,full:22,level:.22,squeal:.25,rate:[.8,1.25]} as c
 /** Rain drumming on the roof and glass, heard from an in-car camera in the rain (offline), at gain level; an open cabin
  * (roof torn away) loses up to ROOF_RAIN.open of it. Recorded only. */
 export const ROOF_RAIN={level:.35,open:.75} as const;
+/** Cabin acoustics: heard from an in-car camera (offline), the world outside — the ambience: crowd, rain, horns, thunder —
+ * comes through the body muffled to CABIN.closed Hz, opening back up toward CABIN.open as the cabin is torn open. */
+export const CABIN={closed:1800,open:20000} as const;
+/** The ambience low-pass for a camera inside (or not) a cabin this open (0–1). */
+export const cabinCutoff=(inside:boolean,openness:number)=>{const o=Math.max(0,Math.min(1,Number.isFinite(openness)?openness:0));return inside?CABIN.closed*Math.pow(CABIN.open/CABIN.closed,o):CABIN.open;};
 /** A badly bent body creaks as it is loaded through a turn (offline): structure damaged past bent on its worst face, cornering past
  * pull m/s² (yaw rate × speed), full at full m/s², the recorded metal groan pitched up by rate, at gain level. */
 export const BODY_CREAK={bent:.4,pull:3,full:9,rate:1.35,level:.13} as const;
@@ -90,6 +95,9 @@ export class Sound {
   ctx?: AudioContext;
   master?: GainNode;
   private dazeFilter?: BiquadFilterNode;
+  /** The cabin's muffling of the ambience (cabin()). */
+  private cabinFilter?: BiquadFilterNode;
+  private cabinCut:number=CABIN.open;
   private dazeLevel = 0;
   engineBus?: GainNode;
   fxBus?: GainNode;
@@ -163,8 +171,11 @@ export class Sound {
     this.engineBus = c.createGain();
     this.fxBus = c.createGain();
     this.ambientBus = c.createGain();
-    for (const b of [this.engineBus, this.fxBus, this.ambientBus])
+    for (const b of [this.engineBus, this.fxBus])
       b.connect(this.master);
+    // The ambience reaches the mix through the cabin's low-pass (wide open unless the camera is inside a car).
+    this.cabinFilter=c.createBiquadFilter();this.cabinFilter.type='lowpass';this.cabinFilter.frequency.value=CABIN.open;this.cabinFilter.Q.value=.4;
+    this.ambientBus.connect(this.cabinFilter).connect(this.master);
     this.setLevels();
     }
     // Browser activation may leave resume pending indefinitely. Asset readiness
@@ -453,6 +464,13 @@ export class Sound {
     l.pan.positionX.value=p.x;l.pan.positionY.value=p.y+1;l.pan.positionZ.value=p.z;
     l.source.playbackRate.setTargetAtTime(.7+Math.min(.8,Math.abs(speed)/40),now,.2);l.gain.gain.setTargetAtTime(.45*level,now,.2);
   }
+  /** Muffle the ambience for a camera inside a car (cabinCutoff). */
+  cabin(inside:boolean,openness:number){
+    const f=cabinCutoff(inside,openness);if(!this.ctx||!this.cabinFilter||Math.abs(f-this.cabinCut)<1)return;
+    this.cabinCut=f;this.cabinFilter.frequency.setTargetAtTime(f,this.ctx.currentTime,.12);
+  }
+  /** The cabin low-pass now (QA). */
+  get cabinHz(){return this.cabinCut;}
   /** Rain drumming on the roof of the car the camera is in (level 0 = silent). */
   private roofRain?:Loop;
   /** The roof rain is playing (QA). */
@@ -460,7 +478,7 @@ export class Sound {
   cabinRain(level:number,p:T.Vector3){
     if(!this.ready||!this.ambientBus||!this.buffers.has('roof-rain'))return;const now=this.ctx!.currentTime;
     if(!(level>.01)){if(this.roofRain){this.roofRain.gain.gain.setTargetAtTime(0,now,.3);this.roofRain.source.stop(now+1.2);this.roofRain=undefined;}return;}
-    this.roofRain??=this.loop('roof-rain',this.ambientBus);const l=this.roofRain;if(!l)return;
+    this.roofRain??=this.loop('roof-rain',this.fxBus!);const l=this.roofRain;if(!l)return;
     l.pan.positionX.value=p.x;l.pan.positionY.value=p.y+1;l.pan.positionZ.value=p.z;l.gain.gain.setTargetAtTime(ROOF_RAIN.level*Math.min(1,level),now,.25);
   }
   /** Growling wheel bearings, by car id (offline, within earshot): the worst bearing on each car, pitched up with speed. */
