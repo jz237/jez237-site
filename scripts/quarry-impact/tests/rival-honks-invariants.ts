@@ -1,3 +1,4 @@
+import {restoreEngineShakeBytes} from './engine-shake-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readRivalHonksPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreRivalHonksBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreEngineShakeBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readRivalHonksPrevious(file);
 }
 export function verifyRivalHonksRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'bde6e85d0c9dc17287bde29dd9ab6a4147c959ae');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreEngineShakeBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreRivalHonksBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the RivalHonks release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreEngineShakeBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the RivalHonks release');
  assert.equal(manifest.previousFixtureCount,7886);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,7886);
 }

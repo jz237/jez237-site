@@ -2764,6 +2764,7 @@ async function boot() {
     leaking: () => sound.leaking,
     squealing: () => sound.squealing,
     creaking: () => sound.creaking,
+    shake: (id = 0) => {const c = cars[id]; if (!c) return null; const w = c.wheels[0]; return {...c.engineShake.out, kicks: c.engineShake.kicks, wheel: w ? [w.position.x, w.position.z, w.parent === c.model] : null};},
     gasps: () => gasps,
     boos: () => boos,
     honks: () => honks,

@@ -107,6 +107,7 @@ export const HUBCAP_POP=.3;
 const HUBCAP=/brushed chrome|wheel trim|hub ?cap|centre ?cap|domed ?cap/i;
 import {VehicleSurface} from './vehicle-surface';
 import { normalizeSetup, setupPhysics, stockSetup, type Setup } from './garage';
+import {EngineShake,NO_SHAKE,plantedWheelY} from './engine-shake';
 export type VehicleGround = {height:(x:number,z:number)=>number;surface:(x:number,z:number)=>DrivingSurface};
 export type Input = {
   throttle: number;
@@ -286,6 +287,9 @@ export class Vehicle {
   private discSmokeClock = 0;
   /** Broken engine mounts (offline events): the lagging throttle the drive gets, the last pedal, jolts so far (QA). */
   mountsBroken = false;
+  /** The running engine shaking the body on its mounts (render only, offline), and the model's resting height. */
+  readonly engineShake = new EngineShake();
+  private modelY = 0;
   private shunt = 0;
   private lastPedal = 0;
   private lastJolt = -1;
@@ -568,6 +572,7 @@ export class Vehicle {
     this.model = cloneCar(kind, color, this.setup.armor);
     this.paintColor=new T.Color(color);
     this.root.add(this.model);
+    this.modelY=this.model.position.y;
     scene.add(this.root);
     const physical=createVehiclePhysics(R,world,kind,def.mass,this.setup.armor);
     this.structure=physical.structure;this.body=physical.body;this.collider=physical.collider;this.roof=physical.roof;this.controller=physical.controller;
@@ -631,7 +636,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchStrain=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.steerLink.fill(1);this.linkClock=0;this.popUntil=0;this.popSlot=-1;this.gearPops=0;this.inNeutral=false;this.brakeDrag.fill(0);this.discHeat.fill(0);this.discSmokeClock=0;this.mountsBroken=false;this.shunt=0;this.lastPedal=0;this.lastJolt=-1;this.mountJolts=0;this.rawInput=null;this.ownInput=null;this.cargoLeft=-1;this.cargoClock=0;this.cargoSpilled=0;this.sumpCrack=0;this.brakeFire.fill(0);this.tyreAlight.fill(0);this.rubberDrop=0;this.brakeFires=0;this.exhaustDragTime=0;this.exhaustGone=false;this.tankDown=this.tankGone=false;this.tankDragTime=0;this.disposeTank();this.throttleCable=this.handbrakeCable=false;this.shedClock=SHED.every;this.rollBar.fill(1);this.beltSlip=this.squeal=0;this.beltSnapped=false;this.battery=1;this.hotTime=0;this.engineFires=0;this.hotFired=false;this.bigHits=0;this.smashFires=0;this.bearingWear.fill(0);this.hubDrag.fill(0);this.propBend=this.propWear=this.propVibration=this.propFlail=0;this.propSnapped=false;this.starterDamage=0;this.crankAttempt=0;this.starterFails=0;this.stallTime=this.bumpRolled=this.bumpStarts=0;this.batteryOut=false;this.rodStress=0;this.rodThrown=false;this.rubHeat.fill(0);this.rubFires=0;this.extinguishers=EXTINGUISHER.charges;this.extinguished=0;this.extinguishRequest=false;this.onFire=false;this.burnTime=0;this.fireSpreads=0;this.wreckBursts=0;this.wheelsRipped=0;this.wheelBlow.fill(0);this.wheelBlowAt.fill(-1e9);this.wheelBlowRolled.fill(0);this.zoneBlow.fill(0);this.zoneBlowAt.fill(-1e9);this.blownUp=false;this.exhaustCrushed=false;this.crushPuff=0;this.underWeight=0;this.frameBend=0;this.deadTime=0;this.dazed=0;this.dazeSteer=0;this.glassPops=0;this.platesLost=0;this.debrisRolls=0;this.debrisPunctures=0;this.radiatorBursts=0;this.punctureClock.fill(0);for(const g of this.discGlows)if(g)g.visible=false;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.rearSlide=0;this.pitSpins=0;this.wingsTorn=0;this.wingGone.fill(false);this.engineOut=false;this.roofSlideTime=0;this.sideSlideTime=0;this.roofSparkClock=0;this.rollShed=0;this.rollShedDone=false;this.rolls=0;this.rollPops=this.popRolls=0;this.pinTime=this.pinTick=this.pins=this.tetherRolls=0;this.spareWheels=0;this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.engineShake.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchStrain=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.steerLink.fill(1);this.linkClock=0;this.popUntil=0;this.popSlot=-1;this.gearPops=0;this.inNeutral=false;this.brakeDrag.fill(0);this.discHeat.fill(0);this.discSmokeClock=0;this.mountsBroken=false;this.shunt=0;this.lastPedal=0;this.lastJolt=-1;this.mountJolts=0;this.rawInput=null;this.ownInput=null;this.cargoLeft=-1;this.cargoClock=0;this.cargoSpilled=0;this.sumpCrack=0;this.brakeFire.fill(0);this.tyreAlight.fill(0);this.rubberDrop=0;this.brakeFires=0;this.exhaustDragTime=0;this.exhaustGone=false;this.tankDown=this.tankGone=false;this.tankDragTime=0;this.disposeTank();this.throttleCable=this.handbrakeCable=false;this.shedClock=SHED.every;this.rollBar.fill(1);this.beltSlip=this.squeal=0;this.beltSnapped=false;this.battery=1;this.hotTime=0;this.engineFires=0;this.hotFired=false;this.bigHits=0;this.smashFires=0;this.bearingWear.fill(0);this.hubDrag.fill(0);this.propBend=this.propWear=this.propVibration=this.propFlail=0;this.propSnapped=false;this.starterDamage=0;this.crankAttempt=0;this.starterFails=0;this.stallTime=this.bumpRolled=this.bumpStarts=0;this.batteryOut=false;this.rodStress=0;this.rodThrown=false;this.rubHeat.fill(0);this.rubFires=0;this.extinguishers=EXTINGUISHER.charges;this.extinguished=0;this.extinguishRequest=false;this.onFire=false;this.burnTime=0;this.fireSpreads=0;this.wreckBursts=0;this.wheelsRipped=0;this.wheelBlow.fill(0);this.wheelBlowAt.fill(-1e9);this.wheelBlowRolled.fill(0);this.zoneBlow.fill(0);this.zoneBlowAt.fill(-1e9);this.blownUp=false;this.exhaustCrushed=false;this.crushPuff=0;this.underWeight=0;this.frameBend=0;this.deadTime=0;this.dazed=0;this.dazeSteer=0;this.glassPops=0;this.platesLost=0;this.debrisRolls=0;this.debrisPunctures=0;this.radiatorBursts=0;this.punctureClock.fill(0);for(const g of this.discGlows)if(g)g.visible=false;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.rearSlide=0;this.pitSpins=0;this.wingsTorn=0;this.wingGone.fill(false);this.engineOut=false;this.roofSlideTime=0;this.sideSlideTime=0;this.roofSparkClock=0;this.rollShed=0;this.rollShedDone=false;this.rolls=0;this.rollPops=this.popRolls=0;this.pinTime=this.pinTick=this.pins=this.tetherRolls=0;this.spareWheels=0;this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -1049,6 +1054,7 @@ export class Vehicle {
     }
     this.surfaceFinish.advance(dt,this.speed,this.surface!=='asphalt',this.wetWheels,this.groundedWheels);
     if(this.extendedDamage)this.swingDoors(dt);
+    if(this.extendedDamage)this.engineShake.step(dt,this.health>0&&!(this.engineStall!>0)&&!this.engineOut,this.input.throttle,this.engineDamage??0,this.misfireFactor,this.mountsBroken,this.speed);
     if(landing>=0&&time-this.lastLanding>HARD_LANDING.gap&&this.health>0){
       // A heavy landing bottoms out that corner: the suspension, wheel and underside take the blow.
       this.lastLanding=time;const p=this.controller.wheelContactPoint(landing)!,up=new T.Vector3(0,1,0).applyQuaternion(this.currentQ);
@@ -1145,12 +1151,15 @@ export class Vehicle {
   render(alpha: number) {
     this.root.position.lerpVectors(this.previous, this.current, alpha);
     this.root.quaternion.slerpQuaternions(this.previousQ, this.currentQ, alpha);
+    // The engine shakes the body on its mounts; the wheels are held where they were.
+    const shake=this.extendedDamage?this.engineShake.out:NO_SHAKE;
+    this.model.rotation.set(shake.pitch,0,shake.roll);this.model.position.y=this.modelY+shake.lift;
     for (const material of this.brakeLights) material.emissiveIntensity = this.electricalCut ? 0 : this.input.brake > .05 || this.input.handbrake ? 3.5 : .8;
     for (let i = 0; i < 4; i++) {
       const w = this.wheels[i];
       if (!w||this.wreckParts.wheelLost[i]) continue;
-      w.position.y =
-        -this.model.position.y - 0.12 - (this.controller.wheelSuspensionLength(i) ?? vehicleSuspensionRestLength(this.kind));
+      w.position.y = plantedWheelY(
+        -this.model.position.y - 0.12 - (this.controller.wheelSuspensionLength(i) ?? vehicleSuspensionRestLength(this.kind)),w.position.x,w.position.z,shake);
       const tyre=this.tyreDamage?.[i],corner=wheelResponse(this.wreckParts.wheelDamage[i],i%2?1:-1,this.speed,vehicleWheelRadius(this.kind),tyre,vehicleFlatTyreRadius(this.kind));
       w.rotation.set(0,(i<2?this.steering*this.steerLink[i]:0)+corner.toe+(i>1?this.thrustAngle:0)+(this.extendedDamage?this.wheelShimmy[i]:0),0);
       w.rotateX(-this.wheelAngle(i));

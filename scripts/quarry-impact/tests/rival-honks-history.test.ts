@@ -1,6 +1,7 @@
+import {restoreEngineShakeBytes} from './engine-shake-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readRivalHonksPrevious,restoreRivalHonksBytes,verifyRivalHonksRevision} from './rival-honks-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreEngineShakeBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('RivalHonks preserves every prior fixture, vehicle asset, venue art and history input',verifyRivalHonksRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/rival-honks/revision.json').toString());
