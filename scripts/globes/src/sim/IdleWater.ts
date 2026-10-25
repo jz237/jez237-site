@@ -8,6 +8,9 @@
 //   new direction, and slow currents wander through the forest.
 // - surge (Anemone Reef): the reef's surge: the water near the bed flows one way, then back, every
 //   few seconds, and the anemone's tentacles sway with it.
+// - filter (Betta Bowl): a quiet current, as a small filter keeps a bowl's water turning over: a
+//   slow swirl round the glass and rolls that turn the water over, both wandering, so the plants
+//   sway; no push, so the surface (and the fish's nest on it) stays calm.
 // Two kinds of force do it. A uniform push, added to the body force, sways the whole body of
 // water as moving the globe would (the waves). A body force with curl (grid_update.wgsl) stirs
 // it: the swirl, and rolls that turn the water over.
@@ -20,7 +23,7 @@
 import type { Vec3 } from './FluidSim';
 
 /** What a globe's water does when it is left alone. */
-export type IdleMotion = 'still' | 'wave' | 'swirl' | 'sea' | 'surge';
+export type IdleMotion = 'still' | 'wave' | 'swirl' | 'sea' | 'surge' | 'filter';
 
 /** The water's centre of mass, read back from the GPU, and the simulated time it was read at. */
 interface Reading {
@@ -74,6 +77,12 @@ const SURGE_PERIOD = 5.6;
 const SURGE_ROLL = 0.16;
 const SURGE_TURN = 2;
 const SURGE_SWIRL = 0.012;
+
+/** Filter: the swirl's rate (1/s^2) and the rolls' push (units/s^2), and where the rolls turn (a
+ *  little above halfway up, so the plants by the bed are in the lower water's flow). */
+const FILTER_SWIRL = 0.02;
+const FILTER_ROLL = 0.025;
+const FILTER_TURN = 1.5;
 
 const TAU = 2 * Math.PI;
 const W0 = TAU / SLOSH_PERIOD;
@@ -136,6 +145,7 @@ export class IdleWater {
     if (this.kind === 'wave') this.wave(t, e);
     else if (this.kind === 'swirl') this.swirl(t, e);
     else if (this.kind === 'surge') this.surge(t, e);
+    else if (this.kind === 'filter') this.filter(t, e);
     else this.sea(t, e);
   }
 
@@ -225,6 +235,17 @@ export class IdleWater {
     this.currents[0] = e * SEA_SWIRL * (Math.sin((TAU * t) / 29 + 0.4) + 0.45 * Math.sin((TAU * t) / 17.3 + 2.1));
     this.currents[1] = e * SEA_ROLL * (surge * Math.cos(heading) + 0.4 * Math.sin((TAU * t) / 23 + 1.3));
     this.currents[2] = e * SEA_ROLL * (surge * Math.sin(heading) + 0.4 * Math.sin((TAU * t) / 31 + 4.2));
+  }
+
+  private filter(t: number, e: number): void {
+    // Round the glass, now a little quicker, now slower; and over, along a heading that turns slowly
+    // all the way round (once in about two minutes and a half), wandering as it goes.
+    const heading = (TAU * t) / 140 + 0.6 * Math.sin((TAU * t) / 37) + 0.3 * Math.sin((TAU * t) / 23 + 1.7);
+    const roll = FILTER_ROLL * (0.7 + 0.3 * Math.sin((TAU * t) / 17.3 + 2.1));
+    this.currents[0] = e * FILTER_SWIRL * (0.6 + 0.4 * Math.sin((TAU * t) / 29 + 0.4));
+    this.currents[1] = e * roll * Math.cos(heading);
+    this.currents[2] = e * roll * Math.sin(heading);
+    this.currents[3] = FILTER_TURN;
   }
 
   private surge(t: number, e: number): void {

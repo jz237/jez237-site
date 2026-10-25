@@ -1,4 +1,6 @@
-// The globes in the collection, in the order the interface shows them.
+// The globes in the collection, in the order the interface shows them. The betta bowl has a page
+// of its own (betta.html, <html data-globes="betta">): it shows the betta alone, and the globes'
+// page (index.html) the rest.
 
 import type { IdleMotion } from '../sim/IdleWater';
 
@@ -30,7 +32,7 @@ export interface GlobeEntry {
   comingSoon?: boolean;
 }
 
-export const GLOBES: readonly GlobeEntry[] = [
+const ALL: readonly GlobeEntry[] = [
   {
     id: 'water',
     name: 'Clear Water',
@@ -42,12 +44,12 @@ export const GLOBES: readonly GlobeEntry[] = [
   {
     id: 'betta',
     name: 'Living Silk',
-    description: 'A small betta explores the globe, gliding between quiet pauses and curling into turns. Tilt the water through its flowing fins, or watch its one-second display.',
+    description: 'A small betta explores its glass bowl, gliding between quiet pauses and curling into turns. Feed it through the lid, tilt the water through its flowing fins, or watch its one-second display.',
     koi: false,
     betta: true,
     clarity: 0.22,
     water: 1.15,
-    idle: 'still',
+    idle: 'filter',
   },
   {
     id: 'koi',
@@ -91,3 +93,15 @@ export const GLOBES: readonly GlobeEntry[] = [
     idle: 'sea',
   },
 ];
+
+/** This page's: the betta bowl's page shows the betta alone. */
+export const BETTA_PAGE = typeof document !== 'undefined' && document.documentElement.dataset.globes === 'betta';
+
+export const GLOBES: readonly GlobeEntry[] = ALL.filter((g) => !!g.betta === BETTA_PAGE);
+
+/** Where a globe this page does not show lives (?globe=<id> asked of the wrong page), relative to
+ *  this page. */
+export function elsewhere(id: string): string | null {
+  if (GLOBES.some((g) => g.id === id) || !ALL.some((g) => g.id === id)) return null;
+  return BETTA_PAGE ? `../globes/?globe=${id}` : '../betta-bowl/';
+}
