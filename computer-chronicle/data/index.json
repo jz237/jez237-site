@@ -2,6 +2,23 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-25",
+      "historicDate": "1985-04-01",
+      "displayDate": "Week of April 1-7, 1985",
+      "edition": "Issue 140 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Atari gathers support; Pooh opens the adventure door; low-cost modems beckon.",
+      "leadHeadline": "Atari’s ST gathers support as the 16-bit challenge approaches",
+      "storyHeadlines": [
+        "Commodore 128 promises three computing worlds without abandoning the 64",
+        "Disney and Sierra make adventure gaming accessible to younger players",
+        "A B-17 campaign in fifteen-minute installments",
+        "SpeedScript 3.0 brings a machine-language word processor to expanded VIC-20s"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-04-01.jpg",
+      "thumb": "media/thumbs/1985-04-01.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-24",
       "historicDate": "1985-03-25",
       "displayDate": "Week of March 25-31, 1985",

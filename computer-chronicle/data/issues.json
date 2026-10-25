@@ -4,6 +4,478 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-10-25",
+      "historicDate": "1985-04-01",
+      "displayDate": "Week of April 1-7, 1985",
+      "edition": "Issue 140 - Weekly 1985 Computer & Culture Chronicle",
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "visualProfile": {
+        "tone": "A new computer generation meets the family game shelf",
+        "motifs": [
+          "Atari ST and mouse",
+          "Hundred Acre Wood game screen",
+          "B-17 simulation"
+        ],
+        "layout": "Dense aged newsprint with red and blue section headers"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 140 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of April 1-7, 1985",
+        "price": "75 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Gaming adventure and B-17 halftones dominate the front page beside the Atari ST anticipation lead",
+        "secondaryRail": "Commodore compatibility, VIC word processing and budget modems",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-04-01.jpg",
+        "alt": "Computer Chronicle front page for April 1-7, 1985, featuring Atari ST anticipation and home-computer games",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "The next generation approaches while the games shelf and modem desk keep today’s machines busy.",
+      "morningLine": "Atari gathers support; Pooh opens the adventure door; low-cost modems beckon.",
+      "lead": {
+        "headline": "Atari’s ST gathers support as the 16-bit challenge approaches",
+        "dek": "April 6 cover coverage puts GEM and the new Atari machines in the spotlight; availability remains a forecast.",
+        "body": [
+          "Atari’s new 16-bit computers are gathering an audience before they reach ordinary desks. Personal Computer News makes the machines its April 6 cover story, pointing to GEM and growing support for the platform. It is a week of anticipation, not a verified retail launch.",
+          "April’s COMPUTE! supplies the technical backdrop from January’s Consumer Electronics Show. The proposed 520ST pairs 512K of memory with an 8 MHz Motorola 68000 and a $599 announced computer price. Atari projected second-quarter availability; that figure is not a complete delivered-system quotation.",
+          "Digital Research’s GEM brings mouse-driven icons, windows and menus over TOS. MIDI, serial and parallel interfaces broaden the machine’s ambitions. Reported display modes run from 320 by 200 with 16 colors to 640 by 400 monochrome, with a 512-color palette behind the color modes.",
+          "The January demonstration machines were prototypes. COMPUTE! found the operating system unfinished and the bundled language undecided; promised software packages remain promises rather than an established shipping library. For home-game players and programmers, the attraction is clear, but the practical questions are still software, peripherals and delivery."
+        ],
+        "confidence": "same-week cover; same-month reporting of January announcements",
+        "sourceRefs": [
+          0,
+          5
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Commodore 128 promises three computing worlds without abandoning the 64",
+          "body": [
+            "Commodore’s answer to the next-generation question begins with the programs already on the shelf. April’s COMPUTE! describes a 128K machine with three environments: C64 compatibility, native BASIC 7.0 operation and Z80-based CP/M 3.0.",
+            "The native environment offers 40- or 80-column text, while C64 mode retains the older display and cannot use 80 columns. Returning from C64 mode requires a reboot. The magazine ran SpeedScript 3.0 successfully in C64 mode at CES, a useful demonstration but not an exhaustive compatibility test.",
+            "Introduction is forecast for April or May. COMPUTE!’s estimate of under $300 is just that: Commodore announced no CES price. The proposed 1571 drive and multiple CP/M formats add appeal, but compatibility and delivery claims still deserve careful reading."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "headline": "Disney and Sierra make adventure gaming accessible to younger players",
+          "body": [
+            "A wind has scattered belongings across the Hundred Acre Wood. Restoring each object to the proper character turns Winnie the Pooh into an adventure in reading, observation and map-making rather than a contest with a stubborn command parser.",
+            "James V. Trunzo’s April COMPUTE! review lists the Sierra-distributed Disney game at $39.95 for a Commodore 64 with disk or an Apple II-series computer with at least 48K and disk. Players carry one object at a time, consult Wise Owl and learn the landscape; changing object locations give a return visit a different puzzle.",
+            "The toybox in the playroom supplies the save function without a separate data disk. Hints and a supplied map lower the entry barrier, while the reviewer encourages players to draw their own. This is April review coverage, not a claim that the game first ships this week."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "headline": "A B-17 campaign in fifteen-minute installments",
+          "body": [
+            "Fifty missions is a long way home for a simulated B-17 crew. Strategic Simulations’ Fifty Mission Crush asks the player to choose crew members and weigh fuel, bomb load, formation and altitude in an Eighth Air Force campaign.",
+            "Trunzo’s April review puts the price at $39.95 and lists Atari with 40K and BASIC, Apple II with 48K, and Commodore 64 versions, all requiring disk drives. Menus and tactical information carry the action rather than arcade reflexes.",
+            "A mission can take as little as five minutes and seldom more than fifteen, according to the reviewer. Saving after each mission makes the campaign manageable in short sittings. Its wartime setting is simulation material, not a report from the present world."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "headline": "SpeedScript 3.0 brings a machine-language word processor to expanded VIC-20s",
+          "body": [
+            "The expanded VIC-20 gets a substantial writing tool in April’s COMPUTE!: Charles Brannon’s SpeedScript 3.0. The machine-language program occupies about 6K and requires at least an 8K memory expansion.",
+            "Word wrap, screen editing, insertion and deletion, margins, headers and footers move the small computer beyond elementary text entry. Reported text capacity ranges from 3,072 characters with 8K expansion to 19,456 with a 24K expander.",
+            "This is a magazine type-in entered with MLX, not a newly priced commercial package. Owners of an older listing must enter version 3.0 anew. Following the C64 version last month, it is a reminder that established inexpensive machines still have useful work ahead."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            8
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Atari 520ST",
+          "summary": "Announced 512K, 8 MHz 68000, GEM, MIDI; proposed $599 computer price, Q2 expected availability; not verified shipping.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5,
+            0
+          ]
+        },
+        {
+          "title": "Commodore 128",
+          "summary": "Three-mode C64/native/CP-M design; April-or-May introduction forecast.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "SpeedScript 3.0 for expanded VIC-20",
+          "detail": "Machine-language magazine type-in; 8K expansion minimum; up to 24K supported.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            8
+          ]
+        },
+        {
+          "name": "Microsoft BASIC for Macintosh",
+          "detail": "PCN April 6 contents advertises a favorable review by software editor Bryan Skinner on page 50. Version, price and performance not established by the accessible contents page.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — editorial shelf selections, not a sales chart",
+          "items": [
+            "Winnie the Pooh in the Hundred Acre Wood — Disney / Sierra, review-listed $39.95",
+            "Fifty Mission Crush — SSI, review-listed $39.95",
+            "Solo Flight — MicroProse, March review",
+            "Conan — Datasoft, March shelf coverage",
+            "Mr. Do! — Datasoft, March shelf coverage"
+          ],
+          "confidence": "April reviews with three continuing March shelf selections",
+          "sourceRefs": [
+            6,
+            7,
+            11,
+            12
+          ]
+        },
+        {
+          "label": "Top 5 Movies — April 5-7 weekend",
+          "items": [
+            "1. Police Academy 2: Their First Assignment",
+            "2. Mask",
+            "3. The Care Bears Movie",
+            "4. The Last Dragon",
+            "5. Beverly Hills Cop"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Winnie the Pooh",
+          "price": "$39.95",
+          "note": "review-listed; April magazine coverage, not proof of a launch this week.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "item": "Fifty Mission Crush",
+          "price": "$39.95",
+          "note": "review-listed; April magazine coverage, not proof of a launch this week.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "item": "Atari XM-301",
+          "price": "$49.95",
+          "note": "announced; April magazine coverage, not proof of a launch this week.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "item": "Commodore 1660 Modem 300",
+          "price": "$29.95",
+          "note": "announced; April magazine coverage, not proof of a launch this week.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "item": "Panasonic KX-D401 300-bps modem",
+          "price": "$99.95",
+          "note": "reported retail; April magazine coverage, not proof of a launch this week.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "item": "Panasonic KX-D402 300/1200-bps modem",
+          "price": "$299.95",
+          "note": "reported retail; April magazine coverage, not proof of a launch this week.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "item": "Castle Associates Banana interface (BBC / Commodore 64)",
+          "price": "£230.00",
+          "note": "approximate magazine-reported; April magazine coverage, not proof of a launch this week.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            10
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "PCN skips Easter follow-up issue",
+          "summary": "Issue 106 explains that Bank Holiday production problems mean no issue the following week; issue 107 promises a printer feature and C64 printer interface.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Seiko wrist computer gets a review slot",
+          "summary": "PCN April 6 contents lists “Computer on your wrist,” page 33. Model, specifications and price are not available from this contents page, so do not expand beyond that.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Panasonic combines speakerphone and modem",
+          "summary": "April COMPUTE! reports the KX-D4130 speakerphone with integrated 300-bps modem and 24-button automatic dialer at $199.95, from its January CES coverage; not an April launch. Requires an RS-232-equipped computer.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            9
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Forever Man",
+          "artist": "Eric Clapton",
+          "chart": "Billboard Top Rock Tracks (archived as Mainstream Rock Airplay)",
+          "chartDate": "1985-04-06",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            1
+          ],
+          "song": "Forever Man"
+        },
+        {
+          "rank": 2,
+          "title": "Don’t Come Around Here No More",
+          "artist": "Tom Petty and the Heartbreakers",
+          "chart": "Billboard Top Rock Tracks (archived as Mainstream Rock Airplay)",
+          "chartDate": "1985-04-06",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            1
+          ],
+          "song": "Don’t Come Around Here No More"
+        },
+        {
+          "rank": 3,
+          "title": "All She Wants to Do Is Dance",
+          "artist": "Don Henley",
+          "chart": "Billboard Top Rock Tracks (archived as Mainstream Rock Airplay)",
+          "chartDate": "1985-04-06",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            1
+          ],
+          "song": "All She Wants to Do Is Dance"
+        },
+        {
+          "rank": 4,
+          "title": "I’m on Fire",
+          "artist": "Bruce Springsteen",
+          "chart": "Billboard Top Rock Tracks (archived as Mainstream Rock Airplay)",
+          "chartDate": "1985-04-06",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            1
+          ],
+          "song": "I’m on Fire"
+        },
+        {
+          "rank": 5,
+          "title": "Don’t You (Forget About Me)",
+          "artist": "Simple Minds",
+          "chart": "Billboard Top Rock Tracks (archived as Mainstream Rock Airplay)",
+          "chartDate": "1985-04-06",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            1
+          ],
+          "song": "Don’t You (Forget About Me)"
+        }
+      ],
+      "periodAd": {
+        "headline": "The $29.95 modem proposition",
+        "summary": "April COMPUTE! reports Commodore’s announced 1660 Modem 300 with autoanswer, autodial and a call-monitor speaker. Announced pricing, not a verified April street offer.",
+        "tagline": "A smaller price for a connection to the outside world.",
+        "sourceRefs": [
+          9
+        ]
+      },
+      "market": {
+        "headline": "The next machine competes with the library you already own",
+        "summary": "Atari’s ST promises a fresh 16-bit environment; Commodore’s 128 emphasizes three modes and C64 compatibility. Announced prices, estimates and promised software must not be confused with delivered systems.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          5
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Sudan’s armed forces depose Nimeiri",
+        "summary": "Sudan’s armed forces deposed Jaafar Nimeiri on April 6, ending roughly sixteen years of rule.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          3,
+          4
+        ]
+      },
+      "bbsNote": {
+        "headline": "Low-cost modems challenge the Hayes price umbrella",
+        "summary": "Arlan R. Levitan’s April COMPUTE! column reports January CES announcements and an online travel-rescue anecdote; these are current-month reading, not April-week product launches.",
+        "confidence": "same-month",
+        "posts": [
+          {
+            "topic": "Budget direct-connect modems",
+            "platform": "Atari / Commodore",
+            "text": "Atari XM-301: announced 300 bps, autoanswer/autodial, serial-bus powered, $49.95. Commodore 1660 Modem 300: announced 300 bps, autoanswer/autodial and call-monitor speaker, $29.95; plugs into the C64, Plus/4 or C128 user port."
+          },
+          {
+            "topic": "Higher-speed service",
+            "platform": "Delphi",
+            "text": "Levitan reports 2400-bps access in 34 major cities, with a $5/hour surcharge above $16/hour business-hours or $6/hour nonprime 300/1200-bps rates. These are the columnist’s reported service rates, not a new April 1 tariff."
+          },
+          {
+            "topic": "Online information in everyday life",
+            "platform": "Electronic Official Airlines Guide",
+            "text": "Levitan recounts using a portable computer and acoustic coupler at Detroit airport to find alternative flights after his January CES flight was canceled. The column does not name which subscribing service carried his OAG session."
+          },
+          {
+            "topic": "1200-bps forecast, not availability",
+            "platform": "Commodore 1670",
+            "text": "The column projects a 1200-bps modem below $100 based on two employee indications, with later introduction expected. Do not treat that forecast as an established retail price or assert it was shipping this week."
+          },
+          {
+            "topic": "Magazine programs by modem",
+            "platform": "Your Computer Telsoft / Spectrum and BBC",
+            "text": "April contents page 3 advertises Telsoft on page 118: readers can obtain magazine programs via modem, with Spectrum Pikchachanja and BBC Graphics offered this month. Contents confirms the service and titles only; connection charges and transfer details have not been verified."
+          }
+        ],
+        "sourceRefs": [
+          9,
+          10
+        ]
+      },
+      "curiosity": {
+        "headline": "A Banana interface for would-be computer ghost hunters",
+        "summary": "Your Computer’s April news page describes Castle Associates’ Banana interface for Commodore 64 and BBC machines at around £230.",
+        "detail": "The page-28 “Ghost busters” item reports eight sensor inputs, including temperature, touch, movement, sound and light, plus eight outputs controlling devices such as cameras, recorders and even nets or trapdoors. The ghost-hunting framing is magazine whimsy, not evidence that the device detected ghosts. The student-oriented name is explained with the maker’s slogan, “so simple a monkey could use it”. Price is approximate and contemporary; no exact launch day is established.",
+        "sourceRefs": [
+          10
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "April magazine reports often describe January CES announcements; no April launch inferred.",
+          "Game list is editorial selection, not a sales ranking; three continuing selections come from March coverage.",
+          "ST pricing is announced computer-only pricing; C128 price is an estimate, not a firm offer.",
+          "Music: Billboard Top Rock Tracks dated April 6; movies: April 5-7 weekend.",
+          "World bulletin uses only corroborated date and change of government."
+        ]
+      },
+      "sources": [
+        {
+          "title": "Personal Computer News issue 106: contents and editorial",
+          "url": "http://www.bob-mockford.co.uk/computers/pcn/106/",
+          "date": "1985-04-06"
+        },
+        {
+          "title": "Billboard rock chart",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-04-06/",
+          "date": "1985-04-06"
+        },
+        {
+          "title": "The Numbers: weekend domestic box office",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/04/05",
+          "date": "1985-04-05"
+        },
+        {
+          "title": "UPI: Ja’far Numeiry, deposed ruler of Sudan (search excerpt only)",
+          "url": "https://www.upi.com/Archives/1985/04/06/Jafar-Numeiry-Deposed-ruler-of-Sudan/9096481611600/",
+          "date": "1985-04-06"
+        },
+        {
+          "title": "1985 Sudanese coup (retrospective; event date)",
+          "url": "https://en.wikipedia.org/wiki/1985_Sudanese_coup_d%27%C3%A9tat",
+          "date": "1985-04-06"
+        },
+        {
+          "title": "COMPUTE! April 1985: The Next Generation: New Computers at Winter CES",
+          "url": "https://www.atarimagazines.com/compute/issue59/next_generation.php",
+          "date": "1985-04"
+        },
+        {
+          "title": "COMPUTE! April 1985: Winnie the Pooh review",
+          "url": "https://www.atarimagazines.com/compute/issue59/review_winnie_the_pooh.php",
+          "date": "1985-04"
+        },
+        {
+          "title": "COMPUTE! April 1985: Fifty Mission Crush review",
+          "url": "https://www.atarimagazines.com/compute/issue59/review_fifty_mission.php",
+          "date": "1985-04"
+        },
+        {
+          "title": "COMPUTE! April 1985: SpeedScript 3.0 for VIC-20",
+          "url": "https://www.atarimagazines.com/compute/issue59/speedscript.php",
+          "date": "1985-04"
+        },
+        {
+          "title": "COMPUTE! April 1985: Telecomputing Today: Telecomputing to the Rescue",
+          "url": "https://www.atarimagazines.com/compute/issue59/telecomputing_today.php",
+          "date": "1985-04"
+        },
+        {
+          "title": "Your Computer, April 1985: news page 28 and contents page 3 (OCR)",
+          "url": "https://archive.org/stream/your-computer-magazine-1985-04/YourComputer_1985_04_djvu.txt",
+          "date": "1985-04"
+        },
+        {
+          "title": "March 1985 period game coverage",
+          "url": "https://www.atarimagazines.com/compute/issue58/review_solo_flight.html",
+          "date": "1985-03"
+        },
+        {
+          "title": "March 1985 period game coverage",
+          "url": "https://www.atarimagazines.com/compute/issue58/news_games_educational_packages.html",
+          "date": "1985-03"
+        }
+      ]
+    },
+    {
       "sectionChrome": {
         "primary": "brick red",
         "secondary": "royal blue",

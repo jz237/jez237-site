@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 24 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 25 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of April 1-7, 1985 — Atari’s ST gathers support as the 16-bit challenge approaches</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-04-01</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-04-01</guid>
+      <pubDate>Sun, 25 Oct 2026 12:00:00 GMT</pubDate>
+      <description>April 6 cover coverage puts GEM and the new Atari machines in the spotlight; availability remains a forecast. Atari’s new 16-bit computers are gathering an audience before they reach ordinary desks. Personal Computer News makes the machines its April 6 cover story, pointing to GEM and growing support for the platform. It is a week of anticipation, not a verified retail launch. Also this week: Commodore 128 promises three computing worlds without abandoning the 64 · Disney and Sierra make adventure gaming accessible to younger players · A B-17 campaign in fifteen-minute installments · SpeedScript 3.0 brings a machine-language word processor to expanded VIC-20s.</description>
+    </item>
     <item>
       <title>Week of March 25-31, 1985 — Solo Flight puts a mail route inside a home-computer cockpit</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-03-25</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-11-19</guid>
       <pubDate>Tue, 06 Oct 2026 12:00:00 GMT</pubDate>
       <description>A record trade-show floor gives way to price cutting, compatibility battles and a crowded software business. The personal-computer business is taking stock after Comdex, and the mood is more restrained than the crowded aisles suggest. Reporting November 20 from Las Vegas, David F. Salisbury describes a record 1,400 exhibits at the previous week’s show, but noticeably less exuberance than a year ago. The question is no longer simply how quickly computers will sell, but which machines and publishers can survive the competition. Also this week: A $795 dish promises satellite data for the personal computer · The bulletin board becomes a neighborhood without borders · CompuServe brings more than 80 merchants into the living room · VisiCalc publisher faces merger and founders&apos; departure.</description>
-    </item>
-    <item>
-      <title>Week of November 12-18, 1984 — Tandy 1000 brings PC compatibility home</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-11-12</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-11-12</guid>
-      <pubDate>Mon, 05 Oct 2026 12:00:00 GMT</pubDate>
-      <description>Radio Shack’s November newcomer combines an 8088 with colorful graphics, three-voice sound and bundled DeskMate. Radio Shack has a new contender for the home-computer desk this November. The Tandy 1000 puts an Intel 8088 inside a machine intended to offer compatibility with most IBM PC software, while retaining the enhanced graphics and sound associated with the PCjr. It is a practical pitch to households that want work and play in the same cabinet. Also this week: A shopping mall arrives on the home-computer screen · KoalaPad gives PCjr owners a drawing surface in their laps · Copy protection must not punish the buyer.</description>
     </item>
   </channel>
 </rss>
