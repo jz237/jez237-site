@@ -2564,6 +2564,8 @@ function frame(now: number) {
     sound.runningLoops(effectsActive&&!online?.active?cars:[],camera.position);
   }
   // In the rain (offline) every wheel on the wet road throws a fine spray too.
+  // Lamps light the spray in the rain: red behind the tails (brighter braking), warm white ahead of the headlamps.
+  puddleSplashes?.light(eventLighting==='rain'&&!online?.active?glowList:[]);
   if(!studio)puddleSplashes?.update(cars,activeVenue.puddles,effectsActive?dt:0,state==='playing',true,eventLighting==='rain'&&!online?.active?1:0);
   if(!studio&&state==='playing'){for(const burst of vehicleFire?.bursts??[]){recorder?.burst({time:elapsed,position:burst.position.toArray()});if(!online?.active){shockwave(burst.position,burst.id);blastDamage(burst.position,burst.id,CAR_BLAST.radius,CAR_BLAST.damage);const car=cars.find(c=>c.id===burst.id);if(car)carBlowsUp(car,burst.position);}}captureReplay();}
   if(studio?.playing&&!studio.seeking){sound.update(cars,camera,dt,false,{id:cars[studio.follow]?.id??0,view:studio.view==='hood'?'hood':studio.view==='chase'?'chase':'orbit'},(from,to)=>cameraObstruction(physics,from,to,undefined,true));sound.thermal(replayThermal,[]);}
@@ -2877,6 +2879,7 @@ async function boot() {
     vapour: () => vapourPuffs,
     brakeSteam: () => brakePuffs,
     reflections: () => wetReflections?.mesh.count ?? 0,
+    litSpray: () => puddleSplashes?.litDrops ?? 0,
     lampBeams: () => cars.map((c) => c.root.children.filter((o) => o.name === 'car_light_beam').map((b) => +b.position.x.toFixed(2))),
     heatDiscs: (id = 0, heat = 1) => { const c = cars[id]; if (!c?.extendedDamage) return false; c.discHeat.fill(heat); return true; },
     storm: () => storm ? { strikes: storm.strikes, claps: storm.claps, thunders: sound.thunders, flash: +lightning.intensity.toFixed(3) } : null,

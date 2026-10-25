@@ -45,8 +45,8 @@ export type CarLights={readonly head:number;readonly tail:number;readonly workin
  /** A lamp mesh, for QA. */
  lamp(kind:'head'|'tail',index:number):T.Mesh|undefined;
  /** Push where this car's lamps are shining from now (world space): each side's lit, unsmashed headlamps, and tail lamps
-  * while lit or braking. */
- glows(out:{x:number;y:number;z:number;tail:boolean}[],root:T.Object3D):void};
+  * while lit or braking, with the way each faces on the ground (dx, dz) and whether the tails are braking. */
+ glows(out:{x:number;y:number;z:number;tail:boolean;brake?:boolean;dx?:number;dz?:number}[],root:T.Object3D):void};
 export function attachCarLights(root:T.Object3D,halfLength:number):CarLights{
  root.updateMatrixWorld(true);
  const inverse=root.matrixWorld.clone().invert(),centre=new T.Vector3(),box=new T.Box3();
@@ -82,7 +82,7 @@ export function attachCarLights(root:T.Object3D,halfLength:number):CarLights{
  // Each side's lamps and their middle, for the light they throw.
  const sidesOf=(list:T.Mesh[])=>([-1,1] as const).map(side=>{const ls=lampPoints(list).filter(l=>Math.sign(l.c.x||1)===side);
   return ls.length?{at:ls.reduce((sum,l)=>sum.add(l.c),new T.Vector3()).multiplyScalar(1/ls.length),lamps:ls.map(l=>l.i)}:null;}).filter(b=>b!==null);
- const headSides=sidesOf(heads),tailSides=sidesOf(tails),glowAt=new T.Vector3();
+ const headSides=sidesOf(heads),tailSides=sidesOf(tails),glowAt=new T.Vector3(),facing=new T.Vector3();
  let lit=false,brake=false,broken=-1,level=1,beamLevel=0;
  const smashed=(m:T.Mesh)=>!m.visible||(m.userData.damage??0)>LAMP_BREAK;
  const api:CarLights={head:heads.length,tail:tails.length,get working(){return heads.filter(m=>!smashed(m)).length;},get lit(){return lit;},
@@ -108,9 +108,9 @@ export function attachCarLights(root:T.Object3D,halfLength:number):CarLights{
   },
   lamp(kind,index){return (kind==='head'?heads:tails)[index];},
   glows(out,root){
-   if(!lit&&!brake)return;root.updateMatrixWorld();
-   if(lit)for(const side of headSides)if(side.lamps.some(i=>!(broken&1<<i))){glowAt.copy(side.at).applyMatrix4(root.matrixWorld);out.push({x:glowAt.x,y:glowAt.y,z:glowAt.z,tail:false});}
-   for(const side of tailSides)if(side.lamps.some(i=>!(broken&1<<(i+16)))){glowAt.copy(side.at).applyMatrix4(root.matrixWorld);out.push({x:glowAt.x,y:glowAt.y,z:glowAt.z,tail:true});}
+   if(!lit&&!brake)return;root.updateMatrixWorld();facing.set(0,0,1).transformDirection(root.matrixWorld).setY(0);if(facing.lengthSq()<1e-6)facing.set(0,0,1);facing.normalize();
+   if(lit)for(const side of headSides)if(side.lamps.some(i=>!(broken&1<<i))){glowAt.copy(side.at).applyMatrix4(root.matrixWorld);out.push({x:glowAt.x,y:glowAt.y,z:glowAt.z,tail:false,dx:facing.x,dz:facing.z});}
+   for(const side of tailSides)if(side.lamps.some(i=>!(broken&1<<(i+16)))){glowAt.copy(side.at).applyMatrix4(root.matrixWorld);out.push({x:glowAt.x,y:glowAt.y,z:glowAt.z,tail:true,brake,dx:-facing.x,dz:-facing.z});}
   },
   dispose(){poolMesh.removeFromParent();poolGeometry.dispose();poolMaterial.dispose();for(const b of beams)b.mesh.removeFromParent();beamGeometry.dispose();beamMaterial.dispose();for(const m of owned)m.dispose();}};
  return api;

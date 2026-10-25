@@ -1,9 +1,10 @@
 import * as T from 'three';
 /** Wet-road reflections (offline rain): every lit headlamp (and lit or braking tail lamp) lays a streak of its light across
  * the wet road toward the camera, REFLECT.length m long and REFLECT.width m wide, fading along its length and with distance
- * from the camera (gone by REFLECT.far m). Warm white for heads at REFLECT.head, red for tails at REFLECT.tail. One draw. */
-export const REFLECT={length:3.4,width:.3,far:45,head:.45,tail:.26,max:160} as const;
-export type Glow={x:number;y:number;z:number;tail:boolean};
+ * from the camera (gone by REFLECT.far m). Warm white for heads at REFLECT.head, red for tails at REFLECT.tail (REFLECT.braking
+ * times that while the car brakes). One draw. */
+export const REFLECT={length:3.4,width:.3,far:45,head:.45,tail:.26,braking:1.8,max:160} as const;
+export type Glow={x:number;y:number;z:number;tail:boolean;brake?:boolean;dx?:number;dz?:number};
 /** A streak's brightness for a lamp this far (m) from the camera: full close by, gone by REFLECT.far, nothing right underfoot. */
 export const streakFade=(distance:number)=>!(distance>=1)?0:Math.max(0,1-distance/REFLECT.far);
 let streak:T.DataTexture|null=null;
@@ -27,7 +28,7 @@ export function createWetReflections(scene:T.Object3D){
       for(const g of glows){
         if(n>=REFLECT.max)break;const dx=cam.x-g.x,dz=cam.z-g.z,fade=streakFade(Math.hypot(dx,dz));if(fade<=0)continue;
         const y=ground(g.x,g.z);p.set(g.x,(Number.isFinite(y)?y:g.y-.6)+.02,g.z);q.setFromAxisAngle(up,Math.atan2(dx,dz));
-        mesh.setMatrixAt(n,m.compose(p,q,s));mesh.setColorAt(n,c.copy(g.tail?red:warm).multiplyScalar((g.tail?REFLECT.tail:REFLECT.head)*fade));n++;
+        mesh.setMatrixAt(n,m.compose(p,q,s));mesh.setColorAt(n,c.copy(g.tail?red:warm).multiplyScalar((g.tail?REFLECT.tail*(g.brake?REFLECT.braking:1):REFLECT.head)*fade));n++;
       }
       mesh.count=n;mesh.instanceMatrix.needsUpdate=true;if(mesh.instanceColor)mesh.instanceColor.needsUpdate=true;
     },

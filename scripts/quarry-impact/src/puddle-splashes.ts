@@ -14,6 +14,25 @@ type Drop={p:T.Vector3;v:T.Vector3;age:number;life:number;size:number;level:numb
  * faint spray off the wet road, up and trailing behind (thrown at a fraction of the car's speed): RAIN_SPRAY.rate drops a
  * second per m/s, up to RAIN_SPRAY.max, per wheel. Shares the puddle drops' pool. */
 export const RAIN_SPRAY={from:4,rate:3,max:48,alpha:.3,trail:[.2,.4],lift:[.6,2],life:[.4,.7],size:[.05,.11]} as const;
+/** Lamp-lit spray (offline rain): a tail lamp lights the spray behind it red out to SPRAY_LIGHT.tail m (at SPRAY_LIGHT.running
+ * while only lit, full while braking), a headlamp lights the spray in front of it warm white out to SPRAY_LIGHT.head m in a
+ * narrower cone at SPRAY_LIGHT.headGain, fading with the square of distance; lit drops glow brighter (up to SPRAY_LIGHT.max)
+ * and swell by up to SPRAY_LIGHT.grow as the light blooms in them. */
+export const SPRAY_LIGHT={tail:4.5,head:8,running:.35,headGain:.55,max:1.6,alpha:1.4,grow:.6} as const;
+export type SprayLamp={x:number;y:number;z:number;tail:boolean;brake?:boolean;dx?:number;dz?:number};
+const RED=[1,.13,.06],WARM=[1,.93,.8],smooth=(a:number,b:number,x:number)=>{const t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t);};
+/** The lamp light falling on a drop at (x, y, z), as rgb into out (0..SPRAY_LIGHT.max each). */
+export function sprayLight(out:number[],x:number,y:number,z:number,lamps:readonly SprayLamp[]){
+  out[0]=out[1]=out[2]=0;
+  for(const l of lamps){
+    const vx=x-l.x,vy=y-l.y,vz=z-l.z,d=Math.hypot(vx,vy,vz),reach=l.tail?SPRAY_LIGHT.tail:SPRAY_LIGHT.head;if(!(d<reach))continue;
+    const facing=l.dx===undefined||l.dz===undefined?1:(vx*l.dx+vz*l.dz)/Math.max(d,.05),cone=l.tail?smooth(-.2,.6,facing):smooth(.55,.9,facing);if(cone<=0)continue;
+    const k=(1-d/reach)**2*cone*(l.tail?(l.brake?1:SPRAY_LIGHT.running):SPRAY_LIGHT.headGain),c=l.tail?RED:WARM;
+    for(let i=0;i<3;i++)out[i]+=c[i]*k;
+  }
+  for(let i=0;i<3;i++)out[i]=Math.min(SPRAY_LIGHT.max,out[i]);
+  return out;
+}
 type Ripple={p:T.Vector3;water:Puddle|null;age:number;life:number;radius:number;strength:number};
 export type SplashSource=Pick<Vehicle,'id'|'velocity'|'health'|'right'|'remoteContactPoints'>&{controller?:Pick<Vehicle['controller'],'wheelIsInContact'|'wheelContactPoint'>};
 export class PuddleSplashes {
@@ -25,6 +44,10 @@ export class PuddleSplashes {
   private offset=new Float32Array(this.capacity*3);
   private movement=new Float32Array(this.capacity*3);
   private data=new Float32Array(this.capacity*2);
+  private glow=new Float32Array(this.capacity*3);
+  private lamps:readonly SprayLamp[]=[];private lit=[0,0,0];
+  /** Drops lit by a lamp at the last render (QA). */
+  litDrops=0;
   private ringOffset=new Float32Array(48*3);
   private ringData=new Float32Array(48*4);
   private shapes=new Float32Array(48*4);
@@ -36,10 +59,10 @@ export class PuddleSplashes {
   sprayed=0;sprayWheels=0;
   constructor(scene:T.Scene,private random=()=>Math.random()){
     const geometry=(attributes:Record<string,[Float32Array,number]>)=>{const p=new T.PlaneGeometry(2,2),g=new T.InstancedBufferGeometry();g.index=p.index;g.attributes.position=p.attributes.position;g.attributes.uv=p.attributes.uv;for(const [name,[data,size]]of Object.entries(attributes))g.setAttribute(name,new T.InstancedBufferAttribute(data,size).setUsage(T.DynamicDrawUsage));g.instanceCount=0;return g;};
-    this.spray=new T.Mesh(geometry({offset:[this.offset,3],movement:[this.movement,3],drop:[this.data,2]}),new T.ShaderMaterial({transparent:true,depthWrite:false,uniforms:{},
-      vertexShader:`attribute vec3 offset;attribute vec3 movement;attribute vec2 drop;varying vec2 vUv;varying float vFade;
-      void main(){vUv=uv*2.-1.;vFade=drop.y;vec4 mv=modelViewMatrix*vec4(offset,1.);vec2 velocity=(viewMatrix*vec4(movement,0.)).xy;float speed=length(velocity);vec2 up=speed>.01?velocity/speed:vec2(0.,1.);vec2 across=vec2(up.y,-up.x);mv.xy+=(across*position.x*.55+up*position.y*(1.+min(5.,speed*.25)))*drop.x;gl_Position=projectionMatrix*mv;}`,
-      fragmentShader:`varying vec2 vUv;varying float vFade;void main(){float d=dot(vUv,vUv);if(d>1.)discard;float rim=pow(max(0.,1.-d),1.5);vec3 color=mix(vec3(.40,.53,.59),vec3(.92,1.,1.02),rim);gl_FragColor=vec4(color,rim*vFade*.60);
+    this.spray=new T.Mesh(geometry({offset:[this.offset,3],movement:[this.movement,3],drop:[this.data,2],glow:[this.glow,3]}),new T.ShaderMaterial({transparent:true,depthWrite:false,uniforms:{},
+      vertexShader:`attribute vec3 offset;attribute vec3 movement;attribute vec2 drop;attribute vec3 glow;varying vec2 vUv;varying float vFade;varying vec3 vGlow;
+      void main(){vUv=uv*2.-1.;vFade=drop.y;vGlow=glow;vec4 mv=modelViewMatrix*vec4(offset,1.);vec2 velocity=(viewMatrix*vec4(movement,0.)).xy;float speed=length(velocity);vec2 up=speed>.01?velocity/speed:vec2(0.,1.);vec2 across=vec2(up.y,-up.x);mv.xy+=(across*position.x*.55+up*position.y*(1.+min(5.,speed*.25)))*drop.x*(1.+min(1.,max(glow.r,glow.g))*${SPRAY_LIGHT.grow.toFixed(2)});gl_Position=projectionMatrix*mv;}`,
+      fragmentShader:`varying vec2 vUv;varying float vFade;varying vec3 vGlow;void main(){float d=dot(vUv,vUv);if(d>1.)discard;float rim=pow(max(0.,1.-d),1.5);vec3 color=mix(vec3(.40,.53,.59),vec3(.92,1.,1.02),rim)*(1.-min(1.,max(vGlow.r,vGlow.g))*.85)+vGlow*(.4+rim*1.6);gl_FragColor=vec4(color,min(1.,rim*vFade*.60*(1.+min(1.,max(vGlow.r,vGlow.g))*${SPRAY_LIGHT.alpha.toFixed(2)})));
       #include <tonemapping_fragment>
       #include <colorspace_fragment>
       }`}));
@@ -52,6 +75,8 @@ export class PuddleSplashes {
       }`}));
     this.rings.name='puddle-wheel-ripples';this.rings.frustumCulled=false;this.rings.renderOrder=2;scene.add(this.rings);
   }
+  /** The lamps shining now (world space; offline rain), lighting the spray from the next render. */
+  light(lamps:readonly SprayLamp[]){this.lamps=lamps;}
   setQuality(quality:string){this.quality=quality==='medium'?.55:quality==='high'?.8:1;}
   update(cars:readonly SplashSource[],waters:Puddle[],dt:number,emit:boolean,render=true,film=0){
     this.accumulator+=Number.isFinite(dt)?Math.min(.05,Math.max(0,dt)):0;
@@ -98,7 +123,8 @@ export class PuddleSplashes {
     }
   }
   private prepare(){
-    let i=0;for(const d of this.drops)if(d.life>0){d.p.toArray(this.offset,i*3);d.v.toArray(this.movement,i*3);this.data[i*2]=d.size;this.data[i*2+1]=Math.min(1,d.age*45)*Math.pow(1-d.age/d.life,.35)*d.alpha;i++;}
+    let i=0;this.litDrops=0;for(const d of this.drops)if(d.life>0){d.p.toArray(this.offset,i*3);d.v.toArray(this.movement,i*3);this.data[i*2]=d.size;this.data[i*2+1]=Math.min(1,d.age*45)*Math.pow(1-d.age/d.life,.35)*d.alpha;
+      if(this.lamps.length){sprayLight(this.lit,d.p.x,d.p.y,d.p.z,this.lamps);if(this.lit[0]>.02)this.litDrops++;}else this.lit[0]=this.lit[1]=this.lit[2]=0;this.glow.set(this.lit,i*3);i++;}
     this.spray.geometry.instanceCount=i;this.spray.visible=i>0;for(const a of Object.values(this.spray.geometry.attributes))if(a instanceof T.InstancedBufferAttribute)a.needsUpdate=true;
     i=0;for(const r of this.ripples)if(r.life>0&&r.water){r.p.toArray(this.ringOffset,i*3);const t=r.age/r.life;this.ringData.set([r.radius*(.18+t),r.strength*(1-t),0,0],i*4);this.shapes.set([r.water.x,r.water.z,r.water.radius,r.water.aspect],i*4);this.phases.set(r.water.phases,i*4);i++;}
     this.rings.geometry.instanceCount=i;this.rings.visible=i>0;for(const a of Object.values(this.rings.geometry.attributes))if(a instanceof T.InstancedBufferAttribute)a.needsUpdate=true;
