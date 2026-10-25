@@ -197,6 +197,7 @@ import {dailyChallenge,dailyLighting} from './daily-event';
 import {EventAwards,awardsHtml,stuntsText} from './event-awards';
 import {bankAchievements} from './achievements';
 import {attachCarLights,headlightAim,type CarLights} from './car-lights';
+import {LAMP_BREAK} from './car-lights';
 import {createRain} from './rain';
 import {applyWetLook} from './wet-look';
 import {setWetness} from './driving-surface';
@@ -2702,6 +2703,9 @@ async function boot() {
     litter: () => ({ chips: fx.litter.mesh.count, ...fx.litter.breaks, last: fx.litter.last.toArray() }),
     /** QA: scatter litter of a kind at a world point (thrown out from from, when given; paint takes colour). */
     scatterLitter: (at: number[], kind: 'glass' | 'head' | 'tail' | 'paint' | 'rubber', seed = 1, from?: number[], colour?: number) => fx.scatterLitter(new T.Vector3().fromArray(at), kind, seed, from ? new T.Vector3().fromArray(from) : undefined, colour),
+    /** QA: smash one lamp as a hard knock would (it goes dark, its lens dulls and its pieces fall). */
+    smashLamp: (id: number, kind: 'head' | 'tail', index = 0) => { const c = cars.find(x => x.id === id), m = c && carLights.get(c)?.lamp(kind, index); if (!m) return false; m.userData.damage = LAMP_BREAK + 1; return true; },
+    lamps: (id: number) => { const c = cars.find(x => x.id === id), l = c && carLights.get(c); return l ? { head: l.head, tail: l.tail, working: l.working } : null; },
     flag: (id: number) => { const f = cars.find(x => x.id === id)?.root.children.find(o => o.name === 'derby_flag'), w = f?.userData.wave; return f ? { bendX: w?.bendX ?? 0, bendZ: w?.bendZ ?? 0, snapped: !!w?.snapped, trail: f.getObjectByName('flag_cloth')!.rotation.y, base: f.position.toArray() } : null; },
     roofSign: (id: number) => { const c = cars.find(x => x.id === id); if (!c) return null; const sign = c.root.children.find(o => o.name === 'roof_sign'); return sign ? { fate: sign.userData.fate ?? 'up', fold: sign.rotation.z } : fx.debris.some(d => d.mesh.name === 'torn_roof_sign' && d.mesh.children[0]?.userData.car === id) ? { fate: 'torn', fold: 0 } : null; },
     driverSway: (id: number) => { const d = cars.find(x => x.id === id)?.root.children.find(o => o.name === 'driver'), s = d?.userData.sway; return s ? { roll: s.roll, pitch: s.pitch, drop: d!.userData.seatBase ? d!.userData.seatBase.y - d!.userData.seat.y : 0, look: d!.userData.look ?? 0, target: drivers.memory.get(id)?.target ?? -1 } : null; },

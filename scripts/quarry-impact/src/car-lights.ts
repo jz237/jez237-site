@@ -7,6 +7,8 @@ import * as T from 'three';
 export const LAMP_BREAK=10;
 /** Tail lamp glow: lit for the mood (running) or braking with the lamps on, and braking in daylight, bright enough to read in sun. */
 export const TAIL_GLOW={running:1.1,braking:3.2,daylightBraking:3} as const;
+/** A smashed lamp's lens goes dark (its colour times shade) and dull (roughness at least rough): an empty socket and shards. */
+export const BROKEN_LENS={shade:.3,rough:.85} as const;
 const HEAD=/headlight|(^|\s)lens$/i,TAIL=/brakelight|tail lens/i,NOT_HEAD=/tail|amber|reverse|indicator|signal|brake/i;
 let poolTexture:T.Texture|null=null;
 function lightPool(){
@@ -24,7 +26,9 @@ export function headlightAim(front:number,left:number,right:number){
 }
 export type CarLights={readonly head:number;readonly tail:number;readonly working:number;set(on:boolean,braking?:boolean):void;aim(yaw:number,reach:number):void;dispose():void;
  /** Told where a lamp is when it first breaks (its lens centre in the world), head or tail. */
- onSmash?:(at:T.Vector3,kind:'head'|'tail')=>void};
+ onSmash?:(at:T.Vector3,kind:'head'|'tail')=>void;
+ /** A lamp mesh, for QA. */
+ lamp(kind:'head'|'tail',index:number):T.Mesh|undefined};
 export function attachCarLights(root:T.Object3D,halfLength:number):CarLights{
  root.updateMatrixWorld(true);
  const inverse=root.matrixWorld.clone().invert(),centre=new T.Vector3(),box=new T.Box3();
@@ -49,6 +53,8 @@ export function attachCarLights(root:T.Object3D,halfLength:number):CarLights{
    let mask=0;heads.forEach((m,i)=>{if(smashed(m))mask|=1<<i;});tails.forEach((m,i)=>{if(smashed(m))mask|=1<<(i+16);});
    // A lamp that has just broken leaves its pieces where it was.
    if(broken>=0&&api.onSmash)for(const [list,shift,kind] of [[heads,0,'head'],[tails,16,'tail']] as const)list.forEach((m,i)=>{if(mask&1<<(i+shift)&&!(broken&1<<(i+shift)))api.onSmash!(box.setFromObject(m).getCenter(new T.Vector3()),kind);});
+   // and its lens goes dark and dull, once.
+   if(broken>=0)for(const [list,shift] of [[headMats,0],[tailMats,16]] as const)list.forEach((m,i)=>{if(mask&1<<(i+shift)&&!(broken&1<<(i+shift))){m.color.multiplyScalar(BROKEN_LENS.shade);m.roughness=Math.max(m.roughness,BROKEN_LENS.rough);}});
    if(on===lit&&braking===brake&&mask===broken)return;
    const intact=heads.length?heads.filter((_,i)=>!(mask&1<<i)).length/heads.length:0;
    headMats.forEach((m,i)=>{m.emissiveIntensity=on&&!(mask&1<<i)?2.4:0;});
@@ -60,6 +66,7 @@ export function attachCarLights(root:T.Object3D,halfLength:number):CarLights{
    const y=Number.isFinite(yaw)?yaw:0,r=Math.max(.3,Math.min(1,Number.isFinite(reach)?reach:1)),d=halfLength+5.2*r;
    poolMesh.rotation.set(-Math.PI/2,0,y);poolMesh.scale.set(1,r,1);poolMesh.position.set(Math.sin(y)*(d-halfLength),.06,halfLength+Math.cos(y)*(d-halfLength));
   },
+  lamp(kind,index){return (kind==='head'?heads:tails)[index];},
   dispose(){poolMesh.removeFromParent();poolGeometry.dispose();poolMaterial.dispose();for(const m of owned)m.dispose();}};
  return api;
 }
