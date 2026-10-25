@@ -23,3 +23,9 @@ test('the player can sound their horn with H: a short honk of the recorded horn,
  assert.ok(main.includes("if(e.code==='KeyH'&&!demo&&state==='playing'&&!e.repeat&&cars[0]){if(sound.clip('horn-stuck',cars[0].current,HONK.volume,HONK.length))honks++;}"),'a press, not a held repeat; not in demos (where H hides the HUD)');
  assert.ok(main.includes("const HONK={length:.45,volume:.7} as const;"));
 });
+test('rivals now and then honk at a new target, spaced out per car, from where they are',()=>{
+ const main=read('src/main.ts').toString();
+ assert.ok(main.includes("const RIVAL_HONK={chance:.15,gap:15,length:.32,volume:.5} as const;"),'a sometime thing (tuned: a 90 s 24-car derby honks about 27 times, not 60)');
+ assert.ok(main.includes("if(was!==undefined&&t>=0&&t!==was&&clock-(honkAt.get(c)??-99)>=RIVAL_HONK.gap&&Math.random()<RIVAL_HONK.chance&&sound.clip('horn-stuck',c.current,RIVAL_HONK.volume,RIVAL_HONK.length)){honkAt.set(c,clock);rivalHonks++;}"),'on a new target pick, at the car (spatial)');
+ assert.ok(main.includes("if(state==='playing'&&!online?.active)for(const c of cars){if(c.id===0&&!demo||c.health<=0)continue;"),'AI drivers still running, offline; the player honks with H');
+});

@@ -2164,6 +2164,9 @@ const shredClock=new WeakMap<object,number>();let shredChunks=0;
 const gaspSeen=new WeakMap<object,{rolls:number;blown:boolean}>();let gasps=0,boos=0,honks=0;
 /** The player's horn on H: a honk of length seconds at volume. */
 const HONK={length:.45,volume:.7} as const;
+/** A rival honks at a new target now and then: a chance in each new pick, spaced gap seconds apart per car, length seconds at volume. */
+const RIVAL_HONK={chance:.15,gap:15,length:.32,volume:.5} as const;
+const honkTarget=new WeakMap<object,number>(),honkAt=new WeakMap<object,number>();let rivalHonks=0;
 /** The player rammed a car that was already out: bad form at a derby, and the crowd lets them know (offline, a real hit). */
 function hitTheWreck(closing:number){if(online?.active||demo||closing<CROWD_BOO.closing)return;if(sound.crowdBoo()){boos++;toast('THE CROWD BOOS · THAT CAR WAS OUT',1.4);}}
 const smokeIn=new WeakMap<object,number>();
@@ -2207,6 +2210,9 @@ function updateCamera(dt: number) {
   // A burning car's cabin fills with smoke, murking its glass, and stays sooty after (offline).
   if(state==='playing'||state==='wrecked')for(const c of cars){if(!c.extendedDamage)continue;const was=smokeIn.get(c)??0,now=cabinSmoke(was,c.onFire,dt);if(now===was)continue;smokeIn.set(c,now);
     for(const g of c.glass){const st=(g.material as T.Material).userData.glassState as GlassState|undefined;if(st)st.smoke.value=now;}}
+  // Rivals taunt with the horn: now and then, a driver picking a new car to hunt gives it a honk (offline, each car spaced out).
+  if(state==='playing'&&!online?.active)for(const c of cars){if(c.id===0&&!demo||c.health<=0)continue;const t=drivers.memory.get(c.id)?.target??-1,was=honkTarget.get(c);honkTarget.set(c,t);
+    if(was!==undefined&&t>=0&&t!==was&&clock-(honkAt.get(c)??-99)>=RIVAL_HONK.gap&&Math.random()<RIVAL_HONK.chance&&sound.clip('horn-stuck',c.current,RIVAL_HONK.volume,RIVAL_HONK.length)){honkAt.set(c,clock);rivalHonks++;}}
   // The crowd gasps when a car rolls over or blows up (offline).
   if(state==='playing')for(const c of cars){if(!c.extendedDamage)continue;const seen=gaspSeen.get(c)??{rolls:c.rolls,blown:c.blownUp};if((c.rolls>seen.rolls||c.blownUp&&!seen.blown)&&sound.crowdGasp())gasps++;seen.rolls=c.rolls;seen.blown=c.blownUp;gaspSeen.set(c,seen);}
   // A shredding tyre sheds lumps of rubber at its wheel as the car goes (offline).
@@ -2761,6 +2767,7 @@ async function boot() {
     gasps: () => gasps,
     boos: () => boos,
     honks: () => honks,
+    rivalHonks: () => rivalHonks,
     /** QA: puncture a tyre as rolling over sharp debris does (it starts going down). */
     puncture: (id: number, wheel: number) => { const c = cars.find(x => x.id === id); if (!c?.tyreDamage || !(wheel >= 0 && wheel < 4)) return false; c.tyreDamage[wheel] = Math.max(c.tyreDamage[wheel], TYRE_LEAK_RANGE.onset + .05); return true; },
     cabinSmoke: (id: number) => { const c = cars.find(x => x.id === id); return c ? smokeIn.get(c) ?? 0 : null; },
