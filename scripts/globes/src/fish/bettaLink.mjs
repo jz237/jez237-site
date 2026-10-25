@@ -6,6 +6,7 @@
 // specimen (bettaSpecimen.mjs) moves as that specimen would, bit for bit.
 import * as THREE from 'three';
 import { FIN_QUALITY } from '../../../betta-atelier/src/fin-dynamics.js';
+import { turnPoints } from './bettaSwim.mjs';
 
 /** The water's readings the betta reads (bettaWater.mjs readBettaWater): its 16 probes, then the 8
  *  of the column above its mouth (BETTA_SURFACE_AT), four floats each, and the sand under the first
@@ -13,9 +14,9 @@ import { FIN_QUALITY } from '../../../betta-atelier/src/fin-dynamics.js';
 const SENSE_FLOATS = 24 * 4, SENSE_SAND = 6;
 /** A step (float64s): dt; FIN_QUALITY's step, passScale, maxFrame; the globe (KoiEnv); the host's
  *  inputs (a pellet or none, where; the gape; flared; the swim's gulpUrge); the water's reading or
- *  none, its centroid; how many obstacles; the reading's probes and sand; then the obstacles, eight
- *  floats each (a, b, r, solid). */
-const S = { dt: 0, quality: 1, radius: 4, level: 5, sandLevel: 6, iso: 7, gravity: 8, food: 11, foodAt: 12, gape: 15, flared: 16, gulpUrge: 17, sensed: 18, centroid: 19, obstacles: 22, probes: 23, sand: 23 + SENSE_FLOATS, capsules: 23 + SENSE_FLOATS + SENSE_SAND };
+ *  none, its centroid; how many obstacles; the bowl's turn about its own axis since the last step;
+ *  the reading's probes and sand; then the obstacles, eight floats each (a, b, r, solid). */
+const S = { dt: 0, quality: 1, radius: 4, level: 5, sandLevel: 6, iso: 7, gravity: 8, food: 11, foodAt: 12, gape: 15, flared: 16, gulpUrge: 17, sensed: 18, centroid: 19, obstacles: 22, turn: 23, probes: 26, sand: 26 + SENSE_FLOATS, capsules: 26 + SENSE_FLOATS + SENSE_SAND };
 /** A pose: float64s first (the swim's heading and pitch, the water level it was moved at, the
  *  mouth, the ripple and where, the bubbles and where; 16 of them, so the float32s are aligned),
  *  then float32s (the 16 probes, four each; the vertices, three each). */
@@ -39,10 +40,12 @@ export const poseBytes = (vertices) => POSE_HEAD * 8 + (PROBE_FLOATS + vertices)
 /**
  * A step's inputs into `data` (a Float64Array back from the worker, or null, or one too short: a new
  * one is made). dt, sense, env as BettaSpecimen.step takes them; host: what it reads of its host
- * (BettaHost); gulpUrge: the swim's (BettaSwim.gulpUrge, set by the page); turn: a turn (rad, about
- * its axis: sim frame) to carry the obstacles on by, or null. Returns the array.
+ * (BettaHost); gulpUrge: the swim's (BettaSwim.gulpUrge, set by the page); lead: a turn (rad, about
+ * its axis: sim frame) to carry the obstacles on by, or null; turn: the bowl's turn about its own
+ * axis since the last step (rad, along it: sim frame), which carries the fish, or null. Returns the
+ * array.
  */
-export function writeStep(data, dt, sense, env, host, gulpUrge, turn = null) {
+export function writeStep(data, dt, sense, env, host, gulpUrge, lead = null, turn = null) {
   const obstacles = host.obstacles, length = S.capsules + obstacles.length * 8;
   if (!data || data.length < length) data = new Float64Array(length);
   data[S.dt] = dt;
@@ -61,12 +64,13 @@ export function writeStep(data, dt, sense, env, host, gulpUrge, turn = null) {
     data.set(sense.sand.subarray(0, SENSE_SAND), S.sand);
   }
   data[S.obstacles] = obstacles.length;
-  const angle = turn ? Math.hypot(turn[0], turn[1], turn[2]) : 0;
+  for (let k = 0; k < 3; k++) data[S.turn + k] = turn ? turn[k] : 0;
+  const angle = lead ? Math.hypot(lead[0], lead[1], lead[2]) : 0;
   obstacles.forEach((o, k) => {
     const at = S.capsules + k * 8;
     if (angle > 0) {
-      turnBy(o.a, turn, angle, data, at);
-      turnBy(o.b, turn, angle, data, at + 3);
+      turnBy(o.a, lead, angle, data, at);
+      turnBy(o.b, lead, angle, data, at + 3);
     } else {
       data.set(o.a, at);
       data.set(o.b, at + 3);
@@ -93,16 +97,17 @@ export function stepScratch() {
     env: { radius: 0, level: 0, sandLevel: 0, iso: 0, gravity: [0, 0, 0] },
     host: { obstacles: [], food: null, gapeWant: 0, flared: false },
     food: { pos: [0, 0, 0] },
+    turn: [0, 0, 0],
   };
 }
 
 /**
  * A step written by writeStep, unpacked into `scratch` (stepScratch) for `fish` (the worker's
  * specimen): FIN_QUALITY and the swim's gulpUrge set as the page had them. Returns { dt, sense,
- * env, host } for fish.step.
+ * env, host, turn } for fish.step.
  */
 export function readStep(data, fish, scratch) {
-  const { sense, env, host, food } = scratch;
+  const { sense, env, host, food, turn } = scratch;
   FIN_QUALITY.step = data[S.quality]; FIN_QUALITY.passScale = data[S.quality + 1]; FIN_QUALITY.maxFrame = data[S.quality + 2];
   env.radius = data[S.radius]; env.level = data[S.level]; env.sandLevel = data[S.sandLevel]; env.iso = data[S.iso];
   for (let k = 0; k < 3; k++) env.gravity[k] = data[S.gravity + k];
@@ -123,7 +128,9 @@ export function readStep(data, fish, scratch) {
     o.r = data[at + 6];
     o.solid = data[at + 7];
   });
-  return { dt: data[S.dt], sense: data[S.sensed] ? sense : null, env, host };
+  for (let k = 0; k < 3; k++) turn[k] = data[S.turn + k];
+  const turned = turn[0] !== 0 || turn[1] !== 0 || turn[2] !== 0;
+  return { dt: data[S.dt], sense: data[S.sensed] ? sense : null, env, host, turn: turned ? turn : null };
 }
 
 /** `fish`'s pose after a step into `buffer` (an ArrayBuffer of poseBytes, back from the page, or
@@ -175,6 +182,14 @@ export class BettaRemote {
     this.spareRun = 0;
     this.held = 0;
     this.turn = [0, 0, 0];
+    // (The bowl's turns about its own axis: all of them so far; those not yet sent; at each step
+    // still to be drawn, all of them as it was sent, oldest first, and arrays to keep those in;
+    // and, as a pose is drawn, those since its step.)
+    this.turned = [0, 0, 0];
+    this.turnOwed = [0, 0, 0];
+    this.turnedAt = [];
+    this.turnedFree = [];
+    this.turnSince = [0, 0, 0];
     worker.onmessage = (e) => this.receive(e.data);
     worker.onerror = (e) => {
       e.preventDefault?.();
@@ -197,18 +212,26 @@ export class BettaRemote {
    *  or, with IN_FLIGHT steps unanswered, its time kept for the next. Nothing before it is ready.
    *  omega: the bowl's spin (rad/s, sim frame). Its pose is drawn a frame or more from now (one,
    *  and one more for each pose to be drawn before it: those waiting, and those of the steps still
-   *  unanswered), so the furnishings it is kept out of are sent where the bowl's turn will have
-   *  carried them by then: where they are drawn with it. */
-  post(dt, sense, env, host, omega) {
+   *  unanswered), so the furnishings it is kept out of are sent where the bowl's spin will have
+   *  carried them by then: where they are drawn with it. (Not its turn about its own axis, `turn`
+   *  this frame, as Betta.update has it: the fish is carried round with that, and keeps its place
+   *  among them.)
+   *  @param {ArrayLike<number> | null} [turn] */
+  post(dt, sense, env, host, omega, turn = null) {
+    if (turn) for (let k = 0; k < 3; k++) this.turnOwed[k] += turn[k];
     if (!this.ready || this.failed) return;
     if (this.sent >= IN_FLIGHT) {
       this.owed += dt;
       return;
     }
-    const lead = (1 + this.waiting.length + this.sent) * dt, turn = this.turn;
-    for (let k = 0; k < 3; k++) turn[k] = omega[k] * lead;
-    const step = writeStep(this.steps.pop() ?? null, dt + this.owed, sense, env, host, this.swim.gulpUrge, turn);
+    const ahead = (1 + this.waiting.length + this.sent) * dt, lead = this.turn, rate = turn && dt > 0 ? 1 / dt : 0;
+    for (let k = 0; k < 3; k++) lead[k] = (omega[k] - (turn ? turn[k] : 0) * rate) * ahead;
+    const step = writeStep(this.steps.pop() ?? null, dt + this.owed, sense, env, host, this.swim.gulpUrge, lead, this.turnOwed);
     this.owed = 0;
+    this.turnOwed.fill(0);
+    const at = this.turnedFree.pop() ?? [0, 0, 0];
+    for (let k = 0; k < 3; k++) at[k] = this.turned[k];
+    this.turnedAt.push(at);
     this.worker.postMessage({ step, spare: this.spare }, [step.buffer, ...this.spare]);
     this.spare.length = 0;
     this.sent++;
@@ -221,8 +244,12 @@ export class BettaRemote {
    *  row, one is skipped (what it did to the water still taken), to be a frame behind again. Null:
    *  none has come, and the last one stays drawn; after STALLED such frames in a row the worker
    *  has failed. (A frame takes one pose and sends one step, and IN_FLIGHT bounds the steps
-   *  unanswered, so no more than two are ever waiting.) */
-  take() {
+   *  unanswered, so no more than two are ever waiting.) turn: the bowl's turn about its own axis
+   *  this frame (Betta.update): a pose is drawn carried on by the turns since its step was sent, as
+   *  the fish has been carried by those before it.
+   *  @param {ArrayLike<number> | null} [turn] */
+  take(turn = null) {
+    if (turn) for (let k = 0; k < 3; k++) this.turned[k] += turn[k];
     const waiting = this.waiting;
     if (!waiting.length) {
       if (++this.held >= STALLED) this.failed = this.ready ? 'the betta worker stopped answering' : 'the betta worker never came up';
@@ -233,18 +260,27 @@ export class BettaRemote {
     if (this.spareRun >= CATCH_UP) {
       this.spareRun = 0;
       this.absorb(waiting.shift());
+      this.turnedFree.push(this.turnedAt.shift());
     }
-    const pose = waiting.shift(), buffer = this.absorb(pose);
+    const pose = waiting.shift(), buffer = this.absorb(pose), at = this.turnedAt.shift();
     const head = new Float64Array(buffer, 0, POSE_HEAD), floats = new Float32Array(buffer, POSE_HEAD * 8);
-    const s = this.swim;
+    const s = this.swim, since = this.turnSince;
+    if (at) {
+      for (let k = 0; k < 3; k++) since[k] = this.turned[k] - at[k];
+      this.turnedFree.push(at);
+    } else since.fill(0);
     s.mode = pose.mode;
-    s.heading = head[P.heading];
+    s.heading = head[P.heading] + since[1];
     s.pitch = head[P.pitch];
     this.level = head[P.level];
+    turnPoints(head, since, P.mouth, P.mouth + 3);
     this.mouth.fromArray(head, P.mouth);
     this.probes.set(floats.subarray(0, PROBE_FLOATS));
+    turnPoints(this.probes, since, 0, PROBE_FLOATS, 4);
     this.posed = true;
-    return floats.subarray(PROBE_FLOATS, PROBE_FLOATS + this.vertexFloats);
+    const vertices = floats.subarray(PROBE_FLOATS, PROBE_FLOATS + this.vertexFloats);
+    turnPoints(vertices, since);
+    return vertices;
   }
 
   /** A pose's disturbance of the water added to what the page has yet to take; its buffer to go back. */

@@ -375,6 +375,9 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // frame or two ago), the water's own motion, then the water (and the kelp with it).
   // The fish that eat the food in the globe shown.
   const feeders = (): Feeder[] => (reef.active ? clowns.fish : koi.visible ? [koi] : betta.active ? [betta] : []);
+  // (The bowl's angle about its own axis at the last frame, and the turn since, for the fish.)
+  let lastTwist = controller.twist;
+  const bettaTurn = [0, 0, 0];
   const advance = (dt: number): void => {
     controller.update(dt, cfg.gravity);
     if (lid && feeding) {
@@ -405,7 +408,16 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
       });
       betta.obstacles = turnedObstacles;
     }
-    betta.update(dt, sim.koiSense, koiEnv(), controller.omega);
+    // The bowl's turn about its own axis this frame (along its axis, sim frame): the fish is carried
+    // round with it, as by the hand that turned the bowl (BettaSwim.turnWith). (Whole turns are
+    // taken off the controller's angle as it goes; a jump of more than a radian is a reset.)
+    let twisted = controller.twist - lastTwist;
+    twisted -= 2 * Math.PI * Math.round(twisted / (2 * Math.PI));
+    lastTwist = controller.twist;
+    if (Math.abs(twisted) > 1) twisted = 0;
+    const axis = controller.rotation.elements;
+    for (let k = 0; k < 3; k++) bettaTurn[k] = axis[3 + k] * twisted;
+    betta.update(dt, sim.koiSense, koiEnv(), controller.omega, twisted ? bettaTurn : null);
     sim.setKoiProbes(betta.active ? betta.probePoints() : koi.probePoints());
     if (betta.active) {
       sim.setProbes(BETTA_SURFACE_AT, betta.surfaceProbes());

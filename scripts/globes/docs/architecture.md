@@ -1122,6 +1122,12 @@ phone's 16.7 ms frame.
   while the worker keeps up with the frames (a simulated worker taking 3-15 ms a step, 1 ms each
   way, frames 16.7 ms apart); one that cannot (18 ms) draws 16% of its poses a frame later than led,
   its own reply being late, which no count can see.
+- **The bowl turned about its own axis** (two fingers, a right- or Ctrl-drag) carries the fish round
+  with it, as the hand turning the bowl would (BettaSwim.turnWith: where it is and goes, where it
+  displays, the ways it faces; the water keeps its own motion). Each step carries it by the turns
+  since the last step was sent, and its pose is drawn carried on by those since its own step
+  (BettaRemote.take), so it keeps its place among the furnishings however late the reply; the lead
+  above is the spin less that turn (a tip or a roll), which the fish is not carried by.
 - **Switches.** `?worker=0` moves it on the page's thread; `?worker=1` in a worker anywhere
   (desktops stay on the page's thread by default: their frames are not short of time). `?manual`
   moves it in step with its ticks unless `?worker=1`. A worker that fails, cannot start or goes

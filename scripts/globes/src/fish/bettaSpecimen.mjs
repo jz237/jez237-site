@@ -113,11 +113,14 @@ export class BettaSpecimen {
    * @param {{ probes: Float32Array, sand: Float32Array, centroid: number[] } | null} sense
    * @param {{ radius: number, level: number, sandLevel: number, gravity: readonly number[], iso: number }} env
    * @param {BettaHost} host
+   * @param {ArrayLike<number> | null} [turn] the bowl's turn about its own axis since the last step
+   *   (rad, along the axis, sim frame): the fish is carried round with it (BettaSwim.turnWith)
    */
-  step(dt, sense, env, host) {
+  step(dt, sense, env, host, turn = null) {
     dt = Math.max(0, Math.min(dt, 0.07));
     this.time += dt;
     this.level = env.level;
+    if (turn) this.swim.turnWith(turn);
     // Sample the actual current and its rotation across the moving anatomy.
     this.waterState = readBettaWater(sense, this.probes, env);
     this.flow.lerp(this.flowTarget.fromArray(this.waterState.flow), 1 - Math.exp(-5 * dt));

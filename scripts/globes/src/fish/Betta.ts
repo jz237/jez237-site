@@ -133,8 +133,10 @@ export class Betta implements Feeder {
   }
 
   /** One frame (dt s): what the water told it (FluidSim's koiSense), the globe; omega: the bowl's
-   *  spin (rad/s, sim frame), for a worker's pose drawn a frame or more on. */
-  update(dt: number, sense: KoiSense | null, env: KoiEnv, omega: readonly number[] = STILL): void {
+   *  spin (rad/s, sim frame), for a worker's pose drawn a frame or more on; turn: the bowl's turn
+   *  about its own axis this frame (rad, along the axis, sim frame), which carries the fish round
+   *  with it (BettaSwim.turnWith), or null. */
+  update(dt: number, sense: KoiSense | null, env: KoiEnv, omega: readonly number[] = STILL, turn: readonly number[] | null = null): void {
     if (!this.active || !this.loaded) {
       this.show(false);
       return;
@@ -147,17 +149,17 @@ export class Betta implements Feeder {
     }
     const remote = this.remote;
     if (!remote) {
-      this.specimen.step(dt, sense, env, this);
+      this.specimen.step(dt, sense, env, this, turn);
       // (Its BVH is refitted once, after the contact passes have moved it.)
       this.refit(this.specimen.vertices);
       this.show(true);
       return;
     }
-    // A frame behind: the pose back from an earlier frame's step is drawn (once the first is back),
-    // then this frame's step is sent.
-    const vertices = remote.take();
+    // A frame behind: the pose back from an earlier frame's step is drawn (once the first is back;
+    // carried on by the bowl's turn since that step), then this frame's step is sent.
+    const vertices = remote.take(turn);
     if (vertices) this.refit(vertices);
-    remote.post(dt, sense, env, this, omega);
+    remote.post(dt, sense, env, this, omega, turn);
     this.show(remote.posed);
   }
 

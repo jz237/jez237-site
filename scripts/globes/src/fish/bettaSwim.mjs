@@ -4,6 +4,19 @@ const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const damp = (x, y, dt, rate) => x + (y - x) * (1 - Math.exp(-dt * rate));
 const wrap = x => Math.atan2(Math.sin(x), Math.cos(x));
 const smooth = (a, b, x) => { const u = clamp((x - a) / (b - a), 0, 1); return u * u * (3 - 2 * u); };
+/** Points (x, y, z, `stride` floats apart, from `start` to `end`) turned in place about the axis
+ *  through the origin that `turn` points along, by its length (rad): Rodrigues. */
+export function turnPoints(points, turn, start = 0, end = points.length, stride = 3) {
+  const angle = Math.hypot(turn[0], turn[1], turn[2]);
+  if (!(angle > 0)) return;
+  const kx = turn[0] / angle, ky = turn[1] / angle, kz = turn[2] / angle, c = Math.cos(angle), s = Math.sin(angle);
+  for (let i = start; i < end; i += stride) {
+    const x = points[i], y = points[i + 1], z = points[i + 2], along = (kx * x + ky * y + kz * z) * (1 - c);
+    points[i] = x * c + (ky * z - kz * y) * s + kx * along;
+    points[i + 1] = y * c + (kz * x - kx * z) * s + ky * along;
+    points[i + 2] = z * c + (kx * y - ky * x) * s + kz * along;
+  }
+}
 /** The point of segment a-b nearest p. */
 const nearestOn = (p, a, b) => {
   const ab = [b[0] - a[0], b[1] - a[1], b[2] - a[2]];
@@ -113,6 +126,21 @@ export class BettaSwim {
     // How much it has to do at the film (set by the host: the betta bowl's nest wanting rebuilding,
     // 0..1): it goes up for air sooner after each trip.
     this.gulpUrge = 0;
+  }
+
+  /** Carried round as the bowl is turned about its own axis (turn: the turn this frame, rad, along
+   *  that axis, sim frame): it keeps its place among the furnishings, as if the hand that turned the
+   *  bowl had moved it with them. Where it is and is going, where it means to display, and the ways
+   *  it faces turn with them; the water keeps its own motion, as the sim has it. */
+  turnWith(turn) {
+    for (const p of [this.position, this.velocity, this.target, this.mirrorPoint]) turnPoints(p, turn);
+    // (Headings face along (-cos, sin) in x, z: a turn about the vertical adds to them; a bearing
+    // round the axis, atan2(z, x), takes it away.)
+    const yaw = turn[1];
+    this.heading = wrap(this.heading + yaw);
+    this.mirrorFace = wrap(this.mirrorFace + yaw);
+    this.startleHeading = wrap(this.startleHeading + yaw);
+    this.lapAngle = wrap(this.lapAngle - yaw);
   }
 
   /** How far p is outside the nearest obstacle (Infinity with none), and the way out from it. */

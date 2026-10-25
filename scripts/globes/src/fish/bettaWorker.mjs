@@ -20,8 +20,8 @@ self.onmessage = ({ data }) => {
     return;
   }
   free.push(...data.spare);
-  const { dt, sense, env, host } = readStep(data.step, fish, scratch);
-  fish.step(dt, sense, env, host);
+  const { dt, sense, env, host, turn } = readStep(data.step, fish, scratch);
+  fish.step(dt, sense, env, host, turn);
   const pose = writePose(free.pop() ?? null, fish);
   self.postMessage({ pose, step: data.step, mode: fish.swim.mode }, [pose, data.step.buffer]);
 };
