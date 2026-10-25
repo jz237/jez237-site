@@ -118,7 +118,7 @@ import {BONNET_STEAM,bonnetHeat,steamRate} from './bonnet-steam';
 import {vapourRate} from './exhaust-vapour';
 import {WIND,eventWind,gusting} from './wind';
 import {Storm,THUNDER} from './thunder';
-import {marshalPosts,marshalFigure,poseMarshal,marshalFlag,type Post} from './arena-marshals';
+import {marshalPosts,marshalFigure,poseMarshal,marshalFlag,flinchesAt,FLINCH,type Post} from './arena-marshals';
 import {HEAD_GASKET} from './damage-handling';
 const HEAD_GASKET_AFTER=HEAD_GASKET.after;
 import {LEAK as TYRE_LEAK_RANGE} from './damage-handling';
@@ -770,7 +770,9 @@ const breezeBase={x:0,z:0},breeze={x:0,z:0};let windy=false;
 /** The thunderstorm over an offline rain event, and the light its lightning flashes. */
 let storm:Storm|null=null;const lightning=new T.AmbientLight(0xdfe8ff,0);
 /** Flag marshals standing round an offline derby arena. */
-let marshals:{figure:T.Group;post:Post}[]=[];
+let marshals:{figure:T.Group;post:Post;flinchFor:number;flinch:number}[]=[];
+/** Each car's last hit seen by the marshals. */
+const marshalSeen=new WeakMap<object,number>();
 function clearMarshals(){for(const m of marshals){m.figure.removeFromParent();m.figure.traverse(o=>{if(o instanceof T.Mesh){o.geometry.dispose();(o.material as T.Material).dispose();}});}marshals=[];}
 let clearSky: T.Texture | null = null, overcastSky: T.Texture | null = null;
 function applyEventLighting(fresh: boolean, choice = settings.lighting) {
@@ -956,7 +958,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   ];
   const ratedGrid=!attract&&activeClubRound===null&&!activeTimeTrial&&(demo?demoOptions.classLimit:customEvent()&&mode!=='playground'&&eventOptions.classLimit)?(demo?demoPerformanceGrid(kind,demoOptions,garage):eventPerformanceGrid(kind,eventOptions,garage)):null;
   // Marshals take their posts round an offline derby arena (the event's venue is active by now).
-  if(!attract&&mode==='derby'&&!online?.active&&!demo)marshals=marshalPosts(activeVenue.arena??DERBY_ARENA,activeVenue.course.height).map(post=>{const figure=marshalFigure();figure.position.set(post.x,post.y,post.z);figure.rotation.y=post.yaw;scene.add(figure);return {figure,post};});
+  if(!attract&&mode==='derby'&&!online?.active&&!demo)marshals=marshalPosts(activeVenue.arena??DERBY_ARENA,activeVenue.course.height).map(post=>{const figure=marshalFigure();figure.position.set(post.x,post.y,post.z);figure.rotation.y=post.yaw;scene.add(figure);return {figure,post,flinchFor:0,flinch:0};});
   for (let i = 0; i < count; i++) {
     const type =
       ratedGrid?ratedGrid.at(i):!attract&&activeClubRound!==null?clubCup!.roster[i].kind:demo&&!attract?demoCarKind(i,kind,demoOptions.lineup):i === 0 ? kind : activeChallenge?(['coupe','sedan','hatch']as CarKind[])[i%3]:!attract&&customEvent()&&mode!=='playground'?gridCarKind(i,kind,eventOptions.lineup):CAR_KINDS[i%CAR_KINDS.length];
@@ -2473,7 +2475,11 @@ function frame(now: number) {
   if(windy&&!online?.active){gusting(breezeBase,clock,breeze);fx.wind.set(breeze.x,breeze.z);vehicleFire?.setWind(breeze,WIND.fire);rain?.setWind(breeze);}
   else if(fx.wind.x||fx.wind.y){fx.wind.set(0,0);vehicleFire?.setWind(null);rain?.setWind(null);}
   // The marshals wave green as a heat starts, red for a fire and yellow for a wreck or a rolled car near them, chequered at the end.
-  if(state==='countdown'||state==='playing'||state==='wrecked'||state==='result')for(const m of marshals)poseMarshal(m.figure,marshalFlag(m.post,elapsed,cars,state==='result'),clock);
+  // A heavy hit close to a post makes its marshal flinch.
+  if(marshals.length&&state==='playing')for(const c of cars){const seen=marshalSeen.get(c);marshalSeen.set(c,c.impactSerial);if(seen===undefined||seen===c.impactSerial)continue;
+    for(const m of marshals)if(flinchesAt(m.post,c.current.x,c.current.z,c.lastDamage))m.flinchFor=FLINCH.hold;}
+  if(state==='countdown'||state==='playing'||state==='wrecked'||state==='result')for(const m of marshals){m.flinchFor=Math.max(0,m.flinchFor-dt);m.flinch+=((m.flinchFor>0?1:0)-m.flinch)*Math.min(1,dt*FLINCH.rate);
+    poseMarshal(m.figure,marshalFlag(m.post,elapsed,cars,state==='result'),clock,m.flinch);}
   // Lightning flashes over a rain event, and its thunder follows as far behind as the strike is away (offline).
   if(storm&&(state==='countdown'||state==='playing'||state==='wrecked')){if(!lightning.parent)scene.add(lightning);const s=storm.step(dt);lightning.intensity=s.flash*THUNDER.light;if(s.clap)sound.thunder(s.clap.near,s.clap.volume);}
   else if(lightning.intensity)lightning.intensity=0;
@@ -2861,7 +2867,7 @@ async function boot() {
     vapour: () => vapourPuffs,
     storm: () => storm ? { strikes: storm.strikes, claps: storm.claps, thunders: sound.thunders, flash: +lightning.intensity.toFixed(3) } : null,
     strike: () => { if (!storm) return false; storm.strikeNow(); return true; },
-    marshals: () => marshals.map(m => ({ flag: m.figure.userData.flag ?? 'down', at: [m.post.x, m.post.y, m.post.z].map(v => +v.toFixed(1)) })),
+    marshals: () => marshals.map(m => ({ flag: m.figure.userData.flag ?? 'down', flinch: +m.flinch.toFixed(2), at: [m.post.x, m.post.y, m.post.z].map(v => +v.toFixed(1)) })),
     rainSteam: () => vehicleFire?.rainSteam ?? 0,
     splashes: () => rainSplashes?.landed ?? 0,
     wind: () => windy && !online?.active ? { x: +breeze.x.toFixed(3), z: +breeze.z.toFixed(3), base: { ...breezeBase } } : null,
