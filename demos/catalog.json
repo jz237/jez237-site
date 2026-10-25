@@ -408,7 +408,33 @@
       "GPU fluid simulation",
       "MIT licensed"
     ],
-    "note": "Requires WebGPU · Best on a recent desktop GPU · Preview supplied by the original project"
+    "note": "Requires WebGPU · Best on a recent desktop GPU · Preview supplied by the original project",
+    "alternateUrl": "procedural-fire/",
+    "alternateLabel": "Procedural Fire"
+  },
+  {
+    "id": "026",
+    "title": "Procedural Fire",
+    "category": "WebGPU · Campfire simulation",
+    "description": "Light a campfire made entirely from computation: curling flames, glowing logs, drifting sparks and crackling sound. Stoke the fire, send a gust through it and orbit the physically based scene.",
+    "url": "procedural-fire/",
+    "image": "assets/procedural-fire.jpg",
+    "imageAlt": "Bright procedural campfire flames above charred logs and glowing coals, from Leon Lin’s original project",
+    "imageWidth": 1920,
+    "imageHeight": 1080,
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/procedural-fire",
+    "features": [
+      "3D combustion & volumetric flames",
+      "Procedural crackling fire audio",
+      "Stoke, sparks, gusts & fire size",
+      "Orbit camera & three quality levels"
+    ],
+    "facts": [
+      "By Leon Lin",
+      "No texture or audio samples",
+      "MIT licensed"
+    ],
+    "note": "Requires advanced WebGPU features · Best on a recent desktop GPU · Preview supplied by the original project"
   },
   {
     "id": "018",
