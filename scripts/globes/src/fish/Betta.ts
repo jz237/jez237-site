@@ -1,6 +1,7 @@
 import * as THREE from 'three/webgpu';
 import { createBetta } from '../../../betta-atelier/src/fish.js';
 import { TriangleBVH } from './triangleBVH.mjs';
+import { BETTA_LEAF_WORKGROUP, bettaRefitBuffers, bettaRefitLayout, bettaRefitPlan, bettaRefitWGSL } from './bettaRefit.mjs';
 import { BettaSwim, BETTA_SCALE as SCALE } from './bettaSwim.mjs';
 import { BETTA_PROBES, BETTA_SURFACE_COUNT, bettaSurfaceHeights, readBettaWater } from './bettaWater.mjs';
 import type { Feeder, FoodAim } from './FishFood';
@@ -47,12 +48,21 @@ export class Betta implements Feeder {
   readonly fish = createBetta({ compact: true });
   readonly rig = new THREE.Group();
   readonly atlas: THREE.CanvasTexture;
-  readonly texture: THREE.DataTexture;
+  /** Its BVH for the shader (triangleBVH.mjs's layout), on the GPU, where it is refitted round the
+   *  moving fish each frame (bettaRefit.mjs). */
+  readonly texture: THREE.Texture;
+  /** (As built and fitted round the first pose: the texture's first contents.) */
   readonly bvh: TriangleBVH;
   readonly ready: Promise<void>;
   private readonly meshes: { mesh: THREE.Mesh; offset: number }[] = [];
   private readonly parts: Part[];
   private readonly vertices: Float32Array;
+  private readonly device: GPUDevice;
+  private readonly gpu: { texture: GPUTexture; vertices: GPUBuffer; group: GPUBindGroup; leaves: GPUComputePipeline; nodes: GPUComputePipeline; leafGroups: number };
+  /** The texture's first texel (node count, triangle texel offset, triangle count, visible), and
+   *  whether it says visible. */
+  private readonly header: Float32Array;
+  private shown = false;
   private readonly probes = new Float32Array(16 * 4);
   private readonly flow = new THREE.Vector3();
   // (Scratch, so that a frame allocates little.)
@@ -112,7 +122,8 @@ export class Betta implements Feeder {
     return near;
   }
 
-  constructor() {
+  constructor(device: GPUDevice) {
+    this.device = device;
     this.rig.add(this.fish);
     this.rig.scale.setScalar(SCALE);
     this.fish.userData.locomotion = this.locomotion();
@@ -162,10 +173,14 @@ export class Betta implements Feeder {
       return part;
     });
     this.bvh = new TriangleBVH(this.vertices, new Uint32Array(indices), new Float32Array(uv), materials, new Float32Array(finUV));
-    this.texture = new THREE.DataTexture(this.bvh.data, this.bvh.width, this.bvh.height, THREE.RGBAFormat, THREE.FloatType);
+    this.header = this.bvh.data.slice(0, 4);
+    this.gpu = this.refitter();
+    // (Wrapped for three.js as GlobeView's texelTexture wraps the others: read texel by texel, no sampler.)
+    this.texture = new THREE.ExternalTexture(this.gpu.texture);
+    (this.texture as unknown as { image: object }).image = { width: this.bvh.width, height: this.bvh.height };
+    this.texture.type = THREE.FloatType;
     this.texture.minFilter = this.texture.magFilter = THREE.NearestFilter;
     this.texture.generateMipmaps = false;
-    this.texture.needsUpdate = true;
     const canvas = document.createElement('canvas');
     canvas.width = 2048; canvas.height = 3072;
     this.atlas = new THREE.CanvasTexture(canvas);
@@ -184,12 +199,39 @@ export class Betta implements Feeder {
       this.loaded = true;
     });
     this.updateVertices();
+    this.bvh.refit(this.vertices);
+    // (The whole texture once; hidden until it swims.)
+    device.queue.writeTexture({ texture: this.gpu.texture }, this.bvh.data as unknown as BufferSource, { bytesPerRow: this.bvh.width * 16, rowsPerImage: this.bvh.height }, [this.bvh.width, this.bvh.height]);
     this.updateProbes();
+  }
+
+  /** The GPU's side of the BVH: its texture, the kernels that refit it (bettaRefit.mjs) and their
+   *  tables, uploaded once; the vertices' buffer, written each frame. */
+  private refitter(): Betta['gpu'] {
+    const device = this.device, plan = bettaRefitPlan(this.bvh, this.vertices.length / 3);
+    const texture = device.createTexture({ label: 'betta BVH', size: [this.bvh.width, this.bvh.height], format: 'rgba32float', usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.STORAGE_BINDING | GPUTextureUsage.COPY_DST });
+    const U = GPUBufferUsage;
+    const buffers: Record<string, GPUBuffer> = {};
+    for (const [name, b] of Object.entries(bettaRefitBuffers(plan))) {
+      buffers[name] = device.createBuffer({ label: `betta: ${name}`, size: b.size, usage: (b.usage === 'uniform' ? U.UNIFORM : U.STORAGE) | U.COPY_DST });
+      if (b.data) device.queue.writeBuffer(buffers[name], 0, b.data as unknown as BufferSource);
+    }
+    const layout = device.createBindGroupLayout({ label: 'betta refit', entries: bettaRefitLayout() as GPUBindGroupLayoutEntry[] });
+    const module = device.createShaderModule({ label: 'betta refit', code: bettaRefitWGSL });
+    const pipelineLayout = device.createPipelineLayout({ bindGroupLayouts: [layout] });
+    const pipe = (entryPoint: string) => device.createComputePipeline({ label: `betta: ${entryPoint}`, layout: pipelineLayout, compute: { module, entryPoint } });
+    const names = ['bettaRefit', 'bettaVerts', 'bettaSlots', 'bettaWords', 'bettaRecords', 'bettaNodeBox'];
+    const group = device.createBindGroup({
+      label: 'betta refit',
+      layout,
+      entries: [...names.map((name, binding) => ({ binding, resource: { buffer: buffers[name] } })), { binding: names.length, resource: texture.createView() }],
+    });
+    return { texture, vertices: buffers.bettaVerts, group, leaves: pipe('bettaLeaves'), nodes: pipe('bettaNodes'), leafGroups: Math.ceil(plan.leafCount / BETTA_LEAF_WORKGROUP) };
   }
 
   update(dt: number, sense: KoiSense | null, env: KoiEnv): void {
     if (!this.active || !this.loaded) {
-      if (this.bvh.data[3]) { this.bvh.data[3] = 0; this.texture.needsUpdate = true; }
+      this.show(false);
       return;
     }
     dt = Math.max(0, Math.min(dt, 0.07));
@@ -211,7 +253,7 @@ export class Betta implements Feeder {
     this.fish.userData.display.requested = this.flared || this.swim.flaring;
     this.fish.userData.update(this.time);
     // (Its BVH is refitted once, after the contact passes have moved it.)
-    this.updateVertices(false);
+    this.updateVertices();
     // Contact against the glass and sampled bed, not a fixed waterline: sloshing
     // can carry the fish vertically and the density probes guide its recovery.
     const near = this.solidsNear();
@@ -240,11 +282,34 @@ export class Betta implements Feeder {
       const v = this.vertices;
       for (let i = 0; i < v.length; i += 3) { v[i] += dx; v[i + 1] += dy; v[i + 2] += dz; }
     }
-    this.bvh.refit(this.vertices);
-    this.bvh.data[3] = 1;
-    this.texture.needsUpdate = true;
+    this.refit();
+    this.show(true);
     this.updateProbes();
     this.disturb(dt);
+  }
+
+  /** The BVH refitted round this frame's vertices, on the GPU: submitted now, before the frame that
+   *  draws them is. */
+  private refit(): void {
+    const { device, gpu } = this;
+    device.queue.writeBuffer(gpu.vertices, 0, this.vertices as unknown as BufferSource);
+    const enc = device.createCommandEncoder({ label: 'betta' });
+    const pass = enc.beginComputePass({ label: 'betta refit' });
+    pass.setBindGroup(0, gpu.group);
+    pass.setPipeline(gpu.leaves);
+    pass.dispatchWorkgroups(gpu.leafGroups);
+    pass.setPipeline(gpu.nodes);
+    pass.dispatchWorkgroups(1);
+    pass.end();
+    device.queue.submit([enc.finish()]);
+  }
+
+  /** Whether the shader traces it (the header's flag), written when that changes. */
+  private show(on: boolean): void {
+    if (this.shown === on) return;
+    this.shown = on;
+    this.header[3] = on ? 1 : 0;
+    this.device.queue.writeTexture({ texture: this.gpu.texture }, this.header as unknown as BufferSource, { bytesPerRow: 16 }, [1, 1]);
   }
 
   /** What the fish did to the water at the film this frame, for the sim to take once (main.ts):
@@ -326,7 +391,7 @@ export class Betta implements Feeder {
     return { ...s, speed: s.speed / SCALE, position: s.position.map((v, k) => (v + offset[k]) / SCALE), velocity: s.velocity.map((v, k) => (v + offsetVelocity[k]) / SCALE) };
   }
 
-  private updateVertices(refit = true): void {
+  private updateVertices(): void {
     this.rig.updateMatrixWorld(true);
     const body = this.fish.userData.bodyMotion, out = this.vertices, s = this.carry;
     const lift = body.gill * 0.046 + this.fish.userData.display.flare * 0.085;
@@ -362,6 +427,5 @@ export class Betta implements Feeder {
         out[o + 2] = (e[2] * x + e[6] * y + e[10] * z + e[14]) * w;
       }
     }
-    if (refit) this.bvh.refit(this.vertices);
   }
 }

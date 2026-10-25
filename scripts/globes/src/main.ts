@@ -152,7 +152,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   });
   const koi = new Koi(device, fishConfig, koiEnv());
   sim.koiPose = koi.texture;
-  const betta = new Betta();
+  const betta = new Betta(device);
   // The betta's globe is a bowl, open at the mouth, with a lid (where the page shows it), which
   // comes off only to feed the fish.
   const bowl = GLOBES.some((g) => g.betta) ? bowlShape(o.globe, LITE) : null;
