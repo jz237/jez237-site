@@ -1,6 +1,7 @@
+import {restoreRoofSignBytes} from './roof-sign-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readRaceNumbersPrevious,restoreRaceNumbersBytes,verifyRaceNumbersRevision} from './race-numbers-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreRoofSignBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('RaceNumbers preserves every prior fixture, vehicle asset, venue art and history input',verifyRaceNumbersRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/race-numbers/revision.json').toString());

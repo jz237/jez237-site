@@ -13,5 +13,5 @@ test('an own number or lettering, a full livery or a bad number leaves the liver
  assert.equal(withRaceNumbers([newLayer('number','left')],3),null);assert.equal(withRaceNumbers([newLayer('text','top')],3),null);
  assert.equal(withRaceNumbers(Array.from({length:LIVERY_LIMIT-2},()=>newLayer('stripe','left')),3),null,'no room');
  assert.equal(withRaceNumbers([],0),null);assert.equal(withRaceNumbers([],1.5),null);
- assert.ok(readFileSync(new URL('../src/main.ts',import.meta.url),'utf8').includes("if(!attract&&!online?.active&&i>0&&mode==='derby'){const numbered=withRaceNumbers(car.setup.livery,i+1);if(numbered)car.livery.set(numbered);}"),'derby rivals only, offline; the player keeps their own livery');
+ assert.ok(readFileSync(new URL('../src/main.ts',import.meta.url),'utf8').includes("if(!attract&&!online?.active&&i>0&&mode==='derby'){const numbered=withRaceNumbers(car.setup.livery,i+1);if(numbered)car.livery.set(numbered);"),'derby rivals only, offline; the player keeps their own livery');
 });
