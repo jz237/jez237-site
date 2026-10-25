@@ -60,28 +60,42 @@ export class TriangleBVH {
       const t = this.order[i];
       for (let v = 0; v < 3; v++) this.data[side + i * 4 + v] = pack(indices[t * 3 + v]);
     }
+    // What refit walks, as flat tables: each triangle slot's corners (offsets into the positions),
+    // and each node's leaf (first slot, or -1, and how many) and right child.
+    this.corners = new Int32Array(this.order.length * 3);
+    for (let i = 0; i < this.order.length; i++) for (let v = 0; v < 3; v++) this.corners[i * 3 + v] = indices[this.order[i] * 3 + v] * 3;
+    this.starts = Int32Array.from(this.nodes, (node) => node.start);
+    this.counts = Int32Array.from(this.nodes, (node) => node.count);
+    this.rights = Int32Array.from(this.nodes, (node) => node.right);
     this.refit(positions);
   }
+  // Bottom up (a node's children come after it): a leaf's triangles copied in and its box fitted
+  // round them as they go, a node's box round its children's.
   refit(positions) {
-    const d = this.data, ix = this.indices;
-    for (let i = 0; i < this.order.length; i++) {
-      const t = this.order[i], o = (this.triOffset + i * 4) * 4;
-      for (let v = 0; v < 3; v++) for (let k = 0; k < 3; k++) d[o + v * 4 + k] = positions[ix[t * 3 + v] * 3 + k];
-    }
+    const d = this.data, corners = this.corners, starts = this.starts, counts = this.counts, rights = this.rights;
     for (let n = this.nodes.length - 1; n >= 0; n--) {
-      const node = this.nodes[n], o = 4 + n * 8;
-      for (let k = 0; k < 3; k++) {
-        let lo = Infinity, hi = -Infinity;
-        if (node.start >= 0) {
-          for (let i = node.start; i < node.start + node.count; i++) {
-            const t = (this.triOffset + i * 4) * 4;
-            for (let v = 0; v < 3; v++) { lo = Math.min(lo, d[t + v * 4 + k]); hi = Math.max(hi, d[t + v * 4 + k]); }
+      const o = 4 + n * 8, start = starts[n];
+      if (start >= 0) {
+        let lx = Infinity, ly = Infinity, lz = Infinity, hx = -Infinity, hy = -Infinity, hz = -Infinity;
+        for (let i = start; i < start + counts[n]; i++) {
+          const t = (this.triOffset + i * 4) * 4;
+          for (let v = 0; v < 3; v++) {
+            const s = corners[i * 3 + v], at = t + v * 4;
+            d[at] = positions[s]; d[at + 1] = positions[s + 1]; d[at + 2] = positions[s + 2];
+            // (As stored: the box holds the float32 corners the shader reads.)
+            const x = d[at], y = d[at + 1], z = d[at + 2];
+            lx = Math.min(lx, x); ly = Math.min(ly, y); lz = Math.min(lz, z);
+            hx = Math.max(hx, x); hy = Math.max(hy, y); hz = Math.max(hz, z);
           }
-        } else {
-          lo = Math.min(d[4 + (n + 1) * 8 + k], d[4 + node.right * 8 + k]);
-          hi = Math.max(d[8 + (n + 1) * 8 + k], d[8 + node.right * 8 + k]);
         }
-        d[o + k] = lo - 0.000001; d[o + 4 + k] = hi + 0.000001;
+        d[o] = lx - 0.000001; d[o + 1] = ly - 0.000001; d[o + 2] = lz - 0.000001;
+        d[o + 4] = hx + 0.000001; d[o + 5] = hy + 0.000001; d[o + 6] = hz + 0.000001;
+      } else {
+        const l = 4 + (n + 1) * 8, r = 4 + rights[n] * 8;
+        for (let k = 0; k < 3; k++) {
+          d[o + k] = Math.min(d[l + k], d[r + k]) - 0.000001;
+          d[o + 4 + k] = Math.max(d[l + 4 + k], d[r + 4 + k]) + 0.000001;
+        }
       }
     }
   }

@@ -80,7 +80,8 @@ const sections = [
   [960, 392, 482, 26],
   [1010, 409, 471, 20],
 ];
-export function section(x) {
+// (Into out, when given: the fin solver asks for one at every paired-fin node of every substep.)
+export function section(x, out = [0, 0, 0, 0]) {
   let i = 0;
   while (i < sections.length - 2 && sections[i + 1][0] < x) i++;
   const a = sections[i],
@@ -88,18 +89,18 @@ export function section(x) {
     u = clamp((x - a[0]) / (b[0] - a[0]), 0, 1);
   const before = sections[Math.max(0, i - 1)],
     after = sections[Math.min(sections.length - 1, i + 2)];
-  return a.map((v, j) => {
-    if (j === 0) return x;
+  out[0] = x;
+  for (let j = 1; j < 4; j++) {
     const dx = b[0] - a[0],
       m0 = ((b[j] - before[j]) / (b[0] - before[0])) * dx,
       m1 = ((after[j] - a[j]) / (after[0] - a[0])) * dx;
-    return (
-      (2 * u ** 3 - 3 * u * u + 1) * v +
+    out[j] =
+      (2 * u ** 3 - 3 * u * u + 1) * a[j] +
       (u ** 3 - 2 * u * u + u) * m0 +
       (-2 * u ** 3 + 3 * u * u) * b[j] +
-      (u ** 3 - u * u) * m1
-    );
-  });
+      (u ** 3 - u * u) * m1;
+  }
+  return out;
 }
 function makeBody(compact = false) {
   const p = [],
@@ -661,7 +662,7 @@ export function createBetta({ compact = false } = {}) {
     gulpOpen = 0,
     gulpGill = 0;
   const cycle = 32;
-  const lipLocal = [0, 0, 0, 0], lipWorld = new T.Vector3();
+  const lipLocal = [0, 0, 0, 0], lipWorld = new T.Vector3(), contour = [0, 0, 0, 0];
   fish.userData = {
     ready: Promise.all([loaded, finLoaded, ...macroPending]),
     macroTextures,
@@ -830,7 +831,8 @@ export function createBetta({ compact = false } = {}) {
         bodyRadius(x, y) {
           const pixelX = x / SCALE + 680;
           if (pixelX < 155 || pixelX > 1010) return 0;
-          const [, top, bottom, thick] = section(pixelX);
+          section(pixelX, contour);
+          const top = contour[1], bottom = contour[2], thick = contour[3];
           const mid = (420 - (top + bottom) / 2) * SCALE, radius = (bottom - top) * 0.5 * SCALE;
           const q = (y - mid) / radius;
           return Math.abs(q) >= 1 ? 0 : Math.sqrt(1 - q * q) * thick * SCALE;

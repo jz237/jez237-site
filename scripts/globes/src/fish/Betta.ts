@@ -13,6 +13,33 @@ export const RIPPLE_TIME = 0.34, RIPPLE_RATE = 6, RIPPLE_RADIUS = 0.045;
 const DIVE_BUBBLES = 14, STARTLE_BUBBLES = 36;
 export const BUBBLE_RADIUS = 0.0035;
 
+/** What updateVertices reads of a fin's solver (betta-atelier's FinDynamics). */
+interface FinSolver {
+  columns: number;
+  rows: number;
+  rest: Float32Array;
+  displacement: Float32Array;
+  carried: Float64Array;
+  carriedBy: unknown;
+  carriedAt: number;
+}
+
+/** One mesh's share of the vertices, and what deforming it takes, worked out once: its rest
+ *  positions; whether the body carries it (deform), its cover's lift (the opercula), its fin; for
+ *  a fin's vertices, the four displacement texels round each (offsets), its place between them
+ *  (u, v), and the solver node it sits on (or -1). */
+interface Part {
+  mesh: THREE.Mesh;
+  offset: number;
+  rest: Float32Array;
+  deform: boolean;
+  cover: Float32Array | null;
+  fin: FinSolver | null;
+  cells: Int32Array | null;
+  place: Float64Array | null;
+  nodes: Int32Array | null;
+}
+
 /** The actual Atelier specimen, evaluated on the CPU for the refracted rays.
  * No screenshot/billboard: skin, seven membranes, mouth, covers and both eye
  * sockets remain separate animated three-dimensional surfaces. */
@@ -24,9 +51,16 @@ export class Betta implements Feeder {
   readonly bvh: TriangleBVH;
   readonly ready: Promise<void>;
   private readonly meshes: { mesh: THREE.Mesh; offset: number }[] = [];
+  private readonly parts: Part[];
   private readonly vertices: Float32Array;
   private readonly probes = new Float32Array(16 * 4);
   private readonly flow = new THREE.Vector3();
+  // (Scratch, so that a frame allocates little.)
+  private readonly carry = [0, 0, 0, 0];
+  private readonly point = new THREE.Vector3();
+  private readonly flowTarget = new THREE.Vector3();
+  private readonly flowNow = [0, 0, 0];
+  private readonly flowLocal = [0, 0, 0];
   private readonly surface = new Float32Array(BETTA_SURFACE_COUNT * 4);
   private readonly mouth = new THREE.Vector3();
   private level = 0.18;
@@ -103,6 +137,30 @@ export class Betta implements Feeder {
       for (let i = 0; i < g.index!.count / 3; i++) materials.push(material);
     });
     this.vertices = new Float32Array(positions);
+    this.parts = this.meshes.map(({ mesh, offset }) => {
+      const g = mesh.geometry, rest = g.attributes.position.array as Float32Array;
+      const deform = (mesh.material as THREE.Material).userData.bettaDeform;
+      const fin: FinSolver | null = deform?.dynamics ?? null;
+      const part: Part = { mesh, offset, rest, deform: !!deform, cover: deform?.operculum ? g.attributes.coverLift.array as Float32Array : null, fin, cells: null, place: null, nodes: null };
+      if (fin) {
+        const count = g.attributes.position.count, fu = g.attributes.finUV.array as Float32Array;
+        const w = fin.columns, h = fin.rows;
+        part.cells = new Int32Array(count * 4);
+        part.place = new Float64Array(count * 2);
+        part.nodes = new Int32Array(count);
+        for (let i = 0; i < count; i++) {
+          const x = fu[i * 2] * (w - 1), y = fu[i * 2 + 1] * (h - 1);
+          const a = Math.floor(x), b = Math.floor(y), xx = Math.min(a + 1, w - 1), yy = Math.min(b + 1, h - 1);
+          part.cells.set([(b * w + a) * 4, (b * w + xx) * 4, (yy * w + a) * 4, (yy * w + xx) * 4], i * 4);
+          part.place[i * 2] = x - a;
+          part.place[i * 2 + 1] = y - b;
+          // (The node it sits on, if its rest is that node's to the bit: the body carries both alike.)
+          const n = Math.round(y) * w + Math.round(x);
+          part.nodes[i] = [0, 1, 2].every((k) => fin.rest[n * 3 + k] === rest[i * 3 + k]) ? n : -1;
+        }
+      }
+      return part;
+    });
     this.bvh = new TriangleBVH(this.vertices, new Uint32Array(indices), new Float32Array(uv), materials, new Float32Array(finUV));
     this.texture = new THREE.DataTexture(this.bvh.data, this.bvh.width, this.bvh.height, THREE.RGBAFormat, THREE.FloatType);
     this.texture.minFilter = this.texture.magFilter = THREE.NearestFilter;
@@ -139,15 +197,16 @@ export class Betta implements Feeder {
     this.level = env.level;
     // Sample the actual current and its rotation across the moving anatomy.
     this.waterState = readBettaWater(sense, this.probes, env);
-    const target = new THREE.Vector3().fromArray(this.waterState.flow);
-    this.flow.lerp(target, 1 - Math.exp(-5 * dt));
+    this.flow.lerp(this.flowTarget.fromArray(this.waterState.flow), 1 - Math.exp(-5 * dt));
     this.swim.food = this.food ? this.food.pos : null;
     this.swim.obstacles = this.obstacles;
     this.swim.gape = this.gapeWant;
     // The tail's own working (read back from last frame's gait) is what lets the body gain speed.
-    this.swim.advance(dt, this.flow.toArray(), env, this.waterState.submerged > 0.99, this.waterState, this.fish.userData.stroke ?? null);
+    this.swim.advance(dt, this.flow.toArray(this.flowNow), env, this.waterState.submerged > 0.99, this.waterState, this.fish.userData.stroke ?? null);
     this.fish.userData.locomotion = this.locomotion();
-    this.fish.userData.externalFlow = this.flow.clone().multiplyScalar(1 / SCALE).toArray();
+    const toLocal = 1 / SCALE;
+    this.flowLocal[0] = this.flow.x * toLocal; this.flowLocal[1] = this.flow.y * toLocal; this.flowLocal[2] = this.flow.z * toLocal;
+    this.fish.userData.externalFlow = this.flowLocal;
     // The same one-second opening as the standalone specimen.
     this.fish.userData.display.requested = this.flared || this.swim.flaring;
     this.fish.userData.update(this.time);
@@ -178,7 +237,8 @@ export class Betta implements Feeder {
         this.fish.position.setComponent(k, this.fish.position.getComponent(k) + shift[k] / SCALE);
         if (shift[k] * this.swim.drift[k] < 0) this.swim.drift[k] = 0;
       }
-      for (let i = 0; i < this.vertices.length; i++) this.vertices[i] += shift[i % 3];
+      const v = this.vertices;
+      for (let i = 0; i < v.length; i += 3) { v[i] += dx; v[i + 1] += dy; v[i + 2] += dz; }
     }
     this.bvh.refit(this.vertices);
     this.bvh.data[3] = 1;
@@ -219,12 +279,12 @@ export class Betta implements Feeder {
 
   private updateProbes(): void {
     this.rig.updateMatrixWorld(true);
-    const scratch = [0, 0, 0, 0], p = new THREE.Vector3();
+    const scratch = this.carry, p = this.point;
     for (let i = 0; i < 16; i++) {
       const local = BETTA_PROBES[i];
       this.fish.userData.bodyMotion.transform(local[0], local[1], local[2], scratch);
       p.set(scratch[0], scratch[1], scratch[2]).applyMatrix4(this.fish.matrixWorld);
-      this.probes.set([p.x, p.y, p.z, 0], i * 4);
+      this.probes[i * 4] = p.x; this.probes[i * 4 + 1] = p.y; this.probes[i * 4 + 2] = p.z; this.probes[i * 4 + 3] = 0;
     }
     // The lips, where it would meet the surface.
     this.fish.userData.bodyMotion.transform(-1.68, 0.0832, 0, scratch);
@@ -268,31 +328,38 @@ export class Betta implements Feeder {
 
   private updateVertices(refit = true): void {
     this.rig.updateMatrixWorld(true);
-    const body = this.fish.userData.bodyMotion;
-    const scratch = [0, 0, 0, 0], p = new THREE.Vector3();
-    for (const { mesh, offset } of this.meshes) {
-      const g = mesh.geometry, source = g.attributes.position;
-      const deform = (mesh.material as THREE.Material).userData.bettaDeform;
-      for (let i = 0; i < source.count; i++) {
-        p.fromBufferAttribute(source, i);
+    const body = this.fish.userData.bodyMotion, out = this.vertices, s = this.carry;
+    const lift = body.gill * 0.046 + this.fish.userData.display.flare * 0.085;
+    for (const { mesh, offset, rest, deform, cover, fin, cells, place, nodes } of this.parts) {
+      const e = mesh.matrixWorld.elements, count = rest.length / 3;
+      // (A fin's vertices that sit on its solver's nodes: the body carried those this frame already,
+      // for the solver's displacement, unless the solver took no step.)
+      const carried = fin && fin.carriedBy === body && fin.carriedAt === body.revision ? fin.carried : null;
+      const data = fin ? fin.displacement : null;
+      for (let i = 0; i < count; i++) {
+        let x = rest[i * 3], y = rest[i * 3 + 1], z = rest[i * 3 + 2];
         if (deform) {
-          if (deform.operculum) p.z += g.attributes.coverLift.getX(i) * (body.gill * 0.046 + this.fish.userData.display.flare * 0.085);
-          body.transform(p.x, p.y, p.z, scratch);
-          p.set(scratch[0], scratch[1], scratch[2]);
-          const fin = deform.dynamics;
-          if (fin) {
-            const x = g.attributes.finUV.getX(i) * (fin.columns - 1), y = g.attributes.finUV.getY(i) * (fin.rows - 1);
-            const a = Math.floor(x), b = Math.floor(y), xx = Math.min(a + 1, fin.columns - 1), yy = Math.min(b + 1, fin.rows - 1);
-            const u = x - a, v = y - b, data = fin.displacement;
-            for (let k = 0; k < 3; k++) {
-              const upper = data[(b * fin.columns + a) * 4 + k] * (1 - u) + data[(b * fin.columns + xx) * 4 + k] * u;
-              const lower = data[(yy * fin.columns + a) * 4 + k] * (1 - u) + data[(yy * fin.columns + xx) * 4 + k] * u;
-              p.setComponent(k, p.getComponent(k) + upper * (1 - v) + lower * v);
-            }
+          if (cover) z += cover[i] * lift;
+          const n = carried ? nodes![i] : -1;
+          if (n >= 0) {
+            x = carried![n * 3]; y = carried![n * 3 + 1]; z = carried![n * 3 + 2];
+          } else {
+            body.transform(x, y, z, s);
+            x = s[0]; y = s[1]; z = s[2];
+          }
+          if (data) {
+            const c0 = cells![i * 4], c1 = cells![i * 4 + 1], c2 = cells![i * 4 + 2], c3 = cells![i * 4 + 3];
+            const u = place![i * 2], v = place![i * 2 + 1];
+            x = x + (data[c0] * (1 - u) + data[c1] * u) * (1 - v) + (data[c2] * (1 - u) + data[c3] * u) * v;
+            y = y + (data[c0 + 1] * (1 - u) + data[c1 + 1] * u) * (1 - v) + (data[c2 + 1] * (1 - u) + data[c3 + 1] * u) * v;
+            z = z + (data[c0 + 2] * (1 - u) + data[c1 + 2] * u) * (1 - v) + (data[c2 + 2] * (1 - u) + data[c3 + 2] * u) * v;
           }
         }
-        p.applyMatrix4(mesh.matrixWorld);
-        p.toArray(this.vertices, (offset + i) * 3);
+        // (Vector3.applyMatrix4, written out.)
+        const w = 1 / (e[3] * x + e[7] * y + e[11] * z + e[15]), o = (offset + i) * 3;
+        out[o] = (e[0] * x + e[4] * y + e[8] * z + e[12]) * w;
+        out[o + 1] = (e[1] * x + e[5] * y + e[9] * z + e[13]) * w;
+        out[o + 2] = (e[2] * x + e[6] * y + e[10] * z + e[14]) * w;
       }
     }
     if (refit) this.bvh.refit(this.vertices);

@@ -304,3 +304,25 @@ test('external solver flow overrides the artistic current and reverses membrane 
   assert.equal(forward.metrics().anchorError, 0);
   assert.equal(backward.metrics().anchorError, 0);
 });
+
+test('each node is kept as the body carried it, with the update it was carried at, for the host', () => {
+  for (const kind of [0, 3, 4]) {
+    const fin = make(kind, kind > 2 ? 1 : 0), body = new BodyMotion();
+    const s = { ...state(0), body };
+    for (let i = 1; i <= 90; i++) {
+      body.update(i / 60 * 2.8, 0.3, 0.2, i / 60 * 4.5);
+      fin.advance(1 / 60, { ...s, time: i / 60 });
+      assert.equal(fin.carriedBy, body);
+      assert.equal(fin.carriedAt, body.revision);
+    }
+    const out = [0, 0, 0, 0];
+    for (let n = 0; n < fin.count; n++) {
+      body.transform(fin.rest[n * 3], fin.rest[n * 3 + 1], fin.rest[n * 3 + 2], out);
+      for (let k = 0; k < 3; k++) assert.ok(Object.is(fin.carried[n * 3 + k], out[k]), `fin ${kind}, node ${n}`);
+    }
+    // A frame with no step keeps the last displacement, and says it was carried before this update.
+    body.update(3, 0.3, 0.2, 2);
+    fin.advance(0, { ...s, time: 1.5 });
+    assert.notEqual(fin.carriedAt, body.revision);
+  }
+});

@@ -75,12 +75,76 @@ export class FinDynamics {
     this.links = new Float32Array(links);
     this.folding = new Uint8Array(folding);
     this.linkLengths = new Float32Array(folding.length);
+    // What the solver reads every substep that never changes, worked out once: each link's ends (as
+    // offsets into the position arrays) and [stiffness, both ends' weight, end a's, end b's]; the
+    // chords that fold with the fan (the broad fins'), every other link keeping its rest length; each
+    // ray segment's rest length; each node's offset from its root, and for the broad fins its angle
+    // and in-plane length there.
+    const m = folding.length;
+    this.linkEnds = new Int32Array(m * 2);
+    this.linkTerms = new Float64Array(m * 4);
+    const refolding = [];
+    for (let l = 0; l < m; l++) {
+      const a = links[l * 4], b = links[l * 4 + 1];
+      this.linkEnds[l * 2] = a * 3; this.linkEnds[l * 2 + 1] = b * 3;
+      this.linkTerms.set([this.links[l * 4 + 3], this.weights[a] + this.weights[b], this.weights[a], this.weights[b]], l * 4);
+      if (kind < 3 && folding[l]) refolding.push(l);
+      else this.linkLengths[l] = this.links[l * 4 + 2];
+    }
+    this.refolding = Int32Array.from(refolding);
+    this.rayRest = new Float64Array(this.count);
+    this.restOffset = new Float64Array(this.count * 3);
+    this.restAngle = new Float64Array(this.count);
+    this.restSpan = new Float64Array(this.count);
+    for (let j = 0; j < rows; j++) for (let i = 0; i < columns; i++) {
+      const n = j * columns + i, q = n * 3, a = q - columns * 3, r = i * 3;
+      if (j) this.rayRest[n] = Math.hypot(this.rest[q] - this.rest[a], this.rest[q + 1] - this.rest[a + 1], this.rest[q + 2] - this.rest[a + 2]);
+      const x = this.rest[q] - this.roots[r], y = this.rest[q + 1] - this.roots[r + 1], z = this.rest[q + 2] - this.roots[r + 2];
+      this.restOffset[q] = x; this.restOffset[q + 1] = y; this.restOffset[q + 2] = z;
+      this.restAngle[n] = Math.atan2(y, x); this.restSpan[n] = Math.hypot(x, y);
+    }
+    // Scratch: each row's stiffness and target terms, each column's root frame.
+    this.rowStiffness = new Float64Array(rows);
+    this.rowTerms = new Float64Array(rows * 4);
+    this.rootFrames = new Float64Array(columns * 4);
+    // Each node's rest point carried by the body in the last displacement (advance), and the body
+    // and its revision it was carried by: a host drawing vertices that sit on the nodes reuses it.
+    this.carried = new Float64Array(this.count * 3);
+    this.carriedBy = null;
+    this.carriedAt = -1;
   }
 
   makeTargets(state) {
     const { time: t, phase, drive, turn, flare, pectoralPhase, body } = state;
     const turnBend = body.turnBend ?? Math.tanh(turn * 0.95);
-    const { columns: w, rows: h, kind, side, rest, roots, target, scratch } = this;
+    const { columns: w, rows: h, kind, side, roots, target, scratch, restOffset: offset, rowTerms: row } = this;
+    // (What is the same across the fin, or along a row, once.)
+    const relaxed = kind === 0 ? 0.58 : kind === 1 ? 0.55 : 0.72;
+    const spread = relaxed + (1 - relaxed) * flare - drive * 0.12, fold = kind === 0 ? 0.10 * (1 - flare) : 0;
+    let cosA = 0, sinA = 0;
+    if (kind === 3) {
+      // Alternating rowing stroke, then feathered/cupped recovery.
+      const beat = pectoralPhase + (side < 0 ? Math.PI : 0);
+      // Sculling fans a little wider than slow swimming; a startle draws the fins in toward the flanks.
+      // The fan keeps beating and keeps most of its span, so the fold reads as a change of pose
+      // and not as the fin shrinking. Power follows the gait's slow pectoral effort, not the tail's.
+      const tuck = state.tuck ?? 0,
+        power = (0.62 + 0.36 * (state.pectoralEffort ?? state.effort ?? drive) + 0.05 * (state.pectoralScull ?? state.scull ?? 0)) * (1 - 0.25 * tuck);
+      for (let j = 0; j < h; j++) {
+        const v = j / (h - 1);
+        const stroke = side * (power * (0.48 * Math.sin(beat) + 0.18 * Math.sin(beat - v * 1.5) * v) - 0.12 - 0.1 * tuck);
+        const feather = side * (0.18 + 0.72 * Math.max(0, Math.cos(beat))) * v;
+        row[j * 4] = Math.cos(stroke); row[j * 4 + 1] = Math.sin(stroke);
+        row[j * 4 + 2] = Math.cos(feather); row[j * 4 + 3] = Math.sin(feather);
+      }
+    } else if (kind === 4) {
+      const angle = -0.02 - flare * 0.16 - drive * 0.40 + 0.055 * Math.sin(phase * 0.55 + side);
+      cosA = Math.cos(angle); sinA = Math.sin(angle);
+      for (let j = 0; j < h; j++) {
+        const v = j / (h - 1);
+        row[j * 4] = side * v * v * 0.035 * Math.sin(t * 1.2 - v * 2 + side);
+      }
+    }
     for (let i = 0; i < w; i++) {
       const u = i / (w - 1), r = i * 3;
       body.frame(roots[r], scratch);
@@ -88,13 +152,11 @@ export class FinDynamics {
       body.transform(roots[r], roots[r + 1], roots[r + 2], scratch);
       const rx = scratch[0], ry = scratch[1], rz = scratch[2];
       for (let j = 0; j < h; j++) {
-        const v = j / (h - 1), n = (j * w + i) * 3;
-        let x = rest[n] - roots[r], y = rest[n + 1] - roots[r + 1], z = rest[n + 2] - roots[r + 2];
+        const v = j / (h - 1), m = j * w + i, n = m * 3;
+        let x = offset[n], y = offset[n + 1], z = offset[n + 2];
         // Fold by changing ray angle, not shortening or scaling the fin.
         if (kind < 3) {
-          const relaxed = kind === 0 ? 0.58 : kind === 1 ? 0.55 : 0.72;
-          const spread = relaxed + (1 - relaxed) * flare - drive * 0.12;
-          const angle = Math.atan2(y, x) * spread - (kind === 0 ? 0.10 * (1 - flare) : 0), length = Math.hypot(x, y);
+          const angle = this.restAngle[m] * spread - fold, length = this.restSpan[m];
           x = length * Math.cos(angle); y = length * Math.sin(angle);
           const wave = kind === 0
             ? (0.012 + drive * 0.20) * Math.sin(phase - 2.5 - v * 0.8)
@@ -106,36 +168,27 @@ export class FinDynamics {
             * Math.sin(t * 1.7 - u * 5.5 - v * 2.2 + kind * 1.8);
           const bend = (wave + billow) * (0.22 + 0.78 * v);
           // Bend about the ray's in-plane perpendicular; roots stay attached.
-          const length3 = Math.hypot(x, y);
-          x *= Math.cos(bend); y *= Math.cos(bend);
+          const length3 = Math.hypot(x, y), cosBend = Math.cos(bend);
+          x *= cosBend; y *= cosBend;
           z += length3 * Math.sin(bend);
           if (kind === 0) {
             // The broad caudal fan wraps behind the peduncle during a turn.
             // Rotate across its span, preserving ray length and vertical spread;
             // the membrane solver supplies the slower free-edge follow-through.
-            const sweep = turnBend * 0.30 * v;
-            const cx = x * Math.cos(sweep) - z * Math.sin(sweep);
-            z = x * Math.sin(sweep) + z * Math.cos(sweep); x = cx;
+            const sweep = turnBend * 0.30 * v, cosSweep = Math.cos(sweep), sinSweep = Math.sin(sweep);
+            const cx = x * cosSweep - z * sinSweep;
+            z = x * sinSweep + z * cosSweep; x = cx;
           }
         } else if (kind === 3) {
-          // Alternating rowing stroke, then feathered/cupped recovery.
-          const beat = pectoralPhase + (side < 0 ? Math.PI : 0);
-          // Sculling fans a little wider than slow swimming; a startle draws the fins in toward the flanks.
-          // The fan keeps beating and keeps most of its span, so the fold reads as a change of pose
-          // and not as the fin shrinking. Power follows the gait's slow pectoral effort, not the tail's.
-          const tuck = state.tuck ?? 0,
-            power = (0.62 + 0.36 * (state.pectoralEffort ?? state.effort ?? drive) + 0.05 * (state.pectoralScull ?? state.scull ?? 0)) * (1 - 0.25 * tuck);
-          const stroke = side * (power * (0.48 * Math.sin(beat) + 0.18 * Math.sin(beat - v * 1.5) * v) - 0.12 - 0.1 * tuck);
-          const cx = x * Math.cos(stroke) - z * Math.sin(stroke);
-          z = x * Math.sin(stroke) + z * Math.cos(stroke); x = cx;
-          const feather = side * (0.18 + 0.72 * Math.max(0, Math.cos(beat))) * v;
-          const cy = y * Math.cos(feather) - z * Math.sin(feather);
-          z = y * Math.sin(feather) + z * Math.cos(feather); y = cy;
+          // (The row's stroke, then its feather.)
+          const cx = x * row[j * 4] - z * row[j * 4 + 1];
+          z = x * row[j * 4 + 1] + z * row[j * 4]; x = cx;
+          const cy = y * row[j * 4 + 2] - z * row[j * 4 + 3];
+          z = y * row[j * 4 + 3] + z * row[j * 4 + 2]; y = cy;
         } else {
-          const angle = -0.02 - flare * 0.16 - drive * 0.40 + 0.055 * Math.sin(phase * 0.55 + side);
-          const cx = x * Math.cos(angle) - y * Math.sin(angle);
-          y = x * Math.sin(angle) + y * Math.cos(angle); x = cx;
-          z += side * v * v * 0.035 * Math.sin(t * 1.2 - v * 2 + side);
+          const cx = x * cosA - y * sinA;
+          y = x * sinA + y * cosA; x = cx;
+          z += row[j * 4];
         }
         target[n] = rx + x * tangentCos - z * tangentSin;
         target[n + 1] = ry + y; target[n + 2] = rz + x * tangentSin + z * tangentCos;
@@ -172,36 +225,50 @@ export class FinDynamics {
     const step = FIN_QUALITY.step;
     const substeps = Math.floor((this.accumulator + 1e-10) / step);
     let completed = 0;
+    const { target, lastTarget, frameTarget } = this;
     while (completed < substeps) {
       // Move insertions throughout the substeps, not in one frame-sized jump.
       // This matters once the trunk has a substantial muscular stroke.
       const blend = ++completed / substeps;
-      for (let i = 0; i < this.target.length; i++) this.target[i] = this.lastTarget[i] + (this.frameTarget[i] - this.lastTarget[i]) * blend;
+      for (let i = 0; i < target.length; i++) target[i] = lastTarget[i] + (frameTarget[i] - lastTarget[i]) * blend;
       this.integrate(step, state);
       this.accumulator = Math.max(0, this.accumulator - step);
       this.steps++;
     }
-    this.target.set(this.frameTarget);
+    target.set(frameTarget);
     // (A frame too short for a step, the step being coarse (FIN_QUALITY) and the screen quick: the
     // last solved shape, relative to the body, is carried with it as it is.)
     if (!completed && this.steps) return;
-    const { position, rest, scratch, displacement } = this;
+    const { position, rest, scratch, displacement, carried } = this;
     for (let n = 0; n < this.count; n++) {
       state.body.transform(rest[n * 3], rest[n * 3 + 1], rest[n * 3 + 2], scratch);
-      for (let k = 0; k < 3; k++) displacement[n * 4 + k] = position[n * 3 + k] - scratch[k];
+      for (let k = 0; k < 3; k++) {
+        carried[n * 3 + k] = scratch[k];
+        displacement[n * 4 + k] = position[n * 3 + k] - scratch[k];
+      }
     }
+    this.carriedBy = state.body;
+    this.carriedAt = state.body.revision;
   }
 
   integrate(dt, state) {
-    const { position: p, previous: old, target, columns: w, rows: h, weights, links, flow } = this;
-    const { heading, velocity, angularVelocity, origin, strength, direction, time } = state;
+    const { position: p, previous: old, target, columns: w, rows: h, flow, linkLengths: lengths, linkEnds: ends, linkTerms: terms } = this;
+    const { heading, velocity, angularVelocity, origin, strength, direction, time, localHydrodynamics: local } = state;
     const co = Math.cos(heading), si = Math.sin(heading), dt2 = dt * dt;
-    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
-      const n = j * w + i, q = n * 3, v = j / (h - 1);
-      if (!j) {
-        for (let k = 0; k < 3; k++) p[q + k] = old[q + k] = target[q + k];
-        continue;
-      }
+    // A fin ray resists stretching, not lateral bending like a rigid sail.
+    // Resting/swimming membranes are soft even in their inner half. Display
+    // adds muscular tension without pinning their positions against the water.
+    // (A row's stiffness, once for the row.)
+    const stiffness = this.rowStiffness;
+    for (let j = 1; j < h; j++) {
+      const v = j / (h - 1);
+      stiffness[j] = this.kind < 3
+        ? 3.8 + 36 * (1 - v) ** 2.4 + state.flare * (5 + 22 * (1 - v) ** 2)
+        : (this.kind === 4 ? 2.0 : 5.0) + (this.kind === 3 ? 160 : 110) * (1 - v) ** 3;
+    }
+    for (let q = 0; q < w * 3; q++) p[q] = old[q] = target[q];
+    for (let j = 1; j < h; j++) for (let i = 0; i < w; i++) {
+      const q = (j * w + i) * 3;
       const a = (j * w + Math.max(0, i - 1)) * 3, b = (j * w + Math.min(w - 1, i + 1)) * 3;
       const c = ((j - 1) * w + i) * 3, d = (Math.min(h - 1, j + 1) * w + i) * 3;
       const ux = p[b] - p[a], uy = p[b + 1] - p[a + 1], uz = p[b + 2] - p[a + 2];
@@ -209,50 +276,50 @@ export class FinDynamics {
       let nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
       const len = Math.sqrt(nx * nx + ny * ny + nz * nz) || 1;
       nx /= len; ny /= len; nz /= len;
-      const wx = co * p[q] + si * p[q + 2], wz = -si * p[q] + co * p[q + 2];
-      if (state.externalFlow) {
-        for (let k = 0; k < 3; k++) flow[k] = state.externalFlow[k];
-      } else waterVelocity(time, wx + origin[0], p[q + 1] + origin[1], wz + origin[2], strength, direction, flow);
-      // Relative fluid includes translation, turning and each membrane's own speed.
-      const fx = flow[0] - velocity[0], fz = flow[2] - velocity[2];
-      let rvx = co * fx - si * fz - angularVelocity * p[q + 2] - (p[q] - old[q]) / dt;
-      let rvy = flow[1] - velocity[1] - (p[q + 1] - old[q + 1]) / dt;
-      let rvz = si * fx + co * fz + angularVelocity * p[q] - (p[q + 2] - old[q + 2]) / dt;
-      if (state.localHydrodynamics) {
+      let rvx, rvy, rvz;
+      if (local) {
         // Host fish may pitch and roll in a turbulent globe. Use the full body
         // frame and omega x radius, not a yaw-only approximation of fin drag.
-        const { flow: u, velocity: v, angular: w } = state.localHydrodynamics;
+        const { flow: u, velocity: v, angular: w } = local;
         rvx = u[0] - v[0] - (w[1] * p[q + 2] - w[2] * p[q + 1]) - (p[q] - old[q]) / dt;
         rvy = u[1] - v[1] - (w[2] * p[q] - w[0] * p[q + 2]) - (p[q + 1] - old[q + 1]) / dt;
         rvz = u[2] - v[2] - (w[0] * p[q + 1] - w[1] * p[q]) - (p[q + 2] - old[q + 2]) / dt;
+      } else {
+        const wx = co * p[q] + si * p[q + 2], wz = -si * p[q] + co * p[q + 2];
+        if (state.externalFlow) {
+          for (let k = 0; k < 3; k++) flow[k] = state.externalFlow[k];
+        } else waterVelocity(time, wx + origin[0], p[q + 1] + origin[1], wz + origin[2], strength, direction, flow);
+        // Relative fluid includes translation, turning and each membrane's own speed.
+        const fx = flow[0] - velocity[0], fz = flow[2] - velocity[2];
+        rvx = co * fx - si * fz - angularVelocity * p[q + 2] - (p[q] - old[q]) / dt;
+        rvy = flow[1] - velocity[1] - (p[q + 1] - old[q + 1]) / dt;
+        rvz = si * fx + co * fz + angularVelocity * p[q] - (p[q + 2] - old[q + 2]) / dt;
       }
       const normalSpeed = clamp(rvx * nx + rvy * ny + rvz * nz, -2, 2);
       const pressure = normalSpeed * (2.0 + Math.abs(normalSpeed) * 3.5);
-      // A fin ray resists stretching, not lateral bending like a rigid sail.
-      // Resting/swimming membranes are soft even in their inner half. Display
-      // adds muscular tension without pinning their positions against the water.
-      const stiffness = this.kind < 3
-        ? 3.8 + 36 * (1 - v) ** 2.4 + state.flare * (5 + 22 * (1 - v) ** 2)
-        : (this.kind === 4 ? 2.0 : 5.0) + (this.kind === 3 ? 160 : 110) * (1 - v) ** 3;
+      const k = stiffness[j];
       const dx = nx * pressure + rvx * 0.9, dy = ny * pressure + rvy * 0.9, dz = nz * pressure + rvz * 0.9;
-      for (let k = 0; k < 3; k++) {
-        const current = p[q + k];
-        const acceleration = clamp((target[q + k] - current) * stiffness + (k === 0 ? dx : k === 1 ? dy : dz), -45, 45);
-        p[q + k] += (current - old[q + k]) * 0.982 + acceleration * dt2;
-        old[q + k] = current;
-      }
+      let current = p[q], acceleration = clamp((target[q] - current) * k + dx, -45, 45);
+      p[q] += (current - old[q]) * 0.982 + acceleration * dt2;
+      old[q] = current;
+      current = p[q + 1]; acceleration = clamp((target[q + 1] - current) * k + dy, -45, 45);
+      p[q + 1] += (current - old[q + 1]) * 0.982 + acceleration * dt2;
+      old[q + 1] = current;
+      current = p[q + 2]; acceleration = clamp((target[q + 2] - current) * k + dz, -45, 45);
+      p[q + 2] += (current - old[q + 2]) * 0.982 + acceleration * dt2;
+      old[q + 2] = current;
     }
     // Cross-ray chord spacing folds with the ray fan. Fin-ray lengths stay
     // fixed; unresolved accordion pleats are represented by shorter chords,
     // not by shrinking the rays. Keeping open-fan chords here would fight closure.
-    for (let l = 0; l < links.length; l += 4) {
-      const a = links[l] * 3, b = links[l + 1] * 3;
-      this.linkLengths[l / 4] = this.kind < 3 && this.folding[l / 4]
-        ? Math.hypot(target[b] - target[a], target[b + 1] - target[a + 1], target[b + 2] - target[a + 2])
-        : links[l + 2];
+    // (Only those chords change: every other link keeps the rest length it was given.)
+    for (let f = 0; f < this.refolding.length; f++) {
+      const l = this.refolding[f], a = ends[l * 2], b = ends[l * 2 + 1];
+      lengths[l] = Math.hypot(target[b] - target[a], target[b + 1] - target[a + 1], target[b + 2] - target[a + 2]);
     }
     // Alternate constraint traversal to avoid a persistent preferred bend direction.
     const passes = Math.max(3, Math.round((this.kind === 3 ? 12 : 8) * FIN_QUALITY.passScale));
+    const m = lengths.length;
     for (let pass = 0; pass < passes; pass++) {
       // Pectoral rays are actively rotated by the muscular base, not merely
       // pulled by a weak spring (which filters a rapid stroke into a slow sway).
@@ -267,13 +334,14 @@ export class FinDynamics {
       }
       // No permanent positional pin across the inner half of the broad fins.
       // Only the insertion is fixed; ray/membrane constraints transmit tension.
-      for (let l = pass % 2 ? links.length - 4 : 0; l >= 0 && l < links.length; l += pass % 2 ? -4 : 4) {
-        const a = links[l], b = links[l + 1], ai = a * 3, bi = b * 3;
+      const back = pass % 2 === 1;
+      for (let s = 0; s < m; s++) {
+        const l = back ? m - 1 - s : s, ai = ends[l * 2], bi = ends[l * 2 + 1];
         const dx = p[bi] - p[ai], dy = p[bi + 1] - p[ai + 1], dz = p[bi + 2] - p[ai + 2];
-        const length = Math.sqrt(dx * dx + dy * dy + dz * dz), weight = weights[a] + weights[b];
+        const length = Math.sqrt(dx * dx + dy * dy + dz * dz), weight = terms[l * 4 + 1];
         if (length < 1e-7 || !weight) continue;
-        const correction = (length - this.linkLengths[l / 4]) / length * links[l + 3] / weight;
-        const wa = correction * weights[a], wb = correction * weights[b];
+        const correction = (length - lengths[l]) / length * terms[l * 4] / weight;
+        const wa = correction * terms[l * 4 + 2], wb = correction * terms[l * 4 + 3];
         p[ai] += dx * wa; p[ai + 1] += dy * wa; p[ai + 2] += dz * wa;
         p[bi] -= dx * wb; p[bi + 1] -= dy * wb; p[bi + 2] -= dz * wb;
       }
@@ -283,30 +351,35 @@ export class FinDynamics {
     // root-to-tip ray limit carries that correction outward without moving roots.
     // The pelvic feelers need it most: it keeps every ray joined to its pinned insertion.
     if (this.kind !== 3) for (let j = 1; j < h; j++) for (let i = 0; i < w; i++) {
-      const q = (j * w + i) * 3, a = q - w * 3;
+      const n = j * w + i, q = n * 3, a = q - w * 3;
       const dx = p[q] - p[a], dy = p[q + 1] - p[a + 1], dz = p[q + 2] - p[a + 2];
-      const length = Math.hypot(dx, dy, dz);
-      const restLength = Math.hypot(this.rest[q] - this.rest[a], this.rest[q + 1] - this.rest[a + 1], this.rest[q + 2] - this.rest[a + 2]);
+      const length = Math.hypot(dx, dy, dz), restLength = this.rayRest[n];
       if (length > 1e-7 && restLength > 1e-7) {
         const ratio = clamp(length, restLength * 0.94, restLength * 1.06) / length;
         p[q] = p[a] + dx * ratio; p[q + 1] = p[a + 1] + dy * ratio; p[q + 2] = p[a + 2] + dz * ratio;
       }
     }
     // Paired fins may fold along the flank, but must not pass through the fish.
-    if (state.bodyRadius && this.side) for (let n = w; n < this.count; n++) {
-      const q = n * 3;
-      const rootX = this.roots[(n % w) * 3];
-      state.body.frame(rootX, this.scratch);
-      const [cx, cz, co, si] = this.scratch;
-      const localX = rootX + (p[q] - cx) * co + (p[q + 2] - cz) * si;
-      const radius = state.bodyRadius(localX, p[q + 1]);
-      state.body.frame(localX, this.scratch);
-      const [centerX, centerZ, c, s] = this.scratch;
-      const lateral = -(p[q] - centerX) * s + (p[q + 2] - centerZ) * c;
-      if (radius > 0 && lateral * this.side < radius + 0.009) {
-        const push = this.side * (radius + 0.009) - lateral;
-        p[q] -= s * push; p[q + 2] += c * push;
-        old[q] = p[q]; old[q + 2] = p[q + 2];
+    if (state.bodyRadius && this.side) {
+      // (Each column's root frame once: every node of the column starts from it.)
+      const frames = this.rootFrames, s = this.scratch;
+      for (let i = 0; i < w; i++) {
+        state.body.frame(this.roots[i * 3], s);
+        frames[i * 4] = s[0]; frames[i * 4 + 1] = s[1]; frames[i * 4 + 2] = s[2]; frames[i * 4 + 3] = s[3];
+      }
+      for (let n = w; n < this.count; n++) {
+        const q = n * 3, i = n % w, rootX = this.roots[i * 3];
+        const cx = frames[i * 4], cz = frames[i * 4 + 1], co = frames[i * 4 + 2], si = frames[i * 4 + 3];
+        const localX = rootX + (p[q] - cx) * co + (p[q + 2] - cz) * si;
+        const radius = state.bodyRadius(localX, p[q + 1]);
+        state.body.frame(localX, s);
+        const centerX = s[0], centerZ = s[1], c = s[2], sn = s[3];
+        const lateral = -(p[q] - centerX) * sn + (p[q + 2] - centerZ) * c;
+        if (radius > 0 && lateral * this.side < radius + 0.009) {
+          const push = this.side * (radius + 0.009) - lateral;
+          p[q] -= sn * push; p[q + 2] += c * push;
+          old[q] = p[q]; old[q + 2] = p[q + 2];
+        }
       }
     }
   }

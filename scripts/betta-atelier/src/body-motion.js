@@ -9,6 +9,8 @@ export class BodyMotion {
     this.data = new Float32Array(SPINE_COUNT * 4);
     this.turnAngles = null;
     this.mouth = this.gill = 0;
+    // (Counts the updates: a point carried by transform() since the last one would be carried there still.)
+    this.revision = 0;
     this.update(0, 0, 0, 0);
   }
   // Tangent memory travels from neck to peduncle. A new head direction reaches
@@ -38,6 +40,7 @@ export class BodyMotion {
   // gulp / gulpGill: host-driven jaw opening and opercular pulse (a surface air
   // gulp); they take over from the breathing rhythm only while they are larger.
   update(phase, effort, turn, breathPhase, gulp = 0, gulpGill = 0) {
+    this.revision++;
     this.effort = effort;
     // A maneuver is a sustained C-bend, not a wider propulsion oscillation.
     // Positive yaw leaves the rear trunk on the previous heading behind the head.
@@ -48,6 +51,7 @@ export class BodyMotion {
     this.gill = Math.max(gulpGill, Math.max(0, Math.sin(breathPhase - 1.05)) ** 1.3 * (0.8 + effort * 0.2));
     const dx = (SPINE_END - SPINE_START) / (SPINE_COUNT - 1);
     let x = SPINE_START, z = 0, oldCos = 1, oldSin = 0;
+    const d = this.data;
     for (let i = 0; i < SPINE_COUNT; i++) {
       const u = clamp((SPINE_START + i * dx + 1.22) / 2.276, 0, 1);
       const envelope = u * u * (3 - 2 * u);
@@ -62,7 +66,7 @@ export class BodyMotion {
         * Math.sin(phase - u * 3.1);
       const c = Math.cos(angle), s = Math.sin(angle);
       if (i) { x += dx * (oldCos + c) * 0.5; z += dx * (oldSin + s) * 0.5; }
-      this.data.set([x, z, c, s], i * 4);
+      d[i * 4] = x; d[i * 4 + 1] = z; d[i * 4 + 2] = c; d[i * 4 + 3] = s;
       oldCos = c; oldSin = s;
     }
   }
