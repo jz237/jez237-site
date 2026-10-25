@@ -4,10 +4,11 @@ import {readFileSync} from 'node:fs';
 import * as T from 'three';
 import {BAIL,shouldBail,bailOut,strollAway} from '../src/driver-bail';
 import {driverFigure,DRIVER} from '../src/driver-figure';
-test('a driver gets out once their car is burning or blown up and has all but stopped for a moment',()=>{
- assert.equal(shouldBail(true,false,1,BAIL.delay),true);assert.equal(shouldBail(false,true,0,BAIL.delay+1),true,'blown up');
- assert.equal(shouldBail(true,false,BAIL.speed+1,9),false,'not while it is still moving');assert.equal(shouldBail(true,false,0,BAIL.delay-.1),false,'not at once');
- assert.equal(shouldBail(false,false,0,9),false,'a car that is not burning keeps its driver');assert.equal(shouldBail(true,false,NaN,9),false);
+test('a driver gets out once their wrecked car is burning or blown up and has all but stopped for a moment',()=>{
+ assert.equal(shouldBail(true,false,true,1,BAIL.delay),true);assert.equal(shouldBail(false,true,true,0,BAIL.delay+1),true,'blown up');
+ assert.equal(shouldBail(true,false,false,0,9),false,'a car still in the fight keeps its driver (its fire may be put out)');
+ assert.equal(shouldBail(true,false,true,BAIL.speed+1,9),false,'not while it is still moving');assert.equal(shouldBail(true,false,true,0,BAIL.delay-.1),false,'not at once');
+ assert.equal(shouldBail(false,false,true,0,9),false,'a wreck that is not burning keeps its driver');assert.equal(shouldBail(true,false,true,NaN,9),false);
 });
 test('the driver climbs out of their own door, walks clear and stands on the floor watching the car',()=>{
  const scene=new T.Scene(),car=new T.Group();car.position.set(5,.4,-3);car.rotation.y=.5;scene.add(car);
@@ -29,6 +30,6 @@ test('the driver climbs out of their own door, walks clear and stands on the flo
 });
 test('offline drivers bail out every frame they should, walk on, and are freed with the next event',()=>{
  const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
- assert.ok(main.includes("if(shouldBail(c.onFire,c.blownUp,c.speed,t)){bailOut(d,c.root,scene,(x,z)=>fx.floorAt(x,z,c.current.y));bailed.push(d);}"));
+ assert.ok(main.includes("if(shouldBail(c.onFire,c.blownUp,c.health<=0,c.speed,t)){bailOut(d,c.root,scene,(x,z)=>fx.floorAt(x,z,c.current.y));bailed.push(d);}"));
  assert.ok(main.includes("for(const f of bailed)if(strollAway(f,dt))sound.crowd(BAIL_CHEER);")&&main.includes("for(const f of bailed)disposeDriver(f);bailed.length=0;"));
 });

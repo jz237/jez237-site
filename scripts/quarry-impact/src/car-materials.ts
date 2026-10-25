@@ -95,24 +95,26 @@ float scrapeLines=mix(smoothstep(.65,.92,abs(sin(across+bodySilt(vBodyPosition*2
   material.customProgramCacheKey = () => contactWear ? 'quarry-contact-paint-crumple-v1' : 'quarry-layered-paint-crumple-v1';
 }
 
-export type GlassState = { damage: { value: number }; impact: { value: T.Vector3 }; axes: { value: T.Vector3 }; };
+export type GlassState = { damage: { value: number }; impact: { value: T.Vector3 }; axes: { value: T.Vector3 }; smoke: { value: number }; };
 export function finishGlass(material: T.MeshPhysicalMaterial, geometry: T.BufferGeometry): GlassState {
   geometry.computeBoundingBox();
   const size = geometry.boundingBox!.getSize(new T.Vector3());
   const state: GlassState = {
     damage: { value: 0 }, impact: { value: geometry.boundingBox!.getCenter(new T.Vector3()) },
     axes: { value: new T.Vector3(size.x < size.z ? 0 : 1, size.x < size.z || size.y > size.z ? 1 : 0, 0) },
+    smoke: { value: 0 },
   };
   material.userData.glassState = state;
   material.onBeforeCompile = (shader) => {
     shader.uniforms.glassDamage = state.damage;
     shader.uniforms.glassImpact = state.impact;
     shader.uniforms.glassAxes = state.axes;
+    shader.uniforms.glassSmoke = state.smoke;
     shader.vertexShader = shader.vertexShader
       .replace('#include <common>', '#include <common>\nvarying vec3 vGlassPosition;')
       .replace('#include <begin_vertex>', '#include <begin_vertex>\nvGlassPosition=position;');
     shader.fragmentShader = shader.fragmentShader
-      .replace('#include <common>', '#include <common>\nvarying vec3 vGlassPosition; uniform float glassDamage; uniform vec3 glassImpact; uniform vec3 glassAxes;')
+      .replace('#include <common>', '#include <common>\nvarying vec3 vGlassPosition; uniform float glassDamage; uniform vec3 glassImpact; uniform vec3 glassAxes; uniform float glassSmoke;')
       .replace('#include <color_fragment>', `#include <color_fragment>
 vec3 d=vGlassPosition-glassImpact;
 vec2 p=vec2(mix(d.z,d.x,glassAxes.x),mix(d.y,d.z,1.-glassAxes.y));
@@ -124,6 +126,10 @@ crack=max(crack,(1.-smoothstep(.018,.065,rings))*.52*(1.-smoothstep(.04,.34,radi
 crack*=smoothstep(0.,.16,glassDamage);
 diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.66,.75,.75),crack);
 diffuseColor.a=clamp(diffuseColor.a+crack*.6+glassDamage*.1,0.,.94);
+// A cabin full of smoke (a burning car) shows dark and murky through the glass, thicker low down where it lies.
+float murk=glassSmoke*(.8+.2*smoothstep(.4,-.2,vGlassPosition.y));
+diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.11,.1,.09),murk*.85);
+diffuseColor.a=clamp(diffuseColor.a+murk*.6,0.,.97);
 `)
       .replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\nroughnessFactor=clamp(roughnessFactor+crack*.72+glassDamage*.1,0.,1.);');
   };

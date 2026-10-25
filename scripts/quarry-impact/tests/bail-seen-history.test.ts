@@ -1,6 +1,7 @@
+import {restoreCabinSmokeBytes} from './cabin-smoke-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readBailSeenPrevious,restoreBailSeenBytes,verifyBailSeenRevision} from './bail-seen-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreCabinSmokeBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('BailSeen preserves every prior fixture, vehicle asset, venue art and history input',verifyBailSeenRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/bail-seen/revision.json').toString());

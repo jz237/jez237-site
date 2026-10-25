@@ -110,6 +110,8 @@ import {derbyFlag,waveFlag,FLAG_COLOURS} from './derby-flag';
 import {CRUNCH,crunchVolume} from './litter-crunch';
 import {SHRED_SECONDS} from './vehicle';
 import {shouldBail,bailOut,strollAway,BAIL} from './driver-bail';
+import {cabinSmoke} from './cabin-smoke';
+import type {GlassState} from './car-materials';
 import {disposeDriver} from './driver-figure';
 import {roofSign} from './roof-sign';
 import {roofSignFate,foldRoofSign,roofSignBox,disposeRoofSign,type RoofSignFate} from './roof-sign';
@@ -2149,6 +2151,7 @@ let hornHeats=0;
 const bailClock=new WeakMap<object,number>(),bailed:T.Object3D[]=[];
 const BAIL_CHEER=.75;
 const shredClock=new WeakMap<object,number>();let shredChunks=0;
+const smokeIn=new WeakMap<object,number>();
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
 function lookDriver(c:Vehicle,figure:T.Object3D,dt:number){
   const t=drivers.memory.get(c.id)?.target,prey=t!==undefined&&t>=0&&t!==c.id?cars.find(x=>x.id===t&&x.health>0):undefined;
@@ -2180,12 +2183,15 @@ function updateCamera(dt: number) {
   if(state!=='paused')for(const c of cars){const d=c.root.children.find(o=>o.name==='driver');if(d)lookDriver(c,d,dt);}
   // Derby flags whip about with their cars and snap once a car is out or upside down.
   if(state!=='paused')for(const c of cars){const f=c.root.children.find(o=>o.name==='derby_flag');if(f)waveFlag(f,c.root,dt,c.health<=0||c.inverted>.3);}
-  // Drivers get out of burning or blown-up cars once they have stopped, and walk clear to watch (offline).
+  // Drivers get out of wrecked cars that are burning or blown up once they have stopped, and walk clear to watch (offline).
   if(state==='playing'||state==='wrecked'){for(const c of cars){if(!c.extendedDamage)continue;const d=c.root.children.find(o=>o.name==='driver');if(!d)continue;
-    const t=(c.onFire||c.blownUp)&&Math.abs(c.speed)<BAIL.speed?(bailClock.get(c)??0)+dt:0;bailClock.set(c,t);
-    if(shouldBail(c.onFire,c.blownUp,c.speed,t)){bailOut(d,c.root,scene,(x,z)=>fx.floorAt(x,z,c.current.y));bailed.push(d);}}
+    const t=(c.onFire||c.blownUp)&&c.health<=0&&Math.abs(c.speed)<BAIL.speed?(bailClock.get(c)??0)+dt:0;bailClock.set(c,t);
+    if(shouldBail(c.onFire,c.blownUp,c.health<=0,c.speed,t)){bailOut(d,c.root,scene,(x,z)=>fx.floorAt(x,z,c.current.y));bailed.push(d);}}
     // A driver clear of the fire waves to show they are all right, and the stands cheer.
     for(const f of bailed)if(strollAway(f,dt))sound.crowd(BAIL_CHEER);}
+  // A burning car's cabin fills with smoke, murking its glass, and stays sooty after (offline).
+  if(state==='playing'||state==='wrecked')for(const c of cars){if(!c.extendedDamage)continue;const was=smokeIn.get(c)??0,now=cabinSmoke(was,c.onFire,dt);if(now===was)continue;smokeIn.set(c,now);
+    for(const g of c.glass){const st=(g.material as T.Material).userData.glassState as GlassState|undefined;if(st)st.smoke.value=now;}}
   // A shredding tyre sheds lumps of rubber at its wheel as the car goes (offline).
   if(state==='playing')for(const c of cars){if(!c.extendedDamage||Math.abs(c.speed)<SHRED_TRAIL.speed||clock-(shredClock.get(c)??-9)<SHRED_TRAIL.gap)continue;const w=c.wheels[c.tyreShred.findIndex(t=>t>0)];if(!w?.visible)continue;w.getWorldPosition(crunchAt);fx.scatterLitter(crunchAt,'rubber',c.id*151+(++shredChunks),undefined,undefined,SHRED_TRAIL.chips);shredClock.set(c,clock);}
   // Tyres crunch over the glass and lens chips on the floor (offline), the two recorded takes in turn.
@@ -2724,6 +2730,7 @@ async function boot() {
     /** QA: chips of glass and lamp lens on the floor, and the breaks that left them by kind. */
     litter: () => ({ chips: fx.litter.mesh.count, ...fx.litter.breaks, last: fx.litter.last.toArray(), crunches: crunchTake }),
     horns: () => hornHeats,
+    cabinSmoke: (id: number) => { const c = cars.find(x => x.id === id); return c ? smokeIn.get(c) ?? 0 : null; },
     /** QA: set a tyre shredding, as a blowout does. */
     shredTyre: (id: number, wheel: number) => { const c = cars.find(x => x.id === id); if (!c || !(wheel >= 0 && wheel < 4)) return false; c.tyreShred[wheel] = SHRED_SECONDS; return true; },
     bailed: () => bailed.map(f => ({ at: f.position.toArray().map(v => +v.toFixed(2)), walked: +(f.userData.bail?.time ?? 0).toFixed(2), legs: !!f.getObjectByName('driver_legs') })),

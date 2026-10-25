@@ -1,13 +1,14 @@
 import * as T from 'three';
 import {DRIVER} from './driver-figure';
-/** A driver gets out of a burning car (offline): once their car is on fire or blown up and has all but stopped (under speed m/s)
- * for delay seconds, they climb out of their door, walk walk metres clear over stroll seconds and stand watching it burn for watch
+/** A driver gets out of a burning car (offline): once their car is out (wrecked) and on fire or blown up, and has all but stopped
+ * (under speed m/s) for delay seconds, they climb out of their door, walk walk metres clear over stroll seconds and stand watching it burn for watch
  * seconds (waving to the crowd for the first wave of them, to show they are all right), then are gone over the barrier (they are
  * not solid, so cars would drive through them). The seated figure is moved into the world and given legs (leg metres long), its
  * arms hanging from shoulders. */
 export const BAIL={delay:1.2,speed:3,door:1.1,walk:3.2,stroll:2.2,watch:6,wave:2.4,leg:.78,stride:.5} as const;
-/** Whether a car's driver should get out now: burning or blown up, nearly stopped, for long enough (seconds so far in that state). */
-export function shouldBail(onFire:boolean,blownUp:boolean,speed:number,seconds:number){return (onFire||blownUp)&&Math.abs(Number.isFinite(speed)?speed:99)<BAIL.speed&&seconds>=BAIL.delay;}
+/** Whether a car's driver should get out now: the car out, burning or blown up, nearly stopped, for long enough (seconds so far in
+ * that state). A car still in the fight keeps its driver: its fire may yet be put out and it drives on. */
+export function shouldBail(onFire:boolean,blownUp:boolean,out:boolean,speed:number,seconds:number){return out&&(onFire||blownUp)&&Math.abs(Number.isFinite(speed)?speed:99)<BAIL.speed&&seconds>=BAIL.delay;}
 const BODY_BOTTOM=-DRIVER.head-.36;
 /** Gives the figure legs and stands it: arms hanging, eyes front, no sway. */
 function standUp(figure:T.Object3D){
