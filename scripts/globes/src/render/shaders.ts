@@ -1267,14 +1267,22 @@ fn globes_bg(bgTex: texture_2d<f32>, bgSamp: sampler, p: vec3f, dir: vec3f) -> v
   return mix(room, desk, smoothstep(0.0, 0.12, dn));`}
 }
 
-// Ray inside the glass at the outer surface heading out: refract into the room.
+// Ray inside the glass at the outer surface heading out: refract into the room. (Its two looks,
+// out and back, from one place: see globesZero. Past the critical angle there is only the look
+// back.)
 fn globes_exitGlass(p: vec3f, dir: vec3f, bgTex: texture_2d<f32>, bgSamp: sampler) -> vec3f {
   let n = normalize(p);
   let outDir = refract(dir, -n, GLOBES_IOR_GLASS);
   let back = reflect(dir, -n);
-  if (dot(outDir, outDir) < 0.5) { return globes_bg(bgTex, bgSamp, p, back); }
-  let F = globes_fresnel(clamp(dot(dir, n), 0.0, 1.0), GLOBES_IOR_GLASS, 1.0);
-  return (1.0 - F) * globes_bg(bgTex, bgSamp, p, outDir) + F * globes_bg(bgTex, bgSamp, p, back);
+  let reflected = dot(outDir, outDir) < 0.5;
+  var F = 1.0;
+  if (!reflected) { F = globes_fresnel(clamp(dot(dir, n), 0.0, 1.0), GLOBES_IOR_GLASS, 1.0); }
+  var c = vec3f(0.0);
+  for (var k = globesZero; k < 2; k++) {
+    if (k == 0 && reflected) { continue; }
+    c += select(F, 1.0 - F, k == 0) * globes_bg(bgTex, bgSamp, p, select(back, outDir, k == 0));
+  }
+  return c;
 }
 
 // Ray inside the cavity (medium index nMed) hitting the inner glass surface at p.
@@ -1290,6 +1298,15 @@ ${bowl ? STUDIO_WGSL + bowlWGSL(bowl) + bowlScapeWGSL(globe.innerRadius, bowl.li
 // A pixel's size where the sand is being shaded (world units: its finest grains fade out there).
 var<private> globesSandFoot: f32 = 0.0;
 ` : ''}
+// A GPU's compiler copies a function into every place it is called from, so a small one called
+// from many places (the noise, the studio's look) makes a pipeline slow to build. Those are called
+// from one place instead, in a loop over what the places differed in, the same sums in the same
+// order; and the loop starts here, at a 0 the compiler cannot know (the betta bowl's passes set it
+// from a uniform at the top of globes_shade), so it cannot unroll the loop back into the copies.
+// (Signed: counting up from an unknown i32, a loop has no small bound on its trips to unroll it by.
+// Where nothing sets it, it stays 0 and the loops may be unrolled.)
+var<private> globesZero: i32 = 0;
+
 // ---- sand ---------------------------------------------------------------------------
 
 fn globes_hash3(p: vec3f) -> f32 {
@@ -1298,16 +1315,21 @@ fn globes_hash3(p: vec3f) -> f32 {
   return fract((q.x + q.y) * q.z);
 }
 
+// (The corners a pair at a time, along x, each pair's blend shifted in: y then z.)
 fn globes_noise3(x: vec3f) -> f32 {
   let i = floor(x);
   let f = fract(x);
   let u = f * f * (3.0 - 2.0 * f);
-  return mix(
-    mix(mix(globes_hash3(i), globes_hash3(i + vec3f(1.0, 0.0, 0.0)), u.x),
-        mix(globes_hash3(i + vec3f(0.0, 1.0, 0.0)), globes_hash3(i + vec3f(1.0, 1.0, 0.0)), u.x), u.y),
-    mix(mix(globes_hash3(i + vec3f(0.0, 0.0, 1.0)), globes_hash3(i + vec3f(1.0, 0.0, 1.0)), u.x),
-        mix(globes_hash3(i + vec3f(0.0, 1.0, 1.0)), globes_hash3(i + vec3f(1.0, 1.0, 1.0)), u.x), u.y),
-    u.z);
+  var zs = vec2f(0.0);
+  for (var k = globesZero; k < 2; k++) {
+    var ys = vec2f(0.0);
+    for (var j = globesZero; j < 2; j++) {
+      let c = i + vec3f(0.0, f32(j), f32(k));
+      ys = vec2f(ys.y, mix(globes_hash3(c), globes_hash3(c + vec3f(1.0, 0.0, 0.0)), u.x));
+    }
+    zs = vec2f(zs.y, mix(ys.x, ys.y, u.y));
+  }
+  return mix(zs.x, zs.y, u.z);
 }
 
 // The sand bed is a height field with columns along gravity (it is carried round with the
@@ -1378,13 +1400,16 @@ fn globes_sandRipple(pb: vec3f) -> f32 {
   return 0.0035 * (sin(ph) + 0.25 * sin(2.0 * ph + 1.3)) + 0.0009 * (globes_noise3(pb * 140.0) - 0.5);`}
 }
 
+// (The ripples at pb, then a step along x, y and z, from one place: see globesZero.)
 fn globes_sandDetailNormal(pb: vec3f, nb: vec3f) -> vec3f {
   let e = 0.0015;
-  let h0 = globes_sandRipple(pb);
-  let g = vec3f(
-    globes_sandRipple(pb + vec3f(e, 0.0, 0.0)) - h0,
-    globes_sandRipple(pb + vec3f(0.0, e, 0.0)) - h0,
-    globes_sandRipple(pb + vec3f(0.0, 0.0, e)) - h0) / e;
+  var h0 = 0.0;
+  var g = vec3f(0.0);
+  for (var k = globesZero; k < 4; k++) {
+    let h = globes_sandRipple(pb + select(vec3f(0.0), vec3f(e), vec3<bool>(k == 1, k == 2, k == 3)));
+    if (k == 0) { h0 = h; } else { g = vec3f(g.yz, h - h0); }
+  }
+  g /= e;
   return normalize(nb - (g - dot(g, nb) * nb));
 }
 
@@ -1424,9 +1449,21 @@ fn globes_sandAtGlass(p: vec3f, rot: mat3x3f) -> vec3f {
   let up = select(vec3f(0.0, 1.0, 0.0), vec3f(1.0, 0.0, 0.0), abs(n.y) > 0.9);
   let t1 = normalize(cross(n, up));
   let t2 = cross(n, t1);
-${bowl ? `  // (The betta's bowl: its studio, and the warm light of the table's pool under it.)
+${bowl ? `  // (The betta's bowl: its studio, and the warm light of the table's pool under it. Its looks
+  // from one place, see globesZero: along n, then n + t1, n - t1, n + t2 and n - t2.)
   let at = p + studioBowl;
-  let room = 0.4 * studio_view(at, n, false) + 0.15 * (studio_view(at, normalize(n + t1), false) + studio_view(at, normalize(n - t1), false) + studio_view(at, normalize(n + t2), false) + studio_view(at, normalize(n - t2), false));
+  var ahead = vec3f(0.0);
+  var aside = vec3f(0.0);
+  for (var k = globesZero; k < 5; k++) {
+    var d = n;
+    if (k > 0) {
+      let t = select(t2, t1, k < 3);
+      d = normalize(n + select(-t, t, (k & 1) == 1));
+    }
+    let v = studio_view(at, d, false);
+    if (k == 0) { ahead = v; } else { aside += v; }
+  }
+  let room = 0.4 * ahead + 0.15 * aside;
   let light = 3.14159265 * room + GLOBES_SUN_IRR * max(dot(n, GLOBES_SUN_DIR), 0.0) * 0.85 + vec3f(1.15, 0.98, 0.78);` : `  let room = 0.4 * globes_sky(n) + 0.15 * (globes_sky(n + t1) + globes_sky(n - t1) + globes_sky(n + t2) + globes_sky(n - t2));
   let light = 3.14159265 * room + GLOBES_SUN_IRR * max(dot(n, GLOBES_SUN_DIR), 0.0) * 0.85 + vec3f(0.95, 0.90, 0.84);`}
   return albedo * light / 3.14159265;
@@ -2668,6 +2705,8 @@ fn globes_shade(camPos: vec3f, fragPos: vec3f, fragCenter: vec3f, center: vec3f,
   }
   var col = vec3f(0.0);
   var cover = 0.0;${bowl ? `
+  globesZero = i32(bowlDetail.z);
+  scapeZero = globesZero;
   bowlRot = rot;
   studioBowl = center;
   scapeRot = rot;

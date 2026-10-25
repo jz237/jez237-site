@@ -232,29 +232,34 @@ fn scape_hash3i(c: vec3i) -> vec3f {
   return vec3f(v) * (1.0 / 4294967296.0);
 }
 
+// 0, set by the shader these run in from a uniform (the bowl's: shaders.ts globes_shade), so a
+// GPU's compiler cannot unroll a loop that starts at it: a function called in one is compiled
+// once, not once for each turn (see globesZero there).
+var<private> scapeZero: i32 = 0;
+
 fn scape_grad(c: vec3i, f: vec3f) -> f32 {
   return dot(scape_hash3i(c) * 2.0 - vec3f(1.0), f);
 }
 
-// Gradient noise, about -1..1, smooth.
+// Gradient noise, about -1..1, smooth. (The corners a pair at a time, along x, each pair's blend
+// shifted in: y then z.)
 fn scape_noise3(p: vec3f) -> f32 {
   let fl = floor(p);
   let i = vec3i(fl);
   let f = p - fl;
   let u = f * f * f * (f * (f * 6.0 - vec3f(15.0)) + vec3f(10.0));
-  let n000 = scape_grad(i, f);
-  let n100 = scape_grad(i + vec3i(1, 0, 0), f - vec3f(1.0, 0.0, 0.0));
-  let n010 = scape_grad(i + vec3i(0, 1, 0), f - vec3f(0.0, 1.0, 0.0));
-  let n110 = scape_grad(i + vec3i(1, 1, 0), f - vec3f(1.0, 1.0, 0.0));
-  let n001 = scape_grad(i + vec3i(0, 0, 1), f - vec3f(0.0, 0.0, 1.0));
-  let n101 = scape_grad(i + vec3i(1, 0, 1), f - vec3f(1.0, 0.0, 1.0));
-  let n011 = scape_grad(i + vec3i(0, 1, 1), f - vec3f(0.0, 1.0, 1.0));
-  let n111 = scape_grad(i + vec3i(1, 1, 1), f - vec3f(1.0, 1.0, 1.0));
-  let x00 = mix(n000, n100, u.x);
-  let x10 = mix(n010, n110, u.x);
-  let x01 = mix(n001, n101, u.x);
-  let x11 = mix(n011, n111, u.x);
-  return 1.15 * mix(mix(x00, x10, u.y), mix(x01, x11, u.y), u.z);
+  var zs = vec2f(0.0);
+  for (var k = scapeZero; k < 2; k++) {
+    var ys = vec2f(0.0);
+    for (var j = scapeZero; j < 2; j++) {
+      let c = vec3i(0, j, k);
+      let g0 = scape_grad(i + c, f - vec3f(c));
+      let g1 = scape_grad(i + c + vec3i(1, 0, 0), f - vec3f(c + vec3i(1, 0, 0)));
+      ys = vec2f(ys.y, mix(g0, g1, u.x));
+    }
+    zs = vec2f(zs.y, mix(ys.x, ys.y, u.y));
+  }
+  return 1.15 * mix(zs.x, zs.y, u.z);
 }
 
 // Fractal noise: octaves of scape_noise3, each twice as fine and half as strong (about -1..1).

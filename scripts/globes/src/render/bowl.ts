@@ -104,12 +104,13 @@ export function lidReach(s: BowlShape, c: { x: number; y: number; z: number }): 
 
 /** The bowl's uniforms, as globes_shade takes them: the lid's pose (the globe's translating frame
  *  to the lid's: its underside's middle at the origin, its axis y); x: the lid is there, y: its
- *  lamp's brightness (0..1). */
-export const BOWL_PARAMS = ', bowlLid: mat4x4f, bowlState: vec4f, bowlLife: mat4x4f';
+ *  lamp's brightness (0..1); what floats in it; and its detail (GlobeView uBowlDetail). */
+export const BOWL_PARAMS = ', bowlLid: mat4x4f, bowlState: vec4f, bowlLife: mat4x4f, bowlDetail: vec4f';
 
 const f = (x: number) => x.toFixed(6);
 
-/** The bowl's glass, for the globe's shader (needs globes_bg, globes_fresnel, GLOBES_GLASS_ABS). */
+/** The bowl's glass, for the globe's shader (needs globes_bg, globes_fresnel, GLOBES_GLASS_ABS,
+ *  globesZero). */
 export function bowlWGSL(s: BowlShape): string {
   return /* wgsl */ `
 // ---- the betta bowl (src/render/bowl.ts) -----------------------------------------------
@@ -206,10 +207,16 @@ fn bowl_sdf(part: u32, q: vec3f) -> f32 {
   return bowl_lidSdf(q);
 }
 
+// (The field at a tetrahedron's corners round q in turn, e.xyy, e.yyx, e.yxy and e.xxx, from one
+// place: see shaders.ts globesZero.)
 fn bowl_normal(part: u32, q: vec3f) -> vec3f {
   let e = vec2f(1.0, -1.0) * BOWL_EPS;
-  return normalize(e.xyy * bowl_sdf(part, q + e.xyy) + e.yyx * bowl_sdf(part, q + e.yyx)
-    + e.yxy * bowl_sdf(part, q + e.yxy) + e.xxx * bowl_sdf(part, q + e.xxx));
+  var g = vec3f(0.0);
+  for (var k = globesZero; k < 4; k++) {
+    let o = select(e.yyy, e.xxx, vec3<bool>((k & 1) == (k >> 1u), k > 1, (k & 1) == 1));
+    g += o * bowl_sdf(part, q + o);
+  }
+  return normalize(g);
 }
 
 // Where a ray is within the upright cylinder r <= rad, lo <= y <= hi, ahead of its origin:

@@ -62,7 +62,7 @@ export class StudioBackdrop {
         let d = normalize(x - cam);
         let cosI = clamp(-d.y, 0.0, 1.0);
         let F = 0.04 + 0.96 * pow(1.0 - cosI, 5.0);
-        return vec4f(studio_table(x, d, false) + F * mirror.rgb, 1.0);
+        return vec4f(studio_table(x) + F * mirror.rgb, 1.0);
       }`,
       includes,
     );

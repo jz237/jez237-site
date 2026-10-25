@@ -83,19 +83,13 @@ fn studio_tableLight(x: vec3f) -> vec3f {
   return e + vec3f(0.18, 0.30, 0.42);
 }
 
-// The table at x seen along d: a dark blue-grey lacquer lit by the pool and the room and, when
-// gloss, mirroring the backdrop and the room (the app's table adds the bowl's own reflection over
-// it instead: StudioBackdrop.ts).
-fn studio_table(x: vec3f, d: vec3f, gloss: bool) -> vec3f {
+// The table at x: a dark blue-grey lacquer lit by the pool and the room (what its gloss mirrors,
+// studio_view adds; the app's table adds the bowl's own reflection over it: StudioBackdrop.ts).
+fn studio_table(x: vec3f) -> vec3f {
   let albedo = vec3f(0.034, 0.040, 0.050);
   var c = albedo * studio_tableLight(x) / 3.14159265;
   // (Its far edge, where it meets the backdrop, catches a thin line of light.)
   c += vec3f(0.05, 0.08, 0.11) * (1.0 - smoothstep(0.0, 0.06, x.z - STUDIO_WALL_Z));
-  if (gloss) {
-    let cosI = clamp(-d.y, 0.0, 1.0);
-    let F = 0.04 + 0.96 * pow(1.0 - cosI, 5.0);
-    c += F * studio_far(x, vec3f(d.x, -d.y, d.z));
-  }
   return c;
 }
 
@@ -109,13 +103,25 @@ fn studio_far(o: vec3f, d: vec3f) -> vec3f {
   return studio_room(d);
 }
 
-// What a ray from o (world) heading along d sees of the studio (gloss: see studio_table).
+// What a ray from o (world) heading along d sees of the studio: the table, and when gloss what it
+// mirrors of the backdrop and the room; or what lies beyond it. (One look beyond, either way: a
+// shader holds a copy of this for every place it is called from, shaders.ts globesZero.)
 fn studio_view(o: vec3f, d: vec3f, gloss: bool) -> vec3f {
+  var c = vec3f(0.0);
+  var w = 1.0;
+  var fo = o;
+  var fd = d;
   if (d.y < -1e-5 && o.y > STUDIO_TABLE_Y) {
     let t = (STUDIO_TABLE_Y - o.y) / d.y;
     let x = o + d * t;
-    if (x.z > STUDIO_WALL_Z) { return studio_table(x, d, gloss); }
+    if (x.z > STUDIO_WALL_Z) {
+      c = studio_table(x);
+      w = select(0.0, 0.04 + 0.96 * pow(1.0 - clamp(-d.y, 0.0, 1.0), 5.0), gloss);
+      fo = x;
+      fd = vec3f(d.x, -d.y, d.z);
+    }
   }
-  return studio_far(o, d);
+  if (w > 0.0) { c += w * studio_far(fo, fd); }
+  return c;
 }
 `;

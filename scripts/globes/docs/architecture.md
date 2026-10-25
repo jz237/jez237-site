@@ -851,6 +851,29 @@ current.
   specks', are built as it runs, which held up the next frames by 33-50 ms with no JavaScript
   running). Measured 2026-10-20 (1712x963): every frame of a switch's swap on time; start-up
   ~0.9 s longer.
+- A pipeline takes as long to build as its code with every call inlined, not its text: GPU
+  compilers copy a function into each place it is called from. The betta bowl's passes were
+  145 KB of text but ~680 K characters inlined (the studio's look copied 48 times, the two
+  noises 60 and 72 times with eight hashes each), and their two pipelines took most of the
+  phone's 29 s load. Each of those functions is now called from one place, in a loop over what
+  the places differed in, the same sums in the same order; the loop starts at `globesZero`, a 0
+  the bowl's passes take from a uniform (GlobeView `uBowlDetail.z`), so no compiler can unroll it
+  back into the copies (signed, so the loop has no small bound on its trips either). ~380 K
+  inlined on the phone's tier, ~400 K on the desktop's; `tools/shader-budget.mjs` measures it
+  and `shader-budget.test.mjs` holds each pass to its budget. Cold, in phone emulation on the
+  5090 (D3D12), each bowl pipeline built in ~0.7x the time (7.0-8.1 s to 5.0-5.8 s, back to
+  back): it is not all in proportion to the inlined size.
+- A frozen frame of the phone's tier (?manual, seeded, the same ticks) is not always the same
+  frame, even from one build: the world takes one of two courses, run to run (one run in four,
+  2026-10-25). In a 400-tick run the water read back at the fish's probes was the same, bit for
+  bit, to tick 300; by the end it differed, and so did the fish's swim and ~0.4-0.7% of the frame
+  (glints on the fish, the water's underside, a few leaf and bark pixels: most by 1-2/255, ~900
+  of a portrait frame's by up to ~100-160). The readback landed at the same tick in every run, so
+  it is not late readings, as with the koi (above). The cause is not found yet (a lead: the
+  water's centroid, which the fish makes for when it is out of the water, read back differently
+  in every run, even in runs that took the same course). The desktop's tier gave the one frame
+  in three runs. Shoot each build three times or more and compare a change with HEAD in the same
+  course: an exact change matches it within 1/255.
 
 ## The app (src/app)
 

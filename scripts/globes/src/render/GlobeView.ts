@@ -107,6 +107,10 @@ export class GlobeView {
   private readonly uBowlState = uniform(new THREE.Vector4(1, 1, 0, 0));
   /** What floats in the bowl: its leaf and its bubble nest (bowlScape.ts scapeLife). */
   private readonly uBowlLife = uniform(new THREE.Matrix4().set(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+  /** The bowl's detail. x: the samples its lamp's haze takes, y: the steps a ray takes through its
+   *  lid's glass (bowl.ts, as yet its own: 4 and 64 on a phone, 10 and 128 else); z: 0, where its
+   *  shader starts the loops a compiler must not unroll (shaders.ts globesZero); w: spare. */
+  private readonly uBowlDetail = uniform(new THREE.Vector4());
   /** MSAA is on and a pixel's rays can run one per sample (else one ray per pixel throughout). */
   private readonly perSample: boolean;
   private readonly uCenter = uniform(new THREE.Vector3());
@@ -150,6 +154,7 @@ export class GlobeView {
     const desktop = 'desktop' in outside ? outside.desktop : null;
     this.outerRadius = globe.outerRadius;
     this.uLit.value.set(sim.restLevel, light.shaftScatter, 0, sim.moteN);
+    this.uBowlDetail.value.set(bowl?.lite ? 4 : 10, bowl?.lite ? 64 : 128, 0, 0);
     const tex = densityTexture(sim);
     const o = sim.origin;
     const vol = uniform(new THREE.Vector4(o[0], o[1], o[2], 1 / (2 * sim.halfSize)));
@@ -333,7 +338,7 @@ export class GlobeView {
       let passInputs = redraw || perSampleWater ? koiInputs : inputs;
       if (withReef) passInputs = { ...passInputs, ...reefGrid };
       if (foam) passInputs = { ...passInputs, ...foamInputs };
-      if (withBowl) passInputs = Object.assign({}, passInputs, { bowlLid: this.uBowlLid, bowlState: this.uBowlState, bowlLife: this.uBowlLife }, scapeTex ? { kelpPrimTex: texture(scapeTex) } : {}, band);
+      if (withBowl) passInputs = Object.assign({}, passInputs, { bowlLid: this.uBowlLid, bowlState: this.uBowlState, bowlLife: this.uBowlLife, bowlDetail: this.uBowlDetail }, scapeTex ? { kelpPrimTex: texture(scapeTex) } : {}, band);
       if (!hardware) passInputs = Object.fromEntries(Object.entries(passInputs).filter(([k]) => k !== TLAS_PARAM)) as typeof passInputs;
       // (One variable: the depth and the colour both read the same trace.) Its w carries the
       // pixel's coverage, plus 2 where the second pass must redraw it.
