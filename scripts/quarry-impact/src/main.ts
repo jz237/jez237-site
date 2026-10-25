@@ -116,6 +116,7 @@ import {WiperRig,wiperArms,windscreen,wipeStep} from './windscreen-wipers';
 import {steerArms,handReach,newHandState,type HandState} from './driver-arms';
 import {BONNET_STEAM,bonnetHeat,steamRate} from './bonnet-steam';
 import {vapourRate} from './exhaust-vapour';
+import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,type HeatSource} from './heat-haze';
 import {brakeSteamRate} from './brake-steam';
 import {createWetReflections,type Glow} from './wet-reflections';
 import {WIND,eventWind,gusting} from './wind';
@@ -709,8 +710,11 @@ const camera = new T.PerspectiveCamera(52, innerWidth / innerHeight, 0.1, 850);
 const composer = new EffectComposer(renderer, createSceneRenderTarget(innerWidth, innerHeight));
 composer.addPass(new RenderPass(scene, camera));
 const ao = new QuarryAO(scene, camera);
+// Hot air over fires, tailpipes and hot bonnets shimmers what is behind it (offline).
+const heatHaze = new HeatHazePass(() => ao.enabled);
 const reflections = new LocalReflections(renderer, scene);
 composer.addPass(ao);
+composer.addPass(heatHaze);
 composer.addPass(new OutputPass());
 composer.addPass(new SMAAPass());
 const orbit = new OrbitControls(camera, canvas);
@@ -2211,6 +2215,19 @@ const handStates=new WeakMap<object,HandState>();
 const wiperScreens=new WeakMap<object,GlassState|undefined>();
 let carWetOverride:number|null=null;
 let umbrellasUp=false,umbrellaRoot:T.Object3D|undefined;
+// Heat haze columns: burning cars, running tailpipes (harder under throttle) and hot bonnets, fainter in the rain (offline).
+const hazeSources:HeatSource[]=[],hazeAt=new T.Vector3();let hazeOff=false;
+function updateHeatHaze(){
+  hazeSources.length=0;const wet=eventLighting==='rain';
+  if(!hazeOff&&!online?.active&&!studio&&['countdown','playing','paused','wrecked','result','inspect'].includes(state))for(const c of cars){if(!c.extendedDamage)continue;
+    const at=(x:number,y:number,z:number)=>hazeAt.set(x,y,z).applyQuaternion(c.root.quaternion).add(c.root.position);
+    if(c.onFire){const fire=vehicleFire?.audio.find(a=>a.id===c.id)?.position??c.root.position;hazeSources.push({x:fire.x,y:fire.y,z:fire.z,radius:HAZE.fire.radius,rise:HAZE.fire.rise,pixels:fireHaze(c.fireHeat??1,true)});}
+    const running=c.health>0&&!(c.engineStall!>0)&&!c.engineOut,half=DEFINITIONS[c.kind].halfLength,rear=isRearEngineKind(c.kind);
+    if(running&&!c.exhaustGone){at(rear?.35:-.35,-.25,-half-.1);hazeSources.push({x:hazeAt.x,y:hazeAt.y,z:hazeAt.z,radius:HAZE.exhaust.radius,rise:HAZE.exhaust.rise,pixels:exhaustHaze(c.input?.throttle??0,true,wet)});}
+    const hot=bonnetHaze(bonnetHeats.get(c)??0,wet);if(hot>0&&!c.onFire){at(0,.6,(rear?-1:1)*half*.45);hazeSources.push({x:hazeAt.x,y:hazeAt.y,z:hazeAt.z,radius:HAZE.bonnet.radius,rise:HAZE.bonnet.rise,pixels:hot});}
+  }
+  heatHaze.setSources(hazeSources,camera,elapsed);
+}
 const bonnetHeats=new WeakMap<object,number>(),bonnetClocks=new WeakMap<object,number>(),steamAt=new T.Vector3();let bonnetPuffs=0;
 const vapourClocks=new WeakMap<object,number>();let vapourPuffs=0;
 const brakeSteamClocks=new WeakMap<object,number[]>();let brakePuffs=0;
@@ -2588,6 +2605,7 @@ function frame(now: number) {
   }
   if (cars[0]) reflections.update(cars[0].root);
   renderer.shadowMap.needsUpdate = true;
+  updateHeatHaze();
   composer.render();
   studio?.capture(canvas);
   hudTime += dt;
@@ -2880,6 +2898,7 @@ async function boot() {
     brakeSteam: () => brakePuffs,
     reflections: () => wetReflections?.mesh.count ?? 0,
     litSpray: () => puddleSplashes?.litDrops ?? 0,
+    heatHaze: (on?: boolean) => { if (on !== undefined) hazeOff = !on; const u = heatHaze.material.uniforms; return { columns: heatHaze.columns, enabled: heatHaze.enabled, sources: hazeSources.length, boxes: (u.boxes.value as T.Vector4[]).slice(0, heatHaze.columns).map((b, i) => [...b.toArray(), ...(u.info.value as T.Vector4[])[i].toArray()].map((n) => +n.toFixed(3))) }; },
     lampBeams: () => cars.map((c) => c.root.children.filter((o) => o.name === 'car_light_beam').map((b) => +b.position.x.toFixed(2))),
     heatDiscs: (id = 0, heat = 1) => { const c = cars[id]; if (!c?.extendedDamage) return false; c.discHeat.fill(heat); return true; },
     storm: () => storm ? { strikes: storm.strikes, claps: storm.claps, thunders: sound.thunders, flash: +lightning.intensity.toFixed(3) } : null,
