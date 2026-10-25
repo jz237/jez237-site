@@ -121,6 +121,7 @@ import {DUST,dustRate} from './dust-trails';
 import {COLD_START,coldStartPuffs,crankStarts} from './cold-start';
 import {GravelRoost,ROOST,roostRate} from './gravel-roost';
 import {STRAP,TowStraps} from './tow-straps';
+import {rearOf,startingWake,wakeDustStep} from './wake-dust';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -1033,6 +1034,8 @@ function createCars(attract = false, previewSetup?:Setup) {
       lampDangles.set(car,new LampDangle(car.root,lamps,mesh=>fx.detach(mesh,car.velocity.clone().multiplyScalar(.65))));}
     // A bright tow strap hangs off each bumper and swings; a smashed or lost bumper takes its strap with it (offline).
     if(car.extendedDamage)towStraps.set(car,new TowStraps(car.root,car.panels,DEFINITIONS[type].halfLength,STRAP.colours[i%STRAP.colours.length],loop=>fx.detach(loop,car.velocity.clone().multiplyScalar(.6))));
+    // Driving through its own dust plume coats the tail in dust; the rain rinses it off (offline).
+    if(car.extendedDamage){const rear=rearOf(car.model,car.panels);if(rear!==null)car.surfaceFinish.placeWake(rear,startingWake(car.id));}
     // Broken glass and smashed lamps leave their pieces on the floor (offline).
     if(car.extendedDamage){const glassSound=car.onGlassBreak,lights=carLights.get(car);let n=0;car.onGlassBreak=p=>{glassSound?.(p);fx.scatterLitter(p,'glass',car.id*131+(++n),car.current);};if(lights)lights.onSmash=(p,kind)=>fx.scatterLitter(p,kind,car.id*137+(++n),car.current);}
     // A big hit knocks flakes of the car's paint off, a blowout leaves lumps of tyre (offline).
@@ -2621,6 +2624,9 @@ function frame(now: number) {
         if(stone&&Math.random()<ROOST.grit.share){const start=fx.cursor;fx.emit(steamAt,1,0,ROOST.grit.size);for(let j=start;j<fx.cursor;j++){const n=j%fx.particles.length,p=fx.particles[n];p.v.copy(stone.v).multiplyScalar(ROOST.grit.speed);
           p.max=p.life=ROOST.grit.life[0]+Math.random()*(ROOST.grit.life[1]-ROOST.grit.life[0]);dustTint.setHex(ROOST.grit.tint[kind]).multiplyScalar(.9+Math.random()*.2).toArray(fx.colors,n*3);}}}}}
   gravelRoost.step(dt);
+  // The tail dusts over in the wake of the car's own dust plume and the rain rinses it (offline).
+  if(state==='playing')for(const c of cars){if(!c.extendedDamage||!c.surfaceFinish.wakePlaced)continue;
+    c.surfaceFinish.wakeLevel=wakeDustStep(c.surfaceFinish.wakeLevel,dt,dustRate(c.speed,c.surface,eventLighting==='rain')/DUST.rate,eventLighting==='rain'?shower:0);}
   // Rain on a hot tyre boils off in steam at the tread: a wet burnout steams (offline).
   if(eventLighting==='rain'&&(state==='playing'||state==='wrecked'))for(const c of cars){if(!c.extendedDamage)continue;const clocks=tyreSteamClocks.get(c)??[0,0,0,0];tyreSteamClocks.set(c,clocks);
     for(let i=0;i<4;i++){const w=c.wheels[i];if(!w||c.wreckParts.wheelLost[i])continue;clocks[i]+=tyreSteamRate(c.tyreTemp[i])*dt;if(clocks[i]<1)continue;clocks[i]%=1;tyrePuffs++;w.getWorldPosition(steamAt).y-=TYRE_STEAM.drop;fx.emit(steamAt,1,5,.3);}}
@@ -3021,6 +3027,7 @@ async function boot() {
     dust: () => dustPuffs,
     coldStart: () => ({ puffs: coldPuffs, age: +coldStart.toFixed(2) }),
     towStraps: (id = 0, damage?: number) => { const c = cars.find(x => x.id === id), s = c && towStraps.get(c); if (s && damage !== undefined) for (const x of s.straps) if (x.panel) x.panel.userData.damage = damage; return s ? { straps: s.straps.length, ends: s.straps.map(x => x.end), torn: s.torn, swings: s.swings, panels: s.straps.map(x => x.panel?.name ?? null) } : null; },
+    wakeDust: (id = 0, level?: number) => { const c = cars.find(x => x.id === id); if (!c) return null; if (level !== undefined) c.surfaceFinish.wakeLevel = level; const w = c.surfaceFinish.wake.value; return { placed: c.surfaceFinish.wakePlaced, level: +w.z.toFixed(4), rear: +w.x.toFixed(3) }; },
     roost: () => ({ thrown: gravelRoost.thrown, flying: gravelRoost.flying, spins: cars.map(c => c.wheelSpins.map(v => +v.toFixed(2))), surfaces: cars.map(c => c.surface), offline: cars.map(c => c.extendedDamage), wet: cars.map(c => c.wetWheels.filter(Boolean).length), speeds: cars.map(c => +c.speed.toFixed(2)) }),
     tyres: (id = 0, temp?: number) => { const c = cars.find((x) => x.id === id); if (!c) return null; if (temp !== undefined) c.tyreTemp.fill(temp); return { temp: c.tyreTemp.map((v) => +v.toFixed(3)), grip: c.tyreGrip.map((v) => +v.toFixed(3)) }; },
     discs: (id = 0) => { const c = cars.find((x) => x.id === id); return c ? Array.from(c.discHeat, (v) => +v.toFixed(3)) : null; },
