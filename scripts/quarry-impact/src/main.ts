@@ -117,6 +117,7 @@ import {steerArms,handReach,newHandState,type HandState} from './driver-arms';
 import {BONNET_STEAM,bonnetHeat,steamRate} from './bonnet-steam';
 import {vapourRate} from './exhaust-vapour';
 import {WIND,eventWind,gusting} from './wind';
+import {marshalPosts,marshalFigure,poseMarshal,marshalFlag,type Post} from './arena-marshals';
 import {HEAD_GASKET} from './damage-handling';
 const HEAD_GASKET_AFTER=HEAD_GASKET.after;
 import {LEAK as TYRE_LEAK_RANGE} from './damage-handling';
@@ -765,6 +766,9 @@ let staticShadows: StaticQuarryShadows | undefined;
 let eventLighting: LightingMood | null = null;
 /** The event's breeze (offline): its base and, gusting, now. */
 const breezeBase={x:0,z:0},breeze={x:0,z:0};let windy=false;
+/** Flag marshals standing round an offline derby arena. */
+let marshals:{figure:T.Group;post:Post}[]=[];
+function clearMarshals(){for(const m of marshals){m.figure.removeFromParent();m.figure.traverse(o=>{if(o instanceof T.Mesh){o.geometry.dispose();(o.material as T.Material).dispose();}});}marshals=[];}
 let clearSky: T.Texture | null = null, overcastSky: T.Texture | null = null;
 function applyEventLighting(fresh: boolean, choice = settings.lighting) {
   if (fresh || !eventLighting) eventLighting = resolveLighting(choice, eventLighting);
@@ -926,6 +930,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   vehicleFire?.reset();propFires.reset();
   puddleSplashes?.reset();
   for (const c of cars){carLights.get(c)?.dispose();carLights.delete(c);c.dispose();}
+  clearMarshals();
   for(const f of bailed)disposeDriver(f);bailed.length=0;
   cars = [];
   fx.reset();
@@ -947,6 +952,8 @@ function createCars(attract = false, previewSetup?:Setup) {
     0x664234,
   ];
   const ratedGrid=!attract&&activeClubRound===null&&!activeTimeTrial&&(demo?demoOptions.classLimit:customEvent()&&mode!=='playground'&&eventOptions.classLimit)?(demo?demoPerformanceGrid(kind,demoOptions,garage):eventPerformanceGrid(kind,eventOptions,garage)):null;
+  // Marshals take their posts round an offline derby arena (the event's venue is active by now).
+  if(!attract&&mode==='derby'&&!online?.active&&!demo)marshals=marshalPosts(activeVenue.arena??DERBY_ARENA,activeVenue.course.height).map(post=>{const figure=marshalFigure();figure.position.set(post.x,post.y,post.z);figure.rotation.y=post.yaw;scene.add(figure);return {figure,post};});
   for (let i = 0; i < count; i++) {
     const type =
       ratedGrid?ratedGrid.at(i):!attract&&activeClubRound!==null?clubCup!.roster[i].kind:demo&&!attract?demoCarKind(i,kind,demoOptions.lineup):i === 0 ? kind : activeChallenge?(['coupe','sedan','hatch']as CarKind[])[i%3]:!attract&&customEvent()&&mode!=='playground'?gridCarKind(i,kind,eventOptions.lineup):CAR_KINDS[i%CAR_KINDS.length];
@@ -2460,6 +2467,8 @@ function frame(now: number) {
   if(vehicleFire)vehicleFire.wet=eventLighting==='rain'&&!online?.active;
   if(windy&&!online?.active){gusting(breezeBase,clock,breeze);fx.wind.set(breeze.x,breeze.z);vehicleFire?.setWind(breeze,WIND.fire);rain?.setWind(breeze);}
   else if(fx.wind.x||fx.wind.y){fx.wind.set(0,0);vehicleFire?.setWind(null);rain?.setWind(null);}
+  // The marshals wave green as a heat starts and yellow for a wreck or a rolled car near them.
+  if(state==='countdown'||state==='playing'||state==='wrecked')for(const m of marshals)poseMarshal(m.figure,marshalFlag(m.post,elapsed,cars),clock);
   // Up go the umbrellas in the stands when it rains (offline).
   {const up=eventLighting==='rain'&&!online?.active;if(up!==umbrellasUp||activeVenue.root!==umbrellaRoot){umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(false));umbrellaRoot=activeVenue.root;umbrellasUp=up;umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(up,windy?breezeBase:undefined));}}
   // The cars are soaked in the rain too: darker paint and mud, a film of water on top (offline).
@@ -2839,6 +2848,7 @@ async function boot() {
     umbrellas: () => { let n = 0; activeVenue.root?.traverse(o => { if (o.name === 'crowd_umbrella' && o.visible) n += (o as T.InstancedMesh).count; }); return n; },
     carWet: (v?: number | null) => { if (v !== undefined) carWetOverride = v; return CAR_WET.value; },
     vapour: () => vapourPuffs,
+    marshals: () => marshals.map(m => ({ flag: m.figure.userData.flag ?? 'down', at: [m.post.x, m.post.y, m.post.z].map(v => +v.toFixed(1)) })),
     rainSteam: () => vehicleFire?.rainSteam ?? 0,
     splashes: () => rainSplashes?.landed ?? 0,
     wind: () => windy && !online?.active ? { x: +breeze.x.toFixed(3), z: +breeze.z.toFixed(3), base: { ...breezeBase } } : null,
