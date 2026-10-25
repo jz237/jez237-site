@@ -12,8 +12,9 @@
 // the fin side table) is written once, with the rest of the texture as TriangleBVH packed it.
 //
 // The boxes are TriangleBVH.refit's but for the padding, which is taken in float32 here (x - 1e-6
-// rounded once, not 1e-6 subtracted in float64 and the difference rounded): a face can lie one ulp
-// off the CPU's, inside the same margin. The corners are the uploaded floats, bit for bit.
+// rounded once, not 1e-6 subtracted in float64 and the difference rounded): now and then a face
+// lies a hair off the CPU's (under 1e-12), inside the same margin. The corners are the uploaded
+// floats, bit for bit.
 // bettaRefitPlan works out the kernels' tables once; refitCPU is the kernels on the CPU (the tests'
 // reference). The texture needs STORAGE_BINDING as well as TEXTURE_BINDING usage (rgba32float storage
 // textures are write-only in core WebGPU, which is all these kernels need).
