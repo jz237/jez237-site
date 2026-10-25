@@ -116,6 +116,7 @@ import {cabinSmoke} from './cabin-smoke';
 import {WiperRig,wiperArms,windscreen,wipeStep} from './windscreen-wipers';
 import {steerArms,handReach,newHandState,type HandState} from './driver-arms';
 import {BONNET_STEAM,bonnetHeat,steamRate} from './bonnet-steam';
+import {TYRE_STEAM,tyreSteamRate} from './tyre-heat';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -2292,7 +2293,7 @@ function updateHeatHaze(){
 }
 const bonnetHeats=new WeakMap<object,number>(),bonnetClocks=new WeakMap<object,number>(),steamAt=new T.Vector3();let bonnetPuffs=0;
 const vapourClocks=new WeakMap<object,number>();let vapourPuffs=0;
-const brakeSteamClocks=new WeakMap<object,number[]>();let brakePuffs=0;
+const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMap<object,number[]>();let brakePuffs=0,tyrePuffs=0;
 let wetReflections:ReturnType<typeof createWetReflections>|undefined;const glowList:Glow[]=[];
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
 function lookDriver(c:Vehicle,figure:T.Object3D,dt:number){
@@ -2585,6 +2586,9 @@ function frame(now: number) {
   // Rain on a hot brake disc boils off in steam at the wheel (offline).
   if(eventLighting==='rain'&&(state==='playing'||state==='wrecked'))for(const c of cars){if(!c.extendedDamage)continue;const clocks=brakeSteamClocks.get(c)??[0,0,0,0];brakeSteamClocks.set(c,clocks);
     for(let i=0;i<4;i++){const w=c.wheels[i];if(!w||c.wreckParts.wheelLost[i])continue;clocks[i]+=brakeSteamRate(c.discHeat[i])*dt;if(clocks[i]<1)continue;clocks[i]%=1;brakePuffs++;fx.emit(w.getWorldPosition(steamAt),1,5,.25);}}
+  // Rain on a hot tyre boils off in steam at the tread: a wet burnout steams (offline).
+  if(eventLighting==='rain'&&(state==='playing'||state==='wrecked'))for(const c of cars){if(!c.extendedDamage)continue;const clocks=tyreSteamClocks.get(c)??[0,0,0,0];tyreSteamClocks.set(c,clocks);
+    for(let i=0;i<4;i++){const w=c.wheels[i];if(!w||c.wreckParts.wheelLost[i])continue;clocks[i]+=tyreSteamRate(c.tyreTemp[i])*dt;if(clocks[i]<1)continue;clocks[i]%=1;tyrePuffs++;w.getWorldPosition(steamAt).y-=TYRE_STEAM.drop;fx.emit(steamAt,1,5,.3);}}
   // Up go the umbrellas in the stands when it rains (offline).
   {const up=eventLighting==='rain'&&!online?.active;if(up!==umbrellasUp||activeVenue.root!==umbrellaRoot){umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(false));umbrellaRoot=activeVenue.root;umbrellasUp=up;umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(up,windy?breezeBase:undefined));}}
   // The cars are soaked in the rain too: darker paint and mud, a film of water on top (offline).
@@ -2978,6 +2982,7 @@ async function boot() {
     heatHaze: (on?: boolean) => { if (on !== undefined) hazeOff = !on; const u = heatHaze.material.uniforms; return { columns: heatHaze.columns, enabled: heatHaze.enabled, sources: hazeSources.length, boxes: (u.boxes.value as T.Vector4[]).slice(0, heatHaze.columns).map((b, i) => [...b.toArray(), ...(u.info.value as T.Vector4[])[i].toArray()].map((n) => +n.toFixed(3))) }; },
     lensRain: () => ({ drops: lensRain.drops.length, landed: lensRain.landed, splashed: lensRain.splashed, enabled: lensRainPass.enabled, view: drivingCamera }),
     puddleSplashes: () => splashes,
+    tyreSteam: () => tyrePuffs,
     tyres: (id = 0, temp?: number) => { const c = cars.find((x) => x.id === id); if (!c) return null; if (temp !== undefined) c.tyreTemp.fill(temp); return { temp: c.tyreTemp.map((v) => +v.toFixed(3)), grip: c.tyreGrip.map((v) => +v.toFixed(3)) }; },
     discs: (id = 0) => { const c = cars.find((x) => x.id === id); return c ? Array.from(c.discHeat, (v) => +v.toFixed(3)) : null; },
     shower: (force?: number | null) => { if (force !== undefined) showerForce = force; return { level: +shower.toFixed(3), drops: rain?.drops ?? 0 }; },

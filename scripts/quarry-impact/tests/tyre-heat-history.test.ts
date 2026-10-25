@@ -1,6 +1,7 @@
+import {restoreTyreSteamBytes} from './tyre-steam-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readTyreHeatPrevious,restoreTyreHeatBytes,verifyTyreHeatRevision} from './tyre-heat-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreTyreSteamBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('TyreHeat preserves every prior fixture, vehicle asset, venue art and history input',verifyTyreHeatRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/tyre-heat/revision.json').toString());

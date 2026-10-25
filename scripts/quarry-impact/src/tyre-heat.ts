@@ -19,3 +19,8 @@ export function tyreHeatGrip(temp:number){
   if(t>hi)return 1-TYRE_HEAT.hot*Math.min(1,(t-hi)/(1-hi));
   return 1;
 }
+/** Steaming tyres (offline rain): rain on a tyre hotter than TYRE_STEAM.from boils off at the tread, up to TYRE_STEAM.rate
+ * puffs a second when overcooked — a wet burnout steams. */
+export const TYRE_STEAM={from:.6,rate:6,drop:.28} as const;
+/** Steam puffs a second off a tyre this hot (0–1) in the rain. */
+export const tyreSteamRate=(temp:number)=>Number.isFinite(temp)&&temp>TYRE_STEAM.from?TYRE_STEAM.rate*Math.min(1,(temp-TYRE_STEAM.from)/(1-TYRE_STEAM.from)):0;
