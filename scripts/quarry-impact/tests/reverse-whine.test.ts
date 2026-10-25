@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {REVERSE_WHINE,TYRE_FLAP,STEAM_HISS,TYRE_HISS,BRAKE_SQUEAL} from '../src/audio';
+import {REVERSE_WHINE,TYRE_FLAP,STEAM_HISS,TYRE_HISS,BRAKE_SQUEAL,BODY_CREAK} from '../src/audio';
 const read=(p:string)=>readFileSync(new URL('../'+p,import.meta.url));
 test('running-gear loops: reverse gears whine, blown tyres flap, burst radiators and punctured tyres hiss, offline, recorded only',()=>{
  const audio=read('src/audio.ts').toString(),main=read('src/main.ts').toString(),manifest=JSON.parse(read('public/audio/manifest.json').toString()) as {id:string;file:string;provider:string;params:{loop:boolean}}[];
@@ -16,5 +16,7 @@ test('running-gear loops: reverse gears whine, blown tyres flap, burst radiators
  assert.ok(main.includes("c.tyreDamage[wheel] = Math.max(c.tyreDamage[wheel], TYRE_LEAK_RANGE.onset + .05); return true;"),'__quarry.puncture for QA');
  assert.ok(BRAKE_SQUEAL.to>BRAKE_SQUEAL.from&&BRAKE_SQUEAL.level<.2);const sq=manifest.find(x=>x.id==='brake-squeal');assert.ok(sq&&sq.params.loop,'brake squeal is a recorded loop');
  assert.ok(audio.includes("return (car.input?.brake??0)>=BRAKE_SQUEAL.brake&&v>=BRAKE_SQUEAL.from&&v<=BRAKE_SQUEAL.to?Math.min(1,(BRAKE_SQUEAL.to-v)/(BRAKE_SQUEAL.to-BRAKE_SQUEAL.from)*1.4):0;},car=>.92+(car.id%5)*.04,BRAKE_SQUEAL.level);"),'hard braking at low speed, louder as it slows, each car its own pitch');
+ assert.ok(BODY_CREAK.full>BODY_CREAK.pull&&BODY_CREAK.bent>0&&BODY_CREAK.rate>1,'a bent body creaks: the groan pitched up, only through real turns');
+ assert.ok(audio.includes("this.driveLoops(this.creaks,'metal-groan',cars,listener,now,car=>{const bent=Math.max(0,...(car.structuralDamage??[0])),pull=Math.abs(car.body.angvel().y*car.speed);return bent>=BODY_CREAK.bent&&pull>=BODY_CREAK.pull?"),'bent past BODY_CREAK.bent and cornering past BODY_CREAK.pull');
  assert.ok(main.includes("    sound.runningLoops(effectsActive&&!online?.active?cars:[],camera.position);")&&main.includes("  if(studio)sound.runningLoops([],camera.position);"),'every frame offline, silenced in the garage');
 });
