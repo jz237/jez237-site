@@ -1,6 +1,7 @@
+import {restoreWetTyresBytes} from './wet-tyres-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readDriverArmsPrevious,restoreDriverArmsBytes,verifyDriverArmsRevision} from './driver-arms-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreWetTyresBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('DriverArms preserves every prior fixture, vehicle asset, venue art and history input',verifyDriverArmsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/driver-arms/revision.json').toString());

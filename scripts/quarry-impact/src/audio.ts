@@ -59,6 +59,10 @@ export const TYRE_HISS={rate:1.7,level:.08} as const;
 /** Old brakes squeal as a car slows (offline): braking at brake or harder between from and to m/s, louder the slower it goes, at gain
  * level, each car's squeal at its own pitch. Recorded only. */
 export const BRAKE_SQUEAL={from:1.2,to:9,brake:.5,level:.12} as const;
+/** Wet tyres (offline rain): tyres swish over the wet road from WET_TYRES.from m/s, full by WET_TYRES.full, brighter
+ * with speed (playback rate between the two rates), at gain level; and they barely squeal (the squeal loop at
+ * WET_TYRES.squeal, no skid shot) — water lets them slide quietly. Recorded only. */
+export const WET_TYRES={from:2,full:22,level:.22,squeal:.25,rate:[.8,1.25]} as const;
 /** A badly bent body creaks as it is loaded through a turn (offline): structure damaged past bent on its worst face, cornering past
  * pull m/s² (yaw rate × speed), full at full m/s², the recorded metal groan pitched up by rate, at gain level. */
 export const BODY_CREAK={bent:.4,pull:3,full:9,rate:1.35,level:.13} as const;
@@ -220,6 +224,7 @@ export class Sound {
   }
   /** A soft looping rain hiss on the ambience bus while it rains. */
   rain(on:boolean){
+    this.raining=on;
     const c=this.ctx;if(!c||!this.ambientBus||!this.ready)return;
     if(on&&!this.rainHiss){
       // The recorded rain when it loaded (level-matched to this hiss after its high-pass); the synthesized hiss otherwise.
@@ -397,6 +402,9 @@ export class Sound {
   private readonly leaks=new Map<number,Loop>();
   private readonly brakeSqueals=new Map<number,Loop>();
   private readonly creaks=new Map<number,Loop>();
+  private readonly swishes=new Map<number,Loop>();
+  /** It is raining on the event (rain()). */
+  private raining=false;
   private readonly steamSeen=new Map<number,{puffs:number;at:number}>();
   /** Cars whining in reverse right now (QA). */
   get whining(){return [...this.whines].filter(([,l])=>!this.quietSince.has(l)).map(([id])=>id);}
@@ -406,6 +414,10 @@ export class Sound {
   get leaking(){return [...this.leaks].filter(([,l])=>!this.quietSince.has(l)).map(([id])=>id);}
   get squealing(){return [...this.brakeSqueals].filter(([,l])=>!this.quietSince.has(l)).map(([id])=>id);}
   get creaking(){return [...this.creaks].filter(([,l])=>!this.quietSince.has(l)).map(([id])=>id);}
+  /** Cars swishing over the wet road right now (QA). */
+  /** The rain ambience is playing (QA). */
+  get rainOn(){return !!this.rainHiss;}
+  get swishing(){return [...this.swishes].filter(([,l])=>!this.quietSince.has(l)).map(([id])=>id);}
   runningLoops(cars:readonly Vehicle[],listener:T.Vector3){
     if(!this.ready||!this.fxBus)return;const now=this.ctx!.currentTime;
     this.driveLoops(this.whines,'reverse-whine',cars,listener,now,car=>{const back=-car.speed;return back>=REVERSE_WHINE.from&&Math.abs(car.input?.throttle??0)>=REVERSE_WHINE.throttle?Math.min(1,(back-REVERSE_WHINE.from+1)/(REVERSE_WHINE.full-REVERSE_WHINE.from+1)):0;},car=>.8+Math.min(.7,-car.speed/12),REVERSE_WHINE.level);
@@ -414,6 +426,7 @@ export class Sound {
     this.driveLoops(this.hisses,'steam-hiss',cars,listener,now,car=>now-(this.steamSeen.get(car.id)?.at??-99)<STEAM_HISS.hold?1:0,()=>1,STEAM_HISS.level);
     this.driveLoops(this.brakeSqueals,'brake-squeal',cars,listener,now,car=>{const v=Math.abs(car.speed);return (car.input?.brake??0)>=BRAKE_SQUEAL.brake&&v>=BRAKE_SQUEAL.from&&v<=BRAKE_SQUEAL.to?Math.min(1,(BRAKE_SQUEAL.to-v)/(BRAKE_SQUEAL.to-BRAKE_SQUEAL.from)*1.4):0;},car=>.92+(car.id%5)*.04,BRAKE_SQUEAL.level);
     this.driveLoops(this.creaks,'metal-groan',cars,listener,now,car=>{const bent=Math.max(0,...(car.structuralDamage??[0])),pull=Math.abs(car.body.angvel().y*car.speed);return bent>=BODY_CREAK.bent&&pull>=BODY_CREAK.pull?Math.min(1,(pull-BODY_CREAK.pull)/(BODY_CREAK.full-BODY_CREAK.pull)+.2)*Math.min(1,(bent-BODY_CREAK.bent)/.3+.3):0;},()=>BODY_CREAK.rate,BODY_CREAK.level);
+    this.driveLoops(this.swishes,'wet-tyres',cars,listener,now,car=>{const v=Math.abs(car.speed);return this.raining&&v>=WET_TYRES.from&&[0,1,2,3].some(i=>car.controller.wheelIsInContact(i))?Math.min(1,(v-WET_TYRES.from+1)/(WET_TYRES.full-WET_TYRES.from+1)):0;},car=>WET_TYRES.rate[0]+(WET_TYRES.rate[1]-WET_TYRES.rate[0])*Math.min(1,Math.abs(car.speed)/WET_TYRES.full),WET_TYRES.level);
     this.driveLoops(this.leaks,'steam-hiss',cars,listener,now,car=>car.tyreDamage?.some((d,i)=>d>=TYRE_LEAK.onset&&d<TYRE_LEAK.flat&&!car.blownOut[i]&&!car.wreckParts.wheelLost[i])?1:0,()=>TYRE_HISS.rate,TYRE_HISS.level);
   }
   /** The wind roaring through the player's open wreck (level 0 = silent), pitched up with speed. */
@@ -547,7 +560,7 @@ export class Sound {
         }
         if (!(car.engineStall!>0)&&car.health>0&&prior.throttle > 0.7 && car.input.throttle < 0.2 && car.speed > 8)
           this.shot(classicEngineVoice(car.kind).bank + '-exhaust', car.current, 0.14);
-        if (grounded && car.slip > 3 && prior.slip <= 3)
+        if (grounded && car.slip > 3 && prior.slip <= 3 && !(this.raining && car.extendedDamage))
           this.shot('skid', car.current, 0.16);
         if (grounded && !prior.grounded)
           this.shot('suspension', car.current, 0.22);
@@ -591,7 +604,7 @@ export class Sound {
         else if (name === 'tires')
           v =
             Math.min(0.35, car.slip * 0.06) *
-            (car.surface === 'asphalt' ? 1 : 0.3);
+            (car.surface === 'asphalt' ? 1 : 0.3) * (this.raining && car.extendedDamage ? WET_TYRES.squeal : 1);
         else if (name === 'gravel')
           v =
             car.surface !== 'asphalt'

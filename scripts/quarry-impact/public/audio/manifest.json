@@ -1191,5 +1191,19 @@
     "sha256": "0fbae25d98f8255cc2124abd65c2bae7b4bd6d04a8304bd635fa70c1359095af",
     "runtimeSha256": "fd19c795e1c9aca69f63f399a67e5adba2cd813805bb8f8a429b7037f5574ce0",
     "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "wet-tyres",
+    "file": "wet-tyres.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Constant road noise of car tyres on a flooded wet asphalt road at speed, recorded from beside the wheel: a steady unchanging loud hiss and swish of spraying water at one constant level from start to end, no fade in, no pass-by, no engine. Isolated, no music, no voices, no speech.",
+      "duration_seconds": 3.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "72188ee011f02b21a0fe66aaeaa29dd1bb32bdf76ddab3f99d1a76ee299dc216",
+    "runtimeSha256": "453d7a9bcd599242f1e5576655463ce1cf98a49835f25d4070a69a33e7cbaaed",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
   }
 ]

@@ -2418,6 +2418,9 @@ function frame(now: number) {
   if (!physics || state === 'loading'||preparingOnline) return;
   rain?.update(camera,state==='paused'?0:dt);
   {const wet=eventLighting==='rain';if(wet!==wetOn||activeVenue.root!==wetRoot){applyWetLook(wetRoot,false);wetRoot=activeVenue.root;wetOn=wet;applyWetLook(wetRoot,wet);}}
+  // The rain sounds for as long as the event's weather says so (applyEventLighting runs while still in the menu, when it
+  // could only switch the rain off).
+  sound.rain(eventLighting==='rain'&&state!=='menu');
   // Up go the umbrellas in the stands when it rains (offline).
   {const up=eventLighting==='rain'&&!online?.active;if(up!==umbrellasUp||activeVenue.root!==umbrellaRoot){umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(false));umbrellaRoot=activeVenue.root;umbrellasUp=up;umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(up));}}
   // The cars are soaked in the rain too: darker paint and mud, a film of water on top (offline).
@@ -2781,6 +2784,8 @@ async function boot() {
     leaking: () => sound.leaking,
     squealing: () => sound.squealing,
     creaking: () => sound.creaking,
+    swishing: () => sound.swishing,
+    rainSound: () => sound.rainOn,
     shake: (id = 0) => {const c = cars[id]; if (!c) return null; const w = c.wheels[0]; return {...c.engineShake.out, kicks: c.engineShake.kicks, wheel: w ? [w.position.x, w.position.z, w.parent === c.model] : null};},
     gasps: () => gasps,
     boos: () => boos,
