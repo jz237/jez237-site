@@ -1093,5 +1093,47 @@
     "sha256": "95535ab3499e551a25c468b914933918e26ba0451759188a49681a0969289531",
     "runtimeSha256": "52fe361dbea55bca8130d0e61244aa3e33b8e66b6f55b75a09e6caa6948f5261",
     "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "reverse-whine",
+    "file": "reverse-whine.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Whining reverse gear of an old car backing up fast: a loud continuous high pitched gearbox whine from straight cut reverse gears, steady and mechanical. Isolated, no engine roar, no music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "09896e717ae8c1ce9f8e5872a07de93108e96690340643b9c27101abe6fd55bd",
+    "runtimeSha256": "9925337cb9a4ec52a50daa903294858faf4ab90fc867bbd0e1b63505e046c97e",
+    "processing": "0.9s kept, first 0.5s cut, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "tyre-flap",
+    "file": "tyre-flap.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Flapping shredded tyre: a flat torn car tyre slapping against the wheel arch as the car drives along, a rhythmic rubbery flap flap flap, steady. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "2261a11b788998702f7558c257e0068d8717348f6a757d47a05730bfb4d71d97",
+    "runtimeSha256": "f3adc1b62c5605ea8c56270bf2e8679b461f5416ed0d22df6610c600d3f0ab2d",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "steam-hiss",
+    "file": "steam-hiss.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Steam hissing out of a burst car radiator: a continuous steady hiss of escaping hot steam with a faint bubbling gurgle under the bonnet. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "aff969c19d8d842c11911e4c9e94edcc92659179cb041e3e3f3708a9d0557f13",
+    "runtimeSha256": "85cd0007ea052c605d3f2c16a32f98f70b7e147827697d13a1ea46e551a8a05d",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
   }
 ]

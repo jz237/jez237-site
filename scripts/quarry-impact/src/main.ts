@@ -2427,6 +2427,7 @@ function frame(now: number) {
   if(!studio)for(const car of cars){car.wreckParts.pose(['playing','countdown'].includes(state)?dt:0,car.speed);car.wreckParts.wheelsPose();car.syncSuspension();}
   const effectsActive=['playing','countdown','wrecked'].includes(state)||(demo&&state==='result');
   if(studio){sound.damageLoops([],camera.position);sound.stuckHorns([],camera.position);sound.bearingGrowls([],camera.position);sound.beltSqueals([],camera.position);sound.cabinWind(0,camera.position,0);}
+  if(studio)sound.runningLoops([],camera.position);
   if(!studio&&vehicleFire){
     const props=propPoints(activeVenue.props);if(effectsActive&&!online?.active)for(const b of propFires.update(fx.slicks.clock,props,fx.slicks))drumBlast(new T.Vector3(b.p.x,b.p.y,b.p.z),b.index);
     const debrisFires=fx.debrisFires();for(const d of debrisFires)fx.slicks.igniteAt(d.x,d.z,.35,false);
@@ -2444,6 +2445,7 @@ function frame(now: number) {
     for(const f of groundFires){const level=burnLevel(f,fx.slicks.clock)*Math.min(1.4,.6+f.radius),p=new T.Vector3(f.x,f.y,f.z);if(level>0&&(!nearest||p.distanceToSquared(camera.position)<nearest.p.distanceToSquared(camera.position)))nearest={p,level};}
     sound.groundFire(effectsActive?nearest:null);
     sound.damageLoops(effectsActive&&!online?.active?cars:[],camera.position);sound.stuckHorns(effectsActive&&!online?.active?cars:[],camera.position);sound.bearingGrowls(effectsActive&&!online?.active?cars:[],camera.position);sound.beltSqueals(effectsActive&&!online?.active?cars:[],camera.position);{const p=cars[0];sound.cabinWind(p&&effectsActive&&!online?.active&&!demo&&p.extendedDamage?windRoar(p.openness,p.speed):0,p?.current??camera.position,p?.speed??0);}
+    sound.runningLoops(effectsActive&&!online?.active?cars:[],camera.position);
   }
   if(!studio)puddleSplashes?.update(cars,activeVenue.puddles,effectsActive?dt:0,state==='playing');
   if(!studio&&state==='playing'){for(const burst of vehicleFire?.bursts??[]){recorder?.burst({time:elapsed,position:burst.position.toArray()});if(!online?.active){shockwave(burst.position,burst.id);blastDamage(burst.position,burst.id,CAR_BLAST.radius,CAR_BLAST.damage);const car=cars.find(c=>c.id===burst.id);if(car)carBlowsUp(car,burst.position);}}captureReplay();}
@@ -2733,6 +2735,9 @@ async function boot() {
     litter: () => ({ chips: fx.litter.mesh.count, ...fx.litter.breaks, last: fx.litter.last.toArray(), crunches: crunchTake }),
     horns: () => hornHeats,
     endHorns: () => endHorns,
+    whining: () => sound.whining,
+    flapping: () => sound.flapping,
+    hissing: () => sound.hissing,
     cabinSmoke: (id: number) => { const c = cars.find(x => x.id === id); return c ? smokeIn.get(c) ?? 0 : null; },
     /** QA: set a tyre shredding, as a blowout does. */
     shredTyre: (id: number, wheel: number) => { const c = cars.find(x => x.id === id); if (!c || !(wheel >= 0 && wheel < 4)) return false; c.tyreShred[wheel] = SHRED_SECONDS; return true; },

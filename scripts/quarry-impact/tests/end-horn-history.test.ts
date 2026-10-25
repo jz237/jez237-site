@@ -1,6 +1,7 @@
+import {restoreRunningLoopsBytes} from './running-loops-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readEndHornPrevious,restoreEndHornBytes,verifyEndHornRevision} from './end-horn-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreRunningLoopsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('EndHorn preserves every prior fixture, vehicle asset, venue art and history input',verifyEndHornRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/end-horn/revision.json').toString());

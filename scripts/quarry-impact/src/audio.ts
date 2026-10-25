@@ -45,6 +45,14 @@ const TAKES=/^(impact-(light|medium|heavy)|glass|debris)$/;
 /** The arena air horn over the PA as a derby heat starts (the recorded takes in turn, one per heat, at gain level, not placed in the
  * world) and, the long take, as it ends. */
 export const ARENA_HORN={level:.45,ids:['air-horn','air-horn-end'],end:'air-horn-end'} as const;
+/** A straight-cut reverse gear whines as a car backs up under power (offline): from m/s backwards, full at full m/s, at gain level,
+ * pitched up with speed. Recorded only (no synthesized stand-in). */
+export const REVERSE_WHINE={from:2,full:9,level:.22,throttle:.2} as const;
+/** A blown or shredding tyre flaps against its arch as the car goes (offline): from m/s, full at full m/s, at gain level, its beat
+ * quickening with the wheel. Recorded only. */
+export const TYRE_FLAP={from:2,full:12,level:.3} as const;
+/** Steam hisses out of a burst radiator while the car is steaming (a steam puff within hold seconds), at gain level. Recorded only. */
+export const STEAM_HISS={hold:1.2,level:.18} as const;
 /** A tyre rubbing a crushed arch (0–1): the hardest rub on the car, with road speed (full from 10 m/s), louder still once
  * the tyre is smoking; silent below RUB.warn or at a crawl. */
 export const rubLoopLevel=(rubs:ArrayLike<number>,speed:number,heat:number)=>{const r=Math.max(0,...Array.from(rubs)),v=Math.abs(Number.isFinite(speed)?speed:0);
@@ -353,6 +361,23 @@ export class Sound {
     for(const [id,l] of this.squeals)if(!live.has(id)){const q=this.quietSince.get(l)??now;this.quietSince.set(l,q);l.gain.gain.setTargetAtTime(0,now,.05);
       if(now-q>LOOP_HOLD||!cars.some(c=>c.id===id)){l.source.stop(now+.3);this.squeals.delete(id);this.quietSince.delete(l);}}
     for(const id of live){const l=this.squeals.get(id);if(l)this.quietSince.delete(l);}
+  }
+  /** Running-gear loops by car id (offline, within earshot): reverse gears whining, blown tyres flapping, burst radiators hissing. */
+  private readonly whines=new Map<number,Loop>();
+  private readonly flaps=new Map<number,Loop>();
+  private readonly hisses=new Map<number,Loop>();
+  private readonly steamSeen=new Map<number,{puffs:number;at:number}>();
+  /** Cars whining in reverse right now (QA). */
+  get whining(){return [...this.whines].filter(([,l])=>!this.quietSince.has(l)).map(([id])=>id);}
+  /** Cars with a flapping tyre or a hissing radiator right now (QA). */
+  get flapping(){return [...this.flaps].filter(([,l])=>!this.quietSince.has(l)).map(([id])=>id);}
+  get hissing(){return [...this.hisses].filter(([,l])=>!this.quietSince.has(l)).map(([id])=>id);}
+  runningLoops(cars:readonly Vehicle[],listener:T.Vector3){
+    if(!this.ready||!this.fxBus)return;const now=this.ctx!.currentTime;
+    this.driveLoops(this.whines,'reverse-whine',cars,listener,now,car=>{const back=-car.speed;return back>=REVERSE_WHINE.from&&Math.abs(car.input?.throttle??0)>=REVERSE_WHINE.throttle?Math.min(1,(back-REVERSE_WHINE.from+1)/(REVERSE_WHINE.full-REVERSE_WHINE.from+1)):0;},car=>.8+Math.min(.7,-car.speed/12),REVERSE_WHINE.level);
+    this.driveLoops(this.flaps,'tyre-flap',cars,listener,now,car=>{const v=Math.abs(car.speed);return v>=TYRE_FLAP.from&&car.blownOut.some((b,i)=>(b||car.tyreShred[i]>0)&&!car.wreckParts.wheelLost[i])?Math.min(1,v/TYRE_FLAP.full):0;},car=>.5+Math.min(1.1,Math.abs(car.speed)/14),TYRE_FLAP.level);
+    for(const car of cars){const seen=this.steamSeen.get(car.id);if(!seen||car.steamPuffs<seen.puffs)this.steamSeen.set(car.id,{puffs:car.steamPuffs,at:-99});else if(car.steamPuffs>seen.puffs){seen.puffs=car.steamPuffs;seen.at=now;}}
+    this.driveLoops(this.hisses,'steam-hiss',cars,listener,now,car=>now-(this.steamSeen.get(car.id)?.at??-99)<STEAM_HISS.hold?1:0,()=>1,STEAM_HISS.level);
   }
   /** The wind roaring through the player's open wreck (level 0 = silent), pitched up with speed. */
   private windLoop?:Loop;
