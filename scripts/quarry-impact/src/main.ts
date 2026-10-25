@@ -2472,8 +2472,8 @@ function frame(now: number) {
   if(vehicleFire)vehicleFire.wet=eventLighting==='rain'&&!online?.active;
   if(windy&&!online?.active){gusting(breezeBase,clock,breeze);fx.wind.set(breeze.x,breeze.z);vehicleFire?.setWind(breeze,WIND.fire);rain?.setWind(breeze);}
   else if(fx.wind.x||fx.wind.y){fx.wind.set(0,0);vehicleFire?.setWind(null);rain?.setWind(null);}
-  // The marshals wave green as a heat starts and yellow for a wreck or a rolled car near them.
-  if(state==='countdown'||state==='playing'||state==='wrecked')for(const m of marshals)poseMarshal(m.figure,marshalFlag(m.post,elapsed,cars),clock);
+  // The marshals wave green as a heat starts, red for a fire and yellow for a wreck or a rolled car near them, chequered at the end.
+  if(state==='countdown'||state==='playing'||state==='wrecked'||state==='result')for(const m of marshals)poseMarshal(m.figure,marshalFlag(m.post,elapsed,cars,state==='result'),clock);
   // Lightning flashes over a rain event, and its thunder follows as far behind as the strike is away (offline).
   if(storm&&(state==='countdown'||state==='playing'||state==='wrecked')){if(!lightning.parent)scene.add(lightning);const s=storm.step(dt);lightning.intensity=s.flash*THUNDER.light;if(s.clap)sound.thunder(s.clap.near,s.clap.volume);}
   else if(lightning.intensity)lightning.intensity=0;

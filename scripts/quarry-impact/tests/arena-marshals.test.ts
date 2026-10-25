@@ -32,6 +32,6 @@ test('main posts marshals once the event venue is active, offline derbies only, 
   const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
   const activated=main.indexOf('activateVenue(targetVenue);'),posted=main.indexOf("marshals=marshalPosts(activeVenue.arena??DERBY_ARENA,activeVenue.course.height)");
   assert.ok(activated>0&&posted>activated,'after the venue switch');assert.ok(main.includes("if(!attract&&mode==='derby'&&!online?.active&&!demo)marshals=marshalPosts("));
-  assert.ok(main.includes("for(const m of marshals)poseMarshal(m.figure,marshalFlag(m.post,elapsed,cars),clock);"));
+  assert.ok(main.includes("for(const m of marshals)poseMarshal(m.figure,marshalFlag(m.post,elapsed,cars,state==='result'),clock);"));
   assert.ok(main.includes('  clearMarshals();\n'),'cleared with the cars');
 });
