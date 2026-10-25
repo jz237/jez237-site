@@ -1,6 +1,7 @@
+import {restoreWindowNetBytes} from './window-net-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readDriverFigurePrevious,restoreDriverFigureBytes,verifyDriverFigureRevision} from './driver-figure-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreWindowNetBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('DriverFigure preserves every prior fixture, vehicle asset, venue art and history input',verifyDriverFigureRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/driver-figure/revision.json').toString());

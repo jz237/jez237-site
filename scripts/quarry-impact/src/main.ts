@@ -100,7 +100,7 @@ import {eventGridSetup,eventPerformanceGrid} from './grid-setup';
 import {gridCarKind,gridRecordKey,GRID_LINEUPS,GRID_PERFORMANCE} from './grid-rules';
 import {timedRaceLimit,timedRaceFinished,timedRaceOrder,timedRaceResult,timedRaceRecordScore} from './timed-race';
 import {RaceRecovery,freeRecoverySlot} from './race-recovery';
-import {driverFigure,DRIVER} from './driver-figure';
+import {driverFigure,DRIVER,windowNet,WINDOW_NET} from './driver-figure';
 import {roofSign} from './roof-sign';
 import {withRaceNumbers} from './race-numbers';
 import {BOOM} from './blow-up';
@@ -925,7 +925,9 @@ function createCars(attract = false, previewSetup?:Setup) {
     const car = new Vehicle(i, type, team?.color ?? setup?.paint ?? colors[i%colors.length], scene, physics, fx, teamSetup,activeVenue.course,online?.active?'legacy':'angular-v1');
     // A driver in the seat of every car, placed from the model's own box (cosmetic).
     {car.root.updateMatrixWorld(true);const box=new T.Box3().setFromObject(car.model),min=car.root.worldToLocal(box.min.clone()),max=car.root.worldToLocal(box.max.clone());
-      const figure=driverFigure([0xd23a2a,0xf1bd42,0x2f6fd8,0xe8e8e8,0x2fa35a][i%5]);figure.position.set(Math.min(min.x,max.x)*DRIVER.side*2,Math.max(min.y,max.y)-DRIVER.headroom-DRIVER.head,(min.z+max.z)/2-Math.abs(max.z-min.z)*DRIVER.back);car.root.add(figure);}
+      const figure=driverFigure([0xd23a2a,0xf1bd42,0x2f6fd8,0xe8e8e8,0x2fa35a][i%5]);figure.position.set(Math.min(min.x,max.x)*DRIVER.side*2,Math.max(min.y,max.y)-DRIVER.headroom-DRIVER.head,(min.z+max.z)/2-Math.abs(max.z-min.z)*DRIVER.back);car.root.add(figure);
+      // Derby cars carry a net over the driver's window (offline events).
+      if(!attract&&!online?.active&&mode==='derby'){const net=windowNet();net.position.set(Math.min(min.x,max.x)*WINDOW_NET.inset,figure.position.y+.02,figure.position.z);car.root.add(net);}}
     // Derby rivals carry their car number on the doors and roof, unless their livery already has one (offline).
     if(!attract&&!online?.active&&i>0&&mode==='derby'){const numbered=withRaceNumbers(car.setup.livery,i+1);if(numbered)car.livery.set(numbered);
       // and a number board standing on the roof, read from any side.
