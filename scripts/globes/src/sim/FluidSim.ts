@@ -21,10 +21,6 @@ import { CLOWN_FIELD, CLOWN_FISH, clownWGSL } from '../fish/clownWGSL';
 import type { KoiSense } from '../fish/Koi';
 import sandRotateWGSL from './shaders/sand_rotate.wgsl?raw';
 import sandScaleWGSL from './shaders/sand_scale.wgsl?raw';
-import gravelGatherWGSL from './shaders/gravel_gather.wgsl?raw';
-import gravelDriftWGSL from './shaders/gravel_drift.wgsl?raw';
-import gravelCarryWGSL from './shaders/gravel_carry.wgsl?raw';
-import gravelCopyWGSL from './shaders/gravel_copy.wgsl?raw';
 import rockBedWGSL from './shaders/rock_bed.wgsl?raw';
 import solidFacesWGSL from './shaders/init.wgsl?raw';
 import initCellsWGSL from './shaders/init_cells.wgsl?raw';
@@ -47,6 +43,46 @@ import kelpBuildWGSL from './shaders/kelp_build.wgsl?raw';
 import type { KelpForest } from '../kelp/KelpForest';
 import { KELP_GRID, KELP_SHADE_GRID, kelpSharedWGSL } from '../kelp/kelpShared';
 import { rockHeight, rockWGSL, sandRestHeight } from '../reef/rock';
+
+/** bedSolids' height map: its size a side, and its value where nothing stands. */
+export const BED_SOLIDS_N = 256;
+export const BED_SOLIDS_NONE = -1.2;
+
+/** reef_rockHeight and reef_sandRest for rock_bed.wgsl when bedSolids stand in a level bed: the
+ *  map's tops (binding 3), and the level. */
+/** sand_rotate.wgsl for bedSolids: their tops stop at the edge of their footprints (no rock
+ *  below the glass, as the reef's has), so a column's floor is taken as no lower than its own
+ *  glass before the columns are blended, or the old surface rebuilt between a solid and the sand
+ *  next to it sags to the glass, and the sand there is lost each frame the bowl turns. */
+function bedSolidsRotateWGSL(code: string): string {
+  const a = 'return rockOld[u32(i + n * j)];';
+  if (!code.includes(a)) throw new Error('sand_rotate.wgsl: columnRock changed');
+  return code.replace(a, `let xz = ((vec2f(f32(i), f32(j)) + vec2f(0.5)) * P.sandMap.y * 2.0 - vec2f(1.0)) * P.radius;
+  return max(rockOld[u32(i + n * j)], -glassHalf(xz));`);
+}
+
+function bedSolidsWGSL(extent: number, level: number): string {
+  return /* wgsl */ `
+@group(0) @binding(3) var<storage, read> bedMap: array<f32>;
+
+fn reef_rockHeight(xz: vec2f) -> f32 {
+  let n = ${BED_SOLIDS_N};
+  let g = (xz / ${(2 * extent).toFixed(6)} + vec2f(0.5)) * f32(n) - vec2f(0.5);
+  let b = floor(g);
+  let f = g - b;
+  let i = vec2i(b);
+  if (i.x < 0 || i.y < 0 || i.x >= n - 1 || i.y >= n - 1) { return -10.0; }
+  let at = u32(i.x + n * i.y);
+  let row = u32(n);
+  let h = mix(mix(bedMap[at], bedMap[at + 1u], f.x), mix(bedMap[at + row], bedMap[at + row + 1u], f.x), f.y);
+  return select(h, -10.0, h < ${(BED_SOLIDS_NONE + 0.1).toFixed(3)});
+}
+
+fn reef_sandRest(xz: vec2f) -> f32 {
+  return ${level.toFixed(6)};
+}
+`;
+}
 import reefSimWGSL from './shaders/reef_sim.wgsl?raw';
 import reefBuildWGSL from './shaders/reef_build.wgsl?raw';
 import type { Reef } from '../reef/Reef';
@@ -308,14 +344,17 @@ export class FluidSim {
   /** The reef rock is part of the bed (src/reef/rock.ts): the water, the sand and the light meet
    *  it. Set before init() or startOver(). */
   rock = false;
+  /** What else stands in the sand, fixed to the glass (the betta bowl's rocks and the feet of its
+   *  driftwood: render/scape/bedSolids.mjs): a height map of their tops (globe frame,
+   *  BED_SOLIDS_N square over [-extent, extent], BED_SOLIDS_NONE where there are none). It is
+   *  part of the bed as the reef's rock is: the sand rests on it and flows round it, and the
+   *  water and the light meet it. Set before init(). */
+  bedSolids: { map: Float32Array; extent: number } | null = null;
   /** How clear the water is (its absorption times this, for the light on its way down). */
   clarity = 1;
   /** The betta bowl's open mouth (render/bowl.ts): the water stays under this height along the
    *  globe's axis (g2p.wgsl), as under its lid. Null for a sealed globe. */
   mouth: number | null = null;
-  /** The bed is the betta bowl's gravel: it flows as the sand does, and the pebbles' pattern is
-   *  carried along with it (gravel_*.wgsl; published in the sand texture's b and a). */
-  gravel = false;
   /** The water's colour: its absorption of red, green and blue, each against the usual water's
    *  (catalog.ts waterColour). */
   waterColour: readonly [number, number, number] = [1, 1, 1];
@@ -506,6 +545,7 @@ export class FluidSim {
     this.writeParams(1 / 120, [0, -this.cfg.gravity, 0], [0, 0, 0], IDENTITY, 1);
     const enc = this.device.createCommandEncoder({ label: 'sim init' });
     this.encodeSeed(enc, plan);
+    if (this.bedSolids) this.device.queue.writeBuffer(this.buffers.bedMap, 0, this.bedSolids.map);
     const pass = enc.beginComputePass({ label: 'container geometry' });
     this.run(pass, 'rockBed', this.sandGroups());
     pass.end();
@@ -552,11 +592,9 @@ export class FluidSim {
     this.drift = 0;
     q.writeBuffer(b.sandT, 0, plan.sand);
     q.writeBuffer(b.motes, 0, plan.motes);
-    // (New water, a fresh bed: its pebbles where they lie at rest.)
-    q.writeBuffer(b.gravelO, 0, new Float32Array(this.sandN * this.sandN * 2));
     // (The kernels below see the new count and the rock; the next step writes the rest.)
     this.pu[3] = this.particleCount;
-    this.pf[76] = this.rock ? 1 : 0;
+    this.pf[76] = this.rock || this.bedSolids ? 1 : 0;
     this.pf[78] = this.rock ? 1 : 0;
     q.writeBuffer(this.paramsBuffer, 0, this.paramsData);
     const enc = this.device.createCommandEncoder({ label: 'sim restart' });
@@ -664,7 +702,6 @@ export class FluidSim {
         // container the water sees (glass + sand bed).
         const turned = Math.abs(this.back[0] - 1) + Math.abs(this.back[4] - 1) + Math.abs(this.back[8] - 1) > 1e-9;
         enc.clearBuffer(b.sandSum);
-        if (this.gravel) enc.clearBuffer(b.gravelD);
         // (The rock, where the globe's turn has carried it; the sand on it goes round with it.)
         enc.copyBufferToBuffer(b.rockTop, 0, b.rockPrev, 0, b.rockTop.size);
         const geo = this.beginPass(enc, 'sand + container');
@@ -672,19 +709,10 @@ export class FluidSim {
         if (turned) {
           this.run(geo, 'sandRotate', this.sandGroups());
           this.run(geo, 'sandScale', this.sandGroups());
-          if (this.gravel) {
-            this.run(geo, 'gravelCarry', this.sandGroups());
-            this.run(geo, 'gravelCopy', this.sandGroups());
-          }
         }
         for (let k = 0; k < cfg.sandSubsteps; k++) {
           this.run(geo, 'sandFlux', this.sandGroups());
-          if (this.gravel) this.run(geo, 'gravelGather', this.sandGroups());
           this.run(geo, 'sandApply', this.sandGroups());
-        }
-        if (this.gravel) {
-          this.run(geo, 'gravelDrift', this.sandGroups());
-          this.run(geo, 'gravelCopy', this.sandGroups());
         }
         this.run(geo, 'sandSurface', this.sandGroups());
         this.run(geo, 'sandExtend', this.sandGroups());
@@ -1023,7 +1051,27 @@ export class FluidSim {
   /** The bed at rest under the floor point (x, z): the sand's level (cfg.sandLevel), or in the
    *  reef the sand's resting shape or the rock, whichever is higher. */
   private bedAt(x: number, z: number, rock = this.rock): number {
-    return rock ? Math.max(sandRestHeight(x, z), rockHeight(x, z)) : this.cfg.sandLevel;
+    if (rock) return Math.max(sandRestHeight(x, z), rockHeight(x, z));
+    return this.bedSolids ? Math.max(this.cfg.sandLevel, this.solidTop(x, z)) : this.cfg.sandLevel;
+  }
+
+  /** The top of bedSolids over the floor point (x, z), globe frame (bilinear; far below where
+   *  there are none), as rock_bed.wgsl reads it. */
+  private solidTop(x: number, z: number): number {
+    const s = this.bedSolids;
+    if (!s) return -10;
+    const n = BED_SOLIDS_N;
+    const gx = (x / (2 * s.extent) + 0.5) * n - 0.5;
+    const gz = (z / (2 * s.extent) + 0.5) * n - 0.5;
+    const i = Math.floor(gx);
+    const j = Math.floor(gz);
+    if (i < 0 || j < 0 || i >= n - 1 || j >= n - 1) return -10;
+    const fx = gx - i;
+    const fz = gz - j;
+    const m = s.map;
+    const at = i + n * j;
+    const h = (m[at] * (1 - fx) + m[at + 1] * fx) * (1 - fz) + (m[at + n] * (1 - fx) + m[at + n + 1] * fx) * fz;
+    return h < BED_SOLIDS_NONE + 0.1 ? -10 : h;
   }
 
   /** The sand at rest: a level bed at cfg.sandLevel (in the reef, its resting shape): thickness
@@ -1039,7 +1087,7 @@ export class FluidSim {
         const z = (((j + 0.5) / N) * 2 - 1) * R;
         const r2 = x * x + z * z;
         if (r2 >= R * R) continue;
-        const bottom = Math.max(-Math.sqrt(R * R - r2), rock ? rockHeight(x, z) : -10);
+        const bottom = Math.max(-Math.sqrt(R * R - r2), rock ? rockHeight(x, z) : this.solidTop(x, z));
         const top = rock ? sandRestHeight(x, z) : this.cfg.sandLevel;
         thickness[i + N * j] = Math.min(Math.max(top - bottom, 0), this.cfg.sandMaxThickness);
       }
@@ -1094,11 +1142,9 @@ export class FluidSim {
       sandOut: make('sand flux', this.sandN * this.sandN * 32),
       sandS: make('sand surface', this.sandN * this.sandN * 4),
       rockTop: make('rock top', this.sandN * this.sandN * 4),
+      bedMap: make('bed solids', BED_SOLIDS_N * BED_SOLIDS_N * 4),
       rockPrev: make('rock top before', this.sandN * this.sandN * 4),
       sandRest: make('sand at rest', this.sandN * this.sandN * 4),
-      gravelO: make('gravel offsets', this.sandN * this.sandN * 8),
-      gravelO2: make('gravel offsets (next)', this.sandN * this.sandN * 8),
-      gravelD: make('gravel steps', this.sandN * this.sandN * 8),
       causticAcc: make('caustic photons', this.causticN * this.causticN * 12),
       causticPrev: make('caustic history', this.causticN * this.causticN * 16),
       probePos: make('probes', PROBES * 16, STORAGE | GPUBufferUsage.COPY_DST),
@@ -1144,17 +1190,13 @@ export class FluidSim {
     // (g2p binds the white water's queue in every globe: only its SHED variant writes it.)
     const g2pSets = parts((q) => [q.pos, q.vel, q.affine, b.velTmp, b.velOld, b.stats, ...sand, ww.queue, ww.ctrl, b.field, b.sortSlot, b.blockCount]);
     const defs: [string, string, string, Resource[][], Record<string, number>?][] = [
-      ['rockBed', `${rockWGSL()}\n${rockBedWGSL}`, 'rockBed', [[b.rockTop, b.sandRest]]],
-      ['sandRotate', sandRotateWGSL, 'sandRotate', [[b.sandT, b.sandT2, b.sandSum, b.rockTop, b.rockPrev]]],
+      ['rockBed', `${this.bedSolids ? bedSolidsWGSL(this.bedSolids.extent, this.cfg.sandLevel) : rockWGSL()}\n${rockBedWGSL}`, 'rockBed', [[b.rockTop, b.sandRest, ...(this.bedSolids ? [b.bedMap] : [])]]],
+      ['sandRotate', this.bedSolids ? bedSolidsRotateWGSL(sandRotateWGSL) : sandRotateWGSL, 'sandRotate', [[b.sandT, b.sandT2, b.sandSum, b.rockTop, b.rockPrev]]],
       ['sandScale', sandScaleWGSL, 'sandScale', [[b.sandT2, b.sandT, b.sandSum]]],
       ['sandFlux', sandFluxWGSL, 'sandFlux', [[b.sandT, b.sandOut, b.rockTop, b.sandRest]]],
       ['sandApply', sandApplyWGSL, 'sandApply', [[b.sandT, b.sandOut]]],
       ['sandSurface', sandSurfaceWGSL, 'sandSurface', [[b.sandT, b.sandS, b.rockTop]]],
-      ['sandExtend', sandExtendWGSL, 'sandExtend', [[b.sandS, sandView, b.rockTop, b.sandT, b.gravelO]]],
-      ['gravelGather', gravelGatherWGSL, 'gravelGather', [[b.sandT, b.sandOut, b.gravelD]]],
-      ['gravelDrift', gravelDriftWGSL, 'gravelDrift', [[b.gravelD, b.gravelO, b.gravelO2]]],
-      ['gravelCarry', gravelCarryWGSL, 'gravelCarry', [[b.sandT, b.rockTop, b.gravelO, b.gravelO2]]],
-      ['gravelCopy', gravelCopyWGSL, 'gravelCopy', [[b.gravelO2, b.gravelO]]],
+      ['sandExtend', sandExtendWGSL, 'sandExtend', [[b.sandS, sandView, b.rockTop, b.sandT]]],
       ['solidFaces', solidFacesWGSL, 'solidFaces', [[b.faceW, ...sand]]],
       ['initCells', initCellsWGSL, 'initCells', [[b.faceW, b.cellFaceW, ...sand]]],
       ['seedWater', seedWGSL, 'seedWater', [[b.pos, b.seedColumns]], { SUB: this.seedSub, JITTER: this.cfg.seedJitter }],
@@ -1399,7 +1441,7 @@ export class FluidSim {
     f.set(cur ?? [0, 0, 0, 0], 72);
     // The bed: the reef rock in it or not (and the sand's resting shape round it); the globe's
     // orientation (the rock turns with it).
-    f[76] = this.rock ? 1 : 0;
+    f[76] = this.rock || this.bedSolids ? 1 : 0;
     f[77] = this.clarity;
     f[78] = this.rock ? 1 : 0;
     const g = this.globeRotation;

@@ -46,9 +46,37 @@ export class Betta implements Feeder {
   food: FoodAim | null = null;
   gapeWant = 0;
   readonly reach = 0.055;
-  /** What else is in the water (the bowl's driftwood and plant: sim frame), set by the host. Its
-   *  route keeps round them (bettaSwim.mjs), and its body out of their solid parts. */
+  /** What else is in the water (the bowl's furnishings: sim frame), set by the host. Its route
+   *  keeps round them (bettaSwim.mjs), and its body out of their solid parts. */
   obstacles: { a: number[]; b: number[]; r: number; solid: number }[] = [];
+
+  /** The obstacles' solid parts its body could touch this frame (inside its box, grown by what
+   *  the contact passes can shift it), each ready for the test: its start, its length, and one
+   *  over its length squared. */
+  private solidsNear(): { ax: number; ay: number; az: number; abx: number; aby: number; abz: number; inv: number; solid: number }[] {
+    if (!this.obstacles.length) return [];
+    const v = this.vertices;
+    const lo = [Infinity, Infinity, Infinity];
+    const hi = [-Infinity, -Infinity, -Infinity];
+    for (let i = 0; i < v.length; i += 3) {
+      for (let k = 0; k < 3; k++) {
+        if (v[i + k] < lo[k]) lo[k] = v[i + k];
+        if (v[i + k] > hi[k]) hi[k] = v[i + k];
+      }
+    }
+    const near = [];
+    for (const o of this.obstacles) {
+      if (o.solid <= 0) continue;
+      const s = o.solid + 0.05;
+      let apart = false;
+      for (let k = 0; k < 3; k++) if (Math.min(o.a[k], o.b[k]) - s > hi[k] || Math.max(o.a[k], o.b[k]) + s < lo[k]) apart = true;
+      if (apart) continue;
+      const abx = o.b[0] - o.a[0], aby = o.b[1] - o.a[1], abz = o.b[2] - o.a[2];
+      const l2 = abx * abx + aby * aby + abz * abz;
+      near.push({ ax: o.a[0], ay: o.a[1], az: o.a[2], abx, aby, abz, inv: l2 > 1e-12 ? 1 / l2 : 0, solid: o.solid });
+    }
+    return near;
+  }
 
   constructor() {
     this.rig.add(this.fish);
@@ -126,18 +154,17 @@ export class Betta implements Feeder {
     this.updateVertices();
     // Contact against the glass and sampled bed, not a fixed waterline: sloshing
     // can carry the fish vertically and the density probes guide its recovery.
+    const near = this.solidsNear();
     for (let pass = 0; pass < 4; pass++) {
       let worst = 0, dx = 0, dy = 0, dz = 0, bottom = Infinity;
       for (let i = 0; i < this.vertices.length; i += 3) {
         const x = this.vertices[i], y = this.vertices[i + 1], z = this.vertices[i + 2];
         bottom = Math.min(bottom, y);
-        const r = Math.hypot(x, y, z), excess = r - env.radius + 0.012;
+        const r = Math.sqrt(x * x + y * y + z * z), excess = r - env.radius + 0.012;
         if (excess > worst) { worst = excess; dx = -x / r * excess; dy = -y / r * excess; dz = -z / r * excess; }
-        for (const o of this.obstacles) {
-          if (o.solid <= 0) continue;
-          const ab = [o.b[0] - o.a[0], o.b[1] - o.a[1], o.b[2] - o.a[2]];
-          const t = Math.max(0, Math.min(1, ((x - o.a[0]) * ab[0] + (y - o.a[1]) * ab[1] + (z - o.a[2]) * ab[2]) / (ab[0] ** 2 + ab[1] ** 2 + ab[2] ** 2)));
-          const ox = x - o.a[0] - ab[0] * t, oy = y - o.a[1] - ab[1] * t, oz = z - o.a[2] - ab[2] * t, l = Math.hypot(ox, oy, oz);
+        for (const o of near) {
+          const t = Math.max(0, Math.min(1, ((x - o.ax) * o.abx + (y - o.ay) * o.aby + (z - o.az) * o.abz) * o.inv));
+          const ox = x - o.ax - o.abx * t, oy = y - o.ay - o.aby * t, oz = z - o.az - o.abz * t, l = Math.sqrt(ox * ox + oy * oy + oz * oz);
           const into = o.solid - l;
           if (into > worst && l > 1e-9) { worst = into; dx = ox / l * into; dy = oy / l * into; dz = oz / l * into; }
         }

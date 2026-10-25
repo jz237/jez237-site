@@ -80,6 +80,10 @@ function densityTexture(sim: FluidSim): THREE.Texture {
  *  the sea foam globe's, the betta bowl's (bowl.ts: open at the mouth, with a rim and a lid). */
 export type GlobeVariant = 'plain' | 'kelp' | 'reef' | 'foam' | 'bowl';
 
+/** The layer the betta bowl's fish pass is drawn on (the camera sees it; the studio table's
+ *  mirror, where the fish is a blur, does not). */
+export const BOWL_KOI_LAYER = 1;
+
 export class GlobeView {
   readonly mesh: THREE.Group;
   /** The plain globe's pass, the koi's (it redraws the pixels near the fish), and the kelp and
@@ -98,8 +102,8 @@ export class GlobeView {
   private readonly bowlMesh: THREE.Mesh | null = null;
   private readonly bowlKoiMesh: THREE.Mesh | null = null;
   private readonly uBowlLid = uniform(new THREE.Matrix4());
-  /** x: the lid is there. */
-  private readonly uBowlState = uniform(new THREE.Vector4(1, 0, 0, 0));
+  /** x: the lid is there, y: its lamp's brightness. */
+  private readonly uBowlState = uniform(new THREE.Vector4(1, 1, 0, 0));
   /** What floats in the bowl: its leaf and its bubble nest (bowlScape.ts scapeLife). */
   private readonly uBowlLife = uniform(new THREE.Matrix4().set(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
   /** MSAA is on and a pixel's rays can run one per sample (else one ray per pixel throughout). */
@@ -139,6 +143,8 @@ export class GlobeView {
     betta: Betta,
     /** The betta bowl's shape, where the page shows it (else it has no passes). */
     bowl: BowlShape | null = null,
+    /** Its furnishings' BVH (render/scape/scapeBVH.mjs), read in the kelp's slot by its passes. */
+    scapeTex: THREE.Texture | null = null,
   ) {
     const desktop = 'desktop' in outside ? outside.desktop : null;
     this.outerRadius = globe.outerRadius;
@@ -314,12 +320,16 @@ export class GlobeView {
       const oneGather = perSampleWater || (perSample && withKoi);
       const shade = wgslFn(globeShadeWGSL(hardware, foam !== null, oneGather, withBowl), [wgsl(envWGSL(light)), wgsl(globeHelpersWGSL(globe, light, withKoi, onDesktop, withKelp, withReef, withReef ? reefClarity : 1, withClown, hardware, foam, withBowl ? bowl : null))]);
       const m = new THREE.MeshBasicNodeMaterial();
+      // (The bowl's passes draw its sphere's far side: the rays are traced from the camera all the
+      // same, and so it is drawn when its sphere dips below the table and the table's mirror clips
+      // the near side, or the camera is inside it as the lid is carried off.)
+      if (withBowl) m.side = THREE.BackSide;
       const redraw = pass === 'koi' || pass === 'kelpAA' || pass === 'reefAA' || pass === 'bowlKoi';
       const edges = pass === 'kelp' || pass === 'reef';
       let passInputs = redraw || perSampleWater ? koiInputs : inputs;
       if (withReef) passInputs = { ...passInputs, ...reefGrid };
       if (foam) passInputs = { ...passInputs, ...foamInputs };
-      if (withBowl) passInputs = Object.assign({}, passInputs, { bowlLid: this.uBowlLid, bowlState: this.uBowlState, bowlLife: this.uBowlLife });
+      if (withBowl) passInputs = Object.assign({}, passInputs, { bowlLid: this.uBowlLid, bowlState: this.uBowlState, bowlLife: this.uBowlLife }, scapeTex ? { kelpPrimTex: texture(scapeTex) } : {});
       if (!hardware) passInputs = Object.fromEntries(Object.entries(passInputs).filter(([k]) => k !== TLAS_PARAM)) as typeof passInputs;
       // (One variable: the depth and the colour both read the same trace.) Its w carries the
       // pixel's coverage, plus 2 where the second pass must redraw it.
@@ -367,6 +377,8 @@ export class GlobeView {
       this.bowlMesh.frustumCulled = false;
       this.bowlKoiMesh.frustumCulled = false;
       this.bowlKoiMesh.renderOrder = 1;
+      // (On a layer of its own: the table's mirror leaves the fish's own pass out, StudioBackdrop.)
+      this.bowlKoiMesh.layers.set(BOWL_KOI_LAYER);
       this.mesh.add(this.bowlMesh, this.bowlKoiMesh);
       passes.push([this.bowlMesh, 'bowl'], [this.bowlKoiMesh, 'bowlKoi']);
       this.bowlReach = globe.outerRadius * 1.012;
@@ -429,10 +441,12 @@ export class GlobeView {
   }
 
   /** The betta bowl's lid: where it is (the globe's translating frame to the lid's), whether it is
-   *  in sight, and how far from the globe's centre it reaches (its passes' sphere takes it in). */
-  setBowlLid(toLid: THREE.Matrix4, shown: boolean, reach: number): void {
+   *  in sight, how far from the globe's centre it reaches (its passes' sphere takes it in) and how
+   *  bright its lamp is. */
+  setBowlLid(toLid: THREE.Matrix4, shown: boolean, reach: number, lamp = 1): void {
     this.uBowlLid.value.copy(toLid);
     this.uBowlState.value.x = shown ? 1 : 0;
+    this.uBowlState.value.y = lamp;
     const r = Math.max(this.outerRadius * 1.012, shown ? reach * 1.01 : 0);
     if (r !== this.bowlReach) {
       this.bowlReach = r;

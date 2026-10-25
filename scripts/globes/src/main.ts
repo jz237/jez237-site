@@ -3,7 +3,7 @@ import './app/styles.css';
 import * as THREE from 'three/webgpu';
 import { AppShell, type DesktopHost } from './app/AppShell';
 import { AdaptiveScale, ratioAt } from './app/adaptiveScale.mjs';
-import { elsewhere, GLOBES, type GlobeEntry } from './app/catalog';
+import { BETTA_PAGE, elsewhere, GLOBES, type GlobeEntry } from './app/catalog';
 import { applyUrlOverrides, fishConfig, globeConfig, lightConfig, simConfig, type GlobeConfig, type LightConfig, type SimConfig } from './config';
 import { DeskMapping, loadDesk, type DesktopHostApi } from './desktop/desktopScene';
 import { Betta, BUBBLE_RADIUS, RIPPLE_RADIUS } from './fish/Betta';
@@ -20,11 +20,13 @@ import { KelpForest } from './kelp/KelpForest';
 import { REEF_PROBES, Reef } from './reef/Reef';
 import { Specks } from './ocean/Specks';
 import { BOWL, bowlShape } from './render/bowl';
-import { GRAVEL, PLANT_OBSTACLES } from './render/bowlScape';
-import { GlobeView, type GlobeVariant } from './render/GlobeView';
+import { BED, setScapeShader } from './render/bowlScape';
+import { furnish } from './render/scape/furnishings';
+import { BOWL_KOI_LAYER, GlobeView, type GlobeVariant } from './render/GlobeView';
 import { OceanBackdrop } from './render/OceanBackdrop';
+import { StudioBackdrop } from './render/StudioBackdrop';
 import { sunInWater } from './render/shaders';
-import { FluidSim, SURFACE_ISO, fillHeight } from './sim/FluidSim';
+import { BED_SOLIDS_N, BED_SOLIDS_NONE, FluidSim, SURFACE_ISO, fillHeight } from './sim/FluidSim';
 import { IdleWater } from './sim/IdleWater';
 
 /** The camera's field of view, top to bottom (degrees). A view narrower than this (width over
@@ -102,6 +104,8 @@ interface WorldOptions {
 
 /** The globe, its water and its koi, drawn into the stage. */
 async function createWorld(stage: HTMLElement, params: URLSearchParams, o: WorldOptions) {
+  // The betta bowl's furnishings are built meanwhile, in a worker (render/scape/furnishings.ts).
+  const furnishing = GLOBES.some((g) => g.betta) ? furnish(BED_SOLIDS_N, o.globe.innerRadius, BED_SOLIDS_NONE) : null;
   const device = await createDevice();
 
   // (Dev builds time the render pass on the GPU, for profiling.)
@@ -118,8 +122,8 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
 
   // The articulated specimen needs cadence more than sub-pixel fluid detail.
   // Preserve the original five scenes' defaults; explicit URL overrides still win.
-  // (The betta's bowl has a shallower bed, of gravel: bowlScape.ts GRAVEL.)
-  const base = o.start.betta ? { ...simConfig, sandLevel: GRAVEL.level } : simConfig;
+  // (The betta's bowl has a bed of its own depth: bowlScape.ts BED.)
+  const base = o.start.betta ? { ...simConfig, sandLevel: BED.level } : simConfig;
   const cfg = applyUrlOverrides(LITE ? { ...base, gridRes: 48 } : o.start.betta ? { ...base, gridRes: 64 } : base);
   const R = o.globe.innerRadius;
   const fill = (g: GlobeEntry) => fillFor(cfg, R, g.water);
@@ -191,17 +195,48 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   sim.clownPose = clowns.texture;
   sim.rock = !!o.start.reef;
   sim.glass = o.globe;
-  sim.gravel = !!o.start.betta;
   // Fish food (the koi's and the reef's globes): flakes dropped in with a right-click.
   const food = new FishFood();
   const idle = new IdleWater();
+  // The betta bowl's furnishings, built by now: their BVH for the shader (its copy here let go once
+  // it is on the GPU), where they stand in the sand for the sim (the sand rests on them and flows
+  // round them), and where the fish keeps clear of them.
+  let scapeTex: THREE.DataTexture | null = null;
+  let scapeObstacles: { a: number[]; b: number[]; r: number; solid: number }[] = [];
+  if (furnishing) {
+    const f = await furnishing;
+    setScapeShader(f.wgsl);
+    scapeTex = new THREE.DataTexture(f.data, f.width, f.height, THREE.RGBAFormat, THREE.FloatType);
+    scapeTex.minFilter = THREE.NearestFilter;
+    scapeTex.magFilter = THREE.NearestFilter;
+    scapeTex.generateMipmaps = false;
+    scapeTex.onUpdate = (t: THREE.Texture) => {
+      (t.image as { data: unknown }).data = null;
+      t.onUpdate = null;
+    };
+    scapeTex.needsUpdate = true;
+    sim.bedSolids = { map: f.map, extent: R };
+    scapeObstacles = f.obstacles;
+  }
+  // (Where the bowl's turn has carried them, each frame: the sim frame.)
+  const turnedObstacles = scapeObstacles.map((o) => ({ a: [0, 0, 0], b: [0, 0, 0], r: o.r, solid: o.solid }));
   await sim.init(Math.max(...GLOBES.map(fill)), GLOBES.map((g) => ({ fill: fill(g), rock: !!g.reef })));
 
   // In the app the globe stands in the deep ocean, specks drifting round it; on the desktop, in
   // front of the wallpaper.
   const scene = new THREE.Scene();
-  const ocean = o.desk ? null : new OceanBackdrop(o.light);
+  // (The betta's bowl stands on a table in a photographer's studio instead: studio.ts.)
+  const studio = bowl && !o.desk ? new StudioBackdrop() : null;
+  const ocean = o.desk || studio ? null : new OceanBackdrop(o.light);
   if (ocean) scene.backgroundNode = ocean.background as unknown as typeof scene.backgroundNode;
+  if (studio) {
+    scene.backgroundNode = studio.background as unknown as typeof scene.backgroundNode;
+    scene.add(studio.table, studio.mirror);
+    controller.rolling = true;
+    // (The fish's own pass: drawn, but not again in the table's mirror, where it is a blur.)
+    camera.layers.enable(BOWL_KOI_LAYER);
+    studio.leaveOut(camera, BOWL_KOI_LAYER);
+  }
   const specks = ocean ? new Specks(SPECKS, o.light, ocean.time) : null;
   if (specks) scene.add(specks.mesh);
 
@@ -229,9 +264,9 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
 
   // ?aa=1 traces one ray per pixel instead of four (cheaper, aliased waterline).
   const samples = Number(params.get('aa') ?? (LITE || o.start.betta ? 1 : 4));
-  const globe = new GlobeView(sim, o.globe, o.light, koi.texture, samples, ocean ? { ocean: ocean.map.texture } : { desktop: o.desk! }, kelp, reef, clowns.texture, GLOBES.find((g) => g.reef)?.clarity, GLOBES.find((g) => g.foam)?.waterColour, betta, bowl);
+  const globe = new GlobeView(sim, o.globe, o.light, koi.texture, samples, ocean ? { ocean: ocean.map.texture } : studio ? { ocean: studio.map } : { desktop: o.desk! }, kelp, reef, clowns.texture, GLOBES.find((g) => g.reef)?.clarity, GLOBES.find((g) => g.foam)?.waterColour, betta, bowl, scapeTex);
   scene.add(globe.mesh);
-  if (lid) globe.setBowlLid(lid.toLid, lid.shown, lid.reach);
+  if (lid) globe.setBowlLid(lid.toLid, lid.shown, lid.reach, lid.lamp);
   // Before the first frame, behind the splash: the water settles, and meanwhile every globe's
   // pipelines are built (and the software tracers' where the device traces in hardware). Built
   // after it, each held up a frame or more as the first globe slid in, and a switch to a globe
@@ -287,7 +322,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
       // Feeding (the lid comes off, the pellets go in), and the lid, turning with the bowl.
       feeding.update(dt, (p) => food.spawn(p, feeders().length), food.count);
       lid.update(dt, controller.rotation);
-      globe.setBowlLid(lid.toLid, lid.shown, lid.reach);
+      globe.setBowlLid(lid.toLid, lid.shown, lid.reach, lid.lamp);
     }
     // What each fish is after (before they move).
     for (const f of [koi, betta, ...clowns.fish]) {
@@ -298,7 +333,18 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     food.aim(eaters);
     koi.update(dt, sim.koiSense, koiEnv());
     // (The bowl's driftwood and plant, where the bowl's turn has carried them.)
-    if (bowl) betta.obstacles = PLANT_OBSTACLES.map((o) => ({ a: new THREE.Vector3(...o.a).applyMatrix3(controller.rotation).toArray(), b: new THREE.Vector3(...o.b).applyMatrix3(controller.rotation).toArray(), r: o.r, solid: o.solid }));
+    if (bowl) {
+      const e = controller.rotation.elements;
+      scapeObstacles.forEach((o, k) => {
+        const t = turnedObstacles[k];
+        for (const [from, to] of [[o.a, t.a], [o.b, t.b]]) {
+          to[0] = e[0] * from[0] + e[3] * from[1] + e[6] * from[2];
+          to[1] = e[1] * from[0] + e[4] * from[1] + e[7] * from[2];
+          to[2] = e[2] * from[0] + e[5] * from[1] + e[8] * from[2];
+        }
+      });
+      betta.obstacles = turnedObstacles;
+    }
     betta.update(dt, sim.koiSense, koiEnv());
     sim.setKoiProbes(betta.active ? betta.probePoints() : koi.probePoints());
     if (betta.active) {
@@ -386,14 +432,14 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     return true;
   };
 
-  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, life, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, specks, setScene, advance, spawnFood, clickLid, setSharpness };
+  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, life, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, studio, specks, setScene, advance, spawnFood, clickLid, setSharpness };
 }
 
 type World = Awaited<ReturnType<typeof createWorld>>;
 
 /** Runs the world every frame. beforeRender: after the world moves, before it is drawn. */
 function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () => void; firstFrame?: () => void }): void {
-  const { renderer, camera, scene, sim, controller, globe, ocean, specks, advance, setSharpness } = world;
+  const { renderer, camera, scene, sim, controller, globe, ocean, studio, specks, advance, setSharpness } = world;
   // ?adapt=0 keeps the picture at full sharpness however slowly it draws (profiling).
   const adaptive = params.get('adapt') === '0' ? null : new AdaptiveScale(performance.now());
   const globeMotion = { center: controller.center, velocity: controller.velocity, radius: world.globeRadius };
@@ -422,6 +468,7 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     const heightPx = renderer.getDrawingBufferSize(drawSize).y;
     globe.update(controller.center, controller.rotation, camera, heightPx);
     ocean?.update(renderer, now / 1000);
+    studio?.update(controller.center);
     if (specks) {
       specks.update(dt, camera, heightPx, controller.panJumps - jumps, globeMotion);
       jumps = controller.panJumps;
@@ -475,7 +522,11 @@ async function startApp(stage: HTMLElement, params: URLSearchParams, host: Deskt
   const shell = new AppShell(stage, host, start);
   if (import.meta.env.DEV) Object.assign(window, { __globes: { shell } });
   try {
-    const world = await createWorld(stage, params, { start: GLOBES[start], alpha: false, light: lightConfig, globe: globeConfig, desk: null });
+    // (The betta's bowl is lit by the lamp in its lid, straight down, and tips less far than a
+    // sealed globe: it rolls on its table.)
+    const light = BETTA_PAGE ? { ...lightConfig, sunDirection: [0, 1, 0] as [number, number, number] } : lightConfig;
+    const globe = BETTA_PAGE ? { ...globeConfig, maxTilt: (40 * Math.PI) / 180 } : globeConfig;
+    const world = await createWorld(stage, params, { start: GLOBES[start], alpha: false, light, globe, desk: null });
     shell.attach(world.controller, world.setScene, world.specks);
     // A right-click on the koi's or the reef's globe drops in a flake of food.
     world.renderer.domElement.addEventListener('pointerdown', (e) => {

@@ -3,7 +3,7 @@
 Original: https://github.com/willwaltz/globes
 Author: Will Waltz · MIT License
 Upstream commit: 93c3b814bbca53463e8207b8e3c95fca8940dff5
-Imported: 2026-10-22 · Hosting build: 1.14.0
+Imported: 2026-10-22 · Hosting build: 1.15.0
 Public routes: https://jez237.com/demos/globes/ (the five original globes) and
 https://jez237.com/demos/betta-bowl/ (the **Living Silk** betta bowl, on its own)
 
@@ -324,7 +324,7 @@ Version 1.13 (Atelier unchanged) makes feeding the only reason the lid comes off
   the bowl, slowest 9.3 s) with no breach. In the browser (manual stepping) the whole cycle ran:
   lid off, four pellets in, all eaten, lid back on, bowl free.
 
-Version 1.14 (Atelier unchanged) furnishes the bowl (`src/render/bowlScape.ts`, compiled into the
+Version 1.14 (Atelier unchanged; its gravel, driftwood and plant were replaced in 1.15) furnishes the bowl (`src/render/bowlScape.ts`, compiled into the
 bowl's shader only; the other globes' shaders are unchanged):
 - **Gravel, as interactive as the sand.** The bed is river gravel (~5 mm pebbles with smaller ones
   between them, a shallower bed than the sand's: `GRAVEL.level`). It flows exactly as the sand
@@ -360,6 +360,69 @@ bowl's shader only; the other globes' shaders are unchanged):
 - Measured with GPU timestamps on the RTX 5090 host: the first gravel (3D cells and noise) cost
   ~8 ms a frame; as 2D cells with no noise its cost is lost in the frame-to-frame variation of the
   shared GPU. The other globes' pages are unchanged.
+
+Version 1.15 (Atelier unchanged) puts the bowl in a photographer's studio and furnishes it in 3D,
+after a reference picture: a round bowl on a glossy table in front of a blue backdrop, lit by a
+lamp in its lid, with a driftwood arch, dark rocks and two plants on pale sand.
+- **Sand again.** The 1.14 gravel did not move or look like gravel, so it is gone (FluidSim's
+  gravel kernels removed, back to 1.13). The bed is the globes' sand, deeper (`BED_LEVEL` -0.6 in
+  `src/render/scape/mesh.mjs`) and paler and more golden, with a sprinkling of dark and rust grains
+  (faded to their mean where a pixel covers several) and softer crossing ripples (the bowl's
+  shader variant only).
+- **The studio** (`src/render/studio.ts`, `src/render/StudioBackdrop.ts`). The bowl stands on a
+  dark lacquered table in front of a seamless blue backdrop. The background is drawn from where the
+  camera really is, so the table lies in true perspective; the bowl's glass and water bend and
+  reflect the same studio (the bowl variant's `globes_bg` evaluates it per ray from the ray's real
+  position, so no environment map). The table mirrors the bowl (a three.js `reflector()`: the
+  scene rendered from under the table at half resolution, sharp at the bowl's foot and softer
+  further off) and takes a warm pool of the lamp's light round its foot. Soft boxes give the glass
+  its highlights. The five globes' page keeps its ocean.
+- **It rolls.** A round-bottomed bowl on a table rolls as it tips (`GlobeController.rolling`: its
+  centre keeps its height and moves sideways by its radius times the tilt; the water feels that
+  motion), at most 40 degrees. The entrance is a camera move, so the bowl does not skid in. The
+  camera stands a little closer (5.6).
+- **The lid** (`src/render/bowl.ts`): a clear glass disc held in a glossy black rim, a black
+  cylindrical knob, and an LED puck under its middle that lights the bowl. The page's sun is that
+  lamp, straight down (its caustics and light shafts), and its cone glows in the air and the water
+  under the lid as rays (`bowl_lampAlong`); it goes out as the lid is lifted to feed. A bug since
+  1.12 is fixed: rays that came into the glass's sphere through the open mouth skipped the parts of
+  the lid inside that sphere (the knob, the middle of the disc), so they were never drawn; and rays
+  leaving the cavity by the mouth now end at the lid when it is in their way, so its underside, the
+  lamp and the collar show from inside the bowl.
+- **The furnishings in 3D** (`src/render/scape/`, plain modules shared with node tests):
+  - A gnarled driftwood arch, about 200,000 triangles: lumpy, twisting limbs swept along their
+    spines and blended at the joints, its bark modelled in the geometry (fissures along a twisting
+    grain, plates, cross-cracks, knots and burls), a broken limb pointing up with a splintered end,
+    its feet sunk in the sand; warm wet brown bark with streaks and fibre detail in the shader.
+  - Four dark river rocks, about 108,000 triangles: worn, faceted, pitted, cracked, part sunk.
+  - A tall plant with broad glossy leaves on long stalks arching over the arch, and a small bushy
+    one at the left, about 70,000 triangles: real curved blades with raised midribs, veins and wavy
+    margins, waxy and translucent where lit from behind.
+  - All 378,000 triangles are built at load in a worker while the page sets up WebGPU
+    (`scape/furnishings.ts`, `scapeWorker.mjs`; deterministic, about 1.7 s with packing; on the main
+    thread only if no worker can be had; the five globes' page never loads them), packed into one BVH
+    (binned SAH, a short-stack walk: about 16 nodes and 3 triangles a ray; a 1024 x 1952 rgba32f
+    texture, 30 MB, read in the kelp's slot, which this globe does not use) and traced on the same
+    refracted rays as the water and the fish, with shadows on the sand and on each other, lit by
+    the lamp through the water's caustics, the studio's key light and the blue room, darkened in
+    their crevices. Each piece was built against offline renders in Blender
+    (`tools/scape-preview.mjs`, which renders the pieces in a stand-in of the bowl).
+- **Solid in the sand.** The rocks and the arch's feet are part of the bed
+  (`FluidSim.bedSolids`, through the reef rock's path: a height map of their tops,
+  `src/render/scape/bedSolids.mjs`; the wood only where it reaches the sand): the sand rests on them
+  and flows round them as the bowl turns (the floor under the turned sand is taken as no lower than
+  the glass, so no moats open round them), the water meets them, and the fish can rest on them. The
+  fish's body is kept out of the solid parts it is near (`Betta.solidsNear`).
+- Tests: `node --test scape-bvh.test.mjs scape-scene.test.mjs` (17: the BVH against brute force,
+  shadows, packing limits; every mesh sound, no piece through another, the fish's open water clear,
+  deterministic builds) plus the 48 existing tests. An independent review (four reviewers, each
+  finding checked by a sceptic) confirmed 14 problems, all fixed here. Measured in Chrome on the
+  (shared) RTX 5090: about 4.8 ms of GPU a frame at 1536 x 1152, the table's reflection included
+  (it leaves out the fish's own pass, which is a blur there).
+- Limits: the arch's span is not solid to the water (a height map has nothing under an overhang,
+  and the water must pass under it); the reflection is a second render of the scene at half
+  resolution; the bowl stays a sphere (the reference's is wider than tall); Firefox's WGSL compiler
+  has not been tried on the new shader code.
 
 ## Browser compatibility
 

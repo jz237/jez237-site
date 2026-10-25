@@ -85,12 +85,16 @@ export class AppShell {
     this.controller = controller;
     this.setScene = setScene;
     this.specks = specks;
-    controller.zoomTo(START_ZOOM, true);
+    // (The betta's bowl, alone on its table, is shot a little closer.)
+    controller.zoomTo(controller.rolling ? 5.6 : START_ZOOM, true);
     // Out of sight on the right; it slides in when the interface appears (sharing the way with
     // the camera, like a switch).
     const way = this.swipeDistance();
     const share = SWIPE_TRAVEL / way;
-    controller.placeAt((share * way) / 2, (-(1 - share) * way) / 2);
+    // (A bowl standing on its table stays put and the camera alone comes round to it: slid, it
+    // would skid across the table.)
+    if (controller.rolling) controller.placeAt(0, -way / 2);
+    else controller.placeAt((share * way) / 2, (-(1 - share) * way) / 2);
     this.applyGlobe();
   }
 

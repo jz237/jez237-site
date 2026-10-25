@@ -59,6 +59,11 @@ export class BowlLid {
     return this.u === 0;
   }
 
+  /** How bright its lamp is: on while it sits on the bowl, off as soon as it is lifted. */
+  get lamp(): number {
+    return Math.max(0, 1 - this.u / 0.08);
+  }
+
   /** Out of the way of the open mouth (food can go in). */
   get clear(): boolean {
     return this.u > 0.45;

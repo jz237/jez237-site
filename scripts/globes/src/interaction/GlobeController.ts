@@ -114,6 +114,9 @@ export class GlobeController {
   }
 
   /** The globe's place along the stage (world x) and how fast it is moving there. */
+  /** It stands on a table and rolls as it tips (the betta's bowl, in its studio: studio.ts),
+   *  instead of rocking on a stand. */
+  rolling = false;
   private stageX = 0;
   private stageVel = 0;
   /** The camera's pan along the stage (world x). */
@@ -385,9 +388,18 @@ export class GlobeController {
     const d = this.cfg.pivotDepth;
     const s = Math.sin(this.theta);
     const c = Math.cos(this.theta);
-    this.pivot.x = this.stageX;
-    this.center.set(this.pivot.x - d * s, this.pivot.y + d * c, 0);
-    if (dt > 0) this.centerVel.set(-d * c * this.thetaVel + this.stageVel, -d * s * this.thetaVel, 0);
+    if (this.rolling) {
+      // Round-bottomed on a table, it rolls without slipping: its centre keeps its height and is
+      // carried as far as its foot rolls (pivotDepth, the foot's radius, times the turn), the
+      // foot right under it.
+      this.pivot.set(this.stageX - d * this.theta, -d, d * this.lean);
+      this.center.set(this.pivot.x, 0, this.pivot.z);
+      if (dt > 0) this.centerVel.set(-d * this.thetaVel + this.stageVel, 0, d * this.leanVel);
+    } else {
+      this.pivot.x = this.stageX;
+      this.center.set(this.pivot.x - d * s, this.pivot.y + d * c, 0);
+      if (dt > 0) this.centerVel.set(-d * c * this.thetaVel + this.stageVel, -d * s * this.thetaVel, 0);
+    }
     // Tilted on its stand, leaned, then spun about its own axis: Rz(theta) Rx(lean) Ry(twist).
     this.rot4.makeRotationZ(this.theta);
     this.rot4.multiply(this.turn4.makeRotationX(this.lean));

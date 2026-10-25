@@ -3,14 +3,12 @@
 // (up to three columns away) carries on linearly, where it runs on below the glass. The
 // surface is then smooth everywhere and the rim, where it meets the glass, interpolates into
 // a clean curve, whatever shape the bed has flowed into. The texture's g says how much of the bed
-// there is bare reef rock (1) rather than sand (0), for the renderer; b and a, how far the betta
-// bowl's gravel has carried its pebbles (gravel_drift.wgsl; 0 elsewhere).
+// there is bare reef rock (1) rather than sand (0), for the renderer.
 
 @group(0) @binding(1) var<storage, read> sandS: array<f32>;
 @group(0) @binding(2) var sandTexOut: texture_storage_2d<rgba16float, write>;
 @group(0) @binding(3) var<storage, read> rockTop: array<f32>;
 @group(0) @binding(4) var<storage, read> sandT: array<f32>;
-@group(0) @binding(5) var<storage, read> gravelO: array<vec2f>;
 
 const BARE_MARK: f32 = 1e6;
 
@@ -79,5 +77,5 @@ fn sandExtend(@builtin(global_invocation_id) gid: vec3u) {
       rock += w * rockCover(i + di, j + dj);
     }
   }
-  textureStore(sandTexOut, gid.xy, vec4f(value, rock, gravelO[gid.x + u32(n) * gid.y]));
+  textureStore(sandTexOut, gid.xy, vec4f(value, rock, 0.0, 1.0));
 }
