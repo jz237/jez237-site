@@ -7,7 +7,8 @@ import {loadCarWithoutImages} from '../tools/car-asset-audit';
 import {loadCars} from '../src/assets';
 import {Vehicle} from '../src/vehicle';
 import {CAR_KINDS,DEFINITIONS} from '../src/rules';
-import {attachCarLights,LAMP_BREAK} from '../src/car-lights';
+import {attachCarLights,LAMP_BREAK,TAIL_GLOW} from '../src/car-lights';
+import {readFileSync} from 'node:fs';
 import {LIGHTING_PRESETS} from '../src/lighting-presets';
 await R.init();
 const loader=GLTFLoader.prototype.loadAsync;
@@ -47,4 +48,25 @@ test('a smashed or knocked-off lamp goes dark while the others stay lit',()=>{
    lights.dispose();car.dispose();
   }
  }finally{world.free();}
+});
+test('brake lights work in daylight too, and a smashed tail lamp stays dark',()=>{
+ const world=new R.World({x:0,y:0,z:0}),scene=new T.Scene();
+ try{
+  for(const kind of ['coupe','muscle','hollins'] as const){
+   const car=new Vehicle(0,kind,DEFINITIONS[kind].color,scene,world,fx),own=new Map<T.Mesh,T.Material>();car.root.traverse(o=>{if(o instanceof T.Mesh&&!Array.isArray(o.material))own.set(o,o.material);});
+   const lights=attachCarLights(car.root,DEFINITIONS[kind].halfLength);
+   // The tail lamps are the rear brake/tail lenses the lights took over (their own material each).
+   const tails:T.Mesh[]=[];car.root.traverse(o=>{if(o instanceof T.Mesh&&!Array.isArray(o.material)&&o.material!==own.get(o)&&/brakelight|tail lens/i.test((o.material as T.Material).name))tails.push(o);});
+   assert.equal(tails.length,lights.tail,kind+' tail lamps');
+   const glow=()=>tails.map(m=>(m.material as T.MeshStandardMaterial).emissiveIntensity);
+   lights.set(false,false);assert.ok(glow().every(v=>v===0),kind+' daylight, off the brakes: dark');
+   lights.set(false,true);assert.ok(glow().some(v=>v===TAIL_GLOW.daylightBraking),kind+' daylight braking: lit');
+   lights.set(true,true);assert.ok(glow().some(v=>v===TAIL_GLOW.braking),kind+' dusk braking');
+   const lit=tails.find(m=>(m.material as T.MeshStandardMaterial).emissiveIntensity>0)!;lit.userData.damage=LAMP_BREAK+1;lights.set(false,true);
+   assert.equal((lit.material as T.MeshStandardMaterial).emissiveIntensity,0,kind+' smashed: dark even braking');
+   lights.dispose();car.dispose();
+  }
+ }finally{world.free();}
+ const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
+ assert.ok(main.includes("c.health>0&&!c.electricalCut&&!c.batteryOut&&(c.input?.brake??0)>.2&&Math.abs(c.speed)>1);}"),'braking is passed in every light, not only at dusk, and needs working electrics');
 });

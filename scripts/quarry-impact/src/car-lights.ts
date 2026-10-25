@@ -5,6 +5,8 @@ import * as T from 'three';
  * along the car, so every model works without per-car tables. Off by default. */
 /** A lamp knocked off, or dented past this much damage, is smashed and stays dark. */
 export const LAMP_BREAK=10;
+/** Tail lamp glow: lit for the mood (running) or braking with the lamps on, and braking in daylight, bright enough to read in sun. */
+export const TAIL_GLOW={running:1.1,braking:3.2,daylightBraking:3} as const;
 const HEAD=/headlight|(^|\s)lens$/i,TAIL=/brakelight|tail lens/i,NOT_HEAD=/tail|amber|reverse|indicator|signal|brake/i;
 let poolTexture:T.Texture|null=null;
 function lightPool(){
@@ -47,7 +49,7 @@ export function attachCarLights(root:T.Object3D,halfLength:number):CarLights{
    const intact=heads.length?heads.filter((_,i)=>!(mask&1<<i)).length/heads.length:0;
    headMats.forEach((m,i)=>{m.emissiveIntensity=on&&!(mask&1<<i)?2.4:0;});
    poolMesh.visible=on&&!!pool&&intact>0;poolMaterial.opacity=on?.38*intact:0;
-   tailMats.forEach((m,i)=>{m.emissiveIntensity=mask&1<<(i+16)?0:on?(braking?3.2:1.1):(braking?.8:0);});
+   tailMats.forEach((m,i)=>{m.emissiveIntensity=mask&1<<(i+16)?0:on?(braking?TAIL_GLOW.braking:TAIL_GLOW.running):(braking?TAIL_GLOW.daylightBraking:0);});
    lit=on;brake=braking;broken=mask;
   },
   aim(yaw,reach){

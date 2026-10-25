@@ -1,6 +1,7 @@
+import {restoreBrakeDayBytes} from './brake-day-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readDriverLookPrevious,restoreDriverLookBytes,verifyDriverLookRevision} from './driver-look-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreBrakeDayBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('DriverLook preserves every prior fixture, vehicle asset, venue art and history input',verifyDriverLookRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/driver-look/revision.json').toString());

@@ -1842,7 +1842,7 @@ function step(dt: number) {
     return;
   }
   {const dusk=eventLighting==='dusk';for(const c of cars){const l=carLights.get(c);if(dusk&&l&&c.extendedDamage){const a=headlightAim(c.structuralDamage?.[0]??0,c.structuralDamage?.[2]??0,c.structuralDamage?.[3]??0);l.aim(a.yaw,a.reach);}}
-  for(const c of cars)carLights.get(c)?.set(dusk&&c.health>0&&!c.electricalCut&&!c.batteryOut&&(!c.beltSnapped||batteryLights(c.battery,clock,c.id)),dusk&&c.health>0&&(c.input?.brake??0)>.2&&Math.abs(c.speed)>1);}
+  for(const c of cars)carLights.get(c)?.set(dusk&&c.health>0&&!c.electricalCut&&!c.batteryOut&&(!c.beltSnapped||batteryLights(c.battery,clock,c.id)),c.health>0&&!c.electricalCut&&!c.batteryOut&&(c.input?.brake??0)>.2&&Math.abs(c.speed)>1);}
   if (state !== 'playing') return;
   elapsed += dt;
   if(mode==='race'&&!eventAwards.started&&elapsed>.5&&!online?.active)eventAwards.grid(rankRace().map(c=>c.id));
@@ -2683,6 +2683,8 @@ async function boot() {
     dropTank: (id: number) => { const c = cars.find(x => x.id === id); if (!c?.extendedDamage) return false; c.dropTank(); return true; },
     setStructure: (id: number, face: number, v: number) => { const c = cars.find(x => x.id === id); if (!c?.structuralDamage || !Number.isInteger(face) || face < 0 || face > 4 || !Number.isFinite(v)) return false; c.structuralDamage[face] = Math.max(0, Math.min(1, v)); return true; },
     blowUp: (id: number) => { const c = cars.find(x => x.id === id); if (!c?.extendedDamage) return false; carBlowsUp(c, c.current.clone()); return c.blownUp; },
+    /** QA: show or hide every car's derby dressing (driver, roof sign, window net, roll cage); returns the meshes it covers. */
+    dressing: (on: boolean) => { let n = 0; for (const c of cars) for (const o of c.root.children) if (['driver', 'roof_sign', 'window_net', 'roll_cage'].includes(o.name)) { o.visible = on; o.traverse(m => { if ((m as T.Mesh).isMesh) n++; }); } return n; },
     roofSign: (id: number) => { const c = cars.find(x => x.id === id); if (!c) return null; const sign = c.root.children.find(o => o.name === 'roof_sign'); return sign ? { fate: sign.userData.fate ?? 'up', fold: sign.rotation.z } : fx.debris.some(d => d.mesh.name === 'torn_roof_sign' && d.mesh.children[0]?.userData.car === id) ? { fate: 'torn', fold: 0 } : null; },
     driverSway: (id: number) => { const d = cars.find(x => x.id === id)?.root.children.find(o => o.name === 'driver'), s = d?.userData.sway; return s ? { roll: s.roll, pitch: s.pitch, drop: d!.userData.seatBase ? d!.userData.seatBase.y - d!.userData.seat.y : 0, look: d!.userData.look ?? 0, target: drivers.memory.get(id)?.target ?? -1 } : null; },
     placeDebris: (index: number, x: number, y: number, z: number, vx: number, vy: number, vz: number) => { const d = fx.debris[index < 0 ? fx.debris.length + index : index]; if (!d) return false; d.body.setTranslation({ x, y, z }, true); d.body.setLinvel({ x: vx, y: vy, z: vz }, true); return true; },
