@@ -26,6 +26,14 @@ test('drops evaporate, faster out of the rain; big ones slide down; at speed the
   const d:LensDrop={u:0,v:0,size:20,age:0,life:4,vu:0,vv:0};assert.equal(dropAlpha(d),1);assert.ok(dropAlpha({...d,age:3.5})<.5&&dropAlpha({...d,age:4})===0,'fades out at the end');
   const safe=new LensRain(seq());safe.step(NaN,true,'chase',NaN);safe.clear();assert.equal(safe.drops.length,0);
 });
+test('ploughing through a puddle throws water over the lens, rain or not, more the harder; none behind the windscreen',()=>{
+  const splash=(plough:number,view:'chase'|'hood'|'dashboard',seconds=.5)=>{const lens=new LensRain(seq());for(let i=0;i<Math.round(seconds*60);i++)lens.splash(plough,1/60,view);return lens;};
+  const hard=splash(2,'hood'),light=splash(.5,'hood');assert.ok(Math.abs(hard.splashed-2*LENS_RAIN.splash.rate*.5)<=1,'about the rate');assert.ok(hard.splashed>light.splashed*3);
+  assert.equal(splash(2,'dashboard').splashed,0,'behind the glass');assert.equal(splash(0,'chase').splashed,0,'dry tyres');
+  assert.ok(Math.abs(splash(99,'chase').splashed-LENS_RAIN.splash.most*LENS_RAIN.splash.rate*.5)<=1,'capped');assert.equal(splash(NaN,'chase').splashed,0);
+  assert.ok(hard.drops.every(d=>d.size>=LENS_RAIN.splash.size[0]&&d.size<=LENS_RAIN.splash.size[1]&&d.life<=LENS_RAIN.splash.life[1]),'big, short-lived drops');
+  assert.ok(splash(2.5,'chase',30).drops.length<=LENS_RAIN.max,'never more than the lens holds');
+});
 test('the lens pass draws this frame\'s drops at the screen\'s scale and switches off on a dry lens',()=>{
   const pass=new LensRainPass(),u=pass.material.uniforms;pass.setSize(1280,720);
   pass.setDrops([]);assert.ok(!pass.enabled&&u.count.value===0);
@@ -39,5 +47,6 @@ test('main lays the drops on the lens after the haze, offline, outside demos and
   const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
   assert.ok(main.includes('composer.addPass(heatHaze);\ncomposer.addPass(lensRainPass);\ncomposer.addPass(new OutputPass());'));
   assert.ok(main.includes('  updateHeatHaze();\n  updateLensRain(dt);\n  composer.render();'));
+  assert.ok(main.includes('  const p=cars[0];if(live&&p?.extendedDamage)lensRain.splash(p.waterDrag.reduce((a,b)=>a+b,0)/AQUA.drag,dt,drivingCamera);'),'water off the tyres');
   assert.ok(main.includes("  if(state==='menu'||state==='lobby'||online?.active||studio||demo){")&&main.includes("lensRain.step(state==='paused'||state==='inspect'?0:dt,live&&eventLighting==='rain',drivingCamera,Math.abs(cars[0]?.speed??0));"));
 });

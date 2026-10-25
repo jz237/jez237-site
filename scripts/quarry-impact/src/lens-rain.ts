@@ -4,8 +4,11 @@ import {Pass,FullScreenQuad} from 'three/addons/postprocessing/Pass.js';
  * more and more with speed as it drives into the rain), each a little lens of its own showing the world upside down and
  * magnified, with a dark rim and a highlight, LENS_RAIN.size px across on a 1080-line screen. Big drops slide down; drops
  * evaporate over LENS_RAIN.life s, faster once the camera is out of the rain or behind the windscreen, and past
- * LENS_RAIN.blow m/s the air strips them away toward the edges. At most LENS_RAIN.max at once; one full-screen pass. */
-export const LENS_RAIN={max:40,rate:{chase:1.6,hood:2.6},speedRate:.14,size:[18,46],life:[2.5,6],slide:.06,heavy:34,blow:22,dry:5,fade:.6} as const;
+ * LENS_RAIN.blow m/s the air strips them away toward the edges. Driving through standing water throws it over the lens
+ * too (LENS_RAIN.splash: bigger drops, more the harder the tyres plough through it), rain or not. At most LENS_RAIN.max at
+ * once; one full-screen pass. */
+export const LENS_RAIN={max:40,rate:{chase:1.6,hood:2.6},speedRate:.14,size:[18,46],life:[2.5,6],slide:.06,heavy:34,blow:22,dry:5,fade:.6,
+  splash:{rate:26,most:2.5,size:[26,60],life:[1.8,4]}} as const;
 export type LensView='chase'|'hood'|'dashboard';
 export type LensDrop={u:number;v:number;size:number;age:number;life:number;vu:number;vv:number};
 const between=(r:readonly number[],t:number)=>r[0]+(r[1]-r[0])*t;
@@ -18,9 +21,9 @@ export function lensRate(raining:boolean,view:LensView,speed:number){
 export const dropAlpha=(d:LensDrop)=>Math.max(0,Math.min(1,(d.life-d.age)/(d.life*LENS_RAIN.fade)));
 export class LensRain{
   readonly drops:LensDrop[]=[];
-  private budget=0;
-  /** Drops landed so far (QA). */
-  landed=0;
+  private budget=0;private splashBudget=0;
+  /** Drops landed so far, and thrown up out of puddles (QA). */
+  landed=0;splashed=0;
   constructor(private random=()=>Math.random()){}
   step(dt:number,raining:boolean,view:LensView,speed:number){
     const t=Number.isFinite(dt)?Math.max(0,Math.min(.1,dt)):0,s=Number.isFinite(speed)?Math.max(0,speed):0;
@@ -39,7 +42,15 @@ export class LensRain{
     }
     for(let i=this.drops.length;i--;){const d=this.drops[i];if(d.age>=d.life||d.u<-.05||d.u>1.05||d.v<-.05)this.drops.splice(i,1);}
   }
-  clear(){this.drops.length=0;this.budget=0;}
+  /** Water thrown up over the lens by the car ploughing through a puddle: `plough` 0 (dry) to LENS_RAIN.splash.most. */
+  splash(plough:number,dt:number,view:LensView){
+    const t=Number.isFinite(dt)?Math.max(0,Math.min(.1,dt)):0,p=Number.isFinite(plough)?Math.max(0,Math.min(LENS_RAIN.splash.most,plough)):0,S=LENS_RAIN.splash;
+    if(view==='dashboard'||p<=0){this.splashBudget=0;return;}
+    this.splashBudget+=p*S.rate*t;
+    while(this.splashBudget>=1){this.splashBudget--;if(this.drops.length>=LENS_RAIN.max)continue;
+      this.drops.push({u:.04+this.random()*.92,v:.06+this.random()*.6,size:between(S.size,this.random()),age:0,life:between(S.life,this.random()),vu:0,vv:0});this.splashed++;}
+  }
+  clear(){this.drops.length=0;this.budget=0;this.splashBudget=0;}
 }
 /** Draws the drops on the lens; disabled whenever the lens is dry. */
 export class LensRainPass extends Pass{

@@ -2240,7 +2240,10 @@ const hazeSources:HeatSource[]=[],hazeAt=new T.Vector3();let hazeOff=false;
 function updateLensRain(dt:number){
   if(state==='menu'||state==='lobby'||online?.active||studio||demo){if(lensRain.drops.length)lensRain.clear();lensRainPass.setDrops(lensRain.drops);return;}
   const live=['countdown','playing','wrecked'].includes(state);
-  lensRain.step(state==='paused'||state==='inspect'?0:dt,live&&eventLighting==='rain',drivingCamera,Math.abs(cars[0]?.speed??0));lensRainPass.setDrops(lensRain.drops);
+  lensRain.step(state==='paused'||state==='inspect'?0:dt,live&&eventLighting==='rain',drivingCamera,Math.abs(cars[0]?.speed??0));
+  // Ploughing through a puddle throws water over the lens, rain or not.
+  const p=cars[0];if(live&&p?.extendedDamage)lensRain.splash(p.waterDrag.reduce((a,b)=>a+b,0)/AQUA.drag,dt,drivingCamera);
+  lensRainPass.setDrops(lensRain.drops);
 }
 // An offline rain event on an arena floor lays standing puddles, cleared again for the next event; they join the venue's
 // own puddles so wheels splash and ripple through them.
@@ -2943,7 +2946,7 @@ async function boot() {
     reflections: () => wetReflections?.mesh.count ?? 0,
     litSpray: () => puddleSplashes?.litDrops ?? 0,
     heatHaze: (on?: boolean) => { if (on !== undefined) hazeOff = !on; const u = heatHaze.material.uniforms; return { columns: heatHaze.columns, enabled: heatHaze.enabled, sources: hazeSources.length, boxes: (u.boxes.value as T.Vector4[]).slice(0, heatHaze.columns).map((b, i) => [...b.toArray(), ...(u.info.value as T.Vector4[])[i].toArray()].map((n) => +n.toFixed(3))) }; },
-    lensRain: () => ({ drops: lensRain.drops.length, landed: lensRain.landed, enabled: lensRainPass.enabled, view: drivingCamera }),
+    lensRain: () => ({ drops: lensRain.drops.length, landed: lensRain.landed, splashed: lensRain.splashed, enabled: lensRainPass.enabled, view: drivingCamera }),
     aquaplane: (id = 0, on?: boolean) => { if (on !== undefined) aquaplaning = on; const c = cars.find((x) => x.id === id); return c ? { grip: c.waterGrip.map((v) => +v.toFixed(3)), drag: c.waterDrag.map((v) => +v.toFixed(0)), on: aquaplaning, puddles: activeVenue.puddles.map((p) => [p.x, p.z, p.radius].map((n) => +n.toFixed(2))) } : null; },
     rainPuddles: () => rainPuddles ? { count: rainPuddles.list.length, fill: +rainPuddles.fill.toFixed(3), venue: activeVenue.puddles.length, at: rainPuddles.list.map((p) => [p.x, p.z, p.radius, p.level].map((n) => +n.toFixed(2))) } : null,
     lampDamage: (id: number, kind: 'head' | 'tail', index: number, damage: number) => { const c = cars.find(x => x.id === id), m = c && carLights.get(c)?.lamp(kind, index); if (!m) return false; m.userData.damage = damage; return true; },
