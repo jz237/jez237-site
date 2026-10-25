@@ -6,12 +6,18 @@ import * as T from 'three';
  * (faded out once a bead is too small on screen to draw). 0 dry to 1 soaked. */
 export const CAR_WET={value:0};
 export const WET_PAINT={darken:.18,saturate:.3,mud:.5,film:.4,coat:.5,bead:36} as const;
+/** Runs of rain (offline rain): on the panels facing sideways, thin runs of water crawl down the paint, RUNS.cols columns a
+ * metre (about RUNS.share of them running), RUNS.len runs a metre down each, at RUNS.speed m a second give or take; faded out
+ * once too fine on screen to draw. CAR_TIME is the clock they run by. */
+export const RUNS={cols:22,share:.45,len:1.6,speed:.22,width:.07} as const;
+export const CAR_TIME={value:0};
 // Body-space shading survives dents and detached parts without swimming UVs.
 // Damage is separate from base color: exposed alloy reflects as metal while
 // dusty paint gets rougher and loses its clearcoat highlights.
 export function finishPaint(material: T.MeshPhysicalMaterial, contactWear = false) {
   material.onBeforeCompile = (shader) => {
     shader.uniforms.rainWet = CAR_WET;
+    shader.uniforms.carTime = CAR_TIME;
     shader.vertexShader = shader.vertexShader
       .replace('#include <common>', '#include <common>\nattribute vec2 impactWear; varying vec3 vBodyPosition; varying vec2 vImpactWear;\nattribute vec3 crumple; varying vec3 vCrumple; varying vec3 vCrumpleRest; varying vec4 vCrumpleFold;')
       .replace('#include <begin_vertex>', '#include <begin_vertex>\nvBodyPosition = position; vImpactWear = impactWear;\nvCrumple = crumple; vCrumpleRest = position - crumple;\nvec3 crumpleAlong=crumple-dot(crumple,objectNormal)*objectNormal; float crumpleAlongLen=length(crumpleAlong);\nvCrumpleFold=vec4(crumpleAlongLen>1e-5?crumpleAlong/crumpleAlongLen:vec3(0.,0.,1.),crumpleAlongLen/max(length(crumple),1e-5));');
@@ -19,6 +25,7 @@ export function finishPaint(material: T.MeshPhysicalMaterial, contactWear = fals
       .replace('#include <common>', `#include <common>
 varying vec3 vBodyPosition; varying vec2 vImpactWear; varying vec3 vCrumple; varying vec3 vCrumpleRest; varying vec4 vCrumpleFold;
 uniform float rainWet;
+uniform float carTime;
 // Bump from a height in metres, using unnormalised screen derivatives so the creases keep their
 // real size at any distance (Mikkelsen's surface-gradient form, as in three's bumpmap chunk).
 vec3 crumpleBump(vec3 pos,vec3 n,vec2 dh,float face){
@@ -80,11 +87,22 @@ float wetSky=rainWet*smoothstep(.2,.75,dot(normalize(vNormal),normalize((viewMat
 #endif
 vec3 beadCell=vBodyPosition*${WET_PAINT.bead}.,beadId=floor(beadCell);vec2 beadAt=fract(beadCell.xz)-.5-(vec2(bodyNoise(beadId+7.),bodyNoise(beadId+13.))-.5)*.5;
 float beadSize=.14+.13*bodyNoise(beadId+21.),bead=wetSky*step(.58,bodyNoise(beadId))*smoothstep(beadSize,beadSize*.45,length(beadAt))*(1.-smoothstep(.35,.9,length(fwidth(beadCell))))*(1.-crumpleCrack);
+// Runs of rain crawl down the panels facing sideways.
+#ifdef FLAT_SHADED
+float wetSide=0.;
+#else
+float wetSide=rainWet*(1.-smoothstep(.15,.5,abs(dot(normalize(vNormal),normalize((viewMatrix*vec4(0.,1.,0.,0.)).xyz)))));
+#endif
+vec2 runCell=vec2((vBodyPosition.z+vBodyPosition.x)*${RUNS.cols}.,vBodyPosition.y);float runCol=floor(runCell.x),runPick=bodyNoise(vec3(runCol,3.,9.));
+float runY=fract(vBodyPosition.y*${RUNS.len}+carTime*${RUNS.speed}*(.6+.8*runPick)*${RUNS.len}+runPick*7.);
+float run=wetSide*step(${1-RUNS.share},runPick)*(1.-smoothstep(${RUNS.width/2},${RUNS.width},abs(fract(runCell.x)-.5)))*smoothstep(0.,.12,runY)*(1.-smoothstep(.12,.55,runY))*(1.-smoothstep(.35,.9,length(fwidth(runCell*vec2(1.,${RUNS.len.toFixed(2)})))))*(1.-crumpleCrack);
 float wetLuma=dot(diffuseColor.rgb,vec3(.299,.587,.114));
 diffuseColor.rgb=max(mix(vec3(wetLuma),diffuseColor.rgb,1.+rainWet*${WET_PAINT.saturate}),0.);
 diffuseColor.rgb*=1.-rainWet*(${WET_PAINT.darken}+${WET_PAINT.mud}*dust);
 // A bead catches the grey sky: a pale speck on the paint.
 diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.62,.66,.7),bead*.35);
+// A run is a darker wet trail with a bright bead of water at its foot.
+diffuseColor.rgb*=1.-run*.2;diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.78,.82,.86),run*smoothstep(.3,.1,runY)*.55);
 `)
       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
 roughnessFactor=clamp(mix(roughnessFactor,.88,dust)+scratch*.35+grain*.016,.04,.98);
@@ -123,7 +141,7 @@ float scrapeLines=mix(smoothstep(.65,.92,abs(sin(across+bodySilt(vBodyPosition*2
         .replace('#include <lights_physical_fragment>', '#include <lights_physical_fragment>\n#ifdef USE_CLEARCOAT\nmaterial.clearcoat *= 1.-clamp(bareMetal+scratch*.5+dust*.7,0.,1.);\n#endif');
     }
   };
-  material.customProgramCacheKey = () => contactWear ? 'quarry-contact-paint-crumple-v1' : 'quarry-layered-paint-crumple-v1';
+  material.customProgramCacheKey = () => contactWear ? 'quarry-contact-paint-crumple-v2' : 'quarry-layered-paint-crumple-v2';
 }
 
 /** Rain on glass (offline rain, CAR_WET): beads of water stand on every window, in GLASS_RAIN.cells cells a metre, on all but

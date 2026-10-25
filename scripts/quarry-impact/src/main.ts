@@ -132,7 +132,7 @@ import {HEAD_GASKET} from './damage-handling';
 const HEAD_GASKET_AFTER=HEAD_GASKET.after;
 import {LEAK as TYRE_LEAK_RANGE} from './damage-handling';
 import type {GlassState} from './car-materials';
-import {CAR_WET} from './car-materials';
+import {CAR_WET,CAR_TIME} from './car-materials';
 import {disposeDriver} from './driver-figure';
 import {roofSign} from './roof-sign';
 import {withSlogan} from './race-numbers';
@@ -2550,6 +2550,8 @@ function frame(now: number) {
   updateRumble(now);
   clock += dt;
   if (!physics || state === 'loading'||preparingOnline) return;
+  // The runs of rain on the paint crawl by the game clock.
+  CAR_TIME.value=clock%1000;
   // Offline the rain comes and goes in showers: the streaks, their hiss, the lens drops and the puddles follow it.
   shower=eventLighting==='rain'&&!online?.active?(showerForce??showerLevel(elapsed,showerSeed)):1;rain?.setIntensity(shower);sound.rainLevel(shower);
   rain?.update(camera,state==='paused'?0:dt);
