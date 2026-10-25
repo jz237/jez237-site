@@ -247,6 +247,8 @@ export class Sound {
     gain.gain.value=CROWD_BOO.level;source.connect(gain).connect(this.ambientBus);source.start();return true;
   }
   /** A soft looping rain hiss on the ambience bus while it rains. */
+  /** The rain's hiss follows the shower: a light one (level 0) at 0.45 of a downpour's (1). */
+  rainLevel(level:number){const c=this.ctx,h=this.rainHiss;if(!c||!h)return;const l=Number.isFinite(level)?Math.max(0,Math.min(1,level)):1;h.gain.gain.setTargetAtTime(.16*(.45+.55*l),c.currentTime,1.2);}
   rain(on:boolean){
     this.raining=on;
     const c=this.ctx;if(!c||!this.ambientBus||!this.ready)return;

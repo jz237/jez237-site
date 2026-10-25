@@ -13,9 +13,9 @@ export type LensView='chase'|'hood'|'dashboard';
 export type LensDrop={u:number;v:number;size:number;age:number;life:number;vu:number;vv:number};
 const between=(r:readonly number[],t:number)=>r[0]+(r[1]-r[0])*t;
 /** Drops landing a second: none out of the rain or behind the windscreen. */
-export function lensRate(raining:boolean,view:LensView,speed:number){
-  if(!raining||view==='dashboard')return 0;const s=Number.isFinite(speed)?Math.max(0,speed):0;
-  return view==='hood'?LENS_RAIN.rate.hood*(1+s*LENS_RAIN.speedRate):LENS_RAIN.rate.chase;
+export function lensRate(raining:boolean,view:LensView,speed:number,level=1){
+  if(!raining||view==='dashboard')return 0;const s=Number.isFinite(speed)?Math.max(0,speed):0,l=Number.isFinite(level)?Math.max(0,Math.min(1,level)):1;
+  return (view==='hood'?LENS_RAIN.rate.hood*(1+s*LENS_RAIN.speedRate):LENS_RAIN.rate.chase)*l;
 }
 /** How visible a drop is (0–1): it lands at once and fades over the last LENS_RAIN.fade of its life. */
 export const dropAlpha=(d:LensDrop)=>Math.max(0,Math.min(1,(d.life-d.age)/(d.life*LENS_RAIN.fade)));
@@ -25,9 +25,9 @@ export class LensRain{
   /** Drops landed so far, and thrown up out of puddles (QA). */
   landed=0;splashed=0;
   constructor(private random=()=>Math.random()){}
-  step(dt:number,raining:boolean,view:LensView,speed:number){
+  step(dt:number,raining:boolean,view:LensView,speed:number,level=1){
     const t=Number.isFinite(dt)?Math.max(0,Math.min(.1,dt)):0,s=Number.isFinite(speed)?Math.max(0,speed):0;
-    this.budget+=lensRate(raining,view,s)*t;
+    this.budget+=lensRate(raining,view,s,level)*t;
     while(this.budget>=1){
       this.budget--;if(this.drops.length>=LENS_RAIN.max)continue;const size=between(LENS_RAIN.size,this.random()**1.5);
       this.drops.push({u:.04+this.random()*.92,v:.06+this.random()*.88,size,age:0,life:between(LENS_RAIN.life,this.random()),vu:0,vv:0});this.landed++;

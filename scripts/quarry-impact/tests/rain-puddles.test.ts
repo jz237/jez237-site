@@ -41,5 +41,5 @@ test('main lays the puddles for an offline rain event on an arena, joins them to
   assert.ok(main.includes("  if(!lay||eventLighting!=='rain'||online?.active||!activeVenue.arena)return;")&&main.includes('activeVenue.puddles.push(...rainPuddles.list);puddleVenue=activeVenue;'));
   assert.ok(main.includes('if(mine.has(puddleVenue.puddles[i]))puddleVenue.puddles.splice(i,1);'),'taken back out for the next event');
   assert.ok(main.includes('  layEventPuddles(!attract);\n')&&main.indexOf('  layEventPuddles(!attract);')>main.indexOf("marshals=marshalPosts(activeVenue.arena??DERBY_ARENA"),'after the venue is active');
-  assert.ok(main.includes("  rainPuddles?.update(dt,eventLighting==='rain'&&state==='playing');"));
+  assert.ok(main.includes("  rainPuddles?.update(dt*shower,eventLighting==='rain'&&state==='playing');"),'filling as hard as it rains');
 });

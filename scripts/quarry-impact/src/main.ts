@@ -188,6 +188,7 @@ import {drawQuarryMap} from './quarry-minimap';
 import { prepareCircuitSurface } from './scenery-circuit-material';
 import { Quarry, puddleGeometry, softShoreMaterial } from './world';
 import {RainPuddles,layRainPuddles} from './rain-puddles';
+import {showerLevel} from './rain-showers';
 import {waterAt,aquaplaningNow,aquaplaneLift,AQUA} from './aquaplaning';
 import { Vehicle, WRECK_BURST, type Input } from './vehicle';
 import { Effects } from './effects';
@@ -414,6 +415,8 @@ let profileStorageWarning='';
 let activeChallenge:Challenge|undefined;
 let rain:ReturnType<typeof createRain>|null=null,wetRoot:T.Object3D|undefined,wetOn=false;
 let rainSplashes:ReturnType<typeof createRainSplashes>|undefined;
+// This event's showers: their seed and how hard it is raining now (1 when not an offline rain event).
+let showerSeed=0,shower=1;
 const eventAwards=new EventAwards();const propFires=new PropFires();
 /** Loose props as fire sources: where they are now and whether they burn. */
 const propPoints=(props:readonly {mesh:T.Object3D}[])=>props.map(p=>({x:p.mesh.position.x,y:p.mesh.position.y,z:p.mesh.position.z,kind:propKind((p.mesh as T.Mesh).geometry?.type)}));let slowMoUntil=0,slowMoScale=.3;
@@ -1060,6 +1063,7 @@ async function start(watch=demo) {
   // Each offline event gets its own breeze (stronger in the rain).
   windy=!online?.active;Object.assign(breezeBase,windy?eventWind(Math.random,eventLighting==='rain'):{x:0,z:0});
   // An offline rain event is a thunderstorm.
+  showerSeed=Math.random();
   storm=!online?.active&&eventLighting==='rain'?new Storm(Math.random):null;lightning.intensity=0;
   demo=watch;demoRestart=0;director.reset();if(watch)director.select(demoOptions.camera);keys.clear();testInput=null;
   wreckHold = 0;
@@ -2258,7 +2262,7 @@ const hazeSources:HeatSource[]=[],hazeAt=new T.Vector3();let hazeOff=false;
 function updateLensRain(dt:number){
   if(state==='menu'||state==='lobby'||online?.active||studio||demo){if(lensRain.drops.length)lensRain.clear();lensRainPass.setDrops(lensRain.drops);return;}
   const live=['countdown','playing','wrecked'].includes(state);
-  lensRain.step(state==='paused'||state==='inspect'?0:dt,live&&eventLighting==='rain',drivingCamera,Math.abs(cars[0]?.speed??0));
+  lensRain.step(state==='paused'||state==='inspect'?0:dt,live&&eventLighting==='rain',drivingCamera,Math.abs(cars[0]?.speed??0),shower);
   // Ploughing through a puddle throws water over the lens, rain or not.
   const p=cars[0];if(live&&p?.extendedDamage)lensRain.splash(p.waterDrag.reduce((a,b)=>a+b,0)/AQUA.drag,dt,drivingCamera);
   lensRainPass.setDrops(lensRain.drops);
@@ -2540,6 +2544,8 @@ function frame(now: number) {
   updateRumble(now);
   clock += dt;
   if (!physics || state === 'loading'||preparingOnline) return;
+  // Offline the rain comes and goes in showers: the streaks, their hiss, the lens drops and the puddles follow it.
+  shower=eventLighting==='rain'&&!online?.active?showerLevel(elapsed,showerSeed):1;rain?.setIntensity(shower);sound.rainLevel(shower);
   rain?.update(camera,state==='paused'?0:dt);
   // Raindrops landing round the camera (offline rain).
   rainSplashes?.update(camera,activeVenue.course.height,state==='paused'?0:dt);
@@ -2548,7 +2554,7 @@ function frame(now: number) {
   // could only switch the rain off).
   sound.rain(eventLighting==='rain'&&state!=='menu');
   // Puddles on the arena floor fill out as the rain goes on (offline).
-  rainPuddles?.update(dt,eventLighting==='rain'&&state==='playing');
+  rainPuddles?.update(dt*shower,eventLighting==='rain'&&state==='playing');
   // The driver feels the steering go light as the front tyres ride up on standing water (offline).
   if(state==='playing'&&cars[0]?.extendedDamage&&aquaplaningNow(cars[0].waterGrip)&&clock-aquaToastAt>AQUA.warnGap){aquaToastAt=clock;toast('AQUAPLANING',1.2);}
   // Engines heat up as they work and cool once stopped; in the rain a hot bonnet boils it off in wisps of steam (offline).
@@ -2972,6 +2978,7 @@ async function boot() {
     heatHaze: (on?: boolean) => { if (on !== undefined) hazeOff = !on; const u = heatHaze.material.uniforms; return { columns: heatHaze.columns, enabled: heatHaze.enabled, sources: hazeSources.length, boxes: (u.boxes.value as T.Vector4[]).slice(0, heatHaze.columns).map((b, i) => [...b.toArray(), ...(u.info.value as T.Vector4[])[i].toArray()].map((n) => +n.toFixed(3))) }; },
     lensRain: () => ({ drops: lensRain.drops.length, landed: lensRain.landed, splashed: lensRain.splashed, enabled: lensRainPass.enabled, view: drivingCamera }),
     puddleSplashes: () => splashes,
+    shower: () => ({ level: +shower.toFixed(3), drops: rain?.drops ?? 0 }),
     shatterWindows: (id = 0) => { const c = cars.find((x) => x.id === id); return c ? { shattered: c.shatterSideWindows(), rims: c.glassRimCount } : null; },
     standby: () => standby ? { count: standby.count, names: standby.group.children.map((o) => o.name) } : null,
     bloom: (on?: boolean) => { if (on !== undefined) bloomOff = !on; return { enabled: lampBloom.enabled, threshold: lampBloom.threshold, strength: lampBloom.strength }; },
