@@ -177,7 +177,8 @@ import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import {BLOOM,bloomWanted} from './lamp-bloom';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { loadCars, environment } from './assets';
+import { loadCars, environment, cloneCar } from './assets';
+import {standbyPosts,createStandby} from './standby-vehicles';
 import { prepareArenaFloor } from './scenery-arena-material';
 import {prepareReferenceFloor} from './scenery-reference-floor';
 import {CHASE_VIEW,chaseComposition,QUARRY_DAYLIGHT} from './quarry-art-direction';
@@ -793,7 +794,9 @@ let storm:Storm|null=null;const lightning=new T.AmbientLight(0xdfe8ff,0);
 let marshals:{figure:T.Group;post:Post;flinchFor:number;flinch:number}[]=[];
 /** Each car's last hit seen by the marshals. */
 const marshalSeen=new WeakMap<object,number>();
-function clearMarshals(){for(const m of marshals){m.figure.removeFromParent();m.figure.traverse(o=>{if(o instanceof T.Mesh){o.geometry.dispose();(o.material as T.Material).dispose();}});}marshals=[];}
+function clearMarshals(){for(const m of marshals){m.figure.removeFromParent();m.figure.traverse(o=>{if(o instanceof T.Mesh){o.geometry.dispose();(o.material as T.Material).dispose();}});}marshals=[];standby?.dispose();standby=null;}
+// A recovery truck and a fire tender stand by outside the wall of an offline derby, light bars flashing.
+let standby:ReturnType<typeof createStandby>|null=null;
 let clearSky: T.Texture | null = null, overcastSky: T.Texture | null = null;
 function applyEventLighting(fresh: boolean, choice = settings.lighting) {
   if (fresh || !eventLighting) eventLighting = resolveLighting(choice, eventLighting);
@@ -979,6 +982,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   const ratedGrid=!attract&&activeClubRound===null&&!activeTimeTrial&&(demo?demoOptions.classLimit:customEvent()&&mode!=='playground'&&eventOptions.classLimit)?(demo?demoPerformanceGrid(kind,demoOptions,garage):eventPerformanceGrid(kind,eventOptions,garage)):null;
   // Marshals take their posts round an offline derby arena (the event's venue is active by now).
   if(!attract&&mode==='derby'&&!online?.active&&!demo)marshals=marshalPosts(activeVenue.arena??DERBY_ARENA,activeVenue.course.height).map(post=>{const figure=marshalFigure();figure.position.set(post.x,post.y,post.z);figure.rotation.y=post.yaw;scene.add(figure);return {figure,post,flinchFor:0,flinch:0};});
+  if(!attract&&mode==='derby'&&!online?.active&&!demo){standby?.dispose();{const arena=activeVenue.arena??DERBY_ARENA;standby=createStandby(scene,standbyPosts(arena,activeVenue.course.height),(kind,color)=>cloneCar(kind,color),new T.Vector3(arena.x,0,arena.z));}}
   // Standing water on the arena floor in an offline rain event (none on the menu's car).
   layEventPuddles(!attract);
   for (let i = 0; i < count; i++) {
@@ -2566,6 +2570,7 @@ function frame(now: number) {
     for(const m of marshals)if(flinchesAt(m.post,c.current.x,c.current.z,c.lastDamage))m.flinchFor=FLINCH.hold;}
   if(state==='countdown'||state==='playing'||state==='wrecked'||state==='result')for(const m of marshals){m.flinchFor=Math.max(0,m.flinchFor-dt);m.flinch+=((m.flinchFor>0?1:0)-m.flinch)*Math.min(1,dt*FLINCH.rate);
     poseMarshal(m.figure,marshalFlag(m.post,elapsed,cars,state==='result'),clock,m.flinch);}
+  standby?.update(clock);
   // Lightning flashes over a rain event, and its thunder follows as far behind as the strike is away (offline).
   if(storm&&(state==='countdown'||state==='playing'||state==='wrecked')){if(!lightning.parent)scene.add(lightning);const s=storm.step(dt);lightning.intensity=s.flash*THUNDER.light;if(s.clap)sound.thunder(s.clap.near,s.clap.volume);}
   else if(lightning.intensity)lightning.intensity=0;
@@ -2965,6 +2970,7 @@ async function boot() {
     heatHaze: (on?: boolean) => { if (on !== undefined) hazeOff = !on; const u = heatHaze.material.uniforms; return { columns: heatHaze.columns, enabled: heatHaze.enabled, sources: hazeSources.length, boxes: (u.boxes.value as T.Vector4[]).slice(0, heatHaze.columns).map((b, i) => [...b.toArray(), ...(u.info.value as T.Vector4[])[i].toArray()].map((n) => +n.toFixed(3))) }; },
     lensRain: () => ({ drops: lensRain.drops.length, landed: lensRain.landed, splashed: lensRain.splashed, enabled: lensRainPass.enabled, view: drivingCamera }),
     puddleSplashes: () => splashes,
+    standby: () => standby ? { count: standby.count, names: standby.group.children.map((o) => o.name) } : null,
     bloom: (on?: boolean) => { if (on !== undefined) bloomOff = !on; return { enabled: lampBloom.enabled, threshold: lampBloom.threshold, strength: lampBloom.strength }; },
     reverseLamps: (id = 0) => { const c = cars.find((x) => x.id === id), l = c && carLights.get(c); return l && c ? { kind: c.kind, count: l.reverse, lit: l.backing, indicators: l.indicator, hazards: l.flashing } : null; },
     aquaplane: (id = 0, on?: boolean) => { if (on !== undefined) aquaplaning = on; const c = cars.find((x) => x.id === id); return c ? { grip: c.waterGrip.map((v) => +v.toFixed(3)), drag: c.waterDrag.map((v) => +v.toFixed(0)), on: aquaplaning, puddles: activeVenue.puddles.map((p) => [p.x, p.z, p.radius].map((n) => +n.toFixed(2))) } : null; },
