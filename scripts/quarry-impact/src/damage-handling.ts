@@ -460,6 +460,13 @@ export const OVERHEAT_FIRE={damage:.6,throttle:.55,after:12,cool:.5,share:.5,war
 export const runningHot=(engineDamage:number,cooling:boolean,throttle:number)=>!cooling&&Number.isFinite(engineDamage)&&engineDamage>=OVERHEAT_FIRE.damage&&Math.abs(Number.isFinite(throttle)?throttle:0)>=OVERHEAT_FIRE.throttle;
 /** Seconds held hot after dt: rises while hot, falls (slower) while not. */
 export const hotClock=(t:number,hot:boolean,dt:number)=>{const v=Math.max(0,Number.isFinite(t)?t:0);return dt>0?hot?v+dt:Math.max(0,v-dt*OVERHEAT_FIRE.cool):v;};
+/** A head gasket blows on an engine run hard (HEAD_GASKET.throttle or more) with nothing cooling it — coolant gone, a snapped
+ * fan belt or a crushed radiator — for HEAD_GASKET.after seconds (the clock runs down at HEAD_GASKET.cool a second
+ * otherwise). From then on the engine burns its coolant (HEAD_GASKET.burn a second), makes HEAD_GASKET.power of its power
+ * and blows thick white smoke out of the exhaust, HEAD_GASKET.smoke puffs a second on full throttle, a third of that idling. */
+export const HEAD_GASKET={after:8,cool:.5,throttle:.3,burn:.02,power:.82,smoke:5} as const;
+export const gasketClock=(t:number,hot:boolean,dt:number)=>{const v=Math.max(0,Number.isFinite(t)?t:0);return dt>0?hot?v+dt:Math.max(0,v-dt*HEAD_GASKET.cool):v;};
+export const gasketWarning=(blown:boolean)=>blown?'HEAD GASKET BLOWN':'';
 export function overheatFire(t:number,carId:number){const x=Math.sin(carId*19.1+7.7)*43758.5453;return t>=OVERHEAT_FIRE.after&&x-Math.floor(x)<OVERHEAT_FIRE.share;}
 export const overheatWarning=(t:number)=>t>=OVERHEAT_FIRE.warn?'ENGINE OVERHEATING':'';
 /** An AI driver whose engine is overheating backs off below OVERHEAT_FIRE.throttle so it cools (forward throttle only). */
