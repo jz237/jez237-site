@@ -116,6 +116,7 @@ import {WiperRig,wiperArms,windscreen,wipeStep} from './windscreen-wipers';
 import {steerArms,handReach,newHandState,type HandState} from './driver-arms';
 import {BONNET_STEAM,bonnetHeat,steamRate} from './bonnet-steam';
 import {vapourRate} from './exhaust-vapour';
+import {brakeSteamRate} from './brake-steam';
 import {WIND,eventWind,gusting} from './wind';
 import {Storm,THUNDER} from './thunder';
 import {marshalPosts,marshalFigure,poseMarshal,marshalFlag,flinchesAt,FLINCH,type Post} from './arena-marshals';
@@ -2208,6 +2209,7 @@ let carWetOverride:number|null=null;
 let umbrellasUp=false,umbrellaRoot:T.Object3D|undefined;
 const bonnetHeats=new WeakMap<object,number>(),bonnetClocks=new WeakMap<object,number>(),steamAt=new T.Vector3();let bonnetPuffs=0;
 const vapourClocks=new WeakMap<object,number>();let vapourPuffs=0;
+const brakeSteamClocks=new WeakMap<object,number[]>();let brakePuffs=0;
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
 function lookDriver(c:Vehicle,figure:T.Object3D,dt:number){
   const t=drivers.memory.get(c.id)?.target,prey=t!==undefined&&t>=0&&t!==c.id?cars.find(x=>x.id===t&&x.health>0):undefined;
@@ -2483,6 +2485,9 @@ function frame(now: number) {
   // Lightning flashes over a rain event, and its thunder follows as far behind as the strike is away (offline).
   if(storm&&(state==='countdown'||state==='playing'||state==='wrecked')){if(!lightning.parent)scene.add(lightning);const s=storm.step(dt);lightning.intensity=s.flash*THUNDER.light;if(s.clap)sound.thunder(s.clap.near,s.clap.volume);}
   else if(lightning.intensity)lightning.intensity=0;
+  // Rain on a hot brake disc boils off in steam at the wheel (offline).
+  if(eventLighting==='rain'&&(state==='playing'||state==='wrecked'))for(const c of cars){if(!c.extendedDamage)continue;const clocks=brakeSteamClocks.get(c)??[0,0,0,0];brakeSteamClocks.set(c,clocks);
+    for(let i=0;i<4;i++){const w=c.wheels[i];if(!w||c.wreckParts.wheelLost[i])continue;clocks[i]+=brakeSteamRate(c.discHeat[i])*dt;if(clocks[i]<1)continue;clocks[i]%=1;brakePuffs++;fx.emit(w.getWorldPosition(steamAt),1,5,.25);}}
   // Up go the umbrellas in the stands when it rains (offline).
   {const up=eventLighting==='rain'&&!online?.active;if(up!==umbrellasUp||activeVenue.root!==umbrellaRoot){umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(false));umbrellaRoot=activeVenue.root;umbrellasUp=up;umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(up,windy?breezeBase:undefined));}}
   // The cars are soaked in the rain too: darker paint and mud, a film of water on top (offline).
@@ -2865,6 +2870,8 @@ async function boot() {
     umbrellas: () => { let n = 0; activeVenue.root?.traverse(o => { if (o.name === 'crowd_umbrella' && o.visible) n += (o as T.InstancedMesh).count; }); return n; },
     carWet: (v?: number | null) => { if (v !== undefined) carWetOverride = v; return CAR_WET.value; },
     vapour: () => vapourPuffs,
+    brakeSteam: () => brakePuffs,
+    heatDiscs: (id = 0, heat = 1) => { const c = cars[id]; if (!c?.extendedDamage) return false; c.discHeat.fill(heat); return true; },
     storm: () => storm ? { strikes: storm.strikes, claps: storm.claps, thunders: sound.thunders, flash: +lightning.intensity.toFixed(3) } : null,
     strike: () => { if (!storm) return false; storm.strikeNow(); return true; },
     marshals: () => marshals.map(m => ({ flag: m.figure.userData.flag ?? 'down', flinch: +m.flinch.toFixed(2), at: [m.post.x, m.post.y, m.post.z].map(v => +v.toFixed(1)) })),
