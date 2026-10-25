@@ -3,6 +3,7 @@ import './app/styles.css';
 import * as THREE from 'three/webgpu';
 import { AppShell, type DesktopHost } from './app/AppShell';
 import { AdaptiveScale, ratioAt } from './app/adaptiveScale.mjs';
+import { describe, describeLoad, FrameProfile, type Sample } from './app/frameProfile';
 import { BETTA_PAGE, elsewhere, GLOBES, type GlobeEntry } from './app/catalog';
 import { applyUrlOverrides, fishConfig, globeConfig, lightConfig, simConfig, type GlobeConfig, type LightConfig, type SimConfig } from './config';
 import { DeskMapping, loadDesk, type DesktopHostApi } from './desktop/desktopScene';
@@ -37,7 +38,10 @@ const FOV = 30;
 const NARROWEST = 0.75;
 /** Phones and tablets get a lighter globe (a coarser grid, one ray per pixel, no supersampled
  *  canvas) unless the URL asks otherwise (?res=, ?aa=). */
-const LITE = matchMedia('(pointer: coarse)').matches && Math.min(screen.width, screen.height) < 1000;
+const LITE = ((q) => (q === '1' ? true : q === '0' ? false : matchMedia('(pointer: coarse)').matches && Math.min(screen.width, screen.height) < 1000))(new URLSearchParams(location.search).get('lite'));
+/** ?stats and ?bench: where each frame's time goes, and the load's (app/frameProfile.ts). */
+const PROF = new FrameProfile(/[?&](stats|bench)\b/.test(location.search));
+PROF.mark('script');
 /** A frame longer than this (s) is a stall (the window hidden, a pipeline built, the debugger):
  *  the time past it is skipped. Every shorter frame is simulated in full, so the motion keeps
  *  real time however few frames the GPU manages. (On phones a slow frame is not caught up on in
@@ -110,12 +114,13 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // The betta bowl's furnishings are built meanwhile, in a worker (render/scape/furnishings.ts).
   const furnishing = GLOBES.some((g) => g.betta) ? furnish(BED_SOLIDS_N, o.globe.innerRadius, BED_SOLIDS_NONE, LITE ? 0.5 : 1) : null;
   const device = await createDevice();
+  PROF.mark('device');
 
   // (Dev builds time the render pass on the GPU, for profiling.)
   // ?aa=1 traces one ray per pixel instead of four (cheaper, aliased waterline); one is all phones and
   // the betta's page draw, and phones have no multisampled canvas unless asked for four.
   const samples = Number(params.get('aa') ?? (LITE || o.start.betta ? 1 : 4));
-  const renderer = new THREE.WebGPURenderer({ device, antialias: !LITE || samples >= 4, alpha: o.alpha, trackTimestamp: import.meta.env.DEV });
+  const renderer = new THREE.WebGPURenderer({ device, antialias: !LITE || samples >= 4, alpha: o.alpha, trackTimestamp: import.meta.env.DEV || PROF.on });
   const stageSize = (): [number, number] => {
     const r = stage.getBoundingClientRect();
     return [Math.max(1, Math.round(r.width)), Math.max(1, Math.round(r.height))];
@@ -125,6 +130,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   renderer.toneMappingExposure = 1.0;
   stage.prepend(renderer.domElement);
   await renderer.init();
+  PROF.mark('renderer');
 
   // The articulated specimen needs cadence more than sub-pixel fluid detail.
   // Preserve the original five scenes' defaults; explicit URL overrides still win.
@@ -213,6 +219,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   let plants: MovingPlants | null = null;
   if (furnishing) {
     const f = await furnishing;
+    PROF.mark('furnishings');
     setScapeShader(f.wgsl);
     const bvh = device.createTexture({ label: 'furnishings BVH', size: [f.width, f.height], format: 'rgba32float', usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.STORAGE_BINDING | GPUTextureUsage.COPY_DST });
     device.queue.writeTexture({ texture: bvh }, f.data as unknown as BufferSource, { bytesPerRow: f.width * 16, rowsPerImage: f.height }, [f.width, f.height]);
@@ -228,6 +235,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // (Where the bowl's turn has carried them, each frame: the sim frame.)
   const turnedObstacles = scapeObstacles.map((o) => ({ a: [0, 0, 0], b: [0, 0, 0], r: o.r, solid: o.solid }));
   await sim.init(Math.max(...GLOBES.map(fill)), GLOBES.map((g) => ({ fill: fill(g), rock: !!g.reef })));
+  PROF.mark('sim');
 
   // In the app the globe stands in the deep ocean, specks drifting round it; on the desktop, in
   // front of the wallpaper.
@@ -254,10 +262,12 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // (If frames come too slowly for the pointer to be followed, run() lowers the sharpness a step
   // at a time, and offers it back when they are quick again.)
   let sharpness = 0;
+  // (?bench: a pixel ratio of its own choosing, for a while.)
+  let ratioOverride: number | null = null;
   const fit = (): void => {
     const [w, h] = stageSize();
     const most = device.limits.maxTextureDimension2D;
-    renderer.setPixelRatio(Math.min(ratioAt(LITE ? 1 : Math.min(window.devicePixelRatio, 2), sharpness), most / w, most / h));
+    renderer.setPixelRatio(Math.min(ratioOverride ?? ratioAt(LITE ? 1 : Math.min(window.devicePixelRatio, 2), sharpness), most / w, most / h));
     renderer.setSize(w, h);
     camera.aspect = w / h;
     camera.fov = (2 * Math.atan(Math.tan((FOV * Math.PI) / 360) * Math.max(1, NARROWEST / camera.aspect)) * 180) / Math.PI;
@@ -270,6 +280,10 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     sharpness = level;
     fit();
   };
+  const setRatio = (ratio: number | null): void => {
+    ratioOverride = ratio;
+    fit();
+  };
 
   const globe = new GlobeView(sim, o.globe, o.light, koi.texture, samples, ocean ? { ocean: ocean.map.texture } : studio ? { ocean: studio.map } : { desktop: o.desk! }, kelp, reef, clowns.texture, GLOBES.find((g) => g.reef)?.clarity, GLOBES.find((g) => g.foam)?.waterColour, betta, bowl, scapeTex);
   scene.add(globe.mesh);
@@ -280,7 +294,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // not built yet stalled until it was. (Only the page's own globes': the betta bowl's page
   // builds the bowl's alone.)
   const variants = [...new Set(GLOBES.map(variantOf))];
-  await Promise.all([sim.settle(), globe.precompile(renderer, camera, scene, variants).catch((err: unknown) => console.warn('[globes] precompile:', err))]);
+  await Promise.all([sim.settle().then(() => PROF.mark('settled')), globe.precompile(renderer, camera, scene, variants).then(() => PROF.mark('compiled')).catch((err: unknown) => console.warn('[globes] precompile:', err))]);
 
   // What lives in the globe (the koi, or the kelp forest) and what its water does when left
   // alone. Another globe comes in with its own water, level and still (the switch happens out
@@ -339,6 +353,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     const eaters = feeders();
     food.aim(eaters);
     koi.update(dt, sim.koiSense, koiEnv());
+    PROF.lap('input');
     // (The bowl's driftwood and plant, where the bowl's turn has carried them.)
     if (bowl) {
       const e = controller.rotation.elements;
@@ -356,6 +371,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     sim.setKoiProbes(betta.active ? betta.probePoints() : koi.probePoints());
     if (betta.active) {
       sim.setProbes(BETTA_SURFACE_AT, betta.surfaceProbes());
+      PROF.lap('betta');
       if (plants) {
         // The plants: their leaves' probes where the bowl's turn has carried them, and their
         // motion (each frame; every other one on phones).
@@ -367,6 +383,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
           plantDue = 0;
         }
       }
+      PROF.lap('plants');
       if (life) {
         life.update(dt, sim.koiSense, sim.restLevel, SURFACE_ISO, controller.rotation.elements, Math.hypot(...controller.omega), betta.swim.mode);
         betta.swim.gulpUrge = life.nestNeed;
@@ -382,6 +399,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
       if (dropped && !(d.push > 0)) sim.push(dropped, PELLET_DIMPLE, PELLET_DIMPLE_RADIUS);
       if (d.bubbles > 0) sim.splash.emit(d.bubblesAt.toArray(), d.bubbles, BUBBLE_RADIUS);
     }
+    PROF.lap(betta.active ? 'life' : 'betta');
     sim.koiVisible = koi.visible;
     if (reef.active) {
       // The clownfish (acting on what the water told them a frame or two ago), then the anemone,
@@ -400,9 +418,11 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     food.update(dt, sim.koiSense?.probes ?? null, sim.koiSense?.sand ?? null, FOOD_PROBE_AT, { rotation: controller.rotation.elements, gravity: controller.bodyAccel(cfg.gravity), iso: SURFACE_ISO, radius: R }, eaters);
     sim.setProbes(FOOD_PROBE_AT, food.probePoints());
     food.write(device, reef.active ? clowns.texture : koi.texture);
+    PROF.lap('food');
     idle.update(dt, controller.holding || controller.moving, sim.koiSense);
     sim.currents = idle.stirring ? idle.currents : null;
     sim.step(dt, idle.withPush(controller.bodyAccel(cfg.gravity)), controller.omega, controller.rotation.elements);
+    PROF.lap('sim');
   };
 
   // A flake of food where the pointer (client px) is over the water: on the line of sight as
@@ -450,32 +470,64 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     return true;
   };
 
-  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, life, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, studio, specks, setScene, advance, spawnFood, clickLid, setSharpness };
+  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, life, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, studio, specks, setScene, advance, spawnFood, clickLid, setSharpness, setRatio };
 }
 
 type World = Awaited<ReturnType<typeof createWorld>>;
 
 /** Runs the world every frame. beforeRender: after the world moves, before it is drawn. */
 function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () => void; firstFrame?: () => void }): void {
-  const { renderer, camera, scene, sim, controller, globe, ocean, studio, specks, advance, setSharpness } = world;
-  // ?adapt=0 keeps the picture at full sharpness however slowly it draws (profiling).
-  const adaptive = params.get('adapt') === '0' ? null : new AdaptiveScale(performance.now());
+  const { renderer, camera, scene, sim, controller, globe, ocean, studio, specks, advance, setSharpness, setRatio } = world;
+  // ?adapt=0 keeps the picture at full sharpness however slowly it draws (profiling; ?bench too).
+  const adaptive = params.get('adapt') === '0' || params.has('bench') ? null : new AdaptiveScale(performance.now());
   const globeMotion = { center: controller.center, velocity: controller.velocity, radius: world.globeRadius };
   let jumps = controller.panJumps;
-  // ?stats logs frame rate and solver load to the console, and shows it in a corner above the
-  // page's links (a phone has no console to read): frames a second, the main thread's time a frame
-  // on the world, the sim's substeps, the pixel ratio.
-  const logStats = params.has('stats');
-  const hud = logStats ? document.createElement('div') : null;
+  // ?stats shows, in a corner above the page's links (a phone has no console to read), where each
+  // frame's time goes (app/frameProfile.ts): frames a second and their pace, the main thread's time
+  // on each part of the frame, the GPU's on the sim and the drawing, the pixel ratio, and when each
+  // step of the load was done (seconds since the page was asked for).
+  const hud = PROF.on ? document.createElement('div') : null;
   if (hud) {
-    hud.style.cssText = 'position:fixed;left:8px;bottom:calc(56px + env(safe-area-inset-bottom));z-index:99;padding:6px 8px;border-radius:6px;background:rgba(0,0,0,.6);color:#cfe;font:12px/1.3 ui-monospace,monospace;pointer-events:none;white-space:pre';
+    hud.style.cssText = 'position:fixed;left:8px;bottom:calc(56px + env(safe-area-inset-bottom));z-index:99;max-width:calc(100vw - 16px);box-sizing:border-box;padding:6px 8px;border-radius:6px;background:rgba(0,0,0,.65);color:#cfe;font:11px/1.35 ui-monospace,monospace;pointer-events:none;white-space:pre-wrap';
     document.body.append(hud);
+    // (The GPU's time on the sim's passes, where the device can time them.)
+    sim.setProfiling(true);
   }
-  let cpuMs = 0;
+  // ?bench: after a few seconds, the picture at each pixel ratio in turn (up to the screen's own),
+  // a moment to settle and three seconds measured, then a table of them; then the usual ratio.
+  const ratios = [0.6, 0.8, 1, 1.25, 1.5, 2].filter((r) => r <= window.devicePixelRatio + 0.01);
+  const bench = params.has('bench') ? { k: -1, measuring: false, at: performance.now() + 5000, rows: [] as [number, Sample][] } : null;
+  const benchNext = (b: NonNullable<typeof bench>, now: number): void => {
+    if (b.measuring) {
+      const s = PROF.take();
+      if (s) b.rows.push([renderer.getPixelRatio(), s]);
+      b.measuring = false;
+      b.k++;
+    } else if (b.k >= 0) {
+      PROF.take();
+      b.measuring = true;
+      b.at = now + 3000;
+      return;
+    } else b.k = 0;
+    if (b.k < ratios.length) {
+      setRatio(ratios[b.k]);
+      b.at = now + 1500;
+    } else {
+      setRatio(null);
+      b.at = Infinity;
+    }
+  };
+  const f1 = (v: number | null): string => (v === null ? '  -' : v.toFixed(1).padStart(4));
+  const benchText = (b: NonNullable<typeof bench>): string => {
+    const head = `bench${LITE ? ' · phone tier' : ''} · ${innerWidth}x${innerHeight} css px · dpr ${window.devicePixelRatio.toFixed(2)}\nratio   fps  frame ms   cpu  gpu sim/draw (queue)`;
+    const rows = b.rows.map(([r, s]) => `${r.toFixed(2)}  ${s.fps.toFixed(1).padStart(4)}  ${f1(s.p50)}/${f1(s.p90)}  ${f1(s.cpuTotal)}  ${f1(s.gpuSim)}/${f1(s.gpuDraw)} (${f1(s.gpuQueue)})`);
+    const now = b.k < ratios.length ? [`... ratio ${ratios[Math.max(0, b.k)].toFixed(2)}${b.measuring ? ' measuring' : ''}`] : [];
+    const parts = b.rows[0] ? [describe(b.rows[0][1], b.rows[0][0]).split('\n')[1]] : [];
+    return [head, ...rows, ...now, ...parts, describeLoad(PROF.load)].join('\n');
+  };
   // ?manual (dev testing): the sim only advances through __globes.tick().
   const manual = params.has('manual');
   const drawSize = new THREE.Vector2();
-  let frames = 0;
   let statsStart = performance.now();
   let first = true;
 
@@ -487,11 +539,10 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     const dt = Math.min((now - last) / 1000, STALL);
     last = now;
 
+    PROF.begin();
     const level = adaptive?.frame(now) ?? null;
     if (level !== null) setSharpness(level);
-    const cpu0 = performance.now();
     if (!manual) advance(dt);
-    if (hud) cpuMs = cpuMs * 0.9 + (performance.now() - cpu0) * 0.1;
     hooks.beforeRender?.();
     const heightPx = renderer.getDrawingBufferSize(drawSize).y;
     globe.update(controller.center, controller.rotation, camera, heightPx);
@@ -501,38 +552,51 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
       specks.update(dt, camera, heightPx, controller.panJumps - jumps, globeMotion);
       jumps = controller.panJumps;
     }
+    PROF.lap('scene');
     renderer.render(scene, camera);
+    PROF.lap('draw');
+    PROF.end(world.device.queue);
     if (first) {
       first = false;
+      PROF.mark('first frame');
       // (Once the GPU has drawn the first frame: the pipelines first used in it - the backdrop's,
       // the specks' - are built as it runs, which held up the frames after it as the globe began
       // to slide in.)
       const firstFrame = hooks.firstFrame;
       if (firstFrame) void world.device.queue.onSubmittedWorkDone().then(() => requestAnimationFrame(firstFrame));
     }
-    if (import.meta.env.DEV && renderTimes.on) {
-      void renderer.resolveTimestampsAsync('render').then(() => {
-        const ms = renderer.info.render.timestamp;
-        if (ms > 0) renderTimes.ms = renderTimes.ms === 0 ? ms : renderTimes.ms * 0.9 + ms * 0.1;
+    if ((import.meta.env.DEV && renderTimes.on) || hud) {
+      void renderer.resolveTimestampsAsync('render').then((ms) => {
+        if (!(ms && ms > 0)) return;
+        if (renderTimes.on) renderTimes.ms = renderTimes.ms === 0 ? ms : renderTimes.ms * 0.9 + ms * 0.1;
+        if (hud) PROF.gpuDraw(ms);
       });
     }
 
-    if (logStats && ++frames >= 120) {
-      const fps = (frames * 1000) / (now - statsStart);
-      console.log(
-        `[globes] ${fps.toFixed(1)} fps · ${sim.particleCount} particles · ` +
-          `${sim.lastSubsteps} substeps · max speed ${sim.maxSpeed.toFixed(2)}`,
-      );
-      if (hud) hud.textContent = `${fps.toFixed(1)} fps\nworld ${cpuMs.toFixed(1)} ms a frame (main thread)\n${sim.lastSubsteps} substeps · ${sim.particleCount} particles\npixel ratio ${renderer.getPixelRatio().toFixed(2)}${LITE ? ' · phone tier' : ''}`;
-      frames = 0;
-      statsStart = now;
+    if (hud) {
+      const simMs = Object.values(sim.gpuTimes).reduce((a, b) => a + b, 0);
+      if (simMs > 0) PROF.gpuSim(simMs);
+      if (bench) {
+        if (now >= bench.at) benchNext(bench, now);
+        if (now - statsStart >= 500) {
+          statsStart = now;
+          hud.textContent = benchText(bench);
+        }
+      } else if (now - statsStart >= 1000) {
+        statsStart = now;
+        const s = PROF.take();
+        if (s) {
+          hud.textContent = `${describe(s, renderer.getPixelRatio(), `${LITE ? ' · phone tier' : ''} · ${sim.lastSubsteps} substeps · ${sim.particleCount} particles`)}\n${describeLoad(PROF.load)}`;
+          console.log(`[globes] ${hud.textContent}`);
+        }
+      }
     }
   });
 
   if (import.meta.env.DEV || params.has('qa')) {
     const tick = (dt: number) => advance(dt);
     const g = window as unknown as { __globes?: object };
-    g.__globes = { ...g.__globes, THREE, ...world, tick, renderTimes, adaptive };
+    g.__globes = { ...g.__globes, THREE, ...world, tick, renderTimes, adaptive, prof: PROF, bench };
   }
 }
 
