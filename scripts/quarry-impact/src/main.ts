@@ -104,6 +104,7 @@ import {driverFigure,DRIVER,windowNet,WINDOW_NET} from './driver-figure';
 import {swayDriver} from './driver-sway';
 import {duckDriver} from './driver-sway';
 import {rollCage,bendCage} from './roll-cage';
+import {lookYaw,turnHead} from './driver-look';
 import {roofSign} from './roof-sign';
 import {roofSignFate,foldRoofSign,roofSignBox,disposeRoofSign,type RoofSignFate} from './roof-sign';
 import {withRaceNumbers} from './race-numbers';
@@ -2123,6 +2124,13 @@ function updateCraze(){
   screenCraze.draw(spots,clip);
 }
 function cycleDrivingCamera(){drivingCamera=nextDrivingCamera(drivingCamera);toast(DRIVING_CAMERA_LABELS[drivingCamera]+' CAMERA');}
+const lookLocal=new T.Vector3(),lookTurn=new T.Quaternion();
+/** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
+function lookDriver(c:Vehicle,figure:T.Object3D,dt:number){
+  const t=drivers.memory.get(c.id)?.target,prey=t!==undefined&&t>=0&&t!==c.id?cars.find(x=>x.id===t&&x.health>0):undefined;
+  if(prey)lookLocal.copy(prey.current).sub(c.current).applyQuaternion(lookTurn.copy(c.root.quaternion).invert());
+  turnHead(figure,lookYaw(prey?lookLocal:null,c.body.angvel().y,c.speed),dt);
+}
 const signAxis=new T.Vector3(),signUp=new T.Vector3();
 /** A derby roof sign takes the car's knocks (only offline derby cars carry one): see roofSignFate. */
 function knockRoofSign(c:Vehicle,sign:T.Object3D,dt:number){
@@ -2144,6 +2152,8 @@ function updateCamera(dt: number) {
   // A roll cage bends down with the roof by the driver's slump.
   for(const c of cars){const cage=c.root.children.find(o=>o.name==='roll_cage'),d=cage&&c.root.children.find(o=>o.name==='driver');if(cage&&d?.userData.seatBase){const drop=d.userData.seatBase.y-d.userData.seat.y;if(drop!==(cage.userData.drop??0)){cage.userData.drop=drop;bendCage(cage,d.userData.seatBase,drop);}}}
   if(state!=='paused')for(const c of cars){const d=c.root.children.find(o=>o.name==='driver');if(d)swayDriver(d,c.root,dt);}
+  // and look where the fight is: at the car they hunt, into the turn, back over a shoulder when reversing.
+  if(state!=='paused')for(const c of cars){const d=c.root.children.find(o=>o.name==='driver');if(d)lookDriver(c,d,dt);}
   // Roof signs fold flat when a car goes over and tear off on a second roll, a crushed roof or a blow-up.
   if(state!=='paused')for(const c of cars){const sign=c.root.children.find(o=>o.name==='roof_sign');if(sign)knockRoofSign(c,sign,dt);}
   if(scoreSpectating()){const current=cars.find(c=>c.id===director.followed);if(!current||current.health<=0)director.cycleCar(cars,1);else if(!director.manual)director.follow(current.id);}
@@ -2674,7 +2684,7 @@ async function boot() {
     setStructure: (id: number, face: number, v: number) => { const c = cars.find(x => x.id === id); if (!c?.structuralDamage || !Number.isInteger(face) || face < 0 || face > 4 || !Number.isFinite(v)) return false; c.structuralDamage[face] = Math.max(0, Math.min(1, v)); return true; },
     blowUp: (id: number) => { const c = cars.find(x => x.id === id); if (!c?.extendedDamage) return false; carBlowsUp(c, c.current.clone()); return c.blownUp; },
     roofSign: (id: number) => { const c = cars.find(x => x.id === id); if (!c) return null; const sign = c.root.children.find(o => o.name === 'roof_sign'); return sign ? { fate: sign.userData.fate ?? 'up', fold: sign.rotation.z } : fx.debris.some(d => d.mesh.name === 'torn_roof_sign' && d.mesh.children[0]?.userData.car === id) ? { fate: 'torn', fold: 0 } : null; },
-    driverSway: (id: number) => { const d = cars.find(x => x.id === id)?.root.children.find(o => o.name === 'driver'), s = d?.userData.sway; return s ? { roll: s.roll, pitch: s.pitch, drop: d!.userData.seatBase ? d!.userData.seatBase.y - d!.userData.seat.y : 0 } : null; },
+    driverSway: (id: number) => { const d = cars.find(x => x.id === id)?.root.children.find(o => o.name === 'driver'), s = d?.userData.sway; return s ? { roll: s.roll, pitch: s.pitch, drop: d!.userData.seatBase ? d!.userData.seatBase.y - d!.userData.seat.y : 0, look: d!.userData.look ?? 0, target: drivers.memory.get(id)?.target ?? -1 } : null; },
     placeDebris: (index: number, x: number, y: number, z: number, vx: number, vy: number, vz: number) => { const d = fx.debris[index < 0 ? fx.debris.length + index : index]; if (!d) return false; d.body.setTranslation({ x, y, z }, true); d.body.setLinvel({ x: vx, y: vy, z: vz }, true); return true; },
     setExhaustCrushed: (id: number, crushed: boolean) => { const c = cars.find(x => x.id === id); if (!c?.extendedDamage) return false; c.exhaustCrushed = !!crushed; return true; },
     setAlight: (id: number) => { const c = cars.find(x => x.id === id); if (!c?.extendedDamage || c.health <= 0) return false; c.igniteRequest = true; return true; },
