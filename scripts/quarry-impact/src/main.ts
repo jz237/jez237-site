@@ -174,6 +174,8 @@ import { prepareNorthForestFloor } from './scenery-north-floor';
 import { northForestDiagnostics } from './scenery-north-forest';
 import { northRidgeDiagnostics } from './scenery-north-ridge';
 import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import {BLOOM,bloomWanted} from './lamp-bloom';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { loadCars, environment } from './assets';
 import { prepareArenaFloor } from './scenery-arena-material';
@@ -719,10 +721,14 @@ const ao = new QuarryAO(scene, camera);
 const heatHaze = new HeatHazePass(() => ao.enabled);
 // Rain lands on the chase and hood cameras' lens (offline).
 const lensRainPass = new LensRainPass(), lensRain = new LensRain();
+// Bright lamps, fire and lightning glow (offline, not on the medium tier).
+const lampBloom = new UnrealBloomPass(new T.Vector2(innerWidth, innerHeight), BLOOM.strength, BLOOM.radius, BLOOM.threshold);
+let bloomOff = false;
 const reflections = new LocalReflections(renderer, scene);
 composer.addPass(ao);
 composer.addPass(heatHaze);
 composer.addPass(lensRainPass);
+composer.addPass(lampBloom);
 composer.addPass(new OutputPass());
 composer.addPass(new SMAAPass());
 const orbit = new OrbitControls(camera, canvas);
@@ -2663,6 +2669,7 @@ function frame(now: number) {
   renderer.shadowMap.needsUpdate = true;
   updateHeatHaze();
   updateLensRain(dt);
+  lampBloom.enabled = !bloomOff && bloomWanted(adaptiveGraphics.quality, !!online?.active, eventLighting);
   composer.render();
   studio?.capture(canvas);
   hudTime += dt;
@@ -2958,6 +2965,7 @@ async function boot() {
     heatHaze: (on?: boolean) => { if (on !== undefined) hazeOff = !on; const u = heatHaze.material.uniforms; return { columns: heatHaze.columns, enabled: heatHaze.enabled, sources: hazeSources.length, boxes: (u.boxes.value as T.Vector4[]).slice(0, heatHaze.columns).map((b, i) => [...b.toArray(), ...(u.info.value as T.Vector4[])[i].toArray()].map((n) => +n.toFixed(3))) }; },
     lensRain: () => ({ drops: lensRain.drops.length, landed: lensRain.landed, splashed: lensRain.splashed, enabled: lensRainPass.enabled, view: drivingCamera }),
     puddleSplashes: () => splashes,
+    bloom: (on?: boolean) => { if (on !== undefined) bloomOff = !on; return { enabled: lampBloom.enabled, threshold: lampBloom.threshold, strength: lampBloom.strength }; },
     reverseLamps: (id = 0) => { const c = cars.find((x) => x.id === id), l = c && carLights.get(c); return l && c ? { kind: c.kind, count: l.reverse, lit: l.backing, indicators: l.indicator, hazards: l.flashing } : null; },
     aquaplane: (id = 0, on?: boolean) => { if (on !== undefined) aquaplaning = on; const c = cars.find((x) => x.id === id); return c ? { grip: c.waterGrip.map((v) => +v.toFixed(3)), drag: c.waterDrag.map((v) => +v.toFixed(0)), on: aquaplaning, puddles: activeVenue.puddles.map((p) => [p.x, p.z, p.radius].map((n) => +n.toFixed(2))) } : null; },
     rainPuddles: () => rainPuddles ? { count: rainPuddles.list.length, fill: +rainPuddles.fill.toFixed(3), venue: activeVenue.puddles.length, at: rainPuddles.list.map((p) => [p.x, p.z, p.radius, p.level].map((n) => +n.toFixed(2))) } : null,

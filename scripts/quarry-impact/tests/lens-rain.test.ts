@@ -45,8 +45,8 @@ test('the lens pass draws this frame\'s drops at the screen\'s scale and switche
 });
 test('main lays the drops on the lens after the haze, offline, outside demos and replays, frozen while paused',()=>{
   const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
-  assert.ok(main.includes('composer.addPass(heatHaze);\ncomposer.addPass(lensRainPass);\ncomposer.addPass(new OutputPass());'));
-  assert.ok(main.includes('  updateHeatHaze();\n  updateLensRain(dt);\n  composer.render();'));
+  assert.ok(main.includes('composer.addPass(heatHaze);\ncomposer.addPass(lensRainPass);\n')&&main.indexOf('composer.addPass(lensRainPass);')<main.indexOf('composer.addPass(new OutputPass());'),'after the haze, before the output');
+  const frame=main.indexOf('  updateHeatHaze();\n  updateLensRain(dt);\n');assert.ok(frame>0&&main.indexOf('  composer.render();\n',frame)-frame<260,'laid out just before each frame is drawn');
   assert.ok(main.includes('  const p=cars[0];if(live&&p?.extendedDamage)lensRain.splash(p.waterDrag.reduce((a,b)=>a+b,0)/AQUA.drag,dt,drivingCamera);'),'water off the tyres');
   assert.ok(main.includes("  if(state==='menu'||state==='lobby'||online?.active||studio||demo){")&&main.includes("lensRain.step(state==='paused'||state==='inspect'?0:dt,live&&eventLighting==='rain',drivingCamera,Math.abs(cars[0]?.speed??0));"));
 });

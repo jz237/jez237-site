@@ -1,6 +1,7 @@
+import {restoreLampBloomBytes} from './lamp-bloom-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readHazardLightsPrevious,restoreHazardLightsBytes,verifyHazardLightsRevision} from './hazard-lights-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreLampBloomBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('HazardLights preserves every prior fixture, vehicle asset, venue art and history input',verifyHazardLightsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/hazard-lights/revision.json').toString());
