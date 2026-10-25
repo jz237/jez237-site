@@ -6,6 +6,9 @@ export const CROWD_SURGE={amplitude:.32,seconds:2.2} as const;
 /** Surge 0..1 at this many seconds after it started (eases out). */
 export const crowdSurge=(age:number)=>!Number.isFinite(age)||age<0||age>=CROWD_SURGE.seconds?0:1-(age/CROWD_SURGE.seconds)**2;
 export type SpectatorPlace={x:number;y:number;z:number;yaw:number;seated?:boolean};
+/** Rain (offline): every UMBRELLAS.every-th spectator (from UMBRELLAS.offset) holds up an umbrella, its canopy
+ * UMBRELLAS.radius wide just above the head, tipped back a little. Built on the first shower, two batches, hidden when dry. */
+export const UMBRELLAS={every:3,offset:1,radius:.66,height:.3,above:1.3,tilt:.16,colours:[0x1b1d22,0x9d2b2b,0x24406b,0xd8c24a,0xe8e6df,0x2f6b46,0x6b3b6e]} as const;
 /** Original low-poly spectators, batched by geometry rather than person or outfit.
  * Local +Z faces the event; y is the grandstand tread, not the seat top. */
 export function createVenueCrowd(places:readonly SpectatorPlace[]){
@@ -55,6 +58,25 @@ export function createVenueCrowd(places:readonly SpectatorPlace[]){
   return lit;
  }
  root.userData.crowdFlash=flash;
+ // Umbrellas go up in the rain: two more batches made on the first shower, then only shown or hidden.
+ let umbrellaMeshes:T.InstancedMesh[]|null=null;
+ function buildUmbrellas(){
+  const held=places.filter((_,i)=>i%UMBRELLAS.every===UMBRELLAS.offset),u=UMBRELLAS;
+  const canopy=new T.InstancedMesh(new T.ConeGeometry(u.radius,u.height,8,1,true),new T.MeshStandardMaterial({roughness:.55,side:T.DoubleSide}),Math.max(1,held.length));
+  const shaft=new T.InstancedMesh(new T.CylinderGeometry(.012,.012,1,4,1),new T.MeshStandardMaterial({color:0x2a2a2a,roughness:.5}),Math.max(1,held.length));
+  canopy.name='crowd_umbrella';shaft.name='crowd_umbrella_shaft';canopy.count=shaft.count=held.length;
+  const m=new T.Matrix4(),local=new T.Object3D(),colour=new T.Color(),top=new T.Vector3(),hand=new T.Vector3();
+  held.forEach((p,k)=>{
+   base.makeRotationY(p.yaw);base.setPosition(p.x,p.y,p.z);const hip=p.seated!==false?.48:.88,i=k*UMBRELLAS.every+UMBRELLAS.offset;
+   top.set(0,hip+u.above,-.04);local.position.copy(top);local.rotation.set(-u.tilt,0,((i*7)%5-2)*.05);local.scale.setScalar(1);local.updateMatrix();
+   canopy.setMatrixAt(k,m.multiplyMatrices(base,local.matrix));canopy.setColorAt(k,colour.setHex(u.colours[(i*5+Math.floor(i/4))%u.colours.length]));
+   hand.set(.1,hip+.25,.2);local.position.copy(hand).add(top).multiplyScalar(.5);local.quaternion.setFromUnitVectors(up,top.clone().sub(hand).normalize());local.scale.set(1,top.distanceTo(hand),1);local.updateMatrix();
+   shaft.setMatrixAt(k,m.multiplyMatrices(base,local.matrix));
+  });
+  for(const mesh of [canopy,shaft]){mesh.castShadow=false;mesh.visible=false;root.add(mesh);}
+  return [canopy,shaft];
+ }
+ root.userData.umbrellas=(on:boolean)=>{if(disposed||!places.length)return;if(on&&!umbrellaMeshes)umbrellaMeshes=buildUmbrellas();for(const mesh of umbrellaMeshes??[])mesh.visible=on;};
  function update(time:number){
   if(disposed||!Number.isFinite(time)||time<0)return;
   now=time;for(const f of flashes)if(f.sprite.visible&&f.until<=time)f.sprite.visible=false;
@@ -71,5 +93,5 @@ export function createVenueCrowd(places:readonly SpectatorPlace[]){
   }
   for(const shape of ['limb','head'] as const){const mesh=meshes.get(shape);if(mesh)mesh.instanceMatrix.needsUpdate=true;}
  }
- let disposed=false;return{root,update,dispose(){if(disposed)return;disposed=true;for(const f of flashes)(f.sprite.material as T.Material).dispose();flashTexture?.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose()});Object.values(geometries).forEach(g=>g.dispose());material.dispose();root.clear();}};
+ let disposed=false;return{root,update,dispose(){if(disposed)return;disposed=true;for(const f of flashes)(f.sprite.material as T.Material).dispose();flashTexture?.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose()});for(const mesh of umbrellaMeshes??[]){mesh.geometry.dispose();(mesh.material as T.Material).dispose();}Object.values(geometries).forEach(g=>g.dispose());material.dispose();root.clear();}};
 }

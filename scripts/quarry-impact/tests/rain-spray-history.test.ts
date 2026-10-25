@@ -1,6 +1,7 @@
+import {restoreUmbrellasBytes} from './umbrellas-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readRainSprayPrevious,restoreRainSprayBytes,verifyRainSprayRevision} from './rain-spray-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreUmbrellasBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('RainSpray preserves every prior fixture, vehicle asset, venue art and history input',verifyRainSprayRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/rain-spray/revision.json').toString());
