@@ -30,12 +30,13 @@ export class Effects {
   /** Scatters litter on the floor as the physics has it (static colliders, cast down from above the break): arena floors stand
    * above the course height function. */
   scatterLitter(point: T.Vector3, kind: LitterKind, seed: number, from?: T.Vector3, colour?: number, count?: number) {
-    const floor = (x: number, z: number) => {
-      const top = Math.max(point.y, this.groundHeight(x, z)) + 1.5;
-      const hit = typeof this.world.castRay === 'function' ? this.world.castRay(new R.Ray({ x, y: top, z }, { x: 0, y: -1, z: 0 }), 4, true, R.QueryFilterFlags.EXCLUDE_SENSORS | R.QueryFilterFlags.EXCLUDE_DYNAMIC | R.QueryFilterFlags.EXCLUDE_KINEMATIC) : null;
-      return hit ? top - hit.timeOfImpact : this.groundHeight(x, z);
-    };
-    return this.litter.scatter(point, kind, seed, floor, from, colour, count);
+    return this.litter.scatter(point, kind, seed, (x, z) => this.floorAt(x, z, point.y), from, colour, count);
+  }
+  /** The floor height at (x, z) as the physics has it (static colliders, cast down from above near), else the course height. */
+  floorAt(x: number, z: number, near: number) {
+    const top = Math.max(Number.isFinite(near) ? near : 0, this.groundHeight(x, z)) + 1.5;
+    const hit = typeof this.world.castRay === 'function' ? this.world.castRay(new R.Ray({ x, y: top, z }, { x: 0, y: -1, z: 0 }), 4, true, R.QueryFilterFlags.EXCLUDE_SENSORS | R.QueryFilterFlags.EXCLUDE_DYNAMIC | R.QueryFilterFlags.EXCLUDE_KINEMATIC) : null;
+    return hit ? top - hit.timeOfImpact : this.groundHeight(x, z);
   }
   marks: T.InstancedMesh;
   markCursor = 0;

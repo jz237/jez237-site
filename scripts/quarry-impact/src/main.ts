@@ -108,6 +108,8 @@ import {lookYaw,turnHead} from './driver-look';
 import {LITTER} from './crash-litter';
 import {derbyFlag,waveFlag,FLAG_COLOURS} from './derby-flag';
 import {CRUNCH,crunchVolume} from './litter-crunch';
+import {shouldBail,bailOut,strollAway,BAIL} from './driver-bail';
+import {disposeDriver} from './driver-figure';
 import {roofSign} from './roof-sign';
 import {roofSignFate,foldRoofSign,roofSignBox,disposeRoofSign,type RoofSignFate} from './roof-sign';
 import {withRaceNumbers} from './race-numbers';
@@ -906,6 +908,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   vehicleFire?.reset();propFires.reset();
   puddleSplashes?.reset();
   for (const c of cars){carLights.get(c)?.dispose();carLights.delete(c);c.dispose();}
+  for(const f of bailed)disposeDriver(f);bailed.length=0;
   cars = [];
   fx.reset();
   activateVenue(targetVenue);fx.world=physics;fx.groundHeight=activeVenue.course.height;events.clear();setQuarryMode();
@@ -2142,6 +2145,7 @@ function cycleDrivingCamera(){drivingCamera=nextDrivingCamera(drivingCamera);toa
 const lookLocal=new T.Vector3(),lookTurn=new T.Quaternion();
 const crunchAt=new T.Vector3(),crunchClock=new WeakMap<object,number>();let crunchTake=0;
 let hornHeats=0;
+const bailClock=new WeakMap<object,number>(),bailed:T.Object3D[]=[];
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
 function lookDriver(c:Vehicle,figure:T.Object3D,dt:number){
   const t=drivers.memory.get(c.id)?.target,prey=t!==undefined&&t>=0&&t!==c.id?cars.find(x=>x.id===t&&x.health>0):undefined;
@@ -2173,6 +2177,11 @@ function updateCamera(dt: number) {
   if(state!=='paused')for(const c of cars){const d=c.root.children.find(o=>o.name==='driver');if(d)lookDriver(c,d,dt);}
   // Derby flags whip about with their cars and snap once a car is out or upside down.
   if(state!=='paused')for(const c of cars){const f=c.root.children.find(o=>o.name==='derby_flag');if(f)waveFlag(f,c.root,dt,c.health<=0||c.inverted>.3);}
+  // Drivers get out of burning or blown-up cars once they have stopped, and walk clear to watch (offline).
+  if(state==='playing'||state==='wrecked'){for(const c of cars){if(!c.extendedDamage)continue;const d=c.root.children.find(o=>o.name==='driver');if(!d)continue;
+    const t=(c.onFire||c.blownUp)&&Math.abs(c.speed)<BAIL.speed?(bailClock.get(c)??0)+dt:0;bailClock.set(c,t);
+    if(shouldBail(c.onFire,c.blownUp,c.speed,t)){bailOut(d,c.root,scene,(x,z)=>fx.floorAt(x,z,c.current.y));bailed.push(d);}}
+    for(const f of bailed)strollAway(f,dt);}
   // Tyres crunch over the glass and lens chips on the floor (offline), the two recorded takes in turn.
   if(state==='playing'&&fx.litter.mesh.count)for(const c of cars){if(!c.extendedDamage||clock-(crunchClock.get(c)??-9)<CRUNCH.gap)continue;for(const w of c.wheels){if(!w.visible)continue;w.getWorldPosition(crunchAt);const v=crunchVolume(fx.litter.under(crunchAt.x,crunchAt.z,CRUNCH.radius),c.speed);if(v>0){sound.clip(crunchTake++%2?'glass-crunch-2':'glass-crunch',crunchAt,v,CRUNCH.duration);crunchClock.set(c,clock);break;}}}
   // Roof signs fold flat when a car goes over and tear off on a second roll, a crushed roof or a blow-up.
@@ -2709,6 +2718,7 @@ async function boot() {
     /** QA: chips of glass and lamp lens on the floor, and the breaks that left them by kind. */
     litter: () => ({ chips: fx.litter.mesh.count, ...fx.litter.breaks, last: fx.litter.last.toArray(), crunches: crunchTake }),
     horns: () => hornHeats,
+    bailed: () => bailed.map(f => ({ at: f.position.toArray().map(v => +v.toFixed(2)), walked: +(f.userData.bail?.time ?? 0).toFixed(2), legs: !!f.getObjectByName('driver_legs') })),
     /** QA: scatter litter of a kind at a world point (thrown out from from, when given; paint takes colour). */
     scatterLitter: (at: number[], kind: 'glass' | 'head' | 'tail' | 'paint' | 'rubber', seed = 1, from?: number[], colour?: number) => fx.scatterLitter(new T.Vector3().fromArray(at), kind, seed, from ? new T.Vector3().fromArray(from) : undefined, colour),
     /** QA: smash one lamp as a hard knock would (it goes dark, its lens dulls and its pieces fall). */
