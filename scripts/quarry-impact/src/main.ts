@@ -114,6 +114,7 @@ import {shouldBail,bailOut,strollAway,BAIL} from './driver-bail';
 import {cabinSmoke} from './cabin-smoke';
 import {WiperRig,wiperArms,windscreen,wipeStep} from './windscreen-wipers';
 import {steerArms} from './driver-arms';
+import {BONNET_STEAM,bonnetHeat,steamRate} from './bonnet-steam';
 import {LEAK as TYRE_LEAK_RANGE} from './damage-handling';
 import type {GlassState} from './car-materials';
 import {CAR_WET} from './car-materials';
@@ -2179,6 +2180,7 @@ const wiperRigs=new WeakMap<object,WiperRig>();
 const wiperScreens=new WeakMap<object,GlassState|undefined>();
 let carWetOverride:number|null=null;
 let umbrellasUp=false,umbrellaRoot:T.Object3D|undefined;
+const bonnetHeats=new WeakMap<object,number>(),bonnetClocks=new WeakMap<object,number>(),steamAt=new T.Vector3();let bonnetPuffs=0;
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
 function lookDriver(c:Vehicle,figure:T.Object3D,dt:number){
   const t=drivers.memory.get(c.id)?.target,prey=t!==undefined&&t>=0&&t!==c.id?cars.find(x=>x.id===t&&x.health>0):undefined;
@@ -2426,6 +2428,11 @@ function frame(now: number) {
   // The rain sounds for as long as the event's weather says so (applyEventLighting runs while still in the menu, when it
   // could only switch the rain off).
   sound.rain(eventLighting==='rain'&&state!=='menu');
+  // Engines heat up as they work and cool once stopped; in the rain a hot bonnet boils it off in wisps of steam (offline).
+  if(state==='countdown'||state==='playing'||state==='wrecked'){const wet=eventLighting==='rain';for(const c of cars){if(!c.extendedDamage)continue;
+    const heat=bonnetHeat(bonnetHeats.get(c)??BONNET_STEAM.start,c.health>0&&!(c.engineStall!>0)&&!c.engineOut,c.input?.throttle??0,c.rpm??0,dt);bonnetHeats.set(c,heat);if(!wet)continue;
+    const t=(bonnetClocks.get(c)??0)+steamRate(heat)*dt;bonnetClocks.set(c,t%1);if(t<1)continue;bonnetPuffs++;
+    steamAt.set((Math.random()-.5)*.5,.6,(isRearEngineKind(c.kind)?-1:1)*DEFINITIONS[c.kind].halfLength*.45).applyQuaternion(c.root.quaternion).add(c.root.position);fx.emit(steamAt,1,5,.35);}}
   // Up go the umbrellas in the stands when it rains (offline).
   {const up=eventLighting==='rain'&&!online?.active;if(up!==umbrellasUp||activeVenue.root!==umbrellaRoot){umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(false));umbrellaRoot=activeVenue.root;umbrellasUp=up;umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(up));}}
   // The cars are soaked in the rain too: darker paint and mud, a film of water on top (offline).
@@ -2801,6 +2808,7 @@ async function boot() {
     driverArms: (id = 0) => { const c = cars[id], d = c?.root.children.find(o => o.name === 'driver'); return d ? { steering: +c.steering.toFixed(3), tilts: d.children.filter(o => o instanceof T.Mesh && o.geometry instanceof T.CylinderGeometry).sort((a, b) => a.position.x - b.position.x).map(o => +o.rotation.x.toFixed(3)) } : null; },
     umbrellas: () => { let n = 0; activeVenue.root?.traverse(o => { if (o.name === 'crowd_umbrella' && o.visible) n += (o as T.InstancedMesh).count; }); return n; },
     carWet: (v?: number | null) => { if (v !== undefined) carWetOverride = v; return CAR_WET.value; },
+    bonnetSteam: (id?: number) => { if (id === undefined) return bonnetPuffs; const c = cars[id]; return c ? +(bonnetHeats.get(c) ?? 0).toFixed(3) : null; },
     screenWiped: (id = 0) => { const c = cars[id], st = c && wiperScreens.get(c); return st ? +st.wiped.value.toFixed(3) : null; },
     wipers: (id = 0) => { const c = cars[id], r = c && wiperRigs.get(c); return r ? { arms: r.arms.length, phase: +r.phase.toFixed(3), sweeping: r.sweeping, bent: r.bentArms, angles: r.arms.map(a => +a.angle.toFixed(3)), names: r.arms.map(a => a.mesh.name) } : null; },
     cabinSmoke: (id: number) => { const c = cars.find(x => x.id === id); return c ? smokeIn.get(c) ?? 0 : null; },

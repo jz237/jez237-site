@@ -8,9 +8,9 @@ test('rain beads every window, laid on the plane each pane faces, fewer where th
   const m=new T.MeshPhysicalMaterial(),state=finishGlass(m,new T.BoxGeometry(1,.5,.02));assert.equal(state.wiped.value,0);
   const shader={uniforms:{} as Record<string,unknown>,vertexShader:'#include <common>\n#include <begin_vertex>',fragmentShader:'#include <common>\n#include <color_fragment>\n#include <roughnessmap_fragment>'};
   m.onBeforeCompile(shader as any,{} as any);
-  assert.ok(shader.uniforms.carWet===CAR_WET&&shader.uniforms.glassWiped===state.wiped,'shared wetness, each pane its own wiping');
+  assert.ok(shader.uniforms.rainWet===CAR_WET&&shader.uniforms.glassWiped===state.wiped,'shared wetness, each pane its own wiping');
   assert.ok(shader.vertexShader.includes('vGlassNormal=normal;')&&shader.fragmentShader.includes('vec3 rainFace=abs(vGlassNormal);'),'beads stay round on every window');
-  assert.ok(shader.fragmentShader.includes(`float glassBead=carWet*step(${GLASS_RAIN.keep}+${1-GLASS_RAIN.keep}*glassWiped*${GLASS_RAIN.wipe},rainKeep)`)&&shader.fragmentShader.includes('*(1.-smoothstep(.35,.9,length(fwidth(rainAt))));'),'fewer when wiped, faded before they shimmer');
+  assert.ok(shader.fragmentShader.includes(`float glassBead=rainWet*step(${GLASS_RAIN.keep}+${1-GLASS_RAIN.keep}*glassWiped*${GLASS_RAIN.wipe},rainKeep)`)&&shader.fragmentShader.includes('*(1.-smoothstep(.35,.9,length(fwidth(rainAt))));'),'fewer when wiped, faded before they shimmer');
   assert.ok(shader.fragmentShader.indexOf('float murk=')<shader.fragmentShader.indexOf('float glassBead='),'on the outside of the smoke');
   m.dispose();
 });

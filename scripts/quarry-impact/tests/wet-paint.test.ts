@@ -8,13 +8,14 @@ test('paint soaks in the rain: deeper colour, dark mud, a film of water and bead
   const material=new T.MeshPhysicalMaterial({clearcoat:1});finishPaint(material,contact);
   const shader={vertexShader:T.ShaderLib.physical.vertexShader,fragmentShader:T.ShaderLib.physical.fragmentShader,uniforms:{}} as unknown as T.WebGLProgramParametersWithUniforms;
   material.onBeforeCompile(shader,{} as T.WebGLRenderer);const f=shader.fragmentShader;
-  assert.ok((shader.uniforms as Record<string,unknown>).carWet===CAR_WET,'one shared wetness for every car');
-  assert.ok(f.includes('uniform float carWet;')&&f.includes(`diffuseColor.rgb*=1.-carWet*(${WET_PAINT.darken}+${WET_PAINT.mud}*dust);`)&&f.includes(`1.+carWet*${WET_PAINT.saturate}`),'darker, deeper paint and darker mud');
+  assert.ok((shader.uniforms as Record<string,unknown>).rainWet===CAR_WET,'one shared wetness for every car');
+  assert.ok(f.includes('uniform float rainWet;')&&f.includes(`diffuseColor.rgb*=1.-rainWet*(${WET_PAINT.darken}+${WET_PAINT.mud}*dust);`)&&f.includes(`1.+rainWet*${WET_PAINT.saturate}`),'darker, deeper paint and darker mud');
   assert.ok(f.includes('#ifdef FLAT_SHADED\nfloat wetSky=0.;'),'flat-shaded materials have no smooth normal to read');
-  const bead=f.indexOf('float beadSize='),dust=f.indexOf('float dust='),rough=f.indexOf('roughnessFactor=mix(roughnessFactor,.03,bead);'),lights=f.indexOf('#include <lights_physical_fragment>'),film=f.indexOf('float wetTop=carWet*mix(.5,1.,');
+  const bead=f.indexOf('float beadSize='),dust=f.indexOf('float dust='),rough=f.indexOf('roughnessFactor=mix(roughnessFactor,.03,bead);'),lights=f.indexOf('#include <lights_physical_fragment>'),film=f.indexOf('float wetTop=rainWet*mix(.5,1.,');
   assert.ok(dust>=0&&dust<bead&&bead<rough&&lights<film,'beads after the dust and before the roughness; the film once the lighting normal is ready');
   assert.ok(f.includes(`material.roughness=mix(material.roughness,max(.05,material.roughness*${WET_PAINT.film}),wetTop);`)&&f.includes('material.clearcoatRoughness=mix(material.clearcoatRoughness,.02,wetTop);'));
   assert.ok(f.includes('*(1.-smoothstep(.35,.9,length(fwidth(beadCell))))'),'beads fade before they shrink below a pixel');
+  assert.ok(!/\bcarWet\b/.test(f),'not named carWet: vehicle-surface declares its own local carWet (tyre-spray moisture), which would shadow it in the lighting');
   material.dispose();
  }
  assert.equal(CAR_WET.value,0,'dry until told');

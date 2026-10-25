@@ -11,14 +11,14 @@ export const WET_PAINT={darken:.18,saturate:.3,mud:.5,film:.4,coat:.5,bead:36} a
 // dusty paint gets rougher and loses its clearcoat highlights.
 export function finishPaint(material: T.MeshPhysicalMaterial, contactWear = false) {
   material.onBeforeCompile = (shader) => {
-    shader.uniforms.carWet = CAR_WET;
+    shader.uniforms.rainWet = CAR_WET;
     shader.vertexShader = shader.vertexShader
       .replace('#include <common>', '#include <common>\nattribute vec2 impactWear; varying vec3 vBodyPosition; varying vec2 vImpactWear;\nattribute vec3 crumple; varying vec3 vCrumple; varying vec3 vCrumpleRest; varying vec4 vCrumpleFold;')
       .replace('#include <begin_vertex>', '#include <begin_vertex>\nvBodyPosition = position; vImpactWear = impactWear;\nvCrumple = crumple; vCrumpleRest = position - crumple;\nvec3 crumpleAlong=crumple-dot(crumple,objectNormal)*objectNormal; float crumpleAlongLen=length(crumpleAlong);\nvCrumpleFold=vec4(crumpleAlongLen>1e-5?crumpleAlong/crumpleAlongLen:vec3(0.,0.,1.),crumpleAlongLen/max(length(crumple),1e-5));');
     shader.fragmentShader = shader.fragmentShader
       .replace('#include <common>', `#include <common>
 varying vec3 vBodyPosition; varying vec2 vImpactWear; varying vec3 vCrumple; varying vec3 vCrumpleRest; varying vec4 vCrumpleFold;
-uniform float carWet;
+uniform float rainWet;
 // Bump from a height in metres, using unnormalised screen derivatives so the creases keep their
 // real size at any distance (Mikkelsen's surface-gradient form, as in three's bumpmap chunk).
 vec3 crumpleBump(vec3 pos,vec3 n,vec2 dh,float face){
@@ -76,13 +76,13 @@ diffuseColor.rgb*=1.-crumpleCavity;
 #ifdef FLAT_SHADED
 float wetSky=0.;
 #else
-float wetSky=carWet*smoothstep(.2,.75,dot(normalize(vNormal),normalize((viewMatrix*vec4(0.,1.,0.,0.)).xyz)));
+float wetSky=rainWet*smoothstep(.2,.75,dot(normalize(vNormal),normalize((viewMatrix*vec4(0.,1.,0.,0.)).xyz)));
 #endif
 vec3 beadCell=vBodyPosition*${WET_PAINT.bead}.,beadId=floor(beadCell);vec2 beadAt=fract(beadCell.xz)-.5-(vec2(bodyNoise(beadId+7.),bodyNoise(beadId+13.))-.5)*.5;
 float beadSize=.14+.13*bodyNoise(beadId+21.),bead=wetSky*step(.58,bodyNoise(beadId))*smoothstep(beadSize,beadSize*.45,length(beadAt))*(1.-smoothstep(.35,.9,length(fwidth(beadCell))))*(1.-crumpleCrack);
 float wetLuma=dot(diffuseColor.rgb,vec3(.299,.587,.114));
-diffuseColor.rgb=max(mix(vec3(wetLuma),diffuseColor.rgb,1.+carWet*${WET_PAINT.saturate}),0.);
-diffuseColor.rgb*=1.-carWet*(${WET_PAINT.darken}+${WET_PAINT.mud}*dust);
+diffuseColor.rgb=max(mix(vec3(wetLuma),diffuseColor.rgb,1.+rainWet*${WET_PAINT.saturate}),0.);
+diffuseColor.rgb*=1.-rainWet*(${WET_PAINT.darken}+${WET_PAINT.mud}*dust);
 // A bead catches the grey sky: a pale speck on the paint.
 diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.62,.66,.7),bead*.35);
 `)
@@ -104,7 +104,7 @@ metalnessFactor=mix(metalnessFactor,.6,crumpleCrack);
 material.clearcoat *= 1.-clamp(crumpleCrack+crumpleAmt*.35,0.,1.);
 #endif
 // Rain films every panel, the ones facing the sky most: glossier, under a sharp clearcoat (cracked paint stays dull).
-float wetTop=carWet*mix(.5,1.,smoothstep(.2,.75,dot(normal,normalize((viewMatrix*vec4(0.,1.,0.,0.)).xyz))))*(1.-crumpleCrack);
+float wetTop=rainWet*mix(.5,1.,smoothstep(.2,.75,dot(normal,normalize((viewMatrix*vec4(0.,1.,0.,0.)).xyz))))*(1.-crumpleCrack);
 material.roughness=mix(material.roughness,max(.05,material.roughness*${WET_PAINT.film}),wetTop);
 #ifdef USE_CLEARCOAT
 material.clearcoat=mix(material.clearcoat,1.,wetTop*${WET_PAINT.coat});material.clearcoatRoughness=mix(material.clearcoatRoughness,.02,wetTop);
@@ -146,12 +146,12 @@ export function finishGlass(material: T.MeshPhysicalMaterial, geometry: T.Buffer
     shader.uniforms.glassAxes = state.axes;
     shader.uniforms.glassSmoke = state.smoke;
     shader.uniforms.glassWiped = state.wiped;
-    shader.uniforms.carWet = CAR_WET;
+    shader.uniforms.rainWet = CAR_WET;
     shader.vertexShader = shader.vertexShader
       .replace('#include <common>', '#include <common>\nvarying vec3 vGlassPosition; varying vec3 vGlassNormal;')
       .replace('#include <begin_vertex>', '#include <begin_vertex>\nvGlassPosition=position; vGlassNormal=normal;');
     shader.fragmentShader = shader.fragmentShader
-      .replace('#include <common>', '#include <common>\nvarying vec3 vGlassPosition; varying vec3 vGlassNormal; uniform float glassDamage; uniform vec3 glassImpact; uniform vec3 glassAxes; uniform float glassSmoke; uniform float glassWiped; uniform float carWet;')
+      .replace('#include <common>', '#include <common>\nvarying vec3 vGlassPosition; varying vec3 vGlassNormal; uniform float glassDamage; uniform vec3 glassImpact; uniform vec3 glassAxes; uniform float glassSmoke; uniform float glassWiped; uniform float rainWet;')
       .replace('#include <color_fragment>', `#include <color_fragment>
 vec3 d=vGlassPosition-glassImpact;
 vec2 p=vec2(mix(d.z,d.x,glassAxes.x),mix(d.y,d.z,1.-glassAxes.y));
@@ -172,7 +172,7 @@ diffuseColor.a=clamp(diffuseColor.a+murk*.6,0.,.97);
 vec3 rainFace=abs(vGlassNormal);vec2 rainAt=(rainFace.x>rainFace.y&&rainFace.x>rainFace.z?vGlassPosition.zy:rainFace.y>rainFace.z?vGlassPosition.xz:vGlassPosition.xy)*${GLASS_RAIN.cells}.;
 vec2 rainId=floor(rainAt),rainIn=fract(rainAt)-.5-(vec2(fract(sin(dot(rainId,vec2(12.9898,78.233)))*43758.5453),fract(sin(dot(rainId,vec2(39.35,11.13)))*24634.63))-.5)*.5;
 float rainKeep=fract(sin(dot(rainId,vec2(7.13,157.1)))*9837.31),rainSize=.13+.14*fract(rainKeep*13.7);
-float glassBead=carWet*step(${GLASS_RAIN.keep}+${1-GLASS_RAIN.keep}*glassWiped*${GLASS_RAIN.wipe},rainKeep)*smoothstep(rainSize,rainSize*.45,length(rainIn))*(1.-smoothstep(.35,.9,length(fwidth(rainAt))));
+float glassBead=rainWet*step(${GLASS_RAIN.keep}+${1-GLASS_RAIN.keep}*glassWiped*${GLASS_RAIN.wipe},rainKeep)*smoothstep(rainSize,rainSize*.45,length(rainIn))*(1.-smoothstep(.35,.9,length(fwidth(rainAt))));
 diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.74,.79,.82),glassBead*.55);
 diffuseColor.a=clamp(diffuseColor.a+glassBead*.35,0.,.97);
 `)
