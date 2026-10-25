@@ -6,9 +6,33 @@
 // globe; this file builds the elements, keeps the arrows under the globe, and keeps the
 // "coming soon" veil over the globe's outline.
 
+import type { SupportProblem } from '../gpu/device';
 import { GLOBES } from './catalog';
 
 export type UIMode = 'loading' | 'gallery';
+
+const NOTICES: Record<SupportProblem, { title: string; body: string; retry: boolean }> = {
+  'no-webgpu': {
+    title: 'This demo needs WebGPU',
+    body: 'This browser doesn’t offer WebGPU yet, which the live water simulation relies on. A recent Chrome or Edge works best; newer Firefox and Safari releases are adding WebGPU too.',
+    retry: false,
+  },
+  'no-gpu': {
+    title: 'No graphics device available',
+    body: 'WebGPU is here, but the browser couldn’t get a graphics device from it. Make sure hardware acceleration is turned on in the browser’s settings, then reload.',
+    retry: true,
+  },
+  shader: {
+    title: 'This browser can’t run the graphics yet',
+    body: 'Its WebGPU doesn’t accept every part of this simulation. Updating the browser, or opening this page in a recent Chrome or Edge, should get the globes running.',
+    retry: true,
+  },
+  other: {
+    title: 'The globes couldn’t start here',
+    body: 'Reloading sometimes helps. If it doesn’t, a recent Chrome or Edge with graphics acceleration turned on is the safest way to see them.',
+    retry: true,
+  },
+};
 
 export interface UIHandlers {
   select(index: number): void;
@@ -79,9 +103,14 @@ export class AppUI {
     this.toastEl.className = 'toast';
     this.toastEl.setAttribute('role', 'status');
 
-    this.splash = document.createElement('div');
-    this.splash.className = 'splash';
-    this.splash.innerHTML = `${icon(ICONS.mark, 'splash-mark')}<span class="splash-bar"></span>`;
+    // (The betta bowl's page has it in its HTML already, to show before this script has loaded.)
+    let splash = stage.querySelector<HTMLElement>(':scope > .splash');
+    if (!splash) {
+      splash = document.createElement('div');
+      splash.className = 'splash';
+      splash.innerHTML = `${icon(ICONS.mark, 'splash-mark')}<span class="splash-bar"></span>`;
+    }
+    this.splash = splash;
 
     stage.append(this.teaser, this.ui, this.toastEl, this.splash);
 
@@ -92,6 +121,8 @@ export class AppUI {
     this.nextBtn = q('[data-action="next"]');
     this.announce = q('.sr-only');
 
+    // (A page with one globe, the betta bowl's, has nowhere to move to.)
+    if (GLOBES.length < 2) this.nav.remove();
     this.desktopBtn.addEventListener('click', () => this.handlers.addToDesktop());
     this.prevBtn.addEventListener('click', () => this.handlers.select(this.active - 1));
     this.nextBtn.addEventListener('click', () => this.handlers.select(this.active + 1));
@@ -161,16 +192,55 @@ export class AppUI {
     this.toastTimer = window.setTimeout(() => this.toastEl.classList.remove('is-on'), ms);
   }
 
+  /** How far along the load is (0..1): the bar fills to it, steadily, in `seconds` (the bowl's
+   *  build, which nothing else measures, fills it over the time it is expected to take). */
+  progress(fraction: number, seconds = 0.3): void {
+    const s = this.splash;
+    s.classList.add('is-measured');
+    s.style.setProperty('--progress', String(fraction));
+    s.style.setProperty('--progress-time', `${seconds}s`);
+  }
+
+  /** What the splash covers is being drawn (the betta bowl's studio, while the rest loads): it
+   *  thins to a veil over it. */
+  veil(): void {
+    this.splash.classList.add('is-veil');
+  }
+
   /** The first frame is up: lift the splash. */
   ready(): void {
     this.splash.classList.add('is-done');
-    this.splash.addEventListener('transitionend', () => this.splash.remove(), { once: true });
+    // (Once it has faded: not as its bar's last stretch ends, a moment after it began to.)
+    const faded = (e: TransitionEvent): void => {
+      if (e.target !== this.splash) return;
+      this.splash.removeEventListener('transitionend', faded);
+      this.splash.remove();
+    };
+    this.splash.addEventListener('transitionend', faded);
   }
 
-  /** Something went wrong before the globe could start. */
-  fail(message: string): void {
-    this.splash.classList.add('is-error');
-    this.splash.querySelector('.splash-bar')?.replaceWith(Object.assign(document.createElement('p'), { className: 'splash-error', textContent: message }));
+  /** The globes cannot run in this browser or on this graphics setup: a calm notice in place of
+   *  the loading bar. (The technical cause belongs in the console, not on the page.) */
+  unsupported(problem: SupportProblem): void {
+    const { title, body, retry } = NOTICES[problem];
+    const notice = document.createElement('div');
+    notice.className = 'splash-notice';
+    notice.innerHTML = '<h1 class="splash-notice-title"></h1><p class="splash-notice-body"></p>';
+    notice.querySelector('.splash-notice-title')!.textContent = title;
+    notice.querySelector('.splash-notice-body')!.textContent = body;
+    if (retry) {
+      const again = document.createElement('button');
+      again.type = 'button';
+      again.className = 'splash-notice-retry';
+      again.textContent = 'Try again';
+      again.addEventListener('click', () => location.reload());
+      notice.append(again);
+    }
+    this.stage.classList.add('is-unsupported');
+    this.splash.classList.add('is-notice');
+    this.splash.dataset.problem = problem;
+    this.splash.setAttribute('role', 'status');
+    this.splash.querySelector('.splash-bar')?.replaceWith(notice);
   }
 
   private setActive(index: number): void {
