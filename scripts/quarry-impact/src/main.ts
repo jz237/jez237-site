@@ -216,6 +216,7 @@ import {bankAchievements} from './achievements';
 import {attachCarLights,headlightAim,type CarLights} from './car-lights';
 import {LAMP_BREAK,RAIN_LIGHTS,RAIN_BEAMS} from './car-lights';
 import {createRain} from './rain';
+import {createRainSplashes} from './rain-splashes';
 import {applyWetLook} from './wet-look';
 import {setWetness} from './driving-surface';
 import {ELIMINATION_INTERVAL,eliminationActive,nextElimination} from './elimination-race';
@@ -399,6 +400,7 @@ try{profile=readProfile(localStorage.getItem(PROFILE_KEY));}catch{}
 let profileStorageWarning='';
 let activeChallenge:Challenge|undefined;
 let rain:ReturnType<typeof createRain>|null=null,wetRoot:T.Object3D|undefined,wetOn=false;
+let rainSplashes:ReturnType<typeof createRainSplashes>|undefined;
 const eventAwards=new EventAwards();const propFires=new PropFires();
 /** Loose props as fire sources: where they are now and whether they burn. */
 const propPoints=(props:readonly {mesh:T.Object3D}[])=>props.map(p=>({x:p.mesh.position.x,y:p.mesh.position.y,z:p.mesh.position.z,kind:propKind((p.mesh as T.Mesh).geometry?.type)}));let slowMoUntil=0,slowMoScale=.3;
@@ -770,7 +772,7 @@ function applyEventLighting(fresh: boolean, choice = settings.lighting) {
   overcastSky ??= createOvercastSky();
   const preset = applyLighting({ sun: quarry.sun, hemisphere: scene.children.find((o): o is T.HemisphereLight => o instanceof T.HemisphereLight), scene, renderer, skies: { clear: clearSky, overcast: overcastSky } }, eventLighting);
   if (staticShadows) staticShadows.intensity = preset.shadow;
-  const raining=eventLighting==='rain';rain??=createRain(scene);rain.setActive(raining);setWetness(raining&&!online?.active?1:0);fx.slicks.wet=raining&&!online?.active;sound.rain(raining&&state!=='menu');
+  const raining=eventLighting==='rain';rain??=createRain(scene);rain.setActive(raining);rainSplashes??=createRainSplashes(scene);rainSplashes.setActive(raining&&!online?.active);setWetness(raining&&!online?.active?1:0);fx.slicks.wet=raining&&!online?.active;sound.rain(raining&&state!=='menu');
 }
 let environmentTarget: T.WebGLRenderTarget | undefined;
 let online:OnlineView, onlineUI:OnlineUI, onlinePhase='';
@@ -2437,6 +2439,8 @@ function frame(now: number) {
   clock += dt;
   if (!physics || state === 'loading'||preparingOnline) return;
   rain?.update(camera,state==='paused'?0:dt);
+  // Raindrops landing round the camera (offline rain).
+  rainSplashes?.update(camera,activeVenue.course.height,state==='paused'?0:dt);
   {const wet=eventLighting==='rain';if(wet!==wetOn||activeVenue.root!==wetRoot){applyWetLook(wetRoot,false);wetRoot=activeVenue.root;wetOn=wet;applyWetLook(wetRoot,wet);}}
   // The rain sounds for as long as the event's weather says so (applyEventLighting runs while still in the menu, when it
   // could only switch the rain off).
@@ -2836,6 +2840,7 @@ async function boot() {
     carWet: (v?: number | null) => { if (v !== undefined) carWetOverride = v; return CAR_WET.value; },
     vapour: () => vapourPuffs,
     rainSteam: () => vehicleFire?.rainSteam ?? 0,
+    splashes: () => rainSplashes?.landed ?? 0,
     wind: () => windy && !online?.active ? { x: +breeze.x.toFixed(3), z: +breeze.z.toFixed(3), base: { ...breezeBase } } : null,
     headGasket: (id = 0) => { const c = cars[id]; return c ? { clock: +c.gasketClock.toFixed(2), blown: c.gasketBlown, smoke: c.gasketSmoke, coolant: +c.coolantLevel.toFixed(3), misfire: +c.misfireFactor.toFixed(3) } : null; },
     blowGasket: (id = 0) => { const c = cars[id]; if (!c?.extendedDamage) return false; c.gasketClock = HEAD_GASKET_AFTER; return true; },
