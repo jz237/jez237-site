@@ -1,3 +1,4 @@
+import {restoreHazardLightsBytes} from './hazard-lights-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readReverseLightsPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreReverseLightsBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreHazardLightsBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readReverseLightsPrevious(file);
 }
 export function verifyReverseLightsRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'1592d4b784237ed660cea2f1d045195b2c21c20f');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreHazardLightsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreReverseLightsBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the ReverseLights release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreHazardLightsBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the ReverseLights release');
  assert.equal(manifest.previousFixtureCount,8337);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,8337);
 }

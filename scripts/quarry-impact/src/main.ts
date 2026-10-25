@@ -1930,6 +1930,8 @@ function step(dt: number) {
   for(const c of cars)carLights.get(c)?.set((dusk||wet&&c.extendedDamage)&&c.health>0&&!c.electricalCut&&!c.batteryOut&&(!c.beltSnapped||batteryLights(c.battery,clock,c.id)),c.health>0&&!c.electricalCut&&!c.batteryOut&&(c.input?.brake??0)>.2&&Math.abs(c.speed)>1,dusk?1:RAIN_LIGHTS.pool,wet&&c.extendedDamage?RAIN_BEAMS.strength:0);}
   // Backing up, the reversing lamps come on (offline).
   for(const c of cars)carLights.get(c)?.reversing(!!c.extendedDamage&&c.health>0&&!c.electricalCut&&!c.batteryOut&&c.speed< -REVERSE_SPEED);
+  // A wrecked car with its electrics still working flashes its hazard lights, each to its own beat (offline).
+  for(const c of cars)carLights.get(c)?.hazards(!!c.extendedDamage&&c.health<=0&&!c.electricalCut&&!c.batteryOut,clock+c.id*.137);
   // On a wet road every lit lamp lays a streak of reflected light toward the camera (offline rain).
   if(eventLighting==='rain'&&!online?.active){wetReflections??=createWetReflections(scene);glowList.length=0;for(const c of cars)if(c.extendedDamage)carLights.get(c)?.glows(glowList,c.root);wetReflections.update(glowList,camera,activeVenue.course.height);}
   else wetReflections?.clear();
@@ -2956,7 +2958,7 @@ async function boot() {
     heatHaze: (on?: boolean) => { if (on !== undefined) hazeOff = !on; const u = heatHaze.material.uniforms; return { columns: heatHaze.columns, enabled: heatHaze.enabled, sources: hazeSources.length, boxes: (u.boxes.value as T.Vector4[]).slice(0, heatHaze.columns).map((b, i) => [...b.toArray(), ...(u.info.value as T.Vector4[])[i].toArray()].map((n) => +n.toFixed(3))) }; },
     lensRain: () => ({ drops: lensRain.drops.length, landed: lensRain.landed, splashed: lensRain.splashed, enabled: lensRainPass.enabled, view: drivingCamera }),
     puddleSplashes: () => splashes,
-    reverseLamps: (id = 0) => { const c = cars.find((x) => x.id === id), l = c && carLights.get(c); return l && c ? { kind: c.kind, count: l.reverse, lit: l.backing } : null; },
+    reverseLamps: (id = 0) => { const c = cars.find((x) => x.id === id), l = c && carLights.get(c); return l && c ? { kind: c.kind, count: l.reverse, lit: l.backing, indicators: l.indicator, hazards: l.flashing } : null; },
     aquaplane: (id = 0, on?: boolean) => { if (on !== undefined) aquaplaning = on; const c = cars.find((x) => x.id === id); return c ? { grip: c.waterGrip.map((v) => +v.toFixed(3)), drag: c.waterDrag.map((v) => +v.toFixed(0)), on: aquaplaning, puddles: activeVenue.puddles.map((p) => [p.x, p.z, p.radius].map((n) => +n.toFixed(2))) } : null; },
     rainPuddles: () => rainPuddles ? { count: rainPuddles.list.length, fill: +rainPuddles.fill.toFixed(3), venue: activeVenue.puddles.length, at: rainPuddles.list.map((p) => [p.x, p.z, p.radius, p.level].map((n) => +n.toFixed(2))) } : null,
     lampDamage: (id: number, kind: 'head' | 'tail', index: number, damage: number) => { const c = cars.find(x => x.id === id), m = c && carLights.get(c)?.lamp(kind, index); if (!m) return false; m.userData.damage = damage; return true; },
