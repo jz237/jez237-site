@@ -16,6 +16,7 @@ import {tyreFailure,vehicleFlatTyreRadius} from './tyre-condition';
 import {vehicleSuspensionRestLength,vehicleSuspensionTravel} from './vehicle-physics';
 import {isClassicKind,classicWheelHalfTrack,vehicleWheelRadius,isRearEngineKind,isFrontDriveKind} from './classic-vehicle-specs';
 import {createVehiclePhysics,stepVehiclePhysics,rotateVehicleVector} from './vehicle-physics';
+import {aquaGrip,waterDrag} from './aquaplaning';
 import {LiveryPaint} from './livery-paint';
 import type {VisualEvent} from './replay-data';
 import {ImpactResponse} from './impact-response';
@@ -395,6 +396,9 @@ export class Vehicle {
   gearLimit = 5;
   /** Grip left under each tyre from oil or coolant on the ground (offline only). */
   readonly slickGrip = [1,1,1,1];
+  /** Offline: how deep in standing water a tyre at a point is (0–1), and each tyre's grip kept and drag from it. */
+  waterAt?:(x:number,y:number,z:number)=>number;
+  readonly waterGrip=[1,1,1,1];readonly waterDrag=[0,0,0,0];
   /** How far the rear tyres are sliding after a PIT shove (0..1, fading); they grip less while it lasts (offline). */
   rearSlide=0;
   pitSpins=0;
@@ -697,9 +701,11 @@ export class Vehicle {
     let contacts=0,groundSum=0;
     for(let i=0;i<4;i++){
       const point=this.wreckParts.wheelLost[i]?null:this.controller.wheelContactPoint(i);
-      if(!point||!this.controller.wheelIsInContact(i)){this.slickGrip[i]=1;continue;}
+      if(!point||!this.controller.wheelIsInContact(i)){this.slickGrip[i]=1;this.waterGrip[i]=1;this.waterDrag[i]=0;continue;}
       contacts++;groundSum+=point.y;
       const grip=slicks?slicks.gripAt(point.x,point.z):1;this.slickGrip[i]=i>1&&this.rearSlide>0?grip*pitGrip(this.rearSlide):grip;
+      // Through standing water at speed the tyre rides up on it, and the water drags at it (offline).
+      const water=this.extendedDamage&&this.waterAt?this.waterAt(point.x,point.y,point.z):0;this.waterGrip[i]=aquaGrip(water,this.speed);this.waterDrag[i]=waterDrag(water,this.speed);
       // Rolling over broken-off debris can puncture this tyre.
       this.punctureClock[i]=Math.max(0,this.punctureClock[i]-dt);
       if(this.punctureClock[i]<=0&&Math.abs(this.speed)>PUNCTURE.speed&&this.tyreDamage&&this.tyreDamage[i]<LEAK.onset&&this.fx.sharpDebrisNear?.(point.x,point.z,PUNCTURE.reach)){

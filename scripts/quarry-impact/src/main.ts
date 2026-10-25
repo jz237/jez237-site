@@ -184,6 +184,7 @@ import {drawQuarryMap} from './quarry-minimap';
 import { prepareCircuitSurface } from './scenery-circuit-material';
 import { Quarry, puddleGeometry, softShoreMaterial } from './world';
 import {RainPuddles,layRainPuddles} from './rain-puddles';
+import {waterAt,aquaplaningNow,AQUA} from './aquaplaning';
 import { Vehicle, WRECK_BURST, type Input } from './vehicle';
 import { Effects } from './effects';
 import { VehicleFire } from './vehicle-fire';
@@ -1002,6 +1003,8 @@ function createCars(attract = false, previewSetup?:Setup) {
     carLights.set(car,attachCarLights(car.root,DEFINITIONS[type].halfLength));
     car.extendedDamage=!attract&&!online?.active;{const derbyPace=car.extendedDamage&&mode==='derby';car.powerScale=derbyPace?DERBY_PACE.power:undefined;car.tractionScale=derbyPace?DERBY_PACE.traction:undefined;car.charge=derbyPace;}if(car.extendedDamage){car.onBackfire=p=>sound.backfire(p);car.onBlowout=p=>sound.blowout(p);car.onSetAlight=by=>{eventAwards.setAlight(by,car.id,elapsed);if(by>=0&&by!==car.id)alightBy.set(car.id,by);};car.onGlassBreak=p=>sound.shot('glass',p,.55);car.onMountClunk=()=>{if(i===0)recordRumbleImpact(.3);sound.shot('impact-light',car.current,.4,{rate:.8,delay:0,duration:.3,lowpass:1400});};car.onBumpStart=()=>{bumpStarts++;sound.clip('bump-start',car.current,.7,1.8);const by=bumpStartedBy(lastHitBy.get(car.id),car.id,elapsed);if(demo)return;if(car.id===0)toast(by>=0?`BUMP STARTED BY #${by+1}`:'BUMP STARTED · ENGINE CAUGHT',2,1);else if(by===0)toast(`YOU BUMP STARTED #${car.id+1}`,1.6,1);};car.onGearClunk=out=>{if(i===0)recordRumbleImpact(out?.25:.35);sound.shot(out?'impact-light':'suspension',car.current,out?.45:.35,{rate:out?1.3:1.6,delay:0,duration:.25});};car.onBreak=(what,w)=>{if(i===0)recordRumbleImpact(what==='spring'?.4:.55);{const f=FAILURE_MOMENTS[what];eventAwards.failure(car.id,f.label,elapsed,f.score);}if(f2crowd(what))sound.crowd(i===0?.7:.45);const corner=['FRONT LEFT','FRONT RIGHT','REAR LEFT','REAR RIGHT'][w];sound.breakage(what,car.current);if(car.id===0&&!demo)toast(what==='spring'?`SPRING BROKEN · ${corner}`:what==='diff'?`DIFF BROKEN · ${w<2?'FRONT':'REAR'} AXLE`:what==='tierod'?`TIE ROD SNAPPED · ${corner}`:what==='exhaust'?'EXHAUST TORN OFF':what==='brakefire'?`BRAKE FIRE · ${corner}`:what==='radiator'?'RADIATOR BURST':what==='propshaft'?'PROPSHAFT SNAPPED':what==='bearing'?`WHEEL BEARING SEIZED · ${corner}`:what==='belt'?'FAN BELT SNAPPED':what==='cable'?'THROTTLE CABLE SNAPPED · LIMPING':what==='handbrake'?'HANDBRAKE CABLE SNAPPED':what==='battery'?'BATTERY THROWN OUT · NO STARTER':what==='rod'?'ROD THROUGH THE BLOCK':what==='rubfire'?`TYRE ON FIRE · ${corner}`:what==='tyrefire'?`FIRE SPREADING · ${corner} TYRE ALIGHT`:what==='exhaustcrush'?'EXHAUST CRUSHED · LOSING POWER':what==='gasket'?'HEAD GASKET BLOWN · WHITE SMOKE':what==='tank'?'FUEL TANK DOWN':what==='tankoff'?'FUEL TANK GONE · ON FUMES':what==='enginefire'?'ENGINE FIRE · OVERHEATED':what==='smashfire'?'ENGINE BAY ALIGHT':what==='rollbar'?`ANTI-ROLL BAR SNAPPED · ${w<2?'FRONT':'REAR'}`:`DRIVESHAFT SNAPPED · ${corner}`,3,what==='smashfire'?3:what==='battery'||what==='rod'||what==='exhaustcrush'?1:0);};car.onSeize=p=>{eventAwards.failure(car.id,'ENGINE SEIZED',elapsed,32);sound.crowd(i===0?.7:.45);fx.emit(p,10,2,.9);if(!sound.clip('engine-seize',p,.8,1.6))sound.shot('impact-heavy',p,.5,{rate:.6,delay:0,duration:.6,lowpass:900});if(car.id===0&&!demo)toast('ENGINE SEIZED');};car.onDoused=()=>{const p=car.current.clone();p.y+=.4;fx.emit(p,14,5,1.4);if(car.id===0&&!demo)toast('FIRE OUT');};}
     if(car.extendedDamage)car.onTether=(_part,debris,anchor)=>tetherBumper(car,debris,anchor);
+    // Tyres aquaplane through the venue's standing water (offline).
+    if(car.extendedDamage)car.waterAt=(x,y,z)=>aquaplaning?waterAt(activeVenue.puddles,x,y,z):0;
     // A lamp smashed hard enough hangs out of its socket on its wiring; a harder knock tears it away (offline).
     if(car.extendedDamage){const lights=carLights.get(car)!,lamps=[...Array.from({length:lights.head},(_,j)=>({mesh:lights.lamp('head',j)!,end:1})),...Array.from({length:lights.tail},(_,j)=>({mesh:lights.lamp('tail',j)!,end:-1}))].filter(l=>l.mesh);
       lampDangles.set(car,new LampDangle(car.root,lamps,mesh=>fx.detach(mesh,car.velocity.clone().multiplyScalar(.65))));}
@@ -2241,7 +2244,7 @@ function updateLensRain(dt:number){
 }
 // An offline rain event on an arena floor lays standing puddles, cleared again for the next event; they join the venue's
 // own puddles so wheels splash and ripple through them.
-let rainPuddles:RainPuddles|undefined,puddleVenue:VenueContext|undefined;
+let rainPuddles:RainPuddles|undefined,puddleVenue:VenueContext|undefined,aquaplaning=true,aquaToastAt=-9;
 function layEventPuddles(lay=true){
   if(puddleVenue&&rainPuddles){const mine=new Set(rainPuddles.list);for(let i=puddleVenue.puddles.length;i--;)if(mine.has(puddleVenue.puddles[i]))puddleVenue.puddles.splice(i,1);}
   rainPuddles?.clear();puddleVenue=undefined;
@@ -2521,6 +2524,8 @@ function frame(now: number) {
   sound.rain(eventLighting==='rain'&&state!=='menu');
   // Puddles on the arena floor fill out as the rain goes on (offline).
   rainPuddles?.update(dt,eventLighting==='rain'&&state==='playing');
+  // The driver feels the steering go light as the front tyres ride up on standing water (offline).
+  if(state==='playing'&&cars[0]?.extendedDamage&&aquaplaningNow(cars[0].waterGrip)&&clock-aquaToastAt>AQUA.warnGap){aquaToastAt=clock;toast('AQUAPLANING',1.2);}
   // Engines heat up as they work and cool once stopped; in the rain a hot bonnet boils it off in wisps of steam (offline).
   if(state==='countdown'||state==='playing'||state==='wrecked'){const wet=eventLighting==='rain';for(const c of cars){if(!c.extendedDamage)continue;
     const heat=bonnetHeat(bonnetHeats.get(c)??BONNET_STEAM.start,c.health>0&&!(c.engineStall!>0)&&!c.engineOut,c.input?.throttle??0,c.rpm??0,dt);bonnetHeats.set(c,heat);if(!wet)continue;
@@ -2939,6 +2944,7 @@ async function boot() {
     litSpray: () => puddleSplashes?.litDrops ?? 0,
     heatHaze: (on?: boolean) => { if (on !== undefined) hazeOff = !on; const u = heatHaze.material.uniforms; return { columns: heatHaze.columns, enabled: heatHaze.enabled, sources: hazeSources.length, boxes: (u.boxes.value as T.Vector4[]).slice(0, heatHaze.columns).map((b, i) => [...b.toArray(), ...(u.info.value as T.Vector4[])[i].toArray()].map((n) => +n.toFixed(3))) }; },
     lensRain: () => ({ drops: lensRain.drops.length, landed: lensRain.landed, enabled: lensRainPass.enabled, view: drivingCamera }),
+    aquaplane: (id = 0, on?: boolean) => { if (on !== undefined) aquaplaning = on; const c = cars.find((x) => x.id === id); return c ? { grip: c.waterGrip.map((v) => +v.toFixed(3)), drag: c.waterDrag.map((v) => +v.toFixed(0)), on: aquaplaning, puddles: activeVenue.puddles.map((p) => [p.x, p.z, p.radius].map((n) => +n.toFixed(2))) } : null; },
     rainPuddles: () => rainPuddles ? { count: rainPuddles.list.length, fill: +rainPuddles.fill.toFixed(3), venue: activeVenue.puddles.length, at: rainPuddles.list.map((p) => [p.x, p.z, p.radius, p.level].map((n) => +n.toFixed(2))) } : null,
     lampDamage: (id: number, kind: 'head' | 'tail', index: number, damage: number) => { const c = cars.find(x => x.id === id), m = c && carLights.get(c)?.lamp(kind, index); if (!m) return false; m.userData.damage = damage; return true; },
     lampDangle: (id = 0) => { const c = cars.find(x => x.id === id), d = c && lampDangles.get(c); const l = c && carLights.get(c), box = new T.Box3(); return d && l ? { kind: c!.kind, hanging: d.count, popped: d.popped, torn: d.torn, swings: d.swings, heads: Array.from({ length: l.head }, (_, j) => +box.setFromObject(l.lamp('head', j)!).getSize(new T.Vector3()).x.toFixed(2)), damage: [...Array.from({ length: l.head }, (_, j) => l.lamp('head', j)), ...Array.from({ length: l.tail }, (_, j) => l.lamp('tail', j))].map((m) => +(m?.userData.damage ?? 0).toFixed(1)) } : null; },
