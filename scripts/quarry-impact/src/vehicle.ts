@@ -18,6 +18,7 @@ import {isClassicKind,classicWheelHalfTrack,vehicleWheelRadius,isRearEngineKind,
 import {createVehiclePhysics,stepVehiclePhysics,rotateVehicleVector} from './vehicle-physics';
 import {aquaGrip,waterDrag} from './aquaplaning';
 import {glassRim} from './glass-rim';
+import {brakeWork} from './brake-heat';
 import {LiveryPaint} from './livery-paint';
 import type {VisualEvent} from './replay-data';
 import {ImpactResponse} from './impact-response';
@@ -989,6 +990,8 @@ export class Vehicle {
     for(let i=0;i<4;i++){
       const drag=this.extendedDamage&&!this.wreckParts.wheelLost[i]?caliperDrag(this.wreckParts.wheelDamage[i]):0;this.brakeDrag[i]=drag;
       this.discHeat[i]=this.extendedDamage?discHeat(this.discHeat[i],Math.max(drag,Math.min(1,this.hubDrag[i])),this.speed,dt):0;
+      // Braking itself heats the discs: hard stop after hard stop and they glow and fade.
+      if(this.extendedDamage&&!this.wreckParts.wheelLost[i])this.discHeat[i]=brakeWork(this.discHeat[i],this.input.brake,this.input.handbrake,this.speed,i<2,dt);
       if(this.discHeat[i]>.6)this.brakeBias[i]*=discFade(this.discHeat[i]);
       if(this.tyreDamage&&this.discHeat[i]>.7)this.tyreDamage[i]=Math.min(1,this.tyreDamage[i]+CALIPER.tyre*(this.discHeat[i]-.7)*dt);
       if(hottest<0||this.discHeat[i]>this.discHeat[hottest])hottest=i;

@@ -2978,6 +2978,7 @@ async function boot() {
     heatHaze: (on?: boolean) => { if (on !== undefined) hazeOff = !on; const u = heatHaze.material.uniforms; return { columns: heatHaze.columns, enabled: heatHaze.enabled, sources: hazeSources.length, boxes: (u.boxes.value as T.Vector4[]).slice(0, heatHaze.columns).map((b, i) => [...b.toArray(), ...(u.info.value as T.Vector4[])[i].toArray()].map((n) => +n.toFixed(3))) }; },
     lensRain: () => ({ drops: lensRain.drops.length, landed: lensRain.landed, splashed: lensRain.splashed, enabled: lensRainPass.enabled, view: drivingCamera }),
     puddleSplashes: () => splashes,
+    discs: (id = 0) => { const c = cars.find((x) => x.id === id); return c ? Array.from(c.discHeat, (v) => +v.toFixed(3)) : null; },
     shower: (force?: number | null) => { if (force !== undefined) showerForce = force; return { level: +shower.toFixed(3), drops: rain?.drops ?? 0 }; },
     shatterWindows: (id = 0) => { const c = cars.find((x) => x.id === id); return c ? { shattered: c.shatterSideWindows(), rims: c.glassRimCount } : null; },
     standby: () => standby ? { count: standby.count, names: standby.group.children.map((o) => o.name) } : null,
