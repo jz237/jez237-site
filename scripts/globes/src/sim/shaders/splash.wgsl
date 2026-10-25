@@ -81,8 +81,9 @@ struct SplashParams {
 // Per texel of the wet map: whether the water covered the glass there last frame.
 @group(0) @binding(11) var<storage, read_write> wet: array<u32>;
 // The drop map: per texel, how many drops' bases reach it; then up to MAP_K of them a texel (each
-// its index + 1); then per texel how many the renderer's map holds (spMapResolve).
+// its index + 1). And per texel, how many the renderer's map holds (spMapResolve).
 @group(0) @binding(12) var<storage, read_write> dropMap: array<atomic<u32>>;
+@group(0) @binding(14) var<storage, read_write> mapHeld: array<u32>;
 // The renderer's grid: per cell, how many spheres reach it; then the boxes round the bubbles and
 // round the spray (fixed point: the most of 2 + x, the most of 2 - x).
 @group(0) @binding(13) var<storage, read_write> bins: array<atomic<u32>>;
@@ -973,9 +974,8 @@ fn spMapResolve(@builtin(global_invocation_id) gid: vec3u) {
   if (gid.x >= N || gid.y >= N) { return; }
   let idx = gid.x + N * gid.y;
   let n = min(atomicLoad(&dropMap[idx]), MAP_K);
-  let held = N * N * (1u + MAP_K) + idx;
-  if (n == 0u && atomicLoad(&dropMap[held]) == 0u) { return; }
-  atomicStore(&dropMap[held], n);
+  if (n == 0u && mapHeld[idx] == 0u) { return; }
+  mapHeld[idx] = n;
   var ids = vec4f(0.0);
   for (var k = 0u; k < n; k++) { ids[k] = f32(atomicLoad(&dropMap[N * N + MAP_K * idx + k])); }
   textureStore(dropTex, vec2i(gid.xy), ids);

@@ -796,10 +796,8 @@ export class FluidSim {
         geo.end();
       }
 
-      // (cellPrep flags the pressure solve's tiles that hold water, project the extrapolation's
-      // that have a valid face.)
+      // (cellPrep flags the pressure solve's tiles that hold water.)
       enc.clearBuffer(b.pressureTiles);
-      enc.clearBuffer(b.faceTiles);
       let pass = this.beginPass(enc, 'flip substep');
       // (Dev, fine profiling: each stage in a timed pass of its own.)
       const stage = (label: string): void => {
@@ -1222,7 +1220,6 @@ export class FluidSim {
       psi: make('pressure', C * 4),
       rhs: make('pressure rhs', C * 8),
       pressureTiles: make('pressure tiles', pressureTiles * 4),
-      faceTiles: make('face tiles', this.faceGroups().reduce((a, b) => a * b, 1) * 4),
       stats: make('stats', 16),
       dens: make('density accum', M3 * 4),
       field: make('density field', M3 * 4),
@@ -1308,12 +1305,12 @@ export class FluidSim {
       // (The two colours share a layout, and so one bind group: step() binds it once a substep.)
       ['pressureRed', pressureWGSL, 'pressure', [[b.cellFaceW, b.rhs, b.psi, b.pressureTiles]], { COLOR: 0 }, pressureLayout],
       ['pressureBlack', pressureWGSL, 'pressure', [], { COLOR: 1 }, pressureLayout],
-      ['project', projectWGSL, 'project', [[b.faceW, b.cellType, b.psi, b.cellRho, b.velNew, b.valid, b.faceTiles]]],
+      ['project', projectWGSL, 'project', [[b.faceW, b.cellType, b.psi, b.cellRho, b.velNew, b.valid]]],
       [
         'extrapolate',
         extrapolateWGSL,
         'extrapolate',
-        [[b.valid, b.velNew, b.faceTiles]],
+        [[b.valid, b.velNew]],
       ],
       ['constrain', constrainWGSL, 'constrain', [[b.faceW, b.velNew, b.velTmp]]],
       ['g2p', g2pWGSL, 'g2p', g2pSets, { AFFINE, SORT_BLOCK }],

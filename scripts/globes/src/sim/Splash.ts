@@ -118,8 +118,8 @@ export class Splash {
       drops: make('drops', 2 * DROP_CAP * 32),
       gain: make('drops run together', DROP_CAP * 16),
       wet: make('wet glass', WET_N * WET_N * 4),
-      // (Per texel its count, its drops, and how many the renderer's map holds: splash.wgsl.)
-      dropMap: make('drop map', DROP_MAP_N * DROP_MAP_N * (2 + MAP_K) * 4),
+      dropMap: make('drop map', DROP_MAP_N * DROP_MAP_N * (1 + MAP_K) * 4),
+      mapHeld: make('drop map held', DROP_MAP_N * DROP_MAP_N * 4),
       bins: make('splash bins', (SPLASH_GRID ** 3 + 12) * 4),
     };
     this.uniform = device.createBuffer({ label: 'splash params', size: S_WORDS * 4, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
@@ -164,6 +164,7 @@ export class Splash {
       11: b.wet,
       12: b.dropMap,
       13: b.bins,
+      14: b.mapHeld,
       18: sand,
       19: sandSampler,
       20: this.uniform,
@@ -180,7 +181,7 @@ export class Splash {
       ['spDrops', [0, 4, 6, 8, 9, 10, 20, 22]],
       ['spDropMap', [0, 6, 9, 12, 20]],
       ['spDropMerge', [0, 6, 9, 10, 12, 20, 22]],
-      ['spMapResolve', [12, 20, 22]],
+      ['spMapResolve', [12, 14, 20, 22]],
       ['spBin', [0, 6, 7, 8, 13, 20, 21]],
       ['spBinCount', [13, 20, 21]],
       ['spCommit', [6, 20]],
