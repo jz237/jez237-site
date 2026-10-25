@@ -119,6 +119,7 @@ import {BONNET_STEAM,bonnetHeat,steamRate} from './bonnet-steam';
 import {TYRE_STEAM,tyreSteamRate} from './tyre-heat';
 import {DUST,dustRate} from './dust-trails';
 import {COLD_START,coldStartPuffs,crankStarts} from './cold-start';
+import {GravelRoost,ROOST,roostRate} from './gravel-roost';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -730,6 +731,8 @@ const ao = new QuarryAO(scene, camera);
 const heatHaze = new HeatHazePass(() => ao.enabled);
 // Rain lands on the chase and hood cameras' lens (offline).
 const lensRainPass = new LensRainPass(), lensRain = new LensRain();
+// Stones flung off spinning tyres on loose ground (offline).
+const gravelRoost = new GravelRoost(scene, (x, z) => fx.groundHeight(x, z));
 // Bright lamps, fire and lightning glow (offline, not on the medium tier).
 const lampBloom = new UnrealBloomPass(new T.Vector2(innerWidth, innerHeight), BLOOM.strength, BLOOM.radius, BLOOM.threshold);
 let bloomOff = false;
@@ -964,7 +967,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   drivers.difficulty=attract?'amateur':aiDifficulty();pursuit=null;pursuitDriving.reset();combat.reset(true);derbyFeed.reset();waypointRace=!attract&&mode==='race'&&raceFormat()!=='laps'?new WaypointRace(raceFormat() as 'ordered'|'free'|'random',raceLaps(),clubRound()?.seed??activeChallenge?.seed??Math.floor(Math.random()*0xffffffff),targetVenue.course.checkpoints,targetVenue.course.waypointStations):null;
   sound.clearCars();
   vehicleFire?.reset();propFires.reset();
-  puddleSplashes?.reset();
+  puddleSplashes?.reset();gravelRoost.reset();
   for (const c of cars){lampDangles.get(c)?.dispose();lampDangles.delete(c);carLights.get(c)?.dispose();carLights.delete(c);c.dispose();}
   clearMarshals();
   for(const f of bailed)disposeDriver(f);bailed.length=0;
@@ -2298,7 +2301,7 @@ function updateHeatHaze(){
 }
 const bonnetHeats=new WeakMap<object,number>(),bonnetClocks=new WeakMap<object,number>(),steamAt=new T.Vector3();let bonnetPuffs=0;
 const vapourClocks=new WeakMap<object,number>();let vapourPuffs=0;
-const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMap<object,number[]>(),dustClocks=new WeakMap<object,number[]>();const dustTint=new T.Color();let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
+const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMap<object,number[]>(),dustClocks=new WeakMap<object,number[]>();const dustTint=new T.Color();const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3();let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
 let wetReflections:ReturnType<typeof createWetReflections>|undefined;const glowList:Glow[]=[];
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
 function lookDriver(c:Vehicle,figure:T.Object3D,dt:number){
@@ -2607,6 +2610,14 @@ function frame(now: number) {
       w.getWorldPosition(steamAt).y-=.25;const start=fx.cursor;fx.emit(steamAt,1,0,DUST.size);for(let j=start;j<fx.cursor;j++){const n=j%fx.particles.length,p=fx.particles[n];p.v.addScaledVector(c.velocity,-DUST.trail*.1);p.v.y=Math.min(p.v.y,DUST.lift);
         // A billowing, pale plume rather than a speck of grit.
         p.size=DUST.puff[0]+Math.random()*(DUST.puff[1]-DUST.puff[0]);p.max=p.life=DUST.life[0]+Math.random()*(DUST.life[1]-DUST.life[0]);dustTint.setHex(DUST.tint).multiplyScalar(.92+Math.random()*.14).toArray(fx.colors,n*3);}}}
+  // A tyre spinning on loose ground flings stones off its tread behind it, clods off mud (offline; in a puddle it throws water).
+  if(state==='playing')for(const c of cars){if(!c.extendedDamage||c.surface==='asphalt')continue;const clocks=roostClocks.get(c)??[0,0,0,0];roostClocks.set(c,clocks);
+    for(let i=0;i<4;i++){const rate=roostRate(c.wheelSpins[i],c.surface);if(rate<=0||c.wreckParts.wheelLost[i]||c.wetWheels[i])continue;clocks[i]+=rate*dt;if(clocks[i]<1)continue;
+      const at=c.controller.wheelContactPoint(i);if(!at){clocks[i]=0;continue;}roostBack.copy(c.forward).setY(0).normalize().negate();
+      for(;clocks[i]>=1;clocks[i]--){steamAt.set(at.x,at.y,at.z).addScaledVector(roostBack,.15);const kind=c.surface==='mud'?'mud':'gravel',stone=gravelRoost.throw(steamAt,roostBack,c.wheelSpins[i],kind);
+        if(stone&&Math.random()<ROOST.grit.share){const start=fx.cursor;fx.emit(steamAt,1,0,ROOST.grit.size);for(let j=start;j<fx.cursor;j++){const n=j%fx.particles.length,p=fx.particles[n];p.v.copy(stone.v).multiplyScalar(ROOST.grit.speed);
+          p.max=p.life=ROOST.grit.life[0]+Math.random()*(ROOST.grit.life[1]-ROOST.grit.life[0]);dustTint.setHex(ROOST.grit.tint[kind]).multiplyScalar(.9+Math.random()*.2).toArray(fx.colors,n*3);}}}}}
+  gravelRoost.step(dt);
   // Rain on a hot tyre boils off in steam at the tread: a wet burnout steams (offline).
   if(eventLighting==='rain'&&(state==='playing'||state==='wrecked'))for(const c of cars){if(!c.extendedDamage)continue;const clocks=tyreSteamClocks.get(c)??[0,0,0,0];tyreSteamClocks.set(c,clocks);
     for(let i=0;i<4;i++){const w=c.wheels[i];if(!w||c.wreckParts.wheelLost[i])continue;clocks[i]+=tyreSteamRate(c.tyreTemp[i])*dt;if(clocks[i]<1)continue;clocks[i]%=1;tyrePuffs++;w.getWorldPosition(steamAt).y-=TYRE_STEAM.drop;fx.emit(steamAt,1,5,.3);}}
@@ -3006,6 +3017,7 @@ async function boot() {
     tyreSteam: () => tyrePuffs,
     dust: () => dustPuffs,
     coldStart: () => ({ puffs: coldPuffs, age: +coldStart.toFixed(2) }),
+    roost: () => ({ thrown: gravelRoost.thrown, flying: gravelRoost.flying, spins: cars.map(c => c.wheelSpins.map(v => +v.toFixed(2))), surfaces: cars.map(c => c.surface), offline: cars.map(c => c.extendedDamage), wet: cars.map(c => c.wetWheels.filter(Boolean).length), speeds: cars.map(c => +c.speed.toFixed(2)) }),
     tyres: (id = 0, temp?: number) => { const c = cars.find((x) => x.id === id); if (!c) return null; if (temp !== undefined) c.tyreTemp.fill(temp); return { temp: c.tyreTemp.map((v) => +v.toFixed(3)), grip: c.tyreGrip.map((v) => +v.toFixed(3)) }; },
     discs: (id = 0) => { const c = cars.find((x) => x.id === id); return c ? Array.from(c.discHeat, (v) => +v.toFixed(3)) : null; },
     shower: (force?: number | null) => { if (force !== undefined) showerForce = force; return { level: +shower.toFixed(3), drops: rain?.drops ?? 0 }; },

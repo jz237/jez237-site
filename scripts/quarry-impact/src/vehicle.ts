@@ -127,6 +127,8 @@ export class Vehicle {
   remoteWheelAngles?:number[];
   remoteContactPoints?:(T.Vector3|null)[];
   readonly wheelSlips=[0,0,0,0];
+  /** Signed wheelspin at each grounded tyre (m/s): + the tread runs forward over the ground faster than the car moves. */
+  readonly wheelSpins=[0,0,0,0];
   wheelAngle(index:number){return this.remoteWheelAngles?.[index]??this.drivetrain?.wheels[index]?.angle??this.controller.wheelRotation(index)??0;}
   private drawBatch?:VehicleDrawBatch;
   syncDrawBatch(){this.drawBatch??=new VehicleDrawBatch(this.root);this.drawBatch.sync();}
@@ -156,7 +158,7 @@ export class Vehicle {
   readonly paintColor:T.Color;
   readonly livery:LiveryPaint;
   readonly surfaceFinish:VehicleSurface;
-  private wetWheels=[false,false,false,false];
+  readonly wetWheels=[false,false,false,false];
   private groundedWheels=[false,false,false,false];
   scraping=0;
   wheels: T.Object3D[] = [];
@@ -629,7 +631,7 @@ export class Vehicle {
     this.currentQ.copy(q);
     this.root.position.copy(p);
     this.root.quaternion.copy(q);
-    this.wheelSlips.fill(0);this.drivetrain?.reset();
+    this.wheelSlips.fill(0);this.wheelSpins.fill(0);this.drivetrain?.reset();
     if(this.drivetrain){this.transmission=undefined;this.gear=1;this.rpm=this.engineStall!>0||this.health<=0?0:850;this.speed=0;this.slip=0;}
     this.rollTime = 0;
     this.stuck = 0;
@@ -644,7 +646,7 @@ export class Vehicle {
     this.surfaceFinish.reset();
     this.impactResponse.reset();
     this.impactEffects = {glass:false,debris:false};
-    this.wheelSlips.fill(0);
+    this.wheelSlips.fill(0);this.wheelSpins.fill(0);
     this.health = 100;
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
@@ -1066,6 +1068,7 @@ export class Vehicle {
       const result=this.drivetrain.step(this.specification,this,dt,undefined,{wheelDamage:this.wreckParts.wheelDamage,wheelShift:this.wreckParts.wheelShift,engineDamage:this.engineDamage,tyreDamage:this.tyreDamage,wheelLost:this.wreckParts.wheelLost});
       // Only grounded tire slip creates skid audio, marks and surface effects.
       this.wheelSlips.splice(0,4,...result.contactSlips);this.slip=Math.max(this.slip,...this.wheelSlips);
+      for(let i=0;i<4;i++)this.wheelSpins[i]=result.contactSlips[i]>0?result.slips[i]:0;
     }else{stepVehiclePhysics(this.body,this.controller,this.kind,this.specification,this,dt,this.wreckParts.wheelDamage,this.wreckParts.wheelShift,this.engineDamage,this.tyreDamage,false,this.wreckParts.wheelLost);this.wheelSlips.fill(this.slip);}
   }
   postStep(dt: number, time: number) {
