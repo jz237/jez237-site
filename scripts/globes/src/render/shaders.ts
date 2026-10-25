@@ -2080,7 +2080,10 @@ ${bowl ? bowlEntryWGSL() : GLASS_ENTRY}
   let koiVisible = ${bowl ? 'false' : '!GLOBES_REEF && koiMisc.y > 0.5 && betta_tex(bettaTex, 0u).w < 0.5'};
   let koiOn = GLOBES_KOI && koiVisible;
   let koiTime = koiMisc.z;
-
+${bowl?.lite && !rt ? `  // (The phone's bowl: where its march can find nothing this frame, marchBand.ts, bound in the
+  // kelp's slot.)
+  let marchBand = textureLoad(kelpRefTex, vec2i(0), 0);
+` : ''}
   // March the cavity: air/water interfaces, the sand bed, the koi, or out through the glass.
   for (var seg = 0; seg < 6; seg++) {
     ${bowl ? 'var' : 'let'} tWall = globes_sphere(p, dir, GLOBES_R_IN).y;${bowl ? `
@@ -2155,7 +2158,30 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
       let last = t >= tStop;
       t = min(t, tStop - 1e-4);
       let q = p + dir * t;
-      var above: f32;
+${bowl?.lite ? `      // (The phone's bowl: where a sample could find nothing, it is not read, nor are those after
+      // it that could not either: the march steps on past them at once, marchBand.ts. tSafe: how
+      // far along the ray that holds; out in the water, to where the ray leaves the open water.)
+      if (!last) {
+        var tSafe = -1.0;
+        if (inWater) {
+          if (q.y < marchBand.y && q.y > marchBand.z && dot(q, q) < marchBand.w) {
+            let b = dot(p, dir);
+            tSafe = -b + sqrt(max(b * b - dot(p, p) + marchBand.w, 0.0));
+            if (dir.y > 0.0) { tSafe = min(tSafe, (marchBand.y - p.y) / dir.y); }
+            if (dir.y < 0.0) { tSafe = min(tSafe, (marchBand.z - p.y) / dir.y); }
+          }
+        } else if (q.y >= marchBand.x) {
+          tSafe = select(1e9, (marchBand.x - p.y) / dir.y, dir.y < 0.0);
+        }
+        if (tSafe > t) {
+          let n = ceil((min(tSafe, tStop) - t) / stepLen);
+          tPrev = t + (n - 1.0) * stepLen;
+          t += n * stepLen;
+          ahead = false;
+          continue;
+        }
+      }
+` : ''}      var above: f32;
       var dv: f32;
       if (ahead) {
         above = aheadAbove;

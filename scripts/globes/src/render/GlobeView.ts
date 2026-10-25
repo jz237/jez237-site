@@ -28,6 +28,7 @@ import { AERATION_N, FOAM_MAP_N } from '../sim/Foam';
 import { TLAS_PARAM } from '../rt/rt';
 import { TlasBinding } from '../rt/tlasBinding';
 import type { BowlShape } from './bowl';
+import { MarchBand } from './marchBand';
 import { envWGSL, globeHelpersWGSL, globeShadeWGSL } from './shaders';
 
 /** Where the backdrop's soft glow lies (a direction from the camera): behind the globe, where
@@ -195,6 +196,9 @@ export class GlobeView {
     // simulation's scene, its top level bound through a stand-in texture.
     const rt = sim.rt;
     rt?.setMarch(prm.value.y);
+    // (A phone's bowl: where its march can find nothing, worked out each frame.)
+    this.band = bowl?.lite ? new MarchBand(sim, globe.innerRadius, globe.capillaryLength, SURFACE_ISO, prm.value.y) : null;
+    const band = this.band ? { kelpRefTex: texture(texelTexture(this.band.texture)) } : {};
     const tlas = rt ? new TlasBinding(sim.device, rt.tlas) : null;
     // Two passes over the same sphere. The main one has no koi code at all, so it stays lean;
     // it notes the pixels where any ray comes near the fish, in the depth buffer (1 there, 0
@@ -329,7 +333,7 @@ export class GlobeView {
       let passInputs = redraw || perSampleWater ? koiInputs : inputs;
       if (withReef) passInputs = { ...passInputs, ...reefGrid };
       if (foam) passInputs = { ...passInputs, ...foamInputs };
-      if (withBowl) passInputs = Object.assign({}, passInputs, { bowlLid: this.uBowlLid, bowlState: this.uBowlState, bowlLife: this.uBowlLife }, scapeTex ? { kelpPrimTex: texture(scapeTex) } : {});
+      if (withBowl) passInputs = Object.assign({}, passInputs, { bowlLid: this.uBowlLid, bowlState: this.uBowlState, bowlLife: this.uBowlLife }, scapeTex ? { kelpPrimTex: texture(scapeTex) } : {}, band);
       if (!hardware) passInputs = Object.fromEntries(Object.entries(passInputs).filter(([k]) => k !== TLAS_PARAM)) as typeof passInputs;
       // (One variable: the depth and the colour both read the same trace.) Its w carries the
       // pixel's coverage, plus 2 where the second pass must redraw it.
@@ -462,6 +466,7 @@ export class GlobeView {
   }
 
   private bowlReach = 1;
+  private readonly band: MarchBand | null;
 
   /** What floats in the betta bowl (interaction/BowlLife.ts: its leaf and its nest). */
   setBowlLife(life: THREE.Matrix4): void {
@@ -517,6 +522,7 @@ export class GlobeView {
     this.uLit.value.x = this.sim.restLevel; // (it changes with the globe's water)
     // (A ray's path: to the globe, through it, and through it again after a turn at the surface.)
     this.sim.rt?.setView(pixel, camera.position.distanceTo(center) + 5 * this.outerRadius);
+    this.band?.update();
     this.chooseTracers();
   }
 }
