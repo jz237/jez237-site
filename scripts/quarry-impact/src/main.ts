@@ -105,6 +105,7 @@ import {swayDriver} from './driver-sway';
 import {duckDriver} from './driver-sway';
 import {rollCage,bendCage} from './roll-cage';
 import {lookYaw,turnHead} from './driver-look';
+import {LITTER} from './crash-litter';
 import {roofSign} from './roof-sign';
 import {roofSignFate,foldRoofSign,roofSignBox,disposeRoofSign,type RoofSignFate} from './roof-sign';
 import {withRaceNumbers} from './race-numbers';
@@ -945,6 +946,8 @@ function createCars(attract = false, previewSetup?:Setup) {
     if(car.extendedDamage)car.onTether=(_part,debris,anchor)=>tetherBumper(car,debris,anchor);
     // Broken glass and smashed lamps leave their pieces on the floor (offline).
     if(car.extendedDamage){const glassSound=car.onGlassBreak,lights=carLights.get(car);let n=0;car.onGlassBreak=p=>{glassSound?.(p);fx.scatterLitter(p,'glass',car.id*131+(++n),car.current);};if(lights)lights.onSmash=(p,kind)=>fx.scatterLitter(p,kind,car.id*137+(++n),car.current);}
+    // A big hit knocks flakes of the car's paint off, a blowout leaves lumps of tyre (offline).
+    if(car.extendedDamage){const burst=car.onBlowout;let n=0;car.onPaintChips=(p,damage)=>{if(damage>=LITTER.paint.min)fx.scatterLitter(p,'paint',car.id*139+(++n),car.current,car.paintColor.getHex(),Math.min(LITTER.paint.most,damage*.8));};car.onBlowout=p=>{burst?.(p);fx.scatterLitter(p,'rubber',car.id*149+(++n),car.current);};}
     if(car.extendedDamage)car.onWheelLost=w=>{sound.crowd(i===0?.8:.55);if(i===0&&!demo)toast(`WHEEL GONE · ${['FRONT LEFT','FRONT RIGHT','REAR LEFT','REAR RIGHT'][w]}`,1.6);};
     car.waters=activeVenue.puddles;
     if(mode==='derby'&&!online?.active&&activeVenue===quarryVenue)car.arenaSurface=DERBY_ARENA;
@@ -2689,8 +2692,8 @@ async function boot() {
     dressing: (on: boolean) => { let n = 0; for (const c of cars) for (const o of c.root.children) if (['driver', 'roof_sign', 'window_net', 'roll_cage'].includes(o.name)) { o.visible = on; o.traverse(m => { if ((m as T.Mesh).isMesh) n++; }); } return n; },
     /** QA: chips of glass and lamp lens on the floor, and the breaks that left them by kind. */
     litter: () => ({ chips: fx.litter.mesh.count, ...fx.litter.breaks, last: fx.litter.last.toArray() }),
-    /** QA: scatter litter of a kind at a world point (thrown out from from, when given). */
-    scatterLitter: (at: number[], kind: 'glass' | 'head' | 'tail', seed = 1, from?: number[]) => fx.scatterLitter(new T.Vector3().fromArray(at), kind, seed, from ? new T.Vector3().fromArray(from) : undefined),
+    /** QA: scatter litter of a kind at a world point (thrown out from from, when given; paint takes colour). */
+    scatterLitter: (at: number[], kind: 'glass' | 'head' | 'tail' | 'paint' | 'rubber', seed = 1, from?: number[], colour?: number) => fx.scatterLitter(new T.Vector3().fromArray(at), kind, seed, from ? new T.Vector3().fromArray(from) : undefined, colour),
     roofSign: (id: number) => { const c = cars.find(x => x.id === id); if (!c) return null; const sign = c.root.children.find(o => o.name === 'roof_sign'); return sign ? { fate: sign.userData.fate ?? 'up', fold: sign.rotation.z } : fx.debris.some(d => d.mesh.name === 'torn_roof_sign' && d.mesh.children[0]?.userData.car === id) ? { fate: 'torn', fold: 0 } : null; },
     driverSway: (id: number) => { const d = cars.find(x => x.id === id)?.root.children.find(o => o.name === 'driver'), s = d?.userData.sway; return s ? { roll: s.roll, pitch: s.pitch, drop: d!.userData.seatBase ? d!.userData.seatBase.y - d!.userData.seat.y : 0, look: d!.userData.look ?? 0, target: drivers.memory.get(id)?.target ?? -1 } : null; },
     placeDebris: (index: number, x: number, y: number, z: number, vx: number, vy: number, vz: number) => { const d = fx.debris[index < 0 ? fx.debris.length + index : index]; if (!d) return false; d.body.setTranslation({ x, y, z }, true); d.body.setLinvel({ x: vx, y: vy, z: vz }, true); return true; },

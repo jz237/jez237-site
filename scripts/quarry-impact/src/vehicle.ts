@@ -455,6 +455,8 @@ export class Vehicle {
   }
   /** Called when heat shatters a window (sound hook). */
   onGlassBreak?:(p:T.Vector3)=>void;
+  /** A damaging hit at point (world), for the paint it knocks off (offline). */
+  onPaintChips?:(p:T.Vector3,damage:number)=>void;
   /** The car's own fire (offline): heat crazes the glass until side windows burst and the screens hang crazed,
    * and cooks the tyres at the burning end. engineRear picks which axle sits over the fire. */
   cook(heat:number,dt:number,engineRear:boolean){
@@ -1187,6 +1189,7 @@ export class Vehicle {
     if(this.extendedDamage&&!quiet){const daze=dazeFor(damage);if(daze>this.dazed){if(!(this.dazed>0))this.dazeSteer=this.input.steer;this.dazed=daze;}}
     this.lastDamage = damage;
     this.impactSerial++;
+    if(this.extendedDamage&&!quiet)this.onPaintChips?.(point,damage);
     if (!quiet) this.impactResponse.kick(direction,damage,direction.dot(this.right),direction.dot(this.forward));
     this.root.updateMatrixWorld(true);
     // Use the same quaternion arithmetic as the authority for mechanical damage.

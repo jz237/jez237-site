@@ -17,7 +17,7 @@ test('broken glass and lamp lenses lie on the floor around the break, thrown out
  assert.deepEqual(litter.last.toArray().map(v=>+v.toFixed(5)),[3,.2,+(4+LITTER.throw).toFixed(5)],'the last scatter is where it landed');
  const colour=new T.Color();litter.mesh.getColorAt(0,colour);assert.ok(colour.r>colour.g*2,'tail lamp chips are red');
  const again=new CrashLitter(new T.Scene());again.scatter(new T.Vector3(3,1,4),'tail',7,flat,new T.Vector3(3,1,2));assert.deepEqual(chips(again),chips(litter),'seeded: the same break scatters the same way');
- assert.equal(litter.scatter(new T.Vector3(NaN,0,0),'glass',1,flat),0);assert.deepEqual(litter.breaks,{glass:0,head:0,tail:1});
+ assert.equal(litter.scatter(new T.Vector3(NaN,0,0),'glass',1,flat),0);assert.deepEqual({glass:litter.breaks.glass,head:litter.breaks.head,tail:litter.breaks.tail},{glass:0,head:0,tail:1});
  for(let i=0;i<LITTER.capacity/LITTER.head.count+5;i++)litter.scatter(new T.Vector3(i,0,0),'head',i,flat);assert.equal(litter.mesh.count,LITTER.capacity,'the oldest are recycled');
  litter.reset();assert.ok(litter.mesh.count===0&&litter.breaks.head===0);
  const g=litter.mesh.geometry.getAttribute('position'),a=new T.Vector3().fromBufferAttribute(g,0),b=new T.Vector3().fromBufferAttribute(g,1),d=new T.Vector3().fromBufferAttribute(g,2);

@@ -7,13 +7,16 @@ export const LITTER={capacity:2400,lift:.012,throw:.85,
   glass:{count:42,spread:1.1,size:[.012,.032],color:0xb9d3cf},
   head:{count:14,spread:.55,size:[.016,.04],color:0xe6ecef},
   tail:{count:14,spread:.55,size:[.016,.04],color:0xb3241b},
+  // Flakes of the car's own paint off a big hit (every third one bare primer), counted from the hit; min is the damage it takes.
+  paint:{count:10,spread:.7,size:[.01,.028],color:0x808080,primer:0x55585c,min:6,most:16},
+  rubber:{count:9,spread:.8,size:[.03,.07],color:0x1b1b1b},
 } as const;
-export type LitterKind='glass'|'head'|'tail';
+export type LitterKind='glass'|'head'|'tail'|'paint'|'rubber';
 export class CrashLitter{
   readonly mesh:T.InstancedMesh;
   private cursor=0;
   /** Breaks scattered so far this event, by kind. */
-  readonly breaks={glass:0,head:0,tail:0};
+  readonly breaks={glass:0,head:0,tail:0,paint:0,rubber:0};
   /** Where the last scatter landed (its middle, on the ground). */
   readonly last=new T.Vector3();
   private pose=new T.Object3D();
@@ -27,20 +30,22 @@ export class CrashLitter{
     this.mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);this.mesh.setColorAt(0,this.tint.setHex(0xffffff));scene.add(this.mesh);
   }
   /** Scatters kind's chips around point (seeded, so the same break scatters the same way), each lying on height(x, z), thrown out
-   * away from from (the car's centre) when given. */
-  scatter(point:T.Vector3,kind:LitterKind,seed:number,height:(x:number,z:number)=>number,from?:T.Vector3){
+   * away from from (the car's centre) when given; colour and count override the kind's own (paint takes the car's colour). */
+  scatter(point:T.Vector3,kind:LitterKind,seed:number,height:(x:number,z:number)=>number,from?:T.Vector3,colour?:number,count?:number){
     if(![point.x,point.y,point.z].every(Number.isFinite))return 0;
     const k=LITTER[kind],dx=from?point.x-from.x:0,dz=from?point.z-from.z:0,d=Math.hypot(dx,dz),cx=point.x+(d>1e-6?dx/d*LITTER.throw:0),cz=point.z+(d>1e-6?dz/d*LITTER.throw:0);let state=(Math.floor(seed*2654435761)^0x9e3779b9)>>>0;const random=()=>((state=(Math.imul(state,1664525)+1013904223)>>>0)/4294967296);
-    for(let i=0;i<k.count;i++){
+    // A count asked for (paint, from the hit) is held to 40 so one scatter never floods the floor.
+    const n=count===undefined?k.count:Number.isFinite(count)?Math.max(0,Math.min(40,Math.round(count))):0,base=colour??k.color;
+    for(let i=0;i<n;i++){
       const angle=random()*Math.PI*2,reach=k.spread*Math.sqrt(random()),x=cx+Math.cos(angle)*reach,z=cz+Math.sin(angle)*reach,ground=height(x,z);
       if(!Number.isFinite(ground))continue;
       const size=k.size[0]+(k.size[1]-k.size[0])*random();
       this.pose.position.set(x,ground+LITTER.lift,z);this.pose.rotation.set((random()-.5)*.25,random()*Math.PI*2,(random()-.5)*.25);this.pose.scale.set(size,1,size*(.7+random()*.6));this.pose.updateMatrix();
       const slot=this.cursor;this.cursor=(this.cursor+1)%LITTER.capacity;this.mesh.setMatrixAt(slot,this.pose.matrix);
-      this.mesh.setColorAt(slot,this.tint.setHex(k.color).multiplyScalar(.82+random()*.3));this.mesh.count=Math.max(this.mesh.count,slot+1);
+      this.mesh.setColorAt(slot,this.tint.setHex(kind==='paint'&&i%3===2?LITTER.paint.primer:base).multiplyScalar(.82+random()*.3));this.mesh.count=Math.max(this.mesh.count,slot+1);
     }
     this.mesh.instanceMatrix.needsUpdate=true;if(this.mesh.instanceColor)this.mesh.instanceColor.needsUpdate=true;
-    this.last.set(cx,height(cx,cz),cz);this.breaks[kind]++;return k.count;
+    this.last.set(cx,height(cx,cz),cz);this.breaks[kind]++;return n;
   }
-  reset(){this.cursor=0;this.mesh.count=0;this.breaks.glass=this.breaks.head=this.breaks.tail=0;}
+  reset(){this.cursor=0;this.mesh.count=0;this.breaks.glass=this.breaks.head=this.breaks.tail=this.breaks.paint=this.breaks.rubber=0;}
 }
