@@ -1,3 +1,4 @@
+import {restoreWetReflectionsBytes} from './wet-reflections-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readBrakeSteamPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreBrakeSteamBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreWetReflectionsBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readBrakeSteamPrevious(file);
 }
 export function verifyBrakeSteamRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'0bc1df5ac0e306586aed5b575e2e494eee203137');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreWetReflectionsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreBrakeSteamBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the BrakeSteam release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreWetReflectionsBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the BrakeSteam release');
  assert.equal(manifest.previousFixtureCount,8195);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,8195);
 }

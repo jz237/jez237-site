@@ -117,6 +117,7 @@ import {steerArms,handReach,newHandState,type HandState} from './driver-arms';
 import {BONNET_STEAM,bonnetHeat,steamRate} from './bonnet-steam';
 import {vapourRate} from './exhaust-vapour';
 import {brakeSteamRate} from './brake-steam';
+import {createWetReflections,type Glow} from './wet-reflections';
 import {WIND,eventWind,gusting} from './wind';
 import {Storm,THUNDER} from './thunder';
 import {marshalPosts,marshalFigure,poseMarshal,marshalFlag,flinchesAt,FLINCH,type Post} from './arena-marshals';
@@ -1903,6 +1904,9 @@ function step(dt: number) {
   // In the rain drivers run their lamps too (offline), the pool on the road fainter against the daylight, the beams
   // showing in the rain.
   for(const c of cars)carLights.get(c)?.set((dusk||wet&&c.extendedDamage)&&c.health>0&&!c.electricalCut&&!c.batteryOut&&(!c.beltSnapped||batteryLights(c.battery,clock,c.id)),c.health>0&&!c.electricalCut&&!c.batteryOut&&(c.input?.brake??0)>.2&&Math.abs(c.speed)>1,dusk?1:RAIN_LIGHTS.pool,wet&&c.extendedDamage?RAIN_BEAMS.strength:0);}
+  // On a wet road every lit lamp lays a streak of reflected light toward the camera (offline rain).
+  if(eventLighting==='rain'&&!online?.active){wetReflections??=createWetReflections(scene);glowList.length=0;for(const c of cars)if(c.extendedDamage)carLights.get(c)?.glows(glowList,c.root);wetReflections.update(glowList,camera,activeVenue.course.height);}
+  else wetReflections?.clear();
   if (state !== 'playing') return;
   elapsed += dt;
   if(mode==='race'&&!eventAwards.started&&elapsed>.5&&!online?.active)eventAwards.grid(rankRace().map(c=>c.id));
@@ -2210,6 +2214,7 @@ let umbrellasUp=false,umbrellaRoot:T.Object3D|undefined;
 const bonnetHeats=new WeakMap<object,number>(),bonnetClocks=new WeakMap<object,number>(),steamAt=new T.Vector3();let bonnetPuffs=0;
 const vapourClocks=new WeakMap<object,number>();let vapourPuffs=0;
 const brakeSteamClocks=new WeakMap<object,number[]>();let brakePuffs=0;
+let wetReflections:ReturnType<typeof createWetReflections>|undefined;const glowList:Glow[]=[];
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
 function lookDriver(c:Vehicle,figure:T.Object3D,dt:number){
   const t=drivers.memory.get(c.id)?.target,prey=t!==undefined&&t>=0&&t!==c.id?cars.find(x=>x.id===t&&x.health>0):undefined;
@@ -2871,6 +2876,7 @@ async function boot() {
     carWet: (v?: number | null) => { if (v !== undefined) carWetOverride = v; return CAR_WET.value; },
     vapour: () => vapourPuffs,
     brakeSteam: () => brakePuffs,
+    reflections: () => wetReflections?.mesh.count ?? 0,
     heatDiscs: (id = 0, heat = 1) => { const c = cars[id]; if (!c?.extendedDamage) return false; c.discHeat.fill(heat); return true; },
     storm: () => storm ? { strikes: storm.strikes, claps: storm.claps, thunders: sound.thunders, flash: +lightning.intensity.toFixed(3) } : null,
     strike: () => { if (!storm) return false; storm.strikeNow(); return true; },
