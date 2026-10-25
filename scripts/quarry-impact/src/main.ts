@@ -188,7 +188,7 @@ import {drawQuarryMap} from './quarry-minimap';
 import { prepareCircuitSurface } from './scenery-circuit-material';
 import { Quarry, puddleGeometry, softShoreMaterial } from './world';
 import {RainPuddles,layRainPuddles} from './rain-puddles';
-import {waterAt,aquaplaningNow,AQUA} from './aquaplaning';
+import {waterAt,aquaplaningNow,aquaplaneLift,AQUA} from './aquaplaning';
 import { Vehicle, WRECK_BURST, type Input } from './vehicle';
 import { Effects } from './effects';
 import { VehicleFire } from './vehicle-fire';
@@ -1711,9 +1711,11 @@ function ai(car: Vehicle, dt: number): Input {
   // the AI holds the throttle back.
   // An overheating engine is eased right off so it cools.
   const input=car.extendedDamage&&!online?.active?{...core,throttle:coolThrottle(nurseThrottle(core.throttle,car.oilLevel<OIL.low||car.coolantLevel<COOLANT.low||car.steerLink.some(v=>v===0)||car.steerPlay>=STEER_PLAY.warn),car.hotTime>=OVERHEAT_FIRE.warn)}:core;
-  if(!fireAvoidance||!car.extendedDamage||online?.active||car.health<=0)return input;
+  // Front tyres riding up on standing water: the AI lifts and keeps off the brakes until they bite again (offline).
+  const steady=car.extendedDamage&&!online?.active?aquaplaneLift(input,car.waterGrip):input;
+  if(!fireAvoidance||!car.extendedDamage||online?.active||car.health<=0)return steady;
   const fires=burningGround();
-  return fires.length?avoidFires(car,input,fires,fx.slicks.clock,car.flameHeat):input;
+  return fires.length?avoidFires(car,steady,fires,fx.slicks.clock,car.flameHeat):steady;
 }
 function aiCore(car: Vehicle, dt: number): Input {
   if(car.health<=0||(car.finished&&mode!=='race'))return {throttle:0,steer:0,brake:1,handbrake:false};

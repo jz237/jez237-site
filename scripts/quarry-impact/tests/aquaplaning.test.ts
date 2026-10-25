@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {AQUA,aquaGrip,waterDrag,waterAt,aquaplaningNow} from '../src/aquaplaning';
+import {AQUA,AQUA_LIFT,aquaGrip,waterDrag,waterAt,aquaplaningNow,aquaplaneLift} from '../src/aquaplaning';
 import type {Puddle} from '../src/puddle-splashes';
 test('a tyre rides up on standing water as it goes faster, the deeper in the puddle the more',()=>{
   assert.equal(aquaGrip(1,AQUA.speed),1,'slow enough to cut through');assert.equal(aquaGrip(0,40),1,'no water, no planing');
@@ -22,6 +22,13 @@ test('a tyre finds the deepest puddle under it; nothing outside them',()=>{
   assert.ok(waterAt(puddles,1.9,0,0)>0,'where the two meet, the deeper one');assert.equal(waterAt(puddles,0,1,0),0,'too high above the water');
   assert.equal(waterAt([],0,0,0),0);
   assert.ok(aquaplaningNow([AQUA.warn-.01,1,1,1])&&!aquaplaningNow([1,1,AQUA.warn-.2,AQUA.warn-.2]),'the driver is told when a front tyre goes');
+});
+test('an AI driver aquaplaning lifts off and keeps off the brakes until the front tyres bite again',()=>{
+  const flat={throttle:1,steer:.3,brake:.8,handbrake:false},planing=[AQUA.warn-.1,1,1,1],gripping=[1,1,AQUA.warn-.3,AQUA.warn-.3];
+  const lifted=aquaplaneLift(flat,planing);assert.ok(lifted.throttle===AQUA_LIFT.throttle&&lifted.brake===AQUA_LIFT.brake&&lifted.steer===.3&&lifted!==flat,'lifts, steering held');
+  assert.equal(aquaplaneLift(flat,gripping),flat,'rear tyres alone: carries on');assert.equal(aquaplaneLift({...flat,throttle:.05,brake:0},planing).throttle,.05,'never more than it was');
+  const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
+  assert.ok(main.includes('  const steady=car.extendedDamage&&!online?.active?aquaplaneLift(input,car.waterGrip):input;')&&main.includes('return fires.length?avoidFires(car,steady,fires,fx.slicks.clock,car.flameHeat):steady;'),'before steering round fires, offline');
 });
 test('the car loses grip and feels the water on the tyres in the water, offline, and is told it is aquaplaning',()=>{
   const physics=readFileSync(new URL('../src/vehicle-physics.ts',import.meta.url),'utf8'),vehicle=readFileSync(new URL('../src/vehicle.ts',import.meta.url),'utf8'),main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');

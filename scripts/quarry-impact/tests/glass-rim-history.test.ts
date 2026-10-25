@@ -1,6 +1,7 @@
+import {restoreAiAquaplaneBytes} from './ai-aquaplane-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readGlassRimPrevious,restoreGlassRimBytes,verifyGlassRimRevision} from './glass-rim-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreAiAquaplaneBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('GlassRim preserves every prior fixture, vehicle asset, venue art and history input',verifyGlassRimRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/glass-rim/revision.json').toString());

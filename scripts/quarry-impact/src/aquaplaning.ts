@@ -4,6 +4,12 @@ import {puddleDepth,type Puddle} from './puddle-splashes';
  * tyre itself (AQUA.drag N at AQUA.dragSpeed m/s, growing with the square of speed up to AQUA.maxDrag times that), so a
  * car with one side in a puddle is tugged toward it. Water depth is how far into a puddle the tyre is, 0 at its edge to 1 well inside. */
 export const AQUA={speed:12,full:24,loss:.75,drag:2500,dragSpeed:18,maxDrag:1.5,warn:.6,warnGap:4} as const;
+/** An AI driver whose front tyres aquaplane lifts off to AQUA_LIFT.throttle and keeps off the brakes (to AQUA_LIFT.brake)
+ * until they bite again, as a driver does, rather than spinning the wheels or locking them on the water. */
+export const AQUA_LIFT={throttle:.15,brake:.15} as const;
+export function aquaplaneLift<I extends {throttle:number;brake:number}>(input:I,grip:ArrayLike<number>):I{
+  return aquaplaningNow(grip)?{...input,throttle:Math.min(input.throttle,AQUA_LIFT.throttle),brake:Math.min(input.brake,AQUA_LIFT.brake)}:input;
+}
 /** The driver is told when a front tyre has lost more than 1 - AQUA.warn of its grip to the water. */
 export const aquaplaningNow=(grip:ArrayLike<number>)=>Math.min(grip[0]??1,grip[1]??1)<AQUA.warn;
 const clamp01=(n:number)=>Number.isFinite(n)?Math.max(0,Math.min(1,n)):0;
