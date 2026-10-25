@@ -618,8 +618,9 @@ async function startApp(stage: HTMLElement, params: URLSearchParams, host: Deskt
     // (The betta's bowl is lit by the lamp in its lid, straight down, and tips less far than a
     // sealed globe: it rolls on its table.)
     const light = { ...(BETTA_PAGE ? { ...lightConfig, sunDirection: [0, 1, 0] as [number, number, number] } : lightConfig), ...(LITE ? { causticRays: 512 } : {}) };
-    // (Phones: the fins solved in coarser steps.)
-    if (LITE) Object.assign(FIN_QUALITY, { step: 1 / 60, passScale: 0.5, maxFrame: 1 / 30 });
+    // (Phones: the fins solved in coarser steps, with fewer constraint passes: at 60 fps three
+    // instead of four (the pectorals five, not six) stay within the membrane's own chaotic spread.)
+    if (LITE) Object.assign(FIN_QUALITY, { step: 1 / 60, passScale: 0.375, maxFrame: 1 / 30 });
     const globe = BETTA_PAGE ? { ...globeConfig, maxTilt: (40 * Math.PI) / 180 } : globeConfig;
     const world = await createWorld(stage, params, { start: GLOBES[start], alpha: false, light, globe, desk: null });
     shell.attach(world.controller, world.setScene, world.specks);
