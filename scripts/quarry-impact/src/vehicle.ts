@@ -17,6 +17,7 @@ import {vehicleSuspensionRestLength,vehicleSuspensionTravel} from './vehicle-phy
 import {isClassicKind,classicWheelHalfTrack,vehicleWheelRadius,isRearEngineKind,isFrontDriveKind} from './classic-vehicle-specs';
 import {createVehiclePhysics,stepVehiclePhysics,rotateVehicleVector} from './vehicle-physics';
 import {aquaGrip,waterDrag} from './aquaplaning';
+import {glassRim} from './glass-rim';
 import {LiveryPaint} from './livery-paint';
 import type {VisualEvent} from './replay-data';
 import {ImpactResponse} from './impact-response';
@@ -462,7 +463,7 @@ export class Vehicle {
     for(const glass of this.glass){
       if(!glass.visible)continue;const before=glass.userData.damage||0;if(before>=target)continue;
       glass.userData.damage=target;const state=(glass.material as T.Material).userData.glassState as GlassState|undefined;if(state)state.damage.value=Math.min(1,target/24);
-      if(!/Windshield|Rearwindow/.test(glass.name)&&before<=24&&target>24){glass.visible=false;const c=new T.Box3().setFromObject(glass).getCenter(new T.Vector3());this.fx.emit(c,12,3,1.2);this.onGlassBreak?.(c);}
+      if(!/Windshield|Rearwindow/.test(glass.name)&&before<=24&&target>24){glass.visible=false;this.leaveGlassRim(glass);const c=new T.Box3().setFromObject(glass).getCenter(new T.Vector3());this.fx.emit(c,12,3,1.2);this.onGlassBreak?.(c);}
     }
   }
   /** Called when heat shatters a window (sound hook). */
@@ -479,7 +480,7 @@ export class Vehicle {
       const state=(glass.material as T.Material).userData.glassState as GlassState|undefined;
       if(state){state.damage.value=Math.min(1,after/24);if(before===0)state.impact.value.set(0,0,0);}
       if(!/Windshield|Rearwindow/.test(glass.name)&&before<=24&&after>24){
-        glass.visible=false;const c=new T.Box3().setFromObject(glass).getCenter(new T.Vector3());this.fx.emit(c,12,3,1.2);this.onGlassBreak?.(c);
+        glass.visible=false;this.leaveGlassRim(glass);const c=new T.Box3().setFromObject(glass).getCenter(new T.Vector3());this.fx.emit(c,12,3,1.2);this.onGlassBreak?.(c);
       }
     }
     if(this.tyreDamage)for(const i of engineRear?[2,3]:[0,1])if(!this.wreckParts.wheelLost[i])this.tyreDamage[i]=Math.min(1,this.tyreDamage[i]+heat*dt*COOK.tyre);
@@ -685,6 +686,7 @@ export class Vehicle {
       (p.material as T.MeshStandardMaterial).vertexColors = false;
       (p.material as T.Material).needsUpdate = true;
     }
+    this.clearGlassRims();
     for (const g of this.glass) {
       repairWreckGeometry(g);
       g.visible = true;
@@ -1325,7 +1327,7 @@ export class Vehicle {
         const laminated = /Windshield|Rearwindow/.test(glass.name);
         // Laminated screens retain their shattered sheet. Tempered side glass
         // cracks first, then releases fragments on a second substantial blow.
-        if (!laminated && glass.userData.damage > 24) glass.visible = false;
+        if (!laminated && glass.userData.damage > 24) { glass.visible = false; if (!quiet) this.leaveGlassRim(glass); }
         if (!quiet) this.fx.emit(bounds.getCenter(new T.Vector3()), Math.ceil(damage * .55), 3, 1.7);
       }
     }
@@ -1631,7 +1633,16 @@ export class Vehicle {
     }
     w.visible=false;
   }
+  /** A shattered side window leaves a ragged rim of crumbs in its frame (offline). */
+  private readonly glassRims=new Map<T.Mesh,T.Mesh>();
+  private leaveGlassRim(glass:T.Mesh){if(!this.extendedDamage||this.glassRims.has(glass)||!glass.parent)return;const rim=glassRim(glass);glass.parent.add(rim);this.glassRims.set(glass,rim);}
+  private clearGlassRims(){for(const r of this.glassRims.values()){r.removeFromParent();(r.material as T.Material).dispose();}this.glassRims.clear();}
+  /** Glass rims left in frames (QA). */
+  get glassRimCount(){return this.glassRims.size;}
+  /** Shatter every side window as a hard blow would (QA). */
+  shatterSideWindows(){let n=0;for(const g of this.glass){if(!g.visible||/Windshield|Rearwindow/.test(g.name))continue;g.userData.damage=25;g.visible=false;this.leaveGlassRim(g);n++;}return n;}
   dispose() {
+    this.clearGlassRims();
     this.drawBatch?.dispose();
     this.livery.dispose();
     {const sign=this.root.children.find(o=>o.name==='roof_sign');if(sign)disposeRoofSign(sign);}
