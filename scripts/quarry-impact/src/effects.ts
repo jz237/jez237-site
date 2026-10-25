@@ -5,6 +5,7 @@ import R from '@dimforge/rapier3d-compat';
 import {GroundEvidence} from './ground-evidence';
 import {FluidSlicks,type GroundFire} from './fluid-leaks';
 import {DAYLIGHT_DIRECTION} from './static-shadows';
+import {CrashLitter,type LitterKind} from './crash-litter';
 type Particle = {
   p: T.Vector3;
   v: T.Vector3;
@@ -24,6 +25,18 @@ export class Effects {
   geometry: T.BufferGeometry;
   points: T.Points;
   debris: { mesh: T.Object3D; body: R.RigidBody; age: number; shared?: boolean; fire?: { start: number; end: number; seed: number }; release?: () => void }[] = [];
+  /** Broken glass and lamp lens chips left on the floor for the event. */
+  readonly litter: CrashLitter;
+  /** Scatters litter on the floor as the physics has it (static colliders, cast down from above the break): arena floors stand
+   * above the course height function. */
+  scatterLitter(point: T.Vector3, kind: LitterKind, seed: number, from?: T.Vector3) {
+    const floor = (x: number, z: number) => {
+      const top = Math.max(point.y, this.groundHeight(x, z)) + 1.5;
+      const hit = typeof this.world.castRay === 'function' ? this.world.castRay(new R.Ray({ x, y: top, z }, { x: 0, y: -1, z: 0 }), 4, true, R.QueryFilterFlags.EXCLUDE_SENSORS | R.QueryFilterFlags.EXCLUDE_DYNAMIC | R.QueryFilterFlags.EXCLUDE_KINEMATIC) : null;
+      return hit ? top - hit.timeOfImpact : this.groundHeight(x, z);
+    };
+    return this.litter.scatter(point, kind, seed, floor, from);
+  }
   marks: T.InstancedMesh;
   markCursor = 0;
   readonly evidence:GroundEvidence;
@@ -35,6 +48,7 @@ export class Effects {
   ) {
     this.evidence=new GroundEvidence(scene);
     this.slicks=new FluidSlicks(scene);
+    this.litter=new CrashLitter(scene);
     const count = 1800;
     this.positions = new Float32Array(count * 3);
     this.colors = new Float32Array(count * 3);
@@ -305,7 +319,7 @@ void main(){
     }
   }
   reset() {
-    this.evidence.reset();this.slicks.reset();
+    this.evidence.reset();this.slicks.reset();this.litter.reset();
     for (const p of this.particles) p.life = 0;
     // Menu frames do not advance this pool. Clear the uploaded attributes too,
     // otherwise the final sparks can remain visible over the new attract car.
