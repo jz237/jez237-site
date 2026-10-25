@@ -45,6 +45,7 @@ import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowo
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,ROD,rodStress,rodAtSeize,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed,SUMP,crackSump,sumpLeak,drainSump} from './oil-starvation';
 import {MAX_ENGINE_RESTART,crankRequested} from './engine-stall';
+import {disposeDriver} from './driver-figure';
 import {disposeRoofSign} from './roof-sign';
 import {BOOM} from './blow-up';
 import {RUB_FIRE,rubHeat,EXTINGUISHER,EXHAUST_CRUSH,exhaustCrushes,wheelRips,WHEEL_RIP,CABLE,HANDBRAKE_CABLE,ENGINE_DROP,SMASH_FIRE,rollBarSnaps,rollTorque,hasPropshaft,propBend,propVibration,fatigueProp,BEARING,bearingCracks,wearBearing,bearingShimmy,bearingDrag,steerSkew,openness,openDrag,debrisFling,smashFire,impactZoneFactor,pitStrength,pitGrip,PIT,EXPOSED_WHEEL,exposedDamage,BUMPER_GONE,COVER_GONE,engineDrops,ROOF_SLIDE,SIDE_SLIDE,ROLL_SHED,roofSlide,TANK_DROP,tankDrops,pushBurn,cableSnaps,cableThrottle,handbrakeSnaps,beltSlip,beltSnaps,beltSqueal,beltHeat,drainBattery,batteryCut,RADIATOR as RADIATOR_COOLING,runningHot,hotClock,overheatFire} from './damage-handling';
@@ -1600,6 +1601,7 @@ export class Vehicle {
     this.drawBatch?.dispose();
     this.livery.dispose();
     {const sign=this.root.children.find(o=>o.name==='roof_sign');if(sign)disposeRoofSign(sign);}
+    {const driver=this.root.children.find(o=>o.name==='driver');if(driver)disposeDriver(driver);}
     this.tireContacts.forEach(contact=>contact.dispose());
     this.world.removeVehicleController(this.controller);
     this.world.removeRigidBody(this.body);

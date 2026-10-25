@@ -100,6 +100,7 @@ import {eventGridSetup,eventPerformanceGrid} from './grid-setup';
 import {gridCarKind,gridRecordKey,GRID_LINEUPS,GRID_PERFORMANCE} from './grid-rules';
 import {timedRaceLimit,timedRaceFinished,timedRaceOrder,timedRaceResult,timedRaceRecordScore} from './timed-race';
 import {RaceRecovery,freeRecoverySlot} from './race-recovery';
+import {driverFigure,DRIVER} from './driver-figure';
 import {roofSign} from './roof-sign';
 import {withRaceNumbers} from './race-numbers';
 import {BOOM} from './blow-up';
@@ -922,6 +923,9 @@ function createCars(attract = false, previewSetup?:Setup) {
     const setup=!attract&&activeTimeTrial?timeTrialSetup(activeTimeTrial):!attract&&activeClubRound!==null?clubVehicleSetup(clubCup!,type):demo&&!attract?demoVehicleSetup(type,demoOptions,garage,kind):!attract&&customEvent()&&mode!=='playground'?eventGridSetup(type,kind,garage,eventOptions.performance,i===0,colors[i%colors.length],eventOptions.classLimit):i===0 && (attract || !demo) && !activeChallenge ? previewSetup??garage.cars[type].setup : undefined;
     const team=!attract&&teamRace()?TEAMS[teamOf(i)]:null,teamSetup=team&&setup?{...setup,paint:team.color,trim:team.trim}:setup;
     const car = new Vehicle(i, type, team?.color ?? setup?.paint ?? colors[i%colors.length], scene, physics, fx, teamSetup,activeVenue.course,online?.active?'legacy':'angular-v1');
+    // A driver in the seat of every car, placed from the model's own box (cosmetic).
+    {car.root.updateMatrixWorld(true);const box=new T.Box3().setFromObject(car.model),min=car.root.worldToLocal(box.min.clone()),max=car.root.worldToLocal(box.max.clone());
+      const figure=driverFigure([0xd23a2a,0xf1bd42,0x2f6fd8,0xe8e8e8,0x2fa35a][i%5]);figure.position.set(Math.min(min.x,max.x)*DRIVER.side*2,Math.max(min.y,max.y)-DRIVER.headroom-DRIVER.head,(min.z+max.z)/2-Math.abs(max.z-min.z)*DRIVER.back);car.root.add(figure);}
     // Derby rivals carry their car number on the doors and roof, unless their livery already has one (offline).
     if(!attract&&!online?.active&&i>0&&mode==='derby'){const numbered=withRaceNumbers(car.setup.livery,i+1);if(numbered)car.livery.set(numbered);
       // and a number board standing on the roof, read from any side.
@@ -2112,6 +2116,9 @@ function updateCraze(){
 }
 function cycleDrivingCamera(){drivingCamera=nextDrivingCamera(drivingCamera);toast(DRIVING_CAMERA_LABELS[drivingCamera]+' CAMERA');}
 function updateCamera(dt: number) {
+  // The driver of the car the camera sits in (hood or dashboard view) is hidden, so the view stays clear.
+  {const spectating=demo||scoreSpectating(),viewed=spectating?cars.find(c=>c.id===director.followed):cars[0],inside=spectating?director.activeView==='hood':drivingCamera!=='chase';
+    for(const c of cars){const d=c.root.children.find(o=>o.name==='driver');if(d)d.visible=!(inside&&c===viewed);}}
   if(scoreSpectating()){const current=cars.find(c=>c.id===director.followed);if(!current||current.health<=0)director.cycleCar(cars,1);else if(!director.manual)director.follow(current.id);}
   const p = demo||scoreSpectating()?(cars.find(c=>c.id===director.followed)??cars[0]):cars[0];
   if (!p) return;
