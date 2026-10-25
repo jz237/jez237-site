@@ -30,7 +30,8 @@ export function bailOut(figure:T.Object3D,car:T.Object3D,scene:T.Object3D,height
   car.updateWorldMatrix(true,false);
   const side=new T.Vector3(Math.sign(figure.position.x)||-1,0,0).transformDirection(car.matrixWorld);side.y=0;if(side.lengthSq()<1e-6)side.set(1,0,0);side.normalize();
   const centre=new T.Vector3().setFromMatrixPosition(car.matrixWorld),from=centre.clone().addScaledVector(side,BAIL.door),to=centre.clone().addScaledVector(side,BAIL.door+BAIL.walk);
-  scene.add(figure);standUp(figure);
+  // Out of the car they are seen, even if a camera inside the car had hidden them.
+  scene.add(figure);figure.visible=true;standUp(figure);
   const walk={from,to,time:0,facing:Math.atan2(-side.x,-side.z),height};figure.userData.bail=walk;placeWalker(figure,0);
   return walk;
 }

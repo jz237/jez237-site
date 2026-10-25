@@ -12,7 +12,7 @@ test('a driver gets out once their car is burning or blown up and has all but st
 test('the driver climbs out of their own door, walks clear and stands on the floor watching the car',()=>{
  const scene=new T.Scene(),car=new T.Group();car.position.set(5,.4,-3);car.rotation.y=.5;scene.add(car);
  const figure=driverFigure(0xd23a2a);figure.position.set(-.45,.9,.1);figure.userData.sway={frames:3};figure.userData.look=.8;figure.children[1].rotation.y=Math.PI/2+.8;car.add(figure);
- const floor=()=>.25;bailOut(figure,car,scene,floor);
+ figure.visible=false;const floor=()=>.25;bailOut(figure,car,scene,floor);assert.ok(figure.visible,'a driver hidden by a camera inside the car is seen once out');
  assert.ok(figure.parent===scene&&!!figure.getObjectByName('driver_legs'),'out of the car, on its own legs');assert.ok(figure.userData.sway===undefined&&figure.children[1].rotation.y===Math.PI/2,'no sway, eyes front');
  const legBottom=()=>{figure.updateMatrixWorld(true);return Math.min(...figure.getObjectByName('driver_legs')!.children.map(h=>new T.Box3().setFromObject(h).min.y));};
  assert.ok(Math.abs(legBottom()-.25)<.02,'feet on the floor');
