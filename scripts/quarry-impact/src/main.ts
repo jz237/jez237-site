@@ -2146,6 +2146,7 @@ const lookLocal=new T.Vector3(),lookTurn=new T.Quaternion();
 const crunchAt=new T.Vector3(),crunchClock=new WeakMap<object,number>();let crunchTake=0;
 let hornHeats=0;
 const bailClock=new WeakMap<object,number>(),bailed:T.Object3D[]=[];
+const BAIL_CHEER=.75;
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
 function lookDriver(c:Vehicle,figure:T.Object3D,dt:number){
   const t=drivers.memory.get(c.id)?.target,prey=t!==undefined&&t>=0&&t!==c.id?cars.find(x=>x.id===t&&x.health>0):undefined;
@@ -2181,7 +2182,8 @@ function updateCamera(dt: number) {
   if(state==='playing'||state==='wrecked'){for(const c of cars){if(!c.extendedDamage)continue;const d=c.root.children.find(o=>o.name==='driver');if(!d)continue;
     const t=(c.onFire||c.blownUp)&&Math.abs(c.speed)<BAIL.speed?(bailClock.get(c)??0)+dt:0;bailClock.set(c,t);
     if(shouldBail(c.onFire,c.blownUp,c.speed,t)){bailOut(d,c.root,scene,(x,z)=>fx.floorAt(x,z,c.current.y));bailed.push(d);}}
-    for(const f of bailed)strollAway(f,dt);}
+    // A driver clear of the fire waves to show they are all right, and the stands cheer.
+    for(const f of bailed)if(strollAway(f,dt))sound.crowd(BAIL_CHEER);}
   // Tyres crunch over the glass and lens chips on the floor (offline), the two recorded takes in turn.
   if(state==='playing'&&fx.litter.mesh.count)for(const c of cars){if(!c.extendedDamage||clock-(crunchClock.get(c)??-9)<CRUNCH.gap)continue;for(const w of c.wheels){if(!w.visible)continue;w.getWorldPosition(crunchAt);const v=crunchVolume(fx.litter.under(crunchAt.x,crunchAt.z,CRUNCH.radius),c.speed);if(v>0){sound.clip(crunchTake++%2?'glass-crunch-2':'glass-crunch',crunchAt,v,CRUNCH.duration);crunchClock.set(c,clock);break;}}}
   // Roof signs fold flat when a car goes over and tear off on a second roll, a crushed roof or a blow-up.

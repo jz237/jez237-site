@@ -17,16 +17,18 @@ test('the driver climbs out of their own door, walks clear and stands on the flo
  const legBottom=()=>{figure.updateMatrixWorld(true);return Math.min(...figure.getObjectByName('driver_legs')!.children.map(h=>new T.Box3().setFromObject(h).min.y));};
  assert.ok(Math.abs(legBottom()-.25)<.02,'feet on the floor');
  const door=new T.Vector3(-1,0,0).applyQuaternion(car.quaternion),start=figure.position.clone();assert.ok(start.clone().sub(car.position).setY(0).dot(door)>BAIL.door*.9,'out of the driver\'s (-x) side');
- for(let i=0;i<200;i++)strollAway(figure,1/60);const gone=figure.position.clone().sub(car.position).setY(0);
+ let clear=0;for(let i=0;i<200;i++)if(strollAway(figure,1/60))clear++;assert.equal(clear,1,'reports getting clear once');const gone=figure.position.clone().sub(car.position).setY(0);
  assert.ok(Math.abs(gone.length()-BAIL.door-BAIL.walk)<.05&&gone.dot(door)>0,'walked clear');
  const facing=new T.Vector3(0,0,1).applyQuaternion(figure.quaternion);assert.ok(facing.dot(gone.clone().normalize())<-.99,'turned round to watch the car');
  assert.ok(Math.abs(legBottom()-.25)<.02&&figure.getObjectByName('driver_legs')!.children.every(h=>h.rotation.x===0),'standing still');
- const arms=figure.children.filter(o=>o instanceof T.Mesh&&(o as T.Mesh).geometry instanceof T.CylinderGeometry&&o.parent===figure);assert.ok(arms.length===2&&arms.every(a=>Math.abs(a.rotation.x)<.2),'arms hanging');
+ const shoulders=figure.children.filter(o=>o.name==='driver_shoulder');assert.ok(shoulders.length===2&&shoulders.every(sh=>sh.children[0] instanceof T.Mesh&&Math.abs(sh.children[0].rotation.x)<.2),'arms on shoulders');
+ const waving=shoulders.find(sh=>sh.position.x>0)!;assert.ok(waving.rotation.z>2,'waving to the crowd once clear');
+ while(figure.userData.bail.watched<BAIL.wave+.1)strollAway(figure,1/60);assert.equal(waving.rotation.z,0,'then the arm comes down');
  while(BAIL.watch-figure.userData.bail.watched>2/60)strollAway(figure,1/60);assert.ok(figure.visible,'watches a while');for(let i=0;i<4;i++)strollAway(figure,1/60);assert.equal(figure.visible,false,'then gone over the barrier');
  assert.ok(DRIVER.head>0);
 });
 test('offline drivers bail out every frame they should, walk on, and are freed with the next event',()=>{
  const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
  assert.ok(main.includes("if(shouldBail(c.onFire,c.blownUp,c.speed,t)){bailOut(d,c.root,scene,(x,z)=>fx.floorAt(x,z,c.current.y));bailed.push(d);}"));
- assert.ok(main.includes("for(const f of bailed)strollAway(f,dt);")&&main.includes("for(const f of bailed)disposeDriver(f);bailed.length=0;"));
+ assert.ok(main.includes("for(const f of bailed)if(strollAway(f,dt))sound.crowd(BAIL_CHEER);")&&main.includes("for(const f of bailed)disposeDriver(f);bailed.length=0;"));
 });

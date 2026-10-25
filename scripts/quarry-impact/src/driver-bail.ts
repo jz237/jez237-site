@@ -2,9 +2,10 @@ import * as T from 'three';
 import {DRIVER} from './driver-figure';
 /** A driver gets out of a burning car (offline): once their car is on fire or blown up and has all but stopped (under speed m/s)
  * for delay seconds, they climb out of their door, walk walk metres clear over stroll seconds and stand watching it burn for watch
- * seconds, then are gone over the barrier (they are not solid, so cars would drive through them). The seated figure is moved into
- * the world and given legs (leg metres long), its arms hanging. */
-export const BAIL={delay:1.2,speed:3,door:1.1,walk:3.2,stroll:2.2,watch:6,leg:.78,stride:.5} as const;
+ * seconds (waving to the crowd for the first wave of them, to show they are all right), then are gone over the barrier (they are
+ * not solid, so cars would drive through them). The seated figure is moved into the world and given legs (leg metres long), its
+ * arms hanging from shoulders. */
+export const BAIL={delay:1.2,speed:3,door:1.1,walk:3.2,stroll:2.2,watch:6,wave:2.4,leg:.78,stride:.5} as const;
 /** Whether a car's driver should get out now: burning or blown up, nearly stopped, for long enough (seconds so far in that state). */
 export function shouldBail(onFire:boolean,blownUp:boolean,speed:number,seconds:number){return (onFire||blownUp)&&Math.abs(Number.isFinite(speed)?speed:99)<BAIL.speed&&seconds>=BAIL.delay;}
 const BODY_BOTTOM=-DRIVER.head-.36;
@@ -16,8 +17,10 @@ function standUp(figure:T.Object3D){
     for(const x of [-.1,.1]){const hip=new T.Group();hip.name='driver_hip';hip.position.set(x,BODY_BOTTOM,0);const leg=new T.Mesh(new T.CylinderGeometry(.08,.068,BAIL.leg,8),suit);leg.position.y=-BAIL.leg/2;hip.add(leg);legs.add(hip);}
     figure.add(legs);
   }
-  // The arms (the two cylinders reaching for the wheel) hang down by the sides.
-  for(const arm of figure.children)if(arm instanceof T.Mesh&&arm.geometry instanceof T.CylinderGeometry&&Math.abs(arm.rotation.x)>.5){arm.rotation.x=.08;arm.position.z=-.02;arm.position.y=-DRIVER.head-.2;arm.position.x=Math.sign(arm.position.x)*.24;}
+  // The arms (the two cylinders reaching for the wheel) hang from shoulders by the sides.
+  for(const arm of [...figure.children])if(arm instanceof T.Mesh&&arm.geometry instanceof T.CylinderGeometry&&Math.abs(arm.rotation.x)>.5){
+    const shoulder=new T.Group();shoulder.name='driver_shoulder';shoulder.position.set(Math.sign(arm.position.x)*.24,-DRIVER.head-.02,-.02);figure.add(shoulder);
+    shoulder.add(arm);arm.rotation.set(.08,0,0);arm.position.set(0,-.18,0);}
   figure.rotation.set(0,0,0);delete figure.userData.sway;
   // Eyes front again (the visor turns about the helmet).
   const visor=figure.children[1];if(visor)visor.rotation.y=Math.PI/2;delete figure.userData.look;
@@ -31,12 +34,18 @@ export function bailOut(figure:T.Object3D,car:T.Object3D,scene:T.Object3D,height
   const walk={from,to,time:0,facing:Math.atan2(-side.x,-side.z),height};figure.userData.bail=walk;placeWalker(figure,0);
   return walk;
 }
-/** Moves a bailed-out driver along their walk for dt (a slight bob and leg swing while walking), stands them still, then takes
- * them away once they have watched long enough. */
+/** Moves a bailed-out driver along their walk for dt (a slight bob and leg swing while walking), stands them still waving for a
+ * while, then takes them away once they have watched long enough. True on the frame they get clear (for the crowd's cheer). */
 export function strollAway(figure:T.Object3D,dt:number){
-  const walk=figure.userData.bail;if(!walk||!(dt>0)||!figure.visible)return;
-  if(walk.time>=BAIL.stroll){walk.watched=(walk.watched??0)+dt;if(walk.watched>=BAIL.watch)figure.visible=false;return;}
+  const walk=figure.userData.bail;if(!walk||!(dt>0)||!figure.visible)return false;
+  if(walk.time>=BAIL.stroll){walk.watched=(walk.watched??0)+dt;wave(figure,walk.watched);if(walk.watched>=BAIL.watch)figure.visible=false;return false;}
   walk.time=Math.min(BAIL.stroll,walk.time+dt);placeWalker(figure,walk.time/BAIL.stroll);
+  if(walk.time>=BAIL.stroll){wave(figure,0);return true;}return false;
+}
+/** The arm on the figure's +x side up over the head, waving side to side, for BAIL.wave seconds of watching; then down. */
+function wave(figure:T.Object3D,t:number){
+  const shoulder=figure.children.find(o=>o.name==='driver_shoulder'&&o.position.x>0);if(!shoulder)return;
+  shoulder.rotation.z=t<BAIL.wave?2.5+Math.sin(t*9)*.3*Math.min(1,t*4):0;
 }
 function placeWalker(figure:T.Object3D,t:number){
   const walk=figure.userData.bail,at=walk.from.clone().lerp(walk.to,t),moving=t<1,phase=walk.time/BAIL.stroll*Math.PI*2*BAIL.walk/BAIL.stride/2;
