@@ -32,7 +32,7 @@ The Atelier's normal tessellation is unchanged. The standalone compiled demo was
 rebuilt as Atelier 1.10 to adopt the shared motion and shader changes (see its
 README).
 
-`src/fish/Betta.ts` evaluates the same vertex deformations on the CPU, refits a
+`src/fish/Betta.ts` (`bettaSpecimen.mjs`) evaluates the same vertex deformations on the CPU, refits a
 stackless triangle BVH, and uploads it to an RGBA32F texture. `bettaWGSL.ts`
 intersects the actual volumetric surfaces **after glass/water refraction**, with
 sand/water occlusion and translucent fin continuation. It is not a billboard or
@@ -130,7 +130,7 @@ Frame time was unchanged: interleaved old/new Chrome WebGPU runs at 64³, one ra
 Version 1.8 adds three behaviours and animated caustics (Atelier 1.10 shares the poses):
 - **Mirror display.** Every minute or two, at the end of a leg near the glass, it swims
   to the wall, faces its reflection obliquely and flares its fins for 5-8 s
-  (`mirror` in `src/fish/bettaSwim.mjs`; `Betta.ts` turns `swim.flaring` into the display
+  (`mirror` in `src/fish/bettaSwim.mjs`; `bettaSpecimen.mjs` turns `swim.flaring` into the display
   request). The globe renders no true reflection of the fish; the behaviour implies one.
 - **Inspection lap.** A slow circuit of the globe (about 1.5-2.5 turns of arc at
   `LAP_SPEED = 0.058`) in one direction, with a gentle vertical drift.
@@ -412,7 +412,7 @@ lamp in its lid, with a driftwood arch, dark rocks and two plants on pale sand.
   `src/render/scape/bedSolids.mjs`; the wood only where it reaches the sand): the sand rests on them
   and flows round them as the bowl turns (the floor under the turned sand is taken as no lower than
   the glass, so no moats open round them), the water meets them, and the fish can rest on them. The
-  fish's body is kept out of the solid parts it is near (`Betta.solidsNear`).
+  fish's body is kept out of the solid parts it is near (`BettaSpecimen.solidsNear`).
 - Tests: `node --test scape-bvh.test.mjs scape-scene.test.mjs` (17: the BVH against brute force,
   shadows, packing limits; every mesh sound, no piece through another, the fish's open water clear,
   deterministic builds) plus the 48 existing tests. An independent review (four reviewers, each
@@ -480,6 +480,18 @@ flexible, gives the water a gentle current, and makes the page run on phones:
   browser's shader cache). `?stats&debug=specks` paints what makes a speck (`?debug=nan`: where a
   colour stopped being a number); it builds its own shaders, so it loads slowly. Tests:
   `bowl-nan.test.mjs` (8), `bench-rows.test.mjs` (4) and `pipeline-count.test.mjs` (1), 127 in all.
+
+Phase 2, the betta off the page's thread: on a phone with four cores or more, the betta's whole
+update (its route, the Atelier fish and its fin solver, the skinning, its contacts with the glass,
+the bed and the furnishings) runs in a worker, a frame behind (`src/fish/bettaWorker.mjs`,
+`bettaLink.mjs`); the page draws, and reads the probes, mouth and swim of, the pose the worker
+sends back, and refits the fish's BVH on the GPU from its vertices as before. The worker's fish moves
+bit for bit as the page's would on the same inputs (`betta-worker.test.mjs`). In phone emulation at
+2.75x CPU throttle the betta's share of the main thread fell from 7.7 ms to 0.1-0.3 ms a frame (37 to
+49-60 fps there; the worker itself is not throttled in emulation, so its cost on a phone, and its
+effect on the load there, wait on a phone's `?bench`). `?worker=0` moves it on the page's thread
+again (desktops do by default), `?worker=1` in a worker anywhere. Details: docs/architecture.md, "The
+betta in a worker".
 
 ## Browser compatibility
 

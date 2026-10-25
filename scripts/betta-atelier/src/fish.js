@@ -379,9 +379,16 @@ function makeFin(fish, texture, roots, edge, kind = 0, side = 0, atlas = null) {
   fish.add(mesh);
   return mesh;
 }
-export function createBetta({ compact = false } = {}) {
+export function createBetta({ compact = false, textures = true } = {}) {
   const fish = new T.Group();
   fish.userData.compact = compact;
+  // (textures: false, for a host that only moves the fish, in a worker where no image can load:
+  // each photograph an empty stand-in, the fish ready at once.)
+  const load = (url, done, fail) => {
+    if (textures) return new T.TextureLoader().load(url, done, undefined, fail);
+    done();
+    return new T.Texture();
+  };
   const finDynamics = [];
   const bodyMotion = new BodyMotion();
   const spineTexture = new T.DataTexture(bodyMotion.data, SPINE_COUNT, 1, T.RGBAFormat, T.FloatType);
@@ -394,10 +401,9 @@ export function createBetta({ compact = false } = {}) {
     resolveTexture = resolve;
     rejectTexture = reject;
   });
-  const texture = new T.TextureLoader().load(
+  const texture = load(
     "https://media.jez237.com/demos/betta-atelier/references/2026-10-22/01-profile.jpg?v=69e062016b32",
     () => resolveTexture(),
-    undefined,
     rejectTexture,
   );
   texture.colorSpace = T.SRGBColorSpace;
@@ -407,10 +413,9 @@ export function createBetta({ compact = false } = {}) {
     resolveFin = resolve;
     rejectFin = reject;
   });
-  const finTexture = new T.TextureLoader().load(
+  const finTexture = load(
     "https://media.jez237.com/demos/betta-atelier/references/2026-10-22/03-fin-material.jpg?v=11641b5eba25",
     () => resolveFin(),
-    undefined,
     rejectFin,
   );
   finTexture.colorSpace = T.SRGBColorSpace;
@@ -432,12 +437,7 @@ export function createBetta({ compact = false } = {}) {
         fail = rej;
       }),
     );
-    const m = new T.TextureLoader().load(
-      macroUrls[name],
-      done,
-      undefined,
-      fail,
-    );
+    const m = load(macroUrls[name], done, fail);
     m.colorSpace = T.SRGBColorSpace;
     m.anisotropy = 8;
     return m;

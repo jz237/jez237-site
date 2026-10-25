@@ -166,7 +166,11 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   });
   const koi = new Koi(device, fishConfig, koiEnv());
   sim.koiPose = koi.texture;
-  const betta = new Betta(device);
+  // (On a phone of four cores or more the betta is moved in a worker, a frame behind: fish/Betta.ts.
+  // ?worker=0 moves it on this thread, ?worker=1 in a worker anywhere; ?manual's ticks move it here,
+  // in step with them, unless asked.)
+  const worker = params.get('worker');
+  const betta = new Betta(device, GLOBES.some((g) => g.betta) && (worker === null ? LITE && !params.has('manual') && navigator.hardwareConcurrency >= 4 : worker === '1'));
   // The betta's globe is a bowl, open at the mouth, with a lid (where the page shows it), which
   // comes off only to feed the fish.
   const bowl = GLOBES.some((g) => g.betta) ? bowlShape(o.globe, LITE, bowlDebug(params.get('debug'))) : null;
@@ -401,7 +405,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
       });
       betta.obstacles = turnedObstacles;
     }
-    betta.update(dt, sim.koiSense, koiEnv());
+    betta.update(dt, sim.koiSense, koiEnv(), controller.omega);
     sim.setKoiProbes(betta.active ? betta.probePoints() : koi.probePoints());
     if (betta.active) {
       sim.setProbes(BETTA_SURFACE_AT, betta.surfaceProbes());

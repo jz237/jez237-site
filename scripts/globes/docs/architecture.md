@@ -1076,3 +1076,60 @@ update or constrain, whose velNew there changes every substep, dt times the body
 extrapolate, which reaches two faces further), and none while the water moves. And what they
 leave as it was is right only while nothing they read changes over the water: sand carried up the
 glass by a tilt does (the cells' faces). About 0.1 ms on the S25 at rest, by the model.
+
+## The betta in a worker (src/fish/Betta.ts, bettaSpecimen.mjs, bettaLink.mjs, bettaWorker.mjs)
+
+Phase 2 of the phone work. The betta's update was most of a phone's main thread (7.7 ms of 9.1 in
+phone emulation at 2.75x CPU throttle; 9.2 ms on the user's S25 Ultra), too much for a mid-range
+phone's 16.7 ms frame.
+
+- **Split.** `BettaSpecimen` (bettaSpecimen.mjs, no DOM, no GPU) is the fish as the CPU moves it:
+  the Atelier specimen on the bowl's route (bettaSwim.mjs), its fins solved, skinned into one list
+  of vertices, kept inside the glass, above the bed and out of the furnishings' solid parts, its
+  probes, mouth and disturbance of the water. `Betta` keeps what needs the page: the BVH's texture
+  and its GPU refit, the atlas, the visible flag. Moved on the page's thread it is the code it was,
+  bit for bit (vertices, probes, mouth, swim and disturbance checked against 59903ac44 over 3000
+  frames at 37, 60 and 120 fps on the phones' fin settings and 60 on the desktop's).
+- **The worker.** On a phone (`LITE`) with four cores or more, a twin of the specimen is built in a
+  worker as the page loads (`createBetta({ textures: false })`: the photographs stay with the page)
+  and moved there. Each frame `Betta.update` takes the pose the worker made of the last frame's step,
+  uploads its vertices for the GPU refit as before, and from then on the page reads that pose's
+  probes, mouth and swim (the water's probes, the food, the nest), so the fish drawn and the fish
+  the water and the food meet are the same; then it sends this frame's step. The fish is hidden
+  until the first pose is back.
+- **Bit for bit.** A step is one Float64Array (about 1 KB: dt, FIN_QUALITY, the globe, the host's
+  inputs, the water's readings, the obstacles), a pose one ArrayBuffer (81 KB: float64 head, float32
+  probes and vertices); both are handed back and forth, so a frame makes neither. Every number
+  crosses as the float it was, so the worker's fish moves exactly as the page's would on the same
+  inputs: `betta-worker.test.mjs` (480 frames through a real worker thread, the fin settings
+  changed midway), and over 3000 frames at 37, 60 and 120 fps and on the desktop's fin settings, the
+  real Betta.ts in a worker thread against Betta.ts on the page's thread, one frame later: uploaded
+  vertices, the refit's BVH (its CPU mirror), probes, surface column, mouth, heading, mode and
+  disturbance all bit-identical.
+- **Late replies.** Poses are taken oldest first: a reply that misses its frame costs a frame of
+  delay (two behind), not a frame held and the next skipped. Once a second pose has been waiting 120
+  frames in a row, one is skipped to be a frame behind again (its disturbance still taken). At most
+  two steps go unanswered; past that a frame's time goes with the next step. In phone emulation the
+  reply comes back in about 2-3 ms (p90 3-4, max 6-20). A worker that never comes up, or stops
+  answering without an error (a stalled fetch of its script, a hang), is given up after 300 frames in
+  a row with no pose to take, as if it had failed (below).
+- **The bowl turning.** The pose is drawn a frame or more after its step, with the furnishings where
+  the bowl has turned them by then, so the obstacles are sent turned on by the bowl's spin for that
+  long (`omega` times the lead: a frame, and one more for each pose to be drawn before this one, both
+  those waiting and those of the steps still unanswered, as with a worker slower than a frame). In a
+  drag, the far end of the wood moved 0.018 sim units a frame (max 0.085; the fish is 0.26 long); the
+  lead leaves 0.005 (max 0.067, when the spin changes). Counted so, the lead is right for every pose
+  while the worker keeps up with the frames (a simulated worker taking 3-15 ms a step, 1 ms each
+  way, frames 16.7 ms apart); one that cannot (18 ms) draws 16% of its poses a frame later than led,
+  its own reply being late, which no count can see.
+- **Switches.** `?worker=0` moves it on the page's thread; `?worker=1` in a worker anywhere
+  (desktops stay on the page's thread by default: their frames are not short of time). `?manual`
+  moves it in step with its ticks unless `?worker=1`. A worker that fails, cannot start or goes
+  silent hands the fish back to the page's thread (from where it was built).
+- **Measured** (phone emulation, 412x915 at dpr 2.625, 2.75x CPU throttle, RTX 5090): the betta's
+  lap 7.7 -> 0.1-0.3 ms (update p50 0.2, p90 0.3-0.5 ms: the 81 KB upload, the refit's dispatch, the
+  post), the main thread 9.1 -> 1.1-2.5 ms a frame, 37 -> 49-60 fps (the GPU shared with other
+  work). The worker's chunk is 377 KB (95 KB gzip). The load's times stayed within run-to-run noise,
+  but there the worker (started as the page loads, beside the furnishings' worker) runs at the PC's
+  speed, unthrottled: its effect on a phone's load is unmeasured. A desktop with `?worker=1`
+  (1280x800, frames unpaced): update p50 2.9 -> 0.7 ms.
