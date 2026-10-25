@@ -115,6 +115,7 @@ import {cabinSmoke} from './cabin-smoke';
 import {WiperRig,wiperArms} from './windscreen-wipers';
 import {LEAK as TYRE_LEAK_RANGE} from './damage-handling';
 import type {GlassState} from './car-materials';
+import {CAR_WET} from './car-materials';
 import {disposeDriver} from './driver-figure';
 import {roofSign} from './roof-sign';
 import {withSlogan} from './race-numbers';
@@ -2173,6 +2174,7 @@ const honkTarget=new WeakMap<object,number>(),honkAt=new WeakMap<object,number>(
 function hitTheWreck(closing:number){if(online?.active||demo||closing<CROWD_BOO.closing)return;if(sound.crowdBoo()){boos++;toast('THE CROWD BOOS · THAT CAR WAS OUT',1.4);}}
 const smokeIn=new WeakMap<object,number>();
 const wiperRigs=new WeakMap<object,WiperRig>();
+let carWetOverride:number|null=null;
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
 function lookDriver(c:Vehicle,figure:T.Object3D,dt:number){
   const t=drivers.memory.get(c.id)?.target,prey=t!==undefined&&t>=0&&t!==c.id?cars.find(x=>x.id===t&&x.health>0):undefined;
@@ -2412,6 +2414,8 @@ function frame(now: number) {
   if (!physics || state === 'loading'||preparingOnline) return;
   rain?.update(camera,state==='paused'?0:dt);
   {const wet=eventLighting==='rain';if(wet!==wetOn||activeVenue.root!==wetRoot){applyWetLook(wetRoot,false);wetRoot=activeVenue.root;wetOn=wet;applyWetLook(wetRoot,wet);}}
+  // The cars are soaked in the rain too: darker paint and mud, a film of water on top (offline).
+  CAR_WET.value=carWetOverride??(eventLighting==='rain'&&state!=='menu'&&!garageOpen&&!online?.active?1:0);
   // Loose arena props are local physics: switch them off whenever this client is in an online event.
   {const off=!!online?.active;if(activeVenue.resetProps&&propsVenue!==activeVenue||propsOnline!==off){propsVenue=activeVenue;propsOnline=off;if(off)activeVenue.resetProps?.(false);else if(activeVenue.props.some(p=>!p.body.isEnabled()))activeVenue.resetProps?.(true);}}
   if(state!=='paused')activeVenue.update?.(clock);
@@ -2777,6 +2781,7 @@ async function boot() {
     rivalHonks: () => rivalHonks,
     /** QA: puncture a tyre as rolling over sharp debris does (it starts going down). */
     puncture: (id: number, wheel: number) => { const c = cars.find(x => x.id === id); if (!c?.tyreDamage || !(wheel >= 0 && wheel < 4)) return false; c.tyreDamage[wheel] = Math.max(c.tyreDamage[wheel], TYRE_LEAK_RANGE.onset + .05); return true; },
+    carWet: (v?: number | null) => { if (v !== undefined) carWetOverride = v; return CAR_WET.value; },
     wipers: (id = 0) => { const c = cars[id], r = c && wiperRigs.get(c); return r ? { arms: r.arms.length, phase: +r.phase.toFixed(3), sweeping: r.sweeping, bent: r.bentArms, angles: r.arms.map(a => +a.angle.toFixed(3)), names: r.arms.map(a => a.mesh.name) } : null; },
     cabinSmoke: (id: number) => { const c = cars.find(x => x.id === id); return c ? smokeIn.get(c) ?? 0 : null; },
     /** QA: set a tyre shredding, as a blowout does. */
