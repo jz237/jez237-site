@@ -117,6 +117,7 @@ import {steerArms,handReach,newHandState,type HandState} from './driver-arms';
 import {BONNET_STEAM,bonnetHeat,steamRate} from './bonnet-steam';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
+import {LensRain,LensRainPass} from './lens-rain';
 import {brakeSteamRate} from './brake-steam';
 import {createWetReflections,type Glow} from './wet-reflections';
 import {WIND,eventWind,gusting} from './wind';
@@ -712,9 +713,12 @@ composer.addPass(new RenderPass(scene, camera));
 const ao = new QuarryAO(scene, camera);
 // Hot air over fires, tailpipes and hot bonnets shimmers what is behind it (offline).
 const heatHaze = new HeatHazePass(() => ao.enabled);
+// Rain lands on the chase and hood cameras' lens (offline).
+const lensRainPass = new LensRainPass(), lensRain = new LensRain();
 const reflections = new LocalReflections(renderer, scene);
 composer.addPass(ao);
 composer.addPass(heatHaze);
+composer.addPass(lensRainPass);
 composer.addPass(new OutputPass());
 composer.addPass(new SMAAPass());
 const orbit = new OrbitControls(camera, canvas);
@@ -2222,6 +2226,12 @@ let carWetOverride:number|null=null;
 let umbrellasUp=false,umbrellaRoot:T.Object3D|undefined;
 // Heat haze columns: burning cars, running tailpipes (harder under throttle) and hot bonnets, fainter in the rain (offline).
 const hazeSources:HeatSource[]=[],hazeAt=new T.Vector3();let hazeOff=false;
+// Drops land on the lens while driving in an offline rain event and dry off once out of it (frozen while paused).
+function updateLensRain(dt:number){
+  if(state==='menu'||state==='lobby'||online?.active||studio||demo){if(lensRain.drops.length)lensRain.clear();lensRainPass.setDrops(lensRain.drops);return;}
+  const live=['countdown','playing','wrecked'].includes(state);
+  lensRain.step(state==='paused'||state==='inspect'?0:dt,live&&eventLighting==='rain',drivingCamera,Math.abs(cars[0]?.speed??0));lensRainPass.setDrops(lensRain.drops);
+}
 function updateHeatHaze(){
   hazeSources.length=0;const wet=eventLighting==='rain';
   if(!hazeOff&&!online?.active&&!studio&&['countdown','playing','paused','wrecked','result','inspect'].includes(state))for(const c of cars){if(!c.extendedDamage)continue;
@@ -2612,6 +2622,7 @@ function frame(now: number) {
   if (cars[0]) reflections.update(cars[0].root);
   renderer.shadowMap.needsUpdate = true;
   updateHeatHaze();
+  updateLensRain(dt);
   composer.render();
   studio?.capture(canvas);
   hudTime += dt;
@@ -2905,6 +2916,7 @@ async function boot() {
     reflections: () => wetReflections?.mesh.count ?? 0,
     litSpray: () => puddleSplashes?.litDrops ?? 0,
     heatHaze: (on?: boolean) => { if (on !== undefined) hazeOff = !on; const u = heatHaze.material.uniforms; return { columns: heatHaze.columns, enabled: heatHaze.enabled, sources: hazeSources.length, boxes: (u.boxes.value as T.Vector4[]).slice(0, heatHaze.columns).map((b, i) => [...b.toArray(), ...(u.info.value as T.Vector4[])[i].toArray()].map((n) => +n.toFixed(3))) }; },
+    lensRain: () => ({ drops: lensRain.drops.length, landed: lensRain.landed, enabled: lensRainPass.enabled, view: drivingCamera }),
     lampBeams: () => cars.map((c) => c.root.children.filter((o) => o.name === 'car_light_beam').map((b) => +b.position.x.toFixed(2))),
     heatDiscs: (id = 0, heat = 1) => { const c = cars[id]; if (!c?.extendedDamage) return false; c.discHeat.fill(heat); return true; },
     storm: () => storm ? { strikes: storm.strikes, claps: storm.claps, thunders: sound.thunders, flash: +lightning.intensity.toFixed(3) } : null,
