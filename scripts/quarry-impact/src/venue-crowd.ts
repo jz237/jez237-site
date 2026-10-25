@@ -1,5 +1,16 @@
 import * as T from 'three';
+/** Camera flashes in the stands: at most CROWD_FLASH.max at once, each lasting about CROWD_FLASH.life seconds. */
+export const CROWD_FLASH={max:30,life:.14,size:2.2} as const;
+/** After a big hit the whole crowd waves: arm swing rises to CROWD_SURGE.amplitude and eases back over CROWD_SURGE.seconds. */
+export const CROWD_SURGE={amplitude:.32,seconds:2.2} as const;
+/** Surge 0..1 at this many seconds after it started (eases out). */
+export const crowdSurge=(age:number)=>!Number.isFinite(age)||age<0||age>=CROWD_SURGE.seconds?0:1-(age/CROWD_SURGE.seconds)**2;
 export type SpectatorPlace={x:number;y:number;z:number;yaw:number;seated?:boolean};
+/** Rain (offline): every UMBRELLAS.every-th spectator (from UMBRELLAS.offset) holds up an umbrella, its canopy
+ * UMBRELLAS.radius wide just above the head, tipped back a little. Built on the first shower, two batches, hidden when dry. */
+/** In a breeze (UmbrellaWind, m/s) each umbrella is angled into it, UMBRELLAS.leanPer radians per m/s up to UMBRELLAS.lean; from
+ * UMBRELLAS.gale m/s, UMBRELLAS.inside of them have blown inside out. */
+export const UMBRELLAS={leanPer:.14,lean:.5,gale:2.6,inside:.05,every:3,offset:1,radius:.66,height:.3,above:1.3,tilt:.16,colours:[0x1b1d22,0x9d2b2b,0x24406b,0xd8c24a,0xe8e6df,0x2f6b46,0x6b3b6e]} as const;
 /** Original low-poly spectators, batched by geometry rather than person or outfit.
  * Local +Z faces the event; y is the grandstand tread, not the seat top. */
 export function createVenueCrowd(places:readonly SpectatorPlace[]){
@@ -32,11 +43,63 @@ export function createVenueCrowd(places:readonly SpectatorPlace[]){
  let triangles=0;for(const[shape,rows]of batches){const geo=geometries[shape],mesh=new T.InstancedMesh(geo,material,rows.length);mesh.name='crowd_'+shape;rows.forEach((row,i)=>{mesh.setMatrixAt(i,row.matrix);mesh.setColorAt(i,row.color)});meshes.set(shape,mesh);if(shape==='limb'||shape==='head')mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);mesh.computeBoundingSphere();if(mesh.boundingSphere)mesh.boundingSphere.radius+=.35;mesh.castShadow=mesh.receiveShadow=true;root.add(mesh);triangles+=(geo.index?.count??geo.getAttribute('position').count)/3*rows.length;}
  root.userData.spectatorCount=places.length;root.userData.triangles=triangles;
  const rotation=new T.Matrix4(),posed=new T.Matrix4();let lastTick=-1;
+ // Camera flashes popping in the stands after a big hit: a small pool of additive sprites made on first use (browser only).
+ const flashes:{sprite:T.Sprite;until:number}[]=[];let flashTexture:T.Texture|null=null,now=0,flashSeed=1,surgeAt=-1e9;
+ function flash(count:number){
+  if(disposed||!places.length||typeof document==='undefined')return 0;
+  if(!flashTexture){const c=document.createElement('canvas');c.width=c.height=32;const g=c.getContext('2d');if(!g)return 0;const r=g.createRadialGradient(16,16,0,16,16,16);r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(.25,'rgba(240,246,255,.85)');r.addColorStop(1,'rgba(220,235,255,0)');g.fillStyle=r;g.fillRect(0,0,32,32);flashTexture=new T.CanvasTexture(c);}
+  surgeAt=now;
+  let lit=0;
+  for(let k=0;k<Math.min(CROWD_FLASH.max,Math.max(0,Math.floor(count)));k++){
+   let f=flashes.find(x=>x.until<=now);
+   if(!f){if(flashes.length>=CROWD_FLASH.max)break;const sprite=new T.Sprite(new T.SpriteMaterial({map:flashTexture,color:0xffffff,blending:T.AdditiveBlending,transparent:true,depthWrite:false}));sprite.name='crowd_flash';sprite.visible=false;root.add(sprite);f={sprite,until:0};flashes.push(f);}
+   flashSeed=(Math.imul(flashSeed,1664525)+1013904223)>>>0;const p=places[flashSeed%places.length],life=CROWD_FLASH.life*(.6+(flashSeed>>>8)%100/100*.8);
+   f.sprite.position.set(p.x,p.y+(p.seated===false?1.6:1.15),p.z);f.sprite.scale.setScalar(CROWD_FLASH.size*(.7+(flashSeed>>>16)%100/100*.6));
+   f.until=now+life+(k%5)*.035;f.sprite.visible=true;lit++;
+  }
+  return lit;
+ }
+ root.userData.crowdFlash=flash;
+ // Umbrellas go up in the rain: two more batches made on the first shower, then only shown or hidden.
+ let umbrellaMeshes:T.InstancedMesh[]|null=null;
+ function buildUmbrellas(){
+  const held=places.filter((_,i)=>i%UMBRELLAS.every===UMBRELLAS.offset),u=UMBRELLAS;
+  const canopy=new T.InstancedMesh(new T.ConeGeometry(u.radius,u.height,8,1,true),new T.MeshStandardMaterial({roughness:.55,side:T.DoubleSide}),Math.max(1,held.length));
+  const shaft=new T.InstancedMesh(new T.CylinderGeometry(.012,.012,1,4,1),new T.MeshStandardMaterial({color:0x2a2a2a,roughness:.5}),Math.max(1,held.length));
+  canopy.name='crowd_umbrella';shaft.name='crowd_umbrella_shaft';canopy.count=shaft.count=held.length;
+  const m=new T.Matrix4(),local=new T.Object3D(),colour=new T.Color(),top=new T.Vector3(),hand=new T.Vector3();
+  held.forEach((p,k)=>{
+   base.makeRotationY(p.yaw);base.setPosition(p.x,p.y,p.z);const hip=p.seated!==false?.48:.88,i=k*UMBRELLAS.every+UMBRELLAS.offset;
+   top.set(0,hip+u.above,-.04);canopy.setColorAt(k,colour.setHex(u.colours[(i*5+Math.floor(i/4))%u.colours.length]));
+   hand.set(.1,hip+.25,.2);local.position.copy(hand).add(top).multiplyScalar(.5);local.quaternion.setFromUnitVectors(up,top.clone().sub(hand).normalize());local.scale.set(1,top.distanceTo(hand),1);local.updateMatrix();
+   shaft.setMatrixAt(k,m.multiplyMatrices(base,local.matrix));
+  });
+  for(const mesh of [canopy,shaft]){mesh.castShadow=false;mesh.visible=false;root.add(mesh);}
+  return [canopy,shaft];
+ }
+ // Each canopy just above its holder, tipped back a little; angled into a breeze, and in a gale a few blown inside out.
+ function poseUmbrellas(canopy:T.InstancedMesh,wind?:{x:number;z:number}){
+  const held=places.filter((_,i)=>i%UMBRELLAS.every===UMBRELLAS.offset),u=UMBRELLAS,m=new T.Matrix4(),local=new T.Object3D();
+  const wx=Number.isFinite(wind?.x)?wind!.x:0,wz=Number.isFinite(wind?.z)?wind!.z:0,speed=Math.hypot(wx,wz),lean=Math.min(u.lean,speed*u.leanPer);
+  held.forEach((p,k)=>{
+   base.makeRotationY(p.yaw);base.setPosition(p.x,p.y,p.z);const hip=p.seated!==false?.48:.88,i=k*UMBRELLAS.every+UMBRELLAS.offset;
+   // Upwind in the holder's own frame.
+   const c=Math.cos(p.yaw),sn=Math.sin(p.yaw),dx=speed?-(wx*c-wz*sn)/speed:0,dz=speed?-(wx*sn+wz*c)/speed:0;
+   const flipped=speed>=u.gale&&(Math.sin(i*78.233)*43758.5453%1+1)%1<u.inside,into=flipped?-lean*1.4:lean;
+   local.position.set(0,hip+u.above,-.04);local.rotation.set(-u.tilt+into*dz,0,((i*7)%5-2)*.05-into*dx);local.scale.set(1,flipped?-1:1,1);local.updateMatrix();
+   canopy.setMatrixAt(k,m.multiplyMatrices(base,local.matrix));
+  });
+  canopy.instanceMatrix.needsUpdate=true;canopy.userData.inside=speed>=u.gale?held.filter((_,k)=>(Math.sin((k*UMBRELLAS.every+UMBRELLAS.offset)*78.233)*43758.5453%1+1)%1<u.inside).length:0;
+ }
+ root.userData.umbrellas=(on:boolean,wind?:{x:number;z:number})=>{if(disposed||!places.length)return;if(on&&!umbrellaMeshes)umbrellaMeshes=buildUmbrellas();if(on&&umbrellaMeshes)poseUmbrellas(umbrellaMeshes[0],wind);for(const mesh of umbrellaMeshes??[])mesh.visible=on;};
  function update(time:number){
   if(disposed||!Number.isFinite(time)||time<0)return;
+  now=time;for(const f of flashes)if(f.sprite.visible&&f.until<=time)f.sprite.visible=false;
   const tick=Math.floor(time*30);if(tick===lastTick)return;lastTick=tick;
   for(const arm of arms){
-   const angle=arm.amplitude*(Math.sin(tick/30*arm.speed+arm.phase)-Math.sin(arm.phase));
+   // Only the swing grows (changing speed would jump the phase late in an event).
+   const surge=crowdSurge(time-surgeAt),amplitude=arm.amplitude+(CROWD_SURGE.amplitude-arm.amplitude)*Math.max(0,surge);
+   const angle=amplitude*(Math.sin(tick/30*arm.speed+arm.phase)-Math.sin(arm.phase));
    rotation.makeRotationAxis(arm.axis,angle);
    // Rotate the complete arm about its shoulder, retaining connected joints.
    const e=rotation.elements,p=arm.pivot;
@@ -45,5 +108,5 @@ export function createVenueCrowd(places:readonly SpectatorPlace[]){
   }
   for(const shape of ['limb','head'] as const){const mesh=meshes.get(shape);if(mesh)mesh.instanceMatrix.needsUpdate=true;}
  }
- let disposed=false;return{root,update,dispose(){if(disposed)return;disposed=true;root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose()});Object.values(geometries).forEach(g=>g.dispose());material.dispose();root.clear();}};
+ let disposed=false;return{root,update,dispose(){if(disposed)return;disposed=true;for(const f of flashes)(f.sprite.material as T.Material).dispose();flashTexture?.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose()});for(const mesh of umbrellaMeshes??[]){mesh.geometry.dispose();(mesh.material as T.Material).dispose();}Object.values(geometries).forEach(g=>g.dispose());material.dispose();root.clear();}};
 }
