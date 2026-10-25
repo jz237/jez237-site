@@ -120,6 +120,7 @@ import {TYRE_STEAM,tyreSteamRate} from './tyre-heat';
 import {DUST,dustRate} from './dust-trails';
 import {COLD_START,coldStartPuffs,crankStarts} from './cold-start';
 import {GravelRoost,ROOST,roostRate} from './gravel-roost';
+import {STRAP,TowStraps} from './tow-straps';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -427,7 +428,7 @@ const eventAwards=new EventAwards();const propFires=new PropFires();
 /** Loose props as fire sources: where they are now and whether they burn. */
 const propPoints=(props:readonly {mesh:T.Object3D}[])=>props.map(p=>({x:p.mesh.position.x,y:p.mesh.position.y,z:p.mesh.position.z,kind:propKind((p.mesh as T.Mesh).geometry?.type)}));let slowMoUntil=0,slowMoScale=.3;
 /** Brief Burnout-style slow motion when the player wrecks an opponent (local events only). */
-const TAKEDOWN_SLOWMO={scale:.3,seconds:.9};const carLights=new Map<Vehicle,CarLights>(),lampDangles=new Map<Vehicle,LampDangle>();let lastBadges:string[]=[];
+const TAKEDOWN_SLOWMO={scale:.3,seconds:.9};const carLights=new Map<Vehicle,CarLights>(),lampDangles=new Map<Vehicle,LampDangle>(),towStraps=new Map<Vehicle,TowStraps>();let lastBadges:string[]=[];
 const badgeLine=()=>lastBadges.length?`<p class="badge-unlock">★ ACHIEVEMENT${lastBadges.length>1?'S':''} UNLOCKED · ${lastBadges.join(' · ')}</p>`:'';
 /** Race feedback for the player's own impacts; derbies already have their score feed. */
 function callout(kind:'TAKEDOWN'|'BIG HIT',victim:Vehicle){if(mode!=='race'||demo||online?.active||pursuit)return;toast(kind==='TAKEDOWN'?`TAKEDOWN · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`:`BIG HIT · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`,kind==='TAKEDOWN'?2.5:1.2);}
@@ -968,7 +969,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   sound.clearCars();
   vehicleFire?.reset();propFires.reset();
   puddleSplashes?.reset();gravelRoost.reset();
-  for (const c of cars){lampDangles.get(c)?.dispose();lampDangles.delete(c);carLights.get(c)?.dispose();carLights.delete(c);c.dispose();}
+  for (const c of cars){lampDangles.get(c)?.dispose();lampDangles.delete(c);towStraps.get(c)?.dispose();towStraps.delete(c);carLights.get(c)?.dispose();carLights.delete(c);c.dispose();}
   clearMarshals();
   for(const f of bailed)disposeDriver(f);bailed.length=0;
   cars = [];
@@ -1030,6 +1031,8 @@ function createCars(attract = false, previewSetup?:Setup) {
     // A lamp smashed hard enough hangs out of its socket on its wiring; a harder knock tears it away (offline).
     if(car.extendedDamage){const lights=carLights.get(car)!,lamps=[...Array.from({length:lights.head},(_,j)=>({mesh:lights.lamp('head',j)!,end:1})),...Array.from({length:lights.tail},(_,j)=>({mesh:lights.lamp('tail',j)!,end:-1}))].filter(l=>l.mesh);
       lampDangles.set(car,new LampDangle(car.root,lamps,mesh=>fx.detach(mesh,car.velocity.clone().multiplyScalar(.65))));}
+    // A bright tow strap hangs off each bumper and swings; a smashed or lost bumper takes its strap with it (offline).
+    if(car.extendedDamage)towStraps.set(car,new TowStraps(car.root,car.panels,DEFINITIONS[type].halfLength,STRAP.colours[i%STRAP.colours.length],loop=>fx.detach(loop,car.velocity.clone().multiplyScalar(.6))));
     // Broken glass and smashed lamps leave their pieces on the floor (offline).
     if(car.extendedDamage){const glassSound=car.onGlassBreak,lights=carLights.get(car);let n=0;car.onGlassBreak=p=>{glassSound?.(p);fx.scatterLitter(p,'glass',car.id*131+(++n),car.current);};if(lights)lights.onSmash=(p,kind)=>fx.scatterLitter(p,kind,car.id*137+(++n),car.current);}
     // A big hit knocks flakes of the car's paint off, a blowout leaves lumps of tyre (offline).
@@ -2339,7 +2342,7 @@ function updateCamera(dt: number) {
   // Derby flags whip about with their cars and snap once a car is out or upside down.
   if(state!=='paused')for(const c of cars){const f=c.root.children.find(o=>o.name==='derby_flag');if(f)waveFlag(f,c.root,dt,c.health<=0||c.inverted>.3,windy&&!online?.active?breeze:undefined);}
   // Smashed lamps hang and swing on their wiring as the car brakes, accelerates and turns (offline).
-  if(state==='playing'||state==='wrecked'||state==='result'||state==='countdown')for(const c of cars)lampDangles.get(c)?.update(c.velocity,dt);
+  if(state==='playing'||state==='wrecked'||state==='result'||state==='countdown')for(const c of cars){lampDangles.get(c)?.update(c.velocity,dt);towStraps.get(c)?.update(c.velocity,dt);}
   // Drivers get out of wrecked cars that are burning or blown up once they have stopped, and walk clear to watch (offline).
   if(state==='playing'||state==='wrecked'){for(const c of cars){if(!c.extendedDamage)continue;const d=c.root.children.find(o=>o.name==='driver');if(!d)continue;
     const t=(c.onFire||c.blownUp)&&c.health<=0&&Math.abs(c.speed)<BAIL.speed?(bailClock.get(c)??0)+dt:0;bailClock.set(c,t);
@@ -3017,6 +3020,7 @@ async function boot() {
     tyreSteam: () => tyrePuffs,
     dust: () => dustPuffs,
     coldStart: () => ({ puffs: coldPuffs, age: +coldStart.toFixed(2) }),
+    towStraps: (id = 0, damage?: number) => { const c = cars.find(x => x.id === id), s = c && towStraps.get(c); if (s && damage !== undefined) for (const x of s.straps) if (x.panel) x.panel.userData.damage = damage; return s ? { straps: s.straps.length, ends: s.straps.map(x => x.end), torn: s.torn, swings: s.swings, panels: s.straps.map(x => x.panel?.name ?? null) } : null; },
     roost: () => ({ thrown: gravelRoost.thrown, flying: gravelRoost.flying, spins: cars.map(c => c.wheelSpins.map(v => +v.toFixed(2))), surfaces: cars.map(c => c.surface), offline: cars.map(c => c.extendedDamage), wet: cars.map(c => c.wetWheels.filter(Boolean).length), speeds: cars.map(c => +c.speed.toFixed(2)) }),
     tyres: (id = 0, temp?: number) => { const c = cars.find((x) => x.id === id); if (!c) return null; if (temp !== undefined) c.tyreTemp.fill(temp); return { temp: c.tyreTemp.map((v) => +v.toFixed(3)), grip: c.tyreGrip.map((v) => +v.toFixed(3)) }; },
     discs: (id = 0) => { const c = cars.find((x) => x.id === id); return c ? Array.from(c.discHeat, (v) => +v.toFixed(3)) : null; },
