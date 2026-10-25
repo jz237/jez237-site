@@ -42,8 +42,9 @@ const BREAK_CLIPS:Record<string,{id:string;volume:number;rate:number;duration:nu
   bearing:{id:'engine-seize',volume:.5,rate:1.3,duration:1.2},tyrefire:{id:'vehicle-burst',volume:.45,rate:.8,duration:.9},exhaustcrush:{id:'impact-medium',volume:.6,rate:1.25,duration:.6}};
 /** Clips with extra recorded takes (id-2, id-3) that shot() rotates between: the impacts and the glass and debris layers. */
 const TAKES=/^(impact-(light|medium|heavy)|glass|debris)$/;
-/** The arena air horn over the PA as a derby heat starts: the recorded takes in turn, one per heat, at gain level (not placed in the world). */
-export const ARENA_HORN={level:.45,ids:['air-horn','air-horn-end']} as const;
+/** The arena air horn over the PA as a derby heat starts (the recorded takes in turn, one per heat, at gain level, not placed in the
+ * world) and, the long take, as it ends. */
+export const ARENA_HORN={level:.45,ids:['air-horn','air-horn-end'],end:'air-horn-end'} as const;
 /** A tyre rubbing a crushed arch (0–1): the hardest rub on the car, with road speed (full from 10 m/s), louder still once
  * the tyre is smoking; silent below RUB.warn or at a crawl. */
 export const rubLoopLevel=(rubs:ArrayLike<number>,speed:number,heat:number)=>{const r=Math.max(0,...Array.from(rubs)),v=Math.abs(Number.isFinite(speed)?speed:0);
@@ -168,6 +169,12 @@ export class Sound {
       gain.gain.value=Math.min(1,CROWD_CHEER.level*intensity);source.connect(gain).connect(this.ambientBus);source.start();return true;}
     this.crowdRoar??=new CrowdRoar(this.ctx,this.ambientBus);
     return this.crowdRoar.roar(intensity);
+  }
+  /** The arena horn ending a derby heat: finish() pauses the audio graph at once, so this plays through a plain audio element (at the
+   * horn's level on the ambience setting), and stays silent when muted or before the sound is up. */
+  endHorn(){
+    if(!this.ready||this.muted||typeof Audio==='undefined'||!this.buffers.has(ARENA_HORN.end))return false;
+    const horn=new Audio(`audio/${ARENA_HORN.end}.ogg`);horn.volume=Math.max(0,Math.min(1,ARENA_HORN.level*this.levels.ambience/.45));horn.play().catch(()=>{});return true;
   }
   arenaHorn(heat:number){
     if(!this.ready||this.muted||this.paused||!this.ctx||!this.ambientBus||this.ctx.state!=='running')return false;

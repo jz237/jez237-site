@@ -1767,6 +1767,8 @@ function finish(title: string) {
   if(activeClubRound!==null){finishClubEvent();return;}
   resultTitle = title;
   state = 'result';
+  // The arena horn sounds the end of a derby heat (it plays on through the pause).
+  if(mode==='derby'&&!online?.active&&sound.endHorn())endHorns++;
   sound.pause(true);
   const ordered = online?.active ? (online.network.snapshot?.ranking??[]).map(id=>cars.find(c=>c.id===id)!).filter(Boolean) : mode === 'derby' ? derbyRanking() : rankRace();
   const rank = ordered.findIndex(isPlayer) + 1;
@@ -2147,7 +2149,7 @@ function updateCraze(){
 function cycleDrivingCamera(){drivingCamera=nextDrivingCamera(drivingCamera);toast(DRIVING_CAMERA_LABELS[drivingCamera]+' CAMERA');}
 const lookLocal=new T.Vector3(),lookTurn=new T.Quaternion();
 const crunchAt=new T.Vector3(),crunchClock=new WeakMap<object,number>();let crunchTake=0;
-let hornHeats=0;
+let hornHeats=0,endHorns=0;
 const bailClock=new WeakMap<object,number>(),bailed:T.Object3D[]=[];
 const BAIL_CHEER=.75;
 const shredClock=new WeakMap<object,number>();let shredChunks=0;
@@ -2730,6 +2732,7 @@ async function boot() {
     /** QA: chips of glass and lamp lens on the floor, and the breaks that left them by kind. */
     litter: () => ({ chips: fx.litter.mesh.count, ...fx.litter.breaks, last: fx.litter.last.toArray(), crunches: crunchTake }),
     horns: () => hornHeats,
+    endHorns: () => endHorns,
     cabinSmoke: (id: number) => { const c = cars.find(x => x.id === id); return c ? smokeIn.get(c) ?? 0 : null; },
     /** QA: set a tyre shredding, as a blowout does. */
     shredTyre: (id: number, wheel: number) => { const c = cars.find(x => x.id === id); if (!c || !(wheel >= 0 && wheel < 4)) return false; c.tyreShred[wheel] = SHRED_SECONDS; return true; },
