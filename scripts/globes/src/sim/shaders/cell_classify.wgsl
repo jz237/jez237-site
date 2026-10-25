@@ -3,12 +3,13 @@
 // draws), so the solver and the picture agree. Thanks to the mirrored particles at the
 // glass, thin wall cells that particles cannot reach still read as water when submerged
 // (otherwise they would be zero-pressure sinks pulling water into the glass).
+// (In grid update's dispatch: grid_update.wgsl, whose bindings come first.)
 
-@group(0) @binding(1) var<storage, read> field: array<f32>;
-@group(0) @binding(2) var<storage, read> cellFaceW: array<vec2u>;
-@group(0) @binding(3) var<storage, read_write> cellType: array<u32>;
-@group(0) @binding(4) var<storage, read_write> cellRho: array<f32>;
-@group(0) @binding(5) var<storage, read> cellCount: array<u32>;
+@group(0) @binding(4) var<storage, read> field: array<f32>;
+@group(0) @binding(5) var<storage, read> cellFaceW: array<vec2u>;
+@group(0) @binding(6) var<storage, read_write> cellType: array<u32>;
+@group(0) @binding(7) var<storage, read_write> cellRho: array<f32>;
+@group(0) @binding(8) var<storage, read> cellCount: array<u32>;
 
 fn fieldAt(q: vec3i) -> f32 {
   let idx = densityIndex(q);
@@ -30,8 +31,7 @@ fn sampleField(x: vec3f) -> f32 {
   return v;
 }
 
-@compute @workgroup_size(8, 8, 4)
-fn cellClassify(@builtin(global_invocation_id) gid: vec3u) {
+fn cellClassify(gid: vec3u) {
   let n = P.n;
   if (any(gid >= vec3u(n))) { return; }
   if (farOutside(P.origin + (vec3f(gid) + vec3f(0.5)) * P.h)) { return; }

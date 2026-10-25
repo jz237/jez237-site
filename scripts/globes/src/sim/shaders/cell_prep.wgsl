@@ -17,6 +17,11 @@
 // Per tile of the pressure solve (pressureTile): whether any of its cells is water (cleared
 // before; pressure.wgsl skips the tiles without).
 @group(0) @binding(7) var<storage, read_write> pressureTiles: array<atomic<u32>>;
+// Where the solve's sweeps may go from one buffer to another and back (pressure_fused.wgsl): the
+// other, held at nought off the water as psi is (while they go as two colours too, so that they can
+// switch from one step to the next).
+@group(0) @binding(8) var<storage, read_write> psiOther: array<f32>;
+override PING_PONG: bool = false;
 
 const THETA_MIN: f32 = 0.05;
 // Density deviation tolerated before the drift correction acts (absorbs sampling noise).
@@ -54,6 +59,7 @@ fn cellPrep(@builtin(global_invocation_id) gid: vec3u) {
 
   if (cellType[c] != CELL_FLUID) {
     psi[pc] = 0.0;
+    if (PING_PONG) { psiOther[pc] = 0.0; }
     rhs[pc] = vec2f(0.0);
     return;
   }

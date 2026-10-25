@@ -60,12 +60,24 @@ fn rockCover(i: i32, j: i32) -> f32 {
   return 1.0 - smoothstep(0.0, 0.008, sandT[c]);
 }
 
+// The workgroup's 16 x 16 columns and one round them: each one's surface and rock cover, worked
+// out once for the nine smoothed columns that take it in (bare glass looks up to four columns
+// round it for sand).
+var<workgroup> surface: array<f32, 324>;
+var<workgroup> cover: array<f32, 324>;
+
 @compute @workgroup_size(16, 16)
-fn sandExtend(@builtin(global_invocation_id) gid: vec3u) {
+fn sandExtend(@builtin(global_invocation_id) gid: vec3u, @builtin(workgroup_id) wid: vec3u,
+              @builtin(local_invocation_id) lid: vec3u, @builtin(local_invocation_index) li: u32) {
   let n = i32(P.sandMap.x);
-  let i = i32(gid.x);
-  let j = i32(gid.y);
-  if (i >= n || j >= n) { return; }
+  let o = vec2i(wid.xy) * 16 - vec2i(1);
+  for (var k = li; k < 324u; k += 256u) {
+    let c = o + vec2i(i32(k % 18u), i32(k / 18u));
+    surface[k] = surfaceAt(c.x, c.y);
+    cover[k] = rockCover(c.x, c.y);
+  }
+  workgroupBarrier();
+  if (i32(gid.x) >= n || i32(gid.y) >= n) { return; }
   // A light 3x3 binomial smoothing of the published surface hides column-scale noise (the
   // sand itself, in sandT, is untouched, so volume stays exact).
   var value = 0.0;
@@ -73,8 +85,9 @@ fn sandExtend(@builtin(global_invocation_id) gid: vec3u) {
   for (var dj = -1; dj <= 1; dj++) {
     for (var di = -1; di <= 1; di++) {
       let w = select(0.5, 1.0, di == 0) * select(0.5, 1.0, dj == 0) * 0.25;
-      value += w * surfaceAt(i + di, j + dj);
-      rock += w * rockCover(i + di, j + dj);
+      let k = u32(i32(lid.x) + 1 + di + 18 * (i32(lid.y) + 1 + dj));
+      value += w * surface[k];
+      rock += w * cover[k];
     }
   }
   textureStore(sandTexOut, gid.xy, vec4f(value, rock, 0.0, 1.0));
