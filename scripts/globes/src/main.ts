@@ -271,6 +271,9 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     const [w, h] = stageSize();
     const most = device.limits.maxTextureDimension2D;
     renderer.setPixelRatio(Math.min(ratioOverride ?? ratioAt(LITE ? 1 : Math.min(window.devicePixelRatio, 2), sharpness), most / w, most / h));
+    // (A phone's table mirror stays as sharp as at its lowest ratio, 0.3 texels to a CSS pixel,
+    // however sharp the picture: faint and blurred as it is, it traces the bowl again.)
+    studio?.setMirrorScale(LITE ? Math.min(0.5, 0.3 / renderer.getPixelRatio()) : 0.5);
     renderer.setSize(w, h);
     camera.aspect = w / h;
     camera.fov = (2 * Math.atan(Math.tan((FOV * Math.PI) / 360) * Math.max(1, NARROWEST / camera.aspect)) * 180) / Math.PI;

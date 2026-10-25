@@ -3,8 +3,8 @@
 
 import type { GlobeConfig, LightConfig } from '../config';
 import { bettaLiteWGSL, bettaWGSL, BETTA_PARAMS, BETTA_ARGS } from '../fish/bettaWGSL';
-import { koiWGSL } from '../fish/koiWGSL';
-import { clownShadeWGSL, clownWGSL } from '../fish/clownWGSL';
+import { KOI_TEXEL, koiWGSL } from '../fish/koiWGSL';
+import { CLOWN_FISH, clownShadeWGSL, clownWGSL } from '../fish/clownWGSL';
 import { foodWGSL } from '../fish/FishFood';
 import { kelpRenderWGSL } from '../kelp/kelpWGSL';
 import { BOWL_PARAMS, bowlWGSL, type BowlShape } from './bowl';
@@ -971,10 +971,58 @@ fn globes_bowlTrace(${params}) -> vec4f {
     o = globesBowlP;
     d = globesBowlDir;
   }
+  // (A ray that met none of it: the backdrop is drawn there already.)
+  if (!met) { return vec4f(0.0); }
   col += thr * globes_bg(bgTex, bgSamp, o, d);
-  return vec4f(col, select(0.0, 1.0, met));
+  return vec4f(col, 1.0);
 }
 `;
+}
+
+/** For the betta bowl's passes, in place of the other globes' fish and growth (koiWGSL,
+ *  clownWGSL, kelpRenderWGSL, reefRenderWGSL, and the koi's and the clownfish's tracing and
+ *  shading here): what globes_trace names of them, doing nothing. The bowl never shows them (its
+ *  kelp, reef and clownfish consts are false, and so is its koiVisible), but their code compiled
+ *  in would still cost: in the time its pipelines take to build, and in registers even where it
+ *  never runs (docs/architecture.md, performance lessons). */
+function bowlStandInsWGSL(): string {
+  return /* wgsl */ `
+const KOI_MISC: i32 = ${KOI_TEXEL.misc};
+const CLOWN_FISH: i32 = ${CLOWN_FISH};
+var<private> koiHint: i32;
+var<private> clownHint: i32;
+struct KoiBox { c: vec4f, x: vec4f, y: vec4f, z: vec4f };
+struct KoiHits { body: f32, n: i32, f0: f32, f1: f32, f2: f32, graze: f32 };
+struct KelpHit { t: f32, prim: i32, u: f32, v: f32, inset: f32 };
+struct ReefHit { t: f32, prim: i32, u: f32, v: f32, rim: f32, near: f32, nearBody: f32 };
+fn koi_box(pose: texture_2d<f32>) -> KoiBox { return KoiBox(vec4f(0.0), vec4f(0.0), vec4f(0.0), vec4f(0.0)); }
+fn koi_boxClip(b: KoiBox, p: vec3f, dir: vec3f) -> vec2f { return vec2f(1.0, 0.0); }
+fn koi_map(pose: texture_2d<f32>, x: vec3f) -> vec2f { return vec2f(1e9, 0.0); }
+fn koi_normal(pose: texture_2d<f32>, x: vec3f) -> vec3f { return vec3f(0.0, 1.0, 0.0); }
+fn globes_koiTrace(pose: texture_2d<f32>, field: texture_3d<f32>, fieldSamp: sampler, p: vec3f, dir: vec3f, t0: f32, t1: f32, eps0: f32, epsK: f32) -> KoiHits { return KoiHits(1e9, 0, 1e9, 1e9, 1e9, 1e9); }
+fn globes_koiFinAt(h: KoiHits, k: i32) -> f32 { return 1e9; }
+fn globes_koiShade(pose: texture_2d<f32>, x: vec3f, n: vec3f, rd: vec3f, mat: f32, inWater: bool, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, foot: f32) -> vec4f { return vec4f(0.0); }
+fn globes_koiNear(pose: texture_2d<f32>, field: texture_3d<f32>, fieldSamp: sampler, p: vec3f, dir: vec3f, t1: f32) -> bool { return false; }
+fn globes_clownNear(pose: texture_2d<f32>, field: texture_3d<f32>, fieldSamp: sampler, p: vec3f, dir: vec3f, t1: f32) -> bool { return false; }
+fn globes_clownTrace(pose: texture_2d<f32>, field: texture_3d<f32>, fieldSamp: sampler, row: i32, p: vec3f, dir: vec3f, t0: f32, t1: f32, eps0: f32, epsK: f32) -> f32 { return 1e9; }
+fn clown_map(pose: texture_2d<f32>, row: i32, x: vec3f) -> vec2f { return vec2f(1e9, 0.0); }
+fn clown_normal(pose: texture_2d<f32>, row: i32, x: vec3f) -> vec3f { return vec3f(0.0, 1.0, 0.0); }
+fn clown_shade(pose: texture_2d<f32>, row: i32, x: vec3f, n0: vec3f, rd: vec3f, mat: f32, inWater: bool, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, foot: f32) -> vec3f { return vec3f(0.0); }
+fn kelp_trace(cellTex: texture_3d<f32>, refTex: texture_2d<f32>, primTex: texture_2d<f32>, p: vec3f, dir: vec3f, tMin: f32, tMax: f32, foot0: f32, footK: f32) -> KelpHit { return KelpHit(tMax, -1, 0.0, 0.0, 0.0); }
+fn kelp_shade(primTex: texture_2d<f32>, h: KelpHit, p: vec3f, dir: vec3f, inWater: bool, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, foot: f32) -> vec3f { return vec3f(0.0); }
+fn reef_trace(cellTex: texture_3d<f32>, refTex: texture_2d<f32>, primTex: texture_2d<f32>, rot: mat3x3f, p: vec3f, dir: vec3f, tMin: f32, tMax: f32, foot0: f32, footK: f32) -> ReefHit { return ReefHit(tMax, -1, 0.0, 0.0, 0.0, 1e9, 1e9); }
+fn reef_squarely(primTex: texture_2d<f32>, h: ReefHit, dir: vec3f) -> bool { return false; }
+fn reef_shade(primTex: texture_2d<f32>, h: ReefHit, p: vec3f, dir: vec3f, inWater: bool, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, foot: f32) -> vec3f { return vec3f(0.0); }
+fn reef_sand(c: vec3f) -> vec3f { return c; }
+fn reef_rockAlbedo(pb: vec3f) -> vec3f { return vec3f(0.0); }
+fn reef_rockNormal(pb: vec3f, nb: vec3f) -> vec3f { return nb; }
+`;
+}
+
+/** WGSL without its comments (the betta bowl's passes: a quarter of their code is comments, and
+ *  every pipeline built from it parses them again). */
+function withoutComments(code: string): string {
+  return code.replace(/[ \t]*\/\/.*$/gm, '').replace(/\n\s*\n/g, '\n');
 }
 
 /** rt: the device has hardware ray tracing (src/rt): the water march finds with it where along
@@ -988,7 +1036,7 @@ export function globeHelpersWGSL(globe: GlobeConfig, light: LightConfig, withKoi
   // globes_trace's parameters, and the arguments the bowl's trace passes them on with.
   const traceParams = `ro: vec3f, rd: vec3f, rot: mat3x3f, vol: vec4f, prm: vec4f, densTex: texture_3d<f32>, densSamp: sampler, sandTex: texture_2d<f32>, sandSamp: sampler, causticTex: texture_2d<f32>, causticSamp: sampler, poseTex: texture_2d<f32>, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, moteTex: texture_3d<f32>, fieldTex: texture_3d<f32>, fieldSamp: sampler, gather: f32, bgTex: texture_2d<f32>, bgSamp: sampler, kelpCellTex: texture_3d<f32>, kelpRefTex: texture_2d<f32>, kelpPrimTex: texture_2d<f32>, splashTex: texture_3d<f32>, dropTex: texture_2d<f32>${BETTA_PARAMS}${rt ? ', tlas: acceleration_structure' : ''}${foam ? FOAM_PARAMS : ''}`;
   const traceArgs = traceParams.replace(/: [^,]+(?:<[^>]*>)?/g, '').replace(/^ro, rd,/, 'o, d,');
-  return /* wgsl */ `
+  const code = /* wgsl */ `
 const GLOBES_SUN_DIR_WATER: vec3f = ${v3(sunInWater(normalised(light.sunDirection)))};
 const GLOBES_SAND_AMBIENT_WATER: vec3f = ${foam ? 'vec3f(0.07, 0.16, 0.12)' : 'vec3f(0.10, 0.19, 0.22)'};
 const GLOBES_SAND_AMBIENT_AIR: vec3f = vec3f(0.32, 0.32, 0.36);
@@ -1291,16 +1339,16 @@ ${bowl ? `  // (The betta's bowl: its studio, and the warm light of the table's 
   return albedo * light / 3.14159265;
 }
 
-// ---- koi -----------------------------------------------------------------------------
+${bowl ? bowlStandInsWGSL() : `// ---- koi -----------------------------------------------------------------------------
 ${koiWGSL()}
 
 // ---- clownfish (the reef's) ------------------------------------------------------------
 ${clownWGSL()}
-${clownShadeWGSL()}
+${clownShadeWGSL()}`}
 
 // ---- fish food ---------------------------------------------------------------------
 ${foodWGSL(bowl !== null)}
-
+${bowl ? '' : `
 fn globes_koiPatch(s: f32, ang: f32, nz: f32, s0: f32, a0: f32, rs: f32, ra: f32) -> f32 {
   let d = length(vec2f((s - s0) / rs, (ang - a0) / ra));
   return smoothstep(1.0, 0.8, d + 0.45 * nz);
@@ -1451,7 +1499,7 @@ fn globes_koiFin(pose: texture_2d<f32>, x: vec3f) -> vec4f {
   let albedo = mix(mix(vec3f(0.86, 0.9, 0.95), vec3f(0.97, 0.95, 0.91), rays), vec3f(0.93, 0.92, 0.88), fleshy);
   return vec4f(albedo, mix(0.4 + 0.3 * rays, 0.97, fleshy));
 }
-
+`}
 // Sunlight in the water at x (rgb irradiance): the photon-traced light volume (focused by the
 // wavy surface, shadowed by the koi and the sand) times the sun's colour after the water has
 // absorbed it on the way down (path length from the depth below the resting level).
@@ -1818,7 +1866,7 @@ fn globes_dropOut(drop: GlobesDrop, rot: mat3x3f, q: vec3f, d: vec3f) -> GlobesL
   if (dot(o, o) < 0.5) { return GlobesLens(x, reflect(d, -n), 1.0); }
   return GlobesLens(x + o * 1e-4, o, globes_fresnel(clamp(dot(d, n), 0.0, 1.0), GLOBES_IOR_WATER, 1.0));
 }
-
+${bowl ? '' : `
 // The koi along a stretch of ray [t0, t1] (its own sphere trace, kept out of the main march):
 // where it first meets the body, and up to three translucent fin crossings before that.
 struct KoiHits {
@@ -1927,15 +1975,15 @@ fn globes_koiShade(pose: texture_2d<f32>, x: vec3f, n: vec3f, rd: vec3f, mat: f3
   let rim = pow(1.0 - max(dot(n, v), 0.0), 3.0) * 0.18;
   return vec4f(albedo * (E * diff + amb * (1.0 + rim)) / 3.14159265 + E * spec, 1.0);
 }
-
+`}
 ${bowl?.lite ? bettaLiteWGSL : bettaWGSL}
-
+${bowl ? '' : `
 // ---- kelp ------------------------------------------------------------------------------
 ${kelpRenderWGSL()}
 
 // ---- reef ------------------------------------------------------------------------------
-${reefRenderWGSL()}${rt ? `\n${rtTraceWGSL()}` : ''}
-
+${reefRenderWGSL()}`}${rt ? `\n${rtTraceWGSL()}` : ''}
+${bowl ? '' : `
 // Main pass: whether the stretch [0, t1] of a ray comes near enough the koi that the koi pass
 // must draw the pixel: the same steps through the field as the koi pass, until one lands
 // within KOI_BAND voxels of the fish (where the koi pass would start evaluating it exactly).
@@ -2001,7 +2049,7 @@ fn globes_clownTrace(pose: texture_2d<f32>, field: texture_3d<f32>, fieldSamp: s
   }
   return 1e9;
 }
-
+`}
 ${foam ? foamWGSL(foam) : ''}
 // Traces one camera ray through the glass and the water, in the globe's translating frame
 // (origin at the centre). Returns linear HDR radiance.
@@ -2029,7 +2077,7 @@ ${bowl ? bowlEntryWGSL() : GLASS_ENTRY}
   // notes rays that pass near it).
   let koiMisc = textureLoad(poseTex, vec2i(KOI_MISC, 0), 0);
   // (The reef globe binds its clownfish in the koi's place: there is no koi.)
-  let koiVisible = !GLOBES_REEF && koiMisc.y > 0.5 && betta_tex(bettaTex, 0u).w < 0.5;
+  let koiVisible = ${bowl ? 'false' : '!GLOBES_REEF && koiMisc.y > 0.5 && betta_tex(bettaTex, 0u).w < 0.5'};
   let koiOn = GLOBES_KOI && koiVisible;
   let koiTime = koiMisc.z;
 
@@ -2389,6 +2437,7 @@ ${bowl ? `    if (event == 9) {
   return col;
 }
 ${bowl ? bowlTraceWGSL(traceParams, traceArgs) : ''}`;
+  return bowl ? withoutComments(code) : code;
 }
 
 /** Entry point called from TSL: traces one ray. The waterline, glass rim and refracted edges
@@ -2403,7 +2452,7 @@ ${bowl ? bowlTraceWGSL(traceParams, traceArgs) : ''}`;
  *  backdrop: its geometry reaches out round the lid). */
 export function globeShadeWGSL(rt = false, foam = false, oneGather = false, bowl = false): string {
   const traceArgs = `rot, vol, prm, densTex, densSamp, sandTex, sandSamp, causticTex, causticSamp, poseTex, lit, lightTex, lightSamp, moteTex, fieldTex, fieldSamp, select(0.0, 1.0, gatherW > 0.0), bgTex, bgSamp, kelpCellTex, kelpRefTex, kelpPrimTex, splashTex, dropTex${BETTA_ARGS}${rt ? `, ${TLAS_PARAM}` : ''}${foam ? ', foamTex, foamSamp, aerTex, aerSamp, foamPart, foamBins' : ''}`;
-  return /* wgsl */ `
+  const code = /* wgsl */ `
 fn globes_shade(camPos: vec3f, fragPos: vec3f, fragCenter: vec3f, center: vec3f, rot: mat3x3f, vol: vec4f, prm: vec4f, aaRight: vec3f, aaUp: vec3f, densTex: texture_3d<f32>, densSamp: sampler, sandTex: texture_2d<f32>, sandSamp: sampler, causticTex: texture_2d<f32>, causticSamp: sampler, poseTex: texture_2d<f32>, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, moteTex: texture_3d<f32>, fieldTex: texture_3d<f32>, fieldSamp: sampler, bgTex: texture_2d<f32>, bgSamp: sampler, deskM: mat4x4f, deskPlane: vec4f, glow: vec3f, kelpCellTex: texture_3d<f32>, kelpRefTex: texture_2d<f32>, kelpPrimTex: texture_2d<f32>, splashTex: texture_3d<f32>, dropTex: texture_2d<f32>${BETTA_PARAMS}${rt ? `, ${TLAS_PARAM}: texture_3d<u32>` : ''}${foam ? FOAM_PARAMS : ''}${bowl ? BOWL_PARAMS : ''}) -> vec4f {
   globesGlow = glow;
   let ro = camPos - center;
@@ -2460,4 +2509,5 @@ fn globes_shade(camPos: vec3f, fragPos: vec3f, fragCenter: vec3f, center: vec3f,
   return vec4f(col + globesGathered * gatherW, alpha + select(0.0, 2.0, globesKoiNear || (GLOBES_EDGES && globesEdge != 0u)));
 }`}
 `;
+  return bowl ? withoutComments(code) : code;
 }

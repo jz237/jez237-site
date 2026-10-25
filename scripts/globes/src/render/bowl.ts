@@ -54,8 +54,6 @@ export interface BowlShape {
   top: number;
   /** Where the glass ends and the rim begins (radius). */
   rimIn: number;
-  /** The lid's reach from its underside's middle (for the geometry the bowl is drawn on). */
-  reach: number;
   /** A phone's lighter bowl: its shader leaves out what is costly and hardly seen at that size
    *  (the fish's self-shadow and its shadow on the bed, the furnishings' shadows, the motes and
    *  shafts in the water), follows a ray through the lid's glass for fewer steps and samples the
@@ -78,8 +76,17 @@ export function bowlShape(globe: GlobeConfig, lite = false): BowlShape {
     top,
     rimIn: BOWL.lidRadius - BOWL.rimWidth,
     lite,
-    reach: Math.hypot(BOWL.lidRadius + BOWL.rimProud, Math.max(top, BOWL.collarDepth)),
   };
+}
+
+/** How far the lid reaches from a point c (in the lid's own frame: its underside's middle at the
+ *  origin, its axis y): to the furthest of it, taken as two upright cylinders round its axis, the
+ *  rim's (the glass, the collar and the lamp lie within it) and the knob's. (For the geometry the
+ *  bowl is drawn on: seated, ~1.07 from the globe's centre, the rim's outer top edge.) */
+export function lidReach(s: BowlShape, c: { x: number; y: number; z: number }): number {
+  const off = Math.hypot(c.x, c.z);
+  const far = (rad: number, lo: number, hi: number): number => Math.hypot(off + rad, Math.max(hi - c.y, c.y - lo));
+  return Math.max(far(BOWL.lidRadius + BOWL.rimProud, -BOWL.collarDepth, BOWL.lidThickness + BOWL.rimProud), far(BOWL.knobRadius, 0, s.top));
 }
 
 /** The bowl's uniforms, as globes_shade takes them: the lid's pose (the globe's translating frame
@@ -240,23 +247,37 @@ fn bowl_march(part: u32, o: vec3f, d: vec3f, span: vec2f) -> f32 {
   return 1e9;
 }
 
+// Whether a point is within the upright cylinder r <= rad, lo <= y <= hi.
+fn bowl_within(q: vec3f, rad: f32, lo: f32, hi: f32) -> bool {
+  return dot(q.xz, q.xz) <= rad * rad && q.y >= lo && q.y <= hi;
+}
+
 // The nearest of the bowl's glass along a ray (o, d in the translating frame; d of unit length).
-// A ray that starts inside a piece is in it at t = 0.
+// A ray that starts inside a piece is in it at t = 0. (Each piece lies within its cylinder, so a
+// ray can start inside it only from there.)
 fn bowl_hit(o: vec3f, d: vec3f) -> BowlHit {
   var best = BowlHit(1e9, 0u, vec3f(0.0), vec3f(0.0));
   let ob = transpose(bowlRot) * o;
   let db = transpose(bowlRot) * d;
   let pad = 2.0 * BOWL_EPS;
-  if (bowl_beadSdf(ob) < 0.0) { return BowlHit(0.0, 1u, ob, db); }
-  let tb = bowl_march(1u, ob, db, bowl_span(ob, db, BOWL_BEAD_R + BOWL_BEAD_T + pad, BOWL_BEAD_Y - BOWL_BEAD_T - pad, BOWL_BEAD_Y + BOWL_BEAD_T + pad));
+  let beadR = BOWL_BEAD_R + BOWL_BEAD_T + pad;
+  let beadLo = BOWL_BEAD_Y - BOWL_BEAD_T - pad;
+  let beadHi = BOWL_BEAD_Y + BOWL_BEAD_T + pad;
+  if (bowl_within(ob, beadR, beadLo, beadHi) && bowl_beadSdf(ob) < 0.0) { return BowlHit(0.0, 1u, ob, db); }
+  let tb = bowl_march(1u, ob, db, bowl_span(ob, db, beadR, beadLo, beadHi));
   if (tb < best.t) { best = BowlHit(tb, 1u, ob, db); }
   if (bowlLidOn) {
     let r = mat3x3f(bowlM[0].xyz, bowlM[1].xyz, bowlM[2].xyz);
     let ol = (bowlM * vec4f(o, 1.0)).xyz;
     let dl = r * d;
-    if (bowl_lidBlackSdf(ol) < 0.0) { return BowlHit(0.0, 3u, ol, dl); }
-    if (bowl_lidSdf(ol) < 0.0) { return BowlHit(0.0, 2u, ol, dl); }
-    let span = bowl_span(ol, dl, BOWL_LID_R + BOWL_RIM_PROUD + pad, -BOWL_COLLAR_D - pad, BOWL_LID_TOP + pad);
+    let lidR = BOWL_LID_R + BOWL_RIM_PROUD + pad;
+    let lidLo = -BOWL_COLLAR_D - pad;
+    let lidHi = BOWL_LID_TOP + pad;
+    if (bowl_within(ol, lidR, lidLo, lidHi)) {
+      if (bowl_lidBlackSdf(ol) < 0.0) { return BowlHit(0.0, 3u, ol, dl); }
+      if (bowl_lidSdf(ol) < 0.0) { return BowlHit(0.0, 2u, ol, dl); }
+    }
+    let span = bowl_span(ol, dl, lidR, lidLo, lidHi);
     let tl = bowl_march(2u, ol, dl, span);
     if (tl < best.t) { best = BowlHit(tl, 2u, ol, dl); }
     let tk = bowl_march(3u, ol, dl, span);
@@ -313,12 +334,16 @@ fn bowl_lampAlong(p: vec3f, dir: vec3f, tEnd: f32, sigma: f32, ext: vec3f) -> ve
   var s = vec3f(0.0);
   let side = normalize(cross(bowlLampD, select(vec3f(1.0, 0.0, 0.0), vec3f(0.0, 0.0, 1.0), abs(bowlLampD.x) > 0.9)));
   let side2 = cross(bowlLampD, side);
+  // (Dimmed by the medium on its way back to p: a step's worth more at each sample.)
+  var T = exp(-ext * (0.5 * dt));
+  let Tstep = exp(-ext * dt);
   for (var i = 0; i < n; i++) {
     let x = p + dir * ((f32(i) + 0.5) * dt);
     let v = x - bowlLampP;
     let a = atan2(dot(v, side2), dot(v, side));
     let rays = 0.55 + 0.45 * sin(a * 17.0 + 1.7 * sin(a * 5.0)) * sin(a * 29.0 + 0.6);
-    s += bowl_lampAt(x) * rays * exp(-ext * ((f32(i) + 0.5) * dt));
+    s += bowl_lampAt(x) * rays * T;
+    T *= Tstep;
   }
   return vec3f(1.0, 0.88, 0.70) * s * sigma * dt;
 }

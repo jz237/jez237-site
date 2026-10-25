@@ -4,7 +4,7 @@
 // stays put until the lid is back on (Feeding.ts): its water would pour out of the open mouth.
 
 import * as THREE from 'three/webgpu';
-import { BOWL, type BowlShape } from '../render/bowl';
+import { BOWL, lidReach, type BowlShape } from '../render/bowl';
 
 /** How long the lid takes to come off, or to go back on (s). */
 const LIFT_SECONDS = 2.2;
@@ -28,6 +28,8 @@ export class BowlLid {
   readonly toLid = new THREE.Matrix4();
   private readonly pose = new THREE.Matrix4();
   private readonly at = new THREE.Vector3();
+  /** The globe's centre in the lid's frame. */
+  private readonly centre = new THREE.Vector3();
   private readonly turn = new THREE.Quaternion();
   private readonly tip = new THREE.Quaternion();
   private readonly tmp = new THREE.Matrix4();
@@ -51,7 +53,7 @@ export class BowlLid {
 
   /** The furthest the lid reaches from the globe's centre (world units). */
   get reach(): number {
-    return this.at.length() + this.shape.reach;
+    return lidReach(this.shape, this.centre.setFromMatrixPosition(this.toLid));
   }
 
   /** On the rim, still. */

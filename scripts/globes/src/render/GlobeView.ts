@@ -374,8 +374,10 @@ export class GlobeView {
     this.mesh.add(this.mainMesh, this.koiMesh, this.kelpMesh, this.kelpAAMesh, this.reefMesh, this.reefAAMesh, this.foamMesh);
     const passes: [THREE.Mesh, Pass][] = [[this.mainMesh, 'main'], [this.koiMesh, 'koi'], [this.kelpMesh, 'kelp'], [this.kelpAAMesh, 'kelpAA'], [this.reefMesh, 'reef'], [this.reefAAMesh, 'reefAA'], [this.foamMesh, 'foam']];
     if (bowl) {
-      // (A unit sphere, scaled to the lid's reach each frame.)
-      const reach = new THREE.SphereGeometry(1, 128, 96);
+      // (A unit sphere, scaled to the lid's reach each frame. Coarse: the rays are traced from the
+      // camera, so it need only take in the bowl, and its faces lie within 0.2% of its radius, well
+      // inside the margin it is scaled up by.)
+      const reach = new THREE.SphereGeometry(1, 64, 48);
       this.bowlMesh = new THREE.Mesh(reach, makeMaterial('bowl'));
       this.bowlKoiMesh = new THREE.Mesh(reach, makeMaterial('bowlKoi'));
       this.bowlMesh.frustumCulled = false;

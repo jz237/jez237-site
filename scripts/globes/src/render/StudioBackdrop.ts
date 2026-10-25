@@ -1,7 +1,8 @@
 // The betta bowl page's backdrop (studio.ts): the backdrop and the room drawn behind everything,
 // from where the camera really is, so the table under the bowl lies in true perspective; and the
 // table itself drawn again over it with the bowl's mirror image in its lacquer (the scene rendered
-// from under the table, at half the resolution, sharper near the bowl's foot than further off).
+// from under the table at half the resolution, or less on a phone (main.ts), sharper near the
+// bowl's foot than further off).
 
 import * as THREE from 'three/webgpu';
 import { cameraPosition, clamp, float, normalize, positionLocal, positionWorld, reflector, uniform, vec4, wgsl, wgslFn } from 'three/tsl';
@@ -26,10 +27,19 @@ export class StudioBackdrop {
 
   constructor() {
     const includes = [wgsl(STUDIO_WGSL)];
+    // (Where the table is seen, the table itself is drawn right over the backdrop: there is nothing
+    // to light, wherever it covers the whole pixel, so a few pixels' angle inside its edges.)
     const background = wgslFn(
       `fn studio_background(dir: vec3f, cam: vec3f, bowl: vec3f) -> vec4f {
         studioBowl = bowl;
-        return vec4f(studio_view(cam, normalize(dir), false), 1.0);
+        let d = normalize(dir);
+        if (d.y < -1e-5 && cam.y > STUDIO_TABLE_Y) {
+          let t = (STUDIO_TABLE_Y - cam.y) / d.y;
+          let x = cam + d * t;
+          let m = 0.004 * t / -d.y;
+          if (abs(x.x) < ${TABLE_HALF_WIDTH.toFixed(4)} - m && x.z > STUDIO_WALL_Z + m && x.z < ${TABLE_FRONT.toFixed(4)} - m) { return vec4f(0.0, 0.0, 0.0, 1.0); }
+        }
+        return vec4f(studio_view(cam, d, false), 1.0);
       }`,
       includes,
     );
@@ -73,9 +83,20 @@ export class StudioBackdrop {
 
   /** What the camera sees on this layer, the mirror leaves out (it renders the scene again from
    *  under the table, half as sharp and softened further off: what is a blur there need not
-   *  cost a pass). */
+   *  cost a pass). (Its picture is kept in the frame buffer's colour space, the working one: three
+   *  builds a pipeline for each, so then its draws reuse those built ahead, GlobeView.precompile,
+   *  rather than building their own on the first frame. Its colours are the same: neither is
+   *  converted.) */
   leaveOut(camera: THREE.Camera, layer: number): void {
-    this.mirrorNode.reflector.getVirtualCamera(camera).layers.disable(layer);
+    const r = this.mirrorNode.reflector;
+    const view = r.getVirtualCamera(camera);
+    view.layers.disable(layer);
+    r.getRenderTarget(view).texture.colorSpace = THREE.LinearSRGBColorSpace;
+  }
+
+  /** How sharp the mirror is: its picture's size, as a share of the drawing buffer's (each way). */
+  setMirrorScale(scale: number): void {
+    this.mirrorNode.reflector.resolutionScale = scale;
   }
 
   /** Follows the bowl (its centre, world). */

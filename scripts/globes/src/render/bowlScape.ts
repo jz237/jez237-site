@@ -231,14 +231,13 @@ fn scape_leafBase(ax: mat3x3f) -> vec3f {
 fn scape_leaf(p: vec3f, dir: vec3f, tEnd: f32) -> ScapeHit {
   var hit = ScapeHit(1e9, 0u, 0u, vec2f(0.0), vec3f(0.0, 1.0, 0.0));
   if (scapeLife[1].x < 0.5) { return hit; }
-  let ax = scape_leafFrame();
-  let base = scape_leafBase(ax);
-  let c0 = scapeLife[0].xyz;
   // (Its bounding sphere first.)
-  let oc = c0 - p;
+  let oc = scapeLife[0].xyz - p;
   let tc = dot(oc, dir);
   let rr = 0.5 * SCAPE_LEAF_L + 0.02;
   if (dot(oc, oc) - tc * tc > rr * rr || tc + rr < 0.0 || tc - rr > tEnd) { return hit; }
+  let ax = scape_leafFrame();
+  let base = scape_leafBase(ax);
   let ol = transpose(ax) * (p - base);
   let dl = transpose(ax) * dir;
   let c = scape_bladeCross(ol, dl, SCAPE_LEAF_L, SCAPE_LEAF_W, SCAPE_LEAF_ARCH, SCAPE_LEAF_CUP, tEnd, true);
