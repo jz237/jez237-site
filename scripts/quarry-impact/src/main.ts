@@ -210,7 +210,7 @@ import {dailyChallenge,dailyLighting} from './daily-event';
 import {EventAwards,awardsHtml,stuntsText} from './event-awards';
 import {bankAchievements} from './achievements';
 import {attachCarLights,headlightAim,type CarLights} from './car-lights';
-import {LAMP_BREAK,RAIN_LIGHTS} from './car-lights';
+import {LAMP_BREAK,RAIN_LIGHTS,RAIN_BEAMS} from './car-lights';
 import {createRain} from './rain';
 import {applyWetLook} from './wet-look';
 import {setWetness} from './driving-surface';
@@ -1875,8 +1875,9 @@ function step(dt: number) {
     return;
   }
   {const dusk=eventLighting==='dusk',wet=eventLighting==='rain';for(const c of cars){const l=carLights.get(c);if((dusk||wet)&&l&&c.extendedDamage){const a=headlightAim(c.structuralDamage?.[0]??0,c.structuralDamage?.[2]??0,c.structuralDamage?.[3]??0);l.aim(a.yaw,a.reach);}}
-  // In the rain drivers run their lamps too (offline), the pool on the road fainter against the daylight.
-  for(const c of cars)carLights.get(c)?.set((dusk||wet&&c.extendedDamage)&&c.health>0&&!c.electricalCut&&!c.batteryOut&&(!c.beltSnapped||batteryLights(c.battery,clock,c.id)),c.health>0&&!c.electricalCut&&!c.batteryOut&&(c.input?.brake??0)>.2&&Math.abs(c.speed)>1,dusk?1:RAIN_LIGHTS.pool);}
+  // In the rain drivers run their lamps too (offline), the pool on the road fainter against the daylight, the beams
+  // showing in the rain.
+  for(const c of cars)carLights.get(c)?.set((dusk||wet&&c.extendedDamage)&&c.health>0&&!c.electricalCut&&!c.batteryOut&&(!c.beltSnapped||batteryLights(c.battery,clock,c.id)),c.health>0&&!c.electricalCut&&!c.batteryOut&&(c.input?.brake??0)>.2&&Math.abs(c.speed)>1,dusk?1:RAIN_LIGHTS.pool,wet&&c.extendedDamage?RAIN_BEAMS.strength:0);}
   if (state !== 'playing') return;
   elapsed += dt;
   if(mode==='race'&&!eventAwards.started&&elapsed>.5&&!online?.active)eventAwards.grid(rankRace().map(c=>c.id));

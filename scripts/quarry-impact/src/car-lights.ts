@@ -12,6 +12,10 @@ export const BROKEN_LENS={shade:.3,rough:.85} as const;
 /** Rain (offline): drivers run their lamps in the gloom, lenses and tails lit as at dusk, but the pool of light on the
  * road is only RAIN_LIGHTS.pool as strong against the daylight. */
 export const RAIN_LIGHTS={pool:.45} as const;
+/** Rain (offline): each side's headlamp beam shows in the falling rain as a faint cone of light, RAIN_BEAMS.length m long and
+ * RAIN_BEAMS.spread m across at its far end, dipped RAIN_BEAMS.dip rad, fading along its length and at its edges, at the
+ * strength the caller gives (RAIN_BEAMS.strength in rain, 0 hides it); a side with every lamp smashed throws none. */
+export const RAIN_BEAMS={length:9,spread:1.1,dip:.06,strength:.3} as const;
 const HEAD=/headlight|(^|\s)lens$/i,TAIL=/brakelight|tail lens/i,NOT_HEAD=/tail|amber|reverse|indicator|signal|brake/i;
 let poolTexture:T.Texture|null=null;
 function lightPool(){
@@ -32,7 +36,7 @@ export function headlightAim(front:number,left:number,right:number){
 }
 export type CarLights={readonly head:number;readonly tail:number;readonly working:number;readonly lit:boolean;
  /** Lamps on or off, braking, and the road pool's strength 0–1 (1 at dusk). */
- set(on:boolean,braking?:boolean,pool?:number):void;aim(yaw:number,reach:number):void;dispose():void;
+ set(on:boolean,braking?:boolean,pool?:number,beam?:number):void;aim(yaw:number,reach:number):void;dispose():void;
  /** Told where a lamp is when it first breaks (its lens centre in the world), head or tail. */
  onSmash?:(at:T.Vector3,kind:'head'|'tail')=>void;
  /** A lamp mesh, for QA. */
@@ -56,28 +60,40 @@ export function attachCarLights(root:T.Object3D,halfLength:number):CarLights{
  const pool=lightPool(),poolMaterial=new T.MeshBasicMaterial({map:pool,color:0xffffff,transparent:true,opacity:0,blending:T.AdditiveBlending,depthWrite:false,toneMapped:false}),poolGeometry=new T.PlaneGeometry(4.6,11);
  const poolMesh=new T.Mesh(poolGeometry,poolMaterial);poolMesh.name='car_light_pool';poolMesh.rotation.x=-Math.PI/2;poolMesh.position.set(0,poolY,halfLength+5.2);poolMesh.renderOrder=2;poolMesh.visible=false;poolMesh.frustumCulled=true;
  if(pool&&heads.length)root.add(poolMesh);
- let lit=false,brake=false,broken=-1,level=1;
+ // A beam per side of the car from its headlamps' middle, for the rain.
+ const beamGeometry=new T.ConeGeometry(RAIN_BEAMS.spread,RAIN_BEAMS.length,16,1,true).rotateX(-Math.PI/2).translate(0,0,RAIN_BEAMS.length/2);
+ const beamMaterial=new T.ShaderMaterial({uniforms:{strength:{value:0},color:{value:new T.Color(0xfff1d0)}},transparent:true,depthWrite:false,blending:T.AdditiveBlending,side:T.DoubleSide,
+  vertexShader:`varying float vAlong;varying vec3 vNormal2;varying vec3 vView;void main(){vAlong=position.z/${RAIN_BEAMS.length}.;vec4 mv=modelViewMatrix*vec4(position,1.);vNormal2=normalize(normalMatrix*normal);vView=normalize(-mv.xyz);gl_Position=projectionMatrix*mv;}`,
+  fragmentShader:`uniform float strength;uniform vec3 color;varying float vAlong;varying vec3 vNormal2;varying vec3 vView;void main(){float t=clamp(vAlong,0.,1.),a=strength*pow(1.-t,1.6)*smoothstep(0.,.06,t)*pow(abs(dot(normalize(vNormal2),normalize(vView))),1.3);gl_FragColor=vec4(color*a,a);}`});
+ const beams=([-1,1] as const).map(side=>{
+  const lamps=heads.map((m,i)=>({i,c:box.setFromObject(m).getCenter(new T.Vector3()).applyMatrix4(inverse)})).filter(l=>Math.sign(l.c.x||1)===side);if(!lamps.length)return null;
+  const mesh=new T.Mesh(beamGeometry,beamMaterial);mesh.name='car_light_beam';mesh.position.copy(lamps.reduce((s,l)=>s.add(l.c),new T.Vector3()).multiplyScalar(1/lamps.length));
+  mesh.rotation.order='YXZ';mesh.rotation.x=RAIN_BEAMS.dip;mesh.renderOrder=2;mesh.visible=false;root.add(mesh);return {mesh,lamps:lamps.map(l=>l.i)};
+ }).filter(b=>b!==null);
+ let lit=false,brake=false,broken=-1,level=1,beamLevel=0;
  const smashed=(m:T.Mesh)=>!m.visible||(m.userData.damage??0)>LAMP_BREAK;
  const api:CarLights={head:heads.length,tail:tails.length,get working(){return heads.filter(m=>!smashed(m)).length;},get lit(){return lit;},
-  set(on,braking=false,pool=1){
-   const strength=Number.isFinite(pool)?Math.max(0,Math.min(1,pool)):1;
+  set(on,braking=false,poolLevel=1,beam=0){
+   const strength=Number.isFinite(poolLevel)?Math.max(0,Math.min(1,poolLevel)):1,shine=Number.isFinite(beam)?Math.max(0,Math.min(1,beam)):0;
    let mask=0;heads.forEach((m,i)=>{if(smashed(m))mask|=1<<i;});tails.forEach((m,i)=>{if(smashed(m))mask|=1<<(i+16);});
    // A lamp that has just broken leaves its pieces where it was.
    if(broken>=0&&api.onSmash)for(const [list,shift,kind] of [[heads,0,'head'],[tails,16,'tail']] as const)list.forEach((m,i)=>{if(mask&1<<(i+shift)&&!(broken&1<<(i+shift)))api.onSmash!(box.setFromObject(m).getCenter(new T.Vector3()),kind);});
    // and its lens goes dark and dull, once.
    if(broken>=0)for(const [list,shift] of [[headMats,0],[tailMats,16]] as const)list.forEach((m,i)=>{if(mask&1<<(i+shift)&&!(broken&1<<(i+shift))){m.color.multiplyScalar(BROKEN_LENS.shade);m.roughness=Math.max(m.roughness,BROKEN_LENS.rough);}});
-   if(on===lit&&braking===brake&&mask===broken&&strength===level)return;
+   if(on===lit&&braking===brake&&mask===broken&&strength===level&&shine===beamLevel)return;
    const intact=heads.length?heads.filter((_,i)=>!(mask&1<<i)).length/heads.length:0;
    headMats.forEach((m,i)=>{m.emissiveIntensity=on&&!(mask&1<<i)?2.4:0;});
    poolMesh.visible=on&&!!pool&&intact>0;poolMaterial.opacity=on?.38*intact*strength:0;
    tailMats.forEach((m,i)=>{m.emissiveIntensity=mask&1<<(i+16)?0:on?(braking?TAIL_GLOW.braking:TAIL_GLOW.running):(braking?TAIL_GLOW.daylightBraking:0);});
-   lit=on;brake=braking;broken=mask;level=strength;
+   beamMaterial.uniforms.strength.value=shine;for(const b of beams)b.mesh.visible=on&&shine>0&&b.lamps.some(i=>!(mask&1<<i));
+   lit=on;brake=braking;broken=mask;level=strength;beamLevel=shine;
   },
   aim(yaw,reach){
    const y=Number.isFinite(yaw)?yaw:0,r=Math.max(.3,Math.min(1,Number.isFinite(reach)?reach:1)),d=halfLength+5.2*r;
    poolMesh.rotation.set(-Math.PI/2,0,y);poolMesh.scale.set(1,r,1);poolMesh.position.set(Math.sin(y)*(d-halfLength),poolY,halfLength+Math.cos(y)*(d-halfLength));
+   for(const b of beams){b.mesh.rotation.y=y;b.mesh.scale.set(1,1,r);}
   },
   lamp(kind,index){return (kind==='head'?heads:tails)[index];},
-  dispose(){poolMesh.removeFromParent();poolGeometry.dispose();poolMaterial.dispose();for(const m of owned)m.dispose();}};
+  dispose(){poolMesh.removeFromParent();poolGeometry.dispose();poolMaterial.dispose();for(const b of beams)b.mesh.removeFromParent();beamGeometry.dispose();beamMaterial.dispose();for(const m of owned)m.dispose();}};
  return api;
 }

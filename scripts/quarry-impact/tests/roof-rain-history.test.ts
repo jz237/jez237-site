@@ -1,6 +1,7 @@
+import {restoreRainBeamsBytes} from './rain-beams-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readRoofRainPrevious,restoreRoofRainBytes,verifyRoofRainRevision} from './roof-rain-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreRainBeamsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('RoofRain preserves every prior fixture, vehicle asset, venue art and history input',verifyRoofRainRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/roof-rain/revision.json').toString());
