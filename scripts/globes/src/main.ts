@@ -462,13 +462,13 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
   const adaptive = params.get('adapt') === '0' ? null : new AdaptiveScale(performance.now());
   const globeMotion = { center: controller.center, velocity: controller.velocity, radius: world.globeRadius };
   let jumps = controller.panJumps;
-  // ?stats logs frame rate and solver load to the console, and shows it in a corner (a phone has
-  // no console to read): frames a second, the main thread's time a frame on the world, the sim's
-  // substeps, the pixel ratio.
+  // ?stats logs frame rate and solver load to the console, and shows it in a corner above the
+  // page's links (a phone has no console to read): frames a second, the main thread's time a frame
+  // on the world, the sim's substeps, the pixel ratio.
   const logStats = params.has('stats');
   const hud = logStats ? document.createElement('div') : null;
   if (hud) {
-    hud.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:99;padding:6px 8px;border-radius:6px;background:rgba(0,0,0,.6);color:#cfe;font:12px/1.3 ui-monospace,monospace;pointer-events:none;white-space:pre';
+    hud.style.cssText = 'position:fixed;left:8px;bottom:calc(56px + env(safe-area-inset-bottom));z-index:99;padding:6px 8px;border-radius:6px;background:rgba(0,0,0,.6);color:#cfe;font:12px/1.3 ui-monospace,monospace;pointer-events:none;white-space:pre';
     document.body.append(hud);
   }
   let cpuMs = 0;
