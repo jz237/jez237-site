@@ -12,6 +12,8 @@ export const LITTER={capacity:2400,lift:.012,throw:.85,cell:.5,
   rubber:{count:9,spread:.8,size:[.03,.07],color:0x1b1b1b},
 } as const;
 export type LitterKind='glass'|'head'|'tail'|'paint'|'rubber';
+/** A shredding tyre on a car going speed m/s or faster sheds chips lumps of rubber at its wheel every gap seconds. */
+export const SHRED_TRAIL={speed:6,gap:.14,chips:2} as const;
 export class CrashLitter{
   readonly mesh:T.InstancedMesh;
   private cursor=0;
