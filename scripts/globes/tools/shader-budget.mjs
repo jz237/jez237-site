@@ -41,7 +41,8 @@ registerHooks({
 });
 
 /** The betta bowl's passes' WGSL (bowl and bowlKoi, the phone's tier and the desktop's), as the
- *  page builds them: its light and globe (main.ts), one ray a pixel, tracing in software. */
+ *  page builds them: its light and globe (main.ts), one ray a pixel, tracing in software; the
+ *  phone's writing what each ray ended on, for the interleave it draws by (render/bowlRender.ts). */
 export async function bowlPasses() {
   const src = (path) => new URL(`../src/${path}`, import.meta.url).href;
   const { envWGSL, globeHelpersWGSL, globeShadeWGSL } = await import(src('render/shaders.ts'));
@@ -54,7 +55,7 @@ export async function bowlPasses() {
   const passes = {};
   for (const lite of [true, false]) {
     const light = { ...lightConfig, sunDirection: [0, 1, 0], ...(lite ? { causticRays: 512 } : {}) };
-    const bowl = bowlShape(globe, lite);
+    const bowl = { ...bowlShape(globe, lite), ids: lite };
     for (const withKoi of [false, true]) {
       passes[`bowl${withKoi ? 'Koi' : ''}-${lite ? 'lite' : 'full'}`] = [globeShadeWGSL(false, false, false, true), envWGSL(light), globeHelpersWGSL(globe, light, withKoi, false, false, false, 1, false, false, null, bowl)].join('\n');
     }

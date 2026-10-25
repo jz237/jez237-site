@@ -63,6 +63,9 @@ export interface BowlShape {
    *  (specks), or where on the way its light stopped being a number (nan): shaders.ts
    *  globesDebugWGSL. 0: neither, the bowl as it is. */
   debug: BowlDebug;
+  /** Its passes write what each ray ended on in the colour's alpha (1 + the hit's code, shaders.ts
+   *  globes_hitIdOf), for the interleave's resolve (bowlRender.ts); only where that may run. */
+  ids?: boolean;
 }
 
 /** 0: no debug view; 1: ?debug=specks; 2: ?debug=nan. */

@@ -4,7 +4,7 @@ import * as THREE from 'three/webgpu';
 import { AppShell, type DesktopHost } from './app/AppShell';
 import { AdaptiveScale, DESKTOP, keepLevel, keptLevel, levelAt, lowestLevel, PHONE, ratioAt } from './app/adaptiveScale.mjs';
 import { FramePace } from './app/framePace.mjs';
-import { Bench, describeDevice } from './app/bench';
+import { Bench, describeDevice, registerBenchRows } from './app/bench';
 import { describe, describeLoad, FrameProfile, wrap } from './app/frameProfile';
 import { BETTA_PAGE, elsewhere, GLOBES, type GlobeEntry } from './app/catalog';
 import { applyUrlOverrides, fishConfig, globeConfig, lightConfig, simConfig, type GlobeConfig, type LightConfig, type SimConfig } from './config';
@@ -24,6 +24,7 @@ import { KelpForest } from './kelp/KelpForest';
 import { REEF_PROBES, Reef } from './reef/Reef';
 import { Specks } from './ocean/Specks';
 import { BOWL, bowlDebug, bowlShape } from './render/bowl';
+import { BowlRender, upDebug, upSettings } from './render/bowlRender';
 import { BED, setScapeShader } from './render/bowlScape';
 import { furnish } from './render/scape/furnishings';
 import { BOWL_KOI_LAYER, GlobeView, texelTexture, type GlobeVariant } from './render/GlobeView';
@@ -176,6 +177,11 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // The betta's globe is a bowl, open at the mouth, with a lid (where the page shows it), which
   // comes off only to feed the fish.
   const bowl = GLOBES.some((g) => g.betta) ? bowlShape(o.globe, LITE, bowlDebug(params.get('debug'))) : null;
+  // (Phones draw it on a 2x2 lattice a frame, made whole again, in its studio: render/bowlRender.ts.
+  // Its passes then write what each ray ended on. ?up=0 draws it straight into the frame, as desktops
+  // do.)
+  const up = upSettings(params, LITE);
+  if (bowl) bowl.ids = up.mode > 0 && !o.desk;
   const lid = bowl ? new BowlLid(bowl) : null;
   const feeding = lid ? new Feeding(lid, controller) : null;
   // What floats in it: an almond leaf, and the betta's bubble nest.
@@ -326,6 +332,10 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   const globe = new GlobeView(sim, o.globe, o.light, koi.texture, samples, ocean ? { ocean: ocean.map.texture } : studio ? { ocean: studio.map } : { desktop: o.desk! }, kelp, reef, clowns.texture, GLOBES.find((g) => g.reef)?.clarity, GLOBES.find((g) => g.foam)?.waterColour, betta, bowl, scapeTex);
   scene.add(globe.mesh);
   if (lid) globe.setBowlLid(lid.toLid, lid.shown, lid.reach, lid.lamp);
+  // (?updebug paints its resolve; ?uptau and ?upwide set its change test's thresholds, for tuning.)
+  const tuning = (k: string): number | undefined => (params.has(k) ? Number(params.get(k)) : undefined);
+  const bowlRender = studio && bowl?.ids ? new BowlRender(globe, studio, camera, scene, up, { debug: upDebug(params.get('updebug')), tau: tuning('uptau'), wide: tuning('upwide') }) : null;
+  if (bowlRender) registerBenchRows('up', bowlRender.benchRows());
   // Before the first frame, behind the splash: the water settles, and meanwhile every globe's
   // pipelines are built (and the software tracers' where the device traces in hardware). Built
   // after it, each held up a frame or more as the first globe slid in, and a switch to a globe
@@ -334,7 +344,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   const variants = [...new Set(GLOBES.map(variantOf))];
   // (Phones settle in frames of 1/30 s, four queued at a time: half the steps, few waits.)
   const settled = LITE ? sim.settle(2.5, 1 / 30, 4) : sim.settle();
-  await Promise.all([settled.then(() => PROF.mark('settled')), globe.precompile(renderer, camera, scene, variants).then(() => PROF.mark('compiled')).catch((err: unknown) => console.warn('[globes] precompile:', err))]);
+  await Promise.all([settled.then(() => PROF.mark('settled')), Promise.all([globe.precompile(renderer, camera, scene, variants), bowlRender?.precompile(renderer, camera, scene)]).then(() => PROF.mark('compiled')).catch((err: unknown) => console.warn('[globes] precompile:', err))]);
 
   // What lives in the globe (the koi, or the kelp forest) and what its water does when left
   // alone. Another globe comes in with its own water, level and still (the switch happens out
@@ -522,14 +532,14 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     return true;
   };
 
-  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, life, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, studio, specks, setScene, advance, spawnFood, clickLid, setSharpness, setRatio };
+  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, life, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, studio, specks, bowlRender, setScene, advance, spawnFood, clickLid, setSharpness, setRatio };
 }
 
 type World = Awaited<ReturnType<typeof createWorld>>;
 
 /** Runs the world every frame. beforeRender: after the world moves, before it is drawn. */
 function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () => void; firstFrame?: () => void }): void {
-  const { renderer, camera, scene, sim, controller, globe, ocean, studio, specks, advance, setSharpness, setRatio } = world;
+  const { renderer, camera, scene, sim, controller, globe, ocean, studio, specks, bowlRender, advance, setSharpness, setRatio } = world;
   // ?adapt=0 keeps the picture at the sharpness it starts at, however slowly it draws (profiling;
   // ?bench too). Phones step their own way (PHONE), down to the first level at the floor, from
   // where frames last held (keptLevel).
@@ -590,7 +600,8 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     // are shown, evenly, and held to 60. The loop's first call, at once, has none.)
     const now = LITE && time !== undefined ? time : performance.now();
     if (pace && !pace.draw(now)) return;
-    const dt = Math.min(Math.max(now - last, 0) / 1000, STALL);
+    const gap = now - last;
+    const dt = Math.min(Math.max(gap, 0) / 1000, STALL);
     last = now;
     const start = performance.now();
 
@@ -604,7 +615,9 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     if (!manual) advance(dt);
     hooks.beforeRender?.();
     const heightPx = renderer.getDrawingBufferSize(drawSize).y;
-    globe.update(controller.center, controller.rotation, camera, heightPx);
+    // (The bowl drawn in its own targets: whether the view moved, and so how far apart its rays are.)
+    bowlRender?.frame(renderer, camera, controller.center, controller.rotation, world.lid, gap);
+    globe.update(controller.center, controller.rotation, camera, bowlRender?.tracedHeightPx() ?? heightPx);
     ocean?.update(renderer, now / 1000);
     studio?.update(controller.center);
     if (specks) {
@@ -612,6 +625,7 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
       jumps = controller.panJumps;
     }
     PROF.lap('scene');
+    bowlRender?.render(renderer, camera);
     renderer.render(scene, camera);
     PROF.lap('draw');
     PROF.end(world.device.queue);
@@ -663,6 +677,7 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
             describe(s, renderer.getPixelRatio(), [...(LITE ? ['phone tier'] : []), `${sim.lastSubsteps} substeps`, `${sim.particleCount} particles`]),
             `gpu, last minute: sim ${m.sim?.toFixed(1) ?? '-'} · draw ${m.draw?.toFixed(1) ?? '-'} ms`,
             ...device,
+            ...(bowlRender ? [bowlRender.describe()] : []),
             describePipelines(),
             ...(splash ? [splash] : []),
             ...legend,

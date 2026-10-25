@@ -1222,3 +1222,98 @@ phone's 16.7 ms frame.
   but there the worker (started as the page loads, beside the furnishings' worker) runs at the PC's
   speed, unthrottled: its effect on a phone's load is unmeasured. A desktop with `?worker=1`
   (1280x800, frames unpaced): update p50 2.9 -> 0.7 ms.
+
+## Phase 2: the bowl on a lattice, made whole again (src/render/bowlRender.ts, bowlResolve.mjs)
+
+A phone's frame is mostly the bowl's rays, and each pixel's costs about the same whatever the
+picture's sharpness. So on phones (`LITE`; `?up=2`, the default there) the bowl is drawn into targets
+of its own and traced each frame on a 2x2 lattice, a quarter of the picture's pixels, a different
+pixel of each 2x2 block each frame (the corner, the opposite corner, then the other two), so every
+pixel is traced once in four frames; the picture is then made whole at full size, and the fish is
+drawn again at full size, as the page has always drawn it. Desktops draw the bowl straight into the
+frame as before (`?up=0`, which is also the phone's kill switch); their shaders are the same text,
+byte for byte.
+
+- **The frame.** The lattice: the bowl's own pass (its two meshes again, in a scene of their own,
+  sharing materials and geometry), through a copy of the camera whose view is offset by the frame's
+  phase (`setViewOffset`), into a half-size target; the fish's pass is left out there. The change
+  test: one texel a block, the new sample against the one traced four frames before (below). The
+  picture: the resolve, on the bowl's sphere, into a full-size target, writing in the depth where the
+  fish is near (its depth 1), then the fish's pass over those pixels (`LessDepth`, as over the bowl
+  pass's marks before). The frame: the backdrop and the table, and a composite on the sphere's
+  outline that puts the picture in, after the table; the table's mirror still traces the bowl itself,
+  its pass on a layer only the mirror's camera sees (`StudioBackdrop.alsoMirror`), at the mirror's
+  own sharpness.
+- **One pipeline each.** three keys a render pipeline on the material and the target's colour
+  format, colour space, samples and depth format: the lattice, the picture, the table's mirror and a
+  phone's frame buffer are all half floats in the working colour space, single-sampled, with a depth
+  buffer, so bowl and bowlKoi are built once each (the pipeline counter: 2 large, none late; three
+  small ones more). Two traps found on the way: three's `screenSize` node makes a new uniform each time
+  a material is built, and the bowl's is built once for each render context (the frame's, the
+  mirror's), so its uniforms came out in another order and it built a second bowl pipeline (a uniform
+  of its own, set as each draw is made, instead); and `compileAsync` builds for the renderer's depth
+  setting, not the target's, so a pass into a target without depth was built again in the first frame
+  (every target has one).
+- **The same rays.** Where the passes write ids (`bowl.ids`, below), a ray is worked out from its
+  pixel of the picture and the camera's matrices, not from the sphere's surface where it is drawn:
+  on the lattice from the picture's pixel `2 texel + phase` and the unshifted camera's projection
+  (`GlobeView.setBowlLattice`). Interpolated over the shifted projection instead, the rays differed by
+  a rounding (~1e-7) and chaotic places (the water's line, its underside) came out otherwise.
+- **What each ray ended on.** The passes write it in the colour's alpha, 1 + a code (bowlResolve.mjs
+  HIT: the room through the air or through the water, sand, wood, rock, a plant, the fish, the lid,
+  the water's surface, spray or a bubble or a pellet; plus 16 where the ray met the water's surface on
+  the way), from a private set where the ray ends and read after the trace (`globes_hitIdOf`). An
+  opaque material's alpha is made 1 by three, so those passes blend with `NoBlending` (the same).
+- **The resolve**, per pixel (bowlResolveWGSL.ts; worked on the CPU in bowlResolve.mjs, which
+  upsample-resolve.test.mjs holds to it): its own last sample (its phase's lattice, its block's texel)
+  is kept as it is while it was traced since the view last moved and is neither the fish nor spray;
+  where a block round it (of nine) has changed since, it is held within what this frame's nearest four
+  samples span; where four or more of them have, it is filled in. Filled in: covered where its nearest
+  four mostly are, by EASU (AMD's FSR 1, adapted from three's FSR1Node, MIT; no sharpening) from this
+  frame's lattice, its luminance for edges squashed (x / (1 + x)) so a glint does not stand for every
+  edge, the fish's samples left out where its pass draws them. Every sample read is scrubbed by its
+  bits (a NaN or an infinity as nought: a miss). The fish's pass draws a pixel again where one of
+  this frame's nearest four samples is the fish (its box: the bowl's pass marks every ray that passes
+  through it), or one of its block's samples still good is (so its pixels' own rays, in the last four
+  frames: slivers thinner than the lattice are not lost).
+- **The change test** (bowlResolve.mjs `changed`): a block has changed where its new sample's
+  luminance differs from the one four frames before by more than 0.6 of the brighter's, or by more
+  than 0.04 where what the ray ended on changed too. The plan's 0.04 alone, with a change filled in,
+  crawled: the sun's dapple on the bed and the wood drifts ~0.3 pixels in four frames, and its sharp
+  lines failed the test everywhere, filled in from a lattice in another place each frame. The plan's
+  "an id still beside it" test went too: lines thinner than the lattice (the water's line against the
+  glass) never had their id beside them, and were never kept. And drops on the glass and the nest are
+  kept like anything else (the plan had them never kept, so wet glass would never be sharp).
+- **Moving.** A frame whose view moved the bowl's picture by more than 0.01 pixel (the camera's turn
+  and travel, the bowl's, its lid's; any change of projection, of the lid being there, of its lamp)
+  keeps nothing traced before it, nor does the first still frame after (traced with the lattice's
+  footprint: while the view moves, `lit.z` is the lattice's, so a picture filled in does not sparkle);
+  so a roll, a zoom or the entrance glide is drawn at the lattice's sharpness, filled in, and is sharp
+  again four frames after it stops. A new size or pixel ratio, a new mode, a gap of 250 ms between
+  frames and the first frame start afresh.
+- **Measured** (phone emulation at the S25 Ultra's 384x693 CSS px, the RTX 5090; frozen frames:
+  `?manual`, seeded, 200 ticks, the same page drawn in each mode, so the same shaders and the same
+  world). At rest the picture is the full trace's, pixel for pixel: 0 of 2.1M pixels differ, upright
+  and on its side, at ratios 1 and 1.5; four frames after a roll stops it is again (bar the splash's
+  bubbles, never kept). The pipelines: 82 built (79 with `?up=0`), bowl and bowlKoi once each, 3 in
+  the first frame as before, none late. GPU time of the frame's passes at pixel ratio 4 (where the
+  5090 is not bound by latency): 2.05-2.16 ms drawn straight, 1.43 on the lattice (the lattice 0.67,
+  the change test 0.01, the resolve 0.035, the fish's pass at full size ~0.5, the composite 0.04);
+  at the phone's own ratios the 5090 is latency-bound and the two are even. On this desktop's Radeon
+  iGPU (2 CUs, a small GPU's stand-in; its timestamps read nothing, so the wall time of a frame to the
+  GPU's done, the bowl alone, the sim not stepped): at ratio 1, 232 ms drawn straight against 75.9 on
+  the lattice (one page, the two switched, twice each); straight at 0.5, 87.5 ms; on the lattice at
+  1.5, 127.6. With the fish traced on the lattice instead of again at full size, 92.8: its rays, sparse,
+  cost more than dense ones. The main thread (phone emulation, 2.75x throttle): the draw's share 0.7
+  -> 1.1-1.2 ms, for three render calls more. Flicker at rest with the
+  world live (frames drawn one by one, the mean second difference in time of each pixel's 8-bit
+  luma over the bowl): 0.67 drawn straight, 0.73 on the lattice (the plan's rules: 3.4); the mean
+  error against the full trace of each frame 0.22-0.23 of 255.
+- **Switches.** `?up=0|1|2` (1: in a target of its own at the picture's size, the same picture, or with
+  `?upin=0.5-1` traced at that share of it and filled in), `?fishfull=0` (the fish traced on the
+  lattice with the rest), `?updebug=id|age|changed|nan`, and for tuning `?uptau=` and `?upwide=` (the
+  change test's threshold; how many of nine blocks round a pixel must change for it to be filled in).
+  ?bench's `up` group times up 0 against up 2 at ratios 0.8, 1, 1.25 and 1.5, and 2 with the fish on
+  the lattice at 1. For the ladder: the picture is the drawing buffer (the pixel ratio the scaler
+  picks is the picture's sharpness: a step starts the picture afresh), `BowlRender.setMode` picks how
+  it is drawn, `tracedShare()` says how many rays a pixel costs.

@@ -34,9 +34,12 @@ export function passes() {
     const light = { ...lightConfig, sunDirection: [0, 1, 0], ...(lite ? { causticRays: 512 } : {}) };
     const globe = { ...globeConfig, maxTilt: (40 * Math.PI) / 180 };
     for (const debug of [0, 1, 2]) {
-      const bowl = bowlShape(globe, lite, debug);
-      for (const fish of [false, true]) {
-        out[(debug ? 'debug' + debug + '-' : '') + (fish ? 'bowlKoi-' : 'bowl-') + (lite ? 'lite' : 'full')] = globeShadeWGSL(false, false, false, true) + envWGSL(light) + globeHelpersWGSL(globe, light, fish, false, false, false, 1, false, false, null, bowl);
+      // (And the phone's passes as the interleave draws them, writing what each ray ended on.)
+      for (const ids of debug ? [false] : [false, true]) {
+        const bowl = { ...bowlShape(globe, lite, debug), ids };
+        for (const fish of [false, true]) {
+          out[(debug ? 'debug' + debug + '-' : '') + (ids ? 'ids-' : '') + (fish ? 'bowlKoi-' : 'bowl-') + (lite ? 'lite' : 'full')] = globeShadeWGSL(false, false, false, true) + envWGSL(light) + globeHelpersWGSL(globe, light, fish, false, false, false, 1, false, false, null, bowl);
+        }
       }
     }
   }

@@ -94,6 +94,12 @@ export class StudioBackdrop {
     r.getRenderTarget(view).texture.colorSpace = THREE.LinearSRGBColorSpace;
   }
 
+  /** What is on this layer the mirror shows, and the camera need not (the betta bowl's own pass, where
+   *  bowlRender.ts draws the bowl for the camera). */
+  alsoMirror(camera: THREE.Camera, layer: number): void {
+    this.mirrorNode.reflector.getVirtualCamera(camera).layers.enable(layer);
+  }
+
   /** How sharp the mirror is: its picture's size, as a share of the drawing buffer's (each way). */
   setMirrorScale(scale: number): void {
     this.mirrorNode.reflector.resolutionScale = scale;

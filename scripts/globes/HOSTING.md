@@ -493,6 +493,19 @@ effect on the load there, wait on a phone's `?bench`). `?worker=0` moves it on t
 again (desktops do by default), `?worker=1` in a worker anywhere. Details: docs/architecture.md, "The
 betta in a worker".
 
+Phase 2, the bowl on a lattice (phones): each frame the bowl is traced on a quarter of the picture's
+pixels, a different one of each 2x2 block each frame, and made whole again at full size; the fish is
+drawn again at full size every frame, as before. Still, the picture is in four frames exactly the
+full trace, pixel for pixel (0 of 2.1M pixels differ in a frozen frame); while the bowl is rolled,
+zoomed or glides in, it is drawn at the lattice's sharpness, filled in by an edge-adaptive filter,
+and is sharp again four frames after it stops. The bowl's two shaders are still built once each. On
+this desktop's small integrated GPU (a phone's stand-in) the bowl's frame at the same sharpness took a
+third of the time (232 -> 76 ms), less than it took at half the sharpness before (88 ms).
+`?up=0` draws it as before (desktops always do: their shaders are unchanged, byte for byte),
+`?fishfull=0` traces the fish on the lattice too, `?updebug=id|age|changed|nan` paints the resolve;
+`?bench=up` times the two side by side. Details: docs/architecture.md, "Phase 2: the bowl on a
+lattice". Tests: `upsample-resolve.test.mjs` (9).
+
 ## Browser compatibility
 
 Firefox compiles WGSL with naga, which is stricter than Chrome's Tint. Builds up to

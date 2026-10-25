@@ -8,6 +8,7 @@ import { CLOWN_FISH, clownShadeWGSL, clownWGSL } from '../fish/clownWGSL';
 import { foodWGSL } from '../fish/FishFood';
 import { kelpRenderWGSL } from '../kelp/kelpWGSL';
 import { BOWL_PARAMS, bowlWGSL, type BowlDebug, type BowlShape } from './bowl';
+import { HIT } from './bowlResolve.mjs';
 import { bowlScapeWGSL } from './bowlScape';
 import { MENISCUS_WGSL } from './meniscus';
 import { STUDIO_WGSL } from './studio';
@@ -805,6 +806,20 @@ const GLASS_ENTRY = /* wgsl */ `  let hitO = globes_sphere(ro, rd, GLOBES_R_OUT)
   }
 `;
 
+/** The betta bowl's passes where they write what each ray ended on (bowl.ids, for the interleave:
+ *  bowlRender.ts): globesHitId's low four bits are the code of where the ray ended (bowlResolve.mjs
+ *  HIT), set as it ends there (hitEnds); and what it met on the way sets a bit (hitMeets): 16 the
+ *  water's surface, 32 the fish, 64 spray, a bubble or a pellet. Both give nothing where the passes
+ *  write no ids. */
+const HIT_MET_FISH = 32;
+const HIT_MET_SPLASH = 64;
+function hitEnds(bowl: BowlShape | null | undefined, code: string): string {
+  return bowl?.ids ? `globesHitId = (globesHitId & 0xf0u) | ${code};` : '';
+}
+function hitMeets(bowl: BowlShape | null | undefined, bit: number, when?: string): string {
+  return bowl?.ids ? (when ? `if (${when}) { globesHitId |= ${bit}u; }` : `globesHitId |= ${bit}u;`) : '';
+}
+
 /** GLASS_ENTRY for the betta bowl (bowl.ts), whose glass is cut open at the mouth. The ray may
  *  come in through the glass as in the globes, through the open mouth (no glass: straight on into
  *  the air in the bowl), or start in the bowl already, having come down through the lid or the
@@ -867,7 +882,8 @@ function bowlEntryWGSL(bowl: BowlShape): string {
       // Sand pressed against the glass: we see the side of the sand layer.
       let nI = normalize(p);
       if (globes_sandAgainstGlass(sandTex, sandSamp, p)) {
-        globesSandFoot = lit.z * pathLen;
+        globesSandFoot = lit.z * pathLen;${bowl.ids ? `
+        ${hitEnds(bowl, `${HIT.SAND}u`)}` : ''}
         col += thr * globes_sandAtGlass(p, rot);
         return col;
       }
@@ -924,7 +940,8 @@ function bowlEntryWGSL(bowl: BowlShape): string {
  *  rim's bead and the lid where it meets them, into the bowl (globes_trace, through its glass or
  *  in by the mouth), and on, if it leaves by the mouth, through the lid and the bead above. w: 1
  *  where it met any of the bowl (else the pixel is the backdrop's). */
-function bowlTraceWGSL(params: string, args: string, debug: BowlDebug): string {
+function bowlTraceWGSL(params: string, args: string, bowl: BowlShape): string {
+  const { debug } = bowl;
   return /* wgsl */ `
 // Set by globes_trace (the bowl's) where its ray leaves the bowl by the open mouth: where, which
 // way, and what is left of its light; and, going in, how far the ray has come (bowl.ts's glass).
@@ -932,7 +949,9 @@ var<private> globesBowlOut: bool;
 var<private> globesBowlP: vec3f;
 var<private> globesBowlDir: vec3f;
 var<private> globesBowlThr: vec3f;
-var<private> globesBowlPath: f32;
+var<private> globesBowlPath: f32;${bowl.ids ? `
+// (What the ray ended on, and met on the way: hitEnds, hitMeets. Read by globes_hitIdOf.)
+var<private> globesHitId: u32;` : ''}
 
 fn globes_bowlTrace${debug ? 'Plain' : ''}(${params}) -> vec4f {
   var col = vec3f(0.0);
@@ -941,7 +960,10 @@ fn globes_bowlTrace${debug ? 'Plain' : ''}(${params}) -> vec4f {
   var d = rd;
   var traces = 0;
   var met = false;
-  globesBowlPath = 0.0;
+  globesBowlPath = 0.0;${bowl.ids ? `
+  // (Where a ray ends without a code of its own - out through the glass, or round it - it shows the
+  // room, seen through the air.)
+  globesHitId = ${HIT.STUDIO_AIR}u;` : ''}
   for (var i = 0; i < 8; i++) {
     let h = bowl_hit(o, d);
     var tS = 1e9;
@@ -961,14 +983,14 @@ fn globes_bowlTrace${debug ? 'Plain' : ''}(${params}) -> vec4f {
     if (h.t < tS || (h.part != 0u && h.t <= 0.0)) {
       met = true;
       // (The lid's rim, knob and lamp are opaque.)
-      if (h.part == 3u) { return vec4f(col + thr * bowl_blackShade(h, bgTex, bgSamp), 1.0); }
+      if (h.part == 3u) { ${bowl.ids ? `${hitEnds(bowl, `${HIT.LID}u`)} ` : ''}return vec4f(col + thr * bowl_blackShade(h, bgTex, bgSamp), 1.0); }
       let g = bowl_through(h, bgTex, bgSamp);
       col += thr * g.col;
       thr *= g.T;
       globesBowlPath += h.t + distance(g.p, o + d * h.t);
       o = g.p;
       d = g.d;
-      if (max(thr.x, max(thr.y, thr.z)) < 0.003) { return vec4f(col, 1.0); }
+      if (max(thr.x, max(thr.y, thr.z)) < 0.003) { ${bowl.ids ? `${hitEnds(bowl, `${HIT.LID}u`)} ` : ''}return vec4f(col, 1.0); }
       continue;
     }
     if (tS >= 1e9) { break; }
@@ -985,7 +1007,8 @@ fn globes_bowlTrace${debug ? 'Plain' : ''}(${params}) -> vec4f {
     d = globesBowlDir;
   }
   // (A ray that met none of it: the backdrop is drawn there already.)
-  if (!met) { return vec4f(0.0); }
+  if (!met) { return vec4f(0.0); }${bowl.ids ? `
+  ${hitEnds(bowl, `${HIT.STUDIO_AIR}u`)}` : ''}
   col += thr * globes_bg(bgTex, bgSamp, o, d);
   return vec4f(col, 1.0);
 }${debug ? `
@@ -2531,7 +2554,8 @@ ${bowl?.lite ? `      // (The phone's bowl: where a sample could find nothing, i
       // (The clear bubbles in it.)
       let sp = globes_splashAlong(splashTex, p, dir, 0.0, t, true, pathLen, lit, lightTex, lightSamp, bgTex, bgSamp);
       col += thr * sp.rgb;
-      thr *= sp.a;${bowl ? `
+      thr *= sp.a;${bowl?.ids ? `
+      ${hitMeets(bowl, HIT_MET_SPLASH, 'sp.a < 0.999')}` : ''}${bowl ? `
       // (The lid's lamp shining down through the water.)
       col += thr * bowl_lampAlong(p, dir, t, 0.5, globesWaterExt);` : ''}
       let T = exp(-globesWaterExt * t);
@@ -2541,7 +2565,8 @@ ${bowl?.lite ? `      // (The phone's bowl: where a sample could find nothing, i
       // (The spray in the air, and the bubbles' domes over the water.)
       let sp = globes_splashAlong(splashTex, p, dir, 0.0, t, false, pathLen, lit, lightTex, lightSamp, bgTex, bgSamp);
       col += thr * sp.rgb;
-      thr *= sp.a;${bowl ? `
+      thr *= sp.a;${bowl?.ids ? `
+      ${hitMeets(bowl, HIT_MET_SPLASH, 'sp.a < 0.999')}` : ''}${bowl ? `
       // (The betta's bubble nest on the film.)
       let nest = scape_nestAlong(kelpPrimTex, p, dir, t, bgTex, bgSamp);
       col += thr * nest.rgb;
@@ -2562,7 +2587,8 @@ ${bowl?.lite ? `      // (The phone's bowl: where a sample could find nothing, i
         globesBowlThr = thr;
         globesBowlPath = pathLen;
         return col;
-      }` : ''}
+      }` : ''}${bowl?.ids ? `
+      ${hitEnds(bowl, `select(${HIT.STUDIO_AIR}u, ${HIT.STUDIO_WATER}u, inWater)`)}` : ''}
       if (!inWater) {
         // A drop on the glass where the ray leaves (on the far side, seen through the cavity): into
         // its water where the ray comes down to its surface, through it, and out through the glass
@@ -2612,6 +2638,7 @@ ${bowl?.lite ? '' : `      if (!GLOBES_KOI && !globesKoiNear && betta_near(betta
       // pixels would stand out against the rest).
       if (inWater && betta_tex(bettaTex, 0u).w > 0.5) { bettaShadow *= betta_dapple(qs + vec3f(0.0, 0.02, 0.0), lit, lightTex, lightSamp, koiTime); }
 ${bowl ? `      globesSandFoot = lit.z * pathLen;
+` : ''}${bowl?.ids ? `      ${hitEnds(bowl, `${HIT.SAND}u`)}
 ` : ''}      col += thr * globes_sandShade(qs, inWater, rot, sandTex, sandSamp, causticTex, causticSamp, bettaShadow${bowl ? ' * scape_bedShadow(kelpPrimTex, qs, inWater)' : ''});
       return col;
     }
@@ -2623,11 +2650,16 @@ ${bowl ? `      globesSandFoot = lit.z * pathLen;
       col += thr * kelp_shade(kelpPrimTex, kelpHit, p, dir, inWater, lit, lightTex, lightSamp, lit.z * pathLen); // (pathLen now reaches the hit)
       return col;
     }
-${bowl ? `    if (event == 9) {
+${bowl ? `    if (event == 9) {${bowl.ids ? `
+      // (The leaf floating on the water, a plant's leaf, stem or root, the driftwood or a rock: by
+      // the triangle's material, scape/mesh.mjs MAT.)
+      let mat = u32(scape_meshTexel(kelpPrimTex, u32(scape_meshTexel(kelpPrimTex, 0u).y) + sc.id * 3u).w) & 7u;
+      ${hitEnds(bowl, `select(${HIT.PLANT}u, select(${HIT.ROCK}u, ${HIT.WOOD}u, mat < 3u), sc.kind == 7u && mat <= 3u)`)}` : ''}
       col += thr * scape_shade(kelpPrimTex, sc, p + dir * t, dir, inWater, lit, lightTex, lightSamp, koiTime, bgTex, bgSamp, lit.z * pathLen);
       return col;
     }
-` : ''}    if (GLOBES_KOI && event == 8) {
+` : ''}    if (GLOBES_KOI && event == 8) {${bowl?.ids ? `
+      ${hitMeets(bowl, HIT_MET_FISH)}` : ''}
       let sh = betta_shade(bettaTex, bettaAtlas, bettaSamp, bh, dir, p + dir * t, inWater, lit, lightTex, lightSamp, lit.z * pathLen, koiTime); // (pathLen now reaches the hit)
       col += thr * sh.rgb * sh.a;
       if (sh.a > 0.99) { return col; }
@@ -2635,7 +2667,8 @@ ${bowl ? `    if (event == 9) {
       p += dir * (t + 0.00005);
       continue;
     }
-    if (GLOBES_FOOD && event == 7) {
+    if (GLOBES_FOOD && event == 7) {${bowl?.ids ? `
+      ${hitMeets(bowl, HIT_MET_SPLASH)}` : ''}
       col += thr * food_shade(poseTex, foodHit.k, p + dir * t, dir, inWater, lit, lightTex, lightSamp);
       return col;
     }
@@ -2664,7 +2697,8 @@ ${bowl ? `    if (event == 9) {
       return col;
     }
 
-    // Water surface.
+    // Water surface.${bowl?.ids ? `
+    ${hitMeets(bowl, HIT.CROSSED)}` : ''}
     let pi = p + dir * t;
     let nw = globes_waterNormal(densTex, densSamp, pi, vol, normalEps);
     var nf = select(nw, -nw, inWater);
@@ -2699,12 +2733,23 @@ ${bowl ? `    if (event == 9) {
     p = pi;
   }
 
-  col += thr * globes_bg(bgTex, bgSamp, p, dir);
+${bowl?.ids ? `  ${hitEnds(bowl, `${HIT.SURFACE}u`)}
+` : ''}  col += thr * globes_bg(bgTex, bgSamp, p, dir);
   return col;
 }
-${bowl ? bowlTraceWGSL(traceParams, traceArgs, bowl.debug) : ''}`;
+${bowl ? bowlTraceWGSL(traceParams, traceArgs, bowl) : ''}`;
   return bowl ? withoutComments(code) : code;
 }
+
+/** The betta bowl's passes, where they write what each ray ended on (bowl.ids): the hit's code
+ *  (bowlResolve.mjs HIT) of the ray globes_shade has just traced (traced, what it returned: 0 for a
+ *  miss). A function of its own, called on that result, so it is read after the trace. */
+export const BOWL_HIT_ID_WGSL = /* wgsl */ `fn globes_hitIdOf(traced: vec4f) -> f32 {
+  if (traced.w < -0.5) { return 0.0; }
+  var id = globesHitId & 15u;
+  if ((globesHitId & ${HIT_MET_FISH}u) != 0u || globesKoiNear) { id = ${HIT.FISH}u; } else if ((globesHitId & ${HIT_MET_SPLASH}u) != 0u) { id = ${HIT.SPLASH}u; }
+  return f32(id | (globesHitId & ${HIT.CROSSED}u));
+}`;
 
 /** Entry point called from TSL: traces one ray. The waterline, glass rim and refracted edges
  *  are computed per ray, so MSAA alone cannot smooth them: with MSAA, the passes that trace a

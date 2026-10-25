@@ -6,8 +6,11 @@
 import * as THREE from 'three/webgpu';
 import {
   cameraPosition,
+  cameraProjectionMatrix,
+  cameraWorldMatrix,
   float,
   positionWorld,
+  screenCoordinate,
   select,
   texture,
   texture3D,
@@ -29,7 +32,7 @@ import { TLAS_PARAM } from '../rt/rt';
 import { TlasBinding } from '../rt/tlasBinding';
 import type { BowlShape } from './bowl';
 import { MarchBand } from './marchBand';
-import { envWGSL, globeHelpersWGSL, globeShadeWGSL } from './shaders';
+import { BOWL_HIT_ID_WGSL, envWGSL, globeHelpersWGSL, globeShadeWGSL } from './shaders';
 
 /** Where the backdrop's soft glow lies (a direction from the camera): behind the globe, where
  *  it rests in the middle of the view. Shared by the backdrop, its map and the globe, so the
@@ -111,6 +114,21 @@ export class GlobeView {
    *  lid's glass (bowl.ts, as yet its own: 4 and 64 on a phone, 10 and 128 else); z: 0, where its
    *  shader starts the loops a compiler must not unroll (shaders.ts globesZero); w: spare. */
   private readonly uBowlDetail = uniform(new THREE.Vector4());
+  /** Where the bowl's passes write what each ray ended on (bowl.ids): where their next draws' pixels
+   *  lie in the picture (x: k, a lattice's texels k pixels apart; yz: its phase's offset), and for a
+   *  lattice the picture's size and its camera's projection (P00, P02, P11, P12; the lattice's own is
+   *  offset by its phase). A size of 0: the target is the picture. (setBowlLattice.) */
+  private readonly uBowlPixels = uniform(new THREE.Vector4(1, 0, 0, 0));
+  private readonly uBowlPicture = uniform(new THREE.Vector2(0, 0));
+  private readonly uBowlProj = uniform(new THREE.Vector4(1, 0, 1, 0));
+  /** The size of what each draw draws into. (Not three's screenSize, which makes a new uniform each
+   *  time a material is built: the bowl's is built for each render context - the frame's, the
+   *  mirror's - and each build would then order its uniforms its own way, its own pipeline.) */
+  private readonly drawnSize = new THREE.Vector2();
+  private readonly uDrawn = uniform(new THREE.Vector2()).onObjectUpdate(({ renderer }) => {
+    const target = renderer?.getRenderTarget();
+    return target ? this.drawnSize.set(target.width, target.height) : renderer ? renderer.getDrawingBufferSize(this.drawnSize) : this.drawnSize;
+  });
   /** MSAA is on and a pixel's rays can run one per sample (else one ray per pixel throughout). */
   private readonly perSample: boolean;
   private readonly uCenter = uniform(new THREE.Vector3());
@@ -308,6 +326,22 @@ export class GlobeView {
       foamBins: texture(texelTexture(ww.binTex)),
     };
     const onDesktop = desktop !== null;
+    // (The betta bowl's passes, where the interleave may draw them (bowl.ids): what each ray ended
+    // on, read after its trace, for the colour's alpha, 1 + its code; bowlRender.ts.)
+    const hitId = bowl?.ids ? wgslFn(BOWL_HIT_ID_WGSL) : null;
+    // (There each ray is worked out from its pixel of the picture and the camera's matrices, not
+    // from the sphere's surface where it is drawn: so a ray traced on the lattice is the very ray the
+    // whole picture traces at that pixel, to the bit, and at rest the two pictures are the same.)
+    const pixelRay = bowl?.ids
+      ? wgslFn(`fn globes_pixelRay(frag: vec2f, pixels: vec4f, picture: vec2f, drawn: vec2f, proj: mat4x4f, lattice: vec4f, camWorld: mat4x4f, camPos: vec3f) -> vec3f {
+  let onLattice = picture.x > 0.5;
+  let size = select(drawn, picture, onLattice);
+  let px = frag * pixels.x + pixels.yz;
+  let ndc = vec2f(px.x / size.x * 2.0 - 1.0, 1.0 - px.y / size.y * 2.0);
+  let p = select(vec4f(proj[0].x, proj[2].x, proj[1].y, proj[2].y), lattice, onLattice);
+  return camPos + (camWorld * vec4f((ndc.x + p.y) / p.x, (ndc.y + p.w) / p.z, -1.0, 0.0)).xyz;
+}`)({ frag: screenCoordinate, pixels: this.uBowlPixels, picture: this.uBowlPicture, drawn: this.uDrawn, proj: cameraProjectionMatrix, lattice: this.uBowlProj, camWorld: cameraWorldMatrix, camPos: cameraPosition })
+      : null;
     // pass: 'main' (the plain globe; marks pixels for the koi pass), 'koi' (redraws them, per
     // sample, with the fish), 'kelp' (the kelp globe: one ray per pixel; marks the pixels near an
     // edge) and 'kelpAA' (redraws those, one ray per MSAA sample, so edges are smoothed only
@@ -339,14 +373,16 @@ export class GlobeView {
       let passInputs = redraw || perSampleWater ? koiInputs : inputs;
       if (withReef) passInputs = { ...passInputs, ...reefGrid };
       if (foam) passInputs = { ...passInputs, ...foamInputs };
-      if (withBowl) passInputs = Object.assign({}, passInputs, { bowlLid: this.uBowlLid, bowlState: this.uBowlState, bowlLife: this.uBowlLife, bowlDetail: this.uBowlDetail }, scapeTex ? { kelpPrimTex: texture(scapeTex) } : {}, band);
+      if (withBowl) passInputs = Object.assign({}, passInputs, { bowlLid: this.uBowlLid, bowlState: this.uBowlState, bowlLife: this.uBowlLife, bowlDetail: this.uBowlDetail }, scapeTex ? { kelpPrimTex: texture(scapeTex) } : {}, band, pixelRay ? { fragPos: pixelRay } : {});
       if (!hardware) passInputs = Object.fromEntries(Object.entries(passInputs).filter(([k]) => k !== TLAS_PARAM)) as typeof passInputs;
       // (One variable: the depth and the colour both read the same trace.) Its w carries the
       // pixel's coverage, plus 2 where the second pass must redraw it.
       const traced = (shade(passInputs) as unknown as ReturnType<typeof vec4>).toVar('globesTraced');
       const marked = traced.w.greaterThan(1.5);
       const alpha = traced.w.sub(select(marked, float(2.0), float(0.0)));
-      m.colorNode = vec4(traced.xyz, onDesktop ? alpha : 1.0) as unknown as typeof m.colorNode;
+      m.colorNode = vec4(traced.xyz, onDesktop ? alpha : withBowl && hitId ? float(1.0).add(hitId({ traced }) as unknown as ReturnType<typeof float>) : 1.0) as unknown as typeof m.colorNode;
+      // (Written as it is: an opaque material's alpha would be made 1.)
+      if (withBowl && hitId) m.blending = THREE.NoBlending;
       if (pass === 'main' || pass === 'bowl' || edges) m.depthNode = select(marked, float(1.0), float(0.0)) as unknown as typeof m.depthNode;
       // (The bowl's: a ray that meets none of it leaves the pixel to the backdrop.)
       if (withBowl) m.maskNode = traced.w.greaterThan(-0.5) as unknown as typeof m.maskNode;
@@ -472,6 +508,33 @@ export class GlobeView {
   }
 
   private bowlReach = 1;
+
+  /** The betta bowl's two passes, drawn again by bowlRender.ts into targets of its own; null where
+   *  the page has no bowl. */
+  get bowlPasses(): { bowl: THREE.Mesh; koi: THREE.Mesh } | null {
+    return this.bowlMesh && this.bowlKoiMesh ? { bowl: this.bowlMesh, koi: this.bowlKoiMesh } : null;
+  }
+
+  /** bowlRender.ts: the bowl's next draws trace a lattice of the picture (size), its texels k pixels
+   *  apart from (ox, oy) on, for `camera` (whose own projection the lattice's camera offsets); or,
+   *  without a camera, the picture itself again. */
+  setBowlLattice(k = 1, ox = 0, oy = 0, size?: THREE.Vector2, camera?: THREE.PerspectiveCamera): void {
+    this.uBowlPixels.value.set(k, ox, oy, 0);
+    if (size && camera) {
+      const e = camera.projectionMatrix.elements;
+      this.uBowlPicture.value.copy(size);
+      this.uBowlProj.value.set(e[0], e[8], e[5], e[9]);
+    } else {
+      this.uBowlPicture.value.set(0, 0);
+    }
+  }
+
+  /** The bowl's detail (uBowlDetail): the samples its lamp's haze takes, the steps a ray takes
+   *  through its lid's glass. */
+  setBowlDetail({ lampSamples, lidSteps }: { lampSamples: number; lidSteps: number }): void {
+    this.uBowlDetail.value.x = lampSamples;
+    this.uBowlDetail.value.y = lidSteps;
+  }
 
   /** What floats in the betta bowl (interaction/BowlLife.ts: its leaf and its nest). */
   setBowlLife(life: THREE.Matrix4): void {
