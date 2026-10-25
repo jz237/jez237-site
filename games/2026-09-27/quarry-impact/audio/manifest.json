@@ -1205,5 +1205,19 @@
     "sha256": "72188ee011f02b21a0fe66aaeaa29dd1bb32bdf76ddab3f99d1a76ee299dc216",
     "runtimeSha256": "453d7a9bcd599242f1e5576655463ce1cf98a49835f25d4070a69a33e7cbaaed",
     "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "roof-rain",
+    "file": "roof-rain.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Heavy rain drumming on the metal roof and windscreen of a car, heard from inside the car cabin: a steady dense patter at one constant level from start to end, no thunder, no fade in, no engine. Isolated, no music, no voices, no speech.",
+      "duration_seconds": 4.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "439c4bcd0714c5c129d098cad2f66f835478e710a0e778b004ca0cf973525482",
+    "runtimeSha256": "d8f3bf23efd6efe74f5f359d5bae35e3965aa462ea84c52b83f80b0f9623cb2a",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
   }
 ]

@@ -63,6 +63,9 @@ export const BRAKE_SQUEAL={from:1.2,to:9,brake:.5,level:.12} as const;
  * with speed (playback rate between the two rates), at gain level; and they barely squeal (the squeal loop at
  * WET_TYRES.squeal, no skid shot) — water lets them slide quietly. Recorded only. */
 export const WET_TYRES={from:2,full:22,level:.22,squeal:.25,rate:[.8,1.25]} as const;
+/** Rain drumming on the roof and glass, heard from an in-car camera in the rain (offline), at gain level; an open cabin
+ * (roof torn away) loses up to ROOF_RAIN.open of it. Recorded only. */
+export const ROOF_RAIN={level:.35,open:.75} as const;
 /** A badly bent body creaks as it is loaded through a turn (offline): structure damaged past bent on its worst face, cornering past
  * pull m/s² (yaw rate × speed), full at full m/s², the recorded metal groan pitched up by rate, at gain level. */
 export const BODY_CREAK={bent:.4,pull:3,full:9,rate:1.35,level:.13} as const;
@@ -439,6 +442,16 @@ export class Sound {
     this.windLoop??=this.loop('wind',this.fxBus);const l=this.windLoop;if(!l)return;
     l.pan.positionX.value=p.x;l.pan.positionY.value=p.y+1;l.pan.positionZ.value=p.z;
     l.source.playbackRate.setTargetAtTime(.7+Math.min(.8,Math.abs(speed)/40),now,.2);l.gain.gain.setTargetAtTime(.45*level,now,.2);
+  }
+  /** Rain drumming on the roof of the car the camera is in (level 0 = silent). */
+  private roofRain?:Loop;
+  /** The roof rain is playing (QA). */
+  get drumming(){return !!this.roofRain;}
+  cabinRain(level:number,p:T.Vector3){
+    if(!this.ready||!this.ambientBus||!this.buffers.has('roof-rain'))return;const now=this.ctx!.currentTime;
+    if(!(level>.01)){if(this.roofRain){this.roofRain.gain.gain.setTargetAtTime(0,now,.3);this.roofRain.source.stop(now+1.2);this.roofRain=undefined;}return;}
+    this.roofRain??=this.loop('roof-rain',this.ambientBus);const l=this.roofRain;if(!l)return;
+    l.pan.positionX.value=p.x;l.pan.positionY.value=p.y+1;l.pan.positionZ.value=p.z;l.gain.gain.setTargetAtTime(ROOF_RAIN.level*Math.min(1,level),now,.25);
   }
   /** Growling wheel bearings, by car id (offline, within earshot): the worst bearing on each car, pitched up with speed. */
   private growls=new Map<number,Loop>();

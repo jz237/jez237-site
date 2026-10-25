@@ -69,6 +69,8 @@ jobs = [
  ('crowd-gasp-2', 'Shocked outdoor stadium crowd: a sharp loud collective gasp and whoa as a car explodes in a demolition derby arena, then excited murmuring. Wordless crowd reaction only, no announcer, no music, no individual words or speech.', 2.5, False),
  # The crowd booing a hard hit on a car that is already out.
  ('crowd-boo', 'Booing grandstand crowd at an outdoor demolition derby: a loud disapproving collective boo rising and fading, some jeers. Wordless crowd reaction only, no announcer, no music, no individual words or speech.', 2.5, False),
+ # Rain drumming on the roof and glass, heard from an in-car camera (a loop).
+ ('roof-rain', 'Heavy rain drumming on the metal roof and windscreen of a car, heard from inside the car cabin: a steady dense patter at one constant level from start to end, no thunder, no fade in, no engine. Isolated, no music, no voices, no speech.', 4.0, True),
  # Tyres swishing over a wet road in the rain (a loop, louder and brighter with speed).
  ('wet-tyres', 'Constant road noise of car tyres on a flooded wet asphalt road at speed, recorded from beside the wheel: a steady unchanging loud hiss and swish of spraying water at one constant level from start to end, no fade in, no pass-by, no engine. Isolated, no music, no voices, no speech.', 3.0, True),
 ]
