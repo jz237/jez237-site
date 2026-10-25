@@ -62,13 +62,15 @@ jobs = [
  # A blown or shredded tyre flapping as the car goes, and steam hissing out of a burst radiator (loops).
  ('tyre-flap', 'Flapping shredded tyre: a flat torn car tyre slapping against the wheel arch as the car drives along, a rhythmic rubbery flap flap flap, steady. Isolated, no engine, no music, no voices, no speech.', 2.0, True),
  ('steam-hiss', 'Steam hissing out of a burst car radiator: a continuous steady hiss of escaping hot steam with a faint bubbling gurgle under the bonnet. Isolated, no engine, no music, no voices, no speech.', 2.0, True),
+ # Old brakes squealing as a car slows to a stop (a loop).
+ ('brake-squeal', 'Squealing brakes on an old car slowing down: a continuous loud high pitched metallic brake squeal, steady, without tyre skid. Isolated, no engine, no music, no voices, no speech.', 2.0, True),
 ]
 # Seconds cut from the start of a raw clip: metal-groan dips to silence early (it would drop out every loop) and
 # debris-2 opens with half a second of near silence (the layer would land late).
-TRIM = {'metal-groan':.7,'debris-2':.45,'growl':.6,'thump':.11,'car-explosion':.5,'reverse-whine':.5}
+TRIM = {'metal-groan':.7,'debris-2':.45,'growl':.6,'thump':.11,'car-explosion':.5,'reverse-whine':.5,'brake-squeal':.95}
 # Seconds kept (after any trim): the game plays the clanks for 0.26 s and the thump for 0.18 s, so the clips are cut to
 # about that (rattle-2 before its second bounce) and level-matched over what is heard.
-KEEP = {'rattle-0':.3,'rattle-1':.3,'rattle-2':.18,'rattle-3':.3,'thump':.22,'reverse-whine':.9}
+KEEP = {'rattle-0':.3,'rattle-1':.3,'rattle-2':.18,'rattle-3':.3,'thump':.22,'reverse-whine':.9,'brake-squeal':1.0}
 # Clips that replace a synthesized sound are brought to that synth's RMS (dBFS), so the gains the game already plays
 # them at stay right: the stuck horn (synthHorn), the starter, the gearbox grind, the belt squeal and the bearing growl.
 MATCH = {'horn-stuck':-13.2,'starter':-13.5,'gear-grind':-14.3,'squeal':-17.4,'growl':-29.1,'rattle-0':-18.3,'rattle-1':-18.2,'rattle-2':-18.2,'rattle-3':-18.3,'thump':-15.4,'wind':-20.3,'rain':-17.7,'car-explosion':-15}

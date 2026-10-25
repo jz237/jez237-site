@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {REVERSE_WHINE,TYRE_FLAP,STEAM_HISS,TYRE_HISS} from '../src/audio';
+import {REVERSE_WHINE,TYRE_FLAP,STEAM_HISS,TYRE_HISS,BRAKE_SQUEAL} from '../src/audio';
 const read=(p:string)=>readFileSync(new URL('../'+p,import.meta.url));
 test('running-gear loops: reverse gears whine, blown tyres flap, burst radiators and punctured tyres hiss, offline, recorded only',()=>{
  const audio=read('src/audio.ts').toString(),main=read('src/main.ts').toString(),manifest=JSON.parse(read('public/audio/manifest.json').toString()) as {id:string;file:string;provider:string;params:{loop:boolean}}[];
@@ -14,5 +14,7 @@ test('running-gear loops: reverse gears whine, blown tyres flap, burst radiators
  assert.ok(TYRE_HISS.rate>1&&TYRE_HISS.level<STEAM_HISS.level,'a punctured tyre hisses higher and quieter than a radiator');
  assert.ok(audio.includes("this.driveLoops(this.leaks,'steam-hiss',cars,listener,now,car=>car.tyreDamage?.some((d,i)=>d>=TYRE_LEAK.onset&&d<TYRE_LEAK.flat&&!car.blownOut[i]&&!car.wreckParts.wheelLost[i])?1:0,()=>TYRE_HISS.rate,TYRE_HISS.level);"),'while a tyre still on the car goes down');
  assert.ok(main.includes("c.tyreDamage[wheel] = Math.max(c.tyreDamage[wheel], TYRE_LEAK_RANGE.onset + .05); return true;"),'__quarry.puncture for QA');
+ assert.ok(BRAKE_SQUEAL.to>BRAKE_SQUEAL.from&&BRAKE_SQUEAL.level<.2);const sq=manifest.find(x=>x.id==='brake-squeal');assert.ok(sq&&sq.params.loop,'brake squeal is a recorded loop');
+ assert.ok(audio.includes("return (car.input?.brake??0)>=BRAKE_SQUEAL.brake&&v>=BRAKE_SQUEAL.from&&v<=BRAKE_SQUEAL.to?Math.min(1,(BRAKE_SQUEAL.to-v)/(BRAKE_SQUEAL.to-BRAKE_SQUEAL.from)*1.4):0;},car=>.92+(car.id%5)*.04,BRAKE_SQUEAL.level);"),'hard braking at low speed, louder as it slows, each car its own pitch');
  assert.ok(main.includes("    sound.runningLoops(effectsActive&&!online?.active?cars:[],camera.position);")&&main.includes("  if(studio)sound.runningLoops([],camera.position);"),'every frame offline, silenced in the garage');
 });

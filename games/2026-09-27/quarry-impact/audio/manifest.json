@@ -1135,5 +1135,19 @@
     "sha256": "aff969c19d8d842c11911e4c9e94edcc92659179cb041e3e3f3708a9d0557f13",
     "runtimeSha256": "85cd0007ea052c605d3f2c16a32f98f70b7e147827697d13a1ea46e551a8a05d",
     "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "brake-squeal",
+    "file": "brake-squeal.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Squealing brakes on an old car slowing down: a continuous loud high pitched metallic brake squeal, steady, without tyre skid. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "9d6ede087d05b5f2dc2b5d6ebd55c0509d67ad3804c1471f3c604da129ad7d75",
+    "runtimeSha256": "386d9b7b58d96890e9b90389fd7d703d48b8f3be9267f3942e56286293f83f9f",
+    "processing": "1.0s kept, first 0.95s cut, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
   }
 ]

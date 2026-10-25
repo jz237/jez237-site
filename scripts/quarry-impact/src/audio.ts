@@ -56,6 +56,9 @@ export const STEAM_HISS={hold:1.2,level:.18} as const;
 /** Air hissing out of a punctured tyre while it goes down (damage between LEAK.onset and LEAK.flat, still on the car): the steam
  * hiss pitched up by rate, quiet, at gain level. */
 export const TYRE_HISS={rate:1.7,level:.08} as const;
+/** Old brakes squeal as a car slows (offline): braking at brake or harder between from and to m/s, louder the slower it goes, at gain
+ * level, each car's squeal at its own pitch. Recorded only. */
+export const BRAKE_SQUEAL={from:1.2,to:9,brake:.5,level:.12} as const;
 /** A tyre rubbing a crushed arch (0–1): the hardest rub on the car, with road speed (full from 10 m/s), louder still once
  * the tyre is smoking; silent below RUB.warn or at a crawl. */
 export const rubLoopLevel=(rubs:ArrayLike<number>,speed:number,heat:number)=>{const r=Math.max(0,...Array.from(rubs)),v=Math.abs(Number.isFinite(speed)?speed:0);
@@ -370,6 +373,7 @@ export class Sound {
   private readonly flaps=new Map<number,Loop>();
   private readonly hisses=new Map<number,Loop>();
   private readonly leaks=new Map<number,Loop>();
+  private readonly brakeSqueals=new Map<number,Loop>();
   private readonly steamSeen=new Map<number,{puffs:number;at:number}>();
   /** Cars whining in reverse right now (QA). */
   get whining(){return [...this.whines].filter(([,l])=>!this.quietSince.has(l)).map(([id])=>id);}
@@ -377,12 +381,14 @@ export class Sound {
   get flapping(){return [...this.flaps].filter(([,l])=>!this.quietSince.has(l)).map(([id])=>id);}
   get hissing(){return [...this.hisses].filter(([,l])=>!this.quietSince.has(l)).map(([id])=>id);}
   get leaking(){return [...this.leaks].filter(([,l])=>!this.quietSince.has(l)).map(([id])=>id);}
+  get squealing(){return [...this.brakeSqueals].filter(([,l])=>!this.quietSince.has(l)).map(([id])=>id);}
   runningLoops(cars:readonly Vehicle[],listener:T.Vector3){
     if(!this.ready||!this.fxBus)return;const now=this.ctx!.currentTime;
     this.driveLoops(this.whines,'reverse-whine',cars,listener,now,car=>{const back=-car.speed;return back>=REVERSE_WHINE.from&&Math.abs(car.input?.throttle??0)>=REVERSE_WHINE.throttle?Math.min(1,(back-REVERSE_WHINE.from+1)/(REVERSE_WHINE.full-REVERSE_WHINE.from+1)):0;},car=>.8+Math.min(.7,-car.speed/12),REVERSE_WHINE.level);
     this.driveLoops(this.flaps,'tyre-flap',cars,listener,now,car=>{const v=Math.abs(car.speed);return v>=TYRE_FLAP.from&&car.blownOut.some((b,i)=>(b||car.tyreShred[i]>0)&&!car.wreckParts.wheelLost[i])?Math.min(1,v/TYRE_FLAP.full):0;},car=>.5+Math.min(1.1,Math.abs(car.speed)/14),TYRE_FLAP.level);
     for(const car of cars){const seen=this.steamSeen.get(car.id);if(!seen||car.steamPuffs<seen.puffs)this.steamSeen.set(car.id,{puffs:car.steamPuffs,at:-99});else if(car.steamPuffs>seen.puffs){seen.puffs=car.steamPuffs;seen.at=now;}}
     this.driveLoops(this.hisses,'steam-hiss',cars,listener,now,car=>now-(this.steamSeen.get(car.id)?.at??-99)<STEAM_HISS.hold?1:0,()=>1,STEAM_HISS.level);
+    this.driveLoops(this.brakeSqueals,'brake-squeal',cars,listener,now,car=>{const v=Math.abs(car.speed);return (car.input?.brake??0)>=BRAKE_SQUEAL.brake&&v>=BRAKE_SQUEAL.from&&v<=BRAKE_SQUEAL.to?Math.min(1,(BRAKE_SQUEAL.to-v)/(BRAKE_SQUEAL.to-BRAKE_SQUEAL.from)*1.4):0;},car=>.92+(car.id%5)*.04,BRAKE_SQUEAL.level);
     this.driveLoops(this.leaks,'steam-hiss',cars,listener,now,car=>car.tyreDamage?.some((d,i)=>d>=TYRE_LEAK.onset&&d<TYRE_LEAK.flat&&!car.blownOut[i]&&!car.wreckParts.wheelLost[i])?1:0,()=>TYRE_HISS.rate,TYRE_HISS.level);
   }
   /** The wind roaring through the player's open wreck (level 0 = silent), pitched up with speed. */
