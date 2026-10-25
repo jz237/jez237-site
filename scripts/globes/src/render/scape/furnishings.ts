@@ -31,13 +31,27 @@ export interface Furnishings {
 }
 
 type Built = Omit<Furnishings, 'wgsl' | 'phases'>;
+type Ask = { n: number; extent: number; none: number; detail: number };
 
-/** n, extent, none: the bed's map (FluidSim's BED_SOLIDS_N, its radius, BED_SOLIDS_NONE); detail:
- *  how finely they are made (1; phones 0.5: about a quarter of the triangles). */
-export function furnish(n: number, extent: number, none: number, detail = 1): Promise<Furnishings> {
-  const wgsl = import('./scapeShader.mjs').then((m) => m.scapeShaderWGSL() as string);
-  const phases = import('./plantMotion.mjs').then((m) => m.leafPhases as Furnishings['phases']);
-  const built = new Promise<Built>((resolve, reject) => {
+/** The worker betta.html starts as the page is read (in a build: see vite.config.ts), what it was
+ *  asked, and what it makes. */
+interface EarlyFurnishing {
+  worker: Worker;
+  ask: Ask;
+  built: Promise<Built>;
+}
+
+/** What `ask` makes, from a worker: the one betta.html started if it was asked the same (the
+ *  page's script loads and runs meanwhile), else a new one. */
+function fromWorker(ask: Ask): Promise<Built> {
+  const page = window as unknown as { globesFurnishing?: EarlyFurnishing };
+  const early = page.globesFurnishing;
+  delete page.globesFurnishing;
+  if (early) {
+    if ((Object.keys(ask) as (keyof Ask)[]).every((k) => early.ask[k] === ask[k])) return early.built;
+    early.worker.terminate();
+  }
+  return new Promise<Built>((resolve, reject) => {
     const worker = new Worker(new URL('./scapeWorker.mjs', import.meta.url), { type: 'module' });
     worker.onmessage = (e: MessageEvent<Built>) => {
       worker.terminate();
@@ -47,8 +61,16 @@ export function furnish(n: number, extent: number, none: number, detail = 1): Pr
       worker.terminate();
       reject(new Error(e.message || 'the furnishings worker failed'));
     };
-    worker.postMessage({ n, extent, none, detail });
-  }).catch(async (err: unknown) => {
+    worker.postMessage(ask);
+  });
+}
+
+/** n, extent, none: the bed's map (FluidSim's BED_SOLIDS_N, its radius, BED_SOLIDS_NONE); detail:
+ *  how finely they are made (1; phones 0.5: about a quarter of the triangles). */
+export function furnish(n: number, extent: number, none: number, detail = 1): Promise<Furnishings> {
+  const wgsl = import('./scapeShader.mjs').then((m) => m.scapeShaderWGSL() as string);
+  const phases = import('./plantMotion.mjs').then((m) => m.leafPhases as Furnishings['phases']);
+  const built = fromWorker({ n, extent, none, detail }).catch(async (err: unknown) => {
     console.warn('[globes] furnishings built on the main thread:', err);
     const m = await import('./scapeBuild.mjs');
     return m.buildFurnishings(n, extent, none, detail) as Built;

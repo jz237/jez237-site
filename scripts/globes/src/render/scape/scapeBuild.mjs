@@ -13,7 +13,12 @@ import { buildScapePieces } from './scene.mjs';
 /** n, extent, none: the bed's map (FluidSim's BED_SOLIDS_N, its radius, BED_SOLIDS_NONE); detail:
  *  how finely the pieces are made (scene.mjs). */
 export function buildFurnishings(n, extent, none, detail = 1) {
-  const pieces = buildScapePieces({ detail });
+  return furnishingsOf(buildScapePieces({ detail }), n, extent, none);
+}
+
+/** The same from the pieces (buildScapePieces: all of them, in their order), wherever they were
+ *  made. */
+export function furnishingsOf(pieces, n, extent, none) {
   const meshes = pieces.flatMap((p) => p.meshes);
   // (The plants keep out of the wood and the rocks: their solid parts.)
   const solids = pieces.filter((p) => p.name !== 'plants').flatMap((p) => p.obstacles);

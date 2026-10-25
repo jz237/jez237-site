@@ -2,7 +2,8 @@ import '@fontsource-variable/inter';
 import './app/styles.css';
 import * as THREE from 'three/webgpu';
 import { AppShell, type DesktopHost } from './app/AppShell';
-import { AdaptiveScale, ratioAt } from './app/adaptiveScale.mjs';
+import { AdaptiveScale, DESKTOP, keepLevel, keptLevel, levelAt, lowestLevel, PHONE, ratioAt } from './app/adaptiveScale.mjs';
+import { FramePace } from './app/framePace.mjs';
 import { describe, describeLoad, FrameProfile, type Sample } from './app/frameProfile';
 import { BETTA_PAGE, elsewhere, GLOBES, type GlobeEntry } from './app/catalog';
 import { applyUrlOverrides, fishConfig, globeConfig, lightConfig, simConfig, type GlobeConfig, type LightConfig, type SimConfig } from './config';
@@ -37,8 +38,18 @@ import { FIN_QUALITY } from '../../betta-atelier/src/fin-dynamics.js';
 const FOV = 30;
 const NARROWEST = 0.75;
 /** Phones and tablets get a lighter globe (a coarser grid, one ray per pixel, no supersampled
- *  canvas) unless the URL asks otherwise (?res=, ?aa=). */
+ *  canvas) unless the URL asks otherwise (?res=, ?aa=). (betta.html repeats this test, to start
+ *  the bowl's furnishings as the page is read.) */
 const LITE = ((q) => (q === '1' ? true : q === '0' ? false : matchMedia('(pointer: coarse)').matches && Math.min(screen.width, screen.height) < 1000))(new URLSearchParams(location.search).get('lite'));
+/** How the picture's sharpness steps (app/adaptiveScale.mjs), from the screen's own pixel ratio
+ *  (up to 2) down: phones' steps are finer, and their frames held to 60 a second (FramePace). */
+const TIER = LITE ? PHONE : DESKTOP;
+const screenRatio = (): number => Math.min(window.devicePixelRatio, 2);
+/** The sharpness (a level: app/adaptiveScale.mjs) a view starts at: on phones 1 canvas pixel a
+ *  CSS pixel, elsewhere the sharpest. */
+const startLevel = (): number => (LITE ? levelAt(screenRatio(), 1, PHONE) : 0);
+/** How the phone is held (the sharpness it holds is kept for each: keptLevel). */
+const wayUp = (): string => (innerWidth > innerHeight ? 'wide' : 'tall');
 /** ?stats and ?bench: where each frame's time goes, and the load's (app/frameProfile.ts). */
 const PROF = new FrameProfile(/[?&](stats|bench)\b/.test(location.search));
 PROF.mark('script');
@@ -198,15 +209,18 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   const [sx, sy, sz] = o.light.sunDirection;
   const sl = Math.hypot(sx, sy, sz);
   const sunWater = sunInWater([sx / sl, sy / sl, sz / sl]);
+  // (The sim builds the kernels of what it is given, and the betta bowl's page has neither a
+  // forest nor a reef: there they are only the globe's stand-ins, never simulated.)
   const kelp = new KelpForest(device, R, cfg.sandLevel, kelpLevel, sunWater, cfg.gravity);
-  sim.kelp = kelp;
+  if (kelpGlobe) sim.kelp = kelp;
   // The reef: its anemone (the clownfish come later), simulated and drawn only in its globe. (Its
   // shadow goes into the same grid as the kelp's: one of them is in the water at a time.)
+  const reefGlobe = GLOBES.some((g) => g.reef);
   const reef = new Reef(device, cfg.gravity, sunWater, kelp.shadeTexture);
-  sim.reef = reef;
+  if (reefGlobe) sim.reef = reef;
   // Its two clownfish, living in the anemone.
   const clowns = new Clownfishes(device, reef.data);
-  sim.clownPose = clowns.texture;
+  if (reefGlobe) sim.clownPose = clowns.texture;
   sim.rock = !!o.start.reef;
   sim.glass = o.globe;
   // (What no globe of the page shows, the sim leaves out: the phone's bowl draws no motes.)
@@ -237,6 +251,10 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   let plantFrame = 0;
   // (Where the bowl's turn has carried them, each frame: the sim frame.)
   const turnedObstacles = scapeObstacles.map((o) => ({ a: [0, 0, 0], b: [0, 0, 0], r: o.r, solid: o.solid }));
+  // (Set up before the globe's pipelines are begun, not alongside them: three holds a WebGPU
+  // error scope open over each pipeline it builds, the sim one over its setup, and scopes close
+  // last first, so side by side each could be handed the other's errors, and the sim's check that
+  // it could be set up, which ends the page with a message where not, would be no check.)
   await sim.init(Math.max(...GLOBES.map(fill)), GLOBES.map((g) => ({ fill: fill(g), rock: !!g.reef })));
   PROF.mark('sim');
 
@@ -263,17 +281,23 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // The picture takes the stage's shape and size, whatever they are: as many pixels as the
   // screen has (up to twice the CSS pixels), but no wider or taller than the GPU's textures go.
   // (If frames come too slowly for the pointer to be followed, run() lowers the sharpness a step
-  // at a time, and offers it back when they are quick again.)
-  let sharpness = 0;
+  // at a time, and offers it back when they are quick again. Phones step more finely, from 1
+  // canvas pixel a CSS pixel to begin with: TIER.)
+  let sharpness = startLevel();
   // (?bench: a pixel ratio of its own choosing, for a while.)
   let ratioOverride: number | null = null;
+  // (Only what changed is set: the canvas is cleared and made anew whenever it is given a size,
+  // the same or not.)
+  let fitted = [0, 0];
   const fit = (): void => {
     const [w, h] = stageSize();
     const most = device.limits.maxTextureDimension2D;
-    renderer.setPixelRatio(Math.min(ratioOverride ?? ratioAt(LITE ? 1 : Math.min(window.devicePixelRatio, 2), sharpness), most / w, most / h));
+    renderer.setPixelRatio(Math.min(ratioOverride ?? ratioAt(screenRatio(), sharpness, TIER), most / w, most / h));
     // (A phone's table mirror stays as sharp as at its lowest ratio, 0.3 texels to a CSS pixel,
     // however sharp the picture: faint and blurred as it is, it traces the bowl again.)
     studio?.setMirrorScale(LITE ? Math.min(0.5, 0.3 / renderer.getPixelRatio()) : 0.5);
+    if (w === fitted[0] && h === fitted[1]) return;
+    fitted = [w, h];
     renderer.setSize(w, h);
     camera.aspect = w / h;
     camera.fov = (2 * Math.atan(Math.tan((FOV * Math.PI) / 360) * Math.max(1, NARROWEST / camera.aspect)) * 180) / Math.PI;
@@ -486,8 +510,28 @@ type World = Awaited<ReturnType<typeof createWorld>>;
 /** Runs the world every frame. beforeRender: after the world moves, before it is drawn. */
 function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () => void; firstFrame?: () => void }): void {
   const { renderer, camera, scene, sim, controller, globe, ocean, studio, specks, advance, setSharpness, setRatio } = world;
-  // ?adapt=0 keeps the picture at full sharpness however slowly it draws (profiling; ?bench too).
-  const adaptive = params.get('adapt') === '0' || params.has('bench') ? null : new AdaptiveScale(performance.now());
+  // ?adapt=0 keeps the picture at the sharpness it starts at, however slowly it draws (profiling;
+  // ?bench too). Phones step their own way (PHONE), down to the first level at the floor, from
+  // where frames last held (keptLevel).
+  const adaptive = params.get('adapt') === '0' || params.has('bench') ? null : new AdaptiveScale(performance.now(), LITE ? { tier: PHONE, level: keptLevel(wayUp(), startLevel()) ?? startLevel(), lowest: lowestLevel(screenRatio(), PHONE) } : {});
+  if (adaptive) setSharpness(adaptive.level);
+  // Phones: frames held to 60 a second (app/framePace.mjs; ?pace=0, as fast as they come, for
+  // profiling, and ?bench, which measures how fast they can come), the scaler told what each one
+  // took the main thread, the level they held at (kept for the next view: keptLevel), and a turn
+  // of the phone (measured afresh, from the level held that way up).
+  const pace = LITE && params.get('pace') !== '0' && !params.has('bench') ? new FramePace() : null;
+  const scale = LITE ? adaptive : null;
+  let held: number | null = null;
+  if (scale) {
+    let way = wayUp();
+    addEventListener('resize', () => {
+      if (wayUp() === way) return;
+      way = wayUp();
+      held = null;
+      scale.restart(performance.now(), keptLevel(way, startLevel()) ?? scale.level);
+      setSharpness(scale.level);
+    });
+  }
   const globeMotion = { center: controller.center, velocity: controller.velocity, radius: world.globeRadius };
   let jumps = controller.panJumps;
   // ?stats shows, in a corner above the page's links (a phone has no console to read), where each
@@ -542,14 +586,22 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
   // Dev: smoothed GPU time of the render pass (ms), when on.
   const renderTimes = { on: false, ms: 0 };
   let last = performance.now();
-  renderer.setAnimationLoop(() => {
-    const now = performance.now();
-    const dt = Math.min((now - last) / 1000, STALL);
+  renderer.setAnimationLoop((time?: number) => {
+    // (Phones: the animation frame's time, the screen's refresh, so that frames are timed as they
+    // are shown, evenly, and held to 60. The loop's first call, at once, has none.)
+    const now = LITE && time !== undefined ? time : performance.now();
+    if (pace && !pace.draw(now)) return;
+    const dt = Math.min(Math.max(now - last, 0) / 1000, STALL);
     last = now;
+    const start = performance.now();
 
     PROF.begin();
     const level = adaptive?.frame(now) ?? null;
     if (level !== null) setSharpness(level);
+    if (scale && scale.held !== null && scale.held !== held) {
+      held = scale.held;
+      keepLevel(wayUp(), held);
+    }
     if (!manual) advance(dt);
     hooks.beforeRender?.();
     const heightPx = renderer.getDrawingBufferSize(drawSize).y;
@@ -564,6 +616,7 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     renderer.render(scene, camera);
     PROF.lap('draw');
     PROF.end(world.device.queue);
+    scale?.work(performance.now() - start);
     if (first) {
       first = false;
       PROF.mark('first frame');
@@ -604,7 +657,8 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
   if (import.meta.env.DEV || params.has('qa')) {
     const tick = (dt: number) => advance(dt);
     const g = window as unknown as { __globes?: object };
-    g.__globes = { ...g.__globes, THREE, ...world, tick, renderTimes, adaptive, prof: PROF, bench };
+    // (three.js itself only in development: held here, none of it could be left out of a build.)
+    g.__globes = { ...g.__globes, ...(import.meta.env.DEV ? { THREE } : {}), ...world, tick, renderTimes, adaptive, prof: PROF, bench };
   }
 }
 

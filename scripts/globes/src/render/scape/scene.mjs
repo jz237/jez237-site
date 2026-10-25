@@ -19,15 +19,20 @@ const PIECES = [
 /** The open water the betta keeps (the bowl's frame): no wood or rock in it, at most a leaf's tip. */
 export const SCAPE_WATER = { lo: [-0.35, -0.15, -0.2], hi: [0.35, 0.6, 0.6] };
 
+/** The pieces' names, in their order. */
+export const SCAPE_PIECE_NAMES = PIECES.map(([name]) => name);
+
 /** Each piece built on its own (deterministic: the same on every call). detail scales every
  *  piece's tessellation (1; 0.5, for phones: about a quarter of the triangles), each the same
- *  shape in the same place, with the same obstacles, at any detail.
- *  @param {{ detail?: number }} [options]
+ *  shape in the same place, with the same obstacles, at any detail. only: just the pieces named
+ *  (in their order; scapeWorker.mjs makes some in another worker).
+ *  @param {{ detail?: number, only?: string[] }} [options]
  *  @returns {(import('./mesh.mjs').ScapePiece & { name: string })[]} */
 export function buildScapePieces(options = { detail: 1 }) {
   // (Anything but a finite number, or no options at all, is full detail.)
   const detail = Number.isFinite(options?.detail) ? Math.min(Math.max(options.detail, 0.25), 2) : 1;
-  return PIECES.map(([name, piece]) => ({ name, ...piece.build({ detail }) }));
+  const only = options?.only;
+  return PIECES.filter(([name]) => !only || only.includes(name)).map(([name, piece]) => ({ name, ...piece.build({ detail }) }));
 }
 
 /** All the furnishings: every piece's meshes, and the room the fish leaves round each.

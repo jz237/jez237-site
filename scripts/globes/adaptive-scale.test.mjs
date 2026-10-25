@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { AdaptiveScale, MAX_LEVEL, ratioAt } from './src/app/adaptiveScale.mjs';
+import { AdaptiveScale, keepLevel, keptLevel, levelAt, lowestLevel, MAX_LEVEL, PHONE, ratioAt } from './src/app/adaptiveScale.mjs';
+import { FramePace } from './src/app/framePace.mjs';
 
 // Drives the controller with frames of `frameMs(level)` for `seconds`; returns the levels reached.
 function run(scale, clock, seconds, frameMs) {
@@ -20,6 +21,26 @@ test('pixel ratio steps down by 0.8 and stops at the floor', () => {
   assert.ok(Math.abs(ratioAt(2, 3) - 1.024) < 1e-9);
   assert.equal(ratioAt(1, 4), 0.6);
   assert.equal(ratioAt(0.5, 4), 0.5);
+});
+
+test('phones step by 0.9 from the screen ratio, through 1 CSS px, to the floor', () => {
+  assert.equal(ratioAt(2, 0, PHONE), 2);
+  assert.equal(levelAt(2, 1, PHONE), 7);
+  assert.ok(Math.abs(ratioAt(2, 7, PHONE) - 1) < 1e-9);
+  assert.ok(Math.abs(ratioAt(2, 8, PHONE) - 0.9) < 1e-9);
+  assert.ok(ratioAt(2, 1, PHONE) < 2 && ratioAt(2, 1, PHONE) > 1.8);
+  assert.equal(ratioAt(2, lowestLevel(2, PHONE), PHONE), 0.6);
+  assert.ok(ratioAt(2, lowestLevel(2, PHONE) - 1, PHONE) > 0.6);
+  // (A screen of 1 CSS px: the steps start there.)
+  assert.equal(levelAt(1, 1, PHONE), 0);
+  assert.ok(Math.abs(ratioAt(1, 1, PHONE) - 0.9) < 1e-9);
+});
+
+test('the lowest level is the first at the floor', () => {
+  // (A screen of 1 CSS px reaches it in three steps: the two more there were did nothing.)
+  assert.equal(lowestLevel(1), 3);
+  assert.equal(lowestLevel(2), MAX_LEVEL);
+  assert.equal(lowestLevel(0.5), 0);
 });
 
 test('quick frames change nothing', () => {
@@ -138,4 +159,141 @@ test('restart measures afresh', () => {
   const before = s.level;
   run(s, clock, 0.3, () => 50);
   assert.equal(s.level, before);
+});
+
+test('frames slow at any sharpness stop at the floor, and stay', () => {
+  // (Before, the steps past the floor, which changed nothing, were taken, then taken back, again
+  // and again.)
+  const s = new AdaptiveScale(0, { lowest: lowestLevel(1) });
+  const clock = { t: 0 };
+  const changes = run(s, clock, 200, (l) => 30 + 20 * ratioAt(1, l) ** 2);
+  assert.deepEqual(changes, [3]);
+});
+
+test('restart can start from another level', () => {
+  const s = new AdaptiveScale(0, { level: 2 });
+  s.restart(0, 4);
+  assert.equal(s.level, 4);
+});
+
+// A phone, its frames held to 60 (FramePace) on a screen of `hz`: a drawn frame takes cost(level)
+// ms of work, cpu of it on the main thread (the scaler is told that part), and the next refresh it
+// can draw at is the first after that.
+function phone(scale, clock, seconds, cost, cpu, hz = 120) {
+  const pace = new FramePace();
+  const changes = [];
+  const end = clock.t + seconds * 1000;
+  let free = 0;
+  while (clock.t < end) {
+    clock.t += 1000 / hz;
+    if (clock.t < free || !pace.draw(clock.t)) continue;
+    const l = scale.frame(clock.t);
+    if (l !== null) changes.push(l);
+    const c = cost(scale.level);
+    free = clock.t + c;
+    scale.work(Math.min(cpu, c));
+  }
+  return changes;
+}
+const pixels = (l) => ratioAt(2, l, PHONE) ** 2;
+const phoneScale = (level = levelAt(2, 1, PHONE)) => new AdaptiveScale(0, { tier: PHONE, level, lowest: lowestLevel(2, PHONE) });
+
+test('a phone with time to spare climbs while its frames hold, and a step too far is taken back', () => {
+  const s = phoneScale();
+  const clock = { t: 0 };
+  // 6 ms of main thread, 6 ms of drawing at 1 CSS px: two steps sharper hold (13.4 ms, 15.1), a
+  // third does not (17.3), and is tried again less and less often.
+  const changes = phone(s, clock, 120, (l) => 6 + 6 * pixels(l), 6);
+  assert.deepEqual(changes.slice(0, 4), [6, 5, 4, 5]);
+  assert.ok(Math.min(...changes) === 4 && changes.filter((l) => l === 4).length <= 4, `${changes}`);
+  assert.equal(s.level, 5);
+  assert.equal(s.held, 5);
+});
+
+test('a phone short of time steps down until its frames hold 60, and stays', () => {
+  const s = phoneScale();
+  const clock = { t: 0 };
+  // 20 ms at 1 CSS px, 12 of it drawing: two 0.9 steps make it fit.
+  const changes = phone(s, clock, 120, (l) => 8 + 12 * pixels(l), 8);
+  assert.equal(changes[0], 9);
+  assert.equal(s.level, 9);
+  assert.equal(s.held, 9);
+  assert.ok(8 + 12 * pixels(9) < 1000 / 60);
+});
+
+test('a phone whose main thread alone is too slow keeps its sharpness', () => {
+  // (On a 120 Hz screen and a 60 Hz one, its time a little uneven.)
+  let n = 0;
+  assert.deepEqual(phone(phoneScale(), { t: 0 }, 60, (l) => 19 + 2 * pixels(l), 19), []);
+  assert.deepEqual(phone(phoneScale(), { t: 0 }, 300, (l) => 26 + (++n % 5) + 2 * pixels(l), 30, 60), []);
+});
+
+test('a phone whose drawing is slower still than its slow main thread steps down even so', () => {
+  const s = phoneScale();
+  const clock = { t: 0 };
+  // 18 ms of main thread, and 40 of drawing at 1 CSS px.
+  const changes = phone(s, clock, 60, (l) => 18 + 40 * pixels(l), 18);
+  assert.ok(changes.length > 0 && s.level > levelAt(2, 1, PHONE), `${changes}`);
+  assert.ok(18 + 40 * pixels(s.level) < 0.75 * (18 + 40 * pixels(levelAt(2, 1, PHONE))));
+});
+
+test('a phone started blurry gets its sharpness back while frames hold', () => {
+  // (As where a slow spell on a visit before was kept: keptLevel.)
+  const s = phoneScale(lowestLevel(2, PHONE));
+  const clock = { t: 0 };
+  phone(s, clock, 90, (l) => 13.5 + pixels(l), 13.5);
+  assert.ok(s.level <= levelAt(2, 1, PHONE), `level ${s.level}`);
+});
+
+test('a kept level is never blurrier than the one a view starts at', () => {
+  const store = new Map();
+  globalThis.localStorage = { getItem: (k) => store.get(k) ?? null, setItem: (k, v) => store.set(k, v) };
+  try {
+    assert.equal(keptLevel('tall', 7), null);
+    keepLevel('tall', 12);
+    assert.equal(keptLevel('tall', 7), 7);
+    keepLevel('tall', 3);
+    assert.equal(keptLevel('tall', 7), 3);
+    assert.equal(keptLevel('wide', 7), null);
+    globalThis.localStorage = { getItem: () => { throw new Error('blocked'); }, setItem: () => { throw new Error('blocked'); } };
+    keepLevel('tall', 2);
+    assert.equal(keptLevel('tall', 7), null);
+  } finally {
+    delete globalThis.localStorage;
+  }
+});
+
+// Refresh times a little uneven, as a phone's are (up to `jitter` ms either way, repeatably).
+const uneven = (k, jitter) => (((k * 7919) % 101) / 50 - 1) * jitter;
+
+test('frames held to 60 on 60, 75, 90, 120, 144 and 165 Hz screens', () => {
+  for (const hz of [60, 75, 90, 120, 144, 165]) {
+    for (const jitter of [0, 0.3, 0.6]) {
+      const pace = new FramePace();
+      let drawn = 0;
+      for (let k = 0; k < hz * 10; k++) if (pace.draw((k * 1000) / hz + uneven(k, jitter))) drawn++;
+      assert.ok(drawn >= 598 && drawn <= 601, `${hz} Hz, ±${jitter} ms: ${drawn} frames in 10 s`);
+    }
+  }
+});
+
+test('a late frame is not caught up on with early ones', () => {
+  for (const hz of [90, 120, 144]) {
+    for (const jitter of [0, 0.6]) {
+      const pace = new FramePace();
+      const times = [];
+      let shortest = Infinity;
+      for (let k = 0; k < hz * 2; k++) {
+        const t = (k * 1000) / hz + uneven(k, jitter);
+        // (Frame 20 or so's work takes 40 ms: the refreshes meanwhile cannot be drawn.)
+        if (t > 166 && t < 210) continue;
+        if (!pace.draw(t)) continue;
+        if (times.length > 1 && times.at(-1) < 166) shortest = Math.min(shortest, t - times.at(-1));
+        times.push(t);
+      }
+      // (After it, no gap shorter than the screen's own pattern before it.)
+      const gaps = times.slice(1).map((t, i) => t - times[i]).filter((_, i) => times[i] > 166);
+      assert.ok(Math.min(...gaps) > shortest - 1.5, `${hz} Hz ±${jitter}: gaps ${gaps.map((g) => g.toFixed(1)).join(' ')}`);
+    }
+  }
 });

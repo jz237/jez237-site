@@ -23,6 +23,20 @@ const bettaPageAsIndex: Plugin = {
   },
 };
 
+/** The betta bowl's page starts its furnishings' worker as it is read (betta.html): it is given
+ *  the worker's file, whose name the build makes. (In development there is none to give: the
+ *  page's script starts the worker itself.) */
+const bettaWorkerFromPage: Plugin = {
+  name: 'betta-worker-from-page',
+  transformIndexHtml: {
+    order: 'post',
+    handler(html, ctx) {
+      const worker = Object.keys(ctx.bundle ?? {}).find((f) => /(^|\/)scapeWorker-[\w-]+\.js$/.test(f));
+      return html.replace('__SCAPE_WORKER__', worker ? `./${worker}` : '');
+    },
+  },
+};
+
 // Relative base so the built app also loads from file:// inside Electron. `--mode betta` builds
 // the betta bowl's page on its own (betta.html, as dist-betta/index.html): a folder that stands
 // alone, for jez237.com/demos/betta-bowl/.
@@ -30,6 +44,6 @@ export default defineConfig(({ mode }) => ({
   base: './',
   resolve: { dedupe: ['three'] },
   server: { proxy: { '/__media/': { target: MEDIA, changeOrigin: true, rewrite: (p) => p.replace(/^\/__media\//, '/') } } },
-  plugins: [mediaThroughDevServer, ...(mode === 'betta' ? [bettaPageAsIndex] : [])],
+  plugins: [mediaThroughDevServer, bettaWorkerFromPage, ...(mode === 'betta' ? [bettaPageAsIndex] : [])],
   ...(mode === 'betta' ? { build: { outDir: 'dist-betta', rollupOptions: { input: resolve(import.meta.dirname, 'betta.html') } } } : {}),
 }));

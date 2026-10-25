@@ -491,16 +491,22 @@ export class GlobeView {
     t?.meshes.forEach((mesh, i) => {
       if (wanted.has(mesh)) jobs.push([mesh, t.software[i]]);
     });
-    for (const [mesh, material] of jobs) {
+    // (All at once: the device builds them side by side, not each after the last. compileAsync
+    // takes the mesh's material and visibility before it first waits, so they go back at once.
+    // Side by side, the error scopes three holds open over them close out of turn: a failed
+    // pipeline may be told another's error, as among the several one compileAsync builds already.
+    // The sim's own scope is closed before these open: main.ts.)
+    const done = jobs.map(([mesh, material]) => {
       const shown = mesh.visible;
       const drawn = mesh.material;
       mesh.visible = true;
       mesh.material = material;
-      const done = renderer.compileAsync(mesh, camera, scene);
+      const compiled = renderer.compileAsync(mesh, camera, scene);
       mesh.visible = shown;
       mesh.material = drawn;
-      await done;
-    }
+      return compiled;
+    });
+    await Promise.all(done);
     if (t) this.sim.rt!.canSwitch = true;
   }
 

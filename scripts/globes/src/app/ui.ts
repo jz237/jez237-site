@@ -103,9 +103,14 @@ export class AppUI {
     this.toastEl.className = 'toast';
     this.toastEl.setAttribute('role', 'status');
 
-    this.splash = document.createElement('div');
-    this.splash.className = 'splash';
-    this.splash.innerHTML = `${icon(ICONS.mark, 'splash-mark')}<span class="splash-bar"></span>`;
+    // (The betta bowl's page has it in its HTML already, to show before this script has loaded.)
+    let splash = stage.querySelector<HTMLElement>(':scope > .splash');
+    if (!splash) {
+      splash = document.createElement('div');
+      splash.className = 'splash';
+      splash.innerHTML = `${icon(ICONS.mark, 'splash-mark')}<span class="splash-bar"></span>`;
+    }
+    this.splash = splash;
 
     stage.append(this.teaser, this.ui, this.toastEl, this.splash);
 
