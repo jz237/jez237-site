@@ -30,7 +30,7 @@ export function buildFurnishings(n, extent, none, detail = 1) {
       buffers: refitBuffers(plan),
       moving: plan.moving,
       slotCount: plan.slotCount,
-      levels: plan.levels,
+      passes: plan.passes,
       leafCount: plan.leafCount,
       leaves: plan.leaves,
       leafTips: plan.leafTips,

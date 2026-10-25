@@ -15,13 +15,13 @@ export interface Furnishings {
   /** Their shader code (scapeShader.mjs). */
   wgsl: string;
   /** The plants' motion (scapeBuild.mjs, scapeRefit.mjs): its kernels, their buffers (to upload
-   *  once), the counts and refit levels they are dispatched by, the leaves' table and tips. */
+   *  once), the counts and refit passes they are dispatched by, the leaves' table and tips. */
   motion: {
     wgsl: { skin: string; tris: string; refit: string };
     buffers: Record<string, { data: ArrayBufferView | null; size: number; usage: 'uniform' | 'storage' }>;
     moving: number;
     slotCount: number;
-    levels: { depth: number; first: number; count: number }[];
+    passes: { first: number; count: number; wide: boolean; groups: number }[];
     leafCount: number;
     leaves: Float32Array;
     leafTips: Float32Array;

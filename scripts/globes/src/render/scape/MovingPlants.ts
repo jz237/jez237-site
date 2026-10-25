@@ -21,7 +21,9 @@ const LEAN_TIME = 0.35;
 
 type Motion = Furnishings['motion'];
 /** What it keeps of the motion once its buffers are on the GPU. */
-type Kept = Pick<Motion, 'leaves' | 'leafTips' | 'leafCount' | 'moving' | 'slotCount' | 'levels'>;
+type Kept = Pick<Motion, 'leaves' | 'leafTips' | 'leafCount' | 'moving' | 'slotCount' | 'passes'>;
+/** Bytes between the refit's passes' uniforms (scapeRefit.mjs PLANT_LEVEL_STRIDE). */
+const PASS_STRIDE = 256;
 
 export class MovingPlants {
   private readonly buffers: Record<string, GPUBuffer> = {};
@@ -32,6 +34,8 @@ export class MovingPlants {
   private readonly points: Float32Array;
   private phases: Float32Array | null = null;
   private readonly motion: Kept;
+  /** Each refit pass's dynamic offset into its uniforms. */
+  private readonly offsets: Uint32Array;
 
   constructor(
     private readonly device: GPUDevice,
@@ -40,7 +44,8 @@ export class MovingPlants {
     private readonly phasesAt: (leaves: Float32Array, t: number, out: Float32Array | null) => Float32Array,
   ) {
     // (The buffers' data is only needed for the upload.)
-    this.motion = { leaves: motion.leaves, leafTips: motion.leafTips, leafCount: motion.leafCount, moving: motion.moving, slotCount: motion.slotCount, levels: motion.levels };
+    this.motion = { leaves: motion.leaves, leafTips: motion.leafTips, leafCount: motion.leafCount, moving: motion.moving, slotCount: motion.slotCount, passes: motion.passes };
+    this.offsets = Uint32Array.from(motion.passes, (_, i) => i * PASS_STRIDE);
     const U = GPUBufferUsage;
     for (const [name, b] of Object.entries(motion.buffers)) {
       const buffer = device.createBuffer({ label: `plants: ${name}`, size: b.size, usage: (b.usage === 'uniform' ? U.UNIFORM : U.STORAGE) | U.COPY_DST });
@@ -48,7 +53,7 @@ export class MovingPlants {
       this.buffers[name] = buffer;
     }
     const C = GPUShaderStage.COMPUTE;
-    const uniform = (binding: number, dynamic = false): GPUBindGroupLayoutEntry => ({ binding, visibility: C, buffer: { type: 'uniform', hasDynamicOffset: dynamic, minBindingSize: 16 } });
+    const uniform = (binding: number, dynamic = false): GPUBindGroupLayoutEntry => ({ binding, visibility: C, buffer: { type: 'uniform', hasDynamicOffset: dynamic, minBindingSize: dynamic ? PASS_STRIDE : 16 } });
     const read = (binding: number): GPUBindGroupLayoutEntry => ({ binding, visibility: C, buffer: { type: 'read-only-storage' } });
     const write = (binding: number): GPUBindGroupLayoutEntry => ({ binding, visibility: C, buffer: { type: 'storage' } });
     const tex = (binding: number): GPUBindGroupLayoutEntry => ({ binding, visibility: C, storageTexture: { access: 'write-only', format: 'rgba32float', viewDimension: '2d' } });
@@ -71,7 +76,7 @@ export class MovingPlants {
     this.groups = {
       skin: group('skin', ['plantSkinParams', 'plantVerts', 'plantLeaves', 'plantLean', 'plantPhase', 'dPos', view]),
       tris: group('tris', ['plantTrisParams', 'plantSlots', 'dPos', view]),
-      refit: group('refit', [{ buffer: B.plantLevel, offset: 0, size: 16 }, 'plantNodes', 'plantSlots', 'plantStatic', 'dPos', 'nodeBox', view]),
+      refit: group('refit', [{ buffer: B.plantLevel, offset: 0, size: PASS_STRIDE }, 'plantNodes', 'plantSlots', 'plantStatic', 'dPos', 'nodeBox', view]),
     };
     const n = motion.leafCount;
     this.lean = new Float32Array(n * 4);
@@ -142,9 +147,9 @@ export class MovingPlants {
     pass.setBindGroup(0, this.groups.tris);
     pass.dispatchWorkgroups(groupsOf(this.motion.slotCount));
     pass.setPipeline(this.pipelines.refit);
-    this.motion.levels.forEach((level, i) => {
-      pass.setBindGroup(0, this.groups.refit, [i * 256]);
-      pass.dispatchWorkgroups(groupsOf(level.count));
+    this.motion.passes.forEach((p, i) => {
+      pass.setBindGroup(0, this.groups.refit, this.offsets, i, 1);
+      pass.dispatchWorkgroups(p.groups);
     });
     pass.end();
     q.submit([enc.finish()]);

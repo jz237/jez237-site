@@ -208,6 +208,8 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   sim.clownPose = clowns.texture;
   sim.rock = !!o.start.reef;
   sim.glass = o.globe;
+  // (What no globe of the page shows, the sim leaves out: the phone's bowl draws no motes.)
+  sim.shows = { koi: GLOBES.some((g) => g.koi), shade: GLOBES.some((g) => !!(g.kelp || g.reef)), foam: GLOBES.some((g) => !!g.foam), motes: !bowl?.lite || !GLOBES.every((g) => g.betta) };
   // Fish food (the koi's and the reef's globes): flakes dropped in with a right-click.
   const food = new FishFood();
   const idle = new IdleWater();

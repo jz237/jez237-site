@@ -5,15 +5,17 @@
 // as packed: the driftwood's and the rocks' texels are never written.
 //
 // refitPlan works out, once on the CPU after packScape, what moves and what each kernel does; the
-// kernels (scapeRefitWGSL) then run every frame, in this order (64 threads a workgroup):
+// kernels (scapeRefitWGSL) then run every frame, in this order:
 //   1. plantSkin    ceil(plan.moving / 64) workgroups: each moving vertex displaced and collided
 //                   into dPos (the positions of all the BVH's vertices; the still ones uploaded once,
 //                   from plan.dPos), its normal into its vertex texel.
 //   2. plantTris    ceil(plan.slotCount / 64): each triangle of a leaf of the tree that has a moving
 //                   corner (and its leaf-mates) rewritten from dPos, its corners' w words as packed.
-//   3. plantRefit   once a level of plan.levels (deepest first; the level's range in a uniform at
-//                   a dynamic offset, PLANT_LEVEL_STRIDE bytes apart): ceil(level.count / 64) each.
-//                   Each node of the level rewrites its two children's boxes (a leaf's from its
+//   3. plantRefit   once a pass of plan.passes (refitPasses: the levels, deepest first, each wider
+//                   than a workgroup on its own, the narrower ones in runs; the pass in a uniform at
+//                   a dynamic offset, PLANT_LEVEL_STRIDE bytes apart): pass.groups workgroups of
+//                   PLANT_REFIT_WORKGROUP each, a run's one workgroup refitting its levels in turn.
+//                   Each node of a level rewrites its two children's boxes (a leaf's from its
 //                   triangles' corners in dPos, padded outward; a node below's from nodeBox; one
 //                   that does not move as packed) and keeps its own in nodeBox; the root also writes
 //                   the header's box (texels 1, 2).
@@ -38,10 +40,33 @@ export const PLANT_VERT_FLOATS = 8 + MOTION_VERTEX_STRIDE;
  *  two vec4s: lo, hi), 1 a node refitted a level below (its record a: nodeBox[2a], [2a + 1]), 2 a
  *  leaf of the tree (b triangles, their entries plan.slots[a ..])). */
 export const PLANT_NODE_U32 = 12;
-/** Bytes between the levels' uniforms (a dynamic offset must be a multiple of 256). */
+/** Bytes between the refit's passes' uniforms (a dynamic offset must be a multiple of 256). */
 export const PLANT_LEVEL_STRIDE = 256;
-/** The workgroup size of every kernel. */
+/** The workgroup size of the skin and tris kernels; and of the refit's (a level of no more nodes is
+ *  refitted by one workgroup, in a run with the levels next to it). */
 export const PLANT_WORKGROUP = 64;
+export const PLANT_REFIT_WORKGROUP = 256;
+/** The most levels a run of the refit takes (its uniform lists them after its 16 bytes). */
+export const PLANT_RUN_LEVELS = PLANT_LEVEL_STRIDE / 16 - 1;
+
+/**
+ * The refit's passes (a dispatch each) over levels (refitPlan's, deepest first): a level wider than
+ * a workgroup on its own, a node a thread; a run of narrower ones (up to PLANT_RUN_LEVELS) by one
+ * workgroup, which refits them in turn, each after a barrier for the last. (The tree's top levels
+ * are narrow, each a dispatch of its own was a launch and a wait apiece for a handful of nodes.)
+ * Returns [{ first, count, wide, groups }]: the levels' index of its first, how many, whether a
+ * wide one's, the workgroups it takes.
+ */
+export function refitPasses(levels) {
+  const passes = [];
+  levels.forEach((l, i) => {
+    const last = passes.at(-1);
+    if (l.count > PLANT_REFIT_WORKGROUP) passes.push({ first: i, count: 1, wide: true, groups: Math.ceil(l.count / PLANT_REFIT_WORKGROUP) });
+    else if (last && !last.wide && last.count < PLANT_RUN_LEVELS) last.count++;
+    else passes.push({ first: i, count: 1, wide: false, groups: 1 });
+  });
+  return passes;
+}
 
 const fr = Math.fround;
 const f32b = new Float32Array(1);
@@ -68,7 +93,7 @@ const bitsOf = (x) => {
  *   statics   Float32Array, eight a box that does not move (one of zeros if none) -> plantStatic
  *   dPos      Float32Array, four a vertex of the whole BVH (its rest position) -> dPos's start
  * and moving, leafCount, slotCount, touched (the slots with a moving corner), nodeCount, levels
- * ([{ depth, first, count }], deepest first), ids (each moving vertex's id), rest (their rest
+ * ([{ depth, first, count }], deepest first), passes (refitPasses(levels)), ids (each moving vertex's id), rest (their rest
  * positions, xyz each: for plantMotionWGSL), solids (plantSolids(obstacles, rest): what
  * plantMotionWGSL(obstacles, rest) bakes), scales (each leaf's calming, 1 for none), leafTips
  * (Float32Array, four a leaf: its blade's tip at rest and the blade's length; where to sample the
@@ -223,6 +248,7 @@ export function refitPlan(packed, meshes, isMoving = (m) => !!m.motion, options 
     nodeCount: order.length,
     statics: Float32Array.from(statics),
     levels,
+    passes: refitPasses(levels),
     dPos,
     triBase,
     vertBase,
@@ -231,15 +257,20 @@ export function refitPlan(packed, meshes, isMoving = (m) => !!m.motion, options 
 }
 
 /** The kernels' uniforms as the plan has them, all written once: skin (16 bytes: count, vertBase),
- *  tris (16 bytes: count, triBase) and levels (PLANT_LEVEL_STRIDE bytes a level, in plan.levels'
- *  order: first, count, vertBase, vertexCount). */
+ *  tris (16 bytes: count, triBase) and levels (PLANT_LEVEL_STRIDE bytes a pass of plan.passes:
+ *  vertBase, vertexCount, its levels' count, 1 for a wide one; then each level's first record and
+ *  count, 16 bytes each). */
 export function refitUniforms(plan) {
   const skin = new ArrayBuffer(16);
   new Uint32Array(skin).set([plan.moving, plan.vertBase, 0, 0]);
   const tris = new ArrayBuffer(16);
   new Uint32Array(tris).set([plan.slotCount, plan.triBase, 0, 0]);
-  const levels = new ArrayBuffer(Math.max(1, plan.levels.length) * PLANT_LEVEL_STRIDE);
-  plan.levels.forEach((l, i) => new Uint32Array(levels, i * PLANT_LEVEL_STRIDE, 4).set([l.first, l.count, plan.vertBase, plan.vertexCount]));
+  const levels = new ArrayBuffer(Math.max(1, plan.passes.length) * PLANT_LEVEL_STRIDE);
+  plan.passes.forEach((p, i) => {
+    const row = new Uint32Array(levels, i * PLANT_LEVEL_STRIDE, PLANT_LEVEL_STRIDE / 4);
+    row.set([plan.vertBase, plan.vertexCount, p.count, p.wide ? 1 : 0]);
+    for (let k = 0; k < p.count; k++) row.set([plan.levels[p.first + k].first, plan.levels[p.first + k].count], 4 + k * 4);
+  });
   return { skin, tris, levels };
 }
 
@@ -247,8 +278,8 @@ export function refitUniforms(plan) {
  * The kernels' buffers, by their WGSL names: { data (to upload once; null: zeros to begin with),
  * size (bytes: never 0, a multiple of 16), usage ('uniform' | 'storage') }. plantLean and
  * plantPhase are written every frame (COPY_DST), dPos starts as plan.dPos; nodeBox is the
- * kernels' own. Uniforms: plantSkinParams, plantTrisParams, plantLevel (the levels, one a dynamic
- * offset: PLANT_LEVEL_STRIDE bytes apart, bound 16 bytes at a time).
+ * kernels' own. Uniforms: plantSkinParams, plantTrisParams, plantLevel (the refit's passes, one a
+ * dynamic offset: PLANT_LEVEL_STRIDE bytes apart, bound PLANT_LEVEL_STRIDE bytes at a time).
  */
 export function refitBuffers(plan, t = 0) {
   const u = refitUniforms(plan);
@@ -276,7 +307,7 @@ export function refitBuffers(plan, t = 0) {
  */
 export function refitLayouts() {
   const C = 4;
-  const uniform = (binding, dynamic = false) => ({ binding, visibility: C, buffer: { type: 'uniform', hasDynamicOffset: dynamic, minBindingSize: 16 } });
+  const uniform = (binding, dynamic = false) => ({ binding, visibility: C, buffer: { type: 'uniform', hasDynamicOffset: dynamic, minBindingSize: dynamic ? PLANT_LEVEL_STRIDE : 16 } });
   const read = (binding) => ({ binding, visibility: C, buffer: { type: 'read-only-storage' } });
   const write = (binding) => ({ binding, visibility: C, buffer: { type: 'storage' } });
   const tex = (binding) => ({ binding, visibility: C, storageTexture: { access: 'write-only', format: 'rgba32float', viewDimension: '2d' } });
@@ -431,8 +462,9 @@ export function refitCPU(packed, plan, dPos) {
  *     2  var<storage, read> dPos: array<vec4f>
  *     3  var scapeTex: texture_storage_2d<rgba32float, write>
  *   refit (plantRefit)
- *     0  var<uniform> plantLevel: PlantLevel { first: u32, count: u32, vertBase: u32, vertCount: u32 }
- *        (bound with a dynamic offset: refitUniforms(plan).levels, PLANT_LEVEL_STRIDE a level)
+ *     0  var<uniform> plantLevel: PlantPass { vertBase: u32, vertCount: u32, levels: u32, wide: u32,
+ *        level: array<vec4u, PLANT_RUN_LEVELS> (first, count, 0, 0) } (bound with a dynamic offset:
+ *        refitUniforms(plan).levels, PLANT_LEVEL_STRIDE a pass)
  *     1  var<storage, read> plantNodes: array<vec4u>          plan.nodes
  *     2  var<storage, read> plantSlots: array<vec4u>          plan.slots
  *     3  var<storage, read> plantStatic: array<vec4f>         plan.statics
@@ -506,12 +538,13 @@ fn plantTris(@builtin(global_invocation_id) gid: vec3u) {
 }
 `;
   const refit = /* wgsl */ `
-// ---- the boxes over the plants refitted, one level of the tree (src/render/scape/scapeRefit.mjs) --
-struct PlantLevel {
-  first: u32,
-  count: u32,
+// ---- the boxes over the plants refitted, a pass of the tree's levels (src/render/scape/scapeRefit.mjs)
+struct PlantPass {
   vertBase: u32,
   vertCount: u32,
+  levels: u32,
+  wide: u32,
+  level: array<vec4u, ${PLANT_RUN_LEVELS}u>,
 }
 
 struct PlantBox {
@@ -519,7 +552,7 @@ struct PlantBox {
   hi: vec3f,
 }
 
-@group(0) @binding(0) var<uniform> plantLevel: PlantLevel;
+@group(0) @binding(0) var<uniform> plantLevel: PlantPass;
 @group(0) @binding(1) var<storage, read> plantNodes: array<vec4u>;
 @group(0) @binding(2) var<storage, read> plantSlots: array<vec4u>;
 @group(0) @binding(3) var<storage, read> plantStatic: array<vec4f>;
@@ -549,12 +582,9 @@ fn plant_childBox(c: vec4u) -> PlantBox {
   return PlantBox(plantStatic[c.y * 2u].xyz, plantStatic[c.y * 2u + 1u].xyz);
 }
 
-// One node of the level: its children's boxes into its texels, its own into nodeBox (and the
-// header's at the root).
-@compute @workgroup_size(${PLANT_WORKGROUP})
-fn plantRefit(@builtin(global_invocation_id) gid: vec3u) {
-  if (gid.x >= plantLevel.count) { return; }
-  let r = plantLevel.first + gid.x;
+// Record r: its children's boxes into its node's texels, its own into nodeBox (and the header's at
+// the root).
+fn plant_refitNode(r: u32) {
   let h = plantNodes[r * 3u];
   let b0 = plant_childBox(plantNodes[r * 3u + 1u]);
   let b1 = plant_childBox(plantNodes[r * 3u + 2u]);
@@ -570,6 +600,22 @@ fn plantRefit(@builtin(global_invocation_id) gid: vec3u) {
   if (h.x == 0u) {
     textureStore(scapeTex, vec2i(1i, 0i), vec4f(lo, f32(plantLevel.vertBase)));
     textureStore(scapeTex, vec2i(2i, 0i), vec4f(hi, f32(plantLevel.vertCount)));
+  }
+}
+
+// A pass: a wide level, a node a thread; or a run of narrow ones, this one workgroup's, a level at
+// a time, each waiting at the barrier for the last's boxes.
+@compute @workgroup_size(${PLANT_REFIT_WORKGROUP})
+fn plantRefit(@builtin(global_invocation_id) gid: vec3u, @builtin(local_invocation_index) li: u32) {
+  if (plantLevel.wide == 1u) {
+    let l = plantLevel.level[0];
+    if (gid.x < l.y) { plant_refitNode(l.x + gid.x); }
+    return;
+  }
+  for (var k = 0u; k < plantLevel.levels; k++) {
+    let l = plantLevel.level[k];
+    for (var i = li; i < l.y; i += ${PLANT_REFIT_WORKGROUP}u) { plant_refitNode(l.x + i); }
+    storageBarrier();
   }
 }
 `;

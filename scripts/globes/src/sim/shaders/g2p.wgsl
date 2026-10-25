@@ -111,6 +111,10 @@ fn foamHash(a: u32, b: u32) -> u32 {
   return h ^ (h >> 16u);
 }
 
+// The workgroup's fastest particle (its speed squared, as bits: in order for floats of one sign),
+// into stats[0] once for all of them. (A global atomic a particle, all on that one word, queued.)
+var<workgroup> wgFastest: atomic<u32>;
+
 @compute @workgroup_size(256)
 fn g2p(@builtin(global_invocation_id) gid: vec3u, @builtin(num_workgroups) nwg: vec3u,
        @builtin(local_invocation_index) li: u32) {
@@ -121,6 +125,8 @@ fn g2p(@builtin(global_invocation_id) gid: vec3u, @builtin(num_workgroups) nwg: 
     let x = g2pMove(p);
     if (KEYS) { key = sort_key(x); }
   }
+  workgroupBarrier();
+  if (li == 0u) { atomicMax(&stats[0], atomicLoad(&wgFastest)); }
   if (KEYS) { g2pKeys(p, live, key, li); }
 }
 
@@ -246,7 +252,7 @@ fn g2pMove(p: u32) -> vec3f {
     affine[3u * p + 1u] = vec4f(sv.grad, 0.0);
     affine[3u * p + 2u] = vec4f(sw.grad, 0.0);
   }
-  atomicMax(&stats[0], bitcast<u32>(dot(vNew, vNew)));
+  atomicMax(&wgFastest, bitcast<u32>(dot(vNew, vNew)));
   return xNew;
 }
 

@@ -8,6 +8,8 @@
 @group(0) @binding(4) var<storage, read> cellRho: array<f32>;
 @group(0) @binding(5) var<storage, read_write> velNew: array<f32>;
 @group(0) @binding(6) var<storage, read_write> valid: array<u32>;
+// Per workgroup (a tile of faces), whether any face in it is valid (extrapolate.wgsl).
+@group(0) @binding(7) var<storage, read_write> faceTiles: array<atomic<u32>>;
 
 const THETA_MIN: f32 = 0.05;
 
@@ -27,7 +29,8 @@ fn ghost(liquid: vec4f, air: vec4f) -> f32 {
 }
 
 @compute @workgroup_size(8, 8, 4)
-fn project(@builtin(global_invocation_id) gid: vec3u) {
+fn project(@builtin(global_invocation_id) gid: vec3u, @builtin(workgroup_id) wid: vec3u,
+           @builtin(num_workgroups) nwg: vec3u) {
   let s = P.s;
   if (gid.x >= s || gid.y >= s || gid.z >= 3u * s) { return; }
   let comp = gid.z / s;
@@ -54,4 +57,5 @@ fn project(@builtin(global_invocation_id) gid: vec3u) {
     }
   }
   valid[t] = ok;
+  if (ok == 1u) { atomicStore(&faceTiles[wid.x + nwg.x * (wid.y + nwg.y * wid.z)], 1u); }
 }

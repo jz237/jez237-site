@@ -11,7 +11,7 @@ import { packScape, traceCPU, triangleCPU, SCAPE_T_MIN } from './src/render/scap
 import { stream } from './src/render/scape/mesh.mjs';
 import { LEAF_STRIDE, MOTION_VERTEX_STRIDE as MS, leafPhases, plantMotionWGSL, plantSolids } from './src/render/scape/plantMotion.mjs';
 import {
-  PLANT_LEVEL_STRIDE, PLANT_NODE_U32, PLANT_VERT_FLOATS, refitBuffers, refitCPU, refitLayouts, refitPlan, refitUniforms, scapeRefitWGSL, skinCPU, trisCPU,
+  PLANT_LEVEL_STRIDE, PLANT_NODE_U32, PLANT_REFIT_WORKGROUP, PLANT_RUN_LEVELS, PLANT_VERT_FLOATS, refitBuffers, refitCPU, refitLayouts, refitPlan, refitUniforms, scapeRefitWGSL, skinCPU, trisCPU,
 } from './src/render/scape/scapeRefit.mjs';
 
 const fr = Math.fround;
@@ -160,9 +160,26 @@ test('the plan covers every moving vertex, the triangles they touch, and the nod
     assert.equal(f[1], D[(5 + k * 4) * 4 + 3]);
     for (const c of [o + 4, o + 8]) if (plan.nodes[c] === 1) assert.ok(plan.nodes[c + 1] < r, `record ${r}'s child ${plan.nodes[c + 1]} is not refitted before it`);
   }
+  // The refit's passes: every level once, in order; a level wider than a workgroup alone, the
+  // narrower in runs a workgroup takes; and each pass's uniform, its words and its levels' records.
+  let lv = 0;
+  for (const p of plan.passes) {
+    assert.equal(p.first, lv);
+    lv += p.count;
+    const ls = plan.levels.slice(p.first, p.first + p.count);
+    if (p.wide) assert.ok(p.count === 1 && ls[0].count > PLANT_REFIT_WORKGROUP && p.groups === Math.ceil(ls[0].count / PLANT_REFIT_WORKGROUP));
+    else assert.ok(p.groups === 1 && p.count <= PLANT_RUN_LEVELS && ls.every((l) => l.count <= PLANT_REFIT_WORKGROUP));
+  }
+  assert.equal(lv, plan.levels.length);
+  assert.ok(plan.passes.length < plan.levels.length);
   const u = refitUniforms(plan);
-  assert.equal(u.levels.byteLength, plan.levels.length * PLANT_LEVEL_STRIDE);
-  console.log(`  ${plan.moving} moving vertices (${plan.leafCount} leaves), ${plan.slotCount} triangles rewritten (${plan.touched} with a moving corner), ${plan.nodeCount} of ${nodeCount} nodes refitted over ${plan.levels.length} levels; planned in ${planMs.toFixed(0)} ms`);
+  assert.equal(u.levels.byteLength, plan.passes.length * PLANT_LEVEL_STRIDE);
+  plan.passes.forEach((p, i) => {
+    const row = new Uint32Array(u.levels, i * PLANT_LEVEL_STRIDE, PLANT_LEVEL_STRIDE / 4);
+    assert.deepEqual(Array.from(row.subarray(0, 4)), [plan.vertBase, plan.vertexCount, p.count, p.wide ? 1 : 0]);
+    for (let k = 0; k < p.count; k++) assert.deepEqual(Array.from(row.subarray(4 + 4 * k, 6 + 4 * k)), [plan.levels[p.first + k].first, plan.levels[p.first + k].count]);
+  });
+  console.log(`  ${plan.moving} moving vertices (${plan.leafCount} leaves), ${plan.slotCount} triangles rewritten (${plan.touched} with a moving corner), ${plan.nodeCount} of ${nodeCount} nodes refitted over ${plan.levels.length} levels in ${plan.passes.length} passes; planned in ${planMs.toFixed(0)} ms`);
   const bytes = plan.verts.byteLength + plan.leaves.byteLength + plan.slots.byteLength + plan.nodes.byteLength + plan.statics.byteLength + plan.dPos.byteLength + plan.nodeCount * 32;
   console.log(`  the kernels' buffers: ${(bytes / 1048576).toFixed(1)} MB`);
 });
@@ -283,7 +300,9 @@ test('the kernels\' WGSL, their bindings\' layouts and buffers, and only f32 lit
   }
   assert.match(w.skin, /texture_storage_2d<rgba32float, write>/);
   assert.equal(layouts.refit[0].buffer.hasDynamicOffset, true);
-  assert.equal(buffers.plantLevel.size, plan.levels.length * PLANT_LEVEL_STRIDE);
+  assert.equal(layouts.refit[0].buffer.minBindingSize, PLANT_LEVEL_STRIDE);
+  assert.match(w.refit, new RegExp(`level: array<vec4u, ${PLANT_RUN_LEVELS}u>`));
+  assert.equal(buffers.plantLevel.size, plan.passes.length * PLANT_LEVEL_STRIDE);
   assert.equal(buffers.plantLean.data, null);
   assert.equal(buffers.plantLean.size, plan.leafCount * 16);
   // (No integer literal left to be taken as abstract, in any kernel: every number has a point, an
