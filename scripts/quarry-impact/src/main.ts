@@ -113,6 +113,7 @@ import {SHRED_SECONDS} from './vehicle';
 import {shouldBail,bailOut,strollAway,BAIL} from './driver-bail';
 import {cabinSmoke} from './cabin-smoke';
 import {WiperRig,wiperArms} from './windscreen-wipers';
+import {steerArms} from './driver-arms';
 import {LEAK as TYRE_LEAK_RANGE} from './damage-handling';
 import type {GlassState} from './car-materials';
 import {CAR_WET} from './car-materials';
@@ -2205,6 +2206,8 @@ function updateCamera(dt: number) {
   if(state!=='paused')for(const c of cars){const d=c.root.children.find(o=>o.name==='driver');if(d)swayDriver(d,c.root,dt);}
   // and look where the fight is: at the car they hunt, into the turn, back over a shoulder when reversing.
   if(state!=='paused')for(const c of cars){const d=c.root.children.find(o=>o.name==='driver');if(d)lookDriver(c,d,dt);}
+  // Their hands ride round the wheel as they steer (offline).
+  if(state!=='paused')for(const c of cars){if(!c.extendedDamage)continue;const d=c.root.children.find(o=>o.name==='driver');if(d)steerArms(d,c.steering);}
   // Derby flags whip about with their cars and snap once a car is out or upside down.
   if(state!=='paused')for(const c of cars){const f=c.root.children.find(o=>o.name==='derby_flag');if(f)waveFlag(f,c.root,dt,c.health<=0||c.inverted>.3);}
   // Drivers get out of wrecked cars that are burning or blown up once they have stopped, and walk clear to watch (offline).
@@ -2785,6 +2788,7 @@ async function boot() {
     rivalHonks: () => rivalHonks,
     /** QA: puncture a tyre as rolling over sharp debris does (it starts going down). */
     puncture: (id: number, wheel: number) => { const c = cars.find(x => x.id === id); if (!c?.tyreDamage || !(wheel >= 0 && wheel < 4)) return false; c.tyreDamage[wheel] = Math.max(c.tyreDamage[wheel], TYRE_LEAK_RANGE.onset + .05); return true; },
+    driverArms: (id = 0) => { const c = cars[id], d = c?.root.children.find(o => o.name === 'driver'); return d ? { steering: +c.steering.toFixed(3), tilts: d.children.filter(o => o instanceof T.Mesh && o.geometry instanceof T.CylinderGeometry).sort((a, b) => a.position.x - b.position.x).map(o => +o.rotation.x.toFixed(3)) } : null; },
     umbrellas: () => { let n = 0; activeVenue.root?.traverse(o => { if (o.name === 'crowd_umbrella' && o.visible) n += (o as T.InstancedMesh).count; }); return n; },
     carWet: (v?: number | null) => { if (v !== undefined) carWetOverride = v; return CAR_WET.value; },
     wipers: (id = 0) => { const c = cars[id], r = c && wiperRigs.get(c); return r ? { arms: r.arms.length, phase: +r.phase.toFixed(3), sweeping: r.sweeping, bent: r.bentArms, angles: r.arms.map(a => +a.angle.toFixed(3)), names: r.arms.map(a => a.mesh.name) } : null; },
