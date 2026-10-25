@@ -1037,5 +1037,33 @@
     "sha256": "a9c62b49a3a218af44935a0e5af133cc64a629f9a7fed06c75db48f521d45fb3",
     "runtimeSha256": "895af83c5a17e4268f93f4b5eef56190c04f668c8eb792f11c9f1b552dd45fba",
     "processing": "first 0.5s cut, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5, RMS matched to -15 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "glass-crunch",
+    "file": "glass-crunch.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Crunching broken glass under a car tyre: a car rolling slowly over scattered tempered glass crumbs on asphalt, a short gritty crackle and crunch. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 1.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "0f4ae608f07b16e786be766fe43094ff86a27ac2c2d2f7db38f1dbf243d54828",
+    "runtimeSha256": "a431cf8e81e18952c273a7b3fc59d16723048603af2909005d810564affd0e50",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "glass-crunch-2",
+    "file": "glass-crunch-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Gritty crackle of glass fragments and plastic chips being crushed under a slowly rolling rubber tyre on a hard floor, short and dry. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 1.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "335d0de55231465a4e009baee4c4f434ac45c7b444e50f69c6d9178e18de80be",
+    "runtimeSha256": "f7b7be055e2ea5ec52f32e1c52fd69b110476d8b95ff54cc245aee54f31ea320",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
   }
 ]

@@ -6,7 +6,7 @@ const root=new URL('../',import.meta.url),read=(p:string)=>readFileSync(new URL(
 const ids=['backfire','tyre-blowout','rod-bang','engine-seize','extinguisher','bump-start','spring-snap','shaft-snap','mirror-snap','battery-rip','crowd-cheer','horn-stuck'];
 test('the twelve ElevenLabs destruction clips are bundled, recorded and hash-checked',()=>{
  const manifest=JSON.parse(read('public/audio/manifest.json').toString()) as {id:string;file:string;provider:string;runtimeSha256?:string;params:{text:string;loop:boolean}}[];
- assert.equal(manifest.length,74);
+ assert.equal(manifest.length,76,'74 plus the two glass-crunch takes (r290)');
  for(const id of ids){const e=manifest.find(x=>x.id===id);assert.ok(e,id);assert.equal(e!.provider,'ElevenLabs');assert.ok(/no music/i.test(e!.params.text)&&/speech/i.test(e!.params.text),'prompt rules out music and speech: '+id);
   const ogg=read('public/audio/'+e!.file);assert.equal(ogg.subarray(0,4).toString(),'OggS',id);assert.equal(createHash('sha256').update(ogg).digest('hex'),e!.runtimeSha256,id);}
  assert.equal(manifest.find(x=>x.id==='horn-stuck')!.params.loop,true,'the horn loops');

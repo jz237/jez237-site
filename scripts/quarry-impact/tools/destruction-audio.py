@@ -51,6 +51,9 @@ jobs = [
  ('rain', 'Steady rain falling on a dirt arena and on car roofs: a continuous even rain hiss with soft patter, no thunder. No music, no voices, no speech.', 4.0, True),
  # A car's fuel tank going up (BLOW UP).
  ('car-explosion', 'Car fuel tank explosion in an outdoor arena: a massive deep boom and fireball whoosh, metal panels tearing and flying, then debris clattering down and fire crackling. No music, no voices, no speech.', 3.5, False),
+ # Tyres rolling over the crash litter (crunch takes, alternated).
+ ('glass-crunch', 'Crunching broken glass under a car tyre: a car rolling slowly over scattered tempered glass crumbs on asphalt, a short gritty crackle and crunch. Isolated, no engine, no music, no voices, no speech.', 1.0, False),
+ ('glass-crunch-2', 'Gritty crackle of glass fragments and plastic chips being crushed under a slowly rolling rubber tyre on a hard floor, short and dry. Isolated, no engine, no music, no voices, no speech.', 1.0, False),
 ]
 # Seconds cut from the start of a raw clip: metal-groan dips to silence early (it would drop out every loop) and
 # debris-2 opens with half a second of near silence (the layer would land late).

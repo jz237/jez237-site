@@ -107,6 +107,7 @@ import {rollCage,bendCage} from './roll-cage';
 import {lookYaw,turnHead} from './driver-look';
 import {LITTER} from './crash-litter';
 import {derbyFlag,waveFlag,FLAG_COLOURS} from './derby-flag';
+import {CRUNCH,crunchVolume} from './litter-crunch';
 import {roofSign} from './roof-sign';
 import {roofSignFate,foldRoofSign,roofSignBox,disposeRoofSign,type RoofSignFate} from './roof-sign';
 import {withRaceNumbers} from './race-numbers';
@@ -2137,6 +2138,7 @@ function updateCraze(){
 }
 function cycleDrivingCamera(){drivingCamera=nextDrivingCamera(drivingCamera);toast(DRIVING_CAMERA_LABELS[drivingCamera]+' CAMERA');}
 const lookLocal=new T.Vector3(),lookTurn=new T.Quaternion();
+const crunchAt=new T.Vector3(),crunchClock=new WeakMap<object,number>();let crunchTake=0;
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
 function lookDriver(c:Vehicle,figure:T.Object3D,dt:number){
   const t=drivers.memory.get(c.id)?.target,prey=t!==undefined&&t>=0&&t!==c.id?cars.find(x=>x.id===t&&x.health>0):undefined;
@@ -2168,6 +2170,8 @@ function updateCamera(dt: number) {
   if(state!=='paused')for(const c of cars){const d=c.root.children.find(o=>o.name==='driver');if(d)lookDriver(c,d,dt);}
   // Derby flags whip about with their cars and snap once a car is out or upside down.
   if(state!=='paused')for(const c of cars){const f=c.root.children.find(o=>o.name==='derby_flag');if(f)waveFlag(f,c.root,dt,c.health<=0||c.inverted>.3);}
+  // Tyres crunch over the glass and lens chips on the floor (offline), the two recorded takes in turn.
+  if(state==='playing'&&fx.litter.mesh.count)for(const c of cars){if(!c.extendedDamage||clock-(crunchClock.get(c)??-9)<CRUNCH.gap)continue;for(const w of c.wheels){if(!w.visible)continue;w.getWorldPosition(crunchAt);const v=crunchVolume(fx.litter.under(crunchAt.x,crunchAt.z,CRUNCH.radius),c.speed);if(v>0){sound.clip(crunchTake++%2?'glass-crunch-2':'glass-crunch',crunchAt,v,CRUNCH.duration);crunchClock.set(c,clock);break;}}}
   // Roof signs fold flat when a car goes over and tear off on a second roll, a crushed roof or a blow-up.
   if(state!=='paused')for(const c of cars){const sign=c.root.children.find(o=>o.name==='roof_sign');if(sign)knockRoofSign(c,sign,dt);}
   if(scoreSpectating()){const current=cars.find(c=>c.id===director.followed);if(!current||current.health<=0)director.cycleCar(cars,1);else if(!director.manual)director.follow(current.id);}
@@ -2700,7 +2704,7 @@ async function boot() {
     /** QA: show or hide every car's derby dressing (driver, roof sign, window net, roll cage, flag); returns the meshes it covers. */
     dressing: (on: boolean) => { let n = 0; for (const c of cars) for (const o of c.root.children) if (['driver', 'roof_sign', 'window_net', 'roll_cage', 'derby_flag'].includes(o.name)) { o.visible = on; o.traverse(m => { if ((m as T.Mesh).isMesh) n++; }); } return n; },
     /** QA: chips of glass and lamp lens on the floor, and the breaks that left them by kind. */
-    litter: () => ({ chips: fx.litter.mesh.count, ...fx.litter.breaks, last: fx.litter.last.toArray() }),
+    litter: () => ({ chips: fx.litter.mesh.count, ...fx.litter.breaks, last: fx.litter.last.toArray(), crunches: crunchTake }),
     /** QA: scatter litter of a kind at a world point (thrown out from from, when given; paint takes colour). */
     scatterLitter: (at: number[], kind: 'glass' | 'head' | 'tail' | 'paint' | 'rubber', seed = 1, from?: number[], colour?: number) => fx.scatterLitter(new T.Vector3().fromArray(at), kind, seed, from ? new T.Vector3().fromArray(from) : undefined, colour),
     /** QA: smash one lamp as a hard knock would (it goes dark, its lens dulls and its pieces fall). */

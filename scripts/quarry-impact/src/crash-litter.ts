@@ -3,7 +3,7 @@ import * as T from 'three';
  * there for the rest of the event (the oldest are recycled once capacity is reached). One instanced draw of small flat chips lying
  * on the ground. Per kind: count chips spread up to spread metres around the break, size the chip edge range (metres). Given
  * the car's centre, the pieces land thrown out from it: the scatter's middle moves throw metres beyond the break, away from the car. */
-export const LITTER={capacity:2400,lift:.012,throw:.85,
+export const LITTER={capacity:2400,lift:.012,throw:.85,cell:.5,
   glass:{count:42,spread:1.1,size:[.012,.032],color:0xb9d3cf},
   head:{count:14,spread:.55,size:[.016,.04],color:0xe6ecef},
   tail:{count:14,spread:.55,size:[.016,.04],color:0xb3241b},
@@ -15,6 +15,10 @@ export type LitterKind='glass'|'head'|'tail'|'paint'|'rubber';
 export class CrashLitter{
   readonly mesh:T.InstancedMesh;
   private cursor=0;
+  // Where each chip lies (x, z) and which floor cell holds it, so wheels can find the litter under them.
+  private readonly spot=new Float32Array(LITTER.capacity*2);
+  private readonly cellOf=new Int32Array(LITTER.capacity).fill(-1);
+  private readonly cells=new Map<number,Set<number>>();
   /** Breaks scattered so far this event, by kind. */
   readonly breaks={glass:0,head:0,tail:0,paint:0,rubber:0};
   /** Where the last scatter landed (its middle, on the ground). */
@@ -41,11 +45,22 @@ export class CrashLitter{
       if(!Number.isFinite(ground))continue;
       const size=k.size[0]+(k.size[1]-k.size[0])*random();
       this.pose.position.set(x,ground+LITTER.lift,z);this.pose.rotation.set((random()-.5)*.25,random()*Math.PI*2,(random()-.5)*.25);this.pose.scale.set(size,1,size*(.7+random()*.6));this.pose.updateMatrix();
-      const slot=this.cursor;this.cursor=(this.cursor+1)%LITTER.capacity;this.mesh.setMatrixAt(slot,this.pose.matrix);
+      const slot=this.cursor;this.cursor=(this.cursor+1)%LITTER.capacity;this.mesh.setMatrixAt(slot,this.pose.matrix);this.place(slot,x,z);
       this.mesh.setColorAt(slot,this.tint.setHex(kind==='paint'&&i%3===2?LITTER.paint.primer:base).multiplyScalar(.82+random()*.3));this.mesh.count=Math.max(this.mesh.count,slot+1);
     }
     this.mesh.instanceMatrix.needsUpdate=true;if(this.mesh.instanceColor)this.mesh.instanceColor.needsUpdate=true;
     this.last.set(cx,height(cx,cz),cz);this.breaks[kind]++;return n;
   }
-  reset(){this.cursor=0;this.mesh.count=0;this.breaks.glass=this.breaks.head=this.breaks.tail=this.breaks.paint=this.breaks.rubber=0;}
+  private static cell(x:number,z:number){return (Math.floor(x/LITTER.cell)+32768)*65536+(Math.floor(z/LITTER.cell)+32768);}
+  private place(slot:number,x:number,z:number){
+    const old=this.cellOf[slot];if(old>=0)this.cells.get(old)?.delete(slot);
+    const key=CrashLitter.cell(x,z);let set=this.cells.get(key);if(!set)this.cells.set(key,set=new Set());set.add(slot);this.cellOf[slot]=key;this.spot[slot*2]=x;this.spot[slot*2+1]=z;
+  }
+  /** How many chips lie within r metres of (x, z) on the floor. */
+  under(x:number,z:number,r:number){
+    if(!this.cells.size||!(r>0))return 0;let n=0;const reach=Math.ceil(r/LITTER.cell);const cx=Math.floor(x/LITTER.cell),cz=Math.floor(z/LITTER.cell);
+    for(let i=-reach;i<=reach;i++)for(let j=-reach;j<=reach;j++){const set=this.cells.get((cx+i+32768)*65536+(cz+j+32768));if(set)for(const slot of set)if(Math.hypot(this.spot[slot*2]-x,this.spot[slot*2+1]-z)<=r)n++;}
+    return n;
+  }
+  reset(){this.cells.clear();this.cellOf.fill(-1);this.cursor=0;this.mesh.count=0;this.breaks.glass=this.breaks.head=this.breaks.tail=this.breaks.paint=this.breaks.rubber=0;}
 }
