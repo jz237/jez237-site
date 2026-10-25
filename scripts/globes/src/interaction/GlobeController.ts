@@ -5,10 +5,11 @@
 // acceleration is what makes the water slosh. Dragging works like a steering wheel
 // around the pivot; on release a damped spring rocks the globe back upright.
 //
-// With Ctrl held, a drag turns the globe about its own centre instead, as if by its glass:
-// across, it spins about its own axis (and keeps spinning when let go, slowing as it goes); up
-// and down, it leans towards or away from the camera, and rocks back upright when let go, as
-// its weighted bed swings under it.
+// With Ctrl held (or with the right button), a drag turns the globe about its own centre
+// instead, as if by its glass: across, it spins about its own axis (and keeps spinning when let
+// go, slowing as it goes); up and down, it leans towards or away from the camera, and rocks back
+// upright when let go, as its weighted bed swings under it. On a touch screen two fingers spin it
+// about its own axis, twisting or sliding across together (and pinch to zoom as they do).
 //
 // The app also moves the whole globe along the stage (world x): it glides between the
 // interface's layouts and slides out and back in when switching globes. Those moves are
@@ -32,6 +33,9 @@ const MAX_FRAME_ACCEL_G = 3; // cap on the container acceleration, in g
 // Spinning about its own axis, once let go: how quickly it slows (1/s), and the fastest it
 // turns (rad/s; the bed and whatever stands on it sweep through the water).
 const SPIN_FRICTION = 0.8;
+/** ...and on a table (the betta's bowl: `rolling`), where its foot drags on the lacquer, so a turn
+ *  to look behind something stops near where the hand left it. */
+const TABLE_SPIN_FRICTION = 4;
 const MAX_SPIN = 6;
 /** How far a spin may run ahead of the globe while held (rad): a fast drag turns it no faster. */
 const SPIN_LEAD = 1.5;
@@ -84,12 +88,19 @@ export class GlobeController {
   private readonly pivot: THREE.Vector3;
 
   private grabbing = false;
-  /** The hold turns the globe about its centre (Ctrl), rather than tilting it. */
+  /** The hold turns the globe about its centre (Ctrl, or the right button), rather than tilting
+   *  it. */
   private spinning = false;
+  private spinButton = false;
   private grabPointer = -1;
   private readonly last = new THREE.Vector2();
   private readonly touches = new Map<number, THREE.Vector2>();
+  /** Two fingers down: how far apart (pinch zoom), and their bearing and midpoint (CSS pixels;
+   *  they spin the globe about its own axis while `twoFinger`). */
   private pinchDistance = 0;
+  private pinchBearing = 0;
+  private readonly pinchMid = new THREE.Vector2();
+  private twoFinger = false;
 
   private distance = 6.6;
   private targetDistance = 6.6;
@@ -103,14 +114,17 @@ export class GlobeController {
 
   set locked(on: boolean) {
     this.lockedNow = on;
-    if (on) this.endGrab();
+    if (on) {
+      this.endGrab();
+      this.twoFinger = false;
+    }
   }
 
   private lockedNow = false;
 
   /** Standing still and upright, nobody holding it (it can be opened). */
   get settled(): boolean {
-    return !this.grabbing && !this.glide && Math.abs(this.theta) < 0.03 && Math.abs(this.lean) < 0.03 && Math.abs(this.thetaVel) < 0.05 && Math.abs(this.leanVel) < 0.05;
+    return !this.grabbing && !this.twoFinger && !this.glide && Math.abs(this.theta) < 0.03 && Math.abs(this.lean) < 0.03 && Math.abs(this.thetaVel) < 0.05 && Math.abs(this.leanVel) < 0.05 && Math.abs(this.twistVel) < 0.05;
   }
 
   /** The globe's place along the stage (world x) and how fast it is moving there. */
@@ -199,14 +213,14 @@ export class GlobeController {
     return this.centerVel;
   }
 
-  /** The globe is being held (dragged to tilt or turn it). */
+  /** The globe is being held (dragged to tilt or turn it, or turned by two fingers). */
   get holding(): boolean {
-    return this.grabbing;
+    return this.grabbing || this.twoFinger;
   }
 
-  /** The hold turns the globe about its centre (Ctrl-drag). */
+  /** The hold turns the globe about its centre (Ctrl- or right-drag, two fingers). */
   get turning(): boolean {
-    return this.grabbing && this.spinning;
+    return (this.grabbing && this.spinning) || this.twoFinger;
   }
 
   /** Stands the globe straight, facing the camera, at once (a new globe, out of sight). */
@@ -303,8 +317,10 @@ export class GlobeController {
     const h = dt / steps;
     const tilting = this.grabbing && !this.spinning;
     const turning = this.grabbing && this.spinning;
+    // (Two fingers spin it about its own axis, and do not lean it.)
+    const twisting = turning || this.twoFinger;
     const max = this.cfg.maxTilt;
-    const friction = Math.exp(-SPIN_FRICTION * h);
+    const friction = Math.exp(-(this.rolling ? TABLE_SPIN_FRICTION : SPIN_FRICTION) * h);
     for (let i = 0; i < steps; i++) {
       let acc: number;
       if (tilting) {
@@ -333,7 +349,7 @@ export class GlobeController {
       }
 
       // Spinning: the hand's spring while turned, else it runs on, slowing.
-      if (turning) {
+      if (twisting) {
         this.twistVel += (GRAB_STIFFNESS * (this.targetTwist - this.twist) - GRAB_DAMPING * this.twistVel) * h;
       } else {
         this.twistVel *= friction;
@@ -342,10 +358,8 @@ export class GlobeController {
       this.twist += this.twistVel * h;
     }
     if (!tilting) this.targetTheta = this.theta;
-    if (!turning) {
-      this.targetLean = this.lean;
-      this.targetTwist = this.twist;
-    }
+    if (!turning) this.targetLean = this.lean;
+    if (!twisting) this.targetTwist = this.twist;
     // (Whole turns taken off, so the angle stays small.)
     const turns = Math.round(this.twist / (2 * Math.PI));
     if (turns !== 0) {
@@ -459,15 +473,20 @@ export class GlobeController {
       if (this.touches.size === 2) {
         this.endGrab();
         this.pinchDistance = this.touchSpread();
+        this.pinchBearing = this.touchBearing();
+        this.touchMid(this.pinchMid);
+        this.twoFinger = !this.lockedNow;
+        this.targetTwist = this.twist;
         return;
       }
     }
-    if (this.grabbing || this.lockedNow || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    if (this.grabbing || this.lockedNow || (e.pointerType === 'mouse' && e.button !== 0 && e.button !== 2)) return;
     if (!this.overGlobe(p)) return;
 
     this.grabbing = true;
     this.grabPointer = e.pointerId;
-    this.spinning = e.ctrlKey;
+    this.spinButton = e.pointerType === 'mouse' && e.button === 2;
+    this.spinning = e.ctrlKey || this.spinButton;
     this.targetTheta = this.theta;
     this.targetLean = this.lean;
     this.targetTwist = this.twist;
@@ -486,14 +505,27 @@ export class GlobeController {
         const spread = this.touchSpread();
         if (this.zoomEnabled && this.pinchDistance > 0 && spread > 0) this.zoomBy(this.pinchDistance / spread);
         this.pinchDistance = spread;
+        if (this.twoFinger) {
+          // Spinning it about its own axis: the fingers' twist (clockwise on the screen turns its
+          // front to the left, as a turntable's seen from above) and their slide across (the
+          // globe's radius turns it a radian, as a Ctrl-drag does).
+          const bearing = this.touchBearing();
+          const mid = this.touchMid(new THREE.Vector2());
+          let twist = bearing - this.pinchBearing;
+          twist -= 2 * Math.PI * Math.round(twist / (2 * Math.PI));
+          const r = this.globeScreenRadius(this.toScreen(this.center, new THREE.Vector2()));
+          this.targetTwist = THREE.MathUtils.clamp(this.targetTwist + (mid.x - this.pinchMid.x) / r - twist, this.twist - SPIN_LEAD, this.twist + SPIN_LEAD);
+          this.pinchBearing = bearing;
+          this.pinchMid.copy(mid);
+        }
         return;
       }
     }
 
     if (this.grabbing && e.pointerId === this.grabPointer) {
       // (Ctrl pressed or let go mid-drag: the hold carries on the other way, from where it is.)
-      if (e.ctrlKey !== this.spinning) {
-        this.spinning = e.ctrlKey;
+      if ((e.ctrlKey || this.spinButton) !== this.spinning) {
+        this.spinning = e.ctrlKey || this.spinButton;
         this.targetTheta = this.theta;
         this.targetLean = this.lean;
         this.targetTwist = this.twist;
@@ -529,7 +561,10 @@ export class GlobeController {
 
   private onPointerUp = (e: PointerEvent): void => {
     this.touches.delete(e.pointerId);
-    if (this.touches.size < 2) this.pinchDistance = 0;
+    if (this.touches.size < 2) {
+      this.pinchDistance = 0;
+      this.twoFinger = false;
+    }
     if (e.pointerId === this.grabPointer) this.endGrab();
   };
 
@@ -538,6 +573,7 @@ export class GlobeController {
     if (this.canvas.hasPointerCapture(this.grabPointer)) this.canvas.releasePointerCapture(this.grabPointer);
     this.grabbing = false;
     this.spinning = false;
+    this.spinButton = false;
     this.grabPointer = -1;
     this.canvas.style.cursor = '';
   }
@@ -545,6 +581,17 @@ export class GlobeController {
   private touchSpread(): number {
     const pts = [...this.touches.values()];
     return pts.length >= 2 ? pts[0].distanceTo(pts[1]) : 0;
+  }
+
+  /** The line from the first finger to the second: its angle (radians, clockwise on the screen). */
+  private touchBearing(): number {
+    const [a, b] = [...this.touches.values()];
+    return b ? Math.atan2(b.y - a.y, b.x - a.x) : 0;
+  }
+
+  private touchMid(out: THREE.Vector2): THREE.Vector2 {
+    const [a, b] = [...this.touches.values()];
+    return b ? out.copy(a).add(b).multiplyScalar(0.5) : out.copy(a ?? out);
   }
 
   private onWheel = (e: WheelEvent): void => {
