@@ -23,7 +23,7 @@ export class Effects {
   types: Float32Array;
   geometry: T.BufferGeometry;
   points: T.Points;
-  debris: { mesh: T.Object3D; body: R.RigidBody; age: number; shared?: boolean; fire?: { start: number; end: number; seed: number } }[] = [];
+  debris: { mesh: T.Object3D; body: R.RigidBody; age: number; shared?: boolean; fire?: { start: number; end: number; seed: number }; release?: () => void }[] = [];
   marks: T.InstancedMesh;
   markCursor = 0;
   readonly evidence:GroundEvidence;
@@ -215,6 +215,22 @@ void main(){
     b.setAngvel({ x: 2, y: 1, z: 3 }, true);
     this.debris.push({ mesh, body: b, age: 0 });
   }
+  /** A whole prop torn off a car (a roof sign): moved out of the car into a holder in the scene where it was, tumbling on a box
+   * body of size (metres) about centre (in the prop's own frame); release frees the prop when the debris is cleared. */
+  detachProp(source: T.Object3D, velocity: T.Vector3, size: T.Vector3, centre: T.Vector3, release?: () => void) {
+    if (this.debris.length >= 36) this.removeDebris(0);
+    source.updateWorldMatrix(true, true);
+    const position = centre.clone().applyMatrix4(source.matrixWorld), quaternion = source.getWorldQuaternion(new T.Quaternion()), holder = new T.Group();
+    holder.position.copy(position); holder.quaternion.copy(quaternion); holder.name = 'torn_' + source.name;
+    this.scene.add(holder); holder.updateMatrixWorld(true); holder.attach(source);
+    const b = this.world.createRigidBody(
+      R.RigidBodyDesc.dynamic().setTranslation(position.x, position.y, position.z).setRotation(quaternion)
+        .setLinvel(velocity.x, velocity.y, velocity.z).setAngularDamping(0.3).setCcdEnabled(true),
+    );
+    this.world.createCollider(R.ColliderDesc.cuboid(size.x / 2, size.y / 2, size.z / 2).setMass(4).setRestitution(0.3).setFriction(0.8), b);
+    b.setAngvel({ x: 3, y: 2, z: 4 }, true);
+    this.debris.push({ mesh: holder, body: b, age: 0, shared: true, release });
+  }
   /** A torn-off wheel rolls away on its own cylinder body. The visual is a clone sharing the
    * car's wheel geometry and materials, so removal only detaches it. */
   detachWheel(source: T.Object3D, velocity: T.Vector3, radius: number, speed = 0) {
@@ -255,6 +271,7 @@ void main(){
     const d = this.debris[i];
     this.world.removeRigidBody(d.body);
     this.scene.remove(d.mesh);
+    d.release?.();
     if (!d.shared && d.mesh instanceof T.Mesh) {
       d.mesh.geometry.dispose();
       (d.mesh.material as T.Material).dispose();

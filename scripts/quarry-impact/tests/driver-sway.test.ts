@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import * as T from 'three';
-import {SWAY,newDriverSway,stepDriverSway,swayDriver} from '../src/driver-sway';
+import {SWAY,newDriverSway,stepDriverSway,swayDriver,DRIVER_DUCK,duckDriver} from '../src/driver-sway';
 const run=(ax:number,az:number,seconds:number,s=newDriverSway())=>{for(let t=0;t<seconds;t+=1/60)stepDriverSway(s,ax,az,1/60);return s;};
 test('a steady corner leans the driver away from the turn, braking pitches them forward and power presses them into the seat',()=>{
  const steady=SWAY.gain*8/SWAY.omega**2;
@@ -35,4 +35,22 @@ test('the figure turns about its hips from the car root\'s own motion, and a tel
 test('every car\'s driver sways each frame except while paused',()=>{
  const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
  assert.ok(main.includes("if(state!=='paused')for(const c of cars){const d=c.root.children.find(o=>o.name==='driver');if(d)swayDriver(d,c.root,dt);}"));
+});
+test('a crushed roof slumps the driver down and in by the clearance it took or its structural crush, never through the roof',()=>{
+ const make=()=>{const car=new T.Group(),figure=new T.Group();figure.position.set(-.5,1,0);car.add(figure);car.position.set(3,0,-2);car.rotation.y=.4;
+  const roof=new T.Mesh(new T.BoxGeometry(2,.04,2),new T.MeshBasicMaterial());roof.name='panel_roof';roof.position.y=1+DRIVER_DUCK.head+.12;car.add(roof);
+  const trim=new T.Mesh(new T.BoxGeometry(2,.02,2),new T.MeshBasicMaterial());trim.name='panel_inner_Interior';trim.position.y=1+.05;car.add(trim);return {car,figure,roof,trim};};
+ const {car,figure,roof,trim}=make();
+ assert.equal(duckDriver(figure,car,[roof,trim],0),0,'the intact cabin is the reference; interior trim under the helmet is not the roof');
+ roof.position.y-=.1;const drop=duckDriver(figure,car,[roof,trim],0);const room=DRIVER_DUCK.head+.12+.02-.1;assert.ok(Math.abs(drop-(DRIVER_DUCK.head+DRIVER_DUCK.margin-room))<1e-6,`the roof came down: they slump by the clearance lost (${drop})`);
+ assert.ok(Math.abs(figure.position.y-(1-drop))<1e-9&&figure.position.x>-.5,'down and in, before any sway frame');
+ roof.visible=false;assert.ok(Math.abs(duckDriver(figure,car,[roof,trim],.6)-DRIVER_DUCK.crush*.6)<1e-9,'roof glass gone: the structural crush still pushes them down');
+ assert.equal(duckDriver(figure,car,[roof,trim],5),DRIVER_DUCK.max,'never more than a slump');assert.equal(duckDriver(figure,car,[roof,trim],NaN),0);
+ roof.visible=true;roof.position.y+=.1;assert.equal(duckDriver(figure,car,[roof,trim],0),0,'repaired: back in the seat');assert.equal(figure.userData.seat.x,-.5);
+ const swaying=make();swaying.figure.userData.sway={...newDriverSway(),frames:3};const at=swaying.figure.position.clone();duckDriver(swaying.figure,swaying.car,[swaying.roof],.5);
+ assert.ok(swaying.figure.position.equals(at)&&swaying.figure.userData.seat.y<1,'a swaying driver moves to the new seat on the next sway step');
+});
+test('every driver is measured once intact, then again whenever the roof crush changes',()=>{
+ const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
+ assert.ok(main.includes("for(const c of cars){const d=c.root.children.find(o=>o.name==='driver'),roof=c.structuralDamage?.[4]??0;if(d&&(d.userData.roofSeen===undefined||Math.abs(d.userData.roofSeen-roof)>.004)){d.userData.roofSeen=roof;duckDriver(d,c.root,[...c.panels,...c.glass],roof);}}"));
 });
