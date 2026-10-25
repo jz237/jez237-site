@@ -113,7 +113,7 @@ import {SHRED_SECONDS} from './vehicle';
 import {shouldBail,bailOut,strollAway,BAIL} from './driver-bail';
 import {cabinSmoke} from './cabin-smoke';
 import {WiperRig,wiperArms,windscreen,wipeStep} from './windscreen-wipers';
-import {steerArms} from './driver-arms';
+import {steerArms,handReach,newHandState,type HandState} from './driver-arms';
 import {BONNET_STEAM,bonnetHeat,steamRate} from './bonnet-steam';
 import {vapourRate} from './exhaust-vapour';
 import {WIND,eventWind,gusting} from './wind';
@@ -2185,6 +2185,7 @@ const honkTarget=new WeakMap<object,number>(),honkAt=new WeakMap<object,number>(
 function hitTheWreck(closing:number){if(online?.active||demo||closing<CROWD_BOO.closing)return;if(sound.crowdBoo()){boos++;toast('THE CROWD BOOS · THAT CAR WAS OUT',1.4);}}
 const smokeIn=new WeakMap<object,number>();
 const wiperRigs=new WeakMap<object,WiperRig>();
+const handStates=new WeakMap<object,HandState>();
 /** Each car's windscreen glass, when it has wiper arms to clear it (rain beads it over otherwise). */
 const wiperScreens=new WeakMap<object,GlassState|undefined>();
 let carWetOverride:number|null=null;
@@ -2221,7 +2222,9 @@ function updateCamera(dt: number) {
   // and look where the fight is: at the car they hunt, into the turn, back over a shoulder when reversing.
   if(state!=='paused')for(const c of cars){const d=c.root.children.find(o=>o.name==='driver');if(d)lookDriver(c,d,dt);}
   // Their hands ride round the wheel as they steer (offline).
-  if(state!=='paused')for(const c of cars){if(!c.extendedDamage)continue;const d=c.root.children.find(o=>o.name==='driver');if(d)steerArms(d,c.steering);}
+  // and the right hand goes to the handbrake and the gear lever (offline).
+  if(state!=='paused')for(const c of cars){if(!c.extendedDamage)continue;const d=c.root.children.find(o=>o.name==='driver');if(!d)continue;let h=handStates.get(c);if(!h){h=newHandState(c.gear);handStates.set(c,h);}
+    steerArms(d,c.steering,handReach(h,!!c.input?.handbrake,c.gear,dt));}
   // Derby flags whip about with their cars and snap once a car is out or upside down.
   if(state!=='paused')for(const c of cars){const f=c.root.children.find(o=>o.name==='derby_flag');if(f)waveFlag(f,c.root,dt,c.health<=0||c.inverted>.3,windy&&!online?.active?breeze:undefined);}
   // Drivers get out of wrecked cars that are burning or blown up once they have stopped, and walk clear to watch (offline).
@@ -2826,7 +2829,7 @@ async function boot() {
     rivalHonks: () => rivalHonks,
     /** QA: puncture a tyre as rolling over sharp debris does (it starts going down). */
     puncture: (id: number, wheel: number) => { const c = cars.find(x => x.id === id); if (!c?.tyreDamage || !(wheel >= 0 && wheel < 4)) return false; c.tyreDamage[wheel] = Math.max(c.tyreDamage[wheel], TYRE_LEAK_RANGE.onset + .05); return true; },
-    driverArms: (id = 0) => { const c = cars[id], d = c?.root.children.find(o => o.name === 'driver'); return d ? { steering: +c.steering.toFixed(3), tilts: d.children.filter(o => o instanceof T.Mesh && o.geometry instanceof T.CylinderGeometry).sort((a, b) => a.position.x - b.position.x).map(o => +o.rotation.x.toFixed(3)) } : null; },
+    driverArms: (id = 0) => { const c = cars[id], d = c?.root.children.find(o => o.name === 'driver'); return d ? { steering: +c.steering.toFixed(3), tilts: d.children.filter(o => o instanceof T.Mesh && o.geometry instanceof T.CylinderGeometry).sort((a, b) => a.position.x - b.position.x).map(o => +o.rotation.x.toFixed(3)), reach: +(handStates.get(c)?.reach ?? 0).toFixed(3), gear: c.gear } : null; },
     umbrellas: () => { let n = 0; activeVenue.root?.traverse(o => { if (o.name === 'crowd_umbrella' && o.visible) n += (o as T.InstancedMesh).count; }); return n; },
     carWet: (v?: number | null) => { if (v !== undefined) carWetOverride = v; return CAR_WET.value; },
     vapour: () => vapourPuffs,

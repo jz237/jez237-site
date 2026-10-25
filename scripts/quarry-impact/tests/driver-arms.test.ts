@@ -25,5 +25,5 @@ test('a driver out of the car is left alone',()=>{
 });
 test('main moves offline drivers\' hands with their steering',()=>{
   const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
-  assert.ok(main.includes("if(state!=='paused')for(const c of cars){if(!c.extendedDamage)continue;const d=c.root.children.find(o=>o.name==='driver');if(d)steerArms(d,c.steering);}"));
+  assert.ok(main.includes("if(state!=='paused')for(const c of cars){if(!c.extendedDamage)continue;const d=c.root.children.find(o=>o.name==='driver');if(!d)continue;let h=handStates.get(c);if(!h){h=newHandState(c.gear);handStates.set(c,h);}")&&main.includes('steerArms(d,c.steering,handReach(h,!!c.input?.handbrake,c.gear,dt));}'));
 });
