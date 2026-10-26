@@ -161,7 +161,7 @@ float scrapeLines=mix(smoothstep(.65,.92,abs(sin(across+bodySilt(vBodyPosition*2
 /** Rain on glass (offline rain, CAR_WET): beads of water stand on every window, in GLASS_RAIN.cells cells a metre, on all but
  * GLASS_RAIN.keep of them; working wipers keep a windscreen clear (GlassState.wiped 1 leaves only GLASS_RAIN.wipe fewer). */
 export const GLASS_RAIN={cells:40,keep:.45,wipe:.85} as const;
-export type GlassState = { damage: { value: number }; impact: { value: T.Vector3 }; axes: { value: T.Vector3 }; smoke: { value: number }; wiped: { value: number }; };
+export type GlassState = { damage: { value: number }; impact: { value: T.Vector3 }; axes: { value: T.Vector3 }; smoke: { value: number }; wiped: { value: number }; mist: { value: number }; };
 export function finishGlass(material: T.MeshPhysicalMaterial, geometry: T.BufferGeometry): GlassState {
   geometry.computeBoundingBox();
   const size = geometry.boundingBox!.getSize(new T.Vector3());
@@ -169,6 +169,7 @@ export function finishGlass(material: T.MeshPhysicalMaterial, geometry: T.Buffer
     damage: { value: 0 }, impact: { value: geometry.boundingBox!.getCenter(new T.Vector3()) },
     axes: { value: new T.Vector3(size.x < size.z ? 0 : 1, size.x < size.z || size.y > size.z ? 1 : 0, 0) },
     smoke: { value: 0 },
+    mist: { value: 0 },
     wiped: { value: 0 },
   };
   material.userData.glassState = state;
@@ -177,13 +178,14 @@ export function finishGlass(material: T.MeshPhysicalMaterial, geometry: T.Buffer
     shader.uniforms.glassImpact = state.impact;
     shader.uniforms.glassAxes = state.axes;
     shader.uniforms.glassSmoke = state.smoke;
+    shader.uniforms.glassMist = state.mist;
     shader.uniforms.glassWiped = state.wiped;
     shader.uniforms.rainWet = CAR_WET;
     shader.vertexShader = shader.vertexShader
       .replace('#include <common>', '#include <common>\nvarying vec3 vGlassPosition; varying vec3 vGlassNormal;')
       .replace('#include <begin_vertex>', '#include <begin_vertex>\nvGlassPosition=position; vGlassNormal=normal;');
     shader.fragmentShader = shader.fragmentShader
-      .replace('#include <common>', '#include <common>\nvarying vec3 vGlassPosition; varying vec3 vGlassNormal; uniform float glassDamage; uniform vec3 glassImpact; uniform vec3 glassAxes; uniform float glassSmoke; uniform float glassWiped; uniform float rainWet;')
+      .replace('#include <common>', '#include <common>\nvarying vec3 vGlassPosition; varying vec3 vGlassNormal; uniform float glassDamage; uniform vec3 glassImpact; uniform vec3 glassAxes; uniform float glassSmoke; uniform float glassMist; uniform float glassWiped; uniform float rainWet;')
       .replace('#include <color_fragment>', `#include <color_fragment>
 vec3 d=vGlassPosition-glassImpact;
 vec2 p=vec2(mix(d.z,d.x,glassAxes.x),mix(d.y,d.z,1.-glassAxes.y));
@@ -199,6 +201,10 @@ diffuseColor.a=clamp(diffuseColor.a+crack*.6+glassDamage*.1,0.,.94);
 float murk=glassSmoke*(.8+.2*smoothstep(.4,-.2,vGlassPosition.y));
 diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.11,.1,.09),murk*.85);
 diffuseColor.a=clamp(diffuseColor.a+murk*.6,0.,.97);
+// Misted up inside (a car standing in the rain): milky, thickest low on the pane where it gathers; cracked glass is open.
+float mist=glassMist*(.75+.25*smoothstep(.5,-.1,vGlassPosition.y))*(1.-crack);
+diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.8,.82,.84),mist*.9);
+diffuseColor.a=clamp(diffuseColor.a+mist*.85,0.,.97);
 // Rain stands in beads on the glass (fewer where wipers keep it clear), faded once a bead is too small on screen to draw.
 // Laid out on whichever plane the pane faces most, so the beads stay round on every window.
 vec3 rainFace=abs(vGlassNormal);vec2 rainAt=(rainFace.x>rainFace.y&&rainFace.x>rainFace.z?vGlassPosition.zy:rainFace.y>rainFace.z?vGlassPosition.xz:vGlassPosition.xy)*${GLASS_RAIN.cells}.;
@@ -210,6 +216,6 @@ diffuseColor.a=clamp(diffuseColor.a+glassBead*.35,0.,.97);
 `)
       .replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\nroughnessFactor=clamp(roughnessFactor+crack*.72+glassDamage*.1,0.,1.);');
   };
-  material.customProgramCacheKey = () => 'quarry-laminated-glass-v2';
+  material.customProgramCacheKey = () => 'quarry-laminated-glass-v3';
   return state;
 }
