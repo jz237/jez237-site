@@ -533,5 +533,887 @@
     "sha256": "b7efb2236addb2e580e12ab92548cc8ac71cff7343558bac71a47ce736cbf126",
     "runtimeSha256": "47020b591368cfe3c2640988d2ddb744f013583dedf20afdf2cc18b019c5ed0c",
     "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "backfire",
+    "file": "backfire.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Exhaust backfire: a single very loud sharp bang from a car tailpipe like a gunshot, with a short metallic ring and a brief echo outdoors. Isolated, no engine running, no music, no voices, no speech.",
+      "duration_seconds": 1.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "7f841b5caea4d8a816a8c2d9e3c53dfba0e22ccdbf8ac9bdee21cf481cb3ffe8",
+    "runtimeSha256": "5cb8ed39675d3ca837a651070061113d81fc5e0480fdbce1bbd2b422657db24f",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "tyre-blowout",
+    "file": "tyre-blowout.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Tyre exploding on a car: one violent rubber blowout bang with a burst of escaping air and a flap of torn rubber, outdoors. Isolated, no music, no voices, no speech.",
+      "duration_seconds": 1.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "a713364e2ff1446e8f0ccfa3514bfe804572f81ddccf874c3735a516d92824d0",
+    "runtimeSha256": "e7ed680a41195a2ce29bb1ac92bd763a6f59faeeafd25b83d75c1d67e6880507",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "rod-bang",
+    "file": "rod-bang.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Engine throwing a connecting rod: one violent metallic bang deep inside the engine block, a harsh clattering grind and the engine stopping dead with a hiss. Isolated mechanical sound, no music, no voices, no speech.",
+      "duration_seconds": 1.8,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "75979ffd90f643e8ca4b3bfda9756944badac8ee87cb260a4749516a7a68da0d",
+    "runtimeSha256": "c54ae48975b6bc5acfbe57d7e0c51eb8367672f865d0b1ae331f8a3569fc69df",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "engine-seize",
+    "file": "engine-seize.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Seizing car engine from oil starvation: a harsh metallic knocking that turns into a grinding screech and stops dead with a final clunk. Isolated mechanical sound, no music, no voices, no speech.",
+      "duration_seconds": 1.6,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "7a19d7844352f50330f9ee25797c022c75bdf0270165e29c7de089fa98432983",
+    "runtimeSha256": "5e9295611e9af368d67efd41d9ed38922cc77c26b5f0ce66dd5386bb1e94060f",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "extinguisher",
+    "file": "extinguisher.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Handheld dry powder fire extinguisher discharged in one burst: a sharp pressurized whoosh and hiss that cuts off cleanly. Isolated, no music, no voices, no speech.",
+      "duration_seconds": 1.3,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "cff496107d8856ed2f203e75e811d1068cb765bdcbef4e6c8dbe32f419509332",
+    "runtimeSha256": "e0172f3bfd3f8697363246d33fa4bc1a23bf5befecd95d4fe5179cb15fdfd75f",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "bump-start",
+    "file": "bump-start.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Push starting an old car: the engine turns over with two compression chuffs, coughs, and catches into a rough idle. Isolated engine sound outdoors, no music, no voices, no speech.",
+      "duration_seconds": 1.8,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "76f144c622131828542c81f378c637a43edd239dbc6951008218723ffb126745",
+    "runtimeSha256": "1a16471f07dd5685a0e0d561433c2abd67f5a0c4d7779f60099f09eeadfacea0",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "spring-snap",
+    "file": "spring-snap.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Heavy car coil spring snapping under load: a sharp metallic twang and a hard suspension clunk. Isolated, no music, no voices, no speech.",
+      "duration_seconds": 0.8,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "adf26454566f1eaed04f1f8ec651f8ce1285d95635d00b286a8185ae4f045ebf",
+    "runtimeSha256": "c8bf40df0768836cb306bfa9c01ab0f4202c6cc74f6a53166f00abb824af06ca",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "shaft-snap",
+    "file": "shaft-snap.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Driveshaft snapping under load on a car: a loud metal crack followed by a few fast clattering flails against the underbody. Isolated, no music, no voices, no speech.",
+      "duration_seconds": 1.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "dc6d15eeb6919bee9e622940091eb21580d2b973a567fdb1e1e054ee0d96c089",
+    "runtimeSha256": "0eaa1e28d875e453f15631e8916b90d91eaaf0b92bbb18d9fd66a54d1d85ac1d",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "mirror-snap",
+    "file": "mirror-snap.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Wing mirror knocked off a car by a passing car: a sharp crack of snapping plastic and a small glass tinkle. Isolated, no music, no voices, no speech.",
+      "duration_seconds": 0.6,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "ea4860181356edb401f3caf4a843b5e5abe4ce09cfbbdee3846eae34aa5219bd",
+    "runtimeSha256": "5e4acf7d558abfc30feb3247b23da171fd0e2a0eb09ef77bb427398624b2a559",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "battery-rip",
+    "file": "battery-rip.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Battery torn out of a car engine bay in a crash: cables snapping with a crackle of electrical sparks and a heavy plastic box thudding onto dirt. Isolated, no music, no voices, no speech.",
+      "duration_seconds": 1.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "bcc149fcf65403a62c46609f3d31a1cee9fd8b1d4ee2fc4bcbb6813bc1b3456d",
+    "runtimeSha256": "3a5a8b63ac86a93ea82a3e95c7bd160a36cdc1704e200408286e906ab401fb5a",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "crowd-cheer",
+    "file": "crowd-cheer.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Grandstand crowd at an outdoor demolition derby erupting into a big roar and cheer after a huge crash, then settling. Wordless crowd noise only, no announcer, no music, no individual words or speech.",
+      "duration_seconds": 4.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "c04d161dcbc7af0bb14144681f95440bdcd25ccf35906b82304a5f0c8cb756d9",
+    "runtimeSha256": "7be2bba43afe5867e29b6d4eea5f561382dbfe82ca88a3a63ef6054deeeff48c",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "impact-light-2",
+    "file": "impact-light-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Light car body knock at low speed: a hollow sheet metal bang with a short plastic trim crack and a faint rattle. Dry close recording. No music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "ae01b1f7c7e4f4168963da0c40031c497988c4483da0d7ece070fb880ddfaa7b",
+    "runtimeSha256": "4c5d4ac69f32138ff99bd501d5c9302e01f59fdeb235ac41f54256e6ceb5bbb0",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "impact-light-3",
+    "file": "impact-light-3.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Low speed bumper-to-door car tap: a dull metallic thump, a crunch of plastic and a light panel flex. Dry close recording. No music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "306868648d674e541f1380c1d4011a108de9ecdf3be2556b36ba8a5742c169cb",
+    "runtimeSha256": "eec628a2196b817eb8cd98cb853397c374059279aadb823da230c68181183dd5",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "impact-medium-2",
+    "file": "impact-medium-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Medium speed demolition derby car crash: a hard crunch of folding steel panels, a cracking bumper and a few bits of trim falling. No explosion. No music, no voices, no speech.",
+      "duration_seconds": 3.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "7fe156f8264b7e937f4f6710ea6dd84a745077b8d2dc5c5f986bc7fddf454001",
+    "runtimeSha256": "4e33da75aad095d6e05a06441d22a996aaba539d474e69d5b13324f33d7efbe2",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "impact-medium-3",
+    "file": "impact-medium-3.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Crunching car side impact starting instantly: from the very first moment a deep metal crump as a door caves in, glass cracking and debris skittering, then fading. No lead-in, no explosion. No music, no voices, no speech.",
+      "duration_seconds": 3.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "a243fa6f3accbc422c1c963819b6bf855a7ecb0d484020580a1bab8a2aac1517",
+    "runtimeSha256": "77e3493b75a14cbfabf7bc27f3fd322768fa7e414ef16b272367c4425b332782",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "impact-heavy-2",
+    "file": "impact-heavy-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Violent head-on collision of two heavy cars at high speed: an enormous low impact boom, steel crushing and tearing, a windscreen bursting and debris raining down. No explosion. No music, no voices, no speech.",
+      "duration_seconds": 4.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "7197753e8d467e76f4dfdb3ae88c8670110d388c36b94d65c285e6f5b2e5b75c",
+    "runtimeSha256": "a7633732075f5f0da0c2686cd119d0d02512e51579a0715f7b020504a97823b9",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "impact-heavy-3",
+    "file": "impact-heavy-3.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Brutal high speed T-bone smash in a demolition derby: a massive metallic slam, a car body folding around the impact, glass showering and parts clattering away. No explosion. No music, no voices, no speech.",
+      "duration_seconds": 4.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "6052c032d7e24ed26208f23ba801cb5b3fd16b909ef6175bda862f3ab49437fc",
+    "runtimeSha256": "3cd2dfe5ab4ec394242694280e08c5694b1789e9474655fd069cc5dfdd984e39",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "tyre-rub",
+    "file": "tyre-rub.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Tyre rubbing against a crushed steel wheel arch on a moving car: a continuous rhythmic rubber scrubbing squeal and grinding with a faint thump on each wheel turn. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 3.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "a9d7b782aab8d94af837173efac7187c4ffd090e29e8468ee9bb3e65c6ee6810",
+    "runtimeSha256": "5af902d02f2b69ba7355ac154193afca19637ae08b941aaf72186ac039c6e53b",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "metal-groan",
+    "file": "metal-groan.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Metal groaning as two crashed cars are pressed together: continuous deep creaking and moaning of stressed steel body panels under heavy load, with small metallic pops. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 3.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "a221d8d42316ab8f092a1a738fbd8a0db8516728ea2bada5b239cab6a75b942c",
+    "runtimeSha256": "4027896965f6787b44995f6449249f4a5b4429f105321e11cbfc77bb9b433211",
+    "processing": "first 0.7s cut, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "glass-2",
+    "file": "glass-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Rear window of a car bursting in a crash: a sharp crack and a shower of small tempered glass cubes pattering onto dirt. No music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "6143eddde644724a80630c8c7b614cc1951f97f8b8afb6b4bf346169e120f880",
+    "runtimeSha256": "9ea39936884c2cc46d5116745cbf64a4fc24909427dcd102e237131d6f5f66fc",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "glass-3",
+    "file": "glass-3.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Car windscreen and headlight glass breaking: a crisp shatter and small glass fragments tinkling down onto asphalt. No music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "7cd6811776454994ea8490930e60543f708824f494e797bd3166dbc0b7026ecf",
+    "runtimeSha256": "25feca97bd7369d27fb4382705ba9a3bf01cd900c1fcebd31fbbadbfcfc63523",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "debris-2",
+    "file": "debris-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Torn-off car door hitting hard ground and skidding along it with a scraping metal clatter. No music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "2d5ddcfc010f365ddc4433872f88e00bfdc5770945d635d268863c507c5866e7",
+    "runtimeSha256": "50cbbf7f6402c02c826c8ee897a46f9f4c6ab4b1ef01d8688cadc859315373a0",
+    "processing": "first 0.45s cut, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "debris-3",
+    "file": "debris-3.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Pieces of plastic car trim and a hubcap falling onto gravel, rolling and rattling to a stop. No music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "589ee1dc6c7ec55994e381fde3936f8c5895d7602e3af51e24790ff4a4f31667",
+    "runtimeSha256": "29efd3edf103d54d5a5f3a2157e1f406e2c4421edfd46196913e936c70e055fe",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "horn-stuck",
+    "file": "horn-stuck.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Stuck car horn: one continuous steady slightly weak old car horn blare with no variation. Isolated, no music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "db68647cdb3788bfc3712cac53a6e5c2a883974b3a8ca01a16727dd6c8e7d933",
+    "runtimeSha256": "671b2e1de0176cbb12f60d6f0b5e32661b86b4aeb0fbd701af86ed4b1db63401",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5, RMS matched to -13.2 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "starter",
+    "file": "starter.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Starter motor cranking a car engine that will not start: continuous rhythmic whirring and chugging of the starter with steady compression pulses, the engine never catching. Isolated, no music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "0fcaea70146dbbd8dbd715fc989a327766b2c9c74a5ef45f4d701523ee5104c6",
+    "runtimeSha256": "9b6d3bbd829351169da989da0add37421f22f8d46abe94bbfd3276ca0b19b497",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5, RMS matched to -13.5 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "gear-grind",
+    "file": "gear-grind.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Loud continuous gear crunch: a manual gearbox grinding hard and steadily the whole time, a dense harsh metallic rasp of clashing gear teeth with no pauses. Isolated, no engine revving, no music, no voices, no speech.",
+      "duration_seconds": 1.5,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "8e182cbd130002dab978aa53427dd0388421145a6556e96a5f223732451a08fc",
+    "runtimeSha256": "7f986f3dee629eb1ce59de0d77fb7f520648ccb5030b0dcfdf2edd90207e6cf0",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5, RMS matched to -14.3 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "squeal",
+    "file": "squeal.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Fan belt slipping in a car engine bay: a continuous steady high pitched rubber belt squeal. Isolated, no music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "29d58919d4562a78828e3bbea91fdddc0bfa93704b6db8c566d4f80647a0fca9",
+    "runtimeSha256": "0beac990b15c51abfdd08dec10cf32004f6cab51da60b8b25d40f8dc8b293c31",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5, RMS matched to -17.4 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "growl",
+    "file": "growl.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Wheel bearing worn out on a moving car: a continuous low rumbling metallic growl and hum that stays steady. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "6c68215e126a5f4ecf7f06f1883fc9454f195510cce884789ac42646ebf09a5c",
+    "runtimeSha256": "a1107d90705241df182390249e3c86ee9a029e3a9ddfa72cb9672c363b27f120",
+    "processing": "first 0.6s cut, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5, RMS matched to -29.1 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "rattle-0",
+    "file": "rattle-0.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Single loose car body panel clank: one short metallic rattle hit of a dented door panel, very short and dry, then silence. No music, no voices, no speech.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "3d0e138f640f692cfd92fd8ac7a0ba6049a7ee1fcb6530ce39e14c5fd5954bc6",
+    "runtimeSha256": "62f0838299a4a1f040f23898352b2dc5f8066563aab05506b5502cb38e0b1473",
+    "processing": "0.3s kept, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 90ms tail fade, Vorbis q5, RMS matched to -18.3 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "rattle-1",
+    "file": "rattle-1.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Tinny clatter: one short hit of a loose plastic bumper trim slapping against car metal, very short and dry, then silence. No music, no voices, no speech.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "1916d91796bd221ff15fd5887c60137cb61151b52fb303e2629aeaa24e497fba",
+    "runtimeSha256": "28701109a3517b0a301e0be680866b0caa771964e1ad9931d72f707d7186a4de",
+    "processing": "0.3s kept, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 90ms tail fade, Vorbis q5, RMS matched to -18.2 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "rattle-2",
+    "file": "rattle-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Hollow knock: one short bang of a loose car bonnet bouncing on its latch, very short and dry, then silence. No music, no voices, no speech.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "203e95f79176d8ff0ace72bb89532adb792639fc9974a6c5f2783758ac789810",
+    "runtimeSha256": "fc0e835a1734a990e71ee030b84d5bad845f1cd6c8bfe124b9133bdfe2c9d1d9",
+    "processing": "0.18s kept, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 54ms tail fade, Vorbis q5, RMS matched to -18.2 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "rattle-3",
+    "file": "rattle-3.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Sharp metallic tick: one short ping of a loose exhaust heat shield rattling against the car floor, very short and dry, then silence. No music, no voices, no speech.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "1231948f7d8e3cea1d27d81f529fecb17ba08346eaf61f7cdaf16ea7647167fb",
+    "runtimeSha256": "3b92d8c892249961d4ac6d48c7d022143d11820c258734bcc2b784818564f6f9",
+    "processing": "0.3s kept, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 90ms tail fade, Vorbis q5, RMS matched to -18.3 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "thump",
+    "file": "thump.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Dull rubbery thump: one short heavy knock of a bent car wheel and flat-spotted tyre hitting the road, very short and dry, then silence. No music, no voices, no speech.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "9fdba6967787d3345079fc534b83a1a9e802af14b9e96cb93a5ab78acd57382b",
+    "runtimeSha256": "ab766b179f34ce37bda41b2dc14081231be4a1483082f8aa3391c71c66d69641",
+    "processing": "0.22s kept, first 0.11s cut, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 66ms tail fade, Vorbis q5, RMS matched to -15.4 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "wind",
+    "file": "wind.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Wind roaring through the shattered open windscreen of a fast moving car: a continuous turbulent rush of air buffeting the cabin, steady. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 3.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "ad3a61625487e25f0df154261e6596ede7840c526e4b62423169a38f1c7253e1",
+    "runtimeSha256": "4fc8f3d7e57a15a7f9737d139d0605db4ac9d585281f7ae27b43a3f58c705c68",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5, RMS matched to -20.3 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "rain",
+    "file": "rain.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Steady rain falling on a dirt arena and on car roofs: a continuous even rain hiss with soft patter, no thunder. No music, no voices, no speech.",
+      "duration_seconds": 4.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "a61500d15fff4ee213817dd763f2ebef4780ab4d3a0aa98ddd776ebe0a166fc1",
+    "runtimeSha256": "5c7b972f2573b8ca009547128e9bc50530e4b173cb5dcec9d91cf62c3ae7e2e3",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5, RMS matched to -17.7 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "car-explosion",
+    "file": "car-explosion.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Car fuel tank explosion in an outdoor arena: a massive deep boom and fireball whoosh, metal panels tearing and flying, then debris clattering down and fire crackling. No music, no voices, no speech.",
+      "duration_seconds": 3.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "a9c62b49a3a218af44935a0e5af133cc64a629f9a7fed06c75db48f521d45fb3",
+    "runtimeSha256": "895af83c5a17e4268f93f4b5eef56190c04f668c8eb792f11c9f1b552dd45fba",
+    "processing": "first 0.5s cut, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5, RMS matched to -15 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "glass-crunch",
+    "file": "glass-crunch.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Crunching broken glass under a car tyre: a car rolling slowly over scattered tempered glass crumbs on asphalt, a short gritty crackle and crunch. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 1.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "0f4ae608f07b16e786be766fe43094ff86a27ac2c2d2f7db38f1dbf243d54828",
+    "runtimeSha256": "a431cf8e81e18952c273a7b3fc59d16723048603af2909005d810564affd0e50",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "glass-crunch-2",
+    "file": "glass-crunch-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Gritty crackle of glass fragments and plastic chips being crushed under a slowly rolling rubber tyre on a hard floor, short and dry. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 1.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "335d0de55231465a4e009baee4c4f434ac45c7b444e50f69c6d9178e18de80be",
+    "runtimeSha256": "f7b7be055e2ea5ec52f32e1c52fd69b110476d8b95ff54cc245aee54f31ea320",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "air-horn",
+    "file": "air-horn.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Airhorn blast at an outdoor stadium: one long loud pneumatic air horn blast over a public address system, echoing around a dirt arena, then fading. Isolated, no music, no voices, no speech, no crowd.",
+      "duration_seconds": 2.2,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "64efc2ba2806be6a092d8d9993010dad55ac91b6b12d60aa3cc9a00ec80d5269",
+    "runtimeSha256": "2eb35c114500f168681f0bf0079a4e38a65033277ff3326edd267187935faf47",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "air-horn-end",
+    "file": "air-horn-end.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Pneumatic stadium horn sounding twice: two long loud air horn blasts in a row over arena loudspeakers, echoing outdoors, then fading. Isolated, no music, no voices, no speech, no crowd.",
+      "duration_seconds": 3.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "95535ab3499e551a25c468b914933918e26ba0451759188a49681a0969289531",
+    "runtimeSha256": "52fe361dbea55bca8130d0e61244aa3e33b8e66b6f55b75a09e6caa6948f5261",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "reverse-whine",
+    "file": "reverse-whine.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Whining reverse gear of an old car backing up fast: a loud continuous high pitched gearbox whine from straight cut reverse gears, steady and mechanical. Isolated, no engine roar, no music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "09896e717ae8c1ce9f8e5872a07de93108e96690340643b9c27101abe6fd55bd",
+    "runtimeSha256": "9925337cb9a4ec52a50daa903294858faf4ab90fc867bbd0e1b63505e046c97e",
+    "processing": "0.9s kept, first 0.5s cut, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "tyre-flap",
+    "file": "tyre-flap.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Flapping shredded tyre: a flat torn car tyre slapping against the wheel arch as the car drives along, a rhythmic rubbery flap flap flap, steady. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "2261a11b788998702f7558c257e0068d8717348f6a757d47a05730bfb4d71d97",
+    "runtimeSha256": "f3adc1b62c5605ea8c56270bf2e8679b461f5416ed0d22df6610c600d3f0ab2d",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "steam-hiss",
+    "file": "steam-hiss.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Steam hissing out of a burst car radiator: a continuous steady hiss of escaping hot steam with a faint bubbling gurgle under the bonnet. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "aff969c19d8d842c11911e4c9e94edcc92659179cb041e3e3f3708a9d0557f13",
+    "runtimeSha256": "85cd0007ea052c605d3f2c16a32f98f70b7e147827697d13a1ea46e551a8a05d",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "brake-squeal",
+    "file": "brake-squeal.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Squealing brakes on an old car slowing down: a continuous loud high pitched metallic brake squeal, steady, without tyre skid. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "9d6ede087d05b5f2dc2b5d6ebd55c0509d67ad3804c1471f3c604da129ad7d75",
+    "runtimeSha256": "386d9b7b58d96890e9b90389fd7d703d48b8f3be9267f3942e56286293f83f9f",
+    "processing": "1.0s kept, first 0.95s cut, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "crowd-gasp",
+    "file": "crowd-gasp.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Gasping grandstand crowd at an outdoor demolition derby: a big shocked collective oooh as a car rolls over, rising and falling. Wordless crowd reaction only, no announcer, no music, no individual words or speech.",
+      "duration_seconds": 2.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "675ac262c6e0d79daf7281dc74530708da1989f130fde131d6f4831e0032c8cc",
+    "runtimeSha256": "40a8e79ea0141913b17136817b469d840e21e8314c2e0bfa7616f8b43b138000",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "crowd-gasp-2",
+    "file": "crowd-gasp-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Shocked outdoor stadium crowd: a sharp loud collective gasp and whoa as a car explodes in a demolition derby arena, then excited murmuring. Wordless crowd reaction only, no announcer, no music, no individual words or speech.",
+      "duration_seconds": 2.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "a4e70d87c3e9103ac34af4d2ef1e702e6b18d9ab483aa38ffdd8d48974d37ab7",
+    "runtimeSha256": "2637ee669122370b902ab4f3bf1e9c1d3aa221a30c8d6c85b685d1c4aa4936f2",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "crowd-boo",
+    "file": "crowd-boo.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Booing grandstand crowd at an outdoor demolition derby: a loud disapproving collective boo rising and fading, some jeers. Wordless crowd reaction only, no announcer, no music, no individual words or speech.",
+      "duration_seconds": 2.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "0fbae25d98f8255cc2124abd65c2bae7b4bd6d04a8304bd635fa70c1359095af",
+    "runtimeSha256": "fd19c795e1c9aca69f63f399a67e5adba2cd813805bb8f8a429b7037f5574ce0",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "wet-tyres",
+    "file": "wet-tyres.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Constant road noise of car tyres on a flooded wet asphalt road at speed, recorded from beside the wheel: a steady unchanging loud hiss and swish of spraying water at one constant level from start to end, no fade in, no pass-by, no engine. Isolated, no music, no voices, no speech.",
+      "duration_seconds": 3.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "72188ee011f02b21a0fe66aaeaa29dd1bb32bdf76ddab3f99d1a76ee299dc216",
+    "runtimeSha256": "453d7a9bcd599242f1e5576655463ce1cf98a49835f25d4070a69a33e7cbaaed",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "roof-rain",
+    "file": "roof-rain.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Heavy rain drumming on the metal roof and windscreen of a car, heard from inside the car cabin: a steady dense patter at one constant level from start to end, no thunder, no fade in, no engine. Isolated, no music, no voices, no speech.",
+      "duration_seconds": 4.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "439c4bcd0714c5c129d098cad2f66f835478e710a0e778b004ca0cf973525482",
+    "runtimeSha256": "d8f3bf23efd6efe74f5f359d5bae35e3965aa462ea84c52b83f80b0f9623cb2a",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "thunder-far",
+    "file": "thunder-far.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Distant thunder: a long low rolling rumble of thunder far away across open country in heavy rain, slowly fading out. Isolated, no music, no voices, no speech.",
+      "duration_seconds": 5.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "72a013810b32ab66f3b0c3344faee916d23f751a160846bf30380177258d47af",
+    "runtimeSha256": "3f414998a2797ef121f8d1be46718f6e3c45706d62799eef60c41870a1782d9c",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "thunder-near",
+    "file": "thunder-near.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Close thunder: a sharp loud crack of nearby lightning splitting the air, then a heavy booming rumble of thunder that rolls away. Outdoors in rain. Isolated, no music, no voices, no speech.",
+      "duration_seconds": 5.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "aa2dfce088caf9fddb941eae6f0f16b4a3b11c0027dfb46cf829ed7912db7e53",
+    "runtimeSha256": "ae772ad846b77860f98556bbcaa9af2ee85ecc96b71a94ddafec2b5a95f95732",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "puddle-splash-0",
+    "file": "puddle-splash-0.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "A car tyre hitting a deep puddle at speed: a single sharp heavy splash and whoosh of water thrown up and sheeting off to the side, then droplets pattering down. Outdoors on asphalt, close to the wheel. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 1.3,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "7da71f9566ef6b36a5fb0a48c3c3039e8c168dd80e6b03f4d9efbb9216beefe0",
+    "runtimeSha256": "7bc7d1c19e97d84687bd0397d8ad1adeb345ef4f23785cffa286c55882d6fa15",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "puddle-splash-1",
+    "file": "puddle-splash-1.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "A fast car driving straight through a big rain puddle: one loud slapping water splash as the tyre ploughs through it, spray hissing out and falling back. Outdoors, heard from close beside the car. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 1.3,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "bbe64c49b0f89641c2c79e7f5142db867d42aac6c151ef73c11e9e4640402a0e",
+    "runtimeSha256": "46fa5260291e68030fa3503a0832bc772684ffdbc37e71af17d7cc6e1e03b26b",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "stone-ping-0",
+    "file": "stone-ping-0.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "A single small gravel stone flicked up by a spinning tyre striking a car's steel door panel: one sharp bright metallic tick, close up. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "31d118f5e06c5f338209d44008b0c8ea23d683fd1579506c2eb3fc43ba77dc86",
+    "runtimeSha256": "83d1868bd12b456d4db2aa55a66c9826ae1f9de6e793a5a16ce385d848f00c51",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "stone-ping-1",
+    "file": "stone-ping-1.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Two or three small stones pinging off a car bonnet in very quick succession: light sharp metallic ticks, close up. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 0.6,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "5a9e31229d2762448d00294d2c0586942b750ef68fcd789d1caefe941a977272",
+    "runtimeSha256": "a29649b844350af3d9d72e94d2dfba131b28cd92f29b3fb010f87cbd9e126c89",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "stone-ping-2",
+    "file": "stone-ping-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "A pebble thrown up from a gravel road hitting a car's front bumper and glancing off: one hard short plastic and metal tock with a tiny tick. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "b33bf38842b4eec8ea2d33d289d70b10e22230f05ed8c5f95b05ee358559215f",
+    "runtimeSha256": "6aecb136a1c8f1be0337823296e142b6d2f5302be24e0a54a3ab3f031ef581f4",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "reverse-beeper",
+    "file": "reverse-beeper.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Commercial van reversing alarm: a steady repeating electronic beep, beep at exactly one beep per second, clean square tone, outdoors, heard from a few metres away. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "576e5d9c14392a78964e0e199614e28360e099c10a4eb0dedee651fb3cfbe606",
+    "runtimeSha256": "e913f645c291f259937c77095184e29c0d6b78e64577d37291832c23f05a893e",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "bump-stop-0",
+    "file": "bump-stop-0.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Car suspension bottoming out on a big bump: one heavy dull metallic clunk as the axle slams into the rubber bump stop, with a short thud through the body. Close up, isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 0.6,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "1adea3f9506452513d7634d2e905e96dfd9ee7ef57bd06f3e12911fe76a7182f",
+    "runtimeSha256": "c13a2cc939151a1d71b80527de0daf3d580eb483ecc80e15b0bd0e23ea696047",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "bump-stop-1",
+    "file": "bump-stop-1.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Old worn car suspension crashing through its travel over a pothole: a hollow metal bang and clank from under the car with a brief rattle of loose parts. Close up, isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 0.7,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "1425e77087e4c928724caea697d9378173466de9f7ff17fed3e63024a9eac052",
+    "runtimeSha256": "5409d32db7cc539dc1f52eac0fda55179a462b9c37ba3eebc0c34e9d7a6cf40d",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "bump-stop-2",
+    "file": "bump-stop-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Car front suspension hitting its bump stops landing off a rut: a deep short thunk of rubber and steel, a creak of the body, outdoors. Close up, isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 0.6,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "3e90620a827d2a867bebe52236ba2e28d3f0f0aaf0a61a3fc1ee83cd80b4ca2d",
+    "runtimeSha256": "3b5744a9f71aa077224c30b03fc4f976934f3a7508b2639c43d05a8f5a8b5b27",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "cv-click-0",
+    "file": "cv-click-0.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "A single sharp metallic click from a worn CV joint on a car's front driveshaft as the wheel turns on full lock, close up under the car. One click only. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "a5d977bbabaef2564a3f85af8360bd6db416437ec0702a670f78188bdde05efd",
+    "runtimeSha256": "f0182e23a98f69ad7399a942009055cea22194f2debcaa9d3bcc0e61842a2c8c",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "cv-click-1",
+    "file": "cv-click-1.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "One loud dry clack from a damaged constant velocity joint in a car's front axle, a short knock of steel balls in a worn cage. One knock only. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "7ae37971b20aa5e5b143f16dc7bd60c0fe9b4dd2c56df17ef69d0e768192ee65",
+    "runtimeSha256": "36041da723e387a1857e12bac76b1e05bf9dd5e5d408d70c1d6b509913acdd22",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "cv-click-2",
+    "file": "cv-click-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "A single metallic tick and clunk from a car's worn front driveshaft joint under load while turning, heard from beside the wheel. One tick only. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "b3beaec2c4b91d3c0d0fb46e8892c516ac6ef26247f98533aa0061d742a964a6",
+    "runtimeSha256": "82b801294a6731c2d5dd323e0e126e7961652fc8f2582cd326d6f7f12cdddbd3",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
   }
 ]
