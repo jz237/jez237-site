@@ -1,6 +1,7 @@
+import {restoreBaldTyresBytes} from './bald-tyres-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readStoneChipsPrevious,restoreStoneChipsBytes,verifyStoneChipsRevision} from './stone-chips-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreBaldTyresBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('StoneChips preserves every prior fixture, vehicle asset, venue art and history input',verifyStoneChipsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/stone-chips/revision.json').toString());

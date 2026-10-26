@@ -16,7 +16,7 @@ test('the lettering is laid into each tyre’s own shader — on the outer sidew
     const root=new T.Group(),wheels=[-1,1].map(side=>{const wheel=new T.Group();wheel.position.set(side*.8,0,1.3);const g=new T.CylinderGeometry(.35,.35,.2,24).rotateZ(Math.PI/2);
       const tyre=new T.Mesh(g,new T.MeshStandardMaterial({name:'Classic Tire'})),hub=new T.Mesh(new T.CylinderGeometry(.2,.2,.21,12).rotateZ(Math.PI/2),new T.MeshStandardMaterial({name:'Rim'}));wheel.add(tyre,hub);root.add(wheel);return wheel;});
     assert.equal(letterTyres(wheels,'muscle',3,root),2,'the tyres, not the rims');assert.equal(letterTyres(wheels,'muscle',3,root),0,'once');
-    const left=(wheels[0].children[0] as T.Mesh).material as T.MeshStandardMaterial;assert.ok(left.customProgramCacheKey().endsWith('-lettered-v1'));
+    const left=(wheels[0].children[0] as T.Mesh).material as T.MeshStandardMaterial;assert.ok(left.customProgramCacheKey().endsWith('-lettered-v2'));
     const shader={uniforms:{} as Record<string,{value:unknown}>,vertexShader:'#include <common>\n#include <beginnormal_vertex>\n#include <begin_vertex>',fragmentShader:'#include <common>\n#include <color_fragment>'};
     left.onBeforeCompile(shader as never,{} as never);
     assert.ok(shader.vertexShader.includes('vLetter=(letterToWheel*vec4(position,1.)).xyz;')&&shader.fragmentShader.includes('texture2D(letterMap,vec2(lu,lv))'));
@@ -26,5 +26,5 @@ test('the lettering is laid into each tyre’s own shader — on the outer sidew
 });
 test('main letters offline cars’ tyres, with a QA hook',()=>{
   const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
-  assert.ok(main.includes('if(car.extendedDamage){const n=letterTyres(car.wheels,type,car.id,car.root);if(n)letteredTyres.set(car,n);}')&&main.includes('tyreLetters: (id = 0) =>'));
+  assert.ok(main.includes('if(car.extendedDamage){const n=letterTyres(car.wheels,type,car.id,car.root,car.tread);if(n)letteredTyres.set(car,n);}')&&main.includes('tyreLetters: (id = 0) =>'));
 });
