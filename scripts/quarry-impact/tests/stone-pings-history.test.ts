@@ -1,6 +1,7 @@
+import {restoreFogLampBytes} from './fog-lamp-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readStonePingsPrevious,restoreStonePingsBytes,verifyStonePingsRevision} from './stone-pings-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreFogLampBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('StonePings preserves every prior fixture, vehicle asset, venue art and history input',verifyStonePingsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/stone-pings/revision.json').toString());

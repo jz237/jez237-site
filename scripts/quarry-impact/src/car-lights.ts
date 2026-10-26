@@ -13,6 +13,10 @@ export const REVERSE_GLOW=2.6,REVERSE_SPEED=.6;
  * in every HAZARD.period s, at HAZARD.glow; an end of the car built without indicators gets an amber lens fitted
  * HAZARD.outset m outboard of each lamp there. */
 export const HAZARD={period:.8,on:.42,glow:4,outset:.13,width:.09,height:.06,depth:.012,proud:.006} as const;
+/** Rear fog lamp (offline): in the rain a single bright red lamp glows at FOG.glow in the rear bumper on the driver's side,
+ * FOG.drop m below that side's tail lamp, FOG.width by FOG.height m, set FOG.proud m out from the bumper skin there (the
+ * tail lamp's own face where no bumper is found within FOG.reach m of it). It is out with its tail lamp or its bumper. */
+export const FOG={glow:2.4,drop:.17,width:.12,height:.05,depth:.014,proud:.006,reach:.35,minX:.25} as const;
 /** Whether the hazards are lit at this moment (seconds) for a car whose flasher started at `phase`. */
 export const hazardLit=(time:number,phase=0)=>Number.isFinite(time)&&((time+phase)%HAZARD.period+HAZARD.period)%HAZARD.period<HAZARD.on;
 /** A smashed lamp's lens goes dark (its colour times shade) and dull (roughness at least rough): an empty socket and shards. */
@@ -46,6 +50,8 @@ export function headlightAim(front:number,left:number,right:number){
  return{yaw:(c(right)-c(left))*HEADLIGHT_AIM.yaw*(.5+f)+(f>0?HEADLIGHT_AIM.yaw*.25*f*(c(right)>=c(left)?1:-1):0),reach:1-HEADLIGHT_AIM.short*f};
 }
 export type CarLights={readonly head:number;readonly tail:number;readonly reverse:number;readonly indicator:number;
+ /** Rear fog lamp (fitted offline on the driver's side): lit in the rain unless smashed or gone. */
+ fog(on:boolean):void;readonly fogLit:boolean;readonly fogLamp:T.Mesh|null;
  /** Hazard lights flashing (a wrecked car), at this moment (seconds). */
  hazards(on:boolean,time:number):void;readonly flashing:boolean;readonly working:number;readonly lit:boolean;
  /** Reversing lamps on while the car backs up. */
@@ -62,7 +68,7 @@ export type CarLights={readonly head:number;readonly tail:number;readonly revers
 /** Lens fitted inboard of each tail lamp on a car built without reversing lamps (offline): REVERSE_FIT m across and
  * high, REVERSE_FIT.inset m in from the tail lamp's middle. */
 export const REVERSE_FIT={width:.1,height:.05,depth:.012,inset:.14,drop:.015,proud:.006,minX:.3} as const;
-export function attachCarLights(root:T.Object3D,halfLength:number,options:{fitReverse?:boolean}={}):CarLights{
+export function attachCarLights(root:T.Object3D,halfLength:number,options:{fitReverse?:boolean;driverSide?:number}={}):CarLights{
  root.updateMatrixWorld(true);
  const inverse=root.matrixWorld.clone().invert(),centre=new T.Vector3(),box=new T.Box3();
  // The road under the car (its lowest point, the tyres) in the root's space: the pool of light lies just above it.
@@ -110,6 +116,21 @@ export function attachCarLights(root:T.Object3D,halfLength:number,options:{fitRe
   root.add(lens);reverses.push(lens);fitted.set(lens,{tail,parent:tail.parent});
  }
  const reverseSides=sidesOf(reverses);
+ // The rear fog lamp: in the bumper below the tail lamp on the driver's side, found by casting in from behind.
+ let fogLens:T.Mesh|null=null,fogTail:T.Mesh|null=null,fogTailParent:T.Object3D|null=null,fogPanel:T.Mesh|null=null,fogOn=false;
+ const fogSide=options.fitReverse?tailSides.find(side=>Math.sign(side.at.x)===Math.sign(options.driverSide??1)&&Math.abs(side.at.x)>=FOG.minX)??null:null;
+ if(fogSide){
+  fogTail=tails[fogSide.lamps[0]];fogTailParent=fogTail.parent;let face=Infinity;
+  // The tail lamps' back face in the car's own frame, wherever the car stands.
+  const toCar=new T.Matrix4();for(const i of fogSide.lamps){const g=tails[i].geometry;if(!g.boundingBox)g.computeBoundingBox();face=Math.min(face,box.copy(g.boundingBox!).applyMatrix4(toCar.multiplyMatrices(inverse,tails[i].matrixWorld)).min.z);}
+  const at=new T.Vector3(fogSide.at.x,fogSide.at.y-FOG.drop,(Number.isFinite(face)?face:fogSide.at.z)-FOG.reach),ray=new T.Raycaster(at.clone().applyMatrix4(root.matrixWorld),new T.Vector3(0,0,1).transformDirection(root.matrixWorld),0,FOG.reach*2),hits:T.Intersection[]=[];
+  // Straight at each panel: the draw batches take the panels off every layer, which intersectObjects skips.
+  root.traverse(o=>{if(o instanceof T.Mesh&&o.name.startsWith('panel_'))o.raycast(ray,hits);});hits.sort((a,b)=>a.distance-b.distance);
+  const hit=hits[0];if(hit){fogPanel=hit.object as T.Mesh;at.z=hit.point.clone().applyMatrix4(inverse).z;}else at.z=Number.isFinite(face)?face:fogSide.at.z;
+  const material=new T.MeshStandardMaterial({name:'Rear fog lens (fitted)',color:0x8e1610,roughness:.18,metalness:.1,emissive:new T.Color(0xff0000),emissiveIntensity:0});owned.push(material);
+  fogLens=new T.Mesh(new T.BoxGeometry(FOG.width,FOG.height,FOG.depth),material);fogLens.name='fog_lens_fitted';fogLens.position.set(at.x,at.y,at.z-FOG.proud);root.add(fogLens);
+ }
+ const fogOut=()=>!fogLens||!fogTail||!fogTail.visible||fogTail.parent!==fogTailParent||(fogTail.userData.damage??0)>LAMP_BREAK||!!fogPanel&&(!fogPanel.visible||!fogPanel.parent);
  // Indicators: the car's own, plus an amber lens fitted outboard of each lamp at an end built without any.
  // Offline only; each keeps its own look (some glow amber already) between flashes.
  const indicatorMats:T.MeshStandardMaterial[]=[],indicatorBase:{color:T.Color;intensity:number}[]=[];
@@ -131,6 +152,9 @@ export function attachCarLights(root:T.Object3D,halfLength:number,options:{fitRe
  const smashed=(m:T.Mesh)=>!m.visible||(m.userData.damage??0)>LAMP_BREAK;
  const api:CarLights={head:heads.length,tail:tails.length,reverse:reverses.length,indicator:indicators.length,get backing(){return backing;},
   get flashing(){return flashing;},
+  get fogLit(){return fogOn;},get fogLamp(){return fogLens;},
+  fog(on){if(!fogLens)return;const out=fogOut();fogLens.visible=!(fogTail&&(!fogTail.visible||fogTail.parent!==fogTailParent))&&!(fogPanel&&(!fogPanel.visible||!fogPanel.parent));
+   const lit=!!on&&!out;if(lit===fogOn)return;fogOn=lit;(fogLens.material as T.MeshStandardMaterial).emissiveIntensity=lit?FOG.glow:0;},
   hazards(on,time){
    for(const f of fittedAmber)f.lens.visible=f.lamp.visible&&f.lamp.parent===f.parent;
    const lit=!!on&&hazardLit(time);if(!!on===flashing&&lit===flashLit&&!on)return;flashing=!!on;flashLit=lit;
@@ -160,12 +184,14 @@ export function attachCarLights(root:T.Object3D,halfLength:number,options:{fitRe
   },
   lamp(kind,index){return (kind==='head'?heads:tails)[index];},
   glows(out,root){
-   if(!lit&&!brake&&!backing)return;root.updateMatrixWorld();facing.set(0,0,1).transformDirection(root.matrixWorld).setY(0);if(facing.lengthSq()<1e-6)facing.set(0,0,1);facing.normalize();
+   if(!lit&&!brake&&!backing&&!fogOn)return;root.updateMatrixWorld();facing.set(0,0,1).transformDirection(root.matrixWorld).setY(0);if(facing.lengthSq()<1e-6)facing.set(0,0,1);facing.normalize();
    if(lit)for(const side of headSides)if(side.lamps.some(i=>!(broken&1<<i))){glowAt.copy(side.at).applyMatrix4(root.matrixWorld);out.push({x:glowAt.x,y:glowAt.y,z:glowAt.z,tail:false,dx:facing.x,dz:facing.z});}
    if(lit||brake)for(const side of tailSides)if(side.lamps.some(i=>!(broken&1<<(i+16)))){glowAt.copy(side.at).applyMatrix4(root.matrixWorld);out.push({x:glowAt.x,y:glowAt.y,z:glowAt.z,tail:true,brake,dx:-facing.x,dz:-facing.z});}
+   // In the rain the fog lamp shines red behind it.
+   if(fogOn&&fogLens){glowAt.copy(fogLens.position).applyMatrix4(root.matrixWorld);out.push({x:glowAt.x,y:glowAt.y,z:glowAt.z,tail:true,brake:true,dx:-facing.x,dz:-facing.z});}
    // Backing up, the reversing lamps shine white behind the car.
    if(backing)for(const side of reverseSides)if(side.lamps.some(i=>!reverseOut(reverses[i]))){glowAt.copy(side.at).applyMatrix4(root.matrixWorld);out.push({x:glowAt.x,y:glowAt.y,z:glowAt.z,tail:false,dx:-facing.x,dz:-facing.z});}
   },
-  dispose(){for(const lens of fitted.keys())lens.removeFromParent();fitGeometry.dispose();for(const f of fittedAmber)f.lens.removeFromParent();fitAmber.dispose();poolMesh.removeFromParent();poolGeometry.dispose();poolMaterial.dispose();for(const b of beams)b.mesh.removeFromParent();beamGeometry.dispose();beamMaterial.dispose();for(const m of owned)m.dispose();}};
+  dispose(){fogLens?.removeFromParent();fogLens?.geometry.dispose();for(const lens of fitted.keys())lens.removeFromParent();fitGeometry.dispose();for(const f of fittedAmber)f.lens.removeFromParent();fitAmber.dispose();poolMesh.removeFromParent();poolGeometry.dispose();poolMaterial.dispose();for(const b of beams)b.mesh.removeFromParent();beamGeometry.dispose();beamMaterial.dispose();for(const m of owned)m.dispose();}};
  return api;
 }

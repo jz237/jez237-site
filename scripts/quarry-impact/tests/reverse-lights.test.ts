@@ -36,5 +36,5 @@ test('backing up, the reversing lamps shine white behind the car onto the wet ro
 test('main lights the reversing lamps as an offline car backs up, and fits lenses only offline',()=>{
   const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
   assert.ok(main.includes('  for(const c of cars)carLights.get(c)?.reversing(!!c.extendedDamage&&c.health>0&&!c.electricalCut&&!c.batteryOut&&c.speed< -REVERSE_SPEED);'));
-  assert.ok(main.includes('attachCarLights(car.root,DEFINITIONS[type].halfLength,{fitReverse:!attract&&!online?.active})'));
+  assert.ok(main.includes('attachCarLights(car.root,DEFINITIONS[type].halfLength,{fitReverse:!attract&&!online?.active,'));
 });
