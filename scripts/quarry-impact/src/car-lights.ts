@@ -28,6 +28,10 @@ export const RAIN_LIGHTS={pool:.45} as const;
  * RAIN_BEAMS.spread m across at its far end, dipped RAIN_BEAMS.dip rad, fading along its length and at its edges, at the
  * strength the caller gives (RAIN_BEAMS.strength in rain, 0 hides it); a side with every lamp smashed throws none. */
 export const RAIN_BEAMS={length:9,spread:1.1,dip:.06,strength:.3} as const;
+/** Tail glow (offline): the same rain or dust lights up red behind each side's tail lamps, a short cone TAIL_GLOW_BEAM.length
+ * m long and TAIL_GLOW_BEAM.spread m across, at TAIL_GLOW_BEAM.running of the beams' strength with the lamps on and full
+ * (TAIL_GLOW_BEAM.braking) on the brakes; a side with every tail lamp smashed throws none. */
+export const TAIL_GLOW_BEAM={length:4.2,spread:.8,running:.5,braking:1.6,color:0xff2410} as const;
 /** A lens reaching past LAMP_BAR.span m either side of the middle is a pair of lamps under one cover: it shines from both
  * ends, LAMP_BAR.inset m in from each. */
 export const LAMP_BAR={span:.25,inset:.18} as const;
@@ -102,6 +106,15 @@ export function attachCarLights(root:T.Object3D,halfLength:number,options:{fitRe
   const mesh=new T.Mesh(beamGeometry,beamMaterial);mesh.name='car_light_beam';mesh.position.copy(lamps.reduce((s,l)=>s.add(l.c),new T.Vector3()).multiplyScalar(1/lamps.length));
   mesh.rotation.order='YXZ';mesh.rotation.x=RAIN_BEAMS.dip;mesh.renderOrder=2;mesh.visible=false;root.add(mesh);return {mesh,lamps:lamps.map(l=>l.i)};
  }).filter(b=>b!==null);
+ // And a red glow per side behind the tail lamps, for the same rain or dust.
+ const tailBeamGeometry=new T.ConeGeometry(TAIL_GLOW_BEAM.spread,TAIL_GLOW_BEAM.length,14,1,true).rotateX(-Math.PI/2).translate(0,0,TAIL_GLOW_BEAM.length/2);
+ const tailBeamMaterial=new T.ShaderMaterial({uniforms:{strength:{value:0},color:{value:new T.Color(TAIL_GLOW_BEAM.color)}},transparent:true,depthWrite:false,blending:T.AdditiveBlending,side:T.DoubleSide,
+  vertexShader:beamMaterial.vertexShader.replace(`/${RAIN_BEAMS.length}.`,`/${TAIL_GLOW_BEAM.length.toFixed(2)}`),fragmentShader:beamMaterial.fragmentShader});
+ const tailBeams=([-1,1] as const).map(side=>{
+  const lamps=lampPoints(tails).filter(l=>Math.sign(l.c.x||1)===side);if(!lamps.length)return null;
+  const mesh=new T.Mesh(tailBeamGeometry,tailBeamMaterial);mesh.name='car_tail_glow';mesh.position.copy(lamps.reduce((s,l)=>s.add(l.c),new T.Vector3()).multiplyScalar(1/lamps.length));
+  mesh.rotation.order='YXZ';mesh.rotation.y=Math.PI;mesh.rotation.x=RAIN_BEAMS.dip;mesh.renderOrder=2;mesh.visible=false;root.add(mesh);return {mesh,lamps:lamps.map(l=>l.i)};
+ }).filter(b=>b!==null);
  // Each side's lamps and their middle, for the light they throw.
  const sidesOf=(list:T.Mesh[])=>([-1,1] as const).map(side=>{const ls=lampPoints(list).filter(l=>Math.sign(l.c.x||1)===side);
   return ls.length?{at:ls.reduce((sum,l)=>sum.add(l.c),new T.Vector3()).multiplyScalar(1/ls.length),lamps:ls.map(l=>l.i)}:null;}).filter(b=>b!==null);
@@ -175,6 +188,7 @@ export function attachCarLights(root:T.Object3D,halfLength:number,options:{fitRe
    poolMesh.visible=on&&!!pool&&intact>0;poolMaterial.opacity=on?.38*intact*strength:0;
    tailMats.forEach((m,i)=>{m.emissiveIntensity=mask&1<<(i+16)?0:on?(braking?TAIL_GLOW.braking:TAIL_GLOW.running):(braking?TAIL_GLOW.daylightBraking:0);});
    beamMaterial.uniforms.strength.value=shine;for(const b of beams)b.mesh.visible=on&&shine>0&&b.lamps.some(i=>!(mask&1<<i));
+   tailBeamMaterial.uniforms.strength.value=shine*(braking?TAIL_GLOW_BEAM.braking:on?TAIL_GLOW_BEAM.running:0);for(const b of tailBeams)b.mesh.visible=(on||braking)&&shine>0&&b.lamps.some(i=>!(mask&1<<(i+16)));
    lit=on;brake=braking;broken=mask;level=strength;beamLevel=shine;
   },
   aim(yaw,reach){
@@ -192,6 +206,6 @@ export function attachCarLights(root:T.Object3D,halfLength:number,options:{fitRe
    // Backing up, the reversing lamps shine white behind the car.
    if(backing)for(const side of reverseSides)if(side.lamps.some(i=>!reverseOut(reverses[i]))){glowAt.copy(side.at).applyMatrix4(root.matrixWorld);out.push({x:glowAt.x,y:glowAt.y,z:glowAt.z,tail:false,dx:-facing.x,dz:-facing.z});}
   },
-  dispose(){fogLens?.removeFromParent();fogLens?.geometry.dispose();for(const lens of fitted.keys())lens.removeFromParent();fitGeometry.dispose();for(const f of fittedAmber)f.lens.removeFromParent();fitAmber.dispose();poolMesh.removeFromParent();poolGeometry.dispose();poolMaterial.dispose();for(const b of beams)b.mesh.removeFromParent();beamGeometry.dispose();beamMaterial.dispose();for(const m of owned)m.dispose();}};
+  dispose(){fogLens?.removeFromParent();fogLens?.geometry.dispose();for(const lens of fitted.keys())lens.removeFromParent();fitGeometry.dispose();for(const f of fittedAmber)f.lens.removeFromParent();fitAmber.dispose();poolMesh.removeFromParent();poolGeometry.dispose();poolMaterial.dispose();for(const b of beams)b.mesh.removeFromParent();beamGeometry.dispose();beamMaterial.dispose();for(const b of tailBeams)b.mesh.removeFromParent();tailBeamGeometry.dispose();tailBeamMaterial.dispose();for(const m of owned)m.dispose();}};
  return api;
 }
