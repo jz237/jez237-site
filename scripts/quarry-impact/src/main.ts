@@ -132,6 +132,7 @@ import {StrutPunch} from './strut-punch';
 import {SparkLight} from './spark-light';
 import {BODY_RAIN,BodyRain,topSpots,type RainCar} from './body-rain';
 import {MIST,mistStep} from './window-mist';
+import {TOP_DUST,settleStep} from './settled-dust';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -988,7 +989,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   drivers.difficulty=attract?'amateur':aiDifficulty();pursuit=null;pursuitDriving.reset();combat.reset(true);derbyFeed.reset();waypointRace=!attract&&mode==='race'&&raceFormat()!=='laps'?new WaypointRace(raceFormat() as 'ordered'|'free'|'random',raceLaps(),clubRound()?.seed??activeChallenge?.seed??Math.floor(Math.random()*0xffffffff),targetVenue.course.checkpoints,targetVenue.course.waypointStations):null;
   sound.clearCars();
   vehicleFire?.reset();propFires.reset();
-  puddleSplashes?.reset();gravelRoost.reset();rollingCaps.reset();exhaustFlames.reset();sparkLight.reset();bodyRain.reset();
+  puddleSplashes?.reset();gravelRoost.reset();rollingCaps.reset();exhaustFlames.reset();sparkLight.reset();bodyRain.reset();TOP_DUST.value=0;
   for (const c of cars){lampDangles.get(c)?.dispose();lampDangles.delete(c);towStraps.get(c)?.dispose();towStraps.delete(c);airbags.get(c)?.dispose();airbags.delete(c);strutPunches.get(c)?.dispose();strutPunches.delete(c);carLights.get(c)?.dispose();carLights.delete(c);c.dispose();}
   clearMarshals();
   for(const f of bailed)disposeDriver(f);bailed.length=0;
@@ -2671,7 +2672,9 @@ function frame(now: number) {
     for(let j=start;j<fx.cursor;j++){const k=j%fx.particles.length,p=fx.particles[k];p.v.addScaledVector(c.forward,-SHIFT_SMOKE.back);p.size=SHIFT_SMOKE.puff[0]+Math.random()*(SHIFT_SMOKE.puff[1]-SHIFT_SMOKE.puff[0]);p.max=p.life=SHIFT_SMOKE.life[0]+Math.random()*(SHIFT_SMOKE.life[1]-SHIFT_SMOKE.life[0]);dustTint.setHex(SHIFT_SMOKE.tint).multiplyScalar(.85+Math.random()*.3).toArray(fx.colors,k*3);}}
   // The dust the plumes leave hanging in the air, thickened by burning cars' smoke and knocked-off dust (it shows the
   // headlamp beams at dusk).
-  if(state==='playing'){knockDust*=Math.exp(-dt/SMOKE_HAZE.fade);dustAir=dustAirStep(dustAir,[...cars.filter(c=>c.extendedDamage).map(c=>dustRate(c.speed,c.surface,eventLighting==='rain')/DUST.rate+(c.onFire?SMOKE_HAZE.fire:0)),knockDust],dt);}
+  if(state==='playing'){knockDust*=Math.exp(-dt/SMOKE_HAZE.fade);dustAir=dustAirStep(dustAir,[...cars.filter(c=>c.extendedDamage).map(c=>dustRate(c.speed,c.surface,eventLighting==='rain')/DUST.rate+(c.onFire?SMOKE_HAZE.fire:0)),knockDust],dt);
+    // and settles on the cars' tops; the rain rinses it.
+    TOP_DUST.value=settleStep(TOP_DUST.value,dt,dustAir,eventLighting==='rain'?shower:0);}
   // Dry gravel kicks up a dust plume behind a fast car's rear tyres (offline; none in the rain).
   if(state==='playing')for(const c of cars){if(!c.extendedDamage)continue;const rate=dustRate(c.speed,c.surface,eventLighting==='rain');if(rate<=0)continue;const clocks=dustClocks.get(c)??[0,0];dustClocks.set(c,clocks);
     for(const k of [0,1]){const i=2+k,w=c.wheels[i];if(!w||c.wreckParts.wheelLost[i]||!c.controller.wheelIsInContact(i))continue;clocks[k]+=rate*dt;if(clocks[k]<1)continue;clocks[k]%=1;dustPuffs++;
@@ -3102,6 +3105,7 @@ async function boot() {
     airbags: (id = 0) => { const c = cars.find(x => x.id === id), b = c && airbags.get(c); return b ? { fitted: b.bags.length, deployed: b.deployed, age: +b.age.toFixed(2), scale: b.bags.map(x => +x.mesh.scale.y.toFixed(3)), at: b.bags.map(x => x.at.toArray().map(v => +v.toFixed(2))), front: +(c!.structuralDamage?.[0] ?? 0).toFixed(3), fired: airbagsFired } : null; },
     rollingCaps: () => ({ rolled: rollingCaps.rolled, moving: rollingCaps.moving, caps: rollingCaps.caps.map(c => ({ phase: c.phase, speed: +c.speed.toFixed(2), lean: +c.lean.toFixed(2), r: +c.radius.toFixed(3), at: c.p.toArray().map(v => +v.toFixed(2)) })) }),
     dustAir: () => +dustAir.toFixed(3),
+    topDust: (level?: number) => { if (level !== undefined) TOP_DUST.value = level; return +TOP_DUST.value.toFixed(3); },
     windowMist: (id = 0, level?: number, now = false) => { const c = cars.find(x => x.id === id); if (!c) return null; if (level !== undefined) { mistIn.set(c, level); if (now) for (const g of c.glass) { const st = (g.material as T.Material).userData.glassState as GlassState | undefined; if (st) st.mist.value = level; } } return { level: +(mistIn.get(c) ?? 0).toFixed(3), glass: c.glass.map(g => +(((g.material as T.Material).userData.glassState as GlassState | undefined)?.mist.value ?? -1).toFixed(3)) }; },
     bodyRain: () => ({ splashing: bodyRain.splashing, landed: bodyRain.landed, cars: rainNear.map(r => ({ id: r.id, spots: r.spots.length })) }),
     sparkLight: () => ({ flashes: sparkLight.flashes, intensity: +sparkLight.light.intensity.toFixed(2) }),

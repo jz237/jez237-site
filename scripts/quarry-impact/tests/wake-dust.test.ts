@@ -34,7 +34,7 @@ test('a car\'s surface carries the dust only once it is placed, and draws it on 
   surface.wakeLevel=.6;assert.equal(surface.wakeLevel,.6);surface.wakeLevel=NaN;assert.equal(surface.wakeLevel,0);
   surface.reset();assert.equal(surface.wakePlaced,true,'a mended car keeps its place');
   const source=readFileSync(new URL('../src/vehicle-surface.ts',import.meta.url),'utf8');
-  assert.ok(source.includes('s.uniforms.carWake=this.wake;')&&source.includes("diffuseColor.a=clamp(diffuseColor.a+wakeDust*.6,0.,.97);")&&source.includes("'-persistent-wet-silt-wake-v2-'"),'glass hazes over, programs rebuilt');
+  assert.ok(source.includes('s.uniforms.carWake=this.wake;')&&source.includes("diffuseColor.a=clamp(diffuseColor.a+wakeDust*.6,0.,.97);")&&source.includes("'-persistent-wet-silt-wake-v3-'"),'glass hazes over, programs rebuilt');
 });
 test('main dusts offline cars in play from their own dust plume and rinses them in the rain',()=>{
   const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');

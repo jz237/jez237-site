@@ -1,6 +1,7 @@
 import * as T from 'three';
 import {finishVehiclePresentation} from './vehicle-presentation';
 import {WAKE} from './wake-dust';
+import {TOP_DUST} from './settled-dust';
 
 /** Persistent deposition state. Four tires retain water after leaving a puddle. */
 export class VehicleSurface {
@@ -25,11 +26,11 @@ export class VehicleSurface {
       if(m.name.includes('hoses')){m.metalness=0;m.roughness=.87;}
       const base=m.onBeforeCompile,key=m.customProgramCacheKey();
       m.onBeforeCompile=(s,renderer)=>{
-        base.call(m,s,renderer);s.uniforms.carCoating=this.coating;s.uniforms.carSurfacePhase=this.phase;s.uniforms.carWake=this.wake;
+        base.call(m,s,renderer);s.uniforms.carCoating=this.coating;s.uniforms.carSurfacePhase=this.phase;s.uniforms.carWake=this.wake;s.uniforms.carTopDust=TOP_DUST;
         s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nattribute vec4 transferPaint;varying vec4 vTransferredPaint;varying vec3 vCoatingRest;'+(s.vertexShader.includes('attribute vec3 wreckPosition;')?'':'\nattribute vec3 wreckPosition;'))
           .replace('#include <begin_vertex>','#include <begin_vertex>\nvCoatingRest=wreckPosition;vTransferredPaint=transferPaint;');
         s.fragmentShader=s.fragmentShader.replace('#include <common>',`#include <common>
-varying vec4 vTransferredPaint;varying vec3 vCoatingRest;uniform vec4 carCoating;uniform float carSurfacePhase;uniform vec4 carWake;
+varying vec4 vTransferredPaint;varying vec3 vCoatingRest;uniform vec4 carCoating;uniform float carSurfacePhase;uniform vec4 carWake;uniform float carTopDust;
 float coatingHash(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
 float coatingNoise(vec3 p){vec3 c=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(mix(coatingHash(c),coatingHash(c+vec3(1,0,0)),f.x),mix(coatingHash(c+vec3(0,1,0)),coatingHash(c+vec3(1,1,0)),f.x),f.y),mix(mix(coatingHash(c+vec3(0,0,1)),coatingHash(c+vec3(1,0,1)),f.x),mix(coatingHash(c+vec3(0,1,1)),coatingHash(c+vec3(1,1,1)),f.x),f.y),f.z);}
 `)
@@ -45,6 +46,10 @@ float carDirt=clamp(deposited*(coatingLow*.74+thrown*.38)*(.45+siltPattern),0.,.
 float carWet=clamp(moisture*(coatingLow*.8+thrown*.3),0.,1.);
 // Wake dust: a film over the tail, thickest at the very back, mottled where it settles.
 float wakeDust=carWake.y>0.?carWake.z*smoothstep(carWake.x+carWake.y,carWake.x+carWake.y*.15,vCoatingRest.z)*(.55+.45*coatingNoise(vCoatingRest*vec3(16.,24.,16.)+carSurfacePhase*3.)):0.;
+// Settled dust: the event's dust in the air lies on the faces that look up, roof, bonnet and boot (same film as the wake dust).
+#ifndef FLAT_SHADED
+wakeDust=max(wakeDust,carTopDust*smoothstep(.35,.85,dot(normalize(vNormal),normalize((viewMatrix*vec4(0.,1.,0.,0.)).xyz)))*(.6+.4*coatingNoise(vCoatingRest*vec3(22.,9.,22.)+carSurfacePhase*5.)));
+#endif
 ${glass?`carDirt*=.1;carWet=moisture*.35;
 float droplets=smoothstep(.73,.87,coatingNoise(vCoatingRest*vec3(130.,40.,95.)))*carWet;
 diffuseColor.a=clamp(diffuseColor.a+droplets*.11,0.,.98);
@@ -65,7 +70,7 @@ material.clearcoat*=(1.-carDirt*.88)*(1.-wakeDust*.85);
 material.clearcoatRoughness=mix(material.clearcoatRoughness,.07,carWet);
 #endif`);
       };
-      m.customProgramCacheKey=()=>key+'-persistent-wet-silt-wake-v2-'+Number(glass);
+      m.customProgramCacheKey=()=>key+'-persistent-wet-silt-wake-v3-'+Number(glass);
     });
   }
   advance(dt:number,speed:number,gravel:boolean,wet:readonly boolean[],grounded:readonly boolean[]=[true,true,true,true]){
