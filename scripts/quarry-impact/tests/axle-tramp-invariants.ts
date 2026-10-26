@@ -1,3 +1,4 @@
+import {restoreTiredElectricsBytes} from './tired-electrics-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readAxleTrampPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreAxleTrampBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreTiredElectricsBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readAxleTrampPrevious(file);
 }
 export function verifyAxleTrampRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'3ebf4a71e3667842eabbe047d19a56d305a0da4d');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreTiredElectricsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreAxleTrampBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the AxleTramp release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreTiredElectricsBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the AxleTramp release');
  assert.equal(manifest.previousFixtureCount,8947);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,8947);
 }

@@ -64,6 +64,10 @@ export type CarLights={readonly head:number;readonly tail:number;readonly revers
  set(on:boolean,braking?:boolean,pool?:number,beam?:number):void;aim(yaw:number,reach:number):void;dispose():void;
  /** Yellows and clouds the headlamp lenses this far (0–1, once): an old car's lamps shine dimmer and warmer (HAZE). */
  yellow(haze:number):void;
+ /** This headlamp's bulb (by index) has gone: its lens stays dark and it lights nothing (an old car's dead bulb). */
+ kill(index:number):void;
+ /** Loose wiring: while `off`, every lamp on the car is dark, head, tail and brake alike (a flicker, set each frame). */
+ flick(off:boolean):void;
  /** Told where a lamp is when it first breaks (its lens centre in the world), head or tail. */
  onSmash?:(at:T.Vector3,kind:'head'|'tail')=>void;
  /** A lamp mesh, for QA. */
@@ -170,7 +174,7 @@ export function attachCarLights(root:T.Object3D,halfLength:number,options:{fitRe
  let flashing=false,flashLit=false;
  // A fitted lens is gone with its tail lamp: smashed, knocked off or left hanging.
  const reverseOut=(m:T.Mesh)=>{const f=fitted.get(m);return f?!f.tail.visible||f.tail.parent!==f.parent||(f.tail.userData.damage??0)>LAMP_BREAK:smashed(m);};
- let lit=false,brake=false,broken=-1,level=1,beamLevel=0,haze=0;
+ let lit=false,brake=false,broken=-1,level=1,beamLevel=0,haze=0,dead=0,flickering=false;
  const smashed=(m:T.Mesh)=>!m.visible||(m.userData.damage??0)>LAMP_BREAK;
  const api:CarLights={head:heads.length,tail:tails.length,reverse:reverses.length,indicator:indicators.length,get backing(){return backing;},
   get flashing(){return flashing;},
@@ -185,6 +189,7 @@ export function attachCarLights(root:T.Object3D,halfLength:number,options:{fitRe
   },
   reversing(on){const lit=!!on;for(const [lens,f] of fitted)lens.visible=f.tail.visible&&f.tail.parent===f.parent;if(lit===backing&&!lit)return;backing=lit;reverseMats.forEach((m,i)=>{m.emissiveIntensity=lit&&!reverseOut(reverses[i])?REVERSE_GLOW:0;});},get working(){return heads.filter(m=>!smashed(m)).length;},get lit(){return lit;},
   set(on,braking=false,poolLevel=1,beam=0){
+   if(flickering){on=false;braking=false;}
    const strength=Number.isFinite(poolLevel)?Math.max(0,Math.min(1,poolLevel)):1,shine=Number.isFinite(beam)?Math.max(0,Math.min(1,beam)):0;
    let mask=0;heads.forEach((m,i)=>{if(smashed(m))mask|=1<<i;});tails.forEach((m,i)=>{if(smashed(m))mask|=1<<(i+16);});
    // A lamp that has just broken leaves its pieces where it was.
@@ -192,11 +197,11 @@ export function attachCarLights(root:T.Object3D,halfLength:number,options:{fitRe
    // and its lens goes dark and dull, once.
    if(broken>=0)for(const [list,shift] of [[headMats,0],[tailMats,16]] as const)list.forEach((m,i)=>{if(mask&1<<(i+shift)&&!(broken&1<<(i+shift))){m.color.multiplyScalar(BROKEN_LENS.shade);m.roughness=Math.max(m.roughness,BROKEN_LENS.rough);}});
    if(on===lit&&braking===brake&&mask===broken&&strength===level&&shine===beamLevel)return;
-   const intact=heads.length?heads.filter((_,i)=>!(mask&1<<i)).length/heads.length:0;
-   headMats.forEach((m,i)=>{m.emissiveIntensity=on&&!(mask&1<<i)?2.4*(1-HAZE.dim*haze):0;});
+   const intact=heads.length?heads.filter((_,i)=>!((mask|dead)&1<<i)).length/heads.length:0;
+   headMats.forEach((m,i)=>{m.emissiveIntensity=on&&!((mask|dead)&1<<i)?2.4*(1-HAZE.dim*haze):0;});
    poolMesh.visible=on&&!!pool&&intact>0;poolMaterial.opacity=on?.38*intact*strength*(1-HAZE.dim*haze):0;
    tailMats.forEach((m,i)=>{m.emissiveIntensity=mask&1<<(i+16)?0:on?(braking?TAIL_GLOW.braking:TAIL_GLOW.running):(braking?TAIL_GLOW.daylightBraking:0);});
-   beamMaterial.uniforms.strength.value=shine;for(const b of beams)b.mesh.visible=on&&shine>0&&b.lamps.some(i=>!(mask&1<<i));
+   beamMaterial.uniforms.strength.value=shine;for(const b of beams)b.mesh.visible=on&&shine>0&&b.lamps.some(i=>!((mask|dead)&1<<i));
    tailBeamMaterial.uniforms.strength.value=shine*(braking?TAIL_GLOW_BEAM.braking:on?TAIL_GLOW_BEAM.running:0);for(const b of tailBeams)b.mesh.visible=(on||braking)&&shine>0&&b.lamps.some(i=>!(mask&1<<(i+16)));
    lit=on;brake=braking;broken=mask;level=strength;beamLevel=shine;
   },
@@ -205,6 +210,8 @@ export function attachCarLights(root:T.Object3D,halfLength:number,options:{fitRe
    headMats.forEach(m=>{m.emissive.lerp(warm,h*HAZE.tint);m.color.lerp(lens,h*HAZE.cloud);m.roughness=Math.max(m.roughness,HAZE.rough*h);});
    poolMaterial.color.lerp(warm,h*HAZE.tint);beamMaterial.uniforms.color.value.lerp(warm,h*HAZE.tint);level=-1;
   },
+  flick(off){if(!!off!==flickering){flickering=!!off;level=-1;}},
+  kill(index){if(Number.isInteger(index)&&index>=0&&index<heads.length){dead|=1<<index;level=-1;}},
   aim(yaw,reach){
    const y=Number.isFinite(yaw)?yaw:0,r=Math.max(.3,Math.min(1,Number.isFinite(reach)?reach:1)),d=halfLength+5.2*r;
    poolMesh.rotation.set(-Math.PI/2,0,y);poolMesh.scale.set(1,r,1);poolMesh.position.set(Math.sin(y)*(d-halfLength),poolY,halfLength+Math.cos(y)*(d-halfLength));

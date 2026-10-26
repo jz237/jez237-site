@@ -143,6 +143,7 @@ import {BUMP,bumpStrike} from './bump-stops';
 import {applyScars,bodyPoints,planScars} from './battle-scars';
 import {RUBBER,markColour} from './tyre-marks';
 import {TRAMP,trampHop,trampKind,trampLevel} from './axle-tramp';
+import {deadBulb,flickerOff,shakesWiring} from './tired-electrics';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -1087,6 +1088,9 @@ function createCars(attract = false, previewSetup?:Setup) {
     if(car.extendedDamage&&type!=='buggy'){const fit=fitRust(car.model,car.panels,car.wheels,vehicleWheelRadius(type));if(fit)car.surfaceFinish.placeRust(fit,i===0?0:startingRust(car.id));}
     // An old rival's headlamp lenses have gone cloudy and yellow: its lamps shine dimmer and warmer (offline).
     if(car.extendedDamage&&i!==0)carLights.get(car)?.yellow(startingRust(car.id));
+    // and its tired wiring: a dead headlamp bulb on some, and lamps that flicker when it is knocked hard (offline).
+    if(car.extendedDamage&&i!==0){const k=deadBulb(car.id,startingRust(car.id));if(k>=0&&carLights.get(car)?.lamp('head',k)){carLights.get(car)!.kill(k);deadBulbs.set(car,k);}
+      const knock=car.onHardKnock;car.onHardKnock=damage=>{knock?.(damage);if(shakesWiring(car.surfaceFinish.rustAge,damage)){wiringAt.set(car,clock);flickers++;}};}
     // Old rivals have been patched up with panels off scrapyard donors, in primer or another car's colour (offline).
     if(car.extendedDamage&&i!==0&&type!=='buggy'){const picked=pickDonors(car.wreckParts.assemblies.map(a=>a.name),car.id,startingRust(car.id),car.paintColor);if(fitDonors(car.wreckParts.assemblies,picked))donorPanels.set(car,picked.map(d=>d.name));}
     // and still wear the dents, scrapes and other cars' paint of their last meetings: the bodywork only (offline).
@@ -2015,6 +2019,8 @@ function step(dt: number) {
   {const dusk=eventLighting==='dusk',wet=eventLighting==='rain';for(const c of cars){const l=carLights.get(c);if((dusk||wet)&&l&&c.extendedDamage){const a=headlightAim(c.structuralDamage?.[0]??0,c.structuralDamage?.[2]??0,c.structuralDamage?.[3]??0);l.aim(a.yaw,a.reach);}}
   // In the rain drivers run their lamps too (offline), the pool on the road fainter against the daylight, the beams
   // showing in the rain.
+  // An old car's loose wiring flickers its lamps for a moment after a hard knock (offline).
+  for(const c of cars)carLights.get(c)?.flick(flickerOff(clock-(wiringAt.get(c)??-9),c.id));
   for(const c of cars)carLights.get(c)?.set((dusk||wet&&c.extendedDamage)&&c.health>0&&!c.electricalCut&&!c.batteryOut&&(!c.beltSnapped||batteryLights(c.battery,clock,c.id)),c.health>0&&!c.electricalCut&&!c.batteryOut&&(c.input?.brake??0)>.2&&Math.abs(c.speed)>1,dusk?1:RAIN_LIGHTS.pool,wet&&c.extendedDamage?RAIN_BEAMS.strength:dusk&&c.extendedDamage?DUST_BEAMS.strength*dustAir:0);}
   // In the rain the rear fog lamps come on too (offline).
   {const raining=eventLighting==='rain';for(const c of cars)carLights.get(c)?.fog(raining&&!!c.extendedDamage&&c.health>0&&!c.electricalCut&&!c.batteryOut);}
@@ -2374,7 +2380,7 @@ const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMa
 function bodyBox(c:Vehicle){let box=roostBoxes.get(c);if(box)return box;c.root.updateMatrixWorld(true);const inverse=c.root.matrixWorld.clone().invert(),b=new T.Box3(),all=new T.Box3();for(const p of c.panels)all.union(b.setFromObject(p).applyMatrix4(inverse));if(all.isEmpty())return null;
   box={centre:all.getCenter(new T.Vector3()),half:all.getSize(new T.Vector3()).multiplyScalar(.5)};roostBoxes.set(c,box);return box;}
 let bodyDusts=0;const dustOut=new T.Vector3();
-const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>(),oilBurners=new WeakMap<object,Burner>(),wheelBlurs=new Map<Vehicle,WheelBlur>(),bumpState=new WeakMap<object,{len:number[];ground:boolean[];at:number[];count:number}>(),battleScars=new WeakMap<object,{scars:number;panels:number}>(),trampState=new WeakMap<object,{phase:number;hops:number;lift:number}>(),trampAt=new T.Vector3(),trampB=new T.Vector3();let trampHops=0;let rustShowers=0,oilBurns=0,bumpStops=0,bumpTake=0;
+const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>(),oilBurners=new WeakMap<object,Burner>(),wheelBlurs=new Map<Vehicle,WheelBlur>(),bumpState=new WeakMap<object,{len:number[];ground:boolean[];at:number[];count:number}>(),battleScars=new WeakMap<object,{scars:number;panels:number}>(),trampState=new WeakMap<object,{phase:number;hops:number;lift:number}>(),trampAt=new T.Vector3(),trampB=new T.Vector3(),deadBulbs=new WeakMap<object,number>(),wiringAt=new WeakMap<object,number>();let trampHops=0,flickers=0;let rustShowers=0,oilBurns=0,bumpStops=0,bumpTake=0;
 const shiftGears=new WeakMap<object,number>(),shiftRevs=new WeakMap<object,number>();let shiftFlames=0,dustAir=0,knockDust=0;let shiftSmokes=0;const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3(),roostBoxes=new WeakMap<Vehicle,{centre:T.Vector3;half:T.Vector3}>(),roostBodies:RoostBody[]=[],pingClock=new Map<number,number>();let pingTake=0,stonePings=0;let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
 let wetReflections:ReturnType<typeof createWetReflections>|undefined;const glowList:Glow[]=[];
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
@@ -3159,6 +3165,7 @@ async function boot() {
     rollingCaps: () => ({ rolled: rollingCaps.rolled, moving: rollingCaps.moving, caps: rollingCaps.caps.map(c => ({ phase: c.phase, speed: +c.speed.toFixed(2), lean: +c.lean.toFixed(2), r: +c.radius.toFixed(3), at: c.p.toArray().map(v => +v.toFixed(2)) })) }),
     dustAir: () => +dustAir.toFixed(3),
     rust: (id = 0, age?: number) => { const c = cars.find(x => x.id === id); if (!c) return null; if (age !== undefined) c.surfaceFinish.rustAge = age; const r = c.surfaceFinish.rust.value, a = c.surfaceFinish.arches.value; const e = new T.Euler().setFromQuaternion(c.root.quaternion, 'YXZ'), head = carLights.get(c)?.lamp('head', 0)?.material as T.MeshStandardMaterial | undefined; return { lens: head ? [head.color.getHexString(), +head.emissiveIntensity.toFixed(2)] : null, showers: rustShowers, lean: [+T.MathUtils.radToDeg(e.x).toFixed(2), +T.MathUtils.radToDeg(e.z).toFixed(2)], sag: Array.from(c.sagBias, v => +v.toFixed(3)), dampers: Array.from(c.damperBias, v => +v.toFixed(3)), age: +r.x.toFixed(3), bottom: +r.y.toFixed(3), half: +r.z.toFixed(3), front: +a.x.toFixed(3), rear: +a.y.toFixed(3), hub: +a.z.toFixed(3), arches: [+r.w.toFixed(3), +a.w.toFixed(3)] }; },
+    electrics: (id = 0, kill?: number) => { const c = cars.find(x => x.id === id); if (c && kill !== undefined && carLights.get(c)?.lamp('head', kill)) { carLights.get(c)!.kill(kill); deadBulbs.set(c, kill); } return c ? { dead: deadBulbs.get(c) ?? -1, flickers, flickering: flickerOff(clock - (wiringAt.get(c) ?? -9), c.id) } : null; },
     tramp: (id?: number) => { if (id === undefined) return trampHops; const c = cars.find(x => x.id === id); return c ? trampState.get(c)?.hops ?? 0 : null; },
     trampLift: (id = 0) => { const c = cars.find(x => x.id === id); return c ? +(trampState.get(c)?.lift ?? 0).toFixed(4) : null; },
     tyreMarks: () => tyreMarks,
