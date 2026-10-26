@@ -1,3 +1,4 @@
+import {restoreBodyRainBytes} from './body-rain-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readSmokeHazePrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreSmokeHazeBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreBodyRainBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readSmokeHazePrevious(file);
 }
 export function verifySmokeHazeRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'211929780fd4f71de1ec1bbc56438f577d7a5038');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreBodyRainBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreSmokeHazeBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the SmokeHaze release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreBodyRainBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the SmokeHaze release');
  assert.equal(manifest.previousFixtureCount,8685);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,8685);
 }

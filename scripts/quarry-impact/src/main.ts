@@ -130,6 +130,7 @@ import {ExhaustFlames,shiftFlame} from './exhaust-flames';
 import {DUST_BEAMS,SMOKE_HAZE,dustAirStep,knockHaze} from './dust-beams';
 import {StrutPunch} from './strut-punch';
 import {SparkLight} from './spark-light';
+import {BODY_RAIN,BodyRain,topSpots,type RainCar} from './body-rain';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -748,6 +749,9 @@ const gravelRoost = new GravelRoost(scene, (x, z) => fx.groundHeight(x, z));
 const exhaustFlames = new ExhaustFlames(scene);
 // Showers of sparks light up the floor and the cars round them (offline).
 const sparkLight = new SparkLight(scene);
+// Raindrops splash on the cars' roofs, bonnets and boot lids near the camera (offline rain).
+const bodyRain = new BodyRain(scene);
+const rainCars = new WeakMap<Vehicle, RainCar>(), rainNear: RainCar[] = [];
 const rollingCaps = new RollingCaps(scene, (x, z, near) => fx.floorAt(x, z, near), (at, loud) => sound.clip(`rattle-${Math.floor(Math.random() * 4)}`, at, .25 + .45 * loud, .26));
 // Bright lamps, fire and lightning glow (offline, not on the medium tier).
 const lampBloom = new UnrealBloomPass(new T.Vector2(innerWidth, innerHeight), BLOOM.strength, BLOOM.radius, BLOOM.threshold);
@@ -983,7 +987,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   drivers.difficulty=attract?'amateur':aiDifficulty();pursuit=null;pursuitDriving.reset();combat.reset(true);derbyFeed.reset();waypointRace=!attract&&mode==='race'&&raceFormat()!=='laps'?new WaypointRace(raceFormat() as 'ordered'|'free'|'random',raceLaps(),clubRound()?.seed??activeChallenge?.seed??Math.floor(Math.random()*0xffffffff),targetVenue.course.checkpoints,targetVenue.course.waypointStations):null;
   sound.clearCars();
   vehicleFire?.reset();propFires.reset();
-  puddleSplashes?.reset();gravelRoost.reset();rollingCaps.reset();exhaustFlames.reset();sparkLight.reset();
+  puddleSplashes?.reset();gravelRoost.reset();rollingCaps.reset();exhaustFlames.reset();sparkLight.reset();bodyRain.reset();
   for (const c of cars){lampDangles.get(c)?.dispose();lampDangles.delete(c);towStraps.get(c)?.dispose();towStraps.delete(c);airbags.get(c)?.dispose();airbags.delete(c);strutPunches.get(c)?.dispose();strutPunches.delete(c);carLights.get(c)?.dispose();carLights.delete(c);c.dispose();}
   clearMarshals();
   for(const f of bailed)disposeDriver(f);bailed.length=0;
@@ -2604,6 +2608,11 @@ function frame(now: number) {
   rain?.update(camera,state==='paused'?0:dt);
   // Raindrops landing round the camera (offline rain).
   rainSplashes?.update(camera,activeVenue.course.height,state==='paused'?0:dt);
+  // Drops splashing on the tops of the offline cars within reach of the camera (their flat tops found once each).
+  rainNear.length=0;if(eventLighting==='rain'&&!online?.active)for(const c of cars){if(!c.extendedDamage||c.root.position.distanceToSquared(camera.position)>BODY_RAIN.reach**2)continue;
+    let rc=rainCars.get(c);if(!rc){const box=bodyBox(c);if(!box)continue;const spots=topSpots(c.root,[...c.panels,...c.glass],box.centre,box.half);rc={id:c.id,root:c.root,spots,spread:{x:box.half.x*1.8/BODY_RAIN.grid[0],z:box.half.z*1.84/BODY_RAIN.grid[1]}};rainCars.set(c,rc);}
+    if(c.root.visible)rainNear.push(rc);}
+  bodyRain.update(rainNear,shower,state==='paused'||state==='inspect'?0:dt);
   {const wet=eventLighting==='rain';if(wet!==wetOn||activeVenue.root!==wetRoot){applyWetLook(wetRoot,false);wetRoot=activeVenue.root;wetOn=wet;applyWetLook(wetRoot,wet);}}
   // The rain sounds for as long as the event's weather says so (applyEventLighting runs while still in the menu, when it
   // could only switch the rain off).
@@ -3088,6 +3097,7 @@ async function boot() {
     airbags: (id = 0) => { const c = cars.find(x => x.id === id), b = c && airbags.get(c); return b ? { fitted: b.bags.length, deployed: b.deployed, age: +b.age.toFixed(2), scale: b.bags.map(x => +x.mesh.scale.y.toFixed(3)), at: b.bags.map(x => x.at.toArray().map(v => +v.toFixed(2))), front: +(c!.structuralDamage?.[0] ?? 0).toFixed(3), fired: airbagsFired } : null; },
     rollingCaps: () => ({ rolled: rollingCaps.rolled, moving: rollingCaps.moving, caps: rollingCaps.caps.map(c => ({ phase: c.phase, speed: +c.speed.toFixed(2), lean: +c.lean.toFixed(2), r: +c.radius.toFixed(3), at: c.p.toArray().map(v => +v.toFixed(2)) })) }),
     dustAir: () => +dustAir.toFixed(3),
+    bodyRain: () => ({ splashing: bodyRain.splashing, landed: bodyRain.landed, cars: rainNear.map(r => ({ id: r.id, spots: r.spots.length })) }),
     sparkLight: () => ({ flashes: sparkLight.flashes, intensity: +sparkLight.light.intensity.toFixed(2) }),
     struts: (id = 0) => { const c = cars.find(x => x.id === id), s = c && strutPunches.get(c); return s ? { punched: s.punched, struts: s.struts.map(x => !!x), wheels: Array.from(c!.wreckParts.wheelDamage).slice(0, 2).map(v => +v.toFixed(2)), front: +(c!.structuralDamage?.[0] ?? 0).toFixed(2) } : null; },
     exhaustFlames: () => ({ flashes: exhaustFlames.flashes, burning: exhaustFlames.burning, shift: shiftFlames }),
