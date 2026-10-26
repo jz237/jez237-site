@@ -61,13 +61,20 @@ export class VarietyMenu {
     }
     menu.append(list);
     controls.append(menu);
-    // (Put away by a press anywhere else, or Escape.)
+    // (Put away by a press anywhere else, or Escape: that Escape only, not Follow's nor Learn's card's
+    // too, so a fish being followed stays followed as its varieties are tried.)
     document.addEventListener('pointerdown', (e) => {
       if (!menu.hidden && !menu.contains(e.target as Node) && !button.contains(e.target as Node)) this.close(false);
     });
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !menu.hidden) this.close(true);
-    });
+    window.addEventListener(
+      'keydown',
+      (e) => {
+        if (e.key !== 'Escape' || menu.hidden) return;
+        e.stopPropagation();
+        this.close(true);
+      },
+      true,
+    );
     this.label();
   }
 

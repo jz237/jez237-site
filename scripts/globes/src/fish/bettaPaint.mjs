@@ -97,29 +97,33 @@ function at(grid, n, u, v) {
 }
 
 /** A grid blurred where `weight` says it has something (normalised: what has nothing round it lends
- *  none), by three box passes of `r` cells each way (about a Gaussian). */
+ *  none), by three box passes of `r` cells each way (about a Gaussian), each a running sum. */
 function blurWhere(values, weight, w, h, r) {
-  let a = values.map((x, k) => x * weight[k]), b = Float32Array.from(weight);
+  const a = new Float32Array(values.length), b = Float32Array.from(weight);
+  for (let k = 0; k < a.length; k++) a[k] = values[k] * weight[k];
+  const line = new Float32Array(Math.max(w, h));
   const pass = (src, horizontal) => {
-    const dst = new Float32Array(src.length);
-    const n = horizontal ? w : h, lines = horizontal ? h : w;
+    const n = horizontal ? w : h, lines = horizontal ? h : w, step = horizontal ? 1 : w;
     for (let l = 0; l < lines; l++) {
+      const first = horizontal ? l * w : l;
+      for (let i = 0; i < n; i++) line[i] = src[first + i * step];
+      // (The window's sum, its ends held at the edge's value.)
+      let sum = 0;
+      for (let d = -r; d <= r; d++) sum += line[Math.min(Math.max(d, 0), n - 1)];
       for (let i = 0; i < n; i++) {
-        let sum = 0;
-        for (let d = -r; d <= r; d++) {
-          const c = Math.min(Math.max(i + d, 0), n - 1);
-          sum += src[horizontal ? l * w + c : c * w + l];
-        }
-        dst[horizontal ? l * w + i : i * w + l] = sum / (2 * r + 1);
+        src[first + i * step] = sum / (2 * r + 1);
+        sum += line[Math.min(i + r + 1, n - 1)] - line[Math.max(i - r, 0)];
       }
     }
-    return dst;
   };
   for (let p = 0; p < 3; p++) {
-    a = pass(pass(a, true), false);
-    b = pass(pass(b, true), false);
+    for (const g of [a, b]) {
+      pass(g, true);
+      pass(g, false);
+    }
   }
-  return a.map((x, k) => (b[k] > 1e-4 ? x / b[k] : 0));
+  for (let k = 0; k < a.length; k++) a[k] = b[k] > 1e-4 ? a[k] / b[k] : 0;
+  return a;
 }
 
 /** The photographs' brightness, measured once as they load: each map's division (comp, 0..1: what a
@@ -130,13 +134,20 @@ function blurWhere(values, weight, w, h, r) {
  *  scales (MACRO square), caudal (CAUDAL's). cells: profileCells(). */
 export function measure(luminance, cells) {
   const { w, h, width, height } = PROFILE;
+  const n = w * h, nc = CAUDAL.w * CAUDAL.h;
   // The body's luminance as betta_shade composes it: the head macro over the head, the scale macro
-  // tiled along the flank (every 400 px), over the profile photograph.
+  // tiled along the flank (every 400 px), over the profile photograph. Off the body, only where there
+  // is fin (the photographs' backgrounds are near black), the fins' own.
   const shown = Float32Array.from(luminance.profile);
+  const onBody = new Float32Array(n), onFin = new Float32Array(n), caudalFin = new Float32Array(nc);
+  const fin = (l) => smooth(0.006, 0.016, l);
   for (let j = 0; j < h; j++) {
     for (let i = 0; i < w; i++) {
       const k = j * w + i;
-      if (cells.kind[k] !== 0) continue;
+      if (cells.kind[k] !== 0) {
+        onFin[k] = fin(shown[k]);
+        continue;
+      }
       const x = ((i + 0.5) * width) / w, y = ((j + 0.5) * height) / h;
       const hx = (x - 145) / 290 + 0.017, hy = (y - 300) / 250 + 0.034;
       const hm = smooth(0, 0.13, hx) * smooth(0, 0.13, 1 - hy) * (1 - smooth(0.87, 1, hx)) * (1 - smooth(0.87, 1, 1 - hy));
@@ -144,50 +155,60 @@ export function measure(luminance, cells) {
       const sx = (x - 430) / 400;
       l += (at(luminance.scales, MACRO, sx - Math.floor(sx), (y - 278) / 250) - l) * smooth(400, 465, x) * 0.98;
       shown[k] = l;
+      onBody[k] = 1;
     }
   }
-  // (Off the body, only where there is fin: the photographs' backgrounds are near black.)
-  const fin = (l) => smooth(0.006, 0.016, l);
-  const onBody = Float32Array.from(cells.kind, (kd) => (kd === 0 ? 1 : 0));
-  const onFin = Float32Array.from(shown, (l, k) => (cells.kind[k] === 0 ? 0 : fin(l)));
-  const caudalFin = Float32Array.from(luminance.caudal, fin);
-  const mean = (lum, weight) => {
-    let s = 0, n = 0;
-    for (let k = 0; k < lum.length; k++) {
-      s += lum[k] * weight[k];
-      n += weight[k];
-    }
-    return s / n;
-  };
-  const body = mean(shown, onBody);
-  const fins = (mean(shown, onFin) * onFin.reduce((a, b) => a + b) + mean(luminance.caudal, caudalFin) * caudalFin.reduce((a, b) => a + b)) / (onFin.reduce((a, b) => a + b) + caudalFin.reduce((a, b) => a + b));
+  for (let k = 0; k < nc; k++) caudalFin[k] = fin(luminance.caudal[k]);
+  // Their means: the body's, and the fins' (the caudal's and the others' together).
+  let bodySum = 0, bodyN = 0, finSum = 0, finN = 0;
+  for (let k = 0; k < n; k++) {
+    bodySum += shown[k] * onBody[k];
+    bodyN += onBody[k];
+    finSum += shown[k] * onFin[k];
+    finN += onFin[k];
+  }
+  for (let k = 0; k < nc; k++) {
+    finSum += luminance.caudal[k] * caudalFin[k];
+    finN += caudalFin[k];
+  }
+  const body = bodySum / bodyN, fins = finSum / finN;
+  // Each cell's division: its region's mean over the brightness round it, to FLATTEN's power, over the
+  // mean; then all of them over the largest (the gain).
   const bodyNear = blurWhere(shown, onBody, w, h, 3);
   const finNear = blurWhere(shown, onFin, w, h, 3);
   const caudalNear = blurWhere(luminance.caudal, caudalFin, CAUDAL.w, CAUDAL.h, 3);
   const division = (mean, near, flatten) => Math.min(Math.max(mean / Math.max(near, 1e-4), 1 / RANGE), RANGE) ** flatten / mean;
-  const profile = Float32Array.from(shown, (_, k) => (cells.kind[k] === 0 ? division(body, bodyNear[k], FLATTEN.body) : division(fins, finNear[k] || fins, FLATTEN.fins)));
-  const caudal = Float32Array.from(caudalNear, (near) => division(fins, near || fins, FLATTEN.fins));
+  const profile = new Float32Array(n), caudal = new Float32Array(nc);
   let gain = 0;
-  for (const c of [profile, caudal]) for (const x of c) gain = Math.max(gain, x);
-  for (const c of [profile, caudal]) for (let k = 0; k < c.length; k++) c[k] /= gain;
+  for (let k = 0; k < n; k++) {
+    profile[k] = onBody[k] ? division(body, bodyNear[k], FLATTEN.body) : division(fins, finNear[k] || fins, FLATTEN.fins);
+    gain = Math.max(gain, profile[k]);
+  }
+  for (let k = 0; k < nc; k++) {
+    caudal[k] = division(fins, caudalNear[k] || fins, FLATTEN.fins);
+    gain = Math.max(gain, caudal[k]);
+  }
+  for (let k = 0; k < n; k++) profile[k] /= gain;
+  for (let k = 0; k < nc; k++) caudal[k] /= gain;
   // (Where there is fish, a couple of cells wide of it.)
-  const fish = {
-    profile: near(Uint8Array.from(onFin, (f, k) => (f > 0.05 || onBody[k] > 0 ? 1 : 0)), w, h),
-    caudal: near(Uint8Array.from(caudalFin, (f) => (f > 0.05 ? 1 : 0)), CAUDAL.w, CAUDAL.h),
-  };
+  const fish = { profile: new Uint8Array(n), caudal: new Uint8Array(nc) };
+  for (let k = 0; k < n; k++) fish.profile[k] = onBody[k] || onFin[k] > 0.05 ? 1 : 0;
+  for (let k = 0; k < nc; k++) fish.caudal[k] = caudalFin[k] > 0.05 ? 1 : 0;
+  grow(fish.profile, w, h);
+  grow(fish.caudal, CAUDAL.w, CAUDAL.h);
   return { profile, caudal, gain, body, fins, fish };
 }
 
-/** A mask grown by two cells each way. */
-function near(mask, w, h) {
-  const grown = new Uint8Array(mask.length);
-  for (let j = 0; j < h; j++) {
-    for (let i = 0; i < w; i++) {
-      if (!mask[j * w + i]) continue;
-      for (let y = Math.max(j - 2, 0); y <= Math.min(j + 2, h - 1); y++) for (let x = Math.max(i - 2, 0); x <= Math.min(i + 2, w - 1); x++) grown[y * w + x] = 1;
+/** A mask grown by two cells each way, in place (along its rows, then its columns). */
+function grow(mask, w, h) {
+  const line = new Uint8Array(Math.max(w, h));
+  for (const [n, lines, step, across] of [[w, h, 1, w], [h, w, w, 1]]) {
+    for (let l = 0; l < lines; l++) {
+      const first = l * across;
+      for (let i = 0; i < n; i++) line[i] = mask[first + i * step];
+      for (let i = 0; i < n; i++) mask[first + i * step] = line[Math.max(i - 2, 0)] | line[Math.max(i - 1, 0)] | line[i] | line[Math.min(i + 1, n - 1)] | line[Math.min(i + 2, n - 1)];
     }
   }
-  return grown;
 }
 
 /** A lattice point's value (0..1), by hash. */

@@ -431,14 +431,19 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // (What the bowl's water shows of its state, and the fish's colours in it.)
   const look = bowl ? new WaterLook(globe, sim, water.fx) : null;
   // (The fish's variety, as it is shown: its numbers in the bowl's shader; its colour maps, once
-  // painted, copied into its atlas's bottom row on the GPU, the rest of it as it was. Its photographs
-  // may already be in, the variety with them.)
-  betta.onLook = (copy) => {
+  // painted, copied into its atlas's bottom row on the GPU, the rest of it as it was, and let go there
+  // (8 MB) until the next. Its photographs may already be in, and the variety painted.)
+  betta.lookHost((copy) => {
     globe.setBettaLook(betta.look);
-    if (copy) renderer.copyTextureToTexture(betta.maps, betta.atlas, null, new THREE.Vector2(0, MAPS_AT));
+    if (!copy) return;
+    renderer.copyTextureToTexture(betta.maps, betta.atlas, null, new THREE.Vector2(0, MAPS_AT));
+    betta.maps.dispose();
+  });
+  // (With Learn mode on, a word on the variety chosen.)
+  variety.onChange = (id) => {
+    betta.showVariety(id);
+    learn?.aboutFish();
   };
-  globe.setBettaLook(betta.look);
-  variety.onChange = (id) => betta.showVariety(id);
   // A phone's quality level's knobs (app/quality/ladder.mjs), each set by its name; none builds a
   // pipeline. (Its fps is run()'s.)
   const knobs: Record<string, (v: number) => void> = {

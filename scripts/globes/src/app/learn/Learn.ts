@@ -203,6 +203,11 @@ export class Learn {
     if (this.on) this.show(NIGHT, true);
   }
 
+  /** With it on, the fish's card (its variety's), as a variety is chosen. */
+  aboutFish(): void {
+    if (this.on) this.show(FISH[this.host.variety()] ?? TOPICS.fish, true);
+  }
+
   /** A tap (a press let go where it began) at client px: with Learn mode on, a card about what it
    *  is on (or, off the bowl, the card put away), and true; off, false (the tap is the page's). */
   tap(clientX: number, clientY: number): boolean {
@@ -215,7 +220,8 @@ export class Learn {
     }
     const topic = this.pick(clientX, clientY);
     // (The fish's card is its variety's.)
-    if (topic) this.show(topic === 'fish' ? (FISH[this.host.variety()] ?? TOPICS.fish) : TOPICS[topic], true);
+    if (topic === 'fish') this.aboutFish();
+    else if (topic) this.show(TOPICS[topic], true);
     else this.hide();
     return true;
   }
