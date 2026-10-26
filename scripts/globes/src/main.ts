@@ -10,6 +10,7 @@ import { bowlArea, GpuClock, PoseWatch, QualityRecord } from './app/quality/page
 import { Bench, describeDevice, registerBenchRows } from './app/bench';
 import { describe, describeLoad, FrameProfile, wrap } from './app/frameProfile';
 import { Learn } from './app/learn/Learn';
+import { ResolutionMenu } from './app/ResolutionMenu';
 import { CLEAR_WATER, forcedWaterEffects } from './water/effects';
 import { WaterCare } from './water/WaterCare';
 import { WaterLook } from './water/look';
@@ -214,13 +215,15 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // first frame: setKnobs.)
   let ratioOverride: number | null = null;
   let knobRatio: number | null = null;
+  // (The betta bowl's page: a ratio chosen there, held however slowly frames come: run().)
+  let fixedRatio: number | null = null;
   // (Only what changed is set: the canvas is cleared and made anew whenever it is given a size,
   // the same or not.)
   let fitted = [0, 0];
   const fit = (): void => {
     const [w, h] = stageSize();
     const most = device.limits.maxTextureDimension2D;
-    renderer.setPixelRatio(Math.min(ratioOverride ?? knobRatio ?? ratioAt(screenRatio(), sharpness, TIER), most / w, most / h));
+    renderer.setPixelRatio(Math.min(ratioOverride ?? fixedRatio ?? knobRatio ?? ratioAt(screenRatio(), sharpness, TIER), most / w, most / h));
     // (A phone's table mirror stays as sharp as at its lowest ratio, 0.3 texels to a CSS pixel,
     // however sharp the picture: faint and blurred as it is, it traces the bowl again.)
     studio?.setMirrorScale(LITE ? Math.min(0.5, 0.3 / renderer.getPixelRatio()) : 0.5);
@@ -240,6 +243,10 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   };
   const setRatio = (ratio: number | null): void => {
     ratioOverride = ratio;
+    fit();
+  };
+  const setFixedRatio = (ratio: number | null): void => {
+    fixedRatio = ratio;
     fit();
   };
 
@@ -659,14 +666,14 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     return true;
   };
 
-  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, life, learn, water, waterCare, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, studio, specks, bowlRender, setScene, advance, spawnFood, clickLid, setSharpness, setRatio, setKnobs, record };
+  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, life, learn, water, waterCare, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, studio, specks, bowlRender, setScene, advance, spawnFood, clickLid, setSharpness, setRatio, setFixedRatio, setKnobs, record };
 }
 
 type World = Awaited<ReturnType<typeof createWorld>>;
 
 /** Runs the world every frame. beforeRender: after the world moves, before it is drawn. */
 function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () => void; firstFrame?: () => void }): void {
-  const { renderer, camera, scene, sim, controller, globe, ocean, studio, specks, bowlRender, advance, setSharpness, setRatio, setKnobs, record, lid, cfg } = world;
+  const { renderer, camera, scene, sim, controller, globe, ocean, studio, specks, bowlRender, advance, setSharpness, setRatio, setFixedRatio, setKnobs, record, lid, cfg } = world;
   // ?adapt=0 keeps the picture at the sharpness it starts at, however slowly it draws (profiling;
   // ?bench too). Desktops step by the frames' pace (app/adaptiveScale.mjs); so do phones with
   // ?quality=0, their own way (PHONE), down to the first level at the floor, from where frames last
@@ -717,6 +724,30 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) keep();
     });
+  }
+  // The betta bowl's resolution (app/ResolutionMenu.ts, in the page's link bar): Auto, all of the
+  // above, or a ratio held however slowly frames come, a phone's other knobs at their sharpest and
+  // nothing stepped. Auto again, the controller or the scaler starts over from where it stood.
+  // (?bench's own ratios win while it runs.)
+  const links = BETTA_PAGE ? document.querySelector<HTMLElement>('.site-links') : null;
+  const resolution = links ? new ResolutionMenu(links, { screen: () => window.devicePixelRatio, stage: () => [stage.clientWidth, stage.clientHeight], ratioNow: () => renderer.getPixelRatio(), most: world.device.limits.maxTextureDimension2D }) : null;
+  let fixed: number | null = null;
+  const hold = (ratio: number | null): void => {
+    fixed = ratio;
+    setFixedRatio(ratio);
+    const now = performance.now();
+    if (ratio !== null) {
+      if (levels) applyKnobs(levels[0]);
+    } else if (quality) {
+      applyKnobs(quality.restart(now, null, { area: areaNow(), restArea: areaAtRest() }));
+    } else if (adaptive) {
+      adaptive.restart(now);
+      setSharpness(adaptive.level);
+    }
+  };
+  if (resolution) {
+    resolution.onChange = hold;
+    if (resolution.ratio !== null) hold(resolution.ratio);
   }
   let held: number | null = null;
   if (scale) {
@@ -774,9 +805,9 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     const start = performance.now();
 
     PROF.begin();
-    const level = adaptive?.frame(now) ?? null;
+    const level = fixed === null ? (adaptive?.frame(now) ?? null) : null;
     if (level !== null) setSharpness(level);
-    if (scale && scale.held !== null && scale.held !== held) {
+    if (fixed === null && scale && scale.held !== null && scale.held !== held) {
       held = scale.held;
       keepLevel(wayUp(), held);
     }
@@ -799,8 +830,16 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     PROF.lap('draw');
     PROF.end(world.device.queue);
     const work = performance.now() - start;
-    scale?.work(work);
-    if (quality && clock && levels) {
+    if (fixed === null) scale?.work(work);
+    if (quality && clock && levels && fixed !== null) {
+      // (Held: the GPU's times let go as they come, nothing stepped; a turn of the phone is the
+      // new way up.)
+      clock.frame(start);
+      clock.take();
+      clock.takeQueue();
+      way = wayUp();
+      turned = 0;
+    } else if (quality && clock && levels) {
       clock.frame(start);
       // (Turned: measured afresh, two frames on, once the picture has the new shape, from the level
       // kept for that way, or where the model puts it.)
@@ -861,7 +900,7 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
           const m = PROF.minute();
           hud.textContent = [
             describe(s, renderer.getPixelRatio(), [...(LITE ? ['phone tier'] : []), `${sim.lastSubsteps} substeps`, `${sim.particleCount} particles`]),
-            ...(quality ? quality.describe(now) : []),
+            ...(fixed !== null ? [`resolution held at ${fixed}× (Auto off)`] : quality ? quality.describe(now) : []),
             `gpu, last minute: sim ${m.sim?.toFixed(1) ?? '-'} · draw ${m.draw?.toFixed(1) ?? '-'} ms`,
             ...device,
             ...(bowlRender ? [bowlRender.describe()] : []),
@@ -880,7 +919,7 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     const tick = (dt: number) => advance(dt);
     const g = window as unknown as { __globes?: object };
     // (three.js itself only in development: held here, none of it could be left out of a build.)
-    g.__globes = { ...g.__globes, ...(import.meta.env.DEV ? { THREE } : {}), ...world, tick, renderTimes, adaptive, quality, prof: PROF, bench, pipelines: pipelineSnapshot };
+    g.__globes = { ...g.__globes, ...(import.meta.env.DEV ? { THREE } : {}), ...world, tick, renderTimes, adaptive, quality, resolution, prof: PROF, bench, pipelines: pipelineSnapshot };
   }
 }
 
