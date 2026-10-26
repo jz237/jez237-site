@@ -160,6 +160,7 @@ import {slowPuncture} from './leaky-tyre';
 import {hasWebGL2,showWebGL2Notice} from './webgl2-notice';
 import {bumperCorner,fitTape,tapeFor} from './duct-tape';
 import {letterTyres,letteringFor} from './tyre-lettering';
+import {fitOddWheels,oddWheelsFor} from './odd-wheels';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -1104,6 +1105,8 @@ function createCars(attract = false, previewSetup?:Setup) {
     if(car.extendedDamage){const dust={value:startingBrakeDust(car.id)};if(dirtyRims(car.wheels,dust))rimDust.set(car,dust);}
     // Classic cars on plain rims get chrome hubcaps, to be knocked off and roll away (offline).
     if(car.extendedDamage)fitHubcaps(car.root,car.wheels);
+    // An old banger's wheels don't match: a hubcap or two already gone, or a black spare on one corner (offline rivals).
+    if(car.extendedDamage&&i!==0){const plan=oddWheelsFor(car.id,startingRust(car.id)),fit=fitOddWheels(car.wheels,plan);if(fit.caps||fit.painted)oddWheels.set(car,{...plan,...fit});}
     // At speed each spoked wheel smears into a soft disc (offline).
     if(car.extendedDamage)wheelBlurs.set(car,new WheelBlur(car.wheels,vehicleWheelRadius(type)));
     // Driving through its own dust plume coats the tail in dust; the rain rinses it off (offline).
@@ -2437,7 +2440,7 @@ const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMa
 function bodyBox(c:Vehicle){let box=roostBoxes.get(c);if(box)return box;c.root.updateMatrixWorld(true);const inverse=c.root.matrixWorld.clone().invert(),b=new T.Box3(),all=new T.Box3();for(const p of c.panels)all.union(b.setFromObject(p).applyMatrix4(inverse));if(all.isEmpty())return null;
   box={centre:all.getCenter(new T.Vector3()),half:all.getSize(new T.Vector3()).multiplyScalar(.5)};roostBoxes.set(c,box);return box;}
 let bodyDusts=0;const dustOut=new T.Vector3();
-const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>(),oilBurners=new WeakMap<object,Burner>(),wheelBlurs=new Map<Vehicle,WheelBlur>(),bumpState=new WeakMap<object,{len:number[];ground:boolean[];at:number[];count:number}>(),battleScars=new WeakMap<object,{scars:number;panels:number}>(),trampState=new WeakMap<object,{phase:number;hops:number;lift:number}>(),trampAt=new T.Vector3(),trampB=new T.Vector3(),cvClocks=new WeakMap<object,{clock:number[];count:number}>(),lodged=new Map<Vehicle,T.Mesh[]>(),dashGlows=new Map<Vehicle,DashGlow>(),soots=new WeakMap<object,{value:number}>(),dustyScreens=new WeakMap<object,{film:number;fans:number;own:boolean}>(),doorChains=new WeakMap<object,{door:string;mesh:T.Mesh}[]>(),deadBrakes=new WeakMap<object,number>(),slowLeaks=new WeakMap<object,number>(),taped=new WeakMap<object,{end:number;corners:number[][];panels:number}>(),letteredTyres=new WeakMap<object,number>(),sootPuffs=new WeakMap<object,number>(),deadBulbs=new WeakMap<object,number>(),wiringAt=new WeakMap<object,number>(),danglers=new Map<Vehicle,Danglers>(),sunstrips=new WeakMap<object,string>(),washed=new WeakMap<object,string>(),plates=new WeakMap<object,string>();let trampHops=0,flickers=0,cvClicked=0,cvTake=0,lodgedPieces=0,looseDebris=0,drafting=0,draftToast=-99;let rustShowers=0,oilBurns=0,bumpStops=0,bumpTake=0;
+const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>(),oilBurners=new WeakMap<object,Burner>(),wheelBlurs=new Map<Vehicle,WheelBlur>(),bumpState=new WeakMap<object,{len:number[];ground:boolean[];at:number[];count:number}>(),battleScars=new WeakMap<object,{scars:number;panels:number}>(),trampState=new WeakMap<object,{phase:number;hops:number;lift:number}>(),trampAt=new T.Vector3(),trampB=new T.Vector3(),cvClocks=new WeakMap<object,{clock:number[];count:number}>(),lodged=new Map<Vehicle,T.Mesh[]>(),dashGlows=new Map<Vehicle,DashGlow>(),soots=new WeakMap<object,{value:number}>(),dustyScreens=new WeakMap<object,{film:number;fans:number;own:boolean}>(),doorChains=new WeakMap<object,{door:string;mesh:T.Mesh}[]>(),deadBrakes=new WeakMap<object,number>(),slowLeaks=new WeakMap<object,number>(),taped=new WeakMap<object,{end:number;corners:number[][];panels:number}>(),letteredTyres=new WeakMap<object,number>(),oddWheels=new WeakMap<object,{missing:number[];spare:number;caps:number;painted:number}>(),sootPuffs=new WeakMap<object,number>(),deadBulbs=new WeakMap<object,number>(),wiringAt=new WeakMap<object,number>(),danglers=new Map<Vehicle,Danglers>(),sunstrips=new WeakMap<object,string>(),washed=new WeakMap<object,string>(),plates=new WeakMap<object,string>();let trampHops=0,flickers=0,cvClicked=0,cvTake=0,lodgedPieces=0,looseDebris=0,drafting=0,draftToast=-99;let rustShowers=0,oilBurns=0,bumpStops=0,bumpTake=0;
 // Door chains snapped (offline QA counter).
 let chainsSnapped=0;
 const shiftGears=new WeakMap<object,number>(),shiftRevs=new WeakMap<object,number>();let shiftFlames=0,dustAir=0,knockDust=0;let shiftSmokes=0;const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3(),roostBoxes=new WeakMap<Vehicle,{centre:T.Vector3;half:T.Vector3}>(),roostBodies:RoostBody[]=[],pingClock=new Map<number,number>();let pingTake=0,stonePings=0;let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
@@ -3248,6 +3251,7 @@ async function boot() {
     sunstrip: (id = 0) => { const c = cars.find(x => x.id === id); return c ? sunstrips.get(c) ?? null : null; },
     dangler: (id = 0) => { const c = cars.find(x => x.id === id), d = c && danglers.get(c); return d ? { kind: d.kind, pitch: +d.state.pitch.toFixed(3), roll: +d.state.roll.toFixed(3), at: d.group.position.toArray().map(v => +v.toFixed(3)) } : null; },
     electrics: (id = 0, kill?: number) => { const c = cars.find(x => x.id === id); if (c && kill !== undefined && carLights.get(c)?.lamp('head', kill)) { carLights.get(c)!.kill(kill); deadBulbs.set(c, kill); } return c ? { dead: deadBulbs.get(c) ?? -1, flickers, flickering: flickerOff(clock - (wiringAt.get(c) ?? -9), c.id) } : null; },
+    oddWheels: (id = 0) => { const c = cars.find(x => x.id === id); return c ? oddWheels.get(c) ?? null : null; },
     tyreLetters: (id = 0) => { const c = cars.find(x => x.id === id); return c ? { ...letteringFor(c.id, c.kind), tyres: letteredTyres.get(c) ?? 0 } : null; },
     tape: (id = 0) => { const c = cars.find(x => x.id === id); return c ? taped.get(c) ?? null : null; },
     slowLeak: (id = 0) => { const c = cars.find(x => x.id === id), w = c && slowLeaks.get(c); return c && w !== undefined ? { wheel: w, tyre: +(c.tyreDamage?.[w] ?? 0).toFixed(3) } : null; },
