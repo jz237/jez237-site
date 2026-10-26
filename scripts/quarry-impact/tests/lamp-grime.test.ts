@@ -17,5 +17,5 @@ test('grime dims a lamp: by the dust film and the dirt on it, within a limit',()
   assert.ok(LAMP_GRIME.dust>0&&LAMP_GRIME.dirt>0&&LAMP_GRIME.most<1,'dimmer, never dark');
   const surface=readFileSync(new URL('../src/vehicle-surface.ts',import.meta.url),'utf8');
   assert.ok(surface.includes("totalEmissiveRadiance*=1.-clamp(wakeDust*${LAMP_GRIME.dust}+carDirt*${LAMP_GRIME.dirt},0.,${LAMP_GRIME.most});"),'through the emissive');
-  assert.ok(surface.includes("'-persistent-wet-silt-wake-v4-'"),'programs rebuilt');
+  assert.ok(surface.includes("'-persistent-wet-silt-wake-v5-'"),'programs rebuilt');
 });

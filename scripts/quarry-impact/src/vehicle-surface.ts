@@ -2,6 +2,7 @@ import * as T from 'three';
 import {finishVehiclePresentation} from './vehicle-presentation';
 import {LAMP_GRIME,WAKE} from './wake-dust';
 import {TOP_DUST} from './settled-dust';
+import {RUST,rusts,type RustFit} from './age-rust';
 
 /** Persistent deposition state. Four tires retain water after leaving a puddle. */
 export class VehicleSurface {
@@ -10,6 +11,10 @@ export class VehicleSurface {
   /** Wake dust on the tail (offline): x the back of the bodywork along the car (model frame), y how far forward it reaches
    * (0 until placed), z how dusty. */
   readonly wake={value:new T.Vector4(0,0,0,0)};
+  /** Age rust (offline, RUST): x how far gone (0 none), y the foot of the flanks, z the half width, w the front arch's edge
+   * (radius); arches x/y the front and rear axle along the car, z the hub height, w the rear arch's edge (model frame). */
+  readonly rust={value:new T.Vector4(0,0,0,0)};
+  readonly arches={value:new T.Vector4(0,0,0,0)};
   readonly phase:{value:number};
   distance=0;
   constructor(root:T.Group,id:number){
@@ -26,16 +31,32 @@ export class VehicleSurface {
       if(m.name.includes('hoses')){m.metalness=0;m.roughness=.87;}
       const base=m.onBeforeCompile,key=m.customProgramCacheKey();
       m.onBeforeCompile=(s,renderer)=>{
-        base.call(m,s,renderer);s.uniforms.carCoating=this.coating;s.uniforms.carSurfacePhase=this.phase;s.uniforms.carWake=this.wake;s.uniforms.carTopDust=TOP_DUST;
+        base.call(m,s,renderer);s.uniforms.carCoating=this.coating;s.uniforms.carSurfacePhase=this.phase;s.uniforms.carWake=this.wake;s.uniforms.carTopDust=TOP_DUST;s.uniforms.carRust=this.rust;s.uniforms.carArches=this.arches;
         s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nattribute vec4 transferPaint;varying vec4 vTransferredPaint;varying vec3 vCoatingRest;'+(s.vertexShader.includes('attribute vec3 wreckPosition;')?'':'\nattribute vec3 wreckPosition;'))
           .replace('#include <begin_vertex>','#include <begin_vertex>\nvCoatingRest=wreckPosition;vTransferredPaint=transferPaint;');
         s.fragmentShader=s.fragmentShader.replace('#include <common>',`#include <common>
-varying vec4 vTransferredPaint;varying vec3 vCoatingRest;uniform vec4 carCoating;uniform float carSurfacePhase;uniform vec4 carWake;uniform float carTopDust;
+varying vec4 vTransferredPaint;varying vec3 vCoatingRest;uniform vec4 carCoating;uniform float carSurfacePhase;uniform vec4 carWake;uniform float carTopDust;uniform vec4 carRust;uniform vec4 carArches;
 float coatingHash(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
 float coatingNoise(vec3 p){vec3 c=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(mix(coatingHash(c),coatingHash(c+vec3(1,0,0)),f.x),mix(coatingHash(c+vec3(0,1,0)),coatingHash(c+vec3(1,1,0)),f.x),f.y),mix(mix(coatingHash(c+vec3(0,0,1)),coatingHash(c+vec3(1,0,1)),f.x),mix(coatingHash(c+vec3(0,1,1)),coatingHash(c+vec3(1,1,1)),f.x),f.y),f.z);}
 `)
           .replace(/float dust=clamp\(lowBody\*\([^;]+;/,'float dust=clamp(lowBody*.035+vImpactWear.x*.07,0.,.32);')
           .replace('#include <alphamap_fragment>',`#include <alphamap_fragment>
+float ageRust=0.,rustStain=0.;
+${rusts(m.name)?`// Age rust: rot along the sills and round the arch lips, mottled, with a stained fringe of blistered paint.
+if(carRust.x>0.){
+  float rustFlank=smoothstep(carRust.z*${RUST.flank[0]},carRust.z*${RUST.flank[1]},abs(vCoatingRest.x));
+  // Patches creep up the sills to their own heights, and the lips rot worst at their low ends, by the hub.
+  float rustReach=coatingNoise(vCoatingRest*vec3(4.,4.,7.)+carSurfacePhase*11.);
+  float rustSill=1.-smoothstep(carRust.y+${RUST.sill[0]},carRust.y+${RUST.sill[1]}*(.35+.9*rustReach),vCoatingRest.y);
+  float frontLip=length(vec2(vCoatingRest.z-carArches.x,vCoatingRest.y-carArches.z))-carRust.w-${RUST.gap},rearLip=length(vec2(vCoatingRest.z-carArches.y,vCoatingRest.y-carArches.z))-carArches.w-${RUST.gap};
+  float rustLip=max(exp(-pow(frontLip/${RUST.lip},2.)),exp(-pow(rearLip/${RUST.lip},2.)))*smoothstep(carArches.z-.12,carArches.z+.02,vCoatingRest.y)*(.55+.45*smoothstep(carArches.z+.3,carArches.z,vCoatingRest.y));
+  float rustNoise=coatingNoise(vCoatingRest*vec3(11.,17.,11.)+carSurfacePhase*7.)*.6+coatingNoise(vCoatingRest*vec3(46.,60.,46.))*.4;
+  float rustField=max(rustSill,rustLip)*rustFlank*(.2+1.05*rustNoise),rustEdge=1.-.7*carRust.x;
+  ageRust=smoothstep(rustEdge-.06,rustEdge+.06,rustField);
+  rustStain=smoothstep(rustEdge-.22,rustEdge-.06,rustField)*(1.-ageRust);
+  diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*vec3(${RUST.stain}),rustStain*.7);
+  diffuseColor.rgb=mix(diffuseColor.rgb,mix(vec3(${RUST.orange}),vec3(${RUST.scale}),coatingNoise(vCoatingRest*95.)),ageRust);
+}`:''}
 float coatingSide=smoothstep(-.3,.3,vCoatingRest.x);
 float deposited=mix(carCoating.z,carCoating.w,coatingSide);
 float moisture=mix(carCoating.x,carCoating.y,coatingSide);
@@ -61,18 +82,19 @@ diffuseColor.rgb=mix(diffuseColor.rgb,vec3(${new T.Color(WAKE.tint).toArray().ma
           .replace('#include <roughnessmap_fragment>',`${glass?'':`float transferred=vTransferredPaint.a*(.48+.52*siltPattern);
 diffuseColor.rgb=mix(diffuseColor.rgb,vTransferredPaint.rgb,transferred*.85);`}
 #include <roughnessmap_fragment>
+roughnessFactor=mix(roughnessFactor,.95,ageRust);
 roughnessFactor=mix(roughnessFactor,.89,max(carDirt*.8,wakeDust*.9));
 roughnessFactor=mix(roughnessFactor,max(.1,roughnessFactor*.48),carWet*(1.-carDirt*.55));`)
-          .replace('#include <metalnessmap_fragment>','#include <metalnessmap_fragment>\nmetalnessFactor*=(1.-carDirt*.9)*(1.-wakeDust*.8);')
+          .replace('#include <metalnessmap_fragment>','#include <metalnessmap_fragment>\nmetalnessFactor*=(1.-carDirt*.9)*(1.-wakeDust*.8)*(1.-ageRust);')
           // A lamp under dust or dirt glows dimmer through the grime.
           .replace('#include <emissivemap_fragment>',`#include <emissivemap_fragment>\ntotalEmissiveRadiance*=1.-clamp(wakeDust*${LAMP_GRIME.dust}+carDirt*${LAMP_GRIME.dirt},0.,${LAMP_GRIME.most});`)
           .replace('#include <lights_physical_fragment>',`#include <lights_physical_fragment>
 #ifdef USE_CLEARCOAT
-material.clearcoat*=(1.-carDirt*.88)*(1.-wakeDust*.85);
+material.clearcoat*=(1.-carDirt*.88)*(1.-wakeDust*.85)*(1.-max(ageRust,rustStain*.6));
 material.clearcoatRoughness=mix(material.clearcoatRoughness,.07,carWet);
 #endif`);
       };
-      m.customProgramCacheKey=()=>key+'-persistent-wet-silt-wake-v4-'+Number(glass);
+      m.customProgramCacheKey=()=>key+'-persistent-wet-silt-wake-v5-'+Number(glass)+(rusts(m.name)?'-rust':'');
     });
   }
   advance(dt:number,speed:number,gravel:boolean,wet:readonly boolean[],grounded:readonly boolean[]=[true,true,true,true]){
@@ -102,6 +124,10 @@ material.clearcoatRoughness=mix(material.clearcoatRoughness,.07,carWet);
   }
   /** Dust in the wake on the tail, back of the bodywork at rear (model frame z), this dusty. */
   placeWake(rear:number,level:number){this.wake.value.set(rear,WAKE.reach,Math.max(0,level),0);}
+  /** Rust where this fit says the car rots, this far gone (0–1). */
+  placeRust(fit:RustFit,age:number){this.rust.value.set(Number.isFinite(age)?Math.max(0,Math.min(1,age)):0,fit.bottom,fit.halfWidth,fit.frontArch);this.arches.value.set(fit.front,fit.rear,fit.hub,fit.rearArch);}
+  get rustAge(){return this.rust.value.x;}
+  set rustAge(age:number){if(this.rust.value.z>0)this.rust.value.x=Number.isFinite(age)?Math.max(0,Math.min(1,age)):0;}
   get wakePlaced(){return this.wake.value.y>0;}
   get wakeLevel(){return this.wake.value.z;}
   set wakeLevel(level:number){if(this.wake.value.y>0)this.wake.value.z=Number.isFinite(level)?Math.max(0,level):0;}
