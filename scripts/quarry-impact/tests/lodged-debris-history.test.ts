@@ -1,6 +1,7 @@
+import {restoreSlipstreamBytes} from './slipstream-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readLodgedDebrisPrevious,restoreLodgedDebrisBytes,verifyLodgedDebrisRevision} from './lodged-debris-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreSlipstreamBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('LodgedDebris preserves every prior fixture, vehicle asset, venue art and history input',verifyLodgedDebrisRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/lodged-debris/revision.json').toString());
