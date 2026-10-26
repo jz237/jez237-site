@@ -137,6 +137,7 @@ import {FLAP,MudFlaps} from './mud-flaps';
 import {brakeDustStep,dirtyRims,startingBrakeDust} from './brake-dust';
 import {ROT,fitRust,rustFlakes,startingRust} from './age-rust';
 import {fitDonors,pickDonors} from './donor-panels';
+import {OIL_BURN,burnOil,burner,type Burner} from './oil-burner';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -2358,7 +2359,7 @@ const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMa
 function bodyBox(c:Vehicle){let box=roostBoxes.get(c);if(box)return box;c.root.updateMatrixWorld(true);const inverse=c.root.matrixWorld.clone().invert(),b=new T.Box3(),all=new T.Box3();for(const p of c.panels)all.union(b.setFromObject(p).applyMatrix4(inverse));if(all.isEmpty())return null;
   box={centre:all.getCenter(new T.Vector3()),half:all.getSize(new T.Vector3()).multiplyScalar(.5)};roostBoxes.set(c,box);return box;}
 let bodyDusts=0;const dustOut=new T.Vector3();
-const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>();let rustShowers=0;
+const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>(),oilBurners=new WeakMap<object,Burner>();let rustShowers=0,oilBurns=0;
 const shiftGears=new WeakMap<object,number>(),shiftRevs=new WeakMap<object,number>();let shiftFlames=0,dustAir=0,knockDust=0;let shiftSmokes=0;const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3(),roostBoxes=new WeakMap<Vehicle,{centre:T.Vector3;half:T.Vector3}>(),roostBodies:RoostBody[]=[],pingClock=new Map<number,number>();let pingTake=0,stonePings=0;let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
 let wetReflections:ReturnType<typeof createWetReflections>|undefined;const glowList:Glow[]=[];
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
@@ -2686,6 +2687,11 @@ function frame(now: number) {
     const n=shiftPuffs(before,c.gear,c.input.throttle,isClassicKind(c.kind),c.engineDamage??0);if(!n)continue;shiftSmokes++;
     steamAt.set(isRearEngineKind(c.kind)?.35:-.35,-.25,-DEFINITIONS[c.kind].halfLength-.1).applyQuaternion(c.root.quaternion).add(c.root.position);const start=fx.cursor;fx.emit(steamAt,n,0,SHIFT_SMOKE.size);
     for(let j=start;j<fx.cursor;j++){const k=j%fx.particles.length,p=fx.particles[k];p.v.addScaledVector(c.forward,-SHIFT_SMOKE.back);p.size=SHIFT_SMOKE.puff[0]+Math.random()*(SHIFT_SMOKE.puff[1]-SHIFT_SMOKE.puff[0]);p.max=p.life=SHIFT_SMOKE.life[0]+Math.random()*(SHIFT_SMOKE.life[1]-SHIFT_SMOKE.life[0]);dustTint.setHex(SHIFT_SMOKE.tint).multiplyScalar(.85+Math.random()*.3).toArray(fx.colors,k*3);}}
+  // An old banger's worn engine burns oil: a blue-grey puff when it is floored after coasting, a haze flat out (offline).
+  if(state==='playing')for(const c of cars){if(!c.extendedDamage||c.health<=0||c.exhaustGone)continue;let b=oilBurners.get(c);if(!b){b=burner();oilBurners.set(c,b);}
+    const n=burnOil(b,c.surfaceFinish.rustAge,c.input.throttle,dt);if(!n)continue;oilBurns+=n;b.puffs+=n;
+    steamAt.set(isRearEngineKind(c.kind)?.35:-.35,-.25,-DEFINITIONS[c.kind].halfLength-.1).applyQuaternion(c.root.quaternion).add(c.root.position);const start=fx.cursor;fx.emit(steamAt,n,0,OIL_BURN.size);
+    for(let j=start;j<fx.cursor;j++){const k=j%fx.particles.length,p=fx.particles[k];p.v.addScaledVector(c.forward,-OIL_BURN.back);p.size=OIL_BURN.puff[0]+Math.random()*(OIL_BURN.puff[1]-OIL_BURN.puff[0]);p.max=p.life=OIL_BURN.life[0]+Math.random()*(OIL_BURN.life[1]-OIL_BURN.life[0]);dustTint.setHex(OIL_BURN.tint).multiplyScalar(.9+Math.random()*.2).toArray(fx.colors,k*3);}}
   // The dust the plumes leave hanging in the air, thickened by burning cars' smoke and knocked-off dust (it shows the
   // headlamp beams at dusk).
   if(state==='playing'){knockDust*=Math.exp(-dt/SMOKE_HAZE.fade);dustAir=dustAirStep(dustAir,[...cars.filter(c=>c.extendedDamage).map(c=>dustRate(c.speed,c.surface,eventLighting==='rain')/DUST.rate+(c.onFire?SMOKE_HAZE.fire:0)),knockDust],dt);
@@ -3122,6 +3128,7 @@ async function boot() {
     rollingCaps: () => ({ rolled: rollingCaps.rolled, moving: rollingCaps.moving, caps: rollingCaps.caps.map(c => ({ phase: c.phase, speed: +c.speed.toFixed(2), lean: +c.lean.toFixed(2), r: +c.radius.toFixed(3), at: c.p.toArray().map(v => +v.toFixed(2)) })) }),
     dustAir: () => +dustAir.toFixed(3),
     rust: (id = 0, age?: number) => { const c = cars.find(x => x.id === id); if (!c) return null; if (age !== undefined) c.surfaceFinish.rustAge = age; const r = c.surfaceFinish.rust.value, a = c.surfaceFinish.arches.value; return { showers: rustShowers, age: +r.x.toFixed(3), bottom: +r.y.toFixed(3), half: +r.z.toFixed(3), front: +a.x.toFixed(3), rear: +a.y.toFixed(3), hub: +a.z.toFixed(3), arches: [+r.w.toFixed(3), +a.w.toFixed(3)] }; },
+    oilBurns: (id?: number) => { if (id === undefined) return oilBurns; const c = cars.find(x => x.id === id); return c ? oilBurners.get(c)?.puffs ?? 0 : null; },
     donors: (id = 0) => { const c = cars.find(x => x.id === id); return c ? { panels: donorPanels.get(c) ?? [], assemblies: c.wreckParts.assemblies.map(a => a.name) } : null; },
     brakeDust: (id = 0, level?: number) => { const c = cars.find(x => x.id === id), d = c && rimDust.get(c); if (!d) return null; if (level !== undefined) d.value = level; return +d.value.toFixed(3); },
     mudFlaps: (id = 0) => { const c = cars.find(x => x.id === id), f = c && mudFlaps.get(c); return f ? { flaps: f.flaps.length, torn: f.torn, swings: f.swings, caught: f.caught } : null; },
