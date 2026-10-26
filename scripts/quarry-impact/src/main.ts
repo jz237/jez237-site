@@ -134,6 +134,7 @@ import {BODY_RAIN,BodyRain,topSpots,type RainCar} from './body-rain';
 import {MIST,mistStep} from './window-mist';
 import {TOP_DUST,settleStep} from './settled-dust';
 import {FLAP,MudFlaps} from './mud-flaps';
+import {brakeDustStep,dirtyRims,startingBrakeDust} from './brake-dust';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -1066,6 +1067,8 @@ function createCars(attract = false, previewSetup?:Setup) {
     if(car.extendedDamage)strutPunches.set(car,new StrutPunch(car.root,car.wheels,car.panels,car.id,at=>{sound.clip('spring-snap',at,.85,.8);fx.emit(at,14,1,1.4);}));
     // A rubber flap hangs behind each wheel and swings; a wrecked wheel tears its flap off (offline; not the open-wheeled buggy).
     if(car.extendedDamage&&type!=='buggy')mudFlaps.set(car,new MudFlaps(car.root,car.wheels,vehicleWheelRadius(type),car.id,sheet=>fx.detach(sheet,car.velocity.clone().multiplyScalar(.6))));
+    // Braking cakes the wheels in brake dust; every old banger starts with some (offline).
+    if(car.extendedDamage){const dust={value:startingBrakeDust(car.id)};if(dirtyRims(car.wheels,dust))rimDust.set(car,dust);}
     // Classic cars on plain rims get chrome hubcaps, to be knocked off and roll away (offline).
     if(car.extendedDamage)fitHubcaps(car.root,car.wheels);
     // Driving through its own dust plume coats the tail in dust; the rain rinses it off (offline).
@@ -2347,7 +2350,7 @@ const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMa
 function bodyBox(c:Vehicle){let box=roostBoxes.get(c);if(box)return box;c.root.updateMatrixWorld(true);const inverse=c.root.matrixWorld.clone().invert(),b=new T.Box3(),all=new T.Box3();for(const p of c.panels)all.union(b.setFromObject(p).applyMatrix4(inverse));if(all.isEmpty())return null;
   box={centre:all.getCenter(new T.Vector3()),half:all.getSize(new T.Vector3()).multiplyScalar(.5)};roostBoxes.set(c,box);return box;}
 let bodyDusts=0;const dustOut=new T.Vector3();
-const mistIn=new WeakMap<object,number>();
+const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>();
 const shiftGears=new WeakMap<object,number>(),shiftRevs=new WeakMap<object,number>();let shiftFlames=0,dustAir=0,knockDust=0;let shiftSmokes=0;const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3(),roostBoxes=new WeakMap<Vehicle,{centre:T.Vector3;half:T.Vector3}>(),roostBodies:RoostBody[]=[],pingClock=new Map<number,number>();let pingTake=0,stonePings=0;let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
 let wetReflections:ReturnType<typeof createWetReflections>|undefined;const glowList:Glow[]=[];
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
@@ -2403,6 +2406,8 @@ function updateCamera(dt: number) {
   // A burning car's cabin fills with smoke, murking its glass, and stays sooty after (offline).
   if(state==='playing'||state==='wrecked')for(const c of cars){if(!c.extendedDamage)continue;const was=smokeIn.get(c)??0,now=cabinSmoke(was,c.onFire,dt);if(now===was)continue;smokeIn.set(c,now);
     for(const g of c.glass){const st=(g.material as T.Material).userData.glassState as GlassState|undefined;if(st)st.smoke.value=now;}}
+  // Braking cakes the rims in brake dust; a downpour slowly rinses it (offline).
+  if(state==='playing')for(const c of cars){const d=rimDust.get(c);if(d)d.value=brakeDustStep(d.value,dt,c.input?.brake??0,c.speed,eventLighting==='rain'?shower:0);}
   // A car standing in the rain (or wrecked) mists up inside, and clears once it gets going (offline).
   if(state==='playing'||state==='wrecked')for(const c of cars){if(!c.extendedDamage)continue;const was=mistIn.get(c)??0,now=mistStep(was,dt,eventLighting==='rain',c.health<=0||Math.abs(c.speed)<MIST.still);if(now===was)continue;mistIn.set(c,now);
     for(const g of c.glass){const st=(g.material as T.Material).userData.glassState as GlassState|undefined;if(st)st.mist.value=g.visible?now:0;}}
@@ -3108,6 +3113,7 @@ async function boot() {
     airbags: (id = 0) => { const c = cars.find(x => x.id === id), b = c && airbags.get(c); return b ? { fitted: b.bags.length, deployed: b.deployed, age: +b.age.toFixed(2), scale: b.bags.map(x => +x.mesh.scale.y.toFixed(3)), at: b.bags.map(x => x.at.toArray().map(v => +v.toFixed(2))), front: +(c!.structuralDamage?.[0] ?? 0).toFixed(3), fired: airbagsFired } : null; },
     rollingCaps: () => ({ rolled: rollingCaps.rolled, moving: rollingCaps.moving, caps: rollingCaps.caps.map(c => ({ phase: c.phase, speed: +c.speed.toFixed(2), lean: +c.lean.toFixed(2), r: +c.radius.toFixed(3), at: c.p.toArray().map(v => +v.toFixed(2)) })) }),
     dustAir: () => +dustAir.toFixed(3),
+    brakeDust: (id = 0, level?: number) => { const c = cars.find(x => x.id === id), d = c && rimDust.get(c); if (!d) return null; if (level !== undefined) d.value = level; return +d.value.toFixed(3); },
     mudFlaps: (id = 0) => { const c = cars.find(x => x.id === id), f = c && mudFlaps.get(c); return f ? { flaps: f.flaps.length, torn: f.torn, swings: f.swings, caught: f.caught } : null; },
     topDust: (level?: number) => { if (level !== undefined) TOP_DUST.value = level; return +TOP_DUST.value.toFixed(3); },
     windowMist: (id = 0, level?: number, now = false) => { const c = cars.find(x => x.id === id); if (!c) return null; if (level !== undefined) { mistIn.set(c, level); if (now) for (const g of c.glass) { const st = (g.material as T.Material).userData.glassState as GlassState | undefined; if (st) st.mist.value = level; } } return { level: +(mistIn.get(c) ?? 0).toFixed(3), glass: c.glass.map(g => +(((g.material as T.Material).userData.glassState as GlassState | undefined)?.mist.value ?? -1).toFixed(3)) }; },
