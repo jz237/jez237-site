@@ -52,6 +52,6 @@ test('no bodywork in reach, no strap',()=>{
 test('main hangs straps on offline cars and swings, tears and clears them',()=>{
   const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
   assert.ok(main.includes('if(car.extendedDamage)towStraps.set(car,new TowStraps(car.root,car.panels,DEFINITIONS[type].halfLength,STRAP.colours[i%STRAP.colours.length],loop=>fx.detach(loop,car.velocity.clone().multiplyScalar(.6))));'),'offline cars');
-  assert.ok(main.includes('{lampDangles.get(c)?.update(c.velocity,dt);towStraps.get(c)?.update(c.velocity,dt);}'),'swung with the lamps');
+  assert.ok(main.includes('{lampDangles.get(c)?.update(c.velocity,dt);towStraps.get(c)?.update(c.velocity,dt);'),'swung with the lamps');
   assert.ok(main.includes('towStraps.get(c)?.dispose();towStraps.delete(c);'),'cleared between events');
 });

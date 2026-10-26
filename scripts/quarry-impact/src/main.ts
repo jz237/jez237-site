@@ -125,6 +125,7 @@ import {rearOf,startingWake,wakeDustStep} from './wake-dust';
 import {SHIFT_SMOKE,shiftPuffs} from './shift-smoke';
 import {RollingCaps,fitHubcaps} from './rolling-caps';
 import {BODY_DUST,bodyDustPuffs,bodyPoint} from './body-dust';
+import {AIRBAG,Airbags} from './airbags';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -432,7 +433,7 @@ const eventAwards=new EventAwards();const propFires=new PropFires();
 /** Loose props as fire sources: where they are now and whether they burn. */
 const propPoints=(props:readonly {mesh:T.Object3D}[])=>props.map(p=>({x:p.mesh.position.x,y:p.mesh.position.y,z:p.mesh.position.z,kind:propKind((p.mesh as T.Mesh).geometry?.type)}));let slowMoUntil=0,slowMoScale=.3;
 /** Brief Burnout-style slow motion when the player wrecks an opponent (local events only). */
-const TAKEDOWN_SLOWMO={scale:.3,seconds:.9};const carLights=new Map<Vehicle,CarLights>(),lampDangles=new Map<Vehicle,LampDangle>(),towStraps=new Map<Vehicle,TowStraps>();let lastBadges:string[]=[];
+const TAKEDOWN_SLOWMO={scale:.3,seconds:.9};const carLights=new Map<Vehicle,CarLights>(),lampDangles=new Map<Vehicle,LampDangle>(),towStraps=new Map<Vehicle,TowStraps>(),airbags=new Map<Vehicle,Airbags>();let airbagsFired=0;let lastBadges:string[]=[];
 const badgeLine=()=>lastBadges.length?`<p class="badge-unlock">★ ACHIEVEMENT${lastBadges.length>1?'S':''} UNLOCKED · ${lastBadges.join(' · ')}</p>`:'';
 /** Race feedback for the player's own impacts; derbies already have their score feed. */
 function callout(kind:'TAKEDOWN'|'BIG HIT',victim:Vehicle){if(mode!=='race'||demo||online?.active||pursuit)return;toast(kind==='TAKEDOWN'?`TAKEDOWN · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`:`BIG HIT · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`,kind==='TAKEDOWN'?2.5:1.2);}
@@ -975,7 +976,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   sound.clearCars();
   vehicleFire?.reset();propFires.reset();
   puddleSplashes?.reset();gravelRoost.reset();rollingCaps.reset();
-  for (const c of cars){lampDangles.get(c)?.dispose();lampDangles.delete(c);towStraps.get(c)?.dispose();towStraps.delete(c);carLights.get(c)?.dispose();carLights.delete(c);c.dispose();}
+  for (const c of cars){lampDangles.get(c)?.dispose();lampDangles.delete(c);towStraps.get(c)?.dispose();towStraps.delete(c);airbags.get(c)?.dispose();airbags.delete(c);carLights.get(c)?.dispose();carLights.delete(c);c.dispose();}
   clearMarshals();
   for(const f of bailed)disposeDriver(f);bailed.length=0;
   cars = [];
@@ -1044,6 +1045,8 @@ function createCars(attract = false, previewSetup?:Setup) {
       for(let k=0;k<n;k++){const at=bodyPoint(box.half.x,box.half.y,box.half.z,Math.random(),Math.random(),Math.random());steamAt.fromArray(at.p).add(box.centre).applyMatrix4(car.root.matrixWorld);dustOut.fromArray(at.n).transformDirection(car.root.matrixWorld);
         const start=fx.cursor;fx.emit(steamAt,1,0,BODY_DUST.size[0]);for(let j=start;j<fx.cursor;j++){const i=j%fx.particles.length,p=fx.particles[i];p.v.copy(dustOut).multiplyScalar(BODY_DUST.out*(.5+Math.random())).addScaledVector(car.velocity,BODY_DUST.carry);p.v.y+=BODY_DUST.lift*Math.random();
           p.size=BODY_DUST.size[0]+Math.random()*(BODY_DUST.size[1]-BODY_DUST.size[0]);p.max=p.life=BODY_DUST.life[0]+Math.random()*(BODY_DUST.life[1]-BODY_DUST.life[0]);dustTint.setHex(BODY_DUST.tint).multiplyScalar(.88+Math.random()*.2).toArray(fx.colors,i*3);}}};
+    // Modern cars carry airbags that fire when the front is crushed (offline).
+    {const driver=car.root.getObjectByName('driver');if(car.extendedDamage&&driver&&!isClassicKind(type))airbags.set(car,new Airbags(car.root,driver,[...car.panels,...car.glass]));}
     // Classic cars on plain rims get chrome hubcaps, to be knocked off and roll away (offline).
     if(car.extendedDamage)fitHubcaps(car.root,car.wheels);
     // Driving through its own dust plume coats the tail in dust; the rain rinses it off (offline).
@@ -2363,7 +2366,13 @@ function updateCamera(dt: number) {
   // Derby flags whip about with their cars and snap once a car is out or upside down.
   if(state!=='paused')for(const c of cars){const f=c.root.children.find(o=>o.name==='derby_flag');if(f)waveFlag(f,c.root,dt,c.health<=0||c.inverted>.3,windy&&!online?.active?breeze:undefined);}
   // Smashed lamps hang and swing on their wiring as the car brakes, accelerates and turns (offline).
-  if(state==='playing'||state==='wrecked'||state==='result'||state==='countdown')for(const c of cars){lampDangles.get(c)?.update(c.velocity,dt);towStraps.get(c)?.update(c.velocity,dt);}
+  if(state==='playing'||state==='wrecked'||state==='result'||state==='countdown')for(const c of cars){lampDangles.get(c)?.update(c.velocity,dt);towStraps.get(c)?.update(c.velocity,dt);
+    // A front crushed past AIRBAG.front fires the airbags: a bang and a puff of powder in the cabin.
+    const bags=airbags.get(c);if(bags&&(c.structuralDamage?.[0]??0)>=AIRBAG.front&&bags.deploy()){airbagsFired++;const at=bags.points([]);sound.clip('backfire',at[0],.45,.4);
+      for(const p of at){const start=fx.cursor;fx.emit(p,AIRBAG.powder/2,0,.3);for(let j=start;j<fx.cursor;j++){const k=j%fx.particles.length,q=fx.particles[k];q.v.multiplyScalar(.35).addScaledVector(c.velocity,.9);q.size=.35+Math.random()*.4;q.max=q.life=1.6+Math.random()*1.4;dustTint.setHex(0xeeeeea).multiplyScalar(.95+Math.random()*.05).toArray(fx.colors,k*3);}}}
+    // A mended front (only a repair un-crushes it) has fresh bags packed away.
+    if(bags?.deployed&&(c.structuralDamage?.[0]??0)<AIRBAG.front/4)bags.reset();
+    bags?.update(dt);}
   // Drivers get out of wrecked cars that are burning or blown up once they have stopped, and walk clear to watch (offline).
   if(state==='playing'||state==='wrecked'){for(const c of cars){if(!c.extendedDamage)continue;const d=c.root.children.find(o=>o.name==='driver');if(!d)continue;
     const t=(c.onFire||c.blownUp)&&c.health<=0&&Math.abs(c.speed)<BAIL.speed?(bailClock.get(c)??0)+dt:0;bailClock.set(c,t);
@@ -3059,6 +3068,7 @@ async function boot() {
     fogLamp: (id = 0) => { const c = cars.find(x => x.id === id), l = c && carLights.get(c), m = l?.fogLamp; return l ? { fitted: !!m, lit: l.fogLit, visible: !!m?.visible, at: m ? m.position.toArray().map(v => +v.toFixed(3)) : null, glow: m ? (m.material as T.MeshStandardMaterial).emissiveIntensity : 0, driver: +(c!.root.getObjectByName('driver')?.position.x ?? 0).toFixed(2) } : null; },
     wakeDust: (id = 0, level?: number) => { const c = cars.find(x => x.id === id); if (!c) return null; if (level !== undefined) c.surfaceFinish.wakeLevel = level; const w = c.surfaceFinish.wake.value; return { placed: c.surfaceFinish.wakePlaced, level: +w.z.toFixed(4), rear: +w.x.toFixed(3) }; },
     bodyDust: () => bodyDusts,
+    airbags: (id = 0) => { const c = cars.find(x => x.id === id), b = c && airbags.get(c); return b ? { fitted: b.bags.length, deployed: b.deployed, age: +b.age.toFixed(2), scale: b.bags.map(x => +x.mesh.scale.y.toFixed(3)), at: b.bags.map(x => x.at.toArray().map(v => +v.toFixed(2))), front: +(c!.structuralDamage?.[0] ?? 0).toFixed(3), fired: airbagsFired } : null; },
     rollingCaps: () => ({ rolled: rollingCaps.rolled, moving: rollingCaps.moving, caps: rollingCaps.caps.map(c => ({ phase: c.phase, speed: +c.speed.toFixed(2), lean: +c.lean.toFixed(2), r: +c.radius.toFixed(3), at: c.p.toArray().map(v => +v.toFixed(2)) })) }),
     shiftSmoke: () => ({ puffs: shiftSmokes, gear: cars[0]?.gear ?? 0 }),
     roost: () => ({ pings: stonePings, thrown: gravelRoost.thrown, flying: gravelRoost.flying, spins: cars.map(c => c.wheelSpins.map(v => +v.toFixed(2))), surfaces: cars.map(c => c.surface), offline: cars.map(c => c.extendedDamage), wet: cars.map(c => c.wetWheels.filter(Boolean).length), speeds: cars.map(c => +c.speed.toFixed(2)) }),
