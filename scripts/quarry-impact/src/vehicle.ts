@@ -41,6 +41,7 @@ import { dentGeometry,crushGeometry,refreshWreckNormals,type CrushFrame, repairW
 import { WreckFinish } from './wreck-finish';
 import { WreckAttachments } from './wreck-attachments';
 import {ROT,rotFactor,tiredCorner,tiredDamper,tiredSag} from './age-rust';
+import {torqueSteer} from './torque-steer';
 import {bodyworkDentDamage} from './bodywork-response';
 import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
@@ -977,6 +978,8 @@ export class Vehicle {
     if(this.throttleCable)throttle=cableThrottle(throttle);
     // Parted handbrake cables: the lever does nothing.
     const handbrake=this.handbrakeCable?false:raw.handbrake;
+    // A front-driver tugs to its own side under hard throttle at low speed: torque steer (offline).
+    if(this.extendedDamage&&isFrontDriveKind(this.kind)&&this.health>0&&!(this.engineStall!>0)&&this.gear>0)steer=torqueSteer(steer,throttle,this.speed,this.id);
     if(steer!==raw.steer||throttle!==raw.throttle||handbrake!==raw.handbrake){this.ownInput={...raw,steer,throttle,handbrake};this.input=this.ownInput;}else this.input=raw;
     if(this.extendedDamage)this.brakeFluid=leakBrakeFluid(this.brakeFluid,this.structuralDamage?.[0]??0,dt);
     this.wreckParts.flipHood=this.extendedDamage;
