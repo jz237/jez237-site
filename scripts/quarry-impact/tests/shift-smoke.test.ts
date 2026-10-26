@@ -12,7 +12,7 @@ test('none changing down, holding a gear, lifting off, from neutral or reverse, 
 });
 test('main puffs it from the tailpipe of offline cars in play, not with the pipe gone or the car out',()=>{
   const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
-  assert.ok(main.includes("if(state==='playing')for(const c of cars){if(!c.extendedDamage)continue;const before=shiftGears.get(c)??c.gear;shiftGears.set(c,c.gear);if(c.health<=0||c.exhaustGone)continue;"),'offline, in play, gear always tracked');
+  assert.ok(main.includes("if(state==='playing')for(const c of cars){if(!c.extendedDamage)continue;const before=shiftGears.get(c)??c.gear,revs=shiftRevs.get(c)??c.rpm;shiftGears.set(c,c.gear);shiftRevs.set(c,c.rpm);if(c.health<=0||c.exhaustGone)continue;"),'offline, in play, gear always tracked');
   assert.ok(main.includes('const n=shiftPuffs(before,c.gear,c.input.throttle,isClassicKind(c.kind),c.engineDamage??0);if(!n)continue;'),'by gear, pedal, engine');
   assert.ok(main.includes('p.v.addScaledVector(c.forward,-SHIFT_SMOKE.back);'),'blown out behind');
 });
