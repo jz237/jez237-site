@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 25 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 26 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of April 8-14, 1985 — Fifty missions, one crew: the bomber game that makes survival count</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-04-08</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-04-08</guid>
+      <pubDate>Mon, 26 Oct 2026 12:00:00 GMT</pubDate>
+      <description>SSI turns the B-17 campaign into a test of preparation, persistence and crew survival. Britain is the starting point, but keeping a B-17 and its crew alive is the real destination. Strategic Simulations’ Fifty Mission Crush puts the player in command of an Eighth Air Force bomber for a campaign of fifty missions over Germany, France and the Netherlands. James V. Trunzo’s April COMPUTE! review finds its appeal in sustained command rather than a quick burst of arcade action. Also this week: Atari and Commodore promise a bargain-computer generation · Home-computer optimism meets the PCjr reckoning · Pooh opens the adventure door without a parser battle.</description>
+    </item>
     <item>
       <title>Week of April 1-7, 1985 — Atari’s ST gathers support as the 16-bit challenge approaches</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-04-01</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-11-26</guid>
       <pubDate>Wed, 07 Oct 2026 12:00:00 GMT</pubDate>
       <description>Spectrum version promised; Amstrad conversion probable as Elite heads for Firebird’s premium line. British Telecom’s Firebird has obtained the rights to convert Acornsoft’s Elite for Z80 computers. Popular Computing Weekly reports the agreement in its November 29 issue, following an auction the previous week. The price is described as a substantial sum but is not disclosed. Also this week: Coleco and Parker Brothers retreat from the British games market · LaserJet wins a 119-printer showdown as laser output reaches the PC desk · Home bulletin boards become a social network—and an arcade · Borland sells a pop-up desk—and charges extra for an unprotected disk.</description>
-    </item>
-    <item>
-      <title>Week of November 19-25, 1984 — After Comdex, personal computing faces an IBM-shaped market</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-11-19</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-11-19</guid>
-      <pubDate>Tue, 06 Oct 2026 12:00:00 GMT</pubDate>
-      <description>A record trade-show floor gives way to price cutting, compatibility battles and a crowded software business. The personal-computer business is taking stock after Comdex, and the mood is more restrained than the crowded aisles suggest. Reporting November 20 from Las Vegas, David F. Salisbury describes a record 1,400 exhibits at the previous week’s show, but noticeably less exuberance than a year ago. The question is no longer simply how quickly computers will sell, but which machines and publishers can survive the competition. Also this week: A $795 dish promises satellite data for the personal computer · The bulletin board becomes a neighborhood without borders · CompuServe brings more than 80 merchants into the living room · VisiCalc publisher faces merger and founders&apos; departure.</description>
     </item>
   </channel>
 </rss>

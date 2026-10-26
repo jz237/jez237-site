@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-26",
+      "historicDate": "1985-04-08",
+      "displayDate": "Week of April 8-14, 1985",
+      "edition": "Issue 141 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Fifty missions test a bomber crew; Atari and Commodore promise more; Discovery lifts off.",
+      "leadHeadline": "Fifty missions, one crew: the bomber game that makes survival count",
+      "storyHeadlines": [
+        "Atari and Commodore promise a bargain-computer generation",
+        "Home-computer optimism meets the PCjr reckoning",
+        "Pooh opens the adventure door without a parser battle"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-04-08.jpg",
+      "thumb": "media/thumbs/1985-04-08.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-25",
       "historicDate": "1985-04-01",
       "displayDate": "Week of April 1-7, 1985",

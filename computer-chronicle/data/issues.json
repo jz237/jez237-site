@@ -4,6 +4,444 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "visualProfile": {
+        "tone": "Bomber crews and bargain computers",
+        "motifs": [
+          "B-17 halftone",
+          "disk games",
+          "low-cost modems"
+        ],
+        "layout": "Dense warm newspaper with red and blue section headers"
+      },
+      "layoutPlan": {
+        "leadPlacement": "B-17 campaign gaming dominates; bargain-computer previews flank it",
+        "secondaryRail": "Commodore compatibility, VIC word processing and budget modems",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "currentDate": "2026-10-26",
+      "historicDate": "1985-04-08",
+      "displayDate": "Week of April 8-14, 1985",
+      "edition": "Issue 141 - Weekly 1985 Computer & Culture Chronicle",
+      "sources": [
+        {
+          "title": "COMPUTE! issue 59: CES feature pp.24 onward; reviews pp.60–63,82–84",
+          "url": "https://archive.org/stream/1985-04-compute-magazine/Compute_Issue_059_1985_Apr_djvu.txt",
+          "date": "1985-04"
+        },
+        {
+          "title": "Arlan R. Levitan, Telecomputing Today: Telecomputing To The Rescue, p.95",
+          "url": "https://www.atarimagazines.com/compute/issue59/telecomputing_today.php",
+          "date": "1985-04"
+        },
+        {
+          "title": "Los Angeles Times: Computing the Defiant Future",
+          "url": "https://www.latimes.com/archives/la-xpm-1985-04-11-me-11829-story.html",
+          "date": "1985-04-11"
+        },
+        {
+          "title": "Your Computer April issue: Piracy Law Near; Hacks versus hackers",
+          "url": "https://archive.org/stream/your-computer-magazine-1985-04/YourComputer_1985_04_djvu.txt",
+          "date": "1985-04"
+        },
+        {
+          "title": "Billboard rock chart archive, chart rows inaccessible",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-04-13/",
+          "date": "1985-04-13"
+        },
+        {
+          "title": "My Favorite Decade: retrospective Billboard rock No.1 table",
+          "url": "https://myfavoritedecade.blogspot.com/2020/03/list-of-billboard-1-top-rock-tracks-of.html",
+          "date": "2020-03-19"
+        },
+        {
+          "title": "The Numbers: April 12 weekend domestic box office",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/04/12",
+          "date": "1985-04-12"
+        },
+        {
+          "title": "NASA STS-51D mission retrospective",
+          "url": "https://www.nasa.gov/mission/sts-51d/",
+          "date": "1985-04-12 (event; retrospective page)"
+        },
+        {
+          "title": "Computer Chronicles: Low End Computers archive catalog",
+          "url": "https://archive.org/details/LowEndCo1985",
+          "date": "1985-04-08 (catalog date)"
+        },
+        {
+          "title": "COMPUTE! April 1985: Winnie the Pooh review",
+          "url": "https://www.atarimagazines.com/compute/issue59/review_winnie_the_pooh.php",
+          "date": "1985-04"
+        },
+        {
+          "title": "COMPUTE! April 1985: Fifty Mission Crush review",
+          "url": "https://www.atarimagazines.com/compute/issue59/review_fifty_mission.php",
+          "date": "1985-04"
+        },
+        {
+          "title": "March 1985 period game coverage",
+          "url": "https://www.atarimagazines.com/compute/issue58/review_solo_flight.html",
+          "date": "1985-03"
+        },
+        {
+          "title": "March 1985 period game coverage",
+          "url": "https://www.atarimagazines.com/compute/issue58/news_games_educational_packages.html",
+          "date": "1985-03"
+        },
+        {
+          "title": "Billboard rock chart",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-04-06/",
+          "date": "1985-04-06"
+        }
+      ],
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 141 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of April 8-14, 1985",
+        "price": "75 cents"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-04-08.jpg",
+        "alt": "Computer Chronicle newspaper front page for April 8-14, 1985, featuring Fifty Mission Crush",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Crew survival, affordable connections and the next generation of home computers fill the desks this week.",
+      "morningLine": "Fifty missions test a bomber crew; Atari and Commodore promise more; Discovery lifts off.",
+      "lead": {
+        "headline": "Fifty missions, one crew: the bomber game that makes survival count",
+        "body": [
+          "Britain is the starting point, but keeping a B-17 and its crew alive is the real destination. Strategic Simulations’ Fifty Mission Crush puts the player in command of an Eighth Air Force bomber for a campaign of fifty missions over Germany, France and the Netherlands. James V. Trunzo’s April COMPUTE! review finds its appeal in sustained command rather than a quick burst of arcade action.",
+          "Crew selection gives each mission a personal stake. Fuel and bombs compete for carrying capacity, turning preparation into a consequential decision before the aircraft leaves the ground. The review describes an overloaded bomber crashing on takeoff after an engine failure: extra offensive weight can exact its price immediately.",
+          "The campaign has the shape of a role-playing game as much as a flight simulation. Completing one sortie is only a small part of the task; the long sequence of missions gives survival and continuity their weight. Trunzo calls it “a challenging, addictive game.”",
+          "At a review-listed $39.95, the disk game serves Atari machines with at least 40K and BASIC, Apple II-series machines with 48K, and the Commodore 64. This is an April review of an available title, not a claim of a debut during this week."
+        ],
+        "confidence": "same-month",
+        "sourceRefs": [
+          0
+        ],
+        "dek": "SSI turns the B-17 campaign into a test of preparation, persistence and crew survival."
+      },
+      "stories": [
+        {
+          "headline": "Atari and Commodore promise a bargain-computer generation",
+          "body": [
+            "April’s COMPUTE! cover report returns to January’s Winter CES and two different answers to the home-computer upgrade question. Atari’s announced 520ST offers 512K, an 8 MHz Motorola 68000 and Digital Research GEM. The proposed $599 computer price and second-quarter availability remain promises, not proof of a machine on a dealer’s shelf.",
+            "Commodore’s 128 instead makes continuity a selling point: C64 compatibility, a native 128K personality with BASIC 7.0 and 40/80-column text, and Z80 CP/M capability. These are operating personalities, not three complete independent computers. Tom R. Halfhill tried SpeedScript 3.0 in C64 mode without claiming exhaustive compatibility tests.",
+            "Commodore had no formally announced CES price. The report’s under-$300 indication and April-or-May introduction are estimates. For buyers, the decision is between the appeal of a new environment and the value of the programs already at home."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Home-computer optimism meets the PCjr reckoning",
+          "body": [
+            "The Los Angeles Times editorial of April 11 takes the already-announced cancellation of IBM’s PCjr as a warning against easy forecasts. It says IBM was reported to hold more than 100,000 unsold machines; that is the editorial’s attributed estimate, not an audited inventory.",
+            "The argument is practical: a household without a specific job such as word processing or financial analysis has less reason to buy. Yet the editorial does not pronounce home computing finished. Its doubts sit alongside new-machine optimism and continuing investment in useful software.",
+            "April’s COMPUTE! reviews Lotus 1-2-3 for the Enhanced PCjr at $495. Two ROM cartridges and a floppy bring the spreadsheet to the small IBM, with availability dating from December rather than a new April launch. Hardware retreat and software usefulness can occupy the same desk."
+          ],
+          "confidence": "exact-date",
+          "sourceRefs": [
+            2,
+            0
+          ]
+        },
+        {
+          "headline": "Pooh opens the adventure door without a parser battle",
+          "body": [
+            "Winnie the Pooh in the Hundred Acre Wood gives young players a familiar place to practice observation. Wind has scattered the characters’ possessions; finding objects, identifying their owners and returning them turns the wood into a gentle puzzle.",
+            "James V. Trunzo’s April review describes a graphic adventure aimed at seven-year-olds, without the usual typed-command struggle except for directional movement. Owl offers help, a map is available, and object placement changes between games.",
+            "The Disney/Sierra title lists at $39.95 in the review. Reading, mapping and logical thinking arrive inside play, while an in-world toybox handles saving without a separate data disk. The review supplies current-month coverage, not a release date for this week."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Atari 520ST",
+          "summary": "CES-announced 512K/68000/GEM machine; $599 and second-quarter availability were forecasts, not a verified shipped configuration.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Commodore 128",
+          "summary": "C64 compatibility, 128K/BASIC 7.0 and CP/M personalities; April/May availability forecast; no formally announced CES price.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Commodore 1571",
+          "summary": "April CES report describes the drive’s C64-compatible, faster native C128 and CP/M operation; performance numbers are magazine claims, not independent benchmarks.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Lotus 1-2-3 for PCjr",
+          "detail": "Donald B. Trivette’s April review: Enhanced PCjr required; two ROM cartridges plus floppy; available since December after a July 1984 announcement. Not a new April launch.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Mind Prober",
+          "detail": "Human Edge personality-analysis program reviewed by Richard Mansfield; about sixty agree/disagree adjective prompts. Reviewer impressions are not scientific validation. C64 $29.95, other versions $49.95.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+          "items": [
+            "Fifty Mission Crush — April review, $39.95",
+            "Winnie the Pooh in the Hundred Acre Wood — April review, $39.95",
+            "Empire III: Armageddon — April review, $32.95",
+            "Solo Flight — MicroProse; continuing March review selection",
+            "Conan — Datasoft; continuing March shelf selection"
+          ],
+          "confidence": "April reviews with two continuing March selections",
+          "sourceRefs": [
+            0,
+            9,
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "label": "Top 5 Movies — April 12-14 weekend",
+          "items": [
+            "1. Police Academy 2: Their First Assignment",
+            "2. Mask",
+            "3. Cat’s Eye",
+            "4. Ladyhawke",
+            "5. Desperately Seeking Susan"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Forever Man",
+          "artist": "Eric Clapton",
+          "chart": "Billboard Top Rock Tracks — April 6 carry-over chart, not April 13 rankings",
+          "chartDate": "1985-04-06",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            13
+          ],
+          "song": "Forever Man"
+        },
+        {
+          "rank": 2,
+          "title": "Don’t Come Around Here No More",
+          "artist": "Tom Petty and the Heartbreakers",
+          "chart": "Billboard Top Rock Tracks — April 6 carry-over chart, not April 13 rankings",
+          "chartDate": "1985-04-06",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            13
+          ],
+          "song": "Don’t Come Around Here No More"
+        },
+        {
+          "rank": 3,
+          "title": "All She Wants to Do Is Dance",
+          "artist": "Don Henley",
+          "chart": "Billboard Top Rock Tracks — April 6 carry-over chart, not April 13 rankings",
+          "chartDate": "1985-04-06",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            13
+          ],
+          "song": "All She Wants to Do Is Dance"
+        },
+        {
+          "rank": 4,
+          "title": "I’m on Fire",
+          "artist": "Bruce Springsteen",
+          "chart": "Billboard Top Rock Tracks — April 6 carry-over chart, not April 13 rankings",
+          "chartDate": "1985-04-06",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            13
+          ],
+          "song": "I’m on Fire"
+        },
+        {
+          "rank": 5,
+          "title": "Don’t You (Forget About Me)",
+          "artist": "Simple Minds",
+          "chart": "Billboard Top Rock Tracks — April 6 carry-over chart, not April 13 rankings",
+          "chartDate": "1985-04-06",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            13
+          ],
+          "song": "Don’t You (Forget About Me)"
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Commodore 1660",
+          "price": "$29.95",
+          "note": "contemporary column quoted price; availability not independently verified",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Atari XM-301",
+          "price": "$49.95",
+          "note": "contemporary column quoted price; availability not independently verified",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Panasonic KX-D401",
+          "price": "$99.95",
+          "note": "contemporary column quoted price; availability not independently verified",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Panasonic KX-D402",
+          "price": "$299.95",
+          "note": "contemporary column quoted price; availability not independently verified",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Panasonic KX-D4130",
+          "price": "$199.95",
+          "note": "contemporary column quoted price; availability not independently verified",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Computer Chronicles examines the low end",
+          "summary": "Archive catalog dates Low End Computers April 8, 1985; guests Jack and Leonard Tramiel, Frank Leonardi and Gary Kildall; catalog lists Commodore laptop, C128, Amiga and Atari ST demonstrations. Catalog metadata alone does not establish commercial launch dates.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            8
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "A $29.95 connection to the outside world",
+        "summary": "Commodore 1660 Modem 300: April column reports 300-bps direct connection, autodial, autoanswer and monitoring speaker for C64, Plus/4 and C128. Announced price, not a verified local offer.",
+        "tagline": "The modem joins the budget shelf.",
+        "sourceRefs": [
+          1
+        ]
+      },
+      "market": {
+        "headline": "New promises confront old inventory",
+        "summary": "April 11 editorial skepticism about the PCjr meets Atari and Commodore previews. A promised specification is not stock on a shelf, and a lower announced price does not supply a household with a reason to buy.",
+        "confidence": "same-week / same-month",
+        "sourceRefs": [
+          0,
+          2
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Discovery launches with Senator Garn aboard",
+        "summary": "Discovery lifted off April 12 on STS-51D with Senator E. J. Garn among its crew. Communications satellites ANIK C-1 and LEASAT-3 were its payloads.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          7
+        ]
+      },
+      "bbsNote": {
+        "headline": "Cheap modems and faster Delphi put telecomputing within reach",
+        "summary": "April magazine reporting on January CES links cheaper hardware to wider online access; the travel anecdote illustrates a real non-game use of a laptop modem. These are reported notes, not invented BBS messages.",
+        "posts": [
+          {
+            "topic": "2400-bps city access",
+            "platform": "Delphi",
+            "text": "General Videotex announced 2400-bps service in 34 major cities; $5/hour surcharge on ordinary $16 daytime/$6 nonprime rates."
+          },
+          {
+            "topic": "Flight information from a payphone",
+            "platform": "Electronic Official Airlines Guide; service unnamed",
+            "text": "Levitan recounts using his lap computer, acoustic cups and an information-service local number after a cancelled CES flight, finding five alternatives in about two minutes. Anecdote occurred for January CES, not this April week."
+          },
+          {
+            "topic": "PLATO educational access",
+            "platform": "Atari / Control Data PLATO",
+            "text": "The Learning Phone cartridge was announced for modem-equipped Atari computers, including high-resolution graphics; estimated cartridge price $30–$40, not a verified retail transaction."
+          }
+        ],
+        "sourceRefs": [
+          1
+        ],
+        "confidence": "same-month"
+      },
+      "curiosity": {
+        "headline": "A home computer offers to analyze your boss",
+        "summary": "Mind Prober turns sixty adjective judgments into a personality report.",
+        "detail": "Richard Mansfield’s April COMPUTE! review describes choosing oneself, a boss or a friend, entering age-category and sex, and agreeing or disagreeing with roughly sixty adjectives. Human Edge charged $29.95 for C64 and $49.95 for other versions. Attribute perceived accuracy to the reviewer, not psychology research.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "gadgetWatch": {
+        "headline": "Panasonic combines a speakerphone and modem",
+        "summary": "April column reports KX-D4130 at $199.95: 300-bps modem, hands-free speakerphone, 24-button automatic dialer and storage of up to 30 digits per number. CES-origin reporting, not a proven April launch.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          1
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "No milestone: April magazine previews and reviews are not this week’s landmark launches.",
+          "All magazine cover dates provide month-level context only; many hardware announcements originated at January CES.",
+          "Only Billboard rock No.1 is supplied, with secondary-source limitation explicit; other chart positions are unverified.",
+          "Movie figures are the April 12–14 weekend, not the April 12–18 weekly chart.",
+          "Omit unsupported crew names, shipping claims, new game release dates and future space-mission outcomes.",
+          "Music panel deliberately carries the verified April 6 Top 5; it is not the April 13 chart.",
+          "Game shelf is editorial selection, not a sales chart."
+        ]
+      }
+    },
+    {
       "currentDate": "2026-10-25",
       "historicDate": "1985-04-01",
       "displayDate": "Week of April 1-7, 1985",
@@ -29,7 +467,7 @@
         "price": "75 cents"
       },
       "layoutPlan": {
-        "leadPlacement": "Gaming adventure and B-17 halftones dominate the front page beside the Atari ST anticipation lead",
+        "leadPlacement": "B-17 campaign gaming dominates; bargain-computer previews flank it",
         "secondaryRail": "Commodore compatibility, VIC word processing and budget modems",
         "archiveNavigation": "Weekly archive and previous/next controls"
       },
