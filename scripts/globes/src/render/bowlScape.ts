@@ -35,8 +35,9 @@ export const LEAF = { length: 0.42, width: 0.115, cup: 0.012, arch: 0.016 };
 const f = (x: number) => x.toFixed(6);
 
 /** The bowl's contents, for the globe's shader (after bowlWGSL; needs globes_bg, globes_fresnel,
- *  globes_noise3, globes_hash3, globes_sunIn, betta_dapple and the sky/sun constants). The ray
- *  functions take points and directions in the translating frame; scapeRot is the bowl's turn. */
+ *  globes_noise3, globes_hash3, globes_sunIn, betta_dapple, the sky/sun constants and the studio's
+ *  light, by day or by night: studio.ts, and bowl.ts bowlSun). The ray functions take points and
+ *  directions in the translating frame; scapeRot is the bowl's turn. */
 export function bowlScapeWGSL(radius: number, lite = false): string {
   if (meshWGSL === null) throw new Error("bowlScape: the furnishings' shader is not loaded (setScapeShader)");
   return /* wgsl */ `
@@ -262,8 +263,8 @@ fn scape_nestAlong(tex: texture_2d<f32>, p: vec3f, dir: vec3f, tEnd: f32, bgTex:
       let Rc = R * tint;
       // (A nest's films are thickened with the fish's mucus: each scatters a little of the light
       // falling on it, the sun's and the sky's, so the raft reads white.)
-      let sunGlint = GLOBES_SUN_IRR * (0.5 * pow(max(dot(reflect(dir, n), GLOBES_SUN_DIR), 0.0), 300.0) + 0.012);
-      col += thr * (Rc * (globes_bg(bgTex, bgSamp, x, reflect(dir, n)) + sunGlint) + vec3f(0.085, 0.09, 0.095));
+      let sunGlint = bowlSun * (0.5 * pow(max(dot(reflect(dir, n), GLOBES_SUN_DIR), 0.0), 300.0) + 0.012);
+      col += thr * (Rc * (globes_bg(bgTex, bgSamp, x, reflect(dir, n)) + sunGlint) + vec3f(0.085, 0.09, 0.095) * studioLamp);
       thr *= (1.0 - Rc) * 0.88;
     }
   }
@@ -309,7 +310,7 @@ fn scape_shadeMesh(tex: texture_2d<f32>, h: ScapeHit, x: vec3f, dir: vec3f, inWa
   let away = dot(n, dir);
   if (away > 0.0) { n = normalize(n - dir * (away + 1e-3)); }
   let L = select(GLOBES_SUN_DIR, GLOBES_SUN_DIR_WATER, inWater);
-  var E = GLOBES_SUN_IRR * 0.86;
+  var E = bowlSun * 0.86;
   if (inWater) { E = globes_sunIn(lightTex, lightSamp, x + n * 0.01, lit) * betta_dapple(x, lit, lightTex, lightSamp, time); }
   // (Its shadows: from just off the side facing the light, so a leaf lit from behind is not
   // shadowed by itself.)
@@ -317,7 +318,7 @@ fn scape_shadeMesh(tex: texture_2d<f32>, h: ScapeHit, x: vec3f, dir: vec3f, inWa
   let off = x + select(-n, n, ndl > 0.0) * 0.0015;
   let S = ${lite ? '' : 'scape_meshShadow(tex, rotT * off, rotT * L, 3.0) * '}scape_leafShadow(off, L);
   let up = n.y * 0.5 + 0.5;
-  let ambient = select(vec3f(0.30, 0.31, 0.34), mix(vec3f(0.045, 0.06, 0.075), vec3f(0.15, 0.18, 0.21), up), inWater) * mat.ao;
+  let ambient = select(vec3f(0.30, 0.31, 0.34), mix(vec3f(0.045, 0.06, 0.075), vec3f(0.15, 0.18, 0.21), up), inWater) * studioAmbient * mat.ao;
   let hv = normalize(L - dir);
   let ndh = max(dot(n, hv), 0.0);
   let ndv = clamp(dot(n, -dir), 0.0, 1.0);
@@ -331,7 +332,7 @@ fn scape_shadeMesh(tex: texture_2d<f32>, h: ScapeHit, x: vec3f, dir: vec3f, inWa
   // shadows are left to the occlusion).
   let K = normalize(vec3f(-0.5, 0.62, 0.62));
   let nk = dot(n, K);
-  let key = vec3f(1.15, 1.04, 0.90) * mat.ao;
+  let key = vec3f(1.15, 1.04, 0.90) * studioKey * mat.ao;
   let hk = normalize(K - dir);
   let keySpec = F * (shine + 8.0) / 25.13274 * pow(max(dot(n, hk), 0.0), shine) * max(nk, 0.0);
   return mat.albedo * (E * S * max(ndl, 0.0) + key * max(nk, 0.0) + ambient) / 3.14159265 + E * S * (spec + through / 3.14159265) + key * (keySpec + mat.trans * max(-nk, 0.0) * 0.3 / 3.14159265) + F * ambient * 0.25 + mat.glow;
@@ -345,13 +346,13 @@ fn scape_shade(tex: texture_2d<f32>, h: ScapeHit, x: vec3f, dir: vec3f, inWater:
   let back = dot(n, dir) > 0.0;
   if (back) { n = -n; }
   let L = select(GLOBES_SUN_DIR, GLOBES_SUN_DIR_WATER, inWater);
-  var E = GLOBES_SUN_IRR * 0.86;
+  var E = bowlSun * 0.86;
   var dapple = 1.0;
   if (inWater) {
     dapple = betta_dapple(x, lit, lightTex, lightSamp, time);
     E = globes_sunIn(lightTex, lightSamp, x + n * 0.01, lit) * dapple;
   }
-  let ambient = select(vec3f(0.36, 0.37, 0.40), mix(vec3f(0.10, 0.13, 0.15), vec3f(0.30, 0.38, 0.44), n.y * 0.5 + 0.5), inWater);
+  let ambient = select(vec3f(0.36, 0.37, 0.40), mix(vec3f(0.10, 0.13, 0.15), vec3f(0.30, 0.38, 0.44), n.y * 0.5 + 0.5), inWater) * studioAmbient;
   let ndl = dot(n, L);
   let hv = normalize(L - dir);
   let ndh = max(dot(n, hv), 0.0);

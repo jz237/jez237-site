@@ -5,12 +5,29 @@
 // bowl's foot than further off).
 
 import * as THREE from 'three/webgpu';
-import { cameraPosition, clamp, float, normalize, positionLocal, positionWorld, reflector, uniform, vec4, wgsl, wgslFn } from 'three/tsl';
-import { STUDIO_TABLE_Y, STUDIO_WALL_Z, STUDIO_WGSL } from './studio';
+import { cameraPosition, clamp, float, normalize, positionLocal, positionWorld, reflector, screenCoordinate, uniform, vec4, wgsl, wgslFn } from 'three/tsl';
+import { STUDIO_LIGHT_ARGS, STUDIO_LIGHT_PARAMS, STUDIO_TABLE_Y, STUDIO_WALL_Z, STUDIO_WGSL } from './studio';
+import { studioLightInputs } from './studioLight';
 
 /** How far the table reaches out to the sides and towards the viewer from the bowl (world). */
 const TABLE_HALF_WIDTH = 12;
 const TABLE_FRONT = 9;
+
+/** The grain the backdrop and the table are drawn with at night (studioGrain; none by day), a share
+ *  of their light up or down, each pixel its own (Wang's hash of where it is): it breaks up the bands
+ *  their dark gradients would show in the picture's 8 bits. */
+const GRAIN_WGSL = /* wgsl */ `
+fn studio_grained(c: vec3f, pix: vec2f) -> vec3f {
+  let p = vec2u(pix);
+  var h = p.x * 1973u + p.y * 9277u;
+  h = (h ^ 61u) ^ (h >> 16u);
+  h *= 9u;
+  h ^= h >> 4u;
+  h *= 0x27d4eb2du;
+  h ^= h >> 15u;
+  return c * (1.0 + studioGrain * (f32(h & 0xffffu) / 65535.0 - 0.5));
+}
+`;
 
 export class StudioBackdrop {
   /** For scene.backgroundNode. */
@@ -31,12 +48,13 @@ export class StudioBackdrop {
   private mirrorFrame = 0;
 
   constructor() {
-    const includes = [wgsl(STUDIO_WGSL)];
+    const includes = [wgsl(STUDIO_WGSL), wgsl(GRAIN_WGSL)];
     // (Where the table is seen, the table itself is drawn right over the backdrop: there is nothing
     // to light, wherever it covers the whole pixel, so a few pixels' angle inside its edges.)
     const background = wgslFn(
-      `fn studio_background(dir: vec3f, cam: vec3f, bowl: vec3f) -> vec4f {
+      `fn studio_background(dir: vec3f, cam: vec3f, bowl: vec3f, pix: vec2f${STUDIO_LIGHT_PARAMS}) -> vec4f {
         studioBowl = bowl;
+        studio_light(${STUDIO_LIGHT_ARGS});
         let d = normalize(dir);
         if (d.y < -1e-5 && cam.y > STUDIO_TABLE_Y) {
           let t = (STUDIO_TABLE_Y - cam.y) / d.y;
@@ -44,11 +62,11 @@ export class StudioBackdrop {
           let m = 0.004 * t / -d.y;
           if (abs(x.x) < ${TABLE_HALF_WIDTH.toFixed(4)} - m && x.z > STUDIO_WALL_Z + m && x.z < ${TABLE_FRONT.toFixed(4)} - m) { return vec4f(0.0, 0.0, 0.0, 1.0); }
         }
-        return vec4f(studio_view(cam, d, false), 1.0);
+        return vec4f(studio_grained(studio_view(cam, d, false), pix), 1.0);
       }`,
       includes,
     );
-    this.background = background({ dir: normalize(positionLocal), cam: cameraPosition, bowl: this.bowl }) as unknown as ReturnType<typeof vec4>;
+    this.background = background({ dir: normalize(positionLocal), cam: cameraPosition, bowl: this.bowl, pix: screenCoordinate, ...studioLightInputs }) as unknown as ReturnType<typeof vec4>;
 
     // (A texture of the same kind as the ocean's map, so the shader binds it the same way.)
     this.map = new THREE.RenderTarget(1, 1, { type: THREE.HalfFloatType, depthBuffer: false }).texture;
@@ -66,19 +84,20 @@ export class StudioBackdrop {
     const redraw = r.updateBefore.bind(r);
     r.updateBefore = (frame) => (this.still && ++this.mirrorFrame % this.mirrorEvery !== 0 ? undefined : redraw(frame));
     const tableShade = wgslFn(
-      `fn studio_tableWithMirror(x: vec3f, cam: vec3f, bowl: vec3f, mirror: vec4f) -> vec4f {
+      `fn studio_tableWithMirror(x: vec3f, cam: vec3f, bowl: vec3f, mirror: vec4f, pix: vec2f${STUDIO_LIGHT_PARAMS}) -> vec4f {
         studioBowl = bowl;
+        studio_light(${STUDIO_LIGHT_ARGS});
         let d = normalize(x - cam);
         let cosI = clamp(-d.y, 0.0, 1.0);
         let F = 0.04 + 0.96 * pow(1.0 - cosI, 5.0);
-        return vec4f(studio_table(x) + F * mirror.rgb, 1.0);
+        return vec4f(studio_grained(studio_table(x) + F * mirror.rgb, pix), 1.0);
       }`,
       includes,
     );
     // (Its lacquer is not a perfect mirror: the image softens with distance from the bowl's foot.)
     const blur = clamp(positionWorld.xz.sub(this.bowl.xz).length().sub(0.5).mul(1.8), float(0), float(5));
     const material = new THREE.MeshBasicNodeMaterial();
-    material.colorNode = tableShade({ x: positionWorld, cam: cameraPosition, bowl: this.bowl, mirror: mirror.level(blur) }) as unknown as typeof material.colorNode;
+    material.colorNode = tableShade({ x: positionWorld, cam: cameraPosition, bowl: this.bowl, mirror: mirror.level(blur), pix: screenCoordinate, ...studioLightInputs }) as unknown as typeof material.colorNode;
     material.depthTest = false;
     material.depthWrite = false;
     const depth = TABLE_FRONT - STUDIO_WALL_Z;

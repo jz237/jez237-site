@@ -10,8 +10,10 @@ import { bowlArea, GpuClock, PoseWatch, QualityRecord } from './app/quality/page
 import { Bench, describeDevice, registerBenchRows } from './app/bench';
 import { describe, describeLoad, FrameProfile, wrap } from './app/frameProfile';
 import { Learn } from './app/learn/Learn';
+import { drowsy, keptNight, NightFade } from './app/night.mjs';
+import { NightToggle } from './app/NightToggle';
 import { ResolutionMenu } from './app/ResolutionMenu';
-import { CLEAR_WATER, forcedWaterEffects } from './water/effects';
+import { CLEAR_WATER, forcedWaterEffects, type WaterEffects } from './water/effects';
 import { WaterCare } from './water/WaterCare';
 import { WaterLook } from './water/look';
 import { BETTA_PAGE, elsewhere, GLOBES, type GlobeEntry } from './app/catalog';
@@ -39,6 +41,7 @@ import { BOWL_KOI_LAYER, GlobeView, texelTexture, type GlobeVariant } from './re
 import { MovingPlants, PLANT_PROBE_AT } from './render/scape/MovingPlants';
 import { OceanBackdrop } from './render/OceanBackdrop';
 import { StudioBackdrop } from './render/StudioBackdrop';
+import { lightStudio } from './render/studioLight';
 import { BOWL_DEBUG_LEGEND, sunInWater } from './render/shaders';
 import { BED_SOLIDS_N, BED_SOLIDS_NONE, FluidSim, SURFACE_ISO, fillHeight } from './sim/FluidSim';
 import { IdleWater } from './sim/IdleWater';
@@ -204,6 +207,10 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   }
   const specks = ocean ? new Specks(SPECKS, o.light, ocean.time) : null;
   if (specks) scene.add(specks.mesh);
+  // Night (app/night.mjs: the room dark, the lamp in its moonlight mode, the fish drowsy), the betta
+  // bowl's page's: from the first frame as this device last left it.
+  const night = bowl ? new NightFade(keptNight(() => localStorage)) : null;
+  if (night) lightStudio(night.value);
 
   // The picture takes the stage's shape and size, whatever they are: as many pixels as the
   // screen has (up to twice the CSS pixels), but no wider or taller than the GPU's textures go.
@@ -368,6 +375,8 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // What the bowl's water does to the fish and to the water's look (water/effects.ts): clear, the
   // page as it always was, unless forced (?water=, testing).
   const water = { fx: forcedWaterEffects(params.get('water')) ?? CLEAR_WATER };
+  // (The fish's at night: night.mjs drowsy, made over each frame.)
+  const drowsyFx: WaterEffects = { ...CLEAR_WATER };
   // Water mode (water/WaterCare.ts): the bowl's water simulated, in a panel and in water.fx; off
   // until asked for.
   const waterCare = feeding ? new WaterCare(bettaControls, stage, { water, forced: forcedWaterEffects(params.get('water')), feeding, food, learn, rotation: () => controller.rotation.elements }) : null;
@@ -520,8 +529,13 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
       f.food = null;
       f.gapeWant = 0;
     }
-    // (And what the water is doing to the betta: water/effects.ts.)
-    betta.water = water.fx;
+    // (Night fading in or out: the studio's light, render/studioLight.ts.)
+    if (night) {
+      const was = night.value;
+      if (night.step(dt) !== was) lightStudio(night.value);
+    }
+    // (And what the water is doing to the betta, water/effects.ts, drowsier at night.)
+    betta.water = night ? drowsy(water.fx, night.value, drowsyFx) : water.fx;
     const eaters = feeders();
     food.aim(eaters);
     koi.update(dt, sim.koiSense, koiEnv());
@@ -666,7 +680,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     return true;
   };
 
-  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, life, learn, water, waterCare, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, studio, specks, bowlRender, setScene, advance, spawnFood, clickLid, setSharpness, setRatio, setFixedRatio, setKnobs, record };
+  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, life, learn, water, waterCare, night, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, studio, specks, bowlRender, setScene, advance, spawnFood, clickLid, setSharpness, setRatio, setFixedRatio, setKnobs, record };
 }
 
 type World = Awaited<ReturnType<typeof createWorld>>;
@@ -732,6 +746,15 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
   // over from where it stood.
   // (?bench's own ratios win while it runs.)
   const links = BETTA_PAGE ? document.querySelector<HTMLElement>('.site-links') : null;
+  // (Night, app/NightToggle.ts, between the page's link and the resolution: with Learn mode on, a word
+  // on a betta's night as it falls.)
+  const nightButton = links && world.night ? new NightToggle(links, world.night.on) : null;
+  if (nightButton) {
+    nightButton.onChange = (on) => {
+      world.night?.set(on);
+      if (on) world.learn?.atNight();
+    };
+  }
   const resolution = links ? new ResolutionMenu(links, { screen: () => window.devicePixelRatio, stage: () => [stage.clientWidth, stage.clientHeight], ratioNow: () => renderer.getPixelRatio(), most: world.device.limits.maxTextureDimension2D }) : null;
   let fixed: number | null = null;
   const hold = (ratio: number | null): void => {

@@ -11,7 +11,7 @@ import { BOWL_PARAMS, bowlWGSL, type BowlDebug, type BowlShape } from './bowl';
 import { HIT } from './bowlResolve.mjs';
 import { bowlScapeWGSL } from './bowlScape';
 import { MENISCUS_WGSL } from './meniscus';
-import { STUDIO_WGSL } from './studio';
+import { STUDIO_LIGHT_ARGS, STUDIO_LIGHT_PARAMS, STUDIO_WGSL } from './studio';
 import { reefRenderWGSL } from '../reef/reefWGSL';
 import { rtTraceWGSL } from '../rt/rtWGSL';
 import { TLAS_PARAM } from '../rt/rt';
@@ -1460,10 +1460,10 @@ fn globes_sandShade(p: vec3f, inWater: bool, rot: mat3x3f, sandTex: texture_2d<f
     }
   }
   if (inWater) { albedo *= ${bowl ? 'vec3f(0.78, 0.77, 0.74)' : 'vec3f(0.62, 0.64, 0.68)'}; }
-  let sun = textureSampleLevel(causticTex, causticSamp, globes_sandUV(p), 0.0).rgb;
+  let sun = textureSampleLevel(causticTex, causticSamp, globes_sandUV(p), 0.0).rgb${bowl ? ' * studioLamp' : ''};
   let towards = select(GLOBES_SUN_DIR, GLOBES_SUN_DIR_WATER, inWater);
   let tilt = clamp(max(dot(nd, towards), 0.0) / max(dot(n, towards), 0.12), 0.0, 2.0);
-  let fill = select(GLOBES_SAND_AMBIENT_AIR, GLOBES_SAND_AMBIENT_WATER, inWater);
+  let fill = select(GLOBES_SAND_AMBIENT_AIR, GLOBES_SAND_AMBIENT_WATER, inWater)${bowl ? ' * studioAmbient' : ''};
   return albedo * (sun * shadow * tilt + fill) / 3.14159265;
 }
 
@@ -1477,7 +1477,7 @@ fn globes_sandAtGlass(p: vec3f, rot: mat3x3f) -> vec3f {
   let up = select(vec3f(0.0, 1.0, 0.0), vec3f(1.0, 0.0, 0.0), abs(n.y) > 0.9);
   let t1 = normalize(cross(n, up));
   let t2 = cross(n, t1);
-${bowl ? `  // (The betta's bowl: its studio, and the warm light of the table's pool under it. Its looks
+${bowl ? `  // (The betta's bowl: its studio, and the light of the table's pool under it, the lamp's. Its looks
   // from one place, see globesZero: along n, then n + t1, n - t1, n + t2 and n - t2.)
   let at = p + studioBowl;
   var ahead = vec3f(0.0);
@@ -1492,7 +1492,7 @@ ${bowl ? `  // (The betta's bowl: its studio, and the warm light of the table's 
     if (k == 0) { ahead = v; } else { aside += v; }
   }
   let room = 0.4 * ahead + 0.15 * aside;
-  let light = 3.14159265 * room + GLOBES_SUN_IRR * max(dot(n, GLOBES_SUN_DIR), 0.0) * 0.85 + vec3f(1.15, 0.98, 0.78);` : `  let room = 0.4 * globes_sky(n) + 0.15 * (globes_sky(n + t1) + globes_sky(n - t1) + globes_sky(n + t2) + globes_sky(n - t2));
+  let light = 3.14159265 * room + bowlSun * max(dot(n, GLOBES_SUN_DIR), 0.0) * 0.85 + vec3f(1.15, 0.98, 0.78) * studioLamp;` : `  let room = 0.4 * globes_sky(n) + 0.15 * (globes_sky(n + t1) + globes_sky(n - t1) + globes_sky(n + t2) + globes_sky(n - t2));
   let light = 3.14159265 * room + GLOBES_SUN_IRR * max(dot(n, GLOBES_SUN_DIR), 0.0) * 0.85 + vec3f(0.95, 0.90, 0.84);`}
   return albedo * light / 3.14159265;
 }
@@ -1664,7 +1664,7 @@ fn globes_koiFin(pose: texture_2d<f32>, x: vec3f) -> vec4f {
 fn globes_sunIn(lightTex: texture_3d<f32>, lightSamp: sampler, x: vec3f, lit: vec4f) -> vec3f {
   let f = textureSampleLevel(lightTex, lightSamp, x / (2.0 * GLOBES_R_IN) + vec3f(0.5), 0.0).r;
   let path = max(lit.x - x.y, 0.0) / max(abs(GLOBES_SUN_DIR_WATER.y), 0.3);
-  return GLOBES_SUN_IRR * f * exp(-${bowl ? 'bowlSunExt' : 'globesWaterExt'} * path);
+  return ${bowl ? 'bowlSun' : 'GLOBES_SUN_IRR'} * f * exp(-${bowl ? 'bowlSunExt' : 'globesWaterExt'} * path);
 }
 
 // Henyey-Greenstein phase function.
@@ -1702,7 +1702,7 @@ fn globes_motes(moteTex: texture_3d<f32>, cell: vec3i, p: vec3f, dir: vec3f, tMi
     // Flakes tumble as they drift: now and then one turns its face to the light and glints.
     let spin = fract(m.w * 137.31) * 6.283 + time * (0.7 + fract(m.w * 71.7) * 1.6);
     let glint = 0.18 + 3.0 * pow(max(sin(spin), 0.0), 12.0);
-    out += exp(-globesWaterExt * tc) * cover * vec3f(0.92, 0.9, 0.84) * (E * ph * 2.2 * glint + vec3f(0.03, 0.05, 0.06));
+    out += exp(-globesWaterExt * tc) * cover * vec3f(0.92, 0.9, 0.84) * (E * ph * 2.2 * glint + vec3f(0.03, 0.05, 0.06)${bowl ? ' * studioAmbient' : ''});
   }
   return out;
 }
@@ -1765,8 +1765,8 @@ fn globes_oct(n: vec3f) -> vec2f {
 // (brighter where the sun's shafts reach the bubble: E, the light there), the water's glow round
 // about, the dark of the depths below; and the sun, where its shafts fall.
 fn globes_waterAround(w: vec3f, E: vec3f) -> vec3f {
-  var c = mix(GLOBES_WATER_DEEP * 0.5, GLOBES_WATER_GLOW * 3.0, smoothstep(-0.7, 0.35, w.y));
-  c += smoothstep(0.45, 0.8, w.y) * (vec3f(0.22, 0.32, 0.42) + 0.15 * E);
+  var c = mix(GLOBES_WATER_DEEP * 0.5, GLOBES_WATER_GLOW * 3.0, smoothstep(-0.7, 0.35, w.y))${bowl ? ' * studioAmbient' : ''};
+  c += smoothstep(0.45, 0.8, w.y) * (vec3f(0.22, 0.32, 0.42)${bowl ? ' * studioLamp' : ''} + 0.15 * E);
   return c + E * (2.0 * pow(max(dot(w, GLOBES_SUN_DIR_WATER), 0.0), 48.0));
 }
 
@@ -1774,7 +1774,7 @@ fn globes_waterAround(w: vec3f, E: vec3f) -> vec3f {
 // the room beyond the glass, or, below, the water.
 fn globes_airAround(bgTex: texture_2d<f32>, bgSamp: sampler, x: vec3f, w: vec3f) -> vec3f {
   let room = globes_bg(bgTex, bgSamp, x, w);
-  let water = GLOBES_WATER_DEEP * 2.0 + 0.04 * globes_bg(bgTex, bgSamp, x, reflect(w, vec3f(0.0, 1.0, 0.0)));
+  let water = GLOBES_WATER_DEEP${bowl ? ' * studioAmbient' : ''} * 2.0 + 0.04 * globes_bg(bgTex, bgSamp, x, reflect(w, vec3f(0.0, 1.0, 0.0)));
   return mix(water, room, smoothstep(-0.3, 0.05, w.y));
 }
 
@@ -1797,7 +1797,7 @@ fn globes_sprayShade(bgTex: texture_2d<f32>, bgSamp: sampler, x: vec3f, n: vec3f
   var d2 = refract(d1, -n2, GLOBES_IOR_WATER);
   if (dot(d2, d2) < 0.5) { d2 = reflect(d1, -n2); }
   let thru = (1.0 - F) * (1.0 - F) * exp(-globesWaterExt * (2.0 * r)) * globes_airAround(bgTex, bgSamp, x2, d2);
-  let glint = GLOBES_SUN_IRR * (F * 4.0 * pow(max(dot(reflect(dir, n), GLOBES_SUN_DIR), 0.0), 60.0));
+  let glint = ${bowl ? 'bowlSun' : 'GLOBES_SUN_IRR'} * (F * 4.0 * pow(max(dot(reflect(dir, n), GLOBES_SUN_DIR), 0.0), 60.0));
   return vec4f(F * globes_airAround(bgTex, bgSamp, x, reflect(dir, n)) + thru + glint, 0.0);
 }
 
@@ -1812,7 +1812,7 @@ fn globes_bubbleWhole(E: vec3f) -> vec4f {
 // it catches (a glint).
 fn globes_sprayWhole(bgTex: texture_2d<f32>, bgSamp: sampler, x: vec3f) -> vec4f {
   let env = 0.5 * (globes_bg(bgTex, bgSamp, x, vec3f(0.0, 1.0, 0.0)) + globes_bg(bgTex, bgSamp, x, vec3f(0.0, -0.3, 0.95)));
-  return vec4f(0.6 * env + 0.05 * GLOBES_SUN_IRR, 0.0);
+  return vec4f(0.6 * env + 0.05 * ${bowl ? 'bowlSun' : 'GLOBES_SUN_IRR'}, 0.0);
 }
 
 // A bubble's dome over the water, met from the air: a film of water, mirroring the air round it
@@ -2556,8 +2556,9 @@ ${bowl ? `      let T = exp(-globesWaterExt * t);
       // clouded one is seen in its haze: the clear water's glow and the tea's, for their share of
       // the dimming; the bloom's haze, for its share, lit as the water is where the stretch begins,
       // dimmer the deeper below the resting level that is. Clear, it is the water's glow, after
-      // the bubbles, as it always was.)
-      if (bowlMurk > 0.0) { col += thr * (bowlGlow + BOWL_HAZE * exp(bowlSunExt * (p.y - lit.x)) * bowlCloud) / globesWaterExt * (1.0 - T); }
+      // the bubbles, as it always was. The water's glow is the light round about, the tea's and the
+      // haze's the lamp's: studio.ts.)
+      if (bowlMurk > 0.0) { col += thr * (bowlGlow + BOWL_HAZE * studioLamp * exp(bowlSunExt * (p.y - lit.x)) * bowlCloud) / globesWaterExt * (1.0 - T); }
 ` : ''}      // (The clear bubbles in it.)
       let sp = globes_splashAlong(splashTex, p, dir, 0.0, t, true, pathLen, lit, lightTex, lightSamp, bgTex, bgSamp);
       col += thr * sp.rgb;
@@ -2565,7 +2566,7 @@ ${bowl ? `      let T = exp(-globesWaterExt * t);
       ${hitMeets(bowl, HIT_MET_SPLASH, 'sp.a < 0.999')}` : ''}${bowl ? `
       // (The lid's lamp shining down through the water: its beam brighter in a clouded one.)
       col += thr * bowl_lampAlong(p, dir, t, 0.5 + BOWL_BLOOM_LAMP * bowlCloud, globesWaterExt);
-      if (bowlMurk <= 0.0) { col += thr * GLOBES_WATER_GLOW * (1.0 - T); }` : `
+      if (bowlMurk <= 0.0) { col += thr * GLOBES_WATER_GLOW * studioAmbient * (1.0 - T); }` : `
       let T = exp(-globesWaterExt * t);
       col += thr * GLOBES_WATER_GLOW * (1.0 - T);`}
       thr *= T;
@@ -2730,7 +2731,7 @@ ${bowl ? `    if (event == 9) {${bowl.ids ? `
     }
     let Fi = globes_fresnel(clamp(-dot(dir, nf), 0.0, 1.0), n1, n2);
     if (inWater) {
-      col += thr * Fi * GLOBES_WATER_DEEP;
+      col += thr * Fi * GLOBES_WATER_DEEP${bowl ? ' * studioAmbient' : ''};
     } else {
       col += thr * Fi * globes_bg(bgTex, bgSamp, pi, refl);
     }
@@ -2772,7 +2773,7 @@ export const BOWL_HIT_ID_WGSL = /* wgsl */ `fn globes_hitIdOf(traced: vec4f) -> 
 export function globeShadeWGSL(rt = false, foam = false, oneGather = false, bowl = false): string {
   const traceArgs = `rot, vol, prm, densTex, densSamp, sandTex, sandSamp, causticTex, causticSamp, poseTex, lit, lightTex, lightSamp, moteTex, fieldTex, fieldSamp, select(0.0, 1.0, gatherW > 0.0), bgTex, bgSamp, kelpCellTex, kelpRefTex, kelpPrimTex, splashTex, dropTex${BETTA_ARGS}${rt ? `, ${TLAS_PARAM}` : ''}${foam ? ', foamTex, foamSamp, aerTex, aerSamp, foamPart, foamBins' : ''}`;
   const code = /* wgsl */ `
-fn globes_shade(camPos: vec3f, fragPos: vec3f, fragCenter: vec3f, center: vec3f, rot: mat3x3f, vol: vec4f, prm: vec4f, aaRight: vec3f, aaUp: vec3f, densTex: texture_3d<f32>, densSamp: sampler, sandTex: texture_2d<f32>, sandSamp: sampler, causticTex: texture_2d<f32>, causticSamp: sampler, poseTex: texture_2d<f32>, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, moteTex: texture_3d<f32>, fieldTex: texture_3d<f32>, fieldSamp: sampler, bgTex: texture_2d<f32>, bgSamp: sampler, deskM: mat4x4f, deskPlane: vec4f, glow: vec3f, kelpCellTex: texture_3d<f32>, kelpRefTex: texture_2d<f32>, kelpPrimTex: texture_2d<f32>, splashTex: texture_3d<f32>, dropTex: texture_2d<f32>${BETTA_PARAMS}${rt ? `, ${TLAS_PARAM}: texture_3d<u32>` : ''}${foam ? FOAM_PARAMS : ''}${bowl ? BOWL_PARAMS : ''}) -> vec4f {
+fn globes_shade(camPos: vec3f, fragPos: vec3f, fragCenter: vec3f, center: vec3f, rot: mat3x3f, vol: vec4f, prm: vec4f, aaRight: vec3f, aaUp: vec3f, densTex: texture_3d<f32>, densSamp: sampler, sandTex: texture_2d<f32>, sandSamp: sampler, causticTex: texture_2d<f32>, causticSamp: sampler, poseTex: texture_2d<f32>, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, moteTex: texture_3d<f32>, fieldTex: texture_3d<f32>, fieldSamp: sampler, bgTex: texture_2d<f32>, bgSamp: sampler, deskM: mat4x4f, deskPlane: vec4f, glow: vec3f, kelpCellTex: texture_3d<f32>, kelpRefTex: texture_2d<f32>, kelpPrimTex: texture_2d<f32>, splashTex: texture_3d<f32>, dropTex: texture_2d<f32>${BETTA_PARAMS}${rt ? `, ${TLAS_PARAM}: texture_3d<u32>` : ''}${foam ? FOAM_PARAMS : ''}${bowl ? BOWL_PARAMS + STUDIO_LIGHT_PARAMS : ''}) -> vec4f {
   globesGlow = glow;
   let ro = camPos - center;
   let rd = normalize(fragPos - camPos);
@@ -2799,17 +2800,21 @@ ${bowl ? '' : `  globesDeskM = deskM;
   scapeZero = globesZero;
   bowlRot = rot;
   studioBowl = center;
+  // (The studio's light, by day or by night: studio.ts. The lamp's, as the photons carry it.)
+  studio_light(${STUDIO_LIGHT_ARGS});
+  bowlSun = GLOBES_SUN_IRR * studioLamp;
   scapeRot = rot;
   scapeLife = bowlLife;
   bowlM = bowlLid;
   bowlLidOn = bowlState.x > 0.5;
   bowlLamp = select(0.0, bowlState.y, bowlLidOn);
   // (The water's state, water/effects.ts: the bloom and the tannins dim it on top of its own
-  // dimming; the fish's colours; the heater's lamp.)
+  // dimming, and glow, the clear water's in the light round about, the tea's in the lamp's; the
+  // fish's colours; the heater's lamp.)
   bowlCloud = bowlWater.x;
   bowlMurk = bowlCloud + bowlWater.y;
   bowlSunExt = globesWaterExt + BOWL_TANNIN * bowlWater.y;
-  bowlGlow = GLOBES_WATER_GLOW * globesWaterExt + BOWL_TEA * bowlWater.y;
+  bowlGlow = GLOBES_WATER_GLOW * globesWaterExt * studioAmbient + BOWL_TEA * bowlWater.y * studioLamp;
   globesWaterExt = bowlSunExt + bowlCloud;
   bowlSunExt += BOWL_BLOOM_LOST * bowlCloud;
   bettaPale = bowlWater.z;

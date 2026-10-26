@@ -172,6 +172,13 @@ export const FEEDING = {
   }),
 };
 
+/** Shown as Night is turned on (app/night.mjs), with Learn mode on. */
+export const NIGHT: LearnCard = {
+  kicker: 'Care',
+  title: 'Bettas sleep at night',
+  body: 'In the dark a betta rests on the bottom or on a broad leaf, barely moving. A real bowl needs a long night: light 8 to 12 hours a day, dark the rest. A dim blue night light is for viewing, not for leaving on all night.',
+};
+
 /** Shown as Learn mode is turned on. */
 export const INTRO: LearnCard = {
   kicker: 'Learn',

@@ -654,3 +654,12 @@ html.desktop #stage canvas.is-live {
 .res-name { font-size: 13px; color: #eef8f7; }
 .res-detail { font-size: 11px; color: #9cc4c6; font-variant-numeric: tabular-nums; }
 .res-note { margin: 8px 4px 0; font-size: 11px; color: #9cc4c6; }
+
+/* Night (NightToggle.ts): its button in the link bar between the page's link and the resolution, in
+   the links' own look, a moon before its word (on one line: the three fit across 360 px); pressed, the
+   moon filled and the pill faintly lit. */
+.site-links .night-button { pointer-events: auto; display: inline-flex; align-items: center; gap: 5px; color: #d9efff; padding: 8px 11px 8px 9px; border: 1px solid #8edcff33; border-radius: 20px; background: #03111dcc; font: inherit; white-space: nowrap; cursor: pointer; touch-action: manipulation; }
+.site-links .night-button svg { width: 13px; height: 13px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
+.site-links .night-button[aria-pressed="true"] { color: white; border-color: #8edcff8c; background: #0a2440e6; box-shadow: 0 0 12px #8edcff33; }
+.site-links .night-button[aria-pressed="true"] svg { fill: currentColor; }
+.site-links .night-button:hover, .site-links .night-button:focus-visible { color: white; outline: 2px solid #8edcff; }

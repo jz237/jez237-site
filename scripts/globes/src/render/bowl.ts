@@ -138,8 +138,9 @@ const BOWL_KNOB_R: f32 = ${f(BOWL.knobRadius)};
 const BOWL_KNOB_H: f32 = ${f(BOWL.knobHeight)};
 const BOWL_PUCK_R: f32 = ${f(BOWL.puckRadius)};
 const BOWL_PUCK_D: f32 = ${f(BOWL.puckDepth)};
-// The lamp's face: radiance at full brightness (warm white, HDR), and its light's cone (the cosine
-// of its half-angle at the edge, and inside which it is full).
+// The lamp's face: radiance at full brightness by day (warm white, HDR; studioLamp tints it for its
+// night mode, studioBeam its beam), and its light's cone (the cosine of its half-angle at the edge,
+// and inside which it is full).
 const BOWL_LAMP: vec3f = vec3f(60.0, 52.0, 40.0);
 const BOWL_LAMP_COS_OUT: f32 = 0.55;
 const BOWL_LAMP_COS_IN: f32 = 0.9;
@@ -160,10 +161,12 @@ var<private> bowlRot: mat3x3f;
 var<private> bowlM: mat4x4f;
 var<private> bowlLidOn: bool;
 // The lamp (set with the lid): its face's middle and the way it shines (the translating frame),
-// and its brightness (0..1).
+// and its brightness (0..1). Its colour, by day or in its night mode, is studioLamp's (studio.ts);
+// bowlSun, the light the photons carry (GLOBES_SUN_IRR) in that colour, set by globes_shade.
 var<private> bowlLampP: vec3f;
 var<private> bowlLampD: vec3f;
 var<private> bowlLamp: f32;
+var<private> bowlSun: vec3f;
 
 // In the open mouth (a point on or in the glass's sphere): above the plane the glass is cut at.
 fn bowl_inMouth(p: vec3f) -> bool {
@@ -338,14 +341,14 @@ fn bowl_blackShade(h: BowlHit, bgTex: texture_2d<f32>, bgSamp: sampler) -> vec3f
   let r = length(q.xz);
   if (nl.y < -0.7 && r < BOWL_PUCK_R - 0.003 && q.y < -BOWL_PUCK_D + 0.002) {
     // (Its diffuser: brightest in its middle, a dimmer ring round it.)
-    return BOWL_LAMP * bowlLamp * (1.0 - 0.4 * smoothstep(0.25 * BOWL_PUCK_R, BOWL_PUCK_R, r)) + vec3f(0.02);
+    return BOWL_LAMP * studioLamp * bowlLamp * (1.0 - 0.4 * smoothstep(0.25 * BOWL_PUCK_R, BOWL_PUCK_R, r)) + vec3f(0.02);
   }
   let n = bowl_toWorld(3u, nl);
   let d = bowl_toWorld(3u, h.d);
   let cosI = clamp(-dot(d, n), 0.0, 1.0);
   let F = 0.045 + 0.955 * pow(1.0 - cosI, 5.0);
   let up = max(dot(n, GLOBES_SUN_DIR), 0.0);
-  return F * globes_bg(bgTex, bgSamp, bowl_pointToWorld(3u, q), reflect(d, n)) + vec3f(0.006, 0.0065, 0.008) * (0.4 + 0.6 * up);
+  return F * globes_bg(bgTex, bgSamp, bowl_pointToWorld(3u, q), reflect(d, n)) + vec3f(0.006, 0.0065, 0.008) * studioAmbient * (0.4 + 0.6 * up);
 }
 
 // The lamp's light at x (the translating frame), along the way it shines: its cone, falling off
@@ -380,7 +383,7 @@ fn bowl_lampAlong(p: vec3f, dir: vec3f, tEnd: f32, sigma: f32, ext: vec3f) -> ve
     s += bowl_lampAt(x) * rays * T;
     T *= Tstep;
   }
-  return ${s.debug ? 'dbg_chk(' : ''}vec3f(1.0, 0.88, 0.70) * s * sigma * dt${s.debug ? ', select(DBG_LAMP_WATER, DBG_LAMP_AIR, sigma < 0.3))' : ''};
+  return ${s.debug ? 'dbg_chk(' : ''}vec3f(1.0, 0.88, 0.70) * studioBeam * s * sigma * dt${s.debug ? ', select(DBG_LAMP_WATER, DBG_LAMP_AIR, sigma < 0.3))' : ''};
 }
 
 // The water's state (water/effects.ts; set by globes_shade): a bloom of bacteria clouding it, whose

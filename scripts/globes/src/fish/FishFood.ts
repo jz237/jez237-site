@@ -570,7 +570,8 @@ export class FishFood {
 if (FOOD_TEXEL + FOOD_TEXELS > KOI_TEX_WIDTH) throw new Error('fish food: no room in the pose texture');
 
 /** The flakes for the renderer: food_trace (the nearest flake a ray meets) and food_shade. round:
- *  they are the betta's pellets (FishFood.pellets), little balls. */
+ *  they are the betta's pellets (FishFood.pellets), little balls, lit by its bowl's studio's light
+ *  (studio.ts, bowl.ts bowlSun). */
 export function foodWGSL(round = false): string {
   return /* wgsl */ `
 const FOOD_TEXEL: i32 = ${FOOD_TEXEL};
@@ -663,9 +664,9 @@ fn food_shade(pose: texture_2d<f32>, k: i32, x: vec3f, dir: vec3f, inWater: bool
   var pc = mix(vec3f(0.30, 0.075, 0.03), vec3f(0.42, 0.16, 0.05), fract(B.w * 7.3)) * (0.8 + 0.35 * globes_noise3(qb * 2.0));
   pc = mix(pc, vec3f(0.55, 0.38, 0.16), 0.6 * smoothstep(0.8, 0.92, globes_noise3(qb * 5.0)));
   let Lb = select(GLOBES_SUN_DIR, GLOBES_SUN_DIR_WATER, inWater);
-  var Eb = GLOBES_SUN_IRR * 0.86;
+  var Eb = bowlSun * 0.86;
   if (inWater) { Eb = globes_sunIn(lightTex, lightSamp, x + Lb * 0.02, lit); }
-  let ab = select(vec3f(0.42, 0.42, 0.46), mix(vec3f(0.035, 0.05, 0.045), vec3f(0.15, 0.25, 0.28), 0.5 + 0.5 * nb.y), inWater);
+  let ab = select(vec3f(0.42, 0.42, 0.46), mix(vec3f(0.035, 0.05, 0.045), vec3f(0.15, 0.25, 0.28), 0.5 + 0.5 * nb.y), inWater) * studioAmbient;
   let hb = normalize(Lb - dir);
   return pc * (Eb * max(dot(nb, Lb), 0.0) + ab) / 3.14159265 + Eb * 0.06 * pow(max(dot(nb, hb), 0.0), 40.0);` : `
   var n = B.xyz / length(B.xyz);

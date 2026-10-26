@@ -14,7 +14,7 @@ import type { BowlLife } from '../../interaction/BowlLife';
 import type { FeedState, Feeding } from '../../interaction/Feeding';
 import type { GlobeController } from '../../interaction/GlobeController';
 import { CaptionClock, MODE_CAPTIONS } from './captions.mjs';
-import { CAPTIONS, FEEDING, INTRO, TOPICS, type CaptionId, type LearnCard, type TopicId } from './content';
+import { CAPTIONS, FEEDING, INTRO, NIGHT, TOPICS, type CaptionId, type LearnCard, type TopicId } from './content';
 import { FeedLog } from './feedLog.mjs';
 
 /** Where the choice is kept on this device. */
@@ -193,6 +193,12 @@ export class Learn {
     const due = this.clock.due(t, this.busy) as CaptionId | null;
     if (due) this.caption(due);
     if (this.until > 0 && t > this.until && !this.held) this.hide();
+  }
+
+  /** Night turned on (app/night.mjs): with Learn mode on, how a betta sleeps, and what a real bowl's
+   *  nights need. */
+  atNight(): void {
+    if (this.on) this.show(NIGHT, true);
   }
 
   /** A tap (a press let go where it began) at client px: with Learn mode on, a card about what it

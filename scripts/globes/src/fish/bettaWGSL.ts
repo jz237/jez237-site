@@ -3,7 +3,8 @@
 export const BETTA_PARAMS = ', bettaTex: texture_2d<f32>, bettaAtlas: texture_2d<f32>, bettaSamp: sampler';
 export const BETTA_ARGS = ', bettaTex, bettaAtlas, bettaSamp';
 /** The fish's WGSL; bowl: the betta bowl's, where the water can fade its colours (bettaPale, set
- *  by globes_shade: water/effects.ts pale). */
+ *  by globes_shade: water/effects.ts pale), lit by its studio's light, by day or by night (studio.ts,
+ *  bowl.ts bowlSun). */
 const bettaFullWGSL = (bowl: boolean): string => /* wgsl */ `${bowl ? `
 // How faded the fish is (0..1): set by globes_shade.
 var<private> bettaPale: f32;` : ''}
@@ -183,7 +184,7 @@ fn betta_shade(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, hit: 
   // saturated and a little darker, skin and fins alike (below, its sheen and play of colour too).
   albedo = mix(albedo, vec3f(dot(albedo, vec3f(0.3, 0.59, 0.11))), 0.65 * bettaPale) * (1.0 - 0.1 * bettaPale);` : ''}
   let L = select(GLOBES_SUN_DIR, GLOBES_SUN_DIR_WATER, inWater);
-  var E = GLOBES_SUN_IRR * 0.86;
+  var E = ${bowl ? 'bowlSun' : 'GLOBES_SUN_IRR'} * 0.86;
   var dapple = 1.0;
   if (inWater) {
     dapple = betta_dapple(x, lit, lightTex, lightSamp, time);
@@ -193,7 +194,7 @@ fn betta_shade(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, hit: 
   let ndv = clamp(dot(n, -rd), 0.0, 1.0);
   let fin = mat == 1u || mat == 2u;
   // (The bright lines also light the water around them, a little: they reach the fish's flanks.)
-  let ambient = mix(vec3f(0.25, 0.30, 0.36), vec3f(0.55, 0.64, 0.72), n.y * 0.5 + 0.5) * (1.0 + 0.55 * (dapple - 1.0));
+  let ambient = mix(vec3f(0.25, 0.30, 0.36), vec3f(0.55, 0.64, 0.72), n.y * 0.5 + 0.5)${bowl ? ' * studioAmbient' : ''} * (1.0 + 0.55 * (dapple - 1.0));
   let side = select(1.0, -1.0, ndl < 0.0);
   let sunVis = mix(vec3f(1.0), betta_occlusion(tex, atlas, smp, x + n * side * 0.0006, L), smoothstep(-0.1, 0.3, select(ndl, abs(ndl), fin)) * select(1.0, 0.6, fin));
   let direct = E * sunVis;

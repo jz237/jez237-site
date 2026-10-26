@@ -34,6 +34,7 @@ import { longestMarch } from '../app/quality/ladder.mjs';
 import { BOWL_WATER, type BowlShape } from './bowl';
 import { MarchBand } from './marchBand';
 import { BOWL_HIT_ID_WGSL, envWGSL, globeHelpersWGSL, globeShadeWGSL } from './shaders';
+import { studioLightInputs } from './studioLight';
 
 /** Where the backdrop's soft glow lies (a direction from the camera): behind the globe, where
  *  it rests in the middle of the view. Shared by the backdrop, its map and the globe, so the
@@ -383,7 +384,7 @@ export class GlobeView {
       let passInputs = redraw || perSampleWater ? koiInputs : inputs;
       if (withReef) passInputs = { ...passInputs, ...reefGrid };
       if (foam) passInputs = { ...passInputs, ...foamInputs };
-      if (withBowl) passInputs = Object.assign({}, passInputs, { bowlLid: this.uBowlLid, bowlState: this.uBowlState, bowlLife: this.uBowlLife, bowlDetail: this.uBowlDetail, bowlWater: this.uBowlWater }, scapeTex ? { kelpPrimTex: texture(scapeTex) } : {}, band, pixelRay ? { fragPos: pixelRay } : {});
+      if (withBowl) passInputs = Object.assign({}, passInputs, { bowlLid: this.uBowlLid, bowlState: this.uBowlState, bowlLife: this.uBowlLife, bowlDetail: this.uBowlDetail, bowlWater: this.uBowlWater }, studioLightInputs, scapeTex ? { kelpPrimTex: texture(scapeTex) } : {}, band, pixelRay ? { fragPos: pixelRay } : {});
       if (!hardware) passInputs = Object.fromEntries(Object.entries(passInputs).filter(([k]) => k !== TLAS_PARAM)) as typeof passInputs;
       // (One variable: the depth and the colour both read the same trace.) Its w carries the
       // pixel's coverage, plus 2 where the second pass must redraw it.

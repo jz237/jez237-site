@@ -6,7 +6,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { CAPTIONS, FEEDING, INTRO, TOPICS } from './src/app/learn/content.ts';
+import { CAPTIONS, FEEDING, INTRO, NIGHT, TOPICS } from './src/app/learn/content.ts';
 import { AFTER, CaptionClock, COOLDOWN, GAP, MODE_CAPTIONS } from './src/app/learn/captions.mjs';
 import { DAY, DAY_PELLETS, FeedLog, SPACING } from './src/app/learn/feedLog.mjs';
 import { TOPIC_IDS } from './src/app/learn/pick.mjs';
@@ -32,6 +32,7 @@ test('every mode of the swim is captioned or is only the route; every caption is
   for (const c of Object.values(MODE_CAPTIONS)) assert.ok(c in CAPTIONS && c in AFTER, c);
   for (const [id, c] of Object.entries(CAPTIONS)) short(id, c);
   short('intro', INTRO);
+  short('night', NIGHT);
   short('rule', FEEDING.rule);
   short('again', FEEDING.again(3, 12));
   short('over', FEEDING.over(9, 340));

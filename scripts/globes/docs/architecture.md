@@ -1631,3 +1631,51 @@ the new code its own way).
   (384x693 at 2.81, vsync), clear and with strong effects alike: 60 fps, GPU sim 0.4-0.5 + draw
   1.0 ms, CPU 1.9-2.3 ms, 84 pipelines.
 - Tests: `water-fish.test.mjs` (12).
+
+## Night (app/night.mjs, NightToggle.ts, render/studio.ts StudioLight)
+
+The betta page's link bar has a **Night** button between "← Demonstrations" and the resolution (a
+pill, a moon before its word, `aria-pressed`; off at first, remembered on the device: localStorage
+`betta.night`, every access in try/catch). Night turns the room's lights off and the lid's lamp to
+its soft blue moonlight mode, and the fish drowsy. Day and night fade into each other over 2 s
+(eased in and out; turned back halfway, from where it is), never a cut; kept on, the page opens at
+night from its first frame (the studio behind the splash too).
+
+- **The light, by uniform.** The studio's colours were literals in its WGSL (studio_wall,
+  studio_room, studio_tableLight, studio_table, each inlined 36 times in the bowl's passes). They are
+  `StudioLight` (studio.ts): 16 colours and 3 shares in four mat4 uniforms (render/studioLight.ts),
+  which every entry point (globes_shade, the backdrop's, the table's) hands to `studio_light`, setting
+  a private for each that the studio's code reads where its literal was. By day (`STUDIO_DAY`) they
+  are those literals; by night `STUDIO_NIGHT`; between, each by the same share of its ratio, as a
+  dimmer turns a light down, so the picture darkens evenly. Night is only these uniforms: no pipeline
+  knows day from night.
+  - The studio: the paper deep blue, faintly lit behind the bowl where the lamp reaches it and darker
+    to its edges and top; the room nearly dark, the soft boxes a whisper (the glass's outline still
+    reads); the pool on the table blue, the caustics' mottle in it deeper (`poolMottle`).
+  - The bowl's light, tints that are 1 by day: `studioLamp` (what the photons carry, GLOBES_SUN_IRR,
+    as `bowlSun`: the light volume, the caustics on the sand, the light above the water on the fish,
+    the furnishings, the pellets, the spray and the nest; the lamp's face; the tea's glow and the
+    bloom's haze); `studioBeam` (the lamp's beams in the air and the water: at night brighter than the
+    lamp's tint, silver-blue against the dark water); `studioAmbient` (the light round about: the
+    ambient of the furnishings, the fish, the pellets and the sand, the clear water's glow and its
+    deep, the motes' glow, the lid's plastic); `studioKey` (the key soft box on the furnishings). The
+    sim and its photons are as they were: the light is tinted and scaled where it is shaded. The
+    heater's lamp is not: the one warm light at night.
+  - `grain`: the backdrop and the table (their own small passes) are drawn with a grain of a share of
+    their light at night (none by day), so their dark gradients do not band in the picture's 8 bits.
+- **The fish.** At night the fish takes the larger of Water mode's lethargy and 0.3 of the fade
+  (night.mjs `drowsy`; Water mode's own effects are left as they are, and by day the fish is handed
+  them themselves): it rests about a fifth of the time, swims slower and shorter, and still patrols
+  and displays. It is not paled or clamped. With Learn mode on, Night turned on brings a card on how
+  a betta sleeps and what a real bowl's nights need (content.ts `NIGHT`).
+- **Exactness.** By day the picture is the page's as it was. Frozen frames (?manual, seeded, 200
+  ticks) against the build before: on the desktop, 0 pixels differ (three runs); on the phone's
+  tier, 0 in the same course of the world (its courses differ by ~400 pixels in either build:
+  Performance lessons). The other globes' WGSL is byte for byte as it was (80 passes).
+- **Cost.** Inlined, the bowl's passes are smaller (a name read where a literal was): bowlKoi-full
+  419.97 -> 415.69 K, bowl-lite 396.97 -> 392.68 K. Phone emulation (384x693 at 2.81, 2.75x CPU,
+  vsync), Night off, kept on, or toggled six times in a row: 60 fps, GPU sim 0.5 + draw 1.0 ms, 84
+  pipelines, 0 late. A frame of the fade blends the light (~1 us in Node, unthrottled) and sets four
+  uniforms; a frame not fading, nothing.
+- Tests: `night.test.mjs` (5: the day's light is the literals, where studio_light reads them; the
+  night's, and halfway the geometric mean; the fade; the drowsiness; what is kept, storage blocked).
