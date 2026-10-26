@@ -30,6 +30,11 @@ export function waterVelocity(t, x, y, z, strength, direction, out) {
  *  of a frame that is caught up on (s). A host on a slow device may lighten it (Globes on phones). */
 export const FIN_QUALITY = { step: 1 / 120, passScale: 1, maxFrame: 0.07 };
 
+/** Clamped (state.clamp, 0..1: an unwell fish holding its fins folded in), how much of each broad
+ *  fin's spread closes up at the most (caudal, dorsal, anal), how far the caudal droops (rad), and
+ *  how far the ventrals tuck back (rad) and in towards each other (a share). */
+const CLAMP_FOLD = [0.62, 0.68, 0.62], CLAMP_DROOP = 0.12, CLAMP_TUCK = 1.05, CLAMP_PINCH = 0.6;
+
 export class FinDynamics {
   constructor({ point, kind, side, columns = 29, rows = 17 }) {
     Object.assign(this, { kind, side, columns, rows });
@@ -120,7 +125,10 @@ export class FinDynamics {
     const { columns: w, rows: h, kind, side, roots, target, scratch, restOffset: offset, rowTerms: row } = this;
     // (What is the same across the fin, or along a row, once.)
     const relaxed = kind === 0 ? 0.58 : kind === 1 ? 0.55 : 0.72;
-    const spread = relaxed + (1 - relaxed) * flare - drive * 0.12, fold = kind === 0 ? 0.10 * (1 - flare) : 0;
+    // Clamped, the rays close up: the caudal's fan narrows and droops, the dorsal and the anal lie
+    // back along the body, the membranes held taut; the ventrals tuck back, close together.
+    const folded = state.clamp ?? 0, held = 1 - 0.6 * folded;
+    const spread = (relaxed + (1 - relaxed) * flare - drive * 0.12) * (1 - (CLAMP_FOLD[kind] ?? 0) * folded), fold = kind === 0 ? 0.10 * (1 - flare) + CLAMP_DROOP * folded : 0;
     let cosA = 0, sinA = 0;
     if (kind === 3) {
       // Alternating rowing stroke, then feathered/cupped recovery.
@@ -138,7 +146,7 @@ export class FinDynamics {
         row[j * 4 + 2] = Math.cos(feather); row[j * 4 + 3] = Math.sin(feather);
       }
     } else if (kind === 4) {
-      const angle = -0.02 - flare * 0.16 - drive * 0.40 + 0.055 * Math.sin(phase * 0.55 + side);
+      const angle = -0.02 - flare * 0.16 - drive * 0.40 + 0.055 * Math.sin(phase * 0.55 + side) + CLAMP_TUCK * folded;
       cosA = Math.cos(angle); sinA = Math.sin(angle);
       for (let j = 0; j < h; j++) {
         const v = j / (h - 1);
@@ -164,7 +172,7 @@ export class FinDynamics {
               + turnBend * (0.20 + u * 0.20);
           // Bend throughout the ray, not just a ruffled outer border. Phase
           // varies across the fan and along each ray, so the membrane billows.
-          const billow = (1 - flare * 0.7) * (0.05 + drive * 0.095)
+          const billow = (1 - flare * 0.7) * (0.05 + drive * 0.095) * held
             * Math.sin(t * 1.7 - u * 5.5 - v * 2.2 + kind * 1.8);
           const bend = (wave + billow) * (0.22 + 0.78 * v);
           // Bend about the ray's in-plane perpendicular; roots stay attached.
@@ -188,7 +196,7 @@ export class FinDynamics {
         } else {
           const cx = x * cosA - y * sinA;
           y = x * sinA + y * cosA; x = cx;
-          z += row[j * 4];
+          z = z * (1 - CLAMP_PINCH * folded) + row[j * 4];
         }
         target[n] = rx + x * tangentCos - z * tangentSin;
         target[n + 1] = ry + y; target[n + 2] = rz + x * tangentSin + z * tangentCos;
@@ -258,13 +266,13 @@ export class FinDynamics {
     // A fin ray resists stretching, not lateral bending like a rigid sail.
     // Resting/swimming membranes are soft even in their inner half. Display
     // adds muscular tension without pinning their positions against the water.
-    // (A row's stiffness, once for the row.)
-    const stiffness = this.rowStiffness;
+    // (A row's stiffness, once for the row. Clamped fins are held in by muscle too.)
+    const stiffness = this.rowStiffness, folded = state.clamp ?? 0;
     for (let j = 1; j < h; j++) {
       const v = j / (h - 1);
       stiffness[j] = this.kind < 3
-        ? 3.8 + 36 * (1 - v) ** 2.4 + state.flare * (5 + 22 * (1 - v) ** 2)
-        : (this.kind === 4 ? 2.0 : 5.0) + (this.kind === 3 ? 160 : 110) * (1 - v) ** 3;
+        ? 3.8 + 36 * (1 - v) ** 2.4 + state.flare * (5 + 22 * (1 - v) ** 2) + folded * (6 + 20 * (1 - v) ** 2)
+        : (this.kind === 4 ? 2.0 + 12 * folded : 5.0) + (this.kind === 3 ? 160 : 110) * (1 - v) ** 3;
     }
     for (let q = 0; q < w * 3; q++) p[q] = old[q] = target[q];
     for (let j = 1; j < h; j++) for (let i = 0; i < w; i++) {

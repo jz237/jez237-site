@@ -2,7 +2,7 @@
 // These are injected into three.js materials through TSL's wgsl()/wgslFn().
 
 import type { GlobeConfig, LightConfig } from '../config';
-import { bettaLiteWGSL, bettaWGSL, BETTA_PARAMS, BETTA_ARGS } from '../fish/bettaWGSL';
+import { bettaBowlWGSL, bettaLiteWGSL, bettaWGSL, BETTA_PARAMS, BETTA_ARGS } from '../fish/bettaWGSL';
 import { KOI_TEXEL, koiWGSL } from '../fish/koiWGSL';
 import { CLOWN_FISH, clownShadeWGSL, clownWGSL } from '../fish/clownWGSL';
 import { foodWGSL } from '../fish/FishFood';
@@ -1664,7 +1664,7 @@ fn globes_koiFin(pose: texture_2d<f32>, x: vec3f) -> vec4f {
 fn globes_sunIn(lightTex: texture_3d<f32>, lightSamp: sampler, x: vec3f, lit: vec4f) -> vec3f {
   let f = textureSampleLevel(lightTex, lightSamp, x / (2.0 * GLOBES_R_IN) + vec3f(0.5), 0.0).r;
   let path = max(lit.x - x.y, 0.0) / max(abs(GLOBES_SUN_DIR_WATER.y), 0.3);
-  return GLOBES_SUN_IRR * f * exp(-globesWaterExt * path);
+  return GLOBES_SUN_IRR * f * exp(-${bowl ? 'bowlSunExt' : 'globesWaterExt'} * path);
 }
 
 // Henyey-Greenstein phase function.
@@ -2201,7 +2201,7 @@ fn globes_koiShade(pose: texture_2d<f32>, x: vec3f, n: vec3f, rd: vec3f, mat: f3
   return vec4f(albedo * (E * diff + amb * (1.0 + rim)) / 3.14159265 + E * spec, 1.0);
 }
 `}
-${bowl?.lite ? bettaLiteWGSL : bettaWGSL}
+${bowl ? (bowl.lite ? bettaLiteWGSL : bettaBowlWGSL) : bettaWGSL}
 ${bowl ? '' : `
 // ---- kelp ------------------------------------------------------------------------------
 ${kelpRenderWGSL()}
@@ -2551,15 +2551,18 @@ ${bowl?.lite ? `      // (The phone's bowl: where a sample could find nothing, i
       let bub = globes_bubblesAlong(aerTex, aerSamp, lightTex, lightSamp, lit, p, dir, 0.0, t);
       col += thr * bub.rgb;
       thr *= bub.a;` : ''}
-      // (The clear bubbles in it.)
+${bowl ? `      let T = exp(-globesWaterExt * t);
+      // (The water's own light along it first: a bubble in a clouded one is seen in its haze.)
+      col += thr * bowl_waterGlow(p.y, lit) * (1.0 - T);
+` : ''}      // (The clear bubbles in it.)
       let sp = globes_splashAlong(splashTex, p, dir, 0.0, t, true, pathLen, lit, lightTex, lightSamp, bgTex, bgSamp);
       col += thr * sp.rgb;
       thr *= sp.a;${bowl?.ids ? `
       ${hitMeets(bowl, HIT_MET_SPLASH, 'sp.a < 0.999')}` : ''}${bowl ? `
-      // (The lid's lamp shining down through the water.)
-      col += thr * bowl_lampAlong(p, dir, t, 0.5, globesWaterExt);` : ''}
+      // (The lid's lamp shining down through the water: its beam brighter in a clouded one.)
+      col += thr * bowl_lampAlong(p, dir, t, 0.5 + BOWL_BLOOM_LAMP * bowlCloud, globesWaterExt);` : `
       let T = exp(-globesWaterExt * t);
-      col += thr * GLOBES_WATER_GLOW * (1.0 - T);
+      col += thr * GLOBES_WATER_GLOW * (1.0 - T);`}
       thr *= T;
     } else {
       // (The spray in the air, and the bubbles' domes over the water.)
@@ -2796,6 +2799,15 @@ ${bowl ? '' : `  globesDeskM = deskM;
   bowlM = bowlLid;
   bowlLidOn = bowlState.x > 0.5;
   bowlLamp = select(0.0, bowlState.y, bowlLidOn);
+  // (The water's state, water/effects.ts: the bloom and the tannins dim it on top of its own
+  // dimming; the fish's colours; the heater's lamp.)
+  bowlCloud = bowlWater.x;
+  bowlSunExt = globesWaterExt + BOWL_TANNIN * bowlWater.y;
+  bowlGlow = GLOBES_WATER_GLOW * globesWaterExt + BOWL_TEA * bowlWater.y;
+  globesWaterExt = bowlSunExt + bowlCloud;
+  bowlSunExt += BOWL_BLOOM_LOST * bowlCloud;
+  bettaPale = bowlWater.z;
+  scapeHeaterLamp = bowlWater.w;
   bowlLampP = bowl_pointToWorld(2u, vec3f(0.0, -BOWL_PUCK_D, 0.0));
   bowlLampD = normalize(bowl_toWorld(2u, vec3f(0.0, -1.0, 0.0)));
   let traced = globes_bowlTrace(ro, rd, ${traceArgs});

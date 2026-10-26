@@ -42,7 +42,8 @@ function sense(t, points) {
 
 /** Frame i's inputs, from the fish the page has (the reference: open loop): a jittered frame time,
  *  no reading for the first frames, the bowl rocking (its solids turned, the weight it feels), a
- *  flare, a pellet, the nest's urge. */
+ *  flare, a pellet, what the water is doing to it (listless a little, short of air now and then,
+ *  its fins clamped and opening), the nest's urge. */
 function inputs(i, t, fps, ref, turned) {
   const a = 0.35 * Math.sin(0.45 * t), c = Math.cos(a), s = Math.sin(a);
   SOLIDS.forEach((o, k) => {
@@ -53,7 +54,7 @@ function inputs(i, t, fps, ref, turned) {
     dt: (1 / fps) * (1 + 0.25 * Math.sin(i * 0.37)),
     sense: i < 5 ? null : sense(t, ref.probes),
     env: { ...ENV, gravity: [7.2 * Math.sin(a), -24 + 2 * Math.sin(t * 1.3), 0.4 * Math.cos(0.7 * t)] },
-    host: { obstacles: turned, food: feeding ? { pos: [0.12, -0.05, 0.08] } : null, gapeWant: feeding ? 0.6 : 0, flared: Math.floor(t / 5) % 2 === 1 },
+    host: { obstacles: turned, food: feeding ? { pos: [0.12, -0.05, 0.08] } : null, gapeWant: feeding ? 0.6 : 0, flared: Math.floor(t / 5) % 2 === 1, water: { lethargy: 0.15 + 0.15 * Math.sin(0.21 * t), gasp: Math.max(0, Math.sin(0.17 * t)), clamp: 0.5 + 0.5 * Math.sin(0.4 * t) } },
     gulpUrge: 0.5 + 0.5 * Math.sin(0.3 * t),
   };
 }

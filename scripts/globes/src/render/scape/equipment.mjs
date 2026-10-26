@@ -397,9 +397,12 @@ export function build(options = { detail: 1 }) {
 // ---- the materials ------------------------------------------------------------------------------
 /** The heater's black plastic (its guard and caps satin, its tube behind the slots a little paler
  *  and smoother, its cord a matte rubber); its light, an amber lens lit from within, brightest at
- *  its middle, as it is while the heater heats; the filter's foam, its plastic and its tubing; the
- *  clear soft suction cups and clips. */
+ *  its middle, while the heater heats (scapeHeaterLamp, set by globes_shade: water/effects.ts
+ *  heaterLamp; off, the lens dark); the filter's foam, its plastic and its tubing; the clear soft
+ *  suction cups and clips. */
 export const WGSL = /* wgsl */ `
+var<private> scapeHeaterLamp: f32 = 1.0;
+
 fn scape_mat_heater(attrs: vec4f, p: vec3f, n: vec3f, foot: f32, front: bool) -> ScapeMat {
   var m: ScapeMat;
   let tube = attrs.x > 0.5 && attrs.x < 1.5;
@@ -419,7 +422,7 @@ fn scape_mat_heaterLamp(attrs: vec4f, p: vec3f, n: vec3f, foot: f32, front: bool
   m.rough = 0.12;
   m.spec = 0.05;
   m.ao = 1.0;
-  m.glow = vec3f(1.0, 0.28, 0.02) * (0.35 + 1.5 * (1.0 - smoothstep(0.0, 0.85, attrs.x)));
+  m.glow = vec3f(1.0, 0.28, 0.02) * (0.35 + 1.5 * (1.0 - smoothstep(0.0, 0.85, attrs.x))) * scapeHeaterLamp;
   return m;
 }
 

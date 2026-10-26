@@ -4,6 +4,9 @@ export class DisplayMotion {
   constructor() {
     this.flare = 0; this.requested = false;
     this.target = false; this.from = 0; this.elapsed = 1;
+    // How closely the fins are held folded in (0..1), as an unwell fish clamps them: set by a host
+    // (the Globes betta bowl's water), eased there; 0 here.
+    this.clamp = 0;
   }
   advance(dt) {
     if (dt <= 0) return;

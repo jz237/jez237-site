@@ -13,10 +13,11 @@ import { turnPoints } from './bettaSwim.mjs';
  *  six. */
 const SENSE_FLOATS = 24 * 4, SENSE_SAND = 6;
 /** A step (float64s): dt; FIN_QUALITY's step, passScale, maxFrame; the globe (KoiEnv); the host's
- *  inputs (a pellet or none, where; the gape; flared; the swim's gulpUrge); the water's reading or
- *  none, its centroid; how many obstacles; the bowl's turn about its own axis since the last step;
- *  the reading's probes and sand; then the obstacles, eight floats each (a, b, r, solid). */
-const S = { dt: 0, quality: 1, radius: 4, level: 5, sandLevel: 6, iso: 7, gravity: 8, food: 11, foodAt: 12, gape: 15, flared: 16, gulpUrge: 17, sensed: 18, centroid: 19, obstacles: 22, turn: 23, probes: 26, sand: 26 + SENSE_FLOATS, capsules: 26 + SENSE_FLOATS + SENSE_SAND };
+ *  inputs (a pellet or none, where; the gape; flared; the swim's gulpUrge; what the water is doing
+ *  to it: lethargy, gasp, clamp); the water's reading or none, its centroid; how many obstacles;
+ *  the bowl's turn about its own axis since the last step; the reading's probes and sand; then the
+ *  obstacles, eight floats each (a, b, r, solid). */
+const S = { dt: 0, quality: 1, radius: 4, level: 5, sandLevel: 6, iso: 7, gravity: 8, food: 11, foodAt: 12, gape: 15, flared: 16, gulpUrge: 17, water: 18, sensed: 21, centroid: 22, obstacles: 25, turn: 26, probes: 29, sand: 29 + SENSE_FLOATS, capsules: 29 + SENSE_FLOATS + SENSE_SAND };
 /** A pose: float64s first (the swim's heading and pitch, the water level it was moved at, the
  *  mouth, the ripple and where, the bubbles and where; 16 of them, so the float32s are aligned),
  *  then float32s (the 16 probes, four each; the vertices, three each). */
@@ -57,6 +58,8 @@ export function writeStep(data, dt, sense, env, host, gulpUrge, lead = null, tur
   data[S.gape] = host.gapeWant;
   data[S.flared] = host.flared ? 1 : 0;
   data[S.gulpUrge] = gulpUrge;
+  const w = host.water;
+  data[S.water] = w ? w.lethargy : 0; data[S.water + 1] = w ? w.gasp : 0; data[S.water + 2] = w ? w.clamp : 0;
   data[S.sensed] = sense ? 1 : 0;
   if (sense) {
     data.set(sense.centroid, S.centroid);
@@ -95,7 +98,7 @@ export function stepScratch() {
   return {
     sense: { probes: new Float32Array(SENSE_FLOATS), sand: new Float32Array(SENSE_SAND), centroid: [0, 0, 0] },
     env: { radius: 0, level: 0, sandLevel: 0, iso: 0, gravity: [0, 0, 0] },
-    host: { obstacles: [], food: null, gapeWant: 0, flared: false },
+    host: { obstacles: [], food: null, gapeWant: 0, flared: false, water: { lethargy: 0, gasp: 0, clamp: 0 } },
     food: { pos: [0, 0, 0] },
     turn: [0, 0, 0],
   };
@@ -116,6 +119,7 @@ export function readStep(data, fish, scratch) {
   host.gapeWant = data[S.gape];
   host.flared = data[S.flared] === 1;
   fish.swim.gulpUrge = data[S.gulpUrge];
+  host.water.lethargy = data[S.water]; host.water.gasp = data[S.water + 1]; host.water.clamp = data[S.water + 2];
   for (let k = 0; k < 3; k++) sense.centroid[k] = data[S.centroid + k];
   sense.probes.set(data.subarray(S.probes, S.probes + SENSE_FLOATS));
   sense.sand.set(data.subarray(S.sand, S.sand + SENSE_SAND));

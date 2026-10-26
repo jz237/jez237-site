@@ -2,7 +2,11 @@
 // glass. The BVH is refitted to the animated Atelier geometry every frame.
 export const BETTA_PARAMS = ', bettaTex: texture_2d<f32>, bettaAtlas: texture_2d<f32>, bettaSamp: sampler';
 export const BETTA_ARGS = ', bettaTex, bettaAtlas, bettaSamp';
-const bettaFullWGSL = /* wgsl */ `
+/** The fish's WGSL; bowl: the betta bowl's, where the water can fade its colours (bettaPale, set
+ *  by globes_shade: water/effects.ts pale). */
+const bettaFullWGSL = (bowl: boolean): string => /* wgsl */ `${bowl ? `
+// How faded the fish is (0..1): set by globes_shade.
+var<private> bettaPale: f32;` : ''}
 fn betta_tex(tex: texture_2d<f32>, i: u32) -> vec4f {
   return textureLoad(tex, vec2i(i32(i % 1024u), i32(i / 1024u)), 0);
 }
@@ -174,7 +178,10 @@ fn betta_shade(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, hit: 
       albedo = mix(albedo, vec3f(0.018, 0.025, 0.027), 1.0 - smoothstep(0.062, 0.082, socket));
     }
   }
-  if (mat == 4u) { albedo = vec3f(0.002, 0.004, 0.006); }
+  if (mat == 4u) { albedo = vec3f(0.002, 0.004, 0.006); }${bowl ? `
+  // Faded (a male stressed or unwell in poor water): its colours wash out and dull, less
+  // saturated and a little darker, skin and fins alike (below, its sheen and play of colour too).
+  albedo = mix(albedo, vec3f(dot(albedo, vec3f(0.3, 0.59, 0.11))), 0.65 * bettaPale) * (1.0 - 0.1 * bettaPale);` : ''}
   let L = select(GLOBES_SUN_DIR, GLOBES_SUN_DIR_WATER, inWater);
   var E = GLOBES_SUN_IRR * 0.86;
   var dapple = 1.0;
@@ -214,28 +221,30 @@ fn betta_shade(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, hit: 
   let hv = normalize(L - rd);
   let spec = pow(max(dot(n, hv), 0.0), 75.0) * gloss;
   let fres = pow(1.0 - ndv, 4.0);
-  let sheen = select(0.0, 1.0, mat == 0u) * (pow(max(dot(n, hv), 0.0), 12.0) * 0.045 + fres * 0.14);
+  let sheen = select(0.0, 1.0, mat == 0u) * (pow(max(dot(n, hv), 0.0), 12.0) * 0.045 + fres * 0.14)${bowl ? ' * (1.0 - 0.7 * bettaPale)' : ''};
   let phase = (1.0 - ndv) * 4.2 + albedo.b * 0.8;
   let irid = 0.5 + 0.5 * cos(6.2831853 * (phase + vec3f(0.0, 0.33, 0.67)));
-  albedo = mix(albedo, albedo * (0.6 + 0.8 * irid), 0.38 * scaleW);
+  albedo = mix(albedo, albedo * (0.6 + 0.8 * irid), 0.38 * scaleW${bowl ? ' * (1.0 - 0.8 * bettaPale)' : ''});
   let lightIn = direct * (diffuse + sheen) + ambient + ambient * fres * 0.5 * select(0.0, 1.0, mat != 4u);
   return BettaShade(albedo * lightIn / 3.14159265 + direct * spec, 1.0, vec3f(1.0));
 }
 `;
 
-export const bettaWGSL = bettaFullWGSL;
+export const bettaWGSL = bettaFullWGSL(false);
+/** The betta bowl's. */
+export const bettaBowlWGSL = bettaFullWGSL(true);
 
 /** The same for a phone's lighter bowl (bowl.ts lite): the fish neither shadows itself nor the bed
  *  (its shadow rays were most of the fish's cost there). */
 export const bettaLiteWGSL = (() => {
-  const from = bettaFullWGSL.indexOf('fn betta_occlusion(');
-  const to = bettaFullWGSL.indexOf('// One faint wave on the film');
+  const from = bettaBowlWGSL.indexOf('fn betta_occlusion(');
+  const to = bettaBowlWGSL.indexOf('// One faint wave on the film');
   if (from < 0 || to < 0) throw new Error('bettaWGSL: betta_occlusion or betta_shadow moved');
-  return bettaFullWGSL.slice(0, from) + `fn betta_occlusion(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, p: vec3f, L: vec3f) -> vec3f {
+  return bettaBowlWGSL.slice(0, from) + `fn betta_occlusion(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, p: vec3f, L: vec3f) -> vec3f {
   return vec3f(1.0);
 }
 fn betta_shadow(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, p: vec3f, L: vec3f) -> vec3f {
   return vec3f(1.0);
 }
-` + bettaFullWGSL.slice(to);
+` + bettaBowlWGSL.slice(to);
 })();

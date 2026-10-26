@@ -31,10 +31,16 @@ export const BUBBLE_RADIUS = 0.0035;
 /**
  * What the host gives it each step besides the water: the furnishings' solid parts and the route's
  * obstacles (capsules, sim frame: { a, b, r, solid }), the pellet it is after (FishFood: its pos) or
- * null, how wide to open for it, whether it is asked to flare.
+ * null, how wide to open for it, whether it is asked to flare, and what the water is doing to it
+ * (water/effects.ts: how listless, how short of air, how closely it holds its fins; clear if none).
  * @typedef {{ obstacles: { a: number[], b: number[], r: number, solid: number }[], food: { pos: number[] } | null,
- *   gapeWant: number, flared: boolean }} BettaHost
+ *   gapeWant: number, flared: boolean, water?: BettaSpirits }} BettaHost
+ * @typedef {{ lethargy: number, gasp: number, clamp: number }} BettaSpirits
  */
+
+/** How fast its fins fold in or open out as the water changes (1/s: over a few seconds), and how
+ *  much quicker it breathes, short of air (rad/s of the breathing's phase, on top of the gait's). */
+const CLAMP_RATE = 0.6, PANT = 5;
 
 export class BettaSpecimen {
   /** textures: false builds it without its photographs (for a worker, which only moves it). */
@@ -63,6 +69,8 @@ export class BettaSpecimen {
     this.ripple = 0;
     this.bubbleDebt = 0;
     this.bubbleCount = 0;
+    /** How closely it holds its fins folded now (0..1), easing to what the water asks. */
+    this.clamp = 0;
     this.rig.add(this.fish);
     this.rig.scale.setScalar(SCALE);
     this.fish.userData.locomotion = this.locomotion();
@@ -127,6 +135,9 @@ export class BettaSpecimen {
     this.swim.food = host.food ? host.food.pos : null;
     this.swim.obstacles = host.obstacles;
     this.swim.gape = host.gapeWant;
+    const spirits = host.water;
+    this.swim.lethargy = spirits ? spirits.lethargy : 0;
+    this.swim.gasp = spirits ? spirits.gasp : 0;
     // The tail's own working (read back from last frame's gait) is what lets the body gain speed.
     this.swim.advance(dt, this.flow.toArray(this.flowNow), env, this.waterState.submerged > 0.99, this.waterState, this.fish.userData.stroke ?? null);
     this.fish.userData.locomotion = this.locomotion();
@@ -134,7 +145,15 @@ export class BettaSpecimen {
     this.flowLocal[0] = this.flow.x * toLocal; this.flowLocal[1] = this.flow.y * toLocal; this.flowLocal[2] = this.flow.z * toLocal;
     this.fish.userData.externalFlow = this.flowLocal;
     // The same one-second opening as the standalone specimen.
-    this.fish.userData.display.requested = host.flared || this.swim.flaring;
+    const display = this.fish.userData.display;
+    display.requested = host.flared || this.swim.flaring;
+    // Unwell, it holds its fins folded in (fin-dynamics.js clamp), and breathes quicker short of air.
+    // (Opened out all but fully, they are open: none of the fold is left to solve.)
+    const clamped = spirits ? spirits.clamp : 0;
+    this.clamp += (clamped - this.clamp) * (1 - Math.exp(-CLAMP_RATE * dt));
+    if (clamped === 0 && this.clamp < 1e-3) this.clamp = 0;
+    display.clamp = this.clamp;
+    if (this.swim.gasp > 0) this.fish.userData.gait.breathPhase += PANT * this.swim.gasp * dt;
     this.fish.userData.update(this.time);
     this.updateVertices();
     // Contact against the glass and sampled bed, not a fixed waterline: sloshing
@@ -210,7 +229,8 @@ export class BettaSpecimen {
   disturb(dt) {
     const s = this.swim, surface = this.waterState?.surface ?? this.level, lip = this.mouth;
     // Opening its mouth at the film, the lips draw the water in: the surface dimples, then rings.
-    if (s.mode === 'gulp' && s.gulpClock < RIPPLE_TIME && Math.abs(lip.y - surface) < 0.03) {
+    // (Lingering at the film between gulps, gasping, its mouth is shut: the clock is short of 0.)
+    if (s.mode === 'gulp' && s.gulpClock >= 0 && s.gulpClock < RIPPLE_TIME && Math.abs(lip.y - surface) < 0.03) {
       this.rippleAt.set(lip.x, surface, lip.z);
       this.ripple += RIPPLE_RATE * dt * Math.sin(Math.PI * Math.min(1, s.gulpClock / RIPPLE_TIME));
     }

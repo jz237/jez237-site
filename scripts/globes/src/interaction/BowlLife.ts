@@ -5,7 +5,8 @@
 // The leaf is carried by the water at the film, slowly drawn to the glass by the meniscus there
 // (a floating thing on water that wets the glass drifts to it and stays) and turned to lie along
 // it, kept clear of the nest. The nest is fixed to the glass (it turns with the bowl) and bobs
-// with the film; sloshing breaks its outer bubbles, and the fish adds to it each time it takes air.
+// with the film; sloshing breaks its outer bubbles, and the fish adds to it each time it takes air
+// (while it is well enough to tend it: left be, it thins as its bubbles burst).
 //
 // Sim frame throughout (world axes, the globe's centre at the origin).
 
@@ -40,6 +41,10 @@ const NEST_REACH = 0.25;
 const NEST_CALM = 1.2;
 const NEST_BREAK = 9;
 const NEST_BUILD = 9;
+/** A fish less willing than this to tend its nest (water/effects.ts nest) leaves it be: it adds
+ *  nothing, and the nest thins as its bubbles burst, this many a second (gone in a few minutes). */
+const NEST_TENDED = 0.5;
+const NEST_FADE = 0.6;
 
 const smooth = (from: number, to: number, dt: number, rate: number): number => from + (to - from) * (1 - Math.exp(-rate * dt));
 
@@ -54,6 +59,8 @@ export class BowlLife {
   private nestAz = 0;
   private lastMode = '';
   private rand = 0.5;
+  /** How willing the fish is to tend its nest (0..1, water/effects.ts nest), set by the page. */
+  tending = 1;
 
   constructor(private readonly radius: number) {}
 
@@ -62,10 +69,10 @@ export class BowlLife {
     return Math.round(this.nestCount);
   }
 
-  /** How much the nest wants rebuilding (0: whole, 1: gone): the fish goes up for air more often
-   *  while it does (bettaSwim.mjs gulpUrge), and each trip adds to it. */
+  /** How much the nest wants rebuilding (0: whole, 1: gone), to a fish that tends it: the fish goes
+   *  up for air more often while it does (bettaSwim.mjs gulpUrge), and each trip adds to it. */
   get nestNeed(): number {
-    return Math.max(0, Math.min(1, 1 - this.nestCount / (NEST.length * 0.85)));
+    return this.tending < NEST_TENDED ? 0 : Math.max(0, Math.min(1, 1 - this.nestCount / (NEST.length * 0.85)));
   }
 
   /** level: the water's resting height; rotation: the globe's turn (column-major 3x3); turning:
@@ -86,7 +93,9 @@ export class BowlLife {
     // A shaken bowl breaks it up; held still or tipped gently, it keeps what it has.
     if (turning > NEST_CALM) this.nestCount = Math.max(0, this.nestCount - NEST_BREAK * (turning - NEST_CALM) * dt);
     if (hn !== null) this.nestY = Number.isFinite(this.nestY) ? smooth(this.nestY, hn, dt, 10) : hn;
-    if (this.lastMode === 'gulp' && fishMode === 'dive') this.nestCount = Math.min(NEST.length, this.nestCount + NEST_BUILD);
+    // The fish adds to it each time it takes air, if it is well enough to tend it; left be, it thins.
+    if (this.tending < NEST_TENDED) this.nestCount = Math.max(0, this.nestCount - NEST_FADE * dt);
+    else if (this.lastMode === 'gulp' && fishMode === 'dive') this.nestCount = Math.min(NEST.length, this.nestCount + NEST_BUILD);
     this.lastMode = fishMode;
 
     // The leaf: its height and the film's slope under it, and the water's motion at the film.

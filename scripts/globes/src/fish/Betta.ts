@@ -6,6 +6,7 @@ import { BettaSpecimen } from './bettaSpecimen.mjs';
 import { BETTA_SURFACE_COUNT, bettaSurfaceHeights } from './bettaWater.mjs';
 import type { Feeder, FoodAim } from './FishFood';
 import type { KoiEnv, KoiSense } from './Koi';
+import { CLEAR_WATER, type WaterEffects } from '../water/effects';
 
 export { BUBBLE_RADIUS, RIPPLE_RADIUS, RIPPLE_RATE, RIPPLE_TIME } from './bettaSpecimen.mjs';
 
@@ -51,6 +52,14 @@ export class Betta implements Feeder {
   /** What else is in the water (the bowl's furnishings: sim frame), set by the host. Its route
    *  keeps round them (bettaSwim.mjs), and its body out of their solid parts. */
   obstacles: { a: number[]; b: number[]; r: number; solid: number }[] = [];
+  /** What the bowl's water is doing to it (water/effects.ts), set by the host each frame: how
+   *  listless it is, how short of air, how closely it holds its fins (bettaSpecimen.mjs), and how
+   *  keen it is on food (FishFood). */
+  water: Readonly<WaterEffects> = CLEAR_WATER;
+
+  get appetite(): number {
+    return this.water.appetite;
+  }
 
   constructor(device: GPUDevice, inWorker = false) {
     this.device = device;

@@ -1516,3 +1516,50 @@ and to the water's look into `water.fx` (`effects.ts`, read by the fish and the 
   week and as the test says; a cycled bowl kept well and neglected; the sponge rinsed; the heater
   off; its lamp; an untreated change; overfeeding; saving) and `water-care.test.mjs` (4: water.fx on
   and off; the clock; routine meals counted and the Feed button's, leftovers; what is kept).
+
+## The water's state, seen (water/effects.ts, as the fish and the bowl show it)
+
+Water mode's care simulation sets `water.fx` (water/effects.ts: each 0..1; `CLEAR_WATER` with the
+mode off; `?water=lethargy:1,cloud:0.6,...` forces values for testing); main.ts hands it on each
+frame: to the betta (`Betta.water`), to the nest (`BowlLife.tending`) and to the look
+(`water/look.ts`). In clear water every one of these is the page as it was: the swim's routes, the
+fins and the body bit for bit (betta-swim.test.mjs, betta-worker.test.mjs, water-fish.test.mjs), the
+other globes' WGSL byte for byte, the bowl's picture to within a few pixels' rounding.
+
+- **The fish** (bettaSwim.mjs; lethargy, gasp and clamp go to the worker in each step, bettaLink.mjs
+  S.water). Listless (lethargy), it goes down whenever it stops, the readier the more listless
+  (`slump`: always from half way), lying 6 times as long at 1, leaning a little onto one side; not
+  over a place to lie, it makes for one (`seekRest`: where its way down, `restLanding`, ends clear of
+  the glass and of the furnishings' solid parts: by the wood or on it). It lets itself sink there,
+  all but in place, rather than swim down. It swims slower on shorter legs, hovers more, keeps low,
+  takes a harder knock to startle, and from 0.4 neither displays nor laps. Short of air (gasp), it
+  goes up up to 6 times as often (`gulpDue`), from 0.4 lingers at the film for up to 8 more gulps,
+  its lips shut between them, and breathes quicker (bettaSpecimen.mjs: the gait's breathing phase).
+  Measured in the bowl among its furnishings, 10 minutes each: resting 4% of the time clear, 10% at
+  lethargy 0.3, 60% at 0.6, 79% at 1; 0.7 gulps a minute clear, 7 at gasp 0.7 (at the film 29% of
+  the time), 11.5 at 1.
+- **The fins** (betta-atelier fin-dynamics.js, the state's optional `clamp`, eased in the specimen
+  over a few seconds): the caudal's rays close to 38% of their spread and droop, the dorsal and anal
+  lie back along the body, the membranes held taut and stiffer, the ventrals tuck back by 1 rad and
+  in towards each other. Without it (the Atelier) the fins are as they were, bit for bit.
+- **Food** (FishFood, `Feeder.appetite`): less keen, the fish notices a pellet up to 4 times later,
+  goes for a share of them (all from 0.6, none at 0: they soak and sink, and lie on the sand), and
+  under 0.5 spits out a share of those it takes: blown out ahead, soaked through, it sinks.
+- **The nest** (BowlLife): under 0.5 the fish adds nothing to it, wants nothing rebuilt (no extra
+  trips up) and the nest thins, 0.6 bubbles a second; content again, it builds again.
+- **The look** (water/look.ts, eased over a couple of seconds, the heater's lamp at once; one
+  uniform, `uBowlWater`, no pipeline). The fish fades (bettaWGSL.ts, the bowl's variants only: less
+  saturated, a little darker, its sheen and the scales' play of colour dimmed). The water: a bloom
+  of bacteria (bowl.ts `BOWL_WATER.bloom`, 1.5 a unit of path at 1) dims every colour alike and sends
+  back a milky haze lit as the water is (the light dimmed on its way down by a third of it: the rest
+  it scatters on down) and shows the lamp's beam the brighter; tannins (`tannin`: the blue all but
+  wholly, the green much, the red hardly; their strength tint^0.6) stain it tea-brown, deeper with
+  depth and path, and glow amber. Both dim the light on the sand too (FluidSim `waterColour`, the
+  photons'). Each stretch of water now adds its glow before its bubbles (a bubble in a clouded one
+  is seen in its haze). The heater's lamp (equipment.mjs `scapeHeaterLamp`) goes dark but stays
+  there, an amber lens.
+- **Cost.** A few multiplies a frame on the page (well under 0.01 ms); the swim's searches only when
+  it stops. Shader: 0.6 K more inlined (bowlKoi-full 419.9 K of its 420 K budget). Phone emulation
+  (384x693 at 2.81, vsync), clear and with strong effects alike: 60 fps, GPU sim 0.4-0.5 + draw
+  1.0 ms, CPU 1.9-2.3 ms, 84 pipelines.
+- Tests: `water-fish.test.mjs` (11).

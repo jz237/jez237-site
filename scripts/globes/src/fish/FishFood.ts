@@ -58,7 +58,19 @@ export interface Feeder {
   food: FoodAim | null;
   /** Set each frame: how wide to open its mouth (0..1). */
   gapeWant: number;
+  /** How keen it is on food (0..1, water/effects.ts appetite), for a fish that can be off it (the
+   *  betta): less keen, it notices food later, lets more of it be, and spits out more of what it
+   *  takes. None: always keen. */
+  readonly appetite?: number;
 }
+
+/** Off its food (appetite under 1), a fish notices food up to NOTICE_SLOWER times later; it goes
+ *  for a share of it (all from KEEN up, none at 0), and from SPITTING down spits out a share of
+ *  what it takes (SPIT_MOST of it at 0), as bettas do. */
+const NOTICE_SLOWER = 4;
+const KEEN = 0.6;
+const SPITTING = 0.5;
+const SPIT_MOST = 0.6;
 
 export interface FoodAim {
   pos: Vec3;
@@ -83,6 +95,11 @@ interface Flake {
   landed: { at: Vec3; normal: Vec3 } | null;
   /** When each fish notices it (age, s). */
   notice: number[];
+  /** (A pellet) how little each fish fancies it, and how likely it is to spit it out (0..1: against
+   *  how keen it is on food); and whether it has. */
+  taste: number[];
+  spit: number[];
+  spat: boolean[];
   /** Being eaten: by which fish, for how long. */
   eater: number;
   eaten: number;
@@ -133,6 +150,17 @@ const toGlobe = (m: ArrayLike<number>, s: Vec3): Vec3 => [
   m[3] * s[0] + m[4] * s[1] + m[5] * s[2],
   m[6] * s[0] + m[7] * s[1] + m[8] * s[2],
 ];
+const smoothstep = (a: number, b: number, x: number): number => {
+  const u = Math.min(Math.max((x - a) / (b - a), 0), 1);
+  return u * u * (3 - 2 * u);
+};
+/** Feeder fi (fd) is after flake f: it has noticed it (the later the less keen it is on food) and,
+ *  off its food, fancies this one and has not spat it out. */
+const wants = (f: Flake, fi: number, fd: Feeder): boolean => {
+  const keen = fd.appetite ?? 1;
+  if (keen >= 1 || !f.taste.length) return f.age >= f.notice[fi];
+  return f.age >= f.notice[fi] * (1 + (NOTICE_SLOWER - 1) * (1 - keen)) && f.taste[fi] < smoothstep(0, KEEN, keen) && !f.spat[fi];
+};
 const randUnit = (): Vec3 => {
   const z = 2 * Math.random() - 1;
   const a = Math.random() * Math.PI * 2;
@@ -245,6 +273,9 @@ export class FishFood {
       landed: null,
       // (Almost always within a second or two; now and then one takes a little longer.)
       notice: Array.from({ length: fish }, () => (Math.random() < 0.9 ? 0.35 + 1.1 * Math.random() : 1.5 + 2.5 * Math.random())),
+      taste: this.pellets ? Array.from({ length: fish }, Math.random) : [],
+      spit: this.pellets ? Array.from({ length: fish }, Math.random) : [],
+      spat: [],
       eater: -1,
       eaten: 0,
       wander: mul(randUnit(), 0.8),
@@ -321,7 +352,7 @@ export class FishFood {
       let best: Flake | null = null;
       let bestD = Infinity;
       for (const f of this.flakes) {
-        if (f.eater >= 0 || f.left !== null || f.age < f.notice[fi]) continue;
+        if (f.eater >= 0 || f.left !== null || !wants(f, fi, fd)) continue;
         const d = len(sub(f.pos, m));
         if (d < bestD) {
           best = f;
@@ -357,7 +388,7 @@ export class FishFood {
     for (const f of this.flakes) {
       if (f.eater >= 0 || f.left !== null) continue;
       feeders.forEach((fd, fi) => {
-        if (f.eater >= 0 || fd.busy() || f.age < f.notice[fi]) return;
+        if (f.eater >= 0 || fd.busy() || !wants(f, fi, fd)) return;
         const to = sub(f.pos, fd.mouthAt());
         // (A flake lying below the mouth is sucked up from further: the pull reaches down.)
         const d = f.landed && to[1] < 0 ? Math.hypot(to[0], 0.4 * to[1], to[2]) : len(to);
@@ -392,6 +423,17 @@ export class FishFood {
         const along = norm(to, fd.ahead());
         f.normal = norm(sub(f.normal, mul(along, dot(f.normal, along) * (1 - Math.exp(-dt / 0.05)))), f.normal);
         if (d < 0.004 || f.eaten > 0.45) {
+          // Off its food, it may spit it out again: the pellet is blown out ahead of it, wet
+          // through now, and sinks; that fish leaves it be.
+          const keen = fd.appetite ?? 1;
+          if (keen < SPITTING && f.spit.length && f.spit[f.eater] < SPIT_MOST * (1 - keen / SPITTING)) {
+            f.spat[f.eater] = true;
+            f.eater = -1;
+            f.soak = Math.min(f.soak, f.age);
+            f.vel = mul(fd.ahead(), 0.1);
+            f.pos = add(fd.mouthAt(), mul(fd.ahead(), 0.6 * fd.reach));
+            return true;
+          }
           this.eatenCount++;
           return false;
         }

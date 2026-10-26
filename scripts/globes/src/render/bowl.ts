@@ -105,10 +105,19 @@ export function lidReach(s: BowlShape, c: { x: number; y: number; z: number }): 
   return Math.max(far(BOWL.lidRadius + BOWL.rimProud, -BOWL.collarDepth, BOWL.lidThickness + BOWL.rimProud), far(BOWL.knobRadius, 0, s.top));
 }
 
+/** What the water's state looks like (water/effects.ts): at full strength, the dimming (per unit
+ *  of path; a unit is ~12 cm) of a bloom of bacteria (grey: it dims every colour alike) and of
+ *  tannins (tea: the blue all but wholly, the green much, the red hardly), whose strength goes as
+ *  tint to the power tintPower (the first stain shows most); and how much of the bloom's dimming of
+ *  the light on its way down is lost to it (the rest it scatters on down, the milky light in the
+ *  water). */
+export const BOWL_WATER = { bloom: 1.5, tannin: [0.05, 1.7, 3.6], tintPower: 0.6, bloomLost: 0.35 } as const;
+
 /** The bowl's uniforms, as globes_shade takes them: the lid's pose (the globe's translating frame
  *  to the lid's: its underside's middle at the origin, its axis y); x: the lid is there, y: its
- *  lamp's brightness (0..1); what floats in it; and its detail (GlobeView uBowlDetail). */
-export const BOWL_PARAMS = ', bowlLid: mat4x4f, bowlState: vec4f, bowlLife: mat4x4f, bowlDetail: vec4f';
+ *  lamp's brightness (0..1); what floats in it; its detail (GlobeView uBowlDetail); and its water's
+ *  state (GlobeView uBowlWater). */
+export const BOWL_PARAMS = ', bowlLid: mat4x4f, bowlState: vec4f, bowlLife: mat4x4f, bowlDetail: vec4f, bowlWater: vec4f';
 
 const f = (x: number) => x.toFixed(6);
 
@@ -372,6 +381,29 @@ fn bowl_lampAlong(p: vec3f, dir: vec3f, tEnd: f32, sigma: f32, ext: vec3f) -> ve
     T *= Tstep;
   }
   return ${s.debug ? 'dbg_chk(' : ''}vec3f(1.0, 0.88, 0.70) * s * sigma * dt${s.debug ? ', select(DBG_LAMP_WATER, DBG_LAMP_AIR, sigma < 0.3))' : ''};
+}
+
+// The water's state (water/effects.ts; set by globes_shade): a bloom of bacteria clouding it, whose
+// milky haze scatters the light (bowlCloud: its dimming, per unit of path), and the tannins that
+// the almond leaf and the wood give it, tea-brown (BOWL_WATER). The light the haze sends back for
+// each unit of its dimming, where the light comes in (at the film); the light the tea sends back
+// (the water's own glow, the light in it amber), per unit of path at full strength; and how much
+// brighter the haze shows the lamp's beam. bowlGlow: the clear water's glow, for its dimming, and
+// the tea's; bowlSunExt: the light's dimming on its way down.
+const BOWL_BLOOM_LOST: f32 = ${f(BOWL_WATER.bloomLost)};
+const BOWL_TANNIN: vec3f = vec3f(${BOWL_WATER.tannin.map(f).join(', ')});
+const BOWL_HAZE: vec3f = vec3f(0.2, 0.2, 0.2);
+const BOWL_TEA: vec3f = vec3f(0.047, 0.056, 0.006);
+const BOWL_BLOOM_LAMP: f32 = 0.8;
+var<private> bowlCloud: f32;
+var<private> bowlGlow: vec3f;
+var<private> bowlSunExt: vec3f;
+
+// The light the water sends back along a stretch of ray from height y, for each share of the light
+// behind it that the stretch dims: the clear water's glow and the tea's, for their share of the
+// dimming; clouded, the bloom's haze, for its share, lit as the water is there (dimmer deeper).
+fn bowl_waterGlow(y: f32, lit: vec4f) -> vec3f {
+  return (bowlGlow + BOWL_HAZE * exp(-bowlSunExt * max(lit.x - y, 0.0)) * bowlCloud) / globesWaterExt;
 }
 
 // Through the piece a ray has met (h): the light its face reflects to the ray, how much of the

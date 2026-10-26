@@ -824,7 +824,7 @@ export function createBetta({ compact = false, textures = true } = {}) {
       uniforms.uMouth.value = bodyMotion.mouth;
       uniforms.uGill.value = bodyMotion.gill;
       const state = {
-        body: bodyMotion, time: t, phase, pectoralPhase, scull, tuck, pectoralEffort, pectoralScull, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value,
+        body: bodyMotion, time: t, phase, pectoralPhase, scull, tuck, pectoralEffort, pectoralScull, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value, clamp: display.clamp,
         heading, angularVelocity, velocity, origin: fish.position.toArray(),
         localHydrodynamics,
         strength: flowStrength, direction: water.direction, externalFlow: fish.userData.externalFlow,

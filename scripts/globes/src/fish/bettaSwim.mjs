@@ -42,6 +42,10 @@ const pitchForMouth = (y, height) => Math.asin(clamp((height - y) / MOUTH_REACH,
 export const gulpMouth = e => 1.1 * (smooth(0, 0.28, e) - smooth(0.62, 0.95, e));
 export const gulpGillCover = e => Math.sin(Math.PI * clamp((e - 0.8) / 0.8, 0, 1)) ** 1.2;
 const GULPING = new Set(['rise', 'gulp', 'dive']);
+// Short of air (gasp, from gills the water has harmed), it goes up GASP_OFTEN times as often at
+// the most, and from GASP_LINGER on it stays at the film for more gulps, up to GASP_GULPS more
+// (each after a pause of GASP_PAUSE s, and up to as long again).
+export const GASP_OFTEN = 6, GASP_LINGER = 0.4, GASP_GULPS = 8, GASP_PAUSE = 0.7;
 
 // Slow, deliberate episodes that interrupt the route: facing its reflection in the glass with the
 // fins flared, a lap round the globe, and settling on the sand. They need a measured, wet fish in an
@@ -49,6 +53,14 @@ const GULPING = new Set(['rise', 'gulp', 'dive']);
 export const BEHAVIORS = new Set(['mirror', 'lap', 'rest']);
 export const REST_HEIGHT = 0.074, LAP_SPEED = 0.058;
 const MIRROR_REACH = 0.025, LAP_RADIUS = 0.78, LAP_LEAD = 0.55;
+// Listless (lethargy, 0..1: a fish unwell in poor water), it goes down to the sand far more often
+// and stays up to REST_LONGER times as long, lying a little over on its side; it swims slower, on
+// shorter legs, and hovers more; from LISTLESS on it no longer displays or patrols; it takes a
+// harder knock to startle it. Going down to lie, it lets itself sink (at SAG_RATE for each unit
+// above where it settles, between SAG_SLOWEST and SAG_FASTEST units/s, from half way listless on),
+// swimming forward at most SAG_STILL less.
+export const REST_LONGER = 6, LISTLESS = 0.4;
+const SAG_RATE = 0.6, SAG_SLOWEST = 0.01, SAG_FASTEST = 0.03, SAG_STILL = 0.85;
 
 // A knock on the glass: water that changes faster than the fish is used to. Measured with the
 // globe in hand, idle water reads 0, a gentle drag ~0.4, a brisk swipe ~1.3 and a flick 2+.
@@ -126,6 +138,27 @@ export class BettaSwim {
     // How much it has to do at the film (set by the host: the betta bowl's nest wanting rebuilding,
     // 0..1): it goes up for air sooner after each trip.
     this.gulpUrge = 0;
+    // What the water is doing to it (set by the host: water/effects.ts, 0 in clear water): how
+    // listless it is (lethargy) and how short of air (gasp).
+    this.lethargy = 0;
+    this.gasp = 0;
+    // (When the wait for the next trip began; the gulps it has taken, and has still to take at the
+    // film this trip; which side it lies over on as it rests.)
+    this.gulpFrom = 0;
+    this.gulps = 0;
+    this.gulpsLeft = 0;
+    this.restSide = 1;
+  }
+
+  /** How readily, listless, it goes down to lie, and how much it lets itself sink there rather than
+   *  swim down (0..1: all of it from half way listless on). */
+  get slump() {
+    return Math.min(1, 2 * this.lethargy);
+  }
+
+  /** When it goes up for air next: sooner the shorter of air it is. */
+  gulpDue() {
+    return this.gasp > 0 ? this.gulpFrom + (this.nextGulp - this.gulpFrom) / (1 + (GASP_OFTEN - 1) * clamp(this.gasp, 0, 1)) : this.nextGulp;
   }
 
   /** Carried round as the bowl is turned about its own axis (turn: the turn this frame, rad, along
@@ -220,14 +253,14 @@ export class BettaSwim {
 
   /** Near the glass at the end of a leg, it stops to face its reflection with the fins flared. */
   tryMirror(b, ok) {
-    if (!ok || this.time < this.mirrorReady) return false;
+    if (!ok || this.lethargy >= LISTLESS || this.time < this.mirrorReady) return false;
     const [x, y, z] = this.position, horizontal = Math.hypot(x, z);
     const reach = Math.sqrt(Math.max(0, (b.radius + MIRROR_REACH) ** 2 - y * y));
     if (horizontal < 0.5 * reach || reach - horizontal > 0.22) return false;
     const nx = x / horizontal, nz = z / horizontal;
     if (nx * -Math.cos(this.heading) + nz * Math.sin(this.heading) < -0.5) return false;
     if (!this.clearWay([nx * reach, y, nz * reach], 0.05)) return false;
-    if (this.behaviorRandom() > 0.6) return false;
+    if (this.behaviorRandom() > 0.6 * (1 - this.lethargy / LISTLESS)) return false;
     this.mode = 'mirror'; this.timer = 99; this.sharpTurn = false;
     this.behaviorClock = this.holdClock = 0; this.mirrorArrived = false;
     this.mirrorPoint = [nx * reach, y, nz * reach];
@@ -239,9 +272,9 @@ export class BettaSwim {
 
   /** A slow circuit of the globe, as a fish makes of a place it is still getting to know. */
   tryLap(b, ok) {
-    if (!ok || this.time < this.lapReady) return false;
+    if (!ok || this.lethargy >= LISTLESS || this.time < this.lapReady) return false;
     const [x, y, z] = this.position;
-    if (Math.hypot(x, z) < 0.2 || this.behaviorRandom() > 0.5) return false;
+    if (Math.hypot(x, z) < 0.2 || this.behaviorRandom() > 0.5 * (1 - this.lethargy / LISTLESS)) return false;
     this.mode = 'lap'; this.timer = 99; this.sharpTurn = false;
     this.behaviorClock = 0; this.cruiseSpeed = LAP_SPEED;
     this.lapDir = this.behaviorRandom() < 0.5 ? -1 : 1;
@@ -251,15 +284,72 @@ export class BettaSwim {
     return true;
   }
 
-  /** Now and then it sinks to the sand and stays there, fins easy. */
+  /** Now and then it sinks to the sand and stays there, fins easy. Listless, it is the likelier to
+   *  go down whenever it stops the more listless it is (slump), if it can lie down from there. */
   tryRest(b, water, ok) {
-    if (!ok || this.time < this.restReady) return false;
+    const listless = ok && this.lethargy > 0 && this.behaviorRandom() < this.slump;
+    if (!ok || (!listless && this.time < this.restReady)) return false;
     const y = water.sand + REST_HEIGHT;
-    if (Math.hypot(this.position[0], this.position[2], y) > b.radius - 0.05 || this.behaviorRandom() > 0.5) return false;
-    if (this.obstacleGap([this.position[0], y, this.position[2]]).gap < 0.1) return false;
+    if (!this.restRoom(b, this.position[0], y, this.position[2]) || (!listless && this.behaviorRandom() > 0.5)) return false;
+    // (Listless, it goes down from wherever it is, if where its way down ends, and the way, are
+    // clear; else where it is must be.)
+    if (this.lethargy > 0 ? !this.restLanding(b, this.position, this.heading, y) : this.obstacleGap([this.position[0], y, this.position[2]]).gap < 0.1) return false;
     this.mode = 'rest'; this.timer = 99; this.sharpTurn = false;
     this.behaviorClock = this.holdClock = 0; this.restSettled = false;
-    this.restY = y; this.restHold = 7 + this.behaviorRandom() * 7;
+    this.restY = y; this.restHold = (7 + this.behaviorRandom() * 7) * (1 + (REST_LONGER - 1) * this.lethargy);
+    if (this.lethargy > 0) this.restSide = this.behaviorRandom() < 0.5 ? -1 : 1;
+    return true;
+  }
+
+  /** Whether the neck has room to come to rest at (x, y, z) on the sand: clear of the glass (by
+   *  less, the more listless it is: such a fish lies down anywhere it can). */
+  restRoom(b, x, y, z) {
+    return Math.hypot(x, z, y) <= b.radius - 0.05 + 0.08 * this.lethargy;
+  }
+
+  /** Going down to lie from `height` above where it settles, how far on it goes in each sixth of
+   *  the height (nose low at first, levelling off as it arrives, as `sinking` steps it; listless,
+   *  letting itself sink, less far: no further than this). */
+  restRun(height) {
+    const du = (height - 0.012) / 6;
+    return Array.from({ length: 6 }, (_, k) => (du > 0 ? (du / Math.tan(Math.min(0.72, 0.12 + 2.5 * (height - (k + 0.5) * du)))) * (1 - SAG_STILL * this.slump) : 0));
+  }
+
+  /** Where it comes to lie (on the sand, the neck at y) going down from p with this heading; null
+   *  if that, or the way there, is not clear (listless, it lies down right by things, or against
+   *  them: clear only of their solid parts). */
+  restLanding(b, p, heading, y) {
+    const fx = -Math.cos(heading), fz = Math.sin(heading), q = [p[0], p[1], p[2]], runs = this.restRun(p[1] - y), near = 0.12 * this.lethargy;
+    for (const run of runs) {
+      q[0] += fx * run; q[1] -= (p[1] - y - 0.012) / 6; q[2] += fz * run;
+      if (this.obstacleGap(q).gap < 0.05 - near) return null;
+    }
+    q[1] = y;
+    return this.restRoom(b, q[0], y, q[2]) && this.obstacleGap(q).gap >= 0.1 - near ? q : null;
+  }
+
+  /** Listless and not where it can lie down, now and then it makes for a place to: the nearest of a
+   *  few on the sand round about that it can come down to, swimming slowly to where it would go
+   *  down from, a little lower than it is (there, stopping, it goes down). */
+  seekRest(b, water, ok) {
+    if (!ok || this.behaviorRandom() >= this.slump) return false;
+    const y = water.sand + REST_HEIGHT, [x0, y0, z0] = this.position, from = clamp(y0 - 0.08, b.low, b.high);
+    let best = null, nearest = Infinity;
+    for (let k = 0; k < 12; k++) {
+      const r = 0.45 * Math.sqrt(this.behaviorRandom()), a = 2 * Math.PI * this.behaviorRandom();
+      const x = r * Math.cos(a), z = r * Math.sin(a), d = Math.hypot(x - x0, z - z0);
+      if (d >= nearest || !this.restRoom(b, x, y, z) || this.obstacleGap([x, y, z]).gap < 0.1 - 0.12 * this.lethargy) continue;
+      // (Coming at it from here, where it would go down from: short of it by its way down.)
+      const heading = Math.atan2(z - z0, -(x - x0)), run = this.restRun(from - y).reduce((a, v) => a + v, 0);
+      if (d < run + 0.15) continue;
+      const start = [x - (x - x0) / d * run, from, z - (z - z0) / d * run];
+      if (Math.hypot(start[0], start[2]) > Math.sqrt(Math.max(0, b.radius ** 2 - from * from)) || !this.clearWay(start, 0.06) || !this.restLanding(b, start, heading, y)) continue;
+      best = start; nearest = d;
+    }
+    if (!best) return false;
+    this.mode = 'cruise'; this.timer = 15; this.sharpTurn = false;
+    this.target = best;
+    this.cruiseSpeed = 0.06 * (1 - 0.55 * this.lethargy);
     return true;
   }
 
@@ -290,7 +380,7 @@ export class BettaSwim {
       this.restY = water.sand + REST_HEIGHT;
       if (!this.restSettled && (y - this.restY < 0.012 || this.behaviorClock > 14)) { this.restSettled = true; this.holdClock = 0; }
       if (this.restSettled) this.holdClock += dt;
-      if ((this.restSettled && this.holdClock >= this.restHold) || this.behaviorClock > 40) this.endBehavior(env);
+      if ((this.restSettled && this.holdClock >= this.restHold) || this.behaviorClock > 40 * (1 + (REST_LONGER - 1) * this.lethargy)) this.endBehavior(env);
     }
   }
 
@@ -330,6 +420,8 @@ export class BettaSwim {
     // Usually investigate water ahead, as the koi does; an occasional reversal
     // is deliberate, not a fresh arbitrary spin at every waypoint.
     const reverse = this.random() < 0.18;
+    // (Listless, it goes less far, and keeps low over the middle, where the sand is to lie on.)
+    const L = this.lethargy, stride = 0.45 * (1 - 0.45 * L);
     let best = -Infinity, found = false;
     for (let attempt = 0; attempt < 16; attempt++) {
       const y = b.low + (b.high - b.low) * (0.08 + 0.84 * this.random());
@@ -338,7 +430,8 @@ export class BettaSwim {
       const candidate = [r * Math.cos(a), y, r * Math.sin(a)];
       const delta = candidate.map((v, i) => v - this.position[i]), distance = Math.hypot(...delta);
       const ahead = (-delta[0] * Math.cos(this.heading) + delta[2] * Math.sin(this.heading)) / Math.max(distance, 1e-6);
-      const score = ahead * (reverse ? -0.7 : 0.8) + this.random() * 0.45 - Math.abs(distance - 0.45) - (distance < 0.22 ? 2 : 0);
+      let score = ahead * (reverse ? -0.7 : 0.8) + this.random() * 0.45 - Math.abs(distance - stride) - (distance < 0.22 ? 2 : 0);
+      if (L > 0) score -= L * (1.5 * (y - b.low) / Math.max(b.high - b.low, 1e-6) + 3 * Math.max(0, r - 0.22));
       // A goal almost overhead or underfoot cannot be reached by turning; it only makes the fish circle it.
       const leg = Math.hypot(delta[0], delta[2]);
       if (leg < MIN_LEG || Math.abs(delta[1]) > MAX_SLOPE * leg + 0.05) continue;
@@ -346,7 +439,7 @@ export class BettaSwim {
       if (score > best) { best = score; this.target = candidate; found = true; }
     }
     if (!found) this.target = this.targetAhead(b, 0.4);
-    this.cruiseSpeed = 0.065 + this.random() * 0.045;
+    this.cruiseSpeed = (0.065 + this.random() * 0.045) * (1 - 0.55 * L);
   }
 
   /** The plan for food, this step: where the neck is to go, which way the head is to turn (from
@@ -423,7 +516,8 @@ export class BettaSwim {
     if (surfaceOk) this.surfaceY = Number.isFinite(this.surfaceY) ? damp(this.surfaceY, surface, dt, 6) : surface;
     const wetNow = water?.submerged ?? (submerged ? 1 : 0);
     this.jolt = this.readJolt(dt, water, wetNow);
-    if (this.mode !== 'startle' && this.jolt > STARTLE_JOLT && this.time >= this.startleReady && (water.airAbove ?? 0) < 0.6) this.startStartle(env);
+    // (Listless, it takes a harder knock to startle it.)
+    if (this.mode !== 'startle' && this.jolt > STARTLE_JOLT * (1 + 1.5 * this.lethargy) && this.time >= this.startleReady && (water.airAbove ?? 0) < 0.6) this.startStartle(env);
     if (this.mode === 'startle') {
       this.startleClock += dt;
       if (this.startleClock >= STARTLE_LENGTH) {
@@ -446,14 +540,17 @@ export class BettaSwim {
     const feeding = this.mode === 'feed';
     let gulping = GULPING.has(this.mode);
     // Too near the film to tip up to the lips' angle: it swims on and goes when it has room.
-    if (!gulping && !feeding && this.time >= this.nextGulp && surfaceOk && this.surfaceY - this.position[1] > 0.07 && wetNow > 0.99 && (water.airAbove ?? 0) < 0.25 && this.mode !== 'burst' && !this.sharpTurn) {
+    const due = this.gulpDue();
+    if (!gulping && !feeding && this.time >= due && surfaceOk && this.surfaceY - this.position[1] > 0.07 && wetNow > 0.99 && (water.airAbove ?? 0) < 0.25 && this.mode !== 'burst' && !this.sharpTurn) {
       this.closeBehavior();
       this.mode = 'rise'; this.gulpClock = 0; this.timer = 9; gulping = true;
     }
     if (BEHAVIORS.has(this.mode)) this.stepBehavior(dt, env, water, wetNow, upright);
     const behaving = BEHAVIORS.has(this.mode), ok = this.behaviorOk(water, wetNow, upright);
-    // An episode that a due gulp would cut short does not start.
-    const free = surfaceOk ? this.nextGulp - this.time : Infinity;
+    // An episode that a due gulp would cut short does not start (listless, it lies down for the
+    // little while it has).
+    const free = surfaceOk ? due - this.time : Infinity;
+    const L = this.lethargy, briefly = 1 - 0.8 * L;
     // The lips' height above the neck grows with the nose-up pitch, so the target tracks it.
     const holdY = this.surfaceY - MOUTH_DEPTH - bettaMouthHeight(0, clamp(this.pitch, 0, GULP_PITCH + 0.1));
     let rise = holdY - this.position[1];
@@ -461,12 +558,20 @@ export class BettaSwim {
       this.gulpClock += dt;
       if (this.mode !== 'dive' && (!surfaceOk || wetNow < 0.5)) { this.mode = 'dive'; this.timer = DIVE_LENGTH; }
       else if (this.mode === 'rise' && ((Math.abs(rise) < 0.012 && this.pitch > 0.7) || this.timer <= 0)) {
-        if (Math.abs(rise) < 0.04) { this.mode = 'gulp'; this.gulpClock = 0; }
+        if (Math.abs(rise) < 0.04) {
+          this.mode = 'gulp'; this.gulpClock = 0; this.gulps++;
+          // (Short of air, it means to stay at the film a while.)
+          this.gulpsLeft = this.gasp > GASP_LINGER ? Math.round(GASP_GULPS * (this.gasp - GASP_LINGER) / (1 - GASP_LINGER) * (0.4 + 0.6 * this.gulpRandom())) : 0;
+        }
         else { this.mode = 'dive'; this.timer = DIVE_LENGTH; }
-      } else if (this.mode === 'gulp' && this.gulpClock >= GULP_LENGTH) { this.mode = 'dive'; this.timer = DIVE_LENGTH; }
-      else if (this.mode === 'dive' && this.timer <= 0) {
+      } else if (this.mode === 'gulp' && this.gulpClock >= GULP_LENGTH) {
+        // Lingering, it takes the next after a pause, its mouth shut (the clock runs up to it).
+        if (this.gulpsLeft > 0) { this.gulpsLeft--; this.gulps++; this.gulpClock = -GASP_PAUSE * (1 + this.gulpRandom()); }
+        else { this.mode = 'dive'; this.timer = DIVE_LENGTH; }
+      } else if (this.mode === 'dive' && this.timer <= 0) {
         this.mode = 'glide'; this.timer = 1.0 + this.random() * 0.8;
         this.nextGulp = this.time + (60 + this.gulpRandom() * 50) * (1 - 0.75 * clamp(this.gulpUrge, 0, 1));
+        this.gulpFrom = this.time;
         this.chooseTarget(env);
         gulping = false;
       }
@@ -477,15 +582,15 @@ export class BettaSwim {
     const reached = distance < 0.075 || Math.hypot(toTarget[0], toTarget[2]) < 0.05;
     if (!gulping && !startling && !behaving && !feeding && (this.timer <= 0 || (this.mode !== 'hover' && reached))) {
       if (this.mode === 'hover') {
-        if (!this.tryLap(b, ok && free > 25)) {
-          this.mode = this.random() < 0.18 ? 'burst' : 'cruise';
+        if (!this.tryLap(b, ok && free > 25) && !(L > 0 && this.tryRest(b, water, ok && free > 30 * briefly))) {
+          this.mode = this.random() < 0.18 * (1 - L) ? 'burst' : 'cruise';
           this.timer = this.mode === 'burst' ? 0.65 + this.random() * 0.45 : 6 + this.random() * 5;
           this.chooseTarget(env);
         }
       } else if (this.mode === 'burst') {
         this.mode = 'glide'; this.timer = 1.2 + this.random();
-      } else if (!this.tryMirror(b, ok && free > 16) && !this.tryRest(b, water, ok && free > 30)) {
-        this.mode = 'hover'; this.timer = 1.8 + this.random() * 3;
+      } else if (!this.tryMirror(b, ok && free > 16) && !this.tryRest(b, water, ok && free > 30 * briefly) && !(L > 0 && this.seekRest(b, water, ok && free > 30 * briefly))) {
+        this.mode = 'hover'; this.timer = (1.8 + this.random() * 3) * (1 + 2 * L);
       }
     }
     // Look ahead and steer away before the body/tail reach the glass or bed.
@@ -505,6 +610,8 @@ export class BettaSwim {
     // Settling is a swim down to the sand, nose low on working fins, levelling off as it arrives.
     const descent = this.mode === 'rest' ? this.position[1] - this.restY : 0;
     const sinking = this.mode === 'rest' && !escaping && descent > 0.007;
+    // (Listless, it lets itself sink down to it, nose a little low, all but in place: SAG.)
+    const sags = sinking && L > 0;
     const nearWall = this.mode !== 'mirror' && !feeding && (this.mode !== 'rest' || sinking) && Math.hypot(...look) > b.radius;
     // (Nose for an obstacle ahead: it veers off, out from it and on round.)
     const ahead = this.obstacles.length && !escaping && this.mode !== 'rest' ? this.obstacleGap(look) : null;
@@ -555,7 +662,7 @@ export class BettaSwim {
       }
     }
     let pitchTarget = still ? 0 : clamp(Math.atan2(delta[1], Math.hypot(delta[0], delta[2])), escaping || feeding ? -0.6 : -0.32, feeding ? 0.85 : 0.32);
-    if (sinking) pitchTarget = -clamp(0.12 + 2.5 * descent, 0, 0.72);
+    if (sinking) pitchTarget = -clamp(0.12 + 2.5 * descent, 0, 0.72) * (1 - 0.65 * this.slump);
     // At the film the lips are trimmed by the tilt of the head alone, which moves them without moving the body.
     const lipTrim = clamp(pitchForMouth(this.position[1], this.surfaceY - MOUTH_DEPTH), GULP_PITCH - 0.1, GULP_PITCH + 0.1);
     if (this.mode === 'rise') pitchTarget = rise > 0.1 ? 0.62 : lipTrim;
@@ -569,12 +676,14 @@ export class BettaSwim {
     const pitchSpin = -this.waterSpin[2] * Math.cos(this.heading) - this.waterSpin[0] * Math.sin(this.heading);
     this.pitch = clamp(damp(this.pitch, pitchTarget, dt, startling ? 8 : 2.4) + pitchSpin * dt * 0.8, -0.75, gulping || striking ? 0.95 : 0.75);
     const rollSpin = this.waterSpin[0] * Math.cos(this.heading) - this.waterSpin[2] * Math.sin(this.heading);
-    this.roll = clamp(damp(this.roll, 0, dt, 2.6) + rollSpin * dt * 0.8, -0.65, 0.65);
+    // (Lying listless on the sand, it leans over a little onto one side.)
+    const lean = L > 0 && this.mode === 'rest' && this.restSettled ? 0.32 * L * this.restSide : 0;
+    this.roll = clamp(damp(this.roll, lean, dt, lean ? 0.8 : 2.6) + rollSpin * dt * 0.8, -0.65, 0.65);
     this.pitchRate = (this.pitch - oldPitch) / dt;
     this.rollRate = (this.roll - oldRoll) / dt;
     // Down to the sand along the nose-down axis: the vertical rate eases off with the height left.
     const sinkSpeed = Math.min(0.09, clamp(1.2 * (descent - 0.004), 0, 0.06) / Math.max(0.1, Math.sin(-pitchTarget)));
-    let desiredSpeed = sinking ? sinkSpeed : this.mode === 'burst' ? 0.19 : this.mode === 'glide' ? 0.04 : feeding ? 0.21 : this.cruiseSpeed;
+    let desiredSpeed = sinking ? sinkSpeed * (1 - SAG_STILL * this.slump) : this.mode === 'burst' ? 0.19 * (1 - 0.4 * L) : this.mode === 'glide' ? 0.04 : feeding ? 0.21 * (1 - 0.5 * L) : this.cruiseSpeed;
     if (still) desiredSpeed = 0;
     else desiredSpeed *= (0.12 + 0.88 * Math.max(0, Math.cos(yawError))) * clamp(distance / 0.14, 0.25, 1);
     // Every speed is along the body axis; at the film the fins only creep it up the last millimetres.
@@ -584,7 +693,7 @@ export class BettaSwim {
     // Rising to a pellet, quickly at first; the last millimetres the fins creep it up, as for a gulp.
     else if (striking) desiredSpeed = rise > 0 ? clamp(rise * 2.5, 0.01, 0.14) : 0;
     // The dart starts once the head has swung round, then the speed decays into a glide.
-    if (startling) desiredSpeed = STARTLE_SPEED * Math.max(0, Math.cos(yawError)) ** 2 * Math.exp(-Math.max(0, this.startleClock - 0.12) / 0.45);
+    if (startling) desiredSpeed = STARTLE_SPEED * Math.max(0, Math.cos(yawError)) ** 2 * Math.exp(-Math.max(0, this.startleClock - 0.12) / 0.45) * (1 - 0.5 * L);
     if (escaping) desiredSpeed = Math.max(desiredSpeed, 0.16);
     // What the tail is asked for, before the body has tipped into line to swim it.
     const intent = desiredSpeed;
@@ -609,6 +718,7 @@ export class BettaSwim {
     const direction = [-Math.cos(this.heading) * Math.cos(this.pitch), Math.sin(this.pitch), Math.sin(this.heading) * Math.cos(this.pitch)];
     const old = [...this.position];
     for (let k = 0; k < 3; k++) this.position[k] += (direction[k] * this.speed + this.drift[k]) * dt;
+    if (sags) this.position[1] -= this.slump * clamp(SAG_RATE * descent, SAG_SLOWEST, SAG_FASTEST) * dt;
     // Once settled on the sand, let the current go by; holding still in the water (hovering,
     // taking air, swallowing, displaying at the glass), work against a slow one (a bowl's gentle
     // circulation, not a slosh, which carries it) and keep station.

@@ -12,6 +12,7 @@ import { describe, describeLoad, FrameProfile, wrap } from './app/frameProfile';
 import { Learn } from './app/learn/Learn';
 import { CLEAR_WATER, forcedWaterEffects } from './water/effects';
 import { WaterCare } from './water/WaterCare';
+import { WaterLook } from './water/look';
 import { BETTA_PAGE, elsewhere, GLOBES, type GlobeEntry } from './app/catalog';
 import { applyUrlOverrides, fishConfig, globeConfig, lightConfig, simConfig, type GlobeConfig, type LightConfig, type SimConfig } from './config';
 import { DeskMapping, loadDesk, type DesktopHostApi } from './desktop/desktopScene';
@@ -404,6 +405,8 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   o.shell?.progress(LOAD.sim);
 
   const globe = new GlobeView(sim, o.globe, o.light, koi.texture, samples, ocean ? { ocean: ocean.map.texture } : studio ? { ocean: studio.map } : { desktop: o.desk! }, kelp, reef, clowns.texture, GLOBES.find((g) => g.reef)?.clarity, GLOBES.find((g) => g.foam)?.waterColour, betta, bowl, scapeTex);
+  // (What the bowl's water shows of its state, and the fish's colours in it.)
+  const look = bowl ? new WaterLook(globe, sim, water.fx) : null;
   // A phone's quality level's knobs (app/quality/ladder.mjs), each set by its name; none builds a
   // pipeline. (Its fps is run()'s.)
   const knobs: Record<string, (v: number) => void> = {
@@ -510,6 +513,8 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
       f.food = null;
       f.gapeWant = 0;
     }
+    // (And what the water is doing to the betta: water/effects.ts.)
+    betta.water = water.fx;
     const eaters = feeders();
     food.aim(eaters);
     koi.update(dt, sim.koiSense, koiEnv());
@@ -553,7 +558,9 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
         }
       }
       PROF.lap('plants');
+      look?.update(dt, water.fx);
       if (life) {
+        life.tending = water.fx.nest;
         life.update(dt, sim.koiSense, sim.restLevel, SURFACE_ISO, controller.rotation.elements, Math.hypot(...controller.omega), betta.swim.mode);
         betta.swim.gulpUrge = life.nestNeed;
         sim.setProbes(LIFE_PROBE_AT, life.probePoints());
