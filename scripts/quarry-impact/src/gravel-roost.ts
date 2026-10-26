@@ -10,6 +10,15 @@ import * as T from 'three';
 export const ROOST={spin:2.5,full:10,rate:36,fling:.85,rise:[.3,.7],fan:.35,skip:.3,life:1.8,sink:.35,max:320,
   size:{gravel:[.03,.065],mud:[.05,.1]},tint:{gravel:0x6c645a,mud:0x3f3026},grit:{share:.55,size:.36,speed:.8,life:[.5,.95],tint:{gravel:0xa89c86,mud:0x5a4636}}} as const;
 export type RoostSurface='gravel'|'mud';
+/** Stones striking another car (offline): a stone still flying faster than STONE_HIT.speed m/s into another car's
+ * bodywork glances off it (losing STONE_HIT.bounce of its speed into the panel) with a metallic tick — three recorded takes
+ * in turn, louder the faster the stone (full at STONE_HIT.full m/s), no more often than every STONE_HIT.gap s per car. A
+ * stone strikes once; mud clods hit with no tick. */
+export const STONE_HIT={speed:3,full:9,bounce:.35,gap:.07,volume:.6,duration:.6,clips:['stone-ping-0','stone-ping-1','stone-ping-2']} as const;
+/** How loud a stone striking a car at this speed (m/s) ticks; 0 for none. */
+export function stoneHitVolume(speed:number){const v=Number.isFinite(speed)?Math.abs(speed):0;return v<STONE_HIT.speed?0:STONE_HIT.volume*Math.min(1,.3+.7*(v-STONE_HIT.speed)/(STONE_HIT.full-STONE_HIT.speed));}
+/** A car stones can strike: its bodywork as a box (centre in the world, half extents in its own frame, its rotation). */
+export type RoostBody={id:number;centre:T.Vector3;quaternion:T.Quaternion;half:T.Vector3};
 const GRAVITY=9.81;
 
 /** Stones a second off one tyre spinning at this many m/s (signed: + is the tread running forward over the ground). */
@@ -20,7 +29,7 @@ export function roostRate(spin:number,surface:string){
 /** The speed (m/s) a stone leaves the tread at for this much wheelspin, before its rise and fan. */
 export function roostSpeed(spin:number){return Math.max(0,ROOST.fling*Math.min(Number.isFinite(spin)?spin:0,ROOST.full*2));}
 
-type Stone={p:T.Vector3;v:T.Vector3;age:number;size:number;floor:number;stuck:boolean;mud:boolean;spin:T.Vector3;turn:T.Euler};
+type Stone={p:T.Vector3;v:T.Vector3;age:number;size:number;floor:number;stuck:boolean;mud:boolean;spin:T.Vector3;turn:T.Euler;owner:number;struck:boolean};
 
 export class GravelRoost {
   readonly mesh:T.InstancedMesh;
@@ -29,6 +38,7 @@ export class GravelRoost {
   private cursor=0;
   private readonly dummy=new T.Object3D();
   private readonly colour=new T.Color();
+  private readonly local=new T.Vector3();private readonly before=new T.Vector3();private readonly was=new T.Vector3();private readonly inverse=new T.Quaternion();private readonly normal=new T.Vector3();
   constructor(parent:T.Object3D,private readonly ground:(x:number,z:number)=>number){
     this.mesh=new T.InstancedMesh(new T.IcosahedronGeometry(1,0),new T.MeshStandardMaterial({roughness:.92,metalness:0,flatShading:true}),ROOST.max);
     this.mesh.name='gravel_roost';this.mesh.count=0;this.mesh.frustumCulled=false;this.mesh.castShadow=false;this.mesh.receiveShadow=true;
@@ -37,25 +47,28 @@ export class GravelRoost {
   }
   /** Throws one stone from the ground at `at` (a tyre's contact patch), `back` the horizontal unit direction the tread runs
    * off behind it; the stone comes down on the ground at the height `at` stands above the ground function there. */
-  throw(at:T.Vector3,back:T.Vector3,spin:number,surface:RoostSurface,random=Math.random):Stone|null{
+  throw(at:T.Vector3,back:T.Vector3,spin:number,surface:RoostSurface,random=Math.random,owner=-1):Stone|null{
     const speed=roostSpeed(spin);if(!(speed>0))return null;
     const side=(random()*2-1)*ROOST.fan,rise=ROOST.rise[0]+random()*(ROOST.rise[1]-ROOST.rise[0]),[lo,hi]=ROOST.size[surface];
     const v=new T.Vector3(back.x-back.z*side,0,back.z+back.x*side).normalize().multiplyScalar(speed*(.7+random()*.45));v.y=speed*rise;
-    const size=lo+random()*(hi-lo),stone:Stone={p:at.clone(),v,age:0,size,floor:at.y-this.ground(at.x,at.z),stuck:false,mud:surface==='mud',
+    const size=lo+random()*(hi-lo),stone:Stone={p:at.clone(),v,age:0,size,floor:at.y-this.ground(at.x,at.z),stuck:false,mud:surface==='mud',owner,struck:false,
       spin:new T.Vector3(random()-.5,random()-.5,random()-.5).multiplyScalar(30),turn:new T.Euler(random()*6,random()*6,random()*6)};
     const n=this.cursor++%ROOST.max;this.stones[n]=stone;this.thrown++;
     this.colour.setHex(ROOST.tint[surface]).multiplyScalar(.75+random()*.4).toArray(this.mesh.instanceColor!.array,n*3);this.mesh.instanceColor!.needsUpdate=true;
     stone.p.y+=size*.5;if(stone.mud)stone.spin.multiplyScalar(.4);
     return stone;
   }
-  step(dt:number){
+  /** Moves the stones on; one flying into a car other than the one that threw it glances off and `onHit` hears it (where, how
+   * fast, which car, whether it was a mud clod). */
+  step(dt:number,bodies:readonly RoostBody[]=[],onHit?:(at:T.Vector3,speed:number,body:RoostBody,mud:boolean)=>void){
     if(!(dt>0))return;
     let shown=0;
     for(let n=0;n<this.stones.length;n++){
       const s=this.stones[n];if(!s||s.age>=ROOST.life)continue;
       s.age+=dt;
       if(!s.stuck){
-        s.v.y-=GRAVITY*dt;s.p.addScaledVector(s.v,dt);s.turn.x+=s.spin.x*dt;s.turn.y+=s.spin.y*dt;s.turn.z+=s.spin.z*dt;
+        this.before.copy(s.p);s.v.y-=GRAVITY*dt;s.p.addScaledVector(s.v,dt);s.turn.x+=s.spin.x*dt;s.turn.y+=s.spin.y*dt;s.turn.z+=s.spin.z*dt;
+        if(!s.struck)for(const body of bodies)if(body.id!==s.owner&&this.strike(s,body)){onHit?.(s.p,this.lastSpeed,body,s.mud);break;}
         const floor=this.ground(s.p.x,s.p.z)+s.floor+s.size*.5;
         if(s.p.y<=floor){
           s.p.y=floor;
@@ -71,6 +84,22 @@ export class GravelRoost {
     // Spent stones sit at zero scale; draw up to the last live one.
     for(let n=0;n<shown;n++){const s=this.stones[n];if(!s||s.age>=ROOST.life){this.dummy.scale.setScalar(0);this.dummy.updateMatrix();this.mesh.setMatrixAt(n,this.dummy.matrix);}}
     this.mesh.count=shown;this.mesh.instanceMatrix.needsUpdate=true;
+  }
+  private lastSpeed=0;
+  /** Does this stone fly into this car's bodywork? If so it glances off the face it went in through. */
+  private strike(s:Stone,body:RoostBody){
+    this.inverse.copy(body.quaternion).invert();const l=this.local.copy(s.p).sub(body.centre).applyQuaternion(this.inverse),h=body.half;
+    if(h.x-Math.abs(l.x)<=0||h.y-Math.abs(l.y)<=0||h.z-Math.abs(l.z)<=0)return false;
+    // The face it came in through: where it was furthest outside the box a moment ago (else the nearest face).
+    const b=this.was.copy(this.before).sub(body.centre).applyQuaternion(this.inverse),out=[Math.abs(b.x)/h.x,Math.abs(b.y)/h.y,Math.abs(b.z)/h.z];
+    let axis=out.indexOf(Math.max(...out));
+    if(out[axis]<=1){const gaps=[h.x-Math.abs(l.x),h.y-Math.abs(l.y),h.z-Math.abs(l.z)];axis=gaps.indexOf(Math.min(...gaps));}
+    const from=axis===0?(out[0]>1?b.x:l.x):axis===1?(out[1]>1?b.y:l.y):(out[2]>1?b.z:l.z),side=Math.sign(from)||1;
+    if(axis===0){this.normal.set(side,0,0);l.x=side*h.x;}else if(axis===1){this.normal.set(0,side,0);l.y=side*h.y;}else{this.normal.set(0,0,side);l.z=side*h.z;}
+    this.normal.applyQuaternion(body.quaternion);s.p.copy(l.applyQuaternion(body.quaternion)).add(body.centre);
+    const into=s.v.dot(this.normal);this.lastSpeed=s.v.length();
+    if(into<0)s.v.addScaledVector(this.normal,-into*(1+STONE_HIT.bounce)).multiplyScalar(1-STONE_HIT.bounce);
+    s.struck=true;s.spin.multiplyScalar(-.6);return true;
   }
   /** Stones still in the air (not yet landed and spent). */
   get flying(){let n=0;for(const s of this.stones)if(s&&!s.stuck&&s.age<ROOST.life)n++;return n;}

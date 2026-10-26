@@ -1275,5 +1275,47 @@
     "sha256": "bbe64c49b0f89641c2c79e7f5142db867d42aac6c151ef73c11e9e4640402a0e",
     "runtimeSha256": "46fa5260291e68030fa3503a0832bc772684ffdbc37e71af17d7cc6e1e03b26b",
     "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "stone-ping-0",
+    "file": "stone-ping-0.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "A single small gravel stone flicked up by a spinning tyre striking a car's steel door panel: one sharp bright metallic tick, close up. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "31d118f5e06c5f338209d44008b0c8ea23d683fd1579506c2eb3fc43ba77dc86",
+    "runtimeSha256": "83d1868bd12b456d4db2aa55a66c9826ae1f9de6e793a5a16ce385d848f00c51",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "stone-ping-1",
+    "file": "stone-ping-1.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Two or three small stones pinging off a car bonnet in very quick succession: light sharp metallic ticks, close up. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 0.6,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "5a9e31229d2762448d00294d2c0586942b750ef68fcd789d1caefe941a977272",
+    "runtimeSha256": "a29649b844350af3d9d72e94d2dfba131b28cd92f29b3fb010f87cbd9e126c89",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "stone-ping-2",
+    "file": "stone-ping-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "A pebble thrown up from a gravel road hitting a car's front bumper and glancing off: one hard short plastic and metal tock with a tiny tick. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "b33bf38842b4eec8ea2d33d289d70b10e22230f05ed8c5f95b05ee358559215f",
+    "runtimeSha256": "6aecb136a1c8f1be0337823296e142b6d2f5302be24e0a54a3ab3f031ef581f4",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
   }
 ]
