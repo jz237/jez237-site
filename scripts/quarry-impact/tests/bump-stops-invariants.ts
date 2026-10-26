@@ -1,3 +1,4 @@
+import {restoreBattleScarsBytes} from './battle-scars-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readBumpStopsPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreBumpStopsBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreBattleScarsBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readBumpStopsPrevious(file);
 }
 export function verifyBumpStopsRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'6a15848a8a33553bc3a7a11f03a7ae0e0fd08448');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreBattleScarsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreBumpStopsBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the BumpStops release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreBattleScarsBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the BumpStops release');
  assert.equal(manifest.previousFixtureCount,8897);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,8897);
 }

@@ -140,6 +140,7 @@ import {fitDonors,pickDonors} from './donor-panels';
 import {OIL_BURN,burnOil,burner,type Burner} from './oil-burner';
 import {WheelBlur} from './wheel-blur';
 import {BUMP,bumpStrike} from './bump-stops';
+import {applyScars,bodyPoints,planScars} from './battle-scars';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -1084,6 +1085,8 @@ function createCars(attract = false, previewSetup?:Setup) {
     if(car.extendedDamage&&type!=='buggy'){const fit=fitRust(car.model,car.panels,car.wheels,vehicleWheelRadius(type));if(fit)car.surfaceFinish.placeRust(fit,i===0?0:startingRust(car.id));}
     // Old rivals have been patched up with panels off scrapyard donors, in primer or another car's colour (offline).
     if(car.extendedDamage&&i!==0&&type!=='buggy'){const picked=pickDonors(car.wreckParts.assemblies.map(a=>a.name),car.id,startingRust(car.id),car.paintColor);if(fitDonors(car.wreckParts.assemblies,picked))donorPanels.set(car,picked.map(d=>d.name));}
+    // and still wear the dents, scrapes and other cars' paint of their last meetings: the bodywork only (offline).
+    if(car.extendedDamage&&i!==0&&type!=='buggy'){const scars=planScars(bodyPoints(car.panels),car.id,startingRust(car.id));if(scars.length)battleScars.set(car,{scars:scars.length,panels:applyScars(car.panels,scars,(p,at,blow,paint)=>car.surfaceFinish.transfer(p,at,blow,paint))});}
     // Broken glass and smashed lamps leave their pieces on the floor (offline).
     if(car.extendedDamage){const glassSound=car.onGlassBreak,lights=carLights.get(car);let n=0;car.onGlassBreak=p=>{glassSound?.(p);fx.scatterLitter(p,'glass',car.id*131+(++n),car.current);};if(lights)lights.onSmash=(p,kind)=>fx.scatterLitter(p,kind,car.id*137+(++n),car.current);}
     // A big hit knocks flakes of the car's paint off, a blowout leaves lumps of tyre (offline).
@@ -2363,7 +2366,7 @@ const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMa
 function bodyBox(c:Vehicle){let box=roostBoxes.get(c);if(box)return box;c.root.updateMatrixWorld(true);const inverse=c.root.matrixWorld.clone().invert(),b=new T.Box3(),all=new T.Box3();for(const p of c.panels)all.union(b.setFromObject(p).applyMatrix4(inverse));if(all.isEmpty())return null;
   box={centre:all.getCenter(new T.Vector3()),half:all.getSize(new T.Vector3()).multiplyScalar(.5)};roostBoxes.set(c,box);return box;}
 let bodyDusts=0;const dustOut=new T.Vector3();
-const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>(),oilBurners=new WeakMap<object,Burner>(),wheelBlurs=new Map<Vehicle,WheelBlur>(),bumpState=new WeakMap<object,{len:number[];ground:boolean[];at:number[];count:number}>();let rustShowers=0,oilBurns=0,bumpStops=0,bumpTake=0;
+const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>(),oilBurners=new WeakMap<object,Burner>(),wheelBlurs=new Map<Vehicle,WheelBlur>(),bumpState=new WeakMap<object,{len:number[];ground:boolean[];at:number[];count:number}>(),battleScars=new WeakMap<object,{scars:number;panels:number}>();let rustShowers=0,oilBurns=0,bumpStops=0,bumpTake=0;
 const shiftGears=new WeakMap<object,number>(),shiftRevs=new WeakMap<object,number>();let shiftFlames=0,dustAir=0,knockDust=0;let shiftSmokes=0;const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3(),roostBoxes=new WeakMap<Vehicle,{centre:T.Vector3;half:T.Vector3}>(),roostBodies:RoostBody[]=[],pingClock=new Map<number,number>();let pingTake=0,stonePings=0;let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
 let wetReflections:ReturnType<typeof createWetReflections>|undefined;const glowList:Glow[]=[];
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
@@ -3138,6 +3141,7 @@ async function boot() {
     rollingCaps: () => ({ rolled: rollingCaps.rolled, moving: rollingCaps.moving, caps: rollingCaps.caps.map(c => ({ phase: c.phase, speed: +c.speed.toFixed(2), lean: +c.lean.toFixed(2), r: +c.radius.toFixed(3), at: c.p.toArray().map(v => +v.toFixed(2)) })) }),
     dustAir: () => +dustAir.toFixed(3),
     rust: (id = 0, age?: number) => { const c = cars.find(x => x.id === id); if (!c) return null; if (age !== undefined) c.surfaceFinish.rustAge = age; const r = c.surfaceFinish.rust.value, a = c.surfaceFinish.arches.value; const e = new T.Euler().setFromQuaternion(c.root.quaternion, 'YXZ'); return { showers: rustShowers, lean: [+T.MathUtils.radToDeg(e.x).toFixed(2), +T.MathUtils.radToDeg(e.z).toFixed(2)], sag: Array.from(c.sagBias, v => +v.toFixed(3)), dampers: Array.from(c.damperBias, v => +v.toFixed(3)), age: +r.x.toFixed(3), bottom: +r.y.toFixed(3), half: +r.z.toFixed(3), front: +a.x.toFixed(3), rear: +a.y.toFixed(3), hub: +a.z.toFixed(3), arches: [+r.w.toFixed(3), +a.w.toFixed(3)] }; },
+    scars: (id = 0) => { const c = cars.find(x => x.id === id); return c ? battleScars.get(c) ?? { scars: 0, panels: 0 } : null; },
     bumpStops: (id?: number) => { if (id === undefined) return bumpStops; const c = cars.find(x => x.id === id); return c ? bumpState.get(c)?.count ?? 0 : null; },
     wheelBlur: (id = 0) => { const c = cars.find(x => x.id === id), b = c && wheelBlurs.get(c); return b ? { discs: b.discs.length, opacities: b.opacities } : null; },
     oilBurns: (id?: number) => { if (id === undefined) return oilBurns; const c = cars.find(x => x.id === id); return c ? oilBurners.get(c)?.puffs ?? 0 : null; },

@@ -1,6 +1,7 @@
+import {restoreBattleScarsBytes} from './battle-scars-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readBumpStopsPrevious,restoreBumpStopsBytes,verifyBumpStopsRevision} from './bump-stops-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreBattleScarsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('BumpStops preserves every prior fixture, vehicle asset, venue art and history input',verifyBumpStopsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/bump-stops/revision.json').toString());
