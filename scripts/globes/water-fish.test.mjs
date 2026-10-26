@@ -75,9 +75,10 @@ test('listless, it lies on the sand far more, swims slower, and from 0.4 leaves 
 });
 
 test('the least bit listless, it rests as often and as long as a well fish, and more the more listless it is', () => {
-  // (Twelve fish, ten minutes each: how much of the time it lies on the sand, and how many times an
-  // hour it goes down.)
-  const seeds = Array.from({ length: 12 }, (_, k) => 237 + 1009 * k);
+  // (Twenty-four fish, ten minutes each: how much of the time it lies on the sand, and how many times
+  // an hour it goes down. Twelve were too few to tell 0.01 from clear: one sample read 0.8 of it,
+  // forty-eight 1.01.)
+  const seeds = Array.from({ length: 24 }, (_, k) => 237 + 1009 * k);
   const resting = (lethargy) => {
     let frames = 0, lying = 0, downs = 0;
     for (const seed of seeds) {

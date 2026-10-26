@@ -114,6 +114,12 @@ Version 1.7 adds four realism behaviours (Atelier 1.9 shares the fin changes):
   smoothing keeps it from startling at its own ripple.
 - **Hover sculling.** `hover`, `surface` and `gulp` modes drive continuous alternating
   pectoral fanning (`SCULL_HZ = 3.8` in `swim-gait.js`).
+- **Leaving the film.** After a gulp the fish turns over quickly (`dive`: pitch at 4.5 /s, a
+  flick of the tail) about its middle, `PITCH_PIVOT` (0.06) behind the neck, not about the neck:
+  the head dips as the tail rises (`turnVelocity`, the one move not along the body axis). Then it
+  swims on (`cruise`, shorter the more listless it is) rather than coasting nose down with the tail
+  stilled, which looked like the body dropping without swimming. (A hovering fish levels out the
+  same way.)
 - **Startle response.** A sudden flow or rotation change (jolt, measured against a
   1.5 /s-smoothed reference so steady swirling does not trigger it) above
   `STARTLE_JOLT = 1.25`, at most once per 10 s, starts a 0.9 s `startle`: a C-bend

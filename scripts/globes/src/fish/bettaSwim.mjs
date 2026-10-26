@@ -42,6 +42,12 @@ const pitchForMouth = (y, height) => Math.asin(clamp((height - y) / MOUTH_REACH,
 export const gulpMouth = e => 1.1 * (smooth(0, 0.28, e) - smooth(0.62, 0.95, e));
 export const gulpGillCover = e => Math.sin(Math.PI * clamp((e - 0.8) / 0.8, 0, 1)) ** 1.2;
 const GULPING = new Set(['rise', 'gulp', 'dive']);
+// A fish tipping nose up or down where it hangs in the water (turning over to dive from the film,
+// levelling out as it hovers) turns about its middle, not its neck (the route point): PITCH_PIVOT
+// behind it, where the body's weight is (its long fins trailing aside). Its head dips as its tail
+// rises, rather than the head held still and the body swung about it. (Swimming, a change of
+// pitch is the route's own bend.)
+export const PITCH_PIVOT = 0.06;
 // Short of air (gasp, from gills the water has harmed), it goes up GASP_OFTEN times as often at
 // the most, and from GASP_LINGER on it stays at the film for more gulps, up to GASP_GULPS more
 // (each after a pause of GASP_PAUSE s, and up to as long again).
@@ -88,6 +94,9 @@ export class BettaSwim {
     this.seed = seed;
     this.position = [0.20, -0.17, 0.12];
     this.velocity = [0, 0, 0];
+    /** The part of that velocity that is the fish turning over in place about its middle
+     *  (PITCH_PIVOT), not travel. */
+    this.turnVelocity = [0, 0, 0];
     this.target = [-0.34, -0.23, -0.18];
     this.heading = -0.35;
     this.pitch = this.angularVelocity = this.speed = this.time = 0;
@@ -581,7 +590,9 @@ export class BettaSwim {
         if (this.gulpsLeft > 0) { this.gulpsLeft--; this.gulps++; this.gulpClock = -GASP_PAUSE * (1 + this.gulpRandom()); }
         else { this.mode = 'dive'; this.timer = DIVE_LENGTH; }
       } else if (this.mode === 'dive' && this.timer <= 0) {
-        this.mode = 'glide'; this.timer = 1.0 + this.random() * 0.8;
+        // (On down and away, swimming: coasting nose down from the dive, the tail stilled, it would
+        // seem to sink rather than swim. Listless, only a little way, before it settles again.)
+        this.mode = 'cruise'; this.timer = (6 + this.random() * 5) * (1 - 0.8 * clamp(this.lethargy, 0, 1));
         this.nextGulp = this.time + (60 + this.gulpRandom() * 50) * (1 - 0.75 * clamp(this.gulpUrge, 0, 1));
         this.gulpFrom = this.time;
         this.chooseTarget(env);
@@ -686,7 +697,9 @@ export class BettaSwim {
     if (startling && this.startleDive) pitchTarget = -0.45;
     const oldPitch = this.pitch, oldRoll = this.roll;
     const pitchSpin = -this.waterSpin[2] * Math.cos(this.heading) - this.waterSpin[0] * Math.sin(this.heading);
-    this.pitch = clamp(damp(this.pitch, pitchTarget, dt, startling ? 8 : 2.4) + pitchSpin * dt * 0.8, -0.75, gulping || striking ? 0.95 : 0.75);
+    // (Leaving the film it turns over quickly, with a flick of the tail: a slow turn there, the tail
+    // all but still, would read as the body swung about by nothing.)
+    this.pitch = clamp(damp(this.pitch, pitchTarget, dt, startling ? 8 : this.mode === 'dive' ? 4.5 : 2.4) + pitchSpin * dt * 0.8, -0.75, gulping || striking ? 0.95 : 0.75);
     const rollSpin = this.waterSpin[0] * Math.cos(this.heading) - this.waterSpin[2] * Math.sin(this.heading);
     // (Lying listless on the sand, it leans over a little onto one side, over a few seconds.)
     const lean = L > 0 && this.mode === 'rest' && this.restSettled ? 0.32 * L * this.restSide * smooth(0, 3, this.holdClock) : 0;
@@ -729,7 +742,13 @@ export class BettaSwim {
     if (speedLimit > 1.2) for (let k = 0; k < 3; k++) this.drift[k] *= 1.2 / speedLimit;
     const direction = [-Math.cos(this.heading) * Math.cos(this.pitch), Math.sin(this.pitch), Math.sin(this.heading) * Math.cos(this.pitch)];
     const old = [...this.position];
-    for (let k = 0; k < 3; k++) this.position[k] += (direction[k] * this.speed + this.drift[k]) * dt;
+    // (Turning over in place, about its middle: the neck swings with the head by the pitch's change.)
+    const pivot = this.mode === 'dive' || this.mode === 'hover' ? PITCH_PIVOT * (1 - smooth(0.02, 0.08, this.speed)) : 0;
+    const was = [-Math.cos(this.heading) * Math.cos(oldPitch), Math.sin(oldPitch), Math.sin(this.heading) * Math.cos(oldPitch)];
+    for (let k = 0; k < 3; k++) {
+      this.turnVelocity[k] = (pivot * (direction[k] - was[k])) / dt;
+      this.position[k] += (direction[k] * this.speed + this.drift[k] + this.turnVelocity[k]) * dt;
+    }
     if (sags) this.position[1] -= this.slump * clamp(SAG_RATE * descent, SAG_SLOWEST, SAG_FASTEST) * dt;
     // Once settled on the sand, let the current go by; holding still in the water (hovering,
     // taking air, swallowing, displaying at the glass), work against a slow one (a bowl's gentle
@@ -768,6 +787,6 @@ export class BettaSwim {
     // The tail follows what the fish means to do, not the speed it has reached: it leads a start and
     // eases off at once for a glide. A startle is the exception, and swims as fast as it flies.
     const effortSpeed = startling ? Math.max(this.speed, intent) : intent;
-    this.drive = this.mode === 'glide' ? 0.065 : parked ? 0.08 : this.mode === 'rest' && !sinking ? 0.03 : holding ? 0.045 : clamp(0.07 + effortSpeed * 1.4 + Math.abs(this.steerRate) * 0.06, 0.045, 0.40);
+    this.drive = this.mode === 'glide' ? 0.065 : parked ? 0.08 : this.mode === 'rest' && !sinking ? 0.03 : holding ? 0.045 : this.mode === 'dive' && pivot > 0 ? 0.40 : clamp(0.07 + effortSpeed * 1.4 + Math.abs(this.steerRate) * 0.06, 0.045, 0.40);
   }
 }
