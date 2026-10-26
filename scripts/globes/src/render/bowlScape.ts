@@ -301,7 +301,13 @@ fn scape_shadeMesh(tex: texture_2d<f32>, h: ScapeHit, x: vec3f, dir: vec3f, inWa
   let s = scape_meshSurface(tex, ScapeMeshHit(h.t, h.id, h.uv));
   let db = rotT * dir;
   let front = dot(db, s.ng) < 0.0;
-  let mat = scape_meshMaterial(s, rotT * x, foot, front);
+  var mat = scape_meshMaterial(s, rotT * x, foot, front);
+  // (The plants' green leaves and stalks: at night their green reflects little of the lamp's blue,
+  // a dark teal-green, greyer and dimmer, light through them too. By day as they are: studio.ts.)
+  if (s.material >= SCAPE_MAT_LEAF_BIG && s.material <= SCAPE_MAT_STEM) {
+    mat.albedo = mix(mat.albedo, vec3f(dot(mat.albedo, vec3f(0.2126, 0.7152, 0.0722))), studioLeafGrey) * studioLeafDim;
+    mat.trans = mix(mat.trans, vec3f(dot(mat.trans, vec3f(0.2126, 0.7152, 0.0722))), studioLeafGrey) * studioLeafDim;
+  }
   // (The shading normal on the side the ray met, by the triangle's own face; where it still leans
   // away, as smooth normals do near an outline, bent back into view rather than turned over.)
   var n = scapeRot * mat.n;

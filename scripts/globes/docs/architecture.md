@@ -1643,7 +1643,7 @@ night from its first frame (the studio behind the splash too).
 
 - **The light, by uniform.** The studio's colours were literals in its WGSL (studio_wall,
   studio_room, studio_tableLight, studio_table, each inlined 36 times in the bowl's passes). They are
-  `StudioLight` (studio.ts): 16 colours and 3 shares in four mat4 uniforms (render/studioLight.ts),
+  `StudioLight` (studio.ts): 16 colours and 5 shares in four mat4 uniforms (render/studioLight.ts),
   which every entry point (globes_shade, the backdrop's, the table's) hands to `studio_light`, setting
   a private for each that the studio's code reads where its literal was. By day (`STUDIO_DAY`) they
   are those literals; by night `STUDIO_NIGHT`; between, each by the same share of its ratio, as a
@@ -1661,6 +1661,10 @@ night from its first frame (the studio behind the splash too).
     deep, the motes' glow, the lid's plastic); `studioKey` (the key soft box on the furnishings). The
     sim and its photons are as they were: the light is tinted and scaled where it is shaded. The
     heater's lamp is not: the one warm light at night.
+  - The plants' green leaves and stalks (scape_shadeMesh): their green reflects little of the
+    moonlight, so at night their albedo and the light through them go greyer (`leafGrey`, towards
+    their own luminance) and dimmer (`leafDim`): a dark teal-green, about 40% less bright (43% over
+    their pixels in a close view), their veins' glow and their glints still there.
   - `grain`: the backdrop and the table (their own small passes) are drawn with a grain of a share of
     their light at night (none by day), so their dark gradients do not band in the picture's 8 bits.
 - **The fish.** At night the fish takes the larger of Water mode's lethargy and 0.3 of the fade
@@ -1673,7 +1677,7 @@ night from its first frame (the studio behind the splash too).
   tier, 0 in the same course of the world (its courses differ by ~400 pixels in either build:
   Performance lessons). The other globes' WGSL is byte for byte as it was (80 passes).
 - **Cost.** Inlined, the bowl's passes are smaller (a name read where a literal was): bowlKoi-full
-  419.97 -> 415.69 K, bowl-lite 396.97 -> 392.68 K. Phone emulation (384x693 at 2.81, 2.75x CPU,
+  419.97 -> 416.04 K, bowl-lite 396.97 -> 393.04 K. Phone emulation (384x693 at 2.81, 2.75x CPU,
   vsync), Night off, kept on, or toggled six times in a row: 60 fps, GPU sim 0.5 + draw 1.0 ms, 84
   pipelines, 0 late. A frame of the fade blends the light (~1 us in Node, unthrottled) and sets four
   uniforms; a frame not fading, nothing.

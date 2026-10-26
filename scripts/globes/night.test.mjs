@@ -34,8 +34,10 @@ const BEFORE = {
   // (The paper's darkening towards the top, mix(1.0, 0.6, ...); the pool's mottle, whole.)
   wallTop: '0.6',
   poolMottle: '1.0',
-  // (And no grain.)
+  // (And no grain; the plants' leaves as they were.)
   grain: '0.0',
+  leafDim: '1.0',
+  leafGrey: '0.0',
 };
 
 /** A WGSL literal's numbers as f32 (a vec3f of one number is that number thrice). */

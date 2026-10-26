@@ -23,7 +23,9 @@ type Rgb = readonly [number, number, number];
  *  lamp's face), its beam's in the air and the water, the light round about (the room's, and the
  *  lamp's bounced: the ambient and the water's glow) and the key soft box's on the furnishings. And the
  *  grain the backdrop and the table are drawn with (a share of their light, either way), so that
- *  their dark gradients at night do not band in the picture's 8 bits. */
+ *  their dark gradients at night do not band in the picture's 8 bits; and the plants' green leaves and
+ *  stalks, how bright (a share) and how grey (towards their own luminance), for a green that reflects
+ *  little of the moonlight. */
 export interface StudioLight {
   wallEdge: Rgb;
   wallMid: Rgb;
@@ -38,6 +40,8 @@ export interface StudioLight {
   pool: Rgb;
   poolMottle: number;
   grain: number;
+  leafDim: number;
+  leafGrey: number;
   tableRoom: Rgb;
   tableEdge: Rgb;
   lamp: Rgb;
@@ -61,6 +65,8 @@ export const STUDIO_DAY: StudioLight = {
   pool: [1.0, 0.44, 0.09],
   poolMottle: 1,
   grain: 0,
+  leafDim: 1,
+  leafGrey: 0,
   tableRoom: [0.18, 0.3, 0.42],
   tableEdge: [0.05, 0.08, 0.11],
   lamp: [1, 1, 1],
@@ -72,7 +78,8 @@ export const STUDIO_DAY: StudioLight = {
 /** By night (Night, app/night.mjs): the room's lights off, the lamp in its soft blue moonlight mode,
  *  much dimmer. The paper deep blue, faintly lit behind the bowl where the lamp's light reaches it,
  *  darker to its edges; the soft boxes a whisper (the glass's outline still shows); the pool on the
- *  table blue, the caustics plain in it; the beams silver-blue, the water dark round them. */
+ *  table blue, the caustics plain in it; the beams silver-blue, the water dark round them; the plants
+ *  a dark teal-green. */
 export const STUDIO_NIGHT: StudioLight = {
   wallEdge: [0.0009, 0.003, 0.012],
   wallMid: [0.002, 0.0065, 0.022],
@@ -87,6 +94,8 @@ export const STUDIO_NIGHT: StudioLight = {
   pool: [0.05, 0.11, 0.28],
   poolMottle: 2.5,
   grain: 0.12,
+  leafDim: 0.62,
+  leafGrey: 0.38,
   tableRoom: [0.006, 0.01, 0.02],
   tableEdge: [0.004, 0.007, 0.013],
   lamp: [0.17, 0.23, 0.6],
@@ -98,7 +107,7 @@ export const STUDIO_NIGHT: StudioLight = {
 /** The order studio_light takes them in: a colour to each column of its four matrices (its xyz), and
  *  the shares in the first columns' w. */
 export const STUDIO_COLOURS = ['wallEdge', 'wallMid', 'wallCore', 'wallFoot', 'roomLow', 'roomHigh', 'softbox', 'strip', 'top', 'pool', 'tableRoom', 'tableEdge', 'lamp', 'beam', 'ambient', 'key'] as const;
-export const STUDIO_SHARES = ['wallTop', 'poolMottle', 'grain'] as const;
+export const STUDIO_SHARES = ['wallTop', 'poolMottle', 'grain', 'leafDim', 'leafGrey'] as const;
 
 /** The studio's light `night` of the way from day to night (0..1), into `out` (its four matrices'
  *  elements, column by column, as studio_light takes them). Each goes by the same share of its ratio,
@@ -137,7 +146,7 @@ ${STUDIO_SHARES.map((name) => `var<private> ${wgslName(name)}: f32;`).join('\n')
 
 fn studio_light(a: mat4x4f, b: mat4x4f, c: mat4x4f, d: mat4x4f) {
 ${STUDIO_COLOURS.map((name, k) => `  ${wgslName(name)} = ${'abcd'[k >> 2]}[${k & 3}].xyz;`).join('\n')}
-${STUDIO_SHARES.map((name, k) => `  ${wgslName(name)} = a[${k}].w;`).join('\n')}
+${STUDIO_SHARES.map((name, k) => `  ${wgslName(name)} = ${'abcd'[k >> 2]}[${k & 3}].w;`).join('\n')}
 }
 
 // atan2(y, x), given an angle where both are 0 (straight up; right under the bowl's middle): a GPU
