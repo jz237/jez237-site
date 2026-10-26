@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import * as T from 'three';
-import {FLAME,SHIFT_FLAME,shiftFlame,flameSize,ExhaustFlames} from '../src/exhaust-flames';
+import {FLAME,FLAME_LIGHT,SHIFT_FLAME,shiftFlame,flameSize,ExhaustFlames} from '../src/exhaust-flames';
+import {SPARK_LIGHT,sparkFlash} from '../src/spark-light';
 test('an old car revved out and floored spits flame on the upshift; nothing else does',()=>{
   assert.equal(shiftFlame(2,3,SHIFT_FLAME.rpm+100,1,true),true);
   assert.equal(shiftFlame(2,3,SHIFT_FLAME.rpm+100,1,false),false,'a modern car');assert.equal(shiftFlame(2,3,SHIFT_FLAME.rpm-100,1,true),false,'short-shifted');
@@ -24,7 +25,11 @@ test('a pop throws a tongue of flame out of the pipe the way it points, then it 
 });
 test('main throws flame with every backfire and on the high-revving upshift, offline',()=>{
   const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
-  assert.ok(main.includes('car.onBackfire=p=>{sound.backfire(p);exhaustFlames.flash(p,steamAt.copy(car.forward).negate());};'),'every pop');
+  assert.ok(main.includes('car.onBackfire=p=>{sound.backfire(p);exhaustFlames.flash(p,steamAt.copy(car.forward).negate());sparkLight.flash(p,FLAME_LIGHT.pop);};'),'every pop');
   assert.ok(main.includes('if(shiftFlame(before,c.gear,revs,c.input.throttle,isClassicKind(c.kind))){shiftFlames++;'),'the upshift');
   assert.ok(main.includes('exhaustFlames.step(state===\'paused\'||state===\'inspect\'?0:dt);')&&main.includes('rollingCaps.reset();exhaustFlames.reset();'),'stepped and cleared');
+});
+test('a tongue of flame lights its surroundings like a burst of sparks, an upshift\'s brighter',()=>{
+  assert.ok(sparkFlash(FLAME_LIGHT.pop)>0&&sparkFlash(FLAME_LIGHT.shift)>=sparkFlash(FLAME_LIGHT.pop),'a pop lights up, an upshift more');assert.ok(FLAME_LIGHT.pop>=SPARK_LIGHT.min);
+  const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');assert.ok(main.includes('exhaustFlames.flash(steamAt,dustOut.copy(c.forward).negate(),1.15);sparkLight.flash(steamAt,FLAME_LIGHT.shift);'),'the upshift flame too');
 });

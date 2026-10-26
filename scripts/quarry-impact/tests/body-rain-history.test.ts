@@ -1,6 +1,7 @@
+import {restoreFlameLightBytes} from './flame-light-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readBodyRainPrevious,restoreBodyRainBytes,verifyBodyRainRevision} from './body-rain-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreFlameLightBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('BodyRain preserves every prior fixture, vehicle asset, venue art and history input',verifyBodyRainRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/body-rain/revision.json').toString());

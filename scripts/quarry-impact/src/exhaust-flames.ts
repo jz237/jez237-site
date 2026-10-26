@@ -7,6 +7,9 @@ import * as T from 'three';
  * FLAME.pool burn at once (the oldest goes). */
 export const FLAME={length:.6,radius:.09,core:.55,life:.16,flicker:.35,pool:12,outer:0xff7a22,inner:0xffe7a0} as const;
 export const SHIFT_FLAME={rpm:5200,throttle:.9} as const;
+/** A tongue of flame lights its surroundings like a burst of this many sparks (the spark light), FLAME_LIGHT.shift for an
+ * upshift's bigger one. */
+export const FLAME_LIGHT={pop:10,shift:14} as const;
 /** Does this upshift (gear before → now, revs before it, pedal) spit flame from this car? */
 export function shiftFlame(before:number,now:number,rpm:number,throttle:number,classic:boolean){
   return classic&&Number.isFinite(before)&&Number.isFinite(now)&&before>=1&&now>before&&Number.isFinite(rpm)&&rpm>=SHIFT_FLAME.rpm&&Number.isFinite(throttle)&&throttle>=SHIFT_FLAME.throttle;
