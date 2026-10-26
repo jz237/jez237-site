@@ -124,6 +124,7 @@ import {STRAP,TowStraps} from './tow-straps';
 import {rearOf,startingWake,wakeDustStep} from './wake-dust';
 import {SHIFT_SMOKE,shiftPuffs} from './shift-smoke';
 import {RollingCaps,fitHubcaps} from './rolling-caps';
+import {BODY_DUST,bodyDustPuffs,bodyPoint} from './body-dust';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -1038,6 +1039,11 @@ function createCars(attract = false, previewSetup?:Setup) {
       lampDangles.set(car,new LampDangle(car.root,lamps,mesh=>fx.detach(mesh,car.velocity.clone().multiplyScalar(.65))));}
     // A bright tow strap hangs off each bumper and swings; a smashed or lost bumper takes its strap with it (offline).
     if(car.extendedDamage)towStraps.set(car,new TowStraps(car.root,car.panels,DEFINITIONS[type].halfLength,STRAP.colours[i%STRAP.colours.length],loop=>fx.detach(loop,car.velocity.clone().multiplyScalar(.6))));
+    // A hard knock shakes the dust out of the car all over its body, as dusty as it has got (offline; none in the rain).
+    if(car.extendedDamage)car.onHardKnock=damage=>{const dirt=car.surfaceFinish.coating.value,n=bodyDustPuffs(damage,Math.max(car.surfaceFinish.wakeLevel/.75,(dirt.z+dirt.w)/2),eventLighting==='rain'),box=n?bodyBox(car):null;if(!box)return;bodyDusts++;
+      for(let k=0;k<n;k++){const at=bodyPoint(box.half.x,box.half.y,box.half.z,Math.random(),Math.random(),Math.random());steamAt.fromArray(at.p).add(box.centre).applyMatrix4(car.root.matrixWorld);dustOut.fromArray(at.n).transformDirection(car.root.matrixWorld);
+        const start=fx.cursor;fx.emit(steamAt,1,0,BODY_DUST.size[0]);for(let j=start;j<fx.cursor;j++){const i=j%fx.particles.length,p=fx.particles[i];p.v.copy(dustOut).multiplyScalar(BODY_DUST.out*(.5+Math.random())).addScaledVector(car.velocity,BODY_DUST.carry);p.v.y+=BODY_DUST.lift*Math.random();
+          p.size=BODY_DUST.size[0]+Math.random()*(BODY_DUST.size[1]-BODY_DUST.size[0]);p.max=p.life=BODY_DUST.life[0]+Math.random()*(BODY_DUST.life[1]-BODY_DUST.life[0]);dustTint.setHex(BODY_DUST.tint).multiplyScalar(.88+Math.random()*.2).toArray(fx.colors,i*3);}}};
     // Classic cars on plain rims get chrome hubcaps, to be knocked off and roll away (offline).
     if(car.extendedDamage)fitHubcaps(car.root,car.wheels);
     // Driving through its own dust plume coats the tail in dust; the rain rinses it off (offline).
@@ -2315,7 +2321,11 @@ function updateHeatHaze(){
 }
 const bonnetHeats=new WeakMap<object,number>(),bonnetClocks=new WeakMap<object,number>(),steamAt=new T.Vector3();let bonnetPuffs=0;
 const vapourClocks=new WeakMap<object,number>();let vapourPuffs=0;
-const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMap<object,number[]>(),dustClocks=new WeakMap<object,number[]>();const dustTint=new T.Color();const shiftGears=new WeakMap<object,number>();let shiftSmokes=0;const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3(),roostBoxes=new WeakMap<Vehicle,{centre:T.Vector3;half:T.Vector3}>(),roostBodies:RoostBody[]=[],pingClock=new Map<number,number>();let pingTake=0,stonePings=0;let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
+const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMap<object,number[]>(),dustClocks=new WeakMap<object,number[]>();const dustTint=new T.Color();// Each car's bodywork as a box in its own frame, measured once (stones strike it, dust shakes off it).
+function bodyBox(c:Vehicle){let box=roostBoxes.get(c);if(box)return box;c.root.updateMatrixWorld(true);const inverse=c.root.matrixWorld.clone().invert(),b=new T.Box3(),all=new T.Box3();for(const p of c.panels)all.union(b.setFromObject(p).applyMatrix4(inverse));if(all.isEmpty())return null;
+  box={centre:all.getCenter(new T.Vector3()),half:all.getSize(new T.Vector3()).multiplyScalar(.5)};roostBoxes.set(c,box);return box;}
+let bodyDusts=0;const dustOut=new T.Vector3();
+const shiftGears=new WeakMap<object,number>();let shiftSmokes=0;const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3(),roostBoxes=new WeakMap<Vehicle,{centre:T.Vector3;half:T.Vector3}>(),roostBodies:RoostBody[]=[],pingClock=new Map<number,number>();let pingTake=0,stonePings=0;let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
 let wetReflections:ReturnType<typeof createWetReflections>|undefined;const glowList:Glow[]=[];
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
 function lookDriver(c:Vehicle,figure:T.Object3D,dt:number){
@@ -2637,8 +2647,7 @@ function frame(now: number) {
         if(stone&&Math.random()<ROOST.grit.share){const start=fx.cursor;fx.emit(steamAt,1,0,ROOST.grit.size);for(let j=start;j<fx.cursor;j++){const n=j%fx.particles.length,p=fx.particles[n];p.v.copy(stone.v).multiplyScalar(ROOST.grit.speed);
           p.max=p.life=ROOST.grit.life[0]+Math.random()*(ROOST.grit.life[1]-ROOST.grit.life[0]);dustTint.setHex(ROOST.grit.tint[kind]).multiplyScalar(.9+Math.random()*.2).toArray(fx.colors,n*3);}}}}}
   // Stones strike the other cars' bodywork (each car a box round its panels, measured once) and tick off it.
-  roostBodies.length=0;if(gravelRoost.flying)for(const c of cars){if(!c.extendedDamage)continue;let box=roostBoxes.get(c);
-    if(!box){c.root.updateMatrixWorld(true);const inverse=c.root.matrixWorld.clone().invert(),b=new T.Box3(),all=new T.Box3();for(const p of c.panels)all.union(b.setFromObject(p).applyMatrix4(inverse));if(all.isEmpty())continue;box={centre:all.getCenter(new T.Vector3()),half:all.getSize(new T.Vector3()).multiplyScalar(.5)};roostBoxes.set(c,box);}
+  roostBodies.length=0;if(gravelRoost.flying)for(const c of cars){if(!c.extendedDamage)continue;const box=bodyBox(c);if(!box)continue;
     roostBodies.push({id:c.id,centre:box.centre.clone().applyMatrix4(c.root.matrixWorld),quaternion:c.root.quaternion,half:box.half});}
   rollingCaps.step(state==='paused'||state==='inspect'?0:dt);
   gravelRoost.step(dt,roostBodies,(at,speed,body,mud)=>{const v=mud?0:stoneHitVolume(speed);if(v<=0||Math.abs(clock-(pingClock.get(body.id)??-9))<STONE_HIT.gap)return;pingClock.set(body.id,clock);
@@ -3049,6 +3058,7 @@ async function boot() {
     towStraps: (id = 0, damage?: number) => { const c = cars.find(x => x.id === id), s = c && towStraps.get(c); if (s && damage !== undefined) for (const x of s.straps) if (x.panel) x.panel.userData.damage = damage; return s ? { straps: s.straps.length, ends: s.straps.map(x => x.end), torn: s.torn, swings: s.swings, panels: s.straps.map(x => x.panel?.name ?? null) } : null; },
     fogLamp: (id = 0) => { const c = cars.find(x => x.id === id), l = c && carLights.get(c), m = l?.fogLamp; return l ? { fitted: !!m, lit: l.fogLit, visible: !!m?.visible, at: m ? m.position.toArray().map(v => +v.toFixed(3)) : null, glow: m ? (m.material as T.MeshStandardMaterial).emissiveIntensity : 0, driver: +(c!.root.getObjectByName('driver')?.position.x ?? 0).toFixed(2) } : null; },
     wakeDust: (id = 0, level?: number) => { const c = cars.find(x => x.id === id); if (!c) return null; if (level !== undefined) c.surfaceFinish.wakeLevel = level; const w = c.surfaceFinish.wake.value; return { placed: c.surfaceFinish.wakePlaced, level: +w.z.toFixed(4), rear: +w.x.toFixed(3) }; },
+    bodyDust: () => bodyDusts,
     rollingCaps: () => ({ rolled: rollingCaps.rolled, moving: rollingCaps.moving, caps: rollingCaps.caps.map(c => ({ phase: c.phase, speed: +c.speed.toFixed(2), lean: +c.lean.toFixed(2), r: +c.radius.toFixed(3), at: c.p.toArray().map(v => +v.toFixed(2)) })) }),
     shiftSmoke: () => ({ puffs: shiftSmokes, gear: cars[0]?.gear ?? 0 }),
     roost: () => ({ pings: stonePings, thrown: gravelRoost.thrown, flying: gravelRoost.flying, spins: cars.map(c => c.wheelSpins.map(v => +v.toFixed(2))), surfaces: cars.map(c => c.surface), offline: cars.map(c => c.extendedDamage), wet: cars.map(c => c.wetWheels.filter(Boolean).length), speeds: cars.map(c => +c.speed.toFixed(2)) }),

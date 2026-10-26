@@ -536,6 +536,8 @@ export class Vehicle {
   private readonly crushPending=new Set<T.Mesh>();
   private lastLanding=-10;private readonly wasGrounded=[true,true,true,true];
   /** Live counts for diagnostics. */
+  /** A knock landed (offline): its damage, for the dust it shakes off. */
+  onHardKnock?:(damage:number)=>void;
   rips=0;backfires=0;
   damageRight = 0;
   readonly damageZones={front:0,rear:0,left:0,right:0,roof:0};
@@ -1376,6 +1378,7 @@ export class Vehicle {
     }
     if (!quiet) {
       this.fx.impact?.(point, direction, damage);
+      if(this.extendedDamage)this.onHardKnock?.(damage);
     }
   }
   /** Doors, barn doors and tailgates with a broken latch swing on their hinges with the car's motion (door-swing.ts); open doors catch the air,
