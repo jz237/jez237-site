@@ -305,7 +305,8 @@ function buildHeater(detail) {
     const back = add(at(h), mul(f.a, -r1));
     const cup = frame(mul(norm(back), GLASS_INNER - CUP_INSET), mul(norm(back), -1), f.u);
     const stem = GLASS_INNER - CUP_INSET - len(back) + 0.004;
-    lathe(mb, cup, [[0.047, 0, true], [0.0466, 0.0024, true], [0.041, 0.006], [0.032, 0.0108], [0.0225, 0.0152], [0.0148, 0.018], [0.0106, 0.0194, true], [0.0086, 0.021], [0.0086, stem]], cupSides, MAT.SUCTION, (i, r) => [0, r / 0.047, 0, 0.7 + 0.25 * smooth(0.047, 0.03, r)]);
+    // (Its face pressed to the glass, seen through it from the far side, then its rim and dome.)
+    lathe(mb, cup, [[0, 0], [0.047, 0, true], [0.0466, 0.0024, true], [0.041, 0.006], [0.032, 0.0108], [0.0225, 0.0152], [0.0148, 0.018], [0.0106, 0.0194, true], [0.0086, 0.021], [0.0086, stem]], cupSides, MAT.SUCTION, (i, r) => [0, r / 0.047, 0, 0.7 + 0.25 * smooth(0.047, 0.03, r)]);
   }
   // The cord: up out of its boot, over to the glass and up it, slack a little where nothing holds
   // it, to the rim, where it goes out under the lid.

@@ -535,7 +535,7 @@ Triangles' materials take four bits now (the equipment's are 8-12: HEATER, HEATE
 TUBE, SUCTION; vertex ids stay below 2^20), in the packer, its mirror, the shader and the plants'
 refit kernels, and the phone's interleave gives the equipment a hit code of its own
 (`bowlResolve.mjs` HIT.EQUIPMENT). The idle 'filter' current is as it was: it stirs the whole bowl
-and has no source to put at the filter. Cost: 12,874 triangles at full detail, 5,214 on phones; on
+and has no source to put at the filter. Cost: 12,938 triangles at full detail, 5,246 on phones; on
 the iGPU (`--use-adapter-luid`) the phone's frame at a ratio of 2 went from 190 to 194 ms; the
 other globes' shaders are unchanged, byte for byte. Tests: `equipment.test.mjs` (7) and a packing
 test in `scape-bvh.test.mjs`, 212 in all.
