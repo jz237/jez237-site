@@ -40,7 +40,7 @@ import { repairCoupePanel } from './coupe-realism';
 import { dentGeometry,crushGeometry,refreshWreckNormals,type CrushFrame, repairWreckGeometry } from './wreck-geometry';
 import { WreckFinish } from './wreck-finish';
 import { WreckAttachments } from './wreck-attachments';
-import {ROT,rotFactor,tiredCorner,tiredDamper,tiredSag,wornEngine} from './age-rust';
+import {ROT,brakePull,caliperGrip,rotFactor,tiredCorner,tiredDamper,tiredSag,wornEngine} from './age-rust';
 import {torqueSteer} from './torque-steer';
 import {bodyworkDentDamage} from './bodywork-response';
 import {puddleDepth,type Puddle} from './puddle-splashes';
@@ -981,6 +981,8 @@ export class Vehicle {
     const handbrake=this.handbrakeCable?false:raw.handbrake;
     // A front-driver tugs to its own side under hard throttle at low speed: torque steer (offline).
     if(this.extendedDamage&&isFrontDriveKind(this.kind)&&this.health>0&&!(this.engineStall!>0)&&this.gear>0)steer=torqueSteer(steer,throttle,this.speed,this.id);
+    // An old banger's half-seized caliper tugs the wheel under braking (offline, by its age).
+    if(this.extendedDamage)steer=brakePull(steer,raw.brake,this.speed,this.surfaceFinish.rustAge,this.id);
     if(steer!==raw.steer||throttle!==raw.throttle||handbrake!==raw.handbrake){this.ownInput={...raw,steer,throttle,handbrake};this.input=this.ownInput;}else this.input=raw;
     if(this.extendedDamage)this.brakeFluid=leakBrakeFluid(this.brakeFluid,this.structuralDamage?.[0]??0,dt);
     this.wreckParts.flipHood=this.extendedDamage;
@@ -995,6 +997,8 @@ export class Vehicle {
     if(wasNeutral!==this.inNeutral)this.onGearClunk?.(this.inNeutral);
     for(let i=0;i<4;i++){this.brakeBias[i]=this.extendedDamage?brakeFactor(this.wreckParts.wheelDamage[i]):1;this.damperBias[i]=this.extendedDamage?damperFactor(this.wreckParts.wheelDamage[i]):1;
       if(this.extendedDamage)this.brakeBias[i]*=brakeFluidFactor(this.brakeFluid);
+      // An old banger's half-seized front caliper grips less: it pulls under braking (offline, by its age).
+      if(this.extendedDamage)this.brakeBias[i]*=caliperGrip(this.surfaceFinish.rustAge,this.id,i);
       const d=this.extendedDamage?this.wreckParts.wheelDamage[i]:0,spring=springBias(d),drive=driveBias(d);
       if(spring<this.springBias[i])this.onBreak?.('spring',i);if(drive<this.driveBias[i])this.onBreak?.('shaft',i);
       this.springBias[i]=spring;this.sagBias[i]=sagBias(d);this.driveBias[i]=drive;

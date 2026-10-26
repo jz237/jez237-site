@@ -1,6 +1,7 @@
+import {restoreBrakePullBytes} from './brake-pull-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readWornEnginesPrevious,restoreWornEnginesBytes,verifyWornEnginesRevision} from './worn-engines-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreBrakePullBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('WornEngines preserves every prior fixture, vehicle asset, venue art and history input',verifyWornEnginesRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/worn-engines/revision.json').toString());

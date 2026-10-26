@@ -45,6 +45,22 @@ export const chromed=(name:string)=>/chrome/i.test(name)&&!/hubcap/i.test(name);
 export const WORN_ENGINE={from:.5,onset:.3,most:.45} as const;
 /** The engine damage an old car's misfires behave as, by its age (0 when it is not that old). */
 export const wornEngine=(age:number)=>{const a=clampAge(age);return a<WORN_ENGINE.from?0:WORN_ENGINE.onset+(WORN_ENGINE.most-WORN_ENGINE.onset)*(a-WORN_ENGINE.from)/(1-WORN_ENGINE.from);};
+/** Brake pull (offline, with the rust): one front caliper of an old banger is half seized — its own side — and grips up to
+ * BRAKE_PULL.loss less than the other from BRAKE_PULL.from of its age, so under hard braking the wheel tugs toward the
+ * stronger side (up to BRAKE_PULL.tug of full lock at full pedal, from BRAKE_PULL.speed m/s up) and the driver has to hold it
+ * straight. */
+export const BRAKE_PULL={from:.5,loss:.38,tug:.12,speed:8} as const;
+/** The front wheel (0 or 1) with the weak caliper on car `id`. */
+export const weakCaliper=(id:number)=>Math.abs(Math.sin((Number.isFinite(id)?id:0)*53.71+.83)*43758.5453)%1<.5?0:1;
+/** How much of its braking this wheel (0–3) keeps on car `id` of this age. */
+export function caliperGrip(age:number,id:number,wheel:number){const a=clampAge(age);if(a<BRAKE_PULL.from||wheel!==weakCaliper(id))return 1;return 1-BRAKE_PULL.loss*(a-BRAKE_PULL.from)/(1-BRAKE_PULL.from);}
+/** The steering after an old car's brakes tug it, from the driver's steer (−1–1) at this brake pedal and speed (m/s). */
+export function brakePull(steer:number,brake:number,speed:number,age:number,id:number){
+  const s=Number.isFinite(steer)?steer:0,a=clampAge(age),b=Number.isFinite(brake)?Math.max(0,Math.min(1,brake)):0,v=Number.isFinite(speed)?Math.abs(speed):0;
+  if(a<BRAKE_PULL.from||b<=0)return s;
+  const pull=BRAKE_PULL.tug*b*Math.min(1,v/BRAKE_PULL.speed)*(a-BRAKE_PULL.from)/(1-BRAKE_PULL.from);
+  return Math.max(-1,Math.min(1,s+(weakCaliper(id)===0?1:-1)*pull));
+}
 /** Does a body material rust? Painted steel does; the plastic trim, hoses and cabin do not. */
 export const rusts=(name:string)=>name.startsWith('paint')&&!/Paint 2|hoses|Interior|Panel Sides/.test(name);
 export const startingRust=(id:number)=>{const n=Number.isFinite(id)?id:0,r=Math.abs(Math.sin(n*57.31+4.77)*43758.5453)%1;return RUST.age[0]+r*(RUST.age[1]-RUST.age[0]);};
