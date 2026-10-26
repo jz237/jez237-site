@@ -1,16 +1,35 @@
 import * as T from 'three';
 
+/** Wet paint (offline rain, shared by every car): the colour deepens (WET_PAINT.saturate more saturated, WET_PAINT.darken
+ * darker) and dust or mud on it goes much darker; every panel takes a film of water (roughness times WET_PAINT.film on top,
+ * halfway to that on the sides) under a sharp clearcoat; and close up, beads of water stand on the panels facing the sky
+ * (faded out once a bead is too small on screen to draw). 0 dry to 1 soaked. */
+export const CAR_WET={value:0};
+export const WET_PAINT={darken:.18,saturate:.3,mud:.5,film:.4,coat:.5,bead:36} as const;
+/** Runs of rain (offline rain): on the panels facing sideways, thin runs of water crawl down the paint, RUNS.cols columns a
+ * metre (about RUNS.share of them running), RUNS.len runs a metre down each, at RUNS.speed m a second give or take; faded out
+ * once too fine on screen to draw. CAR_TIME is the clock they run by. */
+export const RUNS={cols:22,share:.45,len:1.6,speed:.22,width:.07} as const;
+export const CAR_TIME={value:0};
+/** Scrape layers (all paint): wear (the panel's scratch, 0–1) past SCRAPE.scuff dulls and pales the clear coat (by
+ * SCRAPE.pale), past SCRAPE.primer wears the colour through to primer in streaks (SCRAPE.cover of the way) — grey, or red
+ * oxide in the patches where noise passes SCRAPE.patch — before the bare metal of the deepest scrapes. */
+export const SCRAPE={scuff:[.12,.45],primer:[.35,.75],pale:.45,cover:.85,grey:'.36,.37,.36',oxide:'.38,.15,.09',patch:.55} as const;
 // Body-space shading survives dents and detached parts without swimming UVs.
 // Damage is separate from base color: exposed alloy reflects as metal while
 // dusty paint gets rougher and loses its clearcoat highlights.
 export function finishPaint(material: T.MeshPhysicalMaterial, contactWear = false) {
   material.onBeforeCompile = (shader) => {
+    shader.uniforms.rainWet = CAR_WET;
+    shader.uniforms.carTime = CAR_TIME;
     shader.vertexShader = shader.vertexShader
       .replace('#include <common>', '#include <common>\nattribute vec2 impactWear; varying vec3 vBodyPosition; varying vec2 vImpactWear;\nattribute vec3 crumple; varying vec3 vCrumple; varying vec3 vCrumpleRest; varying vec4 vCrumpleFold;')
       .replace('#include <begin_vertex>', '#include <begin_vertex>\nvBodyPosition = position; vImpactWear = impactWear;\nvCrumple = crumple; vCrumpleRest = position - crumple;\nvec3 crumpleAlong=crumple-dot(crumple,objectNormal)*objectNormal; float crumpleAlongLen=length(crumpleAlong);\nvCrumpleFold=vec4(crumpleAlongLen>1e-5?crumpleAlong/crumpleAlongLen:vec3(0.,0.,1.),crumpleAlongLen/max(length(crumple),1e-5));');
     shader.fragmentShader = shader.fragmentShader
       .replace('#include <common>', `#include <common>
 varying vec3 vBodyPosition; varying vec2 vImpactWear; varying vec3 vCrumple; varying vec3 vCrumpleRest; varying vec4 vCrumpleFold;
+uniform float rainWet;
+uniform float carTime;
 // Bump from a height in metres, using unnormalised screen derivatives so the creases keep their
 // real size at any distance (Mikkelsen's surface-gradient form, as in three's bumpmap chunk).
 vec3 crumpleBump(vec3 pos,vec3 n,vec2 dh,float face){
@@ -39,6 +58,14 @@ float scratch=clamp(vImpactWear.x,0.,1.);
 float scrapeLines=smoothstep(.75,.96,abs(sin(vBodyPosition.y*235.+vBodyPosition.z*29.+sin(vBodyPosition.x*12.))));
 float bareMetal=clamp(vImpactWear.y,0.,1.)*max(scrapeLines,smoothstep(.65,.92,grain)*.65);
 diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.19,.16,.12),dust);
+// Paint wears through in layers (SCRAPE): the clear coat scuffs pale and dull first, then the colour wears to primer — grey,
+// or red oxide where the car was patched — and the deepest scrapes reach the metal.
+float scuffLines=smoothstep(.55,.9,abs(sin(vBodyPosition.y*180.+vBodyPosition.z*23.+sin(vBodyPosition.x*9.))));
+float scuff=smoothstep(${SCRAPE.scuff[0]},${SCRAPE.scuff[1]},scratch)*(.55+.45*scuffLines);
+float primer=smoothstep(${SCRAPE.primer[0]},${SCRAPE.primer[1]},scratch)*max(scuffLines,smoothstep(.4,.8,grain))*(1.-bareMetal);
+vec3 primerColour=mix(vec3(${SCRAPE.grey}),vec3(${SCRAPE.oxide}),step(${SCRAPE.patch},bodySilt(vBodyPosition*4.)));
+diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*.72+vec3(.2),scuff*${SCRAPE.pale});
+diffuseColor.rgb=mix(diffuseColor.rgb,primerColour,primer*${SCRAPE.cover});
 diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.22,.24,.24),bareMetal*.9);
 diffuseColor.rgb*=1.-scratch*.15;
 // Crumpled metal: a panel squeezed along its surface folds into an accordion of creases across the
@@ -64,20 +91,56 @@ if(crumpleAmt>0.){
 vec2 crumpleSlope=vec2(dFdx(crumpleHeight),dFdy(crumpleHeight));
 diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.34,.35,.35),crumpleCrack*.7);
 diffuseColor.rgb*=1.-crumpleCavity;
+// Rain deepens the paint, darkens the dirt on it, and close up stands in beads on the panels facing the sky.
+#ifdef FLAT_SHADED
+float wetSky=0.;
+#else
+float wetSky=rainWet*smoothstep(.2,.75,dot(normalize(vNormal),normalize((viewMatrix*vec4(0.,1.,0.,0.)).xyz)));
+#endif
+vec3 beadCell=vBodyPosition*${WET_PAINT.bead}.,beadId=floor(beadCell);vec2 beadAt=fract(beadCell.xz)-.5-(vec2(bodyNoise(beadId+7.),bodyNoise(beadId+13.))-.5)*.5;
+float beadSize=.14+.13*bodyNoise(beadId+21.),bead=wetSky*step(.58,bodyNoise(beadId))*smoothstep(beadSize,beadSize*.45,length(beadAt))*(1.-smoothstep(.35,.9,length(fwidth(beadCell))))*(1.-crumpleCrack);
+// Runs of rain crawl down the panels facing sideways.
+#ifdef FLAT_SHADED
+float wetSide=0.;
+#else
+float wetSide=rainWet*(1.-smoothstep(.15,.5,abs(dot(normalize(vNormal),normalize((viewMatrix*vec4(0.,1.,0.,0.)).xyz)))));
+#endif
+vec2 runCell=vec2((vBodyPosition.z+vBodyPosition.x)*${RUNS.cols}.,vBodyPosition.y);float runCol=floor(runCell.x),runPick=bodyNoise(vec3(runCol,3.,9.));
+float runY=fract(vBodyPosition.y*${RUNS.len}+carTime*${RUNS.speed}*(.6+.8*runPick)*${RUNS.len}+runPick*7.);
+float run=wetSide*step(${1-RUNS.share},runPick)*(1.-smoothstep(${RUNS.width/2},${RUNS.width},abs(fract(runCell.x)-.5)))*smoothstep(0.,.12,runY)*(1.-smoothstep(.12,.55,runY))*(1.-smoothstep(.35,.9,length(fwidth(runCell*vec2(1.,${RUNS.len.toFixed(2)})))))*(1.-crumpleCrack);
+float wetLuma=dot(diffuseColor.rgb,vec3(.299,.587,.114));
+diffuseColor.rgb=max(mix(vec3(wetLuma),diffuseColor.rgb,1.+rainWet*${WET_PAINT.saturate}),0.);
+diffuseColor.rgb*=1.-rainWet*(${WET_PAINT.darken}+${WET_PAINT.mud}*dust);
+// A bead catches the grey sky: a pale speck on the paint.
+diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.62,.66,.7),bead*.35);
+// A run is a darker wet trail with a bright bead of water at its foot.
+diffuseColor.rgb*=1.-run*.2;diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.78,.82,.86),run*smoothstep(.3,.1,runY)*.55);
 `)
       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
 roughnessFactor=clamp(mix(roughnessFactor,.88,dust)+scratch*.35+grain*.016,.04,.98);
+roughnessFactor=mix(roughnessFactor,.7,max(scuff*.6,primer));
 roughnessFactor=mix(roughnessFactor,.43,bareMetal);
 roughnessFactor=clamp(roughnessFactor+crumpleAmt*.12+crumpleCrack*.35,.04,.98);
+roughnessFactor=mix(roughnessFactor,.03,bead);
 `)
       .replace('#include <metalnessmap_fragment>', `#include <metalnessmap_fragment>
 metalnessFactor=mix(metalnessFactor,.02,dust);
+metalnessFactor=mix(metalnessFactor,.04,primer);
 metalnessFactor=mix(metalnessFactor,.95,bareMetal);
 metalnessFactor=mix(metalnessFactor,.6,crumpleCrack);
 `)
       .replace('#include <normal_fragment_maps>', '#include <normal_fragment_maps>\nnormal=crumpleBump(-vViewPosition,normal,crumpleSlope,faceDirection);')
       .replace('#include <clearcoat_normal_fragment_begin>', '#include <clearcoat_normal_fragment_begin>\n#ifdef USE_CLEARCOAT\nclearcoatNormal=crumpleBump(-vViewPosition,clearcoatNormal,crumpleSlope,faceDirection);\n#endif')
-      .replace('#include <lights_physical_fragment>', '#include <lights_physical_fragment>\n#ifdef USE_CLEARCOAT\nmaterial.clearcoat *= 1.-clamp(crumpleCrack+crumpleAmt*.35,0.,1.);\n#endif');
+      .replace('#include <lights_physical_fragment>', `#include <lights_physical_fragment>
+#ifdef USE_CLEARCOAT
+material.clearcoat *= 1.-clamp(crumpleCrack+crumpleAmt*.35+scuff*.6+primer,0.,1.);
+#endif
+// Rain films every panel, the ones facing the sky most: glossier, under a sharp clearcoat (cracked paint stays dull).
+float wetTop=rainWet*mix(.5,1.,smoothstep(.2,.75,dot(normal,normalize((viewMatrix*vec4(0.,1.,0.,0.)).xyz))))*(1.-crumpleCrack);
+material.roughness=mix(material.roughness,max(.05,material.roughness*${WET_PAINT.film}),wetTop);
+#ifdef USE_CLEARCOAT
+material.clearcoat=mix(material.clearcoat,1.,wetTop*${WET_PAINT.coat});material.clearcoatRoughness=mix(material.clearcoatRoughness,.02,wetTop);
+#endif`);
     if (contactWear) {
       shader.vertexShader=shader.vertexShader
         .replace('attribute vec2 impactWear;', 'attribute vec2 impactWear; attribute vec3 restPosition; attribute vec3 impactAxis; varying vec3 vImpactAxis;')
@@ -92,41 +155,71 @@ float scrapeLines=mix(smoothstep(.65,.92,abs(sin(across+bodySilt(vBodyPosition*2
         .replace('#include <lights_physical_fragment>', '#include <lights_physical_fragment>\n#ifdef USE_CLEARCOAT\nmaterial.clearcoat *= 1.-clamp(bareMetal+scratch*.5+dust*.7,0.,1.);\n#endif');
     }
   };
-  material.customProgramCacheKey = () => contactWear ? 'quarry-contact-paint-crumple-v1' : 'quarry-layered-paint-crumple-v1';
+  material.customProgramCacheKey = () => contactWear ? 'quarry-contact-paint-crumple-v3' : 'quarry-layered-paint-crumple-v3';
 }
 
-export type GlassState = { damage: { value: number }; impact: { value: T.Vector3 }; axes: { value: T.Vector3 }; };
+/** Rain on glass (offline rain, CAR_WET): beads of water stand on every window, in GLASS_RAIN.cells cells a metre, on all but
+ * GLASS_RAIN.keep of them; working wipers keep a windscreen clear (GlassState.wiped 1 leaves only GLASS_RAIN.wipe fewer). */
+export const GLASS_RAIN={cells:40,keep:.45,wipe:.85} as const;
+/** reach: how far a crack runs, as a share of a blow's (an old stone chip's is small, stone-chips.ts); it grows back to a
+ * blow's as the damage does. */
+export type GlassState = { damage: { value: number }; impact: { value: T.Vector3 }; axes: { value: T.Vector3 }; smoke: { value: number }; wiped: { value: number }; mist: { value: number }; reach: { value: number }; };
 export function finishGlass(material: T.MeshPhysicalMaterial, geometry: T.BufferGeometry): GlassState {
   geometry.computeBoundingBox();
   const size = geometry.boundingBox!.getSize(new T.Vector3());
   const state: GlassState = {
     damage: { value: 0 }, impact: { value: geometry.boundingBox!.getCenter(new T.Vector3()) },
     axes: { value: new T.Vector3(size.x < size.z ? 0 : 1, size.x < size.z || size.y > size.z ? 1 : 0, 0) },
+    smoke: { value: 0 },
+    mist: { value: 0 },
+    wiped: { value: 0 },
+    reach: { value: 1 },
   };
   material.userData.glassState = state;
   material.onBeforeCompile = (shader) => {
     shader.uniforms.glassDamage = state.damage;
     shader.uniforms.glassImpact = state.impact;
     shader.uniforms.glassAxes = state.axes;
+    shader.uniforms.glassSmoke = state.smoke;
+    shader.uniforms.glassMist = state.mist;
+    shader.uniforms.glassWiped = state.wiped;
+    shader.uniforms.glassReach = state.reach;
+    shader.uniforms.rainWet = CAR_WET;
     shader.vertexShader = shader.vertexShader
-      .replace('#include <common>', '#include <common>\nvarying vec3 vGlassPosition;')
-      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvGlassPosition=position;');
+      .replace('#include <common>', '#include <common>\nvarying vec3 vGlassPosition; varying vec3 vGlassNormal;')
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvGlassPosition=position; vGlassNormal=normal;');
     shader.fragmentShader = shader.fragmentShader
-      .replace('#include <common>', '#include <common>\nvarying vec3 vGlassPosition; uniform float glassDamage; uniform vec3 glassImpact; uniform vec3 glassAxes;')
+      .replace('#include <common>', '#include <common>\nvarying vec3 vGlassPosition; varying vec3 vGlassNormal; uniform float glassDamage; uniform float glassReach; uniform vec3 glassImpact; uniform vec3 glassAxes; uniform float glassSmoke; uniform float glassMist; uniform float glassWiped; uniform float rainWet;')
       .replace('#include <color_fragment>', `#include <color_fragment>
 vec3 d=vGlassPosition-glassImpact;
 vec2 p=vec2(mix(d.z,d.x,glassAxes.x),mix(d.y,d.z,1.-glassAxes.y));
-float radius=length(p); float angle=atan(p.y,p.x);
+float radius=length(p); float reached=radius/max(glassReach,smoothstep(.16,.6,glassDamage)); float angle=atan(p.y,p.x);
 float branches=abs(sin(angle*10.5+sin(radius*19.)*.22));
 float rings=abs(sin(radius*71.+sin(angle*9.)*.6));
-float crack=(1.-smoothstep(.018,.052,branches))*(1.-smoothstep(.12,.86,radius));
-crack=max(crack,(1.-smoothstep(.018,.065,rings))*.52*(1.-smoothstep(.04,.34,radius)));
+float crack=(1.-smoothstep(.018,.052,branches))*(1.-smoothstep(.12,.86,reached));
+crack=max(crack,(1.-smoothstep(.018,.065,rings))*.52*(1.-smoothstep(.04,.34,reached)));
 crack*=smoothstep(0.,.16,glassDamage);
 diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.66,.75,.75),crack);
 diffuseColor.a=clamp(diffuseColor.a+crack*.6+glassDamage*.1,0.,.94);
+// A cabin full of smoke (a burning car) shows dark and murky through the glass, thicker low down where it lies.
+float murk=glassSmoke*(.8+.2*smoothstep(.4,-.2,vGlassPosition.y));
+diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.11,.1,.09),murk*.85);
+diffuseColor.a=clamp(diffuseColor.a+murk*.6,0.,.97);
+// Misted up inside (a car standing in the rain): milky, thickest low on the pane where it gathers; cracked glass is open.
+float mist=glassMist*(.75+.25*smoothstep(.5,-.1,vGlassPosition.y))*(1.-crack);
+diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.8,.82,.84),mist*.9);
+diffuseColor.a=clamp(diffuseColor.a+mist*.85,0.,.97);
+// Rain stands in beads on the glass (fewer where wipers keep it clear), faded once a bead is too small on screen to draw.
+// Laid out on whichever plane the pane faces most, so the beads stay round on every window.
+vec3 rainFace=abs(vGlassNormal);vec2 rainAt=(rainFace.x>rainFace.y&&rainFace.x>rainFace.z?vGlassPosition.zy:rainFace.y>rainFace.z?vGlassPosition.xz:vGlassPosition.xy)*${GLASS_RAIN.cells}.;
+vec2 rainId=floor(rainAt),rainIn=fract(rainAt)-.5-(vec2(fract(sin(dot(rainId,vec2(12.9898,78.233)))*43758.5453),fract(sin(dot(rainId,vec2(39.35,11.13)))*24634.63))-.5)*.5;
+float rainKeep=fract(sin(dot(rainId,vec2(7.13,157.1)))*9837.31),rainSize=.13+.14*fract(rainKeep*13.7);
+float glassBead=rainWet*step(${GLASS_RAIN.keep}+${1-GLASS_RAIN.keep}*glassWiped*${GLASS_RAIN.wipe},rainKeep)*smoothstep(rainSize,rainSize*.45,length(rainIn))*(1.-smoothstep(.35,.9,length(fwidth(rainAt))));
+diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.74,.79,.82),glassBead*.55);
+diffuseColor.a=clamp(diffuseColor.a+glassBead*.35,0.,.97);
 `)
       .replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\nroughnessFactor=clamp(roughnessFactor+crack*.72+glassDamage*.1,0.,1.);');
   };
-  material.customProgramCacheKey = () => 'quarry-laminated-glass-v2';
+  material.customProgramCacheKey = () => 'quarry-laminated-glass-v3';
   return state;
 }
