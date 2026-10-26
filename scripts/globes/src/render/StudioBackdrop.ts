@@ -1,0 +1,142 @@
+// The betta bowl page's backdrop (studio.ts): the backdrop and the room drawn behind everything,
+// from where the camera really is, so the table under the bowl lies in true perspective; and the
+// table itself drawn again over it with the bowl's mirror image in its lacquer (the scene rendered
+// from under the table at half the resolution, or less on a phone (main.ts), sharper near the
+// bowl's foot than further off).
+
+import * as THREE from 'three/webgpu';
+import { cameraPosition, clamp, float, normalize, positionLocal, positionWorld, reflector, screenCoordinate, uniform, vec4, wgsl, wgslFn } from 'three/tsl';
+import { STUDIO_LIGHT_ARGS, STUDIO_LIGHT_PARAMS, STUDIO_TABLE_Y, STUDIO_WALL_Z, STUDIO_WGSL } from './studio';
+import { studioLightInputs } from './studioLight';
+
+/** How far the table reaches out to the sides and towards the viewer from the bowl (world). */
+const TABLE_HALF_WIDTH = 12;
+const TABLE_FRONT = 9;
+
+/** The grain the backdrop and the table are drawn with at night (studioGrain; none by day), a share
+ *  of their light up or down, each pixel its own (Wang's hash of where it is): it breaks up the bands
+ *  their dark gradients would show in the picture's 8 bits. */
+const GRAIN_WGSL = /* wgsl */ `
+fn studio_grained(c: vec3f, pix: vec2f) -> vec3f {
+  let p = vec2u(pix);
+  var h = p.x * 1973u + p.y * 9277u;
+  h = (h ^ 61u) ^ (h >> 16u);
+  h *= 9u;
+  h ^= h >> 4u;
+  h *= 0x27d4eb2du;
+  h ^= h >> 15u;
+  return c * (1.0 + studioGrain * (f32(h & 0xffffu) / 65535.0 - 0.5));
+}
+`;
+
+export class StudioBackdrop {
+  /** For scene.backgroundNode. */
+  readonly background: ReturnType<typeof vec4>;
+  /** For GlobeView's outside: the bowl's variant reads the studio itself (studio.ts), so nothing
+   *  is in it. */
+  readonly map: THREE.Texture;
+  /** The table with the bowl's reflection, and the mirror's plane (both for the scene). */
+  readonly table: THREE.Mesh;
+  readonly mirror: THREE.Object3D;
+  /** Where the bowl stands (its centre, world). */
+  private readonly bowl = uniform(new THREE.Vector3());
+  private readonly mirrorNode: ReturnType<typeof reflector>;
+  /** The mirror redrawn every frame (1), or every other one while nothing moves (2: a phone's
+   *  quality level, app/quality/ladder.mjs; what it shows is a blur, and still). */
+  mirrorEvery = 1;
+  private still = false;
+  private mirrorFrame = 0;
+
+  constructor() {
+    const includes = [wgsl(STUDIO_WGSL), wgsl(GRAIN_WGSL)];
+    // (Where the table is seen, the table itself is drawn right over the backdrop: there is nothing
+    // to light, wherever it covers the whole pixel, so a few pixels' angle inside its edges.)
+    const background = wgslFn(
+      `fn studio_background(dir: vec3f, cam: vec3f, bowl: vec3f, pix: vec2f${STUDIO_LIGHT_PARAMS}) -> vec4f {
+        studioBowl = bowl;
+        studio_light(${STUDIO_LIGHT_ARGS});
+        let d = normalize(dir);
+        if (d.y < -1e-5 && cam.y > STUDIO_TABLE_Y) {
+          let t = (STUDIO_TABLE_Y - cam.y) / d.y;
+          let x = cam + d * t;
+          let m = 0.004 * t / -d.y;
+          if (abs(x.x) < ${TABLE_HALF_WIDTH.toFixed(4)} - m && x.z > STUDIO_WALL_Z + m && x.z < ${TABLE_FRONT.toFixed(4)} - m) { return vec4f(0.0, 0.0, 0.0, 1.0); }
+        }
+        return vec4f(studio_grained(studio_view(cam, d, false), pix), 1.0);
+      }`,
+      includes,
+    );
+    this.background = background({ dir: normalize(positionLocal), cam: cameraPosition, bowl: this.bowl, pix: screenCoordinate, ...studioLightInputs }) as unknown as ReturnType<typeof vec4>;
+
+    // (A texture of the same kind as the ocean's map, so the shader binds it the same way.)
+    this.map = new THREE.RenderTarget(1, 1, { type: THREE.HalfFloatType, depthBuffer: false }).texture;
+    this.map.minFilter = THREE.LinearFilter;
+    this.map.magFilter = THREE.LinearFilter;
+    this.map.generateMipmaps = false;
+
+    const mirror = reflector({ resolutionScale: 0.5, generateMipmaps: true, bounces: false });
+    mirror.target.rotateX(-Math.PI / 2);
+    mirror.target.position.y = STUDIO_TABLE_Y;
+    this.mirror = mirror.target;
+    this.mirrorNode = mirror;
+    // (A frame it is not redrawn in, its last picture stays bound.)
+    const r = mirror.reflector;
+    const redraw = r.updateBefore.bind(r);
+    r.updateBefore = (frame) => (this.still && ++this.mirrorFrame % this.mirrorEvery !== 0 ? undefined : redraw(frame));
+    const tableShade = wgslFn(
+      `fn studio_tableWithMirror(x: vec3f, cam: vec3f, bowl: vec3f, mirror: vec4f, pix: vec2f${STUDIO_LIGHT_PARAMS}) -> vec4f {
+        studioBowl = bowl;
+        studio_light(${STUDIO_LIGHT_ARGS});
+        let d = normalize(x - cam);
+        let cosI = clamp(-d.y, 0.0, 1.0);
+        let F = 0.04 + 0.96 * pow(1.0 - cosI, 5.0);
+        return vec4f(studio_grained(studio_table(x) + F * mirror.rgb, pix), 1.0);
+      }`,
+      includes,
+    );
+    // (Its lacquer is not a perfect mirror: the image softens with distance from the bowl's foot.)
+    const blur = clamp(positionWorld.xz.sub(this.bowl.xz).length().sub(0.5).mul(1.8), float(0), float(5));
+    const material = new THREE.MeshBasicNodeMaterial();
+    material.colorNode = tableShade({ x: positionWorld, cam: cameraPosition, bowl: this.bowl, mirror: mirror.level(blur), pix: screenCoordinate, ...studioLightInputs }) as unknown as typeof material.colorNode;
+    material.depthTest = false;
+    material.depthWrite = false;
+    const depth = TABLE_FRONT - STUDIO_WALL_Z;
+    const plane = new THREE.PlaneGeometry(2 * TABLE_HALF_WIDTH, depth);
+    plane.rotateX(-Math.PI / 2);
+    plane.translate(0, STUDIO_TABLE_Y, STUDIO_WALL_Z + depth / 2);
+    this.table = new THREE.Mesh(plane, material);
+    this.table.renderOrder = -1;
+    this.table.frustumCulled = false;
+  }
+
+  /** What the camera sees on this layer, the mirror leaves out (it renders the scene again from
+   *  under the table, half as sharp and softened further off: what is a blur there need not
+   *  cost a pass). (Its picture is kept in the frame buffer's colour space, the working one: three
+   *  builds a pipeline for each, so then its draws reuse those built ahead, GlobeView.precompile,
+   *  rather than building their own on the first frame. Its colours are the same: neither is
+   *  converted.) */
+  leaveOut(camera: THREE.Camera, layer: number): void {
+    const r = this.mirrorNode.reflector;
+    const view = r.getVirtualCamera(camera);
+    view.layers.disable(layer);
+    r.getRenderTarget(view).texture.colorSpace = THREE.LinearSRGBColorSpace;
+  }
+
+  /** What is on this layer the mirror shows, and the camera need not (the betta bowl's own pass, where
+   *  bowlRender.ts draws the bowl for the camera). */
+  alsoMirror(camera: THREE.Camera, layer: number): void {
+    this.mirrorNode.reflector.getVirtualCamera(camera).layers.enable(layer);
+  }
+
+  /** How sharp the mirror is: its picture's size, as a share of the drawing buffer's (each way). */
+  setMirrorScale(scale: number): void {
+    this.mirrorNode.reflector.resolutionScale = scale;
+  }
+
+  /** Follows the bowl (its centre, world); still: nothing has moved since the last frame (the
+   *  bowl, its lid, the camera). */
+  update(center: THREE.Vector3, still = false): void {
+    this.bowl.value.copy(center);
+    this.still = still;
+  }
+}
