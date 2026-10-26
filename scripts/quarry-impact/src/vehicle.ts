@@ -115,6 +115,7 @@ const HUBCAP=/brushed chrome|wheel trim|hub ?cap|centre ?cap|domed ?cap/i;
 import {VehicleSurface} from './vehicle-surface';
 import { normalizeSetup, setupPhysics, stockSetup, type Setup } from './garage';
 import {EngineShake,NO_SHAKE,plantedWheelY} from './engine-shake';
+import {cornerLean,leanLift} from './bent-corners';
 export type VehicleGround = {height:(x:number,z:number)=>number;surface:(x:number,z:number)=>DrivingSurface};
 export type Input = {
   throttle: number;
@@ -1210,10 +1211,12 @@ export class Vehicle {
     for (let i = 0; i < 4; i++) {
       const w = this.wheels[i];
       if (!w||this.wreckParts.wheelLost[i]) continue;
+      // A knocked corner leans on its bent upright (offline), lifted so the tread's low edge stays on the road.
+      const lean=this.extendedDamage?cornerLean(this.wreckParts.wheelDamage[i],i%2?1:-1):0,profile=this.tireContacts[i].profile;
       w.position.y = plantedWheelY(
-        -this.model.position.y - 0.12 - (this.controller.wheelSuspensionLength(i) ?? vehicleSuspensionRestLength(this.kind)),w.position.x,w.position.z,shake);
+        -this.model.position.y - 0.12 - (this.controller.wheelSuspensionLength(i) ?? vehicleSuspensionRestLength(this.kind)),w.position.x,w.position.z,shake)+(lean?leanLift(lean,profile.outerRadius,profile.halfWidth):0);
       const tyre=this.tyreDamage?.[i],corner=wheelResponse(this.wreckParts.wheelDamage[i],i%2?1:-1,this.speed,vehicleWheelRadius(this.kind),tyre,vehicleFlatTyreRadius(this.kind));
-      w.rotation.set(0,(i<2?this.steering*this.steerLink[i]:0)+corner.toe+(i>1?this.thrustAngle:0)+(this.extendedDamage?this.wheelShimmy[i]:0),0);
+      w.rotation.set(0,(i<2?this.steering*this.steerLink[i]:0)+corner.toe+(i>1?this.thrustAngle:0)+(this.extendedDamage?this.wheelShimmy[i]:0),lean);
       w.rotateX(-this.wheelAngle(i));
       // A bent rim runs out of true: tilted in its own spinning frame, the wheel visibly wobbles as it turns.
       if(this.extendedDamage)w.rotateZ(rimWobble(this.wreckParts.wheelDamage[i])+this.nutLoose[i]*WHEEL_NUTS.tilt);
