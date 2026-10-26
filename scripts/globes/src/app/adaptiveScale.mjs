@@ -2,11 +2,15 @@
 // drawn with fewer pixels (each step 0.8x as sharp, down to a floor), and, once frames have been
 // quick for a while, sharpness is offered back a step at a time. A step that does not hold is
 // taken back and not tried again for twice as long; a step that did not speed frames up (the
-// screen itself is the limit, not the drawing) is taken back too.
+// screen itself is the limit, not the drawing) is taken back too. Desktops (DESKTOP) aim, as
+// phones' Auto does (app/quality/controller.mjs), at 35 frames a second or more: frames further
+// apart than 30 ms (under about 33 a second) are slow, and under 25 ms (40 or more) quick, so a
+// sharper picture at fewer frames is kept (it aimed at 60 until 2026-10-26: 22 and 18.5 ms).
 //
-// Phones (PHONE) are held to 60 frames a second (app/framePace.mjs), so their frames are slow
-// past a sixtieth of a second, and their steps are finer (0.9x), from as sharp as the screen
-// (up to 2 canvas pixels a CSS pixel) through 1 down to the same floor. There the page also says
+// Phones (PHONE: only with ?quality=0, which turns the quality controller off; left at 60) are
+// held to 60 frames a second (app/framePace.mjs), so their frames are slow past a sixtieth of a
+// second, and their steps are finer (0.9x), from as sharp as the screen (up to 2 canvas pixels a
+// CSS pixel) through 1 down to the same floor. There the page also says
 // what each frame took the main thread (work): where that alone is about a sixtieth or more,
 // fewer pixels could not bring frames to 60, and no step down is taken (unless frames come far
 // slower still: the drawing holds them up as well). (The GPU's part cannot be told the same way:
@@ -21,8 +25,10 @@ export const MAX_LEVEL = 5;
 /** The lowest pixel ratio (canvas pixels per CSS pixel) worth drawing at. */
 export const FLOOR_RATIO = 0.6;
 
-export const SLOW_MS = 22;
-export const QUICK_MS = 18.5;
+/** Desktops' frames are slow further apart than this (ms: under about 33 a second), and quick
+ *  closer than QUICK_MS (40 a second or more). */
+export const SLOW_MS = 30;
+export const QUICK_MS = 25;
 /** A step must make frames at least this much quicker (fraction of the time they took) to stay. */
 export const MIN_GAIN = 0.08;
 const WINDOW_MS = 1000;
@@ -38,6 +44,8 @@ const GAP_MS = 1000;
  *  steps at most (maxLevel), when frames are slow and when quick (ms apart), and a ratio every
  *  screen sharper than it passes through (anchor). */
 export const DESKTOP = { step: STEP, maxLevel: MAX_LEVEL, slowMs: SLOW_MS, quickMs: QUICK_MS, anchor: 0 };
+/** (Phones' steps are the quality ladder's ratio sweep too, ladder.mjs. As a scaler, only with
+ *  ?quality=0, they still hold 60: slow past a sixtieth.) */
 export const PHONE = { step: 0.9, maxLevel: 20, slowMs: 17.5, quickMs: 17.2, anchor: 1 };
 
 /** The pixel ratio to draw at: `base` (the screen's own, up to 2) at `level` steps down. */

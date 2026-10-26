@@ -190,8 +190,8 @@ move the globe:
   seconds of quick frames.
 - **Adaptive sharpness** (`src/app/adaptiveScale.mjs`, `?adapt=0` turns it off). Frame time
   scales with canvas pixels, so on hi-dpi or large windows the canvas drops 0.8x per level (to a
-  floor of 0.6 px per CSS px, at most 5 levels) when frames average over 22 ms, in jumps of 1-3
-  levels depending on how slow. A step that does not make frames at least 8% quicker (the screen
+  floor of 0.6 px per CSS px, at most 5 levels) when frames average over 22 ms (30 since the
+  35 fps aim of 2026-10-26, below), in jumps of 1-3 levels depending on how slow. A step that does not make frames at least 8% quicker (the screen
   itself is the limit) is taken back and held for 64 s; sharpness is offered back after 8 s of
   quick frames, and a failed offer doubles the wait. Tests: `node --test adaptive-scale.test.mjs`.
 - Measured on the loaded host (Chrome WebGPU, real mouse drag): 1080p at 1x, lag behind the hand
@@ -510,7 +510,7 @@ Phase 2, a phone's picture steered by the GPU's time: phones step along a qualit
 mirror at half rate while still, the pixel ratio from the screen's own down to 0.6, the water
 march's longer steps, and 30 fps as the floor of a GPU too slow for the lowest level) by what the
 GPU measurably spends on a frame (timestamp queries, now on in production on phones) against a
-sustained 14.5 ms, starting where the device held longest last time (localStorage
+sustained 14.5 ms (24.9 since the 35 fps aim, below), starting where the device held longest last time (localStorage
 `betta.quality.v1`). `?quality=0` brings back the scaler, `?level=n` holds a level; `?stats` shows
 the controller. Desktops keep the scaler. And the betta page's studio is drawn behind a veil, with a
 determinate bar, about a second into the load, while the bowl builds. Details:
@@ -548,6 +548,21 @@ brings a card about it; Feed brings feeding advice, counted from what the fish h
 meal is now three pellets). The words are in `src/app/learn/content.ts`. Off, it costs a frame
 nothing and a tap on the lid feeds as before. Details: docs/architecture.md, "Learn mode". Tests:
 `learn-pick.test.mjs` (4), `learn.test.mjs` (4).
+
+Auto at 35 frames a second (2026-10-26, the user's choice: a sharper picture at fewer frames). The
+betta page's Auto resolution, and the desktops' scaler, now aim at 35 frames a second or more
+rather than 60; frames still come at up to 60 (FramePace's cap) where the picture allows, and the
+resolution menu is as it was. Phones (`src/app/quality/controller.mjs`): the GPU's budget is 60's
+scaled by 60/35, a sustained 24.9 ms (a jump down lands at 22.3 or under, a try up only at 20.6 or
+under), and no longer than the screen shows frames at 35 or more: on a 120 Hz screen three
+refreshes, 25 ms, 40 a second, so 24.9; on a 60 Hz one, which shows nothing between 30 and 60, a
+refresh, 16.7 ms (frames at 60 as before; with 24.9 there a phone sat at 30 a second unheld). Held
+to 30 (the lowest level too slow for 35), 29 ms. The sim at three substeps is priced at 1.25 times
+two (it was 1.5, against the controller's own reading of the substeps). ?stats says "aim 35 fps".
+Desktops (`src/app/adaptiveScale.mjs`): frames are slow past 30 ms (under about 33 a second) and
+quick under 25 (were 22 and 18.5); the phones' scaler, only with `?quality=0`, still holds 60.
+Details: docs/architecture.md, "Phase 2: a phone's picture steered by the GPU's time". Tests:
+`quality.test.mjs` (24), `adaptive-scale.test.mjs` (25).
 
 ## Browser compatibility
 

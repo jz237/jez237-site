@@ -1328,7 +1328,10 @@ byte for byte.
 The phone's scaler (app/adaptiveScale.mjs) stepped the pixel ratio by the frames' pace and the main
 thread's time. On the S25 Ultra the GPU is the limit, and it slows as it warms (30-40% within a
 minute at the same settings), so phones now step along a quality ladder by what the GPU measurably
-spends on a frame (desktops keep the scaler; `?quality=0` gives phones the scaler back).
+spends on a frame (desktops keep the scaler; `?quality=0` gives phones the scaler back). Since
+2026-10-26 both aim at 35 frames a second or more rather than 60: the desktops' scaler counts
+frames further apart than 30 ms (under about 33 a second) as slow and under 25 ms (40 or more) as
+quick (it was 22 and 18.5); the phones' scaler, only with `?quality=0`, still holds 60.
 
 - **The ladder** (quality/ladder.mjs, data): the sharpest level, at the screen's ratio up to 2;
   then the table's mirror redrawn every other frame while nothing moves (a frozen frame is the
@@ -1357,19 +1360,45 @@ spends on a frame (desktops keep the scaler; `?quality=0` gives phones the scale
   A level's cost is the model's prediction scaled to what the current level measures, so a zoom in,
   a turn of the phone or the bowl coming into view keep the traced pixels about the same.
 - **The controller** (quality/controller.mjs, pure; quality.test.mjs): 1 s windows, trimmed means.
-  Over the 14.5 ms budget (or frames slow with the GPU over 12.5): straight down to the sharpest
-  level expected at 13 ms or under (one to three rungs), then a dwell of 2 s. Up one rung after 8 s
-  held, if expected at 12 ms or under; taken back at once if it does not hold, the next try twice as
-  late (to 64 s). Slow frames that neither the GPU nor the main thread explain: a rung after three
-  windows, taken back if it bought nothing. The main thread over 11 ms moves only its own ladder.
+  It aims at 35 frames a second or more (TARGET_FPS, the user's choice of 2026-10-26: a sharper
+  picture at fewer frames; it aimed at 60 before). FramePace still caps frames at 60, so a level
+  whose frames can come quicker does. The budgets are 60's scaled by 60/35: a sustained 24.9 ms
+  (14.5 at 60; the margin under 28.6 is for a GPU that slows as it warms). Over it (or frames
+  further apart than 30 ms with the GPU over 21.4): straight down to the sharpest level expected at
+  22.3 ms or under (one to three rungs), then a dwell of 2 s. Up one rung after 8 s held, if
+  expected at 20.6 ms or under; taken back at once if it does not hold, the next try twice as late
+  (to 64 s). Slow frames that neither the GPU nor the main thread explain: a rung after three
+  windows, taken back if it bought nothing. The main thread over 18.9 ms moves only its own ladder.
   While the bowl moves (its pose, the lid, the camera, or water sloshing: more substeps than a calm
   frame takes), a rung down at once if the GPU goes over, put back 1.5 s after it is still; those
-  frames teach nothing. At the lowest level, with frames that cannot come at 60 (over 15.5 ms) for
-  three windows, 30 fps (FramePace.frameMs), said so in ?stats; back to 60 once the lowest level at
-  60 is expected to hold for 20 s. Calibration: as the bowl comes into view in the entrance, every
-  timed frame is a point of the model, then straight to the sharpest level that fits; and in its
-  first window at rest, up to the sharpest expected at 12 ms if that is sharper (a try). Thermal
-  memory: the level held longest over the last two minutes.
+  frames teach nothing. At the lowest level, with frames further apart than 30 ms (under about 33 a
+  second) for three windows, 30 fps (FramePace.frameMs), said so in ?stats, with 35/30 of each
+  budget (29 ms); back unheld once the lowest level is expected to come every 28 ms or sooner on
+  this screen, for 20 s. Calibration: as the bowl comes into view in the entrance, every timed frame
+  is a point of the model, then straight to the sharpest level that fits; and in its first window
+  at rest, up to the sharpest expected at 20.6 ms if that is sharper (a try). Thermal memory: the
+  level held longest over the last two minutes. ?stats says "aim 35 fps" (or 30, held).
+- **The screen**: a late frame lands on the screen's next refresh, so frames at 35 a second or more
+  come as many whole refreshes apart as fit in 28.6 ms (frameMsAt): three on a 120 Hz screen (25
+  ms, 40 a second: the S25 Ultra's, where the 24.9 ms budget fits), four on a 144 Hz one (27.8 ms,
+  36), two on a 90 Hz one (22.2 ms), and on a 60 Hz one only one: it shows nothing between 30 and 60
+  a second. The budget is no longer than that, the other thresholds scaled with it: 22.2 ms at 90
+  Hz, and at 60 Hz a refresh, 16.7 ms (frames at 60, as before the change). With 24.9 there, a 60
+  Hz phone settled on a level whose frames came every other refresh, 30 a second unheld, slow by
+  nothing the GPU's or the main thread's time showed, and stepped down and back up again and again
+  (quality.test.mjs reproduced it). The refresh is the quickest the controller has been told, the
+  middle of each 15 (a refresh told a little short now and then is not kept): FramePace's estimate
+  grows a little at each refresh it sees, and while every frame is late (a GPU-bound phone at 40 a
+  second) it sees none between them. FramePace no longer counts the gap from the loop's first call,
+  which is timed by the clock, not the screen. Held at 30, frames come every 33.3 ms on any of these
+  screens, and the budget is 29 ms.
+- **The sim's part** of a frame is predicted at the frame rate aimed at on the screen: a frame
+  longer than a sixtieth (at 35-40 a second, or held at 30) takes three substeps where one of a
+  sixtieth takes two, and half the sim's work is by the frame, half by the substep (the S25's two
+  flip substeps were 4.4 ms of its 8.6), so three cost 1.25 times two (ladder.mjs simCost; it was
+  1.5, against the controller's own reading of the substeps it took, 1.25: under the 35 fps aim,
+  where every unheld frame on a 120 Hz screen takes three, that overstated every level's sim by a
+  fifth).
 - **Where a view starts** (quality/record.mjs): localStorage `betta.quality.v1` (every access in
   try/catch), for the device (its GPU's name and its screen) and each way up: the level held
   longest (written every 30 s and as the page is hidden; a rung lower in another build), and how
@@ -1384,12 +1413,16 @@ spends on a frame (desktops keep the scaler; `?quality=0` gives phones the scale
   to 0.9 for frames the compositor paced at about 20 ms); the iGPU, about a tenth of the S25, sits at
   the lowest level at 30 fps. A model of the S25 (bench 3's costs, 35% slower as it warms) settles
   at the floor's ratio with the march's longer steps: its sim and its bowl are what must get
-  cheaper.
+  cheaper. Aiming at 35 (the same model, 7 ms of sim at 60, 160 ms a million traced pixels, five
+  minutes in quality.test.mjs's harness): on its 120 Hz screen a ratio of 0.81 cool and 0.66 warmed
+  by 35%, frames at 40 a second; on a 60 Hz screen 0.6 cool at 60 a second, and warmed, held at 30
+  at 0.66; on a 90 Hz screen 0.73 and 0.6 at 45 a second.
 
 ### The resolution menu (app/resolution.mjs, ResolutionMenu.ts)
 
 The betta bowl's page has a "Resolution" button in its link bar, beside "← Demonstrations". Auto
-(the default) is all of the above: the sharpest picture that keeps 60 frames a second. A fixed size
+(the default) is all of the above: the sharpest picture that keeps 35 frames a second or more (60
+until 2026-10-26; frames still come at up to 60 where the picture allows). A fixed size
 holds the picture at 1, 1.5 or 2 canvas pixels a CSS pixel, or the screen's own (a phone's 2.6 to
 3.5) however slowly frames then come: past the screen's own (a desktop's 1.5 and 2) it is drawn
 larger and shrunk to fit, supersampled. Held, nothing is stepped: a phone's other knobs are at the

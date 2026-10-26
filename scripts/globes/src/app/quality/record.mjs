@@ -11,7 +11,7 @@
 // that, predict to fit; the controller's calibration, as the bowl comes into view, corrects it.
 
 import { fixedCost, simCost, tracedPx } from './ladder.mjs';
-import { TARGET_MS } from './controller.mjs';
+import { aimFps, TARGET_FPS, TARGET_MS } from './controller.mjs';
 
 export const RECORD_KEY = 'betta.quality.v1';
 
@@ -47,8 +47,8 @@ export function priorSpeed(info) {
 export function priorLevel(levels, speed, area) {
   for (let l = 0; l < levels.length; l++) {
     const k = levels[l];
-    const ms = (S25.simMs * simCost(k) + S25.fixedMs * fixedCost(k) + S25.msPerMpx * tracedPx(k, area)) / speed;
-    if (ms <= (TARGET_MS * 60) / k.fps) return l;
+    const ms = (S25.simMs * simCost({ fps: aimFps(k) }) + S25.fixedMs * fixedCost(k) + S25.msPerMpx * tracedPx(k, area)) / speed;
+    if (ms <= (TARGET_MS * TARGET_FPS) / aimFps(k)) return l;
   }
   return levels.length - 1;
 }

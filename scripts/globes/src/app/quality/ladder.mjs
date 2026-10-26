@@ -11,8 +11,9 @@
 // - plantEvery: the plants' motion worked out every so many frames (phones: every other one, as
 //   before the ladder; every third, the main thread's ladder's: CPU_RUNGS);
 // - march: the water march's step, in voxels of the density map (GlobeView setMarchStep);
-// - fps: the frames a second the page is held to (framePace.mjs): 60, or 30, the floor of a GPU
-//   too slow for the lowest level at 60 (said so in ?stats).
+// - fps: the frames a second the page is held to (framePace.mjs): 60 (a cap: the controller aims
+//   at 35 or more, TARGET_FPS), or 30, the floor of a GPU too slow for the lowest level at 35 (said
+//   so in ?stats).
 //
 // The ladder is data: a tier's base (its sharpest level), then its rungs in order, each giving up
 // one thing more, the least missed first. The 'ratio' rung is the whole sweep of the picture's
@@ -104,8 +105,11 @@ export function tracedPx(k, area) {
   return (area * k.ratio * k.ratio * rayCost(k)) / 1e6;
 }
 
-/** The sim's cost at these knobs, relative to at 60 frames a second: a frame of 1/30 s takes three
- *  substeps where one of 1/60 takes two (FluidSim.step; phones' maxSubstepDt 1/100). */
+/** The sim's cost at these knobs, relative to at 60 frames a second: a frame longer than a sixtieth
+ *  (1/40 s, as at 35-40 a second on a 120 Hz screen, or 1/30 held) takes three substeps where one
+ *  of 1/60 takes two (FluidSim.step; phones' maxSubstepDt 1/100, maxSubsteps 3), and half the sim's
+ *  work is by the frame, half by the substep (the S25 Ultra's two flip substeps were 4.4 ms of its
+ *  8.6; the controller reads the substeps it took the same way). */
 export function simCost(k) {
-  return k.fps < 60 ? 1.5 : 1;
+  return k.fps < 60 ? 0.5 + 0.25 * 3 : 1;
 }

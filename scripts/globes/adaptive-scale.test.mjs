@@ -60,19 +60,21 @@ test('nothing happens during the warm-up, however slow', () => {
 test('frames that cost pixels step the picture down until they are quick', () => {
   const s = new AdaptiveScale(0);
   const clock = { t: 0 };
-  // Cost scales with pixels: 40 ms at full sharpness, 0.64x per level.
-  const changes = run(s, clock, 30, (l) => Math.max(14, 40 * 0.64 ** l));
+  // Cost scales with pixels: 50 ms at full sharpness, 0.64x per level.
+  // (20 s: down, then an offer of sharpness back that does not hold, before the next.)
+  const changes = run(s, clock, 20, (l) => Math.max(14, 50 * 0.64 ** l));
   // (A long way to go: two steps at once.)
   assert.equal(changes[0], 2);
   assert.equal(s.level, 2);
-  assert.ok(Math.max(14, 40 * 0.64 ** s.level) <= 22);
+  assert.ok(Math.max(14, 50 * 0.64 ** s.level) <= 30);
 });
 
-test('frames alternating between one and two refreshes (40 fps) count as slow', () => {
+test('frames alternating between one and two refreshes (40 fps) hold; at two refreshes (30 fps) they are slow', () => {
   const s = new AdaptiveScale(0);
-  const clock = { t: 0 };
   let n = 0;
-  const changes = run(s, clock, 12, (l) => (l === 0 ? (++n % 2 ? 16.7 : 33.3) : 16.7));
+  assert.deepEqual(run(s, { t: 0 }, 12, () => (++n % 2 ? 16.7 : 33.3)), []);
+  const t = new AdaptiveScale(0);
+  const changes = run(t, { t: 0 }, 12, (l) => (l === 0 ? 33.3 : 16.7));
   assert.equal(changes[0], 1);
 });
 
@@ -97,16 +99,17 @@ test('a long gap (page hidden) says nothing', () => {
 test('a step that does not speed frames up is taken back and not tried again for a while', () => {
   const s = new AdaptiveScale(0);
   const clock = { t: 0 };
-  // The screen limits frames to 33 ms whatever the pixel count.
+  // The screen limits frames to 33 ms whatever the pixel count. (A step: 33 ms is not far past
+  // the 30 that is slow.)
   const changes = run(s, clock, 40, () => 33.3);
-  assert.deepEqual(changes, [2, 0]);
+  assert.deepEqual(changes, [1, 0]);
   assert.equal(s.level, 0);
 });
 
 test('sharpness comes back after quick frames, and a failed offer waits twice as long', () => {
   // Down a few levels while pixels cost (a burst of load), then the load is gone.
   let load = true;
-  const ms = (l) => (load ? Math.max(14, 40 * 0.64 ** l) : 15);
+  const ms = (l) => (load ? Math.max(14, 50 * 0.64 ** l) : 15);
   const s2 = new AdaptiveScale(0);
   const c2 = { t: 0 };
   while (s2.level < 2) {
@@ -166,7 +169,7 @@ test('frames slow at any sharpness stop at the floor, and stay', () => {
   // and again.)
   const s = new AdaptiveScale(0, { lowest: lowestLevel(1) });
   const clock = { t: 0 };
-  const changes = run(s, clock, 200, (l) => 30 + 20 * ratioAt(1, l) ** 2);
+  const changes = run(s, clock, 200, (l) => 45 + 20 * ratioAt(1, l) ** 2);
   assert.deepEqual(changes, [3]);
 });
 
@@ -274,6 +277,16 @@ test('frames held to 60 on 60, 75, 90, 120, 144 and 165 Hz screens', () => {
       for (let k = 0; k < hz * 10; k++) if (pace.draw((k * 1000) / hz + uneven(k, jitter))) drawn++;
       assert.ok(drawn >= 598 && drawn <= 601, `${hz} Hz, ±${jitter} ms: ${drawn} frames in 10 s`);
     }
+  }
+});
+
+test('the loop\'s first call, timed by the clock, says nothing of the screen\'s refresh', () => {
+  // (Made at once, 6 ms before the screen's next refresh: the gap to it is no refresh.)
+  for (const hz of [60, 120]) {
+    const pace = new FramePace();
+    pace.draw(1000 / hz - 6);
+    for (let k = 1; k <= 3; k++) pace.draw((k * 1000) / hz);
+    assert.ok(Math.abs(pace.refresh - 1000 / hz) < 1e-9, `${hz} Hz: ${pace.refresh}`);
   }
 });
 

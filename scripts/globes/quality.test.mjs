@@ -5,12 +5,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { buildLadder, CPU_RUNGS, fixedCost, longestMarch, merge, PHONE, rayCost, simCost, tracedPx } from './src/app/quality/ladder.mjs';
-import { BUDGET_MS, CostModel, QualityController, TARGET_MS, UP_MS } from './src/app/quality/controller.mjs';
+import { BUDGET_MS, CostModel, QualityController, TARGET_FPS, TARGET_MS, UP_MS } from './src/app/quality/controller.mjs';
 import { deviceKey, keepCompileMs, keepLevel, keptCompileMs, priorLevel, priorSpeed, readRecord, RECORD_KEY, startLevel, UNKNOWN_SPEED, writeRecord } from './src/app/quality/record.mjs';
 
-const REFRESH = 1000 / 60;
+/** The S25 Ultra's screen, 120 Hz: frames at the aim, 35 a second or more, come three refreshes
+ *  (25 ms) apart or sooner; one that misses 25 ms comes at 33.3, 30 a second. */
+const REFRESH = 1000 / 120;
 /** The S25 Ultra's screen, upright: the bowl's area at rest (CSS px^2, lid and all). */
 const AREA = 108000;
+/** Frames a second, held to 30 (the floor). */
+const AT_30 = TARGET_FPS / 30;
 
 /** A made-up phone: its sim, fixed and per-pixel costs (ms, ms per million traced pixels), its
  *  main thread's (ms), how they scale over time (heat), and the bowl's area on screen. */
@@ -18,16 +22,17 @@ function phone(o = {}) {
   return { t: 0, simMs: 5, fixedMs: 1, msPerMpx: 160, cpuMs: 2, area: AREA, restArea: AREA, timed: true, every: 2, heat: () => 1, perPx: () => 1, moving: () => false, extra: () => 0, n: 0, ...o };
 }
 
-/** A frame's GPU time on the phone at these knobs. */
+/** A frame's GPU time on the phone at these knobs, and the sim's substeps: two in a frame of a
+ *  sixtieth, three in a longer one (at 35-40 a second, or held at 30: FluidSim.step). */
 function cost(dev, k, moving) {
-  const heat = dev.heat(dev.t);
-  const sim = dev.simMs * simCost(k) * heat * (moving ? 1.4 : 1);
-  const draw = (dev.fixedMs * fixedCost(k) + dev.msPerMpx * dev.perPx(k) * tracedPx(k, dev.area)) * heat * (moving ? 1.4 : 1);
-  return { sim, draw };
+  const heat = dev.heat(dev.t) * (moving ? 1.4 : 1);
+  const draw = (dev.fixedMs * fixedCost(k) + dev.msPerMpx * dev.perPx(k) * tracedPx(k, dev.area)) * heat;
+  const sixtieth = k.fps >= 60 && Math.max(dev.simMs * heat + draw, dev.cpuMs, dev.extra(dev.t)) <= 1000 / 60;
+  return { sim: dev.simMs * simCost({ fps: sixtieth ? 60 : 30 }) * heat, draw, substeps: sixtieth ? 2 : 3 };
 }
 
 /** Runs the controller on the phone for `seconds`: frames come at whole refreshes (held to the
- *  knobs' fps; the screen's refreshes, 60 a second unless dev.refresh says), as long as the slower
+ *  knobs' fps; the screen's refreshes, 120 a second unless dev.refresh says), as long as the slower
  *  of the GPU and the main thread takes (or `interval`). Returns the moves. */
 function run(c, dev, seconds) {
   const moves = [];
@@ -35,7 +40,7 @@ function run(c, dev, seconds) {
   while (dev.t < end) {
     const k = c.knobs;
     const moving = dev.moving(dev.t);
-    const { sim, draw } = cost(dev, k, moving);
+    const { sim, draw, substeps } = cost(dev, k, moving);
     const busy = Math.max(sim + draw, dev.cpuMs);
     const pace = 1000 / k.fps;
     const refresh = dev.refresh ?? REFRESH;
@@ -48,7 +53,9 @@ function run(c, dev, seconds) {
       area: dev.area,
       restArea: dev.restArea,
       moving,
-      refresh: dev.refresh ?? REFRESH,
+      substeps,
+      // (The refresh as the page tells it: the screen's, unless dev.told says otherwise.)
+      refresh: dev.told ? dev.told(dev.t) : refresh,
     });
     if (r) moves.push({ t: dev.t, level: c.level, cpu: c.cpuLevel, fps: r.fps, why: c.lastMove.why });
   }
@@ -181,9 +188,10 @@ test('a phone that warms (40% slower over a minute) settles lower without going 
 });
 
 test('a try up that does not hold is taken back at once, and the next waits twice as long', () => {
-  // (Past a ratio, a pixel costs twice as much: the model, fitted below it, cannot see it coming.)
+  // (Past a ratio, a pixel costs 2.4 times as much: the model, fitted below it, cannot see it
+  // coming. The rung past it predicted well under UP_MS, over the budget in fact.)
   const cliff = 0.95;
-  const dev = phone({ msPerMpx: 45, perPx: (k) => (k.ratio > cliff ? 2.4 : 1) });
+  const dev = phone({ msPerMpx: 77, perPx: (k) => (k.ratio > cliff ? 2.4 : 1) });
   const c = new QualityController(LEVELS, { level: LEVELS.findIndex((k) => k.ratio < cliff) });
   const moves = run(c, dev, 400);
   const tries = moves.filter((m) => m.why === 'trying sharper');
@@ -212,7 +220,8 @@ test('sharpness comes back when there is room, a rung at a time', () => {
 });
 
 test('a main thread too slow moves only its own ladder, and gives it back when it has room', () => {
-  const dev = phone({ cpuMs: 22 });
+  // (30 ms of main thread: frames at 33.3 ms, under 35 a second, whatever the GPU's level.)
+  const dev = phone({ cpuMs: 30 });
   const c = new QualityController(LEVELS, { level: 0 });
   run(c, dev, 5);
   const level = c.level;
@@ -227,8 +236,8 @@ test('a main thread too slow moves only its own ladder, and gives it back when i
 });
 
 test('slow frames that neither the GPU nor the main thread explain: a rung after three windows, taken back if it bought nothing', () => {
-  // (The compositor, say, shows only every other refresh, whatever is drawn.)
-  const dev = phone({ msPerMpx: 20, extra: () => 2 * REFRESH });
+  // (The compositor, say, shows only every fourth refresh, 30 a second, whatever is drawn.)
+  const dev = phone({ msPerMpx: 20, extra: () => 4 * REFRESH });
   const c = new QualityController(LEVELS, { level: 0 });
   run(c, dev, 1);
   const level = c.level;
@@ -277,8 +286,10 @@ test('zoomed in, or the phone turned, the bowl keeps about the same traced pixel
   assert.deepEqual(run(c, dev, 30).filter((m) => m.why !== 'trying sharper'), []);
 });
 
-test('a GPU too slow for the lowest level at 60 is held to 30, climbs there, and goes back to 60 when it can', () => {
-  const dev = phone({ simMs: 9, msPerMpx: 300 });
+test('a GPU too slow for the lowest level at the aim is held to 30, climbs there, and goes back when it can', () => {
+  // (On a 60 Hz screen, which shows frames at 35 a second or more only every refresh: the lowest
+  // level's 19 ms lands them every other one, 30 a second. Held there, it has twice the time.)
+  const dev = phone({ simMs: 9, msPerMpx: 300, refresh: 1000 / 60 });
   const c = new QualityController(LEVELS, { level: 0 });
   const moves = run(c, dev, 40);
   assert.ok(moves.some((m) => m.why === 'lowest level too slow'), JSON.stringify(moves));
@@ -286,22 +297,24 @@ test('a GPU too slow for the lowest level at 60 is held to 30, climbs there, and
   assert.ok(c.fps30);
   // (With twice the time, sharper than the lowest.)
   assert.ok(c.level < LEVELS.length - 1);
-  assert.ok(gpuAt(dev, c.knobs) <= 2 * BUDGET_MS);
+  assert.ok(gpuAt(dev, c.knobs) <= AT_30 * BUDGET_MS);
   assert.ok(c.describe(dev.t).some((l) => l.includes('30 fps')));
-  // A cooler, quicker GPU: back to 60.
+  // A cooler, quicker GPU: back to frames as they come (here, every refresh).
   dev.simMs = 3;
   dev.msPerMpx = 120;
   const back = run(c, dev, 60);
-  assert.ok(back.some((m) => m.why === 'back to 60 fps'), JSON.stringify(back));
+  assert.ok(back.some((m) => m.why === `back to ${TARGET_FPS}+ fps`), JSON.stringify(back));
   assert.equal(c.knobs.fps, 60);
-  assert.ok(gpuAt(dev, c.knobs) <= BUDGET_MS);
+  assert.ok(gpuAt(dev, c.knobs) <= c.budget);
 });
 
-test('over the budget at the lowest level but quick enough for 60, it stays at 60', () => {
-  // (The lowest level at about 15 ms: over 14.5, under a refresh.)
+test('over the budget at the lowest level but quick enough for the aim, it stays unheld', () => {
+  // (The lowest level at about 24.95 ms: over the budget's 24.86, within three refreshes of the
+  // S25's 120 Hz screen, 40 frames a second.)
   const low = LEVELS[LEVELS.length - 1];
   const dev = phone({ simMs: 6 });
-  dev.msPerMpx = (15 - 6 - fixedCost(low)) / tracedPx(low, AREA);
+  dev.msPerMpx = (24.95 - 6 * simCost({ fps: 40 }) - fixedCost(low)) / tracedPx(low, AREA);
+  assert.ok(gpuAt(dev, low) > BUDGET_MS && gpuAt(dev, low) < 25);
   const c = new QualityController(LEVELS, { level: 0 });
   run(c, dev, 60);
   assert.equal(c.level, LEVELS.length - 1);
@@ -309,12 +322,12 @@ test('over the budget at the lowest level but quick enough for 60, it stays at 6
   assert.ok(!c.fps30);
 });
 
-test('a warm phone on a fast screen whose lowest level misses 60 by a little keeps its frames as they come, not 30', () => {
-  // (The lowest level at about 18 ms, as the S25 Ultra's was warm at 0.6: on its 120 Hz screen frames
-  // land at 25 ms, 40 a second, which is better than 30 held.)
+test('a warm phone on a fast screen whose lowest level misses 25 ms by a little keeps its frames as they come, not 30', () => {
+  // (The lowest level at about 26.5 ms: on a 144 Hz screen frames land every four refreshes, 27.8
+  // ms, 36 a second, which is better than 30 held.)
   const low = LEVELS[LEVELS.length - 1];
-  const dev = phone({ simMs: 7.6, refresh: 1000 / 120 });
-  dev.msPerMpx = (18 - 7.6 - fixedCost(low)) / tracedPx(low, AREA);
+  const dev = phone({ simMs: 7.6, refresh: 1000 / 144 });
+  dev.msPerMpx = (26.5 - 7.6 * simCost({ fps: 40 }) - fixedCost(low)) / tracedPx(low, AREA);
   const c = new QualityController(LEVELS, { level: 0 });
   run(c, dev, 60);
   assert.equal(c.level, LEVELS.length - 1);
@@ -322,18 +335,54 @@ test('a warm phone on a fast screen whose lowest level misses 60 by a little kee
   assert.ok(!c.fps30);
 });
 
-test('held to 30 by a hot spell, a phone on a fast screen goes back to 60 once its frames would come every 25 ms', () => {
-  // (Its lowest level 18 ms when cool, 1.4 times that for 15 s: 25 ms, four 120ths apart, 30 a
+test('held to 30 by a hot spell, a phone goes back unheld once its frames would come every 28 ms or sooner', () => {
+  // (Its lowest level 20 ms when cool, 1.4 times that for 15 s: 28 ms, four 120ths apart, 30 a
   // second; then cool again, three 120ths, 40 a second, better than 30 held.)
   const low = LEVELS[LEVELS.length - 1];
-  const dev = phone({ simMs: 7.6, refresh: 1000 / 120, heat: (t) => (t < 15000 ? 1.4 : 1) });
-  dev.msPerMpx = (18 - 7.6 - fixedCost(low)) / tracedPx(low, AREA);
+  const dev = phone({ simMs: 7.6, heat: (t) => (t < 15000 ? 1.4 : 1) });
+  dev.msPerMpx = (20 - 7.6 * simCost({ fps: 40 }) - fixedCost(low)) / tracedPx(low, AREA);
   const c = new QualityController(LEVELS, { level: 0 });
   const hot = run(c, dev, 15);
   assert.ok(hot.some((m) => m.fps === 30), JSON.stringify(hot));
   const cool = run(c, dev, 90);
-  assert.ok(cool.some((m) => m.why === 'back to 60 fps'), JSON.stringify(cool));
+  assert.ok(cool.some((m) => m.why === `back to ${TARGET_FPS}+ fps`), JSON.stringify(cool));
   assert.equal(c.knobs.fps, 60);
+  assert.ok(gpuAt(dev, c.knobs) <= BUDGET_MS);
+});
+
+test('on a 60 Hz screen, which shows no frames between 30 and 60 a second, the budget is a refresh and frames come at 60', () => {
+  // (A level within 24.9 ms there lands its frames every other refresh, 30 a second: slow, though
+  // neither the GPU's time nor the main thread's would say why.)
+  const dev = phone({ refresh: 1000 / 60 });
+  const c = new QualityController(LEVELS, { level: 0 });
+  const moves = run(c, dev, 120);
+  assert.ok(Math.abs(c.budget - 1000 / 60) < 1e-9, `budget ${c.budget}`);
+  assert.ok(moves.every((m) => m.why !== 'slow, not the gpu' && m.why !== 'bought nothing'), JSON.stringify(moves));
+  assert.ok(!c.fps30);
+  assert.ok(gpuAt(dev, c.knobs) <= 1000 / 60);
+  assert.ok(Math.abs(c.level - truth(LEVELS, dev, 1000 / 60)) <= 1, `level ${c.level}, truth ${truth(LEVELS, dev, 1000 / 60)}`);
+  assert.deepEqual(moves.filter((m) => m.t > 30000), []);
+  // (The same phone on its 120 Hz screen: frames at 40 a second, and a sharper picture.)
+  const fast = new QualityController(LEVELS, { level: 0 });
+  run(fast, phone(), 60);
+  assert.ok(fast.level < c.level, `120 Hz ${fast.level}, 60 Hz ${c.level}`);
+});
+
+test('the screen\'s refresh is the quickest it has been told: an estimate that grows while frames come late moves nothing', () => {
+  // (FramePace's estimate grows a little at each refresh it sees, and while every frame is late it
+  // sees none between them: the S25's frames 25 ms apart, from 10 s on, would read as a screen of
+  // 105 Hz, then 70, then 40.)
+  const steady = new QualityController(LEVELS, { level: 0 });
+  const want = run(steady, phone(), 60);
+  const c = new QualityController(LEVELS, { level: 0 });
+  const told = (t) => Math.min((1000 / 120) * 1.01 ** (Math.max(t - 10000, 0) / 25), 25);
+  const moves = run(c, phone({ told }), 60);
+  assert.deepEqual(moves, want);
+  assert.equal(c.budget, BUDGET_MS);
+  // (Nor does a refresh told a little short now and then: a refresh's time is a little uneven.)
+  const u = new QualityController(LEVELS, { level: 0 });
+  assert.deepEqual(run(u, phone({ told: (t) => 1000 / 120 - (Math.round(t) % 7 === 0 ? 0.6 : 0) }), 60), want);
+  assert.equal(u.budget, BUDGET_MS);
 });
 
 test('without timestamps it steers by the queue\'s pace', () => {
@@ -402,6 +451,6 @@ test('with nothing kept, a level from the GPU\'s name: quicker GPUs start sharpe
   for (let i = 1; i < levels.length; i++) assert.ok(levels[i] <= levels[i - 1], `levels ${levels.join(' ')}`);
   // (The S25 Ultra itself: a level its own costs predict to fit; the slowest, the lowest.)
   const s25 = LEVELS[priorLevel(LEVELS, 1, AREA)];
-  assert.ok(5 + 1 * fixedCost(s25) + 160 * tracedPx(s25, AREA) <= TARGET_MS + 2);
+  assert.ok(5 * simCost({ fps: TARGET_FPS }) + 1 * fixedCost(s25) + 160 * tracedPx(s25, AREA) <= TARGET_MS + 2);
   assert.equal(priorLevel(LEVELS, 0.05, AREA), LEVELS.length - 1);
 });
