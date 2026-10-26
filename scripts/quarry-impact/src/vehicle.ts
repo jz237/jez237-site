@@ -424,6 +424,8 @@ export class Vehicle {
   rolls=0;
   /** Doors and lids sprung open by rolling over (offline QA counter), and the dice counter for them. */
   rollPops=0;
+  /** Doors chained shut (offline derby prep): they stay shut until the chain snaps. */
+  readonly chainedDoors=new Set<string>();
   private popRolls=0;
   /** Seconds held pinned against a wall or a second car, the crush tick clock, and pins suffered (offline). */
   pinTime=0;
@@ -1414,7 +1416,7 @@ export class Vehicle {
         if(hit>=DOOR_SWING.slam){a.loose=Math.min(1,a.loose+hit*DOOR_SWING.fatigue);this.doorSlams++;}
         continue;
       }
-      if(!a.name.startsWith('door')||!doorUnlatched(a.loose,a.damage)||!a.members.some(m=>m.mesh.visible))continue;
+      if(!a.name.startsWith('door')||!doorUnlatched(a.loose,a.damage)||!a.members.some(m=>m.mesh.visible)||this.chainedDoors.has(a.name))continue;
       const side=a.name.endsWith('left')?-1:1,base=doorBase(a.loose),door={swing:a.swing??0,rate:a.swingRate??0};
       const hit=stepDoor(door,base,side,forward,lateral,this.speed,dt);a.swing=door.swing;a.swingRate=door.rate;
       if(door.swing>.05)this.doorOpenTime+=dt;

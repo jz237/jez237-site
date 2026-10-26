@@ -1,6 +1,7 @@
+import {restoreDoorChainsBytes} from './door-chains-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readWiperArcsPrevious,restoreWiperArcsBytes,verifyWiperArcsRevision} from './wiper-arcs-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreDoorChainsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('WiperArcs preserves every prior fixture, vehicle asset, venue art and history input',verifyWiperArcsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/wiper-arcs/revision.json').toString());
