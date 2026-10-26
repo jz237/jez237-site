@@ -40,7 +40,7 @@ import { repairCoupePanel } from './coupe-realism';
 import { dentGeometry,crushGeometry,refreshWreckNormals,type CrushFrame, repairWreckGeometry } from './wreck-geometry';
 import { WreckFinish } from './wreck-finish';
 import { WreckAttachments } from './wreck-attachments';
-import {ROT,rotFactor,tiredCorner,tiredDamper,tiredSag} from './age-rust';
+import {ROT,rotFactor,tiredCorner,tiredDamper,tiredSag,wornEngine} from './age-rust';
 import {torqueSteer} from './torque-steer';
 import {bodyworkDentDamage} from './bodywork-response';
 import {puddleDepth,type Puddle} from './puddle-splashes';
@@ -858,7 +858,8 @@ export class Vehicle {
       if(!this.gasketBlown&&this.health>0&&this.gasketClock>=HEAD_GASKET.after){this.gasketBlown=true;this.onBreak?.('gasket',0);}
       if(this.gasketBlown&&running)this.coolantLevel=Math.max(0,this.coolantLevel-HEAD_GASKET.burn*dt);
     }else this.hotTime=0;
-    this.misfireFactor=running?this.engineMisfire.update(dt,this.engineDamage??0,this.input.throttle):1;
+    // An old banger's tired engine stumbles under load as a damaged one would (offline, by its age).
+    this.misfireFactor=running?this.engineMisfire.update(dt,Math.max(this.engineDamage??0,wornEngine(this.surfaceFinish.rustAge)),this.input.throttle):1;
     if(this.gasketBlown&&running)this.misfireFactor*=HEAD_GASKET.power;
     // A damaged starter cranks slowly and sometimes fails to catch: the engine coughs and it has to go again.
     this.starterDamage=this.extendedDamage?starterDamage((isRearEngineKind(this.kind)?this.structuralDamage?.[1]:this.structuralDamage?.[0])??0):0;

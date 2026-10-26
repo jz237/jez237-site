@@ -39,6 +39,12 @@ export const tiredSag=(age:number,corner:number,wheel:number)=>wheel===corner?1-
 export const PITTING={dull:.55,pits:.5,bloom:.5} as const;
 /** Is this material chrome brightwork (not a fitted hubcap)? */
 export const chromed=(name:string)=>/chrome/i.test(name)&&!/hubcap/i.test(name);
+/** Worn engines (offline, with the rust): an old banger's tired engine stumbles under load — from WORN_ENGINE.from of its age
+ * it misfires as an engine damaged to WORN_ENGINE.onset would, rising to WORN_ENGINE.most at its oldest (the misfire's own onset
+ * is 0.3: a power cut for a moment, the body kicking on its mounts, now and then a backfire). Real damage beyond it still counts. */
+export const WORN_ENGINE={from:.5,onset:.3,most:.45} as const;
+/** The engine damage an old car's misfires behave as, by its age (0 when it is not that old). */
+export const wornEngine=(age:number)=>{const a=clampAge(age);return a<WORN_ENGINE.from?0:WORN_ENGINE.onset+(WORN_ENGINE.most-WORN_ENGINE.onset)*(a-WORN_ENGINE.from)/(1-WORN_ENGINE.from);};
 /** Does a body material rust? Painted steel does; the plastic trim, hoses and cabin do not. */
 export const rusts=(name:string)=>name.startsWith('paint')&&!/Paint 2|hoses|Interior|Panel Sides/.test(name);
 export const startingRust=(id:number)=>{const n=Number.isFinite(id)?id:0,r=Math.abs(Math.sin(n*57.31+4.77)*43758.5453)%1;return RUST.age[0]+r*(RUST.age[1]-RUST.age[0]);};
