@@ -141,6 +141,7 @@ import {OIL_BURN,burnOil,burner,type Burner} from './oil-burner';
 import {WheelBlur} from './wheel-blur';
 import {BUMP,bumpStrike} from './bump-stops';
 import {applyScars,bodyPoints,planScars} from './battle-scars';
+import {RUBBER,markColour} from './tyre-marks';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -1395,7 +1396,7 @@ let mirrorsClipped=0;
 let bumpStarts=0;
 const shrapnelAt=new Map<number,number>();let shrapnelHits=0;let blowUps=0,blowUpHold=-1,chainIgnitions=0;
 const tipAt=new Map<number,number>();let tipOvers=0;
-const rideAt=new Map<number,number>();let rideUps=0;const onTop=new Map<number,{t:number;dent:number;credited:boolean}>();let mounts=0;
+const rideAt=new Map<number,number>(),markAt=new T.Vector3(),DOWN=new T.Vector3(0,-1,0);let rideUps=0,tyreMarks=0;const onTop=new Map<number,{t:number;dent:number;credited:boolean}>();let mounts=0;
 const aiBurn=new Map<number,number>();let aiFireOuts=0;
 /** DOMINOs credited this event (offline QA counter), and who last knocked each car with a real hit, and when. */
 let dominoes=0;const knockedBy=new Map<number,{by:number;at:number}>();
@@ -2079,7 +2080,9 @@ function step(dt: number) {
       o.underWeight=Math.max(o.underWeight,st.t);
       const face=crushedFace(alongCar(s.current,o.current,o.forward,DEFINITIONS[o.kind].halfLength));
       if(o.structuralDamage)o.structuralDamage[face]=Math.min(1,o.structuralDamage[face]+ON_TOP.crush*dt);
-      if(st.dent>=ON_TOP.dent){st.dent=0;const under=s.current.clone();under.y-=.35;o.hit(under,new T.Vector3(0,-1,0),ON_TOP.dentDamage,elapsed,true);lastHitBy.set(o.id,{by:s.id,at:elapsed});}
+      if(st.dent>=ON_TOP.dent){st.dent=0;const under=s.current.clone();under.y-=.35;o.hit(under,new T.Vector3(0,-1,0),ON_TOP.dentDamage,elapsed,true);lastHitBy.set(o.id,{by:s.id,at:elapsed});
+        // and each wheel pressing on it leaves its rubber there.
+        s.wheels.forEach((w,k)=>{if(!w||s.wreckParts.wheelLost[k])return;w.getWorldPosition(markAt);markAt.y-=vehicleWheelRadius(s.kind);if(Math.hypot(markAt.x-o.current.x,markAt.z-o.current.z)<DEFINITIONS[o.kind].halfLength){o.scar(markAt,DOWN,RUBBER);tyreMarks++;}});}
       if(st.t>=ON_TOP.credit&&!st.credited){st.credited=true;mounts++;
         if(s.id===0&&!demo){toast(`ON TOP · #${o.id+1} ${DEFINITIONS[o.kind].name}`+pointsTag(DESTRUCTION_POINTS.ontop),2,2);sound.crowd(.8);crowdFlashes(SMASH_FLASHES);}
         else if(o.id===0&&!demo){toast(`#${s.id+1} IS ON TOP OF YOU · ROCK IT OFF`,2,2);sound.crowd(.6);}
@@ -2098,8 +2101,10 @@ function step(dt: number) {
   for(const {a,b,point1,point2,scarDirection,speed,material} of collisionScars.adjudicate(contacts,elapsed)){
     // Metal grinding on metal or concrete throws sparks along the scrape.
     if(speed>4&&(material==='metal'||material==='concrete'))fx.emit(point1,Math.min(4,Math.ceil(speed/6)),1,.85);
-    a?.scar(point1,scarDirection,b?.paintColor);
-    b?.scar(point2,scarDirection.clone().negate(),a?.paintColor);
+    // Where a wheel struck, it leaves black rubber rather than paint (offline).
+    const onA=markColour(b,point1),onB=markColour(a,point2);if(onA===RUBBER)tyreMarks++;if(onB===RUBBER)tyreMarks++;
+    a?.scar(point1,scarDirection,onA);
+    b?.scar(point2,scarDirection.clone().negate(),onB);
   }
   for(const {contact:{a,b,point,point1,point2,va,vb,impulse,material,closing},damage,feedback} of impactAdjudicator.adjudicate(contacts,elapsed,collisionDamageMultiplier(mode==='race'&&!bangerRace(),damageRule()),online?.active?undefined:impactSpeedFactor,IMPACT_SPEED.cap)){
     // A feedback-only contact still clears stale glass/debris flags in hit().
@@ -3143,6 +3148,8 @@ async function boot() {
     rollingCaps: () => ({ rolled: rollingCaps.rolled, moving: rollingCaps.moving, caps: rollingCaps.caps.map(c => ({ phase: c.phase, speed: +c.speed.toFixed(2), lean: +c.lean.toFixed(2), r: +c.radius.toFixed(3), at: c.p.toArray().map(v => +v.toFixed(2)) })) }),
     dustAir: () => +dustAir.toFixed(3),
     rust: (id = 0, age?: number) => { const c = cars.find(x => x.id === id); if (!c) return null; if (age !== undefined) c.surfaceFinish.rustAge = age; const r = c.surfaceFinish.rust.value, a = c.surfaceFinish.arches.value; const e = new T.Euler().setFromQuaternion(c.root.quaternion, 'YXZ'), head = carLights.get(c)?.lamp('head', 0)?.material as T.MeshStandardMaterial | undefined; return { lens: head ? [head.color.getHexString(), +head.emissiveIntensity.toFixed(2)] : null, showers: rustShowers, lean: [+T.MathUtils.radToDeg(e.x).toFixed(2), +T.MathUtils.radToDeg(e.z).toFixed(2)], sag: Array.from(c.sagBias, v => +v.toFixed(3)), dampers: Array.from(c.damperBias, v => +v.toFixed(3)), age: +r.x.toFixed(3), bottom: +r.y.toFixed(3), half: +r.z.toFixed(3), front: +a.x.toFixed(3), rear: +a.y.toFixed(3), hub: +a.z.toFixed(3), arches: [+r.w.toFixed(3), +a.w.toFixed(3)] }; },
+    tyreMarks: () => tyreMarks,
+    markCar: (id: number, local: number[], dir: number[], times = 1) => { const c = cars[id]; if (!c) return false; c.root.updateMatrixWorld(true); const p = new T.Vector3().fromArray(local).applyMatrix4(c.root.matrixWorld), d = new T.Vector3().fromArray(dir).applyQuaternion(c.root.quaternion).normalize(); for (let k = 0; k < times; k++) c.scar(p, d, RUBBER); return true; },
     scars: (id = 0) => { const c = cars.find(x => x.id === id); return c ? battleScars.get(c) ?? { scars: 0, panels: 0 } : null; },
     bumpStops: (id?: number) => { if (id === undefined) return bumpStops; const c = cars.find(x => x.id === id); return c ? bumpState.get(c)?.count ?? 0 : null; },
     wheelBlur: (id = 0) => { const c = cars.find(x => x.id === id), b = c && wheelBlurs.get(c); return b ? { discs: b.discs.length, opacities: b.opacities } : null; },
