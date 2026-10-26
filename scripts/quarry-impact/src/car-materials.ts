@@ -11,6 +11,10 @@ export const WET_PAINT={darken:.18,saturate:.3,mud:.5,film:.4,coat:.5,bead:36} a
  * once too fine on screen to draw. CAR_TIME is the clock they run by. */
 export const RUNS={cols:22,share:.45,len:1.6,speed:.22,width:.07} as const;
 export const CAR_TIME={value:0};
+/** Scrape layers (all paint): wear (the panel's scratch, 0–1) past SCRAPE.scuff dulls and pales the clear coat (by
+ * SCRAPE.pale), past SCRAPE.primer wears the colour through to primer in streaks (SCRAPE.cover of the way) — grey, or red
+ * oxide in the patches where noise passes SCRAPE.patch — before the bare metal of the deepest scrapes. */
+export const SCRAPE={scuff:[.12,.45],primer:[.35,.75],pale:.45,cover:.85,grey:'.36,.37,.36',oxide:'.38,.15,.09',patch:.55} as const;
 // Body-space shading survives dents and detached parts without swimming UVs.
 // Damage is separate from base color: exposed alloy reflects as metal while
 // dusty paint gets rougher and loses its clearcoat highlights.
@@ -54,6 +58,14 @@ float scratch=clamp(vImpactWear.x,0.,1.);
 float scrapeLines=smoothstep(.75,.96,abs(sin(vBodyPosition.y*235.+vBodyPosition.z*29.+sin(vBodyPosition.x*12.))));
 float bareMetal=clamp(vImpactWear.y,0.,1.)*max(scrapeLines,smoothstep(.65,.92,grain)*.65);
 diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.19,.16,.12),dust);
+// Paint wears through in layers (SCRAPE): the clear coat scuffs pale and dull first, then the colour wears to primer — grey,
+// or red oxide where the car was patched — and the deepest scrapes reach the metal.
+float scuffLines=smoothstep(.55,.9,abs(sin(vBodyPosition.y*180.+vBodyPosition.z*23.+sin(vBodyPosition.x*9.))));
+float scuff=smoothstep(${SCRAPE.scuff[0]},${SCRAPE.scuff[1]},scratch)*(.55+.45*scuffLines);
+float primer=smoothstep(${SCRAPE.primer[0]},${SCRAPE.primer[1]},scratch)*max(scuffLines,smoothstep(.4,.8,grain))*(1.-bareMetal);
+vec3 primerColour=mix(vec3(${SCRAPE.grey}),vec3(${SCRAPE.oxide}),step(${SCRAPE.patch},bodySilt(vBodyPosition*4.)));
+diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*.72+vec3(.2),scuff*${SCRAPE.pale});
+diffuseColor.rgb=mix(diffuseColor.rgb,primerColour,primer*${SCRAPE.cover});
 diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.22,.24,.24),bareMetal*.9);
 diffuseColor.rgb*=1.-scratch*.15;
 // Crumpled metal: a panel squeezed along its surface folds into an accordion of creases across the
@@ -106,12 +118,14 @@ diffuseColor.rgb*=1.-run*.2;diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.78,.82,.
 `)
       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
 roughnessFactor=clamp(mix(roughnessFactor,.88,dust)+scratch*.35+grain*.016,.04,.98);
+roughnessFactor=mix(roughnessFactor,.7,max(scuff*.6,primer));
 roughnessFactor=mix(roughnessFactor,.43,bareMetal);
 roughnessFactor=clamp(roughnessFactor+crumpleAmt*.12+crumpleCrack*.35,.04,.98);
 roughnessFactor=mix(roughnessFactor,.03,bead);
 `)
       .replace('#include <metalnessmap_fragment>', `#include <metalnessmap_fragment>
 metalnessFactor=mix(metalnessFactor,.02,dust);
+metalnessFactor=mix(metalnessFactor,.04,primer);
 metalnessFactor=mix(metalnessFactor,.95,bareMetal);
 metalnessFactor=mix(metalnessFactor,.6,crumpleCrack);
 `)
@@ -119,7 +133,7 @@ metalnessFactor=mix(metalnessFactor,.6,crumpleCrack);
       .replace('#include <clearcoat_normal_fragment_begin>', '#include <clearcoat_normal_fragment_begin>\n#ifdef USE_CLEARCOAT\nclearcoatNormal=crumpleBump(-vViewPosition,clearcoatNormal,crumpleSlope,faceDirection);\n#endif')
       .replace('#include <lights_physical_fragment>', `#include <lights_physical_fragment>
 #ifdef USE_CLEARCOAT
-material.clearcoat *= 1.-clamp(crumpleCrack+crumpleAmt*.35,0.,1.);
+material.clearcoat *= 1.-clamp(crumpleCrack+crumpleAmt*.35+scuff*.6+primer,0.,1.);
 #endif
 // Rain films every panel, the ones facing the sky most: glossier, under a sharp clearcoat (cracked paint stays dull).
 float wetTop=rainWet*mix(.5,1.,smoothstep(.2,.75,dot(normal,normalize((viewMatrix*vec4(0.,1.,0.,0.)).xyz))))*(1.-crumpleCrack);
@@ -141,7 +155,7 @@ float scrapeLines=mix(smoothstep(.65,.92,abs(sin(across+bodySilt(vBodyPosition*2
         .replace('#include <lights_physical_fragment>', '#include <lights_physical_fragment>\n#ifdef USE_CLEARCOAT\nmaterial.clearcoat *= 1.-clamp(bareMetal+scratch*.5+dust*.7,0.,1.);\n#endif');
     }
   };
-  material.customProgramCacheKey = () => contactWear ? 'quarry-contact-paint-crumple-v2' : 'quarry-layered-paint-crumple-v2';
+  material.customProgramCacheKey = () => contactWear ? 'quarry-contact-paint-crumple-v3' : 'quarry-layered-paint-crumple-v3';
 }
 
 /** Rain on glass (offline rain, CAR_WET): beads of water stand on every window, in GLASS_RAIN.cells cells a metre, on all but
