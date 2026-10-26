@@ -45,8 +45,8 @@ test('the steel paint rusts where it is fitted, dull and bare of lacquer; plasti
   const a=compile(steel.material as T.Material),b=compile(trim.material as T.Material);
   assert.ok(a.uniforms.carRust===surface.rust&&a.uniforms.carArches===surface.arches,'live');
   assert.ok(a.fragmentShader.includes('ageRust=smoothstep(rustEdge-.06,rustEdge+.06,rustField);')&&a.fragmentShader.includes(`vec3(${RUST.orange})`),'orange-brown rot');
-  assert.ok(a.fragmentShader.includes('roughnessFactor=mix(roughnessFactor,.95,ageRust);')&&a.fragmentShader.includes('*(1.-max(ageRust,rustStain*.6));'),'dull, no lacquer');
-  assert.ok(!b.fragmentShader.includes('rustField')&&b.fragmentShader.includes('float ageRust=0.,rustStain=0.;'),'the trim never rusts');
+  assert.ok(a.fragmentShader.includes('roughnessFactor=mix(roughnessFactor,.95,ageRust);')&&a.fragmentShader.includes('*(1.-max(max(ageRust,rustStain*.6),max(sunFade*.7,lacquerOff)));'),'dull, no lacquer');
+  assert.ok(!b.fragmentShader.includes('rustField')&&b.fragmentShader.includes('float ageRust=0.,rustStain=0.,sunFade=0.,lacquerOff=0.;'),'the trim never rusts');
   const keys=[steel,trim].map(p=>(p.material as T.Material).customProgramCacheKey());assert.ok(keys[0].endsWith('-rust')&&keys[0]!==keys[1],'never sharing a program');
 });
 test('main fits every offline car but the buggy, rusting the rivals each their own amount and leaving the player as painted',()=>{

@@ -6,6 +6,11 @@ import * as T from 'three';
  * spreads up the flanks. The sills are the bottom RUST.sill m of the painted steel flanks (outside RUST.flank of the car's
  * half width); the lips a band RUST.lip m wide about each arch, RUST.gap m out from its edge. Plastic trim never rusts. */
 export const RUST={age:[.25,1],sill:[.04,.26],lip:.06,gap:.03,flank:[.6,.86],orange:'.25,.075,.02',scale:'.085,.032,.012',stain:'.62,.47,.36'} as const;
+/** Sun fade (with the rust, the same age): an old car's roof, bonnet and boot lid (the faces of its own top, FADE.top of
+ * straight up, from FADE.above m over its sills) are sun-bleached toward a chalky grey (FADE.bleach of the way at its oldest,
+ * mottled), and the lacquer has lifted off in blotches (more of it the older, FADE.peel) — dull matte paint inside, a ragged
+ * white edge of flaking lacquer round each. */
+export const FADE={top:[.55,.85],above:[.35,.6],bleach:.55,chalk:.62,peel:.34,matte:.82,flake:.75} as const;
 /** Does a body material rust? Painted steel does; the plastic trim, hoses and cabin do not. */
 export const rusts=(name:string)=>name.startsWith('paint')&&!/Paint 2|hoses|Interior|Panel Sides/.test(name);
 export const startingRust=(id:number)=>{const n=Number.isFinite(id)?id:0,r=Math.abs(Math.sin(n*57.31+4.77)*43758.5453)%1;return RUST.age[0]+r*(RUST.age[1]-RUST.age[0]);};

@@ -2,7 +2,7 @@ import * as T from 'three';
 import {finishVehiclePresentation} from './vehicle-presentation';
 import {LAMP_GRIME,WAKE} from './wake-dust';
 import {TOP_DUST} from './settled-dust';
-import {RUST,rusts,type RustFit} from './age-rust';
+import {FADE,RUST,rusts,type RustFit} from './age-rust';
 
 /** Persistent deposition state. Four tires retain water after leaving a puddle. */
 export class VehicleSurface {
@@ -41,7 +41,7 @@ float coatingNoise(vec3 p){vec3 c=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix
 `)
           .replace(/float dust=clamp\(lowBody\*\([^;]+;/,'float dust=clamp(lowBody*.035+vImpactWear.x*.07,0.,.32);')
           .replace('#include <alphamap_fragment>',`#include <alphamap_fragment>
-float ageRust=0.,rustStain=0.;
+float ageRust=0.,rustStain=0.,sunFade=0.,lacquerOff=0.;
 ${rusts(m.name)?`// Age rust: rot along the sills and round the arch lips, mottled, with a stained fringe of blistered paint.
 if(carRust.x>0.){
   float rustFlank=smoothstep(carRust.z*${RUST.flank[0]},carRust.z*${RUST.flank[1]},abs(vCoatingRest.x));
@@ -56,6 +56,16 @@ if(carRust.x>0.){
   rustStain=smoothstep(rustEdge-.22,rustEdge-.06,rustField)*(1.-ageRust);
   diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*vec3(${RUST.stain}),rustStain*.7);
   diffuseColor.rgb=mix(diffuseColor.rgb,mix(vec3(${RUST.orange}),vec3(${RUST.scale}),coatingNoise(vCoatingRest*95.)),ageRust);
+  // Sun fade: the top of the car (its own top, from the facet in the rest frame) bleached chalky, the lacquer lifting in blotches.
+  vec3 restFacet=normalize(cross(dFdx(vCoatingRest),dFdy(vCoatingRest)));
+  float sunTop=smoothstep(${FADE.top[0]},${FADE.top[1]},abs(restFacet.y))*smoothstep(carRust.y+${FADE.above[0]},carRust.y+${FADE.above[1]},vCoatingRest.y);
+  sunFade=sunTop*carRust.x*(.5+.5*coatingNoise(vCoatingRest*2.5+carSurfacePhase*13.));
+  diffuseColor.rgb=mix(diffuseColor.rgb,mix(vec3(dot(diffuseColor.rgb,vec3(.299,.587,.114))),vec3(${FADE.chalk}),.35),sunFade*${FADE.bleach});
+  float peelNoise=coatingNoise(vCoatingRest*4.5+carSurfacePhase*17.)*.85+coatingNoise(vCoatingRest*28.)*.15,peelEdge=1.-${FADE.peel}*carRust.x;
+  lacquerOff=sunTop*smoothstep(peelEdge-.015,peelEdge+.015,peelNoise);
+  float lacquerFlake=sunTop*clamp(smoothstep(peelEdge-.03,peelEdge-.012,peelNoise)-smoothstep(peelEdge,peelEdge+.015,peelNoise),0.,1.);
+  diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*${FADE.matte},lacquerOff);
+  diffuseColor.rgb=mix(diffuseColor.rgb,vec3(${FADE.flake}),lacquerFlake*.4);
 }`:''}
 float coatingSide=smoothstep(-.3,.3,vCoatingRest.x);
 float deposited=mix(carCoating.z,carCoating.w,coatingSide);
@@ -82,6 +92,7 @@ diffuseColor.rgb=mix(diffuseColor.rgb,vec3(${new T.Color(WAKE.tint).toArray().ma
           .replace('#include <roughnessmap_fragment>',`${glass?'':`float transferred=vTransferredPaint.a*(.48+.52*siltPattern);
 diffuseColor.rgb=mix(diffuseColor.rgb,vTransferredPaint.rgb,transferred*.85);`}
 #include <roughnessmap_fragment>
+roughnessFactor=mix(roughnessFactor,.68,max(sunFade*.6,lacquerOff));
 roughnessFactor=mix(roughnessFactor,.95,ageRust);
 roughnessFactor=mix(roughnessFactor,.89,max(carDirt*.8,wakeDust*.9));
 roughnessFactor=mix(roughnessFactor,max(.1,roughnessFactor*.48),carWet*(1.-carDirt*.55));`)
@@ -90,7 +101,7 @@ roughnessFactor=mix(roughnessFactor,max(.1,roughnessFactor*.48),carWet*(1.-carDi
           .replace('#include <emissivemap_fragment>',`#include <emissivemap_fragment>\ntotalEmissiveRadiance*=1.-clamp(wakeDust*${LAMP_GRIME.dust}+carDirt*${LAMP_GRIME.dirt},0.,${LAMP_GRIME.most});`)
           .replace('#include <lights_physical_fragment>',`#include <lights_physical_fragment>
 #ifdef USE_CLEARCOAT
-material.clearcoat*=(1.-carDirt*.88)*(1.-wakeDust*.85)*(1.-max(ageRust,rustStain*.6));
+material.clearcoat*=(1.-carDirt*.88)*(1.-wakeDust*.85)*(1.-max(max(ageRust,rustStain*.6),max(sunFade*.7,lacquerOff)));
 material.clearcoatRoughness=mix(material.clearcoatRoughness,.07,carWet);
 #endif`);
       };
