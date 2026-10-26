@@ -1,6 +1,7 @@
+import {restoreSteadyTiersBytes} from './steady-tiers-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readSmoothDemoPrevious,restoreSmoothDemoBytes,verifySmoothDemoRevision} from './smooth-demo-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreSteadyTiersBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('SmoothDemo preserves every prior fixture, vehicle asset, venue art and history input',verifySmoothDemoRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/smooth-demo/revision.json').toString());
