@@ -12,6 +12,8 @@ import { describe, describeLoad, FrameProfile, wrap } from './app/frameProfile';
 import { Learn } from './app/learn/Learn';
 import { drowsy, keptNight, NightFade } from './app/night.mjs';
 import { NightToggle } from './app/NightToggle';
+import { FollowToggle } from './app/FollowToggle';
+import { eyeFor, FollowCamera, followDistance } from './app/follow.mjs';
 import { ResolutionMenu } from './app/ResolutionMenu';
 import { CLEAR_WATER, forcedWaterEffects, type WaterEffects } from './water/effects';
 import { WaterCare } from './water/WaterCare';
@@ -29,7 +31,7 @@ import { describePipelines, pipelineMarks, pipelineSnapshot, pipelinesFirstFrame
 import { BowlLid } from './interaction/BowlLid';
 import { BowlLife, LIFE_PROBE_AT } from './interaction/BowlLife';
 import { Feeding } from './interaction/Feeding';
-import { GlobeController } from './interaction/GlobeController';
+import { CAMERA_VIEW, GlobeController } from './interaction/GlobeController';
 import { KelpForest } from './kelp/KelpForest';
 import { REEF_PROBES, Reef } from './reef/Reef';
 import { Specks } from './ocean/Specks';
@@ -680,7 +682,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     return true;
   };
 
-  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, life, learn, water, waterCare, night, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, studio, specks, bowlRender, setScene, advance, spawnFood, clickLid, setSharpness, setRatio, setFixedRatio, setKnobs, record };
+  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, life, learn, water, waterCare, night, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, glass: o.globe, ocean, studio, specks, bowlRender, setScene, advance, spawnFood, clickLid, setSharpness, setRatio, setFixedRatio, setKnobs, record };
 }
 
 type World = Awaited<ReturnType<typeof createWorld>>;
@@ -755,6 +757,13 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
       if (on) world.learn?.atNight();
     };
   }
+  // Follow (app/FollowToggle.ts, follow.mjs): the camera drawn in close on the fish and kept on it,
+  // where it is seen through the glass and the water; let go, the stage's camera takes the picture
+  // back. (Between Night and the resolution.)
+  const followButton = links && world.betta.active ? new FollowToggle(links) : null;
+  const followCam = followButton ? new FollowCamera() : null;
+  if (followButton && followCam) followButton.onChange = (on) => followCam.set(on, camera.position.toArray());
+  const fishMiddle = [0, 0, 0];
   const resolution = links ? new ResolutionMenu(links, { screen: () => window.devicePixelRatio, stage: () => [stage.clientWidth, stage.clientHeight], ratioNow: () => renderer.getPixelRatio(), most: world.device.limits.maxTextureDimension2D }) : null;
   let fixed: number | null = null;
   const hold = (ratio: number | null): void => {
@@ -837,6 +846,17 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
       keepLevel(wayUp(), held);
     }
     if (!manual) advance(dt);
+    if (followCam && (followCam.on || followCam.weight > 0)) {
+      // (Where the fish is now, its probes' mean in the sim frame; the eye there for the next frame.)
+      const probes = world.betta.probePoints();
+      fishMiddle.fill(0);
+      for (let i = 0; i < 16; i++) for (let k = 0; k < 3; k++) fishMiddle[k] += probes[4 * i + k] / 16;
+      const c = controller.center;
+      const eye = eyeFor(fishMiddle, CAMERA_VIEW, followDistance((camera.fov * Math.PI) / 180, camera.aspect, controller.followZoom), { outer: world.glass.outerRadius, inner: world.glass.innerRadius, level: sim.restLevel });
+      followCam.step(dt, [eye[0] + c.x, eye[1] + c.y, eye[2] + c.z]);
+      controller.followEye.fromArray(followCam.eye);
+      controller.followShare = followCam.share;
+    }
     hooks.beforeRender?.();
     const heightPx = renderer.getDrawingBufferSize(drawSize).y;
     // (The bowl drawn in its own targets: whether the view moved, and so how far apart its rays are.)
@@ -944,7 +964,7 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     const tick = (dt: number) => advance(dt);
     const g = window as unknown as { __globes?: object };
     // (three.js itself only in development: held here, none of it could be left out of a build.)
-    g.__globes = { ...g.__globes, ...(import.meta.env.DEV ? { THREE } : {}), ...world, tick, renderTimes, adaptive, quality, resolution, prof: PROF, bench, pipelines: pipelineSnapshot };
+    g.__globes = { ...g.__globes, ...(import.meta.env.DEV ? { THREE } : {}), ...world, tick, renderTimes, adaptive, quality, resolution, follow: followCam, prof: PROF, bench, pipelines: pipelineSnapshot };
   }
 }
 

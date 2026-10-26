@@ -66,7 +66,13 @@ interface Glide {
 
 const ZOOM_MIN = 2.8;
 const ZOOM_MAX = 14;
+/** Following the fish, how much nearer or further than its own distance the wheel or a pinch may
+ *  take the camera. */
+const FOLLOW_ZOOM_MIN = 0.5;
+const FOLLOW_ZOOM_MAX = 2.5;
 const CAMERA_ELEVATION = (9 * Math.PI) / 180;
+/** The way the camera looks (world: down a little, towards -z). */
+export const CAMERA_VIEW: readonly [number, number, number] = [0, -Math.sin(CAMERA_ELEVATION), -Math.cos(CAMERA_ELEVATION)];
 const CAMERA_TARGET = new THREE.Vector3(0, -0.12, 0);
 
 export class GlobeController {
@@ -107,6 +113,12 @@ export class GlobeController {
 
   private distance = 6.6;
   private targetDistance = 6.6;
+  /** The follow camera (app/follow.mjs, main.ts): where it puts the eye (world), looking the same
+   *  way, and how much of the picture is its (0..1); and how near it follows, the wheel's or a
+   *  pinch's while it does (times its own distance). */
+  readonly followEye = new THREE.Vector3();
+  followShare = 0;
+  followZoom = 1;
   /** Wheel and pinch zoom (off while the interface frames the globe itself). */
   zoomEnabled = true;
   /** Not to be picked up just now (the betta bowl, its lid off to feed the fish: Feeding.ts). A
@@ -447,6 +459,11 @@ export class GlobeController {
       target.y + this.distance * Math.sin(CAMERA_ELEVATION),
       target.z + this.distance * Math.cos(CAMERA_ELEVATION),
     );
+    if (this.followShare > 0) {
+      // (Following: the eye where the follow camera has it, or on the way back, looking the same way.)
+      cam.position.lerp(this.followEye, this.followShare);
+      target.set(cam.position.x + CAMERA_VIEW[0], cam.position.y + CAMERA_VIEW[1], cam.position.z + CAMERA_VIEW[2]);
+    }
     cam.lookAt(target);
     cam.updateMatrixWorld();
   }
@@ -612,6 +629,10 @@ export class GlobeController {
   };
 
   private zoomBy(factor: number): void {
+    if (this.followShare > 0.5) {
+      this.followZoom = THREE.MathUtils.clamp(this.followZoom * factor, FOLLOW_ZOOM_MIN, FOLLOW_ZOOM_MAX);
+      return;
+    }
     this.targetDistance = THREE.MathUtils.clamp(this.targetDistance * factor, ZOOM_MIN, ZOOM_MAX);
   }
 }

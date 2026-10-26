@@ -663,3 +663,14 @@ html.desktop #stage canvas.is-live {
 .site-links .night-button[aria-pressed="true"] { color: white; border-color: #8edcff8c; background: #0a2440e6; box-shadow: 0 0 12px #8edcff33; }
 .site-links .night-button[aria-pressed="true"] svg { fill: currentColor; }
 .site-links .night-button:hover, .site-links .night-button:focus-visible { color: white; outline: 2px solid #8edcff; }
+/* The Follow button (FollowToggle.ts), in Night's look. (On a narrow phone, Night and Follow show
+   their icons alone, round, so the bar's four fit.) */
+.site-links .follow-button { pointer-events: auto; display: inline-flex; align-items: center; gap: 5px; color: #d9efff; padding: 8px 11px 8px 9px; border: 1px solid #8edcff33; border-radius: 20px; background: #03111dcc; font: inherit; white-space: nowrap; cursor: pointer; touch-action: manipulation; }
+.site-links .follow-button svg { width: 13px; height: 13px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.site-links .follow-button[aria-pressed="true"] { color: white; border-color: #8edcff8c; background: #0a2440e6; box-shadow: 0 0 12px #8edcff33; }
+.site-links .follow-button[aria-pressed="true"] circle:last-of-type { fill: currentColor; }
+.site-links .follow-button:hover, .site-links .follow-button:focus-visible { color: white; outline: 2px solid #8edcff; }
+@media (max-width: 440px) {
+  .site-links .pill-text { display: none; }
+  .site-links .night-button, .site-links .follow-button { padding: 8px 10px; }
+}

@@ -1683,3 +1683,30 @@ night from its first frame (the studio behind the splash too).
   uniforms; a frame not fading, nothing.
 - Tests: `night.test.mjs` (5: the day's light is the literals, where studio_light reads them; the
   night's, and halfway the geometric mean; the fade; the drowsiness; what is kept, storage blocked).
+
+## Follow (src/app/follow.mjs, FollowToggle.ts)
+
+The betta page's **Follow** button (in the link bar, between Night and the resolution; on a phone
+narrower than 440 px Night and Follow show their icons alone) draws the camera in close on the fish
+and keeps it there; pressed again, or Escape, and the stage's camera takes the picture back over
+1.1 s. The camera never turns: it looks the way the page's camera always does (9 degrees down,
+towards -z: `GlobeController.CAMERA_VIEW`), so the studio stays put behind the bowl, and it moves
+across that view and in along it.
+- **Where the fish is seen.** Through the glass and the water the fish's image is bent well off where
+  it is towards the bowl's edge, so the eye is put where the fish is seen in the middle of the
+  picture: `eyeFor` bends the eye's line of sight as the shader does (pick.mjs's optics: into the
+  glass, out of it into the water or the air over it, down through the surface) and moves the eye
+  across the view by Newton's steps, each shortened until its line still reaches the water and
+  passes nearer. Along its own line of sight the eye may stand anywhere (the line is bent the same),
+  so it stands `followDistance` from the fish (the fish 0.4 of the picture's shorter side, times
+  the wheel's or a pinch's own: `GlobeController.followZoom`, 0.5-2.5) and steps back along that
+  line to keep 0.3 clear of the glass. Lines of sight all one way bend in towards the middle, so
+  a fish far out at the back corners lies on none: there the nearest line (up to a quarter of the
+  fish off the middle).
+- **Gliding.** The fish's middle is its 16 probes' mean (the worker's pose on a phone, so it is
+  what is drawn); the eye follows where `eyeFor` puts it on a critically damped spring (3 /s: a
+  steady glide, never past it), a frame behind (GlobeController places the camera at the start of
+  the next frame). `GlobeController.followShare` blends the stage's camera into it.
+- No pipeline, no WGSL: phones hold 60 fps in emulation following (the camera always moving, the
+  table's mirror is redrawn every frame and the lattice holds its phase, as while the bowl is
+  turned). Tests: `follow.test.mjs` (4).
