@@ -1392,8 +1392,10 @@ The betta bowl's page has a "Resolution" button in its link bar, beside "← Dem
 (the default) is all of the above: the sharpest picture that keeps 60 frames a second. A fixed size
 holds the picture at 1, 1.5 or 2 canvas pixels a CSS pixel, or the screen's own (a phone's 2.6 to
 3.5) however slowly frames then come: past the screen's own (a desktop's 1.5 and 2) it is drawn
-larger and shrunk to fit, supersampled. Held, a phone's other knobs are at their sharpest (the
-ladder's first level) and nothing is stepped; the GPU's times are still taken and let go. Auto again,
+larger and shrunk to fit, supersampled. Held, nothing is stepped: a phone's other knobs are at the
+ladder's second level, its sharpest but for the table's mirror redrawn every other frame while
+nothing moves (the same picture, a mirror's redraw saved every other still frame); the GPU's times
+are still taken and let go. Auto again,
 the controller (or the scaler) starts over from where it stood. The choice is kept on the device
 (`betta.resolution`: 'auto', 'screen' or a ratio offered on that screen; anything else is Auto).
 Phones still trace the bowl on the interleaved lattice at a fixed size: still, it comes to the full

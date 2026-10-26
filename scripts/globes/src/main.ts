@@ -726,8 +726,10 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     });
   }
   // The betta bowl's resolution (app/ResolutionMenu.ts, in the page's link bar): Auto, all of the
-  // above, or a ratio held however slowly frames come, a phone's other knobs at their sharpest and
-  // nothing stepped. Auto again, the controller or the scaler starts over from where it stood.
+  // above, or a ratio held however slowly frames come, nothing stepped: a phone's other knobs at the
+  // ladder's second level, its sharpest but for the table's mirror redrawn every other frame while
+  // nothing moves (the same picture: ladder.mjs). Auto again, the controller or the scaler starts
+  // over from where it stood.
   // (?bench's own ratios win while it runs.)
   const links = BETTA_PAGE ? document.querySelector<HTMLElement>('.site-links') : null;
   const resolution = links ? new ResolutionMenu(links, { screen: () => window.devicePixelRatio, stage: () => [stage.clientWidth, stage.clientHeight], ratioNow: () => renderer.getPixelRatio(), most: world.device.limits.maxTextureDimension2D }) : null;
@@ -737,7 +739,7 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     setFixedRatio(ratio);
     const now = performance.now();
     if (ratio !== null) {
-      if (levels) applyKnobs(levels[0]);
+      if (levels) applyKnobs(levels[Math.min(1, levels.length - 1)]);
     } else if (quality) {
       applyKnobs(quality.restart(now, null, { area: areaNow(), restArea: areaAtRest() }));
     } else if (adaptive) {
