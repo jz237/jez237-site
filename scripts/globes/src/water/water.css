@@ -78,7 +78,7 @@
   .water-more svg { transform: none; }
   .water-panel.is-open .water-more svg { transform: rotate(180deg); }
   .water-panel:not(.is-open) .water-news { min-height: 0; }
-  .water-panel:not(.is-open) .water-why:not(:empty) + .water-what { display: none; }
+  .water-panel:not(.is-open) .water-why:has(+ .water-what:not(:empty)) { display: none; }
   #stage.water-on .learn-card { top: 92px; bottom: auto; padding: 9px 12px 10px 13px; font-size: 11.5px; line-height: 1.35; }
   #stage.water-on .learn-card .learn-title { font-size: 13px; }
 }

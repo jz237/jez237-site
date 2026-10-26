@@ -77,7 +77,7 @@ test('water.fx: the bowl’s while on, clear (or ?water=’s) while off', () => 
   assert.equal(water.fx, care.bowl.fx);
   care.startOver('neglected');
   assert.equal(water.fx, care.bowl.fx, 'a fresh start’s');
-  assert.ok(water.fx.tint > 0.2 && care.bowl.readings().nitrate > 40);
+  assert.ok(water.fx.tint > 0.1 && care.bowl.readings().nitrate > 40);
   offFood(care.bowl);
   care.speed = 'fast';
   care.frame(1);

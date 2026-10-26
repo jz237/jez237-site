@@ -98,7 +98,7 @@ const KA1 = 10 ** -6.35;
  *  as weak acids worth this much buffer there (meq/L), and tint the water this tea-brown. */
 const TANNIN_DAYS = 4;
 const TANNIN_ACID = 0.08;
-const TANNIN_TINT = 0.3;
+const TANNIN_TINT = 0.15;
 /** Chlorine or chloramine: gone over about a day (per day, aerated, with organics to react with);
  *  it kills bacteria (per ppm per day), and chloramine's breakdown frees some of its ammonia (mg N
  *  per mg Cl2). */
@@ -113,6 +113,8 @@ const CHLORAMINE_N = 0.5 * (14 / 71);
  *  quickly once it is established (per day, new and mature). */
 const BLOOM = { growth: 6, ks: 0.3, loss: 0.7, yield: 0.6 };
 const BIOFILM_EATS = [0.4, 4];
+/** The few free bacteria every bowl has leave its water clear: the eye sees a bloom past this. */
+const BLOOM_SEEN = 0.06;
 
 // ---- Temperature ----------------------------------------------------------------------------------
 /** The room (°C): 70 °F on average, a little warmer by afternoon; the bowl follows it with this
@@ -685,7 +687,7 @@ export class BowlWater {
     fx.pale = show(SHOWS.pale);
     fx.appetite = 1 - 0.95 * show(SHOWS.appetite);
     fx.nest = s.nest;
-    fx.cloud = s.bloom;
+    fx.cloud = (s.bloom - BLOOM_SEEN) / (1 - BLOOM_SEEN);
     fx.tint = TANNIN_TINT * s.tannin;
     fx.heaterLamp = s.lamp;
     for (const k in fx) {

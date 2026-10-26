@@ -307,7 +307,8 @@ export class WaterPanel {
     }
     this.write(this.conditionEl, condition);
     // The news: a reading tapped, for a while; in danger, what to do; else what troubles the fish,
-    // and what is happening. (Folded on a phone, only the first shows.)
+    // and what is happening. (Folded on a phone, only the last shows: what is happening says what to
+    // do.)
     const about = performance.now() < this.aboutUntil;
     this.write(this.whyEl, about ? this.about : v.level >= 3 && v.cause ? DANGER[v.cause] : v.cause ? `${condition}: ${CAUSES[v.cause]}.` : '');
     this.write(this.whatEl, about || v.level >= 3 ? '' : v.news);
