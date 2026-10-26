@@ -41,5 +41,5 @@ test('main hangs smashed lamps on every offline car and swings them each frame o
   const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
   assert.ok(main.includes("lampDangles.set(car,new LampDangle(car.root,lamps,mesh=>fx.detach(mesh,car.velocity.clone().multiplyScalar(.65))));")&&main.includes('    if(car.extendedDamage){const lights=carLights.get(car)!,lamps='));
   assert.ok(main.includes("  if(state==='playing'||state==='wrecked'||state==='result'||state==='countdown')for(const c of cars){lampDangles.get(c)?.update(c.velocity,dt);"));
-  assert.ok(main.includes('  for (const c of cars){lampDangles.get(c)?.dispose();lampDangles.delete(c);towStraps.get(c)?.dispose();towStraps.delete(c);airbags.get(c)?.dispose();airbags.delete(c);carLights.get(c)?.dispose();'));
+  assert.ok(main.includes('  for (const c of cars){lampDangles.get(c)?.dispose();lampDangles.delete(c);towStraps.get(c)?.dispose();towStraps.delete(c);airbags.get(c)?.dispose();airbags.delete(c);strutPunches.get(c)?.dispose();strutPunches.delete(c);carLights.get(c)?.dispose();'));
 });
