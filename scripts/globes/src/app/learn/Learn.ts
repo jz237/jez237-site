@@ -203,7 +203,7 @@ export class Learn {
     if (this.on) this.show(NIGHT, true);
   }
 
-  /** With it on, the fish's card (its variety's), as a variety is chosen. */
+  /** With it on, the fish's card, its variety's: as the fish is tapped, or a variety chosen. */
   aboutFish(): void {
     if (this.on) this.show(FISH[this.host.variety()] ?? TOPICS.fish, true);
   }
