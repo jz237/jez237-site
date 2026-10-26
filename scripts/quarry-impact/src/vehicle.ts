@@ -1354,7 +1354,9 @@ export class Vehicle {
       // A knock past HUBCAP_POP sends the wheel's centre cap spinning off.
       const w=this.wheels[i];if(!w||worn[i]>=HUBCAP_POP||this.wreckParts.wheelDamage[i]<HUBCAP_POP)continue;
       w.traverse(o=>{if(!(o instanceof T.Mesh)||!o.visible||!HUBCAP.test(o.name))return;this.poppedCaps.push(o);
-        if(quiet)o.visible=false;else{const out=new T.Vector3(i%2?1:-1,.4,0).applyQuaternion(this.root.quaternion).multiplyScalar(3);this.fx.detach(o,this.velocity.clone().multiplyScalar(.8).add(out));}});
+        if(quiet)o.visible=false;else{const out=new T.Vector3(i%2?1:-1,.4,0).applyQuaternion(this.root.quaternion).multiplyScalar(3),fling=this.velocity.clone().multiplyScalar(.8).add(out);
+          // It rolls away on its rim where the game can roll it (offline), else tumbles off as debris.
+          if(this.fx.rollCap)this.fx.rollCap(o,new T.Vector3(1,0,0).transformDirection(w.matrixWorld),fling);else this.fx.detach(o,fling);}});
     }
     if(this.extendedDamage)for(let i=0;i<4;i++){const w=this.wheels[i];if(w&&!this.wreckParts.wheelLost[i]&&wheelTearsOff(worn[i],damage,this.wreckParts.wheelReach(i,contact)))this.tearOffWheel(i,direction.clone().multiplyScalar(1+fling.length()*.5),quiet);}
     if(structureBefore&&this.structuralDamage){

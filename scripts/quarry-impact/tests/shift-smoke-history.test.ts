@@ -1,6 +1,7 @@
+import {restoreRollingCapsBytes} from './rolling-caps-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readShiftSmokePrevious,restoreShiftSmokeBytes,verifyShiftSmokeRevision} from './shift-smoke-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreRollingCapsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('ShiftSmoke preserves every prior fixture, vehicle asset, venue art and history input',verifyShiftSmokeRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/shift-smoke/revision.json').toString());

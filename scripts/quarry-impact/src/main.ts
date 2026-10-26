@@ -123,6 +123,7 @@ import {GravelRoost,ROOST,roostRate,STONE_HIT,stoneHitVolume,type RoostBody} fro
 import {STRAP,TowStraps} from './tow-straps';
 import {rearOf,startingWake,wakeDustStep} from './wake-dust';
 import {SHIFT_SMOKE,shiftPuffs} from './shift-smoke';
+import {RollingCaps,fitHubcaps} from './rolling-caps';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -736,6 +737,8 @@ const heatHaze = new HeatHazePass(() => ao.enabled);
 const lensRainPass = new LensRainPass(), lensRain = new LensRain();
 // Stones flung off spinning tyres on loose ground (offline).
 const gravelRoost = new GravelRoost(scene, (x, z) => fx.groundHeight(x, z));
+// Knocked-off hubcaps roll away across the floor (offline), clanking as they land and lie down.
+const rollingCaps = new RollingCaps(scene, (x, z, near) => fx.floorAt(x, z, near), (at, loud) => sound.clip(`rattle-${Math.floor(Math.random() * 4)}`, at, .25 + .45 * loud, .26));
 // Bright lamps, fire and lightning glow (offline, not on the medium tier).
 const lampBloom = new UnrealBloomPass(new T.Vector2(innerWidth, innerHeight), BLOOM.strength, BLOOM.radius, BLOOM.threshold);
 let bloomOff = false;
@@ -970,7 +973,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   drivers.difficulty=attract?'amateur':aiDifficulty();pursuit=null;pursuitDriving.reset();combat.reset(true);derbyFeed.reset();waypointRace=!attract&&mode==='race'&&raceFormat()!=='laps'?new WaypointRace(raceFormat() as 'ordered'|'free'|'random',raceLaps(),clubRound()?.seed??activeChallenge?.seed??Math.floor(Math.random()*0xffffffff),targetVenue.course.checkpoints,targetVenue.course.waypointStations):null;
   sound.clearCars();
   vehicleFire?.reset();propFires.reset();
-  puddleSplashes?.reset();gravelRoost.reset();
+  puddleSplashes?.reset();gravelRoost.reset();rollingCaps.reset();
   for (const c of cars){lampDangles.get(c)?.dispose();lampDangles.delete(c);towStraps.get(c)?.dispose();towStraps.delete(c);carLights.get(c)?.dispose();carLights.delete(c);c.dispose();}
   clearMarshals();
   for(const f of bailed)disposeDriver(f);bailed.length=0;
@@ -1035,6 +1038,8 @@ function createCars(attract = false, previewSetup?:Setup) {
       lampDangles.set(car,new LampDangle(car.root,lamps,mesh=>fx.detach(mesh,car.velocity.clone().multiplyScalar(.65))));}
     // A bright tow strap hangs off each bumper and swings; a smashed or lost bumper takes its strap with it (offline).
     if(car.extendedDamage)towStraps.set(car,new TowStraps(car.root,car.panels,DEFINITIONS[type].halfLength,STRAP.colours[i%STRAP.colours.length],loop=>fx.detach(loop,car.velocity.clone().multiplyScalar(.6))));
+    // Classic cars on plain rims get chrome hubcaps, to be knocked off and roll away (offline).
+    if(car.extendedDamage)fitHubcaps(car.root,car.wheels);
     // Driving through its own dust plume coats the tail in dust; the rain rinses it off (offline).
     if(car.extendedDamage){const rear=rearOf(car.model,car.panels);if(rear!==null)car.surfaceFinish.placeWake(rear,startingWake(car.id));}
     // Broken glass and smashed lamps leave their pieces on the floor (offline).
@@ -2635,6 +2640,7 @@ function frame(now: number) {
   roostBodies.length=0;if(gravelRoost.flying)for(const c of cars){if(!c.extendedDamage)continue;let box=roostBoxes.get(c);
     if(!box){c.root.updateMatrixWorld(true);const inverse=c.root.matrixWorld.clone().invert(),b=new T.Box3(),all=new T.Box3();for(const p of c.panels)all.union(b.setFromObject(p).applyMatrix4(inverse));if(all.isEmpty())continue;box={centre:all.getCenter(new T.Vector3()),half:all.getSize(new T.Vector3()).multiplyScalar(.5)};roostBoxes.set(c,box);}
     roostBodies.push({id:c.id,centre:box.centre.clone().applyMatrix4(c.root.matrixWorld),quaternion:c.root.quaternion,half:box.half});}
+  rollingCaps.step(state==='paused'||state==='inspect'?0:dt);
   gravelRoost.step(dt,roostBodies,(at,speed,body,mud)=>{const v=mud?0:stoneHitVolume(speed);if(v<=0||Math.abs(clock-(pingClock.get(body.id)??-9))<STONE_HIT.gap)return;pingClock.set(body.id,clock);
     sound.clip(STONE_HIT.clips[pingTake++%STONE_HIT.clips.length],at,v,STONE_HIT.duration);stonePings++;});
   // The tail dusts over in the wake of the car's own dust plume and the rain rinses it (offline).
@@ -2866,6 +2872,7 @@ async function boot() {
   physics.timestep = 1 / 60;
   events = new R.EventQueue(true);
   fx = new Effects(scene, physics);
+  fx.rollCap = (cap, axle, velocity) => rollingCaps.launch(cap, axle, velocity);
   propFires.onIgnite=(i,p)=>{if(!studio&&!online?.active)recorder?.drip({time:elapsed,position:[p.x,p.y,p.z],kind:4,seed:i/1000});sound.groundIgnite(new T.Vector3(p.x,p.y,p.z),2);};
   fx.slicks.onIgnite=(x,y,z,kind,owner)=>{if(!studio&&!online?.active){recorder?.drip({time:elapsed,position:[x,y,z],kind:3,seed:fx.slicks.wet?.5:0});eventAwards.ignited(owner);}sound.groundIgnite(new T.Vector3(x,y,z),kind);};
   vehicleFire = new VehicleFire(scene,(p,n,type,force)=>fx.emit(p,n,type,force));
@@ -3042,6 +3049,7 @@ async function boot() {
     towStraps: (id = 0, damage?: number) => { const c = cars.find(x => x.id === id), s = c && towStraps.get(c); if (s && damage !== undefined) for (const x of s.straps) if (x.panel) x.panel.userData.damage = damage; return s ? { straps: s.straps.length, ends: s.straps.map(x => x.end), torn: s.torn, swings: s.swings, panels: s.straps.map(x => x.panel?.name ?? null) } : null; },
     fogLamp: (id = 0) => { const c = cars.find(x => x.id === id), l = c && carLights.get(c), m = l?.fogLamp; return l ? { fitted: !!m, lit: l.fogLit, visible: !!m?.visible, at: m ? m.position.toArray().map(v => +v.toFixed(3)) : null, glow: m ? (m.material as T.MeshStandardMaterial).emissiveIntensity : 0, driver: +(c!.root.getObjectByName('driver')?.position.x ?? 0).toFixed(2) } : null; },
     wakeDust: (id = 0, level?: number) => { const c = cars.find(x => x.id === id); if (!c) return null; if (level !== undefined) c.surfaceFinish.wakeLevel = level; const w = c.surfaceFinish.wake.value; return { placed: c.surfaceFinish.wakePlaced, level: +w.z.toFixed(4), rear: +w.x.toFixed(3) }; },
+    rollingCaps: () => ({ rolled: rollingCaps.rolled, moving: rollingCaps.moving, caps: rollingCaps.caps.map(c => ({ phase: c.phase, speed: +c.speed.toFixed(2), lean: +c.lean.toFixed(2), r: +c.radius.toFixed(3), at: c.p.toArray().map(v => +v.toFixed(2)) })) }),
     shiftSmoke: () => ({ puffs: shiftSmokes, gear: cars[0]?.gear ?? 0 }),
     roost: () => ({ pings: stonePings, thrown: gravelRoost.thrown, flying: gravelRoost.flying, spins: cars.map(c => c.wheelSpins.map(v => +v.toFixed(2))), surfaces: cars.map(c => c.surface), offline: cars.map(c => c.extendedDamage), wet: cars.map(c => c.wetWheels.filter(Boolean).length), speeds: cars.map(c => +c.speed.toFixed(2)) }),
     tyres: (id = 0, temp?: number) => { const c = cars.find((x) => x.id === id); if (!c) return null; if (temp !== undefined) c.tyreTemp.fill(temp); return { temp: c.tyreTemp.map((v) => +v.toFixed(3)), grip: c.tyreGrip.map((v) => +v.toFixed(3)) }; },

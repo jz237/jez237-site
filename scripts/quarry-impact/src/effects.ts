@@ -41,6 +41,8 @@ export class Effects {
   marks: T.InstancedMesh;
   markCursor = 0;
   readonly evidence:GroundEvidence;
+  /** Offline: sends a knocked-off hubcap rolling away instead of tumbling as debris (axle: its wheel's, in the world). */
+  rollCap?:(cap:T.Mesh,axle:T.Vector3,velocity:T.Vector3)=>unknown;
   readonly slicks:FluidSlicks;
   constructor(
     public scene: T.Scene,
