@@ -136,6 +136,7 @@ import {TOP_DUST,settleStep} from './settled-dust';
 import {FLAP,MudFlaps} from './mud-flaps';
 import {brakeDustStep,dirtyRims,startingBrakeDust} from './brake-dust';
 import {ROT,fitRust,rustFlakes,startingRust} from './age-rust';
+import {fitDonors,pickDonors} from './donor-panels';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -1076,6 +1077,8 @@ function createCars(attract = false, previewSetup?:Setup) {
     if(car.extendedDamage){const rear=rearOf(car.model,car.panels);if(rear!==null)car.surfaceFinish.placeWake(rear,startingWake(car.id));}
     // Old bangers rot along the sills and round the arches, each rival as far gone as its own; the player's car stays as painted (offline).
     if(car.extendedDamage&&type!=='buggy'){const fit=fitRust(car.model,car.panels,car.wheels,vehicleWheelRadius(type));if(fit)car.surfaceFinish.placeRust(fit,i===0?0:startingRust(car.id));}
+    // Old rivals have been patched up with panels off scrapyard donors, in primer or another car's colour (offline).
+    if(car.extendedDamage&&i!==0&&type!=='buggy'){const picked=pickDonors(car.wreckParts.assemblies.map(a=>a.name),car.id,startingRust(car.id),car.paintColor);if(fitDonors(car.wreckParts.assemblies,picked))donorPanels.set(car,picked.map(d=>d.name));}
     // Broken glass and smashed lamps leave their pieces on the floor (offline).
     if(car.extendedDamage){const glassSound=car.onGlassBreak,lights=carLights.get(car);let n=0;car.onGlassBreak=p=>{glassSound?.(p);fx.scatterLitter(p,'glass',car.id*131+(++n),car.current);};if(lights)lights.onSmash=(p,kind)=>fx.scatterLitter(p,kind,car.id*137+(++n),car.current);}
     // A big hit knocks flakes of the car's paint off, a blowout leaves lumps of tyre (offline).
@@ -2355,7 +2358,7 @@ const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMa
 function bodyBox(c:Vehicle){let box=roostBoxes.get(c);if(box)return box;c.root.updateMatrixWorld(true);const inverse=c.root.matrixWorld.clone().invert(),b=new T.Box3(),all=new T.Box3();for(const p of c.panels)all.union(b.setFromObject(p).applyMatrix4(inverse));if(all.isEmpty())return null;
   box={centre:all.getCenter(new T.Vector3()),half:all.getSize(new T.Vector3()).multiplyScalar(.5)};roostBoxes.set(c,box);return box;}
 let bodyDusts=0;const dustOut=new T.Vector3();
-const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>();let rustShowers=0;
+const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>();let rustShowers=0;
 const shiftGears=new WeakMap<object,number>(),shiftRevs=new WeakMap<object,number>();let shiftFlames=0,dustAir=0,knockDust=0;let shiftSmokes=0;const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3(),roostBoxes=new WeakMap<Vehicle,{centre:T.Vector3;half:T.Vector3}>(),roostBodies:RoostBody[]=[],pingClock=new Map<number,number>();let pingTake=0,stonePings=0;let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
 let wetReflections:ReturnType<typeof createWetReflections>|undefined;const glowList:Glow[]=[];
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
@@ -3119,6 +3122,7 @@ async function boot() {
     rollingCaps: () => ({ rolled: rollingCaps.rolled, moving: rollingCaps.moving, caps: rollingCaps.caps.map(c => ({ phase: c.phase, speed: +c.speed.toFixed(2), lean: +c.lean.toFixed(2), r: +c.radius.toFixed(3), at: c.p.toArray().map(v => +v.toFixed(2)) })) }),
     dustAir: () => +dustAir.toFixed(3),
     rust: (id = 0, age?: number) => { const c = cars.find(x => x.id === id); if (!c) return null; if (age !== undefined) c.surfaceFinish.rustAge = age; const r = c.surfaceFinish.rust.value, a = c.surfaceFinish.arches.value; return { showers: rustShowers, age: +r.x.toFixed(3), bottom: +r.y.toFixed(3), half: +r.z.toFixed(3), front: +a.x.toFixed(3), rear: +a.y.toFixed(3), hub: +a.z.toFixed(3), arches: [+r.w.toFixed(3), +a.w.toFixed(3)] }; },
+    donors: (id = 0) => { const c = cars.find(x => x.id === id); return c ? { panels: donorPanels.get(c) ?? [], assemblies: c.wreckParts.assemblies.map(a => a.name) } : null; },
     brakeDust: (id = 0, level?: number) => { const c = cars.find(x => x.id === id), d = c && rimDust.get(c); if (!d) return null; if (level !== undefined) d.value = level; return +d.value.toFixed(3); },
     mudFlaps: (id = 0) => { const c = cars.find(x => x.id === id), f = c && mudFlaps.get(c); return f ? { flaps: f.flaps.length, torn: f.torn, swings: f.swings, caught: f.caught } : null; },
     topDust: (level?: number) => { if (level !== undefined) TOP_DUST.value = level; return +TOP_DUST.value.toFixed(3); },
