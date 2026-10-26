@@ -142,6 +142,7 @@ import {WheelBlur} from './wheel-blur';
 import {BUMP,bumpStrike} from './bump-stops';
 import {applyScars,bodyPoints,planScars} from './battle-scars';
 import {RUBBER,markColour} from './tyre-marks';
+import {TRAMP,trampHop,trampKind,trampLevel} from './axle-tramp';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -2373,7 +2374,7 @@ const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMa
 function bodyBox(c:Vehicle){let box=roostBoxes.get(c);if(box)return box;c.root.updateMatrixWorld(true);const inverse=c.root.matrixWorld.clone().invert(),b=new T.Box3(),all=new T.Box3();for(const p of c.panels)all.union(b.setFromObject(p).applyMatrix4(inverse));if(all.isEmpty())return null;
   box={centre:all.getCenter(new T.Vector3()),half:all.getSize(new T.Vector3()).multiplyScalar(.5)};roostBoxes.set(c,box);return box;}
 let bodyDusts=0;const dustOut=new T.Vector3();
-const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>(),oilBurners=new WeakMap<object,Burner>(),wheelBlurs=new Map<Vehicle,WheelBlur>(),bumpState=new WeakMap<object,{len:number[];ground:boolean[];at:number[];count:number}>(),battleScars=new WeakMap<object,{scars:number;panels:number}>();let rustShowers=0,oilBurns=0,bumpStops=0,bumpTake=0;
+const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>(),oilBurners=new WeakMap<object,Burner>(),wheelBlurs=new Map<Vehicle,WheelBlur>(),bumpState=new WeakMap<object,{len:number[];ground:boolean[];at:number[];count:number}>(),battleScars=new WeakMap<object,{scars:number;panels:number}>(),trampState=new WeakMap<object,{phase:number;hops:number;lift:number}>(),trampAt=new T.Vector3(),trampB=new T.Vector3();let trampHops=0;let rustShowers=0,oilBurns=0,bumpStops=0,bumpTake=0;
 const shiftGears=new WeakMap<object,number>(),shiftRevs=new WeakMap<object,number>();let shiftFlames=0,dustAir=0,knockDust=0;let shiftSmokes=0;const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3(),roostBoxes=new WeakMap<Vehicle,{centre:T.Vector3;half:T.Vector3}>(),roostBodies:RoostBody[]=[],pingClock=new Map<number,number>();let pingTake=0,stonePings=0;let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
 let wetReflections:ReturnType<typeof createWetReflections>|undefined;const glowList:Glow[]=[];
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
@@ -2431,6 +2432,14 @@ function updateCamera(dt: number) {
     for(const g of c.glass){const st=(g.material as T.Material).userData.glassState as GlassState|undefined;if(st)st.smoke.value=now;}}
   // Braking cakes the rims in brake dust; a downpour slowly rinses it (offline).
   if(state==='playing')for(const c of cars){const d=rimDust.get(c);if(d)d.value=brakeDustStep(d.value,dt,c.input?.brake??0,c.speed,eventLighting==='rain'?shower:0);}
+  // A classic's live rear axle hops when it is launched hard at the edge of grip: axle tramp (offline).
+  if(state==='playing')for(const c of cars){if(!c.extendedDamage||c.health<=0||!trampKind(c.kind,isClassicKind(c.kind),c.drivenWheels))continue;
+    let t=trampState.get(c);if(!t){t={phase:0,hops:0,lift:0};trampState.set(c,t);}const level=trampLevel((c.wheelSpins[2]+c.wheelSpins[3])/2,c.speed,c.input.throttle,c.surfaceFinish.rustAge);
+    const w2=c.wheels[2],w3=c.wheels[3];if(level<=0||!w2||!w3||c.wreckParts.wheelLost[2]||c.wreckParts.wheelLost[3]){t.phase=0;t.lift=0;continue;}
+    const before=t.phase;t.phase+=dt*TRAMP.hz*Math.PI*2;if(Math.floor(t.phase/(Math.PI*2))>Math.floor(before/(Math.PI*2))){t.hops++;trampHops++;}
+    w2.getWorldPosition(trampAt);w3.getWorldPosition(trampB);trampAt.add(trampB).multiplyScalar(.5);
+    c.body.applyImpulseAtPoint({x:0,y:Math.sin(t.phase)*level*TRAMP.kick*c.body.mass()*9.81*dt,z:0},{x:trampAt.x,y:trampAt.y,z:trampAt.z},true);
+    t.lift=trampHop(t.phase,level);}
   // A corner slammed through its travel crashes onto its bump stop with a clunk; an old banger's worn bushes knock (offline).
   if(state==='playing')for(const c of cars){if(!c.extendedDamage||c.health<=0)continue;let b=bumpState.get(c);if(!b){b={len:[NaN,NaN,NaN,NaN],ground:[false,false,false,false],at:[-9,-9,-9,-9],count:0};bumpState.set(c,b);}
     for(let i=0;i<4;i++){if(c.wreckParts.wheelLost[i])continue;const now=c.controller.wheelSuspensionLength(i)??NaN,grounded=!!c.controller.wheelIsInContact(i),floor=(c.controller.wheelSuspensionRestLength(i)??NaN)-(c.controller.wheelMaxSuspensionTravel(i)??NaN);
@@ -2772,6 +2781,8 @@ function frame(now: number) {
     }
     });
     for (const c of cars) c.render(state === 'wrecked' ? 1 : accumulator / (1 / 60));
+    // A tramping axle hops: its rear wheels lift clear of the ground with each beat (after the wheels are placed).
+    for (const c of cars){const t=trampState.get(c);if(!t?.lift)continue;for(const i of [2,3]){const w=c.wheels[i];if(w)w.position.y+=t.lift;}}
     if(bumperTethers.length)drawTetherWires();
   }
   if (state === 'wrecked') {
@@ -3148,6 +3159,8 @@ async function boot() {
     rollingCaps: () => ({ rolled: rollingCaps.rolled, moving: rollingCaps.moving, caps: rollingCaps.caps.map(c => ({ phase: c.phase, speed: +c.speed.toFixed(2), lean: +c.lean.toFixed(2), r: +c.radius.toFixed(3), at: c.p.toArray().map(v => +v.toFixed(2)) })) }),
     dustAir: () => +dustAir.toFixed(3),
     rust: (id = 0, age?: number) => { const c = cars.find(x => x.id === id); if (!c) return null; if (age !== undefined) c.surfaceFinish.rustAge = age; const r = c.surfaceFinish.rust.value, a = c.surfaceFinish.arches.value; const e = new T.Euler().setFromQuaternion(c.root.quaternion, 'YXZ'), head = carLights.get(c)?.lamp('head', 0)?.material as T.MeshStandardMaterial | undefined; return { lens: head ? [head.color.getHexString(), +head.emissiveIntensity.toFixed(2)] : null, showers: rustShowers, lean: [+T.MathUtils.radToDeg(e.x).toFixed(2), +T.MathUtils.radToDeg(e.z).toFixed(2)], sag: Array.from(c.sagBias, v => +v.toFixed(3)), dampers: Array.from(c.damperBias, v => +v.toFixed(3)), age: +r.x.toFixed(3), bottom: +r.y.toFixed(3), half: +r.z.toFixed(3), front: +a.x.toFixed(3), rear: +a.y.toFixed(3), hub: +a.z.toFixed(3), arches: [+r.w.toFixed(3), +a.w.toFixed(3)] }; },
+    tramp: (id?: number) => { if (id === undefined) return trampHops; const c = cars.find(x => x.id === id); return c ? trampState.get(c)?.hops ?? 0 : null; },
+    trampLift: (id = 0) => { const c = cars.find(x => x.id === id); return c ? +(trampState.get(c)?.lift ?? 0).toFixed(4) : null; },
     tyreMarks: () => tyreMarks,
     markCar: (id: number, local: number[], dir: number[], times = 1) => { const c = cars[id]; if (!c) return false; c.root.updateMatrixWorld(true); const p = new T.Vector3().fromArray(local).applyMatrix4(c.root.matrixWorld), d = new T.Vector3().fromArray(dir).applyQuaternion(c.root.quaternion).normalize(); for (let k = 0; k < times; k++) c.scar(p, d, RUBBER); return true; },
     scars: (id = 0) => { const c = cars.find(x => x.id === id); return c ? battleScars.get(c) ?? { scars: 0, panels: 0 } : null; },
