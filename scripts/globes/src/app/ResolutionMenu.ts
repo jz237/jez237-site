@@ -1,7 +1,9 @@
 // The betta bowl's resolution menu (resolution.mjs): a button in the page's link bar, "Resolution:
-// Auto", and above it a short list to choose from - Auto, the sharpest picture that keeps 60 frames
-// a second, or a size held however slowly frames then come - remembered on this device.
+// Auto", and above it a short list to choose from - Auto, the sharpest picture that keeps frames
+// coming 35 a second or more (TARGET_FPS), or a size held however slowly frames then come -
+// remembered on this device.
 
+import { TARGET_FPS } from './quality/controller.mjs';
 import { choiceFor, describeRatio, fixedRatios, ownRatio, parseChoice, ratioOf, STORAGE_KEY } from './resolution.mjs';
 
 export type ResolutionChoice = 'auto' | 'screen' | number;
@@ -51,7 +53,7 @@ export class ResolutionMenu {
     menu.setAttribute('role', 'dialog');
     menu.setAttribute('aria-label', 'Resolution');
     menu.hidden = true;
-    menu.innerHTML = '<p class="res-head">Resolution</p><div class="res-list" role="radiogroup" aria-label="Resolution"></div><p class="res-note">Auto keeps 60 frames a second. A fixed size stays sharp however slowly frames come.</p>';
+    menu.innerHTML = `<p class="res-head">Resolution</p><div class="res-list" role="radiogroup" aria-label="Resolution"></div><p class="res-note">Auto keeps ${TARGET_FPS} frames a second or more. A fixed size stays sharp however slowly frames come.</p>`;
     this.list = menu.querySelector('.res-list')!;
     document.body.append(menu);
     // (Put away by a press anywhere else, or Escape.)
@@ -104,7 +106,7 @@ export class ResolutionMenu {
       return label;
     };
     const now = describeRatio(Math.round(h.ratioNow() * 100) / 100, w, hgt, h.most);
-    const options = [option('auto', 'Auto', this.choice === 'auto' ? `Now ${now.ratio}, ${now.size}` : 'Sharpest at 60 fps', this.choice === 'auto')];
+    const options = [option('auto', 'Auto', this.choice === 'auto' ? `Now ${now.ratio}, ${now.size}` : `Sharpest at ${TARGET_FPS}+ fps`, this.choice === 'auto')];
     for (const r of fixedRatios(screen)) {
       const d = describeRatio(r, w, hgt, h.most);
       const what = r === own ? ' · the screen’s own' : r > own ? ' · supersampled' : '';
