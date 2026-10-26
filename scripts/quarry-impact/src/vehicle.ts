@@ -16,6 +16,12 @@ import {tyreFailure,vehicleFlatTyreRadius} from './tyre-condition';
 import {vehicleSuspensionRestLength,vehicleSuspensionTravel} from './vehicle-physics';
 import {isClassicKind,classicWheelHalfTrack,vehicleWheelRadius,isRearEngineKind,isFrontDriveKind} from './classic-vehicle-specs';
 import {createVehiclePhysics,stepVehiclePhysics,rotateVehicleVector} from './vehicle-physics';
+import {aquaGrip,waterDrag} from './aquaplaning';
+import {glassRim} from './glass-rim';
+import {brakeWork} from './brake-heat';
+import {TYRE_HEAT,tyreHeatStep,tyreHeatGrip} from './tyre-heat';
+import {currentWetness} from './driving-surface';
+import {treadAquaGrip,wetTreadGrip} from './bald-tyres';
 import {LiveryPaint} from './livery-paint';
 import type {VisualEvent} from './replay-data';
 import {ImpactResponse} from './impact-response';
@@ -35,18 +41,26 @@ import { repairCoupePanel } from './coupe-realism';
 import { dentGeometry,crushGeometry,refreshWreckNormals,type CrushFrame, repairWreckGeometry } from './wreck-geometry';
 import { WreckFinish } from './wreck-finish';
 import { WreckAttachments } from './wreck-attachments';
+import {ROT,brakePull,caliperGrip,hangerDown,rotFactor,rottenHanger,tiredCorner,tiredDamper,tiredSag,wornEngine} from './age-rust';
+import {torqueSteer} from './torque-steer';
 import {bodyworkDentDamage} from './bodywork-response';
 import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
 import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
-import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy,EXHAUST_BLOW,exhaustBlow,liftPops,DIFF,diffDamage,diffAxle,wearDiff,diffDrive,DEBEAD,beadStress,tieRodSnapped,flopToe,GEAR_POP,gearPop,CALIPER,caliperDrag,discHeat,discGlow,discFade,MOUNTS,mountsBroken,shuntThrottle,BRAKE_FIRE,brakeFireClock,STARTER,starterDamage,starterFails,frameBend,dazeFor,dazedSteer,weakSpot,PUNCTURE,punctures,RADIATOR,LEAK} from './damage-handling';
+import {tethers,tetherKind,tetherMount,TETHER_CHANCE} from './bumper-lock';
+import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy,EXHAUST_BLOW,exhaustBlow,liftPops,DIFF,diffDamage,diffAxle,wearDiff,diffDrive,DEBEAD,beadStress,tieRodSnapped,flopToe,GEAR_POP,gearPop,CALIPER,caliperDrag,discHeat,discGlow,discFade,MOUNTS,mountsBroken,shuntThrottle,BRAKE_FIRE,brakeFireClock,STARTER,starterDamage,starterFails,BUMP_START,bumpRoll,bumpCatches,BATTERY_OUT,batteryThrown,frameBend,dazeFor,dazedSteer,weakSpot,PUNCTURE,punctures,RADIATOR,LEAK} from './damage-handling';
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
-import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed,SUMP,crackSump,sumpLeak,drainSump} from './oil-starvation';
+import {drainOil,starvationWear,seizes,ROD,rodStress,rodAtSeize,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed,SUMP,crackSump,sumpLeak,drainSump} from './oil-starvation';
 import {MAX_ENGINE_RESTART,crankRequested} from './engine-stall';
-import {rollBarSnaps,rollTorque,hasPropshaft,propBend,propVibration,fatigueProp,BEARING,bearingCracks,wearBearing,bearingShimmy,bearingDrag,steerSkew,openness,openDrag,debrisFling,beltSlip,beltSnaps,beltSqueal,beltHeat,drainBattery,batteryCut,RADIATOR as RADIATOR_COOLING,runningHot,hotClock,overheatFire} from './damage-handling';
+import {disposeDriver,disposeWindowNet} from './driver-figure';
+import {disposeRollCage} from './roll-cage';
+import {disposeDerbyFlag} from './derby-flag';
+import {disposeRoofSign} from './roof-sign';
+import {BOOM} from './blow-up';
+import {HEAD_GASKET,gasketClock,RUB_FIRE,rubHeat,EXTINGUISHER,EXHAUST_CRUSH,exhaustCrushes,wheelRips,WHEEL_RIP,CABLE,HANDBRAKE_CABLE,ENGINE_DROP,SMASH_FIRE,rollBarSnaps,rollTorque,hasPropshaft,propBend,propVibration,fatigueProp,BEARING,bearingCracks,wearBearing,bearingShimmy,bearingDrag,steerSkew,openness,openDrag,debrisFling,smashFire,impactZoneFactor,pitStrength,pitGrip,PIT,EXPOSED_WHEEL,exposedDamage,BUMPER_GONE,COVER_GONE,engineDrops,ROOF_SLIDE,SIDE_SLIDE,ROLL_SHED,roofSlide,TANK_DROP,tankDrops,pushBurn,cableSnaps,cableThrottle,handbrakeSnaps,beltSlip,beltSnaps,beltSqueal,beltHeat,drainBattery,batteryCut,RADIATOR as RADIATOR_COOLING,runningHot,hotClock,overheatFire} from './damage-handling';
 import {SHED,assemblyMass,glassMass,shedMassProperties,type ShedPart} from './shed-weight';
-import {DOOR_SWING,stepDoor,doorDrag,doorUnlatched,doorBase,lidKind,lidBase,stepLid,CARGO,cargoSpills,type LidKind} from './door-swing';
+import {DOOR_SWING,DOOR_CATCH,ROLL_POP,rollPops,doorTip,barnDoorTip,stepDoor,doorDrag,doorUnlatched,doorBase,lidKind,lidBase,stepLid,CARGO,cargoSpills,type LidKind} from './door-swing';
 /** Rear compression past which the exhaust hangs down and drags. */
 export const EXHAUST_DROP=.2;
 /** A dragged exhaust tears off after EXHAUST_OFF.after seconds of scraping and is left on the track: the car runs open-pipe. */
@@ -71,6 +85,16 @@ export const RADIATOR_BURST={steam:18,splash:5} as const;
 export const INVERTED={after:1,stall:1.5,drip:.35} as const;
 /** A burning car cooks itself: glass damage per second at full heat (side windows burst at 24) and tyre damage per second. */
 export const COOK={glass:2.2,tyre:.02} as const;
+/** Fire spread (offline): a car left burning (heat over 0.3) for FIRE_SPREAD.tyres seconds sets the tyres at its engine end
+ * alight; the clock starts again once the fire is out. */
+export const FIRE_SPREAD={tyres:8} as const;
+/** Wreck burst (offline): a car wrecked by a hit at WRECK_BURST.closing or more sheds up to WRECK_BURST.max of the parts already
+ * hanging loose (WRECK_BURST.loose or more), thrown along the blow at WRECK_BURST.kick and up at WRECK_BURST.lift, with sparks
+ * and smoke. */
+export const WRECK_BURST={closing:12,loose:.25,max:4,kick:5,lift:3} as const;
+/** Crash totals (offline): contacts landing on one zone inside CRASH.window seconds are one crash for the heavy-hit failures. */
+export const CRASH={window:.25} as const;
+const CRASH_ZONES=['front','rear','left','right','roof'] as const;
 /** Roof compression at which the glass starts to craze, and at which side windows burst. */
 export const ROOF_GLASS={craze:.4,burst:.6} as const;
 /** Panels hanging at least this loose build wind load above this speed (m/s) until they tear away. */
@@ -83,12 +107,16 @@ export const HARD_LANDING={speed:7,gain:2.2,gap:.5} as const;
 const PROP_FLAIL=2.5;
 /** Offline part release: assembly thresholds scale and the smallest blow that can release a part. */
 export const DETACH={threshold:.27,blow:4} as const;
+/** Bolt-on front wings (offline): torn off once crushed past `threshold` (before DETACH scaling), more than a bumper takes. */
+export const WING_OFF={threshold:48} as const;
 /** Wheel centre caps pop off the first time a wheel's damage passes this level (offline). */
 export const HUBCAP_POP=.3;
 /** Wheel meshes are merged by material at load: caps live in the chrome / trim pieces. */
 const HUBCAP=/brushed chrome|wheel trim|hub ?cap|centre ?cap|domed ?cap/i;
 import {VehicleSurface} from './vehicle-surface';
 import { normalizeSetup, setupPhysics, stockSetup, type Setup } from './garage';
+import {EngineShake,NO_SHAKE,plantedWheelY} from './engine-shake';
+import {cornerLean,leanLift} from './bent-corners';
 export type VehicleGround = {height:(x:number,z:number)=>number;surface:(x:number,z:number)=>DrivingSurface};
 export type Input = {
   throttle: number;
@@ -103,9 +131,13 @@ export class Vehicle {
   remoteWheelAngles?:number[];
   remoteContactPoints?:(T.Vector3|null)[];
   readonly wheelSlips=[0,0,0,0];
+  /** Signed wheelspin at each grounded tyre (m/s): + the tread runs forward over the ground faster than the car moves. */
+  readonly wheelSpins=[0,0,0,0];
   wheelAngle(index:number){return this.remoteWheelAngles?.[index]??this.drivetrain?.wheels[index]?.angle??this.controller.wheelRotation(index)??0;}
   private drawBatch?:VehicleDrawBatch;
-  syncDrawBatch(){this.drawBatch??=new VehicleDrawBatch(this.root);this.drawBatch.sync();}
+  // Batched from the model, not the root: the engine shakes the model every frame, which must move the batch as a whole
+  // rather than re-transform every panel's vertices into it.
+  syncDrawBatch(){this.drawBatch??=new VehicleDrawBatch(this.model);this.drawBatch.sync();}
   get drawBatchStats(){return{batches:this.drawBatch?.batches.length??0,panels:this.drawBatch?.batches.reduce((n,b)=>n+b.parts.length,0)??0};}
   readonly suspension?:BuggySuspension;
   syncSuspension(){this.suspension?.update();}
@@ -132,7 +164,7 @@ export class Vehicle {
   readonly paintColor:T.Color;
   readonly livery:LiveryPaint;
   readonly surfaceFinish:VehicleSurface;
-  private wetWheels=[false,false,false,false];
+  readonly wetWheels=[false,false,false,false];
   private groundedWheels=[false,false,false,false];
   scraping=0;
   wheels: T.Object3D[] = [];
@@ -191,6 +223,8 @@ export class Vehicle {
   /** Clutch torque capacity left (offline events): a crushed engine end and slipping under load wear it down. */
   clutchGrip = 1;
   private clutchBurn = 0;
+  /** Seconds spent pushing a pinned car at full throttle (offline QA counter). */
+  clutchStrain = 0;
   private clutchSmokeClock = 0;
   clutchSmoke = 0;
   /** Steering free play (offline events) and the wheel angle the slack is wandering by this step. */
@@ -202,6 +236,37 @@ export class Vehicle {
   /** How hard each crushed wheel arch rubs its tyre (offline events), and rubber smoke puffed (QA). */
   readonly rubDrag = new Float32Array(4);
   rubSmoke = 0;
+  /** Rub fire (offline events): heat per tyre from rubbing at speed, and tyres it has set alight. */
+  readonly rubHeat = new Float32Array(4);
+  rubFires = 0;
+  /** Fire extinguisher (offline events): charges left, fires put out with it, and a douse waiting for the fire update
+   * (it stays set until that update takes it, however many physics steps come first). */
+  extinguishers:number = EXTINGUISHER.charges;
+  extinguished = 0;
+  extinguishRequest = false;
+  /** The car itself is burning (set by the fire update). */
+  onFire = false;
+  /** Wreck bursts so far (QA). */
+  wreckBursts = 0;
+  /** Wheels torn clean off by a hit (QA; also counted in wheelsShed). */
+  wheelsRipped = 0;
+  /** The crash landing on each zone this instant (CRASH.window) and when it last landed (front, rear, left, right, roof). */
+  private readonly zoneBlow=[0,0,0,0,0];
+  private readonly zoneBlowAt=[-1e9,-1e9,-1e9,-1e9,-1e9];
+  /** The blow landing near each wheel this instant (WHEEL_RIP.window), when it last landed, and whether its chance was rolled. */
+  private readonly wheelBlow=[0,0,0,0];
+  private readonly wheelBlowAt=[-1e9,-1e9,-1e9,-1e9];
+  private readonly wheelBlowRolled=[0,0,0,0];
+  /** Blown up by its own fuel tank (offline events). */
+  blownUp = false;
+  /** Seconds burning since the fire last went out, and tyres the fire has spread to (offline events). */
+  burnTime = 0;
+  fireSpreads = 0;
+  /** Crushed tailpipe (offline events): back pressure, black smoke and a choked note until the pipe is torn off. */
+  exhaustCrushed = false;
+  private crushPuff = 0;
+  /** Seconds a car has been sitting on top of this one (set each step by the event; offline). */
+  underWeight = 0;
   /** Wiring fault severity (offline events), whether the ignition is cut right now, and cuts so far (QA). */
   electricalFault = 0;
   electricalCut = false;
@@ -235,6 +300,9 @@ export class Vehicle {
   private discSmokeClock = 0;
   /** Broken engine mounts (offline events): the lagging throttle the drive gets, the last pedal, jolts so far (QA). */
   mountsBroken = false;
+  /** The running engine shaking the body on its mounts (render only, offline), and the model's resting height. */
+  readonly engineShake = new EngineShake();
+  private modelY = 0;
   private shunt = 0;
   private lastPedal = 0;
   private lastJolt = -1;
@@ -256,12 +324,23 @@ export class Vehicle {
   /** Seconds the dropped exhaust has dragged, and whether it has torn off (offline events). */
   exhaustDragTime = 0;
   exhaustGone = false;
+  /** The throttle cable has parted: the engine only sees CABLE.limp of the pedal (offline). */
+  throttleCable=false;
+  /** The handbrake cables have parted: the handbrake does nothing (offline). */
+  handbrakeCable=false;
+  /** The fuel tank has dropped on its filler neck and drags (offline), seconds dragged, torn off, and its hanging mesh. */
+  tankDown=false;
+  tankDragTime=0;
+  tankGone=false;
+  private tankMesh:T.Group|null=null;
   /** Kilograms of doors, lids, bumpers, wheels and glass the car has shed (SHED); the body is lighter by this much. */
   shedKg = 0;
   /** Fan belt (BELT): slip 0–1 while whole, snapped, the squeal it makes now, and the battery charge (1 full … 0 flat). */
   beltSlip=0;beltSnapped=false;squeal=0;battery=1;
   /** Seconds the engine has been held hot with no cooling (OVERHEAT_FIRE), and engine fires it has started. */
   hotTime=0;engineFires=0;
+  /** Hits counted for SMASH_FIRE's per-hit odds, and engine bays lit by a smash. */
+  bigHits=0;smashFires=0;
   private hotFired=false;
   /** How open the car is to the wind (AERO): 0 sealed … 1 windscreen, glass, doors and bonnet gone. */
   openness = 0;
@@ -276,6 +355,15 @@ export class Vehicle {
   starterDamage = 0;
   private crankAttempt = 0;
   starterFails = 0;
+  /** Bump start (offline events): seconds stalled, seconds rolled fast with the throttle held, and catches so far (QA). */
+  stallTime = 0;
+  bumpRolled = 0;
+  bumpStarts = 0;
+  /** The battery was thrown out of the bay (offline events): no starter and no lights. */
+  batteryOut = false;
+  /** Thrown rod (offline events): stress built revving an oil-starved, battered engine, and whether a rod went through the block. */
+  rodStress = 0;
+  rodThrown = false;
   /** Toe the bent frame knocks the wheels to (offline events; fronts +, rears −). */
   frameBend = 0;
   /** Seconds this car has been unable to drive itself (offline events; main eliminates it at DNF.after). */
@@ -313,11 +401,48 @@ export class Vehicle {
   onGearClunk?:(out:boolean)=>void;
   /** The loose engine clunked against its broken mounts. */
   onMountClunk?:()=>void;
-  onBreak?:(what:'spring'|'shaft'|'diff'|'tierod'|'exhaust'|'brakefire'|'radiator'|'rollbar'|'propshaft'|'bearing'|'belt'|'enginefire',wheel:number)=>void;
+  /** A shove or a roll turned the stalled engine over and it caught. */
+  onBumpStart?:()=>void;
+  onBreak?:(what:'spring'|'shaft'|'diff'|'tierod'|'exhaust'|'brakefire'|'radiator'|'rollbar'|'propshaft'|'bearing'|'belt'|'enginefire'|'smashfire'|'tank'|'tankoff'|'cable'|'handbrake'|'battery'|'rod'|'rubfire'|'tyrefire'|'exhaustcrush'|'gasket',wheel:number)=>void;
   /** Gears left after gearbox damage (offline only; 5 = intact). */
   gearLimit = 5;
   /** Grip left under each tyre from oil or coolant on the ground (offline only). */
   readonly slickGrip = [1,1,1,1];
+  /** Offline: how deep in standing water a tyre at a point is (0–1), and each tyre's grip kept and drag from it. */
+  waterAt?:(x:number,y:number,z:number)=>number;
+  readonly waterGrip=[1,1,1,1];readonly waterDrag=[0,0,0,0];
+  /** Offline: each tyre's temperature (0 cold – 1 overcooked) and the grip it leaves (tyre-heat). */
+  readonly tyreTemp:number[]=[TYRE_HEAT.start,TYRE_HEAT.start,TYRE_HEAT.start,TYRE_HEAT.start];readonly tyreGrip=[1,1,1,1];
+  /** Tread left on each tyre (1 new; offline rivals' worn tyres, bald-tyres.ts): bald ones lose grip in the wet. */
+  readonly tread=[1,1,1,1];
+  /** How far the rear tyres are sliding after a PIT shove (0..1, fading); they grip less while it lasts (offline). */
+  rearSlide=0;
+  pitSpins=0;
+  /** The engine block has dropped out of the car (offline). */
+  engineOut=false;
+  /** Seconds spent sliding on the roof and on a side, and the spark clock while doing it (offline). */
+  roofSlideTime=0;
+  sideSlideTime=0;
+  /** Loose parts shaken off by rolling over, and whether this roll has already shed them (offline). */
+  rollShed=0;
+  private rollShedDone=false;
+  /** Times this car has rolled onto its roof (offline). */
+  rolls=0;
+  /** Doors and lids sprung open by rolling over (offline QA counter), and the dice counter for them. */
+  rollPops=0;
+  /** Doors chained shut (offline derby prep): they stay shut until the chain snaps. */
+  readonly chainedDoors=new Set<string>();
+  private popRolls=0;
+  /** Seconds held pinned against a wall or a second car, the crush tick clock, and pins suffered (offline). */
+  pinTime=0;
+  pinTick=0;
+  pins=0;
+  private roofSparkClock=0;
+  /** Front wings torn off (offline QA counter), and which front corners (left, right) have lost theirs. */
+  wingsTorn=0;
+  readonly wingGone=[false,false];
+  /** Spare wheels thrown out of a sprung boot (offline QA counter). */
+  spareWheels=0;
   /** How oily each tyre is after rolling through a slick; it lays dark tread marks until it wears off. */
   readonly oily = [0,0,0,0];
   private dripClock = [0,0,0];
@@ -337,6 +462,9 @@ export class Vehicle {
   private invertedDrip = 0;
   /** Coolant left (offline): a leaking radiator drains it and the engine overheats. */
   coolantLevel = 1;
+  /** Head gasket (HEAD_GASKET): the clock run hot with nothing cooling the engine, blown, and white smoke puffs so far (QA). */
+  gasketClock=0;gasketBlown=false;gasketSmoke=0;
+  private gasketSmokeClock=0;
   /** Fuel left in the tank (offline events): a split tank drains it; low it coughs, empty the engine dies. */
   fuelLevel: number = FUEL_TANK.start;
   private fuelClock = 0;
@@ -352,11 +480,13 @@ export class Vehicle {
     for(const glass of this.glass){
       if(!glass.visible)continue;const before=glass.userData.damage||0;if(before>=target)continue;
       glass.userData.damage=target;const state=(glass.material as T.Material).userData.glassState as GlassState|undefined;if(state)state.damage.value=Math.min(1,target/24);
-      if(!/Windshield|Rearwindow/.test(glass.name)&&before<=24&&target>24){glass.visible=false;const c=new T.Box3().setFromObject(glass).getCenter(new T.Vector3());this.fx.emit(c,12,3,1.2);this.onGlassBreak?.(c);}
+      if(!/Windshield|Rearwindow/.test(glass.name)&&before<=24&&target>24){glass.visible=false;this.leaveGlassRim(glass);const c=new T.Box3().setFromObject(glass).getCenter(new T.Vector3());this.fx.emit(c,12,3,1.2);this.onGlassBreak?.(c);}
     }
   }
   /** Called when heat shatters a window (sound hook). */
   onGlassBreak?:(p:T.Vector3)=>void;
+  /** A damaging hit at point (world), for the paint it knocks off (offline). */
+  onPaintChips?:(p:T.Vector3,damage:number)=>void;
   /** The car's own fire (offline): heat crazes the glass until side windows burst and the screens hang crazed,
    * and cooks the tyres at the burning end. engineRear picks which axle sits over the fire. */
   cook(heat:number,dt:number,engineRear:boolean){
@@ -367,10 +497,13 @@ export class Vehicle {
       const state=(glass.material as T.Material).userData.glassState as GlassState|undefined;
       if(state){state.damage.value=Math.min(1,after/24);if(before===0)state.impact.value.set(0,0,0);}
       if(!/Windshield|Rearwindow/.test(glass.name)&&before<=24&&after>24){
-        glass.visible=false;const c=new T.Box3().setFromObject(glass).getCenter(new T.Vector3());this.fx.emit(c,12,3,1.2);this.onGlassBreak?.(c);
+        glass.visible=false;this.leaveGlassRim(glass);const c=new T.Box3().setFromObject(glass).getCenter(new T.Vector3());this.fx.emit(c,12,3,1.2);this.onGlassBreak?.(c);
       }
     }
     if(this.tyreDamage)for(const i of engineRear?[2,3]:[0,1])if(!this.wreckParts.wheelLost[i])this.tyreDamage[i]=Math.min(1,this.tyreDamage[i]+heat*dt*COOK.tyre);
+    // Left burning, the fire reaches the tyres at the engine end: they catch like a brake fire.
+    this.burnTime+=dt;
+    if(this.burnTime>=FIRE_SPREAD.tyres&&this.health>0)for(const i of engineRear?[2,3]:[0,1])if(!this.tyreAlight[i]&&!this.wreckParts.wheelLost[i]){this.tyreAlight[i]=1;this.fireSpreads++;this.onBreak?.('tyrefire',i);}
   }
   /** A part torn off while the car is burning hard keeps burning on the ground for 14–24 s. */
   private burnDebris(){if(this.extendedDamage&&this.fireHeat>.4)this.fx.igniteLastDebris?.(14+((this.id*.37+this.rips*.13)%1)*10);}
@@ -393,6 +526,9 @@ export class Vehicle {
   onDrip?:(x:number,y:number,z:number,kind:0|1|2,seed:number)=>void;
   onBackfire?:(point:T.Vector3)=>void;
   onWheelLost?:(wheel:number)=>void;
+  /** A torn-off bumper left hanging on its wire (offline): told the debris body and the body-local point it hangs from. */
+  onTether?:(part:string,debris:R.RigidBody,anchor:{x:number;y:number;z:number})=>void;
+  private tetherRolls=0;
   private windLoad=new Map<string,number>();
   private readonly tyreBurst=[false,false,false,false];
   /** Tyres whose blowout has already snatched the car (offline only). */
@@ -410,6 +546,8 @@ export class Vehicle {
   private readonly crushPending=new Set<T.Mesh>();
   private lastLanding=-10;private readonly wasGrounded=[true,true,true,true];
   /** Live counts for diagnostics. */
+  /** A knock landed (offline): its damage, for the dust it shakes off. */
+  onHardKnock?:(damage:number)=>void;
   rips=0;backfires=0;
   damageRight = 0;
   readonly damageZones={front:0,rear:0,left:0,right:0,roof:0};
@@ -461,6 +599,7 @@ export class Vehicle {
     this.model = cloneCar(kind, color, this.setup.armor);
     this.paintColor=new T.Color(color);
     this.root.add(this.model);
+    this.modelY=this.model.position.y;
     scene.add(this.root);
     const physical=createVehiclePhysics(R,world,kind,def.mass,this.setup.armor);
     this.structure=physical.structure;this.body=physical.body;this.collider=physical.collider;this.roof=physical.roof;this.controller=physical.controller;
@@ -504,7 +643,7 @@ export class Vehicle {
     this.currentQ.copy(q);
     this.root.position.copy(p);
     this.root.quaternion.copy(q);
-    this.wheelSlips.fill(0);this.drivetrain?.reset();
+    this.wheelSlips.fill(0);this.wheelSpins.fill(0);this.drivetrain?.reset();
     if(this.drivetrain){this.transmission=undefined;this.gear=1;this.rpm=this.engineStall!>0||this.health<=0?0:850;this.speed=0;this.slip=0;}
     this.rollTime = 0;
     this.stuck = 0;
@@ -519,12 +658,12 @@ export class Vehicle {
     this.surfaceFinish.reset();
     this.impactResponse.reset();
     this.impactEffects = {glass:false,debris:false};
-    this.wheelSlips.fill(0);
+    this.wheelSlips.fill(0);this.wheelSpins.fill(0);
     this.health = 100;
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.steerLink.fill(1);this.linkClock=0;this.popUntil=0;this.popSlot=-1;this.gearPops=0;this.inNeutral=false;this.brakeDrag.fill(0);this.discHeat.fill(0);this.discSmokeClock=0;this.mountsBroken=false;this.shunt=0;this.lastPedal=0;this.lastJolt=-1;this.mountJolts=0;this.rawInput=null;this.ownInput=null;this.cargoLeft=-1;this.cargoClock=0;this.cargoSpilled=0;this.sumpCrack=0;this.brakeFire.fill(0);this.tyreAlight.fill(0);this.rubberDrop=0;this.brakeFires=0;this.exhaustDragTime=0;this.exhaustGone=false;this.shedClock=SHED.every;this.rollBar.fill(1);this.beltSlip=this.squeal=0;this.beltSnapped=false;this.battery=1;this.hotTime=0;this.engineFires=0;this.hotFired=false;this.bearingWear.fill(0);this.hubDrag.fill(0);this.propBend=this.propWear=this.propVibration=this.propFlail=0;this.propSnapped=false;this.starterDamage=0;this.crankAttempt=0;this.starterFails=0;this.frameBend=0;this.deadTime=0;this.dazed=0;this.dazeSteer=0;this.glassPops=0;this.platesLost=0;this.debrisRolls=0;this.debrisPunctures=0;this.radiatorBursts=0;this.punctureClock.fill(0);for(const g of this.discGlows)if(g)g.visible=false;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.engineShake.reset();this.gasketClock=this.gasketSmoke=this.gasketSmokeClock=0;this.gasketBlown=false;this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchStrain=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.steerLink.fill(1);this.linkClock=0;this.popUntil=0;this.popSlot=-1;this.gearPops=0;this.inNeutral=false;this.brakeDrag.fill(0);this.discHeat.fill(0);this.discSmokeClock=0;this.mountsBroken=false;this.shunt=0;this.lastPedal=0;this.lastJolt=-1;this.mountJolts=0;this.rawInput=null;this.ownInput=null;this.cargoLeft=-1;this.cargoClock=0;this.cargoSpilled=0;this.sumpCrack=0;this.brakeFire.fill(0);this.tyreAlight.fill(0);this.rubberDrop=0;this.brakeFires=0;this.exhaustDragTime=0;this.exhaustGone=false;this.tankDown=this.tankGone=false;this.tankDragTime=0;this.disposeTank();this.throttleCable=this.handbrakeCable=false;this.shedClock=SHED.every;this.rollBar.fill(1);this.beltSlip=this.squeal=0;this.beltSnapped=false;this.battery=1;this.hotTime=0;this.engineFires=0;this.hotFired=false;this.bigHits=0;this.smashFires=0;this.bearingWear.fill(0);this.hubDrag.fill(0);this.propBend=this.propWear=this.propVibration=this.propFlail=0;this.propSnapped=false;this.starterDamage=0;this.crankAttempt=0;this.starterFails=0;this.stallTime=this.bumpRolled=this.bumpStarts=0;this.batteryOut=false;this.rodStress=0;this.rodThrown=false;this.rubHeat.fill(0);this.rubFires=0;this.extinguishers=EXTINGUISHER.charges;this.extinguished=0;this.extinguishRequest=false;this.onFire=false;this.burnTime=0;this.fireSpreads=0;this.wreckBursts=0;this.wheelsRipped=0;this.wheelBlow.fill(0);this.wheelBlowAt.fill(-1e9);this.wheelBlowRolled.fill(0);this.zoneBlow.fill(0);this.zoneBlowAt.fill(-1e9);this.blownUp=false;this.exhaustCrushed=false;this.crushPuff=0;this.underWeight=0;this.frameBend=0;this.deadTime=0;this.dazed=0;this.dazeSteer=0;this.glassPops=0;this.platesLost=0;this.debrisRolls=0;this.debrisPunctures=0;this.radiatorBursts=0;this.punctureClock.fill(0);for(const g of this.discGlows)if(g)g.visible=false;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.rearSlide=0;this.pitSpins=0;this.wingsTorn=0;this.wingGone.fill(false);this.engineOut=false;this.roofSlideTime=0;this.sideSlideTime=0;this.roofSparkClock=0;this.rollShed=0;this.rollShedDone=false;this.rolls=0;this.rollPops=this.popRolls=0;this.pinTime=this.pinTick=this.pins=this.tetherRolls=0;this.spareWheels=0;this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -566,13 +705,14 @@ export class Vehicle {
       (p.material as T.MeshStandardMaterial).vertexColors = false;
       (p.material as T.Material).needsUpdate = true;
     }
+    this.clearGlassRims();
     for (const g of this.glass) {
       repairWreckGeometry(g);
       g.visible = true;
       g.userData.damage = 0;
       (g.material as T.MeshStandardMaterial).opacity = isClassicKind(this.kind) ? .55 : this.kind === 'coupe' ? .24 : .28;
       const state = (g.material as T.Material).userData.glassState as GlassState | undefined;
-      if (state) state.damage.value = 0;
+      if (state) { state.damage.value = 0; state.reach.value = 1; }
     }
   }
   /** Leaks drip onto the ground under the radiator (coolant) and the engine (oil); every tyre reads
@@ -582,9 +722,16 @@ export class Vehicle {
     let contacts=0,groundSum=0;
     for(let i=0;i<4;i++){
       const point=this.wreckParts.wheelLost[i]?null:this.controller.wheelContactPoint(i);
-      if(!point||!this.controller.wheelIsInContact(i)){this.slickGrip[i]=1;continue;}
+      if(!point||!this.controller.wheelIsInContact(i)){this.slickGrip[i]=1;this.waterGrip[i]=1;this.waterDrag[i]=0;continue;}
       contacts++;groundSum+=point.y;
-      const grip=slicks?slicks.gripAt(point.x,point.z):1;this.slickGrip[i]=grip;
+      const grip=slicks?slicks.gripAt(point.x,point.z):1;this.slickGrip[i]=i>1&&this.rearSlide>0?grip*pitGrip(this.rearSlide):grip;
+      // Through standing water at speed the tyre rides up on it, and the water drags at it (offline).
+      const water=this.extendedDamage&&this.waterAt?this.waterAt(point.x,point.y,point.z):0;this.waterGrip[i]=aquaGrip(water,this.speed);this.waterDrag[i]=waterDrag(water,this.speed);
+      // A bald tyre cannot clear the water: it rides up sooner and deeper (offline rivals' worn tyres; full tread as before).
+      if(this.tread[i]<1)this.waterGrip[i]=treadAquaGrip(water,this.speed,this.tread[i]);
+      // Tyres warm as they roll and slide, and cool toward the air: cold or overcooked, they grip less (offline).
+      if(this.extendedDamage){this.tyreTemp[i]=tyreHeatStep(this.tyreTemp[i],this.speed,this.wheelSlips[i],currentWetness()>.5,dt);this.tyreGrip[i]=tyreHeatGrip(this.tyreTemp[i]);}
+      if(this.extendedDamage&&this.tread[i]<1)this.tyreGrip[i]*=wetTreadGrip(this.tread[i],currentWetness());
       // Rolling over broken-off debris can puncture this tyre.
       this.punctureClock[i]=Math.max(0,this.punctureClock[i]-dt);
       if(this.punctureClock[i]<=0&&Math.abs(this.speed)>PUNCTURE.speed&&this.tyreDamage&&this.tyreDamage[i]<LEAK.onset&&this.fx.sharpDebrisNear?.(point.x,point.z,PUNCTURE.reach)){
@@ -624,18 +771,34 @@ export class Vehicle {
       if(this.invertedDrip>=INVERTED.drip){this.invertedDrip=0;this.dripSeed=(Math.imul(this.dripSeed,1664525)+1013904223)>>>0;const r=this.dripSeed/4294967296,kind=(r<.6?2:0) as 0|2;
         const x=this.previous.x+(r-.5)*.8,z=this.previous.z+(r*7%1-.5)*1.4,y=this.ground.height(x,z);slicks?.drip(x,y,z,kind,r);this.drips[kind]++;this.onDrip?.(x,y,z,kind,r);}
     }else this.invertedDrip=0;
+    // Rolling over shakes off whatever was already hanging loose.
+    if(this.inverted>=ROLL_SHED.at&&!this.rollShedDone){this.rollShedDone=true;this.rolls++;for(const a of this.wreckParts.assemblies)if(a.loose>=ROLL_SHED.loose&&a.members.some(m=>m.mesh.visible)&&this.ripAssembly(a.name))this.rollShed++;
+      // The twisted shell springs latches: doors and lids still shut can pop open and swing.
+      for(const a of this.wreckParts.assemblies){if(!(a.name.startsWith('door')||lidKind(a.name))||!a.members.some(m=>m.mesh.visible)||doorUnlatched(a.loose,a.damage)||!rollPops(this.id*31+this.popRolls++))continue;
+        a.damage=Math.max(a.damage,DOOR_SWING.latchDamage);a.swingRate=(a.swingRate??0)+ROLL_POP.kick;this.rollPops++;}}
+    else if(this.inverted===0)this.rollShedDone=false;
+    // Sliding on its roof or a side: sparks and the scrape off the bodywork, gouges in the ground, that face crushing in.
+    const onSide=this.inverted===0&&Math.abs(up)<SIDE_SLIDE.up;
+    if(this.inverted>0||onSide){const v=this.body.linvel(),slide=Math.hypot(v.x,v.z),s=roofSlide(slide);
+      const face=onSide?(new T.Vector3(1,0,0).applyQuaternion(this.previousQ).y<0?3:2):4;
+      if(s>0){if(onSide)this.sideSlideTime+=dt;else this.roofSlideTime+=dt;this.scraping=Math.max(this.scraping,s*.8);if(this.structuralDamage)this.structuralDamage[face]=Math.min(1,(this.structuralDamage[face]??0)+ROOF_SLIDE.crush*s*dt);
+        this.roofSparkClock+=dt;if(this.roofSparkClock>=ROOF_SLIDE.gap){this.roofSparkClock=0;const p=this.previous.clone();p.y=this.ground.height(p.x,p.z)+.05;
+          this.fx.emit(p,Math.ceil(s*3),1,.9);this.fx.evidence?.add(p,Math.atan2(v.x,v.z),slide*.06,s*.6,2);}}}
     // Short of fuel the pickup sucks air when it sloshes; dry, the engine dies and will not restart.
     this.fuelClock+=dt;
     if(this.health>0){const feed=fuelFeed(this.fuelLevel,this.slip,this.input.brake,this.fuelClock);
       if(feed<=0)this.engineStall=Math.max(this.engineStall??0,MAX_ENGINE_RESTART);else this.misfireFactor*=feed;}
     if(!contacts)return;
     const rearEngine=isRearEngineKind(this.kind),tank=(rearEngine?this.structuralDamage?.[0]:this.structuralDamage?.[1])??0;
-    const rates=leakRates(this.structuralDamage?.[0]??0,this.engineDamage??0,tank);if(this.sumpCrack>0)rates.oil=Math.max(rates.oil,sumpLeak(this.sumpCrack));if(this.fuelLevel<=FUEL_TANK.empty)rates.fuel=0;this.fuelLeak=rates.fuel;this.fuelLevel=drainFuel(this.fuelLevel,rates.fuel,dt);
+    const rates=leakRates(this.structuralDamage?.[0]??0,this.engineDamage??0,tank);if(this.sumpCrack>0)rates.oil=Math.max(rates.oil,sumpLeak(this.sumpCrack));if(this.tankDown)rates.fuel=Math.max(rates.fuel,TANK_DROP.leak);if(this.fuelLevel<=FUEL_TANK.empty)rates.fuel=0;this.fuelLeak=rates.fuel;this.fuelLevel=drainFuel(this.fuelLevel,rates.fuel,dt);
     // The oil that drips out is oil the engine no longer has: low on oil it knocks and wears, dry it seizes.
     this.oilLevel=drainSump(drainOil(this.oilLevel,rates.oil,dt),this.sumpCrack,dt);this.coolantLevel=drainCoolant(this.coolantLevel,rates.coolant,dt);
     if(!this.seized&&this.health>0&&!(this.engineStall!>0)&&this.engineDamage!==undefined){
       this.engineDamage=Math.min(1,this.engineDamage+starvationWear(this.oilLevel,this.input.throttle,dt)+overheatWear(this.coolantLevel,this.input.throttle,dt));
-      if(seizes(this.oilLevel,this.engineDamage)){
+      // Revving a dry, battered engine: hold it long enough and a rod goes through the block.
+      this.rodStress=rodStress(this.rodStress,this.oilLevel,this.engineDamage,this.rpm,this.input.throttle,dt);
+      if(this.rodStress>=ROD.after||seizes(this.oilLevel,this.engineDamage)&&rodAtSeize(this.rpm,this.input.throttle))this.throwRod();
+      else if(seizes(this.oilLevel,this.engineDamage)){
         this.seized=true;this.engineStall=MAX_ENGINE_RESTART;this.rpm=0;
         // The driven wheels lock for a moment: the car lurches as the engine stops dead.
         const k=-Math.sign(this.speed)*this.specification.mass*Math.min(20,Math.abs(this.speed))*OIL.jolt;
@@ -657,6 +820,12 @@ export class Vehicle {
       if(this.oilSmokeClock>=1){this.oilSmokeClock-=1;this.oilSmoke++;
         const p=new T.Vector3(0,.32,-half).applyQuaternion(this.previousQ).add(this.previous);this.fx.emit(p,1,2,.4);}
     }else this.oilSmokeClock=Math.min(this.oilSmokeClock,.5);
+    // A blown head gasket burns coolant: thick white smoke out of the exhaust, heavier on the throttle.
+    if(this.gasketBlown&&this.health>0&&!(this.engineStall!>0)){
+      this.gasketSmokeClock+=dt*HEAD_GASKET.smoke*(1/3+2/3*throttle);
+      if(this.gasketSmokeClock>=1){this.gasketSmokeClock-=1;this.gasketSmoke++;
+        const p=new T.Vector3(0,.32,-half).applyQuaternion(this.previousQ).add(this.previous);this.fx.emit(p,2,5,.45);}
+    }
     for(const kind of [0,1,2] as const){
       const interval=dripInterval(kind===0?rates.oil:kind===1?rates.coolant:rates.fuel);if(!Number.isFinite(interval)){this.dripClock[kind]=0;continue;}
       // A split tank pours: on the move it lays a trail of touching drops, so fire can run along it.
@@ -695,20 +864,37 @@ export class Vehicle {
       const cooling=!(this.beltSnapped||this.coolantLevel<.3||(this.structuralDamage?.[0]??0)>=RADIATOR_COOLING.onset);
       this.hotTime=hotClock(this.hotTime,running&&runningHot(this.engineDamage,cooling,this.input.throttle),dt);
       if(!this.hotFired&&this.health>0&&overheatFire(this.hotTime,this.id)){this.hotFired=true;this.engineFires++;this.igniteRequest=true;this.onSetAlight?.(this.id);this.onBreak?.('enginefire',0);}
+      // Run hard with nothing cooling it, the head gasket goes; blown, it burns the coolant away.
+      this.gasketClock=gasketClock(this.gasketClock,running&&!cooling&&Math.abs(this.input.throttle)>=HEAD_GASKET.throttle,dt);
+      if(!this.gasketBlown&&this.health>0&&this.gasketClock>=HEAD_GASKET.after){this.gasketBlown=true;this.onBreak?.('gasket',0);}
+      if(this.gasketBlown&&running)this.coolantLevel=Math.max(0,this.coolantLevel-HEAD_GASKET.burn*dt);
     }else this.hotTime=0;
-    this.misfireFactor=running?this.engineMisfire.update(dt,this.engineDamage??0,this.input.throttle):1;
+    // An old banger's tired engine stumbles under load as a damaged one would (offline, by its age).
+    this.misfireFactor=running?this.engineMisfire.update(dt,Math.max(this.engineDamage??0,wornEngine(this.surfaceFinish.rustAge)),this.input.throttle):1;
+    if(this.gasketBlown&&running)this.misfireFactor*=HEAD_GASKET.power;
     // A damaged starter cranks slowly and sometimes fails to catch: the engine coughs and it has to go again.
     this.starterDamage=this.extendedDamage?starterDamage((isRearEngineKind(this.kind)?this.structuralDamage?.[1]:this.structuralDamage?.[0])??0):0;
-    if(this.starterDamage>0&&!this.seized&&this.fuelLevel>FUEL_TANK.empty&&crankRequested(this.health,this.engineStall,this.input.throttle)){
+    // No battery, no starter: holding the throttle cranks nothing (the physics step's restart is given straight back).
+    if(this.batteryOut&&crankRequested(this.health,this.engineStall,this.input.throttle))this.engineStall=Math.min(MAX_ENGINE_RESTART,this.engineStall!+dt);
+    else if(this.starterDamage>0&&!this.seized&&this.fuelLevel>FUEL_TANK.empty&&crankRequested(this.health,this.engineStall,this.input.throttle)){
       this.engineStall=Math.min(MAX_ENGINE_RESTART,this.engineStall!+dt*STARTER.slow*this.starterDamage);
       if(this.engineStall!<=dt*1.05){this.crankAttempt++;
         if(starterFails(this.starterDamage,this.crankAttempt,this.id)){this.engineStall=Math.min(MAX_ENGINE_RESTART,STARTER.retry);this.starterFails++;
           const exhaust=new T.Vector3(0,.32,-DEFINITIONS[this.kind].halfLength).applyQuaternion(this.previousQ).add(this.previous);this.fx.emit(exhaust,1,2,.4);this.onBackfire?.(exhaust);}}
     }
+    // Rolling fast enough in gear turns a dead engine over: a shove from a rival or a slope bump-starts it, starter or not.
+    if(this.extendedDamage&&this.health>0&&this.engineStall!>0&&!this.seized&&!this.engineOut&&this.fuelLevel>FUEL_TANK.empty&&this.inverted===0){
+      this.stallTime+=dt;this.bumpRolled=bumpRoll(this.bumpRolled,this.speed,this.input.throttle,dt);
+      if(bumpCatches(this.stallTime,this.bumpRolled)){this.engineStall=0;this.bumpStarts++;this.stallTime=this.bumpRolled=0;
+        const exhaust=new T.Vector3(0,.32,-DEFINITIONS[this.kind].halfLength).applyQuaternion(this.previousQ).add(this.previous);this.fx.emit(exhaust,3,2,.7);this.onBackfire?.(exhaust);
+        const k=-Math.sign(this.speed)*this.specification.mass*Math.min(10,Math.abs(this.speed))*BUMP_START.jolt;this.body.applyImpulse({x:this.forward.x*k,y:0,z:this.forward.z*k},true);this.onBumpStart?.();}
+    }else{this.stallTime=0;this.bumpRolled=0;}
     // A chafed loom cuts the ignition in bursts: the engine dies for a moment and the lights go with it.
     this.electricClock+=dt;this.electricalFault=this.extendedDamage?electricalFault((isRearEngineKind(this.kind)?this.structuralDamage?.[1]:this.structuralDamage?.[0])??0):0;
     const cut=this.health>0&&electricalCut(this.electricalFault,this.electricClock,this.id);if(cut&&!this.electricalCut)this.electricalCuts++;this.electricalCut=cut;
     if(cut&&running)this.misfireFactor=0;
+    // A crushed tailpipe chokes the engine: back pressure takes some of its pull until the pipe is torn off.
+    if(this.exhaustCrushed&&!this.exhaustGone&&running)this.misfireFactor*=EXHAUST_CRUSH.power;
     if(this.beltSnapped&&running&&batteryCut(this.battery,this.electricClock,this.id))this.misfireFactor=0;
     // A cracked diff grinds itself up under load; when it lets go the gears jam for an instant and the car lurches.
     if(this.extendedDamage){const before=this.diffWear;this.diffWear=wearDiff(this.diffWear,diffDamage(this.structuralDamage,this.driveLayout()),running?this.input.throttle:0,dt);
@@ -766,12 +952,15 @@ export class Vehicle {
     if(this.frameBend!==0)for(let i=0;i<4;i++)if(!this.wreckParts.wheelLost[i])this.wheelShimmy[i]+=i<2?this.frameBend:-this.frameBend;
     // Crushed arches rub the tyres: drag on that corner, the tyre scrubbing down, rubber smoke and a squeal.
     let rubbing=0;
-    for(let i=0;i<4;i++){const r=this.extendedDamage&&!this.wreckParts.wheelLost[i]?tyreRub(this.structuralDamage,i):0;this.rubDrag[i]=r;
-      if(r>0&&this.tyreDamage)this.tyreDamage[i]=Math.min(1,this.tyreDamage[i]+rubWear(r,this.speed,dt));if(r>rubbing)rubbing=r;}
+    for(let i=0;i<4;i++){const r=this.extendedDamage&&!this.wreckParts.wheelLost[i]&&!(i<2&&this.wingGone[i])?tyreRub(this.structuralDamage,i):0;this.rubDrag[i]=r;
+      if(r>0&&this.tyreDamage)this.tyreDamage[i]=Math.min(1,this.tyreDamage[i]+rubWear(r,this.speed,dt));if(r>rubbing)rubbing=r;
+      // Rubbing hard at speed heats the tyre until it catches, like a brake fire.
+      this.rubHeat[i]=this.extendedDamage?rubHeat(this.rubHeat[i],r,this.speed,dt):0;
+      if(this.rubHeat[i]>=RUB_FIRE.after&&!this.tyreAlight[i]&&this.health>0){this.tyreAlight[i]=1;this.rubFires++;this.igniteRequest=true;this.onSetAlight?.(this.id);this.onBreak?.('rubfire',i);}}
     if(rubbing>.15&&Math.abs(this.speed)>3&&this.health>0){
       this.rubClock+=dt*rubbing*Math.min(1,Math.abs(this.speed)/12)*6;
       if(this.rubClock>=1){this.rubClock-=1;this.rubSmoke++;const i=this.rubDrag.indexOf(rubbing),half=DEFINITIONS[this.kind];
-        const p=new T.Vector3((i%2?1:-1)*half.halfWidth*.85,.35,(i<2?1:-1)*half.wheelbase/2).applyQuaternion(this.previousQ).add(this.previous);this.fx.emit(p,1,2,.35);}
+        const p=new T.Vector3((i%2?1:-1)*half.halfWidth*.85,.35,(i<2?1:-1)*half.wheelbase/2).applyQuaternion(this.previousQ).add(this.previous);this.fx.emit(p,this.rubHeat[i]>=RUB_FIRE.warn?3:1,2,this.rubHeat[i]>=RUB_FIRE.warn?.6:.35);}
     }else this.rubClock=0;
     // A slipping clutch burns: more slip, less grip, and a wisp of acrid smoke from the bellhousing.
     this.clutchGrip=this.extendedDamage?clutchGrip((isRearEngineKind(this.kind)?this.structuralDamage?.[1]:this.structuralDamage?.[0])??0,this.clutchBurn):1;
@@ -797,7 +986,15 @@ export class Vehicle {
         const k=this.specification.mass*MOUNTS.jolt*step;this.body.applyTorqueImpulse({x:this.forward.x*k,y:this.forward.y*k,z:this.forward.z*k},true);this.onMountClunk?.();}
       this.shunt=shuntThrottle(this.shunt,pedal,dt);throttle=this.shunt;}
     else{this.shunt=raw.throttle;this.lastPedal=raw.throttle;}
-    if(steer!==raw.steer||throttle!==raw.throttle){this.ownInput={...raw,steer,throttle};this.input=this.ownInput;}else this.input=raw;
+    // A parted throttle cable: the engine only sees part of the pedal.
+    if(this.throttleCable)throttle=cableThrottle(throttle);
+    // Parted handbrake cables: the lever does nothing.
+    const handbrake=this.handbrakeCable?false:raw.handbrake;
+    // A front-driver tugs to its own side under hard throttle at low speed: torque steer (offline).
+    if(this.extendedDamage&&isFrontDriveKind(this.kind)&&this.health>0&&!(this.engineStall!>0)&&this.gear>0)steer=torqueSteer(steer,throttle,this.speed,this.id);
+    // An old banger's half-seized caliper tugs the wheel under braking (offline, by its age).
+    if(this.extendedDamage)steer=brakePull(steer,raw.brake,this.speed,this.surfaceFinish.rustAge,this.id);
+    if(steer!==raw.steer||throttle!==raw.throttle||handbrake!==raw.handbrake){this.ownInput={...raw,steer,throttle,handbrake};this.input=this.ownInput;}else this.input=raw;
     if(this.extendedDamage)this.brakeFluid=leakBrakeFluid(this.brakeFluid,this.structuralDamage?.[0]??0,dt);
     this.wreckParts.flipHood=this.extendedDamage;
     this.gearLimit=this.extendedDamage?gearLimit(this.structuralDamage,isFrontDriveKind(this.kind)?'front':(this.kind==='coupe'||isClassicKind(this.kind)&&this.kind!=='trail')?'rear':'all'):5;
@@ -811,9 +1008,13 @@ export class Vehicle {
     if(wasNeutral!==this.inNeutral)this.onGearClunk?.(this.inNeutral);
     for(let i=0;i<4;i++){this.brakeBias[i]=this.extendedDamage?brakeFactor(this.wreckParts.wheelDamage[i]):1;this.damperBias[i]=this.extendedDamage?damperFactor(this.wreckParts.wheelDamage[i]):1;
       if(this.extendedDamage)this.brakeBias[i]*=brakeFluidFactor(this.brakeFluid);
+      // An old banger's half-seized front caliper grips less: it pulls under braking (offline, by its age).
+      if(this.extendedDamage)this.brakeBias[i]*=caliperGrip(this.surfaceFinish.rustAge,this.id,i);
       const d=this.extendedDamage?this.wreckParts.wheelDamage[i]:0,spring=springBias(d),drive=driveBias(d);
       if(spring<this.springBias[i])this.onBreak?.('spring',i);if(drive<this.driveBias[i])this.onBreak?.('shaft',i);
-      this.springBias[i]=spring;this.sagBias[i]=sagBias(d);this.driveBias[i]=drive;}
+      this.springBias[i]=spring;this.sagBias[i]=sagBias(d);this.driveBias[i]=drive;
+      // An old banger's tired dampers wallow and its one sagged spring sits it down on that corner (offline, by its age).
+      if(this.extendedDamage&&this.surfaceFinish.rustAge>0){const age=this.surfaceFinish.rustAge;this.damperBias[i]*=tiredDamper(age);this.sagBias[i]*=tiredSag(age,tiredCorner(this.id),i);}}
     if(this.extendedDamage&&this.diffWear>0){const front=diffAxle(this.structuralDamage,this.driveLayout())==='front',f=diffDrive(this.diffWear);for(const i of front?[0,1]:[2,3])this.driveBias[i]*=f;}
     if(this.propSnapped)this.driveBias[2]=this.driveBias[3]=0;
     // A bent caliper drags its brake: the disc heats, glows, smokes, fades that brake and cooks the tyre.
@@ -821,6 +1022,8 @@ export class Vehicle {
     for(let i=0;i<4;i++){
       const drag=this.extendedDamage&&!this.wreckParts.wheelLost[i]?caliperDrag(this.wreckParts.wheelDamage[i]):0;this.brakeDrag[i]=drag;
       this.discHeat[i]=this.extendedDamage?discHeat(this.discHeat[i],Math.max(drag,Math.min(1,this.hubDrag[i])),this.speed,dt):0;
+      // Braking itself heats the discs: hard stop after hard stop and they glow and fade.
+      if(this.extendedDamage&&!this.wreckParts.wheelLost[i])this.discHeat[i]=brakeWork(this.discHeat[i],this.input.brake,this.input.handbrake,this.speed,i<2,dt);
       if(this.discHeat[i]>.6)this.brakeBias[i]*=discFade(this.discHeat[i]);
       if(this.tyreDamage&&this.discHeat[i]>.7)this.tyreDamage[i]=Math.min(1,this.tyreDamage[i]+CALIPER.tyre*(this.discHeat[i]-.7)*dt);
       if(hottest<0||this.discHeat[i]>this.discHeat[hottest])hottest=i;
@@ -836,7 +1039,7 @@ export class Vehicle {
     if(hottest>=0&&this.discHeat[hottest]>CALIPER.smoke){this.discSmokeClock+=dt*4*this.discHeat[hottest];
       if(this.discSmokeClock>=1){this.discSmokeClock-=1;const w=this.wheels[hottest];if(w)this.fx.emit(w.getWorldPosition(new T.Vector3()),1,2,.3);}}
     else this.discSmokeClock=0;
-    if(this.extendedDamage)this.fluids(dt);
+    if(this.extendedDamage){this.fluids(dt);if(this.rearSlide>0)this.rearSlide=Math.max(0,this.rearSlide-dt/PIT.fade);if(!this.onFire)this.burnTime=0;}
     // A seized engine never turns again: the starter can crank, but it will not catch.
     if(this.seized)this.engineStall=MAX_ENGINE_RESTART;
     if(this.extendedDamage&&this.tyreDamage)for(let i=0;i<4;i++)if(!this.wreckParts.wheelLost[i])this.tyreDamage[i]=leakTyre(bentRimTyre(this.tyreDamage[i],this.wreckParts.wheelDamage[i]),this.speed,dt);
@@ -889,6 +1092,7 @@ export class Vehicle {
       const result=this.drivetrain.step(this.specification,this,dt,undefined,{wheelDamage:this.wreckParts.wheelDamage,wheelShift:this.wreckParts.wheelShift,engineDamage:this.engineDamage,tyreDamage:this.tyreDamage,wheelLost:this.wreckParts.wheelLost});
       // Only grounded tire slip creates skid audio, marks and surface effects.
       this.wheelSlips.splice(0,4,...result.contactSlips);this.slip=Math.max(this.slip,...this.wheelSlips);
+      for(let i=0;i<4;i++)this.wheelSpins[i]=result.contactSlips[i]>0?result.slips[i]:0;
     }else{stepVehiclePhysics(this.body,this.controller,this.kind,this.specification,this,dt,this.wreckParts.wheelDamage,this.wreckParts.wheelShift,this.engineDamage,this.tyreDamage,false,this.wreckParts.wheelLost);this.wheelSlips.fill(this.slip);}
   }
   postStep(dt: number, time: number) {
@@ -908,6 +1112,7 @@ export class Vehicle {
     }
     this.surfaceFinish.advance(dt,this.speed,this.surface!=='asphalt',this.wetWheels,this.groundedWheels);
     if(this.extendedDamage)this.swingDoors(dt);
+    if(this.extendedDamage)this.engineShake.step(dt,this.health>0&&!(this.engineStall!>0)&&!this.engineOut,this.input.throttle,this.engineDamage??0,this.misfireFactor,this.mountsBroken,this.speed);
     if(landing>=0&&time-this.lastLanding>HARD_LANDING.gap&&this.health>0){
       // A heavy landing bottoms out that corner: the suspension, wheel and underside take the blow.
       this.lastLanding=time;const p=this.controller.wheelContactPoint(landing)!,up=new T.Vector3(0,1,0).applyQuaternion(this.currentQ);
@@ -919,6 +1124,9 @@ export class Vehicle {
     }
     if (time - this.lastFx > 0.06) {
       const fxGap=Math.min(.25,time-this.lastFx);this.lastFx = time;
+      // A crushed tailpipe coughs black smoke under throttle.
+      if(this.extendedDamage&&this.exhaustCrushed&&!this.exhaustGone&&this.health>0&&!(this.engineStall!>0)&&this.input.throttle>.4){this.crushPuff+=fxGap;
+        if(this.crushPuff>=EXHAUST_CRUSH.puff){this.crushPuff=0;const tail=new T.Vector3(isRearEngineKind(this.kind)?.35:-.35,.25,-DEFINITIONS[this.kind].halfLength).applyQuaternion(this.previousQ).add(this.previous);this.fx.emit(tail,3,2,.8);}}
       this.scraping=0;this.dragLoad=0;
       // The snapped shaft flails and drags under the car for a moment: sparks from the middle of the floor.
       if(this.propFlail>0&&Math.abs(this.speed)>1){const p=new T.Vector3(0,0,-DEFINITIONS[this.kind].halfLength*.2).applyQuaternion(this.previousQ).add(this.previous);p.y=this.ground.height(p.x,p.z)+.04;
@@ -947,7 +1155,7 @@ export class Vehicle {
           if(this.extendedDamage)this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.08,s*.8,2);
         }
         // A corner down on its bump stops drags the sill and floorpan along the ground: sparks and a groove.
-        if(this.extendedDamage&&this.sagBias[i]<1&&Math.abs(this.speed)>3&&(this.controller.wheelSuspensionLength(i)??1)<.16){
+        if(this.extendedDamage&&this.springBias[i]<1&&Math.abs(this.speed)>3&&(this.controller.wheelSuspensionLength(i)??1)<.16){
           const s=Math.min(1,Math.abs(this.speed)/16),at=p.clone().lerp(this.previous,.3);at.y=p.y;
           this.scraping=Math.max(this.scraping,s*.7);this.fx.emit(at,Math.ceil(s*3),1,.8);this.fx.evidence?.add(at,yaw,Math.abs(this.speed)*.08,s*.7,2);this.bellyDrag=Math.max(this.bellyDrag,s);
         }
@@ -959,8 +1167,9 @@ export class Vehicle {
           else this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.07,feedback.evidence,1);
         }
       }
-      // A rear crushed past EXHAUST_DROP knocks the exhaust down: at speed it drags behind, sparking and scraping.
-      if(this.extendedDamage&&!this.exhaustGone&&(this.structuralDamage?.[1]??0)>EXHAUST_DROP&&Math.abs(this.speed)>4&&this.health>0){
+      // A rear crushed past EXHAUST_DROP knocks the exhaust down: at speed it drags behind, sparking and scraping. An old car's
+      // rusted-through hangers let it bounce down and scrape in bursts.
+      if(this.extendedDamage&&!this.exhaustGone&&((this.structuralDamage?.[1]??0)>EXHAUST_DROP||rottenHanger(this.surfaceFinish.rustAge,this.id)&&hangerDown(time,this.id))&&Math.abs(this.speed)>4&&this.health>0){
         const tail=new T.Vector3(isRearEngineKind(this.kind)?.35:-.35,0,-DEFINITIONS[this.kind].halfLength*.8).applyQuaternion(this.previousQ).add(this.previous);
         tail.y=this.ground.height(tail.x,tail.z)+.04;const s=Math.min(1,Math.abs(this.speed)/18);
         this.scraping=Math.max(this.scraping,s*.45);this.fx.emit(tail,Math.ceil(s*2),1,.6);this.fx.evidence?.add(tail,Math.atan2(this.forward.x,this.forward.z),Math.abs(this.speed)*.06,s*.5,2);this.exhaustDrags++;
@@ -970,6 +1179,14 @@ export class Vehicle {
           pipe.name='exhaust_pipe';pipe.rotation.x=Math.PI/2;pipe.position.set(isRearEngineKind(this.kind)?.35:-.35,-.25,-DEFINITIONS[this.kind].halfLength-EXHAUST_OFF.length*.5);this.root.add(pipe);
           this.fx.detach(pipe,this.velocity.clone().multiplyScalar(.6));pipe.removeFromParent();pipe.geometry.dispose();(pipe.material as T.Material).dispose();
           this.onBreak?.('exhaust',isRearEngineKind(this.kind)?0:2);this.fx.emit(tail,10,1,1);}
+      }
+      // A dropped fuel tank drags on its filler neck: sparks (hot enough at speed to light its own fuel) until it tears off.
+      if(this.tankDown&&!this.tankGone&&Math.abs(this.speed)>TANK_DROP.speed&&this.health>0){
+        const end=isRearEngineKind(this.kind)?1:-1,tail=new T.Vector3(0,0,end*(DEFINITIONS[this.kind].halfLength*.55+TANK_DROP.size.z)).applyQuaternion(this.previousQ).add(this.previous);
+        tail.y=this.ground.height(tail.x,tail.z)+.04;const s=Math.min(1,Math.abs(this.speed)/16);
+        this.scraping=Math.max(this.scraping,s*.5);this.fx.emit(tail,Math.ceil(s*3),1,.75);this.fx.evidence?.add(tail,Math.atan2(this.forward.x,this.forward.z),Math.abs(this.speed)*.06,s*.6,2);
+        if(Math.abs(this.speed)>=TANK_DROP.hot)this.fx.slicks?.igniteAt(tail.x,tail.z,.3,true,this.id);
+        this.tankDragTime+=fxGap;if(this.tankDragTime>=TANK_DROP.after)this.tearTank();
       }
       if(this.wreckParts.assemblies.some(a=>a.name.includes('bumper')&&a.loose>.55))this.model.updateWorldMatrix(true,true);
       for(const a of this.wreckParts.assemblies){
@@ -993,14 +1210,19 @@ export class Vehicle {
   render(alpha: number) {
     this.root.position.lerpVectors(this.previous, this.current, alpha);
     this.root.quaternion.slerpQuaternions(this.previousQ, this.currentQ, alpha);
+    // The engine shakes the body on its mounts; the wheels are held where they were.
+    const shake=this.extendedDamage?this.engineShake.out:NO_SHAKE;
+    this.model.rotation.set(shake.pitch,0,shake.roll);this.model.position.y=this.modelY+shake.lift;
     for (const material of this.brakeLights) material.emissiveIntensity = this.electricalCut ? 0 : this.input.brake > .05 || this.input.handbrake ? 3.5 : .8;
     for (let i = 0; i < 4; i++) {
       const w = this.wheels[i];
       if (!w||this.wreckParts.wheelLost[i]) continue;
-      w.position.y =
-        -this.model.position.y - 0.12 - (this.controller.wheelSuspensionLength(i) ?? vehicleSuspensionRestLength(this.kind));
+      // A knocked corner leans on its bent upright (offline), lifted so the tread's low edge stays on the road.
+      const lean=this.extendedDamage?cornerLean(this.wreckParts.wheelDamage[i],i%2?1:-1):0,profile=this.tireContacts[i].profile;
+      w.position.y = plantedWheelY(
+        -this.model.position.y - 0.12 - (this.controller.wheelSuspensionLength(i) ?? vehicleSuspensionRestLength(this.kind)),w.position.x,w.position.z,shake)+(lean?leanLift(lean,profile.outerRadius,profile.halfWidth):0);
       const tyre=this.tyreDamage?.[i],corner=wheelResponse(this.wreckParts.wheelDamage[i],i%2?1:-1,this.speed,vehicleWheelRadius(this.kind),tyre,vehicleFlatTyreRadius(this.kind));
-      w.rotation.set(0,(i<2?this.steering*this.steerLink[i]:0)+corner.toe+(i>1?this.thrustAngle:0)+(this.extendedDamage?this.wheelShimmy[i]:0),0);
+      w.rotation.set(0,(i<2?this.steering*this.steerLink[i]:0)+corner.toe+(i>1?this.thrustAngle:0)+(this.extendedDamage?this.wheelShimmy[i]:0),lean);
       w.rotateX(-this.wheelAngle(i));
       // A bent rim runs out of true: tilted in its own spinning frame, the wheel visibly wobbles as it turns.
       if(this.extendedDamage)w.rotateZ(rimWobble(this.wreckParts.wheelDamage[i])+this.nutLoose[i]*WHEEL_NUTS.tilt);
@@ -1018,11 +1240,15 @@ export class Vehicle {
     if(this.onVisualEvent){const inverse=this.root.quaternion.clone().invert();this.onVisualEvent({kind:'hit',pose:[...this.root.position.toArray(),...this.root.quaternion.toArray()],point:point.clone().sub(this.root.position).applyQuaternion(inverse).toArray(),direction:direction.clone().applyQuaternion(inverse).toArray(),damage:0,health:this.health,scar:true,...(otherPaint?{paint:otherPaint.getHex()}:{})});}
     return true;
   }
-  collisionHit(point:T.Vector3,direction:T.Vector3,damage:number,time:number,otherPaint?:T.Color){
+  collisionHit(point:T.Vector3,direction:T.Vector3,damage:number,time:number,otherPaint?:T.Color,closing=0){
     const p=this.body.translation(),q=this.body.rotation(),inverse={x:-q.x,y:-q.y,z:-q.z,w:q.w};
     const local=rotateVehicleVector({x:point.x-p.x,y:point.y-p.y,z:point.z-p.z},inverse);
-    const factor=armorWearMultiplier(this.kind,this.structuralDamage,local,rotateVehicleVector(direction,inverse),this.specification.damageScale);
-    this.hit(point,direction,damage*factor,time,false,otherPaint);
+    const along=rotateVehicleVector(direction,inverse),factor=armorWearMultiplier(this.kind,this.structuralDamage,local,along,this.specification.damageScale);
+    // A T-bone into the doors hurts more than a nose-on hit into the crumple zone (offline).
+    const zone=this.extendedDamage?impactZoneFactor(local,along,DEFINITIONS[this.kind].halfWidth,DEFINITIONS[this.kind].halfLength):1;
+    // Shoved sideways behind the rear axle line while moving, the rear tyres break away (PIT).
+    if(this.extendedDamage&&this.health>0){const pit=pitStrength(local,along,DEFINITIONS[this.kind].halfLength,this.speed,closing);if(pit>this.rearSlide){if(pit>=.5&&this.rearSlide<.5)this.pitSpins++;this.rearSlide=pit;}}
+    this.hit(point,direction,damage*factor*zone,time,false,otherPaint);
   }
   hit(point: T.Vector3, direction: T.Vector3, damage: number, time: number, quiet = false,otherPaint?:T.Color) {
     damage *= this.specification.damageScale;
@@ -1034,6 +1260,7 @@ export class Vehicle {
     if(this.extendedDamage&&!quiet){const daze=dazeFor(damage);if(daze>this.dazed){if(!(this.dazed>0))this.dazeSteer=this.input.steer;this.dazed=daze;}}
     this.lastDamage = damage;
     this.impactSerial++;
+    if(this.extendedDamage&&!quiet)this.onPaintChips?.(point,damage);
     if (!quiet) this.impactResponse.kick(direction,damage,direction.dot(this.right),direction.dot(this.forward));
     this.root.updateMatrixWorld(true);
     // Use the same quaternion arithmetic as the authority for mechanical damage.
@@ -1042,14 +1269,55 @@ export class Vehicle {
     const q=this.root.quaternion,p=this.root.position,inverse={x:-q.x,y:-q.y,z:-q.z,w:q.w};
     const local=rotateVehicleVector({x:point.x-p.x,y:point.y-p.y,z:point.z-p.z},inverse);
     const components={structure:this.structuralDamage,engineDamage:this.engineDamage,tyreDamage:this.tyreDamage,wheelDamage:Array.from(this.wreckParts.wheelDamage),wheelShift:this.wreckParts.wheelShift.map(v=>({x:v.x,y:v.y,z:v.z}))};
-    const worn=Array.from(this.wreckParts.wheelDamage),structureBefore=this.extendedDamage?this.structuralDamage?.slice():undefined;
+    const worn=Array.from(this.wreckParts.wheelDamage),structureBefore=this.extendedDamage?this.structuralDamage?.slice():undefined,tyreBefore=this.tyreDamage?.slice(),engineBefore=this.engineDamage;
     applyComponentImpact(components,this.kind,local,rotateVehicleVector(direction,inverse),damage);
+    // With a bumper, a door or the bonnet gone, there is less left to soak up a hit there (offline).
+    if(this.extendedDamage&&structureBefore&&components.structure){
+      const gone=(name:string)=>{const a=this.wreckParts.assemblies.find(x=>x.name===name);return !!a&&a.members.every(m=>!m.mesh.visible);};
+      const engineEnd=isRearEngineKind(this.kind)?1:0,engineHit=(factor:number)=>{if(engineBefore!==undefined&&components.engineDamage!==undefined)components.engineDamage=exposedDamage(engineBefore,components.engineDamage,factor);};
+      for(const [end,name] of [[0,'front-bumper'],[1,'rear-bumper']] as const)if(gone(name)){
+        components.structure[end]=exposedDamage(structureBefore[end],components.structure[end],BUMPER_GONE.crush);if(end===engineEnd)engineHit(BUMPER_GONE.engine);}
+      for(const [side,doors] of [[2,['door-left','door-rear-left']],[3,['door-right','door-rear-right']]] as const)if(doors.some(gone))components.structure[side]=exposedDamage(structureBefore[side],components.structure[side],COVER_GONE.side);
+      if(gone(engineEnd?'engine-lid':'hood'))engineHit(COVER_GONE.engine);
+      // A rotten shell gives way sooner: the rust lets more of the blow into the structure.
+      if(this.surfaceFinish.rustAge>0)for(let k=0;k<components.structure.length;k++)components.structure[k]=exposedDamage(structureBefore[k],components.structure[k],rotFactor(this.surfaceFinish.rustAge,ROT.crush));
+    }
+    // A front corner without its wing leaves the tyre and wheel bare: the hit does more to both (offline).
+    if(this.extendedDamage)for(const i of [0,1])if(this.wingGone[i]){if(tyreBefore&&components.tyreDamage)components.tyreDamage[i]=exposedDamage(tyreBefore[i],components.tyreDamage[i],EXPOSED_WHEEL.tyre);components.wheelDamage[i]=exposedDamage(worn[i],components.wheelDamage[i],EXPOSED_WHEEL.rim);}
     if (local.x < 0) this.damageLeft += damage;
     else this.damageRight += damage;
     const contact = this.model.worldToLocal(point.clone());
     const zone=contact.y>(this.kind==='trail'?1.85:this.kind==='shuttle'?2.30:this.kind==='van'?1.76:this.kind==='cornet'?2.28:this.kind==='hollins'?1.66:1.35)?'roof':contact.z>DEFINITIONS[this.kind].halfLength*.35?'front':contact.z<-DEFINITIONS[this.kind].halfLength*.35?'rear':contact.x<0?'left':'right';
     this.damageZones[zone]+=damage;
-    const dentDamage=bodyworkDentDamage(damage);
+    // One crash arrives as several contacts: total what lands on this zone inside CRASH.window and judge each heavy-hit
+    // failure once, as the crash crosses its threshold (offline). A fragment big enough on its own still counts at once.
+    const zi=CRASH_ZONES.indexOf(zone);if(time-this.zoneBlowAt[zi]>CRASH.window)this.zoneBlow[zi]=0;
+    const priorBlow=this.zoneBlow[zi];this.zoneBlow[zi]+=damage;this.zoneBlowAt[zi]=time;const blow=this.zoneBlow[zi];
+    const crash=(threshold:number)=>priorBlow<threshold&&blow>=threshold?blow:0;
+    // Mounts already broken and a huge hit at the engine end: the block drops out (offline).
+    if(this.extendedDamage&&!quiet&&this.health>0&&engineDrops(this.mountsBroken,this.engineDamage,crash(ENGINE_DROP.damage),zone===(isRearEngineKind(this.kind)?'rear':'front')))this.dropEngine();
+    // A big hit at the engine end of a battered engine can part the throttle cable: the car limps on (offline).
+    if(this.extendedDamage&&!quiet&&this.health>0&&!this.throttleCable&&cableSnaps(this.engineDamage,crash(CABLE.blow),zone===(isRearEngineKind(this.kind)?'rear':'front'),this.id*17+this.bigHits)){this.throttleCable=true;this.onBreak?.('cable',0);}
+    // With the bonnet gone or the bay crushed, a big hit at the engine end can throw the battery clean out (offline).
+    if(this.extendedDamage&&!quiet&&this.health>0&&!this.batteryOut){const lid=this.wreckParts.assemblies.find(x=>x.name===(isRearEngineKind(this.kind)?'engine-lid':'hood'));
+      if(batteryThrown(!!lid&&lid.members.every(m=>!m.mesh.visible),(isRearEngineKind(this.kind)?this.structuralDamage?.[1]:this.structuralDamage?.[0])??0,crash(BATTERY_OUT.damage),zone===(isRearEngineKind(this.kind)?'rear':'front'),this.id*23+this.bigHits))this.throwBattery();}
+    // A big hit on a crushed rear can flatten the tailpipe while the exhaust is still on (offline).
+    if(this.extendedDamage&&!quiet&&this.health>0&&!this.exhaustCrushed&&exhaustCrushes(this.structuralDamage?.[1]??0,crash(EXHAUST_CRUSH.damage),zone==='rear',this.exhaustGone,this.id*29+this.bigHits)){this.exhaustCrushed=true;this.onBreak?.('exhaustcrush',0);}
+    // A big hit on a crushed rear can part the handbrake cables: no more handbrake turns (offline).
+    if(this.extendedDamage&&!quiet&&this.health>0&&!this.handbrakeCable&&handbrakeSnaps(this.structuralDamage?.[1]??0,crash(HANDBRAKE_CABLE.blow),zone==='rear',this.id*19+this.bigHits)){this.handbrakeCable=true;this.onBreak?.('handbrake',0);}
+    // A big hit right on a battered wheel tears it clean off, thrown along the blow (offline).
+    if(this.extendedDamage&&!quiet&&this.health>0){let best=-1,gap=Infinity;const wp=new T.Vector3();
+      for(let i=0;i<4;i++){if(this.wreckParts.wheelLost[i]||!this.wheels[i])continue;this.wheels[i].getWorldPosition(wp);const d=wp.distanceTo(point);if(d<gap){gap=d;best=i;}}
+      // One crash arrives as several contacts: total what lands near the wheel inside the window and judge the blow once.
+      if(best>=0&&gap<=WHEEL_RIP.reach){if(time-this.wheelBlowAt[best]>WHEEL_RIP.window){this.wheelBlow[best]=0;this.wheelBlowRolled[best]=0;}this.wheelBlowAt[best]=time;this.wheelBlow[best]+=damage;}
+      if(best>=0&&gap<=WHEEL_RIP.reach&&!this.wheelBlowRolled[best]&&this.wheelBlow[best]>=WHEEL_RIP.damage&&(this.wheelBlowRolled[best]=1)&&wheelRips(gap,this.wreckParts.wheelDamage[best],this.wheelBlow[best],this.id*37+this.bigHits+best)){this.wheelsShed++;this.wheelsRipped++;
+        this.onVisualEvent?.({kind:'rip',pose:this.visualPose(),part:`wheel-${best}`});this.wheelShimmy[best]=0;this.tearOffWheel(best,direction.clone().normalize(),false);}}
+    // A big hit on a crushed tank end snaps the fuel tank's straps: it drops and drags on its filler neck (offline).
+    if(this.extendedDamage&&!quiet&&this.health>0&&!this.tankDown&&tankDrops((isRearEngineKind(this.kind)?this.structuralDamage?.[0]:this.structuralDamage?.[1])??0,crash(TANK_DROP.blow),zone===(isRearEngineKind(this.kind)?'front':'rear')))this.dropTank();
+    // A smash into the engine end can split a line and light the engine bay at once (offline).
+    if(this.extendedDamage&&!quiet&&this.health>0){this.bigHits++;if(smashFire(crash(SMASH_FIRE.damage),zone===(isRearEngineKind(this.kind)?'rear':'front'),this.id,this.bigHits)&&!this.igniteRequest){this.igniteRequest=true;this.smashFires++;this.onSetAlight?.(this.id);this.onBreak?.('smashfire',0);}}
+    // Rusty panels dent deeper (offline).
+    const dentDamage=bodyworkDentDamage(damage)*(this.extendedDamage?rotFactor(this.surfaceFinish.rustAge,ROT.dent):1);
     const impactDirection = direction.clone().transformDirection(this.model.matrixWorld.clone().invert());
     const assemblies = new Map<string, { panels: T.Mesh[]; damage: number; weight: number }>();
     // Big hits throw what they break off along the blow (offline); slow knocks let parts drop.
@@ -1072,13 +1340,16 @@ export class Vehicle {
     // mirror inserts and bonnet vents cannot remain suspended over a wreck.
     for (const [name, group] of assemblies) {
       // Offline destruction lets parts break away sooner (DETACH): Wreckfest-style showers of panels.
-      const threshold = (name === 'hood' ? 48 : name.startsWith('mirror') ? 22 : name==='rear-bumper' ? 28 : 32)*(this.extendedDamage?DETACH.threshold:1);
+      // A bolt-on front wing comes off only offline, and takes more than a bumper.
+      if(name.startsWith('wing-')&&!this.extendedDamage)continue;
+      const threshold = (name === 'hood' ? 48 : name.startsWith('mirror') ? 22 : name==='rear-bumper' ? 28 : name.startsWith('wing-') ? WING_OFF.threshold : 32)*(this.extendedDamage?DETACH.threshold:1);
       if (group.damage <= threshold || damage <= (this.extendedDamage?DETACH.blow:7) || group.weight <= .18) continue;
       for (const panel of group.panels) {
         if (quiet) panel.visible = false;
         else {this.fx.detach(panel, this.velocity.clone().multiplyScalar(.65).add(fling));this.burnDebris();}
       }
-      if (!quiet) this.impactEffects.debris = true;
+      if (!quiet) {this.impactEffects.debris = true;this.tetherPart(name);}
+      if(name.startsWith('wing-')){this.wingsTorn++;this.wingGone[name==='wing-left'?0:1]=true;}
     }
     for (const glass of this.glass) {
       if (!glass.visible) continue;
@@ -1093,17 +1364,17 @@ export class Vehicle {
         const state = mat.userData.glassState as GlassState | undefined;
         if (state) {
           state.damage.value = Math.min(1, glass.userData.damage / 24);
-          state.impact.value.copy(glass.worldToLocal(point.clone()));
+          state.impact.value.copy(glass.worldToLocal(point.clone()));state.reach.value=1;
         }
         const laminated = /Windshield|Rearwindow/.test(glass.name);
         // Laminated screens retain their shattered sheet. Tempered side glass
         // cracks first, then releases fragments on a second substantial blow.
-        if (!laminated && glass.userData.damage > 24) glass.visible = false;
+        if (!laminated && glass.userData.damage > 24) { glass.visible = false; if (!quiet) this.leaveGlassRim(glass); }
         if (!quiet) this.fx.emit(bounds.getCenter(new T.Vector3()), Math.ceil(damage * .55), 3, 1.7);
       }
     }
     this.wreckParts.hit(contact,impactDirection,dentDamage);
-    this.engineDamage=components.engineDamage;
+    this.engineDamage=this.engineOut?1:components.engineDamage;
     this.engineStall=stalledByImpact(this.engineStall,this.health,this.engineDamage,damage);
     if(this.engineStall!>0||this.health<=0)this.rpm=0;
     this.tyreDamage=components.tyreDamage;
@@ -1113,7 +1384,9 @@ export class Vehicle {
       // A knock past HUBCAP_POP sends the wheel's centre cap spinning off.
       const w=this.wheels[i];if(!w||worn[i]>=HUBCAP_POP||this.wreckParts.wheelDamage[i]<HUBCAP_POP)continue;
       w.traverse(o=>{if(!(o instanceof T.Mesh)||!o.visible||!HUBCAP.test(o.name))return;this.poppedCaps.push(o);
-        if(quiet)o.visible=false;else{const out=new T.Vector3(i%2?1:-1,.4,0).applyQuaternion(this.root.quaternion).multiplyScalar(3);this.fx.detach(o,this.velocity.clone().multiplyScalar(.8).add(out));}});
+        if(quiet)o.visible=false;else{const out=new T.Vector3(i%2?1:-1,.4,0).applyQuaternion(this.root.quaternion).multiplyScalar(3),fling=this.velocity.clone().multiplyScalar(.8).add(out);
+          // It rolls away on its rim where the game can roll it (offline), else tumbles off as debris.
+          if(this.fx.rollCap)this.fx.rollCap(o,new T.Vector3(1,0,0).transformDirection(w.matrixWorld),fling);else this.fx.detach(o,fling);}});
     }
     if(this.extendedDamage)for(let i=0;i<4;i++){const w=this.wheels[i];if(w&&!this.wreckParts.wheelLost[i]&&wheelTearsOff(worn[i],damage,this.wreckParts.wheelReach(i,contact)))this.tearOffWheel(i,direction.clone().multiplyScalar(1+fling.length()*.5),quiet);}
     if(structureBefore&&this.structuralDamage){
@@ -1133,6 +1406,7 @@ export class Vehicle {
     }
     if (!quiet) {
       this.fx.impact?.(point, direction, damage);
+      if(this.extendedDamage)this.onHardKnock?.(damage);
     }
   }
   /** Doors, barn doors and tailgates with a broken latch swing on their hinges with the car's motion (door-swing.ts); open doors catch the air,
@@ -1145,7 +1419,7 @@ export class Vehicle {
       const lid=lidKind(a.name);
       if(lid){
         if(!doorUnlatched(a.loose,a.damage)||!a.members.some(m=>m.mesh.visible))continue;
-        const state={swing:a.swing??0,rate:a.swingRate??0},hit=stepLid(lid,state,lidBase(lid,a.loose),a.name.endsWith('left')?-1:1,forward,lateral,up,dt);a.swing=state.swing;a.swingRate=state.rate;
+        const state={swing:a.swing??0,rate:a.swingRate??0},hit=stepLid(lid,state,lidBase(lid,a.loose),a.name.endsWith('left')?-1:1,forward,lateral,up,dt,this.speed);a.swing=state.swing;a.swingRate=state.rate;
         if(state.swing>.05)this.doorOpenTime+=dt;
         // Wide open, the load starts to fall out of the back.
         if(cargoSpills(lid,lidBase(lid,a.loose)+state.swing))this.spillCargo(lid,dt);
@@ -1153,7 +1427,7 @@ export class Vehicle {
         if(hit>=DOOR_SWING.slam){a.loose=Math.min(1,a.loose+hit*DOOR_SWING.fatigue);this.doorSlams++;}
         continue;
       }
-      if(!a.name.startsWith('door')||!doorUnlatched(a.loose,a.damage)||!a.members.some(m=>m.mesh.visible))continue;
+      if(!a.name.startsWith('door')||!doorUnlatched(a.loose,a.damage)||!a.members.some(m=>m.mesh.visible)||this.chainedDoors.has(a.name))continue;
       const side=a.name.endsWith('left')?-1:1,base=doorBase(a.loose),door={swing:a.swing??0,rate:a.swingRate??0};
       const hit=stepDoor(door,base,side,forward,lateral,this.speed,dt);a.swing=door.swing;a.swingRate=door.rate;
       if(door.swing>.05)this.doorOpenTime+=dt;
@@ -1169,6 +1443,12 @@ export class Vehicle {
     if(this.cargoLeft<0)this.cargoLeft=CARGO[kind].load;
     this.cargoClock+=dt;if(this.cargoLeft<=0||this.cargoClock<CARGO.gap)return;
     this.cargoClock=0;this.cargoLeft--;this.cargoSpilled++;
+    // The first thing out of a sprung boot is the spare wheel: upright and spinning, it lands on its tread and rolls away.
+    if(kind==='boot'&&this.cargoLeft===CARGO.boot.load-1&&this.wheels[2]){
+      const def=DEFINITIONS[this.kind],rear=this.wheels[2],spare=rear.clone(true);spare.visible=true;spare.quaternion.identity();
+      spare.position.set(0,rear.position.y+.2,rear.position.z-(def.halfLength-def.wheelbase/2)-.45);this.model.add(spare);this.model.updateWorldMatrix(true,true);
+      this.fx.detachWheel(spare,this.velocity.clone().multiplyScalar(.85).addScaledVector(this.forward,-1.2),vehicleWheelRadius(this.kind),this.speed*.85);spare.removeFromParent();this.spareWheels++;return;
+    }
     const [w,h,l]=CARGO[kind].size,crate=new T.Mesh(new T.BoxGeometry(w,h,l),new T.MeshStandardMaterial({color:CARGO[kind].color,roughness:.9}));
     crate.name='cargo_spill';
     // Just clear of the body (inside it the collider would shove the crate up onto the roof), at load-floor height.
@@ -1197,6 +1477,68 @@ export class Vehicle {
     }
   }
   /** Tear a whole loose assembly (hood, bumper, door, tailgate) away as debris. Replays pass quiet. */
+  /** Height of this car's venue ground at (x, z). */
+  groundAt(x:number,z:number){return this.ground.height(x,z);}
+  /** Doors (and a van's barn doors) swung open past DOOR_CATCH.open, each as a line from its hinge to its free edge in world space (offline). */
+  /** Wing mirrors stand out from the doors (offline): each still on, from the body side out to its tip, for a passing car to clip. */
+  mirrorSpans(){
+    const out:{name:string;from:T.Vector3;to:T.Vector3}[]=[];if(!this.extendedDamage)return out;
+    const world=(p:{x:number;y:number;z:number})=>new T.Vector3(p.x,p.y,p.z).applyMatrix4(this.model.matrix).applyQuaternion(this.currentQ).add(this.current);
+    for(const a of this.wreckParts.assemblies){
+      if(!a.name.startsWith('mirror')||!a.members.some(m=>m.mesh.visible))continue;
+      const side=a.name.endsWith('left')?-1:1,y=(a.bounds.min.y+a.bounds.max.y)/2,z=(a.bounds.min.z+a.bounds.max.z)/2,tip=side<0?a.bounds.min.x:a.bounds.max.x;
+      out.push({name:a.name,from:world({x:side*DEFINITIONS[this.kind].halfWidth*.85,y,z}),to:world({x:tip+side*.04,y,z})});
+    }
+    return out;
+  }
+  openDoorSpans(){
+    const out:{name:string;from:T.Vector3;to:T.Vector3}[]=[];if(!this.extendedDamage)return out;
+    const world=(p:{x:number;y:number;z:number})=>new T.Vector3(p.x,p.y,p.z).applyMatrix4(this.model.matrix).applyQuaternion(this.currentQ).add(this.current);
+    for(const a of this.wreckParts.assemblies){
+      // A van's barn doors swing out behind it from the rear corners.
+      if(a.name.startsWith('cargo-')&&a.members.some(m=>m.mesh.visible)){const side=a.name.endsWith('left')?-1:1,open=(a.swing??0)>0?lidBase('cargo',a.loose)+a.swing!:a.loose*.45;if(open<DOOR_CATCH.open)continue;
+        const hinge={x:side<0?a.bounds.min.x:a.bounds.max.x,y:(a.bounds.min.y+a.bounds.max.y)/2,z:a.bounds.max.z};out.push({name:a.name,from:world(hinge),to:world(barnDoorTip(hinge,side,a.bounds.max.x-a.bounds.min.x,open))});continue;}
+      if(!a.name.startsWith('door')||!((a.swing??0)>0)||!a.members.some(m=>m.mesh.visible))continue;
+      const open=doorBase(a.loose)+a.swing!;if(open<DOOR_CATCH.open)continue;
+      const side=a.name.endsWith('left')?-1:1,hinge={x:side*DEFINITIONS[this.kind].halfWidth,y:(a.bounds.min.y+a.bounds.max.y)/2,z:a.bounds.max.z-.06};
+      const tip=doorTip(hinge,side,a.bounds.max.z-a.bounds.min.z-.06,open);
+      out.push({name:a.name,from:world(hinge),to:world(tip)});
+    }
+    return out;
+  }
+  /** Tear the engine block out of the car (ENGINE_DROP): it falls under the car as debris and the car is finished. Replays pass
+   * quiet and only hide it. */
+  dropEngine(quiet=false){
+    const engine=this.panels.filter(p=>p.visible&&p.userData.constructionRole==='engine');if(this.engineOut||!engine.length)return false;
+    this.engineOut=true;if(!quiet)this.onVisualEvent?.({kind:'rip',pose:this.visualPose(),part:'engine'});
+    this.model.updateWorldMatrix(true,true);
+    for(const p of engine){if(quiet)p.visible=false;else{this.fx.detach(p,this.velocity.clone().multiplyScalar(.35).add(new T.Vector3(0,-1.5,0)));this.burnDebris();}}
+    this.seized=true;this.engineDamage=1;this.rpm=0;if(!quiet){this.impactEffects.debris=true;this.health=0;}
+    return true;
+  }
+  /** The fuel tank goes up (offline): the car is thrown into the air tumbling, its panels are blown outward, every window is
+   * blown out and it is destroyed. Returns false if it had already blown up. */
+  blowUp(){
+    if(!this.extendedDamage||this.blownUp)return false;this.blownUp=true;
+    const before=new Set(this.fx.debris);let n=0;
+    for(const a of this.wreckParts.assemblies){if(n>=BOOM.parts)break;if(!a.members.some(m=>m.mesh.visible))continue;if(this.ripAssembly(a.name))n++;}
+    for(const d of this.fx.debris)if(!before.has(d)){const p=d.body.translation(),dx=p.x-this.current.x,dz=p.z-this.current.z,l=Math.hypot(dx,dz)||1,v=d.body.linvel();
+      d.body.setLinvel({x:v.x+dx/l*BOOM.kick,y:v.y+BOOM.partLift,z:v.z+dz/l*BOOM.kick},true);}
+    const c=new T.Vector3();for(const g of this.glass){if(!g.visible)continue;g.visible=false;c.setFromMatrixPosition(g.matrixWorld);this.fx.emit(c,6,3,1.6);this.onGlassBreak?.(c);}
+    const m=this.body.mass(),k=BOOM.spin*m;this.body.applyImpulse({x:0,y:m*BOOM.lift,z:0},true);this.body.applyTorqueImpulse({x:k*.7,y:k*.25,z:-k*.5},true);
+    const p=this.current.clone();p.y+=.8;this.fx.emit(p,40,1,3.5);this.fx.emit(p,28,2,2.6);
+    this.health=0;return true;
+  }
+  /** Wrecked by a big hit (offline): what was already hanging loose bursts off along the blow, with sparks and smoke. Returns
+   * the parts shed. */
+  wreckBurst(direction:T.Vector3){
+    if(!this.extendedDamage)return 0;const before=new Set(this.fx.debris);let n=0;
+    for(const a of this.wreckParts.assemblies){if(n>=WRECK_BURST.max)break;if(a.loose<WRECK_BURST.loose||!a.members.some(m=>m.mesh.visible))continue;if(this.ripAssembly(a.name))n++;}
+    const dir=direction.clone().setY(0);if(dir.lengthSq()>1e-6)dir.normalize();
+    for(const d of this.fx.debris)if(!before.has(d)){const v=d.body.linvel();d.body.setLinvel({x:v.x+dir.x*WRECK_BURST.kick,y:v.y+WRECK_BURST.lift,z:v.z+dir.z*WRECK_BURST.kick},true);}
+    if(n>0){const p=this.current.clone();p.y+=.6;this.fx.emit(p,14,1,1.4);this.fx.emit(p,10,2,1.2);this.wreckBursts++;}
+    return n;
+  }
   ripAssembly(name:string,quiet=false){
     const a=this.wreckParts.assemblies.find(x=>x.name===name);if(!a||!a.members.some(m=>m.mesh.visible))return false;
     this.onVisualEvent?.({kind:'rip',pose:this.visualPose(),part:name});
@@ -1205,8 +1547,74 @@ export class Vehicle {
       if(!m.mesh.visible)continue;
       if(quiet)m.mesh.visible=false;else{this.fx.detach(m.mesh,this.velocity.clone().multiplyScalar(.55).add(new T.Vector3(0,1.6,0)));this.burnDebris();}
     }
-    if(!quiet){this.impactEffects.debris=true;this.rips++;}
+    if(!quiet){this.impactEffects.debris=true;this.rips++;this.tetherPart(name);}
     return true;
+  }
+  /** Pushing a pinned car at full throttle cooks the clutch (offline, damage-handling PUSH_BURN). */
+  strainClutch(dt:number){
+    if(!this.extendedDamage||this.health<=0)return;const burn=pushBurn(this.input.throttle,this.speed,dt);
+    if(burn>0){this.clutchBurn=Math.min(1,this.clutchBurn+burn);this.clutchStrain+=dt;}
+  }
+  /** The fuel tank drops on its filler neck under the tank end and hangs there, its far edge on the ground (offline). */
+  dropTank(){
+    if(this.tankDown)return;this.tankDown=true;
+    const end=isRearEngineKind(this.kind)?1:-1,half=DEFINITIONS[this.kind].halfLength,{x,y,z}=TANK_DROP.size;
+    const neck=new T.Vector3(0,0,end*half*.55),at=neck.clone().applyQuaternion(this.previousQ).add(this.previous),floor=this.ground.height(at.x,at.z)-this.previous.y;
+    const pivot=new T.Group();pivot.name='fuel_tank';pivot.position.set(0,floor+z*Math.sin(TANK_DROP.hang)+y*.5,neck.z);pivot.rotation.x=end*TANK_DROP.hang;
+    const tank=new T.Mesh(new T.BoxGeometry(x,y,z),new T.MeshStandardMaterial({color:0x2e2b27,roughness:.6,metalness:.65}));tank.position.z=end*z/2;tank.castShadow=true;pivot.add(tank);
+    this.root.add(pivot);this.tankMesh=pivot;this.onBreak?.('tank',0);
+  }
+  /** On fire: the car itself or any of its tyres. */
+  get burning(){return this.onFire||this.tyreAlight.some(Boolean);}
+  /** Use the fire extinguisher (offline): only on a fire and only with a charge left. The car's fire goes out on the next
+   * fire update (the douse path), burning tyres at once, and the heat comes out of the brakes' and rubbing tyres' fire clocks. */
+  extinguish(){
+    if(!this.extendedDamage||this.health<=0||this.extinguishers<=0||!this.burning)return false;
+    this.extinguishers--;this.extinguished++;this.extinguishRequest=true;this.tyreAlight.fill(0);this.brakeFire.fill(0);this.rubHeat.fill(0);this.burnTime=0;
+    const p=this.current.clone();p.y+=.6;this.fx.emit(p,26,5,1.6);return true;
+  }
+  /** A rod goes through the block (offline): the engine dies on the spot, a chunk of block flies out under the car, the
+   * last of the oil splashes the track and the bay fills with smoke. */
+  throwRod(){
+    if(this.rodThrown||this.health<=0)return;this.rodThrown=true;this.seized=true;this.engineStall=MAX_ENGINE_RESTART;this.rpm=0;this.rodStress=0;this.oilLevel=0;
+    const end=isRearEngineKind(this.kind)?-1:1,half=DEFINITIONS[this.kind].halfLength;
+    const k=-Math.sign(this.speed)*this.specification.mass*Math.min(20,Math.abs(this.speed))*OIL.jolt;this.body.applyImpulse({x:this.forward.x*k,y:0,z:this.forward.z*k},true);
+    const bay=new T.Vector3(0,.4,end*half*.55).applyQuaternion(this.previousQ).add(this.previous);this.fx.emit(bay,36,2,1.7);this.fx.emit(bay,10,1,1.2);
+    const chunk=new T.Mesh(new T.BoxGeometry(.16,.1,.22),new T.MeshStandardMaterial({color:0x3a3d40,roughness:.7,metalness:.5}));
+    chunk.position.set(DEFINITIONS[this.kind].halfWidth*.5,-.05,end*half*.55);this.root.add(chunk);this.root.updateMatrixWorld(true);
+    const side=new T.Vector3(1,0,.2*end).applyQuaternion(this.previousQ).multiplyScalar(ROD.kick);
+    this.fx.detach(chunk,this.velocity.clone().multiplyScalar(.5).add(side).setY(1));chunk.removeFromParent();chunk.geometry.dispose();(chunk.material as T.Material).dispose();
+    const g=this.ground.height(bay.x,bay.z);for(let i=0;i<ROD.splash;i++){this.dripSeed=(Math.imul(this.dripSeed,1664525)+1013904223)>>>0;const r=this.dripSeed/4294967296,x=bay.x+(r-.5)*1.2,z=bay.z+(r*7%1-.5)*1.2;this.fx.slicks?.drip(x,g,z,0,r);this.drips[0]++;this.onDrip?.(x,g,z,0,r);}
+    this.onBreak?.('rod',0);
+  }
+  /** The battery flies out of the open engine bay and lands on the track as a loose part (offline). */
+  throwBattery(){
+    if(this.batteryOut)return;this.batteryOut=true;
+    const end=isRearEngineKind(this.kind)?-1:1,half=DEFINITIONS[this.kind].halfLength,{x,y,z}=BATTERY_OUT.size;
+    const battery=new T.Mesh(new T.BoxGeometry(x,y,z),new T.MeshStandardMaterial({color:0x1f2328,roughness:.55,metalness:.2}));
+    battery.position.set(DEFINITIONS[this.kind].halfWidth*.4,.25,end*half*.72);this.root.add(battery);this.root.updateMatrixWorld(true);
+    const out=new T.Vector3(.4,0,end).applyQuaternion(this.previousQ).multiplyScalar(BATTERY_OUT.kick);
+    this.fx.detach(battery,this.velocity.clone().multiplyScalar(.6).add(out).setY(this.velocity.y+BATTERY_OUT.lift));
+    battery.removeFromParent();battery.geometry.dispose();(battery.material as T.Material).dispose();this.onBreak?.('battery',0);
+  }
+  /** Take the hanging tank off the car and free its geometry and material (a reset with the tank still down). */
+  private disposeTank(){const tank=this.tankMesh?.children[0] as T.Mesh|undefined;this.tankMesh?.removeFromParent();if(tank){tank.geometry.dispose();(tank.material as T.Material).dispose();}this.tankMesh=null;}
+  /** Dragged long enough, the tank tears off its neck and is left on the track; the open lines run the car dry (offline). */
+  private tearTank(){
+    if(this.tankGone||!this.tankMesh)return;this.tankGone=true;this.fuelLevel=Math.min(this.fuelLevel,TANK_DROP.reserve);
+    const tank=this.tankMesh.children[0] as T.Mesh;this.root.updateMatrixWorld(true);this.fx.detach(tank,this.velocity.clone().multiplyScalar(.5));
+    this.tankMesh.removeFromParent();tank.geometry.dispose();(tank.material as T.Material).dispose();this.tankMesh=null;this.onBreak?.('tankoff',0);
+  }
+  /** Now and then a torn-off part stays on its wire (offline): the last piece detached is handed to onTether with the body-local
+   * point it hangs from (a bumper from its mount, a door or lid from the edge it was hinged on). */
+  private tetherPart(name:string){
+    const kind=tetherKind(name);if(!this.extendedDamage||!this.onTether||!kind)return;
+    const piece=this.fx.debris[this.fx.debris.length-1];if(!piece||!tethers(this.id*11+this.tetherRolls++,TETHER_CHANCE[kind]))return;
+    if(kind==='bumper'){this.onTether(name,piece.body,{x:0,y:.1,z:(name==='front-bumper'?1:-1)*DEFINITIONS[this.kind].halfLength*.9});return;}
+    const part=this.wreckParts.assemblies.find(a=>a.name===name);if(!part)return;
+    const mount=tetherMount(name,part.bounds.min,part.bounds.max),world=this.model.localToWorld(new T.Vector3(mount.x,mount.y,mount.z));
+    const t=this.body.translation(),q=this.body.rotation(),local=world.sub(new T.Vector3(t.x,t.y,t.z)).applyQuaternion(new T.Quaternion(q.x,q.y,q.z,q.w).invert());
+    this.onTether(name,piece.body,{x:local.x,y:local.y,z:local.z});
   }
   private measureCrushFrame():CrushFrame{
     const box=new T.Box3();for(const mesh of this.panels){const rest=mesh.userData.wreckRest as T.BufferAttribute|undefined;if(rest)box.union(new T.Box3().setFromBufferAttribute(rest));}
@@ -1270,9 +1678,23 @@ export class Vehicle {
     }
     w.visible=false;
   }
+  /** A shattered side window leaves a ragged rim of crumbs in its frame (offline). */
+  private readonly glassRims=new Map<T.Mesh,T.Mesh>();
+  private leaveGlassRim(glass:T.Mesh){if(!this.extendedDamage||this.glassRims.has(glass)||!glass.parent)return;const rim=glassRim(glass);glass.parent.add(rim);this.glassRims.set(glass,rim);}
+  private clearGlassRims(){for(const r of this.glassRims.values()){r.removeFromParent();(r.material as T.Material).dispose();}this.glassRims.clear();}
+  /** Glass rims left in frames (QA). */
+  get glassRimCount(){return this.glassRims.size;}
+  /** Shatter every side window as a hard blow would (QA). */
+  shatterSideWindows(){let n=0;for(const g of this.glass){if(!g.visible||/Windshield|Rearwindow/.test(g.name))continue;g.userData.damage=25;g.visible=false;this.leaveGlassRim(g);n++;}return n;}
   dispose() {
+    this.clearGlassRims();
     this.drawBatch?.dispose();
     this.livery.dispose();
+    {const sign=this.root.children.find(o=>o.name==='roof_sign');if(sign)disposeRoofSign(sign);}
+    {const driver=this.root.children.find(o=>o.name==='driver');if(driver)disposeDriver(driver);}
+    {const net=this.root.children.find(o=>o.name==='window_net');if(net)disposeWindowNet(net);}
+    {const cage=this.root.children.find(o=>o.name==='roll_cage');if(cage)disposeRollCage(cage);}
+    {const flag=this.root.children.find(o=>o.name==='derby_flag');if(flag)disposeDerbyFlag(flag);}
     this.tireContacts.forEach(contact=>contact.dispose());
     this.world.removeVehicleController(this.controller);
     this.world.removeRigidBody(this.body);
