@@ -57,7 +57,7 @@ export class BowlLife {
 
   constructor(private readonly radius: number) {}
 
-  /** How many bubbles the nest has (for testing). */
+  /** How many bubbles the nest has (Learn mode sees the fish add to it; tests count them). */
   get bubbles(): number {
     return Math.round(this.nestCount);
   }

@@ -606,4 +606,25 @@ html.desktop #stage canvas.is-live {
 .betta-controls button { color: inherit; background: #092d3bbd; border: 1px solid #94c9ce55; border-radius: 24px; padding: 12px 17px; font: inherit; cursor: pointer; min-height: 44px; }
 .betta-controls button:hover, .betta-controls button[aria-pressed="true"] { background: #235966dc; border-color: #a5e3e9aa; }
 .betta-controls button:focus-visible { outline: 2px solid #d2e9e8; outline-offset: 4px; }
-@media (max-width: 500px) { .betta-controls { right: 16px; top: 20px; gap: 9px; } .betta-controls span { font-size: 10px; } }
+/* (On a phone held upright the specimen's name takes a line of its own over the buttons.) */
+@media (max-width: 500px) { .betta-controls { right: 16px; top: 20px; gap: 9px; flex-wrap: wrap; justify-content: flex-end; row-gap: 7px; } .betta-controls span { font-size: 10px; flex-basis: 100%; text-align: right; } }
+
+/* Learn mode's card (app/learn/Learn.ts): low on the stage, beside the bowl rather than over the
+   fish, above the page's links, and clear of ?stats' figures (at the left; up top on a phone). Its
+   close button floats at its corner, the words running round it. (The bowl at rest is about 68cqh
+   across, in the middle of the stage.) */
+.learn-card { position: absolute; z-index: 6; right: 28px; bottom: calc(56px + env(safe-area-inset-bottom)); width: min(352px, calc(100% - 56px)); box-sizing: border-box; padding: 12px 14px 13px 16px; border-radius: 18px; color: #d2e9e8; background: #092d3bd9; border: 1px solid #94c9ce55; box-shadow: 0 12px 32px #00080d66; backdrop-filter: blur(10px); font-size: 12.5px; line-height: 1.45; pointer-events: none; opacity: 0; transform: translateY(8px); transition: opacity 0.45s ease, transform 0.6s var(--ease); }
+.learn-card.is-on { pointer-events: auto; opacity: 1; transform: none; }
+.learn-text p { margin: 0; }
+.learn-text .learn-kicker { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #94c9ce; }
+.learn-text .learn-title { margin-top: 2px; font-size: 14px; font-weight: 600; color: #f1fbfa; }
+.learn-text .learn-body { margin-top: 4px; color: #cde2e1; }
+.learn-close { float: right; width: 36px; height: 36px; margin: -7px -9px 0 8px; padding: 0; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: inherit; cursor: pointer; }
+.learn-close svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.learn-close:hover { background: #235966dc; }
+.learn-close:focus-visible { outline: 2px solid #d2e9e8; outline-offset: -2px; }
+.is-unsupported .learn-card { display: none; }
+@media (max-width: 500px) { .learn-card { left: 12px; right: 12px; width: auto; } .learn-card.beside-stats { top: 92px; bottom: auto; padding: 9px 12px 10px 13px; font-size: 11.5px; line-height: 1.35; } .learn-card.beside-stats .learn-title { font-size: 13px; } }
+/* (A phone on its side: up at the right, in the room beside the bowl.) */
+@media (min-width: 501px) and (max-height: 500px) { .learn-card { right: 12px; top: 76px; bottom: auto; width: max(190px, calc((100cqw - 68cqh) / 2 - 24px)); padding: 9px 12px 10px 13px; font-size: 11.5px; line-height: 1.38; } .learn-text .learn-title { font-size: 13px; } }
+@media (prefers-reduced-motion: reduce) { .learn-card { transform: none; transition-duration: 0.01s; } }

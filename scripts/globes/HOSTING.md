@@ -540,6 +540,15 @@ the iGPU (`--use-adapter-luid`) the phone's frame at a ratio of 2 went from 190 
 other globes' shaders are unchanged, byte for byte. Tests: `equipment.test.mjs` (7) and a packing
 test in `scape-bvh.test.mjs`, 212 in all.
 
+Learn mode (the betta page): a **Learn** button beside Feed and Flare fins (off at first; kept in
+localStorage `betta.learn`) captions the fish's behaviours as it shows them (air at the film, its
+nest, flaring at its reflection, resting, a lap, a startle, feeding), each now and then, and with it
+on a tap on anything in the bowl (followed through the glass and the water: `src/app/learn/pick.mjs`)
+brings a card about it; Feed brings feeding advice, counted from what the fish has had this visit (a
+meal is now three pellets). The words are in `src/app/learn/content.ts`. Off, it costs a frame
+nothing and a tap on the lid feeds as before. Details: docs/architecture.md, "Learn mode". Tests:
+`learn-pick.test.mjs` (4), `learn.test.mjs` (4).
+
 ## Browser compatibility
 
 Firefox compiles WGSL with naga, which is stricter than Chrome's Tint. Builds up to

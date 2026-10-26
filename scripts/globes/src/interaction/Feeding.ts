@@ -9,8 +9,9 @@ import type { GlobeController } from './GlobeController';
 
 type Vec3 = [number, number, number];
 
-/** A betta's meal: a few pellets, let go this far apart (s). */
-const PELLETS = 4;
+/** A betta's meal: three pellets (two or three, once or twice a day, is what a betta needs: Learn
+ *  mode's advice, app/learn/content.ts), let go this far apart (s). */
+const PELLETS = 3;
 const PELLET_GAP = 0.45;
 /** Where they are let go: over the open mouth, a little off its middle, and how far apart (the sim
  *  frame: the bowl stands upright). */
@@ -29,6 +30,8 @@ export class Feeding {
   state: FeedState = 'idle';
   /** Called whenever the state changes (the page's button follows it). */
   onChange: (() => void) | null = null;
+  /** Called as each pellet goes in (Learn mode counts them: app/learn/feedLog.mjs). */
+  onDrop: (() => void) | null = null;
   private clock = 0;
   private dropped = 0;
   private emptyFor = 0;
@@ -72,6 +75,7 @@ export class Feeding {
         const r = DROP_SPREAD * Math.sqrt((this.dropped + 0.5) / PELLETS);
         if (!drop([DROP_AT[0] + r * Math.cos(a), DROP_AT[1], DROP_AT[2] + r * Math.sin(a)])) break;
         this.dropped++;
+        this.onDrop?.();
       }
       const allIn = this.dropped >= PELLETS;
       this.emptyFor = allIn && left === 0 ? this.emptyFor + dt : 0;

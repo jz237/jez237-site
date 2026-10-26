@@ -212,6 +212,11 @@ export class FishFood {
     return this.flakes.length;
   }
 
+  /** How many have settled (on the sand, or in the reef on what else they settle on) uneaten. */
+  get landed(): number {
+    return this.slots.reduce((n, f) => n + (f?.landed && f.eater < 0 ? 1 : 0), 0);
+  }
+
   /** A new flake at p (sim frame), for `fish` fish to notice. */
   spawn(p: Vec3, fish: number): boolean {
     const slot = this.slots.indexOf(null);

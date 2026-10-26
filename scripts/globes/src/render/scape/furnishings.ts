@@ -17,6 +17,8 @@ export interface Furnishings {
   /** The sponge filter's air (equipment.mjs): where it bubbles out of the lift tube (the bowl's
    *  frame), how many bubbles a second, their radius. */
   bubbles: { at: number[]; rate: number; radius: number } | null;
+  /** Each mesh's name and vertex count, in the order their vertices were packed (scapeBuild.mjs). */
+  parts: [string, number][];
   /** Their shader code (scapeShader.mjs). */
   wgsl: string;
   /** The plants' motion (scapeBuild.mjs, scapeRefit.mjs): its kernels, their buffers (to upload

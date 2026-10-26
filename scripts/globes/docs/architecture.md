@@ -1407,3 +1407,50 @@ Decoded off the page's thread by createImageBitmap of their files, its pixels di
 (the browser decodes them otherwise); by createImageBitmap of the images themselves, the decode stays
 on the page's thread. It costs the page's thread about 120 ms at 2.75x CPU as the photographs come
 in, about a second into the load: behind the studio, which does not move.
+
+## Learn mode (src/app/learn)
+
+For people who keep bettas, the betta page's **Learn** button (beside Feed and Flare fins; off at
+first, remembered on the device: localStorage `betta.learn`) explains what the fish does and what is
+in its bowl. Every word is in `content.ts`, for review: a card for each thing a tap can land on, a
+caption for each behaviour, the feeding advice; each a kicker, a title and two or three sentences.
+
+- **Captions** (`captions.mjs`, `Learn.frame`). The swim's mode (`Betta.swim.mode`: the page's fish,
+  or on phones the worker's last pose) is a behaviour: cruising, hovering, a trip to the film for air
+  (rise, gulp and dive are one), displaying at its reflection, a lap, resting on the sand, a startle,
+  taking a pellet (a burst and the glide after it are only the route's). One is captioned once the
+  fish has kept at it a moment (0 to 3 s), never over another card nor within 20 s of one going,
+  and the same not again for 5 minutes (15 for cruising and hovering, which it does all the time).
+  Moments too: the nest growing as the fish comes back from the film (`BowlLife.bubbles`), a pellet
+  settled uneaten (`FishFood.landed`), the fins flared at the button (at once, over any card).
+- **Taps** (`pick.mjs`). A tap (a press let go where it began within 450 ms, no second finger down
+  meanwhile: main.ts) is followed into the bowl as the viewer sees it: the lid first, on the
+  straight line (`BowlLid.hits`, as a click on it always was); then Snell's law into the glass, out
+  of it into the water or the air over it, and down through the film (a film met beyond ~75 degrees
+  is a mirror: the water). The first thing met after that is what was tapped: the furnishings, their
+  BVH traced on the CPU (`scapeBVH.mjs traceCPU`, in the bowl's frame, on the texels the page keeps
+  from `furnishings.ts`: the plants at rest), then `surfaceCPU`'s material, and the mesh by its first
+  vertex (`parts`, each mesh's name and vertex count, now handed over with the BVH) for a stem or a
+  root; the fish (within 0.06 of a probe); the floating leaf and the nest (boxes round them at the
+  film); the sand (the bed's top at rest, at once below it). Past them all, the water; through the
+  glass and the air over the water, the bowl. The heater's materials (8, 9, 12) and the filter's (10,
+  11) have their cards; a material it does not know gets none. With Learn off a tap is what it was.
+- **Feeding** (`feedLog.mjs`). Every pellet `Feeding` lets go is counted (`Feeding.onDrop`, Learn on
+  or off). As a meal is asked for (Learn on): how to feed a betta, or, within 4 hours of the last
+  meal, that it has just eaten, or, with six pellets or more in the last 12 hours, that it has had a
+  day's food. A meal is three pellets now (it was four).
+- **The card** (`.learn-card`, styles.css): one at a time, a polite live region (its words cleared
+  once it fades, so the same card again is read out). Low at the right on a wide screen; on a phone,
+  across the foot over the page's link (the controls give the specimen's name a line of its own to
+  fit 384 px), or up top, in smaller type, with `?stats`' figures up. A caption stays 5 s and 0.12 s
+  a word, a card asked for 8 s and 0.2 s a word, longer while the pointer is on it or focus in it;
+  Escape or its close button puts it away.
+- **Cost.** Off: `learn.on` read once a frame, and a counter a pellet. On: 0.0-0.1 ms a frame (in
+  the food lap), a tap's pick well under a millisecond, its module (3 KB, with the BVH's tracer) loaded
+  the first time Learn is turned on. No pipelines, no WGSL. The furnishings' texels stay on the page's
+  thread for the picker: 8.3 MB on phones, 32 MB on desktops. Phone emulation (384x693 at 2.81, 2.75x
+  CPU, vsync), Learn off and on alike: 60 fps, GPU sim 0.5 + draw 1.0 ms, 84 pipelines.
+- Tests: `learn-pick.test.mjs` (4: Snell's law; the topics; taps traced back from points on the real
+  furnishings, the bowl turned and tipped, land on them; the fish, the leaf, the nest, the film, the
+  sand, the water, the bowl, the lid) and `learn.test.mjs` (4: a card for every topic and behaviour,
+  short; the captions' timing; the feeding count).

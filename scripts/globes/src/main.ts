@@ -9,6 +9,7 @@ import { buildLadder } from './app/quality/ladder.mjs';
 import { bowlArea, GpuClock, PoseWatch, QualityRecord } from './app/quality/pageQuality';
 import { Bench, describeDevice, registerBenchRows } from './app/bench';
 import { describe, describeLoad, FrameProfile, wrap } from './app/frameProfile';
+import { Learn } from './app/learn/Learn';
 import { BETTA_PAGE, elsewhere, GLOBES, type GlobeEntry } from './app/catalog';
 import { applyUrlOverrides, fishConfig, globeConfig, lightConfig, simConfig, type GlobeConfig, type LightConfig, type SimConfig } from './config';
 import { DeskMapping, loadDesk, type DesktopHostApi } from './desktop/desktopScene';
@@ -351,6 +352,9 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // Fish food (the koi's and the reef's globes): flakes dropped in with a right-click.
   const food = new FishFood();
   const idle = new IdleWater();
+  // Learn mode (app/learn): what the fish does and what is in its bowl, explained; off until asked
+  // for. (Its card goes up top on a phone with ?stats' figures up.)
+  const learn = lid && feeding && life ? new Learn(bettaControls, stage, { camera, canvas: renderer.domElement, controller, betta, life, food, feeding, lid, glass: o.globe, level: () => sim.restLevel }, PROF.on) : null;
   // The betta bowl's furnishings, built by now: their BVH for the shader (on the GPU, where the
   // plants' motion rewrites it each frame), where they stand in the sand for the sim (the sand
   // rests on them and flows round them), where the fish keeps clear of them, and where the sponge
@@ -371,6 +375,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     sim.bedSolids = { map: f.map, extent: R };
     scapeObstacles = f.obstacles;
     filterAir = f.bubbles;
+    learn?.setScape(f.data, f.parts);
   }
   // (The filter's bubbles owed, a share of one carried from frame to frame.)
   let airOwed = 0;
@@ -585,6 +590,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     food.update(dt, sim.koiSense?.probes ?? null, sim.koiSense?.sand ?? null, FOOD_PROBE_AT, { rotation: controller.rotation.elements, gravity: controller.bodyAccel(cfg.gravity), iso: SURFACE_ISO, radius: R }, eaters);
     sim.setProbes(FOOD_PROBE_AT, food.probePoints());
     food.write(device, reef.active ? clowns.texture : koi.texture);
+    if (learn?.on) learn.frame();
     PROF.lap('food');
     idle.update(dt, controller.holding || controller.moving, sim.koiSense);
     sim.currents = idle.stirring ? idle.currents : null;
@@ -637,7 +643,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     return true;
   };
 
-  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, life, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, studio, specks, bowlRender, setScene, advance, spawnFood, clickLid, setSharpness, setRatio, setKnobs, record };
+  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, life, learn, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, studio, specks, bowlRender, setScene, advance, spawnFood, clickLid, setSharpness, setRatio, setKnobs, record };
 }
 
 type World = Awaited<ReturnType<typeof createWorld>>;
@@ -889,13 +895,17 @@ async function startApp(stage: HTMLElement, params: URLSearchParams, host: Deskt
     world.renderer.domElement.addEventListener('pointerdown', (e) => {
       if (e.button === 2) world.spawnFood(e.clientX, e.clientY);
     });
-    // A click (a press let go where it began, without a drag) on the betta bowl's lid lifts it.
-    let press: { x: number; y: number; t: number } | null = null;
+    // A click (a press let go where it began, without a drag, and no second finger down meanwhile:
+    // a two-finger turn) on the betta bowl: in Learn mode, a card about what it is on; else, on its
+    // lid, it lifts it.
+    let press: { x: number; y: number; t: number; id: number } | null = null;
     world.renderer.domElement.addEventListener('pointerdown', (e) => {
-      press = e.button === 0 ? { x: e.clientX, y: e.clientY, t: performance.now() } : null;
+      press = e.button === 0 && e.isPrimary ? { x: e.clientX, y: e.clientY, t: performance.now(), id: e.pointerId } : null;
     });
     world.renderer.domElement.addEventListener('pointerup', (e) => {
-      if (press && e.button === 0 && Math.hypot(e.clientX - press.x, e.clientY - press.y) < 6 && performance.now() - press.t < 450) world.clickLid(e.clientX, e.clientY);
+      if (press && e.button === 0 && e.pointerId === press.id && Math.hypot(e.clientX - press.x, e.clientY - press.y) < 6 && performance.now() - press.t < 450) {
+        if (!world.learn?.tap(e.clientX, e.clientY)) world.clickLid(e.clientX, e.clientY);
+      }
       press = null;
     });
     run(world, params, {

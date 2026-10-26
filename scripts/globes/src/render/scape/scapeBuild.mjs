@@ -34,6 +34,9 @@ export function furnishingsOf(pieces, n, extent, none) {
     map: bakeBedSolids(meshes, n, extent, none),
     obstacles: pieces.flatMap((p) => p.obstacles),
     bubbles: pieces.find((p) => p.bubbles)?.bubbles ?? null,
+    // (Each mesh's name and vertex count, in the order they were packed: what a vertex is part of,
+    // for Learn mode's taps, app/learn/pick.mjs.)
+    parts: meshes.map((m) => [m.name, m.positions.length / 3]),
     motion: {
       wgsl: scapeRefitWGSL(plantMotionWGSL(solids, plan.rest)),
       buffers: refitBuffers(plan),
