@@ -1,6 +1,7 @@
+import {restoreTyreLetteringBytes} from './tyre-lettering-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readLoopVoicesPrevious,restoreLoopVoicesBytes,verifyLoopVoicesRevision} from './loop-voices-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreTyreLetteringBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('LoopVoices preserves every prior fixture, vehicle asset, venue art and history input',verifyLoopVoicesRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/loop-voices/revision.json').toString());
