@@ -56,7 +56,7 @@ export const TOPICS: Record<TopicId, LearnCard> = {
   nest: {
     kicker: IN_BOWL,
     title: 'The bubble nest',
-    body: 'Male bettas blow saliva-coated bubbles into a floating raft against cover or the glass, to guard eggs and fry in. Males often build one when settled and comfortable, with no female about, though some seldom do. This one adds to it after trips for air; shaking the bowl breaks it up.',
+    body: 'Male bettas blow saliva-coated bubbles into a floating raft against cover or the glass, to guard eggs and fry in. Settled males often build one, even alone; some seldom do. This one adds to it after trips for air.',
   },
   lid: {
     kicker: IN_BOWL,
@@ -71,7 +71,7 @@ export const TOPICS: Record<TopicId, LearnCard> = {
   glass: {
     kicker: IN_BOWL,
     title: 'The bowl',
-    body: 'A glass bowl about 24\u00a0cm (9.5\u00a0in) across, holding about a gallon (4\u00a0L): the size bettas are often sold in. It has a heater and a gentle filter, but a betta does far better in 5 gallons (19\u00a0L) or more: steadier warmth, cleaner water, room to swim.',
+    body: 'A glass bowl about 24\u00a0cm (9.5\u00a0in) across, holding about a gallon (4\u00a0L): the size bettas are often sold in. It has a heater and filter, but a betta does far better in 5 gallons (19\u00a0L) or more: steadier warmth, cleaner water, room to swim.',
   },
   heater: {
     kicker: IN_BOWL,
