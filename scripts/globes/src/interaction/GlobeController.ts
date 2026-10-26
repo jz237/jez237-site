@@ -5,10 +5,11 @@
 // acceleration is what makes the water slosh. Dragging works like a steering wheel
 // around the pivot; on release a damped spring rocks the globe back upright.
 //
-// With Ctrl held, a drag turns the globe about its own centre instead, as if by its glass:
-// across, it spins about its own axis (and keeps spinning when let go, slowing as it goes); up
-// and down, it leans towards or away from the camera, and rocks back upright when let go, as
-// its weighted bed swings under it.
+// With Ctrl held (or with the right button), a drag turns the globe about its own centre
+// instead, as if by its glass: across, it spins about its own axis (and keeps spinning when let
+// go, slowing as it goes); up and down, it leans towards or away from the camera, and rocks back
+// upright when let go, as its weighted bed swings under it. On a touch screen two fingers spin it
+// about its own axis, twisting or sliding across together (and pinch to zoom as they do).
 //
 // The app also moves the whole globe along the stage (world x): it glides between the
 // interface's layouts and slides out and back in when switching globes. Those moves are
@@ -20,19 +21,27 @@ import * as THREE from 'three/webgpu';
 import type { GlobeConfig } from '../config';
 import type { Vec3 } from '../sim/FluidSim';
 
-// While held, the globe follows the hand through a critically damped spring (~0.1 s): tilts
-// ease in and out smoothly instead of snapping to the pointer.
-const GRAB_STIFFNESS = 150; // rad/s^2 per rad
-const GRAB_DAMPING = 24.5; // 2 * sqrt(stiffness)
+// While held, the globe follows the hand through a critically damped spring (natural frequency
+// 26 rad/s: it trails a steady drag by 2/26 = ~77 ms): tilts ease in and out instead of snapping
+// to the pointer, yet the globe still feels attached to the hand. (The container's acceleration
+// is capped, so a quick flick cannot slosh the water past MAX_FRAME_ACCEL_G.)
+const GRAB_STIFFNESS = 676; // rad/s^2 per rad
+const GRAB_DAMPING = 52; // 2 * sqrt(stiffness)
 const SETTLE_STIFFNESS = 14; // weighted-base restoring spring after release
 const SETTLE_DAMPING = 1.4;
 const MAX_FRAME_ACCEL_G = 3; // cap on the container acceleration, in g
 // Spinning about its own axis, once let go: how quickly it slows (1/s), and the fastest it
 // turns (rad/s; the bed and whatever stands on it sweep through the water).
 const SPIN_FRICTION = 0.8;
+/** ...and on a table (the betta's bowl: `rolling`), where its foot drags on the lacquer, so a turn
+ *  to look behind something stops near where the hand left it. */
+const TABLE_SPIN_FRICTION = 4;
 const MAX_SPIN = 6;
 /** How far a spin may run ahead of the globe while held (rad): a fast drag turns it no faster. */
 const SPIN_LEAD = 1.5;
+/** Let go, a tilt or lean this small (rad) and this slow (rad/s), or a spin this slow, has stopped. */
+const SNAP_ANGLE = 1e-4;
+const SNAP_RATE = 1e-3;
 
 // Minimum-jerk position profile (rest to rest) and its derivative, over u = 0..1.
 const mj = (u: number): number => u * u * u * (10 - 15 * u + 6 * u * u);
@@ -57,7 +66,13 @@ interface Glide {
 
 const ZOOM_MIN = 2.8;
 const ZOOM_MAX = 14;
+/** Following the fish, how much nearer or further than its own distance the wheel or a pinch may
+ *  take the camera. */
+const FOLLOW_ZOOM_MIN = 0.5;
+const FOLLOW_ZOOM_MAX = 2.5;
 const CAMERA_ELEVATION = (9 * Math.PI) / 180;
+/** The way the camera looks (world: down a little, towards -z). */
+export const CAMERA_VIEW: readonly [number, number, number] = [0, -Math.sin(CAMERA_ELEVATION), -Math.cos(CAMERA_ELEVATION)];
 const CAMERA_TARGET = new THREE.Vector3(0, -0.12, 0);
 
 export class GlobeController {
@@ -82,19 +97,55 @@ export class GlobeController {
   private readonly pivot: THREE.Vector3;
 
   private grabbing = false;
-  /** The hold turns the globe about its centre (Ctrl), rather than tilting it. */
+  /** The hold turns the globe about its centre (Ctrl, or the right button), rather than tilting
+   *  it. */
   private spinning = false;
+  private spinButton = false;
   private grabPointer = -1;
   private readonly last = new THREE.Vector2();
   private readonly touches = new Map<number, THREE.Vector2>();
+  /** Two fingers down: how far apart (pinch zoom), and their bearing and midpoint (CSS pixels;
+   *  they spin the globe about its own axis while `twoFinger`). */
   private pinchDistance = 0;
+  private pinchBearing = 0;
+  private readonly pinchMid = new THREE.Vector2();
+  private twoFinger = false;
 
   private distance = 6.6;
   private targetDistance = 6.6;
+  /** The follow camera (app/follow.mjs, main.ts): where it puts the eye (world), looking the same
+   *  way, and how much of the picture is its (0..1); and how near it follows, the wheel's or a
+   *  pinch's while it does (times its own distance). */
+  readonly followEye = new THREE.Vector3();
+  followShare = 0;
+  followZoom = 1;
   /** Wheel and pinch zoom (off while the interface frames the globe itself). */
   zoomEnabled = true;
+  /** Not to be picked up just now (the betta bowl, its lid off to feed the fish: Feeding.ts). A
+   *  hold under way is let go. */
+  get locked(): boolean {
+    return this.lockedNow;
+  }
+
+  set locked(on: boolean) {
+    this.lockedNow = on;
+    if (on) {
+      this.endGrab();
+      this.twoFinger = false;
+    }
+  }
+
+  private lockedNow = false;
+
+  /** Standing still and upright, nobody holding it (it can be opened). */
+  get settled(): boolean {
+    return !this.grabbing && !this.twoFinger && !this.glide && Math.abs(this.theta) < 0.03 && Math.abs(this.lean) < 0.03 && Math.abs(this.thetaVel) < 0.05 && Math.abs(this.leanVel) < 0.05 && Math.abs(this.twistVel) < 0.05;
+  }
 
   /** The globe's place along the stage (world x) and how fast it is moving there. */
+  /** It stands on a table and rolls as it tips (the betta's bowl, in its studio: studio.ts),
+   *  instead of rocking on a stand. */
+  rolling = false;
   private stageX = 0;
   private stageVel = 0;
   /** The camera's pan along the stage (world x). */
@@ -177,14 +228,14 @@ export class GlobeController {
     return this.centerVel;
   }
 
-  /** The globe is being held (dragged to tilt or turn it). */
+  /** The globe is being held (dragged to tilt or turn it, or turned by two fingers). */
   get holding(): boolean {
-    return this.grabbing;
+    return this.grabbing || this.twoFinger;
   }
 
-  /** The hold turns the globe about its centre (Ctrl-drag). */
+  /** The hold turns the globe about its centre (Ctrl- or right-drag, two fingers). */
   get turning(): boolean {
-    return this.grabbing && this.spinning;
+    return (this.grabbing && this.spinning) || this.twoFinger;
   }
 
   /** Stands the globe straight, facing the camera, at once (a new globe, out of sight). */
@@ -281,8 +332,10 @@ export class GlobeController {
     const h = dt / steps;
     const tilting = this.grabbing && !this.spinning;
     const turning = this.grabbing && this.spinning;
+    // (Two fingers spin it about its own axis, and do not lean it.)
+    const twisting = turning || this.twoFinger;
     const max = this.cfg.maxTilt;
-    const friction = Math.exp(-SPIN_FRICTION * h);
+    const friction = Math.exp(-(this.rolling ? TABLE_SPIN_FRICTION : SPIN_FRICTION) * h);
     for (let i = 0; i < steps; i++) {
       let acc: number;
       if (tilting) {
@@ -311,7 +364,7 @@ export class GlobeController {
       }
 
       // Spinning: the hand's spring while turned, else it runs on, slowing.
-      if (turning) {
+      if (twisting) {
         this.twistVel += (GRAB_STIFFNESS * (this.targetTwist - this.twist) - GRAB_DAMPING * this.twistVel) * h;
       } else {
         this.twistVel *= friction;
@@ -319,11 +372,16 @@ export class GlobeController {
       this.twistVel = THREE.MathUtils.clamp(this.twistVel, -MAX_SPIN, MAX_SPIN);
       this.twist += this.twistVel * h;
     }
+    // (Let go and nearly settled, it stops: the springs otherwise ease it on through ever smaller
+    // angles for minutes, and everything that waits for it to be still - the sim's bed, the quality
+    // controller, the mirror at half rate - would wait that long. A ten-thousandth of a radian is
+    // a fraction of a pixel.)
+    if (!tilting && Math.abs(this.theta) < SNAP_ANGLE && Math.abs(this.thetaVel) < SNAP_RATE) this.theta = this.thetaVel = 0;
+    if (!turning && Math.abs(this.lean) < SNAP_ANGLE && Math.abs(this.leanVel) < SNAP_RATE) this.lean = this.leanVel = 0;
+    if (!twisting && Math.abs(this.twistVel) < SNAP_RATE) this.twistVel = 0;
     if (!tilting) this.targetTheta = this.theta;
-    if (!turning) {
-      this.targetLean = this.lean;
-      this.targetTwist = this.twist;
-    }
+    if (!turning) this.targetLean = this.lean;
+    if (!twisting) this.targetTwist = this.twist;
     // (Whole turns taken off, so the angle stays small.)
     const turns = Math.round(this.twist / (2 * Math.PI));
     if (turns !== 0) {
@@ -366,9 +424,18 @@ export class GlobeController {
     const d = this.cfg.pivotDepth;
     const s = Math.sin(this.theta);
     const c = Math.cos(this.theta);
-    this.pivot.x = this.stageX;
-    this.center.set(this.pivot.x - d * s, this.pivot.y + d * c, 0);
-    if (dt > 0) this.centerVel.set(-d * c * this.thetaVel + this.stageVel, -d * s * this.thetaVel, 0);
+    if (this.rolling) {
+      // Round-bottomed on a table, it rolls without slipping: its centre keeps its height and is
+      // carried as far as its foot rolls (pivotDepth, the foot's radius, times the turn), the
+      // foot right under it.
+      this.pivot.set(this.stageX - d * this.theta, -d, d * this.lean);
+      this.center.set(this.pivot.x, 0, this.pivot.z);
+      if (dt > 0) this.centerVel.set(-d * this.thetaVel + this.stageVel, 0, d * this.leanVel);
+    } else {
+      this.pivot.x = this.stageX;
+      this.center.set(this.pivot.x - d * s, this.pivot.y + d * c, 0);
+      if (dt > 0) this.centerVel.set(-d * c * this.thetaVel + this.stageVel, -d * s * this.thetaVel, 0);
+    }
     // Tilted on its stand, leaned, then spun about its own axis: Rz(theta) Rx(lean) Ry(twist).
     this.rot4.makeRotationZ(this.theta);
     this.rot4.multiply(this.turn4.makeRotationX(this.lean));
@@ -392,6 +459,11 @@ export class GlobeController {
       target.y + this.distance * Math.sin(CAMERA_ELEVATION),
       target.z + this.distance * Math.cos(CAMERA_ELEVATION),
     );
+    if (this.followShare > 0) {
+      // (Following: the eye where the follow camera has it, or on the way back, looking the same way.)
+      cam.position.lerp(this.followEye, this.followShare);
+      target.set(cam.position.x + CAMERA_VIEW[0], cam.position.y + CAMERA_VIEW[1], cam.position.z + CAMERA_VIEW[2]);
+    }
     cam.lookAt(target);
     cam.updateMatrixWorld();
   }
@@ -428,15 +500,20 @@ export class GlobeController {
       if (this.touches.size === 2) {
         this.endGrab();
         this.pinchDistance = this.touchSpread();
+        this.pinchBearing = this.touchBearing();
+        this.touchMid(this.pinchMid);
+        this.twoFinger = !this.lockedNow;
+        this.targetTwist = this.twist;
         return;
       }
     }
-    if (this.grabbing || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    if (this.grabbing || this.lockedNow || (e.pointerType === 'mouse' && e.button !== 0 && e.button !== 2)) return;
     if (!this.overGlobe(p)) return;
 
     this.grabbing = true;
     this.grabPointer = e.pointerId;
-    this.spinning = e.ctrlKey;
+    this.spinButton = e.pointerType === 'mouse' && e.button === 2;
+    this.spinning = e.ctrlKey || this.spinButton;
     this.targetTheta = this.theta;
     this.targetLean = this.lean;
     this.targetTwist = this.twist;
@@ -455,14 +532,27 @@ export class GlobeController {
         const spread = this.touchSpread();
         if (this.zoomEnabled && this.pinchDistance > 0 && spread > 0) this.zoomBy(this.pinchDistance / spread);
         this.pinchDistance = spread;
+        if (this.twoFinger) {
+          // Spinning it about its own axis: the fingers' twist (clockwise on the screen turns its
+          // front to the left, as a turntable's seen from above) and their slide across (the
+          // globe's radius turns it a radian, as a Ctrl-drag does).
+          const bearing = this.touchBearing();
+          const mid = this.touchMid(new THREE.Vector2());
+          let twist = bearing - this.pinchBearing;
+          twist -= 2 * Math.PI * Math.round(twist / (2 * Math.PI));
+          const r = this.globeScreenRadius(this.toScreen(this.center, new THREE.Vector2()));
+          this.targetTwist = THREE.MathUtils.clamp(this.targetTwist + (mid.x - this.pinchMid.x) / r - twist, this.twist - SPIN_LEAD, this.twist + SPIN_LEAD);
+          this.pinchBearing = bearing;
+          this.pinchMid.copy(mid);
+        }
         return;
       }
     }
 
     if (this.grabbing && e.pointerId === this.grabPointer) {
       // (Ctrl pressed or let go mid-drag: the hold carries on the other way, from where it is.)
-      if (e.ctrlKey !== this.spinning) {
-        this.spinning = e.ctrlKey;
+      if ((e.ctrlKey || this.spinButton) !== this.spinning) {
+        this.spinning = e.ctrlKey || this.spinButton;
         this.targetTheta = this.theta;
         this.targetLean = this.lean;
         this.targetTwist = this.twist;
@@ -493,12 +583,15 @@ export class GlobeController {
       return;
     }
 
-    if (e.pointerType === 'mouse') this.canvas.style.cursor = this.overGlobe(p) ? 'grab' : '';
+    if (e.pointerType === 'mouse') this.canvas.style.cursor = this.overGlobe(p) && !this.lockedNow ? 'grab' : '';
   };
 
   private onPointerUp = (e: PointerEvent): void => {
     this.touches.delete(e.pointerId);
-    if (this.touches.size < 2) this.pinchDistance = 0;
+    if (this.touches.size < 2) {
+      this.pinchDistance = 0;
+      this.twoFinger = false;
+    }
     if (e.pointerId === this.grabPointer) this.endGrab();
   };
 
@@ -507,6 +600,7 @@ export class GlobeController {
     if (this.canvas.hasPointerCapture(this.grabPointer)) this.canvas.releasePointerCapture(this.grabPointer);
     this.grabbing = false;
     this.spinning = false;
+    this.spinButton = false;
     this.grabPointer = -1;
     this.canvas.style.cursor = '';
   }
@@ -514,6 +608,17 @@ export class GlobeController {
   private touchSpread(): number {
     const pts = [...this.touches.values()];
     return pts.length >= 2 ? pts[0].distanceTo(pts[1]) : 0;
+  }
+
+  /** The line from the first finger to the second: its angle (radians, clockwise on the screen). */
+  private touchBearing(): number {
+    const [a, b] = [...this.touches.values()];
+    return b ? Math.atan2(b.y - a.y, b.x - a.x) : 0;
+  }
+
+  private touchMid(out: THREE.Vector2): THREE.Vector2 {
+    const [a, b] = [...this.touches.values()];
+    return b ? out.copy(a).add(b).multiplyScalar(0.5) : out.copy(a ?? out);
   }
 
   private onWheel = (e: WheelEvent): void => {
@@ -524,6 +629,10 @@ export class GlobeController {
   };
 
   private zoomBy(factor: number): void {
+    if (this.followShare > 0.5) {
+      this.followZoom = THREE.MathUtils.clamp(this.followZoom * factor, FOLLOW_ZOOM_MIN, FOLLOW_ZOOM_MAX);
+      return;
+    }
     this.targetDistance = THREE.MathUtils.clamp(this.targetDistance * factor, ZOOM_MIN, ZOOM_MAX);
   }
 }
