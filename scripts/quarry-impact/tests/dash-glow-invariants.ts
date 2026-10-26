@@ -1,3 +1,4 @@
+import {restoreExhaustSootBytes} from './exhaust-soot-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readDashGlowPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreDashGlowBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreExhaustSootBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readDashGlowPrevious(file);
 }
 export function verifyDashGlowRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'4d20e805fd16913af98f7b934bff5b316c47af01');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreExhaustSootBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreDashGlowBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the DashGlow release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreExhaustSootBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the DashGlow release');
  assert.equal(manifest.previousFixtureCount,9124);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,9124);
 }
