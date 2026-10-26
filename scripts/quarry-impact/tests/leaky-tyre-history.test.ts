@@ -1,6 +1,7 @@
+import {restoreWebgl2NoticeBytes} from './webgl2-notice-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readLeakyTyrePrevious,restoreLeakyTyreBytes,verifyLeakyTyreRevision} from './leaky-tyre-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreWebgl2NoticeBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('LeakyTyre preserves every prior fixture, vehicle asset, venue art and history input',verifyLeakyTyreRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/leaky-tyre/revision.json').toString());

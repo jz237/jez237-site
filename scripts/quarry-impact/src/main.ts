@@ -157,6 +157,7 @@ import {defaultSweeps,dustFilm,fitWiperArcs,sweeps} from './wiper-arcs';
 import {chainDoor,chainSnaps,chainsDoors,frontDoors} from './door-chains';
 import {deadBrakeSide} from './dead-brake';
 import {slowPuncture} from './leaky-tyre';
+import {hasWebGL2,showWebGL2Notice} from './webgl2-notice';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -745,6 +746,8 @@ const impactAdjudicator = new ImpactAdjudicator();
 const collisionScars = new CollisionScars();
 let keys = new Set<string>();
 let testInput: Input | null = null;
+// Without WebGL 2 the game cannot draw at all: tell the player what to try rather than fail behind the loading screen.
+if(!hasWebGL2()){showWebGL2Notice(ui);throw new Error('Quarry Impact needs WebGL 2');}
 const renderer = new T.WebGLRenderer({
   canvas,
   antialias: false, // Composer renders offscreen; SMAA supplies final edge antialiasing.
