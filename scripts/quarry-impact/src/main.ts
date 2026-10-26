@@ -151,6 +151,7 @@ import {CV,cvClicks,cvVolume,cvWear} from './cv-joints';
 import {LODGE,lodgeChunk,lodges,shakesLoose} from './lodged-debris';
 import {DRAFT,draftAccel,draftFactor} from './slipstream';
 import {fitPlates,plateFor} from './number-plates';
+import {DashGlow,dashPoint} from './dash-glow';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -1008,7 +1009,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   sound.clearCars();
   vehicleFire?.reset();propFires.reset();
   puddleSplashes?.reset();gravelRoost.reset();rollingCaps.reset();exhaustFlames.reset();sparkLight.reset();bodyRain.reset();TOP_DUST.value=0;
-  for (const c of cars){lampDangles.get(c)?.dispose();lampDangles.delete(c);towStraps.get(c)?.dispose();towStraps.delete(c);airbags.get(c)?.dispose();airbags.delete(c);strutPunches.get(c)?.dispose();strutPunches.delete(c);mudFlaps.get(c)?.dispose();mudFlaps.delete(c);carLights.get(c)?.dispose();carLights.delete(c);wheelBlurs.get(c)?.dispose();wheelBlurs.delete(c);lodged.delete(c);danglers.get(c)?.dispose();danglers.delete(c);c.dispose();}
+  for (const c of cars){lampDangles.get(c)?.dispose();lampDangles.delete(c);towStraps.get(c)?.dispose();towStraps.delete(c);airbags.get(c)?.dispose();airbags.delete(c);strutPunches.get(c)?.dispose();strutPunches.delete(c);mudFlaps.get(c)?.dispose();mudFlaps.delete(c);carLights.get(c)?.dispose();carLights.delete(c);dashGlows.get(c)?.dispose();dashGlows.delete(c);wheelBlurs.get(c)?.dispose();wheelBlurs.delete(c);lodged.delete(c);danglers.get(c)?.dispose();danglers.delete(c);c.dispose();}
   clearMarshals();
   for(const f of bailed)disposeDriver(f);bailed.length=0;
   cars = [];
@@ -1079,6 +1080,8 @@ function createCars(attract = false, previewSetup?:Setup) {
           p.size=BODY_DUST.size[0]+Math.random()*(BODY_DUST.size[1]-BODY_DUST.size[0]);p.max=p.life=BODY_DUST.life[0]+Math.random()*(BODY_DUST.life[1]-BODY_DUST.life[0]);dustTint.setHex(BODY_DUST.tint).multiplyScalar(.88+Math.random()*.2).toArray(fx.colors,i*3);}}};
     // Modern cars carry airbags that fire when the front is crushed (offline).
     {const driver=car.root.getObjectByName('driver');if(car.extendedDamage&&driver&&!isClassicKind(type))airbags.set(car,new Airbags(car.root,driver,[...car.panels,...car.glass]));}
+    // The instruments light up: the model's own cluster with the electrics, dial faces or added dials with the lamps (offline; not the buggies).
+    {const driver=car.root.getObjectByName('driver');if(car.extendedDamage&&driver&&type!=='buggy'&&type!=='trail'){car.root.updateMatrixWorld(true);const meshes:T.Mesh[]=[];car.root.traverse(o=>{if(o instanceof T.Mesh)meshes.push(o);});dashGlows.set(car,new DashGlow(car.root,dashPoint(car.root,car.root.worldToLocal(driver.getWorldPosition(new T.Vector3())),[...car.panels,...car.glass]),meshes));}}
     // Fuzzy dice or an air freshener hangs from the mirror of most cars and swings with every lurch (offline; not the buggies).
     {const driver=car.root.getObjectByName('driver'),d=dangleFor(car.id);if(car.extendedDamage&&driver&&d.kind!=='none'&&type!=='buggy'&&type!=='trail'){car.root.updateMatrixWorld(true);danglers.set(car,new Danglers(car.root,d.kind,d.colour,mirrorPoint(car.root,car.root.worldToLocal(driver.getWorldPosition(new T.Vector3())),[...car.panels,...car.glass])));}}
     // A wrecked front corner punches its strut up through the panel above the wheel, with a snap and sparks (offline).
@@ -2039,6 +2042,8 @@ function step(dt: number) {
   // An old car's loose wiring flickers its lamps for a moment after a hard knock (offline).
   for(const c of cars)carLights.get(c)?.flick(flickerOff(clock-(wiringAt.get(c)??-9),c.id));
   for(const c of cars)carLights.get(c)?.set((dusk||wet&&c.extendedDamage)&&c.health>0&&!c.electricalCut&&!c.batteryOut&&(!c.beltSnapped||batteryLights(c.battery,clock,c.id)),c.health>0&&!c.electricalCut&&!c.batteryOut&&(c.input?.brake??0)>.2&&Math.abs(c.speed)>1,dusk?1:RAIN_LIGHTS.pool,wet&&c.extendedDamage?RAIN_BEAMS.strength:dusk&&c.extendedDamage?DUST_BEAMS.strength*dustAir:0);}
+  // The instruments live with the electrics (the dials lit with the lamps); a badly hurt car's warning lamp blinks (offline).
+  {const lamps=eventLighting==='dusk'||eventLighting==='rain';for(const c of cars){const g=dashGlows.get(c);if(!g)continue;g.update(c.health>0&&!c.electricalCut&&!c.batteryOut&&(!c.beltSnapped||batteryLights(c.battery,clock,c.id))&&!flickerOff(clock-(wiringAt.get(c)??-9),c.id),lamps,c.health,clock);}}
   // In the rain the rear fog lamps come on too (offline).
   {const raining=eventLighting==='rain';for(const c of cars)carLights.get(c)?.fog(raining&&!!c.extendedDamage&&c.health>0&&!c.electricalCut&&!c.batteryOut);}
   // Backing up, the reversing lamps come on (offline).
@@ -2403,7 +2408,7 @@ const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMa
 function bodyBox(c:Vehicle){let box=roostBoxes.get(c);if(box)return box;c.root.updateMatrixWorld(true);const inverse=c.root.matrixWorld.clone().invert(),b=new T.Box3(),all=new T.Box3();for(const p of c.panels)all.union(b.setFromObject(p).applyMatrix4(inverse));if(all.isEmpty())return null;
   box={centre:all.getCenter(new T.Vector3()),half:all.getSize(new T.Vector3()).multiplyScalar(.5)};roostBoxes.set(c,box);return box;}
 let bodyDusts=0;const dustOut=new T.Vector3();
-const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>(),oilBurners=new WeakMap<object,Burner>(),wheelBlurs=new Map<Vehicle,WheelBlur>(),bumpState=new WeakMap<object,{len:number[];ground:boolean[];at:number[];count:number}>(),battleScars=new WeakMap<object,{scars:number;panels:number}>(),trampState=new WeakMap<object,{phase:number;hops:number;lift:number}>(),trampAt=new T.Vector3(),trampB=new T.Vector3(),cvClocks=new WeakMap<object,{clock:number[];count:number}>(),lodged=new Map<Vehicle,T.Mesh[]>(),deadBulbs=new WeakMap<object,number>(),wiringAt=new WeakMap<object,number>(),danglers=new Map<Vehicle,Danglers>(),sunstrips=new WeakMap<object,string>(),washed=new WeakMap<object,string>(),plates=new WeakMap<object,string>();let trampHops=0,flickers=0,cvClicked=0,cvTake=0,lodgedPieces=0,looseDebris=0,drafting=0,draftToast=-99;let rustShowers=0,oilBurns=0,bumpStops=0,bumpTake=0;
+const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>(),oilBurners=new WeakMap<object,Burner>(),wheelBlurs=new Map<Vehicle,WheelBlur>(),bumpState=new WeakMap<object,{len:number[];ground:boolean[];at:number[];count:number}>(),battleScars=new WeakMap<object,{scars:number;panels:number}>(),trampState=new WeakMap<object,{phase:number;hops:number;lift:number}>(),trampAt=new T.Vector3(),trampB=new T.Vector3(),cvClocks=new WeakMap<object,{clock:number[];count:number}>(),lodged=new Map<Vehicle,T.Mesh[]>(),dashGlows=new Map<Vehicle,DashGlow>(),deadBulbs=new WeakMap<object,number>(),wiringAt=new WeakMap<object,number>(),danglers=new Map<Vehicle,Danglers>(),sunstrips=new WeakMap<object,string>(),washed=new WeakMap<object,string>(),plates=new WeakMap<object,string>();let trampHops=0,flickers=0,cvClicked=0,cvTake=0,lodgedPieces=0,looseDebris=0,drafting=0,draftToast=-99;let rustShowers=0,oilBurns=0,bumpStops=0,bumpTake=0;
 const shiftGears=new WeakMap<object,number>(),shiftRevs=new WeakMap<object,number>();let shiftFlames=0,dustAir=0,knockDust=0;let shiftSmokes=0;const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3(),roostBoxes=new WeakMap<Vehicle,{centre:T.Vector3;half:T.Vector3}>(),roostBodies:RoostBody[]=[],pingClock=new Map<number,number>();let pingTake=0,stonePings=0;let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
 let wetReflections:ReturnType<typeof createWetReflections>|undefined;const glowList:Glow[]=[];
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
@@ -2426,6 +2431,8 @@ function updateCamera(dt: number) {
   // The driver of the car the camera sits in (hood or dashboard view) is hidden, so the view stays clear.
   {const spectating=demo||scoreSpectating(),viewed=spectating?cars.find(c=>c.id===director.followed):cars[0],inside=spectating?director.activeView==='hood':drivingCamera!=='chase';
     for(const c of cars){const d=c.root.children.find(o=>o.name==='driver');if(d)d.visible=!(inside&&c===viewed);}}
+  // nor is that car's cabin glow, which would wash over the view (offline).
+  {const spectating=demo||scoreSpectating(),viewed=spectating?cars.find(c=>c.id===director.followed):cars[0],inside=spectating?director.activeView==='hood':drivingCamera!=='chase';for(const c of cars)dashGlows.get(c)?.seat(inside&&c===viewed);}
   // Drivers sway in their seats with the car's own motion (cosmetic; frozen while paused so resuming does not jolt them).
   // Drivers slump under a crushed roof (measured on the first frame, then only when the roof crush changes) so a helmet never
   // shows through it.
@@ -3202,6 +3209,7 @@ async function boot() {
     sunstrip: (id = 0) => { const c = cars.find(x => x.id === id); return c ? sunstrips.get(c) ?? null : null; },
     dangler: (id = 0) => { const c = cars.find(x => x.id === id), d = c && danglers.get(c); return d ? { kind: d.kind, pitch: +d.state.pitch.toFixed(3), roll: +d.state.roll.toFixed(3), at: d.group.position.toArray().map(v => +v.toFixed(3)) } : null; },
     electrics: (id = 0, kill?: number) => { const c = cars.find(x => x.id === id); if (c && kill !== undefined && carLights.get(c)?.lamp('head', kill)) { carLights.get(c)!.kill(kill); deadBulbs.set(c, kill); } return c ? { dead: deadBulbs.get(c) ?? -1, flickers, flickering: flickerOff(clock - (wiringAt.get(c) ?? -9), c.id) } : null; },
+    dash: (id = 0) => { const c = cars.find(x => x.id === id), d = c && dashGlows.get(c); return d ? { lit: d.lit, warning: d.lamp.visible, clusters: d.clusters.length, faces: d.faces.length, dials: !!d.dials, halo: d.halo.visible, at: (d.dials ?? d.lamp).position.toArray().map(v => +v.toFixed(2)), world: (d.dials ?? d.lamp).getWorldPosition(new T.Vector3()).toArray().map(v => +v.toFixed(2)) } : null; },
     drafting: () => +drafting.toFixed(2),
     lodged: (id?: number) => { if (id === undefined) return { lodged: lodgedPieces, loose: looseDebris }; const c = cars.find(x => x.id === id); return c ? lodged.get(c)?.length ?? 0 : null; },
     cvClicks: (id?: number) => { if (id === undefined) return cvClicked; const c = cars.find(x => x.id === id); return c ? cvClocks.get(c)?.count ?? 0 : null; },
