@@ -133,7 +133,7 @@ import {SparkLight} from './spark-light';
 import {BODY_RAIN,BodyRain,topSpots,type RainCar} from './body-rain';
 import {MIST,mistStep} from './window-mist';
 import {TOP_DUST,settleStep} from './settled-dust';
-import {MudFlaps} from './mud-flaps';
+import {FLAP,MudFlaps} from './mud-flaps';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -2688,7 +2688,7 @@ function frame(now: number) {
   if(state==='playing')for(const c of cars){if(!c.extendedDamage||c.surface==='asphalt')continue;const clocks=roostClocks.get(c)??[0,0,0,0];roostClocks.set(c,clocks);
     for(let i=0;i<4;i++){const rate=roostRate(c.wheelSpins[i],c.surface);if(rate<=0||c.wreckParts.wheelLost[i]||c.wetWheels[i])continue;clocks[i]+=rate*dt;if(clocks[i]<1)continue;
       const at=c.controller.wheelContactPoint(i);if(!at){clocks[i]=0;continue;}roostBack.copy(c.forward).setY(0).normalize().negate();
-      for(;clocks[i]>=1;clocks[i]--){steamAt.set(at.x,at.y,at.z).addScaledVector(roostBack,.15);const kind=c.surface==='mud'?'mud':'gravel',stone=gravelRoost.throw(steamAt,roostBack,c.wheelSpins[i],kind,Math.random,c.id);
+      for(;clocks[i]>=1;clocks[i]--){steamAt.set(at.x,at.y,at.z).addScaledVector(roostBack,.15);const kind=c.surface==='mud'?'mud':'gravel',caught=Math.random()<FLAP.catch&&!!mudFlaps.get(c)?.catchStone(i),stone=gravelRoost.throw(steamAt,roostBack,c.wheelSpins[i]*(caught?FLAP.drop:1),kind,Math.random,c.id);
         if(stone&&Math.random()<ROOST.grit.share){const start=fx.cursor;fx.emit(steamAt,1,0,ROOST.grit.size);for(let j=start;j<fx.cursor;j++){const n=j%fx.particles.length,p=fx.particles[n];p.v.copy(stone.v).multiplyScalar(ROOST.grit.speed);
           p.max=p.life=ROOST.grit.life[0]+Math.random()*(ROOST.grit.life[1]-ROOST.grit.life[0]);dustTint.setHex(ROOST.grit.tint[kind]).multiplyScalar(.9+Math.random()*.2).toArray(fx.colors,n*3);}}}}}
   // Stones strike the other cars' bodywork (each car a box round its panels, measured once) and tick off it.
@@ -3108,7 +3108,7 @@ async function boot() {
     airbags: (id = 0) => { const c = cars.find(x => x.id === id), b = c && airbags.get(c); return b ? { fitted: b.bags.length, deployed: b.deployed, age: +b.age.toFixed(2), scale: b.bags.map(x => +x.mesh.scale.y.toFixed(3)), at: b.bags.map(x => x.at.toArray().map(v => +v.toFixed(2))), front: +(c!.structuralDamage?.[0] ?? 0).toFixed(3), fired: airbagsFired } : null; },
     rollingCaps: () => ({ rolled: rollingCaps.rolled, moving: rollingCaps.moving, caps: rollingCaps.caps.map(c => ({ phase: c.phase, speed: +c.speed.toFixed(2), lean: +c.lean.toFixed(2), r: +c.radius.toFixed(3), at: c.p.toArray().map(v => +v.toFixed(2)) })) }),
     dustAir: () => +dustAir.toFixed(3),
-    mudFlaps: (id = 0) => { const c = cars.find(x => x.id === id), f = c && mudFlaps.get(c); return f ? { flaps: f.flaps.length, torn: f.torn, swings: f.swings } : null; },
+    mudFlaps: (id = 0) => { const c = cars.find(x => x.id === id), f = c && mudFlaps.get(c); return f ? { flaps: f.flaps.length, torn: f.torn, swings: f.swings, caught: f.caught } : null; },
     topDust: (level?: number) => { if (level !== undefined) TOP_DUST.value = level; return +TOP_DUST.value.toFixed(3); },
     windowMist: (id = 0, level?: number, now = false) => { const c = cars.find(x => x.id === id); if (!c) return null; if (level !== undefined) { mistIn.set(c, level); if (now) for (const g of c.glass) { const st = (g.material as T.Material).userData.glassState as GlassState | undefined; if (st) st.mist.value = level; } } return { level: +(mistIn.get(c) ?? 0).toFixed(3), glass: c.glass.map(g => +(((g.material as T.Material).userData.glassState as GlassState | undefined)?.mist.value ?? -1).toFixed(3)) }; },
     bodyRain: () => ({ splashing: bodyRain.splashing, landed: bodyRain.landed, cars: rainNear.map(r => ({ id: r.id, spots: r.spots.length })) }),

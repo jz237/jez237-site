@@ -41,7 +41,7 @@ test('the vehicle keeps each grounded tyre\'s signed wheelspin, and main throws 
   assert.ok(vehicle.includes('for(let i=0;i<4;i++)this.wheelSpins[i]=result.contactSlips[i]>0?result.slips[i]:0;'),'grounded spin only');
   assert.equal(vehicle.split('this.wheelSpins.fill(0)').length-1,2,'cleared on both resets');
   assert.ok(main.includes("if(state==='playing')for(const c of cars){if(!c.extendedDamage||c.surface==='asphalt')continue;const clocks=roostClocks.get(c)"),'offline, in play, off asphalt');
-  assert.ok(main.includes("const kind=c.surface==='mud'?'mud':'gravel',stone=gravelRoost.throw(steamAt,roostBack,c.wheelSpins[i],kind,Math.random,c.id);")&&main.includes('if(stone&&Math.random()<ROOST.grit.share){')&&main.includes('if(rate<=0||c.wreckParts.wheelLost[i]||c.wetWheels[i])continue;'),'from each tyre still on and out of the water');
+  assert.ok(main.includes("const kind=c.surface==='mud'?'mud':'gravel',caught=Math.random()<FLAP.catch&&!!mudFlaps.get(c)?.catchStone(i),stone=gravelRoost.throw(steamAt,roostBack,c.wheelSpins[i]*(caught?FLAP.drop:1),kind,Math.random,c.id);")&&main.includes('if(stone&&Math.random()<ROOST.grit.share){')&&main.includes('if(rate<=0||c.wreckParts.wheelLost[i]||c.wetWheels[i])continue;'),'from each tyre still on and out of the water');
   assert.ok(main.includes('puddleSplashes?.reset();gravelRoost.reset();'),'cleared between events');
 });
 test('a stone flying into another car glances off its panel once and ticks, louder the faster; never off the car that threw it',()=>{

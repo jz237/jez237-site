@@ -40,3 +40,10 @@ test('main hangs flaps on offline cars with arches and swings them every frame o
   assert.ok(main.includes("if(car.extendedDamage&&type!=='buggy')mudFlaps.set(car,new MudFlaps(car.root,car.wheels,vehicleWheelRadius(type),car.id,sheet=>fx.detach(sheet,car.velocity.clone().multiplyScalar(.6))));"),'offline, not the buggy');
   assert.ok(main.includes('mudFlaps.get(c)?.update(c.velocity,c.wreckParts.wheelDamage,c.wreckParts.wheelLost,dt);')&&main.includes('mudFlaps.get(c)?.dispose();mudFlaps.delete(c);'),'swung, cleared');
 });
+test('a flap catches the stones its tyre throws: they drop behind it and kick it back',()=>{
+  const {root,wheels}=car(),flaps=new MudFlaps(root,wheels,.37,1,()=>{}),f=flaps.flaps[2];
+  assert.equal(flaps.catchStone(2),true);assert.ok(f.state.pitchV===FLAP.kick&&flaps.caught===1,'kicked back');
+  flaps.update(new T.Vector3(),[0,0,.9,0],[false,false,false,false],1/60);assert.equal(flaps.catchStone(2),false,'a torn flap catches nothing');assert.equal(flaps.catchStone(7),false);
+  assert.ok(FLAP.catch>0&&FLAP.catch<1&&FLAP.drop<.5,'most caught, the rest fly');
+  const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');assert.ok(main.includes('caught=Math.random()<FLAP.catch&&!!mudFlaps.get(c)?.catchStone(i)')&&main.includes('c.wheelSpins[i]*(caught?FLAP.drop:1)'),'in the roost');
+});

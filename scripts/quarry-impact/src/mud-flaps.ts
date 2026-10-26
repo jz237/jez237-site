@@ -6,8 +6,9 @@ import {measureTyreVisual} from './tyre-visual';
  * swings on its top edge as a damped pendulum (FLAP.omega rad/s, damping FLAP.damping) in the car's own frame:
  * accelerating throws it back, braking forward, cornering sideways, and the oncoming air (FLAP.air·v²) streams it back
  * off the tyre — never forward into the tread (FLAP.tuck rad at most) nor past FLAP.max. A wheel wrecked past FLAP.tear
- * or lost tears its flap away. */
-export const FLAP={wide:1.2,top:.35,clear:.09,gap:.05,thick:.008,omega:8,damping:.22,air:.012,tuck:.05,max:1.1,roll:.5,maxAccel:150,tear:.55,stripe:.035,colour:0x151515,stripes:[0xd8241c,0xf0f0f0,0xf2c21a] as const} as const;
+ * or lost tears its flap away. A flap catches the stones its spinning tyre throws: FLAP.catch of them hit it and drop just
+ * behind (thrown at FLAP.drop of their speed), each kicking the flap back FLAP.kick rad/s. */
+export const FLAP={wide:1.2,top:.35,clear:.09,gap:.05,thick:.008,omega:8,damping:.22,air:.012,tuck:.05,max:1.1,roll:.5,maxAccel:150,tear:.55,catch:.65,drop:.18,kick:2.2,stripe:.035,colour:0x151515,stripes:[0xd8241c,0xf0f0f0,0xf2c21a] as const} as const;
 export type FlapSwing={pitch:number;pitchV:number;roll:number;rollV:number};
 /** One step of a flap's swing (car acceleration and velocity in its own frame, x left z forward). Pitch is back off the
  * tyre (its bottom swinging toward the rear), roll toward the car's +x side. */
@@ -48,6 +49,9 @@ export class MudFlaps{
       this.flaps.push({group,swing:group.getObjectByName('mud_flap_swing')!,sheet:group.getObjectByName('mud_flap_sheet') as T.Mesh,wheel:i,state:{pitch:0,pitchV:0,roll:0,rollV:0},torn:false});
     });
   }
+  /** Does a whole flap hang behind this wheel (0–3) to catch its stones? If so the stone kicks it back. */
+  catchStone(wheel:number){const f=this.flaps.find(x=>x.wheel===wheel&&!x.torn);if(!f)return false;f.state.pitchV+=FLAP.kick;this.caught++;return true;}
+  caught=0;
   /** Flap swing angles back off the tyres (QA, radians), in wheel order. */
   get swings(){return this.flaps.filter(f=>!f.torn).map(f=>+f.state.pitch.toFixed(3));}
   update(velocity:T.Vector3,wheelDamage:ArrayLike<number>,wheelLost:ArrayLike<boolean|number>,dt:number){
