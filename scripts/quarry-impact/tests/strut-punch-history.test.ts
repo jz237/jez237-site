@@ -1,6 +1,7 @@
+import {restoreSparkLightBytes} from './spark-light-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readStrutPunchPrevious,restoreStrutPunchBytes,verifyStrutPunchRevision} from './strut-punch-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreSparkLightBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('StrutPunch preserves every prior fixture, vehicle asset, venue art and history input',verifyStrutPunchRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/strut-punch/revision.json').toString());

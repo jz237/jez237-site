@@ -129,6 +129,7 @@ import {AIRBAG,Airbags} from './airbags';
 import {ExhaustFlames,shiftFlame} from './exhaust-flames';
 import {DUST_BEAMS,dustAirStep} from './dust-beams';
 import {StrutPunch} from './strut-punch';
+import {SparkLight} from './spark-light';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -745,6 +746,8 @@ const gravelRoost = new GravelRoost(scene, (x, z) => fx.groundHeight(x, z));
 // Knocked-off hubcaps roll away across the floor (offline), clanking as they land and lie down.
 // Tongues of flame out of the tailpipes on every pop (offline).
 const exhaustFlames = new ExhaustFlames(scene);
+// Showers of sparks light up the floor and the cars round them (offline).
+const sparkLight = new SparkLight(scene);
 const rollingCaps = new RollingCaps(scene, (x, z, near) => fx.floorAt(x, z, near), (at, loud) => sound.clip(`rattle-${Math.floor(Math.random() * 4)}`, at, .25 + .45 * loud, .26));
 // Bright lamps, fire and lightning glow (offline, not on the medium tier).
 const lampBloom = new UnrealBloomPass(new T.Vector2(innerWidth, innerHeight), BLOOM.strength, BLOOM.radius, BLOOM.threshold);
@@ -980,7 +983,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   drivers.difficulty=attract?'amateur':aiDifficulty();pursuit=null;pursuitDriving.reset();combat.reset(true);derbyFeed.reset();waypointRace=!attract&&mode==='race'&&raceFormat()!=='laps'?new WaypointRace(raceFormat() as 'ordered'|'free'|'random',raceLaps(),clubRound()?.seed??activeChallenge?.seed??Math.floor(Math.random()*0xffffffff),targetVenue.course.checkpoints,targetVenue.course.waypointStations):null;
   sound.clearCars();
   vehicleFire?.reset();propFires.reset();
-  puddleSplashes?.reset();gravelRoost.reset();rollingCaps.reset();exhaustFlames.reset();
+  puddleSplashes?.reset();gravelRoost.reset();rollingCaps.reset();exhaustFlames.reset();sparkLight.reset();
   for (const c of cars){lampDangles.get(c)?.dispose();lampDangles.delete(c);towStraps.get(c)?.dispose();towStraps.delete(c);airbags.get(c)?.dispose();airbags.delete(c);strutPunches.get(c)?.dispose();strutPunches.delete(c);carLights.get(c)?.dispose();carLights.delete(c);c.dispose();}
   clearMarshals();
   for(const f of bailed)disposeDriver(f);bailed.length=0;
@@ -2670,7 +2673,7 @@ function frame(now: number) {
   // Stones strike the other cars' bodywork (each car a box round its panels, measured once) and tick off it.
   roostBodies.length=0;if(gravelRoost.flying)for(const c of cars){if(!c.extendedDamage)continue;const box=bodyBox(c);if(!box)continue;
     roostBodies.push({id:c.id,centre:box.centre.clone().applyMatrix4(c.root.matrixWorld),quaternion:c.root.quaternion,half:box.half});}
-  rollingCaps.step(state==='paused'||state==='inspect'?0:dt);exhaustFlames.step(state==='paused'||state==='inspect'?0:dt);
+  rollingCaps.step(state==='paused'||state==='inspect'?0:dt);exhaustFlames.step(state==='paused'||state==='inspect'?0:dt);sparkLight.step(state==='paused'||state==='inspect'?0:dt);
   gravelRoost.step(dt,roostBodies,(at,speed,body,mud)=>{const v=mud?0:stoneHitVolume(speed);if(v<=0||Math.abs(clock-(pingClock.get(body.id)??-9))<STONE_HIT.gap)return;pingClock.set(body.id,clock);
     sound.clip(STONE_HIT.clips[pingTake++%STONE_HIT.clips.length],at,v,STONE_HIT.duration);stonePings++;});
   // The tail dusts over in the wake of the car's own dust plume and the rain rinses it (offline).
@@ -2903,6 +2906,7 @@ async function boot() {
   events = new R.EventQueue(true);
   fx = new Effects(scene, physics);
   fx.rollCap = (cap, axle, velocity) => rollingCaps.launch(cap, axle, velocity);
+  fx.onSparks = (at, count) => { if (!online?.active) sparkLight.flash(at, count); };
   propFires.onIgnite=(i,p)=>{if(!studio&&!online?.active)recorder?.drip({time:elapsed,position:[p.x,p.y,p.z],kind:4,seed:i/1000});sound.groundIgnite(new T.Vector3(p.x,p.y,p.z),2);};
   fx.slicks.onIgnite=(x,y,z,kind,owner)=>{if(!studio&&!online?.active){recorder?.drip({time:elapsed,position:[x,y,z],kind:3,seed:fx.slicks.wet?.5:0});eventAwards.ignited(owner);}sound.groundIgnite(new T.Vector3(x,y,z),kind);};
   vehicleFire = new VehicleFire(scene,(p,n,type,force)=>fx.emit(p,n,type,force));
@@ -3083,6 +3087,7 @@ async function boot() {
     airbags: (id = 0) => { const c = cars.find(x => x.id === id), b = c && airbags.get(c); return b ? { fitted: b.bags.length, deployed: b.deployed, age: +b.age.toFixed(2), scale: b.bags.map(x => +x.mesh.scale.y.toFixed(3)), at: b.bags.map(x => x.at.toArray().map(v => +v.toFixed(2))), front: +(c!.structuralDamage?.[0] ?? 0).toFixed(3), fired: airbagsFired } : null; },
     rollingCaps: () => ({ rolled: rollingCaps.rolled, moving: rollingCaps.moving, caps: rollingCaps.caps.map(c => ({ phase: c.phase, speed: +c.speed.toFixed(2), lean: +c.lean.toFixed(2), r: +c.radius.toFixed(3), at: c.p.toArray().map(v => +v.toFixed(2)) })) }),
     dustAir: () => +dustAir.toFixed(3),
+    sparkLight: () => ({ flashes: sparkLight.flashes, intensity: +sparkLight.light.intensity.toFixed(2) }),
     struts: (id = 0) => { const c = cars.find(x => x.id === id), s = c && strutPunches.get(c); return s ? { punched: s.punched, struts: s.struts.map(x => !!x), wheels: Array.from(c!.wreckParts.wheelDamage).slice(0, 2).map(v => +v.toFixed(2)), front: +(c!.structuralDamage?.[0] ?? 0).toFixed(2) } : null; },
     exhaustFlames: () => ({ flashes: exhaustFlames.flashes, burning: exhaustFlames.burning, shift: shiftFlames }),
     shiftSmoke: () => ({ puffs: shiftSmokes, gear: cars[0]?.gear ?? 0 }),

@@ -127,7 +127,10 @@ void main(){
     this.marks.frustumCulled = false;
     scene.add(this.marks);
   }
+  /** Offline: told of every burst of sparks (type 1), for the light they throw. */
+  onSparks?:(at:T.Vector3,count:number)=>void;
   emit(p: T.Vector3, count: number, type = 0, force = 1) {
+    if(type===1&&count>0)this.onSparks?.(p,count);
     for (let j = 0; j < count; j++) {
       const i = this.cursor++ % this.particles.length,
         s = this.particles[i];
