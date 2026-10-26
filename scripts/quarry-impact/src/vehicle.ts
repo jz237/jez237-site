@@ -40,6 +40,7 @@ import { repairCoupePanel } from './coupe-realism';
 import { dentGeometry,crushGeometry,refreshWreckNormals,type CrushFrame, repairWreckGeometry } from './wreck-geometry';
 import { WreckFinish } from './wreck-finish';
 import { WreckAttachments } from './wreck-attachments';
+import {ROT,rotFactor} from './age-rust';
 import {bodyworkDentDamage} from './bodywork-response';
 import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
@@ -1254,6 +1255,8 @@ export class Vehicle {
         components.structure[end]=exposedDamage(structureBefore[end],components.structure[end],BUMPER_GONE.crush);if(end===engineEnd)engineHit(BUMPER_GONE.engine);}
       for(const [side,doors] of [[2,['door-left','door-rear-left']],[3,['door-right','door-rear-right']]] as const)if(doors.some(gone))components.structure[side]=exposedDamage(structureBefore[side],components.structure[side],COVER_GONE.side);
       if(gone(engineEnd?'engine-lid':'hood'))engineHit(COVER_GONE.engine);
+      // A rotten shell gives way sooner: the rust lets more of the blow into the structure.
+      if(this.surfaceFinish.rustAge>0)for(let k=0;k<components.structure.length;k++)components.structure[k]=exposedDamage(structureBefore[k],components.structure[k],rotFactor(this.surfaceFinish.rustAge,ROT.crush));
     }
     // A front corner without its wing leaves the tyre and wheel bare: the hit does more to both (offline).
     if(this.extendedDamage)for(const i of [0,1])if(this.wingGone[i]){if(tyreBefore&&components.tyreDamage)components.tyreDamage[i]=exposedDamage(tyreBefore[i],components.tyreDamage[i],EXPOSED_WHEEL.tyre);components.wheelDamage[i]=exposedDamage(worn[i],components.wheelDamage[i],EXPOSED_WHEEL.rim);}
@@ -1289,7 +1292,8 @@ export class Vehicle {
     if(this.extendedDamage&&!quiet&&this.health>0&&!this.tankDown&&tankDrops((isRearEngineKind(this.kind)?this.structuralDamage?.[0]:this.structuralDamage?.[1])??0,crash(TANK_DROP.blow),zone===(isRearEngineKind(this.kind)?'front':'rear')))this.dropTank();
     // A smash into the engine end can split a line and light the engine bay at once (offline).
     if(this.extendedDamage&&!quiet&&this.health>0){this.bigHits++;if(smashFire(crash(SMASH_FIRE.damage),zone===(isRearEngineKind(this.kind)?'rear':'front'),this.id,this.bigHits)&&!this.igniteRequest){this.igniteRequest=true;this.smashFires++;this.onSetAlight?.(this.id);this.onBreak?.('smashfire',0);}}
-    const dentDamage=bodyworkDentDamage(damage);
+    // Rusty panels dent deeper (offline).
+    const dentDamage=bodyworkDentDamage(damage)*(this.extendedDamage?rotFactor(this.surfaceFinish.rustAge,ROT.dent):1);
     const impactDirection = direction.clone().transformDirection(this.model.matrixWorld.clone().invert());
     const assemblies = new Map<string, { panels: T.Mesh[]; damage: number; weight: number }>();
     // Big hits throw what they break off along the blow (offline); slow knocks let parts drop.

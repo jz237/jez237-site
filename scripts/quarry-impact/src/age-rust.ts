@@ -11,6 +11,20 @@ export const RUST={age:[.25,1],sill:[.04,.26],lip:.06,gap:.03,flank:[.6,.86],ora
  * mottled), and the lacquer has lifted off in blotches (more of it the older, FADE.peel) — dull matte paint inside, a ragged
  * white edge of flaking lacquer round each. */
 export const FADE={top:[.55,.85],above:[.35,.6],bleach:.55,chalk:.62,peel:.34,matte:.82,flake:.75} as const;
+/** Rotten shells (offline, with the rust): rust has eaten the steel, so a rusty car's body gives way sooner. Up to ROT.crush
+ * more of each blow reaches its structure (it bends, and drives worse, sooner) and its panels dent up to ROT.dent deeper (so
+ * they tear off sooner), in step with its age. A hard knock (ROT.min damage on) landing low on a rotten flank (within ROT.low m
+ * of its sills) shakes loose a shower of rust flakes — up to ROT.count of them, more the older the car and the harder the blow
+ * (all of them from ROT.full damage) — once the car is ROT.flakes gone. */
+export const ROT={crush:.35,dent:.3,min:6,low:.5,flakes:.3,count:[4,14],full:30,colour:0x7a3a16} as const;
+const clampAge=(age:number)=>Number.isFinite(age)?Math.max(0,Math.min(1,age)):0;
+/** How much more a blow does to a shell this rusty (1 when sound), up to 1 + most. */
+export const rotFactor=(age:number,most:number)=>1+most*clampAge(age);
+/** Rust flakes shaken loose by a blow of this damage landing this high over the sills (model frame m) on a car this rusty. */
+export function rustFlakes(age:number,damage:number,height:number){
+  const a=clampAge(age);if(a<ROT.flakes||!(damage>=ROT.min)||!(height<=ROT.low))return 0;
+  return Math.round(ROT.count[0]+(ROT.count[1]-ROT.count[0])*a*Math.min(1,damage/ROT.full));
+}
 /** Does a body material rust? Painted steel does; the plastic trim, hoses and cabin do not. */
 export const rusts=(name:string)=>name.startsWith('paint')&&!/Paint 2|hoses|Interior|Panel Sides/.test(name);
 export const startingRust=(id:number)=>{const n=Number.isFinite(id)?id:0,r=Math.abs(Math.sin(n*57.31+4.77)*43758.5453)%1;return RUST.age[0]+r*(RUST.age[1]-RUST.age[0]);};
