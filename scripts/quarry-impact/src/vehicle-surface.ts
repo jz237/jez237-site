@@ -3,6 +3,7 @@ import {finishVehiclePresentation} from './vehicle-presentation';
 import {LAMP_GRIME,WAKE} from './wake-dust';
 import {TOP_DUST} from './settled-dust';
 import {FADE,PITTING,RUST,chromed,rusts,type RustFit} from './age-rust';
+import {PRIMER} from './primer-patches';
 
 /** Persistent deposition state. Four tires retain water after leaving a puddle. */
 export class VehicleSurface {
@@ -43,6 +44,7 @@ float coatingNoise(vec3 p){vec3 c=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix
           .replace('#include <alphamap_fragment>',`#include <alphamap_fragment>
 float ageRust=0.,rustStain=0.,sunFade=0.,lacquerOff=0.;
 float chromePit=0.,chromeDull=0.;
+float primerPatch=0.;
 ${chromed(m.name)?`// Pitted chrome: an old car's brightwork dulls and freckles with rust pits, blooming where the plating lifts.
 if(carRust.x>0.){
   float pitEdge=1.-${PITTING.pits}*carRust.x;
@@ -75,6 +77,13 @@ if(carRust.x>0.){
   float lacquerFlake=sunTop*clamp(smoothstep(peelEdge-.03,peelEdge-.012,peelNoise)-smoothstep(peelEdge,peelEdge+.015,peelNoise),0.,1.);
   diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*${FADE.matte},lacquerOff);
   diffuseColor.rgb=mix(diffuseColor.rgb,vec3(${FADE.flake}),lacquerFlake*.4);
+  // Primer patches: repairs sanded back and left in grey primer, filler showing in the bigger ones, never over the rust.
+  float primerField=coatingNoise(vCoatingRest*${PRIMER.scale.toFixed(2)}+carSurfacePhase*23.)*.8+coatingNoise(vCoatingRest*${(PRIMER.scale*5).toFixed(2)}+carSurfacePhase*5.)*.2,primerEdge=1.-${PRIMER.amount}*carRust.x;
+  primerPatch=smoothstep(primerEdge-.008,primerEdge+.008,primerField)*(1.-ageRust);
+  float primerHalo=clamp(smoothstep(primerEdge-${PRIMER.halo},primerEdge-.008,primerField)-primerPatch,0.,1.)*(1.-ageRust);
+  diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*.8+.12,primerHalo*${PRIMER.sand});
+  diffuseColor.rgb=mix(diffuseColor.rgb,mix(vec3(${PRIMER.grey}),vec3(${PRIMER.filler}),smoothstep(primerEdge+${PRIMER.core},primerEdge+${PRIMER.core}+.03,primerField)),primerPatch);
+  lacquerOff=max(lacquerOff,max(primerPatch,primerHalo*.7));
 }`:''}
 float coatingSide=smoothstep(-.3,.3,vCoatingRest.x);
 float deposited=mix(carCoating.z,carCoating.w,coatingSide);
@@ -104,6 +113,7 @@ diffuseColor.rgb=mix(diffuseColor.rgb,vTransferredPaint.rgb,transferred*.85);`}
 roughnessFactor=mix(roughnessFactor,${PITTING.dull},max(chromeDull*.7,chromePit));
 roughnessFactor=mix(roughnessFactor,.68,max(sunFade*.6,lacquerOff));
 roughnessFactor=mix(roughnessFactor,.95,ageRust);
+roughnessFactor=mix(roughnessFactor,${PRIMER.roughness},primerPatch);
 roughnessFactor=mix(roughnessFactor,.89,max(carDirt*.8,wakeDust*.9));
 roughnessFactor=mix(roughnessFactor,max(.1,roughnessFactor*.48),carWet*(1.-carDirt*.55));`)
           .replace('#include <metalnessmap_fragment>','#include <metalnessmap_fragment>\nmetalnessFactor*=(1.-carDirt*.9)*(1.-wakeDust*.8)*(1.-ageRust);\nmetalnessFactor*=1.-chromePit;')
