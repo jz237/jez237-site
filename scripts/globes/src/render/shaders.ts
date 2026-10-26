@@ -2552,15 +2552,20 @@ ${bowl?.lite ? `      // (The phone's bowl: where a sample could find nothing, i
       col += thr * bub.rgb;
       thr *= bub.a;` : ''}
 ${bowl ? `      let T = exp(-globesWaterExt * t);
-      // (The water's own light along it first: a bubble in a clouded one is seen in its haze.)
-      col += thr * bowl_waterGlow(p.y, lit) * (1.0 - T);
+      // (Clouded or stained, the water's own light along it comes first, so that a bubble in a
+      // clouded one is seen in its haze: the clear water's glow and the tea's, for their share of
+      // the dimming; the bloom's haze, for its share, lit as the water is where the stretch begins,
+      // dimmer the deeper below the resting level that is. Clear, it is the water's glow, after
+      // the bubbles, as it always was.)
+      if (bowlMurk > 0.0) { col += thr * (bowlGlow + BOWL_HAZE * exp(bowlSunExt * (p.y - lit.x)) * bowlCloud) / globesWaterExt * (1.0 - T); }
 ` : ''}      // (The clear bubbles in it.)
       let sp = globes_splashAlong(splashTex, p, dir, 0.0, t, true, pathLen, lit, lightTex, lightSamp, bgTex, bgSamp);
       col += thr * sp.rgb;
       thr *= sp.a;${bowl?.ids ? `
       ${hitMeets(bowl, HIT_MET_SPLASH, 'sp.a < 0.999')}` : ''}${bowl ? `
       // (The lid's lamp shining down through the water: its beam brighter in a clouded one.)
-      col += thr * bowl_lampAlong(p, dir, t, 0.5 + BOWL_BLOOM_LAMP * bowlCloud, globesWaterExt);` : `
+      col += thr * bowl_lampAlong(p, dir, t, 0.5 + BOWL_BLOOM_LAMP * bowlCloud, globesWaterExt);
+      if (bowlMurk <= 0.0) { col += thr * GLOBES_WATER_GLOW * (1.0 - T); }` : `
       let T = exp(-globesWaterExt * t);
       col += thr * GLOBES_WATER_GLOW * (1.0 - T);`}
       thr *= T;
@@ -2802,6 +2807,7 @@ ${bowl ? '' : `  globesDeskM = deskM;
   // (The water's state, water/effects.ts: the bloom and the tannins dim it on top of its own
   // dimming; the fish's colours; the heater's lamp.)
   bowlCloud = bowlWater.x;
+  bowlMurk = bowlCloud + bowlWater.y;
   bowlSunExt = globesWaterExt + BOWL_TANNIN * bowlWater.y;
   bowlGlow = GLOBES_WATER_GLOW * globesWaterExt + BOWL_TEA * bowlWater.y;
   globesWaterExt = bowlSunExt + bowlCloud;

@@ -385,26 +385,20 @@ fn bowl_lampAlong(p: vec3f, dir: vec3f, tEnd: f32, sigma: f32, ext: vec3f) -> ve
 
 // The water's state (water/effects.ts; set by globes_shade): a bloom of bacteria clouding it, whose
 // milky haze scatters the light (bowlCloud: its dimming, per unit of path), and the tannins that
-// the almond leaf and the wood give it, tea-brown (BOWL_WATER). The light the haze sends back for
-// each unit of its dimming, where the light comes in (at the film); the light the tea sends back
-// (the water's own glow, the light in it amber), per unit of path at full strength; and how much
-// brighter the haze shows the lamp's beam. bowlGlow: the clear water's glow, for its dimming, and
-// the tea's; bowlSunExt: the light's dimming on its way down.
+// the almond leaf and the wood give it, tea-brown (BOWL_WATER); bowlMurk: either (0: clear). The
+// light the haze sends back for each unit of its dimming, where the light comes in (at the film);
+// the light the tea sends back (the water's own glow, the light in it amber), per unit of path at
+// full strength; and how much brighter the haze shows the lamp's beam. bowlGlow: the clear water's
+// glow, for its dimming, and the tea's; bowlSunExt: the light's dimming on its way down.
 const BOWL_BLOOM_LOST: f32 = ${f(BOWL_WATER.bloomLost)};
 const BOWL_TANNIN: vec3f = vec3f(${BOWL_WATER.tannin.map(f).join(', ')});
 const BOWL_HAZE: vec3f = vec3f(0.2, 0.2, 0.2);
 const BOWL_TEA: vec3f = vec3f(0.047, 0.056, 0.006);
 const BOWL_BLOOM_LAMP: f32 = 0.8;
 var<private> bowlCloud: f32;
+var<private> bowlMurk: f32;
 var<private> bowlGlow: vec3f;
 var<private> bowlSunExt: vec3f;
-
-// The light the water sends back along a stretch of ray from height y, for each share of the light
-// behind it that the stretch dims: the clear water's glow and the tea's, for their share of the
-// dimming; clouded, the bloom's haze, for its share, lit as the water is there (dimmer deeper).
-fn bowl_waterGlow(y: f32, lit: vec4f) -> vec3f {
-  return (bowlGlow + BOWL_HAZE * exp(-bowlSunExt * max(lit.x - y, 0.0)) * bowlCloud) / globesWaterExt;
-}
 
 // Through the piece a ray has met (h): the light its face reflects to the ray, how much of the
 // ray's light comes through it (absorbed on the way, a share reflected at each face), and where

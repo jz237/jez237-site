@@ -4,6 +4,7 @@
 // asked (the panel redraws it at most twice a second while it shows). A finger or the pointer on it
 // reads the values at that time.
 
+import { clockText } from './care.mjs';
 import { DAY } from './chemistry.mjs';
 import { CHART } from './content';
 
@@ -51,6 +52,7 @@ export class WaterChart {
     canvas.className = 'water-chart-plot';
     canvas.style.height = `${CHART_HEIGHT}px`;
     canvas.setAttribute('role', 'img');
+    canvas.setAttribute('aria-label', CHART.title);
     this.ctx = canvas.getContext('2d')!;
     const tip = (this.tip = document.createElement('p'));
     tip.className = 'water-chart-tip';
@@ -95,11 +97,13 @@ export class WaterChart {
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
     g.clearRect(0, 0, w, CHART_HEIGHT);
     const h = this.history;
-    // The days shown: from the start to now, a week at least.
-    const end = Math.max(7, h.length ? h[h.length - 1][0] / DAY : 0);
+    // The days shown: from the first sample kept (the start, or 120 days back) to now, a week at
+    // least.
+    const from = h.length ? Math.floor(h[0][0] / DAY) : 0;
+    const days = Math.max(7, h.length ? h[h.length - 1][0] / DAY - from : 0);
     const x0 = LEFT;
     const x1 = w - RIGHT;
-    const xOf = (t: number): number => x0 + ((t / DAY) / end) * (x1 - x0);
+    const xOf = (t: number): number => x0 + ((t / DAY - from) / days) * (x1 - x0);
     let topMax = 1;
     let bottomMax = 20;
     for (const s of h) {
@@ -154,16 +158,19 @@ export class WaterChart {
       }
       g.lineWidth = 1;
     }
-    // The days along the bottom: every day, two, a week or four, as they fit.
-    const step = [1, 2, 7, 14, 28, 56].find((s) => ((x1 - x0) / end) * s >= 34) ?? 56;
+    // The days along the bottom (their numbers, as the clock counts them): every day, two, a week
+    // or four, as they fit.
+    const step = [1, 2, 7, 14, 28, 56].find((s) => ((x1 - x0) / days) * s >= 34) ?? 56;
     g.textAlign = 'center';
     g.textBaseline = 'top';
     g.fillStyle = INK;
     const axisY = 6 + TOP + GAP + BOTTOM + 4;
-    for (let d = 0; d <= end; d += step) g.fillText(d === 0 ? `${CHART.day} 1` : String(d + 1), Math.min(Math.max(xOf(d * DAY), x0 + 14), x1 - 6), axisY);
+    for (let d = 0; d <= days; d += step) g.fillText(String(from + d + 1), Math.min(Math.max(xOf((from + d) * DAY), x0 + 8), x1 - 8), axisY);
+    g.textAlign = 'right';
+    g.fillText(CHART.day, x0 - 5, axisY);
     // The pointer's time: a crosshair, and the readings then.
     if (this.hover !== null && h.length) {
-      const t = (((this.hover - x0) / (x1 - x0)) * end) * DAY;
+      const t = (from + ((this.hover - x0) / (x1 - x0)) * days) * DAY;
       let k = 0;
       for (let i = 1; i < h.length; i++) if (Math.abs(h[i][0] - t) < Math.abs(h[k][0] - t)) k = i;
       const d = h[k];
@@ -173,9 +180,7 @@ export class WaterChart {
       g.moveTo(x, 6);
       g.lineTo(x, 6 + TOP + GAP + BOTTOM);
       g.stroke();
-      const hours = Math.round(((d[0] % DAY) / 3600) % 24);
-      const when = `${CHART.day} ${Math.floor(d[0] / DAY) + 1}, ${hours % 12 || 12} ${hours < 12 ? 'am' : 'pm'}`;
-      this.tip.textContent = `${when} · ${SERIES.map((s) => `${s.name} ${d[s.key].toFixed(s.key === 3 ? 1 : 2)}`).join(' · ')}`;
+      this.tip.textContent = `${clockText(d[0])} · ${SERIES.map((s) => `${s.name} ${d[s.key].toFixed(s.key === 3 ? 1 : 2)}`).join(' · ')}`;
       this.tip.classList.add('is-on');
     } else {
       this.tip.classList.remove('is-on');

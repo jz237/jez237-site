@@ -140,9 +140,14 @@ export class WaterPanel {
     close.type = 'button';
     close.setAttribute('aria-label', PANEL.close);
     close.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"/></svg>';
-    close.addEventListener('click', () => {
+    const closeIntro = (): void => {
       intro.hidden = true;
       act.introClosed();
+    };
+    close.addEventListener('click', closeIntro);
+    // (Escape puts it away, as it does Learn's card.)
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !intro.hidden && !root.hidden) closeIntro();
     });
     const words = el('div', 'learn-text', intro);
     el('p', 'learn-kicker', words, INTRO.kicker);
@@ -185,6 +190,7 @@ export class WaterPanel {
       const b = button('', speeds, { label: '', title: CONTROLS[s].title }, () => act.speed(s));
       b.dataset.speed = s;
       b.setAttribute('aria-label', CONTROLS[s].label);
+      b.setAttribute('aria-pressed', 'false');
       b.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[s]}</svg>`;
       return b;
     });
@@ -218,6 +224,7 @@ export class WaterPanel {
     button('water-action water-wide', actions, CONTROLS.rinseTap, () => act.rinse(true));
     this.heaterEl = button('water-action water-toggle', actions, CONTROLS.heater, () => act.heater(this.heaterEl.getAttribute('aria-pressed') !== 'true'));
     this.dechlorEl = button('water-action water-toggle', actions, CONTROLS.dechlor, () => act.dechlor(this.dechlorEl.getAttribute('aria-pressed') !== 'true'));
+    for (const b of [this.heaterEl, this.dechlorEl]) b.setAttribute('aria-pressed', 'true');
 
     const routine = el('div', 'water-group', body);
     el('h3', 'water-heading', routine, PANEL.routine);

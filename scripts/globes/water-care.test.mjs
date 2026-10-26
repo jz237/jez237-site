@@ -14,15 +14,17 @@ function feeding() {
   return { state: 'idle' };
 }
 
-/** The page's food (FishFood.ts): seven slots, pellets eaten counted, settled ones left to rot. */
+/** The page's food (FishFood.ts): seven slots, pellets eaten counted, settlings numbered, settled
+ *  ones left to rot. */
 function food() {
   return {
     slots: new Array(7).fill(null),
     eatenCount: 0,
-    leave() {
+    landings: 0,
+    leave(after = 0) {
       const out = [];
       this.slots.forEach((f, i) => {
-        if (f && f.landed && f.left === null) {
+        if (f && f.landed && f.left === null && f.settled > after) {
           f.left = 1;
           out.push(i);
         }
@@ -46,7 +48,7 @@ function food() {
     /** A pellet dropped in by a meal, settling on the sand uneaten. */
     sink() {
       const i = this.slots.indexOf(null);
-      this.slots[i] = { landed: true, left: null };
+      this.slots[i] = { landed: true, left: null, settled: ++this.landings };
     },
     get left() {
       return this.slots.filter((f) => f?.left != null).length;
@@ -75,7 +77,7 @@ test('water.fx: the bowl’s while on, clear (or ?water=’s) while off', () => 
   assert.equal(water.fx, care.bowl.fx);
   care.startOver('neglected');
   assert.equal(water.fx, care.bowl.fx, 'a fresh start’s');
-  assert.ok(water.fx.tint > 0.2 && water.fx.nest < 0.5);
+  assert.ok(water.fx.tint > 0.2 && care.bowl.readings().nitrate > 40);
   offFood(care.bowl);
   care.speed = 'fast';
   care.frame(1);
@@ -83,6 +85,30 @@ test('water.fx: the bowl’s while on, clear (or ?water=’s) while off', () => 
   care.set(false);
   assert.equal(water.fx, CLEAR_WATER);
   assert.equal(host.food.left, 0, 'taken away');
+});
+
+test('turned on, only what happens from then on counts: a pellet that sank before is no leftover of it', () => {
+  const { care, host } = page();
+  host.food.sink();
+  care.set(true);
+  care.frame(1 / 60);
+  assert.equal(care.bowl.s.pellets.length, 0);
+  host.food.sink();
+  care.frame(1 / 60);
+  assert.equal(care.bowl.s.pellets.length, 1);
+});
+
+test('slow frames at Fast (a phone at 10 fps, a tab come back): the clock runs on, each meal once', () => {
+  const { care } = page();
+  care.set(true);
+  care.speed = 'fast';
+  const t0 = performance.now();
+  for (let k = 0; k < 3000; k++) care.frame(0.1);
+  assert.ok(performance.now() - t0 < 2000);
+  assert.equal(clockText(care.bowl.s.t), 'Day 76 · 9:00 am');
+  // (75 days, two meals a day: the last half day's in Learn's count.)
+  assert.equal(care.meals.log.times.length, 3);
+  assert.ok(Number.isFinite(care.bowl.fx.heaterLamp));
 });
 
 test('the clock: half an hour a second at Play, six hours at Fast, nothing paused or hidden', () => {
@@ -170,5 +196,10 @@ test('kept on the device: the bowl, the speed and the routine come back; anythin
   assert.deepEqual(back.bowl.readings(), care.bowl.readings());
   assert.deepEqual(back.bowl.s.history, care.bowl.s.history);
   // (Something else, or spoilt: a new bowl as on a first visit.)
-  for (const bad of [null, {}, { v: 0 }, { ...JSON.parse(kept), v: 99 }, { ...JSON.parse(kept), bowl: { ...JSON.parse(kept).bowl, tan: 'x' } }]) assert.equal(page().care.restore(bad), false);
+  for (const bad of [null, {}, { v: 0 }, { ...JSON.parse(kept), v: 99 }, { ...JSON.parse(kept), bowl: { ...JSON.parse(kept).bowl, tan: 'x' } }, { ...JSON.parse(kept), bowl: { ...JSON.parse(kept).bowl, pellets: [5] } }]) assert.equal(page().care.restore(bad), false);
+  // (A speed or a routine it does not know: left as they were.)
+  const odd = page().care;
+  assert.ok(odd.restore({ ...JSON.parse(kept), speed: 'toString', meals: 3, change: 'constructor' }));
+  assert.equal(odd.speed, 'play');
+  assert.deepEqual(odd.routine, { meals: 2, change: 'none' });
 });

@@ -74,6 +74,37 @@ test('listless, it lies on the sand far more, swims slower, and from 0.4 leaves 
   assert.ok((some.time.mirror ?? 0) < clear.time.mirror && (some.time.lap ?? 0) < clear.time.lap, 'fewer, short of 0.4');
 });
 
+test('the least bit listless, it rests as often and as long as a well fish, and more the more listless it is', () => {
+  // (Twelve fish, ten minutes each: how much of the time it lies on the sand, and how many times an
+  // hour it goes down.)
+  const seeds = Array.from({ length: 12 }, (_, k) => 237 + 1009 * k);
+  const resting = (lethargy) => {
+    let frames = 0, lying = 0, downs = 0;
+    for (const seed of seeds) {
+      const s = new BettaSwim(seed);
+      s.obstacles = [wood];
+      s.lethargy = lethargy;
+      let was = '';
+      for (let i = 0; i < 600 * 60; i++) {
+        s.advance(1 / 60, [0, 0, 0], env, true, calm());
+        frames++;
+        if (s.mode === 'rest') {
+          lying++;
+          if (was !== 'rest') downs++;
+        }
+        was = s.mode;
+      }
+    }
+    return { share: lying / frames, perHour: downs / (seeds.length / 6) };
+  };
+  const clear = resting(0);
+  const table = Object.fromEntries([0.01, 0.05, 0.1, 0.2, 0.3, 0.6, 1].map((l) => [l, resting(l)]));
+  const shown = JSON.stringify(Object.fromEntries(Object.entries({ 0: clear, ...table }).map(([l, r]) => [l, `${(100 * r.share).toFixed(1)}%, ${r.perHour.toFixed(1)}/h`])));
+  assert.ok(clear.share > 0.02 && clear.perHour > 3, `clear water: ${shown}`);
+  for (const l of [0.01, 0.05, 0.1, 0.2]) assert.ok(table[l].share >= 0.85 * clear.share && table[l].perHour >= 0.85 * clear.perHour, `at ${l} it rests less than a well fish: ${shown}`);
+  assert.ok(table[0.2].share > clear.share && table[0.3].share > table[0.2].share && table[0.6].share > table[0.3].share && table[1].share > table[0.6].share, `rising: ${shown}`);
+});
+
 test('lying listless, it settles on the sand, leaning over a little, and stays far longer', () => {
   const s = new BettaSwim(42);
   s.obstacles = [wood];

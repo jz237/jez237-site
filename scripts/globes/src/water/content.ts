@@ -20,7 +20,7 @@ export const READINGS = {
   ammonia: { name: 'Ammonia', unit: ' ppm', about: 'Ammonia (NH3/NH4+, in ppm) comes from the fish’s gills and rotting food. It should read 0. It is most toxic in warm, alkaline water.' },
   nitrite: { name: 'Nitrite', unit: ' ppm', about: 'Nitrite (NO2-, in ppm) is what the first bacteria make of ammonia. It should read 0: it stops the blood carrying oxygen.' },
   nitrate: { name: 'Nitrate', unit: ' ppm', about: 'Nitrate (NO3-, in ppm) is the end of the cycle, far milder. Water changes keep it under 20 to 40\u00a0ppm.' },
-  ph: { name: 'pH', unit: '', about: 'Bettas do well from about 6.5 to 7.5. A steady pH matters more than the exact number.' },
+  ph: { name: 'pH', unit: '', about: 'Bettas come from soft, acid water and do well from about 6.0 to 7.5. A steady pH matters more than the number: avoid sudden swings.' },
   temp: { name: 'Temp', unit: '', about: 'Keep a betta at 78 to 80\u00a0°F (25.5 to 27\u00a0°C). This room is 70\u00a0°F: the heater makes up the rest.' },
 } as const;
 export type ReadingId = keyof typeof READINGS;
@@ -35,7 +35,7 @@ export const CAUSES: Record<string, string> = {
   nitrate: 'nitrate is high',
   cold: 'the water is too cold',
   chlorine: 'chlorine burns its gills',
-  acid: 'the water is too acid',
+  acid: 'the water is far too acid',
   swing: 'the pH changed too fast',
 };
 
@@ -46,7 +46,7 @@ export const DANGER: Record<string, string> = {
   nitrate: 'Nitrate this high wears a fish down. Change a quarter of the water every day or two until it is under 40\u00a0ppm.',
   cold: 'This cold for long, a betta stops eating and falls ill. Turn the heater back on.',
   chlorine: 'In a real bowl chlorine this strong could kill it. Change water again with dechlorinator, which also neutralizes what is left.',
-  acid: 'This acid for long harms a betta. Change a quarter of the water a day so the pH rises slowly.',
+  acid: 'Water this acid harms a betta. Change a quarter of the water a day so the pH rises slowly.',
   swing: 'A sudden pH change shocks a fish. Change smaller amounts, more often, so the pH moves slowly.',
 };
 
@@ -58,12 +58,12 @@ export const HAPPENING: Record<string, string> = {
   warming: 'The heater is warming the water back up to 79\u00a0°F.',
   tapRinse: 'Rinsing the sponge under the tap killed most of its bacteria. Expect ammonia and nitrite for a week or two: test and change water.',
   feast: 'That is far more food than a betta can eat. Uneaten pellets rot into ammonia and feed a cloud of bacteria.',
-  acid: 'The buffer (KH) is spent and the pH has fallen, slowing the bacteria. Change a quarter of the water a day to bring it back slowly.',
+  acid: 'Old water: the buffer is spent and nitrate high. Change 25% a day or so apart until nitrate is under 40. One big change would jolt the pH.',
   bloomNew: 'A bacterial bloom: free-floating bacteria feeding on a new bowl’s organics cloud the water. It clears by itself in a few days.',
   bloomFood: 'Rotting food is feeding a bloom of bacteria that clouds the water. Siphon out leftovers and feed less.',
-  stage1: 'Stage 1 of the cycle: ammonia builds up while the bacteria that eat it are few. A bowl this small needs a test, and often a change, every day while it cycles.',
+  stage1: 'Stage 1: ammonia builds up while the bacteria that eat it are few. A bowl this small needs a test, and often a change, every day.',
   ammoniaBack: 'Ammonia in a cycled bowl: more waste than its bacteria can keep up with. Change water and go easy on food.',
-  stage2: 'Stage 2: bacteria now turn ammonia into nitrite, just as toxic; the ones that eat nitrite grow more slowly. In a bowl this small, test and change water daily until both read 0.',
+  stage2: 'Stage 2: bacteria turn ammonia into nitrite, just as toxic. In a bowl this small, test and change water daily until both read 0.',
   stage3: 'Stage 3: ammonia is cleared, and nitrite lingers until the second bacteria catch up. Keep testing daily, changing water when it reads 0.5.',
   uncycled: 'A new bowl: no bacteria yet to clear the fish’s waste, so ammonia will build up over the first days.',
   nitrate: 'Nitrate is building up. Only water changes (and the plants, a little) take it away.',
@@ -91,7 +91,7 @@ export const CONTROLS = {
   rinseTap: { label: 'Rinse sponge under tap', title: 'Rinse the filter sponge under the tap' },
   heater: { label: 'Heater', title: 'Switch the heater on or off' },
   dechlor: { label: 'Dechlorinator', title: 'Treat the new water of each change with dechlorinator' },
-  meals: { label: 'Meals a day', title: 'Three pellets a meal, given on time (at Fast, counted without opening the lid)' },
+  meals: { label: 'Meals a day', title: 'Three pellets a meal on time, counted without opening the lid (the Feed button gives a real one)' },
   routine: { label: 'Water changes', title: 'Water changes done for you at 10\u00a0am; or the water tested daily, half changed when ammonia or nitrite reads 0.5\u00a0ppm or more' },
 } as const;
 
@@ -113,7 +113,7 @@ export const CHANGES = [
 export const STARTS = [
   { value: 'new', label: 'New bowl', title: 'Set up today, the fish in today: no bacteria yet' },
   { value: 'cycled', label: 'Cycled bowl', title: 'Its bacteria grown, kept well with weekly changes' },
-  { value: 'neglected', label: 'Neglected bowl', title: 'Cycled, then two months without a water change' },
+  { value: 'neglected', label: 'Neglected bowl', title: 'Cycled, then four months without a water change' },
 ] as const;
 
 /** The chart: its title, and its series' names (ppm). */

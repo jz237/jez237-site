@@ -70,13 +70,14 @@
 .water-select select { width: 14em; max-width: 100%; min-height: 34px; padding: 5px 8px; border: 1px solid #94c9ce55; border-radius: 10px; background: #0b3a4a; cursor: pointer; }
 
 /* A phone held upright: a sheet along the foot, above the page's link, folding down to its strip;
-   opened out, it scrolls, short of the controls. Learn's card goes up top, clear of it. */
+   opened out, it scrolls, its top kept below where Learn's card can reach (up top, under the
+   controls: 92 px, and its longest words). The news wraps rather than being cut short. */
 @media (max-width: 500px) {
-  .water-panel { left: 8px; right: 8px; top: auto; bottom: calc(52px + env(safe-area-inset-bottom)); width: auto; max-height: min(64%, calc(100% - 96px - 52px - env(safe-area-inset-bottom))); padding: 9px 11px 8px; border-radius: 16px; }
+  .water-panel { left: 8px; right: 8px; top: auto; bottom: calc(52px + env(safe-area-inset-bottom)); width: auto; max-height: min(64%, calc(100% - 260px - 52px - env(safe-area-inset-bottom))); padding: 9px 11px 8px; border-radius: 16px; }
   .water-intro .learn-text { font-size: 11.5px; line-height: 1.38; }
   .water-more svg { transform: none; }
   .water-panel.is-open .water-more svg { transform: rotate(180deg); }
-  .water-panel:not(.is-open) .water-news { min-height: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .water-panel:not(.is-open) .water-news { min-height: 0; }
   .water-panel:not(.is-open) .water-why:not(:empty) + .water-what { display: none; }
   #stage.water-on .learn-card { top: 92px; bottom: auto; padding: 9px 12px 10px 13px; font-size: 11.5px; line-height: 1.35; }
   #stage.water-on .learn-card .learn-title { font-size: 13px; }

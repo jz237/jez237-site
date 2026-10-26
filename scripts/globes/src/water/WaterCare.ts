@@ -99,17 +99,6 @@ export class WaterCare {
       },
     });
 
-    let kept = false;
-    try {
-      kept = localStorage.getItem(STORAGE_KEY) === '1';
-      const saved = JSON.parse(localStorage.getItem(STATE_KEY) ?? 'null') as { open?: unknown; intro?: unknown } | null;
-      if (care.restore(saved)) {
-        this.open = typeof saved?.open === 'boolean' ? saved.open : null;
-        this.introSeen = saved?.intro === true;
-      }
-    } catch {
-      // (Storage blocked or its contents spoilt: a first visit's new bowl.)
-    }
     const keep = (): void => {
       if (this.on) this.save();
     };
@@ -117,7 +106,20 @@ export class WaterCare {
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) keep();
     });
-    if (kept) this.set(true, false);
+    // Last visit's bowl, and Water mode on again if it was (no intro). (Storage blocked, or what it
+    // holds spoilt: a first visit's new bowl.)
+    try {
+      const saved = JSON.parse(localStorage.getItem(STATE_KEY) ?? 'null') as { open?: unknown; intro?: unknown } | null;
+      if (care.restore(saved)) {
+        this.open = typeof saved?.open === 'boolean' ? saved.open : null;
+        this.introSeen = saved?.intro === true;
+      }
+      if (localStorage.getItem(STORAGE_KEY) === '1') this.set(true, false);
+    } catch (err: unknown) {
+      console.warn('[globes] Water mode: starting with a new bowl:', err);
+      care.startOver('new');
+      if (care.on) this.render();
+    }
   }
 
   get on(): boolean {

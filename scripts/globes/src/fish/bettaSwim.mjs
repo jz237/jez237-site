@@ -284,16 +284,28 @@ export class BettaSwim {
     return true;
   }
 
-  /** Now and then it sinks to the sand and stays there, fins easy. Listless, it is the likelier to
-   *  go down whenever it stops the more listless it is (slump), if it can lie down from there. */
+  /** Now and then it sinks to the sand and stays there, fins easy, when it is over a place to lie;
+   *  listless, it may go down besides (slumpDown). */
   tryRest(b, water, ok) {
-    const listless = ok && this.lethargy > 0 && this.behaviorRandom() < this.slump;
-    if (!ok || (!listless && this.time < this.restReady)) return false;
+    if (!ok) return false;
+    if (this.slumpDown(b, water, ok)) return true;
     const y = water.sand + REST_HEIGHT;
-    if (!this.restRoom(b, this.position[0], y, this.position[2]) || (!listless && this.behaviorRandom() > 0.5)) return false;
-    // (Listless, it goes down from wherever it is, if where its way down ends, and the way, are
-    // clear; else where it is must be.)
-    if (this.lethargy > 0 ? !this.restLanding(b, this.position, this.heading, y) : this.obstacleGap([this.position[0], y, this.position[2]]).gap < 0.1) return false;
+    if (this.time < this.restReady) return false;
+    if (!this.restRoom(b, this.position[0], y, this.position[2]) || this.behaviorRandom() > 0.5) return false;
+    if (this.obstacleGap([this.position[0], y, this.position[2]]).gap < 0.1) return false;
+    return this.lieDown(y);
+  }
+
+  /** Listless, whenever it stops it may go down to lie, the likelier the more listless it is
+   *  (slump), if it can from where it is: its way down, and where that ends, clear. */
+  slumpDown(b, water, ok) {
+    if (!ok || !(this.lethargy > 0) || this.behaviorRandom() >= this.slump) return false;
+    const y = water.sand + REST_HEIGHT;
+    return !!this.restLanding(b, this.position, this.heading, y) && this.lieDown(y);
+  }
+
+  /** Goes down to lie on the sand (the neck at y) for a while: longer, listless, and leaning over. */
+  lieDown(y) {
     this.mode = 'rest'; this.timer = 99; this.sharpTurn = false;
     this.behaviorClock = this.holdClock = 0; this.restSettled = false;
     this.restY = y; this.restHold = (7 + this.behaviorRandom() * 7) * (1 + (REST_LONGER - 1) * this.lethargy);
@@ -390,7 +402,7 @@ export class BettaSwim {
     const wait = this.behaviorRandom();
     if (this.mode === 'mirror') this.mirrorReady = this.time + 60 + wait * 60;
     else if (this.mode === 'lap') this.lapReady = this.time + 120 + wait * 80;
-    else this.restReady = this.time + 70 + wait * 60;
+    else this.restReady = this.time + 70 + wait * 60 - 0.6 * this.lethargy * (70 + wait * 60);
     this.mirrorReady = Math.max(this.mirrorReady, this.time + 15);
     this.lapReady = Math.max(this.lapReady, this.time + 20);
     this.restReady = Math.max(this.restReady, this.time + 20);
@@ -582,7 +594,7 @@ export class BettaSwim {
     const reached = distance < 0.075 || Math.hypot(toTarget[0], toTarget[2]) < 0.05;
     if (!gulping && !startling && !behaving && !feeding && (this.timer <= 0 || (this.mode !== 'hover' && reached))) {
       if (this.mode === 'hover') {
-        if (!this.tryLap(b, ok && free > 25) && !(L > 0 && this.tryRest(b, water, ok && free > 30 * briefly))) {
+        if (!this.tryLap(b, ok && free > 25) && !this.slumpDown(b, water, ok && free > 30 * briefly)) {
           this.mode = this.random() < 0.18 * (1 - L) ? 'burst' : 'cruise';
           this.timer = this.mode === 'burst' ? 0.65 + this.random() * 0.45 : 6 + this.random() * 5;
           this.chooseTarget(env);
@@ -676,9 +688,9 @@ export class BettaSwim {
     const pitchSpin = -this.waterSpin[2] * Math.cos(this.heading) - this.waterSpin[0] * Math.sin(this.heading);
     this.pitch = clamp(damp(this.pitch, pitchTarget, dt, startling ? 8 : 2.4) + pitchSpin * dt * 0.8, -0.75, gulping || striking ? 0.95 : 0.75);
     const rollSpin = this.waterSpin[0] * Math.cos(this.heading) - this.waterSpin[2] * Math.sin(this.heading);
-    // (Lying listless on the sand, it leans over a little onto one side.)
-    const lean = L > 0 && this.mode === 'rest' && this.restSettled ? 0.32 * L * this.restSide : 0;
-    this.roll = clamp(damp(this.roll, lean, dt, lean ? 0.8 : 2.6) + rollSpin * dt * 0.8, -0.65, 0.65);
+    // (Lying listless on the sand, it leans over a little onto one side, over a few seconds.)
+    const lean = L > 0 && this.mode === 'rest' && this.restSettled ? 0.32 * L * this.restSide * smooth(0, 3, this.holdClock) : 0;
+    this.roll = clamp(damp(this.roll, lean, dt, 2.6) + rollSpin * dt * 0.8, -0.65, 0.65);
     this.pitchRate = (this.pitch - oldPitch) / dt;
     this.rollRate = (this.roll - oldRoll) / dt;
     // Down to the sand along the nose-down axis: the vertical rate eases off with the height left.

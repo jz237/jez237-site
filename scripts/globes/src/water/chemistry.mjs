@@ -14,8 +14,10 @@
 const VOLUME = 4.0;
 export const DAY = 86400;
 export const HOUR = 3600;
-/** The longest step taken at once (s): ten sim minutes. */
+/** The longest step taken at once (s): ten sim minutes; the heater's thermostat is followed in
+ *  steps of a minute within it. */
 const SUBSTEP = 600;
+const THERMOSTAT_STEP = 60;
 
 // ---- Food and the fish ---------------------------------------------------------------------
 /** A pellet: ~2 mg, ~40 % protein (16 % of protein is N): its nitrogen (mg N), and its organic
@@ -83,6 +85,11 @@ const DKH_MG = 17.9;
 const MEQ_PER_DKH = 17.9 / 50.04;
 const CACO3_PER_N = 7.14;
 const EXCRETED_NH3 = 0.6;
+/** Water lost to the air through the lid's vents (share a day, ~3 % a week at 79 °F with the
+ *  airstone), topped up with tap water as it goes: only the tap water's KH comes in (what the water
+ *  held stays, its concentration as it was). Plants taking up nitrate give back as much buffer as
+ *  nitrifying it took for the step from ammonium (half the 7.14). */
+const EVAPORATION = 0.004;
 /** CO2 in the water (ppm; the filter's airstone keeps it about here), and carbonic acid's first
  *  constant: pH from KH and CO2 (pH ~ 7 + log10(3 KH / CO2): 7.6 at 4 dKH). */
 const CO2 = 3;
@@ -120,8 +127,11 @@ const SET_F = 79;
 const BAND_F = 0.5;
 
 // ---- The fish -------------------------------------------------------------------------------------
-/** What troubles it, each to a severity 0..1 (0.7: severe): free ammonia NH3 (ppm), nitrite (ppm
- *  NO2-), nitrate (ppm NO3-), cold (°F), chlorine (ppm), acid water, a sudden change of pH. */
+/** What troubles it, each to a severity 0..1 (0.7: severe): free ammonia NH3 (ppm; even a little,
+ *  for long, irritates the gills), nitrite (ppm NO2-), nitrate (ppm NO3-), cold (°F), chlorine
+ *  (ppm), very acid water (bettas come from soft, acid water: only under about pH 5.5 is it harmful
+ *  in itself), a sudden change of pH (half a unit stresses it, a whole one is a shock: what one big
+ *  change on a crashed buffer does). */
 const CAUSES = ['ammonia', 'nitrite', 'nitrate', 'cold', 'chlorine', 'acid', 'swing'];
 /** How each shows in it (WaterEffects): its weight in lethargy, gasping, clamped fins, paleness and
  *  loss of appetite, per cause (in CAUSES' order). Nitrite stops the blood carrying oxygen, so the
@@ -146,6 +156,13 @@ const NEST_HOURS = [24, 3];
 /** The fish's condition by its overall severity: Thriving below the first, Uncomfortable, Stressed,
  *  In danger from the last. */
 const CONDITIONS = [0.12, 0.35, 0.65];
+/** The effects of clear water (effects.ts CLEAR_WATER: the page as it always was); an effect within
+ *  SNAP of its clear value is taken as clear, so a fish that has got over its troubles is exactly
+ *  well again. */
+export const CLEAR_FX = Object.freeze({ lethargy: 0, gasp: 0, clamp: 0, pale: 0, appetite: 1, nest: 1, cloud: 0, tint: 0, heaterLamp: 1 });
+const SNAP = 0.01;
+/** What the panel tells of (state.event). */
+const EVENTS = ['tap', 'rinse', 'change', 'untreated', 'feast'];
 
 // ---- The routine ------------------------------------------------------------------------------------
 /** A meal (pellets), and when meals are given (hours of the day) for each number a day. */
@@ -236,26 +253,50 @@ export class BowlWater {
     if (!this.s.phUsed) this.s.phUsed = this.ph;
     /** What the fish shows (WaterEffects: lethargy, gasp, clamp, pale, appetite, nest, cloud, tint,
      *  heaterLamp), as of the last step. */
-    this.fx = { lethargy: 0, gasp: 0, clamp: 0, pale: 0, appetite: 1, nest: 1, cloud: 0, tint: 0, heaterLamp: 1 };
+    this.fx = { ...CLEAR_FX };
+    /** The heater's lamp is the share of the time it heated over about this long (sim s; 0: the
+     *  last stretch run): what an eye would see of it at the clock's speed (care.mjs sets it). */
+    this.lampWindow = 0;
     this.effects();
   }
 
-  /** A saved state (toJSON) back, or null if it is not one this model saved. */
+  /** A saved state (toJSON) back, or null if it is not one this model saved: every field there, of
+   *  its kind, its numbers finite and in range, its lists of the right shape. */
   static restore(saved) {
-    const fresh = newState();
     if (!saved || typeof saved !== 'object') return null;
+    const fresh = newState();
+    const number = (x, low = 0) => typeof x === 'number' && Number.isFinite(x) && x >= low;
+    const numbers = (a, n, low = 0) => Array.isArray(a) && (n < 0 || a.length === n) && a.every((x) => number(x, low));
     for (const [k, v] of Object.entries(fresh)) {
       const got = saved[k];
-      if (typeof v === 'number' ? !Number.isFinite(got) : Array.isArray(v) ? !Array.isArray(got) || (k === 'feel' && got.length !== CAUSES.length) : typeof v === 'boolean' && typeof got !== 'boolean') return null;
+      if (typeof v === 'number' && !number(got, k === 'phUsed' ? -Infinity : 0)) return null;
+      if (typeof v === 'boolean' && typeof got !== 'boolean') return null;
     }
-    return new BowlWater(saved);
+    const ok =
+      numbers(saved.aob, 3) &&
+      numbers(saved.nob, 3) &&
+      numbers(saved.feel, CAUSES.length) &&
+      saved.feel.every((x) => x <= 1) &&
+      Array.isArray(saved.pellets) &&
+      saved.pellets.length <= MOST_PELLETS &&
+      saved.pellets.every((p) => numbers(p, 2)) &&
+      Array.isArray(saved.given) &&
+      saved.given.every((g) => numbers(g, 2)) &&
+      Array.isArray(saved.history) &&
+      saved.history.length <= (SAMPLE_DAYS * DAY) / SAMPLE_EVERY &&
+      saved.history.every((h) => numbers(h, 4)) &&
+      (saved.event === null || EVENTS.includes(saved.event));
+    return ok ? new BowlWater(saved) : null;
   }
 
   /** A start: 'new' (set up today, the fish in today), 'cycled' (its bacteria grown, kept well),
-   *  'neglected' (cycled, then nine weeks without a water change). */
+   *  'neglected' (cycled, then four months without a water change, only topped up). */
   static start(kind) {
     const w = new BowlWater();
-    if (kind === 'new') return w;
+    if (kind === 'new') {
+      w.sample();
+      return w;
+    }
     const s = w.s;
     // A bowl run for months: its bacteria at what the fish's food supports, its detritus, nitrate
     // and tannins at their usual levels; then a month of the usual care, to settle.
@@ -270,7 +311,7 @@ export class BowlWater {
     s.bloom = 0.01;
     s.cycled = true;
     w.advance(28 * DAY, { meals: 2, change: 'weekly' });
-    if (kind === 'neglected') w.advance(63 * DAY, { meals: 2, change: 'none' });
+    if (kind === 'neglected') w.advance(120 * DAY, { meals: 2, change: 'none' });
     // (A new start of the clock and the chart; the fish as it is now, used to its water.)
     s.t = START_HOUR * HOUR;
     s.history = [];
@@ -400,7 +441,8 @@ export class BowlWater {
 
   /** A fraction of the water changed for tap water (dechlorinated or not: this.s.dechlor), the sand
    *  siphoned as it goes (a share of the detritus out with it, every leftover pellet, and a little
-   *  of the sand's bacteria). */
+   *  of the sand's bacteria). A dechlorinator is dosed for the whole bowl: it neutralizes any
+   *  chlorine or chloramine still in it too. */
   waterChange(fraction) {
     const s = this.s;
     const keep = 1 - fraction;
@@ -411,7 +453,7 @@ export class BowlWater {
     s.bloom *= keep;
     s.tannin *= keep;
     s.kh = s.kh * keep + TAP_KH * fraction;
-    s.chlorine = s.chlorine * keep + (s.dechlor ? 0 : TAP_CHLORINE * fraction);
+    s.chlorine = s.dechlor ? 0 : s.chlorine * keep + TAP_CHLORINE * fraction;
     s.detritus *= 1 - Math.min(1.2 * fraction, 0.8);
     s.pellets = [];
     s.aob[1] *= 1 - 0.15 * fraction;
@@ -464,46 +506,65 @@ export class BowlWater {
   }
 
   /** Runs `seconds` of sim time with a routine ({ meals: 0 | 1 | 2 | 4, change: 'none' | 'weekly' |
-   *  'twice' | 'test' }), meals and water changes (or tests) at their times. onMeal: a meal is due
-   *  (default: counted at the fish's appetite, this.meal).
+   *  'twice' | 'test' }), meals and water changes (or tests) at their times: the clock lands on each
+   *  exactly, so none comes round twice. onMeal: a meal is due (default: counted at the fish's
+   *  appetite, this.meal).
    *  @param {number} seconds @param {{ meals: number, change: string }} routine @param {() => unknown} [onMeal] */
   advance(seconds, routine, onMeal = () => this.meal()) {
+    if (!(seconds > 0)) return;
     const end = this.s.t + seconds;
     for (;;) {
       const e = BowlWater.nextEvent(this.s.t, routine);
       if (!e || e.t > end) break;
-      this.step(e.t - this.s.t);
+      this.runTo(e.t);
       if (e.kind === 'meal') onMeal();
       else if (this.reads(e.reads)) this.waterChange(e.fraction);
     }
-    this.step(end - this.s.t);
+    this.runTo(end);
   }
 
-  /** Runs `seconds` of sim time as it is (no routine), in steps of at most SUBSTEP. */
+  /** Runs `seconds` of sim time as it is (no routine). */
   step(seconds) {
-    if (!(seconds > 0)) return;
-    const n = Math.ceil(seconds / SUBSTEP - 1e-9);
+    if (seconds > 0) this.runTo(this.s.t + seconds);
+  }
+
+  /** Runs the clock to `end` (s), landing on it exactly, in steps of at most SUBSTEP (one at the
+   *  least); then the lamp and the effects. */
+  runTo(end) {
+    const s = this.s;
+    const span = end - s.t;
+    if (!(span > 0)) return;
+    const n = Math.max(1, Math.ceil(span / SUBSTEP - 1e-9));
     let heated = 0;
-    for (let k = 0; k < n; k++) heated += this.substep(seconds / n) ? 1 : 0;
-    this.s.lamp = heated / n;
+    for (let k = 0; k < n; k++) heated += this.substep(k === n - 1 ? end - s.t : span / n);
+    s.t = end;
+    const share = Math.min(Math.max(heated / span, 0), 1);
+    s.lamp = this.lampWindow > 0 ? s.lamp + (share - s.lamp) * (1 - Math.exp(-span / this.lampWindow)) : share;
     this.effects();
   }
 
-  /** One step of dt s: true if the heater heated through it. */
+  /** One step of dt s: how long (s) the heater heated in it. */
   substep(dt) {
     const s = this.s;
     const d = dt / DAY;
     const t0 = s.t;
     s.t += dt;
 
-    // The temperature: the room (warmest mid-afternoon), the bowl following it, the heater.
+    // The temperature: the room (warmest mid-afternoon), the bowl following it, the heater as its
+    // thermostat switches it (followed a minute at a time).
     const hourOfDay = (t0 / HOUR) % 24;
     const room = ROOM_C + ROOM_SWING * Math.cos(((hourOfDay - 15) / 24) * 2 * Math.PI);
-    const f = toF(s.tempC);
-    if (!s.heater) s.heating = false;
-    else if (f < SET_F - BAND_F / 2) s.heating = true;
-    else if (f > SET_F + BAND_F / 2) s.heating = false;
-    s.tempC += (room - s.tempC) * (1 - Math.exp(-dt / (BOWL_HOURS * HOUR))) + (s.heating ? (HEATER_W * dt) / HEAT_CAPACITY : 0);
+    const m = Math.max(1, Math.ceil(dt / THERMOSTAT_STEP));
+    const tick = dt / m;
+    let heated = 0;
+    for (let k = 0; k < m; k++) {
+      const f = toF(s.tempC);
+      if (!s.heater) s.heating = false;
+      else if (f < SET_F - BAND_F / 2) s.heating = true;
+      else if (f > SET_F + BAND_F / 2) s.heating = false;
+      s.tempC += (room - s.tempC) * (1 - Math.exp(-tick / (BOWL_HOURS * HOUR))) + (s.heating ? (HEATER_W * tick) / HEAT_CAPACITY : 0);
+      if (s.heating) heated += tick;
+    }
     const warm = WARMER ** (s.tempC - 25);
     const ph = this.ph;
     const acid = 1 / (1 + Math.exp(-(ph - PH_HALF) / PH_WIDTH));
@@ -555,6 +616,7 @@ export class BowlWater {
     const want = PLANTS * d - plantsTan;
     const plantsNo3 = Math.min((want * (s.no3 / VOLUME)) / (PLANT_KS_NO3 + s.no3 / VOLUME), s.no3);
     s.no3 -= plantsNo3;
+    s.kh += ((plantsNo3 * (CACO3_PER_N / 2)) / VOLUME / DKH_MG) + TAP_KH * EVAPORATION * d;
 
     // The nitrifiers: ammonia to nitrite (using up the buffer), nitrite to nitrate.
     const aob = s.aob[0] + s.aob[1] + s.aob[2];
@@ -585,7 +647,7 @@ export class BowlWater {
     this.feel(dt, ph);
     if (!s.cycled && aob > 0.3 && nob > 0.3 && s.tan / VOLUME < 0.05 && s.no2 / VOLUME < 0.02) s.cycled = true;
     if (Math.floor(s.t / SAMPLE_EVERY) > Math.floor(t0 / SAMPLE_EVERY)) this.sample();
-    return s.heating;
+    return heated;
   }
 
   /** The fish, over dt s at pH ph: how it feels each cause, coming on over hours and going over
@@ -595,13 +657,13 @@ export class BowlWater {
     const r = this.readings();
     s.phUsed += (ph - s.phUsed) * (1 - Math.exp(-dt / (PH_SETTLE_DAYS * DAY)));
     const now = [
-      severity(r.freeAmmonia, 0.02, 0.05),
+      severity(r.freeAmmonia, 0.004, 0.05),
       severity(r.nitrite, 0.25, 2),
       severity(r.nitrate, 40, 160),
       clamp01(((76.5 - r.tempF) / 6.5) * 0.55),
       severity(r.chlorine, 0.02, 0.2),
-      clamp01(((6.4 - ph) / 0.6) * 0.7),
-      clamp01(((Math.abs(ph - s.phUsed) - 0.3) / 0.7) * 0.7),
+      clamp01(((5.6 - ph) / 0.6) * 0.7),
+      clamp01(((Math.abs(ph - s.phUsed) - 0.5) / 0.6) * 0.7),
     ];
     for (let k = 0; k < now.length; k++) {
       const hours = now[k] > s.feel[k] ? FEEL_HOURS : MEND_HOURS[k];
@@ -611,7 +673,8 @@ export class BowlWater {
     s.nest += (content - s.nest) * (1 - Math.exp(-dt / (NEST_HOURS[content ? 0 : 1] * HOUR)));
   }
 
-  /** this.fx from the state. */
+  /** this.fx from the state: each 0..1 and finite (whatever the state), and within SNAP of its
+   *  clear value, exactly that. */
   effects() {
     const s = this.s;
     const show = (w) => 1 - s.feel.reduce((p, x, k) => p * (1 - w[k] * x), 1);
@@ -621,10 +684,14 @@ export class BowlWater {
     fx.clamp = show(SHOWS.clamp);
     fx.pale = show(SHOWS.pale);
     fx.appetite = 1 - 0.95 * show(SHOWS.appetite);
-    fx.nest = clamp01(s.nest);
-    fx.cloud = clamp01(s.bloom);
-    fx.tint = TANNIN_TINT * clamp01(s.tannin);
+    fx.nest = s.nest;
+    fx.cloud = s.bloom;
+    fx.tint = TANNIN_TINT * s.tannin;
     fx.heaterLamp = s.lamp;
+    for (const k in fx) {
+      const v = Number.isFinite(fx[k]) ? clamp01(fx[k]) : CLEAR_FX[k];
+      fx[k] = Math.abs(v - CLEAR_FX[k]) < SNAP ? CLEAR_FX[k] : v;
+    }
   }
 
   /** A sample for the chart, now (the oldest dropped past SAMPLE_DAYS). */

@@ -112,6 +112,8 @@ interface Flake {
    *  sank). */
   left: number | null;
   laid: boolean;
+  /** When it settled, by the count of settlings (FishFood.landings; 0: not yet). */
+  settled: number;
 }
 
 export interface FoodEnv {
@@ -224,6 +226,8 @@ export class FishFood {
   eatenCount = 0;
   /** Floating pellets rather than flakes (the betta's bowl). */
   pellets = false;
+  /** How many flakes have settled so far (each numbered by it as it settles). */
+  landings = 0;
   /** Where pellets have dropped into the water since this was last emptied (the page dimples the
    *  surface there). */
   readonly splashes: Vec3[] = [];
@@ -282,6 +286,7 @@ export class FishFood {
       soak: PELLET_FLOAT * (1 + Math.random()),
       left: null,
       laid: false,
+      settled: 0,
     };
     return true;
   }
@@ -291,11 +296,12 @@ export class FishFood {
   // last little way and settles); the fish leave them alone; each shrinks as it rots (rot) until it
   // is taken away (take).
 
-  /** The pellets that have settled uneaten since the last call, left now to rot: their slots. */
-  leave(): number[] {
+  /** The pellets that have settled uneaten since the last call (and after settling number `after`:
+   *  FishFood.landings then), left now to rot: their slots. */
+  leave(after = 0): number[] {
     const out: number[] = [];
     this.slots.forEach((f, i) => {
-      if (f?.landed && f.eater < 0 && f.left === null) {
+      if (f?.landed && f.eater < 0 && f.left === null && f.settled > after) {
         f.left = 1;
         out.push(i);
       }
@@ -524,9 +530,13 @@ export class FishFood {
       // Settling: on the sand, or (the reef) on the crown, the rock or a coral.
       if (sample >= 0 && sand && f.pos[1] - 0.25 * r < sand[first + i]) {
         f.landed = { at: toGlobe(m, [f.pos[0], sand[first + i] + 0.002, f.pos[2]]), normal: toGlobe(m, up) };
+        f.settled = ++this.landings;
       } else if (this.ground) {
         const c = this.ground.contact(toGlobe(m, f.pos), r);
-        if (c) f.landed = c;
+        if (c) {
+          f.landed = c;
+          f.settled = ++this.landings;
+        }
       }
       return true;
     }

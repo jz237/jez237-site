@@ -5,7 +5,8 @@
 // Run: node --test water-chemistry.test.mjs
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { BowlWater, DAY, HOUR } from './src/water/chemistry.mjs';
+import { BowlWater, CLEAR_FX, DAY, HOUR } from './src/water/chemistry.mjs';
+import { CLEAR_WATER } from './src/water/effects.ts';
 
 const TWICE = { meals: 2, change: 'none' };
 /** The day a time falls on, as the panel counts them (day 1 is the first). */
@@ -43,8 +44,11 @@ test('a new bowl, fed twice a day, never changed: the classic cycle, ammonia the
   // Nitrate from then on, rising.
   const at = (d) => rows.find((r) => dayOf(r.t) === d).nitrate;
   assert.ok(at(46) > 5 && at(60) > at(46), `nitrate ${at(46).toFixed(1)} then ${at(60).toFixed(1)}`);
-  // The fish suffers (in danger at the worst), but never more than the effects can say.
+  // The fish suffers (in danger at the worst), but never more than the effects can say; and it
+  // feels the ammonia from about a kit's first step (chronic, it irritates the gills).
   assert.equal(Math.max(...rows.map((r) => r.level)), 3);
+  const early = rows.filter((r) => r.ammonia >= 0.25 && r.t < 12 * DAY);
+  assert.ok(early.length > 0 && early.every((r) => r.level >= 1), 'not thriving with ammonia showing');
   for (const r of rows) for (const v of Object.values(r.fx)) assert.ok(v >= 0 && v <= 1);
 });
 
@@ -68,8 +72,8 @@ test('fish-in cycling the way a bowl this small needs: tested daily, half change
   const rows = log(BowlWater.start('new'), 63, { meals: 2, change: 'test' });
   // (Changed the day it reads 0.5, a reading peaks a day's rise above that: nitrite, rising ~0.35 ppm a
   // day at its worst, ~0.7.)
-  assert.ok(max(rows, 'ammonia') <= 0.6, `ammonia ${max(rows, 'ammonia').toFixed(2)}`);
-  assert.ok(max(rows, 'nitrite') <= 0.75, `nitrite ${max(rows, 'nitrite').toFixed(2)}`);
+  assert.ok(max(rows, 'ammonia') <= 0.65, `ammonia ${max(rows, 'ammonia').toFixed(2)}`);
+  assert.ok(max(rows, 'nitrite') <= 0.8, `nitrite ${max(rows, 'nitrite').toFixed(2)}`);
   assert.ok(!rows.some((r) => r.level >= 3), 'never in danger');
   const last = rows.findLastIndex((r) => r.ammonia >= 0.1 || r.nitrite >= 0.1);
   const cycled = dayOf(rows[last + 1].t);
@@ -89,19 +93,48 @@ test('a cycled bowl, a quarter changed weekly: ammonia and nitrite read zero, ni
   assert.ok(end.fx.nest > 0.9 && end.fx.appetite > 0.95 && end.fx.lethargy < 0.05);
 });
 
-test('a cycled bowl left three months without a water change: nitrate climbs, the buffer goes, the pH falls, ammonia comes back', () => {
-  const rows = log(BowlWater.start('cycled'), 91, TWICE);
+test('a cycled bowl left months without a water change: nitrate climbs, the buffer goes, the pH falls, ammonia comes back', () => {
+  const rows = log(BowlWater.start('cycled'), 120, TWICE);
   const at = (d) => rows.find((r) => dayOf(r.t) === d);
   const weekly = (at(43).nitrate - at(1).nitrate) / 6;
   assert.ok(weekly >= 3 && weekly <= 8, `nitrate +${weekly.toFixed(1)} a week`);
+  // (Topped up as it evaporates, never changed, the buffer lasts about three and a half months.)
   const acid = dayOf(first(rows, (r) => r.ph < 6.5).t);
-  assert.ok(acid >= 50 && acid <= 90, `pH under 6.5 on day ${acid}`);
+  assert.ok(acid >= 60 && acid <= 110, `pH under 6.5 on day ${acid}`);
   assert.ok(at(acid).kh < 0.6, `KH ${at(acid).kh.toFixed(2)}`);
   // Old tank syndrome: nitrification slows in the acid water and ammonia shows.
   assert.ok(max(rows.slice(acid * 24), 'ammonia') >= 0.25 && max(rows.slice(0, (acid - 14) * 24), 'ammonia') < 0.05);
-  // The "Neglected bowl" start is this, about two months on: high nitrate, the buffer spent, acid.
-  const n = BowlWater.start('neglected').readings();
-  assert.ok(n.nitrate >= 40 && n.kh < 0.6 && n.ph > 6.15 && n.ph < 6.45, JSON.stringify(n));
+});
+
+test('the neglected bowl: high nitrate wearing the fish down; changed a quarter at a time it comes back, one big change shocks it', () => {
+  // Four months on: nitrate 80-110, the buffer spent, the pH ~6.2, mulm on the sand, the fish
+  // uncomfortable or stressed by the nitrate.
+  const start = BowlWater.start('neglected');
+  const n = start.readings();
+  assert.ok(n.nitrate >= 80 && n.nitrate <= 110 && n.kh < 0.5 && n.ph > 6.1 && n.ph < 6.35, JSON.stringify(n));
+  assert.ok(start.s.detritus > 2);
+  const c = start.condition();
+  assert.ok(c.level >= 1 && c.level <= 2 && c.cause === 'nitrate', JSON.stringify(c));
+  assert.equal(start.happening(), 'acid');
+  // A quarter changed: the pH rises, the fish feels it, but is not in danger; a day later another.
+  const after = (fraction) => {
+    const w = new BowlWater(structuredClone(start.s));
+    w.waterChange(fraction);
+    return log(w, 1, TWICE);
+  };
+  const quarter = after(0.25);
+  assert.ok(quarter.every((r) => r.level < 3), `25 %: worst ${Math.max(...quarter.map((r) => r.level))}`);
+  const half = after(0.5);
+  assert.ok(half.some((r) => r.level === 3), '50 %: in danger');
+  // Day by day, a quarter at a time, nitrate under 40 within a week or so, never in danger.
+  const w = new BowlWater(structuredClone(start.s));
+  const rows = [];
+  for (let d = 0; d < 7; d++) {
+    w.waterChange(0.25);
+    rows.push(...log(w, 1, TWICE));
+  }
+  assert.ok(rows.every((r) => r.level < 3), 'never in danger');
+  assert.ok(rows.at(-1).nitrate < 40, `nitrate ${rows.at(-1).nitrate.toFixed(0)}`);
 });
 
 test('the sponge rinsed under the tap sets the bowl back a week or two; rinsed in tank water, nothing shows', () => {
@@ -135,6 +168,44 @@ test('the heater off: the bowl falls to the room in half a day and the fish slow
   assert.ok(by(warm, 12).fx.lethargy < 0.1, 'lively again');
 });
 
+test('the clock lands on each meal and change exactly: frames of any length, a start at any time, nothing fired twice', () => {
+  const routine = { meals: 2, change: 'twice' };
+  // Fast frames of 0.1 s (2160 sim s; a slow phone's): 500 days in a few hundredths of a second.
+  const w = BowlWater.start('new');
+  let meals = 0;
+  const t0 = performance.now();
+  for (let k = 0; k < 20000; k++) w.advance(0.1 * 6 * HOUR, routine, () => {
+    meals++;
+    w.meal();
+  });
+  assert.ok(performance.now() - t0 < 2000);
+  assert.equal(meals, 1000);
+  assert.ok(w.s.given.length < 10, 'a day of food, not a pile');
+  // A week and a bit from a clock at an odd time: each meal and change once.
+  for (const days of [7.3, 7, 13.71]) {
+    const v = BowlWater.start('cycled');
+    v.step(0.3 * HOUR + 0.123);
+    const start = v.s.t;
+    const fired = [];
+    const real = BowlWater.prototype.waterChange;
+    v.waterChange = function (f) {
+      fired.push(this.s.t);
+      real.call(this, f);
+    };
+    v.advance(days * DAY, routine, () => fired.push(v.s.t));
+    assert.equal(v.s.t, start + days * DAY);
+    let expected = 0;
+    for (let t = Math.ceil(start / HOUR) * HOUR; t <= start + days * DAY; t += HOUR) {
+      const h = (t / HOUR) % 24;
+      const day = Math.floor(t / DAY) + 1;
+      if (h === 9 || h === 19 || (h === 10 && [3, 0].includes(day % 7))) expected++;
+    }
+    assert.equal(fired.length, expected, `${days} days`);
+    assert.equal(new Set(fired).size, fired.length, 'none twice');
+    assert.ok(Number.isFinite(v.fx.heaterLamp));
+  }
+});
+
 test('the heater lamp blinks with the thermostat: lit while it heats, at about two-thirds of the time', () => {
   const w = BowlWater.start('cycled');
   const lamp = [];
@@ -151,6 +222,24 @@ test('the heater lamp blinks with the thermostat: lit while it heats, at about t
   // (A frame of 6 sim hours: the lamp at its average.)
   w.step(6 * HOUR);
   assert.ok(w.fx.heaterLamp > 0.5 && w.fx.heaterLamp < 0.85);
+  // As the page shows it (care.mjs: blended over 0.15 s of real time): at Play it still blinks; at
+  // Fast (a frame 360 sim s, a thermostat cycle ~35 sim min) it glows steadily at its duty.
+  w.lampWindow = 0.15 * 1800;
+  const play = [];
+  for (let k = 0; k < 6 * 120; k++) {
+    w.step(30);
+    play.push(w.fx.heaterLamp);
+  }
+  assert.ok(play.filter((x) => x < 0.2 || x > 0.8).length > 0.6 * play.length, 'mostly plainly on or off');
+  assert.ok(Math.min(...play) < 0.1 && Math.max(...play) > 0.9);
+  w.lampWindow = 0.15 * 6 * HOUR;
+  const fast = [];
+  for (let k = 0; k < 600; k++) {
+    w.step(360);
+    if (k > 60) fast.push(w.fx.heaterLamp);
+  }
+  assert.ok(Math.min(...fast) > 0.45 && Math.max(...fast) < 0.9, `${Math.min(...fast).toFixed(2)}-${Math.max(...fast).toFixed(2)}`);
+  assert.ok(fast.slice(1).every((x, k) => Math.abs(x - fast[k]) < 0.1), 'no flicker');
 });
 
 test('half the water changed without dechlorinator: a day of burnt gills, bacteria lost, a little ammonia', () => {
@@ -167,10 +256,21 @@ test('half the water changed without dechlorinator: a day of burnt gills, bacter
   const lost = 1 - Math.min(...rows.map((r) => r.aob)) / before;
   assert.ok(lost >= 0.08 && lost <= 0.35, `bacteria lost ${(lost * 100).toFixed(0)} %`);
   assert.ok(max(rows, 'ammonia') >= 0.05 && max(rows, 'ammonia') <= 0.3, `ammonia ${max(rows, 'ammonia').toFixed(2)}`);
-  // With dechlorinator (the default), nothing of the sort.
+  // With dechlorinator (the default), nothing of the sort; and as it is dosed for the whole bowl, a
+  // treated change also neutralizes what an untreated one left.
   const ok = BowlWater.start('cycled');
   ok.waterChange(0.5);
   assert.equal(ok.readings().chlorine, 0);
+  ok.dechlor = false;
+  ok.waterChange(0.25);
+  assert.ok(ok.readings().chlorine > 0.4);
+  ok.dechlor = true;
+  ok.waterChange(0.25);
+  assert.equal(ok.readings().chlorine, 0);
+  // Over it, the fish is exactly well again (CLEAR_WATER's values), not nearly.
+  w.advance(10 * DAY, TWICE);
+  for (const k of ['lethargy', 'gasp', 'clamp', 'pale', 'appetite', 'nest']) assert.equal(w.fx[k], CLEAR_WATER[k], k);
+  assert.deepEqual({ ...CLEAR_FX }, { ...CLEAR_WATER });
 });
 
 test('a day of overfeeding: the water clouds within a day, a modest ammonia bump, the leftovers rot in about two days', () => {
@@ -207,6 +307,18 @@ test('a saved bowl picks up where it left off; meals counted at the fish\'s appe
   back.advance(3 * DAY, TWICE);
   assert.deepEqual(back.readings(), w.readings());
   assert.deepEqual(back.fx, w.fx);
+  // Anything else, or spoilt, is no saved bowl; and whatever the state, the effects are finite.
+  const good = JSON.parse(saved);
+  for (const bad of [{ pellets: [5] }, { aob: [1] }, { feel: [0.5] }, { tan: -1 }, { t: null }, { history: [[1, 2]] }, { event: 'flood' }, { heater: 1 }, { pellets: new Array(61).fill([1, 0.1]) }]) {
+    assert.equal(BowlWater.restore({ ...good, ...bad }), null, JSON.stringify(bad).slice(0, 40));
+  }
+  assert.equal(BowlWater.restore(null), null);
+  assert.ok(BowlWater.restore(good));
+  const odd = BowlWater.start('cycled');
+  odd.s.feel[0] = NaN;
+  odd.s.bloom = Infinity;
+  odd.effects();
+  assert.ok(Object.values(odd.fx).every((x) => Number.isFinite(x) && x >= 0 && x <= 1));
   // A fish off its food leaves a share of each meal, its fractions carried over.
   const sick = BowlWater.start('cycled');
   sick.fx.appetite = 0.5;

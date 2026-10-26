@@ -1472,22 +1472,30 @@ and to the water's look into `water.fx` (`effects.ts`, read by the fish and the 
   capacities (mg N/day) in the sponge, sand and glass (70/25/5 %), Monod uptake taken implicitly,
   growing on what they oxidize, x1.07 per °C, slowed in acid water (half at pH 6.45). Plants take
   0.07 mg N/day, ammonia first. KH: 7.14 mg CaCO3 per mg N nitrified, less half for the share of the
-  fish's ammonia excreted as NH3; pH from the carbonate balance with 3 ppm CO2 (7.6 at 4 dKH), the
+  fish's ammonia excreted as NH3 and for the nitrate the plants take; the water lost to the air
+  (0.4 %/day) topped up with tap water, its KH coming in; pH from the carbonate balance with 3 ppm CO2 (7.6 at 4 dKH), the
   leaf's tannins a little acid and a tint. The room 70 °F (±1 °F a day), the bowl's time constant 3.5
-  h, a 10 W heater with a 0.5 °F thermostat band at 79 °F (its lamp lit while heating; averaged over a
-  frame that spans many cycles). Chlorine at 2 ppm in untreated tap water: gone in about a day,
-  killing bacteria (0.7/ppm/day), chloramine freeing some ammonia. A bloom of free bacteria on
-  dissolved organics (a new bowl's leaching, rotting food), eaten fast by a mature biofilm.
+  h, a 10 W heater with a 0.5 °F thermostat band at 79 °F, followed a minute at a time (its lamp: the
+  share of the time it heated, blended over 0.15 s of real time, so at Play it blinks and at Fast it
+  glows steadily at its duty). Chlorine at 2 ppm in untreated tap water: gone in about a day, killing
+  bacteria (0.7/ppm/day), chloramine freeing some ammonia; a treated change neutralizes what is left.
+  A bloom of free bacteria on dissolved organics (a new bowl's leaching, rotting food), eaten fast by
+  a mature biofilm. The clock runs to each meal or change and lands on it exactly (so none fires
+  twice, whatever the frames' lengths), in steps of at most 10 minutes, at least one.
 - **Choices that differ from the textbook values** (to match what keepers see): the nitrifiers' Ks
   is a few thousandths of a mg N/L (aquarium biofilters are mostly ammonia-oxidizing archaea and
   comammox Nitrospira) and the active biofilm's loss rate is 0.56 (AOB) / 0.45 (NOB) a day (decay,
   grazing, sloughing), so a cycled filter carries ~1.35x its load: ammonia reads ~0.01-0.02 ppm, yet a
   sponge rinsed under the tap (97 % of its bacteria killed) brings 0.25-0.3 ppm in 3-4 days. The flip
   side: a week or two without food shrinks the colony, and feeding again brings a short ammonia rise.
-- **The fish**: severities 0..1 (0.7 severe) for free NH3 (0.02-0.05 ppm), nitrite (0.25-2), nitrate
-  (40-160), cold (under 76.5 °F; 70 °F ~0.55), chlorine, acid water (under 6.4) and a pH swing from
-  what it is used to (2-day memory); felt within ~2 h, mended over 1-2 days (the cold within hours);
-  each effect a weighted combination; appetite falls with them; the nest only when content and warm.
+- **The fish**: severities 0..1 (0.7 severe) for free NH3 (0.004-0.05 ppm: total ammonia from about
+  0.25 ppm at pH 7.6 makes it uncomfortable), nitrite (0.25-2), nitrate (40-160), cold (under 76.5
+  °F; 70 °F ~0.55), chlorine, very acid water (under pH 5.6: bettas come from soft, acid water, so
+  old-tank syndrome's harm is the swing a big change on a crashed buffer gives, and its stalled
+  bacteria) and a pH swing from what it is used to (2-day memory; from half a unit, a whole unit
+  severe); felt within ~2 h, mended over 1-2
+  days (the cold within hours); each effect a weighted combination, finite and 0..1, and within 0.01
+  of its clear value exactly that; appetite falls with them; the nest only when content and warm.
   Its condition (Thriving / Uncomfortable / Stressed / In danger) and the main cause go to the panel;
   it never dies (in danger, the panel says what that would mean in a real bowl and what to do).
 - **The page** (`care.mjs`, no DOM; `WaterCare.ts` wires it). Clock: paused, Play (30 sim min a
@@ -1499,23 +1507,30 @@ and to the water's look into `water.fx` (`effects.ts`, read by the fish and the 
   leaving them alone. Water changes by the routine: none, 25 % weekly, 50 % twice a week, or tested
   daily at 10 am and half changed when ammonia or nitrite reads 0.5 ppm (fish-in cycling in a bowl
   this small: peaks ammonia 0.57, nitrite 0.73, never in danger, cycled on day 33). Starts: a new bowl (the first), a cycled one (a month of
-  weekly changes after a steady state), a neglected one (that, then nine weeks without changes:
-  nitrate ~48, KH 0.4, pH 6.3). Kept every 5 s and as the page hides (~30 KB at most: 120 days of
-  3-hourly samples).
+  weekly changes after a steady state), a neglected one (that, then four months without a change,
+  only topped up: nitrate ~80, KH 0.4, pH 6.26, ammonia 1.3 held as harmless NH4+ at that pH, the fish
+  stressed by the nitrate; a quarter changed a day brings it back in about four days, never in
+  danger, while half at once shocks it with a jump of 1.1 in pH). Kept every 5 s and as the page hides (~30 KB at most: 120 days of
+  3-hourly samples); what comes back is checked field by field (numbers finite and in range, lists of
+  the right shape, known speeds and routines), else a new bowl. Only pellets that settle once Water
+  mode is on are its leftovers (`FishFood.landings` numbers each settling).
 - **The panel** (`panel.ts`, `chart.ts`, `water.css`; words in `content.ts`): readings with test-kit
   colour chips, pH, °F and °C; the condition; a line on what is happening; opened out, the nitrogen
-  cycle chart (ammonia and nitrite on one scale, nitrate below on its own; canvas at the device's
-  ratio, a crosshair under the pointer), care, routine and start points. A side panel on a desktop, a
-  column at the left on a phone held sideways, a sheet above the page's link on one held upright (it
-  folds to its readings, clear of the bowl; Learn's card moves up top). DOM updated at 4 Hz (only what
+  cycle chart (ammonia and nitrite on one scale, nitrate below on its own, from the first sample
+  kept to now; canvas at the device's ratio, a crosshair under the pointer), care, routine and start
+  points. A side panel on a desktop, a column at the left on a phone held sideways, a sheet above the
+  page's link on one held upright (it folds to its readings and its news in full, clear of the bowl;
+  Learn's card moves up top, and the sheet opened stops short of the lowest it can reach). DOM updated at 4 Hz (only what
   changed), the chart at 2 Hz when shown (its width from a ResizeObserver: no forced layout).
 - **Cost**: phone emulation (384x693 at 2.81, 2.75x CPU, vsync), the panel open: 60 fps, 84
   pipelines; Water's frame 0.05-0.07 ms on average (throttled), the chart's redraw ~0.5 ms twice a
   second. No WGSL, no pipelines.
-- Tests: `water-chemistry.test.mjs` (11: the new bowl's cycle; fish-in cycling with changes twice a
+- Tests: `water-chemistry.test.mjs` (12: the new bowl's cycle; fish-in cycling with changes twice a
   week and as the test says; a cycled bowl kept well and neglected; the sponge rinsed; the heater
-  off; its lamp; an untreated change; overfeeding; saving) and `water-care.test.mjs` (4: water.fx on
-  and off; the clock; routine meals counted and the Feed button's, leftovers; what is kept).
+  off; events landed on exactly with frames of any length; its lamp at Play and Fast; an untreated
+  change, and a treated one after; overfeeding; saving, and spoilt saves) and `water-care.test.mjs`
+  (6: water.fx on and off; pellets from before Water mode; slow frames at Fast; the clock; routine
+  meals counted and the Feed button's, leftovers; what is kept).
 
 ## The water's state, seen (water/effects.ts, as the fish and the bowl show it)
 
@@ -1524,20 +1539,25 @@ mode off; `?water=lethargy:1,cloud:0.6,...` forces values for testing); main.ts 
 frame: to the betta (`Betta.water`), to the nest (`BowlLife.tending`) and to the look
 (`water/look.ts`). In clear water every one of these is the page as it was: the swim's routes, the
 fins and the body bit for bit (betta-swim.test.mjs, betta-worker.test.mjs, water-fish.test.mjs), the
-other globes' WGSL byte for byte, the bowl's picture to within a few pixels' rounding.
+other globes' WGSL byte for byte, the bowl's shading the same sums as before (the desktop's picture
+pixel for pixel; on a phone's a few hundred pixels at the edges of bubbles differ, as they do for
+any edit that leaves the water's dimming to a uniform, even one adding 0: the GPU's compiler rounds
+the new code its own way).
 
 - **The fish** (bettaSwim.mjs; lethargy, gasp and clamp go to the worker in each step, bettaLink.mjs
-  S.water). Listless (lethargy), it goes down whenever it stops, the readier the more listless
-  (`slump`: always from half way), lying 6 times as long at 1, leaning a little onto one side; not
+  S.water). Listless (lethargy), it rests as a well fish does, its rests coming round sooner (their
+  wait up to 60% shorter), and besides goes down whenever it stops, the readier the more listless
+  (`slumpDown`, `slump`: always from half way), lying 6 times as long at 1, leaning a little onto one
+  side as it settles; not
   over a place to lie, it makes for one (`seekRest`: where its way down, `restLanding`, ends clear of
   the glass and of the furnishings' solid parts: by the wood or on it). It lets itself sink there,
   all but in place, rather than swim down. It swims slower on shorter legs, hovers more, keeps low,
   takes a harder knock to startle, and from 0.4 neither displays nor laps. Short of air (gasp), it
   goes up up to 6 times as often (`gulpDue`), from 0.4 lingers at the film for up to 8 more gulps,
   its lips shut between them, and breathes quicker (bettaSpecimen.mjs: the gait's breathing phase).
-  Measured in the bowl among its furnishings, 10 minutes each: resting 4% of the time clear, 10% at
-  lethargy 0.3, 60% at 0.6, 79% at 1; 0.7 gulps a minute clear, 7 at gasp 0.7 (at the film 29% of
-  the time), 11.5 at 1.
+  Measured in the bowl among its furnishings (32 fish, 15 minutes each): resting 1.8% of the time
+  clear (2.8 times an hour), 1.9% at lethargy 0.01, 4.2% at 0.1, 8.4% at 0.2, 21% at 0.3, 65% at 0.6,
+  78% at 1; 0.7 gulps a minute clear, 7 at gasp 0.7 (at the film 29% of the time), 11.5 at 1.
 - **The fins** (betta-atelier fin-dynamics.js, the state's optional `clamp`, eased in the specimen
   over a few seconds): the caudal's rays close to 38% of their spread and droop, the dorsal and anal
   lie back along the body, the membranes held taut and stiffer, the ventrals tuck back by 1 rad and
@@ -1555,11 +1575,11 @@ other globes' WGSL byte for byte, the bowl's picture to within a few pixels' rou
   it scatters on down) and shows the lamp's beam the brighter; tannins (`tannin`: the blue all but
   wholly, the green much, the red hardly; their strength tint^0.6) stain it tea-brown, deeper with
   depth and path, and glow amber. Both dim the light on the sand too (FluidSim `waterColour`, the
-  photons'). Each stretch of water now adds its glow before its bubbles (a bubble in a clouded one
-  is seen in its haze). The heater's lamp (equipment.mjs `scapeHeaterLamp`) goes dark but stays
+  photons'). Clouded or stained, each stretch of water adds its glow before its bubbles (a bubble in
+  a clouded one is seen in its haze); clear, after them, as it always did. The heater's lamp (equipment.mjs `scapeHeaterLamp`) goes dark but stays
   there, an amber lens.
 - **Cost.** A few multiplies a frame on the page (well under 0.01 ms); the swim's searches only when
-  it stops. Shader: 0.6 K more inlined (bowlKoi-full 419.9 K of its 420 K budget). Phone emulation
+  it stops. Shader: 0.7 K more inlined (bowlKoi-full 419.97 K of its 420 K budget). Phone emulation
   (384x693 at 2.81, vsync), clear and with strong effects alike: 60 fps, GPU sim 0.4-0.5 + draw
   1.0 ms, CPU 1.9-2.3 ms, 84 pipelines.
-- Tests: `water-fish.test.mjs` (11).
+- Tests: `water-fish.test.mjs` (12).

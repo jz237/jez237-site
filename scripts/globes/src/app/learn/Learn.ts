@@ -117,9 +117,12 @@ export class Learn {
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && this.until > 0) this.hide();
     });
-    // (Every pellet is counted, Learn mode on or off: the advice is for the whole visit. With Water
-    // mode on, by its clock: a meal's pellets at the time it was given.)
-    host.feeding.onDrop = () => (this.meals ? this.meals.drop() : this.log.drop(performance.now() / 1000));
+    // (Every pellet is counted, Learn mode on or off: the advice is for the whole visit; with Water
+    // mode on, by its clock too, for its advice while it runs.)
+    host.feeding.onDrop = () => {
+      this.log.drop(performance.now() / 1000);
+      this.meals?.drop();
+    };
 
     let kept = false;
     try {

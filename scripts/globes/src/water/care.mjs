@@ -10,6 +10,9 @@ import { FeedLog } from '../app/learn/feedLog.mjs';
 
 /** Sim seconds a second, at each speed: paused, Play (half an hour a second), Fast (six hours). */
 export const RATE = { pause: 0, play: 30 * 60, fast: 6 * HOUR };
+/** The heater's lamp as an eye sees it (s of real time it blends over): at Play it blinks with the
+ *  thermostat; at Fast, whose frames span many of its cycles, it glows steadily at its duty. */
+const LAMP_SECONDS = 0.15;
 /** Most uneaten pellets shown on the sand at once (the newest), leaving room for a meal (FishFood
  *  holds seven). */
 export const SHOWN = 4;
@@ -32,7 +35,8 @@ export function clockText(t) {
  *  water: { fx } (main.ts: what the fish and the bowl's look read);
  *  idle: the effects water.fx holds while off (CLEAR_WATER, or ?water='s);
  *  feeding: Feeding (its state: a meal asked for with the Feed button);
- *  food: FishFood (eatenCount, leave(), lay(p), rot(slot, left), isLeft(slot), take(slot));
+ *  food: FishFood (eatenCount, landings, leave(after), lay(p), rot(slot, left), isLeft(slot),
+ *    take(slot));
  *  rotation(): the globe frame to the sim frame (column-major 3x3);
  *  bed: the sand's height at rest (the globe frame).
  */
@@ -49,8 +53,10 @@ export class Care {
     this.mealAt = 0;
     this.meals = { log: new FeedLog(), now: () => this.bowl.s.t, drop: () => this.meals.log.drop(this.mealAt) };
     this.feedState = host.feeding.state;
-    /** FishFood's count of pellets eaten, as last seen. */
+    /** FishFood's count of pellets eaten, as last seen, and of settlings when Water mode came on
+     *  (a pellet that settled before is no leftover of its). */
     this.eaten = 0;
+    this.since = 0;
     /** Uneaten pellets shown on the sand: the bowl's id for each, and its FishFood slot. */
     this.shown = new Map();
   }
@@ -68,6 +74,7 @@ export class Care {
     }
     h.water.fx = this.bowl.fx;
     this.eaten = h.food.eatenCount;
+    this.since = h.food.landings;
     this.feedState = h.feeding.state;
     this.mealAt = this.bowl.s.t;
     this.sync();
@@ -86,9 +93,12 @@ export class Care {
     const eaten = h.food.eatenCount - this.eaten;
     this.eaten = h.food.eatenCount;
     if (eaten > 0) this.bowl.eat(eaten);
-    for (const slot of h.food.leave()) this.shown.set(this.bowl.leave(), slot);
+    for (const slot of h.food.leave(this.since)) this.shown.set(this.bowl.leave(), slot);
     const run = hidden ? 0 : dt * RATE[this.speed];
-    if (run > 0) this.bowl.advance(run, this.routine, () => this.meal());
+    if (run > 0) {
+      this.bowl.lampWindow = LAMP_SECONDS * RATE[this.speed];
+      this.bowl.advance(run, this.routine, () => this.meal());
+    }
   }
 
   /** A meal of the routine, due now, counted (the lid stays on): the fish eats what its appetite
@@ -152,7 +162,7 @@ export class Care {
     const bowl = BowlWater.restore(saved.bowl);
     if (!bowl) return false;
     this.bowl = bowl;
-    if (saved.speed in RATE) this.speed = saved.speed;
+    if (Object.hasOwn(RATE, saved.speed)) this.speed = saved.speed;
     if (ROUTINES.meals.includes(saved.meals)) this.routine.meals = saved.meals;
     if (ROUTINES.change.includes(saved.change)) this.routine.change = saved.change;
     return true;
