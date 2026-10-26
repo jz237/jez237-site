@@ -88,7 +88,10 @@ export function attachCarLights(root:T.Object3D,halfLength:number,options:{fitRe
  });
  // Each car gets its own lamp materials so one car's lights never switch another's.
  const owned:T.Material[]=[];
- const own=(mesh:T.Mesh,color:number)=>{const m=(mesh.material as T.MeshStandardMaterial).clone();m.emissive=new T.Color(color);m.emissiveIntensity=0;mesh.material=m;owned.push(m);return m;};
+ // A lamp's own copy of its material keeps the shader work done on the original (clone() drops onBeforeCompile): the
+ // lens fracturing, the dirt, wet and dust films.
+ const keep=<M extends T.Material>(from:M,to:M)=>{to.onBeforeCompile=from.onBeforeCompile;to.customProgramCacheKey=from.customProgramCacheKey;return to;};
+ const own=(mesh:T.Mesh,color:number)=>{const m=keep(mesh.material as T.MeshStandardMaterial,(mesh.material as T.MeshStandardMaterial).clone());m.emissive=new T.Color(color);m.emissiveIntensity=0;mesh.material=m;owned.push(m);return m;};
  const headMats=heads.map(m=>own(m,0xfff1d0)),tailMats=tails.map(m=>own(m,0xff2a1a)),reverseMats=reverses.map(m=>own(m,0xfff6ea));
  const pool=lightPool(),poolMaterial=new T.MeshBasicMaterial({map:pool,color:0xffffff,transparent:true,opacity:0,blending:T.AdditiveBlending,depthWrite:false,toneMapped:false}),poolGeometry=new T.PlaneGeometry(4.6,11);
  const poolMesh=new T.Mesh(poolGeometry,poolMaterial);poolMesh.name='car_light_pool';poolMesh.rotation.x=-Math.PI/2;poolMesh.position.set(0,poolY,halfLength+5.2);poolMesh.renderOrder=2;poolMesh.visible=false;poolMesh.frustumCulled=true;
@@ -148,7 +151,7 @@ export function attachCarLights(root:T.Object3D,halfLength:number,options:{fitRe
  // Offline only; each keeps its own look (some glow amber already) between flashes.
  const indicatorMats:T.MeshStandardMaterial[]=[],indicatorBase:{color:T.Color;intensity:number}[]=[];
  if(!options.fitReverse)indicators.length=0;
- for(const m of indicators){const material=(m.material as T.MeshStandardMaterial).clone();m.material=material;owned.push(material);indicatorMats.push(material);indicatorBase.push({color:material.emissive?.clone()??new T.Color(0),intensity:material.emissiveIntensity??0});}
+ for(const m of indicators){const material=keep(m.material as T.MeshStandardMaterial,(m.material as T.MeshStandardMaterial).clone());m.material=material;owned.push(material);indicatorMats.push(material);indicatorBase.push({color:material.emissive?.clone()??new T.Color(0),intensity:material.emissiveIntensity??0});}
  const fitAmber=new T.BoxGeometry(HAZARD.width,HAZARD.height,HAZARD.depth),fittedAmber:{lens:T.Mesh;lamp:T.Mesh;parent:T.Object3D|null}[]=[];
  if(options.fitReverse)for(const [end,list,lampSides] of [[1,heads,headSides],[-1,tails,tailSides]] as const){
   if(indicators.some(m=>Math.sign(box.setFromObject(m).getCenter(centre).applyMatrix4(inverse).z)===end))continue;

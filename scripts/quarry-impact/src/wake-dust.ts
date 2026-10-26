@@ -6,6 +6,9 @@ import * as T from 'three';
  * plume), and the rain rinses it off (WAKE.rinse of it a second in a full downpour). Every car starts the event a little
  * dusty (WAKE.start, its own amount). */
 export const WAKE={reach:1.15,rate:.08,max:.75,rinse:.05,start:[.06,.18],tint:0x8a7f6b} as const;
+/** Grimy lamps (offline): a lamp under the dust film (wake or settled) or body dirt glows dimmer through it — down by
+ * LAMP_GRIME.dust of the film and LAMP_GRIME.dirt of the dirt, LAMP_GRIME.most at most. */
+export const LAMP_GRIME={dust:.7,dirt:.5,most:.75} as const;
 export function startingWake(id:number){
   const n=Number.isFinite(id)?id:0,r=Math.abs(Math.sin(n*78.233+1.733)*43758.5453)%1;
   return WAKE.start[0]+r*(WAKE.start[1]-WAKE.start[0]);

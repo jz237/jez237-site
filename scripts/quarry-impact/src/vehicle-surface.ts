@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {finishVehiclePresentation} from './vehicle-presentation';
-import {WAKE} from './wake-dust';
+import {LAMP_GRIME,WAKE} from './wake-dust';
 import {TOP_DUST} from './settled-dust';
 
 /** Persistent deposition state. Four tires retain water after leaving a puddle. */
@@ -64,13 +64,15 @@ diffuseColor.rgb=mix(diffuseColor.rgb,vTransferredPaint.rgb,transferred*.85);`}
 roughnessFactor=mix(roughnessFactor,.89,max(carDirt*.8,wakeDust*.9));
 roughnessFactor=mix(roughnessFactor,max(.1,roughnessFactor*.48),carWet*(1.-carDirt*.55));`)
           .replace('#include <metalnessmap_fragment>','#include <metalnessmap_fragment>\nmetalnessFactor*=(1.-carDirt*.9)*(1.-wakeDust*.8);')
+          // A lamp under dust or dirt glows dimmer through the grime.
+          .replace('#include <emissivemap_fragment>',`#include <emissivemap_fragment>\ntotalEmissiveRadiance*=1.-clamp(wakeDust*${LAMP_GRIME.dust}+carDirt*${LAMP_GRIME.dirt},0.,${LAMP_GRIME.most});`)
           .replace('#include <lights_physical_fragment>',`#include <lights_physical_fragment>
 #ifdef USE_CLEARCOAT
 material.clearcoat*=(1.-carDirt*.88)*(1.-wakeDust*.85);
 material.clearcoatRoughness=mix(material.clearcoatRoughness,.07,carWet);
 #endif`);
       };
-      m.customProgramCacheKey=()=>key+'-persistent-wet-silt-wake-v3-'+Number(glass);
+      m.customProgramCacheKey=()=>key+'-persistent-wet-silt-wake-v4-'+Number(glass);
     });
   }
   advance(dt:number,speed:number,gravel:boolean,wet:readonly boolean[],grounded:readonly boolean[]=[true,true,true,true]){
