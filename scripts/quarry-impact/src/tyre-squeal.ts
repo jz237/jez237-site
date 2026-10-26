@@ -6,10 +6,17 @@
  * - A slipping fan belt squeals as the revs climb (BELT_SURGE.rise rpm above where they have been is full voice) and settles
  *   to BELT_SURGE.base of that while they hold.
  * - Rattles, knocks and clatter across the field are played at most RATTLE_BUDGET.rate a second (bursts of
- *   RATTLE_BUDGET.burst): beyond that they are a wall of noise, and every one is a new sound to build. */
+ *   RATTLE_BUDGET.burst): beyond that they are a wall of noise, and every one is a new sound to build.
+ * - Each running-gear loop (reverse whine, steam and tyre hiss, flapping tyres, groans, brake squeal…) sounds from at most
+ *   LOOP_VOICES cars, the ones heard loudest; the rest of the field's would only blur into a drone. */
 export const TYRE_SQUEAL={onset:2.5,full:9,cap:.35,settle:1.4,steady:.3,voices:3,skidGap:1.2} as const;
 export const BELT_SURGE={settle:1,rise:1200,base:.1} as const;
 export const RATTLE_BUDGET={rate:10,burst:5} as const;
+export const LOOP_VOICES=2;
+/** The cars whose loop of one kind sounds: the LOOP_VOICES heard loudest (level over distance). */
+export function loudest<C>(heard:readonly {car:C;level:number;distance:number}[]){
+  return [...heard].sort((a,b)=>b.level/Math.max(1,b.distance)-a.level/Math.max(1,a.distance)).slice(0,LOOP_VOICES);
+}
 const clamp01=(v:number)=>Math.max(0,Math.min(1,Number.isFinite(v)?v:0));
 export const isPaved=(surface:string|undefined)=>surface==='asphalt';
 export type SquealState={avg:number;skidAt:number};

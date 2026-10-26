@@ -13,7 +13,7 @@ import {engineDamageLevel} from './engine-condition';
 import {classicEngineVoice,vehicleWheelRadius} from './classic-vehicle-specs';
 import {RATTLE,rattleRate,thumpRate,EventClock,synthClank,synthThump,hornStuck,synthHorn,synthGrowl,synthWind,synthSqueal} from './damage-rattle';
 import {knockRate} from './oil-starvation';
-import {ShotBudget,beltSurge,isPaved,skidChirp,squealLevel,squealState,squealVoices,type SquealState} from './tyre-squeal';
+import {ShotBudget,beltSurge,isPaved,loudest,skidChirp,squealLevel,squealState,squealVoices,type SquealState} from './tyre-squeal';
 /** Front compression past which the fan hits its shroud, and its clatter rate cap. */
 const FAN_CLATTER={onset:.35,max:12} as const;
 import {impactSoundLayers} from './impact-response';
@@ -408,9 +408,12 @@ export class Sound {
   }
   /** Keep one loop per car at its level; a loop that falls quiet fades and is held LOOP_HOLD seconds before it is stopped. */
   private driveLoops(map:Map<number,Loop>,id:string,cars:readonly Vehicle[],listener:T.Vector3,now:number,level:(car:Vehicle)=>number,rate:(car:Vehicle)=>number,gain:number){
-    if(!this.buffers.has(id))return;const live=new Set<number>();
+    if(!this.buffers.has(id))return;const live=new Set<number>(),heard:{car:Vehicle;level:number;distance:number}[]=[];
     for(const car of cars){
-      if(!car.extendedDamage||car.health<=0||car.current.distanceTo(listener)>RATTLE.hearing)continue;const v=level(car);if(!(v>0))continue;
+      if(!car.extendedDamage||car.health<=0||car.current.distanceTo(listener)>RATTLE.hearing)continue;const v=level(car);if(!(v>0))continue;heard.push({car,level:v,distance:car.current.distanceTo(listener)});
+    }
+    // Only the few heard loudest: a whole field of the same loop is a drone.
+    for(const {car,level:v} of loudest(heard)){
       live.add(car.id);let l=map.get(car.id);if(!l){l=this.loop(id,this.fxBus!);if(!l)continue;map.set(car.id,l);}
       l.pan.positionX.value=car.current.x;l.pan.positionY.value=car.current.y+.4;l.pan.positionZ.value=car.current.z;
       l.source.playbackRate.setTargetAtTime(rate(car),now,.08);l.gain.gain.setTargetAtTime(gain*v,now,.08);

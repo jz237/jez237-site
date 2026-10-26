@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {BELT_SURGE,RATTLE_BUDGET,ShotBudget,TYRE_SQUEAL,beltSurge,isPaved,skidChirp,squealLevel,squealState,squealVoices} from '../src/tyre-squeal';
+import {BELT_SURGE,LOOP_VOICES,RATTLE_BUDGET,ShotBudget,TYRE_SQUEAL,beltSurge,isPaved,loudest,skidChirp,squealLevel,squealState,squealVoices} from '../src/tyre-squeal';
 test('tyres squeal on paved ground only, and not below the onset',()=>{
   assert.ok(isPaved('asphalt')&&!isPaved('gravel')&&!isPaved(undefined));
   assert.equal(squealLevel(squealState(),20,false,.016),0,'gravel roars, it does not squeal');
@@ -38,4 +38,9 @@ test('the audio uses them: squeal level and voices for the tyre loop, chirps on 
   assert.ok(audio.includes("&& isPaved(car.surface) && skidChirp(this.squealOf(car.id),c.currentTime))\n          this.shot('skid', car.current, 0.16);"));
   assert.ok(audio.includes('l.gain.gain.setTargetAtTime(.2*car.squeal*beltSurge(b,car.rpm??0,dt),now,.06);'));
   assert.ok(audio.includes("if((id.startsWith('rattle-')||id==='thump')&&!this.rattleBudget.take(this.ctx?.currentTime??0))return;"));
+});
+test('each running-gear loop sounds from the LOOP_VOICES cars heard loudest, near and loud before far or faint',()=>{
+  const heard=[{car:'far',level:1,distance:40},{car:'near',level:.5,distance:3},{car:'mid',level:1,distance:8},{car:'faint',level:.05,distance:2}];
+  assert.deepEqual(loudest(heard).map(h=>h.car),['near','mid']);assert.equal(loudest(heard).length,LOOP_VOICES);assert.equal(loudest([]).length,0);
+  const audio=readFileSync(new URL('../src/audio.ts',import.meta.url),'utf8');assert.ok(audio.includes('for(const {car,level:v} of loudest(heard)){'),'driveLoops plays only those');
 });
