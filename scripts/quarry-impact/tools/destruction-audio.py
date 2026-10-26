@@ -85,6 +85,9 @@ jobs = [
  ('stone-ping-2', "A pebble thrown up from a gravel road hitting a car's front bumper and glancing off: one hard short plastic and metal tock with a tiny tick. Isolated, no engine, no music, no voices, no speech.", .5, False),
  # A commercial vehicle's reversing alarm (audio.REVERSE_BEEPER), looped while it backs up.
  ('reverse-beeper', 'Commercial van reversing alarm: a steady repeating electronic beep, beep at exactly one beep per second, clean square tone, outdoors, heard from a few metres away. Isolated, no engine, no music, no voices, no speech.', 2.0, True),
+ ('bump-stop-0', 'Car suspension bottoming out on a big bump: one heavy dull metallic clunk as the axle slams into the rubber bump stop, with a short thud through the body. Close up, isolated, no engine, no music, no voices, no speech.', .6, False),
+ ('bump-stop-1', 'Old worn car suspension crashing through its travel over a pothole: a hollow metal bang and clank from under the car with a brief rattle of loose parts. Close up, isolated, no engine, no music, no voices, no speech.', .7, False),
+ ('bump-stop-2', 'Car front suspension hitting its bump stops landing off a rut: a deep short thunk of rubber and steel, a creak of the body, outdoors. Close up, isolated, no engine, no music, no voices, no speech.', .6, False),
 ]
 # Seconds cut from the start of a raw clip: metal-groan dips to silence early (it would drop out every loop) and
 # debris-2 opens with half a second of near silence (the layer would land late).

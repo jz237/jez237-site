@@ -1,3 +1,4 @@
+import {restoreBumpStopsBytes} from './bump-stops-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readWheelBlurPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreWheelBlurBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreBumpStopsBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readWheelBlurPrevious(file);
 }
 export function verifyWheelBlurRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'56744328878d06b29c82ab85f41aa21d23508f5b');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreBumpStopsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreWheelBlurBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the WheelBlur release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreBumpStopsBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the WheelBlur release');
  assert.equal(manifest.previousFixtureCount,8886);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,8886);
 }

@@ -139,6 +139,7 @@ import {ROT,fitRust,rustFlakes,startingRust} from './age-rust';
 import {fitDonors,pickDonors} from './donor-panels';
 import {OIL_BURN,burnOil,burner,type Burner} from './oil-burner';
 import {WheelBlur} from './wheel-blur';
+import {BUMP,bumpStrike} from './bump-stops';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -2362,7 +2363,7 @@ const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMa
 function bodyBox(c:Vehicle){let box=roostBoxes.get(c);if(box)return box;c.root.updateMatrixWorld(true);const inverse=c.root.matrixWorld.clone().invert(),b=new T.Box3(),all=new T.Box3();for(const p of c.panels)all.union(b.setFromObject(p).applyMatrix4(inverse));if(all.isEmpty())return null;
   box={centre:all.getCenter(new T.Vector3()),half:all.getSize(new T.Vector3()).multiplyScalar(.5)};roostBoxes.set(c,box);return box;}
 let bodyDusts=0;const dustOut=new T.Vector3();
-const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>(),oilBurners=new WeakMap<object,Burner>(),wheelBlurs=new Map<Vehicle,WheelBlur>();let rustShowers=0,oilBurns=0;
+const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>(),oilBurners=new WeakMap<object,Burner>(),wheelBlurs=new Map<Vehicle,WheelBlur>(),bumpState=new WeakMap<object,{len:number[];ground:boolean[];at:number[];count:number}>();let rustShowers=0,oilBurns=0,bumpStops=0,bumpTake=0;
 const shiftGears=new WeakMap<object,number>(),shiftRevs=new WeakMap<object,number>();let shiftFlames=0,dustAir=0,knockDust=0;let shiftSmokes=0;const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3(),roostBoxes=new WeakMap<Vehicle,{centre:T.Vector3;half:T.Vector3}>(),roostBodies:RoostBody[]=[],pingClock=new Map<number,number>();let pingTake=0,stonePings=0;let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
 let wetReflections:ReturnType<typeof createWetReflections>|undefined;const glowList:Glow[]=[];
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
@@ -2420,6 +2421,11 @@ function updateCamera(dt: number) {
     for(const g of c.glass){const st=(g.material as T.Material).userData.glassState as GlassState|undefined;if(st)st.smoke.value=now;}}
   // Braking cakes the rims in brake dust; a downpour slowly rinses it (offline).
   if(state==='playing')for(const c of cars){const d=rimDust.get(c);if(d)d.value=brakeDustStep(d.value,dt,c.input?.brake??0,c.speed,eventLighting==='rain'?shower:0);}
+  // A corner slammed through its travel crashes onto its bump stop with a clunk; an old banger's worn bushes knock (offline).
+  if(state==='playing')for(const c of cars){if(!c.extendedDamage||c.health<=0)continue;let b=bumpState.get(c);if(!b){b={len:[NaN,NaN,NaN,NaN],ground:[false,false,false,false],at:[-9,-9,-9,-9],count:0};bumpState.set(c,b);}
+    for(let i=0;i<4;i++){if(c.wreckParts.wheelLost[i])continue;const now=c.controller.wheelSuspensionLength(i)??NaN,grounded=!!c.controller.wheelIsInContact(i),floor=(c.controller.wheelSuspensionRestLength(i)??NaN)-(c.controller.wheelMaxSuspensionTravel(i)??NaN);
+      const strike=bumpStrike(b.len[i],now,floor,dt,grounded,b.ground[i],c.surfaceFinish.rustAge);b.len[i]=now;b.ground[i]=grounded;
+      if(strike.volume>0&&clock-b.at[i]>=BUMP.gap){b.at[i]=clock;b.count++;bumpStops++;c.wheels[i]?.getWorldPosition(steamAt);sound.clip(BUMP.clips[bumpTake++%BUMP.clips.length],steamAt,strike.volume,BUMP.duration);}}}
   if(state==='playing'||state==='wrecked'||state==='result')for(const c of cars)wheelBlurs.get(c)?.update([0,1,2,3].map(i=>c.wheelAngle(i)),dt,c.wreckParts.wheelLost,rimDust.get(c)?.value??0);
   // A car standing in the rain (or wrecked) mists up inside, and clears once it gets going (offline).
   if(state==='playing'||state==='wrecked')for(const c of cars){if(!c.extendedDamage)continue;const was=mistIn.get(c)??0,now=mistStep(was,dt,eventLighting==='rain',c.health<=0||Math.abs(c.speed)<MIST.still);if(now===was)continue;mistIn.set(c,now);
@@ -3132,6 +3138,7 @@ async function boot() {
     rollingCaps: () => ({ rolled: rollingCaps.rolled, moving: rollingCaps.moving, caps: rollingCaps.caps.map(c => ({ phase: c.phase, speed: +c.speed.toFixed(2), lean: +c.lean.toFixed(2), r: +c.radius.toFixed(3), at: c.p.toArray().map(v => +v.toFixed(2)) })) }),
     dustAir: () => +dustAir.toFixed(3),
     rust: (id = 0, age?: number) => { const c = cars.find(x => x.id === id); if (!c) return null; if (age !== undefined) c.surfaceFinish.rustAge = age; const r = c.surfaceFinish.rust.value, a = c.surfaceFinish.arches.value; const e = new T.Euler().setFromQuaternion(c.root.quaternion, 'YXZ'); return { showers: rustShowers, lean: [+T.MathUtils.radToDeg(e.x).toFixed(2), +T.MathUtils.radToDeg(e.z).toFixed(2)], sag: Array.from(c.sagBias, v => +v.toFixed(3)), dampers: Array.from(c.damperBias, v => +v.toFixed(3)), age: +r.x.toFixed(3), bottom: +r.y.toFixed(3), half: +r.z.toFixed(3), front: +a.x.toFixed(3), rear: +a.y.toFixed(3), hub: +a.z.toFixed(3), arches: [+r.w.toFixed(3), +a.w.toFixed(3)] }; },
+    bumpStops: (id?: number) => { if (id === undefined) return bumpStops; const c = cars.find(x => x.id === id); return c ? bumpState.get(c)?.count ?? 0 : null; },
     wheelBlur: (id = 0) => { const c = cars.find(x => x.id === id), b = c && wheelBlurs.get(c); return b ? { discs: b.discs.length, opacities: b.opacities } : null; },
     oilBurns: (id?: number) => { if (id === undefined) return oilBurns; const c = cars.find(x => x.id === id); return c ? oilBurners.get(c)?.puffs ?? 0 : null; },
     donors: (id = 0) => { const c = cars.find(x => x.id === id); return c ? { panels: donorPanels.get(c) ?? [], assemblies: c.wreckParts.assemblies.map(a => a.name) } : null; },

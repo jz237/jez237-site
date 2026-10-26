@@ -1331,5 +1331,47 @@
     "sha256": "576e5d9c14392a78964e0e199614e28360e099c10a4eb0dedee651fb3cfbe606",
     "runtimeSha256": "e913f645c291f259937c77095184e29c0d6b78e64577d37291832c23f05a893e",
     "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "bump-stop-0",
+    "file": "bump-stop-0.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Car suspension bottoming out on a big bump: one heavy dull metallic clunk as the axle slams into the rubber bump stop, with a short thud through the body. Close up, isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 0.6,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "1adea3f9506452513d7634d2e905e96dfd9ee7ef57bd06f3e12911fe76a7182f",
+    "runtimeSha256": "c13a2cc939151a1d71b80527de0daf3d580eb483ecc80e15b0bd0e23ea696047",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "bump-stop-1",
+    "file": "bump-stop-1.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Old worn car suspension crashing through its travel over a pothole: a hollow metal bang and clank from under the car with a brief rattle of loose parts. Close up, isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 0.7,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "1425e77087e4c928724caea697d9378173466de9f7ff17fed3e63024a9eac052",
+    "runtimeSha256": "5409d32db7cc539dc1f52eac0fda55179a462b9c37ba3eebc0c34e9d7a6cf40d",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "bump-stop-2",
+    "file": "bump-stop-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Car front suspension hitting its bump stops landing off a rut: a deep short thunk of rubber and steel, a creak of the body, outdoors. Close up, isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 0.6,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "3e90620a827d2a867bebe52236ba2e28d3f0f0aaf0a61a3fc1ee83cd80b4ca2d",
+    "runtimeSha256": "3b5744a9f71aa077224c30b03fc4f976934f3a7508b2639c43d05a8f5a8b5b27",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
   }
 ]
