@@ -127,7 +127,7 @@ import {RollingCaps,fitHubcaps} from './rolling-caps';
 import {BODY_DUST,bodyDustPuffs,bodyPoint} from './body-dust';
 import {AIRBAG,Airbags} from './airbags';
 import {ExhaustFlames,shiftFlame} from './exhaust-flames';
-import {DUST_BEAMS,dustAirStep} from './dust-beams';
+import {DUST_BEAMS,SMOKE_HAZE,dustAirStep,knockHaze} from './dust-beams';
 import {StrutPunch} from './strut-punch';
 import {SparkLight} from './spark-light';
 import {vapourRate} from './exhaust-vapour';
@@ -1049,7 +1049,7 @@ function createCars(attract = false, previewSetup?:Setup) {
     // A bright tow strap hangs off each bumper and swings; a smashed or lost bumper takes its strap with it (offline).
     if(car.extendedDamage)towStraps.set(car,new TowStraps(car.root,car.panels,DEFINITIONS[type].halfLength,STRAP.colours[i%STRAP.colours.length],loop=>fx.detach(loop,car.velocity.clone().multiplyScalar(.6))));
     // A hard knock shakes the dust out of the car all over its body, as dusty as it has got (offline; none in the rain).
-    if(car.extendedDamage)car.onHardKnock=damage=>{const dirt=car.surfaceFinish.coating.value,n=bodyDustPuffs(damage,Math.max(car.surfaceFinish.wakeLevel/.75,(dirt.z+dirt.w)/2),eventLighting==='rain'),box=n?bodyBox(car):null;if(!box)return;bodyDusts++;
+    if(car.extendedDamage)car.onHardKnock=damage=>{const dirt=car.surfaceFinish.coating.value,n=bodyDustPuffs(damage,Math.max(car.surfaceFinish.wakeLevel/.75,(dirt.z+dirt.w)/2),eventLighting==='rain'),box=n?bodyBox(car):null;if(!box)return;bodyDusts++;knockDust=knockHaze(knockDust,n,BODY_DUST.puffs[1]);
       for(let k=0;k<n;k++){const at=bodyPoint(box.half.x,box.half.y,box.half.z,Math.random(),Math.random(),Math.random());steamAt.fromArray(at.p).add(box.centre).applyMatrix4(car.root.matrixWorld);dustOut.fromArray(at.n).transformDirection(car.root.matrixWorld);
         const start=fx.cursor;fx.emit(steamAt,1,0,BODY_DUST.size[0]);for(let j=start;j<fx.cursor;j++){const i=j%fx.particles.length,p=fx.particles[i];p.v.copy(dustOut).multiplyScalar(BODY_DUST.out*(.5+Math.random())).addScaledVector(car.velocity,BODY_DUST.carry);p.v.y+=BODY_DUST.lift*Math.random();
           p.size=BODY_DUST.size[0]+Math.random()*(BODY_DUST.size[1]-BODY_DUST.size[0]);p.max=p.life=BODY_DUST.life[0]+Math.random()*(BODY_DUST.life[1]-BODY_DUST.life[0]);dustTint.setHex(BODY_DUST.tint).multiplyScalar(.88+Math.random()*.2).toArray(fx.colors,i*3);}}};
@@ -2338,7 +2338,7 @@ const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMa
 function bodyBox(c:Vehicle){let box=roostBoxes.get(c);if(box)return box;c.root.updateMatrixWorld(true);const inverse=c.root.matrixWorld.clone().invert(),b=new T.Box3(),all=new T.Box3();for(const p of c.panels)all.union(b.setFromObject(p).applyMatrix4(inverse));if(all.isEmpty())return null;
   box={centre:all.getCenter(new T.Vector3()),half:all.getSize(new T.Vector3()).multiplyScalar(.5)};roostBoxes.set(c,box);return box;}
 let bodyDusts=0;const dustOut=new T.Vector3();
-const shiftGears=new WeakMap<object,number>(),shiftRevs=new WeakMap<object,number>();let shiftFlames=0,dustAir=0;let shiftSmokes=0;const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3(),roostBoxes=new WeakMap<Vehicle,{centre:T.Vector3;half:T.Vector3}>(),roostBodies:RoostBody[]=[],pingClock=new Map<number,number>();let pingTake=0,stonePings=0;let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
+const shiftGears=new WeakMap<object,number>(),shiftRevs=new WeakMap<object,number>();let shiftFlames=0,dustAir=0,knockDust=0;let shiftSmokes=0;const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3(),roostBoxes=new WeakMap<Vehicle,{centre:T.Vector3;half:T.Vector3}>(),roostBodies:RoostBody[]=[],pingClock=new Map<number,number>();let pingTake=0,stonePings=0;let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
 let wetReflections:ReturnType<typeof createWetReflections>|undefined;const glowList:Glow[]=[];
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
 function lookDriver(c:Vehicle,figure:T.Object3D,dt:number){
@@ -2655,8 +2655,9 @@ function frame(now: number) {
     const n=shiftPuffs(before,c.gear,c.input.throttle,isClassicKind(c.kind),c.engineDamage??0);if(!n)continue;shiftSmokes++;
     steamAt.set(isRearEngineKind(c.kind)?.35:-.35,-.25,-DEFINITIONS[c.kind].halfLength-.1).applyQuaternion(c.root.quaternion).add(c.root.position);const start=fx.cursor;fx.emit(steamAt,n,0,SHIFT_SMOKE.size);
     for(let j=start;j<fx.cursor;j++){const k=j%fx.particles.length,p=fx.particles[k];p.v.addScaledVector(c.forward,-SHIFT_SMOKE.back);p.size=SHIFT_SMOKE.puff[0]+Math.random()*(SHIFT_SMOKE.puff[1]-SHIFT_SMOKE.puff[0]);p.max=p.life=SHIFT_SMOKE.life[0]+Math.random()*(SHIFT_SMOKE.life[1]-SHIFT_SMOKE.life[0]);dustTint.setHex(SHIFT_SMOKE.tint).multiplyScalar(.85+Math.random()*.3).toArray(fx.colors,k*3);}}
-  // The dust the plumes leave hanging in the air (it shows the headlamp beams at dusk).
-  if(state==='playing')dustAir=dustAirStep(dustAir,cars.filter(c=>c.extendedDamage).map(c=>dustRate(c.speed,c.surface,eventLighting==='rain')/DUST.rate),dt);
+  // The dust the plumes leave hanging in the air, thickened by burning cars' smoke and knocked-off dust (it shows the
+  // headlamp beams at dusk).
+  if(state==='playing'){knockDust*=Math.exp(-dt/SMOKE_HAZE.fade);dustAir=dustAirStep(dustAir,[...cars.filter(c=>c.extendedDamage).map(c=>dustRate(c.speed,c.surface,eventLighting==='rain')/DUST.rate+(c.onFire?SMOKE_HAZE.fire:0)),knockDust],dt);}
   // Dry gravel kicks up a dust plume behind a fast car's rear tyres (offline; none in the rain).
   if(state==='playing')for(const c of cars){if(!c.extendedDamage)continue;const rate=dustRate(c.speed,c.surface,eventLighting==='rain');if(rate<=0)continue;const clocks=dustClocks.get(c)??[0,0];dustClocks.set(c,clocks);
     for(const k of [0,1]){const i=2+k,w=c.wheels[i];if(!w||c.wreckParts.wheelLost[i]||!c.controller.wheelIsInContact(i))continue;clocks[k]+=rate*dt;if(clocks[k]<1)continue;clocks[k]%=1;dustPuffs++;
