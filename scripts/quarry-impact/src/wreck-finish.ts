@@ -1,8 +1,13 @@
 import * as T from 'three';
 
+/** Blistered paint (fires): between the sound paint and the char a ring of paint bubbles up in cells — where the scorch is
+ * between BLISTER.band (up, then down) — pale toward BLISTER.pale and dull, in cells BLISTER.size to the metre. */
+export const BLISTER={band:[.015,.12,.25,.55],cells:[.55,.74],size:95,pale:'.62,.58,.52'} as const;
 /** One persistent burn state per car; impact chips stay in the panel buffers. */
 export class WreckFinish {
   readonly soot = {value:0};
+  /** Whether the paint blisters by a fire (BLISTER): offline cars only, set once the car's rules are known. */
+  readonly blisters = {value:0};
   readonly bay: {value:T.Vector3};
   constructor(root:T.Group, halfLength:number,engineBay?:T.Vector3) {
     this.bay={value:engineBay?.clone()??new T.Vector3(0,1.0,halfLength*.55)};
@@ -15,18 +20,18 @@ export class WreckFinish {
       const base=m.onBeforeCompile,key=m.customProgramCacheKey();
       m.onBeforeCompile=(s,renderer)=>{
         base.call(m,s,renderer);
-        s.uniforms.wreckSoot=this.soot;s.uniforms.wreckBay=this.bay;
+        s.uniforms.wreckSoot=this.soot;s.uniforms.wreckBay=this.bay;s.uniforms.wreckBlisters=this.blisters;
         s.vertexShader=s.vertexShader
           .replace('#include <common>','#include <common>\nattribute vec3 wreckPosition; varying vec3 vWreckRest; varying vec2 vWreckWear;'+(s.vertexShader.includes('attribute vec2 impactWear;')?'':'\nattribute vec2 impactWear;'))
           .replace('#include <begin_vertex>','#include <begin_vertex>\nvWreckRest=wreckPosition;vWreckWear=impactWear;');
         s.fragmentShader=s.fragmentShader.replace('#include <common>',`#include <common>
-uniform float wreckSoot;uniform vec3 wreckBay;varying vec3 vWreckRest;varying vec2 vWreckWear;
+uniform float wreckSoot;uniform vec3 wreckBay;uniform float wreckBlisters;varying vec3 vWreckRest;varying vec2 vWreckWear;
 float wreckHash(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,73.3)))*43758.5453);}
 float wreckNoise(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
 return mix(mix(mix(wreckHash(i),wreckHash(i+vec3(1,0,0)),f.x),mix(wreckHash(i+vec3(0,1,0)),wreckHash(i+vec3(1,1,0)),f.x),f.y),mix(mix(wreckHash(i+vec3(0,0,1)),wreckHash(i+vec3(1,0,1)),f.x),mix(wreckHash(i+vec3(0,1,1)),wreckHash(i+vec3(1,1,1)),f.x),f.y),f.z);}
 `)
           .replace('#include <alphamap_fragment>',`#include <alphamap_fragment>
-float wreckChip=0.,wreckChar=0.;
+float wreckChip=0.,wreckChar=0.,wreckBlister=0.;
 float wreckDamage=clamp(vWreckWear.x,0.,1.);
 if(wreckDamage>.015||wreckSoot>.001){
  float broken=wreckNoise(vWreckRest*28.)*.65+wreckNoise(vWreckRest*73.)*.35;
@@ -40,13 +45,17 @@ if(wreckDamage>.015||wreckSoot>.001){
  wreckChar=smoothstep(.025,.56,scorch)*(.72+broken*.28);
  diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.09,.038,.017),scorch*(1.-wreckChar)*.8);
  diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.014,.012,.011),wreckChar);
+ ${painted?`// Blistered paint: in a ring short of the char the paint bubbles up in cells, pale and dull.
+ float blisterBand=smoothstep(${BLISTER.band[0]},${BLISTER.band[1]},scorch)*(1.-smoothstep(${BLISTER.band[2]},${BLISTER.band[3]},scorch));
+ wreckBlister=smoothstep(${BLISTER.cells[0]},${BLISTER.cells[1]},wreckNoise(vWreckRest*${BLISTER.size}.))*blisterBand*(1.-wreckChar)*wreckBlisters;
+ diffuseColor.rgb=mix(diffuseColor.rgb,mix(diffuseColor.rgb,vec3(${BLISTER.pale}),.65),wreckBlister);`:''}
  ${lamp?`float shattered=smoothstep(.22,.82,wreckDamage);
  if(shattered>.72&&broken>.64)discard;
  diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.04,.046,.05),shattered*.85);`:''}
 }
 `)
           .replace('#include <roughnessmap_fragment>',`#include <roughnessmap_fragment>
-roughnessFactor=mix(roughnessFactor,.57,wreckChip);roughnessFactor=mix(roughnessFactor,.96,wreckChar);`)
+roughnessFactor=mix(roughnessFactor,.57,wreckChip);roughnessFactor=mix(roughnessFactor,.96,wreckChar);roughnessFactor=mix(roughnessFactor,.82,wreckBlister);`)
           .replace('#include <metalnessmap_fragment>',`#include <metalnessmap_fragment>
 ${painted?'metalnessFactor=mix(metalnessFactor,.82,wreckChip);':''}
 metalnessFactor*=1.-wreckChar*.97;`)
