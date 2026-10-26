@@ -150,6 +150,7 @@ import {fitWashMe,rearWindow,washWords} from './wash-me';
 import {CV,cvClicks,cvVolume,cvWear} from './cv-joints';
 import {LODGE,lodgeChunk,lodges,shakesLoose} from './lodged-debris';
 import {DRAFT,draftAccel,draftFactor} from './slipstream';
+import {fitPlates,plateFor} from './number-plates';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -1098,6 +1099,8 @@ function createCars(attract = false, previewSetup?:Setup) {
     if(car.extendedDamage&&i!==0)carLights.get(car)?.yellow(startingRust(car.id));
     // A burning car's paint blisters short of the char (offline).
     car.wreckFinish.blisters.value=car.extendedDamage?1:0;
+    // Every rival wears its own registration (offline rivals; the player's car keeps its own plate).
+    if(car.extendedDamage&&i!==0){const reg=plateFor(car.id);if(fitPlates(car.panels,reg))plates.set(car,reg);}
     // A sunstrip across the top of the windscreen with the driver's name on it (offline rivals).
     if(car.extendedDamage&&i!==0){const strip=sunstripFor(car.id),screen=windscreen(car.glass,car.root);if(strip&&screen&&fitSunstrip(screen,strip))sunstrips.set(car,strip.name);}
     // and the grubby ones have WASH ME written in the grime on the rear window (offline rivals).
@@ -2400,7 +2403,7 @@ const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMa
 function bodyBox(c:Vehicle){let box=roostBoxes.get(c);if(box)return box;c.root.updateMatrixWorld(true);const inverse=c.root.matrixWorld.clone().invert(),b=new T.Box3(),all=new T.Box3();for(const p of c.panels)all.union(b.setFromObject(p).applyMatrix4(inverse));if(all.isEmpty())return null;
   box={centre:all.getCenter(new T.Vector3()),half:all.getSize(new T.Vector3()).multiplyScalar(.5)};roostBoxes.set(c,box);return box;}
 let bodyDusts=0;const dustOut=new T.Vector3();
-const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>(),oilBurners=new WeakMap<object,Burner>(),wheelBlurs=new Map<Vehicle,WheelBlur>(),bumpState=new WeakMap<object,{len:number[];ground:boolean[];at:number[];count:number}>(),battleScars=new WeakMap<object,{scars:number;panels:number}>(),trampState=new WeakMap<object,{phase:number;hops:number;lift:number}>(),trampAt=new T.Vector3(),trampB=new T.Vector3(),cvClocks=new WeakMap<object,{clock:number[];count:number}>(),lodged=new Map<Vehicle,T.Mesh[]>(),deadBulbs=new WeakMap<object,number>(),wiringAt=new WeakMap<object,number>(),danglers=new Map<Vehicle,Danglers>(),sunstrips=new WeakMap<object,string>(),washed=new WeakMap<object,string>();let trampHops=0,flickers=0,cvClicked=0,cvTake=0,lodgedPieces=0,looseDebris=0,drafting=0,draftToast=-99;let rustShowers=0,oilBurns=0,bumpStops=0,bumpTake=0;
+const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>(),oilBurners=new WeakMap<object,Burner>(),wheelBlurs=new Map<Vehicle,WheelBlur>(),bumpState=new WeakMap<object,{len:number[];ground:boolean[];at:number[];count:number}>(),battleScars=new WeakMap<object,{scars:number;panels:number}>(),trampState=new WeakMap<object,{phase:number;hops:number;lift:number}>(),trampAt=new T.Vector3(),trampB=new T.Vector3(),cvClocks=new WeakMap<object,{clock:number[];count:number}>(),lodged=new Map<Vehicle,T.Mesh[]>(),deadBulbs=new WeakMap<object,number>(),wiringAt=new WeakMap<object,number>(),danglers=new Map<Vehicle,Danglers>(),sunstrips=new WeakMap<object,string>(),washed=new WeakMap<object,string>(),plates=new WeakMap<object,string>();let trampHops=0,flickers=0,cvClicked=0,cvTake=0,lodgedPieces=0,looseDebris=0,drafting=0,draftToast=-99;let rustShowers=0,oilBurns=0,bumpStops=0,bumpTake=0;
 const shiftGears=new WeakMap<object,number>(),shiftRevs=new WeakMap<object,number>();let shiftFlames=0,dustAir=0,knockDust=0;let shiftSmokes=0;const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3(),roostBoxes=new WeakMap<Vehicle,{centre:T.Vector3;half:T.Vector3}>(),roostBodies:RoostBody[]=[],pingClock=new Map<number,number>();let pingTake=0,stonePings=0;let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
 let wetReflections:ReturnType<typeof createWetReflections>|undefined;const glowList:Glow[]=[];
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
@@ -3194,6 +3197,7 @@ async function boot() {
     rollingCaps: () => ({ rolled: rollingCaps.rolled, moving: rollingCaps.moving, caps: rollingCaps.caps.map(c => ({ phase: c.phase, speed: +c.speed.toFixed(2), lean: +c.lean.toFixed(2), r: +c.radius.toFixed(3), at: c.p.toArray().map(v => +v.toFixed(2)) })) }),
     dustAir: () => +dustAir.toFixed(3),
     rust: (id = 0, age?: number) => { const c = cars.find(x => x.id === id); if (!c) return null; if (age !== undefined) c.surfaceFinish.rustAge = age; const r = c.surfaceFinish.rust.value, a = c.surfaceFinish.arches.value; const e = new T.Euler().setFromQuaternion(c.root.quaternion, 'YXZ'), head = carLights.get(c)?.lamp('head', 0)?.material as T.MeshStandardMaterial | undefined; return { drags: c.exhaustDrags, exhaustGone: c.exhaustGone, misfire: +c.misfireFactor.toFixed(2), lens: head ? [head.color.getHexString(), +head.emissiveIntensity.toFixed(2)] : null, showers: rustShowers, lean: [+T.MathUtils.radToDeg(e.x).toFixed(2), +T.MathUtils.radToDeg(e.z).toFixed(2)], sag: Array.from(c.sagBias, v => +v.toFixed(3)), dampers: Array.from(c.damperBias, v => +v.toFixed(3)), age: +r.x.toFixed(3), bottom: +r.y.toFixed(3), half: +r.z.toFixed(3), front: +a.x.toFixed(3), rear: +a.y.toFixed(3), hub: +a.z.toFixed(3), arches: [+r.w.toFixed(3), +a.w.toFixed(3)] }; },
+    plate: (id = 0) => { const c = cars.find(x => x.id === id); return c ? plates.get(c) ?? null : null; },
     washMe: (id = 0) => { const c = cars.find(x => x.id === id); return c ? washed.get(c) ?? null : null; },
     sunstrip: (id = 0) => { const c = cars.find(x => x.id === id); return c ? sunstrips.get(c) ?? null : null; },
     dangler: (id = 0) => { const c = cars.find(x => x.id === id), d = c && danglers.get(c); return d ? { kind: d.kind, pitch: +d.state.pitch.toFixed(3), roll: +d.state.roll.toFixed(3), at: d.group.position.toArray().map(v => +v.toFixed(3)) } : null; },
