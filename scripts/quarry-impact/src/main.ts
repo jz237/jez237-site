@@ -133,6 +133,7 @@ import {SparkLight} from './spark-light';
 import {BODY_RAIN,BodyRain,topSpots,type RainCar} from './body-rain';
 import {MIST,mistStep} from './window-mist';
 import {TOP_DUST,settleStep} from './settled-dust';
+import {MudFlaps} from './mud-flaps';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -258,7 +259,7 @@ import {wreckReport,mechanicalReport} from './wreck-report';
 import {DNF,deadReason,deadTime} from './mechanical-dnf';
 import {warningLine,tankWarning,cableWarnings} from './hud-warnings';
 import {createArenaProps,ARENA_PROP_SPOTS,arenaPropCount,courseCornerSpots} from './arena-props';
-import {isClassicKind,isRearEngineKind} from './classic-vehicle-specs';
+import {isClassicKind,isRearEngineKind,vehicleWheelRadius} from './classic-vehicle-specs';
 import {tyreFailure as tyreFailureLevel} from './tyre-condition';
 import {dailyKey,dailyStreak,dailyWeek,isDailyChallenge,DAILY_PREFIX} from './daily-record';
 import {EVENT_KEY,readEventOptions,circuitRoute,raceGridSlot,derbyGridSlot,checkRoute,lapProgress,CombatScoreboard,eventDerbyOrder,stepScoreRespawns} from './event-rules';
@@ -440,7 +441,7 @@ const eventAwards=new EventAwards();const propFires=new PropFires();
 /** Loose props as fire sources: where they are now and whether they burn. */
 const propPoints=(props:readonly {mesh:T.Object3D}[])=>props.map(p=>({x:p.mesh.position.x,y:p.mesh.position.y,z:p.mesh.position.z,kind:propKind((p.mesh as T.Mesh).geometry?.type)}));let slowMoUntil=0,slowMoScale=.3;
 /** Brief Burnout-style slow motion when the player wrecks an opponent (local events only). */
-const TAKEDOWN_SLOWMO={scale:.3,seconds:.9};const carLights=new Map<Vehicle,CarLights>(),lampDangles=new Map<Vehicle,LampDangle>(),towStraps=new Map<Vehicle,TowStraps>(),airbags=new Map<Vehicle,Airbags>(),strutPunches=new Map<Vehicle,StrutPunch>();let airbagsFired=0;let lastBadges:string[]=[];
+const TAKEDOWN_SLOWMO={scale:.3,seconds:.9};const carLights=new Map<Vehicle,CarLights>(),lampDangles=new Map<Vehicle,LampDangle>(),towStraps=new Map<Vehicle,TowStraps>(),airbags=new Map<Vehicle,Airbags>(),strutPunches=new Map<Vehicle,StrutPunch>(),mudFlaps=new Map<Vehicle,MudFlaps>();let airbagsFired=0;let lastBadges:string[]=[];
 const badgeLine=()=>lastBadges.length?`<p class="badge-unlock">★ ACHIEVEMENT${lastBadges.length>1?'S':''} UNLOCKED · ${lastBadges.join(' · ')}</p>`:'';
 /** Race feedback for the player's own impacts; derbies already have their score feed. */
 function callout(kind:'TAKEDOWN'|'BIG HIT',victim:Vehicle){if(mode!=='race'||demo||online?.active||pursuit)return;toast(kind==='TAKEDOWN'?`TAKEDOWN · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`:`BIG HIT · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`,kind==='TAKEDOWN'?2.5:1.2);}
@@ -990,7 +991,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   sound.clearCars();
   vehicleFire?.reset();propFires.reset();
   puddleSplashes?.reset();gravelRoost.reset();rollingCaps.reset();exhaustFlames.reset();sparkLight.reset();bodyRain.reset();TOP_DUST.value=0;
-  for (const c of cars){lampDangles.get(c)?.dispose();lampDangles.delete(c);towStraps.get(c)?.dispose();towStraps.delete(c);airbags.get(c)?.dispose();airbags.delete(c);strutPunches.get(c)?.dispose();strutPunches.delete(c);carLights.get(c)?.dispose();carLights.delete(c);c.dispose();}
+  for (const c of cars){lampDangles.get(c)?.dispose();lampDangles.delete(c);towStraps.get(c)?.dispose();towStraps.delete(c);airbags.get(c)?.dispose();airbags.delete(c);strutPunches.get(c)?.dispose();strutPunches.delete(c);mudFlaps.get(c)?.dispose();mudFlaps.delete(c);carLights.get(c)?.dispose();carLights.delete(c);c.dispose();}
   clearMarshals();
   for(const f of bailed)disposeDriver(f);bailed.length=0;
   cars = [];
@@ -1063,6 +1064,8 @@ function createCars(attract = false, previewSetup?:Setup) {
     {const driver=car.root.getObjectByName('driver');if(car.extendedDamage&&driver&&!isClassicKind(type))airbags.set(car,new Airbags(car.root,driver,[...car.panels,...car.glass]));}
     // A wrecked front corner punches its strut up through the panel above the wheel, with a snap and sparks (offline).
     if(car.extendedDamage)strutPunches.set(car,new StrutPunch(car.root,car.wheels,car.panels,car.id,at=>{sound.clip('spring-snap',at,.85,.8);fx.emit(at,14,1,1.4);}));
+    // A rubber flap hangs behind each wheel and swings; a wrecked wheel tears its flap off (offline; not the open-wheeled buggy).
+    if(car.extendedDamage&&type!=='buggy')mudFlaps.set(car,new MudFlaps(car.root,car.wheels,vehicleWheelRadius(type),car.id,sheet=>fx.detach(sheet,car.velocity.clone().multiplyScalar(.6))));
     // Classic cars on plain rims get chrome hubcaps, to be knocked off and roll away (offline).
     if(car.extendedDamage)fitHubcaps(car.root,car.wheels);
     // Driving through its own dust plume coats the tail in dust; the rain rinses it off (offline).
@@ -2383,7 +2386,7 @@ function updateCamera(dt: number) {
   // Derby flags whip about with their cars and snap once a car is out or upside down.
   if(state!=='paused')for(const c of cars){const f=c.root.children.find(o=>o.name==='derby_flag');if(f)waveFlag(f,c.root,dt,c.health<=0||c.inverted>.3,windy&&!online?.active?breeze:undefined);}
   // Smashed lamps hang and swing on their wiring as the car brakes, accelerates and turns (offline).
-  if(state==='playing'||state==='wrecked'||state==='result'||state==='countdown')for(const c of cars){lampDangles.get(c)?.update(c.velocity,dt);towStraps.get(c)?.update(c.velocity,dt);
+  if(state==='playing'||state==='wrecked'||state==='result'||state==='countdown')for(const c of cars){lampDangles.get(c)?.update(c.velocity,dt);towStraps.get(c)?.update(c.velocity,dt);mudFlaps.get(c)?.update(c.velocity,c.wreckParts.wheelDamage,c.wreckParts.wheelLost,dt);
     // A front crushed past AIRBAG.front fires the airbags: a bang and a puff of powder in the cabin.
     const bags=airbags.get(c);if(bags&&(c.structuralDamage?.[0]??0)>=AIRBAG.front&&bags.deploy()){airbagsFired++;const at=bags.points([]);sound.clip('backfire',at[0],.45,.4);
       for(const p of at){const start=fx.cursor;fx.emit(p,AIRBAG.powder/2,0,.3);for(let j=start;j<fx.cursor;j++){const k=j%fx.particles.length,q=fx.particles[k];q.v.multiplyScalar(.35).addScaledVector(c.velocity,.9);q.size=.35+Math.random()*.4;q.max=q.life=1.6+Math.random()*1.4;dustTint.setHex(0xeeeeea).multiplyScalar(.95+Math.random()*.05).toArray(fx.colors,k*3);}}}
@@ -3105,6 +3108,7 @@ async function boot() {
     airbags: (id = 0) => { const c = cars.find(x => x.id === id), b = c && airbags.get(c); return b ? { fitted: b.bags.length, deployed: b.deployed, age: +b.age.toFixed(2), scale: b.bags.map(x => +x.mesh.scale.y.toFixed(3)), at: b.bags.map(x => x.at.toArray().map(v => +v.toFixed(2))), front: +(c!.structuralDamage?.[0] ?? 0).toFixed(3), fired: airbagsFired } : null; },
     rollingCaps: () => ({ rolled: rollingCaps.rolled, moving: rollingCaps.moving, caps: rollingCaps.caps.map(c => ({ phase: c.phase, speed: +c.speed.toFixed(2), lean: +c.lean.toFixed(2), r: +c.radius.toFixed(3), at: c.p.toArray().map(v => +v.toFixed(2)) })) }),
     dustAir: () => +dustAir.toFixed(3),
+    mudFlaps: (id = 0) => { const c = cars.find(x => x.id === id), f = c && mudFlaps.get(c); return f ? { flaps: f.flaps.length, torn: f.torn, swings: f.swings } : null; },
     topDust: (level?: number) => { if (level !== undefined) TOP_DUST.value = level; return +TOP_DUST.value.toFixed(3); },
     windowMist: (id = 0, level?: number, now = false) => { const c = cars.find(x => x.id === id); if (!c) return null; if (level !== undefined) { mistIn.set(c, level); if (now) for (const g of c.glass) { const st = (g.material as T.Material).userData.glassState as GlassState | undefined; if (st) st.mist.value = level; } } return { level: +(mistIn.get(c) ?? 0).toFixed(3), glass: c.glass.map(g => +(((g.material as T.Material).userData.glassState as GlassState | undefined)?.mist.value ?? -1).toFixed(3)) }; },
     bodyRain: () => ({ splashing: bodyRain.splashing, landed: bodyRain.landed, cars: rainNear.map(r => ({ id: r.id, spots: r.spots.length })) }),
