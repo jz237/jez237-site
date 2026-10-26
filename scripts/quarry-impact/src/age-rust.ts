@@ -33,6 +33,12 @@ export const tiredDamper=(age:number)=>1-TIRED.damper*clampAge(age);
 /** The corner (0–3, front left first) whose spring has sagged on car `id`. */
 export const tiredCorner=(id:number)=>{const n=Number.isFinite(id)?id:0,r=Math.abs(Math.sin(n*39.17+1.31)*43758.5453)%1;return (r<TIRED.rear?2:0)+(Math.floor(r*977)%2);};
 export const tiredSag=(age:number,corner:number,wheel:number)=>wheel===corner?1-TIRED.sag*clampAge(age):1;
+/** Pitted chrome (with the rust, the same age): an old car's brightwork — bumpers, grille surrounds, trim — dulls (up to
+ * PITTING.dull rougher) and freckles with rust pits, more and larger the older (PITTING.pits of it at its oldest), with
+ * blooms of rust where the plating has lifted. */
+export const PITTING={dull:.55,pits:.5,bloom:.5} as const;
+/** Is this material chrome brightwork (not a fitted hubcap)? */
+export const chromed=(name:string)=>/chrome/i.test(name)&&!/hubcap/i.test(name);
 /** Does a body material rust? Painted steel does; the plastic trim, hoses and cabin do not. */
 export const rusts=(name:string)=>name.startsWith('paint')&&!/Paint 2|hoses|Interior|Panel Sides/.test(name);
 export const startingRust=(id:number)=>{const n=Number.isFinite(id)?id:0,r=Math.abs(Math.sin(n*57.31+4.77)*43758.5453)%1;return RUST.age[0]+r*(RUST.age[1]-RUST.age[0]);};

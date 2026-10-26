@@ -2,7 +2,7 @@ import * as T from 'three';
 import {finishVehiclePresentation} from './vehicle-presentation';
 import {LAMP_GRIME,WAKE} from './wake-dust';
 import {TOP_DUST} from './settled-dust';
-import {FADE,RUST,rusts,type RustFit} from './age-rust';
+import {FADE,PITTING,RUST,chromed,rusts,type RustFit} from './age-rust';
 
 /** Persistent deposition state. Four tires retain water after leaving a puddle. */
 export class VehicleSurface {
@@ -42,6 +42,15 @@ float coatingNoise(vec3 p){vec3 c=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix
           .replace(/float dust=clamp\(lowBody\*\([^;]+;/,'float dust=clamp(lowBody*.035+vImpactWear.x*.07,0.,.32);')
           .replace('#include <alphamap_fragment>',`#include <alphamap_fragment>
 float ageRust=0.,rustStain=0.,sunFade=0.,lacquerOff=0.;
+float chromePit=0.,chromeDull=0.;
+${chromed(m.name)?`// Pitted chrome: an old car's brightwork dulls and freckles with rust pits, blooming where the plating lifts.
+if(carRust.x>0.){
+  float pitEdge=1.-${PITTING.pits}*carRust.x;
+  float pits=smoothstep(pitEdge,pitEdge+.04,coatingNoise(vCoatingRest*140.+carSurfacePhase*9.));
+  float bloom=smoothstep(.62,.9,coatingNoise(vCoatingRest*11.+carSurfacePhase*4.))*carRust.x;
+  chromePit=clamp(max(pits*.9,bloom*${PITTING.bloom}),0.,1.);chromeDull=carRust.x;
+  diffuseColor.rgb=mix(diffuseColor.rgb,mix(vec3(${RUST.orange}),vec3(${RUST.scale}),coatingNoise(vCoatingRest*60.)),chromePit);
+}`:''}
 ${rusts(m.name)?`// Age rust: rot along the sills and round the arch lips, mottled, with a stained fringe of blistered paint.
 if(carRust.x>0.){
   float rustFlank=smoothstep(carRust.z*${RUST.flank[0]},carRust.z*${RUST.flank[1]},abs(vCoatingRest.x));
@@ -92,11 +101,12 @@ diffuseColor.rgb=mix(diffuseColor.rgb,vec3(${new T.Color(WAKE.tint).toArray().ma
           .replace('#include <roughnessmap_fragment>',`${glass?'':`float transferred=vTransferredPaint.a*(.48+.52*siltPattern);
 diffuseColor.rgb=mix(diffuseColor.rgb,vTransferredPaint.rgb,transferred*.85);`}
 #include <roughnessmap_fragment>
+roughnessFactor=mix(roughnessFactor,${PITTING.dull},max(chromeDull*.7,chromePit));
 roughnessFactor=mix(roughnessFactor,.68,max(sunFade*.6,lacquerOff));
 roughnessFactor=mix(roughnessFactor,.95,ageRust);
 roughnessFactor=mix(roughnessFactor,.89,max(carDirt*.8,wakeDust*.9));
 roughnessFactor=mix(roughnessFactor,max(.1,roughnessFactor*.48),carWet*(1.-carDirt*.55));`)
-          .replace('#include <metalnessmap_fragment>','#include <metalnessmap_fragment>\nmetalnessFactor*=(1.-carDirt*.9)*(1.-wakeDust*.8)*(1.-ageRust);')
+          .replace('#include <metalnessmap_fragment>','#include <metalnessmap_fragment>\nmetalnessFactor*=(1.-carDirt*.9)*(1.-wakeDust*.8)*(1.-ageRust);\nmetalnessFactor*=1.-chromePit;')
           // A lamp under dust or dirt glows dimmer through the grime.
           .replace('#include <emissivemap_fragment>',`#include <emissivemap_fragment>\ntotalEmissiveRadiance*=1.-clamp(wakeDust*${LAMP_GRIME.dust}+carDirt*${LAMP_GRIME.dirt},0.,${LAMP_GRIME.most});`)
           .replace('#include <lights_physical_fragment>',`#include <lights_physical_fragment>
@@ -105,7 +115,7 @@ material.clearcoat*=(1.-carDirt*.88)*(1.-wakeDust*.85)*(1.-max(max(ageRust,rustS
 material.clearcoatRoughness=mix(material.clearcoatRoughness,.07,carWet);
 #endif`);
       };
-      m.customProgramCacheKey=()=>key+'-persistent-wet-silt-wake-v5-'+Number(glass)+(rusts(m.name)?'-rust':'');
+      m.customProgramCacheKey=()=>key+'-persistent-wet-silt-wake-v5-'+Number(glass)+(rusts(m.name)?'-rust':'')+(chromed(m.name)?'-chrome':'');
     });
   }
   advance(dt:number,speed:number,gravel:boolean,wet:readonly boolean[],grounded:readonly boolean[]=[true,true,true,true]){
