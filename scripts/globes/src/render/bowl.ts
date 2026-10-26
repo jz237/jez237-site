@@ -115,9 +115,9 @@ export const BOWL_WATER = { bloom: 1.5, tannin: [0.05, 1.7, 3.6], tintPower: 0.6
 
 /** The bowl's uniforms, as globes_shade takes them: the lid's pose (the globe's translating frame
  *  to the lid's: its underside's middle at the origin, its axis y); x: the lid is there, y: its
- *  lamp's brightness (0..1); what floats in it; its detail (GlobeView uBowlDetail); and its water's
- *  state (GlobeView uBowlWater). */
-export const BOWL_PARAMS = ', bowlLid: mat4x4f, bowlState: vec4f, bowlLife: mat4x4f, bowlDetail: vec4f, bowlWater: vec4f';
+ *  lamp's brightness (0..1); what floats in it; its detail (GlobeView uBowlDetail); its water's
+ *  state (GlobeView uBowlWater); and its fish's variety (GlobeView uBowlBetta). */
+export const BOWL_PARAMS = ', bowlLid: mat4x4f, bowlState: vec4f, bowlLife: mat4x4f, bowlDetail: vec4f, bowlWater: vec4f, bowlBetta: mat4x4f';
 
 const f = (x: number) => x.toFixed(6);
 

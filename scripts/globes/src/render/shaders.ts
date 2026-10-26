@@ -2819,6 +2819,7 @@ ${bowl ? '' : `  globesDeskM = deskM;
   bowlSunExt += BOWL_BLOOM_LOST * bowlCloud;
   bettaPale = bowlWater.z;
   scapeHeaterLamp = bowlWater.w;
+  bettaLook = bowlBetta;
   bowlLampP = bowl_pointToWorld(2u, vec3f(0.0, -BOWL_PUCK_D, 0.0));
   bowlLampD = normalize(bowl_toWorld(2u, vec3f(0.0, -1.0, 0.0)));
   let traced = globes_bowlTrace(ro, rd, ${traceArgs});

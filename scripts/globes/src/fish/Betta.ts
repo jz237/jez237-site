@@ -4,6 +4,8 @@ import { BETTA_LEAF_WORKGROUP, bettaRefitBuffers, bettaRefitLayout, bettaRefitPl
 import { BettaRemote } from './bettaLink.mjs';
 import { BettaSpecimen } from './bettaSpecimen.mjs';
 import { BETTA_SURFACE_COUNT, bettaSurfaceHeights } from './bettaWater.mjs';
+import { CAUDAL, caudalCells, luminanceOf, MACRO, measure, paint, prepare, PROFILE, profileCells } from './bettaPaint.mjs';
+import { VARIETIES, varietyLook, varietyOf } from './varieties.mjs';
 import type { Feeder, FoodAim } from './FishFood';
 import type { KoiEnv, KoiSense } from './Koi';
 import { CLEAR_WATER, type WaterEffects } from '../water/effects';
@@ -12,6 +14,8 @@ export { BUBBLE_RADIUS, RIPPLE_RADIUS, RIPPLE_RATE, RIPPLE_TIME } from './bettaS
 
 /** A bowl not turning (update's omega, unless given). */
 const STILL = [0, 0, 0] as const;
+/** Where the colour maps (tiles 4 and 5) start down the atlas (px). */
+export const MAPS_AT = 2048;
 
 /** The actual Atelier specimen, evaluated on the CPU for the refracted rays (bettaSpecimen.mjs).
  * No screenshot/billboard: skin, seven membranes, mouth, covers and both eye
@@ -24,7 +28,21 @@ export class Betta implements Feeder {
   /** The fish, moved here; with a worker, as built (the worker's twin is moved instead). */
   private readonly specimen = new BettaSpecimen();
   readonly fish = this.specimen.fish;
+  /** Its photographs, for the shader: six 1024 px tiles, two across and three down (the profile, the
+   *  fins, the head and scale macros, then its variety's two colour maps: bettaPaint.mjs). */
   readonly atlas: THREE.CanvasTexture;
+  /** The atlas's bottom row as a variety repaints it (its colour maps, drawn up to the tiles' size),
+   *  for the host to copy in (onLook). */
+  readonly maps: THREE.CanvasTexture;
+  /** The shader's numbers for its variety (varieties.mjs varietyLook: GlobeView setBettaLook). */
+  readonly look = new Float32Array(16);
+  /** Called as a variety is shown (once its photographs are in): the host sets look in the shader,
+   *  and, with copy, copies maps into the atlas's bottom row (MAPS_AT). */
+  onLook: ((copy: boolean) => void) | null = null;
+  private variety = 'classic';
+  /** The photographs' brightness, measured as they come in (bettaPaint.mjs measure), with where each
+   *  cell of the maps lies on the fish. */
+  private field: (ReturnType<typeof measure> & { cells: ReturnType<typeof profileCells>; caudalOut: Float32Array }) | null = null;
   /** Its BVH for the shader (triangleBVH.mjs's layout), on the GPU, where it is refitted round the
    *  moving fish each frame (bettaRefit.mjs). */
   readonly texture: THREE.Texture;
@@ -95,15 +113,36 @@ export class Betta implements Feeder {
     this.atlas.flipY = false;
     // (No mipmaps: betta_sample reads level 0 only, bettaWGSL.ts.)
     this.atlas.generateMipmaps = false;
+    const maps = document.createElement('canvas');
+    maps.width = 2048; maps.height = 1024;
+    this.maps = new THREE.CanvasTexture(maps);
+    this.maps.colorSpace = THREE.NoColorSpace;
+    this.maps.flipY = false;
+    this.maps.generateMipmaps = false;
     this.ready = this.fish.userData.ready.then(() => {
       const body = this.meshes.find(({ mesh }) => mesh.name.startsWith('Arc-length'))!.mesh;
       const tail = this.meshes.find(({ mesh }) => mesh.userData.kind === 0)!.mesh;
       const macro = this.fish.userData.macroTextures;
-      const textures = [(body.material as THREE.MeshPhysicalMaterial).map!, (tail.material as THREE.MeshPhysicalMaterial).map!, macro.head, macro.scales, macro.fin];
+      const textures = [(body.material as THREE.MeshPhysicalMaterial).map!, (tail.material as THREE.MeshPhysicalMaterial).map!, macro.head, macro.scales];
       const ctx = canvas.getContext('2d')!;
       textures.forEach((t, i) => ctx.drawImage(t.image, (i % 2) * 1024, Math.floor(i / 2) * 1024, 1024, 1024));
+      // (Their brightness, on the maps' grids, for every variety to come.)
+      const grid = (t: THREE.Texture, w: number, h: number): Float32Array => {
+        const small = document.createElement('canvas');
+        small.width = w; small.height = h;
+        const c = small.getContext('2d', { willReadFrequently: true })!;
+        c.imageSmoothingQuality = 'high';
+        c.drawImage(t.image as CanvasImageSource, 0, 0, w, h);
+        return luminanceOf(c.getImageData(0, 0, w, h).data);
+      };
+      const cells = profileCells();
+      this.field = { ...measure({ profile: grid(textures[0], PROFILE.w, PROFILE.h), caudal: grid(textures[1], CAUDAL.w, CAUDAL.h), head: grid(textures[2], MACRO, MACRO), scales: grid(textures[3], MACRO, MACRO) }, cells), cells, caudalOut: caudalCells() };
+      prepare(VARIETIES);
+      // (A variety kept from the last visit: in the atlas from its first upload.)
+      if (this.paintMaps()) ctx.drawImage(maps, 0, MAPS_AT);
       this.atlas.needsUpdate = true;
       this.loaded = true;
+      this.onLook?.(false);
     });
     // (The whole texture once; hidden until it swims.)
     device.queue.writeTexture({ texture: this.gpu.texture }, this.bvh.data as unknown as BufferSource, { bytesPerRow: this.bvh.width * 16, rowsPerImage: this.bvh.height }, [this.bvh.width, this.bvh.height]);
@@ -115,6 +154,35 @@ export class Betta implements Feeder {
         console.warn("[globes] the betta is moved on the page's thread:", err);
       }
     }
+  }
+
+  /** Shows a variety (varieties.mjs id): its colour maps painted and its numbers in look, at once
+   *  if its photographs are in (onLook), else as they come. */
+  showVariety(variety: string): void {
+    this.variety = variety;
+    if (!this.loaded) return;
+    const painted = this.paintMaps();
+    if (painted) this.maps.needsUpdate = true;
+    this.onLook?.(painted);
+  }
+
+  /** The variety's colour maps painted on their grids (bettaPaint.mjs) and drawn up into maps, and
+   *  its numbers into look; whether it has maps (Classic has none: its fish is the photographs'). */
+  private paintMaps(): boolean {
+    const v = varietyOf(this.variety), field = this.field!;
+    varietyLook(v, field, this.look);
+    if (!v.body) return false;
+    const painted = paint(v, field);
+    const ctx = (this.maps.image as HTMLCanvasElement).getContext('2d')!;
+    ctx.imageSmoothingQuality = 'high';
+    [[painted.caudal, CAUDAL, 0], [painted.profile, PROFILE, 1024]].forEach(([bytes, grid, x]) => {
+      const { w, h } = grid as typeof PROFILE;
+      const small = document.createElement('canvas');
+      small.width = w; small.height = h;
+      small.getContext('2d')!.putImageData(new ImageData(bytes as Uint8ClampedArray<ArrayBuffer>, w, h), 0, 0);
+      ctx.drawImage(small, x as number, 0, 1024, 1024);
+    });
+    return true;
   }
 
   /** The GPU's side of the BVH: its texture, the kernels that refit it (bettaRefit.mjs) and their

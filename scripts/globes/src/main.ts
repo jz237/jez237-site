@@ -15,13 +15,14 @@ import { NightToggle } from './app/NightToggle';
 import { FollowToggle } from './app/FollowToggle';
 import { eyeFor, FollowCamera, followDistance } from './app/follow.mjs';
 import { ResolutionMenu } from './app/ResolutionMenu';
+import { VarietyMenu } from './app/VarietyMenu';
 import { CLEAR_WATER, forcedWaterEffects, type WaterEffects } from './water/effects';
 import { WaterCare } from './water/WaterCare';
 import { WaterLook } from './water/look';
 import { BETTA_PAGE, elsewhere, GLOBES, type GlobeEntry } from './app/catalog';
 import { applyUrlOverrides, fishConfig, globeConfig, lightConfig, simConfig, type GlobeConfig, type LightConfig, type SimConfig } from './config';
 import { DeskMapping, loadDesk, type DesktopHostApi } from './desktop/desktopScene';
-import { Betta, BUBBLE_RADIUS, RIPPLE_RADIUS } from './fish/Betta';
+import { Betta, MAPS_AT, BUBBLE_RADIUS, RIPPLE_RADIUS } from './fish/Betta';
 import { BETTA_SURFACE_AT } from './fish/bettaWater.mjs';
 import { Koi, type KoiEnv } from './fish/Koi';
 import { CLOWN_PROBES, Clownfishes } from './fish/Clownfish';
@@ -317,7 +318,11 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   const life = bowl ? new BowlLife(o.globe.innerRadius) : null;
   const bettaControls = document.createElement('div');
   bettaControls.className = 'betta-controls';
-  bettaControls.innerHTML = '<span>Living Silk</span><button type="button" data-action="feed">Feed</button><button type="button" data-action="flare" aria-pressed="false">Flare fins</button>';
+  bettaControls.innerHTML = '<button type="button" data-action="feed">Feed</button><button type="button" data-action="flare" aria-pressed="false">Flare fins</button>';
+  // Its variety (app/VarietyMenu.ts, fish/varieties.mjs): chosen at its name, first among its
+  // controls; from the first frame as this device last chose it.
+  const variety = new VarietyMenu(bettaControls);
+  betta.showVariety(variety.variety);
   const flareButton = bettaControls.querySelector<HTMLButtonElement>('[data-action="flare"]')!;
   const feedButton = bettaControls.querySelector<HTMLButtonElement>('[data-action="feed"]')!;
   feedButton.hidden = !feeding;
@@ -373,7 +378,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   const idle = new IdleWater();
   // Learn mode (app/learn): what the fish does and what is in its bowl, explained; off until asked
   // for. (Its card goes up top on a phone with ?stats' figures up.)
-  const learn = lid && feeding && life ? new Learn(bettaControls, stage, { camera, canvas: renderer.domElement, controller, betta, life, food, feeding, lid, glass: o.globe, level: () => sim.restLevel }, PROF.on) : null;
+  const learn = lid && feeding && life ? new Learn(bettaControls, stage, { camera, canvas: renderer.domElement, controller, betta, life, food, feeding, lid, glass: o.globe, level: () => sim.restLevel, variety: () => variety.variety }, PROF.on) : null;
   // What the bowl's water does to the fish and to the water's look (water/effects.ts): clear, the
   // page as it always was, unless forced (?water=, testing).
   const water = { fx: forcedWaterEffects(params.get('water')) ?? CLEAR_WATER };
@@ -425,6 +430,15 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   const globe = new GlobeView(sim, o.globe, o.light, koi.texture, samples, ocean ? { ocean: ocean.map.texture } : studio ? { ocean: studio.map } : { desktop: o.desk! }, kelp, reef, clowns.texture, GLOBES.find((g) => g.reef)?.clarity, GLOBES.find((g) => g.foam)?.waterColour, betta, bowl, scapeTex);
   // (What the bowl's water shows of its state, and the fish's colours in it.)
   const look = bowl ? new WaterLook(globe, sim, water.fx) : null;
+  // (The fish's variety, as it is shown: its numbers in the bowl's shader; its colour maps, once
+  // painted, copied into its atlas's bottom row on the GPU, the rest of it as it was. Its photographs
+  // may already be in, the variety with them.)
+  betta.onLook = (copy) => {
+    globe.setBettaLook(betta.look);
+    if (copy) renderer.copyTextureToTexture(betta.maps, betta.atlas, null, new THREE.Vector2(0, MAPS_AT));
+  };
+  globe.setBettaLook(betta.look);
+  variety.onChange = (id) => betta.showVariety(id);
   // A phone's quality level's knobs (app/quality/ladder.mjs), each set by its name; none builds a
   // pipeline. (Its fps is run()'s.)
   const knobs: Record<string, (v: number) => void> = {

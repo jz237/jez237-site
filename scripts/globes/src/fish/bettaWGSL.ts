@@ -4,10 +4,16 @@ export const BETTA_PARAMS = ', bettaTex: texture_2d<f32>, bettaAtlas: texture_2d
 export const BETTA_ARGS = ', bettaTex, bettaAtlas, bettaSamp';
 /** The fish's WGSL; bowl: the betta bowl's, where the water can fade its colours (bettaPale, set
  *  by globes_shade: water/effects.ts pale), lit by its studio's light, by day or by night (studio.ts,
- *  bowl.ts bowlSun). */
+ *  bowl.ts bowlSun), in the colours of the variety chosen (bettaLook: varieties.mjs). */
 const bettaFullWGSL = (bowl: boolean): string => /* wgsl */ `${bowl ? `
 // How faded the fish is (0..1): set by globes_shade.
-var<private> bettaPale: f32;` : ''}
+var<private> bettaPale: f32;
+// Its variety (varieties.mjs varietyLook), set by globes_shade: [0] how much of it shows (0: the
+// photographs' own colours), its colour maps' gain, how much of the photographs' light and shade it
+// keeps (a power of their luminance), 1 / the body's mean luminance in them; [1] the scales' play of
+// colour's tint and share; [2] the fins' outer band's colour (over the fins' mean luminance) and where
+// it starts, root to fringe; [3] the scales' metallic coat's colour and reach.
+var<private> bettaLook: mat4x4f;` : ''}
 fn betta_tex(tex: texture_2d<f32>, i: u32) -> vec4f {
   return textureLoad(tex, vec2i(i32(i % 1024u), i32(i / 1024u)), 0);
 }
@@ -101,7 +107,7 @@ fn betta_occlusion(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, p
     if (h.triangle == 0xffffffffu) { break; }
     let mat = u32(betta_tex(tex, h.triangle).w);
     if (mat == 0u || mat >= 3u) { return vec3f(0.0); }
-    let c = betta_sample(atlas, smp, select(0u, 1u, mat == 1u), betta_uv(tex, h));
+    let c = betta_sample(atlas, smp, ${bowl ? 'select(select(0u, 1u, mat == 1u), select(5u, 4u, mat == 1u), bettaLook[0].x > 0.0)' : 'select(0u, 1u, mat == 1u)'}, betta_uv(tex, h));
     T *= mix(vec3f(1.0), c / max(max(c.r, c.g), max(c.b, 0.05)), 0.75) * 0.42;
     o += L * (h.t + 0.0004);
   }
@@ -178,7 +184,15 @@ fn betta_shade(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, hit: 
       let socket = length((pixel - vec2f(240.0, 400.0)) * 0.0032);
       albedo = mix(albedo, vec3f(0.018, 0.025, 0.027), 1.0 - smoothstep(0.062, 0.082, socket));
     }
-  }
+  }${bowl ? `
+  // The variety's colours for the photographs': its colour map's (tile 5 where the profile photograph
+  // lies, 4 where the fin photograph does), painted divided by the photographs' local brightness
+  // (bettaPaint.mjs), times their luminance here, so every scale, ray and fold stays as it was.
+  let lum = dot(albedo, vec3f(0.2126, 0.7152, 0.0722));
+  let look = bettaLook[0].x > 0.0;
+  if (look) {
+    albedo = mix(albedo, betta_sample(atlas, smp, select(5u, 4u, mat == 1u), uv) * pow(max(lum, 1e-6), bettaLook[0].z) * bettaLook[0].y, bettaLook[0].x);
+  }` : ''}
   if (mat == 4u) { albedo = vec3f(0.002, 0.004, 0.006); }${bowl ? `
   // Faded (a male stressed or unwell in poor water): its colours wash out and dull, less
   // saturated and a little darker, skin and fins alike (below, its sheen and play of colour too).
@@ -202,7 +216,13 @@ fn betta_shade(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, hit: 
     // A membrane: lit from the viewer's side it reflects; lit from behind it glows
     // in its own colour, and looking towards the sun the edge scatters forward.
     let fc = betta_finCoord(tex, hit);
-    let ray = betta_rays(fc, foot, mat == 1u);
+    let ray = betta_rays(fc, foot, mat == 1u);${bowl ? `
+    if (look) {
+      // The variety's outer band (a butterfly's, a mustard gas's): a crisp edge, the inner colour
+      // running a little further out along the rays, the edge wandering along the fin.
+      let band = smoothstep(-0.012, 0.012, fc.y - bettaLook[2].w - 0.045 * ray + 0.018 * sin(fc.x * 37.0) + 0.01 * sin(fc.x * 103.0 + 1.7));
+      albedo = mix(albedo, bettaLook[2].xyz * lum, band);
+    }` : ''}
     let front = max(ndl, 0.0); let back = max(-ndl, 0.0);
     let hue = pow(albedo, vec3f(0.8));
     let towardSun = pow(max(dot(rd, L), 0.0), 3.0);
@@ -222,9 +242,18 @@ fn betta_shade(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, hit: 
   let hv = normalize(L - rd);
   let spec = pow(max(dot(n, hv), 0.0), 75.0) * gloss;
   let fres = pow(1.0 - ndv, 4.0);
-  let sheen = select(0.0, 1.0, mat == 0u) * (pow(max(dot(n, hv), 0.0), 12.0) * 0.045 + fres * 0.14)${bowl ? ' * (1.0 - 0.7 * bettaPale)' : ''};
+  ${bowl ? 'var' : 'let'} sheen = select(0.0, 1.0, mat == 0u) * (pow(max(dot(n, hv), 0.0), 12.0) * 0.045 + fres * 0.14)${bowl ? ' * (1.0 - 0.7 * bettaPale)' : ''};
   let phase = (1.0 - ndv) * 4.2 + albedo.b * 0.8;
-  let irid = 0.5 + 0.5 * cos(6.2831853 * (phase + vec3f(0.0, 0.33, 0.67)));
+  ${bowl ? 'var' : 'let'} irid = 0.5 + 0.5 * cos(6.2831853 * (phase + vec3f(0.0, 0.33, 0.67)));${bowl ? `
+  if (look) {
+    // The variety's play of colour, turned towards its tint; and its metallic coat (a dragon's, a
+    // copper's): over each scale's bright face, the base colour left at the edges between them, with
+    // a broad gloss in its own colour.
+    irid = mix(irid, bettaLook[1].xyz * (0.3 + 1.4 * irid), bettaLook[1].w);
+    let coat = smoothstep(1.2, 3.0, lum * bettaLook[0].w + bettaLook[3].w) * scaleW;
+    albedo = mix(albedo, bettaLook[3].xyz * min(pow(lum * bettaLook[0].w, bettaLook[0].z), 1.6), coat);
+    sheen += coat * pow(max(dot(n, hv), 0.0), 16.0) * 0.5 * (1.0 - 0.7 * bettaPale);
+  }` : ''}
   albedo = mix(albedo, albedo * (0.6 + 0.8 * irid), 0.38 * scaleW${bowl ? ' * (1.0 - 0.8 * bettaPale)' : ''});
   let lightIn = direct * (diffuse + sheen) + ambient + ambient * fres * 0.5 * select(0.0, 1.0, mat != 4u);
   return BettaShade(albedo * lightIn / 3.14159265 + direct * spec, 1.0, vec3f(1.0));

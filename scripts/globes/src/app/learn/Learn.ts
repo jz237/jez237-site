@@ -14,7 +14,7 @@ import type { BowlLife } from '../../interaction/BowlLife';
 import type { FeedState, Feeding } from '../../interaction/Feeding';
 import type { GlobeController } from '../../interaction/GlobeController';
 import { CaptionClock, MODE_CAPTIONS } from './captions.mjs';
-import { CAPTIONS, FEEDING, INTRO, NIGHT, TOPICS, type CaptionId, type LearnCard, type TopicId } from './content';
+import { CAPTIONS, FEEDING, FISH, INTRO, NIGHT, TOPICS, type CaptionId, type LearnCard, type TopicId } from './content';
 import { FeedLog } from './feedLog.mjs';
 
 /** Where the choice is kept on this device. */
@@ -43,6 +43,8 @@ export interface LearnHost {
   glass: { outerRadius: number; innerRadius: number };
   /** The water's resting height (the sim frame). */
   level: () => number;
+  /** The fish's variety (fish/varieties.mjs id), for its card. */
+  variety: () => string;
 }
 
 type Picking = typeof import('./pick.mjs');
@@ -212,7 +214,8 @@ export class Learn {
       return true;
     }
     const topic = this.pick(clientX, clientY);
-    if (topic) this.show(TOPICS[topic], true);
+    // (The fish's card is its variety's.)
+    if (topic) this.show(topic === 'fish' ? (FISH[this.host.variety()] ?? TOPICS.fish) : TOPICS[topic], true);
     else this.hide();
     return true;
   }

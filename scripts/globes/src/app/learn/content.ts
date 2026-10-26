@@ -17,12 +17,61 @@ export type TopicId = 'fish' | 'driftwood' | 'rock' | 'anubias' | 'rosette' | 's
 
 const IN_BOWL = 'In the bowl';
 
-export const TOPICS: Record<TopicId, LearnCard> = {
-  fish: {
-    kicker: 'The fish',
+const FISH_KICKER = 'The fish';
+const ALONE = 'Keep males alone: two will fight.';
+
+/** The fish's card, for each of its varieties (fish/varieties.mjs ids): which it is, and a fact about
+ *  it. */
+export const FISH: Record<string, LearnCard> = {
+  classic: {
+    kicker: FISH_KICKER,
     title: 'Betta splendens, the Siamese fighting fish',
-    body: 'Wild bettas live in warm, shallow, slow water thick with plants: the rice paddies and marshes of Thailand and nearby. This male halfmoon was bred for huge fins. Keep males alone, as two will fight. With good care they live 3 to 5 years.',
+    body: `Wild bettas live in warm, shallow, plant-thick water in Thailand and nearby. This red and blue halfmoon’s red is pigment; its blue is light reflected by crystals in its skin cells (iridophores). ${ALONE}`,
   },
+  'super-red': {
+    kicker: FISH_KICKER,
+    title: 'Betta splendens: Super Red',
+    body: `Bred to be red from fin to fin. Red is a pigment, held in skin cells called erythrophores, where a betta’s blue is reflected light. ${ALONE} With good care they live 3 to 5 years.`,
+  },
+  'royal-blue': {
+    kicker: FISH_KICKER,
+    title: 'Betta splendens: Royal Blue',
+    body: `No betta has a blue pigment: its blue is light reflected by tiny crystal plates in cells called iridophores, so it shifts as the fish turns. ${ALONE} With good care they live 3 to 5 years.`,
+  },
+  'black-samurai': {
+    kicker: FISH_KICKER,
+    title: 'Betta splendens: Black Samurai',
+    body: `A dragon scale on a black base. Dragon scales carry a thick, reflective layer of iridophores over each scale; on a black fish, each metallic scale is edged in black, like armour. ${ALONE}`,
+  },
+  'mustard-gas': {
+    kicker: FISH_KICKER,
+    title: 'Betta splendens: Mustard Gas',
+    body: `A bicolour: a blue-green body, and fins dark blue near it and mustard yellow towards their edges. The yellow is a pigment; the blue is light reflected by the skin. ${ALONE}`,
+  },
+  butterfly: {
+    kicker: FISH_KICKER,
+    title: 'Betta splendens: Butterfly',
+    body: `Each fin is coloured near the body and edged in a sharp pale band. The bands often shift as a butterfly matures, the colour creeping out or drawing back. ${ALONE} With good care they live 3 to 5 years.`,
+  },
+  koi: {
+    kicker: FISH_KICKER,
+    title: 'Betta splendens: Koi (marble)',
+    body: `Marble and koi bettas are thought to carry a “jumping gene”, a transposon that turns colour cells on and off as it moves, so their patches change through life: this one may look quite different in a year. ${ALONE}`,
+  },
+  platinum: {
+    kicker: FISH_KICKER,
+    title: 'Betta splendens: Platinum White',
+    body: `Its white is not pigment but a dense layer of reflective cells (iridophores) over every scale, which makes it opaque and metallic. ${ALONE} With good care they live 3 to 5 years.`,
+  },
+  copper: {
+    kicker: FISH_KICKER,
+    title: 'Betta splendens: Copper',
+    body: `Its sheen is reflective cells (iridophores) laid thickly over a dark base: copper or gold by turns, it shifts with the angle of the light. ${ALONE} With good care they live 3 to 5 years.`,
+  },
+};
+
+export const TOPICS: Record<TopicId, LearnCard> = {
+  fish: FISH.classic,
   driftwood: {
     kicker: IN_BOWL,
     title: 'Driftwood',

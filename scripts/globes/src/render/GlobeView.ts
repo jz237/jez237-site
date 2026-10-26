@@ -120,6 +120,9 @@ export class GlobeView {
    *  of path: bowl.ts BOWL_WATER), y the tannins' strength, z how faded the fish is, w its heater's
    *  lamp. */
   private readonly uBowlWater = uniform(new THREE.Vector4(0, 0, 0, 1));
+  /** The betta's variety (fish/varieties.mjs varietyLook: its colour maps' gain, its sheen, its fins'
+   *  band, its scales' coat): all 0, the photographs' own colours. */
+  private readonly uBowlBetta = uniform(new THREE.Matrix4().set(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
   /** Where the bowl's passes write what each ray ended on (bowl.ids): where their next draws' pixels
    *  lie in the picture (x: k, a lattice's texels k pixels apart; yz: its phase's offset), and for a
    *  lattice the picture's size and its camera's projection (P00, P02, P11, P12; the lattice's own is
@@ -384,7 +387,7 @@ export class GlobeView {
       let passInputs = redraw || perSampleWater ? koiInputs : inputs;
       if (withReef) passInputs = { ...passInputs, ...reefGrid };
       if (foam) passInputs = { ...passInputs, ...foamInputs };
-      if (withBowl) passInputs = Object.assign({}, passInputs, { bowlLid: this.uBowlLid, bowlState: this.uBowlState, bowlLife: this.uBowlLife, bowlDetail: this.uBowlDetail, bowlWater: this.uBowlWater }, studioLightInputs, scapeTex ? { kelpPrimTex: texture(scapeTex) } : {}, band, pixelRay ? { fragPos: pixelRay } : {});
+      if (withBowl) passInputs = Object.assign({}, passInputs, { bowlLid: this.uBowlLid, bowlState: this.uBowlState, bowlLife: this.uBowlLife, bowlDetail: this.uBowlDetail, bowlWater: this.uBowlWater, bowlBetta: this.uBowlBetta }, studioLightInputs, scapeTex ? { kelpPrimTex: texture(scapeTex) } : {}, band, pixelRay ? { fragPos: pixelRay } : {});
       if (!hardware) passInputs = Object.fromEntries(Object.entries(passInputs).filter(([k]) => k !== TLAS_PARAM)) as typeof passInputs;
       // (One variable: the depth and the colour both read the same trace.) Its w carries the
       // pixel's coverage, plus 2 where the second pass must redraw it.
@@ -560,6 +563,11 @@ export class GlobeView {
    *  (each 0..1), and how bright the heater's lamp. */
   setBowlWater(cloud: number, tint: number, pale: number, heaterLamp: number): void {
     this.uBowlWater.value.set(BOWL_WATER.bloom * cloud, tint ** BOWL_WATER.tintPower, pale, heaterLamp);
+  }
+
+  /** The betta's variety (uBowlBetta): varieties.mjs varietyLook's numbers, a mat4's columns. */
+  setBettaLook(look: ArrayLike<number>): void {
+    this.uBowlBetta.value.fromArray(look);
   }
 
   /** Builds pipelines ahead of time (their shaders are large), so no switch stalls: every
