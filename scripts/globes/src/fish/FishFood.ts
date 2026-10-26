@@ -91,8 +91,10 @@ interface Flake {
   /** (A pellet) the age at which it has soaked enough to sink. */
   soak: number;
   /** (A pellet, Water mode) left to rot on the sand, the fish leaving it alone: the share of it
-   *  left (1 whole; null: not left). */
+   *  left (1 whole; null: not left); and whether the simulation laid it there (no pellet that
+   *  sank). */
   left: number | null;
+  laid: boolean;
 }
 
 export interface FoodEnv {
@@ -216,9 +218,10 @@ export class FishFood {
     return this.slots.reduce((n, f) => n + (f && f.left === null ? 1 : 0), 0);
   }
 
-  /** How many have settled (on the sand, or in the reef on what else they settle on) uneaten. */
+  /** How many have settled (on the sand, or in the reef on what else they settle on) uneaten (not
+   *  counting those Water mode lays there). */
   get landed(): number {
-    return this.slots.reduce((n, f) => n + (f?.landed && f.eater < 0 ? 1 : 0), 0);
+    return this.slots.reduce((n, f) => n + (f?.landed && f.eater < 0 && !f.laid ? 1 : 0), 0);
   }
 
   /** A new flake at p (sim frame), for `fish` fish to notice. */
@@ -247,6 +250,7 @@ export class FishFood {
       wander: mul(randUnit(), 0.8),
       soak: PELLET_FLOAT * (1 + Math.random()),
       left: null,
+      laid: false,
     };
     return true;
   }
@@ -277,6 +281,7 @@ export class FishFood {
     f.wet = true;
     f.soak = 0;
     f.left = 1;
+    f.laid = true;
     return slot;
   }
 

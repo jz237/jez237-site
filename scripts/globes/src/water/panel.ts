@@ -290,8 +290,8 @@ export class WaterPanel {
     this.reading('nitrite', ppm(v.nitrite, 0.05), v.nitrite);
     this.reading('nitrate', ppm(v.nitrate, 0.5), v.nitrate);
     this.reading('ph', v.ph.toFixed(1), v.ph);
-    this.reading('temp', `${v.tempF.toFixed(1)} °F`, v.tempF);
-    this.write(this.values.get('tempC')!, ` ${v.tempC.toFixed(1)} °C`);
+    this.reading('temp', `${v.tempF.toFixed(1)}\u00a0°F`, v.tempF);
+    this.write(this.values.get('tempC')!, ` ${v.tempC.toFixed(1)}\u00a0°C`);
     const condition = CONDITIONS[v.level];
     const title = v.cause ? `${condition}: ${CAUSES[v.cause]}` : condition;
     if (this.conditionEl.title !== title) {

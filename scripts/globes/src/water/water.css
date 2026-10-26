@@ -66,8 +66,8 @@
 /* (A switch: its light on while it is.) */
 .water-toggle::before { content: ''; display: inline-block; width: 7px; height: 7px; margin: 0 7px 1px 0; border-radius: 50%; background: #3d5862; vertical-align: middle; }
 .water-toggle[aria-pressed="true"]::before { background: #ffb347; box-shadow: 0 0 6px #ffb347aa; }
-.water-select { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 6px; }
-.water-select select { width: 11.5em; min-height: 34px; padding: 5px 8px; border: 1px solid #94c9ce55; border-radius: 10px; background: #0b3a4a; cursor: pointer; }
+.water-select { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 10px; margin-top: 6px; }
+.water-select select { width: 14em; max-width: 100%; min-height: 34px; padding: 5px 8px; border: 1px solid #94c9ce55; border-radius: 10px; background: #0b3a4a; cursor: pointer; }
 
 /* A phone held upright: a sheet along the foot, above the page's link, folding down to its strip;
    opened out, it scrolls, short of the controls. Learn's card goes up top, clear of it. */
@@ -89,5 +89,5 @@
 /* (A narrow panel: the fish's condition on a line of its own; narrower still, the readings in two
    rows.) */
 @container (max-width: 330px) { .water-bar { flex-wrap: wrap; row-gap: 4px; } .water-condition { flex-basis: 100%; } }
-@container (max-width: 240px) { .water-readings { grid-template-columns: repeat(3, auto); row-gap: 2px; } }
+@container (max-width: 240px) { .water-readings { grid-template-columns: repeat(3, auto); row-gap: 2px; } .water-toggle { grid-column: span 2; } }
 @media (prefers-reduced-motion: reduce) { .water-more svg { transition: none; } }

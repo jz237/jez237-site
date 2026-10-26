@@ -151,8 +151,15 @@ const CONDITIONS = [0.12, 0.35, 0.65];
 /** A meal (pellets), and when meals are given (hours of the day) for each number a day. */
 export const MEAL = 3;
 const MEAL_HOURS = { 0: [], 1: [9], 2: [9, 19], 4: [8, 12, 16, 20] };
-/** Automatic water changes: which days of the week (day number mod 7) at this hour, and how much. */
-const CHANGES = { none: null, weekly: { days: [0], fraction: 0.25 }, twice: { days: [3, 0], fraction: 0.5 } };
+/** Automatic water changes: which days of the week (day number mod 7) at this hour, and how much;
+ *  or, tested every day, half whenever ammonia or nitrite reads this much (ppm) or more - what a
+ *  bowl this small needs while it cycles with the fish in. */
+const CHANGES = {
+  none: null,
+  weekly: { days: [0], fraction: 0.25 },
+  twice: { days: [3, 0], fraction: 0.5 },
+  test: { days: [0, 1, 2, 3, 4, 5, 6], fraction: 0.5, reads: 0.5 },
+};
 const CHANGE_HOUR = 10;
 /** Where a fresh start's clock begins (h on day 1). */
 const START_HOUR = 9;
@@ -385,6 +392,12 @@ export class BowlWater {
     return left;
   }
 
+  /** A test kit reads ammonia or nitrite at `level` ppm or more (0: whatever it reads). */
+  reads(level) {
+    const r = this.readings();
+    return r.ammonia >= level || r.nitrite >= level;
+  }
+
   /** A fraction of the water changed for tap water (dechlorinated or not: this.s.dechlor), the sand
    *  siphoned as it goes (a share of the detritus out with it, every leftover pellet, and a little
    *  of the sand's bacteria). */
@@ -444,15 +457,15 @@ export class BowlWater {
       for (const h of MEAL_HOURS[routine.meals] ?? []) at.push({ t: d * DAY + h * HOUR, kind: 'meal' });
       const c = CHANGES[routine.change];
       // (Day numbers count from 1: day d + 1 for the day starting at d * DAY.)
-      if (c && c.days.includes((d + 1) % 7)) at.push({ t: d * DAY + CHANGE_HOUR * HOUR, kind: 'change', fraction: c.fraction });
+      if (c && c.days.includes((d + 1) % 7)) at.push({ t: d * DAY + CHANGE_HOUR * HOUR, kind: 'change', fraction: c.fraction, reads: c.reads ?? 0 });
       for (const e of at) if (e.t > t && (!best || e.t < best.t)) best = e;
     }
     return best;
   }
 
   /** Runs `seconds` of sim time with a routine ({ meals: 0 | 1 | 2 | 4, change: 'none' | 'weekly' |
-   *  'twice' }), meals and water changes at their times. onMeal: a meal is due (default: counted at
-   *  the fish's appetite, this.meal).
+   *  'twice' | 'test' }), meals and water changes (or tests) at their times. onMeal: a meal is due
+   *  (default: counted at the fish's appetite, this.meal).
    *  @param {number} seconds @param {{ meals: number, change: string }} routine @param {() => unknown} [onMeal] */
   advance(seconds, routine, onMeal = () => this.meal()) {
     const end = this.s.t + seconds;
@@ -461,7 +474,7 @@ export class BowlWater {
       if (!e || e.t > end) break;
       this.step(e.t - this.s.t);
       if (e.kind === 'meal') onMeal();
-      else this.waterChange(e.fraction);
+      else if (this.reads(e.reads)) this.waterChange(e.fraction);
     }
     this.step(end - this.s.t);
   }

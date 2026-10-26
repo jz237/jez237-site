@@ -64,6 +64,18 @@ test('fish-in cycling with half the water changed twice a week: much lower peaks
   assert.ok(cycled >= 4 * 7 + 1 && cycled <= 8 * 7, `cycled on day ${cycled}`);
 });
 
+test('fish-in cycling the way a bowl this small needs: tested daily, half changed whenever ammonia or nitrite reads 0.5', () => {
+  const rows = log(BowlWater.start('new'), 63, { meals: 2, change: 'test' });
+  // (Changed the day it reads 0.5, a reading peaks a day's rise above that: nitrite, rising ~0.35 ppm a
+  // day at its worst, ~0.7.)
+  assert.ok(max(rows, 'ammonia') <= 0.6, `ammonia ${max(rows, 'ammonia').toFixed(2)}`);
+  assert.ok(max(rows, 'nitrite') <= 0.75, `nitrite ${max(rows, 'nitrite').toFixed(2)}`);
+  assert.ok(!rows.some((r) => r.level >= 3), 'never in danger');
+  const last = rows.findLastIndex((r) => r.ammonia >= 0.1 || r.nitrite >= 0.1);
+  const cycled = dayOf(rows[last + 1].t);
+  assert.ok(cycled >= 4 * 7 + 1 && cycled <= 7 * 7, `cycled on day ${cycled}`);
+});
+
 test('a cycled bowl, a quarter changed weekly: ammonia and nitrite read zero, nitrate levels off, the pH holds', () => {
   const rows = log(BowlWater.start('cycled'), 56, { meals: 2, change: 'weekly' });
   assert.ok(max(rows, 'ammonia') <= 0.05, `ammonia ${max(rows, 'ammonia').toFixed(3)}`);
@@ -205,5 +217,5 @@ test('a saved bowl picks up where it left off; meals counted at the fish\'s appe
   const e = BowlWater.nextEvent(9 * HOUR, { meals: 2, change: 'weekly' });
   assert.deepEqual(e, { t: 19 * HOUR, kind: 'meal' });
   const c = BowlWater.nextEvent(5 * DAY + 20 * HOUR, { meals: 0, change: 'weekly' });
-  assert.deepEqual(c, { t: 6 * DAY + 10 * HOUR, kind: 'change', fraction: 0.25 });
+  assert.deepEqual(c, { t: 6 * DAY + 10 * HOUR, kind: 'change', fraction: 0.25, reads: 0 });
 });

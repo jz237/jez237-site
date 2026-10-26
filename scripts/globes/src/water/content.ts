@@ -3,7 +3,7 @@
 // panel's line on what is happening in the bowl, and the words on its controls. Plain words for
 // people who keep bettas, accurate to the simulation (chemistry.mjs) and to real bowls.
 // (Plain data, no imports but a type: the tests read it in Node. A number and its unit are kept
-// together by a no-break space,  .)
+// together by a no-break space, \u00a0.)
 
 import type { LearnCard } from '../app/learn/content';
 
@@ -19,9 +19,9 @@ export const INTRO: LearnCard = {
 export const READINGS = {
   ammonia: { name: 'Ammonia', unit: ' ppm', about: 'Ammonia (NH3/NH4+, in ppm) comes from the fish’s gills and rotting food. It should read 0. It is most toxic in warm, alkaline water.' },
   nitrite: { name: 'Nitrite', unit: ' ppm', about: 'Nitrite (NO2-, in ppm) is what the first bacteria make of ammonia. It should read 0: it stops the blood carrying oxygen.' },
-  nitrate: { name: 'Nitrate', unit: ' ppm', about: 'Nitrate (NO3-, in ppm) is the end of the cycle, far milder. Water changes keep it under 20 to 40 ppm.' },
+  nitrate: { name: 'Nitrate', unit: ' ppm', about: 'Nitrate (NO3-, in ppm) is the end of the cycle, far milder. Water changes keep it under 20 to 40\u00a0ppm.' },
   ph: { name: 'pH', unit: '', about: 'Bettas do well from about 6.5 to 7.5. A steady pH matters more than the exact number.' },
-  temp: { name: 'Temp', unit: '', about: 'Keep a betta at 78 to 80 °F (25.5 to 27 °C). This room is 70 °F: the heater makes up the rest.' },
+  temp: { name: 'Temp', unit: '', about: 'Keep a betta at 78 to 80\u00a0°F (25.5 to 27\u00a0°C). This room is 70\u00a0°F: the heater makes up the rest.' },
 } as const;
 export type ReadingId = keyof typeof READINGS;
 
@@ -43,7 +43,7 @@ export const CAUSES: Record<string, string> = {
 export const DANGER: Record<string, string> = {
   ammonia: 'In a real bowl this much ammonia would likely kill it. Change half the water now, and again each day until ammonia reads 0.',
   nitrite: 'In a real bowl this much nitrite would likely kill it. Change half the water now, and again each day until nitrite reads 0.',
-  nitrate: 'Nitrate this high wears a fish down. Change a quarter of the water every day or two until it is under 40 ppm.',
+  nitrate: 'Nitrate this high wears a fish down. Change a quarter of the water every day or two until it is under 40\u00a0ppm.',
   cold: 'This cold for long, a betta stops eating and falls ill. Turn the heater back on.',
   chlorine: 'In a real bowl chlorine this strong could kill it. Change water again with dechlorinator, which also neutralizes what is left.',
   acid: 'This acid for long harms a betta. Change a quarter of the water a day so the pH rises slowly.',
@@ -53,18 +53,18 @@ export const DANGER: Record<string, string> = {
 /** What is happening (chemistry.mjs happening()), most pressing first. */
 export const HAPPENING: Record<string, string> = {
   chlorine: 'Untreated tap water: its chlorine is burning the fish’s gills and killing the filter’s bacteria. Always dechlorinate new water.',
-  cooling: 'The heater is off. The water is cooling toward the room’s 70 °F.',
-  cold: 'The water is too cold. At 70 °F a betta is sluggish, eats little and falls ill more easily.',
-  warming: 'The heater is warming the water back up to 79 °F.',
+  cooling: 'The heater is off. The water is cooling toward the room’s 70\u00a0°F.',
+  cold: 'The water is too cold. At 70\u00a0°F a betta is sluggish, eats little and falls ill more easily.',
+  warming: 'The heater is warming the water back up to 79\u00a0°F.',
   tapRinse: 'Rinsing the sponge under the tap killed most of its bacteria. Expect ammonia and nitrite for a week or two: test and change water.',
   feast: 'That is far more food than a betta can eat. Uneaten pellets rot into ammonia and feed a cloud of bacteria.',
   acid: 'The buffer (KH) is spent and the pH has fallen, slowing the bacteria. Change a quarter of the water a day to bring it back slowly.',
   bloomNew: 'A bacterial bloom: free-floating bacteria feeding on a new bowl’s organics cloud the water. It clears by itself in a few days.',
   bloomFood: 'Rotting food is feeding a bloom of bacteria that clouds the water. Siphon out leftovers and feed less.',
-  stage1: 'Stage 1 of the cycle: ammonia builds up while the bacteria that eat it are few. Change water often to keep it down.',
+  stage1: 'Stage 1 of the cycle: ammonia builds up while the bacteria that eat it are few. A bowl this small needs a test, and often a change, every day while it cycles.',
   ammoniaBack: 'Ammonia in a cycled bowl: more waste than its bacteria can keep up with. Change water and go easy on food.',
-  stage2: 'Stage 2: bacteria now turn ammonia into nitrite, just as toxic. The ones that eat nitrite grow more slowly.',
-  stage3: 'Stage 3: ammonia is cleared, and nitrite lingers until the second bacteria catch up.',
+  stage2: 'Stage 2: bacteria now turn ammonia into nitrite, just as toxic; the ones that eat nitrite grow more slowly. In a bowl this small, test and change water daily until both read 0.',
+  stage3: 'Stage 3: ammonia is cleared, and nitrite lingers until the second bacteria catch up. Keep testing daily, changing water when it reads 0.5.',
   uncycled: 'A new bowl: no bacteria yet to clear the fish’s waste, so ammonia will build up over the first days.',
   nitrate: 'Nitrate is building up. Only water changes (and the plants, a little) take it away.',
   kh: 'The bacteria use up the water’s buffer (KH) as they work. Water changes bring it back.',
@@ -92,7 +92,7 @@ export const CONTROLS = {
   heater: { label: 'Heater', title: 'Switch the heater on or off' },
   dechlor: { label: 'Dechlorinator', title: 'Treat the new water of each change with dechlorinator' },
   meals: { label: 'Meals a day', title: 'Three pellets a meal, given on time (at Fast, counted without opening the lid)' },
-  routine: { label: 'Water changes', title: 'Water changes done for you, at 10 am' },
+  routine: { label: 'Water changes', title: 'Water changes done for you at 10\u00a0am; or the water tested daily, half changed when ammonia or nitrite reads 0.5\u00a0ppm or more' },
 } as const;
 
 /** The routine's choices. */
@@ -106,6 +106,7 @@ export const CHANGES = [
   { value: 'none', label: 'None' },
   { value: 'weekly', label: '25% weekly' },
   { value: 'twice', label: '50% twice a week' },
+  { value: 'test', label: 'When the test says so' },
 ] as const;
 
 /** Where the simulation can start (chemistry.mjs BowlWater.start). */

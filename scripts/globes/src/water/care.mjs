@@ -1,8 +1,9 @@
 // Water mode's running of the simulation (WaterCare.ts gives it the page and the panel): the bowl
-// (chemistry.mjs) on its clock, the routine's meals and water changes, the food the fish eats or
-// leaves (FishFood.ts), the uneaten pellets shown on the sand, what the water does to the fish
-// written to water.fx (effects.ts), and what is kept on this device. No DOM: the tests run it in Node
-// with stand-ins for the page (water-care.test.mjs).
+// (chemistry.mjs) on its clock, the routine's meals (counted, never through the lid) and water
+// changes, the food the fish eats or leaves when the Feed button lifts the lid (FishFood.ts), the
+// uneaten pellets shown on the sand, what the water does to the fish written to water.fx
+// (effects.ts), and what is kept on this device. No DOM: the tests run it in Node with stand-ins for
+// the page (water-care.test.mjs).
 
 import { BowlWater, DAY, HOUR, MEAL, PELLET_N } from './chemistry.mjs';
 import { FeedLog } from '../app/learn/feedLog.mjs';
@@ -17,7 +18,7 @@ export const VERSION = 1;
 /** Where pellets are laid on the sand (counted meals): open sand at the front of the bowl (the globe
  *  frame, in front of the wood and between the stones), a little above it, to settle. */
 const SAND = { x: [-0.3, 0.3], z: [0.28, 0.56], above: 0.015 };
-const ROUTINES = { meals: [0, 1, 2, 4], change: ['none', 'weekly', 'twice'] };
+const ROUTINES = { meals: [0, 1, 2, 4], change: ['none', 'weekly', 'twice', 'test'] };
 
 /** "Day 3 · 2:40 pm", to ten minutes. */
 export function clockText(t) {
@@ -30,7 +31,7 @@ export function clockText(t) {
  * host: the page's parts it works with -
  *  water: { fx } (main.ts: what the fish and the bowl's look read);
  *  idle: the effects water.fx holds while off (CLEAR_WATER, or ?water='s);
- *  feeding: Feeding (state, request(routine));
+ *  feeding: Feeding (its state: a meal asked for with the Feed button);
  *  food: FishFood (eatenCount, leave(), lay(p), rot(slot, left), isLeft(slot), take(slot));
  *  rotation(): the globe frame to the sim frame (column-major 3x3);
  *  bed: the sand's height at rest (the globe frame).
@@ -87,17 +88,12 @@ export class Care {
     if (eaten > 0) this.bowl.eat(eaten);
     for (const slot of h.food.leave()) this.shown.set(this.bowl.leave(), slot);
     const run = hidden ? 0 : dt * RATE[this.speed];
-    if (run > 0) this.bowl.advance(run, this.routine, () => this.meal(this.speed !== 'play'));
+    if (run > 0) this.bowl.advance(run, this.routine, () => this.meal());
   }
 
-  /** A meal of the routine, due now: at Play a real one, through the lid (Feeding: unless one is
-   *  under way, or the bowl is held so long it cannot be); else counted, the fish eating what its
-   *  appetite allows, the rest laid on the sand. */
-  meal(counted) {
-    if (!counted) {
-      if (this.host.feeding.state === 'idle') this.host.feeding.request(true);
-      return;
-    }
+  /** A meal of the routine, due now, counted (the lid stays on): the fish eats what its appetite
+   *  allows, the rest is laid on the sand; Learn's count has it too. */
+  meal() {
     for (let k = 0; k < MEAL; k++) this.meals.log.drop(this.bowl.s.t);
     this.bowl.meal(MEAL);
   }
@@ -141,7 +137,7 @@ export class Care {
 
   /** `days` run at once with the routine, its meals counted (testing). */
   forward(days) {
-    this.bowl.advance(days * DAY, this.routine, () => this.meal(true));
+    this.bowl.advance(days * DAY, this.routine, () => this.meal());
     this.sync();
   }
 

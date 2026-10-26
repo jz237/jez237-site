@@ -5,11 +5,11 @@
 // controls, remembered on this device, as is the bowl itself: next visit it carries on where it
 // was); off, it does nothing in a frame and water.fx is the page as it always was.
 //
-// The clock runs only while Water mode is on and the page is seen. At Play (half an hour a second)
-// a meal of the routine is a real one: the lid lifts and the pellets fall (Feeding.ts), and each is
-// counted as the fish eats it or as it settles on the sand uneaten (FishFood.ts). At Fast (six hours
-// a second) meals are counted without the lid, the fish eating what its appetite allows. Pellets
-// left uneaten lie on the sand, crumbling, until they have rotted (the newest few are shown).
+// The clock runs only while Water mode is on and the page is seen: Play is half an hour a second,
+// Fast six hours. The routine's meals are counted without lifting the lid, the fish eating what its
+// appetite allows; the Feed button's pellets are counted as the fish eats them or as they settle on
+// the sand uneaten (FishFood.ts). Pellets left uneaten lie on the sand, crumbling, until they have
+// rotted (the newest few are shown).
 
 import { Care, clockText } from './care.mjs';
 import { CLEAR_WATER, type WaterEffects } from './effects';

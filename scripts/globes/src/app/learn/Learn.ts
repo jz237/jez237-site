@@ -48,7 +48,8 @@ export interface LearnHost {
 type Picking = typeof import('./pick.mjs');
 
 /** Water mode's clock (water/WaterCare.ts), while it runs: its own count of the fish's food, by
- *  the simulation's time (s), each pellet counted at the time its meal was given (drop). */
+ *  the simulation's time (s): its routine's meals, and each pellet the Feed button lets go, counted
+ *  at the time its meal was asked for (drop). */
 export interface MealClock {
   log: FeedLog;
   now(): number;
@@ -171,8 +172,8 @@ export class Learn {
     const fed = h.feeding.state;
     if (fed !== this.feedState) {
       // (Away from idle is a meal asked for: waiting for the bowl to stand still, or, standing
-      // still already, opening in the same frame. Water mode's meals on time are no news.)
-      if (this.feedState === 'idle' && !h.feeding.routine) this.advise(t);
+      // still already, opening in the same frame.)
+      if (this.feedState === 'idle') this.advise(t);
       this.feedState = fed;
     }
     // Things that happen at a moment: the fins flared at the button (asked for: shown at once), the

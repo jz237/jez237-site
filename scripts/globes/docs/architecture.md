@@ -1439,8 +1439,8 @@ caption for each behaviour, the feeding advice; each a kicker, a title and two o
   or off). As a meal is asked for (Learn on): how to feed a betta, or, within 4 hours of the last
   meal, that it has just eaten, or, with six pellets or more in the last 12 hours, that it has had a
   day's food. A meal is three pellets now (it was four). With Water mode on, the
-  pellets are counted by its clock (each at the time its meal was given), and its meals on time
-  (`Feeding.routine`) bring no advice.
+  food is counted by its clock (its routine's meals, which never lift the lid, and each Feed's
+  pellets at the time the meal was asked for), so a Feed soon after a routine meal is told so.
 - **The card** (`.learn-card`, styles.css): one at a time, a polite live region (its words cleared
   once it fades, so the same card again is read out). Low at the right on a wide screen; on a phone,
   across the foot over the page's link (the controls give the specimen's name a line of its own to
@@ -1491,11 +1491,14 @@ and to the water's look into `water.fx` (`effects.ts`, read by the fish and the 
   Its condition (Thriving / Uncomfortable / Stressed / In danger) and the main cause go to the panel;
   it never dies (in danger, the panel says what that would mean in a real bowl and what to do).
 - **The page** (`care.mjs`, no DOM; `WaterCare.ts` wires it). Clock: paused, Play (30 sim min a
-  second) or Fast (6 sim h), only while on and the page is seen. At Play a routine meal is a real one
-  (`Feeding.request(true)`): pellets eaten count from `FishFood.eatenCount`, one that settles uneaten
-  becomes a leftover (`FishFood.leave`); at Fast meals are counted at `fx.appetite` and leftovers are
-  laid on the front sand (`FishFood.lay`). The newest four leftovers show, shrinking as they rot
-  (`rot`), the fish leaving them alone. Starts: a new bowl (the first), a cycled one (a month of
+  second) or Fast (6 sim h), only while on and the page is seen. The routine's meals are counted,
+  the lid left on, at `fx.appetite`, their leftovers laid on the front sand (`FishFood.lay`; not in
+  `FishFood.landed`, so Learn's "food on the sand" is only for a pellet that sank). The Feed button's
+  pellets count as the fish eats them (`FishFood.eatenCount`) or as one settles uneaten and becomes a
+  leftover (`FishFood.leave`). The newest four leftovers show, shrinking as they rot (`rot`), the fish
+  leaving them alone. Water changes by the routine: none, 25 % weekly, 50 % twice a week, or tested
+  daily at 10 am and half changed when ammonia or nitrite reads 0.5 ppm (fish-in cycling in a bowl
+  this small: peaks ammonia 0.57, nitrite 0.73, never in danger, cycled on day 33). Starts: a new bowl (the first), a cycled one (a month of
   weekly changes after a steady state), a neglected one (that, then nine weeks without changes:
   nitrate ~48, KH 0.4, pH 6.3). Kept every 5 s and as the page hides (~30 KB at most: 120 days of
   3-hourly samples).
@@ -1509,7 +1512,7 @@ and to the water's look into `water.fx` (`effects.ts`, read by the fish and the 
 - **Cost**: phone emulation (384x693 at 2.81, 2.75x CPU, vsync), the panel open: 60 fps, 84
   pipelines; Water's frame 0.05-0.07 ms on average (throttled), the chart's redraw ~0.5 ms twice a
   second. No WGSL, no pipelines.
-- Tests: `water-chemistry.test.mjs` (10: the new bowl's cycle; fish-in cycling with changes; a
-  cycled bowl kept well and neglected; the sponge rinsed; the heater off; its lamp; an untreated
-  change; overfeeding; saving) and `water-care.test.mjs` (4: water.fx on and off; the clock; routine
-  meals at Play and Fast and leftovers; what is kept).
+- Tests: `water-chemistry.test.mjs` (11: the new bowl's cycle; fish-in cycling with changes twice a
+  week and as the test says; a cycled bowl kept well and neglected; the sponge rinsed; the heater
+  off; its lamp; an untreated change; overfeeding; saving) and `water-care.test.mjs` (4: water.fx on
+  and off; the clock; routine meals counted and the Feed button's, leftovers; what is kept).

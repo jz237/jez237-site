@@ -9,18 +9,9 @@ import { Care, clockText, RATE, SHOWN } from './src/water/care.mjs';
 import { BowlWater, DAY, HOUR } from './src/water/chemistry.mjs';
 import { CLEAR_WATER } from './src/water/effects.ts';
 
-/** The page's feeding (Feeding.ts): asked for, it takes the lid off; here it only remembers. */
+/** The page's feeding (Feeding.ts): its state, which the Feed button moves on from idle. */
 function feeding() {
-  return {
-    state: 'idle',
-    routine: false,
-    asked: 0,
-    request(routine = false) {
-      this.state = 'waiting';
-      this.routine = routine;
-      this.asked++;
-    },
-  };
+  return { state: 'idle' };
 }
 
 /** The page's food (FishFood.ts): seven slots, pellets eaten counted, settled ones left to rot. */
@@ -116,13 +107,13 @@ test('the clock: half an hour a second at Play, six hours at Fast, nothing pause
   assert.equal(clockText(DAY + 5 * 60), 'Day 2 · 12:00 am');
 });
 
-test('routine meals: at Fast counted (the fish eating what its appetite allows), at Play through the lid', () => {
+test('routine meals counted, the lid on, at every speed; the Feed button’s pellets counted as the fish eats or leaves them', () => {
   const { care, host } = page();
   care.set(true);
   care.speed = 'fast';
   // A day at Fast: meals at 9 am (now passed) and 7 pm, then 9 am tomorrow.
   for (let k = 0; k < 4; k++) care.frame(1);
-  assert.equal(host.feeding.asked, 0, 'no lid');
+  assert.equal(host.feeding.state, 'idle', 'no lid');
   assert.deepEqual(care.meals.log.times, [DAY + 9 * HOUR, DAY + 9 * HOUR, DAY + 9 * HOUR], 'counted for Learn (its log keeps half a day)');
   assert.ok(care.bowl.s.gut > 0, 'eaten');
   assert.equal(care.bowl.s.pellets.length, 0, 'a well fish eats them all');
@@ -138,15 +129,18 @@ test('routine meals: at Fast counted (the fish eating what its appetite allows),
   assert.equal(care.bowl.s.pellets.length, 0, 'rotted');
   assert.equal(host.food.left, 0);
 
-  // At Play a meal is a real one: the lid asked for, as the routine's (Learn gives no advice).
+  // At Play too: the 7 pm meal counted (for Learn as well), the lid left on.
   const p = page();
   p.care.set(true);
-  p.care.routine.meals = 2;
-  for (let k = 0; k < 20 && p.host.feeding.asked === 0; k++) p.care.frame(1);
-  assert.equal(p.host.feeding.asked, 1);
-  assert.equal(p.host.feeding.routine, true);
-  assert.equal(clockText(p.care.bowl.s.t), 'Day 1 · 7:00 pm');
-  // The fish takes two pellets; the third settles uneaten and is left to rot, shown where it fell.
+  for (let k = 0; k < 21; k++) p.care.frame(1);
+  assert.equal(clockText(p.care.bowl.s.t), 'Day 1 · 7:30 pm');
+  assert.equal(p.host.feeding.state, 'idle');
+  assert.deepEqual(p.care.meals.log.times, [19 * HOUR, 19 * HOUR, 19 * HOUR]);
+  assert.equal(p.care.meals.log.advise(p.care.meals.now()).advice, 'again', 'a Feed now: already fed');
+  // The Feed button at 8 pm: the fish takes two pellets; the third settles uneaten and is left to
+  // rot, shown where it fell; Learn counts all three at the time the meal was asked for.
+  p.care.frame(1);
+  p.host.feeding.state = 'waiting';
   p.care.frame(1 / 60);
   const gut = p.care.bowl.s.gut;
   p.host.food.eatenCount += 2;
@@ -155,9 +149,9 @@ test('routine meals: at Fast counted (the fish eating what its appetite allows),
   assert.ok(p.care.bowl.s.gut > gut);
   assert.equal(p.care.bowl.s.pellets.length, 1);
   assert.equal(p.care.shown.size, 1);
-  // Learn's count: each pellet of it at the time the meal was asked for.
   for (let k = 0; k < 3; k++) p.care.meals.drop();
-  assert.deepEqual(p.care.meals.log.times, [19 * HOUR, 19 * HOUR, 19 * HOUR]);
+  assert.deepEqual(p.care.meals.log.times.slice(3), [20 * HOUR, 20 * HOUR, 20 * HOUR]);
+  assert.equal(p.care.meals.log.advise(20 * HOUR + 600).advice, 'over', 'six pellets in an hour');
 });
 
 test('kept on the device: the bowl, the speed and the routine come back; anything else is set aside', () => {
