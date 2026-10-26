@@ -3,7 +3,8 @@ import * as T from 'three';
 import {doorBase,lidBase,LID} from './door-swing';
 type Member={mesh:T.Mesh;matrix:T.Matrix4;position:T.Vector3;quaternion:T.Quaternion;scale:T.Vector3;auto:boolean;toModel:T.Matrix4;fromParent:T.Matrix4};
 type Assembly={name:string;members:Member[];bounds:T.Box3;damage:number;side:number;loose:number;swing?:number;swingRate?:number;
-  /** Extra drop (rad) of a bumper that came without its clips at its free end (offline; sagging-bumpers.ts). */
+  /** Extra hinge angle (rad) of a part that came without its clips or catch (offline): a bumper's free end drops by it
+   * (sagging-bumpers.ts), a bonnet's front edge rises by it (bonnet-ajar.ts). */
   sag?:number};
 
 /** Extra bonnet lift (radians) from airflow: none below 14 m/s or for a barely loose bonnet. */
@@ -86,7 +87,7 @@ export class WreckAttachments {
       if(a.name==='hood'){
         // At speed the airflow gets under a loose bonnet and lifts it, shaking, toward the screen.
         const lift=hoodWindLift(speed,a.loose);
-        pivot.set(0,a.bounds.max.y-.04,a.bounds.min.z+.08);euler.x=-a.loose*.42-lift+flutter*(1+lift*4);euler.z=a.side*a.loose*.045;
+        pivot.set(0,a.bounds.max.y-.04,a.bounds.min.z+.08);euler.x=-a.loose*.42-(a.sag??0)-lift+flutter*(1+lift*4);euler.z=a.side*a.loose*.045;
         // Nearly torn off at speed it folds right back against the windscreen (blinding a driver in the cab view).
         if(this.flipHood){const flip=hoodFlip(speed,a.loose);if(flip>0)euler.x+=(HOOD_FOLD-euler.x)*flip;}
       }else if(a.name.startsWith('cargo-')){
