@@ -61,6 +61,14 @@ export function brakePull(steer:number,brake:number,speed:number,age:number,id:n
   const pull=BRAKE_PULL.tug*b*Math.min(1,v/BRAKE_PULL.speed)*(a-BRAKE_PULL.from)/(1-BRAKE_PULL.from);
   return Math.max(-1,Math.min(1,s+(weakCaliper(id)===0?1:-1)*pull));
 }
+/** Rotten exhaust hangers (offline, with the rust): on HANGER.share of the oldest cars (from HANGER.from of age) the hangers
+ * have rusted through, and at speed the pipe bounces down and scrapes along the ground in bursts (down when the bounce is past
+ * HANGER.on, HANGER.rate rad/s, each car its own beat), sparking, until it tears off as a knocked-down exhaust does. */
+export const HANGER={from:.75,share:.4,rate:2.6,on:.5} as const;
+/** Has car `id` of this age a rusted-through exhaust hanger? */
+export const rottenHanger=(age:number,id:number)=>clampAge(age)>=HANGER.from&&Math.abs(Math.sin((Number.isFinite(id)?id:0)*71.9+3.3)*43758.5453)%1<HANGER.share;
+/** Is the loose pipe down on the ground at this moment (s), on car `id`? */
+export const hangerDown=(time:number,id:number)=>Number.isFinite(time)&&Math.sin(time*HANGER.rate+(Number.isFinite(id)?id:0)*1.7)>HANGER.on;
 /** Does a body material rust? Painted steel does; the plastic trim, hoses and cabin do not. */
 export const rusts=(name:string)=>name.startsWith('paint')&&!/Paint 2|hoses|Interior|Panel Sides/.test(name);
 export const startingRust=(id:number)=>{const n=Number.isFinite(id)?id:0,r=Math.abs(Math.sin(n*57.31+4.77)*43758.5453)%1;return RUST.age[0]+r*(RUST.age[1]-RUST.age[0]);};

@@ -40,7 +40,7 @@ import { repairCoupePanel } from './coupe-realism';
 import { dentGeometry,crushGeometry,refreshWreckNormals,type CrushFrame, repairWreckGeometry } from './wreck-geometry';
 import { WreckFinish } from './wreck-finish';
 import { WreckAttachments } from './wreck-attachments';
-import {ROT,brakePull,caliperGrip,rotFactor,tiredCorner,tiredDamper,tiredSag,wornEngine} from './age-rust';
+import {ROT,brakePull,caliperGrip,hangerDown,rotFactor,rottenHanger,tiredCorner,tiredDamper,tiredSag,wornEngine} from './age-rust';
 import {torqueSteer} from './torque-steer';
 import {bodyworkDentDamage} from './bodywork-response';
 import {puddleDepth,type Puddle} from './puddle-splashes';
@@ -1156,8 +1156,9 @@ export class Vehicle {
           else this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.07,feedback.evidence,1);
         }
       }
-      // A rear crushed past EXHAUST_DROP knocks the exhaust down: at speed it drags behind, sparking and scraping.
-      if(this.extendedDamage&&!this.exhaustGone&&(this.structuralDamage?.[1]??0)>EXHAUST_DROP&&Math.abs(this.speed)>4&&this.health>0){
+      // A rear crushed past EXHAUST_DROP knocks the exhaust down: at speed it drags behind, sparking and scraping. An old car's
+      // rusted-through hangers let it bounce down and scrape in bursts.
+      if(this.extendedDamage&&!this.exhaustGone&&((this.structuralDamage?.[1]??0)>EXHAUST_DROP||rottenHanger(this.surfaceFinish.rustAge,this.id)&&hangerDown(time,this.id))&&Math.abs(this.speed)>4&&this.health>0){
         const tail=new T.Vector3(isRearEngineKind(this.kind)?.35:-.35,0,-DEFINITIONS[this.kind].halfLength*.8).applyQuaternion(this.previousQ).add(this.previous);
         tail.y=this.ground.height(tail.x,tail.z)+.04;const s=Math.min(1,Math.abs(this.speed)/18);
         this.scraping=Math.max(this.scraping,s*.45);this.fx.emit(tail,Math.ceil(s*2),1,.6);this.fx.evidence?.add(tail,Math.atan2(this.forward.x,this.forward.z),Math.abs(this.speed)*.06,s*.5,2);this.exhaustDrags++;
