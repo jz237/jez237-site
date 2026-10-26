@@ -1,0 +1,93 @@
+/* Water mode's panel (water/panel.ts), in the style of the fish's controls and Learn's card
+   (app/styles.css): a side panel on a wide screen, beside the bowl on a phone held sideways, and on
+   a phone held upright a sheet along the foot, above the page's link, that folds down to its
+   readings and never reaches the controls. (No blur behind it: over the live canvas it would cost
+   the compositor every frame.) */
+.water-panel { position: absolute; z-index: 6; left: 24px; top: 80px; width: clamp(248px, calc((100cqw - 68cqh) / 2 - 44px), 340px); container-type: inline-size; max-height: calc(100% - 80px - 64px - env(safe-area-inset-bottom)); overflow-y: auto; overscroll-behavior: contain; box-sizing: border-box; padding: 12px 14px 12px; border-radius: 18px; color: #d2e9e8; background: #092d3bf0; border: 1px solid #94c9ce55; box-shadow: 0 12px 32px #00080d66; font-size: 12px; line-height: 1.4; scrollbar-width: thin; scrollbar-color: #94c9ce55 transparent; }
+/* (Shown with the fish's controls: not while the page loads, nor where it cannot run.) */
+.water-panel[hidden], .betta-controls[hidden] ~ .water-panel, .is-unsupported .water-panel { display: none; }
+.water-panel button, .water-panel select { font: inherit; color: inherit; }
+.water-panel button:focus-visible, .water-panel select:focus-visible { outline: 2px solid #d2e9e8; outline-offset: 2px; }
+
+/* The card shown the first time (Learn's card's words and close button). */
+.water-intro { margin: 0 0 10px; padding-bottom: 10px; border-bottom: 1px solid #94c9ce33; }
+.water-intro[hidden] { display: none; }
+
+/* The readings, like a test kit's: each a name, a colour from the kit's card, a value. */
+.water-readings { display: grid; grid-template-columns: repeat(5, auto); justify-content: space-between; column-gap: 4px; }
+.water-reading { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; min-width: 0; margin: 0 -3px; padding: 3px; background: none; border: 0; border-radius: 8px; text-align: left; cursor: pointer; }
+.water-reading:hover { background: #235966a0; }
+.water-name { font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: #94c9ce; white-space: nowrap; }
+.water-sub, [data-reading="ph"] .water-name { letter-spacing: 0; text-transform: none; }
+.water-value { display: flex; align-items: center; gap: 4px; font-size: 13.5px; font-weight: 600; color: #f1fbfa; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.water-chip { flex: none; width: 10px; height: 10px; border-radius: 3px; box-shadow: inset 0 0 0 1px #00000040; }
+
+/* The fish, the clock and its speed, opening out. */
+.water-bar { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.water-condition { display: inline-flex; align-items: center; gap: 6px; margin-right: auto; font-weight: 600; color: #f1fbfa; white-space: nowrap; }
+.water-condition::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--state, #4cc38a); }
+.water-condition[data-level="1"] { --state: #e3c341; }
+.water-condition[data-level="2"] { --state: #f0883e; }
+.water-condition[data-level="3"] { --state: #f05252; }
+.water-clock { color: #cde2e1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.water-speed { display: flex; flex: none; border: 1px solid #94c9ce55; border-radius: 17px; overflow: hidden; }
+.water-speed button { width: 34px; height: 32px; display: grid; place-items: center; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.water-speed button + button { border-left: 1px solid #94c9ce33; }
+.water-speed button:hover, .water-speed button[aria-pressed="true"] { background: #235966dc; }
+.water-speed button:focus-visible { outline-offset: -2px; }
+.water-speed svg, .water-more svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.water-speed [data-speed="play"] svg, .water-speed [data-speed="fast"] svg { fill: currentColor; stroke-width: 1.2; }
+.water-more { flex: none; width: 34px; height: 34px; display: grid; place-items: center; padding: 0; border: 1px solid #94c9ce55; border-radius: 50%; background: transparent; cursor: pointer; }
+.water-more:hover { background: #235966dc; }
+/* (Its chevron points the way the panel opens: down here, up from the sheet on a phone.) */
+.water-more svg { transform: rotate(180deg); transition: transform 0.3s var(--ease); }
+.water-panel.is-open .water-more svg { transform: none; }
+.water-news { margin: 6px 0 0; min-height: 2.8em; color: #cde2e1; }
+.water-why:not(:empty) + .water-what::before { content: ' '; }
+
+/* Opened out: the chart, the care, the routine, a fresh start. */
+.water-body { display: none; }
+.water-panel.is-open .water-body { display: block; }
+.water-chart { margin: 10px 0 0; padding-top: 8px; border-top: 1px solid #94c9ce33; }
+.water-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 11px; color: #cde2e1; }
+.water-units { color: #94c9ce; }
+.water-key::before { content: ''; display: inline-block; width: 14px; height: 2px; margin-right: 5px; border-radius: 1px; background: var(--key); vertical-align: middle; }
+/* (Not the stage's canvas: in the panel's flow.) */
+#stage .water-chart-plot { position: static; display: block; width: 100%; margin-top: 6px; touch-action: pan-y; }
+.water-chart-tip { margin: 2px 0 0; min-height: 1.4em; font-size: 10.5px; color: #cde2e1; font-variant-numeric: tabular-nums; visibility: hidden; }
+.water-chart-tip.is-on { visibility: visible; }
+.water-group { margin-top: 8px; }
+.water-heading { margin: 0 0 6px; font-size: 10px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: #94c9ce; }
+.water-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.water-wide { grid-column: span 2; }
+.water-starts { grid-template-columns: repeat(3, auto); justify-content: start; }
+.water-action { min-height: 36px; padding: 7px 10px; border: 1px solid #94c9ce55; border-radius: 18px; background: #0b3a4abd; cursor: pointer; }
+.water-action:hover { background: #235966dc; border-color: #a5e3e9aa; }
+/* (A switch: its light on while it is.) */
+.water-toggle::before { content: ''; display: inline-block; width: 7px; height: 7px; margin: 0 7px 1px 0; border-radius: 50%; background: #3d5862; vertical-align: middle; }
+.water-toggle[aria-pressed="true"]::before { background: #ffb347; box-shadow: 0 0 6px #ffb347aa; }
+.water-select { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 6px; }
+.water-select select { width: 11.5em; min-height: 34px; padding: 5px 8px; border: 1px solid #94c9ce55; border-radius: 10px; background: #0b3a4a; cursor: pointer; }
+
+/* A phone held upright: a sheet along the foot, above the page's link, folding down to its strip;
+   opened out, it scrolls, short of the controls. Learn's card goes up top, clear of it. */
+@media (max-width: 500px) {
+  .water-panel { left: 8px; right: 8px; top: auto; bottom: calc(52px + env(safe-area-inset-bottom)); width: auto; max-height: min(64%, calc(100% - 96px - 52px - env(safe-area-inset-bottom))); padding: 9px 11px 8px; border-radius: 16px; }
+  .water-intro .learn-text { font-size: 11.5px; line-height: 1.38; }
+  .water-more svg { transform: none; }
+  .water-panel.is-open .water-more svg { transform: rotate(180deg); }
+  .water-panel:not(.is-open) .water-news { min-height: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .water-panel:not(.is-open) .water-why:not(:empty) + .water-what { display: none; }
+  #stage.water-on .learn-card { top: 92px; bottom: auto; padding: 9px 12px 10px 13px; font-size: 11.5px; line-height: 1.35; }
+  #stage.water-on .learn-card .learn-title { font-size: 13px; }
+}
+/* A phone on its side: a column at the left, beside the bowl, under the mark. */
+@media (max-height: 500px) {
+  .water-panel { left: 10px; top: 52px; width: max(204px, calc((100cqw - 68cqh) / 2 - 24px)); max-height: calc(100% - 52px - 52px - env(safe-area-inset-bottom)); padding: 8px 10px; font-size: 11px; }
+  .water-intro .learn-text { font-size: 11px; line-height: 1.35; }
+}
+/* (A narrow panel: the fish's condition on a line of its own; narrower still, the readings in two
+   rows.) */
+@container (max-width: 330px) { .water-bar { flex-wrap: wrap; row-gap: 4px; } .water-condition { flex-basis: 100%; } }
+@container (max-width: 240px) { .water-readings { grid-template-columns: repeat(3, auto); row-gap: 2px; } }
+@media (prefers-reduced-motion: reduce) { .water-more svg { transition: none; } }

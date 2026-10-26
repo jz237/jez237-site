@@ -66,7 +66,7 @@ export const TOPICS: Record<TopicId, LearnCard> = {
   water: {
     kicker: IN_BOWL,
     title: 'The water',
-    body: 'Keep it at 78 to 80\u00a0°F (25.5 to 27\u00a0°C), and treat tap water with a dechlorinator. In a cycled tank, bacteria turn the fish’s toxic ammonia into nitrite, then into milder nitrate, which weekly partial water changes remove.',
+    body: 'Keep it at 78 to 80\u00a0°F (25.5 to 27\u00a0°C), and treat tap water with a dechlorinator. In a cycled tank, bacteria turn the fish’s toxic ammonia into nitrite, then into milder nitrate, which weekly water changes remove. The Water button simulates it.',
   },
   glass: {
     kicker: IN_BOWL,

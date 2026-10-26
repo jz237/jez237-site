@@ -32,6 +32,8 @@ export class Feeding {
   onChange: (() => void) | null = null;
   /** Called as each pellet goes in (Learn mode counts them: app/learn/feedLog.mjs). */
   onDrop: (() => void) | null = null;
+  /** The meal under way is one of Water mode's routine (water/WaterCare.ts), not asked for. */
+  routine = false;
   private clock = 0;
   private dropped = 0;
   private emptyFor = 0;
@@ -41,9 +43,11 @@ export class Feeding {
     private readonly controller: GlobeController,
   ) {}
 
-  /** Feeds the fish (when nothing is under way), or puts the lid back on now (while it is fed). */
-  request(): void {
+  /** Feeds the fish (when nothing is under way), or puts the lid back on now (while it is fed).
+   *  routine: Water mode's meal on time. */
+  request(routine = false): void {
     if (this.state === 'idle') {
+      this.routine = routine;
       this.controller.locked = true;
       this.set('waiting');
     } else if (this.state === 'waiting' || this.state === 'opening' || this.state === 'feeding') {

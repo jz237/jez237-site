@@ -90,6 +90,9 @@ interface Flake {
   wander: Vec3;
   /** (A pellet) the age at which it has soaked enough to sink. */
   soak: number;
+  /** (A pellet, Water mode) left to rot on the sand, the fish leaving it alone: the share of it
+   *  left (1 whole; null: not left). */
+  left: number | null;
 }
 
 export interface FoodEnv {
@@ -208,8 +211,9 @@ export class FishFood {
     return this.slots.filter((f): f is Flake => f !== null);
   }
 
+  /** How many are in the water or on their way to be eaten (not those left to rot). */
   get count(): number {
-    return this.flakes.length;
+    return this.slots.reduce((n, f) => n + (f && f.left === null ? 1 : 0), 0);
   }
 
   /** How many have settled (on the sand, or in the reef on what else they settle on) uneaten. */
@@ -242,8 +246,54 @@ export class FishFood {
       eaten: 0,
       wander: mul(randUnit(), 0.8),
       soak: PELLET_FLOAT * (1 + Math.random()),
+      left: null,
     };
     return true;
+  }
+
+  // Water mode (water/WaterCare.ts) keeps the betta's uneaten pellets on the sand until they have
+  // rotted: one that settles uneaten is left there (leave), or one is laid there (lay: it sinks the
+  // last little way and settles); the fish leave them alone; each shrinks as it rots (rot) until it
+  // is taken away (take).
+
+  /** The pellets that have settled uneaten since the last call, left now to rot: their slots. */
+  leave(): number[] {
+    const out: number[] = [];
+    this.slots.forEach((f, i) => {
+      if (f?.landed && f.eater < 0 && f.left === null) {
+        f.left = 1;
+        out.push(i);
+      }
+    });
+    return out;
+  }
+
+  /** A pellet left to rot, sinking from p (sim frame) to the sand: its slot, or -1 (no room). */
+  lay(p: Vec3): number {
+    const slot = this.slots.indexOf(null);
+    if (slot < 0 || !this.spawn(p, 0)) return -1;
+    const f = this.slots[slot]!;
+    f.vel = [0, 0, 0];
+    f.wet = true;
+    f.soak = 0;
+    f.left = 1;
+    return slot;
+  }
+
+  /** A left pellet's share still there (it shrinks as it rots). */
+  rot(slot: number, left: number): void {
+    const f = this.slots[slot];
+    if (f && f.left !== null) f.left = Math.min(Math.max(left, 0), 1);
+  }
+
+  /** Is a pellet left to rot in this slot? */
+  isLeft(slot: number): boolean {
+    return (this.slots[slot]?.left ?? null) !== null;
+  }
+
+  /** A left pellet taken away (rotted, or siphoned). */
+  take(slot: number): void {
+    if (this.isLeft(slot)) this.slots[slot] = null;
   }
 
   /** Where the water should be sampled for each flake (xyz + pad), FOOD_MAX points. */
@@ -266,7 +316,7 @@ export class FishFood {
       let best: Flake | null = null;
       let bestD = Infinity;
       for (const f of this.flakes) {
-        if (f.eater >= 0 || f.age < f.notice[fi]) continue;
+        if (f.eater >= 0 || f.left !== null || f.age < f.notice[fi]) continue;
         const d = len(sub(f.pos, m));
         if (d < bestD) {
           best = f;
@@ -300,7 +350,7 @@ export class FishFood {
 
     // Caught: in reach of a fish's mouth, in front of it.
     for (const f of this.flakes) {
-      if (f.eater >= 0) continue;
+      if (f.eater >= 0 || f.left !== null) continue;
       feeders.forEach((fd, fi) => {
         if (f.eater >= 0 || fd.busy() || f.age < f.notice[fi]) return;
         const to = sub(f.pos, fd.mouthAt());
@@ -445,7 +495,9 @@ export class FishFood {
       // it goes into a mouth.
       const pop = this.pellets ? 1 : 1 - Math.exp(-f.age / 0.06) * Math.cos(f.age * 19);
       const gulp = f.eater >= 0 ? 1 - 0.3 * Math.min(f.eaten / 0.3, 1) : 1;
-      const r = (this.pellets ? PELLET_RADIUS : RADIUS) * f.size * pop * gulp;
+      // (A pellet left to rot crumbles away: smaller as less of it is left.)
+      const rotted = f.left === null ? 1 : Math.cbrt(f.left);
+      const r = (this.pellets ? PELLET_RADIUS : RADIUS) * f.size * pop * gulp * rotted;
       const o = 4 * (1 + 2 * k);
       d.set([f.pos[0], f.pos[1], f.pos[2], Math.max(r, 1e-5)], o);
       // (Normal scaled by 1 + its turn as a fraction of a full turn: the shader takes both apart.)

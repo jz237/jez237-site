@@ -11,6 +11,7 @@ import { Bench, describeDevice, registerBenchRows } from './app/bench';
 import { describe, describeLoad, FrameProfile, wrap } from './app/frameProfile';
 import { Learn } from './app/learn/Learn';
 import { CLEAR_WATER, forcedWaterEffects } from './water/effects';
+import { WaterCare } from './water/WaterCare';
 import { BETTA_PAGE, elsewhere, GLOBES, type GlobeEntry } from './app/catalog';
 import { applyUrlOverrides, fishConfig, globeConfig, lightConfig, simConfig, type GlobeConfig, type LightConfig, type SimConfig } from './config';
 import { DeskMapping, loadDesk, type DesktopHostApi } from './desktop/desktopScene';
@@ -359,6 +360,9 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // What the bowl's water does to the fish and to the water's look (water/effects.ts): clear, the
   // page as it always was, unless forced (?water=, testing).
   const water = { fx: forcedWaterEffects(params.get('water')) ?? CLEAR_WATER };
+  // Water mode (water/WaterCare.ts): the bowl's water simulated, in a panel and in water.fx; off
+  // until asked for.
+  const waterCare = feeding ? new WaterCare(bettaControls, stage, { water, forced: forcedWaterEffects(params.get('water')), feeding, food, learn, rotation: () => controller.rotation.elements }) : null;
   // The betta bowl's furnishings, built by now: their BVH for the shader (on the GPU, where the
   // plants' motion rewrites it each frame), where they stand in the sand for the sim (the sand
   // rests on them and flows round them), where the fish keeps clear of them, and where the sponge
@@ -595,6 +599,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     sim.setProbes(FOOD_PROBE_AT, food.probePoints());
     food.write(device, reef.active ? clowns.texture : koi.texture);
     if (learn?.on) learn.frame();
+    if (waterCare?.on) waterCare.frame(dt);
     PROF.lap('food');
     idle.update(dt, controller.holding || controller.moving, sim.koiSense);
     sim.currents = idle.stirring ? idle.currents : null;
@@ -647,7 +652,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     return true;
   };
 
-  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, life, learn, water, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, studio, specks, bowlRender, setScene, advance, spawnFood, clickLid, setSharpness, setRatio, setKnobs, record };
+  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, life, learn, water, waterCare, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, studio, specks, bowlRender, setScene, advance, spawnFood, clickLid, setSharpness, setRatio, setKnobs, record };
 }
 
 type World = Awaited<ReturnType<typeof createWorld>>;

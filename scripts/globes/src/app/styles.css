@@ -611,8 +611,11 @@ html.desktop #stage canvas.is-live {
 .betta-controls button:focus-visible { outline: 2px solid #d2e9e8; outline-offset: 4px; }
 /* (On a phone held upright the specimen's name takes a line of its own over the buttons.) */
 @media (max-width: 500px) { .betta-controls { right: 16px; top: 20px; gap: 9px; flex-wrap: wrap; justify-content: flex-end; row-gap: 7px; } .betta-controls span { font-size: 10px; flex-basis: 100%; text-align: right; } }
-/* (On one held sideways the name goes: it sat over the lid.) */
-@media (max-height: 500px) { .betta-controls span { display: none; } }
+/* (Four of them, Water mode's button too, fit beside the mark down to 360 px wide.) */
+@media (max-width: 420px) { .betta-controls { gap: 7px; } .betta-controls button { padding: 12px 10px; } }
+/* (On one held sideways the name goes, and the buttons close up to the corner: they sat over the
+   lid.) */
+@media (max-height: 500px) { .betta-controls { right: 12px; gap: 8px; } .betta-controls span { display: none; } .betta-controls button { padding: 12px 11px; } }
 
 /* Learn mode's card (app/learn/Learn.ts): low on the stage, beside the bowl rather than over the
    fish, above the page's links, and clear of ?stats' figures (at the left; up top on a phone). Its

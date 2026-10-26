@@ -47,8 +47,18 @@ export interface LearnHost {
 
 type Picking = typeof import('./pick.mjs');
 
+/** Water mode's clock (water/WaterCare.ts), while it runs: its own count of the fish's food, by
+ *  the simulation's time (s), each pellet counted at the time its meal was given (drop). */
+export interface MealClock {
+  log: FeedLog;
+  now(): number;
+  drop(): void;
+}
+
 export class Learn {
   on = false;
+  /** Water mode's clock while it is on: the food counted, and the advice given, by its time. */
+  meals: MealClock | null = null;
   private readonly button: HTMLButtonElement;
   private readonly card: HTMLElement;
   private readonly text: HTMLElement;
@@ -106,8 +116,9 @@ export class Learn {
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && this.until > 0) this.hide();
     });
-    // (Every pellet is counted, Learn mode on or off: the advice is for the whole visit.)
-    host.feeding.onDrop = () => this.log.drop(performance.now() / 1000);
+    // (Every pellet is counted, Learn mode on or off: the advice is for the whole visit. With Water
+    // mode on, by its clock: a meal's pellets at the time it was given.)
+    host.feeding.onDrop = () => (this.meals ? this.meals.drop() : this.log.drop(performance.now() / 1000));
 
     let kept = false;
     try {
@@ -160,8 +171,8 @@ export class Learn {
     const fed = h.feeding.state;
     if (fed !== this.feedState) {
       // (Away from idle is a meal asked for: waiting for the bowl to stand still, or, standing
-      // still already, opening in the same frame.)
-      if (this.feedState === 'idle') this.advise(t);
+      // still already, opening in the same frame. Water mode's meals on time are no news.)
+      if (this.feedState === 'idle' && !h.feeding.routine) this.advise(t);
       this.feedState = fed;
     }
     // Things that happen at a moment: the fins flared at the button (asked for: shown at once), the
@@ -228,9 +239,10 @@ export class Learn {
     return this.until > 0;
   }
 
-  /** The advice for a meal asked for at t (s), by what the fish has had (feedLog.mjs). */
+  /** The advice for a meal asked for at t (s), by what the fish has had (feedLog.mjs); with Water
+   *  mode on, by its clock. */
   private advise(t: number): void {
-    const a = this.log.advise(t);
+    const a = this.meals ? this.meals.log.advise(this.meals.now()) : this.log.advise(t);
     this.show(a.advice === 'over' ? FEEDING.over(a.pellets, a.minutes) : a.advice === 'again' ? FEEDING.again(a.pellets, a.minutes) : FEEDING.rule, true);
     // (The fish feeds while that card is up, and the rule's card says how: no caption after.)
     this.clock.told('feed', t);

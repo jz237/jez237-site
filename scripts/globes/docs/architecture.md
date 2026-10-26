@@ -1438,7 +1438,9 @@ caption for each behaviour, the feeding advice; each a kicker, a title and two o
 - **Feeding** (`feedLog.mjs`). Every pellet `Feeding` lets go is counted (`Feeding.onDrop`, Learn on
   or off). As a meal is asked for (Learn on): how to feed a betta, or, within 4 hours of the last
   meal, that it has just eaten, or, with six pellets or more in the last 12 hours, that it has had a
-  day's food. A meal is three pellets now (it was four).
+  day's food. A meal is three pellets now (it was four). With Water mode on, the
+  pellets are counted by its clock (each at the time its meal was given), and its meals on time
+  (`Feeding.routine`) bring no advice.
 - **The card** (`.learn-card`, styles.css): one at a time, a polite live region (its words cleared
   once it fades, so the same card again is read out). Low at the right on a wide screen; on a phone,
   across the foot over the page's link (the controls give the specimen's name a line of its own to
@@ -1454,3 +1456,60 @@ caption for each behaviour, the feeding advice; each a kicker, a title and two o
   furnishings, the bowl turned and tipped, land on them; the fish, the leaf, the nest, the film, the
   sand, the water, the bowl, the lid) and `learn.test.mjs` (4: a card for every topic and behaviour,
   short; the captions' timing; the feeding count).
+
+## Water mode (src/water)
+
+The betta page's **Water** button (beside Learn; off at first, remembered on the device:
+localStorage `betta.water`, the bowl itself in `betta.water.state`) runs a simulation of the bowl's
+water on a fast clock, shows its test readings in a panel, and writes what the water does to the fish
+and to the water's look into `water.fx` (`effects.ts`, read by the fish and the bowl's look). Off,
+`water.fx` is `CLEAR_WATER` (or `?water=`'s forcing) and nothing runs in a frame.
+
+- **The model** (`chemistry.mjs`, plain JS, steps of at most 10 sim minutes). Nitrogen in mg N in
+  4.0 L (the glass card's gallon): TAN, nitrite, nitrate; detritus (feces, remains; 7 %/day back to
+  TAN); the fish's gut (a 2 mg pellet is 0.128 mg N: 55 % excreted as TAN over a day, 20 % feces) and
+  its fasting 0.04 mg N/day; uneaten pellets rotting (1.3/day: ~2 days; 70 % to TAN). Nitrifiers as
+  capacities (mg N/day) in the sponge, sand and glass (70/25/5 %), Monod uptake taken implicitly,
+  growing on what they oxidize, x1.07 per °C, slowed in acid water (half at pH 6.45). Plants take
+  0.07 mg N/day, ammonia first. KH: 7.14 mg CaCO3 per mg N nitrified, less half for the share of the
+  fish's ammonia excreted as NH3; pH from the carbonate balance with 3 ppm CO2 (7.6 at 4 dKH), the
+  leaf's tannins a little acid and a tint. The room 70 °F (±1 °F a day), the bowl's time constant 3.5
+  h, a 10 W heater with a 0.5 °F thermostat band at 79 °F (its lamp lit while heating; averaged over a
+  frame that spans many cycles). Chlorine at 2 ppm in untreated tap water: gone in about a day,
+  killing bacteria (0.7/ppm/day), chloramine freeing some ammonia. A bloom of free bacteria on
+  dissolved organics (a new bowl's leaching, rotting food), eaten fast by a mature biofilm.
+- **Choices that differ from the textbook values** (to match what keepers see): the nitrifiers' Ks
+  is a few thousandths of a mg N/L (aquarium biofilters are mostly ammonia-oxidizing archaea and
+  comammox Nitrospira) and the active biofilm's loss rate is 0.56 (AOB) / 0.45 (NOB) a day (decay,
+  grazing, sloughing), so a cycled filter carries ~1.35x its load: ammonia reads ~0.01-0.02 ppm, yet a
+  sponge rinsed under the tap (97 % of its bacteria killed) brings 0.25-0.3 ppm in 3-4 days. The flip
+  side: a week or two without food shrinks the colony, and feeding again brings a short ammonia rise.
+- **The fish**: severities 0..1 (0.7 severe) for free NH3 (0.02-0.05 ppm), nitrite (0.25-2), nitrate
+  (40-160), cold (under 76.5 °F; 70 °F ~0.55), chlorine, acid water (under 6.4) and a pH swing from
+  what it is used to (2-day memory); felt within ~2 h, mended over 1-2 days (the cold within hours);
+  each effect a weighted combination; appetite falls with them; the nest only when content and warm.
+  Its condition (Thriving / Uncomfortable / Stressed / In danger) and the main cause go to the panel;
+  it never dies (in danger, the panel says what that would mean in a real bowl and what to do).
+- **The page** (`care.mjs`, no DOM; `WaterCare.ts` wires it). Clock: paused, Play (30 sim min a
+  second) or Fast (6 sim h), only while on and the page is seen. At Play a routine meal is a real one
+  (`Feeding.request(true)`): pellets eaten count from `FishFood.eatenCount`, one that settles uneaten
+  becomes a leftover (`FishFood.leave`); at Fast meals are counted at `fx.appetite` and leftovers are
+  laid on the front sand (`FishFood.lay`). The newest four leftovers show, shrinking as they rot
+  (`rot`), the fish leaving them alone. Starts: a new bowl (the first), a cycled one (a month of
+  weekly changes after a steady state), a neglected one (that, then nine weeks without changes:
+  nitrate ~48, KH 0.4, pH 6.3). Kept every 5 s and as the page hides (~30 KB at most: 120 days of
+  3-hourly samples).
+- **The panel** (`panel.ts`, `chart.ts`, `water.css`; words in `content.ts`): readings with test-kit
+  colour chips, pH, °F and °C; the condition; a line on what is happening; opened out, the nitrogen
+  cycle chart (ammonia and nitrite on one scale, nitrate below on its own; canvas at the device's
+  ratio, a crosshair under the pointer), care, routine and start points. A side panel on a desktop, a
+  column at the left on a phone held sideways, a sheet above the page's link on one held upright (it
+  folds to its readings, clear of the bowl; Learn's card moves up top). DOM updated at 4 Hz (only what
+  changed), the chart at 2 Hz when shown (its width from a ResizeObserver: no forced layout).
+- **Cost**: phone emulation (384x693 at 2.81, 2.75x CPU, vsync), the panel open: 60 fps, 84
+  pipelines; Water's frame 0.05-0.07 ms on average (throttled), the chart's redraw ~0.5 ms twice a
+  second. No WGSL, no pipelines.
+- Tests: `water-chemistry.test.mjs` (10: the new bowl's cycle; fish-in cycling with changes; a
+  cycled bowl kept well and neglected; the sponge rinsed; the heater off; its lamp; an untreated
+  change; overfeeding; saving) and `water-care.test.mjs` (4: water.fx on and off; the clock; routine
+  meals at Play and Fast and leftovers; what is kept).
