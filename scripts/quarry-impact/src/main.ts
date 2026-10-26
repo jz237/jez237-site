@@ -1093,6 +1093,8 @@ function createCars(attract = false, previewSetup?:Setup) {
     if(car.extendedDamage&&type!=='buggy'){const fit=fitRust(car.model,car.panels,car.wheels,vehicleWheelRadius(type));if(fit)car.surfaceFinish.placeRust(fit,i===0?0:startingRust(car.id));}
     // An old rival's headlamp lenses have gone cloudy and yellow: its lamps shine dimmer and warmer (offline).
     if(car.extendedDamage&&i!==0)carLights.get(car)?.yellow(startingRust(car.id));
+    // A burning car's paint blisters short of the char (offline).
+    car.wreckFinish.blisters.value=car.extendedDamage?1:0;
     // A sunstrip across the top of the windscreen with the driver's name on it (offline rivals).
     if(car.extendedDamage&&i!==0){const strip=sunstripFor(car.id),screen=windscreen(car.glass,car.root);if(strip&&screen&&fitSunstrip(screen,strip))sunstrips.set(car,strip.name);}
     // and the grubby ones have WASH ME written in the grime on the rear window (offline rivals).
