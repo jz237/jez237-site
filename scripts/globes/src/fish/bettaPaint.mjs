@@ -258,10 +258,12 @@ const ENCODE = Uint8ClampedArray.from({ length: 4096 }, (_, k) => {
 const encode = (c) => ENCODE[Math.min(Math.max((c * 4095 + 0.5) | 0, 0), 4095)];
 
 /** A variety's two maps (varieties.mjs: not Classic's, which has none), as RGBA bytes on the grids:
- *  profile (PROFILE's) and caudal (CAUDAL's). field: measure()'s, with profileCells() as cells and
- *  caudalCells() as caudalOut. (A cell at a time, without a garbage object: on a phone, the time
- *  a variety takes to show.) */
-export function paint(variety, field, out = { profile: new Uint8ClampedArray(PROFILE.w * PROFILE.h * 4), caudal: new Uint8ClampedArray(CAUDAL.w * CAUDAL.h * 4) }) {
+ *  profile (PROFILE's) and caudal (CAUDAL's), painted a row at a time: it yields after each, and
+ *  returns them. field: measure()'s, with profileCells() as cells and caudalCells() as caudalOut.
+ *  (A cell at a time, without a garbage object. A phone at a quarter of this PC's speed takes 10 to 40
+ *  ms for one, a marble's the longest: Betta.ts paints a few ms a frame.) */
+export function* painting(variety, field) {
+  const out = { profile: new Uint8ClampedArray(PROFILE.w * PROFILE.h * 4), caudal: new Uint8ClampedArray(CAUDAL.w * CAUDAL.h * 4) };
   const [back, side, belly, head, root, edge] = [variety.body.back, variety.body.side, variety.body.belly, variety.body.head, variety.fins.root, variety.fins.edge].map(linearOf);
   const patches = patchesOf(variety);
   // (Its light and shade kept as a power of the photographs' luminance, varieties.mjs detail: the
@@ -298,6 +300,7 @@ export function paint(variety, field, out = { profile: new Uint8ClampedArray(PRO
       }
       put(out.profile, k, field.profile[k], field.fish.profile[k], ((i + 0.5) * PROFILE.width) / PROFILE.w, ((j + 0.5) * PROFILE.height) / PROFILE.h);
     }
+    yield;
   }
   for (let j = 0; j < CAUDAL.h; j++) {
     for (let i = 0; i < CAUDAL.w; i++) {
@@ -307,6 +310,7 @@ export function paint(variety, field, out = { profile: new Uint8ClampedArray(PRO
       // (Its patches in a place of their own, not the profile's.)
       put(out.caudal, k, field.caudal[k], field.fish.caudal[k], ((i + 0.5) * CAUDAL.width) / CAUDAL.w + 2000, ((j + 0.5) * CAUDAL.height) / CAUDAL.h);
     }
+    yield;
   }
   return out;
 }

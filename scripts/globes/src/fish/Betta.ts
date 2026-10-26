@@ -4,7 +4,7 @@ import { BETTA_LEAF_WORKGROUP, bettaRefitBuffers, bettaRefitLayout, bettaRefitPl
 import { BettaRemote } from './bettaLink.mjs';
 import { BettaSpecimen } from './bettaSpecimen.mjs';
 import { BETTA_SURFACE_COUNT, bettaSurfaceHeights } from './bettaWater.mjs';
-import { CAUDAL, caudalCells, luminanceOf, MACRO, measure, paint, prepare, PROFILE, profileCells } from './bettaPaint.mjs';
+import { CAUDAL, caudalCells, luminanceOf, MACRO, measure, painting, prepare, PROFILE, profileCells } from './bettaPaint.mjs';
 import { VARIETIES, varietyLook, varietyOf } from './varieties.mjs';
 import type { Feeder, FoodAim } from './FishFood';
 import type { KoiEnv, KoiSense } from './Koi';
@@ -16,6 +16,8 @@ export { BUBBLE_RADIUS, RIPPLE_RADIUS, RIPPLE_RATE, RIPPLE_TIME } from './bettaS
 const STILL = [0, 0, 0] as const;
 /** Where the colour maps (tiles 4 and 5) start down the atlas (px). */
 export const MAPS_AT = 2048;
+/** How long a variety's maps are painted for in a frame (ms; Betta.showVariety). */
+const PAINT_MS = 3;
 
 /** The actual Atelier specimen, evaluated on the CPU for the refracted rays (bettaSpecimen.mjs).
  * No screenshot/billboard: skin, seven membranes, mouth, covers and both eye
@@ -40,6 +42,8 @@ export class Betta implements Feeder {
    *  and, with copy, copies maps into the atlas's bottom row (MAPS_AT). */
   onLook: ((copy: boolean) => void) | null = null;
   private variety = 'classic';
+  /** The variety being painted, a few ms a frame (showVariety): a newer choice ends it. */
+  private painting: object | null = null;
   /** The photographs' brightness, measured as they come in (bettaPaint.mjs measure), with where each
    *  cell of the maps lies on the fish. */
   private field: (ReturnType<typeof measure> & { cells: ReturnType<typeof profileCells>; caudalOut: Float32Array }) | null = null;
@@ -138,8 +142,16 @@ export class Betta implements Feeder {
       const cells = profileCells();
       this.field = { ...measure({ profile: grid(textures[0], PROFILE.w, PROFILE.h), caudal: grid(textures[1], CAUDAL.w, CAUDAL.h), head: grid(textures[2], MACRO, MACRO), scales: grid(textures[3], MACRO, MACRO) }, cells), cells, caudalOut: caudalCells() };
       prepare(VARIETIES);
-      // (A variety kept from the last visit: in the atlas from its first upload.)
-      if (this.paintMaps()) ctx.drawImage(maps, 0, MAPS_AT);
+      // (A variety kept from the last visit: in the atlas from its first upload, painted at once.)
+      const v = varietyOf(this.variety);
+      varietyLook(v, this.field, this.look);
+      if (v.body) {
+        const rows = painting(v, this.field);
+        let r = rows.next();
+        while (!r.done) r = rows.next();
+        this.drawMaps(r.value);
+        ctx.drawImage(maps, 0, MAPS_AT);
+      }
       this.atlas.needsUpdate = true;
       this.loaded = true;
       this.onLook?.(false);
@@ -156,33 +168,49 @@ export class Betta implements Feeder {
     }
   }
 
-  /** Shows a variety (varieties.mjs id): its colour maps painted and its numbers in look, at once
-   *  if its photographs are in (onLook), else as they come. */
+  /** Shows a variety (varieties.mjs id) once its photographs are in (else as they come): its colour
+   *  maps painted a few ms a frame (bettaPaint.mjs), then drawn up into maps and, with its numbers in
+   *  look, handed to the host together (onLook). Classic, which has none, at once. */
   showVariety(variety: string): void {
     this.variety = variety;
     if (!this.loaded) return;
-    const painted = this.paintMaps();
-    if (painted) this.maps.needsUpdate = true;
-    this.onLook?.(painted);
+    const v = varietyOf(variety), field = this.field!;
+    const job = (this.painting = {});
+    if (!v.body) {
+      varietyLook(v, field, this.look);
+      this.onLook?.(false);
+      return;
+    }
+    const rows = painting(v, field);
+    const step = (): void => {
+      if (this.painting !== job) return;
+      const until = performance.now() + PAINT_MS;
+      for (let r = rows.next(); ; r = rows.next()) {
+        if (r.done) {
+          this.drawMaps(r.value);
+          this.maps.needsUpdate = true;
+          varietyLook(v, field, this.look);
+          this.onLook?.(true);
+          return;
+        }
+        if (performance.now() > until) break;
+      }
+      requestAnimationFrame(step);
+    };
+    step();
   }
 
-  /** The variety's colour maps painted on their grids (bettaPaint.mjs) and drawn up into maps, and
-   *  its numbers into look; whether it has maps (Classic has none: its fish is the photographs'). */
-  private paintMaps(): boolean {
-    const v = varietyOf(this.variety), field = this.field!;
-    varietyLook(v, field, this.look);
-    if (!v.body) return false;
-    const painted = paint(v, field);
+  /** A variety's maps (bettaPaint.mjs painting's) drawn up to the tiles' size in maps: the caudal's
+   *  at its left (tile 4), the profile's at its right (tile 5). */
+  private drawMaps(painted: { profile: Uint8ClampedArray; caudal: Uint8ClampedArray }): void {
     const ctx = (this.maps.image as HTMLCanvasElement).getContext('2d')!;
     ctx.imageSmoothingQuality = 'high';
-    [[painted.caudal, CAUDAL, 0], [painted.profile, PROFILE, 1024]].forEach(([bytes, grid, x]) => {
-      const { w, h } = grid as typeof PROFILE;
+    for (const [bytes, { w, h }, x] of [[painted.caudal, CAUDAL, 0], [painted.profile, PROFILE, 1024]] as const) {
       const small = document.createElement('canvas');
       small.width = w; small.height = h;
       small.getContext('2d')!.putImageData(new ImageData(bytes as Uint8ClampedArray<ArrayBuffer>, w, h), 0, 0);
-      ctx.drawImage(small, x as number, 0, 1024, 1024);
-    });
-    return true;
+      ctx.drawImage(small, x, 0, 1024, 1024);
+    }
   }
 
   /** The GPU's side of the BVH: its texture, the kernels that refit it (bettaRefit.mjs) and their

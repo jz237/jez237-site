@@ -8,9 +8,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { keepVariety, keptVariety, linearOf, parseVariety, STORAGE_KEY, VARIETIES, varietyLook, varietyOf } from './src/fish/varieties.mjs';
-import { CAUDAL, caudalCells, MACRO, measure, paint, PROFILE, profileCells } from './src/fish/bettaPaint.mjs';
+import { CAUDAL, caudalCells, MACRO, measure, painting, PROFILE, profileCells } from './src/fish/bettaPaint.mjs';
 import { bettaBowlWGSL, bettaLiteWGSL, bettaWGSL } from './src/fish/bettaWGSL.ts';
 import { FISH } from './src/app/learn/content.ts';
+
+/** A variety's maps, painted to the end (a row at a time, as the page paints them over frames). */
+function paint(variety, field) {
+  const rows = painting(variety, field);
+  let r = rows.next();
+  while (!r.done) r = rows.next();
+  return r.value;
+}
 
 /** A storage that keeps what it is given, or one that throws at every touch. */
 const memory = () => {

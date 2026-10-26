@@ -13,7 +13,11 @@ var<private> bettaPale: f32;
 // keeps (a power of their luminance), 1 / the body's mean luminance in them; [1] the scales' play of
 // colour's tint and share; [2] the fins' outer band's colour (over the fins' mean luminance) and where
 // it starts, root to fringe; [3] the scales' metallic coat's colour and reach.
-var<private> bettaLook: mat4x4f;` : ''}
+var<private> bettaLook: mat4x4f;
+// A variety's colour faded as the fish is (betta_shade's albedo, below).
+fn betta_fade(c: vec3f) -> vec3f {
+  return mix(c, vec3f(dot(c, vec3f(0.3, 0.59, 0.11))), 0.65 * bettaPale) * (1.0 - 0.1 * bettaPale);
+}` : ''}
 fn betta_tex(tex: texture_2d<f32>, i: u32) -> vec4f {
   return textureLoad(tex, vec2i(i32(i % 1024u), i32(i / 1024u)), 0);
 }
@@ -221,7 +225,7 @@ fn betta_shade(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, hit: 
       // The variety's outer band (a butterfly's, a mustard gas's): a crisp edge, the inner colour
       // running a little further out along the rays, the edge wandering along the fin.
       let band = smoothstep(-0.012, 0.012, fc.y - bettaLook[2].w - 0.045 * ray + 0.018 * sin(fc.x * 37.0) + 0.01 * sin(fc.x * 103.0 + 1.7));
-      albedo = mix(albedo, bettaLook[2].xyz * lum, band);
+      albedo = mix(albedo, betta_fade(bettaLook[2].xyz) * lum, band);
     }` : ''}
     let front = max(ndl, 0.0); let back = max(-ndl, 0.0);
     let hue = pow(albedo, vec3f(0.8));
@@ -251,7 +255,7 @@ fn betta_shade(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, hit: 
     // a broad gloss in its own colour.
     irid = mix(irid, bettaLook[1].xyz * (0.3 + 1.4 * irid), bettaLook[1].w);
     let coat = smoothstep(1.2, 3.0, lum * bettaLook[0].w + bettaLook[3].w) * scaleW;
-    albedo = mix(albedo, bettaLook[3].xyz * min(pow(lum * bettaLook[0].w, bettaLook[0].z), 1.6), coat);
+    albedo = mix(albedo, betta_fade(bettaLook[3].xyz) * min(pow(lum * bettaLook[0].w, bettaLook[0].z), 1.6), coat);
     sheen += coat * pow(max(dot(n, hv), 0.0), 16.0) * 0.5 * (1.0 - 0.7 * bettaPale);
   }` : ''}
   albedo = mix(albedo, albedo * (0.6 + 0.8 * irid), 0.38 * scaleW${bowl ? ' * (1.0 - 0.8 * bettaPale)' : ''});

@@ -68,6 +68,16 @@ export const FISH: Record<string, LearnCard> = {
     title: 'Betta splendens: Copper',
     body: `Its sheen is reflective cells (iridophores) laid thickly over a dark base: copper or gold by turns, it shifts with the angle of the light. ${ALONE} With good care they live 3 to 5 years.`,
   },
+  pineapple: {
+    kicker: FISH_KICKER,
+    title: 'Betta splendens: Pineapple',
+    body: `A yellow betta whose scales are each edged in dark brown, like a pineapple’s skin. Yellow is a pigment, held in cells called xanthophores. ${ALONE} With good care they live 3 to 5 years.`,
+  },
+  'galaxy-koi': {
+    kicker: FISH_KICKER,
+    title: 'Betta splendens: Galaxy Koi',
+    body: `A koi on a dark blue base, speckled with metallic flecks like stars. Like every marble, it is thought to carry a “jumping gene”, so its patches and stars change through its life. ${ALONE}`,
+  },
 };
 
 export const TOPICS: Record<TopicId, LearnCard> = {

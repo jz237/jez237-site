@@ -107,6 +107,25 @@ export const VARIETIES = [
     coat: { colour: '#e39a52', reach: 0.75 },
     swatch: ['#c27a3e', '#6e2810'],
   },
+  {
+    id: 'pineapple',
+    name: 'Pineapple',
+    body: { back: '#3a2706', side: '#4a320a', belly: '#6a4c12', head: '#b88a1e' },
+    fins: { root: '#c99418', edge: '#ddb036' },
+    sheen: { tint: '#ffd24a', share: 0.7 },
+    coat: { colour: '#e9b52a', reach: 0.9 },
+    swatch: ['#e9b52a', '#ddb036'],
+  },
+  {
+    id: 'galaxy-koi',
+    name: 'Galaxy Koi',
+    detail: 0.8,
+    body: { back: '#0b1a3c', side: '#13285a', belly: '#1b3266', head: '#0c1a38' },
+    fins: { root: '#132a62', edge: '#1a3878' },
+    patches: { colours: [['#b4ccff', 0.16, 26], ['#e2481a', 0.34, 200], ['#e1e4ea', 0.14, 150]], seed: 3 },
+    sheen: { tint: '#5d8dff', share: 0.6 },
+    swatch: ['#13285a', '#e2481a'],
+  },
 ];
 
 /** The variety kept as `text` ('classic' for anything not one of them). */
