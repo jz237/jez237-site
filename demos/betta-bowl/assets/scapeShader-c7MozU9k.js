@@ -1,0 +1,1 @@
+import{n as e}from"./scapeBVH-Dfuamp1T.js";import{t}from"./scene-D64Cs_80.js";function n(){return e(t)}export{n as scapeShaderWGSL};
