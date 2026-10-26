@@ -13,6 +13,7 @@ import {engineDamageLevel} from './engine-condition';
 import {classicEngineVoice,vehicleWheelRadius} from './classic-vehicle-specs';
 import {RATTLE,rattleRate,thumpRate,EventClock,synthClank,synthThump,hornStuck,synthHorn,synthGrowl,synthWind,synthSqueal} from './damage-rattle';
 import {knockRate} from './oil-starvation';
+import {ShotBudget,beltSurge,isPaved,skidChirp,squealLevel,squealState,squealVoices,type SquealState} from './tyre-squeal';
 /** Front compression past which the fan hits its shroud, and its clatter rate cap. */
 const FAN_CLATTER={onset:.35,max:12} as const;
 import {impactSoundLayers} from './impact-response';
@@ -113,6 +114,13 @@ export class Sound {
   ambientBus?: GainNode;
   buffers = new Map<string, AudioBuffer>();
   loops = new Map<number, Map<string, Loop>>();
+  /** One-shots played so far, by sound (QA). */
+  readonly shotCounts=new Map<string,number>();
+  /** Every loop sounding now (gain over 0.004): per kind, [car id, gain] (QA). */
+  mix(){const out:Record<string,number[][]>={};const add=(k:string,id:number,l:Loop)=>{const g=l.gain.gain.value;if(g>.004)(out[k]??=[]).push([id,+g.toFixed(3)]);};
+    for(const [id,m] of this.loops)for(const [n,l] of m)add(n,id,l);
+    for(const [k,m] of Object.entries({horns:this.horns,rubs:this.rubs,groans:this.groans,belt:this.squeals,whines:this.whines,beepers:this.beepers,flaps:this.flaps,hisses:this.hisses,leaks:this.leaks,brake:this.brakeSqueals,creaks:this.creaks,swishes:this.swishes,growls:this.growls}))for(const [id,l] of m as Map<number,Loop>)add(k,id,l);
+    return {loops:out,shots:Object.fromEntries(this.shotCounts)};}
   ambient?: Loop;
   muted = false;
   ready = false;
@@ -413,16 +421,20 @@ export class Sound {
   }
   /** Slipping fan belts squealing under load, by car id (offline, within earshot), pitched with the revs. */
   private squeals=new Map<number,Loop>();
+  /** Each car's tyre squeal and belt surge state, who was heard squealing last frame, and the field's rattle allowance. */
+  private readonly squealStates=new Map<number,SquealState>();private squealHeard=new Map<number,number>();private squealAllowed=new Set<number>();
+  private readonly beltRpm=new Map<number,{rpm:number}>();private beltAt:number|undefined;private readonly rattleBudget=new ShotBudget();
+  private squealOf(id:number){let s=this.squealStates.get(id);if(!s){s=squealState();this.squealStates.set(id,s);}return s;}
   private readonly quietSince=new WeakMap<Loop,number>();
   beltSqueals(cars:readonly Vehicle[],listener:T.Vector3){
     if(!this.ready||!this.fxBus)return;
     if(!this.buffers.has('squeal')){const c=this.ctx;if(!c||typeof c.createBuffer!=='function')return;const d=synthSqueal(c.sampleRate),b=c.createBuffer(1,d.length,c.sampleRate);b.copyToChannel(d,0);this.buffers.set('squeal',b);}
-    const now=this.ctx!.currentTime,live=new Set<number>();
+    const now=this.ctx!.currentTime,live=new Set<number>(),dt=this.beltAt===undefined?0:now-this.beltAt;this.beltAt=now;
     for(const car of cars){
       if(!car.extendedDamage||car.health<=0||car.squeal<.02||car.current.distanceTo(listener)>RATTLE.hearing)continue;
       live.add(car.id);let l=this.squeals.get(car.id);if(!l){l=this.loop('squeal',this.fxBus);if(!l)continue;this.squeals.set(car.id,l);}
       l.pan.positionX.value=car.current.x;l.pan.positionY.value=car.current.y+.6;l.pan.positionZ.value=car.current.z;
-      l.source.playbackRate.setTargetAtTime(.8+Math.min(.6,(car.rpm??0)/9000),now,.06);l.gain.gain.setTargetAtTime(.2*car.squeal,now,.06);
+      l.source.playbackRate.setTargetAtTime(.8+Math.min(.6,(car.rpm??0)/9000),now,.06);let b=this.beltRpm.get(car.id);if(!b){b={rpm:car.rpm??0};this.beltRpm.set(car.id,b);}l.gain.gain.setTargetAtTime(.2*car.squeal*beltSurge(b,car.rpm??0,dt),now,.06);
     }
     // AI throttle flickers on and off many times a second: a loop that falls quiet is faded and kept for LOOP_HOLD seconds
     // rather than torn down and rebuilt each time (that node churn cost frames).
@@ -528,6 +540,9 @@ export class Sound {
   /** A tyre bursting at speed: a sharp, full bang (the burst sample, less pitched up than a backfire). */
   blowout(p:T.Vector3){if(this.buffers.has('tyre-blowout'))this.shot('tyre-blowout',p,.9,{rate:1,delay:0,duration:1});else this.shot('vehicle-burst',p,.85,{rate:1.45,delay:0,duration:.32});}
   shot(id: string, p: T.Vector3, volume = 1, options?:{rate:number;delay:number;duration:number;lowpass?:number;group?:string}) {
+    // Rattles, knocks and clatter share one allowance across the field.
+    if((id.startsWith('rattle-')||id==='thump')&&!this.rattleBudget.take(this.ctx?.currentTime??0))return;
+    this.shotCounts.set(id,(this.shotCounts.get(id)??0)+1);
     if (!this.ready || this.activeVoices >= 18) return;
     // Every use of an impact, glass or debris clip picks one of its recorded takes; they share a key, so two cannot both play one hit.
     const group = options?.group ?? id;
@@ -602,6 +617,8 @@ export class Sound {
       this.ambient.pan.positionY.value = p.y;
       this.ambient.pan.positionZ.value = p.z;
     }
+    // Only the loudest few cars squeal their tyres at once (as heard last frame).
+    this.squealAllowed=squealVoices(this.squealHeard);this.squealHeard=new Map();
     for (const car of cars) {
       const loops = this.loops.get(car.id);
       if (!loops) continue;
@@ -616,7 +633,7 @@ export class Sound {
         }
         if (!(car.engineStall!>0)&&car.health>0&&prior.throttle > 0.7 && car.input.throttle < 0.2 && car.speed > 8)
           this.shot(classicEngineVoice(car.kind).bank + '-exhaust', car.current, 0.14);
-        if (grounded && car.slip > 3 && prior.slip <= 3 && !(this.raining && car.extendedDamage))
+        if (grounded && car.slip > 3 && prior.slip <= 3 && !(this.raining && car.extendedDamage) && isPaved(car.surface) && skidChirp(this.squealOf(car.id),c.currentTime))
           this.shot('skid', car.current, 0.16);
         if (grounded && !prior.grounded)
           this.shot('suspension', car.current, 0.22);
@@ -659,10 +676,11 @@ export class Sound {
         else if (name === 'load') v = Math.abs(car.input.throttle) * 0.07 * cut * beat;
         else if (name === 'damaged')
           v = engineDamageLevel(car.health,car.engineDamage) * 0.18 * (cut<1?1.6:1);
-        else if (name === 'tires')
-          v =
-            Math.min(0.35, car.slip * 0.06) *
-            (car.surface === 'asphalt' ? 1 : 0.3) * (this.raining && car.extendedDamage ? WET_TYRES.squeal : 1);
+        else if (name === 'tires'){
+          // Squeal on paved ground as a slide begins, settling to a scrub if it holds; the loudest few cars only.
+          const level=squealLevel(this.squealOf(car.id),car.slip,isPaved(car.surface),dt) * (this.raining && car.extendedDamage ? WET_TYRES.squeal : 1);
+          this.squealHeard.set(car.id,level/Math.max(1,car.current.distanceTo(p)));v=this.squealAllowed.has(car.id)?level:0;
+        }
         else if (name === 'gravel')
           v =
             car.surface !== 'asphalt'

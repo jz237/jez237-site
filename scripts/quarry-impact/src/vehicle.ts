@@ -133,7 +133,9 @@ export class Vehicle {
   readonly wheelSpins=[0,0,0,0];
   wheelAngle(index:number){return this.remoteWheelAngles?.[index]??this.drivetrain?.wheels[index]?.angle??this.controller.wheelRotation(index)??0;}
   private drawBatch?:VehicleDrawBatch;
-  syncDrawBatch(){this.drawBatch??=new VehicleDrawBatch(this.root);this.drawBatch.sync();}
+  // Batched from the model, not the root: the engine shakes the model every frame, which must move the batch as a whole
+  // rather than re-transform every panel's vertices into it.
+  syncDrawBatch(){this.drawBatch??=new VehicleDrawBatch(this.model);this.drawBatch.sync();}
   get drawBatchStats(){return{batches:this.drawBatch?.batches.length??0,panels:this.drawBatch?.batches.reduce((n,b)=>n+b.parts.length,0)??0};}
   readonly suspension?:BuggySuspension;
   syncSuspension(){this.suspension?.update();}

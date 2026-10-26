@@ -158,6 +158,7 @@ import {chainDoor,chainSnaps,chainsDoors,frontDoors} from './door-chains';
 import {deadBrakeSide} from './dead-brake';
 import {slowPuncture} from './leaky-tyre';
 import {hasWebGL2,showWebGL2Notice} from './webgl2-notice';
+import {bumperCorner,fitTape,tapeFor} from './duct-tape';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -331,6 +332,8 @@ const settings = {
   lighting: readLighting(saved.lighting),
 };
 const adaptiveGraphics=new AdaptiveGraphics();
+// Whether the sun's shadows are drawn this tier, and the strength they had before medium faded them out.
+let shadowsLive=true,shadowStrength=1;
 let drivingControls=readControls();
 try{drivingControls=readControls(localStorage.getItem(CONTROLS_KEY));}catch{}
 let garage=readGarage();
@@ -1118,6 +1121,8 @@ function createCars(attract = false, previewSetup?:Setup) {
     if(car.extendedDamage&&i!==0){const words=washWords(car.id,startingRust(car.id)),pane=rearWindow(car.glass,car.root);if(words&&pane&&pane!==windscreen(car.glass,car.root)&&fitWashMe(pane,words))washed.set(car,words);}
     // An old banger's windscreen is filmed with dust but for the fans its wipers have swept clean (offline rivals).
     if(car.extendedDamage&&i!==0){const film=dustFilm(startingRust(car.id)),screen=windscreen(car.glass,car.root);if(film>0&&screen){const own=sweeps(wiperArms(car.model),car.root),fans=own.length?own:defaultSweeps(screen,car.root);if(fans.length&&fitWiperArcs(screen,car.root,fans,film))dustyScreens.set(car,{film,fans:fans.length,own:own.length>0});}}
+    // An old banger's cracked bumper corner is held together with duct tape (offline rivals).
+    if(car.extendedDamage&&i!==0){const tape=tapeFor(car.id,startingRust(car.id));if(tape){let n=0;const at:number[][]=[];for(const side of tape.corners){const corner=bumperCorner(car.root,car.panels,tape.end,side);if(corner){n+=fitTape(car.root,car.panels,corner,car.id*2+side);at.push(corner.toArray().map(v=>+v.toFixed(2)));}}if(n)taped.set(car,{end:tape.end,corners:at,panels:n});}}
     // Some rivals come with their front doors chained shut, derby style (offline).
     if(car.extendedDamage&&i!==0&&chainsDoors(car.id)){const chains:{door:string;mesh:T.Mesh}[]=[];for(const name of frontDoors(car.wreckParts.assemblies.map(a=>a.name))){const a=car.wreckParts.assemblies.find(x=>x.name===name)!;car.chainedDoors.add(name);chains.push({door:name,mesh:chainDoor(car.model,a.bounds,name.endsWith('left')?-1:1)});}if(chains.length)doorChains.set(car,chains);}
     // Soot blackens the back round the tailpipes: an old banger's already, every car's more as it is driven hard (offline).
@@ -1757,7 +1762,10 @@ function applyQuality() {
   ao.enabled = quality !== 'medium';
   reflections.enabled = quality !== 'medium';
   reflections.interval = quality === 'ultra' ? 3 : 6;
-  setSceneShadows(renderer,scene,quality !== 'medium');
+  // Medium skips the sun's shadow pass and fades its shadows out, but shadows stay compiled into every material: switching them
+  // off in the renderer recompiles every shader at once, a freeze of seconds in the middle of an event.
+  setSceneShadows(renderer,scene,true);shadowsLive=quality!=='medium';
+  if(quarry&&shadowsLive&&quarry.sun.shadow.intensity===0)quarry.sun.shadow.intensity=shadowStrength;
 }
 function fullScreen() {
   if (document.fullscreenElement) document.exitFullscreen();
@@ -2426,7 +2434,7 @@ const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMa
 function bodyBox(c:Vehicle){let box=roostBoxes.get(c);if(box)return box;c.root.updateMatrixWorld(true);const inverse=c.root.matrixWorld.clone().invert(),b=new T.Box3(),all=new T.Box3();for(const p of c.panels)all.union(b.setFromObject(p).applyMatrix4(inverse));if(all.isEmpty())return null;
   box={centre:all.getCenter(new T.Vector3()),half:all.getSize(new T.Vector3()).multiplyScalar(.5)};roostBoxes.set(c,box);return box;}
 let bodyDusts=0;const dustOut=new T.Vector3();
-const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>(),oilBurners=new WeakMap<object,Burner>(),wheelBlurs=new Map<Vehicle,WheelBlur>(),bumpState=new WeakMap<object,{len:number[];ground:boolean[];at:number[];count:number}>(),battleScars=new WeakMap<object,{scars:number;panels:number}>(),trampState=new WeakMap<object,{phase:number;hops:number;lift:number}>(),trampAt=new T.Vector3(),trampB=new T.Vector3(),cvClocks=new WeakMap<object,{clock:number[];count:number}>(),lodged=new Map<Vehicle,T.Mesh[]>(),dashGlows=new Map<Vehicle,DashGlow>(),soots=new WeakMap<object,{value:number}>(),dustyScreens=new WeakMap<object,{film:number;fans:number;own:boolean}>(),doorChains=new WeakMap<object,{door:string;mesh:T.Mesh}[]>(),deadBrakes=new WeakMap<object,number>(),slowLeaks=new WeakMap<object,number>(),sootPuffs=new WeakMap<object,number>(),deadBulbs=new WeakMap<object,number>(),wiringAt=new WeakMap<object,number>(),danglers=new Map<Vehicle,Danglers>(),sunstrips=new WeakMap<object,string>(),washed=new WeakMap<object,string>(),plates=new WeakMap<object,string>();let trampHops=0,flickers=0,cvClicked=0,cvTake=0,lodgedPieces=0,looseDebris=0,drafting=0,draftToast=-99;let rustShowers=0,oilBurns=0,bumpStops=0,bumpTake=0;
+const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>(),oilBurners=new WeakMap<object,Burner>(),wheelBlurs=new Map<Vehicle,WheelBlur>(),bumpState=new WeakMap<object,{len:number[];ground:boolean[];at:number[];count:number}>(),battleScars=new WeakMap<object,{scars:number;panels:number}>(),trampState=new WeakMap<object,{phase:number;hops:number;lift:number}>(),trampAt=new T.Vector3(),trampB=new T.Vector3(),cvClocks=new WeakMap<object,{clock:number[];count:number}>(),lodged=new Map<Vehicle,T.Mesh[]>(),dashGlows=new Map<Vehicle,DashGlow>(),soots=new WeakMap<object,{value:number}>(),dustyScreens=new WeakMap<object,{film:number;fans:number;own:boolean}>(),doorChains=new WeakMap<object,{door:string;mesh:T.Mesh}[]>(),deadBrakes=new WeakMap<object,number>(),slowLeaks=new WeakMap<object,number>(),taped=new WeakMap<object,{end:number;corners:number[][];panels:number}>(),sootPuffs=new WeakMap<object,number>(),deadBulbs=new WeakMap<object,number>(),wiringAt=new WeakMap<object,number>(),danglers=new Map<Vehicle,Danglers>(),sunstrips=new WeakMap<object,string>(),washed=new WeakMap<object,string>(),plates=new WeakMap<object,string>();let trampHops=0,flickers=0,cvClicked=0,cvTake=0,lodgedPieces=0,looseDebris=0,drafting=0,draftToast=-99;let rustShowers=0,oilBurns=0,bumpStops=0,bumpTake=0;
 // Door chains snapped (offline QA counter).
 let chainsSnapped=0;
 const shiftGears=new WeakMap<object,number>(),shiftRevs=new WeakMap<object,number>();let shiftFlames=0,dustAir=0,knockDust=0;let shiftSmokes=0;const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3(),roostBoxes=new WeakMap<Vehicle,{centre:T.Vector3;half:T.Vector3}>(),roostBodies:RoostBody[]=[],pingClock=new Map<number,number>();let pingTake=0,stonePings=0;let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
@@ -2918,6 +2926,8 @@ function frame(now: number) {
   }
   if (cars[0]) reflections.update(cars[0].root);
   renderer.shadowMap.needsUpdate = true;
+  // On medium the sun's shadow has no map (the shaders sample an empty texel, not a 2048² one) and no strength.
+  if(quarry){const sun=quarry.sun.shadow;sun.autoUpdate=shadowsLive;if(!shadowsLive){sun.needsUpdate=false;if(sun.map){sun.map.dispose();sun.map=null;}if(sun.intensity!==0){shadowStrength=sun.intensity;sun.intensity=0;}}}
   updateHeatHaze();
   updateLensRain(dt);
   lampBloom.enabled = !bloomOff && bloomWanted(adaptiveGraphics.quality, !!online?.active, eventLighting);
@@ -3192,6 +3202,7 @@ async function boot() {
     horns: () => hornHeats,
     endHorns: () => endHorns,
     whining: () => sound.whining,
+    audioMix: () => sound.mix(),
     flapping: () => sound.flapping,
     hissing: () => sound.hissing,
     leaking: () => sound.leaking,
@@ -3234,6 +3245,7 @@ async function boot() {
     sunstrip: (id = 0) => { const c = cars.find(x => x.id === id); return c ? sunstrips.get(c) ?? null : null; },
     dangler: (id = 0) => { const c = cars.find(x => x.id === id), d = c && danglers.get(c); return d ? { kind: d.kind, pitch: +d.state.pitch.toFixed(3), roll: +d.state.roll.toFixed(3), at: d.group.position.toArray().map(v => +v.toFixed(3)) } : null; },
     electrics: (id = 0, kill?: number) => { const c = cars.find(x => x.id === id); if (c && kill !== undefined && carLights.get(c)?.lamp('head', kill)) { carLights.get(c)!.kill(kill); deadBulbs.set(c, kill); } return c ? { dead: deadBulbs.get(c) ?? -1, flickers, flickering: flickerOff(clock - (wiringAt.get(c) ?? -9), c.id) } : null; },
+    tape: (id = 0) => { const c = cars.find(x => x.id === id); return c ? taped.get(c) ?? null : null; },
     slowLeak: (id = 0) => { const c = cars.find(x => x.id === id), w = c && slowLeaks.get(c); return c && w !== undefined ? { wheel: w, tyre: +(c.tyreDamage?.[w] ?? 0).toFixed(3) } : null; },
     brakeBulb: (id = 0, side?: number) => { const c = cars.find(x => x.id === id), l = c && carLights.get(c); if (!c || !l) return null; if (side) { l.deadBrake(side); deadBrakes.set(c, Math.sign(side)); } const tails: number[] = []; const xs: number[] = []; c.root.updateMatrixWorld(true); for (let k = 0; l.lamp('tail', k); k++) { const m = l.lamp('tail', k)!; tails.push(+((m.material as T.MeshStandardMaterial).emissiveIntensity.toFixed(2))); xs.push(+c.root.worldToLocal(new T.Box3().setFromObject(m).getCenter(new T.Vector3())).x.toFixed(2)); } return { side: deadBrakes.get(c) ?? 0, tails, xs }; },
     chains: (id = 0) => { const c = cars.find(x => x.id === id); return c ? { chained: [...c.chainedDoors], links: doorChains.get(c)?.length ?? 0, snapped: chainsSnapped } : null; },
@@ -3344,6 +3356,7 @@ async function boot() {
         elapsed,
         collisions,
         drawCalls: renderer.info.render.calls,
+        programs: (renderer.info as unknown as {programs?:unknown[]}).programs?.length ?? 0,
         reflectionUpdates: reflections.updates,
         staticShadows: staticShadows?.stats,
         triangles: renderer.info.render.triangles,

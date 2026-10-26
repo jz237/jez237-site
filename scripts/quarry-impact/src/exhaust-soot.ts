@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {GRID,decalGeometry,restIn} from './decal-geometry';
 
 /** Exhaust soot (offline): the back of a car goes black round its tailpipes. An old banger arrives sooted already (from
  * SOOT.age of its age, SOOT.start of the way, more the older), and every car sooted further as it is driven: held flat out
@@ -36,24 +37,22 @@ const fragmentShader=`uniform vec3 tips[2];uniform int count;uniform float soot;
 void main(){float s=0.;for(int i=0;i<2;i++){if(i>=count)break;vec3 d=vRoot-tips[i];float up=d.y>0.?d.y/${SOOT.rise.toFixed(3)}:-d.y/${(SOOT.radius*.6).toFixed(3)};
   float r=length(vec2(d.x/${SOOT.radius.toFixed(3)},up))+abs(d.z)*${(1/SOOT.depth).toFixed(3)};s=max(s,1.-smoothstep(.45,1.15,r));}
   float cell=vRoot.x*60.+sin(vRoot.y*23.)*.6,a=fract(sin(floor(cell)*12.9898)*43758.5),b=fract(sin((floor(cell)+1.)*12.9898)*43758.5),streak=.72+.28*mix(a,b,smoothstep(0.,1.,fract(cell)));s*=soot*streak*(1.-smoothstep(-.35,.1,vBack));if(s<.01)discard;gl_FragColor=vec4(dark,s*${SOOT.max.toFixed(2)});}`;
-/** Does this panel (`toRoot` its frame into the root's) look back anywhere within reach of a tip? Only there can soot show. */
-function facesBack(geometry:T.BufferGeometry,toRoot:T.Matrix4,tips:readonly T.Vector3[]){
-  const rest=geometry.attributes.wreckPosition,normals=geometry.attributes.normal,turn=new T.Matrix3().getNormalMatrix(toRoot),v=new T.Vector3(),n=new T.Vector3();
-  for(let i=0;i<rest.count;i++){if(n.fromBufferAttribute(normals,i).applyMatrix3(turn).normalize().z>-.35)continue;v.fromBufferAttribute(rest,i).applyMatrix4(toRoot);if(tips.some(t=>v.distanceTo(t)<SOOT.reach))return true;}
-  return false;
-}
-/** Lays the soot over the rear panels near the tips (children of the panels, sharing their geometry). Returns the shared
- * soot level (0–1) the stains show, or null when no panel is near. */
+/** Lays the soot over the rear panels near the tips (children of the panels): over just the triangles within reach of a tip
+ * that look back, drawn from the panel's own vertex buffers. Returns the shared soot level (0–1) the stains show, or null when
+ * no panel is near. */
 export function fitSoot(root:T.Object3D,panels:readonly T.Mesh[],tips:readonly T.Vector3[]){
   root.updateMatrixWorld(true);const inv=root.matrixWorld.clone().invert(),level={value:0},box=new T.Box3();let n=0;
   const tipList=[0,1].map(i=>(tips[i]??tips[0]).clone());
   for(const p of panels){
     if(!p.geometry.attributes.wreckPosition||!p.geometry.attributes.normal||/interior|inner/i.test(p.name))continue;
     const toRoot=inv.clone().multiply(p.matrixWorld);p.geometry.computeBoundingBox();box.copy(p.geometry.boundingBox!).applyMatrix4(toRoot);
-    if(!tips.some(t=>box.distanceToPoint(t)<SOOT.reach)||!facesBack(p.geometry,toRoot,tips))continue;
+    if(!tips.some(t=>box.distanceToPoint(t)<SOOT.reach))continue;
+    const at=restIn(p.geometry,toRoot),turn=new T.Matrix3().getNormalMatrix(toRoot),normals=p.geometry.attributes.normal,n3=new T.Vector3();
+    const near=(i:number)=>tips.some(t=>Math.hypot(at[i*3]-t.x,at[i*3+1]-t.y,at[i*3+2]-t.z)<SOOT.reach+GRID),back=(i:number)=>n3.fromBufferAttribute(normals,i).applyMatrix3(turn).normalize().z<-.35;
+    const patch=decalGeometry(p.geometry,(a,b,c)=>(near(a)||near(b)||near(c))&&(back(a)||back(b)||back(c)));if(!patch)continue;
     const material=new T.ShaderMaterial({name:'Exhaust soot',transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-4,
       uniforms:{tips:{value:tipList},count:{value:Math.min(2,tips.length)},soot:level,dark:{value:new T.Color(SOOT.dark)},toRoot:{value:toRoot}},vertexShader,fragmentShader});
-    const mesh=new T.Mesh(p.geometry,material);mesh.name='exhaust_soot';mesh.renderOrder=3;mesh.castShadow=mesh.receiveShadow=false;mesh.frustumCulled=false;p.add(mesh);n++;
+    const mesh=new T.Mesh(patch,material);mesh.name='exhaust_soot';mesh.renderOrder=3;mesh.castShadow=mesh.receiveShadow=false;mesh.frustumCulled=false;p.add(mesh);n++;
   }
   return n?level:null;
 }

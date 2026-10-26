@@ -24,13 +24,13 @@ test('the tips come into the car’s frame from its model’s, or the fallback f
   assert.equal(tips.length,2);assert.ok(Math.abs(tips[0].x+.42)<1e-9&&Math.abs(tips[0].y-(.42-.8))<1e-9&&Math.abs(tips[0].z-(-2.41+.1))<1e-9);
   const none=exhaustTips('no-such-car',model,root,new T.Vector3(-.35,-.25,-2));assert.ok(none.length===1&&none[0].equals(new T.Vector3(-.35,-.25,-2)));
 });
-test('the stain lies on the rear panels near the tips (not the interior), each sharing its panel’s geometry and one soot level',()=>{
+test('the stain lies on the rear panels near the tips (not the interior), each drawing from its panel’s own buffers, with one soot level',()=>{
   const root=new T.Group(),back=panel('panel_bumper_rear',1.6,.3,[0,-.2,-2.3]),tailgate=panel('panel_Tailgate',1.4,.6,[0,.3,-2.25]),front=panel('panel_bumper_front',1.6,.3,[0,-.2,2.3]),inside=panel('panel_inner_Interior',1,.3,[0,-.2,-2.2]);
   root.add(back,tailgate,front,inside);root.updateMatrixWorld(true);
   const level=fitSoot(root,[back,tailgate,front,inside],[new T.Vector3(.42,-.3,-2.4)]);assert.ok(level!==null);
   const stain=(p:T.Mesh)=>p.children.find(c=>c.name==='exhaust_soot') as T.Mesh|undefined;
   assert.ok(!!stain(back)&&!!stain(tailgate)&&!stain(front)&&!stain(inside),'rear panels only');
-  assert.ok(stain(back)!.geometry===back.geometry&&(stain(back)!.material as T.ShaderMaterial).uniforms.soot===(stain(tailgate)!.material as T.ShaderMaterial).uniforms.soot,'one level for the car');
+  assert.ok(stain(back)!.geometry.getAttribute('position')===back.geometry.getAttribute('position')&&stain(back)!.geometry.index!.count<=back.geometry.index!.count&&(stain(back)!.material as T.ShaderMaterial).uniforms.soot===(stain(tailgate)!.material as T.ShaderMaterial).uniforms.soot,'one level for the car');
   level!.value=.6;assert.equal((stain(back)!.material as T.ShaderMaterial).uniforms.soot.value,.6);
   assert.equal(fitSoot(root,[front],[new T.Vector3(.42,-.3,-2.4)]),null,'nothing near');
 });
