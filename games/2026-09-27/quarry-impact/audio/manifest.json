@@ -1317,5 +1317,19 @@
     "sha256": "b33bf38842b4eec8ea2d33d289d70b10e22230f05ed8c5f95b05ee358559215f",
     "runtimeSha256": "6aecb136a1c8f1be0337823296e142b6d2f5302be24e0a54a3ab3f031ef581f4",
     "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "reverse-beeper",
+    "file": "reverse-beeper.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Commercial van reversing alarm: a steady repeating electronic beep, beep at exactly one beep per second, clean square tone, outdoors, heard from a few metres away. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "576e5d9c14392a78964e0e199614e28360e099c10a4eb0dedee651fb3cfbe606",
+    "runtimeSha256": "e913f645c291f259937c77095184e29c0d6b78e64577d37291832c23f05a893e",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
   }
 ]

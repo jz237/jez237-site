@@ -50,6 +50,14 @@ export const ARENA_HORN={level:.45,ids:['air-horn','air-horn-end'],end:'air-horn
 /** A straight-cut reverse gear whines as a car backs up under power (offline): from m/s backwards, full at full m/s, at gain level,
  * pitched up with speed. Recorded only (no synthesized stand-in). */
 export const REVERSE_WHINE={from:2,full:9,level:.22,throttle:.2} as const;
+/** A commercial vehicle backing up (offline: the van, the utility truck and the shuttle) sounds its reversing alarm —
+ * the recorded tone keyed on and off REVERSE_BEEPER.hz times a second (REVERSE_BEEPER.duty of each beat on) while it rolls
+ * back faster than REVERSE_BEEPER.speed m/s with its electrics working, at REVERSE_BEEPER.level; each its own beat. */
+export const REVERSE_BEEPER={kinds:['van','utility','shuttle'],speed:.6,hz:1,duty:.5,level:.3} as const;
+/** Is the alarm sounding at this moment (s), offset for this car? */
+export const beeperOn=(time:number,id:number)=>((((Number.isFinite(time)?time:0)+(Number.isFinite(id)?id:0)*.37)*REVERSE_BEEPER.hz)%1)<REVERSE_BEEPER.duty;
+/** Does this car carry a reversing alarm that should be sounding (backing up, electrics working)? */
+export const beeperWanted=(kind:string,speed:number,electrics:boolean)=>(REVERSE_BEEPER.kinds as readonly string[]).includes(kind)&&electrics&&Number.isFinite(speed)&&speed< -REVERSE_BEEPER.speed;
 /** A blown or shredding tyre flaps against its arch as the car goes (offline): from m/s, full at full m/s, at gain level, its beat
  * quickening with the wheel. Recorded only. */
 export const TYRE_FLAP={from:2,full:12,level:.3} as const;
@@ -424,6 +432,7 @@ export class Sound {
   }
   /** Running-gear loops by car id (offline, within earshot): reverse gears whining, blown tyres flapping, burst radiators hissing. */
   private readonly whines=new Map<number,Loop>();
+  private readonly beepers=new Map<number,Loop>();
   private readonly flaps=new Map<number,Loop>();
   private readonly hisses=new Map<number,Loop>();
   private readonly leaks=new Map<number,Loop>();
@@ -435,6 +444,8 @@ export class Sound {
   private readonly steamSeen=new Map<number,{puffs:number;at:number}>();
   /** Cars whining in reverse right now (QA). */
   get whining(){return [...this.whines].filter(([,l])=>!this.quietSince.has(l)).map(([id])=>id);}
+  /** Cars whose reversing alarm loop is running (QA). */
+  get beeping(){return [...this.beepers.keys()];}
   /** Cars with a flapping tyre or a hissing radiator right now (QA). */
   get flapping(){return [...this.flaps].filter(([,l])=>!this.quietSince.has(l)).map(([id])=>id);}
   get hissing(){return [...this.hisses].filter(([,l])=>!this.quietSince.has(l)).map(([id])=>id);}
@@ -448,6 +459,7 @@ export class Sound {
   runningLoops(cars:readonly Vehicle[],listener:T.Vector3){
     if(!this.ready||!this.fxBus)return;const now=this.ctx!.currentTime;
     this.driveLoops(this.whines,'reverse-whine',cars,listener,now,car=>{const back=-car.speed;return back>=REVERSE_WHINE.from&&Math.abs(car.input?.throttle??0)>=REVERSE_WHINE.throttle?Math.min(1,(back-REVERSE_WHINE.from+1)/(REVERSE_WHINE.full-REVERSE_WHINE.from+1)):0;},car=>.8+Math.min(.7,-car.speed/12),REVERSE_WHINE.level);
+    this.driveLoops(this.beepers,'reverse-beeper',cars,listener,now,car=>beeperWanted(car.kind,car.speed,!car.electricalCut&&!car.batteryOut)&&beeperOn(now,car.id)?1:0,()=>1,REVERSE_BEEPER.level);
     this.driveLoops(this.flaps,'tyre-flap',cars,listener,now,car=>{const v=Math.abs(car.speed);return v>=TYRE_FLAP.from&&car.blownOut.some((b,i)=>(b||car.tyreShred[i]>0)&&!car.wreckParts.wheelLost[i])?Math.min(1,v/TYRE_FLAP.full):0;},car=>.5+Math.min(1.1,Math.abs(car.speed)/14),TYRE_FLAP.level);
     for(const car of cars){const seen=this.steamSeen.get(car.id);if(!seen||car.steamPuffs<seen.puffs)this.steamSeen.set(car.id,{puffs:car.steamPuffs,at:-99});else if(car.steamPuffs>seen.puffs){seen.puffs=car.steamPuffs;seen.at=now;}}
     this.driveLoops(this.hisses,'steam-hiss',cars,listener,now,car=>now-(this.steamSeen.get(car.id)?.at??-99)<STEAM_HISS.hold?1:0,()=>1,STEAM_HISS.level);

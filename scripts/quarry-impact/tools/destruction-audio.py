@@ -83,6 +83,8 @@ jobs = [
  ('stone-ping-0', "A single small gravel stone flicked up by a spinning tyre striking a car's steel door panel: one sharp bright metallic tick, close up. Isolated, no engine, no music, no voices, no speech.", .5, False),
  ('stone-ping-1', 'Two or three small stones pinging off a car bonnet in very quick succession: light sharp metallic ticks, close up. Isolated, no engine, no music, no voices, no speech.', .6, False),
  ('stone-ping-2', "A pebble thrown up from a gravel road hitting a car's front bumper and glancing off: one hard short plastic and metal tock with a tiny tick. Isolated, no engine, no music, no voices, no speech.", .5, False),
+ # A commercial vehicle's reversing alarm (audio.REVERSE_BEEPER), looped while it backs up.
+ ('reverse-beeper', 'Commercial van reversing alarm: a steady repeating electronic beep, beep at exactly one beep per second, clean square tone, outdoors, heard from a few metres away. Isolated, no engine, no music, no voices, no speech.', 2.0, True),
 ]
 # Seconds cut from the start of a raw clip: metal-groan dips to silence early (it would drop out every loop) and
 # debris-2 opens with half a second of near silence (the layer would land late).
