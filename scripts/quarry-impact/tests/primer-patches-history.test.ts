@@ -1,6 +1,7 @@
+import {restoreTiredMirrorsBytes} from './tired-mirrors-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readPrimerPatchesPrevious,restorePrimerPatchesBytes,verifyPrimerPatchesRevision} from './primer-patches-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreTiredMirrorsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('PrimerPatches preserves every prior fixture, vehicle asset, venue art and history input',verifyPrimerPatchesRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/primer-patches/revision.json').toString());
