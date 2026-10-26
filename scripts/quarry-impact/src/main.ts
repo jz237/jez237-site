@@ -122,6 +122,7 @@ import {COLD_START,coldStartPuffs,crankStarts} from './cold-start';
 import {GravelRoost,ROOST,roostRate,STONE_HIT,stoneHitVolume,type RoostBody} from './gravel-roost';
 import {STRAP,TowStraps} from './tow-straps';
 import {rearOf,startingWake,wakeDustStep} from './wake-dust';
+import {SHIFT_SMOKE,shiftPuffs} from './shift-smoke';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -247,7 +248,7 @@ import {wreckReport,mechanicalReport} from './wreck-report';
 import {DNF,deadReason,deadTime} from './mechanical-dnf';
 import {warningLine,tankWarning,cableWarnings} from './hud-warnings';
 import {createArenaProps,ARENA_PROP_SPOTS,arenaPropCount,courseCornerSpots} from './arena-props';
-import {isRearEngineKind} from './classic-vehicle-specs';
+import {isClassicKind,isRearEngineKind} from './classic-vehicle-specs';
 import {tyreFailure as tyreFailureLevel} from './tyre-condition';
 import {dailyKey,dailyStreak,dailyWeek,isDailyChallenge,DAILY_PREFIX} from './daily-record';
 import {EVENT_KEY,readEventOptions,circuitRoute,raceGridSlot,derbyGridSlot,checkRoute,lapProgress,CombatScoreboard,eventDerbyOrder,stepScoreRespawns} from './event-rules';
@@ -2309,7 +2310,7 @@ function updateHeatHaze(){
 }
 const bonnetHeats=new WeakMap<object,number>(),bonnetClocks=new WeakMap<object,number>(),steamAt=new T.Vector3();let bonnetPuffs=0;
 const vapourClocks=new WeakMap<object,number>();let vapourPuffs=0;
-const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMap<object,number[]>(),dustClocks=new WeakMap<object,number[]>();const dustTint=new T.Color();const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3(),roostBoxes=new WeakMap<Vehicle,{centre:T.Vector3;half:T.Vector3}>(),roostBodies:RoostBody[]=[],pingClock=new Map<number,number>();let pingTake=0,stonePings=0;let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
+const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMap<object,number[]>(),dustClocks=new WeakMap<object,number[]>();const dustTint=new T.Color();const shiftGears=new WeakMap<object,number>();let shiftSmokes=0;const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3(),roostBoxes=new WeakMap<Vehicle,{centre:T.Vector3;half:T.Vector3}>(),roostBodies:RoostBody[]=[],pingClock=new Map<number,number>();let pingTake=0,stonePings=0;let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
 let wetReflections:ReturnType<typeof createWetReflections>|undefined;const glowList:Glow[]=[];
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
 function lookDriver(c:Vehicle,figure:T.Object3D,dt:number){
@@ -2612,6 +2613,11 @@ function frame(now: number) {
     if(crankStarts(coldStart,before,c.id))sound.clip('starter',tail(),COLD_START.volume,COLD_START.crank);
     const n=coldStartPuffs(coldStart,before,c.id);if(n){const start=fx.cursor;fx.emit(tail(),n*2,0,COLD_START.size);coldPuffs+=n;
       for(let j=start;j<fx.cursor;j++){const k=j%fx.particles.length,p=fx.particles[k];p.size=COLD_START.puff[0]+Math.random()*(COLD_START.puff[1]-COLD_START.puff[0]);p.max=p.life=COLD_START.life[0]+Math.random()*(COLD_START.life[1]-COLD_START.life[0]);dustTint.setHex(COLD_START.tint).multiplyScalar(.9+Math.random()*.15).toArray(fx.colors,k*3);}}}}
+  // Floored through the gears, each upshift coughs a puff of dark smoke from the tailpipe (offline).
+  if(state==='playing')for(const c of cars){if(!c.extendedDamage)continue;const before=shiftGears.get(c)??c.gear;shiftGears.set(c,c.gear);if(c.health<=0||c.exhaustGone)continue;
+    const n=shiftPuffs(before,c.gear,c.input.throttle,isClassicKind(c.kind),c.engineDamage??0);if(!n)continue;shiftSmokes++;
+    steamAt.set(isRearEngineKind(c.kind)?.35:-.35,-.25,-DEFINITIONS[c.kind].halfLength-.1).applyQuaternion(c.root.quaternion).add(c.root.position);const start=fx.cursor;fx.emit(steamAt,n,0,SHIFT_SMOKE.size);
+    for(let j=start;j<fx.cursor;j++){const k=j%fx.particles.length,p=fx.particles[k];p.v.addScaledVector(c.forward,-SHIFT_SMOKE.back);p.size=SHIFT_SMOKE.puff[0]+Math.random()*(SHIFT_SMOKE.puff[1]-SHIFT_SMOKE.puff[0]);p.max=p.life=SHIFT_SMOKE.life[0]+Math.random()*(SHIFT_SMOKE.life[1]-SHIFT_SMOKE.life[0]);dustTint.setHex(SHIFT_SMOKE.tint).multiplyScalar(.85+Math.random()*.3).toArray(fx.colors,k*3);}}
   // Dry gravel kicks up a dust plume behind a fast car's rear tyres (offline; none in the rain).
   if(state==='playing')for(const c of cars){if(!c.extendedDamage)continue;const rate=dustRate(c.speed,c.surface,eventLighting==='rain');if(rate<=0)continue;const clocks=dustClocks.get(c)??[0,0];dustClocks.set(c,clocks);
     for(const k of [0,1]){const i=2+k,w=c.wheels[i];if(!w||c.wreckParts.wheelLost[i]||!c.controller.wheelIsInContact(i))continue;clocks[k]+=rate*dt;if(clocks[k]<1)continue;clocks[k]%=1;dustPuffs++;
@@ -3036,6 +3042,7 @@ async function boot() {
     towStraps: (id = 0, damage?: number) => { const c = cars.find(x => x.id === id), s = c && towStraps.get(c); if (s && damage !== undefined) for (const x of s.straps) if (x.panel) x.panel.userData.damage = damage; return s ? { straps: s.straps.length, ends: s.straps.map(x => x.end), torn: s.torn, swings: s.swings, panels: s.straps.map(x => x.panel?.name ?? null) } : null; },
     fogLamp: (id = 0) => { const c = cars.find(x => x.id === id), l = c && carLights.get(c), m = l?.fogLamp; return l ? { fitted: !!m, lit: l.fogLit, visible: !!m?.visible, at: m ? m.position.toArray().map(v => +v.toFixed(3)) : null, glow: m ? (m.material as T.MeshStandardMaterial).emissiveIntensity : 0, driver: +(c!.root.getObjectByName('driver')?.position.x ?? 0).toFixed(2) } : null; },
     wakeDust: (id = 0, level?: number) => { const c = cars.find(x => x.id === id); if (!c) return null; if (level !== undefined) c.surfaceFinish.wakeLevel = level; const w = c.surfaceFinish.wake.value; return { placed: c.surfaceFinish.wakePlaced, level: +w.z.toFixed(4), rear: +w.x.toFixed(3) }; },
+    shiftSmoke: () => ({ puffs: shiftSmokes, gear: cars[0]?.gear ?? 0 }),
     roost: () => ({ pings: stonePings, thrown: gravelRoost.thrown, flying: gravelRoost.flying, spins: cars.map(c => c.wheelSpins.map(v => +v.toFixed(2))), surfaces: cars.map(c => c.surface), offline: cars.map(c => c.extendedDamage), wet: cars.map(c => c.wetWheels.filter(Boolean).length), speeds: cars.map(c => +c.speed.toFixed(2)) }),
     tyres: (id = 0, temp?: number) => { const c = cars.find((x) => x.id === id); if (!c) return null; if (temp !== undefined) c.tyreTemp.fill(temp); return { temp: c.tyreTemp.map((v) => +v.toFixed(3)), grip: c.tyreGrip.map((v) => +v.toFixed(3)) }; },
     discs: (id = 0) => { const c = cars.find((x) => x.id === id); return c ? Array.from(c.discHeat, (v) => +v.toFixed(3)) : null; },

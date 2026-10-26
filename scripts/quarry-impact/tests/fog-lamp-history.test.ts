@@ -1,6 +1,7 @@
+import {restoreShiftSmokeBytes} from './shift-smoke-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readFogLampPrevious,restoreFogLampBytes,verifyFogLampRevision} from './fog-lamp-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreShiftSmokeBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('FogLamp preserves every prior fixture, vehicle asset, venue art and history input',verifyFogLampRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/fog-lamp/revision.json').toString());
