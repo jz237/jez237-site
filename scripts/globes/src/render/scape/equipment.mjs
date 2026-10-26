@@ -8,9 +8,10 @@
 // foam: a gentle flow, as a betta's long fins need), its airline tubing running up the glass and out
 // under the lid too. The bubbles themselves are the water's (the page lets them go from the lift
 // tube's mouth: build's `bubbles`).
-// Sizes as the real things, at the fish's scale (an 18-inch bowl: a world unit is ~23 cm): the
-// heater 12 cm long and 2.4 cm across, its cord 4 mm; the sponge 4.6 cm across and 6 cm tall, the
-// lift tube 1.2 cm, the airline 5 mm.
+// Sizes as the real things for a bowl this size (a world unit is ~12 cm: the glass ~24 cm across, the
+// betta ~5.5 cm long, mesh.mjs): the heater ~6 cm long and 1.2 cm across, a nano heater; the sponge
+// 2.3 cm across and 3 cm tall, a nano sponge filter. (Built first to an 18-inch bowl's scale, twice
+// this; the numbers in the code are world units.)
 // Everything here is rigid: lathed (surfaces of revolution about each part's own axis) or swept
 // along a curve (the cord and the airline), its normals from its profile, sharp where it creases.
 

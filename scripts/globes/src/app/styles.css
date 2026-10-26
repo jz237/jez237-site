@@ -600,7 +600,10 @@ html.desktop #stage canvas.is-live {
 
 
 /* A small, scene-specific control for the living specimen. */
-.betta-controls { position: absolute; z-index: 5; top: 24px; right: 28px; display: flex; align-items: center; gap: 14px; color: #d2e9e8; font-size: 12px; }
+/* (Only its buttons take a tap: the rest of its box lies over the stage, the lid's rim on a phone
+   held sideways.) */
+.betta-controls { position: absolute; z-index: 5; top: 24px; right: 28px; display: flex; align-items: center; gap: 14px; color: #d2e9e8; font-size: 12px; pointer-events: none; }
+.betta-controls button { pointer-events: auto; }
 .betta-controls[hidden], .is-unsupported .betta-controls { display: none; }
 .betta-controls span { letter-spacing: .12em; text-transform: uppercase; }
 .betta-controls button { color: inherit; background: #092d3bbd; border: 1px solid #94c9ce55; border-radius: 24px; padding: 12px 17px; font: inherit; cursor: pointer; min-height: 44px; }
@@ -608,13 +611,18 @@ html.desktop #stage canvas.is-live {
 .betta-controls button:focus-visible { outline: 2px solid #d2e9e8; outline-offset: 4px; }
 /* (On a phone held upright the specimen's name takes a line of its own over the buttons.) */
 @media (max-width: 500px) { .betta-controls { right: 16px; top: 20px; gap: 9px; flex-wrap: wrap; justify-content: flex-end; row-gap: 7px; } .betta-controls span { font-size: 10px; flex-basis: 100%; text-align: right; } }
+/* (On one held sideways the name goes: it sat over the lid.) */
+@media (max-height: 500px) { .betta-controls span { display: none; } }
 
 /* Learn mode's card (app/learn/Learn.ts): low on the stage, beside the bowl rather than over the
    fish, above the page's links, and clear of ?stats' figures (at the left; up top on a phone). Its
    close button floats at its corner, the words running round it. (The bowl at rest is about 68cqh
    across, in the middle of the stage.) */
-.learn-card { position: absolute; z-index: 6; right: 28px; bottom: calc(56px + env(safe-area-inset-bottom)); width: min(352px, calc(100% - 56px)); box-sizing: border-box; padding: 12px 14px 13px 16px; border-radius: 18px; color: #d2e9e8; background: #092d3bd9; border: 1px solid #94c9ce55; box-shadow: 0 12px 32px #00080d66; backdrop-filter: blur(10px); font-size: 12.5px; line-height: 1.45; pointer-events: none; opacity: 0; transform: translateY(8px); transition: opacity 0.45s ease, transform 0.6s var(--ease); }
+.learn-card { position: absolute; z-index: 6; right: 28px; bottom: calc(56px + env(safe-area-inset-bottom)); width: min(352px, calc(100% - 56px)); box-sizing: border-box; padding: 12px 14px 13px 16px; border-radius: 18px; color: #d2e9e8; background: #092d3bd9; border: 1px solid #94c9ce55; box-shadow: 0 12px 32px #00080d66; font-size: 12.5px; line-height: 1.45; pointer-events: none; opacity: 0; transform: translateY(8px); transition: opacity 0.45s ease, transform 0.6s var(--ease); }
 .learn-card.is-on { pointer-events: auto; opacity: 1; transform: none; }
+/* (A blur behind it only with a mouse: over the live canvas a phone's compositor would blur it
+   afresh every frame, a cost no GPU timer of the page sees.) */
+@media (pointer: fine) { .learn-card { backdrop-filter: blur(10px); } }
 .learn-text p { margin: 0; }
 .learn-text .learn-kicker { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #94c9ce; }
 .learn-text .learn-title { margin-top: 2px; font-size: 14px; font-weight: 600; color: #f1fbfa; }

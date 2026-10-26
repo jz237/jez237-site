@@ -538,7 +538,7 @@ refit kernels, and the phone's interleave gives the equipment a hit code of its 
 and has no source to put at the filter. Cost: 12,938 triangles at full detail, 5,246 on phones; on
 the iGPU (`--use-adapter-luid`) the phone's frame at a ratio of 2 went from 190 to 194 ms; the
 other globes' shaders are unchanged, byte for byte. Tests: `equipment.test.mjs` (7) and a packing
-test in `scape-bvh.test.mjs`, 212 in all.
+test in `scape-bvh.test.mjs`, 220 in all with Learn mode's.
 
 Learn mode (the betta page): a **Learn** button beside Feed and Flare fins (off at first; kept in
 localStorage `betta.learn`) captions the fish's behaviours as it shows them (air at the film, its

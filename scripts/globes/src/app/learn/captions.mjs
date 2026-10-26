@@ -59,6 +59,12 @@ export class CaptionClock {
     return true;
   }
 
+  /** Explained at time t by another card (the meal's advice says how it feeds): not captioned again
+   *  within its cooldown. */
+  told(key, t) {
+    this.said.set(key, t);
+  }
+
   /** A card went at time t: no caption for GAP. */
   closed(t) {
     this.freeAt = t + GAP;

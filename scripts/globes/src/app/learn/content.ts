@@ -41,7 +41,7 @@ export const TOPICS: Record<TopicId, LearnCard> = {
   rosette: {
     kicker: IN_BOWL,
     title: 'A rosette plant',
-    body: 'Leaves rising from one crown in the sand. It is not modelled on a particular species; Cryptocoryne wendtii grows much like this, and Java fern is another easy choice. Live plants use up fish waste and give a betta cover.',
+    body: 'Leaves rising from one crown in the sand. It is not modelled on one species; Cryptocoryne wendtii grows much like this. Java fern is easy too, tied to wood: it rots if buried. Live plants use up fish waste and give a betta cover.',
   },
   sand: {
     kicker: IN_BOWL,
@@ -56,7 +56,7 @@ export const TOPICS: Record<TopicId, LearnCard> = {
   nest: {
     kicker: IN_BOWL,
     title: 'The bubble nest',
-    body: 'Male bettas blow saliva-coated bubbles into a floating raft against cover or the glass, to guard eggs and fry in. A healthy, settled male builds one with no female about. This one adds to it after trips for air; shaking the bowl breaks it up.',
+    body: 'Male bettas blow saliva-coated bubbles into a floating raft against cover or the glass, to guard eggs and fry in. Males often build one when settled and comfortable, with no female about, though some seldom do. This one adds to it after trips for air; shaking the bowl breaks it up.',
   },
   lid: {
     kicker: IN_BOWL,
@@ -71,7 +71,7 @@ export const TOPICS: Record<TopicId, LearnCard> = {
   glass: {
     kicker: IN_BOWL,
     title: 'The bowl',
-    body: 'A large planted bowl of about 10 gallons (38\u00a0L), with a heater and a gentle filter: not the small, unheated bowls bettas are often sold in. A betta needs 5 gallons (19\u00a0L) or more, kept warm, filtered and covered.',
+    body: 'A glass bowl about 24\u00a0cm (9.5\u00a0in) across, holding about a gallon (4\u00a0L): the size bettas are often sold in. It has a heater and a gentle filter, but a betta does far better in 5 gallons (19\u00a0L) or more: steadier warmth, cleaner water, room to swim.',
   },
   heater: {
     kicker: IN_BOWL,
@@ -110,7 +110,7 @@ export const CAPTIONS: Record<CaptionId, LearnCard> = {
   nest: {
     kicker: NOW,
     title: 'Tending the bubble nest',
-    body: 'Back from the surface, it adds bubbles to its nest by the glass. Nest-building is a sign of a healthy, settled male.',
+    body: 'Back from the surface, it adds bubbles to its nest by the glass. Males often build when they are settled and comfortable.',
   },
   mirror: {
     kicker: NOW,
@@ -155,7 +155,7 @@ export const FEEDING = {
   rule: {
     kicker: 'Care',
     title: 'Feeding a betta',
-    body: 'Two or three pellets, once or twice a day, is plenty: its stomach is about the size of its eye. Uneaten food rots and fouls the water.',
+    body: 'Two or three pellets, once or twice a day, is plenty: its stomach is about the size of its eye. Watch it take them: bettas feed at the surface, rising under each pellet lips first. Uneaten food rots and fouls the water.',
   } as LearnCard,
   /** Fed already, not yet a day's worth: `pellets` of them, `minutes` ago. */
   again: (pellets: number, minutes: number): LearnCard => ({

@@ -232,6 +232,8 @@ export class Learn {
   private advise(t: number): void {
     const a = this.log.advise(t);
     this.show(a.advice === 'over' ? FEEDING.over(a.pellets, a.minutes) : a.advice === 'again' ? FEEDING.again(a.pellets, a.minutes) : FEEDING.rule, true);
+    // (The fish feeds while that card is up, and the rule's card says how: no caption after.)
+    this.clock.told('feed', t);
   }
 
   private caption(id: CaptionId): void {
