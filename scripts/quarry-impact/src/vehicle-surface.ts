@@ -1,10 +1,21 @@
 import * as T from 'three';
 import {finishVehiclePresentation} from './vehicle-presentation';
+import {LAMP_GRIME,WAKE} from './wake-dust';
+import {TOP_DUST} from './settled-dust';
+import {FADE,PITTING,RUST,chromed,rusts,type RustFit} from './age-rust';
+import {PRIMER} from './primer-patches';
 
 /** Persistent deposition state. Four tires retain water after leaving a puddle. */
 export class VehicleSurface {
   readonly coating={value:new T.Vector4(0,0,0,0)}; // left/right wetness, left/right dirt
   readonly water=new Float32Array(4);
+  /** Wake dust on the tail (offline): x the back of the bodywork along the car (model frame), y how far forward it reaches
+   * (0 until placed), z how dusty. */
+  readonly wake={value:new T.Vector4(0,0,0,0)};
+  /** Age rust (offline, RUST): x how far gone (0 none), y the foot of the flanks, z the half width, w the front arch's edge
+   * (radius); arches x/y the front and rear axle along the car, z the hub height, w the rear arch's edge (model frame). */
+  readonly rust={value:new T.Vector4(0,0,0,0)};
+  readonly arches={value:new T.Vector4(0,0,0,0)};
   readonly phase:{value:number};
   distance=0;
   constructor(root:T.Group,id:number){
@@ -21,16 +32,59 @@ export class VehicleSurface {
       if(m.name.includes('hoses')){m.metalness=0;m.roughness=.87;}
       const base=m.onBeforeCompile,key=m.customProgramCacheKey();
       m.onBeforeCompile=(s,renderer)=>{
-        base.call(m,s,renderer);s.uniforms.carCoating=this.coating;s.uniforms.carSurfacePhase=this.phase;
+        base.call(m,s,renderer);s.uniforms.carCoating=this.coating;s.uniforms.carSurfacePhase=this.phase;s.uniforms.carWake=this.wake;s.uniforms.carTopDust=TOP_DUST;s.uniforms.carRust=this.rust;s.uniforms.carArches=this.arches;
         s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nattribute vec4 transferPaint;varying vec4 vTransferredPaint;varying vec3 vCoatingRest;'+(s.vertexShader.includes('attribute vec3 wreckPosition;')?'':'\nattribute vec3 wreckPosition;'))
           .replace('#include <begin_vertex>','#include <begin_vertex>\nvCoatingRest=wreckPosition;vTransferredPaint=transferPaint;');
         s.fragmentShader=s.fragmentShader.replace('#include <common>',`#include <common>
-varying vec4 vTransferredPaint;varying vec3 vCoatingRest;uniform vec4 carCoating;uniform float carSurfacePhase;
+varying vec4 vTransferredPaint;varying vec3 vCoatingRest;uniform vec4 carCoating;uniform float carSurfacePhase;uniform vec4 carWake;uniform float carTopDust;uniform vec4 carRust;uniform vec4 carArches;
 float coatingHash(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
 float coatingNoise(vec3 p){vec3 c=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(mix(coatingHash(c),coatingHash(c+vec3(1,0,0)),f.x),mix(coatingHash(c+vec3(0,1,0)),coatingHash(c+vec3(1,1,0)),f.x),f.y),mix(mix(coatingHash(c+vec3(0,0,1)),coatingHash(c+vec3(1,0,1)),f.x),mix(coatingHash(c+vec3(0,1,1)),coatingHash(c+vec3(1,1,1)),f.x),f.y),f.z);}
 `)
           .replace(/float dust=clamp\(lowBody\*\([^;]+;/,'float dust=clamp(lowBody*.035+vImpactWear.x*.07,0.,.32);')
           .replace('#include <alphamap_fragment>',`#include <alphamap_fragment>
+float ageRust=0.,rustStain=0.,sunFade=0.,lacquerOff=0.;
+float chromePit=0.,chromeDull=0.;
+float primerPatch=0.;
+${chromed(m.name)?`// Pitted chrome: an old car's brightwork dulls and freckles with rust pits, blooming where the plating lifts.
+if(carRust.x>0.){
+  float pitEdge=1.-${PITTING.pits}*carRust.x;
+  float pits=smoothstep(pitEdge,pitEdge+.04,coatingNoise(vCoatingRest*140.+carSurfacePhase*9.));
+  float bloom=smoothstep(.62,.9,coatingNoise(vCoatingRest*11.+carSurfacePhase*4.))*carRust.x;
+  chromePit=clamp(max(pits*.9,bloom*${PITTING.bloom}),0.,1.);chromeDull=carRust.x;
+  diffuseColor.rgb=mix(diffuseColor.rgb,mix(vec3(${RUST.orange}),vec3(${RUST.scale}),coatingNoise(vCoatingRest*60.)),chromePit);
+}`:''}
+${rusts(m.name)?`// Age rust: rot along the sills and round the arch lips, mottled, with a stained fringe of blistered paint.
+if(carRust.x>0.){
+  float rustFlank=smoothstep(carRust.z*${RUST.flank[0]},carRust.z*${RUST.flank[1]},abs(vCoatingRest.x));
+  // Patches creep up the sills to their own heights, and the lips rot worst at their low ends, by the hub.
+  float rustReach=coatingNoise(vCoatingRest*vec3(4.,4.,7.)+carSurfacePhase*11.);
+  float rustSill=1.-smoothstep(carRust.y+${RUST.sill[0]},carRust.y+${RUST.sill[1]}*(.35+.9*rustReach),vCoatingRest.y);
+  float frontLip=length(vec2(vCoatingRest.z-carArches.x,vCoatingRest.y-carArches.z))-carRust.w-${RUST.gap},rearLip=length(vec2(vCoatingRest.z-carArches.y,vCoatingRest.y-carArches.z))-carArches.w-${RUST.gap};
+  float rustLip=max(exp(-pow(frontLip/${RUST.lip},2.)),exp(-pow(rearLip/${RUST.lip},2.)))*smoothstep(carArches.z-.12,carArches.z+.02,vCoatingRest.y)*(.55+.45*smoothstep(carArches.z+.3,carArches.z,vCoatingRest.y));
+  float rustNoise=coatingNoise(vCoatingRest*vec3(11.,17.,11.)+carSurfacePhase*7.)*.6+coatingNoise(vCoatingRest*vec3(46.,60.,46.))*.4;
+  float rustField=max(rustSill,rustLip)*rustFlank*(.2+1.05*rustNoise),rustEdge=1.-.7*carRust.x;
+  ageRust=smoothstep(rustEdge-.06,rustEdge+.06,rustField);
+  rustStain=smoothstep(rustEdge-.22,rustEdge-.06,rustField)*(1.-ageRust);
+  diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*vec3(${RUST.stain}),rustStain*.7);
+  diffuseColor.rgb=mix(diffuseColor.rgb,mix(vec3(${RUST.orange}),vec3(${RUST.scale}),coatingNoise(vCoatingRest*95.)),ageRust);
+  // Sun fade: the top of the car (its own top, from the facet in the rest frame) bleached chalky, the lacquer lifting in blotches.
+  vec3 restFacet=normalize(cross(dFdx(vCoatingRest),dFdy(vCoatingRest)));
+  float sunTop=smoothstep(${FADE.top[0]},${FADE.top[1]},abs(restFacet.y))*smoothstep(carRust.y+${FADE.above[0]},carRust.y+${FADE.above[1]},vCoatingRest.y);
+  sunFade=sunTop*carRust.x*(.5+.5*coatingNoise(vCoatingRest*2.5+carSurfacePhase*13.));
+  diffuseColor.rgb=mix(diffuseColor.rgb,mix(vec3(dot(diffuseColor.rgb,vec3(.299,.587,.114))),vec3(${FADE.chalk}),.35),sunFade*${FADE.bleach});
+  float peelNoise=coatingNoise(vCoatingRest*4.5+carSurfacePhase*17.)*.85+coatingNoise(vCoatingRest*28.)*.15,peelEdge=1.-${FADE.peel}*carRust.x;
+  lacquerOff=sunTop*smoothstep(peelEdge-.015,peelEdge+.015,peelNoise);
+  float lacquerFlake=sunTop*clamp(smoothstep(peelEdge-.03,peelEdge-.012,peelNoise)-smoothstep(peelEdge,peelEdge+.015,peelNoise),0.,1.);
+  diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*${FADE.matte},lacquerOff);
+  diffuseColor.rgb=mix(diffuseColor.rgb,vec3(${FADE.flake}),lacquerFlake*.4);
+  // Primer patches: repairs sanded back and left in grey primer, filler showing in the bigger ones, never over the rust.
+  float primerField=coatingNoise(vCoatingRest*${PRIMER.scale.toFixed(2)}+carSurfacePhase*23.)*.8+coatingNoise(vCoatingRest*${(PRIMER.scale*5).toFixed(2)}+carSurfacePhase*5.)*.2,primerEdge=1.-${PRIMER.amount}*carRust.x;
+  primerPatch=smoothstep(primerEdge-.008,primerEdge+.008,primerField)*(1.-ageRust);
+  float primerHalo=clamp(smoothstep(primerEdge-${PRIMER.halo},primerEdge-.008,primerField)-primerPatch,0.,1.)*(1.-ageRust);
+  diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*.8+.12,primerHalo*${PRIMER.sand});
+  diffuseColor.rgb=mix(diffuseColor.rgb,mix(vec3(${PRIMER.grey}),vec3(${PRIMER.filler}),smoothstep(primerEdge+${PRIMER.core},primerEdge+${PRIMER.core}+.03,primerField)),primerPatch);
+  lacquerOff=max(lacquerOff,max(primerPatch,primerHalo*.7));
+}`:''}
 float coatingSide=smoothstep(-.3,.3,vCoatingRest.x);
 float deposited=mix(carCoating.z,carCoating.w,coatingSide);
 float moisture=mix(carCoating.x,carCoating.y,coatingSide);
@@ -39,25 +93,39 @@ float thrown=exp(-pow((abs(vCoatingRest.z)-1.45)*2.7,2.));
 float siltPattern=coatingNoise(vCoatingRest*vec3(26.,40.,22.)+carSurfacePhase)*.58+coatingNoise(vCoatingRest*7.)*.42;
 float carDirt=clamp(deposited*(coatingLow*.74+thrown*.38)*(.45+siltPattern),0.,.72);
 float carWet=clamp(moisture*(coatingLow*.8+thrown*.3),0.,1.);
+// Wake dust: a film over the tail, thickest at the very back, mottled where it settles.
+float wakeDust=carWake.y>0.?carWake.z*smoothstep(carWake.x+carWake.y,carWake.x+carWake.y*.15,vCoatingRest.z)*(.55+.45*coatingNoise(vCoatingRest*vec3(16.,24.,16.)+carSurfacePhase*3.)):0.;
+// Settled dust: the event's dust in the air lies on the faces that look up, roof, bonnet and boot (same film as the wake dust).
+#ifndef FLAT_SHADED
+wakeDust=max(wakeDust,carTopDust*smoothstep(.35,.85,dot(normalize(vNormal),normalize((viewMatrix*vec4(0.,1.,0.,0.)).xyz)))*(.6+.4*coatingNoise(vCoatingRest*vec3(22.,9.,22.)+carSurfacePhase*5.)));
+#endif
 ${glass?`carDirt*=.1;carWet=moisture*.35;
 float droplets=smoothstep(.73,.87,coatingNoise(vCoatingRest*vec3(130.,40.,95.)))*carWet;
-diffuseColor.a=clamp(diffuseColor.a+droplets*.11,0.,.98);`:''}
+diffuseColor.a=clamp(diffuseColor.a+droplets*.11,0.,.98);
+diffuseColor.a=clamp(diffuseColor.a+wakeDust*.6,0.,.97);`:''}
 diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.185,.148,.103)*mix(1.,.66,carWet),carDirt);
 diffuseColor.rgb*=1.-carWet*.08;
+diffuseColor.rgb=mix(diffuseColor.rgb,vec3(${new T.Color(WAKE.tint).toArray().map(v=>v.toFixed(3)).join(',')})*mix(1.,.62,carWet),wakeDust*${glass?'.85':'.8'});
 `)
           .replace('#include <roughnessmap_fragment>',`${glass?'':`float transferred=vTransferredPaint.a*(.48+.52*siltPattern);
 diffuseColor.rgb=mix(diffuseColor.rgb,vTransferredPaint.rgb,transferred*.85);`}
 #include <roughnessmap_fragment>
-roughnessFactor=mix(roughnessFactor,.89,carDirt*.8);
+roughnessFactor=mix(roughnessFactor,${PITTING.dull},max(chromeDull*.7,chromePit));
+roughnessFactor=mix(roughnessFactor,.68,max(sunFade*.6,lacquerOff));
+roughnessFactor=mix(roughnessFactor,.95,ageRust);
+roughnessFactor=mix(roughnessFactor,${PRIMER.roughness},primerPatch);
+roughnessFactor=mix(roughnessFactor,.89,max(carDirt*.8,wakeDust*.9));
 roughnessFactor=mix(roughnessFactor,max(.1,roughnessFactor*.48),carWet*(1.-carDirt*.55));`)
-          .replace('#include <metalnessmap_fragment>','#include <metalnessmap_fragment>\nmetalnessFactor*=1.-carDirt*.9;')
+          .replace('#include <metalnessmap_fragment>','#include <metalnessmap_fragment>\nmetalnessFactor*=(1.-carDirt*.9)*(1.-wakeDust*.8)*(1.-ageRust);\nmetalnessFactor*=1.-chromePit;')
+          // A lamp under dust or dirt glows dimmer through the grime.
+          .replace('#include <emissivemap_fragment>',`#include <emissivemap_fragment>\ntotalEmissiveRadiance*=1.-clamp(wakeDust*${LAMP_GRIME.dust}+carDirt*${LAMP_GRIME.dirt},0.,${LAMP_GRIME.most});`)
           .replace('#include <lights_physical_fragment>',`#include <lights_physical_fragment>
 #ifdef USE_CLEARCOAT
-material.clearcoat*=1.-carDirt*.88;
+material.clearcoat*=(1.-carDirt*.88)*(1.-wakeDust*.85)*(1.-max(max(ageRust,rustStain*.6),max(sunFade*.7,lacquerOff)));
 material.clearcoatRoughness=mix(material.clearcoatRoughness,.07,carWet);
 #endif`);
       };
-      m.customProgramCacheKey=()=>key+'-persistent-wet-silt-v1-'+Number(glass);
+      m.customProgramCacheKey=()=>key+'-persistent-wet-silt-wake-v5-'+Number(glass)+(rusts(m.name)?'-rust':'')+(chromed(m.name)?'-chrome':'');
     });
   }
   advance(dt:number,speed:number,gravel:boolean,wet:readonly boolean[],grounded:readonly boolean[]=[true,true,true,true]){
@@ -85,6 +153,15 @@ material.clearcoatRoughness=mix(material.clearcoatRoughness,.07,carWet);
     }
     attribute.needsUpdate=true;
   }
+  /** Dust in the wake on the tail, back of the bodywork at rear (model frame z), this dusty. */
+  placeWake(rear:number,level:number){this.wake.value.set(rear,WAKE.reach,Math.max(0,level),0);}
+  /** Rust where this fit says the car rots, this far gone (0–1). */
+  placeRust(fit:RustFit,age:number){this.rust.value.set(Number.isFinite(age)?Math.max(0,Math.min(1,age)):0,fit.bottom,fit.halfWidth,fit.frontArch);this.arches.value.set(fit.front,fit.rear,fit.hub,fit.rearArch);}
+  get rustAge(){return this.rust.value.x;}
+  set rustAge(age:number){if(this.rust.value.z>0)this.rust.value.x=Number.isFinite(age)?Math.max(0,Math.min(1,age)):0;}
+  get wakePlaced(){return this.wake.value.y>0;}
+  get wakeLevel(){return this.wake.value.z;}
+  set wakeLevel(level:number){if(this.wake.value.y>0)this.wake.value.z=Number.isFinite(level)?Math.max(0,level):0;}
   reset(){this.coating.value.set(0,0,0,0);this.water.fill(0);this.distance=0;}
   get stats(){return{wet:[this.coating.value.x,this.coating.value.y],dirt:[this.coating.value.z,this.coating.value.w],tires:Array.from(this.water),distance:this.distance};}
 }

@@ -1,0 +1,13 @@
+import {restorePrimerPatchesBytes} from './primer-patches-invariants';
+import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
+import {readOddWheelsPrevious,restoreOddWheelsBytes,verifyOddWheelsRevision} from './odd-wheels-invariants';
+const source=(file:string)=>restorePrimerPatchesBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
+test('OddWheels preserves every prior fixture, vehicle asset, venue art and history input',verifyOddWheelsRevision);
+test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
+ const manifest=JSON.parse(source('tests/fixtures/odd-wheels/revision.json').toString());
+ for(const file of Object.keys(manifest.files)){
+  const bytes=source(file);assert.deepEqual(restoreOddWheelsBytes(file,bytes),readOddWheelsPrevious(file));
+  const corrupt=Buffer.concat([bytes,Buffer.from('\ncorrupt')]);assert.deepEqual(restoreOddWheelsBytes(file,corrupt),corrupt);
+ }
+ const unknown=Buffer.from('unknown');assert.deepEqual(restoreOddWheelsBytes('src/unknown.ts',unknown),unknown);
+});
