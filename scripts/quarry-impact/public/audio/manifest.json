@@ -1373,5 +1373,47 @@
     "sha256": "3e90620a827d2a867bebe52236ba2e28d3f0f0aaf0a61a3fc1ee83cd80b4ca2d",
     "runtimeSha256": "3b5744a9f71aa077224c30b03fc4f976934f3a7508b2639c43d05a8f5a8b5b27",
     "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "cv-click-0",
+    "file": "cv-click-0.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "A single sharp metallic click from a worn CV joint on a car's front driveshaft as the wheel turns on full lock, close up under the car. One click only. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "a5d977bbabaef2564a3f85af8360bd6db416437ec0702a670f78188bdde05efd",
+    "runtimeSha256": "f0182e23a98f69ad7399a942009055cea22194f2debcaa9d3bcc0e61842a2c8c",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "cv-click-1",
+    "file": "cv-click-1.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "One loud dry clack from a damaged constant velocity joint in a car's front axle, a short knock of steel balls in a worn cage. One knock only. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "7ae37971b20aa5e5b143f16dc7bd60c0fe9b4dd2c56df17ef69d0e768192ee65",
+    "runtimeSha256": "36041da723e387a1857e12bac76b1e05bf9dd5e5d408d70c1d6b509913acdd22",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "cv-click-2",
+    "file": "cv-click-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "A single metallic tick and clunk from a car's worn front driveshaft joint under load while turning, heard from beside the wheel. One tick only. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "b3beaec2c4b91d3c0d0fb46e8892c516ac6ef26247f98533aa0061d742a964a6",
+    "runtimeSha256": "82b801294a6731c2d5dd323e0e126e7961652fc8f2582cd326d6f7f12cdddbd3",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
   }
 ]

@@ -147,6 +147,7 @@ import {deadBulb,flickerOff,shakesWiring} from './tired-electrics';
 import {Danglers,dangleFor,mirrorPoint} from './danglers';
 import {fitSunstrip,sunstripFor} from './sunstrips';
 import {fitWashMe,rearWindow,washWords} from './wash-me';
+import {CV,cvClicks,cvVolume,cvWear} from './cv-joints';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -2391,7 +2392,7 @@ const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMa
 function bodyBox(c:Vehicle){let box=roostBoxes.get(c);if(box)return box;c.root.updateMatrixWorld(true);const inverse=c.root.matrixWorld.clone().invert(),b=new T.Box3(),all=new T.Box3();for(const p of c.panels)all.union(b.setFromObject(p).applyMatrix4(inverse));if(all.isEmpty())return null;
   box={centre:all.getCenter(new T.Vector3()),half:all.getSize(new T.Vector3()).multiplyScalar(.5)};roostBoxes.set(c,box);return box;}
 let bodyDusts=0;const dustOut=new T.Vector3();
-const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>(),oilBurners=new WeakMap<object,Burner>(),wheelBlurs=new Map<Vehicle,WheelBlur>(),bumpState=new WeakMap<object,{len:number[];ground:boolean[];at:number[];count:number}>(),battleScars=new WeakMap<object,{scars:number;panels:number}>(),trampState=new WeakMap<object,{phase:number;hops:number;lift:number}>(),trampAt=new T.Vector3(),trampB=new T.Vector3(),deadBulbs=new WeakMap<object,number>(),wiringAt=new WeakMap<object,number>(),danglers=new Map<Vehicle,Danglers>(),sunstrips=new WeakMap<object,string>(),washed=new WeakMap<object,string>();let trampHops=0,flickers=0;let rustShowers=0,oilBurns=0,bumpStops=0,bumpTake=0;
+const mistIn=new WeakMap<object,number>(),rimDust=new WeakMap<object,{value:number}>(),donorPanels=new WeakMap<object,string[]>(),oilBurners=new WeakMap<object,Burner>(),wheelBlurs=new Map<Vehicle,WheelBlur>(),bumpState=new WeakMap<object,{len:number[];ground:boolean[];at:number[];count:number}>(),battleScars=new WeakMap<object,{scars:number;panels:number}>(),trampState=new WeakMap<object,{phase:number;hops:number;lift:number}>(),trampAt=new T.Vector3(),trampB=new T.Vector3(),cvClocks=new WeakMap<object,{clock:number[];count:number}>(),deadBulbs=new WeakMap<object,number>(),wiringAt=new WeakMap<object,number>(),danglers=new Map<Vehicle,Danglers>(),sunstrips=new WeakMap<object,string>(),washed=new WeakMap<object,string>();let trampHops=0,flickers=0,cvClicked=0,cvTake=0;let rustShowers=0,oilBurns=0,bumpStops=0,bumpTake=0;
 const shiftGears=new WeakMap<object,number>(),shiftRevs=new WeakMap<object,number>();let shiftFlames=0,dustAir=0,knockDust=0;let shiftSmokes=0;const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3(),roostBoxes=new WeakMap<Vehicle,{centre:T.Vector3;half:T.Vector3}>(),roostBodies:RoostBody[]=[],pingClock=new Map<number,number>();let pingTake=0,stonePings=0;let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
 let wetReflections:ReturnType<typeof createWetReflections>|undefined;const glowList:Glow[]=[];
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
@@ -2449,6 +2450,10 @@ function updateCamera(dt: number) {
     for(const g of c.glass){const st=(g.material as T.Material).userData.glassState as GlassState|undefined;if(st)st.smoke.value=now;}}
   // Braking cakes the rims in brake dust; a downpour slowly rinses it (offline).
   if(state==='playing')for(const c of cars){const d=rimDust.get(c);if(d)d.value=brakeDustStep(d.value,dt,c.input?.brake??0,c.speed,eventLighting==='rain'?shower:0);}
+  // A driven front wheel's knocked-about or worn CV joint clicks as it turns on lock under power (offline).
+  if(state==='playing')for(const c of cars){if(!c.extendedDamage||c.health<=0||!c.drivenWheels.includes(0))continue;let k=cvClocks.get(c);if(!k){k={clock:[0,0],count:0};cvClocks.set(c,k);}
+    for(const i of [0,1]){if(c.wreckParts.wheelLost[i]){k.clock[i]=0;continue;}const wear=cvWear(c.wreckParts.wheelDamage[i],c.surfaceFinish.rustAge),rate=cvClicks(wear,c.input?.steer??0,c.input?.throttle??0,c.speed,vehicleWheelRadius(c.kind));
+      if(rate<=0){k.clock[i]=0;continue;}k.clock[i]+=rate*dt;if(k.clock[i]<1)continue;k.clock[i]-=1;k.count++;cvClicked++;c.wheels[i]?.getWorldPosition(steamAt);sound.clip(CV.clips[cvTake++%CV.clips.length],steamAt,cvVolume(wear),CV.duration);}}
   // A classic's live rear axle hops when it is launched hard at the edge of grip: axle tramp (offline).
   if(state==='playing')for(const c of cars){if(!c.extendedDamage||c.health<=0||!trampKind(c.kind,isClassicKind(c.kind),c.drivenWheels))continue;
     let t=trampState.get(c);if(!t){t={phase:0,hops:0,lift:0};trampState.set(c,t);}const level=trampLevel((c.wheelSpins[2]+c.wheelSpins[3])/2,c.speed,c.input.throttle,c.surfaceFinish.rustAge);
@@ -3180,6 +3185,7 @@ async function boot() {
     sunstrip: (id = 0) => { const c = cars.find(x => x.id === id); return c ? sunstrips.get(c) ?? null : null; },
     dangler: (id = 0) => { const c = cars.find(x => x.id === id), d = c && danglers.get(c); return d ? { kind: d.kind, pitch: +d.state.pitch.toFixed(3), roll: +d.state.roll.toFixed(3), at: d.group.position.toArray().map(v => +v.toFixed(3)) } : null; },
     electrics: (id = 0, kill?: number) => { const c = cars.find(x => x.id === id); if (c && kill !== undefined && carLights.get(c)?.lamp('head', kill)) { carLights.get(c)!.kill(kill); deadBulbs.set(c, kill); } return c ? { dead: deadBulbs.get(c) ?? -1, flickers, flickering: flickerOff(clock - (wiringAt.get(c) ?? -9), c.id) } : null; },
+    cvClicks: (id?: number) => { if (id === undefined) return cvClicked; const c = cars.find(x => x.id === id); return c ? cvClocks.get(c)?.count ?? 0 : null; },
     tramp: (id?: number) => { if (id === undefined) return trampHops; const c = cars.find(x => x.id === id); return c ? trampState.get(c)?.hops ?? 0 : null; },
     trampLift: (id = 0) => { const c = cars.find(x => x.id === id); return c ? +(trampState.get(c)?.lift ?? 0).toFixed(4) : null; },
     tyreMarks: () => tyreMarks,
