@@ -14,13 +14,14 @@
 // and what both share: the hit codes, the phases' order, the change test.
 
 /** What a ray of the bowl's passes ended on: shaders.ts globes_hitIdOf, written in the colour's
- *  alpha as 1 + the code (a ray that met none of the bowl leaves 0). The fish is any ray that met
+ *  alpha as 1 + the code (a ray that met none of the bowl leaves 0). EQUIPMENT is the heater and the
+ *  sponge filter, opaque and still as the wood and the rocks are. The fish is any ray that met
  *  it (its fins too), and in the bowl's own pass (which leaves the fish out) any that passed near
  *  it: the fish's pass draws those again. SPLASH is what is small and flies on its own: spray, a
  *  bubble, a pellet. (The drops on the glass and the nest stay put, mostly: the change test sees
  *  them when they move. Never kept, wet glass would never be traced at full sharpness.) CROSSED is
  *  added where the ray met the water's surface on the way. */
-export const HIT = Object.freeze({ MISS: 0, STUDIO_AIR: 1, STUDIO_WATER: 2, SAND: 3, WOOD: 4, ROCK: 5, PLANT: 6, FISH: 7, LID: 8, SURFACE: 9, SPLASH: 10, CROSSED: 16 });
+export const HIT = Object.freeze({ MISS: 0, STUDIO_AIR: 1, STUDIO_WATER: 2, SAND: 3, WOOD: 4, ROCK: 5, PLANT: 6, FISH: 7, LID: 8, SURFACE: 9, SPLASH: 10, EQUIPMENT: 11, CROSSED: 16 });
 
 /** The order a lattice's phases are traced in: the pixel of its block (x, y) each frame traces.
  *  2x2 goes corner to opposite corner, so the pixels two frames apart are diagonal neighbours. */

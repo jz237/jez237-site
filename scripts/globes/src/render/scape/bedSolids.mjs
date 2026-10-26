@@ -1,5 +1,6 @@
-// The betta bowl's furnishings as part of its bed (FluidSim.bedSolids): the rocks, and the
-// driftwood where it meets the sand (its feet), as a height map of their tops in the bowl's frame.
+// The betta bowl's furnishings as part of its bed (FluidSim.bedSolids): the rocks, the sponge
+// filter's weighted base (equipment.mjs), and the driftwood where it meets the sand (its feet), as
+// a height map of their tops in the bowl's frame.
 // The sand rests on them and flows round them, the water meets them and the fish can rest on
 // them. (A height map has nothing under an overhang: higher up, the arch is left out, or the water
 // could not pass under it; and so is any low part of it that does not reach down into the sand.)
@@ -8,10 +9,14 @@ import { BED_LEVEL, MAT } from './mesh.mjs';
 
 /** How far under a mesh's surface its solid top lies (so the traced mesh always covers it), how
  *  high above the bed the driftwood counts as standing in it, and how near the sand its underside
- *  must come there for it to count. */
+ *  must come there for it to count; how high the filter's plastic counts (its base). (Its sponge
+ *  is left out: the water passes through it, as it does through a sponge, and a column that tall
+ *  would raise the bed's top over the open water, under which a phone's march steps over its
+ *  samples: marchBand.ts.) */
 const SINK = 0.014;
 const FOOT = 0.06;
 const TOUCH = 0.005;
+const BASE = 0.04;
 
 /** The map: n x n columns over [-extent, extent] in x and z, each the highest point of the
  *  meshes' parts standing in the sand over it (less SINK), or `none`. */
@@ -53,7 +58,7 @@ export function bakeBedSolids(meshes, n, extent, none) {
     for (let t = 0; t < I.length / 3; t++) {
       const m = mesh.materials[t];
       const a = I[t * 3] * 3, b = I[t * 3 + 1] * 3, c = I[t * 3 + 2] * 3;
-      if (m === MAT.ROCK) {
+      if (m === MAT.ROCK || (m === MAT.TUBE && Math.max(P[a + 1], P[b + 1], P[c + 1]) <= BED_LEVEL + BASE)) {
         raster(P, a, b, c, (k, y) => { if (y - SINK > rock[k]) rock[k] = y - SINK; });
       } else if (m === MAT.BARK || m === MAT.WOOD_END) {
         // (Where the wood's underside is, everywhere; its top, only low down.)

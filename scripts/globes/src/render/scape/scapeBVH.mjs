@@ -1,8 +1,8 @@
 // The betta bowl's furnishings traced as triangles (its page only): every triangle of every piece
-// (wood.mjs, rocks.mjs, plants.mjs; their mesh format in mesh.mjs) in one static BVH, packed into a
-// 1024-wide rgba32float texture the bowl's shader reads with textureLoad, like the betta's mesh
-// (src/fish/triangleBVH.mjs). Built once at load (binned SAH); only the moving plants' triangles
-// and the boxes over them are refitted in place, every frame (scapeRefit.mjs).
+// (wood.mjs, rocks.mjs, plants.mjs, equipment.mjs; their mesh format in mesh.mjs) in one static BVH,
+// packed into a 1024-wide rgba32float texture the bowl's shader reads with textureLoad, like the
+// betta's mesh (src/fish/triangleBVH.mjs). Built once at load (binned SAH); only the moving plants'
+// triangles and the boxes over them are refitted in place, every frame (scapeRefit.mjs).
 //
 // The texture, in texels (rgba32float, row-major, 1024 a row; index i is at (i % 1024, i / 1024)).
 // Every integer is stored as an exactly representable float (all stay below 2^24):
@@ -17,7 +17,8 @@
 //              start .. start + count - 1 (count 1..4), -w - 1 = start * 4 + count - 1.
 //   tb + 3t    triangle t (the leaves' order), its three corners as the mesh has them (shared
 //              corners bit-identical, so the watertight test leaves no cracks):
-//                [a.xyz, va * 8 + material] [b.xyz, vb] [c.xyz, vc]     (va, vb, vc: vertex ids)
+//                [a.xyz, va * 16 + material] [b.xyz, vb] [c.xyz, vc]    (va, vb, vc: vertex ids;
+//                material in SCAPE_MAT_BITS bits, so va below 2^20)
 //   vb + 2v    vertex v, for shading: [n.xyz, attrs.x] [attrs.yzw, 0]
 //   rb + r     row r of what the shader reads alongside (packScape's rows: the bubble nest's, nest.mjs)
 //
@@ -59,6 +60,9 @@
 import { MAT, SCAPE_WGSL_COMMON } from './mesh.mjs';
 
 export const SCAPE_TEX_WIDTH = 1024;
+/** The bits of a triangle's first word its material takes (the rest its first corner's vertex id). */
+export const SCAPE_MAT_BITS = 4;
+const MAT_SPAN = 1 << SCAPE_MAT_BITS;
 export const SCAPE_MAX_HEIGHT = 8192;
 /** The tree is never deeper than this (root 0), so the shader's stack of this size cannot overflow. */
 export const SCAPE_MAX_DEPTH = 32;
@@ -285,7 +289,7 @@ export function packScape(meshes, options = {}) {
     V += m.positions.length / 3;
     N += m.indices.length / 3;
   }
-  if (V >= 1 << 21) throw new Error(`packScape: ${V} vertices (at most ${(1 << 21) - 1})`);
+  if (V >= 1 << (24 - SCAPE_MAT_BITS)) throw new Error(`packScape: ${V} vertices (at most ${(1 << (24 - SCAPE_MAT_BITS)) - 1})`);
   // (The limit holds only from the root down when halving fits under it: a node at depth d of n
   // triangles always keeps d + levels(n) <= maxDepth, by SAH or else by a median split.)
   if (levels(N) > maxDepth) {
@@ -309,7 +313,7 @@ export function packScape(meshes, options = {}) {
     }
     for (let i = 0; i < tc; i++) {
       const k = m.materials[i];
-      if (!(k >= 0 && k <= 7)) throw new Error(`packScape: ${label}: material ${k} (0..7)`);
+      if (!(k >= 0 && k < MAT_SPAN)) throw new Error(`packScape: ${label}: material ${k} (0..${MAT_SPAN - 1})`);
       mat[to + i] = k;
     }
     vo += vc;
@@ -410,7 +414,7 @@ export function packScape(meshes, options = {}) {
       data[o + v * 4] = pos[vi * 3];
       data[o + v * 4 + 1] = pos[vi * 3 + 1];
       data[o + v * 4 + 2] = pos[vi * 3 + 2];
-      data[o + v * 4 + 3] = v === 0 ? vi * 8 + mat[t] : vi;
+      data[o + v * 4 + 3] = v === 0 ? vi * MAT_SPAN + mat[t] : vi;
     }
   }
   for (let v = 0; v < V; v++) {
@@ -581,7 +585,7 @@ function walkCPU(P, o, d, tEnd, leaf, tMax, stats, variant, exact) {
         stats.loads += 3;
       }
       if (triCPU(r, D, at, exact) && triOut[0] > F_TMIN && triOut[0] < tMax()) {
-        if (leaf(k, triOut[0], triOut[1], triOut[2], (texel(D, at, 3) >>> 0) & 7) === false) return false;
+        if (leaf(k, triOut[0], triOut[1], triOut[2], (texel(D, at, 3) >>> 0) & (MAT_SPAN - 1)) === false) return false;
       }
     }
     return true;
@@ -742,7 +746,7 @@ export function surfaceCPU(packed, hit) {
   const triBase = texel(D, 0, 1), vertBase = texel(D, 1, 3);
   const at = triBase + hit.tri * 3;
   const wa = texel(D, at, 3) >>> 0;
-  const vs = [wa >>> 3, texel(D, at + 1, 3), texel(D, at + 2, 3)];
+  const vs = [wa >>> SCAPE_MAT_BITS, texel(D, at + 1, 3), texel(D, at + 2, 3)];
   const w = [1 - hit.bary[0] - hit.bary[1], hit.bary[0], hit.bary[1]];
   const n = [0, 0, 0], attrs = [0, 0, 0, 0];
   vs.forEach((v, j) => {
@@ -756,7 +760,7 @@ export function surfaceCPU(packed, hit) {
   const g = [e1[1] * e2[2] - e1[2] * e2[1], e1[2] * e2[0] - e1[0] * e2[2], e1[0] * e2[1] - e1[1] * e2[0]];
   const gl = Math.hypot(...g), nl = Math.hypot(...n);
   const ng = gl > 1e-20 ? g.map((x) => x / gl) : [0, 1, 0];
-  return { n: nl > 1e-6 ? n.map((x) => x / nl) : ng, ng, attrs, material: wa & 7, vertices: vs };
+  return { n: nl > 1e-6 ? n.map((x) => x / nl) : ng, ng, attrs, material: wa & (MAT_SPAN - 1), vertices: vs };
 }
 
 // ---- the shader ---------------------------------------------------------------------------------
@@ -768,6 +772,11 @@ const MAT_FN = [
   ['LEAF_SMALL', 'leafSmall', 'vec3f(0.03, 0.09, 0.02)', '0.4', '0.04', 'vec3f(0.06, 0.14, 0.03)'],
   ['STEM', 'stem', 'vec3f(0.04, 0.09, 0.025)', '0.5', '0.03', 'vec3f(0.0)'],
   ['ROOT', 'root', 'vec3f(0.06, 0.045, 0.03)', '0.7', '0.02', 'vec3f(0.0)'],
+  ['HEATER', 'heater', 'vec3f(0.02, 0.02, 0.022)', '0.4', '0.045', 'vec3f(0.0)'],
+  ['HEATER_LAMP', 'heaterLamp', 'vec3f(0.6, 0.25, 0.03)', '0.15', '0.05', 'vec3f(0.0)'],
+  ['SPONGE', 'sponge', 'vec3f(0.035, 0.035, 0.035)', '0.9', '0.02', 'vec3f(0.0)'],
+  ['TUBE', 'tube', 'vec3f(0.025, 0.025, 0.027)', '0.35', '0.045', 'vec3f(0.0)'],
+  ['SUCTION', 'suction', 'vec3f(0.5, 0.53, 0.52)', '0.3', '0.04', 'vec3f(0.06, 0.065, 0.065)'],
 ];
 const f = (x) => {
   const s = String(x);
@@ -822,7 +831,7 @@ export function scapeMeshWGSL(pieces = []) {
     if (defs && defs.length > 1) throw new Error(`scapeMeshWGSL: scape_mat_${name} is defined ${defs.length} times`);
     if (!defs) {
       stubs.push(`fn scape_mat_${name}(attrs: vec4f, p: vec3f, n: vec3f, foot: f32, front: bool) -> ScapeMat {
-  return ScapeMat(${albedo}, n, ${rough}, ${spec}, ${trans}, clamp(attrs.w, 0.0, 1.0));
+  return ScapeMat(${albedo}, n, ${rough}, ${spec}, ${trans}, clamp(attrs.w, 0.0, 1.0), vec3f(0.0));
 }`);
     }
   }
@@ -894,6 +903,10 @@ ${LEAF}
 // ---- the furnishings' triangles (src/render/scape/scapeBVH.mjs) ------------------------------
 ${mats}
 const SCAPE_MESH_NONE: u32 = 0xffffffffu;
+// (A triangle's first word: its first corner's vertex id above SCAPE_MESH_MAT_BITS bits of its
+// material.)
+const SCAPE_MESH_MAT_BITS: u32 = ${SCAPE_MAT_BITS}u;
+const SCAPE_MESH_MAT_MASK: u32 = ${MAT_SPAN - 1}u;
 const SCAPE_MESH_STACK: u32 = ${SCAPE_MAX_DEPTH}u;
 const SCAPE_MESH_STEPS: u32 = ${SCAPE_MAX_STEPS}u;
 const SCAPE_MESH_TMIN: f32 = ${f(SCAPE_T_MIN)};
@@ -1045,7 +1058,7 @@ fn scape_meshShadow(tex: texture_2d<f32>, o: vec3f, d: vec3f, tEnd: f32) -> vec3
   if (scape_meshBad(o, d, tEnd) || tEnd <= SCAPE_MESH_TMIN) { return T; }
   let r = scape_meshRay(o, d);
   if (scape_meshBox(r, scape_meshTexel(tex, 1u).xyz, scape_meshTexel(tex, 2u).xyz, tEnd) >= SCAPE_MESH_FAR) { return T; }
-${walk(`          let m = u32(a.w) & 7u;
+${walk(`          let m = u32(a.w) & SCAPE_MESH_MAT_MASK;
           if (m != SCAPE_MAT_LEAF_BIG && m != SCAPE_MAT_LEAF_SMALL) { return vec3f(0.0); }
           T *= SCAPE_LEAF_PASS;
           if (max(T.x, max(T.y, T.z)) < SCAPE_SHADOW_CUTOFF) { return vec3f(0.0); }`, 'tEnd', 'true').replaceAll('OUT', 'T')}
@@ -1066,7 +1079,7 @@ fn scape_meshSurface(tex: texture_2d<f32>, h: ScapeMeshHit) -> ScapeSurface {
   let b = scape_meshTexel(tex, at + 1u);
   let c = scape_meshTexel(tex, at + 2u);
   let wa = u32(a.w);
-  let ia = vb + (wa >> 3u) * 2u;
+  let ia = vb + (wa >> SCAPE_MESH_MAT_BITS) * 2u;
   let ib = vb + u32(b.w) * 2u;
   let ic = vb + u32(c.w) * 2u;
   let a0 = scape_meshTexel(tex, ia);
@@ -1085,13 +1098,13 @@ fn scape_meshSurface(tex: texture_2d<f32>, h: ScapeMeshHit) -> ScapeSurface {
   let nl = length(ni);
   let n = select(ng, ni / max(nl, 1e-30), nl > 1e-6);
   let attrs = vec4f(a0.w, a1.xyz) * w0 + vec4f(b0.w, b1.xyz) * wb + vec4f(c0.w, c1.xyz) * wc;
-  return ScapeSurface(n, ng, attrs, wa & 7u);
+  return ScapeSurface(n, ng, attrs, wa & SCAPE_MESH_MAT_MASK);
 }
 
 // The surface's material at p (foot: a pixel's size there; front: the ray meets the side s.n
 // points to).
 fn scape_meshMaterial(s: ScapeSurface, p: vec3f, foot: f32, front: bool) -> ScapeMat {
-  var m = ScapeMat(vec3f(0.18), s.n, 0.8, 0.02, vec3f(0.0), clamp(s.attrs.w, 0.0, 1.0));
+  var m = ScapeMat(vec3f(0.18), s.n, 0.8, 0.02, vec3f(0.0), clamp(s.attrs.w, 0.0, 1.0), vec3f(0.0));
   switch (s.material) {
 ${cases}
     default: {}

@@ -12,7 +12,7 @@ import { execFileSync } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { BED_LEVEL, BED_RADIUS, checkMesh } from '../src/render/scape/mesh.mjs';
+import { BED_LEVEL, BED_RADIUS, MAT, checkMesh } from '../src/render/scape/mesh.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const args = process.argv.slice(2);
@@ -75,7 +75,7 @@ for (const m of modules) {
 console.log(`total: ${total} triangles`);
 const obj = resolve(outDir, 'scape.obj');
 writeFileSync(obj, lines.join('\n') + '\n');
-writeFileSync(resolve(outDir, 'scape.mtl'), Array.from({ length: 8 }, (_, i) => `newmtl mat_${i}\nKd 0.8 0.8 0.8\n`).join('\n'));
+writeFileSync(resolve(outDir, 'scape.mtl'), Array.from({ length: Math.max(...Object.values(MAT)) + 1 }, (_, i) => `newmtl mat_${i}\nKd 0.8 0.8 0.8\n`).join('\n'));
 
 const blender = process.env.BLENDER ?? 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe';
 execFileSync(blender, ['-b', '--factory-startup', '-P', resolve(here, 'scape_render.py'), '--', obj, resolve(outDir), views, glass ? '1' : '0', samples, size, String(BED_LEVEL), String(BED_RADIUS)], { stdio: ['ignore', 'ignore', 'inherit'] });

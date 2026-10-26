@@ -353,10 +353,12 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   const idle = new IdleWater();
   // The betta bowl's furnishings, built by now: their BVH for the shader (on the GPU, where the
   // plants' motion rewrites it each frame), where they stand in the sand for the sim (the sand
-  // rests on them and flows round them), and where the fish keeps clear of them.
+  // rests on them and flows round them), where the fish keeps clear of them, and where the sponge
+  // filter's air bubbles out.
   let scapeTex: THREE.Texture | null = null;
   let scapeObstacles: { a: number[]; b: number[]; r: number; solid: number }[] = [];
   let plants: MovingPlants | null = null;
+  let filterAir: { at: number[]; rate: number; radius: number } | null = null;
   if (furnishing) {
     const f = await furnishing;
     PROF.mark('furnishings');
@@ -368,7 +370,10 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     plants = new MovingPlants(device, bvh, f.motion, f.phases);
     sim.bedSolids = { map: f.map, extent: R };
     scapeObstacles = f.obstacles;
+    filterAir = f.bubbles;
   }
+  // (The filter's bubbles owed, a share of one carried from frame to frame.)
+  let airOwed = 0;
   // (The plants' clock, and on phones every other frame of their motion, or fewer at a lower quality
   // level: it is slow enough.)
   let plantClock = 0;
@@ -549,6 +554,17 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
       food.splashes.length = 0;
       if (dropped && !(d.push > 0)) sim.push(dropped, PELLET_DIMPLE, PELLET_DIMPLE_RADIUS);
       if (d.bubbles > 0) sim.splash.emit(d.bubblesAt.toArray(), d.bubbles, BUBBLE_RADIUS);
+      // The sponge filter's air, bubbling steadily out of its lift tube where the bowl's turn has
+      // carried it: those owed, in a frame the fish lets none go (the splash takes one place a
+      // frame).
+      if (filterAir) {
+        airOwed = Math.min(airOwed + dt * filterAir.rate, 4);
+        if (!(d.bubbles > 0) && airOwed >= 1) {
+          const e = controller.rotation.elements, a = filterAir.at;
+          sim.splash.emit([e[0] * a[0] + e[3] * a[1] + e[6] * a[2], e[1] * a[0] + e[4] * a[1] + e[7] * a[2], e[2] * a[0] + e[5] * a[1] + e[8] * a[2]], airOwed, filterAir.radius);
+          airOwed -= Math.floor(airOwed);
+        }
+      }
     }
     PROF.lap(betta.active ? 'life' : 'betta');
     sim.koiVisible = koi.visible;

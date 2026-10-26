@@ -770,6 +770,6 @@ ${crackWGSL()}
   let sn = normalize(n - (grad - n * dot(grad, n)));
   // A soft wet sheen: glossier on the quartz and the flecks, rougher in the hollows and pits.
   let rough = clamp(0.56 + matte + 0.06 * m1 + 0.12 * cav + 0.1 * pit - 0.08 * vein - 0.1 * pale * grainSeen, 0.3, 0.85);
-  return ScapeMat(albedo, sn, rough, 0.04, vec3f(0.0), clamp(attrs.w, 0.0, 1.0));
+  return ScapeMat(albedo, sn, rough, 0.04, vec3f(0.0), clamp(attrs.w, 0.0, 1.0), vec3f(0.0));
 }
 `;

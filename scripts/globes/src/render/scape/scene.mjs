@@ -1,19 +1,22 @@
 // The betta bowl's furnishings together (its page only): the driftwood arch (wood.mjs), the four
-// rocks (rocks.mjs) and the two plants (plants.mjs), each built in the bowl's frame (mesh.mjs) and
-// laid out round the others, so none passes through another and the fish keeps its open water
-// (scape-scene.test.mjs holds them to it). bowlScape.ts builds them once; main.ts packs their
-// meshes into the BVH (scapeBVH.mjs) and the bed's solids (bedSolids.mjs), the bowl's shader takes
-// their materials, and the fish keeps clear of their obstacles.
+// rocks (rocks.mjs), the two plants (plants.mjs) and the heater and the sponge filter
+// (equipment.mjs), each built in the bowl's frame (mesh.mjs) and laid out round the others, so
+// none passes through another and the fish keeps its open water (scape-scene.test.mjs holds them
+// to it). bowlScape.ts builds them once; main.ts packs their meshes into the BVH (scapeBVH.mjs) and
+// the bed's solids (bedSolids.mjs), the bowl's shader takes their materials, and the fish keeps
+// clear of their obstacles.
 
 import * as wood from './wood.mjs';
 import * as rocks from './rocks.mjs';
 import * as plants from './plants.mjs';
+import * as equipment from './equipment.mjs';
 
 /** The pieces, in the order their meshes are packed and their materials are joined. */
 const PIECES = [
   ['wood', wood],
   ['rocks', rocks],
   ['plants', plants],
+  ['equipment', equipment],
 ];
 
 /** The open water the betta keeps (the bowl's frame): no wood or rock in it, at most a leaf's tip. */

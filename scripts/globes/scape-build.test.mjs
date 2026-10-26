@@ -1,5 +1,5 @@
 // The betta bowl's furnishings made as scapeWorker.mjs makes them (the wood and the rocks in a
-// worker of their own, handed over as a worker hands them; the plants meanwhile) are the same, to
+// worker of their own, handed over as a worker hands them; the rest meanwhile) are the same, to
 // the bit, as made in one go (scapeBuild.mjs buildFurnishings), at the phones' detail; their
 // texture has room for the bubble nest's rows where the shader looks for them, which the page fills
 // (the worker never makes the nest); and the page asks its worker, as it is read (betta.html), what
@@ -38,7 +38,7 @@ const bytes = (a) => Buffer.from(a.buffer, a.byteOffset, a.byteLength);
 
 test('furnishings made in two workers are the ones made in one go', async () => {
   const others = apart(['wood', 'rocks']);
-  const here = buildScapePieces({ detail: DETAIL, only: ['plants'] });
+  const here = buildScapePieces({ detail: DETAIL, only: SCAPE_PIECE_NAMES.filter((name) => name !== 'wood' && name !== 'rocks') });
   const pieces = [...(await others), ...here].sort((a, b) => SCAPE_PIECE_NAMES.indexOf(a.name) - SCAPE_PIECE_NAMES.indexOf(b.name));
   assert.deepEqual(pieces.map((p) => p.name), SCAPE_PIECE_NAMES);
   const split = furnishingsOf(pieces, N, EXTENT, NONE);

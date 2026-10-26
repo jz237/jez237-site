@@ -2651,10 +2651,10 @@ ${bowl ? `      globesSandFoot = lit.z * pathLen;
       return col;
     }
 ${bowl ? `    if (event == 9) {${bowl.ids ? `
-      // (The leaf floating on the water, a plant's leaf, stem or root, the driftwood or a rock: by
-      // the triangle's material, scape/mesh.mjs MAT.)
-      let mat = u32(scape_meshTexel(kelpPrimTex, u32(scape_meshTexel(kelpPrimTex, 0u).y) + sc.id * 3u).w) & 7u;
-      ${hitEnds(bowl, `select(${HIT.PLANT}u, select(${HIT.ROCK}u, ${HIT.WOOD}u, mat < 3u), sc.kind == 7u && mat <= 3u)`)}` : ''}
+      // (The leaf floating on the water, a plant's leaf, stem or root, the driftwood, a rock, or the
+      // heater or the filter: by the triangle's material, scape/mesh.mjs MAT.)
+      let mat = u32(scape_meshTexel(kelpPrimTex, u32(scape_meshTexel(kelpPrimTex, 0u).y) + sc.id * 3u).w) & SCAPE_MESH_MAT_MASK;
+      ${hitEnds(bowl, `select(select(${HIT.PLANT}u, select(${HIT.ROCK}u, ${HIT.WOOD}u, mat < 3u), sc.kind == 7u && mat <= 3u), ${HIT.EQUIPMENT}u, sc.kind == 7u && mat >= SCAPE_MAT_HEATER)`)}` : ''}
       col += thr * scape_shade(kelpPrimTex, sc, p + dir * t, dir, inWater, lit, lightTex, lightSamp, koiTime, bgTex, bgSamp, lit.z * pathLen);
       return col;
     }

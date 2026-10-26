@@ -1088,7 +1088,7 @@ fn scape_mat_${name}(attrs: vec4f, p: vec3f, n: vec3f, foot: f32, front: bool) -
   let relief = 0.04 * smoothstep(2.0, 6.0, 1.0 / (k * max(foot, 1e-6)));
   let nn = normalize(n - (g - n * dot(n, g)) * relief);
   let ao = attrs.w * (1.0 - select(0.0, 0.2 * midrib, front));
-  return ScapeMat(c, nn, rough, spec, trans, ao);
+  return ScapeMat(c, nn, rough, spec, trans, ao, vec3f(0.0));
 }
 `;
 
@@ -1112,7 +1112,7 @@ fn scape_mat_stem(attrs: vec4f, p: vec3f, n: vec3f, foot: f32, front: bool) -> S
   stria = mix(0.5, stria, smoothstep(1.0, 3.0, 0.004 / max(foot, 1e-6)));
   c *= (0.93 + 0.12 * stria) * (0.94 + 0.12 * scape_noise3(vec3f(s * 60.0, f32(id) * 3.1, 0.5)));
   let trans = scape_linear(vec3f(0.4, 0.6, 0.15)) * 0.4;
-  return ScapeMat(c, n, 0.4, 0.035, trans, attrs.w);
+  return ScapeMat(c, n, 0.4, 0.035, trans, attrs.w, vec3f(0.0));
 }
 
 fn scape_mat_root(attrs: vec4f, p: vec3f, n: vec3f, foot: f32, front: bool) -> ScapeMat {
@@ -1126,7 +1126,7 @@ fn scape_mat_root(attrs: vec4f, p: vec3f, n: vec3f, foot: f32, front: bool) -> S
     ring = mix(0.2, ring, smoothstep(1.0, 3.0, 0.003 / max(foot, 1e-6)));
     c = mix(c, scape_linear(vec3f(0.2, 0.16, 0.08)), 0.6 * ring);
   }
-  return ScapeMat(c, n, 0.7, 0.02, vec3f(0.0), attrs.w);
+  return ScapeMat(c, n, 0.7, 0.02, vec3f(0.0), attrs.w, vec3f(0.0));
 }
 `,
 ].join('');

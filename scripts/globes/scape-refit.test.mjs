@@ -2,12 +2,13 @@
 // texture packScape fills: scapeBVH.mjs): the plan covers every moving vertex, triangle and node
 // above them; after the plants are moved (the kernels' CPU mirror, at several times and leans)
 // every node's boxes hold its triangles, the tracer's walk over the refitted texels meets what a
-// test of every triangle meets, and nothing of the driftwood's or the rocks' is written.
+// test of every triangle meets, and nothing of the driftwood's, the rocks' or the equipment's is
+// written.
 // Run: node --test scape-refit.test.mjs
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { buildScapePieces } from './src/render/scape/scene.mjs';
-import { packScape, traceCPU, triangleCPU, SCAPE_T_MIN } from './src/render/scape/scapeBVH.mjs';
+import { packScape, traceCPU, triangleCPU, SCAPE_MAT_BITS, SCAPE_T_MIN } from './src/render/scape/scapeBVH.mjs';
 import { stream } from './src/render/scape/mesh.mjs';
 import { LEAF_STRIDE, MOTION_VERTEX_STRIDE as MS, leafPhases, plantMotionWGSL, plantSolids } from './src/render/scape/plantMotion.mjs';
 import {
@@ -28,7 +29,7 @@ const D = packed.data;
 const triBase = D[1], N = D[2], nodeCount = D[0];
 
 /** Each slot's corners' vertex ids, as packed. */
-const slotVerts = (X, t) => [Math.floor(X[(triBase + t * 3) * 4 + 3] / 8), X[(triBase + t * 3 + 1) * 4 + 3], X[(triBase + t * 3 + 2) * 4 + 3]];
+const slotVerts = (X, t) => [X[(triBase + t * 3) * 4 + 3] >>> SCAPE_MAT_BITS, X[(triBase + t * 3 + 1) * 4 + 3], X[(triBase + t * 3 + 2) * 4 + 3]];
 
 /** The plants moved to time t (or by the leaves' phases, as the GPU has them; lean: a vec4 a leaf,
  *  or null), and the refit, into packed.data. */
@@ -138,7 +139,7 @@ test('the plan covers every moving vertex, the triangles they touch, and the nod
     touched++;
     const e = inPlan.get(t);
     assert.ok(e !== undefined, `slot ${t} has a moving corner but is not in the plan`);
-    assert.deepEqual([plan.slots[e * 4 + 1] >>> 3, plan.slots[e * 4 + 2], plan.slots[e * 4 + 3]], vs);
+    assert.deepEqual([plan.slots[e * 4 + 1] >>> SCAPE_MAT_BITS, plan.slots[e * 4 + 2], plan.slots[e * 4 + 3]], vs);
     assert.equal(plan.slots[e * 4 + 1], D[(triBase + t * 3) * 4 + 3]);
   }
   assert.equal(touched, plan.touched);
@@ -184,7 +185,7 @@ test('the plan covers every moving vertex, the triangles they touch, and the nod
   console.log(`  the kernels' buffers: ${(bytes / 1048576).toFixed(1)} MB`);
 });
 
-test('moved and refitted: every box holds its triangles, the walk meets what every triangle meets, and the driftwood and the rocks are untouched', () => {
+test('moved and refitted: every box holds its triangles, the walk meets what every triangle meets, and the driftwood, the rocks and the equipment are untouched', () => {
   const rand = stream(2024);
   // (The texels the kernels may write: the moving vertices' first texels, the plan's slots, the
   // refitted nodes' and the header's boxes.)

@@ -1,11 +1,11 @@
 // What lives in the betta bowl besides the fish (its page only): on its bed of sand (FluidSim's),
-// the furnishings (a driftwood arch, rocks and two plants: scape/, triangle meshes in a BVH, fixed
-// to the bowl, they turn with it), an Indian almond leaf floating on the water, and the bubble nest
-// the betta keeps against the glass at the waterline (interaction/BowlLife.ts moves both, from the
-// water's probes). All of it is traced in the bowl's shader (shaders.ts, in globes_trace's
-// segments) on the same refracted rays as the water and the fish: the furnishings through their
-// BVH (bound in the kelp's slot, which this globe does not use), the leaf as a curved blade met
-// analytically, the nest as thin films.
+// the furnishings (a driftwood arch, rocks, two plants, a heater and a sponge filter: scape/,
+// triangle meshes in a BVH, fixed to the bowl, they turn with it), an Indian almond leaf floating
+// on the water, and the bubble nest the betta keeps against the glass at the waterline
+// (interaction/BowlLife.ts moves both, from the water's probes). All of it is traced in the bowl's
+// shader (shaders.ts, in globes_trace's segments) on the same refracted rays as the water and the
+// fish: the furnishings through their BVH (bound in the kelp's slot, which this globe does not
+// use), the leaf as a curved blade met analytically, the nest as thin films.
 //
 // World units (the glass's outer radius is 1, ~12 cm); the bowl's own frame, its axis up.
 
@@ -293,8 +293,8 @@ fn scape_trace(tex: texture_2d<f32>, p: vec3f, dir: vec3f, tEnd: f32) -> ScapeHi
 
 // A furnishing's surface where a ray (dir, translating frame) met it at x: its material, lit by the
 // lamp through the water and the film's ripples (in the shadows of all the furnishings and of the
-// floating leaf), the blue room's light (shut out of its crevices), a glossy or waxy highlight, and
-// light let through a leaf from behind.
+// floating leaf), the blue room's light (shut out of its crevices), a glossy or waxy highlight,
+// light let through a leaf from behind, and the light it gives off (the heater's lamp).
 fn scape_shadeMesh(tex: texture_2d<f32>, h: ScapeHit, x: vec3f, dir: vec3f, inWater: bool, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, time: f32, foot: f32) -> vec3f {
   let rotT = transpose(scapeRot);
   let s = scape_meshSurface(tex, ScapeMeshHit(h.t, h.id, h.uv));
@@ -334,7 +334,7 @@ fn scape_shadeMesh(tex: texture_2d<f32>, h: ScapeHit, x: vec3f, dir: vec3f, inWa
   let key = vec3f(1.15, 1.04, 0.90) * mat.ao;
   let hk = normalize(K - dir);
   let keySpec = F * (shine + 8.0) / 25.13274 * pow(max(dot(n, hk), 0.0), shine) * max(nk, 0.0);
-  return mat.albedo * (E * S * max(ndl, 0.0) + key * max(nk, 0.0) + ambient) / 3.14159265 + E * S * (spec + through / 3.14159265) + key * (keySpec + mat.trans * max(-nk, 0.0) * 0.3 / 3.14159265) + F * ambient * 0.25;
+  return mat.albedo * (E * S * max(ndl, 0.0) + key * max(nk, 0.0) + ambient) / 3.14159265 + E * S * (spec + through / 3.14159265) + key * (keySpec + mat.trans * max(-nk, 0.0) * 0.3 / 3.14159265) + F * ambient * 0.25 + mat.glow;
 }
 
 // The light a hit sends back along dir (x: the point; inWater: the medium the ray is in; tex: the

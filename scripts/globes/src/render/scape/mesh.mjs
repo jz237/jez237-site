@@ -1,5 +1,5 @@
 // The betta bowl's furnishings as triangle meshes (its page only): the shared ground rules for the
-// pieces (wood.mjs, rocks.mjs, plants.mjs), the mesh they hand over, and helpers. The pieces are
+// pieces (wood.mjs, rocks.mjs, plants.mjs, equipment.mjs), the mesh they hand over, and helpers. The pieces are
 // built once at load, deterministically (seeded), packed into one BVH (scapeBVH.mjs) and traced on
 // the same refracted rays as the water and the fish, like the betta's own mesh.
 //
@@ -29,8 +29,21 @@ export const GLASS_CLEAR = 0.95;
  *    thin two-sided sheets: one layer of triangles, the shader lights both faces.
  *  - STEM: a leaf's stalk or a plant's stem. x: along it (world units), y: angle round it, z: which
  *    stem, w: occlusion.
- *  - ROOT: crown and roots where a plant meets the sand. x, y, z: as STEM, w: occlusion. */
-export const MAT = { BARK: 1, WOOD_END: 2, ROCK: 3, LEAF_BIG: 4, LEAF_SMALL: 5, STEM: 6, ROOT: 7 };
+ *  - ROOT: crown and roots where a plant meets the sand. x, y, z: as STEM, w: occlusion.
+ *  - HEATER: the heater's dark plastic (equipment.mjs). x: which part (0 its guard and caps, 1 its
+ *    tube inside the guard, 2 its cord), y: along it (world units: from its foot, or along the
+ *    cord), z: 0, w: occlusion.
+ *  - HEATER_LAMP: the heater's light, a small lens. x: out from its middle (0..1 at its edge), y, z:
+ *    0, w: occlusion.
+ *  - SPONGE: the filter's foam. x: 0, y: height above the base it stands on (world units), z: 0,
+ *    w: occlusion.
+ *  - TUBE: the filter's plastic and tubing. x: which part (0 its cap and lift tube, 1 down inside
+ *    the lift tube, 2 its base, 3 the airline, 4 the airline's sleeve), y: along it (world units),
+ *    z: 0, w: occlusion.
+ *  - SUCTION: the heater's suction cups and clips, clear soft plastic. x: which (0 a cup, 1 a clip),
+ *    y: out across it (0..1: a cup's middle to its rim; a clip's inside to its outside), z: 0, w:
+ *    occlusion. */
+export const MAT = { BARK: 1, WOOD_END: 2, ROCK: 3, LEAF_BIG: 4, LEAF_SMALL: 5, STEM: 6, ROOT: 7, HEATER: 8, HEATER_LAMP: 9, SPONGE: 10, TUBE: 11, SUCTION: 12 };
 
 /** @typedef {[number, number, number]} V3 */
 /**
@@ -41,6 +54,8 @@ export const MAT = { BARK: 1, WOOD_END: 2, ROCK: 3, LEAF_BIG: 4, LEAF_SMALL: 5, 
  * @property {Float32Array} attrs four a vertex (see MAT)
  * @property {Uint32Array} indices three a triangle, counter-clockwise seen from outside
  * @property {Uint8Array} materials one a triangle (MAT)
+ * @property {boolean} [onGlass] fixed to the glass (the equipment, on its suction cups, its tubing
+ *   up the wall): it may come right up to the glass, nearer than GLASS_CLEAR (checkMesh)
  */
 /**
  * Where the fish keeps clear of: a capsule from a to b. r: the margin it swims round (centre line
@@ -170,8 +185,8 @@ export class MeshBuilder {
 }
 
 /** Problems with a mesh (an empty list when it is sound): NaNs, indices out of range, normals not of
- *  unit length, attributes out of their ranges, anything nearer the glass than GLASS_CLEAR, or
- *  below the glass's bottom. */
+ *  unit length, attributes out of their ranges, anything nearer the glass than GLASS_CLEAR (but in
+ *  a mesh fixed to the glass: onGlass), or below the glass's bottom. */
 export function checkMesh(mesh) {
   const out = [];
   const vc = mesh.positions.length / 3;
@@ -187,7 +202,7 @@ export function checkMesh(mesh) {
     const [x, y, z] = [mesh.positions[v * 3], mesh.positions[v * 3 + 1], mesh.positions[v * 3 + 2]];
     const nl = Math.hypot(mesh.normals[v * 3], mesh.normals[v * 3 + 1], mesh.normals[v * 3 + 2]);
     if (Math.abs(nl - 1) > 1e-3) { out.push(`normal ${v} not unit (${nl})`); break; }
-    if (y > BED_LEVEL - 0.02 && Math.hypot(x, y, z) > GLASS_CLEAR) far++;
+    if (!mesh.onGlass && y > BED_LEVEL - 0.02 && Math.hypot(x, y, z) > GLASS_CLEAR) far++;
     if (Math.hypot(x, y, z) > GLASS_INNER - 0.005) { out.push(`vertex ${v} outside the glass`); break; }
     const w = mesh.attrs[v * 4 + 3];
     if (!(w >= 0 && w <= 1)) { out.push(`attrs ${v}: occlusion out of 0..1`); break; }
@@ -211,13 +226,15 @@ struct ScapeMat {
   // Linear reflectance (0..1); the shading normal (the bowl's frame, the side the input n is on,
   // fine relief added); specular roughness (0 mirror .. 1 matte) and strength (Fresnel at normal
   // incidence: ~0.02 dry, ~0.04 wet or waxy); light a thin blade lets through (linear, 0 opaque);
-  // ambient occlusion (1 open .. 0 closed).
+  // ambient occlusion (1 open .. 0 closed); the light it gives off itself (linear, 0 for all but a
+  // lamp).
   albedo: vec3f,
   n: vec3f,
   rough: f32,
   spec: f32,
   trans: vec3f,
   ao: f32,
+  glow: vec3f,
 }
 
 fn scape_hash3i(c: vec3i) -> vec3f {

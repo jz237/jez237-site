@@ -1,8 +1,9 @@
 // The betta bowl's furnishings, ready for the page (main.ts via furnishings.ts): built
 // (scene.mjs), packed into their BVH's texture (scapeBVH.mjs; with room for the bubble nest's
-// rows, which the page writes in: nest.mjs), baked into the bed's solids (bedSolids.mjs), and the
+// rows, which the page writes in: nest.mjs), baked into the bed's solids (bedSolids.mjs), the
 // plants' motion planned (scapeRefit.mjs: their kernels, their data, and what of the BVH to refit
-// as they move). Run in a worker (scapeWorker.mjs), or here if no worker can be had.
+// as they move), and where the sponge filter's air comes out (equipment.mjs). Run in a worker
+// (scapeWorker.mjs), or here if no worker can be had.
 
 import { bakeBedSolids } from './bedSolids.mjs';
 import { NEST_MAX } from './nest.mjs';
@@ -21,7 +22,7 @@ export function buildFurnishings(n, extent, none, detail = 1) {
  *  made. */
 export function furnishingsOf(pieces, n, extent, none) {
   const meshes = pieces.flatMap((p) => p.meshes);
-  // (The plants keep out of the wood and the rocks: their solid parts.)
+  // (The plants keep out of the wood, the rocks and the equipment: their solid parts.)
   const solids = pieces.filter((p) => p.name !== 'plants').flatMap((p) => p.obstacles);
   // (Room after the vertices for the nest's rows: nest.mjs withNest.)
   const packed = packScape(meshes, { rows: new Float32Array(4 * NEST_MAX) });
@@ -32,6 +33,7 @@ export function furnishingsOf(pieces, n, extent, none) {
     height: packed.height,
     map: bakeBedSolids(meshes, n, extent, none),
     obstacles: pieces.flatMap((p) => p.obstacles),
+    bubbles: pieces.find((p) => p.bubbles)?.bubbles ?? null,
     motion: {
       wgsl: scapeRefitWGSL(plantMotionWGSL(solids, plan.rest)),
       buffers: refitBuffers(plan),

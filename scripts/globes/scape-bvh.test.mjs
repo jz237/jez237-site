@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import { existsSync } from 'node:fs';
 import {
   packScape, traceCPU, shadowCPU, surfaceCPU, scapeMeshWGSL, scapeStats,
-  LEAF_PASS, SHADOW_CUTOFF, SCAPE_T_MIN, SCAPE_MAX_DEPTH, SCAPE_MAX_HEIGHT, SCAPE_MAX_STEPS,
+  LEAF_PASS, SHADOW_CUTOFF, SCAPE_MAT_BITS, SCAPE_T_MIN, SCAPE_MAX_DEPTH, SCAPE_MAX_HEIGHT, SCAPE_MAX_STEPS,
 } from './src/render/scape/scapeBVH.mjs';
 import { MAT, MeshBuilder, stream, fbm3, SCAPE_WGSL_COMMON } from './src/render/scape/mesh.mjs';
 
@@ -163,7 +163,7 @@ let piecesOnce = null;
 function realPieces() {
   piecesOnce ??= (async () => {
     const out = [];
-    for (const name of ['wood', 'rocks', 'plants']) {
+    for (const name of ['wood', 'rocks', 'plants', 'equipment']) {
       const url = new URL(`./src/render/scape/${name}.mjs`, import.meta.url);
       if (!existsSync(url)) continue;
       let mod, piece;
@@ -408,8 +408,8 @@ function checkPacked(P, meshes) {
     const [m, i, off] = locate(P.order[k]);
     const at = triBase + k * 3;
     const wa = tx(at, 3);
-    assert.equal(wa & 7, m.materials[i]);
-    const ids = [wa >>> 3, tx(at + 1, 3), tx(at + 2, 3)];
+    assert.equal(wa & ((1 << SCAPE_MAT_BITS) - 1), m.materials[i]);
+    const ids = [wa >>> SCAPE_MAT_BITS, tx(at + 1, 3), tx(at + 2, 3)];
     for (let v = 0; v < 3; v++) {
       const vi = m.indices[i * 3 + v];
       assert.equal(ids[v], vi + off);
@@ -633,7 +633,7 @@ test('the shader: the API, the pieces\' materials and stand-ins for those missin
     'fn scape_meshSurface(tex: texture_2d<f32>, h: ScapeMeshHit) -> ScapeSurface',
     'fn scape_meshMaterial(s: ScapeSurface, p: vec3f, foot: f32, front: bool) -> ScapeMat',
   ]) assert.ok(wgsl.includes(sig), sig);
-  for (const name of ['bark', 'woodEnd', 'rock', 'leafBig', 'leafSmall', 'stem', 'root']) {
+  for (const name of ['bark', 'woodEnd', 'rock', 'leafBig', 'leafSmall', 'stem', 'root', 'heater', 'heaterLamp', 'sponge', 'tube', 'suction']) {
     assert.equal(wgsl.match(new RegExp(`fn scape_mat_${name}\\(`, 'g'))?.length, 1, name);
   }
   // Every function once; braces and parentheses balance.
@@ -920,6 +920,34 @@ test('rows packed after the vertices, found from texel 3, leave the tree and its
   assert.deepEqual(b, a);
   for (const r of boxRays(P.lo, P.hi, 500, 100, 3)) assert.deepEqual(traceCPU(P, r.o, r.d, r.tEnd), traceCPU(plain, r.o, r.d, r.tEnd));
   assert.throws(() => packScape(meshes, { rows: new Float32Array(6) }), /rows/);
+});
+
+test("a triangle's first word holds the highest vertex id and material there is room for, exactly, and no more", () => {
+  // (As many vertices as the word leaves room for, all but the last three at one point; a triangle
+  // on those three, of the highest material, and one at the start.)
+  const V = (1 << (24 - SCAPE_MAT_BITS)) - 1, top = (1 << SCAPE_MAT_BITS) - 1;
+  const mesh = (vc) => {
+    const positions = new Float32Array(vc * 3).fill(-0.5), normals = new Float32Array(vc * 3), attrs = new Float32Array(vc * 4);
+    for (let v = 0; v < vc; v++) normals[v * 3 + 1] = 1;
+    positions.set([0, -0.5, 0, 0.1, -0.5, 0, 0, -0.5, 0.1], (vc - 3) * 3);
+    positions.set([0.3, -0.5, 0, 0.4, -0.5, 0, 0.3, -0.5, 0.1], 0);
+    attrs.set([7, 8, 9, 1], (vc - 2) * 4);
+    return { name: 'wide', positions, normals, attrs, indices: Uint32Array.from([vc - 3, vc - 2, vc - 1, 0, 1, 2]), materials: Uint8Array.from([top, MAT.SUCTION]) };
+  };
+  const P = packScape([mesh(V)]);
+  for (const [x, material, ids] of [[0.03, top, [V - 3, V - 2, V - 1]], [0.33, MAT.SUCTION, [0, 1, 2]]]) {
+    const h = traceCPU(P, [x, -0.4, 0.03], [0, -1, 0], 1);
+    assert.notEqual(h.tri, NONE);
+    const s = surfaceCPU(P, h);
+    assert.equal(s.material, material);
+    assert.deepEqual(s.vertices, ids);
+    assert.equal(P.data[(P.data[1] + h.tri * 3) * 4 + 3], ids[0] * (top + 1) + material);
+  }
+  // (The second corner's attributes read back through its id: the vertex table's far end.)
+  const far = surfaceCPU(P, traceCPU(P, [0.1 - 1e-5, -0.4, 1e-5], [0, -1, 0], 1));
+  assert.ok(Math.abs(far.attrs[0] - 7) < 1e-3 && Math.abs(far.attrs[3] - 1) < 1e-3);
+  assert.throws(() => packScape([mesh(V + 1)]), /vertices/);
+  assert.throws(() => packScape([{ ...mesh(8), materials: Uint8Array.from([top + 1, 1]) }]), /material/);
 });
 
 test('the real pieces, if present: sound, agree with brute force; and the measurements that chose the traversal', async () => {

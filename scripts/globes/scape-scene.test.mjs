@@ -89,7 +89,7 @@ test('every mesh is sound, and the furnishings fit their budgets', () => {
 });
 
 test('the pieces build alike every time, and buildScape is all of them in turn', () => {
-  assert.deepEqual(pieces.map((p) => p.name), ['wood', 'rocks', 'plants']);
+  assert.deepEqual(pieces.map((p) => p.name), ['wood', 'rocks', 'plants', 'equipment']);
   assertSameMeshes(scape.meshes, pieces);
   assert.deepEqual(scape.obstacles, pieces.flatMap((p) => p.obstacles));
 });
@@ -243,7 +243,7 @@ test('the shader has every material from the pieces, and the tracer packs them a
   assert.equal(SCAPE_PIECE_WGSL.length, pieces.length);
   for (const src of SCAPE_PIECE_WGSL) assert.equal(typeof src, 'string');
   const all = SCAPE_PIECE_WGSL.join('\n');
-  for (const name of ['bark', 'woodEnd', 'rock', 'leafBig', 'leafSmall', 'stem', 'root']) {
+  for (const name of ['bark', 'woodEnd', 'rock', 'leafBig', 'leafSmall', 'stem', 'root', 'heater', 'heaterLamp', 'sponge', 'tube', 'suction']) {
     assert.equal(all.match(new RegExp(`\\bfn\\s+scape_mat_${name}\\s*\\(`, 'g'))?.length ?? 0, 1, `scape_mat_${name} is not defined exactly once`);
   }
   assert.ok(scapeMeshWGSL(SCAPE_PIECE_WGSL).length > all.length);

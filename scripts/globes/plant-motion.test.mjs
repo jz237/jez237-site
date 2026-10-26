@@ -155,9 +155,9 @@ test('the tips move clearly, and never wildly', () => {
   }
 });
 
-test('nothing goes out through the glass or into the driftwood or the rocks over a minute, and plant_collide seldom has to push', () => {
+test('nothing goes out through the glass or into the driftwood, the rocks or the equipment over a minute, and plant_collide seldom has to push', () => {
   let points = 0, pushed = 0, sum = 0, max = 0;
-  assert.ok(solids.length > 0, 'no solids from the driftwood and the rocks');
+  assert.ok(solids.length > 0, 'no solids from the driftwood, the rocks and the equipment');
   for (const m of piece.meshes) {
     // (Calmed, and collided, against the solids the shader bakes: both plants' rest poses kept
     // clear of them.)

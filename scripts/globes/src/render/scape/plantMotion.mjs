@@ -669,9 +669,9 @@ const f = (x) => {
 const v3 = (a) => `vec3f(${a.map((x) => f(Math.round(x * 1e6) / 1e6)).join(', ')})`;
 
 /**
- * The plants' motion in WGSL. obstacles: the driftwood's and the rocks' (those with solid > 0 keep
- * out the leaves: see plantSolids); rest: the moving vertices' rest positions, xyz each (refitPlan's
- * plan.rest), which keeps the rest pose clear of them. Defines:
+ * The plants' motion in WGSL. obstacles: the driftwood's, the rocks' and the equipment's (those with
+ * solid > 0 keep out the leaves: see plantSolids); rest: the moving vertices' rest positions, xyz
+ * each (refitPlan's plan.rest), which keeps the rest pose clear of them. Defines:
  *   struct PlantMV { a: vec4f, b: vec4f, c: vec4f, d: vec4f, e: vec4f }   a vertex's motion (its
  *                                                        five vec4s)
  *   fn plant_displace(rest: vec3f, mv: PlantMV) -> vec3f   the displaced point (floor kept)
@@ -902,7 +902,7 @@ fn plant_pushOut(p: vec3f, a: vec3f, b: vec3f, r: f32) -> vec3f {
   return p + dir * plant_soft(r - d);
 }
 
-// p kept out of the driftwood's and the rocks' solids and in from the glass.
+// p kept out of the driftwood's, the rocks' and the equipment's solids and in from the glass.
 fn plant_collide(p: vec3f) -> vec3f {
   var q = p;
 ${pushes || '  // (No solids given.)'}

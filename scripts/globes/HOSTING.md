@@ -517,6 +517,29 @@ determinate bar, about a second into the load, while the bowl builds. Details:
 docs/architecture.md, the two Phase 2 sections at its end (quality, and the studio while the bowl
 builds).
 
+The equipment: the bowl now holds what a keeper puts in a ~10-gallon planted bowl for a betta, as
+furnishings like the rest (`src/render/scape/equipment.mjs`, in the same BVH, lit and shaded alike):
+a compact submersible heater on the back glass, partly behind the tall plant (its tube in a black
+slotted guard, a cap with a small amber light, held off the glass by two clear suction cups on
+clips, its cord up the glass and out under the lid's rim), and a small sponge filter at the back on
+the left (a coarse black foam cylinder on a weighted base in the sand, a short lift tube, its
+airline up the glass and out). The foam is its material: round pores of many sizes, darker inside,
+dimmer struts down them and paler ones between, faded to their mean where a pixel outgrows them.
+The filter's air rises from its lift tube as the water's own bubbles (`FluidSim.splash.emit`, nine
+a second, in frames the fish lets none go: main.ts), which sit at the film and burst like the
+rest. The fish keeps clear of both (obstacles), the plants' leaves keep out of them, and the sand
+flows round the filter's base (the bed's solids: its base only; the water passes through the
+sponge, and a column that tall would raise the bed's top over the open water, under which a
+phone's march skips its samples: on this desktop's Radeon iGPU that cost the phone's frame 5%).
+Triangles' materials take four bits now (the equipment's are 8-12: HEATER, HEATER_LAMP, SPONGE,
+TUBE, SUCTION; vertex ids stay below 2^20), in the packer, its mirror, the shader and the plants'
+refit kernels, and the phone's interleave gives the equipment a hit code of its own
+(`bowlResolve.mjs` HIT.EQUIPMENT). The idle 'filter' current is as it was: it stirs the whole bowl
+and has no source to put at the filter. Cost: 12,874 triangles at full detail, 5,214 on phones; on
+the iGPU (`--use-adapter-luid`) the phone's frame at a ratio of 2 went from 190 to 194 ms; the
+other globes' shaders are unchanged, byte for byte. Tests: `equipment.test.mjs` (7) and a packing
+test in `scape-bvh.test.mjs`, 212 in all.
+
 ## Browser compatibility
 
 Firefox compiles WGSL with naga, which is stricter than Chrome's Tint. Builds up to

@@ -2,7 +2,7 @@
 // moves the plants' vertices (plantMotion.mjs), rewrites their triangles' corners and refits the
 // boxes of the tree's nodes above them, bottom up, in place in the texture packScape filled
 // (scapeBVH.mjs). The tree's shape and numbering, and everything not over a moving triangle, stay
-// as packed: the driftwood's and the rocks' texels are never written.
+// as packed: the driftwood's, the rocks' and the equipment's texels are never written.
 //
 // refitPlan works out, once on the CPU after packScape, what moves and what each kernel does; the
 // kernels (scapeRefitWGSL) then run every frame, in this order:
@@ -31,6 +31,7 @@
 // takes about 0.1 ms (34,912 vertices, 64,805 triangles, 20,847 nodes over 22 levels).
 
 import { LEAF_STRIDE, MOTION_VERTEX_STRIDE, forgetMotion, leafPhases, moveVertex, plantCollide, plantSolids, tamedLeaves } from './plantMotion.mjs';
+import { SCAPE_MAT_BITS } from './scapeBVH.mjs';
 
 /** Floats a moving vertex takes in plan.verts (seven vec4s: [rest.xyz, vertex id] [n.xyz, attrs.x]
  *  and its motion's five, plantMotion.mjs). */
@@ -80,16 +81,17 @@ const bitsOf = (x) => {
 /**
  * What moves, and the kernels' work, for the BVH packScape(meshes) made (layout 'stack').
  * isMoving(mesh, index): whether a mesh's vertices move (by default, a mesh with motion: the plants).
- * options.obstacles (the driftwood's and the rocks'; the plants' own are passed over): each leaf
- * whose motion would carry it into their solids or the glass is calmed (plantMotion.mjs's
- * tamedLeaves, options.allow and options.minScale its own) in the plan's copy of the leaf tables
- * (the meshes are left as they are); plan.scales has each leaf's. Without them the leaves keep
- * their full motion: the page passes them.
+ * options.obstacles (the driftwood's, the rocks' and the equipment's; the plants' own are passed
+ * over): each leaf whose motion would carry it into their solids or the glass is calmed
+ * (plantMotion.mjs's tamedLeaves, options.allow and options.minScale its own) in the plan's copy of
+ * the leaf tables (the meshes are left as they are); plan.scales has each leaf's. Without them the
+ * leaves keep their full motion: the page passes them.
  * Returns (typed arrays to upload once, as their names say):
  *   verts     Float32Array, PLANT_VERT_FLOATS a moving vertex          -> plantVerts
  *   leaves    Float32Array, LEAF_STRIDE a leaf (the moving meshes' in turn; a vertex's leaf is its
  *             index here)                                              -> plantLeaves
- *   slots     Uint32Array, four a triangle: [slot, va * 8 + material, vb, vc]  -> plantSlots
+ *   slots     Uint32Array, four a triangle: [slot, va * 16 + material, vb, vc] -> plantSlots
+ *             (its first word as packed: scapeBVH.mjs SCAPE_MAT_BITS)
  *   nodes     Uint32Array, PLANT_NODE_U32 a node record, deepest level first   -> plantNodes
  *   statics   Float32Array, eight a box that does not move (one of zeros if none) -> plantStatic
  *   dPos      Float32Array, four a vertex of the whole BVH (its rest position) -> dPos's start
@@ -168,7 +170,7 @@ export function refitPlan(packed, meshes, isMoving = (m) => !!m.motion, options 
   const touched = new Uint8Array(N);
   let touchedCount = 0;
   for (let t = 0; t < N; t++) {
-    const va = Math.floor(word(t, 0) / 8), vb = word(t, 1), vc = word(t, 2);
+    const va = word(t, 0) >>> SCAPE_MAT_BITS, vb = word(t, 1), vc = word(t, 2);
     if (moving[va] >= 0 || moving[vb] >= 0 || moving[vc] >= 0) {
       touched[t] = 1;
       touchedCount++;
@@ -364,7 +366,7 @@ export function trisCPU(packed, plan, dPos) {
   const D = packed.data, S = plan.slots;
   for (let e = 0; e < plan.slotCount; e++) {
     const at = (plan.triBase + S[e * 4] * 3) * 4;
-    const vs = [S[e * 4 + 1] >>> 3, S[e * 4 + 2], S[e * 4 + 3]];
+    const vs = [S[e * 4 + 1] >>> SCAPE_MAT_BITS, S[e * 4 + 2], S[e * 4 + 3]];
     const ws = [S[e * 4 + 1], S[e * 4 + 2], S[e * 4 + 3]];
     for (let c = 0; c < 3; c++) {
       D[at + c * 4] = dPos[vs[c] * 4];
@@ -399,7 +401,7 @@ export function refitCPU(packed, plan, dPos) {
       out.fill(Infinity, 0, 3);
       out.fill(-Infinity, 3, 6);
       for (let e = a; e < a + b; e++) {
-        for (const v of [S[e * 4 + 1] >>> 3, S[e * 4 + 2], S[e * 4 + 3]]) {
+        for (const v of [S[e * 4 + 1] >>> SCAPE_MAT_BITS, S[e * 4 + 2], S[e * 4 + 3]]) {
           for (let k = 0; k < 3; k++) {
             const x = dPos[v * 4 + k];
             if (x < out[k]) out[k] = x;
@@ -447,8 +449,8 @@ export function refitCPU(packed, plan, dPos) {
 // ---- the kernels --------------------------------------------------------------------------------------
 
 /**
- * The kernels' WGSL, one module each (motionWGSL: plantMotionWGSL's, built with the driftwood's and
- * the rocks' obstacles and plan.rest). Their bindings, all @group(0):
+ * The kernels' WGSL, one module each (motionWGSL: plantMotionWGSL's, built with the driftwood's, the
+ * rocks' and the equipment's obstacles and plan.rest). Their bindings, all @group(0):
  *   skin  (entry point plantSkin)
  *     0  var<uniform> plantSkinParams: PlantSkinParams { count: u32, vertBase: u32, pad0: u32, pad1: u32 }
  *     1  var<storage, read> plantVerts: array<vec4f>          plan.verts
@@ -526,14 +528,14 @@ struct PlantTrisParams {
 @group(0) @binding(3) var scapeTex: texture_storage_2d<rgba32float, write>;
 ${texel}
 // One triangle: its corners from dPos (so corners it shares are bit for bit its neighbours'), their
-// words as packed (va * 8 + material, vb, vc).
+// words as packed (va * 16 + material, vb, vc).
 @compute @workgroup_size(${PLANT_WORKGROUP})
 fn plantTris(@builtin(global_invocation_id) gid: vec3u) {
   let i = gid.x;
   if (i >= plantTrisParams.count) { return; }
   let e = plantSlots[i];
   let at = plantTrisParams.triBase + e.x * 3u;
-  textureStore(scapeTex, plant_texel(at), vec4f(dPos[e.y >> 3u].xyz, f32(e.y)));
+  textureStore(scapeTex, plant_texel(at), vec4f(dPos[e.y >> ${SCAPE_MAT_BITS}u].xyz, f32(e.y)));
   textureStore(scapeTex, plant_texel(at + 1u), vec4f(dPos[e.z].xyz, f32(e.z)));
   textureStore(scapeTex, plant_texel(at + 2u), vec4f(dPos[e.w].xyz, f32(e.w)));
 }
@@ -572,7 +574,7 @@ fn plant_childBox(c: vec4u) -> PlantBox {
     var hi = vec3f(-3.0e38);
     for (var j = 0u; j < c.z; j++) {
       let e = plantSlots[c.y + j];
-      let a = dPos[e.y >> 3u].xyz;
+      let a = dPos[e.y >> ${SCAPE_MAT_BITS}u].xyz;
       let b = dPos[e.z].xyz;
       let d = dPos[e.w].xyz;
       lo = min(lo, min(a, min(b, d)));
