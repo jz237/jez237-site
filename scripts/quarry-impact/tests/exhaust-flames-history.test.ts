@@ -1,6 +1,7 @@
+import {restoreDustBeamsBytes} from './dust-beams-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readExhaustFlamesPrevious,restoreExhaustFlamesBytes,verifyExhaustFlamesRevision} from './exhaust-flames-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreDustBeamsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('ExhaustFlames preserves every prior fixture, vehicle asset, venue art and history input',verifyExhaustFlamesRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/exhaust-flames/revision.json').toString());

@@ -68,7 +68,7 @@ test('brake lights work in daylight too, and a smashed tail lamp stays dark',()=
   }
  }finally{world.free();}
  const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
- assert.ok(main.includes("c.health>0&&!c.electricalCut&&!c.batteryOut&&(c.input?.brake??0)>.2&&Math.abs(c.speed)>1,dusk?1:RAIN_LIGHTS.pool,wet&&c.extendedDamage?RAIN_BEAMS.strength:0);}"),'braking is passed in every light, not only at dusk, and needs working electrics');
+ assert.ok(main.includes("c.health>0&&!c.electricalCut&&!c.batteryOut&&(c.input?.brake??0)>.2&&Math.abs(c.speed)>1,dusk?1:RAIN_LIGHTS.pool,wet&&c.extendedDamage?RAIN_BEAMS.strength:dusk&&c.extendedDamage?DUST_BEAMS.strength*dustAir:0);}"),'braking is passed in every light, not only at dusk, and needs working electrics');
 });
 test('a smashed lamp\'s lens goes dark and dull the moment it breaks, and only once',()=>{
  const root=new T.Group(),lamp=new T.Mesh(new T.BoxGeometry(.3,.1,.05),new T.MeshStandardMaterial({name:'Headlight',color:0xe0e0e0,roughness:.1}));lamp.position.set(.6,.7,2);root.add(lamp);

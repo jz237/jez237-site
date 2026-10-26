@@ -127,6 +127,7 @@ import {RollingCaps,fitHubcaps} from './rolling-caps';
 import {BODY_DUST,bodyDustPuffs,bodyPoint} from './body-dust';
 import {AIRBAG,Airbags} from './airbags';
 import {ExhaustFlames,shiftFlame} from './exhaust-flames';
+import {DUST_BEAMS,dustAirStep} from './dust-beams';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -1976,7 +1977,7 @@ function step(dt: number) {
   {const dusk=eventLighting==='dusk',wet=eventLighting==='rain';for(const c of cars){const l=carLights.get(c);if((dusk||wet)&&l&&c.extendedDamage){const a=headlightAim(c.structuralDamage?.[0]??0,c.structuralDamage?.[2]??0,c.structuralDamage?.[3]??0);l.aim(a.yaw,a.reach);}}
   // In the rain drivers run their lamps too (offline), the pool on the road fainter against the daylight, the beams
   // showing in the rain.
-  for(const c of cars)carLights.get(c)?.set((dusk||wet&&c.extendedDamage)&&c.health>0&&!c.electricalCut&&!c.batteryOut&&(!c.beltSnapped||batteryLights(c.battery,clock,c.id)),c.health>0&&!c.electricalCut&&!c.batteryOut&&(c.input?.brake??0)>.2&&Math.abs(c.speed)>1,dusk?1:RAIN_LIGHTS.pool,wet&&c.extendedDamage?RAIN_BEAMS.strength:0);}
+  for(const c of cars)carLights.get(c)?.set((dusk||wet&&c.extendedDamage)&&c.health>0&&!c.electricalCut&&!c.batteryOut&&(!c.beltSnapped||batteryLights(c.battery,clock,c.id)),c.health>0&&!c.electricalCut&&!c.batteryOut&&(c.input?.brake??0)>.2&&Math.abs(c.speed)>1,dusk?1:RAIN_LIGHTS.pool,wet&&c.extendedDamage?RAIN_BEAMS.strength:dusk&&c.extendedDamage?DUST_BEAMS.strength*dustAir:0);}
   // In the rain the rear fog lamps come on too (offline).
   {const raining=eventLighting==='rain';for(const c of cars)carLights.get(c)?.fog(raining&&!!c.extendedDamage&&c.health>0&&!c.electricalCut&&!c.batteryOut);}
   // Backing up, the reversing lamps come on (offline).
@@ -2331,7 +2332,7 @@ const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMa
 function bodyBox(c:Vehicle){let box=roostBoxes.get(c);if(box)return box;c.root.updateMatrixWorld(true);const inverse=c.root.matrixWorld.clone().invert(),b=new T.Box3(),all=new T.Box3();for(const p of c.panels)all.union(b.setFromObject(p).applyMatrix4(inverse));if(all.isEmpty())return null;
   box={centre:all.getCenter(new T.Vector3()),half:all.getSize(new T.Vector3()).multiplyScalar(.5)};roostBoxes.set(c,box);return box;}
 let bodyDusts=0;const dustOut=new T.Vector3();
-const shiftGears=new WeakMap<object,number>(),shiftRevs=new WeakMap<object,number>();let shiftFlames=0;let shiftSmokes=0;const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3(),roostBoxes=new WeakMap<Vehicle,{centre:T.Vector3;half:T.Vector3}>(),roostBodies:RoostBody[]=[],pingClock=new Map<number,number>();let pingTake=0,stonePings=0;let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
+const shiftGears=new WeakMap<object,number>(),shiftRevs=new WeakMap<object,number>();let shiftFlames=0,dustAir=0;let shiftSmokes=0;const roostClocks=new WeakMap<object,number[]>(),roostBack=new T.Vector3(),roostBoxes=new WeakMap<Vehicle,{centre:T.Vector3;half:T.Vector3}>(),roostBodies:RoostBody[]=[],pingClock=new Map<number,number>();let pingTake=0,stonePings=0;let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
 let wetReflections:ReturnType<typeof createWetReflections>|undefined;const glowList:Glow[]=[];
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
 function lookDriver(c:Vehicle,figure:T.Object3D,dt:number){
@@ -2647,6 +2648,8 @@ function frame(now: number) {
     const n=shiftPuffs(before,c.gear,c.input.throttle,isClassicKind(c.kind),c.engineDamage??0);if(!n)continue;shiftSmokes++;
     steamAt.set(isRearEngineKind(c.kind)?.35:-.35,-.25,-DEFINITIONS[c.kind].halfLength-.1).applyQuaternion(c.root.quaternion).add(c.root.position);const start=fx.cursor;fx.emit(steamAt,n,0,SHIFT_SMOKE.size);
     for(let j=start;j<fx.cursor;j++){const k=j%fx.particles.length,p=fx.particles[k];p.v.addScaledVector(c.forward,-SHIFT_SMOKE.back);p.size=SHIFT_SMOKE.puff[0]+Math.random()*(SHIFT_SMOKE.puff[1]-SHIFT_SMOKE.puff[0]);p.max=p.life=SHIFT_SMOKE.life[0]+Math.random()*(SHIFT_SMOKE.life[1]-SHIFT_SMOKE.life[0]);dustTint.setHex(SHIFT_SMOKE.tint).multiplyScalar(.85+Math.random()*.3).toArray(fx.colors,k*3);}}
+  // The dust the plumes leave hanging in the air (it shows the headlamp beams at dusk).
+  if(state==='playing')dustAir=dustAirStep(dustAir,cars.filter(c=>c.extendedDamage).map(c=>dustRate(c.speed,c.surface,eventLighting==='rain')/DUST.rate),dt);
   // Dry gravel kicks up a dust plume behind a fast car's rear tyres (offline; none in the rain).
   if(state==='playing')for(const c of cars){if(!c.extendedDamage)continue;const rate=dustRate(c.speed,c.surface,eventLighting==='rain');if(rate<=0)continue;const clocks=dustClocks.get(c)??[0,0];dustClocks.set(c,clocks);
     for(const k of [0,1]){const i=2+k,w=c.wheels[i];if(!w||c.wreckParts.wheelLost[i]||!c.controller.wheelIsInContact(i))continue;clocks[k]+=rate*dt;if(clocks[k]<1)continue;clocks[k]%=1;dustPuffs++;
@@ -3075,6 +3078,7 @@ async function boot() {
     bodyDust: () => bodyDusts,
     airbags: (id = 0) => { const c = cars.find(x => x.id === id), b = c && airbags.get(c); return b ? { fitted: b.bags.length, deployed: b.deployed, age: +b.age.toFixed(2), scale: b.bags.map(x => +x.mesh.scale.y.toFixed(3)), at: b.bags.map(x => x.at.toArray().map(v => +v.toFixed(2))), front: +(c!.structuralDamage?.[0] ?? 0).toFixed(3), fired: airbagsFired } : null; },
     rollingCaps: () => ({ rolled: rollingCaps.rolled, moving: rollingCaps.moving, caps: rollingCaps.caps.map(c => ({ phase: c.phase, speed: +c.speed.toFixed(2), lean: +c.lean.toFixed(2), r: +c.radius.toFixed(3), at: c.p.toArray().map(v => +v.toFixed(2)) })) }),
+    dustAir: () => +dustAir.toFixed(3),
     exhaustFlames: () => ({ flashes: exhaustFlames.flashes, burning: exhaustFlames.burning, shift: shiftFlames }),
     shiftSmoke: () => ({ puffs: shiftSmokes, gear: cars[0]?.gear ?? 0 }),
     roost: () => ({ pings: stonePings, thrown: gravelRoost.thrown, flying: gravelRoost.flying, spins: cars.map(c => c.wheelSpins.map(v => +v.toFixed(2))), surfaces: cars.map(c => c.surface), offline: cars.map(c => c.extendedDamage), wet: cars.map(c => c.wetWheels.filter(Boolean).length), speeds: cars.map(c => +c.speed.toFixed(2)) }),

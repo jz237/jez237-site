@@ -23,5 +23,5 @@ test('in the rain each side\'s headlamps throw a beam through the falling rain; 
 });
 test('main gives the beams their strength in an offline rain event',()=>{
   const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
-  assert.ok(main.includes(",dusk?1:RAIN_LIGHTS.pool,wet&&c.extendedDamage?RAIN_BEAMS.strength:0);}"));
+  assert.ok(main.includes(",dusk?1:RAIN_LIGHTS.pool,wet&&c.extendedDamage?RAIN_BEAMS.strength:dusk&&c.extendedDamage?DUST_BEAMS.strength*dustAir:0);}"));
 });
