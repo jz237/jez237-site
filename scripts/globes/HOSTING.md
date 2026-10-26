@@ -3,18 +3,21 @@
 Original: https://github.com/willwaltz/globes
 Author: Will Waltz · MIT License
 Upstream commit: 93c3b814bbca53463e8207b8e3c95fca8940dff5
-Imported: 2026-10-22 · Hosting build: 1.4.0
-Public route: https://jez237.com/demos/globes/
+Imported: 2026-10-22 · Hosting build: 1.16.0
+Public routes: https://jez237.com/demos/globes/ (the five original globes) and
+https://jez237.com/demos/betta-bowl/ (the **Living Silk** betta bowl, on its own)
 
 The upstream source and MIT attribution are retained. Hosting adds the gallery
-return link, clearer WebGPU messages, and a sixth **Living Silk** betta globe.
-The five original scenes and their solver quality defaults are preserved. Fonts and
-runtime dependencies are local; the betta uses its existing immutable R2 texture
-references (not newly generated art).
+return link, clearer WebGPU messages, and the **Living Silk** betta bowl, built from
+the same source as a page of its own (`betta.html`). The five original scenes and
+their solver quality defaults are preserved. Fonts and runtime dependencies are
+local; the betta uses its existing immutable R2 texture references (not newly
+generated art).
 
 ## Living Silk — Betta Atelier integration
 
-Direct link: `?globe=betta`. A desktop launch into this scene defaults to a
+Direct link: https://jez237.com/demos/betta-bowl/ (`../globes/?globe=betta`, the
+link before 1.12, is sent there). A desktop launch into this scene defaults to a
 64³ water grid and one ray per pixel (60 fps observed on the host Radeon 8060S
 at 1200×900, versus 11 fps at the original 128³/four-ray setting). Phones retain
 the original 48³ default; this is touch-emulated layout validation, not a physical
@@ -25,9 +28,11 @@ The specimen is imported from
 `../betta-atelier/src/fish.js` with optional compact tessellation. It keeps the
 shared anatomy, breathing, one-second flare and synchronized gaze, with the
 full-fin compliance and head-led turning revision described below.
-The Atelier's normal tessellation and standalone compiled demo are unchanged.
+The Atelier's normal tessellation is unchanged. The standalone compiled demo was
+rebuilt as Atelier 1.10 to adopt the shared motion and shader changes (see its
+README).
 
-`src/fish/Betta.ts` evaluates the same vertex deformations on the CPU, refits a
+`src/fish/Betta.ts` (`bettaSpecimen.mjs`) evaluates the same vertex deformations on the CPU, refits a
 stackless triangle BVH, and uploads it to an RGBA32F texture. `bettaWGSL.ts`
 intersects the actual volumetric surfaces **after glass/water refraction**, with
 sand/water occlusion and translucent fin continuation. It is not a billboard or
@@ -48,6 +53,159 @@ gentler pose springs and distributed billowing let the proximal/middle membrane
 bend under water pressure as well as the fringe. Display increases tension and
 transports existing folds with the one-second rest-fan opening; it does not erase
 flow-driven deformation. The paired-fin flank guard uses the curved local normal.
+
+Version 1.5 pulls the broad-fin compliance back from 1.4, which over-corrected:
+cross-ray shear/bend constants are about 0.45/0.15/0.15/0.075, billowing is
+`0.05 + drive*0.095`, turn-sweep is `0.30*turnBend*v`, and stiffness rises toward
+the root (`3.8 + 36*(1-v)^2.4`, plus a display-flare term). The root third now
+holds its shape under swimming load while the free edge still lags and flutters;
+pectoral/other fins (kind ≥ 3) are unchanged.
+
+The 1.5 realism pass is in the ray tracer, not the animation. Each triangle's
+fin `(u,v)` is stored in a one-texel-per-triangle side table appended after the
+triangle block (the 4-texel triangle stride is unchanged; height uses
+`order.length*5`). The shader uses it for:
+- **Fin rays**: fine ridges plus branching ray splits near the fringe, faded by
+  the actual pixel footprint so zoomed-out views do not shimmer.
+- **Translucent fins**: light passes through the membrane tinted by the fin hue,
+  more clear toward the fringe, with a lit back-face glow when the sun is behind.
+- **Sun occlusion**: up to four membrane hits darken a point by the fin hue, so
+  the body sits in the tinted shadow of its own dorsal/anal fins; skin and eye
+  block fully.
+- **Cast shadow on the sand**: a four-tap soft shadow of the whole fish. From
+  the near-overhead sun it is a thin sliver in side views; that is physical.
+- **Skin**: a restrained sheen and thin-film colour shift on scale tiles.
+These are rendering approximations, not a spectral or subsurface model. Desktop
+default (64³, one ray) still measured 60 fps on the host at 1200×900.
+
+Version 1.6 adds the betta's **surface air gulp** (bettas are labyrinth fish and
+really do take air at the surface). `bettaWater.mjs` reads the water surface under
+the snout from an eight-probe vertical density column (probe slots 16-23 of the
+64-probe fluid sensor, 0.016 globe units apart, centred on the resting level;
+slots 16+ are otherwise unused in this scene) and interpolates where the density
+crosses the sim's `iso`. It returns null with no crossing, so a missing or
+disturbed reading never triggers anything. `bettaSwim.mjs` then runs an
+independent `rise -> gulp -> dive` cycle: the first trip comes 22-36 s after
+load, later ones every 60-110 s, from its own random stream, so existing routes
+are unchanged. A trip starts only while the globe is upright (effective gravity
+within ~10 degrees of vertical), the measured surface is within 0.04 of the sim's
+level (calm, not sloshing), the whole body is wet, the betta is not bursting or
+turning sharply, and aborts to a dive if any of that is lost. The fish rises with
+its lips held ~3 mm under the measured surface and pitches to ~0.85 rad (~49
+degrees nose-up); the Atelier then opens the mouth (`gulp`) and pulses the gill
+cover (`gulpGill`) for 1.6 s before it dives. These host-driven values override
+the breathing rhythm only while larger. Limits: trips happen
+only in an upright globe; the surface is read once per frame with the sim's 1-2
+frame readback delay, so the lip height is held to within ~3 mm, not exactly.
+
+Version 1.7 adds four realism behaviours (Atelier 1.9 shares the fin changes):
+- **Attached pelvic feelers.** The two ventral feelers are rooted at a computed
+  belly insertion point and solved with extra constraint passes, so they read as
+  attached in every pose (`pelvicInsertion` in `../betta-atelier/src/fish.js`).
+- **Gulp ripples and bubbles.** The fish makes a small, bounded push into the
+  water (the coupling was one-way before). `Betta.takeDisturbance()` reports it once
+  per frame; `main.ts` forwards it to `FluidSim.push(at, speed, radius)` (a downward
+  Gaussian velocity delta in `grid_update.wgsl`'s `fishPush`, capped at
+  `MAX_PUSH = 0.15`) and to `Splash.emit(...)`, a new `spEmit` kernel that spawns
+  bubbles. While its lip is within 0.03 of the film, the first 0.34 s of the gulp
+  dimples the surface (about 10 mm, with a ring ripple). On the dive, while the dive
+  timer is above 0.55, bubbles leave the lip at 14 per second (about ten). The fish
+  senses the push only through its existing flow probes, and the jolt reference
+  smoothing keeps it from startling at its own ripple.
+- **Hover sculling.** `hover`, `surface` and `gulp` modes drive continuous alternating
+  pectoral fanning (`SCULL_HZ = 3.8` in `swim-gait.js`).
+- **Leaving the film.** After a gulp the fish turns over quickly (`dive`: pitch at 4.5 /s, a
+  flick of the tail) about its middle, `PITCH_PIVOT` (0.06) behind the neck, not about the neck:
+  the head dips as the tail rises (`turnVelocity`, the one move not along the body axis). Then it
+  swims on (`cruise`, shorter the more listless it is) rather than coasting nose down with the tail
+  stilled, which looked like the body dropping without swimming. (A hovering fish levels out the
+  same way.)
+- **Startle response.** A sudden flow or rotation change (jolt, measured against a
+  1.5 /s-smoothed reference so steady swirling does not trigger it) above
+  `STARTLE_JOLT = 1.25`, at most once per 10 s, starts a 0.9 s `startle`: a C-bend
+  away from the disturbance, a dart at about 4x cruise speed, pectorals tucked,
+  then a glide. A startle within 0.1 of the film also dives and releases about
+  fourteen bubbles in its first 0.4 s. It sets a heading target and the voluntary
+  `steerRate`, so head-led turn history and the separation of passive spin from
+  deliberate turning are preserved. Idle water reads 0, a gentle drag ~0.4, a brisk
+  swipe ~1.3 and a flick above 2.
+
+Frame time was unchanged: interleaved old/new Chrome WebGPU runs at 64³, one ray,
+1200×900 gave 58-60 fps in idle, full-gulp and strong-flick windows for both builds.
+
+Version 1.8 adds three behaviours and animated caustics (Atelier 1.10 shares the poses):
+- **Mirror display.** Every minute or two, at the end of a leg near the glass, it swims
+  to the wall, faces its reflection obliquely and flares its fins for 5-8 s
+  (`mirror` in `src/fish/bettaSwim.mjs`; `bettaSpecimen.mjs` turns `swim.flaring` into the display
+  request). The globe renders no true reflection of the fish; the behaviour implies one.
+- **Inspection lap.** A slow circuit of the globe (about 1.5-2.5 turns of arc at
+  `LAP_SPEED = 0.058`) in one direction, with a gentle vertical drift.
+- **Resting on the sand.** It sinks to the measured sand height plus `REST_HEIGHT` and
+  holds for 7-14 s with its fins easy, if it is near the middle of the bowl.
+- All three use their own seeded random stream and start only in measured, upright, wet
+  water with no gulp due soon; a startle, a flow knock or air above ends them early.
+  Cooldowns are 60-120 s (mirror), 120-200 s (lap) and 70-130 s (rest).
+- **Caustics.** `betta_dapple` (`bettaWGSL.ts`) projects each shaded point up the sun
+  direction to the surface and sums seven faint plane-wave ripples, giving a moving web of
+  bright and dark lines on the fish's skin and fins, with ambient light modulated a
+  little as well. The sand shader applies the same function while the betta is active, so
+  the sand under and around it matches in both render passes. It is analytic: the
+  simulated surface is flat in this globe's idle, so the real light volume has no caustic
+  structure to show; where the volume has structure (tilting, gulp ripples) the analytic
+  term fades out and the simulated light is used.
+- Frame time: interleaved old/new Chrome WebGPU runs at 64³, one ray, with frame-rate
+  limit off: about 82-87 fps at 1200×900 for both builds (idle and flick windows), and
+  about 4-7 fps lower at 1920×1440 (roughly +1 ms per frame, 56-64 fps against 61-63).
+
+Limits: the push and bubbles are artistic, not a coupled free-surface solver; the
+Firefox check confirmed the new sim kernels compile under naga, with the betta itself
+checked on the published site.
+
+Version 1.9 (Atelier 1.11) makes the fish move only by swimming, and stops it chasing its tail:
+- **Stroke-limited speed.** `SwimGait.stroke` goes back into `BettaSwim.advance(..., stroke)`;
+  speed can rise by at most `STROKE_ACCEL = 1.1` x stroke per second. Slowing is drag and is not
+  limited. With no stroke reading (tests, a bare sim) there is no limit.
+- **Every move is along the body axis.** The hold at the film and the rest descent used to slide
+  the fish up and down while the tail was easy. The rise now creeps up the last millimetres on
+  the fins, the lips are trimmed by head tilt alone (`pitchForMouth`), the descent to the sand is
+  a nose-down swim, and the dive does not start its speed until the head has tipped over
+  (`smooth(0.1, -0.25, pitch)`). The old dive lunged up the water column while still nose-up.
+- **Gravity only for a fish that is out of the water.** It was applied in proportion to dryness,
+  so a tail that briefly cleared the film during the dive pitch-over shoved the whole fish down.
+  It is now `smooth(0.35, 0.9, dryness)`.
+- **No goals it can only circle.** `chooseTarget` rejects goals closer than `MIN_LEG = 0.22` in
+  plan or steeper than `MAX_SLOPE = 0.32`; the heading error fades as the goal gets nearer in
+  plan (`smooth(0.03, 0.12, ...)`) and a goal counts as reached when passed over. A failsafe
+  (`yawAccum`, 6 s decay, `SPIN_LIMIT = 1.6 pi`) abandons any goal it still turns about.
+- Headless numbers, 8 seeds x 600 s with a gulp trip every ~10 s: unexplained movement (faster
+  than its strongest recent stroke could drive) 0.00% in every mode (old: 37% burst, 11% rise,
+  8% dive); sideways slip 0.00% (old: 46% gulp, 30% rest). Net turn in any 8 s window: under 1
+  revolution in calm and turbulent water (old: 2.8-3.3). Tests: `node --test betta-swim.test.mjs`
+  runs 23 locomotion tests (16 before).
+
+Version 1.10 (Atelier unchanged) makes the pointer follow-through quicker when you hold and
+move the globe:
+- **Stiffer grab spring.** While held, the globe follows the hand through a critically damped
+  spring at 26 rad/s (was 12 rad/s), so it trails a steady drag by about 77 ms instead of 160 ms.
+  Container acceleration is still capped at 3 g, which bounds how hard a quick flick can slosh the
+  water; a sweep measured the same ~3 g side acceleration ceiling and a lower peak solver speed
+  than before (17.9 vs 20.5).
+- **Quicker custom cursor.** The software ring follows at rate 40 (was 24). A drawn cursor can
+  only move once per rendered frame, so if frames stay slower than ~34 ms for a second the system
+  pointer takes over (`html.custom-cursor` is removed), and the drawn one returns after three
+  seconds of quick frames.
+- **Adaptive sharpness** (`src/app/adaptiveScale.mjs`, `?adapt=0` turns it off). Frame time
+  scales with canvas pixels, so on hi-dpi or large windows the canvas drops 0.8x per level (to a
+  floor of 0.6 px per CSS px, at most 5 levels) when frames average over 22 ms (30 since the
+  35 fps aim of 2026-10-26, below), in jumps of 1-3 levels depending on how slow. A step that does not make frames at least 8% quicker (the screen
+  itself is the limit) is taken back and held for 64 s; sharpness is offered back after 8 s of
+  quick frames, and a failed offer doubles the wait. Tests: `node --test adaptive-scale.test.mjs`.
+- Measured on the loaded host (Chrome WebGPU, real mouse drag): 1080p at 1x, lag behind the hand
+  p50 147 to 59 ms, p95 205 to 90 ms at ~54 fps; 1440p at 2x, 25.8 to ~40 fps and lag 114/203 to
+  ~51/90 ms (p50/p95), with the canvas settling at 2100-2600 px wide.
+- Limits: numbers are from a shared, loaded machine; Firefox and a physical phone were not
+  re-measured; a quick flick sloshes a little more than before (still capped).
+
 
 The neck now leads the route, instead of rotating about the center of the fish.
 `BodyMotion.advanceTurn()` carries a history of local tangent angles down the
@@ -80,8 +238,8 @@ motion while pitching/rolling, so transported water does not create false drag.
 The Atelier accepts optional host-owned `locomotion`
 (position/velocity/speed in model units, heading/pitch/roll in radians, angularVelocity/steerRate,
 drive and mode); without it the standalone choreography still runs. The shared
-solver source includes the flexibility changes, but the standalone published
-bundle is deliberately not rebuilt by this globe release.
+solver source includes the flexibility changes; the standalone published bundle
+adopted them in Atelier 1.8.
 This is an artistic coupling, not a fully coupled
 fish/fluid solver or instantaneous collision against every turbulent wave. The
 betta does not eat the Koi scene's food. The **Flare fins / Relax fins** button controls the display; each opening
@@ -104,6 +262,346 @@ actual WebGPU side/overhead turn sequences as well as scalar checks; fin-to-fin
 self-collision is still approximate, not a full cloth/contact solver.
 Use `npm run web -- --host 127.0.0.1` for browser development (`npm run dev` starts
 Electron). `?qa` exposes the same local inspection object as a dev build.
+Version 1.11 (Atelier 1.12) stops the pectoral fins changing size when the swim mode changes:
+- The startle tuck is a soft spring and a gentler fold, and the fin's beat power and cadence
+  follow slow filtered copies of the tail's effort (`pectoralEffort`, `pectoralScull`) instead
+  of the tail itself. See Atelier 1.12 in `../betta-atelier/README.md` for the numbers.
+- Headless replay of the live 1.10 behaviour (56 mode changes): worst fin-size jump 0.18 to 0.055
+  of rest area; cruise to startle +0.09..0.18 to under 0.015. Synthetic chain on the real fin
+  geometry: 0.21 to 0.03.
+- Limits: the glide-to-hover change that remains (0.04-0.05) is the trunk straightening after a
+  turn; the startle fold is now subtle rather than a dramatic tuck.
+
+Version 1.12 (Atelier unchanged) makes the betta's globe a real betta bowl, with a lid that comes
+off, and gives it a page of its own:
+- **Its own page.** `betta.html` (`<html data-globes="betta">`) shows the betta alone, and
+  `index.html` the five original globes (`src/app/catalog.ts`). `npm run build:betta` builds it as a
+  standalone folder (`dist-betta/index.html` and its assets) for `demos/betta-bowl/`. Each page
+  builds only its own globe shaders before the first frame (`GlobeView.precompile`'s variants),
+  so the bowl starts sooner and the globes' page no longer builds the betta's.
+- **An open mouth** (`src/render/bowl.ts`). The glass is cut off at 0.88 along the globe's axis
+  (a mouth ~11 cm across on the ~24 cm bowl), and a rolled bead of glass (a torus, ~2 mm tube)
+  runs round it. The bowl variant of the globe shader (`bowlEntryWGSL`, `bowlTraceWGSL` in
+  `shaders.ts`; the other globes' shaders are unchanged) lets rays in and out of the mouth with no
+  glass and hands them on to the bead and the lid.
+- **The lid**, solid glass ~3.8 mm thick with a bullnose edge, a mushroom knob, eight 3 mm air
+  vents (a betta breathes at the surface) and a collar under it that drops into the mouth so it
+  cannot slide off. The bead and the lid are marched as distance fields and refract, reflect and
+  absorb like the bowl's own glass, with total internal reflection inside them (the edges carry
+  light round and read darker, as thick glass does). Its geometry is a sphere grown to take in the
+  lid wherever it is; pixels where a ray meets none of the bowl are left to the backdrop
+  (`maskNode`).
+- **Lift lid / Replace lid** (1.12 only: see 1.13) (or a click on the lid, or on the open mouth). It came off only from
+  an upright bowl: it rises until its collar clears the mouth, then is carried up and away out of
+  sight (`src/interaction/BowlLid.ts`, 2.6 s). While it is off, the bowl tips at most 25 degrees
+  (`GlobeController.tiltLimit`): from ~47 degrees the water would pour out of the mouth.
+- **The water stays in.** `FluidSim.mouth` holds the particles under a plane at 0.85 along the
+  globe's axis (`g2p.wgsl`), as under the lid and its collar, treated like the glass.
+- **Development.** The betta's R2 textures allow only `https://jez237.com` (CORS), so
+  `npm run web` serves them through the dev server (`vite.config.ts`). A copy of the page on any
+  other site (Hidden Reef included) would load the bowl but not the fish's textures unless R2's
+  CORS allows that origin, or the page is embedded from jez237.com.
+- Measured in Chrome WebGPU on the RTX 5090 host: 60 fps (the display's limit) with the lid on,
+  coming off and going back on. Limits: the lid casts no shadow or caustic of its own into the
+  water, the spray above the water still meets the glass's whole sphere, and the lid is not
+  physically simulated (it is carried on a fixed path).
+
+Version 1.13 (Atelier unchanged) makes feeding the only reason the lid comes off, and feeds the fish:
+- **Feed** (or a click on the lid) replaces Lift lid / Replace lid. The solver cannot let water
+  leave the bowl, so instead of a realistic spill an open bowl is never moved: `Feeding.ts` locks
+  the bowl (`GlobeController.locked`: no hold starts, one under way is let go) and waits for it to
+  stand still (`GlobeController.settled`), lifts the lid (2.2 s), lets four pellets go one at a time
+  through the mouth, and puts the lid back on 1.8 s after the last is eaten, or after 30 s
+  whatever is left. The bowl is freed once the lid is seated. **Close lid** ends it early. The 1.12
+  tilt limit for an open bowl is gone (it can no longer be tipped open).
+- **Pellets** (`FishFood.pellets`, the betta's page only): ~1 mm reddish-brown balls that fall
+  through the air, dimple the film where they land (`FluidSim.push`), float held at the film (the
+  water's density at their centre kept at the surface's level) and are carried along it, kept
+  within 0.72 of the axis, and sink after 45-90 s. The koi and reef globes keep their flakes; the
+  pellet shading is compiled into the bowl's shader only (`foodWGSL(round)`).
+- **The betta eats** (`Betta` is now a `Feeder`; `feed` mode in `bettaSwim.mjs`): it takes a
+  pellet off the film from below as bettas do, lining up under the film a rise's length short of
+  it (`FEED_RISE` ground per unit of height), turning to it, then rising lips first with the head
+  tipped up, and sucks it in from 5.5 mm. A strike that ends at the film without it is a miss: it
+  drops back and comes round again. Swallowing it holds still; then it tips down off the film.
+- Tests: `node --test betta-swim.test.mjs` adds a feeding test (24 in all): three seeds reach a
+  pellet on the film lips first without the lips breaking the surface, swallow, and leave off. A
+  headless sweep of 80 seeds and pellet spots reached every pellet (median 6.0 s from anywhere in
+  the bowl, slowest 9.3 s) with no breach. In the browser (manual stepping) the whole cycle ran:
+  lid off, four pellets in, all eaten, lid back on, bowl free.
+
+Version 1.14 (Atelier unchanged; its gravel, driftwood and plant were replaced in 1.15) furnishes the bowl (`src/render/bowlScape.ts`, compiled into the
+bowl's shader only; the other globes' shaders are unchanged):
+- **Gravel, as interactive as the sand.** The bed is river gravel (~5 mm pebbles with smaller ones
+  between them, a shallower bed than the sand's: `GRAVEL.level`). It flows exactly as the sand
+  does (the same solver and settings), and the pebbles go with it: `FluidSim.gravel` keeps, for
+  each column of the bed, how far its surface's pebbles have been carried from where they lay at
+  rest (`gravel_gather.wgsl` adds up the flow each sand substep, `gravel_drift.wgsl` carries the
+  offsets along it, semi-Lagrangian; `gravel_carry.wgsl` turns them with the glass). The sand
+  texture publishes them (`sand_extend.wgsl`, its b and a), and the shader draws each pebble where
+  the flow has taken it: tip the bowl and the pebbles visibly slide downhill and pile up. Pebbles are
+  2D cells across the bed with a rounded top, a lean of their own and dark crevices between them,
+  shaded by the plant's and the leaf's shadows and the caustics; those against the glass are drawn
+  there too.
+- **Driftwood and anubias.** A bark-textured branch with a side branch, an anubias rhizome along it
+  and eleven broad leaves on stalks (round cones, capsules and curved blades, traced exactly). They
+  cast shadows on the gravel and darken it where the wood touches it.
+- **An Indian almond leaf** floats on the water (`src/interaction/BowlLife.ts`): columns of density
+  probes under it find the film's height and slope, so it bobs and tilts with the surface; it is
+  carried by the water at the film and slowly drawn to the glass by the meniscus, where it turns to
+  lie along it, as a floating leaf does.
+- **The bubble nest** on the glass at the waterline (front right, turning with the bowl): up to
+  170 small bubbles in two layers, thin-film tinted with a glint. A gentle tilt leaves it be; a hard
+  shake breaks it up (bubbles lost for each rad/s the bowl turns faster than 1.2). The betta rebuilds
+  it: each trip to the film for air adds bubbles, and it goes up sooner while the nest is broken
+  (`bettaSwim.mjs gulpUrge`).
+- **The fish swims round the wood** (`bettaSwim.mjs` obstacles): it does not choose a place to go,
+  rest or display that the wood blocks, steers off it when near, and its body is held out of the
+  wood's core.
+- Tests: `node --test betta-swim.test.mjs` adds an obstacle test (25 in all). In the browser
+  (manual stepping): after a 57 degree tilt the pebbles have been carried up to 0.6-0.8 of a world
+  unit where the bed slid, the leaf drifts to the glass, the nest keeps 142 of its 145 bubbles
+  through a gentle tilt and 86 through a hard 3 s shake. Limits: the leaf and nest are drawn, not
+  simulated as particles (they follow the probed surface); the wood and plant do not move.
+- Measured with GPU timestamps on the RTX 5090 host: the first gravel (3D cells and noise) cost
+  ~8 ms a frame; as 2D cells with no noise its cost is lost in the frame-to-frame variation of the
+  shared GPU. The other globes' pages are unchanged.
+
+Version 1.15 (Atelier unchanged) puts the bowl in a photographer's studio and furnishes it in 3D,
+after a reference picture: a round bowl on a glossy table in front of a blue backdrop, lit by a
+lamp in its lid, with a driftwood arch, dark rocks and two plants on pale sand.
+- **Sand again.** The 1.14 gravel did not move or look like gravel, so it is gone (FluidSim's
+  gravel kernels removed, back to 1.13). The bed is the globes' sand, deeper (`BED_LEVEL` -0.6 in
+  `src/render/scape/mesh.mjs`) and paler and more golden, with a sprinkling of dark and rust grains
+  (faded to their mean where a pixel covers several) and softer crossing ripples (the bowl's
+  shader variant only).
+- **The studio** (`src/render/studio.ts`, `src/render/StudioBackdrop.ts`). The bowl stands on a
+  dark lacquered table in front of a seamless blue backdrop. The background is drawn from where the
+  camera really is, so the table lies in true perspective; the bowl's glass and water bend and
+  reflect the same studio (the bowl variant's `globes_bg` evaluates it per ray from the ray's real
+  position, so no environment map). The table mirrors the bowl (a three.js `reflector()`: the
+  scene rendered from under the table at half resolution, sharp at the bowl's foot and softer
+  further off) and takes a warm pool of the lamp's light round its foot. Soft boxes give the glass
+  its highlights. The five globes' page keeps its ocean.
+- **It rolls.** A round-bottomed bowl on a table rolls as it tips (`GlobeController.rolling`: its
+  centre keeps its height and moves sideways by its radius times the tilt; the water feels that
+  motion), at most 40 degrees. The entrance is a camera move, so the bowl does not skid in. The
+  camera stands a little closer (5.6).
+- **The lid** (`src/render/bowl.ts`): a clear glass disc held in a glossy black rim, a black
+  cylindrical knob, and an LED puck under its middle that lights the bowl. The page's sun is that
+  lamp, straight down (its caustics and light shafts), and its cone glows in the air and the water
+  under the lid as rays (`bowl_lampAlong`); it goes out as the lid is lifted to feed. A bug since
+  1.12 is fixed: rays that came into the glass's sphere through the open mouth skipped the parts of
+  the lid inside that sphere (the knob, the middle of the disc), so they were never drawn; and rays
+  leaving the cavity by the mouth now end at the lid when it is in their way, so its underside, the
+  lamp and the collar show from inside the bowl.
+- **The furnishings in 3D** (`src/render/scape/`, plain modules shared with node tests):
+  - A gnarled driftwood arch, about 200,000 triangles: lumpy, twisting limbs swept along their
+    spines and blended at the joints, its bark modelled in the geometry (fissures along a twisting
+    grain, plates, cross-cracks, knots and burls), a broken limb pointing up with a splintered end,
+    its feet sunk in the sand; warm wet brown bark with streaks and fibre detail in the shader.
+  - Four dark river rocks, about 108,000 triangles: worn, faceted, pitted, cracked, part sunk.
+  - A tall plant with broad glossy leaves on long stalks arching over the arch, and a small bushy
+    one at the left, about 70,000 triangles: real curved blades with raised midribs, veins and wavy
+    margins, waxy and translucent where lit from behind.
+  - All 378,000 triangles are built at load in a worker while the page sets up WebGPU
+    (`scape/furnishings.ts`, `scapeWorker.mjs`; deterministic, about 1.7 s with packing; on the main
+    thread only if no worker can be had; the five globes' page never loads them), packed into one BVH
+    (binned SAH, a short-stack walk: about 16 nodes and 3 triangles a ray; a 1024 x 1952 rgba32f
+    texture, 30 MB, read in the kelp's slot, which this globe does not use) and traced on the same
+    refracted rays as the water and the fish, with shadows on the sand and on each other, lit by
+    the lamp through the water's caustics, the studio's key light and the blue room, darkened in
+    their crevices. Each piece was built against offline renders in Blender
+    (`tools/scape-preview.mjs`, which renders the pieces in a stand-in of the bowl).
+- **Solid in the sand.** The rocks and the arch's feet are part of the bed
+  (`FluidSim.bedSolids`, through the reef rock's path: a height map of their tops,
+  `src/render/scape/bedSolids.mjs`; the wood only where it reaches the sand): the sand rests on them
+  and flows round them as the bowl turns (the floor under the turned sand is taken as no lower than
+  the glass, so no moats open round them), the water meets them, and the fish can rest on them. The
+  fish's body is kept out of the solid parts it is near (`BettaSpecimen.solidsNear`).
+- Tests: `node --test scape-bvh.test.mjs scape-scene.test.mjs` (17: the BVH against brute force,
+  shadows, packing limits; every mesh sound, no piece through another, the fish's open water clear,
+  deterministic builds) plus the 48 existing tests. An independent review (four reviewers, each
+  finding checked by a sceptic) confirmed 14 problems, all fixed here. Measured in Chrome on the
+  (shared) RTX 5090: about 4.8 ms of GPU a frame at 1536 x 1152, the table's reflection included
+  (it leaves out the fish's own pass, which is a blur there).
+- Limits: the arch's span is not solid to the water (a height map has nothing under an overhang,
+  and the water must pass under it); the reflection is a second render of the scene at half
+  resolution; the bowl stays a sphere (the reference's is wider than tall); Firefox's WGSL compiler
+  has not been tried on the new shader code.
+
+Version 1.16 (Atelier source: an optional lighter fin solver, its defaults unchanged, and fins that
+stay on the body on a frame too short for a fin step; its built demo is not rebuilt) makes the plants
+flexible, gives the water a gentle current, and makes the page run on phones:
+- **The plants move with the water**, like the kelp globe's kelp and the plants of the Living
+  Aquascape. Every frame their 35,000 vertices are moved on the GPU (`src/render/scape/
+  plantMotion.mjs`): each leaf sways on its stalk (bending from its foot, the blade carried on its
+  tip and turned with it, its length kept), its blade flutters in a wave running out to its tip and
+  twists about its midrib (the Aquascape's motion, its constants scaled to the bowl), the plant sways
+  as a whole on slow, unrelated periods, and each leaf leans with the water round it: a probe at its
+  tip (`FluidSim` probes 64-127) reads the water's velocity less the glass's own turn, followed with
+  a 0.4 s lag. Leaves are kept out of the wood, the rocks and the glass, and calmed where they would
+  touch them; leaves crowded against a neighbour move with it. The furnishings' BVH is refitted over
+  them on the GPU (`scapeRefit.mjs`: skin, triangles, then the boxes level by level, about 0.1 ms;
+  `src/render/scape/MovingPlants.ts`), so they are traced, lit and shadowed where they are.
+- **A gentle current** (`IdleWater` 'filter'): left alone for a few seconds the water turns over
+  slowly, as a small filter keeps a bowl's water moving: a swirl round the glass and rolls whose
+  heading turns all the way round every couple of minutes, with no push on the surface (the floating
+  leaf drifts, the nest stays). The betta keeps station against so slow a current while it hovers,
+  takes air or displays at the glass (`bettaSwim.mjs` HOLD_AGAINST), and is still carried by a
+  slosh.
+- **Phones** (`LITE`: a coarse pointer and a small screen). The page fell to a few frames a second
+  there because a slow frame made the next one simulate more (up to 8 substeps of the water and the
+  fins), and because of work a phone's screen does not show. On phones now: a slow frame is not
+  caught up on in full (1/30 s at most), the water has a coarser grid (40) with at most 3 substeps
+  and fewer solver sweeps, the fins are solved at 60 Hz with half the passes (`FIN_QUALITY` in
+  `../betta-atelier/src/fin-dynamics.js`), the furnishings are built at half the detail (a quarter of
+  the triangles, 7.8 MB of BVH), the bowl's shader leaves out the fish's shadows, the furnishings'
+  shadows and the motes and shafts, and marches the glass in fewer steps, and the canvas has no
+  multisampling. Measured on this desktop at a phone's 0.3 MP: the render pass 2.5 -> 0.85 ms, the
+  main thread's work a frame 8.3 -> 6.1 ms. `?stats` now also shows the frame rate and the main
+  thread's time in a corner of the page.
+- **Fixed for everyone:** the fish's redraw pass ran on every pixel of the bowl's (large) proxy that
+  its rays missed; the depth is now cleared to 0 for the bowl's passes and its main pass always
+  writes its mark, so the fish's pass runs only where it is needed (22x fewer pixels). The fish's
+  BVH is refitted once a frame instead of twice.
+- A second independent review (three reviewers, each finding checked by a sceptic) confirmed nine
+  problems, all fixed here (among them: the lighter bowl's lid march, its needless fish redraws, the
+  fish drifting while it held still, the current never turning round).
+- Tests: `plant-motion.test.mjs` (12), `scape-refit.test.mjs` (6) and `idle-water.test.mjs` (1), and
+  a slow-current test in `betta-swim.test.mjs`, besides the others (91 in all):
+  stalk feet fixed, tips moving, travel bounded, no leaf through the wood, a rock, the glass or
+  another leaf over minutes of motion, normals, the refit against brute force; the GPU kernels were
+  checked against their CPU mirror on the RTX 5090.
+- **No more dark specks on phones' glass** (phase 2). After the bowl was rolled, the drops the water
+  leaves on the dome showed on phones as hard dark dots: most are narrower than a phone's pixel,
+  and a ray through a sliver of one took its whole lens, often black. On phones a drop narrower than
+  the pixel, or one whose edge crosses it, is now drawn by how much of the pixel it covers, so wet
+  glass reads as fine droplets (docs/architecture.md, Splash). The bowl's shaders also guard every
+  piece of maths a phone's GPU need not define (a colour that is not a number shows the backdrop,
+  never black). The desktop's picture is unchanged.
+- **Measuring a phone**: `?bench` (about two minutes, one screenshot held upright) times the frame at
+  a run of pixel ratios, with each part of it left out, and the sim's own passes; it names the GPU
+  and its features, the pipelines built and the load (reload once: a sooner "compiled" is the
+  browser's shader cache). `?stats&debug=specks` paints what makes a speck (`?debug=nan`: where a
+  colour stopped being a number); it builds its own shaders, so it loads slowly. Tests:
+  `bowl-nan.test.mjs` (8), `bench-rows.test.mjs` (4) and `pipeline-count.test.mjs` (1), 127 in all.
+
+Phase 2, the betta off the page's thread: on a phone with four cores or more, the betta's whole
+update (its route, the Atelier fish and its fin solver, the skinning, its contacts with the glass,
+the bed and the furnishings) runs in a worker, a frame behind (`src/fish/bettaWorker.mjs`,
+`bettaLink.mjs`); the page draws, and reads the probes, mouth and swim of, the pose the worker
+sends back, and refits the fish's BVH on the GPU from its vertices as before. The worker's fish moves
+bit for bit as the page's would on the same inputs (`betta-worker.test.mjs`). In phone emulation at
+2.75x CPU throttle the betta's share of the main thread fell from 7.7 ms to 0.1-0.3 ms a frame (37 to
+49-60 fps there; the worker itself is not throttled in emulation, so its cost on a phone, and its
+effect on the load there, wait on a phone's `?bench`). `?worker=0` moves it on the page's thread
+again (desktops do by default), `?worker=1` in a worker anywhere. Details: docs/architecture.md, "The
+betta in a worker".
+
+Phase 2, the bowl on a lattice (phones): each frame the bowl is traced on a quarter of the picture's
+pixels, a different one of each 2x2 block each frame, and made whole again at full size; the fish is
+drawn again at full size every frame, as before. Still, the picture is in four frames exactly the
+full trace, pixel for pixel (0 of 2.1M pixels differ in a frozen frame); while the bowl is rolled,
+zoomed or glides in, it is drawn at the lattice's sharpness, filled in by an edge-adaptive filter,
+and is sharp again four frames after it stops. The bowl's two shaders are still built once each. On
+this desktop's small integrated GPU (a phone's stand-in) the bowl's frame at the same sharpness took a
+third of the time (232 -> 76 ms), less than it took at half the sharpness before (88 ms).
+`?up=0` draws it as before (desktops always do: their shaders are unchanged, byte for byte),
+`?fishfull=0` traces the fish on the lattice too, `?updebug=id|age|changed|nan` paints the resolve;
+`?bench=up` times the two side by side. Details: docs/architecture.md, "Phase 2: the bowl on a
+lattice". Tests: `upsample-resolve.test.mjs` (9).
+
+Phase 2, a phone's picture steered by the GPU's time: phones step along a quality ladder (the
+mirror at half rate while still, the pixel ratio from the screen's own down to 0.6, the water
+march's longer steps, and 30 fps as the floor of a GPU too slow for the lowest level) by what the
+GPU measurably spends on a frame (timestamp queries, now on in production on phones) against a
+sustained 14.5 ms (24.9 since the 35 fps aim, below), starting where the device held longest last time (localStorage
+`betta.quality.v1`). `?quality=0` brings back the scaler, `?level=n` holds a level; `?stats` shows
+the controller. Desktops keep the scaler. And the betta page's studio is drawn behind a veil, with a
+determinate bar, about a second into the load, while the bowl builds. Details:
+docs/architecture.md, the two Phase 2 sections at its end (quality, and the studio while the bowl
+builds).
+
+The equipment: the bowl now holds what a keeper puts in a ~10-gallon planted bowl for a betta, as
+furnishings like the rest (`src/render/scape/equipment.mjs`, in the same BVH, lit and shaded alike):
+a compact submersible heater on the back glass, partly behind the tall plant (its tube in a black
+slotted guard, a cap with a small amber light, held off the glass by two clear suction cups on
+clips, its cord up the glass and out under the lid's rim), and a small sponge filter at the back on
+the left (a coarse black foam cylinder on a weighted base in the sand, a short lift tube, its
+airline up the glass and out). The foam is its material: round pores of many sizes, darker inside,
+dimmer struts down them and paler ones between, faded to their mean where a pixel outgrows them.
+The filter's air rises from its lift tube as the water's own bubbles (`FluidSim.splash.emit`, nine
+a second, in frames the fish lets none go: main.ts), which sit at the film and burst like the
+rest. The fish keeps clear of both (obstacles), the plants' leaves keep out of them, and the sand
+flows round the filter's base (the bed's solids: its base only; the water passes through the
+sponge, and a column that tall would raise the bed's top over the open water, under which a
+phone's march skips its samples: on this desktop's Radeon iGPU that cost the phone's frame 5%).
+Triangles' materials take four bits now (the equipment's are 8-12: HEATER, HEATER_LAMP, SPONGE,
+TUBE, SUCTION; vertex ids stay below 2^20), in the packer, its mirror, the shader and the plants'
+refit kernels, and the phone's interleave gives the equipment a hit code of its own
+(`bowlResolve.mjs` HIT.EQUIPMENT). The idle 'filter' current is as it was: it stirs the whole bowl
+and has no source to put at the filter. Cost: 12,938 triangles at full detail, 5,246 on phones; on
+the iGPU (`--use-adapter-luid`) the phone's frame at a ratio of 2 went from 190 to 194 ms; the
+other globes' shaders are unchanged, byte for byte. Tests: `equipment.test.mjs` (7) and a packing
+test in `scape-bvh.test.mjs`, 220 in all with Learn mode's.
+
+Learn mode (the betta page): a **Learn** button beside Feed and Flare fins (off at first; kept in
+localStorage `betta.learn`) captions the fish's behaviours as it shows them (air at the film, its
+nest, flaring at its reflection, resting, a lap, a startle, feeding), each now and then, and with it
+on a tap on anything in the bowl (followed through the glass and the water: `src/app/learn/pick.mjs`)
+brings a card about it; Feed brings feeding advice, counted from what the fish has had this visit (a
+meal is now three pellets). The words are in `src/app/learn/content.ts`. Off, it costs a frame
+nothing and a tap on the lid feeds as before. Details: docs/architecture.md, "Learn mode". Tests:
+`learn-pick.test.mjs` (4), `learn.test.mjs` (4).
+
+Auto at 35 frames a second (2026-10-26, the user's choice: a sharper picture at fewer frames). The
+betta page's Auto resolution, and the desktops' scaler, now aim at 35 frames a second or more
+rather than 60; frames still come at up to 60 (FramePace's cap) where the picture allows, and the
+resolution menu is as it was. Phones (`src/app/quality/controller.mjs`): the GPU's budget is 60's
+scaled by 60/35, a sustained 24.9 ms (a jump down lands at 22.3 or under, a try up only at 20.6 or
+under), and no longer than the screen shows frames at 35 or more: on a 120 Hz screen three
+refreshes, 25 ms, 40 a second, so 24.9; on a 60 Hz one, which shows nothing between 30 and 60, a
+refresh, 16.7 ms (frames at 60 as before; with 24.9 there a phone sat at 30 a second unheld). Held
+to 30 (the lowest level too slow for 35), 29 ms. The sim at three substeps is priced at 1.25 times
+two (it was 1.5, against the controller's own reading of the substeps). ?stats says "aim 35 fps".
+Desktops (`src/app/adaptiveScale.mjs`): frames are slow past 30 ms (under about 33 a second) and
+quick under 25 (were 22 and 18.5); the phones' scaler, only with `?quality=0`, still holds 60.
+Details: docs/architecture.md, "Phase 2: a phone's picture steered by the GPU's time". Tests:
+`quality.test.mjs` (24), `adaptive-scale.test.mjs` (25).
+
+Varieties (the betta page): the fish's name among its controls, "Living Silk · Classic", opens a list
+of its colour varieties (Classic, Super Red, Royal Blue, Black Samurai, Mustard Gas, Butterfly, Koi
+Marble, Platinum White, Copper, Pineapple, Galaxy Koi; kept in localStorage `betta.variety`). Each
+recolours the photographed fish, keeping the photographs' light and shade: two colour maps in the
+atlas's bottom row, painted where the photographs lie and divided by their local brightness
+(`src/fish/bettaPaint.mjs`), and one mat4 uniform for its sheen, its fins' outer band and its scales'
+metallic coat (`src/fish/varieties.mjs`, `bettaWGSL.ts`). Classic is the page as it was, pixel for pixel
+on the desktop; no pipeline is added; phones hold 60 fps on every variety, a switch painted over frames
+with no long one. Learn's fish card names the variety. Details: docs/architecture.md, "Varieties".
+Tests: `betta-variety.test.mjs` (7).
+
+## Browser compatibility
+
+Firefox compiles WGSL with naga, which is stricter than Chrome's Tint. Builds up to
+1.6.0 failed there with `Abstract types may only appear in constant expressions` in
+the Koi `koi_map` function, because upstream called `mix()` with only literal
+arguments (`mix(0.0045, 0.0025, 0.5)`); naga cannot constant-fold `mix`, so the
+abstract result reached a runtime expression. It is now the literal `0.0035`, the
+identical value. Keep all-literal builtin calls (`mix`, `pow`, `smoothstep`, ...) out
+of runtime WGSL. Verified by driving stock Firefox 158 with WebGPU enabled
+(`geckodriver`) through all six scenes: no validation errors, and the scenes render.
+A cold first load there compiles shaders for roughly 30-60 s, so the loading
+screen lingers. This is a Firefox pipeline-compile cost, not a hang.
+
+When the globes cannot start, the page shows a calm notice over the loading backdrop,
+never the raw browser error (the full error stays in the console as
+`[globes] could not start:`). `classifyFailure()` in `src/gpu/device.ts` picks one of
+four notices: `no-webgpu` (no `navigator.gpu`; no retry button), `no-gpu` (no adapter or
+the device could not be created), `shader` (the browser's WebGPU rejected generated
+WGSL or a pipeline, matched by message), and `other`. The splash carries
+`data-problem` for QA. Checked in Chrome by faking each failure at the WebGPU API, and
+in stock Firefox 158 with `dom.webgpu.enabled` off, which is the real no-WebGPU case.
 
 The separate willwaltz/webgpu-ray-tracing project is an optional experimental
 browser patch, not a site dependency. No custom browser is installed or required.
@@ -119,6 +617,11 @@ rsync -a --delete dist/ ../../demos/globes/
 cp LICENSE ../../demos/globes/LICENSE
 cp node_modules/three/LICENSE ../../demos/globes/THREE-LICENSE.txt
 cp node_modules/@fontsource-variable/inter/LICENSE ../../demos/globes/INTER-LICENSE.txt
+npm run build:betta
+rsync -a --delete dist-betta/ ../../demos/betta-bowl/
+cp LICENSE ../../demos/betta-bowl/LICENSE
+cp node_modules/three/LICENSE ../../demos/betta-bowl/THREE-LICENSE.txt
+cp node_modules/@fontsource-variable/inter/LICENSE ../../demos/betta-bowl/INTER-LICENSE.txt
 ```
 
 Then regenerate the gallery from the repository root with

@@ -80,9 +80,11 @@ Per substep:
    Symmetric volume-drift correction in cells clear of the surface.
 5. **Pressure** — red-black Gauss–Seidel SOR (ω 1.85, 50 sweeps), warm-started and
    rescaled by dt ratio. cellPrep flags each 16x8x4 tile of cells that holds any water; the
-   sweeps skip the rest (most of the grid: the air, the glass's corners) at once. (Measured by
-   the residual left after the sweeps, ω 1.85 with 50 left a hard shake's equations a third
-   nearer solved than 1.7 with 60, the worst cell too; above ~1.875 the worst cells ring.)
+   sweeps skip the rest (most of the grid: the air, the glass's corners) at once. On grids of
+   48 and under (phones) a whole sweep can go in one dispatch (pressure_fused.wgsl, below), once a
+   phone's bench shows that it pays. (Measured by the residual left after the sweeps, ω 1.85 with
+   50 left a hard shake's equations a third nearer solved than 1.7 with 60, the worst cell too;
+   above ~1.875 the worst cells ring.)
 6. **Project** — ghost pressure ψc(1 − 1/θ) on liquid/air faces; SPRAY faces keep their
    ballistic velocity. Faces less than 60% open (`minOpenFace`) are left for extrapolation:
    the solve barely constrains them and their velocity is noise.
@@ -706,6 +708,25 @@ globe's own frame (they turn with the glass), the rest in the water's.
   and once it is laid). A ray through the glass is bent into and out of a drop's water
   (`globes_dropOut`; towards its edge the surface turns it back wholly: the dark outline and
   bright crescents of drops on a window).
+- **Drops on a phone** (the betta bowl's `LITE` shader): one ray a pixel at a ratio of 0.6-1, and
+  most drops are narrower than a pixel there (at 1, 70% of them; the median half a pixel). A ray
+  through a sliver of one took its whole lens for the pixel, often black where the rim turns the
+  light back to the dim room: rolled, the dome filled with hard dark specks. Now a drop narrower
+  than 0.6 of the pixel's footprint on the glass (`lit.z` x the path, drawn out along the way the
+  glass slants from the eye), and any whose edge crosses the pixel, is drawn by how much of the
+  pixel it covers (`globes_dropCover`: its area spread over the pixel's width so that the pixels
+  round it take just its area between them), taking its share of the light by its contact angle
+  (`globes_dropLoss`: where its surface stands past water's critical angle, 0.75 / sin of the
+  angle of the way out, the light is turned back); only a ray well inside a drop goes through its
+  lens. Against the same frozen state rendered at 4x the ratio and box-filtered (2026-10-25,
+  14,000 drops after four rolls): pixels darker than half the reference 605 -> 76 at ratio 0.6,
+  1650 -> 345 at 1, 3763 -> 1039 at 1.5 (what is left: the dark rims of the larger drops, which
+  are drawn through their lens), the mean within 2%. It is cheaper too, where the glass is wet
+  (fewer lenses, and no wavering edge worked out for a drop narrower than a pixel): the render
+  pass 1.4 -> 1.3 ms at ratio 2, 2.6 -> 2.4 at 4 (RTX 5090); dry, the same. The desktop's shader
+  is as it was. A trail's water (a trail line, and the line a running drop draws behind it)
+  stands too low to turn any light back, and takes only what its surface reflects, whatever the
+  drop's own angle; and a trail narrower than the pixel covers it only up to its far edge.
 - **Cost**: a hard slosh at the usual zoom (1712x963) leaves ~18,000 drops on the glass: 93 fps
   (median 10.9 ms), against ~100 before the trails (2026-10-19).
 - Lessons (tuned live against photos of rain on a window): drops that were perfect circles,
@@ -782,7 +803,8 @@ current.
 - `clearBuffer` is far cheaper than zeroing from a kernel: grid update zeroing the p2g sums it
   had read went from 0.06 to 0.47 ms, classify zeroing the splat's voxels from 0.11 to 0.21.
 - WebGPU usage scopes: a buffer bound both read-only and read_write in one dispatch fails
-  validation, even on disjoint ranges (two read_write bindings are fine).
+  validation, even on disjoint ranges. Chrome now fails two read_write bindings of one buffer
+  too, where their ranges overlap ("writable storage buffer binding aliasing").
 - The marches (render and photons) wait on their reads: reading the next sample with each one
   took a third off a shaking globe's render and a sixth off the photons. Then a second read
   dropped from a step saves little (the photons' sand test above the bed: 5%), and anything a
@@ -800,6 +822,31 @@ current.
   load compares.
 - Indirect dispatch (`dispatchWorkgroupsIndirect`) proved slow in Dawn here: dispatch for the
   capacity and let the threads past the live count return at once.
+- Phones run Vulkan, where maths D3D12 forgives is undefined: `atan2(0, 0)`, a `smoothstep`
+  whose edges run the wrong way round, `min`/`max` with a NaN. The betta bowl's passes give every
+  `atan2` its angle at the origin and write every falling smoothstep as 1 - a rising one
+  (`bowl-nan.test.mjs` holds them to it, as GlobeView builds them), shade no splash sphere that
+  covers none of the pixel (0 x NaN is NaN), and at their end test the colour's bits (a compiler
+  may take `x != x` for always false): a NaN or an infinity shows the backdrop instead of black,
+  and no colour goes past 60000 (the HDR target's float16 tops out at 65504). `?debug=specks`
+  and `?debug=nan` build the bowl's passes painting what each ray met that can make a speck, or
+  where its light stopped being a number (the colours in the `?stats` HUD).
+- Measuring a phone (`?bench`, `app/bench.ts`): one page, about two minutes, sized for a
+  screenshot held upright. The frame at pixel ratios 0.6, 1, 0.8, 1.25, 0.6, 1.5, 2, 1 (coming
+  back to some shows a phone slowing as it warms), then at 0.6 and 1 with a part left out (the
+  table and its mirror, the fish's pass, the bowl, the sim's step: what each costs, by what it
+  saves), then the sim at 0.6 (as the page runs it and, on a phone, as round 2 did: `simq 0`;
+  each stage of its substeps in a timed pass of its own, the line of its passes from that row;
+  the pressure solve at 8 and 40 sweeps; a shaken bowl at 2 substeps) and the GPU's own cost of a
+  dispatch
+  (`gpu/dispatchProbe.ts`); and the adapter, its features (timestamps, f16, subgroups, tier-1
+  formats), the pipelines built (`gpu/pipelineCount.ts`: the bowl's two large ones, timed, and
+  any of them built at once, 'sync', untimed, the first frame that draws with it waiting for it;
+  how many were built in the first frame; and any after it, each a hitch, a large one many
+  seconds, the first three named) and the load. Other code adds rows with `registerBenchRows`;
+  `?bench=<group>` runs one group alone. `?stats` shows the adapter, the pipelines, the splash's
+  counts and the last minute's GPU times (a soak), and `?gpu=low` asks for a laptop's integrated
+  GPU (Chrome on Windows ignores it).
 - Never answer a slow frame with more substeps (see Real time above).
 - Nothing heavy on the main thread once frames are running: what can be planned is done
   behind the splash. Each globe's seed (above); every globe's pipelines (each `compileAsync`'s
@@ -809,6 +856,29 @@ current.
   specks', are built as it runs, which held up the next frames by 33-50 ms with no JavaScript
   running). Measured 2026-10-20 (1712x963): every frame of a switch's swap on time; start-up
   ~0.9 s longer.
+- A pipeline takes as long to build as its code with every call inlined, not its text: GPU
+  compilers copy a function into each place it is called from. The betta bowl's passes were
+  145 KB of text but ~680 K characters inlined (the studio's look copied 48 times, the two
+  noises 60 and 72 times with eight hashes each), and their two pipelines took most of the
+  phone's 29 s load. Each of those functions is now called from one place, in a loop over what
+  the places differed in, the same sums in the same order; the loop starts at `globesZero`, a 0
+  the bowl's passes take from a uniform (GlobeView `uBowlDetail.z`), so no compiler can unroll it
+  back into the copies (signed, so the loop has no small bound on its trips either). ~380 K
+  inlined on the phone's tier, ~400 K on the desktop's; `tools/shader-budget.mjs` measures it
+  and `shader-budget.test.mjs` holds each pass to its budget. Cold, in phone emulation on the
+  5090 (D3D12), each bowl pipeline built in ~0.7x the time (7.0-8.1 s to 5.0-5.8 s, back to
+  back): it is not all in proportion to the inlined size.
+- A frozen frame of the phone's tier (?manual, seeded, the same ticks) is not always the same
+  frame, even from one build: the world takes one of two courses, run to run (one run in four,
+  2026-10-25). In a 400-tick run the water read back at the fish's probes was the same, bit for
+  bit, to tick 300; by the end it differed, and so did the fish's swim and ~0.4-0.7% of the frame
+  (glints on the fish, the water's underside, a few leaf and bark pixels: most by 1-2/255, ~900
+  of a portrait frame's by up to ~100-160). The readback landed at the same tick in every run, so
+  it is not late readings, as with the koi (above). The cause is not found yet (a lead: the
+  water's centroid, which the fish makes for when it is out of the water, read back differently
+  in every run, even in runs that took the same course). The desktop's tier gave the one frame
+  in three runs. Shoot each build three times or more and compare a change with HEAD in the same
+  course: an exact change matches it within 1/255.
 
 ## The app (src/app)
 
@@ -904,3 +974,817 @@ across, it spins about its own axis (and keeps spinning when let go, slowing at 
 let go, as its weighted bed swings under it.
 
 Units: R_outer = 1, g = 24 units/s² (≈1 s fundamental slosh).
+
+## Phase 2: the bowl's rays, trimmed exactly (WP-H)
+
+The phone runs the bowl at about 1% of its arithmetic peak: it waits on its reads, its registers
+and its lanes' divergence. These trims leave every frame as it was, to the pixel (frozen frames,
+`?manual`, seeded, 400 ticks, phone and desktop tiers, portrait and landscape, ratios 0.6 and 1;
+the page has more than one frozen state run to run, so a build is compared with every state the
+one before was seen in).
+
+- No array is indexed by a variable in the bowl's shader but the furnishings' walk's stack. On
+  Android, Chrome translates the shader to SPIR-V (Tint), where a const array indexed by a
+  variable becomes a private array per invocation, filled from the constant: the nest's 170
+  bubbles were 2.7 KB of it. They are rows of the furnishings' texture now (scape/nest.mjs,
+  after the vertices; texel 3's w says where), and the big leaves' lengths a switch. The worker
+  only leaves room for them: the page has made the nest as it loaded, and writes it in
+  (furnishings.ts). Made in the worker too, it held the furnishings up (about 12 ms on a desktop
+  CPU, more on a phone). On Windows (HLSL, DXC) the same arrays became constant tables, which is
+  why a Radeon iGPU drew them no faster.
+- The walks look only as far as the stretch can end: the glass, a flake of food (a tie with it
+  is the walk's), and the furnishings no further than the fish. In the air the march comes
+  first and the walks look only as far as it got: what lies straight ahead there is mostly
+  under the film, past where the ray bends (a CPU model of the phone's camera: ~9% of the BVH's
+  reads). Where they meet something short of the march's last sample (the floating leaf, a
+  leaf above the water) the march is taken again, stopping there, so its samples are the ones
+  it would have taken. Each walk and the march are still inlined once. The Radeon iGPU drew the
+  bowl in the same time, within 1%, at ratios 0.6 to 2 (phone tier upright and on its side,
+  desktop tier). `?walks=0` has the walks come first again (the same picture), to time the two
+  on a phone, where lanes in the air and in the water mixed in a wave may cost more than this
+  saves.
+- The desk's matrices are left out of the bowl's shader (it stands in its studio).
+- The furnishings' walk keeps its stack: walks without one read more and wait on more of their
+  reads in turn (see scapeBVH.mjs), and the one tried drew no faster on the iGPU.
+
+## Phase 2: the sim's dispatches, fewer and cheaper (S1)
+
+The plan's model takes a phone's sim to be bound by launching its dispatches more than by their
+work: the S25 Ultra took about 6.1 ms for 151 a frame at 2 substeps, ~40 us each, work and all,
+where the 5090 takes ~5 us. What a launch alone costs on a phone is for its ?bench=sim to say; the
+GPUs here say little for it (the fused sweeps, below). These leave the water exactly as it was: the
+determinism harnesses (a scripted tilt, roll and spin, every readback waited on) hash the
+particles, the density field and texture, psi, the face and cell grids, the sand, the caustics, the
+light volume and the march band to the same bits on the phone and desktop tiers, on the betta page
+and the globes page (kelp, reef, koi, foam; what differs between their runs, the koi's light and
+the probes, differs between runs of the same build too).
+
+- **Fused pressure sweeps** (pressure_fused.wgsl, built for grids of 48 and under, run only with
+  `?fused=1` or when FluidSim.fusedSweeps is switched on, which a bench may do between frames to
+  time both in one load). A workgroup reads its 16x8x4 tile with two cells round it into workgroup
+  memory, relaxes the red cells of the tile and one round it (those round it are its neighbours'
+  too, worked out the same way from the same black cells), then the tile's black cells, and writes
+  the tile into the other of two psi buffers: 24 dispatches a substep where the two colours take 48.
+  The sums are pressure.wgsl's, in its order (pressure-sweep.test.mjs runs both walks over the
+  cells and holds the shader to them). cellPrep holds the second buffer at nought off the water
+  too (while the sweeps go as two colours as well), so dry tiles (which stop at once) are right in
+  both, and the sweeps can switch from one step to the next (the hashes are the same with them on,
+  and with them switched every seventh frame); they go in pairs, so the solve ends in psi (an odd
+  one left over goes as two colours). They pay only where a launch costs more than the
+  work they add, and no GPU here is such: on the 5090 (launches of 1-2 us) they took 0.72 against
+  0.52 ms a frame at 64^3, and 0.22 against 0.16 at 40^3; on this desktop's Radeon iGPU (2 CUs,
+  reached with Chrome's `--use-adapter-luid`: on Windows it ignores powerPreference), the betta's
+  sim alone at 40^3, switched back and forth in one load, 3.56 against 1.10 (the whole sim 22.1
+  against 19.6), most likely for a fused workgroup's long chain (its box loaded, the red cells of a
+  ring round the tile relaxed, then the black, a barrier between each), which a small GPU waits
+  on. So they wait for a phone's own numbers.
+- **The density blur's run** from the map's size (blurRun: at most 64, at least 16, the longest
+  that still gives the dispatch 512 workgroups). At 80 a side 64 made 50 workgroups each walking
+  70 slices in turn; 16 makes 125 walking 22: 0.094 -> 0.033 ms a frame on the 5090, and at 128 a
+  side (the betta's desktop) 0.140 -> 0.059.
+- **Two jobs a dispatch** where neither reads what the other writes: grid update and the cells'
+  classification (the cells' workgroups after the faces'), the caustic map's resolve and the light
+  volume's (the voxels' after the texels'), the water's centre gathered in the shift's threads
+  (on its own between shifts). sim-dispatch.test.mjs holds each dispatch to where its shader
+  looks for the second job.
+- **The march band in the sim's frame** (FluidSim.onWaterBuilt): render/marchBand.ts works it
+  out in the sim's encoder once the last substep's water is built (and for new water), for every
+  bowl, and the photons coming in through the air step over their samples over its x by whole
+  steps, unread (caustics.wgsl): 0.172 -> 0.144 ms at 64^3, 0.296 -> 0.223 at 128^3 on the page.
+  (Skipping the open water's samples as well, as the renderer's march does, was slower: the test
+  at every step cost more than the reads it saved.) The band's own encoder and submit are gone. Its
+  pass is timed with the sim's: on a desktop it is new work, and on the 5090 about even (0.016 ms
+  for the band at 64^3, against 0.028 saved in the photons on the page, and 0.010 in the sim alone
+  with the band and without), while a small GPU gains (the Radeon iGPU, the sim alone: 0.20 against
+  1.55 at 64^3; at 40^3, where phones had the band already, 0.05 against 0.15-0.21).
+- **The splash's kernels 256 wide** (spSpawn, the wet map, the drop map and merge, the map
+  resolve, the bins' counts): a quarter of the workgroups, most of which had nothing to do; and
+  this frame's pools' counts emptied by the bins' counts' first thread, not a dispatch of their
+  own. (Its pools follow the atomics' order, which varies run to run; the water does not read
+  them.)
+- **sandExtend** works out each column's surface (bare glass looks up to four columns away for
+  sand) once for its workgroup, in workgroup memory, and smooths from that, instead of nine
+  times: sand + container 0.124 -> 0.112 ms (64^3), 0.074 -> 0.062 (40^3).
+
+Phone tier, 2 substeps: 150 -> 146 of the sim's dispatches a frame (with the march band's 3, now
+in the sim's encoder: 153 -> 149), and the sim's encoder's WebGPU calls 398 -> 394; with the fused
+sweeps, 98 dispatches and 298 calls. Left for the phone's own numbers (?bench=sim, with a row that
+switches FluidSim.fusedSweeps): whether the fused sweeps pay there, and only then two sweeps a
+dispatch (a 24x16x12 box, 18 KB of workgroup memory, a longer chain still). Not done:
+the particle band (the grid kernels' workgroups over the water left alone). At 40^3 those
+workgroups are 8 cells tall: over the betta's water at rest a dispatch could leave only the top
+row of them, a fifth of the cells, and only in classify, cellPrep, project and the blur (not in grid
+update or constrain, whose velNew there changes every substep, dt times the body force; nor in
+extrapolate, which reaches two faces further), and none while the water moves. And what they
+leave as it was is right only while nothing they read changes over the water: sand carried up the
+glass by a tilt does (the cells' faces). About 0.1 ms on the S25 at rest, by the model.
+
+## Phase 2: the sim's work by what there is to do (S2)
+
+The S25 Ultra's ?bench (round 2) took 6-8.7 ms a frame for the sim, at rest: flip substeps 4.36
+(two), the splash 1.70, the density field 0.90, the photons 0.89, sand and container 0.70. It is
+not bound by launching its dispatches (0.8 us each there). Two kinds of change: the same water,
+less work; and, on phones only, lighter settings while the water moves little (`sim/simTier.ts`,
+`FluidSim.runtime`), with `?simq=0` running a phone's sim as round 2 did.
+
+The same water, every globe (the det harnesses: the particles, the grids, the field, the sand,
+the caustics and every texture the renderer reads hash as before on the phone's tier with
+`?simq=0` and on the desktop's; the splash's own pools follow the atomics' order run to run, as
+before):
+- **The splash's counts** are loaded once a workgroup (`sp_poolCount`): every thread of a pool's
+  kernel loading the one count from the same word took its turn at it (spBin, its pools empty,
+  0.09 -> 0.007 ms on the Radeon iGPU; spDrops with 380 drops 0.13 -> 0.03).
+- **The drop map's kernels by the drops there are.** At rest a few hundred drops lie on the glass;
+  a thread a drop walking its texels in turn, spDropMap and spDropMerge waited on a few long loops
+  with most of the GPU idle. While fewer than 1024 are on the glass (as last read back), LANES (16)
+  threads take each drop's texels between them (`spDropMapTeams`, `spDropMergeTeams`), the drop's
+  reach worked out once, by its first lane; a lane passes over any drop smaller than one its team
+  has found, and the drop goes into the largest found, of that size the first listed (as one
+  thread finds it: drop-map.test.mjs, with the lanes' steps in random orders). With many, a
+  thread a drop as before (shared among lanes, 12,000 drops took 2.8 against 1.7 ms). Two more
+  small pipelines.
+- **The map resolved over the tiles drops reach.** spDropMap marks each 16x16 tile of the map a
+  drop reaches; spMapResolve works the tiles marked this frame or the last (the rest hold none,
+  as they did) and empties last frame's counts there: the counts are kept for two frames (by
+  S.cur), and the 1 MB clear a frame is gone.
+- **The wet map** leaves the glass that was dry and lies over all the water (over the march
+  band's x, where no read blends a voxel of the water; FluidSim.marchBand, also bound where a page
+  has no band: it then leaves nothing out) as it was: most of the dome, at rest.
+- **The rock's and the bed solids' tops** (rock_bed.wgsl, 80 steps down each column) are worked out
+  again only when the globe has turned (its orientation's floats changed); rockPrev is copied once
+  more after, so the sand's rotation reads what it read before.
+
+On the Radeon iGPU (the betta's sim alone, the phone's tier, 2 substeps; `?simq=0` here, so these
+alone): the splash at rest with 380 drops 1.01 -> 0.36 ms, with 13,000 drops 3.53 -> 3.30; the
+whole sim at rest 14.9 -> 14.2.
+
+**The phone's runtime** (`PHONE_SIMQ1`; none of it a pipeline: `?bench`'s rows switch it between
+frames):
+- Pressure sweeps by how much the water moves (`FluidSim.agitation`, from the bowl's motion and
+  the fastest particle read back): 12 a substep calm (the bowl still and the fastest under 2 for
+  3 s), 20 moving, 24 in a hard shake (fastest over 6). Measured on the sim alone, scripted
+  (rest, a tilt held and let go, a hard shake, rest; and fish gulps at the film every 2.5 s, as
+  the betta's): the resting divergence 1.6e-3 against 1.1e-3 at 24, the slosh's kinetic energy
+  falling to half in the same 1.5 s, the ripples' roughness the same (2.5e-4). Any change at all
+  (20 against 24) leaves the gulps' ripple fields 15% apart in a few seconds; 12, 21%.
+- The photons in two halves of their rows, the even and the odd a frame each, each half laying its
+  deposits into its own half of the caustic map and the light volume; the resolves add both (all
+  the rays of the last two frames) and, half of the flux being a frame old, take more of the new
+  each frame (0.75 for 0.6, 0.42 for 0.35). The caustics' mean the same, their contrast within
+  0.1% at rest and 1.5% in motion, their change frame to frame within 4-9% of the full trace's
+  (taking 0.6, in motion 15-20% less).
+- While the bowl stands still (0.5 s), the bed the water, the light and the picture see (the
+  sand's surface, extended, and the container's faces and cells) is built every fourth frame; the
+  sand still flows every frame (the sand's thickness the same, to the bit, after a tilt and a
+  shake).
+
+On the iGPU, all of it against round 2: at rest 14.9 -> 12.0 ms (the flip substeps 6.5 -> 6.2, the
+photons 3.2 -> 2.1, the splash 1.0 -> 0.37, sand and container 2.1 -> 1.3), with 13,000 drops on
+the glass 18.5 -> 15.7, a hard shake (3 substeps) 25.8 -> 23.8. In phone emulation on the 5090
+(latency-bound, as a phone's sim is much of the time): at rest 0.61 -> 0.38 ms (the splash 0.17
+-> 0.05), shaken hard the same (1.12). The sim's dispatches a frame at rest 147 -> 95.
+
+Dead ends, measured on the sim alone:
+- One substep a frame while calm (1/60 s, the FLIP blend made as much a frame as two took): the
+  resting water four to six times as lively, with flicks of divergence (a particle flung at the
+  film), at 12, 24 and 40 sweeps alike.
+- The sand every fourth frame for four frames' time: its slides are capped a substep, so they
+  slowed (the bed 0.016 apart, RMS, after a shake). Fewer sand substeps once the bowl had stood
+  still 3 s: still 0.01 apart.
+- Extrapolation from a tile read into workgroup memory with two faces round it (most faces
+  outside the water read 42 neighbours from memory): no faster on the iGPU (1.62 against 1.54 ms),
+  and slower with the validity in bits (2.35).
+
+Left for the phone's own numbers: `?bench`'s `sim fine` row times each stage of the substeps
+(p2g, grid update, cell prep, pressure, project, extrapolate, constrain, g2p, the density field's
+splat and blur) where the S25 has only ever shown the flip substep whole; and `simq 0` against
+`sim` is what this costs and saves there.
+
+## The betta in a worker (src/fish/Betta.ts, bettaSpecimen.mjs, bettaLink.mjs, bettaWorker.mjs)
+
+Phase 2 of the phone work. The betta's update was most of a phone's main thread (7.7 ms of 9.1 in
+phone emulation at 2.75x CPU throttle; 9.2 ms on the user's S25 Ultra), too much for a mid-range
+phone's 16.7 ms frame.
+
+- **Split.** `BettaSpecimen` (bettaSpecimen.mjs, no DOM, no GPU) is the fish as the CPU moves it:
+  the Atelier specimen on the bowl's route (bettaSwim.mjs), its fins solved, skinned into one list
+  of vertices, kept inside the glass, above the bed and out of the furnishings' solid parts, its
+  probes, mouth and disturbance of the water. `Betta` keeps what needs the page: the BVH's texture
+  and its GPU refit, the atlas, the visible flag. Moved on the page's thread it is the code it was,
+  bit for bit (vertices, probes, mouth, swim and disturbance checked against 59903ac44 over 3000
+  frames at 37, 60 and 120 fps on the phones' fin settings and 60 on the desktop's).
+- **The worker.** On a phone (`LITE`) with four cores or more, a twin of the specimen is built in a
+  worker as the page loads (`createBetta({ textures: false })`: the photographs stay with the page)
+  and moved there. Each frame `Betta.update` takes the pose the worker made of the last frame's step,
+  uploads its vertices for the GPU refit as before, and from then on the page reads that pose's
+  probes, mouth and swim (the water's probes, the food, the nest), so the fish drawn and the fish
+  the water and the food meet are the same; then it sends this frame's step. The fish is hidden
+  until the first pose is back.
+- **Bit for bit.** A step is one Float64Array (about 1 KB: dt, FIN_QUALITY, the globe, the host's
+  inputs, the water's readings, the obstacles), a pose one ArrayBuffer (81 KB: float64 head, float32
+  probes and vertices); both are handed back and forth, so a frame makes neither. Every number
+  crosses as the float it was, so the worker's fish moves exactly as the page's would on the same
+  inputs: `betta-worker.test.mjs` (480 frames through a real worker thread, the fin settings
+  changed midway), and over 3000 frames at 37, 60 and 120 fps and on the desktop's fin settings, the
+  real Betta.ts in a worker thread against Betta.ts on the page's thread, one frame later: uploaded
+  vertices, the refit's BVH (its CPU mirror), probes, surface column, mouth, heading, mode and
+  disturbance all bit-identical.
+- **Late replies.** Poses are taken oldest first: a reply that misses its frame costs a frame of
+  delay (two behind), not a frame held and the next skipped. Once a second pose has been waiting 120
+  frames in a row, one is skipped to be a frame behind again (its disturbance still taken). At most
+  two steps go unanswered; past that a frame's time goes with the next step. In phone emulation the
+  reply comes back in about 2-3 ms (p90 3-4, max 6-20). A worker that never comes up, or stops
+  answering without an error (a stalled fetch of its script, a hang), is given up after 300 frames in
+  a row with no pose to take, as if it had failed (below).
+- **The bowl turning.** The pose is drawn a frame or more after its step, with the furnishings where
+  the bowl has turned them by then, so the obstacles are sent turned on by the bowl's spin for that
+  long (`omega` times the lead: a frame, and one more for each pose to be drawn before this one, both
+  those waiting and those of the steps still unanswered, as with a worker slower than a frame). In a
+  drag, the far end of the wood moved 0.018 sim units a frame (max 0.085; the fish is 0.26 long); the
+  lead leaves 0.005 (max 0.067, when the spin changes). Counted so, the lead is right for every pose
+  while the worker keeps up with the frames (a simulated worker taking 3-15 ms a step, 1 ms each
+  way, frames 16.7 ms apart); one that cannot (18 ms) draws 16% of its poses a frame later than led,
+  its own reply being late, which no count can see.
+- **The bowl turned about its own axis** (two fingers, a right- or Ctrl-drag) carries the fish round
+  with it, as the hand turning the bowl would (BettaSwim.turnWith: where it is and goes, where it
+  displays, the ways it faces; the water keeps its own motion). Each step carries it by the turns
+  since the last step was sent, and its pose is drawn carried on by those since its own step
+  (BettaRemote.take), so it keeps its place among the furnishings however late the reply; the lead
+  above is the spin less that turn (a tip or a roll), which the fish is not carried by.
+- **Switches.** `?worker=0` moves it on the page's thread; `?worker=1` in a worker anywhere
+  (desktops stay on the page's thread by default: their frames are not short of time). `?manual`
+  moves it in step with its ticks unless `?worker=1`. A worker that fails, cannot start or goes
+  silent hands the fish back to the page's thread (from where it was built).
+- **Measured** (phone emulation, 412x915 at dpr 2.625, 2.75x CPU throttle, RTX 5090): the betta's
+  lap 7.7 -> 0.1-0.3 ms (update p50 0.2, p90 0.3-0.5 ms: the 81 KB upload, the refit's dispatch, the
+  post), the main thread 9.1 -> 1.1-2.5 ms a frame, 37 -> 49-60 fps (the GPU shared with other
+  work). The worker's chunk is 377 KB (95 KB gzip). The load's times stayed within run-to-run noise,
+  but there the worker (started as the page loads, beside the furnishings' worker) runs at the PC's
+  speed, unthrottled: its effect on a phone's load is unmeasured. A desktop with `?worker=1`
+  (1280x800, frames unpaced): update p50 2.9 -> 0.7 ms.
+
+## Phase 2: the bowl on a lattice, made whole again (src/render/bowlRender.ts, bowlResolve.mjs)
+
+A phone's frame is mostly the bowl's rays, and each pixel's costs about the same whatever the
+picture's sharpness. So on phones (`LITE`; `?up=2`, the default there) the bowl is drawn into targets
+of its own and traced each frame on a 2x2 lattice, a quarter of the picture's pixels, a different
+pixel of each 2x2 block each frame (the corner, the opposite corner, then the other two), so every
+pixel is traced once in four frames; the picture is then made whole at full size, and the fish is
+drawn again at full size, as the page has always drawn it. Desktops draw the bowl straight into the
+frame as before (`?up=0`, which is also the phone's kill switch); their shaders are the same text,
+byte for byte.
+
+- **The frame.** The lattice: the bowl's own pass (its two meshes again, in a scene of their own,
+  sharing materials and geometry), through a copy of the camera whose view is offset by the frame's
+  phase (`setViewOffset`), into a half-size target; the fish's pass is left out there. The change
+  test: one texel a block, the new sample against the one traced four frames before (below). The
+  picture: the resolve, on the bowl's sphere, into a full-size target, writing in the depth where the
+  fish is near (its depth 1), then the fish's pass over those pixels (`LessDepth`, as over the bowl
+  pass's marks before). The frame: the backdrop and the table, and a composite on the sphere's
+  outline that puts the picture in, after the table; the table's mirror still traces the bowl itself,
+  its pass on a layer only the mirror's camera sees (`StudioBackdrop.alsoMirror`), at the mirror's
+  own sharpness.
+- **One pipeline each.** three keys a render pipeline on the material and the target's colour
+  format, colour space, samples and depth format: the lattice, the picture, the table's mirror and a
+  phone's frame buffer are all half floats in the working colour space, single-sampled, with a depth
+  buffer, so bowl and bowlKoi are built once each (the pipeline counter: 2 large, none late; three
+  small ones more). Two traps found on the way: three's `screenSize` node makes a new uniform each time
+  a material is built, and the bowl's is built once for each render context (the frame's, the
+  mirror's), so its uniforms came out in another order and it built a second bowl pipeline (a uniform
+  of its own, set as each draw is made, instead); and `compileAsync` builds for the renderer's depth
+  setting, not the target's, so a pass into a target without depth was built again in the first frame
+  (every target has one).
+- **The same rays.** Where the passes write ids (`bowl.ids`, below), a ray is worked out from its
+  pixel of the picture and the camera's matrices, not from the sphere's surface where it is drawn:
+  on the lattice from the picture's pixel `2 texel + phase` and the unshifted camera's projection
+  (`GlobeView.setBowlLattice`). Interpolated over the shifted projection instead, the rays differed by
+  a rounding (~1e-7) and chaotic places (the water's line, its underside) came out otherwise.
+- **What each ray ended on.** The passes write it in the colour's alpha, 1 + a code (bowlResolve.mjs
+  HIT: the room through the air or through the water, sand, wood, rock, a plant, the fish, the lid,
+  the water's surface, spray or a bubble or a pellet; plus 16 where the ray met the water's surface on
+  the way), from a private set where the ray ends and read after the trace (`globes_hitIdOf`). An
+  opaque material's alpha is made 1 by three, so those passes blend with `NoBlending` (the same).
+- **The resolve**, per pixel (bowlResolveWGSL.ts; worked on the CPU in bowlResolve.mjs, which
+  upsample-resolve.test.mjs holds to it): its own last sample (its phase's lattice, its block's texel)
+  is kept as it is while it was traced since the view last moved and is neither the fish nor spray;
+  where a block round it (of nine) has changed since, it is held within what this frame's nearest four
+  samples span; where four or more of them have, it is filled in. Filled in: covered where its nearest
+  four mostly are, by EASU (AMD's FSR 1, adapted from three's FSR1Node, MIT; no sharpening) from this
+  frame's lattice, its luminance for edges squashed (x / (1 + x)) so a glint does not stand for every
+  edge, the fish's samples left out where its pass draws them. Every sample read is scrubbed by its
+  bits (a NaN or an infinity as nought: a miss). The fish's pass draws a pixel again where one of
+  this frame's nearest four samples is the fish (its box: the bowl's pass marks every ray that passes
+  through it), or one of its block's samples still good is (so its pixels' own rays, in the last four
+  frames: slivers thinner than the lattice are not lost).
+- **The change test** (bowlResolve.mjs `changed`): a block has changed where its new sample's
+  luminance differs from the one four frames before by more than 0.6 of the brighter's, or by more
+  than 0.04 where what the ray ended on changed too. The plan's 0.04 alone, with a change filled in,
+  crawled: the sun's dapple on the bed and the wood drifts ~0.3 pixels in four frames, and its sharp
+  lines failed the test everywhere, filled in from a lattice in another place each frame. The plan's
+  "an id still beside it" test went too: lines thinner than the lattice (the water's line against the
+  glass) never had their id beside them, and were never kept. And drops on the glass and the nest are
+  kept like anything else (the plan had them never kept, so wet glass would never be sharp).
+- **Moving.** A frame whose view moved the bowl's picture by more than 0.05 pixel (the camera's turn
+  and travel, the bowl's, its lid's; any change of projection, of the lid being there, of its lamp)
+  keeps nothing traced before it, nor does the first still frame after (traced with the lattice's
+  footprint: while the view moves, `lit.z` is the lattice's, so a picture filled in does not sparkle);
+  so a roll, a zoom or the entrance glide is drawn at the lattice's sharpness, filled in, and is sharp
+  again four frames after it stops. While it moves the lattice holds its place (Schedule): moved on,
+  each frame was filled in from another place and every edge buzzed with the four-frame cycle
+  (a camera drifting 0.04 px a frame: 17.5k pixels off by more than 8/255 from one grab to the next,
+  against 3.3k drawn straight; held, 5.0k). The bowl rocking back upright after a roll stops dead
+  under a ten-thousandth of a radian (GlobeController), and under 0.05 pixel a frame counts as still,
+  so the long settle after a roll is not drawn at the lattice's sharpness. A new size or pixel ratio,
+  a new mode, a gap of 250 ms between frames and the first frame start afresh.
+- **Measured** (phone emulation at the S25 Ultra's 384x693 CSS px, the RTX 5090; frozen frames:
+  `?manual`, seeded, 200 ticks, the same page drawn in each mode, so the same shaders and the same
+  world). At rest the picture is the full trace's, pixel for pixel: 0 of 2.1M pixels differ, upright
+  and on its side, at ratios 1 and 1.5; four frames after a roll stops it is again (bar the splash's
+  bubbles, never kept). The pipelines: 82 built (79 with `?up=0`), bowl and bowlKoi once each, 3 in
+  the first frame as before, none late. GPU time of the frame's passes at pixel ratio 4 (where the
+  5090 is not bound by latency): 2.05-2.16 ms drawn straight, 1.43 on the lattice (the lattice 0.67,
+  the change test 0.01, the resolve 0.035, the fish's pass at full size ~0.5, the composite 0.04);
+  at the phone's own ratios the 5090 is latency-bound and the two are even. On this desktop's Radeon
+  iGPU (2 CUs, a small GPU's stand-in; its timestamps read nothing, so the wall time of a frame to the
+  GPU's done, the bowl alone, the sim not stepped): at ratio 1, 232 ms drawn straight against 75.9 on
+  the lattice (one page, the two switched, twice each); straight at 0.5, 87.5 ms; on the lattice at
+  1.5, 127.6. With the fish traced on the lattice instead of again at full size, 92.8: its rays, sparse,
+  cost more than dense ones. The main thread (phone emulation, 2.75x throttle): the draw's share 0.7
+  -> 1.1-1.2 ms, for three render calls more. Flicker at rest with the
+  world live (frames drawn one by one, the mean second difference in time of each pixel's 8-bit
+  luma over the bowl): 0.67 drawn straight, 0.73 on the lattice (the plan's rules: 3.4); the mean
+  error against the full trace of each frame 0.22-0.23 of 255.
+- **Switches.** `?up=0|1|2` (1: in a target of its own at the picture's size, the same picture, or with
+  `?upin=0.5-1` traced at that share of it and filled in), `?fishfull=0` (the fish traced on the
+  lattice with the rest), `?updebug=id|age|changed|nan`, and for tuning `?uptau=` and `?upwide=` (the
+  change test's threshold; how many of nine blocks round a pixel must change for it to be filled in).
+  ?bench's `up` group times up 0 against up 2 at ratios 0.8, 1, 1.25 and 1.5, and 2 with the fish on
+  the lattice at 1. For the ladder: the picture is the drawing buffer (the pixel ratio the scaler
+  picks is the picture's sharpness: a step starts the picture afresh), `BowlRender.setMode` picks how
+  it is drawn, `tracedShare()` says how many rays a pixel costs.
+
+## Phase 2: a phone's picture steered by the GPU's time (src/app/quality)
+
+The phone's scaler (app/adaptiveScale.mjs) stepped the pixel ratio by the frames' pace and the main
+thread's time. On the S25 Ultra the GPU is the limit, and it slows as it warms (30-40% within a
+minute at the same settings), so phones now step along a quality ladder by what the GPU measurably
+spends on a frame (desktops keep the scaler; `?quality=0` gives phones the scaler back). Since
+2026-10-26 both aim at 35 frames a second or more rather than 60: the desktops' scaler counts
+frames further apart than 30 ms (under about 33 a second) as slow and under 25 ms (40 or more) as
+quick (it was 22 and 18.5); the phones' scaler, only with `?quality=0`, still holds 60.
+
+- **The ladder** (quality/ladder.mjs, data): the sharpest level, at the screen's ratio up to 2;
+  then the table's mirror redrawn every other frame while nothing moves (a frozen frame is the
+  same to the pixel); then the ratio down in steps of 0.9, through 1, to the floor of 0.6; then the
+  water march's step at 0.75 and 0.9 voxels (a few pixels of the water's edge seen from below
+  move: at 0.75, 2% of a portrait frame's pixels, 0.2% by more than 8/255). Every knob is a canvas
+  size, a uniform, a pass skipped or a dispatch put off: no level builds a pipeline (none built
+  after the first frame across ratio, mirror and march switches, in phone emulation), and a switch
+  costs its frame about 1 ms. On phones the march band (marchBand.ts) is worked out for the longest
+  step a level takes, so it holds at each (a band for a longer step leaves out no more reads: the
+  frame is the same). Tried and left out: fewer samples of the lamp's haze (bowl.ts, through
+  uBowlDetail.x): at 3, a hot spot under the lamp and moire through the haze; at 2, coarser
+  streaks. The plants every third frame, then 30 fps, are the main thread's ladder (CPU_RUNGS).
+  The interleaved bowl (?up=2) is not a rung: phones draw it so at every level, and the cost model
+  takes its steady share of traced pixels into its cost of one. (The march rungs' saving it then
+  overstates a little: the resolve and the composite do not march.)
+- **What it measures** (quality/pageQuality.ts, GpuClock): three's render passes (trackTimestamp,
+  now on in production on phones) and the sim's compute passes (FluidSim.setProfiling), one resolve
+  in flight at a time, so a frame's times come in a few frames late, about every other frame; on a
+  device without timestamp queries, the queue's pace. And the bowl's area on screen (its outline,
+  1.15x for the lid, clipped to the stage), now and at rest in this view.
+- **The cost model** (CostModel): the sim as measured, plus a fixed part (the mirror, the backdrop,
+  the output) and a cost per traced bowl pixel (area x ratio squared, by the march step's share),
+  fitted by least squares to its windows (older ones counting less: a warming GPU drifts), the fixed
+  part drawn towards about 0.006 million pixels' worth where the windows cannot tell the two apart.
+  A level's cost is the model's prediction scaled to what the current level measures, so a zoom in,
+  a turn of the phone or the bowl coming into view keep the traced pixels about the same.
+- **The controller** (quality/controller.mjs, pure; quality.test.mjs): 1 s windows, trimmed means.
+  It aims at 35 frames a second or more (TARGET_FPS, the user's choice of 2026-10-26: a sharper
+  picture at fewer frames; it aimed at 60 before). FramePace still caps frames at 60, so a level
+  whose frames can come quicker does. The budgets are 60's scaled by 60/35: a sustained 24.9 ms
+  (14.5 at 60; the margin under 28.6 is for a GPU that slows as it warms). Over it (or frames
+  further apart than 30 ms with the GPU over 21.4): straight down to the sharpest level expected at
+  22.3 ms or under (one to three rungs), then a dwell of 2 s. Up one rung after 8 s held, if
+  expected at 20.6 ms or under; taken back at once if it does not hold, the next try twice as late
+  (to 64 s). Slow frames that neither the GPU nor the main thread explain: a rung after three
+  windows, taken back if it bought nothing. The main thread over 18.9 ms moves only its own ladder.
+  While the bowl moves (its pose, the lid, the camera, or water sloshing: more substeps than a calm
+  frame takes), a rung down at once if the GPU goes over, put back 1.5 s after it is still; those
+  frames teach nothing. At the lowest level, with frames further apart than 30 ms (under about 33 a
+  second) for three windows, 30 fps (FramePace.frameMs), said so in ?stats, with 35/30 of each
+  budget (29 ms); back unheld once the lowest level is expected to come every 28 ms or sooner on
+  this screen, for 20 s. Calibration: as the bowl comes into view in the entrance, every timed frame
+  is a point of the model, then straight to the sharpest level that fits; and in its first window
+  at rest, up to the sharpest expected at 20.6 ms if that is sharper (a try). Thermal memory: the
+  level held longest over the last two minutes. ?stats says "aim 35 fps" (or 30, held).
+- **The screen**: a late frame lands on the screen's next refresh, so frames at 35 a second or more
+  come as many whole refreshes apart as fit in 28.6 ms (frameMsAt): three on a 120 Hz screen (25
+  ms, 40 a second: the S25 Ultra's, where the 24.9 ms budget fits), four on a 144 Hz one (27.8 ms,
+  36), two on a 90 Hz one (22.2 ms), and on a 60 Hz one only one: it shows nothing between 30 and 60
+  a second. The budget is no longer than that, the other thresholds scaled with it: 22.2 ms at 90
+  Hz, and at 60 Hz a refresh, 16.7 ms (frames at 60, as before the change). With 24.9 there, a 60
+  Hz phone settled on a level whose frames came every other refresh, 30 a second unheld, slow by
+  nothing the GPU's or the main thread's time showed, and stepped down and back up again and again
+  (quality.test.mjs reproduced it). The refresh is the quickest the controller has been told, the
+  middle of each 15 (a refresh told a little short now and then is not kept): FramePace's estimate
+  grows a little at each refresh it sees, and while every frame is late (a GPU-bound phone at 40 a
+  second) it sees none between them. FramePace no longer counts the gap from the loop's first call,
+  which is timed by the clock, not the screen. Held at 30, frames come every 33.3 ms on any of these
+  screens, and the budget is 29 ms.
+- **The sim's part** of a frame is predicted at the frame rate aimed at on the screen: a frame
+  longer than a sixtieth (at 35-40 a second, or held at 30) takes three substeps where one of a
+  sixtieth takes two, and half the sim's work is by the frame, half by the substep (the S25's two
+  flip substeps were 4.4 ms of its 8.6), so three cost 1.25 times two (ladder.mjs simCost; it was
+  1.5, against the controller's own reading of the substeps it took, 1.25: under the 35 fps aim,
+  where every unheld frame on a 120 Hz screen takes three, that overstated every level's sim by a
+  fifth).
+- **Where a view starts** (quality/record.mjs): localStorage `betta.quality.v1` (every access in
+  try/catch), for the device (its GPU's name and its screen) and each way up: the level held
+  longest (written every 30 s and as the page is hidden; a rung lower in another build), and how
+  long the bowl's pipelines took to build (the splash's bar). With nothing kept, the GPU's name
+  (PRIORS: its speed against the S25's Adreno 830) and the S25's measured costs pick the level.
+- **Switches**: `?quality=0` (the scaler), `?level=n` (held at level n), `?adapt=0` and `?bench`
+  (the sharpest knobs at 1 CSS px, as before). `?stats` shows the level, its knobs, the GPU's time
+  against the budget, the prediction, the level held longest and how much more a pixel costs than
+  when the GPU was coolest, and the last move and why.
+- Measured on this desktop only (the 5090; the Radeon iGPU through `--use-adapter-luid`): the 5090
+  holds the sharpest level at a phone's size (the old scaler, in headless emulation, stepped down
+  to 0.9 for frames the compositor paced at about 20 ms); the iGPU, about a tenth of the S25, sits at
+  the lowest level at 30 fps. A model of the S25 (bench 3's costs, 35% slower as it warms) settles
+  at the floor's ratio with the march's longer steps: its sim and its bowl are what must get
+  cheaper. Aiming at 35 (the same model, 7 ms of sim at 60, 160 ms a million traced pixels, five
+  minutes in quality.test.mjs's harness): on its 120 Hz screen a ratio of 0.81 cool and 0.66 warmed
+  by 35%, frames at 40 a second; on a 60 Hz screen 0.6 cool at 60 a second, and warmed, held at 30
+  at 0.66; on a 90 Hz screen 0.73 and 0.6 at 45 a second.
+
+### The resolution menu (app/resolution.mjs, ResolutionMenu.ts)
+
+The betta bowl's page has a "Resolution" button in its link bar, beside "← Demonstrations". Auto
+(the default) is all of the above: the sharpest picture that keeps 35 frames a second or more (60
+until 2026-10-26; frames still come at up to 60 where the picture allows). A fixed size
+holds the picture at 1, 1.5 or 2 canvas pixels a CSS pixel, or the screen's own (a phone's 2.6 to
+3.5) however slowly frames then come: past the screen's own (a desktop's 1.5 and 2) it is drawn
+larger and shrunk to fit, supersampled. Held, nothing is stepped: a phone's other knobs are at the
+ladder's second level, its sharpest but for the table's mirror redrawn every other frame while
+nothing moves (the same picture, a mirror's redraw saved every other still frame); the GPU's times
+are still taken and let go. Auto again,
+the controller (or the scaler) starts over from where it stood. The choice is kept on the device
+(`betta.resolution`: 'auto', 'screen' or a ratio offered on that screen; anything else is Auto).
+Phones still trace the bowl on the interleaved lattice at a fixed size: still, it comes to the full
+size in four frames. ?stats says "resolution held at ...". Tests: `resolution.test.mjs` (3).
+
+## Phase 2: the studio while the bowl builds (L2)
+
+The betta page showed its splash until the bowl's pipelines were built (10.7 s on the S25; about
+8 s of it the two compiling side by side). Now, right after the renderer is up, the studio
+(backdrop, table and its mirror; the camera where the entrance starts, the bowl out of sight) has
+its small pipelines built, is drawn once (and again whenever the stage changes size: nothing in it
+moves), and shows through the splash, thinned to a veil, while the rest loads. The splash's bar is
+determinate (main.ts LOAD: the load's steps, the bowl's build filling it over the time it took on
+this device last time). The studio's first frame is drawn before the sim is set up, so three's
+error scopes never close among the sim's; the globe is kept out of its frames until its pipelines
+are built. Cold, in phone emulation (384x693 at dpr 2.81, 2.75x CPU; two sets of three runs
+interleaved with the build before): the first picture at 0.89-1.09 s (it was the splash lifting,
+at 8.8-10.3 s); compiled no later (8.7-10.0 s, against 8.7-10.2); the splash lifts 0.06-0.08 s after
+it (0.12-0.15: the backdrop's 3 pipelines were built in the bowl's first frame; now none); no frame
+of the entrance over twice the median, no long task in it, none built after the first frame.
+
+The betta's atlas is composed as before (Betta.ts: drawImage of its four photographs as they load;
+its bottom row is now its variety's colour maps: Varieties, below).
+Decoded off the page's thread by createImageBitmap of their files, its pixels differ by up to 14/255
+(the browser decodes them otherwise); by createImageBitmap of the images themselves, the decode stays
+on the page's thread. It costs the page's thread about 120 ms at 2.75x CPU as the photographs come
+in, about a second into the load: behind the studio, which does not move.
+
+## Learn mode (src/app/learn)
+
+For people who keep bettas, the betta page's **Learn** button (beside Feed and Flare fins; off at
+first, remembered on the device: localStorage `betta.learn`) explains what the fish does and what is
+in its bowl. Every word is in `content.ts`, for review: a card for each thing a tap can land on, a
+caption for each behaviour, the feeding advice; each a kicker, a title and two or three sentences.
+
+- **Captions** (`captions.mjs`, `Learn.frame`). The swim's mode (`Betta.swim.mode`: the page's fish,
+  or on phones the worker's last pose) is a behaviour: cruising, hovering, a trip to the film for air
+  (rise, gulp and dive are one), displaying at its reflection, a lap, resting on the sand, a startle,
+  taking a pellet (a burst and the glide after it are only the route's). One is captioned once the
+  fish has kept at it a moment (0 to 3 s), never over another card nor within 20 s of one going,
+  and the same not again for 5 minutes (15 for cruising and hovering, which it does all the time).
+  Moments too: the nest growing as the fish comes back from the film (`BowlLife.bubbles`), a pellet
+  settled uneaten (`FishFood.landed`), the fins flared at the button (at once, over any card).
+- **Taps** (`pick.mjs`). A tap (a press let go where it began within 450 ms, no second finger down
+  meanwhile: main.ts) is followed into the bowl as the viewer sees it: the lid first, on the
+  straight line (`BowlLid.hits`, as a click on it always was); then Snell's law into the glass, out
+  of it into the water or the air over it, and down through the film (a film met beyond ~75 degrees
+  is a mirror: the water). The first thing met after that is what was tapped: the furnishings, their
+  BVH traced on the CPU (`scapeBVH.mjs traceCPU`, in the bowl's frame, on the texels the page keeps
+  from `furnishings.ts`: the plants at rest), then `surfaceCPU`'s material, and the mesh by its first
+  vertex (`parts`, each mesh's name and vertex count, now handed over with the BVH) for a stem or a
+  root; the fish (within 0.06 of a probe); the floating leaf and the nest (boxes round them at the
+  film); the sand (the bed's top at rest, at once below it). Past them all, the water; through the
+  glass and the air over the water, the bowl. The heater's materials (8, 9, 12) and the filter's (10,
+  11) have their cards; a material it does not know gets none. With Learn off a tap is what it was.
+- **Feeding** (`feedLog.mjs`). Every pellet `Feeding` lets go is counted (`Feeding.onDrop`, Learn on
+  or off). As a meal is asked for (Learn on): how to feed a betta, or, within 4 hours of the last
+  meal, that it has just eaten, or, with six pellets or more in the last 12 hours, that it has had a
+  day's food. A meal is three pellets now (it was four). With Water mode on, the
+  food is counted by its clock (its routine's meals, which never lift the lid, and each Feed's
+  pellets at the time the meal was asked for), so a Feed soon after a routine meal is told so.
+- **The card** (`.learn-card`, styles.css): one at a time, a polite live region (its words cleared
+  once it fades, so the same card again is read out). Low at the right on a wide screen; on a phone,
+  across the foot over the page's link (the controls give the specimen's name a line of its own to
+  fit 384 px), or up top, in smaller type, with `?stats`' figures up. A caption stays 5 s and 0.12 s
+  a word, a card asked for 8 s and 0.2 s a word, longer while the pointer is on it or focus in it;
+  Escape or its close button puts it away.
+- **Cost.** Off: `learn.on` read once a frame, and a counter a pellet. On: 0.0-0.1 ms a frame (in
+  the food lap), a tap's pick well under a millisecond, its module (3 KB, with the BVH's tracer) loaded
+  the first time Learn is turned on. No pipelines, no WGSL. The furnishings' texels stay on the page's
+  thread for the picker: 8.3 MB on phones, 32 MB on desktops. Phone emulation (384x693 at 2.81, 2.75x
+  CPU, vsync), Learn off and on alike: 60 fps, GPU sim 0.5 + draw 1.0 ms, 84 pipelines.
+- Tests: `learn-pick.test.mjs` (4: Snell's law; the topics; taps traced back from points on the real
+  furnishings, the bowl turned and tipped, land on them; the fish, the leaf, the nest, the film, the
+  sand, the water, the bowl, the lid) and `learn.test.mjs` (4: a card for every topic and behaviour,
+  short; the captions' timing; the feeding count).
+
+## Water mode (src/water)
+
+The betta page's **Water** button (beside Learn; off at first, remembered on the device:
+localStorage `betta.water`, the bowl itself in `betta.water.state`) runs a simulation of the bowl's
+water on a fast clock, shows its test readings in a panel, and writes what the water does to the fish
+and to the water's look into `water.fx` (`effects.ts`, read by the fish and the bowl's look). Off,
+`water.fx` is `CLEAR_WATER` (or `?water=`'s forcing) and nothing runs in a frame.
+
+- **The model** (`chemistry.mjs`, plain JS, steps of at most 10 sim minutes). Nitrogen in mg N in
+  4.0 L (the glass card's gallon): TAN, nitrite, nitrate; detritus (feces, remains; 7 %/day back to
+  TAN); the fish's gut (a 2 mg pellet is 0.128 mg N: 55 % excreted as TAN over a day, 20 % feces) and
+  its fasting 0.04 mg N/day; uneaten pellets rotting (1.3/day: ~2 days; 70 % to TAN). Nitrifiers as
+  capacities (mg N/day) in the sponge, sand and glass (70/25/5 %), Monod uptake taken implicitly,
+  growing on what they oxidize, x1.07 per °C, slowed in acid water (half at pH 6.45). Plants take
+  0.07 mg N/day, ammonia first. KH: 7.14 mg CaCO3 per mg N nitrified, less half for the share of the
+  fish's ammonia excreted as NH3 and for the nitrate the plants take; the water lost to the air
+  (0.4 %/day) topped up with tap water, its KH coming in; pH from the carbonate balance with 3 ppm CO2 (7.6 at 4 dKH), the
+  leaf's tannins a little acid and a tint. The room 70 °F (±1 °F a day), the bowl's time constant 3.5
+  h, a 10 W heater with a 0.5 °F thermostat band at 79 °F, followed a minute at a time (its lamp: the
+  share of the time it heated, blended over 0.15 s of real time, so at Play it blinks and at Fast it
+  glows steadily at its duty). Chlorine at 2 ppm in untreated tap water: gone in about a day, killing
+  bacteria (0.7/ppm/day), chloramine freeing some ammonia; a treated change neutralizes what is left.
+  A bloom of free bacteria on dissolved organics (a new bowl's leaching, rotting food), eaten fast by
+  a mature biofilm. The clock runs to each meal or change and lands on it exactly (so none fires
+  twice, whatever the frames' lengths), in steps of at most 10 minutes, at least one.
+- **Choices that differ from the textbook values** (to match what keepers see): the nitrifiers' Ks
+  is a few thousandths of a mg N/L (aquarium biofilters are mostly ammonia-oxidizing archaea and
+  comammox Nitrospira) and the active biofilm's loss rate is 0.56 (AOB) / 0.45 (NOB) a day (decay,
+  grazing, sloughing), so a cycled filter carries ~1.35x its load: ammonia reads ~0.01-0.02 ppm, yet a
+  sponge rinsed under the tap (97 % of its bacteria killed) brings 0.25-0.3 ppm in 3-4 days. The flip
+  side: a week or two without food shrinks the colony, and feeding again brings a short ammonia rise.
+- **The fish**: severities 0..1 (0.7 severe) for free NH3 (0.004-0.05 ppm: total ammonia from about
+  0.25 ppm at pH 7.6 makes it uncomfortable), nitrite (0.25-2), nitrate (40-160), cold (under 76.5
+  °F; 70 °F ~0.55), chlorine, very acid water (under pH 5.6: bettas come from soft, acid water, so
+  old-tank syndrome's harm is the swing a big change on a crashed buffer gives, and its stalled
+  bacteria) and a pH swing from what it is used to (2-day memory; from half a unit, a whole unit
+  severe); felt within ~2 h, mended over 1-2
+  days (the cold within hours); each effect a weighted combination, finite and 0..1, and within 0.01
+  of its clear value exactly that; appetite falls with them; the nest only when content and warm.
+  Its condition (Thriving / Uncomfortable / Stressed / In danger) and the main cause go to the panel;
+  it never dies (in danger, the panel says what that would mean in a real bowl and what to do).
+- **The page** (`care.mjs`, no DOM; `WaterCare.ts` wires it). Clock: paused, Play (30 sim min a
+  second) or Fast (6 sim h), only while on and the page is seen. The routine's meals are counted,
+  the lid left on, at `fx.appetite`, their leftovers laid on the front sand (`FishFood.lay`; not in
+  `FishFood.landed`, so Learn's "food on the sand" is only for a pellet that sank). The Feed button's
+  pellets count as the fish eats them (`FishFood.eatenCount`) or as one settles uneaten and becomes a
+  leftover (`FishFood.leave`). The newest four leftovers show, shrinking as they rot (`rot`), the fish
+  leaving them alone. Water changes by the routine: none, 25 % weekly, 50 % twice a week, or tested
+  daily at 10 am and half changed when ammonia or nitrite reads 0.5 ppm (fish-in cycling in a bowl
+  this small: peaks ammonia 0.57, nitrite 0.73, never in danger, cycled on day 33). Starts: a new bowl (the first), a cycled one (a month of
+  weekly changes after a steady state), a neglected one (that, then four months without a change,
+  only topped up: nitrate ~80, KH 0.4, pH 6.26, ammonia 1.3 held as harmless NH4+ at that pH, the fish
+  stressed by the nitrate; a quarter changed a day brings it back in about four days, never in
+  danger, while half at once shocks it with a jump of 1.1 in pH). Kept every 5 s and as the page hides (~30 KB at most: 120 days of
+  3-hourly samples); what comes back is checked field by field (numbers finite and in range, lists of
+  the right shape, known speeds and routines), else a new bowl. Only pellets that settle once Water
+  mode is on are its leftovers (`FishFood.landings` numbers each settling).
+- **The panel** (`panel.ts`, `chart.ts`, `water.css`; words in `content.ts`): readings with test-kit
+  colour chips, pH, °F and °C; the condition; a line on what is happening; opened out, the nitrogen
+  cycle chart (ammonia and nitrite on one scale, nitrate below on its own, from the first sample
+  kept to now; canvas at the device's ratio, a crosshair under the pointer), care, routine and start
+  points. A side panel on a desktop, a column at the left on a phone held sideways, a sheet above the
+  page's link on one held upright (it folds to its readings and its news in full, clear of the bowl;
+  Learn's card moves up top, and the sheet opened stops short of the lowest it can reach). DOM updated at 4 Hz (only what
+  changed), the chart at 2 Hz when shown (its width from a ResizeObserver: no forced layout).
+- **Cost**: phone emulation (384x693 at 2.81, 2.75x CPU, vsync), the panel open: 60 fps, 84
+  pipelines; Water's frame 0.05-0.07 ms on average (throttled), the chart's redraw ~0.5 ms twice a
+  second. No WGSL, no pipelines.
+- Tests: `water-chemistry.test.mjs` (12: the new bowl's cycle; fish-in cycling with changes twice a
+  week and as the test says; a cycled bowl kept well and neglected; the sponge rinsed; the heater
+  off; events landed on exactly with frames of any length; its lamp at Play and Fast; an untreated
+  change, and a treated one after; overfeeding; saving, and spoilt saves) and `water-care.test.mjs`
+  (6: water.fx on and off; pellets from before Water mode; slow frames at Fast; the clock; routine
+  meals counted and the Feed button's, leftovers; what is kept).
+
+## The water's state, seen (water/effects.ts, as the fish and the bowl show it)
+
+Water mode's care simulation sets `water.fx` (water/effects.ts: each 0..1; `CLEAR_WATER` with the
+mode off; `?water=lethargy:1,cloud:0.6,...` forces values for testing); main.ts hands it on each
+frame: to the betta (`Betta.water`), to the nest (`BowlLife.tending`) and to the look
+(`water/look.ts`). In clear water every one of these is the page as it was: the swim's routes, the
+fins and the body bit for bit (betta-swim.test.mjs, betta-worker.test.mjs, water-fish.test.mjs), the
+other globes' WGSL byte for byte, the bowl's shading the same sums as before (the desktop's picture
+pixel for pixel; on a phone's a few hundred pixels at the edges of bubbles differ, as they do for
+any edit that leaves the water's dimming to a uniform, even one adding 0: the GPU's compiler rounds
+the new code its own way).
+
+- **The fish** (bettaSwim.mjs; lethargy, gasp and clamp go to the worker in each step, bettaLink.mjs
+  S.water). Listless (lethargy), it rests as a well fish does, its rests coming round sooner (their
+  wait up to 60% shorter), and besides goes down whenever it stops, the readier the more listless
+  (`slumpDown`, `slump`: always from half way), lying 6 times as long at 1, leaning a little onto one
+  side as it settles; not
+  over a place to lie, it makes for one (`seekRest`: where its way down, `restLanding`, ends clear of
+  the glass and of the furnishings' solid parts: by the wood or on it). It lets itself sink there,
+  all but in place, rather than swim down. It swims slower on shorter legs, hovers more, keeps low,
+  takes a harder knock to startle, and from 0.4 neither displays nor laps. Short of air (gasp), it
+  goes up up to 6 times as often (`gulpDue`), from 0.4 lingers at the film for up to 8 more gulps,
+  its lips shut between them, and breathes quicker (bettaSpecimen.mjs: the gait's breathing phase).
+  Measured in the bowl among its furnishings (32 fish, 15 minutes each): resting 1.8% of the time
+  clear (2.8 times an hour), 1.9% at lethargy 0.01, 4.2% at 0.1, 8.4% at 0.2, 21% at 0.3, 65% at 0.6,
+  78% at 1; 0.7 gulps a minute clear, 7 at gasp 0.7 (at the film 29% of the time), 11.5 at 1.
+- **The fins** (betta-atelier fin-dynamics.js, the state's optional `clamp`, eased in the specimen
+  over a few seconds): the caudal's rays close to 38% of their spread and droop, the dorsal and anal
+  lie back along the body, the membranes held taut and stiffer, the ventrals tuck back by 1 rad and
+  in towards each other. Without it (the Atelier) the fins are as they were, bit for bit.
+- **Food** (FishFood, `Feeder.appetite`): less keen, the fish notices a pellet up to 4 times later,
+  goes for a share of them (all from 0.6, none at 0: they soak and sink, and lie on the sand), and
+  under 0.5 spits out a share of those it takes: blown out ahead, soaked through, it sinks.
+- **The nest** (BowlLife): under 0.5 the fish adds nothing to it, wants nothing rebuilt (no extra
+  trips up) and the nest thins, 0.6 bubbles a second; content again, it builds again.
+- **The look** (water/look.ts, eased over a couple of seconds, the heater's lamp at once; one
+  uniform, `uBowlWater`, no pipeline). The fish fades (bettaWGSL.ts, the bowl's variants only: less
+  saturated, a little darker, its sheen and the scales' play of colour dimmed). The water: a bloom
+  of bacteria (bowl.ts `BOWL_WATER.bloom`, 1.5 a unit of path at 1) dims every colour alike and sends
+  back a milky haze lit as the water is (the light dimmed on its way down by a third of it: the rest
+  it scatters on down) and shows the lamp's beam the brighter; tannins (`tannin`: the blue all but
+  wholly, the green much, the red hardly; their strength tint^0.6) stain it tea-brown, deeper with
+  depth and path, and glow amber. Both dim the light on the sand too (FluidSim `waterColour`, the
+  photons'). Clouded or stained, each stretch of water adds its glow before its bubbles (a bubble in
+  a clouded one is seen in its haze); clear, after them, as it always did. The heater's lamp (equipment.mjs `scapeHeaterLamp`) goes dark but stays
+  there, an amber lens.
+- **Cost.** A few multiplies a frame on the page (well under 0.01 ms); the swim's searches only when
+  it stops. Shader: 0.7 K more inlined (bowlKoi-full 419.97 K of its 420 K budget). Phone emulation
+  (384x693 at 2.81, vsync), clear and with strong effects alike: 60 fps, GPU sim 0.4-0.5 + draw
+  1.0 ms, CPU 1.9-2.3 ms, 84 pipelines.
+- Tests: `water-fish.test.mjs` (12).
+
+## Night (app/night.mjs, NightToggle.ts, render/studio.ts StudioLight)
+
+The betta page's link bar has a **Night** button between "← Demonstrations" and the resolution (a
+pill, a moon before its word, `aria-pressed`; off at first, remembered on the device: localStorage
+`betta.night`, every access in try/catch). Night turns the room's lights off and the lid's lamp to
+its soft blue moonlight mode, and the fish drowsy. Day and night fade into each other over 2 s
+(eased in and out; turned back halfway, from where it is), never a cut; kept on, the page opens at
+night from its first frame (the studio behind the splash too).
+
+- **The light, by uniform.** The studio's colours were literals in its WGSL (studio_wall,
+  studio_room, studio_tableLight, studio_table, each inlined 36 times in the bowl's passes). They are
+  `StudioLight` (studio.ts): 16 colours and 5 shares in four mat4 uniforms (render/studioLight.ts),
+  which every entry point (globes_shade, the backdrop's, the table's) hands to `studio_light`, setting
+  a private for each that the studio's code reads where its literal was. By day (`STUDIO_DAY`) they
+  are those literals; by night `STUDIO_NIGHT`; between, each by the same share of its ratio, as a
+  dimmer turns a light down, so the picture darkens evenly. Night is only these uniforms: no pipeline
+  knows day from night.
+  - The studio: the paper deep blue, faintly lit behind the bowl where the lamp reaches it and darker
+    to its edges and top; the room nearly dark, the soft boxes a whisper (the glass's outline still
+    reads); the pool on the table blue, the caustics' mottle in it deeper (`poolMottle`).
+  - The bowl's light, tints that are 1 by day: `studioLamp` (what the photons carry, GLOBES_SUN_IRR,
+    as `bowlSun`: the light volume, the caustics on the sand, the light above the water on the fish,
+    the furnishings, the pellets, the spray and the nest; the lamp's face; the tea's glow and the
+    bloom's haze); `studioBeam` (the lamp's beams in the air and the water: at night brighter than the
+    lamp's tint, silver-blue against the dark water); `studioAmbient` (the light round about: the
+    ambient of the furnishings, the fish, the pellets and the sand, the clear water's glow and its
+    deep, the motes' glow, the lid's plastic); `studioKey` (the key soft box on the furnishings). The
+    sim and its photons are as they were: the light is tinted and scaled where it is shaded. The
+    heater's lamp is not: the one warm light at night.
+  - The plants' green leaves and stalks (scape_shadeMesh): their green reflects little of the
+    moonlight, so at night their albedo and the light through them go greyer (`leafGrey`, towards
+    their own luminance) and dimmer (`leafDim`): a dark teal-green, about 40% less bright (43% over
+    their pixels in a close view), their veins' glow and their glints still there.
+  - `grain`: the backdrop and the table (their own small passes) are drawn with a grain of a share of
+    their light at night (none by day), so their dark gradients do not band in the picture's 8 bits.
+- **The fish.** At night the fish takes the larger of Water mode's lethargy and 0.3 of the fade
+  (night.mjs `drowsy`; Water mode's own effects are left as they are, and by day the fish is handed
+  them themselves): it rests about a fifth of the time, swims slower and shorter, and still patrols
+  and displays. It is not paled or clamped. With Learn mode on, Night turned on brings a card on how
+  a betta sleeps and what a real bowl's nights need (content.ts `NIGHT`).
+- **Exactness.** By day the picture is the page's as it was. Frozen frames (?manual, seeded, 200
+  ticks) against the build before: on the desktop, 0 pixels differ (three runs); on the phone's
+  tier, 0 in the same course of the world (its courses differ by ~400 pixels in either build:
+  Performance lessons). The other globes' WGSL is byte for byte as it was (80 passes).
+- **Cost.** Inlined, the bowl's passes are smaller (a name read where a literal was): bowlKoi-full
+  419.97 -> 416.04 K, bowl-lite 396.97 -> 393.04 K. Phone emulation (384x693 at 2.81, 2.75x CPU,
+  vsync), Night off, kept on, or toggled six times in a row: 60 fps, GPU sim 0.5 + draw 1.0 ms, 84
+  pipelines, 0 late. A frame of the fade blends the light (~1 us in Node, unthrottled) and sets four
+  uniforms; a frame not fading, nothing.
+- Tests: `night.test.mjs` (5: the day's light is the literals, where studio_light reads them; the
+  night's, and halfway the geometric mean; the fade; the drowsiness; what is kept, storage blocked).
+
+## Follow (src/app/follow.mjs, FollowToggle.ts)
+
+The betta page's **Follow** button (in the link bar, between Night and the resolution; on a phone
+narrower than 440 px Night and Follow show their icons alone) draws the camera in close on the fish
+and keeps it there; pressed again, or Escape, and the stage's camera takes the picture back over
+1.1 s. The camera never turns: it looks the way the page's camera always does (9 degrees down,
+towards -z: `GlobeController.CAMERA_VIEW`), so the studio stays put behind the bowl, and it moves
+across that view and in along it.
+- **Where the fish is seen.** Through the glass and the water the fish's image is bent well off where
+  it is towards the bowl's edge, so the eye is put where the fish is seen in the middle of the
+  picture: `eyeFor` bends the eye's line of sight as the shader does (pick.mjs's optics: into the
+  glass, out of it into the water or the air over it, down through the surface) and moves the eye
+  across the view by Newton's steps, each shortened until its line still reaches the water and
+  passes nearer. Along its own line of sight the eye may stand anywhere (the line is bent the same),
+  so it stands `followDistance` from the fish (the fish 0.4 of the picture's shorter side, times
+  the wheel's or a pinch's own: `GlobeController.followZoom`, 0.5-2.5) and steps back along that
+  line to keep 0.3 clear of the glass. Lines of sight all one way bend in towards the middle, so
+  a fish far out at the back corners lies on none: there the nearest line (up to a quarter of the
+  fish off the middle).
+- **Gliding.** The fish's middle is its 16 probes' mean (the worker's pose on a phone, so it is
+  what is drawn); the eye follows where `eyeFor` puts it on a critically damped spring (3 /s: a
+  steady glide, never past it), a frame behind (GlobeController places the camera at the start of
+  the next frame). `GlobeController.followShare` blends the stage's camera into it.
+- No pipeline, no WGSL: phones hold 60 fps in emulation following (the camera always moving, the
+  table's mirror is redrawn every frame and the lattice holds its phase, as while the bowl is
+  turned). Tests: `follow.test.mjs` (4).
+
+## Varieties (fish/varieties.mjs, bettaPaint.mjs, app/VarietyMenu.ts)
+
+The fish's name among its controls is a button, "Living Silk · Classic", that opens a list of its
+colour varieties, each with a swatch of its body and its fins: Classic (the photographed red and blue
+halfmoon), Super Red, Royal Blue, Black Samurai, Mustard Gas, Butterfly, Koi Marble, Platinum White,
+Copper, Pineapple and Galaxy Koi. The choice is kept on the device (localStorage `betta.variety`, every
+access in try/catch; anything else is Classic). No variety is a model of its own: each recolours the
+photographed fish, keeping the photographs' light and shade (every scale, ray and fold).
+
+- **Recoloured, the light and shade kept.** betta_shade (bettaWGSL.ts, the bowl's variants only) takes
+  the albedo it composes from the photographs (the profile, the fins, the head and scale macros) and,
+  for a variety, swaps its colour for its colour map's, times its luminance: `map x lum^detail x gain`.
+  The maps sit in the atlas's bottom row, where the photographs lie: tile 5 in the profile photograph's
+  place (the body, and every fin but the caudal: they take their colours from that photograph; the
+  pectorals lie over the body there and take its colour), tile 4 in the fin photograph's (the caudal's;
+  it held the membrane macro, which the shader never read). So that the light and shade kept are the
+  photographs' fine ones and not their broad ones (the scale macro is twice as bright along the back as
+  at the belly; the head darker than the flank), each map is painted divided by the photographs' local
+  brightness: their luminance, blurred over ~30 px, to the power 0.85 on the body and 0.6 on the fins
+  (bettaPaint.mjs FLATTEN: what is left of the bright back reads as the light from above; the fins'
+  pale fringes stay a little paler). That is measured once, as the photographs load, on small grids
+  (192 x 128 cells over the profile, 128 x 128 over the fins, the body's as betta_shade composes it),
+  drawn down by createImageBitmap's resize (drawn down on the page's thread for getImageData, they took
+  a phone's main thread 117 ms at 4x CPU). `detail`, a power of the luminance, softens the dark edges
+  between the scales for the pale varieties (0.45-0.6) and the blues; the maps are painted with the
+  division to the same power, so on average the colour is still the one painted.
+- **What a map holds** (bettaPaint.mjs painting, from the variety's data): the body counter-shaded (a
+  darker back, a paler belly), its head its own to the gill covers' edge; the fins root to edge; a
+  marble's patches (value noise in four octaves, its domain warped so they wander and pinch, the finest
+  octave giving their edges a scale-sized fringe; each colour's threshold the quantile that covers its
+  share of the fish), on body and fins alike, painted only where there is fish.
+- **The shader's numbers** (varieties.mjs varietyLook, one mat4 uniform: GlobeView `uBowlBetta`, set as
+  a variety is shown; globes_shade hands it to the fish as `bettaLook`): how much of the variety shows
+  (0: Classic), the maps' gain and detail, the body's mean luminance; the scales' play of colour (its
+  cosine palette) turned towards a tint (Super Red's has little blue left in it); an outer band on every
+  fin from v, root to fringe, of betta_finCoord (Butterfly's white, Mustard Gas's mustard yellow), a crisp
+  edge that runs a little further out along the rays and wanders along the fin; and a metallic coat over
+  the scales' bright faces, the base colour left at the edges between them, with a broad gloss in its
+  own colour (Black Samurai's silver-blue armour, Copper's, Platinum's; Pineapple's is yellow over a dark
+  base, which edges each scale in brown). The band and the coat fade with Water mode's pale like the
+  rest (betta_fade). Light through the fins, and their shadows, take the map's colour (betta_occlusion).
+  Everything a variety does is behind `if (look)` (bettaLook[0].x > 0): Classic runs none of it.
+- **Switching** (Betta.showVariety): the variety's maps are painted on their grids a row at a time, ~3 ms
+  a frame (requestAnimationFrame; a newer choice ends an older one), then drawn up to the tiles' size in
+  a 2048 x 1024 canvas, copied into the atlas's bottom row on the GPU (renderer.copyTextureToTexture:
+  the rest of the atlas is not uploaded again) and let go there (8 MB) until the next; the uniform is set
+  in the same frame. No pipeline is built: the atlas keeps its size, the uniform its place. A variety
+  kept from the last visit is painted the same way once the photographs are measured, and handed over
+  when the page is ready for it (Betta.lookHost).
+- **The menu** (VarietyMenu.ts, in ResolutionMenu's pattern): a dialog with a radio group; a tap or a
+  click on one shows it and puts the list away, the arrow keys go through them (each shown as they come
+  to it) until Escape or a press anywhere else. Its Escape is its own: a fish being followed stays
+  followed (Follow and Learn's card take Escape too). Opened, the controls rise over Learn's card and
+  Water's panel. On a phone held upright the name keeps its line over the buttons (the list two columns
+  wide below them); held sideways, where the name had been dropped (it sat over the lid), it goes on a
+  line of its own under the buttons, and Learn's card moves down to clear it.
+- **Learn** (content.ts FISH): the fish's card is its variety's: which it is, and a fact about it (blue in
+  a betta is light reflected by iridophores, not pigment; red and yellow are pigments; dragon scales are a
+  thick reflective layer over each scale; marbles are thought to carry a "jumping gene", a transposon, so
+  their patches change through life; a butterfly's bands shift as it matures). With Learn on, it comes
+  up as a variety is chosen.
+- **Exactness.** Classic is the page as it was: frozen frames (?manual, seeded, 200 ticks) against the
+  build before, on the desktop, 0 pixels differ outside the name (three runs); on the phone's tier, in
+  the same course of the world (Performance lessons), none of the bowl's, only a pixel's line along the
+  pills' lower edges (the page's layers composed otherwise); the controls stand where they stood. The
+  other globes' WGSL is byte for byte as it was (81 passes).
+- **Cost.** Inlined (tools/shader-budget.mjs): bowlKoi-full 416.0 -> 417.5 K (of 420), bowlKoi-lite
+  394.8 -> 396.2 K (of 400), bowl-full 409.4 -> 410.8, bowl-lite 393.0 -> 394.4. Phone emulation (384x693
+  at 2.81, vsync, 4x CPU throttle; RTX 5090): 60 fps on every variety, 84 pipelines built and 0 late
+  before and after switching through all eleven; a switch's call under 4 ms, the variety shown 50-80 ms
+  later (a marble's 190-220), no frame longer than 17 ms. Measuring the photographs costs the page's
+  thread ~55 ms at 4x CPU, once, as they load (behind the studio, while the bowl's pipelines build).
+- Tests: `betta-variety.test.mjs` (7: the list, its swatches and cards; the choice kept, storage blocked;
+  Classic's numbers off, and every read of a variety's behind its gate; the numbers; on photographs of
+  even brightness, the colour made is the colour painted, counter-shaded; the broad light and shade
+  divided out; a marble's patches covering what they should, the same each time).
