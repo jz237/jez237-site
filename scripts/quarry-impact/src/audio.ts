@@ -1,3 +1,4 @@
+import {LIMITER,limiterCut,onLimiter} from './rev-limiter';
 import {exhaustLoudness,bearingGrowl,RUB,RUB_FIRE,EXHAUST_CRUSH,LEAK as TYRE_LEAK} from './damage-handling';
 import {materialImpactProfile,type ImpactMaterial} from './impact-material';
 import {readAudioOutput,type AudioOutput} from './audio-output';
@@ -628,6 +629,8 @@ export class Sound {
       const scrapeMix=scrapeSurfaceMix(car.scraping??0,this.contactScraping.level(car.id),car.surface,car.speed);
       // A misfire cut drops the combustion layers and lets the damaged rattle through: an audible stutter.
       const cut=(car.misfireFactor??1)<1?MISFIRE_AUDIO:1;
+      // Floored against the limiter, it bounces off the ignition cut (offline): the combustion layers stutter, quick.
+      const limiting=!!car.extendedDamage&&car.health>0&&onLimiter(rpm,car.input.throttle,!(car.engineStall!>0)),bounce=limiting&&limiterCut(c.currentTime,car.id),beat=bounce?LIMITER.cut:1,heard=rpm-(bounce?LIMITER.drop:0);
       for (const [name, l] of loops) {
         if(name.startsWith('fire-'))continue;
         l.pan.positionX.value = car.current.x;
@@ -636,12 +639,12 @@ export class Sound {
         let v = 0;
         const centers=ENGINE_CENTERS;
         if (name in centers) {
-          v = Math.max(0, 1 - Math.abs(Math.min(rpm,6500) - centers[name]) / 2100) * level * cut * (car.extendedDamage ? exhaustLoudness(car.exhaustBlow)*(car.exhaustCrushed&&!car.exhaustGone?EXHAUST_CRUSH.sound:1) : 1);
+          v = Math.max(0, 1 - Math.abs(Math.min(rpm,6500) - centers[name]) / 2100) * level * cut * beat * (car.extendedDamage ? exhaustLoudness(car.exhaustBlow)*(car.exhaustCrushed&&!car.exhaustGone?EXHAUST_CRUSH.sound:1) : 1);
           if (car.health === 0) v = 0;
-          setRate(l,Math.max(0.72, Math.min(1.4, (rpm / centers[name]) * doppler))*classicEngineVoice(car.kind).pitch,c.currentTime,0.13);
+          setRate(l,Math.max(0.72, Math.min(1.4, (heard / centers[name]) * doppler))*classicEngineVoice(car.kind).pitch,c.currentTime,limiting?LIMITER.response:0.13);
         } else if (name === 'gear-grind') v=car.health>0?.16*Math.min(1,(car.transmission?.grind??0)/.3):0;
         else if (name === 'starter') v=car.health>0&&car.engineStall!>0&&car.rpm>0&&!car.batteryOut?.13:0;
-        else if (name === 'load') v = Math.abs(car.input.throttle) * 0.07 * cut;
+        else if (name === 'load') v = Math.abs(car.input.throttle) * 0.07 * cut * beat;
         else if (name === 'damaged')
           v = engineDamageLevel(car.health,car.engineDamage) * 0.18 * (cut<1?1.6:1);
         else if (name === 'tires')
@@ -662,7 +665,7 @@ export class Sound {
           v = 0;
         if(car.engineStall!>0&&['idle','low','mid','high','load','damaged'].includes(name))v=0;
         if(wreckInspection)v=0;
-        setGain(l,v,c.currentTime,0.08);
+        setGain(l,v,c.currentTime,limiting&&(name in ENGINE_CENTERS||name==='load')?LIMITER.response:0.08);
       }
     }
   }
