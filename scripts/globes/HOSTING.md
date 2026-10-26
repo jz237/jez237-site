@@ -570,6 +570,17 @@ quick under 25 (were 22 and 18.5); the phones' scaler, only with `?quality=0`, s
 Details: docs/architecture.md, "Phase 2: a phone's picture steered by the GPU's time". Tests:
 `quality.test.mjs` (24), `adaptive-scale.test.mjs` (25).
 
+Varieties (the betta page): the fish's name among its controls, "Living Silk · Classic", opens a list
+of its colour varieties (Classic, Super Red, Royal Blue, Black Samurai, Mustard Gas, Butterfly, Koi
+Marble, Platinum White, Copper, Pineapple, Galaxy Koi; kept in localStorage `betta.variety`). Each
+recolours the photographed fish, keeping the photographs' light and shade: two colour maps in the
+atlas's bottom row, painted where the photographs lie and divided by their local brightness
+(`src/fish/bettaPaint.mjs`), and one mat4 uniform for its sheen, its fins' outer band and its scales'
+metallic coat (`src/fish/varieties.mjs`, `bettaWGSL.ts`). Classic is the page as it was, pixel for pixel
+on the desktop; no pipeline is added; phones hold 60 fps on every variety, a switch painted over frames
+with no long one. Learn's fish card names the variety. Details: docs/architecture.md, "Varieties".
+Tests: `betta-variety.test.mjs` (7).
+
 ## Browser compatibility
 
 Firefox compiles WGSL with naga, which is stricter than Chrome's Tint. Builds up to

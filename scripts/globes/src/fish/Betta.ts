@@ -133,7 +133,7 @@ export class Betta implements Feeder {
       textures.forEach((t, i) => ctx.drawImage(t.image, (i % 2) * 1024, Math.floor(i / 2) * 1024, 1024, 1024));
       this.atlas.needsUpdate = true;
       this.loaded = true;
-      void this.measure(textures);
+      void this.measurePhotographs(textures);
     });
     // (The whole texture once; hidden until it swims.)
     device.queue.writeTexture({ texture: this.gpu.texture }, this.bvh.data as unknown as BufferSource, { bytesPerRow: this.bvh.width * 16, rowsPerImage: this.bvh.height }, [this.bvh.width, this.bvh.height]);
@@ -151,7 +151,7 @@ export class Betta implements Feeder {
    *  measure); then the variety chosen, if not Classic, is painted and shown. (Drawn down to the grids
    *  by createImageBitmap, off the page's thread: drawn down on it, for getImageData, they took a
    *  phone's main thread over 100 ms.) */
-  private async measure(textures: THREE.Texture[]): Promise<void> {
+  private async measurePhotographs(textures: THREE.Texture[]): Promise<void> {
     try {
       const grid = async (t: THREE.Texture, w: number, h: number): Promise<Float32Array> => {
         const bitmap = await createImageBitmap(t.image as ImageBitmapSource, { resizeWidth: w, resizeHeight: h, resizeQuality: 'high' });

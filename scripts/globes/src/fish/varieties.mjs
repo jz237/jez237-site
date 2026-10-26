@@ -1,6 +1,6 @@
 // The betta's colour varieties, chosen in the fish's controls (app/VarietyMenu.ts) and remembered on
 // this device. Classic is the photographed fish as it is; each other one is painted over it (Betta.ts
-// look, bettaPaint.mjs): its colours in two maps where the photographs lie, and the rest in a few
+// showVariety, bettaPaint.mjs): its colours in two maps where the photographs lie, and the rest in a few
 // numbers for the shader (bettaWGSL.ts): the scales' play of colour, an outer band on the fins, and a
 // metallic coat on the scales. The photographs' light and shade stay: every scale, ray and fold.
 // (Plain data, no imports: the tests read it in Node. Colours are sRGB, as a swatch shows them.)
@@ -122,7 +122,7 @@ export const VARIETIES = [
     detail: 0.8,
     body: { back: '#0b1a3c', side: '#13285a', belly: '#1b3266', head: '#0c1a38' },
     fins: { root: '#132a62', edge: '#1a3878' },
-    patches: { colours: [['#b4ccff', 0.16, 26], ['#e2481a', 0.34, 200], ['#e1e4ea', 0.14, 150]], seed: 3 },
+    patches: { colours: [['#b4ccff', 0.16, 26], ['#e2481a', 0.34, 200], ['#e1e4ea', 0.08, 150]], seed: 3 },
     sheen: { tint: '#5d8dff', share: 0.6 },
     swatch: ['#13285a', '#e2481a'],
   },
@@ -172,9 +172,10 @@ const NO_BAND = 2;
 const NO_COAT = -8;
 
 /** The shader's numbers for a variety (bettaWGSL.ts bettaLook, a mat4's columns, into out): [0] how
- *  much of it shows (0: the photographs' own colours), the colour maps' gain and 1 / the body's and the
- *  fins' mean luminance in the photographs (refs: Betta.ts, from bettaPaint.mjs's measure); [1] the
- *  sheen's tint and share; [2] the band's colour and start; [3] the coat's colour and reach (shifted to
+ *  much of it shows (0: the photographs' own colours), the colour maps' gain (to the power of its
+ *  detail, as the maps are painted), its detail, and 1 / the body's mean luminance in the photographs
+ *  (refs: bettaPaint.mjs measure's gain, body and fins); [1] the sheen's tint and share; [2] the band's
+ *  colour over the fins' mean luminance, and its start; [3] the coat's colour and reach (shifted to
  *  where bettaWGSL.ts's smoothstep reads it: reach 1 covers all but the darkest edges). Classic's are
  *  all 0 but for the band and the coat, which are off, so its fish is the photographs' alone. */
 export function varietyLook(variety, refs, out = new Float32Array(16)) {

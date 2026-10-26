@@ -1450,7 +1450,8 @@ at 8.8-10.3 s); compiled no later (8.7-10.0 s, against 8.7-10.2); the splash lif
 it (0.12-0.15: the backdrop's 3 pipelines were built in the bowl's first frame; now none); no frame
 of the entrance over twice the median, no long task in it, none built after the first frame.
 
-The betta's atlas is composed as before (Betta.ts: drawImage of its five photographs as they load).
+The betta's atlas is composed as before (Betta.ts: drawImage of its four photographs as they load;
+its bottom row is now its variety's colour maps: Varieties, below).
 Decoded off the page's thread by createImageBitmap of their files, its pixels differ by up to 14/255
 (the browser decodes them otherwise); by createImageBitmap of the images themselves, the decode stays
 on the page's thread. It costs the page's thread about 120 ms at 2.75x CPU as the photographs come
@@ -1710,3 +1711,80 @@ across that view and in along it.
 - No pipeline, no WGSL: phones hold 60 fps in emulation following (the camera always moving, the
   table's mirror is redrawn every frame and the lattice holds its phase, as while the bowl is
   turned). Tests: `follow.test.mjs` (4).
+
+## Varieties (fish/varieties.mjs, bettaPaint.mjs, app/VarietyMenu.ts)
+
+The fish's name among its controls is a button, "Living Silk · Classic", that opens a list of its
+colour varieties, each with a swatch of its body and its fins: Classic (the photographed red and blue
+halfmoon), Super Red, Royal Blue, Black Samurai, Mustard Gas, Butterfly, Koi Marble, Platinum White,
+Copper, Pineapple and Galaxy Koi. The choice is kept on the device (localStorage `betta.variety`, every
+access in try/catch; anything else is Classic). No variety is a model of its own: each recolours the
+photographed fish, keeping the photographs' light and shade (every scale, ray and fold).
+
+- **Recoloured, the light and shade kept.** betta_shade (bettaWGSL.ts, the bowl's variants only) takes
+  the albedo it composes from the photographs (the profile, the fins, the head and scale macros) and,
+  for a variety, swaps its colour for its colour map's, times its luminance: `map x lum^detail x gain`.
+  The maps sit in the atlas's bottom row, where the photographs lie: tile 5 in the profile photograph's
+  place (the body, and every fin but the caudal: they take their colours from that photograph; the
+  pectorals lie over the body there and take its colour), tile 4 in the fin photograph's (the caudal's;
+  it held the membrane macro, which the shader never read). So that the light and shade kept are the
+  photographs' fine ones and not their broad ones (the scale macro is twice as bright along the back as
+  at the belly; the head darker than the flank), each map is painted divided by the photographs' local
+  brightness: their luminance, blurred over ~30 px, to the power 0.85 on the body and 0.6 on the fins
+  (bettaPaint.mjs FLATTEN: what is left of the bright back reads as the light from above; the fins'
+  pale fringes stay a little paler). That is measured once, as the photographs load, on small grids
+  (192 x 128 cells over the profile, 128 x 128 over the fins, the body's as betta_shade composes it),
+  drawn down by createImageBitmap's resize (drawn down on the page's thread for getImageData, they took
+  a phone's main thread 117 ms at 4x CPU). `detail`, a power of the luminance, softens the dark edges
+  between the scales for the pale varieties (0.45-0.6) and the blues; the maps are painted with the
+  division to the same power, so on average the colour is still the one painted.
+- **What a map holds** (bettaPaint.mjs painting, from the variety's data): the body counter-shaded (a
+  darker back, a paler belly), its head its own to the gill covers' edge; the fins root to edge; a
+  marble's patches (value noise in four octaves, its domain warped so they wander and pinch, the finest
+  octave giving their edges a scale-sized fringe; each colour's threshold the quantile that covers its
+  share of the fish), on body and fins alike, painted only where there is fish.
+- **The shader's numbers** (varieties.mjs varietyLook, one mat4 uniform: GlobeView `uBowlBetta`, set as
+  a variety is shown; globes_shade hands it to the fish as `bettaLook`): how much of the variety shows
+  (0: Classic), the maps' gain and detail, the body's mean luminance; the scales' play of colour (its
+  cosine palette) turned towards a tint (Super Red's has little blue left in it); an outer band on every
+  fin from v, root to fringe, of betta_finCoord (Butterfly's white, Mustard Gas's mustard yellow), a crisp
+  edge that runs a little further out along the rays and wanders along the fin; and a metallic coat over
+  the scales' bright faces, the base colour left at the edges between them, with a broad gloss in its
+  own colour (Black Samurai's silver-blue armour, Copper's, Platinum's; Pineapple's is yellow over a dark
+  base, which edges each scale in brown). The band and the coat fade with Water mode's pale like the
+  rest (betta_fade). Light through the fins, and their shadows, take the map's colour (betta_occlusion).
+  Everything a variety does is behind `if (look)` (bettaLook[0].x > 0): Classic runs none of it.
+- **Switching** (Betta.showVariety): the variety's maps are painted on their grids a row at a time, ~3 ms
+  a frame (requestAnimationFrame; a newer choice ends an older one), then drawn up to the tiles' size in
+  a 2048 x 1024 canvas, copied into the atlas's bottom row on the GPU (renderer.copyTextureToTexture:
+  the rest of the atlas is not uploaded again) and let go there (8 MB) until the next; the uniform is set
+  in the same frame. No pipeline is built: the atlas keeps its size, the uniform its place. A variety
+  kept from the last visit is painted the same way once the photographs are measured, and handed over
+  when the page is ready for it (Betta.lookHost).
+- **The menu** (VarietyMenu.ts, in ResolutionMenu's pattern): a dialog with a radio group; a tap or a
+  click on one shows it and puts the list away, the arrow keys go through them (each shown as they come
+  to it) until Escape or a press anywhere else. Its Escape is its own: a fish being followed stays
+  followed (Follow and Learn's card take Escape too). Opened, the controls rise over Learn's card and
+  Water's panel. On a phone held upright the name keeps its line over the buttons (the list two columns
+  wide below them); held sideways, where the name had been dropped (it sat over the lid), it goes on a
+  line of its own under the buttons, and Learn's card moves down to clear it.
+- **Learn** (content.ts FISH): the fish's card is its variety's: which it is, and a fact about it (blue in
+  a betta is light reflected by iridophores, not pigment; red and yellow are pigments; dragon scales are a
+  thick reflective layer over each scale; marbles are thought to carry a "jumping gene", a transposon, so
+  their patches change through life; a butterfly's bands shift as it matures). With Learn on, it comes
+  up as a variety is chosen.
+- **Exactness.** Classic is the page as it was: frozen frames (?manual, seeded, 200 ticks) against the
+  build before, on the desktop, 0 pixels differ outside the name (three runs); on the phone's tier, in
+  the same course of the world (Performance lessons), none of the bowl's, only a pixel's line along the
+  pills' lower edges (the page's layers composed otherwise); the controls stand where they stood. The
+  other globes' WGSL is byte for byte as it was (81 passes).
+- **Cost.** Inlined (tools/shader-budget.mjs): bowlKoi-full 416.0 -> 417.5 K (of 420), bowlKoi-lite
+  394.8 -> 396.2 K (of 400), bowl-full 409.4 -> 410.8, bowl-lite 393.0 -> 394.4. Phone emulation (384x693
+  at 2.81, vsync, 4x CPU throttle; RTX 5090): 60 fps on every variety, 84 pipelines built and 0 late
+  before and after switching through all eleven; a switch's call under 4 ms, the variety shown 50-80 ms
+  later (a marble's 190-220), no frame longer than 17 ms. Measuring the photographs costs the page's
+  thread ~55 ms at 4x CPU, once, as they load (behind the studio, while the bowl's pipelines build).
+- Tests: `betta-variety.test.mjs` (7: the list, its swatches and cards; the choice kept, storage blocked;
+  Classic's numbers off, and every read of a variety's behind its gate; the numbers; on photographs of
+  even brightness, the colour made is the colour painted, counter-shaded; the broad light and shade
+  divided out; a marble's patches covering what they should, the same each time).

@@ -255,7 +255,7 @@ fn betta_shade(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, hit: 
     // a broad gloss in its own colour.
     irid = mix(irid, bettaLook[1].xyz * (0.3 + 1.4 * irid), bettaLook[1].w);
     let coat = smoothstep(1.2, 3.0, lum * bettaLook[0].w + bettaLook[3].w) * scaleW;
-    albedo = mix(albedo, betta_fade(bettaLook[3].xyz) * min(pow(lum * bettaLook[0].w, bettaLook[0].z), 1.6), coat);
+    albedo = mix(albedo, betta_fade(bettaLook[3].xyz) * min(pow(max(lum * bettaLook[0].w, 1e-6), bettaLook[0].z), 1.6), coat);
     sheen += coat * pow(max(dot(n, hv), 0.0), 16.0) * 0.5 * (1.0 - 0.7 * bettaPale);
   }` : ''}
   albedo = mix(albedo, albedo * (0.6 + 0.8 * irid), 0.38 * scaleW${bowl ? ' * (1.0 - 0.8 * bettaPale)' : ''});

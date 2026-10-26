@@ -1,10 +1,12 @@
-// A variety's colour maps (varieties.mjs), painted where the betta's photographs lie (Betta.ts look):
+// A variety's colour maps (varieties.mjs), painted where the betta's photographs lie (Betta.ts
+// showVariety):
 // the profile photograph's map (the atlas's tile 5: the body, and every fin but the caudal, which take
 // their colours from that photograph) and the fin photograph's (tile 4: the caudal's). The shader
 // (bettaWGSL.ts) swaps the photographs' colours for the map's, keeping their luminance:
 //
-//   albedo = map x luminance x gain
+//   albedo = map x luminance^detail x gain
 //
+// (detail: varieties.mjs, 1 unless a variety softens the dark edges between its scales.)
 // So that the light and shade kept are the photographs' fine ones (scales, rays, folds) and not their
 // broad ones (the scale macro is bright along the back and dark at the belly, the head darker than the
 // flank: a blue fish's), each map is painted divided by the photographs' local brightness, measured
@@ -126,10 +128,11 @@ function blurWhere(values, weight, w, h, r) {
   return a;
 }
 
-/** The photographs' brightness, measured once as they load: each map's division (comp, 0..1: what a
- *  cell's colour is multiplied by before it is painted), the shader's gain (comp's largest: the map
- *  times the luminance times the gain is the colour painted, on average where the photographs are
- *  as bright as round about), and the mean luminance of what the body shows and of the fins.
+/** The photographs' brightness, measured once as they load: each map's division (0..1, cell by cell:
+ *  what its colour is multiplied by before it is painted), the shader's gain (the divisions' largest,
+ *  which they are each over: the map times the luminance times the gain is the colour painted, on
+ *  average, where the photographs are as bright as round about), the mean luminance of what the body
+ *  shows and of the fins, and where there is fish.
  *  luminance: the atlas's tiles at the grids' sizes (luminanceOf): profile (PROFILE's), head and
  *  scales (MACRO square), caudal (CAUDAL's). cells: profileCells(). */
 export function measure(luminance, cells) {
