@@ -25,6 +25,14 @@ export function rustFlakes(age:number,damage:number,height:number){
   const a=clampAge(age);if(a<ROT.flakes||!(damage>=ROT.min)||!(height<=ROT.low))return 0;
   return Math.round(ROT.count[0]+(ROT.count[1]-ROT.count[0])*a*Math.min(1,damage/ROT.full));
 }
+/** Tired suspension (offline, with the rust): an old banger's dampers are worn, up to TIRED.damper less damping, so it wallows
+ * and bounces over the bumps; and one of its springs (its own corner, a rear one TIRED.rear of the time) has sagged, up to
+ * TIRED.sag of that corner's ride height, so it sits down on that corner. */
+export const TIRED={damper:.4,sag:.22,rear:.7} as const;
+export const tiredDamper=(age:number)=>1-TIRED.damper*clampAge(age);
+/** The corner (0–3, front left first) whose spring has sagged on car `id`. */
+export const tiredCorner=(id:number)=>{const n=Number.isFinite(id)?id:0,r=Math.abs(Math.sin(n*39.17+1.31)*43758.5453)%1;return (r<TIRED.rear?2:0)+(Math.floor(r*977)%2);};
+export const tiredSag=(age:number,corner:number,wheel:number)=>wheel===corner?1-TIRED.sag*clampAge(age):1;
 /** Does a body material rust? Painted steel does; the plastic trim, hoses and cabin do not. */
 export const rusts=(name:string)=>name.startsWith('paint')&&!/Paint 2|hoses|Interior|Panel Sides/.test(name);
 export const startingRust=(id:number)=>{const n=Number.isFinite(id)?id:0,r=Math.abs(Math.sin(n*57.31+4.77)*43758.5453)%1;return RUST.age[0]+r*(RUST.age[1]-RUST.age[0]);};

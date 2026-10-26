@@ -40,7 +40,7 @@ import { repairCoupePanel } from './coupe-realism';
 import { dentGeometry,crushGeometry,refreshWreckNormals,type CrushFrame, repairWreckGeometry } from './wreck-geometry';
 import { WreckFinish } from './wreck-finish';
 import { WreckAttachments } from './wreck-attachments';
-import {ROT,rotFactor} from './age-rust';
+import {ROT,rotFactor,tiredCorner,tiredDamper,tiredSag} from './age-rust';
 import {bodyworkDentDamage} from './bodywork-response';
 import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
@@ -993,7 +993,9 @@ export class Vehicle {
       if(this.extendedDamage)this.brakeBias[i]*=brakeFluidFactor(this.brakeFluid);
       const d=this.extendedDamage?this.wreckParts.wheelDamage[i]:0,spring=springBias(d),drive=driveBias(d);
       if(spring<this.springBias[i])this.onBreak?.('spring',i);if(drive<this.driveBias[i])this.onBreak?.('shaft',i);
-      this.springBias[i]=spring;this.sagBias[i]=sagBias(d);this.driveBias[i]=drive;}
+      this.springBias[i]=spring;this.sagBias[i]=sagBias(d);this.driveBias[i]=drive;
+      // An old banger's tired dampers wallow and its one sagged spring sits it down on that corner (offline, by its age).
+      if(this.extendedDamage&&this.surfaceFinish.rustAge>0){const age=this.surfaceFinish.rustAge;this.damperBias[i]*=tiredDamper(age);this.sagBias[i]*=tiredSag(age,tiredCorner(this.id),i);}}
     if(this.extendedDamage&&this.diffWear>0){const front=diffAxle(this.structuralDamage,this.driveLayout())==='front',f=diffDrive(this.diffWear);for(const i of front?[0,1]:[2,3])this.driveBias[i]*=f;}
     if(this.propSnapped)this.driveBias[2]=this.driveBias[3]=0;
     // A bent caliper drags its brake: the disc heats, glows, smokes, fades that brake and cooks the tyre.
@@ -1134,7 +1136,7 @@ export class Vehicle {
           if(this.extendedDamage)this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.08,s*.8,2);
         }
         // A corner down on its bump stops drags the sill and floorpan along the ground: sparks and a groove.
-        if(this.extendedDamage&&this.sagBias[i]<1&&Math.abs(this.speed)>3&&(this.controller.wheelSuspensionLength(i)??1)<.16){
+        if(this.extendedDamage&&this.springBias[i]<1&&Math.abs(this.speed)>3&&(this.controller.wheelSuspensionLength(i)??1)<.16){
           const s=Math.min(1,Math.abs(this.speed)/16),at=p.clone().lerp(this.previous,.3);at.y=p.y;
           this.scraping=Math.max(this.scraping,s*.7);this.fx.emit(at,Math.ceil(s*3),1,.8);this.fx.evidence?.add(at,yaw,Math.abs(this.speed)*.08,s*.7,2);this.bellyDrag=Math.max(this.bellyDrag,s);
         }
