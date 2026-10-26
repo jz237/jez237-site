@@ -1,8 +1,11 @@
 import {damageWheels} from './component-damage';
 import * as T from 'three';
-import {doorBase,lidBase} from './door-swing';
+import {doorBase,lidBase,LID} from './door-swing';
 type Member={mesh:T.Mesh;matrix:T.Matrix4;position:T.Vector3;quaternion:T.Quaternion;scale:T.Vector3;auto:boolean;toModel:T.Matrix4;fromParent:T.Matrix4};
-type Assembly={name:string;members:Member[];bounds:T.Box3;damage:number;side:number;loose:number;swing?:number;swingRate?:number};
+type Assembly={name:string;members:Member[];bounds:T.Box3;damage:number;side:number;loose:number;swing?:number;swingRate?:number;
+  /** Extra hinge angle (rad) of a part that came without its clips or catch (offline): a bumper's free end drops by it
+   * (sagging-bumpers.ts), a bonnet's front edge rises by it (bonnet-ajar.ts). */
+  sag?:number};
 
 /** Extra bonnet lift (radians) from airflow: none below 14 m/s or for a barely loose bonnet. */
 export function hoodWindLift(speed:number,loose:number){
@@ -50,7 +53,7 @@ export class WreckAttachments {
       const door=(rearDoor||/bodydoor[lr]/.test(name))&&!name.includes('mirror');
       const bounds=new T.Box3().setFromBufferAttribute(o.userData.wreckRest);
       const cargo=/^panel_cargodoorvan[lr]/.test(name);
-      const group=/^panel_enginelidmarten/.test(name)?'engine-lid':cargo?('cargo-'+(name.includes('cargodoorvanl')?'left':'right')):door?`door-${rearDoor?'rear-':''}${bounds.getCenter(new T.Vector3()).x<0?'left':'right'}`:/^(?:panel_tailgate(?:estate|rearwindow|tern|trail|kite|alder|saber|ravenhill|fernleigh|cornet)|glass_tailgate(?:rear$|tern|trail|kite|alder|saber|ravenhill|fernleigh|cornet))/.test(name)?'tailgate':/^panel_servinghatchcornet/.test(name)?'hatch':o.userData.detachAssembly;
+      const group=/^panel_enginelidmarten/.test(name)?'engine-lid':/^panel_(?:bodytrunk|boot|trunkmorrow)/.test(name)?'boot':cargo?('cargo-'+(name.includes('cargodoorvanl')?'left':'right')):door?`door-${rearDoor?'rear-':''}${bounds.getCenter(new T.Vector3()).x<0?'left':'right'}`:/^(?:panel_tailgate(?:estate|rearwindow|tern|trail|kite|alder|saber|ravenhill|fernleigh|cornet)|glass_tailgate(?:rear$|tern|trail|kite|alder|saber|ravenhill|fernleigh|cornet))/.test(name)?'tailgate':/^panel_servinghatchcornet/.test(name)?'hatch':o.userData.detachAssembly?.startsWith('wing-')?null:o.userData.detachAssembly;
       if(!group)return;
       let a=map.get(group);if(!a){a={name:group,members:[],bounds:new T.Box3(),damage:0,side:1,loose:0};map.set(group,a);}
       a.bounds.union(bounds);
@@ -84,7 +87,7 @@ export class WreckAttachments {
       if(a.name==='hood'){
         // At speed the airflow gets under a loose bonnet and lifts it, shaking, toward the screen.
         const lift=hoodWindLift(speed,a.loose);
-        pivot.set(0,a.bounds.max.y-.04,a.bounds.min.z+.08);euler.x=-a.loose*.42-lift+flutter*(1+lift*4);euler.z=a.side*a.loose*.045;
+        pivot.set(0,a.bounds.max.y-.04,a.bounds.min.z+.08);euler.x=-a.loose*.42-(a.sag??0)-lift+flutter*(1+lift*4);euler.z=a.side*a.loose*.045;
         // Nearly torn off at speed it folds right back against the windscreen (blinding a driver in the cab view).
         if(this.flipHood){const flip=hoodFlip(speed,a.loose);if(flip>0)euler.x+=(HOOD_FOLD-euler.x)*flip;}
       }else if(a.name.startsWith('cargo-')){
@@ -94,6 +97,9 @@ export class WreckAttachments {
         pivot.set(0,a.bounds.max.y-.02,a.bounds.max.z-.03);euler.x=a.loose*.48+flutter;
       }else if(a.name==='tailgate'){
         pivot.set(0,a.bounds.max.y-.025,a.bounds.max.z-.025);euler.x=((a.swing??0)>0?lidBase('tailgate',a.loose)+a.swing!:a.loose*.38)+flutter;euler.z=a.side*a.loose*.018;
+      }else if(a.name==='boot'){
+        // Hinged along its front edge, under the rear window: it lifts at the back.
+        pivot.set(0,a.bounds.max.y-.01,a.bounds.max.z-.02);euler.x=((a.swing??0)>0?lidBase('boot',a.loose)+a.swing!:a.loose*LID.boot.ajar)+flutter;euler.z=a.side*a.loose*.02;
       }else if(a.name==='drop-tailgate'){
         pivot.set(0,a.bounds.min.y+.01,a.bounds.min.z+.02);euler.x=-((a.swing??0)>0?lidBase('drop',a.loose)+a.swing!:a.loose*1.05)+flutter;
       }else if(a.name==='hatch'){
@@ -108,7 +114,7 @@ export class WreckAttachments {
         pivot.set(side*this.width,a.bounds.min.y+.45,a.bounds.max.z-.06);euler.y=-side*((a.swing??0)>0?doorBase(a.loose)+a.swing!:a.loose*.075);euler.x=-a.loose*.025;
       }else{
         pivot.x=-a.side*this.width*.82;pivot.y=a.bounds.max.y-.07;
-        euler.z=-a.side*a.loose*.3+flutter;euler.x=(a.name==='front-bumper'?-.18:.18)*a.loose;
+        euler.z=-a.side*(a.loose*.3+(a.sag??0))+flutter;euler.x=(a.name==='front-bumper'?-.18:.18)*a.loose;
       }
       const hinge=new T.Matrix4().makeTranslation(pivot.x,pivot.y,pivot.z)
         .multiply(new T.Matrix4().makeRotationFromEuler(euler)).multiply(new T.Matrix4().makeTranslation(-pivot.x,-pivot.y,-pivot.z));
@@ -138,7 +144,7 @@ export class WreckAttachments {
   reset(){
     this.time=this.wheelTravel=this.wheelSpeed=0;this.wheelDamage.fill(0);this.wheelShift.forEach(v=>v.set(0,0,0));
     for(const key of Object.keys(this.zones)as (keyof typeof this.zones)[])this.zones[key]=0;
-    for(const a of this.assemblies){a.damage=a.loose=0;a.swing=a.swingRate=0;for(const p of a.members){p.mesh.position.copy(p.position);p.mesh.quaternion.copy(p.quaternion);p.mesh.scale.copy(p.scale);p.mesh.matrix.copy(p.matrix);p.mesh.matrixAutoUpdate=p.auto;p.mesh.matrixWorldNeedsUpdate=true;}}
+    for(const a of this.assemblies){a.damage=a.loose=0;a.swing=a.swingRate=0;a.sag=0;for(const p of a.members){p.mesh.position.copy(p.position);p.mesh.quaternion.copy(p.quaternion);p.mesh.scale.copy(p.scale);p.mesh.matrix.copy(p.matrix);p.mesh.matrixAutoUpdate=p.auto;p.mesh.matrixWorldNeedsUpdate=true;}}
     this.wheels.forEach((w,i)=>{if(this.wheelLost[i])w.visible=true;w.position.x=this.wheelRest[i].x;w.position.z=this.wheelRest[i].z;w.quaternion.copy(this.wheelBase[i]);this.wheelApplied[i].copy(w.quaternion);});
     this.wheelLost.fill(0);
   }
