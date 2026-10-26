@@ -27,7 +27,7 @@ export function captureReplayCheckpoint(cars:readonly Vehicle[],limit:number){
    return {mesh,damage:mesh.userData.damage,shift:(mesh.userData.engineShift as T.Vector3|undefined)?.clone(),
     buffers:attributes.flatMap(name=>{const a=mesh.geometry.getAttribute(name);return a?[{name,array:a.array.slice()}]:[];}),
     box:mesh.geometry.boundingBox?.clone(),sphere:mesh.geometry.boundingSphere?.clone(),
-    opacity:(mesh.material as T.Material).opacity,glass:glass?{damage:glass.damage.value,impact:glass.impact.value.clone()}:undefined};
+    opacity:(mesh.material as T.Material).opacity,glass:glass?{damage:glass.damage.value,impact:glass.impact.value.clone(),reach:glass.reach.value}:undefined};
   });
   return {car,nodes,meshes,values:scalars.map(key=>car[key]),structure:car.structuralDamage?.slice(),tyres:car.tyreDamage?.slice(),
    zones:{...car.damageZones},partZones:{...car.wreckParts.zones},wheelDamage:car.wreckParts.wheelDamage.slice(),wheelLost:car.wreckParts.wheelLost.slice(),wheelShift:car.wreckParts.wheelShift.map(v=>v.clone()),
@@ -49,7 +49,7 @@ export function captureReplayCheckpoint(cars:readonly Vehicle[],limit:number){
     m.mesh.geometry.boundingBox=m.box?.clone()??null;m.mesh.geometry.boundingSphere=m.sphere?.clone()??null;
     (m.mesh.material as T.Material).opacity=m.opacity;
     const glass=(m.mesh.material as T.Material).userData.glassState as GlassState|undefined;
-    if(glass&&m.glass){glass.damage.value=m.glass.damage;glass.impact.value.copy(m.glass.impact);}
+    if(glass&&m.glass){glass.damage.value=m.glass.damage;glass.impact.value.copy(m.glass.impact);glass.reach.value=m.glass.reach??1;}
    }
   }
  }};

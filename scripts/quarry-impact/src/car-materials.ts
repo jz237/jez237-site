@@ -161,7 +161,9 @@ float scrapeLines=mix(smoothstep(.65,.92,abs(sin(across+bodySilt(vBodyPosition*2
 /** Rain on glass (offline rain, CAR_WET): beads of water stand on every window, in GLASS_RAIN.cells cells a metre, on all but
  * GLASS_RAIN.keep of them; working wipers keep a windscreen clear (GlassState.wiped 1 leaves only GLASS_RAIN.wipe fewer). */
 export const GLASS_RAIN={cells:40,keep:.45,wipe:.85} as const;
-export type GlassState = { damage: { value: number }; impact: { value: T.Vector3 }; axes: { value: T.Vector3 }; smoke: { value: number }; wiped: { value: number }; mist: { value: number }; };
+/** reach: how far a crack runs, as a share of a blow's (an old stone chip's is small, stone-chips.ts); it grows back to a
+ * blow's as the damage does. */
+export type GlassState = { damage: { value: number }; impact: { value: T.Vector3 }; axes: { value: T.Vector3 }; smoke: { value: number }; wiped: { value: number }; mist: { value: number }; reach: { value: number }; };
 export function finishGlass(material: T.MeshPhysicalMaterial, geometry: T.BufferGeometry): GlassState {
   geometry.computeBoundingBox();
   const size = geometry.boundingBox!.getSize(new T.Vector3());
@@ -171,6 +173,7 @@ export function finishGlass(material: T.MeshPhysicalMaterial, geometry: T.Buffer
     smoke: { value: 0 },
     mist: { value: 0 },
     wiped: { value: 0 },
+    reach: { value: 1 },
   };
   material.userData.glassState = state;
   material.onBeforeCompile = (shader) => {
@@ -180,20 +183,21 @@ export function finishGlass(material: T.MeshPhysicalMaterial, geometry: T.Buffer
     shader.uniforms.glassSmoke = state.smoke;
     shader.uniforms.glassMist = state.mist;
     shader.uniforms.glassWiped = state.wiped;
+    shader.uniforms.glassReach = state.reach;
     shader.uniforms.rainWet = CAR_WET;
     shader.vertexShader = shader.vertexShader
       .replace('#include <common>', '#include <common>\nvarying vec3 vGlassPosition; varying vec3 vGlassNormal;')
       .replace('#include <begin_vertex>', '#include <begin_vertex>\nvGlassPosition=position; vGlassNormal=normal;');
     shader.fragmentShader = shader.fragmentShader
-      .replace('#include <common>', '#include <common>\nvarying vec3 vGlassPosition; varying vec3 vGlassNormal; uniform float glassDamage; uniform vec3 glassImpact; uniform vec3 glassAxes; uniform float glassSmoke; uniform float glassMist; uniform float glassWiped; uniform float rainWet;')
+      .replace('#include <common>', '#include <common>\nvarying vec3 vGlassPosition; varying vec3 vGlassNormal; uniform float glassDamage; uniform float glassReach; uniform vec3 glassImpact; uniform vec3 glassAxes; uniform float glassSmoke; uniform float glassMist; uniform float glassWiped; uniform float rainWet;')
       .replace('#include <color_fragment>', `#include <color_fragment>
 vec3 d=vGlassPosition-glassImpact;
 vec2 p=vec2(mix(d.z,d.x,glassAxes.x),mix(d.y,d.z,1.-glassAxes.y));
-float radius=length(p); float angle=atan(p.y,p.x);
+float radius=length(p); float reached=radius/max(glassReach,smoothstep(.16,.6,glassDamage)); float angle=atan(p.y,p.x);
 float branches=abs(sin(angle*10.5+sin(radius*19.)*.22));
 float rings=abs(sin(radius*71.+sin(angle*9.)*.6));
-float crack=(1.-smoothstep(.018,.052,branches))*(1.-smoothstep(.12,.86,radius));
-crack=max(crack,(1.-smoothstep(.018,.065,rings))*.52*(1.-smoothstep(.04,.34,radius)));
+float crack=(1.-smoothstep(.018,.052,branches))*(1.-smoothstep(.12,.86,reached));
+crack=max(crack,(1.-smoothstep(.018,.065,rings))*.52*(1.-smoothstep(.04,.34,reached)));
 crack*=smoothstep(0.,.16,glassDamage);
 diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.66,.75,.75),crack);
 diffuseColor.a=clamp(diffuseColor.a+crack*.6+glassDamage*.1,0.,.94);

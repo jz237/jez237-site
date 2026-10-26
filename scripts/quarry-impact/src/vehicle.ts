@@ -709,7 +709,7 @@ export class Vehicle {
       g.userData.damage = 0;
       (g.material as T.MeshStandardMaterial).opacity = isClassicKind(this.kind) ? .55 : this.kind === 'coupe' ? .24 : .28;
       const state = (g.material as T.Material).userData.glassState as GlassState | undefined;
-      if (state) state.damage.value = 0;
+      if (state) { state.damage.value = 0; state.reach.value = 1; }
     }
   }
   /** Leaks drip onto the ground under the radiator (coolant) and the engine (oil); every tyre reads
@@ -1358,7 +1358,7 @@ export class Vehicle {
         const state = mat.userData.glassState as GlassState | undefined;
         if (state) {
           state.damage.value = Math.min(1, glass.userData.damage / 24);
-          state.impact.value.copy(glass.worldToLocal(point.clone()));
+          state.impact.value.copy(glass.worldToLocal(point.clone()));state.reach.value=1;
         }
         const laminated = /Windshield|Rearwindow/.test(glass.name);
         // Laminated screens retain their shattered sheet. Tempered side glass
