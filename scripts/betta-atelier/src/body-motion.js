@@ -12,11 +12,11 @@ const PIVOT_U = 0.3;
 // so the rear third swings as a soft S rather than a flag), and how far the head yaws back against
 // it (a share of the tail's swing).
 const WAVE = 5, RECOIL = 0.12;
-// Turning, the trunk curls into a C at once (CURL s of the turn's rate at the tail: the bend leads
-// the turn rather than waiting for the tail to be dragged round), the head leads the route into the
-// turn by LEAD s of it (LEAD_MOST rad at the most: a startle's whip is the trunk's), and the C
-// straightens as the turn ends.
-const CURL = 0.4, LEAD = 0.05, LEAD_MOST = 0.15;
+// Turning, the trunk curls into a C at once (CURL s of the turn's rate at the tail, CURL_MOST rad at
+// the most: the bend leads the turn rather than waiting for the tail to be dragged round), the head
+// leads the route into the turn by LEAD s of it (LEAD_MOST rad at the most: a startle's whip is the
+// trunk's), and the C straightens as the turn ends.
+const CURL = 0.4, CURL_MOST = 1.4, LEAD = 0.05, LEAD_MOST = 0.15;
 export class BodyMotion {
   constructor() {
     this.data = new Float32Array(SPINE_COUNT * 4);
@@ -66,7 +66,8 @@ export class BodyMotion {
     // A maneuver is a sustained C-bend, not a wider propulsion oscillation.
     // Positive yaw leaves the rear trunk on the previous heading behind the head.
     // Soft saturation avoids a kink as the turn speeds up or changes direction.
-    this.turnBend = this.turnAngles ? clamp(this.turnAngles.at(-1) + CURL * this.steer, -2.95, 2.95) / 2.95 : Math.tanh(turn * 0.8);
+    const curl = clamp(CURL * this.steer, -CURL_MOST, CURL_MOST);
+    this.turnBend = this.turnAngles ? clamp(this.turnAngles.at(-1) + curl, -2.95, 2.95) / 2.95 : Math.tanh(turn * 0.8);
     const depth = (0.8 + effort * 0.2) * breathDepth;
     // (Breathing, the lips only part; the gill covers pump plainly, lifting off the flank to show
     // the dark slit under them.)
@@ -89,7 +90,7 @@ export class BodyMotion {
       let maneuver = smooth(0.03, 1, u) * this.turnBend * 2.95;
       if (this.turnAngles) {
         const g = u * (this.turnAngles.length - 1), a = Math.floor(g), b = Math.min(a + 1, this.turnAngles.length - 1);
-        maneuver = clamp(this.turnAngles[a] + (this.turnAngles[b] - this.turnAngles[a]) * (g - a) + CURL * this.steer * smooth(0.05, 1, u), -2.95, 2.95);
+        maneuver = clamp(this.turnAngles[a] + (this.turnAngles[b] - this.turnAngles[a]) * (g - a) + curl * smooth(0.05, 1, u), -2.95, 2.95);
       }
       const angle = this.headYaw + maneuver + envelope * sweep * (1 - Math.abs(maneuver) / 3.2)
         * Math.sin(phase - u * WAVE);
