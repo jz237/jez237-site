@@ -767,3 +767,39 @@ body.touch-driving #derby-event-feed li:nth-child(n+3){display:none}
  body.touch-driving .live-standings{top:74px}
  body.touch-driving #derby-event-feed{top:74px}
 }
+
+/* Split screen: player 1's HUD keeps the top half, player 2's instruments sit in the bottom half under a dark rule; the
+   countdown straddles the two. Everything player 1 shows is pared down to fit half a screen. */
+body.split-screen .hud{bottom:50%;padding:12px 18px;background:none}
+body.split-screen .controls{display:none}
+body.split-screen .instruments{width:clamp(120px,9vw,170px);bottom:44px;left:12px}
+body.split-screen .status{bottom:10px}
+body.split-screen .minimap{width:clamp(110px,9vw,180px);bottom:8px}
+body.split-screen .damage-diagram{bottom:10px;transform:scale(.7);transform-origin:bottom left}
+body.split-screen .center-message{position:fixed;top:50%;transform:translateY(-50%);z-index:2}
+body.split-screen .hud .toast{top:36%}
+body.split-screen .live-standings{top:84px;width:min(280px,30vw)}
+body.split-screen .live-standings:not(.expanded) .standings-body{display:none}
+body.split-screen .hud #derby-event-feed{top:114px;width:min(280px,34vw);font-size:9px}
+body.split-screen .hud #derby-event-feed li:nth-child(n+3){display:none}
+body.split-screen .hud .waypoint-status{top:84px;left:16px;transform:scale(.8);transform-origin:top left}
+.split-tag{position:absolute;top:10px;left:50%;transform:translateX(-50%);padding:4px 10px;background:#182220d9;border:1px solid #d9c58c88;color:#f1d99d;font:700 12px Montserrat,Arial,sans-serif;letter-spacing:2px;pointer-events:none}
+.p2-hud{position:fixed;left:0;right:0;top:50%;bottom:0;border-top:2px solid #0b1210;pointer-events:none;color:#ebece4}
+.p2-status{position:absolute;left:28px;bottom:18px;width:clamp(170px,14vw,250px);padding:10px 14px;background:#182220bd;border:1px solid #b7bcaa48}
+.p2-status .status-row{display:flex;justify-content:space-between;gap:10px;font-size:10px;letter-spacing:.5px}
+.p2-note{min-height:11px;margin-top:6px;font-size:9px;letter-spacing:1px;color:#e0b98a}
+.p2-stats{position:absolute;right:24px;top:12px;display:flex;gap:18px;text-shadow:0 1px 4px #0008}
+.p2-stats div{display:flex;flex-direction:column;align-items:flex-end}
+.p2-stats span{font-size:8px;letter-spacing:1.1px;color:#d1d6cc}
+.p2-stats strong{margin-top:3px;font-size:24px;font-style:italic;font-weight:700}
+.p2-speed{position:absolute;right:28px;bottom:18px;text-align:right;text-shadow:0 2px 8px #000a}
+.p2-speed strong{font-size:44px;font-style:italic;font-weight:700}
+.p2-speed span{font-size:10px;letter-spacing:1px}
+.p2-speed small{display:block;font-size:9px;letter-spacing:1px;color:#d1d6cc}
+.split-result{font-size:12px;letter-spacing:1px;line-height:1.7;color:#f1d99d}
+.menu-hub>#split-screen{order:3;border-color:#d9c58c99!important;color:#f1d99d!important}
+.menu-hub>#split-screen[aria-pressed="true"]{background:#3a3a24e8}
+.p2-select{margin-top:6px}
+.split-tag-p1{top:auto;bottom:8px}
+.p2-select .car-name strong{color:#f1d99d}
+@media (max-height:500px){.p2-select{margin-top:4px}}

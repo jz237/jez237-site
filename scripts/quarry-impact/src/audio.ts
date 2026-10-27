@@ -148,6 +148,7 @@ export class Sound {
     { throttle: number; slip: number; grounded: boolean; gear: number }
   >();
   listenerPrevious = new T.Vector3();
+  private secondAt = new T.Vector3();
   private listenerMotion=new AudioListenerMotion();
   private files?: Promise<{id:string; data:ArrayBuffer}[]>;
   private initializing?: Promise<void>;
@@ -625,21 +626,23 @@ export class Sound {
     for (const car of cars) {
       const loops = this.loops.get(car.id);
       if (!loops) continue;
+      // Split screen: player 2's own car is heard where it sits in their view, placed alike before player 1's listener.
+      const second=perspective?.second?.id===car.id,at=second?perspective!.second!.place(car.current,this.secondAt):car.current;
       const prior = this.history.get(car.id);
       const grounded = car.remoteGrounded ?? [0, 1, 2, 3].some((i) =>
         car.controller.wheelIsInContact(i),
       );
       if (prior && !wreckInspection) {
         if (!(car.engineStall!>0)&&car.health>0&&car.gear !== prior.gear && Math.abs(car.speed) > 3) {
-          this.shot(classicEngineVoice(car.kind).bank + '-shift', car.current, 0.18);
-          this.shot(classicEngineVoice(car.kind).bank + '-exhaust', car.current, 0.12);
+          this.shot(classicEngineVoice(car.kind).bank + '-shift', at, 0.18);
+          this.shot(classicEngineVoice(car.kind).bank + '-exhaust', at, 0.12);
         }
         if (!(car.engineStall!>0)&&car.health>0&&prior.throttle > 0.7 && car.input.throttle < 0.2 && car.speed > 8)
-          this.shot(classicEngineVoice(car.kind).bank + '-exhaust', car.current, 0.14);
+          this.shot(classicEngineVoice(car.kind).bank + '-exhaust', at, 0.14);
         if (grounded && car.slip > 3 && prior.slip <= 3 && !(this.raining && car.extendedDamage) && isPaved(car.surface) && skidChirp(this.squealOf(car.id),c.currentTime))
           this.shot('skid', car.current, 0.16);
         if (grounded && !prior.grounded)
-          this.shot('suspension', car.current, 0.22);
+          this.shot('suspension', at, 0.22);
       }
       if(!wreckInspection)this.damageRattle(car,p,dt,car===focused);
       this.history.set(car.id, {
@@ -648,8 +651,8 @@ export class Sound {
         grounded,
         gear: car.gear,
       });
-      const radial = p.clone().sub(car.current).normalize();
-      const doppler = Math.max(
+      const radial = p.clone().sub(at).normalize();
+      const doppler = second ? 1 : Math.max(
         0.93,
         Math.min(
           1.07,
@@ -657,7 +660,7 @@ export class Sound {
         ),
       );
       const rpm = car.rpm,
-        level = car === focused ? 0.38 : 0.22;
+        level = car === focused || second ? 0.38 : 0.22;
       const scrapeMix=scrapeSurfaceMix(car.scraping??0,this.contactScraping.level(car.id),car.surface,car.speed);
       // A misfire cut drops the combustion layers and lets the damaged rattle through: an audible stutter.
       const cut=(car.misfireFactor??1)<1?MISFIRE_AUDIO:1;
@@ -665,9 +668,9 @@ export class Sound {
       const limiting=!!car.extendedDamage&&car.health>0&&onLimiter(rpm,car.input.throttle,!(car.engineStall!>0)),bounce=limiting&&limiterCut(c.currentTime,car.id),beat=bounce?LIMITER.cut:1,heard=rpm-(bounce?LIMITER.drop:0);
       for (const [name, l] of loops) {
         if(name.startsWith('fire-'))continue;
-        l.pan.positionX.value = car.current.x;
-        l.pan.positionY.value = car.current.y;
-        l.pan.positionZ.value = car.current.z;
+        l.pan.positionX.value = at.x;
+        l.pan.positionY.value = at.y;
+        l.pan.positionZ.value = at.z;
         let v = 0;
         const centers=ENGINE_CENTERS;
         if (name in centers) {
@@ -682,7 +685,7 @@ export class Sound {
         else if (name === 'tires'){
           // Squeal on paved ground as a slide begins, settling to a scrub if it holds; the loudest few cars only.
           const level=squealLevel(this.squealOf(car.id),car.slip,isPaved(car.surface),dt) * (this.raining && car.extendedDamage ? WET_TYRES.squeal : 1);
-          this.squealHeard.set(car.id,level/Math.max(1,car.current.distanceTo(p)));v=this.squealAllowed.has(car.id)?level:0;
+          this.squealHeard.set(car.id,level/Math.max(1,at.distanceTo(p)));v=this.squealAllowed.has(car.id)?level:0;
         }
         else if (name === 'gravel')
           v =

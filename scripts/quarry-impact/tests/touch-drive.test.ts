@@ -20,7 +20,7 @@ test('touch pedals drive through the same input rules as keys and pads; no touch
 });
 test('main feeds the pedals only while the touch controls show, and shows them only while the player drives',()=>{
   assert.ok(main.includes(",touchDrive.active?touchDrive.pedals:undefined);"));
-  assert.ok(main.includes("touchDrive.show((state==='playing'||state==='countdown')&&!demo&&!studio&&!preparingEvent&&!!p&&!p.finished&&!clubPlayerStopped);"));
+  assert.ok(main.includes("touchDrive.show((state==='playing'||state==='countdown')&&!demo&&!studio&&!preparingEvent&&!!p&&!p.finished&&!clubPlayerStopped&&!splitRun);"));
   assert.ok(main.includes('const touchDrive=new TouchDrive(document.body);'));
   assert.ok(css.includes('body.touch-driving .controls{display:none}')&&css.includes('.touch-drive[hidden]{display:none}'));
 });

@@ -1,4 +1,4 @@
-import {raceFinishRemaining} from './race-finish-window';import {estimateFinishes} from './race-estimate';import {TouchDrive} from './touch-drive';
+import {raceFinishRemaining} from './race-finish-window';import {estimateFinishes} from './race-estimate';import {TouchDrive} from './touch-drive';import {SPLIT,SplitCamera,adoptView,p2HudMarkup,placeLabel,readSplit,splitControls,splitDone,splitDuel,splitFov,splitHeights,splitSeats} from './split-screen';
 import {onlineSpectatorEligible} from './spectator-state';
 import {prepareLoadingStages,type LoadingStage} from './loading-stages';
 import {clubEngineLabel} from './club-engine-label';
@@ -879,7 +879,16 @@ function applyEventLighting(fresh: boolean, choice = settings.lighting) {
 let environmentTarget: T.WebGLRenderTarget | undefined;
 let online:OnlineView, onlineUI:OnlineUI, onlinePhase='';
 const isPlayer=(c:Vehicle)=>c===cars[0];
-const displayedDriver=(c:Vehicle)=>driverLabel(c,online?.active?online.network.snapshot?.members:undefined);
+// Split screen: wanted from the title screen (saved), running for this event; the gamepads are dealt as they come and go.
+let split=(()=>{try{return readSplit(localStorage.getItem(SPLIT.key),CAR_KINDS);}catch{return readSplit(null,CAR_KINDS);}})(),splitRun=false,splitLaid=false,seats=splitSeats([]),splitMaps=splitControls(drivingControls,seats);
+const splitCamera=new SplitCamera(),p1View=new T.PerspectiveCamera(),p2Controller=new ControllerInput(),splitMid=new T.Vector3(),splitCost={calls:0,triangles:0};
+// Player 1's lens before a split half narrows it (updateCamera eases the lens from frame to frame).
+let p1Lens=52;
+/** Split screen needs a keyboard or gamepads: not offered on a touch-first device (its on-screen controls drive one car). */
+const splitPossible=()=>!(globalThis.matchMedia?.('(pointer: coarse)').matches??false);
+/** Player 1, or player 2 in a split-screen event. */
+const isHuman=(c:Vehicle)=>isPlayer(c)||splitRun&&c===cars[1];
+const displayedDriver=(c:Vehicle)=>splitRun&&c.id<2?`P${c.id+1} · ${DEFINITIONS[c.kind].name}`:driverLabel(c,online?.active?online.network.snapshot?.members:undefined);
 const modes = {
   derby: {
     label: 'DEMOLITION DERBY',
@@ -920,6 +929,7 @@ function menu() {
   archiveReplay();bankRun(false);telemetry=null;activeChallenge=undefined;activeTimeTrial=null;timeTrialOpen=false;timeTrialResult=null;timeTrialInvalidReason='';
   careerOpen=false;careerRun=false;garageOpen=false;profileOpen=false;eventSetupOpen=false;clubOpen=false;activeClubRound=null;clubPlayerStopped=false;clubRetired=false;clubPlayerRow=null;clubRunStats=undefined;clubFirstFinish=null;
   demo=false;demoRestart=0;demoHudHidden=false;ui.classList.remove('demo-clean');director.reset();orbit.maxDistance=22;orbit.enablePan=true;
+  splitRun=false;applySplitLayout();
   if (online?.active) online.disconnect();
   state = 'menu';
   wreckHold = 0;
@@ -949,6 +959,15 @@ function menu() {
   ui.querySelector<HTMLButtonElement>('#car-prev')!.onclick=()=>step(-1);ui.querySelector<HTMLButtonElement>('#car-next')!.onclick=()=>step(1);
   ui.querySelector<HTMLButtonElement>('#car-all')!.onclick=()=>{const list=ui.querySelector<HTMLElement>('#car-list')!,open=list.hidden;list.hidden=!open;ui.querySelector('#car-all')!.setAttribute('aria-expanded',String(open));const intro=ui.querySelector('.intro')!;if(open)intro.classList.add('picking');else intro.classList.remove('picking');};
   const hub=ui.querySelector('.menu-hub')!;
+  // Two players on one screen: the switch, and player 2's car under player 1's (offline derbies, races and free drive).
+  const saveSplit=()=>{try{localStorage.setItem(SPLIT.key,JSON.stringify(split));}catch{/* this session only */}};
+  const splitButton=document.createElement('button');splitButton.id='split-screen';splitButton.className='small-button';splitButton.setAttribute('aria-pressed',String(split.on));splitButton.textContent=`2 PLAYERS · SPLIT SCREEN · ${split.on?'ON':'OFF'}`;splitButton.onclick=()=>{split.on=!split.on;saveSplit();menu();ui.querySelector<HTMLButtonElement>('#split-screen')?.focus();};if(splitPossible())hub.append(splitButton);
+  if(split.on&&splitPossible()){const p2=split.p2 as CarKind,chase=mode==='race'&&pursuitSelected();ui.querySelector('.car-name strong')?.prepend('P1 · ');
+    ui.querySelector('.car-select')!.insertAdjacentHTML('afterend',`<div class="car-select p2-select"><button id="p2-prev" class="car-step" aria-label="Player 2: previous car">‹</button><div class="car-name"><strong>P2 · ${DEFINITIONS[p2].name}</strong><div class="spec">${chase?'CHASES ARE ONE PLAYER · PICK ANOTHER RACE TYPE':'ARROWS · RIGHT SHIFT · ENTER RECOVERS · OR A GAMEPAD'}</div></div><button id="p2-next" class="car-step" aria-label="Player 2: next car">›</button></div>`);
+    const stepP2=(by:number)=>{split.p2=roster[(roster.indexOf(p2)+by+roster.length)%roster.length];saveSplit();menu();ui.querySelector<HTMLButtonElement>(by<0?'#p2-prev':'#p2-next')?.focus();};
+    ui.querySelector<HTMLButtonElement>('#p2-prev')!.onclick=()=>stepP2(-1);ui.querySelector<HTMLButtonElement>('#p2-next')!.onclick=()=>stepP2(1);
+    // Line player 2's arrows up under player 1's (whose row also holds the roster button).
+    const all=ui.querySelector<HTMLElement>('#car-all');if(all)ui.querySelector<HTMLElement>('.p2-select')!.style.paddingRight=all.offsetWidth+8+'px';}
   document.querySelector<HTMLButtonElement>('#start')!.onclick = () => start(false);
   replayMenu();
   const garageButton=document.createElement('button');garageButton.id='garage';garageButton.className='small-button';garageButton.textContent='GARAGE & TUNING';garageButton.onclick=openGarage;hub.append(garageButton);
@@ -1041,7 +1060,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   if(activeVenue===quarryVenue)quarry.resetProps();else activeVenue.resetProps?.(!online?.active);
   impactAdjudicator.clear();collisionScars.clear();
   collisions = 0;
-  const count = attract ? 1 : activeTimeTrial ? 1 : activeClubRound!==null ? clubCup!.roster.length : mode === 'playground' ? ((activeChallenge?activeChallenge.traffic:traffic) ? 5 : 1) : activeChallenge?8:demo?demoOptions.field:eventOptions.field;
+  const count = !attract&&splitRun ? Math.max(2,mode === 'playground' ? (traffic ? 5 : 1) : eventOptions.field) : attract ? 1 : activeTimeTrial ? 1 : activeClubRound!==null ? clubCup!.roster.length : mode === 'playground' ? ((activeChallenge?activeChallenge.traffic:traffic) ? 5 : 1) : activeChallenge?8:demo?demoOptions.field:eventOptions.field;
   if(!attract&&pursuitSelected())pursuit=new PursuitSession(teamPursuitRules(Array.from({length:count},(_,i)=>i),0,demo?'runner':eventOptions.pursuitRole??'runner',demo?1:eventOptions.pursuitRunners??1,Math.max(60,demo?demoOptions.duration:eventOptions.duration)));
   const pursuitGrid=pursuit?pursuitGridOrder(pursuit.snapshot().rules):null;
   const colors = [
@@ -1062,7 +1081,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   layEventPuddles(!attract);
   for (let i = 0; i < count; i++) {
     const type =
-      ratedGrid?ratedGrid.at(i):!attract&&activeClubRound!==null?clubCup!.roster[i].kind:demo&&!attract?demoCarKind(i,kind,demoOptions.lineup):i === 0 ? kind : activeChallenge?(['coupe','sedan','hatch']as CarKind[])[i%3]:!attract&&customEvent()&&mode!=='playground'?gridCarKind(i,kind,eventOptions.lineup):CAR_KINDS[i%CAR_KINDS.length];
+      ratedGrid?ratedGrid.at(i):!attract&&activeClubRound!==null?clubCup!.roster[i].kind:demo&&!attract?demoCarKind(i,kind,demoOptions.lineup):i === 0 ? kind : !attract&&splitRun&&i===1&&!ratedGrid ? split.p2 as CarKind : activeChallenge?(['coupe','sedan','hatch']as CarKind[])[i%3]:!attract&&customEvent()&&mode!=='playground'?gridCarKind(i,kind,eventOptions.lineup):CAR_KINDS[i%CAR_KINDS.length];
     const setup=!attract&&activeTimeTrial?timeTrialSetup(activeTimeTrial):!attract&&activeClubRound!==null?clubVehicleSetup(clubCup!,type):demo&&!attract?demoVehicleSetup(type,demoOptions,garage,kind):!attract&&customEvent()&&mode!=='playground'?eventGridSetup(type,kind,garage,eventOptions.performance,i===0,colors[i%colors.length],eventOptions.classLimit):i===0 && (attract || !demo) && !activeChallenge ? previewSetup??garage.cars[type].setup : undefined;
     const team=!attract&&teamRace()?TEAMS[teamOf(i)]:null,teamSetup=team&&setup?{...setup,paint:team.color,trim:team.trim}:setup;
     const car = new Vehicle(i, type, team?.color ?? setup?.paint ?? colors[i%colors.length], scene, physics, fx, teamSetup,activeVenue.course,online?.active?'legacy':'angular-v1');
@@ -1214,6 +1233,8 @@ async function start(watch=demo) {
   showerSeed=Math.random();
   storm=!online?.active&&eventLighting==='rain'?new Storm(Math.random):null;lightning.intensity=0;
   demo=watch;demoRestart=0;raceEstimates=new Map();director.reset();if(watch)director.select(demoOptions.camera);keys.clear();testInput=null;
+  // Split screen this time: two players in an offline derby, race (not a chase) or free drive.
+  splitRun=split.on&&splitPossible()&&!watch&&customEvent()&&!pursuitSelected()&&(mode==='derby'||mode==='race'||mode==='playground');
   wreckHold = 0;
   if(online?.active) {if(online.network.isHost){online.network.start(mode);return true;}return false;}
   let retainedReplay=recorder&&recorder.frames.length>1?recorder.document():lastReplay;
@@ -1242,6 +1263,7 @@ async function start(watch=demo) {
     setQuarryMode();
     cameraImpactOffset.set(0,0,0);
     camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
+    splitCamera.reset();seats=splitSeats([]);splitMaps=splitControls(drivingControls,seats);
     hud();
     sound.pause(false);
     eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();pinCounted.clear();pinScoring.clear();pinEscapes=0;sandwiches=0;wallSlams=0;finalStuntsCalled=false;mirrorsClipped=0;bumpStarts=0;aiBurn.clear();aiFireOuts=0;rideAt.clear();rideUps=0;onTop.clear();mounts=0;shrapnelAt.clear();shrapnelHits=0;blowUps=0;blowUpHold=-1;chainIgnitions=0;tipAt.clear();tipOvers=0;dominoes=0;knockedBy.clear();tankBy.clear();targetToastAt=-Infinity;clearLocks();pileUp.reset();pileUps=biggestPileUp=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
@@ -1278,7 +1300,7 @@ function currentStandings():StandingRow[]{
 }
 function baseStandings():StandingRow[]{
  const ranking=online?.active?online.network.snapshot?.ranking.map(id=>cars.find(c=>c.id===id)).filter((c):c is Vehicle=>!!c)??cars:mode==='derby'?derbyRanking():rankRace();
- return ranking.map(c=>({id:c.id,name:displayedDriver(c),health:c.health,player:!demo&&isPlayer(c),followed:demo&&c.id===director.followed,detail:pursuit?(pursuit.role(c.id)==='runner'?'RUNNER':'CHASER'):mode==='derby'?(scoreDerby()?combat.points(c.id)+' PTS':c.health>0?'RUNNING':wreckCauses.get(c.id)??'OUT'):raceTimeLimit()?(c.finished?Math.floor(c.passed/24)+' LAPS · '+formatTime(c.finishTime):c.health<=0?'RETIRED':'LAP '+c.lap):c.finished?formatTime(c.finishTime):eliminationRace()&&eliminatedOrder.includes(c.id)?'OUT '+(eliminatedOrder.indexOf(c.id)+1)+(eliminatedOrder.indexOf(c.id)===0?'ST':eliminatedOrder.indexOf(c.id)===1?'ND':eliminatedOrder.indexOf(c.id)===2?'RD':'TH'):c.health<=0?'RETIRED':eliminationRace()&&state==='result'?'SURVIVOR':state==='result'?(raceEstimates.has(c.id)?'≈ '+formatTime(raceEstimates.get(c.id)!):'DNF'):waypointRace?'GATES '+c.passed:'LAP '+Math.min(raceLaps(),c.lap)}));
+ return ranking.map(c=>({id:c.id,name:displayedDriver(c),health:c.health,player:!demo&&isHuman(c),followed:demo&&c.id===director.followed,detail:pursuit?(pursuit.role(c.id)==='runner'?'RUNNER':'CHASER'):mode==='derby'?(scoreDerby()?combat.points(c.id)+' PTS':c.health>0?'RUNNING':wreckCauses.get(c.id)??'OUT'):raceTimeLimit()?(c.finished?Math.floor(c.passed/24)+' LAPS · '+formatTime(c.finishTime):c.health<=0?'RETIRED':'LAP '+c.lap):c.finished?formatTime(c.finishTime):eliminationRace()&&eliminatedOrder.includes(c.id)?'OUT '+(eliminatedOrder.indexOf(c.id)+1)+(eliminatedOrder.indexOf(c.id)===0?'ST':eliminatedOrder.indexOf(c.id)===1?'ND':eliminatedOrder.indexOf(c.id)===2?'RD':'TH'):c.health<=0?'RETIRED':eliminationRace()&&state==='result'?'SURVIVOR':state==='result'?(raceEstimates.has(c.id)?'≈ '+formatTime(raceEstimates.get(c.id)!):'DNF'):waypointRace?'GATES '+c.passed:'LAP '+Math.min(raceLaps(),c.lap)}));
 }
 function refreshStandings(force=false){
  const panel=document.getElementById('live-standings');if(!panel||!force&&clock-standingsUpdated<.25)return;standingsUpdated=clock;
@@ -1293,6 +1315,7 @@ function hud() {
   document.querySelector<HTMLButtonElement>('#pause')!.onclick = () => pause();
   if(mode!=='playground'&&!activeTimeTrial){ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<section id="live-standings" class="live-standings" aria-label="Live standings"><button type="button" aria-expanded="false" aria-controls="standings-body"></button><div id="standings-body" class="standings-body"></div></section>');ui.querySelector<HTMLButtonElement>('#live-standings button')!.onclick=toggleStandings;refreshStandings(true);}
   const instruments=document.createElement('canvas');instruments.id='instruments';instruments.width=400;instruments.height=450;instruments.className='instruments';ui.querySelector('.hud')!.append(instruments);
+  if(splitRun&&cars[1])ui.querySelector('.hud')!.insertAdjacentHTML('beforeend',p2HudMarkup(DEFINITIONS[cars[1].kind].name));
   if(scoreDerby())ui.querySelector('.hud-title')!.textContent=scoreElimination()?'SCORE DERBY · NO RESPAWNS':'SCORE DERBY';
   if(mode==='race'&&customEvent())ui.querySelector('.hud-title')!.textContent=waypointRace?`${eventLabel()} · ${RACE_NAMES[raceFormat()].toUpperCase()}`:`${eventLabel()} · ${eventOptions.direction.toUpperCase()}`;
   if(pursuit)ui.querySelector('.hud-title')!.textContent=(pursuit.role(cars[0].id)==='chaser'?'CHASE · STOP THE RUNNERS':'CHASE · FINISH ALIVE')+' · NO RECOVERIES';
@@ -1796,12 +1819,13 @@ function applyQuality() {
   // off in the renderer recompiles every shader at once, a freeze of seconds in the middle of an event.
   setSceneShadows(renderer,scene,true);shadowsLive=quality!=='medium';
   if(quarry&&shadowsLive&&quarry.sun.shadow.intensity===0)quarry.sun.shadow.intensity=shadowStrength;
+  applySplitLayout(true);
 }
 function fullScreen() {
   if (document.fullscreenElement) document.exitFullscreen();
   else document.documentElement.requestFullscreen().catch(() => {});
 }
-function recover() {
+function recover(target?:Vehicle) {
   if(pursuit){toast('CHASE: NO RECOVERIES',2);return;}
   if(scoreElimination()&&cars[0]?.health<=0){toast('WRECKED · NO RESPAWNS',2);return;}
   if(activeClubRound!==null&&clubPlayerStopped)return;
@@ -1810,14 +1834,16 @@ function recover() {
   telemetry?.recover();
   if(activeTimeTrial)timeTrialInvalidReason='RECOVERY USED';
   if(online?.active){online.network.recover();return;}
-  const p = cars[0];
+  const p = target??cars[0];
+  // Player 2's recoveries are announced as theirs (split screen).
+  const say=(message:string)=>toast(splitRun&&p===cars[1]?'P2 · '+message:message);
   if (!p||raceTimeLimit()&&p.finished) return;
   if (mode === 'playground') {
     if(activeVenue!==quarryVenue){
       const def=DEFINITIONS[p.kind],shape=new R.Cuboid(def.halfWidth+.25,.3,def.halfLength+.25);
       const at=freeDriveRecovery(activeVenue.course,p,cars,slot=>!!physics.intersectionWithShape({x:slot.x,y:activeVenue.course.height(slot.x,slot.z)+.9,z:slot.z},{x:0,y:Math.sin(slot.yaw/2),z:0,w:Math.cos(slot.yaw/2)},shape,undefined,undefined,undefined,p.body));
-      if(!at){toast('WAITING FOR CLEAR GROUND');return;}
-      p.place(at.x,at.z,at.yaw,true);toast('CAR REPAIRED');return;
+      if(!at){say('WAITING FOR CLEAR GROUND');return;}
+      p.place(at.x,at.z,at.yaw,true);say('CAR REPAIRED');return;
     }
     p.place(
       p.current.x,
@@ -1825,7 +1851,7 @@ function recover() {
       Math.atan2(p.forward.x, p.forward.z),
       true,
     );
-    toast('CAR REPAIRED');
+    say('CAR REPAIRED');
   } else if (mode === 'race') {
     const route=raceRoute(p.id);
     const index = (p.nextCheckpoint + route.length-1) % route.length;
@@ -1833,7 +1859,7 @@ function recover() {
       to = raceRoute(p.id)[p.nextCheckpoint];
     p.place(at.x, at.z, Math.atan2(to.x - at.x, to.z - at.z));
     p.penalty += 5;
-    toast(activeTimeTrial?'RECOVERED · PRACTICE ONLY · RETRY FOR A PERSONAL BEST':'RECOVERED · +5 SECONDS');
+    say(activeTimeTrial?'RECOVERED · PRACTICE ONLY · RETRY FOR A PERSONAL BEST':'RECOVERED · +5 SECONDS');
   } else {
     if (p.health === 0) return;
     combat.feats.remove(p.id);
@@ -1844,13 +1870,19 @@ function recover() {
       arena.z+dz*(dist>limit?limit/dist:1),
       Math.atan2(-dx,-dz),
     );
-    toast('RECOVERED · CONDITION −8%');
+    say('RECOVERED · CONDITION −8%');
   }
 }
 function input(): Input {
   if (testInput) return testInput;
   const pads=Array.from(navigator.getGamepads?.()??[],pad=>pad?controllerInput.drivingPad(pad):null);
-  return drivingInput(drivingControls,keys,pads,cars[0]?.speed??0,!online?.active||online.network.snapshot?.transmissionSupport===true,!online?.active||online.network.snapshot?.assistsSupport===true,touchDrive.active?touchDrive.pedals:undefined);
+  return drivingInput(splitRun?splitMaps.p1:drivingControls,keys,pads,cars[0]?.speed??0,!online?.active||online.network.snapshot?.transmissionSupport===true,!online?.active||online.network.snapshot?.assistsSupport===true,touchDrive.active?touchDrive.pedals:undefined);
+}
+/** Player 2's controls in a split-screen event: the arrows and their own gamepad. */
+function input2(): Input {
+  const all=navigator.getGamepads?.()??[],menuPad=selectedPad(drivingControls,all)?.index;
+  const pads=Array.from(all,pad=>pad?(pad.index===menuPad?controllerInput:p2Controller).drivingPad(pad):null);
+  return drivingInput(splitMaps.p2,keys,pads,cars[1]?.speed??0);
 }
 const aiFires:{clock:number;list:GroundFire[]}={clock:-1,list:[]};let fireAvoidance=true;
 /** Offline AI drivers also steer round burning puddles and props, and drive out of flames. */
@@ -2026,13 +2058,13 @@ function finish(title: string) {
   const category=arenaRecordKey(difficultyRecordKey(pursuit?`chase:${activeVenue.course.id}:${raceDirection()}:${raceLaps()}:${cars.length}${pursuitRecordSuffix(pursuit,0)}`:raceTimeLimit()?`timed-race:${activeVenue.course.id}:${eventOptions.direction}:${raceTimeLimit()}:${cars.length}`:mode==='race'?`race:${activeVenue.course.id==='quarry-v1'?'':activeVenue.course.id+':'}${raceFormat()==='laps'?(customEvent()?eventOptions.direction:'forward'):raceFormat()}:${raceLaps()}:${cars.length}`:scoreDerby()?`${derbyRecordPrefix(derbyFormat(),!!combat.rivals,combat.feats.graded)}:${eventDuration()}:${cars.length}`:mode,drivers.difficulty),mode==='derby'?activeVenue.arenaId:undefined);
   const bestKey=customEvent()&&mode!=='playground'?damageRecordKey(classRecordKey(gridRecordKey(category,kind,eventOptions.lineup,eventOptions.performance),eventOptions.classLimit),damageRule()):category;
   if (
-    !online?.active && !eliminationRace() && !(mode==='race'&&raceFormat()==='random') && (pursuit?pursuitTeamWon(pursuit,cars[0].id):(mode !== 'race' || cars[0].finished)) &&
+    !splitRun && !online?.active && !eliminationRace() && !(mode==='race'&&raceFormat()==='random') && (pursuit?pursuitTeamWon(pursuit,cars[0].id):(mode !== 'race' || cars[0].finished)) &&
     (!saved.best[bestKey] ||
       (mode === 'derby'||raceTimeLimit() ? score > saved.best[bestKey] : score < saved.best[bestKey]))
   )
     saved.best[bestKey] = score;
   persist();
-  if (!online?.active && !pursuit && cars[0].health <= 0 && !scoreDerby() && !(raceTimeLimit()&&cars[0].finished) && !eliminationRace()) {
+  if (!splitRun && !online?.active && !pursuit && cars[0].health <= 0 && !scoreDerby() && !(raceTimeLimit()&&cars[0].finished) && !eliminationRace()) {
     state = 'wrecked'; wreckHold = 5;
     sound.pause(false);
     keys.clear(); testInput = null; accumulator = 0;
@@ -2047,9 +2079,14 @@ function finish(title: string) {
     ui.innerHTML = '<div class="wreck-note"><strong>WRECKED OUT'+(cause&&cause!=='WRECKED'?' · '+cause:'')+(by?` · BY #${by.id+1} ${DEFINITIONS[by.kind].name}`:'')+'</strong><span>DRAG TO LOOK AROUND &middot; SCROLL TO ZOOM</span><span>RETURNING TO QUARRY IN <b id="wreck-count">5</b></span></div>';
     return;
   }
-  ui.innerHTML = `<div class="overlay"><div class="dialog"><div class="eyebrow">${pursuit?'CHASE · ':''}${eventLabel()} / RESULTS${customEvent()&&mode!=='playground'?' · '+AI_DIFFICULTIES[drivers.difficulty].label.toUpperCase()+' AI':''}</div><h2>${title}</h2>${customEvent()&&mode!=='playground'?`<p>${GRID_LINEUPS[eventOptions.lineup??'mixed']} · ${GRID_PERFORMANCE[eventOptions.performance??'open']} · ${classLimitLabel(eventOptions.classLimit)} · ${DAMAGE_RULES[damageRule()].label}</p>`:''}<p>${pursuit?(pursuitTeamWon(pursuit,cars[0].id)?'YOUR TEAM WINS':'YOUR TEAM LOSES'):'Placed '+rank+' of '+cars.length} · ${Math.ceil(cars[0].health)}% condition<br>${pursuit?formatTime(elapsed)+' chase · No recoveries':mode === 'derby' ? scoreDerby()?combat.points(cars[0].id)+' points · '+combat.get(cars[0].id).knockouts+' knockouts · '+(combat.get(cars[0].id).spins??0)+' spin-outs · '+(combat.get(cars[0].id).bonus??0)+' bonus points'+(combat.get(cars[0].id).rivalHits?' · '+combat.get(cars[0].id).rivalHits+' rival hits':''):Math.round(cars[0].inflicted) + ' damage inflicted'+(!online?.active&&playerTopSpeed>=1?' · top speed '+Math.round(playerTopSpeed*3.6)+' km/h':'')+(combat.rivals?' · '+(combat.get(cars[0].id).bonus??0)+' bonus points · '+(combat.get(cars[0].id).rivalHits??0)+' rival hits':'') : raceTimeLimit()?timedRaceResult(cars[0])+' · '+formatTime(raceTimeLimit())+' timed race':cars[0].finished?formatTime(cars[0].finishTime)+' including recovery penalties':cars[0].health<=0?'RETIRED · CAR WRECKED':'DNF · RACE NOT FINISHED'}</p>${ordered.map((c, i) => `<div class="results-row ${isPlayer(c) ? 'player' : ''}"><span>${pursuit?(pursuit.role(c.id)==='runner'?'RUNNER':'PURSUER'):String(i + 1).padStart(2, '0')} &nbsp; ${resultDriverLabel(displayedDriver(c),isPlayer(c))}</span><span>${pursuit?(pursuit.role(c.id)==='runner'?(pursuit.result(c.id)?.outcome==='escaped'?'ESCAPED · '+formatTime(c.finishTime):c.health<=0?'WRECKED':'TIME EXPIRED'):Math.ceil(c.health)+'% CONDITION'):mode === 'derby' ? scoreDerby()?combat.points(c.id)+' PTS':c.health<=0&&causeOf(c)?causeOf(c)+(wreckedBy.has(c.id)?` · BY ${wreckedBy.get(c.id)===cars[0]?.id&&!demo?'YOU':'#'+(wreckedBy.get(c.id)!+1)}`:''):Math.ceil(c.health) + '%' : raceTimeLimit()?timedRaceResult(c):c.finished ? formatTime(c.finishTime) : (raceEstimates.has(c.id)?'≈ '+formatTime(raceEstimates.get(c.id)!)+' · STILL RACING':(c.health<=0?causeOf(c)??'RETIRED':'DNF')+' · '+(waypointRace?'STATIONS '+c.passed:'LAP '+Math.min(raceLaps(), c.lap)))}</span></div>`).join('')}<p class="award-summary">${awardText(lastAward)}</p>${victimsLine()}${stuntsLine()}${badgeLine()}<button class="primary" id="again">RUN IT BACK ↗</button><button class="small-button" id="back">RETURN TO QUARRY</button></div></div>`;
+  ui.innerHTML = `<div class="overlay"><div class="dialog"><div class="eyebrow">${pursuit?'CHASE · ':''}${eventLabel()} / RESULTS${customEvent()&&mode!=='playground'?' · '+AI_DIFFICULTIES[drivers.difficulty].label.toUpperCase()+' AI':''}</div><h2>${title}</h2>${customEvent()&&mode!=='playground'?`<p>${GRID_LINEUPS[eventOptions.lineup??'mixed']} · ${GRID_PERFORMANCE[eventOptions.performance??'open']} · ${classLimitLabel(eventOptions.classLimit)} · ${DAMAGE_RULES[damageRule()].label}</p>`:''}<p>${pursuit?(pursuitTeamWon(pursuit,cars[0].id)?'YOUR TEAM WINS':'YOUR TEAM LOSES'):'Placed '+rank+' of '+cars.length} · ${Math.ceil(cars[0].health)}% condition<br>${pursuit?formatTime(elapsed)+' chase · No recoveries':mode === 'derby' ? scoreDerby()?combat.points(cars[0].id)+' points · '+combat.get(cars[0].id).knockouts+' knockouts · '+(combat.get(cars[0].id).spins??0)+' spin-outs · '+(combat.get(cars[0].id).bonus??0)+' bonus points'+(combat.get(cars[0].id).rivalHits?' · '+combat.get(cars[0].id).rivalHits+' rival hits':''):Math.round(cars[0].inflicted) + ' damage inflicted'+(!online?.active&&playerTopSpeed>=1?' · top speed '+Math.round(playerTopSpeed*3.6)+' km/h':'')+(combat.rivals?' · '+(combat.get(cars[0].id).bonus??0)+' bonus points · '+(combat.get(cars[0].id).rivalHits??0)+' rival hits':'') : raceTimeLimit()?timedRaceResult(cars[0])+' · '+formatTime(raceTimeLimit())+' timed race':cars[0].finished?formatTime(cars[0].finishTime)+' including recovery penalties':cars[0].health<=0?'RETIRED · CAR WRECKED':'DNF · RACE NOT FINISHED'}</p>${ordered.map((c, i) => `<div class="results-row ${isHuman(c) ? 'player' : ''}"><span>${pursuit?(pursuit.role(c.id)==='runner'?'RUNNER':'PURSUER'):String(i + 1).padStart(2, '0')} &nbsp; ${resultDriverLabel(displayedDriver(c),isPlayer(c)&&!splitRun)}</span><span>${pursuit?(pursuit.role(c.id)==='runner'?(pursuit.result(c.id)?.outcome==='escaped'?'ESCAPED · '+formatTime(c.finishTime):c.health<=0?'WRECKED':'TIME EXPIRED'):Math.ceil(c.health)+'% CONDITION'):mode === 'derby' ? scoreDerby()?combat.points(c.id)+' PTS':c.health<=0&&causeOf(c)?causeOf(c)+(wreckedBy.has(c.id)?` · BY ${wreckedBy.get(c.id)===cars[0]?.id&&!demo?'YOU':'#'+(wreckedBy.get(c.id)!+1)}`:''):Math.ceil(c.health) + '%' : raceTimeLimit()?timedRaceResult(c):c.finished ? formatTime(c.finishTime) : (raceEstimates.has(c.id)?'≈ '+formatTime(raceEstimates.get(c.id)!)+' · STILL RACING':(c.health<=0?causeOf(c)??'RETIRED':'DNF')+' · '+(waypointRace?'STATIONS '+c.passed:'LAP '+Math.min(raceLaps(), c.lap)))}</span></div>`).join('')}<p class="award-summary">${awardText(lastAward)}</p>${victimsLine()}${stuntsLine()}${badgeLine()}<button class="primary" id="again">RUN IT BACK ↗</button><button class="small-button" id="back">RETURN TO QUARRY</button></div></div>`;
+  // Split screen: who won the duel between the two players, and where each of them placed.
+  if(splitRun&&cars[1]){const duel=splitDuel(ordered.map(c=>c.id)),h2=ui.querySelector('.dialog h2');if(h2)h2.textContent=duel.winner?`PLAYER ${duel.winner} WINS`:'DEAD HEAT';
+    // (in place of player 1's own "Placed …" line)
+    Array.from(ui.querySelectorAll('.dialog > p')).find(e=>e.textContent?.startsWith('Placed '))?.remove();
+    h2?.insertAdjacentHTML('afterend',`<p class="split-result">${[cars[0],cars[1]].map((c,i)=>{const place=i?duel.p2:duel.p1,time=mode!=='race'?'':c.finished?' · '+formatTime(c.finishTime):raceEstimates.has(c.id)?' · ≈ '+formatTime(raceEstimates.get(c.id)!):'';return `P${i+1} · ${DEFINITIONS[c.kind].name} · ${place?placeLabel(place)+' of '+cars.length:'—'}${time} · ${Math.ceil(Math.max(0,c.health))}% condition`;}).join('<br>')}</p>`);}
   if(teamRace())ui.querySelector('.dialog h2')?.insertAdjacentHTML('afterend',`<p class="team-result">${teamVerdict(currentTeamScores(),demo?undefined:0)}</p>`);
-  if(!demo&&!online?.active&&!pursuit&&mode==='race'&&cars[0].finished&&cars.length>=2)globalScoresButton(ui.querySelector('.dialog'),{rank,field:cars.length,condition:Math.max(0,Math.min(100,cars[0].health)),course:activeVenue.course.id});
+  if(!splitRun&&!demo&&!online?.active&&!pursuit&&mode==='race'&&cars[0].finished&&cars.length>=2)globalScoresButton(ui.querySelector('.dialog'),{rank,field:cars.length,condition:Math.max(0,Math.min(100,cars[0].health)),course:activeVenue.course.id});
   if(!online?.active&&!pursuit&&(mode==='race'||mode==='derby')){const name=(id:number)=>{const c=cars.find(v=>v.id===id);return c?`#${id+1} ${DEFINITIONS[c.kind].name}`:`#${id+1}`;};const order=mode==='race'?rankRace().map(c=>c.id):[],list=eventAwards.awards(mode,cars.map(c=>({id:c.id,inflicted:c.inflicted,health:c.health,partsGone:c.extendedDamage?majorPartsGone(c):undefined})),order),nemesis=eventAwards.nemesis(cars[0].id,cars,mode,order);if(nemesis)list.push(nemesis);const html=awardsHtml(list,name,cars[0].id);if(html)ui.querySelector('.dialog button')?.insertAdjacentHTML('beforebegin',html);}
   if(!demo&&!online?.active&&cars[0]?.extendedDamage&&(mode==='race'||mode==='derby')){const p=cars[0];ui.querySelector('.dialog h2')?.insertAdjacentHTML('afterend',`<p class="wreck-report">${wreckReport({rolls:p.rolls,wheelsLost:p.wreckParts.wheelLost.reduce((n,v)=>n+v,0),partsGone:p.panels.reduce((n,m)=>n+(m.visible?0:1),0),engineDamage:p.engineDamage,structure:p.structuralDamage,health:p.health,shedKg:p.shedKg})}</p>`+(()=>{const m=mechanicalReport({engineOut:p.engineOut,tank:p.tankGone?'gone':p.tankDown?'down':undefined,throttleCable:p.throttleCable,handbrakeCable:p.handbrakeCable,batteryOut:p.batteryOut,rodThrown:p.rodThrown,exhaustCrushed:p.exhaustCrushed&&!p.exhaustGone,seized:p.seized,outOfFuel:p.fuelLevel<=.005,diffBroken:p.diffWear>=1,tieRods:p.steerLink.filter(v=>v===0).length,gearsLost:5-p.gearLimit,clutchSlipping:p.clutchGrip<.8,shafts:p.driveBias.filter((v,i)=>v===0&&!p.wreckParts.wheelLost[i]).length,springs:p.springBias.filter(v=>v<1).length,brakesBinding:p.brakeDrag.filter(v=>v>0).length,electrical:p.electricalFault>0,exhaust:p.exhaustBlow>0,wheelsLoose:p.nutLoose.filter((v,i)=>v>=.35&&!p.wreckParts.wheelLost[i]).length,rubbing:p.rubDrag.filter(v=>v>=.25).length,steeringFailed:p.steerRate<1,brakeFluidLow:p.brakeFluid<.7,overheating:p.coolantLevel<.3,oilLow:p.oilLevel<.25&&!p.seized,sumpCracked:p.sumpCrack>0,exhaustGone:p.exhaustGone,frameBent:p.frameBend!==0,radiatorBurst:p.radiatorBursts>0,rollBars:p.rollBar.filter(v=>v===0).length,propshaft:p.propSnapped?'snapped':p.propBend>=.12?'bent':undefined,steerSkew:p.steerSkew,engineFire:p.engineFires>0||p.smashFires>0,belt:p.beltSnapped?(p.battery<=0?'flat':'snapped'):p.beltSlip>=.3?'slipping':undefined,bearing:p.bearingWear.some(v=>v>=1)?'seized':p.bearingWear.some(v=>v>=.2)?'worn':undefined,brakeFire:p.brakeFires>0,rubFire:p.rubFires>0,throttleJammed:p.throttleJammed,doorsTorn:p.doorsTorn});return m?`<p class="wreck-report">${m}</p>`:'';})());}
   studioButtons(ui.querySelector('.dialog'));replayBiggestHit(ui.querySelector('.dialog'));highlightsButton(ui.querySelector('.dialog'));
@@ -2121,11 +2158,11 @@ function step(dt: number) {
   elapsed += dt;
   if(mode==='race'&&!eventAwards.started&&elapsed>.5&&!online?.active)eventAwards.grid(rankRace().map(c=>c.id));
   if(eliminationRace()&&elapsed>=nextEliminationAt){nextEliminationAt+=ELIMINATION_INTERVAL;const out=nextElimination(rankRace().filter(c=>!c.finished&&c.health>0).map(c=>c.id)),car=out===null?undefined:cars.find(c=>c.id===out);
-    if(car){eliminatedOrder.push(car.id);const dir=new T.Vector3(0,-1,0);car.hit(car.current.clone().add(car.forward.clone().multiplyScalar(1.4)).setY(car.current.y+.6),dir,(car.health+5)/Math.max(.05,car.specification.damageScale),elapsed,true);toast(car.id===cars[0].id&&!demo?'ELIMINATED · LAST PLACE':`ELIMINATED · #${car.id+1} ${DEFINITIONS[car.kind].name}`,2.5);if(car.id===cars[0].id&&!demo){finish('ELIMINATED');return;}}}
+    if(car){eliminatedOrder.push(car.id);const dir=new T.Vector3(0,-1,0);car.hit(car.current.clone().add(car.forward.clone().multiplyScalar(1.4)).setY(car.current.y+.6),dir,(car.health+5)/Math.max(.05,car.specification.damageScale),elapsed,true);toast(car.id===cars[0].id&&!demo?'ELIMINATED · LAST PLACE':`ELIMINATED · #${car.id+1} ${DEFINITIONS[car.kind].name}`,2.5);if(car.id===cars[0].id&&!demo&&!splitRun){finish('ELIMINATED');return;}}}
   if(eliminationRace()&&!cars.some(c=>c.finished)){const running=cars.filter(c=>c.health>0);if(running.length<=1){finish(demo?'RACE COMPLETE':running[0]?.id===cars[0].id?'LAST CAR RUNNING':'ELIMINATION COMPLETE');return;}}
-  if(demo||autopilot||testInput){telemetry=null;if(activeTimeTrial)timeTrialInvalidReason='ASSISTED OR TEST INPUT';}
+  if(demo||autopilot||testInput||splitRun){telemetry=null;if(activeTimeTrial)timeTrialInvalidReason='ASSISTED OR TEST INPUT';}
   for (const c of cars) {
-    c.input = pursuit&&(c.health<=0||pursuit.result(c.id)?.outcome==='escaped')?{throttle:0,steer:0,brake:1,handbrake:false}:raceTimeLimit()&&c.id===0&&c.finished&&!demo ? ai(c,dt) : c.id===0&&activeClubRound!==null&&clubPlayerStopped ? clubRetired||!c.finished?{throttle:0,steer:0,brake:1,handbrake:false}:ai(c,dt) : c.id === 0 && !autopilot && !demo ? input() : ai(c, dt);
+    c.input = pursuit&&(c.health<=0||pursuit.result(c.id)?.outcome==='escaped')?{throttle:0,steer:0,brake:1,handbrake:false}:raceTimeLimit()&&c.id===0&&c.finished&&!demo ? ai(c,dt) : c.id===0&&activeClubRound!==null&&clubPlayerStopped ? clubRetired||!c.finished?{throttle:0,steer:0,brake:1,handbrake:false}:ai(c,dt) : splitRun&&c.id<2&&!autopilot&&!demo ? (c.finished?ai(c,dt):c.id===0?input():input2()) : c.id === 0 && !autopilot && !demo ? input() : ai(c, dt);
     c.preStep(dt);
   }
   const scoreMotion=mode==='derby'?cars.map(c=>combatMotion(c.id,c.current,c.currentQ,c.velocity,c.body.angvel().y,c.health,[0,1,2,3].filter(i=>c.controller.wheelIsInContact(i)).length)):[];
@@ -2318,8 +2355,8 @@ function step(dt: number) {
     if(mode==='race'&&waypointRace){
       const reached=waypointRace.sample(c.id,c.current),progress=waypointRace.get(c.id);c.passed=progress.passed;c.lap=progress.round+1;
       if(reached&&c.id===0&&!demo)toast(reached.finished?'ALL STATIONS COMPLETE':reached.id===0?'ROUND COMPLETE':`STATION ${reached.id} COLLECTED`,1.2);
-      if(progress.finished&&!c.finished){c.finished=true;c.finishTime=elapsed+c.penalty;if(c.id===0&&!demo){if(activeClubRound!==null)freezeClubPlayer();else finish('WAYPOINT FINISH');}}
-      if(c.id===0&&!demo)c.nextCheckpoint=waypointRace.navigation(c.id,c.current,c.forward).next;
+      if(progress.finished&&!c.finished){c.finished=true;c.finishTime=elapsed+c.penalty;if(splitRun&&c.id<2&&!demo)toast(`P${c.id+1} FINISHED`,2.5,2);if(c.id===0&&!demo&&!splitRun){if(activeClubRound!==null)freezeClubPlayer();else finish('WAYPOINT FINISH');}}
+      if((c.id===0||splitRun&&c.id===1)&&!demo)c.nextCheckpoint=waypointRace.navigation(c.id,c.current,c.forward).next;
     } else if (mode === 'race') {
       const check = checkRoute(
         raceRoute(c.id),c.current.x,
@@ -2342,14 +2379,15 @@ function step(dt: number) {
         const progress=lapProgress(c.passed,raceLaps());c.lap=progress.lap;
         if((!pursuit||pursuit.role(c.id)==='runner')&&(raceTimeLimit()?c.health>0&&timedRaceFinished(c.passed,elapsed,raceTimeLimit()):progress.finished)){
           c.finished=true;c.finishTime=elapsed+c.penalty;
-          if(c.id===0&&!demo&&!raceTimeLimit()&&!pursuit){if(activeClubRound!==null)freezeClubPlayer();else finish('FINISH LINE');}
+          if(splitRun&&c.id<2&&!demo&&!raceTimeLimit())toast(`P${c.id+1} FINISHED`,2.5,2);
+          if(c.id===0&&!demo&&!raceTimeLimit()&&!pursuit&&!splitRun){if(activeClubRound!==null)freezeClubPlayer();else finish('FINISH LINE');}
         }
       }
     }
   }
   if(pursuit){pursuit.update(cars,elapsed);if(pursuit.complete){finish(pursuitTeamTitle(pursuit,0));return;}}
   // A car blowing up gets BOOM.hold seconds to fly before the event can end on it.
-  if (!pursuit && !demo && activeClubRound===null && mode === 'race' && cars[0].health <= 0 && !(raceTimeLimit()&&cars[0].finished) && !(elapsed<blowUpHold)) finish('RETIRED · DAMAGE');
+  if (!splitRun && !pursuit && !demo && activeClubRound===null && mode === 'race' && cars[0].health <= 0 && !(raceTimeLimit()&&cars[0].finished) && !(elapsed<blowUpHold)) finish('RETIRED · DAMAGE');
   // AI drivers use their extinguishers too, after a moment's reaction (offline only).
   for(const c of cars){if(!c.extendedDamage||c.health<=0||c.id===0&&!demo)continue;
     if(!c.burning||c.extinguishers<=0){aiBurn.delete(c.id);continue;}
@@ -2369,7 +2407,7 @@ function step(dt: number) {
   if (mode === 'derby' && !(elapsed<blowUpHold)) {
     const alive = cars.filter((c) => c.health > 0&&!(activeClubRound!==null&&clubRetired&&c.id===0));
     if(scoreDerby()){const end=derbyEndReason(derbyFormat(),cars,elapsed,eventDuration());if(end)finish(end==='time'?'TIME’S UP':'SCORE DERBY COMPLETE');}
-    else if (!demo && activeClubRound===null && cars[0].health <= 0) finish('WRECKED OUT');
+    else if (!splitRun && !demo && activeClubRound===null && cars[0].health <= 0) finish('WRECKED OUT');
     else if (alive.length <= 1 && activeChallenge?.metric!=='condition'){
       // The player outlasted the field (offline): the stands go up as the results come in.
       if(!online?.active&&!demo&&alive[0]?.id===0){sound.crowd(1);crowdFlashes(SMASH_FLASHES+8);}
@@ -2384,6 +2422,9 @@ function step(dt: number) {
   if(activeChallenge&&state==='playing'&&(elapsed+cars[0].penalty>=activeChallenge.limit||cars[0].health<=0))finish('CHALLENGE COMPLETE');
   if(raceTimeLimit()&&state==='playing'&&(cars.every(c=>c.finished||c.health<=0)||elapsed>=raceTimeLimit()+120))finish('TIMED RACE COMPLETE');
   if(demo&&!pursuit&&!raceTimeLimit()&&mode==='race'&&(raceFinishRemaining(cars,elapsed)===0||cars.every(c=>c.finished||c.health<=0)||elapsed>=Math.max(600,raceLaps()*150)))finish('RACE COMPLETE');
+  // Split screen: the event ends once both players are done (finished or wrecked); one who finishes first drives on under
+  // the AI until the other is in.
+  if(splitRun&&state==='playing'&&!scoreDerby()&&!raceTimeLimit()&&!(elapsed<blowUpHold)&&cars[1]&&splitDone(mode,[cars[0],cars[1]]))finish(mode==='derby'?'WRECKED OUT':cars[0].finished||cars[1].finished?'FINISH LINE':'RETIRED · DAMAGE');
   fx.update(dt);
 }
 function cycleSpectator(direction:number){if(scoreSpectating())director.cycleCar(cars,direction);}
@@ -2712,6 +2753,11 @@ function pollController(now:number){
     context=controllerContext();key=controllerKey(context);controllerInput.update(pad,now,key,drivingControls.triggerDeadzone);
   }
   controllerNavigation.sync(context);
+  // Split screen: deal the seats as pads come and go; player 2's own pad (when the menus use another) pauses and recovers.
+  if(splitRun){const all=navigator.getGamepads?.()??[],next=splitSeats(Array.from(all).flatMap(g=>g?.connected?[g.index]:[]),pad?.index);
+    if(next.p1!==seats.p1||next.p2!==seats.p2||!['playing','countdown'].includes(state)){seats=next;splitMaps=splitControls(drivingControls,seats);}
+    const own=seats.p2!==pad?.index?all[seats.p2]??undefined:undefined;
+    for(const command of p2Controller.update(own,now,'split:'+state,splitMaps.p2.triggerDeadzone).commands){if(command==='start'){if(state==='paused')resume();else if(['playing','countdown'].includes(state))pause();}else if(command==='recover'&&state==='playing')recover(cars[1]);}}
   if(!preparingEvent&&key!=='library-busy')for(const command of sample.commands){
     if(controllerKey(controllerContext())!==key)break;
     if(command==='start'){
@@ -2719,6 +2765,8 @@ function pollController(now:number){
       if(state==='paused'||state==='inspect')resume();
       else if(studio){if(studio.hidden)studio.toggleHud();else studio.togglePlay();}
       else if(['playing','countdown','wrecked'].includes(state)||demo&&state==='result')pause();
+    }else if(splitRun&&pad?.index===seats.p2&&(command==='camera'||command==='recover')){
+      if(command==='recover'&&state==='playing')recover(cars[1]);
     }else if(command==='camera'||command==='recover'){
       // Preserve custom driving maps: a button assigned to a pedal/handbrake keeps that meaning.
       const button=command==='camera'?2:3,assigned=drivingButtons(drivingControls,!online?.active||online.network.snapshot?.transmissionSupport===true).includes(button);
@@ -2742,6 +2790,61 @@ function pollController(now:number){
   const message=hint+(['playing','countdown'].includes(state)&&sound.ctx?.state==='suspended'?' · CLICK / KEY for sound':'');
   if(controllerHelp.textContent!==message)controllerHelp.textContent=message;
 }
+/** Split screen is drawn while a split event runs (not in the replay studio). */
+function splitShown(){return splitRun&&!studio&&['countdown','playing','paused','wrecked','result','inspect'].includes(state);}
+/** Half-height post chain and lens for each player while split, the whole screen otherwise (only when that changes). */
+function applySplitLayout(force=false){
+  const on=splitShown(),was=splitLaid;if(on===was&&!force)return;splitLaid=on;
+  document.body.classList.toggle('split-screen',on);
+  const h=on?splitHeights(innerHeight).top:innerHeight;composer.setSize(innerWidth,h);
+  if(on&&!was)p1Lens=camera.fov;else if(!on&&was)camera.fov=p1Lens;
+  for(const cam of [camera,splitCamera.camera]){cam.aspect=innerWidth/h;cam.updateProjectionMatrix();}
+  if(on){camera.fov=splitFov(p1Lens,camera.aspect);camera.updateProjectionMatrix();}
+}
+/** Ground under player 2's chase camera, as for player 1's. */
+const splitGround=(x:number,z:number)=>activeVenue===quarryVenue?Math.max(scenerySurfaceHeight(x,z),quarryExtensionHeight(x,z)??-Infinity,quarryWestWallHeight(x,z)??-Infinity):activeVenue.course.height(x,z);
+/** Player 2's camera, and the sun's shadow centred between the two cars while one shadow map covers both. */
+function updateSplitView(dt:number){
+  if(splitLaid){p1Lens=camera.fov;camera.fov=splitFov(p1Lens,camera.aspect);camera.updateProjectionMatrix();}
+  const p=cars[1];if(!p)return;
+  splitCamera.follow(p,state==='paused'||state==='inspect'?0:dt,settings.camera,splitGround,(from,to)=>cameraObstruction(physics,from,to,p.body,true),state==='playing',clock);
+  const a=cars[0];if(quarry&&a&&!demo&&a.current.distanceTo(p.current)<=SPLIT.shadowShare){splitMid.copy(a.root.position).add(p.root.position).multiplyScalar(.5);quarry.sun.position.copy(splitMid).addScaledVector(DAYLIGHT_DIRECTION,DAYLIGHT_DISTANCE);quarry.sun.target.position.copy(splitMid);}
+}
+/** Player 1 draws into the top half. */
+function splitTop(){const {top,bottom}=splitHeights(innerHeight);renderer.setScissorTest(true);renderer.setViewport(0,bottom,innerWidth,top);renderer.setScissor(0,bottom,innerWidth,top);}
+/** Player 2's half: the same scene and post chain seen through player 2's camera, lent to the main camera so every pass
+ * that holds it follows. A car far from the other gets the sun's shadow map round itself; the rain falls round it; its
+ * lens stays dry. */
+function renderPlayerTwo(){
+  const {bottom}=splitHeights(innerHeight),p=cars[1];
+  adoptView(p1View,camera);adoptView(camera,splitCamera.camera);
+  if(p&&cars[0]&&quarry&&shadowsLive&&cars[0].current.distanceTo(p.current)>SPLIT.shadowShare){quarry.sun.position.copy(p.root.position).addScaledVector(DAYLIGHT_DIRECTION,DAYLIGHT_DISTANCE);quarry.sun.target.position.copy(p.root.position);renderer.shadowMap.needsUpdate=true;}
+  heatHaze.setSources(hazeSources,camera,elapsed);lensRainPass.setDrops([]);rain?.update(camera,0);
+  // Player 2 sees their own next gate or stations (player 1's are put back before the next frame is drawn).
+  if(p&&mode==='race'&&!demo){if(waypointRace)waypointMarkers?.update(waypointRace,p.id,true,activeVenue.course.height);
+    else{const route=raceRoute(p.id),at=route[p.nextCheckpoint],ahead=route[(p.nextCheckpoint+1)%route.length];if(at&&ahead){activeVenue.checkpoint.position.set(at.x,activeVenue===quarryVenue?terrainHeight(at.x,at.z):activeVenue.course.height(at.x,at.z),at.z);activeVenue.checkpoint.rotation.y=Math.atan2(ahead.x-at.x,ahead.z-at.z);}}}
+  renderer.setViewport(0,0,innerWidth,bottom);renderer.setScissor(0,0,innerWidth,bottom);
+  const calls=renderer.info.render.calls,triangles=renderer.info.render.triangles;
+  composer.render();
+  splitCost.calls=renderer.info.render.calls-calls;splitCost.triangles=renderer.info.render.triangles-triangles;
+  renderer.setScissorTest(false);renderer.setViewport(0,0,innerWidth,innerHeight);
+  adoptView(camera,p1View);
+}
+/** A point near player 2, moved to where it sits in player 2's view but before player 1's camera (so player 2 hears their own car). */
+const splitPlace=(at:T.Vector3,out:T.Vector3)=>{camera.updateMatrixWorld();return out.copy(at).applyMatrix4(splitCamera.camera.matrixWorldInverse).applyMatrix4(camera.matrixWorld);};
+/** How far a car is from the nearer of the cameras drawing it. */
+const viewDistance=(car:Vehicle)=>{const d=car.current.distanceTo(camera.position);return splitLaid?Math.min(d,car.current.distanceTo(splitCamera.camera.position)):d;};
+/** Player 2's instruments (split screen). */
+function updateP2Hud(){
+  const p=cars[1];if(!p||!document.getElementById('p2-hud'))return;
+  text('p2-health',Math.ceil(Math.max(0,p.health))+'%');const bar=document.getElementById('p2-health-bar');if(bar){bar.style.width=Math.max(0,p.health)+'%';bar.style.background=p.health<30?'#dd7a55':'#d9c486';}
+  text('p2-speed',String(Math.round(Math.abs(p.speed)*3.6)));text('p2-gear','GEAR '+transmissionGearLabel(p.gear));
+  text('p2-place-label',mode==='race'?'POSITION':mode==='derby'?'REMAINING':'FREE DRIVE');
+  text('p2-place',mode==='race'?`${rankRace().indexOf(p)+1} / ${cars.length}`:mode==='derby'?`${cars.filter(c=>c.health>0).length} / ${cars.length}`:'—');
+  text('p2-lap-label',mode==='race'?(waypointRace?'STATIONS':'LAP'):mode==='derby'?(scoreDerby()?'POINTS':'DAMAGE DEALT'):'');
+  text('p2-lap',mode==='race'?(waypointRace?String(p.passed):`${Math.min(raceLaps(),p.lap)} / ${raceLaps()}`):mode==='derby'?String(scoreDerby()?combat.points(p.id):Math.round(p.inflicted)):'');
+  const cause=causeOf(p);text('p2-note',p.health<=0?'WRECKED'+(cause&&cause!=='WRECKED'?' · '+cause:''):mode==='race'&&p.finished?'FINISHED · '+formatTime(p.finishTime):'');
+}
 /** On-screen pedals and steering for touch screens. */
 const touchDrive=new TouchDrive(document.body);
 function recordRumbleImpact(strength:number){
@@ -2749,8 +2852,8 @@ function recordRumbleImpact(strength:number){
 }
 function updateRumble(now:number){
   const p=cars[0],active=state==='playing'&&!demo&&!studio&&!preparingEvent&&!document.hidden&&(!online?.active||online.network.connected)&&!!p&&!p.finished&&!clubPlayerStopped;
-  touchDrive.show((state==='playing'||state==='countdown')&&!demo&&!studio&&!preparingEvent&&!!p&&!p.finished&&!clubPlayerStopped);
-  controllerRumble.update(selectedPad(drivingControls,navigator.getGamepads?.()??[]),now,drivingControls.rumble,active?{
+  touchDrive.show((state==='playing'||state==='countdown')&&!demo&&!studio&&!preparingEvent&&!!p&&!p.finished&&!clubPlayerStopped&&!splitRun);
+  controllerRumble.update(splitRun?(navigator.getGamepads?.()??[])[seats.p1]??undefined:selectedPad(drivingControls,navigator.getGamepads?.()??[]),now,drivingControls.rumble,active?{
     speed:p.health>0?p.speed:0,slip:p.slip,surface:p.surface,scraping:p.scraping,
     ...(p.extendedDamage?{wobble:Math.max(...p.wreckParts.wheelDamage,...p.nutLoose,Math.min(1,p.propVibration),...Array.from(p.bearingWear,v=>bearingGrowl(v,p.speed)*.5)),misfire:p.misfireFactor<1,rub:Math.max(...p.rubDrag)}:{}),
     grounded:online?.active?!!p.remoteGrounded:[0,1,2,3].some(i=>p.controller.wheelIsInContact(i)),
@@ -2912,7 +3015,9 @@ function frame(now: number) {
   }
   if(demo&&state==='result'){demoRestart=Math.max(0,demoRestart-dt);fx.update(dt);if(demoRestart===0){const next=nextDemoMode(mode,demoOptions.loop);if(next){mode=next;state='loading';void start(true);}}}
   updateTrialGhost();
+  if(splitLaid)camera.fov=p1Lens;
   updateCamera(dt);
+  if(splitRun)updateSplitView(dt);
   updateCraze();
   if(studio&&!studio.seeking){replaySlicks?.update(studio.time);replayFire?.fire.setGround(replaySlicks?[...replaySlicks.slicks.fires(),...replaySlicks.props.fires(studio.time,propPoints(replayPropMeshes.map(mesh=>({mesh}))))]:[],studio.time);replayFire?.update(studio.time,camera);replayPuddles?.update(studio.time);}
   if(!studio)for(const car of cars){car.wreckParts.pose(['playing','countdown'].includes(state)?dt:0,car.speed);car.wreckParts.wheelsPose();car.syncSuspension();}
@@ -2949,7 +3054,7 @@ function frame(now: number) {
   if(!studio&&state==='playing'){for(const burst of vehicleFire?.bursts??[]){recorder?.burst({time:elapsed,position:burst.position.toArray()});if(!online?.active){shockwave(burst.position,burst.id);blastDamage(burst.position,burst.id,CAR_BLAST.radius,CAR_BLAST.damage);const car=cars.find(c=>c.id===burst.id);if(car)carBlowsUp(car,burst.position);}}captureReplay();}
   if(studio?.playing&&!studio.seeking){sound.update(cars,camera,dt,false,{id:cars[studio.follow]?.id??0,view:studio.view==='hood'?'hood':studio.view==='chase'?'chase':'orbit'},(from,to)=>cameraObstruction(physics,from,to,undefined,true));sound.thermal(replayThermal,[]);}
   {const p=cars[0];sound.daze(state==='playing'&&!demo&&!studio&&p?.extendedDamage?Math.min(1,p.dazed/1.2):0);}
-  if(effectsActive){sound.update(cars,camera,dt,state==='wrecked',{id:demo||scoreSpectating()?director.followed:cars[0]?.id??0,view:demo||scoreSpectating()?director.activeView:drivingCamera==='dashboard'?'hood':drivingCamera},(from,to)=>cameraObstruction(physics,from,to,undefined,true));if(vehicleFire)sound.thermal(vehicleFire.audio,vehicleFire.bursts);}
+  if(effectsActive){sound.update(cars,camera,dt,state==='wrecked',{id:demo||scoreSpectating()?director.followed:cars[0]?.id??0,view:demo||scoreSpectating()?director.activeView:drivingCamera==='dashboard'?'hood':drivingCamera,...(splitLaid&&cars[1]?{second:{id:cars[1].id,place:splitPlace}}:{})},(from,to)=>cameraObstruction(physics,from,to,undefined,true));if(vehicleFire)sound.thermal(vehicleFire.audio,vehicleFire.bursts);}
   if(activeVenue===quarryVenue)quarry.update(camera);
   waypointMarkers??=new WaypointMarkers(scene);waypointMarkers.update(waypointRace,demo||scoreSpectating()?director.followed:online?.active?online.network.id:0,!studio&&mode==='race'&&['playing','countdown','paused','result'].includes(state),activeVenue.course.height);
   if(waypointRace)activeVenue.checkpoint.visible=false;
@@ -2959,7 +3064,7 @@ function frame(now: number) {
     activeVenue.checkpoint.rotation.y=Math.atan2(ahead.x-p.x,ahead.z-p.z);
   }
   // Distant cars resync their batched parts every 2nd or 4th frame while driving (SYNC_LOD); everything else every frame.
-  syncFrame++;{const live=!studio&&['playing','countdown'].includes(state);for(const car of cars)if(!live||syncDue(syncFrame,car.id,syncInterval(car.current.distanceTo(camera.position))))car.syncDrawBatch();}
+  syncFrame++;{const live=!studio&&['playing','countdown'].includes(state);for(const car of cars)if(!live||syncDue(syncFrame,car.id,syncInterval(viewDistance(car))))car.syncDrawBatch();}
   renderer.info.reset();
   if (staticShadows) {
     for (const car of cars) staticShadows.bindReceivers(car.root);
@@ -2969,15 +3074,17 @@ function frame(now: number) {
   renderer.shadowMap.needsUpdate = true;
   // On medium the sun's shadow has no map (the shaders sample an empty texel, not a 2048² one) and no strength.
   if(quarry){const sun=quarry.sun.shadow;sun.autoUpdate=shadowsLive;if(!shadowsLive){sun.needsUpdate=false;if(sun.map){sun.map.dispose();sun.map=null;}if(sun.intensity!==0){shadowStrength=sun.intensity;sun.intensity=0;}}}
+  applySplitLayout();if(splitLaid)splitTop();
   updateHeatHaze();
   updateLensRain(dt);
   lampBloom.enabled = !bloomOff && bloomWanted(adaptiveGraphics.quality, !!online?.active, eventLighting);
   composer.render();
+  if(splitLaid)renderPlayerTwo();
   studio?.capture(canvas);
   hudTime += dt;
   if (hudTime > 0.12) {
     hudTime = 0;
-    updateHud();
+    updateHud();if(splitRun)updateP2Hud();
   }
   if (
     benchmarkStart &&
@@ -3011,6 +3118,7 @@ addEventListener('keydown', (e) => {
     (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)||Object.values(drivingControls.keys).some(binding=>binding.includes(e.code)))
   )
     e.preventDefault();
+  if(splitRun&&['playing','countdown'].includes(state)&&([...SPLIT.handbrake,...SPLIT.recover] as string[]).includes(e.code))e.preventDefault();
   if (e.repeat) return;
   if (e.code === 'Escape') {
     state === 'paused' || state === 'inspect' ? resume() : pause();
@@ -3025,6 +3133,7 @@ addEventListener('keydown', (e) => {
   if(e.code==='KeyH'&&!demo&&state==='playing'&&!e.repeat&&cars[0]){if(sound.clip('horn-stuck',cars[0].current,HONK.volume,HONK.length))honks++;}
   if (e.code === 'KeyC') {if(demo)director.cycleView();else cycleDrivingCamera();}
   if (!demo && e.code === 'KeyR' && state === 'playing') recover();
+  if(splitRun&&!demo&&(SPLIT.recover as readonly string[]).includes(e.code)&&state==='playing')recover(cars[1]);
   if(!demo&&e.code===EXTINGUISHER.key&&state==='playing'&&!Object.values(drivingControls.keys).some(binding=>binding.includes(e.code))){const p=cars[0];
     if(p.extinguish()){if(!sound.clip('extinguisher',p.current,.75,1.3))sound.shot('impact-light',p.current,.35,{rate:2.4,delay:0,duration:.45,lowpass:7000});toast(`FIRE OUT · ${p.extinguishers} EXTINGUISHER${p.extinguishers===1?'':'S'} LEFT`,1.8,2);}
     else if(p.extendedDamage&&p.burning&&p.extinguishers<=0)toast('EXTINGUISHER EMPTY',1.2,1);}
@@ -3064,6 +3173,7 @@ addEventListener('resize', () => {
   composer.setSize(innerWidth, innerHeight);
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
+  applySplitLayout(true);
 });
 canvas.addEventListener('webglcontextlost', (e) => {
   e.preventDefault();
@@ -3160,6 +3270,9 @@ async function boot() {
     connectOnline,leaveOnline,
     startOnline:(m:Mode)=>online.network.start(m),
     get pursuit(){return pursuit?.snapshot()??null;},
+    /** QA: draw the running event split or whole (frame-cost A/B on the same scene; the autopilot should drive). */
+    splitView:(on:boolean)=>{splitRun=on;},
+    get split(){return {run:splitRun,laid:splitLaid,seats:{...seats},camera:splitCamera.camera.position.toArray(),zoom:camera.zoom,aspect:camera.aspect,secondView:{...splitCost},heard:cars.slice(0,2).map(c=>{const l=sound.loops.get(c.id)?.values().next().value;return l?+Math.hypot(l.pan.positionX.value-camera.position.x,l.pan.positionY.value-camera.position.y,l.pan.positionZ.value-camera.position.z).toFixed(1):null;}),inputs:cars.slice(0,2).map(c=>({throttle:c.input?.throttle,steer:c.input?.steer,brake:c.input?.brake})),keys:{p1:splitMaps.p1.keys.throttle,p2:splitMaps.p2.keys.throttle}};},
     get state() {
       return state;
     },
