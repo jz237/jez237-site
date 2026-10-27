@@ -510,7 +510,8 @@ export class BettaSwim {
       if (!perch) this.restY = water.sand + REST_HEIGHT;
       // (Down on it; or, on the sand, given up waiting for that. One it cannot get to on the
       // furnishings, it gives up.)
-      const down = perch ? perch.near && Math.hypot(x - perch.at[0], z - perch.at[2]) < 0.015 && Math.abs(y - perch.at[1]) < 0.02 : y - this.restY < 0.004;
+      // (On a furnishing, near enough: its body, held off the wood, may keep it a little short.)
+      const down = perch ? perch.near && Math.hypot(x - perch.at[0], y - perch.at[1], z - perch.at[2]) < 0.035 : y - this.restY < 0.004;
       if (!this.restSettled && (down || (!perch && this.behaviorClock > 20))) { this.restSettled = true; this.holdClock = 0; }
       if (!this.restSettled && perch && this.behaviorClock > 20) { this.endBehavior(env); return; }
       if (this.restSettled) this.holdClock += dt;
