@@ -1,3 +1,4 @@
+import {restoreCoupeAssetLoadBytes} from './coupe-asset-load-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readBaldTyresPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreBaldTyresBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreCoupeAssetLoadBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readBaldTyresPrevious(file);
 }
 export function verifyBaldTyresRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'06da7778ca4d0e5a5d27b532adaf074763a6f07b');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreCoupeAssetLoadBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreBaldTyresBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the BaldTyres release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreCoupeAssetLoadBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the BaldTyres release');
  assert.equal(manifest.previousFixtureCount,9343);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,9343);
 }

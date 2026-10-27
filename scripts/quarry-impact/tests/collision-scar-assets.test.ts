@@ -15,7 +15,7 @@ function same(a:ReturnType<typeof shape>,b:ReturnType<typeof shape>){
  assert.equal(a.length,b.length);for(let i=0;i<a.length;i++){assert.equal(a[i].visible,b[i].visible);for(const field of ['p','wear','paint']as const)for(let j=0;j<a[i][field].length;j++)assert.ok(Math.abs(a[i][field][j]-b[i][field][j])<2e-5,`panel ${i} ${field} ${j}`);}
 }
 test('every real car has visible cosmetic dents, intact mechanics, repair and exact compressed replay backseeks',async()=>{
- await R.init();const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|shuttle|regent|trail|kite|morrow|wheel-machining)\.glb$/.exec(String(url))![1]);
+ await R.init();const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/([^/]+)\.glb$/.exec(String(url))![1]);
  try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
  for(const kind of CAR_KINDS){
   const scene=new T.Scene(),world=new R.World({x:0,y:0,z:0}),setup=stockSetup(kind);

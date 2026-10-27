@@ -1,9 +1,11 @@
-import {restoreGarageBytes} from './garage-invariants';
+import {importDeep} from './deep-import';
+// History leaves head a chain of hundreds of invariants modules: imported deepest first, or linking overflows the stack.
+const {restoreGarageBytes}=await importDeep<typeof import('./garage-invariants')>(new URL('./garage-invariants.ts',import.meta.url));
 import test from 'node:test';
 import fs from 'node:fs';
 import {createHash} from 'node:crypto';
-import {restoreWreckBytes} from './wreck-invariants';
-import {restoreFireBytes} from './fire-invariants';
+const {restoreWreckBytes}=await importDeep<typeof import('./wreck-invariants')>(new URL('./wreck-invariants.ts',import.meta.url));
+const {restoreFireBytes}=await importDeep<typeof import('./fire-invariants')>(new URL('./fire-invariants.ts',import.meta.url));
 import assert from 'node:assert/strict';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
@@ -41,7 +43,7 @@ test('skin and window use the same metre-scale deformation across different mesh
 });
 
 test('actual three-car wrecks bend skin, structure and screens, repair exactly and replay identically',async()=>{
- await R.init();const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|shuttle|regent|trail|kite|morrow|wheel-machining)\.glb$/.exec(String(url))![1]);
+ await R.init();const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/([^/]+)\.glb$/.exec(String(url))![1]);
  try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
  for(const kind of ['coupe','sedan','hatch']as const){const world=new R.World({x:0,y:-9.81,z:0}),car=new Vehicle(0,kind,0xffffff,new T.Scene(),world,{emit(){},mark(){},detach(p:T.Mesh){p.visible=false;}}as any);car.place(0,0,0);
   const meshes=[...car.panels,...car.glass],capture=()=>meshes.map(p=>({p:new Float32Array(p.geometry.attributes.position.array),n:new Float32Array(p.geometry.attributes.normal.array),visible:p.visible}));const intact=capture();

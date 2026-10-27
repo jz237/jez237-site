@@ -1,16 +1,18 @@
-import {restoreCoupeBytes} from './coupe-realism-invariants';
 import test from 'node:test';
-import {historicGripBytes} from './circuit-grip-invariants';
 import assert from 'node:assert/strict';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { describeCar, currentPhysicsInvariants, loadCarWithoutImages, readProject, sha256 } from '../tools/car-asset-audit';
 import { loadCars, templates } from '../src/assets';
-import { assertHeadwallEvolution, headwallBaseline } from './quarry-headwall-invariants';
 import { quarryColliderLayout } from '../src/quarry-layout';
 import { Vehicle } from '../src/vehicle';
 import type { Dent } from '../multiplayer/protocol';
+import {importDeep} from './deep-import';
+// These history leaves head a chain of hundreds of invariants modules: imported deepest first, or linking overflows the stack.
+const {restoreCoupeBytes}=await importDeep<typeof import('./coupe-realism-invariants')>(new URL('./coupe-realism-invariants.ts',import.meta.url));
+const {historicGripBytes}=await importDeep<typeof import('./circuit-grip-invariants')>(new URL('./circuit-grip-invariants.ts',import.meta.url));
+const {assertHeadwallEvolution,headwallBaseline}=await importDeep<typeof import('./quarry-headwall-invariants')>(new URL('./quarry-headwall-invariants.ts',import.meta.url));
 
 const realismBefore=JSON.parse(readProject('tests/fixtures/coupe-realism-before.json').toString());
 const newPanels=new Set(['panel_bumper_grille','panel_bumper_intake_surround','panel_lamp_head_L','panel_lamp_head_R','panel_lamp_tail_L','panel_lamp_tail_R']);
@@ -89,7 +91,7 @@ async function productionTemplates(){
   if(!prepared)prepared=(async()=>{
     const original=GLTFLoader.prototype.loadAsync;
     GLTFLoader.prototype.loadAsync=async url=>{
-      const match=/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url));assert.ok(match);return loadCarWithoutImages(match[1]);
+      const match=/\/([^/]+)\.glb$/.exec(String(url));assert.ok(match);return loadCarWithoutImages(match[1]);
     };
     try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
     await R.init();

@@ -35,7 +35,7 @@ function harness(state='menu'){
  let pads:readonly(Pad|null)[]=[pad()],time=0;
  const count=(name:string)=>calls[name]=(calls[name]??0)+1;
  const c:any={state,activeTimeTrial:null,timeTrialOpen:false,resumeState:'playing',preparingEvent:false,studio:null,closeReplayLibrary:null,clubOpen:false,eventSetupOpen:false,careerOpen:false,careerRun:false,openCareer(){},profileOpen:false,garageOpen:false,activeChallenge:null,online:null,demo:false,demoHudHidden:false,drivingCamera:'chase',nextDrivingCamera,DRIVING_CAMERA_LABELS,
-  sound:{ctx:{state:'running'}},ui,keys:new Set(),testInput:null,cars:[{speed:0}],drivingControls:defaultControls(),selectedPad,drivingInput,drivingButtons,controllerInput:new ControllerInput(),controllerHelp:{hidden:true,textContent:''},navigator:{getGamepads:()=>pads},
+  sound:{ctx:{state:'running'}},ui,keys:new Set(),testInput:null,cars:[{speed:0}],drivingControls:defaultControls(),selectedPad,drivingInput,drivingButtons,touchDrive:{active:false},controllerInput:new ControllerInput(),controllerHelp:{hidden:true,textContent:''},navigator:{getGamepads:()=>pads},
   controllerNavigation:{sync(context:NavigationContext|null){navigation.context=context;},handle(command:string){navigation.handled.push(command);const context=navigation.context;if(command==='back')context?.back?.();else if(command==='accept'&&context?.initial)(context.root as unknown as Node).querySelector(context.initial)?.click();}},
   pause(){count('pause');c.resumeState=c.state;c.state='paused';const overlay=ui.add('#overlay');overlay.add('#resume').onclick=()=>c.resume();},
   resume(){count('resume');c.state=c.resumeState;ui.children.delete('#overlay');},recover(){count('recover');},toast(){count('toast');},director:{cycleView(){count('camera');}},

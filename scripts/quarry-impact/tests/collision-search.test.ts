@@ -41,7 +41,7 @@ function referenceMark(panels:readonly T.Mesh[],contact:T.Vector3,direction:T.Ve
  return marked;
 }
 
-await R.init();const load=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url))![1]);try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=load;}
+await R.init();const load=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/([^/]+)\.glb$/.exec(String(url))![1]);try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=load;}
 const bytes=(a:ArrayBufferView)=>Buffer.from(a.buffer,a.byteOffset,a.byteLength);
 function same(a:Vehicle,b:Vehicle){
  a.panels.forEach((p,i)=>{const q=b.panels[i];assert.equal(p.visible,q.visible);for(const key of Object.keys(p.geometry.attributes))assert.deepEqual(bytes(p.geometry.attributes[key].array),bytes(q.geometry.attributes[key].array),a.kind+' '+p.name+' '+key);assert.deepEqual(p.geometry.boundingBox,q.geometry.boundingBox);assert.deepEqual(p.geometry.boundingSphere,q.geometry.boundingSphere);});

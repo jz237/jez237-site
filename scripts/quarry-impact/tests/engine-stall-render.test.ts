@@ -13,7 +13,7 @@ import {ReplayScene,captureReplayFrame} from '../src/replay-scene';
 import {Sound} from '../src/audio';
 import {classicEngineVoice} from '../src/classic-vehicle-specs';
 await R.init();const originalLoad=GLTFLoader.prototype.loadAsync;
-try{GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url))![1]);await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=originalLoad;}
+try{GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/([^/]+)\.glb$/.exec(String(url))![1]);await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=originalLoad;}
 const zero={x:0,y:0,z:0},fx={emit(){},mark(){},detach(m:T.Mesh){m.visible=false;},reset(){}} as any;
 const near=(a:number,b:number)=>assert.ok(Math.abs(a-b)<1e-5,`${a} != ${b}`);
 function pose(c:Vehicle){c.place(0,0,0);c.render(1);c.root.updateMatrixWorld(true);}

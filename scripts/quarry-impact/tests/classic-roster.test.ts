@@ -3,7 +3,7 @@ import test from 'node:test';import assert from 'node:assert/strict';import * as
 import {loadCarWithoutImages} from '../tools/car-asset-audit';import {loadCars,templates} from '../src/assets';import {Vehicle} from '../src/vehicle';
 import {CAR_KINDS,DEFINITIONS,isCarKind} from '../src/rules';import {CLASSIC_VEHICLES,classicWheelAnchors,classicEngineVoice} from '../src/classic-vehicle-specs';import {readGarage,stockSetup,exportSetup,importSetup} from '../src/garage';
 import {createVehiclePhysics,stepVehiclePhysics,vehicleSpecification} from '../src/vehicle-physics';import {freshComponents,applyComponentImpact} from '../src/component-damage';import {ReplayRecorder,replayFile,readReplayFile,REPLAY_STRIDE} from '../src/replay-data';import {demoCarKind} from '../src/demo-session';import {verifyClassicRosterRevision} from './classic-roster-invariants';
-await R.init();const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url))![1]);try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
+await R.init();const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/([^/]+)\.glb$/.exec(String(url))![1]);try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
 const fx={emit(){},mark(){},detach(m:T.Mesh){m.visible=false;},reset(){}}as any;
 const hashes=(car:Vehicle)=>car.panels.map(p=>Array.from(p.geometry.attributes.position.array));
 test('the eleven-car roster is validated and existing garage saves retain upgrades while new cars receive factory defaults',()=>{

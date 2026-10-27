@@ -17,7 +17,7 @@ test('packed normals and bounds exactly match the installed Three algorithms acr
 });
 
 test('historical packed-normal release: all eleven real vehicles preserve every dent, welded normal, scrape, paint value and repair against the frozen release',async()=>{
- await R.init();const load=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url))![1]);try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=load;}
+ await R.init();const load=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/([^/]+)\.glb$/.exec(String(url))![1]);try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=load;}
  for(const kind of CAR_KINDS){
   const worlds=[new R.World({x:0,y:0,z:0}),new R.World({x:0,y:0,z:0})],setup=stockSetup(kind),cars=worlds.map(w=>new Vehicle(0,kind,setup.paint,new T.Scene(),w,{emit(){},mark(){},detach(){}}as any,setup));
   const compare=()=>{for(let i=0;i<cars[0].panels.length;i++){const a=cars[0].panels[i],b=cars[1].panels[i];for(const name of['position','normal','impactWear','impactAxis','transferPaint'])assert.deepEqual(bytes(a.geometry.attributes[name].array),bytes(b.geometry.attributes[name].array),kind+' '+a.name+' '+name);assert.deepEqual(a.geometry.boundingBox,b.geometry.boundingBox);assert.deepEqual(a.geometry.boundingSphere,b.geometry.boundingSphere);}};
