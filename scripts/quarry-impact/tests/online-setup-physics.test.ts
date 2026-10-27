@@ -14,7 +14,7 @@ import {ImpactAdjudicator,type ImpactContact} from '../src/impact-adjudication';
 import {vehicleContact,vehicleContactManifold} from '../src/vehicle-contact';
 import {OnlineView} from '../src/online-view';
 await R.init();
-const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url))![1]);
+const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/([^/]+)\.glb$/.exec(String(url))![1]);
 try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
 const fx={emit(){},mark(){},detach(m:T.Mesh){m.visible=false;},reset(){}} as any;
 const humans=new Set([0,1,2,3,4,5,6,7]);

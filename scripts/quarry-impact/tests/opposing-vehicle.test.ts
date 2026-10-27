@@ -25,7 +25,7 @@ let initialized:Promise<void>|undefined;
 function init(){return initialized??=(async()=>{
  await R.init();const original=GLTFLoader.prototype.loadAsync;
  GLTFLoader.prototype.loadAsync=async url=>{
-  const match=/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url));
+  const match=/\/([^/]+)\.glb$/.exec(String(url));
   assert.ok(match,`Unexpected asset ${url}`);return loadCarWithoutImages(match[1]);
  };
  try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}

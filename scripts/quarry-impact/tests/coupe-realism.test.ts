@@ -1,4 +1,6 @@
-import {restoreWorkyardBytes} from './workyard-invariants';
+import {importDeep} from './deep-import';
+// History leaves head a chain of hundreds of invariants modules: imported deepest first, or linking overflows the stack.
+const {restoreWorkyardBytes}=await importDeep<typeof import('./workyard-invariants')>(new URL('./workyard-invariants.ts',import.meta.url));
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -12,7 +14,7 @@ import {Vehicle} from '../src/vehicle';
 import {westVergePlacements} from '../src/scenery-west-verge';
 import {landscapeHeight} from '../src/quarry-layout';
 import {trackPoint} from '../src/rules';
-import {restoreCoupeBytes} from './coupe-realism-invariants';
+const {restoreCoupeBytes}=await importDeep<typeof import('./coupe-realism-invariants')>(new URL('./coupe-realism-invariants.ts',import.meta.url));
 
 const before=JSON.parse(readProject('tests/fixtures/coupe-realism-before.json').toString());
 const hash=(b:Uint8Array)=>createHash('sha256').update(b).digest('hex');
@@ -45,7 +47,7 @@ test('front intake is an actual opening; the surrounding fascia still intercepts
 
 async function actualCar(){
   const original=GLTFLoader.prototype.loadAsync;
-  GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url))![1]);
+  GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/([^/]+)\.glb$/.exec(String(url))![1]);
   try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
   await R.init();const world=new R.World({x:0,y:-9.81,z:0});
   const car=new Vehicle(0,'coupe',0xb32618,new T.Scene(),world,{emit(){},mark(){},detach(p:T.Mesh){p.visible=false;}}as any);

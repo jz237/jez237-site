@@ -53,7 +53,7 @@ export function steeringAxis(raw:number,config:DrivingControls):number{
  const amount=Math.max(0,Math.min(1,(Math.abs(value)-config.deadzone)/(config.saturation-config.deadzone)));
  return Math.sign(value)*Math.pow(amount,config.curve)*(config.invert?-1:1);
 }
-export function drivingInput(config:DrivingControls,keys:ReadonlySet<string>,pads:readonly(Pad|null)[],speed:number,transmissionAvailable=true,assistsAvailable=true):Input{
+export function drivingInput(config:DrivingControls,keys:ReadonlySet<string>,pads:readonly(Pad|null)[],speed:number,transmissionAvailable=true,assistsAvailable=true,touch?:{steer:number;gas:number;reverse:number;handbrake:boolean}):Input{
  const held=(action:Action)=>config.keys[action].some(key=>keys.has(key));
  let up=held('shiftUp'),down=held('shiftDown'),clutch=Number(held('clutch'));
  let steer=Number(held('right'))-Number(held('left')),gas=Number(held('throttle')),reverse=Number(held('reverse')),handbrake=held('handbrake');
@@ -62,6 +62,8 @@ export function drivingInput(config:DrivingControls,keys:ReadonlySet<string>,pad
   const button=(index:number)=>{const value=bound(pad.buttons[index]?.value,0,1,0);return Math.max(0,(value-config.triggerDeadzone)/(1-config.triggerDeadzone));};
   gas=Math.max(gas,button(config.throttleButton));reverse=Math.max(reverse,button(config.brakeButton));handbrake ||= button(config.handbrakeButton)>.5;up ||= button(config.shiftUpButton)>.5;down ||= button(config.shiftDownButton)>.5;clutch=Math.max(clutch,button(config.clutchButton));
  }
+ // On-screen touch controls: a thumb on the steering pad wins, pedals add to whatever else is pressed.
+ if(touch){if(touch.steer!==0)steer=touch.steer;gas=Math.max(gas,touch.gas);reverse=Math.max(reverse,touch.reverse);handbrake ||= touch.handbrake;}
  const safeSpeed=Number.isFinite(speed)?speed:0;
  // Simultaneous pedals brake instead of unexpectedly reversing at a stop.
  const brake=reverse>0&&(safeSpeed>1||gas>0)?reverse:0;

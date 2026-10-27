@@ -6,7 +6,7 @@ import {Vehicle} from '../src/vehicle';import {CAR_KINDS} from '../src/rules';im
 import {dentGeometry} from '../src/wreck-geometry';
 import {Effects} from '../src/effects';import {withWreckBatch,queueWreckNormals,cancelWreckNormals} from '../src/wreck-batch';
 import {ReplayRecorder} from '../src/replay-data';import {ReplayScene,captureReplayFrame} from '../src/replay-scene';
-await R.init();const load=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url))![1]);try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=load;}
+await R.init();const load=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/([^/]+)\.glb$/.exec(String(url))![1]);try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=load;}
 const fx={emit(){},mark(){},detach(m:T.Mesh){m.visible=false;}}as any;
 const bytes=(a:ArrayBufferView)=>Buffer.from(a.buffer,a.byteOffset,a.byteLength);
 function same(a:Vehicle,b:Vehicle){

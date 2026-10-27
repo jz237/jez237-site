@@ -51,7 +51,7 @@ import {SessionTelemetry} from '../src/session-telemetry';
 let initialized:Promise<void>|undefined;
 function init(){return initialized??=(async()=>{
  await R.init();const original=GLTFLoader.prototype.loadAsync;
- GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|shuttle|regent|trail|wheel-machining)\.glb$/.exec(String(url))![1]);
+ GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/([^/]+)\.glb$/.exec(String(url))![1]);
  try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
 })();}
 /** Actual prepared Vehicle objects and current controllers; only GPU, sound and

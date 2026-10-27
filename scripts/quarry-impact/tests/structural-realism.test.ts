@@ -1,4 +1,6 @@
-import {restoreGarageBytes} from './garage-invariants';
+import {importDeep} from './deep-import';
+// History leaves head a chain of hundreds of invariants modules: imported deepest first, or linking overflows the stack.
+const {restoreGarageBytes}=await importDeep<typeof import('./garage-invariants')>(new URL('./garage-invariants.ts',import.meta.url));
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -12,14 +14,14 @@ import {Vehicle} from '../src/vehicle';
 import {VehicleSurface} from '../src/vehicle-surface';
 import {GroundEvidence} from '../src/ground-evidence';
 import {prepareWreckGeometry,dentGeometry,repairWreckGeometry} from '../src/wreck-geometry';
-import {restoreStructuralBytes} from './structural-realism-invariants';
-import {restoreReferenceBytes} from './reference-invariants';
+const {restoreStructuralBytes}=await importDeep<typeof import('./structural-realism-invariants')>(new URL('./structural-realism-invariants.ts',import.meta.url));
+const {restoreReferenceBytes}=await importDeep<typeof import('./reference-invariants')>(new URL('./reference-invariants.ts',import.meta.url));
 await R.init();
 const read=(p:string)=>fs.readFileSync(new URL('../'+p,import.meta.url));
 const hash=(b:Uint8Array)=>createHash('sha256').update(b).digest('hex');
 let loaded=false;
 async function car(kind:'coupe'|'sedan'|'hatch'='coupe'){
- if(!loaded){const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url))![1]);try{await loadCars(()=>{});loaded=true;}finally{GLTFLoader.prototype.loadAsync=original;}}
+ if(!loaded){const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/([^/]+)\.glb$/.exec(String(url))![1]);try{await loadCars(()=>{});loaded=true;}finally{GLTFLoader.prototype.loadAsync=original;}}
  const world=new R.World({x:0,y:-9.81,z:0});world.createCollider(R.ColliderDesc.cuboid(1000,.1,1000).setTranslation(0,-.1,0));
  const c=new Vehicle(0,kind,0x1247cc,new T.Scene(),world,{emit(){},mark(){},detach(p:T.Mesh){p.visible=false;}}as any);c.place(0,0,0);return{c,world,close(){c.dispose();world.free();}};
 }

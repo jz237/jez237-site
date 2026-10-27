@@ -22,7 +22,7 @@ import {VehicleThermalState} from '../src/vehicle-thermal-state';
 import {VehicleFire} from '../src/vehicle-fire';
 
 await R.init();const original=GLTFLoader.prototype.loadAsync;
-GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/(coupe|sedan|hatch|muscle|wagon|utility|compact|van|tern|marten|buggy|wheel-machining)\.glb$/.exec(String(url))![1]);
+GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/([^/]+)\.glb$/.exec(String(url))![1]);
 try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
 const fx={emit(){},mark(){},detach(m:T.Mesh){m.visible=false;}}as any;
 const key=(p:T.Vector3)=>p.toArray().map(x=>x.toFixed(6)).join(',');
