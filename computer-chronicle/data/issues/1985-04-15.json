@@ -1,0 +1,397 @@
+{
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "visualProfile": {
+    "tone": "Bomber crews and bargain computers",
+    "motifs": [
+      "B-17 halftone",
+      "disk games",
+      "low-cost modems"
+    ],
+    "layout": "Dense warm newspaper with red and blue section headers"
+  },
+  "layoutPlan": {
+    "leadPlacement": "B-17 campaign gaming dominates; bargain-computer previews flank it",
+    "secondaryRail": "Commodore compatibility, VIC word processing and budget modems",
+    "archiveNavigation": "Weekly archive and previous/next controls"
+  },
+  "currentDate": "2026-10-27",
+  "historicDate": "1985-04-15",
+  "displayDate": "Week of April 15-21, 1985",
+  "edition": "Issue 142 - Weekly 1985 Computer & Culture Chronicle",
+  "sources": [
+    {
+      "title": "COMPUTE! issue 59, April 1985: full issue OCR (Halfhill pp.25–33; reviews pp.61–84; advertisements)",
+      "url": "https://archive.org/stream/1985-04-compute-magazine/Compute_Issue_059_1985_Apr_djvu.txt",
+      "date": "1985-04"
+    },
+    {
+      "title": "Arlan R. Levitan, Telecomputing Today: Telecomputing To The Rescue, COMPUTE! p.95",
+      "url": "https://www.atarimagazines.com/compute/issue59/telecomputing_today.php",
+      "date": "1985-04"
+    },
+    {
+      "title": "UK Hansard: Copyright (Computer Software) Amendment Bill, HC vol.77 cols.554–561",
+      "url": "https://api.parliament.uk/historic-hansard/commons/1985/apr/19/copyright-computer-software-amendment",
+      "date": "1985-04-19"
+    },
+    {
+      "title": "Billboard vol.97 no.16, Top Rock Tracks chart (original issue PDF)",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-04-20.pdf",
+      "date": "1985-04-20"
+    },
+    {
+      "title": "The Numbers: Weekend Domestic Box Office April 19, 1985 (retrospective database)",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/04/19",
+      "date": "1985-04-19/1985-04-21"
+    },
+    {
+      "title": "Los Angeles Times: Damage to Shuttle Worst in 16 Missions",
+      "url": "https://www.latimes.com/archives/la-xpm-1985-04-21-mn-13130-story.html",
+      "date": "1985-04-21"
+    }
+  ],
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 142 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of April 15-21, 1985",
+    "price": "75 cents"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-04-15.jpg",
+    "alt": "Vintage Computer Chronicle front page for April 15-21, 1985, with B-17 gaming and software copyright headlines",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "From the flight line to the modem jack, home computing puts bigger choices on a smaller budget.",
+  "morningLine": "A bomber crew needs a captain; software copyright reaches a Commons vote; new machines promise more for less.",
+  "lead": {
+    "headline": "Fifty Mission Crush puts the B-17 campaign on home computers",
+    "dek": "SSI trades arcade spectacle for the fortunes of a bomber crew in April’s simulation review.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      0
+    ],
+    "body": [
+      "A home-computer flight need not be a test of reflexes. Strategic Simulations’ Fifty Mission Crush makes the player responsible for an Eighth Air Force B-17 and the men aboard it. James V. Trunzo’s April COMPUTE! review finds its pull in a campaign of decisions and consequences rather than lavish graphics.",
+      "Operating from Britain, the crew flies against targets in Germany, France and the Netherlands. Fuel competes with bomb load; altitude, formation and cloud cover shape the prospects of a mission. Gunners must be assigned, and an abort can be wiser than pressing on with a damaged aircraft. Damage can even keep the bombs from leaving the bay.",
+      "The ambition is fifty missions, but individual sorties need not consume an evening. Trunzo reports flights as short as five minutes and seldom longer than fifteen, with the campaign saved after each mission. Menus and a concise booklet help make keyboard command approachable. The review calls the game challenging and addictive, while finding its graphics functional rather than spectacular.",
+      "Listed at $39.95, the simulation requires an Atari with at least 40K and BASIC, an Apple II-series machine with at least 48K, or a Commodore 64; all require a disk drive. This is an April review selection, not a claim that the game first reached shops this week."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Commons passes software-copyright bill at third reading",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        2
+      ],
+      "body": [
+        "The House of Commons gave William Powell’s Copyright (Computer Software) Amendment Bill its third reading and passed it on April 19. The proposal would apply the Copyright Act 1956 to a computer program as to a literary work. Commons passage is a parliamentary step, not Royal Assent or final enactment.",
+        "Members debated commercial copying, search warrants and penalties as software became a larger business. John Butcher cited provisional computer-services turnover of £2,120 million in 1984, against £1,750 million in 1983. An estimate of nearly £150 million in annual piracy losses was an industry claim repeated in debate, not an independently audited total.",
+        "The Federation Against Software Theft’s case joined legal remedies to technical deterrents. As quoted by Andrew Hunter, its position acknowledged that no technical method alone would stop a determined thief, and warned against protection that imposed unacceptable costs or reduced value for legitimate users."
+      ]
+    },
+    {
+      "headline": "Atari promises a mouse-and-window computer for $599",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ],
+      "body": [
+        "Atari’s new price challenge fills the April magazine desk: an announced $599 520ST with 512K and an 8MHz Motorola 68000. Tom R. Halfhill’s COMPUTE! preview reports the January Winter CES promises, including a proposed 128K 130ST at $399. Those figures are computer prices, not complete monitor-and-drive packages.",
+        "Digital Research GEM brings icons, windows, drop-down menus and a two-button mouse. MIDI, serial and parallel interfaces suggest uses from music to printing, while the preview lists color and high-resolution monochrome display modes. Atari projected second-quarter availability; preproduction specifications and prices are promises, not evidence of retail delivery."
+      ]
+    },
+    {
+      "headline": "Commodore 128 promises three ways to preserve a software library",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ],
+      "body": [
+        "Commodore’s answer rests on keeping yesterday’s disks useful. April’s COMPUTE! preview describes three personalities: C64 compatibility, native 128K operation under the 8502, and Z80A operation with CP/M 3.0 loaded from disk. Native BASIC 7.0 and 40/80-column choices expand the machine’s working range.",
+        "The magazine tried SpeedScript 3.0 in C64 mode, but did not claim an exhaustive compatibility trial. A numeric keypad and dedicated Help, Escape, Tab and display keys mark a more work-oriented keyboard. April or May was a projected introduction window; an under-$300 indication was not an officially announced CES price."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Atari 520ST / proposed 130ST",
+      "summary": "April preproduction preview: 68000/GEM, 512K/$599 and 128K/$399 announced configurations; projected Q2 availability, not verified retail offers.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Commodore 128",
+      "summary": "Three-mode compatibility preview; April/May projection, under-$300 estimate, not a confirmed launch.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "EasyPath",
+      "detail": "Richard Mansfield review, pp.82–84: Polygon Software, $100; DOS utility gives applications access to data across directories and supplies EPFILES search, RAM-disk/piping support. Reviewer notes powerful but initially confusing options.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "name": "Lotus 1-2-3 for IBM PCjr",
+      "detail": "Donald B. Trivette April review, p.63 onward: two ROM cartridges plus help/utilities disk for Enhanced PCjr; review says announced July 1984 and available December, so not new this week. Approximately 39,500 bytes worksheet space, or 45,700 bypassing Lotus Access System.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial shelf selections, not sales rankings",
+      "items": [
+        "Fifty Mission Crush — April review; $39.95",
+        "Winnie the Pooh in the Hundred Acre Wood — April review; $39.95",
+        "Ballblazer — retailer advertises C64 version at $21.95 sale",
+        "Rescue on Fractalus! — retailer advertises C64 version at $21.95 sale",
+        "Empire III: Armageddon — continuing April review selection; $32.95"
+      ],
+      "confidence": "same-month; advertisements establish offers, not delivery",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "label": "Top 5 Movies — April 19-21 weekend",
+      "items": [
+        "1. Police Academy 2: Their First Assignment",
+        "2. Moving Violations",
+        "3. Ladyhawke",
+        "4. Mask",
+        "5. Desperately Seeking Susan"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-04-20",
+      "rank": 1,
+      "title": "Don't You (Forget About Me)",
+      "artist": "Simple Minds",
+      "confidence": "exact-date",
+      "song": "Don't You (Forget About Me)",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-04-20",
+      "rank": 2,
+      "title": "Don't Come Around Here No More",
+      "artist": "Tom Petty",
+      "confidence": "exact-date",
+      "song": "Don't Come Around Here No More",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-04-20",
+      "rank": 3,
+      "title": "Forever Man",
+      "artist": "Eric Clapton",
+      "confidence": "exact-date",
+      "song": "Forever Man",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-04-20",
+      "rank": 4,
+      "title": "That Was Yesterday",
+      "artist": "Foreigner",
+      "confidence": "exact-date",
+      "song": "That Was Yesterday",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-04-20",
+      "rank": 5,
+      "title": "Everybody Wants to Rule the World",
+      "artist": "Tears for Fears",
+      "confidence": "exact-date",
+      "song": "Everybody Wants to Rule the World",
+      "sourceRefs": [
+        3
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Panasonic KX-D401",
+      "price": "$99.95",
+      "note": "$99.95 retail quoted; 300 bps.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Panasonic KX-D402",
+      "price": "$299.95",
+      "note": "$299.95 retail quoted; 300/1200 bps.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Atari XM-301",
+      "price": "$49.95",
+      "note": "$49.95 announced; 300 bps.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Commodore 1660",
+      "price": "$29.95",
+      "note": "$29.95 quoted; 300 bps.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "MPP 1064",
+      "price": "$99.95",
+      "note": "$99.95 including smart terminal program for C64.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Epyx Fast Load",
+      "price": "C64",
+      "note": "C64 cartridge ad: $39.95 list/$24.95 sale; advertiser claims fivefold load/save/copy speed. Advertised claim, not benchmark.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "A Pooh adventure for young readers",
+      "summary": "April review by James V. Trunzo, p.84: Disney software through Sierra, C64 or Apple II with 48K and disk; $39.95. Recover and return scattered belongings; hints, maps and simplified input suit young readers. Review date is not release date.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "headline": "EasyPath crosses directory boundaries",
+      "summary": "Richard Mansfield review, pp.82–84: Polygon Software, $100; DOS utility gives applications access to data across directories and supplies EPFILES search, RAM-disk/piping support. Reviewer notes powerful but initially confusing options.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Fast Load on the cartridge shelf",
+    "summary": "A C64 retailer advertises Epyx Fast Load at $24.95 sale against $39.95 list. Its fivefold speed claim is advertising, not an independent benchmark.",
+    "tagline": "An advertised shortcut to disk time.",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "market": {
+    "headline": "The modem price umbrella starts to leak",
+    "summary": "Arlan R. Levitan’s April column links cheaper chip sets and consumer-brand competition to falling modem prices. Panasonic’s $99.95 300-bps KX-D401 and $299.95 1200-bps KX-D402 frame a market also courting Atari and Commodore owners at lower announced prices. These are period quoted prices, not a local stock check.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      1
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Discovery returns; NASA assesses heat-shield damage",
+    "summary": "Discovery landed at Kennedy on April 19 with Sen. Jake Garn and six crewmates. Tile loss damaged a wing flap and a tire burst after a brake locked; NASA was assessing possible schedule effects, not announcing a confirmed delay.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      5
+    ]
+  },
+  "bbsNote": {
+    "headline": "Cheap modems and faster Delphi access",
+    "summary": "April 1985 Levitan column covers January CES announcements and current service pricing; not an exact-week BBS event. Posts below are editorial source summaries, never purported surviving BBS messages.",
+    "posts": [
+      {
+        "topic": "Online travel rescue",
+        "platform": "Online Official Airlines Guide; service not named in anecdote",
+        "text": "Levitan recounts using a lap computer and acoustic cups at Detroit airport to find alternate flights after cancellation; the trip was to January CES, recounted in April."
+      },
+      {
+        "topic": "Faster access, metered time",
+        "platform": "Delphi",
+        "text": "Column reports 2400-bps access in 34 major cities at $5/hour extra, on top of $16/hour business or $6/hour nonprime service."
+      },
+      {
+        "topic": "Educational telecomputing",
+        "platform": "Atari / Control Data PLATO",
+        "text": "The Learning Phone cartridge announced at CES would provide PLATO access with high-resolution graphics; estimated cartridge price $30–$40, not confirmed retail availability."
+      }
+    ],
+    "sourceRefs": [
+      1
+    ]
+  },
+  "curiosity": {
+    "headline": "A telephone with a modem inside",
+    "summary": "Panasonic’s KX-D4130 combines the desk phone and computer link for $199.95.",
+    "detail": "Levitan’s April column describes a built-in 300-bps modem, speakerphone and 24-button automatic dialer storing up to 30 digits per number; busy-number auto-redial is also described. RS-232-equipped computers can use the new Panasonic models. This is a CES product report, not proof of an April launch.",
+    "sourceRefs": [
+      1
+    ]
+  },
+  "gadgetWatch": {
+    "headline": "Panasonic combines speakerphone and 300-bps modem",
+    "summary": "KX-D4130 phone/modem at $199.95, reported in April COMPUTE! after Winter CES; 24-button dialer and handsfree speakerphone. Consumer-telephone crossover, not an exact-week announcement.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      1
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "April reviews and January CES previews supply month-level computing coverage; no invented exact-week launches.",
+      "Commons passage on April 19 is not enactment.",
+      "Hardware prices and shipping windows remain attributed projections.",
+      "Games are editorial selections, not a sales chart; retail advertisements do not prove delivery.",
+      "Billboard rock chart is dated April 20; film rankings cover April 19-21.",
+      "No sourced underground crew event: Underground Desk omitted."
+    ]
+  }
+}
