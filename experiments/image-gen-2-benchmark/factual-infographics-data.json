@@ -16093,5 +16093,155 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-27-factual-infographic-factual-infographic-magicicada-septende",
+    "title": "Factual infographic: Magicicada septendecim — Seventeen Years to Sing",
+    "tests": "All 188 factual archive entries scanned: no Magicicada/periodical-cicada/tymbal duplicate. Sources fetched before authoring. Restored scientific-plate exception follows explicit scheduled job; prominent internal sound anatomy retained.; archive_slot=2026-10-27T04:20; concept=magicicada-septendecim-tymbal-song; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: bizarre-insect-life",
+    "prompt": "Create a finished richly detailed natural-history scientific plate about Linnaeus’ 17-year cicada, Magicicada septendecim. Exact main title: “SEVENTEEN YEARS TO SING”; scientific subtitle “Magicicada septendecim”; secondary line “Linnaeus’ 17-year cicada”. This scheduled insect retains the restored scientific-plate exception: enormous whole-insect macro hero plus SEVEN substantial supporting biological panels, with at least three large biological close-ups/diagrams, mechanism sequence, habitat and scale context. Do not substitute a sparse artistic atlas or remove required studies. Use restrained fine rules and varied panel sizes around a dominant diagonal hero, not equal-sized dashboard cards. Render the plate itself directly, not a photograph of a poster, book, museum case or workbench.\n\nThe dominant hero is a complete ADULT MALE, oblique dorsolateral view perched on a slender deciduous twig: anatomically credible six jointed legs, distinct head/thorax/abdomen, short antennae, polished red compound eyes, black finely textured exoskeleton, orange thoracic areas behind eyes, two pairs of delicate transparent wings with orange branching veins. Show the wings held so the entire animal is readable; do not invent extra limbs or a locust body. A small ventral companion study reveals broad orange bands on the abdominal underside. Amber grazing light reveals veins, minute cuticular texture and softly reflective eyes against a cool ivory/slate field, with restrained rust-orange diagrams and leaf-green habitat accents. Naturalistic macro-photography detail with meticulous scientific ink annotation; detailed soft shadows, no gore or fantasy biology. Insect imagery and anatomy occupy most of the canvas, not prose.\n\nSeven supporting panels, each biologically substantial, in clear visual reading order with elegant readable short labels:\n1. Large internal sound-anatomy cutaway, the most prominent secondary illustration. Caption EXACTLY “Simplified male periodical-cicada sound anatomy”. A dorsolateral transparent anterior-abdominal study labels paired ridged “tymbals”, “tymbal muscles”, and the “hollow abdomen — may resonate”. Separate underside glimpse labels “tympana — hearing membranes”. Carefully distinguish producing sound from hearing it. Show only supported sound-organ relationships, simplified rather than claiming exact species-specific geometry; no invented lungs, bones, vertebrate ears or unrelated organs.\n2. High-magnification external close-up at the first abdominal segment just behind the hindwing attachment: “Tymbal — ridged sound membrane”. Show the membrane texture and the connection back to its location on the whole male with a precise leader.\n3. Three-step mechanism diagram, spacious within one supporting panel: “Muscle drives tymbal” → “Membrane vibrates” → “Airborne song”. Use a muscle/membrane schematic and delicate sound-wave marks; small qualifying note “Hollow abdomen may resonate”. No unsupported frequency, decibel reading, force number or claim that rubbing wings makes the song.\n4. Large head-and-ventral-abdomen diagnostic close-ups: red eyes and orange thoracic area, then broad orange underside bands. Brief labels only: “Red eyes”, “Orange thoracic patch”, “Broad orange abdominal bands”. Keep these as two views of the SAME species, not comparison species.\n5. Underground-to-adult life cycle with beautiful root/soil cross-section: root-feeding nymph, mature nymph ascending trunk, pale newly molted adult beside empty nymphal skin, dark mature adult. Label “Root-feeding nymph”, “Normally 17 years”, “Final molt”, “Adult”. Small sober note “Some emerge early or late”. No pupa, caterpillar, invented precise root depth, or claim of seventeen adult years.\n6. Reproductive continuation close-up: separately and clearly labeled ADULT FEMALE uses her ovipositor to place eggs in a twig; next a hatchling drops toward soil and rootlets. Labels “Eggs in living twigs”, “Hatchlings drop and burrow”. Integrate a small male/female branch duet with “Male call / Female wing flick”. Do not give the female male tymbal structures; no sensational human motives.\n7. Habitat, approximate scale and ecological context: a deciduous canopy over rooted soil, tiny chorus on high sunlit branches and a small bird silhouette as predator. Label “Eastern North America”, “Choruses in sunlit branches”, “Plant-fluid feeders; prey for wildlife”. Include approximately life-size adult silhouette beside a “1 cm” ruler and label “Approximate scale”; no exact species-length statistic or borrowed distribution map. A concise line “Mass emergence can overwhelm predators” is qualified rather than guaranteeing safety.\n\nMaintain clean hierarchy, useful spacious labels and precision leaders; dense illustrated biology rather than text walls. No URLs, citations, logos, watermarks, chart mockup, false anatomical measurements, or extra claims. Produce exactly one opaque finished image. Request medium quality and automatic size.",
+    "image": "images/2026-10-27-factual-infographic-factual-infographic-magicicada-septende.jpg",
+    "thumb": "thumbs/2026-10-27-factual-infographic-factual-infographic-magicicada-septende.webp",
+    "color": "#a89d81",
+    "date": "2026-10-27",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "magicicada-septendecim-tymbal-song",
+      "imageSha256": "7b12df4bd4658fb05f61fa10c8905ca77b07bff161352e8276d36d60cd016a44",
+      "imageDHash": "3ae22e96191898d2"
+    },
+    "factualInfographic": {
+      "topic": "How male Magicicada septendecim produce airborne songs with paired muscle-driven tymbals after a 17-year underground juvenile life",
+      "description": "Species-focused scientific plate of male tymbal sound production and periodical-cicada life history, with explicitly simplified internal sound anatomy.",
+      "sourceNote": "University of Connecticut species, behavior and general biology: https://cicadas.uconn.edu/species/m_septendecim/, https://cicadas.uconn.edu/behavior/, https://cicadas.uconn.edu/. Penn State Extension: https://extension.psu.edu/periodical-cicada. Verified identity, diagnostic morphology, approximate scale, life history, habitat, song and hearing organs; simplified internal sound anatomy, not measured dissection.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-27T08:22:40.057497+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "University of Connecticut",
+            "title": "Magicicada septendecim (L. 1758)",
+            "sourceType": "university",
+            "url": "https://cicadas.uconn.edu/species/m_septendecim/"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of Connecticut",
+            "title": "Periodical Cicada Behavior",
+            "sourceType": "university",
+            "url": "https://cicadas.uconn.edu/behavior/"
+          },
+          {
+            "id": "S3",
+            "publisher": "University of Connecticut",
+            "title": "General Periodical Cicada Information",
+            "sourceType": "university",
+            "url": "https://cicadas.uconn.edu/"
+          },
+          {
+            "id": "S4",
+            "publisher": "Penn State Extension",
+            "title": "Periodical Cicada",
+            "sourceType": "university",
+            "url": "https://extension.psu.edu/periodical-cicada"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Magicicada septendecim is Linnaeus’ 17-year cicada, a true bug in family Cicadidae.",
+            "sourceIds": [
+              "S1",
+              "S3",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Adults have black bodies, red to reddish-orange eyes, transparent wings with orange veins, and six legs; M. septendecim has broad orange bands on the abdominal underside and orange on the thorax behind each eye.",
+            "sourceIds": [
+              "S1",
+              "S3",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Adult periodical cicadas are about one and one-half inches long; a small approximately life-size silhouette and 1 cm ruler give approximate scale rather than a measured specimen.",
+            "sourceIds": [
+              "S4",
+              "S1"
+            ]
+          },
+          {
+            "claim": "Periodical cicadas occur in eastern North America; the 17-year species are generally northern, with overlap with southern 13-year species. Adults use living deciduous woody vegetation.",
+            "sourceIds": [
+              "S3",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Male periodical cicadas produce airborne songs using paired ridged membranes called tymbals on the first abdominal segment, driven by large muscles.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The male abdomen is hollow and may act as a resonating chamber; the internal sound-organ illustration is a simplified male periodical-cicada schematic, not a measured species dissection.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Both sexes hear using membranous tympana on the abdominal underside; tympana are hearing organs, distinct from sound-producing tymbals.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The mechanism sequence is muscle drives tymbal, membrane vibrates to produce airborne sound, and the hollow abdomen may resonate; arrows illustrate cause, not a measured oscillation frequency or displacement.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Male calling songs attract males and females to choruses, often in high sunlit branches; female Magicicada respond to male calls with timed wing flicks.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Nymphs live underground feeding on root fluids; M. septendecim normally has a 17-year life cycle, with occasional early or late stragglers.",
+            "sourceIds": [
+              "S1",
+              "S3",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Mature nymphs emerge, climb vegetation and molt into pale adults that subsequently darken; there is no pupal stage.",
+            "sourceIds": [
+              "S3",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Females insert eggs into living twigs with an ovipositor; hatchlings drop and burrow into soil to begin root feeding.",
+            "sourceIds": [
+              "S3",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Periodical cicadas feed on plant fluids and are eaten by birds and other animals; mass emergence can satiate predators, but does not guarantee survival of each cicada.",
+            "sourceIds": [
+              "S3",
+              "S4"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
