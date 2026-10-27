@@ -227,7 +227,7 @@ export class FinDynamics {
       this.wander += (this.wanderTo - this.wander) * (1 - Math.exp(-3 * dt));
       this.splay += (Math.max(brake, 0.5 * clamp(this.flick, 0, 1)) - this.splay) * (1 - Math.exp(-6 * dt));
       // The tip follows late (the streamer bends), and a slow wave runs down it.
-      const late = 1 - Math.exp(-6 * dt);
+      const late = 1 - Math.exp(-3.5 * dt);
       this.flickTip += (this.flick - this.flickTip) * late;
       this.splayTip += (this.splay - this.splayTip) * late;
       this.wanderTip += (this.wander - this.wanderTip) * late;
@@ -281,8 +281,8 @@ export class FinDynamics {
         const v = j / (h - 1), tip = v * v;
         const flick = this.flick + (this.flickTip - this.flick) * tip, splay = this.splay + (this.splayTip - this.splay) * tip;
         const wander = this.wander + (this.wanderTip - this.wander) * tip;
-        const angle = base + 0.34 + 0.4 * under * (0.7 + 0.6 * v) - 0.6 * flick - 0.3 * splay + 0.1 * wander
-          + (0.05 + 0.05 * under) * v * Math.sin(this.ripple - v * 4.5);
+        const angle = base + 0.34 + (0.12 + 0.4 * under) * (0.7 + 0.6 * v) - 0.12 - 0.6 * flick - 0.3 * splay + 0.1 * wander
+          + (0.16 + 0.08 * under) * v * Math.sin(this.ripple - v * 4.5);
         row[j * 4] = side * v * (0.08 + 0.2 * splay + 0.05 * wander);
         row[j * 4 + 1] = Math.cos(angle); row[j * 4 + 2] = Math.sin(angle);
       }
