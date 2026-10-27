@@ -261,7 +261,7 @@ export class FinDynamics {
       // Resting between runs of beats (the gait's pectoralPower), the fans hold their mean pose; at
       // hover a turn is the pectorals' work, one fin beating harder than the other.
       const tuck = state.tuck ?? 0, effort = state.pectoralEffort ?? state.effort ?? drive, beating = state.pectoralPower ?? 1,
-        power = (0.62 + 0.36 * effort + 0.05 * (state.pectoralScull ?? state.scull ?? 0)) * (1 - 0.25 * tuck) * beating
+        power = (0.62 + 0.36 * effort + 0.05 * (state.pectoralScull ?? state.scull ?? 0)) * (1 - 0.35 * tuck) * beating
           * (1 + 0.3 * side * clamp(turn, -1, 1) * (1 - effort));
       const cup = Math.max(0, Math.cos(beat));
       for (let j = 0; j < h; j++) {
