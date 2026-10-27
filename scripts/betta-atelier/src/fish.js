@@ -669,6 +669,8 @@ export function createBetta({ compact = false, textures = true } = {}) {
   let measured = false;
   const cycle = 32;
   const lipLocal = [0, 0, 0, 0], lipWorld = new T.Vector3(), contour = [0, 0, 0, 0];
+  // A host's solids for the fins to lie on (userData.solids), brought into the fish's own frame.
+  const toLocal = new T.Matrix4(), solidEnd = new T.Vector3(), finSolids = { data: new Float64Array(7 * 32), count: 0 };
   fish.userData = {
     ready: Promise.all([loaded, finLoaded, ...macroPending]),
     macroTextures,
@@ -809,6 +811,21 @@ export function createBetta({ compact = false, textures = true } = {}) {
         };
       }
       const relativeFlow = Math.hypot(...localFlow.map((v, i) => v - velocity[i]));
+      const solids = fish.userData.solids;
+      finSolids.count = 0;
+      if (solids) {
+        fish.updateMatrix();
+        toLocal.copy(fish.matrix).invert();
+        for (let k = 0; k < Math.min(solids.count, 32); k++) {
+          const from = solids.data, o = k * 7;
+          for (const end of [0, 3]) {
+            solidEnd.set(from[o + end], from[o + end + 1], from[o + end + 2]).applyMatrix4(toLocal);
+            finSolids.data[o + end] = solidEnd.x; finSolids.data[o + end + 1] = solidEnd.y; finSolids.data[o + end + 2] = solidEnd.z;
+          }
+          finSolids.data[o + 6] = from[o + 6];
+        }
+        finSolids.count = Math.min(solids.count, 32);
+      }
       if (dt > 0) {
         accelLocal.set((velocity[0] - lastVelocity.x) / dt, (velocity[1] - lastVelocity.y) / dt, (velocity[2] - lastVelocity.z) / dt);
         if (!measured) accelLocal.set(0, 0, 0);
@@ -848,10 +865,10 @@ export function createBetta({ compact = false, textures = true } = {}) {
       uniforms.uMouth.value = bodyMotion.mouth;
       uniforms.uGill.value = bodyMotion.gill;
       const state = {
-        body: bodyMotion, time: t, phase, pectoralPhase, pectoralPower, scull, tuck, pectoralEffort, pectoralScull, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value, clamp: display.clamp,
+        body: bodyMotion, time: t, mode, phase, pectoralPhase, pectoralPower, scull, tuck, pectoralEffort, pectoralScull, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value, clamp: display.clamp,
         billowPhase, wash, speed: relativeFlow / BODY_LENGTH, accel: accelLocal.toArray(), down: downLocal.toArray(),
         heading, angularVelocity, velocity, origin: fish.position.toArray(),
-        localHydrodynamics,
+        localHydrodynamics, solids: finSolids.count ? finSolids : null,
         strength: flowStrength, direction: water.direction, externalFlow: fish.userData.externalFlow,
         bodyRadius(x, y) {
           const pixelX = x / SCALE + 680;

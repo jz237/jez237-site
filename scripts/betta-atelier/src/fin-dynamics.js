@@ -47,7 +47,15 @@ const OPEN_STOPPED = [0.82, 0.8, 0.86], OPEN_UNDER_WAY = [0.5, 0.42, 0.7], OPENI
 /** Each fin's weight in water (its sag: Atelier units/s^2 down, pectorals none) and the share of
  *  the body's acceleration it and the water it carries resist (so it lags a start and swings on
  *  in a stop). */
-const WEIGHT = [1.6, 1.0, 1.6, 0, 0.5], INERTIA = 0.35;
+const WEIGHT = [0.8, 1.0, 1.6, 0, 0.5], INERTIA = 0.35;
+/** A broad fin is never a flat sheet: partly closed, its membrane gathers into pleats between the
+ *  rays (PLEAT: their lean at the margin, rad, per share of the fan closed; FOLDS: half-waves across
+ *  the fan), and the caudal's two lobes lean a little apart, a slow wander and the turn's lag
+ *  twisting them (TWIST, rad), so that seen edge-on it reads as a gathered, curving curtain. */
+const PLEAT = [0.22, 0.12, 0.16], FOLDS = [7, 6, 9], TWIST = 0.12;
+/** The dorsal's spread when the fish rests (laid down) and when it is alert (raised: turning, or
+ *  lifted now and then as it looks about, for DORSAL_LIFT s), and how fast it rises and lowers (1/s). */
+const DORSAL_REST = 0.32, DORSAL_ALERT = 0.98, DORSAL_LIFT = [0.6, 1.6], DORSAL_RISE = 3.5, DORSAL_FALL = 1.1;
 
 export class FinDynamics {
   constructor({ point, kind, side, columns = 29, rows = 17 }) {
@@ -145,6 +153,28 @@ export class FinDynamics {
     this.flickAt = 0.4 + 2 * draw(this);
     this.wander = this.wanderTo = 0;
     this.wanderAt = 0;
+    // (The ventral's tip follows its root a little late, so a flick bends the streamer along its
+    // length: flickTip, splayTip, wanderTip; ripple: a slow wave running down it, rad.)
+    this.flickTip = this.splayTip = this.wanderTip = this.ripple = 0;
+    // Each ray tip of a broad fin trembles on its own (tipPhase, rad, at tipRate Hz), the caudal's
+    // lobes twist (twist, rad, easing to twistTo) and the dorsal is raised now and then (liftAt,
+    // liftUntil s; turnLag: the turn, felt late).
+    this.tipPhase = new Float64Array(columns);
+    this.tipRate = new Float64Array(columns);
+    for (let i = 0; i < columns; i++) { this.tipPhase[i] = 2 * Math.PI * draw(this); this.tipRate[i] = 3 + 4 * draw(this); }
+    this.twist = this.twistTo = this.turnLag = 0;
+    this.twistAt = 0;
+    this.liftAt = 2 + 4 * draw(this);
+    this.liftUntil = 0;
+    // How far the fin reaches from its insertions' middle (with a margin for its bending), and the
+    // host's solids within that reach this frame (each: start, start to end, 1 / its length squared,
+    // radius), that it lies on.
+    let reach = 0;
+    const mid = [0, 1, 2].map((k) => this.roots.reduce((sum, x, i) => sum + (i % 3 === k ? x : 0), 0) / columns);
+    for (let n = 0; n < this.count; n++) reach = Math.max(reach, Math.hypot(this.rest[n * 3] - mid[0], this.rest[n * 3 + 1] - mid[1], this.rest[n * 3 + 2] - mid[2]));
+    this.reach = reach * 1.15 + 0.1;
+    this.touching = new Float64Array(8 * 32);
+    this.touchCount = 0;
   }
 
   /** What the fish's motion asks of the fins this frame (dt > 0): the broad fins close as the
@@ -154,11 +184,32 @@ export class FinDynamics {
   advancePosture(dt, state) {
     const { kind } = this, speed = state.speed ?? 0, under = smooth(0.08, 0.6, speed);
     if (kind < 3) {
-      const turning = smooth(0.4, 1.6, Math.abs(state.turn ?? 0));
-      const want = OPEN_STOPPED[kind] + (OPEN_UNDER_WAY[kind] - OPEN_STOPPED[kind]) * Math.max(under, 0.8 * turning);
-      this.open += (want - this.open) * (1 - Math.exp(-(want < this.open ? CLOSING : OPENING[kind]) * dt));
-      // The margins flutter faster and wider the faster the water goes past.
+      const r = () => draw(this), turn = state.turn ?? 0, turning = smooth(0.4, 1.6, Math.abs(turn));
+      this.clock += dt;
+      let want = OPEN_STOPPED[kind] + (OPEN_UNDER_WAY[kind] - OPEN_STOPPED[kind]) * Math.max(under, 0.8 * turning), rate;
+      if (kind === 1) {
+        // The dorsal goes up when the fish is alert (turning, or now and then as it looks about at
+        // hover) and down when it rests, quick to rise and slow to fall.
+        if (this.clock >= this.liftAt) {
+          this.liftUntil = this.clock + DORSAL_LIFT[0] + (DORSAL_LIFT[1] - DORSAL_LIFT[0]) * r();
+          this.liftAt = this.liftUntil + 2 + 6 * r();
+        }
+        const resting = state.mode === 'rest' ? 1 : 0, lifted = this.clock < this.liftUntil ? 1 - under : 0;
+        want += (DORSAL_REST - want) * resting;
+        want += (DORSAL_ALERT - want) * Math.max(turning, lifted) * (1 - resting);
+        rate = want > this.open ? DORSAL_RISE : DORSAL_FALL;
+      } else rate = want < this.open ? CLOSING : OPENING[kind];
+      this.open += (want - this.open) * (1 - Math.exp(-rate * dt));
+      // The margins flutter faster and wider the faster the water goes past; each ray tip at its own rate.
+      const quick = 1 + 0.6 * Math.min(1, speed);
       this.flutterPhase += dt * Math.PI * 2 * (4.5 + 3.5 * Math.min(1, speed));
+      for (let i = 0; i < this.columns; i++) this.tipPhase[i] += dt * Math.PI * 2 * this.tipRate[i] * quick;
+      if (kind === 0) {
+        // The lobes' slow twist wanders, and a turn twists them late.
+        if (this.clock >= this.twistAt) { this.twistTo = r() * 2 - 1; this.twistAt = this.clock + 1 + 2.5 * r(); }
+        this.twist += (this.twistTo - this.twist) * (1 - Math.exp(-1.2 * dt));
+        this.turnLag += (clamp(turn, -1.5, 1.5) - this.turnLag) * (1 - Math.exp(-2.5 * dt));
+      }
     } else if (kind === 4) {
       const r = () => draw(this), brake = smooth(0.4, 3, state.accel ? state.accel[0] : 0);
       this.clock += dt;
@@ -173,6 +224,12 @@ export class FinDynamics {
       if (this.clock >= this.wanderAt) { this.wanderTo = r() * 2 - 1; this.wanderAt = this.clock + 0.3 + 0.6 * r(); }
       this.wander += (this.wanderTo - this.wander) * (1 - Math.exp(-3 * dt));
       this.splay += (Math.max(brake, 0.5 * clamp(this.flick, 0, 1)) - this.splay) * (1 - Math.exp(-6 * dt));
+      // The tip follows late (the streamer bends), and a slow wave runs down it.
+      const late = 1 - Math.exp(-6 * dt);
+      this.flickTip += (this.flick - this.flickTip) * late;
+      this.splayTip += (this.splay - this.splayTip) * late;
+      this.wanderTip += (this.wander - this.wanderTip) * late;
+      this.ripple += dt * Math.PI * 2 * (0.9 + 0.8 * under);
     }
   }
 
@@ -190,7 +247,9 @@ export class FinDynamics {
     // gait's billowPhase), more as the fish moves and turns, less held open in display.
     const billowPhase = state.billowPhase ?? 0, speed = Math.min(state.speed ?? 0, 1.2);
     const billowSize = (1 - flare * 0.7) * held * (0.025 + 0.035 * (state.wash ?? 0) + 0.05 * speed + 0.02 * Math.min(1, Math.abs(turn)));
-    let cosA = 0, sinA = 0;
+    // Partly closed, the membrane gathers into pleats; the caudal's lobes twist apart.
+    const pleat = kind < 3 ? PLEAT[kind] * (0.3 + clamp(1 - spread, 0, 1)) * held * (1 - 0.6 * flare) : 0;
+    const twist = kind === 0 ? TWIST * (0.6 * this.twist - 0.5 * this.turnLag) * (1 - 0.7 * flare) : 0;
     if (kind === 3) {
       // Alternating rowing stroke, then feathered/cupped recovery.
       const beat = pectoralPhase + (side < 0 ? Math.PI : 0);
@@ -211,18 +270,23 @@ export class FinDynamics {
         row[j * 4 + 2] = Math.cos(feather); row[j * 4 + 3] = Math.sin(feather);
       }
     } else if (kind === 4) {
-      // (Positive swings the streamer back.) Trailing further back under way, flicked forward and
-      // splayed out when the fish brakes, a slow wander of its own between.
-      const angle = 0.34 + 0.4 * smooth(0.08, 0.6, state.speed ?? 0) - 0.6 * this.flick - 0.3 * this.splay + 0.1 * this.wander
-        - flare * 0.16 + CLAMP_TUCK * folded;
-      cosA = Math.cos(angle); sinA = Math.sin(angle);
+      // (Positive swings the streamer back.) Trailing further back under way (its tip swept back
+      // more), flicked forward and splayed out when the fish brakes, a slow wander of its own between:
+      // each a little later at the tip than at the root, so the thin streamer bends along its length
+      // rather than swinging as a rod, a slow wave running down it.
+      const under = smooth(0.08, 0.6, state.speed ?? 0), base = -flare * 0.16 + CLAMP_TUCK * folded;
       for (let j = 0; j < h; j++) {
-        const v = j / (h - 1);
-        row[j * 4] = side * v * (0.08 + 0.2 * this.splay + 0.05 * this.wander);
+        const v = j / (h - 1), tip = v * v;
+        const flick = this.flick + (this.flickTip - this.flick) * tip, splay = this.splay + (this.splayTip - this.splay) * tip;
+        const wander = this.wander + (this.wanderTip - this.wander) * tip;
+        const angle = base + 0.34 + 0.4 * under * (0.7 + 0.6 * v) - 0.6 * flick - 0.3 * splay + 0.1 * wander
+          + (0.05 + 0.05 * under) * v * Math.sin(this.ripple - v * 4.5);
+        row[j * 4] = side * v * (0.08 + 0.2 * splay + 0.05 * wander);
+        row[j * 4 + 1] = Math.cos(angle); row[j * 4 + 2] = Math.sin(angle);
       }
     }
     for (let i = 0; i < w; i++) {
-      const u = i / (w - 1), r = i * 3;
+      const u = i / (w - 1), r = i * 3, pleated = pleat * Math.sin(u * Math.PI * FOLDS[kind] + kind);
       body.frame(roots[r], scratch);
       const tangentCos = scratch[2], tangentSin = scratch[3];
       body.transform(roots[r], roots[r + 1], roots[r + 2], scratch);
@@ -241,7 +305,9 @@ export class FinDynamics {
           // Bend throughout the ray, not just a ruffled outer border. Phase varies across the fan
           // and travels out along each ray, so the membrane billows.
           const billow = billowSize * Math.sin(billowPhase - u * 5.5 - v * 2.2 + kind * 1.8);
-          const bend = (wave + billow) * (0.22 + 0.78 * v);
+          // The pleats and the twist lean the rays apart, more towards the margin.
+          const upper = Math.sin(this.restAngle[m]);
+          const bend = (wave + billow) * (0.22 + 0.78 * v) + (pleated + twist * upper) * v;
           // Bend about the ray's in-plane perpendicular; roots stay attached.
           const length3 = Math.hypot(x, y), cosBend = Math.cos(bend);
           x *= cosBend; y *= cosBend;
@@ -250,7 +316,8 @@ export class FinDynamics {
             // The broad caudal fan wraps behind the peduncle during a turn.
             // Rotate across its span, preserving ray length and vertical spread;
             // the membrane solver supplies the slower free-edge follow-through.
-            const sweep = turnBend * 0.15 * v, cosSweep = Math.cos(sweep), sinSweep = Math.sin(sweep);
+            // (The lobes' tips more than the middle: the fan's outline bends in the turn.)
+            const sweep = turnBend * v * (0.1 + 0.12 * Math.abs(upper)), cosSweep = Math.cos(sweep), sinSweep = Math.sin(sweep);
             const cx = x * cosSweep - z * sinSweep;
             z = x * sinSweep + z * cosSweep; x = cx;
           }
@@ -261,7 +328,7 @@ export class FinDynamics {
           const cy = y * row[j * 4 + 2] - z * row[j * 4 + 3];
           z = y * row[j * 4 + 3] + z * row[j * 4 + 2]; y = cy;
         } else {
-          const cx = x * cosA - y * sinA;
+          const cosA = row[j * 4 + 1], sinA = row[j * 4 + 2], cx = x * cosA - y * sinA;
           y = x * sinA + y * cosA; x = cx;
           z = z * (1 - CLAMP_PINCH * folded) + row[j * 4];
         }
@@ -297,6 +364,7 @@ export class FinDynamics {
       this.initialized = true;
     }
     this.frameTarget.set(this.target);
+    this.findSolids(state.solids);
     this.accumulator += Math.min(dt, FIN_QUALITY.maxFrame);
     const step = FIN_QUALITY.step;
     const substeps = Math.floor((this.accumulator + 1e-10) / step);
@@ -330,22 +398,47 @@ export class FinDynamics {
     this.carriedAt = state.body.revision;
   }
 
-  // The broad fins' margins (their outer quarter) flutter, faster and wider than any body motion,
-  // across the membrane: drawn over the solved shape (the solver's soft fringe would smooth it away).
+  // The broad fins' margins (their outer third) shimmer, faster and wider than any body motion, even
+  // with the fish still: small ripples running out along the margin from the fan's middle, across
+  // the membrane, and each ray tip trembling on its own in the fan's plane, so the outline never
+  // holds still. Drawn over the solved shape (the solver's soft fringe would smooth it away).
   flutter(state) {
-    const { columns: w, rows: h, position: p, displacement } = this;
-    const size = (1 - 0.5 * state.flare) * (0.006 + 0.02 * Math.min(1, state.speed ?? 0) + 0.006 * (state.wash ?? 0));
-    for (let j = Math.ceil((h - 1) * 0.7); j < h; j++) {
-      const v = j / (h - 1), edge = size * smooth(0.7, 1, v);
+    const { columns: w, rows: h, position: p, displacement, tipPhase } = this;
+    const calm = (1 - 0.5 * state.flare) * (1 - 0.5 * (state.clamp ?? 0)), speed = Math.min(1, state.speed ?? 0);
+    const size = calm * (0.014 + 0.03 * speed + 0.008 * (state.wash ?? 0)), tremble = calm * (0.012 + 0.02 * speed);
+    for (let j = Math.ceil((h - 1) * 0.6); j < h; j++) {
+      const v = j / (h - 1), edge = smooth(0.6, 1, v) ** 1.5;
       for (let i = 0; i < w; i++) {
-        const n = j * w + i, q = n * 3;
+        const n = j * w + i, q = n * 3, u = i / (w - 1);
         const a = (j * w + Math.max(0, i - 1)) * 3, b = (j * w + Math.min(w - 1, i + 1)) * 3, c = q - w * 3;
         const ux = p[b] - p[a], uy = p[b + 1] - p[a + 1], uz = p[b + 2] - p[a + 2];
         const vx = p[q] - p[c], vy = p[q + 1] - p[c + 1], vz = p[q + 2] - p[c + 2];
         const nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
-        const s = edge * Math.sin(this.flutterPhase - i / (w - 1) * 30 + v * 4) / (Math.sqrt(nx * nx + ny * ny + nz * nz) || 1);
-        displacement[n * 4] += nx * s; displacement[n * 4 + 1] += ny * s; displacement[n * 4 + 2] += nz * s;
+        const out = Math.abs(u - 0.5);
+        const ripple = 0.65 * Math.sin(this.flutterPhase - out * 40 + v * 4) + 0.35 * Math.sin(0.61 * this.flutterPhase - u * 17 + tipPhase[i] * 0.3);
+        const s = edge * size * ripple / (Math.sqrt(nx * nx + ny * ny + nz * nz) || 1);
+        const t = edge * tremble * Math.sin(tipPhase[i] + v * 2) / (Math.sqrt(ux * ux + uy * uy + uz * uz) || 1);
+        displacement[n * 4] += nx * s + ux * t; displacement[n * 4 + 1] += ny * s + uy * t; displacement[n * 4 + 2] += nz * s + uz * t;
       }
+    }
+  }
+
+  /** The host's solids (state.solids: { data: [start, end, radius] each, count }, in the fish's frame)
+   *  that the fin could touch this frame: those passing within its reach of its insertions. */
+  findSolids(solids) {
+    this.touchCount = 0;
+    if (!solids) return;
+    const { target, columns: w, touching } = this;
+    let mx = 0, my = 0, mz = 0;
+    for (let i = 0; i < w; i++) { mx += target[i * 3]; my += target[i * 3 + 1]; mz += target[i * 3 + 2]; }
+    mx /= w; my /= w; mz /= w;
+    for (let k = 0; k < solids.count; k++) {
+      const d = solids.data, o = k * 7, ax = d[o], ay = d[o + 1], az = d[o + 2];
+      const bx = d[o + 3] - ax, by = d[o + 4] - ay, bz = d[o + 5] - az, r = d[o + 6];
+      const l2 = bx * bx + by * by + bz * bz, inv = l2 > 1e-12 ? 1 / l2 : 0;
+      const t = clamp(((mx - ax) * bx + (my - ay) * by + (mz - az) * bz) * inv, 0, 1);
+      if (Math.hypot(mx - ax - bx * t, my - ay - by * t, mz - az - bz * t) > this.reach + r) continue;
+      touching.set([ax, ay, az, bx, by, bz, inv, r], this.touchCount++ * 8);
     }
   }
 
@@ -489,6 +582,21 @@ export class FinDynamics {
           p[q] -= sn * push; p[q + 2] += c * push;
           old[q] = p[q]; old[q + 2] = p[q + 2];
         }
+      }
+    }
+    // A fin that meets a solid lies on it, held there (the surface's grip takes its speed), and slides
+    // off it as the fish moves on; the membrane carries the rest of the fin with it.
+    const touching = this.touching;
+    for (let k = 0; k < this.touchCount; k++) {
+      const o = k * 8, ax = touching[o], ay = touching[o + 1], az = touching[o + 2];
+      const bx = touching[o + 3], by = touching[o + 4], bz = touching[o + 5], inv = touching[o + 6], r = touching[o + 7];
+      for (let q = w * 3; q < p.length; q += 3) {
+        const t = clamp(((p[q] - ax) * bx + (p[q + 1] - ay) * by + (p[q + 2] - az) * bz) * inv, 0, 1);
+        const cx = ax + bx * t, cy = ay + by * t, cz = az + bz * t;
+        const dx = p[q] - cx, dy = p[q + 1] - cy, dz = p[q + 2] - cz, d2 = dx * dx + dy * dy + dz * dz;
+        if (d2 >= r * r || d2 < 1e-18) continue;
+        const out = r / Math.sqrt(d2);
+        p[q] = old[q] = cx + dx * out; p[q + 1] = old[q + 1] = cy + dy * out; p[q + 2] = old[q + 2] = cz + dz * out;
       }
     }
   }

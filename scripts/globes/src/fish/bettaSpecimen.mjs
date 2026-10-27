@@ -77,6 +77,9 @@ export class BettaSpecimen {
     this.clamp = 0;
     /** Which way its fins hang (the globe's felt gravity, as a direction in the bowl's frame). */
     this.down = [0, -1, 0];
+    /** The furnishings' solid parts near it last step (solidsNear's), for its fins to lie on: each
+     *  [start, end, radius] in the fish's parent's frame (Atelier units), count of them. */
+    this.finSolids = { data: new Float64Array(7 * 32), count: 0 };
     this.rig.add(this.fish);
     this.rig.scale.setScalar(SCALE);
     this.fish.userData.locomotion = this.locomotion();
@@ -166,6 +169,7 @@ export class BettaSpecimen {
     if (clamped === 0 && this.clamp < 1e-3) this.clamp = 0;
     display.clamp = this.clamp;
     if (this.swim.gasp > 0) this.fish.userData.gait.breathPhase += PANT * this.swim.gasp * dt;
+    this.fish.userData.solids = this.finSolids.count ? this.finSolids : null;
     this.fish.userData.update(this.time);
     this.updateVertices();
     // Contact against the glass and sampled bed, not a fixed waterline: sloshing
@@ -173,6 +177,14 @@ export class BettaSpecimen {
     // them; its fins are laid on them where they touch (lying on the sand, its ventrals, anal and
     // caudal spread over it, rather than held up on them like stilts).
     const near = this.solidsNear(host.obstacles), fins = this.finVertex;
+    // (Next step's fins lie on these: their solver meets them as it goes, so a fin stays whole on a
+    // furnishing, rather than each vertex being put onto it after: layFins is then a last touch.)
+    const solids = this.finSolids, keep = Math.min(near.length, solids.data.length / 7);
+    for (let k = 0; k < keep; k++) {
+      const o = near[k];
+      solids.data.set([o.ax / SCALE, o.ay / SCALE, o.az / SCALE, (o.ax + o.abx) / SCALE, (o.ay + o.aby) / SCALE, (o.az + o.abz) / SCALE, (o.solid + FIN_CLEAR) / SCALE], k * 7);
+    }
+    solids.count = keep;
     for (let pass = 0; pass < 4; pass++) {
       let worst = 0, dx = 0, dy = 0, dz = 0, bottom = Infinity;
       for (let i = 0; i < this.vertices.length; i += 3) {
