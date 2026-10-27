@@ -26312,5 +26312,131 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-27-factual-infographic-factual-infographic-radiocarbon-the-iso",
+    "title": "Factual infographic: Radiocarbon — The Isotope Clock",
+    "tests": "All 189 factual archive records scanned; no radiocarbon, carbon-14 dating or isotope-clock duplicate. NOAA and Oxford pages fetched before authoring. Numerical half-life omitted; decay plot uses relative half-life units.; archive_slot=2026-10-27T08:20; concept=radiocarbon-atmosphere-tree-wood-decay; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: factual-infographic",
+    "prompt": "Create the finished illustrated scientific infographic directly on the canvas, titled \"RADIOCARBON\" with the subtitle \"The isotope clock\". A richly painted, artwork-led explanatory journey, not boxes or a grid. Use midnight-indigo atmospheric washes fading into moss green forest and warm ochre wood grain; fine luminous copper technical linework, precise open annotations, generous readable negative space, confident editorial typography. No photographed poster, frame, room, UI, watermark, bibliography or URLs. Highly tactile botanical detail and wood fibers, subtle atmospheric light; do not invent a physical glowing radioactive forest. Colored particles and connections are explicitly schematic.\n\nMake a magnificent living tree and a cross-cut section of old wood the dominant interconnected artwork, its canopy reaching into a sweeping atmosphere at upper left and its exposed grain and annual rings opening toward the lower right. The tree is an illustrative example, not a specimen with a claimed age or species. A broad, curved compositional pathway carries the reader from atmosphere through leaves to wood, then to an elegant open decay graph following the wood's curve. Avoid a rigid row of panels. Scientific substudies nest into clear spaces without competing with the hero.\n\nAt the atmospheric edge, show a tiny conceptual nuclear reaction with the legible label \"Cosmic-ray cascades supply neutrons\" and formula \"14N + neutron → 14C + proton\". Small heading: \"Made in the upper atmosphere\". Do not draw cosmic rays as sunlight from the sun. Along the canopy show a few CO2 molecular symbols entering leaves with the caption \"Plants take up carbon dioxide\" and label \"Photosynthesis\"; a small browsing animal silhouette and one arrow explain \"Animals acquire carbon through food\". These are schematic carbon pathways, not literal visible isotope streams.\n\nWithin an open magnified study near the trunk, show two nuclear particle clusters, schematic and not to scale, with an understated key distinguishing protons and neutrons. Precisely six proton symbols and six neutron symbols in the first, six proton symbols and eight neutron symbols in the second. Labels \"12C: stable\" and \"14C: radioactive\" with short counts \"6 protons · 6 neutrons\" and \"6 protons · 8 neutrons\". Avoid decorative electrons or false orbital mechanics. Connect these with a fine leader to the wood, not a detached card.\n\nWhere the wood separates from the living tree, mark \"Carbon exchange stops\". Below: \"In a closed sample, the 14C / stable-carbon ratio falls by radioactive decay.\" Integrate a gently descending exponential curve into the spreading wood grain, with explicit horizontal axis \"Elapsed half-lives\" marked 0, 1, 2, 3, and vertical axis \"14C remaining (% of initial)\" marked 100, 50, 25, 12.5 at the corresponding curve positions. Use the mathematically correct curve: 100% at 0, 50% at 1, 25% at 2, 12.5% at 3; never linear decay, never a calendar-date axis. Add \"Ideal closed sample\" directly above the curve and a tiny adjacent isotope transformation \"14C → nitrogen\". Do not supply a numerical half-life in years. A concise explanation beside the curve: \"Measure remaining radiocarbon relative to stable carbon to infer age.\"\n\nUse the beautiful exposed tree-ring section for the essential interpretive annotation \"Wood dates ring growth — not necessarily later use.\" In the remaining lower open margin, three short flowing callouts tied to relevant artwork, not enclosed boxes: \"Calibration: atmospheric 14C has varied; known-age material links radiocarbon to calendar ages.\" \"Contamination: added carbon can shift the result; pretreatment removes contaminants.\" \"Reservoir effects: ocean carbon can shift apparent ages.\" End with the compact readable qualification \"For once-living carbon-containing material; stone and metal usually cannot be dated directly.\" Do not imply the pictured tree's real age, add archaeological dates or specimen ages, invent precision, display extra statistics, or claim perfect accuracy. All text supports the luminous living-tree-to-wood narrative; balance substantive science with painterly atmosphere, open space and a clear visual journey. Generate using requested model openai/gpt-image-2.5-sunburst, quality medium, auto size, opaque background.",
+    "image": "images/2026-10-27-factual-infographic-factual-infographic-radiocarbon-the-iso.jpg",
+    "thumb": "thumbs/2026-10-27-factual-infographic-factual-infographic-radiocarbon-the-iso.webp",
+    "color": "#71674f",
+    "date": "2026-10-27",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "radiocarbon-atmosphere-tree-wood-decay",
+      "imageSha256": "9f1e61229e406c6cf68329f47ac4741ea311c65e5d29fc4aaafef222ab8e106f",
+      "imageDHash": "c51fbd0b83874178"
+    },
+    "factualInfographic": {
+      "topic": "How radiocarbon forms, enters living organisms and constrains age after exchange stops",
+      "description": "An artwork-led journey from atmospheric carbon-14 production through photosynthesis to closed-sample decay and qualified radiocarbon age interpretation.",
+      "sourceNote": "Verified formation, isotopes, food-chain entry, closed-sample exponential decay, wood-ring meaning, calibration, contamination and marine reservoir limitations. NOAA: https://gml.noaa.gov/ccgg/isotopes/chemistry.html ; University of Oxford: https://c14.arch.ox.ac.uk/dating.html ; https://c14.arch.ox.ac.uk/sources.html . No numerical half-life in years asserted.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-27T12:21:45.846283+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NOAA Global Monitoring Laboratory",
+            "title": "The Technical Details: Chemistry",
+            "sourceType": "government-agency",
+            "url": "https://gml.noaa.gov/ccgg/isotopes/chemistry.html"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of Oxford Radiocarbon Accelerator Unit",
+            "title": "Radiocarbon Dating",
+            "sourceType": "university",
+            "url": "https://c14.arch.ox.ac.uk/dating.html"
+          },
+          {
+            "id": "S3",
+            "publisher": "University of Oxford Radiocarbon Accelerator Unit",
+            "title": "Radiocarbon Sources",
+            "sourceType": "university",
+            "url": "https://c14.arch.ox.ac.uk/sources.html"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Carbon-12 has six protons and six neutrons and is stable; carbon-14 has six protons and eight neutrons and is radioactive.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Cosmic-ray cascades produce neutrons in the upper atmosphere; nitrogen-14 captures a neutron and emits a proton to form carbon-14.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Atmospheric radiocarbon enters carbon dioxide, which plants take up by photosynthesis; animals acquire carbon through food.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "After a sample stops exchanging carbon with its surroundings, the radiocarbon to stable-carbon ratio decreases exponentially through radioactive decay.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Carbon-14 decays to nitrogen.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "An ideal closed sample retains half its initial carbon-14 after each half-life; the relative sequence is 100%, 50%, 25%, 12.5%, and the decay curve approaches zero rather than dropping linearly.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Radiocarbon dating measures remaining radiocarbon relative to stable carbon to infer an age.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Wood records the growth of the sampled tree ring, not necessarily when the wood was used.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Atmospheric radiocarbon has varied, so calibration against material of known age is needed for calendar ages.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Contamination can introduce carbon of another age; chemical pretreatment aims to remove it.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Marine reservoir effects can shift apparent ages because ocean carbon differs from atmospheric carbon.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The method applies to once-living carbon-containing material; stone and metal usually cannot be dated directly by radiocarbon.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
