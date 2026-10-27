@@ -14,8 +14,9 @@ const PIVOT_U = 0.3;
 const WAVE = 5, RECOIL = 0.12;
 // Turning, the trunk curls into a C at once (CURL s of the turn's rate at the tail: the bend leads
 // the turn rather than waiting for the tail to be dragged round), the head leads the route into the
-// turn by LEAD s of it, and the C straightens as the turn ends.
-const CURL = 0.4, LEAD = 0.05;
+// turn by LEAD s of it (LEAD_MOST rad at the most: a startle's whip is the trunk's), and the C
+// straightens as the turn ends.
+const CURL = 0.4, LEAD = 0.05, LEAD_MOST = 0.15;
 export class BodyMotion {
   constructor() {
     this.data = new Float32Array(SPINE_COUNT * 4);
@@ -75,7 +76,7 @@ export class BodyMotion {
     const dx = (SPINE_END - SPINE_START) / (SPINE_COUNT - 1);
     const sweep = tailAmplitude(effort);
     // The head yaws back against the tail's swing (in step with the rear third's), and into a turn.
-    this.headYaw = (LEAD * -this.steer - RECOIL * (sweep - tailAmplitude(0)) * Math.sin(phase - WAVE * 0.85)) || 0;
+    this.headYaw = (clamp(LEAD * -this.steer, -LEAD_MOST, LEAD_MOST) - RECOIL * (sweep - tailAmplitude(0)) * Math.sin(phase - WAVE * 0.85)) || 0;
     let x = SPINE_START, z = 0, oldCos = 1, oldSin = 0;
     const d = this.data;
     for (let i = 0; i < SPINE_COUNT; i++) {

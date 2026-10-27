@@ -104,7 +104,7 @@ export const STROKE_ACCEL = 1.1;
 // Its trims while it hovers: up to TRIM_PITCH and TRIM_ROLL (rad) either way, a yaw of up to
 // TRIM_YAW rad/s and a nudge forward of up to TRIM_NUDGE units/s, each kick lasting TRIM_KICK s.
 // Backing up (its hover's creep, or easing off the glass), it works its pectorals the harder.
-export const TRIM_PITCH = 0.05, TRIM_ROLL = 0.04, TRIM_YAW = 0.16, TRIM_NUDGE = 0.009, TRIM_KICK = 0.45;
+export const TRIM_PITCH = 0.08, TRIM_ROLL = 0.06, TRIM_YAW = 0.16, TRIM_NUDGE = 0.009, TRIM_KICK = 0.45;
 
 // Goals are a real stride away across the water and within the slope the fish can climb, so it never
 // has to circle a point above or below it. A net turn beyond SPIN_LIMIT rad (leaking away over ~6 s)
@@ -914,7 +914,7 @@ export class BettaSwim {
     if (startling && this.startleDive) pitchTarget = -0.45;
     const oldPitch = this.pitch, oldRoll = this.roll;
     const pitchSpin = -this.waterSpin[2] * Math.cos(this.heading) - this.waterSpin[0] * Math.sin(this.heading);
-    const pitchPace = startling ? 8 : this.mode === 'rise' || aiming || striking ? 3.5 : this.mode === 'dive' ? 2.6 : hovering ? 1.5 : 2.4;
+    const pitchPace = startling ? 8 : this.mode === 'rise' || aiming || striking ? 3.5 : this.mode === 'dive' ? 2.6 : hovering ? 2.2 : 2.4;
     this.pitch = clamp(damp(this.pitch, pitchTarget, dt, pitchPace) + pitchSpin * dt * 0.8, -0.75, gulping || climbing ? 1.5 : 0.75);
     const rollSpin = this.waterSpin[0] * Math.cos(this.heading) - this.waterSpin[2] * Math.sin(this.heading);
     // It banks into its turns, the more the faster it goes round, and rocks a little as it hangs or
