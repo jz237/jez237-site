@@ -67,13 +67,21 @@ test('a real autonomous reversal produces deep flexion; passive water spin does 
     b.advanceTurn(1 / 60, s.steerRate, s.speed / BETTA_SCALE);
     peak = Math.max(peak, Math.abs(b.turnAngles.at(-1)));
   }
-  assert.ok(peak > 2.5, `turn controller cannot reach deep pose: ${peak}`);
-  s.mode = 'hover'; s.timer = 100; s.position = [0, -0.17, 0]; s.steerRate = 0;
-  const passive = new BodyMotion();
+  // (Going back the way it came it swings round in a tight arc at a real fish's pace, not on the spot
+  // at the old fixed rate: the body bends into a deep C, past two radians, rather than a full U.)
+  assert.ok(peak > 2, `turn controller cannot reach deep pose: ${peak}`);
+  // (Hovering it turns a little of its own accord, as its twin in still water does (its slow coming
+  // round to a heading set aside); spun by the water, its body bends just as that twin's: the
+  // water's spin asks nothing of its muscles.)
+  const spun = new BettaSwim(), still = new BettaSwim();
+  for (const f of [spun, still]) { f.mode = 'hover'; f.timer = 100; f.position = [0, -0.17, 0]; f.hoverPivot = 0; }
+  const passive = new BodyMotion(), own = new BodyMotion();
   for (let i = 0; i < 60; i++) {
-    s.advance(1 / 60, [0, 0, 0], env, true, { angular: [0, 1, 0], submerged: 1, airAbove: 0, sand: -0.55, centroid: [0, -0.2, 0] });
-    passive.advanceTurn(1 / 60, s.steerRate, 0);
+    spun.advance(1 / 60, [0, 0, 0], env, true, { angular: [0, 1, 0], submerged: 1, airAbove: 0, sand: -0.55, centroid: [0, -0.2, 0] });
+    still.advance(1 / 60, [0, 0, 0], env, true, { angular: [0, 0, 0], submerged: 1, airAbove: 0, sand: -0.55, centroid: [0, -0.2, 0] });
+    passive.advanceTurn(1 / 60, spun.steerRate, 0);
+    own.advanceTurn(1 / 60, still.steerRate, 0);
   }
-  assert.ok(s.angularVelocity > 0.7);
-  assert.equal(Math.max(...passive.turnAngles.map(Math.abs)), 0);
+  assert.ok(spun.angularVelocity > 0.7);
+  assert.deepEqual([...passive.turnAngles], [...own.turnAngles]);
 });

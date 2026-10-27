@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { BEHAVIORS, BETTA_SCALE, BettaSwim, GULP_LENGTH, MAX_SLOPE, MIN_LEG, MOUTH_DEPTH, PITCH_PIVOT, REST_HEIGHT, STARTLE_COOLDOWN, STARTLE_LENGTH, STROKE_ACCEL, bettaMouth, bettaMouthHeight, gulpGillCover, gulpMouth } from './src/fish/bettaSwim.mjs';
+// (A body length, snout to the base of the tail: the rest mesh's, at the specimen's scale.)
+const BL = (1.68 + 1.056) * BETTA_SCALE;
 import { SwimGait } from '../betta-atelier/src/swim-gait.js';
 
 const env = { radius: 0.95, sandLevel: -0.55, level: 0.181, iso: 0.5 };
@@ -81,11 +83,13 @@ function runGulp(seconds, { water = () => calm(), environment = upright, seed = 
   return { s, log };
 }
 
-test('the mouth and gill cycle opens, closes and pulses within the gulp', () => {
-  assert.equal(gulpMouth(0), 0);
-  assert.ok(gulpMouth(0.5) > 1.05 && gulpMouth(0.5) <= 1.1 + 1e-9);
-  assert.ok(gulpMouth(GULP_LENGTH) < 1e-6 && gulpGillCover(GULP_LENGTH) < 1e-6);
-  assert.ok(gulpGillCover(1.2) > 0.9 && gulpGillCover(0.5) === 0);
+test('the mouth opens and shuts within the gulp, however long; the gill covers pulse once it has shut', () => {
+  for (const length of [GULP_LENGTH, 0.2, 0.45]) {
+    assert.equal(gulpMouth(0, length), 0);
+    assert.ok(gulpMouth(length / 2, length) > 1.05 && gulpMouth(length / 2, length) <= 1.1 + 1e-9);
+    assert.ok(gulpMouth(length, length) < 1e-6);
+  }
+  assert.ok(gulpGillCover(0) === 0 && gulpGillCover(-0.3) === 0 && gulpGillCover(0.25) > 0.9 && gulpGillCover(0.5) < 1e-6);
 });
 
 test('an upright calm globe sends the betta up to gulp air with its lips at the surface, then back down', () => {
@@ -104,11 +108,20 @@ test('an upright calm globe sends the betta up to gulp air with its lips at the 
       assert.ok(Math.hypot(...r.position) <= env.radius - 0.29 + 1e-8);
       if (r.mode === 'gulp') {
         assert.ok(Math.abs(r.mouth - (env.level - MOUTH_DEPTH)) < 0.012, `hold height ${r.mouth}`);
-        assert.ok(r.pitch > 0.7);
-        open = Math.max(open, r.gulp); gill = Math.max(gill, r.gill);
+        assert.ok(r.pitch > 1);
+        open = Math.max(open, r.gulp);
       }
+      // (The gill covers let the old air go as it leaves the film.)
+      if (r.mode === 'gulp' || r.mode === 'dive') gill = Math.max(gill, r.gill);
     }
     assert.ok(open > 1 && gill > 0.9);
+    // As a betta does: up nearly on end, the lips at the film well under half a second, then a sink
+    // back that levels out within about a second and a half; no two trips alike.
+    const holds = episodes(log, 'gulp');
+    for (const ep of episodes(log, 'rise')) assert.ok(Math.max(...ep.map(r => r.pitch)) > 1.1, `${seed}: rose at ${Math.max(...ep.map(r => r.pitch)).toFixed(2)} rad`);
+    for (const ep of holds) assert.ok(ep.length / 60 < 0.5, `${seed}: at the film ${(ep.length / 60).toFixed(2)} s`);
+    for (const ep of ended(log, 'dive')) assert.ok(ep.length / 60 < 1.5 && Math.abs(ep.at(-1).pitch) < 0.25, `${seed}: ${(ep.length / 60).toFixed(2)} s down, at ${ep.at(-1).pitch.toFixed(2)} rad`);
+    assert.ok(new Set(holds.map(ep => ep.length)).size > 1, `${seed}: every trip alike`);
     // After a trip it is swimming below the surface again.
     const after = log.filter(r => r.mode === 'glide' || r.mode === 'cruise');
     assert.ok(after.every(r => r.mouth < env.level - 0.01));
@@ -157,8 +170,14 @@ test('a sudden hard shove startles the betta: a fast C-bend, a dart, then a glid
     assert.ok(run.every(r => r.mode === 'startle'), 'the response is one continuous startle');
     const turned = Math.abs(wrap(log[start + 30].heading - log[start - 1].heading));
     assert.ok(turned >= 0.7 && turned <= 3, `${seed}: turned ${turned.toFixed(2)} rad in half a second`);
-    assert.ok(Math.max(...run.map(r => Math.abs(r.steer))) > 5, 'a fast head-led swing, not an ordinary turn');
-    assert.ok(Math.max(...run.map(r => r.speed)) > 0.2 && run.filter(r => r.t - log[start].t < 0.6).every(r => r.drive > 0.15), 'a dart');
+    // The C-bend: nearly all of the turn within a tenth of a second, at well over a thousand degrees a second.
+    const bent = Math.abs(wrap(log[start + 6].heading - log[start - 1].heading));
+    assert.ok(bent > 0.85 * turned, `${seed}: ${bent.toFixed(2)} of ${turned.toFixed(2)} rad in 0.1 s`);
+    assert.ok(Math.max(...run.map(r => Math.abs(r.steer))) > 20, 'a whip of the head, not an ordinary turn');
+    // The dart: several body lengths a second, the tail driving it; then it coasts.
+    const top = Math.max(...run.map(r => r.speed)), at = run.findIndex(r => r.speed === top);
+    assert.ok(top > 3 * BL && run.slice(0, at + 1).filter(r => r.t - log[start].t > 0.05).every(r => r.drive > 0.15), `${seed}: a dart at ${(top / BL).toFixed(1)} BL/s`);
+    assert.ok(run.at(-1).speed < 0.25 * top, `${seed}: coasting at ${(run.at(-1).speed / BL).toFixed(2)} BL/s`);
     assert.ok(log.slice(start + 70, start + 130).every(r => r.mode === 'glide' || r.mode === 'cruise' || r.mode === 'hover'), 'it recovers');
     for (const r of log) assert.ok(Math.hypot(...r.position) <= env.radius - 0.34 + 1e-8 && r.position.every(Number.isFinite));
   }
@@ -184,7 +203,7 @@ test('a startle while gulping air abandons the trip and closes the mouth', () =>
   const water = t => calm();
   const s = new BettaSwim(), log = [];
   for (let i = 0; i < 60 * 80; i++) {
-    const t = i / 60, hit = s.mode === 'gulp' && s.gulpClock > 0.4 && !log.some(r => r.hit);
+    const t = i / 60, hit = s.mode === 'gulp' && s.gulpClock > 0.1 && !log.some(r => r.hit);
     s.advance(1 / 60, [0, 0, 0], upright, true, { ...water(t), flow: hit ? [2, 0, 0.4] : [0, 0, 0] });
     log.push({ t, mode: s.mode, gulp: s.gulp, hit, mouth: bettaMouthHeight(s.position[1], s.pitch) });
   }
@@ -209,11 +228,13 @@ const episodes = (log, mode) => {
   log.forEach((r, i) => { if (r.mode === mode) { if (log[i - 1]?.mode === mode) out[out.length - 1].push(r); else out.push([r]); } });
   return out;
 };
+/** Those of them that ended before the log did (the last may only have been cut short by it). */
+const ended = (log, mode) => episodes(log, mode).filter(ep => ep.at(-1) !== log.at(-1));
 const bounds = { radius: env.radius - 0.34 };
 
 test('near the glass it stops, faces its reflection and flares its fins, then leaves', () => {
   for (const seed of [237, 42, 901]) {
-    const log = runBehaviors(600, { seed }), eps = episodes(log, 'mirror');
+    const log = runBehaviors(600, { seed }), eps = ended(log, 'mirror');
     assert.ok(eps.length >= 2, `${seed}: ${eps.length} reflection episodes`);
     eps.forEach((ep, n) => {
       const length = ep.at(-1).t - ep[0].t;
@@ -259,10 +280,10 @@ test('a lap follows the glass in one direction at an easy pace', () => {
 
 test('it sinks onto the sand, settles there without drifting, then lifts off', () => {
   for (const seed of [237, 42, 901]) {
-    const log = runBehaviors(900, { seed }), eps = episodes(log, 'rest');
+    const log = runBehaviors(900, { seed }), eps = ended(log, 'rest');
     assert.ok(eps.length >= 1, `${seed}: never rested`);
     for (const ep of eps) {
-      const floor = env.sandLevel + 0.07, end = ep.at(-1), settled = ep.slice(-120);
+      const floor = env.sandLevel + REST_HEIGHT - 0.004, end = ep.at(-1), settled = ep.slice(-120);
       assert.ok(end.t - ep[0].t > 9, 'long enough to count as a rest');
       assert.ok(ep.every(r => r.position[1] >= floor - 1e-9));
       assert.ok(settled.every(r => Math.abs(r.position[1] - (env.sandLevel + REST_HEIGHT)) < 0.01 && r.speed < 0.01 && Math.abs(r.pitch) < 0.1), `${seed}: not settled on the bed`);
@@ -309,7 +330,7 @@ function runStroked(seconds, { seed = 237, trips = false, water = () => calm() }
     const axial = travel.reduce((sum, v, k) => sum + v * nose[k], 0);
     const slip = Math.hypot(...travel.map((v, k) => v - axial * nose[k]));
     const middle = s.position.map((v, k) => v - PITCH_PIVOT * nose[k]);
-    log.push({ t: i / 60, mode: s.mode, stroke, gain: s.speed - before, own: s.speed, speed: Math.hypot(...travel), slip, rise: s.position[1] - y0, y: s.position[1], pitch: s.pitch, settled: s.restSettled, restY: s.restY, turn: Math.hypot(...s.turnVelocity), middle });
+    log.push({ t: i / 60, mode: s.mode, stroke, gain: Math.abs(s.speed) - Math.abs(before), own: Math.abs(s.speed), speed: Math.hypot(...travel), slip, rise: s.position[1] - y0, y: s.position[1], pitch: s.pitch, settled: s.restSettled, restY: s.restY, turn: Math.hypot(...s.turnVelocity), middle });
   }
   return log;
 }
@@ -339,8 +360,8 @@ test('every move is along the body axis through trips to the air and settling on
     assert.ok(['rise', 'gulp', 'dive', 'rest'].every(m => log.some(r => r.mode === m)), `${seed}: precondition`);
     for (const r of log) assert.ok(r.slip < 0.008, `${seed}: ${r.mode} at ${r.t.toFixed(1)} s slid sideways at ${r.slip.toFixed(3)}`);
     // Once the way it carried into the hold has run out, holding at the film is not a slide.
-    const held = episodes(log, 'gulp').flatMap(ep => ep.slice(36));
-    assert.ok(held.length > 100 && held.every(r => Math.abs(r.rise) < 0.0004 && r.speed < 0.03), `${seed}: slid while holding at the film (${Math.max(...held.map(r => Math.abs(r.rise))).toFixed(5)})`);
+    const held = episodes(log, 'gulp').flatMap(ep => ep.slice(15));
+    assert.ok(held.length > 10 && held.every(r => Math.abs(r.rise) < 0.0004 && r.speed < 0.03), `${seed}: slid while holding at the film (${Math.max(...held.map(r => Math.abs(r.rise))).toFixed(5)})`);
     // Going down to rest, the nose leads.
     for (const ep of episodes(log, 'rest')) for (const r of ep.slice(60)) if (!r.settled && r.y - r.restY > 0.03) assert.ok(r.pitch < -0.05, `${seed}: sinking with the nose at ${r.pitch.toFixed(2)}`);
   }
@@ -446,13 +467,14 @@ test('food on the film: it swims to the pellet lips first, without breaching, th
       if (Math.hypot(...lips.map((v, k) => v - pellet[k])) < 0.04) reached = i / 60; // (inside Betta.reach, which sucks it in from 0.055)
     }
     assert.ok(reached > 0, `seed ${seed} never reached the pellet`);
-    // Swallowing: the pellet is on its way in (no aim left), the mouth still wide.
+    // Swallowing: the pellet is on its way in (no aim left), the mouth still wide; it brakes hard
+    // from its snap and holds there.
     s.food = null;
     s.gape = 1;
     for (let i = 0; i < 27; i++) {
       s.advance(1 / 60, [0, 0, 0], upright, true, calm());
       assert.equal(s.mode, 'feed');
-      assert.ok(s.speed < 0.2);
+      assert.ok(i < 9 || s.speed < 0.2, `still at ${s.speed.toFixed(3)} after ${i} frames`);
     }
     s.gape = 0;
     for (let i = 0; i < 120; i++) s.advance(1 / 60, [0, 0, 0], upright, true, calm());
@@ -485,13 +507,18 @@ test("in the bowl's slow current it holds station while it hovers or displays, a
   for (const seed of [237, 42]) {
     const log = runBehaviors(600, { seed, flow: current, water: (t) => ({ ...calm(), flow: current(t) }) });
     for (const mode of ['hover', 'mirror']) {
-      for (const ep of episodes(log, mode)) {
+      for (const ep of ended(log, mode)) {
         // (Once it has stopped: the second half of the hold.)
-        const hold = ep.slice(ep.length >> 1).filter((r) => r.speed < 0.01);
+        // (Its middle, which it turns about as it hovers.)
+        const middle = (r) => r.position.map((v, k) => v - PITCH_PIVOT * [-Math.cos(r.heading) * Math.cos(r.pitch), Math.sin(r.pitch), Math.sin(r.heading) * Math.cos(r.pitch)][k]);
+        const hold = ep.slice(ep.length >> 1).filter((r) => Math.abs(r.speed) < 0.015);
         if (hold.length < 60) continue;
-        const from = hold[0].position;
-        const travel = Math.max(...hold.map((r) => Math.hypot(r.position[0] - from[0], r.position[1] - from[1], r.position[2] - from[2])));
-        assert.ok(travel < (mode === 'mirror' ? 0.06 : 0.04), `seed ${seed}: drifted ${travel.toFixed(3)} while holding (${mode})`);
+        const from = middle(hold[0]);
+        const travel = Math.max(...hold.map((r) => Math.hypot(...middle(r).map((v, k) => v - from[k]))));
+        // (Hovering it creeps and drifts a little as it corrects itself, as a real one does: about
+        // 0.04 body lengths a second; the current carries it no further than that.)
+        const bound = mode === 'mirror' ? 0.06 : 0.02 + 0.04 * BL * hold.length / 60;
+        assert.ok(travel < bound, `seed ${seed}: drifted ${travel.toFixed(3)} while holding (${mode}) for ${(hold.length / 60).toFixed(1)} s`);
       }
     }
     assert.ok(episodes(log, 'mirror').length >= 2, `seed ${seed}: it still displays at the glass`);

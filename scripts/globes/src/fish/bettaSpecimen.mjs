@@ -10,11 +10,15 @@ import { createBetta } from '../../../betta-atelier/src/fish.js';
 import { BettaSwim, BETTA_SCALE as SCALE } from './bettaSwim.mjs';
 import { BETTA_PROBES, readBettaWater } from './bettaWater.mjs';
 
-/** The dimple the lips make at the film: for how long (s into the gulp), at what rate it adds speed
- *  to the water under them (world units/s per s), over what radius; the bubbles let go diving
- *  from the film and darting off it (per second), their radius. */
-export const RIPPLE_TIME = 0.34, RIPPLE_RATE = 6, RIPPLE_RADIUS = 0.045;
-const DIVE_BUBBLES = 14, STARTLE_BUBBLES = 36;
+/** The dimple the lips make at the film: for how long (s into the gulp: within the shortest), at
+ *  what rate it adds speed to the water under them (world units/s per s), over what radius; the
+ *  bubbles let go sinking back from the film (for DIVE_BUBBLING s) and darting off it (per second),
+ *  their radius. */
+export const RIPPLE_TIME = 0.2, RIPPLE_RATE = 10, RIPPLE_RADIUS = 0.045;
+const DIVE_BUBBLES = 14, STARTLE_BUBBLES = 36, DIVE_BUBBLING = 0.9;
+/** A long fin lying on the sand, or against the glass or a furnishing, lies on it: the fin's own
+ *  vertices are laid onto the surface (FIN_CLEAR off it), the body is not lifted by them. */
+const FIN_CLEAR = 0.003;
 export const BUBBLE_RADIUS = 0.0035;
 
 /**
@@ -85,6 +89,8 @@ export class BettaSpecimen {
     });
     /** Every mesh's vertices, skinned, in the bowl's frame (where the shader traces them). */
     this.vertices = new Float32Array(count * 3);
+    /** Which of them are a fin's (1): those only bend where they touch, the rest hold the body off. */
+    this.finVertex = new Uint8Array(count);
     /** @type {Part[]} */
     this.parts = this.meshes.map(({ mesh, offset }) => {
       const g = mesh.geometry, rest = /** @type {Float32Array} */ (g.attributes.position.array);
@@ -107,6 +113,7 @@ export class BettaSpecimen {
           nodes[i] = [0, 1, 2].every((k) => fin.rest[n * 3 + k] === rest[i * 3 + k]) ? n : -1;
         }
         Object.assign(part, { cells, place, nodes });
+        this.finVertex.fill(1, offset, offset + count);
       }
       return part;
     });
@@ -157,11 +164,14 @@ export class BettaSpecimen {
     this.fish.userData.update(this.time);
     this.updateVertices();
     // Contact against the glass and sampled bed, not a fixed waterline: sloshing
-    // can carry the fish vertically and the density probes guide its recovery.
-    const near = this.solidsNear(host.obstacles);
+    // can carry the fish vertically and the density probes guide its recovery. The body is held off
+    // them; its fins are laid on them where they touch (lying on the sand, its ventrals, anal and
+    // caudal spread over it, rather than held up on them like stilts).
+    const near = this.solidsNear(host.obstacles), fins = this.finVertex;
     for (let pass = 0; pass < 4; pass++) {
       let worst = 0, dx = 0, dy = 0, dz = 0, bottom = Infinity;
       for (let i = 0; i < this.vertices.length; i += 3) {
+        if (fins[i / 3]) continue;
         const x = this.vertices[i], y = this.vertices[i + 1], z = this.vertices[i + 2];
         bottom = Math.min(bottom, y);
         const r = Math.sqrt(x * x + y * y + z * z), excess = r - env.radius + 0.012;
@@ -184,8 +194,29 @@ export class BettaSpecimen {
       const v = this.vertices;
       for (let i = 0; i < v.length; i += 3) { v[i] += dx; v[i + 1] += dy; v[i + 2] += dz; }
     }
+    this.layFins(env, near);
     this.updateProbes();
     this.disturb(dt);
+  }
+
+  /** Each fin vertex that has gone into the sand, the glass or a furnishing's solid part (near:
+   *  solidsNear's), laid onto its surface. */
+  layFins(env, near) {
+    const v = this.vertices, fins = this.finVertex, sand = this.waterState.sand + FIN_CLEAR, glass = env.radius - FIN_CLEAR;
+    for (let i = 0; i < v.length; i += 3) {
+      if (!fins[i / 3]) continue;
+      if (v[i + 1] < sand) v[i + 1] = sand;
+      let x = v[i], y = v[i + 1], z = v[i + 2];
+      const r = Math.sqrt(x * x + y * y + z * z);
+      if (r > glass) { x *= glass / r; y *= glass / r; z *= glass / r; }
+      for (const o of near) {
+        const t = Math.max(0, Math.min(1, ((x - o.ax) * o.abx + (y - o.ay) * o.aby + (z - o.az) * o.abz) * o.inv));
+        const cx = o.ax + o.abx * t, cy = o.ay + o.aby * t, cz = o.az + o.abz * t;
+        const ox = x - cx, oy = y - cy, oz = z - cz, l = Math.sqrt(ox * ox + oy * oy + oz * oz), out = o.solid + FIN_CLEAR;
+        if (l < out && l > 1e-9) { x = cx + ox / l * out; y = cy + oy / l * out; z = cz + oz / l * out; }
+      }
+      v[i] = x; v[i + 1] = y; v[i + 2] = z;
+    }
   }
 
   /** What the fish did to the water at the film since this was last asked (main.ts gives it to the
@@ -234,8 +265,8 @@ export class BettaSpecimen {
       this.rippleAt.set(lip.x, surface, lip.z);
       this.ripple += RIPPLE_RATE * dt * Math.sin(Math.PI * Math.min(1, s.gulpClock / RIPPLE_TIME));
     }
-    // Diving from the film (and darting off it), the air it took in leaves as a few small bubbles.
-    const bubbling = (s.mode === 'dive' && s.timer > 0.55) ? DIVE_BUBBLES : (s.mode === 'startle' && s.startleDive && s.startleClock < 0.4) ? STARTLE_BUBBLES : 0;
+    // Sinking back from the film (and darting off it), the old air leaves as a few small bubbles.
+    const bubbling = (s.mode === 'dive' && s.diveClock < DIVE_BUBBLING) ? DIVE_BUBBLES : (s.mode === 'startle' && s.startleDive && s.startleClock < 0.4) ? STARTLE_BUBBLES : 0;
     if (bubbling > 0 && surface - lip.y < 0.09) {
       this.bubbleDebt += bubbling * dt;
       const n = Math.floor(this.bubbleDebt);

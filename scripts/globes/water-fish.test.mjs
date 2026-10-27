@@ -156,7 +156,8 @@ test('in the bowl itself, among its wood, stones, plants and equipment, listless
 test('short of air, it goes up for it far more often and lingers at the film, its lips never breaking it', () => {
   const clear = swimFor({}), some = swimFor({ gasp: 0.3 }), much = swimFor({ gasp: 0.7 }), most = swimFor({ gasp: 1 });
   const rates = [clear, some, much, most].map((r) => r.gulpsPerMinute);
-  assert.ok(rates[0] > 0.4 && rates[0] < 1, `clear: ${rates[0].toFixed(2)} gulps a minute`);
+  // (A betta at rest goes up about twenty times an hour, one displaying about fifty.)
+  assert.ok(rates[0] > 0.25 && rates[0] < 1, `clear: ${rates[0].toFixed(2)} gulps a minute`);
   assert.ok(rates[1] > 1.5 * rates[0] && rates[2] > 2 * rates[1] && rates[3] > rates[2], `gulps a minute ${rates.map((r) => r.toFixed(2))}`);
   assert.ok(rates[3] > 8 * rates[0], 'much more often at 1');
   // (Lingering: from 0.4 up it stays for several gulps, most of its time at 1.)
