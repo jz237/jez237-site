@@ -13,7 +13,7 @@ import { Learn } from './app/learn/Learn';
 import { drowsy, keptNight, NightFade } from './app/night.mjs';
 import { NightToggle } from './app/NightToggle';
 import { FollowToggle } from './app/FollowToggle';
-import { eyeFor, FollowCamera, followDistance } from './app/follow.mjs';
+import { eyeFor, FollowCamera, followDistance, followElevation, viewFor } from './app/follow.mjs';
 import { ResolutionMenu } from './app/ResolutionMenu';
 import { VarietyMenu } from './app/VarietyMenu';
 import { CLEAR_WATER, forcedWaterEffects, type WaterEffects } from './water/effects';
@@ -32,7 +32,7 @@ import { describePipelines, pipelineMarks, pipelineSnapshot, pipelinesFirstFrame
 import { BowlLid } from './interaction/BowlLid';
 import { BowlLife, LIFE_PROBE_AT } from './interaction/BowlLife';
 import { Feeding } from './interaction/Feeding';
-import { CAMERA_VIEW, GlobeController } from './interaction/GlobeController';
+import { CAMERA_ELEVATION, GlobeController } from './interaction/GlobeController';
 import { KelpForest } from './kelp/KelpForest';
 import { REEF_PROBES, Reef } from './reef/Reef';
 import { Specks } from './ocean/Specks';
@@ -871,9 +871,11 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
       fishMiddle.fill(0);
       for (let i = 0; i < 16; i++) for (let k = 0; k < 3; k++) fishMiddle[k] += probes[4 * i + k] / 16;
       const c = controller.center;
-      const eye = eyeFor(fishMiddle, CAMERA_VIEW, followDistance((camera.fov * Math.PI) / 180, camera.aspect, controller.followZoom), { outer: world.glass.outerRadius, inner: world.glass.innerRadius, level: sim.restLevel });
+      const view = viewFor(followCam.tilt(dt, followElevation(CAMERA_ELEVATION, sim.restLevel - fishMiddle[1]), CAMERA_ELEVATION));
+      const eye = eyeFor(fishMiddle, view, followDistance((camera.fov * Math.PI) / 180, camera.aspect, controller.followZoom), { outer: world.glass.outerRadius, inner: world.glass.innerRadius, level: sim.restLevel });
       followCam.step(dt, [eye[0] + c.x, eye[1] + c.y, eye[2] + c.z]);
       controller.followEye.fromArray(followCam.eye);
+      controller.followView.fromArray(view);
       controller.followShare = followCam.share;
     }
     hooks.beforeRender?.();

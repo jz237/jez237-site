@@ -11,9 +11,10 @@
 import { enterSphere, IOR_GLASS, IOR_WATER, refract } from './learn/pick.mjs';
 
 /** How much of the picture's shorter side the fish fills (FISH_LENGTH), how quickly the eye
- *  follows (the spring's rate, 1/s), how near the glass it may come (world units), and how long it
- *  takes to hand the picture back to the stage's camera (s). */
-export const FOLLOW = { fill: 0.4, rate: 3, clearance: 0.3, release: 1.1 };
+ *  follows (the spring's rate, 1/s), how near the glass it may come (world units), how long it
+ *  takes to hand the picture back to the stage's camera (s), and, for a fish near the surface: how
+ *  far under it (world units) the view starts to level out and how far it tilts up there (rad). */
+export const FOLLOW = { fill: 0.4, rate: 3, clearance: 0.3, release: 1.1, surface: 0.3, lift: (4 * Math.PI) / 180 };
 /** The betta, nose to tail tip (world units). */
 export const FISH_LENGTH = 0.42;
 
@@ -112,6 +113,18 @@ function keepClear(eye, view, bowl) {
   return t > 0 ? add(eye, view, -t) : eye;
 }
 
+/** The way the follow camera looks down (rad, + down) for a fish `depth` under the water's surface:
+ *  the stage's own way (stage) in mid-water, levelling out and tilting a little up near the top, so
+ *  a fish just under the film is seen through the glass under it, the surface silvered overhead,
+ *  not from over the water through its surface. */
+export function followElevation(stage, depth) {
+  const u = Math.min(Math.max((depth - 0.04) / (FOLLOW.surface - 0.04), 0), 1);
+  return -FOLLOW.lift + (stage + FOLLOW.lift) * u * u * (3 - 2 * u);
+}
+
+/** The way an eye looks down at `elevation` (rad), towards -z. */
+export const viewFor = (elevation) => [0, -Math.sin(elevation), -Math.cos(elevation)];
+
 /** How far from the fish the eye stands for it to fill FOLLOW.fill of the picture's shorter side:
  *  fov (rad), the vertical field of view, at this aspect (width over height); zoom, the viewer's own
  *  nearer or further. */
@@ -128,6 +141,8 @@ export class FollowCamera {
     this.weight = 0;
     this.eye = [0, 0, 0];
     this.velocity = [0, 0, 0];
+    /** The way it looks down (rad), eased (null: not yet, the stage's way). */
+    this.elevation = null;
   }
 
   /** Following from now (the eye starts where the camera is: from: world; pressed again on the way
@@ -136,9 +151,18 @@ export class FollowCamera {
     if (on && !this.on && this.weight === 0) {
       this.eye = [...from];
       this.velocity = [0, 0, 0];
+      this.elevation = null;
     }
     this.on = on;
     if (on) this.weight = 1;
+  }
+
+  /** A frame's way of looking down (rad): eased from the stage's (stage) towards `want` while
+   *  following, and back to the stage's once let go. */
+  tilt(dt, want, stage) {
+    if (this.elevation === null) this.elevation = stage;
+    if (dt > 0) this.elevation += ((this.on ? want : stage) - this.elevation) * (1 - Math.exp(-FOLLOW.rate * dt));
+    return this.elevation;
   }
 
   /** A frame: the eye on towards `want` (world) as a critically damped spring, the weight up at once

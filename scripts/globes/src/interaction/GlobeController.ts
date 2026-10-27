@@ -70,7 +70,7 @@ const ZOOM_MAX = 14;
  *  take the camera. */
 const FOLLOW_ZOOM_MIN = 0.5;
 const FOLLOW_ZOOM_MAX = 2.5;
-const CAMERA_ELEVATION = (9 * Math.PI) / 180;
+export const CAMERA_ELEVATION = (9 * Math.PI) / 180;
 /** The way the camera looks (world: down a little, towards -z). */
 export const CAMERA_VIEW: readonly [number, number, number] = [0, -Math.sin(CAMERA_ELEVATION), -Math.cos(CAMERA_ELEVATION)];
 const CAMERA_TARGET = new THREE.Vector3(0, -0.12, 0);
@@ -113,10 +113,11 @@ export class GlobeController {
 
   private distance = 6.6;
   private targetDistance = 6.6;
-  /** The follow camera (app/follow.mjs, main.ts): where it puts the eye (world), looking the same
-   *  way, and how much of the picture is its (0..1); and how near it follows, the wheel's or a
-   *  pinch's while it does (times its own distance). */
+  /** The follow camera (app/follow.mjs, main.ts): where it puts the eye (world) and the way it looks
+   *  (the stage's, but level near the water's surface), and how much of the picture is its (0..1);
+   *  and how near it follows, the wheel's or a pinch's while it does (times its own distance). */
   readonly followEye = new THREE.Vector3();
+  readonly followView = new THREE.Vector3(...CAMERA_VIEW);
   followShare = 0;
   followZoom = 1;
   /** Wheel and pinch zoom (off while the interface frames the globe itself). */
@@ -460,9 +461,9 @@ export class GlobeController {
       target.z + this.distance * Math.cos(CAMERA_ELEVATION),
     );
     if (this.followShare > 0) {
-      // (Following: the eye where the follow camera has it, or on the way back, looking the same way.)
+      // (Following: the eye where the follow camera has it, or on the way back, looking its way.)
       cam.position.lerp(this.followEye, this.followShare);
-      target.set(cam.position.x + CAMERA_VIEW[0], cam.position.y + CAMERA_VIEW[1], cam.position.z + CAMERA_VIEW[2]);
+      target.set(CAMERA_VIEW[0], CAMERA_VIEW[1], CAMERA_VIEW[2]).lerp(this.followView, this.followShare).add(cam.position);
     }
     cam.lookAt(target);
     cam.updateMatrixWorld();
