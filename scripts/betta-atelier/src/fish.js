@@ -818,7 +818,7 @@ export function createBetta({ compact = false, textures = true } = {}) {
         toLocal.copy(fish.matrix).invert();
         for (let k = 0; k < Math.min(solids.count, 32); k++) {
           const from = solids.data, o = k * 7;
-          for (const end of [0, 3]) {
+          for (let end = 0; end < 6; end += 3) {
             solidEnd.set(from[o + end], from[o + end + 1], from[o + end + 2]).applyMatrix4(toLocal);
             finSolids.data[o + end] = solidEnd.x; finSolids.data[o + end + 1] = solidEnd.y; finSolids.data[o + end + 2] = solidEnd.z;
           }

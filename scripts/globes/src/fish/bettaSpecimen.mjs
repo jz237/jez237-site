@@ -182,7 +182,10 @@ export class BettaSpecimen {
     const solids = this.finSolids, keep = Math.min(near.length, solids.data.length / 7);
     for (let k = 0; k < keep; k++) {
       const o = near[k];
-      solids.data.set([o.ax / SCALE, o.ay / SCALE, o.az / SCALE, (o.ax + o.abx) / SCALE, (o.ay + o.aby) / SCALE, (o.az + o.abz) / SCALE, (o.solid + FIN_CLEAR) / SCALE], k * 7);
+      const d = solids.data, at = k * 7;
+      d[at] = o.ax / SCALE; d[at + 1] = o.ay / SCALE; d[at + 2] = o.az / SCALE;
+      d[at + 3] = (o.ax + o.abx) / SCALE; d[at + 4] = (o.ay + o.aby) / SCALE; d[at + 5] = (o.az + o.abz) / SCALE;
+      d[at + 6] = (o.solid + FIN_CLEAR) / SCALE;
     }
     solids.count = keep;
     for (let pass = 0; pass < 4; pass++) {

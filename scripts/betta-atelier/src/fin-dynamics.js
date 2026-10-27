@@ -442,7 +442,9 @@ export class FinDynamics {
       const l2 = bx * bx + by * by + bz * bz, inv = l2 > 1e-12 ? 1 / l2 : 0;
       const t = clamp(((mx - ax) * bx + (my - ay) * by + (mz - az) * bz) * inv, 0, 1);
       if (Math.hypot(mx - ax - bx * t, my - ay - by * t, mz - az - bz * t) > this.reach + r) continue;
-      touching.set([ax, ay, az, bx, by, bz, inv, r], this.touchCount++ * 8);
+      const at = this.touchCount++ * 8;
+      touching[at] = ax; touching[at + 1] = ay; touching[at + 2] = az;
+      touching[at + 3] = bx; touching[at + 4] = by; touching[at + 5] = bz; touching[at + 6] = inv; touching[at + 7] = r;
     }
   }
 
