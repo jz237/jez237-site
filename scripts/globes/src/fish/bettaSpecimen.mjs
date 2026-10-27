@@ -44,7 +44,7 @@ export const BUBBLE_RADIUS = 0.0035;
 
 /** How fast its fins fold in or open out as the water changes (1/s: over a few seconds), and how
  *  much quicker it breathes, short of air (rad/s of the breathing's phase, on top of the gait's). */
-const CLAMP_RATE = 0.6, PANT = 5;
+const CLAMP_RATE = 0.6, PANT = 8;
 
 export class BettaSpecimen {
   /** textures: false builds it without its photographs (for a worker, which only moves it). */

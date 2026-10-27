@@ -8,8 +8,10 @@ const smooth = (a, b, x) => { const u = clamp((x - a) / (b - a), 0, 1); return u
 const TAU = Math.PI * 2;
 /** Snout tip to caudal peduncle (standard length), in the Atelier's units (fish.js: x -1.68 to 1.056). */
 export const BODY_LENGTH = 2.736;
-/** Peak tail-bend excursion (rad) at a given effort; the body-bend model uses the same curve. */
-export const tailAmplitude = effort => 0.004 + effort * 0.30;
+/** Peak tail-bend excursion (rad: the peduncle's swing either side) at a given effort; the body-bend
+ *  model uses the same curve. An easy cruise sweeps the caudal some 15 degrees either way, plainly
+ *  seen side-on as the fan swings; at hover it is all but still. */
+export const tailAmplitude = effort => 0.0076 + effort * 0.57;
 /** The tail's beat (Hz) at a given effort and pace (body lengths/s): it quickens mostly with
  *  speed, as Bainbridge found (about 1.7 Hz at 0.3 BL/s, 2.5 at 0.6, 3.4 at 1), and a little with
  *  the effort of speeding up. */
@@ -27,7 +29,7 @@ export function draw(holder) {
 export class SwimGait {
   constructor() {
     this.effort = this.phase = this.pectoralPhase = this.breathPhase = 0;
-    this.scull = this.tuck = this.tuckRate = 0;
+    this.scull = this.tuck = this.tuckRate = this.back = 0;
     this.pectoralEffort = this.pectoralScull = 0;
     this.bodyHz = tailHz(0, 0);
     this.seed = 0x6be77a;
@@ -37,7 +39,9 @@ export class SwimGait {
     this.pectoralRun = 3;
     this.pectoralPause = 0;
     this.pectoralPower = 1;
-    // Breaths come at a rate and depth that vary from breath to breath.
+    // Breaths come at a rate and depth that vary from breath to breath (drawn from a stream of their
+    // own, so the breathing's pace leaves the pectorals' beats as they are).
+    this.breaths = { seed: 0x2c1b3c6d };
     this.breathRate = 1;
     this.breathDepth = 1;
     // The long fins' slow billow (its phase, rad), stirred along by the pectorals' wash and the
@@ -48,10 +52,13 @@ export class SwimGait {
   }
   // `pose.scull`: hold station with the pectorals, beating in long runs while the body is still.
   // `pose.tuck`: the pectorals drawn in toward the flanks, as in a startle dart.
+  // `pose.back`: backing up on the pectorals (0..1): they beat quicker, and without their rests.
   // relativeSpeed: the water going past the fish (Atelier units/s).
   advance(dt, drive, relativeSpeed, turn = 0, pose = {}) {
     if (dt <= 0) return;
     this.scull += ((pose.scull ?? 0) - this.scull) * (1 - Math.exp(-5 * dt));
+    this.back += ((pose.back ?? 0) - this.back) * (1 - Math.exp(-6 * dt));
+    if (this.back > 0.3) this.pectoralPause = 0;
     // A critically damped spring, so the fins accelerate into the fold and settle out of it
     // instead of snapping at the first frame of a mode change.
     {
@@ -77,7 +84,7 @@ export class SwimGait {
     // power comes back within a beat.)
     this.pectoralPower += ((beating ? 1 : 0.14) - this.pectoralPower) * (1 - Math.exp(-(beating ? 7 : 4) * dt));
     const before = this.pectoralPhase;
-    this.pectoralPhase += dt * TAU * (beating ? this.pectoralHz : 0.7);
+    this.pectoralPhase += dt * TAU * (beating ? this.pectoralHz * (1 + 0.5 * this.back) : 0.7);
     if (Math.floor(this.pectoralPhase / TAU) !== Math.floor(before / TAU)) this.nextPectoralBeat(beating);
     this.phase += dt * TAU * this.bodyHz;
     // The membranes billow at about 1-2 Hz, quicker as the pectorals wash over them and as the fish
@@ -85,10 +92,12 @@ export class SwimGait {
     this.wash += (this.pectoralPower - this.wash) * (1 - Math.exp(-3 * dt));
     this.billowPhase += dt * TAU * (0.55 + 0.4 * this.pectoralHz * this.wash + 0.6 * Math.min(this.pace, 1.5));
     const breath = this.breathPhase;
-    this.breathPhase += dt * (3.6 + this.effort * 3.4) * this.breathRate;
+    // (About 1.1 breaths a second at rest, 1.5 working hard: the gill covers' pumping, give or take a
+    // fifth from breath to breath.)
+    this.breathPhase += dt * (7 + this.effort * 4) * this.breathRate;
     if (Math.floor(this.breathPhase / TAU) !== Math.floor(breath / TAU)) {
-      this.breathRate = 0.8 + 0.4 * draw(this);
-      this.breathDepth = 0.65 + 0.45 * draw(this);
+      this.breathRate = 0.8 + 0.4 * draw(this.breaths);
+      this.breathDepth = 0.65 + 0.45 * draw(this.breaths);
     }
   }
   // At the end of each pectoral beat: the next one's rate, and after the last of a run, a rest.

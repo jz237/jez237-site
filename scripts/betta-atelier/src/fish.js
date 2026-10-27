@@ -632,7 +632,7 @@ export function createBetta({ compact = false, textures = true } = {}) {
     pivot.name = `Eye socket pivot ${side}`;
     pivot.position.set(ex, ey, side * 0.120);
     const motion = gaze;
-    eyes.push({ pivot, motion, side });
+    eyes.push({ pivot, motion, side, socket: [ex, ey, side * 0.120] });
     eye.position.set(0, 0, side * 0.020);
     eye.scale.set(1, 1, 0.5);
     pivot.add(eye);
@@ -688,9 +688,6 @@ export function createBetta({ compact = false, textures = true } = {}) {
       display.advance(dt);
       uniforms.uFlare.value = display.flare;
       gaze.advance(dt, turn, display.flare);
-      for (const { pivot, motion, side } of eyes) {
-        pivot.rotation.set(-motion.pitch * side, motion.yaw * side, 0);
-      }
       uniforms.uTime.value = t;
       // A burst-and-coast swimmer: stabilize, accelerate, glide, brake, investigate.
       const q = t % cycle;
@@ -825,11 +822,19 @@ export function createBetta({ compact = false, textures = true } = {}) {
       accelLocal.copy(acceleration).applyQuaternion(toFish);
       const down = fish.userData.down;
       downLocal.set(down ? down[0] : 0, down ? down[1] : -1, down ? down[2] : 0).applyQuaternion(toFish);
-      gait.advance(dt, drive, relativeFlow, turn, POSES[mode] ?? {});
+      // (Backing up on its pectorals, a host's fish works them the harder.)
+      const pose = POSES[mode] ?? {};
+      gait.advance(dt, drive, relativeFlow, turn, locomotion?.backing ? { ...pose, back: locomotion.backing } : pose);
       const { phase, effort, breathPhase, breathDepth, pectoralPhase, pectoralPower, scull, tuck, pectoralEffort, pectoralScull, billowPhase, wash } = gait;
       // The standalone turn also leads with the neck; the rear follows the head's tangent.
       bodyMotion.advanceTurn(dt, locomotion ? locomotion.steerRate ?? angularVelocity : turn, locomotion ? locomotion.speed ?? 0 : Math.hypot(...velocity));
       bodyMotion.update(phase, effort, turn, breathPhase, locomotion?.gulp ?? gulpOpen, locomotion?.gulpGill ?? gulpGill, breathDepth);
+      // The eyes ride in their sockets on the head as it yaws against the tail and into turns.
+      for (const { pivot, motion, side, socket } of eyes) {
+        const f = bodyMotion.frame(socket[0], contour);
+        pivot.position.set(f[0] - socket[2] * f[3], socket[1], f[1] + socket[2] * f[2]);
+        pivot.rotation.set(-motion.pitch * side, motion.yaw * side - Math.atan2(f[3], f[2]), 0);
+      }
       if (lift > 0 || fish.userData.gulp.lift > 0) {
         const g = fish.userData.gulp;
         g.lift = lift; g.phase = shown.phase; g.clock = shown.clock;

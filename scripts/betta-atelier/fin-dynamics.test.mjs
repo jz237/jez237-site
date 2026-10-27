@@ -123,7 +123,10 @@ test('mouth opens into a larger aperture before the gill covers open', () => {
     return upper[1] - lower[1];
   };
   const closed = gap(Math.PI * 1.5), open = gap(Math.PI * 0.5);
-  assert.ok(open > closed * 4 && open > 0.05, `mouth aperture ${closed} to ${open}`);
+  // (Breathing, the lips only part; a gulp at the film opens them wide.)
+  assert.ok(open > closed * 3 && open > 0.03, `mouth aperture ${closed} to ${open}`);
+  body.update(0, 0.3, 0, Math.PI * 1.5, 1); body.transform(-1.68, 0.1056, 0, upper); body.transform(-1.68, 0.0608, 0, lower);
+  assert.ok(upper[1] - lower[1] > open * 1.5, `gulp aperture ${upper[1] - lower[1]} vs a breath's ${open}`);
   body.update(0, 0.3, 0, Math.PI * 0.5); const intake = body.mouth, firstGill = body.gill;
   body.update(0, 0.3, 0, Math.PI * 0.5 + 1.05);
   assert.ok(body.gill > firstGill && body.mouth < intake, 'gills should lag mouth intake');
