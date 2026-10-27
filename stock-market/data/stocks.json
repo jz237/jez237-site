@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-26T21:00:14.558Z",
+  "updatedAt": "2026-10-27T00:09:42.415Z",
   "source": "yahoo-finance-chart",
   "stocks": [
     {
@@ -30,7 +30,7 @@
       "changeAmount": -4.7,
       "prevClose": 228.05,
       "dayLow": 210.85,
-      "dayHigh": 225.63,
+      "dayHigh": 225.67,
       "range52w": [
         100.02,
         452.7
@@ -1972,7 +1972,7 @@
         20690.25,
         27722.75
       ],
-      "volume": 6457764000,
+      "volume": 6508626000,
       "currency": "USD",
       "exchange": "Nasdaq GIDS",
       "chart": [
@@ -2038,7 +2038,7 @@
         26169.3809
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-10-26T21:00:21.000Z",
+      "quoteUpdatedAt": "2026-10-26T21:15:59.000Z",
       "yahooSymbol": "^IXIC"
     },
     {
@@ -2364,12 +2364,12 @@
         "Global growth data"
       ],
       "kind": "instrument",
-      "price": 102.017,
-      "change": 0.2329,
-      "changeAmount": 0.237,
+      "price": 102.02,
+      "change": 0.2358,
+      "changeAmount": 0.24,
       "prevClose": 101.78,
-      "dayLow": 101.582,
-      "dayHigh": 102.056,
+      "dayLow": 102.017,
+      "dayHigh": 102.034,
       "range52w": [
         95.55,
         102.95
@@ -2437,10 +2437,10 @@
         101.78,
         101.61,
         101.81,
-        102.017
+        102.02
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-10-26T20:50:25.000Z",
+      "quoteUpdatedAt": "2026-10-26T23:59:50.000Z",
       "yahooSymbol": "DX-Y.NYB"
     },
     {
@@ -2464,21 +2464,20 @@
         "Dollar/yield moves"
       ],
       "kind": "instrument",
-      "price": 79727.97,
-      "change": -1.948,
-      "changeAmount": -1583.92,
-      "prevClose": 81311.89,
-      "dayLow": 79343.66,
-      "dayHigh": 80612.24,
+      "price": 80112.07,
+      "change": -1.1867,
+      "changeAmount": -962.12,
+      "prevClose": 81074.19,
+      "dayLow": 80009.5,
+      "dayHigh": 80048.92,
       "range52w": [
         57747.766,
         116273.31
       ],
-      "volume": 28058171392,
+      "volume": 27201748992,
       "currency": "USD",
       "exchange": "CCC",
       "chart": [
-        77830.2891,
         78245.8125,
         77667.5703,
         78548.6328,
@@ -2537,10 +2536,11 @@
         81074.1875,
         80790.8359,
         80024.0078,
-        79727.9688
+        79727.9688,
+        80112.0703
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-10-26T21:00:19.000Z",
+      "quoteUpdatedAt": "2026-10-27T00:09:38.000Z",
       "yahooSymbol": "BTC-USD"
     },
     {
@@ -2565,17 +2565,17 @@
         "Geopolitics"
       ],
       "kind": "instrument",
-      "price": 101.27,
-      "change": 4.2409,
-      "changeAmount": 4.12,
+      "price": 101.49,
+      "change": 4.4673,
+      "changeAmount": 4.34,
       "prevClose": 97.15,
-      "dayLow": 100.33,
-      "dayHigh": 103.13,
+      "dayLow": 101.25,
+      "dayHigh": 101.6,
       "range52w": [
         54.98,
         119.48
       ],
-      "volume": 245861,
+      "volume": 2004,
       "currency": "USD",
       "exchange": "NY Mercantile",
       "chart": [
@@ -2638,10 +2638,10 @@
         97.15,
         99.47,
         103.27,
-        101.27
+        101.49
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-10-26T20:50:24.000Z",
+      "quoteUpdatedAt": "2026-10-26T23:59:53.000Z",
       "yahooSymbol": "CL=F"
     },
     {
@@ -2666,17 +2666,17 @@
         "Geopolitical risk"
       ],
       "kind": "instrument",
-      "price": 4029.3,
-      "change": -2.9084,
-      "changeAmount": -120.7,
+      "price": 4018.7,
+      "change": -3.1639,
+      "changeAmount": -131.3,
       "prevClose": 4150,
-      "dayLow": 3990.9,
-      "dayHigh": 4044,
+      "dayLow": 4017.3,
+      "dayHigh": 4032.9,
       "range52w": [
         3901.3,
         5586.2
       ],
-      "volume": 118797,
+      "volume": 4697,
       "currency": "USD",
       "exchange": "COMEX",
       "chart": [
@@ -2739,10 +2739,10 @@
         4150,
         4060.3999,
         4007.8999,
-        4029.3
+        4018.7
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-10-26T20:50:27.000Z",
+      "quoteUpdatedAt": "2026-10-26T23:59:46.000Z",
       "yahooSymbol": "GC=F"
     }
   ],
