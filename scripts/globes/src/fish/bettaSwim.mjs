@@ -955,6 +955,7 @@ export class BettaSwim {
       this.turnVelocity[k] = (pivot * (direction[k] - was[k])) / dt;
       this.position[k] += (direction[k] * this.speed + this.drift[k] + this.turnVelocity[k]) * dt;
     }
+    const unheld = [...this.position];
     if (sags) this.position[1] -= this.slump * clamp(SAG_RATE * descent, SAG_SLOWEST, SAG_FASTEST) * dt;
     // Once settled on the sand, let the current go by; holding still in the water (hovering,
     // taking air, swallowing, displaying at the glass), work against a slow one (a bowl's gentle
@@ -990,6 +991,13 @@ export class BettaSwim {
         this.position[k] = q[k] + n[k] * r;
         if (into < 0) this.drift[k] -= into * n[k];
       }
+    }
+    // (What the sand, the glass or a thing held back of its turning in place, it did not turn: the
+    // part of their push against that motion comes off it.)
+    const turning = Math.hypot(...this.turnVelocity);
+    if (turning > 1e-9) {
+      const held = this.position.reduce((sum, v, k) => sum + (v - unheld[k]) * this.turnVelocity[k], 0) / (turning * dt);
+      if (held < 0) for (let k = 0; k < 3; k++) this.turnVelocity[k] *= Math.max(0, 1 + held / turning);
     }
     this.velocity = this.position.map((v, i) => (v - old[i]) / dt);
     // The tail follows what the fish means to do, not the speed it has reached: it leads a start and
