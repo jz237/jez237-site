@@ -16482,5 +16482,112 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-27-factual-infographic-factual-infographic-pulsar-the-sweeping",
+    "title": "Factual infographic: Pulsar — The Sweeping Lighthouse",
+    "tests": "Scanned all 191 factual archive records; no pulsar subject duplicate (one unrelated gravitational-wave entry mentions neutron stars). ESA and NRAO source pages fetched before authoring; no numerical stellar parameters used. Artwork-led unboxed composition.; archive_slot=2026-10-27T16:20; concept=pulsar-beams-sweep-earth-sightline; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: factual-infographic",
+    "prompt": "Create a finished, exquisitely illustrated factual science infographic, directly on the canvas, entitled \"PULSAR\" with the elegant smaller subtitle \"The Sweeping Lighthouse\". Artwork-led luminous astronomical painting with precise technical-ink annotations, not a boxed classroom chart. A deep midnight-navy and indigo space field has subtle grain, restrained stars and generous dark negative space. A brilliant ivory-blue neutron star dominates slightly left of center, with delicately luminous shading and a clean spherical silhouette, no invented mountain ranges or lava crust. Surround it with graceful thin turquoise schematic magnetic-field arcs, building a sculptural open cage. Two opposed tapered amber-gold radiation cones extend from the magnetic poles on a tilted diagonal, one sweeping dramatically toward the upper right and one receding to the lower left. These are explanatory false-color beams, not literal visible searchlights in vacuum. Use a much subtler dashed rose rotation-axis line through the center at a different inclination from the amber magnetic axis; the distinction is unmistakable. A fine curved arrow indicates rotation. A translucent, minimal dashed sweep arc traces the direction the near beam travels, leaving the central star beautifully uncluttered. Delicate open leader lines identify \"Neutron star\", \"Magnetic axis\", \"Rotation axis\", and \"Radiation beam\". A small unobtrusive note reads \"Schematic geometry • not to scale • illustrative color\".\n\nLet the luminous sweeping beam guide the reader toward a small blue Earth observer symbol far to the right, separated by a visually broken line of sight to indicate the huge unscaled distance. Label \"Toward Earth\". In an organically connected lower-right study, show three small unboxed silhouettes of the SAME tilted rotating beam geometry at successive phases, connected by a thin curved arrow: \"Beam away\", \"Beam crosses Earth\", \"Beam away\". Keep the observer direction fixed across all three; beams rotate, the sightline does not. Below this sequence, a simple ivory signal trace labelled \"Observed signal\" has a single narrow amber peak aligned with the middle phase, low baseline at the two away phases; the horizontal axis reads \"Time\". No numerical axes, invented measurements, extra pulse-period statistics, or universal promise of one pulse per turn. A concise sentence near the trace reads \"We detect a pulse when a beam sweeps across our line of sight.\" The star does not turn itself on and off.\n\nBalance the main hero with three concise open annotations of different scale, naturally following the curving field lines rather than enclosed cards. Near the title: \"A rapidly rotating, magnetized neutron star.\" Along the left outer curve: \"The remnant core of a massive star after an explosion.\" Near the beam base: \"Strong electric and magnetic fields accelerate particles that emit radiation.\" A small secondary line reads \"Emission can include radio waves.\" Near the two axes: \"A tilted magnetic axis makes the beams sweep through space.\" Do not imply that all neutron stars are pulsars or that every pulsar is seen in every wavelength. Keep text short, beautifully typeset and readable, thin arrows exact, labels attached to the correct features. Strong asymmetrical visual hierarchy, varied study scales, open space around the star, exquisitely resolved luminous filaments and controlled painterly gradients. No rigid grid, boxes, detached cards, stock photo, physical poster mockup, border frame, logos, URLs, bibliography, or watermark. Add no other factual claims, numeric sizes, rotation rates, unseen internal layers or speculative emission mechanisms. Preserve explanatory clarity and scientific geometry over decorative complexity.",
+    "image": "images/2026-10-27-factual-infographic-factual-infographic-pulsar-the-sweeping.jpg",
+    "thumb": "thumbs/2026-10-27-factual-infographic-factual-infographic-pulsar-the-sweeping.webp",
+    "color": "#223141",
+    "date": "2026-10-27",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "pulsar-beams-sweep-earth-sightline",
+      "imageSha256": "0924450683749fb67fe773024bc9af7d9887373c6ecabf1cf51d36f49e6365aa",
+      "imageDHash": "77261d993e79c9e3"
+    },
+    "factualInfographic": {
+      "topic": "How a rotating magnetized neutron star produces observable pulsar pulses",
+      "description": "A source-backed illustrated explanation of pulsar beam geometry, tilted magnetic and rotation axes, and the observer-dependent lighthouse effect.",
+      "sourceNote": "ESA: https://www.esa.int/Science_Exploration/Space_Science/Neutron_stars_pulsars_and_magnetars; NRAO: https://www.nrao.edu/pr/2002/3c58/pulsars/; NRAO geometry: https://public.nrao.edu/gallery/parts-of-a-pulsar/. Fetched full pages before authoring; verified remnant identity, fields, tilted axes, beam sweep and observer pulses. Geometry and colors explicitly schematic.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-27T20:21:26.892840+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "European Space Agency",
+            "title": "Neutron stars: pulsars and magnetars",
+            "sourceType": "government-agency",
+            "url": "https://www.esa.int/Science_Exploration/Space_Science/Neutron_stars_pulsars_and_magnetars"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Radio Astronomy Observatory",
+            "title": "Pulsars: Lighthouses in the Sky",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.nrao.edu/pr/2002/3c58/pulsars/"
+          },
+          {
+            "id": "S3",
+            "publisher": "National Radio Astronomy Observatory",
+            "title": "Parts of a Pulsar",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://public.nrao.edu/gallery/parts-of-a-pulsar/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "A pulsar is a rapidly rotating magnetized neutron star.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A neutron star is the remnant core of a massive star after an explosion.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Pulsar emission includes radio waves; beams emerge in the directions of magnetic poles.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The magnetic axis can be offset from the rotation axis, causing beams to sweep through space as the star rotates.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "A beam crossing Earth makes the pulsar appear to switch on and off like a lighthouse; regular observed pulses reflect rotation.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Strong magnetic fields and associated electric fields accelerate particles that emit radiation.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The displayed curved field lines and opposing beams are schematic representations of magnetic geometry, not visible solid structures.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "A schematic observer signal has a peak when a beam crosses the sightline and a low interval when it points away; geometry controls whether the observer sees pulses.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
