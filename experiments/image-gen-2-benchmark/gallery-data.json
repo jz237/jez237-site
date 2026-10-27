@@ -26438,5 +26438,118 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-27-factual-infographic-factual-infographic-gyrinus-substriatus",
+    "title": "Factual infographic: Gyrinus substriatus — Eyes Above and Below",
+    "tests": "Scanned all 190 factual archive records; no Gyrinus or whirligig subject. CSIRO, NatureSpot and NC State pages fetched before authoring. Explicit scheduled scientific-plate exception applied; seven supporting studies and prominent generalized gut retained. Texas A&M fetch failed 403 and was not used as evidence.; archive_slot=2026-10-27T12:20; concept=gyrinus-substriatus-divided-eyes-water-surface; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: bizarre-insect-life",
+    "prompt": "Create a finished, exquisitely detailed natural-history scientific plate about the real whirligig beetle Gyrinus substriatus. Direct-canvas educational artwork, not a photograph of a poster or book. Title: “Gyrinus substriatus”; subtitle: “Eyes Above and Below”. Follow this run's restored scientific-plate exception: one enormous whole-insect macro hero plus SEVEN substantive supporting scientific studies, including at least three large biological close-ups/diagrams, a prominent internal anatomy study, mechanism sequence, habitat and scale. Do not replace the studies with a sparse artistic atlas. A disciplined, asymmetric scientific-plate layout with delicate separators and numbered study headings is appropriate; vary the study sizes, avoid a bland uniform dashboard. Prioritize the beetle imagery and explanatory anatomy over prose. Rich macro realism, exact fine entomological detail, luminous blue-green water, glossy charcoal cuticle with restrained cool specular highlights, warm ivory labels and golden-yellow legs. Subtle optical watercolor atmosphere around precise technical illustration. Elegant readable typography, concise labels, no bibliography, URLs, logos or watermark.\n\nDOMINANT HERO: exceptionally large dorsal three-quarter adult beetle meeting a pond surface; entire body and all six correctly attached legs visible, head/thorax/abdomen consistent with beetle anatomy, closed paired elytra, short thick antennae, elongated oval dark body, yellow legs. Long grasping front legs and much shorter flattened paddle-like middle and hind legs. Water meniscus and fine ripples locate the real waterline without hiding anatomy. Show a shallow pond reflection, not a second insect fused to the body. Tiny accurate scale silhouette alongside a clearly labeled bracket “Adult length 5–7.5 mm”; do not force literal page scale. Main hero occupies about two fifths of the canvas; the seven studies fill the rest without becoming tiny stamps.\n\nSTUDY 1 — “A divided view”: large side-of-head macro at a horizontal waterline. Clearly separate upper and lower portions of the compound eye on the same side of the head; upper portion exposed to air, lower portion submerged. Labels “Above-water vision” and “Below-water vision”. Two subtle sight fans point into the correct medium. The waterline is an environmental reference, not an anatomical cut through the eye. Show natural dark facets rather than eyeballs, camera lenses or human pupils. Make no unsupported claims about optical constants or nervous circuitry.\n\nSTUDY 2 — “Paddles and graspers”: magnified ventrolateral leg study and anatomical silhouette. Label a long front leg “Grasping foreleg” and the short flat middle/hind legs “Swimming paddles”. Clear attachment points and natural joints. Preserve the yellow mid/hind tarsal claws, not black. No extra legs, fins or mechanical oars.\n\nSTUDY 3 — “Inside an insect”: a large, readable translucent adult-body outline with ONLY a simplified continuous digestive tube in warm ochre. Prominent qualifier directly below heading: “Generalized insect digestive schematic — not a species dissection”. Draw a simple schematic, not fabricated measured species-specific organ geometry. Precisely label “Mouth”, “Foregut”, “Midgut — digestion & absorption”, “Hindgut — water & salt recovery”, “Anus”. Small arrows follow mouth → foregut → midgut → hindgut → anus. No vertebrate stomach, lungs, bones, heart or unsupported organs. This is a major study, not a postage-stamp inset.\n\nSTUDY 4 — “At the surface”: a three-stage behavior sequence with clearly connected arrows, miniature anatomically consistent adults and changes in waterline position: “Whirl at surface” → “Encounter food” → “Dive when disturbed”. Show a dead small insect at the surface as food, NOT a beetle producing or chemically transforming it. This is a behavior sequence, not a claim that feeding causes alarm. A short caption clarifies “Surface scavenging and rapid escape”. No speed numbers or sonar claims.\n\nSTUDY 5 — “Aquatic young”: large lateral larva detail on submerged substrate, abdominal gills clearly shown and labeled “Abdominal gills”. Distinguish slender predatory larva from rounded adult. Tiny generic aquatic invertebrate nearby establishes feeding context; label “Aquatic predatory larva”. Do not invent exact instar durations or seasonal dates.\n\nSTUDY 6 — “Leaving the water”: shoreline cross-section with larva leaving water for a cocoon above the waterline, and an adult nearby. Connected concise labels “Aquatic larva” → “Land cocoon” → “Adult”. Cocoon texture is plant matter and sand grains. Keep this developmental process separate from the adult feeding/escape sequence. No egg morphology or developmental timing guessed.\n\nSTUDY 7 — “Pond life and identification”: habitat vignette of a freshwater pond edge with a small surface group of whirligigs, submerged substrate and shore. Text “Pools and ponds • widespread in Britain”. Beside it, a large close-up of pronotum margin showing the lateral lip and inner groove, plus the approximately parallel elytral rim, using delicate leaders “Pronotal lip & groove” and “Parallel elytral rim”. This adds a fourth external macro beyond eye, leg and larva. Do not invent a global range map. Keep plants generic environmental context, not labeled species.\n\nCareful visual hierarchy: hero first, split-eye study and internal digestive study second, remaining biological studies third. Readable short labels; retain all seven meaningful studies with ample macro detail and rich natural materials, no filler text. Clearly distinguish species-specific identity/appearance/habitat from family-level eye/leg/larval adaptations and the explicitly generalized insect internal schematic. Biological accuracy overrides decorative symmetry. Opaque background, auto image size; request medium quality.",
+    "image": "images/2026-10-27-factual-infographic-factual-infographic-gyrinus-substriatus.jpg",
+    "thumb": "thumbs/2026-10-27-factual-infographic-factual-infographic-gyrinus-substriatus.webp",
+    "color": "#969a84",
+    "date": "2026-10-27",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "gyrinus-substriatus-divided-eyes-water-surface",
+      "imageSha256": "7f0e31fef429d09eaac1e10267419de7e13ad7e3e00f01c45131e25143047c85",
+      "imageDHash": "cce4c0cc5ff4fbb3"
+    },
+    "factualInfographic": {
+      "topic": "How Gyrinus substriatus whirligig beetles see above and below the water while swimming at the surface",
+      "description": "Whirligig split-eye vision, swimming adaptations and freshwater life history, with qualified generalized internal anatomy.",
+      "sourceNote": "Fetched CSIRO https://www.ento.csiro.au/education/insects/coleoptera_families/gyrinidae.html; NatureSpot https://www.naturespot.org/species/Gyrinus-substriatus; NC State University https://genent.cals.ncsu.edu/bug-bytes/digestive-system/. Species identity, diagnostic morphology, size and habitat checked; divided eyes, paddle legs and aquatic development supported at family level; internal gut explicitly generalized.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-27T16:21:43.014720+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "CSIRO",
+            "title": "Gyrinidae (whirligig beetles)",
+            "sourceType": "government-agency",
+            "url": "https://www.ento.csiro.au/education/insects/coleoptera_families/gyrinidae.html"
+          },
+          {
+            "id": "S2",
+            "publisher": "NatureSpot biological recording organization",
+            "title": "Gyrinus substriatus",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.naturespot.org/species/Gyrinus-substriatus"
+          },
+          {
+            "id": "S3",
+            "publisher": "North Carolina State University",
+            "title": "Digestive and Excretory Systems — General Entomology",
+            "sourceType": "university",
+            "url": "https://genent.cals.ncsu.edu/bug-bytes/digestive-system/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Gyrinus substriatus is a whirligig beetle, with a black body, yellow legs and adult length 5–7.5 mm.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The pronotum has a lateral lip and inner groove; mid and hind tarsal claws are not darkened; the elytral rim is approximately parallel along its length.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Gyrinus substriatus occurs in pools and ponds and is common and widespread in Britain.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Whirligig beetle eyes are divided: the upper parts see above water while the lower parts see below water simultaneously.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Whirligig beetles have short thick antennae, long grasping forelegs and short flattened paddle-like middle and hind legs.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Whirligig beetles whirl at the surface, often in groups, seeking dead or injured insects, and dive when disturbed.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Whirligig larvae are aquatic predators of aquatic invertebrates, have abdominal gills, and leave the water to pupate in a cocoon above the waterline.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Both larvae and adults of Gyrinus substriatus are predatory; this species pupates on land in a cocoon of plant matter and sand grains.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The internal digestive study is explicitly a generalized insect schematic, not a species dissection: mouth to foregut to midgut to hindgut to anus is the direction of food passage.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "In the generalized insect digestive system the midgut is a principal site of digestion and nutrient absorption; the hindgut recovers water and salts.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
