@@ -26049,5 +26049,118 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-27-factual-infographic-factual-infographic-enceladus-ocean-esc",
+    "title": "Factual infographic: Enceladus — Ocean Escaping Through Ice",
+    "tests": "{\"archive_uniqueness\": \"Scanned all 187 factual archive records; no Enceladus subject found.\", \"source_scope\": \"NASA and ESA full source pages fetched; all diagram claims recorded before generation.\"}; archive_slot=2026-10-27T00:20; concept=enceladus-ocean-escapes-south-polar-fractures; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: factual-infographic",
+    "prompt": "Create a finished artistic scientific infographic directly on the canvas, not a poster mockup. Title: \"ENCELADUS\" with subtitle \"An ocean escaping through ice\". A luminous, exquisitely detailed planetary-science illustration in cool ivory, deep midnight navy, glacial turquoise and restrained copper heat accents. Artwork-led asymmetric composition with generous negative space, no boxed grid or detached fact cards. Scientific painting meets precise technical ink, fine ice-grain textures, fractured terrain and delicate orbital linework.\n\nDominant hero occupies the central two-thirds: an icy moon with a carefully exposed wedge revealing an outer ice shell, a continuous dark blue liquid ocean and a rocky interior. Keep the intact hemisphere brilliant chalk-white with subtle ridges; emphasize south-polar fractures and wispy sunlit jets streaming into dark space. Put the south pole toward the lower right for an energetic curved visual path. Use open leaders with exact concise labels \"Ice shell\", \"Global salty ocean\", \"Rocky core\", \"South-polar tiger stripes\", \"Water vapor + ice grains\". Small nearby note: \"Interior schematic — not to scale\". Do not paint molten lava, a glowing magma core or organisms. Copper strokes are schematic heat arrows, not literal glowing rock.\n\nWeave supporting studies into the open space, varying scale, using shared curves rather than panels. At upper left a small ringed Saturn and Enceladus orbital arc establish that this is Saturn’s moon; label \"Saturn’s tides deform the moon\". Show two tiny outline silhouettes gently squeezed and stretched along the orbit, connected by a restrained arrow, with \"Tidal friction: a proposed heat source\" and \"Orbit exaggerated for clarity\". Saturn is contextual and must not overwhelm the hero; this is an explanatory montage, not a realistic single-camera planetary alignment.\n\nLet a delicate curving trail from the hero’s jets lead to the upper right. Split it into a looping return path and an outward arc with exact labels \"Some material falls back\" and \"Some supplies Saturn’s E ring\". Avoid implying all ejecta escapes. A small open magnified plume study beneath that arc shows ice grains as illustrative specks, accompanied by \"Cassini sampled water, salts, organics and silica\" and \"Particle sizes schematic\". No invented molecular structures or numerical abundances.\n\nBelow left, organically nested against the exposed rocky core, a larger schematic magnification shows a porous gray-brown rock matrix, cool blue water entering cracks, restrained copper warming arrows through those pores, and warmed water rising back toward the ocean. Bold heading \"A modeled heat engine\". Labels \"Water enters porous rock\", \"Tidal friction warms the interior\", \"Warm water rises\". Caption: \"Silica particles support hot water–rock interaction. Detailed circulation is modeled, not directly imaged.\" Make this inference distinction unmistakable; do not draw Earth-style smoking black chimneys as established observed features.\n\nAt the bottom in an airy, readable typographic line: \"About 500 km across\" followed by \"Potentially habitable does not mean inhabited — no life confirmed.\" Use confident title typography, short readable labels and thin elegant leaders; the ice and ocean dominate, with enough breathing room to appreciate painterly surface detail. All factual text must be limited to the supplied labels and statements. No URLs, bibliography, watermark, logos, surrounding frame or tiny filler prose. Preserve scientific clarity, a global ocean rather than one isolated puddle, a solid rocky core rather than fire, and clear observed-versus-modeled distinctions. Output one finished richly informative artwork.",
+    "image": "images/2026-10-27-factual-infographic-factual-infographic-enceladus-ocean-esc.jpg",
+    "thumb": "thumbs/2026-10-27-factual-infographic-factual-infographic-enceladus-ocean-esc.webp",
+    "color": "#3e515f",
+    "date": "2026-10-27",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "enceladus-ocean-escapes-south-polar-fractures",
+      "imageSha256": "f49d431f753b8f1171df62fd0cb8a3bc5e4cf94d6f362c1cbd7995c5d113dea2",
+      "imageDHash": "d085271303333349"
+    },
+    "factualInfographic": {
+      "topic": "How Enceladus connects a global subsurface ocean to south-polar ice-and-vapor plumes",
+      "description": "Enceladus ocean structure, plume transport and a qualified model of tidal heating and hydrothermal circulation.",
+      "sourceNote": "NASA: https://science.nasa.gov/mission/cassini/science/enceladus/ ; ESA: https://www.esa.int/Science_Exploration/Space_Science/Cassini-Huygens/Heating_ocean_moon_Enceladus_for_billions_of_years . Verified ocean, plume composition and transport; internal heating/circulation explicitly presented as modeled, not directly observed.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-27T04:21:44.095045+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NASA",
+            "title": "Cassini at Enceladus: Overview",
+            "sourceType": "government-agency",
+            "url": "https://science.nasa.gov/mission/cassini/science/enceladus/"
+          },
+          {
+            "id": "S2",
+            "publisher": "European Space Agency",
+            "title": "Heating ocean moon Enceladus for billions of years",
+            "sourceType": "government-agency",
+            "url": "https://www.esa.int/Science_Exploration/Space_Science/Cassini-Huygens/Heating_ocean_moon_Enceladus_for_billions_of_years"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Enceladus is an icy moon of Saturn, about 500 kilometers across.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A global salty liquid-water ocean lies beneath its icy crust, above a rocky core.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "South-polar fractures informally called tiger stripes release jets of water vapor and ice grains from the subsurface ocean.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Some ejected material falls back to the surface; some escapes to supply Saturn’s E ring.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Cassini sampled the plume and detected water, salts, organic materials and silica particles; these are chemical clues, not evidence that life has been found.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Silica particles support hot water–rock interactions in the interior; hydrothermal circulation is inferred rather than photographed.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Saturn’s tides deform Enceladus as it follows an elliptical orbit; tidal friction is a proposed internal heat source.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "In a proposed porous-core model, ocean water enters deformable rock, is heated by tidal friction and rises back toward the ocean; the detailed interior and heat distribution remain modeled.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The cutaway and orbit are schematic, with layer thicknesses, orbit eccentricity, jet size and particle size not to scale.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "No life has been confirmed on Enceladus; potential habitability is not a detection of organisms.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
