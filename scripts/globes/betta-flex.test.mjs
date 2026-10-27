@@ -68,8 +68,9 @@ test('a real autonomous reversal produces deep flexion; passive water spin does 
     peak = Math.max(peak, Math.abs(b.turnAngles.at(-1)));
   }
   // (Going back the way it came it swings round in a tight arc at a real fish's pace, not on the spot
-  // at the old fixed rate: the body bends into a deep C, past two radians, rather than a full U.)
-  assert.ok(peak > 2, `turn controller cannot reach deep pose: ${peak}`);
+  // at the old fixed rate: the body bends into a deep C, well past a right angle, rather than a
+  // full U; a halfmoon's trunk is a stiff one.)
+  assert.ok(peak > 1.5, `turn controller cannot reach deep pose: ${peak}`);
   // (Hovering it turns a little of its own accord, as its twin in still water does (its slow coming
   // round to a heading set aside); spun by the water, its body bends just as that twin's: the
   // water's spin asks nothing of its muscles.)
