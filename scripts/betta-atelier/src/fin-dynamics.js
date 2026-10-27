@@ -39,23 +39,25 @@ export const FIN_QUALITY = { step: 1 / 120, passScale: 1, maxFrame: 0.07 };
 const CLAMP_FOLD = [0.62, 0.68, 0.62], CLAMP_DROOP = 0.12, CLAMP_TUCK = 1.05, CLAMP_PINCH = 0.6;
 
 /** The broad fins' spread (caudal, dorsal, anal), as a share of their photographed, displayed fan:
- *  stopped (the caudal a full D, the dorsal raised) and under way (the caudal a half-closed trailing
- *  fan, the dorsal laid back, the anal still a fairly open curtain); how fast each opens again
- *  (1/s: the caudal last, after a turn or a stop), and how fast they all close as the water sweeps
- *  them back. The caudal's lower lobe hangs LOWER_LOBE (rad) below its upper one at rest. */
-const OPEN_STOPPED = [0.82, 0.8, 0.86], OPEN_UNDER_WAY = [0.5, 0.42, 0.7], OPENING = [0.9, 1.6, 1.3], CLOSING = 2.8, LOWER_LOBE = 0.12;
-/** Each fin's weight in water (its sag: Atelier units/s^2 down, pectorals none) and the share of
- *  the body's acceleration it and the water it carries resist (so it lags a start and swings on
- *  in a stop). */
-const WEIGHT = [0.8, 1.0, 1.6, 0, 0.5], INERTIA = 0.35;
+ *  stopped (the caudal a full D, the dorsal half raised: further when alert, DORSAL_ALERT) and under
+ *  way (the caudal a half-closed trailing fan, the dorsal laid back, the anal still a fairly open
+ *  curtain); how fast each opens again (1/s: the caudal last, after a turn or a stop), and how fast
+ *  they all close as the water sweeps them back. The caudal's lower lobe hangs LOWER_LOBE (rad)
+ *  below its upper one at rest. */
+const OPEN_STOPPED = [0.82, 0.66, 0.86], OPEN_UNDER_WAY = [0.5, 0.42, 0.7], OPENING = [0.9, 1.6, 1.3], CLOSING = 2.8, LOWER_LOBE = 0.16;
+/** Each fin's weight in water (its sag: Atelier units/s^2 down, pectorals none; the caudal light,
+ *  its lower lobe's hang held in its shape, LOWER_LOBE, so that it never swings down as a flap) and
+ *  the share of the body's acceleration it and the water it carries resist (so it lags a start and
+ *  swings on in a stop). */
+const WEIGHT = [0.8, 1.0, 1.1, 0, 0.5], INERTIA = 0.35;
 /** A broad fin is never a flat sheet: partly closed, its membrane gathers into pleats between the
  *  rays (PLEAT: their lean at the margin, rad, per share of the fan closed; FOLDS: half-waves across
  *  the fan), and the caudal's two lobes lean a little apart, a slow wander and the turn's lag
  *  twisting them (TWIST, rad), so that seen edge-on it reads as a gathered, curving curtain. */
-const PLEAT = [0.22, 0.12, 0.16], FOLDS = [7, 6, 9], TWIST = 0.12;
+const PLEAT = [0.22, 0.12, 0.22], FOLDS = [7, 6, 9], TWIST = 0.3;
 /** The dorsal's spread when the fish rests (laid down) and when it is alert (raised: turning, or
  *  lifted now and then as it looks about, for DORSAL_LIFT s), and how fast it rises and lowers (1/s). */
-const DORSAL_REST = 0.32, DORSAL_ALERT = 0.98, DORSAL_LIFT = [0.6, 1.6], DORSAL_RISE = 3.5, DORSAL_FALL = 1.1;
+const DORSAL_REST = 0.32, DORSAL_ALERT = 1, DORSAL_LIFT = [0.6, 1.6], DORSAL_RISE = 3.5, DORSAL_FALL = 1.1;
 
 export class FinDynamics {
   constructor({ point, kind, side, columns = 29, rows = 17 }) {
@@ -248,7 +250,7 @@ export class FinDynamics {
     const billowPhase = state.billowPhase ?? 0, speed = Math.min(state.speed ?? 0, 1.2);
     const billowSize = (1 - flare * 0.7) * held * (0.025 + 0.035 * (state.wash ?? 0) + 0.05 * speed + 0.02 * Math.min(1, Math.abs(turn)));
     // Partly closed, the membrane gathers into pleats; the caudal's lobes twist apart.
-    const pleat = kind < 3 ? PLEAT[kind] * (0.3 + clamp(1 - spread, 0, 1)) * held * (1 - 0.6 * flare) : 0;
+    const pleat = kind < 3 ? PLEAT[kind] * (0.5 + clamp(1 - spread, 0, 1)) * held * (1 - 0.6 * flare) : 0;
     const twist = kind === 0 ? TWIST * (0.6 * this.twist - 0.5 * this.turnLag) * (1 - 0.7 * flare) : 0;
     if (kind === 3) {
       // Alternating rowing stroke, then feathered/cupped recovery.
@@ -265,7 +267,7 @@ export class FinDynamics {
       for (let j = 0; j < h; j++) {
         const v = j / (h - 1);
         const stroke = side * (power * (0.48 * Math.sin(beat) + 0.18 * Math.sin(beat - v * 1.5) * v) - 0.12 - 0.13 * tuck);
-        const feather = side * (0.41 + beating * (0.72 * cup - 0.23)) * v;
+        const feather = side * (0.41 + beating * (0.9 * cup - 0.29)) * v;
         row[j * 4] = Math.cos(stroke); row[j * 4 + 1] = Math.sin(stroke);
         row[j * 4 + 2] = Math.cos(feather); row[j * 4 + 3] = Math.sin(feather);
       }
@@ -298,10 +300,12 @@ export class FinDynamics {
         if (kind < 3) {
           const angle = this.restAngle[m] * spread - fold - lower * this.lowerLobe[m], length = this.restSpan[m];
           x = length * Math.cos(angle); y = length * Math.sin(angle);
+          // (A turn leans the dorsal and anal over, more towards their tips: their rays bend, rather
+          // than the fin tipping over from its base like a flap.)
           const wave = kind === 0
             ? (0.004 + drive * 0.4) * Math.sin(phase - 2.5 - v * 0.8)
             : (0.006 + drive * 0.13) * Math.sin(phase * 0.8 - u * 3.7 - v * 0.7 + kind * 1.8)
-              + turnBend * (0.20 + u * 0.20);
+              + turnBend * (0.20 + u * 0.20) * (0.3 + 0.7 * v);
           // Bend throughout the ray, not just a ruffled outer border. Phase varies across the fan
           // and travels out along each ray, so the membrane billows.
           const billow = billowSize * Math.sin(billowPhase - u * 5.5 - v * 2.2 + kind * 1.8);
@@ -405,7 +409,7 @@ export class FinDynamics {
   flutter(state) {
     const { columns: w, rows: h, position: p, displacement, tipPhase } = this;
     const calm = (1 - 0.5 * state.flare) * (1 - 0.5 * (state.clamp ?? 0)), speed = Math.min(1, state.speed ?? 0);
-    const size = calm * (0.014 + 0.03 * speed + 0.008 * (state.wash ?? 0)), tremble = calm * (0.012 + 0.02 * speed);
+    const size = calm * (0.02 + 0.03 * speed + 0.008 * (state.wash ?? 0)), tremble = calm * (0.016 + 0.02 * speed);
     for (let j = Math.ceil((h - 1) * 0.6); j < h; j++) {
       const v = j / (h - 1), edge = smooth(0.6, 1, v) ** 1.5;
       for (let i = 0; i < w; i++) {
