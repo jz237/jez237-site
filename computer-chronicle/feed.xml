@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 26 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of April 15-21, 1985 — Fifty Mission Crush puts the B-17 campaign on home computers</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-04-15</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-04-15</guid>
+      <pubDate>Tue, 27 Oct 2026 12:00:00 GMT</pubDate>
+      <description>SSI trades arcade spectacle for the fortunes of a bomber crew in April’s simulation review. A home-computer flight need not be a test of reflexes. Strategic Simulations’ Fifty Mission Crush makes the player responsible for an Eighth Air Force B-17 and the men aboard it. James V. Trunzo’s April COMPUTE! review finds its pull in a campaign of decisions and consequences rather than lavish graphics. Also this week: Commons passes software-copyright bill at third reading · Atari promises a mouse-and-window computer for $599 · Commodore 128 promises three ways to preserve a software library.</description>
+    </item>
     <item>
       <title>Week of April 8-14, 1985 — Fifty missions, one crew: the bomber game that makes survival count</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-04-08</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-12-03</guid>
       <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
       <description>December’s gaming review puts Atari and Commodore pilots in a three-dimensional combat cockpit. MicroProse puts the home-computer pilot in a combat cockpit with F-15 Strike Eagle. The December Computer Gaming World review identifies Atari and Commodore 64 editions, each for one player, and credits Sid Meier and Grant Irani. Its arcade-and-strategy billing promises more than a simple shooting gallery. Also this week: Tandy 1000 challenges IBM on price and bundled software · MSX promises common software across competing home computers · A Commodore can watch the house as well as run games.</description>
-    </item>
-    <item>
-      <title>Week of November 26-December 2, 1984 — British Telecom’s Firebird wins the rights to take Elite to Z80 computers</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-11-26</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-11-26</guid>
-      <pubDate>Wed, 07 Oct 2026 12:00:00 GMT</pubDate>
-      <description>Spectrum version promised; Amstrad conversion probable as Elite heads for Firebird’s premium line. British Telecom’s Firebird has obtained the rights to convert Acornsoft’s Elite for Z80 computers. Popular Computing Weekly reports the agreement in its November 29 issue, following an auction the previous week. The price is described as a substantial sum but is not disclosed. Also this week: Coleco and Parker Brothers retreat from the British games market · LaserJet wins a 119-printer showdown as laser output reaches the PC desk · Home bulletin boards become a social network—and an arcade · Borland sells a pop-up desk—and charges extra for an unprotected disk.</description>
     </item>
   </channel>
 </rss>
