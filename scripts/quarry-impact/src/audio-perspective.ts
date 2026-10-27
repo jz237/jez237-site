@@ -1,6 +1,7 @@
 import * as T from 'three';
 import type {DemoCamera} from './demo-director';
-export type AudioPerspective={id:number;view:DemoCamera};
+/** `second`: in split screen, player 2's car, heard where it sits in player 2's view placed alike before this listener. */
+export type AudioPerspective={id:number;view:DemoCamera;second?:{id:number;place:(at:T.Vector3,out:T.Vector3)=>T.Vector3}};
 /** Remote broadcast views retain a nearby listening point around their subject.
  * Trackside and orbit cameras keep their actual world-space listening position. */
 export function audioListenerPosition(camera:T.Vector3,focus:T.Vector3|undefined,view?:AudioPerspective['view']){
