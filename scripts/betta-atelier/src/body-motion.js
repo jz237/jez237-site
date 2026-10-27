@@ -24,9 +24,9 @@ export class BodyMotion {
     let remaining = Math.min(dt, 0.07);
     while (remaining > 1e-9) {
       const h = Math.min(remaining, 1 / 120);
-      const travel = 0.38 + Math.min(2.5, Math.abs(speed)) * 0.75;
+      const travel = 0.9 + Math.min(2.5, Math.abs(speed)) * 0.75;
       const follow = 1 - Math.exp(-travel * h / ds);
-      const relax = Math.exp(-h * (Math.abs(rate) > 0.15 ? 0.12 : 1.5));
+      const relax = Math.exp(-h * (Math.abs(rate) > 0.15 ? 0.12 : 3));
       for (let i = a.length - 1; i > 0; i--) {
         a[i] = clamp((a[i] + rate * h) * relax, -2.95, 2.95);
         a[i] += (a[i - 1] - a[i]) * follow;
@@ -39,22 +39,26 @@ export class BodyMotion {
   }
   // gulp / gulpGill: host-driven jaw opening and opercular pulse (a surface air
   // gulp); they take over from the breathing rhythm only while they are larger.
-  update(phase, effort, turn, breathPhase, gulp = 0, gulpGill = 0) {
+  // breathDepth: how deep this breath is (the gait varies it from breath to breath).
+  update(phase, effort, turn, breathPhase, gulp = 0, gulpGill = 0, breathDepth = 1) {
     this.revision++;
     this.effort = effort;
     // A maneuver is a sustained C-bend, not a wider propulsion oscillation.
     // Positive yaw leaves the rear trunk on the previous heading behind the head.
     // Soft saturation avoids a kink as the turn speeds up or changes direction.
     this.turnBend = this.turnAngles ? this.turnAngles.at(-1) / 2.95 : Math.tanh(turn * 0.8);
-    this.mouth = Math.max(gulp, Math.max(0, Math.sin(breathPhase)) ** 1.4 * (0.8 + effort * 0.2));
+    const depth = (0.8 + effort * 0.2) * breathDepth;
+    this.mouth = Math.max(gulp, Math.max(0, Math.sin(breathPhase)) ** 1.4 * depth);
     // Buccal intake precedes the opercular outlet: not two synchronous flaps.
-    this.gill = Math.max(gulpGill, Math.max(0, Math.sin(breathPhase - 1.05)) ** 1.3 * (0.8 + effort * 0.2));
+    this.gill = Math.max(gulpGill, Math.max(0, Math.sin(breathPhase - 1.05)) ** 1.3 * depth);
     const dx = (SPINE_END - SPINE_START) / (SPINE_COUNT - 1);
     let x = SPINE_START, z = 0, oldCos = 1, oldSin = 0;
     const d = this.data;
     for (let i = 0; i < SPINE_COUNT; i++) {
       const u = clamp((SPINE_START + i * dx + 1.22) / 2.276, 0, 1);
-      const envelope = u * u * (3 - 2 * u);
+      // The stroke bends the rear of the trunk only: the front stays all but rigid, and the
+      // visible wave is in the fins (a halfmoon's body barely undulates).
+      const envelope = smooth(0.42, 1, u);
       // Compact propulsion strokes; turning curvature is a separate maneuver.
       // Quiet holding has almost no trunk excursion, but breathing continues.
       let maneuver = smooth(0.03, 1, u) * this.turnBend * 2.95;
@@ -63,7 +67,7 @@ export class BodyMotion {
         maneuver = this.turnAngles[a] + (this.turnAngles[b] - this.turnAngles[a]) * (g - a);
       }
       const angle = maneuver + envelope * tailAmplitude(effort) * (1 - Math.abs(maneuver) / 3.2)
-        * Math.sin(phase - u * 3.1);
+        * Math.sin(phase - u * 4.2);
       const c = Math.cos(angle), s = Math.sin(angle);
       if (i) { x += dx * (oldCos + c) * 0.5; z += dx * (oldSin + s) * 0.5; }
       d[i * 4] = x; d[i * 4 + 1] = z; d[i * 4 + 2] = c; d[i * 4 + 3] = s;

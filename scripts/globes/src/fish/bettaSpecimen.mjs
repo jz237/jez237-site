@@ -75,6 +75,8 @@ export class BettaSpecimen {
     this.bubbleCount = 0;
     /** How closely it holds its fins folded now (0..1), easing to what the water asks. */
     this.clamp = 0;
+    /** Which way its fins hang (the globe's felt gravity, as a direction in the bowl's frame). */
+    this.down = [0, -1, 0];
     this.rig.add(this.fish);
     this.rig.scale.setScalar(SCALE);
     this.fish.userData.locomotion = this.locomotion();
@@ -135,6 +137,9 @@ export class BettaSpecimen {
     dt = Math.max(0, Math.min(dt, 0.07));
     this.time += dt;
     this.level = env.level;
+    const g = env.gravity, weight = g ? Math.hypot(g[0], g[1], g[2]) : 0;
+    if (weight > 1e-6) for (let k = 0; k < 3; k++) this.down[k] = g[k] / weight;
+    this.fish.userData.down = this.down;
     if (turn) this.swim.turnWith(turn);
     // Sample the actual current and its rotation across the moving anatomy.
     this.waterState = readBettaWater(sense, this.probes, env);

@@ -3,7 +3,7 @@ import { addMacroSurface } from "./surfaces.js";
 import { FinDynamics, water, waterVelocity } from "./fin-dynamics.js";
 import { BodyMotion, bodyGLSL, SPINE_COUNT } from "./body-motion.js";
 import { DisplayMotion, EyeMotion } from "./display-motion.js";
-import { SwimGait } from "./swim-gait.js";
+import { SwimGait, BODY_LENGTH } from "./swim-gait.js";
 import { gulpState, gulpPresentation, SURFACE_Y, MOUTH_DEPTH, GULP_PITCH } from "./surface-gulp.js";
 const PI = Math.PI,
   lerp = T.MathUtils.lerp,
@@ -661,6 +661,12 @@ export function createBetta({ compact = false, textures = true } = {}) {
     lift = 0,
     gulpOpen = 0,
     gulpGill = 0;
+  // The body's acceleration (world, smoothed over a few frames) from its last velocity, and that and
+  // the way down in the fish's own frame: what the fins' inertia and weight act along. A host may
+  // say which way is down (userData.down, in the fish's parent's frame).
+  const lastVelocity = new T.Vector3(), acceleration = new T.Vector3(), toFish = new T.Quaternion();
+  const accelLocal = new T.Vector3(), downLocal = new T.Vector3();
+  let measured = false;
   const cycle = 32;
   const lipLocal = [0, 0, 0, 0], lipWorld = new T.Vector3(), contour = [0, 0, 0, 0];
   fish.userData = {
@@ -806,11 +812,24 @@ export function createBetta({ compact = false, textures = true } = {}) {
         };
       }
       const relativeFlow = Math.hypot(...localFlow.map((v, i) => v - velocity[i]));
+      if (dt > 0) {
+        accelLocal.set((velocity[0] - lastVelocity.x) / dt, (velocity[1] - lastVelocity.y) / dt, (velocity[2] - lastVelocity.z) / dt);
+        if (!measured) accelLocal.set(0, 0, 0);
+        // (A jump of the route, a contact or a teleport, is not an acceleration the fins could feel.)
+        accelLocal.clampLength(0, 20);
+        acceleration.lerp(accelLocal, 1 - Math.exp(-12 * dt));
+        lastVelocity.fromArray(velocity);
+        measured = true;
+      }
+      toFish.copy(fish.quaternion).invert();
+      accelLocal.copy(acceleration).applyQuaternion(toFish);
+      const down = fish.userData.down;
+      downLocal.set(down ? down[0] : 0, down ? down[1] : -1, down ? down[2] : 0).applyQuaternion(toFish);
       gait.advance(dt, drive, relativeFlow, turn, POSES[mode] ?? {});
-      const { phase, effort, breathPhase, pectoralPhase, scull, tuck, pectoralEffort, pectoralScull } = gait;
+      const { phase, effort, breathPhase, breathDepth, pectoralPhase, pectoralPower, scull, tuck, pectoralEffort, pectoralScull, billowPhase, wash } = gait;
       // The standalone turn also leads with the neck; the rear follows the head's tangent.
       bodyMotion.advanceTurn(dt, locomotion ? locomotion.steerRate ?? angularVelocity : turn, locomotion ? locomotion.speed ?? 0 : Math.hypot(...velocity));
-      bodyMotion.update(phase, effort, turn, breathPhase, locomotion?.gulp ?? gulpOpen, locomotion?.gulpGill ?? gulpGill);
+      bodyMotion.update(phase, effort, turn, breathPhase, locomotion?.gulp ?? gulpOpen, locomotion?.gulpGill ?? gulpGill, breathDepth);
       if (lift > 0 || fish.userData.gulp.lift > 0) {
         const g = fish.userData.gulp;
         g.lift = lift; g.phase = shown.phase; g.clock = shown.clock;
@@ -824,7 +843,8 @@ export function createBetta({ compact = false, textures = true } = {}) {
       uniforms.uMouth.value = bodyMotion.mouth;
       uniforms.uGill.value = bodyMotion.gill;
       const state = {
-        body: bodyMotion, time: t, phase, pectoralPhase, scull, tuck, pectoralEffort, pectoralScull, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value, clamp: display.clamp,
+        body: bodyMotion, time: t, phase, pectoralPhase, pectoralPower, scull, tuck, pectoralEffort, pectoralScull, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value, clamp: display.clamp,
+        billowPhase, wash, speed: relativeFlow / BODY_LENGTH, accel: accelLocal.toArray(), down: downLocal.toArray(),
         heading, angularVelocity, velocity, origin: fish.position.toArray(),
         localHydrodynamics,
         strength: flowStrength, direction: water.direction, externalFlow: fish.userData.externalFlow,
