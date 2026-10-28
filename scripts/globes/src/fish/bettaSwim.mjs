@@ -79,6 +79,10 @@ export const REST_HEIGHT = 0.049, LAP_SPEED = 0.058;
 export const DISPLAY_NEAR = 0.08, DISPLAY_HOLD = 3;
 export const PERCH_SOLID = 0.04, PERCH_SLOPE = 0.35, PERCH_LIFT = 0.041;
 const PERCH_BACK = 0.16, PERCH_ABOVE = 0.05;
+// (Down on it within 0.035 of its place; or, there PERCH_SETTLE s already, within PERCH_CLOSE.)
+const PERCH_SETTLE = 3, PERCH_CLOSE = 0.06;
+// (Going down to lie, coming no nearer its place for REST_STUCK s, it lies down short of it or gives it up.)
+const REST_STUCK = 4;
 const MIRROR_REACH = 0.025, LAP_RADIUS = 0.78, LAP_LEAD = 0.55;
 // Listless (lethargy, 0..1: a fish unwell in poor water), it goes down to the sand far more often
 // and stays up to REST_LONGER times as long, lying a little over on its side; it swims slower, on
@@ -287,7 +291,7 @@ export class BettaSwim {
     // (The furthest round it has come this lap, and when: a lap that gets no further round, kept back by
     // something in its way, it gives up.)
     this.lapBest = this.lapBestAt = 0;
-    this.restY = 0; this.restHold = 8; this.restSettled = false;
+    this.restY = 0; this.restHold = 8; this.restSettled = false; this.restBest = Infinity; this.restBestAt = 0;
     // (A place on the furnishings it is going to lie on, or null for the sand: findPerch.)
     this.perch = null;
     this.gulpClock = 0;
@@ -577,7 +581,7 @@ export class BettaSwim {
       const s = (at[0] - x0) * ab[0] + (at[2] - z0) * ab[2] < 0 ? -1 : 1, dx = s * ab[0] / plan, dz = s * ab[2] / plan;
       const approach = [at[0] - dx * PERCH_BACK, at[1] + PERCH_ABOVE, at[2] - dz * PERCH_BACK];
       if (Math.hypot(...approach) > b.radius || !this.perchClear(at, PERCH_LIFT) || !this.perchClear(approach, PERCH_LIFT) || !this.clearWay(approach, 0.04)) continue;
-      best = { at, approach, heading: Math.atan2(dz, -dx), pitch: Math.atan2(s * ab[1], plan), near: false };
+      best = { at, approach, heading: Math.atan2(dz, -dx), pitch: Math.atan2(s * ab[1], plan), near: false, nearAt: 0 };
       nearest = d;
     }
     return best;
@@ -598,6 +602,8 @@ export class BettaSwim {
     this.behaviorClock = this.holdClock = 0; this.restSettled = false;
     this.perch = perch;
     this.restY = y; this.restHold = (9 + this.behaviorRandom() * 12) * (1 + (REST_LONGER - 1) * this.lethargy);
+    // (How near it has come to its place, and when it last came nearer: REST_STUCK.)
+    this.restBest = Infinity; this.restBestAt = 0;
     if (this.lethargy > 0) this.restSide = this.behaviorRandom() < 0.5 ? -1 : 1;
     return true;
   }
@@ -691,10 +697,26 @@ export class BettaSwim {
       // (Down on it; or, on the sand, given up waiting for that. One it cannot get to on the
       // furnishings, it gives up.)
       // (On a furnishing, near enough: its body, held off the wood, may keep it a little short.)
-      const down = perch ? perch.near && Math.hypot(x - perch.at[0], y - perch.at[1], z - perch.at[2]) < 0.035 : y - this.restY < 0.004;
+      // (Gliding down onto its place on the wood, it is down within 0.035 of it; or, once it has been at
+      // it PERCH_SETTLE s, within PERCH_CLOSE of it at its height: the wood is wide enough there to lie on.)
+      const off = perch ? Math.hypot(x - perch.at[0], y - perch.at[1], z - perch.at[2]) : 0;
+      const down = perch ? perch.near && (off < 0.035 || (this.behaviorClock - perch.nearAt > PERCH_SETTLE && off < PERCH_CLOSE && Math.abs(y - perch.at[1]) < 0.025)) : y - this.restY < 0.004;
       // (Given up waiting only once all but down, or no longer getting lower: sinking slowly from high,
       // listless, it goes on down.)
       if (!this.restSettled && (down || (!perch && this.behaviorClock > 20 && (y - this.restY < 0.012 || Math.abs(this.velocity[1]) < 0.002)))) { this.restSettled = true; this.holdClock = 0; }
+      // (Getting no nearer its place for REST_STUCK s, held off by something in its way, or circling it: on
+      // the sand, all but down, it lies where it is; otherwise it gives that place up, for the sand under
+      // it if it can lie there, or for another time.)
+      const left = perch ? off : y - this.restY;
+      if (left < this.restBest - 0.005) { this.restBest = left; this.restBestAt = this.behaviorClock; }
+      if (!this.restSettled && this.behaviorClock - this.restBestAt > REST_STUCK) {
+        if (!perch && left < 0.03) { this.restSettled = true; this.holdClock = 0; }
+        else {
+          const sand = water.sand + REST_HEIGHT, b = this.bounds(env);
+          if (perch && this.restRoom(b, x, sand, z) && this.restLanding(b, this.position, this.heading, sand)) { this.lieDown(sand); this.restBest = Infinity; this.restBestAt = 0; }
+          else { this.endBehavior(env); return; }
+        }
+      }
       if (!this.restSettled && perch && this.behaviorClock > 20) { this.endBehavior(env); return; }
       if (this.restSettled) this.holdClock += dt;
       if ((this.restSettled && this.holdClock >= this.restHold) || this.behaviorClock > 40 * (1 + (REST_LONGER - 1) * this.lethargy)) this.endBehavior(env);
@@ -991,7 +1013,7 @@ export class BettaSwim {
     // Going down to lie: on the sand, a swim down nose low, gliding in flatter as it nears; on a
     // furnishing, a swim to behind and above it, then a glide down onto it.
     const perch = this.mode === 'rest' ? this.perch : null;
-    if (perch && !perch.near && Math.hypot(...perch.approach.map((v, k) => v - this.position[k])) < 0.06) perch.near = true;
+    if (perch && !perch.near && Math.hypot(...perch.approach.map((v, k) => v - this.position[k])) < 0.06) { perch.near = true; perch.nearAt = this.behaviorClock; }
     const descent = this.mode === 'rest' ? this.position[1] - this.restY : 0;
     const sinking = this.mode === 'rest' && !escaping && !this.restSettled;
     // (Listless, it lets itself sink down to it, nose a little low, all but in place: SAG.)
@@ -1037,6 +1059,12 @@ export class BettaSwim {
     // Parked at the glass it works at its reflection: head turned a little off square, swaying to and fro.
     // Going for food, the head turns as the plan says (to the pellet itself from the lips, close in).
     if (feed) yawError = wrap(feed.yaw - this.heading) * smooth(0.004, 0.02, feed.plan);
+    // Gliding down onto its place on the wood, it steers for it however near (it would only circle it
+    // otherwise), and right over it, lines up along the wood.
+    if (perch && perch.near && !this.restSettled && goal === perch.at) {
+      const plan = Math.hypot(delta[0], delta[2]), w = smooth(0.012, 0.035, plan);
+      yawError = w * wrap(Math.atan2(delta[2], -delta[0]) - this.heading) + (1 - w) * wrap(perch.heading - this.heading);
+    }
     const parked = this.mode === 'mirror' && this.mirrorArrived && !escaping;
     if (parked) yawError = wrap(this.mirrorFace + this.mirrorSide * 0.5 + 0.2 * Math.sin(2 * Math.PI * 0.55 * this.holdClock) - this.heading);
     // (Hanging in the water facing the glass, it comes round away from it, rather than swim off.)
