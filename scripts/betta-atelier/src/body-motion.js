@@ -66,8 +66,9 @@ export class BodyMotion {
   // gulp / gulpGill: host-driven jaw opening and opercular pulse (a surface air
   // gulp); they take over from the breathing rhythm only while they are larger.
   // breathDepth: how deep this breath is (the gait varies it from breath to breath). kick, kickAt:
-  // a single sweep of the tail (the gait's: its size and side, signed, and how far through it).
-  update(phase, effort, turn, breathPhase, gulp = 0, gulpGill = 0, breathDepth = 1, kick = 0, kickAt = 1) {
+  // a single sweep of the tail (the gait's: its size and side, signed, and how far through it), or
+  // kickSweeps of them, to and fro.
+  update(phase, effort, turn, breathPhase, gulp = 0, gulpGill = 0, breathDepth = 1, kick = 0, kickAt = 1, kickSweeps = 1) {
     this.revision++;
     this.effort = effort;
     // A maneuver is a sustained C-bend, not a wider propulsion oscillation.
@@ -102,7 +103,7 @@ export class BodyMotion {
       // (A kick sweeps the rear out to one side and back, on top of the beat.)
       const free = 1 - Math.abs(maneuver) / 3.2;
       const angle = this.headYaw + maneuver + envelope * sweep * free * Math.sin(phase - u * WAVE)
-        + (kick ? envelope * KICK_SIZE * kick * kickSweep(kickAt, u) * free : 0);
+        + (kick ? envelope * KICK_SIZE * kick * kickSweep(kickAt, u, kickSweeps) * free : 0);
       const c = Math.cos(angle), s = Math.sin(angle);
       if (i) { x += dx * (oldCos + c) * 0.5; z += dx * (oldSin + s) * 0.5; }
       d[i * 4] = x; d[i * 4 + 1] = z; d[i * 4 + 2] = c; d[i * 4 + 3] = s;

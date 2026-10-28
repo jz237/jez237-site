@@ -25,15 +25,17 @@ export const tailHz = (effort, pace) => 0.8 + 1.2 * effort + 1.4 * Math.min(pace
 const CRUISE_STROKE = tailHz(0.45, 0.4) * tailAmplitude(0.45);
 export const STROKE_MOST = 3;
 // A single sweep of the tail (a kick: a half-beat out to one side and back, KICK_TIME s, KICK_SIZE rad
-// at the peduncle at the most) is the cause of a move from all but a standstill: setting off, a nudge
-// forward, levelling out, coming round. It travels down the trunk (KICK_LAG of its length behind at
-// the peduncle), and while it lasts it works as hard as KICK_STROKE.
-export const KICK_TIME = 0.34, KICK_SIZE = 0.3, KICK_LAG = 0.45, KICK_STROKE = 0.9;
+// at the peduncle at the most: plainly seen, the caudal swung well off the body's line, the rear of the
+// body bent with it) is the cause of a move from all but a standstill: setting off, a nudge forward,
+// levelling out, coming round. Setting off it sweeps twice (a whole beat: out to one side, then across
+// to the other, KICK_RETURN as far). It travels down the trunk (KICK_LAG of a sweep behind at the
+// peduncle), and while it lasts it works as hard as KICK_STROKE.
+export const KICK_TIME = 0.34, KICK_SIZE = 0.46, KICK_LAG = 0.45, KICK_STROKE = 0.9, KICK_RETURN = 0.75;
 /** A kick's swing at a place along the trunk (u: 0 neck, 1 peduncle), `at` (0..1) through it, as a
- *  share of its size: out and back once, later towards the tail. */
-export function kickSweep(at, u) {
-  const here = at * (1 + KICK_LAG) - KICK_LAG * u;
-  return here > 0 && here < 1 ? Math.sin(Math.PI * here) : 0;
+ *  share of its size (signed: the second of `sweeps` swings the other way): later towards the tail. */
+export function kickSweep(at, u, sweeps = 1) {
+  const here = at * (sweeps + KICK_LAG) - KICK_LAG * u;
+  return here > 0 && here < sweeps ? Math.sin(Math.PI * here) * (here > 1 ? KICK_RETURN : 1) : 0;
 }
 /** The next of a small seeded stream (mulberry32), 0..1, kept in holder.seed: the same from the same
  *  seed, so a twin of the fish (bettaLink's worker) moves alike; a plain number, so it clones. */
@@ -73,13 +75,14 @@ export class SwimGait {
     // braking (brake: the pectorals fanned and beating), each 0..1.
     this.pushes = this.kicks = 0;
     this.push = this.kick = this.dart = this.brake = 0;
-    this.kickAt = 1;
+    this.kickAt = 1; this.kickSweeps = 1;
   }
   // `pose.scull`: hold station with the pectorals, beating in long runs while the body is still.
   // `pose.tuck`: the pectorals drawn in toward the flanks, as in a startle dart.
   // `pose.back`: backing up on the pectorals (0..1): they beat quicker, and without their rests.
   // `pose.pushes` / `pose.pushSize`, `pose.kicks` / `pose.kickSize` (signed: the side the tail sweeps
-  // to): the host's strokes, counted; `pose.dart`, `pose.brake` (0..1): darting off, braking hard.
+  // to) / `pose.kickSweeps` (1, or 2 for a whole beat): the host's strokes, counted; `pose.dart`,
+  // `pose.brake` (0..1): darting off, braking hard.
   // relativeSpeed: the water going past the fish (Atelier units/s).
   advance(dt, drive, relativeSpeed, turn = 0, pose = {}) {
     if (dt <= 0) return;
@@ -90,8 +93,8 @@ export class SwimGait {
       this.pectoralPause = 0;
       this.pectoralRun = Math.max(this.pectoralRun, 2);
     }
-    if ((pose.kicks ?? 0) !== this.kicks) { this.kicks = pose.kicks; this.kick = pose.kickSize ?? 1; this.kickAt = 0; }
-    this.kickAt = Math.min(1, this.kickAt + dt / KICK_TIME);
+    if ((pose.kicks ?? 0) !== this.kicks) { this.kicks = pose.kicks; this.kick = pose.kickSize ?? 1; this.kickSweeps = pose.kickSweeps ?? 1; this.kickAt = 0; }
+    this.kickAt = Math.min(1, this.kickAt + dt / (KICK_TIME * this.kickSweeps));
     this.push *= Math.exp(-2.2 * dt);
     this.dart += ((pose.dart ?? 0) - this.dart) * (1 - Math.exp(-((pose.dart ?? 0) > this.dart ? 25 : 5) * dt));
     this.brake += ((pose.brake ?? 0) - this.brake) * (1 - Math.exp(-((pose.brake ?? 0) > this.brake ? 20 : 4) * dt));
@@ -163,6 +166,6 @@ export class SwimGait {
   get stroke() {
     // (Harder than an easy cruise only while darting.)
     const most = 1 + (STROKE_MOST - 1) * this.dart;
-    return clamp(Math.max(this.bodyHz * tailSwing(this.effort) / CRUISE_STROKE, 0.15 * this.scull, KICK_STROKE * Math.abs(this.kick) * kickSweep(this.kickAt, 1)), 0, most);
+    return clamp(Math.max(this.bodyHz * tailSwing(this.effort) / CRUISE_STROKE, 0.15 * this.scull, KICK_STROKE * Math.abs(this.kick * kickSweep(this.kickAt, 1, this.kickSweeps))), 0, most);
   }
 }

@@ -120,6 +120,15 @@ export const YAW_DRAG = 1.6, YAW_PEAK = 1.5, YAW_SNAP = 7, YAW_GAP = 0.35;
 // A pass often ends in a hard stop (HARD_STOP of them), braked in BRAKE_TIME s on its pectorals,
 // fanned, rather than eased into.
 export const DART_START = 0.4, DART_SPEED = 0.5, DART_TIME = 0.3, LUNGE_OFTEN = 0.25, HARD_STOP = 0.45, BRAKE_TIME = 0.35;
+// The stroke comes first and the move after it: darting or coming round from all but a standstill, it
+// gains no way and swings round only slowly for STROKE_LEAD s after the stroke, while the sweep runs
+// down the body to the tail; setting off, START_LEAD s, until its first sweep is at its widest. A
+// hover turn takes a sweep of the tail with its pectoral beat from TURN_KICK of its strongest on (a
+// half beat: the tail swung out the way the head is not).
+export const STROKE_LEAD = 0.18, START_LEAD = 0.26, TURN_KICK = 0.3;
+// A fish hanging in the water or all but still keeps near level: it tips towards where it is going
+// only as it means to get under way or does (from LEVEL_SLOW to LEVEL_FAST units/s).
+const LEVEL_SLOW = 0.03, LEVEL_FAST = 0.09;
 
 // Goals are a real stride away across the water and within the slope the fish can climb, so it never
 // has to circle a point above or below it. A net turn beyond SPIN_LIMIT rad (leaking away over ~6 s)
@@ -186,8 +195,15 @@ export class BettaSwim {
     // making (rad/s, slowing).
     this.pushes = this.kicks = 0;
     this.pushSize = this.kickSize = 0;
+    this.kickSweeps = 1;
     this.cueClock = 9;
     this.yawStroke = 0;
+    // (The time since a stroke that sets off a move, which waits leadTime s on it; which way round it
+    // is committed to coming, in a turn far round: -1, 1, or 0 for none.)
+    this.leadClock = 9; this.leadTime = STROKE_LEAD;
+    this.turnSide = 0;
+    // (The speed it last meant to swim at, units/s.)
+    this.intent = 0;
     // Darting (0..1: fins folded, beating hard) and braking (0..1: pectorals fanned): the time since
     // each began; whether it is to dart once it faces the way it is going; how fast it darts; whether
     // this pass is to end in a hard stop; when it lunges from this hover (s, its clock).
@@ -383,11 +399,13 @@ export class BettaSwim {
   }
 
   /** A stroke: a beat of the pectorals (push, 0..1; as it comes round, the outer one the harder) and,
-   *  if kick, one sweep of the tail (its size, 0..1, to `side`), taken by the host's gait. */
-  cue(push, kick, side) {
+   *  if kick, a sweep of the tail (its size, 0..1, to `side`; sweeps 2: and back across to the other),
+   *  taken by the host's gait. lead: it sets off a move, which waits on it that long (s), or 0. */
+  cue(push, kick, side, sweeps = 1, lead = 0) {
     if (push > 0) { this.pushes++; this.pushSize = Math.min(1, push); }
-    if (kick > 0) { this.kicks++; this.kickSize = Math.min(1, kick) * (side < 0 ? -1 : 1); }
+    if (kick > 0) { this.kicks++; this.kickSize = Math.min(1, kick) * (side < 0 ? -1 : 1); this.kickSweeps = sweeps; }
     this.cueClock = 0;
+    if (lead) { this.leadClock = 0; this.leadTime = lead; }
   }
 
   /** Only a measured, wet fish in an upright globe takes part in these. */
@@ -639,6 +657,9 @@ export class BettaSwim {
       const ahead = (-delta[0] * Math.cos(this.heading) + delta[2] * Math.sin(this.heading)) / Math.max(distance, 1e-6);
       let score = ahead * (reverse ? -0.7 : 0.8) + this.random() * 0.45 - Math.abs(distance - stride) - (distance < 0.22 ? 2 : 0);
       if (L > 0) score -= L * (1.5 * (y - b.low) / Math.max(b.high - b.low, 1e-6) + 3 * Math.max(0, r - 0.22));
+      // (Come a long way round one way of late, it would rather not go on round that way again.)
+      const round = wrap(Math.atan2(delta[2], -delta[0]) - this.heading);
+      if (round * this.yawAccum > 0) score -= Math.abs(round) * smooth(1.5, 3, Math.abs(this.yawAccum));
       // A goal almost overhead or underfoot cannot be reached by turning; it only makes the fish circle it.
       const leg = Math.hypot(delta[0], delta[2]);
       if (leg < MIN_LEG || Math.abs(delta[1]) > MAX_SLOPE * leg + 0.05) continue;
@@ -727,7 +748,7 @@ export class BettaSwim {
     this.timer -= dt;
     this.gillClock += dt;
     this.diveClock += dt;
-    this.cueClock += dt; this.dartClock += dt; this.brakeClock += dt;
+    this.cueClock += dt; this.dartClock += dt; this.brakeClock += dt; this.leadClock += dt;
     // (How busy it has been over the last minute or so: swimming hard, or displaying.)
     this.activity = damp(this.activity, this.drive > 0.12 || this.flaring ? 1 : 0, dt, 1 / 40);
     // A trip to the surface needs a measured, calm, level free surface above an
@@ -943,9 +964,10 @@ export class BettaSwim {
       if (this.cueClock > YAW_GAP && Math.abs(want) > 0.25 && Math.abs(this.yawStroke) < 0.3 && most > 0.3) {
         this.yawStroke = clamp(want * YAW_DRAG, -most, most);
         const size = Math.abs(this.yawStroke) / YAW_PEAK;
-        this.cue(0.4 + 0.6 * size, size > 0.45 ? size : 0, this.yawStroke);
+        this.cue(0.4 + 0.6 * size, size > TURN_KICK ? size : 0, this.yawStroke, 1, STROKE_LEAD);
       }
-      wantedRate = this.yawStroke + 0.03 * this.wander(0, 0.6); angularAcceleration = YAW_SNAP;
+      // (Its head swings round once the stroke is under way.)
+      wantedRate = this.yawStroke * smooth(0, STROKE_LEAD, this.leadClock) + 0.03 * this.wander(0, 0.6); angularAcceleration = YAW_SNAP;
     } else if (aiming) wantedRate = clamp(yawError * 2, -1, 1);
     else if (this.mode === 'rest' && this.restSettled && perch) wantedRate = clamp(wrap(perch.heading - this.heading), -0.3, 0.3);
     else if (!holding) {
@@ -954,8 +976,24 @@ export class BettaSwim {
       // from a standstill it swings round more gently.
       const arc = Math.max(TURN_STILL * (1 - smooth(0.03, 0.08, Math.abs(this.speed))), Math.abs(this.speed) / (this.turnRadius * (nearWall || nearThing ? 0.6 : 1)));
       const maxRate = TURN_FASTEST * Math.tanh(arc / TURN_FASTEST);
-      wantedRate = clamp(yawError * 2.2, -maxRate, maxRate);
+      // A turn far round, once begun one way, goes on round that way: two ways out at once (the glass
+      // and a thing beside it) must not leave it dithering, swung to and fro on the spot.
+      if (Math.abs(yawError) < 1) this.turnSide = 0;
+      else if (!this.turnSide && Math.abs(yawError) > 1.6) this.turnSide = Math.sign(yawError);
+      // (Not the long way round, though, for a goal that has come to lie far behind it the other way.)
+      let round = this.turnSide && Math.sign(yawError) !== this.turnSide ? yawError + 2 * Math.PI * this.turnSide : yawError;
+      if (Math.abs(round) > 4.4) { this.turnSide = Math.sign(yawError); round = yawError; }
+      wantedRate = clamp(round * 2.2, -maxRate, maxRate);
+      // Coming round from all but a standstill, it does so on a stroke: its outer pectoral, and for a
+      // big turn a sweep of the tail, the head swinging round once it is under way.
+      const stalled = Math.abs(this.speed) < 0.04 && !escaping && !parked;
+      if (stalled && Math.abs(wantedRate) > 0.5 && Math.abs(this.steerRate) < 0.2 && this.cueClock > YAW_GAP) {
+        const size = Math.min(1, Math.abs(wantedRate) / YAW_PEAK);
+        this.cue(0.4 + 0.6 * size, size > TURN_KICK ? size : 0, wantedRate, 1, STROKE_LEAD);
+      }
+      if (stalled) wantedRate *= smooth(0, STROKE_LEAD, this.leadClock);
     }
+    if (holding || startling) this.turnSide = 0;
     for (let k = 0; k < 3; k++) this.waterSpin[k] = damp(this.waterSpin[k], water?.angular[k] ?? 0, dt, 5);
     this.steerRate += clamp(wantedRate - this.steerRate, -angularAcceleration * dt, angularAcceleration * dt);
     this.angularVelocity = this.steerRate + this.waterSpin[1] * 0.8;
@@ -973,6 +1011,12 @@ export class BettaSwim {
       }
     }
     let pitchTarget = still ? 0 : clamp(Math.atan2(delta[1], Math.hypot(delta[0], delta[2])), escaping || feeding ? -0.6 : -0.32, feeding ? 1.2 : 0.32);
+    // (All but still, it keeps near level, rather than stand on its tail going nowhere; nose down, it
+    // still goes half as far, sinking away from the film.)
+    if (!escaping && !feeding) {
+      const under = smooth(LEVEL_SLOW, LEVEL_FAST, Math.max(Math.abs(this.speed), this.intent));
+      pitchTarget *= pitchTarget > 0 ? under : 0.5 + 0.5 * under;
+    }
     // Hovering, it hangs a little nose down, nodding slowly as it trims itself (level, just over the
     // sand).
     const floor = water ? water.sand + REST_HEIGHT - 0.004 : b.low, low = smooth(0.005, 0.04, this.position[1] - floor);
@@ -1042,11 +1086,12 @@ export class BettaSwim {
     if (startling) desiredSpeed = STARTLE_SPEED * Math.max(0, Math.cos(yawError)) ** 2 * Math.exp(-Math.max(0, this.startleClock - 0.1) / STARTLE_COAST) * (1 - 0.5 * L);
     if (escaping) desiredSpeed = Math.max(desiredSpeed, 0.16);
     // Off in a dart once it faces the way it is going (DART_*): a strong first beat, its fins folded.
-    if (this.dartReady && !still && !escaping && Math.abs(yawError) < 0.45) { this.dartReady = false; this.dartClock = 0; this.cue(0.5, 1, this.kickSize < 0 ? 1 : -1); }
+    if (this.dartReady && !still && !escaping && Math.abs(yawError) < 0.45) { this.dartReady = false; this.dartClock = 0; this.cue(0.5, 1, this.kickSize < 0 ? 1 : -1, 1, STROKE_LEAD); }
     const darting = this.dartClock < DART_TIME && (this.mode === 'cruise' || this.mode === 'burst') && !escaping;
     if (darting) desiredSpeed = Math.max(desiredSpeed, this.dartSpeed * (1 - 0.4 * L));
     // What the tail is asked for, before the body has tipped into line to swim it.
     const intent = desiredSpeed;
+    this.intent = Math.abs(intent);
     // (A burst of speed comes at once; a snap or a take brakes it hard, fins flared; coming up to the
     // film it brakes on its pectorals, so as not to break it; a hard stop is braked on them, fanned.)
     const slowing = Math.abs(desiredSpeed) < Math.abs(this.speed), braking = this.brakeClock < BRAKE_TIME && slowing;
@@ -1054,9 +1099,11 @@ export class BettaSwim {
     let nextSpeed = damp(this.speed, desiredSpeed, dt, pace);
     // Speed is only gained as fast as the tail is working; slowing down is drag, and costs nothing.
     if (!startling && !snapping && stroke !== null && Math.abs(nextSpeed) > Math.abs(this.speed)) nextSpeed = Math.sign(nextSpeed) * Math.min(Math.abs(nextSpeed), Math.abs(this.speed) + STROKE_ACCEL * clamp(stroke, 0, STROKE_MOST) * dt);
-    // Gaining way from all but a stop with its tail all but still, it goes on a stroke: a sweep of the
-    // tail and a beat of the pectorals (setting off, levelling out to swim off from the film).
-    if (!startling && !snapping && !darting && desiredSpeed > Math.abs(this.speed) + 0.025 && this.drive < 0.12 && this.cueClock > 0.7) this.cue(0.6, 0.7, this.kickSize < 0 ? 1 : -1);
+    // Gaining way from all but a stop with its tail all but still, it goes on a stroke: a whole beat of
+    // the tail, out to one side and across to the other, and a beat of the pectorals (setting off,
+    // levelling out to swim off from the film); it gets under way as the sweep reaches the tail.
+    if (!startling && !snapping && !darting && desiredSpeed > Math.abs(this.speed) + 0.025 && this.drive < 0.12 && this.cueClock > 0.7) this.cue(0.6, 1, this.kickSize < 0 ? 1 : -1, 2, START_LEAD);
+    if (!startling && !snapping && this.leadClock < this.leadTime && Math.abs(nextSpeed) > Math.abs(this.speed)) nextSpeed = this.speed;
     this.dart = darting ? 1 : 0;
     this.brake = this.brakeClock < BRAKE_TIME ? 1 : 0;
     this.speed = nextSpeed;
@@ -1077,7 +1124,9 @@ export class BettaSwim {
     // (Turning over or round in place, about its middle, as a hovering fish does: the neck swings with
     // the head by the change of pitch and heading; tipping just over the sand, about the neck, though
     // it still comes round about its middle there.)
-    const pivot = this.mode === 'dive' || this.mode === 'hover' ? PITCH_PIVOT * (1 - smooth(0.02, 0.08, Math.abs(this.speed))) : 0, tip = pivot * (this.mode === 'hover' ? low : 1);
+    // (So too coming round slowly in any other way, but in a startle, at the film or after food.)
+    const pivots = !startling && !feeding && !climbing && this.mode !== 'gulp' && !(this.mode === 'rest' && this.restSettled);
+    const pivot = pivots ? PITCH_PIVOT * (1 - smooth(0.02, 0.08, Math.abs(this.speed))) : 0, tip = pivot * (this.mode === 'dive' ? 1 : low);
     const was = [-Math.cos(oldHeading) * Math.cos(oldPitch), Math.sin(oldPitch), Math.sin(oldHeading) * Math.cos(oldPitch)];
     const round = [-Math.cos(this.heading) * Math.cos(oldPitch), Math.sin(oldPitch), Math.sin(this.heading) * Math.cos(oldPitch)];
     for (let k = 0; k < 3; k++) {

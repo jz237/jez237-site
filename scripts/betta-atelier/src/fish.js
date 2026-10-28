@@ -11,8 +11,9 @@ const PI = Math.PI,
 export const SCALE = 0.0032;
 // The gill covers swing out from their hinge as it breathes (COVER_LIFT at the rim, a breath's full
 // depth; COVER_FLARE more in display), their rims drawn forward as they swing (COVER_DRAW), so the
-// dark gill under the rim shows plainly, side on too.
-export const COVER_LIFT = 0.062, COVER_FLARE = 0.085, COVER_DRAW = 0.045;
+// dark gill under the rim shows plainly, side on too: a dark crescent opening and closing behind the
+// cover with each breath, a few pixels wide even with the whole fish 150 px long.
+export const COVER_LIFT = 0.08, COVER_FLARE = 0.085, COVER_DRAW = 0.065;
 // Pectoral pose by locomotion mode: fan to hold station when still, fold in for the startle dart.
 export const POSES = { hover: { scull: 1 }, surface: { scull: 1 }, gulp: { scull: 1 }, rise: { scull: 0.7 }, dive: { scull: 0.5 }, glide: { scull: 0.3 }, startle: { tuck: 1 }, mirror: { scull: 1 }, lap: { scull: 0.15 }, rest: { scull: 0.25 } };
 const world = ([x, y]) => [(x - 680) * SCALE, (420 - y) * SCALE];
@@ -202,7 +203,7 @@ function addBreathingAnatomy(fish, skin) {
       }
       // The dark gill is concealed beneath the closed cover's rim, revealed on exhalation.
       for (let j = 0; j < 2; j++) {
-        const px = edge - (j ? 0 : 20 * shape), [x, y] = world([px, py]);
+        const px = edge - (j ? 0 : 30 * shape), [x, y] = world([px, py]);
         gp.push(x, y, surface(px, 0.001)); gu.push(u, j);
       }
       if (i < rows) { const n = i * 2; gi.push(n, n + 1, n + 2, n + 1, n + 3, n + 2); }
@@ -849,12 +850,12 @@ export function createBetta({ compact = false, textures = true } = {}) {
       const pose = POSES[mode] ?? {};
       gait.advance(dt, drive, relativeFlow, turn, locomotion ? {
         ...pose, back: locomotion.backing ?? 0, pushes: locomotion.pushes ?? 0, pushSize: locomotion.pushSize ?? 0, kicks: locomotion.kicks ?? 0,
-        kickSize: locomotion.kickSize ?? 0, dart: locomotion.dart ?? 0, brake: locomotion.brake ?? 0,
+        kickSize: locomotion.kickSize ?? 0, kickSweeps: locomotion.kickSweeps ?? 1, dart: locomotion.dart ?? 0, brake: locomotion.brake ?? 0,
       } : pose);
       const { phase, effort, breathPhase, breathDepth, pectoralPhase, pectoralPower, scull, tuck, pectoralEffort, pectoralScull, billowPhase, wash, push, dart, brake } = gait;
       // The standalone turn also leads with the neck; the rear follows the head's tangent.
       bodyMotion.advanceTurn(dt, locomotion ? locomotion.steerRate ?? angularVelocity : turn, locomotion ? locomotion.speed ?? 0 : Math.hypot(...velocity), locomotion?.pitchRate ?? 0);
-      bodyMotion.update(phase, effort, turn, breathPhase, locomotion?.gulp ?? gulpOpen, locomotion?.gulpGill ?? gulpGill, breathDepth, gait.kick, gait.kickAt);
+      bodyMotion.update(phase, effort, turn, breathPhase, locomotion?.gulp ?? gulpOpen, locomotion?.gulpGill ?? gulpGill, breathDepth, gait.kick, gait.kickAt, gait.kickSweeps);
       // The eyes ride in their sockets on the head as it yaws against the tail and into turns.
       for (const { pivot, motion, side, socket } of eyes) {
         const f = bodyMotion.frame(socket[0], contour);
