@@ -12,11 +12,14 @@ const PIVOT_U = 0.3;
 // so the rear third swings as a soft S rather than a flag), and how far the head yaws back against
 // it (a share of the tail's swing).
 const WAVE = 5, RECOIL = 0.12;
-// Turning, the trunk curls into a C at once (CURL s of the turn's rate at the tail, CURL_MOST rad at
-// the most: the bend leads the turn rather than waiting for the tail to be dragged round), the head
-// leads the route into the turn by LEAD s of it (LEAD_MOST rad at the most: a startle's whip is the
-// trunk's), and the C straightens as the turn ends.
-const CURL = 0.4, CURL_MOST = 1.4, LEAD = 0.05, LEAD_MOST = 0.15;
+// Turning, the head leads the route into the turn by LEAD s of it (LEAD_MOST rad at the most: a
+// startle's whip is the trunk's), and the trunk curls into a C: by the host's curl (-1..1, + to its
+// left; without one, its own from the turn's rate: tanh(rate / CURL_RATE)), CURL_BEND rad at the
+// peduncle for a full one, bent evenly along it (a C, not a hinge). The head takes it up first and each
+// place behind a moment later (CURL_LAG s at the peduncle), so the C forms from the head back while the
+// rear is still on its old way, and lets it go from the head back too: the tail straightens out of it
+// last, a stroke running down to it.
+const LEAD = 0.05, LEAD_MOST = 0.15, CURL_RATE = 1.6, CURL_BEND = 1.5, CURL_LAG = 0.3;
 // Tipping nose up or down, the head leads and the rest follows: each place along the trunk takes up
 // the pitch's change a moment later the further back it is (PITCH_LAG s at the peduncle, less the
 // faster the fish swims, the water straightening it), so the spine bends in a gentle curve, seen from
@@ -32,6 +35,11 @@ export class BodyMotion {
     // peduncle is (rad, + its rear lifted: lagging a nose-up tip), the peduncle's (arch), and the
     // lift it makes at each spine sample (Atelier units, + up; uLift in the shader).
     this.pitchBend = new Float64Array(PITCH_POINTS);
+    // The C as each of those places has taken it up (share of a full one, + to the left), the angle it
+    // has bent the trunk to there from the neck (rad), and the curl it was last given (-1..1).
+    this.curlBend = new Float64Array(PITCH_POINTS);
+    this.curlAngle = new Float64Array(PITCH_POINTS);
+    this.curl = 0;
     this.arch = 0;
     this.lift = new Float32Array(SPINE_COUNT);
     // The voluntary turn rate, eased over a tenth of a second or so (rad/s), and the head's yaw
@@ -48,10 +56,16 @@ export class BodyMotion {
   // the rear later, like the koi's head-following chain, instead of posing the
   // entire trunk in the same C shape at once. Only voluntary steering enters
   // here: water can rotate the whole fish without triggering a muscle U-turn.
-  // pitchRate: the fish's own tipping (rad/s, nose up), for the pitch bend.
-  advanceTurn(dt, rate, speed, pitchRate = 0) {
+  // pitchRate: the fish's own tipping (rad/s, nose up), for the pitch bend. curl: the host's C (-1..1),
+  // or none.
+  advanceTurn(dt, rate, speed, pitchRate = 0, curl = null) {
     this.turnAngles ??= new Float64Array(25);
     if (!(dt > 0)) return;
+    this.curl = curl ?? Math.tanh(rate / CURL_RATE);
+    // (A startle's whip, many times quicker than any turn, bends the whole trunk at once.)
+    const c = this.curlBend, quick = 1 + 2 * Math.max(0, Math.abs(rate) - 3);
+    c[0] = this.curl;
+    for (let i = 1; i < PITCH_POINTS; i++) c[i] += (this.curl - c[i]) * (1 - Math.exp(-dt * quick / (CURL_LAG * i / (PITCH_POINTS - 1))));
     // (Each place behind the neck follows the pitch's rate over its own lag: lag x rate is how far
     // behind it is, the bend easing in as the tip begins and out after it ends.)
     const b = this.pitchBend, lagAll = PITCH_LAG / (1 + 0.8 * Math.min(2.5, Math.abs(speed)));
@@ -90,8 +104,11 @@ export class BodyMotion {
     // Positive yaw leaves the rear trunk on the previous heading behind the head.
     // Soft saturation avoids a kink as the turn speeds up or changes direction.
     // (A strong stroke round, going back the way it came from all but a standstill, curls it the deeper.)
-    const curl = clamp(CURL * this.steer * (1 + 0.6 * smooth(1.15, 1.9, Math.abs(this.steer))), -CURL_MOST, CURL_MOST);
-    this.turnBend = this.turnAngles ? clamp(this.turnAngles.at(-1) + curl, -2.95, 2.95) / 2.95 : Math.tanh(turn * 0.8);
+    // (The C's angle at each place: its bend summed from the neck, eased in just behind it.)
+    const ca = this.curlAngle, cb = this.curlBend, step = 1 / (PITCH_POINTS - 1);
+    ca[0] = 0;
+    for (let i = 1; i < PITCH_POINTS; i++) ca[i] = ca[i - 1] + CURL_BEND * step * 0.5 * (cb[i - 1] + cb[i]) * smooth(0, 0.1, i * step);
+    this.turnBend = this.turnAngles ? clamp(this.turnAngles.at(-1) + ca[PITCH_POINTS - 1], -2.95, 2.95) / 2.95 : Math.tanh(turn * 0.8);
     const depth = (0.8 + effort * 0.2) * breathDepth;
     // (Breathing, the lips only part; the gill covers pump plainly, lifting off the flank to show
     // the dark slit under them.)
@@ -114,7 +131,7 @@ export class BodyMotion {
       let maneuver = smooth(0.03, 1, u) * this.turnBend * 2.95;
       if (this.turnAngles) {
         const g = u * (this.turnAngles.length - 1), a = Math.floor(g), b = Math.min(a + 1, this.turnAngles.length - 1);
-        maneuver = clamp(this.turnAngles[a] + (this.turnAngles[b] - this.turnAngles[a]) * (g - a) + curl * smooth(0.05, 1, u), -2.95, 2.95);
+        maneuver = clamp(this.turnAngles[a] + (this.turnAngles[b] - this.turnAngles[a]) * (g - a) + ca[a] + (ca[b] - ca[a]) * (g - a), -2.95, 2.95);
       }
       // (A kick sweeps the rear out to one side and back, on top of the beat.)
       const free = 1 - Math.abs(maneuver) / 3.2;

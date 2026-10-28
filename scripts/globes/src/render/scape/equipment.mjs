@@ -369,11 +369,23 @@ function buildFilter(detail) {
     onGlass(0.3, az - 0.03, LINE_INSET), onGlass(0.56, az - 0.07, 0.045), onGlass(0.78, az - 0.09, 0.022), onGlass(0.866, az - 0.095, LINE_INSET)];
   const line = glassLine(path, Math.max(4, Math.round(12 * detail)), LINE_INSET);
   sweep(mb, line, AIRLINE_R, Math.max(6, Math.round(9 * detail)), MAT.TUBE, (s) => [3, s, 0, 0.9], true, [0, 1, 0]);
+  // (The airline's room follows it as it runs: back from the port to the glass, sagging a little, then
+  // up the glass to the film; one straight piece from the port to the film would cut that corner,
+  // and the fish swim through the tubing behind the lift tube.)
+  // (Its own curve, coarse: the same at any detail.)
+  // (Its own curve, coarse: the same at any detail; a point is kept only where leaving it out would
+  // take the room more than a few millimetres off the tubing.)
+  const coarse = glassLine(path, 3, LINE_INSET), top = coarse.findIndex((p) => p[1] > 0.27);
+  const curve = [port, ...coarse.slice(1, top < 0 ? coarse.length : top + 1)], run = [port];
+  const off = (p, a, b) => { const ab = sub(b, a), t = Math.min(Math.max(dot(sub(p, a), ab) / dot(ab, ab), 0), 1); return len(sub(p, add(a, mul(ab, t)))); };
+  for (let k = 1, from = 0; k < curve.length; k++) {
+    if (k === curve.length - 1 || curve.slice(from + 1, k + 2).some((p) => off(p, curve[from], curve[k + 1]) > 0.004)) { run.push(curve[k]); from = k; }
+  }
   const obstacles = [
     // (The sponge and its base, standing in the sand, and the lift tube; the airline up to the film.)
     { a: add(foot, [0, -0.01, 0]), b: add(foot, [0, F.spongeTop, 0]), r: 0.158, solid: 0.108 },
     { a: add(foot, [0, F.spongeTop, 0]), b: add(foot, [0, F.tubeTop, 0]), r: 0.08, solid: 0.03 },
-    { a: port, b: onGlass(0.27, az - 0.025, LINE_INSET), r: 0.064, solid: 0.014 },
+    ...run.slice(1).map((b, k) => ({ a: run[k], b, r: 0.064, solid: 0.014 })),
   ];
   return { mesh: { ...mb.finish(), onGlass: true }, obstacles, bubbles: { at: add(foot, [0, F.tubeTop - 0.01, 0]), ...BUBBLES } };
 }

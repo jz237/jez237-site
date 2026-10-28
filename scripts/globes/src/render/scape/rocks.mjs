@@ -9,6 +9,7 @@
 // inside the mesh's shallow groove.
 
 import { BED_LEVEL, MAT, MeshBuilder, fbm3, noise3, stream } from './mesh.mjs';
+import { finRoom } from './finRoom.mjs';
 
 /** @typedef {import('./mesh.mjs').V3} V3 */
 /** @typedef {import('./mesh.mjs').Obstacle} Obstacle */
@@ -595,8 +596,11 @@ export function build(options = { detail: 1 }) {
     }
     for (let t = 0; t < sphere.tris.length; t += 3) mb.tri(base + sphere.tris[t], base + sphere.tris[t + 1], base + sphere.tris[t + 2], MAT.ROCK);
     const o = stone.obstacle;
-    obstacles.push({ a: o.a.slice(), b: o.b.slice(), r: o.r, solid: o.solid });
+    // (fin 0: its fins keep the stone's whole surface instead, finRoom.mjs.)
+    obstacles.push({ a: o.a.slice(), b: o.b.slice(), r: o.r, solid: o.solid, fin: 0 });
   });
+  // (And the room its fins keep round it: finRoom.mjs.)
+  obstacles.push(...finRoom('rocks'));
   return { meshes: [mb.finish()], obstacles };
 }
 

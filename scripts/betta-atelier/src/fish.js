@@ -858,7 +858,7 @@ export function createBetta({ compact = false, textures = true } = {}) {
       } : pose);
       const { phase, effort, breathPhase, breathDepth, pectoralPhase, pectoralPower, scull, tuck, pectoralEffort, pectoralScull, billowPhase, wash, push, dart, brake } = gait;
       // The standalone turn also leads with the neck; the rear follows the head's tangent.
-      bodyMotion.advanceTurn(dt, locomotion ? locomotion.steerRate ?? angularVelocity : turn, locomotion ? locomotion.speed ?? 0 : Math.hypot(...velocity), locomotion?.pitchRate ?? 0);
+      bodyMotion.advanceTurn(dt, locomotion ? locomotion.steerRate ?? angularVelocity : turn, locomotion ? locomotion.speed ?? 0 : Math.hypot(...velocity), locomotion?.pitchRate ?? 0, locomotion?.curl ?? null);
       bodyMotion.update(phase, effort, turn, breathPhase, locomotion?.gulp ?? gulpOpen, locomotion?.gulpGill ?? gulpGill, breathDepth, gait.kick, gait.kickAt, gait.kickSweeps);
       // The eyes ride in their sockets on the head as it yaws against the tail and into turns.
       for (const { pivot, motion, side, socket } of eyes) {
@@ -885,9 +885,15 @@ export function createBetta({ compact = false, textures = true } = {}) {
         push, dart, brake, kick: gait.kick, kickAt: gait.kickAt, kickSweeps: gait.kickSweeps,
         // (How hard it works to hold or shift station at hover or slow speed, 0..1: the gait's hold.)
         hold: gait.hold,
+        // (The water's surface, for the fins to keep under: a host's userData.surfaceY, its height along
+        // the fish's up, -userData.down, in the frame the fish is placed in, brought into its own frame.)
+        surfaceY: fish.userData.surfaceY === undefined ? undefined
+          : fish.userData.surfaceY + (down ? down[0] * fish.position.x + down[1] * fish.position.y + down[2] * fish.position.z : -fish.position.y),
         billowPhase, wash, speed: relativeFlow / BODY_LENGTH, accel: accelLocal.toArray(), down: downLocal.toArray(),
         heading, angularVelocity, velocity, origin: fish.position.toArray(),
         localHydrodynamics, solids: finSolids.count ? finSolids : null,
+        // (The C it is curling into as it comes round, -1..1, + to its left: the host's curl, or the body's own.)
+        curl: bodyMotion.curl,
         strength: flowStrength, direction: water.direction, externalFlow: fish.userData.externalFlow,
         bodyRadius(x, y) {
           const pixelX = x / SCALE + 680;

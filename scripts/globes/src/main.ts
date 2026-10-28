@@ -392,7 +392,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // rests on them and flows round them), where the fish keeps clear of them, and where the sponge
   // filter's air bubbles out.
   let scapeTex: THREE.Texture | null = null;
-  let scapeObstacles: { a: number[]; b: number[]; r: number; solid: number }[] = [];
+  let scapeObstacles: { a: number[]; b: number[]; r: number; solid: number; fin?: number }[] = [];
   let plants: MovingPlants | null = null;
   let filterAir: { at: number[]; rate: number; radius: number } | null = null;
   if (furnishing) {
@@ -418,7 +418,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   let plantFrame = 0;
   let plantEvery = LITE ? 2 : 1;
   // (Where the bowl's turn has carried them, each frame: the sim frame.)
-  const turnedObstacles = scapeObstacles.map((o) => ({ a: [0, 0, 0], b: [0, 0, 0], r: o.r, solid: o.solid }));
+  const turnedObstacles = scapeObstacles.map((o) => ({ a: [0, 0, 0], b: [0, 0, 0], r: o.r, solid: o.solid, fin: o.fin ?? o.solid }));
   // (Set up before the globe's pipelines are begun, not alongside them: three holds a WebGPU
   // error scope open over each pipeline it builds, the sim one over its setup, and scopes close
   // last first, so side by side each could be handed the other's errors, and the sim's check that

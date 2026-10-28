@@ -74,7 +74,7 @@ export class Betta implements Feeder {
   readonly reach = 0.055;
   /** What else is in the water (the bowl's furnishings: sim frame), set by the host. Its route
    *  keeps round them (bettaSwim.mjs), and its body out of their solid parts. */
-  obstacles: { a: number[]; b: number[]; r: number; solid: number }[] = [];
+  obstacles: { a: number[]; b: number[]; r: number; solid: number; fin?: number }[] = [];
   /** What the bowl's water is doing to it (water/effects.ts), set by the host each frame: how
    *  listless it is, how short of air, how closely it holds its fins (bettaSpecimen.mjs), and how
    *  keen it is on food (FishFood). */
