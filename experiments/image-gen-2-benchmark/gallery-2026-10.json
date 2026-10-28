@@ -609,6 +609,121 @@
     }
   },
   {
+    "id": "2026-10-27-factual-infographic-factual-infographic-dactylotum-bicolor-",
+    "title": "Factual infographic: Dactylotum bicolor — The Painted Grasshopper",
+    "tests": "Scanned all 192 factual archive records; no Dactylotum/painted/pictured grasshopper duplicate. Three institutional sources fetched before authoring. Explicit scheduled scientific-plate exception retained: seven supporting studies, three external close-ups and prominent generalized internal gut.; archive_slot=2026-10-27T20:20; concept=dactylotum-bicolor-warning-colors-prairie; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: bizarre-insect-life",
+    "prompt": "Create a finished, richly detailed natural-history scientific plate about the PAINTED GRASSHOPPER, with the exact italic scientific name Dactylotum bicolor beneath the title. Direct full-canvas artwork, not a photographed poster or a room, no props, logos, bibliography or URLs. Use naturalistic macro-photographic surface fidelity combined with precise technical illustration, on warm pale mineral-white with restrained sage and clay accents. Keep insect biology as the overwhelming visual mass, not paragraphs. Intentional large-format plate with clear typographic hierarchy, substantial breathing room and delicate precise leaders. Follow the scheduled insect scientific-plate exception: one enormous complete whole-insect macro hero and seven substantive supporting scientific studies; preserve all seven rather than simplifying to a sparse artistic poster. Use varied study sizes and a strong hierarchy, not a matrix of identical cards.\n\nThe hero occupies the upper central field, a three-quarter lateral adult on a minimal prairie-ground plane, all six legs anatomically accounted for with correct thoracic attachments, true head/thorax/abdomen segmentation and slender antennae. Show intricate cuticle punctures, vertical face and rounded crown, three transverse pronotal incisions, black/yellow body banding and red-orange dorsal stripe and face markings, black/red-orange banded hind femora, yellow-green hind tibiae, tiny black forewing remnants with fine yellow venation. Never give it full flight wings. Accurate colors for the cited Colorado form, not fluorescent fantasy. Fine tactile relief, realistic occlusion and coherent directional light; depth of field must not obscure anatomical landmarks.\n\nSeven substantial supporting studies, distinctly separated and elegantly captioned as a scientific plate:\n1. A large lateral translucent internal-anatomy study, the second main anchor, labeled clearly “Generalized insect digestive plan — schematic, not a species dissection”. Show ONLY the sourced digestive tube: mouth → foregut/crop → midgut → hindgut → anus. Use a few precise leaders: “Crop: food storage”; “Midgut: digestion + nutrient absorption”; “Hindgut: water + salt recovery”. Tube remains within body, no vertebrate organs, invented glands, unlabeled speculative systems or exact measured-dissection claim. Enough area for effortless reading.\n2. A large head/pronotum close-up, revealing rounded crown, vertical face, slender antenna bases and punctured cylindrical pronotum, with three transverse grooves accurately visible. Concise labels only.\n3. A large reduced-wing close-up in true lateral context: tiny black tegmen with fine yellow veins; label “Very small wings • flightless”. No unfolding flight illustration.\n4. A large hind-leg and cuticle detail showing black/red-orange banding on the robust hind femur and yellow-green tibia, natural exoskeletal texture, no invented gearing or extra joints.\n5. A concise three-stage warning-signal mechanism sequence linked by fine arrows: “Red + yellow pattern” → “Warning coloration (aposematism)” → “Signals unpalatability to potential predators”. Use a close-up of the actual insect's color pattern and abstract understated eye/attention cue; do not show a predator dying, a toxin injection, guaranteed rejection, venom or an invented chemical pathway.\n6. An underground egg-pod and seasonal cycle study: cut soil at believable scale, brownish-yellow elongated eggs in irregular columns, soft soil/sand textures. A readable curved sequence: “Fall: eggs laid in soil” → “Winter: eggs underground” → “Late spring–early summer: hatching” → “One generation per year”. No pupa or butterfly metamorphosis, no unsupported egg count or exact timing. Tiny hatchlings may be diagrammatic, never present unsourced detailed juvenile coloration as verified.\n7. A prairie habitat, food and scale study: sparse low shortgrass-prairie vegetation, a grasshopper feeding on a forb leaf with a flowering scarlet-globemallow context, label “Forb feeder — flowering herbs, not grasses”. Include a concise locator text “Western Great Plains: Alberta to northern Mexico” rather than a crowded map. Add accurate separate male/female silhouettes beside a millimetre ruler with “Male ~25 mm” and “Female ~32 mm”; the huge hero is enlarged, not a giant animal. Note “Color pattern varies by region”. Do not show grass being eaten.\n\nKeep main labels readable and secondary explanations short. No redundant filler or decorative graphs. The complete specimen, prominent internal schematic, three large external biological close-ups, warning mechanism, eggs and habitat together form an information-rich professional scientific plate. Render exactly one image, opaque background, automatic size, requested quality medium.",
+    "image": "images/2026-10-27-factual-infographic-factual-infographic-dactylotum-bicolor-.jpg",
+    "thumb": "thumbs/2026-10-27-factual-infographic-factual-infographic-dactylotum-bicolor-.webp",
+    "color": "#c4b49c",
+    "date": "2026-10-27",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "dactylotum-bicolor-warning-colors-prairie",
+      "imageSha256": "ae8751aead7efead4c26e19f47f4dfcd5ee3887a08519fa80446b7d65068b038",
+      "imageDHash": "d7d9b49acdc5e89d"
+    },
+    "factualInfographic": {
+      "topic": "How Dactylotum bicolor combines warning coloration, reduced wings and a soil-overwintering life cycle",
+      "description": "Painted grasshopper warning coloration, reduced wings, diet and underground seasonal cycle, with explicitly generalized digestive anatomy.",
+      "sourceNote": "Verified species, external anatomy, feeding, warning coloration and seasonal biology: University of Wyoming https://www.uwyo.edu/entomology/grasshoppers/colorado/fact-sheets/dactylotum-bicolor.html; University of Colorado Museum of Natural History https://www.colorado.edu/cumuseum/2020/07/22/pictured-grasshopper; North Carolina State University https://genent.cals.ncsu.edu/bug-bytes/digestive-system/. Internal digestive anatomy explicitly generalized, not a species-specific dissection.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-28T00:21:18.771264+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "University of Wyoming",
+            "title": "Grasshoppers of Colorado: Dactylotum bicolor",
+            "sourceType": "university",
+            "url": "https://www.uwyo.edu/entomology/grasshoppers/colorado/fact-sheets/dactylotum-bicolor.html"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of Colorado Museum of Natural History",
+            "title": "Pictured Grasshopper",
+            "sourceType": "museum",
+            "url": "https://www.colorado.edu/cumuseum/2020/07/22/pictured-grasshopper"
+          },
+          {
+            "id": "S3",
+            "publisher": "North Carolina State University",
+            "title": "Digestive and Excretory Systems",
+            "sourceType": "university",
+            "url": "https://genent.cals.ncsu.edu/bug-bytes/digestive-system/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The pictured or painted grasshopper is Dactylotum bicolor.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Its red and yellow warning coloration signals unpalatability to potential predators (aposematism); this does not establish a toxin or universal predator avoidance.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Adults have a vertical face, rounded vertex, slender antennae, a punctured cylindrical pronotum with three transverse incisions, and very small tegmina and wings.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Black and yellow bands, red-orange midline and face/thorax markings, black/red-orange hind femora and yellow-green hind tibiae characterize the adult described for Colorado. Small black tegmina have fine yellow veins.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "This flightless grasshopper occurs in shortgrass prairie and sparse low vegetation along the western Great Plains, from Alberta to northern Mexico; coloration varies geographically.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "It feeds on herbaceous flowering plants (forbs), not grasses; reported food plants include scarlet globemallow and prairie clover.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "It produces one generation a year: females lay eggs in soft soil or sand in fall, eggs overwinter underground, and hatch in late spring to early summer.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Eggs are brownish-yellow in underground pods, laid in disorderly columns; adult length is about 25 mm for males and 32 mm for females in the cited account.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The supporting internal view is explicitly a simplified generalized insect digestive plan, not a dissection of Dactylotum: a mouth-to-anus alimentary canal with foregut, midgut and hindgut.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "In the generalized insect gut, the crop stores food, the midgut is the main site of enzymatic digestion and nutrient absorption, and the hindgut regulates water and salt recovery from waste.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-10-24-factual-infographic-factual-infographic-trypophobia-cluster",
     "title": "Factual infographic: Trypophobia — Clusters of Holes",
     "tests": "factual_subtype: phobia-infographic; phobia: Trypophobia; source-supported descriptive research term; verified name and definition; distinct fictional older woman casting; general phobia treatment explicitly qualified; no subjective critic or rerolls; archive_slot=2026-10-24T16:08; concept=trypophobia-lotus-pattern-conservatory-avoidance; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
