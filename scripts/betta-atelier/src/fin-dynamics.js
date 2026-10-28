@@ -91,8 +91,14 @@ const KICK_FAN = 0.26, KICK_HOLD = 0.25;
 /** The ventral streamers are held by their own muscles in the fish's frame, not hung from it: at hover
  *  swung forward of their photographed rake by PELVIC_HOLD (rad: down and a little back from the
  *  belly, whatever way the fish is tipped), splayed apart (PELVIC_SPLAY, sideways at the tip per unit
- *  of length, wandering by PELVIC_SPLAY_WANDER each fin on its own), trailing back under way. */
-const PELVIC_HOLD = 0.26, PELVIC_SPLAY = 0.2, PELVIC_SPLAY_WANDER = 0.1;
+ *  of length, wandering by PELVIC_SPLAY_WANDER each fin on its own), trailing back under way. Thin and
+ *  supple (Pexels 37685390, 4107166): each is set at its own angle (PELVIC_WANDER rad either way) and
+ *  bowed along its length (PELVIC_BOW rad, root to tip, its own), the two never quite a pair, moved to a
+ *  new set now and then; tipped with the body (PELVIC_PITCH rad per unit of the fish's down along it);
+ *  the outer one swung out the further in a turn; narrowed to PELVIC_THIN of their photographed width
+ *  beyond the insertion, so that they read as streamers, not blades. */
+const PELVIC_HOLD = 0.26, PELVIC_SPLAY = 0.2, PELVIC_SPLAY_WANDER = 0.22;
+const PELVIC_WANDER = 0.24, PELVIC_BOW = [0.08, 0.55], PELVIC_PITCH = 0.45, PELVIC_THIN = 0.55;
 /** At hover the pectorals fan all but without pause (Pexels 4107166, 37685390: some 1.5-3.3 Hz, alternating
  *  or together): through the gait's rests the fins keep a beat of their own (FAN_HZ, quicker the harder
  *  the fish works to hold its station), the gait's own beats come a little quicker there (FAN_QUICK),
@@ -124,10 +130,10 @@ const RAGGED = [0.06, 0.04, 0.05], UNEVEN = 0.5, UNEVEN_PACE = 1.1;
  *  out of the host's solids (state.solids), lying on them; what is drawn over the solved shape (the
  *  margins' shimmer and ragged tips) is held to the same. */
 const SURFACE_CLEAR = 0.02;
-const CURL_RATE = 1.6, CURL_DRAG = 0.1, CURL_TWIST = 0.5, CURL_CLOSE = [0.16, 0, 0.08], CURL_PELVIC = 0.22;
+const CURL_RATE = 1.6, CURL_DRAG = 0.07, CURL_TWIST = 0.2, CURL_CLOSE = [0.16, 0, 0.08], CURL_PELVIC = 0.22;
 /** The anal fin ripples in a wave running back along its length (and the dorsal's rear a little):
  *  UNDULATE rad at the margin (caudal, dorsal, anal), at about UNDULATE_HZ, harder as the fish works. */
-const UNDULATE = [0, 0.08, 0.18], UNDULATE_HZ = 1.4;
+const UNDULATE = [0, 0.08, 0.11], UNDULATE_HZ = 1.4;
 
 export class FinDynamics {
   constructor({ point, kind, side, columns = 29, rows = 17 }) {
@@ -277,6 +283,10 @@ export class FinDynamics {
     this.idle = 0;
     // (A ventral's trail: how far back the pace has swept it, 0..1, eased.)
     this.trail = 0;
+    // (A ventral's bow along its length, rad, easing to bowTo; each row's middle at rest, for its narrowing.)
+    this.bow = this.bowTo = 0.25;
+    this.rowMid = new Float64Array(rows * 3);
+    for (let j = 0; j < rows; j++) for (let i = 0; i < columns; i++) for (let k = 0; k < 3; k++) this.rowMid[j * 3 + k] += this.rest[(j * columns + i) * 3 + k] / columns;
     // (The body's C as this fin feels it, -1..1, and its rate of change, 1/s.)
     this.curl = this.curlRate = 0;
     this.jitPhase = new Float64Array(columns); this.jitRate = new Float64Array(columns);
@@ -445,7 +455,7 @@ export class FinDynamics {
         const kick = (9 + 10 * r()) * (1 - 0.6 * under);
         this.flickRate += kick;
         this.wave += 0.012 * kick;
-        this.flickAt = this.clock + 1.2 + 5 * r() * r();
+        this.flickAt = this.clock + 0.8 + 4 * r() * r();
       }
       const w = 13, k = Math.exp(-1.7 * w * dt);
       this.flickRate = (this.flickRate - w * w * this.flick * dt) * k;
@@ -454,10 +464,12 @@ export class FinDynamics {
       if (this.clock >= this.wanderAt) {
         const to = r() * 2 - 1;
         this.wave += 0.05 * Math.abs(to - this.wanderTo);
-        this.wanderTo = to; this.wanderAt = this.clock + 0.8 + 2.5 * r();
-        this.splayTo = r() * 2 - 1;
+        this.wanderTo = to; this.wanderAt = this.clock + 0.6 + 2 * r();
+        this.splayTo = r() * 2 - 1; this.bowTo = PELVIC_BOW[0] + (PELVIC_BOW[1] - PELVIC_BOW[0]) * r();
       }
-      this.wander += (this.wanderTo - this.wander) * (1 - Math.exp(-9 * dt));
+      // (Moved to it, quickly but not in a snap: the muscles carry it there.)
+      this.wander += (this.wanderTo - this.wander) * (1 - Math.exp(-3.5 * dt));
+      this.bow += (this.bowTo - this.bow) * (1 - Math.exp(-2.5 * dt));
       this.splayWander += (this.splayTo - this.splayWander) * (1 - Math.exp(-5 * dt));
       // Splayed out to brake, and a little as it flicks; swept back in a dart.
       this.splay += (Math.max(this.brake, 0.5 * clamp(this.flick, 0, 1)) - this.splay) * (1 - Math.exp(-6 * dt));
@@ -491,7 +503,7 @@ export class FinDynamics {
     const billowSize = (1 - flare * 0.7) * held * (0.025 + 0.035 * (state.wash ?? 0) + 0.05 * speed + 0.02 * Math.min(1, Math.abs(turn)))
       * (this.gust + 0.6 * this.stir), swellSize = billowSize * (1.2 - this.gust) * 0.8;
     // Partly closed, the membrane gathers into pleats; the caudal's lobes twist apart.
-    const pleat = kind < 3 ? PLEAT[kind] * (0.5 + clamp(1 - spread, 0, 1)) * held * (1 - 0.6 * flare) : 0;
+    const pleat = kind < 3 ? PLEAT[kind] * (0.5 + 0.6 * clamp(1 - spread, 0, 1)) * held * (1 - 0.6 * flare) : 0;
     // (The body's C changing drags the caudal round behind, its lobes twisting, and the rear of the dorsal
     // and the anal after it.)
     const curling = clamp(this.curlRate, -3, 3) * (1 - 0.7 * flare), dragged = kind < 3 ? -CURL_DRAG * curling : 0;
@@ -535,16 +547,17 @@ export class FinDynamics {
       // steer as the body curls into a turn. Only the thin outer part waves on its own, quicker and shorter
       // than a wave down the whole streamer: the rest is held.)
       const under = this.trail, base = -flare * 0.16 + CLAMP_TUCK * folded - PELVIC_HOLD * (1 - under);
-      const steering = CURL_PELVIC * Math.abs(this.curl);
+      const steering = CURL_PELVIC * Math.abs(this.curl), outer = CURL_PELVIC * Math.max(0, -side * this.curl);
+      const tipped = PELVIC_PITCH * (state.down ? state.down[0] : 0);
       for (let j = 0; j < h; j++) {
         const v = j / (h - 1), tip = v * v, thin = smooth(0.4, 1, v) ** 2;
         const flick = this.flick + (this.flickTip - this.flick) * tip, splay = this.splay + (this.splayTip - this.splay) * tip;
         const wander = this.wander + (this.wanderTip - this.wander) * tip;
-        const angle = base + 0.34 + (0.12 + 0.4 * under) * (0.7 + 0.6 * v) - 0.12 - 0.45 * flick - 0.3 * splay + 0.07 * wander - steering
-          + 0.25 * this.push * v + (0.12 + this.wave) * thin * Math.sin(this.ripple - v * 6);
+        const angle = base + 0.34 + (0.12 + 0.4 * under) * (0.7 + 0.6 * v) - 0.12 - 0.6 * flick - 0.3 * splay + PELVIC_WANDER * wander - steering
+          + this.bow * (v - 0.3) + tipped + 0.25 * this.push * v + (0.1 + this.wave) * thin * Math.sin(this.ripple - v * 4);
         // (The streamer's tip waves sideways too, on its own beat.)
-        row[j * 4] = side * v * (PELVIC_SPLAY * (1 - 0.5 * this.push) + 0.2 * splay + PELVIC_SPLAY_WANDER * this.splayWander + 0.5 * steering)
-          + 0.05 * thin * Math.sin(0.7 * this.ripple - v * 5 + side);
+        row[j * 4] = side * v * (PELVIC_SPLAY * (1 - 0.5 * this.push) + 0.2 * splay + PELVIC_SPLAY_WANDER * this.splayWander + 0.5 * steering + 0.6 * outer)
+          + 0.025 * thin * Math.sin(0.7 * this.ripple - v * 3 + side);
         row[j * 4 + 1] = Math.cos(angle); row[j * 4 + 2] = Math.sin(angle);
       }
     }
@@ -601,6 +614,11 @@ export class FinDynamics {
           const cy = y * row[j * 4 + 2] - z * row[j * 4 + 3];
           z = y * row[j * 4 + 3] + z * row[j * 4 + 2]; y = cy;
         } else {
+          // (Narrowed about the streamer's middle beyond its insertion.)
+          const narrow = 1 - (1 - PELVIC_THIN) * smooth(0, 0.35, v), mid = this.rowMid, rx0 = this.roots[r], ry0 = this.roots[r + 1], rz0 = this.roots[r + 2];
+          x = mid[j * 3] + (rx0 + x - mid[j * 3]) * narrow - rx0;
+          y = mid[j * 3 + 1] + (ry0 + y - mid[j * 3 + 1]) * narrow - ry0;
+          z = mid[j * 3 + 2] + (rz0 + z - mid[j * 3 + 2]) * narrow - rz0;
           const cosA = row[j * 4 + 1], sinA = row[j * 4 + 2], cx = x * cosA - y * sinA;
           y = x * sinA + y * cosA; x = cx;
           z = z * (1 - CLAMP_PINCH * folded) + row[j * 4];
@@ -769,7 +787,7 @@ export class FinDynamics {
         // (The ventral streamer is the muscle's out to its middle, so a flick or a twitch shows along
         // it, and only its last third is left to the water: even there its leading ray holds it out
         // straight, bending, not crumpling like a thread.)
-        : this.kind === 4 ? 6 + 12 * folded + 260 * (1 - v) ** 2 : 5.0 + (this.kind === 3 ? 160 : 110) * (1 - v) ** 3;
+        : this.kind === 4 ? 6 + 12 * folded + 200 * (1 - v) ** 2 : 5.0 + (this.kind === 3 ? 160 : 110) * (1 - v) ** 3;
     }
     // The fin's weight, along the fish's own down (state.down), and the lag of its mass against the
     // body's acceleration (state.accel), the same at every node; the water's own damping per second
