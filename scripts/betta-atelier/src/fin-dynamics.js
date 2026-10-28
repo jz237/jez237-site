@@ -2,9 +2,9 @@
 // insertions, velocity-dependent water drag, a little weight and the lag of the water the fin
 // carries. Not a CFD/biological calibration: fitted by eye to footage of male halfmoons.
 import { draw, kickSweep } from './swim-gait.js';
-export const water = { strength: 0, direction: 'changing' };
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const smooth = (a, b, x) => { const u = clamp((x - a) / (b - a), 0, 1); return u * u * (3 - 2 * u); };
+export const water = { strength: 0, direction: 'changing' };
 
 // World-space current. All fins and suspended particles sample the same field.
 // Direction changes ease in at the caller; eddies vary in space, not per frame.
@@ -597,8 +597,8 @@ export class FinDynamics {
     // A fin ray resists stretching, not lateral bending like a rigid sail. The broad fins' inner
     // half is just stiff enough to take up the tail's 2-3 Hz beat and still yield to the water;
     // their outer half is softer, trailing the beat and lagging, settling within a second or so when
-    // the body turns or stops, but the rays still hold it out in shape: it ripples, never drapes. Display adds muscular tension without pinning their
-    // positions against the water. (A row's stiffness, once for the row. Clamped fins are held in
+    // the body turns or stops, but the rays still hold it out in shape: it ripples, never drapes.
+    // Display adds muscular tension without pinning their positions against the water. (A row's stiffness, once for the row. Clamped fins are held in
     // by muscle too.)
     const stiffness = this.rowStiffness, folded = state.clamp ?? 0;
     for (let j = 1; j < h; j++) {
