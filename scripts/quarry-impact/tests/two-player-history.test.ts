@@ -1,6 +1,7 @@
+import {restoreSoftDustBytes} from './soft-dust-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readTwoPlayerPrevious,restoreTwoPlayerBytes,verifyTwoPlayerRevision} from './two-player-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreSoftDustBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('TwoPlayer preserves every prior fixture, vehicle asset, venue art and history input',verifyTwoPlayerRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/two-player/revision.json').toString());

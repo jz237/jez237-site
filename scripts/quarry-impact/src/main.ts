@@ -118,6 +118,7 @@ import {steerArms,handReach,newHandState,type HandState} from './driver-arms';
 import {BONNET_STEAM,bonnetHeat,steamRate} from './bonnet-steam';
 import {TYRE_STEAM,tyreSteamRate} from './tyre-heat';
 import {DUST,dustRate} from './dust-trails';
+import {SoftParticlesPass} from './soft-particles';
 import {COLD_START,coldStartPuffs,crankStarts} from './cold-start';
 import {GravelRoost,ROOST,roostRate,STONE_HIT,stoneHitVolume,type RoostBody} from './gravel-roost';
 import {STRAP,TowStraps} from './tow-straps';
@@ -777,8 +778,10 @@ const camera = new T.PerspectiveCamera(52, innerWidth / innerHeight, 0.1, 850);
 const composer = new EffectComposer(renderer, createSceneRenderTarget(innerWidth, innerHeight));
 composer.addPass(new RenderPass(scene, camera));
 const ao = new QuarryAO(scene, camera);
+// Dust, smoke and sparks, after the ambient occlusion and against the scene's depth (they fade where they meet a surface).
+const softParticles = new SoftParticlesPass(() => fx ? [fx.points] : [], camera, () => ao.enabled);
 // Hot air over fires, tailpipes and hot bonnets shimmers what is behind it (offline).
-const heatHaze = new HeatHazePass(() => ao.enabled);
+const heatHaze = new HeatHazePass(() => ao.enabled || softParticles.swapped);
 // Rain lands on the chase and hood cameras' lens (offline).
 const lensRainPass = new LensRainPass(), lensRain = new LensRain();
 // Stones flung off spinning tyres on loose ground (offline).
@@ -797,6 +800,7 @@ const lampBloom = new UnrealBloomPass(new T.Vector2(innerWidth, innerHeight), BL
 let bloomOff = false;
 const reflections = new LocalReflections(renderer, scene);
 composer.addPass(ao);
+composer.addPass(softParticles);
 composer.addPass(heatHaze);
 composer.addPass(lensRainPass);
 composer.addPass(lampBloom);

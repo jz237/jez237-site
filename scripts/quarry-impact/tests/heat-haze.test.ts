@@ -47,7 +47,7 @@ test('anything burning on the ground raises a column as wide as the fire within 
 });
 test('main runs the haze after ambient occlusion, from fires, tailpipes, hot bonnets and the burning ground, offline only',()=>{
   const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
-  assert.ok(main.includes('composer.addPass(ao);\ncomposer.addPass(heatHaze);\n')&&main.indexOf('composer.addPass(heatHaze);')<main.indexOf('composer.addPass(new OutputPass());'),'after ambient occlusion, before the output');
+  assert.ok(main.includes('composer.addPass(ao);\n')&&main.indexOf('composer.addPass(ao);')<main.indexOf('composer.addPass(heatHaze);')&&main.indexOf('composer.addPass(heatHaze);')<main.indexOf('composer.addPass(new OutputPass());'),'after ambient occlusion, before the output');
   const frame=main.indexOf('  updateHeatHaze();\n');assert.ok(frame>0&&frame<main.indexOf('  composer.render();\n',frame)&&main.indexOf('  composer.render();\n',frame)-frame<260,'laid out just before each frame is drawn');
   assert.ok(main.includes("if(!hazeOff&&!online?.active&&!studio&&['countdown','playing','paused','wrecked','result','inspect'].includes(state))for(const c of cars){if(!c.extendedDamage)continue;"));
   assert.ok(main.includes('for(const f of burningGround()){const h=groundHaze(f,burnLevel(f,fx.slicks.clock));if(h)addHeat(ground,h);}hazeSources.push(...ground);')&&main.includes('  const fires=burningGround();\n'),'ground fires shared with the AI');

@@ -6,6 +6,7 @@ import {GroundEvidence} from './ground-evidence';
 import {FluidSlicks,type GroundFire} from './fluid-leaks';
 import {DAYLIGHT_DIRECTION} from './static-shadows';
 import {CrashLitter,type LitterKind} from './crash-litter';
+import {SOFT_FRAGMENT,SOFT_UNIFORMS,makeSoft,softUniforms} from './soft-particles';
 type Particle = {
   p: T.Vector3;
   v: T.Vector3;
@@ -71,11 +72,14 @@ export class Effects {
       transparent: true,
       depthWrite: false,
       vertexColors: true,
-      uniforms: { scale: { value: window.innerHeight },sun: {value:DAYLIGHT_DIRECTION} },
+      uniforms: { scale: { value: window.innerHeight },sun: {value:DAYLIGHT_DIRECTION},...softUniforms },
       vertexShader: `attribute float size; attribute float alpha; attribute float kind;
-varying vec3 vColor; varying float vAlpha; varying float vKind; varying float vSeed; varying float vBacklight; uniform float scale;uniform vec3 sun;
-void main(){if(alpha<=0.){gl_Position=vec4(2.,2.,2.,1.);gl_PointSize=1.;return;}vColor=color;vAlpha=alpha;vKind=kind;vSeed=fract(position.x*.13+position.z*.27);vec4 p=modelViewMatrix*vec4(position,1.);vBacklight=pow(max(0.,dot(normalize(cameraPosition-position),sun)),5.);gl_PointSize=min(kind==0.?180.:120.,size*scale/max(1.,-p.z));gl_Position=projectionMatrix*p;}`,
-      fragmentShader: `varying vec3 vColor; varying float vAlpha; varying float vKind; varying float vSeed;varying float vBacklight;
+varying vec3 vColor; varying float vAlpha; varying float vKind; varying float vSeed; varying float vBacklight; varying float vDepth; varying float vRadius; uniform float scale;uniform vec3 sun;
+void main(){if(alpha<=0.){gl_Position=vec4(2.,2.,2.,1.);gl_PointSize=1.;return;}vColor=color;vAlpha=alpha;vKind=kind;vSeed=fract(position.x*.13+position.z*.27);vec4 p=modelViewMatrix*vec4(position,1.);vBacklight=pow(max(0.,dot(normalize(cameraPosition-position),sun)),5.);
+ float px=size*scale/max(1.,-p.z);gl_PointSize=min(kind==0.?180.:120.,px);vDepth=-p.z;vRadius=.5*size*gl_PointSize/max(px,1e-3);gl_Position=projectionMatrix*p;}`,
+      fragmentShader: `${SOFT_UNIFORMS}
+varying vec3 vColor; varying float vAlpha; varying float vKind; varying float vSeed;varying float vBacklight;varying float vDepth;varying float vRadius;
+${SOFT_FRAGMENT}
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+1.),f.x),f.y);}
 void main(){
@@ -84,13 +88,15 @@ void main(){
  else if(vKind==3. || vKind==4.) {a=1.-smoothstep(.18,.5,max(abs(uv.x+uv.y*.4),abs(uv.y)));}
  else {float n=noise(uv*8.+vSeed*27.)*.6+noise(uv*17.-vSeed*13.)*.3; a=smoothstep(1.,.18,r+n*.24)*(n*.6+.4);}
  vec3 lit=vKind==0.?vColor*(vec3(1.08,.99,.82)+vec3(.55,.35,.10)*vBacklight*(1.-r*.45)):vColor;
- gl_FragColor=vec4(lit,a*vAlpha);
+ gl_FragColor=vec4(lit,a*vAlpha*softParticle(vDepth,vRadius,min(1.,r)));
  #include <tonemapping_fragment>
  #include <colorspace_fragment>
 }`,
     });
     this.points = new T.Points(this.geometry, material);
     this.points.frustumCulled = false;
+    // Drawn by the soft particle pass, after the scene, against its depth.
+    makeSoft(this.points);
     scene.add(this.points);
     for (let i = 0; i < count; i++)
       this.particles.push({

@@ -1,3 +1,4 @@
+import {restoreSoftDustBytes} from './soft-dust-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readTwoPlayerPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreTwoPlayerBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreSoftDustBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readTwoPlayerPrevious(file);
 }
 export function verifyTwoPlayerRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'52ae2fc40c5412bc17f4901aec5c5b8be8ec4bbc');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreSoftDustBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreTwoPlayerBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the TwoPlayer release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreSoftDustBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the TwoPlayer release');
  assert.equal(manifest.previousFixtureCount,9408);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,9408);
 }
