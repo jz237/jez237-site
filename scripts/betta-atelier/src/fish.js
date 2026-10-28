@@ -28,6 +28,7 @@ export const uniforms = {
   uSpine: { value: null },
   uMouth: { value: 0 },
   uGill: { value: 0 },
+  uArch: { value: 0 },
 };
 const deform = `uniform float uTime,uFlare,uMotion,uPhase,uDrive,uTurn,uFold;\n` + bodyGLSL;
 function animate(mat, dynamics = null, operculum = false) {
@@ -852,12 +853,12 @@ export function createBetta({ compact = false, textures = true } = {}) {
       } : pose);
       const { phase, effort, breathPhase, breathDepth, pectoralPhase, pectoralPower, scull, tuck, pectoralEffort, pectoralScull, billowPhase, wash, push, dart, brake } = gait;
       // The standalone turn also leads with the neck; the rear follows the head's tangent.
-      bodyMotion.advanceTurn(dt, locomotion ? locomotion.steerRate ?? angularVelocity : turn, locomotion ? locomotion.speed ?? 0 : Math.hypot(...velocity));
+      bodyMotion.advanceTurn(dt, locomotion ? locomotion.steerRate ?? angularVelocity : turn, locomotion ? locomotion.speed ?? 0 : Math.hypot(...velocity), locomotion?.pitchRate ?? 0);
       bodyMotion.update(phase, effort, turn, breathPhase, locomotion?.gulp ?? gulpOpen, locomotion?.gulpGill ?? gulpGill, breathDepth, gait.kick, gait.kickAt);
       // The eyes ride in their sockets on the head as it yaws against the tail and into turns.
       for (const { pivot, motion, side, socket } of eyes) {
         const f = bodyMotion.frame(socket[0], contour);
-        pivot.position.set(f[0] - socket[2] * f[3], socket[1], f[1] + socket[2] * f[2]);
+        pivot.position.set(f[0] - socket[2] * f[3], socket[1] + bodyMotion.archAt(socket[0]), f[1] + socket[2] * f[2]);
         pivot.rotation.set(-motion.pitch * side, motion.yaw * side - Math.atan2(f[3], f[2]), 0);
       }
       if (lift > 0 || fish.userData.gulp.lift > 0) {
@@ -872,6 +873,7 @@ export function createBetta({ compact = false, textures = true } = {}) {
       uniforms.uFold.value = drive;
       uniforms.uMouth.value = bodyMotion.mouth;
       uniforms.uGill.value = bodyMotion.gill;
+      uniforms.uArch.value = bodyMotion.arch;
       const state = {
         body: bodyMotion, time: t, mode, phase, pectoralPhase, pectoralPower, scull, tuck, pectoralEffort, pectoralScull, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value, clamp: display.clamp,
         // (The body's strokes, for the fins: a pectoral push, 0..1; darting, fins to fold; braking, fins to flare.)

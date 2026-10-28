@@ -17,11 +17,15 @@ const WAVE = 5, RECOIL = 0.12;
 // leads the route into the turn by LEAD s of it (LEAD_MOST rad at the most: a startle's whip is the
 // trunk's), and the C straightens as the turn ends.
 const CURL = 0.4, CURL_MOST = 1.4, LEAD = 0.05, LEAD_MOST = 0.15;
+// Tipping nose up or down, the body arches a little the same way (its ends a moment behind its middle,
+// where it turns: ARCH_AT), by ARCH s of the pitch's rate (the tail's slope at the most ARCH_MOST rad),
+// easing in and out; as a turn bends it in a C, seen from the side.
+const ARCH = 0.25, ARCH_MOST = 0.12, ARCH_AT = SPINE_START + PIVOT_U * 2.276, ARCH_SPAN = 2 * (SPINE_END - ARCH_AT);
 export class BodyMotion {
   constructor() {
     this.data = new Float32Array(SPINE_COUNT * 4);
     this.turnAngles = null;
-    this.mouth = this.gill = 0;
+    this.mouth = this.gill = this.arch = 0;
     // The voluntary turn rate, eased over a tenth of a second or so (rad/s), and the head's yaw
     // against the route this update (rad).
     this.steer = 0;
@@ -36,9 +40,11 @@ export class BodyMotion {
   // the rear later, like the koi's head-following chain, instead of posing the
   // entire trunk in the same C shape at once. Only voluntary steering enters
   // here: water can rotate the whole fish without triggering a muscle U-turn.
-  advanceTurn(dt, rate, speed) {
+  // pitchRate: the fish's own tipping (rad/s, nose up), for the arch.
+  advanceTurn(dt, rate, speed, pitchRate = 0) {
     this.turnAngles ??= new Float64Array(25);
     if (!(dt > 0)) return;
+    this.arch += (clamp(ARCH * pitchRate, -ARCH_MOST, ARCH_MOST) - this.arch) * (1 - Math.exp(-6 * dt));
     const a = this.turnAngles, ds = 2.276 / (a.length - 1);
     let remaining = Math.min(dt, 0.07);
     while (remaining > 1e-9) {
@@ -138,8 +144,12 @@ export class BodyMotion {
     const lip = 1 - smooth(-1.68, -1.48, x), jaw = 1 - smooth(-1.67, -1.28, x);
     y = 0.0832 + (y - 0.0832) * (1 - lip * (0.78 - 0.78 * this.mouth));
     y -= jaw * (1 - smooth(0.045, 0.105, y)) * (0.003 + 0.047 * this.mouth);
-    out[0] = cx - z * s; out[1] = y; out[2] = cz + z * c;
+    out[0] = cx - z * s; out[1] = y + this.archAt(x); out[2] = cz + z * c;
     return out;
+  }
+  /** How far the arch lifts the body at x (Atelier units, + up). */
+  archAt(x) {
+    return this.arch * (x - ARCH_AT) ** 2 / ARCH_SPAN;
   }
 }
 
@@ -147,7 +157,7 @@ export class BodyMotion {
 // shader consume the identical Float32 spine rather than separate sine formulas.
 export const bodyGLSL = `
 uniform sampler2D uSpine;
-uniform float uMouth,uGill;
+uniform float uMouth,uGill,uArch;
 vec4 spineFrame(float x) {
  if(x<=${SPINE_START}){vec4 f=texelFetch(uSpine,ivec2(0,0),0);return vec4(f.x+(x-(${SPINE_START}))*f.z,f.y+(x-(${SPINE_START}))*f.w,f.z,f.w);}
  float g=clamp((x-(${SPINE_START}))/${SPINE_END - SPINE_START},0.,1.)*${SPINE_COUNT - 1}.;
@@ -162,6 +172,6 @@ vec3 swim(vec3 p) {
  float lip=1.-smoothstep(-1.68,-1.48,p.x),jaw=1.-smoothstep(-1.67,-1.28,p.x);
  p.y=.0832+(p.y-.0832)*(1.-lip*(.78-.78*uMouth));
  p.y-=jaw*(1.-smoothstep(.045,.105,p.y))*(.003+.047*uMouth);
- return vec3(f.x-p.z*f.w,p.y,f.y+p.z*f.z);
+ return vec3(f.x-p.z*f.w,p.y+uArch*pow(p.x-(${ARCH_AT}),2.)/${ARCH_SPAN},f.y+p.z*f.z);
 }
 `;

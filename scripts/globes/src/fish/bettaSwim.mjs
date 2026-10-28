@@ -119,7 +119,7 @@ export const YAW_DRAG = 1.6, YAW_PEAK = 1.5, YAW_SNAP = 7, YAW_GAP = 0.35;
 // folded, DART_TIME s at up to DART_SPEED (a body length and a half a second or more), then it coasts.
 // A pass often ends in a hard stop (HARD_STOP of them), braked in BRAKE_TIME s on its pectorals,
 // fanned, rather than eased into.
-export const DART_START = 0.4, DART_SPEED = 0.5, DART_TIME = 0.3, LUNGE_OFTEN = 0.35, HARD_STOP = 0.45, BRAKE_TIME = 0.35;
+export const DART_START = 0.4, DART_SPEED = 0.5, DART_TIME = 0.3, LUNGE_OFTEN = 0.25, HARD_STOP = 0.45, BRAKE_TIME = 0.35;
 
 // Goals are a real stride away across the water and within the slope the fish can climb, so it never
 // has to circle a point above or below it. A net turn beyond SPIN_LIMIT rad (leaking away over ~6 s)
@@ -194,7 +194,7 @@ export class BettaSwim {
     this.dart = this.brake = 0;
     this.dartClock = this.brakeClock = 9;
     this.dartReady = false; this.dartSpeed = DART_SPEED;
-    this.hardStop = false; this.lungeAt = Infinity; this.lunge = false;
+    this.hardStop = false; this.lungeAt = Infinity; this.lunge = false; this.hoverLeft = 0;
     this.nextGulp = 22 + this.gulpRandom() * 14;
     // This trip up's own shape: how steeply it rises, how fast at most, how long its lips are at the
     // film, how long it takes to level out after; and the time since its mouth last shut on air (the
@@ -837,13 +837,14 @@ export class BettaSwim {
           this.timer = 4 + this.random() * 4;
           this.chooseTarget(env);
         } else {
-          this.mode = 'hover'; this.timer = (3 + this.random() * 9) * (1 + 2 * L);
+          // (Back from a lunge, it hangs there for what was left of the hover.)
+          this.mode = 'hover'; this.timer = this.lunge ? Math.max(1, this.hoverLeft) : (3 + this.random() * 9) * (1 + 2 * L);
           this.hoverYaw = wrap(this.heading + 3 * (this.random() - 0.5)); this.hoverPivot = 0.2 + 0.25 * this.random();
           // (Come in at a pace meant to end in a hard stop, it brakes; and now and then, hanging there,
           // it lunges at something a short way ahead.)
           if (this.hardStop && Math.abs(this.speed) > 0.05) { this.brakeClock = 0; this.cue(1, 0, 1); }
+          this.lungeAt = !this.lunge && this.random() < LUNGE_OFTEN * (1 - L) ? this.time + 1.5 + this.random() * Math.max(0, this.timer - 2.5) : Infinity;
           this.hardStop = this.lunge = false;
-          this.lungeAt = this.random() < LUNGE_OFTEN * (1 - L) ? this.time + 1.5 + this.random() * Math.max(0, this.timer - 2.5) : Infinity;
         }
       }
     }
@@ -915,6 +916,7 @@ export class BettaSwim {
     if (hovering && this.time >= this.lungeAt) {
       this.lungeAt = Infinity;
       if (!nearWall && this.clearWay(this.targetAhead(b, 0.2), 0.06)) {
+        this.hoverLeft = this.timer;
         this.mode = 'burst'; this.timer = DART_TIME + 0.1; this.lunge = true; this.target = this.targetAhead(b, 0.2);
         this.dartReady = true; this.dartSpeed = 0.75 * DART_SPEED;
       }
@@ -1067,11 +1069,13 @@ export class BettaSwim {
     const direction = [-Math.cos(this.heading) * Math.cos(this.pitch), Math.sin(this.pitch), Math.sin(this.heading) * Math.cos(this.pitch)];
     const old = [...this.position];
     // (Turning over or round in place, about its middle, as a hovering fish does: the neck swings with
-    // the head by the change of pitch and heading; tipping just over the sand, about the neck.)
-    const pivot = this.mode === 'dive' || this.mode === 'hover' ? PITCH_PIVOT * (1 - smooth(0.02, 0.08, Math.abs(this.speed))) * (this.mode === 'hover' ? low : 1) : 0;
+    // the head by the change of pitch and heading; tipping just over the sand, about the neck, though
+    // it still comes round about its middle there.)
+    const pivot = this.mode === 'dive' || this.mode === 'hover' ? PITCH_PIVOT * (1 - smooth(0.02, 0.08, Math.abs(this.speed))) : 0, tip = pivot * (this.mode === 'hover' ? low : 1);
     const was = [-Math.cos(oldHeading) * Math.cos(oldPitch), Math.sin(oldPitch), Math.sin(oldHeading) * Math.cos(oldPitch)];
+    const round = [-Math.cos(this.heading) * Math.cos(oldPitch), Math.sin(oldPitch), Math.sin(this.heading) * Math.cos(oldPitch)];
     for (let k = 0; k < 3; k++) {
-      this.turnVelocity[k] = (pivot * (direction[k] - was[k])) / dt;
+      this.turnVelocity[k] = (pivot * (round[k] - was[k]) + tip * (direction[k] - round[k])) / dt;
       this.position[k] += (direction[k] * this.speed + this.drift[k] + this.turnVelocity[k]) * dt;
     }
     const unheld = [...this.position];
