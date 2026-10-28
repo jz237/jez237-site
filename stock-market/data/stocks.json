@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-27T20:37:40.843Z",
+  "updatedAt": "2026-10-28T00:10:10.982Z",
   "source": "yahoo-finance-chart",
   "stocks": [
     {
@@ -35,7 +35,7 @@
         100.02,
         452.7
       ],
-      "volume": 3726166,
+      "volume": 3737607,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -137,7 +137,7 @@
         289.96,
         495
       ],
-      "volume": 25207168,
+      "volume": 25480570,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -239,7 +239,7 @@
         51.24,
         141.79
       ],
-      "volume": 52546767,
+      "volume": 53151279,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -341,7 +341,7 @@
         267.17,
         404.47
       ],
-      "volume": 17477944,
+      "volume": 17638170,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -444,7 +444,7 @@
         32.89,
         142.35
       ],
-      "volume": 89287127,
+      "volume": 89550016,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -546,7 +546,7 @@
         520.26,
         779.82
       ],
-      "volume": 50369963,
+      "volume": 50659475,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -648,7 +648,7 @@
         349.2,
         553.72
       ],
-      "volume": 18957427,
+      "volume": 19419705,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -750,7 +750,7 @@
         164.27,
         243.37
       ],
-      "volume": 84182670,
+      "volume": 84307573,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -852,7 +852,7 @@
         121.99,
         259.92
       ],
-      "volume": 12041512,
+      "volume": 12242748,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -954,7 +954,7 @@
         147.82,
         379.935
       ],
-      "volume": 8345064,
+      "volume": 8393728,
       "currency": "USD",
       "exchange": "NYSE",
       "chart": [
@@ -1056,7 +1056,7 @@
         196,
         287.2
       ],
-      "volume": 33554437,
+      "volume": 33975762,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -1158,7 +1158,7 @@
         266.82,
         487.47
       ],
-      "volume": 8848089,
+      "volume": 8992418,
       "currency": "USD",
       "exchange": "NYSE",
       "chart": [
@@ -1260,7 +1260,7 @@
         106.37,
         212.94
       ],
-      "volume": 18954052,
+      "volume": 19170693,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -1362,7 +1362,7 @@
         6.85,
         34.17
       ],
-      "volume": 16490979,
+      "volume": 16573808,
       "currency": "USD",
       "exchange": "NasdaqGM",
       "chart": [
@@ -1464,7 +1464,7 @@
         114.5,
         285.46
       ],
-      "volume": 25592838,
+      "volume": 25904273,
       "currency": "USD",
       "exchange": "NYSE",
       "chart": [
@@ -1566,7 +1566,7 @@
         4.2,
         18.76
       ],
-      "volume": 17946139,
+      "volume": 17972399,
       "currency": "USD",
       "exchange": "NasdaqGM",
       "chart": [
@@ -1668,7 +1668,7 @@
         167.41,
         254.35
       ],
-      "volume": 46832754,
+      "volume": 46971337,
       "currency": "USD",
       "exchange": "NYSE",
       "chart": [
@@ -1770,7 +1770,7 @@
         243.42,
         351.73
       ],
-      "volume": 38123940,
+      "volume": 39051747,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -1871,7 +1871,7 @@
         6316.91,
         7844.52
       ],
-      "volume": 2799501000,
+      "volume": 2810939000,
       "currency": "USD",
       "exchange": "SNP",
       "chart": [
@@ -1937,7 +1937,7 @@
         7722.6001
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-10-27T20:20:01.000Z",
+      "quoteUpdatedAt": "2026-10-27T20:48:15.000Z",
       "yahooSymbol": "^GSPC"
     },
     {
@@ -1972,7 +1972,7 @@
         20690.25,
         27722.75
       ],
-      "volume": 7036308000,
+      "volume": 7116359000,
       "currency": "USD",
       "exchange": "Nasdaq GIDS",
       "chart": [
@@ -2038,7 +2038,7 @@
         26477.8105
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-10-27T20:37:49.000Z",
+      "quoteUpdatedAt": "2026-10-27T21:15:59.000Z",
       "yahooSymbol": "^IXIC"
     },
     {
@@ -2072,7 +2072,7 @@
         45057.28,
         54744.33
       ],
-      "volume": 400713990,
+      "volume": 401210066,
       "currency": "USD",
       "exchange": "DJI",
       "chart": [
@@ -2138,7 +2138,7 @@
         52377.5703
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-10-27T20:20:01.000Z",
+      "quoteUpdatedAt": "2026-10-27T20:48:23.000Z",
       "yahooSymbol": "^DJI"
     },
     {
@@ -2364,12 +2364,12 @@
         "Global growth data"
       ],
       "kind": "instrument",
-      "price": 102.343,
-      "change": 0.7214,
-      "changeAmount": 0.733,
+      "price": 102.37,
+      "change": 0.748,
+      "changeAmount": 0.76,
       "prevClose": 101.61,
-      "dayLow": 101.986,
-      "dayHigh": 102.35,
+      "dayLow": 102.364,
+      "dayHigh": 102.377,
       "range52w": [
         95.55,
         102.95
@@ -2378,7 +2378,6 @@
       "currency": "USD",
       "exchange": "ICE Futures",
       "chart": [
-        99.89,
         99.69,
         99.97,
         99.6,
@@ -2437,10 +2436,11 @@
         101.61,
         101.81,
         101.96,
-        102.343
+        102.343,
+        102.37
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-10-27T20:27:51.000Z",
+      "quoteUpdatedAt": "2026-10-28T00:00:21.000Z",
       "yahooSymbol": "DX-Y.NYB"
     },
     {
@@ -2464,21 +2464,20 @@
         "Dollar/yield moves"
       ],
       "kind": "instrument",
-      "price": 80556,
-      "change": -0.6392,
-      "changeAmount": -518.19,
-      "prevClose": 81074.19,
-      "dayLow": 79380.36,
-      "dayHigh": 80717.01,
+      "price": 80649.34,
+      "change": -0.1751,
+      "changeAmount": -141.496,
+      "prevClose": 80790.836,
+      "dayLow": 80672.02,
+      "dayHigh": 80800.42,
       "range52w": [
         57747.766,
         116078.984
       ],
-      "volume": 21978580992,
+      "volume": 22660851712,
       "currency": "USD",
       "exchange": "CCC",
       "chart": [
-        78245.8125,
         77667.5703,
         78548.6328,
         77403.625,
@@ -2537,10 +2536,11 @@
         80790.8359,
         80024.0078,
         80006.6563,
-        80556
+        80556,
+        80649.3438
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-10-27T20:37:47.000Z",
+      "quoteUpdatedAt": "2026-10-28T00:10:20.000Z",
       "yahooSymbol": "BTC-USD"
     },
     {
@@ -2565,21 +2565,20 @@
         "Geopolitics"
       ],
       "kind": "instrument",
-      "price": 100.21,
-      "change": 0.7439,
-      "changeAmount": 0.74,
+      "price": 100.16,
+      "change": 0.6937,
+      "changeAmount": 0.69,
       "prevClose": 99.47,
-      "dayLow": 99.44,
-      "dayHigh": 102.82,
+      "dayLow": 99.75,
+      "dayHigh": 100.26,
       "range52w": [
         54.98,
         119.48
       ],
-      "volume": 252825,
+      "volume": 2505,
       "currency": "USD",
       "exchange": "NY Mercantile",
       "chart": [
-        75.77,
         75.22,
         77.29,
         78.18,
@@ -2638,10 +2637,11 @@
         99.47,
         103.27,
         101.76,
-        100.21
+        100.21,
+        100.16
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-10-27T20:27:51.000Z",
+      "quoteUpdatedAt": "2026-10-28T00:00:19.000Z",
       "yahooSymbol": "CL=F"
     },
     {
@@ -2666,21 +2666,20 @@
         "Geopolitical risk"
       ],
       "kind": "instrument",
-      "price": 4072.3,
-      "change": 0.2931,
-      "changeAmount": 11.9,
+      "price": 4076.2,
+      "change": 0.3891,
+      "changeAmount": 15.8,
       "prevClose": 4060.4,
-      "dayLow": 4001.6,
-      "dayHigh": 4079.3,
+      "dayLow": 4070.7,
+      "dayHigh": 4077.9,
       "range52w": [
         3901.3,
         5586.2
       ],
-      "volume": 131745,
+      "volume": 3359,
       "currency": "USD",
       "exchange": "COMEX",
       "chart": [
-        4152.6001,
         4305.2002,
         4299.6001,
         4399.7002,
@@ -2739,10 +2738,11 @@
         4060.3999,
         4007.8999,
         4038.3999,
-        4072.3
+        4072.3,
+        4076.2
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-10-27T20:27:48.000Z",
+      "quoteUpdatedAt": "2026-10-28T00:00:21.000Z",
       "yahooSymbol": "GC=F"
     }
   ],
