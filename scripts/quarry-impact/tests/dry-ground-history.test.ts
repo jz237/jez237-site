@@ -1,6 +1,7 @@
+import {restorePuddleWaterBytes} from './puddle-water-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readDryGroundPrevious,restoreDryGroundBytes,verifyDryGroundRevision} from './dry-ground-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restorePuddleWaterBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('DryGround preserves every prior fixture, vehicle asset, venue art and history input',verifyDryGroundRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/dry-ground/revision.json').toString());

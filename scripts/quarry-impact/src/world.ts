@@ -50,6 +50,12 @@ function claddingUV(mesh: T.Mesh<T.BoxGeometry>) {
 }
 // A narrow translucent shoreline keeps shallow water embedded in the aggregate.
 // Vertex opacity fades both the water edge and the wider damp margin in-place.
+/** Standing water: water itself hardly scatters light, so a puddle is the dark, wet ground under it plus a mirror of the
+ * sky that strengthens towards grazing angles (water's own reflectance, ior 1.33) — not a pale milky film. */
+export const PUDDLE_WATER={color:0x2a2924,roughness:.03,opacity:.86,env:1.4} as const;
+export function puddleWater(){
+  return new T.MeshPhysicalMaterial({color:PUDDLE_WATER.color,metalness:0,roughness:PUDDLE_WATER.roughness,ior:1.33,transparent:true,opacity:PUDDLE_WATER.opacity,envMapIntensity:PUDDLE_WATER.env,depthWrite:false});
+}
 export function softShoreMaterial(material: T.MeshStandardMaterial) {
   material.onBeforeCompile = shader => {
     shader.vertexShader = 'attribute float shoreAlpha; varying float vShoreAlpha;\n' + shader.vertexShader;
@@ -451,18 +457,7 @@ export class Quarry {
       mesh.castShadow=mesh.receiveShadow=true;mesh.name='movable_quarry_tyre_'+id;
       this.scenery.add(mesh);this.props.push({mesh,body,start:new T.Vector3(x,y,z)});
     }
-    const water = softShoreMaterial(new T.MeshPhysicalMaterial({
-      color: 0x858d87,
-      metalness: 0.05,
-      roughness: 0.045,
-      clearcoat: 1,
-      clearcoatRoughness: .055,
-      ior: 1.33,
-      transparent: true,
-      opacity: 0.77,
-      envMapIntensity: 1.3,
-      depthWrite: false,
-    }));
+    const water = softShoreMaterial(puddleWater());
     const wetSoil = softShoreMaterial(new T.MeshStandardMaterial({ color:0x514d40,roughness:.48,transparent:true,opacity:.4,depthWrite:false }));
     for (let i = 0; i < 12; i++) {
       const a = rand() * 6.28,

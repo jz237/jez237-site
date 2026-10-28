@@ -237,7 +237,7 @@ import {drawInstruments} from './instruments';
 import {OffroadMarker} from './offroad-marker';
 import {drawQuarryMap} from './quarry-minimap';
 import { prepareCircuitSurface } from './scenery-circuit-material';
-import { Quarry, puddleGeometry, softShoreMaterial } from './world';
+import { Quarry, puddleGeometry, puddleWater, softShoreMaterial } from './world';
 import {RainPuddles,layRainPuddles} from './rain-puddles';
 import {showerLevel} from './rain-showers';
 import {waterAt,aquaplaningNow,aquaplaneLift,AQUA} from './aquaplaning';
@@ -2496,7 +2496,7 @@ function layEventPuddles(lay=true){
   if(puddleVenue&&rainPuddles){const mine=new Set(rainPuddles.list);for(let i=puddleVenue.puddles.length;i--;)if(mine.has(puddleVenue.puddles[i]))puddleVenue.puddles.splice(i,1);}
   rainPuddles?.clear();puddleVenue=undefined;
   if(!lay||eventLighting!=='rain'||online?.active||!activeVenue.arena)return;
-  rainPuddles??=new RainPuddles(scene,puddleGeometry,softShoreMaterial(new T.MeshPhysicalMaterial({color:0x7d8580,metalness:.05,roughness:.06,clearcoat:1,clearcoatRoughness:.09,ior:1.33,transparent:true,opacity:.8,envMapIntensity:1,depthWrite:false})),
+  rainPuddles??=new RainPuddles(scene,puddleGeometry,softShoreMaterial(puddleWater()),
     softShoreMaterial(new T.MeshStandardMaterial({color:0x26282a,roughness:.3,transparent:true,opacity:.45,depthWrite:false})));
   rainPuddles.lay(layRainPuddles(activeVenue.arena,activeVenue.course.height,Math.random()*1e9));activeVenue.puddles.push(...rainPuddles.list);puddleVenue=activeVenue;
 }
