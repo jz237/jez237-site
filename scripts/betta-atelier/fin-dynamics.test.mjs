@@ -199,8 +199,9 @@ test('hover sculling fans the pectorals continuously and a startle tucks them to
     return { gait, mean, swing: Math.max(...trace) - Math.min(...trace), hz: crossings / 2 / (trace.length / fps) };
   }
   const idle = pectoral({}), scull = pectoral({ scull: 1 }), tucked = pectoral({ tuck: 1 });
-  // Sculling differs from idle swimming by longer runs of beats, not by a bigger fin: the swing must not shrink or grow much.
-  assert.ok(scull.swing > idle.swing * 0.8 && scull.swing < idle.swing * 1.3, `sculling swing ${scull.swing} vs idle ${idle.swing}`);
+  // Sculling differs from idle swimming by longer runs of beats and a somewhat wider sweep (the hover beat
+  // must read), not by a bigger fin: the swing must not shrink, nor grow too much.
+  assert.ok(scull.swing > idle.swing * 0.8 && scull.swing < idle.swing * 1.6, `sculling swing ${scull.swing} vs idle ${idle.swing}`);
   for (const { hz } of [idle, scull]) assert.ok(hz > 1 && hz < 3.5, `beats at ${scull.hz} Hz, idle ${idle.hz}`);
   // The tuck draws the fins in and stills them, but gently: a deep fold reads as the fin changing size.
   assert.ok(tucked.mean < idle.mean - 0.01, `tucked mean ${tucked.mean} vs ${idle.mean}`);
