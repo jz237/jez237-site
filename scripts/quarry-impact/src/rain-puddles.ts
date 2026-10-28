@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {makeSoft} from './soft-particles';
 import type {ArenaLayout} from './derby-arena';
 import type {Puddle} from './puddle-splashes';
 /** Rain puddles (offline rain, derby arenas): RAIN_PUDDLES.count puddles of standing water lie on the arena floor,
@@ -41,7 +42,7 @@ export class RainPuddles{
     for(const {puddle,variations} of laid){
       for(const [wet,material,lift] of [[true,this.wet,0],[false,this.water,.004]] as const){
         const mesh=new T.Mesh(this.geometry(puddle.radius,variations,wet),material);mesh.name=wet?'rain_puddle_damp':'rain_puddle';
-        mesh.rotation.x=-Math.PI/2;mesh.position.set(puddle.x,puddle.level+lift,puddle.z);mesh.receiveShadow=true;mesh.renderOrder=1;
+        mesh.rotation.x=-Math.PI/2;mesh.position.set(puddle.x,puddle.level+lift,puddle.z);mesh.receiveShadow=true;mesh.renderOrder=1;if(!wet)makeSoft(mesh);
         this.group.add(mesh);this.meshes.push(mesh);
       }
       this.full.push(puddle.radius);this.list.push(puddle);

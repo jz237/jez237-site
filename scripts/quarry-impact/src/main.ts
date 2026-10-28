@@ -119,6 +119,7 @@ import {BONNET_STEAM,bonnetHeat,steamRate} from './bonnet-steam';
 import {TYRE_STEAM,tyreSteamRate} from './tyre-heat';
 import {DUST,dustRate} from './dust-trails';
 import {SoftParticlesPass} from './soft-particles';
+import {reflectivePuddles} from './puddle-reflections';
 import {SharpenPass} from './sharpen';
 import {COLD_START,coldStartPuffs,crankStarts} from './cold-start';
 import {GravelRoost,ROOST,roostRate,STONE_HIT,stoneHitVolume,type RoostBody} from './gravel-roost';
@@ -781,7 +782,8 @@ const composer = new EffectComposer(renderer, createSceneRenderTarget(innerWidth
 composer.addPass(new RenderPass(scene, camera));
 const ao = new QuarryAO(scene, camera);
 // Dust, smoke and sparks, after the ambient occlusion and against the scene's depth (they fade where they meet a surface).
-const softParticles = new SoftParticlesPass(() => fx ? [fx.points] : [], camera, () => ao.enabled);
+// What lives on the soft layer: the puddles' water (it mirrors the picture), the wheel ripples and spray, the particles.
+const softParticles = new SoftParticlesPass(scene, camera, () => ao.enabled);
 // Hot air over fires, tailpipes and hot bonnets shimmers what is behind it (offline).
 const heatHaze = new HeatHazePass(() => ao.enabled || softParticles.swapped);
 // Rain lands on the chase and hood cameras' lens (offline).
@@ -2501,7 +2503,7 @@ function layEventPuddles(lay=true){
   if(puddleVenue&&rainPuddles){const mine=new Set(rainPuddles.list);for(let i=puddleVenue.puddles.length;i--;)if(mine.has(puddleVenue.puddles[i]))puddleVenue.puddles.splice(i,1);}
   rainPuddles?.clear();puddleVenue=undefined;
   if(!lay||eventLighting!=='rain'||online?.active||!activeVenue.arena)return;
-  rainPuddles??=new RainPuddles(scene,puddleGeometry,softShoreMaterial(puddleWater()),
+  rainPuddles??=new RainPuddles(scene,puddleGeometry,reflectivePuddles(softShoreMaterial(puddleWater()) as T.MeshPhysicalMaterial),
     softShoreMaterial(new T.MeshStandardMaterial({color:0x26282a,roughness:.3,transparent:true,opacity:.45,depthWrite:false})));
   rainPuddles.lay(layRainPuddles(activeVenue.arena,activeVenue.course.height,Math.random()*1e9));activeVenue.puddles.push(...rainPuddles.list);puddleVenue=activeVenue;
 }

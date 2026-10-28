@@ -1,6 +1,7 @@
+import {restorePuddleMirrorBytes} from './puddle-mirror-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readCrispDetailPrevious,restoreCrispDetailBytes,verifyCrispDetailRevision} from './crisp-detail-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restorePuddleMirrorBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('CrispDetail preserves every prior fixture, vehicle asset, venue art and history input',verifyCrispDetailRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/crisp-detail/revision.json').toString());

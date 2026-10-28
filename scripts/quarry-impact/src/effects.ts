@@ -95,8 +95,8 @@ void main(){
     });
     this.points = new T.Points(this.geometry, material);
     this.points.frustumCulled = false;
-    // Drawn by the soft particle pass, after the scene, against its depth.
-    makeSoft(this.points);
+    // Drawn by the soft particle pass, after the scene, against its depth (last there: over the puddles and ripples).
+    makeSoft(this.points);this.points.renderOrder=10;
     scene.add(this.points);
     for (let i = 0; i < count; i++)
       this.particles.push({

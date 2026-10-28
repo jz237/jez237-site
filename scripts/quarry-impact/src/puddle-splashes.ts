@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {handDepthTest,makeSoft} from './soft-particles';
 import type {Vehicle} from './vehicle';
 
 export type Puddle={id:number;x:number;z:number;level:number;radius:number;aspect:number;phases:number[]};
@@ -67,6 +68,8 @@ export class PuddleSplashes {
       #include <colorspace_fragment>
       }`}));
     this.spray.name='tire-puddle-spray';this.spray.frustumCulled=false;this.spray.renderOrder=3;scene.add(this.spray);
+    // Over the puddles' water, which is drawn after the scene: so are these, depth-tested by hand.
+    makeSoft(this.spray);handDepthTest(this.spray.material as T.ShaderMaterial);
     this.rings=new T.Mesh(geometry({offset:[this.ringOffset,3],ring:[this.ringData,4],shape:[this.shapes,4],phases:[this.phases,4]}),new T.ShaderMaterial({transparent:true,depthWrite:false,side:T.DoubleSide,
       vertexShader:`attribute vec3 offset;attribute vec4 ring;attribute vec4 shape;attribute vec4 phases;varying vec2 vUv;varying vec2 vWorld;varying vec4 vRing;varying vec4 vShape;varying vec4 vPhases;void main(){vUv=uv*2.-1.;vRing=ring;vShape=shape;vPhases=phases;vec3 p=offset+vec3(position.x*ring.x,0.,position.y*ring.x);vWorld=p.xz;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}`,
       fragmentShader:`varying vec2 vUv;varying vec2 vWorld;varying vec4 vRing;varying vec4 vShape;varying vec4 vPhases;void main(){vec2 q=(vWorld-vShape.xy)/vec2(1.,-vShape.w);float a=atan(q.y,q.x);float edge=1.+sin(a*3.+vPhases.x*6.28)*.105+sin(a*5.+vPhases.y*6.28)*.066+sin(a*11.+vPhases.z*6.28)*.025+sin(a*23.+vPhases.w*6.28)*.008;float wet=smoothstep(0.,.07,edge-length(q)/vShape.z);float r=length(vUv);float wave=exp(-pow((r-.79)*32.,2.))*.64+exp(-pow((r-.52)*38.,2.))*.28;gl_FragColor=vec4(.73,.84,.87,wave*vRing.y*wet);
@@ -74,6 +77,7 @@ export class PuddleSplashes {
       #include <colorspace_fragment>
       }`}));
     this.rings.name='puddle-wheel-ripples';this.rings.frustumCulled=false;this.rings.renderOrder=2;scene.add(this.rings);
+    makeSoft(this.rings);handDepthTest(this.rings.material as T.ShaderMaterial);
   }
   /** The lamps shining now (world space; offline rain), lighting the spray from the next render. */
   light(lamps:readonly SprayLamp[]){this.lamps=lamps;}

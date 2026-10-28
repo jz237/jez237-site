@@ -4,6 +4,7 @@ import {ReferenceArena} from './scenery-reference-arena';
 import {referenceArenaFloor} from './scenery-reference-floor';
 import {QUARRY_DAYLIGHT} from './quarry-art-direction';
 import { freezeSceneryTransforms } from './render-work';
+import {reflectivePuddles,softPuddle} from './puddle-reflections';
 import {DERBY_ARENA,LEGACY_ARENA,DerbyArenaPhysics,expandedArenaFloor,arenaBarrier} from './derby-arena';
 import type {Puddle} from './puddle-splashes';
 import { fractureBankGeometry } from './scenery-bank-relief';
@@ -103,6 +104,8 @@ export class Quarry {
   expandedFences = new T.Group();
   legacyFences = new T.Group();
   puddles:Puddle[]=[];
+  /** The puddles' water meshes (drawn in the soft particle pass). */
+  readonly puddleWater:T.Mesh[]=[];
   readonly arenaPhysics:DerbyArenaPhysics;
   private originalArena:T.Mesh;
   private largerArena:T.Mesh;
@@ -463,7 +466,8 @@ export class Quarry {
       mesh.castShadow=mesh.receiveShadow=true;mesh.name='movable_quarry_tyre_'+id;
       this.scenery.add(mesh);this.props.push({mesh,body,start:new T.Vector3(x,y,z)});
     }
-    const water = softShoreMaterial(puddleWater());
+    // Drawn after the scene so it can mirror the picture (src/puddle-reflections.ts).
+    const water = reflectivePuddles(softShoreMaterial(puddleWater()) as T.MeshPhysicalMaterial);
     const wetSoil = softShoreMaterial(new T.MeshStandardMaterial({ color:0x514d40,roughness:.48,transparent:true,opacity:.4,depthWrite:false }));
     for (let i = 0; i < 12; i++) {
       const a = rand() * 6.28,
@@ -477,6 +481,7 @@ export class Quarry {
       p.position.set(Math.sin(a) * r, 0.025, Math.cos(a) * r);
       p.scale.y = 0.45 + rand() * 0.6;
       this.puddles.push({id:i,x:p.position.x,z:p.position.z,level:p.position.y,radius,aspect:p.scale.y,phases:[variations[0],variations[7],variations[14],variations[21]]});
+      softPuddle(p);this.puddleWater.push(p);
       this.scenery.add(p);
       const wet = new T.Mesh(puddleGeometry(radius, variations, true), wetSoil);
       wet.rotation.copy(p.rotation);wet.position.copy(p.position);wet.position.y=.022;

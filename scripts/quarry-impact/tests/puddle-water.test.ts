@@ -11,6 +11,6 @@ test('a puddle is dark wet ground under a mirror of the sky, not a pale film',()
   assert.ok(m.roughness<=.05&&m.transparent&&!m.depthWrite&&m.opacity>.8&&m.opacity<1,'smooth, and a little of the ground shows through');
 });
 test('the quarry puddles and the rain puddles share it',()=>{
-  assert.ok(world.includes('const water = softShoreMaterial(puddleWater());'));
-  assert.ok(main.includes('rainPuddles??=new RainPuddles(scene,puddleGeometry,softShoreMaterial(puddleWater()),'));
+  assert.ok(world.includes('const water = reflectivePuddles(softShoreMaterial(puddleWater()) as T.MeshPhysicalMaterial);'));
+  assert.ok(main.includes('rainPuddles??=new RainPuddles(scene,puddleGeometry,reflectivePuddles(softShoreMaterial(puddleWater()) as T.MeshPhysicalMaterial),'));
 });
