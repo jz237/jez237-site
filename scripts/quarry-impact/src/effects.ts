@@ -5,6 +5,8 @@ import R from '@dimforge/rapier3d-compat';
 import {GroundEvidence} from './ground-evidence';
 import {FluidSlicks,type GroundFire} from './fluid-leaks';
 import {DAYLIGHT_DIRECTION} from './static-shadows';
+import {CrashLitter,type LitterKind} from './crash-litter';
+import {SOFT_FRAGMENT,SOFT_UNIFORMS,makeSoft,softUniforms} from './soft-particles';
 type Particle = {
   p: T.Vector3;
   v: T.Vector3;
@@ -23,10 +25,25 @@ export class Effects {
   types: Float32Array;
   geometry: T.BufferGeometry;
   points: T.Points;
-  debris: { mesh: T.Object3D; body: R.RigidBody; age: number; shared?: boolean; fire?: { start: number; end: number; seed: number } }[] = [];
+  debris: { mesh: T.Object3D; body: R.RigidBody; age: number; shared?: boolean; fire?: { start: number; end: number; seed: number }; release?: () => void }[] = [];
+  /** Broken glass and lamp lens chips left on the floor for the event. */
+  readonly litter: CrashLitter;
+  /** Scatters litter on the floor as the physics has it (static colliders, cast down from above the break): arena floors stand
+   * above the course height function. */
+  scatterLitter(point: T.Vector3, kind: LitterKind, seed: number, from?: T.Vector3, colour?: number, count?: number) {
+    return this.litter.scatter(point, kind, seed, (x, z) => this.floorAt(x, z, point.y), from, colour, count);
+  }
+  /** The floor height at (x, z) as the physics has it (static colliders, cast down from above near), else the course height. */
+  floorAt(x: number, z: number, near: number) {
+    const top = Math.max(Number.isFinite(near) ? near : 0, this.groundHeight(x, z)) + 1.5;
+    const hit = typeof this.world.castRay === 'function' ? this.world.castRay(new R.Ray({ x, y: top, z }, { x: 0, y: -1, z: 0 }), 4, true, R.QueryFilterFlags.EXCLUDE_SENSORS | R.QueryFilterFlags.EXCLUDE_DYNAMIC | R.QueryFilterFlags.EXCLUDE_KINEMATIC) : null;
+    return hit ? top - hit.timeOfImpact : this.groundHeight(x, z);
+  }
   marks: T.InstancedMesh;
   markCursor = 0;
   readonly evidence:GroundEvidence;
+  /** Offline: sends a knocked-off hubcap rolling away instead of tumbling as debris (axle: its wheel's, in the world). */
+  rollCap?:(cap:T.Mesh,axle:T.Vector3,velocity:T.Vector3)=>unknown;
   readonly slicks:FluidSlicks;
   constructor(
     public scene: T.Scene,
@@ -35,6 +52,7 @@ export class Effects {
   ) {
     this.evidence=new GroundEvidence(scene);
     this.slicks=new FluidSlicks(scene);
+    this.litter=new CrashLitter(scene);
     const count = 1800;
     this.positions = new Float32Array(count * 3);
     this.colors = new Float32Array(count * 3);
@@ -54,11 +72,14 @@ export class Effects {
       transparent: true,
       depthWrite: false,
       vertexColors: true,
-      uniforms: { scale: { value: window.innerHeight },sun: {value:DAYLIGHT_DIRECTION} },
+      uniforms: { scale: { value: window.innerHeight },sun: {value:DAYLIGHT_DIRECTION},...softUniforms },
       vertexShader: `attribute float size; attribute float alpha; attribute float kind;
-varying vec3 vColor; varying float vAlpha; varying float vKind; varying float vSeed; varying float vBacklight; uniform float scale;uniform vec3 sun;
-void main(){if(alpha<=0.){gl_Position=vec4(2.,2.,2.,1.);gl_PointSize=1.;return;}vColor=color;vAlpha=alpha;vKind=kind;vSeed=fract(position.x*.13+position.z*.27);vec4 p=modelViewMatrix*vec4(position,1.);vBacklight=pow(max(0.,dot(normalize(cameraPosition-position),sun)),5.);gl_PointSize=min(kind==0.?180.:120.,size*scale/max(1.,-p.z));gl_Position=projectionMatrix*p;}`,
-      fragmentShader: `varying vec3 vColor; varying float vAlpha; varying float vKind; varying float vSeed;varying float vBacklight;
+varying vec3 vColor; varying float vAlpha; varying float vKind; varying float vSeed; varying float vBacklight; varying float vDepth; varying float vRadius; uniform float scale;uniform vec3 sun;
+void main(){if(alpha<=0.){gl_Position=vec4(2.,2.,2.,1.);gl_PointSize=1.;return;}vColor=color;vAlpha=alpha;vKind=kind;vSeed=fract(position.x*.13+position.z*.27);vec4 p=modelViewMatrix*vec4(position,1.);vBacklight=pow(max(0.,dot(normalize(cameraPosition-position),sun)),5.);
+ float px=size*scale/max(1.,-p.z);gl_PointSize=min(kind==0.?180.:120.,px);vDepth=-p.z;vRadius=.5*size*gl_PointSize/max(px,1e-3);gl_Position=projectionMatrix*p;}`,
+      fragmentShader: `${SOFT_UNIFORMS}
+varying vec3 vColor; varying float vAlpha; varying float vKind; varying float vSeed;varying float vBacklight;varying float vDepth;varying float vRadius;
+${SOFT_FRAGMENT}
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+1.),f.x),f.y);}
 void main(){
@@ -67,13 +88,15 @@ void main(){
  else if(vKind==3. || vKind==4.) {a=1.-smoothstep(.18,.5,max(abs(uv.x+uv.y*.4),abs(uv.y)));}
  else {float n=noise(uv*8.+vSeed*27.)*.6+noise(uv*17.-vSeed*13.)*.3; a=smoothstep(1.,.18,r+n*.24)*(n*.6+.4);}
  vec3 lit=vKind==0.?vColor*(vec3(1.08,.99,.82)+vec3(.55,.35,.10)*vBacklight*(1.-r*.45)):vColor;
- gl_FragColor=vec4(lit,a*vAlpha);
+ gl_FragColor=vec4(lit,a*vAlpha*softParticle(vDepth,vRadius,min(1.,r)));
  #include <tonemapping_fragment>
  #include <colorspace_fragment>
 }`,
     });
     this.points = new T.Points(this.geometry, material);
     this.points.frustumCulled = false;
+    // Drawn by the soft particle pass, after the scene, against its depth (last there: over the puddles and ripples).
+    makeSoft(this.points);this.points.renderOrder=10;
     scene.add(this.points);
     for (let i = 0; i < count; i++)
       this.particles.push({
@@ -110,7 +133,10 @@ void main(){
     this.marks.frustumCulled = false;
     scene.add(this.marks);
   }
+  /** Offline: told of every burst of sparks (type 1), for the light they throw. */
+  onSparks?:(at:T.Vector3,count:number)=>void;
   emit(p: T.Vector3, count: number, type = 0, force = 1) {
+    if(type===1&&count>0)this.onSparks?.(p,count);
     for (let j = 0; j < count; j++) {
       const i = this.cursor++ % this.particles.length,
         s = this.particles[i];
@@ -215,6 +241,22 @@ void main(){
     b.setAngvel({ x: 2, y: 1, z: 3 }, true);
     this.debris.push({ mesh, body: b, age: 0 });
   }
+  /** A whole prop torn off a car (a roof sign): moved out of the car into a holder in the scene where it was, tumbling on a box
+   * body of size (metres) about centre (in the prop's own frame); release frees the prop when the debris is cleared. */
+  detachProp(source: T.Object3D, velocity: T.Vector3, size: T.Vector3, centre: T.Vector3, release?: () => void) {
+    if (this.debris.length >= 36) this.removeDebris(0);
+    source.updateWorldMatrix(true, true);
+    const position = centre.clone().applyMatrix4(source.matrixWorld), quaternion = source.getWorldQuaternion(new T.Quaternion()), holder = new T.Group();
+    holder.position.copy(position); holder.quaternion.copy(quaternion); holder.name = 'torn_' + source.name;
+    this.scene.add(holder); holder.updateMatrixWorld(true); holder.attach(source);
+    const b = this.world.createRigidBody(
+      R.RigidBodyDesc.dynamic().setTranslation(position.x, position.y, position.z).setRotation(quaternion)
+        .setLinvel(velocity.x, velocity.y, velocity.z).setAngularDamping(0.3).setCcdEnabled(true),
+    );
+    this.world.createCollider(R.ColliderDesc.cuboid(size.x / 2, size.y / 2, size.z / 2).setMass(4).setRestitution(0.3).setFriction(0.8), b);
+    b.setAngvel({ x: 3, y: 2, z: 4 }, true);
+    this.debris.push({ mesh: holder, body: b, age: 0, shared: true, release });
+  }
   /** A torn-off wheel rolls away on its own cylinder body. The visual is a clone sharing the
    * car's wheel geometry and materials, so removal only detaches it. */
   detachWheel(source: T.Object3D, velocity: T.Vector3, radius: number, speed = 0) {
@@ -255,12 +297,15 @@ void main(){
     const d = this.debris[i];
     this.world.removeRigidBody(d.body);
     this.scene.remove(d.mesh);
+    d.release?.();
     if (!d.shared && d.mesh instanceof T.Mesh) {
       d.mesh.geometry.dispose();
       (d.mesh.material as T.Material).dispose();
     }
     this.debris.splice(i, 1);
   }
+  /** The breeze (m/s, x and z) smoke, steam and vapour drift with; still air when zero. */
+  readonly wind = new T.Vector2();
   update(dt: number) {
     this.evidence.advance(dt);this.slicks.advance(dt);
     (this.points.material as T.ShaderMaterial).uniforms.scale.value = window.innerHeight;
@@ -272,6 +317,8 @@ void main(){
         const solid = p.type === 1 || p.type === 3 || p.type === 4;
         p.v.y += (solid ? -9 : p.type === 2 ? .6 : .18) * dt;
         p.v.multiplyScalar(Math.exp(-dt * 0.6));
+        // Smoke, steam and vapour are carried off downwind.
+        if (!solid && (this.wind.x || this.wind.y)) { const k = 1 - Math.exp(-dt * 1.5); p.v.x += (this.wind.x - p.v.x) * k; p.v.z += (this.wind.y - p.v.z) * k; }
         this.positions.set(p.p.toArray(), i * 3);
         this.sizes[i] =
           p.size * (solid ? 1 : 1 + (p.max - p.life) * 1.5);
@@ -288,7 +335,7 @@ void main(){
     }
   }
   reset() {
-    this.evidence.reset();this.slicks.reset();
+    this.evidence.reset();this.slicks.reset();this.litter.reset();
     for (const p of this.particles) p.life = 0;
     // Menu frames do not advance this pool. Clear the uploaded attributes too,
     // otherwise the final sparks can remain visible over the new attract car.
