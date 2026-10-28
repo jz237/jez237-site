@@ -111,7 +111,7 @@ const TIP_FLUTTER = 0.075;
  *  own, redrawn now and then and eased to), and the billow runs along it unevenly, higher in some
  *  stretches than in others (UNEVEN: a share of the billow either way) and quicker in some (UNEVEN_PACE:
  *  rad of the wave's phase bunched or spread across the fan), the stretches drifting along it. */
-const RAGGED = [0.045, 0.035, 0.04], UNEVEN = 0.5, UNEVEN_PACE = 1.1;
+const RAGGED = [0.06, 0.04, 0.05], UNEVEN = 0.5, UNEVEN_PACE = 1.1;
 /** The C the body bends into to turn (state.curl, -1..1, + towards the fish's left: the body's word for
  *  it, or the fins' own from the turn's rate, a full C at CURL_RATE rad/s or so): the caudal is dragged
  *  round behind the peduncle (CURL_DRAG rad at the margin per unit of the C's change a second), its lobes
