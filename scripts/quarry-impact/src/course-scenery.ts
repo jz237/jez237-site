@@ -14,6 +14,7 @@ import {createMidway} from './fairground-midway';
 import {createFairWheel} from './fairground-wheel';
 import {addCourseRockDetail} from './course-materials';
 import * as T from 'three';
+import {photoTreeMaterial} from './photo-trees';
 import type {createCountyCourse} from './county-course';
 
 type Course=ReturnType<typeof createCountyCourse>;
@@ -596,19 +597,8 @@ diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.73,.8,.74),foam*.65);`);};
   for(const [kind,aspect]of [['pine',461/1024],['spruce',402/1024],['maple',712/1024]]as const){
    const trees=treeCards.filter(t=>t.kind===kind);if(!trees.length)continue;
    const photo=new T.TextureLoader().load((import.meta.env?.BASE_URL??'./')+'models/'+kind+'.webp');photo.colorSpace=T.SRGBColorSpace;photo.anisotropy=8;textures.push(photo);
-   const material=new T.MeshStandardMaterial({map:photo,alphaTest:.45,roughness:1,color:0xbac4b0,side:T.DoubleSide});
-   material.onBeforeCompile=shader=>{
-    shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>',`
-      vec3 center=(modelMatrix*instanceMatrix*vec4(0.0,0.0,0.0,1.0)).xyz;
-      vec3 right=normalize(vec3(viewMatrix[0][0],0.0,viewMatrix[2][0]));
-      vec3 billboard=center+right*position.x*length(instanceMatrix[0].xyz)+vec3(0.0,position.y*length(instanceMatrix[1].xyz),0.0);
-      vec4 mvPosition=viewMatrix*vec4(billboard,1.0);gl_Position=projectionMatrix*mvPosition;
-    `);
-    shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_begin>',`#include <normal_fragment_begin>
-normal=transformDirection(vec3(0.0,1.0,0.0),viewMatrix);nonPerturbedNormal=normal;`).replace('#include <lights_fragment_end>',`#include <lights_fragment_end>
-reflectedLight.directDiffuse *= .5;reflectedLight.directSpecular *= .5;`);
-   };
-   material.customProgramCacheKey=()=> 'course-forest-canopy-v1';
+   // Lit as rounded crowns (src/photo-trees.ts).
+   const material=photoTreeMaterial(kind,photo);
    const geometry=new T.PlaneGeometry(aspect,1);geometry.translate(0,.5,0);ownedGeometries.push(geometry);ownedMaterials.push(material);
    const mesh=new T.InstancedMesh(geometry,material,trees.length);mesh.name=course.id+'_forest_'+kind;
    for(const [i,t]of trees.entries()){matrix.makeScale(t.size,t.size,t.size);matrix.setPosition(t.x,t.y,t.z);mesh.setMatrixAt(i,matrix);mesh.setColorAt(i,new T.Color().setScalar(.87+(i%7)*.025));}mesh.computeBoundingSphere();root.add(mesh);

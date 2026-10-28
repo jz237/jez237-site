@@ -2,6 +2,7 @@ import {withBarrierBoards,boardSeed} from './barrier-boards';
 import * as T from 'three';
 import {MILLHAVEN} from './millhaven-course';
 import {freezeSceneryTransforms} from './render-work';
+import {createPhotoTrees,type PhotoTree} from './photo-trees';
 export function createMillhavenWorld(){
  const id='millhaven-rally-v1',dock=false,course=MILLHAVEN,root=new T.Group();root.name=id;
  const materials=withBarrierBoards({concrete:new T.MeshStandardMaterial({color:dock?0xc9c3ac:0xd2c5a1,roughness:.95}),stripe:new T.MeshStandardMaterial({color:dock?0xd99033:0x9b3e38,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x344553,roughness:.7,metalness:.4}),grass:new T.MeshStandardMaterial({color:0x687858,roughness:1}),seat:new T.MeshStandardMaterial({color:0xc7c0a4,roughness:.8}),blue:new T.MeshStandardMaterial({color:0x3e6c81,roughness:.85}),red:new T.MeshStandardMaterial({color:0x9f4b3e,roughness:.9})},boardSeed(course.id));
@@ -39,16 +40,15 @@ export function createMillhavenWorld(){
  for(const x of [-70,-54,-38])for(let row=0;row<3;row++)box(x,1.2+row*1.4,-38,12-row*2,1.2,20,'seat');
  for(let row=0;row<5;row++){const z=-140-row*2,h=.6+row*.6;box(30,h/2,z,140,h,2,'concrete');for(let x=-35;x<=95;x+=3)box(x,h+.2,z,2.2,.2,.65,'blue');}
  // Instanced trees stay clear of the road, shoulders and start gantry.
- const trunk=new T.CylinderGeometry(.35,.55,1,6),crown=new T.ConeGeometry(1,1,7),trees:T.Matrix4[]=[],trunks:T.Matrix4[]=[];
+ const belt:PhotoTree[]=[];
  for(let i=0;i<190;i++){
   const x=-205+(i*67.13%410),z=-163+(i*41.71%323);
   if(course.distance(x,z)<27||(Math.abs(x-15)<85&&Math.abs(z+28)<60)||z< -130&&x> -50&&x<110)continue;
   const y=course.height(x,z),h=7+i%5;
-  trunks.push(new T.Matrix4().makeScale(1,h*.6,1).setPosition(x,y+h*.3,z));
-  trees.push(new T.Matrix4().makeScale(h*.38,h,h*.38).setPosition(x,y+h*.85,z));
+  belt.push({kind:i%5===0?'pine':i%2?'spruce':'hemlock',x,y,z,height:h*1.3,tint:.9+(i%5)*.04});
  }
- for(const [geometry,finish,matrices]of [[trunk,materials.steel,trunks],[crown,materials.grass,trees]]as const){const mesh=new T.InstancedMesh(geometry,finish,matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name=id+'_trees';mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name=id+'_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
+ const forest=createPhotoTrees(belt,id+'_trees');root.add(forest.root);
  root.userData.solidRecords=course.solids;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();trunk.dispose();crown.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;forest.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }
