@@ -357,3 +357,44 @@ test('each node is kept as the body carried it, with the update it was carried a
     assert.notEqual(fin.carriedAt, body.revision);
   }
 });
+
+test('no fin node is ever drawn above the surface or inside a solid, and the fin folds along them without a pop', () => {
+  // The surface comes down onto the fin over a second, to SURFACE (in the fish's frame, up = -down), and a
+  // solid (a capsule, as a host's state.solids) comes up into the fin's lower part, as the fish meets them. (The drawn shape is
+  // kept in single precision: 1e-5 is its rounding.)
+  // (Each test fin's surface: across its upper part, clear of its insertions and of the solid.)
+  const SURFACE = [0.25, 0.25, 0.25, 0.15, -0.5], R = 0.18, solids = { data: new Float64Array(7), count: 1 };
+  const drawn = (f, n, k) => f.carried[n * 3 + k] + f.displacement[n * 4 + k];
+  for (const [kind, side] of [[0, 0], [1, 0], [2, 0], [3, -1], [3, 1], [4, -1], [4, 1]]) {
+    const fin = make(kind, side), free = make(kind, side);
+    // (Across the fin's middle: its rest nodes' mean, a little below.)
+    let mx = 0, my = 0;
+    for (let n = 0; n < fin.count; n++) { mx += fin.rest[n * 3]; my += fin.rest[n * 3 + 1]; }
+    mx /= fin.count; my /= fin.count;
+    let last = null, lastFree = null, jump = 0, jumpFree = 0;
+    for (let i = 1; i <= 300; i++) {
+      const s = state(i / 60, 0.8, 'changing'), top = Math.max(SURFACE[kind], 2 - 2 * i / 60);
+      const sy = my - 0.15 - Math.max(0, 1.4 - 1.4 * i / 60);
+      solids.data.set([mx, sy, -2, mx, sy, 2, R]);
+      fin.advance(1 / 60, { ...s, down: [0, -1, 0], surfaceY: top, solids });
+      free.advance(1 / 60, s);
+      const now = [], nowFree = [];
+      for (let n = fin.columns; n < fin.count; n++) {
+        const x = drawn(fin, n, 0), y = drawn(fin, n, 1), z = drawn(fin, n, 2);
+        assert.ok(y <= top + 1e-5, `fin ${kind}/${side} node ${n} above the surface by ${y - top}`);
+        const d = Math.hypot(x - mx, y - sy);
+        assert.ok(d >= R - 1e-5 || Math.abs(z) > 2, `fin ${kind}/${side} node ${n} inside the solid by ${R - d}`);
+        now.push(x, y, z); nowFree.push(drawn(free, n, 0), drawn(free, n, 1), drawn(free, n, 2));
+      }
+      // (Once the surface has stopped coming down: a pop is a node jumping further in a frame than it does free.)
+      if (last && i > 90) for (let q = 0; q < now.length; q += 3) {
+        jump = Math.max(jump, Math.hypot(now[q] - last[q], now[q + 1] - last[q + 1], now[q + 2] - last[q + 2]));
+        jumpFree = Math.max(jumpFree, Math.hypot(nowFree[q] - lastFree[q], nowFree[q + 1] - lastFree[q + 1], nowFree[q + 2] - lastFree[q + 2]));
+      }
+      last = now; lastFree = nowFree;
+    }
+    assert.ok(jump < jumpFree * 1.5 + 0.01, `fin ${kind}/${side} pops against the surface or the solid: ${jump.toFixed(4)} a frame vs ${jumpFree.toFixed(4)} free`);
+    assert.equal(fin.metrics().anchorError, 0);
+    assert.ok(fin.position.every(Number.isFinite));
+  }
+});

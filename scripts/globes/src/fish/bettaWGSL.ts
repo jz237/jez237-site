@@ -227,17 +227,19 @@ fn betta_shade(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, hit: 
       let band = smoothstep(-0.012, 0.012, fc.y - bettaLook[2].w - 0.045 * ray + 0.018 * sin(fc.x * 37.0) + 0.01 * sin(fc.x * 103.0 + 1.7));
       albedo = mix(albedo, betta_fade(bettaLook[2].xyz) * lum, band);
     }` : ''}
-    // The pectorals are clear: a wash of the fish's colour, its rays and edge showing most; fanning,
-    // they catch the light (a glint off the membrane) more than they hide the flank behind.
+    // The pectorals are clear: a pale, whitish wash of the fish's colour, its rays and edge showing most
+    // (thicker towards the edge than the root: Pexels 12659950's whitish flicker); fanning, they catch
+    // the light (a broad glint off the membrane that comes and goes with each beat) more than they
+    // hide the flank behind.
     let clear = mat == 5u;
-    if (clear) { albedo = mix(vec3f(dot(albedo, vec3f(0.3, 0.59, 0.11))), albedo, 0.5) * 1.25; }
+    if (clear) { albedo = mix(vec3f(dot(albedo, vec3f(0.3, 0.59, 0.11))), albedo, 0.3) * 1.55; }
     let front = max(ndl, 0.0); let back = max(-ndl, 0.0);
     let hue = pow(albedo, vec3f(0.8));
     let towardSun = pow(max(dot(rd, L), 0.0), 3.0);
     let glow = hue * direct * (back * 0.62 + towardSun * 0.55 * (0.4 + 0.6 * fc.y)) * (1.0 - 0.55 * ray);
     let body = albedo * (direct * (0.3 + 0.42 * front + 0.2 * back) + ambient);
-    let rgb = (body + glow) / 3.14159265 + select(0.0, 0.3, clear) * direct * pow(max(dot(n, normalize(L - rd)), 0.0), 40.0);
-    var alpha = mix(select(0.93, 0.42, clear), select(0.66, 0.2, clear), smoothstep(0.15, 1.0, fc.y));
+    let rgb = (body + glow) / 3.14159265 + select(0.0, 0.8, clear) * direct * pow(max(dot(n, normalize(L - rd)), 0.0), 22.0);
+    var alpha = mix(select(0.93, 0.36, clear), select(0.66, 0.5, clear), smoothstep(0.15, 1.0, fc.y));
     alpha = mix(alpha, select(0.97, 0.62, clear), ray);
     alpha = 1.0 - pow(1.0 - alpha, 1.0 / max(ndv, 0.32));
     let hueNorm = albedo / max(max(albedo.r, albedo.g), max(albedo.b, 0.05));

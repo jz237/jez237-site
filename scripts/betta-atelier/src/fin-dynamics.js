@@ -50,8 +50,9 @@ const OPEN_STOPPED = [0.82, 0.66, 0.86], OPEN_UNDER_WAY = [0.5, 0.42, 0.7], OPEN
  *  dorsal's little, held up by its rays rather than flopping over; the ventrals' little, held as
  *  they are by their own muscles rather than hanging plumb) and
  *  the share of the body's acceleration it and the water it carries resist (so it lags a start and
- *  swings on in a stop). */
-const WEIGHT = [0.8, 0.4, 1.1, 0, 0.25], INERTIA = 0.35;
+ *  swings on in a stop: the ventrals far less, held by the fish rather than hung from it, so that they
+ *  never swing on like weighted strings). */
+const WEIGHT = [0.8, 0.4, 1.1, 0, 0.12], INERTIA = [0.35, 0.35, 0.35, 0.35, 0.12];
 /** A broad fin is never a flat sheet: partly closed, its membrane gathers into pleats between the
  *  rays (PLEAT: their lean at the margin, rad, per share of the fan closed; FOLDS: half-waves across
  *  the fan), and the caudal's two lobes lean a little apart, a slow wander and the turn's lag
@@ -91,10 +92,33 @@ const PELVIC_HOLD = 0.26, PELVIC_SPLAY = 0.2, PELVIC_SPLAY_WANDER = 0.1;
  *  the fish works to hold its station), the gait's own beats come a little quicker there (FAN_QUICK),
  *  and they sweep wider (FAN_SWEEP more, at the hardest work). */
 const FAN_HZ = 2.2, FAN_QUICK = 1.15, FAN_SWEEP = 0.2;
+/** Nor do they stop when it rests on the wood (Pexels 7209739: a whitish flicker behind the gill even
+ *  then): resting they fan on more slowly, in a time of their own (REST_HZ), the gait's rests only a
+ *  weaker beat there (REST_POWER of a full one), and as wide as at hover (REST_SWEEP more). */
+const REST_HZ = 1.35, REST_POWER = 0.8, REST_SWEEP = 0.22;
 /** Each ray tip of a broad fin flutters on its own, small and quick, out of step with its neighbours, on
  *  top of the slow billow (TIP_FLUTTER: out of the membrane at the tip, Atelier units; a share of it in
  *  the fan's plane), in fits: each tip's flutter swells and dies on its own. */
-const TIP_FLUTTER = 0.06;
+const TIP_FLUTTER = 0.075;
+/** Nor is a halfmoon's margin one smooth curve (Pexels 12659950): its ray tips stand out at different
+ *  lengths (RAGGED: Atelier units at the most either way along the ray, caudal, dorsal, anal: each tip its
+ *  own, redrawn now and then and eased to), and the billow runs along it unevenly, higher in some
+ *  stretches than in others (UNEVEN: a share of the billow either way) and quicker in some (UNEVEN_PACE:
+ *  rad of the wave's phase bunched or spread across the fan), the stretches drifting along it. */
+const RAGGED = [0.045, 0.035, 0.04], UNEVEN = 0.5, UNEVEN_PACE = 1.1;
+/** The C the body bends into to turn (state.curl, -1..1, + towards the fish's left: the body's word for
+ *  it, or the fins' own from the turn's rate, a full C at CURL_RATE rad/s or so): the caudal is dragged
+ *  round behind the peduncle (CURL_DRAG rad at the margin per unit of the C's change a second), its lobes
+ *  twisting apart into a ribbon (CURL_TWIST), and it closes up (CURL_CLOSE more of the fan: caudal,
+ *  dorsal, anal) to fan back out slowly once the tail straightens out of the C; the dorsal and the anal
+ *  trail the same way at their rear; the pelvics are swung out and forward to steer (CURL_PELVIC rad). */
+/** No fin ever breaks the surface or passes into a furnishing: every node is held SURFACE_CLEAR (Atelier
+ *  units) under the water's surface (state.surfaceY: its height in the fish's own frame, along the
+ *  fish's up, -state.down; none: no surface), the fin flattening along under the film as it would, and
+ *  out of the host's solids (state.solids), lying on them; what is drawn over the solved shape (the
+ *  margins' shimmer and ragged tips) is held to the same. */
+const SURFACE_CLEAR = 0.02;
+const CURL_RATE = 1.6, CURL_DRAG = 0.1, CURL_TWIST = 0.5, CURL_CLOSE = [0.16, 0, 0.08], CURL_PELVIC = 0.22;
 /** The anal fin ripples in a wave running back along its length (and the dorsal's rear a little):
  *  UNDULATE rad at the margin (caudal, dorsal, anal), at about UNDULATE_HZ, harder as the fish works. */
 const UNDULATE = [0, 0.08, 0.18], UNDULATE_HZ = 1.4;
@@ -243,9 +267,20 @@ export class FinDynamics {
     // undulation, its phase, rad; each ray tip's flutter: its phase, rate (Hz) and swell, easing to
     // jitTo, redrawn at jitAt s.)
     this.fan = 0; this.lastGait = null; this.fanPower = 1; this.still = 0; this.work = 0; this.undulate = 0;
+    // (Resting on something, idle: 0..1, eased, for the pectorals' own beat there.)
+    this.idle = 0;
+    // (The body's C as this fin feels it, -1..1, and its rate of change, 1/s.)
+    this.curl = this.curlRate = 0;
     this.jitPhase = new Float64Array(columns); this.jitRate = new Float64Array(columns);
     this.jitAmp = new Float64Array(columns); this.jitTo = new Float64Array(columns); this.jitAt = new Float64Array(columns);
     if (kind < 3) for (let i = 0; i < columns; i++) { this.jitPhase[i] = 2 * Math.PI * draw(this); this.jitRate[i] = 6 + 6 * draw(this); }
+    // (Each ray tip's own length past the margin's curve, Atelier units, easing to ragTo, redrawn at ragAt
+    // s; the uneven stretches' phases, rad, drifting; each column's share of the billow and of the margin's
+    // shimmer now, worked out with the targets.)
+    this.rag = new Float64Array(columns); this.ragTo = new Float64Array(columns); this.ragAt = new Float64Array(columns);
+    this.lumps = [0, 0, 0].map(() => 2 * Math.PI * draw(this));
+    this.lumpy = new Float64Array(columns).fill(1);
+    if (kind < 3) for (let i = 0; i < columns; i++) { this.ragTo[i] = this.rag[i] = RAGGED[kind] * (2 * draw(this) - 1); this.ragAt[i] = 1 + 5 * draw(this); }
     // How far the fin reaches from its insertions' middle (with a margin for its bending), and the
     // host's solids within that reach this frame (each: start, start to end, 1 / its length squared,
     // radius), that it lies on.
@@ -277,12 +312,17 @@ export class FinDynamics {
     // fins' own reckoning (a push, a brake, creeping along, turning, the body's moves).
     const hold = state.hold ?? clamp(0.25 + 0.6 * (state.push ?? 0) + 0.5 * this.brake + 0.4 * smooth(0.02, 0.3, speed) + 0.25 * Math.min(1, Math.abs(turn)) + 0.15 * this.stir, 0, 1);
     this.work += (hold - this.work) * (1 - Math.exp(-4 * dt));
+    // The C the body is bending into (eased a little: the fins feel it through the water), and how fast
+    // it is changing (1/s: + bending further towards the left, or straightening out of a right-hand C).
+    const curl = clamp(state.curl ?? Math.tanh(turn / CURL_RATE), -1, 1), lastCurl = this.curl;
+    this.curl += (curl - this.curl) * (1 - Math.exp(-12 * dt));
+    this.curlRate += ((this.curl - lastCurl) / dt - this.curlRate) * (1 - Math.exp(-10 * dt));
     if (kind < 3) {
       // (The caudal and the anal fold even in a slow turn at hover; the dorsal rises in a quick one.)
       const turning = kind === 1 ? smooth(0.4, 1.6, Math.abs(turn)) : smooth(0.25, 1.3, Math.abs(turn));
       this.clock += dt;
       // A dart folds the long fins as quickly as the water sweeps them back; a stop spreads them sooner.
-      let want = OPEN_STOPPED[kind] + (OPEN_UNDER_WAY[kind] - OPEN_STOPPED[kind]) * Math.max(under, 0.8 * turning, this.push), rate;
+      let want = OPEN_STOPPED[kind] + (OPEN_UNDER_WAY[kind] - OPEN_STOPPED[kind]) * Math.max(under, 0.8 * turning, this.push) - CURL_CLOSE[kind] * Math.abs(this.curl), rate;
       // The billow's own pace and gusts: the gait's billow (the pectorals' wash, the travel) sets
       // its mean pace, but no two seconds alike.
       const gaitBillow = state.billowPhase ?? 0, flowed = this.lastBillow === null ? 0 : clamp(gaitBillow - this.lastBillow, 0, 1);
@@ -328,9 +368,14 @@ export class FinDynamics {
         this.tipPhase[i] += dt * Math.PI * 2 * this.tipRate[i] * quick;
         this.jitPhase[i] += dt * Math.PI * 2 * this.jitRate[i] * quick;
         if (this.clock >= this.jitAt[i]) { const a = r(); this.jitTo[i] = 0.15 + 1.6 * a * a; this.jitAt[i] = this.clock + 0.2 + 0.8 * r(); }
+        if (this.clock >= this.ragAt[i]) { this.ragTo[i] = RAGGED[kind] * (2 * r() - 1); this.ragAt[i] = this.clock + 2 + 5 * r(); }
+        this.rag[i] += (this.ragTo[i] - this.rag[i]) * (1 - Math.exp(-0.7 * dt));
         this.jitAmp[i] += (this.jitTo[i] - this.jitAmp[i]) * (1 - Math.exp(-8 * dt));
       }
       this.undulate += dt * Math.PI * 2 * UNDULATE_HZ * (0.8 + 0.4 * this.work);
+      // (The uneven stretches drift along the margin with the billow, each at its own pace.)
+      const drift = 0.15 * flowed * this.pace;
+      this.lumps[0] += 0.43 * drift; this.lumps[1] -= 0.71 * drift; this.lumps[2] += 0.29 * drift;
       if (kind === 0) {
         // The lobes' slow twist wanders, and a turn twists them late.
         if (this.clock >= this.twistAt) { this.twistTo = r() * 2 - 1; this.twistAt = this.clock + 1 + 2.5 * r(); }
@@ -352,14 +397,18 @@ export class FinDynamics {
       // (Over a second or so: a change of mode shifts the beat, not the fin's size, at a stroke.)
       this.still += (smooth(0.5, 0.9, state.pectoralScull ?? state.scull ?? 0) * (1 - under) - this.still) * (1 - Math.exp(-1.2 * dt));
       const still = this.still;
+      // Resting (the host's mode) the fins fan on slowly in a time of their own (over a second or so, like still).
+      this.idle += ((state.mode === 'rest' ? 1 - under : 0) * (1 - still) - this.idle) * (1 - Math.exp(-1.2 * dt));
+      const idle = this.idle;
       const gait = state.pectoralPhase ?? 0, gaitStep = this.lastGait === null ? 0 : clamp(gait - this.lastGait, 0, 3);
       if (this.lastGait === null) this.fan = gait;
       this.lastGait = gait;
-      this.fan += gaitStep + still * Math.max(0, Math.max(gaitStep * FAN_QUICK, dt * 2 * Math.PI * FAN_HZ * (1 + 0.35 * this.work)) - gaitStep);
+      const own = dt * 2 * Math.PI * FAN_HZ * (1 + 0.35 * this.work), resting = dt * 2 * Math.PI * REST_HZ * (1 + 0.3 * this.work);
+      this.fan += gaitStep + still * Math.max(0, Math.max(gaitStep * FAN_QUICK, own) - gaitStep) + idle * (resting - gaitStep);
       // (Off station, it falls back into the gait's time within a second or two, never beating backwards.)
       const off = this.fan - gait, behind = off - 2 * Math.PI * Math.round(off / (2 * Math.PI));
-      this.fan -= clamp(behind * (1 - still) * (1 - Math.exp(-1.5 * dt)), -0.5 * gaitStep, 0.5 * gaitStep);
-      this.fanPower += (Math.max(state.pectoralPower ?? 1, still) - this.fanPower) * (1 - Math.exp(-7 * dt));
+      this.fan -= clamp(behind * (1 - Math.max(still, idle)) * (1 - Math.exp(-1.5 * dt)), -0.5 * gaitStep, 0.5 * gaitStep);
+      this.fanPower += (Math.max(state.pectoralPower ?? 1, still, REST_POWER * idle) - this.fanPower) * (1 - Math.exp(-7 * dt));
       const beat = Math.floor((this.fan + this.slip) / (2 * Math.PI) + (this.side < 0 ? 0.5 : 0));
       if (beat !== this.beat) {
         this.beat = beat;
@@ -385,7 +434,7 @@ export class FinDynamics {
         const kick = (9 + 10 * r()) * (1 - 0.6 * under);
         this.flickRate += kick;
         this.wave += 0.012 * kick;
-        this.flickAt = this.clock + 0.6 + 4 * r() * r();
+        this.flickAt = this.clock + 1.2 + 5 * r() * r();
       }
       const w = 13, k = Math.exp(-1.7 * w * dt);
       this.flickRate = (this.flickRate - w * w * this.flick * dt) * k;
@@ -408,7 +457,7 @@ export class FinDynamics {
       this.splayTip += (this.splay - this.splayTip) * late;
       this.wanderTip += (this.wander - this.wanderTip) * late;
       this.wave = Math.min(this.wave, 0.3) * Math.exp(-2.6 * dt);
-      this.ripple += dt * Math.PI * 2 * (1.6 + 0.8 * under);
+      this.ripple += dt * Math.PI * 2 * (2.2 + 1.0 * under);
     }
   }
 
@@ -430,7 +479,10 @@ export class FinDynamics {
       * (this.gust + 0.6 * this.stir), swellSize = billowSize * (1.2 - this.gust) * 0.8;
     // Partly closed, the membrane gathers into pleats; the caudal's lobes twist apart.
     const pleat = kind < 3 ? PLEAT[kind] * (0.5 + clamp(1 - spread, 0, 1)) * held * (1 - 0.6 * flare) : 0;
-    const twist = kind === 0 ? TWIST * (0.6 * this.twist - 0.5 * this.turnLag) * (1 - 0.7 * flare) : 0;
+    // (The body's C changing drags the caudal round behind, its lobes twisting, and the rear of the dorsal
+    // and the anal after it.)
+    const curling = clamp(this.curlRate, -3, 3) * (1 - 0.7 * flare), dragged = kind < 3 ? -CURL_DRAG * curling : 0;
+    const twist = kind === 0 ? TWIST * (0.6 * this.twist - 0.5 * this.turnLag - CURL_TWIST * clamp(curling, -2, 2)) * (1 - 0.7 * flare) : 0;
     // (A kick of the tail swings the fan out beyond the peduncle's own swing.)
     const kicked = kind === 0 && state.kick ? KICK_FAN * state.kick * kickSweep(state.kickAt ?? 1, 1, state.kickSweeps ?? 1) : 0;
     // (The anal's undulation, and the dorsal's: most at hover, harder as the fish works.)
@@ -450,7 +502,7 @@ export class FinDynamics {
       const tuck = Math.max(state.tuck ?? 0, this.push), beating = this.fanPower * (1 - 0.86 * this.resting);
       const power = (0.62 + 0.36 * effort + 0.05 * (state.pectoralScull ?? state.scull ?? 0)) * (1 - 0.35 * tuck) * beating * this.own
         * (1 - 0.3 * side * clamp(turn, -1, 1) * (1 - effort)) * (1 + 0.25 * this.brake) * (1 - 0.6 * stroking)
-        * (1 + FAN_SWEEP * this.still * (0.45 + 0.55 * this.work));
+        * (1 + FAN_SWEEP * this.still * (0.45 + 0.55 * this.work) + REST_SWEEP * this.idle);
       const cup = Math.max(0, Math.cos(beat)), lie = LIE * Math.max(0, 1 - beating) * (1 - this.brake) - FLARE_FORWARD * this.brake;
       const reach = this.strokeAt < 1 ? STROKE_REACH * this.strokeSize * (STROKE_INNER + (1 - STROKE_INNER) * this.outer) * Math.sin(2 * Math.PI * this.strokeAt) : 0;
       for (let j = 0; j < h; j++) {
@@ -466,22 +518,30 @@ export class FinDynamics {
       // more, and further in a dart), flicked forward and splayed out when the fish brakes, twitched
       // to a new set of its own between: each a little later at the tip than at the root, so the thin
       // streamer bends along its length rather than swinging as a rod, a flick's wave running down it.
-      // (Held forward of the photographed rake at hover, trailing back under way.)
+      // (Held forward of the photographed rake at hover, trailing back under way; swung forward and out to
+      // steer as the body curls into a turn. Only the thin outer part waves on its own, quicker and shorter
+      // than a wave down the whole streamer: the rest is held.)
       const under = smooth(0.08, 0.6, state.speed ?? 0), base = -flare * 0.16 + CLAMP_TUCK * folded - PELVIC_HOLD * (1 - under);
+      const steering = CURL_PELVIC * Math.abs(this.curl);
       for (let j = 0; j < h; j++) {
-        const v = j / (h - 1), tip = v * v;
+        const v = j / (h - 1), tip = v * v, thin = smooth(0.4, 1, v) ** 2;
         const flick = this.flick + (this.flickTip - this.flick) * tip, splay = this.splay + (this.splayTip - this.splay) * tip;
         const wander = this.wander + (this.wanderTip - this.wander) * tip;
-        const angle = base + 0.34 + (0.12 + 0.4 * under) * (0.7 + 0.6 * v) - 0.12 - 0.6 * flick - 0.3 * splay + 0.13 * wander
-          + 0.25 * this.push * v + (0.14 + this.wave) * v ** 1.5 * Math.sin(this.ripple - v * 4.5);
+        const angle = base + 0.34 + (0.12 + 0.4 * under) * (0.7 + 0.6 * v) - 0.12 - 0.45 * flick - 0.3 * splay + 0.07 * wander - steering
+          + 0.25 * this.push * v + (0.12 + this.wave) * thin * Math.sin(this.ripple - v * 6);
         // (The streamer's tip waves sideways too, on its own beat.)
-        row[j * 4] = side * v * (PELVIC_SPLAY * (1 - 0.5 * this.push) + 0.2 * splay + PELVIC_SPLAY_WANDER * this.splayWander)
-          + 0.05 * v * v * Math.sin(0.7 * this.ripple - v * 4 + side);
+        row[j * 4] = side * v * (PELVIC_SPLAY * (1 - 0.5 * this.push) + 0.2 * splay + PELVIC_SPLAY_WANDER * this.splayWander + 0.5 * steering)
+          + 0.05 * thin * Math.sin(0.7 * this.ripple - v * 5 + side);
         row[j * 4 + 1] = Math.cos(angle); row[j * 4 + 2] = Math.sin(angle);
       }
     }
+    const lumps = this.lumps;
     for (let i = 0; i < w; i++) {
       const u = i / (w - 1), r = i * 3, pleated = pleat * Math.sin(u * Math.PI * FOLDS[kind] + kind);
+      // (The billow higher in some stretches of the margin than others, and running on quicker in some.)
+      const lumpy = kind < 3 ? 1 + UNEVEN * (0.6 * Math.sin(9.4 * u + lumps[0]) + 0.4 * Math.sin(21 * u + lumps[1])) : 1;
+      const bunched = kind < 3 ? UNEVEN_PACE * Math.sin(5.1 * u + lumps[2]) : 0;
+      this.lumpy[i] = lumpy;
       body.frame(roots[r], scratch);
       const tangentCos = scratch[2], tangentSin = scratch[3];
       body.transform(roots[r], roots[r + 1], roots[r + 2], scratch);
@@ -498,13 +558,13 @@ export class FinDynamics {
           const wave = kind === 0
             ? (0.004 + drive * 0.4) * this.sway * Math.sin(phase - 2.5 - v * 0.8)
             : (0.006 + drive * 0.13) * this.sway * Math.sin(phase * 0.8 - u * 3.7 - v * 0.7 + kind * 1.8)
-              + turnBend * (0.20 + u * 0.20) * (0.3 + 0.7 * v)
+              + turnBend * (0.20 + u * 0.20) * (0.3 + 0.7 * v) + 0.6 * dragged * u * v
               // (A wave running back along it, the dorsal's mostly at its rear.)
               + undulation * (kind === 1 ? 0.25 + 0.75 * u : 1) * Math.sin(this.undulate - u * 7 - v * 0.6 + kind);
           // Bend throughout the ray, not just a ruffled outer border, but held near the body by the
           // rays' stiffness: most of it in the outer half. Phase varies across the fan and travels out
           // along each ray, so the membrane billows.
-          const billow = billowSize * Math.sin(this.billow - u * 5.5 - v * 2.2 + kind * 1.8) + swellSize * Math.sin(this.swell + u * 3.1 - v * 1.6);
+          const billow = lumpy * (billowSize * Math.sin(this.billow - u * 5.5 - bunched - v * 2.2 + kind * 1.8) + swellSize * Math.sin(this.swell + u * 3.1 - v * 1.6));
           // The pleats and the twist lean the rays apart, more towards the margin.
           const upper = Math.sin(this.restAngle[m]);
           const bend = (wave + billow) * (0.1 + 0.9 * v ** 1.5) + (pleated + twist * upper) * v;
@@ -517,7 +577,7 @@ export class FinDynamics {
             // Rotate across its span, preserving ray length and vertical spread;
             // the membrane solver supplies the slower free-edge follow-through.
             // (The lobes' tips more than the middle: the fan's outline bends in the turn.)
-            const sweep = turnBend * v * (0.1 + 0.12 * Math.abs(upper)) + kicked * (0.6 + 0.4 * v), cosSweep = Math.cos(sweep), sinSweep = Math.sin(sweep);
+            const sweep = turnBend * v * (0.1 + 0.12 * Math.abs(upper)) + kicked * (0.6 + 0.4 * v) + dragged * v ** 1.5, cosSweep = Math.cos(sweep), sinSweep = Math.sin(sweep);
             const cx = x * cosSweep - z * sinSweep;
             z = x * sinSweep + z * cosSweep; x = cx;
           }
@@ -594,6 +654,7 @@ export class FinDynamics {
       }
     }
     if (this.kind < 3) this.flutter(state);
+    this.keepClear(state);
     this.carriedBy = state.body;
     this.carriedAt = state.body.revision;
   }
@@ -601,9 +662,11 @@ export class FinDynamics {
   // The broad fins' margins (their outer third) shimmer, faster and wider than any body motion, even
   // with the fish still: small ripples running out along the margin from the fan's middle, across
   // the membrane, and each ray tip trembling on its own in the fan's plane, so the outline never
-  // holds still. Drawn over the solved shape (the solver's soft fringe would smooth it away).
+  // holds still; the ripple higher in some stretches than others, and each ray tip standing out past the
+  // margin's curve by its own length. Drawn over the solved shape (the solver's soft fringe would
+  // smooth it away).
   flutter(state) {
-    const { columns: w, rows: h, position: p, displacement, tipPhase } = this;
+    const { columns: w, rows: h, position: p, displacement, tipPhase, rag, lumpy } = this;
     const calm = (1 - 0.5 * state.flare) * (1 - 0.5 * (state.clamp ?? 0)), speed = Math.min(1, state.speed ?? 0);
     const size = calm * (0.02 + 0.03 * speed + 0.008 * (state.wash ?? 0)), tremble = calm * (0.016 + 0.02 * speed);
     const jitter = calm * TIP_FLUTTER * (0.7 + 0.5 * speed + 0.3 * Math.min(1, this.stir)), { jitPhase, jitAmp } = this;
@@ -619,11 +682,38 @@ export class FinDynamics {
         const ripple = 0.65 * Math.sin(this.flutterPhase - out * 40 + v * 4) + 0.35 * Math.sin(0.61 * this.flutterPhase - u * 17 + tipPhase[i] * 0.3);
         // (And each ray tip on its own, out of the membrane and a little across and along the fan.)
         const tip = smooth(0.7, 1, v) ** 2, own = tip * jitter * jitAmp[i] * (0.7 * Math.sin(jitPhase[i]) + 0.3 * Math.sin(1.9 * tipPhase[i] + i));
-        const s = (edge * size * ripple + own) / (Math.sqrt(nx * nx + ny * ny + nz * nz) || 1);
+        const s = (edge * size * ripple * lumpy[i] + own) / (Math.sqrt(nx * nx + ny * ny + nz * nz) || 1);
         const t = (edge * tremble * Math.sin(tipPhase[i] + v * 2) + 0.45 * own) / (Math.sqrt(ux * ux + uy * uy + uz * uz) || 1);
-        const l = 0.25 * own / (Math.sqrt(vx * vx + vy * vy + vz * vz) || 1);
+        const l = (0.25 * own + calm * rag[i] * smooth(0.75, 1, v) ** 2) / (Math.sqrt(vx * vx + vy * vy + vz * vz) || 1);
         displacement[n * 4] += nx * s + ux * t + vx * l; displacement[n * 4 + 1] += ny * s + uy * t + vy * l; displacement[n * 4 + 2] += nz * s + uz * t + vz * l;
       }
+    }
+  }
+
+  /** What is drawn (each node as carried, plus its displacement) held under the surface and out of the
+   *  solids the fin could touch, as the solver holds the nodes: the shimmer drawn over the solved shape
+   *  folds along them too, never through. (The insertions are the body's: they stay where it puts them.) */
+  keepClear(state) {
+    const { carried, displacement: d, touching, columns: w } = this, surface = typeof state.surfaceY === 'number', down = state.down;
+    if (!surface && !this.touchCount) return;
+    const ux = down ? -down[0] : 0, uy = down ? -down[1] : 1, uz = down ? -down[2] : 0, top = state.surfaceY - SURFACE_CLEAR;
+    for (let n = w; n < this.count; n++) {
+      const q = n * 3, e = n * 4;
+      let x = carried[q] + d[e], y = carried[q + 1] + d[e + 1], z = carried[q + 2] + d[e + 2];
+      for (let k = 0; k < this.touchCount; k++) {
+        const o = k * 8, ax = touching[o], ay = touching[o + 1], az = touching[o + 2];
+        const bx = touching[o + 3], by = touching[o + 4], bz = touching[o + 5], r = touching[o + 7];
+        const t = clamp(((x - ax) * bx + (y - ay) * by + (z - az) * bz) * touching[o + 6], 0, 1);
+        const cx = ax + bx * t, cy = ay + by * t, cz = az + bz * t, dx = x - cx, dy = y - cy, dz = z - cz, d2 = dx * dx + dy * dy + dz * dz;
+        if (d2 >= r * r || d2 < 1e-18) continue;
+        const out = r / Math.sqrt(d2);
+        x = cx + dx * out; y = cy + dy * out; z = cz + dz * out;
+      }
+      if (surface) {
+        const over = ux * x + uy * y + uz * z - top;
+        if (over > 0) { x -= ux * over; y -= uy * over; z -= uz * over; }
+      }
+      d[e] = x - carried[q]; d[e + 1] = y - carried[q + 1]; d[e + 2] = z - carried[q + 2];
     }
   }
 
@@ -666,16 +756,16 @@ export class FinDynamics {
         // (The ventral streamer is the muscle's out to its middle, so a flick or a twitch shows along
         // it, and only its last third is left to the water: even there its leading ray holds it out
         // straight, bending, not crumpling like a thread.)
-        : this.kind === 4 ? 5 + 12 * folded + 180 * (1 - v) ** 2 : 5.0 + (this.kind === 3 ? 160 : 110) * (1 - v) ** 3;
+        : this.kind === 4 ? 6 + 12 * folded + 260 * (1 - v) ** 2 : 5.0 + (this.kind === 3 ? 160 : 110) * (1 - v) ** 3;
     }
     // The fin's weight, along the fish's own down (state.down), and the lag of its mass against the
     // body's acceleration (state.accel), the same at every node; the water's own damping per second
     // (a thin ventral streamer is held hardest by it: it trails and settles, never swinging on freely;
     // nor do the broad fins swing on, cloth-like, after a move).
     const down = state.down, accel = state.accel, weight = WEIGHT[this.kind];
-    const gx = (down ? down[0] : 0) * weight - (accel ? accel[0] : 0) * INERTIA;
-    const gy = (down ? down[1] : -1) * weight - (accel ? accel[1] : 0) * INERTIA;
-    const gz = (down ? down[2] : 0) * weight - (accel ? accel[2] : 0) * INERTIA;
+    const gx = (down ? down[0] : 0) * weight - (accel ? accel[0] : 0) * INERTIA[this.kind];
+    const gy = (down ? down[1] : -1) * weight - (accel ? accel[1] : 0) * INERTIA[this.kind];
+    const gz = (down ? down[2] : 0) * weight - (accel ? accel[2] : 0) * INERTIA[this.kind];
     const keep = Math.exp(-(this.kind === 4 ? 4.5 : this.kind === 3 ? 2.2 : 3) * dt);
     for (let q = 0; q < w * 3; q++) p[q] = old[q] = target[q];
     for (let j = 1; j < h; j++) for (let i = 0; i < w; i++) {
@@ -810,6 +900,18 @@ export class FinDynamics {
         if (d2 >= r * r || d2 < 1e-18) continue;
         const out = r / Math.sqrt(d2);
         p[q] = old[q] = cx + dx * out; p[q + 1] = old[q + 1] = cy + dy * out; p[q + 2] = old[q + 2] = cz + dz * out;
+      }
+    }
+    // Under the surface: a node that would rise through the film is held just under it, its speed up
+    // through it taken away (along it, it slides on), so the fin flattens along the underside.
+    if (typeof state.surfaceY === 'number') {
+      const ux = down ? -down[0] : 0, uy = down ? -down[1] : 1, uz = down ? -down[2] : 0, top = state.surfaceY - SURFACE_CLEAR;
+      for (let q = w * 3; q < p.length; q += 3) {
+        const over = ux * p[q] + uy * p[q + 1] + uz * p[q + 2] - top;
+        if (over <= 0) continue;
+        p[q] -= ux * over; p[q + 1] -= uy * over; p[q + 2] -= uz * over;
+        const rise = ux * (p[q] - old[q]) + uy * (p[q + 1] - old[q + 1]) + uz * (p[q + 2] - old[q + 2]);
+        if (rise > 0) { old[q] += ux * rise; old[q + 1] += uy * rise; old[q + 2] += uz * rise; }
       }
     }
   }
