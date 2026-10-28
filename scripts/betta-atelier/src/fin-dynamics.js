@@ -38,13 +38,18 @@ export const FIN_QUALITY = { step: 1 / 120, passScale: 1, maxFrame: 0.07 };
  *  how far the ventrals tuck back (rad) and in towards each other (a share). */
 const CLAMP_FOLD = [0.62, 0.68, 0.62], CLAMP_DROOP = 0.12, CLAMP_TUCK = 1.05, CLAMP_PINCH = 0.6;
 
-/** The broad fins' spread (caudal, dorsal, anal), as a share of their photographed, displayed fan:
- *  stopped (the caudal a full D, the dorsal half raised: further when alert, DORSAL_ALERT) and under
- *  way (the caudal a half-closed trailing fan, the dorsal laid back, the anal still a fairly open
- *  curtain); how fast each opens again (1/s: the caudal last, after a turn or a stop), and how fast
- *  they all close as the water sweeps them back. The caudal's lower lobe hangs LOWER_LOBE (rad)
- *  below its upper one at rest. */
-const OPEN_STOPPED = [0.82, 0.66, 0.86], OPEN_UNDER_WAY = [0.5, 0.42, 0.7], OPENING = [0.9, 1.6, 1.3], CLOSING = 2.8, LOWER_LOBE = 0.16;
+/** The broad fins' spread (caudal, dorsal, anal), as a share of their photographed, displayed fan (the
+ *  full D is display's, state.flare: Pexels 37685390's fish, gill covers out). A calm male carries them
+ *  relaxed (fitted to the relaxed clips: Pexels 12659950, 4107166, 6590365, 19036689; the caudal some
+ *  90-105 deg tip to tip at hover, drooping 25-35 deg, and some 55-70 deg trailing under way): stopped
+ *  (the caudal well short of a D, the dorsal partly down: raised when alert, DORSAL_ALERT, the anal a
+ *  soft curtain) and under way (the caudal a closed trailing fan, the dorsal laid back); how fast each
+ *  opens again (1/s: the caudal last, after a turn or a stop), and how fast they all close as the water
+ *  sweeps them back; a stop spreads them a little (STOP_SPREAD more, braking hard). The caudal's lower
+ *  lobe hangs LOWER_LOBE (rad) below its upper one at rest, and the whole fan droops by DROOP (rad)
+ *  stopped, less under way (the water carries it straight back), none in display. */
+const OPEN_STOPPED = [0.62, 0.5, 0.72], OPEN_UNDER_WAY = [0.32, 0.36, 0.58], OPENING = [0.9, 1.6, 1.3], CLOSING = 2.8, LOWER_LOBE = 0.16;
+const STOP_SPREAD = 0.12, DROOP = [0.38, 0.1];
 /** Each fin's weight in water (its sag: Atelier units/s^2 down, pectorals none; the caudal light,
  *  its lower lobe's hang held in its shape, LOWER_LOBE, so that it never swings down as a flap; the
  *  dorsal's little, held up by its rays rather than flopping over; the ventrals' little, held as
@@ -56,11 +61,12 @@ const WEIGHT = [0.8, 0.4, 1.1, 0, 0.12], INERTIA = [0.35, 0.35, 0.35, 0.35, 0.12
 /** A broad fin is never a flat sheet: partly closed, its membrane gathers into pleats between the
  *  rays (PLEAT: their lean at the margin, rad, per share of the fan closed; FOLDS: half-waves across
  *  the fan), and the caudal's two lobes lean a little apart, a slow wander and the turn's lag
- *  twisting them (TWIST, rad), so that seen edge-on it reads as a gathered, curving curtain. */
-const PLEAT = [0.22, 0.12, 0.22], FOLDS = [7, 6, 9], TWIST = 0.3;
+ *  twisting them (TWIST, rad), so that seen edge-on it reads as a gathered, curving curtain. (The
+ *  caudal's pleats are the shallower: carried partly closed, they would stiffen it against the water.) */
+const PLEAT = [0.13, 0.12, 0.2], FOLDS = [7, 6, 9], TWIST = 0.3;
 /** The dorsal's spread when the fish rests (laid down) and when it is alert (raised: turning, or
  *  lifted now and then as it looks about, for DORSAL_LIFT s), and how fast it rises and lowers (1/s). */
-const DORSAL_REST = 0.32, DORSAL_ALERT = 0.9, DORSAL_LIFT = [0.6, 1.6], DORSAL_RISE = 3.5, DORSAL_FALL = 1.1;
+const DORSAL_REST = 0.3, DORSAL_ALERT = 0.78, DORSAL_LIFT = [0.6, 1.6], DORSAL_RISE = 3.5, DORSAL_FALL = 1.1;
 /** The fish's own push and brake as the fins feel them (state.accel along the body, Atelier units/s^2:
  *  forwards, and backwards): a dart folds the long fins and draws the pectorals in, a stop spreads them
  *  and flares the pectorals forward. */
@@ -269,6 +275,8 @@ export class FinDynamics {
     this.fan = 0; this.lastGait = null; this.fanPower = 1; this.still = 0; this.work = 0; this.undulate = 0;
     // (Resting on something, idle: 0..1, eased, for the pectorals' own beat there.)
     this.idle = 0;
+    // (A ventral's trail: how far back the pace has swept it, 0..1, eased.)
+    this.trail = 0;
     // (The body's C as this fin feels it, -1..1, and its rate of change, 1/s.)
     this.curl = this.curlRate = 0;
     this.jitPhase = new Float64Array(columns); this.jitRate = new Float64Array(columns);
@@ -276,11 +284,13 @@ export class FinDynamics {
     if (kind < 3) for (let i = 0; i < columns; i++) { this.jitPhase[i] = 2 * Math.PI * draw(this); this.jitRate[i] = 6 + 6 * draw(this); }
     // (Each ray tip's own length past the margin's curve, Atelier units, easing to ragTo, redrawn at ragAt
     // s; the uneven stretches' phases, rad, drifting; each column's share of the billow and of the margin's
-    // shimmer now, worked out with the targets.)
+    // shimmer now, worked out with the targets. Drawn from a stream of their own, ragged, so that the
+    // fin's other wanderings come as they did.)
+    this.ragged = { seed: 0x7a66ed + kind * 389 + (side + 1) * 71 };
     this.rag = new Float64Array(columns); this.ragTo = new Float64Array(columns); this.ragAt = new Float64Array(columns);
-    this.lumps = [0, 0, 0].map(() => 2 * Math.PI * draw(this));
+    this.lumps = [0, 0, 0].map(() => 2 * Math.PI * draw(this.ragged));
     this.lumpy = new Float64Array(columns).fill(1);
-    if (kind < 3) for (let i = 0; i < columns; i++) { this.ragTo[i] = this.rag[i] = RAGGED[kind] * (2 * draw(this) - 1); this.ragAt[i] = 1 + 5 * draw(this); }
+    if (kind < 3) for (let i = 0; i < columns; i++) { this.ragTo[i] = this.rag[i] = RAGGED[kind] * (2 * draw(this.ragged) - 1); this.ragAt[i] = 1 + 5 * draw(this.ragged); }
     // How far the fin reaches from its insertions' middle (with a margin for its bending), and the
     // host's solids within that reach this frame (each: start, start to end, 1 / its length squared,
     // radius), that it lies on.
@@ -322,7 +332,8 @@ export class FinDynamics {
       const turning = kind === 1 ? smooth(0.4, 1.6, Math.abs(turn)) : smooth(0.25, 1.3, Math.abs(turn));
       this.clock += dt;
       // A dart folds the long fins as quickly as the water sweeps them back; a stop spreads them sooner.
-      let want = OPEN_STOPPED[kind] + (OPEN_UNDER_WAY[kind] - OPEN_STOPPED[kind]) * Math.max(under, 0.8 * turning, this.push) - CURL_CLOSE[kind] * Math.abs(this.curl), rate;
+      let want = OPEN_STOPPED[kind] + (OPEN_UNDER_WAY[kind] - OPEN_STOPPED[kind]) * Math.max(under, 0.8 * turning, this.push) - CURL_CLOSE[kind] * Math.abs(this.curl)
+        + STOP_SPREAD * this.brake, rate;
       // The billow's own pace and gusts: the gait's billow (the pectorals' wash, the travel) sets
       // its mean pace, but no two seconds alike.
       const gaitBillow = state.billowPhase ?? 0, flowed = this.lastBillow === null ? 0 : clamp(gaitBillow - this.lastBillow, 0, 1);
@@ -343,7 +354,7 @@ export class FinDynamics {
         // hover) and down when it rests, quick to rise and slow to fall.
         if (this.clock >= this.liftAt) {
           this.liftUntil = this.clock + DORSAL_LIFT[0] + (DORSAL_LIFT[1] - DORSAL_LIFT[0]) * r();
-          this.liftAt = this.liftUntil + 2 + 6 * r();
+          this.liftAt = this.liftUntil + 4 + 10 * r();
         }
         const resting = state.mode === 'rest' ? 1 : 0, lifted = this.clock < this.liftUntil ? 1 - under : 0;
         want += (DORSAL_REST - want) * resting;
@@ -368,7 +379,7 @@ export class FinDynamics {
         this.tipPhase[i] += dt * Math.PI * 2 * this.tipRate[i] * quick;
         this.jitPhase[i] += dt * Math.PI * 2 * this.jitRate[i] * quick;
         if (this.clock >= this.jitAt[i]) { const a = r(); this.jitTo[i] = 0.15 + 1.6 * a * a; this.jitAt[i] = this.clock + 0.2 + 0.8 * r(); }
-        if (this.clock >= this.ragAt[i]) { this.ragTo[i] = RAGGED[kind] * (2 * r() - 1); this.ragAt[i] = this.clock + 2 + 5 * r(); }
+        if (this.clock >= this.ragAt[i]) { this.ragTo[i] = RAGGED[kind] * (2 * draw(this.ragged) - 1); this.ragAt[i] = this.clock + 2 + 5 * draw(this.ragged); }
         this.rag[i] += (this.ragTo[i] - this.rag[i]) * (1 - Math.exp(-0.7 * dt));
         this.jitAmp[i] += (this.jitTo[i] - this.jitAmp[i]) * (1 - Math.exp(-8 * dt));
       }
@@ -458,6 +469,8 @@ export class FinDynamics {
       this.wanderTip += (this.wander - this.wanderTip) * late;
       this.wave = Math.min(this.wave, 0.3) * Math.exp(-2.6 * dt);
       this.ripple += dt * Math.PI * 2 * (2.2 + 1.0 * under);
+      // (How far it is trailed back: the fish's pace over a second or so, not each stroke's surge.)
+      this.trail += (under - this.trail) * (1 - Math.exp(-1.2 * dt));
     }
   }
 
@@ -469,7 +482,7 @@ export class FinDynamics {
     // Clamped, the rays close up: the caudal's fan narrows and droops, the dorsal and the anal lie
     // back along the body, the membranes held taut; the ventrals tuck back, close together.
     const folded = state.clamp ?? 0, held = 1 - 0.6 * folded;
-    const spread = (this.open + (1 - this.open) * flare) * (1 - (CLAMP_FOLD[kind] ?? 0) * folded), fold = kind === 0 ? 0.10 * (1 - flare) + CLAMP_DROOP * folded : 0;
+    const spread = (this.open + (1 - this.open) * flare) * (1 - (CLAMP_FOLD[kind] ?? 0) * folded), fold = kind === 0 ? (DROOP[0] + (DROOP[1] - DROOP[0]) * smooth(0.08, 0.6, state.speed ?? 0)) * (1 - flare) + CLAMP_DROOP * folded : 0;
     const lower = LOWER_LOBE * (1 - flare);
     // The membranes billow slowly, stirred by the pectorals' wash and the water going past (at about
     // the gait's billow pace), more as the fish moves and turns, less held open in display; in gusts,
@@ -521,7 +534,7 @@ export class FinDynamics {
       // (Held forward of the photographed rake at hover, trailing back under way; swung forward and out to
       // steer as the body curls into a turn. Only the thin outer part waves on its own, quicker and shorter
       // than a wave down the whole streamer: the rest is held.)
-      const under = smooth(0.08, 0.6, state.speed ?? 0), base = -flare * 0.16 + CLAMP_TUCK * folded - PELVIC_HOLD * (1 - under);
+      const under = this.trail, base = -flare * 0.16 + CLAMP_TUCK * folded - PELVIC_HOLD * (1 - under);
       const steering = CURL_PELVIC * Math.abs(this.curl);
       for (let j = 0; j < h; j++) {
         const v = j / (h - 1), tip = v * v, thin = smooth(0.4, 1, v) ** 2;
