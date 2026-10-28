@@ -29,7 +29,7 @@ export const uniforms = {
   uSpine: { value: null },
   uMouth: { value: 0 },
   uGill: { value: 0 },
-  uArch: { value: 0 },
+  uLift: { value: null },
 };
 const deform = `uniform float uTime,uFlare,uMotion,uPhase,uDrive,uTurn,uFold;\n` + bodyGLSL;
 function animate(mat, dynamics = null, operculum = false) {
@@ -400,6 +400,10 @@ export function createBetta({ compact = false, textures = true } = {}) {
   const spineTexture = new T.DataTexture(bodyMotion.data, SPINE_COUNT, 1, T.RGBAFormat, T.FloatType);
   spineTexture.needsUpdate = true;
   uniforms.uSpine.value = spineTexture;
+  // (The pitch bend's lift along the same spine samples.)
+  const liftTexture = new T.DataTexture(bodyMotion.lift, SPINE_COUNT, 1, T.RedFormat, T.FloatType);
+  liftTexture.needsUpdate = true;
+  uniforms.uLift.value = liftTexture;
   fish.userData.finDynamics = finDynamics;
   fish.name = "Betta splendens — volumetric reference-textured specimen";
   let resolveTexture, rejectTexture;
@@ -850,7 +854,7 @@ export function createBetta({ compact = false, textures = true } = {}) {
       const pose = POSES[mode] ?? {};
       gait.advance(dt, drive, relativeFlow, turn, locomotion ? {
         ...pose, back: locomotion.backing ?? 0, pushes: locomotion.pushes ?? 0, pushSize: locomotion.pushSize ?? 0, kicks: locomotion.kicks ?? 0,
-        kickSize: locomotion.kickSize ?? 0, kickSweeps: locomotion.kickSweeps ?? 1, dart: locomotion.dart ?? 0, brake: locomotion.brake ?? 0,
+        kickSize: locomotion.kickSize ?? 0, kickSweeps: locomotion.kickSweeps ?? 1, dart: locomotion.dart ?? 0, brake: locomotion.brake ?? 0, hold: locomotion.hold,
       } : pose);
       const { phase, effort, breathPhase, breathDepth, pectoralPhase, pectoralPower, scull, tuck, pectoralEffort, pectoralScull, billowPhase, wash, push, dart, brake } = gait;
       // The standalone turn also leads with the neck; the rear follows the head's tangent.
@@ -867,19 +871,20 @@ export function createBetta({ compact = false, textures = true } = {}) {
         g.lift = lift; g.phase = shown.phase; g.clock = shown.clock;
         lipWorld.toArray(g.lip);
       }
-      spineTexture.needsUpdate = dt > 0;
+      spineTexture.needsUpdate = liftTexture.needsUpdate = dt > 0;
       uniforms.uPhase.value = phase;
       uniforms.uDrive.value = drive;
       uniforms.uTurn.value = turn;
       uniforms.uFold.value = drive;
       uniforms.uMouth.value = bodyMotion.mouth;
       uniforms.uGill.value = bodyMotion.gill;
-      uniforms.uArch.value = bodyMotion.arch;
       const state = {
         body: bodyMotion, time: t, mode, phase, pectoralPhase, pectoralPower, scull, tuck, pectoralEffort, pectoralScull, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value, clamp: display.clamp,
         // (The body's strokes, for the fins: a pectoral push, 0..1; darting, fins to fold; braking, fins to flare;
         // a kick of the tail, its size and side and how far through it, for the caudal's sweep.)
         push, dart, brake, kick: gait.kick, kickAt: gait.kickAt, kickSweeps: gait.kickSweeps,
+        // (How hard it works to hold or shift station at hover or slow speed, 0..1: the gait's hold.)
+        hold: gait.hold,
         billowPhase, wash, speed: relativeFlow / BODY_LENGTH, accel: accelLocal.toArray(), down: downLocal.toArray(),
         heading, angularVelocity, velocity, origin: fish.position.toArray(),
         localHydrodynamics, solids: finSolids.count ? finSolids : null,

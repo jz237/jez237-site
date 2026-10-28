@@ -76,6 +76,10 @@ export class SwimGait {
     this.pushes = this.kicks = 0;
     this.push = this.kick = this.dart = this.brake = 0;
     this.kickAt = 1; this.kickSweeps = 1;
+    // How hard the fins are working to hold the fish where it is, or to shift it a little, at hover
+    // or slow speed (hold, 0..1: for the pectorals' beat, which is that work made visible); the
+    // host's own measure (pose.hold) when it gives one.
+    this.hold = 0;
   }
   // `pose.scull`: hold station with the pectorals, beating in long runs while the body is still.
   // `pose.tuck`: the pectorals drawn in toward the flanks, as in a startle dart.
@@ -113,6 +117,9 @@ export class SwimGait {
     // The idle drive is below the propulsion threshold. Holding against flow still costs effort,
     // even when the fish's position is stationary; full load is a fast swim (1.2 body lengths/s).
     this.pace = Math.max(0, relativeSpeed) / BODY_LENGTH;
+    // (Without the host's measure: sculling at little pace, backing, a push.)
+    const hold = pose.hold ?? clamp(0.4 * this.scull * (1 - smooth(0.2, 0.6, this.pace)) + 0.4 * this.back + 0.3 * this.push, 0, 1);
+    this.hold += (hold - this.hold) * (1 - Math.exp(-(hold > this.hold ? 6 : 2) * dt));
     const propulsion = smooth(0.065, 0.40, drive);
     const load = clamp(this.pace / 1.2, 0, 1);
     // (Darting, the tail works hard at once: the first beat is a strong one.)
