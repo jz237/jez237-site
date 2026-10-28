@@ -95,8 +95,8 @@ export class Betta implements Feeder {
         finUV.push(fu ? fu.getX(i) : 0, fu ? fu.getY(i) : 0);
       }
       const mat = mesh.material as THREE.MeshPhysicalMaterial;
-      // 0: skin; 1: caudal; 2: other fins; 3: eye; 4: dark mouth/pupil.
-      const material = !mat.map ? 4 : mesh.parent !== this.fish ? 3 : mesh.userData.kind === 0 ? 1 : mesh.userData.kind !== undefined ? 2 : 0;
+      // 0: skin; 1: caudal; 2: other fins; 3: eye; 4: dark mouth/pupil; 5: the clear pectorals.
+      const material = !mat.map ? 4 : mesh.parent !== this.fish ? 3 : mesh.userData.kind === 0 ? 1 : mesh.userData.kind === 3 ? 5 : mesh.userData.kind !== undefined ? 2 : 0;
       for (let i = 0; i < g.index!.count; i++) indices.push(g.index!.getX(i) + offset);
       for (let i = 0; i < g.index!.count / 3; i++) materials.push(material);
     }
