@@ -283,6 +283,7 @@ import {LAMP_BREAK,RAIN_LIGHTS,RAIN_BEAMS} from './car-lights';
 import {createRain} from './rain';
 import {createRainSplashes} from './rain-splashes';
 import {applyWetLook} from './wet-look';
+import {dullGround,setGroundWet} from './ground-sheen';
 import {setWetness} from './driving-surface';
 import {ELIMINATION_INTERVAL,eliminationActive,nextElimination} from './elimination-race';
 import {TEAMS,teamOf,teamRaceActive,teamScores,teamLine,teamVerdict} from './team-race';
@@ -833,7 +834,7 @@ function ensureVenue(id:CourseId,arenaId:ArenaId='quarry-arena-v1'):VenueContext
       const checkpoint=new T.Group();checkpoint.visible=false;artwork.root.add(checkpoint);artwork.root.visible=false;scene.add(artwork.root);
       const spots=ARENA_PROP_SPOTS[arenaId],loose=spots?createArenaProps(R,world,artwork.root,spots):undefined,art=artwork;
       const venue:VenueContext={arenaId,arena:bowl?MOORFIELD_ARENA:yard?GULLHAVEN_ARENA:ring?KESTREL_RING_ARENA:mud?WRENFORD_PIT_ARENA:foundry?FOUNDRY_ARENA:briarhill?BRIARHILL_ARENA:HARROW_ARENA,course,physics:world,root:artwork.root,checkpoint,props:loose?.props??[],puddles:[],update:loose?time=>{art.update?.(time);loose.update();}:artwork.update,resetProps:loose?.reset,dispose:()=>{loose?.dispose();artwork!.dispose();world.free();}};
-      arenaVenues[arenaId]=venue;return venue;
+      dullGround(artwork.root);arenaVenues[arenaId]=venue;return venue;
     }catch(error){artwork?.dispose();world.free();throw error;}
   }
   if(id==='quarry-v1')return quarryVenue;
@@ -845,7 +846,7 @@ function ensureVenue(id:CourseId,arenaId:ArenaId='quarry-arena-v1'):VenueContext
     const checkpoint=quarry.checkpoint.clone(true);checkpoint.name=id+'_checkpoint';checkpoint.visible=false;artwork.root.add(checkpoint);artwork.root.visible=false;scene.add(artwork.root);
     const corners=courseCornerSpots(R,world,course),loose=corners.length?createArenaProps(R,world,artwork.root,corners,(x,z)=>course.height(x,z)):undefined,art=artwork;
     const venue:VenueContext={course,physics:world,root:artwork.root,checkpoint,props:loose?.props??[],puddles:[],update:loose?time=>{art.update?.(time);loose.update();}:artwork.update,resetProps:loose?.reset,dispose:()=>{loose?.dispose();checkpoint.removeFromParent();artwork!.dispose();world.free();}};
-    raceVenues[id]=venue;return venue;
+    dullGround(artwork.root);raceVenues[id]=venue;return venue;
   }catch(error){artwork?.dispose();world.free();throw error;}
 }
 function refreshVenueLighting(){
@@ -2886,7 +2887,7 @@ function frame(now: number) {
     let rc=rainCars.get(c);if(!rc){const box=bodyBox(c);if(!box)continue;const spots=topSpots(c.root,[...c.panels,...c.glass],box.centre,box.half);rc={id:c.id,root:c.root,spots,spread:{x:box.half.x*1.8/BODY_RAIN.grid[0],z:box.half.z*1.84/BODY_RAIN.grid[1]}};rainCars.set(c,rc);}
     if(c.root.visible)rainNear.push(rc);}
   bodyRain.update(rainNear,shower,state==='paused'||state==='inspect'?0:dt);
-  {const wet=eventLighting==='rain';if(wet!==wetOn||activeVenue.root!==wetRoot){applyWetLook(wetRoot,false);wetRoot=activeVenue.root;wetOn=wet;applyWetLook(wetRoot,wet);}}
+  {const wet=eventLighting==='rain';if(wet!==wetOn||activeVenue.root!==wetRoot){applyWetLook(wetRoot,false);wetRoot=activeVenue.root;wetOn=wet;applyWetLook(wetRoot,wet);setGroundWet(wet);}}
   // The rain sounds for as long as the event's weather says so (applyEventLighting runs while still in the menu, when it
   // could only switch the rain off).
   sound.rain(eventLighting==='rain'&&state!=='menu');
@@ -3223,6 +3224,8 @@ async function boot() {
   const quarryRoot=new T.Group();quarryRoot.name='quarry_venue';
   const quarryNodes=scene.children.filter(node=>!beforeQuarry.has(node)&&!(node instanceof T.Light)&&node!==quarry.sun.target);
   quarryRoot.add(...quarryNodes);scene.add(quarryRoot);
+  // Dry soil, rock and old asphalt hardly shine (every venue's large ground is dulled as it is built).
+  dullGround(quarryRoot);
   quarryVenue={course:getRaceCourse(),physics,root:quarryRoot,checkpoint:quarry.checkpoint,props:quarry.props,puddles:quarry.puddles};activeVenue=quarryVenue;
   online=new OnlineView(scene,physics,fx,sound,()=>cars,next=>{cars=next;});
   online.onLocalImpact=damage=>recordRumbleImpact(.12+damage/30);

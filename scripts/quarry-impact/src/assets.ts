@@ -1,6 +1,7 @@
 import {attachVehicleArmor} from './vehicle-armor';
 import {CLASSIC_VEHICLES,isClassicKind} from './classic-vehicle-specs';
 import * as THREE from 'three';
+import {QUARRY_DAYLIGHT} from './quarry-art-direction';
 import { GLTFLoader } from './model-loader';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
@@ -254,7 +255,7 @@ export async function environment(
   const pmrem = createPMREMGenerator(renderer);
   const target = pmrem.fromEquirectangular(hdr);
   scene.environment = target.texture;
-  scene.environmentIntensity = 0.54;
+  scene.environmentIntensity = QUARRY_DAYLIGHT.sky;
   pmrem.dispose();
   return target;
 }

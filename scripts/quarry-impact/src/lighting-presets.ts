@@ -6,8 +6,8 @@ import {QUARRY_DAYLIGHT} from './quarry-art-direction';
  * backdrops and static shadow coverage stay valid. */
 export type LightingPreset={label:string;overcastSky:boolean;sun:number;sunColor:number;shadow:number;ambient:number;skyColor:number;groundColor:number;sky:number;background:number;fog:number;fogColor:number;exposure:number};
 export const LIGHTING_PRESETS={
- midday:{label:'Clear midday',overcastSky:false,sun:QUARRY_DAYLIGHT.sun,sunColor:QUARRY_DAYLIGHT.sunColor,shadow:1,ambient:QUARRY_DAYLIGHT.ambient,skyColor:QUARRY_DAYLIGHT.skyColor,groundColor:QUARRY_DAYLIGHT.groundColor,sky:.54,background:1,fog:QUARRY_DAYLIGHT.fog,fogColor:0xb3bdc9,exposure:QUARRY_DAYLIGHT.exposure},
- afternoon:{label:'Warm late afternoon',overcastSky:false,sun:3.0,sunColor:0xffad63,shadow:.95,ambient:.33,skyColor:0xf2c194,groundColor:0x6e5039,sky:.42,background:.8,fog:.0012,fogColor:0xdcb48f,exposure:.99},
+ midday:{label:'Clear midday',overcastSky:false,sun:QUARRY_DAYLIGHT.sun,sunColor:QUARRY_DAYLIGHT.sunColor,shadow:1,ambient:QUARRY_DAYLIGHT.ambient,skyColor:QUARRY_DAYLIGHT.skyColor,groundColor:QUARRY_DAYLIGHT.groundColor,sky:QUARRY_DAYLIGHT.sky,background:1,fog:QUARRY_DAYLIGHT.fog,fogColor:0xb3bdc9,exposure:QUARRY_DAYLIGHT.exposure},
+ afternoon:{label:'Warm late afternoon',overcastSky:false,sun:3.2,sunColor:0xffad63,shadow:.95,ambient:.2,skyColor:0xf2c194,groundColor:0x6e5039,sky:.4,background:.8,fog:.0012,fogColor:0xdcb48f,exposure:.99},
  overcast:{label:'Overcast',overcastSky:true,sun:1.15,sunColor:0xdfe3e8,shadow:.42,ambient:.62,skyColor:0xc3ccd6,groundColor:0x6d6a63,sky:.78,background:.92,fog:.0017,fogColor:0xb2b7bc,exposure:1.08},
  dusk:{label:'Dusk · headlights on',overcastSky:false,sun:.75,sunColor:0xff7a3c,shadow:.65,ambient:.16,skyColor:0x6a6fa8,groundColor:0x2e2628,sky:.13,background:.16,fog:.0018,fogColor:0x4f4660,exposure:1.05},
  rain:{label:'Rain · wet roads',overcastSky:true,sun:.55,sunColor:0xc9d0d8,shadow:.25,ambient:.5,skyColor:0x9aa4ae,groundColor:0x4f4d49,sky:.5,background:.6,fog:.0034,fogColor:0x8d959c,exposure:.98},
