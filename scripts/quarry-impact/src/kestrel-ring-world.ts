@@ -3,12 +3,13 @@ import {attachArenaGroundDetail} from './arena-ground-detail';
 import * as T from 'three';
 import {KESTREL_RING_ARENA,KESTREL_RING_BARRIERS} from './kestrel-ring-arena';
 import {freezeSceneryTransforms} from './render-work';
+import {createPhotoTrees,type PhotoTree} from './photo-trees';
 /** Kestrel Ring: painted asphalt around a grass island with a tyre wall and a
  * four-faced scoreboard tower; covered stands and floodlights outside. */
 export function createKestrelRingWorld(){
  const root=new T.Group();root.name='kestrel_ring';
  const materials={concrete:new T.MeshStandardMaterial({color:0xbcb5a4,roughness:.98}),blue:new T.MeshStandardMaterial({color:0x2f5a86,roughness:.85}),steel:new T.MeshStandardMaterial({color:0x303539,roughness:.7,metalness:.3}),seat:new T.MeshStandardMaterial({color:0x8a3a32,roughness:.85}),cream:new T.MeshStandardMaterial({color:0xd8ccad,roughness:.9}),rubber:new T.MeshStandardMaterial({color:0x1b1c1d,roughness:.95}),white:new T.MeshStandardMaterial({color:0xe9e6dc,roughness:.8}),lamp:new T.MeshStandardMaterial({color:0xfff2cc,emissive:0xfff2cc,emissiveIntensity:1.3,roughness:.4}),pine:new T.MeshStandardMaterial({color:0x2f4a2a,roughness:1}),oak:new T.MeshStandardMaterial({color:0x4a6232,roughness:1})};
- const floorMaterial=new T.MeshStandardMaterial({color:0xffffff,roughness:.93}),floorGeometry=new T.PlaneGeometry(180,180),boxGeometry=new T.BoxGeometry(),tyreGeometry=new T.CylinderGeometry(.42,.42,.3,14),trunkGeometry=new T.CylinderGeometry(.5,.6,1,6),crownGeometry=new T.ConeGeometry(1,1,7),textures:T.Texture[]=[];
+ const floorMaterial=new T.MeshStandardMaterial({color:0xffffff,roughness:.93}),floorGeometry=new T.PlaneGeometry(180,180),boxGeometry=new T.BoxGeometry(),tyreGeometry=new T.CylinderGeometry(.42,.42,.3,14),textures:T.Texture[]=[];
  const island=KESTREL_RING_ARENA.island!;
  if(typeof document!=='undefined'){
   const canvas=document.createElement('canvas');canvas.width=canvas.height=1024;const ctx=canvas.getContext('2d');
@@ -57,7 +58,10 @@ export function createKestrelRingWorld(){
  for(let i=0;i<8;i++){const a=(i+.5)/8*Math.PI*2,r=68,x=Math.sin(a)*r,z=Math.cos(a)*r;box(x,9,z,.4,18,.4,'steel');box(x,18.2,z,4.4,1.4,.5,'steel',a);for(const dx of [-1.4,0,1.4])box(x+Math.cos(a)*dx-Math.sin(a)*.3,18.2,z-Math.sin(a)*dx-Math.cos(a)*.3,1.1,1,.1,'lamp',a);}
  // A loose tree belt around the grounds.
  let seed=91;const rand=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
- for(let i=0;i<90;i++){const a=i/90*Math.PI*2+rand()*.05,r=105+rand()*45,x=Math.sin(a)*r,z=Math.cos(a)*r,h=7+rand()*7;put(trunkGeometry,'tree:steel','steel',x,h*.2,z,.5,h*.4,.5);put(crownGeometry,'tree:'+(i%3?'pine':'oak'),i%3?'pine':'oak',x,h*.4+h*.35,z,h*.42,h*.7,h*.42,rand()*6);}
+ // Photographed spruces and maples (the old cone crowns' yaw draw is still taken, keeping later scenery in place).
+ const belt:PhotoTree[]=[];
+ for(let i=0;i<90;i++){const a=i/90*Math.PI*2+rand()*.05,r=105+rand()*45,x=Math.sin(a)*r,z=Math.cos(a)*r,h=7+rand()*7;rand();belt.push({kind:i%3?'spruce':'maple',x,y:0,z,height:h*1.1,tint:.9+(i%5)*.04});}
+ const forest=createPhotoTrees(belt,'kestrel_ring_trees');root.add(forest.root);
  // Pit huts at two gates.
  for(const a of [0,Math.PI]){const x=Math.sin(a)*72,z=Math.cos(a)*72;box(x,1.6,z,10,3.2,5,'cream',a);box(x,3.35,z,11,.3,6,'blue',a);}
  const signGeometry=new T.PlaneGeometry(4.4,2.1),signMaterial=new T.MeshStandardMaterial({color:0xeee6cc,roughness:.85});
@@ -69,5 +73,5 @@ export function createKestrelRingWorld(){
  for(const [key,{geometry,finish,list}]of batches){const mesh=new T.InstancedMesh(geometry,materials[finish],list.length);list.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name='kestrel_ring_'+key.replace(':','_');mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
  const crowd=createVenueCrowd(spectators);root.add(crowd.root);
  root.userData.solidRecords=KESTREL_RING_BARRIERS;freezeSceneryTransforms(root);
- let disposed=false;return{root,update:crowd.update,dispose(){if(disposed)return;disposed=true;crowd.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});[floorGeometry,apronGeometry,boxGeometry,tyreGeometry,trunkGeometry,crownGeometry,islandGeometry,signGeometry].forEach(g=>g.dispose());[floorMaterial,apronMaterial,grassMaterial,signMaterial,...Object.values(materials)].forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,update:crowd.update,dispose(){if(disposed)return;disposed=true;forest.dispose();crowd.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});[floorGeometry,apronGeometry,boxGeometry,tyreGeometry,islandGeometry,signGeometry].forEach(g=>g.dispose());[floorMaterial,apronMaterial,grassMaterial,signMaterial,...Object.values(materials)].forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }

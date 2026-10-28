@@ -56,6 +56,8 @@ export const PUDDLE_WATER={color:0x2a2924,roughness:.03,opacity:.86,env:1.4} as 
 export function puddleWater(){
   return new T.MeshPhysicalMaterial({color:PUDDLE_WATER.color,metalness:0,roughness:PUDDLE_WATER.roughness,ior:1.33,transparent:true,opacity:PUDDLE_WATER.opacity,envMapIntensity:PUDDLE_WATER.env,depthWrite:false});
 }
+/** Loose aggregate chips: the cliff's photographic rock darkened to the floor gravel's grey-brown (until r433 .97/.91 of white). */
+export const AGGREGATE_TINT=[.6,.57,.52] as const;
 export function softShoreMaterial(material: T.MeshStandardMaterial) {
   material.onBeforeCompile = shader => {
     shader.vertexShader = 'attribute float shoreAlpha; varying float vShoreAlpha;\n' + shader.vertexShader;
@@ -104,6 +106,8 @@ export class Quarry {
   readonly arenaPhysics:DerbyArenaPhysics;
   private originalArena:T.Mesh;
   private largerArena:T.Mesh;
+  /** Loose chips on the original arena floor (hidden on the larger derby floor). */
+  floorChips!:T.InstancedMesh;
   private ramps:T.Mesh[]=[];
   derbyColliders: R.Collider[] = [];
   props: { mesh: T.Mesh; body: R.RigidBody; start: T.Vector3 }[] = [];
@@ -282,7 +286,7 @@ export class Quarry {
       stones.setMatrixAt(i, dummy.matrix);
     }
     scene.add(stones);
-    const aggregateMatrices: T.Matrix4[] = [], aggregateColors: T.Color[] = [];
+    const aggregateMatrices: T.Matrix4[] = [], aggregateColors: T.Color[] = [], floorMatrices: T.Matrix4[] = [], floorColors: T.Color[] = [];
     for(let i=0;i<460;i++) {
       let x:number,z:number;
       if(i<170) {
@@ -297,14 +301,16 @@ export class Quarry {
       // Consume the original random sequence before filtering, preserving every
       // retained chip and all scenery generated after this batch.
       if (!overlapsQuarryRoadside(x,z,s) && !overlapsQuarryHeadwall(x,z,s) && !overlapsQuarryEastBay(x,z,s) && !overlapsQuarryWestWall(x,z,s)) {
-        aggregateMatrices.push(dummy.matrix.clone());
-        aggregateColors.push(new T.Color(tint,tint*.97,tint*.91));
+        // Chips that lie on the larger derby floor are left out there (cars would drive through them); loose stones are
+        // the dull grey-brown of the floor's own gravel, not the pale cliff face they were cut from.
+        const onFloor=Math.hypot(x-DERBY_ARENA.x,z-DERBY_ARENA.z)<DERBY_ARENA.radius-1;
+        (onFloor?floorMatrices:aggregateMatrices).push(dummy.matrix.clone());
+        (onFloor?floorColors:aggregateColors).push(new T.Color(tint*AGGREGATE_TINT[0],tint*AGGREGATE_TINT[1],tint*AGGREGATE_TINT[2]));
       }
     }
-    const aggregate = new T.InstancedMesh(stoneGeo, rock, aggregateMatrices.length);
-    aggregate.receiveShadow=true;
-    aggregateMatrices.forEach((matrix,i)=>{aggregate.setMatrixAt(i,matrix);aggregate.setColorAt(i,aggregateColors[i]);});
-    aggregate.computeBoundingSphere();this.scenery.add(aggregate);
+    const chips=(matrices:T.Matrix4[],colors:T.Color[])=>{const mesh=new T.InstancedMesh(stoneGeo, rock, matrices.length);mesh.receiveShadow=true;
+      matrices.forEach((matrix,i)=>{mesh.setMatrixAt(i,matrix);mesh.setColorAt(i,colors[i]);});mesh.computeBoundingSphere();this.scenery.add(mesh);return mesh;};
+    chips(aggregateMatrices,aggregateColors);this.floorChips=chips(floorMatrices,floorColors);this.floorChips.name='quarry-floor-chips';
     this.industrial();
     this.playground();
     this.fences();
@@ -546,7 +552,7 @@ export class Quarry {
     const changed=this.arenaPhysics.setMode(derby,online),expanded=this.arenaPhysics.expanded;
     this.derbyWalls.visible=expanded;this.legacyDerbyWalls.visible=derby&&online;
     this.expandedFences.visible=expanded;this.legacyFences.visible=!expanded;
-    this.largerArena.visible=expanded;this.originalArena.visible=!expanded;
+    this.largerArena.visible=expanded;this.originalArena.visible=!expanded;this.floorChips.visible=!expanded;
     this.ramps.forEach(m=>m.visible=!expanded);
     for(let i=0;i<RAMPS.length;i++)this.collisionPhysics.statics.get('ramp-'+i)!.setEnabled(!expanded);
     this.checkpoint.visible = mode === 'race';

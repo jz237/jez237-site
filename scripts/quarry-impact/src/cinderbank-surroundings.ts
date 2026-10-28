@@ -1,9 +1,10 @@
 import * as T from 'three';
 import {createVenueCrowd,type SpectatorPlace} from './venue-crowd';
+import {createPhotoTrees,type PhotoTree} from './photo-trees';
 /** Speedway fairground behind the existing safety walls; no driving geometry. */
 export function createCinderbankSurroundings(){
  const root=new T.Group();root.name='cinderbank_surroundings';
- const geometries={box:new T.BoxGeometry(1,1,1),hill:new T.SphereGeometry(1,16,8),tree:new T.ConeGeometry(1,1,7),trunk:new T.CylinderGeometry(.65,1,1,6)};
+ const geometries={box:new T.BoxGeometry(1,1,1),hill:new T.SphereGeometry(1,16,8)};
  const material=new T.MeshStandardMaterial({roughness:.94});
  type Shape=keyof typeof geometries;
  const batches=new Map<Shape,{matrix:T.Matrix4;color:T.Color}[]>(),q=new T.Quaternion(),m=new T.Matrix4();
@@ -20,11 +21,11 @@ export function createCinderbankSurroundings(){
   const a=i/26*Math.PI*2,x=Math.cos(a)*355,z=Math.sin(a)*280,h=22+rand()*35;
   add('hill',x,-9,z,80+rand()*45,h,65+rand()*40,i%2?0x667153:0x7b805b,a);
  }
- const trees:{x:number;z:number}[]=[];
+ const trees:{x:number;z:number}[]=[],belt:PhotoTree[]=[];
  for(let i=0;i<240;i++){
   const a=i/240*Math.PI*2,r=1+rand()*.35,x=Math.cos(a)*205*r,z=Math.sin(a)*157*r,h=7+rand()*10;
-  trees.push({x,z});add('trunk',x,h*.27,z,.38,h*.54,.38,0x665343);
-  for(let layer=0;layer<3;layer++)add('tree',x,h*(.46+layer*.19),z,3.2-layer*.65,h*.62,3.2-layer*.65,[0x465c3d,0x546b43,0x64764b][i%3]);
+  // Photographed trees; the old trunk and three cone tiers each took a colour draw, still taken to keep the rest in place.
+  trees.push({x,z});belt.push({kind:i%4===0?'maple':i%2?'spruce':'pine',x,y:0,z,height:h*1.15,tint:.9+(i%5)*.04});for(let k=0;k<4;k++)rand();
  }
  // Rear paddock: service trailers, awnings, parked cars, tire piles and vendors.
  for(let i=0;i<9;i++){
@@ -49,6 +50,7 @@ export function createCinderbankSurroundings(){
  box(0,12,108,25,8,1,0x253a36);
  for(let row=0;row<4;row++)for(let col=0;col<6;col++)box(-10+col*4,9.5+row*1.6,107.46,2.4,.65,.08,col?0xc7bd85:0xb96b37);
  for(const [shape,rows]of batches){const mesh=new T.InstancedMesh(geometries[shape],material,rows.length);rows.forEach((r,i)=>{mesh.setMatrixAt(i,r.matrix);mesh.setColorAt(i,r.color);});mesh.name='cinderbank_surroundings_'+shape;mesh.receiveShadow=true;mesh.castShadow=shape==='box';mesh.computeBoundingSphere();root.add(mesh);}
+ const forest=createPhotoTrees(belt,'cinderbank_trees');root.add(forest.root);
  const places:SpectatorPlace[]=[];
  for(const center of [-38,38])for(let row=0;row<6;row++)for(let x=-30;x<=30;x+=2){if(rand()<.28)continue;places.push({x:center+x,y:.6+row*.55,z:-85-row*1.65,yaw:0,seated:true});}
  const crowd=createVenueCrowd(places);root.add(crowd.root);for(const mesh of crowd.root.children)mesh.castShadow=false;
@@ -59,5 +61,5 @@ export function createCinderbankSurroundings(){
   const map=new T.CanvasTexture(canvas);map.colorSpace=T.SRGBColorSpace;signTextures.push(map);const mat=new T.MeshStandardMaterial({map,roughness:.9,side:T.DoubleSide});signMaterials.push(mat);const sign=new T.Mesh(signGeometry,mat);sign.position.set(x,x===0?17:6.5,z);sign.rotation.y=yaw;root.add(sign);
  }
  root.userData.treePositions=trees;root.userData.spectatorCount=places.length;
- let disposed=false;return{root,update:crowd.update,dispose(){if(disposed)return;disposed=true;crowd.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});Object.values(geometries).forEach(g=>g.dispose());material.dispose();signGeometry.dispose();signTextures.forEach(t=>t.dispose());signMaterials.forEach(m=>m.dispose());root.clear();}};
+ let disposed=false;return{root,update:crowd.update,dispose(){if(disposed)return;disposed=true;forest.dispose();crowd.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});Object.values(geometries).forEach(g=>g.dispose());material.dispose();signGeometry.dispose();signTextures.forEach(t=>t.dispose());signMaterials.forEach(m=>m.dispose());root.clear();}};
 }

@@ -4,6 +4,7 @@ import { backdropFirs, composeForestBackdrop, BACKDROP_CENTER, type BackdropCard
 import { composeNorthHeadwallBackdrop } from './scenery-north-backdrop';
 import { composeNorthForestCards, loadNorthForest, type NorthSaplingPart } from './scenery-north-forest';
 import * as T from 'three';
+import {photoTreeMaterial,type PhotoTreeKind} from './photo-trees';
 import { dressWestVerge } from './scenery-west-verge';
 import { bankForestCards, addBankForest, dressBankVerges } from './scenery-bank-relief';
 import { GLTFLoader } from './model-loader';
@@ -216,40 +217,10 @@ export async function forestScenery(parent: T.Group, random: () => number) {
         const photo = textures.load(url('models/' + kind + '.webp'));
         photo.colorSpace = T.SRGBColorSpace;
         photo.anisotropy = 8;
-        const material = new T.MeshStandardMaterial({ map: photo, alphaTest: .45, roughness: 1, color: 0xb6beb2, side: T.DoubleSide });
-        // Distant trees use a single camera-facing photographic silhouette. No crossed
-        // cards overlap the real branch geometry along the accessible forest edge.
-        material.onBeforeCompile = shader => {
-            shader.vertexShader = shader.vertexShader.replace('#include <project_vertex>', `
-        vec3 center=(modelMatrix*instanceMatrix*vec4(0.0,0.0,0.0,1.0)).xyz;
-        float width=length(instanceMatrix[0].xyz), height=length(instanceMatrix[1].xyz);
-        vec3 cameraRight=normalize(vec3(viewMatrix[0][0],0.0,viewMatrix[2][0]));
-        vec3 billboard=center+cameraRight*position.x*width+vec3(0.0,position.y*height,0.0);
-        vec4 mvPosition=viewMatrix*vec4(billboard,1.0);
-        gl_Position=projectionMatrix*mvPosition;
-      `);
-            // A photographed canopy already contains leaf-facing and internal
-            // shade variation. Its lighting proxy must not use the arbitrary
-            // +/-Z normal of the flat source card, or an opposite-side sun
-            // turns the entire tree black. A world-up canopy response stays
-            // consistent as this silhouette rotates in main/reflection views.
-            // Override after DOUBLE_SIDED's face flip; preserve photograph,
-            // instance tint, alpha test, fog and all existing PBR light hooks.
-            shader.fragmentShader = shader.fragmentShader.replace('#include <normal_fragment_begin>', `
-        #include <normal_fragment_begin>
-        normal=transformDirection(vec3(0.0,1.0,0.0),viewMatrix);
-        nonPerturbedNormal=normal;
-      `);
-            // Approximate the canopy's mixed projected leaf area instead of
-            // lighting every photographed leaf as one upward opaque face.
-            // Preserve indirect sky/fill response and the photo's own shading.
-            shader.fragmentShader = shader.fragmentShader.replace('#include <lights_fragment_end>', `
-        #include <lights_fragment_end>
-        reflectedLight.directDiffuse *= 0.5;
-        reflectedLight.directSpecular *= 0.5;
-      `);
-        };
-        material.customProgramCacheKey = () => 'quarry-distant-tree-billboard-canopy-v3';
+        // Distant trees use a single camera-facing photographic silhouette, lit as a rounded crown (src/photo-trees.ts);
+        // no crossed cards overlap the real branch geometry along the accessible forest edge.
+        const material = photoTreeMaterial(kind as PhotoTreeKind, photo);
+        material.color.setHex(0xb6beb2);
         const geo = new T.PlaneGeometry(aspect, 1);
         geo.translate(0, .5, 0);
         const trees = new T.InstancedMesh(geo, material, placements.length);
