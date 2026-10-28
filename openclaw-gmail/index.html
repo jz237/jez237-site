@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>OpenClaw Gmail — Personal email automation and privacy</title>
+<style>
+  :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+  body { max-width: 48rem; margin: 3rem auto; padding: 0 1.25rem; line-height: 1.65; }
+  h1, h2 { line-height: 1.2; } h2 { margin-top: 2rem; }
+  a { color: light-dark(#1759a8, #8fc4ff); }
+  .note { border-left: .25rem solid #6486ad; padding-left: 1rem; }
+</style>
+<main>
+  <p><a href="/">Jez237.com</a></p>
+  <h1>OpenClaw Gmail</h1>
+  <p class="note">A private, personal-use integration for the operator's own Gmail
+    accounts. This is not a public email service or an official Google product.</p>
+  <p>OpenClaw Gmail checks newly arrived Inbox messages and helps the operator
+    investigate relevant GitHub build-failure notifications. It uses Google's
+    official Gmail API through the open-source gog command-line client.</p>
+  <h2 id="privacy">Privacy policy</h2>
+  <p>Effective October 28, 2026.</p>
+  <h2>Access and purpose</h2>
+  <p>The integration requests Gmail read-only access and the identity information
+    needed to verify the connected account. It uses message identifiers, arrival
+    times, senders and subjects to identify new mail. It reads message bodies
+    for relevant GitHub failure notices to diagnose still-current failures.</p>
+  <p>It does not send email, change message labels, mark messages read, delete
+    messages, or request Calendar, Drive or Contacts access. Google authorization
+    grants technical access to read mail; the configured workflow limits its
+    use to new Inbox mail and relevant GitHub failure follow-up.</p>
+  <h2>Processing and disclosure</h2>
+  <p>Processing runs on the operator's OpenClaw host. Relevant message details may
+    be processed by the operator's configured AI model providers to provide
+    requested assistance. Important results are delivered to the operator's
+    private chat; GitHub is consulted when investigating build failures.</p>
+  <p>Mailbox contents and OAuth credentials are not published on this website.
+    Google user data is not sold, used for advertising, or used by this
+    integration to develop, improve or train generalized AI or machine-learning
+    models. Access is used only to provide the operator-requested functionality.</p>
+  <h2>Storage and retention</h2>
+  <p>OAuth refresh tokens are stored in an encrypted local keyring, with its
+    unlock credential restricted to the operator's account. Checkpoints retain
+    message identifiers and check times to avoid duplicate work. Relevant
+    failure notices may be retained privately while an investigation is pending;
+    the workflow removes their bodies from its queue when closed. Private chat,
+    model-provider and host backup records may have separate retention settings.</p>
+  <h2>Control and deletion</h2>
+  <p>The operator can stop the automation, remove local authorizations and
+    checkpoints, and revoke access at any time through
+    <a href="https://myaccount.google.com/connections">Google Account connections</a>.
+    Questions or deletion requests can be directed to the operator using the
+    support contact shown on Google's authorization screen.</p>
+  <h2>Google API Limited Use</h2>
+  <p>OpenClaw Gmail's use and transfer of information received from Google APIs
+    will adhere to the
+    <a href="https://developers.google.com/terms/api-services-user-data-policy">Google
+    API Services User Data Policy</a>, including its Limited Use requirements.</p>
+</main>
+</html>
