@@ -20,7 +20,7 @@ const CURL = 0.4, CURL_MOST = 1.4, LEAD = 0.05, LEAD_MOST = 0.15;
 // Tipping nose up or down, the body arches a little the same way (its ends a moment behind its middle,
 // where it turns: ARCH_AT), by ARCH s of the pitch's rate (the tail's slope at the most ARCH_MOST rad),
 // easing in and out; as a turn bends it in a C, seen from the side.
-const ARCH = 0.25, ARCH_MOST = 0.12, ARCH_AT = SPINE_START + PIVOT_U * 2.276, ARCH_SPAN = 2 * (SPINE_END - ARCH_AT);
+const ARCH = 0.12, ARCH_MOST = 0.05, ARCH_AT = SPINE_START + PIVOT_U * 2.276, ARCH_SPAN = 2 * (SPINE_END - ARCH_AT);
 export class BodyMotion {
   constructor() {
     this.data = new Float32Array(SPINE_COUNT * 4);

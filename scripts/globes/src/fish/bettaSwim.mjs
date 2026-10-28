@@ -977,9 +977,15 @@ export class BettaSwim {
     // sand).
     const floor = water ? water.sand + REST_HEIGHT - 0.004 : b.low, low = smooth(0.005, 0.04, this.position[1] - floor);
     if (hovering) pitchTarget = (-0.1 + 0.03 * this.wander(1, 0.5) + this.trimPitch) * low;
+    // Going down to a perch well below, it glides at a gentle slope and sinks the rest of the way
+    // (perchSink: the share of its speed it drops by), not nose down at the perch.
+    let perchSink = 0;
     if (sinking && !perch) pitchTarget = -this.descentPitch(descent) * (1 - 0.65 * this.slump);
-    else if (perch) pitchTarget = this.restSettled ? perch.pitch : clamp(Math.atan2(delta[1], Math.hypot(delta[0], delta[2])), -0.75, 0.32);
-    else if (this.mode === 'rest') pitchTarget = -0.03;
+    else if (perch) {
+      const slope = Math.atan2(delta[1], Math.hypot(delta[0], delta[2]));
+      pitchTarget = this.restSettled ? perch.pitch : clamp(slope, -0.4, 0.32);
+      if (!this.restSettled) perchSink = clamp(Math.sin(this.pitch) - Math.sin(slope), 0, 0.6);
+    } else if (this.mode === 'rest') pitchTarget = -0.03;
     // At the film the lips are trimmed by the tilt of the head alone, which moves them without moving the body.
     const trim = (low, high) => clamp(pitchForMouth(this.position[1], this.surfaceY - MOUTH_DEPTH), low, high);
     if (this.mode === 'rise') pitchTarget = rise > 0.08 ? this.tripPitch : trim(this.tripPitch - 0.12, this.tripPitch + 0.08);
@@ -1080,6 +1086,7 @@ export class BettaSwim {
     }
     const unheld = [...this.position];
     if (sags) this.position[1] -= this.slump * clamp(SAG_RATE * descent, SAG_SLOWEST, SAG_FASTEST) * dt;
+    if (perchSink > 0) this.position[1] -= perchSink * this.speed * dt;
     // Once settled on the sand, let the current go by; holding still in the water (hovering,
     // taking air, swallowing, displaying at the glass), work against a slow one (a bowl's gentle
     // circulation, not a slosh, which carries it) and keep station.
