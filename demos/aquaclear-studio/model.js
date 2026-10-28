@@ -1,8 +1,9 @@
 import * as T from './vendor/three.module.js';
-import { PARTS, flowModel } from './data.js?v=realism-2';
-import { buildWater, buildDebris, buildPumpStudy } from './effects.js?v=realism-2';
+import { PARTS, flowModel } from './data.js?v=optics-3';
+import { buildWater, buildDebris, buildPumpStudy } from './effects.js?v=optics-3';
+import { surfaceMaps, clothMaterial, perforatedCover, hollowCylinder, pumpCoverGeometry, causticMaterial } from './detail.js?v=optics-3';
 const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z), TAU=Math.PI*2;
-const mat=(color,roughness=.5,metalness=0)=>new T.MeshStandardMaterial({color,roughness,metalness});
+const mat=(color,roughness=.5,metalness=0)=>new T.MeshPhysicalMaterial({color,roughness,metalness,clearcoat:.08,clearcoatRoughness:.25});
 function roundedBox(w,h,d,r=.08){
   r=Math.min(r,w/3,h/3,d/3);const x=-w/2,y=-h/2,s=new T.Shape();
   s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);s.lineTo(x+w,y+h-r);s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);s.lineTo(x+r,y+h);s.quadraticCurveTo(x,y+h,x,y+h-r);s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);
@@ -22,10 +23,12 @@ function textPlate(text,w,h,bg='#152c31',fg='#cae0db'){
 export function buildFilter(){
   const root=new T.Group(),parts=new Map(),pickables=[],cutSurfaces=[],guides=new T.Group();root.add(guides);
   const shell=mat('#202b2d',.32,0),edge=mat('#384347',.35,0),black=mat('#0a1014',.52),rubber=mat('#182328',.95),copper=mat('#ce9255',.37,.5),ceramic=mat('#d4cdb0',.91);
-  const foamTex=porousTexture(75,'#c0bfa2','#565946',10),spongeTex=porousTexture(115,'#293131','#080e12',14),grainTex=porousTexture(5,'#d9d6ba','#aaa992',5);
+  const plasticGrain=surfaceMaps(91);for(const material of [shell,edge,black]){material.bumpMap=plasticGrain;material.bumpScale=.003;material.roughnessMap=plasticGrain;}
+  const caseMaterial=new T.MeshPhysicalMaterial({color:'#747a7d',roughness:.11,transparent:true,opacity:.24,depthWrite:false,side:T.DoubleSide,clearcoat:1,clearcoatRoughness:.08});
+  const foamTex=porousTexture(75,'#247f9c','#073c52',10),spongeTex=porousTexture(115,'#293131','#080e12',14),grainTex=porousTexture(5,'#d9d6ba','#aaa992',5);
   const foamMat=new T.MeshStandardMaterial({map:foamTex,bumpMap:foamTex,bumpScale:.045,roughness:.97});ceramic.bumpMap=grainTex;ceramic.bumpScale=.016;
   const spongeMat=new T.MeshStandardMaterial({map:spongeTex,bumpMap:spongeTex,bumpScale:.03,roughness:1});
-  const tubeMat=new T.MeshPhysicalMaterial({color:'#91b0b2',roughness:.14,metalness:.07,transparent:true,opacity:.38,side:T.DoubleSide,depthWrite:false});
+  const tubeMat=new T.MeshPhysicalMaterial({color:'#abbdbd',roughness:.075,metalness:0,transparent:true,opacity:.23,clearcoat:1,side:T.DoubleSide,depthWrite:false});
   const offsets={case:[0,0,0],lid:[0,4.6,0],basket:[3,.1,0],foam:[3,3.5,0],carbon:[3,4.2,-.7],biomax:[3,4.2,.7],utube:[-1.8,1.6,0],extension:[-2.1,.9,0],stem:[-2.1,-.1,0],prefilter:[-2.1,-.8,.65],impeller:[-1.2,-1.1,0],motor:[-1.2,-2.0,0],seal:[-1.2,-.55,0],'impeller-cover':[-1.2,1.45,0],leveler:[2.8,-1.0,0]};
   function part(id){const group=new T.Group();root.add(group);const p={...PARTS.find(p=>p.id===id),object:group,offset:V(...offsets[id]),center:V()};parts.set(id,p);return group;}
   function mesh(g,geometry,material,x=0,y=0,z=0){const m=new T.Mesh(geometry,material);m.position.set(x,y,z);m.castShadow=!material.transparent;m.receiveShadow=true;g.add(m);return m;}
@@ -33,11 +36,13 @@ export function buildFilter(){
   const cyl=(g,r1,r2,h,x,y,z,m=black,n=48)=>mesh(g,new T.CylinderGeometry(r1,r2,h,n),m,x,y,z);
   const tube=(g,points,r=.14,m=tubeMat)=>mesh(g,new T.TubeGeometry(new T.CatmullRomCurve3(points.map(p=>V(...p)),false,'centripetal'),80,r,16,false),m);
   const caseGroup=part('case');
-  box(caseGroup,4.28,.16,2.62,0,.15,0,shell);
-  box(caseGroup,4.28,3.45,.14,0,1.9,-1.3,shell);
-  cutSurfaces.push(box(caseGroup,.15,3.45,2.6,-2.08,1.9,0,shell));
-  cutSurfaces.push(box(caseGroup,.15,3.45,2.6,2.08,1.9,0,shell));
-  cutSurfaces.push(box(caseGroup,4.28,2.95,.13,0,1.65,1.3,shell));
+  box(caseGroup,4.04,.12,2.48,0,.15,0,caseMaterial,.11);
+  box(caseGroup,4.28,3.45,.09,0,1.9,-1.3,caseMaterial,.045);
+  cutSurfaces.push(box(caseGroup,.09,3.45,2.6,-2.08,1.9,0,caseMaterial,.045));
+  cutSurfaces.push(box(caseGroup,.09,3.45,2.6,2.08,1.9,0,caseMaterial,.045));
+  cutSurfaces.push(box(caseGroup,4.28,2.95,.09,0,1.65,1.3,caseMaterial,.045));
+  // A slight molded draft and real thin wall thickness replace square opaque blocks.
+  for(const wall of caseGroup.children.slice(1)){const a=wall.geometry.attributes.position;for(let i=0;i<a.count;i++){const y=a.getY(i)+wall.position.y,k=.94+.06*Math.max(0,y)/3.65;a.setX(i,(a.getX(i)+wall.position.x)*k-wall.position.x);a.setZ(i,(a.getZ(i)+wall.position.z)*k-wall.position.z);}a.needsUpdate=true;wall.geometry.computeVertexNormals();}
   // Narrow inlet well is separated from the wider media chamber.
   box(caseGroup,.1,2.9,2.5,-.98,1.95,0,edge);
   for(let z of [-1.37,1.37])box(caseGroup,4.4,.12,.13,0,3.65,z,edge,.035);
@@ -47,9 +52,11 @@ export function buildFilter(){
   const lip=box(caseGroup,2.9,.1,1.03,.55,3.12,1.76,edge,.04);lip.rotation.x=.14;
   for(let x of [-.91,2.0])box(caseGroup,.07,.22,1.0,x,3.22,1.76,shell,.02);
   const badge=textPlate('AC70',.57,.12);badge.position.set(-1.53,3.18,1.378);caseGroup.add(badge);
-  const lid=part('lid');box(lid,4.5,.2,2.86,0,3.85,0,shell,.1);box(lid,3.35,.06,1.9,0,3.98,0,black,.1);
-  for(let i=0;i<18;i++)box(lid,.07,.025,.8,-1.4+i*.166,4.02,-.42,edge,.01);
-  box(lid,.94,.12,.19,.25,4.07,.89,edge,.045);const logo=textPlate('FLUVAL  /  AquaClear',2.0,.3);logo.rotation.x=-Math.PI/2;logo.position.set(.1,4.026,.3);lid.add(logo);
+  const lid=part('lid');mesh(lid,perforatedCover(),shell,0,3.73,0);
+  for(const z of [-1.36,1.36])box(lid,4.30,.18,.075,0,3.72,z,caseMaterial,.035);
+  for(const x of [-2.17,2.17])box(lid,.075,.18,2.62,x,3.72,0,caseMaterial,.035);
+  box(lid,.49,.06,2.20,-1.66,3.92,-.05,black,.10);
+  const logo=textPlate('FLUVAL',1.55,.27,'#131b1e','#6f7878');logo.rotation.set(-Math.PI/2,0,Math.PI/2);logo.position.set(-1.66,3.956,-.05);lid.add(logo);
   const basket=part('basket');
   for(let z of [-1.1,1.06])for(let i=0;i<16;i++) {const b=box(basket,.065,2.63,.06,-.73+i*.173,1.86,z,black,.012);if(z>0)cutSurfaces.push(b);}
   for(let x of [-.84,1.97])for(let i=0;i<12;i++)box(basket,.06,2.63,.065,x,1.86,-1.0+i*.184,black,.012);
@@ -67,16 +74,23 @@ export function buildFilter(){
   const biomax=part('biomax'), carbon=part('carbon');
   let seed=341;const random=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);
   const ringShape=new T.Shape();ringShape.absarc(0,0,.095,0,TAU,false);const hole=new T.Path();hole.absarc(0,0,.042,0,TAU,true);ringShape.holes.push(hole);
-  const ringGeo=new T.ExtrudeGeometry(ringShape,{depth:.145,bevelEnabled:true,bevelSize:.008,bevelThickness:.008,bevelSegments:2,curveSegments:8});ringGeo.center();
+  const ringGeo=new T.ExtrudeGeometry(ringShape,{depth:.145,bevelEnabled:true,bevelSize:.008,bevelThickness:.008,bevelSegments:2,curveSegments:16});ringGeo.center();
   const rings=new T.InstancedMesh(ringGeo,ceramic,288),dummy=new T.Object3D();
   for(let i=0;i<288;i++){const col=i%12,row=Math.floor(i/12)%4,layer=Math.floor(i/48);dummy.position.set(-.65+col*.215+(random()-.5)*.035,1.68+layer*.235+(random()-.5)*.025,.13+row*.235+(random()-.5)*.03);dummy.rotation.set(random()*TAU,random()*TAU,random()*TAU);dummy.updateMatrix();rings.setMatrixAt(i,dummy.matrix);}rings.castShadow=true;rings.receiveShadow=true;biomax.add(rings);
   const beads=new T.InstancedMesh(new T.IcosahedronGeometry(.07,1),mat('#263337',.95),650);
   for(let i=0;i<650;i++){dummy.position.set(-.63+random()*2.4,1.64+random()*1.36,-.95+random()*.74);dummy.rotation.set(random()*3,random()*3,random()*3);dummy.scale.setScalar(.75+random()*.5);dummy.updateMatrix();beads.setMatrixAt(i,dummy.matrix);}beads.castShadow=true;beads.receiveShadow=true;carbon.add(beads);
-  const meshBag=mat('#c1c7b8',.9);meshBag.transparent=true;meshBag.opacity=.16;meshBag.wireframe=true;mesh(carbon,new T.BoxGeometry(2.56,1.49,.9,20,12,8),meshBag,.55,2.29,-.58);
-  const u=part('utube');const intakePath=[[-1.5,1.5,2.44],[-1.5,3.83,2.44],[-1.5,4.2,2.18],[-1.5,4.25,.9],[-1.5,4.02,-.24],[-1.5,3.55,-.32],[-1.5,.6,-.32]];tube(u,intakePath,.16);
+  const fabric=clothMaterial();
+  for(const [holder,z] of [[carbon,-.58],[biomax,.55]]){
+    const cloth=mesh(holder,new T.BoxGeometry(2.56,1.49,.91,18,14,8),fabric.clone(),.55,2.29,z);
+    const a=cloth.geometry.attributes.position;for(let i=0;i<a.count;i++){const y=a.getY(i);a.setZ(i,a.getZ(i)+Math.sin(a.getX(i)*9+y*4)*.012*Math.sin((y+.745)/1.49*Math.PI));}a.needsUpdate=true;cloth.geometry.computeVertexNormals();
+    // Narrow sewn hems leave the top and bottom as cloth, not solid plates.
+    const seam=mat('#87958e',.92);for(const sy of [1.56,3.02]){for(const dz of [-.455,.455])box(holder,2.58,.025,.025,.55,sy,z+dz,seam,.008);for(const x of [-.73,1.83])box(holder,.025,.025,.91,x,sy,z,seam,.008);}
+  }
+  const u=part('utube');const intakePath=[[-1.5,1.5,2.44],[-1.5,3.83,2.44],[-1.5,4.2,2.18],[-1.5,4.25,.9],[-1.5,4.02,-.24],[-1.5,3.55,-.32],[-1.5,.6,-.32]];tube(u,intakePath,.16);const inner=tube(u,intakePath,.133,tubeMat.clone());inner.material.side=T.BackSide;
+  for(const y of [1.5]){const rim=mesh(u,new T.TorusGeometry(.146,.014,8,40),tubeMat,-1.5,y,2.44);rim.rotation.x=Math.PI/2;}
   for(let y of [1.57,3.62])cyl(u,.19,.19,.12,-1.5,y,2.44,edge);
-  box(u,.62,.12,.22,-1.5,4.45,1.27,edge,.04);const lever=box(u,.15,.16,.3,-1.5,4.52,1.27,copper,.04);
-  const extension=part('extension');cyl(extension,.145,.145,1.65,-1.5,.67,2.44,tubeMat);cyl(extension,.175,.175,.12,-1.5,-.1,2.44,edge);
+  box(u,.62,.12,.22,-1.5,4.45,1.27,edge,.04);const lever=box(u,.15,.16,.3,-1.5,4.52,1.27,black,.04);
+  const extension=part('extension');mesh(extension,hollowCylinder(.145,.119,1.65),tubeMat,-1.5,.67,2.44);cyl(extension,.175,.175,.12,-1.5,-.1,2.44,edge);
   const stem=part('stem');cyl(stem,.12,.12,.86,-1.5,-.6,2.44,black);
   for(let i=0;i<14;i++){const angle=i/14*TAU;box(stem,.035,.74,.035,-1.5+Math.cos(angle)*.23,-.62,2.44+Math.sin(angle)*.23,edge,.009);}for(let y of [-.99,-.22])cyl(stem,.25,.25,.065,-1.5,y,2.44,edge);
   const prefilter=part('prefilter');const preShape=new T.Shape();preShape.absarc(0,0,.43,0,TAU,false);const preHole=new T.Path();preHole.absarc(0,0,.26,0,TAU,true);preShape.holes.push(preHole);const pg=new T.ExtrudeGeometry(preShape,{depth:.97,bevelEnabled:true,bevelSize:.04,bevelThickness:.04,bevelSegments:3,curveSegments:24});pg.rotateX(Math.PI/2);pg.translate(-1.5,-.19,2.44);mesh(prefilter,pg,spongeMat);
@@ -87,13 +101,16 @@ export function buildFilter(){
   const impeller=part('impeller');cyl(impeller,.17,.17,.48,-1.5,.18,-.32,mat('#3e4b4f',.35,.6));cyl(impeller,.035,.035,.82,-1.5,.33,-.32,ceramic);
   const rotor=new T.Group();rotor.position.set(-1.5,.48,-.32);impeller.add(rotor);cyl(rotor,.28,.28,.065,0,0,0,edge);
   for(let i=0;i<6;i++){const g=new T.Group();g.rotation.y=i/6*TAU;rotor.add(g);box(g,.19,.14,.035,.17,.08,0,mat('#b7d2cc',.3,.2),.012);}
-  const seal=part('seal');const ring=mesh(seal,new T.TorusGeometry(.4,.036,12,64),copper,-1.5,.17,-.32);ring.rotation.x=Math.PI/2;
-  const cover=part('impeller-cover');cyl(cover,.42,.47,.14,-1.5,.7,-.32,edge);cyl(cover,.21,.21,.21,-1.5,.84,-.32,tubeMat);
+  const seal=part('seal');const ring=mesh(seal,new T.TorusGeometry(.4,.036,16,64),rubber,-1.5,.17,-.32);ring.rotation.x=Math.PI/2;
+  const cover=part('impeller-cover');mesh(cover,pumpCoverGeometry(),black,-1.5,.70,-.32);mesh(cover,hollowCylinder(.23,.18,.20),black,-1.5,.84,-.32);for(const z of [-.70,.06])box(cover,.94,.18,.045,-1.5,.65,z,black,.015);box(cover,.20,.05,.14,-1.5,.63,.12,black,.01);
   const leveler=part('leveler');box(leveler,.23,.3,.5,.8,.65,1.49,black);const knob=cyl(leveler,.22,.22,.16,.8,.63,1.82,edge);knob.rotation.x=Math.PI/2;for(let i=0;i<12;i++){const a=i/12*TAU;box(leveler,.045,.045,.13,.8+Math.cos(a)*.23,.63+Math.sin(a)*.23,1.82,black,.008);}
   // Aquarium context: a cropped rear glass panel and a water surface under the return.
   const context=new T.Group();root.add(context);const glass=new T.MeshPhysicalMaterial({color:'#79c2c1',roughness:.2,transparent:true,opacity:.1,side:T.DoubleSide,depthWrite:false});
   box(context,7,4.85,.065,0,.55,1.98,glass,.01);box(context,7,.12,.13,0,3.0,1.98,edge,.02);
   const water=buildWater();root.add(water.group);
+  const bottomMaterial=mat('#20383a',.88);bottomMaterial.bumpMap=surfaceMaps(83);bottomMaterial.bumpScale=.01;const bottom=mesh(context,new T.PlaneGeometry(7,4.5),bottomMaterial,0,-1.65,4.25);bottom.rotation.x=-Math.PI/2;
+  const caustics=mesh(context,new T.PlaneGeometry(7,4.5),causticMaterial(),0,-1.642,4.25);caustics.rotation.x=-Math.PI/2;
+  const waterline=mesh(context,new T.TubeGeometry(new T.LineCurve3(V(-3.45,0,2.03),V(3.45,0,2.03)),1,.007,6,false),new T.MeshPhysicalMaterial({color:'#b0c8c5',roughness:.08,transparent:true,opacity:.25}));
   const debris=buildDebris(foam);root.add(debris.group);
   const pumpStudy=buildPumpStudy();root.add(pumpStudy.group);
   const traceGroup=new T.Group();root.add(traceGroup);const flowPaths=[];
@@ -130,6 +147,7 @@ export function buildFilter(){
     const running=amount<.01&&!isolated&&careStep<0;rotor.rotation.y=running?time*5:0;
     pumpStudy.update(time,mode==='pump'&&running);
     const hydraulics=flowModel(flow,restricted);lever.position.x=-1.7+hydraulics.setting*.4;
+    caustics.material.uniforms.time.value=time;caustics.material.uniforms.strength.value=hydraulics.delivery;waterline.position.y=3.02-waterLevel*.021;
     water.update(time,hydraulics.delivery,waterLevel,running&&!['cutaway','pump'].includes(mode));
     debris.update(time,restricted,showDebris&&running&&['cutaway','flow'].includes(mode),hydraulics.delivery,showDebris);
     traceGroup.visible=mode==='flow'&&running;
@@ -141,12 +159,16 @@ export function buildFilter(){
     // Subdue context in close-up chapters without adding transparent ghost layers.
     for(const [id,p] of parts)p.object.traverse(m=>{if(!m.isMesh||!m.material.emissive)return;
       const material=m.material;
+      if(material.userData.dryRoughness===undefined)material.userData.dryRoughness=material.roughness;
+      const wet=running&&['basket','foam','biomax','impeller','impeller-cover','utube','extension'].includes(id);
+      material.roughness=material.userData.dryRoughness*(wet?.77:1);
+      if(material.isMeshPhysicalMaterial){if(material.userData.dryClearcoat===undefined)material.userData.dryClearcoat=material.clearcoat;material.clearcoat=wet&&id!=='biomax'?Math.max(.32,material.userData.dryClearcoat):material.userData.dryClearcoat;}
       if(material.userData.studyColor===undefined)material.userData.studyColor=material.color.getHex();
       material.color.setHex(material.userData.studyColor);
-      if(m===foam.children[0])material.color.set(restricted?'#898271':'#ffffff');
+      if(m===foam.children[0])material.color.set(restricted?'#797c61':'#ffffff');
       if(journeyPart&&journeyPart!=='case'&&id!==journeyPart&&!(journeyPart==='biomax'&&id==='carbon'))material.color.multiplyScalar(.55);
       material.emissive.set(id===selected?'#214b3e':'#000000');material.emissiveIntensity=id===selected?.055:0;
     });
   }
-  return {root,parts,pickables,pose,context,guides,flowPaths,effectsSnapshot:()=>({water:water.snapshot(),debris:debris.snapshot(),rotorAngle:rotor.rotation.y,pumpVisible:pumpStudy.group.visible})};
+  return {root,parts,pickables,pose,context,guides,flowPaths,water,opticsExcluded:[traceGroup,guides,pumpStudy.group],effectsSnapshot:()=>({water:water.snapshot(),debris:debris.snapshot(),rotorAngle:rotor.rotation.y,pumpVisible:pumpStudy.group.visible})};
 }

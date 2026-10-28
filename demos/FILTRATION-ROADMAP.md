@@ -23,12 +23,13 @@ The alternate photographic aquarium, the Hidden Reef koi mount and Philadelphia'
 - Curved, animated spillway water meeting an adjustable surface; interfering surface waves, small bubbles/droplets, and a 0–38 mm water-level control with the manufacturer's maximum-gap reference mark.
 - Nonmetallic case materials, finer foam detail, less overlap in ceramic placement and revised lighting. Still an educational reconstruction, not a photoreal scan.
 
-### Next graphics and realism priorities
+### Second AC70 realism pass — implemented October 28, 2026
 
-1. **Measured reference geometry.** Obtain detailed AC70 photographs or measurements of the actual housing, intake, impeller and media carrier. Replace approximations with verified proportions, wall thickness, seams and molding details. Current open pump section is schematic.
-2. **Water optics.** Add scene-aware refraction/reflection, edge menisci and restrained moving caustics, with a cheaper mobile fallback. The current transparent water and analytic waves do not refract the scene.
-3. **Materials and contact.** Add spatially varied roughness, subtle molded-plastic grain, wet/dry transitions, fine ceramic pores and actual fabric mesh. Physically settle the ceramic pieces; add local contact shading without obscuring teaching cutaways.
-4. **Lighting and motion polish.** Add quality tiers for softer contact shadows and reflections, small coherent surface eddies, and reference-matched impeller blade geometry. Preserve the explicitly slowed teaching motion and reduced-motion controls.
+1. **Photograph-guided geometry:** visually checked the official AC70 gallery, A16331 cover and A16316 impeller cover. Corrected smoky thin walls, drafted case, perforated lid/side badge, blue foam, woven bags, hollow extension and rectangular pump cover. This remains an approximate reconstruction; no measured CAD was supplied.
+2. **Water optics:** mirrored-camera scene reflection, depth-aware screen refraction, Fresnel blending, waterline detail and restrained procedural moving light patterns. Uses bounded lower-resolution targets on mobile; rendering is suspended when water is hidden. Not ray tracing or CFD.
+3. **Surface and contact detail:** procedural molding grain, ceramic pores, actual alpha-cutout fabric weave, wet/dry roughness, filtered contact shadows and fitted lid seams. No purchased or copied image assets.
+
+The next precision step is measured geometry or a physical scan, particularly the concealed volute and impeller dimensions. A future optical pass could add depth-aware absorption and better refraction at screen edges; the current sheet uses the horizontal surface's reflection approximation. Ceramic pieces still use distributed placements rather than a physically settled packing simulation. See `aquaclear-studio/README.md` for references, rendering limits and tests.
 
 ### Next distinct filter mechanisms
 

@@ -1,12 +1,13 @@
 import * as T from './vendor/three.module.js';
 import { OrbitControls } from './vendor/OrbitControls.js';
 import { RoomEnvironment } from './vendor/RoomEnvironment.js';
-import { buildFilter } from './model.js?v=realism-2';
-import { PARTS, LESSONS, CARE, flowModel } from './data.js?v=realism-2';
+import { buildFilter } from './model.js?v=optics-3';
+import { PARTS, LESSONS, CARE, flowModel } from './data.js?v=optics-3';
 
+import { createWaterOptics } from './optics.js?v=optics-3';
 const $=id=>document.getElementById(id), reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const state={mode:'cutaway',tab:'explore',amount:0,target:0,flow:100,restricted:false,selected:'foam',isolated:false,paused:reduced.matches,rotate:false,labels:true,tour:-1,care:-1,sequence:false,sequenceTime:0,time:0,ready:false,waterLevel:26,showDebris:true};
-let scene,camera,renderer,controls,filter,camTween,last=0,down=null;
+let scene,camera,renderer,controls,filter,optics,camTween,last=0,down=null;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),smooth=t=>t*t*(3-2*t),v=(x,y,z)=>new T.Vector3(x,y,z);
 const stage=$('viewport'),raycaster=new T.Raycaster(),pointer=new T.Vector2();
 const labelNodes=new Map();
@@ -132,14 +133,13 @@ function labels(){
 function intersect(e){const r=stage.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);raycaster.setFromCamera(pointer,camera);return raycaster.intersectObjects(filter.pickables,false).find(hit=>{let o=hit.object;while(o){if(!o.visible)return false;o=o.parent;}return true;});}
 async function init(){
   try{
-    renderer=new T.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setSize(stage.clientWidth,stage.clientHeight);renderer.setClearColor(0,0);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;stage.append(renderer.domElement);
+    renderer=new T.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setSize(stage.clientWidth,stage.clientHeight);renderer.setClearColor(0,0);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFShadowMap;stage.append(renderer.domElement);
     scene=new T.Scene();camera=new T.PerspectiveCamera(36,stage.clientWidth/stage.clientHeight,.1,150);camera.position.set(10,8,13);controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.075;controls.minDistance=2;controls.maxDistance=45;controls.maxPolarAngle=Math.PI*.82;controls.target.set(0,2,0);controls.addEventListener('start',()=>{camTween=null;});
     const pmrem=new T.PMREMGenerator(renderer),room=new RoomEnvironment();scene.environment=pmrem.fromScene(room,.04).texture;scene.environmentIntensity=.65;room.dispose();pmrem.dispose();
     scene.add(new T.HemisphereLight('#b7e5e2','#1c222a',.6));
-    const key=new T.DirectionalLight('#fff3e3',3.2);key.position.set(-5,9,8);key.castShadow=true;key.shadow.mapSize.set(2048,2048);Object.assign(key.shadow.camera,{left:-10,right:10,top:12,bottom:-7,near:.5,far:35});key.shadow.normalBias=.025;key.shadow.bias=-.0001;key.shadow.radius=4;scene.add(key);
+    const key=new T.DirectionalLight('#fff3e3',3.2);key.position.set(-5,9,8);key.castShadow=true;key.shadow.mapSize.set(innerWidth<760?2048:4096,innerWidth<760?2048:4096);Object.assign(key.shadow.camera,{left:-10,right:10,top:12,bottom:-7,near:.5,far:35});key.shadow.normalBias=.025;key.shadow.bias=-.0001;key.shadow.radius=2.5;scene.add(key);
     const rim=new T.DirectionalLight('#c0dce3',1.3);rim.position.set(6,6,-4);scene.add(rim);const fill=new T.DirectionalLight('#bce3cf',.4);fill.position.set(1,2,10);scene.add(fill);
-    filter=buildFilter();scene.add(filter.root);
-    const floor=new T.Mesh(new T.PlaneGeometry(100,100),new T.ShadowMaterial({color:'#020b11',opacity:.08}));floor.rotation.x=-Math.PI/2;floor.position.y=-3.8;floor.receiveShadow=true;scene.add(floor);
+    filter=buildFilter();scene.add(filter.root);optics=createWaterOptics(renderer,scene,camera,filter.water,filter.opticsExcluded);
     renderer.domElement.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY};});
     renderer.domElement.addEventListener('pointerup',e=>{if(down&&Math.hypot(e.clientX-down.x,e.clientY-down.y)<6){const hit=intersect(e);if(hit){endTour();tab('explore',{syncMode:false});select(hit.object.userData.part);}}down=null;});
     renderer.domElement.addEventListener('pointermove',e=>{if(down)return;const hit=intersect(e);$('tooltip').hidden=!hit;renderer.domElement.style.cursor=hit?'pointer':'grab';if(hit){$('tooltip').textContent=filter.parts.get(hit.object.userData.part).name;const r=stage.getBoundingClientRect();$('tooltip').style.left=clamp(e.clientX-r.left+15,12,r.width-220)+'px';$('tooltip').style.top=clamp(e.clientY-r.top-30,10,r.height-35)+'px';}});
@@ -148,7 +148,7 @@ async function init(){
     new ResizeObserver(()=>{if(!stage.clientWidth||!stage.clientHeight)return;camera.aspect=stage.clientWidth/stage.clientHeight;camera.updateProjectionMatrix();renderer.setSize(stage.clientWidth,stage.clientHeight);fit();}).observe(stage);
     filter.pose(0,state.mode,0,100,false,'foam',false);state.ready=true;$('loading').hidden=true;document.body.dataset.ready='true';select('foam');fit();renderer.setAnimationLoop(frame);
     // Read-only diagnostics for repeatable browser checks; no hidden mutation API.
-    window.filterStudio={snapshot:()=>({...state,partCount:filter.parts.size,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,camera:camera.position.toArray(),effects:filter.effectsSnapshot()})};
+    window.filterStudio={snapshot:()=>({...state,partCount:filter.parts.size,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,camera:camera.position.toArray(),effects:filter.effectsSnapshot(),optics:optics.snapshot()})};
   }catch(err){console.error('AquaClear studio:',err);$('loading').hidden=true;$('error').hidden=false;}
 }
 function frame(now){
@@ -157,7 +157,7 @@ function frame(now){
   state.amount+= (state.target-state.amount)*(reduced.matches?1:Math.min(1,dt*5));if(Math.abs(state.target-state.amount)<.0001)state.amount=state.target;
   filter.pose(state.amount,state.mode,state.time,state.flow,state.restricted,state.selected,state.isolated,state.care,dt,reduced.matches,state.waterLevel,state.tour>=0?LESSONS[state.tour].part:null,state.showDebris);
   if(camTween){camTween.elapsed+=dt;const t=smooth(Math.min(1,camTween.elapsed/.8));camera.position.lerpVectors(camTween.from,camTween.to,t);controls.target.lerpVectors(camTween.fromTarget,camTween.target,t);if(t>=1)camTween=null;}
-  controls.autoRotate=state.rotate&&!state.paused;controls.autoRotateSpeed=.5;controls.update();labels();renderer.render(scene,camera);
+  controls.autoRotate=state.rotate&&!state.paused;controls.autoRotateSpeed=.5;controls.update();labels();optics.capture(state.time);renderer.render(scene,camera);
   if(document.activeElement!==$('explode'))$('explode').value=Math.round(state.amount*100);$('explode-value').textContent=Math.round(state.amount*100)+'%';document.body.dataset.explosion=String(Math.round(state.amount*100));document.body.dataset.motion=state.paused?'paused':'running';
 }
 init();
