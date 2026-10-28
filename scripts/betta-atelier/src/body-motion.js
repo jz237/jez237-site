@@ -16,7 +16,7 @@ const WAVE = 5, RECOIL = 0.12;
 // the most: the bend leads the turn rather than waiting for the tail to be dragged round), the head
 // leads the route into the turn by LEAD s of it (LEAD_MOST rad at the most: a startle's whip is the
 // trunk's), and the C straightens as the turn ends.
-const CURL = 0.55, CURL_MOST = 1.4, LEAD = 0.05, LEAD_MOST = 0.15;
+const CURL = 0.4, CURL_MOST = 1.4, LEAD = 0.05, LEAD_MOST = 0.15;
 // Tipping nose up or down, the head leads and the rest follows: each place along the trunk takes up
 // the pitch's change a moment later the further back it is (PITCH_LAG s at the peduncle, less the
 // faster the fish swims, the water straightening it), so the spine bends in a gentle curve, seen from
@@ -89,7 +89,8 @@ export class BodyMotion {
     // A maneuver is a sustained C-bend, not a wider propulsion oscillation.
     // Positive yaw leaves the rear trunk on the previous heading behind the head.
     // Soft saturation avoids a kink as the turn speeds up or changes direction.
-    const curl = clamp(CURL * this.steer, -CURL_MOST, CURL_MOST);
+    // (A strong stroke round, going back the way it came from all but a standstill, curls it the deeper.)
+    const curl = clamp(CURL * this.steer * (1 + 0.6 * smooth(1.15, 1.9, Math.abs(this.steer))), -CURL_MOST, CURL_MOST);
     this.turnBend = this.turnAngles ? clamp(this.turnAngles.at(-1) + curl, -2.95, 2.95) / 2.95 : Math.tanh(turn * 0.8);
     const depth = (0.8 + effort * 0.2) * breathDepth;
     // (Breathing, the lips only part; the gill covers pump plainly, lifting off the flank to show

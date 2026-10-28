@@ -1061,7 +1061,8 @@ export class BettaSwim {
         const size = Math.min(1, Math.abs(this.turnStroke) / YAW_PEAK), first = Math.abs(this.steerRate) < 0.15 && !crowded;
         this.cue(0.4 + 0.6 * size, first && size > TURN_KICK ? TURN_SWEEP * size : 0, this.turnStroke, 1, STROKE_LEAD);
       }
-      if (stalled && (Math.abs(wantedRate) > 0.5 || Math.abs(this.turnStroke) > 0.05)) { wantedRate = this.turnStroke * smooth(0, STROKE_LEAD, this.leadClock); angularAcceleration = YAW_SNAP; }
+      // (A strong one snaps round the quicker.)
+      if (stalled && (Math.abs(wantedRate) > 0.5 || Math.abs(this.turnStroke) > 0.05)) { wantedRate = this.turnStroke * smooth(0, STROKE_LEAD, this.leadClock); angularAcceleration = YAW_SNAP * (1 + 1.5 * smooth(1.5, 2.5, Math.abs(this.turnStroke))); }
       else if (this.mode === 'rest' && Math.abs(this.speed) < 0.04 && !escaping) wantedRate *= smooth(0, STROKE_LEAD, this.leadClock);
     }
     if (holding || startling) this.turnSide = 0;
