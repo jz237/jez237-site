@@ -36,7 +36,7 @@ test('lizard mesh is finite, indexed in range and fully skinned', () => {
   json.bones.forEach((b, i) => assert.ok(used.has(i), `bone ${b.name} has influence`));
 });
 
-test('lizard proportions are plausible for a 30 cm agamid', () => {
+test('lizard sculpt retains its proportions before the adult scene scale is applied', () => {
   const {json, buf} = load('lizard', 'lizard');
   const pos = new Float32Array(buf, json.offsets.position, json.vertexCount * 3);
   let minX = Infinity, maxX = -Infinity, minY = Infinity, maxZ = 0;
@@ -45,7 +45,7 @@ test('lizard proportions are plausible for a 30 cm agamid', () => {
     minY = Math.min(minY, pos[i + 1]); maxZ = Math.max(maxZ, Math.abs(pos[i + 2]));
   }
   const length = maxX - minX;
-  assert.ok(length > 27 && length < 31, `length ${length.toFixed(1)} cm`);
+  assert.ok(length > 27 && length < 31, `length ${length.toFixed(1)} sculpt units`);
   assert.ok(minY > -0.05 && minY < 0.12, 'feet reach the ground plane in the bind pose');
   assert.ok(maxZ > 5 && maxZ < 7.5, 'sprawled limb span');
   // limbs: four with five digits each, bones in range

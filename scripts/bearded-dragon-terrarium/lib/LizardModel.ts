@@ -34,7 +34,7 @@ export const MORPHS: Record<string, [number, number, number][]> = {
   hypo: [[0.5, 0.38, 0.22], [0.7, 0.58, 0.38], [0.28, 0.19, 0.1], [0.42, 0.3, 0.17], [0.72, 0.64, 0.5], [0.66, 0.36, 0.14], [0.76, 0.68, 0.54], [0.5, 0.45, 0.38]],
 };
 
-/** Lizard length is 30.5 cm in the sculpt; scene units are metres. */
+/** 30.5 sculpt units × .016 m gives an approximately 49 cm adult, including tail. */
 export const LIZARD_SCALE = 0.016;
 
 function irisTexture(): THREE.DataTexture {
@@ -450,6 +450,8 @@ export class LizardModel {
   tongueOut = 0;
   /** 0..1 a full prey-catching flick: the tongue shoots out well past the snout. */
   tongueReach = 0;
+  /** Prey location for bounded muscular prehension, in scene metres. */
+  tongueTarget: THREE.Vector3 | null = null;
   /** World position of the tongue's tip, updated with the attachments. */
   readonly tongueTip = new THREE.Vector3();
   private tongueRest = new THREE.Matrix4();
@@ -576,8 +578,20 @@ export class LizardModel {
     const jawM = new THREE.Matrix4().copy(this.bones[jaw].matrix).multiply(new THREE.Matrix4().copy(this.bind[jaw]).invert());
     const ext = this.tongueOut;
     const reach = this.tongueReach;
-    const t = new THREE.Matrix4().makeTranslation(ext * 0.95 + reach * 1.9, ext * -0.05 - reach * 0.1, 0).multiply(this.tongueRest).multiply(new THREE.Matrix4().makeScale(1 + ext * 0.3 + reach * 1.0, 1 - reach * 0.15, 1 - ext * 0.15));
-    this.tongue.matrix.copy(jawM).multiply(t);
+    const base=new THREE.Vector3().setFromMatrixPosition(this.tongueRest).applyMatrix4(jawM);
+    const direction=new THREE.Vector3(1,0,0).transformDirection(jawM),up=new THREE.Vector3(0,1,0).transformDirection(jawM);
+    if(this.tongueTarget&&reach>0){
+      const target=this.tongueTarget.clone().sub(base).normalize();
+      const angle=direction.angleTo(target),rotation=new THREE.Quaternion().setFromUnitVectors(direction,target);
+      // The fleshy tongue can lift off the jaw, but cannot swivel behind the
+      // head or reach around an obstruction. Its excursion stays finite.
+      direction.applyQuaternion(new THREE.Quaternion().slerp(rotation,Math.min(1,.7/Math.max(angle,.001))));
+    }
+    const right=new THREE.Vector3().crossVectors(direction,up).normalize();
+    up.crossVectors(right,direction).normalize();
+    const position=base.addScaledVector(direction,(ext*.95+reach*2.5)*LIZARD_SCALE);
+    this.tongue.matrix.makeBasis(direction,up,right).setPosition(position)
+      .multiply(new THREE.Matrix4().makeScale(LIZARD_SCALE*(1+ext*.3+reach),LIZARD_SCALE*(1-reach*.15),LIZARD_SCALE*(1-ext*.15)));
     this.tongueTip.set(0.46, 0, 0).applyMatrix4(this.tongue.matrix);
     this.tongue.visible = true;
   }

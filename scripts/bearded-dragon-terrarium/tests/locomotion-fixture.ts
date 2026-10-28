@@ -38,15 +38,18 @@ export function habitat() {
 }
 
 export class Audit {
-  maxSlide=0; maxAnchorError=0; maxJump=0; maxPenetration=0; maxFloat=0; maxLimbError=0;
-  steps=0; frames=0; worst:any={}; worstLimb:any={}; worstJump:any={};
+  maxSlide=0; maxAnchorError=0; maxJump=0; maxHeadJump=0; maxPenetration=0; maxFloat=0; maxLimbError=0;
+  steps=0; frames=0; worst:any={}; worstLimb:any={}; worstJump:any={}; worstHeadJump:any={};
   private previous = new Map<any,THREE.Vector3>();
   private body:THREE.Vector3|null=null;
+  private head:THREE.Vector3|null=null;
   private previousPose:any=null;
   sample(rig:LizardRig, surface?:Surface) {
     const r=rig as any, model=rig.model;
     const pos=(bone:number)=>new THREE.Vector3().setFromMatrixPosition(model.bones[bone].matrix);
     const current=rig.spinePoints()[3];
+    if(this.head&&this.head.distanceTo(rig.snout)>this.maxHeadJump){this.maxHeadJump=this.head.distanceTo(rig.snout);this.worstHeadJump={frame:this.frames,from:this.head.toArray(),to:rig.snout.toArray(),head:[r.headYaw,r.headPitchCur,r.headLift],pose:r.accepted};}
+    this.head=rig.snout.clone();
     if(this.body&&this.body.distanceTo(current)>this.maxJump){this.maxJump=this.body.distanceTo(current);this.worstJump={frame:this.frames,from:this.body.toArray(),to:current.toArray(),previous:this.previousPose,pose:{...r.accepted}};}
     this.previousPose={...r.accepted};
     this.body=current.clone();this.frames++;
@@ -68,17 +71,18 @@ export class Audit {
       }
     }
   }
-  report(){return {frames:this.frames,steps:this.steps,slide:this.maxSlide,anchor:this.maxAnchorError,jump:this.maxJump,worstJump:this.worstJump,penetration:this.maxPenetration,float:this.maxFloat,limbError:this.maxLimbError,worst:this.worst,worstLimb:this.worstLimb};}
+  report(){return {frames:this.frames,steps:this.steps,slide:this.maxSlide,anchor:this.maxAnchorError,jump:this.maxJump,headJump:this.maxHeadJump,worstHeadJump:this.worstHeadJump,worstJump:this.worstJump,penetration:this.maxPenetration,float:this.maxFloat,limbError:this.maxLimbError,worst:this.worst,worstLimb:this.worstLimb};}
 }
 
 /** Samples the rendered, skinned feet and limbs rather than only their IK targets. */
 export class SkinAudit {
   maxPenetration=0; worst:any={}; samples=0;
   private vertices:{id:number;bone:number}[]=[];
-  constructor(lizard:LizardModel){
+  constructor(lizard:LizardModel,includeHead=false){
     const g=lizard.mesh.geometry,p=g.attributes.position,ids=g.attributes.skinIndex,w=g.attributes.skinWeight;
     const groups=new Map<number,number[]>();
     for(const l of lizard.data.limbs)for(const b of [l.bones.upper,l.bones.lower,l.bones.hand,...l.bones.digits])groups.set(b,[]);
+    if(includeHead)for(const name of ['head','jaw','neck','chest','spine2','spine1','pelvis'])groups.set(lizard.bone(name),[]);
     for(let i=0;i<p.count;i++)for(let j=0;j<4;j++){const b=ids.getComponent(i,j);if(w.getComponent(i,j)>.7 && groups.has(b))groups.get(b)!.push(i);}
     for(const [bone,all] of groups){
       all.sort((a,b)=>p.getY(a)-p.getY(b));
