@@ -119,6 +119,7 @@ import {BONNET_STEAM,bonnetHeat,steamRate} from './bonnet-steam';
 import {TYRE_STEAM,tyreSteamRate} from './tyre-heat';
 import {DUST,dustRate} from './dust-trails';
 import {SoftParticlesPass} from './soft-particles';
+import {SharpenPass} from './sharpen';
 import {COLD_START,coldStartPuffs,crankStarts} from './cold-start';
 import {GravelRoost,ROOST,roostRate,STONE_HIT,stoneHitVolume,type RoostBody} from './gravel-roost';
 import {STRAP,TowStraps} from './tow-straps';
@@ -807,6 +808,9 @@ composer.addPass(lensRainPass);
 composer.addPass(lampBloom);
 composer.addPass(new OutputPass());
 composer.addPass(new SMAAPass());
+// Fine detail back after the reduced render scale and the edge smoothing (the last step).
+const sharpen = new SharpenPass();
+composer.addPass(sharpen);
 const orbit = new OrbitControls(camera, canvas);
 orbit.enabled = false;
 orbit.minDistance = 2.5;
@@ -1818,6 +1822,7 @@ function applyQuality() {
   puddleSplashes?.setQuality(quality);
   quarry?.referenceArena.setQuality(quality);
   ao.enabled = quality !== 'medium';
+  sharpen.setTier(quality);
   reflections.enabled = quality !== 'medium';
   reflections.interval = quality === 'ultra' ? 3 : 6;
   // Medium skips the sun's shadow pass and fades its shadows out, but shadows stay compiled into every material: switching them
