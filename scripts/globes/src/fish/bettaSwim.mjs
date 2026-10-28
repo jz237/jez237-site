@@ -692,8 +692,9 @@ export class BettaSwim {
       // furnishings, it gives up.)
       // (On a furnishing, near enough: its body, held off the wood, may keep it a little short.)
       const down = perch ? perch.near && Math.hypot(x - perch.at[0], y - perch.at[1], z - perch.at[2]) < 0.035 : y - this.restY < 0.004;
-      // (Given up waiting only once all but down: sinking slowly from high, listless, it goes on down.)
-      if (!this.restSettled && (down || (!perch && this.behaviorClock > 20 && y - this.restY < 0.012))) { this.restSettled = true; this.holdClock = 0; }
+      // (Given up waiting only once all but down, or no longer getting lower: sinking slowly from high,
+      // listless, it goes on down.)
+      if (!this.restSettled && (down || (!perch && this.behaviorClock > 20 && (y - this.restY < 0.012 || Math.abs(this.velocity[1]) < 0.002)))) { this.restSettled = true; this.holdClock = 0; }
       if (!this.restSettled && perch && this.behaviorClock > 20) { this.endBehavior(env); return; }
       if (this.restSettled) this.holdClock += dt;
       if ((this.restSettled && this.holdClock >= this.restHold) || this.behaviorClock > 40 * (1 + (REST_LONGER - 1) * this.lethargy)) this.endBehavior(env);
