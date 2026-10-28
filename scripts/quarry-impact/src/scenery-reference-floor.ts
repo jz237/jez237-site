@@ -9,7 +9,7 @@ export async function prepareReferenceFloor(){mask.value=await loadArenaFloorMas
  * irregular patches and paired rubber arcs. World metres prevent scale changes
  * between the original and expanded arenas. Eight samplers before lighting. */
 export function referenceArenaFloor(layout={x:0,z:0,radius:45}){
- const material=new T.MeshPhysicalMaterial({name:'Reference quarry worn floor',map:texture('circuit_asphalt_diff',1,true),normalMap:texture('circuit_asphalt_nor_gl'),roughnessMap:texture('circuit_asphalt_rough'),roughness:1,metalness:0,clearcoat:.16,clearcoatRoughness:.2});
+ const material=new T.MeshPhysicalMaterial({name:'Reference quarry worn floor',map:texture('circuit_asphalt_diff',1,true),normalMap:texture('circuit_asphalt_nor_gl'),roughnessMap:texture('circuit_asphalt_rough'),roughness:1,metalness:0,clearcoat:.03,clearcoatRoughness:.2});
  material.onBeforeCompile=s=>{
   Object.assign(s.uniforms,{floorMask:mask,floorReady:ready,floorGravel:{value:texture('gravel_diff',1,true)},floorGravelN:{value:texture('gravel_nor_gl')},floorGravelR:{value:texture('gravel_rough')},floorChips:{value:texture('scree_diff',1,true)}});
   s.vertexShader='varying vec3 vFloorWorld;\n'+s.vertexShader;

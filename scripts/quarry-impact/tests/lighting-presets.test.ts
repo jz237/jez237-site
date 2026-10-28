@@ -1,12 +1,12 @@
 import test from 'node:test';import assert from 'node:assert/strict';import * as T from 'three';
 import {LIGHTING_PRESETS,LIGHTING_CHOICES,readLighting,resolveLighting,applyLighting} from '../src/lighting-presets';
 import {QUARRY_DAYLIGHT} from '../src/quarry-art-direction';
-const target=()=>{const scene=new T.Scene();scene.fog=new T.FogExp2(0xb3bdc9,QUARRY_DAYLIGHT.fog);const sun=new T.DirectionalLight(QUARRY_DAYLIGHT.sunColor,QUARRY_DAYLIGHT.sun),hemisphere=new T.HemisphereLight(QUARRY_DAYLIGHT.skyColor,QUARRY_DAYLIGHT.groundColor,QUARRY_DAYLIGHT.ambient);scene.environmentIntensity=.54;return{scene,sun,hemisphere,renderer:{toneMappingExposure:QUARRY_DAYLIGHT.exposure}};};
+const target=()=>{const scene=new T.Scene();scene.fog=new T.FogExp2(0xb3bdc9,QUARRY_DAYLIGHT.fog);const sun=new T.DirectionalLight(QUARRY_DAYLIGHT.sunColor,QUARRY_DAYLIGHT.sun),hemisphere=new T.HemisphereLight(QUARRY_DAYLIGHT.skyColor,QUARRY_DAYLIGHT.groundColor,QUARRY_DAYLIGHT.ambient);scene.environmentIntensity=QUARRY_DAYLIGHT.sky;return{scene,sun,hemisphere,renderer:{toneMappingExposure:QUARRY_DAYLIGHT.exposure}};};
 test('midday reproduces the original daylight exactly',()=>{
  const before=target(),after=target();applyLighting(after,'midday');
  assert.equal(after.sun.intensity,before.sun.intensity);assert.equal(after.sun.color.getHex(),before.sun.color.getHex());assert.equal(after.sun.shadow.intensity,1);
  assert.equal(after.hemisphere.intensity,before.hemisphere.intensity);assert.equal(after.hemisphere.color.getHex(),before.hemisphere.color.getHex());assert.equal(after.hemisphere.groundColor.getHex(),before.hemisphere.groundColor.getHex());
- assert.equal(after.scene.environmentIntensity,.54);assert.equal(after.scene.backgroundIntensity,1);assert.equal(after.renderer.toneMappingExposure,before.renderer.toneMappingExposure);
+ assert.equal(after.scene.environmentIntensity,QUARRY_DAYLIGHT.sky);assert.equal(after.scene.backgroundIntensity,1);assert.equal(after.renderer.toneMappingExposure,before.renderer.toneMappingExposure);
  assert.equal((after.scene.fog as T.FogExp2).density,QUARRY_DAYLIGHT.fog);assert.equal((after.scene.fog as T.FogExp2).color.getHex(),0xb3bdc9);
 });
 test('afternoon and overcast regrade light, haze and sky; overcast swaps only the visible sky',()=>{
