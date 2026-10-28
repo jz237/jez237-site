@@ -6,7 +6,7 @@
 // (bettaWorker.mjs, bettaLink.mjs): built alike and given the same inputs, the two move alike, bit
 // for bit. It uses no DOM and no GPU (built without its textures, it runs in a worker).
 import * as THREE from 'three';
-import { createBetta } from '../../../betta-atelier/src/fish.js';
+import { createBetta, COVER_LIFT, COVER_FLARE, COVER_DRAW } from '../../../betta-atelier/src/fish.js';
 import { BettaSwim, BETTA_SCALE as SCALE } from './bettaSwim.mjs';
 import { BETTA_PROBES, readBettaWater } from './bettaWater.mjs';
 
@@ -328,7 +328,7 @@ export class BettaSpecimen {
   updateVertices() {
     this.rig.updateMatrixWorld(true);
     const body = this.fish.userData.bodyMotion, out = this.vertices, s = this.carry;
-    const lift = body.gill * 0.046 + this.fish.userData.display.flare * 0.085;
+    const flare = this.fish.userData.display.flare, lift = body.gill * COVER_LIFT + flare * COVER_FLARE, draw = (body.gill + flare) * COVER_DRAW;
     for (const { mesh, offset, rest, deform, cover, fin, cells, place, nodes } of this.parts) {
       const e = mesh.matrixWorld.elements, count = rest.length / 3;
       // (A fin's vertices that sit on its solver's nodes: the body carried those this frame already,
@@ -338,7 +338,7 @@ export class BettaSpecimen {
       for (let i = 0; i < count; i++) {
         let x = rest[i * 3], y = rest[i * 3 + 1], z = rest[i * 3 + 2];
         if (deform) {
-          if (cover) z += cover[i] * lift;
+          if (cover) { z += cover[i] * lift; x -= Math.abs(cover[i]) * draw; }
           const n = carried ? nodes[i] : -1;
           if (n >= 0) {
             x = carried[n * 3]; y = carried[n * 3 + 1]; z = carried[n * 3 + 2];

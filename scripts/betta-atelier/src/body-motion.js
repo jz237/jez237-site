@@ -1,7 +1,7 @@
 // Arc-length spine shared by the skin and all fin insertions. Muscle waves travel down the trunk
 // instead of shearing the tail; the head yaws a little against them (its recoil), about the
 // body's middle, and leads it round into a turn.
-import { tailAmplitude } from './swim-gait.js';
+import { tailAmplitude, tailSwing, kickSweep, KICK_SIZE } from './swim-gait.js';
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const smooth = (a, b, x) => { const u = clamp((x - a) / (b - a), 0, 1); return u * u * (3 - 2 * u); };
 export const SPINE_START = -1.22, SPINE_END = 2.65, SPINE_COUNT = 161;
@@ -59,8 +59,9 @@ export class BodyMotion {
   }
   // gulp / gulpGill: host-driven jaw opening and opercular pulse (a surface air
   // gulp); they take over from the breathing rhythm only while they are larger.
-  // breathDepth: how deep this breath is (the gait varies it from breath to breath).
-  update(phase, effort, turn, breathPhase, gulp = 0, gulpGill = 0, breathDepth = 1) {
+  // breathDepth: how deep this breath is (the gait varies it from breath to breath). kick, kickAt:
+  // a single sweep of the tail (the gait's: its size and side, signed, and how far through it).
+  update(phase, effort, turn, breathPhase, gulp = 0, gulpGill = 0, breathDepth = 1, kick = 0, kickAt = 1) {
     this.revision++;
     this.effort = effort;
     // A maneuver is a sustained C-bend, not a wider propulsion oscillation.
@@ -75,9 +76,9 @@ export class BodyMotion {
     // Buccal intake precedes the opercular outlet: not two synchronous flaps.
     this.gill = Math.max(gulpGill, Math.max(0, Math.sin(breathPhase - 1.05)) ** 1.3 * depth * 1.35);
     const dx = (SPINE_END - SPINE_START) / (SPINE_COUNT - 1);
-    const sweep = tailAmplitude(effort);
+    const sweep = tailSwing(effort);
     // The head yaws back against the tail's swing (in step with the rear third's), and into a turn.
-    this.headYaw = (clamp(LEAD * -this.steer, -LEAD_MOST, LEAD_MOST) - RECOIL * (sweep - tailAmplitude(0)) * Math.sin(phase - WAVE * 0.85)) || 0;
+    this.headYaw = (clamp(LEAD * -this.steer, -LEAD_MOST, LEAD_MOST) - RECOIL * Math.max(0, sweep - tailAmplitude(0)) * Math.sin(phase - WAVE * 0.85)) || 0;
     let x = SPINE_START, z = 0, oldCos = 1, oldSin = 0;
     const d = this.data;
     for (let i = 0; i < SPINE_COUNT; i++) {
@@ -92,8 +93,10 @@ export class BodyMotion {
         const g = u * (this.turnAngles.length - 1), a = Math.floor(g), b = Math.min(a + 1, this.turnAngles.length - 1);
         maneuver = clamp(this.turnAngles[a] + (this.turnAngles[b] - this.turnAngles[a]) * (g - a) + curl * smooth(0.05, 1, u), -2.95, 2.95);
       }
-      const angle = this.headYaw + maneuver + envelope * sweep * (1 - Math.abs(maneuver) / 3.2)
-        * Math.sin(phase - u * WAVE);
+      // (A kick sweeps the rear out to one side and back, on top of the beat.)
+      const free = 1 - Math.abs(maneuver) / 3.2;
+      const angle = this.headYaw + maneuver + envelope * sweep * free * Math.sin(phase - u * WAVE)
+        + (kick ? envelope * KICK_SIZE * kick * kickSweep(kickAt, u) * free : 0);
       const c = Math.cos(angle), s = Math.sin(angle);
       if (i) { x += dx * (oldCos + c) * 0.5; z += dx * (oldSin + s) * 0.5; }
       d[i * 4] = x; d[i * 4 + 1] = z; d[i * 4 + 2] = c; d[i * 4 + 3] = s;
@@ -128,6 +131,10 @@ export class BodyMotion {
     const cx = out[0], cz = out[1], c = out[2], s = out[3];
     const cheek = Math.exp(-(((x + 1.03) / 0.17) ** 2) - ((y + 0.01) / 0.29) ** 2);
     z += Math.sign(z) * cheek * (0.004 + 0.018 * this.gill);
+    // (The throat, under the head and short of the pectorals' base, drops as the mouth draws the water
+    // in, a moment ahead of the covers: plain from the side, where the covers' lift is edge-on.)
+    const throat = Math.exp(-(((x + 1.3) / 0.16) ** 2)) * (1 - smooth(-1.15, -1, x)) * (1 - smooth(-0.2, 0.05, y));
+    y -= throat * 0.04 * this.mouth;
     const lip = 1 - smooth(-1.68, -1.48, x), jaw = 1 - smooth(-1.67, -1.28, x);
     y = 0.0832 + (y - 0.0832) * (1 - lip * (0.78 - 0.78 * this.mouth));
     y -= jaw * (1 - smooth(0.045, 0.105, y)) * (0.003 + 0.047 * this.mouth);
@@ -151,6 +158,7 @@ vec3 swim(vec3 p) {
  vec4 f=spineFrame(p.x);
  float cheek=exp(-pow((p.x+1.03)/.17,2.)-pow((p.y+.01)/.29,2.));
  p.z+=sign(p.z)*cheek*(.004+.018*uGill);
+ p.y-=exp(-pow((p.x+1.3)/.16,2.))*(1.-smoothstep(-1.15,-1.,p.x))*(1.-smoothstep(-.2,.05,p.y))*.04*uMouth;
  float lip=1.-smoothstep(-1.68,-1.48,p.x),jaw=1.-smoothstep(-1.67,-1.28,p.x);
  p.y=.0832+(p.y-.0832)*(1.-lip*(.78-.78*uMouth));
  p.y-=jaw*(1.-smoothstep(.045,.105,p.y))*(.003+.047*uMouth);

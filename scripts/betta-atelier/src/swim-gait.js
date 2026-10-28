@@ -12,12 +12,29 @@ export const BODY_LENGTH = 2.736;
  *  model uses the same curve. An easy cruise sweeps the caudal some 15 degrees either way, plainly
  *  seen side-on as the fan swings; at hover it is all but still. */
 export const tailAmplitude = effort => 0.0076 + effort * 0.57;
+/** The swing the trunk actually makes (rad, at the peduncle): the tail's beat, which at hover dies
+ *  away altogether below a small effort (the fish holds station on its pectorals, its tail still but
+ *  for single sweeps, the kicks; an even idle beat would set the caudal swinging like a metronome). */
+export const tailSwing = effort => tailAmplitude(effort) * smooth(0.04, 0.14, effort);
 /** The tail's beat (Hz) at a given effort and pace (body lengths/s): it quickens mostly with
  *  speed, as Bainbridge found (about 1.7 Hz at 0.3 BL/s, 2.5 at 0.6, 3.4 at 1), and a little with
  *  the effort of speeding up. */
 export const tailHz = (effort, pace) => 0.8 + 1.2 * effort + 1.4 * Math.min(pace, 2.5);
-// (The stroke of an easy cruise: working that hard or harder, the tail gains speed as fast as it can.)
+// (The stroke of an easy cruise: the measure of how hard the propulsors work. A dart's beats, quick and
+// wide, are up to STROKE_MOST times as hard.)
 const CRUISE_STROKE = tailHz(0.45, 0.4) * tailAmplitude(0.45);
+export const STROKE_MOST = 3;
+// A single sweep of the tail (a kick: a half-beat out to one side and back, KICK_TIME s, KICK_SIZE rad
+// at the peduncle at the most) is the cause of a move from all but a standstill: setting off, a nudge
+// forward, levelling out, coming round. It travels down the trunk (KICK_LAG of its length behind at
+// the peduncle), and while it lasts it works as hard as KICK_STROKE.
+export const KICK_TIME = 0.34, KICK_SIZE = 0.3, KICK_LAG = 0.45, KICK_STROKE = 0.9;
+/** A kick's swing at a place along the trunk (u: 0 neck, 1 peduncle), `at` (0..1) through it, as a
+ *  share of its size: out and back once, later towards the tail. */
+export function kickSweep(at, u) {
+  const here = at * (1 + KICK_LAG) - KICK_LAG * u;
+  return here > 0 && here < 1 ? Math.sin(Math.PI * here) : 0;
+}
 /** The next of a small seeded stream (mulberry32), 0..1, kept in holder.seed: the same from the same
  *  seed, so a twin of the fish (bettaLink's worker) moves alike; a plain number, so it clones. */
 export function draw(holder) {
@@ -49,21 +66,45 @@ export class SwimGait {
     this.billowPhase = 0;
     this.wash = 1;
     this.pace = 0;
+    // The host's strokes (a host with its own locomotion: the bowl's BettaSwim), each taken once, by
+    // its count: a beat of the pectorals (push, 0..1, easing off over half a second or so: they beat
+    // the harder), a kick of the tail (kickAt: how far through it, 0..1, 1 done; kick: its size and
+    // side, signed); and how much it is darting (dart: fins folded, the tail beating hard at once) or
+    // braking (brake: the pectorals fanned and beating), each 0..1.
+    this.pushes = this.kicks = 0;
+    this.push = this.kick = this.dart = this.brake = 0;
+    this.kickAt = 1;
   }
   // `pose.scull`: hold station with the pectorals, beating in long runs while the body is still.
   // `pose.tuck`: the pectorals drawn in toward the flanks, as in a startle dart.
   // `pose.back`: backing up on the pectorals (0..1): they beat quicker, and without their rests.
+  // `pose.pushes` / `pose.pushSize`, `pose.kicks` / `pose.kickSize` (signed: the side the tail sweeps
+  // to): the host's strokes, counted; `pose.dart`, `pose.brake` (0..1): darting off, braking hard.
   // relativeSpeed: the water going past the fish (Atelier units/s).
   advance(dt, drive, relativeSpeed, turn = 0, pose = {}) {
     if (dt <= 0) return;
-    this.scull += ((pose.scull ?? 0) - this.scull) * (1 - Math.exp(-5 * dt));
+    if ((pose.pushes ?? 0) !== this.pushes) {
+      // (A beat of the pectorals now: a run starts, if they were resting.)
+      this.pushes = pose.pushes;
+      this.push = Math.max(this.push, pose.pushSize ?? 1);
+      this.pectoralPause = 0;
+      this.pectoralRun = Math.max(this.pectoralRun, 2);
+    }
+    if ((pose.kicks ?? 0) !== this.kicks) { this.kicks = pose.kicks; this.kick = pose.kickSize ?? 1; this.kickAt = 0; }
+    this.kickAt = Math.min(1, this.kickAt + dt / KICK_TIME);
+    this.push *= Math.exp(-2.2 * dt);
+    this.dart += ((pose.dart ?? 0) - this.dart) * (1 - Math.exp(-((pose.dart ?? 0) > this.dart ? 25 : 5) * dt));
+    this.brake += ((pose.brake ?? 0) - this.brake) * (1 - Math.exp(-((pose.brake ?? 0) > this.brake ? 20 : 4) * dt));
+    // (Braking, the pectorals fan as they do to hold station; darting, they fold in.)
+    this.scull += (Math.max(pose.scull ?? 0, this.brake) - this.scull) * (1 - Math.exp(-5 * dt));
     this.back += ((pose.back ?? 0) - this.back) * (1 - Math.exp(-6 * dt));
     if (this.back > 0.3) this.pectoralPause = 0;
     // A critically damped spring, so the fins accelerate into the fold and settle out of it
     // instead of snapping at the first frame of a mode change.
     {
-      const w = pose.tuck ? 11 : 4.5, e = this.tuck - (pose.tuck ?? 0), c = this.tuckRate + w * e, k = Math.exp(-w * dt);
-      this.tuck = clamp((pose.tuck ?? 0) + (e + c * dt) * k, 0, 1);
+      const want = Math.max(pose.tuck ?? 0, 0.8 * this.dart);
+      const w = want ? 11 : 4.5, e = this.tuck - want, c = this.tuckRate + w * e, k = Math.exp(-w * dt);
+      this.tuck = clamp(want + (e + c * dt) * k, 0, 1);
       this.tuckRate = (this.tuckRate - w * c * dt) * k;
     }
     // The idle drive is below the propulsion threshold. Holding against flow still costs effort,
@@ -71,8 +112,9 @@ export class SwimGait {
     this.pace = Math.max(0, relativeSpeed) / BODY_LENGTH;
     const propulsion = smooth(0.065, 0.40, drive);
     const load = clamp(this.pace / 1.2, 0, 1);
-    const target = clamp(propulsion * 0.8 + load * 0.35 + Math.abs(turn) * 0.08, 0, 1);
-    this.effort += (target - this.effort) * (1 - Math.exp(-3 * dt));
+    // (Darting, the tail works hard at once: the first beat is a strong one.)
+    const target = Math.max(clamp(propulsion * 0.8 + load * 0.35 + Math.abs(turn) * 0.08, 0, 1), 0.9 * this.dart);
+    this.effort += (target - this.effort) * (1 - Math.exp(-(this.dart > 0.1 ? 14 : 3) * dt));
     this.bodyHz = tailHz(this.effort, this.pace);
     // The pectoral fans are slow to follow the tail: a change of swim mode shifts their power and
     // rate over a second or so, so the fins read as one continuous stroke rather than a new gait.
@@ -82,9 +124,11 @@ export class SwimGait {
     const beating = this.pectoralPause <= 0;
     // (Paused, the fans hold half spread and drift through the stroke slowly; beating again, the
     // power comes back within a beat.)
-    this.pectoralPower += ((beating ? 1 : 0.14) - this.pectoralPower) * (1 - Math.exp(-(beating ? 7 : 4) * dt));
+    // (A push, or braking, they beat the harder and a little quicker.)
+    const push = Math.max(this.push, this.brake);
+    this.pectoralPower += ((beating ? 1 + 0.45 * push : 0.14) - this.pectoralPower) * (1 - Math.exp(-(beating ? 7 : 4) * dt));
     const before = this.pectoralPhase;
-    this.pectoralPhase += dt * TAU * (beating ? this.pectoralHz * (1 + 0.5 * this.back) : 0.7);
+    this.pectoralPhase += dt * TAU * (beating ? this.pectoralHz * (1 + 0.5 * this.back + 0.3 * push) : 0.7);
     if (Math.floor(this.pectoralPhase / TAU) !== Math.floor(before / TAU)) this.nextPectoralBeat(beating);
     this.phase += dt * TAU * this.bodyHz;
     // The membranes billow at about 1-2 Hz, quicker as the pectorals wash over them and as the fish
@@ -117,6 +161,8 @@ export class SwimGait {
    * speed faster than this allows.
    */
   get stroke() {
-    return clamp(Math.max(this.bodyHz * tailAmplitude(this.effort) / CRUISE_STROKE, 0.15 * this.scull), 0, 1);
+    // (Harder than an easy cruise only while darting.)
+    const most = 1 + (STROKE_MOST - 1) * this.dart;
+    return clamp(Math.max(this.bodyHz * tailSwing(this.effort) / CRUISE_STROKE, 0.15 * this.scull, KICK_STROKE * Math.abs(this.kick) * kickSweep(this.kickAt, 1)), 0, most);
   }
 }

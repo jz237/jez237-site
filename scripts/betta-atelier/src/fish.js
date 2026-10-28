@@ -9,6 +9,10 @@ const PI = Math.PI,
   lerp = T.MathUtils.lerp,
   clamp = T.MathUtils.clamp;
 export const SCALE = 0.0032;
+// The gill covers swing out from their hinge as it breathes (COVER_LIFT at the rim, a breath's full
+// depth; COVER_FLARE more in display), their rims drawn forward as they swing (COVER_DRAW), so the
+// dark gill under the rim shows plainly, side on too.
+export const COVER_LIFT = 0.062, COVER_FLARE = 0.085, COVER_DRAW = 0.045;
 // Pectoral pose by locomotion mode: fan to hold station when still, fold in for the startle dart.
 export const POSES = { hover: { scull: 1 }, surface: { scull: 1 }, gulp: { scull: 1 }, rise: { scull: 0.7 }, dive: { scull: 0.5 }, glide: { scull: 0.3 }, startle: { tuck: 1 }, mirror: { scull: 1 }, lap: { scull: 0.15 }, rest: { scull: 0.25 } };
 const world = ([x, y]) => [(x - 680) * SCALE, (420 - y) * SCALE];
@@ -49,7 +53,7 @@ vec3 wetFin(vec2 uv) {
 ` : "") + s.vertexShader;
     s.vertexShader = s.vertexShader.replace(
       "#include <project_vertex>",
-      `vec3 anatomical=transformed;${operculum ? "anatomical.z+=coverLift*(uGill*.046+uFlare*.085);" : ""}
+      `vec3 anatomical=transformed;${operculum ? `anatomical.z+=coverLift*(uGill*${COVER_LIFT}+uFlare*${COVER_FLARE});anatomical.x-=abs(coverLift)*(uGill+uFlare)*${COVER_DRAW};` : ""}
        vec4 mvPosition=vec4(swim(anatomical)${dynamics ? '+wetFin(finUV)' : ''},1.);
        mvPosition=modelViewMatrix*mvPosition;gl_Position=projectionMatrix*mvPosition;`,
     );
@@ -195,9 +199,9 @@ function addBreathingAnatomy(fish, skin) {
         lift.push(side * v * v * shape ** 0.7);
         if (i < rows && j < cols) { const n = i * (cols + 1) + j; ci.push(n, n + 1, n + cols + 1, n + 1, n + cols + 2, n + cols + 1); }
       }
-      // The narrow outlet is concealed beneath the closed cover, revealed on exhalation.
+      // The dark gill is concealed beneath the closed cover's rim, revealed on exhalation.
       for (let j = 0; j < 2; j++) {
-        const px = edge - (j ? 0 : 5 * shape), [x, y] = world([px, py]);
+        const px = edge - (j ? 0 : 20 * shape), [x, y] = world([px, py]);
         gp.push(x, y, surface(px, 0.001)); gu.push(u, j);
       }
       if (i < rows) { const n = i * 2; gi.push(n, n + 1, n + 2, n + 1, n + 3, n + 2); }
@@ -839,13 +843,17 @@ export function createBetta({ compact = false, textures = true } = {}) {
       accelLocal.copy(acceleration).applyQuaternion(toFish);
       const down = fish.userData.down;
       downLocal.set(down ? down[0] : 0, down ? down[1] : -1, down ? down[2] : 0).applyQuaternion(toFish);
-      // (Backing up on its pectorals, a host's fish works them the harder.)
+      // (Backing up on its pectorals, a host's fish works them the harder; the host's strokes, darts and
+      // brakes are its gait's too.)
       const pose = POSES[mode] ?? {};
-      gait.advance(dt, drive, relativeFlow, turn, locomotion?.backing ? { ...pose, back: locomotion.backing } : pose);
-      const { phase, effort, breathPhase, breathDepth, pectoralPhase, pectoralPower, scull, tuck, pectoralEffort, pectoralScull, billowPhase, wash } = gait;
+      gait.advance(dt, drive, relativeFlow, turn, locomotion ? {
+        ...pose, back: locomotion.backing ?? 0, pushes: locomotion.pushes ?? 0, pushSize: locomotion.pushSize ?? 0, kicks: locomotion.kicks ?? 0,
+        kickSize: locomotion.kickSize ?? 0, dart: locomotion.dart ?? 0, brake: locomotion.brake ?? 0,
+      } : pose);
+      const { phase, effort, breathPhase, breathDepth, pectoralPhase, pectoralPower, scull, tuck, pectoralEffort, pectoralScull, billowPhase, wash, push, dart, brake } = gait;
       // The standalone turn also leads with the neck; the rear follows the head's tangent.
       bodyMotion.advanceTurn(dt, locomotion ? locomotion.steerRate ?? angularVelocity : turn, locomotion ? locomotion.speed ?? 0 : Math.hypot(...velocity));
-      bodyMotion.update(phase, effort, turn, breathPhase, locomotion?.gulp ?? gulpOpen, locomotion?.gulpGill ?? gulpGill, breathDepth);
+      bodyMotion.update(phase, effort, turn, breathPhase, locomotion?.gulp ?? gulpOpen, locomotion?.gulpGill ?? gulpGill, breathDepth, gait.kick, gait.kickAt);
       // The eyes ride in their sockets on the head as it yaws against the tail and into turns.
       for (const { pivot, motion, side, socket } of eyes) {
         const f = bodyMotion.frame(socket[0], contour);
@@ -866,6 +874,8 @@ export function createBetta({ compact = false, textures = true } = {}) {
       uniforms.uGill.value = bodyMotion.gill;
       const state = {
         body: bodyMotion, time: t, mode, phase, pectoralPhase, pectoralPower, scull, tuck, pectoralEffort, pectoralScull, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value, clamp: display.clamp,
+        // (The body's strokes, for the fins: a pectoral push, 0..1; darting, fins to fold; braking, fins to flare.)
+        push, dart, brake,
         billowPhase, wash, speed: relativeFlow / BODY_LENGTH, accel: accelLocal.toArray(), down: downLocal.toArray(),
         heading, angularVelocity, velocity, origin: fish.position.toArray(),
         localHydrodynamics, solids: finSolids.count ? finSolids : null,
