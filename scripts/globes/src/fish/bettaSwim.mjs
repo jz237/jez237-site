@@ -82,7 +82,7 @@ const PERCH_BACK = 0.16, PERCH_ABOVE = 0.05;
 // (Down on it within 0.035 of its place; or, there PERCH_SETTLE s already, within PERCH_CLOSE.)
 const PERCH_SETTLE = 3, PERCH_CLOSE = 0.06;
 // (Going down to lie, coming no nearer its place for REST_STUCK s, it lies down short of it or gives it up.)
-const REST_STUCK = 4;
+const REST_STUCK = 5;
 const MIRROR_REACH = 0.025, LAP_RADIUS = 0.78, LAP_LEAD = 0.55;
 // Listless (lethargy, 0..1: a fish unwell in poor water), it goes down to the sand far more often
 // and stays up to REST_LONGER times as long, lying a little over on its side; it swims slower, on
@@ -707,7 +707,8 @@ export class BettaSwim {
       // (Getting no nearer its place for REST_STUCK s, held off by something in its way, or circling it: on
       // the sand, all but down, it lies where it is; otherwise it gives that place up, for the sand under
       // it if it can lie there, or for another time.)
-      const left = perch ? off : y - this.restY;
+      // (Its place: on the wood, the point behind and above it it comes in from, then the place itself.)
+      const left = perch ? (perch.near ? off : Math.hypot(x - perch.approach[0], y - perch.approach[1], z - perch.approach[2])) : y - this.restY;
       if (left < this.restBest - 0.005) { this.restBest = left; this.restBestAt = this.behaviorClock; }
       if (!this.restSettled && this.behaviorClock - this.restBestAt > REST_STUCK) {
         if (!perch && left < 0.03) { this.restSettled = true; this.holdClock = 0; }
@@ -1013,7 +1014,7 @@ export class BettaSwim {
     // Going down to lie: on the sand, a swim down nose low, gliding in flatter as it nears; on a
     // furnishing, a swim to behind and above it, then a glide down onto it.
     const perch = this.mode === 'rest' ? this.perch : null;
-    if (perch && !perch.near && Math.hypot(...perch.approach.map((v, k) => v - this.position[k])) < 0.06) { perch.near = true; perch.nearAt = this.behaviorClock; }
+    if (perch && !perch.near && Math.hypot(...perch.approach.map((v, k) => v - this.position[k])) < 0.06) { perch.near = true; perch.nearAt = this.behaviorClock; this.restBest = Infinity; this.restBestAt = this.behaviorClock; }
     const descent = this.mode === 'rest' ? this.position[1] - this.restY : 0;
     const sinking = this.mode === 'rest' && !escaping && !this.restSettled;
     // (Listless, it lets itself sink down to it, nose a little low, all but in place: SAG.)
