@@ -14,8 +14,15 @@ export class Footholds {
     out.y = this.ground.heightAt(x, z); this.ground.normalAt(x, z, out.normal); return out;
   }
 
-  find(wanted: THREE.Vector3, shoulder: THREE.Vector3, reach: number, heading: number,
-    side: number, from?: THREE.Vector3, footprint: THREE.Vector3[] = [], fromHeading=heading, maximumHeight=Infinity, footHeading=heading, usable?:(hold:Foothold)=>boolean, maximumLift=.025): Foothold | null {
+  find(...args:Parameters<Footholds['search']>):Foothold|null {
+    const search=this.search(...args);let result=search.next();
+    while(!result.done)result=search.next();return result.value;
+  }
+
+  /** Cooperative search: each yield bounds a candidate's work. The caller can
+   * retain planted contacts and continue the search on the next physics tick. */
+  *search(wanted: THREE.Vector3, shoulder: THREE.Vector3, reach: number, heading: number,
+    side: number, from?: THREE.Vector3, footprint: THREE.Vector3[] = [], fromHeading=heading, maximumHeight=Infinity, footHeading=heading, usable?:(hold:Foothold)=>boolean, maximumLift=.025): Generator<void,Foothold|null,unknown> {
     const f = new THREE.Vector3(Math.cos(heading), 0, -Math.sin(heading));
     const right = new THREE.Vector3(-f.z, 0, f.x);
     let best: Foothold | null = null, score = Infinity;
@@ -25,6 +32,7 @@ export class Footholds {
       // exceeds the best patch, no expensive toe/corridor cast can improve it.
       if(best && radius*radius>score+1e-12)break;
       for (let i = 0; i < (radius ? 24 : 1); i++) {
+        yield;
         const angle = i * Math.PI / 12;
         const x = wanted.x + radius * Math.cos(angle), z = wanted.z + radius * Math.sin(angle);
         const support = this.support(x, z, shoulder.y + .035);
@@ -89,7 +97,7 @@ export class Footholds {
     // a rock corner even when both soles are on sand. Size that lift to this
     // limb; the rig still checks reach and collision throughout the transfer.
     const higherLift=Math.min(.045,reach*.65);
-    if(!best && from && maximumLift<higherLift)return this.find(wanted,shoulder,reach,heading,side,from,footprint,fromHeading,maximumHeight,footHeading,usable,higherLift);
+    if(!best && from && maximumLift<higherLift)return yield* this.search(wanted,shoulder,reach,heading,side,from,footprint,fromHeading,maximumHeight,footHeading,usable,higherLift);
     return best;
   }
 }

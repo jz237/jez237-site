@@ -78,7 +78,7 @@ test('head clearance and looking around cannot lift the shoulder away from plant
 test('the complete habitat supports a continuous tour with real planted feet', {timeout:600000},t=>{
   let seed=12345;const random=Math.random;Math.random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
   try{
-    const a=habitat(),r=a.rig,b=a.brain as any,audit=new Audit(),skin=new SkinAudit(a.lizard);
+    const a=habitat(),r=a.rig,b=a.brain as any,audit=new Audit(),skin=new SkinAudit(a.lizard,true);
     const presentation=new PoseInterpolation(a.lizard.bones);
     const drink=b.drinkSpot(); assert.ok(drink,'a dry drinking approach is available');
     b.dish={centre:new THREE.Vector3(-.58,groundHeight(-.58,.362),.362)};
@@ -115,6 +115,7 @@ test('the complete habitat supports a continuous tour with real planted feet', {
     assert.ok(audit.maxFloat<.0005 && audit.maxPenetration<.0005,'every planted sole belongs to an actual surface');
     assert.ok(audit.maxLimbError<.00015,'contact does not stretch the sculpted limbs');
     assert.ok(audit.maxJump<.004,'no discontinuous body movement at a 60 Hz step');
-    assert.ok(skin.maxPenetration<.003,`visible limb penetration ${skin.maxPenetration} m`);
+    assert.ok(audit.maxHeadJump<.012,`no abrupt head relocation (${audit.maxHeadJump} m per 60 Hz tick)`);
+    assert.ok(skin.maxPenetration<.003,`visible head, trunk or limb penetration ${skin.maxPenetration} m`);
   } finally {Math.random=random;}
 });

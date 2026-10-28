@@ -7,6 +7,8 @@ import type {Insects, Cricket} from './Insects';
 import type {Dish} from './Dish';
 import {POOL, poolDistance, WATER_LEVEL, CAVE} from './Ground';
 import {TANK} from './Case';
+import {touchesPrey} from './PreyContact';
+import {DragonNeeds} from './DragonNeeds';
 
 /**
  * Behaviour for the bearded dragon. Lizards move in short bursts and freeze,
@@ -28,6 +30,7 @@ const smoothstep01 = (t: number) => {t = clamp(t, 0, 1); return t * t * (3 - 2 *
 interface Pose {clearance: number; chestLift: number; headPitch: number; lid: number; breath: number}
 
 export class LizardBrain {
+  readonly needs=new DragonNeeds();
   mode: Mode = 'bask';
   status = 'Basking under the lamp';
   private t = 0;
@@ -52,11 +55,16 @@ export class LizardBrain {
   private biteT = 0;
   private preySide = 1;
   private phaseT = 0;
+  private captureWith: 'mouth' | 'tongue' | null = null;
+  private strikeScale=1;
   private lapCount = 0;
   private drinkPitch = -0.55;
   private huntGoal: [number, number] | null = null;
   private huntPrey: [number, number] | null = null;
   private huntReplanT=0;
+  private huntElapsed=0;
+  private huntDistance=0;
+  private lastPreyPosition=new THREE.Vector3();
   private preyHiddenT=0;
   private standTries = 0;
   private misses = 0;
@@ -349,6 +357,11 @@ export class LizardBrain {
     const r = rnd();
     const I = this.rig.inputs;
     const onLog = Math.hypot(I.x - this.baskSpot[0], I.z - this.baskSpot[1]) < 0.03;
+    if(this.bodyTemp>.74&&this.lampOnIt>.3){
+      const shade=this.nav.nearestWalkable(.35,.29,this.nav.mainRegion);
+      if(shade&&this.goTo(shade[0],shade[1],'idle')){this.status='Moving into the shade';return;}
+    }
+    if(this.needs.fatigue>.65){this.setMode('idle','Resting');return;}
     // most often it simply stays where it is and keeps watching
     if (rnd() < 0.25 && this.bodyTemp > 0.4 && this.t > 5) {this.setMode('idle', onLog ? 'Basking under the lamp' : 'Watching'); return;}
     // after rain (or misting) it licks the droplets off the leaves
@@ -356,11 +369,11 @@ export class LizardBrain {
       const s = this.sipSpot();
       if (s && this.goTo(s[0], s[1], 'sip')) {this.faceHeading = s[2]; return;}
     }
-    if (this.dish && this.dish.remaining > 0 && this.t - this.lastGraze > 45 && rnd() < 0.35) {
+    if (this.dish && this.dish.remaining > 0 && this.needs.satiety<.8 && this.t - this.lastGraze > 45 && rnd() < 0.35) {
       const s = this.grazeSpot();
       if (s && this.goTo(s[0], s[1], 'graze')) {this.faceHeading = s[2]; return;}
     }
-    if (r < 0.18) {
+    if (this.needs.thirst>.35 && r < 0.18) {
       const s = this.drinkSpot();
       if (s && this.goTo(s[0], s[1], 'drink')) {this.faceHeading = s[2]; return;}
     }
@@ -373,11 +386,8 @@ export class LizardBrain {
       const p = this.nav.randomPoint(rnd, {x0: -0.5, x1: 0.5, z0: TANK.d / 2 - 0.18, z1: TANK.d / 2 - 0.135});
       if (p && this.goTo(p[0], p[1], 'idle')) {this.faceHeading = -Math.PI / 2 + (rnd() - 0.5) * 0.6; return;}
     }
-    if (r < 0.62) {
-      this.displayKind = rnd() < 0.6 ? 'bob' : 'wave';
-      this.setMode('display', this.displayKind === 'bob' ? 'Head-bobbing' : 'Waving an arm');
-      return;
-    }
+    // Head bobs and arm waves are social signals. This solitary animal has no
+    // conspecific stimulus, so they are not scheduled as random idle decoration.
     // explore: favour places it has not been lately, so it roams the whole case
     const options: [number, number, number][] = [];
     for (let k = 0; k < 12; k++) {
@@ -394,6 +404,7 @@ export class LizardBrain {
 
   /** Can it get within striking distance of this cricket? (Remembers the ones it cannot.) */
   private canHunt(c: Cricket) {
+    if(!this.needs.wantsPrey||this.bodyTemp<.2)return false;
     const until = this.ignorePrey.get(c) ?? -1;
     if (this.t < until) return false;
     const I = this.rig.inputs;
@@ -410,7 +421,7 @@ export class LizardBrain {
     const region = start ? this.nav.region[this.nav.idx(...start)] : -1;
     // A fleeing cricket can hide beneath the arch. Approach its opening from
     // the sand; do not turn the sprawling animal sideways inside the doorway.
-    if(Math.abs(target.x-.475)<.11&&target.z<.15&&this.surface.heightAt(target.x,target.z)<.12)return [.485,.28];
+    if(Math.abs(target.x-.475)<.11&&target.z<.15&&this.surface.heightAt(target.x,target.z)<.12)return [.485,.27];
     let best: [number, number] | null = null, bestScore = Infinity;
     for (let k = 0; k < 16; k++) {
       const a = (k / 16) * Math.PI * 2 + this.standTries * 0.7;
@@ -446,7 +457,8 @@ export class LizardBrain {
     this.path = [];
     this.huntGoal = null;
     this.huntPrey = null;
-    this.huntReplanT=0;this.preyHiddenT=0;
+    this.huntReplanT=0;this.preyHiddenT=0;this.huntElapsed=0;
+    this.huntDistance=0;this.lastPreyPosition.copy(c.pos);
     this.standTries = 0;
     // Pursuit must not inherit an exploration pause, a head-lead delay or a
     // failed approach from the activity that the cricket interrupted.
@@ -523,6 +535,7 @@ export class LizardBrain {
     this.t += dt;
     this.modeT += dt;
     const I = this.rig.inputs;
+    this.captureWith=null;
     {
       const decay = Math.exp(-dt / 150);
       for (let k = 0; k < this.visited.length; k++) this.visited[k] *= decay;
@@ -537,7 +550,8 @@ export class LizardBrain {
     I.bob = damp(I.bob, 0, 20, dt);
     I.wave = damp(I.wave, 0, 3, dt);
     I.display = damp(I.display, 0, 1.5, dt);
-    const twitch = this.mode === 'hunt' && (this.huntPhase === 'approach' || this.huntPhase === 'fix') ? 1 : 0;
+    // No evidence for a continuous cat-like predatory tail flick in Pogona.
+    const twitch = 0;
     I.tailTwitch = damp(I.tailTwitch, twitch, 6, dt);
     let targetSpeed = 0, targetTurn = 0;
     // Thermoregulation: the body follows its surroundings slowly; colour and
@@ -664,6 +678,7 @@ export class LizardBrain {
           const lap = Math.floor(lapT * 1.8);
           if (lap > this.lapCount && ph > 0.15) {
             this.lapCount = lap;
+            this.needs.drink(.08);
             this.onLap?.(this.rig.mouth.clone());
           }
         }
@@ -747,6 +762,7 @@ export class LizardBrain {
         } else if (this.grazePhase === 'bite') {
           I.jaw = 0.04;
           if (this.grazeT > 0.08 && d.take(this.rig.mouth)) {
+            this.needs.eat(.06);
             this.onCrunch?.(this.rig.mouth, 0.35);
             this.grazePhase = 'chew'; this.grazeT = 0; this.grazeBites++;
           } else if (this.grazeT > 0.3) {this.grazePhase = 'chew'; this.grazeT = 0; this.grazeBites++;}
@@ -839,7 +855,20 @@ export class LizardBrain {
     I.headPitch = p.headPitch;
     I.lid = p.lid;
     I.breath = p.breath;
+    I.tracking=this.mode==='hunt';
+    const previousMouth=this.rig.mouth.clone(),previousTongue=this.rig.model.tongueTip.clone();
     this.rig.update(dt);
+    this.needs.update(dt,Math.hypot(I.x-oldX,I.z-oldZ),Math.abs(this.rig.motion.speed)<.003);
+    // Resolve feeding only after the contact solver has accepted the body/head
+    // pose. An intended lunge which terrain prevents cannot catch anything.
+    if(this.captureWith&&this.prey&&!this.prey.caught){
+      const tongue=this.captureWith==='tongue',c=this.prey;
+      const preyCentre=c.pos.clone();preyCentre.y+=.004;
+      if(touchesPrey(preyCentre,tongue?previousTongue:previousMouth,
+        tongue?this.rig.model.tongueTip:this.rig.mouth,tongue?.011:.018,this.surface.tailContacts)){
+        c.caught=true;c.airborne=false;this.onTongue=tongue;
+      }
+    }
     // Measure accepted motion, including turns. A stuck airborne foot must
     // not disable recovery indefinitely, and a healthy pivot is progress.
     const travelling=this.mode==='travel'||this.mode==='startle'||(this.mode==='hunt'&&this.huntPhase==='approach');
@@ -882,8 +911,21 @@ export class LizardBrain {
   }
 
   private turnToward(h: number) {
-    const e = wrap(h - this.rig.inputs.heading);
+    const e = this.clearTurnError(h);
     return Math.abs(e) < 0.06 ? 0 : clamp(e * 3.2, -1.25, 1.25);
+  }
+
+  /** A short turn through the front pane is not a usable turn. Compare the
+   * head's swept outline in both directions before committing the feet. */
+  private clearTurnError(heading:number){
+    const I=this.rig.inputs,e=wrap(heading-I.heading);
+    if(Math.abs(e)<.25||I.z<.29)return e;
+    const extent=(turn:number)=>{
+      let z=I.z;for(let i=0;i<=16;i++)z=Math.max(z,I.z-Math.sin(I.heading+turn*i/16)*.13+.025);
+      return z;
+    };
+    const alternate=e-Math.sign(e)*Math.PI*2;
+    return extent(e)>.435&&extent(alternate)<extent(e)-.012?alternate:e;
   }
 
   private idleLook(dt: number, cameraBias: number) {
@@ -979,7 +1021,7 @@ export class LizardBrain {
    */
   private travel(dt: number) {
     const I = this.rig.inputs;
-    if(this.stallT>1.5 && this.retreatT<=0){
+    if((this.stallT>1.5||this.rig.needsRecovery) && this.retreatT<=0){
       if(this.mode==='hunt'&&!this.caveExit&&!this.bowlExit){this.nav.avoidApproach(I.x,I.z,I.heading);this.replan();}
       this.retreatSign=-Math.sign(this.speed||1);this.retreatLeft=.025;this.retreatT=2;
       this.stallT=0;this.pushedT=0;this.turnStallT=0;
@@ -1093,7 +1135,7 @@ export class LizardBrain {
     }
     const backing=this.backOutLeft>0;
     const want = Math.atan2(-(aim[1] - I.z), aim[0] - I.x)+(backing?Math.PI:0);
-    const err = wrap(want - I.heading);
+    const err = this.clearTurnError(want);
     if (this.leadT > 0) {
       this.leadT -= dt;
       return {speed: 0, turn: Math.abs(err) > 1.2 ? Math.sign(err) * 1.1 : 0};
@@ -1130,16 +1172,30 @@ export class LizardBrain {
     const I = this.rig.inputs;
     const c = this.prey;
     if (!c || (c.eaten && this.huntPhase !== 'lick')) {this.prey = null; this.setMode('idle', 'Watching'); return {speed: 0, turn: 0};}
+    if(!c.caught){
+      this.huntElapsed+=dt;
+      this.huntDistance+=c.pos.distanceTo(this.lastPreyPosition);this.lastPreyPosition.copy(c.pos);
+      if(this.huntElapsed>45&&this.huntDistance>.35){
+        // An insect escaping repeatedly across ledges is allowed to get away.
+        // Keep the current supported stance and remember it for a while instead
+        // of restarting the chase every time an approach phase changes.
+        this.ignorePrey.set(c,this.t+20);this.prey=null;this.path=[];this.faceHeading=null;
+        this.setMode('idle','Watching escaped prey');return {speed:0,turn:0};
+      }
+    }
     this.phaseT += dt;
     const head = this.rig.snout;
     const toPrey = new THREE.Vector3().subVectors(c.pos, head);
     const flat = Math.hypot(toPrey.x, toPrey.z);
     const want = Math.atan2(-(c.pos.z - I.z), c.pos.x - I.x);
     const err = wrap(want - I.heading);
-    if (!c.caught) {this.lookPoint.copy(c.pos); I.look = this.lookPoint;}
+    if (!c.caught) {this.lookPoint.copy(c.pos);this.lookPoint.y+=.006; I.look = this.lookPoint;}
     switch (this.huntPhase) {
       case 'notice':
         this.status = 'Spotted a cricket';
+        // Finish a transfer already in progress before pursuit takes ownership
+        // of the root and starts steering toward a new target.
+        if(this.rig.motion.transferring)return {speed:0,turn:0};
         if (this.phaseT > 0.5 + rnd() * 0.02) {this.huntPhase = 'approach'; this.phaseT = 0;}
         return {speed: 0, turn: !this.caveExit&&!this.bowlExit&&Math.abs(err) > 0.6 ? this.turnToward(want) : 0};
       case 'approach': {
@@ -1151,7 +1207,7 @@ export class LizardBrain {
         // The last few centimetres still need contact recovery. Previously the
         // end-of-route creep bypassed travel(), so a blocked ledge approach
         // could keep pushing forever without withdrawing or choosing a new side.
-        if(this.retreatT>0||this.stallT>1.5){
+        if(this.retreatT>0||this.stallT>1.5||this.rig.needsRecovery){
           if(this.retreatT<=0){this.standTries++;this.huntPrey=null;this.huntReplanT=0;}
           return this.travel(dt);
         }
@@ -1166,7 +1222,17 @@ export class LizardBrain {
           if(this.nav.dry(x,z))target.set(x,this.surface.heightAt(x,z),z);
         }
         const mouthD = c.pos.distanceTo(this.rig.mouth);
-        if (!c.airborne && mouthD < 0.055 && Math.abs(err) < 0.4) {this.huntPhase = 'fix'; this.phaseT = 0; this.path = []; return {speed: 0, turn: 0};}
+        const aheadOfMouth=(c.pos.x-this.rig.mouth.x)*Math.cos(I.heading)
+          -(c.pos.z-this.rig.mouth.z)*Math.sin(I.heading);
+        if(!c.airborne&&flat<.09&&Math.hypot(c.pos.x-I.x,c.pos.z-I.z)<.125&&aheadOfMouth<-.008&&Math.abs(err)<.4){
+          // Prey can hop beneath the chin. Turning the neck farther down or
+          // repeatedly striking from the same stance cannot reach it. Withdraw
+          // on the existing supports, then approach with the mouth in front.
+          this.retreatSign=-1;this.retreatLeft=clamp(-aheadOfMouth+.025,.025,.065);this.retreatT=2.5;
+          this.path=[];this.huntPrey=null;this.huntReplanT=0;
+          return {speed:-.05,turn:0};
+        }
+          if (!c.airborne && mouthD < .055-Math.min(this.misses,4)*.007 && Math.abs(err) < 0.4) {this.huntPhase = 'fix'; this.phaseT = 0; this.path = []; return {speed: 0, turn: 0};}
         if (this.phaseT > 50) {this.ignorePrey.set(c, this.t + 10); this.prey = null; this.boredom = 6; this.setMode('idle', 'Lost interest'); return {speed: 0, turn: 0};}
         this.cruise=flat>.20?.24:flat>.09?.18:.10;
         this.huntReplanT=Math.max(0,this.huntReplanT-dt);
@@ -1181,7 +1247,7 @@ export class LizardBrain {
             // supported approach instead of abandoning a long chase on the
             // first temporarily unavailable landing point.
             this.preyHiddenT+=.20;
-            if(this.preyHiddenT>5){this.ignorePrey.set(c,this.t+8);this.prey=null;this.setMode('idle','Watching');return {speed:0,turn:0};}
+            if(this.preyHiddenT>5){this.ignorePrey.set(c,this.t+20);this.prey=null;this.path=[];this.faceHeading=null;this.setMode('idle','Watching escaped prey');return {speed:0,turn:0};}
           }else{
             this.preyHiddenT=0;this.huntPrey=[target.x,target.z];
             this.huntGoal = stand;
@@ -1200,7 +1266,7 @@ export class LizardBrain {
             this.status='Watching the cave entrance';return {speed:0,turn:clamp(wrap(Math.PI/2-I.heading)*3,-1,1)};
           }
           if (Math.abs(err) > 0.3) return {speed: 0, turn: clamp(err * 5, -2.5, 2.5)};
-          if (!c.airborne && mouthD < 0.06) {this.huntPhase = 'fix'; this.phaseT = 0; return {speed: 0, turn: 0};}
+          if (!c.airborne && mouthD < .055-Math.min(this.misses,4)*.007) {this.huntPhase = 'fix'; this.phaseT = 0; return {speed: 0, turn: 0};}
           const ax=I.x+Math.cos(I.heading)*.02,az=I.z-Math.sin(I.heading)*.02;
           const doorway=Math.abs(ax-.475)<.14&&az<.26&&this.surface.heightAt(ax,az)<.12;
           const perchLip=ax<-.20&&az>.105&&az<.27&&this.surface.heightAt(ax,az)>.12;
@@ -1213,60 +1279,72 @@ export class LizardBrain {
         }
         const r = this.travel(dt);
         // Keep the eyes on the prey while following the supported route.
-        this.lookPoint.copy(c.pos);
+        this.lookPoint.copy(c.pos);this.lookPoint.y+=.006;
         I.look = this.lookPoint;
         if (this.mode !== 'hunt') this.mode = 'hunt';
         return r;
       }
-      case 'fix':
+      case 'fix': {
         this.status = 'Fixating';
-        this.posePreset('walk');this.poseGoal.headPitch=-.25;
+        // The gaze target already pitches the head down to the insect. Adding
+        // another downward angle buried the jaw and aimed the tongue into sand.
+        this.posePreset('walk');this.poseGoal.headPitch=0;
         if (c.pos.distanceTo(this.rig.mouth) > 0.085 || c.airborne) {this.huntPhase = 'approach'; this.phaseT = 0; return {speed: 0, turn: 0};}
-        if (this.phaseT > 0.12 + rnd() * 0.02) {
+        const aim=Math.atan2(-(c.pos.z-this.rig.mouth.z),c.pos.x-this.rig.mouth.x);
+        const headAim=Math.atan2(-this.rig.headForward.z,this.rig.headForward.x);
+        const aligned=Math.abs(wrap(aim-headAim))<.25;
+        if(this.phaseT>2&&(!aligned||this.rig.motion.transferring)){
+          // Fixation cannot keep pivoting on a ledge with a suspended paw.
+          // Withdraw on the existing supports, then choose another approach.
+          this.huntPhase='approach';this.phaseT=0;this.huntPrey=null;
+          this.retreatSign=-1;this.retreatLeft=.025;this.retreatT=2;
+          return {speed:-.025,turn:0};
+        }
+        if (this.phaseT > .18 && aligned && !this.rig.motion.transferring && Math.abs(this.rig.motion.speed)<.035) {
           this.huntPhase = 'strike'; this.phaseT = 0;
           // close prey is often picked up with a flick of the sticky tongue
-          this.tongueStrike = c.pos.distanceTo(this.rig.mouth) < 0.042 && rnd() < 0.75;
+          const reach=c.pos.distanceTo(this.rig.mouth);
+          this.tongueStrike = reach < .045;
+          this.strikeScale=clamp(reach/.055,.25,1);
           this.onTongue = false;
           // and a cricket that sees it coming may hop clear
           if (rnd() < 0.25) c.startle(this.rig.snout);
         }
-        return {speed: 0, turn: clamp(err * 6, -2, 2)};
+        // The head aims the strike. Demanding perfect trunk alignment caused
+        // an unnecessary last-second pivot after a supported approach.
+        return {speed: 0, turn: Math.abs(err)>.3?clamp(err * 6, -2, 2):0};
+      }
       case 'strike': {
         this.status = 'Strike!';
         const k = this.phaseT;
         if (this.tongueStrike) {
-          // the tongue shoots out, sticks to the prey and reels it into the mouth
-          I.lunge = k < 0.07 ? (k / 0.07) * 0.35 : Math.max(0, 0.35 * (1 - (k - 0.07) / 0.2));
-          I.jaw = k < 0.26 ? 0.42 : I.jaw;
-          I.tongueReach = k < 0.08 ? k / 0.08 : Math.max(0, 1 - (k - 0.12) / 0.12);
-          if (k > 0.04 && k < 0.15 && !c.caught && c.pos.distanceTo(this.rig.model.tongueTip) < 0.013) {
-            c.caught = true;
-            c.airborne = false;
-            this.onTongue = true;
-          }
-          if (k > 0.26) this.onTongue = false;
-          if (k > 0.32) {
+          // Short muscular prehension: extend deliberately, retract faster.
+          // Zghikh et al. 2014 measured ~.05 m/s protrusion and .40 m/s
+          // retraction; our ~2 cm excursion and timing are model-scale estimates.
+          I.lunge = k < .20 ? smoothstep01(k/.20)*.35 : Math.max(0,.35*(1-(k-.24)/.16));
+          I.jaw = k < .34 ? .42 : I.jaw;
+          I.tongueReach = .6*(k<.24?smoothstep01(k/.24):1-smoothstep01((k-.27)/.07));
+          if(k>.08&&k<.32)this.captureWith='tongue';
+          if (k > .34) this.onTongue = false;
+          if (k > .40) {
             I.tongueReach = 0;
             this.phaseT = 0;
-            if (c.caught) {this.huntPhase = 'grip'; this.preySide = Math.random() < 0.5 ? -1 : 1; c.consumed = 0;} else {this.misses++; this.huntPhase = this.misses > 3 ? 'approach' : 'fix'; this.status = 'Missed';}
-            if (this.misses > 5) {this.prey = null; this.misses = 0; this.boredom = 8; this.setMode('idle', 'Missed');}
+            if (c.caught) {this.huntPhase = 'grip'; this.preySide = Math.random() < 0.5 ? -1 : 1; c.consumed = 0;} else {this.misses++; this.huntPhase='approach';this.path=[];this.huntPrey=null;this.status='Missed';}
+            if (this.misses > 5) {this.ignorePrey.set(c,this.t+20);this.prey = null; this.misses = 0; this.boredom = 8; this.setMode('idle', 'Missed');}
           }
           return {speed: 0, turn: clamp(err * 6, -3, 3)};
         }
-        I.lunge = k < 0.09 ? k / 0.09 : Math.max(0, 1 - (k - 0.09) / 0.25);
+        I.lunge = this.strikeScale*(k < 0.09 ? k / 0.09 : Math.max(0, 1 - (k - 0.09) / 0.25));
         I.jaw = k < 0.12 ? 0.85 : I.jaw;
         I.tongue = k < 0.14 ? 0.7 : I.tongue;
         // the sticky tongue extends the reach of the snap
-        if (k > 0.06 && k < 0.18 && !c.caught && c.pos.distanceTo(this.rig.mouth) < 0.04) {
-          c.caught = true;
-          c.airborne = false;
-        }
+        if (k > 0.06 && k < 0.20) this.captureWith='mouth';
         if (k > 0.3) {
           this.phaseT = 0;
-          if (c.caught) {this.huntPhase = 'grip'; this.preySide = Math.random() < 0.5 ? -1 : 1; c.consumed = 0;} else {this.misses++; this.huntPhase = this.misses > 3 ? 'approach' : 'fix';}
-          if (this.misses > 5) {this.prey = null; this.misses = 0; this.boredom = 8; this.setMode('idle', 'Missed');}
+          if (c.caught) {this.huntPhase = 'grip'; this.preySide = Math.random() < 0.5 ? -1 : 1; c.consumed = 0;} else {this.misses++;this.huntPhase='approach';this.path=[];this.huntPrey=null;}
+          if (this.misses > 5) {this.ignorePrey.set(c,this.t+20);this.prey = null; this.misses = 0; this.boredom = 8; this.setMode('idle', 'Missed');}
         }
-        return {speed: k < 0.1 ? 0.32 : 0, turn: clamp(err * 6, -3, 3)};
+        return {speed: k < 0.1 ? 0.32*this.strikeScale : 0, turn: clamp(err * 6, -3, 3)};
       }
       case 'grip': {
         // clamp down and thrash the head to subdue it
@@ -1311,7 +1389,7 @@ export class LizardBrain {
         c.consumed = Math.min(1, c.consumed + dt * 0.9);
         c.struggle = 0;
         if (this.phaseT > 0.35) c.group.visible = false;
-        if (this.phaseT > 1.0) {c.eaten = true; this.misses = 0; this.huntPhase = 'lick'; this.phaseT = 0; this.poseGoal.lid = 1;}
+        if (this.phaseT > 1.0) {c.eaten = true; this.needs.eat(.14); this.misses = 0; this.huntPhase = 'lick'; this.phaseT = 0; this.poseGoal.lid = 1;}
         return {speed: 0, turn: 0};
       }
       case 'lick': {

@@ -25,3 +25,45 @@ Run `npm test` for the regression suite. In addition to cadence, limb lengths, t
 Cave rear walls follow the rounded openings and sit inside the stone arches, avoiding an exposed dark rectangle behind the cool hide. Individual aloe blades and shrub stems bend down under contact with the dragon's body, feet, and tail, then recover gradually. Their roots stay anchored; margin teeth, seed clusters, geometry normals, and shadows follow the same bends. Broad shallow body contacts leave low leaves beneath the belly alone. Plant regressions check pressure clearance, recovery, rooted geometry, frame cadence, and overhead passes.
 
 The feeding tray follows the original reference: a thick chipped oval stone rim and a properly closed basin, using the existing sandstone photograph. Fourteen edible portions combine 56 cupped, torn greens with textured squash chunks and slices. The bowl participates in foothold and tail collisions. The dragon keeps its chest and head raised to the salad when grazing; bites remove portions and the Greens control restores the full salad.
+
+## Movement research and scale
+
+The animal represents a central bearded dragon, *Pogona vitticeps*. The baked sculpt spans roughly 30 sculpt units, but its scene scale is **0.016 metres per unit**, giving an adult about **49 cm long**, including the tail. Cadence and reach use that scene scale; the old 30 cm description referred to the unscaled sculpt.
+
+| Evidence | Consequence for this simulation |
+| --- | --- |
+| [Bonnan et al., 2025](https://anatomypubs.onlinelibrary.wiley.com/doi/full/10.1002/ar.25588), XROMM and treadmill observations: mean speed 0.30 m/s; forelimb stance 63%, hindlimb stance 74% across 13 trials. | Separate fore/hind support timing, with more support during slower movement. The forearm may rotate while the palm stays oriented toward its support. Published joint angles use anatomical coordinate systems and are not copied directly into this rig. |
+| [Abdala et al., 2009](https://anatomypubs.onlinelibrary.wiley.com/doi/full/10.1002/ar.20909): flat-substrate stance/swing 0.49/0.14 s; broad-dowel 0.57/0.20 s, from two animals. | These imply approximately 1.6 and 1.3 cycles/s in those trials. Narrow surfaces require deliberate transfers and room for the stiff, splayed hand; the feet do not wrap like a chameleon's. |
+| [Barringham, 2021](https://pure.manchester.ac.uk/ws/portalfiles/portal/216118204/FULL_TEXT.PDF): five juveniles filmed at 500 fps on sand, gravel and slopes from −15° to +15°. Sand increased support duty; slope responses varied between individuals. | Terrain changes step length, speed and support requirements. Juvenile size-normalized regressions are not copied as adult speeds. These shallow-track trials do not validate climbing over large rock edges. |
+| [Zghikh et al., 2014](https://onlinelibrary.wiley.com/doi/full/10.1111/joa.12224): muscular tongue protrusion and substantially faster retraction. | A short, aimed pickup with faster retraction. Its excursion and timing are model-scale approximations, not a ballistic chameleon tongue. |
+| [Australian Museum](https://australian.museum/learn/animals/reptiles/central-bearded-dragon/) and [Taronga Zoo / NSW Education footage](https://nswdoe-prod65-04.adobecqms.net/teaching-and-learning/animals-in-schools/animals-in-schools-resources/videos-animal-care-and-management/bearded-dragon-videos). | Daytime basking, resting, shelter, shade and omnivorous feeding. Random head-bob/arm-wave performances are disabled for this solitary animal. |
+
+Visual references include the XROMM paper's two fluoroscope views and its looped forelimb reconstruction, plus Taronga's resting/perching and feeding presentation. Edited, slowed and looped footage is used for posture and limb sequencing; it is not treated as an unedited timing measurement. Speeds between the measured examples, acceleration, turning limits, tail stiffness, breathing and normalized internal drives remain engineering estimates. This is a behavior-informed animation, not a validated physiological model or husbandry guide.
+
+## Controller ownership and regression checks
+
+`LizardBrain` chooses activities, routes and desired motion. `LizardRig` owns the accepted root pose, support constraints, anatomical limb frames and committed foot transfers. `FootTransfer` gives each transfer a continuous start and touchdown. Gait phase requests a lift; it cannot skip a foot partway into its arc. A deterministic candidate budget spreads difficult foothold searches across ticks while existing feet remain planted. Unfinished transfers report recovery needs back to navigation.
+
+The independent head solver checks an envelope of the actual head, neck and jaw mesh and raises the short neck without moving the shoulder supports. A near target crossing behind the neck cannot flip gaze between opposite limits. Jaw opening is eased. Tongue reach has a bounded direction and excursion. `PreyContact` tests the swept mouth/tongue against the insect's body after the final pose is accepted and rejects contact through hardscape. Prey under the chin triggers withdrawal; an insect repeatedly escaping across ledges may be left alone after a bounded pursuit.
+
+`DragonNeeds` tracks illustrative satiety, thirst and fatigue. Feeding and drinking change those drives; supported rest reduces fatigue. Temperature and environmental light retain their existing role. The simulation now runs in real seconds rather than applying a global 1.5× multiplier to physiology, behavior and gait together. Render interpolation remains separate from the 60 Hz contact solver and 120 Hz tail solver.
+
+The habitat tour and obstacle hunts sample rendered head, jaw, neck, trunk, feet and limbs in addition to controller targets. Separate tests cover lift-off continuity, different fore/hind duty factors, physical capture, gaze singularities, needs, tail stability and varied display cadence. `node --import tsx tools/measure-gait.ts` reports actual distance, cadence and support ratios on level ground; those values are simulation measurements, not additional biological evidence.
+
+### Validation, 28 October 2026
+
+All **71 regression tests** passed across the movement, navigation, hunting and remaining geometry/presentation suites. Six repeated tours from three seeds completed all 30 destinations, in addition to the continuous five-destination skin audit. All five stationary obstacle hunts captured by contact. The two open-sand moving-prey trials captured in 7.75 and 5.25 seconds; two insects escaping around ledges were left safely after bounded pursuits. Starting stances are checked for reach, and the difficult rock starting area is reached by walking rather than placing an impossible pose across an edge.
+
+| Check | Observed result / limit |
+| --- | --- |
+| Planted sole drift | 0 in the sampled tours and hunts; limit 0.1 mm |
+| Sole support gap and limb-length error | Floating-point residuals; limits 0.5 mm and 0.15 mm |
+| Continuous-tour root/head displacement | At most 3.18 / 10.00 mm per 60 Hz tick; limits 4 / 12 mm |
+| Sampled visible skin penetration | At most 2.43 mm in the continuous tour, including interpolated poses; limit 3 mm. Obstacle and moving-prey hunts stayed below 1.5 mm. |
+| Stationary obstacle hunts | Longest translation pause 2.77 s; longest airborne transfer 1.74 s; no inverted forepaws |
+| Level requested / actual speeds | 0.060 / 0.060, 0.120 / 0.119, 0.240 / 0.232 m/s |
+| Timing | Fixed-step tests at 10, 15, 30, 60, 144 Hz and uneven display intervals; suspension and slow-frame recovery tested |
+
+Rendered review used an oblique descent recording and a side-view moving-cricket capture, with closely spaced frames inspected during foot transfers. A visible 1280×720 embedded-browser sample ran about 32 fps, 31.7 ms frame-time p95 and real-time simulation speed over 81 seconds, with no frames over 100 ms. These are local measurements, not a performance promise for every device.
+
+The contact solver is kinematic: it preserves supports and reachable anatomy, but does not simulate measured muscle forces or prove physical balance for every possible stance. Collision envelopes and the skin audit are sampled, with millimetre-scale residual penetration permitted. Difficult climbs remain slower than open-ground pursuit, some insects escape, and behavior/soft-tissue timings not directly measured in the cited studies remain estimates. The unchanged sculpt and material assets preserve the dragon's appearance.
