@@ -61,7 +61,7 @@ const DORSAL_REST = 0.32, DORSAL_ALERT = 1, DORSAL_LIFT = [0.6, 1.6], DORSAL_RIS
 /** The fish's own push and brake as the fins feel them (state.accel along the body, Atelier units/s^2:
  *  forwards, and backwards): a dart folds the long fins and draws the pectorals in, a stop spreads them
  *  and flares the pectorals forward. */
-const PUSH = [0.6, 2.6], BRAKE = [0.3, 1.6];
+const PUSH = [1.2, 3.2], BRAKE = [0.3, 1.6];
 /** At hover the caudal's spread wanders by up to SAG (a share of the fan: it sags partly shut and
  *  spreads again, now and then, on no beat). */
 const SAG = 0.07;
@@ -187,11 +187,15 @@ export class FinDynamics {
     this.pace = this.paceTo = 1; this.gust = this.gustTo = 0.7; this.gustAt = 0; this.stir = 0;
     this.lastBillow = this.lastTurn = null;
     this.sag = this.sagTo = 0; this.sagAt = 0;
+    // No two of the tail's beats carry the long fins alike: each beat's sway (a share, easing to
+    // swayTo; stroke: the beat's count).
+    this.sway = this.swayTo = 1; this.stroke = 0;
     // The fish's push and brake as this fin feels them (0..1, eased).
     this.push = this.brake = 0;
     // A pectoral beats in its own time: its stroke slips against the other's (slip, easing to slipTo,
-    // redrawn at slipAt s), each beat a little stronger or weaker (own, easing to ownTo; beat: the count), and now and
-    // then it rests alone for a moment (alone: s left; resting: how far into that rest, 0..1).
+    // redrawn at slipAt s), each beat a little stronger or weaker (own, easing to ownTo; beat: the
+    // count), and now and then it rests alone for a moment (alone: s left; resting: how far into
+    // that rest, 0..1).
     this.slip = this.slipTo = 0; this.slipAt = 0; this.own = this.ownTo = 1; this.beat = 0; this.alone = this.resting = 0;
     // (The ventral's flicks and twitches send a wave down it, dying away: wave, its size.)
     this.wave = 0;
@@ -207,8 +211,9 @@ export class FinDynamics {
   }
 
   /** What the fish's motion asks of the fins this frame (dt > 0): the broad fins close as the
-   *  water sweeps them back and open again once the fish stops (the caudal last); the ventrals
-   *  flick, splay and wander. state.speed: the water past the fish (body lengths/s); state.accel:
+   *  water sweeps them back and open again once the fish stops (the caudal last) and billow in
+   *  gusts; the pectorals keep their own time; the ventrals flick, splay and twitch. state.speed:
+   *  the water past the fish (body lengths/s); state.accel:
    *  the fish's acceleration in its own frame (Atelier units/s^2, +x towards the tail). */
   advancePosture(dt, state) {
     const { kind } = this, speed = state.speed ?? 0, under = smooth(0.08, 0.6, speed), r = () => draw(this);
@@ -237,6 +242,9 @@ export class FinDynamics {
       }
       this.gust += (this.gustTo - this.gust) * (1 - Math.exp(-2.2 * dt));
       this.pace += (this.paceTo - this.pace) * (1 - Math.exp(-1.4 * dt));
+      const stroke = Math.floor((state.phase ?? 0) / (2 * Math.PI));
+      if (stroke !== this.stroke) { this.stroke = stroke; this.swayTo = 0.5 + 0.85 * r(); }
+      this.sway += (this.swayTo - this.sway) * (1 - Math.exp(-5 * dt));
       this.billow += flowed * this.pace;
       this.swell += flowed * (1.75 - this.pace) * 0.6;
       if (kind === 1) {
@@ -272,11 +280,11 @@ export class FinDynamics {
       }
     } else if (kind === 3) {
       this.clock += dt;
-      // Each pectoral beats in its own time: its stroke slips in and out of step with the other's,
-      // each beat a little stronger or weaker than the last, and holding station it now and then
-      // rests alone, lying back against the flank, while the other beats on.
-      // (The left fin's stroke slips against the right's, which keeps the gait's own time. Only in
-      // the gait's runs of beats, pectoralPower, does a fin rest alone: driven without them, it beats on.)
+      // Each pectoral beats in its own time: the left's stroke slips in and out of step with the
+      // right's (which keeps the gait's time), and holding station each beat is a little stronger or
+      // weaker than the last, and now and then one fin rests alone, lying back against the flank,
+      // while the other beats on (only within the gait's runs of beats, pectoralPower: a fin driven
+      // without them beats on).
       if (this.clock >= this.slipAt) { this.slipTo = this.side < 0 ? SLIP * (r() * 2 - 1) : 0; this.slipAt = this.clock + 0.6 + 2.2 * r(); }
       this.slip += (this.slipTo - this.slip) * (1 - Math.exp(-1.6 * dt));
       const beat = Math.floor(((state.pectoralPhase ?? 0) + this.slip) / (2 * Math.PI) + (this.side < 0 ? 0.5 : 0));
@@ -333,10 +341,10 @@ export class FinDynamics {
     const folded = state.clamp ?? 0, held = 1 - 0.6 * folded;
     const spread = (this.open + (1 - this.open) * flare) * (1 - (CLAMP_FOLD[kind] ?? 0) * folded), fold = kind === 0 ? 0.10 * (1 - flare) + CLAMP_DROOP * folded : 0;
     const lower = LOWER_LOBE * (1 - flare);
-    // The membranes billow slowly, stirred by the pectorals' wash and the water going past (the
-    // gait's billowPhase), more as the fish moves and turns, less held open in display.
+    // The membranes billow slowly, stirred by the pectorals' wash and the water going past (at about
+    // the gait's billow pace), more as the fish moves and turns, less held open in display; in gusts,
+    // and stirred up by the body's moves, while the swell, a second, slower wave, comes and goes.
     const speed = Math.min(state.speed ?? 0, 1.2);
-    // (In gusts, stirred up by the body's moves: the swell, a second, slower wave, comes and goes.)
     const billowSize = (1 - flare * 0.7) * held * (0.025 + 0.035 * (state.wash ?? 0) + 0.05 * speed + 0.02 * Math.min(1, Math.abs(turn)))
       * (this.gust + 0.6 * this.stir), swellSize = billowSize * (1.2 - this.gust) * 0.8;
     // Partly closed, the membrane gathers into pleats; the caudal's lobes twist apart.
@@ -396,8 +404,8 @@ export class FinDynamics {
           // (A turn leans the dorsal and anal over, more towards their tips: their rays bend, rather
           // than the fin tipping over from its base like a flap.)
           const wave = kind === 0
-            ? (0.004 + drive * 0.4) * Math.sin(phase - 2.5 - v * 0.8)
-            : (0.006 + drive * 0.13) * Math.sin(phase * 0.8 - u * 3.7 - v * 0.7 + kind * 1.8)
+            ? (0.004 + drive * 0.4) * this.sway * Math.sin(phase - 2.5 - v * 0.8)
+            : (0.006 + drive * 0.13) * this.sway * Math.sin(phase * 0.8 - u * 3.7 - v * 0.7 + kind * 1.8)
               + turnBend * (0.20 + u * 0.20) * (0.3 + 0.7 * v);
           // Bend throughout the ray, not just a ruffled outer border. Phase varies across the fan
           // and travels out along each ray, so the membrane billows.
