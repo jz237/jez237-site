@@ -10,6 +10,366 @@
         "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
       },
       "visualProfile": {
+        "tone": "Airborne rescue and disc-drive ambition",
+        "motifs": [
+          "Commodore game screen",
+          "Amstrad disc drive",
+          "holographic cassette label"
+        ],
+        "layout": "Dense warm newsprint with red and blue boxed sections"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Gribbly gaming dominates the main halftone; Amstrad leads hardware rail",
+        "secondaryRail": "Hologram packaging, budget modems and rock radio",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "currentDate": "2026-10-28",
+      "historicDate": "1985-04-22",
+      "displayDate": "Week of April 22-28, 1985",
+      "edition": "Issue 143 - Weekly 1985 Computer & Culture Chronicle",
+      "sources": [
+        {
+          "title": "Home Computing Weekly No. 109, cover; news; game reviews p. 8; modem advertisement p. 18",
+          "url": "https://dn721405.ca.archive.org/0/items/home-computing-weekly-109/Home_Computing_Weekly_109.pdf",
+          "date": "1985-04-23"
+        },
+        {
+          "title": "Centre for Computing History catalogue: HCW April 23–29, No. 109",
+          "url": "https://www.computinghistory.org.uk/det/27843/Home-Computing-Weekly-23-29-April-1985/",
+          "date": "1985-04-23"
+        },
+        {
+          "title": "COMPUTE! No. 59: Atari/Commodore coverage, game and Lotus reviews, Atari modem advertisement",
+          "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute%20(Clean)/Compute_Issue_059_1985_Apr.pdf",
+          "date": "1985-04"
+        },
+        {
+          "title": "Billboard, April 27, 1985, Top Rock Tracks printed p. 14",
+          "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-04-27.pdf",
+          "date": "1985-04-27"
+        },
+        {
+          "title": "The Numbers: domestic weekend box office April 26, 1985",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/04/26",
+          "date": "1985-04-26"
+        },
+        {
+          "title": "UPI: Coca-Cola changing its recipe, Lee Comegys (search-index evidence; full fetch blocked)",
+          "url": "https://www.upi.com/Archives/1985/04/23/Coca-Cola-the-worlds-No-1-consumer-product-said-Tuesday/3500483080400/",
+          "date": "1985-04-23"
+        },
+        {
+          "title": "Commodore User April 1985 Gribbly’s Day Out review catalogue",
+          "url": "https://amr.abime.net/review_55818",
+          "date": "1985-04"
+        }
+      ],
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 143 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of April 22-28, 1985",
+        "price": "75 cents"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-04-22.jpg",
+        "alt": "Computer Chronicle newspaper artifact for April 22-28, 1985, featuring Gribbly and the disc-based Amstrad",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Flight, floppy discs and a glint of holographic ink: the home-computer week opens new territory.",
+      "morningLine": "Gribbly takes flight; Amstrad trades tape for disc; a holographic egg marks the genuine article.",
+      "lead": {
+        "headline": "Gribbly’s Day Out brings airborne rescue to the Commodore screen",
+        "dek": "Hewson’s unusual rescue game earns a lively reception in this week’s home-computer press.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0,
+          6
+        ],
+        "body": [
+          "A rescue mission takes a strange and expressive turn on the Commodore screen. Gribbly’s Day Out, from Hewson, sends its hero after young gribblets, mixing movement on land with Psi-powered flight. The review in this week’s Home Computing Weekly treats the result as an inventive departure from routine arcade action.",
+          "Flight does not mean freedom from difficulty. Gravity pulls at Gribbly, and an anti-Psi web complicates the journey. Topsies descend in a seedlike airborne form before moving along the ground and flipping the vulnerable gribblets. Catching those enemies in bubbles while they are airborne is part of the rescue work.",
+          "The reviewer praises the expressions of the characters and the graphics, giving the little creatures a personality beyond their place in the rules. Control is the sticking point: mastering the movement is difficult. Sound receives a more ordinary verdict, with only a few tunes accompanying the action.",
+          "“Overall a very innovative game, well done,” concludes the review signed J.G.H. on page 8. This is a game on the current review desk, not a newly established release date: April’s Commodore User coverage also identifies Hewson’s title. For readers seeking something unusual to fly, the challenge is as much handling Gribbly as finding the youngsters."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Amstrad puts disc storage at the center of its new home micro",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "The new disc-based Amstrad CPC takes pride of place in this week’s Home Computing Weekly. The machine replaces the CPC464’s built-in cassette player with a disc drive. The report describes a London unveiling last Wednesday, before this issue’s historical week; this is the week’s press coverage, not an April 23 launch claim.",
+            "Prices give the package its force: £339 with a green monitor and £449 with a colour monitor, below the earlier forecasts of £429 and £529. These are British monitor-inclusive bundles. Memory is not increased over the predecessor, but the keyboard is narrower, contrasting keys sharpen the layout, and cursor keys sit in a square above the numeric pad.",
+            "DR LOGO comes with the machine, while disc software is quoted at £12.95. An ordinary cassette recorder can connect through the built-in interface for tape-to-disc transfers. Dotted lines and high-speed colour filling add to the graphics facilities. Amstrad marketing director Michael Miller says the CPC464 met its 200,000-unit target for 1984; that remains the company’s sales claim."
+          ]
+        },
+        {
+          "headline": "Chuckie Egg packaging turns to holograms against copying",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "A’n’F is placing a reflection hologram on cassette packaging for its new Chuckie Egg program, reports Home Computing Weekly’s “Eggstra security” item. The sticker displays the copyright symbol and the word egg, giving a buyer a physical mark to inspect on the genuine package.",
+            "This is authentication, not proof that program code cannot be copied. The report discusses a possible future numbering scheme to help detect large-scale counterfeit distribution; it does not establish that such numbering is already in use. No named cracking crew or pirate board appears in the report.",
+            "The promotion also includes a competition with £1,800 at stake and a £500 first prize, with regional finalists due to meet in August. For the software counter, the immediate novelty is a label whose shifting image makes the packaging itself part of the anti-counterfeit pitch."
+          ]
+        },
+        {
+          "headline": "Atari’s announced ST machines promise a graphical desktop at home-computer prices",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ],
+          "body": [
+            "April’s COMPUTE! examines Atari’s proposed 130ST and 520ST, bringing the Motorola 68000 and Digital Research GEM into the home-computer price argument. The announced figures are $399 for a 128K 130ST and $599 for a 512K 520ST. Second-quarter availability is a projection, not evidence that either package is on a dealer’s shelf this week.",
+            "Menus, windows, icons and a two-button mouse give the preview its desktop character. Reported display modes run from 320 by 200 with sixteen colours to 640 by 400 monochrome, with a 512-colour palette for colour modes. RS-232, Centronics, MIDI, disk and joystick/mouse connections suggest a broad set of jobs beyond games. These remain April preview specifications, not a fresh announcement this week."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Disc-based Amstrad CPC",
+          "summary": "Monitor-inclusive packages £339 green / £449 colour; disc drive replaces cassette; no memory increase reported.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "BBC mouse package",
+          "summary": "HCW news reports Wigmore House BBC mouse package at £88.55 including Mousepaint. Features mentioned include colour handling, brush sizes, shapes, icons and printing; distinguish vendor claims from review findings.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Lotus 1-2-3 for IBM PCjr",
+          "detail": "Donald B. Trivette’s April COMPUTE! review, p. 63: two ROM cartridges plus a floppy. Announced July 1984, available December 1984, not new this week. A 128K PCjr has 39,500 bytes of worksheet space, or 45,700 bypassing the Access System; memory expandable to 512K.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "DR LOGO",
+          "detail": "Bundled with the new disc-based Amstrad; described as a graphics and teaching language in the HCW cover report.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — editorial review selections, not sales rankings",
+          "items": [
+            "Gribbly’s Day Out — Hewson; current April C64 review coverage. Rescue, Psi-powered flight, and environmental hazards; do not invent an exact release date.",
+            "Cauldron — HCW 109 p. 8 review describes scrolling flight, colour-matched keys and doors, then platform rooms and gathering ingredients. Palace Software; review prints £9.95.",
+            "Falcon Patrol II — HCW 109 p. 8 review: Virgin Games, £6.95, scrolling aircraft action with radar, flak and jammers; smooth movement but awkward altitude control.",
+            "Fifty Mission Crush — COMPUTE! April pp. 61–63, James V. Trunzo: SSI B-17 mission/crew simulation, Atari (40K plus BASIC and disk), Apple II (48K and disk), C64 with disk. Goal is 50 missions; saves between missions. This is review coverage, not an April release claim.",
+            "Winnie the Pooh in the Hundred Acre Wood — continuing April COMPUTE! review selection; Sierra/Disney, C64 or Apple II with disk, $39.95"
+          ],
+          "confidence": "same-week and same-month review coverage",
+          "sourceRefs": [
+            0,
+            2
+          ]
+        },
+        {
+          "label": "Top 5 Movies — April 26-28 domestic weekend",
+          "items": [
+            "1. Stick",
+            "2. Just One of the Guys",
+            "3. Police Academy 2: Their First Assignment",
+            "4. Moving Violations",
+            "5. Mask"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-04-27",
+          "rank": 1,
+          "title": "Don’t You (Forget About Me)",
+          "artist": "Simple Minds",
+          "confidence": "same-week",
+          "song": "Don’t You (Forget About Me)",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-04-27",
+          "rank": 2,
+          "title": "Don’t Come Around Here No More",
+          "artist": "Tom Petty and the Heartbreakers",
+          "confidence": "same-week",
+          "song": "Don’t Come Around Here No More",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-04-27",
+          "rank": 3,
+          "title": "Forever Man",
+          "artist": "Eric Clapton",
+          "confidence": "same-week",
+          "song": "Forever Man",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-04-27",
+          "rank": 4,
+          "title": "Everybody Wants to Rule the World",
+          "artist": "Tears for Fears",
+          "confidence": "same-week",
+          "song": "Everybody Wants to Rule the World",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-04-27",
+          "rank": 5,
+          "title": "Centerfield",
+          "artist": "John Fogerty",
+          "confidence": "same-week",
+          "song": "Centerfield",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Amstrad green-monitor bundle",
+          "price": "£339",
+          "note": "UK monitor-inclusive reported package; colour bundle £449.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "VTX 5000 modem",
+          "price": "£49.95",
+          "note": "Modem House advertisement; user-to-user software £3.95; free quarter Micronet subscription.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Atari 1030 package",
+          "price": "$79.95",
+          "note": "ADD-ON Systems advertisement; $2.75 shipping extra; 300 baud.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "St George’s Day at the keyboard",
+          "summary": "HCW’s April 23 cover promotes a “Slay the dragon” St George’s Day program on p. 28: a small seasonal computing item, not a commercial game launch.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "A Spectrum doorway to Micronet",
+        "summary": "Modem House advertises the VTX 5000 at £49.95 with a free quarter subscription to Micronet. User-to-user software is £3.95; ongoing service charges may apply.",
+        "tagline": "The telephone line joins the computer shelf.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "market": {
+        "headline": "Monitor bundles put disc computing in the price argument",
+        "summary": "The disc-based Amstrad’s reported £339 green and £449 colour packages come in below earlier £429/£529 forecasts. These British monitor bundles cannot be compared directly with Atari’s projected US computer-only ST prices.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0,
+          2
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Coca-Cola changes its formula",
+        "summary": "Coca-Cola announced a change to its secret recipe on April 23, putting a familiar national brand at the center of the week’s consumer news.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          5
+        ]
+      },
+      "bbsNote": {
+        "headline": "Budget modems sell a doorway to online clubs and information",
+        "summary": "Two dated advertisements show complementary UK and US pitches: asymmetric videotex access for Spectrum owners and low-cost Atari dial-up access. These are advertisements, not independent product tests.",
+        "posts": [
+          {
+            "topic": "Spectrum owners get a videotex offer",
+            "platform": "Spectrum / VTX 5000 / Micronet",
+            "text": "Modem House advertises 1200/75-baud access to Prestel, Micronet, BT Gold and user bulletin boards: £49.95 modem, £3.95 user-to-user software, and a free quarter Micronet subscription. This is an advertisement summary, not a surviving BBS post."
+          },
+          {
+            "topic": "Atari SIG and financial data in one pitch",
+            "platform": "Atari 1030 / CompuServe / Dow Jones News/Retrieval",
+            "text": "ADD-ON Systems advertises a 300-baud Atari 1030 package for $79.95 plus shipping, introductory CompuServe and Dow Jones time, and disk communications software. A 16K Atari and telephone line are specified; disk features require a drive. These are advertised capabilities, not independent test results."
+          }
+        ],
+        "sourceRefs": [
+          0,
+          2
+        ]
+      },
+      "curiosity": {
+        "headline": "A holographic egg guards the cassette",
+        "summary": "A’n’F puts reflection-hologram stickers on Chuckie Egg packaging.",
+        "detail": "HCW’s “Eggstra security” reports a sticker displaying the copyright symbol and the word egg, an unusually tangible anti-counterfeit measure for home-computer software. This verifies packaging authentication, not unbreakable copy protection.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Weekly reviews are not exact release dates.",
+          "Amstrad unveiling preceded this historical week; prices are UK monitor bundles.",
+          "Atari prices and delivery dates are announced projections from April coverage.",
+          "Games are editorial selections, not sales rankings.",
+          "Billboard Top Rock Tracks dated April 27; films cover April 26-28.",
+          "Coca-Cola announcement date supported by dated UPI index evidence; no quotation used.",
+          "No named piracy crew or breaking non-computer gadget event substantiated."
+        ]
+      }
+    },
+    {
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "visualProfile": {
         "tone": "Bomber crews and bargain computers",
         "motifs": [
           "B-17 halftone",

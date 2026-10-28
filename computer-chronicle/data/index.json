@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-28",
+      "historicDate": "1985-04-22",
+      "displayDate": "Week of April 22-28, 1985",
+      "edition": "Issue 143 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Gribbly takes flight; Amstrad trades tape for disc; a holographic egg marks the genuine article.",
+      "leadHeadline": "Gribbly’s Day Out brings airborne rescue to the Commodore screen",
+      "storyHeadlines": [
+        "Amstrad puts disc storage at the center of its new home micro",
+        "Chuckie Egg packaging turns to holograms against copying",
+        "Atari’s announced ST machines promise a graphical desktop at home-computer prices"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-04-22.jpg",
+      "thumb": "media/thumbs/1985-04-22.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-27",
       "historicDate": "1985-04-15",
       "displayDate": "Week of April 15-21, 1985",

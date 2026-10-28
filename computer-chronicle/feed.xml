@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 27 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 28 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of April 22-28, 1985 — Gribbly’s Day Out brings airborne rescue to the Commodore screen</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-04-22</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-04-22</guid>
+      <pubDate>Wed, 28 Oct 2026 12:00:00 GMT</pubDate>
+      <description>Hewson’s unusual rescue game earns a lively reception in this week’s home-computer press. A rescue mission takes a strange and expressive turn on the Commodore screen. Gribbly’s Day Out, from Hewson, sends its hero after young gribblets, mixing movement on land with Psi-powered flight. The review in this week’s Home Computing Weekly treats the result as an inventive departure from routine arcade action. Also this week: Amstrad puts disc storage at the center of its new home micro · Chuckie Egg packaging turns to holograms against copying · Atari’s announced ST machines promise a graphical desktop at home-computer prices.</description>
+    </item>
     <item>
       <title>Week of April 15-21, 1985 — Fifty Mission Crush puts the B-17 campaign on home computers</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-04-15</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-12-10</guid>
       <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
       <description>Activision turns a hit film into equipment-buying strategy and audiovisual spectacle on the C64. Ghostbusters gives the Commodore 64 owner a business to run as well as ghosts to catch. Activision’s game makes the player the proprietor of a Ghostbusters franchise, bringing the film’s premise to a home-computer screen. December’s Computer Gaming World includes it among the games receiving a first look. Also this week: Tandy 1000 offers a $1,200 challenge to IBM’s junior · Plus/4’s improved BASIC runs into Commodore’s compatibility wall · Archon II: Adept trades the chessboard for elemental combat.</description>
-    </item>
-    <item>
-      <title>Week of December 3-9, 1984 — F-15 Strike Eagle brings combat flying to Atari and Commodore desktops</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-12-03</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-12-03</guid>
-      <pubDate>Thu, 08 Oct 2026 12:00:00 GMT</pubDate>
-      <description>December’s gaming review puts Atari and Commodore pilots in a three-dimensional combat cockpit. MicroProse puts the home-computer pilot in a combat cockpit with F-15 Strike Eagle. The December Computer Gaming World review identifies Atari and Commodore 64 editions, each for one player, and credits Sid Meier and Grant Irani. Its arcade-and-strategy billing promises more than a simple shooting gallery. Also this week: Tandy 1000 challenges IBM on price and bundled software · MSX promises common software across competing home computers · A Commodore can watch the house as well as run games.</description>
     </item>
   </channel>
 </rss>
