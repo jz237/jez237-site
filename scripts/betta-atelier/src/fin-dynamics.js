@@ -259,7 +259,7 @@ export class FinDynamics {
         want += (DORSAL_ALERT - want) * Math.max(turning, lifted) * (1 - resting);
         rate = want > this.open ? DORSAL_RISE : DORSAL_FALL;
       } else {
-        if (kind === 0) {
+        if (kind === 0 && state.mode === 'hover') {
           // At hover the fan sags partly shut and spreads again now and then, on no beat.
           if (this.clock >= this.sagAt) { this.sagTo = -SAG * r() * r() * 1.4 + 0.3 * SAG * r(); this.sagAt = this.clock + 1.2 + 4 * r(); }
           this.sag += (this.sagTo - this.sag) * (1 - Math.exp(-0.9 * dt));
