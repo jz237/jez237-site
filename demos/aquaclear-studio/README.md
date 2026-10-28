@@ -7,7 +7,7 @@ Serve the repository over HTTP, then open `/demos/aquaclear-studio/`. All runtim
 ## Experience
 
 - Fifteen selectable assemblies, corresponding to the manual's included component groups.
-- Assembled, cutaway, continuous exploded and directional water-flow views.
+- Assembled, cutaway, continuous exploded and directional water-flow views. Small three-dimensional arrows follow each path tangent; their heads remain directional when motion is paused. Cyan identifies intake, mint return, and amber refiltration or bypass.
 - Instanced ceramic rings with actual holes, granular carbon, procedural foam pores, ribbed basket, motor, rotor, intake and leveling device.
 - Six guided chapters, adjustable illustrative refiltration and a restricted-media example.
 - Four care stages with pump animation disabled; single-component inspection; orbit, fit, camera presets, fullscreen, labels and pause controls.

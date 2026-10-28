@@ -99,12 +99,16 @@ export function buildFilter(){
   for(let i=0;i<4;i++){const r=mesh(context,new T.RingGeometry(.5,.507,80),rippleMaterial.clone(),.55,2.285,3);r.rotation.x=-Math.PI/2;r.scale.y=.6;ripples.push(r);}
   const traceGroup=new T.Group();root.add(traceGroup);const flowPaths=[];
   const chamberWater=mesh(traceGroup,new T.BoxGeometry(.88,1,2.22),new T.MeshBasicMaterial({color:'#62ced9',transparent:true,opacity:.08,depthWrite:false}),-1.53,1.7,-.03);
-  function path(points,color,kind='main',count=32){const curve=new T.CatmullRomCurve3(points.map(p=>V(...p)),false,'centripetal');const line=new T.Line(new T.BufferGeometry().setFromPoints(curve.getPoints(140)),new T.LineBasicMaterial({color,transparent:true,opacity:.24,depthTest:false}));line.renderOrder=9;traceGroup.add(line);const dots=new T.InstancedMesh(new T.SphereGeometry(.032,8,6),new T.MeshBasicMaterial({color,depthTest:false}),count);dots.renderOrder=10;traceGroup.add(dots);flowPaths.push({curve,line,dots,kind,count});}
-  path([[-1.5,-1.1,2.44],...intakePath,[-1.5,.42,-.32],[-.4,.4,-.32],[.5,.45,-.3]],'#64dff2','intake',38);
+  // A shaft and pointed head in one instanced mesh. Local +Y is the direction
+  // of travel; orient each arrow to the curve tangent, including vertical bends.
+  const arrowGeometry=new T.LatheGeometry([[0,-.14],[.019,-.14],[.019,.018],[.067,.018],[0,.15]].map(([x,y])=>new T.Vector2(x,y)),12);
+  const arrowAxis=V(0,1,0),tangent=V();
+  function path(points,color,kind='main',count=24){const curve=new T.CatmullRomCurve3(points.map(p=>V(...p)),false,'centripetal');const line=new T.Line(new T.BufferGeometry().setFromPoints(curve.getPoints(140)),new T.LineBasicMaterial({color,transparent:true,opacity:.24,depthTest:false}));line.renderOrder=9;traceGroup.add(line);const arrows=new T.InstancedMesh(arrowGeometry,new T.MeshBasicMaterial({color,depthTest:false}),count);arrows.name=`flow-arrows-${kind}`;arrows.renderOrder=10;traceGroup.add(arrows);flowPaths.push({curve,line,arrows,kind,count});}
+  path([[-1.5,-1.1,2.44],...intakePath,[-1.5,.42,-.32],[-.4,.4,-.32],[.5,.45,-.3]],'#64dff2','intake',24);
   // A deliberately schematic connection between the actual rear/front media compartments.
-  path([[.5,.45,-.3],[.5,1.1,-.3],[.5,1.72,-.57],[.5,2.72,-.57],[.5,2.9,.55],[.5,3.18,.8],[.5,3.18,1.7],[.5,3.06,2.2],[.5,2.28,2.53],[.5,2.25,3.6]],'#a8f4d4','return',40);
-  path([[.5,3.07,.76],[-.65,3.14,.75],[-1.25,2.8,.65],[-1.4,.6,.4],[.5,.45,-.3],[.5,1.1,-.3]],'#efa865','recirculation',23);
-  path([[-1.5,.5,-.32],[-1.5,2.7,.5],[-1.3,3.32,1.1],[-1.3,3.15,1.8],[-1.3,2.3,2.5]],'#efa865','bypass',20);
+  path([[.5,.45,-.3],[.5,1.1,-.3],[.5,1.72,-.57],[.5,2.72,-.57],[.5,2.9,.55],[.5,3.18,.8],[.5,3.18,1.7],[.5,3.06,2.2],[.5,2.28,2.53],[.5,2.25,3.6]],'#a8f4d4','return',18);
+  path([[.5,3.07,.76],[-.65,3.14,.75],[-1.25,2.8,.65],[-1.4,.6,.4],[.5,.45,-.3],[.5,1.1,-.3]],'#efa865','recirculation',15);
+  path([[-1.5,.5,-.32],[-1.5,2.7,.5],[-1.3,3.32,1.1],[-1.3,3.15,1.8],[-1.3,2.3,2.5]],'#efa865','bypass',11);
   const guideMaterial=new T.LineDashedMaterial({color:'#8dbfb8',transparent:true,opacity:.25,dashSize:.09,gapSize:.09});
   for(const [id,p] of parts){
     p.object.traverse(m=>{if(m.isMesh){m.userData.part=id;pickables.push(m);}});p.center=new T.Box3().setFromObject(p.object).getCenter(V());
@@ -128,13 +132,13 @@ export function buildFilter(){
     const hydraulics=flowModel(flow,restricted);lever.position.x=-1.7+hydraulics.setting*.4;
     returnGroup.visible=running&&mode!=='cutaway';traceGroup.visible=mode==='flow'&&running;
     const waterHeight=restricted?3.05:2.52;chamberWater.scale.y=waterHeight;chamberWater.position.y=.25+waterHeight/2;
-    for(const p of flowPaths){const active=p.kind==='recirculation'?flow<95:p.kind==='bypass'?restricted:true;p.line.visible=p.dots.visible=active;if(!active)continue;
+    for(const p of flowPaths){const active=p.kind==='recirculation'?flow<95:p.kind==='bypass'?restricted:true;p.line.visible=p.arrows.visible=active;if(!active)continue;
       const speed=p.kind==='return'?hydraulics.delivery:.8;
-      for(let i=0;i<p.count;i++){const t=(i/p.count+time*.075*speed)%1;dummy.position.copy(p.curve.getPointAt(t));dummy.rotation.set(0,0,0);dummy.scale.setScalar(p.kind==='recirculation'?.8+hydraulics.recirculation:1);dummy.updateMatrix();p.dots.setMatrixAt(i,dummy.matrix);}p.dots.instanceMatrix.needsUpdate=true;
+      for(let i=0;i<p.count;i++){const t=(i/p.count+time*.075*speed)%1;dummy.position.copy(p.curve.getPointAt(t));p.curve.getTangentAt(t,tangent).normalize();dummy.quaternion.setFromUnitVectors(arrowAxis,tangent);dummy.scale.setScalar(1);dummy.updateMatrix();p.arrows.setMatrixAt(i,dummy.matrix);}p.arrows.instanceMatrix.needsUpdate=true;
     }
     const a=surface.geometry.attributes.position;for(let i=0;i<a.count;i++){const x=surfaceBase[i*3],y=surfaceBase[i*3+1];a.setZ(i,Math.sin(x*3.5+time*1.3)*Math.cos(y*3-time)*.012);}a.needsUpdate=true;
     const f=waterfall.geometry.attributes.position;for(let i=0;i<f.count;i++){f.setZ(i,Math.sin(fallBase[i*3]*19+time*3)*.012+Math.sin(fallBase[i*3+1]*7+time*5)*.018);}f.needsUpdate=true;waterfall.material.opacity=.16+hydraulics.delivery*.18;
     ripples.forEach((r,i)=>{const phase=(time*.3+i/4)%1;r.scale.set(1+phase*2.3, .6+phase*1.4,1);r.material.opacity=(1-phase)*.22;});
   }
-  return {root,parts,pickables,pose,context,guides};
+  return {root,parts,pickables,pose,context,guides,flowPaths};
 }

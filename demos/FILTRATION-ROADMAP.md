@@ -15,6 +15,17 @@ The alternate photographic aquarium, the Hidden Reef koi mount and Philadelphia'
 
 ## Revised order
 
+### AC70 improvements to consider
+
+The flow view now uses small tangent-aligned 3D arrows, including in paused views. Further improvements below are proposals, not implemented features:
+
+- A guided water journey with camera close-ups and one highlighted stage at a time, so the inlet, impeller, foam, upper media and spillway are easy to follow.
+- A magnified working impeller view that exposes the blades and pump chamber, synchronized with the main model.
+- A clearer clean-versus-loaded media comparison: visible debris caught at the foam, reduced passage through it, and an explicitly labeled bypass. Keep this qualitative; do not invent calibrated clogging or chemistry values.
+- A more natural spillway sheet and surface ripples, with adjustable aquarium water level and a visible manufacturer reference mark.
+
+### Next distinct filter mechanisms
+
 1. **Air-driven sponge filter.** Best next distinct mechanism: airlift, bubbles entraining water, sponge surfaces, gentle circulation, air line and check-valve placement. Show the air and water as different paths. No current gallery exhibit focuses on this mechanism.
 2. **Undergravel filter.** A useful contrast: gravel as the bed, slotted plates, lift tubes, trapped detritus and maintenance. Explain conventional and reverse-flow arrangements separately.
 3. **Wet/dry trickle filter.** Show a distributor, oxygen-exposed biological media, sump water level and return. Differentiate it from the existing submerged live-rock sump exhibit.

@@ -1,8 +1,8 @@
 import * as T from './vendor/three.module.js';
 import { OrbitControls } from './vendor/OrbitControls.js';
 import { RoomEnvironment } from './vendor/RoomEnvironment.js';
-import { buildFilter } from './model.js';
-import { PARTS, LESSONS, CARE, flowModel } from './data.js';
+import { buildFilter } from './model.js?v=flow-arrows-1';
+import { PARTS, LESSONS, CARE, flowModel } from './data.js?v=flow-arrows-1';
 
 const $=id=>document.getElementById(id), reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const state={mode:'cutaway',tab:'explore',amount:0,target:0,flow:100,restricted:false,selected:'foam',isolated:false,paused:reduced.matches,rotate:false,labels:true,tour:-1,care:-1,sequence:false,sequenceTime:0,time:0,ready:false};
