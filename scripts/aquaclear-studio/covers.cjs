@@ -1,0 +1,5 @@
+const fs=require('node:fs');const path=require('node:path');
+let chromium;try{({chromium}=require('playwright-core'));}catch{({chromium}=require('C:/Users/jrb04/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core'));}
+(async()=>{const browser=await chromium.launch({executablePath:process.env.CHROME_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,args:['--enable-webgl','--ignore-gpu-blocklist']});const p=await browser.newPage({viewport:{width:1440,height:900}});const errors=[];p.on('pageerror',e=>errors.push(e.message));
+ for(const name of ['aquaclear-studio','filtoclear-studio','reef-filtration']){await p.goto(`http://127.0.0.1:8818/demos/${name}/`);await p.waitForTimeout(3500);await p.mouse.move(1,1);await p.screenshot({path:path.resolve(`demos/assets/${name}.jpg`),type:'jpeg',quality:88});console.log(name,await p.title());}
+ console.log({errors});if(errors.length)throw new Error('Cover demo failed');await browser.close();})();

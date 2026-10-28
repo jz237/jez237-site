@@ -1,0 +1,31 @@
+/* Run with a local static server, or pass a deployed URL. No app state is mutated directly. */
+const assert=require('node:assert/strict');
+const fs=require('node:fs');const path=require('node:path');
+let chromium;try{({chromium}=require('playwright-core'));}catch{({chromium}=require('C:/Users/jrb04/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core'));}
+const base=process.argv[2]||'http://127.0.0.1:8818/demos/aquaclear-studio/';
+const output=path.resolve('tmp/aquaclear-qa');fs.mkdirSync(output,{recursive:true});
+(async()=>{
+ const browser=await chromium.launch({executablePath:process.env.CHROME_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,args:['--enable-webgl','--ignore-gpu-blocklist']});
+ const page=await browser.newPage({viewport:{width:1440,height:1000}});const errors=[],bad=[];
+ page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});page.on('response',r=>{if(r.status()>=400)bad.push(`${r.status()} ${r.url()}`);});
+ await page.goto(base);await page.waitForFunction(()=>document.body.dataset.ready==='true');await page.waitForTimeout(1000);
+ const snapshot=()=>page.evaluate(()=>window.filterStudio.snapshot());assert.equal((await snapshot()).partCount,15);
+ const geometry=await page.evaluate(async()=>{const T=await import('./vendor/three.module.js'),{buildFilter}=await import('./model.js');const f=buildFilter();f.pose(1,'exploded',0,100,false,'foam',false,-1,.05,true);const bounds=id=>new T.Box3().setFromObject(f.parts.get(id).object);const result={foamClear:bounds('foam').min.y>bounds('basket').max.y,ceramicClear:bounds('biomax').min.y>bounds('foam').max.y,allPickable:[...f.parts.keys()].every(id=>f.pickables.some(m=>m.userData.part===id))};f.root.traverse(o=>{o.geometry?.dispose();if(o.material){for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});return result;});assert.deepEqual(geometry,{foamClear:true,ceramicClear:true,allPickable:true});
+ await page.screenshot({path:path.join(output,'desktop-cutaway.png')});
+ for(const mode of ['assembled','exploded','flow']){await page.locator(`[data-mode=${mode}]`).click();await page.waitForTimeout(1500);assert.equal((await snapshot()).mode,mode);await page.screenshot({path:path.join(output,`desktop-${mode}.png`)});}
+ await page.locator('#flow').fill('0');await page.locator('#flow').dispatchEvent('input');assert.match(await page.locator('#refiltration').innerText(),/50%/);
+ await page.locator('#restricted').check();assert.equal((await snapshot()).restricted,true);await page.waitForTimeout(600);await page.screenshot({path:path.join(output,'restricted.png')});
+ await page.locator('#tab-care').click();for(let i=0;i<4;i++){await page.locator(`[data-care="${i}"]`).click();await page.waitForTimeout(1000);assert.equal((await snapshot()).care,i);if(i===2)await page.screenshot({path:path.join(output,'care.png')});}
+ await page.locator('#reset').click();await page.locator('#tour').click();for(let i=0;i<6;i++){assert.equal((await snapshot()).tour,i);await page.locator('#next').click();}assert.equal((await snapshot()).tour,-1);
+ await page.locator('#reset').click();const ids=await page.locator('#part-list option').evaluateAll(es=>es.map(e=>e.value));
+ for(const id of ids){await page.locator('#part-list').selectOption(id);assert.equal((await snapshot()).selected,id);await page.locator('#isolate').click();assert.equal((await snapshot()).isolated,true);await page.waitForTimeout(100);await page.locator('#clear').click();assert.equal((await snapshot()).isolated,false);}
+ await page.locator('#reset').click();await page.locator('#pause').click();const time=(await snapshot()).time;await page.waitForTimeout(500);assert.equal((await snapshot()).time,time);
+ await page.locator('#tab-explore').focus();await page.keyboard.press('ArrowRight');assert.equal(await page.locator('#tab-flow').getAttribute('aria-selected'),'true');
+ await page.locator('#reset').click();await page.locator('#sequence').click();await page.waitForTimeout(9300);assert.equal((await snapshot()).mode,'assembled');assert.equal((await snapshot()).sequence,false);
+ const box=await page.locator('#viewport').boundingBox();await page.mouse.move(box.x+box.width*.5,box.y+box.height*.5);const before=(await snapshot()).camera;await page.mouse.down();await page.mouse.move(box.x+box.width*.65,box.y+box.height*.53,{steps:8});await page.mouse.up();await page.waitForTimeout(500);assert.notDeepEqual((await snapshot()).camera,before);
+ await page.locator('#reset').click();await page.setViewportSize({width:390,height:844});await page.waitForTimeout(1300);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);await page.screenshot({path:path.join(output,'mobile.png'),fullPage:true});
+ await page.locator('[data-mode=exploded]').click();await page.waitForTimeout(1300);await page.screenshot({path:path.join(output,'mobile-exploded.png'),fullPage:true});
+ const reduced=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'});await reduced.goto(base);await reduced.waitForFunction(()=>document.body.dataset.ready==='true');assert.equal(await reduced.locator('body').getAttribute('data-motion'),'paused');await reduced.locator('[data-mode=exploded]').click();await reduced.waitForTimeout(100);assert.equal(await reduced.locator('body').getAttribute('data-explosion'),'100');await reduced.close();
+ const fallback=await browser.newPage();await fallback.addInitScript(()=>{const original=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){return /webgl/.test(type)?null:original.call(this,type,...args);};});await fallback.goto(base);await fallback.locator('#error').waitFor({state:'visible'});await fallback.locator('#part-list').selectOption('biomax');assert.equal(await fallback.locator('#part-title').innerText(),'BIOMAX ceramic media');await fallback.close();
+ assert.deepEqual(errors,[]);assert.deepEqual(bad,[]);console.log(JSON.stringify({result:'PASS',base,parts:ids.length,desktop:true,mobile:true,keyboard:true,flow:true,tour:true,care:true,sequence:true,reducedMotion:true,webglFallback:true,screenshots:output},null,2));await browser.close();
+})().catch(e=>{console.error(e);process.exit(1);});
