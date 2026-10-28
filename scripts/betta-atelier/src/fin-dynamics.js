@@ -76,11 +76,11 @@ const SLIP = 1.8, LIE = 0.4, FLARE_FORWARD = 0.45;
  *  the outer fin of the turn it comes with the most (the inner one STROKE_INNER of that), over the
  *  gait's own beat. */
 const STROKE_TIME = 0.45, STROKE_REACH = 0.6, STROKE_INNER = 0.35;
-/** A kick of the tail (state.kick, kickAt: the gait's single sweep) swings the caudal fan out further
+/** A kick of the tail (state.kick, kickAt, kickSweeps: the gait's sweep, or whole beat) swings the caudal fan out further
  *  than the peduncle goes (KICK_FAN rad at the most), driven through the water by the muscles at the
  *  rays' bases (KICK_HOLD: the share of the way to its target the inner fan is pulled each of the
  *  first constraint passes, at the kick's height), its margin trailing like a sail's leech. */
-const KICK_FAN = 0.4, KICK_HOLD = 0.35;
+const KICK_FAN = 0.26, KICK_HOLD = 0.25;
 /** The ventral streamers are held by their own muscles in the fish's frame, not hung from it: at hover
  *  swung forward of their photographed rake by PELVIC_HOLD (rad: down and a little back from the
  *  belly, whatever way the fish is tipped), splayed apart (PELVIC_SPLAY, sideways at the tip per unit
@@ -301,7 +301,7 @@ export class FinDynamics {
         if (this.clock >= this.twistAt) { this.twistTo = r() * 2 - 1; this.twistAt = this.clock + 1 + 2.5 * r(); }
         this.twist += (this.twistTo - this.twist) * (1 - Math.exp(-1.2 * dt));
         this.turnLag += (clamp(turn, -1.5, 1.5) - this.turnLag) * (1 - Math.exp(-2.5 * dt));
-        this.kickHold = state.kick && (state.kickAt ?? 1) < 1 ? Math.min(1, Math.abs(state.kick)) * Math.sin(Math.PI * state.kickAt) : 0;
+        this.kickHold = state.kick && (state.kickAt ?? 1) < 1 ? Math.min(1, Math.abs(state.kick)) * Math.abs(Math.sin(Math.PI * state.kickAt * (state.kickSweeps ?? 1))) : 0;
       }
     } else if (kind === 3) {
       this.clock += dt;
@@ -385,7 +385,7 @@ export class FinDynamics {
     const pleat = kind < 3 ? PLEAT[kind] * (0.5 + clamp(1 - spread, 0, 1)) * held * (1 - 0.6 * flare) : 0;
     const twist = kind === 0 ? TWIST * (0.6 * this.twist - 0.5 * this.turnLag) * (1 - 0.7 * flare) : 0;
     // (A kick of the tail swings the fan out beyond the peduncle's own swing.)
-    const kicked = kind === 0 && state.kick ? KICK_FAN * state.kick * kickSweep(state.kickAt ?? 1, 1) : 0;
+    const kicked = kind === 0 && state.kick ? KICK_FAN * state.kick * kickSweep(state.kickAt ?? 1, 1, state.kickSweeps ?? 1) : 0;
     if (kind === 3) {
       // Alternating rowing stroke, then feathered/cupped recovery.
       // (Each fin in its own time: slipping in and out of step with the other.)

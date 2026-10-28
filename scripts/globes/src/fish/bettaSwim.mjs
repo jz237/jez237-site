@@ -124,8 +124,9 @@ export const DART_START = 0.4, DART_SPEED = 0.5, DART_TIME = 0.3, LUNGE_OFTEN = 
 // gains no way and swings round only slowly for STROKE_LEAD s after the stroke, while the sweep runs
 // down the body to the tail; setting off, START_LEAD s, until its first sweep is at its widest. A
 // hover turn takes a sweep of the tail with its pectoral beat from TURN_KICK of its strongest on (a
-// half beat: the tail swung out the way the head is not).
-export const STROKE_LEAD = 0.18, START_LEAD = 0.26, TURN_KICK = 0.3;
+// half beat: the tail swung out the way the head is not), TURN_SWEEP the size of setting off's: turning
+// on the spot, the pectorals do most of the work, and a full sweep would beat the tail for nothing.
+export const STROKE_LEAD = 0.18, START_LEAD = 0.26, TURN_KICK = 0.5, TURN_SWEEP = 0.6;
 // A fish hanging in the water or all but still keeps near level: it tips towards where it is going
 // only as it means to get under way or does (from LEVEL_SLOW to LEVEL_FAST units/s).
 const LEVEL_SLOW = 0.03, LEVEL_FAST = 0.09;
@@ -964,7 +965,7 @@ export class BettaSwim {
       if (this.cueClock > YAW_GAP && Math.abs(want) > 0.25 && Math.abs(this.yawStroke) < 0.3 && most > 0.3) {
         this.yawStroke = clamp(want * YAW_DRAG, -most, most);
         const size = Math.abs(this.yawStroke) / YAW_PEAK;
-        this.cue(0.4 + 0.6 * size, size > TURN_KICK ? size : 0, this.yawStroke, 1, STROKE_LEAD);
+        this.cue(0.4 + 0.6 * size, size > TURN_KICK ? TURN_SWEEP * size : 0, this.yawStroke, 1, STROKE_LEAD);
       }
       // (Its head swings round once the stroke is under way.)
       wantedRate = this.yawStroke * smooth(0, STROKE_LEAD, this.leadClock) + 0.03 * this.wander(0, 0.6); angularAcceleration = YAW_SNAP;
@@ -989,7 +990,7 @@ export class BettaSwim {
       const stalled = Math.abs(this.speed) < 0.04 && !escaping && !parked;
       if (stalled && Math.abs(wantedRate) > 0.5 && Math.abs(this.steerRate) < 0.2 && this.cueClock > YAW_GAP) {
         const size = Math.min(1, Math.abs(wantedRate) / YAW_PEAK);
-        this.cue(0.4 + 0.6 * size, size > TURN_KICK ? size : 0, wantedRate, 1, STROKE_LEAD);
+        this.cue(0.4 + 0.6 * size, size > TURN_KICK ? TURN_SWEEP * size : 0, wantedRate, 1, STROKE_LEAD);
       }
       if (stalled) wantedRate *= smooth(0, STROKE_LEAD, this.leadClock);
     }

@@ -879,7 +879,7 @@ export function createBetta({ compact = false, textures = true } = {}) {
         body: bodyMotion, time: t, mode, phase, pectoralPhase, pectoralPower, scull, tuck, pectoralEffort, pectoralScull, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value, clamp: display.clamp,
         // (The body's strokes, for the fins: a pectoral push, 0..1; darting, fins to fold; braking, fins to flare;
         // a kick of the tail, its size and side and how far through it, for the caudal's sweep.)
-        push, dart, brake, kick: gait.kick, kickAt: gait.kickAt,
+        push, dart, brake, kick: gait.kick, kickAt: gait.kickAt, kickSweeps: gait.kickSweeps,
         billowPhase, wash, speed: relativeFlow / BODY_LENGTH, accel: accelLocal.toArray(), down: downLocal.toArray(),
         heading, angularVelocity, velocity, origin: fish.position.toArray(),
         localHydrodynamics, solids: finSolids.count ? finSolids : null,
