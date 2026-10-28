@@ -121,6 +121,7 @@ import {DUST,dustRate} from './dust-trails';
 import {SoftParticlesPass} from './soft-particles';
 import {reflectivePuddles} from './puddle-reflections';
 import {SharpenPass} from './sharpen';
+import {ContactShadows} from './contact-shadows';
 import {COLD_START,coldStartPuffs,crankStarts} from './cold-start';
 import {GravelRoost,ROOST,roostRate,STONE_HIT,stoneHitVolume,type RoostBody} from './gravel-roost';
 import {STRAP,TowStraps} from './tow-straps';
@@ -345,6 +346,7 @@ const settings = {
 const adaptiveGraphics=new AdaptiveGraphics();
 // Whether the sun's shadows are drawn this tier, and the strength they had before medium faded them out.
 let shadowsLive=true,shadowStrength=1;
+let contactShadows:ContactShadows|undefined;
 let drivingControls=readControls();
 try{drivingControls=readControls(localStorage.getItem(CONTROLS_KEY));}catch{}
 let garage=readGarage();
@@ -3083,6 +3085,8 @@ function frame(now: number) {
     staticShadows.prepare(renderer);
   }
   if (cars[0]) reflections.update(cars[0].root);
+  // Without the sun's shadow pass (medium), a soft footprint under each car keeps it on the ground.
+  contactShadows?.update(cars, DEFINITIONS, (x, z, near) => Math.max(fx.floorAt(x, z, near), fx.groundHeight(x, z) + .018), !shadowsLive && !!fx);
   renderer.shadowMap.needsUpdate = true;
   // On medium the sun's shadow has no map (the shaders sample an empty texel, not a 2048² one) and no strength.
   if(quarry){const sun=quarry.sun.shadow;sun.autoUpdate=shadowsLive;if(!shadowsLive){sun.needsUpdate=false;if(sun.map){sun.map.dispose();sun.map=null;}if(sun.intensity!==0){shadowStrength=sun.intensity;sun.intensity=0;}}}
@@ -3223,6 +3227,7 @@ async function boot() {
   fx.onSparks = (at, count) => { if (!online?.active) sparkLight.flash(at, count); };
   propFires.onIgnite=(i,p)=>{if(!studio&&!online?.active)recorder?.drip({time:elapsed,position:[p.x,p.y,p.z],kind:4,seed:i/1000});sound.groundIgnite(new T.Vector3(p.x,p.y,p.z),2);};
   fx.slicks.onIgnite=(x,y,z,kind,owner)=>{if(!studio&&!online?.active){recorder?.drip({time:elapsed,position:[x,y,z],kind:3,seed:fx.slicks.wet?.5:0});eventAwards.ignited(owner);}sound.groundIgnite(new T.Vector3(x,y,z),kind);};
+  contactShadows = new ContactShadows(scene);
   vehicleFire = new VehicleFire(scene,(p,n,type,force)=>fx.emit(p,n,type,force));
   vehicleFire.setQuality(adaptiveGraphics.quality);
   puddleSplashes=new PuddleSplashes(scene);puddleSplashes.setQuality(adaptiveGraphics.quality);

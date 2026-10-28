@@ -4,6 +4,7 @@ import * as T from 'three';
 import {KESTREL_RING_ARENA,KESTREL_RING_BARRIERS} from './kestrel-ring-arena';
 import {freezeSceneryTransforms} from './render-work';
 import {createPhotoTrees,type PhotoTree} from './photo-trees';
+import {turf} from './turf';
 /** Kestrel Ring: painted asphalt around a grass island with a tyre wall and a
  * four-faced scoreboard tower; covered stands and floodlights outside. */
 export function createKestrelRingWorld(){
@@ -27,10 +28,10 @@ export function createKestrelRingWorld(){
  if(typeof document!=='undefined')attachArenaGroundDetail(floorMaterial,'harrow');
  const floor=new T.Mesh(floorGeometry,floorMaterial);floor.name='kestrel_ring_asphalt';floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;root.add(floor);
  // Mown grass apron beyond the asphalt pad.
- const apronMaterial=new T.MeshStandardMaterial({color:0x6a7d45,roughness:1}),apronGeometry=new T.PlaneGeometry(700,700);
+ const apronMaterial=turf(new T.MeshStandardMaterial({color:0x6a7d45,roughness:1})),apronGeometry=new T.PlaneGeometry(700,700);
  const apron=new T.Mesh(apronGeometry,apronMaterial);apron.name='kestrel_ring_apron';apron.rotation.x=-Math.PI/2;apron.position.y=-.03;apron.receiveShadow=true;root.add(apron);
  // Grass island inside its wall.
- const grassMaterial=new T.MeshStandardMaterial({color:0x5e7a3c,roughness:1}),islandGeometry=new T.CylinderGeometry(island-.45,island-.2,.7,48);
+ const grassMaterial=turf(new T.MeshStandardMaterial({color:0x5e7a3c,roughness:1})),islandGeometry=new T.CylinderGeometry(island-.45,island-.2,.7,48);
  const grass=new T.Mesh(islandGeometry,grassMaterial);grass.name='kestrel_ring_island';grass.position.y=.35;grass.receiveShadow=true;root.add(grass);
  const spectators:SpectatorPlace[]=[];
  const batches=new Map<string,{geometry:T.BufferGeometry;finish:keyof typeof materials;list:T.Matrix4[]}>(),matrix=new T.Matrix4(),q=new T.Quaternion(),up=new T.Vector3(0,1,0);
