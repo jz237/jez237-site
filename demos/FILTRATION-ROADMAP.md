@@ -15,14 +15,20 @@ The alternate photographic aquarium, the Hidden Reef koi mount and Philadelphia'
 
 ## Revised order
 
-### AC70 improvements to consider
+### AC70 realism update — implemented October 28, 2026
 
-The flow view now uses small tangent-aligned 3D arrows, including in paused views. Further improvements below are proposals, not implemented features:
+- Six close-up guided chapters with subdued context and dedicated pump, foam, media and spillway camera positions.
+- A working impeller close-up with an open teaching section, the same rotor as the main assembly, and axial-in/radial-out arrows. Pause freezes it; care disables operation.
+- Clean versus loaded foam: visible upstream deposits, incoming debris captured at the foam, lower normal delivery and a labeled bypass. These are qualitative illustrations.
+- Curved, animated spillway water meeting an adjustable surface; interfering surface waves, small bubbles/droplets, and a 0–38 mm water-level control with the manufacturer's maximum-gap reference mark.
+- Nonmetallic case materials, finer foam detail, less overlap in ceramic placement and revised lighting. Still an educational reconstruction, not a photoreal scan.
 
-- A guided water journey with camera close-ups and one highlighted stage at a time, so the inlet, impeller, foam, upper media and spillway are easy to follow.
-- A magnified working impeller view that exposes the blades and pump chamber, synchronized with the main model.
-- A clearer clean-versus-loaded media comparison: visible debris caught at the foam, reduced passage through it, and an explicitly labeled bypass. Keep this qualitative; do not invent calibrated clogging or chemistry values.
-- A more natural spillway sheet and surface ripples, with adjustable aquarium water level and a visible manufacturer reference mark.
+### Next graphics and realism priorities
+
+1. **Measured reference geometry.** Obtain detailed AC70 photographs or measurements of the actual housing, intake, impeller and media carrier. Replace approximations with verified proportions, wall thickness, seams and molding details. Current open pump section is schematic.
+2. **Water optics.** Add scene-aware refraction/reflection, edge menisci and restrained moving caustics, with a cheaper mobile fallback. The current transparent water and analytic waves do not refract the scene.
+3. **Materials and contact.** Add spatially varied roughness, subtle molded-plastic grain, wet/dry transitions, fine ceramic pores and actual fabric mesh. Physically settle the ceramic pieces; add local contact shading without obscuring teaching cutaways.
+4. **Lighting and motion polish.** Add quality tiers for softer contact shadows and reflections, small coherent surface eddies, and reference-matched impeller blade geometry. Preserve the explicitly slowed teaching motion and reduced-motion controls.
 
 ### Next distinct filter mechanisms
 

@@ -5,3 +5,8 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
 .leaders{position:absolute;inset:0;width:100%;height:100%;overflow:visible}.leaders path{fill:none;stroke:#a0c5bb;stroke-width:.75;stroke-opacity:.6}
 @media(max-width:760px){.inspector-heading br{display:initial}.scene-footer span:last-child{display:inline}.scene-footer>span:last-child{display:none}}
+
+.study-actions{display:grid;gap:8px;margin:20px 0 10px}.study-actions button{text-align:left}.water-control{border-top:1px solid #355059;margin-top:20px;padding-top:8px}#study-caption{display:none;position:absolute;z-index:3;top:80px;left:30px;right:30px;color:#d8eadd;font-size:12px;letter-spacing:.03em;pointer-events:none}body[data-journey] #study-caption{display:block}body[data-journey] .scene-heading h1,body[data-journey] .edition{display:none}body[data-mode=pump] .scene-heading h1{font-size:28px}body[data-mode=pump] .edition{display:none}
+@media(max-width:760px){#study-caption{top:63px;left:20px;right:20px;font-size:11px}.water-control .range-title{letter-spacing:0;font-size:8px}}
+
+.journey-stage-nav{display:none}@media(max-width:760px){body[data-journey] .journey-stage-nav{display:flex;align-items:center;gap:12px;position:absolute;z-index:5;left:20px;top:91px}.journey-stage-nav button{padding:3px 10px;background:#102b34}.journey-stage-nav output{font-size:10px;color:#bbdaca}}
