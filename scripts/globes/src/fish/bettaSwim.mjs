@@ -962,7 +962,9 @@ export class BettaSwim {
     // (Once easing off, it goes on until they are well clear.)
     const finsNear = !!fins && fins.gap < (this.finsClearing ? 2 * FIN_ROOM : FIN_ROOM) && !nearWall;
     this.finsClearing = finsNear;
-    if (finsNear && among && among.gap >= 0) { among.gap = -1; among.away = fins.away; }
+    // (Hanging there with them on a thing, it does not stay: it goes on its way, its next leg chosen
+    // clear of things.)
+    if (finsNear && this.mode === 'hover' && this.timer > 0) this.timer = 0;
     const crowded = !!among && among.gap < 0 && !nearWall;
     let goal = this.target;
     if (feed) goal = feed.goal;
@@ -1054,8 +1056,10 @@ export class BettaSwim {
         // (Going back the way it came, a strong one: the head whipped round, the body in a deep C.)
         const most = Math.max(maxRate, YAW_PEAK) * (1 + smooth(1.2, 2.6, Math.abs(round)));
         this.turnStroke = clamp(round * TURN_DRAG, -most, most);
-        const size = Math.min(1, Math.abs(this.turnStroke) / YAW_PEAK);
-        this.cue(0.4 + 0.6 * size, size > TURN_KICK ? TURN_SWEEP * size : 0, this.turnStroke, 1, STROKE_LEAD);
+        // (A sweep of the tail only to begin a big one, and not easing out from among things: the strokes
+        // after, the pectorals alone.)
+        const size = Math.min(1, Math.abs(this.turnStroke) / YAW_PEAK), first = Math.abs(this.steerRate) < 0.15 && !crowded;
+        this.cue(0.4 + 0.6 * size, first && size > TURN_KICK ? TURN_SWEEP * size : 0, this.turnStroke, 1, STROKE_LEAD);
       }
       if (stalled && (Math.abs(wantedRate) > 0.5 || Math.abs(this.turnStroke) > 0.05)) { wantedRate = this.turnStroke * smooth(0, STROKE_LEAD, this.leadClock); angularAcceleration = YAW_SNAP; }
       else if (this.mode === 'rest' && Math.abs(this.speed) < 0.04 && !escaping) wantedRate *= smooth(0, STROKE_LEAD, this.leadClock);
