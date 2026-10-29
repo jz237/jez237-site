@@ -1,1 +1,0 @@
-import{n as e}from"./index-7Btd1-Ui.js";import{t}from"./scene-CDx3KLsb.js";function n(){return e(t)}export{n as scapeShaderWGSL};
