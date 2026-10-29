@@ -22,6 +22,10 @@ const FIN_CLEAR = 0.003;
 /** In the water, its body is held BODY_CLEAR under the surface, but for its lips and chin (in front of
  *  LIPS_BEHIND, Atelier units, as it was built): only they go up into the air, at a gulp or a take. */
 const BODY_CLEAR = 0.002, LIPS_BEHIND = -1.45;
+/** Off a furnishing's solid part its body is held BODY_ROOM clear (a little gap, seen as it passes, not
+ *  its snout or flank pressed into the bark), but lying on one, it lies on it: a touch, and as it settles
+ *  there it sinks the last of that gap. */
+const BODY_ROOM = 0.01;
 export const BUBBLE_RADIUS = 0.0035;
 
 /**
@@ -170,7 +174,7 @@ export class BettaSpecimen {
     this.fish.userData.externalFlow = this.flowLocal;
     // The same one-second opening as the standalone specimen.
     const display = this.fish.userData.display;
-    display.requested = host.flared || this.swim.flaring;
+    display.requested = host.flared || this.swim.flaring || this.swim.flaringAfter;
     // Unwell, it holds its fins folded in (fin-dynamics.js clamp), and breathes quicker short of air.
     // (Opened out all but fully, they are open: none of the fold is left to solve.)
     const clamped = spirits ? spirits.clamp : 0;
@@ -207,6 +211,7 @@ export class BettaSpecimen {
     solids.count = keep;
     // (In the water, all but its lips are held under the surface too: up is against the way its fins hang.)
     const wet = this.fish.userData.surfaceY !== undefined, lips = this.lipVertex, u0 = -this.down[0], u1 = -this.down[1], u2 = -this.down[2], under = this.surface - BODY_CLEAR;
+    const room = this.swim.mode === 'rest' && this.swim.restSettled ? 0 : BODY_ROOM;
     for (let pass = 0; pass < 4; pass++) {
       let worst = 0, dx = 0, dy = 0, dz = 0, bottom = Infinity;
       for (let i = 0; i < this.vertices.length; i += 3) {
@@ -223,7 +228,7 @@ export class BettaSpecimen {
           if (!(o.solid > 0)) continue;
           const t = Math.max(0, Math.min(1, ((x - o.ax) * o.abx + (y - o.ay) * o.aby + (z - o.az) * o.abz) * o.inv));
           const ox = x - o.ax - o.abx * t, oy = y - o.ay - o.aby * t, oz = z - o.az - o.abz * t, l = Math.sqrt(ox * ox + oy * oy + oz * oz);
-          const into = o.solid - l;
+          const into = o.solid + room - l;
           if (into > worst && l > 1e-9) { worst = into; dx = ox / l * into; dy = oy / l * into; dz = oz / l * into; }
         }
       }

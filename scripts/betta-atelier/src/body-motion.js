@@ -15,17 +15,25 @@ const WAVE = 5, RECOIL = 0.12;
 // Turning, the head leads the route into the turn by LEAD s of it (LEAD_MOST rad at the most: a
 // startle's whip is the trunk's), and the trunk curls into a C: by the host's curl (-1..1, + to its
 // left; without one, its own from the turn's rate: tanh(rate / CURL_RATE)), CURL_BEND rad at the
-// peduncle for a full one, bent evenly along it (a C, not a hinge). The head takes it up first and each
-// place behind a moment later (CURL_LAG s at the peduncle), so the C forms from the head back while the
-// rear is still on its old way, and lets it go from the head back too: the tail straightens out of it
-// last, a stroke running down to it.
+// peduncle for a full one, bent along it (a C, not a hinge), the most just behind the head (CURL_HEAD
+// more, about CURL_HEAD_AT of the way back) and at the peduncle (CURL_TAIL more), as a real one bends:
+// the head swung plainly off the trunk's line and the tail swept round behind, so that the C reads from
+// the side too, not only from above. The head takes it up first and each place behind a moment later
+// (CURL_LAG s at the peduncle), so the C forms from the head back while the rear is still on its old way,
+// and lets it go from the head back too: the tail straightens out of it last, a stroke running down to it.
 const LEAD = 0.05, LEAD_MOST = 0.15, CURL_RATE = 1.6, CURL_BEND = 1.5, CURL_LAG = 0.3;
+export const CURL_HEAD = 1.2, CURL_HEAD_AT = 0.2, CURL_TAIL = 1.4;
+/** How much of the C's bend each place along the trunk takes (u: 0 neck .. 1 peduncle; 1 along most of it). */
+export const curlShape = u => 1 + CURL_HEAD * Math.exp(-(((u - CURL_HEAD_AT) / 0.13) ** 2)) + CURL_TAIL * Math.exp(-(((u - 0.92) / 0.1) ** 2));
 // Tipping nose up or down, the head leads and the rest follows: each place along the trunk takes up
-// the pitch's change a moment later the further back it is (PITCH_LAG s at the peduncle, less the
-// faster the fish swims, the water straightening it), so the spine bends in a gentle curve, seen from
-// the side, while it tips (its rear the most behind, PITCH_BEND_MOST rad at the most), and straightens
-// as the tip ends. The body keeps its place about its middle (PIVOT_U), where it turns.
-const PITCH_LAG = 0.55, PITCH_BEND_MOST = 0.32, PITCH_POINTS = 25;
+// the pitch's change a moment later the further back it is (PITCH_LAG s at the peduncle; under way, as
+// it swims up or down into the tip, a little more (PITCH_TRAVEL for each unit/s, up to 1.5): the rear
+// follows the head along the way it went, rather than tipping with it), so the spine bends in a curve,
+// seen from the side, while it tips (its rear the most behind, PITCH_BEND_MOST rad at the most), and
+// straightens as the tip ends. The body keeps its place about its middle (PIVOT_U), where it turns.
+const PITCH_LAG = 0.55, PITCH_TRAVEL = 0.3, PITCH_BEND_MOST = 0.38, PITCH_POINTS = 25;
+// (Each of the PITCH_POINTS places' share, at the middle of the step in front of it.)
+const CURL_SHAPE = Float64Array.from({ length: PITCH_POINTS }, (_, i) => curlShape((i - 0.5) / (PITCH_POINTS - 1)));
 export class BodyMotion {
   constructor() {
     this.data = new Float32Array(SPINE_COUNT * 4);
@@ -68,7 +76,7 @@ export class BodyMotion {
     for (let i = 1; i < PITCH_POINTS; i++) c[i] += (this.curl - c[i]) * (1 - Math.exp(-dt * quick / (CURL_LAG * i / (PITCH_POINTS - 1))));
     // (Each place behind the neck follows the pitch's rate over its own lag: lag x rate is how far
     // behind it is, the bend easing in as the tip begins and out after it ends.)
-    const b = this.pitchBend, lagAll = PITCH_LAG / (1 + 0.8 * Math.min(2.5, Math.abs(speed)));
+    const b = this.pitchBend, lagAll = PITCH_LAG * (1 + PITCH_TRAVEL * Math.min(1.5, Math.abs(speed)));
     for (let i = 1; i < PITCH_POINTS; i++) {
       const lag = lagAll * i / (PITCH_POINTS - 1), want = PITCH_BEND_MOST * Math.tanh(lag * pitchRate / PITCH_BEND_MOST);
       b[i] += (want - b[i]) * (1 - Math.exp(-dt / lag));
@@ -107,7 +115,7 @@ export class BodyMotion {
     // (The C's angle at each place: its bend summed from the neck, eased in just behind it.)
     const ca = this.curlAngle, cb = this.curlBend, step = 1 / (PITCH_POINTS - 1);
     ca[0] = 0;
-    for (let i = 1; i < PITCH_POINTS; i++) ca[i] = ca[i - 1] + CURL_BEND * step * 0.5 * (cb[i - 1] + cb[i]) * smooth(0, 0.1, i * step);
+    for (let i = 1; i < PITCH_POINTS; i++) ca[i] = ca[i - 1] + CURL_BEND * step * 0.5 * (cb[i - 1] + cb[i]) * smooth(0, 0.1, i * step) * CURL_SHAPE[i];
     this.turnBend = this.turnAngles ? clamp(this.turnAngles.at(-1) + ca[PITCH_POINTS - 1], -2.95, 2.95) / 2.95 : Math.tanh(turn * 0.8);
     const depth = (0.8 + effort * 0.2) * breathDepth;
     // (Breathing, the lips only part; the gill covers pump plainly, lifting off the flank to show

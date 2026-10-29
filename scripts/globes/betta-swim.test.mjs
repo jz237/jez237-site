@@ -220,7 +220,7 @@ function runBehaviors(seconds, { seed = 237, water = () => calm(), environment =
   const s = new BettaSwim(seed), log = [];
   for (let i = 0; i < seconds * 60; i++) {
     s.advance(1 / 60, flow(i / 60), environment, true, water(i / 60));
-    log.push({ t: i / 60, mode: s.mode, flaring: s.flaring, position: [...s.position], heading: s.heading, speed: s.speed, pitch: s.pitch, drive: s.drive });
+    log.push({ t: i / 60, mode: s.mode, flaring: s.flaring, position: [...s.position], heading: s.heading, speed: s.speed, pitch: s.pitch, drive: s.drive, steer: s.steerRate });
   }
   return log;
 }
@@ -241,7 +241,12 @@ test('near the glass it stops, faces its reflection and flares its fins, then le
       const length = ep.at(-1).t - ep[0].t;
       assert.ok(length > 3 && length < 16, `${seed}: episode of ${length}s`);
       if (n) assert.ok(ep[0].t - eps[n - 1][0].t > 60, 'a cooldown between displays');
-      const hold = ep.slice(ep.length >> 1);
+      // (It flares only once it is up to its reflection and facing it, still: from then, or the episode's
+      // second half if that is later, it holds there flared.)
+      const flared = ep.findIndex(r => r.flaring);
+      assert.ok(flared > 0, `${seed}: never flared at its reflection`);
+      assert.ok(Math.abs(ep[flared].steer) < 0.3 && ep[flared].speed < 0.05, `${seed}: flared turning (${ep[flared].steer.toFixed(2)} rad/s) or under way`);
+      const hold = ep.slice(Math.max(ep.length >> 1, flared));
       for (const r of hold) {
         const horizontal = Math.hypot(r.position[0], r.position[2]);
         const facing = (r.position[0] * -Math.cos(r.heading) + r.position[2] * Math.sin(r.heading)) / horizontal;
