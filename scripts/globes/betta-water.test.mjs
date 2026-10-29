@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { BETTA_PROBES, BETTA_SURFACE_AT, BETTA_SURFACE_COUNT, bettaSurfaceHeights, readBettaWater } from './src/fish/bettaWater.mjs';
-import { BettaSwim, BETTA_SCALE, REST_HEIGHT } from './src/fish/bettaSwim.mjs';
+import { BettaSwim, BETTA_SCALE } from './src/fish/bettaSwim.mjs';
 
 const env = { radius: 0.95, sandLevel: -0.55, level: 0.246, iso: 0.5, gravity: [0, -24, 0] };
 const points = Float32Array.from(BETTA_PROBES.flatMap(p => [...p.map(v => v * BETTA_SCALE), 0]));
@@ -63,17 +63,15 @@ test('vertical turbulence is not clipped to the resting-water band', () => {
 });
 
 test('shear tips and rotates the fish; it rights itself afterward', () => {
-  // (Its twin, never tipped, hovers as it would have: a little nose down, rocking a little.)
-  const s = hover(), twin = hover(), w = calm(); w.angular = [1.8, 0.8, 1.1];
+  const s = hover(), w = calm(); w.angular = [1.8, 0.8, 1.1];
   const yaw = s.heading;
-  for (let i = 0; i < 45; i++) { s.advance(1 / 60, [0, 0, 0], env, true, w); twin.advance(1 / 60, [0, 0, 0], env, true, calm()); }
+  for (let i = 0; i < 45; i++) s.advance(1 / 60, [0, 0, 0], env, true, w);
   assert.ok(Math.abs(s.heading - yaw) > 0.2);
-  assert.ok(Math.abs(s.roll - twin.roll) > 0.18 && Math.abs(s.pitch - twin.pitch) > 0.04);
-  // (Turned with the water, though it is working a little against it, back to the way it was facing.)
-  assert.ok(Math.abs(s.angularVelocity) > 0.3);
+  assert.ok(Math.abs(s.roll) > 0.18 && Math.abs(s.pitch) > 0.04);
+  assert.ok(Math.abs(s.angularVelocity) > 0.4);
   w.angular = [0, 0, 0];
-  for (let i = 0; i < 300; i++) { s.advance(1 / 60, [0, 0, 0], env, true, w); twin.advance(1 / 60, [0, 0, 0], env, true, calm()); }
-  assert.ok(Math.abs(s.roll - twin.roll) < 0.03 && Math.abs(s.pitch - twin.pitch) < 0.01, `roll ${s.roll.toFixed(3)} (${twin.roll.toFixed(3)}), pitch ${s.pitch.toFixed(3)} (${twin.pitch.toFixed(3)})`);
+  for (let i = 0; i < 300; i++) s.advance(1 / 60, [0, 0, 0], env, true, w);
+  assert.ok(Math.abs(s.roll) < 0.002 && Math.abs(s.pitch) < 0.002);
 });
 
 test('air exposure loses buoyancy, and violent reversing flow remains finite and inside glass', () => {
@@ -86,7 +84,7 @@ test('air exposure loses buoyancy, and violent reversing flow remains finite and
     s.advance(1 / 30, [Math.sin(i / 31) * 2, Math.cos(i / 45), Math.cos(i / 53) * 2], env, true, w);
     assert.ok([...s.position, ...s.velocity, s.heading, s.pitch, s.roll].every(Number.isFinite));
     assert.ok(Math.hypot(...s.position) <= env.radius - 0.29 + 1e-7);
-    assert.ok(s.position[1] >= w.sand + REST_HEIGHT - 0.004 - 1e-7);
+    assert.ok(s.position[1] >= w.sand + 0.07 - 1e-7);
   }
 });
 

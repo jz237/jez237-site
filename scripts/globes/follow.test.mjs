@@ -2,7 +2,7 @@
 // the picture through the glass and the water, clear of the glass, and gliding there.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { eyeFor, FISH_LENGTH, FOLLOW, FollowCamera, followDistance, followElevation, intoWater, viewFor } from './src/app/follow.mjs';
+import { eyeFor, FISH_LENGTH, FOLLOW, FollowCamera, followDistance, intoWater } from './src/app/follow.mjs';
 
 const bowl = { outer: 1, inner: 0.975, level: 0.181 };
 const el = (9 * Math.PI) / 180;
@@ -10,8 +10,8 @@ const view = [0, -Math.sin(el), -Math.cos(el)];
 const add = (a, b, k = 1) => a.map((v, i) => v + b[i] * k);
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 /** How far the bent line of sight from eye along view passes from point. */
-const miss = (eye, point, v = view) => {
-  const ray = intoWater(eye, v, bowl);
+const miss = (eye, point) => {
+  const ray = intoWater(eye, view, bowl);
   const r = add(point, ray.p, -1);
   return Math.hypot(...add(r, ray.dir, -dot(r, ray.dir)));
 };
@@ -42,30 +42,6 @@ test('the eye stands where the fish is seen in the middle of the picture, all ov
   // Drawn in too near, it stands back along its own line of sight: the fish still in the middle.
   const near = eyeFor([0, -0.2, 0.7], view, 0.4, bowl);
   assert.ok(Math.hypot(...near) >= bowl.outer + FOLLOW.clearance - 1e-9 && miss(near, [0, -0.2, 0.7]) < 1e-4);
-});
-
-test('near the surface it looks level, a little up: the fish seen through the glass under the film, not down through it', () => {
-  assert.equal(followElevation(el, 0.5), el);
-  assert.ok(followElevation(el, 0.02) < 0, 'tilted up at the film');
-  for (let d = 0; d < 0.6; d += 0.01) assert.ok(followElevation(el, d + 0.01) >= followElevation(el, d), 'levelling out smoothly');
-  for (const point of [[0, bowl.level - 0.05, 0], [0.3, bowl.level - 0.08, 0.3], [-0.4, bowl.level - 0.04, -0.1]]) {
-    // (The stage's way down: the line of sight comes over the glass's rim of water, down through the surface.)
-    const high = eyeFor(point, view, 2.2, bowl);
-    assert.ok(intoWater(high, view, bowl).p[1] >= bowl.level - 1e-9, `${point}: the stage's way is over the water`);
-    const v = viewFor(followElevation(el, bowl.level - point[1]));
-    const low = eyeFor(point, v, 2.2, bowl);
-    const ray = intoWater(low, v, bowl);
-    assert.ok(ray.p[1] < bowl.level && miss(low, point, v) < 1e-4, `${point}: through the glass under the film`);
-  }
-  // Eased there and back: from the stage's way when it starts, and back to it once let go.
-  const cam = new FollowCamera();
-  cam.set(true, [0, 0.5, 6]);
-  assert.equal(cam.tilt(1 / 60, -0.05, el) < el, true);
-  for (let i = 0; i < 180; i++) cam.tilt(1 / 60, -0.05, el);
-  assert.ok(Math.abs(cam.elevation + 0.05) < 1e-3);
-  cam.set(false);
-  for (let i = 0; i < 180; i++) cam.tilt(1 / 60, -0.05, el);
-  assert.ok(Math.abs(cam.elevation - el) < 1e-3);
 });
 
 test('the fish fills its share of the picture\'s shorter side; nearer as the viewer zooms in', () => {

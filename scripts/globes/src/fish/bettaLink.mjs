@@ -16,7 +16,7 @@ const SENSE_FLOATS = 24 * 4, SENSE_SAND = 6;
  *  inputs (a pellet or none, where; the gape; flared; the swim's gulpUrge; what the water is doing
  *  to it: lethargy, gasp, clamp); the water's reading or none, its centroid; how many obstacles;
  *  the bowl's turn about its own axis since the last step; the reading's probes and sand; then the
- *  obstacles, nine floats each (a, b, r, solid, and the room its fins keep: fin, or solid without one). */
+ *  obstacles, eight floats each (a, b, r, solid). */
 const S = { dt: 0, quality: 1, radius: 4, level: 5, sandLevel: 6, iso: 7, gravity: 8, food: 11, foodAt: 12, gape: 15, flared: 16, gulpUrge: 17, water: 18, sensed: 21, centroid: 22, obstacles: 25, turn: 26, probes: 29, sand: 29 + SENSE_FLOATS, capsules: 29 + SENSE_FLOATS + SENSE_SAND };
 /** A pose: float64s first (the swim's heading and pitch, the water level it was moved at, the
  *  mouth, the ripple and where, the bubbles and where; 16 of them, so the float32s are aligned),
@@ -47,7 +47,7 @@ export const poseBytes = (vertices) => POSE_HEAD * 8 + (PROBE_FLOATS + vertices)
  * array.
  */
 export function writeStep(data, dt, sense, env, host, gulpUrge, lead = null, turn = null) {
-  const obstacles = host.obstacles, length = S.capsules + obstacles.length * 9;
+  const obstacles = host.obstacles, length = S.capsules + obstacles.length * 8;
   if (!data || data.length < length) data = new Float64Array(length);
   data[S.dt] = dt;
   data[S.quality] = FIN_QUALITY.step; data[S.quality + 1] = FIN_QUALITY.passScale; data[S.quality + 2] = FIN_QUALITY.maxFrame;
@@ -70,7 +70,7 @@ export function writeStep(data, dt, sense, env, host, gulpUrge, lead = null, tur
   for (let k = 0; k < 3; k++) data[S.turn + k] = turn ? turn[k] : 0;
   const angle = lead ? Math.hypot(lead[0], lead[1], lead[2]) : 0;
   obstacles.forEach((o, k) => {
-    const at = S.capsules + k * 9;
+    const at = S.capsules + k * 8;
     if (angle > 0) {
       turnBy(o.a, lead, angle, data, at);
       turnBy(o.b, lead, angle, data, at + 3);
@@ -80,7 +80,6 @@ export function writeStep(data, dt, sense, env, host, gulpUrge, lead = null, tur
     }
     data[at + 6] = o.r;
     data[at + 7] = o.solid;
-    data[at + 8] = o.fin ?? o.solid;
   });
   return data;
 }
@@ -125,14 +124,13 @@ export function readStep(data, fish, scratch) {
   sense.probes.set(data.subarray(S.probes, S.probes + SENSE_FLOATS));
   sense.sand.set(data.subarray(S.sand, S.sand + SENSE_SAND));
   const n = data[S.obstacles], obstacles = host.obstacles;
-  while (obstacles.length < n) obstacles.push({ a: [0, 0, 0], b: [0, 0, 0], r: 0, solid: 0, fin: 0 });
+  while (obstacles.length < n) obstacles.push({ a: [0, 0, 0], b: [0, 0, 0], r: 0, solid: 0 });
   obstacles.length = n;
   obstacles.forEach((o, k) => {
-    const at = S.capsules + k * 9;
+    const at = S.capsules + k * 8;
     for (let j = 0; j < 3; j++) { o.a[j] = data[at + j]; o.b[j] = data[at + 3 + j]; }
     o.r = data[at + 6];
     o.solid = data[at + 7];
-    o.fin = data[at + 8];
   });
   for (let k = 0; k < 3; k++) turn[k] = data[S.turn + k];
   const turned = turn[0] !== 0 || turn[1] !== 0 || turn[2] !== 0;

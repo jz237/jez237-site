@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { SwimGait, BODY_LENGTH } from './src/swim-gait.js';
+import { SwimGait, SCULL_HZ } from './src/swim-gait.js';
 import { BodyMotion } from './src/body-motion.js';
 import { FinDynamics, waterVelocity } from './src/fin-dynamics.js';
 
@@ -123,37 +123,30 @@ test('mouth opens into a larger aperture before the gill covers open', () => {
     return upper[1] - lower[1];
   };
   const closed = gap(Math.PI * 1.5), open = gap(Math.PI * 0.5);
-  // (Breathing, the lips only part; a gulp at the film opens them wide.)
-  assert.ok(open > closed * 3 && open > 0.03, `mouth aperture ${closed} to ${open}`);
-  body.update(0, 0.3, 0, Math.PI * 1.5, 1); body.transform(-1.68, 0.1056, 0, upper); body.transform(-1.68, 0.0608, 0, lower);
-  assert.ok(upper[1] - lower[1] > open * 1.5, `gulp aperture ${upper[1] - lower[1]} vs a breath's ${open}`);
+  assert.ok(open > closed * 4 && open > 0.05, `mouth aperture ${closed} to ${open}`);
   body.update(0, 0.3, 0, Math.PI * 0.5); const intake = body.mouth, firstGill = body.gill;
   body.update(0, 0.3, 0, Math.PI * 0.5 + 1.05);
   assert.ok(body.gill > firstGill && body.mouth < intake, 'gills should lag mouth intake');
 });
 
 
-// The water past the fish, in the gait's units (Atelier units/s) from body lengths a second.
-const lengths = bl => bl * BODY_LENGTH;
-test('the tail beats with speed, all but stops at hover, works against a current, and breathing goes on', () => {
-  const hover = new SwimGait(), current = new SwimGait(), cruise = new SwimGait(), fast = new SwimGait();
+test('flow and locomotion accelerate cadence without stopping quiet-hover breathing', () => {
+  const hover = new SwimGait(), current = new SwimGait(), swim = new SwimGait();
   for (let i = 0; i < 600; i++) {
     hover.advance(1 / 60, 0.045, 0); current.advance(1 / 60, 0.045, 0.9);
-    cruise.advance(1 / 60, 0.2, lengths(0.35)); fast.advance(1 / 60, 0.34, lengths(1));
+    swim.advance(1 / 60, 0.38, 0);
   }
-  assert.ok(hover.effort < 0.01 && hover.breathPhase > 25);
-  // A halfmoon's tail: about 2 Hz at an easy cruise, near 3 at a body length a second, still at hover.
-  assert.ok(hover.bodyHz < 1, `hover ${hover.bodyHz}`);
-  assert.ok(cruise.bodyHz > 1.5 && cruise.bodyHz < 2.4, `cruise ${cruise.bodyHz}`);
-  assert.ok(fast.bodyHz > 2.6 && fast.bodyHz < 3.8, `fast ${fast.bodyHz}`);
-  assert.ok(current.effort > hover.effort + 0.05, 'holding against a current costs effort');
+  assert.ok(hover.effort < 0.01 && hover.breathPhase > 30);
+  // The pectoral cadence follows load over a narrow band, so a change of swim mode never reads as a new gait.
+  assert.ok(current.pectoralHz > hover.pectoralHz + 1 && current.pectoralHz < hover.pectoralHz * 2, `${hover.pectoralHz} -> ${current.pectoralHz}`);
+  assert.ok(current.bodyHz > 3 && swim.bodyHz > 3);
   const before = structuredClone(current);
   current.advance(0, 0, 0); assert.deepEqual({...current}, before);
   current.advance(1 / 60, 0.045, 0);
   assert.ok(current.effort > before.effort * 0.9, 'flow changes should ease, not snap');
 });
 
-test('actual pectoral membrane beats at a halfmoon rate, stays attached and resolves at 30fps', () => {
+test('actual pectoral membrane beats faster under load, stays attached and resolves at 30fps', () => {
   function sample(load, fps = 60) {
     const fin = make(3, 1), gait = new SwimGait(), trace = [];
     for (let i = 1; i <= fps * 7; i++) {
@@ -176,7 +169,7 @@ test('actual pectoral membrane beats at a halfmoon rate, stays attached and reso
     return best.hz;
   }
   const hover=sample(0), loaded=sample(0.9), phone=sample(0.9,30);
-  for (const hz of [hover, loaded]) assert.ok(hz > 1.3 && hz < 3.3, `rendered cadence ${hover}, ${loaded}`);
+  assert.ok(loaded > hover + 1 && loaded < hover * 2, `rendered cadence ${hover} -> ${loaded}`);
   assert.ok(Math.abs(loaded-phone)<0.35, `30fps alias/drift ${loaded} vs ${phone}`);
 });
 
@@ -199,31 +192,13 @@ test('hover sculling fans the pectorals continuously and a startle tucks them to
     return { gait, mean, swing: Math.max(...trace) - Math.min(...trace), hz: crossings / 2 / (trace.length / fps) };
   }
   const idle = pectoral({}), scull = pectoral({ scull: 1 }), tucked = pectoral({ tuck: 1 });
-  // Sculling differs from idle swimming by longer runs of beats and a somewhat wider sweep (the hover beat
-  // must read), not by a bigger fin: the swing must not shrink, nor grow too much.
-  assert.ok(scull.swing > idle.swing * 0.8 && scull.swing < idle.swing * 1.6, `sculling swing ${scull.swing} vs idle ${idle.swing}`);
-  for (const { hz } of [idle, scull]) assert.ok(hz > 1 && hz < 3.5, `beats at ${scull.hz} Hz, idle ${idle.hz}`);
+  assert.ok(idle.gait.pectoralHz < 3 && Math.abs(scull.gait.pectoralHz - SCULL_HZ) < 0.05);
+  // Sculling differs from idle swimming by a quicker fan, not by a bigger fin: the swing must not shrink or grow much.
+  assert.ok(scull.swing > idle.swing * 0.9 && scull.swing < idle.swing * 1.3, `sculling swing ${scull.swing} vs idle ${idle.swing}`);
+  assert.ok(scull.hz > idle.hz + 0.5 && scull.hz < 5, `sculling beats at ${scull.hz} Hz vs idle ${idle.hz}`);
   // The tuck draws the fins in and stills them, but gently: a deep fold reads as the fin changing size.
   assert.ok(tucked.mean < idle.mean - 0.01, `tucked mean ${tucked.mean} vs ${idle.mean}`);
   assert.ok(tucked.swing < idle.swing * 0.6, 'a tucked fin beats much less');
-  // The beats themselves: about 1.5-3 Hz, each at its own rate, in runs with rests of up to a
-  // second or so between them, the runs longer while sculling; never a steady clock.
-  for (const [pose, most] of [[{ scull: 1 }, 0.25], [{}, 0.4]]) {
-    const gait = new SwimGait(), beats = [], rests = [];
-    let last = null, resting = 0;
-    for (let i = 1; i <= 60 * 120; i++) {
-      const was = Math.floor(gait.pectoralPhase / (Math.PI * 2)), paused = gait.pectoralPause > 0;
-      gait.advance(1 / 60, 0.045, 0, 0, pose);
-      if (gait.pectoralPause > 0) resting += 1 / 60; else if (resting) { rests.push(resting); resting = 0; }
-      if (paused) last = null;
-      else if (Math.floor(gait.pectoralPhase / (Math.PI * 2)) !== was) { if (last !== null) beats.push(i / 60 - last); last = i / 60; }
-    }
-    beats.sort((a, b) => a - b);
-    const at = q => beats[Math.floor(q * (beats.length - 1))], share = rests.reduce((a, b) => a + b, 0) / 120;
-    assert.ok(1 / at(0.5) > 1.5 && 1 / at(0.5) < 3, `median beat ${1 / at(0.5)} Hz`);
-    assert.ok(at(0.9) / at(0.1) > 1.4, `beats too even: ${at(0.1)}..${at(0.9)} s`);
-    assert.ok(Math.max(...rests) > 0.6 && Math.max(...rests) < 1.4 && share > 0.05 && share < most, `rests up to ${Math.max(...rests)} s, ${share} of the time`);
-  }
   const quick = new SwimGait(); for (let i = 0; i < 6; i++) quick.advance(1 / 60, 0.045, 0, 0, { tuck: 1 });
   assert.ok(quick.tuck > 0.15 && quick.tuck < 0.5, `the tuck accelerates into the fold instead of snapping (${quick.tuck})`);
   for (let i = 0; i < 24; i++) quick.advance(1 / 60, 0.045, 0, 0, { tuck: 1 });
@@ -251,8 +226,7 @@ test('partly open resting tail flares over one second, closes again and keeps ra
     s.body.update(0,0,0,0);s.drive=0;s.phase=0;
     const advance = seconds => {for(let i=0;i<Math.round(seconds*fps);i++){display.advance(1/fps);s.flare=display.flare;f.advance(1/fps,s)}};
     advance(1);const relaxed=span(f);display.requested=true;advance(.267);const early=span(f);advance(.733);const atOneSecond=span(f);advance(1);const open=span(f);
-    // (At rest the halfmoon's fan is already most of a D: the display opens the last of it.)
-    assert.ok(open>relaxed*1.06 && open<relaxed*1.6, `${fps}: fan lacks contrast (${relaxed} -> ${open})`);
+    assert.ok(open>relaxed*1.25 && open<relaxed*1.6, `${fps}: fan lacks contrast`);
     assert.ok((early-relaxed)/(open-relaxed)<.35, `${fps}: still flares in a quarter-second`);
     assert.ok((atOneSecond-relaxed)/(open-relaxed)>.85, `${fps}: not open after one second`);
     display.requested=false;advance(.4);assert.ok(span(f)<relaxed+(open-relaxed)*.3, `${fps}: relaxation too slow`);
@@ -264,19 +238,14 @@ test('partly open resting tail flares over one second, closes again and keeps ra
 test('eye gaze has quiet fixations, short glances, bounded synchronized motion and pause', async () => {
   const { EyeMotion } = await import('./src/display-motion.js');
   const left=new EyeMotion(),right=new EyeMotion(),trace=[];
-  // (Twenty seconds: a fixation may last several.)
-  for(let i=0;i<2400;i++) {left.advance(1/120);right.advance(1/120);trace.push([left.yaw,left.pitch,right.yaw,right.pitch]);}
-  assert.ok(Math.max(...trace.map(p=>p[0]))-Math.min(...trace.map(p=>p[0]))>.15,'gaze is static');
+  for(let i=0;i<1200;i++) {left.advance(1/120);right.advance(1/120);trace.push([left.yaw,left.pitch,right.yaw,right.pitch]);}
+  assert.ok(Math.max(...trace.map(p=>p[0]))-Math.min(...trace.map(p=>p[0]))>.3,'gaze is static');
   assert.ok(trace.every(p=>Math.abs(p[0])<=.24&&Math.abs(p[2])<=.24&&Math.abs(p[1])<=.13&&Math.abs(p[3])<=.13));
   const changes=trace.slice(1).map((p,i)=>Math.hypot(p[0]-trace[i][0],p[1]-trace[i][1]));
   assert.ok(changes.filter(v=>v<.0001).length>changes.length*.65,'eyes continually rolling instead of fixating');
   assert.ok(Math.max(...changes)>.01&&Math.max(...changes)<.08,'glance should be brief but not teleport');
   assert.ok(trace.every(p=>p[0]===p[2]&&p[1]===p[3]),'eyes must share glance direction and timing');
   const frozen=[left.time,left.yaw,left.pitch];left.advance(0,1,1);assert.deepEqual([left.time,left.yaw,left.pitch],frozen);
-  // Glances come at uneven times, not on a clock.
-  const starts=[];for(let i=1;i<changes.length;i++)if(changes[i]>=.0001&&changes[i-1]<.0001)starts.push(i/120);
-  const gaps=starts.slice(1).map((t,i)=>t-starts[i]);
-  assert.ok(gaps.length>=4&&Math.max(...gaps)>Math.min(...gaps)*2,`glances every ${gaps.map(g=>g.toFixed(2))} s`);
 });
 
 
@@ -355,48 +324,5 @@ test('each node is kept as the body carried it, with the update it was carried a
     body.update(3, 0.3, 0.2, 2);
     fin.advance(0, { ...s, time: 1.5 });
     assert.notEqual(fin.carriedAt, body.revision);
-  }
-});
-
-test('no fin node is ever drawn above the surface or inside a solid, and the fin folds along them without a pop', () => {
-  // The surface comes down onto the fin over a second, to SURFACE (in the fish's frame, up = -down), and a
-  // solid (a capsule, as a host's state.solids) comes up into the fin's lower part, as the fish meets them. (The drawn shape is
-  // kept in single precision: 1e-5 is its rounding.)
-  // (Each test fin's surface: across its upper part, clear of its insertions and of the solid.)
-  const SURFACE = [0.25, 0.25, 0.25, 0.15, -0.5], R = 0.18, solids = { data: new Float64Array(7), count: 1 };
-  const drawn = (f, n, k) => f.carried[n * 3 + k] + f.displacement[n * 4 + k];
-  for (const [kind, side] of [[0, 0], [1, 0], [2, 0], [3, -1], [3, 1], [4, -1], [4, 1]]) {
-    const fin = make(kind, side), free = make(kind, side);
-    // (Across the fin's middle: its rest nodes' mean, a little below.)
-    let mx = 0, my = 0;
-    for (let n = 0; n < fin.count; n++) { mx += fin.rest[n * 3]; my += fin.rest[n * 3 + 1]; }
-    mx /= fin.count; my /= fin.count;
-    let last = null, lastFree = null, jump = 0, jumpFree = 0;
-    for (let i = 1; i <= 300; i++) {
-      const s = state(i / 60, 0.8, 'changing'), top = Math.max(SURFACE[kind], 2 - 2 * i / 60);
-      const sy = my - 0.15 - Math.max(0, 1.4 - 1.4 * i / 60);
-      solids.data.set([mx, sy, -2, mx, sy, 2, R]);
-      fin.advance(1 / 60, { ...s, down: [0, -1, 0], surfaceY: top, solids });
-      free.advance(1 / 60, s);
-      const now = [], nowFree = [];
-      for (let n = fin.columns; n < fin.count; n++) {
-        const x = drawn(fin, n, 0), y = drawn(fin, n, 1), z = drawn(fin, n, 2);
-        assert.ok(y <= top + 1e-5, `fin ${kind}/${side} node ${n} above the surface by ${y - top}`);
-        const d = Math.hypot(x - mx, y - sy);
-        assert.ok(d >= R - 1e-5 || Math.abs(z) > 2, `fin ${kind}/${side} node ${n} inside the solid by ${R - d}`);
-        now.push(x, y, z); nowFree.push(drawn(free, n, 0), drawn(free, n, 1), drawn(free, n, 2));
-      }
-      // (Once the surface has stopped coming down: a pop is a node jumping further in a frame than it does free.)
-      if (last && i > 90) for (let q = 0; q < now.length; q += 3) {
-        jump = Math.max(jump, Math.hypot(now[q] - last[q], now[q + 1] - last[q + 1], now[q + 2] - last[q + 2]));
-        jumpFree = Math.max(jumpFree, Math.hypot(nowFree[q] - lastFree[q], nowFree[q + 1] - lastFree[q + 1], nowFree[q + 2] - lastFree[q + 2]));
-      }
-      last = now; lastFree = nowFree;
-    }
-    // (Against its own free motion, or, the free fin being all but still in still water, against what lying
-    // on and sliding along a solid takes a frame (round 6's fins: up to 0.069 here): a pop is several times that.)
-    assert.ok(jump < Math.max(jumpFree * 1.5 + 0.01, 0.075), `fin ${kind}/${side} pops against the surface or the solid: ${jump.toFixed(4)} a frame vs ${jumpFree.toFixed(4)} free`);
-    assert.equal(fin.metrics().anchorError, 0);
-    assert.ok(fin.position.every(Number.isFinite));
   }
 });

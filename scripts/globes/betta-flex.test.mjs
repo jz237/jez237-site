@@ -46,10 +46,7 @@ test('head-led flexion can reach a U, preserves arc length, has no neck hinge an
       assert.ok(Math.abs(length - 3.87) < 0.003);
     }
     assert.ok(peak > 2.7 && peak <= 2.95, `not U-shaped: ${peak}`);
-    // (The head leads the turn, yawed a little into it on the neck's frame: no hinge behind it.)
-    const head = b.frame(-1.4, []), neck = b.frame(-1.21, []);
-    assert.ok(Math.abs(Math.atan2(head[3], head[2]) - Math.atan2(neck[3], neck[2])) < 0.02, 'a hinge at the neck');
-    assert.ok(-sign * Math.atan2(head[3], head[2]) > 0.05 && -sign * Math.atan2(head[3], head[2]) < 0.25, `head yaw ${Math.atan2(head[3], head[2])}`);
+    const neck = b.frame(-1.22, []); assert.deepEqual(neck, [-1.22, 0, 1, 0]);
     const snapshot = [...b.turnAngles]; b.advanceTurn(0, 0, 0); assert.deepEqual([...b.turnAngles], snapshot);
     b.advanceTurn(1 / fps, 0, 0.5);
     assert.ok(Math.abs(b.turnAngles.at(-1)) > peak * 0.9, 'tail snapped straight when steering stopped');
@@ -68,28 +65,15 @@ test('a real autonomous reversal produces deep flexion; passive water spin does 
   for (let i = 0; i < 180; i++) {
     s.advance(1 / 60, [0, 0, 0], env);
     b.advanceTurn(1 / 60, s.steerRate, s.speed / BETTA_SCALE);
-    b.update(0, 0, s.steerRate, 0);
-    // (The bend seen: the tail's way at the peduncle against the head's.)
-    const tail = b.frame(1.056, []), head = b.frame(-1.4, []);
-    peak = Math.max(peak, Math.abs(Math.atan2(tail[3], tail[2]) - Math.atan2(head[3], head[2])));
+    peak = Math.max(peak, Math.abs(b.turnAngles.at(-1)));
   }
-  // (Going back the way it came it swings round in a tight arc at a real fish's pace, not on the spot
-  // at the old fixed rate: the body bends into a deep C (curled as the turn starts, the rear
-  // trailing round it), well past a right angle, rather than a full U; a halfmoon's trunk is a
-  // stiff one.)
-  assert.ok(peak > 1.5, `turn controller cannot reach deep pose: ${peak}`);
-  // (Hovering it turns a little of its own accord, as its twin in still water does (its slow coming
-  // round to a heading set aside); spun by the water, its body bends just as that twin's: the
-  // water's spin asks nothing of its muscles.)
-  const spun = new BettaSwim(), still = new BettaSwim();
-  for (const f of [spun, still]) { f.mode = 'hover'; f.timer = 100; f.position = [0, -0.17, 0]; f.hoverPivot = 0; }
-  const passive = new BodyMotion(), own = new BodyMotion();
+  assert.ok(peak > 2.5, `turn controller cannot reach deep pose: ${peak}`);
+  s.mode = 'hover'; s.timer = 100; s.position = [0, -0.17, 0]; s.steerRate = 0;
+  const passive = new BodyMotion();
   for (let i = 0; i < 60; i++) {
-    spun.advance(1 / 60, [0, 0, 0], env, true, { angular: [0, 1, 0], submerged: 1, airAbove: 0, sand: -0.55, centroid: [0, -0.2, 0] });
-    still.advance(1 / 60, [0, 0, 0], env, true, { angular: [0, 0, 0], submerged: 1, airAbove: 0, sand: -0.55, centroid: [0, -0.2, 0] });
-    passive.advanceTurn(1 / 60, spun.steerRate, 0);
-    own.advanceTurn(1 / 60, still.steerRate, 0);
+    s.advance(1 / 60, [0, 0, 0], env, true, { angular: [0, 1, 0], submerged: 1, airAbove: 0, sand: -0.55, centroid: [0, -0.2, 0] });
+    passive.advanceTurn(1 / 60, s.steerRate, 0);
   }
-  assert.ok(spun.angularVelocity > 0.7);
-  assert.deepEqual([...passive.turnAngles], [...own.turnAngles]);
+  assert.ok(s.angularVelocity > 0.7);
+  assert.equal(Math.max(...passive.turnAngles.map(Math.abs)), 0);
 });

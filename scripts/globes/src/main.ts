@@ -13,7 +13,7 @@ import { Learn } from './app/learn/Learn';
 import { drowsy, keptNight, NightFade } from './app/night.mjs';
 import { NightToggle } from './app/NightToggle';
 import { FollowToggle } from './app/FollowToggle';
-import { eyeFor, FollowCamera, followDistance, followElevation, viewFor } from './app/follow.mjs';
+import { eyeFor, FollowCamera, followDistance } from './app/follow.mjs';
 import { ResolutionMenu } from './app/ResolutionMenu';
 import { VarietyMenu } from './app/VarietyMenu';
 import { CLEAR_WATER, forcedWaterEffects, type WaterEffects } from './water/effects';
@@ -32,7 +32,7 @@ import { describePipelines, pipelineMarks, pipelineSnapshot, pipelinesFirstFrame
 import { BowlLid } from './interaction/BowlLid';
 import { BowlLife, LIFE_PROBE_AT } from './interaction/BowlLife';
 import { Feeding } from './interaction/Feeding';
-import { CAMERA_ELEVATION, GlobeController } from './interaction/GlobeController';
+import { CAMERA_VIEW, GlobeController } from './interaction/GlobeController';
 import { KelpForest } from './kelp/KelpForest';
 import { REEF_PROBES, Reef } from './reef/Reef';
 import { Specks } from './ocean/Specks';
@@ -392,7 +392,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // rests on them and flows round them), where the fish keeps clear of them, and where the sponge
   // filter's air bubbles out.
   let scapeTex: THREE.Texture | null = null;
-  let scapeObstacles: { a: number[]; b: number[]; r: number; solid: number; fin?: number }[] = [];
+  let scapeObstacles: { a: number[]; b: number[]; r: number; solid: number }[] = [];
   let plants: MovingPlants | null = null;
   let filterAir: { at: number[]; rate: number; radius: number } | null = null;
   if (furnishing) {
@@ -418,7 +418,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   let plantFrame = 0;
   let plantEvery = LITE ? 2 : 1;
   // (Where the bowl's turn has carried them, each frame: the sim frame.)
-  const turnedObstacles = scapeObstacles.map((o) => ({ a: [0, 0, 0], b: [0, 0, 0], r: o.r, solid: o.solid, fin: o.fin ?? o.solid }));
+  const turnedObstacles = scapeObstacles.map((o) => ({ a: [0, 0, 0], b: [0, 0, 0], r: o.r, solid: o.solid }));
   // (Set up before the globe's pipelines are begun, not alongside them: three holds a WebGPU
   // error scope open over each pipeline it builds, the sim one over its setup, and scopes close
   // last first, so side by side each could be handed the other's errors, and the sim's check that
@@ -871,11 +871,9 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
       fishMiddle.fill(0);
       for (let i = 0; i < 16; i++) for (let k = 0; k < 3; k++) fishMiddle[k] += probes[4 * i + k] / 16;
       const c = controller.center;
-      const view = viewFor(followCam.tilt(dt, followElevation(CAMERA_ELEVATION, sim.restLevel - fishMiddle[1]), CAMERA_ELEVATION));
-      const eye = eyeFor(fishMiddle, view, followDistance((camera.fov * Math.PI) / 180, camera.aspect, controller.followZoom), { outer: world.glass.outerRadius, inner: world.glass.innerRadius, level: sim.restLevel });
+      const eye = eyeFor(fishMiddle, CAMERA_VIEW, followDistance((camera.fov * Math.PI) / 180, camera.aspect, controller.followZoom), { outer: world.glass.outerRadius, inner: world.glass.innerRadius, level: sim.restLevel });
       followCam.step(dt, [eye[0] + c.x, eye[1] + c.y, eye[2] + c.z]);
       controller.followEye.fromArray(followCam.eye);
-      controller.followView.fromArray(view);
       controller.followShare = followCam.share;
     }
     hooks.beforeRender?.();

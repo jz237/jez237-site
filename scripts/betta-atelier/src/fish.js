@@ -3,17 +3,12 @@ import { addMacroSurface } from "./surfaces.js";
 import { FinDynamics, water, waterVelocity } from "./fin-dynamics.js";
 import { BodyMotion, bodyGLSL, SPINE_COUNT } from "./body-motion.js";
 import { DisplayMotion, EyeMotion } from "./display-motion.js";
-import { SwimGait, BODY_LENGTH } from "./swim-gait.js";
+import { SwimGait } from "./swim-gait.js";
 import { gulpState, gulpPresentation, SURFACE_Y, MOUTH_DEPTH, GULP_PITCH } from "./surface-gulp.js";
 const PI = Math.PI,
   lerp = T.MathUtils.lerp,
   clamp = T.MathUtils.clamp;
 export const SCALE = 0.0032;
-// The gill covers swing out from their hinge as it breathes (COVER_LIFT at the rim, a breath's full
-// depth; COVER_FLARE more in display), their rims drawn forward as they swing (COVER_DRAW), so the
-// dark gill under the rim shows plainly, side on too: a dark crescent opening and closing behind the
-// cover with each breath, a few pixels wide even with the whole fish 150 px long.
-export const COVER_LIFT = 0.08, COVER_FLARE = 0.085, COVER_DRAW = 0.065;
 // Pectoral pose by locomotion mode: fan to hold station when still, fold in for the startle dart.
 export const POSES = { hover: { scull: 1 }, surface: { scull: 1 }, gulp: { scull: 1 }, rise: { scull: 0.7 }, dive: { scull: 0.5 }, glide: { scull: 0.3 }, startle: { tuck: 1 }, mirror: { scull: 1 }, lap: { scull: 0.15 }, rest: { scull: 0.25 } };
 const world = ([x, y]) => [(x - 680) * SCALE, (420 - y) * SCALE];
@@ -29,7 +24,6 @@ export const uniforms = {
   uSpine: { value: null },
   uMouth: { value: 0 },
   uGill: { value: 0 },
-  uLift: { value: null },
 };
 const deform = `uniform float uTime,uFlare,uMotion,uPhase,uDrive,uTurn,uFold;\n` + bodyGLSL;
 function animate(mat, dynamics = null, operculum = false) {
@@ -55,7 +49,7 @@ vec3 wetFin(vec2 uv) {
 ` : "") + s.vertexShader;
     s.vertexShader = s.vertexShader.replace(
       "#include <project_vertex>",
-      `vec3 anatomical=transformed;${operculum ? `anatomical.z+=coverLift*(uGill*${COVER_LIFT}+uFlare*${COVER_FLARE});anatomical.x-=abs(coverLift)*(uGill+uFlare)*${COVER_DRAW};` : ""}
+      `vec3 anatomical=transformed;${operculum ? "anatomical.z+=coverLift*(uGill*.046+uFlare*.085);" : ""}
        vec4 mvPosition=vec4(swim(anatomical)${dynamics ? '+wetFin(finUV)' : ''},1.);
        mvPosition=modelViewMatrix*mvPosition;gl_Position=projectionMatrix*mvPosition;`,
     );
@@ -201,9 +195,9 @@ function addBreathingAnatomy(fish, skin) {
         lift.push(side * v * v * shape ** 0.7);
         if (i < rows && j < cols) { const n = i * (cols + 1) + j; ci.push(n, n + 1, n + cols + 1, n + 1, n + cols + 2, n + cols + 1); }
       }
-      // The dark gill is concealed beneath the closed cover's rim, revealed on exhalation.
+      // The narrow outlet is concealed beneath the closed cover, revealed on exhalation.
       for (let j = 0; j < 2; j++) {
-        const px = edge - (j ? 0 : 30 * shape), [x, y] = world([px, py]);
+        const px = edge - (j ? 0 : 5 * shape), [x, y] = world([px, py]);
         gp.push(x, y, surface(px, 0.001)); gu.push(u, j);
       }
       if (i < rows) { const n = i * 2; gi.push(n, n + 1, n + 2, n + 1, n + 3, n + 2); }
@@ -400,10 +394,6 @@ export function createBetta({ compact = false, textures = true } = {}) {
   const spineTexture = new T.DataTexture(bodyMotion.data, SPINE_COUNT, 1, T.RGBAFormat, T.FloatType);
   spineTexture.needsUpdate = true;
   uniforms.uSpine.value = spineTexture;
-  // (The pitch bend's lift along the same spine samples.)
-  const liftTexture = new T.DataTexture(bodyMotion.lift, SPINE_COUNT, 1, T.RedFormat, T.FloatType);
-  liftTexture.needsUpdate = true;
-  uniforms.uLift.value = liftTexture;
   fish.userData.finDynamics = finDynamics;
   fish.name = "Betta splendens — volumetric reference-textured specimen";
   let resolveTexture, rejectTexture;
@@ -642,7 +632,7 @@ export function createBetta({ compact = false, textures = true } = {}) {
     pivot.name = `Eye socket pivot ${side}`;
     pivot.position.set(ex, ey, side * 0.120);
     const motion = gaze;
-    eyes.push({ pivot, motion, side, socket: [ex, ey, side * 0.120] });
+    eyes.push({ pivot, motion, side });
     eye.position.set(0, 0, side * 0.020);
     eye.scale.set(1, 1, 0.5);
     pivot.add(eye);
@@ -671,16 +661,8 @@ export function createBetta({ compact = false, textures = true } = {}) {
     lift = 0,
     gulpOpen = 0,
     gulpGill = 0;
-  // The body's acceleration (world, smoothed over a few frames) from its last velocity, and that and
-  // the way down in the fish's own frame: what the fins' inertia and weight act along. A host may
-  // say which way is down (userData.down, in the fish's parent's frame).
-  const lastVelocity = new T.Vector3(), acceleration = new T.Vector3(), toFish = new T.Quaternion();
-  const accelLocal = new T.Vector3(), downLocal = new T.Vector3();
-  let measured = false;
   const cycle = 32;
   const lipLocal = [0, 0, 0, 0], lipWorld = new T.Vector3(), contour = [0, 0, 0, 0];
-  // A host's solids for the fins to lie on (userData.solids), brought into the fish's own frame.
-  const toLocal = new T.Matrix4(), solidEnd = new T.Vector3(), finSolids = { data: new Float64Array(7 * 32), count: 0 };
   fish.userData = {
     ready: Promise.all([loaded, finLoaded, ...macroPending]),
     macroTextures,
@@ -700,6 +682,9 @@ export function createBetta({ compact = false, textures = true } = {}) {
       display.advance(dt);
       uniforms.uFlare.value = display.flare;
       gaze.advance(dt, turn, display.flare);
+      for (const { pivot, motion, side } of eyes) {
+        pivot.rotation.set(-motion.pitch * side, motion.yaw * side, 0);
+      }
       uniforms.uTime.value = t;
       // A burst-and-coast swimmer: stabilize, accelerate, glide, brake, investigate.
       const q = t % cycle;
@@ -821,57 +806,17 @@ export function createBetta({ compact = false, textures = true } = {}) {
         };
       }
       const relativeFlow = Math.hypot(...localFlow.map((v, i) => v - velocity[i]));
-      const solids = fish.userData.solids;
-      finSolids.count = 0;
-      if (solids) {
-        fish.updateMatrix();
-        toLocal.copy(fish.matrix).invert();
-        for (let k = 0; k < Math.min(solids.count, 32); k++) {
-          const from = solids.data, o = k * 7;
-          for (let end = 0; end < 6; end += 3) {
-            solidEnd.set(from[o + end], from[o + end + 1], from[o + end + 2]).applyMatrix4(toLocal);
-            finSolids.data[o + end] = solidEnd.x; finSolids.data[o + end + 1] = solidEnd.y; finSolids.data[o + end + 2] = solidEnd.z;
-          }
-          finSolids.data[o + 6] = from[o + 6];
-        }
-        finSolids.count = Math.min(solids.count, 32);
-      }
-      if (dt > 0) {
-        accelLocal.set((velocity[0] - lastVelocity.x) / dt, (velocity[1] - lastVelocity.y) / dt, (velocity[2] - lastVelocity.z) / dt);
-        if (!measured) accelLocal.set(0, 0, 0);
-        // (A jump of the route, a contact or a teleport, is not an acceleration the fins could feel.)
-        accelLocal.clampLength(0, 20);
-        acceleration.lerp(accelLocal, 1 - Math.exp(-12 * dt));
-        lastVelocity.fromArray(velocity);
-        measured = true;
-      }
-      toFish.copy(fish.quaternion).invert();
-      accelLocal.copy(acceleration).applyQuaternion(toFish);
-      const down = fish.userData.down;
-      downLocal.set(down ? down[0] : 0, down ? down[1] : -1, down ? down[2] : 0).applyQuaternion(toFish);
-      // (Backing up on its pectorals, a host's fish works them the harder; the host's strokes, darts and
-      // brakes are its gait's too.)
-      const pose = POSES[mode] ?? {};
-      gait.advance(dt, drive, relativeFlow, turn, locomotion ? {
-        ...pose, back: locomotion.backing ?? 0, pushes: locomotion.pushes ?? 0, pushSize: locomotion.pushSize ?? 0, kicks: locomotion.kicks ?? 0,
-        kickSize: locomotion.kickSize ?? 0, kickSweeps: locomotion.kickSweeps ?? 1, dart: locomotion.dart ?? 0, brake: locomotion.brake ?? 0, hold: locomotion.hold,
-      } : pose);
-      const { phase, effort, breathPhase, breathDepth, pectoralPhase, pectoralPower, scull, tuck, pectoralEffort, pectoralScull, billowPhase, wash, push, dart, brake } = gait;
+      gait.advance(dt, drive, relativeFlow, turn, POSES[mode] ?? {});
+      const { phase, effort, breathPhase, pectoralPhase, scull, tuck, pectoralEffort, pectoralScull } = gait;
       // The standalone turn also leads with the neck; the rear follows the head's tangent.
-      bodyMotion.advanceTurn(dt, locomotion ? locomotion.steerRate ?? angularVelocity : turn, locomotion ? locomotion.speed ?? 0 : Math.hypot(...velocity), locomotion?.pitchRate ?? 0, locomotion?.curl ?? null);
-      bodyMotion.update(phase, effort, turn, breathPhase, locomotion?.gulp ?? gulpOpen, locomotion?.gulpGill ?? gulpGill, breathDepth, gait.kick, gait.kickAt, gait.kickSweeps);
-      // The eyes ride in their sockets on the head as it yaws against the tail and into turns.
-      for (const { pivot, motion, side, socket } of eyes) {
-        const f = bodyMotion.frame(socket[0], contour);
-        pivot.position.set(f[0] - socket[2] * f[3], socket[1] + bodyMotion.archAt(socket[0]), f[1] + socket[2] * f[2]);
-        pivot.rotation.set(-motion.pitch * side, motion.yaw * side - Math.atan2(f[3], f[2]), 0);
-      }
+      bodyMotion.advanceTurn(dt, locomotion ? locomotion.steerRate ?? angularVelocity : turn, locomotion ? locomotion.speed ?? 0 : Math.hypot(...velocity));
+      bodyMotion.update(phase, effort, turn, breathPhase, locomotion?.gulp ?? gulpOpen, locomotion?.gulpGill ?? gulpGill);
       if (lift > 0 || fish.userData.gulp.lift > 0) {
         const g = fish.userData.gulp;
         g.lift = lift; g.phase = shown.phase; g.clock = shown.clock;
         lipWorld.toArray(g.lip);
       }
-      spineTexture.needsUpdate = liftTexture.needsUpdate = dt > 0;
+      spineTexture.needsUpdate = dt > 0;
       uniforms.uPhase.value = phase;
       uniforms.uDrive.value = drive;
       uniforms.uTurn.value = turn;
@@ -879,21 +824,9 @@ export function createBetta({ compact = false, textures = true } = {}) {
       uniforms.uMouth.value = bodyMotion.mouth;
       uniforms.uGill.value = bodyMotion.gill;
       const state = {
-        body: bodyMotion, time: t, mode, phase, pectoralPhase, pectoralPower, scull, tuck, pectoralEffort, pectoralScull, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value, clamp: display.clamp,
-        // (The body's strokes, for the fins: a pectoral push, 0..1; darting, fins to fold; braking, fins to flare;
-        // a kick of the tail, its size and side and how far through it, for the caudal's sweep.)
-        push, dart, brake, kick: gait.kick, kickAt: gait.kickAt, kickSweeps: gait.kickSweeps,
-        // (How hard it works to hold or shift station at hover or slow speed, 0..1: the gait's hold.)
-        hold: gait.hold,
-        // (The water's surface, for the fins to keep under: a host's userData.surfaceY, its height along
-        // the fish's up, -userData.down, in the frame the fish is placed in, brought into its own frame.)
-        surfaceY: fish.userData.surfaceY === undefined ? undefined
-          : fish.userData.surfaceY + (down ? down[0] * fish.position.x + down[1] * fish.position.y + down[2] * fish.position.z : -fish.position.y),
-        billowPhase, wash, speed: relativeFlow / BODY_LENGTH, accel: accelLocal.toArray(), down: downLocal.toArray(),
+        body: bodyMotion, time: t, phase, pectoralPhase, scull, tuck, pectoralEffort, pectoralScull, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value, clamp: display.clamp,
         heading, angularVelocity, velocity, origin: fish.position.toArray(),
-        localHydrodynamics, solids: finSolids.count ? finSolids : null,
-        // (The C it is curling into as it comes round, -1..1, + to its left: the host's curl, or the body's own.)
-        curl: bodyMotion.curl,
+        localHydrodynamics,
         strength: flowStrength, direction: water.direction, externalFlow: fish.userData.externalFlow,
         bodyRadius(x, y) {
           const pixelX = x / SCALE + 680;
