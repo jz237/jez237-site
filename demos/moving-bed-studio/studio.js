@@ -1,10 +1,10 @@
 import * as T from '../aquaclear-studio/vendor/three.module.js';
 import {OrbitControls} from '../aquaclear-studio/vendor/OrbitControls.js';
 import {studioEnvironment} from '../aquaclear-studio/realism.js?v=material-5';
-import {createWaterOptics} from '../trickle-studio/optics.js?v=3';
-import {PARTS,LESSONS,SCENARIOS,REACTIONS,CARE,SOURCES,conditions} from './data.js?v=2';
-import {createSimulation} from './simulation.js?v=2';
-import {buildModel} from './model.js?v=2';
+import {createWaterOptics} from './optics.js?v=3';
+import {PARTS,LESSONS,SCENARIOS,REACTIONS,CARE,SOURCES,conditions} from './data.js?v=3';
+import {createSimulation} from './simulation.js?v=3';
+import {buildModel} from './model.js?v=3';
 const $=id=>document.getElementById(id),reduced=matchMedia('(prefers-reduced-motion: reduce)'),V=(...x)=>new T.Vector3(...x),clamp=T.MathUtils.clamp;
 const initial={mode:'cutaway',focus:null,showWater:true,showAir:true,showMix:true,tab:'explore',selected:'media',amount:0,target:0,air:70,load:40,water:65,maturity:75,airOn:true,waterOn:true,paused:reduced.matches,slow:false,rotate:false,track:false,labels:true,isolated:false,shellOpen:false,transport:true,time:0,waterPhase:0,airPhase:0,tour:-1,care:0,ready:false};
 const focuses={bed:{center:[0,1.8,0],radius:2.25,part:'media',note:'The gold trail records the recent path of one carrier. It shows changing height and depth, not a fixed circular orbit.'},diffusers:{center:[0,1.1,0],radius:1.8,part:'diffusers',note:'Carriers are hidden in this teaching view so the two diffuser rails and rising bubble plumes can be seen. Return to Cutaway to restore them.'},solids:{center:[-3,2.25,0],radius:1.45,part:'pad',note:'The coarse pad intercepts particles before the biological bed. The basket supports it; captured debris still needs to be removed.'},screen:{center:[1.75,1.8,0],radius:1.65,part:'outlet-screen',note:'Water crosses narrow slots while the larger carriers stay in the biological chamber. The screen is a retaining barrier, not the biological treatment surface.'}};
