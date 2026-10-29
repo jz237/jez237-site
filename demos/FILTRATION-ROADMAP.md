@@ -1,6 +1,6 @@
 # Filtration demo inventory and next studies
 
-Reviewed October 29, 2026 against the current `jz237/jez237-site` checkout and the running demos. The gallery now lists 31 exhibits, including the new Moving Bed Atelier. The earlier AC70 update also registered two existing filtration exhibits that had been absent from the gallery.
+Reviewed October 29, 2026 against the current `jz237/jez237-site` checkout and the running demos. The main gallery now has 27 entries, including one Aquarium Filtration collection containing five filter exhibits. Individual filter URLs are unchanged. The earlier AC70 update also registered two existing filtration exhibits that had been absent from the gallery.
 
 | Exhibit | Existing coverage | Location |
 | --- | --- | --- |
@@ -48,6 +48,10 @@ Implemented all five follow-ups: outlet/rib pendant drops and thread breakup; te
 ### Moving-bed biological filter — implemented October 29, 2026
 
 Hundreds of independently moving hollow carriers, twin aeration plumes, separate air/water controls, media-loading experiments, visible water, an enlarged removable-shell carrier and an exposed linear diaphragm mechanism. Nine lessons and the Biology panel explain protected surfaces, nitrification, oxygen and establishment without implying measured chemistry. Six presets and four care stages complement 18 selectable assemblies. See `moving-bed-studio/README.md` for primary references, model limits, tests and deployment guidance.
+
+### Moving-bed refinement and collection — October 29, 2026
+
+Added water-depth cues, surface breakup, actual carrier trails, open lid vents, pipe bores, rounded macro geometry, flexing pump diaphragms/valves, four teaching close-ups and independent flow-route switches. All five filter studies now appear inside `/demos/aquarium-filtration/` through one main-gallery link. Future filters belong in its catalog; see that collection's README.
 
 ### Next distinct filter mechanisms
 

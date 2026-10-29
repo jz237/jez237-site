@@ -9,3 +9,7 @@ To add a demo:
 4. Commit the catalog, generated `index.html`, and new demo assets together.
 
 The layout supports additional cards without editing CSS. The gallery works without JavaScript; the shared site menu is enhanced by `assets/side-menu.js`.
+
+## Filtration collection
+
+Keep aquarium/pond filter demos inside the single Aquarium Filtration collection. Add their metadata to `aquarium-filtration/catalog.json`, not this directory's main catalog. `build-demos.mjs` builds that sub-gallery first. See `aquarium-filtration/README.md` for the user instruction and workflow. Existing filter URLs are preserved.

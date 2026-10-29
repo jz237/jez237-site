@@ -1,3 +1,4 @@
+import './build-filtration.mjs';
 import { readFileSync, writeFileSync, readdirSync, unlinkSync } from 'node:fs';
 const root = new URL('../demos/', import.meta.url);
 const demos = JSON.parse(readFileSync(new URL('catalog.json', root), 'utf8'));

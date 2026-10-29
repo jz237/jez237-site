@@ -1,0 +1,122 @@
+[
+  {
+    "id": "031",
+    "title": "Moving Bed Atelier",
+    "category": "3D · Biological filtration",
+    "description": "Explore a living biological filter, from hundreds of tumbling carriers to the protected film inside one hollow surface. Follow separate air and water circuits, open the diaphragm pump, and experiment with aeration, media loading and biological establishment.",
+    "url": "moving-bed-studio/",
+    "image": "assets/moving-bed-studio.jpg",
+    "imageAlt": "The Moving Bed Atelier showing a cutaway aerated reactor with hundreds of hollow carriers, separate mechanical and return-pump bays and an interactive component explorer",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/moving-bed-studio",
+    "features": [
+      "18 assemblies, nine lessons & six experiments",
+      "Depth-shaded water, surface breakup & carrier trails",
+      "Rounded carrier macro & flexing pump section",
+      "Four close-ups & independent flow-route controls"
+    ],
+    "facts": [
+      "Original biological teaching design",
+      "Mouse, touch & keyboard",
+      "Self-hosted 3D"
+    ],
+    "note": "WebGL 2 · Desktop & mobile · Illustrative circulation and biology · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
+    "id": "030",
+    "title": "Trickle Atelier",
+    "category": "3D · Filtration engineering",
+    "description": "Follow a drop through a complete wet/dry circuit: overflow, drip distributor, open bio-balls, bubble baffles and return pump. Take 18 assemblies apart, then turn the power off and watch the sump receive the water above.",
+    "url": "trickle-studio/",
+    "image": "assets/trickle-studio.jpg",
+    "imageAlt": "The working Trickle Atelier showing an aquarium overflow above a cutaway wet/dry tower, ribbed bio-balls, baffles, clear water levels and a component explorer",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/trickle-studio",
+    "features": [
+      "18 selectable assemblies & seven close-ups",
+      "Wet ribs, pendant drops & polished acrylic",
+      "Staged restart & residual drain-down",
+      "Overflow section & gradual pad loading"
+    ],
+    "facts": [
+      "Original wet/dry teaching design",
+      "Mouse, touch & keyboard",
+      "Self-hosted 3D"
+    ],
+    "note": "WebGL 2 · Desktop & mobile · Illustrative hydraulics · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
+    "id": "027",
+    "title": "AquaClear Atelier",
+    "category": "3D · Filtration engineering",
+    "description": "Take a Fluval AquaClear AC70 apart in 3D. Follow the intake, magnetic impeller and spillway, explore three filtration media, and discover what changes when water takes another lap through the filter.",
+    "url": "aquaclear-studio/",
+    "image": "assets/aquaclear-studio.jpg",
+    "imageAlt": "The working AquaClear Atelier showing a cutaway hang-on-back filter, foam and ceramic media, labeled intake and a component explorer",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/aquaclear-studio",
+    "features": [
+      "15 selectable assemblies",
+      "Explode, cutaway & inspect alone",
+      "Working pump & loaded-foam lab",
+      "Loose media, clear plastic & refractive water"
+    ],
+    "facts": [
+      "Current AC70 layout",
+      "Mouse, touch & keyboard",
+      "Self-hosted 3D"
+    ],
+    "note": "WebGL 2 · Desktop & mobile · Educational reconstruction · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
+    "id": "028",
+    "title": "FiltoClear 5200 Studio",
+    "category": "3D · Pond filtration",
+    "description": "Open a pressurized pond filter and discover its foam stack, UV clarification core and cleaning mechanism. Follow the water through the OASE FiltoClear 5200 and explore every selectable assembly.",
+    "url": "filtoclear-studio/",
+    "image": "assets/filtoclear-studio.jpg",
+    "imageAlt": "The working FiltoClear studio showing a cylindrical pond filter cut open to reveal colored foam rings and the central UV assembly",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/filtoclear-studio",
+    "features": [
+      "32 selectable assemblies",
+      "Exploded & cutaway views",
+      "Normal flow & Easy-Clean",
+      "Guided lessons & pond sizing"
+    ],
+    "facts": [
+      "OASE FiltoClear 5200",
+      "Pressure-filter study",
+      "Mouse & touch"
+    ],
+    "note": "WebGL 2 · Desktop & touch · Educational reconstruction · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
+    "id": "029",
+    "title": "Inside the Reef · Filtration Studio",
+    "category": "3D · Reef life support",
+    "description": "Explore the hidden support system beneath a reef aquarium. Take apart a fleece roller, protein skimmer and return pump, inspect living-rock filtration, and trace the circuit through a transparent sump.",
+    "url": "reef-filtration/",
+    "image": "assets/reef-filtration.jpg",
+    "imageAlt": "The working reef filtration studio showing a transparent sump with a fleece roller, bubbling protein skimmer, live-rock chamber and return pump",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/reef-filtration",
+    "features": [
+      "Four filtration assemblies",
+      "37 selectable components",
+      "Water, air & waste paths",
+      "Exploded views & guided circuit"
+    ],
+    "facts": [
+      "One continuous circuit",
+      "Reef sump study",
+      "Mouse & touch"
+    ],
+    "note": "WebGL 2 · Desktop & touch · Educational reconstruction · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  }
+]

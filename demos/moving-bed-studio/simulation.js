@@ -1,6 +1,6 @@
 // Deterministic kinematic flow field + conservative sphere contacts.
 // A readable circulation study, not CFD, calibrated buoyancy or rib-level rigid bodies.
-import {conditions} from './data.js?v=1';
+import {conditions} from './data.js?v=2';
 export const MAX=660,R=.15,BOUNDS={x:1.65,z:1.13,bottom:.52,top:3.08};
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 export function createSimulation(){
