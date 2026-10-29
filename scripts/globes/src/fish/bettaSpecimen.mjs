@@ -26,6 +26,11 @@ const BODY_CLEAR = 0.002, LIPS_BEHIND = -1.45;
  *  its snout or flank pressed into the bark), but lying on one, it lies on it: a touch, and as it settles
  *  there it sinks the last of that gap. */
 const BODY_ROOM = 0.01;
+/** Its solid parts are cores, a little inside the bark; the bark stands out of them in places (knots,
+ *  bulges) by as much as 5 mm. Swimming by, it is held off the room its fins keep round a thing (which
+ *  holds all of the bark), less BODY_IN (the least that room stands off the bark), at every BODY_SPARSE-th
+ *  vertex of its body (enough to hold it off a bulge, at a quarter of the cost). */
+const BODY_IN = 0.013, BODY_SPARSE = 4;
 export const BUBBLE_RADIUS = 0.0035;
 
 /**
@@ -224,11 +229,15 @@ export class BettaSpecimen {
           const above = x * u0 + y * u1 + z * u2 - under;
           if (above > worst) { worst = above; dx = -u0 * above; dy = -u1 * above; dz = -u2 * above; }
         }
+        // (Swimming by, every BODY_SPARSE-th of its vertices is held off the bark's whole surface too: the
+        // room its fins keep, less BODY_IN.)
+        const sparse = room > 0 && (i / 3) % BODY_SPARSE === 0;
         for (const o of near) {
-          if (!(o.solid > 0)) continue;
+          const hold = o.solid > 0 ? o.solid + room : sparse && o.fin > 0 ? o.fin - BODY_IN : 0;
+          if (!(hold > 0)) continue;
           const t = Math.max(0, Math.min(1, ((x - o.ax) * o.abx + (y - o.ay) * o.aby + (z - o.az) * o.abz) * o.inv));
           const ox = x - o.ax - o.abx * t, oy = y - o.ay - o.aby * t, oz = z - o.az - o.abz * t, l = Math.sqrt(ox * ox + oy * oy + oz * oz);
-          const into = o.solid + room - l;
+          const into = hold - l;
           if (into > worst && l > 1e-9) { worst = into; dx = ox / l * into; dy = oy / l * into; dz = oz / l * into; }
         }
       }
