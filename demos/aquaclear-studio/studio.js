@@ -4,7 +4,7 @@ import { studioEnvironment } from './realism.js?v=material-5';
 import { buildFilter } from './model.js?v=material-5';
 import { PARTS, LESSONS, CARE, flowModel } from './data.js?v=material-5';
 
-import { createWaterOptics } from './optics.js?v=material-5';
+import { createWaterOptics } from './optics.js?v=water-6';
 const $=id=>document.getElementById(id), reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const state={mode:'cutaway',tab:'explore',amount:0,target:0,flow:100,restricted:false,selected:'foam',isolated:false,paused:reduced.matches,rotate:false,labels:true,tour:-1,care:-1,sequence:false,sequenceTime:0,time:0,ready:false,waterLevel:26,showDebris:true};
 let scene,camera,renderer,controls,filter,optics,camTween,last=0,down=null;

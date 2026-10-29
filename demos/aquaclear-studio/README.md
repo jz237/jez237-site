@@ -49,6 +49,10 @@ Blue foam and the black intake sponge use separate procedural open-cell color an
 
 These remain real-time approximations, not microscopic reference textures or measured material scans. The original geometry and appearance references above still apply. No paid assets, new packages or outside runtime requests were introduced.
 
+## Water visibility adjustment — October 28, 2026
+
+The optical shader adds a restrained blue-green visibility tint, narrow spillway edge/lip highlights, moving sheet glints and downstream ripple crests. These cues keep water legible on the dark studio background even when there is no scene geometry to refract. They follow the shared animation clock, impact point and delivery value, preserving pause, reduced motion and water-level behavior. Tint and highlights are educational visibility cues, not measured water color or turbidity.
+
 ## Maintenance and checks
 
 `data.js`: content, primary sources and qualitative flow mapping. `model.js`: procedural geometry, assembly offsets and water traces. `effects.js`: procedural waterfall/surface, debris capture and open pump section. `optics.js`: bounded offscreen reflection/refraction captures and water shader. `detail.js`: perforated cover, hollow tubes, pump cover, procedural grain, cloth and light-pattern materials. `realism.js`: cellular foam maps, ceramic packing/profile, fabric deformation and the studio reflection environment. `studio.js`: UI, selection, guided camera and state. `studio.css`: responsive layout.
