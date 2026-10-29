@@ -1,13 +1,13 @@
 import * as T from '../aquaclear-studio/vendor/three.module.js';
 import { OrbitControls } from '../aquaclear-studio/vendor/OrbitControls.js';
 import { studioEnvironment } from '../aquaclear-studio/realism.js?v=material-5';
-import { buildTrickle } from './model.js?v=1';
-import { PARTS, LESSONS, CARE, hydraulics } from './data.js?v=1';
+import { buildTrickle } from './model.js?v=2';
+import { PARTS, LESSONS, CARE, hydraulics } from './data.js?v=2';
 
-import { createWaterOptics } from './optics.js?v=1';
+import { createWaterOptics } from './optics.js?v=2';
 const $=id=>document.getElementById(id), reduced=matchMedia('(prefers-reduced-motion: reduce)');
-const state={mode:'cutaway',tab:'explore',amount:0,target:0,rate:70,fill:25,blocked:false,power:true,drainback:0,selected:'biomedia',isolated:false,paused:reduced.matches,rotate:false,labels:true,tour:-1,care:-1,sequence:false,sequenceTime:0,time:0,ready:false};
-let scene,camera,renderer,controls,filter,optics,camTween,last=0,down=null;
+const state={mode:'cutaway',tab:'explore',amount:0,target:0,rate:70,fill:25,blocked:false,power:true,drainback:0,selected:'biomedia',isolated:false,paused:reduced.matches,rotate:false,labels:true,tour:-1,care:-1,sequence:false,sequenceTime:0,time:0,flowTime:0,arrowTime:0,rotorAngle:0,slow:false,ready:false};
+let scene,camera,renderer,controls,filter,optics,studioFloor,camTween,last=0,down=null;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),smooth=t=>t*t*(3-2*t),v=(x,y,z)=>new T.Vector3(x,y,z);
 const stage=$('viewport'),raycaster=new T.Raycaster(),pointer=new T.Vector2();
 const labelNodes=new Map();
@@ -91,7 +91,7 @@ function focusRegion(center,radius,direction){
   const limiting=Math.min(half,Math.atan(Math.tan(half)*camera.aspect));
   moveCamera(target.clone().addScaledVector(v(...direction).normalize(),radius/Math.sin(limiting)),target);
 }
-function focusLesson(){const l=LESSONS[state.tour];if(!l)return;if(l.center)focusRegion(l.center,l.radius,state.tour===2?[2,.75,6]:[3,1.8,6]);else if(l.mode==='media')focusRegion([-2.35,2.65,0],2.25,[3,2,6]);}
+function focusLesson(){const l=LESSONS[state.tour];if(!l)return;if(l.center)focusRegion(l.center,l.radius,state.tour===2?[2,.75,6]:[3,1.8,6]);else if(l.mode==='media')focusRegion(filter?.mediaFocus||[-2.35,2.65,0],.55,[2,1.2,6]);}
 function showMobileStage(){if(matchMedia('(max-width:760px)').matches)stage.parentElement.scrollIntoView({behavior:reduced.matches?'instant':'smooth',block:'start'});}
 function inspectPump(){endTour();setMode('pump',{changeTab:false});select('rotor');$('pump-inspect').setAttribute('aria-pressed','true');showMobileStage();}
 $('pump-inspect').onclick=()=>state.mode==='pump'?setMode('flow',{changeTab:false}):inspectPump();
@@ -107,12 +107,13 @@ document.querySelectorAll('[data-tab]').forEach(b=>{b.onclick=()=>{endTour();tab
 $('explode').addEventListener('input',e=>{endTour();stopSequence();const val=+e.target.value/100;if(state.mode!=='exploded')setMode('exploded',{fitView:false});state.target=val;fit();});
 $('sequence').onclick=()=>{if(state.sequence){stopSequence();return;}endTour();setMode('exploded');state.sequence=true;state.sequenceTime=0;state.paused=false;pressed('pause',false);$('pause').textContent='Pause motion';pressed('sequence',true);$('sequence').textContent='■ Stop sequence';};
 $('pause').onclick=()=>{state.paused=!state.paused;pressed('pause',state.paused);$('pause').textContent=state.paused?'Resume motion':'Pause motion';};
+$('slow').onclick=()=>{state.slow=!state.slow;pressed('slow',state.slow);$('slow').textContent=state.slow?'Slow motion · ⅓×':'Slow motion';};
 $('rotate').onclick=()=>{state.rotate=!state.rotate;pressed('rotate',state.rotate);};
 $('labels-toggle').onclick=()=>{state.labels=!state.labels;pressed('labels-toggle',state.labels);};
 $('isolate').onclick=()=>{state.isolated=!state.isolated;pressed('isolate',state.isolated);$('isolate').textContent=state.isolated?'Return to assembly':'Inspect alone';stopSequence();fit();};
 $('clear').onclick=()=>{state.isolated=false;pressed('isolate',false);$('isolate').textContent='Inspect alone';fit();};
 $('tour').onclick=()=>lesson(0);$('previous').onclick=()=>lesson(state.tour-1);$('next').onclick=()=>state.tour===LESSONS.length-1?endTour():lesson(state.tour+1);$('end-tour').onclick=endTour;$('stage-previous').onclick=()=>lesson(state.tour-1);$('stage-next').onclick=()=>state.tour===LESSONS.length-1?endTour():lesson(state.tour+1);
-$('reset').onclick=()=>{endTour();Object.assign(state,{rate:70,fill:25,blocked:false,power:true,drainback:0,rotate:false,paused:reduced.matches,labels:true,isolated:false});$('rate').value=70;$('fill').value=25;$('blocked').checked=false;pressed('rotate',false);pressed('pause',state.paused);pressed('labels-toggle',true);$('pause').textContent=state.paused?'Resume motion':'Pause motion';tab('explore',{syncMode:false});setMode('cutaway');select('biomedia');updateFlowText();};
+$('reset').onclick=()=>{endTour();Object.assign(state,{rate:70,fill:25,blocked:false,power:true,drainback:0,flowTime:0,arrowTime:0,rotorAngle:0,slow:false,rotate:false,paused:reduced.matches,labels:true,isolated:false});$('rate').value=70;$('fill').value=25;$('blocked').checked=false;pressed('slow',false);$('slow').textContent='Slow motion';pressed('rotate',false);pressed('pause',state.paused);pressed('labels-toggle',true);$('pause').textContent=state.paused?'Resume motion':'Pause motion';tab('explore',{syncMode:false});setMode('cutaway');select('biomedia');updateFlowText();};
 $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{$('fullscreen').textContent='Fullscreen unavailable';}};
 document.addEventListener('fullscreenchange',()=>{$('fullscreen').setAttribute('aria-label',document.fullscreenElement?'Exit fullscreen':'Enter fullscreen');});
 reduced.addEventListener('change',e=>{if(e.matches){state.paused=true;pressed('pause',true);$('pause').textContent='Resume motion';}});
@@ -133,11 +134,12 @@ function intersect(e){const r=stage.getBoundingClientRect();pointer.set((e.clien
 async function init(){
   try{
     renderer=new T.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.transmissionResolutionScale=stage.clientWidth<760?.5:.8;renderer.setSize(stage.clientWidth,stage.clientHeight);renderer.setClearColor('#10242c',1);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFShadowMap;stage.append(renderer.domElement);
-    scene=new T.Scene();scene.background=new T.Color('#10242c');camera=new T.PerspectiveCamera(36,stage.clientWidth/stage.clientHeight,.1,150);camera.position.set(10,8,13);controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.075;controls.minDistance=.6;controls.maxDistance=70;controls.maxPolarAngle=Math.PI*.82;controls.target.set(0,2,0);controls.addEventListener('start',()=>{camTween=null;});
+    scene=new T.Scene();const backdrop=document.createElement('canvas');backdrop.width=backdrop.height=512;const bg=backdrop.getContext('2d'),gradient=bg.createRadialGradient(300,240,20,256,256,410);gradient.addColorStop(0,'#233c43');gradient.addColorStop(.6,'#142b33');gradient.addColorStop(1,'#0a1a22');bg.fillStyle=gradient;bg.fillRect(0,0,512,512);const background=new T.CanvasTexture(backdrop);background.colorSpace=T.SRGBColorSpace;scene.background=background;camera=new T.PerspectiveCamera(36,stage.clientWidth/stage.clientHeight,.1,150);camera.position.set(10,8,13);controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.075;controls.minDistance=.6;controls.maxDistance=70;controls.maxPolarAngle=Math.PI*.82;controls.target.set(0,2,0);controls.addEventListener('start',()=>{camTween=null;});
     const environment=studioEnvironment(renderer);scene.environment=environment.texture;scene.environmentIntensity=1.0;
     scene.add(new T.HemisphereLight('#e4e8eb','#171b20',.28));
-    const key=new T.DirectionalLight('#fff3e5',2.6);key.position.set(-5,9,8);key.castShadow=true;key.shadow.mapSize.set(innerWidth<760?2048:4096,innerWidth<760?2048:4096);Object.assign(key.shadow.camera,{left:-10,right:10,top:12,bottom:-7,near:.5,far:35});key.shadow.normalBias=.025;key.shadow.bias=-.0001;key.shadow.radius=2.5;scene.add(key);
-    const rim=new T.DirectionalLight('#d4e6ff',2.2);rim.position.set(6,6,-4);scene.add(rim);const fill=new T.DirectionalLight('#f0f2f0',.65);fill.position.set(1,2,10);scene.add(fill);
+    const key=new T.DirectionalLight('#fff0db',3.1);key.position.set(-5,9,8);key.castShadow=true;key.shadow.mapSize.set(innerWidth<760?2048:4096,innerWidth<760?2048:4096);Object.assign(key.shadow.camera,{left:-10,right:10,top:12,bottom:-7,near:.5,far:35});key.shadow.normalBias=.025;key.shadow.bias=-.0001;key.shadow.radius=2.5;scene.add(key);
+    const rim=new T.DirectionalLight('#b9e4f6',2.6);rim.position.set(6,6,-4);scene.add(rim);const fill=new T.DirectionalLight('#f0f2f0',.65);fill.position.set(1,2,10);scene.add(fill);
+    studioFloor=new T.Mesh(new T.PlaneGeometry(26,20),new T.ShadowMaterial({color:'#02070a',opacity:.25,depthWrite:false}));studioFloor.rotation.x=-Math.PI/2;studioFloor.position.y=-.34;studioFloor.receiveShadow=true;scene.add(studioFloor);
     filter=buildTrickle();scene.add(filter.root);optics=createWaterOptics(renderer,scene,camera,filter.water,filter.opticsExcluded);
     renderer.domElement.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY};});
     renderer.domElement.addEventListener('pointerup',e=>{if(down&&Math.hypot(e.clientX-down.x,e.clientY-down.y)<6){const hit=intersect(e);if(hit){endTour();if(state.mode==='care')setMode('cutaway',{changeTab:false});tab('explore',{syncMode:false});select(hit.object.userData.part);}}down=null;});
@@ -152,9 +154,9 @@ async function init(){
 }
 function frame(now){
   const dt=Math.min((now-last)/1000,.05);last=now;if(!state.ready||document.hidden)return;
-  if(!state.paused){state.time+=dt;if(state.care<0){const target=state.power?0:1;state.drainback=clamp(state.drainback+(target?1:-1)*dt*.35,0,1);}if(state.sequence){state.sequenceTime+=dt;const t=state.sequenceTime;state.target=t<3?smooth(t/3):t<5?1:t<8?1-smooth((t-5)/3):0;if(t>=8){stopSequence();setMode('assembled');}}}
+  if(!state.paused){const step=dt*(state.slow?1/3:1);state.time+=step;const h=hydraulics(state);if(state.care<0&&state.amount<.02&&!state.isolated){if(h.flow>.005){state.flowTime+=step*(.55+h.flow*.55);state.arrowTime+=step*.07*Math.max(.3,h.flow);}if(h.running)state.rotorAngle+=step*(2+h.setting*5);const target=state.power?0:1;state.drainback=clamp(state.drainback+(target?1:-1)*step*.35,0,1);}if(state.sequence){state.sequenceTime+=dt;const t=state.sequenceTime;state.target=t<3?smooth(t/3):t<5?1:t<8?1-smooth((t-5)/3):0;if(t>=8){stopSequence();setMode('assembled');}}}
   state.amount+= (state.target-state.amount)*(reduced.matches?1:Math.min(1,dt*5));if(Math.abs(state.target-state.amount)<.0001)state.amount=state.target;
-  filter.pose(state,dt);updateFlowText();
+  filter.pose(state,dt);studioFloor.visible=!state.isolated&&!['pump','media'].includes(state.mode);studioFloor.position.y=-.34-state.amount*1.4;updateFlowText();
   if(camTween){camTween.elapsed+=dt;const t=smooth(Math.min(1,camTween.elapsed/.8));camera.position.lerpVectors(camTween.from,camTween.to,t);controls.target.lerpVectors(camTween.fromTarget,camTween.target,t);if(t>=1)camTween=null;}
   controls.autoRotate=state.rotate&&!state.paused;controls.autoRotateSpeed=.5;controls.update();labels();optics.capture(state.time);renderer.render(scene,camera);
   if(document.activeElement!==$('explode'))$('explode').value=Math.round(state.amount*100);$('explode-value').textContent=Math.round(state.amount*100)+'%';document.body.dataset.explosion=String(Math.round(state.amount*100));document.body.dataset.motion=state.paused?'paused':'running';

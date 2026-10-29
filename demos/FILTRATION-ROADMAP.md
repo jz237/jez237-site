@@ -36,6 +36,10 @@ The next precision step is measured geometry or a physical scan, particularly th
 
 The user chose this mechanism ahead of the sponge filter. Trickle Atelier provides a complete gravity-drain/pumped-return circuit, an actual perforated distributor, 96 ribbed bio-balls, water-level and loaded-pad controls, finite power-off drain-down, low-level pump stop and high-fill overflow warning. It shares the HOB exhibit's visual/control system and local rendering dependencies. Seven guided close-ups, four care stages and 18 selectable assemblies are supported on desktop/mobile. See `trickle-studio/README.md` for references, simulation limits, architecture and tests. The original design is educational rather than a branded product replica or installation plan.
 
+### Trickle detail and animation pass — October 29, 2026
+
+Added an isolated macro bio-ball, water beads following its ribs, deflected stream paths, impact ripples, a distributor film, weir/baffle sheets, curved impeller vanes, shaft/seal detail, fasteners, rounded acrylic and upstream pad deposits. The tower base is corrected to drain through its grate. Integrated motion phases, a one-third-speed control, improved lighting and a full pause/stop audit accompany the visual changes. See the Trickle README for the qualitative model limits and new detail QA.
+
 ### Next distinct filter mechanisms
 
 1. **Undergravel filter.** Gravel as the bed, slotted plates, lift tubes, trapped detritus and maintenance. Explain conventional and reverse-flow arrangements separately. This adds a larger system-level study after wet/dry.

@@ -12,3 +12,5 @@
 .journey-stage-nav{display:none}@media(max-width:760px){body[data-journey] .journey-stage-nav{display:flex;align-items:center;gap:12px;position:absolute;z-index:5;left:20px;top:91px}.journey-stage-nav button{padding:3px 10px;background:#102b34}.journey-stage-nav output{font-size:10px;color:#bbdaca}}
 
 .hydraulic-stats{display:grid;gap:8px;font-size:10px;border-top:1px solid #42635e;padding-top:12px}.hydraulic-stats span{display:flex;justify-content:space-between;gap:8px}.hydraulic-stats strong{font-size:9px;letter-spacing:.04em;color:#b4ebd4}body[data-warning=true] .flow-readout{border-color:#a57849;background:#493827}body[data-mode=media] .scene-heading h1{font-size:28px}body[data-mode=media] .edition{display:none}#panel-flow .switch{margin-top:20px}
+
+.playback{flex-wrap:wrap}.playback>span{display:none}body[data-mode=pump]:not([data-journey]) .scene-heading h1,body[data-mode=media]:not([data-journey]) .scene-heading h1{font-size:25px}@media(max-width:760px){.playback{gap:4px}.playback button{padding:6px 7px}}
