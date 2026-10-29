@@ -31,4 +31,3 @@ try{fs.mkdirSync('tmp/moving-bed-qa',{recursive:true});const errors=[],page=awai
  const fallback=await browser.newPage();await fallback.addInitScript(()=>{const get=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){return /webgl/.test(type)?null:get.call(this,type,...args);};});await fallback.goto(url);await fallback.locator('#error').waitFor({state:'visible'});await fallback.locator('[data-tab=biology]').click();assert(await fallback.locator('.nitrogen-chain').isVisible());
  assert.deepEqual(errors,[]);console.log(JSON.stringify({passed:true,url,parts:parts.length,lessons:9,presets:6,slowRatio:slow/normal,desktop:true,mobile:true,reducedMotion:true,fallback:true,errors},null,2));
 }finally{await browser.close();}})().catch(e=>{console.error(e);process.exit(1);});
-
