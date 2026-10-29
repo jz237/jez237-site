@@ -16,6 +16,13 @@ test('finished, failed, canceled and skipped deployments do not hold the queue',
     ...['failure', 'canceled', 'skipped'].map(status => deployment('build', status))];
   assert.deepEqual(pendingProductionBuilds(rows), []);
 });
+
+test('explicitly skipped Pages deployments can retain an idle queued stage', () => {
+  const skipped = { ...deployment('queued', 'idle'), is_skipped: true };
+  const pending = { ...deployment('queued', 'idle'), is_skipped: false };
+  const unknown = { ...deployment('queued', 'idle'), is_skipped: 'true' };
+  assert.deepEqual(pendingProductionBuilds([skipped, pending, unknown]), [pending, unknown]);
+});
 test('unknown or unfinished production states fail closed and previews do not block production', () => {
   assert.equal(pendingProductionBuilds([{ environment: 'production' },
     deployment('deploy', 'active'), deployment('deploy', 'success')]).length, 3);
