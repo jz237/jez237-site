@@ -186,7 +186,7 @@ export const PITCH_FASTEST = 0.45, PITCH_SNAP = 1.6, PITCH_STROKE = 0.14;
 // building over most of the rise, at RISE_TIP rad/s at the most, eased into and out of at up to
 // RISE_SNAP rad/s/s. Sinking back from the film it tips over the same way, a little quicker (DIVE_TIP at
 // the most, DIVE_SNAP): it levels out within about a second and a half.
-export const RISE_TIP = 1.35, RISE_SNAP = 2.6, RISE_UNDER_WAY = 0.55, DIVE_TIP = 1.8, DIVE_SNAP = 4.5;
+export const RISE_TIP = 1.6, RISE_SNAP = 3.2, RISE_UNDER_WAY = 0.55, DIVE_TIP = 1.8, DIVE_SNAP = 4.5;
 // Hanging in the water, or going on slowly with its tail all but still (gliding, or on its pectorals),
 // it gains way only on a stroke: for PUSH_TIME s after a beat of its pectorals or a sweep of its tail;
 // between them it coasts, slowing (COAST, 1/s). Going on slowly it beats its pectorals again once it has
