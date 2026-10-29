@@ -17075,5 +17075,104 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-29-factual-infographic-factual-infographic-macular-degeneratio",
+    "title": "Factual infographic: Macular Degeneration — The Center of Sight",
+    "tests": "factual_subtype: medical-health-infographic; source-backed clinical context; artwork-led flowing anatomy; stock Sunburst medium/auto/opaque requested; backend identity not independently verified.; archive_slot=2026-10-29T17:20; concept=macular-degeneration-retinal-damage-central-vision; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, artwork-led medical infographic, directly on the canvas, titled \"AGE-RELATED MACULAR DEGENERATION\" with the subtitle \"The center of sight\". Refined luminous anatomical painting and delicate technical ink on a warm ivory ground; midnight indigo, retinal coral, amber and soft cyan. Asymmetric, organic composition with breathing room, no rigid boxed grid, cards, frame, photographed poster or UI. The dominant illustration is a large oblique cutaway of the human eye, with the curved back wall unfurling into an enlarged retinal landscape across the middle of the composition. Make the macula a clearly indicated small central region of the retina, not the whole retina, with precise elegant leader lines reading \"Retina — light-sensitive back wall\" and \"Macula — sharp central vision\". Show credible curved eye geometry and finely shaded layered retinal tissue, not invented structures or decorative pseudo-anatomy.\nThe enlarged tissue sweep branches gently into two separate schematic studies, not a before-and-after ladder: \"Dry AMD\" shows small yellow drusen beneath the retina with the concise label \"Drusen; tissue may thin and atrophy\"; \"Wet AMD\" shows abnormal fine red vessels growing beneath the retina with restrained leakage and subtle distortion, labeled \"Abnormal vessels can leak or bleed\". Clearly identify this as \"Simplified anatomy\"; do not imply every dry case progresses to wet AMD. The tissue structures are beautifully resolved, with microvascular detail only where anatomically justified and finely textured layered surfaces.\nAbove the retinal sweep float two small, open-edged vision illustrations using the same garden gate seen from a fixed viewpoint: one with straight bars and one with central waviness and a soft central blur, leaving peripheral details clear. Caption \"Illustrative symptoms — experiences vary\" and \"Central blur or wavy lines; early AMD may be silent\". These are illustrative, not diagnostic tests; no simulated total black blindness. A clear coral accent follows the visual path to the readable urgent callout \"New wavy lines or central vision changes? Contact an eye doctor promptly.\" Do not add unsourced emergency diagnoses.\nAlong the lower organic arc, weave concise clinically meaningful callouts into open space: \"Evaluation: dilated eye exam + OCT imaging\"; \"Wet AMD: anti-VEGF eye injections can preserve vision\"; \"Selected intermediate AMD: ask about AREDS supplements\"; \"Care depends on type and stage\". Do not show a needle piercing a diagram or include doses, product brands, cure claims or generic supplements for everyone. Small graceful magnifying-glass motif accompanies \"Low-vision aids and rehabilitation support daily life\". A final short line reads \"Risk rises with age, family history and smoking. Healthy habits and not smoking can help.\" Tiny but legible footer: \"General education — not a diagnosis\". No invented statistics, no source URLs or bibliography on the art. Keep all essential labels readable, the eye and flowing retinal anatomy dominant, and supporting facts integrated by varied scale and delicate curved leaders, never a worksheet of identical panels. Request medium quality, auto size, opaque background.",
+    "image": "images/2026-10-29-factual-infographic-factual-infographic-macular-degeneratio.jpg",
+    "thumb": "thumbs/2026-10-29-factual-infographic-factual-infographic-macular-degeneratio.webp",
+    "color": "#d9c2b3",
+    "date": "2026-10-29",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "macular-degeneration-retinal-damage-central-vision",
+      "imageSha256": "a3d3b6d8b41e2f280b5442875a1cb70e72e3b817f7490aea706f14c23843bdaa",
+      "imageDHash": "cc8dc4c4ccec9396"
+    },
+    "factualInfographic": {
+      "topic": "Age-related macular degeneration and central vision",
+      "description": "Macular anatomy, dry and wet AMD, central-vision symptoms, prompt assessment and type-specific clinical care.",
+      "sourceNote": "National Eye Institute: https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/age-related-macular-degeneration ; American Society of Retina Specialists: https://www.asrs.org/patients/retinal-diseases/2/age-related-macular-degeneration . Verified macular anatomy, disease patterns, symptoms, risk, evaluation and management; omit outdated blanket claims about late dry AMD treatments.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-29T21:20:57.765748+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Eye Institute",
+            "title": "Age-Related Macular Degeneration (AMD)",
+            "sourceType": "government-agency",
+            "url": "https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/age-related-macular-degeneration"
+          },
+          {
+            "id": "S2",
+            "publisher": "American Society of Retina Specialists",
+            "title": "Age-Related Macular Degeneration",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.asrs.org/patients/retinal-diseases/2/age-related-macular-degeneration"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The macula is part of the light-sensitive retina at the back of the eye and supports sharp straight-ahead central vision.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "AMD damages the macula with aging; its exact cause is unknown, and age, family history and smoking increase risk.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Dry AMD can feature yellow drusen beneath the retina and progress to retinal atrophy; wet AMD features abnormal vessels beneath the retina that may leak or bleed and distort retinal structure. These are different disease patterns, not a universal linear sequence.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Early AMD may have no symptoms; advanced disease can cause wavy straight lines and blurred or blank central vision, with peripheral vision generally preserved rather than complete blindness.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "New wavy lines or central vision changes require prompt eye-doctor assessment; straight lines looking wavy warrant seeing an eye doctor right away.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A comprehensive dilated eye examination and OCT imaging can help evaluate AMD.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Treatment depends on type and stage: anti-VEGF eye injections treat wet AMD and can preserve vision; selected patients with intermediate AMD may benefit from clinician-recommended AREDS-type supplements, not a universal supplement recommendation.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Quitting smoking, regular exercise and healthy eating may help lower risk or slow AMD-related vision loss; low-vision devices and rehabilitation can support daily activities.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
