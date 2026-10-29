@@ -13,6 +13,7 @@
 // have fewer rings and columns along the same spines, the relief eased to what they can hold.
 
 import { BED_LEVEL, MAT, MeshBuilder, fbm3, noise3, stream } from './mesh.mjs';
+import { finRoom } from './finRoom.mjs';
 
 const TAU = Math.PI * 2;
 const clamp01 = (x) => (x < 0 ? 0 : x > 1 ? 1 : x);
@@ -977,6 +978,8 @@ export function build(options = { detail: 1 }) {
   for (const g of grids) emitTube(mb, g);
   const obstacles = [];
   for (const g of grids) obstaclesFor(g, obstacles);
+  // (And the room its fins keep round it: finRoom.mjs.)
+  obstacles.push(...finRoom('wood'));
   return { meshes: [mb.finish()], obstacles };
 }
 
@@ -1217,7 +1220,8 @@ function obstaclesFor(g, out) {
       for (let j = 0; j < N; j += 4) r = Math.max(r, radius(i, j));
     }
     const solid = Math.round(r * 0.9 * 1000) / 1000;
-    out.push({ a: A.map((x) => Math.round(x * 1000) / 1000), b: B.map((x) => Math.round(x * 1000) / 1000), r: Math.round((solid + 0.05) * 1000) / 1000, solid });
+    // (fin 0: its fins keep the wood's whole surface instead, finRoom.mjs.)
+    out.push({ a: A.map((x) => Math.round(x * 1000) / 1000), b: B.map((x) => Math.round(x * 1000) / 1000), r: Math.round((solid + 0.05) * 1000) / 1000, solid, fin: 0 });
   }
 }
 

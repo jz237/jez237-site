@@ -13,7 +13,7 @@ export interface Furnishings {
   /** The bed's solids (bedSolids.mjs, FluidSim.bedSolids). */
   map: Float32Array;
   /** Where the fish keeps clear of them (the bowl's frame). */
-  obstacles: { a: number[]; b: number[]; r: number; solid: number }[];
+  obstacles: { a: number[]; b: number[]; r: number; solid: number; fin?: number }[];
   /** The sponge filter's air (equipment.mjs): where it bubbles out of the lift tube (the bowl's
    *  frame), how many bubbles a second, their radius. */
   bubbles: { at: number[]; rate: number; radius: number } | null;

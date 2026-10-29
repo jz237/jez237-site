@@ -60,8 +60,8 @@ export const MAT = { BARK: 1, WOOD_END: 2, ROCK: 3, LEAF_BIG: 4, LEAF_SMALL: 5, 
 /**
  * Where the fish keeps clear of: a capsule from a to b. r: the margin it swims round (centre line
  * to the edge of the room it leaves); solid: the part its body must never enter (0 for leaves it
- * may brush past).
- * @typedef {{ a: V3, b: V3, r: number, solid: number }} Obstacle
+ * may brush past); fin: the room its fins keep round it (none: solid; 0: none, finRoom.mjs keeps it).
+ * @typedef {{ a: V3, b: V3, r: number, solid: number, fin?: number }} Obstacle
  */
 /** @typedef {{ meshes: ScapeMesh[], obstacles: Obstacle[] }} ScapePiece */
 

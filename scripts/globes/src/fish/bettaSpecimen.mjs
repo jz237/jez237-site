@@ -1,7 +1,8 @@
 // The betta itself, moved on the CPU (Betta.ts draws it): the Atelier specimen (betta-atelier's
 // fish.js) on the bowl's route (bettaSwim.mjs), reading the water at its probes (bettaWater.mjs),
 // its fins solved, its skin, membranes, mouth, covers and eyes skinned into one list of vertices in
-// the bowl's frame, then kept inside the glass, above the bed and out of the furnishings' solid parts.
+// the bowl's frame, then kept inside the glass, above the bed and out of the furnishings' solid parts,
+// its fins under the water and out of the wood, the rocks and the equipment.
 // The page moves it on its own thread, or a worker moves a twin of it a frame behind
 // (bettaWorker.mjs, bettaLink.mjs): built alike and given the same inputs, the two move alike, bit
 // for bit. It uses no DOM and no GPU (built without its textures, it runs in a worker).
@@ -41,6 +42,10 @@ export const BUBBLE_RADIUS = 0.0035;
 /** How fast its fins fold in or open out as the water changes (1/s: over a few seconds), and how
  *  much quicker it breathes, short of air (rad/s of the breathing's phase, on top of the gait's). */
 const CLAMP_RATE = 0.6, PANT = 5;
+
+/** How far its fins keep (sim units) under the water's surface, off the sand and the glass, and
+ *  outside the room they keep round each furnishing (finRoom.mjs; an obstacle's fin, or its solid). */
+const FIN_CLEAR = 0.003;
 
 export class BettaSpecimen {
   /** textures: false builds it without its photographs (for a worker, which only moves it). */
@@ -85,6 +90,8 @@ export class BettaSpecimen {
     });
     /** Every mesh's vertices, skinned, in the bowl's frame (where the shader traces them). */
     this.vertices = new Float32Array(count * 3);
+    /** Which of them are a fin's (1): those are laid under the surface and outside the furnishings. */
+    this.finVertex = new Uint8Array(count);
     /** @type {Part[]} */
     this.parts = this.meshes.map(({ mesh, offset }) => {
       const g = mesh.geometry, rest = /** @type {Float32Array} */ (g.attributes.position.array);
@@ -107,6 +114,7 @@ export class BettaSpecimen {
           nodes[i] = [0, 1, 2].every((k) => fin.rest[n * 3 + k] === rest[i * 3 + k]) ? n : -1;
         }
         Object.assign(part, { cells, place, nodes });
+        this.finVertex.fill(1, offset, offset + count);
       }
       return part;
     });
@@ -184,6 +192,7 @@ export class BettaSpecimen {
       const v = this.vertices;
       for (let i = 0; i < v.length; i += 3) { v[i] += dx; v[i + 1] += dy; v[i + 2] += dz; }
     }
+    this.layFins(env, host.obstacles);
     this.updateProbes();
     this.disturb(dt);
   }
@@ -224,6 +233,56 @@ export class BettaSpecimen {
       near.push({ ax: o.a[0], ay: o.a[1], az: o.a[2], abx, aby, abz, inv: l2 > 1e-12 ? 1 / l2 : 0, solid: o.solid });
     }
     return near;
+  }
+
+  /** Each fin vertex, as drawn, held FIN_CLEAR under the water's surface (in the water: up is against
+   *  the globe's gravity), off the sand and inside the glass, and laid onto the room it keeps round
+   *  each furnishing it has gone into, never through it. Only what is drawn moves: the fish swims as
+   *  it would, its fins solved as they would be. */
+  layFins(env, obstacles) {
+    const v = this.vertices, fins = this.finVertex, water = this.waterState;
+    const lo = [Infinity, Infinity, Infinity], hi = [-Infinity, -Infinity, -Infinity];
+    for (let i = 0; i < v.length; i += 3) {
+      if (!fins[i / 3]) continue;
+      for (let k = 0; k < 3; k++) {
+        if (v[i + k] < lo[k]) lo[k] = v[i + k];
+        if (v[i + k] > hi[k]) hi[k] = v[i + k];
+      }
+    }
+    const near = [];
+    for (const o of obstacles) {
+      const room = o.fin ?? o.solid;
+      if (!(room > 0)) continue;
+      const s = room + FIN_CLEAR;
+      let apart = false;
+      for (let k = 0; k < 3; k++) if (Math.min(o.a[k], o.b[k]) - s > hi[k] || Math.max(o.a[k], o.b[k]) + s < lo[k]) apart = true;
+      if (apart) continue;
+      const abx = o.b[0] - o.a[0], aby = o.b[1] - o.a[1], abz = o.b[2] - o.a[2], l2 = abx * abx + aby * aby + abz * abz;
+      near.push({ ax: o.a[0], ay: o.a[1], az: o.a[2], abx, aby, abz, inv: l2 > 1e-12 ? 1 / l2 : 0, out: s });
+    }
+    // (The surface where the probes find it, else the globe's level; out of the water, none.)
+    const g = env.gravity, weight = Math.hypot(g[0], g[1], g[2]);
+    const measured = Number.isFinite(water.surface), wet = water.submerged > (measured ? 0.2 : 0.5) && weight > 1e-6;
+    const u0 = wet ? -g[0] / weight : 0, u1 = wet ? -g[1] / weight : 0, u2 = wet ? -g[2] / weight : 0;
+    const top = (measured ? water.surface : env.level) - FIN_CLEAR, sand = water.sand + FIN_CLEAR, glass = env.radius - FIN_CLEAR;
+    for (let i = 0; i < v.length; i += 3) {
+      if (!fins[i / 3]) continue;
+      let x = v[i], y = v[i + 1], z = v[i + 2];
+      for (const o of near) {
+        const t = Math.max(0, Math.min(1, ((x - o.ax) * o.abx + (y - o.ay) * o.aby + (z - o.az) * o.abz) * o.inv));
+        const cx = o.ax + o.abx * t, cy = o.ay + o.aby * t, cz = o.az + o.abz * t;
+        const ox = x - cx, oy = y - cy, oz = z - cz, l = Math.sqrt(ox * ox + oy * oy + oz * oz);
+        if (l < o.out && l > 1e-9) { x = cx + ox / l * o.out; y = cy + oy / l * o.out; z = cz + oz / l * o.out; }
+      }
+      if (wet) {
+        const over = x * u0 + y * u1 + z * u2 - top;
+        if (over > 0) { x -= over * u0; y -= over * u1; z -= over * u2; }
+      }
+      if (y < sand) y = sand;
+      const r = Math.sqrt(x * x + y * y + z * z);
+      if (r > glass) { x *= glass / r; y *= glass / r; z *= glass / r; }
+      v[i] = x; v[i + 1] = y; v[i + 2] = z;
+    }
   }
 
   disturb(dt) {
