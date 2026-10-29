@@ -1,10 +1,10 @@
 import * as T from './vendor/three.module.js';
 import { OrbitControls } from './vendor/OrbitControls.js';
-import { RoomEnvironment } from './vendor/RoomEnvironment.js';
-import { buildFilter } from './model.js?v=optics-3';
-import { PARTS, LESSONS, CARE, flowModel } from './data.js?v=optics-3';
+import { studioEnvironment } from './realism.js?v=material-5';
+import { buildFilter } from './model.js?v=material-5';
+import { PARTS, LESSONS, CARE, flowModel } from './data.js?v=material-5';
 
-import { createWaterOptics } from './optics.js?v=optics-3';
+import { createWaterOptics } from './optics.js?v=material-5';
 const $=id=>document.getElementById(id), reduced=matchMedia('(prefers-reduced-motion: reduce)');
 const state={mode:'cutaway',tab:'explore',amount:0,target:0,flow:100,restricted:false,selected:'foam',isolated:false,paused:reduced.matches,rotate:false,labels:true,tour:-1,care:-1,sequence:false,sequenceTime:0,time:0,ready:false,waterLevel:26,showDebris:true};
 let scene,camera,renderer,controls,filter,optics,camTween,last=0,down=null;
@@ -133,19 +133,19 @@ function labels(){
 function intersect(e){const r=stage.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);raycaster.setFromCamera(pointer,camera);return raycaster.intersectObjects(filter.pickables,false).find(hit=>{let o=hit.object;while(o){if(!o.visible)return false;o=o.parent;}return true;});}
 async function init(){
   try{
-    renderer=new T.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setSize(stage.clientWidth,stage.clientHeight);renderer.setClearColor(0,0);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFShadowMap;stage.append(renderer.domElement);
-    scene=new T.Scene();camera=new T.PerspectiveCamera(36,stage.clientWidth/stage.clientHeight,.1,150);camera.position.set(10,8,13);controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.075;controls.minDistance=2;controls.maxDistance=45;controls.maxPolarAngle=Math.PI*.82;controls.target.set(0,2,0);controls.addEventListener('start',()=>{camTween=null;});
-    const pmrem=new T.PMREMGenerator(renderer),room=new RoomEnvironment();scene.environment=pmrem.fromScene(room,.04).texture;scene.environmentIntensity=.65;room.dispose();pmrem.dispose();
-    scene.add(new T.HemisphereLight('#b7e5e2','#1c222a',.6));
-    const key=new T.DirectionalLight('#fff3e3',3.2);key.position.set(-5,9,8);key.castShadow=true;key.shadow.mapSize.set(innerWidth<760?2048:4096,innerWidth<760?2048:4096);Object.assign(key.shadow.camera,{left:-10,right:10,top:12,bottom:-7,near:.5,far:35});key.shadow.normalBias=.025;key.shadow.bias=-.0001;key.shadow.radius=2.5;scene.add(key);
-    const rim=new T.DirectionalLight('#c0dce3',1.3);rim.position.set(6,6,-4);scene.add(rim);const fill=new T.DirectionalLight('#bce3cf',.4);fill.position.set(1,2,10);scene.add(fill);
+    renderer=new T.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.transmissionResolutionScale=stage.clientWidth<760?.5:.8;renderer.setSize(stage.clientWidth,stage.clientHeight);renderer.setClearColor('#10242c',1);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFShadowMap;stage.append(renderer.domElement);
+    scene=new T.Scene();scene.background=new T.Color('#10242c');camera=new T.PerspectiveCamera(36,stage.clientWidth/stage.clientHeight,.1,150);camera.position.set(10,8,13);controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.075;controls.minDistance=2;controls.maxDistance=45;controls.maxPolarAngle=Math.PI*.82;controls.target.set(0,2,0);controls.addEventListener('start',()=>{camTween=null;});
+    const environment=studioEnvironment(renderer);scene.environment=environment.texture;scene.environmentIntensity=1.0;
+    scene.add(new T.HemisphereLight('#e4e8eb','#171b20',.28));
+    const key=new T.DirectionalLight('#fff3e5',2.6);key.position.set(-5,9,8);key.castShadow=true;key.shadow.mapSize.set(innerWidth<760?2048:4096,innerWidth<760?2048:4096);Object.assign(key.shadow.camera,{left:-10,right:10,top:12,bottom:-7,near:.5,far:35});key.shadow.normalBias=.025;key.shadow.bias=-.0001;key.shadow.radius=2.5;scene.add(key);
+    const rim=new T.DirectionalLight('#d4e6ff',2.2);rim.position.set(6,6,-4);scene.add(rim);const fill=new T.DirectionalLight('#f0f2f0',.65);fill.position.set(1,2,10);scene.add(fill);
     filter=buildFilter();scene.add(filter.root);optics=createWaterOptics(renderer,scene,camera,filter.water,filter.opticsExcluded);
     renderer.domElement.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY};});
     renderer.domElement.addEventListener('pointerup',e=>{if(down&&Math.hypot(e.clientX-down.x,e.clientY-down.y)<6){const hit=intersect(e);if(hit){endTour();tab('explore',{syncMode:false});select(hit.object.userData.part);}}down=null;});
     renderer.domElement.addEventListener('pointermove',e=>{if(down)return;const hit=intersect(e);$('tooltip').hidden=!hit;renderer.domElement.style.cursor=hit?'pointer':'grab';if(hit){$('tooltip').textContent=filter.parts.get(hit.object.userData.part).name;const r=stage.getBoundingClientRect();$('tooltip').style.left=clamp(e.clientX-r.left+15,12,r.width-220)+'px';$('tooltip').style.top=clamp(e.clientY-r.top-30,10,r.height-35)+'px';}});
     renderer.domElement.addEventListener('pointerleave',()=>{$('tooltip').hidden=true;down=null;});renderer.domElement.addEventListener('pointercancel',()=>{down=null;});
     renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();state.ready=false;$('error').hidden=false;$('error').querySelector('b').textContent='The 3D view was interrupted. Reload to restore it.';});
-    new ResizeObserver(()=>{if(!stage.clientWidth||!stage.clientHeight)return;camera.aspect=stage.clientWidth/stage.clientHeight;camera.updateProjectionMatrix();renderer.setSize(stage.clientWidth,stage.clientHeight);fit();}).observe(stage);
+    new ResizeObserver(()=>{if(!stage.clientWidth||!stage.clientHeight)return;renderer.transmissionResolutionScale=stage.clientWidth<760?.5:.8;camera.aspect=stage.clientWidth/stage.clientHeight;camera.updateProjectionMatrix();renderer.setSize(stage.clientWidth,stage.clientHeight);fit();}).observe(stage);
     filter.pose(0,state.mode,0,100,false,'foam',false);state.ready=true;$('loading').hidden=true;document.body.dataset.ready='true';select('foam');fit();renderer.setAnimationLoop(frame);
     // Read-only diagnostics for repeatable browser checks; no hidden mutation API.
     window.filterStudio={snapshot:()=>({...state,partCount:filter.parts.size,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,camera:camera.position.toArray(),effects:filter.effectsSnapshot(),optics:optics.snapshot()})};

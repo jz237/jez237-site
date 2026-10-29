@@ -5,14 +5,14 @@ import * as T from './vendor/three.module.js';
 export function createWaterOptics(renderer,scene,camera,water,excluded=[]){
   const options={type:renderer.extensions.has('EXT_color_buffer_float')?T.HalfFloatType:T.UnsignedByteType,minFilter:T.LinearFilter,magFilter:T.LinearFilter};
   const behind=new T.WebGLRenderTarget(1,1,options), reflected=new T.WebGLRenderTarget(1,1,options);
-  behind.depthTexture=new T.DepthTexture(1,1,T.UnsignedIntType);
+  behind.depthTexture=new T.DepthTexture(1,1,T.UnsignedIntType);reflected.depthTexture=new T.DepthTexture(1,1,T.UnsignedIntType);
   const mirror=new T.PerspectiveCamera(),size=new T.Vector2(),normal=new T.Vector3(0,1,0),look=new T.Vector3(),plane=new T.Plane(),clip=new T.Vector4(),q=new T.Vector4();
   const textureMatrix=new T.Matrix4(),bias=new T.Matrix4().set(.5,0,0,.5,0,.5,0,.5,0,0,.5,.5,0,0,0,1);
-  const uniforms={sceneTexture:{value:behind.texture},sceneDepth:{value:behind.depthTexture},reflectionTexture:{value:reflected.texture},reflectionMatrix:{value:textureMatrix},reflectionWeight:{value:1},viewSize:{value:new T.Vector2()},waterTime:{value:0}};
+  const uniforms={sceneTexture:{value:behind.texture},sceneDepth:{value:behind.depthTexture},reflectionTexture:{value:reflected.texture},reflectionDepth:{value:reflected.depthTexture},reflectionMatrix:{value:textureMatrix},reflectionWeight:{value:1},viewSize:{value:new T.Vector2()},waterTime:{value:0}};
   function material(sheet=false){return new T.ShaderMaterial({uniforms:{...uniforms,sheet:{value:sheet?1:0}},transparent:true,depthWrite:false,side:T.DoubleSide,
     vertexShader:`varying vec3 worldPoint;varying vec3 worldNormal;varying vec3 viewNormal;varying vec4 projected;varying vec4 reflectedPoint;varying vec2 waterUV;uniform mat4 reflectionMatrix;
       void main(){vec4 world=modelMatrix*vec4(position,1.);worldPoint=world.xyz;worldNormal=normalize(mat3(modelMatrix)*normal);viewNormal=normalize(normalMatrix*normal);waterUV=uv;projected=projectionMatrix*viewMatrix*world;reflectedPoint=reflectionMatrix*world;gl_Position=projected;}`,
-    fragmentShader:`uniform sampler2D sceneTexture,sceneDepth,reflectionTexture;uniform float sheet,waterTime,reflectionWeight;uniform vec2 viewSize;
+    fragmentShader:`uniform sampler2D sceneTexture,sceneDepth,reflectionTexture,reflectionDepth;uniform float sheet,waterTime,reflectionWeight;uniform vec2 viewSize;
       varying vec3 worldPoint,worldNormal,viewNormal;varying vec4 projected,reflectedPoint;varying vec2 waterUV;
       void main(){vec3 N=normalize(worldNormal);vec3 V=normalize(cameraPosition-worldPoint);float cosine=abs(dot(N,V));float fresnel=.0204+.9796*pow(1.-cosine,5.);
         vec2 uv=projected.xy/projected.w*.5+.5;
@@ -22,8 +22,10 @@ export function createWaterOptics(renderer,scene,camera,water,excluded=[]){
         float depth=texture2D(sceneDepth,refractedUV).r;
         if(depth<gl_FragCoord.z-.0001)refractedUV=uv;
         vec4 transmitted=texture2D(sceneTexture,refractedUV);
+        transmitted.a*=1.-step(.99999,texture2D(sceneDepth,refractedUV).r);
         vec2 reflectUV=reflectedPoint.xy/reflectedPoint.w+micro*2.+N.xz*.012;
         vec4 reflection=texture2D(reflectionTexture,clamp(reflectUV,vec2(.002),vec2(.998)));
+        reflection.a*=1.-step(.99999,texture2D(reflectionDepth,clamp(reflectUV,vec2(.002),vec2(.998))).r);
         float valid=step(0.,reflectUV.x)*step(reflectUV.x,1.)*step(0.,reflectUV.y)*step(reflectUV.y,1.)*reflectionWeight;
         vec3 lightDirection=normalize(vec3(-.45,1.,.65));vec3 H=normalize(V+lightDirection);
         float sparkle=pow(max(dot(N,H),0.),220.)*.38;

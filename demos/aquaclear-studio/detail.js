@@ -7,10 +7,10 @@ export function surfaceMaps(seed=17){
 }
 export function clothMaterial(){
   const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');x.clearRect(0,0,64,64);
-  x.strokeStyle='#697971';x.lineWidth=3;x.beginPath();x.moveTo(0,32);x.lineTo(64,32);x.moveTo(32,0);x.lineTo(32,64);x.stroke();
+  x.strokeStyle='#a9ada2';x.lineWidth=2;x.beginPath();x.moveTo(0,32);x.lineTo(64,32);x.moveTo(32,0);x.lineTo(32,64);x.stroke();
   x.strokeStyle='#a6b0a5';x.lineWidth=1;x.beginPath();x.moveTo(0,30);x.lineTo(64,30);x.moveTo(30,0);x.lineTo(30,64);x.stroke();
-  const map=new T.CanvasTexture(c);map.colorSpace=T.SRGBColorSpace;map.wrapS=map.wrapT=T.RepeatWrapping;map.repeat.set(34,22);map.anisotropy=8;
-  return new T.MeshStandardMaterial({color:'#a4b0a7',map,alphaTest:.18,alphaToCoverage:true,roughness:.93,side:T.DoubleSide});
+  const map=new T.CanvasTexture(c);map.colorSpace=T.SRGBColorSpace;map.wrapS=map.wrapT=T.RepeatWrapping;map.repeat.set(48,30);map.anisotropy=8;
+  return new T.MeshStandardMaterial({color:'#a4b0a7',map,transparent:true,depthWrite:false,alphaTest:.005,roughness:.93,side:T.DoubleSide});
 }
 export function perforatedCover(){
   const shape=new T.Shape();const w=4.38,d=2.68,r=.22;

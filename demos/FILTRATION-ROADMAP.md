@@ -29,7 +29,7 @@ The alternate photographic aquarium, the Hidden Reef koi mount and Philadelphia'
 2. **Water optics:** mirrored-camera scene reflection, depth-aware screen refraction, Fresnel blending, waterline detail and restrained procedural moving light patterns. Uses bounded lower-resolution targets on mobile; rendering is suspended when water is hidden. Not ray tracing or CFD.
 3. **Surface and contact detail:** procedural molding grain, ceramic pores, actual alpha-cutout fabric weave, wet/dry roughness, filtered contact shadows and fitted lid seams. No purchased or copied image assets.
 
-The next precision step is measured geometry or a physical scan, particularly the concealed volute and impeller dimensions. A future optical pass could add depth-aware absorption and better refraction at screen edges; the current sheet uses the horizontal surface's reflection approximation. Ceramic pieces still use distributed placements rather than a physically settled packing simulation. See `aquaclear-studio/README.md` for references, rendering limits and tests.
+The next precision step is measured geometry or a physical scan, particularly the concealed volute and impeller dimensions. A future optical pass could add depth-aware absorption and better refraction at screen edges; the current sheet uses the horizontal surface's reflection approximation. Ceramic pieces now use a conservative sphere-envelope packing approximation, varied profiles and shaded bores. A further material pass adds cellular foam, finer flexible bags, physically transmissive plastic and studio reflection panels; it remains a real-time educational reconstruction. See `aquaclear-studio/README.md` for references, rendering limits and tests.
 
 ### Next distinct filter mechanisms
 
