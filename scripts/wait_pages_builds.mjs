@@ -5,6 +5,9 @@ import { spawnSync } from 'node:child_process';
 export function pendingProductionBuilds(deployments) {
   return deployments.filter(deployment => {
     if (deployment.environment !== 'production') return false;
+    // Pages leaves every stage idle/queued on a skipped Git deployment.
+    // The explicit deployment-level flag is authoritative; it cannot publish.
+    if (deployment.is_skipped === true) return false;
     const stage = deployment.latest_stage;
     if (['failure', 'canceled', 'skipped'].includes(stage?.status)) return false;
     return !(stage?.name === 'deploy' && stage.status === 'success' && stage.ended_on);
