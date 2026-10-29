@@ -1,12 +1,13 @@
 import * as T from '../aquaclear-studio/vendor/three.module.js';
 import { OrbitControls } from '../aquaclear-studio/vendor/OrbitControls.js';
 import { studioEnvironment } from '../aquaclear-studio/realism.js?v=material-5';
-import { buildTrickle } from './model.js?v=2';
-import { PARTS, LESSONS, CARE, hydraulics } from './data.js?v=2';
+import { buildTrickle } from './model.js?v=3';
+import { PARTS, LESSONS, CARE, hydraulics } from './data.js?v=3';
 
-import { createWaterOptics } from './optics.js?v=2';
+import {transport} from './dynamics.js?v=3';
+import { createWaterOptics } from './optics.js?v=3';
 const $=id=>document.getElementById(id), reduced=matchMedia('(prefers-reduced-motion: reduce)');
-const state={mode:'cutaway',tab:'explore',amount:0,target:0,rate:70,fill:25,blocked:false,power:true,drainback:0,selected:'biomedia',isolated:false,paused:reduced.matches,rotate:false,labels:true,tour:-1,care:-1,sequence:false,sequenceTime:0,time:0,flowTime:0,arrowTime:0,rotorAngle:0,slow:false,ready:false};
+const state={mode:'cutaway',tab:'explore',amount:0,target:0,rate:70,fill:25,blocked:false,loading:0,runAge:20,coastAge:20,comparison:false,power:true,drainback:0,selected:'biomedia',isolated:false,paused:reduced.matches,rotate:false,labels:true,tour:-1,care:-1,sequence:false,sequenceTime:0,time:0,flowTime:0,arrowTime:0,rotorAngle:0,slow:false,ready:false};
 let scene,camera,renderer,controls,filter,optics,studioFloor,camTween,last=0,down=null;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),smooth=t=>t*t*(3-2*t),v=(x,y,z)=>new T.Vector3(x,y,z);
 const stage=$('viewport'),raycaster=new T.Raycaster(),pointer=new T.Vector2();
@@ -28,17 +29,19 @@ function tab(name,{syncMode=true}={}){
   state.care=-1;
   if(name==='flow'&&syncMode){state.isolated=false;pressed('isolate',false);setMode('flow',{changeTab:false});}
   if(name==='care'){care(0);}
-  else if(syncMode&&['care','pump','media'].includes(state.mode))setMode('cutaway',{changeTab:false});
+  else if(syncMode&&['care','pump','media','overflow'].includes(state.mode))setMode('cutaway',{changeTab:false});
 }
-function setMode(mode,{changeTab=true,fitView=true}={}){
+function setMode(mode,{changeTab=true,fitView=true,keepComparison=false}={}){
+  if(!keepComparison){state.comparison=false;pressed('compare-pad',false);}
   stopSequence();state.mode=mode;state.care=-1;state.isolated=false;pressed('isolate',false);$('isolate').textContent='Inspect alone';
   state.target=mode==='exploded'?1:0;
   if(changeTab){if(mode==='flow')tab('flow',{syncMode:false});else if(state.tab==='care'||state.tab==='flow')tab('explore',{syncMode:false});}
   document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));
-  $('scene-status').textContent=({assembled:'ASSEMBLED / IN OPERATION',cutaway:'CUTAWAY / LOOK INSIDE',exploded:'EXPLODED / PUMP OFF',flow:'WATER PATH / DIRECTIONAL STUDY',care:'CARE / POWER DISCONNECTED',pump:'PUMP SECTION / SLOWED FOR STUDY',media:'BIOLOGICAL BED / OPEN RIB GEOMETRY'})[mode];
+  $('scene-status').textContent=({assembled:'ASSEMBLED / IN OPERATION',cutaway:'CUTAWAY / LOOK INSIDE',exploded:'EXPLODED / PUMP OFF',flow:'WATER PATH / DIRECTIONAL STUDY',care:'CARE / POWER DISCONNECTED',pump:'PUMP SECTION / SLOWED FOR STUDY',media:'BIOLOGICAL BED / OPEN RIB GEOMETRY',overflow:'OVERFLOW / WATER & ENTRAINED AIR'})[mode];
   document.body.dataset.mode=mode;pressed('pump-inspect',mode==='pump');$('pump-inspect').textContent=mode==='pump'?'← Return to water circuit':'Inspect the working impeller ↗';if(fitView)fit();
 }
 function care(i){
+  state.comparison=false;pressed('compare-pad',false);
   stopSequence();state.care=i;state.mode='care';state.target=0;state.isolated=false;pressed('isolate',false);
   document.querySelectorAll('[data-care]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.care===i)));document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed','false'));
   $('care-title').textContent=CARE[i].title;$('care-text').textContent=CARE[i].text;$('scene-status').textContent='CARE / POWER DISCONNECTED';document.body.dataset.mode='care';select(CARE[i].part);fit();
@@ -47,20 +50,20 @@ function lesson(i){
   state.tour=clamp(i,0,LESSONS.length-1);const l=LESSONS[state.tour];$('tour-panel').hidden=false;$('parts-panel').hidden=true;$('tour').hidden=true;
   $('lesson-tag').textContent=l.tag;$('lesson-title').textContent=l.title;$('lesson-text').textContent=l.text;$('lesson-tip').textContent=l.tip;$('lesson-count').textContent=`${state.tour+1} / ${LESSONS.length}`;
   $('previous').disabled=$('stage-previous').disabled=state.tour===0;$('stage-count').textContent=`${state.tour+1} / ${LESSONS.length}`;$('stage-next').textContent=state.tour===LESSONS.length-1?'✓':'→';$('next').textContent=state.tour===LESSONS.length-1?'Finish ✓':'Next →';
-  if(l.off){state.power=false;state.drainback=0;}else if(state.tour===0){state.power=true;state.drainback=0;}updateFlowText();
+  if(l.off){state.power=false;state.coastAge=0;state.drainback=0;}else if(state.tour===0){state.power=true;state.runAge=20;state.drainback=0;}updateFlowText();
   setMode(l.mode,{changeTab:false});select(l.part);tab('explore',{syncMode:false});document.body.dataset.journey=String(state.tour);$('study-caption').textContent=l.tag+' · '+l.title;focusLesson();showMobileStage();
 }
 function endTour(){state.tour=-1;delete document.body.dataset.journey;$('tour-panel').hidden=true;$('parts-panel').hidden=false;$('tour').hidden=false;}
 function updateFlowText(){
-  const f=hydraulics(state);$('rate-value').textContent=state.rate+'%';$('fill-value').textContent=state.fill+'%';
+  const f=hydraulics(state),delivery=transport(state,f);if($('transport-phase').textContent!==delivery.phase)$('transport-phase').textContent=delivery.phase;$('loading-value').textContent=Math.round(state.loading*100)+'%';$('pad-load').value=Math.round(state.loading*100);$('rate-value').textContent=state.rate+'%';$('fill-value').textContent=state.fill+'%';
   $('power').textContent=state.power?'Turn pump off · test drain-down':'Restart return pump';pressed('power',!state.power);
   let title='Room for the return.',note='The biological bed stays above the collected water. Spare sump space receives the upper circuit when power stops.';
   if(f.overflow){title='The reserve is exhausted.';note='The calculated level exceeds the rim. The surface stops at the rim; excess water would spill. Lower the fill and repeat the power-off test.';}
   else if(f.dry){title='Return level too low.';note='The illustrative protection stops the pump. Raise the sump fill before restarting.';}
   else if(!state.power){title=state.drainback<.995?'The upper circuit drains down.':'The circuit has settled.';note='The impeller is stopped. Gravity drainage and return-line backflow raise the sump until the finite upper volume is exhausted.';}
   else if(f.submerged){title='The wet/dry bed is flooding.';note='The elevated fill submerges the bottom of the media bed and reduces its open-air region. Reserve space also shrinks.';}
-  else if(state.blocked){title='Less of the bed gets wet.';note='Only 21 of 63 distributor outlets are active in this study. Concentrated trickles and an amber side bypass show the changed route.';}
-  for(const [id,value] of Object.entries({'hydraulic-title':title,'hydraulic-note':note,'power-status':state.care>=0?'CARE / POWER DISCONNECTED':f.running?'PUMP RUNNING':'PUMP STOPPED','reserve-value':f.overflow?'EXCEEDED':f.settled>3.02?'INSUFFICIENT':f.settled>2.7?'LIMITED':'AVAILABLE','coverage-value':(f.flow>.005?(state.blocked?'21 / 63':'63 / 63'):'0 / 63')})){if($(id).textContent!==value)$(id).textContent=value;}
+  else if(state.loading>.02){title=state.loading>.6?'Water is finding the bypass.':'Debris is accumulating.';note=`${f.activeHoles} of 63 outlets remain active in this illustrative loading study. Deposits and pooled water increase as the pad loads; the side bypass becomes visible above 35%.`;}
+  for(const [id,value] of Object.entries({'hydraulic-title':title,'hydraulic-note':note,'power-status':state.care>=0?'CARE / POWER DISCONNECTED':f.running?'PUMP RUNNING':'PUMP STOPPED','reserve-value':f.overflow?'EXCEEDED':f.settled>3.02?'INSUFFICIENT':f.settled>2.7?'LIMITED':'AVAILABLE','coverage-value':(delivery.tray>.005?f.activeHoles+' / 63':'0 / 63')})){if($(id).textContent!==value)$(id).textContent=value;}
   document.body.dataset.warning=String(f.overflow||f.dry||f.submerged);
 }
 function targetBounds(){
@@ -75,6 +78,7 @@ function moveCamera(position,target){
 function fit(view='hero'){
   if(!filter)return;
   document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view)));
+  if(state.mode==='overflow'&&!state.isolated){focusRegion([-1.28,5.70,-.05],1.50,[2,1.4,6]);return;}
   if(state.mode==='pump'&&!state.isolated){focusRegion([2.65,.55,.3],1.0,view==='top'?[.01,5,.1]:[1.5,1.2,5]);return;}
   if(state.tour>0&&(LESSONS[state.tour].center||LESSONS[state.tour].mode==='media')){focusLesson();return;}const box=targetBounds(),size=box.getSize(v()),center=box.getCenter(v());
   const directions={hero:v(8,5.6,10).normalize(),front:v(0,1.2,12).normalize(),top:v(.01,14,.1).normalize()};
@@ -97,9 +101,12 @@ function inspectPump(){endTour();setMode('pump',{changeTab:false});select('rotor
 $('pump-inspect').onclick=()=>state.mode==='pump'?setMode('flow',{changeTab:false}):inspectPump();
 $('water-tour').onclick=()=>lesson(0);
 for(const id of ['rate','fill'])$(id).oninput=e=>{state[id]=+e.target.value;updateFlowText();};
-$('blocked').onchange=e=>{state.blocked=e.target.checked;updateFlowText();};
-$('power').onclick=()=>{state.power=!state.power;updateFlowText();};
-$('part-list').addEventListener('change',e=>{endTour();if(['pump','media'].includes(state.mode))setMode('cutaway');select(e.target.value);});
+$('blocked').onchange=e=>{state.blocked=e.target.checked;state.loading=state.blocked?1:0;state.comparison=false;pressed('compare-pad',false);updateFlowText();};
+$('pad-load').oninput=e=>{state.loading=+e.target.value/100;state.blocked=state.loading===1;$('blocked').checked=state.blocked;state.comparison=false;pressed('compare-pad',false);updateFlowText();};
+$('overflow-inspect').onclick=()=>{endTour();setMode('overflow',{changeTab:false});select('overflow');showMobileStage();};
+$('compare-pad').onclick=()=>{state.comparison=!state.comparison;pressed('compare-pad',state.comparison);if(state.comparison){state.loading=0;state.blocked=false;state.power=true;state.runAge=20;state.drainback=0;state.paused=false;pressed('pause',false);$('pause').textContent='Pause motion';endTour();setMode('flow',{changeTab:false,keepComparison:true});select('pad');focusRegion([-2.35,4.22,0],2.15,[1,3.8,5]);showMobileStage();}updateFlowText();};
+$('power').onclick=()=>{state.power=!state.power;if(state.power)state.runAge=0;else state.coastAge=0;updateFlowText();};
+$('part-list').addEventListener('change',e=>{endTour();if(['pump','media','overflow'].includes(state.mode))setMode('cutaway');select(e.target.value);});
 document.querySelectorAll('[data-part]').forEach(b=>b.addEventListener('click',()=>{endTour();tab('explore');setMode('exploded');select(b.dataset.part);}));
 document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{endTour();setMode(b.dataset.mode);}));
 document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{endTour();fit(b.dataset.view);}));$('fit').onclick=()=>{endTour();fit();};
@@ -113,14 +120,14 @@ $('labels-toggle').onclick=()=>{state.labels=!state.labels;pressed('labels-toggl
 $('isolate').onclick=()=>{state.isolated=!state.isolated;pressed('isolate',state.isolated);$('isolate').textContent=state.isolated?'Return to assembly':'Inspect alone';stopSequence();fit();};
 $('clear').onclick=()=>{state.isolated=false;pressed('isolate',false);$('isolate').textContent='Inspect alone';fit();};
 $('tour').onclick=()=>lesson(0);$('previous').onclick=()=>lesson(state.tour-1);$('next').onclick=()=>state.tour===LESSONS.length-1?endTour():lesson(state.tour+1);$('end-tour').onclick=endTour;$('stage-previous').onclick=()=>lesson(state.tour-1);$('stage-next').onclick=()=>state.tour===LESSONS.length-1?endTour():lesson(state.tour+1);
-$('reset').onclick=()=>{endTour();Object.assign(state,{rate:70,fill:25,blocked:false,power:true,drainback:0,flowTime:0,arrowTime:0,rotorAngle:0,slow:false,rotate:false,paused:reduced.matches,labels:true,isolated:false});$('rate').value=70;$('fill').value=25;$('blocked').checked=false;pressed('slow',false);$('slow').textContent='Slow motion';pressed('rotate',false);pressed('pause',state.paused);pressed('labels-toggle',true);$('pause').textContent=state.paused?'Resume motion':'Pause motion';tab('explore',{syncMode:false});setMode('cutaway');select('biomedia');updateFlowText();};
+$('reset').onclick=()=>{endTour();Object.assign(state,{rate:70,fill:25,blocked:false,loading:0,runAge:20,coastAge:20,comparison:false,power:true,drainback:0,flowTime:0,arrowTime:0,rotorAngle:0,slow:false,rotate:false,paused:reduced.matches,labels:true,isolated:false});$('rate').value=70;$('fill').value=25;$('blocked').checked=false;pressed('compare-pad',false);pressed('slow',false);$('slow').textContent='Slow motion';pressed('rotate',false);pressed('pause',state.paused);pressed('labels-toggle',true);$('pause').textContent=state.paused?'Resume motion':'Pause motion';tab('explore',{syncMode:false});setMode('cutaway');select('biomedia');updateFlowText();};
 $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{$('fullscreen').textContent='Fullscreen unavailable';}};
 document.addEventListener('fullscreenchange',()=>{$('fullscreen').setAttribute('aria-label',document.fullscreenElement?'Exit fullscreen':'Enter fullscreen');});
 reduced.addEventListener('change',e=>{if(e.matches){state.paused=true;pressed('pause',true);$('pause').textContent='Resume motion';}});
 pressed('pause',state.paused);if(state.paused)$('pause').textContent='Resume motion';select('biomedia');updateFlowText();
 function labels(){
   const placed=[],w=stage.clientWidth,h=stage.clientHeight;
-  for(const [id,el] of labelNodes){const p=filter.parts.get(id);let visible=state.labels&&!state.isolated&&state.care<0&&state.mode!=='assembled'&&!['pump','media'].includes(state.mode)&&state.tour<0;
+  for(const [id,el] of labelNodes){const p=filter.parts.get(id);let visible=state.labels&&!state.isolated&&state.care<0&&state.mode!=='assembled'&&!['pump','media','overflow'].includes(state.mode)&&state.tour<0;
     const point=p.center.clone().add(p.object.position).project(camera);const px=(point.x*.5+.5)*w,py=(-point.y*.5+.5)*h;
     const lw=el.offsetWidth||150,lh=25,left=id==='overflow'||id==='pump';let x=left?px-lw-65:px+65,y=py-10;
     x=clamp(x,12,w-lw-12);if(id==='biomedia')y+=23;
@@ -154,9 +161,9 @@ async function init(){
 }
 function frame(now){
   const dt=Math.min((now-last)/1000,.05);last=now;if(!state.ready||document.hidden)return;
-  if(!state.paused){const step=dt*(state.slow?1/3:1);state.time+=step;const h=hydraulics(state);if(state.care<0&&state.amount<.02&&!state.isolated){if(h.flow>.005){state.flowTime+=step*(.55+h.flow*.55);state.arrowTime+=step*.07*Math.max(.3,h.flow);}if(h.running)state.rotorAngle+=step*(2+h.setting*5);const target=state.power?0:1;state.drainback=clamp(state.drainback+(target?1:-1)*step*.35,0,1);}if(state.sequence){state.sequenceTime+=dt;const t=state.sequenceTime;state.target=t<3?smooth(t/3):t<5?1:t<8?1-smooth((t-5)/3):0;if(t>=8){stopSequence();setMode('assembled');}}}
+  if(!state.paused){const step=dt*(state.slow?1/3:1);state.time+=step;const h=hydraulics(state);if(state.care<0&&state.amount<.02&&!state.isolated){const delivery=transport(state,h);if(Math.max(delivery.film,delivery.returning,delivery.drain)>.001){state.flowTime+=step*(.55+Math.max(h.flow,delivery.film)*.55);state.arrowTime+=step*.07*Math.max(.3,h.flow);}if(state.power&&h.running)state.runAge+=step;else if(!state.power)state.coastAge+=step;if(state.comparison){state.loading=Math.min(1,state.loading+step/12);state.blocked=state.loading===1;$('blocked').checked=state.blocked;if(state.loading===1){state.comparison=false;pressed('compare-pad',false);}}if(h.running)state.rotorAngle+=step*(2+h.setting*5);const target=state.power?0:1;if(!state.power||(h.running&&state.runAge>=1.4))state.drainback=clamp(state.drainback+(target?1:-1)*step*.35,0,1);}if(state.sequence){state.sequenceTime+=dt;const t=state.sequenceTime;state.target=t<3?smooth(t/3):t<5?1:t<8?1-smooth((t-5)/3):0;if(t>=8){stopSequence();setMode('assembled');}}}
   state.amount+= (state.target-state.amount)*(reduced.matches?1:Math.min(1,dt*5));if(Math.abs(state.target-state.amount)<.0001)state.amount=state.target;
-  filter.pose(state,dt);studioFloor.visible=!state.isolated&&!['pump','media'].includes(state.mode);studioFloor.position.y=-.34-state.amount*1.4;updateFlowText();
+  filter.pose(state,dt);studioFloor.visible=!state.isolated&&!['pump','media','overflow'].includes(state.mode);studioFloor.position.y=-.34-state.amount*1.4;updateFlowText();
   if(camTween){camTween.elapsed+=dt;const t=smooth(Math.min(1,camTween.elapsed/.8));camera.position.lerpVectors(camTween.from,camTween.to,t);controls.target.lerpVectors(camTween.fromTarget,camTween.target,t);if(t>=1)camTween=null;}
   controls.autoRotate=state.rotate&&!state.paused;controls.autoRotateSpeed=.5;controls.update();labels();optics.capture(state.time);renderer.render(scene,camera);
   if(document.activeElement!==$('explode'))$('explode').value=Math.round(state.amount*100);$('explode-value').textContent=Math.round(state.amount*100)+'%';document.body.dataset.explosion=String(Math.round(state.amount*100));document.body.dataset.motion=state.paused?'paused':'running';

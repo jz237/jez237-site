@@ -1,9 +1,12 @@
 import * as T from '../aquaclear-studio/vendor/three.module.js';
 import {cellularFoam} from '../aquaclear-studio/realism.js?v=material-5';
 import {surfaceMaps} from '../aquaclear-studio/detail.js?v=material-5';
-import {refineConstruction,roundedBox} from './detail.js?v=2';
-import {createWaterDetail} from './water-detail.js?v=2';
-import {PARTS,hydraulics} from './data.js?v=2';
+import {refineConstruction,roundedBox} from './detail.js?v=3';
+import {createWaterDetail} from './water-detail.js?v=3';
+import {PARTS,hydraulics} from './data.js?v=3';
+import {finishAcrylic,acrylicEdges} from './acrylic.js?v=3';
+import {padLoading,outletActive,transport} from './dynamics.js?v=3';
+import {createSurfaceWater} from './surface-water.js?v=3';
 const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z),TAU=Math.PI*2;
 const material=(color,roughness=.4)=>new T.MeshPhysicalMaterial({color,roughness,clearcoat:.15,clearcoatRoughness:.2});
 function combine(items){const arrays={position:[],normal:[],uv:[]};for(const {g,m} of items){const geo=g.index?g.toNonIndexed():g.clone();geo.applyMatrix4(m);for(const key of Object.keys(arrays))arrays[key].push(...geo.attributes[key].array);geo.dispose();g.dispose();}const g=new T.BufferGeometry();for(const key of Object.keys(arrays))g.setAttribute(key,new T.Float32BufferAttribute(arrays[key],key==='uv'?2:3));return g;}
@@ -15,9 +18,10 @@ export function buildTrickle(){
  const black=material('#16272e',.31),rim=material('#253e43',.32),rubber=material('#111a1d',.96),white=material('#c8d1cc',.86),steel=material('#687c80',.3);
  steel.metalness=.75;const grain=surfaceMaps(331);for(const m of [black,rim]){m.bumpMap=grain;m.bumpScale=.0025;}
  const glass=new T.MeshPhysicalMaterial({color:'#c9e5df',roughness:.045,transmission:.96,thickness:.065,ior:1.49,attenuationColor:new T.Color('#8db7b1'),attenuationDistance:3,clearcoat:.2});
+ finishAcrylic(glass);
  const offsets={sump:[0,0,0],tower:[-3.8,.1,-3],lid:[-3.3,5.2,0],drain:[-3,2,-1.4],overflow:[-2,3,0],pad:[-3.3,4.2,0],tray:[-3.3,3.4,0],biomedia:[-3.3,1.6,0],grate:[-3.3,.6,0],baffles:[.6,1.6,2.9],sponge:[1.8,1.5,3],pump:[3.1,.5,0],rotor:[3.1,1.7,1.5],union:[3.1,2,0],return:[3.1,0,0],nozzle:[3.1,1.4,0],aquarium:[0,3.3,0],feet:[0,-1.4,0]};
  function part(id){const object=new T.Group();object.name=id;root.add(object);parts.set(id,{...PARTS.find(p=>p.id===id),object,offset:V(...offsets[id])});return object;}
- function mesh(parent,g,m,x=0,y=0,z=0){const o=new T.Mesh(g,m);o.position.set(x,y,z);o.castShadow=!m.transparent&&!m.transmission;o.receiveShadow=true;parent.add(o);return o;}
+ function mesh(parent,g,m,x=0,y=0,z=0){const o=new T.Mesh(g,m);o.position.set(x,y,z);o.castShadow=!m.transparent&&!m.transmission;o.receiveShadow=true;parent.add(o);if(m===glass)acrylicEdges(o);return o;}
  function box(parent,w,h,d,x,y,z,m=black){return mesh(parent,m===glass?roundedBox(w,h,d,.008):new T.BoxGeometry(w,h,d),m,x,y,z);}
  function cylinder(parent,r,h,x,y,z,m=black){return mesh(parent,new T.CylinderGeometry(r,r,h,40),m,x,y,z);}
  function tube(parent,points,r=.13,m=black){return mesh(parent,new T.TubeGeometry(new T.CatmullRomCurve3(points.map(p=>V(...p)),false,'centripetal'),72,r,16,false),m);}
@@ -66,6 +70,7 @@ export function buildTrickle(){
  path(drainPoints,'#65d5e7','drain',15);path([[-2.55,4.0,1.43],[-2.60,3.4,1.43],[-2.4,2.4,1.43],[-2.3,1.12,1.43],[-.65,1.06,1.43],[-.05,1.25,1.43],[.1,.22,1.43],[.50,.22,1.43],[.75,1.25,1.43],[1.05,.85,1.43],[2.65,.5,.95]],'#7fd8c3','collection',25);
  path([...returnPoints,[2.78,6.25,.3]],'#b8edd5','return',25);path([[-.65,4.28,-1.15],[-.60,3.4,-1.15],[-.60,1.18,-1.15]],'#efb774','bypass',9);
  const construction=refineConstruction({parts,rotorSpin,pumpSection,black,rim,rubber,steel,padBody});
+ const surfaceWater=createSurfaceWater({group:waterGroup,parts});
  const waterDetail=createWaterDetail({root,group:waterGroup,media,bio,balls,focusIndex,dropMaterial:dropMat});
  waterDetail.update({amount:0,care:-1,mode:'cutaway',selected:'biomedia',time:0,flowTime:0,blocked:false},hydraulics(),hydraulics().flow,drops,sheet);
  for(const [id,p] of parts){p.object.traverse(m=>{if(m.isMesh){m.userData.part=id;pickables.push(m);}});p.center=new T.Box3().setFromObject(p.object).getCenter(V());const line=new T.Line(new T.BufferGeometry().setFromPoints([p.center,p.center.clone().add(p.offset)]),new T.LineDashedMaterial({color:'#8da8a4',transparent:true,opacity:.22,dashSize:.12,gapSize:.10}));line.computeLineDistances();guides.add(line);}
@@ -73,22 +78,23 @@ export function buildTrickle(){
  function pose(state,dt=0){
   const h=hydraulics(state),amount=state.amount||0,care=state.care??-1,isolated=state.isolated,mode=state.mode;
   for(const [id,p] of parts){let off=p.offset.clone().multiplyScalar(amount);if(care>=0){off.set(0,0,0);if(care>=1&&['lid','pad','tray'].includes(id))off.copy(p.offset).multiplyScalar(.6);if(care===2&&['biomedia','grate'].includes(id))off.copy(p.offset).multiplyScalar(.65);if(care===3&&id==='rotor')off.set(0,.6,1.8);}p.object.position.copy(off);p.object.visible=(!isolated||id===state.selected)&&(mode!=='pump'||['pump','rotor'].includes(id))&&(mode!=='media'||id==='biomedia');}
-  const cutaway=['cutaway','flow'].includes(mode)&&amount<.02&&!isolated&&care<0;for(const o of cut)o.visible=!cutaway;
+  const cutaway=['cutaway','flow','overflow'].includes(mode)&&amount<.02&&!isolated&&care<0;for(const o of cut)o.visible=!cutaway;
   lid.visible=parts.get('lid').object.visible&&(!cutaway||state.selected==='lid');pad.visible=parts.get('pad').object.visible&&!(cutaway&&state.selected==='tray');housing.visible=mode!=='pump';pump.children.forEach(o=>{if(o.isMesh&&o!==housing)o.visible=mode!=='pump'||o.geometry.type==='TubeGeometry';});
   pumpSection.visible=mode==='pump';bio.visible=mode!=='media';focusBall.visible=mode==='media';
-  const operation=amount<.02&&care<0&&!isolated&&!['media','pump'].includes(mode),flow=operation?h.flow:0;
-  waterGroup.visible=operation;waterlines.visible=operation;guides.visible=amount>.1&&!isolated&&care<0;
+  const delivery=transport(state,h),loading=padLoading(state);
+  const operation=amount<.02&&care<0&&!isolated&&!['media','pump'].includes(mode),flow=operation?delivery.tray:0;
+  waterGroup.visible=operation;waterlines.visible=operation;for(const b of bodies)b.group.visible=!(mode==='overflow'||state.tour===1);guides.visible=amount>.1&&!isolated&&care<0;
   rotorSpin.rotation.z=care<0&&amount<.02&&!isolated?(state.rotorAngle??(h.running?state.time*4:0)):0;construction.update(state);
-  bioMat.clearcoat=h.flow>0?.75:.25;padMat.color.set(state.blocked?'#71604b':'#d5d4bb');
+  bioMat.clearcoat=h.flow>0?.75:.25;padMat.color.set('#d5d4bb').lerp(new T.Color('#71604b'),loading);
   surface.position.y=Math.min(h.collectionLevel,3.02);returnSurface.position.y=Math.min(h.returnLevel,3.02);displaySurface.position.y=h.displayLevel;for(const [i,level] of [surface.position.y,returnSurface.position.y,displaySurface.position.y].entries()){bodies[i].group.scale.y=Math.max(.01,level-bodies[i].bottom);bodies[i].line.position.y=level+.006;}
   for(const [o,strength] of [[surface,.009],[returnSurface,.005],[displaySurface,.004]]){const a=o.geometry.attributes.position;for(let i=0;i<a.count;i++){const x=a.getX(i),z=-a.getY(i),t=state.flowTime??state.time;let wave=Math.sin(x*5+t*1.8)*Math.cos(z*4-t*1.3)*.25;if(o===surface){for(const [cx,cz] of [[-1.6,-.8],[-.8,.7],[-.1,-.3],[-1.4,.3]]){const d=Math.hypot(x-cx,z-cz);wave+=Math.sin(d*23-t*6)*Math.exp(-d*1.5)*.7;}}else {const d=Math.hypot(x-(o===displaySurface?1.43:-1.5),z-.3);wave+=Math.sin(d*19-t*5)*Math.exp(-d*1.2);}a.setZ(i,wave*strength*h.flow);}a.needsUpdate=true;o.geometry.computeVertexNormals();}
   const upper=h.collectionLevel,lower=Math.min(h.returnLevel,upper);sheet.position.set(.79,(upper+lower)/2,0);sheet.scale.y=Math.max(.005,(upper-lower)/.5);sheet.visible=upper-lower>.03&&flow>0;
-  waterDetail.update(state,h,flow,drops,sheet);dummy.quaternion.identity();
-  for(let i=0;i<63;i++){const x=-3.705+(i%9)*.338,z=-1.10+Math.floor(i/9)*.366,len=.13+flow*.18;dummy.position.set(x,4.13-len/2,z);dummy.scale.set(1,len,1);if(state.blocked&&i%3!==0)dummy.scale.setScalar(.0001);dummy.updateMatrix();jets.setMatrixAt(i,dummy.matrix);}jets.instanceMatrix.needsUpdate=true;jets.visible=flow>.005;
-  for(let i=0;i<80;i++){const age=((state.flowTime??state.time)*.34+i*.618)%1;dummy.position.set(-3.6+(i%13)*.26,.25+age*(h.collectionLevel-.25),-.95+((i*7)%17)*.11);dummy.scale.setScalar((.4+(i%5)*.16)*Math.sin(age*Math.PI));dummy.updateMatrix();bubbles.setMatrixAt(i,dummy.matrix);}bubbles.instanceMatrix.needsUpdate=true;bubbles.visible=flow>.005;runoff.visible=state.blocked&&flow>.005;
-  arrowsGroup.visible=mode==='flow'&&operation&&flow>.005;const axis=V(0,1,0);
-  for(const p of flowPaths){p.arrows.visible=p.kind!=='bypass'||state.blocked;p.arrows.material.color.set(!state.power?'#e6b37c':p.kind==='return'?'#b8edd5':p.kind==='drain'?'#65d5e7':p.kind==='bypass'?'#efb774':'#7fd8c3');for(let i=0;i<p.count;i++){let t=(i/p.count+(state.arrowTime??state.time*.07*Math.max(.3,flow)))%1;const reverse=!state.power&&p.kind==='return';if(reverse)t=1-t;dummy.position.copy(p.curve.getPointAt(t));const tangent=p.curve.getTangentAt(t);if(reverse)tangent.negate();dummy.quaternion.setFromUnitVectors(axis,tangent.normalize());dummy.scale.setScalar(1);dummy.updateMatrix();p.arrows.setMatrixAt(i,dummy.matrix);}p.arrows.instanceMatrix.needsUpdate=true;}
-  last={...h,visibleDrops:flow>.005?(state.blocked?210:630):0,activeHoles:flow>.005?(state.blocked?21:63):0,rotorAngle:rotorSpin.rotation.z,waterVisible:waterGroup.visible,rotorActive:h.running&&care<0&&amount<.02&&!isolated,mediaCount:bio.count,detail:construction.snapshot(),waterDetail:waterDetail.snapshot()};return last;
+  waterDetail.update(state,h,flow,drops,sheet);surfaceWater.update(state,h);dummy.quaternion.identity();
+  for(let i=0;i<63;i++){const x=-3.705+(i%9)*.338,z=-1.10+Math.floor(i/9)*.366,len=.13+flow*.18;dummy.position.set(x,4.13-len/2,z);dummy.scale.set(1,len,1);if(state.blocked&&i%3!==0)dummy.scale.setScalar(.0001);dummy.updateMatrix();jets.setMatrixAt(i,dummy.matrix);}jets.instanceMatrix.needsUpdate=true;jets.visible=false;
+  for(let i=0;i<80;i++){const age=((state.flowTime??state.time)*.34+i*.618)%1;dummy.position.set(-3.6+(i%13)*.26,.25+age*(h.collectionLevel-.25),-.95+((i*7)%17)*.11);dummy.scale.setScalar((.4+(i%5)*.16)*Math.sin(age*Math.PI));dummy.updateMatrix();bubbles.setMatrixAt(i,dummy.matrix);}bubbles.instanceMatrix.needsUpdate=true;bubbles.visible=flow>.005;runoff.visible=loading>.35&&flow>.005;runoff.scale.x=runoff.scale.z=Math.max(.15,loading);
+  arrowsGroup.visible=['flow','overflow'].includes(mode)&&operation&&Math.max(delivery.returning,delivery.drain,delivery.tray)>.005;const axis=V(0,1,0);
+  for(const p of flowPaths){p.arrows.visible=(p.kind!=='bypass'||loading>.35)&&(p.kind==='return'?(state.power?delivery.returning:h.flow):p.kind==='drain'?delivery.drain:delivery.tray)>.005;p.arrows.material.color.set(!state.power?'#e6b37c':p.kind==='return'?'#b8edd5':p.kind==='drain'?'#65d5e7':p.kind==='bypass'?'#efb774':'#7fd8c3');for(let i=0;i<p.count;i++){let t=(i/p.count+(state.arrowTime??state.time*.07*Math.max(.3,flow)))%1;const reverse=!state.power&&p.kind==='return';if(reverse)t=1-t;dummy.position.copy(p.curve.getPointAt(t));const tangent=p.curve.getTangentAt(t);if(reverse)tangent.negate();dummy.quaternion.setFromUnitVectors(axis,tangent.normalize());dummy.scale.setScalar(mode==='overflow'?.62:1);dummy.updateMatrix();p.arrows.setMatrixAt(i,dummy.matrix);}p.arrows.instanceMatrix.needsUpdate=true;}
+  last={...h,visibleDrops:flow>.005?h.activeHoles*10:0,activeHoles:flow>.005?h.activeHoles:0,rotorAngle:rotorSpin.rotation.z,waterVisible:waterGroup.visible,rotorActive:h.running&&care<0&&amount<.02&&!isolated,mediaCount:bio.count,detail:construction.snapshot(),waterDetail:waterDetail.snapshot(),surfaceWater:surfaceWater.snapshot()};return last;
  }
  // Optics uses a waterfall-compatible interface; impact is under the tower.
  const water={group:waterGroup,surface,sheet,snapshot:()=>({impactZ:0,delivery:last.flow??0})};

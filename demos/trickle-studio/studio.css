@@ -14,3 +14,7 @@
 .hydraulic-stats{display:grid;gap:8px;font-size:10px;border-top:1px solid #42635e;padding-top:12px}.hydraulic-stats span{display:flex;justify-content:space-between;gap:8px}.hydraulic-stats strong{font-size:9px;letter-spacing:.04em;color:#b4ebd4}body[data-warning=true] .flow-readout{border-color:#a57849;background:#493827}body[data-mode=media] .scene-heading h1{font-size:28px}body[data-mode=media] .edition{display:none}#panel-flow .switch{margin-top:20px}
 
 .playback{flex-wrap:wrap}.playback>span{display:none}body[data-mode=pump]:not([data-journey]) .scene-heading h1,body[data-mode=media]:not([data-journey]) .scene-heading h1{font-size:25px}@media(max-width:760px){.playback{gap:4px}.playback button{padding:6px 7px}}
+
+.transport-phase{padding:12px;border:1px solid #3f6769;color:#b8e5da;font-size:10px;letter-spacing:.07em;border-radius:5px}body[data-mode=overflow] .scene-heading h1{font-size:25px}body[data-mode=overflow] .edition{display:none}
+
+body[data-mode=flow][data-selected=pad] .scene-heading h1{font-size:25px}body[data-mode=flow][data-selected=pad] .edition{display:none}

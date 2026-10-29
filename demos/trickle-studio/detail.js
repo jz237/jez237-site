@@ -1,4 +1,5 @@
 import * as T from '../aquaclear-studio/vendor/three.module.js';
+import {padLoading} from './dynamics.js?v=3';
 
 // Original molded/sealed construction detail, not measured product CAD.
 export function roundedBox(w,h,d,r=Math.min(w,h,d)*.15){
@@ -29,5 +30,5 @@ export function refineConstruction({parts,rotorSpin,pumpSection,black,rim,rubber
  // Actual deposits remain on the upstream pad face; clean vs loaded is visible.
  const deposits=new T.InstancedMesh(new T.IcosahedronGeometry(.015,0),new T.MeshStandardMaterial({color:'#604a2b',roughness:1}),520),o=new T.Object3D();deposits.name='pad-deposits';group('pad').add(deposits);let seed=417;const rnd=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);
  for(let i=0;i<520;i++){o.position.set(-3.82+rnd()*2.94,4.524+rnd()*.012,-1.21+rnd()*2.42);o.rotation.set(rnd()*6,rnd()*6,rnd()*6);o.scale.set(.4+rnd()*1.2,.2+rnd()*.5,.4+rnd()*1.3);o.updateMatrix();deposits.setMatrixAt(i,o.matrix);}deposits.castShadow=true;
- return {update(state){deposits.count=state.blocked?520:28;},snapshot:()=>({deposits:deposits.count,curvedVanes:6,openTowerBase:true})};
+ return {update(state){deposits.count=Math.round(28+492*padLoading(state));},snapshot:()=>({deposits:deposits.count,curvedVanes:6,openTowerBase:true})};
 }

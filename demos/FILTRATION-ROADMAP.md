@@ -40,6 +40,10 @@ The user chose this mechanism ahead of the sponge filter. Trickle Atelier provid
 
 Added an isolated macro bio-ball, water beads following its ribs, deflected stream paths, impact ripples, a distributor film, weir/baffle sheets, curved impeller vanes, shaft/seal detail, fasteners, rounded acrylic and upstream pad deposits. The tower base is corrected to drain through its grate. Integrated motion phases, a one-third-speed control, improved lighting and a full pause/stop audit accompany the visual changes. See the Trickle README for the qualitative model limits and new detail QA.
 
+### Trickle surface realism and operating studies — October 29, 2026
+
+Implemented all five follow-ups: outlet/rib pendant drops and thread breakup; textured, polished acrylic; a sectioned overflow/drain close-up with entrained air; staged line filling, restart and finite residual drips; and continuous pad loading with visible deposits, pooling and bypass. The Water lab includes direct close-up/comparison buttons. See the README and realism QA for timings and qualitative limits.
+
 ### Next distinct filter mechanisms
 
 1. **Undergravel filter.** Gravel as the bed, slotted plates, lift tubes, trapped detritus and maintenance. Explain conventional and reverse-flow arrangements separately. This adds a larger system-level study after wet/dry.

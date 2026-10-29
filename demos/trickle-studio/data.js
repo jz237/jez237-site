@@ -21,7 +21,7 @@ export const PARTS=[
 ].map(([id,name,group,description,detail],i)=>({id,name,group,description,detail,number:String(i+1).padStart(2,'0')}));
 export const LESSONS=[
  {title:'One pump. A complete loop.',tag:'01 / THE SYSTEM',part:'sump',mode:'assembled',text:'The pump raises water to the aquarium. Gravity brings it back through the filter. Follow the plumbing from the upper aquarium section to the lower reservoir.',tip:'Drag to look behind the tower, or choose Follow water for direction arrows.'},
- {title:'Let gravity do this half',tag:'02 / OVERFLOW & DRAIN',part:'overflow',mode:'flow',center:[-1.2,5.7,0],radius:2.6,text:'The surface weir establishes the illustrated aquarium level. Water entering the overflow falls to the pad and distributor.',tip:'There is no second pump in the drain. The visible display is a cropped section, so it is not a capacity guide.'},
+ {title:'Let gravity do this half',tag:'02 / OVERFLOW & DRAIN',part:'overflow',mode:'overflow',center:[-1.28,5.70,-.05],radius:1.50,text:'The surface weir establishes the illustrated aquarium level. Watch separate tongues cross the teeth, gather in the overflow, and carry entrained air down the sectioned drain to the pad.',tip:'There is no second pump in the drain. The visible display is a cropped section, so it is not a capacity guide.'},
  {title:'A stream becomes many trickles',tag:'03 / PAD & DISTRIBUTOR',part:'tray',mode:'cutaway',center:[-2.35,4.1,0],radius:2.25,text:'The pad catches particles. The perforated plate below it spreads water across the biological bed. Watch individual threads emerge from the holes.',tip:'In the Water lab, compare even distribution with a loaded pad and fewer active outlets.'},
  {title:'Wet surfaces. Open air.',tag:'04 / BIOLOGICAL BED',part:'biomedia',mode:'media',text:'Open ribs support a thin wet film without filling the whole chamber with water. The spaces between the balls admit air.',tip:'This macro view isolates one ball from the bed. Watch beads follow its ribs; use Slow motion to study them. Microscopic biofilms are not drawn as oversized organisms.'},
  {title:'Collect, then slow the bubbles',tag:'05 / SUMP & BAFFLES',part:'baffles',mode:'flow',center:[.8,.95,0],radius:2.25,text:'Drops collect below the grate, then water follows an over-under-over route toward the pump. Bubbles can rise before the return intake.',tip:'Look from the front to see the gaps beneath the middle baffle and above the two lower walls.'},
@@ -35,7 +35,8 @@ export const CARE=[
  {title:'Inspect, refill and test',part:'rotor',text:'With power disconnected, inspect the pump and plumbing according to their manuals. Reassemble, restore the operating level, and test both normal running and a power-off drain-down.'}
 ];
 
-export function hydraulics({rate=70,fill=25,blocked=false,power=true,drainback=0}={}){
+export function hydraulics({rate=70,fill=25,blocked=false,loading=blocked?1:0,power=true,drainback=0}={}){
+ const load=Math.max(0,Math.min(1,loading)),activeHoles=63-Math.round(load*42);
  const f=Math.max(0,Math.min(100,fill)),setting=Math.max(0,Math.min(100,rate))/100;
  const returnRunning=.38+f*.025,collection=Math.max(1.25,returnRunning);
  // Illustrative compartment balance: a weighted starting sump level plus
@@ -44,5 +45,5 @@ export function hydraulics({rate=70,fill=25,blocked=false,power=true,drainback=0
  const d=Math.max(0,Math.min(1,drainback)),returnLevel=returnRunning+(settled-returnRunning)*d,collectionLevel=collection+(settled-collection)*d;
  const dry=returnLevel<.80,running=power&&!dry;
  const flow=running?(.3+.7*setting):(!power&&d<.995?(1-d)*.55:0);
- return {setting,running,dry,flow,returnLevel,collectionLevel,displayLevel:6.50-d*.32,drainback:d,settled,overflow:Math.max(collectionLevel,returnLevel)>3.02,submerged:collectionLevel>1.58,coverage:blocked?.36:1,bypass:blocked?flow*.64:0,reserve:Math.max(0,3.02-Math.max(collectionLevel,returnLevel))};
+ return {setting,running,dry,flow,returnLevel,collectionLevel,displayLevel:6.50-d*.32,drainback:d,settled,overflow:Math.max(collectionLevel,returnLevel)>3.02,submerged:collectionLevel>1.58,loading:load,activeHoles,coverage:activeHoles/63,bypass:flow*.64*load*load,reserve:Math.max(0,3.02-Math.max(collectionLevel,returnLevel))};
 }

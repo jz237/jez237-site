@@ -25,7 +25,7 @@ Primary references reviewed October 28, 2026:
 
 The model's arrangement and proportions are original. It does not claim to duplicate ProFlex geometry or capacity. No aquarium-store competitor links are used. Mechanical capture does not remove material from the system until maintenance; nitrification does not remove nitrate. The biological bed is represented as wet surfaces with air passages, not literal visible bacteria.
 
-`hydraulics()` in `data.js` is an explicit illustrative compartment model. Running collection level crests the first baffle; the return compartment varies with the fill control. Power-off adds a finite upper-circuit volume to a weighted sump balance while the display level falls. At the end of drain-down, delivery and drops reach zero. High fill can exceed the rim; rendered surfaces clamp to the rim and the UI explains overflow. This does not calculate real volume, head loss, siphon geometry, pump curves or fluid dynamics. A real installation needs its own complete power-off test.
+`hydraulics()` in `data.js` is an explicit illustrative compartment model. Running collection level crests the first baffle; the return compartment varies with the fill control. Power-off adds a finite upper-circuit volume to a weighted sump balance while the display level falls. Bulk delivery reaches zero when the finite upper volume has drained. Small retained-film drips decay separately to zero over six animation seconds. High fill can exceed the rim; rendered surfaces clamp to the rim and the UI explains overflow. This does not calculate real volume, head loss, siphon geometry, pump curves or fluid dynamics. A real installation needs its own complete power-off test.
 
 Pump setting is qualitative, with nonzero flow at its low end; the power button switches it off. Low return level stops the illustrative pump. The final sponge, bypass channel, droplet paths and bubble separation are simplified. Free streams deflect around conservative media envelopes; beads separately follow actual molded rib arcs. This does not solve exact droplet-to-rib collisions, surface tension or film mass conservation. The rotor is slowed for inspection and holds its last angle at power-off. A separate one-third-speed control slows all operating effects. Exploded positions are teaching offsets, not a servicing sequence. Care mode does not replace manufacturer instructions.
 
@@ -37,6 +37,9 @@ Bio-ball placement uses deterministic conservative sphere envelopes; spheres do 
 - `model.js`: deterministic geometry, material generation, pick targets, component offsets, water meshes, instanced drops/bubbles/arrows and pure pose application.
 - `detail.js`: rounded construction, seam fillets, fasteners, curved vanes, rotor magnet/shaft/seal, open pipe bores and upstream pad deposits.
 - `water-detail.js`: deterministic envelope-deflected streams, beads/film glints aligned to actual ribs, distributor film, weir sheet, impact ripples/splashes and restrained procedural floor light.
+- `dynamics.js`: pure staged transport and deterministic outlet selection for continuous pad loading.
+- `surface-water.js`: outlet menisci/pendants/neck breakup, pad pooling, separate weir tongues, sectioned drain/air and return-line charge.
+- `acrylic.js`: subtle procedural polish marks, physical thickness/roughness and edge highlights.
 - `optics.js`: offscreen scene capture, depth-guarded refraction and reflection shader. Width is capped at 1024 pixels, with half-resolution capture below 760 CSS pixels. Renderer state is restored in `finally`; captures stop when water is hidden.
 - `studio.js`: accessible UI, unified animation state/clock, guided cameras, selection, care and read-only diagnostics at `window.trickleStudio.snapshot()`.
 - `studio.css`: the HOB exhibit's responsive visual system, with water-lab state styling.
@@ -52,6 +55,7 @@ node --check demos/trickle-studio/model.js
 node --check demos/trickle-studio/studio.js
 node scripts/trickle-studio/qa.cjs http://127.0.0.1:8818/demos/trickle-studio/
 node scripts/trickle-studio/detail-qa.cjs http://127.0.0.1:8818/demos/trickle-studio/
+node scripts/trickle-studio/realism-qa.cjs http://127.0.0.1:8818/demos/trickle-studio/
 node scripts/trickle-studio/cover.cjs http://127.0.0.1:8818/demos/trickle-studio/
 node scripts/build-demos.mjs
 ```
@@ -72,3 +76,16 @@ Construction now includes narrow seam fillets, rounded acrylic edges and pump ca
 The studio has a graded backdrop and contact-shadow receiver. No HOB runtime files were changed. The new scripts remain local and introduce no paid services or remote model assets. Cache versions for this exhibit advance to `v=2`.
 
 `detail-qa.cjs` checks bounded descending stream paths, the open tower base, phase-deterministic bead motion, macro isolation, loaded deposits, care shutdown, pause across all clocks and the measured one-third animation rate. Its desktop/mobile captures supplement the main interaction suite.
+
+
+## Surface realism and operating studies — October 29, 2026 (v3)
+
+All five requested refinements are implemented. Outlet rims collect water into swelling pendants, narrowing necks and detached threads; media beads gather at rib low points before falling. These remain deterministic mesh animations, not a surface-tension solver. Acrylic uses sparse polish marks in bump/roughness, physical thickness, clearcoat and restrained edge highlights. Existing depth-guarded water refraction remains in place.
+
+The overflow button and tour stop 2 move to a closer sectioned view: eight water tongues correspond to the gaps between nine modeled teeth. A translucent pipe reveals the drain core and downward entrained-air bubbles. Cutting the overflow front and hiding the broad water-depth tint makes its interior readable; ordinary views restore those surfaces/materials. Direction arrows are smaller in this close-up.
+
+On restart the return-line charge travels upward for 1.4 animation seconds; the display then rises, drainage develops around 3.35 seconds, the distributor wets after 4 seconds, and rib film reaches steady operation by 6.2 seconds. After power-off the rotor stops immediately, finite bulk drain-down raises the sump, and residual film drains out by six seconds. These timings explain sequence, not measured equipment performance. The residual film is a visual approximation without a separate volume balance. Care, isolation and exploded modes suppress operation; pause and one-third speed apply to operating clocks.
+
+The Water lab has a continuous 0–100% debris slider and a twelve-animation-second loading demonstration. The same pad goes from 28 to 520 deposits, darkens, pools above its upstream face, and progressively reduces active outlets from 63 to 21 with a deterministic mask. A visible bypass begins above 35% loading. No clogging curve, elapsed maintenance interval or actual distributor failure probability is implied. The original loaded-pad checkbox remains a clean/loaded shortcut. Navigation away cancels the automatic comparison; reset restores all controls and clocks.
+
+`realism-qa.cjs` checks transport order, finite residual drainage, matching outlet counts, progressive loading, pooling, sectioned drain, pause, care, restart, desktop/mobile layout and browser errors. `qa.cjs` additionally waits for residual film to end after bulk settling. All local imports use v3 cache keys.
