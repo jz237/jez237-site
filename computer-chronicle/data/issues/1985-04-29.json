@@ -1,0 +1,370 @@
+{
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "currentDate": "2026-10-29",
+  "historicDate": "1985-04-29",
+  "displayDate": "Week of April 29-May 5, 1985",
+  "edition": "Issue 144 - Weekly 1985 Computer & Culture Chronicle",
+  "sources": [
+    {
+      "title": "Computerworld, vol. XIX no. 17; full OCR, including pp. 1, 5, 11 and product/support desks",
+      "url": "https://archive.org/stream/computerworld1917unse/computerworld1917unse_djvu.txt",
+      "date": "1985-04-29"
+    },
+    {
+      "title": "Computer Gaming World, vol. 5 no. 2; comparative robot simulation review and Commodore column",
+      "url": "https://www.mirrors.apple2.org.za/ftp.apple.asimov.net/documentation/magazines/computer_gaming_world/Computer%20Gaming%20World-1985_0405_issue21.pdf",
+      "date": "1985-04/1985-05"
+    },
+    {
+      "title": "Billboard Mainstream Rock chart, week of May 4; original HTML chart rows inspected",
+      "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-05-04/",
+      "date": "1985-05-04"
+    },
+    {
+      "title": "Box Office History, May 3–5 weekend; archived Mojo-derived figures",
+      "url": "https://boxofficehistory.com/weekend/1985-18",
+      "date": "1985-05-03/1985-05-05"
+    },
+    {
+      "title": "Reagan Library: Bitburg Air Base remarks",
+      "url": "https://www.reaganlibrary.gov/archives/speech/remarks-joint-german-american-military-ceremony-bitburg-air-base-federal-republic",
+      "date": "1985-05-05"
+    },
+    {
+      "title": "COMPUTE! No. 59: Atari/Commodore coverage, game and Lotus reviews, Atari modem advertisement",
+      "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute%20(Clean)/Compute_Issue_059_1985_Apr.pdf",
+      "date": "1985-04"
+    }
+  ],
+  "visualProfile": {
+    "tone": "Robots turn programming into play",
+    "motifs": [
+      "Apple II robot logic adventure",
+      "Macintosh visual programming",
+      "80286 desktop"
+    ],
+    "layout": "Dense warm newsprint with red and blue boxed sections"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Robot games dominate the main illustration",
+    "secondaryRail": "AT competitors, shared screens and rock radio",
+    "archiveNavigation": "Weekly archive and previous/next controls"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 144 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of April 29-May 5, 1985",
+    "price": "75 cents"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-04-29.jpg",
+    "alt": "Computer Chronicle robot-programming front page for April 29-May 5, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Robot adventures lead the gaming desk; April–May review coverage is distinguished from new releases.",
+  "morningLine": "Wire a robot, hand over a keyboard, and weigh the next AT.",
+  "lead": {
+    "headline": "Build a robot, solve an adventure: programming becomes play",
+    "confidence": "same-month",
+    "sourceRefs": [
+      1
+    ],
+    "body": [
+      "Adventure games are putting a new question to the home computer: can the player build the intelligence that wins the game? In the April–May Computer Gaming World, Gregg Williams compares Robot Odyssey I and Chipwits, two simulations that make programming itself the entertainment. These are current review selections, not announcements of releases during this week.",
+      "Robot Odyssey I, from The Learning Co., lists at $49.95 for the Apple II. Its Innovation Lab gives players room to experiment before tackling Robotropolis. Sensors feed digital-logic gates; wires turn those signals into robot behavior. Players can watch signals propagate and work through three tutorial worlds before the five adventure levels described in the review.",
+      "Chipwits takes a different route on the Macintosh. Its domino-shaped visual instructions assemble into programs in a Workshop, then face eight missions. The review’s publisher box identifies Brainpower and a $59.95 price. Williams finds both games engaging but considers Chipwits the gentler introduction for a programming newcomer.",
+      "The attraction is not simply watching a robot obey. A failed mission sends the player back to the design bench to discover what the instructions actually mean. The review reports an Apple II Chipwits edition expected by publication and a Commodore 64 version licensed to Epyx; these remain reported plans rather than verified shipping dates."
+    ],
+    "dek": "Robot Odyssey I and Chipwits make circuits and visual instructions the machinery of adventure."
+  },
+  "stories": [
+    {
+      "headline": "AT competition widens: three rivals promise more choice",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ],
+      "body": [
+        "The April 29 Computerworld surveys three more entrants in the AT-compatible contest: Corona, Zenith and Televideo. Their announcements came the previous week, but the new comparison gives buyers a timely look at the widening Intel 80286 field.",
+        "Zenith’s Z-200 standard package is listed at $3,999 with 512 KB, a 1.2 MB floppy, six AT-compatible slots and MS-DOS 3.1. Its enhanced version is $5,599. Zenith promotes no-wait-state memory; that is a vendor claim, not an independent benchmark.",
+        "Televideo quotes $3,400 for a standard 256 KB machine and $4,995 for an enhanced 512 KB system with a 20 MB hard disk. It offers 8 MHz operation with a switch to 6 MHz. Corona’s 38-pound transportable includes a nine-inch green screen; its $4,500 standard configuration has 512 KB and two floppy drives. Both companies promise July shipments, not immediate shelf availability."
+      ]
+    },
+    {
+      "headline": "Buyers and vendors still divided over software protection",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ],
+      "body": [
+        "Software buyers and vendors remain divided over protection. Kathleen Burton reports in the April 29 Computerworld that the Microcomputer Managers Association and Adapso have not resolved their differences over proposed standards.",
+        "The MMA says its members bought more than $100 million in microcomputer software last year. Hardware keys and the administrative burden of tracking software keys are among the practical concerns. MMA president Alan Gross denies any softening of his association’s position.",
+        "Adapso counsel Ron Palenski cites antitrust considerations in explaining why the association cannot recommend marketing methods. Lotus president Mitchell Kapor acknowledges that user groups represent enough of the community to require engagement, yet the report describes no vendor plan to refocus the protection strategy. This is an ownership and usability dispute, not evidence of a named pirate crew."
+      ]
+    },
+    {
+      "headline": "Share a screen over the telephone",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ],
+      "body": [
+        "The telephone line is becoming a shared workbench. New-product coverage in the April 29 Computerworld describes CC:share, which lets separated users run applications together, see screen activity and pass control of the keyboard.",
+        "Professional and Corporate Communication Systems suggests training, presentations and remote maintenance. File transfer and screen snapshots stored as PC-DOS files extend the session beyond conversation. The related CC:mail can capture application screens, attach files, and supply word-processing, drawing and highlighting functions.",
+        "Both products target IBM PC, XT, AT and compatible machines with DOS 2.0 or later and a Hayes-compatible modem. CC:share needs 26 KB beyond the application’s requirements; CC:mail needs 320 KB RAM. Quoted prices are $195 and $295 per copy respectively in purchases of ten, not single-copy retail offers."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Zenith Z-200",
+      "summary": "80286 AT-compatible, standard 512 KB RAM and 1.2 MB floppy; vendor no-wait-state claim.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Televideo AT",
+      "summary": "Switchable 8/6 MHz 80286; promised July shipment, not currently verified in shops.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Corona AT Transportable",
+      "summary": "38-pound AT-compatible with nine-inch monochrome screen; July delivery promised.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "CC:share",
+      "detail": "Dial-up shared applications and keyboard hand-off; $195 per copy in quantities of ten.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "name": "CC:mail",
+      "detail": "Graphics-capable mail with captured application screens and attachments; $295 per copy in ten-unit purchases.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial review selections, not sales rankings",
+      "items": [
+        "Robot Odyssey I — Apple II robot-logic adventure; contemporary review price $49.95, Learning Co.; review coverage, not this-week launch.",
+        "Chipwits — Macintosh visual-programming robot simulation; $59.95, Brainpower; future platform plans must remain attributed.",
+        "Kampfgruppe — Mark Bausman review, CGW p. 21; $59.95; Eastern Front tactical simulation for 1941–45, 60×60 scrolling map, 200 yards per square, four built-in scenarios and scenario construction. No exact release day established.",
+        "Fifty Mission Crush — continuing April COMPUTE! review selection; SSI B-17 mission and crew simulation. Not a new-this-week release.",
+        "Winnie the Pooh in the Hundred Acre Wood — continuing April COMPUTE! review selection; Sierra/Disney, Apple II or C64 with disk, $39.95."
+      ],
+      "confidence": "same-month review coverage; two continuing April selections",
+      "sourceRefs": [
+        1,
+        5
+      ]
+    },
+    {
+      "label": "Top 5 Movies — May 3-5 domestic weekend",
+      "items": [
+        "1. Code of Silence — $5,512,461",
+        "2. Just One of the Guys — $2,454,977",
+        "3. Gotcha! — $2,360,484",
+        "4. Police Academy 2: Their First Assignment — $2,221,193",
+        "5. Mask — $1,727,153"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        3
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Don't You (Forget About Me)",
+      "artist": "Simple Minds",
+      "chart": "Billboard Mainstream Rock",
+      "chartDate": "1985-05-04",
+      "confidence": "exact-date",
+      "song": "Don't You (Forget About Me)",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Trapped",
+      "artist": "Bruce Springsteen",
+      "chart": "Billboard Mainstream Rock",
+      "chartDate": "1985-05-04",
+      "confidence": "exact-date",
+      "song": "Trapped",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Everybody Wants To Rule The World",
+      "artist": "Tears for Fears",
+      "chart": "Billboard Mainstream Rock",
+      "chartDate": "1985-05-04",
+      "confidence": "exact-date",
+      "song": "Everybody Wants To Rule The World",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Centerfield",
+      "artist": "John Fogerty",
+      "chart": "Billboard Mainstream Rock",
+      "chartDate": "1985-05-04",
+      "confidence": "exact-date",
+      "song": "Centerfield",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Don't Come Around Here No More",
+      "artist": "Tom Petty And The Heartbreakers",
+      "chart": "Billboard Mainstream Rock",
+      "chartDate": "1985-05-04",
+      "confidence": "exact-date",
+      "song": "Don't Come Around Here No More",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Zenith Z-200",
+      "price": "$3,999 standard",
+      "note": "$3,999 standard; $5,599 enhanced; announced US dollar prices.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Televideo AT",
+      "price": "$3,400 standard",
+      "note": "$3,400 standard; $4,995 enhanced; announced US dollar prices.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Corona AT Transportable",
+      "price": "$4,500 standard",
+      "note": "$4,500 standard; $5,500 enhanced; announced US dollar prices.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Robot Odyssey I / Chipwits",
+      "price": "$49.95 / $59.95 respectively, review-box US prices.",
+      "note": "$49.95 / $59.95 respectively, review-box US prices.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Microcomputer sales overtake mainframes",
+      "summary": "Computerworld cover reports IDC finding that 1984 personal-computer sales revenue surpassed mainframes for the first time. Treat as IDC market-research claim, not new 1985 sales total; IDC forecasts 60% growth in installed micros at large-computer sites in 1985.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Robot laboratory at home",
+    "summary": "Robot Odyssey I for Apple II: The Learning Co., $49.95 in the contemporary review box. A shelf-price spotlight, not a reproduced advertisement.",
+    "tagline": "The adventure begins at the wiring bench.",
+    "sourceRefs": [
+      1
+    ]
+  },
+  "market": {
+    "headline": "Personal-computer revenue passes mainframes, IDC reports",
+    "summary": "Computerworld cover reports IDC finding that 1984 personal-computer sales revenue surpassed mainframes for the first time. Treat as IDC market-research claim, not new 1985 sales total; IDC forecasts 60% growth in installed micros at large-computer sites in 1985.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Reagan visits Bitburg and Bergen-Belsen",
+    "summary": "On May 5, President Reagan visits Bergen-Belsen and takes part in the controversial Bitburg cemetery visit. His Bitburg Air Base remarks acknowledge the controversy while arguing for German-American reconciliation.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      4
+    ]
+  },
+  "bbsNote": {
+    "headline": "Dial-up is becoming a support desk and shared workspace",
+    "summary": "April 29 reporting documents online software support and shared-screen work, without inventing BBS posts or sysop events.",
+    "posts": [
+      {
+        "topic": "Vendor-supported SIGs",
+        "platform": "CompuServe",
+        "text": "Computerworld’s software-maintenance discussion names Borland and Lotus special-interest groups on CompuServe as support and education channels; this is a research digest, not a verbatim message."
+      },
+      {
+        "topic": "Shared keyboard over a modem",
+        "platform": "IBM PC / Hayes-compatible dial-up",
+        "text": "CC:share is described as passing application control between users while both see screen activity; DOS 2.0+ and Hayes-compatible modem required. $195 per copy applies to ten-unit purchases."
+      }
+    ],
+    "sourceRefs": [
+      0
+    ]
+  },
+  "curiosity": {
+    "headline": "Commodore offers worn-out game disks a $5 second life",
+    "summary": "A small service-policy change earns praise in the April–May gaming press.",
+    "detail": "Computer Gaming World’s Commodore column reports a $5 replacement policy for Commodore diskettes damaged or worn through continued use, with return within ten days. This is the policy as reported in the period column, not a modern guarantee or a new-this-week announcement.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      1
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Game selections are editorial, not sales ranks; April–May reviews are not release dates.",
+      "Two games continue April COMPUTE! coverage with original source retained.",
+      "AT announcements preceded this week; July shipments remain promises.",
+      "CC prices require ten-unit purchases.",
+      "Billboard Mainstream Rock May 4; domestic films May 3-5.",
+      "No verified named underground crew or breaking gadget event supplied."
+    ]
+  }
+}

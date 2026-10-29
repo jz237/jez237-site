@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Wed, 28 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 29 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of April 29-May 5, 1985 — Build a robot, solve an adventure: programming becomes play</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-04-29</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-04-29</guid>
+      <pubDate>Thu, 29 Oct 2026 12:00:00 GMT</pubDate>
+      <description>Robot Odyssey I and Chipwits make circuits and visual instructions the machinery of adventure. Adventure games are putting a new question to the home computer: can the player build the intelligence that wins the game? In the April–May Computer Gaming World, Gregg Williams compares Robot Odyssey I and Chipwits, two simulations that make programming itself the entertainment. These are current review selections, not announcements of releases during this week. Also this week: AT competition widens: three rivals promise more choice · Buyers and vendors still divided over software protection · Share a screen over the telephone.</description>
+    </item>
     <item>
       <title>Week of April 22-28, 1985 — Gribbly’s Day Out brings airborne rescue to the Commodore screen</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-04-22</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-12-17</guid>
       <pubDate>Sat, 10 Oct 2026 12:00:00 GMT</pubDate>
       <description>Infocom’s adventure rewards ingenuity as a novice confronts the sorcerer Krill. An adventure need not begin with a drawn sword. In Infocom’s Enchanter, the Circle of Enchanters sends a novice to confront the sorcerer Krill. Marc Berman’s December COMPUTE! review follows that journey on the Macintosh, where words and spells supply the action. Also this week: MSX promises a common language for home computers · Plus/4 improves BASIC but leaves C64 software behind · A modem makes the home computer social.</description>
-    </item>
-    <item>
-      <title>Week of December 10-16, 1984 — Ghostbusters turns the Commodore 64 into a paranormal franchise</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-12-10</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-12-10</guid>
-      <pubDate>Fri, 09 Oct 2026 12:00:00 GMT</pubDate>
-      <description>Activision turns a hit film into equipment-buying strategy and audiovisual spectacle on the C64. Ghostbusters gives the Commodore 64 owner a business to run as well as ghosts to catch. Activision’s game makes the player the proprietor of a Ghostbusters franchise, bringing the film’s premise to a home-computer screen. December’s Computer Gaming World includes it among the games receiving a first look. Also this week: Tandy 1000 offers a $1,200 challenge to IBM’s junior · Plus/4’s improved BASIC runs into Commodore’s compatibility wall · Archon II: Adept trades the chessboard for elemental combat.</description>
     </item>
   </channel>
 </rss>

@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-29",
+      "historicDate": "1985-04-29",
+      "displayDate": "Week of April 29-May 5, 1985",
+      "edition": "Issue 144 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Wire a robot, hand over a keyboard, and weigh the next AT.",
+      "leadHeadline": "Build a robot, solve an adventure: programming becomes play",
+      "storyHeadlines": [
+        "AT competition widens: three rivals promise more choice",
+        "Buyers and vendors still divided over software protection",
+        "Share a screen over the telephone"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-04-29.jpg",
+      "thumb": "media/thumbs/1985-04-29.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-28",
       "historicDate": "1985-04-22",
       "displayDate": "Week of April 22-28, 1985",
