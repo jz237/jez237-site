@@ -74,15 +74,15 @@ export const BEHAVIORS = new Set(['mirror', 'lap', 'rest']);
 // (PERCH_BACK, PERCH_ABOVE), gliding down onto it.
 export const REST_HEIGHT = 0.049, LAP_SPEED = 0.058;
 // Its display at its reflection is a short bout, as a real one's is: it flares once it is all but up to
-// the glass (DISPLAY_NEAR units off where it holds) and holds there DISPLAY_HOLD s, up to four fifths as
-// long again, then lets its fins down and leaves; the rest of the time it carries them relaxed.
-// It flares only once it has come up to the glass, turned to its reflection and held there facing it
-// a moment (DISPLAY_LOOK s, turning no faster than DISPLAY_STILL rad/s): never as it comes round, only
-// at what it sees. Startled, now and then (FLARE_AFTER of the time) it flares at whatever startled it,
-// once it has stopped and come out of its turn, FLARE_WAIT s or so after the startle, for FLARE_BOUT s
-// or up to half as long again.
+// the glass (DISPLAY_NEAR units off where it holds), facing its reflection and held there a moment
+// (DISPLAY_LOOK s, turning no faster than DISPLAY_STILL rad/s: never as it comes round, only at what it
+// sees), and holds there DISPLAY_HOLD s from then, up to four fifths as long again, then lets its fins
+// down and leaves; the rest of the time it carries them relaxed. Startled, now and then (FLARE_AFTER of
+// the time) it flares at whatever startled it, once it has stopped to hang in the water (from FLARE_WAIT
+// s or so after the startle, within FLARE_WITHIN s of it, or not at all), facing it, for FLARE_BOUT s or
+// up to half as long again.
 export const DISPLAY_NEAR = 0.08, DISPLAY_HOLD = 3, DISPLAY_LOOK = 0.45, DISPLAY_STILL = 0.3;
-export const FLARE_AFTER = 0.4, FLARE_WAIT = 0.8, FLARE_BOUT = 2.2;
+export const FLARE_AFTER = 0.3, FLARE_WAIT = 0.8, FLARE_WITHIN = 8, FLARE_BOUT = 2.2;
 export const PERCH_SOLID = 0.04, PERCH_SLOPE = 0.35, PERCH_LIFT = 0.041;
 const PERCH_BACK = 0.16, PERCH_ABOVE = 0.05;
 // (Down on it within 0.035 of its place; or, there PERCH_SETTLE s already, within PERCH_CLOSE.)
@@ -200,8 +200,10 @@ export const PUSH_TIME = 0.4, COAST = 1.2, PADDLE_AGAIN = 0.8, PADDLE_GAP = 0.45
 const FIN_REACH = [[0.08, 0.15], [0.15, 0.15], [0.22, 0.17], [0.29, 0.14], [0.36, 0.05]];
 // So too its body, as it passes a thing: its snout, its head, its belly and its rear (BODY_REACH: how far
 // back of the neck, how far under its line, and how far out its skin is from there), which it keeps off
-// the solid parts by as much (rather than brushing the bark with its snout, or its flank pressed into it).
-const BODY_REACH = [[-0.05, 0, 0.006], [0, 0.004, 0.026], [0.1, 0.004, 0.04], [0.2, 0.002, 0.026]];
+// a thing by as much (rather than brushing the bark with its snout, or its flank pressed into it): off its
+// whole surface (the room the fins keep round it, less BODY_IN, the least that room stands off the bark
+// or the stone), or else its solid part.
+const BODY_REACH = [[-0.05, 0, 0.006], [0, 0.004, 0.026], [0.1, 0.004, 0.04], [0.2, 0.002, 0.026]], BODY_IN = 0.012;
 export const FIN_ROOM = 0.025;
 
 // Goals are a real stride away across the water and within the slope the fish can climb, so it never
@@ -313,10 +315,10 @@ export class BettaSwim {
     this.restReady = 50 + this.behaviorRandom() * 35;
     this.behaviorClock = this.holdClock = 0;
     this.flaring = false;
-    // (How long it has hung at the glass facing its reflection (s); after a startle, when it may flare at
-    // what startled it and until when (s, its clock; -1 none), and whether it is.)
+    // (How long it has hung at the glass facing its reflection (s); after a startle, from when it may flare
+    // at what startled it and by when (s, its clock; -1 none), whether it is, and until when.)
     this.mirrorLook = 0;
-    this.flareFrom = this.flareUntil = -1; this.flaringAfter = false;
+    this.flareFrom = this.flareBy = this.flareUntil = -1; this.flaringAfter = false;
     this.mirrorPoint = [0, 0, 0];
     this.mirrorFace = 0; this.mirrorSide = 1; this.mirrorHold = 5; this.mirrorArrived = false;
     this.lapDir = 1; this.lapY = 0; this.lapAngle = this.lapTravelled = 0; this.lapLength = 2 * Math.PI;
@@ -423,9 +425,10 @@ export class BettaSwim {
     for (const [back, down, skin] of BODY_REACH) {
       const q = [p[0] + ch * cp * back - ch * sp * down, p[1] - sp * back - cp * down, p[2] - sh * cp * back + sh * sp * down];
       for (const o of this.obstacles) {
-        if (!(o.solid > 0)) continue;
+        const room = o.fin > 0 ? o.fin - BODY_IN : o.solid;
+        if (!(room > 0)) continue;
         const c = nearestOn(q, o.a, o.b), d = [q[0] - c[0], q[1] - c[1], q[2] - c[2]], l = Math.hypot(...d);
-        if (l - o.solid - skin < gap) { gap = l - o.solid - skin; away = l > 1e-9 ? d.map(v => v / l) : [0, 1, 0]; }
+        if (l - room - skin < gap) { gap = l - room - skin; away = l > 1e-9 ? d.map(v => v / l) : [0, 1, 0]; }
       }
     }
     return { gap, away };
@@ -925,7 +928,7 @@ export class BettaSwim {
         // (Now and then, it flares at what startled it, once it has stopped.)
         if (this.lethargy < LISTLESS && this.behaviorRandom() < FLARE_AFTER) {
           this.flareFrom = this.time + FLARE_WAIT * (0.7 + 0.6 * this.behaviorRandom());
-          this.flareUntil = this.flareFrom + FLARE_BOUT * (1 + 0.5 * this.behaviorRandom());
+          this.flareBy = this.time + FLARE_WITHIN; this.flareUntil = FLARE_BOUT * (1 + 0.5 * this.behaviorRandom());
         }
         this.mode = 'glide'; this.timer = 1.2 + this.random() * 0.8; this.sharpTurn = false;
         this.chooseTarget(env);
@@ -1129,18 +1132,23 @@ export class BettaSwim {
     }
     const parked = this.mode === 'mirror' && this.mirrorArrived && !escaping;
     // (Flared, it turns a little off square and sways; until then it holds square on to its reflection.)
-    if (parked) yawError = wrap(this.mirrorFace + (this.mirrorSide * 0.5 + 0.2 * Math.sin(2 * Math.PI * 0.55 * this.holdClock)) * smooth(0.5, 1.4, this.holdClock) - this.heading);
+    // (Its flare all but built first, over the second it takes: then it turns.)
+    if (parked) yawError = wrap(this.mirrorFace + (this.mirrorSide * 0.5 + 0.2 * Math.sin(2 * Math.PI * 0.55 * this.holdClock)) * smooth(0.8, 1.7, this.holdClock) - this.heading);
     // (Close to its reflection and facing it, still, it takes it in before it flares: DISPLAY_LOOK.)
     if (this.mode === 'mirror' && !this.flaring) {
       const near = Math.hypot(...this.mirrorPoint.map((v, k) => v - this.position[k])) < DISPLAY_NEAR;
       this.mirrorLook = near && Math.abs(wrap(this.mirrorFace - this.heading)) < 0.35 && Math.abs(this.steerRate) < DISPLAY_STILL ? this.mirrorLook + dt : 0;
     }
-    // (After a startle: from when it may, once it is all but stopped and out of its turn, until the bout ends;
-    // anything else it takes up (food, the film, another startle) ends it.)
+    // (After a startle: from when it may, once it hangs in the water, all but still and out of its turn,
+    // until the bout ends, hanging there facing what it flares at; anything else it takes up (food, the
+    // film, another startle, setting off) ends it.)
     if (this.flareFrom >= 0) {
-      const busy = startling || feeding || gulping || this.mode === 'mirror' || this.mode === 'rest';
-      if (busy || this.time >= this.flareUntil || (!this.flaringAfter && this.time > this.flareUntil - 1)) { this.flaringAfter = false; this.flareFrom = this.flareUntil = -1; }
-      else if (!this.flaringAfter && this.time >= this.flareFrom && Math.abs(this.steerRate) < DISPLAY_STILL && Math.abs(this.speed) < 0.06) this.flaringAfter = true;
+      const there = this.mode === 'hover' && !escaping && !crowded;
+      if (!there && (this.flaringAfter || this.time > this.flareBy || startling || feeding || gulping || BEHAVIORS.has(this.mode))) { this.flaringAfter = false; this.flareFrom = -1; }
+      else if (this.flaringAfter && this.time >= this.flareUntil) { this.flaringAfter = false; this.flareFrom = -1; }
+      else if (!this.flaringAfter && there && this.time >= this.flareFrom && this.time <= this.flareBy && Math.abs(this.steerRate) < DISPLAY_STILL && Math.abs(this.speed) < 0.03) {
+        this.flaringAfter = true; this.flareUntil += this.time; this.timer = Math.max(this.timer, this.flareUntil - this.time + 0.8);
+      }
     }
     // (Hanging in the water facing the glass, it comes round away from it, rather than swim off.)
     const hovering = this.mode === 'hover' && !escaping && !crowded;
@@ -1177,7 +1185,8 @@ export class BettaSwim {
       // Hanging in the water it comes round to look about it in strokes (YAW_*), never quite still.
       // (hoverPivot: how readily it comes round this time; none, it stays as it is turned.)
       const want = wrap(this.hoverYaw - this.heading), most = YAW_PEAK * Math.min(1, this.hoverPivot / 0.2);
-      if (this.cueClock > YAW_GAP && Math.abs(want) > 0.25 && Math.abs(this.yawStroke) < 0.3 && most > 0.3) {
+      // (Flaring at a thing, it holds square on to it.)
+      if (this.cueClock > YAW_GAP && Math.abs(want) > 0.25 && Math.abs(this.yawStroke) < 0.3 && most > 0.3 && !this.flaringAfter) {
         this.yawStroke = clamp(want * YAW_DRAG, -most, most);
         const size = Math.abs(this.yawStroke) / YAW_PEAK;
         this.cue(0.4 + 0.6 * size, size > TURN_KICK ? TURN_SWEEP * size : 0, this.yawStroke, 1, STROKE_LEAD);
@@ -1338,7 +1347,7 @@ export class BettaSwim {
     }
     this.backing = hovering ? clamp(-desiredSpeed / 0.006, 0, 1) : 0;
     // Every speed is along the body axis; at the film the fins only creep it up the last millimetres.
-    // Rising, it climbs once it has tipped up.
+    // Rising, it swims up into it, under way before it has tipped up (RISE_UNDER_WAY), the climb quickening as it tips.
     if (this.mode === 'rise') desiredSpeed = rise > 0 ? clamp(rise * 3, 0.006, this.risePace) * (RISE_UNDER_WAY + (1 - RISE_UNDER_WAY) * smooth(0.2, 0.7, this.pitch / this.tripPitch)) : 0;
     else if (this.mode === 'gulp') desiredSpeed = rise > 0.002 ? clamp(rise * 3, 0, 0.03) : 0;
     // Leaving the film it sinks back tail first while its head is still well up, then swims off.
