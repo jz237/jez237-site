@@ -1,5 +1,29 @@
 [
   {
+    "id": "030",
+    "title": "Trickle Atelier",
+    "category": "3D · Filtration engineering",
+    "description": "Follow a drop through a complete wet/dry circuit: overflow, drip distributor, open bio-balls, bubble baffles and return pump. Take 18 assemblies apart, then turn the power off and watch the sump receive the water above.",
+    "url": "trickle-studio/",
+    "image": "assets/trickle-studio.jpg",
+    "imageAlt": "The working Trickle Atelier showing an aquarium overflow above a cutaway wet/dry tower, ribbed bio-balls, baffles, clear water levels and a component explorer",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/trickle-studio",
+    "features": [
+      "18 selectable assemblies & seven close-ups",
+      "Perforated distributor & open bio-balls",
+      "Power-off drain-down & sump reserve lab",
+      "Cutaway, explosion & working impeller"
+    ],
+    "facts": [
+      "Original wet/dry teaching design",
+      "Mouse, touch & keyboard",
+      "Self-hosted 3D"
+    ],
+    "note": "WebGL 2 · Desktop & mobile · Illustrative hydraulics · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
     "id": "027",
     "title": "AquaClear Atelier",
     "category": "3D · Filtration engineering",

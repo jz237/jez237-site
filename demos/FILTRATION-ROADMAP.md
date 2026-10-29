@@ -1,10 +1,11 @@
 # Filtration demo inventory and next studies
 
-Reviewed October 28, 2026 against the current `jz237/jez237-site` checkout and the running demos. The main gallery previously listed 26 exhibits. Two existing filtration exhibits were reachable within the site but absent from that gallery; this update registers them alongside the new AC70, bringing the gallery to 29.
+Reviewed October 28, 2026 against the current `jz237/jez237-site` checkout and the running demos. The gallery now lists 30 exhibits, including the new Trickle Atelier. The earlier AC70 update also registered two existing filtration exhibits that had been absent from the gallery.
 
 | Exhibit | Existing coverage | Location |
 | --- | --- | --- |
-| AquaClear Atelier — new | Current AC70 hang-on-back filter; 15 assemblies; intake, magnetic impeller, foam, rear carbon/front BIOMAX, spillway, refiltration, care | `/demos/aquaclear-studio/` |
+| Trickle Atelier — new | Original wet/dry circuit; 18 assemblies; distributor, open bio-balls, baffles, return pump, seven close-ups and power-off reserve lab | `/demos/trickle-studio/` |
+| AquaClear Atelier — existing | Current AC70 hang-on-back filter; 15 assemblies; intake, magnetic impeller, foam, rear carbon/front BIOMAX, spillway, refiltration, care | `/demos/aquaclear-studio/` |
 | FiltoClear 5200 Studio — existing | Pressurized pond canister; 32 assemblies; foam stack, UV core, normal water path, Easy-Clean and pond sizing | `/demos/filtoclear-studio/` |
 | Inside the Reef — existing | Sump system, fleece roller, protein skimmer, live-rock biology and return pump | `/demos/reef-filtration/` |
 | The Living Reef — existing | Reef aquarium and water chemistry; links to the filtration studio | `/demos/reef-aquarium/` |
@@ -31,11 +32,14 @@ The alternate photographic aquarium, the Hidden Reef koi mount and Philadelphia'
 
 The next precision step is measured geometry or a physical scan, particularly the concealed volute and impeller dimensions. A future optical pass could add depth-aware absorption and better refraction at screen edges; the current sheet uses the horizontal surface's reflection approximation. Ceramic pieces now use a conservative sphere-envelope packing approximation, varied profiles and shaded bores. A further material pass adds cellular foam, finer flexible bags, physically transmissive plastic and studio reflection panels; it remains a real-time educational reconstruction. See `aquaclear-studio/README.md` for references, rendering limits and tests.
 
+### Wet/dry trickle study — implemented October 28, 2026
+
+The user chose this mechanism ahead of the sponge filter. Trickle Atelier provides a complete gravity-drain/pumped-return circuit, an actual perforated distributor, 96 ribbed bio-balls, water-level and loaded-pad controls, finite power-off drain-down, low-level pump stop and high-fill overflow warning. It shares the HOB exhibit's visual/control system and local rendering dependencies. Seven guided close-ups, four care stages and 18 selectable assemblies are supported on desktop/mobile. See `trickle-studio/README.md` for references, simulation limits, architecture and tests. The original design is educational rather than a branded product replica or installation plan.
+
 ### Next distinct filter mechanisms
 
-1. **Air-driven sponge filter.** Best next distinct mechanism: airlift, bubbles entraining water, sponge surfaces, gentle circulation, air line and check-valve placement. Show the air and water as different paths. No current gallery exhibit focuses on this mechanism.
-2. **Undergravel filter.** A useful contrast: gravel as the bed, slotted plates, lift tubes, trapped detritus and maintenance. Explain conventional and reverse-flow arrangements separately.
-3. **Wet/dry trickle filter.** Show a distributor, oxygen-exposed biological media, sump water level and return. Differentiate it from the existing submerged live-rock sump exhibit.
+1. **Undergravel filter.** Gravel as the bed, slotted plates, lift tubes, trapped detritus and maintenance. Explain conventional and reverse-flow arrangements separately. This adds a larger system-level study after wet/dry.
+2. **Air-driven sponge filter.** A smaller distinct mechanism, deferred by user preference: airlift, bubbles entraining water, sponge surfaces, gentle circulation, air line and check-valve placement. Show the air and water as different paths. No current gallery exhibit focuses on this mechanism.
 
 The protein skimmer, fleece roller and return pump already have a dedicated existing studio. Improve those exhibits when a specific teaching gap appears rather than building duplicate demos. Another branded canister is a lower priority unless its mechanism adds a distinct lesson.
 
