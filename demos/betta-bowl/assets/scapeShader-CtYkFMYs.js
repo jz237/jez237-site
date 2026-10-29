@@ -1,1 +1,0 @@
-import{n as e}from"./betta-Cevgu3MO.js";import{t}from"./scene-_YChd-I6.js";function n(){return e(t)}export{n as scapeShaderWGSL};
