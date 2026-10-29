@@ -1,0 +1,34 @@
+const fs=require('fs'),assert=require('node:assert/strict');
+const {chromium}=require(process.env.PLAYWRIGHT_CORE_PATH||'C:/Users/jrb04/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core');
+const url=process.argv[2]||'http://127.0.0.1:8818/demos/moving-bed-studio/';
+(async()=>{const browser=await chromium.launch({executablePath:process.env.CHROME_PATH||'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,args:['--enable-webgl','--ignore-gpu-blocklist']});
+try{fs.mkdirSync('tmp/moving-bed-qa',{recursive:true});const errors=[],page=await browser.newPage({viewport:{width:1500,height:1050}});
+ page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`);});
+ const click=s=>page.locator(s).click(),snap=()=>page.evaluate(()=>window.movingBedStudio.snapshot()),settle=()=>page.waitForTimeout(900);
+ await page.goto(url);await page.waitForFunction(()=>window.movingBedStudio?.snapshot().ready,{},{timeout:45000});await settle();
+ assert.equal((await snap()).effects.parts,18);assert.equal(await page.locator('#part-list option').count(),18);
+ await click('#pause');let a=await snap();await page.waitForTimeout(400);let b=await snap();assert.equal(a.time,b.time);assert.deepEqual(a.effects.simulation,b.effects.simulation);assert.equal(a.airPhase,b.airPhase);await click('#pause');
+ let t=await snap();await page.waitForTimeout(600);const normal=(await snap()).time-t.time;await click('#slow');t=await snap();await page.waitForTimeout(600);const slow=(await snap()).time-t.time;assert(slow/normal>.2&&slow/normal<.5,`Slow ratio ${slow/normal}`);await click('#slow');
+ await click('[data-tab=lab]');for(const id of ['normal','weak','crowded','air-off','water-off','new']){await click(`[data-scenario="${id}"]`);await page.waitForTimeout(180);const s=await snap();assert(s.effects.simulation.finite);if(id==='air-off'){assert.equal(s.effects.air,0);assert(s.effects.water>0);}if(id==='water-off'){assert.equal(s.effects.water,0);assert(s.effects.air>0);}if(id==='crowded')assert.equal(s.effects.simulation.count,558);}
+ await click('[data-scenario=normal]');await click('#air-power');assert.equal(await page.locator('[data-scenario][aria-pressed=true]').count(),0);await click('#air-power');
+ await click('#reset');await click('#track');assert((await snap()).track);await page.screenshot({path:'tmp/moving-bed-qa/tracked.png'});
+ const parts=await page.locator('#part-list option').evaluateAll(nodes=>nodes.map(n=>n.value));
+ for(const part of parts){await page.selectOption('#part-list',part);await click('#isolate');assert((await snap()).isolated);await page.waitForTimeout(40);assert(!(await snap()).effects.waterVisible);await click('#isolate');}
+ await click('#inspect-carrier');await settle();assert((await snap()).effects.macro);await click('#shell');assert((await snap()).shellOpen);await click('#tokens');assert(!(await snap()).transport);await page.screenshot({path:'tmp/moving-bed-qa/macro-open-verified.png'});
+ await click('[data-tab=biology]');await page.locator('#maturity').evaluate(el=>el.value='0');await page.locator('#maturity').dispatchEvent('input');await page.waitForTimeout(60);assert(!(await snap()).effects.filmVisible);
+ for(const i of [0,1,2]){await click(`[data-reaction="${i}"]`);assert((await page.locator('#equation').textContent()).length>15);}
+ await click('.knowledge summary');await page.locator('.quiz-item').first().getByRole('button',{name:'Yes',exact:true}).click();assert.match(await page.locator('.quiz-answer').first().textContent(),/Correct/);
+ await click('[data-tab=care]');for(let i=0;i<4;i++){await click(`[data-care="${i}"]`);await page.waitForTimeout(60);assert(!(await snap()).effects.operation);}a=await snap();await page.waitForTimeout(200);assert.equal((await snap()).time,a.time);
+ await click('#reset');await click('#tour');for(let i=0;i<9;i++){assert.equal((await snap()).tour,i);await page.waitForTimeout(100);assert((await page.locator('#lesson-text').textContent()).length>80);await click('#next');}assert.equal((await snap()).tour,-1);
+ await click('#reset');await click('#inspect-airpump');await settle();await page.screenshot({path:'tmp/moving-bed-qa/pump-verified.png'});await click('#reset');await click('[data-mode=exploded]');await page.waitForTimeout(1500);assert((await snap()).amount>.99);assert(!(await snap()).effects.waterVisible);await page.screenshot({path:'tmp/moving-bed-qa/exploded.png'});
+ await click('#reset');await page.locator('#tab-explore').focus();await page.keyboard.press('ArrowRight');assert.equal(await page.locator('#tab-lab').getAttribute('aria-selected'),'true');await page.keyboard.press('End');assert.equal(await page.locator('#tab-care').getAttribute('aria-selected'),'true');
+ await click('#reset');await settle();await page.screenshot({path:'tmp/moving-bed-qa/desktop.png'});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+ // Real demo pixels, not a concept image, become the gallery cover.
+ await page.setViewportSize({width:1440,height:900});await settle();await page.screenshot({path:'tmp/moving-bed-qa/cover.jpg',type:'jpeg',quality:92});
+ await page.setViewportSize({width:390,height:844});await settle();await page.screenshot({path:'tmp/moving-bed-qa/mobile.png',fullPage:true});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+ await click('#inspect-carrier');await settle();await page.screenshot({path:'tmp/moving-bed-qa/mobile-macro.png'});assert((await snap()).effects.macro);
+ const reduced=await browser.newPage({viewport:{width:1280,height:800},reducedMotion:'reduce'});await reduced.goto(url);await reduced.waitForFunction(()=>window.movingBedStudio?.snapshot().ready);assert(await reduced.evaluate(()=>window.movingBedStudio.snapshot().paused));await reduced.locator('#reset').click();assert.equal(await reduced.locator('#pause').getAttribute('aria-pressed'),'true');
+ const fallback=await browser.newPage();await fallback.addInitScript(()=>{const get=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){return /webgl/.test(type)?null:get.call(this,type,...args);};});await fallback.goto(url);await fallback.locator('#error').waitFor({state:'visible'});await fallback.locator('[data-tab=biology]').click();assert(await fallback.locator('.nitrogen-chain').isVisible());
+ assert.deepEqual(errors,[]);console.log(JSON.stringify({passed:true,url,parts:parts.length,lessons:9,presets:6,slowRatio:slow/normal,desktop:true,mobile:true,reducedMotion:true,fallback:true,errors},null,2));
+}finally{await browser.close();}})().catch(e=>{console.error(e);process.exit(1);});
+

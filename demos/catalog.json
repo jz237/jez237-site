@@ -1,5 +1,29 @@
 [
   {
+    "id": "031",
+    "title": "Moving Bed Atelier",
+    "category": "3D · Biological filtration",
+    "description": "Explore a living biological filter, from hundreds of tumbling carriers to the protected film inside one hollow surface. Follow separate air and water circuits, open the diaphragm pump, and experiment with aeration, media loading and biological establishment.",
+    "url": "moving-bed-studio/",
+    "image": "assets/moving-bed-studio.jpg",
+    "imageAlt": "The Moving Bed Atelier showing a cutaway aerated reactor with hundreds of hollow carriers, separate mechanical and return-pump bays and an interactive component explorer",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/moving-bed-studio",
+    "features": [
+      "18 assemblies & nine guided lessons",
+      "Individual carriers, bubbles & rolling circulation",
+      "Carrier macro & diaphragm-pump section",
+      "Six experiments, nitrification & care"
+    ],
+    "facts": [
+      "Original biological teaching design",
+      "Mouse, touch & keyboard",
+      "Self-hosted 3D"
+    ],
+    "note": "WebGL 2 · Desktop & mobile · Illustrative circulation and biology · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
     "id": "030",
     "title": "Trickle Atelier",
     "category": "3D · Filtration engineering",

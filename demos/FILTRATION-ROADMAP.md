@@ -1,10 +1,11 @@
 # Filtration demo inventory and next studies
 
-Reviewed October 28, 2026 against the current `jz237/jez237-site` checkout and the running demos. The gallery now lists 30 exhibits, including the new Trickle Atelier. The earlier AC70 update also registered two existing filtration exhibits that had been absent from the gallery.
+Reviewed October 29, 2026 against the current `jz237/jez237-site` checkout and the running demos. The gallery now lists 31 exhibits, including the new Moving Bed Atelier. The earlier AC70 update also registered two existing filtration exhibits that had been absent from the gallery.
 
 | Exhibit | Existing coverage | Location |
 | --- | --- | --- |
-| Trickle Atelier — new | Original wet/dry circuit; 18 assemblies; distributor, open bio-balls, baffles, return pump, seven close-ups and power-off reserve lab | `/demos/trickle-studio/` |
+| Moving Bed Atelier — new | Original aerated carrier reactor; 18 assemblies, nine lessons, six experiments, protected-biofilm macro and linear diaphragm-pump section | `/demos/moving-bed-studio/` |
+| Trickle Atelier — existing | Original wet/dry circuit; 18 assemblies; distributor, open bio-balls, baffles, return pump, seven close-ups and power-off reserve lab | `/demos/trickle-studio/` |
 | AquaClear Atelier — existing | Current AC70 hang-on-back filter; 15 assemblies; intake, magnetic impeller, foam, rear carbon/front BIOMAX, spillway, refiltration, care | `/demos/aquaclear-studio/` |
 | FiltoClear 5200 Studio — existing | Pressurized pond canister; 32 assemblies; foam stack, UV core, normal water path, Easy-Clean and pond sizing | `/demos/filtoclear-studio/` |
 | Inside the Reef — existing | Sump system, fleece roller, protein skimmer, live-rock biology and return pump | `/demos/reef-filtration/` |
@@ -43,6 +44,10 @@ Added an isolated macro bio-ball, water beads following its ribs, deflected stre
 ### Trickle surface realism and operating studies — October 29, 2026
 
 Implemented all five follow-ups: outlet/rib pendant drops and thread breakup; textured, polished acrylic; a sectioned overflow/drain close-up with entrained air; staged line filling, restart and finite residual drips; and continuous pad loading with visible deposits, pooling and bypass. The Water lab includes direct close-up/comparison buttons. See the README and realism QA for timings and qualitative limits.
+
+### Moving-bed biological filter — implemented October 29, 2026
+
+Hundreds of independently moving hollow carriers, twin aeration plumes, separate air/water controls, media-loading experiments, visible water, an enlarged removable-shell carrier and an exposed linear diaphragm mechanism. Nine lessons and the Biology panel explain protected surfaces, nitrification, oxygen and establishment without implying measured chemistry. Six presets and four care stages complement 18 selectable assemblies. See `moving-bed-studio/README.md` for primary references, model limits, tests and deployment guidance.
 
 ### Next distinct filter mechanisms
 
