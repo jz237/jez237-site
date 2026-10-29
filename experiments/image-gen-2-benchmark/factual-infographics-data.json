@@ -16704,5 +16704,117 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-29-factual-infographic-factual-infographic-bell-s-palsy-the-in",
+    "title": "Factual infographic: Bell’s Palsy — The Interrupted Facial Signal",
+    "tests": "Source-backed clinical context; artwork-led flowing anatomy; no subjective review; requested stock OpenAI Sunburst medium/auto/opaque; backend identity not independently verified.; archive_slot=2026-10-29T02:20; concept=bells-palsy-facial-nerve-weakness; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished artwork-led medical and health infographic, directly on the canvas, titled 'BELL’S PALSY' with subtitle 'When the facial nerve stops carrying the signal'. Render in refined anatomical colored-pencil and translucent gouache with precise technical ink: ivory ground, midnight teal nerve accents, muted coral muscles, warm natural skin, amber emphasis. An asymmetric flowing atlas, never a rigid grid, detached cards, UI, photographed poster or framed sheet. Substantial readable clinical education with generous visual breathing room. No logos, URLs, bibliography or invented statistics.\n\nThe dominant central-right illustration is a dignified fictional man about 45, medium-brown skin, broad nose, close-cropped black curls touched with gray, clean-shaven, sturdy build, plain sage shirt visible at shoulders, facing nearly forward. Show ONE affected side consistently: viewer's left, patient's right. That side has a mildly lowered eyebrow, incompletely closed eyelid and lowered mouth corner. Avoid caricature or grotesque distortion. A gently lifted translucent anatomical overlay reveals facial-expression muscle sheets and a restrained schematic branching facial nerve toward brow, eyelid and mouth. Label precisely 'Facial nerve • cranial nerve VII' and 'Muscles of facial expression'. Do not show a nerve cut, ruptured wire, fabricated lesion, tumor or brain infarct; branches are simplified, explicitly 'Schematic nerve pathways'. An organic curved leader links this dominant portrait to an enlarged nerve segment nestled at upper left, with a softly swollen contour and fine fascicular texture, label 'Inflammation and swelling may disrupt nerve function' and beside it 'Exact cause is unknown'. Do not depict a proven viral cause.\n\nAround the portrait let open, fine leaders and small elegant sketches trace the symptoms rather than using boxes: 'Weakness usually affects one side', 'Drooping brow or mouth', 'Eye may not close fully', 'Dry or watering eye', 'Drooling • altered taste'. Use tasteful clear visual hierarchy. A small same-person facial study naturally flows into the lower-left negative space, showing a clinician observing facial movements, caption 'Assessment checks facial movement and rules out other causes' with short subline 'No single lab test confirms Bell’s palsy'. Do not imply that a facial-expression test rules out stroke.\n\nA graceful teal care pathway along the lower edge carries three short, legible notes: 'Seek prompt medical assessment'; 'Prescribed steroids work best within 72 hours, if suitable'; 'Antivirals are sometimes added'. Integrate a small beautifully rendered eye study with smooth corneal sheen, an incompletely meeting eyelid, and a simple unbranded drop silhouette: 'Protect an eye that cannot close' and 'Clinician-guided lubrication and nighttime eyelid protection'. No drug doses, do-it-yourself taping diagram, or cure claims. Keep optional ornament secondary to clarity.\n\nAt the upper-left margin create a distinct highly readable coral-red open typographic warning, not an ornamental badge: 'SUDDEN FACIAL DROOP? CALL EMERGENCY SERVICES' followed by 'Arm weakness or speech trouble are also stroke warning signs. Do not self-diagnose.' Preserve this warning even if another secondary item must be omitted. Do not present forehead movement as a home stroke rule-out. At the lower-right give a calm closing note: 'Many recover within weeks to six months; some take longer or have lasting weakness.' Small but readable footer: 'General education • not a diagnosis'. Keep all medical labels faithful to these statements, all arrows tied to real structures or the qualified mechanism. Fine muscle striations, subtle skin shading, nerve fascicles and delicate ink leaders should reward close looking while the hero remains visually dominant. Make the composition artistic, organically connected and text legible, not an exhaustive boxed medical worksheet.",
+    "image": "images/2026-10-29-factual-infographic-factual-infographic-bell-s-palsy-the-in.jpg",
+    "thumb": "thumbs/2026-10-29-factual-infographic-factual-infographic-bell-s-palsy-the-in.webp",
+    "color": "#c3ad95",
+    "date": "2026-10-29",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "bells-palsy-facial-nerve-weakness",
+      "imageSha256": "280e2f8bc717a086233b96b100f038d3db6257060ca1cf0036eb2e9a5637046a",
+      "imageDHash": "d8b4b434b4cccf28"
+    },
+    "factualInfographic": {
+      "topic": "How Bell's palsy affects the facial nerve, causes one-sided facial weakness, and is evaluated and managed",
+      "description": "An anatomical and clinical guide to facial nerve dysfunction, symptoms, qualified mechanism, diagnostic evaluation, eye protection, early treatment, recovery uncertainty and emergency stroke recognition.",
+      "sourceNote": "NINDS: https://www.ninds.nih.gov/health-information/disorders/bells-palsy ; NHS: https://www.nhs.uk/conditions/bells-palsy/ . Read both full guidance pages; verified facial nerve role, symptom pattern, uncertain cause, assessment, early prescribed steroids, eye protection, recovery and emergency warning signs.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-29T06:21:41.382038+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Neurological Disorders and Stroke",
+            "title": "Bell’s Palsy",
+            "sourceType": "government-agency",
+            "url": "https://www.ninds.nih.gov/health-information/disorders/bells-palsy"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Bell’s palsy",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/bells-palsy/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Bell's palsy usually causes weakness or paralysis on one side of the face.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The facial nerve (cranial nerve VII) connects the brain to muscles controlling facial expression; it also affects taste and ear sensation.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The exact cause is unknown; inflammation and swelling of the facial nerve may be involved.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Symptoms can include a drooping eyebrow or mouth, difficulty closing the eyelid, dry or watering eye, drooling and altered taste.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Symptoms develop suddenly over hours to a few days and may involve upper and lower facial muscles.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Clinicians assess facial movement and symptom onset and rule out other causes; no single laboratory test confirms Bell's palsy.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Prompt medical assessment matters: prescribed steroids are most effective when started within 72 hours, where suitable; antivirals are sometimes added.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "If the eyelid cannot close, clinician-guided lubricating drops or ointment and nighttime eyelid protection help prevent drying and eye injury.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Many people recover within weeks to six months, but recovery may take longer and some weakness can persist.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Sudden facial droop, arm weakness or speech difficulty can indicate stroke and warrant an immediate emergency call; do not self-diagnose Bell's palsy.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
