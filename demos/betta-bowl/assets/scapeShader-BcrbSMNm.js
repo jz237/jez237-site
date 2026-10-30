@@ -1,0 +1,1 @@
+import{n as e}from"./betta-sH-95bUe.js";import{t}from"./scene-DtiApRqa.js";function n(){return e(t)}export{n as scapeShaderWGSL};
