@@ -45,7 +45,8 @@ test('head-led flexion can reach a U, preserves arc length, has no neck hinge an
       for (let k = 4; k < b.data.length; k += 4) length += Math.hypot(b.data[k] - b.data[k - 4], b.data[k + 1] - b.data[k - 3]);
       assert.ok(Math.abs(length - 3.87) < 0.003);
     }
-    assert.ok(peak > 2.7 && peak <= 2.95, `not U-shaped: ${peak}`);
+    // (As far as a U: the rear of the trunk turned right round from the head.)
+    assert.ok(peak > 2.7 && peak <= Math.PI + 1e-6, `not U-shaped: ${peak}`);
     const neck = b.frame(-1.22, []); assert.deepEqual(neck, [-1.22, 0, 1, 0]);
     const snapshot = [...b.turnAngles]; b.advanceTurn(0, 0, 0); assert.deepEqual([...b.turnAngles], snapshot);
     b.advanceTurn(1 / fps, 0, 0.5);
