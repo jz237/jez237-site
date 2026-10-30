@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 29 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 30 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of May 6-12, 1985 — Championship Lode Runner turns veterans into certified champions</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-05-06</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-05-06</guid>
+      <pubDate>Fri, 30 Oct 2026 12:00:00 GMT</pubDate>
+      <description>Brøderbund’s fifty-screen challenge gives veteran runners a certificate to chase. Championship Lode Runner asks a pointed question of anyone who has mastered the original: can you survive fifty screens built for experts? Brøderbund’s sequel, reviewed in the May COMPUTE!, trades the original’s 150 screens for a smaller, deliberately demanding collection. This is a test of seasoned runners, not a gentle first lesson in collecting gold and evading guards. Also this week: Atari’s attack: 520ST reaches the hands-on test bench · Sidekick puts the desk inside the PC — at two prices · MacVision imports the video world into Macintosh documents.</description>
+    </item>
     <item>
       <title>Week of April 29-May 5, 1985 — Build a robot, solve an adventure: programming becomes play</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-04-29</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-12-24</guid>
       <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
       <description>December’s game reviews put a familiar movie business on the home computer. Activision’s Ghostbusters puts the Commodore 64 owner in charge of a ghost-catching franchise. Computer Gaming World’s December roundup finds the movie license well executed, with a particular eye for the machine’s graphics and sound. It is a holiday-season review, not an announcement of a Christmas-week shipment. Also this week: MSX promises a common language for incompatible home computers · A Commodore can switch the lights and watch the windows · Year-end editors still choose the under-$200 Commodore 64.</description>
-    </item>
-    <item>
-      <title>Week of December 17-23, 1984 — Enchanter brings a spellbook to the Macintosh</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-12-17</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-12-17</guid>
-      <pubDate>Sat, 10 Oct 2026 12:00:00 GMT</pubDate>
-      <description>Infocom’s adventure rewards ingenuity as a novice confronts the sorcerer Krill. An adventure need not begin with a drawn sword. In Infocom’s Enchanter, the Circle of Enchanters sends a novice to confront the sorcerer Krill. Marc Berman’s December COMPUTE! review follows that journey on the Macintosh, where words and spells supply the action. Also this week: MSX promises a common language for home computers · Plus/4 improves BASIC but leaves C64 software behind · A modem makes the home computer social.</description>
     </item>
   </channel>
 </rss>

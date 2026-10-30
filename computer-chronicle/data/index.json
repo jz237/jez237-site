@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-30",
+      "historicDate": "1985-05-06",
+      "displayDate": "Week of May 6-12, 1985",
+      "edition": "Issue 145 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Fifty expert mazes, a mouse on the desktop, and a video picture in your document.",
+      "leadHeadline": "Championship Lode Runner turns veterans into certified champions",
+      "storyHeadlines": [
+        "Atari’s attack: 520ST reaches the hands-on test bench",
+        "Sidekick puts the desk inside the PC — at two prices",
+        "MacVision imports the video world into Macintosh documents"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-05-06.jpg",
+      "thumb": "media/thumbs/1985-05-06.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-29",
       "historicDate": "1985-04-29",
       "displayDate": "Week of April 29-May 5, 1985",
