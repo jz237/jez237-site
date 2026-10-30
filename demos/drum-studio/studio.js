@@ -1,10 +1,10 @@
 import * as T from '../aquaclear-studio/vendor/three.module.js';
 import {OrbitControls} from '../aquaclear-studio/vendor/OrbitControls.js';
 import {studioEnvironment} from '../aquaclear-studio/realism.js?v=material-5';
-import {createWaterOptics} from './optics.js?v=1';
-import {PARTS,LESSONS,SCENARIOS,CARE,SOURCES} from './data.js?v=1';
-import {createSimulation,defaults} from './simulation.js?v=1';
-import {buildModel} from './model.js?v=1';
+import {createWaterOptics} from './optics.js?v=2';
+import {PARTS,LESSONS,SCENARIOS,CARE,SOURCES} from './data.js?v=2';
+import {createSimulation,defaults} from './simulation.js?v=2';
+import {buildModel} from './model.js?v=2';
 const $=id=>document.getElementById(id),V=(...p)=>new T.Vector3(...p),reduced=matchMedia('(prefers-reduced-motion: reduce)'),clamp=T.MathUtils.clamp;
 const initial={...defaults,mode:'cutaway',tab:'explore',focus:null,selected:'screen',amount:0,target:0,paused:reduced.matches,slow:false,rotate:false,routes:true,labels:true,isolated:false,tour:-1,visualTime:0,ready:false};
 const state={...initial},sim=createSimulation(),viewport=$('viewport'),labelNodes=new Map();let renderer,scene,camera,controls,model,optics,tween,last=0,accumulator=0,floor,down;

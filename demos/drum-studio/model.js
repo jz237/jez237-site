@@ -1,14 +1,16 @@
 import * as T from '../aquaclear-studio/vendor/three.module.js';
 import {roundedBox} from '../trickle-studio/detail.js?v=3';
 import {textureMaterial} from '../moving-bed-studio/materials.js?v=3';
-import {PARTS} from './data.js?v=1';
-import {SECTORS,TAU} from './simulation.js?v=1';
+import {finishMetal} from './finish.js?v=2';
+import {addDetail} from './detail.js?v=2';
+import {PARTS} from './data.js?v=2';
+import {SECTORS,TAU} from './simulation.js?v=2';
 const V=(...a)=>new T.Vector3(...a),up=V(0,1,0);
 export function buildModel(){
  const root=new T.Group(),parts=new Map(),pickables=[],o=new T.Object3D(),cutPlane=new T.Plane(V(0,0,-1),0),clipMaterials=[];
- const steel=textureMaterial(new T.MeshStandardMaterial({color:'#8eaaae',metalness:.8,roughness:.28}),'metal'),dark=textureMaterial(new T.MeshPhysicalMaterial({color:'#203339',roughness:.36,clearcoat:.2}),'plastic'),rubber=textureMaterial(new T.MeshStandardMaterial({color:'#122024',roughness:.85}),'rubber');
+ const steel=finishMetal(new T.MeshStandardMaterial({color:'#a4b1b3',metalness:.91,roughness:.32})),dark=textureMaterial(new T.MeshPhysicalMaterial({color:'#203339',roughness:.36,clearcoat:.2}),'plastic'),rubber=textureMaterial(new T.MeshStandardMaterial({color:'#122024',roughness:.85}),'rubber');
  const brass=new T.MeshStandardMaterial({color:'#b69a66',metalness:.7,roughness:.27}),white=new T.MeshStandardMaterial({color:'#c8d2c6',roughness:.4}),glass=new T.MeshPhysicalMaterial({color:'#b2d2d1',transmission:.9,thickness:.08,roughness:.08,ior:1.49});
- const drumSteel=steel.clone(),drumDark=dark.clone();textureMaterial(drumSteel,'metal');textureMaterial(drumDark,'plastic');clipMaterials.push(drumSteel,drumDark);
+ const drumSteel=steel.clone(),drumDark=dark.clone();finishMetal(drumSteel);textureMaterial(drumDark,'plastic');clipMaterials.push(drumSteel,drumDark);
  function group(id){const g=new T.Group();g.name=id;root.add(g);const d=PARTS.find(p=>p.id===id);parts.set(id,{...d,object:g});return g;}
  function mesh(g,geo,mat,x=0,y=0,z=0){const q=new T.Mesh(geo,mat);q.position.set(x,y,z);q.castShadow=!mat.transparent&&!mat.transmission;q.receiveShadow=true;g.add(q);return q;}
  const box=(g,w,h,d,x,y,z,m=dark)=>mesh(g,roundedBox(w,h,d,Math.min(.045,w*.12,h*.12,d*.12)),m,x,y,z);
@@ -25,11 +27,11 @@ export function buildModel(){
  const seal=group('seal');ring(seal,1.305,.035,-1.91,1.8,0,rubber);
  const frame=group('frame'),spin=new T.Group();spin.position.y=1.8;frame.add(spin);for(const x of [-1.8,-.7,.4,1.5])ring(spin,1.28,.047,x,0,0,drumSteel);for(let i=0;i<12;i++){const a=i/12*TAU;box(spin,3.3,.055,.055,-.15,Math.cos(a)*1.28,Math.sin(a)*1.28,drumSteel);}cylinder(spin,1.28,.05,1.5,0,0,drumSteel);for(const x of [-1.8,1.5])for(let i=0;i<12;i++){const a=i/12*TAU;bolt(spin,x,Math.cos(a)*1.21,Math.sin(a)*1.21,'x',drumSteel);}
  const screen=group('screen'),screenSpin=new T.Group();screenSpin.position.y=1.8;screen.add(screenSpin);
- const woven=new T.MeshStandardMaterial({color:'#93a5a3',metalness:.68,roughness:.4,side:T.DoubleSide,transparent:true,opacity:1,depthWrite:false});
+ const woven=new T.MeshStandardMaterial({color:'#7d9695',metalness:.48,roughness:.43,side:T.DoubleSide,transparent:true,opacity:1,depthWrite:false});
  woven.onBeforeCompile=s=>{s.fragmentShader=s.fragmentShader.replace('#include <common>','#include <common>\nvarying vec2 vScreenUV;');s.vertexShader='varying vec2 vScreenUV;\n'+s.vertexShader;s.vertexShader=s.vertexShader.replace('#include <uv_vertex>','#include <uv_vertex>\nvScreenUV=uv;');s.fragmentShader=s.fragmentShader.replace('#include <alphamap_fragment>',`#include <alphamap_fragment>
- vec2 cell=vScreenUV*vec2(210.,90.);vec2 edge=abs(fract(cell)-.5);vec2 aa=max(fwidth(cell),vec2(.001));vec2 wire=smoothstep(vec2(.34)-aa,vec2(.34)+aa,edge);float coverage=max(wire.x,wire.y);float farBlend=smoothstep(.4,1.6,max(aa.x,aa.y));coverage=mix(coverage,.46,farBlend);diffuseColor.a*=coverage*.82;if(diffuseColor.a<.03)discard;diffuseColor.rgb*=.76+.24*max(wire.x,wire.y);`);};woven.customProgramCacheKey=()=> 'drum-woven-v1';clipMaterials.push(woven);
+ vec2 cell=vScreenUV*vec2(210.,90.);vec2 edge=abs(fract(cell)-.5);vec2 aa=max(fwidth(cell),vec2(.001));vec2 wire=smoothstep(vec2(.34)-aa,vec2(.34)+aa,edge);float coverage=max(wire.x,wire.y);float farBlend=smoothstep(.4,1.6,max(aa.x,aa.y));coverage=mix(coverage,.46,farBlend);diffuseColor.a*=coverage*.82;if(diffuseColor.a<.03)discard;diffuseColor.rgb*=.87+.13*max(wire.x,wire.y);`);};woven.customProgramCacheKey=()=> 'drum-woven-v1';clipMaterials.push(woven);
  const sleeve=mesh(screenSpin,new T.CylinderGeometry(1.275,1.275,3.24,128,1,true),woven,-.15,0,0);sleeve.rotation.z=Math.PI/2;
- const depositMat=new T.MeshStandardMaterial({color:'#7e633c',roughness:.95});clipMaterials.push(depositMat);const deposits=new T.InstancedMesh(new T.IcosahedronGeometry(.034,0),depositMat,SECTORS*7);screenSpin.add(deposits);deposits.castShadow=false;
+ const depositMat=new T.MeshStandardMaterial({color:'#8b7950',roughness:.77});clipMaterials.push(depositMat);const deposits=new T.InstancedMesh(new T.IcosahedronGeometry(.034,0),depositMat,SECTORS*7);screenSpin.add(deposits);deposits.castShadow=false;for(let i=0;i<SECTORS*7;i++)deposits.setColorAt(i,new T.Color().setHSL(.10+(i*.618%1)*.035,.18+(i*.414%1)*.22,.32+(i*.732%1)*.25));
  const drive=group('drive'),gearSpin=new T.Group();gearSpin.position.set(1.6,1.8,0);drive.add(gearSpin);ring(gearSpin,1.32,.065,0,0,0,steel);for(let i=0;i<72;i++){const a=i/72*TAU,t=box(gearSpin,.13,.085,.065,0,Math.cos(a)*1.36,Math.sin(a)*1.36,steel);t.rotation.x=a;}
  const pinion=new T.Group();pinion.position.set(1.6,3.39,0);drive.add(pinion);cylinder(pinion,.19,.2,0,0,0,steel);for(let i=0;i<12;i++){const a=i/12*TAU,t=box(pinion,.18,.07,.065,0,Math.cos(a)*.22,Math.sin(a)*.22,steel);t.rotation.x=a;}cylinder(drive,.23,.55,2.03,3.39,0,dark);box(drive,.38,.45,.52,2.37,3.39,0,steel);for(let i=0;i<9;i++)ring(drive,.235,.014,1.8+i*.05,3.39,0,dark);box(drive,.7,.1,.65,2.1,3.12,0,steel);cylinder(drive,.065,.5,1.85,3.39,0,steel);
  const rollers=group('rollers'),rolls=[];for(const x of [-1.7,1.4])for(const z of [-.86,.86]){box(rollers,.34,.17,.3,x,.53,z,steel);const r=cylinder(rollers,.16,.28,x,.69,z,rubber);rolls.push(r);bolt(rollers,x+.15,.69,z,'x');}
@@ -45,12 +47,12 @@ export function buildModel(){
  // Water is bounded to the dirty interior and the surrounding clean chamber.
  const waterGroup=new T.Group();root.add(waterGroup);const waterMat=new T.MeshPhysicalMaterial({color:'#458d9b',transparent:true,opacity:.3,roughness:.08,side:T.DoubleSide,depthWrite:false});
  const surface=mesh(waterGroup,new T.PlaneGeometry(6.2,3.2,50,24),waterMat,0,2.3,0);surface.rotation.x=-Math.PI/2;const dirty=mesh(waterGroup,new T.PlaneGeometry(6.2,3.2,50,24),waterMat.clone(),0,2.4,0);dirty.rotation.x=-Math.PI/2;
- const faceMat=new T.MeshBasicMaterial({color:'#317b90',transparent:true,opacity:.14,depthWrite:false,side:T.DoubleSide});const waterFace=mesh(waterGroup,new T.PlaneGeometry(6.2,1),faceMat,0,1.2,1.59);
+ const faceMat=new T.ShaderMaterial({transparent:true,depthWrite:false,side:T.DoubleSide,vertexShader:'varying vec2 faceUv;void main(){faceUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'varying vec2 faceUv;void main(){float edge=pow(faceUv.y,32.);gl_FragColor=vec4(mix(vec3(.035,.21,.28),vec3(.29,.57,.58),faceUv.y),.055+.095*(1.-faceUv.y)+edge*.16);}' });const waterFace=mesh(waterGroup,new T.PlaneGeometry(6.2,1),faceMat,0,1.2,1.59);
  const seams=new T.Group();waterGroup.add(seams);const seamMat=new T.LineBasicMaterial({color:'#9fddd5',transparent:true,opacity:.5});for(const z of [-1.58,1.58]){const l=new T.Line(new T.BufferGeometry().setFromPoints([V(-1.8,0,z),V(3.1,0,z)]),seamMat);seams.add(l);}
  // Fan sprays and waste droplets only appear during an actual rinse.
  const effects=new T.Group();root.add(effects);const sprayMat=new T.MeshBasicMaterial({color:'#c4e7eb',transparent:true,opacity:.65,depthWrite:false}),drops=new T.InstancedMesh(new T.SphereGeometry(.013,6,4),sprayMat,360);effects.add(drops);
  const wasteDrops=new T.InstancedMesh(new T.SphereGeometry(.024,8,6),new T.MeshStandardMaterial({color:'#b49a62',roughness:.35,transparent:true,opacity:.8}),90);effects.add(wasteDrops);
- const fans=[];for(const x of nozzleXs){const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute([x,3.23,0,x-.19,2.96,-.08,x+.19,2.96,.08],3));const fan=mesh(effects,g,new T.MeshBasicMaterial({color:'#b4dae4',side:T.DoubleSide,transparent:true,opacity:.16,depthWrite:false}));fans.push(fan);}
+ const fanMat=new T.ShaderMaterial({transparent:true,side:T.DoubleSide,depthWrite:false,uniforms:{clock:{value:0}},vertexShader:'varying vec2 fanUv;void main(){fanUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'varying vec2 fanUv;uniform float clock;void main(){float edges=pow(max(0.,1.-abs(fanUv.x*2.-1.)),.65);float streak=pow(.5+.5*sin(fanUv.x*103.+sin(fanUv.y*11.-clock*17.)*.8),5.);float breakup=.55+.45*sin(fanUv.y*65.-clock*30.+fanUv.x*19.);gl_FragColor=vec4(.65,.85,.89,edges*(.045+.14*streak)*breakup);}' });const fans=[];for(const x of nozzleXs){const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute([x,3.23,0,x-.19,2.96,-.08,x+.19,2.96,.08],3));g.setAttribute('uv',new T.Float32BufferAttribute([.5,0,0,1,1,1],2));const fan=mesh(effects,g,fanMat);fans.push(fan);}
  const incoming=new T.InstancedMesh(new T.IcosahedronGeometry(.025,0),new T.MeshStandardMaterial({color:'#c39755',roughness:.85}),120);effects.add(incoming);
  // Explicit small arrowheads: water, reverse rinse, and waste are separate routes.
  const routes=new T.Group();root.add(routes);const paths=[];
@@ -59,11 +61,12 @@ export function buildModel(){
  route([[2.1,.6,2.1],[2.75,1.2,1.9],[2.6,3.35,.6],[.6,3.37,0],[.6,3.05,0],[.6,2.77,0]],'#78d8ef',12,'rinse');
  route([[1.3,2.76,0],[0,2.76,0],[-2.5,2.76,0],[-3.6,2.7,0],[-4.5,2.05,0]],'#e6b16c',12,'waste');
  // Separate macro shows actual open weave, not a solid surface with a grid painted on.
- const macro=new T.Group();root.add(macro);const wireMat=textureMaterial(new T.MeshPhysicalMaterial({color:'#bdc9c7',metalness:.8,roughness:.3}),'metal');
+ const macro=new T.Group();root.add(macro);const wireMat=finishMetal(new T.MeshPhysicalMaterial({color:'#aebdbc',metalness:.82,roughness:.26}));
  const strands=[];for(let axis=0;axis<2;axis++)for(let i=-7;i<=7;i++){const pts=[];for(let j=0;j<=120;j++){const along=-1.65+j/120*3.3,cross=i*.22,z=Math.sin(along/.22*Math.PI+i*Math.PI+(axis?Math.PI:0))*.018;pts.push(axis?V(cross,along,z):V(along,cross,z));}const m=mesh(macro,new T.TubeGeometry(new T.CatmullRomCurve3(pts),120,.025,8,false),wireMat);strands.push(m);}
  const macroFrame=[];for(const y of [-1.75,1.75])macroFrame.push(box(macro,3.65,.12,.13,0,y,0,steel));for(const x of [-1.75,1.75])macroFrame.push(box(macro,.12,3.65,.13,x,0,0,steel));
  const macroSmall=mesh(macro,new T.SphereGeometry(.045,24,16),new T.MeshStandardMaterial({color:'#72d6ed',roughness:.25})),macroLarge=mesh(macro,new T.IcosahedronGeometry(.27,2),new T.MeshStandardMaterial({color:'#c18a4a',roughness:.85}));macroLarge.position.set(.55,.55,.31);
  const guide=new T.ArrowHelper(V(0,0,-1),V(-.55,-.55,1),1.8,'#9be2d2',.14,.08);macro.add(guide);
+ const detail=addDetail({parts,steel,dark,rubber,brass,spin,drumSteel,waterGroup,effects,nozzleXs});
  for(const [id,p] of parts){p.object.traverse(q=>{if(q.isMesh){q.userData.part=id;pickables.push(q);}});}
  let last={};
  function render(s,h){
@@ -72,16 +75,16 @@ export function buildModel(){
   front.visible=s.mode==='assembled'||s.mode==='exploded'||s.isolated;lid.visible=!showMacro&&(s.isolated?s.selected==='lid':s.mode==='assembled'||s.mode==='exploded');
   for(const m of clipMaterials)m.clippingPlanes=cut&&!s.isolated?[cutPlane]:[];
   spin.rotation.x=screenSpin.rotation.x=gearSpin.rotation.x=h.angle;pinion.rotation.x=-h.angle*6;for(const r of rolls)r.rotation.x=-h.angle*8;
-  for(let i=0;i<SECTORS*7;i++){const sector=Math.floor(i/7),a=sector/SECTORS*TAU,load=h.loads[sector],x=-1.68+(i%7)*.49;o.position.set(x,Math.cos(a)*1.245,Math.sin(a)*1.245);o.rotation.set(a,i*.4,i*.7);const scale=load*(1+(i%3)*.3)*2.7;o.scale.set(scale*1.8,scale*.55,scale);o.updateMatrix();deposits.setMatrixAt(i,o.matrix);}deposits.instanceMatrix.needsUpdate=true;
+  for(let i=0;i<SECTORS*7;i++){const sector=Math.floor(i/7),a=sector/SECTORS*TAU+Math.sin(i*13.1)*.016,load=h.loads[sector],x=-1.65+(i%7)*.47+Math.sin(i*7.31)*.06;o.position.set(x,Math.cos(a)*1.245,Math.sin(a)*1.245);o.rotation.set(a,i*.4,i*.7);const scale=load*(1+(i%3)*.3)*2.7;o.scale.set(scale*(.8+(i*.618%1)),scale*.34,scale*(.55+(i*.414%1)*.7));o.updateMatrix();deposits.setMatrixAt(i,o.matrix);}deposits.instanceMatrix.needsUpdate=true;
   waterGroup.visible=operating;surface.position.y=h.cleanLevel;dirty.position.y=h.dirtyLevel;waterFace.position.y=(h.cleanLevel+.22)/2;waterFace.scale.y=h.cleanLevel-.22;seams.position.y=h.cleanLevel+.003;float.position.y=h.cleanLevel;lampMat.color.set(h.alarm?'#ed8c55':h.phase==='rinse'?'#81d2ee':'#b7ead1');
-  for(const p of [surface,dirty]){const a=p.geometry.attributes.position;for(let i=0;i<a.count;i++)a.setZ(i,(Math.sin(a.getX(i)*5+h.time*1.7)*.008+Math.sin(a.getY(i)*8-h.time*2.4)*.005)*(.2+h.flow));a.needsUpdate=true;p.geometry.computeVertexNormals();}
-  effects.visible=operating;drops.visible=h.rinse;for(const f of fans)f.visible=h.rinse;wasteDrops.visible=h.rinse;incoming.visible=h.flow>0;
-  for(let i=0;i<360;i++){const t=(h.time*3+i*.618)%1,x=nozzleXs[i%6],spread=((i%13)/12-.5);o.position.set(x+spread*.38*t,3.22-t*.48,Math.sin(i*1.7)*.10*t);o.scale.set(.5,.8+(i%3)*.2,.5);o.updateMatrix();drops.setMatrixAt(i,o.matrix);}drops.instanceMatrix.needsUpdate=true;
+  for(const p of [surface,dirty]){const a=p.geometry.attributes.position;for(let i=0;i<a.count;i++)a.setZ(i,(Math.sin(a.getX(i)*5+h.time*1.7)*.0045+Math.sin(a.getY(i)*8-h.time*2.4)*.003)*(.2+h.flow));a.needsUpdate=true;p.geometry.computeVertexNormals();}
+  detail.update(s,h,operating);fanMat.uniforms.clock.value=h.time;effects.visible=operating;drops.visible=h.rinse;for(const f of fans)f.visible=h.rinse;wasteDrops.visible=h.rinse;incoming.visible=h.flow>0;
+  for(let i=0;i<360;i++){const t=(h.time*3+i*.618)%1,x=nozzleXs[i%6],spread=((i%13)/12-.5);o.position.set(x+spread*.38*t,3.22-(t*.28+t*t*.2),Math.sin(i*1.7)*.10*t);o.rotation.set(0,0,-spread*.5);const size=.25+(i*.414%1)*.34;o.scale.set(size,(.8+t)*(1+(i%3)*.4),size);o.updateMatrix();drops.setMatrixAt(i,o.matrix);}drops.instanceMatrix.needsUpdate=true;
   for(let i=0;i<90;i++){const t=(h.time*.42+i*.618)%1;o.position.set(1.4-t*6,2.765-Math.max(0,t-.81)*3.3,Math.sin(i)*.15);o.scale.setScalar(.5+(i%4)*.2);o.updateMatrix();wasteDrops.setMatrixAt(i,o.matrix);}wasteDrops.instanceMatrix.needsUpdate=true;
   for(let i=0;i<120;i++){const t=(h.time*.09*h.flow+i*.618)%1;o.position.set(-3.9+t*3.7,1.4+Math.sin(i)*.22,Math.cos(i)*.7);o.scale.setScalar(.45+(i%5)*.2);o.updateMatrix();incoming.setMatrixAt(i,o.matrix);}incoming.instanceMatrix.needsUpdate=true;
   routes.visible=operating&&s.routes;for(const path of paths){path.mesh.visible=path.kind==='water'?h.flow>0:h.rinse;for(let i=0;i<path.n;i++){const t=(i/path.n+h.time*(path.kind==='water'?.065*h.flow:.14))%1;o.position.copy(path.curve.getPointAt(t));o.quaternion.setFromUnitVectors(up,path.curve.getTangentAt(t).normalize());o.scale.setScalar(1);o.updateMatrix();path.mesh.setMatrixAt(i,o.matrix);}path.mesh.instanceMatrix.needsUpdate=true;}
   macro.visible=showMacro;const scale=s.aperture/60;for(const strand of strands)strand.scale.set(scale,scale,1);for(const m of macroFrame){m.scale.set(scale,scale,1);m.position.x=(Math.sign(m.position.x)||0)*1.75*scale;m.position.y=(Math.sign(m.position.y)||0)*1.75*scale;}macro.scale.setScalar(1/scale);macroSmall.position.set(-.55*scale,-.55*scale,1-((s.visualTime*.28)%1)*2);macroLarge.position.set(.55*scale,.55*scale,.31+Math.sin(s.visualTime*1.4)*.012);
-  last={operation:operating,parts:parts.size,sprayDrops:h.rinse&&operating?360:0,wasteDrops:h.rinse&&operating?90:0,drumAngle:spin.rotation.x,pinionAngle:pinion.rotation.x,cutaway:cut,macro:showMacro,waterVisible:waterGroup.visible,cleanLevel:h.cleanLevel,dirtyLevel:h.dirtyLevel,screenSectors:SECTORS};
+  last={operation:operating,parts:parts.size,sprayDrops:h.rinse&&operating?360:0,wasteDrops:h.rinse&&operating?90:0,drumAngle:spin.rotation.x,pinionAngle:pinion.rotation.x,cutaway:cut,macro:showMacro,waterVisible:waterGroup.visible,cleanLevel:h.cleanLevel,dirtyLevel:h.dirtyLevel,screenSectors:SECTORS,detail:detail.snapshot()};
  }
  return {root,parts,pickables,render,snapshot:()=>last,water:{group:waterGroup,surface,sheet:dirty,snapshot:()=>({delivery:last.operation?.65:0})},excluded:[routes,effects],routes};
 }

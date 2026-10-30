@@ -33,7 +33,7 @@ The animation uses bounded 1/60-second simulation steps. Pause freezes operating
 - `optics.js`: local adaptation of the Moving Bed optics, with separate dirty/clean surface masks. Both surfaces share scene captures; the clean-water level is the reflection reference, so dirty-side reflection is an approximation. It is not ray tracing or CFD.
 - `studio.js`: UI, camera, picking, clocks, renderer and read-only `window.drumStudio.snapshot()` diagnostics.
 
-Local dependencies reuse the existing Three.js/OrbitControls, AquaClear studio environment, Trickle rounded geometry, and Moving Bed material microstructure. Those modules are unchanged. Changing a shared module requires regression checks in its existing consumers. Current new-runtime cache keys are `v=1`; bump affected module/CSS keys together for subsequent publications.
+Local dependencies reuse the existing Three.js/OrbitControls, AquaClear studio environment, Trickle rounded geometry, and Moving Bed material microstructure. Those modules are unchanged. Changing a shared module requires regression checks in its existing consumers. Current new-runtime cache keys are `v=2`; bump affected module/CSS keys together for subsequent publications.
 
 Cutaway uses a fixed world-space plane, so the opening does not rotate with the drum. The complete screen returns in Assembled and Exploded views. The microscopic opening count is deliberately reduced/enlarged to remain visible. The main screen uses derivative-filtered procedural weave coverage; the macro uses actual wire geometry. The particles are illustrative, not a calibrated screen-efficiency test. Flexible waste, clumping, orientation and screen condition can affect real capture.
 
@@ -64,3 +64,14 @@ node scripts/build-demos.mjs
 The browser scripts accept `PLAYWRIGHT_CORE_PATH` and `CHROME_PATH`. `preview.cjs` is the shorter visual review helper. Ignored screenshots go under `tmp/drum-qa/`. Numerical tests cover repeatable loading, recovery, fault cases, stop/manual operation, aperture comparison and reset. Browser checks cover actual wash recovery, clock freezing, all component isolation states, six close-ups, nine lessons, all modes, mobile overflow, keyboard tabs, reduced motion and WebGL fallback.
 
 Update the child catalog, main collection count, collection introduction, roadmap and actual screenshot when changing the inventory. The collection remains a single main-gallery entry. Commit and push source, then use the mandatory workspace `deploy-reusing-stage.mjs --deploy` wrapper. Do not create another full-site stage or bypass Functions/preview/production checks.
+
+
+## Graphics refinement — October 30, 2026 (v2)
+
+A local `finish.js` replaces the coarse shared metal treatment with subtle directional brushing and distance-filtered microstructure. The shared filter materials remain unchanged. Steel, dark molded components and brass retain distinct finishes; screen highlights and captured deposits are less uniform.
+
+`detail.js` adds thin enclosure seams, lid seals, 36 cage-mounted panel clamps, hex nozzle shoulders and dark apertures, motor vents/fasteners, 64 stationary wet wall beads and an actual controller display texture. The display reports the same filter state and relative load as the learning panel; its canvas only updates when the state or quantized load changes.
+
+Spray fans now carry animated streaks and breakup; elongated instanced drops vary in size and follow an accelerating fall. Impact rings and a moving trough film make wash collection visible. Residual drips/film fade over a short period after washing. These are bounded artistic effects driven by the existing simulation clock, not a liquid or spray solver. Pause freezes the runoff decay; reset clears it; suspended views hide the operating effects.
+
+The two-level water surfaces use gentler ripple normals and an approximate view-depth absorption tint. The depth estimate comes from the existing refraction capture and is not a full optical path through the vessel. Reflection/refraction resolutions remain bounded and the main operating model is unchanged. The browser regression adds runoff pause/decay checks and verifies the new material/detail path loads without shader errors. Review main, rinse, macro and mobile captures before publication.
