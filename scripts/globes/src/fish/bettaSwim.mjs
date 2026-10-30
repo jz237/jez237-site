@@ -638,7 +638,8 @@ export class BettaSwim {
     // (Nose for an obstacle ahead: it veers off, out from it and on round, from as far off as it needs
     // to come round.)
     const ahead = this.obstacles.length && !escaping && this.mode !== 'rest' ? this.obstacleGap(look) : null;
-    const nearThing = !!ahead && ahead.gap < 0.04 + TURN_RADIUS && !nearWall;
+    // (The veer grows as the gap closes, so it never flicks on and off at an edge and jerks the nose.)
+    const veer = ahead && !nearWall ? smooth(0.08 + TURN_RADIUS, 0.04, ahead.gap) : 0;
     let goal = this.target;
     if (feed) goal = feed.goal;
     else if (swallowing) goal = [...this.position];
@@ -649,7 +650,10 @@ export class BettaSwim {
     else if (this.mode === 'rest') goal = [this.position[0] + fx * 0.3, this.restY, this.position[2] + fz * 0.3];
     if (startling) goal = [this.position[0] - Math.cos(this.startleHeading) * 0.3, this.position[1], this.position[2] + Math.sin(this.startleHeading) * 0.3];
     else if (nearWall) goal = [-this.position[0] * 0.45, clamp(this.position[1], b.low, b.high), -this.position[2] * 0.45];
-    else if (nearThing) goal = [this.position[0] + ahead.away[0] * 0.3 + fx * 0.1, this.position[1] + Math.max(ahead.away[1], 0) * 0.15, this.position[2] + ahead.away[2] * 0.3 + fz * 0.1];
+    else if (veer > 0) {
+      const away = [this.position[0] + ahead.away[0] * 0.3 + fx * 0.1, this.position[1] + Math.max(ahead.away[1], 0) * 0.15, this.position[2] + ahead.away[2] * 0.3 + fz * 0.1];
+      goal = goal.map((v, k) => v + (away[k] - v) * veer);
+    }
     if (escaping) goal = water ? [water.centroid[0], water.centroid[1] - 0.06, water.centroid[2]] : [this.position[0] * 0.6, b.low + 0.025, this.position[2] * 0.6];
     const delta = goal.map((v, i) => v - this.position[i]);
     distance = Math.hypot(...delta);

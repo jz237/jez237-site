@@ -58,7 +58,9 @@ export class BodyMotion {
     const d = this.data;
     for (let i = 0; i < SPINE_COUNT; i++) {
       const u = clamp((SPINE_START + i * dx + 1.22) / 2.276, 0, 1);
-      const envelope = u * u * (3 - 2 * u);
+      // The wave runs the length of the trunk and grows toward the tail: the body bends as a whole,
+      // not a tail flicking behind a stiff trunk. The head stays steady.
+      const envelope = smooth(0, 0.3, u) * (0.3 + 0.7 * u);
       // Compact propulsion strokes; turning curvature is a separate maneuver.
       // Quiet holding has almost no trunk excursion, but breathing continues.
       let maneuver = smooth(0.03, 1, u) * this.turnBend * 2.95;
@@ -67,7 +69,7 @@ export class BodyMotion {
         maneuver = this.turnAngles[a] + (this.turnAngles[b] - this.turnAngles[a]) * (g - a);
       }
       const angle = maneuver + envelope * tailAmplitude(effort) * (1 - Math.abs(maneuver) / 3.2)
-        * Math.sin(phase - u * 3.1);
+        * Math.sin(phase - u * 4.4);
       const c = Math.cos(angle), s = Math.sin(angle);
       if (i) { x += dx * (oldCos + c) * 0.5; z += dx * (oldSin + s) * 0.5; }
       d[i * 4] = x; d[i * 4 + 1] = z; d[i * 4 + 2] = c; d[i * 4 + 3] = s;

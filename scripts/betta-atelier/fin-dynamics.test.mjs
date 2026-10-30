@@ -139,7 +139,8 @@ test('flow and locomotion accelerate cadence without stopping quiet-hover breath
   assert.ok(hover.effort < 0.01 && hover.breathPhase > 30);
   // The pectoral cadence follows load over a narrow band, so a change of swim mode never reads as a new gait.
   assert.ok(current.pectoralHz > hover.pectoralHz + 1 && current.pectoralHz < hover.pectoralHz * 2, `${hover.pectoralHz} -> ${current.pectoralHz}`);
-  assert.ok(current.bodyHz > 3 && swim.bodyHz > 3);
+  // (The tail beats in proportion to the work: held in a current, briskly; swimming hard, near 2.5 Hz.)
+  assert.ok(current.bodyHz > hover.bodyHz + 0.6 && swim.bodyHz > 2.2 && swim.bodyHz < 3, `${hover.bodyHz} ${current.bodyHz} ${swim.bodyHz}`);
   const before = structuredClone(current);
   current.advance(0, 0, 0); assert.deepEqual({...current}, before);
   current.advance(1 / 60, 0.045, 0);

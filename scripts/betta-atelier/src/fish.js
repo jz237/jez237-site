@@ -810,7 +810,7 @@ export function createBetta({ compact = false, textures = true } = {}) {
       const { phase, effort, breathPhase, pectoralPhase, scull, tuck, pectoralEffort, pectoralScull } = gait;
       // The standalone turn also leads with the neck; the rear follows the head's tangent.
       bodyMotion.advanceTurn(dt, locomotion ? locomotion.steerRate ?? angularVelocity : turn, locomotion ? locomotion.speed ?? 0 : Math.hypot(...velocity));
-      bodyMotion.update(phase, effort, turn, breathPhase, locomotion?.gulp ?? gulpOpen, locomotion?.gulpGill ?? gulpGill);
+      bodyMotion.update(phase, gait.tailEffort, turn, breathPhase, locomotion?.gulp ?? gulpOpen, locomotion?.gulpGill ?? gulpGill);
       if (lift > 0 || fish.userData.gulp.lift > 0) {
         const g = fish.userData.gulp;
         g.lift = lift; g.phase = shown.phase; g.clock = shown.clock;

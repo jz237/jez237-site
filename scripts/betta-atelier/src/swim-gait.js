@@ -5,13 +5,15 @@ const smooth = (a, b, x) => { const u = clamp((x - a) / (b - a), 0, 1); return u
 export const SCULL_HZ = 3.8;
 /** Peak tail-bend excursion (rad) at a given effort; the body-bend model uses the same curve. */
 export const tailAmplitude = effort => 0.006 + effort * 0.24;
-const FULL_STROKE = (0.55 + 4.15) * tailAmplitude(1);
+// Cruising about 2 Hz, a burst near 3 (measured on real bettas: 1.7 Hz at 0.3 BL/s, 2.9 at 0.65).
+export const bodyHz = effort => 0.5 + 2.3 * effort;
+const FULL_STROKE = bodyHz(1) * tailAmplitude(1);
 export class SwimGait {
   constructor() {
-    this.effort = this.phase = this.pectoralPhase = this.breathPhase = 0;
+    this.effort = this.tailEffort = this.phase = this.pectoralPhase = this.breathPhase = 0;
     this.scull = this.tuck = this.tuckRate = 0;
     this.pectoralEffort = this.pectoralScull = 0;
-    this.bodyHz = 0.55;
+    this.bodyHz = bodyHz(0);
     this.pectoralHz = 1.6;
   }
   // `pose.scull`: hold station with a quick alternating fanning of the pectorals while the
@@ -32,7 +34,11 @@ export class SwimGait {
     const load = clamp(relativeSpeed * 1.05, 0, 1);
     const target = clamp(propulsion * 0.82 + load * 0.92 + Math.abs(turn) * 0.12, 0, 1);
     this.effort += (target - this.effort) * (1 - Math.exp(-3 * dt));
-    this.bodyHz = 0.55 + 4.15 * Math.sqrt(this.effort);
+    // The tail and trunk work in proportion to the speed itself: a cruise is an easy, slow beat and
+    // only a burst a hard one (the fins above keep the effort of holding station).
+    const swim = clamp(propulsion * 0.82 + clamp(relativeSpeed * 0.45, 0, 1) * 0.92 + Math.abs(turn) * 0.12, 0, 1);
+    this.tailEffort += (swim - this.tailEffort) * (1 - Math.exp(-3 * dt));
+    this.bodyHz = bodyHz(this.tailEffort);
     // The pectoral fans are slow to follow the tail: a change of swim mode shifts their power and
     // rate over a second or so, so the fins read as one continuous stroke rather than a new gait.
     this.pectoralEffort += (this.effort - this.pectoralEffort) * (1 - Math.exp(-1.1 * dt));
@@ -48,6 +54,6 @@ export class SwimGait {
    * when the body is held still. Locomotion may not gain speed faster than this allows.
    */
   get stroke() {
-    return clamp(Math.max(this.bodyHz * tailAmplitude(this.effort) / FULL_STROKE, 0.15 * this.scull), 0, 1);
+    return clamp(Math.max(this.bodyHz * tailAmplitude(this.tailEffort) / FULL_STROKE, 0.15 * this.scull), 0, 1);
   }
 }
