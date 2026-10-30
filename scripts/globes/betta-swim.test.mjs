@@ -353,8 +353,9 @@ test('leaving the film it backs down off it as it tips over: no climb, no lunge,
     assert.ok(first.every(r => r.rise < 0.0005), `${seed}: climbed on the way out`);
     assert.ok(first.every(r => r.speed < 0.09), `${seed}: lunged at ${Math.max(...first.map(r => r.speed)).toFixed(3)}`);
     assert.ok(first.every(r => r.lips <= first[0].lips + 1e-6), `${seed}: the lips rose through the film`);
-    // It tips over as it backs off (its own speed backward), not on the spot.
-    assert.ok(first.some(r => r.own < -0.03) && log[start + 29].pitch < log[start].pitch - 0.2, `${seed}: tipped ${(log[start + 29].pitch - log[start].pitch).toFixed(2)}`);
+    // It tips over as it backs off (its own speed backward), not on the spot: easing into it, so
+    // only a little way in the first half second.
+    assert.ok(first.some(r => r.own < -0.03) && log[start + 29].pitch < log[start].pitch - 0.15, `${seed}: tipped ${(log[start + 29].pitch - log[start].pitch).toFixed(2)}`);
     assert.ok(log[start + 29].y < log[start].y - 0.006, `${seed}: its head ${(log[start + 29].y - log[start].y).toFixed(4)}`);
     assert.ok(log.slice(start + 90, start + 120).every(r => r.rise < 0), 'then it swims down');
   }
@@ -495,6 +496,7 @@ test('it keeps clear of things in the water (the bowl\'s driftwood): routes roun
 test("in the bowl's slow current it holds station while it hovers or displays, and still goes about", () => {
   // (About what the bowl's filter current does near the fish: IdleWater 'filter'.)
   const current = (t) => [0.04 * Math.cos(t / 23), 0, 0.03 * Math.sin(t / 23)];
+  let displays = 0;
   for (const seed of [237, 42]) {
     const log = runBehaviors(600, { seed, flow: current, water: (t) => ({ ...calm(), flow: current(t) }) });
     for (const mode of ['hover', 'mirror']) {
@@ -507,8 +509,11 @@ test("in the bowl's slow current it holds station while it hovers or displays, a
         assert.ok(travel < (mode === 'mirror' ? 0.06 : 0.04), `seed ${seed}: drifted ${travel.toFixed(3)} while holding (${mode})`);
       }
     }
-    assert.ok(episodes(log, 'mirror').length >= 2, `seed ${seed}: it still displays at the glass`);
+    // (How often in ten minutes is down to chance: one to four times across eight seeds.)
+    displays += episodes(log, 'mirror').length;
+    assert.ok(episodes(log, 'mirror').length >= 1, `seed ${seed}: it still displays at the glass`);
     assert.ok(log.every((r) => r.position.every(Number.isFinite) && Math.hypot(...r.position) <= env.radius - 0.29 + 1e-8));
   }
+  assert.ok(displays >= 4, `it displayed at the glass ${displays} times in twenty minutes`);
 });
 

@@ -155,6 +155,8 @@ export class FinDynamics {
     }
     for (let i = 0; i < w; i++) {
       const u = i / (w - 1), r = i * 3;
+      body.pitchFrame(roots[r], scratch);
+      const upCos = scratch[1], upSin = scratch[2];
       body.frame(roots[r], scratch);
       const tangentCos = scratch[2], tangentSin = scratch[3];
       body.transform(roots[r], roots[r + 1], roots[r + 2], scratch);
@@ -198,8 +200,11 @@ export class FinDynamics {
           y = x * sinA + y * cosA; x = cx;
           z = z * (1 - CLAMP_PINCH * folded) + row[j * 4];
         }
-        target[n] = rx + x * tangentCos - z * tangentSin;
-        target[n + 1] = ry + y; target[n + 2] = rz + x * tangentSin + z * tangentCos;
+        // (Tipped with the trunk's up-and-down bow at the root, then round with its sideways bend.)
+        const along = x * upCos - y * upSin;
+        y = x * upSin + y * upCos;
+        target[n] = rx + along * tangentCos - z * tangentSin;
+        target[n + 1] = ry + y; target[n + 2] = rz + along * tangentSin + z * tangentCos;
       }
     }
   }
@@ -379,7 +384,7 @@ export class FinDynamics {
         const q = n * 3, i = n % w, rootX = this.roots[i * 3];
         const cx = frames[i * 4], cz = frames[i * 4 + 1], co = frames[i * 4 + 2], si = frames[i * 4 + 3];
         const localX = rootX + (p[q] - cx) * co + (p[q + 2] - cz) * si;
-        const radius = state.bodyRadius(localX, p[q + 1]);
+        const radius = state.bodyRadius(localX, p[q + 1] - state.body.pitchFrame(localX, s)[0]);
         state.body.frame(localX, s);
         const centerX = s[0], centerZ = s[1], c = s[2], sn = s[3];
         const lateral = -(p[q] - centerX) * sn + (p[q + 2] - centerZ) * c;

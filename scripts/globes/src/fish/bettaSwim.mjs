@@ -706,13 +706,14 @@ export class BettaSwim {
     if (startling && this.startleDive) pitchTarget = -0.45;
     const oldPitch = this.pitch, oldRoll = this.roll;
     const pitchSpin = -this.waterSpin[2] * Math.cos(this.heading) - this.waterSpin[0] * Math.sin(this.heading);
-    // (Leaving the film it tips over quickly, as fast as backing off it carries it round. Swimming about,
-    // it eases into a new angle and out of it again as its fins and tail bring it round: never a sudden tip.)
+    // (Swimming about, and leaving the film, it eases into a new angle and out of it again as its fins
+    // and tail bring it round: never a sudden tip. Rising, taking air or food and in a startle, briskly.)
     const brisk = startling || this.mode === 'dive' || climbing || gulping || feeding;
     // (A turn under way is checked a little faster than it is begun, so it does not run on past the angle.)
-    const pitchPace = startling ? 8 : this.mode === 'dive' ? 4.5 : brisk ? 2.4 : 1.3, pitchMost = Math.min(Math.abs(this.speed) / PITCH_RADIUS, brisk ? Infinity : 0.5);
+    const diving = this.mode === 'dive' && !startling;
+    const pitchPace = startling ? 8 : diving ? 3 : brisk ? 2.4 : 1.3, pitchMost = Math.min(Math.abs(this.speed) / PITCH_RADIUS, diving ? 0.6 : brisk ? Infinity : 0.5);
     const wantedPitch = clamp((pitchTarget - this.pitch) * pitchPace, -pitchMost, pitchMost), checking = (wantedPitch - this.pitchSpeed) * this.pitchSpeed < 0;
-    const pitchEase = (startling ? 80 : brisk ? 6 : checking ? 2.4 : 1.2) * dt;
+    const pitchEase = (startling ? 80 : diving ? 4 : brisk ? 6 : checking ? 2.4 : 1.2) * dt;
     this.pitchSpeed = clamp(this.pitchSpeed + clamp(wantedPitch - this.pitchSpeed, -pitchEase, pitchEase), -pitchMost, pitchMost);
     this.pitch = clamp(this.pitch + this.pitchSpeed * dt + pitchSpin * dt * 0.8, -0.75, gulping || striking ? 0.95 : 0.75);
     const rollSpin = this.waterSpin[0] * Math.cos(this.heading) - this.waterSpin[2] * Math.sin(this.heading);

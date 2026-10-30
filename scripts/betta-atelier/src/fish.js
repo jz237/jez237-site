@@ -391,7 +391,7 @@ export function createBetta({ compact = false, textures = true } = {}) {
   };
   const finDynamics = [];
   const bodyMotion = new BodyMotion();
-  const spineTexture = new T.DataTexture(bodyMotion.data, SPINE_COUNT, 1, T.RGBAFormat, T.FloatType);
+  const spineTexture = new T.DataTexture(bodyMotion.texels, SPINE_COUNT, 2, T.RGBAFormat, T.FloatType);
   spineTexture.needsUpdate = true;
   uniforms.uSpine.value = spineTexture;
   fish.userData.finDynamics = finDynamics;
@@ -810,6 +810,8 @@ export function createBetta({ compact = false, textures = true } = {}) {
       const { phase, effort, breathPhase, pectoralPhase, scull, tuck, pectoralEffort, pectoralScull } = gait;
       // The standalone turn also leads with the neck; the rear follows the head's tangent.
       bodyMotion.advanceTurn(dt, locomotion ? locomotion.steerRate ?? angularVelocity : turn, locomotion ? locomotion.speed ?? 0 : Math.hypot(...velocity));
+      // And so with the head's own tipping up or down (not the water's turning the whole fish).
+      bodyMotion.advancePitch(dt, locomotion?.pitchSpeed ?? 0, locomotion ? locomotion.speed ?? 0 : Math.hypot(...velocity));
       bodyMotion.update(phase, gait.tailEffort, turn, breathPhase, locomotion?.gulp ?? gulpOpen, locomotion?.gulpGill ?? gulpGill);
       if (lift > 0 || fish.userData.gulp.lift > 0) {
         const g = fish.userData.gulp;
