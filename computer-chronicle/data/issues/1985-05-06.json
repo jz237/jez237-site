@@ -1,0 +1,542 @@
+{
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "visualProfile": {
+    "tone": "Expert games meet the mouse-driven desktop",
+    "motifs": [
+      "Lode Runner ladders and brick mazes",
+      "Atari ST and mouse"
+    ],
+    "layout": "Dense warm newsprint with red and blue boxed sections"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Lode Runner game illustration and largest headline",
+    "secondaryRail": "Atari preview, Sidekick, MacVision and rock radio",
+    "archiveNavigation": "Weekly archive and previous/next controls"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 145 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of May 6-12, 1985",
+    "price": "75 cents"
+  },
+  "currentDate": "2026-10-30",
+  "historicDate": "1985-05-06",
+  "displayDate": "Week of May 6-12, 1985",
+  "edition": "Issue 145 - Weekly 1985 Computer & Culture Chronicle",
+  "sources": [
+    {
+      "title": "Selby Bateman, GEM: A New Look for IBM and Atari",
+      "url": "https://www.atarimagazines.com/compute/issue60/175_1_GEM_A_New_Look_For_IBM_And_Atari.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Arlan R. Levitan, Telecomputing Today: Uploading and Downloading",
+      "url": "https://www.atarimagazines.com/compute/issue60/191_1_TELECOMPUTING_TODAY.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Arthur Leyenberger, Relax Stress Reduction System review",
+      "url": "https://www.atarimagazines.com/compute/issue60/185_1_REVIEWS_Relax_Stress_Reduction_System.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Richard Mansfield, Sidekick review",
+      "url": "https://www.atarimagazines.com/compute/issue60/186_1_REVIEWS_Sidekick_For_PC_And_PCjr.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Steve Hudson, Gateway to Apshai review",
+      "url": "https://www.atarimagazines.com/compute/issue60/186_2_REVIEWS_Gateway_To_Apshai.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Michael B. Williams, Championship Lode Runner review",
+      "url": "https://www.atarimagazines.com/compute/issue60/187_1_REVIEWS_Championship_Lode_Runner.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Charles Brannon, MacVision review",
+      "url": "https://www.atarimagazines.com/compute/issue60/188_1_REVIEWS_MacVision_For_Apple_Macintosh.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Personal Computer News issue 110 contents transcription",
+      "url": "http://www.bob-mockford.co.uk/computers/pcn/110/",
+      "date": "1985-05-11"
+    },
+    {
+      "title": "Billboard rock chart, week of May 11, 1985; entries verified from full HTML text",
+      "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-05-11/",
+      "date": "1985-05-11"
+    },
+    {
+      "title": "Box Office Mojo domestic weekend May 10–12, 1985",
+      "url": "https://www.boxofficemojo.com/weekend/1985W19/",
+      "date": "1985-05-10/1985-05-12"
+    },
+    {
+      "title": "BBC Sport, Bradford fire: The Valley Parade disaster 30 years on",
+      "url": "https://www.bbc.com/sport/football/32388297",
+      "date": "2015-05-11"
+    },
+    {
+      "title": "C64 Copy Protection, Copy Corner #1 – Copy II (retrospective with INFO reproduction)",
+      "url": "https://www.c64copyprotection.com/copy-corner-1/",
+      "date": "2014-09-20"
+    },
+    {
+      "title": "Computer Gaming World, vol. 5 no. 2; comparative robot simulation review and Commodore column",
+      "url": "https://www.mirrors.apple2.org.za/ftp.apple.asimov.net/documentation/magazines/computer_gaming_world/Computer%20Gaming%20World-1985_0405_issue21.pdf",
+      "date": "1985-04/1985-05"
+    }
+  ],
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-05-06.jpg",
+    "alt": "Computer Chronicle game and desktop front page for May 6-12, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "May review coverage leads the games desk; Atari’s British hands-on preview supplies the week’s hardware spotlight.",
+  "morningLine": "Fifty expert mazes, a mouse on the desktop, and a video picture in your document.",
+  "lead": {
+    "headline": "Championship Lode Runner turns veterans into certified champions",
+    "confidence": "same-month",
+    "sourceRefs": [
+      5
+    ],
+    "body": [
+      "Championship Lode Runner asks a pointed question of anyone who has mastered the original: can you survive fifty screens built for experts? Brøderbund’s sequel, reviewed in the May COMPUTE!, trades the original’s 150 screens for a smaller, deliberately demanding collection. This is a test of seasoned runners, not a gentle first lesson in collecting gold and evading guards.",
+      "The reviewed editions run on the Commodore 64 with disk drive or an Apple II-series machine with at least 48K and a disk drive. A joystick is optional. The published list price is $34.95, with an optional $9.95 hint book for players who find the expert architects have outwitted them.",
+      "There is no level-design mode here. Instead, the reward lies at the end of the supplied challenge: completing all fifty screens qualifies the player for a personalized champion certificate and a 19-character victory message. It gives the familiar pursuit a finish line worth working toward.",
+      "Disk saves offer a way to break up the campaign, but repeated retreats to the same saved position are not free: after the first restoration, restoring that save again costs a life. Michael B. Williams’s contemporary review makes the intended audience clear—experienced Lode Runner players. The May review is the occasion for this spotlight, not evidence of a release during this particular week."
+    ],
+    "dek": "Brøderbund’s fifty-screen challenge gives veteran runners a certificate to chase."
+  },
+  "stories": [
+    {
+      "headline": "Atari’s attack: 520ST reaches the hands-on test bench",
+      "confidence": "same-week",
+      "sourceRefs": [
+        7,
+        0
+      ],
+      "body": [
+        "The May 11 Personal Computer News puts “Atari’s Attack” on its cover and advertises an exclusive hands-on test of the 520ST in Slough. The dated contents listing places Atari’s new machine squarely on this week’s test bench; it does not establish a retail launch or a delivered complete-system price.",
+        "Atari’s other new arrival is quite a different proposition. The same issue lists a review of the 128K Atari 130XE, priced just under £170 and backed by the established Atari games library. That 8-bit machine must not be mistaken for the ST.",
+        "Meanwhile, Selby Bateman’s May COMPUTE! feature describes Digital Research’s GEM as the bridge to icons, pull-down menus, windows and a two-button mouse. Its earlier CES price projections—about $399 for a 128K 130ST and $599 for a 512K 520ST—remain proposals, not verified May shop prices. The developing desktop is the attraction; availability and final shipping configuration remain separate questions."
+      ]
+    },
+    {
+      "headline": "Sidekick puts the desk inside the PC — at two prices",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ],
+      "body": [
+        "Borland’s Sidekick brings a small office toolkit into reach without closing the program already on screen. Richard Mansfield’s May review describes a notepad, calculator, diary and calendar, telephone dialer and ASCII table for the IBM PC and compatibles, or Enhanced PCjr.",
+        "The dialer can take a number from a personal directory or another part of the screen. The calculator handles hexadecimal work as well as ordinary arithmetic. Mansfield praises the convenience while noting limitations, including the absence of an alarm and the notepad’s WordStar-like commands.",
+        "The price list carries its own debate: $49 for the copy-protected edition, $79 for the unprotected edition. That $30 difference makes freedom from copy protection a separately priced benefit. It is a documented software-policy dispute, not evidence of a cracking crew or a piracy incident."
+      ]
+    },
+    {
+      "headline": "MacVision imports the video world into Macintosh documents",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ],
+      "body": [
+        "Koala Technologies’ MacVision gives the Macintosh an entrance to the video world. Charles Brannon’s May review describes a $399.95 hardware-and-software package accepting NTSC pictures from a camera, VCR or LaserDisc player through the Macintosh printer or modem port.",
+        "A desk accessory supplies scanning, saving and printing while another application is running. A small-window scan takes about six seconds and a full-screen scan about 22 seconds, so a still subject is essential. Gray shades emerge through patterns of dots rather than a color display.",
+        "The resulting pictures can be edited in MacPaint or placed into MacWrite documents. For a personal computer increasingly used to assemble words and pictures on one page, the appeal is clear: an image need not begin as a drawing made with the mouse."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Atari 130XE",
+      "summary": "128K and just under £170 in the May 11 PCN contents; review page 18.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "title": "Sinclair QL JS ROM",
+      "summary": "PCN May 11 page 21 promises a guide to improvements as JS ROM reaches shops; no detailed changes verified from contents.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "title": "Koala MacVision",
+      "summary": "NTSC digitizing accessory for Macintosh, $399.95; six/22-second scanning modes.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Borland Sidekick",
+      "detail": "Desktop utilities; $49 protected/$79 unprotected.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "name": "GST C for Sinclair QL",
+      "detail": "PCN May 11 contents describes an eminently usable C compiler on page 27; price and full review not retrieved.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "name": "Altor Pascal for BBC Micro",
+      "detail": "PCN May 11 contents highlights a fast, inexpensive Pascal package on page 28; no numerical price verified.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "name": "GEM developer toolkit",
+      "detail": "$500 toolkit includes GEM Desktop, drivers, sample applications, symbolic debugger and Resource Construction Set. Cross-CPU software requires recompilation, not binary interchange.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial review selections, not sales rankings",
+      "items": [
+        "Championship Lode Runner — Brøderbund; $34.95; 50 expert levels; Apple II and C64 review. Existing title reviewed this month, not a verified May launch.",
+        "Gateway to Apshai — Steve Hudson reviews Epyx’s dungeon adventure: 8 levels with 16 possible dungeons each (128 layouts). Atari/C64 $39.95; Coleco Adam $53. C64 cartridge or disk; Atari and Adam cartridge.",
+        "Robot Odyssey I — Apple II robot-logic adventure; contemporary review price $49.95, Learning Co.; review coverage, not this-week launch. Continuing April–May review selection, not a new-this-week release.",
+        "Chipwits — Macintosh visual-programming robot simulation; $59.95, Brainpower; future platform plans must remain attributed. Continuing April–May review selection, not a new-this-week release.",
+        "Kampfgruppe — Mark Bausman review, CGW p. 21; $59.95; Eastern Front tactical simulation for 1941–45, 60×60 scrolling map, 200 yards per square, four built-in scenarios and scenario construction. No exact release day established. Continuing April–May review selection, not a new-this-week release."
+      ],
+      "confidence": "May reviews and continuing April–May selections",
+      "sourceRefs": [
+        5,
+        4,
+        12
+      ]
+    },
+    {
+      "label": "Top 5 Movies — US weekend box office, May 10-12",
+      "items": [
+        "1. Code of Silence — $3,583,099",
+        "2. Rustlers’ Rhapsody — $2,374,973",
+        "3. Gotcha! — $1,984,860",
+        "4. Rappin’ — $1,802,204",
+        "5. Police Academy 2: Their First Assignment — $1,658,046"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        9
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Trapped",
+      "artist": "Bruce Springsteen",
+      "chart": "Billboard Mainstream Rock Airplay (historical rock chart)",
+      "chartDate": "1985-05-11",
+      "confidence": "exact-date",
+      "song": "Trapped",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Everybody Wants To Rule The World",
+      "artist": "Tears for Fears",
+      "chart": "Billboard Mainstream Rock Airplay (historical rock chart)",
+      "chartDate": "1985-05-11",
+      "confidence": "exact-date",
+      "song": "Everybody Wants To Rule The World",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Don’t You (Forget About Me)",
+      "artist": "Simple Minds",
+      "chart": "Billboard Mainstream Rock Airplay (historical rock chart)",
+      "chartDate": "1985-05-11",
+      "confidence": "exact-date",
+      "song": "Don’t You (Forget About Me)",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Centerfield",
+      "artist": "John Fogerty",
+      "chart": "Billboard Mainstream Rock Airplay (historical rock chart)",
+      "chartDate": "1985-05-11",
+      "confidence": "exact-date",
+      "song": "Centerfield",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Satisfaction Guaranteed",
+      "artist": "The Firm",
+      "chart": "Billboard Mainstream Rock Airplay (historical rock chart)",
+      "chartDate": "1985-05-11",
+      "confidence": "exact-date",
+      "song": "Satisfaction Guaranteed",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "rank": 6,
+      "title": "Say You’re Wrong",
+      "artist": "Julian Lennon",
+      "chart": "Billboard Mainstream Rock Airplay (historical rock chart)",
+      "chartDate": "1985-05-11",
+      "confidence": "exact-date",
+      "song": "Say You’re Wrong",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "rank": 7,
+      "title": "Don’t Come Around Here No More",
+      "artist": "Tom Petty and the Heartbreakers",
+      "chart": "Billboard Mainstream Rock Airplay (historical rock chart)",
+      "chartDate": "1985-05-11",
+      "confidence": "exact-date",
+      "song": "Don’t Come Around Here No More",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "rank": 8,
+      "title": "Rebels",
+      "artist": "Tom Petty",
+      "chart": "Billboard Mainstream Rock Airplay (historical rock chart)",
+      "chartDate": "1985-05-11",
+      "confidence": "exact-date",
+      "song": "Rebels",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "rank": 9,
+      "title": "Driving With Your Eyes Closed",
+      "artist": "Don Henley",
+      "chart": "Billboard Mainstream Rock Airplay (historical rock chart)",
+      "chartDate": "1985-05-11",
+      "confidence": "exact-date",
+      "song": "Driving With Your Eyes Closed",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "rank": 10,
+      "title": "Lucky In Love",
+      "artist": "Mick Jagger",
+      "chart": "Billboard Mainstream Rock Airplay (historical rock chart)",
+      "chartDate": "1985-05-11",
+      "confidence": "exact-date",
+      "song": "Lucky In Love",
+      "sourceRefs": [
+        8
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Atari 130XE",
+      "price": "£under 170",
+      "note": "UK contemporary review listing",
+      "confidence": "same-week",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "item": "Championship Lode Runner",
+      "price": "$34.95",
+      "note": "Published review list price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "item": "Championship Lode Runner hint book",
+      "price": "$9.95",
+      "note": "Optional book",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "item": "Gateway to Apshai Atari/C64",
+      "price": "$39.95",
+      "note": "Published review list price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "item": "Gateway to Apshai Coleco Adam",
+      "price": "$53",
+      "note": "Published review list price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "item": "Sidekick protected",
+      "price": "$49",
+      "note": "Published review list price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Sidekick unprotected",
+      "price": "$79",
+      "note": "Published review list price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "MacVision",
+      "price": "$399.95",
+      "note": "Published review list price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "item": "Relax",
+      "price": "$139.95",
+      "note": "Published review list price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "GEM developer toolkit",
+      "price": "$500",
+      "note": "Reported toolkit price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Commodore losses on the news agenda",
+      "summary": "PCN’s May 11 Monitor contents says Commodore announces losses. Amount, reporting period and announcement date are not verified; brief only, not a numerical business story.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        7
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "The expert runner’s challenge",
+    "summary": "Championship Lode Runner: $34.95; optional hint book $9.95. Contemporary review-price spotlight, not a reproduced advertisement.",
+    "tagline": "Fifty screens stand between you and the certificate.",
+    "sourceRefs": [
+      5
+    ]
+  },
+  "market": {
+    "headline": "GEM courts more than one family of computers",
+    "summary": "Digital Research licenses its graphical environment to computer makers and developers. Its $500 toolkit targets application builders; the prediction of one million GEM machines by 1986 is a company forecast, not an installed-base count.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Fire destroys Bradford City’s main stand",
+    "summary": "On May 11, fire sweeps through the main stand at Bradford City’s Valley Parade during the match against Lincoln City. The disaster will ultimately claim 56 lives; that final toll is a retrospective count.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      10
+    ]
+  },
+  "bbsNote": {
+    "headline": "The modem desk explains why transfers fail",
+    "summary": "Arlan R. Levitan’s May COMPUTE! column, “Uploading And Downloading,” describes novice confusion, terminal-program compatibility, capture buffers and reliable binary transfers. This is genuine same-month online culture, not invented BBS chatter.",
+    "posts": [
+      {
+        "topic": "Writing mail before connecting",
+        "platform": "Commercial information services / BBSs",
+        "text": "Levitan reports readers asking how to compose electronic mail offline to avoid paying for typing while connected; paraphrase of the column, not a recovered user post."
+      },
+      {
+        "topic": "Cross-system file transfers",
+        "platform": "CompuServe, Delphi and BBS systems",
+        "text": "The column says XMODEM is available on CompuServe and Delphi and broadly used by BBSs. Retain this as period reporting; its simplified MODEM7/XMODEM origin chronology is not independently verified."
+      },
+      {
+        "topic": "Terminal programs and capture",
+        "platform": "Home-computer telecomputing",
+        "text": "Column stresses compatible software at both ends, disk or memory capture, and error checking for binary programs. No named local sysop event or modem price verified."
+      }
+    ],
+    "sourceRefs": [
+      1
+    ]
+  },
+  "curiosity": {
+    "headline": "A headband lets you relax your way through a balloon game",
+    "summary": "Synapse’s $139.95 Relax biofeedback package turns muscle activity into computer input.",
+    "detail": "Arthur Leyenberger’s May COMPUTE! review describes an EMG headband and control box, workbook and audio exercises, a changing kaleidoscope, and a balloon game in which relaxation increases altitude. Documentation is credited to clinical psychologist Dr. Martha Davis. The review also describes subliminal messages, while explicitly noting disputed effectiveness; report claims without endorsing health benefits. Versions cover C64, Atari, Apple II, IBM PC and Enhanced PCjr with differing requirements.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      2
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "May COMPUTE! reviews are not exact-week release announcements.",
+      "PCN evidence is a dated contents transcription, not the full Atari test.",
+      "GEM projections are not shipping prices or proof of ROM configuration.",
+      "Games are editorial selections; three continue April–May coverage.",
+      "Movie rankings spot-checked against Box Office Mojo.",
+      "Bradford final death toll is retrospective.",
+      "No verified gadget launch or named underground group this week."
+    ]
+  }
+}
