@@ -87,6 +87,88 @@
     }
   },
   {
+    "id": "2026-10-30-factual-infographic-factual-infographic-the-moving-pinna-a-",
+    "title": "Factual infographic: The Moving Pinna — A Sound-Collecting Ear",
+    "tests": "Source-verified before generation; artwork-led open composition; no subjective post-generation critic or reroll. Requested backend identity not independently verified.; archive_slot=2026-10-30T12:20; concept=feline-mobile-pinnae-sound-collection-localization; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: extraordinary-senses",
+    "prompt": "Create a finished, richly artistic scientific cat infographic, directly rendered flat artwork, not a photographed poster. Exact main heading: \"THE MOVING PINNA\" with subtitle \"A sound-collecting ear\". A refined gouache and colored-pencil anatomical atlas on cool mist-blue paper, copper-gold acoustic lines and midnight-blue typography. The visually dominant subject is a magnificent shorthaired silver tabby adult cat in three-quarter rear-to-side view, upper body filling the center and lower left, beautifully resolved silver fur, dark stripes, translucent pink ear interiors and warm rim light. The near ear angles toward an off-axis sound while the head remains in its original orientation; the other ear is differently oriented. Natural feline anatomy, only two real ears. Thin dashed ghost contours show alternate positions and are explicitly labeled \"alternate ear positions\", not extra physical ears. A tiny distant sound-source mark at upper right emits delicate schematic copper arcs toward the cat. These are labeled \"sound waves — schematic\", not literal visible rays or claims of exact acoustic geometry.\n\nCompose an asymmetrical, flowing, unboxed educational atlas with generous negative space, elegantly curved leader lines and short legible facts nested around the illustration. Not a rigid grid, detached cards, dashboard, or dense text wall. The main open annotation beside the ear reads \"Pinna = external earflap\" and beneath it \"Collects sound into the ear canal\". Another curved annotation with a modest rotation arrow reads \"Mobile ears\" and \"Pinnae can turn independently of head position.\" Do not specify muscle counts, rotation angles, hearing ranges, or speed.\n\nLet the cat's near ear open visually into a larger exquisitely drawn schematic ear pathway floating on the right, clearly marked \"schematic • not to scale\". Show anatomically credible outer canal curving down then inward to the eardrum, then a tiny middle-ear bone chain leading to a simplified coiled cochlea. Use open labels with delicate leaders: \"Ear canal\", \"Eardrum\", \"Middle-ear bones\", \"Cochlea\". The short explanatory line running along this organic path reads \"Vibrations → eardrum → tiny bones → cochlea → nerve signals to the brain\". No exposed gore, no invented muscles, no actual cochlea sitting in the external ear, no diagram that implies air travels directly into the brain. Maintain enough space for all essential labels.\n\nAt upper left weave a small graceful acoustic comparison into the background: two differently angled incoming arc motifs alongside two small qualitative waveform/spectral silhouettes, without numeric axes or fabricated measured traces. Label \"Direction changes the sound pattern\" with the sentence \"Ear shape filters frequencies differently as sound direction changes.\" Mark the tiny illustration \"conceptual\". A final concise open note near the bottom reads \"More than a swivel\" then \"Ear shape helps locate sound; the exact benefit of active ear movements is still being studied.\" This limitation is essential; do not claim perfect pinpointing, radar, superpowers, or that ear pose reveals a guaranteed emotion. Keep the subject narrow: sound collection and mobile pinnae, not an overview of all cat senses, not a disease chart. Anatomical fur detail and the luminous tabby portrait should dominate over text; use tasteful hierarchy, refined typography and flowing acoustic curves. Small footer: \"Cat Atlas • Extraordinary Senses\" and \"Sources: Cornell Feline Health Center; Populin & Yin, Journal of Neuroscience (1998)\". No URLs needed inside image. No invented additional factual claims, decorative data, panels or logos.",
+    "image": "images/2026-10-30-factual-infographic-factual-infographic-the-moving-pinna-a-.jpg",
+    "thumb": "thumbs/2026-10-30-factual-infographic-factual-infographic-the-moving-pinna-a-.webp",
+    "color": "#a0a4a8",
+    "date": "2026-10-30",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "feline-mobile-pinnae-sound-collection-localization",
+      "imageSha256": "53ceecf04a597be7422d1dc2b782abd055cc2ab2a80f10f540e06697254a95ef",
+      "imageDHash": "e93364c68607040c"
+    },
+    "factualInfographic": {
+      "topic": "How mobile feline pinnae collect sound and contribute to sound localization",
+      "description": "An artwork-led study of feline pinna mobility, sound collection and direction-dependent acoustic filtering, with a schematic hearing pathway and explicit limits on active-movement claims.",
+      "sourceNote": "Read Cornell veterinary anatomy and Populin & Yin peer-reviewed pinna research: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/deafness ; https://pmc.ncbi.nlm.nih.gov/articles/PMC6792787/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-30T16:21:36.405697+00:00",
+        "sources": [
+          {
+            "id": "cornell",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Deafness",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/deafness"
+          },
+          {
+            "id": "populin",
+            "publisher": "Journal of Neuroscience",
+            "title": "Pinna Movements of the Cat during Sound Localization",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6792787/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The pinna is the external earflap; sound vibrations enter the ear canal, reach the eardrum, and are transmitted by small middle-ear bones to the inner ear.",
+            "sourceIds": [
+              "cornell"
+            ]
+          },
+          {
+            "claim": "The cochlea receives vibrations and passes nervous-system signals toward the brain, enabling hearing.",
+            "sourceIds": [
+              "cornell"
+            ]
+          },
+          {
+            "claim": "Cat pinnae can orient independently of head position; pinna movements accompany orienting to sounds and visual targets.",
+            "sourceIds": [
+              "populin"
+            ]
+          },
+          {
+            "claim": "The pinna, head and torso attenuate or amplify different sound frequencies depending on sound direction, creating direction-dependent spectral cues for localization.",
+            "sourceIds": [
+              "populin"
+            ]
+          },
+          {
+            "claim": "Pinna shape contributes to sound localization, but the precise functional contribution of active pinna movements is not fully resolved; do not imply perfect localization or a quantified improvement.",
+            "sourceIds": [
+              "populin"
+            ]
+          },
+          {
+            "claim": "A sound-evoked early pinna movement can precede the eye movement and is asymmetric, larger in the ear on the stimulus side, in the reported experimental conditions; the artwork depicts illustrative orientation, not a universal fixed response.",
+            "sourceIds": [
+              "populin"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-10-30-factual-infographic-factual-infographic-permethrin-a-dog-tr",
     "title": "Factual infographic: Permethrin — A Dog Treatment That Can Poison Cats",
     "tests": "Source-verified before generation; flowing artwork-led composition; no subjective critic or reroll. Requested backend identity not independently verified.; archive_slot=2026-10-30T04:20; concept=canine-permethrin-contact-cat-poisoning; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: household-hazards",
