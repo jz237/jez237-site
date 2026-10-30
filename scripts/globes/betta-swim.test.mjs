@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { BEHAVIORS, BETTA_SCALE, BettaSwim, GULP_LENGTH, MAX_SLOPE, MIN_LEG, MOUTH_DEPTH, PITCH_PIVOT, REST_HEIGHT, STARTLE_COOLDOWN, STARTLE_LENGTH, STROKE_ACCEL, bettaMouth, bettaMouthHeight, gulpGillCover, gulpMouth } from './src/fish/bettaSwim.mjs';
+import { BEHAVIORS, BETTA_SCALE, BettaSwim, GULP_LENGTH, MAX_SLOPE, MIN_LEG, MOUTH_DEPTH, PITCH_RADIUS, REST_HEIGHT, STARTLE_COOLDOWN, STARTLE_LENGTH, STROKE_ACCEL, TURN_RADIUS, bettaMouth, bettaMouthHeight, gulpGillCover, gulpMouth } from './src/fish/bettaSwim.mjs';
 import { SwimGait } from '../betta-atelier/src/swim-gait.js';
 
 const env = { radius: 0.95, sandLevel: -0.55, level: 0.181, iso: 0.5 };
@@ -259,7 +259,8 @@ test('a lap follows the glass in one direction at an easy pace', () => {
 
 test('it sinks onto the sand, settles there without drifting, then lifts off', () => {
   for (const seed of [237, 42, 901]) {
-    const log = runBehaviors(900, { seed }), eps = episodes(log, 'rest');
+    // (Rests it has come out of: one still going as the run ends is not over.)
+    const log = runBehaviors(900, { seed }), eps = episodes(log, 'rest').filter(ep => ep.at(-1) !== log.at(-1));
     assert.ok(eps.length >= 1, `${seed}: never rested`);
     for (const ep of eps) {
       const floor = env.sandLevel + 0.07, end = ep.at(-1), settled = ep.slice(-120);
@@ -298,18 +299,16 @@ function runStroked(seconds, { seed = 237, trips = false, water = () => calm() }
   if (trips) s.nextGulp = 5;
   for (let i = 0; i < seconds * 60; i++) {
     if (trips && s.mode === 'dive') s.nextGulp = s.time + 8;
-    const stroke = gait.stroke, before = s.speed, y0 = s.position[1];
+    const stroke = gait.stroke, before = s.speed, y0 = s.position[1], pitch0 = s.pitch, swam = s.speed;
     s.advance(dt, [0, 0, 0], upright, true, water(i / 60), stroke);
     drive = damp(drive, s.drive, 3, dt); turn = damp(turn, s.steerRate, 4, dt);
     gait.advance(dt, drive, Math.hypot(...s.velocity) / BETTA_SCALE, turn, POSES[s.mode] ?? {});
     const nose = [-Math.cos(s.heading) * Math.cos(s.pitch), Math.sin(s.pitch), Math.sin(s.heading) * Math.cos(s.pitch)];
-    // (Its travel: the neck's velocity less its turning over in place about its middle, which is
-    // not travel: turnVelocity.)
-    const travel = s.velocity.map((v, k) => v - s.turnVelocity[k]);
+    const travel = s.velocity;
     const axial = travel.reduce((sum, v, k) => sum + v * nose[k], 0);
     const slip = Math.hypot(...travel.map((v, k) => v - axial * nose[k]));
-    const middle = s.position.map((v, k) => v - PITCH_PIVOT * nose[k]);
-    log.push({ t: i / 60, mode: s.mode, stroke, gain: s.speed - before, own: s.speed, speed: Math.hypot(...travel), slip, rise: s.position[1] - y0, y: s.position[1], pitch: s.pitch, settled: s.restSettled, restY: s.restY, turn: Math.hypot(...s.turnVelocity), middle });
+    // (How fast it turned, up or down and sideways, and how fast it swam meanwhile.)
+    log.push({ t: i / 60, mode: s.mode, stroke, gain: s.speed - before, own: s.speed, speed: Math.hypot(...travel), slip, rise: s.position[1] - y0, y: s.position[1], pitch: s.pitch, settled: s.restSettled, restY: s.restY, pitchRate: (s.pitch - pitch0) / dt, yawRate: s.steerRate, swam, parked: s.mirrorArrived, lips: bettaMouth(s.position, s.heading, s.pitch)[1] });
   }
   return log;
 }
@@ -326,7 +325,7 @@ test('speed is only gained as fast as the stroke works, and a still tail does no
   for (const seed of [237, 42]) {
     for (const r of runStroked(600, { seed, trips: true })) {
       assert.ok(r.gain <= STROKE_ACCEL * r.stroke / 60 + 1e-9, `${seed}: ${r.mode} at ${r.t.toFixed(1)} s gained ${r.gain.toFixed(4)} on a stroke of ${r.stroke.toFixed(2)}`);
-      assert.ok(r.speed <= r.own + 0.002, `${seed}: ${r.mode} at ${r.t.toFixed(1)} s travelled ${r.speed.toFixed(3)} faster than it swims (${r.own.toFixed(3)})`);
+      assert.ok(r.speed <= Math.abs(r.own) + 0.002, `${seed}: ${r.mode} at ${r.t.toFixed(1)} s travelled ${r.speed.toFixed(3)} faster than it swims (${r.own.toFixed(3)})`);
     }
   }
 });
@@ -346,19 +345,33 @@ test('every move is along the body axis through trips to the air and settling on
   }
 });
 
-test('leaving the film it turns over before it travels: no climb and no lunge while the head is still tipped up', () => {
+test('leaving the film it backs down off it as it tips over: no climb, no lunge, the lips never up through the film', () => {
   for (const seed of [237, 42, 901]) {
     const log = runStroked(120, { seed, trips: true }), start = log.findIndex((r, i) => r.mode === 'dive' && log[i - 1].mode !== 'dive');
     assert.ok(start > 0, `${seed}: no dive`);
-    const first = log.slice(start, start + 18);
+    const first = log.slice(start, start + 30);
     assert.ok(first.every(r => r.rise < 0.0005), `${seed}: climbed on the way out`);
-    assert.ok(first.every(r => r.speed < 0.06), `${seed}: lunged at ${Math.max(...first.map(r => r.speed)).toFixed(3)}`);
-    // It turns over about its middle: the head dips as the tail rises, the middle all but still,
-    // rather than the head held where it was and the body swung about it.
-    assert.ok(first.some(r => r.turn > 0.02), `${seed}: turned about its neck`);
-    const held = Math.hypot(...first.at(-1).middle.map((v, k) => v - first[0].middle[k]));
-    assert.ok(held < 0.012 && log[start + 17].y < log[start].y - 0.006, `${seed}: its middle moved ${held.toFixed(4)}, its head ${(log[start + 17].y - log[start].y).toFixed(4)}`);
-    assert.ok(log.slice(start + 60, start + 90).every(r => r.rise < 0), 'then it swims down');
+    assert.ok(first.every(r => r.speed < 0.09), `${seed}: lunged at ${Math.max(...first.map(r => r.speed)).toFixed(3)}`);
+    assert.ok(first.every(r => r.lips <= first[0].lips + 1e-6), `${seed}: the lips rose through the film`);
+    // It tips over as it backs off (its own speed backward), not on the spot.
+    assert.ok(first.some(r => r.own < -0.03) && log[start + 29].pitch < log[start].pitch - 0.2, `${seed}: tipped ${(log[start + 29].pitch - log[start].pitch).toFixed(2)}`);
+    assert.ok(log[start + 29].y < log[start].y - 0.006, `${seed}: its head ${(log[start + 29].y - log[start].y).toFixed(4)}`);
+    assert.ok(log.slice(start + 90, start + 120).every(r => r.rise < 0), 'then it swims down');
+  }
+});
+
+test('it only turns, up or down or sideways, as fast as its own swimming carries it round its arc', () => {
+  for (const seed of [237, 42, 901]) {
+    const log = runStroked(600, { seed, trips: true });
+    assert.ok(['rise', 'gulp', 'dive', 'hover'].every(m => log.some(r => r.mode === m)), `${seed}: precondition`);
+    for (const r of log) {
+      // (In calm water nothing else turns it; the startle's C-start and the sway at its reflection are its own.)
+      assert.ok(Math.abs(r.pitchRate) <= Math.abs(r.swam) / PITCH_RADIUS + 1e-6, `${seed}: ${r.mode} at ${r.t.toFixed(2)} s tipped at ${r.pitchRate.toFixed(2)} rad/s swimming ${r.swam.toFixed(3)}`);
+      if (r.mode !== 'startle' && !(r.mode === 'mirror' && r.parked)) assert.ok(Math.abs(r.yawRate) <= Math.abs(r.swam) / TURN_RADIUS + 1e-6, `${seed}: ${r.mode} at ${r.t.toFixed(2)} s turned at ${r.yawRate.toFixed(2)} rad/s swimming ${r.swam.toFixed(3)}`);
+    }
+    // Hovering, it does not hang tipped up or down: it levels out, swimming into it.
+    const hovers = episodes(log, 'hover').filter(ep => ep.length > 150);
+    assert.ok(hovers.length && hovers.every(ep => Math.abs(ep.at(-1).pitch) < 0.08), `${seed}: hovered tipped ${hovers.map(ep => ep.at(-1).pitch.toFixed(2))}`);
   }
 });
 

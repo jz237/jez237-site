@@ -4,6 +4,8 @@ import { tailAmplitude } from './swim-gait.js';
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const smooth = (a, b, x) => { const u = clamp((x - a) / (b - a), 0, 1); return u * u * (3 - 2 * u); };
 export const SPINE_START = -1.22, SPINE_END = 2.65, SPINE_COUNT = 161;
+// The most the rear of the trunk may lag the head's heading (rad): round a tight turn, a U.
+export const BEND_MOST = Math.PI;
 export class BodyMotion {
   constructor() {
     this.data = new Float32Array(SPINE_COUNT * 4);
@@ -28,7 +30,7 @@ export class BodyMotion {
       const follow = 1 - Math.exp(-travel * h / ds);
       const relax = Math.exp(-h * (Math.abs(rate) > 0.15 ? 0.12 : 1.5));
       for (let i = a.length - 1; i > 0; i--) {
-        a[i] = clamp((a[i] + rate * h) * relax, -2.95, 2.95);
+        a[i] = clamp((a[i] + rate * h) * relax, -BEND_MOST, BEND_MOST);
         a[i] += (a[i - 1] - a[i]) * follow;
       }
       // Spread flexion along the trunk: a tight turn must not become a hinge
@@ -45,7 +47,7 @@ export class BodyMotion {
     // A maneuver is a sustained C-bend, not a wider propulsion oscillation.
     // Positive yaw leaves the rear trunk on the previous heading behind the head.
     // Soft saturation avoids a kink as the turn speeds up or changes direction.
-    this.turnBend = this.turnAngles ? this.turnAngles.at(-1) / 2.95 : Math.tanh(turn * 0.8);
+    this.turnBend = this.turnAngles ? clamp(this.turnAngles.at(-1) / 2.95, -1, 1) : Math.tanh(turn * 0.8);
     this.mouth = Math.max(gulp, Math.max(0, Math.sin(breathPhase)) ** 1.4 * (0.8 + effort * 0.2));
     // Buccal intake precedes the opercular outlet: not two synchronous flaps.
     this.gill = Math.max(gulpGill, Math.max(0, Math.sin(breathPhase - 1.05)) ** 1.3 * (0.8 + effort * 0.2));
