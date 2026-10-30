@@ -33,7 +33,7 @@ The animation uses bounded 1/60-second simulation steps. Pause freezes operating
 - `optics.js`: local adaptation of the Moving Bed optics, with separate dirty/clean surface masks. Both surfaces share scene captures; the clean-water level is the reflection reference, so dirty-side reflection is an approximation. It is not ray tracing or CFD.
 - `studio.js`: UI, camera, picking, clocks, renderer and read-only `window.drumStudio.snapshot()` diagnostics.
 
-Local dependencies reuse the existing Three.js/OrbitControls, Trickle rounded geometry, and Moving Bed material microstructure. Those modules are unchanged. Changing a shared module requires regression checks in its existing consumers. Current new-runtime cache keys are `v=3`; bump affected module/CSS keys together for subsequent publications.
+Local dependencies reuse the existing Three.js/OrbitControls, Trickle rounded geometry, and Moving Bed material microstructure. Those modules are unchanged. Changing a shared module requires regression checks in its existing consumers. Current new-runtime cache keys are `v=4`; bump affected module/CSS keys together for subsequent publications.
 
 Cutaway uses a fixed world-space plane, so the opening does not rotate with the drum. The complete screen returns in Assembled and Exploded views. The microscopic opening count is deliberately reduced/enlarged to remain visible. The main screen uses derivative-filtered procedural weave coverage; the macro uses actual wire geometry. The particles are illustrative, not a calibrated screen-efficiency test. Flexible waste, clumping, orientation and screen condition can affect real capture.
 
@@ -84,3 +84,10 @@ The two-level water surfaces use gentler ripple normals and an approximate view-
 `presentation.js` provides a local multi-softbox reflection environment and a soft contact-shadow layer. The main camera brings the mechanism closer, with lower elevation and a slightly stronger view of the service side. Water has a clearer section face, bounded inlet rings and moving floor-light patterns. Water embellishments use the simulation clock, so pause, reset and suspended views remain coherent. Floor light and inlet rings are artistic depth cues, not calculated caustics or a fluid solver.
 
 The enlarged screen now has alternating over/under wire crossings (cosine displacement, separated wire centers), and the retained particle has an irregular textured surface. Its scale and rigid-particle teaching simplification remain explicit. Camera diagnostics expose transition completion so screenshot checks wait for the actual settled view rather than a fixed delay. Browser checks also verify the fabrication path and water-detail pause behavior.
+
+
+## Wet machinery pass — October 30, 2026 (v4)
+
+`wet-motion.js` adds a physical clearcoat screen finish with wetness-dependent roughness, 96 bounded bead instances attached to the rotating screen, 144 impact droplets with short ballistic arcs, 36 expanding partial splash rings, and narrow animated runoff ribbons into the stationary trough. Beads are suppressed beneath the current dirty-side waterline and share the screen cut plane. Splash effects require an operating rinse; runoff decays after washing. All use the existing simulation clock, including pause, slow motion and reset, and disappear in suspended teaching views. Their scale is illustrative, not a pressure or fluid calculation.
+
+Wash and waste views now look down into the collection zone; the waste view looks from the outlet side. The drive view favors the gear side. Captured and exported particles use more restrained wet organic colors. The browser regression checks wet-effect pause, splash activation, runoff decay and suppression during component isolation. No simulation rates, capacities, or source claims changed.
