@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';import {createSimulation,defaults} from '../../demos/drum-studio/simulation.js';
+const run=(s,c,seconds)=>{for(let i=0;i<seconds*60;i++)s.step(1/60,c);return s.snapshot();};
+let s=createSimulation(),h=run(s,defaults,120);assert(h.cycles>=1);assert(h.exported>0);assert(h.cleanLevel<h.dirtyLevel);assert(h.loads.every(x=>Number.isFinite(x)&&x>=0&&x<=.98));
+const a=createSimulation(),b=createSimulation();assert.deepEqual(run(a,defaults,20),run(b,defaults,20));
+s=createSimulation();s.preset('loaded');h=run(s,defaults,18);assert.equal(h.cycles,1);assert(h.meanLoad<.3);assert(h.head<.18);assert.equal(h.alarm,null);
+s=createSimulation();s.preset('no-rinse');h=run(s,{...defaults,pressure:0},16);assert.equal(h.phase,'fault');assert.equal(h.exported,0);assert(!h.turning&&!h.rinse);
+s=createSimulation();s.preset('blocked-waste');h=run(s,{...defaults,wasteBlocked:true},3);assert.equal(h.phase,'fault');assert.equal(h.angle,0);
+s=createSimulation();s.preset('pump-off');h=run(s,{...defaults,pump:false},8);assert(h.head<.00001);assert.equal(h.angle,0);
+s=createSimulation();s.preset('loaded');h=run(s,{...defaults,auto:false},20);assert.equal(h.cycles,0);assert.equal(h.angle,0);assert(s.request());h=run(s,{...defaults,auto:false},15);assert.equal(h.cycles,1);
+const fine=createSimulation(),coarse=createSimulation();run(fine,{...defaults,auto:false,aperture:60},30);run(coarse,{...defaults,auto:false,aperture:150},30);assert(fine.snapshot().captured>coarse.snapshot().captured);assert(fine.snapshot().passed<coarse.snapshot().passed);
+s.reset();assert.deepEqual(s.snapshot(),createSimulation().snapshot());console.log('PASS: deterministic cycles, recovery, no-pressure and waste faults, circulation stop, manual wash, aperture comparison, reset.');
