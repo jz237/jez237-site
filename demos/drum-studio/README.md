@@ -33,7 +33,7 @@ The animation uses bounded 1/60-second simulation steps. Pause freezes operating
 - `optics.js`: local adaptation of the Moving Bed optics, with separate dirty/clean surface masks. Both surfaces share scene captures; the clean-water level is the reflection reference, so dirty-side reflection is an approximation. It is not ray tracing or CFD.
 - `studio.js`: UI, camera, picking, clocks, renderer and read-only `window.drumStudio.snapshot()` diagnostics.
 
-Local dependencies reuse the existing Three.js/OrbitControls, AquaClear studio environment, Trickle rounded geometry, and Moving Bed material microstructure. Those modules are unchanged. Changing a shared module requires regression checks in its existing consumers. Current new-runtime cache keys are `v=2`; bump affected module/CSS keys together for subsequent publications.
+Local dependencies reuse the existing Three.js/OrbitControls, Trickle rounded geometry, and Moving Bed material microstructure. Those modules are unchanged. Changing a shared module requires regression checks in its existing consumers. Current new-runtime cache keys are `v=3`; bump affected module/CSS keys together for subsequent publications.
 
 Cutaway uses a fixed world-space plane, so the opening does not rotate with the drum. The complete screen returns in Assembled and Exploded views. The microscopic opening count is deliberately reduced/enlarged to remain visible. The main screen uses derivative-filtered procedural weave coverage; the macro uses actual wire geometry. The particles are illustrative, not a calibrated screen-efficiency test. Flexible waste, clumping, orientation and screen condition can affect real capture.
 
@@ -75,3 +75,12 @@ A local `finish.js` replaces the coarse shared metal treatment with subtle direc
 Spray fans now carry animated streaks and breakup; elongated instanced drops vary in size and follow an accelerating fall. Impact rings and a moving trough film make wash collection visible. Residual drips/film fade over a short period after washing. These are bounded artistic effects driven by the existing simulation clock, not a liquid or spray solver. Pause freezes the runoff decay; reset clears it; suspended views hide the operating effects.
 
 The two-level water surfaces use gentler ripple normals and an approximate view-depth absorption tint. The depth estimate comes from the existing refraction capture and is not a full optical path through the vessel. Reflection/refraction resolutions remain bounded and the main operating model is unchanged. The browser regression adds runoff pause/decay checks and verifies the new material/detail path loads without shader errors. Review main, rinse, macro and mobile captures before publication.
+
+
+## Fabrication and presentation pass — October 30, 2026 (v3)
+
+`fabrication.js` adds formed corner channels, end-panel ribs, coated rear skin, a raised reinforced lid that clears the drive and wash supports, finished front panel, five bolted pipe flanges with compression gaskets, machined drive collars, a rounded pump volute with cover fasteners, feet, terminal box and cable, and local canvas equipment markings. These are original illustrative machine details. Static geometry is merged by assembly and material; picking, isolation and explosion still belong to the same 18 assemblies. Shared demo assets are unchanged.
+
+`presentation.js` provides a local multi-softbox reflection environment and a soft contact-shadow layer. The main camera brings the mechanism closer, with lower elevation and a slightly stronger view of the service side. Water has a clearer section face, bounded inlet rings and moving floor-light patterns. Water embellishments use the simulation clock, so pause, reset and suspended views remain coherent. Floor light and inlet rings are artistic depth cues, not calculated caustics or a fluid solver.
+
+The enlarged screen now has alternating over/under wire crossings (cosine displacement, separated wire centers), and the retained particle has an irregular textured surface. Its scale and rigid-particle teaching simplification remain explicit. Camera diagnostics expose transition completion so screenshot checks wait for the actual settled view rather than a fixed delay. Browser checks also verify the fabrication path and water-detail pause behavior.
