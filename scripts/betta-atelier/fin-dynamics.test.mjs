@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { SwimGait } from './src/swim-gait.js';
+import { SwimGait, SCULL_HZ } from './src/swim-gait.js';
 import { BodyMotion } from './src/body-motion.js';
 import { FinDynamics, waterVelocity } from './src/fin-dynamics.js';
 
@@ -137,8 +137,10 @@ test('flow and locomotion accelerate cadence without stopping quiet-hover breath
     swim.advance(1 / 60, 0.38, 0);
   }
   assert.ok(hover.effort < 0.01 && hover.breathPhase > 30);
-  assert.ok(current.pectoralHz > hover.pectoralHz * 3);
-  assert.ok(current.bodyHz > 3 && swim.bodyHz > 3);
+  // The pectoral cadence follows load over a narrow band, so a change of swim mode never reads as a new gait.
+  assert.ok(current.pectoralHz > hover.pectoralHz + 1 && current.pectoralHz < hover.pectoralHz * 2, `${hover.pectoralHz} -> ${current.pectoralHz}`);
+  // (The tail beats in proportion to the work: held in a current, briskly; swimming hard, near 2.5 Hz.)
+  assert.ok(current.bodyHz > hover.bodyHz + 0.6 && swim.bodyHz > 2.2 && swim.bodyHz < 3, `${hover.bodyHz} ${current.bodyHz} ${swim.bodyHz}`);
   const before = structuredClone(current);
   current.advance(0, 0, 0); assert.deepEqual({...current}, before);
   current.advance(1 / 60, 0.045, 0);
@@ -168,8 +170,42 @@ test('actual pectoral membrane beats faster under load, stays attached and resol
     return best.hz;
   }
   const hover=sample(0), loaded=sample(0.9), phone=sample(0.9,30);
-  assert.ok(loaded > hover * 2.5, `rendered cadence ${hover} -> ${loaded}`);
+  assert.ok(loaded > hover + 1 && loaded < hover * 2, `rendered cadence ${hover} -> ${loaded}`);
   assert.ok(Math.abs(loaded-phone)<0.35, `30fps alias/drift ${loaded} vs ${phone}`);
+});
+
+test('hover sculling fans the pectorals continuously and a startle tucks them to the flanks', () => {
+  function pectoral(pose, fps = 60) {
+    const fin = make(3, 1), gait = new SwimGait(), trace = [];
+    for (let i = 1; i <= fps * 8; i++) {
+      gait.advance(1 / fps, 0.045, 0, 0, pose);
+      const s = state(i / fps, 0, 'right');
+      Object.assign(s, { phase: gait.phase, pectoralPhase: gait.pectoralPhase, effort: gait.effort, drive: 0.045, scull: gait.scull, tuck: gait.tuck });
+      s.body.update(gait.phase, gait.effort, 0, gait.breathPhase);
+      fin.advance(1 / fps, s);
+      if (i > fps * 5) trace.push(edgeMean(fin, 2));
+    }
+    assert.equal(fin.metrics().anchorError, 0);
+    assert.ok(fin.metrics().maxRayStrain < 0.15, JSON.stringify(fin.metrics()));
+    const mean = trace.reduce((a, b) => a + b, 0) / trace.length;
+    let crossings = 0;
+    for (let i = 1; i < trace.length; i++) if ((trace[i - 1] - mean) * (trace[i] - mean) < 0) crossings++;
+    return { gait, mean, swing: Math.max(...trace) - Math.min(...trace), hz: crossings / 2 / (trace.length / fps) };
+  }
+  const idle = pectoral({}), scull = pectoral({ scull: 1 }), tucked = pectoral({ tuck: 1 });
+  assert.ok(idle.gait.pectoralHz < 3 && Math.abs(scull.gait.pectoralHz - SCULL_HZ) < 0.05);
+  // Sculling differs from idle swimming by a quicker fan, not by a bigger fin: the swing must not shrink or grow much.
+  assert.ok(scull.swing > idle.swing * 0.9 && scull.swing < idle.swing * 1.3, `sculling swing ${scull.swing} vs idle ${idle.swing}`);
+  assert.ok(scull.hz > idle.hz + 0.5 && scull.hz < 5, `sculling beats at ${scull.hz} Hz vs idle ${idle.hz}`);
+  // The tuck draws the fins in and stills them, but gently: a deep fold reads as the fin changing size.
+  assert.ok(tucked.mean < idle.mean - 0.01, `tucked mean ${tucked.mean} vs ${idle.mean}`);
+  assert.ok(tucked.swing < idle.swing * 0.6, 'a tucked fin beats much less');
+  const quick = new SwimGait(); for (let i = 0; i < 6; i++) quick.advance(1 / 60, 0.045, 0, 0, { tuck: 1 });
+  assert.ok(quick.tuck > 0.15 && quick.tuck < 0.5, `the tuck accelerates into the fold instead of snapping (${quick.tuck})`);
+  for (let i = 0; i < 24; i++) quick.advance(1 / 60, 0.045, 0, 0, { tuck: 1 });
+  assert.ok(quick.tuck > 0.9, 'the tuck is closed within about half a second');
+  for (let i = 0; i < 180; i++) quick.advance(1 / 60, 0.045, 0, 0, {});
+  assert.ok(quick.tuck < 0.05 && quick.scull === 0, 'it opens again afterwards');
 });
 
 test('a long fin with distributed body insertions does not stretch during fast trunk strokes', () => {
@@ -268,4 +304,26 @@ test('external solver flow overrides the artistic current and reverses membrane 
   assert.ok(edgeMean(forward, 2) - edgeMean(backward, 2) > 0.1);
   assert.equal(forward.metrics().anchorError, 0);
   assert.equal(backward.metrics().anchorError, 0);
+});
+
+test('each node is kept as the body carried it, with the update it was carried at, for the host', () => {
+  for (const kind of [0, 3, 4]) {
+    const fin = make(kind, kind > 2 ? 1 : 0), body = new BodyMotion();
+    const s = { ...state(0), body };
+    for (let i = 1; i <= 90; i++) {
+      body.update(i / 60 * 2.8, 0.3, 0.2, i / 60 * 4.5);
+      fin.advance(1 / 60, { ...s, time: i / 60 });
+      assert.equal(fin.carriedBy, body);
+      assert.equal(fin.carriedAt, body.revision);
+    }
+    const out = [0, 0, 0, 0];
+    for (let n = 0; n < fin.count; n++) {
+      body.transform(fin.rest[n * 3], fin.rest[n * 3 + 1], fin.rest[n * 3 + 2], out);
+      for (let k = 0; k < 3; k++) assert.ok(Object.is(fin.carried[n * 3 + k], out[k]), `fin ${kind}, node ${n}`);
+    }
+    // A frame with no step keeps the last displacement, and says it was carried before this update.
+    body.update(3, 0.3, 0.2, 2);
+    fin.advance(0, { ...s, time: 1.5 });
+    assert.notEqual(fin.carriedAt, body.revision);
+  }
 });
