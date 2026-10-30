@@ -26,7 +26,9 @@ export class BodyMotion {
     let remaining = Math.min(dt, 0.07);
     while (remaining > 1e-9) {
       const h = Math.min(remaining, 1 / 120);
-      const travel = 0.38 + Math.min(2.5, Math.abs(speed)) * 0.75;
+      // (The bend runs back as fast as the fish swims on, so the trunk lies along the way the head
+      // went: round a tight turn, a U.)
+      const travel = 0.1 + Math.min(2.5, Math.abs(speed));
       const follow = 1 - Math.exp(-travel * h / ds);
       const relax = Math.exp(-h * (Math.abs(rate) > 0.15 ? 0.12 : 1.5));
       for (let i = a.length - 1; i > 0; i--) {

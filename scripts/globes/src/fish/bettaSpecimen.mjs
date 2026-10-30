@@ -235,9 +235,9 @@ export class BettaSpecimen {
     return near;
   }
 
-  /** Each fin vertex, as drawn, held FIN_CLEAR under the water's surface (in the water: up is against
-   *  the globe's gravity), off the sand and inside the glass, and laid onto the room it keeps round
-   *  each furnishing it has gone into, never through it. Only what is drawn moves: the fish swims as
+  /** Each fin vertex, as drawn, held off the sand and inside the glass, laid onto the room it keeps
+   *  round each furnishing it has gone into, never through it, and held FIN_CLEAR under the water's
+   *  surface (in the water: up is against the globe's gravity). Only what is drawn moves: the fish swims as
    *  it would, its fins solved as they would be. */
   layFins(env, obstacles) {
     const v = this.vertices, fins = this.finVertex, water = this.waterState;
@@ -268,19 +268,25 @@ export class BettaSpecimen {
     for (let i = 0; i < v.length; i += 3) {
       if (!fins[i / 3]) continue;
       let x = v[i], y = v[i + 1], z = v[i + 2];
-      for (const o of near) {
-        const t = Math.max(0, Math.min(1, ((x - o.ax) * o.abx + (y - o.ay) * o.aby + (z - o.az) * o.abz) * o.inv));
-        const cx = o.ax + o.abx * t, cy = o.ay + o.aby * t, cz = o.az + o.abz * t;
-        const ox = x - cx, oy = y - cy, oz = z - cz, l = Math.sqrt(ox * ox + oy * oy + oz * oz);
-        if (l < o.out && l > 1e-9) { x = cx + ox / l * o.out; y = cy + oy / l * o.out; z = cz + oz / l * o.out; }
+      // (Off the sand and inside the glass first: where the wood sits on the sand, the wood wins, a
+      // fin's edge in the sand by a hair rather than in the bark. The water's surface last of all.)
+      if (y < sand) y = sand;
+      const r = Math.sqrt(x * x + y * y + z * z);
+      if (r > glass) { x *= glass / r; y *= glass / r; z *= glass / r; }
+      // (Out of one room can be into the next, where rooms overlap: again, until it is out of all.)
+      for (let pass = 0, moved = true; moved && pass < 3; pass++) {
+        moved = false;
+        for (const o of near) {
+          const t = Math.max(0, Math.min(1, ((x - o.ax) * o.abx + (y - o.ay) * o.aby + (z - o.az) * o.abz) * o.inv));
+          const cx = o.ax + o.abx * t, cy = o.ay + o.aby * t, cz = o.az + o.abz * t;
+          const ox = x - cx, oy = y - cy, oz = z - cz, l = Math.sqrt(ox * ox + oy * oy + oz * oz);
+          if (l < o.out - 1e-9 && l > 1e-9) { x = cx + ox / l * o.out; y = cy + oy / l * o.out; z = cz + oz / l * o.out; moved = true; }
+        }
       }
       if (wet) {
         const over = x * u0 + y * u1 + z * u2 - top;
         if (over > 0) { x -= over * u0; y -= over * u1; z -= over * u2; }
       }
-      if (y < sand) y = sand;
-      const r = Math.sqrt(x * x + y * y + z * z);
-      if (r > glass) { x *= glass / r; y *= glass / r; z *= glass / r; }
       v[i] = x; v[i + 1] = y; v[i + 2] = z;
     }
   }
