@@ -7,6 +7,8 @@
 
 /** Where the choice is kept on this device. */
 export const STORAGE_KEY = 'betta.variety';
+/** The fish a first visit sees (and anything not kept, or not known). */
+export const DEFAULT_VARIETY = 'koi';
 
 /** Each variety, in the menu's order:
  *  - body: its colour down the flank (back, side, belly) and on its head (to the gill covers);
@@ -128,19 +130,19 @@ export const VARIETIES = [
   },
 ];
 
-/** The variety kept as `text` ('classic' for anything not one of them). */
+/** The variety kept as `text` (the default for anything not one of them). */
 export function parseVariety(text) {
-  return VARIETIES.some((v) => v.id === text) ? text : 'classic';
+  return VARIETIES.some((v) => v.id === text) ? text : DEFAULT_VARIETY;
 }
 
 /** The variety kept on this device. storage: what gives localStorage (reaching it can throw, as
- *  reading it can: storage blocked, a private window), each meaning only Classic, as for a first
+ *  reading it can: storage blocked, a private window), each meaning only the default, as for a first
  *  visit. */
 export function keptVariety(storage) {
   try {
     return parseVariety(storage().getItem(STORAGE_KEY));
   } catch {
-    return 'classic';
+    return DEFAULT_VARIETY;
   }
 }
 
@@ -153,9 +155,9 @@ export function keepVariety(storage, id) {
   }
 }
 
-/** The variety of this id (Classic for none). */
+/** The variety of this id (the default for none). */
 export function varietyOf(id) {
-  return VARIETIES.find((v) => v.id === id) ?? VARIETIES[0];
+  return VARIETIES.find((v) => v.id === id) ?? VARIETIES.find((v) => v.id === DEFAULT_VARIETY) ?? VARIETIES[0];
 }
 
 /** An sRGB colour ('#rrggbb') as linear light, 0..1 a channel. */

@@ -10,7 +10,7 @@
 // leaf's tip that way, as far as the current would carry it in LEAN_TIME.
 
 import type { KoiSense } from '../../fish/Koi';
-import type { Furnishings } from './furnishings';
+import type { Furnishings, LeafFollow } from './furnishings';
 
 /** Where the leaves' probes start in FluidSim's list (as many as there are leaves). */
 export const PLANT_PROBE_AT = 64;
@@ -33,6 +33,8 @@ export class MovingPlants {
   private readonly felt: Float32Array;
   private readonly points: Float32Array;
   private phases: Float32Array | null = null;
+  /** Leaf vertices where they are (place). */
+  private moved: Float32Array | null = null;
   private readonly motion: Kept;
   /** Each refit pass's dynamic offset into its uniforms. */
   private readonly offsets: Uint32Array;
@@ -41,7 +43,8 @@ export class MovingPlants {
     private readonly device: GPUDevice,
     texture: GPUTexture,
     motion: Motion,
-    private readonly phasesAt: (leaves: Float32Array, t: number, out: Float32Array | null) => Float32Array,
+    private readonly phasesAt: Furnishings['phases'],
+    private readonly placeAt: Furnishings['place'],
   ) {
     // (The buffers' data is only needed for the upload.)
     this.motion = { leaves: motion.leaves, leafTips: motion.leafTips, leafCount: motion.leafCount, moving: motion.moving, slotCount: motion.slotCount, passes: motion.passes };
@@ -82,6 +85,19 @@ export class MovingPlants {
     this.lean = new Float32Array(n * 4);
     this.felt = new Float32Array(n * 3);
     this.points = new Float32Array(n * 4);
+  }
+
+  /** Where the end `from` of an obstacle round a leaf is, the leaves where the last update left
+   *  them (the bowl's frame; `from` itself before the first), into out. */
+  place(follow: LeafFollow, from: readonly number[], out: number[]): number[] {
+    out[0] = from[0]; out[1] = from[1]; out[2] = from[2];
+    if (!this.phases || !follow.k.length) return out;
+    const moved = (this.moved = this.moved && this.moved.length >= follow.rest.length ? this.moved : new Float32Array(follow.rest.length));
+    this.placeAt(follow.rest, follow.mv, this.motion.leaves, this.phases, this.lean, moved);
+    follow.k.forEach((k, i) => {
+      for (let c = 0; c < 3; c++) out[c] += k * (moved[i * 3 + c] - follow.rest[i * 3 + c]);
+    });
+    return out;
   }
 
   /** How many probes the leaves take (from PLANT_PROBE_AT). */

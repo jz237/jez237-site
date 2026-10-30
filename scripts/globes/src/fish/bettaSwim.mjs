@@ -48,6 +48,14 @@ const GULPING = new Set(['rise', 'gulp', 'dive']);
 // it wants, it swims into, at up to TURN_SPEED. Only a startle's C-start and its sway at its
 // reflection turn it where it is; the water may turn it as it will.
 export const TURN_RADIUS = 0.05, PITCH_RADIUS = 0.08, TURN_SPEED = 0.1;
+// Folded round towards a U (fold: the bend its body has taken up, its trunk's last angle, radians,
+// which the host reads back from the body each frame), it turns on no faster than swimming on lets
+// the trunk unfold: from FOLD_SOFT to FOLD_MOST its arc opens out to FOLD_MOST over BODY_LENGTH, so
+// the head never drags the rear half round behind it.
+export const FOLD_SOFT = 1.9, FOLD_MOST = 2.5, BODY_LENGTH = 2.276 * BETTA_SCALE;
+// Its snout, this far ahead of the neck: a leaf (an obstacle that moves with the plant's leaves:
+// leaf) keeps it out as it keeps the neck out, swinging into it or swum into.
+export const SNOUT_REACH = 0.046;
 // Leaving the film nose up, it backs down off it at DIVE_BACK as it tips over, then swims on down.
 export const DIVE_BACK = 0.07;
 // Short of air (gasp, from gills the water has harmed), it goes up GASP_OFTEN times as often at
@@ -99,7 +107,7 @@ export class BettaSwim {
     this.target = [-0.34, -0.23, -0.18];
     this.heading = -0.35;
     this.pitch = this.angularVelocity = this.speed = this.time = 0;
-    this.steerRate = this.roll = this.rollRate = this.pitchRate = this.pitchSpeed = 0;
+    this.steerRate = this.roll = this.rollRate = this.pitchRate = this.pitchSpeed = this.fold = 0;
     this.sharpTurn = false;
     this.yawAccum = 0;
     this.spinBreaks = 0;
@@ -677,6 +685,12 @@ export class BettaSwim {
     this.steerRate += clamp(wantedRate - this.steerRate, -angularAcceleration * dt, angularAcceleration * dt);
     // (No faster than its swimming carries it round.)
     if (!startling && !parked) this.steerRate = clamp(this.steerRate, -Math.abs(this.speed) / TURN_RADIUS, Math.abs(this.speed) / TURN_RADIUS);
+    // (Nor on round, folded, faster than its trunk unfolds as it swims on.)
+    if (!startling && !parked && this.fold * this.steerRate > 0) {
+      const bent = Math.abs(this.fold), k = smooth(FOLD_SOFT, FOLD_MOST, bent);
+      const most = Math.abs(this.speed) * ((1 - k) / TURN_RADIUS + k * clamp(FOLD_MOST - 3 * (bent - FOLD_MOST), 0, FOLD_MOST) / BODY_LENGTH);
+      this.steerRate = clamp(this.steerRate, -most, most);
+    }
     this.angularVelocity = this.steerRate + this.waterSpin[1] * 0.8;
     this.heading += this.angularVelocity * dt;
     // Failsafe: the fish's own net turn over the last few seconds. Several turns' worth is a spin
@@ -794,6 +808,19 @@ export class BettaSwim {
       const n = d.map(v => v / l), into = this.drift.reduce((sum, v, k) => sum + v * n[k], 0);
       for (let k = 0; k < 3; k++) {
         this.position[k] = q[k] + n[k] * r;
+        if (into < 0) this.drift[k] -= into * n[k];
+      }
+    }
+    // (Nor its snout into a leaf: held off it, the fish goes with it.)
+    const snout = [-Math.cos(this.heading) * Math.cos(this.pitch), Math.sin(this.pitch), Math.sin(this.heading) * Math.cos(this.pitch)].map((v) => v * SNOUT_REACH);
+    for (const o of this.obstacles) {
+      if (!o.leaf) continue;
+      const tip = this.position.map((v, k) => v + snout[k]), q = nearestOn(tip, o.a, o.b);
+      const d = tip.map((v, k) => v - q[k]), l = Math.hypot(...d), r = o.r * 0.6;
+      if (l >= r || l < 1e-9) continue;
+      const n = d.map(v => v / l), into = this.drift.reduce((sum, v, k) => sum + v * n[k], 0);
+      for (let k = 0; k < 3; k++) {
+        this.position[k] += n[k] * (r - l);
         if (into < 0) this.drift[k] -= into * n[k];
       }
     }

@@ -439,6 +439,15 @@ export function displacePlantVertex(rest, mv, leaves, t, lean = null) {
   return out;
 }
 
+/** Where some moving vertices are at a time (the floor kept, before plantCollide): rest, xyz a
+ *  vertex; mv, MOTION_VERTEX_STRIDE floats a vertex (a leaf of `leaves`); t, seconds or the leaves'
+ *  phases (leafPhases); lean, 4 floats a leaf (or null). Into out, xyz a vertex. */
+export function placeVertices(rest, mv, leaves, t, lean, out) {
+  forget();
+  for (let i = 0; i < rest.length / 3; i++) moveVertex(rest, i * 3, null, 0, mv, i * MOTION_VERTEX_STRIDE, leaves, lean, t, out, i * 3, null);
+  return out;
+}
+
 /** One vertex's normal there (unit, on the rest normal n's side). */
 export function plantNormal(rest, n, mv, leaves, t, lean = null) {
   const p = [0, 0, 0], out = [n[0], n[1], n[2]];

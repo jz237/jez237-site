@@ -39,7 +39,7 @@ import { Specks } from './ocean/Specks';
 import { BOWL, bowlDebug, bowlShape } from './render/bowl';
 import { BowlRender, upDebug, upSettings } from './render/bowlRender';
 import { BED, setScapeShader } from './render/bowlScape';
-import { furnish } from './render/scape/furnishings';
+import { furnish, type Furnishings } from './render/scape/furnishings';
 import { BOWL_KOI_LAYER, GlobeView, texelTexture, type GlobeVariant } from './render/GlobeView';
 import { MovingPlants, PLANT_PROBE_AT } from './render/scape/MovingPlants';
 import { OceanBackdrop } from './render/OceanBackdrop';
@@ -392,7 +392,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // rests on them and flows round them), where the fish keeps clear of them, and where the sponge
   // filter's air bubbles out.
   let scapeTex: THREE.Texture | null = null;
-  let scapeObstacles: { a: number[]; b: number[]; r: number; solid: number; fin?: number }[] = [];
+  let scapeObstacles: Furnishings['obstacles'] = [];
   let plants: MovingPlants | null = null;
   let filterAir: { at: number[]; rate: number; radius: number } | null = null;
   if (furnishing) {
@@ -403,7 +403,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     const bvh = device.createTexture({ label: 'furnishings BVH', size: [f.width, f.height], format: 'rgba32float', usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.STORAGE_BINDING | GPUTextureUsage.COPY_DST });
     device.queue.writeTexture({ texture: bvh }, f.data as unknown as BufferSource, { bytesPerRow: f.width * 16, rowsPerImage: f.height }, [f.width, f.height]);
     scapeTex = texelTexture(bvh);
-    plants = new MovingPlants(device, bvh, f.motion, f.phases);
+    plants = new MovingPlants(device, bvh, f.motion, f.phases, f.place);
     sim.bedSolids = { map: f.map, extent: R };
     scapeObstacles = f.obstacles;
     filterAir = f.bubbles;
@@ -418,7 +418,8 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   let plantFrame = 0;
   let plantEvery = LITE ? 2 : 1;
   // (Where the bowl's turn has carried them, each frame: the sim frame.)
-  const turnedObstacles = scapeObstacles.map((o) => ({ a: [0, 0, 0], b: [0, 0, 0], r: o.r, solid: o.solid, fin: o.fin ?? o.solid }));
+  const turnedObstacles = scapeObstacles.map((o) => ({ a: [0, 0, 0], b: [0, 0, 0], r: o.r, solid: o.solid, fin: o.fin ?? o.solid, leaf: !!o.follow }));
+  const leafEnds = [[0, 0, 0], [0, 0, 0]];
   // (Set up before the globe's pipelines are begun, not alongside them: three holds a WebGPU
   // error scope open over each pipeline it builds, the sim one over its setup, and scopes close
   // last first, so side by side each could be handed the other's errors, and the sim's check that
@@ -566,7 +567,9 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
       const e = controller.rotation.elements;
       scapeObstacles.forEach((o, k) => {
         const t = turnedObstacles[k];
-        for (const [from, to] of [[o.a, t.a], [o.b, t.b]]) {
+        // (Those round the leaves where the leaves have swung to, as the water moves them.)
+        const ends = o.follow && plants ? [plants.place(o.follow.a, o.a, leafEnds[0]), plants.place(o.follow.b, o.b, leafEnds[1])] : [o.a, o.b];
+        for (const [from, to] of [[ends[0], t.a], [ends[1], t.b]]) {
           to[0] = e[0] * from[0] + e[3] * from[1] + e[6] * from[2];
           to[1] = e[1] * from[0] + e[4] * from[1] + e[7] * from[2];
           to[2] = e[2] * from[0] + e[5] * from[1] + e[8] * from[2];

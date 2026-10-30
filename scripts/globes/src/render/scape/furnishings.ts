@@ -12,8 +12,9 @@ export interface Furnishings {
   height: number;
   /** The bed's solids (bedSolids.mjs, FluidSim.bedSolids). */
   map: Float32Array;
-  /** Where the fish keeps clear of them (the bowl's frame). */
-  obstacles: { a: number[]; b: number[]; r: number; solid: number; fin?: number }[];
+  /** Where the fish keeps clear of them (the bowl's frame); those round the plants' leaves move with
+   *  them (follow: scapeBuild.mjs, MovingPlants.place). */
+  obstacles: { a: number[]; b: number[]; r: number; solid: number; fin?: number; follow?: { a: LeafFollow; b: LeafFollow } }[];
   /** The sponge filter's air (equipment.mjs): where it bubbles out of the lift tube (the bowl's
    *  frame), how many bubbles a second, their radius. */
   bubbles: { at: number[]; rate: number; radius: number } | null;
@@ -35,9 +36,15 @@ export interface Furnishings {
   };
   /** The leaves' phases at a time (plantMotion.mjs leafPhases), each frame. */
   phases: (leaves: Float32Array, t: number, out: Float32Array | null) => Float32Array;
+  /** Where some leaf vertices are, with the leaves' phases and lean (plantMotion.mjs placeVertices). */
+  place: (rest: Float32Array, mv: Float32Array, leaves: Float32Array, phases: Float32Array, lean: Float32Array, out: Float32Array) => Float32Array;
 }
 
-type Built = Omit<Furnishings, 'wgsl' | 'phases'>;
+/** Leaf vertices an obstacle's end moves with: at rest (xyz a vertex), their motion
+ *  (plantMotion.mjs MOTION_VERTEX_STRIDE floats a vertex) and how much of each one's move it takes. */
+export type LeafFollow = { rest: Float32Array; mv: Float32Array; k: number[] };
+
+type Built = Omit<Furnishings, 'wgsl' | 'phases' | 'place'>;
 type Ask = { n: number; extent: number; none: number; detail: number };
 
 /** The worker betta.html starts as the page is read (in a build: see vite.config.ts), what it was
@@ -76,7 +83,7 @@ function fromWorker(ask: Ask): Promise<Built> {
  *  how finely they are made (1; phones 0.5: about a quarter of the triangles). */
 export function furnish(n: number, extent: number, none: number, detail = 1): Promise<Furnishings> {
   const wgsl = import('./scapeShader.mjs').then((m) => m.scapeShaderWGSL() as string);
-  const phases = import('./plantMotion.mjs').then((m) => m.leafPhases as Furnishings['phases']);
+  const motion = import('./plantMotion.mjs');
   const built = fromWorker({ n, extent, none, detail }).catch(async (err: unknown) => {
     console.warn('[globes] furnishings built on the main thread:', err);
     const m = await import('./scapeBuild.mjs');
@@ -84,5 +91,7 @@ export function furnish(n: number, extent: number, none: number, detail = 1): Pr
   });
   // (The bubble nest's rows are written into their texture here, as the page has made the nest
   // already: nest.mjs.)
-  return Promise.all([built, wgsl, phases]).then(([b, w, p]) => ({ ...b, data: withNest(b.data), wgsl: w, phases: p }));
+  return Promise.all([built, wgsl, motion]).then(([b, w, m]) => ({
+    ...b, data: withNest(b.data), wgsl: w, phases: m.leafPhases as Furnishings['phases'], place: m.placeVertices as Furnishings['place'],
+  }));
 }

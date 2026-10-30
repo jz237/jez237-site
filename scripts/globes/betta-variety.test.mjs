@@ -53,24 +53,24 @@ test('every variety is listed once, Classic first, with a two-colour swatch and 
   assert.deepEqual(Object.keys(FISH).sort(), VARIETIES.map((v) => v.id).sort());
 });
 
-test('the choice is kept on the device; blocked storage, or a name it does not know, is Classic', () => {
+test('the choice is kept on the device; blocked storage, or a name it does not know, is Koi Marble', () => {
   const s = memory();
-  assert.equal(keptVariety(() => s), 'classic', 'a first visit');
-  keepVariety(() => s, 'koi');
-  assert.equal(s.kept.get(STORAGE_KEY), 'koi');
-  assert.equal(keptVariety(() => s), 'koi');
-  s.setItem(STORAGE_KEY, 'neon-tetra');
+  assert.equal(keptVariety(() => s), 'koi', 'a first visit');
+  keepVariety(() => s, 'classic');
+  assert.equal(s.kept.get(STORAGE_KEY), 'classic');
   assert.equal(keptVariety(() => s), 'classic');
+  s.setItem(STORAGE_KEY, 'neon-tetra');
+  assert.equal(keptVariety(() => s), 'koi');
   keepVariety(() => s, 'neon-tetra');
-  assert.equal(s.kept.get(STORAGE_KEY), 'classic', 'only a variety is kept');
+  assert.equal(s.kept.get(STORAGE_KEY), 'koi', 'only a variety is kept');
   // (Storage blocked: nothing throws, nothing is kept.)
   assert.doesNotThrow(() => keepVariety(blocked, 'copper'));
-  assert.equal(keptVariety(blocked), 'classic');
+  assert.equal(keptVariety(blocked), 'koi');
   const throwsOnRead = { getItem: blocked, setItem: () => {} };
-  assert.equal(keptVariety(() => throwsOnRead), 'classic');
+  assert.equal(keptVariety(() => throwsOnRead), 'koi');
   for (const v of VARIETIES) assert.equal(parseVariety(v.id), v.id);
-  assert.equal(parseVariety(null), 'classic');
-  assert.equal(varietyOf('nonsense').id, 'classic');
+  assert.equal(parseVariety(null), 'koi');
+  assert.equal(varietyOf('nonsense').id, 'koi');
 });
 
 test('Classic leaves the fish to its photographs: its numbers are off, and the shader reads a variety only behind its gate', () => {

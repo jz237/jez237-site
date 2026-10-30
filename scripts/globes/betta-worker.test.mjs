@@ -24,7 +24,7 @@ const ENV = { radius: 0.99125, sandLevel: -0.6, level: 0.181, iso: 0.5 };
 const STILL = [0, 0, 0];
 /** Two of the bowl's solid parts across the fish's water (where they are with the bowl upright), and
  *  the room its fins keep round them (fin: as the page sends them, main.ts). */
-const SOLIDS = [{ a: [-0.45, -0.3, -0.1], b: [0.4, -0.22, 0.15], r: 0.06, solid: 0.045, fin: 0.045 }, { a: [0.1, -0.5, -0.3], b: [0.05, 0.05, -0.25], r: 0.04, solid: 0.03, fin: 0.04 }];
+const SOLIDS = [{ a: [-0.45, -0.3, -0.1], b: [0.4, -0.22, 0.15], r: 0.06, solid: 0.045, fin: 0.045, leaf: false }, { a: [0.1, -0.5, -0.3], b: [0.05, 0.05, -0.25], r: 0.04, solid: 0.03, fin: 0.04, leaf: true }];
 
 /** The water as the fish's probes find it: a slow swirl, a knock now and then, the film at the
  *  level, the bed under the head moving a little. */

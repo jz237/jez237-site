@@ -1,5 +1,5 @@
 // The betta's variety (fish/varieties.mjs): the fish's name among its controls is a button, "Living
-// Silk · Classic", and under it a short list to choose from, each with a swatch of its body and its
+// Silk · Koi Marble", and under it a short list to choose from, each with a swatch of its body and its
 // fins; remembered on this device. A tap on one shows it and puts the list away; the arrow keys go
 // through them, each shown as they come to it, until Escape or a press anywhere else.
 

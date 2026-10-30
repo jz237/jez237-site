@@ -273,7 +273,9 @@ test('at the phones\' detail the pieces build alike every time, with the full de
   assert.deepEqual(lowPieces.map((p) => p.name), pieces.map((p) => p.name));
   assertSameMeshes(low.meshes, lowPieces);
   assert.deepEqual(low.obstacles, lowPieces.flatMap((p) => p.obstacles));
-  lowPieces.forEach((p, i) => assert.deepEqual(p.obstacles, pieces[i].obstacles, `${p.name}'s obstacles differ from the full detail's`));
+  // (Those round the leaves follow vertices of their own detail's mesh: placed alike, numbered apart.)
+  const placed = (os) => os.map(({ follow, ...o }) => o);
+  lowPieces.forEach((p, i) => assert.deepEqual(placed(p.obstacles), placed(pieces[i].obstacles), `${p.name}'s obstacles differ from the full detail's`));
   // (The same materials, each attribute over the same range, so the shader reads them alike.)
   const fullRanges = attrRanges(scape.meshes), lowRanges = attrRanges(low.meshes);
   assert.deepEqual([...lowRanges.keys()].sort(), [...fullRanges.keys()].sort());

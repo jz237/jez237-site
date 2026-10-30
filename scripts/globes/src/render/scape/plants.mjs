@@ -431,6 +431,29 @@ function leafMotion(mb, mv, leaves, li, shape, bv, line, rings, full, g) {
 
 /** The mesh's motion (mesh.motion): its vertices' entries (mv, by vertex; the still ones, leaf -1)
  *  and its leaves' table. */
+/** The obstacles round a plant's leaves move with them: o.follow, for each end, the mesh's vertices
+ *  whose motion carries it and by how much of it (scapeBuild.mjs, MovingPlants.place). Round a leaf
+ *  (o.leaf), each end goes with that leaf's vertex nearest it; round a cluster of leaves (o.tips), its
+ *  foot in the crown stays put and its far end, 0.85 of the way out to their tips, goes with them. */
+function followLeaves(mesh, obstacles) {
+  const P = mesh.positions, mv = mesh.motion.vertex;
+  const nearest = (leaf, p) => {
+    let best = -1, far = Infinity;
+    for (let v = 0; v < P.length / 3; v++) {
+      if (mv[v * MOTION_VERTEX_STRIDE] !== leaf) continue;
+      const d = (P[v * 3] - p[0]) ** 2 + (P[v * 3 + 1] - p[1]) ** 2 + (P[v * 3 + 2] - p[2]) ** 2;
+      if (d < far) { far = d; best = v; }
+    }
+    return best;
+  };
+  for (const o of obstacles) {
+    if (o.leaf !== undefined) o.follow = { mesh: mesh.name, a: [[nearest(o.leaf, o.a), 1]], b: [[nearest(o.leaf, o.b), 1]] };
+    else if (o.tips) o.follow = { mesh: mesh.name, a: [], b: o.tips.map((t) => [nearest(t.leaf, t.tip), 0.85 / o.tips.length]) };
+    delete o.leaf;
+    delete o.tips;
+  }
+}
+
 function motionOf(vertexCount, mv, leaves) {
   const vertex = new Float32Array(vertexCount * MOTION_VERTEX_STRIDE);
   for (let v = 0; v < vertexCount; v++) {
@@ -837,17 +860,18 @@ function tallPlant(rand, rootRand, detail) {
     tubePatches(pts.slice(0, segs + 1), 0.007, 1000 + i, patches);
     crowdIn(crowd, shape, pts, samples);
     // (Round its petiole above the crown, and its blade; a young furled leaf, stalk and all.)
-    if (young) obstacles.push({ a: pts[Math.round(segs * 0.3)], b: shape.at(1, 0), r: 0.03, solid: 0.015 });
+    if (young) obstacles.push({ a: pts[Math.round(segs * 0.3)], b: shape.at(1, 0), r: 0.03, solid: 0.015, leaf: i });
     else {
       const mid = pts[Math.round(segs * 0.6)];
-      obstacles.push({ a: pts[Math.round(segs * 0.25)], b: mid, r: 0.035, solid: 0.02 }, { a: mid, b: l.top, r: 0.035, solid: 0.02 });
-      obstacles.push({ a: shape.at(0.12, 0), b: shape.at(0.8, 0), r: 0.85 * shape.H + 0.02, solid: 0 });
+      obstacles.push({ a: pts[Math.round(segs * 0.25)], b: mid, r: 0.035, solid: 0.02, leaf: i }, { a: mid, b: l.top, r: 0.035, solid: 0.02, leaf: i });
+      obstacles.push({ a: shape.at(0.12, 0), b: shape.at(0.8, 0), r: 0.85 * shape.H + 0.02, solid: 0, leaf: i });
     }
   });
   obstacles.push({ a: TALL_CROWN, b: add(TALL_CROWN, [0, 0.14, 0]), r: 0.07, solid: 0.03 });
   occlude(mb, owners, patches, 0.2, 1.6);
   const mesh = mb.finish();
   mesh.motion = motionOf(mb.vertexCount, mv, leaves);
+  followLeaves(mesh, obstacles);
   return { mesh, obstacles };
 }
 
@@ -958,7 +982,7 @@ function smallPlant(rand, detail) {
     leafMotion(mb, mv, leaves, n, shape, bv, line, rings, full, { crown: SMALL_CROWN, plant: 'small', young: false, with: SMALL_MOVE_WITH[n] });
     tubePatches(full.pts.slice(0, segs + 1), 0.003, 1000 + k, patches);
     crowdIn(crowd, shape, full.pts, samples);
-    tips.push({ tip: shape.at(0.85, 0), pts: bladeSamples(shape, 6, 2) });
+    tips.push({ tip: shape.at(0.85, 0), pts: bladeSamples(shape, 6, 2), leaf: n });
   }
   obstacles.push({ a: SMALL_CROWN, b: add(SMALL_CROWN, [0, 0.07, 0]), r: 0.08, solid: 0.02 });
   // (The leaves in four clusters round it, by where their tips point.)
@@ -968,12 +992,13 @@ function smallPlant(rand, detail) {
     if (!group.length) continue;
     const b = mix3(a, mul(group.reduce((sum, t) => add(sum, t.tip), [0, 0, 0]), 1 / group.length), 0.85);
     const d = group.flatMap((t) => t.pts.map((q) => segDist(q, a, b))).sort((x, y) => x - y);
-    obstacles.push({ a, b, r: Math.min(Math.max(d[Math.floor(0.9 * (d.length - 1))], 0.03), 0.12), solid: 0 });
+    obstacles.push({ a, b, r: Math.min(Math.max(d[Math.floor(0.9 * (d.length - 1))], 0.03), 0.12), solid: 0, tips: group });
   }
   // (Its many small leaves crowd close: each shades less than the tall plant's.)
   occlude(mb, owners, patches, 0.12, 0.9);
   const mesh = mb.finish();
   mesh.motion = motionOf(mb.vertexCount, mv, leaves);
+  followLeaves(mesh, obstacles);
   return { mesh, obstacles };
 }
 

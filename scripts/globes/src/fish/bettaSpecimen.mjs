@@ -34,7 +34,7 @@ export const BUBBLE_RADIUS = 0.0035;
  * obstacles (capsules, sim frame: { a, b, r, solid }), the pellet it is after (FishFood: its pos) or
  * null, how wide to open for it, whether it is asked to flare, and what the water is doing to it
  * (water/effects.ts: how listless, how short of air, how closely it holds its fins; clear if none).
- * @typedef {{ obstacles: { a: number[], b: number[], r: number, solid: number }[], food: { pos: number[] } | null,
+ * @typedef {{ obstacles: { a: number[], b: number[], r: number, solid: number, leaf?: boolean }[], food: { pos: number[] } | null,
  *   gapeWant: number, flared: boolean, water?: BettaSpirits }} BettaHost
  * @typedef {{ lethargy: number, gasp: number, clamp: number }} BettaSpirits
  */
@@ -146,6 +146,8 @@ export class BettaSpecimen {
     const spirits = host.water;
     this.swim.lethargy = spirits ? spirits.lethargy : 0;
     this.swim.gasp = spirits ? spirits.gasp : 0;
+    // How far its body is folded round (last frame's), so it turns no tighter than the trunk can follow.
+    this.swim.fold = this.fish.userData.bodyMotion?.turnAngles?.at(-1) ?? 0;
     // The tail's own working (read back from last frame's gait) is what lets the body gain speed.
     this.swim.advance(dt, this.flow.toArray(this.flowNow), env, this.waterState.submerged > 0.99, this.waterState, this.fish.userData.stroke ?? null);
     this.fish.userData.locomotion = this.locomotion();

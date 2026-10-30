@@ -14,7 +14,7 @@ import { BED_LEVEL, GLASS_CLEAR, MAT } from './src/render/scape/mesh.mjs';
 import { packScape, traceCPU } from './src/render/scape/scapeBVH.mjs';
 import {
   COLLIDE_SOFT, FLOOR, LEAF_STRIDE, LEAN_CAP, MOTION_VERTEX_STRIDE as MS, PHASE_STRIDE, PLANT_MOTION,
-  displacePlantVertex, forgetMotion, leafPhases, leafReach, moveVertex, movePlant, plantCollide, plantMotionWGSL, plantNormal, plantSolids, tamedLeaves,
+  displacePlantVertex, forgetMotion, leafPhases, leafReach, moveVertex, movePlant, placeVertices, plantCollide, plantMotionWGSL, plantNormal, plantSolids, tamedLeaves,
 } from './src/render/scape/plantMotion.mjs';
 
 const piece = plants.build();
@@ -434,6 +434,35 @@ test('the lean bends a leaf its way, the stalk\'s foot staying put', () => {
   }
 });
 
+test('the obstacles round the leaves go with them, at any detail', () => {
+  for (const built of [piece, plants.build({ detail: 0.5 })]) {
+    const follows = built.obstacles.filter((o) => o.follow);
+    assert.equal(follows.length, built.obstacles.length - 2, 'all but the two crowns follow their leaves');
+    for (const o of follows) {
+      const m = built.meshes.find((x) => x.name === o.follow.mesh), P = m.positions, mv = m.motion.vertex;
+      for (const end of ['a', 'b']) {
+        const list = o.follow[end];
+        // (A cluster's foot, in the crown, stays put; its far end goes 0.85 of the way its tips go.)
+        const share = list.reduce((sum, [, k]) => sum + k, 0);
+        assert.ok(list.length ? Math.abs(share - (o.follow.a.length ? 1 : 0.85)) < 1e-9 : end === 'a', `${m.name}: an end's weights add to ${share}`);
+        if (!list.length) continue;
+        const at = list.reduce((sum, [v, k]) => sum.map((x, j) => x + k * P[v * 3 + j]), o.a.map((x) => (1 - share) * x));
+        const off = Math.hypot(...at.map((x, j) => x - o[end][j]));
+        // (On a stalk, the nearest vertex is on its ring, round its line.)
+        assert.ok(off < 0.025, `${m.name}: an obstacle's end ${fmt(o[end])} goes with vertices ${off.toFixed(4)} from it`);
+        for (const [v] of list) assert.ok(mv[v * MS] >= 0, `${m.name}: vertex ${v} does not move`);
+        // (And they go where the plant's own motion takes them, leaning and all.)
+        const lean = new Float32Array((m.motion.leaves.length / LEAF_STRIDE) * 4).fill(0.03);
+        const rest = Float32Array.from(list.flatMap(([v]) => [P[v * 3], P[v * 3 + 1], P[v * 3 + 2]]));
+        const rows = Float32Array.from(list.flatMap(([v]) => [...mv.subarray(v * MS, (v + 1) * MS)]));
+        const now = placeVertices(rest, rows, m.motion.leaves, 4.2, lean, new Float32Array(rest.length));
+        const all = moved(m, 4.2, m.motion.leaves, lean);
+        list.forEach(([v], i) => assert.ok(Math.hypot(...[0, 1, 2].map((j) => now[i * 3 + j] - all[v * 3 + j])) < 1e-6, `${m.name}: vertex ${v} placed apart from its plant`));
+      }
+    }
+  }
+});
+
 test('the motion is the same every time, and at any detail the same leaves in the same places', () => {
   const again = plants.build();
   piece.meshes.forEach((m, i) => {
@@ -442,7 +471,9 @@ test('the motion is the same every time, and at any detail the same leaves in th
     assert.deepEqual(moved(again.meshes[i], 9.9), moved(m, 9.9));
   });
   const half = plants.build({ detail: 0.5 });
-  assert.deepEqual(half.obstacles, piece.obstacles, 'the obstacles differ at detail 0.5');
+  // (Each leaf's obstacles follow vertices of their own detail's mesh: placed alike, numbered apart.)
+  const placed = (os) => os.map(({ follow, ...o }) => o);
+  assert.deepEqual(placed(half.obstacles), placed(piece.obstacles), 'the obstacles differ at detail 0.5');
   let tris = 0, tris1 = 0;
   piece.meshes.forEach((m, i) => {
     const h = half.meshes[i];

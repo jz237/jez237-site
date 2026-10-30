@@ -5,7 +5,7 @@ import { BettaRemote } from './bettaLink.mjs';
 import { BettaSpecimen } from './bettaSpecimen.mjs';
 import { BETTA_SURFACE_COUNT, bettaSurfaceHeights } from './bettaWater.mjs';
 import { CAUDAL, caudalCells, luminanceOf, MACRO, measure, painting, prepare, PROFILE, profileCells } from './bettaPaint.mjs';
-import { VARIETIES, varietyLook, varietyOf } from './varieties.mjs';
+import { DEFAULT_VARIETY, VARIETIES, varietyLook, varietyOf } from './varieties.mjs';
 import type { Feeder, FoodAim } from './FishFood';
 import type { KoiEnv, KoiSense } from './Koi';
 import { CLEAR_WATER, type WaterEffects } from '../water/effects';
@@ -42,7 +42,7 @@ export class Betta implements Feeder {
   private host: ((copy: boolean) => void) | null = null;
   /** A variety shown before there was a host, and whether its maps are still to be copied. */
   private unsent: boolean | null = null;
-  private variety = 'classic';
+  private variety = DEFAULT_VARIETY;
   /** The variety being painted, a few ms a frame (showVariety): a newer choice ends it. */
   private paintJob: object | null = null;
   /** The photographs' brightness, measured as they come in (bettaPaint.mjs measure), with where each
@@ -74,7 +74,7 @@ export class Betta implements Feeder {
   readonly reach = 0.055;
   /** What else is in the water (the bowl's furnishings: sim frame), set by the host. Its route
    *  keeps round them (bettaSwim.mjs), and its body out of their solid parts. */
-  obstacles: { a: number[]; b: number[]; r: number; solid: number; fin?: number }[] = [];
+  obstacles: { a: number[]; b: number[]; r: number; solid: number; fin?: number; leaf?: boolean }[] = [];
   /** What the bowl's water is doing to it (water/effects.ts), set by the host each frame: how
    *  listless it is, how short of air, how closely it holds its fins (bettaSpecimen.mjs), and how
    *  keen it is on food (FishFood). */
