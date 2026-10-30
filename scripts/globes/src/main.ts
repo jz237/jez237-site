@@ -845,6 +845,10 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
 
   // Dev: smoothed GPU time of the render pass (ms), when on.
   const renderTimes = { on: false, ms: 0 };
+  // ?clock: the seconds since the first frame, in a corner (to say when something looked off).
+  const seconds = params.has('clock') ? document.body.appendChild(document.createElement('div')) : null;
+  if (seconds) seconds.style.cssText = 'position:fixed;left:max(12px,env(safe-area-inset-left));top:calc(100px + env(safe-area-inset-top));z-index:50;padding:6px 10px;border-radius:4px;background:rgba(0,0,0,.6);color:#fff;font:600 22px/1 ui-monospace,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;pointer-events:none';
+  let secondsFrom = 0;
   let last = performance.now();
   renderer.setAnimationLoop((time?: number) => {
     // (Phones: the animation frame's time, the screen's refresh, so that frames are timed as they
@@ -918,6 +922,10 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
       const calm = Math.min(cfg.maxSubsteps, Math.max(cfg.minSubsteps, Math.ceil(dt / cfg.maxSubstepDt - 1e-6)));
       const knobs = quality.frame(now, { cpu: work, gpu: clock.take(), queue: clock.takeQueue(), area: areaNow(), restArea: areaAtRest(), moving: !still || sim.lastSubsteps > calm, substeps: sim.lastSubsteps, refresh: pace?.refresh });
       if (knobs) applyKnobs(knobs);
+    }
+    if (seconds) {
+      if (first) secondsFrom = now;
+      seconds.textContent = `${((now - secondsFrom) / 1000).toFixed(1)} s`;
     }
     if (first) {
       first = false;
