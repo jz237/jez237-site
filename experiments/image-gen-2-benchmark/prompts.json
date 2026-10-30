@@ -27374,5 +27374,92 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-30-factual-infographic-factual-infographic-tortoiseshell-a-mos",
+    "title": "Factual infographic: Tortoiseshell — A Mosaic of Active X Chromosomes",
+    "tests": "Source-verified before generation; artwork-led open composition; no subjective post-generation critic; requested backend identity not independently verified.; archive_slot=2026-10-30T00:20; concept=tortoiseshell-x-inactivation-coat-mosaic; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: coats-and-genetics",
+    "prompt": "Create a finished, richly illustrated Cat Atlas infographic, an artwork-led flowing scientific illustration about TORTOISESHELL coat mosaicism. Exact main headline: \"TORTOISESHELL\". Directly beneath: \"One cat, a mosaic of active X chromosomes\". A dominant exquisitely naturalistic adult short-haired tortoiseshell cat curls in a loose comma through the center-right, three-quarter overhead view, head lifted toward the reader, alert gentle amber eyes, believable paws and whiskers, lustrous interwoven black and russet-orange fur, no white patches. Capture individual guard hairs, soft underfur, copper rim lighting and deep charcoal shadows. Use fine gouache, luminous colored-pencil fur and delicate scientific ink on a cool pale blue-gray ground, warm copper-orange and slate accents. A beautiful asymmetric composition with spacious breathing room, not a rigid chart. The cat occupies more than half the illustration; explanations grow from its curled silhouette and the color boundaries of its coat.\n\nAt upper left weave an enlarged, clearly schematic early-development cell with two X chromosomes, one copper and one slate. Label \"Typical XX cat: orange and non-orange variants\". Below, a branching, gently curving pathway shows two possible cell lineages: each cell has one bright active X and one pale compact inactive X. Explicit readable label: \"Early development: one X is randomly switched off in each cell\". Copper-active lineage flows toward an orange fur close-up; slate-active lineage toward a black fur close-up. Descendant cells preserve their active-X choice; label \"Cell descendants form a pigment mosaic\". Use a few generously sized cells, not an exhaustive pedigree; no chromosome-shaped structures floating literally inside hair. Leader lines connect these conceptual lineages to the appropriate coat areas, with \"Simplified mechanism — not a literal patch map\" in small readable type. Avoid implying that a full coat patch is a single cell or that orange and black paint mix.\n\nAlong the lower-left curve a delicate open scientific detail shows two simplified melanocytes beside enlarged hair shafts with pigment dots, orange vs dark, not an unsupported anatomical cross-section. Labels: \"Orange patch: pheomelanin\" and \"Black patch: eumelanin\". A compact typographic annotation beside them reads \"Orange-associated DNA deletion at ARHGAP36\" then \"Higher ARHGAP36 activity in orange pigment cells\". The deletion is non-coding: show a small gap on a schematic DNA line, labeled \"Non-coding deletion\", not an amputated protein. No invented nucleotide letters, numbers, protein structures or molecular pathway intermediates. The connection is genetic regulation, not temperature or diet.\n\nFinish the lower open margin with two concise source-backed notes: \"Tortoiseshell cats are nearly always female\" and \"Coat color does not establish personality\". In a restrained footnote: \"Sources: Stanford Medicine; Kyushu University (2025)\". Main title, central mechanism, cell labels and pigment labels should be comfortably legible; secondary text short and graceful, no walls of text. Use curved fine leaders and shared color accents to integrate the studies into the cat illustration. No detached cards, boxed grids, breed-history claims, health diagnoses, anthropomorphic props, humans, decorative fake text, photographed poster, frame, table, interface or book mockup. Scientific clarity with sumptuous fur and expressive yet anatomically correct feline presence. Render the composition itself with opaque background.",
+    "image": "images/2026-10-30-factual-infographic-factual-infographic-tortoiseshell-a-mos.jpg",
+    "thumb": "thumbs/2026-10-30-factual-infographic-factual-infographic-tortoiseshell-a-mos.webp",
+    "color": "#9d9891",
+    "date": "2026-10-30",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "tortoiseshell-x-inactivation-coat-mosaic",
+      "imageSha256": "c82757afc8512bb6394fa0a1320050f9f3b6838de76a25fbde1988490deacdd2",
+      "imageDHash": "d8b23adafc96be9c"
+    },
+    "factualInfographic": {
+      "topic": "How random X-chromosome inactivation creates orange and black patches in tortoiseshell cats",
+      "description": "A focused genetics atlas connecting a tortoiseshell coat to random X inactivation, pigment-cell lineages and orange-associated ARHGAP36 regulation. Schematic studies are explicitly labeled.",
+      "sourceNote": "Read independent university accounts of the two 2025 studies: https://med.stanford.edu/news/all-news/2025/05/orange-cats.html ; https://www.kyushu-u.ac.jp/en/researches/view/337/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-30T04:21:24.567314+00:00",
+        "sources": [
+          {
+            "id": "stanford",
+            "publisher": "Stanford Medicine",
+            "title": "Scientists track down mutation that makes orange cats orange",
+            "sourceType": "university",
+            "url": "https://med.stanford.edu/news/all-news/2025/05/orange-cats.html"
+          },
+          {
+            "id": "kyushu",
+            "publisher": "Kyushu University",
+            "title": "Scientists find the meow-tation that gives cats their orange fur",
+            "sourceType": "university",
+            "url": "https://www.kyushu-u.ac.jp/en/researches/view/337/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Tortoiseshell cats have mottled orange and non-orange fur, and are nearly always female.",
+            "sourceIds": [
+              "stanford",
+              "kyushu"
+            ]
+          },
+          {
+            "claim": "In a typical XX cat carrying orange and non-orange variants, one X chromosome is randomly inactivated in each cell early in development.",
+            "sourceIds": [
+              "stanford",
+              "kyushu"
+            ]
+          },
+          {
+            "claim": "Descendant cells retain different active X chromosomes, producing a mosaic of pigment-cell areas and orange or black coat patches.",
+            "sourceIds": [
+              "stanford",
+              "kyushu"
+            ]
+          },
+          {
+            "claim": "The orange-associated deletion is in a non-coding region at the X-linked ARHGAP36 locus; orange patches show increased ARHGAP36 activity in melanocytes.",
+            "sourceIds": [
+              "stanford",
+              "kyushu"
+            ]
+          },
+          {
+            "claim": "Orange patches favor pheomelanin and black patches eumelanin; the cell and chromosome artwork is a simplified mechanism schematic, not a literal patch map.",
+            "sourceIds": [
+              "kyushu"
+            ]
+          },
+          {
+            "claim": "A coat-color pattern does not establish an individual cat’s personality; behavioral links are not established by these findings.",
+            "sourceIds": [
+              "stanford",
+              "kyushu"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
