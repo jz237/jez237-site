@@ -99,7 +99,7 @@ export class BettaSwim {
     this.target = [-0.34, -0.23, -0.18];
     this.heading = -0.35;
     this.pitch = this.angularVelocity = this.speed = this.time = 0;
-    this.steerRate = this.roll = this.rollRate = this.pitchRate = 0;
+    this.steerRate = this.roll = this.rollRate = this.pitchRate = this.pitchSpeed = 0;
     this.sharpTurn = false;
     this.yawAccum = 0;
     this.spinBreaks = 0;
@@ -690,7 +690,10 @@ export class BettaSwim {
         this.target = this.targetAhead(b, 0.4);
       }
     }
-    let pitchTarget = still ? 0 : clamp(Math.atan2(delta[1], Math.hypot(delta[0], delta[2])), escaping || feeding ? -0.6 : -0.32, feeding ? 0.85 : 0.32);
+    // (Swimming about, the climb or descent is spread over the leg: the nose does not steepen as the
+    // goal comes near.)
+    const reach = escaping || feeding ? 0 : 0.2;
+    let pitchTarget = still ? 0 : clamp(Math.atan2(delta[1], Math.max(reach, Math.hypot(delta[0], delta[2]))), escaping || feeding ? -0.6 : -0.32, feeding ? 0.85 : 0.32);
     if (sinking) pitchTarget = -clamp(0.12 + 2.5 * descent, 0, 0.72) * (1 - 0.65 * this.slump);
     // At the film the lips are trimmed by the tilt of the head alone, which moves them without moving the body.
     const lipTrim = clamp(pitchForMouth(this.position[1], this.surfaceY - MOUTH_DEPTH), GULP_PITCH - 0.1, GULP_PITCH + 0.1);
@@ -703,9 +706,15 @@ export class BettaSwim {
     if (startling && this.startleDive) pitchTarget = -0.45;
     const oldPitch = this.pitch, oldRoll = this.roll;
     const pitchSpin = -this.waterSpin[2] * Math.cos(this.heading) - this.waterSpin[0] * Math.sin(this.heading);
-    // (Leaving the film it tips over quickly, as fast as backing off it carries it round.)
-    const pitchPace = startling ? 8 : this.mode === 'dive' ? 4.5 : 2.4, pitchMost = Math.abs(this.speed) / PITCH_RADIUS * dt;
-    this.pitch = clamp(this.pitch + clamp(damp(this.pitch, pitchTarget, dt, pitchPace) - this.pitch, -pitchMost, pitchMost) + pitchSpin * dt * 0.8, -0.75, gulping || striking ? 0.95 : 0.75);
+    // (Leaving the film it tips over quickly, as fast as backing off it carries it round. Swimming about,
+    // it eases into a new angle and out of it again as its fins and tail bring it round: never a sudden tip.)
+    const brisk = startling || this.mode === 'dive' || climbing || gulping || feeding;
+    // (A turn under way is checked a little faster than it is begun, so it does not run on past the angle.)
+    const pitchPace = startling ? 8 : this.mode === 'dive' ? 4.5 : brisk ? 2.4 : 1.3, pitchMost = Math.min(Math.abs(this.speed) / PITCH_RADIUS, brisk ? Infinity : 0.5);
+    const wantedPitch = clamp((pitchTarget - this.pitch) * pitchPace, -pitchMost, pitchMost), checking = (wantedPitch - this.pitchSpeed) * this.pitchSpeed < 0;
+    const pitchEase = (startling ? 80 : brisk ? 6 : checking ? 2.4 : 1.2) * dt;
+    this.pitchSpeed = clamp(this.pitchSpeed + clamp(wantedPitch - this.pitchSpeed, -pitchEase, pitchEase), -pitchMost, pitchMost);
+    this.pitch = clamp(this.pitch + this.pitchSpeed * dt + pitchSpin * dt * 0.8, -0.75, gulping || striking ? 0.95 : 0.75);
     const rollSpin = this.waterSpin[0] * Math.cos(this.heading) - this.waterSpin[2] * Math.sin(this.heading);
     // (Lying listless on the sand, it leans over a little onto one side, over a few seconds.)
     const lean = L > 0 && this.mode === 'rest' && this.restSettled ? 0.32 * L * this.restSide * smooth(0, 3, this.holdClock) : 0;
@@ -792,6 +801,6 @@ export class BettaSwim {
     // eases off at once for a glide. A startle is the exception, and swims as fast as it flies.
     const effortSpeed = startling ? Math.max(this.speed, intent) : intent;
     const turning = intent > 0.004 && (holding || this.mode === 'glide');
-    this.drive = this.mode === 'glide' && !turning ? 0.065 : parked ? 0.08 : settledDown ? 0.03 : holding && !turning ? 0.045 : clamp(0.07 + effortSpeed * 1.4 + Math.abs(this.steerRate) * 0.06, 0.045, 0.40);
+    this.drive = this.mode === 'glide' && !turning ? 0.065 : parked ? 0.08 : settledDown ? 0.03 : holding && !turning ? 0.045 : clamp(0.07 + effortSpeed * 1.4 + Math.abs(this.steerRate) * 0.06 + Math.abs(this.pitchSpeed) * 0.3, 0.045, 0.40);
   }
 }
