@@ -1,5 +1,29 @@
 [
   {
+    "id": "033",
+    "title": "Drum Atelier",
+    "category": "3D · Mechanical filtration",
+    "description": "Follow suspended waste into an automatic drum filter. Inspect the woven screen, watch the clean-water level trigger a wash, and trace the captured solids through a stationary trough to the waste outlet.",
+    "url": "drum-studio/",
+    "image": "assets/drum-studio.jpg",
+    "imageAlt": "The working Drum Atelier with a cutaway cylindrical screen, geared drive, six rinse nozzles, separate water levels and component explorer",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/drum-studio",
+    "features": [
+      "18 assemblies, nine lessons & six experiments",
+      "Automatic rinse, rotating drive & visible waste export",
+      "Woven-screen macro & six teaching close-ups",
+      "Gravity-fed level response & fault studies"
+    ],
+    "facts": [
+      "Original mechanical teaching design",
+      "Mouse, touch & keyboard",
+      "Self-hosted 3D"
+    ],
+    "note": "WebGL 2 · Desktop & mobile · Illustrative loading and hydraulics · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
     "id": "031",
     "title": "Moving Bed Atelier",
     "category": "3D · Biological filtration",

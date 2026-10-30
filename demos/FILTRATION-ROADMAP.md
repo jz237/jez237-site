@@ -1,10 +1,11 @@
 # Filtration demo inventory and next studies
 
-Reviewed October 29, 2026 against the current `jz237/jez237-site` checkout and the running demos. The main gallery now has 27 entries, including one Aquarium Filtration collection containing five filter exhibits. Individual filter URLs are unchanged. The earlier AC70 update also registered two existing filtration exhibits that had been absent from the gallery.
+Reviewed October 30, 2026 against the current `jz237/jez237-site` checkout and the running demos. The main gallery now has 27 entries, including one Aquarium Filtration collection containing six filter exhibits. Individual filter URLs are unchanged. The earlier AC70 update also registered two existing filtration exhibits that had been absent from the gallery.
 
 | Exhibit | Existing coverage | Location |
 | --- | --- | --- |
-| Moving Bed Atelier — new | Original aerated carrier reactor; 18 assemblies, nine lessons, six experiments, protected-biofilm macro and linear diaphragm-pump section | `/demos/moving-bed-studio/` |
+| Drum Atelier — new | Original gravity-fed mechanical drum; 18 assemblies, nine lessons, six experiments, sector loading, wash cycle and enlarged screen weave | `/demos/drum-studio/` |
+| Moving Bed Atelier — existing | Original aerated carrier reactor; 18 assemblies, nine lessons, six experiments, protected-biofilm macro and linear diaphragm-pump section | `/demos/moving-bed-studio/` |
 | Trickle Atelier — existing | Original wet/dry circuit; 18 assemblies; distributor, open bio-balls, baffles, return pump, seven close-ups and power-off reserve lab | `/demos/trickle-studio/` |
 | AquaClear Atelier — existing | Current AC70 hang-on-back filter; 15 assemblies; intake, magnetic impeller, foam, rear carbon/front BIOMAX, spillway, refiltration, care | `/demos/aquaclear-studio/` |
 | FiltoClear 5200 Studio — existing | Pressurized pond canister; 32 assemblies; foam stack, UV core, normal water path, Easy-Clean and pond sizing | `/demos/filtoclear-studio/` |
@@ -52,6 +53,10 @@ Hundreds of independently moving hollow carriers, twin aeration plumes, separate
 ### Moving-bed refinement and collection — October 29, 2026
 
 Added water-depth cues, surface breakup, actual carrier trails, open lid vents, pipe bores, rounded macro geometry, flexing pump diaphragms/valves, four teaching close-ups and independent flow-route switches. All five filter studies now appear inside `/demos/aquarium-filtration/` through one main-gallery link. Future filters belong in its catalog; see that collection's README.
+
+### Rotating drum study — implemented October 30, 2026
+
+The user selected a rotating drum next. Drum Atelier adds inside-to-outside screening, a separate stationary waste trough, a reverse spray wash, on-demand gear motion and gravity-fed clean-side drawdown. Six experiments include loaded screens, heavy solids, lost rinse pressure, circulation stop and blocked waste. The original model is documented in `drum-studio/README.md`; all six filters remain inside the single collection.
 
 ### Next distinct filter mechanisms
 
