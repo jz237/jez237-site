@@ -1,0 +1,8 @@
+export const JOURNEY=[
+ {title:'The pump supplies the lift',seconds:6,focus:'base',text:'Follow the cyan marker through the feed pump and control valve. The pump supplies water flow; no air is being injected.',points:[[-2.95,.62,.65],[-2.95,.62,0],[-2.3,.62,0],[-1.8,.9,0],[-1.8,1.48,0],[-1.35,1.48,0],[-1.35,.76,0]]},
+ {title:'Spread the incoming flow',seconds:5,focus:'base',text:'Water enters the plenum, spreads underneath the distributor, and rises through its openings. Uniform distribution helps avoid poorly moving regions.',points:[[-1.35,.76,0],[-.7,.76,0],[0,.76,0],[.4,.85,.2],[.45,1.18,.3]]},
+ {title:'Pass through living surfaces',seconds:8,focus:'bed',text:'Upward flow suspends grains and carries dissolved compounds toward their biofilm. Grains stay in the reactor while water continues upward.',points:[[.45,1.18,.3],[.4,1.7,.5],[.15,2.3,.7],[-.4,2.9,.6],[-.45,3.5,.4],[-.1,4.3,.3]]},
+ {title:'Leave the sand behind',seconds:7,focus:'outlet',text:'Water crosses the freeboard and enters the gravity return. Fine media should remain below this outlet; excessive flow can carry grains out.',points:[[-.1,4.3,.3],[.3,4.8,.1],[.9,5.02,0],[1.65,5.02,0],[2.05,4.75,0],[2.05,1.2,0],[2.05,.81,0]]}
+];
+export function stepJourney(g,dt){if(!g||g.done||dt<=0)return g;g.elapsed+=dt;while(g.elapsed>=JOURNEY[g.index].seconds){g.elapsed-=JOURNEY[g.index].seconds;if(g.index===JOURNEY.length-1){g.done=true;g.elapsed=JOURNEY[g.index].seconds;break;}g.index++;}return g;}
+export function addHistory(history,s){if(history.length&&s.time-history.at(-1).time<.25)return;history.push({time:s.time,height:s.bedHeight/1.18});while(history.length&&s.time-history[0].time>60)history.shift();}
