@@ -27780,5 +27780,121 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-31-factual-infographic-factual-infographic-tokophobia-severe-f",
+    "title": "Factual infographic: Tokophobia — Severe Fear of Childbirth",
+    "tests": "factual_subtype: phobia-infographic; phobia: Tokophobia; exact requested title lines read back before render; source-supported terminology; distinct fictional cast; no subjective review.; archive_slot=2026-10-31T00:08; concept=tokophobia-childbirth-fear-collaborative-planning; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished, richly detailed educational phobia infographic directly on the canvas, with portrait-oriented composition if appropriate, not a photographed poster or page mockup. Use refined gouache and colored-pencil scientific illustration, luminous sea-glass teal, warm ochre, dusty rose and deep indigo, softly textured ivory ground. Artwork-led asymmetrical composition, generous open space and flowing annotations; absolutely no rigid boxed grid, detached dashboard cards, logos, citations or URLs.\n\nEXACT TWO TITLE LINES: first line prominently bold, typeset as actual lettering (not Markdown): \"Tokophobia\". Immediately beneath, the exact plain-English subtitle: \"Severe fear of childbirth\". Do not use Specific Phobia or a broad diagnostic category as the headline. A small subordinate note reads \"An established term for severe childbirth fear—not ordinary uncertainty.\"\n\nDominant hero occupying the middle and lower-right: a dignified, fictional pregnant woman in her early 30s, deep brown skin, round face, short natural coiled hair, broad sturdy build, mustard knit cardigan and loose teal trousers; seated three-quarter profile with hands resting on knees, speaking to a midwife. The midwife is a middle-aged light-skinned woman with straight gray bob and simple blue scrubs, listening at eye level, not directing or restraining. Draw tactile knit stitches, gentle window light on facial planes, curved chair arms, subtle fabric folds, and a small open birth-planning notebook with only the supported labels \"Questions\", \"Pain relief\", \"Birth options\". No generic repeated anxious-woman stock pose. The pictured consultation is illustrative, not a real clinical case. No actual birth, fetus cutaway, needles, blood, monsters or threatening imagery.\n\nThe organic visual journey begins above the protagonist: a delicate indigo thought ribbon curls from a small non-graphic maternity-door silhouette toward the upper-left. Heading \"Anticipatory anxiety\"; short gloss \"Fear builds before birth\"; quieter labels \"Thoughts about birth\", \"Negative birth stories\", \"Memories of a difficult birth\". These are possible triggers or associations, not universal causes. Along the ribbon's curve, a translucent small torso outline is purely schematic, with a pulse motif at the chest and fine leaders to \"Rapid heartbeat\", \"Muscle tension\", \"Disturbed sleep\" under the heading \"Body alarm\". Do not invent brain pathways or imply these signs prove an obstetric emergency.\n\nThe ribbon branches gently left into a smaller vignette of the SAME woman turning away from a closed antenatal booklet, not shamed. Heading \"Avoidance\" and concise supported text: \"Avoiding birth conversations or antenatal education can accompany the fear.\" Below it a quiet open phrase \"Feeling isolated or unsupported\"; do not depict this as an experimentally proven causal loop or add unsupported negative-reinforcement claims.\n\nAt the lower-left, two open annotations follow different small curved paths, not boxes: \"Primary: can occur before any birth\" and \"Secondary: can follow a difficult or traumatic birth\". Do not equate all secondary fear with PTSD or invent a diagnostic code. A visually clear contrasting annotation by the main consultation reads \"Fear of harm is not a personal risk estimate\" and \"Discuss your own risks and choices with your maternity team\". This is not a promise that childbirth is risk-free.\n\nLet the dark thought ribbon soften into a warm ochre line connecting the listening midwife, notebook and a small supportive conversation study. Heading \"Evidence-based help\" with elegant open callouts: \"Tell your midwife or obstetrician\", \"Perinatal mental-health support\", \"Psychological therapy, including CBT\", \"A collaborative birth plan\". A clear small note: \"Ask to speak with someone experienced in childbirth fear. Care is individualized.\" No DIY exposure instructions, forced birth preferences, medication advice or claims of guaranteed recovery. Preserve patient agency and no implication that one birth mode is morally preferable. Along the bottom in readable small type: \"Experiences vary. Educational illustration—not a diagnosis.\" Keep substantial explanation but avoid a wall of prose, tiny illegible lettering or repeated labels. Make the artwork compelling, warm, clinically thoughtful and richly textured, with clear typographic hierarchy and factual labels integrated through open, organic pathways.\n\nGeneration request: stock installed OpenClaw OpenAI provider, openai/gpt-image-2.5-sunburst, quality medium, size auto, opaque background. Exactly one image.",
+    "image": "images/2026-10-31-factual-infographic-factual-infographic-tokophobia-severe-f.jpg",
+    "thumb": "thumbs/2026-10-31-factual-infographic-factual-infographic-tokophobia-severe-f.webp",
+    "color": "#c1b9aa",
+    "date": "2026-10-31",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "tokophobia-childbirth-fear-collaborative-planning",
+      "imageSha256": "4b46de3f463a6911bedc855fe7728acec605776bba7d4e3c8d4a43593ee44e7e",
+      "imageDHash": "750999b36373aa2b"
+    },
+    "factualInfographic": {
+      "topic": "Tokophobia: severe fear of childbirth, anticipatory anxiety, avoidance, and evidence-based perinatal support",
+      "description": "A source-backed artistic explanation of tokophobia, its possible triggers and symptoms, avoidance and individualized maternity and mental-health support.",
+      "sourceNote": "United Lincolnshire Hospitals NHS Trust: https://www.ulh.nhs.uk/patients/patient-information-library/fear-of-childbirth/ ; NICE: https://www.nice.org.uk/guidance/cg192/ifp/chapter/Anxiety-disorders ; NHS: https://www.nhs.uk/mental-health/conditions/phobias/ . Verified name, definition, symptoms, avoidance and professional support; no prevalence numbers, individual risk estimate or diagnostic code.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-31T04:09:53.747396+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "United Lincolnshire Hospitals NHS Trust",
+            "title": "Fear of Childbirth",
+            "sourceType": "government-agency",
+            "url": "https://www.ulh.nhs.uk/patients/patient-information-library/fear-of-childbirth/"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Institute for Health and Care Excellence",
+            "title": "Antenatal and postnatal mental health: Anxiety disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nice.org.uk/guidance/cg192/ifp/chapter/Anxiety-disorders"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Tokophobia is an established term for severe or phobic fear of childbirth, not ordinary uncertainty about birth.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Anxiety may occur even when someone wants a child; symptoms and experiences vary.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Anticipatory anxiety can increase during pregnancy; thoughts about birth, negative birth accounts and memories of a traumatic previous birth may be associated with fear.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Anxiety symptoms can include a rapid heartbeat, muscle tension, disturbed sleep and panic symptoms.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Avoidance can involve not talking or thinking about birth and avoiding antenatal education; isolation and feeling unsupported can also occur.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Primary tokophobia can occur without prior experience of birth; secondary tokophobia can follow a difficult or traumatic birth.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Fears may focus on harm to the parent or baby; maternity teams discuss birth options and develop plans that account for both physical and mental health. Fear alone does not measure individual obstetric risk.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "People with tokophobia should be offered discussion with a professional experienced in supporting this fear.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Support can include speaking with a midwife or obstetrician, perinatal mental-health referral, psychological therapy such as CBT, and a collaborative birth plan including pain-relief and birth options.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Treatment is individualized to symptoms and the anxiety condition; education is not an individual diagnosis.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
