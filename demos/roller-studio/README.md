@@ -3,6 +3,12 @@
 Route: `/demos/roller-studio/`. Collection: `/demos/aquarium-filtration/`.
 Field study 036. Added October 31, 2026 at the user's request.
 
+## Version 4 — hardware surface textures
+
+`hardware.js` adds separate molded-plastic finishes to the red housings, ivory frame, dark controllers/sensors and rubber guides, plus a coarser coated-metal motor finish and directional brushing on steel. Each finish combines fine color grain, roughness variation and matching surface-normal relief. Grain uses object-space coordinates so it stays attached to moving parts and does not stretch across narrow rails. Screen derivatives fade fine relief at distance to reduce shimmer. No image downloads or extra geometry are required; labels and teaching behavior are unchanged.
+
+Verified close-up and assembled/cutaway/exploded/macro rendering, mobile layout and existing synchronized-motion/pause checks. The gallery cover shows the updated materials.
+
 ## Version 3 — seven realism and learning improvements
 
 1. Each roll has 60 irregular exposed layer lines at both edges, a subtly uneven fabric surface, and fine lint or larger waste deposits. Empty take-up cores reveal the spindle instead of retaining a fictitious fleece skin.

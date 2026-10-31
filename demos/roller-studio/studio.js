@@ -1,7 +1,7 @@
 import * as T from '../aquaclear-studio/vendor/three.module.js';
 import {OrbitControls} from '../aquaclear-studio/vendor/OrbitControls.js';
 import {studioEnvironment,studioFloor} from '../drum-studio/presentation.js?v=5';
-import {buildModel} from './model.js?v=3';
+import {buildModel} from './model.js?v=4';
 import {createSimulation,defaults} from './simulation.js?v=3';
 import {SERVICE_STEPS,serviceStage} from './transport.js?v=3';
 import {PARTS,LESSONS,SCENARIOS} from './data.js?v=3';

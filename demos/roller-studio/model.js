@@ -1,17 +1,17 @@
 import * as T from '../aquaclear-studio/vendor/three.module.js';
-import {bevelBox,molded} from '../sand-studio/finishes.js?v=2';
-import {finishMetal} from '../drum-studio/finish.js?v=5';
+import {bevelBox} from '../sand-studio/finishes.js?v=2';
+import {hardwareFinish} from './hardware.js?v=4';
 import {createWebShape} from './web-shape.js?v=3';
 import {createParticleTransport} from './transport.js?v=3';
-import {addRollLayers,buildDrive,buildService,addWetContact} from './roller-detail.js?v=3';
+import {addRollLayers,buildDrive,buildService,addWetContact} from './roller-detail.js?v=4';
 import {textile,webFinish,usedRollFinish,addSurfaceDetail} from './finishes.js?v=3';
 const V=(...p)=>new T.Vector3(...p),TAU=Math.PI*2;
 const seeded=()=>{let n=719;return()=>((n=(n*1664525+1013904223)>>>0)/4294967296);};
 function fleeceMaterial(map,dirty=false){const m=new T.MeshStandardMaterial({map,color:dirty?'#695137':'#ecebdc',roughness:.92,side:T.DoubleSide,bumpMap:map,bumpScale:.018});return m;}
 export function buildModel(){
  const root=new T.Group(),machine=new T.Group(),macro=new T.Group(),groups={},anchors={},pickables=[],r=seeded();root.add(machine,macro);
- const porcelain=molded(new T.MeshStandardMaterial({color:'#dadfd8',roughness:.38})),red=molded(new T.MeshStandardMaterial({color:'#a33024',roughness:.4})),dark=molded(new T.MeshStandardMaterial({color:'#18282d'})),rubber=new T.MeshStandardMaterial({color:'#152125',roughness:.87});
- const steel=finishMetal(new T.MeshStandardMaterial({color:'#afbabc',metalness:.8,roughness:.29}));
+ const porcelain=hardwareFinish(new T.MeshStandardMaterial({color:'#dadfd8'}),'ivory'),red=hardwareFinish(new T.MeshStandardMaterial({color:'#a33024'}),'red'),dark=hardwareFinish(new T.MeshStandardMaterial({color:'#203238'}),'dark'),rubber=hardwareFinish(new T.MeshStandardMaterial({color:'#152125'}),'rubber');
+ const steel=hardwareFinish(new T.MeshStandardMaterial({color:'#afbabc'}),'steel'),motorMaterial=hardwareFinish(new T.MeshStandardMaterial({color:'#293b41'}),'motor');
  const acrylic=new T.MeshPhysicalMaterial({color:'#bbdbe0',transparent:true,opacity:.14,roughness:.12,metalness:.04,clearcoat:1,depthWrite:false,side:T.DoubleSide});
  const map=textile(),fresh=fleeceMaterial(map),used=fleeceMaterial(map,true),webMap=map.clone(),webMat=fleeceMaterial(webMap);const wetUniform={value:.3},travelUniform={value:0},lengthUniform={value:12},waterLevelUniform={value:2.5},usedLoadingUniform={value:.9};webMap.repeat.set(2,1.1);webFinish(webMat,wetUniform,travelUniform,lengthUniform,waterLevelUniform,usedLoadingUniform);usedRollFinish(used);
  function group(id,p){let g=new T.Group();g.userData.part=id;machine.add(g);groups[id]=g;anchors[id]=V(...p);return g;}
@@ -40,7 +40,7 @@ export function buildModel(){
  for(let i=0;i<60;i++){let t=i/59,p=hose.path.getPointAt(t),tan=hose.path.getTangentAt(t),ring=torus(inlet,.184,.017,p.toArray(),rubber);ring.quaternion.setFromUnitVectors(V(0,0,1),tan);}cyl(inlet,.27,.23,[0,3,-1.04],red,12);box(inlet,.85,.12,.7,[0,2.86,-.48]);
  const sensor=group('sensor',[1.14,2.92,1.07]);box(sensor,.18,.6,.13,[1.17,2.85,1.0],dark);const sensing=box(sensor,.075,.16,.04,[1.17,2.93,1.09],new T.MeshStandardMaterial({color:'#76ceb8',emissive:'#76ceb8',emissiveIntensity:.2}));pipe(sensor,[[1.17,3.15,1],[1.2,3.6,1],[1.9,3.9,1],[2.12,4.25,.6]],.018,rubber);
  const guard=group('guard',[2.15,2.96,.4]);box(guard,.16,.6,.15,[2.1,2.9,.4],dark);const guardLight=box(guard,.06,.15,.04,[2.1,2.96,.5],sensing.material.clone());pipe(guard,[[2.1,3.2,.4],[2.2,3.65,.4],[2.12,4.25,.6]],.018,rubber);
- const drive=group('drive',[1.75,4.25,1.4]),driveDetail=buildDrive({drive,mesh,box,cyl,torus,steel,red,dark}),driveCover=driveDetail.cover;
+ const drive=group('drive',[1.75,4.25,1.4]),driveDetail=buildDrive({drive,mesh,box,cyl,torus,steel,red,dark,motorMaterial}),driveCover=driveDetail.cover;
  const bypass=group('bypass',[-1.86,3.26,1.1]);box(bypass,.45,.08,.55,[-1.88,3.26,.65],red);box(bypass,.07,.3,.55,[-2.1,3.35,.65],red);label(bypass,'BYPASS',[-1.86,3.3,.94],.65,'#f1c292');
  const media=group('media',[.5,.7,.6]);for(const z of [-.67,.67])box(media,1.5,.33,.04,[0,.83,z],dark);for(let x=-.7;x<.71;x+=.14){box(media,.035,.035,1.4,[x,.67,0],dark);for(const z of [-.67,.67])box(media,.035,.32,.04,[x,.83,z],dark);}
  const controller=group('controller',[2.15,3.65,1.13]);box(controller,.56,.56,.16,[2.15,3.66,1.05],dark);label(controller,'AUTO',[2.15,3.72,1.14],.46);const signal=mesh(controller,new T.SphereGeometry(.04,12,8),sensing.material.clone(),[2.15,3.5,1.16]);

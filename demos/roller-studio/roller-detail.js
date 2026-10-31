@@ -26,9 +26,9 @@ export function addRollLayers(spools){
  const dummy=new T.Object3D();return {update(s){for(let i=0;i<2;i++){const d=details[i],rad=i?s.dirty:s.clean;d.layers.visible=d.lint.visible=rad>.195;if(rad===d.rad)continue;d.rad=rad;const p=d.layerGeo.attributes.position;d.seeds.forEach((v,k)=>{const rr=.192+(rad-.192)*v.f+Math.sin(v.a*7+v.f*12)*.0025*v.f;p.setXYZ(k,Math.cos(v.a)*rr,Math.sin(v.a)*rr,v.edge*(.922+Math.sin(v.a*11+v.f*22)*.003));});p.needsUpdate=true;d.lintSeeds.forEach((v,k)=>{const rr=rad+.004;dummy.position.set(Math.cos(v.a)*rr,4e-3+Math.sin(v.a)*rr,v.z);dummy.rotation.set(v.a,v.a*.7,v.a);dummy.scale.set(v.size,v.size*.5,v.size*2);dummy.updateMatrix();d.lint.setMatrixAt(k,dummy.matrix);});d.lint.instanceMatrix.needsUpdate=true;}},layerCount:60};
 }
 
-export function buildDrive({drive,mesh,box,cyl,torus,steel,red,dark}){
+export function buildDrive({drive,mesh,box,cyl,torus,steel,red,dark,motorMaterial}){
  const housing=box(drive,1.02,.68,.18,[1.72,4.25,1.17],red),cover=box(drive,1.02,.68,.06,[1.72,4.25,1.57],red),gears=[];
- const motor=new T.Group();motor.position.set(1.97,4.25,1.93);motor.userData.part='drive';drive.add(motor);cyl(motor,.17,.8,[0,0,0],dark);for(let i=0;i<6;i++)torus(motor,.17,.012,[0,0,-.31+i*.11],steel);const rotor=new T.Group();motor.add(rotor);cyl(rotor,.035,.6,[0,0,-.5],steel);box(rotor,.015,.07,.02,[0,.03,-.49],red);
+ const motor=new T.Group();motor.position.set(1.97,4.25,1.93);motor.userData.part='drive';drive.add(motor);cyl(motor,.17,.8,[0,0,0],motorMaterial);for(let i=0;i<6;i++)torus(motor,.17,.012,[0,0,-.31+i*.11],steel);const rotor=new T.Group();motor.add(rotor);cyl(rotor,.035,.6,[0,0,-.5],steel);box(rotor,.015,.07,.02,[0,.03,-.49],red);
  for(const [x,rad,teeth] of [[1.34,.28,40],[1.76,.14,20],[1.97,.07,10]]){
   const g=new T.Group();g.position.set(x,4.25,1.40);g.userData.part='drive';drive.add(g);mesh(g,spurGeometry(rad,teeth),steel);torus(g,.042,.007,[0,0,.038],steel);
   cyl(g,.035,.1,[0,0,.03],dark,12);box(g,.018,rad*.62,.018,[0,rad*.52,.055],red);gears.push(g);
