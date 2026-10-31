@@ -1,0 +1,554 @@
+{
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "visualProfile": {
+    "tone": "Budget games and the coming graphical desktop",
+    "motifs": [
+      "Commodore 64 game cassettes",
+      "Atari ST and mouse"
+    ],
+    "layout": "Dense aged newsprint with red and blue boxed sections"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Largest headline and halftone game-cassette display for Mastertronic",
+    "secondaryRail": "Atari ST, GEM, printers and rock radio",
+    "archiveNavigation": "Weekly archive and previous/next controls"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 146 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of May 13-19, 1985",
+    "price": "75 cents"
+  },
+  "currentDate": "2026-10-31",
+  "historicDate": "1985-05-13",
+  "displayDate": "Week of May 13-19, 1985",
+  "edition": "Issue 146 - Weekly 1985 Computer & Culture Chronicle",
+  "sources": [
+    {
+      "title": "Atari said it will participate in a key trade show. — Los Angeles Times",
+      "url": "https://www.latimes.com/archives/la-xpm-1985-05-17-fi-9035-story.html",
+      "date": "1985-05-17"
+    },
+    {
+      "title": "COMPUTE! 60, p.120: Inexpensive Games For 64 And VIC",
+      "url": "https://www.atarimagazines.com/compute/issue60/218_2_NEWS_PRODUCTS_Inexpensive_Games_For_64_And_VIC.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "COMPUTE! 60, p.22: GEM: A New Look For IBM And Atari — Selby Bateman",
+      "url": "https://www.atarimagazines.com/compute/issue60/175_1_GEM_A_New_Look_For_IBM_And_Atari.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "COMPUTE! 60, p.120: New Printers",
+      "url": "https://www.atarimagazines.com/compute/issue60/217_4_NEWS_PRODUCTS_New_Printers.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "COMPUTE! 60, p.120: Spreadsheet Program; Printer Interface",
+      "url": "https://www.atarimagazines.com/compute/issue60/218_4_NEWS_PRODUCTS_Spreadsheet_Program_Printer_Interface.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "COMPUTE! 60, p.120: Apple Action Game",
+      "url": "https://www.atarimagazines.com/compute/issue60/218_5_NEWS_PRODUCTS_Apple_Action_Game.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Antic 4(1): Product Reviews",
+      "url": "https://www.atarimagazines.com/v4n1/product_reviews.html",
+      "date": "1985-05"
+    },
+    {
+      "title": "Creative Computing 11(5), p.14: Modem Magic — Russ Lockwood",
+      "url": "https://www.atarimagazines.com/creative/v11n5/14_Modem_magic_more_baud_fo.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "COMPUTE! 60, p.70: Telecomputing Today — Arlan R. Levitan",
+      "url": "https://www.atarimagazines.com/compute/issue60/191_1_TELECOMPUTING_TODAY.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Creative Computing 11(5), p.42: ISM Express — Russ Lockwood",
+      "url": "https://www.atarimagazines.com/creative/v11n5/42_ISM_Express_sharp_RGB_co.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Billboard, May 18, 1985: Top Rock Tracks",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-05-18.pdf",
+      "date": "1985-05-18"
+    },
+    {
+      "title": "Box Office Mojo: Domestic Weekend May 17–19, 1985",
+      "url": "https://www.boxofficemojo.com/weekend/1985W20/",
+      "date": "1985-05-17/1985-05-19"
+    },
+    {
+      "title": "Farman, Gardiner & Shanklin: Large losses of total ozone in Antarctica reveal seasonal ClOx/NOx interaction",
+      "url": "https://www.nature.com/articles/315207a0",
+      "date": "1985-05-16 (print issue; website publication metadata 1985-05-01)"
+    },
+    {
+      "title": "Your Computer 5(5), May 1985: news report of Prestel arrests",
+      "url": "https://archive.org/stream/your-computer-magazine-1985-05/YourComputer_1985_05_djvu.txt",
+      "date": "1985-05"
+    }
+  ],
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-05-13.jpg",
+    "alt": "Computer Chronicle newspaper front page for May 13-19, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "This week’s Atari dispatch joins the games, software and equipment in the May computer magazines.",
+  "morningLine": "Ten-dollar games crowd the rack as Atari prepares its return to the show floor.",
+  "lead": {
+    "headline": "Mastertronic pitches Commodore games at $9.99",
+    "dek": "A $9.99 price tag brings a fresh budget pitch to the Commodore 64 shelf.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      1
+    ],
+    "body": [
+      "Mastertronic is making price the attraction on the Commodore 64 games rack. The May issue of COMPUTE! reports games at $9.99 apiece, a modest entry ticket for owners looking beyond the familiar full-price boxes. This is the month’s product-news coverage, not a claim that the games all arrived during this particular week.",
+      "The advertised selection ranges from Chiller and BMX Racer to Dark Star, Magic Carpet and More Adventures of Big Mac. The notice also names Monty Python’s Quest for the Holy Grail. Its stated total and printed list do not line up neatly, but the consumer proposition is plain: individual C64 games for less than ten dollars.",
+      "For players who would rather build than buy another fixed challenge, the company announces The Games Creator for the C64 at $19.99. Scrolling scenery, sound effects and animated multicolored sprites are among the promised tools, with no programming required according to the vendor. That promise is not a hands-on verdict.",
+      "VIC-20 owners are included in the plans, with tape versions of games expected and a forthcoming construction package called The Games Designer priced at $12.99. Expected products should stay on the watch list until they reach the counter; the low-price campaign is news enough without turning a forecast into a delivery receipt."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Atari rejoins Summer CES; ST clears FCC hurdle",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0
+      ],
+      "body": [
+        "Atari is returning to the Summer Consumer Electronics Show after reversing its April decision to withdraw. The Los Angeles Times reports the change on May 17, following speculation that the earlier withdrawal signaled difficulties bringing the new ST computer to market.",
+        "Sigmund Hartmann, president of Atari’s software division, says the machine has cleared FCC requirements for United States sales. He also says shipments to Europe are under way and predicts American shipping will begin in July. Those are Atari’s statements and timetable, not independently established retail availability.",
+        "The report supplies no confirmed shop price or specific retail configuration. For prospective buyers, the immediate news is the regulatory hurdle and renewed show participation; final packages and deliveries remain the questions to watch."
+      ]
+    },
+    {
+      "headline": "GEM brings the desktop metaphor to PCs and Atari",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ],
+      "body": [
+        "Digital Research’s GEM offers icons, pull-down menus, movable overlapping windows and folders to computer owners accustomed to command lines. Selby Bateman’s May COMPUTE! feature describes Graphics Environment Manager as an interface layer, not a replacement operating system.",
+        "The attraction extends to developers. Digital Research’s Thomas Byers says application source can be reused and recompiled for Atari machines. That is a development bridge between processors, not a promise that IBM PC programs can simply be loaded as identical binaries on an ST.",
+        "The $500 developer toolkit includes Desktop, drivers, documentation, sample applications, a symbolic debugger and a Resource Construction Set. Planned applications include GEM Draw, GEM Wordchart and GEM Presentation Master, while Lifetree is adapting Volkswriter as Gem Write. Broad software support remains a task to accomplish, not an automatic benefit of a mouse."
+      ]
+    },
+    {
+      "headline": "Star offers near-letter-quality printing from $299",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ],
+      "body": [
+        "Star Micronics puts a $299 price on the SG-10 in the May COMPUTE! product notices. The ten-inch dot-matrix model is rated at 120 characters per second in draft mode and 30 in near-letter-quality printing. The slower second figure is the tradeoff behind the more finished page.",
+        "The SG, SD and SR families combine Star’s standard and PC lines through switch selection, with ten- and fifteen-inch carriage choices. The $799 SR-15 carries a 200-cps rating; that must not be read as its near-letter-quality speed.",
+        "Other listed alternatives include the $199 STX-10 thermal printer and $499 Powertype daisywheel. These are published product specifications and prices rather than an independent speed test, so a buyer still needs to check the computer connection and intended workload."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Atari ST market update",
+      "summary": "FCC clearance and proposed July US shipments reported May 17, attributed to Atari software president Sigmund Hartmann.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Star SG-10",
+      "summary": "10-inch dot matrix, 120 cps draft/30 cps near letter quality, published $299.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "title": "ISM Express",
+      "summary": "Creative Computing May review: transportable PC-compatible with 4.77 MHz 8088, 256K expandable to 640K, 9-inch RGB monitor, five slots, two serial ports and one parallel port; weighs 35 pounds.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        9
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Cal-Kit and HomePak",
+      "detail": "C64 Cal-Kit $49.95; integrated HomePak $49.95 on the platforms named in the product notice.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "name": "MAC/65 Toolkit",
+      "detail": "Antic May review by Andy Barton: Optimized Systems Software, $39.95, 16K disk, requires MAC/65 Assembler. Some 67 macros in utility, Player/Missile graphics and scrolling libraries; reviewer notes large memory use and some limitations for beginners.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "name": "GEM developer toolkit",
+      "detail": "Digital Research’s developer package is reported at $500; interface construction tools and sample applications are included.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+      "items": [
+        "Rescue Raiders — Sir-Tech’s Apple disk game is listed at $34.95. The May COMPUTE! vendor notice describes a helicopter defending a European city, resource efficiency and strategy scoring, and eight battles followed by historical city notes. Do not call May 13 its launch date.",
+        "Ghostbusters — Antic May review by Harvey Bernstein lists Atari 48K disk at $29.95. Franchise economics and equipment purchases frame ghost-catching action; reviewer likes play but criticizes manually recorded account numbers and endlessly repeating music. A review of an existing game, not a new May release.",
+        "Spy vs. Spy — Antic May review by Harvey Bernstein lists Atari 48K disk at $29.95, First Star Software. Two-player or computer opposition, traps, five objects and split-screen Simulvision; the review strongly recommends it.",
+        "Beyond Castle Wolfenstein — Antic May review lists Muse Software’s Atari 32K disk at $34.95. Harvey Bernstein notes synthesized German speech but criticizes repetitive strategy and loading time.",
+        "Chiller — Mastertronic C64 budget selection in the May COMPUTE! product notice; $9.99, not a verified exact-week launch."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        5,
+        6,
+        1
+      ]
+    },
+    {
+      "label": "Top 5 Movies — May 17-19 weekend box office",
+      "items": [
+        "1. Code of Silence",
+        "2. Gotcha!",
+        "3. Beverly Hills Cop",
+        "4. Police Academy 2: Their First Assignment",
+        "5. Rustlers’ Rhapsody"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        11
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Trapped",
+      "artist": "Bruce Springsteen",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-05-18",
+      "confidence": "same-week",
+      "song": "Trapped",
+      "sourceRefs": [
+        10
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Everybody Wants to Rule the World",
+      "artist": "Tears for Fears",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-05-18",
+      "confidence": "same-week",
+      "song": "Everybody Wants to Rule the World",
+      "sourceRefs": [
+        10
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Say You’re Wrong",
+      "artist": "Julian Lennon",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-05-18",
+      "confidence": "same-week",
+      "song": "Say You’re Wrong",
+      "sourceRefs": [
+        10
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Satisfaction Guaranteed",
+      "artist": "The Firm",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-05-18",
+      "confidence": "same-week",
+      "song": "Satisfaction Guaranteed",
+      "sourceRefs": [
+        10
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Rebels",
+      "artist": "Tom Petty",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-05-18",
+      "confidence": "same-week",
+      "song": "Rebels",
+      "sourceRefs": [
+        10
+      ]
+    },
+    {
+      "rank": 6,
+      "title": "Would I Lie to You",
+      "artist": "Eurythmics",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-05-18",
+      "confidence": "same-week",
+      "song": "Would I Lie to You",
+      "sourceRefs": [
+        10
+      ]
+    },
+    {
+      "rank": 7,
+      "title": "Lucky in Love",
+      "artist": "Mick Jagger",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-05-18",
+      "confidence": "same-week",
+      "song": "Lucky in Love",
+      "sourceRefs": [
+        10
+      ]
+    },
+    {
+      "rank": 8,
+      "title": "Centerfield",
+      "artist": "John Fogerty",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-05-18",
+      "confidence": "same-week",
+      "song": "Centerfield",
+      "sourceRefs": [
+        10
+      ]
+    },
+    {
+      "rank": 9,
+      "title": "Driving with Your Eyes Closed",
+      "artist": "Don Henley",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-05-18",
+      "confidence": "same-week",
+      "song": "Driving with Your Eyes Closed",
+      "sourceRefs": [
+        10
+      ]
+    },
+    {
+      "rank": 10,
+      "title": "Don’t Come Around Here No More",
+      "artist": "Tom Petty",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-05-18",
+      "confidence": "same-week",
+      "song": "Don’t Come Around Here No More",
+      "sourceRefs": [
+        10
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Mastertronic C64 games",
+      "price": "$9.99",
+      "note": "Published product notice; individual title price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "The Games Creator",
+      "price": "$19.99",
+      "note": "Announced forthcoming C64 package",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "The Games Designer",
+      "price": "$12.99",
+      "note": "Announced forthcoming VIC tape package",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Star SG-10",
+      "price": "$299.00",
+      "note": "Published price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Star SR-15",
+      "price": "$799.00",
+      "note": "Published price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Star STX-10",
+      "price": "$199.00",
+      "note": "Published price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Star Powertype",
+      "price": "$499.00",
+      "note": "Published price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "ISM Express PC",
+      "price": "$3195.00",
+      "note": "Review price, two 360K floppy drives",
+      "confidence": "same-month",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "item": "ISM Express XT-10",
+      "price": "$4695.00",
+      "note": "Review price, floppy plus 10MB hard disk",
+      "confidence": "same-month",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "item": "ISM Express XT-20",
+      "price": "$4995.00",
+      "note": "Review price, floppy plus 20MB hard disk",
+      "confidence": "same-month",
+      "sourceRefs": [
+        9
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Rescue Raiders",
+      "summary": "Sir-Tech’s Apple disk game is listed at $34.95. The May COMPUTE! vendor notice describes a helicopter defending a European city, resource efficiency and strategy scoring, and eight battles followed by historical city notes. Do not call May 13 its launch date.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "headline": "Ghostbusters",
+      "summary": "Antic May review by Harvey Bernstein lists Atari 48K disk at $29.95. Franchise economics and equipment purchases frame ghost-catching action; reviewer likes play but criticizes manually recorded account numbers and endlessly repeating music. A review of an existing game, not a new May release.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "headline": "Spy vs. Spy",
+      "summary": "Antic May review by Harvey Bernstein lists Atari 48K disk at $29.95, First Star Software. Two-player or computer opposition, traps, five objects and split-screen Simulvision; the review strongly recommends it.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "A construction kit for the game maker",
+    "summary": "The Games Creator for C64 is announced at $19.99; the VIC tape Games Designer at $12.99. Forthcoming vendor offerings, not a reproduced advertisement.",
+    "tagline": "Build a game of your own.",
+    "sourceRefs": [
+      1
+    ]
+  },
+  "market": {
+    "headline": "Budget games meet a developing desktop market",
+    "summary": "Mastertronic competes at $9.99 per C64 game while Digital Research courts software builders with a $500 GEM toolkit. These May published prices describe different bets on the home-computer market, not sales totals.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      1,
+      2
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Antarctic spring ozone losses challenge prevailing models",
+    "summary": "In the May 16 print issue of Nature, British Antarctic Survey researchers Farman, Gardiner and Shanklin report large springtime Antarctic ozone losses and examine chlorine-related chemistry. The journal’s online publication metadata says May 1; May 16 is the dated print issue.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      12
+    ]
+  },
+  "bbsNote": {
+    "headline": "File transfers and the 2400-bps buying dilemma",
+    "summary": "May 1985 telecomputing coverage explains how beginners can move files and why faster modems are not automatically the best value. These are editorial summaries of period columns, not invented BBS messages.",
+    "posts": [
+      {
+        "topic": "Reliable transfers",
+        "platform": "COMPUTE! / BBSs, CompuServe and Delphi",
+        "text": "Arlan R. Levitan’s May column describes compatible terminal software, text capture and error checking, and identifies XMODEM on BBSs, CompuServe and Delphi."
+      },
+      {
+        "topic": "Speed versus service charges",
+        "platform": "Creative Computing / The Source and CompuServe",
+        "text": "Russ Lockwood’s May buyer’s guide discusses 300, 1200 and 2400-bps modems. It argues 300 bps can suffice for chat on The Source and games on CompuServe, while file transfers benefit from higher speed. It warns of speed surcharges and limited 2400-bps support."
+      },
+      {
+        "topic": "Standards and portability",
+        "platform": "Creative Computing",
+        "text": "Lockwood names Hayes, US Robotics, Racal-Vadic and other 2400-bps suppliers and discusses V.22bis. He estimates external modems can cost about $100 more than internal ones, but notes portability between computers. This is a general differential, not a verified specific-model price."
+      }
+    ],
+    "sourceRefs": [
+      8,
+      7
+    ]
+  },
+  "curiosity": {
+    "headline": "Portable color, with a 35-pound workout",
+    "summary": "The ISM Express brings an RGB monitor along for the trip, at a considerable weight.",
+    "detail": "Russ Lockwood’s May Creative Computing review weighs the PC-compatible at 35 pounds and complains that its carrying strap needs thicker padding. Base dual-floppy model: $3,195. The evaluation unit had a Panasonic monitor; the manufacturer was switching production to Sony, so do not describe the reviewer’s screen as Sony.",
+    "sourceRefs": [
+      9
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "May magazine coverage is not an exact-week launch claim.",
+      "Atari shipping forecasts are attributed to Hartmann.",
+      "Game selections are editorial, not a sales chart.",
+      "Music uses the original Billboard Top Rock Tracks chart dated May 18.",
+      "Nature world bulletin uses the May 16 print issue date.",
+      "No verified breaking gadget event included."
+    ]
+  }
+}

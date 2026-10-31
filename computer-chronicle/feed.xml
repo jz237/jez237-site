@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 30 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 31 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of May 13-19, 1985 — Mastertronic pitches Commodore games at $9.99</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-05-13</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-05-13</guid>
+      <pubDate>Sat, 31 Oct 2026 12:00:00 GMT</pubDate>
+      <description>A $9.99 price tag brings a fresh budget pitch to the Commodore 64 shelf. Mastertronic is making price the attraction on the Commodore 64 games rack. The May issue of COMPUTE! reports games at $9.99 apiece, a modest entry ticket for owners looking beyond the familiar full-price boxes. This is the month’s product-news coverage, not a claim that the games all arrived during this particular week. Also this week: Atari rejoins Summer CES; ST clears FCC hurdle · GEM brings the desktop metaphor to PCs and Atari · Star offers near-letter-quality printing from $299.</description>
+    </item>
     <item>
       <title>Week of May 6-12, 1985 — Championship Lode Runner turns veterans into certified champions</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-05-06</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-12-31</guid>
       <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
       <description>Winter CES opens with 68000 power, GEM windows and unfinished prototypes. LAS VEGAS — Winter CES opens January 5 with Atari putting a new family of personal computers before the trade. The 512K 520ST carries an announced computer price of $599; the 128K 130ST is announced at $399. Neither figure buys a complete monitor-and-drive system. The show runs through January 8, with its opening two days falling in this week. Also this week: Commodore 128 promises three computers in one · Coleco pulls out of Adam; inventory sale points to bargains · Epyx puts young players in charge of its CES demonstrations · Commodore’s LCD portable packs office tools and a modem.</description>
-    </item>
-    <item>
-      <title>Week of December 24-30, 1984 — Ghostbusters turns the Commodore 64 into a movie franchise</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-12-24</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-12-24</guid>
-      <pubDate>Sun, 11 Oct 2026 12:00:00 GMT</pubDate>
-      <description>December’s game reviews put a familiar movie business on the home computer. Activision’s Ghostbusters puts the Commodore 64 owner in charge of a ghost-catching franchise. Computer Gaming World’s December roundup finds the movie license well executed, with a particular eye for the machine’s graphics and sound. It is a holiday-season review, not an announcement of a Christmas-week shipment. Also this week: MSX promises a common language for incompatible home computers · A Commodore can switch the lights and watch the windows · Year-end editors still choose the under-$200 Commodore 64.</description>
     </item>
   </channel>
 </rss>

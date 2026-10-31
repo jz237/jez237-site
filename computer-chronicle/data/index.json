@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-31",
+      "historicDate": "1985-05-13",
+      "displayDate": "Week of May 13-19, 1985",
+      "edition": "Issue 146 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Ten-dollar games crowd the rack as Atari prepares its return to the show floor.",
+      "leadHeadline": "Mastertronic pitches Commodore games at $9.99",
+      "storyHeadlines": [
+        "Atari rejoins Summer CES; ST clears FCC hurdle",
+        "GEM brings the desktop metaphor to PCs and Atari",
+        "Star offers near-letter-quality printing from $299"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-05-13.jpg",
+      "thumb": "media/thumbs/1985-05-13.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-30",
       "historicDate": "1985-05-06",
       "displayDate": "Week of May 6-12, 1985",
