@@ -21,5 +21,5 @@ export function createSimulation(){
    if((level>=2.90||manual)&&delay===0&&pulse<=0&&!s.high&&!p.jammed&&remaining>0&&p.pump){pulse=2.2;cycles++;manual=false;}
    if(pulse>0){if(s.high||p.jammed||!p.pump||remaining<=0){pulse=0;delay=1;}else{const delta=Math.min(remaining,h*.024);remaining=clamp(remaining-delta);travel+=delta*28;exported+=delta*loading;loading=clamp(loading-h*.31);pulse=Math.max(0,pulse-h);if(!pulse)delay=2.5;}}
   }}
- reset();return {step,snapshot,reset,replace,advance(){manual=true;},seed(values){if(values.loading!==undefined)loading=clamp(values.loading);if(values.remaining!==undefined)remaining=clamp(values.remaining);if(values.level!==undefined)level=clamp(values.level,1.2,3.38);}};
+ reset();return {step,snapshot,reset,replace,cancelAdvance(){manual=false;},advance(){manual=true;},seed(values){if(values.loading!==undefined)loading=clamp(values.loading);if(values.remaining!==undefined)remaining=clamp(values.remaining);if(values.level!==undefined)level=clamp(values.level,1.2,3.38);}};
 }

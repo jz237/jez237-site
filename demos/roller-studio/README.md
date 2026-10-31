@@ -3,6 +3,18 @@
 Route: `/demos/roller-studio/`. Collection: `/demos/aquarium-filtration/`.
 Field study 036. Added October 31, 2026 at the user's request.
 
+## Version 3 — seven realism and learning improvements
+
+1. Each roll has 60 irregular exposed layer lines at both edges, a subtly uneven fabric surface, and fine lint or larger waste deposits. Empty take-up cores reveal the spindle instead of retaining a fictitious fleece skin.
+2. The U-shaped path now follows tangent curves around the guide rollers. Unsupported spans relax between advances and tighten when the drive starts. Wrinkles flatten at the roll contact points. All physical changes follow simulation time and freeze on pause.
+3. Wet shading follows the actual model water height. Saturated fleece darkens, a contact highlight follows each waterline, acrylic carries clinging beads, and pendant drops grow and fall from exposed wet fabric. Fresh replacement fleece resets the stored waste staining.
+4. A particle transport state machine keeps each particle's identity from incoming water to capture, web transport and winding. Captured particles are anchored to a material distance, not water time. Buried particles can recycle as a new incoming visual particle. This is illustrative transport, not CFD.
+5. The explanatory drive has beveled 10-, 20- and 40-tooth gears, face openings, bearings, a motor shaft and a retracting coupling. Output angles follow the actual take-up angle: motor 4x, idler -2x, take-up 1x. The UI explains changing supply-roll speed and that this geometry is not proprietary ReefMat internals.
+6. Service now has five labeled human-maintenance stages: release retainers, remove spent rolls, install fresh material, feed the leader around the U path, and secure/tension. Automatic care uses the same nine-second model service. **Watch a roll change** shows it at one-third speed, starting nearly exhausted. Care remains a paused reading panel. The real manufacturer's procedure remains authoritative.
+7. **Track one fleece patch** follows one amber-marked material location from the supply surface through the wet chamber onto the take-up. The camera adjusts its angle near the outgoing roll. Dragging releases camera tracking; a Resume control restores it. Patch and particle studies request repeated illustrative advances; ending a study cancels those requests and restores sensor-driven operation. They respect pause, high-water/jam interlocks and reduced-motion preferences.
+
+New modules: `web-shape.js` (supported path and wrinkles), `transport.js` (particle identities and service phases), and `roller-detail.js` (layers, gears, retainers, wet contact). `studies-qa.cjs` exercises the complete patch route, particle capture/export, all service phases, gear ratio, pause, mobile and reduced motion. `transport.test.mjs` checks material anchoring, service state and guide clearance. The original eight lessons, 14 assemblies and four modes remain available.
+
 ## Version 2 — visible winding and surface detail
 
 The Explore panel now has **Watch one advance**. It loads the wet chamber enough to trigger the existing level sensor, moves to the front of the mechanism and runs at one-third speed. It respects reduced-motion preferences (press Resume). The motor still runs intermittently; the demonstration does not turn the spindles continuously when no fleece is being consumed. Initial arrival starts with a partially loaded web so the first automatic burst can be seen promptly. Reset retains the original clean-start experiment.
@@ -38,6 +50,8 @@ Run from the repository:
 
 ```
 node scripts/roller-studio/simulation.test.mjs
+node scripts/roller-studio/transport.test.mjs
+node scripts/roller-studio/studies-qa.cjs http://127.0.0.1:8822/demos/roller-studio/
 node scripts/roller-studio/motion-qa.cjs http://127.0.0.1:8822/demos/roller-studio/
 node scripts/roller-studio/qa.cjs http://127.0.0.1:8822/demos/roller-studio/
 node scripts/build-demos.mjs
