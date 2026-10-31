@@ -46,7 +46,7 @@ export function addRefinements({groups,liquids,glass,plastic,metal,ceramic,rotor
  const drainage=new T.InstancedMesh(new T.SphereGeometry(1,7,5),new T.MeshPhysicalMaterial({color:'#c8dac5',transparent:true,opacity:.65,roughness:.1,metalness:.1,depthWrite:false}),96);drainage.frustumCulled=false;wet.add(drainage);
  const strands=[];for(let i=0;i<12;i++){const a=i/12*TAU,points=[];for(let j=0;j<10;j++)points.push(V(Math.cos(a)*.395,4.7+j*.105,Math.sin(a)*.395));const o=mesh(wet,new T.TubeGeometry(new T.CatmullRomCurve3(points),20,.0025,4,false),new T.MeshBasicMaterial({color:'#b3cbb9',transparent:true,opacity:.3,depthWrite:false}));strands.push(o);}
  // Original schematic wet-rotor section: fixed shaft, two bushes, magnet sleeve and volute.
- const axis=(r,h,z,m)=>{const o=mesh(mechanics,new T.CylinderGeometry(r,r,h,32),m,[-1.8,.8,z]);o.rotation.x=Math.PI/2;return o;};
+ const axis=(r,h,z,m)=>{const geometry=new T.CylinderGeometry(r,r,h,32);geometry.rotateX(Math.PI/2);return mesh(mechanics,geometry,m,[-1.8,.8,z]);};
  axis(.028,1.08,-.08,ceramic);axis(.09,.09,-.48,ceramic);axis(.085,.07,.43,ceramic);
  const magnet=axis(.17,.5,-.19,new T.MeshStandardMaterial({color:'#3d4445',metalness:.3,roughness:.45}));
  for(const z of [-.46,.05]){const o=mesh(mechanics,annulus(.195,.06,.055),ceramic,[-1.8,.8,z]);o.rotation.x=Math.PI/2;}
