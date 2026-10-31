@@ -116,6 +116,126 @@
     }
   },
   {
+    "id": "2026-10-31-factual-infographic-factual-infographic-thanatophobia-fear-",
+    "title": "Factual infographic: Thanatophobia — Fear of Death",
+    "tests": "factual_subtype: phobia-infographic; phobia: Thanatophobia; exact requested title lines read back before render: Thanatophobia / Fear of death; source-supported established term; distinct fictional cast; no subjective review.; archive_slot=2026-10-31T12:08; concept=thanatophobia-mortality-reminders-garden-counseling; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished factual phobia infographic directly on the canvas, not a poster photographed in a room, not a book or mockup. Request medium quality, auto size, opaque background. A richly detailed artwork-led portrait composition in gouache, translucent watercolor and precise colored-pencil linework: muted copper, moss green, warm ivory and deep indigo. Elegant readable typography and substantial informative content, no rigid boxed grid, no detached cards, no bibliography, URLs or citation marks on the artwork.\n\nMANDATORY TWO TITLE LINES at the top with ample quiet space: first line exactly \"Thanatophobia\" in prominent bold lettering, not literal Markdown. Directly beneath it the second line exactly \"Fear of death\" in smaller clearly readable text. Never replace this named headline with Specific Phobia. A small subordinate note: \"An established term for death-related fear; not a separate diagnosis here.\"\n\nDominant illustration: a gently winding public garden path with finely painted stone texture, autumn seed heads, olive foliage and amber sunlight. Fictional protagonist: A woman in her late 50s with warm tan skin, long gray braid, square face, athletic build and rust linen shirt; walking with a counselor along a garden path. The counselor is a younger adult man with deep brown skin, close-cropped black hair, slim build and a muted blue jacket, listening without dramatization. The woman is alert and tense but dignified, one hand held near her chest and the other open while speaking. They are in an ordinary safe garden, no graves, ghosts, skulls, coffins, horror, gore or suggestion of imminent danger. Let the curving path organize the reader's visual journey, with generous negative space for open annotations. This is an educational illustration, not a real clinical case, and appearance does not imply demographic risk.\n\nAt upper left, a light translucent thought-ribbon emerging from a small folded newspaper silhouette and a conversation motif, labeled \"Mortality reminders\" and \"News, conversations or thoughts about death can trigger worry.\" Show no specific headlines or fabricated events. The ribbon curls toward the protagonist; label this approach \"Anticipatory anxiety — worry before a feared reminder.\"\n\nBeside her hand and shoulder, delicate nonliteral indigo ripple lines signify an alarm response, explicitly symbolic rather than anatomy. A small readable open callout: \"Body alarm\" with \"A pounding heart, trembling or dizziness may occur. Symptoms vary.\" Do not draw invented brain pathways, biometric traces, diagnostic thresholds or disease anatomy.\n\nA curled branch of the thought-ribbon traces an open loop, integrated into the garden rather than boxed: \"Reminder → anxiety → avoidance → brief relief\" with a short returning arrow and annotation \"Avoidance can keep fear going.\" A small echo-vignette of the same woman turning away from a conversation illustrates avoidance, not a prescriptive instruction. No requirement to confront feared reminders alone.\n\nWhere indigo gives way to sunlit green, place the grounded comparison \"A frightening thought is not proof of immediate danger.\" Keep this as context, not a universal guarantee of safety or a denial that death and medical illness are real.\n\nThe path opens toward the counselor and a small, naturally integrated bench-and-notebook study. Label \"Evidence-based help\" and \"CBT can address unhelpful beliefs and avoidance.\" Beneath: \"Seek professional support when fear disrupts daily life.\" A short final clinical note: \"Any exposure work: safe, gradual and clinician-guided. Keep ordinary medical care.\" Do not provide a do-it-yourself exposure protocol, promise a cure, or imply that medical symptoms should be dismissed.\n\nAt the lower edge, an unobtrusive readable context line: \"Awareness of mortality is common. Persistent, disruptive fear deserves assessment. General education, not diagnosis.\" Preserve the central artwork, title, mechanisms and clinical context; omit decorative secondary foliage or repeated trigger icons if needed for breathing room. No invented facts or statistics, no visual sensationalism, no logos or watermarks. Maintain nuanced facial features, tactile textiles, delicate botanical surfaces, coherent lighting and an unboxed organic flow. All explanatory text must be legible and correctly spelled.",
+    "image": "images/2026-10-31-factual-infographic-factual-infographic-thanatophobia-fear-.jpg",
+    "thumb": "thumbs/2026-10-31-factual-infographic-factual-infographic-thanatophobia-fear-.webp",
+    "color": "#b7a689",
+    "date": "2026-10-31",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "thanatophobia-mortality-reminders-garden-counseling",
+      "imageSha256": "400791971df8c132f4ddfb976b35dcb09df47f085640c93bf29a75cef807eb78",
+      "imageDHash": "79af32363a19800b"
+    },
+    "factualInfographic": {
+      "topic": "Thanatophobia: fear of death, mortality reminders, body alarm, avoidance, and evidence-based support",
+      "description": "Artwork-led educational chart explaining the established name, death-related reminders, anxiety symptoms, avoidance and professional support without presenting ordinary mortality awareness as illness.",
+      "sourceNote": "Journal of Natural Science, Biology and Medicine: https://pmc.ncbi.nlm.nih.gov/articles/PMC5812065/; British Journal of Clinical Psychology: https://pmc.ncbi.nlm.nih.gov/articles/PMC9804815/; NHS: https://www.nhs.uk/mental-health/conditions/phobias/; The Cognitive Behaviour Therapist: https://pmc.ncbi.nlm.nih.gov/articles/PMC7308596/. Verified terminology, symptoms, avoidance and evidence-based support; illustrative cast is fictional.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-31T16:09:45.618160+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Journal of Natural Science, Biology and Medicine",
+            "title": "“Thanatophobia”: Physician’s Perspective of Dealing with Patients with Fear of Death",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5812065/"
+          },
+          {
+            "id": "S2",
+            "publisher": "British Journal of Clinical Psychology",
+            "title": "The development and validation of the Death Anxiety Beliefs and Behaviours Scale",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9804815/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S4",
+            "publisher": "The Cognitive Behaviour Therapist",
+            "title": "Death anxiety in the time of COVID-19: theoretical explanations and clinical implications",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7308596/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Thanatophobia is an established term for fear of death; the displayed definition is Fear of death.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Death anxiety is studied across multiple mental health conditions; the term is not being presented as a separate diagnosis in this educational chart.",
+            "sourceIds": [
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Awareness of mortality is common; distress and disruption of daily life warrant assessment rather than assuming all death-related worry is illness.",
+            "sourceIds": [
+              "S4",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Death-related conversations and news can act as reminders that provoke death anxiety; thoughts of one’s own death can be feared.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "Phobic anxiety may include palpitations, dizziness and trembling; symptoms differ between people.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Avoidance of death-related reminders can be an unhelpful coping behavior maintaining death anxiety; short-term relief should not be equated with lasting recovery.",
+            "sourceIds": [
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Perceived threat can exceed the current situation: a reminder or frightening thought is not itself evidence of imminent death.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "CBT can reduce death anxiety by addressing unhelpful beliefs and avoidance; seek individualized professional assessment when fear disrupts life.",
+            "sourceIds": [
+              "S2",
+              "S3",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Any exposure work should be planned collaboratively with a trained clinician, using safe gradual steps rather than forced confrontation; normal medical care should be maintained.",
+            "sourceIds": [
+              "S4",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-10-31-factual-infographic-factual-infographic-somniphobia-extreme",
     "title": "Factual infographic: Somniphobia — Extreme Fear of Sleep",
     "tests": "factual_subtype: phobia-infographic; phobia: Somniphobia; exact requested title lines read back before render: Somniphobia / Extreme fear of sleep; source-supported established term; distinct fictional cast; no subjective review.; archive_slot=2026-10-31T08:08; concept=somniphobia-bedtime-vigilance-bedroom; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
