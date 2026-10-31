@@ -40,4 +40,8 @@ Never make another full-site staging copy. Verify live module bytes, browser ope
 
 ## v2 — continuous assembly separation
 
-The persistent Exploded view range control scrubs separation from 0–100%, with native pointer, touch and arrow-key support. Moving it enters assembly inspection and isolates UV/pump power even at 0%; select Cutaway or Assembled to resume operation. Geometry smoothly follows the requested separation, and the camera fits intermediate extents while retaining an existing orbit during scrubbing. Reset and other modes return the slider to 0%. Power stays isolated until a returning assembly is fully seated. The slider remains usable while the operating animation is paused.
+The persistent Exploded view range control scrubs separation from 0–100%, with native pointer, touch and arrow-key support. Moving it enters assembly inspection and isolates UV/pump power while parts are separated. As of v3, returning to 0% automatically restores Cutaway once the parts finish seating, resuming the previous operation without another click. Geometry smoothly follows the requested separation, and the camera fits intermediate extents while retaining an existing orbit during scrubbing. Reset and other modes return the slider to 0%. Power stays isolated until a returning assembly is fully seated. The slider remains usable while the operating animation is paused.
+
+## v3 — resume after reassembly
+
+The frame loop leaves assembly inspection only when both the requested and rendered separation reach zero. Operation then resumes through the normal simulation gate, preserving explicit Pause, reduced-motion, pump, lamp and care-reading settings. The camera retains the slider framing/orbit rather than snapping to another preset. Reopening during a closing animation keeps operation isolated.
