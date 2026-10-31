@@ -8,11 +8,11 @@ export function createWaterOptics(renderer,scene,camera,water,excluded=[]){
   behind.depthTexture=new T.DepthTexture(1,1,T.UnsignedIntType);reflected.depthTexture=new T.DepthTexture(1,1,T.UnsignedIntType);
   const mirror=new T.PerspectiveCamera(),size=new T.Vector2(),normal=new T.Vector3(0,1,0),look=new T.Vector3(),plane=new T.Plane(),clip=new T.Vector4(),q=new T.Vector4();
   const textureMatrix=new T.Matrix4(),bias=new T.Matrix4().set(.5,0,0,.5,0,.5,0,.5,0,0,.5,.5,0,0,0,1);
-  const uniforms={sceneTexture:{value:behind.texture},sceneDepth:{value:behind.depthTexture},reflectionTexture:{value:reflected.texture},reflectionDepth:{value:reflected.depthTexture},reflectionMatrix:{value:textureMatrix},reflectionWeight:{value:1},viewSize:{value:new T.Vector2()},waterTime:{value:0},impactZ:{value:0},delivery:{value:1},nearPlane:{value:camera.near},farPlane:{value:camera.far}};
+  const uniforms={sceneTexture:{value:behind.texture},sceneDepth:{value:behind.depthTexture},reflectionTexture:{value:reflected.texture},reflectionDepth:{value:reflected.depthTexture},reflectionMatrix:{value:textureMatrix},reflectionWeight:{value:1},viewSize:{value:new T.Vector2()},waterTime:{value:0},impactZ:{value:0},delivery:{value:1},dirtyLoad:{value:.12},nearPlane:{value:camera.near},farPlane:{value:camera.far}};
   function material(dirty=false){return new T.ShaderMaterial({uniforms:{...uniforms,sheet:{value:0},dirtySide:{value:dirty?1:0}},transparent:true,depthWrite:false,side:T.DoubleSide,
     vertexShader:`varying vec3 worldPoint;varying vec3 worldNormal;varying vec3 viewNormal;varying vec4 projected;varying vec4 reflectedPoint;varying vec2 waterUV;uniform mat4 reflectionMatrix;
       void main(){vec4 world=modelMatrix*vec4(position,1.);worldPoint=world.xyz;worldNormal=normalize(mat3(modelMatrix)*normal);viewNormal=normalize(normalMatrix*normal);waterUV=uv;projected=projectionMatrix*viewMatrix*world;reflectedPoint=reflectionMatrix*world;gl_Position=projected;}`,
-    fragmentShader:`uniform sampler2D sceneTexture,sceneDepth,reflectionTexture,reflectionDepth;uniform float dirtySide,sheet,waterTime,reflectionWeight,impactZ,delivery,nearPlane,farPlane;uniform vec2 viewSize;
+    fragmentShader:`uniform sampler2D sceneTexture,sceneDepth,reflectionTexture,reflectionDepth;uniform float dirtySide,sheet,waterTime,reflectionWeight,impactZ,delivery,dirtyLoad,nearPlane,farPlane;uniform vec2 viewSize;
       varying vec3 worldPoint,worldNormal,viewNormal;varying vec4 projected,reflectedPoint;varying vec2 waterUV;
       float waterNoise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);vec4 h=fract(sin(vec4(dot(i,vec2(127.1,311.7)),dot(i+vec2(1,0),vec2(127.1,311.7)),dot(i+vec2(0,1),vec2(127.1,311.7)),dot(i+vec2(1,1),vec2(127.1,311.7))))*43758.5453);return mix(mix(h.x,h.y,f.x),mix(h.z,h.w,f.x),f.y);}
       float linearDepth(float d){return nearPlane*farPlane/(farPlane-d*(farPlane-nearPlane));}
@@ -20,12 +20,12 @@ export function createWaterOptics(renderer,scene,camera,water,excluded=[]){
       void main(){float halfWidth=sqrt(max(0.,1.275*1.275-pow(worldPoint.y-1.8,2.)));bool interior=worldPoint.x< -1.86||(worldPoint.x<1.5&&abs(worldPoint.z)<halfWidth);if(dirtySide>.5&&!interior)discard;if(dirtySide<.5&&interior)discard;vec2 p=worldPoint.xz;float e=.018;float gx=(waterHeight(p+vec2(e,0))-waterHeight(p-vec2(e,0)))/(2.*e),gz=(waterHeight(p+vec2(0,e))-waterHeight(p-vec2(0,e)))/(2.*e);vec3 N=normalize(worldNormal+vec3(-gx,0.,-gz));vec3 V=normalize(cameraPosition-worldPoint);float cosine=abs(dot(N,V));float fresnel=.0204+.9796*pow(1.-cosine,5.);
         vec2 uv=projected.xy/projected.w*.5+.5;
         vec2 micro=vec2(sin(worldPoint.x*38.+worldPoint.z*17.-waterTime*2.),cos(worldPoint.z*31.-worldPoint.x*23.+waterTime*1.7))*.0003;
-        vec2 bend=normalize(viewNormal).xy*.006+vec2(gx,gz)*.022+micro;
+        vec2 bend=normalize(viewNormal).xy*.0025+vec2(gx,gz)*.010+micro;
         vec2 refractedUV=clamp(uv+bend,vec2(.002),vec2(.998));
         float depth=texture2D(sceneDepth,refractedUV).r;
         if(depth<gl_FragCoord.z-.0001)refractedUV=uv;
         vec4 transmitted=texture2D(sceneTexture,refractedUV);
-        float distanceThroughWater=clamp(linearDepth(texture2D(sceneDepth,refractedUV).r)-linearDepth(gl_FragCoord.z),0.,5.);vec3 attenuation=exp(-distanceThroughWater*(dirtySide>.5?vec3(.16,.10,.08):vec3(.12,.045,.028)));transmitted.rgb=transmitted.rgb*attenuation+vec3(.045,.16,.18)*(1.-attenuation);
+        float distanceThroughWater=clamp(linearDepth(texture2D(sceneDepth,refractedUV).r)-linearDepth(gl_FragCoord.z),0.,5.);vec3 attenuation=exp(-distanceThroughWater*(dirtySide>.5?vec3(.19,.16,.22)*(1.+dirtyLoad*.6):vec3(.10,.04,.025)));vec3 scatter=dirtySide>.5?vec3(.13,.15,.095):vec3(.045,.16,.18);transmitted.rgb=transmitted.rgb*attenuation+scatter*(1.-attenuation);
         transmitted.a*=1.-step(.99999,texture2D(sceneDepth,refractedUV).r);
         vec2 reflectUV=reflectedPoint.xy/reflectedPoint.w+micro*2.+N.xz*.012;
         vec4 reflection=texture2D(reflectionTexture,clamp(reflectUV,vec2(.002),vec2(.998)));
@@ -46,7 +46,7 @@ export function createWaterOptics(renderer,scene,camera,water,excluded=[]){
         float radius=length(vec2(dx,min(abs(worldPoint.z-.62),abs(worldPoint.z+.62))));
         float crest=pow(.5+.5*sin(worldPoint.x*9.+worldPoint.z*8.-waterTime*2.),18.)*.13;
         float gleam=sheet>.5?(.21*sideRim+.13*lip+.075*streak*travel):crest*.20*delivery;
-        float visibility=sheet>.5?.17+gleam:.17+.09*fresnel+gleam;
+        float wallDistance=min(3.1-abs(worldPoint.x),1.6-abs(worldPoint.z));float drumDistance=worldPoint.x> -1.86&&worldPoint.x<1.5?abs(abs(worldPoint.z)-halfWidth):10.;float meniscus=exp(-max(0.,min(wallDistance,drumDistance))/.014);gleam+=meniscus*.11;float visibility=sheet>.5?.17+gleam:.18+.09*fresnel+gleam;
         vec3 tint=sheet>.5?vec3(.08,.34,.40):vec3(.035,.28,.34);
         if(dirtySide>.5)tint=mix(tint,vec3(.21,.25,.15),.32);tint+=vec3(.30,.46,.46)*min(1.,gleam*3.);
         float alpha=coverage*(1.-visibility)+visibility;
@@ -63,7 +63,7 @@ export function createWaterOptics(renderer,scene,camera,water,excluded=[]){
   function capture(time){
     if(!water.group.visible)return;
     renderer.getSize(size);const scale=size.x<760?.5:.72,w=Math.min(1024,Math.max(1,Math.round(size.x*scale))),h=Math.max(1,Math.round(w*size.y/size.x));
-    if(behind.width!==w||behind.height!==h){behind.setSize(w,h);reflected.setSize(w,h);lastSize=[w,h];}uniforms.viewSize.value.set(size.x,size.y);uniforms.waterTime.value=time;const flow=water.snapshot();uniforms.impactZ.value=flow.impactZ??0;uniforms.delivery.value=flow.delivery??1;
+    if(behind.width!==w||behind.height!==h){behind.setSize(w,h);reflected.setSize(w,h);lastSize=[w,h];}uniforms.viewSize.value.set(size.x,size.y);uniforms.waterTime.value=time;const flow=water.snapshot();uniforms.impactZ.value=flow.impactZ??0;uniforms.delivery.value=flow.delivery??1;uniforms.dirtyLoad.value=flow.load??0;
     const level=water.surface.position.y;camera.updateMatrixWorld();mirror.copy(camera);mirror.position.y=2*level-camera.position.y;camera.getWorldDirection(look);look.reflect(normal);mirror.up.copy(camera.up).reflect(normal);mirror.lookAt(mirror.position.clone().add(look));mirror.updateMatrixWorld();
     textureMatrix.copy(bias).multiply(mirror.projectionMatrix).multiply(mirror.matrixWorldInverse);
     plane.set(normal,-level).applyMatrix4(mirror.matrixWorldInverse);clip.set(plane.normal.x,plane.normal.y,plane.normal.z,plane.constant);

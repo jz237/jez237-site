@@ -1,18 +1,20 @@
 import * as T from '../aquaclear-studio/vendor/three.module.js';
 import {roundedBox} from '../trickle-studio/detail.js?v=3';
-import {textureMaterial} from '../moving-bed-studio/materials.js?v=3';
-import {finishMetal} from './finish.js?v=4';
-import {wetMotion} from './wet-motion.js?v=4';
-import {fabricate} from './fabrication.js?v=4';
-import {addDetail} from './detail.js?v=4';
-import {PARTS} from './data.js?v=4';
-import {SECTORS,TAU} from './simulation.js?v=4';
+import {polymer} from './surface-finishes.js?v=5';
+import {discharge} from './discharge.js?v=5';
+import {journeyMarker} from './journey.js?v=5';
+import {finishMetal} from './finish.js?v=5';
+import {wetMotion} from './wet-motion.js?v=5';
+import {fabricate} from './fabrication.js?v=5';
+import {addDetail} from './detail.js?v=5';
+import {PARTS} from './data.js?v=5';
+import {SECTORS,TAU} from './simulation.js?v=5';
 const V=(...a)=>new T.Vector3(...a),up=V(0,1,0);
 export function buildModel(){
  const root=new T.Group(),parts=new Map(),pickables=[],o=new T.Object3D(),cutPlane=new T.Plane(V(0,0,-1),0),clipMaterials=[];
- const steel=finishMetal(new T.MeshStandardMaterial({color:'#b6c2c3',metalness:.87,roughness:.27})),dark=textureMaterial(new T.MeshPhysicalMaterial({color:'#203339',roughness:.36,clearcoat:.2}),'plastic'),rubber=textureMaterial(new T.MeshStandardMaterial({color:'#122024',roughness:.85}),'rubber');
+ const steel=finishMetal(new T.MeshStandardMaterial({color:'#b6c2c3',metalness:.87,roughness:.27})),dark=polymer(new T.MeshPhysicalMaterial({color:'#1b3038',metalness:.04,roughness:.37,clearcoat:.22,clearcoatRoughness:.3})),rubber=polymer(new T.MeshStandardMaterial({color:'#10191d',roughness:.9}),true);
  const brass=new T.MeshStandardMaterial({color:'#b69a66',metalness:.7,roughness:.27}),white=new T.MeshStandardMaterial({color:'#c8d2c6',roughness:.4}),glass=new T.MeshPhysicalMaterial({color:'#b2d2d1',transmission:.9,thickness:.08,roughness:.08,ior:1.49});
- const drumSteel=steel.clone(),drumDark=dark.clone();finishMetal(drumSteel);textureMaterial(drumDark,'plastic');clipMaterials.push(drumSteel,drumDark);
+ const drumSteel=steel.clone(),drumDark=dark.clone();finishMetal(drumSteel);polymer(drumDark);clipMaterials.push(drumSteel,drumDark);
  function group(id){const g=new T.Group();g.name=id;root.add(g);const d=PARTS.find(p=>p.id===id);parts.set(id,{...d,object:g});return g;}
  function mesh(g,geo,mat,x=0,y=0,z=0){const q=new T.Mesh(geo,mat);q.position.set(x,y,z);q.castShadow=!mat.transparent&&!mat.transmission;q.receiveShadow=true;g.add(q);return q;}
  const box=(g,w,h,d,x,y,z,m=dark)=>mesh(g,roundedBox(w,h,d,Math.min(.045,w*.12,h*.12,d*.12)),m,x,y,z);
@@ -20,7 +22,7 @@ export function buildModel(){
  function ring(g,r,t,x,y,z,m=steel,axis='x'){const q=mesh(g,new T.TorusGeometry(r,t,8,96),m,x,y,z);if(axis==='x')q.rotation.y=Math.PI/2;if(axis==='y')q.rotation.x=Math.PI/2;return q;}
  function pipe(g,points,r=.12,m=dark){const curve=new T.CatmullRomCurve3(points.map(p=>V(...p))),q=mesh(g,new T.TubeGeometry(curve,40,r,16,false),m);for(const end of [0,points.length-1]){const p=V(...points[end]),n=curve.getTangent(end?1:0);const edge=ring(g,r,.025,...p.toArray(),m,'z');edge.quaternion.setFromUnitVectors(V(0,0,1),n);const bore=new T.Mesh(new T.CylinderGeometry(r-.025,r-.025,.15,24,1,true),rubber);bore.quaternion.setFromUnitVectors(up,n);bore.position.copy(p).addScaledVector(n,end?-.075:.075);g.add(bore);}return q;}
  function bolt(g,x,y,z,axis='z',m=steel){const b=cylinder(g,.034,.022,x,y,z,m,axis);const slot=box(g,.041,.007,.004,x,y,z+.013,rubber);if(axis==='x'){slot.rotation.y=Math.PI/2;slot.position.set(x+.013,y,z);}return b;}
- const body=group('body');box(body,6.45,.17,3.4,0,.12,0,steel);box(body,6.45,3.2,.075,0,1.8,-1.64,steel);const front=box(body,6.45,3.2,.075,0,1.8,1.64,steel);box(body,.075,3.2,3.3,3.18,1.8,0,steel);box(body,.075,3.2,3.3,-3.18,1.8,0,steel);
+ const body=group('body');box(body,6.45,.17,3.4,0,.12,0,steel);box(body,6.45,3.2,.075,0,1.8,-1.64,steel);const front=box(body,6.45,3.2,.075,0,1.8,1.64,steel);const rightWall=box(body,.075,3.2,3.3,3.18,1.8,0,steel);const ghostWall=steel.clone();ghostWall.transparent=true;ghostWall.opacity=.12;ghostWall.depthWrite=false;box(body,.075,3.2,3.3,-3.18,1.8,0,steel);
  for(const z of [-1.69,1.69]){box(body,6.6,.12,.12,0,3.43,z);box(body,6.6,.12,.12,0,.2,z);}for(const x of [-3.2,3.2])box(body,.12,.12,3.5,x,3.43,0);
  for(const x of [-3.05,-1.5,0,1.5,3.05])for(const y of [.35,3.24])bolt(body,x,y,1.69);
  const lid=group('lid');box(lid,6.45,.13,3.42,0,3.92,0,steel);for(const x of [-1.7,1.7]){box(lid,.65,.06,.12,x,4.13,0);for(const dx of [-.25,.25])box(lid,.06,.16,.12,x+dx,4.03,0);}for(const x of [-3,3])for(const z of [-1.4,1.4])box(lid,.15,.24,.09,x,3.85,z,rubber);
@@ -52,6 +54,7 @@ export function buildModel(){
  const surface=mesh(waterGroup,new T.PlaneGeometry(6.2,3.2,50,24),waterMat,0,2.3,0);surface.rotation.x=-Math.PI/2;const dirty=mesh(waterGroup,new T.PlaneGeometry(6.2,3.2,50,24),waterMat.clone(),0,2.4,0);dirty.rotation.x=-Math.PI/2;
  const faceMat=new T.ShaderMaterial({transparent:true,depthWrite:false,side:T.DoubleSide,vertexShader:'varying vec2 faceUv;void main(){faceUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'varying vec2 faceUv;void main(){float edge=pow(faceUv.y,32.);gl_FragColor=vec4(mix(vec3(.035,.21,.28),vec3(.29,.57,.58),faceUv.y),.10+.13*(1.-faceUv.y)+edge*.23);}' });const waterFace=mesh(waterGroup,new T.PlaneGeometry(6.2,1),faceMat,0,1.2,1.59);
  const seams=new T.Group();waterGroup.add(seams);const seamMat=new T.LineBasicMaterial({color:'#9fddd5',transparent:true,opacity:.5});for(const z of [-1.58,1.58]){const l=new T.Line(new T.BufferGeometry().setFromPoints([V(-1.8,0,z),V(3.1,0,z)]),seamMat);seams.add(l);}
+ const dirtySeams=new T.Group();waterGroup.add(dirtySeams);for(const side of [-1,1]){const line=new T.Line(new T.BufferGeometry().setFromPoints([V(-1.8,0,side),V(1.5,0,side)]),new T.LineBasicMaterial({color:'#c6d3a7',transparent:true,opacity:.56}));dirtySeams.add(line);}
  // Fan sprays and waste droplets only appear during an actual rinse.
  const effects=new T.Group();root.add(effects);const sprayMat=new T.MeshBasicMaterial({color:'#c4e7eb',transparent:true,opacity:.65,depthWrite:false}),drops=new T.InstancedMesh(new T.SphereGeometry(.013,6,4),sprayMat,360);effects.add(drops);
  const wasteDrops=new T.InstancedMesh(new T.SphereGeometry(.024,8,6),new T.MeshStandardMaterial({color:'#8d805b',roughness:.24,transparent:true,opacity:.8}),90);effects.add(wasteDrops);
@@ -74,27 +77,28 @@ export function buildModel(){
  macroLarge.geometry.computeVertexNormals();macroLarge.material.roughness=.74;
  macroLarge.material.onBeforeCompile=shader=>{shader.vertexShader='varying vec3 crumb;\n'+shader.vertexShader;shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ncrumb=position;');shader.fragmentShader='varying vec3 crumb;\n'+shader.fragmentShader;shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>','#include <color_fragment>\nfloat grain=sin(crumb.x*420.)*sin(crumb.y*377.)*sin(crumb.z*391.);diffuseColor.rgb*=.87+.13*grain;');};
  const guide=new T.ArrowHelper(V(0,0,-1),V(-.55,-.55,1),1.8,'#9be2d2',.14,.08);macro.add(guide);
+ const wasteJet=discharge(effects),marker=journeyMarker(root);
  const wet=wetMotion({screenSpin,woven,effects,nozzleXs,clipMaterials});
  const fabrication=fabricate({parts,steel,dark,rubber,brass,gearSpin,waterGroup,front});
  const detail=addDetail({parts,steel,dark,rubber,brass,spin,drumSteel,waterGroup,effects,nozzleXs});
  for(const [id,p] of parts){p.object.traverse(q=>{if(q.isMesh){q.userData.part=id;pickables.push(q);}});}
  let last={};
  function render(s,h){
-  const operating=!s.isolated&&s.amount<.01&&s.mode!=='exploded'&&s.tab!=='care'&&s.focus!=='macro',cut=s.mode!=='assembled'&&s.mode!=='exploded',showMacro=s.focus==='macro';
+  const operating=!s.isolated&&s.amount<.01&&s.mode!=='exploded'&&s.tab!=='care'&&s.focus!=='macro',cut=s.mode!=='assembled'&&s.mode!=='exploded'&&s.cutScreen!==false,showMacro=s.focus==='macro',housingOpen=(s.mode==='cutaway'||s.mode==='flow')&&s.cutHousing!==false,driveReveal=(s.mode==='cutaway'||s.mode==='flow')&&s.cutDrive&&!s.isolated;
   for(const p of parts.values()){p.object.position.set(...p.offset).multiplyScalar(s.amount);p.object.visible=!showMacro&&(!s.isolated||s.selected===p.id);}
-  front.visible=s.mode==='assembled'||s.mode==='exploded'||s.isolated;lid.visible=!showMacro&&(s.isolated?s.selected==='lid':s.mode==='assembled'||s.mode==='exploded');
+  front.visible=!housingOpen||s.isolated;lid.visible=!showMacro&&(s.isolated?s.selected==='lid':!housingOpen);rightWall.material=driveReveal?ghostWall:steel;rightWall.castShadow=!driveReveal;
   for(const m of clipMaterials)m.clippingPlanes=cut&&!s.isolated?[cutPlane]:[];
   spin.rotation.x=screenSpin.rotation.x=gearSpin.rotation.x=h.angle;pinion.rotation.x=-h.angle*6;for(const r of rolls)r.rotation.x=-h.angle*8;
-  for(let i=0;i<SECTORS*7;i++){const sector=Math.floor(i/7),a=sector/SECTORS*TAU+Math.sin(i*13.1)*.016,load=h.loads[sector],x=-1.65+(i%7)*.47+Math.sin(i*7.31)*.06;o.position.set(x,Math.cos(a)*1.245,Math.sin(a)*1.245);o.rotation.set(a,i*.4,i*.7);const scale=load*(1+(i%3)*.3)*2.7;o.scale.set(scale*(.8+(i*.618%1)),scale*.34,scale*(.55+(i*.414%1)*.7));o.updateMatrix();deposits.setMatrixAt(i,o.matrix);}deposits.instanceMatrix.needsUpdate=true;
-  waterGroup.visible=operating;surface.position.y=h.cleanLevel;dirty.position.y=h.dirtyLevel;waterFace.position.y=(h.cleanLevel+.22)/2;waterFace.scale.y=h.cleanLevel-.22;seams.position.y=h.cleanLevel+.003;float.position.y=h.cleanLevel;lampMat.color.set(h.alarm?'#ed8c55':h.phase==='rinse'?'#81d2ee':'#b7ead1');
+  for(let i=0;i<SECTORS*7;i++){const sector=Math.floor(i/7),a=sector/SECTORS*TAU+Math.sin(i*13.1)*.016,load=h.loads[sector],x=-1.65+(i%7)*.47+Math.sin(i*7.31)*.06;o.position.set(x,Math.cos(a)*1.245,Math.sin(a)*1.245);o.rotation.set(a,i*.4,i*.7);const scale=load*(1+(i%3)*.3)*1.65;o.scale.set(scale*(.8+(i*.618%1)),scale*.34,scale*(.55+(i*.414%1)*.7));o.updateMatrix();deposits.setMatrixAt(i,o.matrix);}deposits.instanceMatrix.needsUpdate=true;
+  waterGroup.visible=operating;surface.position.y=h.cleanLevel;dirty.position.y=h.dirtyLevel;waterFace.position.y=(h.cleanLevel+.22)/2;waterFace.scale.y=h.cleanLevel-.22;seams.position.y=h.cleanLevel+.003;dirtySeams.position.y=h.dirtyLevel+.008;dirtySeams.scale.z=Math.sqrt(Math.max(0,1.275*1.275-(h.dirtyLevel-1.8)**2));float.position.y=h.cleanLevel;lampMat.color.set(h.alarm?'#ed8c55':h.phase==='rinse'?'#81d2ee':'#b7ead1');
   for(const p of [surface,dirty]){const a=p.geometry.attributes.position;for(let i=0;i<a.count;i++)a.setZ(i,(Math.sin(a.getX(i)*5+h.time*1.7)*.0045+Math.sin(a.getY(i)*8-h.time*2.4)*.003)*(.2+h.flow));a.needsUpdate=true;p.geometry.computeVertexNormals();}
-  wet.update(s,h,operating);fabrication.update(s,h);detail.update(s,h,operating);fanMat.uniforms.clock.value=h.time;effects.visible=operating;drops.visible=h.rinse;for(const f of fans)f.visible=h.rinse;wasteDrops.visible=h.rinse;incoming.visible=h.flow>0;
+  marker.update(s);wasteJet.update(s,h,operating);wet.update(s,h,operating);fabrication.update(s,h);detail.update(s,h,operating);fanMat.uniforms.clock.value=h.time;effects.visible=operating;drops.visible=h.rinse;for(const f of fans)f.visible=h.rinse;wasteDrops.visible=h.rinse;incoming.visible=h.flow>0;
   for(let i=0;i<360;i++){const t=(h.time*3+i*.618)%1,x=nozzleXs[i%6],spread=((i%13)/12-.5);o.position.set(x+spread*.38*t,3.22-(t*.28+t*t*.2),Math.sin(i*1.7)*.10*t);o.rotation.set(0,0,-spread*.5);const size=.25+(i*.414%1)*.34;o.scale.set(size,(.8+t)*(1+(i%3)*.4),size);o.updateMatrix();drops.setMatrixAt(i,o.matrix);}drops.instanceMatrix.needsUpdate=true;
   for(let i=0;i<90;i++){const t=(h.time*.42+i*.618)%1;o.position.set(1.4-t*6,2.765-Math.max(0,t-.81)*3.3,Math.sin(i)*.15);o.scale.setScalar(.5+(i%4)*.2);o.updateMatrix();wasteDrops.setMatrixAt(i,o.matrix);}wasteDrops.instanceMatrix.needsUpdate=true;
   for(let i=0;i<120;i++){const t=(h.time*.09*h.flow+i*.618)%1;o.position.set(-3.9+t*3.7,1.4+Math.sin(i)*.22,Math.cos(i)*.7);o.scale.setScalar(.45+(i%5)*.2);o.updateMatrix();incoming.setMatrixAt(i,o.matrix);}incoming.instanceMatrix.needsUpdate=true;
   routes.visible=operating&&s.routes;for(const path of paths){path.mesh.visible=path.kind==='water'?h.flow>0:h.rinse;for(let i=0;i<path.n;i++){const t=(i/path.n+h.time*(path.kind==='water'?.065*h.flow:.14))%1;o.position.copy(path.curve.getPointAt(t));o.quaternion.setFromUnitVectors(up,path.curve.getTangentAt(t).normalize());o.scale.setScalar(1);o.updateMatrix();path.mesh.setMatrixAt(i,o.matrix);}path.mesh.instanceMatrix.needsUpdate=true;}
   macro.visible=showMacro;const scale=s.aperture/60;for(const strand of strands)strand.scale.set(scale,scale,1);for(const m of macroFrame){m.scale.set(scale,scale,1);m.position.x=(Math.sign(m.position.x)||0)*1.75*scale;m.position.y=(Math.sign(m.position.y)||0)*1.75*scale;}macro.scale.setScalar(1/scale);macroSmall.position.set(-.55*scale,-.55*scale,1-((s.visualTime*.28)%1)*2);macroLarge.position.set(.55*scale,.55*scale,.31+Math.sin(s.visualTime*1.4)*.012);
-  last={operation:operating,parts:parts.size,sprayDrops:h.rinse&&operating?360:0,wasteDrops:h.rinse&&operating?90:0,drumAngle:spin.rotation.x,pinionAngle:pinion.rotation.x,cutaway:cut,macro:showMacro,waterVisible:waterGroup.visible,cleanLevel:h.cleanLevel,dirtyLevel:h.dirtyLevel,screenSectors:SECTORS,wet:wet.snapshot(),detail:detail.snapshot(),fabrication:fabrication.snapshot()};
+  last={operation:operating,parts:parts.size,sprayDrops:h.rinse&&operating?360:0,wasteDrops:h.rinse&&operating?90:0,drumAngle:spin.rotation.x,pinionAngle:pinion.rotation.x,cutaway:cut,macro:showMacro,waterVisible:waterGroup.visible,cleanLevel:h.cleanLevel,dirtyLevel:h.dirtyLevel,screenSectors:SECTORS,meanLoad:h.meanLoad,flow:h.flow,layers:{housingOpen,screenSection:cut,driveReveal:!!driveReveal},journeyMarker:marker.snapshot(),discharge:wasteJet.snapshot(),wet:wet.snapshot(),detail:detail.snapshot(),fabrication:fabrication.snapshot()};
  }
- return {root,parts,pickables,render,snapshot:()=>last,water:{group:waterGroup,surface,sheet:dirty,snapshot:()=>({delivery:last.operation?.65:0})},excluded:[routes,effects],routes};
+ return {root,parts,pickables,render,snapshot:()=>last,water:{group:waterGroup,surface,sheet:dirty,snapshot:()=>({delivery:last.operation?last.flow:0,load:last.meanLoad||0})},excluded:[routes,effects,marker.object],routes};
 }
