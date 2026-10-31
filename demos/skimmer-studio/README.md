@@ -16,7 +16,7 @@ No manufacturer specifications or tank-capacity claims are assigned to the inven
 
 ## Implementation and constraints
 
-- `model.js`: sectioned body/cone/neck/cup, needle-wheel pins, perforated diffuser, silencer and airline, adjustable outlet, cup drain, sump and support. Up to 6,200 bubble sprites and 3,600 instanced translucent foam cells. Foam crosses the lip and the cup fills; overflow returns below. Color and animation are explanatory, not measured concentrations or bubble trajectories. Shared local materials, geometry helpers, optics and lighting are imported without changing other demos.
+- `model.js`: sectioned body/cone/neck/cup, needle-wheel pins, perforated diffuser, silencer and airline, adjustable outlet, cup drain, sump and support. Up to 11,500 bubble sprites and 3,600 instanced translucent foam cells. Foam crosses the lip and the cup fills; overflow returns below. Color and animation are explanatory, not measured concentrations or bubble trajectories. Shared local materials, geometry helpers, optics and lighting are imported without changing other demos.
 - `simulation.js`: dimensionless lagged pump/air delivery, water level response to sump depth and outlet restriction, qualitative foam stability, wetness and collection. Time and collection are accelerated. Cup contents persist through preset changes; Empty cup and Reset are explicit. A temporary disturbance decays over 14 simulated seconds; this is not a real feeding recovery prediction. Neck film reduces foam modestly; Clean neck resets it.
 - `studio.js`: orbit/zoom, component selector and raycast, assembled/cutaway/exploded/macro, four close-ups, eight manual lessons, four-stage guided journey, experiments, live cup history and microscope controls. Diagnostic `window.skimmerStudio.snapshot()` returns copied state; no hidden simulation-step API. Pause freezes physical clocks. Care and Exploded suspend operation; hidden tabs stop rendering and simulation; reduced-motion starts paused and does not auto-play the guide. WebGL failure leaves authored learning content usable.
 - `data.js`: authored assembly notes, source-informed lessons, seven presets and journey route.
@@ -31,6 +31,7 @@ From the website checkout:
 
 ```
 node scripts/skimmer-studio/simulation.test.mjs
+node scripts/skimmer-studio/refinement.test.mjs
 node scripts/skimmer-studio/inspect.cjs
 node scripts/skimmer-studio/qa.cjs http://127.0.0.1:8822/demos/skimmer-studio/
 node scripts/skimmer-studio/release-check.cjs
@@ -44,3 +45,17 @@ node scripts/build-demos.mjs
 Cover `demos/assets/skimmer-studio.jpg` is a 1440×900 screenshot of the actual working application. Collection catalog, builder label, count and main collection description must stay synchronized.
 
 Use the user-required deployment workflow: source/runtime checks, committed and pushed update, then `node "D:/Projects/hidden reef header/deploy-reusing-stage.mjs" --deploy`. Reuse the existing public stage; no full-site copies or raw Wrangler deployments. Preserve Philadelphia Functions and the private relay. Run browser QA on the live route after the wrapper succeeds.
+
+
+## Second edition: six realism and teaching refinements
+
+Published cache keys advance to v=2. Existing experiment mathematics and the eight-study collection structure remain unchanged.
+
+1. Connected foam: a deforming, textured cell-film envelope folds over the neck into the cup. Small cells travel over that continuous surface and diminish as they reach the collected liquid. The previous ring of independent spilling beads is hidden.
+2. Bubble cloud: up to 11,500 rim-lit sprites rise in bounded swaying plumes, spread above the diffuser and move more slowly at the chamber perimeter. These trajectories are procedural, not a turbulence solver.
+3. Collection: separate open-sided liquid volume and rippling annular surface avoid coplanar faces. Wet specular highlights, floating collapsed-foam patches, darker liquid and faint cup-wall residue make collection easier to read. Apparent darkness remains illustrative, not measured organic concentration.
+4. Acrylic: true annular rim thickness and exposed section edges accompany subtle roughness scratches, angular edge reflections and modest physical-material transmission. Existing depth-guarded water optics remain intact.
+5. Drainage: downward droplets and thin wet threads in the neck counter the upward foam movement. A visible toggle helps compare layers. Droplet speed responds to the qualitative wetness value. All animation respects the same physical clock.
+6. Pump study: the clear teaching housing exposes a stationary ceramic shaft, support bushes, rotating magnet sleeve, pin wheel, spiral collector passage and mixed air/water indicators. The dedicated Pump section button selects a tighter camera and one-third speed; it respects a paused state.
+
+`refinements.js` owns the new wet layers, acrylic treatment and pump components. Shared filter modules remain unmodified. `refinement.test.mjs` checks plume radial bounds and continuous finite foam envelopes. The existing browser suite now also checks the new layers, drainage toggle, pump-study action and frozen refinement clock. Inspect the neck/cup and slow-pump screenshots before release.

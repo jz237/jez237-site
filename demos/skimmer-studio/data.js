@@ -1,10 +1,10 @@
 export const PARTS=[
  ['body','01','Reaction chamber','A cloud of fine air bubbles meets seawater inside the clear body. Surface-active organic compounds can collect at the air–water interface.'],
  ['cone','02','Tapered transition','The cone brings the rising bubble mixture toward the narrower neck. Its shape is shown as an original teaching design.'],
- ['neck','03','Foam neck','Water drains back as foam rises. The increasingly concentrated foam crosses the neck lip into the cup.'],
+ ['neck','03','Foam neck','Thin films and small drops drain downward as the connected foam rises. The increasingly concentrated foam crosses the neck lip into the cup.'],
  ['cup','04','Collection cup','Collapsed foam becomes skimmate. Wet skimming carries more water into this cup; a darker cup is not by itself a measure of total removal.'],
  ['lid','05','Vented cup lid','A removable cover contains splashes while allowing air to leave. The exploded view separates the cover and cup for inspection.'],
- ['pump','06','Needle-wheel pump','The rotating pin wheel disperses air into the incoming water. Its clear teaching section exposes the rotor.'],
+ ['pump','06','Needle-wheel pump','The rotating pin wheel disperses air into the incoming water. Its clear teaching section exposes the stationary ceramic shaft, support bushes, magnet sleeve and pin wheel. The surrounding passage collects the mixture toward the discharge.'],
  ['venturi','07','Air-injection inlet','The moving water draws air through the injection fitting. The airline connects this inlet to the silencer above the sump.'],
  ['silencer','08','Air silencer','Air enters through a muffled intake. A restricted airline reduces bubble delivery even while the water pump runs.'],
  ['plate','09','Bubble diffuser plate','A perforated plate spreads the pump discharge into the chamber. Its openings are actual geometry in this model.'],
