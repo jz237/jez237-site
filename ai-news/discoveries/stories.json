@@ -19,7 +19,8 @@
       ],
       "status": "Proof report · still being checked",
       "evidenceKind": "proof",
-      "illustration": "symmetry"
+      "illustration": "symmetry",
+      "modelNote": "GPT Astra helped find proofs and draft the paper; the exact version was not disclosed."
     },
     {
       "id": "33dd309216a8",
@@ -34,7 +35,8 @@
       ],
       "status": "Research demonstration",
       "evidenceKind": "demo",
-      "illustration": "research-loop"
+      "illustration": "research-loop",
+      "modelNote": "GPT-5.6-Luna powered QuantumMatterExplorer’s simulation planning and follow-up calculations."
     },
     {
       "id": "48617f5f3628",
@@ -50,7 +52,8 @@
       ],
       "status": "Early lab result",
       "evidenceKind": "lab",
-      "illustration": "molecular-grip"
+      "illustration": "molecular-grip",
+      "modelNote": "Claude helped redesign antibody fragments and analyze results; the exact version was not disclosed."
     },
     {
       "id": "6e560c5ac103",
@@ -66,7 +69,8 @@
       ],
       "status": "Early lab result",
       "evidenceKind": "lab",
-      "illustration": "cell-switch"
+      "illustration": "cell-switch",
+      "modelNote": "Claude Opus 4.7 and 4.8 helped interpret results and refine designs. Several models proposed initial designs; they were not all named."
     },
     {
       "id": "100ac22d6267",
@@ -82,7 +86,8 @@
       ],
       "status": "Early research",
       "evidenceKind": "early",
-      "illustration": "allergy-latch"
+      "illustration": "allergy-latch",
+      "modelNote": "Claude helped plan and run the computer-design campaign; the exact version was not identified in the report."
     },
     {
       "id": "32d67c8d7095",
@@ -99,7 +104,8 @@
       ],
       "status": "Proof report · still being checked",
       "evidenceKind": "proof",
-      "illustration": "waves"
+      "illustration": "waves",
+      "modelNote": "An OpenAI research model supplied the proof; its identity was not disclosed. Lean is the proof checker, not the AI model."
     },
     {
       "id": "d9eaeb1b174f",
@@ -116,7 +122,8 @@
       ],
       "status": "Proof report · still being checked",
       "evidenceKind": "proof",
-      "illustration": "branching"
+      "illustration": "branching",
+      "modelNote": "An OpenAI research model generated the argument; its identity was not disclosed. Lean was used for reported formal checks."
     },
     {
       "id": "af0c794d8dcd",
@@ -132,7 +139,8 @@
       ],
       "status": "Follow-up / checking",
       "evidenceKind": "followup",
-      "illustration": "branching"
+      "illustration": "branching",
+      "modelNote": "An internal Claude research model found the core algorithm; its exact identity/version was not disclosed."
     },
     {
       "id": "7a027b2db316",
@@ -147,7 +155,8 @@
       ],
       "status": "Research demonstration",
       "evidenceKind": "demo",
-      "illustration": "research-loop"
+      "illustration": "research-loop",
+      "modelNote": "GPT-5.6 Terra powered PEARL’s planning and analysis of robot-lab tests."
     },
     {
       "id": "72082569b650",
@@ -162,7 +171,8 @@
       ],
       "status": "Early lab result",
       "evidenceKind": "lab",
-      "illustration": "molecular-grip"
+      "illustration": "molecular-grip",
+      "modelNote": "Gemini Pro and Flash agents designed DNA candidates and analyzed lab feedback; exact model versions were not specified in this account."
     },
     {
       "id": "a7698d21e8b5",
@@ -176,7 +186,8 @@
         "https://arxiv.org/abs/2610.30277"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Gemini, including internal Gemini 4 Argon, built mathematical search tools; not every participating version was named."
     },
     {
       "id": "b2347f2628d2",
@@ -190,7 +201,8 @@
         "https://arxiv.org/abs/2610.31637"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT suggested the crucial adjustment; the underlying model/version was not specified."
     },
     {
       "id": "b056121dbad7",
@@ -204,7 +216,8 @@
         "https://arxiv.org/abs/2610.31614"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "ChatGPT 5.5, 5.6 and 6 helped derive bounds and complete the argument; more specific variants were not reported."
     },
     {
       "id": "a21712c0f322",
@@ -218,7 +231,8 @@
         "https://arxiv.org/abs/2610.30227"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "Claude Code proposed fixes. That names the coding tool, not its underlying model, which was not specified here."
     },
     {
       "id": "f826b3b6c45a",
@@ -232,7 +246,8 @@
         "https://arxiv.org/abs/2610.30808"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Claude Opus 5.5 selected strategies; GPT-6 Astra wrote arguments and the computer-checkable proof within ClawsGO Science."
     },
     {
       "id": "9416894f07b4",
@@ -246,7 +261,8 @@
         "https://arxiv.org/abs/2610.30851"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "GPT-6 Astra and Claude Fable 5.1 helped develop the search program. Final tests ran that fixed program, not a model steering live experiments."
     },
     {
       "id": "e8644d8d1eab",
@@ -260,7 +276,8 @@
         "https://arxiv.org/abs/2610.30468"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "SplatLab is the research system; its underlying model was not identified in this account."
     },
     {
       "id": "2ee16ee25853",
@@ -274,7 +291,8 @@
         "https://arxiv.org/abs/2610.31445"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 Astra suggested key proof techniques during discussions with the researchers."
     },
     {
       "id": "205941e49ec6",
@@ -288,7 +306,8 @@
         "https://arxiv.org/abs/2610.31387"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT 6 Astra suggested the initial proof mechanism; humans substantially reworked it."
     },
     {
       "id": "8670d367a94d",
@@ -302,7 +321,8 @@
         "https://arxiv.org/abs/2610.30761"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "ChatGPT Astra supplied the central protocol; the exact version was not specified."
     },
     {
       "id": "b7a0f8df104c",
@@ -316,7 +336,8 @@
         "https://arxiv.org/abs/2610.31402"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Claude produced an initial argument from the author’s ideas and source papers; its exact version was not specified."
     },
     {
       "id": "c9945b0a21ac",
@@ -330,7 +351,8 @@
         "https://arxiv.org/abs/2610.30490"
       ],
       "status": "Follow-up / checking",
-      "evidenceKind": "followup"
+      "evidenceKind": "followup",
+      "modelNote": "The original proof is credited to an unnamed OpenAI model. This follow-up is the mathematician’s reworked argument."
     },
     {
       "id": "ea772592e70f",
@@ -344,7 +366,8 @@
         "https://arxiv.org/abs/2610.29636"
       ],
       "status": "Follow-up / checking",
-      "evidenceKind": "followup"
+      "evidenceKind": "followup",
+      "modelNote": "The added improvement depends on an earlier OpenAI proof claim whose model was not named; the counting argument is human-developed."
     },
     {
       "id": "8226dc1585c8",
@@ -358,7 +381,8 @@
         "https://zenodo.org/records/23150466"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Claude developed arguments and checking code under human direction; its exact version was not specified."
     },
     {
       "id": "506e3bd26271",
@@ -372,7 +396,8 @@
         "https://arxiv.org/abs/2610.30050"
       ],
       "status": "Follow-up / checking",
-      "evidenceKind": "followup"
+      "evidenceKind": "followup",
+      "modelNote": "ChatGPT Astra helped with editing and illustrations in this follow-up. The model behind OpenAI’s original proof was not identified here."
     },
     {
       "id": "d1b11e53691e",
@@ -386,7 +411,8 @@
         "https://arxiv.org/abs/2610.30027"
       ],
       "status": "Follow-up / checking",
-      "evidenceKind": "followup"
+      "evidenceKind": "followup",
+      "modelNote": "An unnamed OpenAI model supplied an earlier key argument; the extension and new connections are human work."
     },
     {
       "id": "e457dba9e1b9",
@@ -400,7 +426,8 @@
         "https://arxiv.org/abs/2610.28828"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 Astra suggested mathematical search methods; the researcher supplied the construction and checking procedure."
     },
     {
       "id": "33aab1cc71be",
@@ -414,7 +441,8 @@
         "https://arxiv.org/abs/2610.28029"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "ChatGPT 6.1 Sol found the counterexample; the separate stronger bound is the researcher’s work."
     },
     {
       "id": "6eb32deddda9",
@@ -428,7 +456,8 @@
         "https://arxiv.org/abs/2610.27676"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT-5.6 Sol generated many ideas and proof arguments; GPT-6 Sol helped revise them."
     },
     {
       "id": "66f39b7b6880",
@@ -442,7 +471,8 @@
         "https://arxiv.org/abs/2610.27643"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Claude Opus 5.5 proved a core supporting step; the overall approach and final rewrite are human work."
     },
     {
       "id": "a2b6a4448f6a",
@@ -456,7 +486,8 @@
         "https://arxiv.org/abs/2610.29066"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Claude developed constructions and arguments under the authors’ direction; its exact version was not specified."
     },
     {
       "id": "5fc0c14381c5",
@@ -470,7 +501,8 @@
         "https://arxiv.org/abs/2610.27095"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT 5.5 Pro and Claude Opus 4.8 produced the initial proof; humans strengthened and rewrote it."
     },
     {
       "id": "4f99ef83522b",
@@ -484,7 +516,8 @@
         "https://arxiv.org/abs/2610.27175"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Claude Opus 5.5 built search and construction programs; humans analyzed the results and checked the mathematics."
     },
     {
       "id": "9eaf8a29384d",
@@ -498,7 +531,8 @@
         "https://arxiv.org/abs/2610.27184"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "An unreleased OpenAI model supplied an earlier construction; its identity was not disclosed. Humans developed this new counterexample."
     },
     {
       "id": "00210871dddd",
@@ -514,7 +548,8 @@
       ],
       "status": "Early lab result",
       "evidenceKind": "lab",
-      "illustration": "molecular-grip"
+      "illustration": "molecular-grip",
+      "modelNote": "RFD4-Proteina generated protein designs; people set chemical goals and made and tested the proteins."
     },
     {
       "id": "f721f286ef49",
@@ -528,7 +563,8 @@
         "https://arxiv.org/abs/2610.28629"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "GPT-5.6 Sol and Luna powered GBClaw’s simulation work and analysis."
     },
     {
       "id": "3340688fa978",
@@ -542,7 +578,8 @@
         "https://arxiv.org/abs/2610.24612"
       ],
       "status": "Follow-up / checking",
-      "evidenceKind": "followup"
+      "evidenceKind": "followup",
+      "modelNote": "Claude supplied the original proof approach; the exact version was not specified. This report is a human expert’s repaired argument."
     },
     {
       "id": "2bce54facd9d",
@@ -556,7 +593,8 @@
         "https://arxiv.org/abs/2610.24154"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT-5.6 Sol and Claude Opus 5.5 helped find the counterexample and develop proof ideas."
     },
     {
       "id": "7979e5196529",
@@ -570,7 +608,8 @@
         "https://arxiv.org/abs/2610.26563"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "Gemini, ChatGPT and Claude contributed constructions, corrections and analysis; exact model versions were not specified in this account."
     },
     {
       "id": "c1692db3f05c",
@@ -584,7 +623,8 @@
         "https://arxiv.org/abs/2610.22603"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Gemini 3.1 Pro and a later Gemini 3.8 Flash research stage proposed rules and proofs; Lean checked the formal steps."
     },
     {
       "id": "4506e2a98f43",
@@ -598,7 +638,8 @@
         "https://arxiv.org/abs/2610.24758"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Claude found the construction and wrote proofs; Codex and other AI-written programs added checks. The underlying model versions were not specified."
     },
     {
       "id": "5b4310fbe058",
@@ -612,7 +653,8 @@
         "https://arxiv.org/abs/2610.07304"
       ],
       "status": "Follow-up / checking",
-      "evidenceKind": "followup"
+      "evidenceKind": "followup",
+      "modelNote": "Gemini 4 Argon helped extend the earlier plasma solutions; the researchers independently re-derived the calculations."
     },
     {
       "id": "1d227e12e8ab",
@@ -626,7 +668,8 @@
         "https://arxiv.org/abs/2610.25327"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "The authors credit an AI tool with suggesting the counterexample but do not identify its model."
     },
     {
       "id": "6eee472f29d0",
@@ -640,7 +683,8 @@
         "https://arxiv.org/abs/2610.24502"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT6-Astra helped open a new approach and refine key proof reductions."
     },
     {
       "id": "d944434fc2d9",
@@ -654,7 +698,8 @@
         "https://arxiv.org/abs/2610.25230"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT suggested adapting an older proof technique; Claude helped refine constants. Exact model versions were not specified."
     },
     {
       "id": "e66a6c660486",
@@ -668,7 +713,8 @@
         "https://arxiv.org/abs/2610.24644"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT Astra supplied the intermediate theorem; the exact version was not specified."
     },
     {
       "id": "16b6ba262a40",
@@ -682,7 +728,8 @@
         "https://arxiv.org/abs/2610.25104"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "AI generated the example, but the authors did not name the model."
     },
     {
       "id": "70fae10fdfab",
@@ -696,7 +743,8 @@
         "https://arxiv.org/abs/2610.26546"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "GPT-6 helped construct the counterexample; no more specific variant was identified in the report."
     },
     {
       "id": "382b68c70259",
@@ -710,7 +758,8 @@
         "https://www.anthropic.com/research/claude-scorpion-toxin-binder-design"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "An internal Claude research model ran the protein-design campaign; its exact identity/version was not disclosed."
     },
     {
       "id": "d0b3d6eac7f3",
@@ -724,7 +773,8 @@
         "https://arxiv.org/abs/2610.23853"
       ],
       "status": "Follow-up / checking",
-      "evidenceKind": "followup"
+      "evidenceKind": "followup",
+      "modelNote": "An unnamed OpenAI model supplied the original proof ideas. This shorter, stronger proof is the human specialists’ work; the AI used to help read the originals was not identified here."
     },
     {
       "id": "d5ea57ec99f8",
@@ -738,7 +788,8 @@
         "https://arxiv.org/abs/2610.26686"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT 6 Astra Pro found the key generalization after a focused human request."
     },
     {
       "id": "bddbf9d92d0a",
@@ -752,7 +803,8 @@
         "https://arxiv.org/abs/2610.24887"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT-6 Astra proved intermediate steps; the researcher supplied the overall strategy and extended those steps."
     },
     {
       "id": "28c05bc9a336",
@@ -766,7 +818,8 @@
         "https://arxiv.org/abs/2610.24080"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Claude Opus 5 and 5.5 generated the construction and initial proofs; ChatGPT-6 Astra reviewed them. Codex helped formalize the main theorems, with its underlying version unspecified."
     },
     {
       "id": "3b7f68abef84",
@@ -780,7 +833,8 @@
         "https://arxiv.org/abs/2610.26556"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT-6 Astra proposed the finite-dimensional extension and helped develop proofs."
     },
     {
       "id": "68919a46804f",
@@ -794,7 +848,8 @@
         "https://arxiv.org/abs/2610.25955"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT Astra Ultra developed complete proofs from human insights; other GPT and Claude assistance with drafting was not version-specified."
     },
     {
       "id": "0e5d2d487308",
@@ -808,7 +863,8 @@
         "https://arxiv.org/abs/2610.24774"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT-6 Astra found the proofs; the authors improved and presented the arguments."
     },
     {
       "id": "d4c51c5eda5f",
@@ -822,7 +878,8 @@
         "https://arxiv.org/abs/2610.24606"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT 5.6 Sol supplied two key proof ideas after a focused question from the author."
     },
     {
       "id": "747518e88c14",
@@ -836,7 +893,8 @@
         "https://arxiv.org/abs/2610.24836"
       ],
       "status": "Follow-up / checking",
-      "evidenceKind": "followup"
+      "evidenceKind": "followup",
+      "modelNote": "GPT Astra helped draft this human-developed follow-up. The model behind the earlier OpenAI construction was not identified here."
     },
     {
       "id": "c3d5072a9f44",
@@ -850,7 +908,8 @@
         "https://arxiv.org/abs/2610.21961"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "ChatGPT 5.6 Sol suggested the central approach; humans developed the remaining algorithm and analysis."
     },
     {
       "id": "be037de25696",
@@ -864,7 +923,8 @@
         "https://arxiv.org/abs/2610.22313"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT 5.6 Sol identified a missing condition and suggested an intermediate bound; the author replaced that bound and completed the proof."
     },
     {
       "id": "5c8ba66a8b04",
@@ -878,7 +938,8 @@
         "https://arxiv.org/abs/2610.21071"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT helped develop several proof sections; its underlying model/version was not disclosed."
     },
     {
       "id": "1647c7bc11c8",
@@ -892,7 +953,8 @@
         "https://arxiv.org/abs/2610.20983"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT assisted with algorithms, proofs, counterexamples and implementation; its underlying model/version was not disclosed."
     },
     {
       "id": "4289aed8df7f",
@@ -906,7 +968,8 @@
         "https://arxiv.org/abs/2610.22183"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "Gemini 3.6 Flash suggested a counting connection; Claude Sonnet 5.5 suggested another calculation method. The researcher corrected many AI errors."
     },
     {
       "id": "f920496511bf",
@@ -920,7 +983,8 @@
         "https://arxiv.org/abs/2610.22107"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT helped develop numerical thresholds and proofs; its underlying model/version was not specified in this account."
     },
     {
       "id": "eedb357c46df",
@@ -934,7 +998,8 @@
         "https://arxiv.org/abs/2610.20937"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Claude Opus 5.5 found errors and missing steps and proposed proof repairs; humans developed the main results."
     },
     {
       "id": "c1622eec16b2",
@@ -948,7 +1013,8 @@
         "https://arxiv.org/abs/2610.21593"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Perplexity Computer is the credited research tool; its underlying model was not specified."
     },
     {
       "id": "6d008266112e",
@@ -962,7 +1028,8 @@
         "https://arxiv.org/abs/2610.21381"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Altifina used GPT-6 Astra, GPT-6.1 Sol and Claude Opus 5.5 to develop the initial proof."
     },
     {
       "id": "8f83335abfe1",
@@ -976,7 +1043,8 @@
         "https://arxiv.org/abs/2610.21788"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Claude Opus 5.5 found the first proof; the published shorter replacement is human-developed."
     },
     {
       "id": "1e310e9a66ec",
@@ -990,7 +1058,8 @@
         "https://arxiv.org/abs/2610.22037"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Claude Opus 5.5 produced the calculations; GPT-6 Astra critiqued drafts under human direction."
     },
     {
       "id": "525adbe0599c",
@@ -1004,7 +1073,8 @@
         "https://arxiv.org/abs/2610.20737"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Astra-6 Pro supplied key proofs; Gemini 3.1 Pro supplied an earlier diagnostic idea. Humans developed the main construction."
     },
     {
       "id": "126dfce179a1",
@@ -1018,7 +1088,8 @@
         "https://arxiv.org/abs/2610.22208"
       ],
       "status": "Research demonstration",
-      "evidenceKind": "demo"
+      "evidenceKind": "demo",
+      "modelNote": "GPT-5.6 Sol powered Colombo’s research workflow; the human authors reviewed and approved the claims."
     },
     {
       "id": "d39be6e208dd",
@@ -1032,7 +1103,8 @@
         "https://arxiv.org/abs/2610.21785"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "GPT-6 Astra helped develop and detail the lower-bound argument."
     },
     {
       "id": "2db0dd199cb6",
@@ -1046,7 +1118,8 @@
         "https://arxiv.org/abs/2610.21093"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "GPT-6 Astra found explicit ways to join pieces within the humans’ broader approach."
     },
     {
       "id": "cc8c0b757c13",
@@ -1060,7 +1133,8 @@
         "https://arxiv.org/abs/2610.22345"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT-5.6 Sol suggested a crucial approach; GPT-6 Astra helped construct a related counterexample."
     },
     {
       "id": "3034c008e48e",
@@ -1074,7 +1148,8 @@
         "https://arxiv.org/abs/2610.21070"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "The researchers used an AI-agent workflow but did not identify its models in the disclosure."
     },
     {
       "id": "6c9790fb174f",
@@ -1088,7 +1163,8 @@
         "https://arxiv.org/abs/2610.20769"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "The authors credit GPT-5.6/6 Pro with results and proofs; this is the naming given in the account, without a finer breakdown of roles."
     },
     {
       "id": "9f91d1e87e61",
@@ -1102,7 +1178,8 @@
         "https://arxiv.org/abs/2610.20649"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT, Claude and Grok models developed arguments; exact versions and detailed human supervision were not specified here."
     },
     {
       "id": "fa9459ae11a8",
@@ -1116,7 +1193,8 @@
         "https://arxiv.org/abs/2610.20916"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT-5.6, ChatGPT-6.1 and Gemini Flash 3.6 helped develop the proof and examples; finer ChatGPT variants were not specified."
     },
     {
       "id": "03dcb0098b73",
@@ -1130,7 +1208,8 @@
         "https://arxiv.org/abs/2610.08927"
       ],
       "status": "Research demonstration",
-      "evidenceKind": "demo"
+      "evidenceKind": "demo",
+      "modelNote": "Station combined GPT-5.5, Claude Opus 4.8 and Gemini 3.1 Pro to propose and run experiments."
     },
     {
       "id": "a35e8e86eee3",
@@ -1144,7 +1223,8 @@
         "https://arxiv.org/abs/2610.21017"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "An unnamed language model discovered bounds and a proof after receiving human calculations and a suggested technique."
     },
     {
       "id": "2ca6fca5c8b4",
@@ -1158,7 +1238,8 @@
         "https://arxiv.org/abs/2610.19350"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Claude Opus 4.8 and 5.5 developed supporting proof arguments; humans rewrote and checked them."
     },
     {
       "id": "8ebb9d137f92",
@@ -1172,7 +1253,8 @@
         "https://arxiv.org/abs/2610.20724"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Claude Fable 5.1, GPT-6 Astra and GPT-6.1 Sol contributed to the work; the reported Lean check covers a supporting argument, not the whole physical conclusion."
     },
     {
       "id": "8209d7a1fbfd",
@@ -1186,7 +1268,8 @@
         "https://arxiv.org/abs/2610.21153"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "GPT-6 helped formulate and prove the rule and supplied a counterexample; no more specific variant was named here."
     },
     {
       "id": "5a21756a6573",
@@ -1200,7 +1283,8 @@
         "https://arxiv.org/abs/2610.22082"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6.1 Sol developed central proofs and exact checks; other GPT, Claude and Grok models contributed earlier arguments and review without version details here."
     },
     {
       "id": "52de3a6f00ee",
@@ -1214,7 +1298,8 @@
         "https://arxiv.org/abs/2610.21461"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "Codex Astra 6 and Claude Opus 5.5 helped obtain the theoretical results; humans edited and checked every argument."
     },
     {
       "id": "701ea5026bb3",
@@ -1228,7 +1313,8 @@
         "https://arxiv.org/abs/2610.21692"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "ChatGPT-5.5 Pro helped find the construction proving the lower limit."
     },
     {
       "id": "74f1ced6785a",
@@ -1242,7 +1328,8 @@
         "https://arxiv.org/abs/2610.15067"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT and Codex, identified as GPT-6, helped develop the proof; no more specific variant was reported."
     },
     {
       "id": "b02007ecf367",
@@ -1256,7 +1343,8 @@
         "https://www.biorxiv.org/content/10.64898/2026.10.07.756448v1"
       ],
       "status": "Research demonstration",
-      "evidenceKind": "demo"
+      "evidenceKind": "demo",
+      "modelNote": "Claude Opus 5, Sonnet 5 and Haiku 4.5 powered Braintree’s experimental planning and reasoning."
     },
     {
       "id": "a56a4eca12a2",
@@ -1270,7 +1358,8 @@
         "https://arxiv.org/abs/2610.09769"
       ],
       "status": "Research demonstration",
-      "evidenceKind": "demo"
+      "evidenceKind": "demo",
+      "modelNote": "Bolzano used GPT-5.5 and GPT-5.6 Sol for proof search; its AI review is not a formal proof checker."
     },
     {
       "id": "ef22941da18f",
@@ -1284,7 +1373,8 @@
         "https://arxiv.org/abs/2610.18464"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 Astra supplied the key construction; humans extended, checked and substantially rewrote it."
     },
     {
       "id": "91110e8a48e9",
@@ -1298,7 +1388,8 @@
         "https://www.gstatic.com/science-ai/verid_semantic_lab.pdf"
       ],
       "status": "Research demonstration",
-      "evidenceKind": "demo"
+      "evidenceKind": "demo",
+      "modelNote": "An internal preview of Gemini 4 Argon powered VERID’s laboratory reasoning."
     },
     {
       "id": "113422022490",
@@ -1312,7 +1403,8 @@
         "https://www.gstatic.com/science-ai/agentic_aptamer_sandbox.pdf"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "Gemini Pro/Flash agents designed and revised DNA candidates; exact versions were not specified in this account."
     },
     {
       "id": "b411294802dc",
@@ -1326,7 +1418,8 @@
         "https://www.gstatic.com/science-ai/epitope_excision.pdf"
       ],
       "status": "Early lab result",
-      "evidenceKind": "lab"
+      "evidenceKind": "lab",
+      "modelNote": "Gemini 3.1 Pro selected binding sites and revised protein-design strategies."
     },
     {
       "id": "a626b159cf3f",
@@ -1340,7 +1433,8 @@
         "https://molecule.one/posts/marias-journal-accelerating-towards-a-new-reaction-class-in-organic-chemistry"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "Maria is Molecule.one’s research system; the model used in this campaign was not named."
     },
     {
       "id": "10cc5e3947fc",
@@ -1354,7 +1448,8 @@
         "https://arxiv.org/abs/2610.17193"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "GPT-6 Astra explored explanations using PhysKit. Related instrument campaigns used Claude and GPT models without full version details in this account."
     },
     {
       "id": "e239305aa2b6",
@@ -1368,7 +1463,8 @@
         "https://arxiv.org/abs/2610.22367"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "Claude Mythos 5 developed and revised quantum-circuit designs using checking feedback."
     },
     {
       "id": "7924f7e2c409",
@@ -1383,7 +1479,8 @@
         "https://github.com/frenzymath/HolomorphicAnosov"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Intern-S2 contributed to the earlier human–AI proof. This new formalization was produced by a human team; any AI model used for that stage was not identified here."
     },
     {
       "id": "34f27be39ecd",
@@ -1397,7 +1494,8 @@
         "https://arxiv.org/abs/2610.22173"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT-6-Astra supplied the starting proof; humans developed and extended the argument."
     },
     {
       "id": "58bef9756afe",
@@ -1411,7 +1509,8 @@
         "https://arxiv.org/abs/2610.22111"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT Astra 6.0 supplied the initial bridge between techniques; the author simplified and generalized it."
     },
     {
       "id": "55035e548f31",
@@ -1425,7 +1524,8 @@
         "https://arxiv.org/abs/2610.22281"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6.1 Sol prompted the counterexample approach; Claude provided additional assistance, with its exact version not specified."
     },
     {
       "id": "0252d9c8b32f",
@@ -1439,7 +1539,8 @@
         "https://arxiv.org/abs/2610.21818"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Sol 5.6 and Astra suggested intermediate arguments; the account does not specify Astra’s exact version."
     },
     {
       "id": "8686204c73fd",
@@ -1453,7 +1554,8 @@
         "https://arxiv.org/abs/2610.21263"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "GPT-5.6 Sol helped formulate bounds; Claude Opus 5.5 helped find a key reformulation under human guidance."
     },
     {
       "id": "16c13d22fe56",
@@ -1467,7 +1569,8 @@
         "https://arxiv.org/abs/2610.21511"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Claude Opus 5.5 developed bounds, proofs and computation under the author’s direction."
     },
     {
       "id": "723249dd6832",
@@ -1481,7 +1584,8 @@
         "https://arxiv.org/abs/2610.21506"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT-5.6 Sol found the central construction that humans used in the final result."
     },
     {
       "id": "c81c706ba4ef",
@@ -1495,7 +1599,8 @@
         "https://arxiv.org/abs/2610.21272"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "GPT-6 Pro and GPT-Astra proposed the counterexamples; the report does not specify Astra’s exact version."
     },
     {
       "id": "92ff3773a326",
@@ -1509,7 +1614,8 @@
         "https://arxiv.org/abs/2610.21472"
       ],
       "status": "Follow-up / checking",
-      "evidenceKind": "followup"
+      "evidenceKind": "followup",
+      "modelNote": "GPT-6 Astra supplied the earlier starting construction; this stronger follow-up is the human researchers’ contribution."
     },
     {
       "id": "4412e9844e2b",
@@ -1523,7 +1629,8 @@
         "https://arxiv.org/abs/2610.13376"
       ],
       "status": "Research demonstration",
-      "evidenceKind": "demo"
+      "evidenceKind": "demo",
+      "modelNote": "Qwen3.7-Max powered EndoForge’s analysis of failed tests and controller redesign."
     },
     {
       "id": "13caa9c4b0be",
@@ -1537,7 +1644,8 @@
         "https://www.nature.com/articles/s41586-026-11138-7"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "QRNN, a neural-network simulator, supplied the earlier molecular predictions. Humans performed the new laboratory measurements."
     },
     {
       "id": "6d7e71cf38fd",
@@ -1551,7 +1659,8 @@
         "https://arxiv.org/abs/2610.16208"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Claude Opus 5.5 generated the simpler proof; the author edited it and filled technical gaps."
     },
     {
       "id": "b76641a0eefd",
@@ -1565,7 +1674,8 @@
         "https://arxiv.org/abs/2610.18713"
       ],
       "status": "Follow-up / checking",
-      "evidenceKind": "followup"
+      "evidenceKind": "followup",
+      "modelNote": "GPT-6 Astra is credited with the original argument. ChatGPT was used only for figures and proofreading in this human follow-up; its version was not specified."
     },
     {
       "id": "30f7836c313a",
@@ -1579,7 +1689,8 @@
         "https://arxiv.org/abs/2610.16203"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "An unnamed generative AI supplied crucial proof arguments; the paper did not identify its model."
     },
     {
       "id": "a4094c91e6ad",
@@ -1593,7 +1704,8 @@
         "https://arxiv.org/abs/2610.13917"
       ],
       "status": "Early lab result",
-      "evidenceKind": "lab"
+      "evidenceKind": "lab",
+      "modelNote": "Claude Opus 4.6 planned and refined designs; Prompteina generated protein structures. Humans arranged and performed the laboratory testing."
     },
     {
       "id": "e19c55c0b98d",
@@ -1608,7 +1720,8 @@
         "https://arxiv.org/abs/2610.06761"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 Astra supplied an essential argument in one paper; a separate paper credits an unnamed AI with a different key idea."
     },
     {
       "id": "6a0c06b2a8f0",
@@ -1623,7 +1736,8 @@
         "https://github.com/ckkogler/exact-overlaps-one-dim-lean"
       ],
       "status": "Follow-up / checking",
-      "evidenceKind": "followup"
+      "evidenceKind": "followup",
+      "modelNote": "GPT-6 Astra supplied the core argument; humans rewrote it and supplied a different final proof step."
     },
     {
       "id": "ff0ab458e140",
@@ -1639,7 +1753,8 @@
         "https://www.sciencemediacentre.es/en/alphaproof-nexus-new-ai-tool-designed-tackle-mathematical-proofs"
       ],
       "status": "Research demonstration",
-      "evidenceKind": "demo"
+      "evidenceKind": "demo",
+      "modelNote": "Gemini 3.1 Pro drafted and revised proofs within AlphaProof Nexus; Lean checked the formal steps."
     },
     {
       "id": "48e9d4aef950",
@@ -1653,7 +1768,8 @@
         "https://arxiv.org/abs/2610.13848"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Claude and ChatGPT found the initial counterexample; their exact model versions were not identified."
     },
     {
       "id": "845fcef9700e",
@@ -1668,7 +1784,8 @@
         "https://weneedabp.github.io/ai.html"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 Astra Ultra supplied the earlier core proof; the new explanation is the human authors’ work."
     },
     {
       "id": "f44e46530b14",
@@ -1682,7 +1799,8 @@
         "https://arxiv.org/abs/2610.13530"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 Pro reportedly found the proof; the mathematicians say they checked and understood it."
     },
     {
       "id": "1574e4dab922",
@@ -1697,7 +1815,8 @@
         "https://github.com/wangyangvictor/cubic-lean-mid"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT 6.0 suggested a crucial sharper bound and how to prove it; the account does not name a more specific variant."
     },
     {
       "id": "6f1b9e5077d6",
@@ -1712,7 +1831,8 @@
         "https://arxiv.org/html/2610.07728v2#S1.SS5"
       ],
       "status": "Follow-up / checking",
-      "evidenceKind": "followup"
+      "evidenceKind": "followup",
+      "modelNote": "Several AI models developed estimates and constructions, but the authors did not name them in this account."
     },
     {
       "id": "30d5462fc164",
@@ -1728,7 +1848,8 @@
         "https://techcrunch.com/2026/10/08/openais-math-solutions-arent-meeting-the-fields-standards-yet/"
       ],
       "status": "Correction / caution",
-      "evidenceKind": "correction"
+      "evidenceKind": "correction",
+      "modelNote": "An unnamed internal OpenAI model generated the original proof arguments. This report is a human expert critique; the critique does not name a new discovery model."
     },
     {
       "id": "b6a2bdbd0967",
@@ -1742,7 +1863,8 @@
         "https://www.biorxiv.org/content/10.64898/2026.09.30.750244v1.full"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "iBioGenie and BiofoundryAI are the named research systems within iCloudBiofoundry; their underlying models were not identified in this account."
     },
     {
       "id": "be572d6ced68",
@@ -1757,7 +1879,8 @@
         "https://github.com/openai/math"
       ],
       "status": "Correction / caution",
-      "evidenceKind": "correction"
+      "evidenceKind": "correction",
+      "modelNote": "An unreleased OpenAI model produced the withdrawn arguments; its identity was not disclosed."
     },
     {
       "id": "1cca8e5cd7df",
@@ -1776,7 +1899,8 @@
       "evidenceKind": "proof",
       "related": [
         "be572d6ced68"
-      ]
+      ],
+      "modelNote": "An unnamed, unreleased OpenAI model generated the proof collection; no specific model identity was disclosed."
     },
     {
       "id": "b58dbb206fe0",
@@ -1791,7 +1915,8 @@
         "https://github.com/vdeshchenya/autosella"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "Claude Fable 5.1 and GPT-6 Astra independently developed AutoSella variants; the stronger tested variant came from Claude."
     },
     {
       "id": "a7812f047769",
@@ -1806,7 +1931,8 @@
         "https://github.com/anthropics/formal-math/tree/main/3sum-apsp"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "An internal Claude research model found the core method; its exact identity/version was not disclosed. Human experts then simplified and strengthened it."
     },
     {
       "id": "1732d679aee3",
@@ -1821,7 +1947,8 @@
         "https://arxiv.org/abs/2610.01447v2"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT is credited with most ideas and proofs in one paper; the underlying version and models in the related work were not specified here."
     },
     {
       "id": "f582e3ad1476",
@@ -1835,7 +1962,8 @@
         "https://www.biorxiv.org/content/10.64898/2026.10.01.756017v1"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "AlphaProtein Novo supplied the protein designs; humans chose the chemistry and made and tested the enzymes."
     },
     {
       "id": "65b75636f504",
@@ -1850,7 +1978,8 @@
         "https://palomar-registry.org/entry.html?id=PALOMAR-2026-10-04-000003&version=1"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 Astra agents worked through OpenAI Dots to develop and formalize the argument."
     },
     {
       "id": "1aa82680ec59",
@@ -1865,7 +1994,8 @@
         "https://github.com/spicylemonade/compensated-magnet-ledger"
       ],
       "status": "Research demonstration",
-      "evidenceKind": "demo"
+      "evidenceKind": "demo",
+      "modelNote": "Claude Opus 5.5 agents ran the material simulations and investigations under human direction and audit."
     },
     {
       "id": "cb986c0aa88a",
@@ -1879,7 +2009,8 @@
         "https://arxiv.org/abs/2610.06227"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "Claude Opus 4.5 powered APOD’s modeling and revision of predictions."
     },
     {
       "id": "783fe55fe513",
@@ -1893,7 +2024,8 @@
         "https://arxiv.org/abs/2610.02417"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "Claude Opus 4.6 and an adapted Qwen3.5-27B powered AI Theorist’s proposed explanations and calculations."
     },
     {
       "id": "2cca4bf86d58",
@@ -1907,7 +2039,8 @@
         "https://arxiv.org/abs/2610.03160"
       ],
       "status": "Early lab result",
-      "evidenceKind": "lab"
+      "evidenceKind": "lab",
+      "modelNote": "ImmuneAgent is the named research system; its underlying model was not identified in this account."
     },
     {
       "id": "6b30159c1b65-shortcuts",
@@ -1922,7 +2055,8 @@
         "https://research.meta.ai/blog/solving-open-research-problems-together"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Muse Spark helped reframe the problem, find a counterexample and develop the proof."
     },
     {
       "id": "6b30159c1b65-languages",
@@ -1937,7 +2071,8 @@
         "https://research.meta.ai/blog/solving-open-research-problems-together"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Muse Spark helped develop the connection and drafted core proof sections, which humans checked and refined."
     },
     {
       "id": "6b30159c1b65-classification",
@@ -1952,7 +2087,8 @@
         "https://research.meta.ai/blog/solving-open-research-problems-together"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Muse Spark supplied a counterexample and proposed replacement classification rules and proofs."
     },
     {
       "id": "db3ca06bb970",
@@ -1967,7 +2103,8 @@
         "https://arxiv.org/abs/2609.40324"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Gemini worked through Cogentic to develop the main result; the exact Gemini version was not specified here."
     },
     {
       "id": "ac74855960d7",
@@ -1981,7 +2118,8 @@
         "https://arxiv.org/abs/2609.28873"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Gemini worked through Cogentic to find the proof; the exact Gemini version was not specified here."
     },
     {
       "id": "05bb13c0d14a",
@@ -1995,7 +2133,8 @@
         "https://arxiv.org/abs/2609.27304"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Gemini worked through Cogentic to develop the proof; the exact Gemini version was not specified here."
     },
     {
       "id": "df582b62e53f",
@@ -2010,7 +2149,8 @@
         "https://github.com/huwngtran/thomson-n7-lean"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Ten Claude Sonnet 5.5 agents developed the proof within the human-supplied research setup."
     },
     {
       "id": "d1687474d079",
@@ -2025,7 +2165,8 @@
         "https://www.theneuron.ai/news/gpt-6-astra-fusion-math-breakthrough-grads-conjecture/"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 Astra Pro helped discover the plasma solutions and draft the paper; the physicist manually checked every equation."
     },
     {
       "id": "5f6d1892912a",
@@ -2040,7 +2181,8 @@
         "https://arxiv.org/html/2609.29949v1"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Language-model AI supplied the core contribution, but the report did not name the models."
     },
     {
       "id": "51e8dbf097f5",
@@ -2055,7 +2197,8 @@
         "https://arxiv.org/html/2609.30200v1#S1.SS4"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT-5.5 Pro supplied a central idea; Aletheia independently supplied two proofs, with its underlying model unspecified here. GPT-5.6 Sol Pro supplied a proof for another selected question."
     },
     {
       "id": "8b959f007261",
@@ -2070,7 +2213,8 @@
         "https://github.com/dpwoodru/general-courtade-kumar-lean"
       ],
       "status": "Follow-up / checking",
-      "evidenceKind": "followup"
+      "evidenceKind": "followup",
+      "modelNote": "Gemini through Stellar Colosseum supplied most new proof ideas, with its version unspecified here. Several unnamed AI models helped formalize the proof."
     },
     {
       "id": "3b7e61e796b1",
@@ -2085,7 +2229,8 @@
         "https://github.com/roos-j/lean-weakhellinger"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "OpenAI GPT models helped develop the argument, without full version details. GPT-6 Astra through Codex generated supervised computer-checkable proofs."
     },
     {
       "id": "2c7bd0a5026d",
@@ -2100,7 +2245,8 @@
         "https://arxiv.org/html/2609.28791v1#Ax1"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 helped develop and refine arguments and estimates; the report did not identify a more specific variant."
     },
     {
       "id": "1dbe9966814b",
@@ -2115,7 +2261,8 @@
         "https://smsharma.io/cosmic-nine-loops/"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "Claude Fable 5.1 through Claude Science performed the main calculation. A separate human team using GPT-6 also obtained a central part of the answer."
     },
     {
       "id": "15ea3fbda0d5",
@@ -2130,7 +2277,8 @@
         "https://www.lila.ai/news/how-an-ai-run-lab-cracked-open-green-hydrogens-catalyst-problem"
       ],
       "status": "Early lab result",
-      "evidenceKind": "lab"
+      "evidenceKind": "lab",
+      "modelNote": "The language model used in Lila’s live discovery campaign was not clearly identified. Claude Opus 4.6 was named for comparison tests, not established as the discovery model."
     },
     {
       "id": "88019f905393",
@@ -2146,7 +2294,8 @@
         "https://proofsandprompts.com/2026/09/25/from-non-sofic-to-non-hyperlinear-groups-the-new-messiness-of-discovering-and-announcing-big-results/"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 Astra powered Danus’s proposed mathematical construction and argument."
     },
     {
       "id": "49158a82180d",
@@ -2162,7 +2311,8 @@
         "https://jihaoliu.org/fujita-sevenfold-supplement.html"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 Astra powered Danus’s proof generation under human direction."
     },
     {
       "id": "eaebd780522d",
@@ -2177,7 +2327,8 @@
         "https://techcrunch.com/2026/09/25/astra-and-opus-just-passed-turings-other-test/"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "Claude Opus 5 helped read the message, track uncertain letters and search for the key with substantial human guidance."
     },
     {
       "id": "c358de770aff",
@@ -2192,7 +2343,8 @@
         "https://arxiv.org/html/2609.28603v1"
       ],
       "status": "Research demonstration",
-      "evidenceKind": "demo"
+      "evidenceKind": "demo",
+      "modelNote": "Claude Opus 4.6 generated candidates and Lean proofs in the six-round run. A separate experiment trained Qwen3.6-27B to propose statements."
     },
     {
       "id": "35f86f7483f7",
@@ -2207,7 +2359,8 @@
         "https://www-cdn.anthropic.com/22573675ada52a8ca8a97a1a4b4326b2f208a071.pdf"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "Claude Mythos 5 followed the DNA-database clue; humans performed the laboratory work."
     },
     {
       "id": "359940e4d46d",
@@ -2222,7 +2375,8 @@
         "https://github.com/spicylemonade/c-hd-proof"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Ten Claude Opus 5.5 agents developed the route-finding method and computer-checkable proof."
     },
     {
       "id": "a2665a78ac1f",
@@ -2236,7 +2390,8 @@
         "https://arxiv.org/abs/2609.26661"
       ],
       "status": "Research demonstration",
-      "evidenceKind": "demo"
+      "evidenceKind": "demo",
+      "modelNote": "GPT-5.5 through Codex powered FermiLink’s sustained laboratory campaigns."
     },
     {
       "id": "8633435945f7",
@@ -2251,7 +2406,8 @@
         "https://arxiv.org/html/2609.26732v1"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT Astra generated the proof draft with repeated human guidance; the exact version was not specified."
     },
     {
       "id": "c8b25d27867c",
@@ -2265,7 +2421,8 @@
         "https://arxiv.org/abs/2609.19099"
       ],
       "status": "Early research",
-      "evidenceKind": "early"
+      "evidenceKind": "early",
+      "modelNote": "Andromeda 2 is the named formulation-research system; its underlying model was not specified in this account."
     },
     {
       "id": "b51a52d5dd10",
@@ -2281,7 +2438,8 @@
         "https://github.com/tadamcz/erdos548"
       ],
       "status": "Follow-up / checking",
-      "evidenceKind": "followup"
+      "evidenceKind": "followup",
+      "modelNote": "GPT-6 Astra supplied the earlier Erdős–Sós argument. This report covers human simplifications and extensions of it."
     },
     {
       "id": "83315a4f6b2c",
@@ -2296,7 +2454,8 @@
         "https://arxiv.org/abs/2609.11189"
       ],
       "status": "Follow-up / checking",
-      "evidenceKind": "followup"
+      "evidenceKind": "followup",
+      "modelNote": "GPT-6 Astra helped refine this human follow-up’s proof and writing. Odin is the earlier research agent; its underlying model was not named here."
     },
     {
       "id": "c65b579f27d9",
@@ -2310,7 +2469,8 @@
         "https://github.com/boonsuan/nivat"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 Pro reportedly supplied the proof; GPT-6 Astra Ultra produced the computer-checkable version."
     },
     {
       "id": "9bf9aba0dc1e",
@@ -2325,7 +2485,8 @@
         "https://arxiv.org/abs/2609.24184"
       ],
       "status": "Proof report · still being checked",
-      "evidenceKind": "proof"
+      "evidenceKind": "proof",
+      "modelNote": "Gemini through Stellar Colosseum contributed to one proof; ChatGPT helped develop the other. Exact model versions were not specified here."
     },
     {
       "id": "8d8fc52e3817",
@@ -2340,7 +2501,8 @@
       ],
       "status": "Research demonstration",
       "evidenceKind": "demo",
-      "illustration": "research-loop"
+      "illustration": "research-loop",
+      "modelNote": "Sixteen Claude Opus 5 sessions ran the materials searches and simulations."
     },
     {
       "id": "e412d0f7f4af",
@@ -2358,7 +2520,8 @@
       "evidenceKind": "proof",
       "related": [
         "30d5462fc164"
-      ]
+      ],
+      "modelNote": "An unnamed internal OpenAI model generated the original argument; GPT-6 Astra was used for formalization."
     }
   ]
 }
