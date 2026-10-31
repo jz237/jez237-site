@@ -17632,5 +17632,84 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-30-factual-infographic-factual-infographic-the-scratch-mark-mo",
+    "title": "Factual infographic: The Scratch Mark — More Than Sharp Claws",
+    "tests": "Source-verified before generation; artwork-led open composition; no subjective critic or automatic reroll. Requested backend identity not independently verified.; archive_slot=2026-10-30T20:20; concept=feline-scratching-visual-chemical-communication; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: curious-behaviors",
+    "prompt": "Create a finished, elaborate artistic feline behavioral infographic, directly rendered artwork rather than a photographed page or mockup. Exact headline: “THE SCRATCH MARK”, with subordinate line “More than sharp claws”. Small series label “CAT ATLAS · CURIOUS BEHAVIORS”. A breathtaking dominant full-body illustration of a lean chocolate-brown tabby domestic cat with warm amber eyes, seen in three-quarter side view, back legs firmly grounded and forelegs stretched up a weathered upright timber, actively scratching. Credible feline proportions, articulated toes, fine individual fur, muscular stretch, softly curling tail, exquisitely tactile timber fibers and parallel scratch grooves. Rich gouache, colored pencil and fine scientific ink, warm copper highlights against spacious smoky blue-gray ground, atmospheric light without distracting scenery. The hero and timber occupy most of the composition; asymmetric open explanatory studies grow naturally out of the scratches and paw gesture. No rigid grid, cards, box borders, dashboard or repeated panels. Generous breathing room and elegant highly readable typography.\nNear the timber scratches, a delicate leader to exact heading “A visible trace” and text “Claw marks remain on the surface.” Continue the visual path to an enlarged external paw-contact study: credible fur and toes, surface contact clearly indicated without inventing a gland cross-section. Heading “An invisible scent trace” and text “Glands on the paws deposit scent during scratching.” A few muted stipples may symbolize contact deposits ONLY, explicitly labeled “Schematic: scent is invisible”; no glowing odor cloud, chemical formula or invented message translation. Connect these two studies with the concise line “Visual + olfactory communication”. Do not claim that a scratch tells other cats a precise sentence or proves any particular emotion.\nNear the lower edge integrate a small translucent curved empty claw sheath beside a timber shaving, with a fine magnifying leader and heading “Renewing the surface”; exact text “Scratching helps shed superficial claw sheaths.” Depict the thin hollow outer husk, not a whole toe or complete living claw dropping off. This is a supporting behavioral clue, not a detailed claw-retraction anatomy plate.\nA curved ink annotation follows the long line of the hero's back and forelimbs: “A full-body stretch” and “Also maintains claw motion used in hunting and climbing.” In remaining open space, a small understated loose sketch of the same cat scratching a horizontal surface links to “Preferences vary” and “Cats differ in texture and orientation preferences.” End with a quiet readable sentence “Normal feline behavior—not revenge.” Small source credit “Sources: Cornell Feline Health Center; AAFP”. Keep all scientific claims within this supplied text; no statistics, breed history, disease profile, husbandry checklist, emotion certainty, extra anatomy labels or unsupported safety advice. Material detail should reward close inspection while labels remain clear. Artwork leads, facts are organically integrated. Request quality medium, size auto, opaque background.",
+    "image": "images/2026-10-30-factual-infographic-factual-infographic-the-scratch-mark-mo.jpg",
+    "thumb": "thumbs/2026-10-30-factual-infographic-factual-infographic-the-scratch-mark-mo.webp",
+    "color": "#5a5148",
+    "date": "2026-10-30",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "feline-scratching-visual-chemical-communication",
+      "imageSha256": "c86b89ff04def65f4c29ba62439affdd8121457a85166287ad76c56c21e0e457",
+      "imageDHash": "93c57163cbdf0db8"
+    },
+    "factualInfographic": {
+      "topic": "Feline scratching as claw care and visual and chemical communication",
+      "description": "How normal feline scratching combines visible marks, paw scent deposition, superficial sheath removal and stretching.",
+      "sourceNote": "Read Cornell and AAFP sources before generation: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-destructive-behavior ; https://pmc.ncbi.nlm.nih.gov/articles/PMC11128892/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-31T00:20:48.915408+00:00",
+        "sources": [
+          {
+            "id": "cornell",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Feline Behavior Problems: Destructive Behavior",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-destructive-behavior"
+          },
+          {
+            "id": "aafp",
+            "publisher": "American Association of Feline Practitioners",
+            "title": "AAFP Position Statement: Declawing",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11128892/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Scratching is normal feline behavior, not evidence that a cat is seeking revenge.",
+            "sourceIds": [
+              "cornell",
+              "aafp"
+            ]
+          },
+          {
+            "claim": "Scratching leaves visible marks and deposits scent from glands on the paws, serving visual and olfactory communication. The scent is not visible.",
+            "sourceIds": [
+              "cornell",
+              "aafp"
+            ]
+          },
+          {
+            "claim": "Scratching helps remove superficial claw sheaths; the entire claw is not shed.",
+            "sourceIds": [
+              "cornell",
+              "aafp"
+            ]
+          },
+          {
+            "claim": "Scratching also stretches the body and maintains claw motion used in hunting and climbing.",
+            "sourceIds": [
+              "aafp"
+            ]
+          },
+          {
+            "claim": "Cats differ in preferred scratching materials and in vertical or horizontal orientation.",
+            "sourceIds": [
+              "cornell"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
