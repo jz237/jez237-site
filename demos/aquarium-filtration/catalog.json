@@ -1,5 +1,29 @@
 [
   {
+    "id": "037",
+    "title": "Bio-Wheel Atelier",
+    "category": "3D · Water-driven biological filtration",
+    "description": "Explore a detailed hang-on-back filter with a freely turning pleated biological wheel. Follow one pleat through water and air, open the cartridge and magnetic pump, enlarge the attached biofilm, and animate two different maintenance procedures.",
+    "url": "biowheel-studio/",
+    "image": "assets/biowheel-studio.jpg",
+    "imageAlt": "The Bio-Wheel Atelier with a fibrous pleated wheel, cutaway cartridge, clear intake, flowing spillway and aquarium section",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/biowheel-studio",
+    "features": [
+      "14 assemblies, nine lessons & eight experiments",
+      "Textured pleats, wet sheen & water-driven rotation",
+      "Cartridge change & axle-care animations",
+      "Biofilm microscope & complete water journey"
+    ],
+    "facts": [
+      "Penguin-style teaching model",
+      "Mouse, touch & keyboard",
+      "Self-hosted 3D"
+    ],
+    "note": "WebGL 2 · Desktop & mobile · Illustrative biology and hydraulics · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
     "id": "036",
     "title": "Fleece Atelier",
     "category": "3D · Automatic mechanical filtration",
@@ -14,7 +38,11 @@
       "Working gear reduction & five-stage human service",
       "Track one fleece patch from supply to waste roll"
     ],
-    "facts": ["ReefMat-inspired teaching model", "Mouse, touch & keyboard", "Self-hosted 3D"],
+    "facts": [
+      "ReefMat-inspired teaching model",
+      "Mouse, touch & keyboard",
+      "Self-hosted 3D"
+    ],
     "note": "WebGL 2 · Desktop & mobile · Illustrative hydraulics and control · Actual demo screenshot",
     "imageWidth": 1440,
     "imageHeight": 900

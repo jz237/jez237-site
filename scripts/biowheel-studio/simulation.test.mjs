@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {createSimulation,defaults,servicePhase} from '../../demos/biowheel-studio/simulation.js';
+const run=(sim,c,seconds)=>{for(let t=0;t<seconds;t+=.025)sim.step(.025,c);return sim.snapshot(c);};
+const s=createSimulation(),c={...defaults};let a=run(s,c,10);assert(a.flow>.6&&a.speed>.3&&a.angle>1);const normal=a.flow;
+c.restriction=90;a=run(s,c,8);assert(a.flow<normal*.25);c.restriction=0;c.jammed=true;a=run(s,c,8);assert(a.speed<.001&&a.flow>.6);const angle=a.angle;a=run(s,c,2);assert.equal(a.angle,angle);
+c.pump=false;a=run(s,c,10);assert.equal(a.flow,0);assert(a.wetness>.7);c.jammed=false;c.pump=true;c.primed=false;a=run(s,c,5);assert.equal(a.flow,0);assert.equal(a.speed,0);
+c.primed=true;c.loading=96;a=run(s,c,5);assert(a.bypass);const maturity=c.maturity;s.service('cartridge');a=run(s,c,7);assert(a.service&&a.flow<.001);a=run(s,c,10);assert(!a.service&&a.services===1&&c.loading===8&&c.maturity===maturity&&a.flow>.5);
+c.jammed=true;s.service('bearings');a=run(s,c,16);assert(!a.service&&!c.jammed&&c.maturity===maturity&&a.wetness>.8);a=run(s,c,4);assert(a.speed>.3);
+assert.deepEqual([0,.21,.41,.61,.81,1].map(servicePhase),[0,1,2,3,4,4]);
+const coarse=createSimulation(),fine=createSimulation(),c1={...defaults},c2={...defaults};run(coarse,c1,20);for(let i=0;i<1200;i++)fine.step(1/60,c2);assert(Math.abs(coarse.snapshot(c1).angle-fine.snapshot(c2).angle)<.08);
+console.log('PASS: water-driven rotation, restriction, jam isolation, retained moisture, dry-start inhibition, bypass, both services and timestep stability.');

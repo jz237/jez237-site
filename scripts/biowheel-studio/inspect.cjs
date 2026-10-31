@@ -1,0 +1,8 @@
+const {chromium}=require('C:/Users/jrb04/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core');
+const fs=require('node:fs'),assert=require('node:assert/strict');
+(async()=>{const browser=await chromium.launch({executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',headless:true,args:['--enable-webgl','--ignore-gpu-blocklist']});try{
+const p=await browser.newPage({viewport:{width:1600,height:1000}}),errors=[];p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text())});fs.mkdirSync('tmp/biowheel-qa',{recursive:true});await p.goto(process.argv[2]||'http://127.0.0.1:8823/demos/biowheel-studio/');await p.waitForFunction(()=>window.biowheelStudio?.snapshot().ready);await p.waitForTimeout(2500);await p.screenshot({path:'tmp/biowheel-qa/hero.png'});
+for(const mode of ['assembled','exploded','macro']){await p.locator(`[data-mode=${mode}]`).first().click();await p.waitForTimeout(1200);await p.screenshot({path:`tmp/biowheel-qa/${mode}.png`});}
+await p.locator('#pleat-study').click();await p.waitForTimeout(1500);await p.screenshot({path:'tmp/biowheel-qa/wheel.png'});await p.locator('#pump-study').click();await p.waitForTimeout(1500);await p.screenshot({path:'tmp/biowheel-qa/pump.png'});
+await p.locator('#reset').click();await p.setViewportSize({width:390,height:844});await p.waitForTimeout(1200);assert(!await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth));await p.screenshot({path:'tmp/biowheel-qa/mobile.png',fullPage:true});assert.deepEqual(errors,[]);console.log(JSON.stringify({errors,state:await p.evaluate(()=>biowheelStudio.snapshot())}));
+}finally{await browser.close()}})().catch(e=>{console.error(e);process.exit(1)});
