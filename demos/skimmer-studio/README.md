@@ -59,3 +59,12 @@ Published cache keys advance to v=2. Existing experiment mathematics and the eig
 6. Pump study: the clear teaching housing exposes a stationary ceramic shaft, support bushes, rotating magnet sleeve, pin wheel, spiral collector passage and mixed air/water indicators. The dedicated Pump section button selects a tighter camera and one-third speed; it respects a paused state.
 
 `refinements.js` owns the new wet layers, acrylic treatment and pump components. Shared filter modules remain unmodified. `refinement.test.mjs` checks plume radial bounds and continuous finite foam envelopes. The existing browser suite now also checks the new layers, drainage toggle, pump-study action and frozen refinement clock. Inspect the neck/cup and slow-pump screenshots before release.
+
+
+## Third edition: automatic cup service
+
+Automatic care is now the default. At 78% cup fill, an eight-simulated-second service sequence suspends pump delivery and collection, lifts the full cup/lid/drain, moves it out, clears contents and cup/neck residue at the concealed midpoint, returns an empty cup and restores the user's pump preference. This represents a person servicing reusable equipment, not an automatic feature of a real skimmer. The user can disable automatic care in Experiment to manage it manually; only that choice permits overflow. Presets preserve this preference. Service cup now triggers the same visible exchange.
+
+Pause, reduced motion, Care, Exploded, slow motion and hidden-page suspension apply to the service clock. Changing to manual mode mid-service finishes the current exchange; it affects future cycles. Reset restores automatic care. The cup-history chart retains the service drop. Excessive water level still warns and remains a fault; automatic emptying does not repair bad hydraulic settings.
+
+`service.test.mjs` checks 15 simulated minutes of unattended default operation, repeated flood-condition service, explicit manual overflow, service midpoint, paused progress, animation poses and preservation of the off preference. The browser regression suite exercises a visible automatic exchange, pauses it midway, then explicitly chooses manual care before the overflow test. Local cache keys are v=3; shared dependencies retain their established versions.

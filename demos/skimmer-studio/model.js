@@ -2,8 +2,9 @@ import * as T from '../aquaclear-studio/vendor/three.module.js';
 import {molded,bevelBox} from '../sand-studio/finishes.js?v=2';
 import {annulus,perforatedDistributor} from '../sand-studio/mechanics.js?v=2';
 import {finishMetal} from '../drum-studio/finish.js?v=5';
-import {JOURNEY} from './data.js?v=2';
-import {addRefinements,refineAcrylic,bubblePosition} from './refinements.js?v=2';
+import {cupServicePose} from './simulation.js?v=3';
+import {JOURNEY} from './data.js?v=3';
+import {addRefinements,refineAcrylic,bubblePosition} from './refinements.js?v=3';
 const V=(...p)=>new T.Vector3(...p),TAU=Math.PI*2;
 const radiusAt=y=>y<3.25?1.08:y<4.65?1.08-(y-3.25)/1.4*.67:.41;
 function seeded(){let n=421;return()=>{n=(n*1664525+1013904223)>>>0;return n/4294967296;};}
@@ -59,7 +60,7 @@ export function buildModel(){
  caption('AIR',[0,3,.1],.8);caption('WATER',[1.7,3.85,.4],1.0);caption('AIR–WATER INTERFACE',[0,1.5,.2],2.2);
  const details=addRefinements({groups,liquids,glass,plastic,metal,ceramic,rotor,foamMat,cupMat});
  let lastTime=-1,diag={};
- function render(state,s){const exploded=state.explode,micro=state.mode==='macro',cut=state.mode==='cutaway';machine.visible=!micro;macro.visible=micro;[bodyFront,coneFront,neckFront,cupFront,sumpFront].forEach(o=>o.visible=state.mode==='assembled');cup.position.y=exploded*.8;drain.position.y=exploded*.8;collected.visible=cupSurface.visible=exploded<.02;lid.position.y=exploded*1.4;cone.position.y=exploded*.35;plate.position.x=exploded*1.4;neck.position.y=exploded*.55;liquids.visible=exploded<.02;rotor.visible=cut&&state.mechanics;rotor.rotation.z=-s.phase*13;housing.material=rotor.visible?ghost:plastic;motor.material=rotor.visible?ghost:plastic;knob.rotation.y=state.outlet/100*Math.PI*2;
+ function render(state,s){const exploded=state.explode,micro=state.mode==='macro',cut=state.mode==='cutaway';machine.visible=!micro;macro.visible=micro;[bodyFront,coneFront,neckFront,cupFront,sumpFront].forEach(o=>o.visible=state.mode==='assembled');const service=cupServicePose(s.serviceProgress);cup.position.set(service.x,exploded*.8+service.lift,0);drain.position.copy(cup.position);cup.visible=drain.visible=lid.visible=!s.servicing||service.visible;collected.visible=cupSurface.visible=exploded<.02;lid.position.set(service.x,exploded*1.4+service.lift,0);cone.position.y=exploded*.35;plate.position.x=exploded*1.4;neck.position.y=exploded*.55;liquids.visible=exploded<.02;rotor.visible=cut&&state.mechanics;rotor.rotation.z=-s.phase*13;housing.material=rotor.visible?ghost:plastic;motor.material=rotor.visible?ghost:plastic;knob.rotation.y=state.outlet/100*Math.PI*2;
   sumpWater.scale.y=Math.max(.02,s.sumpLevel-.22);sumpWater.position.y=.22+sumpWater.scale.y/2;sumpSurface.position.y=s.sumpLevel;
   const h=Math.max(.05,s.level-.5),wp=waterGeo.attributes.position;// Immutable source coordinates prevent cumulative deformation.
   if(!waterGeo.userData.base)waterGeo.userData.base=new Float32Array(wp.array);const base=waterGeo.userData.base;for(let i=0;i<wp.count;i++){const y=.5+(base[i*3+1]+.5)*h,r=radiusAt(y)*.977/1.065;wp.setXYZ(i,base[i*3]*r,y,base[i*3+2]*r);}wp.needsUpdate=true;waterGeo.computeVertexNormals();waterSurface.position.y=s.level;waterSurface.scale.setScalar(radiusAt(s.level)*.98);line.position.y=s.level+.005;line.scale.setScalar(radiusAt(s.level)*.98);
@@ -71,7 +72,7 @@ export function buildModel(){
   marker.visible=!!state.guide&&!state.guide.done&&state.mode!=='macro';if(marker.visible)marker.position.copy(guidePaths[state.guide.index].getPoint(Math.min(1,state.guide.elapsed/JOURNEY[state.guide.index].seconds)));
   microFront.visible=!state.section;microRim.visible=state.section;molecules.visible=state.molecules;for(const m of mols){const t=(s.time*.055+m.phase)%1,k=t<.35?1+(.35-t)*1.6:1;m.g.position.copy(m.n).multiplyScalar((k-1)*1.2).add(V(0,3,0));}
   details.render(state,s);
-  diag={...details.snapshot(),bubbles:bg.drawRange.count,foamCells:foam.count,water:liquids.visible,arrows:routes.visible,frontWall:bodyFront.visible,rotor:rotor.visible,rotorAngle:rotor.rotation.z,macro:micro,molecules:molecules.visible,section:microRim.visible,guideMarker:marker.visible,overflow:overflow.visible,foamTop:s.foamTop};return diag;
+  diag={...details.snapshot(),bubbles:bg.drawRange.count,foamCells:foam.count,water:liquids.visible,arrows:routes.visible,frontWall:bodyFront.visible,rotor:rotor.visible,rotorAngle:rotor.rotation.z,macro:micro,molecules:molecules.visible,section:microRim.visible,guideMarker:marker.visible,overflow:overflow.visible,foamTop:s.foamTop,cupLift:service.lift,cupOffset:service.x,cupVisible:cup.visible};return diag;
  }
  return {root,groups,anchors,pickables,render,snapshot:()=>({...diag}),reset(){lastTime=-1;details.reset();},opticalSurfaces:[[waterSurface,1],[sumpSurface,1]],opticalHidden:[liquids,routes,marker],waterVisible:()=>machine.visible&&liquids.visible};
 }

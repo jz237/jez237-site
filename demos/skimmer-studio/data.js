@@ -9,7 +9,7 @@ export const PARTS=[
  ['silencer','08','Air silencer','Air enters through a muffled intake. A restricted airline reduces bubble delivery even while the water pump runs.'],
  ['plate','09','Bubble diffuser plate','A perforated plate spreads the pump discharge into the chamber. Its openings are actual geometry in this model.'],
  ['outlet','10','Outlet level control','Restricting the water outlet raises the internal level in this illustrative design. Excessive restriction can flood the neck.'],
- ['drain','11','Cup drain','Collected liquid can leave through the cup drain during service. Empty cup clears the simulated collection without changing the settings.'],
+ ['drain','11','Cup drain','Collected liquid can leave through the cup drain during service. Service cup now exchanges the simulated cup without changing your pump or flow settings.'],
  ['sump','12','Sump & support','The skimmer sits in an open sump. External depth influences its internal operating level; a stable installation matters.']
 ];
 export const LESSONS=[
@@ -26,7 +26,7 @@ export const SCENARIOS=[
  ['balanced','Balanced foam','A stable foam head crosses the neck lip gradually.',{...{air:65,outlet:45,depth:50,organics:60,pump:true,blocked:false}}],
  ['dry','Drier skimming','A lower water line leaves more neck length for drainage. Collection is slower and more concentrated in this model.',{air:78,outlet:27,depth:50,organics:60,pump:true,blocked:false}],
  ['wet','Wetter skimming','A higher operating level sends wetter foam into the cup. Watch the faster, paler collection.',{air:65,outlet:65,depth:50,organics:60,pump:true,blocked:false}],
- ['flood','Level too high','Excessive restriction and a deep sump drive liquid into the neck. The cup can fill and overflow.',{air:65,outlet:100,depth:85,organics:60,pump:true,blocked:false}],
+ ['flood','Level too high','Excessive restriction and a deep sump drive liquid into the neck. Automatic care exchanges the cup before it fills; switch to manual care to study overflow.',{air:65,outlet:100,depth:85,organics:60,pump:true,blocked:false}],
  ['air','Restricted air','The water pump still runs, but the restricted intake reduces bubbles and foam.',{air:65,outlet:45,depth:50,organics:60,pump:true,blocked:true}],
  ['lean','Low organic load','Air alone does not guarantee a persistent collecting foam head.',{air:65,outlet:45,depth:50,organics:5,pump:true,blocked:false}],
  ['off','Power failure','The bubble cloud fades, foam drains and the internal level approaches the sump level.',{air:65,outlet:45,depth:50,organics:60,pump:false,blocked:false}]
