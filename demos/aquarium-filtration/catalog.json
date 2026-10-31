@@ -1,5 +1,25 @@
 [
   {
+    "id": "036",
+    "title": "Fleece Atelier",
+    "category": "3D · Automatic mechanical filtration",
+    "description": "Follow water through a sensor-driven fleece roller. Inspect the continuous nonwoven web, shrinking clean roll and growing waste roll. Watch the level sensor trigger a geared advance, explore the fibers up close, and investigate jams, high sump water and roll replacement.",
+    "url": "roller-studio/",
+    "image": "assets/roller-studio.jpg",
+    "imageAlt": "The working Fleece Atelier showing clean and used fleece rolls, a cutaway wet chamber, level sensors, exposed drive gears and receiving sump",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/roller-studio",
+    "features": [
+      "14 assemblies, eight lessons & six experiments",
+      "Moving textile, growing waste roll & rippled water",
+      "Sensor-driven advance & visible roll replacement",
+      "Particle journey, fiber microscope & fault studies"
+    ],
+    "facts": ["ReefMat-inspired teaching model", "Mouse, touch & keyboard", "Self-hosted 3D"],
+    "note": "WebGL 2 · Desktop & mobile · Illustrative hydraulics and control · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
     "id": "035",
     "title": "Skimmer Atelier",
     "category": "3D · Marine foam fractionation",
