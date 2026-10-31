@@ -37,3 +37,7 @@ Gallery artwork must be an actual render of the demo. Inspect desktop, mobile, a
 `node "D:/Projects/hidden reef header/deploy-reusing-stage.mjs" --deploy`
 
 Never make another full-site staging copy. Verify live module bytes, browser operation and the collection link after wrapper success. HTML may be augmented by middleware; do not compare raw HTML hashes.
+
+## v2 — continuous assembly separation
+
+The persistent Exploded view range control scrubs separation from 0–100%, with native pointer, touch and arrow-key support. Moving it enters assembly inspection and isolates UV/pump power even at 0%; select Cutaway or Assembled to resume operation. Geometry smoothly follows the requested separation, and the camera fits intermediate extents while retaining an existing orbit during scrubbing. Reset and other modes return the slider to 0%. Power stays isolated until a returning assembly is fully seated. The slider remains usable while the operating animation is paused.
