@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <title>Breakout — SceNoCo</title>
+    <link rel="icon" href="data:," />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@1,800&family=Orbitron:wght@500;700&display=swap" rel="stylesheet" />
+    <style>
+      /* The page around the game: the UI below is UI Toolkit's, its USS here and its UXML in the body. */
+      html, body { margin: 0; height: 100%; background: #02040a; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; }
+      canvas { display: block; }
+      /* A button as UI Toolkit's: no look of the browser's own, its parent's text. */
+      button { appearance: none; margin: 0; padding: 0; font: inherit; color: inherit; }
+
+      :root { --cyan: #2ff5d2; --pink: #ff3dd8; --gold: #ffd23f; --ink: #e9f2ff; --dim: #6f86b3; }
+      #ui { font-family: Orbitron; font-weight: bold; color: var(--ink); }
+      /* A face is USS's own — colour, border, radius — and its glow an image (tools/ui-images.mjs, drawn at
+         twice its size) on a .shade child placed outside it, nine-sliced in the image's pixels as
+         -unity-slice-* is. Gradients and washes are images too, stretched. */
+      .shade { position: absolute; border-width: 0; border-style: solid; }
+
+      /* The bar: three glass panels, numbers glowing in neon. It drops in once PLAY is pressed. */
+      .bar {
+        position: absolute; left: 12px; right: 12px; top: 10px; display: flex; flex-direction: row; align-items: flex-start;
+        translate: 0 -140%; opacity: 0; transition: translate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s, opacity 0.4s ease 0.15s;
+      }
+      .bar.shown { translate: 0 0; opacity: 1; }
+      .side { flex-grow: 1; flex-basis: 0; display: flex; flex-direction: row; }
+      .side.right { justify-content: flex-end; }
+      .panel {
+        position: relative; display: flex; flex-direction: column; padding: 9px 14px 10px; border-radius: 14px;
+        background-image: url(ui/panel-face.png); background-size: 100% 100%;
+        border: 1px solid rgba(120, 160, 255, 0.22); border-top-color: rgba(170, 195, 255, 0.3);
+      }
+      .panel > .shade { left: -41px; top: -41px; right: -41px; bottom: -41px; border-image: url(ui/panel-shadow.png) 108 fill / 54px; }
+      .panel.middle { align-items: center; margin: 0 10px; }
+      .panel.right { align-items: flex-end; }
+      .label { font-size: 9px; letter-spacing: 2.5px; color: var(--dim); margin-bottom: 4px; }
+      #score {
+        font-family: 'Exo 2'; font-size: 30px; font-style: italic; letter-spacing: 2.4px; color: var(--cyan);
+        text-shadow: 0 0 8px rgba(47, 245, 210, 0.8); transition: scale 0.13s ease-out;
+      }
+      #level { font-size: 12px; letter-spacing: 1.9px; white-space: nowrap; }
+      #lives { display: flex; flex-direction: row; padding-top: 3px; }
+      .pip { position: relative; width: 22px; height: 7px; margin-left: 6px; border-radius: 4px; background-color: var(--pink); transition: scale 0.42s ease-out, background-color 0.3s; }
+      .pip > .shade { left: -10px; top: -10px; right: -10px; bottom: -10px; background-image: url(ui/pip-glow.png); background-size: 100% 100%; }
+      .pip.spent { background-color: rgba(255, 255, 255, 0.1); }
+      .pip.spent > .shade { display: none; }
+      .pip.losing { scale: 1.8 2.2; background-color: #ffffff; transition: scale 0.18s ease-out, background-color 0.18s; }
+      .pip.losing > .shade { display: flex; flex-direction: column; background-image: url(ui/pip-burst.png); }
+
+      #combo {
+        position: absolute; left: 0; right: 0; top: 78px; text-align: center; font-size: 15px; letter-spacing: 3px; color: var(--gold);
+        text-shadow: 0 0 10px rgba(255, 210, 63, 0.9); transition: scale 0.13s ease-out;
+      }
+      .bump { scale: 1.18; transition: scale 0.09s ease-out; }
+
+      /* Running bonuses: a chip each, its bar draining as its time runs out. */
+      #effects { position: absolute; left: 0; right: 0; bottom: 14px; display: flex; flex-direction: row; justify-content: center; }
+      .chip {
+        position: relative; min-width: 74px; margin: 0 4px; padding: 6px 10px 7px; text-align: center; font-size: 11px; letter-spacing: 1.5px;
+        border-radius: 10px; border-width: 1px; border-style: solid; background-color: rgba(8, 12, 28, 0.75);
+        transition: scale 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease-out;
+      }
+      .chip.new { scale: 0.3; opacity: 0; transition-duration: 0s; }
+      .chip > .shade { left: -17px; top: -17px; right: -17px; bottom: -17px; }
+      .chip .timer { height: 3px; margin-top: 5px; border-radius: 2px; transform-origin: left; }
+      .chip.laser { color: #ff3b6b; border-color: #ff3b6b; }
+      .chip.laser > .shade { border-image: url(ui/chip-laser.png) 52 fill / 26px; }
+      .chip.laser .timer { background-color: #ff3b6b; }
+      .chip.multi { color: #ffd23f; border-color: #ffd23f; }
+      .chip.multi > .shade { border-image: url(ui/chip-multi.png) 52 fill / 26px; }
+      .chip.multi .timer { background-color: #ffd23f; }
+      .chip.wide { color: #3bff9a; border-color: #3bff9a; }
+      .chip.wide > .shade { border-image: url(ui/chip-wide.png) 52 fill / 26px; }
+      .chip.wide .timer { background-color: #3bff9a; }
+      .chip.slim { color: #b18cff; border-color: #b18cff; }
+      .chip.slim > .shade { border-image: url(ui/chip-slim.png) 52 fill / 26px; }
+      .chip.slim .timer { background-color: #b18cff; }
+
+      /* A brick's points, rising from where it broke. */
+      #popups { position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; }
+      .popup {
+        position: absolute; translate: -50% -64px; opacity: 0; font-size: 15px; letter-spacing: 0.6px; color: #ffffff;
+        text-shadow: 0 0 8px rgba(47, 245, 210, 0.9);
+        transition: translate 0.9s cubic-bezier(0.33, 1, 0.68, 1), opacity 0.9s cubic-bezier(0.33, 1, 0.68, 1), scale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .popup.start { translate: -50% 0; opacity: 1; scale: 0.6; transition-duration: 0s; }
+      .popup.hot { color: var(--gold); font-size: 19px; text-shadow: 0 0 10px rgba(255, 210, 63, 0.95); }
+
+      /* Between rounds. It fades in; after a loss it waits for the sting first. */
+      #banner {
+        position: absolute; left: 0; top: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        background-image: url(ui/banner.png); background-size: 100% 100%; opacity: 0; visibility: hidden;
+        transition: opacity 0.45s ease, visibility 0s 0.45s;
+      }
+      #banner.shown { opacity: 1; visibility: visible; pointer-events: auto; cursor: pointer; transition: opacity 0.45s ease; }
+      #banner.shown.bad { transition-delay: 0.7s; }
+      #headline {
+        font-size: 72px; letter-spacing: 5.8px; text-align: center; color: #ffffff; margin-bottom: 22px;
+        text-shadow: 0 0 40px rgba(47, 245, 210, 0.8); scale: 0.6; opacity: 0; transition: scale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease;
+      }
+      #banner.bad #headline { text-shadow: 0 0 40px rgba(255, 61, 107, 0.85); }
+      #banner.shown #headline { scale: 1; opacity: 1; }
+      #banner.shown.bad #headline { transition-delay: 0.7s; }
+      .blink { font-size: 13px; letter-spacing: 4.2px; color: var(--dim); }
+      .blink.dim { opacity: 0.25; }
+
+      /* A lost ball: the edges of the screen flash red. */
+      #flash { position: absolute; left: 0; top: 0; right: 0; bottom: 0; background-image: url(ui/flash.png); background-size: 100% 100%; opacity: 0; transition: opacity 0.83s ease-out; }
+      #flash.on { opacity: 1; transition: opacity 0.07s ease-out; }
+
+      /* A stage's name, sweeping in and out as it opens. */
+      #intro {
+        position: absolute; left: 0; right: 0; top: 40%; display: flex; flex-direction: column; align-items: center; opacity: 0;
+        font-size: 54px; letter-spacing: 6.5px; color: #ffffff; text-shadow: 0 0 12px rgba(47, 245, 210, 0.9);
+        transition: opacity 0.55s ease-in, translate 0.55s ease-in;
+      }
+      #intro.enter { opacity: 0; translate: 60px 0; letter-spacing: 27px; transition-duration: 0s; }
+      #intro.shown { opacity: 1; translate: 0 0; letter-spacing: 6.5px; transition: opacity 0.4s cubic-bezier(0.33, 1, 0.68, 1), translate 0.4s cubic-bezier(0.33, 1, 0.68, 1), letter-spacing 0.4s cubic-bezier(0.33, 1, 0.68, 1); }
+      #intro.leave { opacity: 0; translate: -40px 0; }
+      #intro-stage { margin-bottom: 8px; font-size: 16px; letter-spacing: 9.7px; color: var(--cyan); }
+
+      /* Between levels the screen goes to black and comes back. */
+      #fade { position: absolute; left: 0; top: 0; right: 0; bottom: 0; background-color: #02040a; opacity: 0; transition: opacity 0.7s ease; }
+      #fade.shut { opacity: 1; transition-duration: 0.6s; }
+
+      /* The splash: the first level waits behind it until PLAY, which is also what lets sound start. */
+      #splash {
+        position: absolute; left: 0; top: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        text-align: center; padding: 16px; background-image: url(ui/splash.png); background-size: 100% 100%;
+        pointer-events: auto; transition: opacity 0.5s ease, visibility 0s 0.5s;
+      }
+      #splash.gone { opacity: 0; visibility: hidden; pointer-events: none; }
+      #title {
+        display: flex; flex-direction: column; align-items: center; margin-bottom: 26px;
+        transition: translate 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), scale 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.7s ease;
+      }
+      #title.arriving { scale: 0.6; opacity: 0; transition-duration: 0s; }
+      #splash.gone #title { translate: 0 -30px; scale: 1.08; transition: translate 0.5s ease-in, scale 0.5s ease-in; }
+      #title-name { font-size: 112px; letter-spacing: 6.7px; font-style: italic; color: #ffffff; text-shadow: 0 0 36px rgba(255, 61, 216, 0.85); }
+      #title-tag { margin-top: 14px; font-size: 18px; letter-spacing: 9px; color: var(--cyan); text-shadow: 0 0 10px rgba(47, 245, 210, 0.8); }
+      #play {
+        position: relative; margin-bottom: 26px; padding: 18px 40px 18px 46px; font-size: 22px; letter-spacing: 6.6px; color: #02040a;
+        border-radius: 14px; background-color: var(--cyan); pointer-events: auto; cursor: pointer;
+      }
+      #play > .shade { left: -90px; top: -90px; right: -90px; bottom: -90px; border-image: url(ui/play-glow.png) 208 fill / 104px; }
+      #play:active { scale: 0.96; }
+      #play > #play-glow { border-image: url(ui/play-glow-bright.png) 208 fill / 104px; opacity: 0; transition: opacity 0.8s ease-in-out; }
+      #play > #play-glow.bright { opacity: 1; }
+      #how { font-size: 11px; letter-spacing: 2.4px; color: var(--dim); }
+      #how .line { margin: 6px 0; }
+
+      /* The sound switch: a virtual button, as the banner is. M on a keyboard. */
+      #sound {
+        position: absolute; right: 14px; bottom: 14px; width: 42px; height: 42px; border-radius: 12px; color: var(--cyan);
+        background-color: rgba(8, 12, 28, 0.7); border: 1px solid rgba(120, 160, 255, 0.25); pointer-events: auto; cursor: pointer;
+      }
+      #sound > .shade { left: -17px; top: -17px; right: -17px; bottom: -17px; background-image: url(ui/sound-glow.png); background-size: 100% 100%; }
+      #sound .icon { position: absolute; left: 9px; top: 9px; width: 22px; height: 22px; background-image: url(ui/speaker.png); background-size: 100% 100%; }
+      #sound.off > .shade { display: none; }
+      #sound.off .icon { background-image: url(ui/speaker-off.png); }
+
+      /* A phone held upright. UI Toolkit has no media queries, so Progress puts .portrait on the root; the
+         big words then take the share of the screen's width the page gave them before the port. */
+      #ui.portrait #title-name { font-size: 84px; }
+      #ui.portrait #headline { font-size: 60px; }
+      #ui.portrait #intro { font-size: 46px; }
+
+      /* Until the first frame: the page's scripts on their way, then the first level's shaders. Outside
+         #ui, so it shows before the UIDocument has scaled anything. */
+      #loading {
+        position: absolute; left: 0; top: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        text-align: center; background-color: #02040a; font-family: Orbitron; font-weight: bold; transition: opacity 0.5s ease;
+      }
+      #loading .title { font-size: 48px; margin-bottom: 18px; font-style: italic; letter-spacing: 3px; color: #ffffff; text-shadow: 0 0 24px rgba(255, 61, 216, 0.85); }
+      #loading-bar { width: 320px; height: 8px; border-radius: 4px; background-color: rgba(47, 245, 210, 0.15); overflow: hidden; margin-bottom: 18px; }
+      #loading-fill { height: 100%; width: 0; background-color: var(--cyan); transition: width 0.25s ease-out; }
+      #loading .label { font-size: 14px; letter-spacing: 3.4px; color: var(--cyan); }
+      #loading.done { opacity: 0; pointer-events: none; }
+    </style>
+    <script type="module" crossorigin src="./assets/index-Dzfqs6d4.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/chunk-Bh1tDfsg.js">
+    <link rel="modulepreload" crossorigin href="./assets/three.module-CeDnYVWB.js">
+  </head>
+  <body>
+    <div id="ui">
+      <div class="bar" id="hud">
+        <div class="side"><div class="panel"><div class="shade"></div><div class="label">SCORE</div><div id="score">00000</div></div></div>
+        <div class="panel middle"><div class="shade"></div><div class="label">STAGE</div><div id="level">1/3</div></div>
+        <div class="side right"><div class="panel right"><div class="shade"></div><div class="label">LIVES</div><div id="lives"><div class="pip"><div class="shade"></div></div><div class="pip"><div class="shade"></div></div><div class="pip"><div class="shade"></div></div></div></div></div>
+      </div>
+      <div id="combo"></div>
+      <div id="effects"></div>
+      <template id="chip"><div class="chip"><div class="shade"></div><div class="name"></div><div class="timer"></div></div></template>
+      <div id="popups"></div>
+      <template id="popup"><div class="popup start"></div></template>
+      <!-- Between rounds. A virtual button: Input.getButtonDown('Continue') reads a tap on it. -->
+      <div id="banner" data-button="Continue">
+        <div id="headline"></div>
+        <div id="hint" class="blink"></div>
+      </div>
+      <!-- Over everything but the splash: a red flash on a lost ball, a stage's name, black between levels. -->
+      <div id="flash"></div>
+      <div id="intro"><div id="intro-stage"></div><div id="intro-name"></div></div>
+      <div id="fade" class="shut"></div>
+      <!-- The first screen. PLAY is a virtual button too; Space or Enter on a keyboard. -->
+      <div id="splash">
+        <div id="title" class="arriving"><div id="title-name">BREAKOUT</div><div id="title-tag">NEON · FM · SCENOCO</div></div>
+        <button id="play" data-button="Play"><div class="shade"></div><div id="play-glow" class="shade"></div>PLAY</button>
+        <div id="how">
+          <div class="line">MOUSE, FINGER OR ARROWS TO STEER · TAP OR SPACE TO LAUNCH</div>
+          <div class="line">GAMEPAD: STICK STEERS · A LAUNCHES · M OR BACK FOR SOUND</div>
+        </div>
+      </div>
+      <button id="sound" data-button="Sound" aria-label="Sound on or off" title="Sound (M)"><div class="shade"></div><div class="icon"></div></button>
+    </div>
+    <div id="loading"><div class="title">BREAKOUT</div><div id="loading-bar"><div id="loading-fill"></div></div><div class="label">LOADING</div></div>
+    <!-- jez237.com build: visible version, bumped on every publish. Original game by RomaRogov (SceNoCo, MIT). -->
+    <div id="jz-version" style="position:fixed;left:max(8px,env(safe-area-inset-left));bottom:max(6px,env(safe-area-inset-bottom));z-index:2147483000;pointer-events:none;font:600 10px/1.2 system-ui,sans-serif;letter-spacing:.06em;color:rgba(255,255,255,.62);text-shadow:0 1px 2px rgba(0,0,0,.85)">SceNoCo Breakout · v1.0.0</div>
+  </body>
+</html>

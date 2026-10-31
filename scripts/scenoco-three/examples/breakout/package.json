@@ -1,0 +1,21 @@
+{
+  "name": "@scenoco-three/example-breakout",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "check": "tsc --noEmit && scenoco check src",
+    "single": "node tools/single.mjs"
+  },
+  "dependencies": {
+    "@scenoco-three/box2d": "*",
+    "@scenoco-three/core": "*",
+    "@scenoco-three/particles": "*",
+    "tetorica-fm2612": "^0.2.33"
+  },
+  "devDependencies": {
+    "@scenoco-three/tools": "*"
+  }
+}

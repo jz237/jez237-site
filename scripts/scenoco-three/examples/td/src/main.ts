@@ -1,0 +1,44 @@
+import { log } from './phoneLog';
+import { ACESFilmicToneMapping, PCFShadowMap } from 'three';
+import { loadAssets, play } from '@scenoco-three/core';
+import { allAssets } from './assets';
+import { Menu } from './scenes/Menu';
+import { sounds } from './Sfx';
+
+/**
+ * PowerVR's GLES driver (the Pixel 10's DXT-48) crashes in a draw when shadows meet several textured
+ * materials, and takes the WebGL context with it — three.js#34311. `?shadows=1` or `=0` forces it.
+ */
+function shadowsWork(gl: WebGLRenderingContext | WebGL2RenderingContext): boolean {
+  const forced = new URLSearchParams(location.search).get('shadows');
+  if (forced !== null) return forced !== '0';
+  const info = gl.getExtension('WEBGL_debug_renderer_info');
+  const gpu = String(gl.getParameter(info ? info.UNMASKED_RENDERER_WEBGL : gl.RENDERER));
+  return !/PowerVR|Imagination/i.test(gpu);
+}
+
+log('loading');
+// The loading screen fills as each piece arrives: every model, texture and sound.
+const loading = document.getElementById('loading')!;
+const bar = document.getElementById('loading-fill')!;
+const pieces = [...allAssets, ...Object.values(sounds)];
+let done = 0;
+const arrived = () => void (bar.style.width = `${(++done / pieces.length) * 100}%`);
+await Promise.all(pieces.map((piece) => loadAssets(piece).then(arrived)));
+log('assets loaded');
+const game = play(Menu);
+game.renderer.shadowMap.enabled = shadowsWork(game.renderer.getContext());
+game.renderer.shadowMap.type = PCFShadowMap;
+game.renderer.toneMapping = ACESFilmicToneMapping;
+game.renderer.toneMappingExposure = 1.1;
+// Phones have dense screens: past 1.5× the extra pixels cost GPU memory and heat, and show little.
+const touch = matchMedia('(pointer: coarse)').matches;
+game.renderer.setPixelRatio(Math.min(window.devicePixelRatio, touch ? 1.5 : 2));
+log('playing', { shadows: game.renderer.shadowMap.enabled, pixelRatio: game.renderer.getPixelRatio(), size: [game.renderer.domElement.width, game.renderer.domElement.height] });
+// Gone once the first frame is drawn: compiling its shaders is the last wait, and the screen covers it.
+requestAnimationFrame(() => requestAnimationFrame(() => loading.classList.add('done')));
+// Its own fade only: the bar's fill ends transitions inside it too.
+loading.addEventListener('transitionend', (e) => e.target === loading && loading.remove());
+requestAnimationFrame(() => requestAnimationFrame(() => log('first frames drawn', { calls: game.renderer.info.render.calls, programs: game.renderer.info.programs?.length })));
+// Development only: the renderer's counters, for checking GPU memory from the console.
+if (import.meta.env.DEV) Object.assign(window, { renderer: game.renderer });

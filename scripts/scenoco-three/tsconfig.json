@@ -1,0 +1,24 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    // Scenes are TSX with no React: an element is the three.js object itself (packages/core/src/jsx.ts).
+    "jsx": "react-jsx",
+    "jsxImportSource": "@scenoco-three/core",
+    "paths": {
+      "@scenoco-three/core": ["./packages/core/src/index.ts"],
+      "@scenoco-three/core/jsx-runtime": ["./packages/core/src/jsx-runtime.ts"],
+      "@scenoco-three/core/jsx-dev-runtime": ["./packages/core/src/jsx-dev-runtime.ts"],
+      "@scenoco-three/core/snapshot": ["./packages/core/src/snapshot.ts"],
+      "@scenoco-three/box2d": ["./packages/box2d/src/index.ts"],
+      "@scenoco-three/rapier": ["./packages/rapier/src/index.ts"],
+      "@scenoco-three/particles": ["./packages/particles/src/index.ts"],
+      "@scenoco-three/audio": ["./packages/audio/src/index.ts"],
+      "@scenoco-three/splines": ["./packages/splines/src/index.ts"],
+      "@scenoco-three/terrain": ["./packages/terrain/src/index.ts"],
+      "@scenoco-three/tools": ["./packages/tools/src/index.ts"],
+      "@scenoco-three/tools/vite": ["./packages/tools/src/vite.ts"]
+    }
+  },
+  "include": ["packages/core/src", "packages/box2d/src", "packages/rapier/src", "packages/particles/src", "packages/audio/src", "packages/splines/src", "packages/terrain/src", "packages/unity/src", "packages/tools/src", "packages/editor/src", "tests", "vitest.config.ts"],
+  "exclude": ["**/dist", "tests/.tmp"]
+}

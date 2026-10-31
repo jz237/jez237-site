@@ -1,0 +1,73 @@
+{
+  "name": "@scenoco-three/audio",
+  "version": "1.0.0",
+  "description": "Audio for SceNoCo: Unity-shaped AudioSource, AudioClip and AudioMixer on three.js's Web Audio wrappers.",
+  "keywords": [
+    "three",
+    "threejs",
+    "scenoco",
+    "game-engine",
+    "game-framework",
+    "gamedev",
+    "web-game",
+    "webgl",
+    "typescript",
+    "unity",
+    "audio",
+    "web-audio",
+    "positional-audio",
+    "audiosource"
+  ],
+  "homepage": "https://github.com/RomaRogov/scenoco-three/tree/main/packages/audio#readme",
+  "bugs": "https://github.com/RomaRogov/scenoco-three/issues",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RomaRogov/scenoco-three.git",
+    "directory": "packages/audio"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "scenoco": {
+    "files": [
+      {
+        "extensions": [
+          "mp3",
+          "ogg",
+          "wav",
+          "m4a",
+          "aac",
+          "flac"
+        ],
+        "helper": "sharedClip",
+        "suffix": "Clip",
+        "await": true
+      }
+    ]
+  },
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "npm --prefix ../core run build && tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@scenoco-three/core": "^1.0.0"
+  },
+  "peerDependencies": {
+    "three": ">=0.184.0"
+  }
+}

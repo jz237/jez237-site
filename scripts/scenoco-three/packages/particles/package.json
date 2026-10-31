@@ -1,0 +1,60 @@
+{
+  "name": "@scenoco-three/particles",
+  "version": "1.0.0",
+  "description": "Particle effects for SceNoCo on three.quarks: Unity's ParticleSystem playing typed ParticleEffect data.",
+  "keywords": [
+    "three",
+    "threejs",
+    "scenoco",
+    "game-engine",
+    "game-framework",
+    "gamedev",
+    "web-game",
+    "webgl",
+    "typescript",
+    "unity",
+    "particles",
+    "particle-system",
+    "vfx",
+    "three.quarks"
+  ],
+  "homepage": "https://github.com/RomaRogov/scenoco-three/tree/main/packages/particles#readme",
+  "bugs": "https://github.com/RomaRogov/scenoco-three/issues",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RomaRogov/scenoco-three.git",
+    "directory": "packages/particles"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": true,
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "npm --prefix ../core run build && tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@scenoco-three/core": "^1.0.0",
+    "three.quarks": "^0.17.1"
+  },
+  "peerDependencies": {
+    "three": ">=0.184.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.0"
+  }
+}

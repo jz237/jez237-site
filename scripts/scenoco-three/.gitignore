@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+# The workspace lockfile is committed on purpose: CI resolves from the registry otherwise, so a
+# package published upstream can break a build that changed nothing. One did — a new major of an
+# optional peer of vitest crashed npm's resolver on a commit that only bumped versions. The
+# nested ones stay out: each of those projects is installed on its own, deliberately.
+package-lock.json
+!/package-lock.json
+
+# Build output / artifacts
+dist/
+dist-single/
+# The Pages site, built by `npm run site`.
+site/
+*.log
+
+# OS / editor
+.DS_Store
+
+# Tooling caches & local config (not published)
+.claude/
+.playwright-mcp/
+
+# Working notes, kept local. What is public is the README of each package and AGENTS.md.
+docs/
+agentic/
+
+# Other agents' local config
+.aider.conf.yml
+.clinerules
+
+
+# Test scratch folders, removed when their test file finishes
+tests/**/.tmp/
+
+# Written from the starter's rules card when core is packed (scripts/core-card.mjs)
+packages/core/AGENTS.md

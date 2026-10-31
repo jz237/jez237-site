@@ -1,0 +1,23 @@
+name: Bug report
+description: Something built wrong, ran wrong, or the message was unhelpful.
+labels: [bug]
+body:
+  - type: textarea
+    id: document
+    attributes:
+      label: The scene
+      description: The TSX (and any behaviour) that reproduces it, trimmed to the smallest thing that still misbehaves.
+      render: tsx
+    validations: { required: true }
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected, and what happened
+      description: If something said something, paste it verbatim — the message is the feature, and a bad message is a valid bug on its own.
+    validations: { required: true }
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      placeholder: "@scenoco-three/core 0.9.5, three 0.184.0, node 22"
+    validations: { required: true }

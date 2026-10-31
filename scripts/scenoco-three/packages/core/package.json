@@ -1,0 +1,70 @@
+{
+  "name": "@scenoco-three/core",
+  "version": "1.0.0",
+  "description": "SceNoCo core: Unity's behaviours on three.js — Behaviour, coroutines, Time, Input, SceneManager — with scenes written in TSX and no React.",
+  "keywords": [
+    "three",
+    "threejs",
+    "scenoco",
+    "game-engine",
+    "game-framework",
+    "gamedev",
+    "web-game",
+    "webgl",
+    "typescript",
+    "unity",
+    "tsx",
+    "jsx",
+    "monobehaviour",
+    "components",
+    "coroutines",
+    "scene-graph"
+  ],
+  "homepage": "https://github.com/RomaRogov/scenoco-three/tree/main/packages/core#readme",
+  "bugs": "https://github.com/RomaRogov/scenoco-three/issues",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RomaRogov/scenoco-three.git",
+    "directory": "packages/core"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./jsx-runtime": {
+      "types": "./dist/jsx-runtime.d.ts",
+      "import": "./dist/jsx-runtime.js"
+    },
+    "./jsx-dev-runtime": {
+      "types": "./dist/jsx-dev-runtime.d.ts",
+      "import": "./dist/jsx-dev-runtime.js"
+    },
+    "./snapshot": {
+      "types": "./dist/snapshot.d.ts",
+      "import": "./dist/snapshot.js"
+    }
+  },
+  "files": [
+    "dist",
+    "API.md",
+    "AGENTS.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": true,
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "prepack": "node ../../scripts/core-card.mjs",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "peerDependencies": {
+    "three": ">=0.184.0"
+  }
+}

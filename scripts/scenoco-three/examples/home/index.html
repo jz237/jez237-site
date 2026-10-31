@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <title>SceNoCo</title>
+    <link rel="icon" href="data:," />
+    <link rel="alternate" type="text/plain" href="llms.txt" title="llms.txt" />
+    <style>
+      html, body { margin: 0; height: 100%; background: #05070d; overflow: hidden; }
+      canvas { display: block; touch-action: none; }
+      /* The game draws in the view; the source panel takes its side of the page, as the editor's does. */
+      #view { position: fixed; top: 0; left: 0; right: 0; bottom: 0; transition: right 0.25s ease-out, bottom 0.25s ease-out; }
+      body.source-open #view { right: min(760px, 58vw); }
+      .what {
+        position: absolute; left: 50%; bottom: calc(28px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
+        padding: 13px 26px; border-radius: 999px; border: 1px solid #2c4a6b;
+        background: rgb(10 16 28 / 0.82); color: #dbeafe; backdrop-filter: blur(6px);
+        font: 600 16px/1 system-ui, -apple-system, 'Segoe UI', sans-serif; letter-spacing: 0.02em;
+        text-decoration: none; white-space: nowrap; transition: border-color 0.15s, color 0.15s, background 0.15s;
+      }
+      .what:hover, .what:focus-visible { border-color: #4af0e0; color: #ffffff; background: rgb(14 28 40 / 0.9); outline: none; }
+
+      /* The corner button and the panel it opens: this page's own source. */
+      #source-button {
+        position: absolute; top: calc(16px + env(safe-area-inset-top, 0px)); right: 16px;
+        padding: 8px 14px; border-radius: 999px; border: 1px solid #2c4a6b; cursor: pointer;
+        background: rgb(10 16 28 / 0.82); color: #dbeafe; backdrop-filter: blur(6px);
+        font: 600 13px/1 ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+        transition: border-color 0.15s, color 0.15s;
+      }
+      #source-button:hover, #source-button:focus-visible { border-color: #4af0e0; color: #ffffff; outline: none; }
+      #source {
+        position: fixed; top: 0; right: 0; bottom: 0; width: min(760px, 58vw); display: flex; flex-direction: column;
+        background: rgb(7 11 20 / 0.94); backdrop-filter: blur(8px); border-left: 1px solid #1c2c44; color: #c9d6ea;
+        font: 13px/1.5 system-ui, -apple-system, 'Segoe UI', sans-serif;
+      }
+      #source[hidden] { display: none; }
+      @media (orientation: portrait) {
+        body.source-open #view { right: 0; bottom: 56%; }
+        #source { top: auto; left: 0; width: auto; height: 56%; border-left: 0; border-top: 1px solid #1c2c44; }
+      }
+      #source header { display: flex; align-items: center; gap: 12px; padding: 14px 16px 10px; }
+      #source header p { margin: 0; flex: 1; color: #9fb3cf; }
+      #source header a { color: #4af0e0; text-decoration: none; white-space: nowrap; }
+      #source .close { border: 0; background: none; color: #9fb3cf; font-size: 22px; line-height: 1; cursor: pointer; padding: 0 4px; }
+      #source .tabs { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 16px 10px; border-bottom: 1px solid #1c2c44; }
+      #source .tabs button {
+        border: 1px solid #1c2c44; border-radius: 6px; background: none; color: #9fb3cf; cursor: pointer;
+        padding: 4px 9px; font: 12px/1.3 ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+      }
+      #source .tabs button.on { border-color: #4af0e0; color: #ffffff; }
+      #source pre { margin: 0; flex: 1; overflow: auto; padding: 14px 16px 28px; tab-size: 2; }
+      #source code { font: 12.5px/1.55 ui-monospace, 'SF Mono', Menlo, Consolas, monospace; color: #c9d6ea; }
+      .t-comment { color: #6b7f99; font-style: italic; } .t-string { color: #a5e3a0; } .t-tag { color: #4af0e0; }
+      .t-keyword { color: #c792ea; } .t-attr { color: #ffcb6b; } .t-type { color: #82aaff; } .t-number { color: #f78c6c; }
+    </style>
+  </head>
+  <body>
+    <main id="view">
+      <a class="what" href="https://github.com/RomaRogov/scenoco-three#readme">What's that?</a>
+      <button id="source-button" aria-controls="source" aria-expanded="false">&lt;/&gt; Source</button>
+    </main>
+    <aside id="source" hidden aria-label="This page's source">
+      <header>
+        <p>This page is these files. The scene only declares; what moves is a behaviour.</p>
+        <a class="github" href="https://github.com/RomaRogov/scenoco-three/tree/main/examples/home">On GitHub ↗</a>
+        <button class="close" aria-label="Close">×</button>
+      </header>
+      <nav class="tabs"></nav>
+      <pre><code></code></pre>
+    </aside>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
