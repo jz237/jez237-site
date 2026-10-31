@@ -1382,6 +1382,7 @@ def main():
 </head>
 <body>
   <h1>AI News Feed</h1>
+  <p><a href="../discoveries/">AI Discoveries, Explained — science news in everyday language</a></p>
   <div class=\"muted\">Updated: {now.isoformat()} · Top {len(daily_top)} for {today.isoformat()}</div>
   <ol>
     {html_items}
