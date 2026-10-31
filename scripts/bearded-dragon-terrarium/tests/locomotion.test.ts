@@ -13,16 +13,21 @@ import {habitat, model, Audit, SkinAudit} from './locomotion-fixture';
 test('resting on the basking rock settles without alternating vertical corrections',()=>{
   const {rig,brain}=habitat(),r=rig as any,b=brain as any;
   b.boredom=1e6;
-  let previous=0,maxDelta=0,min=Infinity,max=-Infinity;
+  let previous=0,maxDelta=0,min=Infinity,max=-Infinity,samples=0;
   const audit=new Audit();
-  for(let i=0;i<300;i++){
+  for(let i=0;i<600&&samples<120;i++){
     b.update(1/60);
-    if(i>=180){
+    // The rest transition may deliberately adjust one paw before relaxing.
+    // Measure the supported rest after that transition, with a bounded time
+    // to settle, rather than counting its smooth initial lowering as quiver.
+    if(b.restTransition.settled>=1&&!r.motion.transferring){
       if(previous)maxDelta=Math.max(maxDelta,Math.abs(r.bodyY-previous));
       previous=r.bodyY;min=Math.min(min,r.bodyY);max=Math.max(max,r.bodyY);
       audit.sample(rig);
-    }
+      samples++;
+    }else{previous=0;maxDelta=0;min=Infinity;max=-Infinity;samples=0;}
   }
+  assert.equal(samples,120,'reach two seconds of supported rest within ten seconds');
   assert.ok(maxDelta<.00005,`resting vertical correction ${maxDelta} m per tick`);
   assert.ok(max-min<.00015,`resting height range ${max-min} m`);
   assert.ok(audit.maxSlide<.0001,'settling still preserves planted contacts');
@@ -57,6 +62,20 @@ test('a ray starting inside wood cannot mistake its underside for a foothold',()
   assert.ok(Math.abs(sample(.14).y-groundHeight(0,0))<1e-6,'a genuinely overhead branch is not the floor');
 });
 
+test('a foot can withdraw below a ledge but cannot pass through a wall beneath it',()=>{
+  const from=new THREE.Vector3(-.03,groundHeight(-.03,.03),.03),wanted=new THREE.Vector3(.03,groundHeight(.03,.03),.03);
+  const roof=new THREE.Mesh(new THREE.BoxGeometry(.03,.018,.12),new THREE.MeshBasicMaterial({side:THREE.DoubleSide}));
+  roof.position.set(-.03,from.y+.043,.03);
+  const wall=new THREE.Mesh(new THREE.BoxGeometry(.012,.14,.3),new THREE.MeshBasicMaterial({side:THREE.DoubleSide}));
+  wall.position.set(0,from.y+.06,.03);
+  const shoulder=new THREE.Vector3(0,from.y+.03,0),footprint=[new THREE.Vector3(),new THREE.Vector3(.005,0,.005)];
+  const find=(blocked:boolean)=>new Footholds(new Surface(new THREE.Mesh(),[{mesh:roof,kind:1},...(blocked?[{mesh:wall,kind:1}]:[])]))
+    .find(wanted,shoulder,.1,0,1,from,footprint,0,from.y+.01,0,h=>h.point.x>.02&&Math.abs(h.point.z-.03)<.01);
+  const clear=find(false);assert.ok(clear,'the overhead ledge must not pin a supported foot');
+  assert.ok(clear.top<from.y+.018,'the foot withdraws below the roof');
+  assert.equal(find(true),null,'a low support query must still reject a solid wall across the transfer');
+});
+
 test('unreachable motion requests cannot teleport the body or drag planted feet',()=>{
   const rig=new LizardRig(model(),{heightAt:()=>0,normalAt:(_x,_z,out=new THREE.Vector3())=>out.set(0,1,0)});
   rig.update(1/120);const before=rig.spinePoints()[3].clone(),audit=new Audit();audit.sample(rig);
@@ -78,7 +97,7 @@ test('head clearance and looking around cannot lift the shoulder away from plant
 test('the complete habitat supports a continuous tour with real planted feet', {timeout:600000},t=>{
   let seed=12345;const random=Math.random;Math.random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
   try{
-    const a=habitat(),r=a.rig,b=a.brain as any,audit=new Audit(),skin=new SkinAudit(a.lizard);
+    const a=habitat(),r=a.rig,b=a.brain as any,audit=new Audit(),skin=new SkinAudit(a.lizard,true);
     const presentation=new PoseInterpolation(a.lizard.bones);
     const drink=b.drinkSpot(); assert.ok(drink,'a dry drinking approach is available');
     b.dish={centre:new THREE.Vector3(-.58,groundHeight(-.58,.362),.362)};
@@ -102,7 +121,13 @@ test('the complete habitat supports a continuous tour with real planted feet', {
         frame++;
         seconds=(i+1)/60;
         if(i%600===0)report({name,seconds,x:r.inputs.x,z:r.inputs.z});
-        if(b.mode==='idle' && Math.hypot(r.inputs.x-goal[0],r.inputs.z-goal[1])<.06){arrived=true;break;}
+        // This continuous behavior tour checks actual visits. After a bounded
+        // reassessment the animal may finish the ledge visit by basking rather
+        // than idling; the strict single-journey navigation tests are separate.
+        // Require the real destination and completed foot transfers, not just
+        // a particular activity label or a moving pass near the waypoint.
+        if((b.mode==='idle'||b.mode==='bask')&&!r.motion.transferring
+          &&Math.hypot(r.inputs.x-goal[0],r.inputs.z-goal[1])<.04){arrived=true;break;}
       }
       const result={name,arrived,seconds,x:r.inputs.x,z:r.inputs.z};results.push(result);t.diagnostic(JSON.stringify(result));
       report(result);
@@ -115,6 +140,7 @@ test('the complete habitat supports a continuous tour with real planted feet', {
     assert.ok(audit.maxFloat<.0005 && audit.maxPenetration<.0005,'every planted sole belongs to an actual surface');
     assert.ok(audit.maxLimbError<.00015,'contact does not stretch the sculpted limbs');
     assert.ok(audit.maxJump<.004,'no discontinuous body movement at a 60 Hz step');
-    assert.ok(skin.maxPenetration<.003,`visible limb penetration ${skin.maxPenetration} m`);
+    assert.ok(audit.maxHeadJump<.012,`no abrupt head relocation (${audit.maxHeadJump} m per 60 Hz tick)`);
+    assert.ok(skin.maxPenetration<.003,`visible head, trunk or limb penetration ${skin.maxPenetration} m`);
   } finally {Math.random=random;}
 });
