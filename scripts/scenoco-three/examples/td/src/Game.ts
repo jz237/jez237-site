@@ -1,4 +1,5 @@
 import { Vector3 } from 'three';
+import { formatScore, scoreBoard } from './jzBoard';
 import {
   Behaviour, Coroutine, Input, KeyCode, SceneManager, Screen, Time, WaitForSeconds, WaitForSecondsRealtime, WaitUntil, destroy, findObjectOfType, findObjectsOfType, instantiate,
   type Yieldable,
@@ -35,6 +36,8 @@ export class Game extends Behaviour {
   lives = 0;
   /** Waves started so far. */
   wave = 0;
+  /** jez237.com: points for the high-score board — kills, waves held, and a win's lives and stars. */
+  score = 0;
   phase: Phase = 'ready';
   speed = 1;
   paused = false;
@@ -103,6 +106,7 @@ export class Game extends Behaviour {
 
   enemyKilled(enemy: Enemy) {
     this.gold += enemy.spec.gold;
+    this.score += enemy.spec.gold * 10;
     this.pop(enemy.node.position, `+${enemy.spec.gold}`, 'coin');
     instantiate(CoinBurst, { position: enemy.node.position.clone().setY(enemy.node.position.y + 0.8) });
     this.sfx('coin', 0.5);
@@ -158,6 +162,7 @@ export class Game extends Behaviour {
     // Every wave that has arrived pays out: the money to answer the next one.
     const bonus = 20 + index * 6;
     if (this.phase !== 'lost') {
+      this.score += 100 * (index + 1);
       this.gold += bonus;
       this.bump('gold-chip');
       this.toast(`Wave ${index + 1} cleared the gate: +${bonus} gold`);
@@ -333,6 +338,7 @@ export class Game extends Behaviour {
     const share = this.lives / this.spec.lives;
     const stars = share >= 0.9 ? 3 : share >= 0.5 ? 2 : 1;
     saveStars(this.level, stars);
+    this.score += this.lives * 50 + stars * 500 * this.mapNumber;
     this.select(null);
     this.showNext(false);
     this.startCoroutine(this.showWin(stars));
@@ -344,7 +350,7 @@ export class Game extends Behaviour {
     this.sfx('win');
     const last = LEVEL_ORDER.indexOf(this.level) === LEVEL_ORDER.length - 1;
     $('won-next').classList.toggle('hidden', last);
-    $('won-text').textContent = last ? 'Every bastion stands. Well played!' : `${this.lives} of ${this.spec.lives} lives kept.`;
+    $('won-text').textContent = (last ? 'Every bastion stands. Well played!' : `${this.lives} of ${this.spec.lives} lives kept.`) + ` Score ${formatScore(this.score)}`;
     const shown = [...$('won-stars').children] as HTMLElement[];
     shown.forEach((star) => star.classList.remove('show', 'got'));
     this.startCoroutine(appear('won'));
@@ -356,6 +362,13 @@ export class Game extends Behaviour {
         this.sfx('star', 0.8);
       }
     }
+    yield new WaitForSeconds(0.6);
+    scoreBoard().submit(this.score, this.mapNumber);
+  }
+
+  /** Which map this is, from 1 — the high-score board's MAP column. */
+  private get mapNumber() {
+    return LEVEL_ORDER.indexOf(this.level) + 1;
   }
 
   private lose() {
@@ -369,8 +382,10 @@ export class Game extends Behaviour {
   private *showLoss() {
     yield new WaitForSeconds(1);
     Time.timeScale = 1;
-    $('lost-text').textContent = `Wave ${this.wave} of ${this.spec.waves.length} broke through.`;
+    $('lost-text').textContent = `Wave ${this.wave} of ${this.spec.waves.length} broke through. Score ${formatScore(this.score)}`;
     this.startCoroutine(appear('lost'));
+    yield new WaitForSeconds(0.8);
+    scoreBoard().submit(this.score, this.mapNumber);
   }
 
   // ── HUD ─────────────────────────────────────────────────────────────────────────────────

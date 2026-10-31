@@ -4,6 +4,7 @@ import { LEVELS, LEVEL_ORDER, type LevelId } from './levels';
 import { loadStars } from './progress';
 import { route } from './routes';
 import { Sfx } from './Sfx';
+import { scoreBoard } from './jzBoard';
 
 /** The title screen: one card per level, its stars, locked until the one before is won. */
 export class MenuController extends Behaviour {
@@ -46,6 +47,17 @@ export class MenuController extends Behaviour {
       return card;
     });
     $('levels').replaceChildren(...cards);
+    // jez237.com: the high-score table, under the maps.
+    if (!document.getElementById('jz-scores')) {
+      const scores = document.createElement('button');
+      scores.type = 'button';
+      scores.id = 'jz-scores';
+      scores.className = 'jzhs-open';
+      scores.textContent = 'HIGH SCORES';
+      scores.style.cssText = 'margin:12px auto 0;display:block;font-size:18px;background:rgba(74,42,18,.85)';
+      scores.addEventListener('click', (e) => { e.stopPropagation(); scoreBoard().open(); });
+      $('levels').after(scores);
+    }
     this.startCoroutine(arrive(cards));
   }
 

@@ -3,6 +3,7 @@ import { Behaviour, Input, KeyCode, SceneManager, Screen, WaitForSecondsRealtime
 import { Paddle } from './Paddle.js';
 import type { Bonus } from './bonus.js';
 import type { GameState } from './GameState.js';
+import { createScoreBoard, type ScoreBoard } from '../../../jez237/scores';
 
 /**
  * The run — score, lives, which level — and the HUD that shows it.
@@ -44,6 +45,9 @@ export class Progress extends Behaviour {
   private drawnCombo = 0;
   private drawnEffects = '';
   private shownBonuses = new Set<string>();
+  /** jez237.com: the local + global high-score board, and whether this run's score went to it. */
+  private board!: ScoreBoard;
+  private reported = false;
 
   private hud!: Record<
     'ui' | 'score' | 'level' | 'lives' | 'combo' | 'effects' | 'popups' | 'banner' | 'splash' | 'title' | 'playGlow' | 'bar' | 'fade' | 'flash' | 'intro' | 'introStage' | 'introName' | 'headline' | 'hint',
@@ -78,6 +82,24 @@ export class Progress extends Behaviour {
     };
     this.chip = element('chip') as HTMLTemplateElement;
     this.popupTemplate = element('popup') as HTMLTemplateElement;
+    this.board = createScoreBoard({
+      game: 'scenoco-breakout',
+      title: 'BREAKOUT',
+      levelLabel: 'STAGE',
+      accent: '#2ff5d2',
+      accent2: '#ff3dd8',
+      panel: 'linear-gradient(160deg,rgba(22,10,52,.95),rgba(4,6,20,.97))',
+      font: 'Orbitron, sans-serif',
+    });
+    const scores = document.createElement('button');
+    scores.type = 'button';
+    scores.id = 'jz-scores';
+    scores.className = 'jzhs-open';
+    scores.textContent = 'HIGH SCORES';
+    // Under the how-to lines, and above PLAY's wide glow, which would otherwise take its taps.
+    scores.style.cssText = 'margin-top:12px;position:relative;z-index:2;font-size:12px';
+    scores.addEventListener('click', (e) => { e.stopPropagation(); this.board.open(); });
+    element('how').after(scores);
   }
 
   override start(): void {
@@ -91,7 +113,7 @@ export class Progress extends Behaviour {
 
   override update(): void {
     const phase = this.game?.phase;
-    if (phase === 'title' || phase === 'ready' || phase === 'playing' || this.fading) return;
+    if (phase === 'title' || phase === 'ready' || phase === 'playing' || this.fading || this.board.isOpen) return;
     if (Input.getButtonDown('Continue') || Input.getKeyDown(KeyCode.Space) || Input.getKeyDown(KeyCode.JoystickButton0)) this.advance();
   }
 
@@ -104,7 +126,12 @@ export class Progress extends Behaviour {
     const start =
       Input.getButtonDown('Play') || Input.getKeyDown(KeyCode.Space) || Input.getKeyDown(KeyCode.Return) ||
       Input.getKeyDown(KeyCode.JoystickButton0) || Input.getKeyDown(KeyCode.JoystickButton9);
-    if (this.game?.phase === 'title' && start) {
+    // The run is over: its score goes to the high-score board once, before the banner can restart it.
+    if ((this.game?.phase === 'lost' || this.game?.phase === 'won') && !this.reported) {
+      this.reported = true;
+      this.board.submit(this.score, this.index + 1);
+    }
+    if (this.game?.phase === 'title' && start && !this.board.isOpen) {
       this.begun = true;
       this.game.phase = 'ready';
       this.redraw();
@@ -195,6 +222,7 @@ export class Progress extends Behaviour {
     const phase = this.game?.phase;
     if (phase === 'cleared') return this.go(this.index + 1);
     if (phase === 'lost' || phase === 'won') {
+      this.reported = false;
       this.score = 0;
       this.lives = this.startingLives;
       this.go(0);
