@@ -84,7 +84,7 @@ test('air exposure loses buoyancy, and violent reversing flow remains finite and
     s.advance(1 / 30, [Math.sin(i / 31) * 2, Math.cos(i / 45), Math.cos(i / 53) * 2], env, true, w);
     assert.ok([...s.position, ...s.velocity, s.heading, s.pitch, s.roll].every(Number.isFinite));
     assert.ok(Math.hypot(...s.position) <= env.radius - 0.29 + 1e-7);
-    assert.ok(s.position[1] >= w.sand + 0.07 - 1e-7);
+    assert.ok(s.position[1] >= w.sand + 0.07 * BETTA_SCALE / 0.105 - 1e-7);
   }
 });
 

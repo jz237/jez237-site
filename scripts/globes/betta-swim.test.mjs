@@ -263,7 +263,7 @@ test('it sinks onto the sand, settles there without drifting, then lifts off', (
     const log = runBehaviors(900, { seed }), eps = episodes(log, 'rest').filter(ep => ep.at(-1) !== log.at(-1));
     assert.ok(eps.length >= 1, `${seed}: never rested`);
     for (const ep of eps) {
-      const floor = env.sandLevel + 0.07, end = ep.at(-1), settled = ep.slice(-120);
+      const floor = env.sandLevel + 0.07 * BETTA_SCALE / 0.105, end = ep.at(-1), settled = ep.slice(-120);
       assert.ok(end.t - ep[0].t > 9, 'long enough to count as a rest');
       assert.ok(ep.every(r => r.position[1] >= floor - 1e-9));
       assert.ok(settled.every(r => Math.abs(r.position[1] - (env.sandLevel + REST_HEIGHT)) < 0.01 && r.speed < 0.01 && Math.abs(r.pitch) < 0.1), `${seed}: not settled on the bed`);
