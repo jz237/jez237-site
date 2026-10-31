@@ -3,9 +3,56 @@
   "title": "AI Discoveries, Explained",
   "updated": "2026-10-31",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-10-30",
+  "coverageEnd": "2026-10-31",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "title": "AI helps repair a gap in an older mathematics proof",
+      "takeaway": "A proof is like a chain: every link must hold. Axiom reports that its AxiomProver system found examples showing that one step in an older proof about finite symmetries did not work, then produced a supporting theorem to repair that route. Human experts contributed earlier ideas and guidance, and the team reports checking the replacement with Lean proof-checking software. The established classification remains intact because other proofs exist; people also found a shorter workaround. This is the team’s account, not an independently confirmed result here.",
+      "category": "Mathematics",
+      "status": "Team-reported proof repair; not independently confirmed here",
+      "evidenceKind": "proof",
+      "modelNote": "AxiomProver reportedly found counterexamples and produced the repair theorem; its underlying model and version are not disclosed in the inspected account. Lean checked proof steps; it is proof-checking software, not an identified research model. Human experts supplied earlier ideas and guidance.",
+      "sources": [
+        "https://hexagonmath.org/2610.00575?version=1",
+        "https://axiommath.ai/research/the-enormous-theorem-formalized/"
+      ],
+      "id": "d-1566093927864471793-repairing-an-older-symmetry-proof",
+      "context": "AI finds and repairs a gap in an older proof — October 27\n\nAxiom says AxiomProver found counterexamples to a step in an older proof about the basic building blocks of finite symmetries, then produced a new supporting theorem to repair that route. Human experts supplied earlier mathematical ideas and guidance; the team reports checking the replacement with Lean, software that checks proof steps. This does not overturn the established classification—other proofs exist, and people later found a shorter workaround. Author-reported result, not independently confirmed here; AxiomProver’s underlying model/version is not disclosed in the inspected account.\n\nSources: https://axiommath.ai/research/the-enormous-theorem-formalized/\nhttps://hexagonmath.org/2610.00575?version=1",
+      "coveredOn": "2026-10-31"
+    },
+    {
+      "title": "AI teams choose questions and run five research studies",
+      "takeaway": "Ko Fujimura reports five studies in which AI chose questions about satellite maps or weather forecasts, tested them using public data, and wrote and revised papers. Think of a small research team with separate investigators and critics, all played by AI. People built the instructions and set the broad subject, but reportedly gave no research advice during the runs. AI review caught misleading claims and prompted corrections, including negative findings. This tests a research process, not five established discoveries: evaluation was AI-only, novelty scores were low, and one pilot was included after later results were seen.",
+      "category": "Research in action",
+      "status": "Early research-process demonstration; AI-only evaluation",
+      "evidenceKind": "demo",
+      "modelNote": "GPT-6.1 Sol performed the research; GPT-6 Astra challenged the plans; Claude Opus 5.5 managed the runs and checked first drafts. These are the model names reported in the confirmed account. People developed the instructions and set the broad research area.",
+      "sources": [
+        "https://arxiv.org/abs/2610.39620",
+        "https://arxiv.org/html/2610.39620",
+        "https://github.com/kofujimura/autonomous-research-agents"
+      ],
+      "id": "d-1566094144156471398-ai-runs-five-public-data-studies",
+      "context": "AI chooses research questions and completes five studies — October 29\n\nKo Fujimura reports five studies in which AI chose questions about satellite maps or weather forecasts, ran computer experiments on public data, and wrote and revised papers. GPT-6.1 Sol did the research, GPT-6 Astra challenged the plans, and Claude Opus 5.5 managed the runs and checked first drafts. People developed the instructions and set the broad research area; they reportedly gave no research advice during these runs. AI reviewers caught misleading claims and prompted corrections, including negative findings—not five established new discoveries. Early autonomous-research demonstration: evaluation was AI-only, novelty scores were low, and one pilot was included after later results were seen.\n\nPaper: https://arxiv.org/abs/2610.39620\nReleased records: https://github.com/kofujimura/autonomous-research-agents",
+      "coveredOn": "2026-10-31"
+    },
+    {
+      "title": "AI tests a quantum-lab rule and catches misleading data",
+      "takeaway": "Calibration teaches an instrument how to interpret its readings. Researchers report that AI agents derived an exact rule for how many calibration settings are needed to predict diamond-spin responses to a restricted set of microwave pulses. The agents rejected a promising run when checks exposed drifting signals, changed the procedure, and obtained supporting measurements: ten settings predicted four responses held back from calibration in the tested three-pulse case. People built the equipment and set limits. This single-lab preprint lacks independent replication; pulse strength, length and shape were fixed, and errors were assumed constant within each sequence.",
+      "category": "Physics & materials",
+      "status": "Single-lab preprint with measurements; not independently replicated",
+      "evidenceKind": "lab",
+      "modelNote": "GPT-5.6 proposed ideas, GPT-6 developed the theory, and GPT-6 Astra checked calculations. Claude Fable 5 operated the equipment; Claude Opus 5 coordinated. These are distinct reported roles, not interchangeable model labels. People built the apparatus and set operating limits.",
+      "sources": [
+        "https://arxiv.org/abs/2610.40589",
+        "https://arxiv.org/html/2610.40589",
+        "https://github.com/E-zClap/auctopus"
+      ],
+      "id": "d-1566094490492731556-testing-a-diamond-spin-calibration-rule",
+      "context": "AI derives a rule, tests it in a quantum lab—and rejects its own misleading data — October 29\n\nUsing GPT-5.6 to propose ideas and GPT-6 to develop the theory, researchers report an exact rule for how much calibration is needed to predict diamond-spin responses to a restricted family of microwave pulses. GPT-6 Astra checked the calculations, Claude Fable 5 operated the equipment, and Claude Opus 5 coordinated; people built the apparatus and set operating limits. The agents rejected an apparently successful run after checks exposed drifting signals, changed the procedure, and obtained supporting measurements. In the tested three-pulse case, ten calibration settings predicted four withheld responses. Early result—single-lab preprint, not independent replication: pulse strength, length and shape were fixed, and errors were assumed constant during each sequence.\n\nPaper: https://arxiv.org/abs/2610.40589\nSystem code: https://github.com/E-zClap/auctopus",
+      "coveredOn": "2026-10-31"
+    },
     {
       "id": "479cee271616",
       "title": "A fresh attempt at a 66-year-old symmetry puzzle",
