@@ -3,20 +3,20 @@
     "id": "032",
     "title": "Aquarium Filtration",
     "category": "3D · Interactive filter collection",
-    "description": "One collection for all seven filter studies: fluidized sand, automatic drum screening, moving-bed biology, wet/dry trickle, AquaClear hang-on-back, FiltoClear pond canister and reef-sump filtration. Open the machinery, follow the water and explore the biology.",
+    "description": "One collection for all eight filter studies: marine protein skimming, fluidized sand, automatic drum screening, moving-bed biology, wet/dry trickle, AquaClear hang-on-back, FiltoClear pond canister and reef-sump filtration. Open the machinery, follow the water and explore the biology.",
     "url": "aquarium-filtration/",
     "image": "assets/moving-bed-studio.jpg",
-    "imageAlt": "Cutaway biological filter with animated carriers, one of seven detailed interactive filtration studies",
+    "imageAlt": "Cutaway biological filter with animated carriers, one of eight detailed interactive filtration studies",
     "source": "https://github.com/jz237/jez237-site/tree/main/demos/aquarium-filtration",
     "features": [
-      "Seven complete interactive filter demos",
+      "Eight complete interactive filter demos",
       "Exploded assemblies & close-up mechanisms",
       "Animated water paths & operating experiments",
       "Biology, maintenance & guided explanations"
     ],
     "facts": [
       "Aquarium, reef & pond",
-      "Seven filter studies",
+      "Eight filter studies",
       "Mouse, touch & keyboard"
     ],
     "note": "Collection gallery · Interactive studies require WebGL · Existing direct demo links preserved",

@@ -1,5 +1,29 @@
 [
   {
+    "id": "035",
+    "title": "Skimmer Atelier",
+    "category": "3D · Marine foam fractionation",
+    "description": "Follow air through a needle-wheel marine skimmer. Inspect the bubble cloud, tapered neck and collection cup, then enlarge one air–water interface to see how surface-active molecules collect. Compare wet and dry skimming and investigate air restriction, power loss and overflow.",
+    "url": "skimmer-studio/",
+    "image": "assets/skimmer-studio.jpg",
+    "imageAlt": "The working Skimmer Atelier with a clear cone-shaped chamber, fine bubbles, rising foam, collection cup and exposed needle-wheel pump",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/skimmer-studio",
+    "features": [
+      "12 assemblies, eight lessons & seven experiments",
+      "Fine bubbles, wet foam films & filling collection cup",
+      "Guided bubble journey & air–water microscope",
+      "Wet/dry operation, restricted air & overflow studies"
+    ],
+    "facts": [
+      "Original marine teaching design",
+      "Mouse, touch & keyboard",
+      "Self-hosted 3D"
+    ],
+    "note": "WebGL 2 · Desktop & mobile · Illustrative foam response · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
     "id": "034",
     "title": "Sand Atelier",
     "category": "3D · Fluidized biological filtration",
@@ -8,8 +32,17 @@
     "image": "assets/sand-studio.jpg",
     "imageAlt": "The working Sand Atelier with a clear vertical sand reactor, individually animated grains, feed pump, height scale and gravity return",
     "source": "https://github.com/jz237/jez237-site/tree/main/demos/sand-studio",
-    "features": ["12 assemblies, eight lessons & six experiments", "Continuous grain motion, refractive water & pump section", "Guided water journey & live bed-height history", "Attached biofilm colonies & new/mature comparison"],
-    "facts": ["Original biological teaching design", "Mouse, touch & keyboard", "Self-hosted 3D"],
+    "features": [
+      "12 assemblies, eight lessons & six experiments",
+      "Continuous grain motion, refractive water & pump section",
+      "Guided water journey & live bed-height history",
+      "Attached biofilm colonies & new/mature comparison"
+    ],
+    "facts": [
+      "Original biological teaching design",
+      "Mouse, touch & keyboard",
+      "Self-hosted 3D"
+    ],
     "note": "WebGL 2 · Desktop & mobile · Illustrative hydraulics and biology · Actual demo screenshot",
     "imageWidth": 1440,
     "imageHeight": 900
