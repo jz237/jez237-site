@@ -1,0 +1,60 @@
+{
+  "name": "@scenoco-three/rapier",
+  "version": "1.0.0",
+  "description": "3D physics for SceNoCo on Rapier, in Unity's shape: Rigidbody, the colliders, Physics.gravity, and the contact messages.",
+  "keywords": [
+    "three",
+    "threejs",
+    "scenoco",
+    "game-engine",
+    "game-framework",
+    "gamedev",
+    "web-game",
+    "webgl",
+    "typescript",
+    "unity",
+    "physics",
+    "rapier",
+    "3d-physics",
+    "rigidbody",
+    "collider"
+  ],
+  "homepage": "https://github.com/RomaRogov/scenoco-three/tree/main/packages/rapier#readme",
+  "bugs": "https://github.com/RomaRogov/scenoco-three/issues",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RomaRogov/scenoco-three.git",
+    "directory": "packages/rapier"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "//sideEffects": "Importing the package registers its @component/@setting tags (decorator side effects), so it must not be tree-shaken away when imported for registration.",
+  "sideEffects": true,
+  "scenoco": {},
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "npm --prefix ../core run build && tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@scenoco-three/core": "^1.0.0",
+    "@dimforge/rapier3d-compat": "~0.20.0"
+  },
+  "peerDependencies": {
+    "three": ">=0.184.0"
+  }
+}

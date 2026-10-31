@@ -1,0 +1,60 @@
+{
+  "name": "@scenoco-three/box2d",
+  "version": "1.0.0",
+  "description": "2D physics for SceNoCo on planck (Box2D), in Unity's shape: Rigidbody2D, the 2D colliders, PhysicsMaterial2D, Physics2D queries and layers, and the contact messages.",
+  "keywords": [
+    "three",
+    "threejs",
+    "scenoco",
+    "game-engine",
+    "game-framework",
+    "gamedev",
+    "web-game",
+    "webgl",
+    "typescript",
+    "unity",
+    "physics",
+    "box2d",
+    "planck",
+    "2d",
+    "rigidbody2d"
+  ],
+  "homepage": "https://github.com/RomaRogov/scenoco-three/tree/main/packages/box2d#readme",
+  "bugs": "https://github.com/RomaRogov/scenoco-three/issues",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RomaRogov/scenoco-three.git",
+    "directory": "packages/box2d"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "//sideEffects": "index.ts declares the 2D contact messages to core at import (declareMessages), so a bundler must keep it.",
+  "sideEffects": true,
+  "scenoco": {},
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "npm --prefix ../core run build && tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@scenoco-three/core": "^1.0.0",
+    "planck": "^1.5.0"
+  },
+  "peerDependencies": {
+    "three": ">=0.184.0"
+  }
+}

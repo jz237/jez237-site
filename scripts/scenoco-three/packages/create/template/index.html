@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <title>Game</title>
+    <link rel="icon" href="data:," />
+    <style>
+      html, body { margin: 0; height: 100%; background: #10131c; overflow: hidden; }
+      canvas { display: block; touch-action: none; }
+      /* The UI is UI Toolkit's, written in HTML: this is its USS, the markup below its UXML. */
+      #hint { position: absolute; left: 16px; bottom: 16px; font-size: 18px; color: #94a3b8; }
+    </style>
+  </head>
+  <body>
+    <div id="ui">
+      <div id="hint">Arrows or WASD to move · Space drops a crate</div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

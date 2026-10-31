@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <title>Eggy Roll</title>
+    <style>
+      /* The page around the game: the UI below is UI Toolkit's, its USS here and its UXML in the body. */
+      html, body { margin: 0; height: 100%; overflow: hidden; background: #fff; touch-action: none; user-select: none; -webkit-user-select: none; }
+      canvas { position: relative; display: block; }
+      /* A button as UI Toolkit's: no look of the browser's own, its parent's text. */
+      button { appearance: none; margin: 0; font: inherit; color: inherit; }
+
+      /* Unity's UI was set in Chalkboard, which cannot be shipped: Comic Neue Bold (SIL Open Font
+         License, fonts/ComicNeue-OFL.txt) is the font file it ships with instead. */
+      @font-face { font-family: 'Comic Neue'; font-weight: bold; font-display: block; src: url(/fonts/ComicNeue-Bold.woff2) format('woff2'); }
+
+      /* Unity's canvas is 1080 × 1920, and both UIDocuments lay out at it: every px is one of its units.
+         Behind the scene, its UIGradient: color1 at the top, color2 at the bottom. */
+      #backdrop { background-image: url(/ui/sky.png); background-size: 100% 100%; }
+      /* The screen's box, clipped, from the first layout on: before the UIDocument scales it, a 1080-unit
+         layout would spill past a phone's width, and a phone widens the whole page to fit it for good. */
+      #ui { position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; font-family: 'Comic Neue'; font-weight: bold; color: #371e70; }
+
+      /* DOTween's easings, as CSS has them: USS names them ease-out-back, ease-in-back and ease-in-expo… */
+      #title {
+        position: absolute; left: 0; right: 0; top: 20%; margin-top: -120px; text-align: center; font-size: 200px;
+        transition: translate 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s; /* ease-out-back */
+      }
+      #title.gone { translate: 0 -600px; transition: translate 0.3s cubic-bezier(0.32, 0, 0.67, 0) 0.1s; /* ease-in-cubic */ }
+
+      #play {
+        position: absolute; left: 50%; top: 74%; width: 533px; height: 304px; margin: -152px 0 0 -266px; padding: 0; border-width: 0;
+        background-color: transparent; background-image: url(/textures/play.png); background-size: 100% 100%;
+        pointer-events: auto; cursor: pointer;
+        transition: translate 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s; /* ease-out-back */
+      }
+      #play.gone { translate: 0 800px; transition: translate 0.3s cubic-bezier(0.36, 0, 0.66, -0.56); /* ease-in-back */ }
+      #level { position: absolute; left: 0; right: 0; bottom: -110px; text-align: center; color: #ffffff; font-size: 93px; font-weight: bold; }
+
+      #stars {
+        position: absolute; left: 0; right: 0; top: 0; height: 10%; display: flex; flex-direction: row; align-items: center; justify-content: center;
+        transition: scale 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), translate 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s; /* ease-out-back */
+      }
+      #stars.shrunk { scale: 0; transition: scale 0.3s cubic-bezier(0.36, 0, 0.66, -0.56); /* ease-in-back */ }
+      #stars.raised { translate: 0 -300px; }
+      #stars.bump { scale: 1.2; transition: scale 0.1s ease-out; }
+      #star { width: 245px; height: 245px; margin-right: 10px; background-image: url(/textures/star.png); background-size: 100% 100%; }
+      #count { font-size: 100px; }
+
+      #fade { position: absolute; left: 0; top: 0; right: 0; bottom: 0; background-color: #ffffff; opacity: 0; transition: opacity 0.3s 0.1s; }
+      #fade.shut { opacity: 1; transition: opacity 0.5s 0.3s; }
+
+      /* Set at once rather than moved to: an element placed where its entrance starts. */
+      .instant { transition-duration: 0s; transition-delay: 0s; }
+
+      /* Until the first frame: physics and every model and texture, then the first frame's shaders.
+         Outside #ui, so it shows before the UIDocument has scaled anything. */
+      #loading {
+        position: absolute; left: 0; top: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        text-align: center; background-color: #ffffff; font-family: 'Comic Neue'; font-weight: bold; transition: opacity 0.5s ease;
+      }
+      #loading .title { font-size: 48px; margin-bottom: 18px; color: #371e70; }
+      #loading-bar { width: 320px; height: 8px; border-radius: 4px; background-color: rgba(55, 30, 112, 0.15); overflow: hidden; margin-bottom: 18px; }
+      #loading-fill { height: 100%; width: 0; background-color: #d6007b; transition: width 0.25s ease-out; }
+      #loading .label { font-size: 14px; letter-spacing: 3.4px; color: #371e70; }
+      #loading.done { opacity: 0; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="backdrop"></div>
+    <div id="ui">
+      <div id="title" class="gone">Eggy Roll</div>
+      <button id="play" class="gone" aria-label="Play"><div id="level">LEVEL 1</div></button>
+      <div id="stars"><div id="star"></div><div id="count">0</div></div>
+      <div id="fade" class="shut"></div>
+    </div>
+    <div id="loading"><div class="title">Eggy Roll</div><div id="loading-bar"><div id="loading-fill"></div></div><div class="label">LOADING</div></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

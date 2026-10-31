@@ -1,0 +1,41 @@
+# The project's site: the README as its front page, the examples playable, and llms.txt for coding
+# agents.
+# Runs by hand: publishing is the maintainer's call.
+name: pages
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Same install as CI: the committed lockfile, so the site is built from what was tested.
+      - run: npm ci --legacy-peer-deps
+      - run: npm run build
+      - run: npm run site
+        env:
+          # The search consoles' ownership tags, from the repository's Actions variables, when set.
+          GOOGLE_SITE_VERIFICATION: ${{ vars.GOOGLE_SITE_VERIFICATION }}
+          BING_SITE_VERIFICATION: ${{ vars.BING_SITE_VERIFICATION }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
