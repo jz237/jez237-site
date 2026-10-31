@@ -49,6 +49,7 @@ import { BOWL_DEBUG_LEGEND, sunInWater } from './render/shaders';
 import { BED_SOLIDS_N, BED_SOLIDS_NONE, FluidSim, SURFACE_ISO, fillHeight } from './sim/FluidSim';
 import { IdleWater } from './sim/IdleWater';
 import { PHONE_SIM, phoneRuntime } from './sim/simTier';
+import { DROPS_CLEAR_IN } from './sim/Splash';
 import { FIN_QUALITY } from '../../betta-atelier/src/fin-dynamics.js';
 
 /** The camera's field of view, top to bottom (degrees). A view narrower than this (width over
@@ -521,6 +522,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     sim.waterColour = g.waterColour ?? [1, 1, 1];
     sim.foaming = !!g.foam;
     sim.mouth = g.betta && bowl ? BOWL.waterCeiling : null;
+    sim.splash.dropsClearIn = g.betta ? DROPS_CLEAR_IN : 0;
     globe.setVariant(variantOf(g));
     if (g.id !== shown.id) {
       sim.startOver(fill(g), !!g.reef, controller.rotation.elements);

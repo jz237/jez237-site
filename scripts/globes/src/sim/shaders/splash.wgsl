@@ -53,7 +53,8 @@ struct SplashParams {
   wetK: vec4f,
   // Drops on the glass: (how hard to move (their weight along the glass against their hold, as a
   // Bond number), how fast they run once moving (world units/s, by that ratio over 1 to the 3/4),
-  // how fast they dry (their base's radius squared, world units^2/s), -).
+  // how fast they dry (their base's radius squared, world units^2/s), how long after the glass last
+  // took drops it is clear again (s; 0: never - CLEAR_FROM)).
   dropK: vec4f,
   // Bubbles a fish lets go (spEmit): (where (xyz), how many), (their radius (world units), how far
   // they spread about where, -, -).
@@ -118,6 +119,16 @@ const DROP_MIN: f32 = 0.0006;
 // How long the film the water leaves on the glass takes to drain (s, to 1/e), and the fastest a
 // drop runs down the glass (world units/s).
 const FILM_TIME: f32 = 1.5;
+// Clearing (S.dropK.w): from this share of that time after a drop came onto the glass (its age, by
+// its film draining: slip, FILM_TIME), the glass holds it less and less and it dries faster
+// (CLEAR_DRY times at the last): the heaviest run down first, then the rest, the smallest dry,
+// until none is left. Spray lands on dry glass with a trace of film (LANDED_SLIP: a few seconds'
+// age), a trail line's beads as if BEAD_AGE old.
+const CLEAR_FROM: f32 = 0.15;
+const CLEAR_HOLD: f32 = 0.06;
+const CLEAR_DRY: f32 = 40.0;
+const LANDED_SLIP: f32 = 0.01;
+const BEAD_AGE: f32 = 20.0;
 const DROP_FASTEST: f32 = 0.6;
 // A drop drawn out further than the glass pins it draws itself in (world units/s); a drop on steep
 // glass sags a little (its tail easing up the glass, world units/s).
@@ -640,7 +651,7 @@ fn spSpray(@builtin(global_invocation_id) gid: vec3u, @builtin(local_invocation_
     let nrm = xn / rn;
     if (r > 0.0 && ww_density(nrm * (P.radius - 1.5 * P.renderVoxel)) < P.iso) {
       let at = sp_toGlobe(nrm) * P.radius;
-      sp_addDrop(S.cur, at, 1.6 * ra, at, 0.0, sp_info(ww_hash(info, 13u)));
+      sp_addDrop(S.cur, at, 1.6 * ra, at, LANDED_SLIP, sp_info(ww_hash(info, 13u)));
       atomicAdd(&ctrl[14], 1u);
     }
     return;
@@ -778,7 +789,10 @@ fn spDrops(@builtin(global_invocation_id) gid: vec3u, @builtin(local_invocation_
     }
     t = c;
   }
-  let a2 = a * a - 2.0 * S.dropK.z * dt;
+  // (Clearing, by its age: not a trail line's, whose slip is its width.)
+  let age = -FILM_TIME * log(max(slip, 1e-30));
+  let clearing = select(0.0, smoothstep(CLEAR_FROM, 1.0, age / max(S.dropK.w, 1e-3)), S.dropK.w > 0.0 && !line);
+  let a2 = a * a - 2.0 * S.dropK.z * (1.0 + CLEAR_DRY * clearing) * dt;
   if (a2 < DROP_MIN * DROP_MIN) {
     atomicAdd(&ctrl[20], 1u);
     return;
@@ -793,7 +807,7 @@ fn spDrops(@builtin(global_invocation_id) gid: vec3u, @builtin(local_invocation_
       for (var k = 0u; k < nb; k++) {
         let f = (f32(k) + 0.5 + 0.7 * (ww_rnd(&s) - 0.5)) / f32(nb);
         let p = normalize(mix(t, c, f)) * P.radius;
-        sp_addDrop(1u - S.cur, p, ab * mix(0.8, 1.2, ww_rnd(&s)), p, 0.0, sp_info(ww_hash(s, 23u + k)));
+        sp_addDrop(1u - S.cur, p, ab * mix(0.8, 1.2, ww_rnd(&s)), p, exp(-BEAD_AGE / FILM_TIME), sp_info(ww_hash(s, 23u + k)));
       }
       atomicAdd(&ctrl[21], 1u);
       return;
@@ -820,7 +834,7 @@ fn spDrops(@builtin(global_invocation_id) gid: vec3u, @builtin(local_invocation_
   let bo = a * a * a / (w * S.capLen * S.capLen * S.g);
   slip *= exp(-dt / FILM_TIME);
   let grip = sp_noise(c * 35.0);
-  let hold = S.dropK.x * mix(0.5, 1.6, grip) * mix(1.0, 0.75, slip) * select(1.0, 0.85, running);
+  let hold = S.dropK.x * mix(0.5, 1.6, grip) * mix(1.0, 0.75, slip) * select(1.0, 0.85, running) * mix(1.0, CLEAR_HOLD, clearing);
   let over = gtl * bo / hold;
   let goal = select(0.0, min(S.dropK.y * pow(max(over - 1.0, 0.0), 0.75), DROP_FASTEST), over > 1.0);
   speed = mix(goal, speed, exp(-dt / 0.08));

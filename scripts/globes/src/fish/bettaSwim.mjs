@@ -56,8 +56,10 @@ export const FOLD_SOFT = 1.9, FOLD_MOST = 2.5, BODY_LENGTH = 2.276 * BETTA_SCALE
 // Its snout, this far ahead of the neck: a leaf (an obstacle that moves with the plant's leaves:
 // leaf) keeps it out as it keeps the neck out, swinging into it or swum into.
 export const SNOUT_REACH = 0.046;
-// Leaving the film nose up, it backs down off it at DIVE_BACK as it tips over, then swims on down.
-export const DIVE_BACK = 0.07;
+// Leaving the film nose up, it pushes back down off it at DIVE_BACK as it tips over (briskly: the
+// way back is set by its arc, PITCH_RADIUS, and only backing keeps its back under the film), easing
+// off as it levels, then swims on down.
+export const DIVE_BACK = 0.13;
 // Short of air (gasp, from gills the water has harmed), it goes up GASP_OFTEN times as often at
 // the most, and from GASP_LINGER on it stays at the film for more gulps, up to GASP_GULPS more
 // (each after a pause of GASP_PAUSE s, and up to as long again).
@@ -725,7 +727,7 @@ export class BettaSwim {
     const brisk = startling || this.mode === 'dive' || climbing || gulping || feeding;
     // (A turn under way is checked a little faster than it is begun, so it does not run on past the angle.)
     const diving = this.mode === 'dive' && !startling;
-    const pitchPace = startling ? 8 : diving ? 3 : brisk ? 2.4 : 1.3, pitchMost = Math.min(Math.abs(this.speed) / PITCH_RADIUS, diving ? 0.6 : brisk ? Infinity : 0.5);
+    const pitchPace = startling ? 8 : diving ? 3 : brisk ? 2.4 : 1.3, pitchMost = Math.min(Math.abs(this.speed) / PITCH_RADIUS, brisk ? Infinity : 0.5);
     const wantedPitch = clamp((pitchTarget - this.pitch) * pitchPace, -pitchMost, pitchMost), checking = (wantedPitch - this.pitchSpeed) * this.pitchSpeed < 0;
     const pitchEase = (startling ? 80 : diving ? 4 : brisk ? 6 : checking ? 2.4 : 1.2) * dt;
     this.pitchSpeed = clamp(this.pitchSpeed + clamp(wantedPitch - this.pitchSpeed, -pitchEase, pitchEase), -pitchMost, pitchMost);
@@ -744,7 +746,7 @@ export class BettaSwim {
     // Every speed is along the body axis; at the film the fins only creep it up the last millimetres.
     if (this.mode === 'rise') desiredSpeed = rise > 0 ? clamp(rise * 2.5, 0.006, 0.2) : 0;
     else if (this.mode === 'gulp') desiredSpeed = rise > 0.002 ? clamp(rise * 3, 0, 0.03) : 0;
-    else if (this.mode === 'dive') desiredSpeed = this.pitch > 0.12 ? -DIVE_BACK : 0.17;
+    else if (this.mode === 'dive') desiredSpeed = this.pitch > 0.12 ? -DIVE_BACK * clamp((this.pitch - 0.12) / 0.35, 0.2, 1) : 0.17;
     // Rising to a pellet, quickly at first; the last millimetres the fins creep it up, as for a gulp.
     else if (striking) desiredSpeed = rise > 0 ? clamp(rise * 2.5, 0.01, 0.14) : 0;
     // The dart starts once the head has swung round, then the speed decays into a glide.

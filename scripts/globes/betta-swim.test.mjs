@@ -345,19 +345,22 @@ test('every move is along the body axis through trips to the air and settling on
   }
 });
 
-test('leaving the film it backs down off it as it tips over: no climb, no lunge, the lips never up through the film', () => {
+test('leaving the film it pushes back down off it as it tips over, briskly, then swims down: no climb, no lunge, the lips never up through the film', () => {
   for (const seed of [237, 42, 901]) {
     const log = runStroked(120, { seed, trips: true }), start = log.findIndex((r, i) => r.mode === 'dive' && log[i - 1].mode !== 'dive');
     assert.ok(start > 0, `${seed}: no dive`);
-    const first = log.slice(start, start + 30);
+    const first = log.slice(start, start + 30), dive = log.slice(start, start + 90);
     assert.ok(first.every(r => r.rise < 0.0005), `${seed}: climbed on the way out`);
-    assert.ok(first.every(r => r.speed < 0.09), `${seed}: lunged at ${Math.max(...first.map(r => r.speed)).toFixed(3)}`);
-    assert.ok(first.every(r => r.lips <= first[0].lips + 1e-6), `${seed}: the lips rose through the film`);
-    // It tips over as it backs off (its own speed backward), not on the spot: easing into it, so
-    // only a little way in the first half second.
-    assert.ok(first.some(r => r.own < -0.03) && log[start + 29].pitch < log[start].pitch - 0.15, `${seed}: tipped ${(log[start + 29].pitch - log[start].pitch).toFixed(2)}`);
-    assert.ok(log[start + 29].y < log[start].y - 0.006, `${seed}: its head ${(log[start + 29].y - log[start].y).toFixed(4)}`);
-    assert.ok(log.slice(start + 90, start + 120).every(r => r.rise < 0), 'then it swims down');
+    assert.ok(first.every(r => r.speed < 0.14), `${seed}: lunged at ${Math.max(...first.map(r => r.speed)).toFixed(3)}`);
+    assert.ok(dive.every(r => r.lips <= dive[0].lips + 1e-6), `${seed}: the lips rose through the film`);
+    // It tips over as it backs off (its own speed backward), not on the spot, and soon: under a
+    // second backing, level by then, its back well under the film.
+    const back = dive.filter(r => r.own < 0);
+    assert.ok(back.some(r => r.own < -0.08) && back.length <= 60, `${seed}: backed for ${back.length} frames`);
+    assert.ok(log[start + 45].pitch < log[start].pitch - 0.5, `${seed}: tipped ${(log[start + 45].pitch - log[start].pitch).toFixed(2)}`);
+    assert.ok(dive.every(r => r.y < dive[0].y + 1e-6) && log[start + 60].y < log[start].y - 0.015, `${seed}: its head ${(log[start + 60].y - log[start].y).toFixed(4)}`);
+    // ...then swims on down, nose down.
+    assert.ok(log[start + 90].pitch < -0.25 && log.slice(start + 75, start + 120).every(r => r.rise < 0), `${seed}: then it swims down`);
   }
 });
 

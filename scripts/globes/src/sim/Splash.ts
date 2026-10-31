@@ -11,7 +11,8 @@
 //
 // (Dev: ?splash=<bubbles,spray> scales how many bubbles and how much spray the churned water
 // sheds; ?drops=<per world unit^2 of glass the water draws back from,smallest,largest,hold,speed,
-// drying> overrides the drops' tuning, any left empty as they are.)
+// drying> overrides the drops' tuning, any left empty as they are; the betta bowl's clear in
+// DROPS_CLEAR_IN s.)
 
 import commonWGSL from './shaders/common.wgsl?raw';
 import sandSampleWGSL from './shaders/sand_sample.wgsl?raw';
@@ -68,6 +69,8 @@ const BUBBLE_K = [0.5, 0.12, 0.75, 0];
  *  world units^2/s; -). */
 const WET_K = [4000, 0.0008, 0.0085, 0.03];
 const DROP_K = [0.35, 0.15, 3.3e-8, 0];
+/** How long after it came onto the betta bowl's glass a drop has run down or dried (s: dropsClearIn), so the glass is clear again about a minute after a shake. */
+export const DROPS_CLEAR_IN = 50;
 
 interface SplashKernel {
   pipeline: GPUComputePipeline;
@@ -89,6 +92,9 @@ export class Splash {
   /** What a particle of churned water sheds (g2p.wgsl P.shed): clear bubbles, spray. */
   readonly bubbleRate: number;
   readonly sprayRate: number;
+  /** How long after it came onto the glass (a shake's) a drop has run down or dried (s; 0: it stays
+   *  till it dries, slowly - splash.wgsl CLEAR_FROM). */
+  dropsClearIn = 0;
   /** The water's capillary length (world units: the glass's), which sizes the drops' hold. */
   capillaryLength = 0.0225;
   private readonly ctrl: GPUBuffer;
@@ -260,6 +266,7 @@ export class Splash {
     f.set(BUBBLE_K, 16);
     f.set(this.wetK, 20);
     f.set(this.dropK, 24);
+    f[27] = this.dropsClearIn;
     f.set([this.emitAt[0], this.emitAt[1], this.emitAt[2], this.emitCount], 28);
     f.set([this.emitRadius, this.emitSpread, 0, 0], 32);
     this.device.queue.writeBuffer(this.uniform, 0, this.u);
