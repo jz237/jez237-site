@@ -31,7 +31,11 @@
     try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
     const target = cards.find(card => card.id === id);
     if (!target) return;
-    form.reset();
+    // Set values directly: form.reset() schedules the user-reset pagination
+    // handler, which would hide a deep-linked story beyond the first page.
+    search.value = '';
+    topic.value = '';
+    evidence.value = '';
     visible = Math.max(pageSize, cards.indexOf(target) + 1);
     render();
     requestAnimationFrame(() => { target.scrollIntoView({ block: 'start' }); });
