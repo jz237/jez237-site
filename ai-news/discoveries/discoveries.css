@@ -1,0 +1,81 @@
+/* A science notebook inside the existing AI News space-console theme. */
+.discoveries-page { --discovery-ink:#eef5ff; --discovery-muted:#b5cbe1; }
+.discoveries-page [hidden] { display:none !important; }
+.discoveries-page :focus-visible { outline:3px solid #6beaff;outline-offset:5px; }
+.discoveries-page .skip-content { position:fixed;left:20px;top:-100px;z-index:1000;padding:15px;background:#0d2546; }
+.discoveries-page .skip-content:focus { top:10px; }
+.discoveries-page main.container { padding:22px 30px 36px; }
+.discovery-breadcrumb { display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--discovery-muted);margin-bottom:22px; }
+.discovery-hero { display:grid;grid-template-columns:1.1fr 1fr;gap:20px;align-items:center;position:relative;overflow:hidden;border:1px solid rgba(34,205,255,.42);border-radius:16px;padding:36px 30px;background:radial-gradient(ellipse at 84% 20%,rgba(42,112,219,.24),transparent 55%),linear-gradient(120deg,#10143a,#031a30); }
+.kicker { display:flex;gap:9px;align-items:center;color:#69deff !important;font-size:11px;letter-spacing:.1em !important;text-transform:uppercase;font-weight:750;margin:0 0 13px; }
+.signal-dot { width:7px;height:7px;border-radius:50%;background:#62e6ff;box-shadow:0 0 18px #24cfff; }
+.discoveries-page .discovery-hero h1 { font-family:var(--font-serif,Georgia,serif) !important;font-size:clamp(32px,3.4vw,48px);line-height:1.1;letter-spacing:-.03em !important;margin:0 0 19px;color:#fff7e9 !important; }
+.discovery-hero h1 em { font-style:normal;color:#79d9ff; }
+.hero-deck { max-width:44ch;font-size:16px;line-height:1.7;color:#cadbed;margin:0 0 23px; }
+.hero-actions { display:flex;gap:15px;align-items:center;flex-wrap:wrap;font-size:12px;font-weight:650; }
+.discoveries-page a.primary-link { display:inline-flex;gap:18px;padding:12px 17px;color:#fff !important;background:linear-gradient(135deg,#225bd5,#087ac2);border:1px solid #54bcf6;border-radius:7px;text-decoration:none; }
+.coverage-line { font-size:11px;color:#a5bdd4;margin-top:23px; }
+.hero-art img { display:block;width:100%;height:auto;border-radius:13px;border:1px solid #234d73; }
+.hero-art-caption { padding:16px 16px 0;border-left:2px solid #3690cc;margin:12px 0 0 15px; }
+.hero-art-caption>span { color:#69deff;font-size:10px;letter-spacing:.12em !important; }
+.hero-art-caption p { font-size:14px;color:#c3d4e9;line-height:1.6;margin:5px 0; }
+.hero-art-caption strong { color:#f1f6ff;font-weight:550; }
+.featured-lesson { margin:26px 0;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:32px;padding:28px;background:linear-gradient(125deg,rgba(13,44,65,.96),rgba(10,17,39,.92));border:1px solid #245072;border-radius:13px; }
+.discoveries-page h2 { font-size:26px;line-height:1.2;margin:0 0 14px; }
+.featured-lesson p:not(.kicker) { font-size:14px;color:#c1d3e5;line-height:1.8; }
+.featured-lesson a { font-size:13px;font-weight:700; }
+.featured-lesson figure { margin:0; }
+.featured-lesson img { width:100%;height:auto;border-radius:10px; }
+figcaption { font-size:10px;color:#9ab4d0;line-height:1.5;padding-top:8px; }
+.evidence-guide { border-block:1px solid #26435f;margin:30px 0;padding:24px 0;scroll-margin-top:100px; }
+.section-heading { display:flex;justify-content:space-between;gap:18px;align-items:center; }
+.section-heading h2 { margin:0;font-size:23px; }
+.guide-toggle { flex-shrink:0;min-height:44px;padding:10px 13px;cursor:pointer;font-size:12px; }
+#evidence-notes { color:#bdd0e3;font-size:13px;line-height:1.8; }
+.guide-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:22px;padding-top:23px; }
+.guide-grid h3 { font-family:var(--font-sans,system-ui,sans-serif) !important;font-size:14px;line-height:1.5;margin:0; }
+.guide-grid p { margin-bottom:0; }
+.discovery-library { scroll-margin-top:100px; }
+.library-updated { font-size:11px;color:#a4bad2; }
+.discovery-controls { margin-top:22px;display:grid;grid-template-columns:2fr 1.3fr 1.4fr auto;gap:12px;align-items:end; }
+.discovery-controls label { display:flex;flex-direction:column;gap:7px;color:#b7cce4;font-size:11px;font-weight:650;min-width:0; }
+.discovery-controls input,.discovery-controls select { min-width:0;width:100%;box-sizing:border-box;border:1px solid #315574;background:#06182c;color:#e7f2ff;border-radius:7px;padding:12px;font:inherit;font-size:12px;height:44px;color-scheme:dark; }
+.discovery-controls option { background:#071a2d;color:#edf6ff; }
+.discovery-controls button { padding:11px 13px;font-size:12px;height:44px;cursor:pointer; }
+.library-status { display:flex;justify-content:space-between;gap:12px;color:#91b1d0;font-size:11px;margin:15px 0 20px; }
+#result-count { color:#b7d8ed; }
+#empty-results { padding:30px;border:1px dashed #41617d;border-radius:10px;color:#c3d7e9; }
+#discovery-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:start; }
+.discovery-story { min-width:0;border:1px solid #284963;border-radius:12px;background:linear-gradient(145deg,rgba(8,28,49,.96),rgba(4,15,32,.97));overflow:hidden;scroll-margin-top:110px;box-shadow:0 12px 25px #0002; }
+.story-top { display:flex;justify-content:space-between;gap:6px;align-items:center;padding:13px 17px;border-bottom:1px solid #23425d;font-size:9px; }
+.topic-label { color:#83d9ef;font-weight:700; }
+.story-top time { color:#9cb4d0;white-space:nowrap; }
+.story-figure { margin:0;background:#07172c; }
+.story-figure img { width:100%;height:auto;display:block; }
+.story-figure figcaption { padding:5px 17px 8px;background:#05192a;font-size:9px; }
+.story-content { padding:20px 18px 18px; }
+.evidence-tag { display:inline-block;font-size:9px;line-height:1.5;border:1px solid #627e4b;border-radius:4px;padding:4px 7px;color:#c4dfb2;background:#38602622; }
+.evidence-tag.proof,.evidence-tag.early { color:#efd29a;border-color:#8b734d;background:#d0a0500c; }
+.evidence-tag.correction { color:#ffd0d5;border-color:#ae6072;background:#9b3f5326; }
+.evidence-tag.followup { color:#b6ddfc;border-color:#5383aa; }
+.evidence-tag.demo { color:#c9c3ff;border-color:#7068a9;background:#7561bf16; }
+.discoveries-page .discovery-story h3 { margin:13px 0 12px;font-family:var(--font-serif,Georgia,serif) !important;font-size:21px;line-height:1.23; }
+.discoveries-page .discovery-story h3 a { color:#f1f4ff !important;text-decoration:none; }
+.discoveries-page .discovery-story h3 a:hover { color:#7bddff !important; }
+.takeaway { margin:0 0 18px;color:#c4d3e5;font-size:13px;line-height:1.85; }
+.story-detail { border-top:1px solid #29435e;padding-top:12px; }
+.story-detail summary { font-size:11px;color:#8edbfa;cursor:pointer;min-height:30px;line-height:1.6; }
+.report-context { font-size:12px;line-height:1.85;color:#c4d3e5;overflow-wrap:anywhere; }
+.context-note { color:#9bb2cc;font-size:10px;line-height:1.7;border-left:2px solid #4d7194;padding-left:10px; }
+.story-sources { margin-top:11px;display:flex;flex-direction:column;gap:8px; }
+.story-sources a { font-size:11px;font-weight:650;overflow-wrap:anywhere; }
+.source-host { display:block;color:#88a9ca;font-size:9px;font-weight:400;margin-top:2px; }
+.later-update { border:1px solid #a4696b;padding:10px;font-size:11px;margin-bottom:12px;border-radius:5px;background:#7f34431a; }
+.load-more-row { display:flex;justify-content:center;margin:28px 0; }
+#load-more { min-height:46px;padding:12px 24px;font-size:13px;cursor:pointer; }
+.discovery-footer { margin-top:30px;padding:25px 0 0;border-top:1px solid #29455e;font-size:11px;line-height:1.9;color:#9eb8d3; }
+.discovery-footer strong { color:#d1e5f4; }
+@media(min-width:900px) { .discovery-story:has(.story-figure):nth-child(-n+9) { min-height:0; } }
+@media(max-width:1000px) { #discovery-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .discovery-hero { padding:25px; } .discovery-controls { grid-template-columns:2fr 1.3fr; } .guide-grid { grid-template-columns:repeat(2,1fr); } }
+@media(max-width:650px) { .discoveries-page main.container { width:calc(100% - 20px);padding:16px 14px 30px; } .discoveries-page header#site-nav { width:calc(100% - 20px); } .discovery-hero { grid-template-columns:1fr;padding:24px 19px;gap:20px; } .discovery-hero h1 { font-size:34px; } .hero-deck { font-size:14px; } .hero-art { max-width:500px; } .hero-art-caption { display:none; } .featured-lesson { grid-template-columns:1fr;padding:22px;gap:17px; } #discovery-grid { grid-template-columns:1fr; } .section-heading { align-items:flex-start;flex-wrap:wrap; } .section-heading h2 { font-size:23px; } .guide-grid { grid-template-columns:1fr;gap:15px; } .discovery-controls { grid-template-columns:1fr 1fr; } .discovery-controls>label:first-child { grid-column:1/-1; } .discovery-controls button { grid-column:1/-1; } .library-status { flex-wrap:wrap;gap:0; } .library-status p { margin:5px 0; } .story-top { font-size:10px; } .takeaway { font-size:14px; } .story-detail summary { min-height:36px;display:list-item; } .story-sources a { padding:5px 0;font-size:12px; } }
+@media(prefers-reduced-motion:reduce) { .discoveries-page * { scroll-behavior:auto !important;transition:none !important;animation:none !important; } }
