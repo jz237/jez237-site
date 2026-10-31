@@ -18164,5 +18164,100 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-31-factual-infographic-factual-infographic-megalophobia-intens",
+    "title": "Factual infographic: Megalophobia — Intense Fear of Large Objects",
+    "tests": "factual_subtype: phobia-infographic; phobia: Megalophobia; exact requested title lines read back before render: Megalophobia / Intense fear of large objects; verified established terminology; distinct fictional casting; no subjective review.; archive_slot=2026-10-31T16:08; concept=megalophobia-monument-plaza-avoidance; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create the finished factual phobia infographic directly on the canvas, not a photographed poster, book, screen, frame or mockup. An exquisitely drawn architectural gouache and fine graphite illustration with mineral-blue dusk, pale sandstone, copper typography and a small amber pool of welcoming interior light. Portrait-oriented composition if suitable, generous readable type and clear hierarchy. Richly informative but artwork-led, asymmetric and unboxed; no grid, detached fact cards or numbered panel matrix.\n\nEXACT requested title lines, vertically aligned near the open sky at the top:\nLine 1: Megalophobia\nLine 2 directly underneath: Intense fear of large objects\nSet the first line in prominent bold lettering (actual bold type, no literal asterisks). Nothing else may replace this fear-specific headline. Modest subordinate terminology: \"An established name discussed under specific phobia—not a separate named DSM diagnosis.\"\n\nDominant hero across the central two-thirds: a calm, believable public plaza viewed diagonally upward past a monumental stone statue on a broad pedestal and a distant tall building, architectural perspective establishing large scale. These are ordinary static structures, not collapsing or leaning threats. Fine stone pores, shallow carved folds, tiny window reflections, crisp paving joints, a few planted grasses and soft cast shadows reward closer inspection. No ocean, abyss, monster, gore, threatening giant, surreal size distortion, dangerous ledge or crowd panic. This is fear education, not an intense-phobia horror scene.\n\nThe fictional protagonist is a young adult woman with light brown skin, oval face, long auburn curls, petite build and forest green jacket, seen mostly from behind at a comfortable distance from the monumental structure, one hand lightly near her chest. A small three-quarter profile study near her shoulder reveals the same face. She is dignified, not caricatured, not a clinical case portrait. Use her consistently in the small helping vignette. Her appearance is independent of the condition.\n\nOrganic visual journey: a thin copper curve follows her gaze from the statue toward open annotations: \"Triggers can include large statues, buildings or vehicles.\" A faint architectural silhouette of a bus and building blends into the margin, not separate boxes. \"Anticipatory anxiety — fear can start before an encounter.\" Connect that phrase to a lightly sketched imagined outline, not an asserted brain pathway.\n\nNear the protagonist weave a small transparent amber contour at the chest, not a literal anatomic scan, with delicate leader lines and exact concise labels: \"Body alarm may include:\" / \"Rapid heartbeat\" / \"Shortness of breath\" / \"Dizziness\" / \"Urge to escape\". Add \"Experiences vary.\" Do not imply everyone has every symptom.\n\nA curved paving route becomes an educational feedback loop in open space: \"Avoidance\" → \"Short-term relief\" → \"Less chance to learn that fear is manageable\" → returning to \"Avoidance\". Keep the arrows thin and readable; this is a schematic learning cycle, not a deterministic brain circuit. An adjacent short comparison, integrated into the statue shadow rather than in a box: \"Fear can exceed the actual danger.\" Show ordinary safe surroundings, not a promise that every large object is harmless.\n\nAt the lower right the plaza's curved path opens into a softly lit counseling alcove illustrated as a secondary vignette on the same canvas, not a real framed object. The protagonist sits with a clinician across a small curved table. The clinician holds a simple sketch of the same statue. Exact helping text integrated into the light: \"Evidence-based help\" / \"CBT: learn different ways to respond to anxiety.\" / \"Gradual exposure: therapist-guided and paced to the person.\" A very small open sequence of talking silhouettes, a picture sheet and a distant statue is labeled \"Discuss → pictures → real-world practice\"; subordinate line \"An example treatment progression, not a do-it-yourself challenge.\" No instructions to approach hazards, forced exposure, abrupt confrontation or guaranteed cure. Bottom readable note: \"If fear limits daily life, seek professional assessment. Educational illustration—not a diagnosis.\"\n\nText should be concise, legible, correctly spelled, with room around the hero artwork. Do not add prevalence numbers, diagnostic duration thresholds, medicines, etiologies, neurological structures, invented labels, bibliographies, URLs, logos or watermarks. Retain definition, triggers, body alarm, avoidance feedback, actual-danger distinction and evidence-based help; omit decorative secondary silhouettes first if needed for breathing room. Render a complete polished scientific illustration, not a prompt card.",
+    "image": "images/2026-10-31-factual-infographic-factual-infographic-megalophobia-intens.jpg",
+    "thumb": "thumbs/2026-10-31-factual-infographic-factual-infographic-megalophobia-intens.webp",
+    "color": "#a08e7b",
+    "date": "2026-10-31",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "megalophobia-monument-plaza-avoidance",
+      "imageSha256": "8ffad6b268d50fa8f8159958ac2bb7a667b9283e4a1f10740f1271e055e9b09e",
+      "imageDHash": "b46d3f979e968603"
+    },
+    "factualInfographic": {
+      "topic": "Megalophobia: intense fear of large objects, anticipatory anxiety, body alarm, avoidance, and evidence-based help",
+      "description": "An artwork-led clinical explainer of megalophobia with a safe architectural setting and individualized professional treatment context.",
+      "sourceNote": "Cleveland Clinic https://my.clevelandclinic.org/health/diseases/21742-megalophobia verifies terminology, triggers, symptoms, avoidance and treatment; NIMH https://www.nimh.nih.gov/health/topics/anxiety-disorders supports daily-life impairment and the need for care.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-31T20:09:25.676537+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Cleveland Clinic",
+            "title": "Megalophobia (Fear of Large Objects): Symptoms & Treatment",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://my.clevelandclinic.org/health/diseases/21742-megalophobia"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Institute of Mental Health",
+            "title": "Anxiety Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/topics/anxiety-disorders"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Megalophobia is an established name for intense fear of large objects, discussed clinically as a specific phobia rather than a separate named DSM diagnosis.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Large buildings, statues and vehicles can trigger fear; thinking about large objects can also provoke anticipatory anxiety.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Symptoms can include rapid heartbeat, shortness of breath, dizziness and an urge to escape; experiences vary.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobic fear is out of proportion to the actual danger of the object or situation.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Avoidance can provide short-term relief but prevents learning that fear can be managed and that feared outcomes often do not happen.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Anxiety symptoms can interfere with daily routines and activities; seek professional assessment when fear limits daily life.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Cognitive behavioral therapy helps change responses to anxiety; gradual exposure therapy is tailored to the person by a therapist or psychologist.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Exposure treatment can begin by talking about large objects, then pictures, then being near an object; the pace is gradual and individualized.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
