@@ -17922,5 +17922,127 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-31-factual-infographic-factual-infographic-somniphobia-extreme",
+    "title": "Factual infographic: Somniphobia — Extreme Fear of Sleep",
+    "tests": "factual_subtype: phobia-infographic; phobia: Somniphobia; exact requested title lines read back before render: Somniphobia / Extreme fear of sleep; source-supported established term; distinct fictional cast; no subjective review.; archive_slot=2026-10-31T08:08; concept=somniphobia-bedtime-vigilance-bedroom; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished, artwork-led educational phobia infographic, directly on the canvas, not a photographed page or mockup. A refined luminous gouache and fine colored-pencil nocturne with delicate technical ink annotations. Portrait-oriented composition if suitable for auto size. Opaque background. Rich tactile detail and substantial readable explanatory content, with elegant breathing room; never a matrix of boxes or detached cards.\n\nMANDATORY EXACT TWO TITLE LINES, read back and verified before rendering:\nLine 1: Somniphobia\nLine 2: Extreme fear of sleep\nSet line 1 in prominent bold display lettering, not literal Markdown asterisks. Set the exact meaning in line 2 directly underneath. This named fear is the headline; never replace it with Specific Phobia or a diagnostic category. At the bottom, subordinate wording: \"An established fear term; individual assessment matters.\" Do not imply a separate named DSM or ICD diagnosis.\n\nHero scene: A nonbinary adult in their mid 20s with olive skin, angular features, shaved dark hair, stocky build, plum pajamas; seated at the edge of a bed, seen from above. This is a fictional educational person, not a sourced patient portrait. An overhead oblique view of an ordinary bedroom, beautifully painted in indigo, dusty mauve, warm amber and chalk cream. Their feet meet a woven rug; fingers rest tensely on the mattress seam; a folded quilt reveals fine stitched fibers and subtle shadow. A warm bedside lamp illuminates the foreground while a cool, entirely ordinary window recedes into the background. No monsters, lurking silhouettes, nightmare imagery or real threat. The hero dominates the central canvas. The surrounding bedroom objects form a curved organic reading path, not panels; preserve clear open areas for lettering. Fear is represented by fine plum contour lines around the shoulder and hand, explicitly symbolic, not fabricated anatomy.\n\nWeave these concise exact text clusters into the artwork with graceful curved leaders. Main labels large enough to read; explanatory sentences short and secondary. Use no other scientific claims, numbers or statistics.\nNear the upper sweep of the duvet: \"Anticipatory anxiety\" and \"Even thinking about sleep can trigger fear.\"\nNear the chest/hand, a small open schematic heart outline and restrained tremor strokes, NOT an ECG or anatomical nerve map: \"Body alarm\" and \"Palpitations • chest tightness • trembling\" with \"Responses vary.\"\nIn a cool crescent beside the window, no frightening image: \"What may be feared?\" and \"Nightmares or being unable to stay on guard.\" Directly beneath, \"In trauma-related sleep fear; not everyone's experience.\"\nA delicate open loop sweeps around the bed edge, connecting readable phrases \"Fear of sleep\" → \"Avoiding reminders\" → \"Fear persists\". Accompany it with \"Relying on avoidance can hinder recovery after trauma.\" No universal deterministic claim and no label negative reinforcement, since this chart does not establish that mechanism for all cases.\nNext to the ordinary bedroom, lettering on clear ground: \"Strong alarm ≠ proof of present danger\" and \"Fear of sleep is not the same as insomnia.\"\nLet the rug's broad curve lead into an unboxed small daylight vignette of the same adult conversing at equal eye level with a clinician, believable gestures, gentle golden light. Label \"Evidence-based help\" then \"CBT can help phobias.\" and \"CBT-I reduced sleep fear in adults with PTSD and insomnia in a clinical trial.\" Keep that population qualification intact. Finish with \"If fear or sleep symptoms disrupt life, seek professional assessment.\" No prescriptions, medication instructions, self-directed sleep restriction, forced exposure or guarantees of cure.\n\nCarefully balance the hero and clinically meaningful studies. Technical depth comes from anticipatory anxiety and the clinically qualified vigilance/avoidance explanation, not speculative brain structures. Dignified mood, no stereotypes, no gore, no alarmist hazard montage. Render all requested text crisply with a clear hierarchy. No bibliography, citations, URLs, logos, watermark or decorative nonsense text. Artistic environmental detail may be rich, but must not imply extra unverified medical facts.",
+    "image": "images/2026-10-31-factual-infographic-factual-infographic-somniphobia-extreme.jpg",
+    "thumb": "thumbs/2026-10-31-factual-infographic-factual-infographic-somniphobia-extreme.webp",
+    "color": "#6e594b",
+    "date": "2026-10-31",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "somniphobia-bedtime-vigilance-bedroom",
+      "imageSha256": "48ebf2feb7f9f4c957480f38a5621d6913a0907c8c1c1c8f27d0d87ee813656f",
+      "imageDHash": "ddea32262c1b9041"
+    },
+    "factualInfographic": {
+      "topic": "Somniphobia: extreme fear of sleep, anticipatory anxiety, nighttime vigilance, avoidance, and evidence-based support",
+      "description": "Artwork-led educational chart on Somniphobia, distinguishing fear of sleep from insomnia and qualifying PTSD-related mechanisms and treatment evidence.",
+      "sourceNote": "Verified name/definition, variable phobia symptoms, qualified PTSD sleep-fear mechanisms and CBT/CBT-I help: Journal of Mid-life Health https://pmc.ncbi.nlm.nih.gov/articles/PMC9190958/; NHS https://www.nhs.uk/mental-health/conditions/phobias/; Journal of Clinical Sleep Medicine https://pmc.ncbi.nlm.nih.gov/articles/PMC6040781/; US Department of Veterans Affairs https://www.ptsd.va.gov/understand/what/avoidance.asp.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-31T12:09:34.649495+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Journal of Mid-life Health",
+            "title": "Menopause and Sleep Disorders",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9190958/"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "Journal of Clinical Sleep Medicine",
+            "title": "Cognitive Behavioral Therapy for Insomnia Reduces Fear of Sleep in Individuals With Posttraumatic Stress Disorder",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6040781/"
+          },
+          {
+            "id": "S4",
+            "publisher": "US Department of Veterans Affairs",
+            "title": "Avoidance",
+            "sourceType": "government-agency",
+            "url": "https://www.ptsd.va.gov/understand/what/avoidance.asp"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Somniphobia means extreme fear of sleep; even thinking of going to sleep may provoke extreme anxiety.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Anticipatory anxiety means anxiety before the feared situation; thoughts of going to sleep can be sufficient to provoke fear.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobia symptoms can include palpitations, chest tightness and trembling; responses vary between people.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "In PTSD-related fear of sleep, anticipated nightmares and inability to remain vigilant while asleep can contribute; this is not an explanation for every person.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Hypervigilance means remaining on guard; fear of sleep is associated with greater hypervigilance in studied adults with PTSD and insomnia.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Avoiding sleep-related reminders may occur in trauma-related fear; reliance on avoidance can make trauma symptoms worse and impede recovery.",
+            "sourceIds": [
+              "S3",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Fear can be disproportionate to a threat; the intensity of a fear response is not itself evidence of current danger. Real sleep symptoms warrant individual assessment.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Talking therapies including CBT can help phobias; seek a health professional when symptoms affect daily life.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "CBT-I reduced fear of sleep in a trial of adults with both PTSD and insomnia; that finding is specific to that studied group, not a universal promise.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Fear of sleep is not identical to insomnia; in the studied PTSD sample it related to nightmares and hypervigilance rather than classic insomnia symptoms.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
