@@ -3,6 +3,14 @@
 Route: `/demos/roller-studio/`. Collection: `/demos/aquarium-filtration/`.
 Field study 036. Added October 31, 2026 at the user's request.
 
+## Version 2 — visible winding and surface detail
+
+The Explore panel now has **Watch one advance**. It loads the wet chamber enough to trigger the existing level sensor, moves to the front of the mechanism and runs at one-third speed. It respects reduced-motion preferences (press Resume). The motor still runs intermittently; the demonstration does not turn the spindles continuously when no fleece is being consumed. Initial arrival starts with a partially loaded web so the first automatic burst can be seen promptly. Reset retains the original clean-start experiment.
+
+The fleece has physical-distance UVs, advected mottled soil, a locally generated 1024-pixel nonwoven texture, slight cross-web wrinkles, 1,100 raised fiber segments and 260 attached dirt flecks. Surface detail travels only when the web advances. The used roll has uneven staining and speckles. Guide rollers use their actual model radius to derive rotation; both spindle angles integrate web travel divided by the changing roll radius. Amber/black index marks make rotation visible against stationary bearings. Fasteners and screw slots add scale cues. All geometry and materials are original code-generated assets.
+
+`finishes.js` owns these procedural materials and details. `motion-qa.cjs` checks spindle motion, guide-radius ratio, texture advection, idle/pause/jam freezing and reduced-motion behavior. Do not animate these parts from wall-clock time independently of `simulation.travel`.
+
 ## Intent and boundaries
 
 A detailed educational automatic mechanical filter, following the Red Sea ReefMat 500's general operating principles. The Hidden Reef sells this product. This is original teaching geometry, not a CAD replica or firmware emulation. It shows the random nonwoven fabric, continuous U-shaped web, supported wet chamber, upstream level sensor, geared take-up, external high-water guard, bypass and downstream sump/media basket. Exposed gears, thresholds and timing are explanatory abstractions. Rates, particles, roll consumption and service are accelerated.
@@ -30,6 +38,7 @@ Run from the repository:
 
 ```
 node scripts/roller-studio/simulation.test.mjs
+node scripts/roller-studio/motion-qa.cjs http://127.0.0.1:8822/demos/roller-studio/
 node scripts/roller-studio/qa.cjs http://127.0.0.1:8822/demos/roller-studio/
 node scripts/build-demos.mjs
 ```
