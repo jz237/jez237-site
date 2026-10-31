@@ -1,1 +1,0 @@
-import{n as e}from"./index-d4Li6cYM.js";import{t}from"./scene-CVs9DkzR.js";function n(){return e(t)}export{n as scapeShaderWGSL};
