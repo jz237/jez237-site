@@ -27896,5 +27896,100 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-31-factual-infographic-factual-infographic-chronophobia-extrem",
+    "title": "Factual infographic: Chronophobia — Extreme Fear of Time or Time Passing",
+    "tests": "factual_subtype: phobia-infographic; phobia: Chronophobia; exact requested title lines read back before render; source-supported terminology; distinct fictional cast; no subjective review.; archive_slot=2026-10-31T04:08; concept=chronophobia-calendar-passage-alarm; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create the finished factual phobia infographic directly on an opaque canvas, with a portrait-oriented composition if appropriate, not a photographed poster, book, room display or screen mockup. Refined luminous gouache and finely drawn colored pencil with selective technical-ink callouts. The subject is CHRONOPHOBIA, not a generic phobia chart. Request medium quality and auto size.\n\nEXACT TWO TITLE LINES: First line in prominent bold typographic lettering: \"Chronophobia\". Directly underneath it, in smaller clear lettering: \"Extreme fear of time or time passing\". Never replace the headline with Specific Phobia. No literal Markdown asterisks. The same name governs this entire illustration.\n\nDominant hero occupying the central two thirds: a fictional man in his late 60s with pale freckled skin, long narrow face, silver beard, thinning hair, tall lean build, navy cardigan and soft charcoal trousers, standing side-on near a sunlit calendar in a quiet domestic interior. Thoughtful tense posture and one hand resting at his upper chest, dignified and ordinary, not a caricature. Warm dawn light crosses textured plaster, cardigan stitching, polished wooden window ledge and a simple wall clock. Use gently curving calendar-leaf motifs and elongated light-and-shadow bands to lead the eye down through the composition; this is an artistic metaphor, not a claim about time distortion. No skulls, monsters, funeral scene, horror or alarming countdown. Do not associate the condition exclusively with older people; this person is one fictional example.\n\nOrganically nest concise annotations around the hero, with varied scale and fine curved leaders rather than a matrix of boxes. Upper left near a clock/calendar detail: \"Time-related reminders\" and \"Thoughts of time passing, aging or mortality can evoke dread.\" Small subordinate line: \"Some people repeatedly watch clocks or mark calendar days.\" Keep the calendar free of fabricated medical metrics or meaningful dates.\n\nAlong a flowing open line from the thought motif toward his chest and hands: \"Body alarm\" followed by \"Palpitations • trembling • dizziness\" and \"Symptoms differ between people.\" Do not show speculative brain circuits, anatomical abnormalities or invented physiological graphs.\n\nA subtle curling pathway leads past a smaller silhouette of the same man declining a social invitation, captioned \"Avoidance can narrow daily life\" with \"Avoiding reminders may affect relationships.\" Do not claim a specific neurochemical mechanism or quantified risk. Leave breathing room between these studies.\n\nAt the brightest opening near the bottom, an intimate small vignette shows the same man conversing comfortably with a therapist at equal eye level, linked by an open ribbon of light, not a before/after cure promise. Text: \"Help is available\"; \"Psychotherapy can help; CBT is used to treat phobias.\" Then \"Seek professional support when fear affects daily life.\" A short open note nearby: \"Talking to someone trusted and relaxation breathing may help.\" No do-it-yourself exposure task, flooding, instructions to stop medication, or guarantees.\n\nIntegrate a readable clinical-context note into the lower margin: \"A named fear described within specific phobias—not a separate diagnostic code here.\" Another short note bridges the fear illustration and the light: \"A clock or calendar is not itself an immediate threat, though the alarm can feel intense. Time cannot be stopped.\" Educational framing, not individualized diagnosis. Restrict all printed clinical claims to the specified supported text. No prevalence statistics, invented causes, citations, URLs, logos or watermarks. Substantial illustration, precise typography and tactile detail remain primary; no detached cards, rigid boxed grid or wall of prose. Maintain warm amber, slate blue, soft ivory and muted sage, with room around the headline and strongest visual focus on the human scene.",
+    "image": "images/2026-10-31-factual-infographic-factual-infographic-chronophobia-extrem.jpg",
+    "thumb": "thumbs/2026-10-31-factual-infographic-factual-infographic-chronophobia-extrem.webp",
+    "color": "#ad9a7b",
+    "date": "2026-10-31",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "chronophobia-calendar-passage-alarm",
+      "imageSha256": "00c0883fdbdc1b583699fb26fc0825d2a6fe648bf3136be176aedce85541f04f",
+      "imageDHash": "0c181839ad3d99d1"
+    },
+    "factualInfographic": {
+      "topic": "Chronophobia: extreme fear of time or time passing, time-related reminders, body alarm, avoidance, and evidence-based help",
+      "description": "Source-backed explanation of chronophobia, reminders, variable phobia symptoms, avoidance and professional support.",
+      "sourceNote": "Cleveland Clinic https://my.clevelandclinic.org/health/diseases/22579-chronophobia-fear-of-time; NHS https://www.nhs.uk/mental-health/conditions/phobias/. Verified name/definition, time-related concerns, variable symptoms, avoidance and psychotherapy/CBT help.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-31T08:09:16.887491+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Cleveland Clinic",
+            "title": "Chronophobia (Fear of Time): Symptoms, Causes & Treatment",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://my.clevelandclinic.org/health/diseases/22579-chronophobia-fear-of-time"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Chronophobia means an extreme fear of time or time passing.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Chronophobia is a named fear described clinically within specific phobias; the name does not imply a separate diagnostic code.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Thinking about time passing, getting older or mortality can evoke intense discomfort or dread; some people obsess over clocks or calendar days.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobia symptoms can include palpitations, trembling and dizziness; symptoms vary between people.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "People with specific phobias may avoid reminders of what they fear; chronophobia can involve social isolation and interference with relationships.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Time cannot be stopped; a calendar or clock is not itself an immediate danger even when the associated alarm feels intense.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Psychotherapy can help with chronophobia; cognitive behavioural therapy (CBT) is a treatment for phobias.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Seek professional help when symptoms affect daily life; talking to someone trusted and relaxation breathing may help manage symptoms.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
