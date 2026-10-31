@@ -9,7 +9,7 @@
 // spBubbles, spSpray, spWet (where the water has drawn back from the glass: drops), spDrops,
 // spDropMap and spDropMerge (drops that touch run together), spMapResolve (the drop map, for the
 // renderer: shaders.ts globes_dropAt), spBin and spBinCount (the bubbles and the spray into a grid
-// for the renderer: shaders.ts globes_splashAlong), spCommit.
+// for the renderer: shaders.ts globes_splashAlong; and this frame's pools' counts emptied).
 //
 // The pools, as foam.wgsl's: each particle is two vec4u (floats as their bits), in one of its
 // pool's two halves, this frame's (in) and the next's (out): every frame each survivor is written
@@ -53,8 +53,13 @@ struct SplashParams {
   wetK: vec4f,
   // Drops on the glass: (how hard to move (their weight along the glass against their hold, as a
   // Bond number), how fast they run once moving (world units/s, by that ratio over 1 to the 3/4),
-  // how fast they dry (their base's radius squared, world units^2/s), -).
+  // how fast they dry (their base's radius squared, world units^2/s), how long after the glass last
+  // took drops it is clear again (s; 0: never - CLEAR_FROM)).
   dropK: vec4f,
+  // Bubbles a fish lets go (spEmit): (where (xyz), how many), (their radius (world units), how far
+  // they spread about where, -, -).
+  emit: vec4f,
+  emitK: vec4f,
 };
 @group(0) @binding(20) var<uniform> S: SplashParams;
 
@@ -76,9 +81,12 @@ struct SplashParams {
 @group(0) @binding(10) var<storage, read_write> gain: array<atomic<i32>>;
 // Per texel of the wet map: whether the water covered the glass there last frame.
 @group(0) @binding(11) var<storage, read_write> wet: array<u32>;
-// The drop map: per texel, how many drops' bases reach it; then up to MAP_K of them a texel (each
-// its index + 1).
+// The drop map: per texel, how many drops' bases reach it, a count for each of two frames (by
+// S.cur: this frame's made by spDropMap, last frame's emptied by spMapResolve); then up to MAP_K
+// of them a texel (each its index + 1). And per tile of it (TILE texels a side), for each of the
+// two frames, whether any drop reaches it: spMapResolve works only those.
 @group(0) @binding(12) var<storage, read_write> dropMap: array<atomic<u32>>;
+@group(0) @binding(14) var<storage, read_write> mapTiles: array<atomic<u32>>;
 // The renderer's grid: per cell, how many spheres reach it; then the boxes round the bubbles and
 // round the spray (fixed point: the most of 2 + x, the most of 2 - x).
 @group(0) @binding(13) var<storage, read_write> bins: array<atomic<u32>>;
@@ -86,15 +94,20 @@ struct SplashParams {
 @group(0) @binding(19) var sandSamp: sampler;
 @group(0) @binding(21) var gridOut: texture_storage_3d<rgba32float, write>;
 @group(0) @binding(22) var dropTex: texture_storage_2d<rgba32float, write>;
+// x: a height over all the water (FluidSim.marchBand, render/marchBand.ts: no density read from
+// over it blends a voxel of the water), where a page works it out; else far over everything.
+@group(0) @binding(23) var marchBand: texture_2d<f32>;
 
 const CTRL_QUEUE: u32 = 20u;
 const BUB: u32 = 0u;
 const SPRAY: u32 = 2u;
 const DROP: u32 = 4u;
 const NONE: u32 = 0xffffffffu;
-// The drop map's drops a texel. The renderer's grid's spheres a cell (shaders.ts GLOBES_SPLASH_K),
-// and how far beyond a sphere it lists it (the renderer's pixel, at most).
+// The drop map's drops a texel, and its tiles' texels a side (spMapResolve's workgroups'). The
+// renderer's grid's spheres a cell (shaders.ts GLOBES_SPLASH_K), and how far beyond a sphere it
+// lists it (the renderer's pixel, at most).
 const MAP_K: u32 = 4u;
+const TILE: u32 = 16u;
 const GRID_K: i32 = 8;
 const MARGIN: f32 = 0.004;
 // Fixed point: a drop's water (its base's radius cubed), and its offset times that.
@@ -106,6 +119,16 @@ const DROP_MIN: f32 = 0.0006;
 // How long the film the water leaves on the glass takes to drain (s, to 1/e), and the fastest a
 // drop runs down the glass (world units/s).
 const FILM_TIME: f32 = 1.5;
+// Clearing (S.dropK.w): from this share of that time after a drop came onto the glass (its age, by
+// its film draining: slip, FILM_TIME), the glass holds it less and less and it dries faster
+// (CLEAR_DRY times at the last): the heaviest run down first, then the rest, the smallest dry,
+// until none is left. Spray lands on dry glass with a trace of film (LANDED_SLIP: a few seconds'
+// age), a trail line's beads as if BEAD_AGE old.
+const CLEAR_FROM: f32 = 0.15;
+const CLEAR_HOLD: f32 = 0.06;
+const CLEAR_DRY: f32 = 40.0;
+const LANDED_SLIP: f32 = 0.01;
+const BEAD_AGE: f32 = 20.0;
 const DROP_FASTEST: f32 = 0.6;
 // A drop drawn out further than the glass pins it draws itself in (world units/s); a drop on steep
 // glass sags a little (its tail easing up the glass, world units/s).
@@ -122,6 +145,25 @@ const BEAD_TIME: f32 = 15.0;
 // A trail's water, per its length, against its width (half) squared: mostly a thin film, its edge
 // standing up a little (a drop's own streak holds 0.82).
 const TRAIL_FILM: f32 = 0.12;
+// The threads a drop's texels of the drop map are shared among in the team kernels
+// (spDropMapTeams, spDropMergeTeams), and so the drops a workgroup takes at a time.
+const LANES: u32 = 16u;
+const LANES_SIDE: u32 = 4u;
+const TEAMS: u32 = 16u;
+
+// A pool's count (at most cap), loaded once for the workgroup: every thread loading the one count
+// took its turn at it.
+var<workgroup> spCount: u32;
+var<workgroup> spCount2: u32;
+// spDropMerge: per drop of the workgroup's, the largest its lanes found it runs into (its size's
+// bits, then the first listed of that size).
+var<workgroup> spTeamA: array<atomic<u32>, TEAMS>;
+var<workgroup> spTeamO: array<atomic<u32>, TEAMS>;
+
+fn sp_poolCount(at: u32, cap: u32, li: u32) -> u32 {
+  if (li == 0u) { spCount = min(atomicLoad(&ctrl[at]), cap); }
+  return workgroupUniformLoad(&spCount);
+}
 
 // ------------------------------------------------------------------ time, frames
 
@@ -413,7 +455,7 @@ fn sp_window(c: vec3f, reach: f32) -> SpWindow {
 
 // The queue into the clear bubbles and the spray (its counts: what, foam.wgsl's aside, each entry
 // sheds of them), at where it will be at the frame's end.
-@compute @workgroup_size(64)
+@compute @workgroup_size(256)
 fn spSpawn(@builtin(global_invocation_id) gid: vec3u) {
   let q = gid.x;
   let n = min(shedCount[CTRL_QUEUE], S.queueCap);
@@ -455,6 +497,23 @@ fn spSpawn(@builtin(global_invocation_id) gid: vec3u) {
   }
 }
 
+// A fish's bubbles (the air the betta lets go as it dives from the film): S.emit.w of them, about
+// S.emit.xyz, in the water, before spBubbles carries them on.
+@compute @workgroup_size(16)
+fn spEmit(@builtin(global_invocation_id) gid: vec3u) {
+  let k = gid.x;
+  if (k >= u32(S.emit.w)) { return; }
+  var s = ww_hash(k * 0x2c1b3c6du + 0x7f4a7c15u, S.frame * 0x9e3779b9u + 0x1b873593u);
+  let up = sp_up();
+  let rMax = P.radius - 0.01;
+  var p = S.emit.xyz + ww_gauss3(&s) * S.emitK.y;
+  if (length(p) > rMax) { p *= rMax / length(p); }
+  let w = sp_intoWater(p, up);
+  if (w.w < 0.5) { return; }
+  let r = S.emitK.x * mix(0.7, 1.5, ww_rnd(&s));
+  sp_addBubble(S.cur, w.xyz, r, sp_info(ww_hash(s, 131u + k)));
+}
+
 // A bubble bursting at the surface: the jet its hollow closes into throws up a drop or two (the
 // larger the bubble, the more).
 fn sp_burst(x: vec3f, r: f32, up: vec3f, s: ptr<function, u32>) {
@@ -471,9 +530,9 @@ fn sp_burst(x: vec3f, r: f32, up: vec3f, s: ptr<function, u32>) {
 // rides it a moment, then bursts; pushed out through it, it stays at it, riding it. Left out of
 // the water altogether (a wave's lip, the water gone from round it) it bursts at once.
 @compute @workgroup_size(256)
-fn spBubbles(@builtin(global_invocation_id) gid: vec3u) {
+fn spBubbles(@builtin(global_invocation_id) gid: vec3u, @builtin(local_invocation_index) li: u32) {
   let i = gid.x;
-  let n = min(atomicLoad(&ctrl[BUB + S.cur]), S.bubbleCap);
+  let n = sp_poolCount(BUB + S.cur, S.bubbleCap, li);
   if (i >= n) { return; }
   let j = 2u * (S.cur * S.bubbleCap + i);
   let e0 = bubbles[j];
@@ -553,9 +612,9 @@ fn spBubbles(@builtin(global_invocation_id) gid: vec3u) {
 // more). Back into the water, it is the water's again (a large one, now and then, takes a bubble
 // down with it); onto the glass above the water, it stays there as a drop; into the sand, gone.
 @compute @workgroup_size(256)
-fn spSpray(@builtin(global_invocation_id) gid: vec3u) {
+fn spSpray(@builtin(global_invocation_id) gid: vec3u, @builtin(local_invocation_index) li: u32) {
   let i = gid.x;
-  let n = min(atomicLoad(&ctrl[SPRAY + S.cur]), S.sprayCap);
+  let n = sp_poolCount(SPRAY + S.cur, S.sprayCap, li);
   if (i >= n) { return; }
   let j = 2u * (S.cur * S.sprayCap + i);
   let e0 = spray[j];
@@ -592,7 +651,7 @@ fn spSpray(@builtin(global_invocation_id) gid: vec3u) {
     let nrm = xn / rn;
     if (r > 0.0 && ww_density(nrm * (P.radius - 1.5 * P.renderVoxel)) < P.iso) {
       let at = sp_toGlobe(nrm) * P.radius;
-      sp_addDrop(S.cur, at, 1.6 * ra, at, 0.0, sp_info(ww_hash(info, 13u)));
+      sp_addDrop(S.cur, at, 1.6 * ra, at, LANDED_SLIP, sp_info(ww_hash(info, 13u)));
       atomicAdd(&ctrl[14], 1u);
     }
     return;
@@ -610,7 +669,7 @@ fn spSpray(@builtin(global_invocation_id) gid: vec3u) {
 // whether the water covers the glass there, or lies close under it; where it no longer does, so
 // many drops, here and there in the texel, most small, a few large. (The glass under the sand
 // never dries.)
-@compute @workgroup_size(8, 8)
+@compute @workgroup_size(16, 16)
 fn spWet(@builtin(global_invocation_id) gid: vec3u) {
   let N = S.wetN;
   if (gid.x >= N || gid.y >= N) { return; }
@@ -625,8 +684,10 @@ fn spWet(@builtin(global_invocation_id) gid: vec3u) {
   }
   // (Close under it: a little lower on the glass.)
   let below = normalize(x - vec3f(0.0, S.wetK.w, 0.0)) * r;
-  let now = ww_density(x) > P.iso || ww_density(below) > P.iso;
   let was = wet[idx] == 1u;
+  // (Dry, and over all the water: dry still. Most of the glass over the water, at rest.)
+  if (!was && min(x.y, below.y) > textureLoad(marchBand, vec2i(0), 0).x) { return; }
+  let now = ww_density(x) > P.iso || ww_density(below) > P.iso;
   wet[idx] = select(0u, 1u, now);
   if (!was || now) { return; }
   var s = ww_hash(idx * 0x9e3779b1u + 17u, S.frame);
@@ -665,9 +726,9 @@ fn spWet(@builtin(global_invocation_id) gid: vec3u) {
 // as a merge drew it out; on steep glass it sags a little. Hanging from the glass, heavy enough,
 // it falls.
 @compute @workgroup_size(256)
-fn spDrops(@builtin(global_invocation_id) gid: vec3u) {
+fn spDrops(@builtin(global_invocation_id) gid: vec3u, @builtin(local_invocation_index) li: u32) {
   let i = gid.x;
-  let n = min(atomicLoad(&ctrl[DROP + S.cur]), S.dropCap);
+  let n = sp_poolCount(DROP + S.cur, S.dropCap, li);
   if (i >= n) { return; }
   // (What ran into it: taken, and its slot left empty for the next frame's.)
   let g = 4u * i;
@@ -728,7 +789,10 @@ fn spDrops(@builtin(global_invocation_id) gid: vec3u) {
     }
     t = c;
   }
-  let a2 = a * a - 2.0 * S.dropK.z * dt;
+  // (Clearing, by its age: not a trail line's, whose slip is its width.)
+  let age = -FILM_TIME * log(max(slip, 1e-30));
+  let clearing = select(0.0, smoothstep(CLEAR_FROM, 1.0, age / max(S.dropK.w, 1e-3)), S.dropK.w > 0.0 && !line);
+  let a2 = a * a - 2.0 * S.dropK.z * (1.0 + CLEAR_DRY * clearing) * dt;
   if (a2 < DROP_MIN * DROP_MIN) {
     atomicAdd(&ctrl[20], 1u);
     return;
@@ -743,7 +807,7 @@ fn spDrops(@builtin(global_invocation_id) gid: vec3u) {
       for (var k = 0u; k < nb; k++) {
         let f = (f32(k) + 0.5 + 0.7 * (ww_rnd(&s) - 0.5)) / f32(nb);
         let p = normalize(mix(t, c, f)) * P.radius;
-        sp_addDrop(1u - S.cur, p, ab * mix(0.8, 1.2, ww_rnd(&s)), p, 0.0, sp_info(ww_hash(s, 23u + k)));
+        sp_addDrop(1u - S.cur, p, ab * mix(0.8, 1.2, ww_rnd(&s)), p, exp(-BEAD_AGE / FILM_TIME), sp_info(ww_hash(s, 23u + k)));
       }
       atomicAdd(&ctrl[21], 1u);
       return;
@@ -770,7 +834,7 @@ fn spDrops(@builtin(global_invocation_id) gid: vec3u) {
   let bo = a * a * a / (w * S.capLen * S.capLen * S.g);
   slip *= exp(-dt / FILM_TIME);
   let grip = sp_noise(c * 35.0);
-  let hold = S.dropK.x * mix(0.5, 1.6, grip) * mix(1.0, 0.75, slip) * select(1.0, 0.85, running);
+  let hold = S.dropK.x * mix(0.5, 1.6, grip) * mix(1.0, 0.75, slip) * select(1.0, 0.85, running) * mix(1.0, CLEAR_HOLD, clearing);
   let over = gtl * bo / hold;
   let goal = select(0.0, min(S.dropK.y * pow(max(over - 1.0, 0.0), 0.75), DROP_FASTEST), over > 1.0);
   speed = mix(goal, speed, exp(-dt / 0.08));
@@ -833,19 +897,33 @@ fn spDrops(@builtin(global_invocation_id) gid: vec3u) {
   sp_putDrop(1u - S.cur, slot, c, a, t, shape, speed, slip, info);
 }
 
-// Each of the next frame's drops into the drop map: every texel it reaches (as far as its edge
-// wavers, and a texel more, so a point anywhere under it finds it in the texel under it).
-@compute @workgroup_size(64)
-fn spDropMap(@builtin(global_invocation_id) gid: vec3u) {
-  let i = gid.x;
-  let pool = 1u - S.cur;
-  let n = min(atomicLoad(&ctrl[DROP + pool]), S.dropCap);
-  if (i >= n) { return; }
-  let j = 2u * (pool * S.dropCap + i);
+// A drop's reach on the drop map (sp_mapReach, sp_mergeReach): its head and tail, how far round its
+// streak it reaches (spDropMap: out, and along a running drop's trail; spDropMerge: to touch
+// others, and the texels it looks through), the texels round it, how large a drop it may run into
+// (larger than itself, or as large and listed first; a line, any running into it), and whether it
+// is a line, and a drop at all.
+struct SpReach {
+  c: vec3f,
+  wide: f32,
+  tail: vec3f,
+  thin: f32,
+  t: vec2i,
+  h: vec2i,
+  texel: f32,
+  own: f32,
+  line: u32,
+  on: u32,
+};
+// (The team kernels': each team's drop's, worked out by its first lane.)
+var<workgroup> spReach: array<SpReach, TEAMS>;
+
+// Drop i of the next frame's pool (n of them) as spDropMap takes it.
+fn sp_mapReach(pool: u32, i: u32, n: u32) -> SpReach {
+  let j = 2u * (pool * S.dropCap + min(i, n - 1u));
   let e = drops[j];
   let c = bitcast<vec3f>(e.xyz);
   let a = bitcast<f32>(e.w);
-  if (!(a > 0.0)) { return; }
+  if (i >= n || !(a > 0.0)) { return SpReach(); }
   // (Running, it is round, and the trail it is drawing - if any - runs back to its tail.)
   let e1 = drops[j + 1u];
   let runner = bitcast<f32>(e1.x) > 0.002;
@@ -853,106 +931,209 @@ fn spDropMap(@builtin(global_invocation_id) gid: vec3u) {
   let tail = select(anchor, c, runner && !sp_trailWet(anchor, e1.w));
   let len = distance(c, tail);
   let wide = EDGE_REACH * sp_touchWidth(a, len, e1);
-  let thin = select(wide, 1.4 * a * sp_lineRatio(e1.w), runner);
   let w = sp_window(normalize(c + tail) * P.radius, 0.5 * len + wide);
-  let N = i32(S.mapN);
+  return SpReach(c, wide, tail, select(wide, 1.4 * a * sp_lineRatio(e1.w), runner), w.t, w.h, w.texel, 0.0, 0u, 1u);
+}
+
+// The texel at d round drop i: the drop into it, if it reaches it; and its tile marked.
+fn sp_mapTexel(r: SpReach, i: u32, d: vec2i) {
+  let t = sp_octWrap(r.t + d, i32(S.mapN));
+  let x = sp_texelDir(t, S.mapN) * P.radius;
+  if (distance(x, r.c) > r.wide + r.texel && sp_segDist(x, r.tail, r.c) > r.thin + r.texel) { return; }
   let NN = S.mapN * S.mapN;
-  for (var dy = -w.h.y; dy <= w.h.y; dy++) {
-    for (var dx = -w.h.x; dx <= w.h.x; dx++) {
-      let t = sp_octWrap(w.t + vec2i(dx, dy), N);
-      let x = sp_texelDir(t, S.mapN) * P.radius;
-      if (distance(x, c) > wide + w.texel && sp_segDist(x, tail, c) > thin + w.texel) { continue; }
-      let idx = u32(t.x) + S.mapN * u32(t.y);
-      let k = atomicAdd(&dropMap[idx], 1u);
-      if (k < MAP_K) { atomicStore(&dropMap[NN + MAP_K * idx + k], i + 1u); }
-    }
+  let idx = u32(t.x) + S.mapN * u32(t.y);
+  let m = atomicAdd(&dropMap[S.cur * NN + idx], 1u);
+  if (m == 0u) {
+    let tiles = (S.mapN + TILE - 1u) / TILE;
+    atomicStore(&mapTiles[S.cur * tiles * tiles + u32(t.x) / TILE + tiles * (u32(t.y) / TILE)], 1u);
+  }
+  if (m < MAP_K) { atomicStore(&dropMap[2u * NN + MAP_K * idx + m], i + 1u); }
+}
+
+// Each of the next frame's drops into the drop map: every texel it reaches (as far as its edge
+// wavers, and a texel more, so a point anywhere under it finds it in the texel under it); and the
+// map's tiles they reach marked. A thread a drop (with many on the glass); spDropMapTeams, LANES
+// threads a drop, walking the drops in turn (with few: one thread a drop, the few drops' long loops
+// held the kernel up, most of the GPU idle).
+@compute @workgroup_size(256)
+fn spDropMap(@builtin(global_invocation_id) gid: vec3u, @builtin(local_invocation_index) li: u32) {
+  let pool = 1u - S.cur;
+  let n = sp_poolCount(DROP + pool, S.dropCap, li);
+  let i = gid.x;
+  if (i >= n) { return; }
+  let r = sp_mapReach(pool, i, n);
+  if (r.on == 0u) { return; }
+  for (var dy = -r.h.y; dy <= r.h.y; dy++) {
+    for (var dx = -r.h.x; dx <= r.h.x; dx++) { sp_mapTexel(r, i, vec2i(dx, dy)); }
   }
 }
 
-// Drops that touch run together: each into the largest it touches that is larger than itself (or
-// as large, and listed first: never each into the other). The next frame's drop takes in its water
-// where it was (spDrops); it is gone. (Streaks touch where either's ends come within both widths
-// of the other; one running into another as another runs into it loses what it took.) A trail
-// line stays where it was laid: it goes only into a drop running into it (one it lies ahead of -
-// not the drop that laid it, nor one come to rest on it), and no drop goes into it.
-@compute @workgroup_size(64)
-fn spDropMerge(@builtin(global_invocation_id) gid: vec3u) {
-  let i = gid.x;
+@compute @workgroup_size(256)
+fn spDropMapTeams(@builtin(workgroup_id) wid: vec3u, @builtin(local_invocation_index) li: u32, @builtin(num_workgroups) groups: vec3u) {
   let pool = 1u - S.cur;
-  let n = min(atomicLoad(&ctrl[DROP + pool]), S.dropCap);
-  if (i >= n) { return; }
-  let ji = 2u * (pool * S.dropCap + i);
-  let e = drops[ji];
+  let n = sp_poolCount(DROP + pool, S.dropCap, li);
+  let team = li / LANES;
+  let lane = li % LANES;
+  for (var first = wid.x * TEAMS; first < n; first += groups.x * TEAMS) {
+    let i = first + team;
+    if (lane == 0u) { spReach[team] = sp_mapReach(pool, i, n); }
+    workgroupBarrier();
+    let r = spReach[team];
+    // (The lanes a square, stepping over the texels round it together.)
+    let at = vec2i(i32(lane % LANES_SIDE), i32(lane / LANES_SIDE)) - r.h;
+    for (var dy = select(at.y, 1 << 30, r.on == 0u); dy <= r.h.y; dy += i32(LANES_SIDE)) {
+      for (var dx = at.x; dx <= r.h.x; dx += i32(LANES_SIDE)) { sp_mapTexel(r, i, vec2i(dx, dy)); }
+    }
+    workgroupBarrier();
+  }
+}
+
+// Drop i of the next frame's pool (n of them) as spDropMerge takes it.
+fn sp_mergeReach(pool: u32, i: u32, n: u32) -> SpReach {
+  let j = 2u * (pool * S.dropCap + min(i, n - 1u));
+  let e = drops[j];
   let c = bitcast<vec3f>(e.xyz);
   let a = bitcast<f32>(e.w);
-  if (!(a > 0.0)) { return; }
-  let e1 = drops[ji + 1u];
+  if (i >= n || !(a > 0.0)) { return SpReach(); }
+  let e1 = drops[j + 1u];
   let line = bitcast<f32>(e1.x) < 0.0;
   let tail = sp_shapeTail(c, e1);
   let len = distance(c, tail);
   let wi = sp_touchWidth(a, len, e1);
   let w = sp_window(normalize(c + tail) * P.radius, 0.5 * len + wi);
-  let reach = wi + w.texel;
-  let N = i32(S.mapN);
+  return SpReach(c, wi, tail, wi + w.texel, w.t, w.h, w.texel, select(a, 0.0, line), select(0u, 1u, line), 1u);
+}
+
+// The largest drop that drop i runs into among the texels round it, every step-th each way from
+// start (x: its index, or NONE; y: its size's bits). team: the team whose other lanes look through
+// the rest (none: NONE), whose largest find so far no smaller one beats.
+fn sp_mergeFind(r: SpReach, pool: u32, i: u32, start: vec2i, step: i32, team: u32) -> vec2u {
   let NN = S.mapN * S.mapN;
   var best = NONE;
-  var bestA = select(a, 0.0, line);
-  var bestC = c;
-  for (var dy = -w.h.y; dy <= w.h.y; dy++) {
-    for (var dx = -w.h.x; dx <= w.h.x; dx++) {
-      let t = sp_octWrap(w.t + vec2i(dx, dy), N);
-      if (sp_segDist(sp_texelDir(t, S.mapN) * P.radius, tail, c) > reach) { continue; }
-      let idx = u32(t.x) + S.mapN * u32(t.y);
-      let m = min(atomicLoad(&dropMap[idx]), MAP_K);
-      for (var k = 0u; k < m; k++) {
-        let o = atomicLoad(&dropMap[NN + MAP_K * idx + k]) - 1u;
-        if (o == i || o == best) { continue; }
-        let jo = 2u * (pool * S.dropCap + o);
-        let f = drops[jo];
-        let ao = bitcast<f32>(f.w);
-        if (!(ao > 0.0) || ao < bestA || (ao == bestA && o > min(i, best))) { continue; }
-        let co = bitcast<vec3f>(f.xyz);
-        let fo = drops[jo + 1u];
-        let so = bitcast<f32>(fo.x);
-        if (line) {
-          if (so <= 0.002) { continue; }
-          let k = clamp(dot(co - tail, c - tail) / max(dot(c - tail, c - tail), 1e-12), 0.0, 1.0);
-          if (dot(mix(tail, c, k) - co, co - sp_unpackTail(co, fo.z)) <= 0.0) { continue; }
-        } else if (so < 0.0) {
-          continue;
-        }
-        let to = sp_shapeTail(co, fo);
-        let wo = sp_width(ao, distance(co, to));
-        let gap = min(min(sp_segDist(c, to, co), sp_segDist(tail, to, co)), min(sp_segDist(co, tail, c), sp_segDist(to, tail, c)));
-        if (gap > 0.9 * (wi + wo)) { continue; }
-        best = o;
-        bestA = ao;
-        bestC = co;
+  var bestA = 0.0;
+  for (var dy = select(start.y - r.h.y, 1 << 30, r.on == 0u); dy <= r.h.y; dy += step) {
+  for (var dx = start.x - r.h.x; dx <= r.h.x; dx += step) {
+    let t = sp_octWrap(r.t + vec2i(dx, dy), i32(S.mapN));
+    if (sp_segDist(sp_texelDir(t, S.mapN) * P.radius, r.tail, r.c) > r.thin) { continue; }
+    let idx = u32(t.x) + S.mapN * u32(t.y);
+    let m = min(atomicLoad(&dropMap[S.cur * NN + idx]), MAP_K);
+    for (var q = 0u; q < m; q++) {
+      let o = atomicLoad(&dropMap[2u * NN + MAP_K * idx + q]) - 1u;
+      if (o == i) { continue; }
+      let jo = 2u * (pool * S.dropCap + o);
+      let f = drops[jo];
+      let ao = bitcast<f32>(f.w);
+      if (!(ao > 0.0) || ao < r.own || (ao == r.own && o > i)) { continue; }
+      // (No larger than the largest found so far and listed after it, or smaller than its team's.)
+      if (best != NONE && (ao < bestA || (ao == bestA && o >= best))) { continue; }
+      if (team != NONE && bitcast<u32>(ao) < atomicLoad(&spTeamA[team])) { continue; }
+      let co = bitcast<vec3f>(f.xyz);
+      let fo = drops[jo + 1u];
+      let so = bitcast<f32>(fo.x);
+      if (r.line == 1u) {
+        if (so <= 0.002) { continue; }
+        let along = clamp(dot(co - r.tail, r.c - r.tail) / max(dot(r.c - r.tail, r.c - r.tail), 1e-12), 0.0, 1.0);
+        if (dot(mix(r.tail, r.c, along) - co, co - sp_unpackTail(co, fo.z)) <= 0.0) { continue; }
+      } else if (so < 0.0) {
+        continue;
       }
+      let to = sp_shapeTail(co, fo);
+      let wo = sp_width(ao, distance(co, to));
+      let gap = min(min(sp_segDist(r.c, to, co), sp_segDist(r.tail, to, co)), min(sp_segDist(co, r.tail, r.c), sp_segDist(to, r.tail, r.c)));
+      if (gap > 0.9 * (r.wide + wo)) { continue; }
+      best = o;
+      bestA = ao;
+      if (team != NONE) { atomicMax(&spTeamA[team], bitcast<u32>(ao)); }
     }
   }
-  if (best == NONE) { return; }
+  }
+  return vec2u(best, bitcast<u32>(bestA));
+}
+
+// Drop i run into drop o: its water and where it was given to o's next frame, and it is gone.
+fn sp_mergeInto(pool: u32, i: u32, r: SpReach, o: u32) {
+  let ji = 2u * (pool * S.dropCap + i);
+  let a = bitcast<f32>(drops[ji].w);
   let v = a * a * a;
-  let off = (c - bestC) * (v / OFS_UNIT);
-  let g = 4u * best;
+  let off = (r.c - bitcast<vec3f>(drops[2u * (pool * S.dropCap + o)].xyz)) * (v / OFS_UNIT);
+  let g = 4u * o;
   atomicAdd(&gain[g], i32(v / VOL_UNIT + 0.5));
   atomicAdd(&gain[g + 1u], i32(round(off.x)));
   atomicAdd(&gain[g + 2u], i32(round(off.y)));
   atomicAdd(&gain[g + 3u], i32(round(off.z)));
-  drops[ji] = vec4u(e.xyz, bitcast<u32>(0.0));
-  sp_record(i, c, 0.0, c, 0.0, 0u);
+  drops[ji] = vec4u(bitcast<vec3u>(r.c), bitcast<u32>(0.0));
+  sp_record(i, r.c, 0.0, r.c, 0.0, 0u);
   atomicAdd(&ctrl[17], 1u);
 }
 
-// The drop map for the renderer: per texel, up to MAP_K drops (index + 1; 0, none).
-@compute @workgroup_size(8, 8)
-fn spMapResolve(@builtin(global_invocation_id) gid: vec3u) {
+// Drops that touch run together: each into the largest it touches that is larger than itself (or
+// as large, and listed first: never each into the other; of those as large, the first listed). The
+// next frame's drop takes in its water where it was (spDrops); it is gone. (Streaks touch where
+// either's ends come within both widths of the other; one running into another as another runs
+// into it loses what it took.) A trail line stays where it was laid: it goes only into a drop
+// running into it (one it lies ahead of - not the drop that laid it, nor one come to rest on it),
+// and no drop goes into it. A thread a drop; spDropMergeTeams, LANES threads a drop, walking the
+// drops in turn, each looking through its share of the texels round it, the drop going into the
+// largest any found.
+@compute @workgroup_size(256)
+fn spDropMerge(@builtin(global_invocation_id) gid: vec3u, @builtin(local_invocation_index) li: u32) {
+  let pool = 1u - S.cur;
+  let n = sp_poolCount(DROP + pool, S.dropCap, li);
+  let i = gid.x;
+  if (i >= n) { return; }
+  let r = sp_mergeReach(pool, i, n);
+  let found = sp_mergeFind(r, pool, i, vec2i(0), 1, NONE);
+  if (found.x != NONE) { sp_mergeInto(pool, i, r, found.x); }
+}
+
+@compute @workgroup_size(256)
+fn spDropMergeTeams(@builtin(workgroup_id) wid: vec3u, @builtin(local_invocation_index) li: u32, @builtin(num_workgroups) groups: vec3u) {
+  let pool = 1u - S.cur;
+  let n = sp_poolCount(DROP + pool, S.dropCap, li);
+  let team = li / LANES;
+  let lane = li % LANES;
+  for (var first = wid.x * TEAMS; first < n; first += groups.x * TEAMS) {
+    let i = first + team;
+    if (lane == 0u) {
+      atomicStore(&spTeamA[team], 0u);
+      atomicStore(&spTeamO[team], NONE);
+      spReach[team] = sp_mergeReach(pool, i, n);
+    }
+    workgroupBarrier();
+    let r = spReach[team];
+    let found = sp_mergeFind(r, pool, i, vec2i(i32(lane % LANES_SIDE), i32(lane / LANES_SIDE)), i32(LANES_SIDE), team);
+    workgroupBarrier();
+    // (Of the largest its lanes found, the first listed.)
+    if (found.x != NONE && found.y == atomicLoad(&spTeamA[team])) { atomicMin(&spTeamO[team], found.x); }
+    workgroupBarrier();
+    if (lane == 0u) {
+      let into = atomicLoad(&spTeamO[team]);
+      if (into != NONE) { sp_mergeInto(pool, i, r, into); }
+    }
+  }
+}
+
+// The drop map for the renderer: per texel, up to MAP_K drops (index + 1; 0, none), over the
+// tiles drops reach this frame or reached last frame (the rest of the map holds none, as it did),
+// and last frame's counts there emptied for the frame after this. (Most of the glass: a workgroup
+// that finds its tile marked for neither frame is done at once.)
+@compute @workgroup_size(16, 16)
+fn spMapResolve(@builtin(global_invocation_id) gid: vec3u, @builtin(workgroup_id) wid: vec3u, @builtin(local_invocation_index) li: u32) {
   let N = S.mapN;
-  if (gid.x >= N || gid.y >= N) { return; }
+  let tiles = (N + TILE - 1u) / TILE;
+  let tile = wid.x + tiles * wid.y;
+  let was = (1u - S.cur) * tiles * tiles + tile;
+  if (li == 0u) {
+    spCount = atomicLoad(&mapTiles[S.cur * tiles * tiles + tile]) | atomicLoad(&mapTiles[was]);
+    atomicStore(&mapTiles[was], 0u);
+  }
+  if (workgroupUniformLoad(&spCount) == 0u || gid.x >= N || gid.y >= N) { return; }
+  let NN = N * N;
   let idx = gid.x + N * gid.y;
-  let n = min(atomicLoad(&dropMap[idx]), MAP_K);
+  let n = min(atomicLoad(&dropMap[S.cur * NN + idx]), MAP_K);
+  atomicStore(&dropMap[(1u - S.cur) * NN + idx], 0u);
   var ids = vec4f(0.0);
-  for (var k = 0u; k < n; k++) { ids[k] = f32(atomicLoad(&dropMap[N * N + MAP_K * idx + k])); }
+  for (var k = 0u; k < n; k++) { ids[k] = f32(atomicLoad(&dropMap[2u * NN + MAP_K * idx + k])); }
   textureStore(dropTex, vec2i(gid.xy), ids);
 }
 
@@ -960,11 +1141,12 @@ fn spMapResolve(@builtin(global_invocation_id) gid: vec3u) {
 // (by the margin more); its kind's box made to take it in. (Bubbles' radii positive, the spray's
 // negative; spray not yet out of the water is hidden in it.)
 @compute @workgroup_size(256)
-fn spBin(@builtin(global_invocation_id) gid: vec3u) {
+fn spBin(@builtin(global_invocation_id) gid: vec3u, @builtin(local_invocation_index) li: u32) {
   let i = gid.x;
   let pool = 1u - S.cur;
-  let nb = min(atomicLoad(&ctrl[BUB + pool]), S.bubbleCap);
-  let ns = min(atomicLoad(&ctrl[SPRAY + pool]), S.sprayCap);
+  if (li == 0u) { spCount2 = min(atomicLoad(&ctrl[SPRAY + pool]), S.sprayCap); }
+  let nb = sp_poolCount(BUB + pool, S.bubbleCap, li);
+  let ns = workgroupUniformLoad(&spCount2);
   var e: vec4u;
   var kind = 0u;
   if (i < nb) {
@@ -1003,7 +1185,8 @@ fn spBin(@builtin(global_invocation_id) gid: vec3u) {
 
 // The grid's counts (each cell's texel past its spheres'), and the two boxes (the bubbles', the
 // spray's: their low and high corners, in the texels past the grid's row; empty, low above high).
-@compute @workgroup_size(4, 4, 4)
+// And this frame's pools, written on, have their counts emptied (nothing after reads them).
+@compute @workgroup_size(8, 8, 4)
 fn spBinCount(@builtin(global_invocation_id) gid: vec3u) {
   let G = S.gridN;
   if (any(gid >= vec3u(G))) { return; }
@@ -1018,13 +1201,8 @@ fn spBinCount(@builtin(global_invocation_id) gid: vec3u) {
       textureStore(gridOut, vec3i(row + 2 * i32(k), 0, 0), vec4f(lo, 0.0));
       textureStore(gridOut, vec3i(row + 2 * i32(k) + 1, 0, 0), vec4f(hi, 0.0));
     }
+    atomicStore(&ctrl[BUB + S.cur], 0u);
+    atomicStore(&ctrl[SPRAY + S.cur], 0u);
+    atomicStore(&ctrl[DROP + S.cur], 0u);
   }
-}
-
-// This frame's pools are written on: their counts emptied.
-@compute @workgroup_size(1)
-fn spCommit() {
-  atomicStore(&ctrl[BUB + S.cur], 0u);
-  atomicStore(&ctrl[SPRAY + S.cur], 0u);
-  atomicStore(&ctrl[DROP + S.cur], 0u);
 }
