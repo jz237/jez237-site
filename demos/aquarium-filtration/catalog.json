@@ -1,5 +1,20 @@
 [
   {
+    "id": "034",
+    "title": "Sand Atelier",
+    "category": "3D · Fluidized biological filtration",
+    "description": "Lift thousands of sand grains with upward water flow. Explore a clear reactor, its distributor and gravity return, then travel to the living surface of a single grain. Adjust the flow, interrupt the pump, and watch the bed expand, settle or lose fine media.",
+    "url": "sand-studio/",
+    "image": "assets/sand-studio.jpg",
+    "imageAlt": "The working Sand Atelier with a clear vertical sand reactor, individually animated grains, feed pump, height scale and gravity return",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/sand-studio",
+    "features": ["12 assemblies, eight lessons & six experiments", "12,000 moving grains, textured fittings & rippled water", "Settling, restart, expansion & media carryover", "Enlarged grain, biofilm & nitrification microscope"],
+    "facts": ["Original biological teaching design", "Mouse, touch & keyboard", "Self-hosted 3D"],
+    "note": "WebGL 2 · Desktop & mobile · Illustrative hydraulics and biology · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
     "id": "033",
     "title": "Drum Atelier",
     "category": "3D · Mechanical filtration",
