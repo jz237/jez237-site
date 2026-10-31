@@ -8,7 +8,7 @@
     "image": "assets/sand-studio.jpg",
     "imageAlt": "The working Sand Atelier with a clear vertical sand reactor, individually animated grains, feed pump, height scale and gravity return",
     "source": "https://github.com/jz237/jez237-site/tree/main/demos/sand-studio",
-    "features": ["12 assemblies, eight lessons & six experiments", "12,000 moving grains, textured fittings & rippled water", "Settling, restart, expansion & media carryover", "Enlarged grain, biofilm & nitrification microscope"],
+    "features": ["12 assemblies, eight lessons & six experiments", "Continuous grain motion, refractive water & pump section", "Guided water journey & live bed-height history", "Attached biofilm colonies & new/mature comparison"],
     "facts": ["Original biological teaching design", "Mouse, touch & keyboard", "Self-hosted 3D"],
     "note": "WebGL 2 · Desktop & mobile · Illustrative hydraulics and biology · Actual demo screenshot",
     "imageWidth": 1440,

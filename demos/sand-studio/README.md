@@ -41,3 +41,27 @@ Browser tests use the existing local Chrome/Playwright installation and save rev
 Screenshot cover: `demos/assets/sand-studio.jpg`, 1440×900, captured from the actual application. Keep the collection count and main collection description current. Bump local `?v=1` module/style keys together when revising a published release.
 
 Follow root AGENTS deployment rules: tested, committed and pushed source, then `node "D:/Projects/hidden reef header/deploy-reusing-stage.mjs" --deploy`. Reuse the existing stage; no new full-site copies or direct Wrangler deployments. Preserve Philadelphia service routes and the private relay.
+
+## Second edition: eight refinement passes
+
+The user requested eight further improvement iterations. Local module/style cache keys are now `v=2`; shared dependencies keep their existing versions.
+
+1. **Grain kinematics.** `grains.js` replaces abrupt vertical reversals with bounded continuous turns, lateral drift, variable tumbling and grain-size variation. Deterministic continuity and bounds tests plus a browser render check passed.
+2. **Bed and carryover.** Settled and expanded volumes account for media lost. Flow arrows integrate delivery rather than jumping when flow changes. Representative escaped grains finish their four-second drain path and accumulate in the basin; smaller grains leave first. Mass/height, settling, restart and flow-continuity tests cover the qualitative model.
+3. **Water optics.** `optics.js` captures one reduced-resolution scene with a depth texture. Modest refraction, view-depth tint and moving surface highlights keep grains readable. Shader state is restored after capture. Main render owns shadow updates. Surface geometry is horizontal in both the vessel and receiving basin.
+4. **Materials and fabrication.** `finishes.js` adds molded micro-roughness, softened manufactured edges, quieter metal, rubber feet, union grips, fasteners and an equipment plaque. Procedural assets stay local. Render checks cover shader compilation.
+5. **Working mechanical detail.** `mechanics.js` supplies genuinely perforated distributor geometry, annular flanges, a seven-vane rotor under a transparent teaching cover, a pump cable and distributor flow indicators. The plenum retains a solid bottom. The section toggle affects the cutaway; Assembled restores the ordinary housing. Rotor speed follows integrated pump delivery and freezes on pause.
+6. **Attached biofilm.** `biofilm.js` positions clustered, instanced cells directly on the irregular grain surface with fine gel strands. New-grain/established-film comparison controls adjust the existing maturity parameter; the visual layer can be hidden. This is an illustrative comparison, not time-lapse growth or species identification.
+7. **Guided learning.** `journey.js` defines a four-stage, manually startable water journey with captions and camera focus. An enlarged cyan marker is deliberately visible through surfaces. Starting resets to the working-bed condition; Pause, reduced motion, Care and view changes are respected. A bounded 60-simulated-second chart records bed height relative to the original settled bed; loss therefore remains visible.
+8. **Presentation and performance.** Larger default framing, narrow-screen framing, collision-aware labels and leader lines, reduced label count on phones, return impact ripples and small splash droplets. Grain matrix uploads stop while paused or in the microscope. The wet details share the physical clock. The existing interactions, lessons and accessible fallbacks remain available.
+
+Additional checks:
+
+```
+node scripts/sand-studio/grains.test.mjs
+node scripts/sand-studio/refinement.test.mjs
+node scripts/sand-studio/refinement-qa.cjs
+node scripts/sand-studio/release-check.cjs
+```
+
+`refinement-qa.cjs` captures the pump section, four guided stages, bed-history view, mature biofilm and phone layout. It checks guide completion/pause/stop, history, micro comparison and layer visibility, mechanical controls, wet-animation pause, reduced motion and skipped grain uploads. Existing `qa.cjs` remains the baseline regression suite. Figures are illustrative throughout: no CFD, collision solver, pump curve, real chemical concentration or capacity prediction has been added.
