@@ -1,5 +1,29 @@
 [
   {
+    "id": "038",
+    "title": "UV Atelier",
+    "category": "3D · Inline ultraviolet treatment",
+    "description": "Open an inline UV sterilizer and explore the dry compact lamp, quartz sleeve and wet reaction chamber. Follow three exposure paths, compare flow and optical conditions, enlarge a cell to understand replication damage, and watch lamp replacement and sleeve care.",
+    "url": "uv-studio/",
+    "image": "assets/uv-studio.jpg",
+    "imageAlt": "The UV Atelier cutaway showing a compact ultraviolet lamp inside its quartz sleeve, flowing water, threaded connections, mounting brackets and external ballast",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/uv-studio",
+    "features": [
+      "14 assemblies, ten lessons & eight experiments",
+      "Threaded joints, quartz optics & animated flow arrows",
+      "Six-stage lamp replacement & sleeve-care animation",
+      "Enlarged cell study & comparative exposure paths"
+    ],
+    "facts": [
+      "Aquatop-informed teaching model",
+      "Mouse, touch & keyboard",
+      "Self-hosted 3D"
+    ],
+    "note": "WebGL 2 · Desktop & mobile · Illustrative exposure, not calibrated treatment dosing · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
     "id": "037",
     "title": "Bio-Wheel Atelier",
     "category": "3D · Water-driven biological filtration",
