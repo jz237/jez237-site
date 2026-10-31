@@ -9,6 +9,8 @@ import {POOL, poolDistance, WATER_LEVEL, CAVE} from './Ground';
 import {TANK} from './Case';
 import {touchesPrey} from './PreyContact';
 import {DragonNeeds} from './DragonNeeds';
+import {RestTransition} from './RestTransition';
+import {PreyObservation} from './PreyObservation';
 
 /**
  * Behaviour for the bearded dragon. Lizards move in short bursts and freeze,
@@ -31,6 +33,11 @@ interface Pose {clearance: number; chestLift: number; headPitch: number; lid: nu
 
 export class LizardBrain {
   readonly needs=new DragonNeeds();
+  readonly restTransition=new RestTransition();
+  readonly observation=new PreyObservation();
+  private preyVisible=true;
+  private huntDeparture=false;
+  private sightT=0;
   mode: Mode = 'bask';
   status = 'Basking under the lamp';
   private t = 0;
@@ -64,6 +71,8 @@ export class LizardBrain {
   private huntReplanT=0;
   private huntElapsed=0;
   private huntDistance=0;
+  private huntNoProgress=0;
+  private huntProgressAt=new THREE.Vector3();
   private lastPreyPosition=new THREE.Vector3();
   private preyHiddenT=0;
   private standTries = 0;
@@ -73,19 +82,28 @@ export class LizardBrain {
   private boredom = 0;
   private goal: [number, number] | null = null;
   private replans = 0;
+  private replanOrigin=new THREE.Vector2();
   private blockedT = 0;
   private stallT = 0;
+  private travelNoProgress=0;
+  private travelProgressAt=new THREE.Vector3();
   /** Time spent walking into something the body is pushed back off (the glass, a tall stone). */
   private pushedT = 0;
   private retreatLeft = 0;
   private retreatT = 0;
   private retreatSign = -1;
+  private retreatReversed=false;
+  private retreatSide=0;
+  private pivotRecovery:{direction:number;remaining:number;time:number;depart?:number}|null=null;
+  private climbBacking=false;
+  private lateralRequest=0;
+  private lateralSpeed=0;
   private turnStallT = 0;
   private caveApproach = false;
   private caveBacking = false;
   private caveExit = 0;
-  private bowlExit: {x:number;z:number;heading:number;time:number}|null=null;
-  private backOutLeft=0;
+  private bowlExit: {x:number;z:number;heading:number;time:number;side?:number;unload?:boolean}|null=null;
+  private foodExit=false;
   /** Closest it has come to the end of the current route, and how long since it got closer. */
   private nearPath: [number, number][] | null = null;
   private nearBest = Infinity;
@@ -96,6 +114,7 @@ export class LizardBrain {
   private lickT = 0;
   private tmp2: [number, number] = [0, 0];
   private ignorePrey = new WeakMap<Cricket, number>();
+  private huntReassessUntil=0;
   /** Running for the cave: no stops to look around on the way. */
   private hurry = false;
   private clearT = 0;
@@ -224,23 +243,26 @@ export class LizardBrain {
     this.path = path;
     this.pathI = 1;
     this.goal = path[path.length - 1];
-    this.retreatT=0;this.retreatLeft=0;
+    this.retreatT=0;this.retreatLeft=0;this.retreatSide=0;this.pivotRecovery=null;
     this.turnStallT=0;
     this.caveApproach=Math.abs(x-.475)<.11 && z<.11 && this.surface.heightAt(x,z)<.12;
     this.caveBacking=false;
     this.caveExit=!this.caveApproach && Math.abs(I.x-.475)<.11 && I.z<.11 && this.surface.heightAt(I.x,I.z)<.12
       ? (Math.sin(I.heading)>0 ? -1 : 1) : 0;
     this.bowlExit=I.x>.43&&I.x<.52&&I.z>.30&&x<.40
-      ? {x:I.x-Math.cos(I.heading)*.075,z:I.z+Math.sin(I.heading)*.075,heading:I.heading,time:0} : null;
+      ? {x:I.x-Math.cos(I.heading)*.075,z:I.z+Math.sin(I.heading)*.075,heading:I.heading,time:0} : this.dishWithdrawal(x,z);
     // Leave the greens dish along the approach corridor before attempting a
     // half-turn between its rim, the steps and the front glass.
-    this.backOutLeft=I.x>-.5&&I.x<-.34&&I.z>.29&&Math.cos(I.heading)<-.25
-      && (x>-.35||this.surface.heightAt(x,z)>.15) ? .09 : 0;
+    this.foodExit=I.x>-.5&&I.x<-.34&&I.z>.29&&Math.cos(I.heading)<-.25
+      && (x>-.35||this.surface.heightAt(x,z)>.15);
+    if(this.foodExit)this.path=this.nav.path(I.x,I.z,.18,.365)??path;
     this.replans = 0;
+    this.replanOrigin.set(I.x,I.z);
     this.blockedT = 0;
     this.stallT = 0;
     this.pushedT = 0;
     this.stallRef.set(I.x, I.z);
+    this.travelNoProgress=0;this.travelProgressAt.set(I.x,I.z,I.heading);
     this.after = then;
     this.hurry = false;
     this.cruise = cruise * (0.85 + rnd() * 0.3);
@@ -250,6 +272,30 @@ export class LizardBrain {
     this.setMode('travel', then === 'drink' ? 'Heading to the water' : then === 'bask' ? 'Returning to the basking ledge' : then === 'sleep' ? 'Looking for a place to sleep' : then === 'soak' ? 'Wading into the shallows' : then === 'shelter' ? 'Heading for the cave' : then === 'graze' ? 'Off to the greens dish' : then === 'sip' ? 'Off to lick the wet leaves' : 'Exploring');
     this.posePreset('walk');
     return true;
+  }
+
+  /** A chase can approach the tray from a side other than the grazing route. */
+  private dishWithdrawal(x:number,z:number){
+    if(!this.dish)return null;
+    const I=this.rig.inputs,c=this.dish.centre,dx=c.x-I.x,dz=c.z-I.z,distance=Math.hypot(dx,dz);
+    if(distance>.16||Math.hypot(x-c.x,z-c.z)<distance+.05||dx*Math.cos(I.heading)-dz*Math.sin(I.heading)<.035)return null;
+    const back={x:I.x-Math.cos(I.heading)*.075,z:I.z+Math.sin(I.heading)*.075,heading:I.heading,time:0,side:0,cost:this.rig.recoveryCost(-1,0)};
+    // An oblique feeding stance can put stone directly behind the hips.
+    // Keep the head clear of the rim by stepping sideways on open sand before
+    // turning, rather than repeatedly backing into that blocked approach.
+    const sides=[-1,1].map(side=>({x:I.x+Math.sin(I.heading)*.075*side,z:I.z+Math.cos(I.heading)*.075*side,heading:I.heading,time:0,side,cost:this.rig.recoveryCost(0,side)}))
+      .filter(p=>this.nav.lineClear(I.x,I.z,p.x,p.z,Infinity)&&Math.hypot(p.x-c.x,p.z-c.z)>distance)
+      .sort((a,b)=>Math.hypot(a.x-x,a.z-z)-Math.hypot(b.x-x,b.z-z));
+    if(!this.nav.lineClear(I.x,I.z,back.x,back.z,Infinity))return sides[0]??back;
+    // Only a strongly constrained backing stance needs unloading. Tiny cost
+    // differences must not redirect an otherwise clear oblique withdrawal.
+    if(back.cost<=.005)return back;
+    const clearSide=sides.find(p=>p.cost<.001);if(clearSide)return clearSide;
+    const connector=this.nav.path(I.x,I.z,x,z)?.[1]??[x,z];
+    const unload=[-1,1].map(side=>({x:I.x+Math.sin(I.heading)*.04*side,z:I.z+Math.cos(I.heading)*.04*side,heading:I.heading,time:0,side,unload:true,cost:this.rig.recoveryCost(0,side)}))
+      .filter(p=>p.cost<.001&&this.nav.lineClear(I.x,I.z,p.x,p.z,Infinity))
+      .sort((a,b)=>Math.hypot(a.x-connector[0],a.z-connector[1])-Math.hypot(b.x-connector[0],b.z-connector[1]));
+    return unload[0]??back;
   }
 
   /** A body position on the shore from which the head reaches over the water. */
@@ -404,7 +450,9 @@ export class LizardBrain {
 
   /** Can it get within striking distance of this cricket? (Remembers the ones it cannot.) */
   private canHunt(c: Cricket) {
-    if(!this.needs.wantsPrey||this.bodyTemp<.2)return false;
+    if(this.t<this.huntReassessUntil)return false;
+    if(this.rig.needsRecovery||!this.needs.wantsPrey||this.bodyTemp<.2)return false;
+    if(!this.surface.visibleFrom(this.rig.snout.clone().add(new THREE.Vector3(0,.009,0)),c.pos.clone().add(new THREE.Vector3(0,.006,0))))return false;
     const until = this.ignorePrey.get(c) ?? -1;
     if (this.t < until) return false;
     const I = this.rig.inputs;
@@ -421,10 +469,13 @@ export class LizardBrain {
     const region = start ? this.nav.region[this.nav.idx(...start)] : -1;
     // A fleeing cricket can hide beneath the arch. Approach its opening from
     // the sand; do not turn the sprawling animal sideways inside the doorway.
-    if(Math.abs(target.x-.475)<.11&&target.z<.15&&this.surface.heightAt(target.x,target.z)<.12)return [.485,.27];
+    if(Math.abs(target.x-.475)<.11&&target.z<.15&&this.surface.heightAt(target.x,target.z)<.12)return [.485,.32];
     let best: [number, number] | null = null, bestScore = Infinity;
-    for (let k = 0; k < 16; k++) {
-      const a = (k / 16) * Math.PI * 2 + this.standTries * 0.7;
+    for (let k = -1; k < 16; k++) {
+      // Include the exact radial approach. Restricting open-ground pursuit to
+      // sixteen angles made the destination jump sideways as prey crossed a
+      // sector boundary, triggering unnecessary last-second turns.
+      const a = k<0?Math.atan2(I.z-target.z,I.x-target.x):(k / 16) * Math.PI * 2 + this.standTries * 0.7;
       const dx = Math.cos(a), dz = Math.sin(a);
       const sx = target.x + dx * 0.12, sz = target.z + dz * 0.12;
       if(Math.abs(sx-.475)<.14&&sz<.26&&this.surface.heightAt(sx,sz)<.12)continue;
@@ -433,9 +484,24 @@ export class LizardBrain {
       if(sx<-.20&&sz>.105&&sz<.27&&this.surface.heightAt(sx,sz)>.12)continue;
       const ki = this.nav.idx(sx, sz);
       if (ki < 0 || this.nav.region[ki] !== region || this.nav.isWet(sx, sz)) continue;
-      // the head must have room to reach in
-      if (!this.nav.walkable(target.x + dx * 0.035, target.z + dz * 0.035)) continue;
-      const score = Math.hypot(sx - I.x, sz - I.z) + this.nav.costAt(sx, sz) * 0.02;
+      // The head can reach over a ledge that cannot support the whole body.
+      // Reject a raised obstruction in its approach, not a body-clearance grid
+      // cell under the neck. The final articulated head still needs mesh clearance.
+      if(this.surface.heightAt(target.x+dx*.035,target.z+dz*.035)>target.y+.045)continue;
+      // A strike needs a stable whole-body stance, not merely a walkable root
+      // cell on a riser. Prefer a level patch with room for both girdles before
+      // turning toward prey; the foot controller still resolves exact contacts.
+      let low=Infinity,high=-Infinity;
+      for(const along of [-.055,.055])for(const across of [-.05,.05]){
+        const h=this.surface.heightAt(sx+dx*along-dz*across,sz+dz*along+dx*across);
+        low=Math.min(low,h);high=Math.max(high,h);
+      }
+      const stanceSpread=high-low;
+      if(stanceSpread>.055)continue;
+      const velocity=this.observation.velocity;
+      const intercept=this.observation.age<.25&&velocity.length()>.025
+        ? -(dx*velocity.x+dz*velocity.z)*.18 : 0;
+      const score = Math.hypot(sx - I.x, sz - I.z) + this.nav.costAt(sx, sz) * 0.02+intercept+stanceSpread*4;
       if (score < bestScore) {bestScore = score; best = [sx, sz];}
     }
     return best;
@@ -453,26 +519,31 @@ export class LizardBrain {
 
   startHunt(c: Cricket) {
     if (this.prey?.caught && !this.prey.eaten) return; // one mouthful at a time
+    const finishClimb=this.mode==='travel'&&this.rig.maneuver==='climb'&&!this.rig.canRedirect&&this.pathI<this.path.length;
+    this.huntDeparture=finishClimb;
     this.prey = c;
-    this.path = [];
+    this.observation.reset();this.observation.update(.1,c.pos,true);this.sightT=0;this.preyVisible=true;
+    if(!finishClimb)this.path = [];
     this.huntGoal = null;
     this.huntPrey = null;
     this.huntReplanT=0;this.preyHiddenT=0;this.huntElapsed=0;
     this.huntDistance=0;this.lastPreyPosition.copy(c.pos);
+    this.huntNoProgress=0;this.huntProgressAt.set(this.rig.inputs.x,this.rig.inputs.z,this.rig.inputs.heading);
     this.standTries = 0;
     // Pursuit must not inherit an exploration pause, a head-lead delay or a
     // failed approach from the activity that the cricket interrupted.
     this.pauseT=0;this.leadT=0;this.lickT=0;this.hurry=true;
     this.blockedT=0;this.stallT=0;this.pushedT=0;this.turnStallT=0;
-    this.retreatT=0;this.retreatLeft=0;this.backOutLeft=0;
+    this.retreatT=0;this.retreatLeft=0;this.retreatSide=0;this.pivotRecovery=null;this.foodExit=false;
     this.caveApproach=false;this.caveBacking=false;this.bowlExit=null;
     const I=this.rig.inputs;
     this.caveExit=Math.abs(I.x-.475)<.11&&I.z<.24&&this.surface.heightAt(I.x,I.z)<.12
       ? (Math.sin(I.heading)>0?-1:1):0;
     this.bowlExit=I.x>.43&&I.x<.52&&I.z>.30&&c.pos.x<.40
-      ? {x:I.x-Math.cos(I.heading)*.075,z:I.z+Math.sin(I.heading)*.075,heading:I.heading,time:0}:null;
-    this.backOutLeft=I.x>-.5&&I.x<-.34&&I.z>.29&&Math.cos(I.heading)<-.25
-      && (c.pos.x>-.35||this.surface.heightAt(c.pos.x,c.pos.z)>.15)?.09:0;
+      ? {x:I.x-Math.cos(I.heading)*.075,z:I.z+Math.sin(I.heading)*.075,heading:I.heading,time:0}:this.dishWithdrawal(c.pos.x,c.pos.z);
+    this.foodExit=I.x>-.5&&I.x<-.34&&I.z>.29&&Math.cos(I.heading)<-.25
+      && (c.pos.x>-.35||this.surface.heightAt(c.pos.x,c.pos.z)>.15);
+    if(this.foodExit){this.path=this.nav.path(I.x,I.z,.18,.365)??[];this.pathI=1;this.goal=null;}
     this.stallRef.set(I.x,I.z);this.stallHeading=I.heading;
     this.misses=0;
     this.huntPhase = 'notice';
@@ -554,6 +625,7 @@ export class LizardBrain {
     const twitch = 0;
     I.tailTwitch = damp(I.tailTwitch, twitch, 6, dt);
     let targetSpeed = 0, targetTurn = 0;
+    this.lateralRequest=0;
     // Thermoregulation: the body follows its surroundings slowly; colour and
     // posture follow the body. A storm keeps it on edge.
     this.bodyTemp += (this.envTemp - this.bodyTemp) * (1 - Math.exp(-dt / 32));
@@ -815,6 +887,17 @@ export class LizardBrain {
         break;
       }
     }
+    // Losing interest in prey does not cancel an unfinished physical recovery.
+    // Keep the supported withdrawal active through a resting activity, and
+    // defer new prey until the paw has landed. Otherwise idle froze the root
+    // while a returning hind foot still needed a weight shift to touch down.
+    if(this.rig.needsRecovery&&!['travel','startle','hunt'].includes(this.mode)){
+      const mode=this.mode;
+      this.posePreset('walk');I.look=null;
+      const recovery=this.travel(dt);
+      this.mode=mode;this.status='Settling a foot';
+      targetSpeed=recovery.speed;targetTurn=recovery.turn;
+    }
     if (this.raining && this.mode !== 'sleep' && rnd() < dt * 0.15) I.tongue = Math.max(I.tongue, 0.6);
     // mist on the face: blink, and lick it off the lips
     if (this.snoutLickT > 0) {
@@ -823,33 +906,57 @@ export class LizardBrain {
       if (this.mode !== 'hunt') I.tongue = Math.max(I.tongue, ph > 0.6 ? Math.sin(((ph - 0.6) / 0.4) * Math.PI) * 0.7 : 0);
     }
 
+    const resting=['idle','bask','sleep','shelter','petted'].includes(this.mode)&&Math.abs(targetSpeed)<.005&&Math.abs(targetTurn)<.1&&!this.lateralRequest;
+    const transition=this.restTransition.update(dt,resting,this.rig.motion.transferring,this.rig.motion.speed,this.rig.motion.turnRate);
+    targetSpeed*=transition.advance;
+    I.restAdjustment=transition.adjust;
     // Snappy acceleration and braking: bursts, not glides.
     this.speed = damp(this.speed, targetSpeed, targetSpeed > this.speed ? 9 : 14, dt);
     this.turn = damp(this.turn, targetTurn, 5, dt);
+    this.lateralSpeed=damp(this.lateralSpeed,this.lateralRequest,12,dt);
+    if(!this.lateralRequest&&Math.abs(this.lateralSpeed)<.0001)this.lateralSpeed=0;
+    I.lateralSpeed=this.lateralSpeed;
     I.speed = this.speed;
     I.turnRate = this.turn;
     const oldHeading=I.heading;
     I.heading = wrap(I.heading + this.turn * dt);
     const oldX = I.x, oldZ = I.z;
-    const nx = I.x + Math.cos(I.heading) * this.speed * dt;
-    const nz = I.z - Math.sin(I.heading) * this.speed * dt;
+    const nx = I.x + (Math.cos(I.heading)*this.speed+Math.sin(I.heading)*this.lateralSpeed)*dt;
+    const nz = I.z + (-Math.sin(I.heading)*this.speed+Math.cos(I.heading)*this.lateralSpeed)*dt;
     // The hide's straight entry is narrower than the grid's turning margin.
     // Its aligned forward/backward motion is still checked by actual body and
     // foot contacts; an inflated navigation cell must not stop it in the doorway.
-    const alignedHide=(this.caveBacking||this.caveExit!==0)&&Math.abs(nx-.485)<.025&&nz>-.10&&nz<.31&&this.surface.heightAt(nx,nz)<.12;
-    const huntDoorway=this.mode==='hunt'&&!this.caveExit&&Math.abs(nx-.475)<.14&&nz<.26&&this.surface.heightAt(nx,nz)<.12;
-    if (!huntDoorway&&(Math.abs(this.speed) < 1e-4 || ((this.nav.walkable(nx, nz)||alignedHide) && this.nav.canTraverse(I.x, I.z, nx, nz)) || !this.nav.walkable(I.x, I.z))) {I.x = nx; I.z = nz; this.blockedT = 0;}
+    // Permit the small lateral correction from the staging stance. A 25 mm
+    // navigation strip could reject the first backward step before the body
+    // converged to the centreline, causing endless forward/backward retries.
+    // Actual mesh, limb and toe clearance still approve every accepted pose.
+    const enteringForPrey=this.mode==='hunt'&&this.huntPhase==='approach'&&this.preyVisible
+      &&this.observation.position.z<.15&&Math.abs(this.observation.position.x-.475)<.11
+      &&Math.abs(wrap(I.heading-Math.PI/2))<.15&&nz>.215;
+    const alignedHide=(this.caveBacking||this.caveExit!==0||enteringForPrey)&&Math.abs(nx-.485)<.06&&nz>-.10&&nz<.31&&this.surface.heightAt(nx,nz)<.12;
+    const huntDoorway=this.mode==='hunt'&&!this.caveExit&&!alignedHide&&Math.abs(nx-.475)<.14&&nz<.26
+      &&nz<I.z&&this.surface.heightAt(nx,nz)<.12;
+    // A 25 mm recovery can cross the grid's inflated turning margin while
+    // remaining on level sand. The actual torso, limb and sole constraints
+    // still accept every tick; the grid must not veto its only clear side.
+    const supportedRecoveryStep=this.retreatT>0&&this.retreatLeft>0&&this.rig.maneuver!=='climb'
+      &&this.surface.heightAt(nx,nz)<.12&&Math.abs(this.surface.heightAt(nx,nz)-this.surface.heightAt(I.x,I.z))<.008;
+    if (!huntDoorway&&(Math.hypot(this.speed,this.lateralSpeed) < 1e-4 || ((this.nav.walkable(nx, nz)||alignedHide||supportedRecoveryStep) && this.nav.canTraverse(I.x, I.z, nx, nz)) || !this.nav.walkable(I.x, I.z))) {I.x = nx; I.z = nz; this.blockedT = 0;}
     else {this.speed *= 0.5; this.blockedT += dt;}
     // The gait follows actual progress; an obstacle cannot make it paddle in place.
     I.speed = Math.sign(this.speed) * Math.hypot(I.x - oldX, I.z - oldZ) / Math.max(dt, 1e-6);
+    if(this.lateralSpeed){
+      I.speed=((I.x-oldX)*Math.cos(I.heading)-(I.z-oldZ)*Math.sin(I.heading))/dt;
+      I.lateralSpeed=((I.x-oldX)*Math.sin(I.heading)+(I.z-oldZ)*Math.cos(I.heading))/dt;
+    }
     const movedX = I.x, movedZ = I.z;
     // Pose eases toward its goal.
     const p = this.pose, g = this.poseGoal;
-    p.clearance = damp(p.clearance, g.clearance, 4, dt);
-    p.chestLift = damp(p.chestLift, g.chestLift, 4, dt);
-    p.headPitch = damp(p.headPitch, g.headPitch, 5, dt);
+    p.clearance = damp(p.clearance, g.clearance, transition.bodyRate, dt);
+    p.chestLift = damp(p.chestLift, g.chestLift, transition.bodyRate, dt);
+    p.headPitch = damp(p.headPitch, g.headPitch, transition.headRate, dt);
     p.lid = damp(p.lid, g.lid, this.mode === 'sleep' ? 0.6 : 5, dt);
-    p.breath = damp(p.breath, g.breath, 2, dt);
+    p.breath = damp(p.breath, g.breath, transition.breathRate, dt);
     I.clearance = p.clearance + (Math.abs(this.speed) > 0.02 ? 0.2 : 0);
     I.chestLift = p.chestLift;
     I.headPitch = p.headPitch;
@@ -858,6 +965,10 @@ export class LizardBrain {
     I.tracking=this.mode==='hunt';
     const previousMouth=this.rig.mouth.clone(),previousTongue=this.rig.model.tongueTip.clone();
     this.rig.update(dt);
+    // A valid planted-foot pivot can temporarily block translation at a grid
+    // corner. Count only an actually blocked stance toward route retries,
+    // rather than exhausting them while the accepted heading is advancing.
+    if(Math.abs(wrap(I.heading-oldHeading))>.0005)this.blockedT=0;
     this.needs.update(dt,Math.hypot(I.x-oldX,I.z-oldZ),Math.abs(this.rig.motion.speed)<.003);
     // Resolve feeding only after the contact solver has accepted the body/head
     // pose. An intended lunge which terrain prevents cannot catch anything.
@@ -871,7 +982,7 @@ export class LizardBrain {
     }
     // Measure accepted motion, including turns. A stuck airborne foot must
     // not disable recovery indefinitely, and a healthy pivot is progress.
-    const travelling=this.mode==='travel'||this.mode==='startle'||(this.mode==='hunt'&&this.huntPhase==='approach');
+    const travelling=this.mode==='travel'||this.mode==='startle'||(this.mode==='hunt'&&(this.huntPhase==='approach'||this.huntDeparture));
     // Direct cave/bowl approaches run before the route's pause/head-lead
     // timers. Those dormant timers must not suppress their stall detection.
     const directApproach=this.caveExit!==0||this.caveBacking||this.bowlExit!==null;
@@ -881,10 +992,24 @@ export class LizardBrain {
         this.stallT=0;this.stallRef.set(I.x,I.z);this.stallHeading=I.heading;
       }
     }else{this.stallT=0;this.stallRef.set(I.x,I.z);this.stallHeading=I.heading;}
+    // Retrying and withdrawing must not reset the lifetime of a genuinely
+    // blocked journey. After several seconds without accepted body progress,
+    // stop on real supports and reassess instead of stepping in place forever.
+    const routeActive=this.mode==='travel';
+    if(!routeActive||Math.hypot(I.x-this.travelProgressAt.x,I.z-this.travelProgressAt.y)>.003
+      ||Math.abs(wrap(I.heading-this.travelProgressAt.z))>.06){
+      this.travelNoProgress=0;this.travelProgressAt.set(I.x,I.z,I.heading);
+    }else this.travelNoProgress+=dt;
+    if(this.travelNoProgress>6&&!this.rig.motion.transferring){
+      this.nav.avoidApproach(I.x,I.z,I.heading);
+      this.path=[];this.faceHeading=null;this.retreatT=0;this.retreatLeft=0;this.retreatSide=0;
+      this.speed=0;this.turn=0;I.speed=0;I.turnRate=0;
+      this.posePreset('alert');this.setMode('idle','Pausing to reassess the route');
+      this.boredom=Math.max(this.boredom,3);this.travelNoProgress=0;
+    }
     const turningBlocked=Math.abs(this.turn)>.3 && !this.rig.placingFoot && Math.abs(wrap(I.heading-oldHeading))<.0001;
     this.turnStallT=turningBlocked ? this.turnStallT+dt : Math.max(0,this.turnStallT-dt);
-    if(this.retreatLeft>0 && this.speed*this.retreatSign>0)this.retreatLeft=Math.max(0,this.retreatLeft-Math.hypot(I.x-oldX,I.z-oldZ));
-    if(this.backOutLeft>0 && this.speed<0 && this.retreatT<=0)this.backOutLeft=Math.max(0,this.backOutLeft-Math.hypot(I.x-oldX,I.z-oldZ));
+    if(this.retreatLeft>0 && (this.speed*this.retreatSign>0||this.lateralSpeed*this.retreatSide>0))this.retreatLeft=Math.max(0,this.retreatLeft-Math.hypot(I.x-oldX,I.z-oldZ));
     // Walking on the spot: the rig shoved the body back off the glass or a stone
     // it was walking into (see travel)
     const back = -((I.x - movedX) * Math.cos(I.heading) - (I.z - movedZ) * Math.sin(I.heading));
@@ -932,7 +1057,7 @@ export class LizardBrain {
     this.lookT -= dt;
     const I = this.rig.inputs;
     if (this.lookT < 0) {
-      this.lookT = 0.8 + rnd() * 3;
+      this.lookT = this.restTransition.settled>2?2.5+rnd()*5:0.8 + rnd() * 3;
       const r = rnd();
       if (this.pointer && this.pointer.distanceTo(this.rig.snout) < 0.3) {this.lookPoint.copy(this.pointer); this.looking = true;}
       else if (r < cameraBias && this.cameraPos.distanceTo(this.rig.snout) < 2.2) {this.lookPoint.copy(this.cameraPos); this.looking = true;}
@@ -1002,8 +1127,13 @@ export class LizardBrain {
   /** Re-plans to the end of the current route; false once it keeps failing. */
   private replan() {
     const I = this.rig.inputs;
-    const end = this.path[this.path.length - 1] ?? this.goal;
+    const end = this.foodExit ? [.18,.365] : this.goal ?? this.path[this.path.length - 1];
     if (!end) return false;
+    // Count repeated attempts at the same obstruction, not successful route
+    // corrections accumulated over a long withdrawal and climb.
+    if(Math.hypot(I.x-this.replanOrigin.x,I.z-this.replanOrigin.y)>.035){
+      this.replans=0;this.replanOrigin.set(I.x,I.z);
+    }
     this.replans++;
     if (this.replans > 4) return false;
     const p = this.nav.path(I.x, I.z, end[0], end[1]);
@@ -1014,22 +1144,156 @@ export class LizardBrain {
     return true;
   }
 
-  /**
-   * Follows the planned route in bursts: a run of steps, a freeze to scan, then
-   * on. Steering pursues a point a little way along the route, so corners are
-   * rounded the way an animal takes them rather than snapped to.
-   */
+  private recoveryDestinationClear(x:number,z:number){
+    const I=this.rig.inputs,floor=this.surface.heightAt(I.x,I.z);
+    if(floor>=.12||![.25,.5,.75,1].every(t=>Math.abs(this.surface.heightAt(I.x+(x-I.x)*t,I.z+(z-I.z)*t)-floor)<.008))return false;
+    if(this.nav.walkable(x,z))return true;
+    if(this.nav.walkable(I.x,I.z))return false;
+    // A contact fit can leave the root inside the grid's turning margin.
+    // Recover the actual stance before reconnecting its route. The first
+    // support shift may temporarily move away from the nearest clear cell;
+    // requiring immediate grid progress can veto every physically valid exit.
+    return true;
+  }
+  private recoverySides(){
+    const I=this.rig.inputs;
+    return [-1,1].map(side=>{
+      const x=I.x+Math.sin(I.heading)*.03*side,z=I.z+Math.cos(I.heading)*.03*side;
+      const clear=this.recoveryDestinationClear(x,z);
+      return {side,clear,room:Math.min(TANK.w/2-Math.abs(x),TANK.d/2-Math.abs(z)),cost:this.rig.recoveryCost(0,side)};
+    }).filter(p=>p.clear).sort((a,b)=>a.cost-b.cost||b.room-a.room);
+  }
+  /** Follows a route in short bouts, steering ahead to round its corners. */
   private travel(dt: number) {
     const I = this.rig.inputs;
+    if(this.pivotRecovery){
+      const p=this.pivotRecovery;p.time-=dt;
+      p.remaining-=Math.max(0,this.rig.motion.turnRate*p.direction)*dt;
+      I.look=null;this.poseGoal.headPitch=.1;
+      if(p.time>0&&p.remaining>.04)return {speed:0,turn:.6*p.direction};
+      this.pivotRecovery=null;this.stallT=0;this.turnStallT=0;
+      if(p.depart){
+        // Keep the supported alignment long enough to leave the diagonal
+        // stance, including a partially completed turn at the time limit.
+        // Immediately steering back to the route would undo that real progress.
+        this.retreatSign=p.depart;this.retreatSide=0;this.retreatLeft=.05;this.retreatT=4;this.retreatReversed=true;
+        this.climbBacking=p.depart<0;
+        this.speed=0;this.turn=0;
+      }else this.replan();
+    }
+    if(this.bowlExit){
+      // Retract on the approach axis before looking toward a new destination.
+      // A lingering feeding/prey gaze can otherwise hold the jaw at the rim
+      // while the torso is trying to reverse out of that same narrow stance.
+      I.look=null;this.poseGoal.headPitch=.15;this.poseGoal.chestLift=.4;
+    }
+    // A half-turn does not fit between the food tray, rock face and glass.
+    // Keep backing through that corridor until the open sand provides room
+    // for the head's swept arc, then reconnect the route from the real pose.
+    if(this.foodExit&&I.x>.155){
+      this.foodExit=false;
+      if(this.mode==='hunt'){this.path=[];this.goal=null;this.huntPrey=null;return {speed:0,turn:0};}
+      this.replan();
+    }
     if((this.stallT>1.5||this.rig.needsRecovery) && this.retreatT<=0){
-      if(this.mode==='hunt'&&!this.caveExit&&!this.bowlExit){this.nav.avoidApproach(I.x,I.z,I.heading);this.replan();}
-      this.retreatSign=-Math.sign(this.speed||1);this.retreatLeft=.025;this.retreatT=2;
+      // A foot settling on a riser does not make the supported climb route
+      // impassable. Marking it blocked diverted pursuit around the step's tall
+      // side, repeatedly abandoning a usable path during contact recovery.
+      if(this.mode==='hunt'&&this.rig.maneuver!=='climb'&&!this.caveExit&&!this.bowlExit){this.nav.avoidApproach(I.x,I.z,I.heading);this.replan();}
+      this.retreatSign=-Math.sign(this.speed||1);this.retreatLeft=.025;this.retreatT=2;this.retreatReversed=false;this.retreatSide=0;
+      if(this.rig.maneuver==='climb'&&!this.rig.motion.transferring){
+        // A diagonal stance across two stair heights may block both forward
+        // and backward motion. With all feet down, permit a bounded supported
+        // pivot so the next transfer can realign with the slope. The rig owns
+        // each contact and stops turning whenever a climbing paw is airborne.
+        const axial=Math.min(this.rig.recoveryCost(-1,0),this.rig.recoveryCost(1,0));
+        const destination=this.goal??this.path.at(-1);
+        const slope=new THREE.Vector3();this.surface.normalAt(I.x,I.z,slope);
+        let heading=destination?Math.atan2(-(destination[1]-I.z),destination[0]-I.x):I.heading;
+        if(Math.hypot(slope.x,slope.z)>.12){
+          heading=Math.atan2(-slope.z,slope.x);
+          if(destination&&(destination[0]-I.x)*slope.x+(destination[1]-I.z)*slope.z<0)heading+=Math.PI;
+        }
+        const toward=Math.sign(wrap(heading-I.heading))||1;
+        const score=(cost:number)=>cost<=.0001?0:cost;
+        const pivots=[toward,-toward].map(direction=>({direction,cost:this.rig.recoveryCost(0,0,direction)})).sort((a,b)=>score(a.cost)-score(b.cost));
+        if(pivots[0].cost<axial-1e-5){
+          this.retreatT=0;this.retreatLeft=0;this.speed=0;this.turn=0;
+          // Align along the slope toward the retained destination. Always
+          // choosing downhill can repeatedly undo an ascent or cricket chase.
+          // Equally supported pivots prefer this route-facing turn.
+          let angle=wrap(heading-I.heading);
+          let depart=1;
+          // Either end of the body can lead out. Align the trunk with the
+          // exit axis in the supported direction, then walk or back along it.
+          if(Math.sign(angle)!==pivots[0].direction){angle+=pivots[0].direction*Math.PI;depart=-1;}
+          const remaining=Math.max(.2,Math.abs(angle));
+          this.pivotRecovery={direction:pivots[0].direction,remaining,time:Math.min(18,2+remaining/.2),depart};I.look=null;this.poseGoal.headPitch=.1;
+          return {speed:0,turn:.6*pivots[0].direction};
+        }
+      }
+      // Choose a clear local destination and a direction that does not worsen
+      // the current support constraints. A stretched foot alone is not enough
+      // information: the other limbs and the ramp edge also constrain a shift.
+      if(this.rig.maneuver!=='climb'){
+        const axial=[-1,1].map(forward=>{
+          const x=I.x+Math.cos(I.heading)*.03*forward,z=I.z-Math.sin(I.heading)*.03*forward;
+          const clear=this.recoveryDestinationClear(x,z);
+          return {forward,side:0,turn:0,clear,cost:this.rig.recoveryCost(forward,0)};
+        });
+        const back=axial.find(p=>p.forward===this.retreatSign)!;
+        const destination=this.goal??this.path.at(-1);
+        const toward=destination?Math.sign(wrap(Math.atan2(-(destination[1]-I.z),destination[0]-I.x)-I.heading))||1:1;
+        const pivots=[toward,-toward].map(turn=>({forward:0,side:0,turn,cost:this.rig.recoveryCost(0,0,turn)}));
+        // All shifts within the solver's contact tolerance are equally
+        // supported. For a pivot tie, face the route instead of repeatedly
+        // turning away because of a tiny floating-point cost difference.
+        const score=(cost:number)=>cost<=.0001?0:cost;
+        const options=[...axial.filter(p=>p.clear),...this.recoverySides().map(p=>({...p,forward:0,turn:0})),...pivots].sort((a,b)=>score(a.cost)-score(b.cost));
+        const best=options[0];
+        if(best&&(!back.clear||best.cost<back.cost-1e-5)){
+          if(best.turn){
+            this.retreatT=0;this.retreatLeft=0;this.speed=0;this.turn=0;
+            this.pivotRecovery={direction:best.turn,remaining:.75,time:3};I.look=null;this.poseGoal.headPitch=.1;
+            return {speed:0,turn:.6*best.turn};
+          }
+          this.retreatSide=best.side;this.retreatSign=best.forward||this.retreatSign;
+          this.retreatReversed=best.side!==0||best.forward!==back.forward;this.speed=0;this.turn=0;
+        }
+      }
       this.stallT=0;this.pushedT=0;this.turnStallT=0;
     }
     if(this.retreatT>0){
+      // Balance recovery takes priority over a prey/route gaze on every
+      // surface. A sideways neck can pin the jaw beside a bowl or log just
+      // as it can on a climbing riser, preventing either withdrawal direction.
+      I.look=null;this.poseGoal.headPitch=.1;
       this.retreatT-=dt;
-      if(this.retreatLeft>.003 && this.retreatT>0)return {speed:.025*this.retreatSign,turn:0};
-      this.retreatT=0;this.retreatLeft=0;this.stallT=0;this.pushedT=0;this.turnStallT=0;
+      if(this.retreatLeft>.003 && this.retreatT>0){
+        this.lateralRequest=.025*this.retreatSide;
+        return {speed:this.retreatSide?0:.025*this.retreatSign,turn:0};
+      }
+      if(this.retreatT<=0&&this.retreatLeft>.020&&(!this.retreatReversed||this.retreatSide!==0)){
+        // When neither an axial step nor a pivot fits, shift sideways into
+        // open sand. The rig transfers one foot at a time and still rejects
+        // every body/limb pose that would cross stone, glass or a fixed sole.
+        if(this.rig.maneuver!=='climb'&&!this.retreatSide){
+          const choices=this.recoverySides();
+          if(choices.length){
+            this.retreatSide=choices[0].side;this.retreatLeft=.025;this.retreatT=2;this.retreatReversed=true;
+            this.speed=0;this.turn=0;this.lateralRequest=.025*this.retreatSide;
+            return {speed:0,turn:0};
+          }
+        }
+        // A stretched forefoot may prevent both backing and the chosen side
+        // step. Moving toward that support can shorten its reach and release
+        // it. Try this remaining axial direction once, retaining the journey's
+        // existing no-progress clock throughout all three attempts.
+        this.retreatSide=0;
+        this.retreatSign*=-1;this.retreatLeft=.025;this.retreatT=2;this.retreatReversed=true;
+        return {speed:.025*this.retreatSign,turn:0};
+      }
+      this.retreatT=0;this.retreatLeft=0;this.retreatSide=0;this.stallT=0;this.pushedT=0;this.turnStallT=0;
       // A contact recovery preserves the destination and allows the other
       // supports to take their next step before trying the approach again.
       this.blockedT=0;
@@ -1038,12 +1302,14 @@ export class LizardBrain {
       const exit=this.bowlExit;exit.time+=dt;
       // Withdraw into open sand before turning away from the water. Pivoting
       // beside the rim can trap a hind foot between the bowl and front glass.
-      if(Math.hypot(I.x-exit.x,I.z-exit.z)>.012 && exit.time<6){
+      if(Math.hypot(I.x-exit.x,I.z-exit.z)>.012 && exit.time<12){
         const err=wrap(exit.heading-I.heading);
         this.posePreset('walk');
-        return {speed:Math.abs(err)<.3 ? -.05 : 0,turn:clamp(err*3,-.6,.6)};
+        if(exit.side)this.lateralRequest=Math.abs(err)<.3?.025*exit.side:0;
+        return {speed:!exit.side&&Math.abs(err)<.3 ? -.05 : 0,turn:clamp(err*3,-.6,.6)};
       }
-      this.bowlExit=null;this.replan();
+      if(exit.unload&&I.x>-.5&&I.x<-.34&&I.z>.29&&Math.cos(I.heading)<-.25)this.foodExit=true;
+      this.bowlExit=null;this.posePreset('walk');this.replan();
     }
     // The hide is wide enough to rest in, but not to turn the full animal
     // sideways. Turn on the open sand, then back in with the head facing out.
@@ -1054,7 +1320,11 @@ export class LizardBrain {
       const want=Math.atan2(dz,.485-I.x)+Math.PI;
       const err=wrap(want-I.heading);
       this.posePreset('walk');
-      return {speed:Math.abs(err)<.25 ? -.035 : 0,turn:clamp(err*3,-.8,.8)};
+      // Back into the narrow shelter with the head facing the opening. A gaze
+      // toward the destination behind the body twists the jaw into the arch.
+      // Align on the open approach before committing the shoulders to it.
+      I.look=null;this.poseGoal.headPitch=.1;
+      return {speed:Math.abs(err)<.10 ? -.035 : 0,turn:clamp(err*3,-.8,.8)};
     }
     if(this.caveExit){
       if(I.z<.28){
@@ -1072,7 +1342,7 @@ export class LizardBrain {
     if (this.blockedT > 0.8 || this.stallT > 8 || this.turnStallT>2 || (this.pushedT > 3 && this.remaining() > 0.06)) {
       if (this.pushedT > 3 || this.stallT > 8 || this.turnStallT>2) {
         this.nav.avoidApproach(I.x, I.z, I.heading);
-        this.retreatSign=-1;this.retreatLeft=.025;this.retreatT=2;this.stallT=0;this.pushedT=0;this.turnStallT=0;
+        this.retreatSide=0;this.retreatSign=-1;this.retreatLeft=.025;this.retreatT=2;this.stallT=0;this.pushedT=0;this.turnStallT=0;
         this.status='Finding a firmer foothold';
         return {speed:-.025,turn:0};
       }
@@ -1133,7 +1403,13 @@ export class LizardBrain {
       if (this.nav.lineClear(I.x, I.z, aim[0], aim[1], Infinity)) break;
       aim = this.pathPoint(Math.min(ahead, remaining), this.tmp2);
     }
-    const backing=this.backOutLeft>0;
+    // All four paws can reach the sand while the head still overhangs a riser.
+    // Keep backing until the head also has floor below it; otherwise turning
+    // immediately pins the neck against the edge the animal just left.
+    if(this.climbBacking&&this.rig.canRedirect&&this.surface.heightAt(I.x,I.z)<.12
+      &&this.surface.heightAt(this.rig.snout.x,this.rig.snout.z)<.12)this.climbBacking=false;
+    const backing=this.foodExit||this.climbBacking;
+    if(this.climbBacking){I.look=null;this.poseGoal.headPitch=.1;}
     const want = Math.atan2(-(aim[1] - I.z), aim[0] - I.x)+(backing?Math.PI:0);
     const err = this.clearTurnError(want);
     if (this.leadT > 0) {
@@ -1146,7 +1422,7 @@ export class LizardBrain {
     if (this.path !== this.nearPath) {this.nearPath = this.path; this.nearBest = Infinity; this.nearT = 0;}
     if (remaining < this.nearBest - 0.005) {this.nearBest = remaining; this.nearT = 0;}
     else this.nearT += dt;
-    if (remaining < 0.035 && (Math.abs(err) > 1.0 || this.nearT > 1.5 || this.pushedT > 0.25)) {
+    if (remaining < 0.025 && (Math.abs(err) > 1.0 || this.nearT > 1.5 || this.pushedT > 0.25)) {
       this.pushedT = 0;
       this.arrive();
       return {speed: 0, turn: 0};
@@ -1172,9 +1448,39 @@ export class LizardBrain {
     const I = this.rig.inputs;
     const c = this.prey;
     if (!c || (c.eaten && this.huntPhase !== 'lick')) {this.prey = null; this.setMode('idle', 'Watching'); return {speed: 0, turn: 0};}
+    this.sightT-=dt;
+    if(!c.caught&&this.sightT<=0){
+      this.sightT=.075;
+      this.preyVisible=this.surface.visibleFrom(this.rig.snout.clone().add(new THREE.Vector3(0,.009,0)),c.pos.clone().add(new THREE.Vector3(0,.006,0)));
+    }
+    this.observation.update(dt,c.pos,this.preyVisible&&!c.caught);
+    if(Math.hypot(I.x-this.huntProgressAt.x,I.z-this.huntProgressAt.y)>.004
+      ||Math.abs(wrap(I.heading-this.huntProgressAt.z))>.06||this.huntPhase!=='approach'&&!this.huntDeparture){
+      this.huntNoProgress=0;this.huntProgressAt.set(I.x,I.z,I.heading);
+    }else this.huntNoProgress+=dt;
+    const searchBudget=this.huntDistance>.35?45:90;
+    const exhaustedSearch=this.observation.age>8
+      &&(this.rig.snout.distanceTo(this.observation.position)<.03||this.huntElapsed>searchBudget);
+    // When both sight and supported progress are lost, stop the search rather
+    // than repeatedly pushing at the same edge until the whole chase expires.
+    // Brief glimpses through an obstacle must not keep renewing an approach
+    // that cannot advance. Remember the escape and resume another activity.
+    const blockedSearch=this.huntNoProgress>4;
+    if(!c.caught&&(exhaustedSearch||blockedSearch)){
+      this.ignorePrey.set(c,this.t+20);this.prey=null;this.path=[];this.faceHeading=null;
+      this.setMode('idle','Watching escaped prey');
+      if(blockedSearch){
+        // Several insects around one obstructed stance must not take turns
+        // cancelling its exit. Briefly reassess, then allow another activity
+        // to reposition the animal before automatic prey selection resumes.
+        this.huntReassessUntil=this.t+12;this.holdFor=.8;I.look=null;
+      }
+      return {speed:0,turn:0};
+    }
+    const seen=this.preyVisible?c.pos:this.observation.position;
     if(!c.caught){
       this.huntElapsed+=dt;
-      this.huntDistance+=c.pos.distanceTo(this.lastPreyPosition);this.lastPreyPosition.copy(c.pos);
+      if(this.preyVisible){this.huntDistance+=seen.distanceTo(this.lastPreyPosition);this.lastPreyPosition.copy(seen);}
       if(this.huntElapsed>45&&this.huntDistance>.35){
         // An insect escaping repeatedly across ledges is allowed to get away.
         // Keep the current supported stance and remember it for a while instead
@@ -1185,60 +1491,79 @@ export class LizardBrain {
     }
     this.phaseT += dt;
     const head = this.rig.snout;
-    const toPrey = new THREE.Vector3().subVectors(c.pos, head);
+    const toPrey = new THREE.Vector3().subVectors(seen, head);
     const flat = Math.hypot(toPrey.x, toPrey.z);
-    const want = Math.atan2(-(c.pos.z - I.z), c.pos.x - I.x);
+    const want = Math.atan2(-(seen.z - I.z), seen.x - I.x);
     const err = wrap(want - I.heading);
-    if (!c.caught) {this.lookPoint.copy(c.pos);this.lookPoint.y+=.006; I.look = this.lookPoint;}
+    if (!c.caught) {this.lookPoint.copy(seen);this.lookPoint.y+=.006; I.look = this.lookPoint;}
+    if(this.huntDeparture){
+      // Keep the existing climb route until the four supports can accommodate
+      // a new heading. A new insect cannot demand a pivot across a steep edge.
+      this.posePreset('walk');const movement=this.travel(dt);this.mode='hunt';
+      this.status='Finishing a supported climb';
+      if(this.rig.canRedirect||this.pathI>=this.path.length){
+        this.huntDeparture=false;this.path=[];this.goal=null;this.huntPhase='notice';this.phaseT=0;
+      }
+      return movement;
+    }
     switch (this.huntPhase) {
       case 'notice':
         this.status = 'Spotted a cricket';
         // Finish a transfer already in progress before pursuit takes ownership
         // of the root and starts steering toward a new target.
-        if(this.rig.motion.transferring)return {speed:0,turn:0};
+        if(this.rig.motion.transferring&&this.phaseT<1.2){
+          // A feed can interrupt a descent while a hind shin is still beside
+          // the log. Let the existing contact recovery shift weight; freezing
+          // the root until touchdown can make touchdown impossible.
+          if(this.rig.needsRecovery||this.retreatT>0)return this.travel(dt);
+          return {speed:0,turn:0};
+        }
         if (this.phaseT > 0.5 + rnd() * 0.02) {this.huntPhase = 'approach'; this.phaseT = 0;}
-        return {speed: 0, turn: !this.caveExit&&!this.bowlExit&&Math.abs(err) > 0.6 ? this.turnToward(want) : 0};
+        return {speed: 0, turn: this.rig.canRedirect&&!this.caveExit&&!this.bowlExit&&Math.abs(err) > 0.6 ? this.turnToward(want) : 0};
       case 'approach': {
-        this.status = 'Chasing a cricket';
+        this.status = this.preyVisible?'Chasing a cricket':'Checking where the cricket disappeared';
         this.posePreset('walk');
         // Finish leaving a confined stance before fixation, steering or a
         // strike can take control. The tail and hind feet must clear it too.
-        if(this.caveExit||this.bowlExit)return this.travel(dt);
+        if(this.caveExit||this.bowlExit||this.foodExit)return this.travel(dt);
         // The last few centimetres still need contact recovery. Previously the
         // end-of-route creep bypassed travel(), so a blocked ledge approach
         // could keep pushing forever without withdrawing or choosing a new side.
         if(this.retreatT>0||this.stallT>1.5||this.rig.needsRecovery){
-          if(this.retreatT<=0){this.standTries++;this.huntPrey=null;this.huntReplanT=0;}
+          if(this.retreatT<=0&&this.rig.maneuver!=='climb'){this.standTries++;this.huntPrey=null;this.huntReplanT=0;}
           return this.travel(dt);
         }
         // Keep closing during a hop, aiming at the reachable landing area.
         // Contact checks still govern every step; only a grounded cricket can
         // trigger the final fixation and strike.
-        const target=c.pos.clone();
-        if(c.airborne){
-          const height=Math.max(0,c.pos.y-this.surface.heightAt(c.pos.x,c.pos.z));
-          const flight=clamp((c.vel.y+Math.sqrt(c.vel.y*c.vel.y+19.6*height))/9.8,0,.3);
-          const x=c.pos.x+c.vel.x*flight,z=c.pos.z+c.vel.z*flight;
-          if(this.nav.dry(x,z))target.set(x,this.surface.heightAt(x,z),z);
-        }
-        const mouthD = c.pos.distanceTo(this.rig.mouth);
-        const aheadOfMouth=(c.pos.x-this.rig.mouth.x)*Math.cos(I.heading)
-          -(c.pos.z-this.rig.mouth.z)*Math.sin(I.heading);
-        if(!c.airborne&&flat<.09&&Math.hypot(c.pos.x-I.x,c.pos.z-I.z)<.125&&aheadOfMouth<-.008&&Math.abs(err)<.4){
+        const target=this.observation.predict(flat,this.preyVisible&&c.airborne,this.surface.heightAt(seen.x,seen.z));
+        const terrain=this.surface.heightAt(target.x,target.z);
+        if(this.observation.age>.25||!this.nav.dry(target.x,target.z)||!this.nav.lineClear(seen.x,seen.z,target.x,target.z,Infinity)
+          ||Math.abs(terrain-this.surface.heightAt(seen.x,seen.z))>.025)target.copy(seen);
+        else target.y=terrain;
+        const mouthD = seen.distanceTo(this.rig.mouth);
+        const aheadOfMouth=(seen.x-this.rig.mouth.x)*Math.cos(I.heading)
+          -(seen.z-this.rig.mouth.z)*Math.sin(I.heading);
+        if(!c.airborne&&flat<.09&&Math.hypot(seen.x-I.x,seen.z-I.z)<.125&&aheadOfMouth<-.008&&Math.abs(err)<.4){
           // Prey can hop beneath the chin. Turning the neck farther down or
           // repeatedly striking from the same stance cannot reach it. Withdraw
           // on the existing supports, then approach with the mouth in front.
-          this.retreatSign=-1;this.retreatLeft=clamp(-aheadOfMouth+.025,.025,.065);this.retreatT=2.5;
+          this.retreatSide=0;this.retreatSign=-1;this.retreatLeft=clamp(-aheadOfMouth+.025,.025,.065);this.retreatT=2.5;
           this.path=[];this.huntPrey=null;this.huntReplanT=0;
           return {speed:-.05,turn:0};
         }
-          if (!c.airborne && mouthD < .055-Math.min(this.misses,4)*.007 && Math.abs(err) < 0.4) {this.huntPhase = 'fix'; this.phaseT = 0; this.path = []; return {speed: 0, turn: 0};}
-        if (this.phaseT > 50) {this.ignorePrey.set(c, this.t + 10); this.prey = null; this.boredom = 6; this.setMode('idle', 'Lost interest'); return {speed: 0, turn: 0};}
+          if (this.preyVisible && !c.airborne && mouthD < .040-Math.min(this.misses,3)*.004
+            && (Math.abs(err)<.9||mouthD<.025)) {this.huntPhase = 'fix'; this.phaseT = 0; this.path = []; return {speed: 0, turn: 0};}
+        // A stationary insect beyond a supported climb can take longer to
+        // reach than fleeing prey. Keep making progress; the separate 4 s
+        // stall and 45 s moving-prey limits still end futile pursuits early.
+        if (this.huntElapsed > 90) {this.ignorePrey.set(c, this.t + 10); this.prey = null; this.boredom = 6; this.setMode('idle', 'Lost interest'); return {speed: 0, turn: 0};}
         this.cruise=flat>.20?.24:flat>.09?.18:.10;
         this.huntReplanT=Math.max(0,this.huntReplanT-dt);
         // Plan a route to a stand-off spot near the prey; replan if it moves.
         const moved = !this.huntPrey || Math.hypot(this.huntPrey[0] - target.x, this.huntPrey[1] - target.z) > 0.03;
-        if ((moved || !this.path.length) && this.huntReplanT<=0) {
+        const committedClimb=this.pathI<this.path.length&&this.rig.maneuver==='climb'&&!this.rig.canRedirect;
+        if ((moved || !this.path.length) && this.huntReplanT<=0&&!committedClimb) {
           this.huntReplanT=.20;
           const stand = this.standPoint(c,target);
           const path = stand && this.nav.path(I.x, I.z, stand[0], stand[1]);
@@ -1262,11 +1587,20 @@ export class LizardBrain {
           // At the stand-off point: face the prey, creep in, or strike from a little
           // further (the lunge and tongue add reach). If it cannot get close from
           // this side, try another side.
-          if(Math.abs(c.pos.x-.475)<.11&&c.pos.z<.15&&this.surface.heightAt(c.pos.x,c.pos.z)<.12){
-            this.status='Watching the cave entrance';return {speed:0,turn:clamp(wrap(Math.PI/2-I.heading)*3,-1,1)};
+          if(Math.abs(seen.x-.475)<.11&&seen.z<.15&&this.surface.heightAt(seen.x,seen.z)<.12){
+            this.status='Watching the cave entrance';
+            const angle=this.clearTurnError(Math.atan2(I.z-.225,.485-I.x));
+            // The route ends outside the arch to leave turning room. Once
+            // aligned, take the last supported step toward the opening instead
+            // of waiting forever just beyond tongue range.
+            // Centre the torso in the opening before tracking sideways. The
+            // route's arrival tolerance can leave a hip beside the water rim,
+            // while a lateral prey gaze pins the jaw against the arch.
+            if(mouthD>.06){I.look=null;this.poseGoal.headPitch=.1;}
+            return {speed:I.z>.225&&Math.abs(angle)<.15?.025:0,turn:clamp(angle*3,-.8,.8)};
           }
           if (Math.abs(err) > 0.3) return {speed: 0, turn: clamp(err * 5, -2.5, 2.5)};
-          if (!c.airborne && mouthD < .055-Math.min(this.misses,4)*.007) {this.huntPhase = 'fix'; this.phaseT = 0; return {speed: 0, turn: 0};}
+          if (this.preyVisible && !c.airborne && mouthD < .040-Math.min(this.misses,3)*.004) {this.huntPhase = 'fix'; this.phaseT = 0; return {speed: 0, turn: 0};}
           const ax=I.x+Math.cos(I.heading)*.02,az=I.z-Math.sin(I.heading)*.02;
           const doorway=Math.abs(ax-.475)<.14&&az<.26&&this.surface.heightAt(ax,az)<.12;
           const perchLip=ax<-.20&&az>.105&&az<.27&&this.surface.heightAt(ax,az)>.12;
@@ -1278,9 +1612,13 @@ export class LizardBrain {
           return {speed: 0, turn: 0};
         }
         const r = this.travel(dt);
-        // Keep the eyes on the prey while following the supported route.
-        this.lookPoint.copy(c.pos);this.lookPoint.y+=.006;
-        I.look = this.lookPoint;
+        // Across a riser the neck follows the next supported step. Holding
+        // the head sideways toward prey behind the rock can pin the jaw on
+        // the edge and prevent the shoulders from completing the climb.
+        if(this.rig.maneuver!=='climb'||mouthD<.05){
+          this.lookPoint.copy(seen);this.lookPoint.y+=.006;
+          I.look = this.lookPoint;
+        }
         if (this.mode !== 'hunt') this.mode = 'hunt';
         return r;
       }
@@ -1289,21 +1627,25 @@ export class LizardBrain {
         // The gaze target already pitches the head down to the insect. Adding
         // another downward angle buried the jaw and aimed the tongue into sand.
         this.posePreset('walk');this.poseGoal.headPitch=0;
-        if (c.pos.distanceTo(this.rig.mouth) > 0.085 || c.airborne) {this.huntPhase = 'approach'; this.phaseT = 0; return {speed: 0, turn: 0};}
-        const aim=Math.atan2(-(c.pos.z-this.rig.mouth.z),c.pos.x-this.rig.mouth.x);
+        if (!this.preyVisible || seen.distanceTo(this.rig.mouth) > 0.055 || c.airborne) {this.huntPhase = 'approach'; this.phaseT = 0; return {speed: 0, turn: 0};}
+        const aim=Math.atan2(-(seen.z-this.rig.mouth.z),seen.x-this.rig.mouth.x);
         const headAim=Math.atan2(-this.rig.headForward.z,this.rig.headForward.x);
-        const aligned=Math.abs(wrap(aim-headAim))<.25;
-        if(this.phaseT>2&&(!aligned||this.rig.motion.transferring)){
+        const strikeDirection=seen.clone().sub(this.rig.mouth);
+        const aligned=strikeDirection.length()<.015||Math.abs(wrap(aim-headAim))<.25&&strikeDirection.angleTo(this.rig.headForward)<.55;
+        if(this.phaseT>2&&(!aligned||!this.rig.canPickUpPrey)){
           // Fixation cannot keep pivoting on a ledge with a suspended paw.
           // Withdraw on the existing supports, then choose another approach.
-          this.huntPhase='approach';this.phaseT=0;this.huntPrey=null;
-          this.retreatSign=-1;this.retreatLeft=.025;this.retreatT=2;
+          this.huntPhase='approach';this.phaseT=0;this.huntPrey=null;this.standTries++;
+          this.retreatSide=0;this.retreatSign=-1;this.retreatLeft=.025;this.retreatT=2;
           return {speed:-.025,turn:0};
         }
-        if (this.phaseT > .18 && aligned && !this.rig.motion.transferring && Math.abs(this.rig.motion.speed)<.035) {
+        // Both forefeet and at least one hind foot support the short pickup.
+        // A finishing hind step need not cancel an already aimed tongue strike;
+        // the torso still passes the same support and collision constraints.
+        if (this.phaseT > .18 && aligned && this.rig.canPickUpPrey) {
           this.huntPhase = 'strike'; this.phaseT = 0;
           // close prey is often picked up with a flick of the sticky tongue
-          const reach=c.pos.distanceTo(this.rig.mouth);
+          const reach=seen.distanceTo(this.rig.mouth);
           this.tongueStrike = reach < .045;
           this.strikeScale=clamp(reach/.055,.25,1);
           this.onTongue = false;
@@ -1312,7 +1654,8 @@ export class LizardBrain {
         }
         // The head aims the strike. Demanding perfect trunk alignment caused
         // an unnecessary last-second pivot after a supported approach.
-        return {speed: 0, turn: Math.abs(err)>.3?clamp(err * 6, -2, 2):0};
+        return {speed: 0, turn: aligned?0:Math.abs(err)>.3?clamp(err * 6, -2, 2)
+          :!aligned&&this.phaseT>.6?clamp(wrap(aim-headAim)*2,-.7,.7):0};
       }
       case 'strike': {
         this.status = 'Strike!';
@@ -1332,7 +1675,10 @@ export class LizardBrain {
             if (c.caught) {this.huntPhase = 'grip'; this.preySide = Math.random() < 0.5 ? -1 : 1; c.consumed = 0;} else {this.misses++; this.huntPhase='approach';this.path=[];this.huntPrey=null;this.status='Missed';}
             if (this.misses > 5) {this.ignorePrey.set(c,this.t+20);this.prey = null; this.misses = 0; this.boredom = 8; this.setMode('idle', 'Missed');}
           }
-          return {speed: 0, turn: clamp(err * 6, -3, 3)};
+          // The head already aligned during fixation. Preserve that supported
+          // stance through prehension instead of pivoting the trunk underneath
+          // the strike and starting another foot transfer.
+          return {speed: 0, turn: 0};
         }
         I.lunge = this.strikeScale*(k < 0.09 ? k / 0.09 : Math.max(0, 1 - (k - 0.09) / 0.25));
         I.jaw = k < 0.12 ? 0.85 : I.jaw;
@@ -1344,7 +1690,7 @@ export class LizardBrain {
           if (c.caught) {this.huntPhase = 'grip'; this.preySide = Math.random() < 0.5 ? -1 : 1; c.consumed = 0;} else {this.misses++;this.huntPhase='approach';this.path=[];this.huntPrey=null;}
           if (this.misses > 5) {this.ignorePrey.set(c,this.t+20);this.prey = null; this.misses = 0; this.boredom = 8; this.setMode('idle', 'Missed');}
         }
-        return {speed: k < 0.1 ? 0.32*this.strikeScale : 0, turn: clamp(err * 6, -3, 3)};
+        return {speed: k < 0.1 ? 0.32*this.strikeScale : 0, turn: 0};
       }
       case 'grip': {
         // clamp down and thrash the head to subdue it

@@ -1,10 +1,10 @@
 {
-  "built": "2026-10-28T05:28:49.248Z",
+  "built": "2026-10-31T13:20:54.883Z",
   "files": [
     "ASSETS.md",
     "ATTRIBUTION.md",
     "README.md",
-    "assets/index-B_ROMgGT.js",
+    "assets/index-BJAebWyT.js",
     "assets/index-Jt7n4Fr5.css",
     "desert-panorama-v2.png",
     "driftwood-grain-v2.png",
@@ -24,6 +24,8 @@
     "models/dead_tree_trunk_02/textures/dead_tree_trunk_02_nor_gl_2k.jpg",
     "plants/aloe-reference.png",
     "plants/cactus-reference.png",
+    "references/validation/soak-2026-10-31.json",
+    "references/validation/summary-2026-10-31.json",
     "sandstone-v2.png"
   ]
 }

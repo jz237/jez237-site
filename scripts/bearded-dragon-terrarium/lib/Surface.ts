@@ -33,6 +33,7 @@ export class Surface {
   readonly cell: number;
   private ray = new THREE.Raycaster();
   private upward = new THREE.Raycaster();
+  private sight = new THREE.Raycaster();
   private meshes: {mesh: THREE.Mesh; kind: SurfaceKind; box: THREE.Box3; normalMatrix: THREE.Matrix3}[];
 
   constructor(ground: THREE.Mesh, hard: {mesh: THREE.Mesh; kind: SurfaceKind}[], cell = 0.004) {
@@ -191,4 +192,12 @@ export class Surface {
 
   /** Slope steepness (0 flat … 1 vertical) from the normal. */
   slopeAt(x: number, z: number) {return 1 - this.normalAt(x, z).y;}
+
+  /** Sight uses the same visible stone/wood meshes as contact, not navigation cells. */
+  visibleFrom(eye:THREE.Vector3,target:THREE.Vector3) {
+    const delta=target.clone().sub(eye),distance=delta.length();
+    if(distance<.006)return true;
+    this.sight.set(eye,delta.divideScalar(distance));this.sight.near=.002;this.sight.far=distance-.003;
+    return !this.meshes.some(h=>this.sight.ray.intersectsBox(h.box)&&this.sight.intersectObject(h.mesh,false).length>0);
+  }
 }

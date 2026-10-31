@@ -20,6 +20,7 @@ import {SimulationClock} from './lib/SimulationClock';
 import {PoseInterpolation} from './lib/PoseInterpolation';
 import {PlaybackStats} from './lib/PlaybackStats';
 import {FrameDriver} from './lib/FrameDriver';
+import {AdaptiveQuality,qualityLevels} from './lib/AdaptiveQuality';
 
 const params=new URLSearchParams(location.search);
 const $=<T extends HTMLElement=HTMLElement>(id:string)=>document.getElementById(id) as T;
@@ -42,6 +43,7 @@ export class DesertTerrarium {
   private poseInterpolation?:PoseInterpolation;
   private playbackStats=params.has('profile')?new PlaybackStats():undefined;
   private animation?:FrameDriver;
+  readonly quality=new AdaptiveQuality();
   private fill=new THREE.DirectionalLight(0xe3dccf,1.1);
   private ambient=new THREE.HemisphereLight(0xcbdbe9,0x63503c,.95);
   private plantContacts: PlantContact[] = [];
@@ -57,7 +59,7 @@ export class DesertTerrarium {
     this.post=new Post(r,this.scene,this.camera,params.has('lite')?0:4);this.post.settings.dof=false;this.post.settings.bloomStrength=.10;this.post.settings.exposure=1.05;
     if(params.has('lite')) this.post.settings.ao=false;
     this.resize(true);new ResizeObserver(()=>this.resize(false)).observe($('scene'));
-    document.addEventListener('visibilitychange',()=>this.lastTime=0);
+    document.addEventListener('visibilitychange',()=>{this.lastTime=0;this.quality.resetWindow();});
     r.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();this.stopAnimation();this.say('The display is paused while graphics recover…');});
     r.domElement.addEventListener('webglcontextrestored',()=>{void this.ready.then(async()=>{
       await r.compileAsync(this.scene,this.camera);this.lastTime=0;this.draw();
@@ -96,8 +98,20 @@ export class DesertTerrarium {
     this.poseInterpolation!.render(this.simulationClock.alpha,()=>this.draw(),()=>{
       this.lizard.syncAttachments();this.lizard.root.updateMatrixWorld(true);this.camera.updateMatrixWorld();
     });
-    this.playbackStats?.record(ms,this.time,performance.now()-cpuStart,simulationEnd-cpuStart,performance.now()-simulationEnd);
+    const renderEnd=performance.now();
+    this.playbackStats?.record(ms,this.time,renderEnd-cpuStart,simulationEnd-cpuStart,renderEnd-simulationEnd,params.has('lite')?'Light':qualityLevels[this.quality.level].name);
+    if(!params.has('lite')&&params.get('quality')!=='high'&&this.quality.record(dt,simulationEnd-cpuStart))this.applyQuality();
   });this.animation.start();}
+  private applyQuality(){
+    const q=qualityLevels[this.quality.level];
+    this.renderer.setPixelRatio(Math.min(devicePixelRatio,q.ratio));
+    this.post.setSamples(q.samples);this.post.settings.ao=q.ao;this.post.settings.bloom=q.bloom;
+    for(const light of [this.habitat.warm,this.habitat.daylight]){
+      if(light.shadow.mapSize.x===q.shadow)continue;
+      light.shadow.map?.dispose();light.shadow.map=null;light.shadow.mapSize.setScalar(q.shadow);
+    }
+    this.renderer.shadowMap.needsUpdate=true;this.resize(false);
+  }
   simulate(dt:number,budget=Infinity) {
     // A slow contact solve must not trigger nine more solves before the next
     // picture. Carry the time debt and give rendering a turn after ~8 ms.

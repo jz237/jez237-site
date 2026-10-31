@@ -14,7 +14,7 @@ export class PlaybackStats {
     this.output.id='playback-profile';this.output.hidden=true;document.body.append(this.output);
     setInterval(()=>this.timerTicks++,16);
   }
-  record(now: number, simulation: number, cost: number,simulationCost=0,renderCost=0) {
+  record(now: number, simulation: number, cost: number,simulationCost=0,renderCost=0,quality='Full') {
     if(!this.start){this.start=now;this.firstSimulation=simulation;}
     if(this.previous && now-this.previous<2000){this.frames.push(now-this.previous);this.costs.push(cost);}
     this.previous=now;
@@ -29,7 +29,7 @@ export class PlaybackStats {
       renderP95:[...this.renderCosts].sort((a,b)=>a-b)[Math.floor(this.renderCosts.length*.95)],
       recentFps:Math.min(600,this.frames.length)*1000/this.frames.slice(-600).reduce((a,b)=>a+b,0),
       timerRate:this.timerTicks/((now-this.start)/1000),lastFrame:this.frames.at(-1),
-      visible:!document.hidden,width:innerWidth,height:innerHeight,dpr:devicePixelRatio});
+      visible:!document.hidden,width:innerWidth,height:innerHeight,dpr:devicePixelRatio,quality});
     // Keep bounded diagnostics even if someone leaves the profile open all day.
     if(this.frames.length>18000){this.frames.splice(0,9000);this.costs.splice(0,9000);}
   }

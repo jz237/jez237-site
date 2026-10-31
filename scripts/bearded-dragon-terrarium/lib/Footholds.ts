@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import type {GroundQuery} from './LizardRig';
 import {TANK} from './Case';
+import {footTransfer,transferEase} from './FootTransfer';
 
 export interface Foothold {point: THREE.Vector3; normal: THREE.Vector3; top: number}
 
@@ -22,7 +23,7 @@ export class Footholds {
   /** Cooperative search: each yield bounds a candidate's work. The caller can
    * retain planted contacts and continue the search on the next physics tick. */
   *search(wanted: THREE.Vector3, shoulder: THREE.Vector3, reach: number, heading: number,
-    side: number, from?: THREE.Vector3, footprint: THREE.Vector3[] = [], fromHeading=heading, maximumHeight=Infinity, footHeading=heading, usable?:(hold:Foothold)=>boolean, maximumLift=.025): Generator<void,Foothold|null,unknown> {
+    side: number, from?: THREE.Vector3, footprint: THREE.Vector3[] = [], fromHeading=heading, maximumHeight=Infinity, footHeading=heading, usable?:(hold:Foothold)=>boolean, maximumLift=.025, sweepCeiling=.055, lift=.012): Generator<void,Foothold|null,unknown> {
     const f = new THREE.Vector3(Math.cos(heading), 0, -Math.sin(heading));
     const right = new THREE.Vector3(-f.z, 0, f.x);
     let best: Foothold | null = null, score = Infinity;
@@ -76,17 +77,36 @@ export class Footholds {
           const n = Math.max(2, Math.ceil(from.distanceTo(point) / .005));
           for (let j = 0; j <= n; j++) for (const lateral of [-.008, 0, .008]) {
             const p = from.clone().lerp(point, j / n).addScaledVector(right, lateral);
-            top = Math.max(top, this.support(p.x, p.z, Math.max(from.y, point.y) + .055).y);
+            top = Math.max(top, this.support(p.x, p.z, Math.max(from.y, point.y) + sweepCeiling).y);
           }
           const turn=Math.atan2(Math.sin(footHeading-fromHeading),Math.cos(footHeading-fromHeading));
           for(let j=0;j<=n;j++){
             const p=from.clone().lerp(point,j/n),yaw=fromHeading+turn*j/n,c=Math.cos(yaw),s=Math.sin(yaw);
             for(const offset of footprint){
               const dx=c*offset.x+s*offset.z,dz=-s*offset.x+c*offset.z;
-              top=Math.max(top,this.support(p.x+dx,p.z+dz,Math.max(from.y,point.y)+.055).y);
+              top=Math.max(top,this.support(p.x+dx,p.z+dz,Math.max(from.y,point.y)+sweepCeiling).y);
             }
           }
           if (top > Math.max(from.y, point.y) + maximumLift) continue;
+          if(sweepCeiling<.055){
+            // A ledge above an already planted toe is a roof, not necessarily
+            // a riser to climb. Validate a low withdrawal against solid meshes
+            // before accepting a support below that roof. A wall still rejects
+            // the complete toe fan throughout its actual raised transfer.
+            if(!this.ground.tailContacts)continue;
+            const fromNormal=this.support(from.x,from.z,from.y+.012).normal;
+            for(let j=0;j<=Math.max(12,n*2)&&clear;j++){
+              const phase=j/Math.max(12,n*2),p=footTransfer(from,point,top,phase,lift),k=transferEase(phase);
+              const yaw=fromHeading+turn*k,c=Math.cos(yaw),s=Math.sin(yaw),up=fromNormal.clone().lerp(normal,k).normalize();
+              for(const offset of [new THREE.Vector3(),...footprint]){
+                const dx=c*offset.x+s*offset.z,dz=-s*offset.x+c*offset.z;
+                const q=new THREE.Vector3(p.x+dx,p.y-(up.x*dx+up.z*dz)/Math.max(.4,up.y)+.0015,p.z+dz),out=q.clone();
+                this.ground.tailContacts.projectPoint(q,out,.001,new THREE.Vector3());
+                if(q.distanceTo(out)>.002){clear=false;break;}
+              }
+            }
+            if(!clear)continue;
+          }
         }
         const hold={point,normal,top};
         if (s < score && (!usable||usable(hold))) {score = s; best = hold;}
@@ -97,7 +117,19 @@ export class Footholds {
     // a rock corner even when both soles are on sand. Size that lift to this
     // limb; the rig still checks reach and collision throughout the transfer.
     const higherLift=Math.min(.045,reach*.65);
-    if(!best && from && maximumLift<higherLift)return yield* this.search(wanted,shoulder,reach,heading,side,from,footprint,fromHeading,maximumHeight,footHeading,usable,higherLift);
+    if(!best && from && maximumLift<higherLift)return yield* this.search(wanted,shoulder,reach,heading,side,from,footprint,fromHeading,maximumHeight,footHeading,usable,higherLift,sweepCeiling,lift);
+    if(!best && from && sweepCeiling>.018&&this.ground.tailContacts){
+      const c=Math.cos(fromHeading),s=Math.sin(fromHeading);
+      const beneathRoof=[new THREE.Vector3(),...footprint].some(offset=>{
+        const x=from.x+c*offset.x+s*offset.z,z=from.z-s*offset.x+c*offset.z;
+        const low=this.support(x,z,from.y+.018).y,high=this.support(x,z,from.y+.055).y;
+        if(high-low<.025||low>from.y+.004)return false;
+        const p=new THREE.Vector3(x,from.y+.0015,z),q=p.clone();
+        this.ground.tailContacts!.projectPoint(p,q,.001,new THREE.Vector3());
+        return p.distanceTo(q)<.002;
+      });
+      if(beneathRoof)return yield* this.search(wanted,shoulder,reach,heading,side,from,footprint,fromHeading,maximumHeight,footHeading,usable,higherLift,.018,lift);
+    }
     return best;
   }
 }

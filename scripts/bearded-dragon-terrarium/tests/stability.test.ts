@@ -106,9 +106,11 @@ test('routing retains small climbing steps and rejects a tall ledge between walk
     kindAt: () => 1,
   }) as unknown as Surface;
   const small = new Nav(surface(.02), []), tall = new Nav(surface(.055), []);
-  assert.ok(small.lineClear(-.2, 0, .5, 0, Infinity), 'low steps remain usable');
+  // Isolate the artificial x=.25 step from the warm-ramp corridor reserved
+  // by this habitat's navigator on the negative-x side of the tank.
+  assert.ok(small.lineClear(.1, 0, .5, 0, Infinity), 'low steps remain usable');
   assert.ok(tall.walkable(.245, 0) && tall.walkable(.255, 0), 'the two surfaces are individually walkable');
-  assert.equal(tall.lineClear(-.2, 0, .5, 0, Infinity), false, 'smoothing cannot shortcut a drop');
+  assert.equal(tall.lineClear(.1, 0, .5, 0, Infinity), false, 'smoothing cannot shortcut a drop');
   assert.equal(tall.reachable(.5, 0), false, 'connected-region search cannot bridge the ledge');
 });
 

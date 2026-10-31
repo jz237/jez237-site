@@ -4,6 +4,15 @@ import {WATER_LEVEL, groundHeight} from './Ground';
 
 /** Deepest water the dragon will wade through (metres). */
 export const WADE_DEPTH = 0.021;
+const STEP_ROUTE:[number,number][]=[[-.40,.055],[-.31,.09],[-.20,.13],[-.08,.17],[.075,.23]];
+function stepCentreZ(x:number){
+  let z=STEP_ROUTE[0][1];
+  for(let i=1;i<STEP_ROUTE.length;i++)if(x>=STEP_ROUTE[i-1][0]){
+    const t=Math.min(1,Math.max(0,(x-STEP_ROUTE[i-1][0])/(STEP_ROUTE[i][0]-STEP_ROUTE[i-1][0])));
+    z=STEP_ROUTE[i-1][1]+(STEP_ROUTE[i][1]-STEP_ROUTE[i-1][1])*t;
+  }
+  return z;
+}
 
 /**
  * Walkability grid for the lizard: cost from slope, water depth, rock, planting
@@ -56,8 +65,17 @@ export class Nav {
       if (kind === SurfaceKind.Rock) c = y > 0.335 ? Infinity : c + 2;
       if (kind === SurfaceKind.Wood && y > 0.25) c = Infinity;
       // The strip beside the front face of the warm steps is narrower than a
-      // complete stance. Its clear sand crossing is farther forward at z=.355.
-      if(kind===SurfaceKind.Ground && x>-.38 && x<-.09 && z>.28 && z<.345)c=Infinity;
+      // complete stance. Include the forward reach of the forefoot before
+      // entering the crossing; a clear root alone left toes at the stone edge.
+      if(kind===SurfaceKind.Ground && x>-.38 && x<.01 && z>.28 && z<.355)c=Infinity;
+      // The sides of the warm ramp can support a point, but leave one
+      // flank down on sand while the other reaches across a tall rock edge.
+      // Reserve the broad step corridor for the trunk; feet can still use
+      // neighbouring patches through the independent contact controller.
+      // The lower rear edge also traps a sideways hunting stance; narrow its
+      // centre corridor before the animal can put its hind feet below that lip.
+      if(kind===SurfaceKind.Rock&&y>.11&&x>-.38&&x<-.105&&z>stepCentreZ(x)+.025)c=Infinity;
+      if(kind===SurfaceKind.Rock&&x>-.12&&x<.025&&z<stepCentreZ(x)-.035)c=Infinity;
       // Route the trunk around tall faces before the rig has to shove it away.
       // Low risers and the sides of a climbable log remain available footholds.
       for (let a = 0; a < 8 && Number.isFinite(c); a++) {
@@ -232,16 +250,33 @@ export class Nav {
     const highA=ax<.05 && this.surface.heightAt(ax,az)>.11;
     const highB=bx<-.22 && this.surface.heightAt(bx,bz)>.20;
     const lowA=this.surface.heightAt(ax,az)<.12,lowB=this.surface.heightAt(bx,bz)<.12;
-    const stair:[number,number][]=[[-.40,.055],[-.31,.09],[-.20,.13],[-.08,.17],[.075,.23]];
+    const stair=STEP_ROUTE;
     const gates:[number,number][] = highA&&lowB ? stair.filter(([x])=>ax<x-.012) : [];
     if(highB && (ax>bx+.04 || lowA)){
-      for(const gate of [...stair].reverse())if(ax>gate[0]+.012 || (lowA&&(az>.28||ax<-.38)))gates.push(gate);
+      const fromSide=highA&&az>stepCentreZ(ax)+.035;
+      const entry=stair.reduce((a,b)=>Math.hypot(a[0]-ax,a[1]-az)<Math.hypot(b[0]-ax,b[1]-az)?a:b);
+      // Leave room to turn the whole animal before the first rising step.
+      // A side approach straight to its toe puts the turnaround on the lip.
+      if(lowA&&ax<.04)gates.push([.16,.34]);
+      for(const gate of [...stair].reverse()){
+        // Stop adding ascent gateways at the requested ledge. Continuing to
+        // the far end and doubling back creates an unnecessary tight pivot
+        // during a prey approach partway up the steps.
+        // A root beside the steps is not already established on their route.
+        // Join the nearest lower entry before ascending, rather than cutting
+        // diagonally across the tall side with one forefoot still on sand.
+        // Any approach from the sand joins the low entrance first. A nearby
+        // root beside the ramp still cannot take a full stance across its
+        // tall side, even when the point-height grid offers a diagonal path.
+        const needed=fromSide?gate[0]<=entry[0]+.012:ax>gate[0]+.012 || lowA;
+        if(gate[0]>=bx-.012&&needed)gates.push(gate);
+      }
     }
     // Cross the sand in front of the steps with the feet on the same level.
     // A centre-only shortest route otherwise straddles the step's vertical side.
-    if(lowA&&lowB&&ax>-.08&&bx<-.38)gates.push([-.04,.355],[-.38,.355]);
-    if(lowA&&lowB&&ax<-.38&&bx>-.08)gates.push([-.38,.355],[-.04,.355]);
-    if(lowA&&highB&&ax<-.38)gates.unshift([-.38,.355],[-.04,.355]);
+    if(lowA&&lowB&&ax>-.08&&bx<-.38)gates.push([-.04,.365],[-.38,.365]);
+    if(lowA&&lowB&&ax<-.38&&bx>-.08)gates.push([-.38,.365],[-.04,.365]);
+    if(lowA&&highB&&ax<-.38)gates.unshift([-.38,.365],[-.04,.365]);
     const caveA=Math.abs(ax-.475)<.11 && az<.11 && this.surface.heightAt(ax,az)<.12;
     const caveB=Math.abs(bx-.475)<.11 && bz<.11 && this.surface.heightAt(bx,bz)<.12;
     if(caveA&&!caveB)gates.unshift([.485,.28]);
