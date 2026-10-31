@@ -26,6 +26,14 @@ No links to competing aquarium retailers. No store inventory claim is made. Hidd
 
 ## Runtime and safeguards
 
+### Water realism update — v2
+
+`water.js` now owns the return sheet, receiving surface, impact effects and subtle moving floor caustics. The sheet follows the actual plastic trough and angled lip, then follows a gravity-shaped arc to the current aquarium level. Lower water creates a longer fall; lower delivery narrows both the sheet and its bubble/splash footprint. Small waves deform the geometry, while fine moving surface detail bends the reflections. Foam patches drift outward, entrained bubbles descend and rise, and small droplets leave the landing zone. These are illustrative visual units, not measured hydraulics.
+
+`optics.js` captures the actual scene for planar aquarium reflections and depth-guarded refraction. It restores render target, visibility, clear color, tone mapping, shadow settings and XR state after each capture. The reflection camera clips at the aquarium surface; the falling sheet and filter chamber use refraction and studio highlights rather than incorrectly reusing that horizontal reflection plane. Captures are skipped for hidden water, exploded views and the microscope. Resolution is capped and smaller on mobile. Screen-space refraction cannot show objects outside the camera frame; this is a real-time approximation, not path tracing.
+
+All water geometry, shader detail and particles use the simulation clock, so pause and reading modes remain consistent. The full curtain and its impact particles disappear as return delivery falls to zero. Main water rendering replaces the old bright drawn ripple pattern; the maintenance tray and enlarged biofilm keep a lighter independent finish. The cartridge-loading input now has a unique ID, fixing a collision with the loading overlay that positioned its slider across the 3D view.
+
 `simulation.js` contains substepped normalized flow, inertia, moisture, service state and the teaching dry-start interlock. This interlock is not claimed as real product electronics. All animation uses simulation time/travel; pause, exploded mode, Care reading view and hidden documents freeze it. Reduced motion starts paused and leaves orbit/zoom available. All topics remain readable when WebGL is unavailable.
 
 `model.js` owns geometry and rendering; `finishes.js` owns texture/shader detail; `data.js` owns components, lessons, experiments and quizzes; `studio.js` owns interaction and camera. The pump and cartridge close-ups hide obstructing assemblies, restoring them when the view ends. Runtime inspection is available through `window.biowheelStudio.snapshot()` and `.reset()`.
@@ -36,11 +44,15 @@ From this checkout, with a local HTTP server on port 8823:
 
 ```text
 node scripts/biowheel-studio/simulation.test.mjs
+node scripts/biowheel-studio/water.test.mjs
+node scripts/biowheel-studio/water-qa.cjs
 node scripts/biowheel-studio/inspect.cjs
 node scripts/biowheel-studio/qa.cjs
 node scripts/build-demos.mjs
 ```
 
 The pure tests cover rotation causality, jam isolation, restriction, moisture retention, priming, bypass, service and timestep stability. Browser QA checks all views/parts/lessons, full service sequences and preservation of biology, pause, Care freeze, mobile, reduced motion, WebGL fallback and errors. It captures the actual 1440×900 cover in `demos/assets/biowheel-studio.jpg`; diagnostic images are ignored under `tmp/biowheel-qa/`. Pass a live origin to QA to avoid overwriting the cover.
+
+Water-specific tests additionally check that the sheet clears the solid lip and lands at every modeled water height, responds to delivery, freezes on pause, stops/restarts with the pump, and hides its scene captures in separated/microscope views. Browser checks include the cartridge-loading control, mobile rendering and shader errors. `release-check.cjs` refreshes the gallery cover and checks the collection links and detail views.
 
 After tests, commit and push, then use the mandatory `deploy-reusing-stage.mjs --deploy` wrapper. Reuse the existing stage; preserve Pages Functions and the rest of the site. Do not create a new full-site copy or modify sibling demos to add this exhibit.

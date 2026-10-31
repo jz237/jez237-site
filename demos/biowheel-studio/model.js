@@ -1,7 +1,8 @@
 import * as T from '../aquaclear-studio/vendor/three.module.js';
 import {bevelBox} from '../sand-studio/finishes.js?v=2';
 import {hardwareFinish} from '../roller-studio/hardware.js?v=4';
-import {seeded,fiberMap,wheelFinish,waterMaterial,pleatedGeometry} from './finishes.js?v=1';
+import {seeded,fiberMap,wheelFinish,waterMaterial,pleatedGeometry} from './finishes.js?v=2';
+import {buildWater} from './water.js?v=2';
 const V=(...v)=>new T.Vector3(...v),TAU=Math.PI*2,clamp=T.MathUtils.clamp;
 export function buildModel(){
  const root=new T.Group(),machine=new T.Group(),macro=new T.Group(),groups={},anchors={},pickables=[],r=seeded(837),dummy=new T.Object3D();root.add(machine,macro);
@@ -38,12 +39,7 @@ export function buildModel(){
  const mark=box(rotating,.34,.018,.055,[.5,.579,0],amber);const dropMat=new T.MeshPhysicalMaterial({color:'#cbefeb',roughness:.06,metalness:.1,transparent:true,opacity:.68,clearcoat:1,depthWrite:false});
  const beads=instances(rotating,new T.SphereGeometry(.013,7,5),dropMat,100);for(let i=0;i<100;i++){const a=r()*TAU;dummy.position.set(-1+r()*2,Math.cos(a)*.575,Math.sin(a)*.575);dummy.scale.set(.5+r(),1.1,.7);dummy.rotation.set(r(),r(),r());dummy.updateMatrix();beads.setMatrixAt(i,dummy.matrix);}
  const bypass=group('bypass',[-1.13,3.2,.73]);box(bypass,.45,.07,.9,[-1.25,3.34,.76],plastic);for(const x of [-1.48,-1.02])box(bypass,.045,.15,.9,[x,3.39,.76],rim);
- const wet=group('water',[.4,3.2,.7]);const chamberWater=mesh(wet,new T.PlaneGeometry(3.46,1.6,36,20),water,[0,3.34,-.3],[-Math.PI/2,0,0]);const aquariumWater=mesh(wet,new T.PlaneGeometry(5.98,2.48,60,32),water,[0,2.6,1.98],[-Math.PI/2,0,0]);
- const sheetGeo=new T.PlaneGeometry(2.2,1,40,36);sheetGeo.rotateX(-Math.PI/2);const sheet=mesh(wet,sheetGeo,water);const sheetBase=sheetGeo.attributes.position.array.slice();
- const tankBase=aquariumWater.geometry.attributes.position.array.slice(),waterBase=chamberWater.geometry.attributes.position.array.slice();
- const foam=instances(wet,new T.SphereGeometry(.014,7,5),new T.MeshStandardMaterial({color:'#d4eeeb',transparent:true,opacity:.65,roughness:.35,depthWrite:false}),130);
- const splash=instances(wet,new T.SphereGeometry(.016,6,5),dropMat,80),seeds=Array.from({length:130},()=>({x:r(),z:r(),phase:r(),size:.5+r()}));
- const rippleMat=new T.MeshBasicMaterial({color:'#b7e4e0',transparent:true,opacity:.16,depthWrite:false}),ripples=[];for(let i=0;i<5;i++)ripples.push(mesh(wet,new T.RingGeometry(.96,1,64),rippleMat.clone(),[.35,2.6,1.95],[-Math.PI/2,0,0]));
+ const wet=group('water',[.4,3.2,.7]),waterSystem=buildWater(wet);
  const route=new T.CatmullRomCurve3([[-1.26,1.05,1.45],[-1.26,3.6,1.45],[-1.26,4.04,.7],[-1.26,3.72,-.67],[-1.26,2.8,-.67],[-.6,3.1,-.8],[.35,3.3,-.8],[.35,3.3,-.02],[.35,3.21,.62],[.35,3.16,1.3],[.35,2.6,1.95],[0,1.6,2.4],[-1.26,1.05,1.45]].map(p=>V(...p)),true,'centripetal');
  const arrowShape=new T.Shape();arrowShape.moveTo(-.04,-.12);arrowShape.lineTo(.04,-.12);arrowShape.lineTo(.04,.015);arrowShape.lineTo(.10,.015);arrowShape.lineTo(0,.15);arrowShape.lineTo(-.10,.015);arrowShape.lineTo(-.04,.015);arrowShape.closePath();const arrowGeo=new T.ExtrudeGeometry(arrowShape,{depth:.012,bevelEnabled:false});
  const arrows=instances(wet,arrowGeo,new T.MeshBasicMaterial({color:'#ade9e3',transparent:true,opacity:.76,depthWrite:false}),20);arrows.castShadow=false;const journey=mesh(wet,new T.SphereGeometry(.072,16,12),amber);const bypassArrows=instances(wet,arrowGeo,new T.MeshBasicMaterial({color:'#efbd71'}),4);
@@ -70,12 +66,7 @@ export function buildModel(){
   if(s.service){const p=s.serviceProgress,up=p<.2?p/.2:p>.85?(1-p)/.15:1;lid.position.set(-up*.5,up*.9,-up*1.8);const lift=p<.2?0:p<.4?(p-.2)/.2:p<.65?1:p<.85?1-(p-.65)/.2:0;
    if(s.service==='cartridge'){cartridge.position.y=lift*1.35;carbon.position.y=lift*1.35;cartridge.position.z=-lift*.4;carbon.position.z=-lift*.4;cartridge.rotation.z=-lift*.11;carbon.rotation.z=-lift*.11;}else{wheel.position.set(lift*1.95,lift*.5,0);brush.position.x=1.45+Math.sin(s.time*8)*.08;}}
   else{cartridge.rotation.z=carbon.rotation.z=0;}
-  wet.visible=ex<.1&&!pumpSection;chamberWater.position.y=s.level;aquariumWater.position.y=s.aquariumLevel;
-  for(const [o,base,amp]of [[aquariumWater,tankBase,.009],[chamberWater,waterBase,.005]]){const a=o.geometry.attributes.position;for(let i=0;i<a.count;i++){const x=base[i*3],y=base[i*3+1];a.setZ(i,(Math.sin(x*10+s.time*2)+Math.sin(y*13-s.time*2.6))*(.15+s.flow)*amp);}a.needsUpdate=true;o.geometry.computeVertexNormals();}
-  sheet.visible=s.flow>.003;const a=sheetGeo.attributes.position;for(let i=0;i<a.count;i++){const x=sheetBase[i*3],t=sheetBase[i*3+2]+.5;const y=t<.5?3.17-.14*(t/.5):3.03-(3.03-s.aquariumLevel)*Math.pow((t-.5)*2,1.8);a.setXYZ(i,.35+x*(.94+.04*Math.sin(t*8)),y+.007*Math.sin(x*25-s.time*5)*s.flow,.18+t*1.8);}a.needsUpdate=true;sheetGeo.computeVertexNormals();
-  for(let i=0;i<130;i++){const v=seeds[i],t=(s.travel*.3+v.phase)%1;dummy.position.set(.35+(v.x-.5)*2.2,s.aquariumLevel-.02-t*.2,1.85+t*.85);dummy.scale.setScalar((1-t)*v.size*(.4+s.flow));dummy.updateMatrix();foam.setMatrixAt(i,dummy.matrix);}foam.instanceMatrix.needsUpdate=true;foam.visible=s.flow>.015;
-  for(let i=0;i<80;i++){const v=seeds[i],t=(s.travel*1.5+v.phase)%1;dummy.position.set(.35+(v.x-.5)*2.1,s.aquariumLevel+Math.sin(t*Math.PI)*(.08+(3.03-s.aquariumLevel)*.4),1.9+v.z*.4+t*.2);dummy.scale.set(.6,1.5,.6);dummy.updateMatrix();splash.setMatrixAt(i,dummy.matrix);}splash.instanceMatrix.needsUpdate=true;splash.visible=s.flow>.08;
-  ripples.forEach((o,i)=>{const t=(s.travel*.55+i/5)%1;o.position.y=s.aquariumLevel+.015;o.scale.set(1+t*1.4,.17+t*.6,1);o.material.opacity=(1-t)*s.flow*.25;});
+  wet.visible=ex<.1&&!pumpSection&&machine.visible;waterSystem.update(s,wet.visible);
   arrows.visible=state.arrows&&s.flow>.01;for(let i=0;i<20;i++){const t=(i/20+s.travel*.075)%1;dummy.position.copy(route.getPointAt(t));dummy.quaternion.setFromUnitVectors(V(0,1,0),route.getTangentAt(t));dummy.scale.setScalar(.65);dummy.updateMatrix();arrows.setMatrixAt(i,dummy.matrix);}arrows.instanceMatrix.needsUpdate=true;
   bypassArrows.visible=s.bypass&&state.arrows;for(let i=0;i<4;i++){const t=(i/4+s.travel*.4)%1;dummy.position.set(-1.25,3.39-t*.6,.45+t*1.3);dummy.quaternion.setFromUnitVectors(V(0,1,0),V(0,-.5,1).normalize());dummy.scale.setScalar(.65);dummy.updateMatrix();bypassArrows.setMatrixAt(i,dummy.matrix);}bypassArrows.instanceMatrix.needsUpdate=true;
   journey.visible=state.study==='water';journey.position.copy(route.getPointAt((s.travel*.075)%1));
@@ -85,5 +76,5 @@ export function buildModel(){
   for(let i=0;i<35;i++){const t=(s.time*.11+i/35)%1;dummy.position.set(-2.1+(i%7)*.69,3.05-t*1.1,-.9+Math.floor(i/7)*.44);dummy.scale.setScalar(1);dummy.updateMatrix();oxygen.setMatrixAt(i,dummy.matrix);}oxygen.instanceMatrix.needsUpdate=true;
  }
  function anchor(id){const p=anchors[id]?.clone()||V(.35,3.59,.92);return groups[id]?groups[id].localToWorld(p):p;}
- return {root,pickables,render,anchor,journeyTarget:()=>journey.getWorldPosition(V()),snapshot:()=>({pleats:32,carbons:210,macroColonies:colonies.count,wheelAngle:rotating.rotation.x,impellerAngle:rotor.rotation.y,waterTime:clock.value,wheelWetness:moisture.value,service:lastSnapshot?.service,serviceProgress:lastSnapshot?.serviceProgress,cartridgeLift:cartridge.position.y,wheelLift:wheel.position.y,mode:lastState?.mode})};
+ return {root,pickables,render,anchor,water:{...waterSystem,captureGroup:wet},journeyTarget:()=>journey.getWorldPosition(V()),snapshot:()=>({pleats:32,carbons:210,macroColonies:colonies.count,wheelAngle:rotating.rotation.x,impellerAngle:rotor.rotation.y,waterTime:clock.value,water:waterSystem.snapshot(),wheelWetness:moisture.value,service:lastSnapshot?.service,serviceProgress:lastSnapshot?.serviceProgress,cartridgeLift:cartridge.position.y,wheelLift:wheel.position.y,mode:lastState?.mode})};
 }

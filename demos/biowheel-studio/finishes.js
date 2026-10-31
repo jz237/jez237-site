@@ -13,11 +13,13 @@ export function wheelFinish(map,uniforms){
  float filmPatch=bn(bUV*vec2(15.,22.))*.65+bn(bUV*vec2(53.,81.))*.35;float growth=maturity*(.28+filmPatch*.65);diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.25,.20,.075),growth);float wet=(1.-smoothstep(3.2,3.62,bWorld.y))*.18+moisture*.16;diffuseColor.rgb*=1.-wet;`);
   s.fragmentShader=s.fragmentShader.replace('#include <roughnessmap_fragment>','#include <roughnessmap_fragment>\nroughnessFactor=mix(.83,.36,moisture*(1.-smoothstep(3.2,3.62,bWorld.y))*.7);');};m.customProgramCacheKey=()=> 'biowheel-living-pleats-v1';return m;
 }
+// Quiet shallow-water finish for the service tray and enlarged biofilm view.
+// Main aquarium/return optics are in water.js and optics.js.
 export function waterMaterial(clock,flow){
- const m=new T.MeshPhysicalMaterial({color:'#5aa5b4',transparent:true,opacity:.52,roughness:.17,metalness:.18,clearcoat:1,side:T.DoubleSide,depthWrite:false});
- m.onBeforeCompile=s=>{Object.assign(s.uniforms,{waterTime:clock,waterFlow:flow});s.vertexShader='varying vec3 wPosition;\n'+s.vertexShader;s.vertexShader=s.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nwPosition=position;');s.fragmentShader='uniform float waterTime,waterFlow;varying vec3 wPosition;\n'+s.fragmentShader;s.fragmentShader=s.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
- vec2 wp=vec2(wPosition.x+.63*wPosition.z,wPosition.y+.81*wPosition.z);float waveA=sin(dot(wp,vec2(13.2,8.7))+waterTime*1.3+sin(wp.y*6.-waterTime*.6));float waveB=sin(dot(wp,vec2(-9.1,17.4))-waterTime*1.7);float line=pow(max(0.,1.-abs(waveA+waveB+.65*sin(dot(wp,vec2(7.3,-4.2))+sin(wp.x*4.+waterTime*.4)))*1.2),12.);diffuseColor.rgb+=vec3(.23,.34,.36)*line*(.35+waterFlow*.65);`);s.fragmentShader=s.fragmentShader.replace('#include <normal_fragment_maps>',`#include <normal_fragment_maps>
- normal=normalize(normal+vec3(sin(dot(wp,vec2(11.,7.))+waterTime*1.7),cos(dot(wp,vec2(-6.,14.))-waterTime*2.),0.)*.055*(.2+waterFlow));`);};m.customProgramCacheKey=()=> 'biowheel-water-v1';return m;
+ const m=new T.MeshPhysicalMaterial({color:'#9dbdbb',transparent:true,opacity:.28,roughness:.10,metalness:0,clearcoat:1,side:T.DoubleSide,depthWrite:false});
+ m.onBeforeCompile=s=>{Object.assign(s.uniforms,{waterTime:clock,waterFlow:flow});s.vertexShader='varying vec3 wPosition;\n'+s.vertexShader;s.vertexShader=s.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nwPosition=position;');s.fragmentShader='uniform float waterTime,waterFlow;varying vec3 wPosition;\n'+s.fragmentShader;
+ s.fragmentShader=s.fragmentShader.replace('#include <normal_fragment_maps>',`#include <normal_fragment_maps>
+ vec2 wp=vec2(wPosition.x+.63*wPosition.z,wPosition.y+.81*wPosition.z);normal=normalize(normal+vec3(sin(dot(wp,vec2(11.,7.))+waterTime*1.7),cos(dot(wp,vec2(-6.,14.))-waterTime*2.),0.)*.025*(.2+waterFlow));`);};m.customProgramCacheKey=()=> 'biowheel-shallow-water-v2';return m;
 }
 export function pleatedGeometry(width=2.1,outer=.57,inner=.31,count=32){
  const p=[],uv=[];for(let i=0;i<count*2;i++){const a=i/(count*2)*Math.PI*2,b=(i+1)/(count*2)*Math.PI*2,r=i%2?inner:outer,r2=i%2?outer:inner;
