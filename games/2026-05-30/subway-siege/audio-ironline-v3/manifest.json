@@ -1,0 +1,44 @@
+[
+  {
+    "file": "railgun.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 1.0,
+    "prompt": "One single futuristic magnetic railgun shot, sharp electric snap followed by a short heavy metallic bass thunk and sizzling tail, crisp premium arcade game weapon sound, isolated, no music no speech."
+  },
+  {
+    "file": "rupture.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 2.0,
+    "prompt": "One powerful robot explosion in a huge underground subway station, deep punchy blast, scattered metallic shards clattering and electrical crackle, cinematic game sound effect, no speech no music."
+  },
+  {
+    "file": "pulse.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 2.5,
+    "prompt": "One expanding electromagnetic pulse shockwave, deep sub bass impact rising electrical shimmer sweeping outward, huge empty subway reverberation, powerful science fiction arcade special ability, no speech no music."
+  },
+  {
+    "file": "train.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 4.0,
+    "prompt": "One subway express train thunders past in a dark underground tunnel, accelerating metallic wheel roar and wind rush, short distant horn first, cinematic Doppler pass, no speech no music."
+  },
+  {
+    "file": "pickup.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 1.0,
+    "prompt": "One satisfying futuristic powerup collected, three quick warm crystalline ascending notes with a soft magnetic energy swell, premium arcade interface sound, no speech no music."
+  },
+  {
+    "file": "boss.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 3.0,
+    "prompt": "One enormous sinister industrial machine powering on in an underground rail station, heavy hydraulic doors opening, metallic mechanical growl, deep ominous electrical surge, boss arrival sound, no speech no music."
+  }
+]
