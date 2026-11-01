@@ -1,33 +1,25 @@
 {
-  "title": "Look at the aquarium before you reach for the tools",
-  "dek": "A simple observation routine for freshwater and reef keepers. The whole checklist is here—nothing to open.",
+  "title": "Before you reach for the tools",
   "items": [
     {
-      "title": "Watch the animals",
-      "text": "Look for a change from their usual activity, appearance or interest in food. Make observation part of feeding, rather than dropping food in and walking away.",
-      "icon": "fish",
+      "text": "Watch the tank at feeding time instead of dropping the food in and walking off. You’re looking for any change in how the animals act, look or eat.",
       "refs": ["maintenance"]
     },
     {
-      "title": "Check the equipment",
-      "text": "Look at filter output and confirm the lighting timer is following its intended schedule. A running motor is not a substitute for checking the water flow.",
-      "icon": "flow",
+      "text": "Check that the filter is actually moving water (a humming motor doesn’t prove it) and that the lights are keeping to their timer.",
       "refs": ["maintenance"]
     },
     {
-      "title": "Read the thermometer",
-      "text": "Compare the measured temperature with the needs of your livestock. Read the water temperature, not just the heater’s setting.",
-      "icon": "temperature",
+      "text": "Read the thermometer, not the heater dial, and compare it with what your livestock needs.",
       "refs": ["temperature"]
     },
     {
-      "title": "Leave a useful note",
-      "text": "Our suggestion: jot down today’s reading, anything unusual and the last change you made. Bring that record when asking for help rather than relying on memory.",
-      "icon": "note",
+      "text": "Write down the temperature, anything odd and the last thing you changed. If you end up asking for help, bring the note.",
       "refs": []
     }
   ],
-  "note": "This is an observation checklist, not a complete maintenance or health assessment. Keep your aquarium’s species-specific testing, cleaning and water-change routine.",
+  "note": "Same for freshwater and reef. Keep up your usual testing and water changes too.",
+  "source_note": "The note-taking tip is our own suggestion. This list is for looking, not a full maintenance or health check.",
   "references": [
     {"id": "maintenance", "label": "Aqueon — Maintaining a Planted Aquarium", "url": "https://www.aqueon.com/articles/maintain-planted-aquarium", "date": "Undated manufacturer guidance; the checklist above is our editorial selection, not its complete schedule."},
     {"id": "temperature", "label": "Aqueon — Water Temperature and Fish Health", "url": "https://www.aqueon.com/articles/fish-tanks-and-water-temperature", "date": "Undated manufacturer guidance."}

@@ -61,7 +61,13 @@ class PracticalTests(unittest.TestCase):
         for item in CHECK['items']:
             self.assertIn(item['text'],visible)
         self.assertNotIn('<script',html)
-        self.assertEqual(visible.count('<svg '),4)
+        # Compact, plain layout: no decorative icons, eyebrow or em-dash copy.
+        self.assertEqual(visible.count('<svg'),0)
+        self.assertNotIn('eyebrow',visible)
+        self.assertNotIn('—',visible)
+        self.assertEqual(visible.count('<li>'),4)
+        self.assertIn(CHECK['note'],visible)
+        self.assertIn(CHECK['source_note'],html.split('<details')[1])
         self.assertIn('id="daily-check"',(OUT/'index.html').read_text())
 
     def test_homepage_and_article_source_budgets(self):
@@ -74,7 +80,7 @@ class PracticalTests(unittest.TestCase):
         refs={r['id']:r['url'] for r in CHECK['references']}
         for item in CHECK['items']:
             for rid in item['refs']:
-                budgets[refs[rid]]+=word_count({'blocks':[{'type':'p','text':item['title']+' '+item['text']}]})
+                budgets[refs[rid]]+=word_count({'blocks':[{'type':'p','text':item['text']}]})
         self.assertTrue(all(n<=200 for n in budgets.values()),dict(budgets))
 
 if __name__=='__main__':

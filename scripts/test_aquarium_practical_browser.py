@@ -24,7 +24,11 @@ try:
             page.goto(base+'/newsletter/',wait_until='networkidle')
             for item in check['items']:
                 assert item['text'] in page.locator('#daily-check').inner_text()
-            assert page.locator('#daily-check svg').count()==4
+            assert page.locator('#daily-check svg').count()==0
+            # Keep the checklist a compact note rather than a full-width feature block.
+            height=page.locator('#daily-check').evaluate('(e)=>e.getBoundingClientRect().height')
+            assert height<={320:680,390:600,768:520,1440:340}[width],(width,height)
+            results.setdefault('checklist_heights',{})[width]=round(height)
             assert page.locator('#daily-check details').evaluate('(e)=>!e.open')
             assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
             if width in [390,1440]:

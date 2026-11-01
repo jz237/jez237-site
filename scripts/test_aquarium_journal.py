@@ -84,8 +84,8 @@ try:
         page.wait_for_timeout(150)
         assert page.locator('.story:visible').count()==len(stories)
         assert page.locator('h1').inner_text()=='Small worlds.\nEndless wonder.'
-        assert page.locator('#daily-check .check-grid > li').count()==4
-        assert page.locator('#daily-check .check-grid > li p:visible').count()==4
+        assert page.locator('#daily-check .check-list > li').count()==4
+        assert page.locator('#daily-check .check-list > li:visible').count()==4
         assert page.locator('.story .source-date').count()==0
         assert page.locator('.cover .button-link').get_attribute('href')=='stories/'+stories[0]['slug']+'/'
         page.screenshot(path=str(args.output/'desktop.png'),full_page=True)
@@ -143,7 +143,7 @@ try:
         nojs=browser.new_context(java_script_enabled=False,viewport={'width':390,'height':844})
         np=nojs.new_page();np.goto(base+'/newsletter/',wait_until='networkidle');assert np.locator('.story').count()==len(stories)
         assert np.locator('noscript').is_visible()
-        assert np.locator('#daily-check .check-grid > li p:visible').count()==4
+        assert np.locator('#daily-check .check-list > li:visible').count()==4
         results['checks'].append('readable without JavaScript')
         assert not errors, errors
         assert not bad, bad
