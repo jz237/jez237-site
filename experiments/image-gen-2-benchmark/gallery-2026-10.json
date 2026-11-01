@@ -358,6 +358,112 @@
     }
   },
   {
+    "id": "2026-10-31-factual-infographic-factual-infographic-nosophobia-persiste",
+    "title": "Factual infographic: Nosophobia — Persistent Fear of Developing a Specific Serious Disease",
+    "tests": "factual_subtype: phobia-infographic; phobia: Nosophobia; exact requested title lines read back before render: Nosophobia / Persistent fear of developing a specific serious disease; verified established terminology; distinct fictional cast; no subjective review.; archive_slot=2026-10-31T20:08; concept=nosophobia-illness-interpretation-clinic; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create the finished factual phobia infographic directly on the canvas, not a photographed poster or book, not an app or mockup. Portrait-oriented artwork-led composition, richly illustrated in luminous gouache and precise colored-pencil linework, with deep petrol blue, warm cream, muted copper, and reassuring sage. No rigid boxed grid or detached cards. Allow generous negative space for readable labels. No citations, URLs, logos, watermarks, diagnostic codes, statistics, monsters, gore, or invented anatomy.\n\nAt the top set the following EXACT two title lines, vertically adjacent: first line in prominent bold type: \"Nosophobia\". Directly underneath, smaller but clearly readable: \"Persistent fear of developing a specific serious disease\". These are the headline and its definition, not an umbrella diagnostic heading.\n\nDominant hero across the center: a fictional man in his early 40s with medium brown skin, broad nose, wavy black hair, glasses, soft heavyset build, cream sweater; facing a clinician across a desk. Show a gentle three-quarter side view, his shoulders slightly tense and one hand near his chest, the clinician listening at equal eye level. Specific tactile details: ribbed sweater cuffs, translucent spectacle reflections, walnut desk grain, a softly lit window, a ceramic water cup, ordinary clinic furniture. He is a dignified ordinary person, not a caricature or a sourced clinical case. Let the desk curve and window-light guide the visual journey; keep scene calm, not horror. No implication that his body contains the feared disease. A phone beside him shows only a small generic health-search motif, no diagnosis or fabricated test result.\n\nWeave an open copper ribbon around the scene as a clearly labeled conceptual loop, not an anatomical pathway. Small naturally integrated studies along the ribbon: a hand noticing a bodily sensation, the same man's uncertain thought, a simple chest/heartbeat motif, his phone and checking hand, then an opening toward the listening clinician. Use these concise exact labels: \"Bodily cue or illness information\" -> \"Catastrophic interpretation: Could this be serious?\" -> \"Anxiety + racing heartbeat\" -> \"Checking, reassurance or avoidance\" -> \"Short-term relief; fear can persist\". Delicate curved arrows show the feedback; put the modest technical label \"Cognitive–behavioural health-anxiety model\" nearby and the brief caveat \"One possible cycle—not everyone's experience\". Do not label a brain region, nerve, or speculative biological cause.\n\nAt the heartbeat motif write: \"Anxiety can create sensations that feel threatening.\" At a separate small open comparison, use a warm thought cloud labeled \"Felt danger\" and an unboxed clinician conversation labeled \"Medical assessment\" linked by the text \"A strong alarm is not itself evidence of disease.\" This must not imply that all symptoms are anxiety or that disease is impossible.\n\nLower part of the artwork opens out of the loop into sage daylight, with the SAME man conversing with the clinician; this is an educational vignette, not a guaranteed recovery or before-and-after cure. Integrate readable help text along the light: \"CBT: examine catastrophic beliefs\"; \"With support, reduce excessive checking and avoidance\"; \"Agree an appropriate care plan with a clinician\". Add essential compact context in readable subordinate text: \"Nosophobia is an established term for disease fear. It overlaps with health anxiety; diagnosis needs clinical assessment.\" And \"Seek help when worry disrupts daily life. Keep appropriate medical care. Education, not diagnosis.\"\n\nKeep the technical meaning precise and the composition richly artistic: textured brush edges, expressive but respectful faces and hands, warm reflected light, crisp typographic hierarchy, open curved annotations, and breathing room. No extra disease examples or unsupported claims. Essential definition, triggers, feedback mechanism, perceived danger versus assessment, and evidence-based help must remain legible. Generate with the requested stock OpenAI model, medium quality, auto size, opaque background.",
+    "image": "images/2026-10-31-factual-infographic-factual-infographic-nosophobia-persiste.jpg",
+    "thumb": "thumbs/2026-10-31-factual-infographic-factual-infographic-nosophobia-persiste.webp",
+    "color": "#c2b498",
+    "date": "2026-10-31",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "nosophobia-illness-interpretation-clinic",
+      "imageSha256": "1d1d7a1dd245243ee2ad7a9693121fb57bdb505a7d0feaa8af3159fe8d5982f9",
+      "imageDHash": "11254d4985452565"
+    },
+    "factualInfographic": {
+      "topic": "Nosophobia: persistent fear of developing a specific serious disease, health-related threat interpretation, body alarm, checking and avoidance, and evidence-based help",
+      "description": "An artwork-led, source-backed explanation of nosophobia terminology and the related cognitive–behavioural health-anxiety model, with clinical context and evidence-based support.",
+      "sourceNote": "Innovations in Clinical Neuroscience: https://pmc.ncbi.nlm.nih.gov/articles/PMC10941862/; Current Psychiatry Reports: https://pmc.ncbi.nlm.nih.gov/articles/PMC11211185/; NHS: https://www.nhs.uk/mental-health/conditions/health-anxiety/; verified terminology, body alarm, threat interpretation, maintaining behaviours and CBT; health-anxiety evidence is identified as such.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-01T00:09:17.147387+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Innovations in Clinical Neuroscience",
+            "title": "Health Anxiety, Fear of COVID-19, Nosophobia, and Health-protective Behaviors Among Healthcare Professionals",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10941862/"
+          },
+          {
+            "id": "S2",
+            "publisher": "Current Psychiatry Reports",
+            "title": "Illness Anxiety Disorder: A Review of the Current Research and Future Directions",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11211185/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS",
+            "title": "Health anxiety",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/health-anxiety/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Nosophobia is an established literature term also called disease phobia, referring to persistent fear of contracting or having a dangerous disease, often focused on a specific serious illness. The displayed plain-English definition is: Persistent fear of developing a specific serious disease.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Nosophobia is a descriptive established term; related health anxiety and illness anxiety disorder overlap, but a clinician must assess the appropriate diagnosis rather than infer it from a label.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Bodily sensations and disease-related health information can become cues for catastrophic interpretation; people may misinterpret sensations as serious illness and overestimate threat.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Anxiety itself can cause a racing heartbeat, which may be misinterpreted as illness; a strong alarm feeling does not itself establish a disease.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "The cognitive-behavioural health-anxiety model links bodily cues, catastrophic illness interpretation, anxiety, checking or reassurance-seeking or avoidance, short-term relief, and persistence of fear because feared beliefs remain untested. This is a model, not every person’s pathway.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "People may repeatedly check their bodies, search for health information, seek reassurance, or avoid reminders of serious illness and medical settings.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Cognitive behavioural therapy is evidence-based help for health anxiety and related illness anxiety: it addresses catastrophic beliefs, body vigilance, excessive checking, reassurance seeking and avoidance.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Seek a clinician when health worries impair daily life; assessment and appropriate care are important. Reducing excessive checking should be part of a care plan, not abandoning appropriate medical care. Educational material does not diagnose illness.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-10-31-factual-infographic-factual-infographic-megalophobia-intens",
     "title": "Factual infographic: Megalophobia — Intense Fear of Large Objects",
     "tests": "factual_subtype: phobia-infographic; phobia: Megalophobia; exact requested title lines read back before render: Megalophobia / Intense fear of large objects; verified established terminology; distinct fictional casting; no subjective review.; archive_slot=2026-10-31T16:08; concept=megalophobia-monument-plaza-avoidance; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
