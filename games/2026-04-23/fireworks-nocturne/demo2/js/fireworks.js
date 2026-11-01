@@ -2,10 +2,10 @@
 // drag curve with a fuse or tail, and break at the apex; the break builds its
 // star records, smoke, light and sound events. Everything is placed at its
 // scheduled show time, so late frames and seeking still land things exactly.
-import { StarBatch, K_FLASH, K_FUSE, K_GERB, K_CRACKLE, T_GOLD, T_SILVER, T_GLITTER, T_COLOR, T_FALL } from './particles.js';
-import { SHELLS, colorOf } from './shells.js';
-import { starPos, starVel, aimShell, rng } from './physics.js';
-import { SITE } from './site.js';
+import { StarBatch, K_FLASH, K_FUSE, K_GERB, K_CRACKLE, T_GOLD, T_SILVER, T_GLITTER, T_COLOR, T_FALL } from './particles.js?v=3';
+import { SHELLS, colorOf } from './shells.js?v=3';
+import { starPos, starVel, aimShell, rng } from './physics.js?v=3';
+import { SITE } from './site.js?v=3';
 
 const SHELL_C = 0.0032, SHELL_KG = 0.07;
 // Workshop modifiers; every value is clamped again here so no setting can

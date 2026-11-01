@@ -3,9 +3,9 @@
 // break height is kept where that calibre can actually get to with its stars
 // clear of the water, so nothing can be set up to look wrong.
 import * as THREE from 'three';
-import { SITE } from './site.js';
-import { SHELL_NAMES } from './shells.js';
-import { aimShell } from './physics.js';
+import { SITE } from './site.js?v=3';
+import { SHELL_NAMES } from './shells.js?v=3';
+import { aimShell } from './physics.js?v=3';
 
 const SWATCH = {
   red: '#ff3b2b', orange: '#ff8a22', yellow: '#ffd23f', lemon: '#e0ff5c', green: '#56ff4a', aqua: '#2ee8d8',

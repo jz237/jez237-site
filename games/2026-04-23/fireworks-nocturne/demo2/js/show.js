@@ -1,7 +1,7 @@
 // The programme: about three minutes in acts, like a real harbour display,
 // then a pause for the smoke to clear and a new programme with a new seed.
-import { rng } from './physics.js';
-import { SITE } from './site.js';
+import { rng } from './physics.js?v=3';
+import { SITE } from './site.js?v=3';
 
 export const ACTS = [
   { at: 0, name: 'Overture' },

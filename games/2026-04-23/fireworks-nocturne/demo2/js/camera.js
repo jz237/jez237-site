@@ -2,7 +2,7 @@
 // circling the show, and a long lens from the hill. Drag looks around, the
 // wheel or a pinch zooms, and switching glides from one view to the next.
 import * as THREE from 'three';
-import { CAMERAS, SITE } from './site.js';
+import { CAMERAS, SITE } from './site.js?v=3';
 
 const v3 = (a) => new THREE.Vector3(a[0], a[1], a[2]);
 
