@@ -4,6 +4,16 @@ Source-linked everyday explanations of reports shared by AI Discovery Watch.
 This is a static, progressively enhanced companion to AI News. It keeps the
 existing space-console theme and does not change the news-feed ingestion.
 
+The page is articles-first: a short heading, search/filters and newest daily
+reports. Keep the introductory hero and featured lesson out of the top of the
+page. The optional evidence guide lives below the articles. Concept diagrams
+remain inside relevant stories rather than delaying the daily news.
+
+New discovery-channel posts and website cards share the same reviewed plain-
+English explanation. The private publisher reuses the retained `explanations`
+fields verbatim, including model details, qualifications and original sources;
+only older confirmed posts without those fields need a separate explanation.
+
 - `stories.json`: reviewed prose, dates, evidence labels, source-reported model details and primary references.
 - `build.py`: offline renderer; `python3 ai-news/discoveries/build.py` regenerates HTML.
 - `discoveries.js`: search, topic/evidence filters, incremental display and deep links.
