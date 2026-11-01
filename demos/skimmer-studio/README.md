@@ -1,0 +1,74 @@
+# Skimmer Atelier
+
+Public route: `/demos/skimmer-studio/`. Eighth child of the single Aquarium Filtration collection. Keep one collection card in Website Demos and preserve every existing direct demo URL.
+
+## Scope and sources
+
+Original marine in-sump needle-wheel protein skimmer. Not a commercial replica, sizing tool, CFD solver or chemical kinetics simulation. Twelve assemblies, eight lessons, seven experiments, a four-stage bubble journey and enlarged air–water interface diagram. The reef-sump exhibit has a simpler skimmer; this standalone study supplies the detailed explanation.
+
+Primary references reviewed 2026-10-31:
+
+- Royal Exclusiv Double Cone operating manual: https://www.royalexclusiv.com/images/content/bk_dc/eng/bk_dc_operating_maintenance_eng.pdf
+- RK2 foam fractionation principles: https://www.rk2.com/facts-about-fracs.php
+- Tropical Marine Centre protein skimming: https://tropicalmarinecentre.com/ib/learn-more/filtration-systems/protein-skimming
+
+No manufacturer specifications or tank-capacity claims are assigned to the invented geometry. Saltwater is the context; specialist freshwater fractionators are acknowledged. Do not claim that dark collection alone proves greater organic mass removal, or that skimming replaces biological treatment. No retailer links, external runtime dependencies, ozone equipment or paid services.
+
+## Implementation and constraints
+
+- `model.js`: sectioned body/cone/neck/cup, needle-wheel pins, perforated diffuser, silencer and airline, adjustable outlet, cup drain, sump and support. Up to 11,500 bubble sprites and 3,600 instanced translucent foam cells. Foam crosses the lip and the cup fills; overflow returns below. Color and animation are explanatory, not measured concentrations or bubble trajectories. Shared local materials, geometry helpers, optics and lighting are imported without changing other demos.
+- `simulation.js`: dimensionless lagged pump/air delivery, water level response to sump depth and outlet restriction, qualitative foam stability, wetness and collection. Time and collection are accelerated. Cup contents persist through preset changes; Empty cup and Reset are explicit. A temporary disturbance decays over 14 simulated seconds; this is not a real feeding recovery prediction. Neck film reduces foam modestly; Clean neck resets it.
+- `studio.js`: orbit/zoom, component selector and raycast, assembled/cutaway/exploded/macro, four close-ups, eight manual lessons, four-stage guided journey, experiments, live cup history and microscope controls. Diagnostic `window.skimmerStudio.snapshot()` returns copied state; no hidden simulation-step API. Pause freezes physical clocks. Care and Exploded suspend operation; hidden tabs stop rendering and simulation; reduced-motion starts in Light graphics with motion running and does not auto-play the guide. WebGL failure leaves authored learning content usable.
+- `data.js`: authored assembly notes, source-informed lessons, seven presets and journey route.
+
+Microscope: a simplified amphiphile has a water-compatible head outside the interface and a water-avoiding tail toward air. Bubble, molecules and animation scales are independently enlarged. Colored arrows and the journey marker deliberately draw through surfaces for teaching. Geometry follows an original conceptual installation, not fabrication instructions. Assembled restores front walls; Exploded separates selected service assemblies and hides operating liquids.
+
+Shared dependencies: Three.js and OrbitControls from AquaClear; environment/metal finishes from Drum; molded finishes, annulus/distributor helpers, optics and CSS base from Sand (whose CSS also imports Trickle). Retain these routes when reorganizing. Local release query keys start at v=1; increment them together for later revisions. Shared modules keep their own existing versions.
+
+## Verification and publishing
+
+From the website checkout:
+
+```
+node scripts/skimmer-studio/simulation.test.mjs
+node scripts/skimmer-studio/refinement.test.mjs
+node scripts/skimmer-studio/inspect.cjs
+node scripts/skimmer-studio/qa.cjs http://127.0.0.1:8822/demos/skimmer-studio/
+node scripts/skimmer-studio/release-check.cjs
+node scripts/build-demos.mjs
+```
+
+`inspect.cjs` captures hero, pump, neck, cup and microscope for visual review. `qa.cjs` tests assembly modes, pause, rotor and arrows, all lessons, journey completion and pause, air restriction, power failure, flooding, service actions, microscope controls, care suspension, mobile overflow, reduced motion, WebGL fallback, failed requests and console errors. Screenshots go to ignored `tmp/skimmer-qa/`. `simulation.test.mjs` checks wet/dry relationships, bounds, failures, disturbance recovery and service actions.
+
+`release-check.cjs` verifies the eight-study collection, navigation, final exploded view and refreshes the actual cover from the local preview.
+
+Cover `demos/assets/skimmer-studio.jpg` is a 1440×900 screenshot of the actual working application. Collection catalog, builder label, count and main collection description must stay synchronized.
+
+Use the user-required deployment workflow: source/runtime checks, committed and pushed update, then `node "D:/Projects/hidden reef header/deploy-reusing-stage.mjs" --deploy`. Reuse the existing public stage; no full-site copies or raw Wrangler deployments. Preserve Philadelphia Functions and the private relay. Run browser QA on the live route after the wrapper succeeds.
+
+
+## Second edition: six realism and teaching refinements
+
+Published cache keys advance to v=2. Existing experiment mathematics and the eight-study collection structure remain unchanged.
+
+1. Connected foam: a deforming, textured cell-film envelope folds over the neck into the cup. Small cells travel over that continuous surface and diminish as they reach the collected liquid. The previous ring of independent spilling beads is hidden.
+2. Bubble cloud: up to 11,500 rim-lit sprites rise in bounded swaying plumes, spread above the diffuser and move more slowly at the chamber perimeter. These trajectories are procedural, not a turbulence solver.
+3. Collection: separate open-sided liquid volume and rippling annular surface avoid coplanar faces. Wet specular highlights, floating collapsed-foam patches, darker liquid and faint cup-wall residue make collection easier to read. Apparent darkness remains illustrative, not measured organic concentration.
+4. Acrylic: true annular rim thickness and exposed section edges accompany subtle roughness scratches, angular edge reflections and modest physical-material transmission. Existing depth-guarded water optics remain intact.
+5. Drainage: downward droplets and thin wet threads in the neck counter the upward foam movement. A visible toggle helps compare layers. Droplet speed responds to the qualitative wetness value. All animation respects the same physical clock.
+6. Pump study: the clear teaching housing exposes a stationary ceramic shaft, support bushes, rotating magnet sleeve, pin wheel, spiral collector passage and mixed air/water indicators. The dedicated Pump section button selects a tighter camera and one-third speed; it respects a paused state.
+
+`refinements.js` owns the new wet layers, acrylic treatment and pump components. Shared filter modules remain unmodified. `refinement.test.mjs` checks plume radial bounds and continuous finite foam envelopes. The existing browser suite now also checks the new layers, drainage toggle, pump-study action and frozen refinement clock. Inspect the neck/cup and slow-pump screenshots before release.
+
+
+## Third edition: automatic cup service
+
+Automatic care is now the default. At 78% cup fill, an eight-simulated-second service sequence suspends pump delivery and collection, lifts the full cup/lid/drain, moves it out, clears contents and cup/neck residue at the concealed midpoint, returns an empty cup and restores the user's pump preference. This represents a person servicing reusable equipment, not an automatic feature of a real skimmer. The user can disable automatic care in Experiment to manage it manually; only that choice permits overflow. Presets preserve this preference. Service cup now triggers the same visible exchange.
+
+Pause, reduced motion, Care, Exploded, slow motion and hidden-page suspension apply to the service clock. Changing to manual mode mid-service finishes the current exchange; it affects future cycles. Reset restores automatic care. The cup-history chart retains the service drop. Excessive water level still warns and remains a fault; automatic emptying does not repair bad hydraulic settings.
+
+`service.test.mjs` checks 15 simulated minutes of unattended default operation, repeated flood-condition service, explicit manual overflow, service midpoint, paused progress, animation poses and preservation of the off preference. The browser regression suite exercises a visible automatic exchange, pauses it midway, then explicitly chooses manual care before the overflow test. Local cache keys are v=3; shared dependencies retain their established versions.
+
+## Automatic startup (November 1, 2026)
+
+Operation starts automatically, including with OS reduced motion. Pause remains explicit and camera orbit is not forced. Shared [`../filter-runtime/README.md`](../filter-runtime/README.md) documents adaptive graphics, animated diagram fallback, and the collection-wide startup checks. The diagram is a simplified operating view; full 3D assembly and experiments require WebGL.

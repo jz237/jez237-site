@@ -1,0 +1,114 @@
+# Drum Atelier
+
+Route: `/demos/drum-studio/` · filtration exhibit 033 · October 30, 2026.
+
+An original interactive gravity-fed rotating drum filter. It joins the existing filter studies inside `/demos/aquarium-filtration/`, rather than adding another main-gallery filter card. Geometry is procedural and illustrative, not a commercial product replica or measured CAD.
+
+## Experience
+
+- Eighteen selectable assemblies, assembled/cutaway/exploded views, component isolation, orbit, camera presets, fullscreen, pause and one-third speed.
+- Nine guided lessons, six close-ups and six experiments: normal operation, loaded screen, heavy solids, lost rinse pressure, circulation stopped and blocked waste.
+- Separate normal filtration, reverse wash and waste-export arrows. The trough remains stationary while the drum and gear train turn.
+- Fine screen weave, removable-panel cage, gear teeth, support rollers, a rinse strainer/pump, six brass nozzles, fan sprays, captured deposits and traveling waste droplets.
+- Two water levels and a clean-side float, with masked ripple surfaces, planar reflection, depth-guarded refraction and material grain.
+- An enlarged woven-screen study built from actual crossing wires, with 60/100/150 micrometre nominal aperture comparisons and enlarged rigid particles.
+- Keyboard tabs and native component selection, reduced-motion Light graphics, mobile layout, readable explanations and sources if WebGL is unavailable.
+
+## Operating model
+
+`simulation.js` is deterministic and independent of the renderer. Seventy-two angular sectors accumulate a bounded relative load when submerged. A finer selected screen retains a greater illustrative fraction of incoming material. Sector angle follows the same drum angle used by the visible screen and gear train.
+
+The dirty-water reference level is held at 2.4 model units. The clean-side head difference approaches a qualitative function of circulation setting and mean screen loading. At a head difference above 0.27 model units, automatic mode requests a wash. The controller waits 0.8 simulated seconds, runs an 11.8-second wash, then allows 2 seconds of recovery. The drum completes a little over one revolution per wash. Sectors near the top lose load in proportion to rinse strength. These values are chosen for readable demonstrations and are **not equipment settings or physical measurements**.
+
+Insufficient recovery ends in a fault. A blocked waste route stops the wash; circulation loss during washing also stops it in this model. A manual request uses the same sequence. No hydraulic drain-down, real pressure, controller certification, or actual safety interlock is simulated. Reset/Normal operation explicitly clears the demonstration fault.
+
+The animation uses bounded 1/60-second simulation steps. Pause freezes operating clocks, water, drum motion and particles. Macro view suspends the machine while its separate illustrative particle clock runs; pause freezes that clock too. Care, exploded and isolated views suspend operation. Camera transitions remain available while paused.
+
+## Architecture and rendering
+
+- `index.html` / `studio.css`: responsive Atelier layout, learning panels and accessible controls.
+- `data.js`: original component explanations, lessons, experiments and primary-source links.
+- `simulation.js`: loading, water-level response, rinse state machine and deterministic reset.
+- `model.js`: procedural mechanical geometry, masked cutaway, instanced particles, macro weave and state-driven render updates.
+- `optics.js`: local adaptation of the Moving Bed optics, with separate dirty/clean surface masks. Both surfaces share scene captures; the clean-water level is the reflection reference, so dirty-side reflection is an approximation. It is not ray tracing or CFD.
+- `studio.js`: UI, camera, picking, clocks, renderer and read-only `window.drumStudio.snapshot()` diagnostics.
+
+Local dependencies reuse the existing Three.js/OrbitControls, Trickle rounded geometry, and Moving Bed material microstructure. Those modules are unchanged. Changing a shared module requires regression checks in its existing consumers. Current new-runtime cache keys are `v=5`; bump affected module/CSS keys together for subsequent publications.
+
+Cutaway uses a fixed world-space plane, so the opening does not rotate with the drum. The complete screen returns in Assembled and Exploded views. The microscopic opening count is deliberately reduced/enlarged to remain visible. The main screen uses derivative-filtered procedural weave coverage; the macro uses actual wire geometry. The particles are illustrative, not a calibrated screen-efficiency test. Flexible waste, clumping, orientation and screen condition can affect real capture.
+
+No purchased assets, external runtime service or new dependency installation is required. The gallery cover is an actual 1440×900 browser screenshot.
+
+## Sources and educational boundaries
+
+Primary references checked October 30, 2026:
+
+- [AquaForte drum-filter principle](https://www.aqua-forte.com/products/pond-swimming-pond-filters/drum-filters): inside-to-outside screening and a separate reverse rinse/waste route.
+- [TinyDrum operating manual](https://www.tinydrum.de/site/assets/files/1295/manual_drum_filter.pdf): construction, sensor/controller, drive, rinse system, waste trough and maintenance topics. Its described level arrangement is not copied wholesale into this gravity-fed model.
+- [OASE gravity-fed drum filter](https://www.oase.com/en-US/pond-and-water-garden/proficlear-premium-compact-l-gravity-fed): a mechanical stage in a gravity-fed treatment system.
+- [ProfiDrum FAQs](https://www.profidrum.com/faqs): distinction between gravity-fed and pump-fed arrangements.
+
+The educational design does not carry a manufacturer's flow capacity, pressure, screen efficiency, installation level, waste-water consumption or maintenance interval. It removes suspended material conceptually; it does not calculate dissolved waste removal, nitrification, oxygen or water chemistry. Those distinctions are also visible in the demo, with a link to Moving Bed for the next biological stage. All sources are manufacturers; there are no competing aquarium-store links.
+
+## Checks and publication
+
+From the existing repository checkout, serve locally, then run:
+
+```text
+node scripts/drum-studio/simulation.test.mjs
+node scripts/drum-studio/qa.cjs http://127.0.0.1:8820/demos/drum-studio/
+node scripts/moving-bed-studio/refinement-qa.cjs http://127.0.0.1:8820
+node scripts/build-demos.mjs
+```
+
+The browser scripts accept `PLAYWRIGHT_CORE_PATH` and `CHROME_PATH`. `preview.cjs` is the shorter visual review helper. Ignored screenshots go under `tmp/drum-qa/`. Numerical tests cover repeatable loading, recovery, fault cases, stop/manual operation, aperture comparison and reset. Browser checks cover actual wash recovery, clock freezing, all component isolation states, six close-ups, nine lessons, all modes, mobile overflow, keyboard tabs, reduced motion and WebGL fallback.
+
+Update the child catalog, main collection count, collection introduction, roadmap and actual screenshot when changing the inventory. The collection remains a single main-gallery entry. Commit and push source, then use the mandatory workspace `deploy-reusing-stage.mjs --deploy` wrapper. Do not create another full-site stage or bypass Functions/preview/production checks.
+
+
+## Graphics refinement — October 30, 2026 (v2)
+
+A local `finish.js` replaces the coarse shared metal treatment with subtle directional brushing and distance-filtered microstructure. The shared filter materials remain unchanged. Steel, dark molded components and brass retain distinct finishes; screen highlights and captured deposits are less uniform.
+
+`detail.js` adds thin enclosure seams, lid seals, 36 cage-mounted panel clamps, hex nozzle shoulders and dark apertures, motor vents/fasteners, 64 stationary wet wall beads and an actual controller display texture. The display reports the same filter state and relative load as the learning panel; its canvas only updates when the state or quantized load changes.
+
+Spray fans now carry animated streaks and breakup; elongated instanced drops vary in size and follow an accelerating fall. Impact rings and a moving trough film make wash collection visible. Residual drips/film fade over a short period after washing. These are bounded artistic effects driven by the existing simulation clock, not a liquid or spray solver. Pause freezes the runoff decay; reset clears it; suspended views hide the operating effects.
+
+The two-level water surfaces use gentler ripple normals and an approximate view-depth absorption tint. The depth estimate comes from the existing refraction capture and is not a full optical path through the vessel. Reflection/refraction resolutions remain bounded and the main operating model is unchanged. The browser regression adds runoff pause/decay checks and verifies the new material/detail path loads without shader errors. Review main, rinse, macro and mobile captures before publication.
+
+
+## Fabrication and presentation pass — October 30, 2026 (v3)
+
+`fabrication.js` adds formed corner channels, end-panel ribs, coated rear skin, a raised reinforced lid that clears the drive and wash supports, finished front panel, five bolted pipe flanges with compression gaskets, machined drive collars, a rounded pump volute with cover fasteners, feet, terminal box and cable, and local canvas equipment markings. These are original illustrative machine details. Static geometry is merged by assembly and material; picking, isolation and explosion still belong to the same 18 assemblies. Shared demo assets are unchanged.
+
+`presentation.js` provides a local multi-softbox reflection environment and a soft contact-shadow layer. The main camera brings the mechanism closer, with lower elevation and a slightly stronger view of the service side. Water has a clearer section face, bounded inlet rings and moving floor-light patterns. Water embellishments use the simulation clock, so pause, reset and suspended views remain coherent. Floor light and inlet rings are artistic depth cues, not calculated caustics or a fluid solver.
+
+The enlarged screen now has alternating over/under wire crossings (cosine displacement, separated wire centers), and the retained particle has an irregular textured surface. Its scale and rigid-particle teaching simplification remain explicit. Camera diagnostics expose transition completion so screenshot checks wait for the actual settled view rather than a fixed delay. Browser checks also verify the fabrication path and water-detail pause behavior.
+
+
+## Wet machinery pass — October 30, 2026 (v4)
+
+`wet-motion.js` adds a physical clearcoat screen finish with wetness-dependent roughness, 96 bounded bead instances attached to the rotating screen, 144 impact droplets with short ballistic arcs, 36 expanding partial splash rings, and narrow animated runoff ribbons into the stationary trough. Beads are suppressed beneath the current dirty-side waterline and share the screen cut plane. Splash effects require an operating rinse; runoff decays after washing. All use the existing simulation clock, including pause, slow motion and reset, and disappear in suspended teaching views. Their scale is illustrative, not a pressure or fluid calculation.
+
+Wash and waste views now look down into the collection zone; the waste view looks from the outlet side. The drive view favors the gear side. Captured and exported particles use more restrained wet organic colors. The browser regression checks wet-effect pause, splash activation, runoff decay and suppression during component isolation. No simulation rates, capacities, or source claims changed.
+
+
+## Realism and guided study — October 31, 2026 (v5)
+
+Water optics now use gentler screen-space refraction, separate dirty-side absorption/scattering, thin wall/drum meniscus highlights and dirty-side waterline geometry. The dirty tint increases with the existing relative screen-load index; it is a visual cue, not a turbidity measurement or prediction of chemical water quality. The existing bounded reflection/refraction captures remain in use.
+
+`surface-finishes.js` replaces the shared coarse plastic/rubber treatment locally: molded plastic has restrained micro-roughness and a controlled clearcoat, rubber is matte, and steel retains its directional brush shader. Shared filtration demos are unchanged. Captured flakes are smaller so the load remains readable without oversized chunks.
+
+`discharge.js` adds a tapered translucent waste-water jet and 32 bounded drops after the modeled pipe mouth. It appears only during an operating rinse, with a brief decay afterward; blocked waste, isolated/exploded/macro/care views suppress it. Pause and reset affect the same simulation clock. Stream shape, speed and color are illustrative, not flow or pressure calculations.
+
+`journey.js` provides six guided stages, automatic camera placement, an amber tracking marker, full captions and optional browser speech. Starting the journey resets the study. It begins with automatic rinsing temporarily held, explicitly loads the screen at the level lesson, then restores automatic control. The marker lifts using the actual drum angle; it moves inward to the trough only once the retained point reaches the wash zone. It follows an illustrative export path afterward. The marker is intentionally enlarged and rendered through surfaces, disclosed in the UI. Short spoken lines fit the scene timing; full detail remains in captions. Voice availability and sound depend on the browser/device. Voice is off by default. Pause, slow mode, hidden-tab suspension, reduced motion, ending/replaying the guide and switching views are handled. Existing nine lessons remain available independently.
+
+Three independent Cutaway layer checkboxes open the housing, section the screen/cage, or ghost the drive-side end wall. Full assembly and explosion retain their existing meaning. The drive reveal preserves structural edges and surrounding machinery; it does not invent gearbox internals.
+
+Run `node scripts/drum-studio/journey-qa.cjs` in addition to the existing simulation and browser checks. It covers all six stages, actual rinse/discharge activation, pause, replay/stop and ordinary-view interruption, independent layers, mobile overflow, and speech-control calls using a browser mock. It does not assert that a device has a working audio voice. Inspect the captured images to verify marker visibility and water/material appearance.
+
+The explanatory route was rechecked against the existing AquaForte drum-filter principle and OASE gravity-fed product references on October 31, 2026. No manufacturer capacities or measurements are assigned to this original teaching model.
+
+## Automatic startup (November 1, 2026)
+
+Operation starts automatically, including with OS reduced motion. Pause remains explicit and camera orbit is not forced. Shared [`../filter-runtime/README.md`](../filter-runtime/README.md) documents adaptive graphics, animated diagram fallback, and the collection-wide startup checks. The diagram is a simplified operating view; full 3D assembly and experiments require WebGL.

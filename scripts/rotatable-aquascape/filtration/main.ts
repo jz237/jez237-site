@@ -1,3 +1,4 @@
+import {createFilterAnimation} from '../../../demos/filter-runtime/runtime.js';
 import * as T from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {studioEnvironment} from './SurfaceDetail.ts';
@@ -13,7 +14,7 @@ const all=<E extends HTMLElement=HTMLElement>(s:string)=>Array.from(document.que
 const store=/\/showroom\/filtration\/?$/.test(location.pathname);
 if(!store){$<HTMLAnchorElement>('reef-link').href='../reef-aquarium/';$<HTMLAnchorElement>('home').href='../../';$('home').innerHTML='JEZ237 <span>/ FILTRATION STUDIO</span>';}
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-let system:System='system',lesson=0,selected:string|null=null,isolate=false,labels=false,flow=true,paused=reduced.matches,explosion=0,targetExplosion=0,time=0,sequence=false,sequenceTime=0,experimentTime=-1,view='perspective',dirty=true;
+let system:System='system',lesson=0,selected:string|null=null,isolate=false,labels=false,flow=true,paused=false,explosion=0,targetExplosion=0,time=0,sequence=false,sequenceTime=0,experimentTime=-1,view='perspective',dirty=true;
 const model=makeFiltration();
 const pumpLab=pumpLearning($('pump-learning'));
 $('pump-cutaway').onclick=()=>{model.pumpDetail.setCutaway(!model.pumpDetail.snapshot().cutaway);pumpUI();if(renderer)renderer.shadowMap.needsUpdate=true;changed();};
@@ -35,6 +36,7 @@ const ground=new T.Mesh(new T.PlaneGeometry(2000,2000),new T.MeshStandardMateria
 const grid=new T.GridHelper(26,26,0x456471,0x456471);grid.position.y=-.54;(grid.material as T.Material).transparent=true;(grid.material as T.Material).opacity=.035;scene.add(grid);
 const selection=new T.Box3Helper(new T.Box3(),0xa6ffe3);selection.visible=false;scene.add(selection);
 const viewport=$('viewport'),slider=$<HTMLInputElement>('explode');
+const animation=createFilterAnimation({id:'reef-filtration',viewport,getState:()=>({paused,explosion,pump:flow})});
 new IntersectionObserver(entries=>{onScreen=entries[0].isIntersecting;dirty=true;},{threshold:0}).observe(viewport);
 function changed(){dirty=true;}
 function fit(){
@@ -87,7 +89,7 @@ $('bio-focus').onclick=()=>{$('biology-key').scrollIntoView({block:'center',beha
 slider.oninput=()=>{sequence=false;targetExplosion=explosion=Number(slider.value)/100;model.setExplosion(explosion);explosionUI();fit();status();};
 $('explode-button').onclick=()=>{sequence=false;setExplosionTarget(targetExplosion>.5?0:1);explosionUI();};
 $('sequence').onclick=()=>{sequence=!sequence;sequenceTime=0;if(sequence){setPaused(false);inspect(null);}explosionUI();changed();};
-$('reset').onclick=()=>{setPaused(reduced.matches);labels=false;flow=true;model.setFlow(true);flowUI();$('labels-toggle').setAttribute('aria-pressed','false');time=0;changeSystem(system);};
+$('reset').onclick=()=>{setPaused(false);labels=false;flow=true;model.setFlow(true);flowUI();$('labels-toggle').setAttribute('aria-pressed','false');time=0;changeSystem(system);};
 $('flow').onclick=()=>{flow=!flow;model.setFlow(flow);flowUI();changed();};
 $('labels-toggle').onclick=()=>{labels=!labels;$('labels-toggle').setAttribute('aria-pressed',String(labels));changed();};
 function setPaused(v:boolean){paused=v;bio.setPaused(v);process.setPaused(v);$('pause').textContent=paused?'Resume motion':'Pause motion';$('pause').setAttribute('aria-pressed',String(paused));status();changed();}
@@ -100,9 +102,9 @@ $('experiment').onclick=()=>{if(system==='biology'){bio.start();$('biology-key')
 
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){inspect(null);sequence=false;explosionUI();}});
 document.addEventListener('visibilitychange',changed);
-const initialHash=location.hash.slice(1);changeSystem(initialHash in systems?initialHash as System:'system');setPaused(reduced.matches);
+const initialHash=location.hash.slice(1);changeSystem(initialHash in systems?initialHash as System:'system');setPaused(false);
 try{
- renderer=new T.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});renderer.localClippingEnabled=true;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.VSMShadowMap;renderer.shadowMap.autoUpdate=false;renderer.shadowMap.needsUpdate=true;renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setClearColor(0x07151e,0);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.04;viewport.append(renderer.domElement);
+ renderer=animation.makeRenderer(T,{antialias:true,alpha:true,powerPreference:'high-performance'});renderer.localClippingEnabled=true;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.VSMShadowMap;renderer.shadowMap.autoUpdate=false;renderer.shadowMap.needsUpdate=true;renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.setClearColor(0x07151e,0);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.04;viewport.append(renderer.domElement);
  const env=studioEnvironment(),pmrem=new T.PMREMGenerator(renderer);scene.environment=pmrem.fromScene(env,.02).texture;scene.environmentIntensity=.75;env.traverse(o=>{if(o instanceof T.Mesh){o.geometry.dispose();(o.material as T.Material).dispose();}});pmrem.dispose();
  controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.09;controls.maxPolarAngle=Math.PI*.49;controls.minDistance=1.4;controls.maxDistance=70;controls.addEventListener('change',changed);
  const resize=()=>{const w=viewport.clientWidth,h=viewport.clientHeight;renderer!.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();fit();};new ResizeObserver(resize).observe(viewport);resize();
@@ -110,14 +112,14 @@ try{
  function hit(e:PointerEvent){const b=renderer!.domElement.getBoundingClientRect();mouse.set((e.clientX-b.left)/b.width*2-1,-(e.clientY-b.top)/b.height*2+1);ray.setFromCamera(mouse,camera);const selectable=model.parts.filter(p=>p.group.visible&&p.group.parent?.visible).map(p=>p.group);const hits=ray.intersectObjects(selectable,true);for(const h of hits){let o:T.Object3D|null=h.object;while(o&&!o.userData.part)o=o.parent;if(o?.userData.part)return o.userData.part as string;}return null;}
  renderer.domElement.addEventListener('pointerdown',e=>{down={x:e.clientX,y:e.clientY};});renderer.domElement.addEventListener('pointerup',e=>{if(down&&Math.hypot(e.clientX-down.x,e.clientY-down.y)<6){const id=hit(e);if(id)inspect(id);}down=null;});renderer.domElement.addEventListener('pointercancel',()=>down=null);
  renderer.domElement.addEventListener('pointermove',e=>{if(e.pointerType==='touch'||e.buttons)return;const id=hit(e);const tip=$('tooltip');tip.hidden=!id;renderer!.domElement.style.cursor=id?'pointer':'grab';if(id){tip.textContent=descriptions[id].title;const b=viewport.parentElement!.getBoundingClientRect();tip.style.left=Math.min(e.clientX-b.left+12,b.width-220)+'px';tip.style.top=e.clientY-b.top+16+'px';}});renderer.domElement.addEventListener('pointerleave',()=>{$('tooltip').hidden=true;down=null;});
- renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();$('fallback').hidden=false;setPaused(true);});renderer.domElement.addEventListener('webglcontextrestored',()=>location.reload());
+
  $('loading').hidden=model.isReady();
  let last=performance.now(),frames=0;
- renderer.setAnimationLoop(now=>{const dt=Math.max(0,Math.min(.04,(now-last)/1000));last=now;if(document.hidden||!onScreen)return;let moving=false;
+ animation.start(renderer,scene,now=>{const dt=Math.max(0,Math.min(.04,(now-last)/1000));last=now;if(document.hidden||!onScreen)return;let moving=false;
   if(!paused){time+=dt;if(experimentTime>=0)experimentTime+=dt;model.update(time,dt,experimentTime);if(sequence){sequenceTime+=dt;const p=sequenceTime%10;targetExplosion=p<4?1:p<5?1:0;}moving=true;}
   if(Math.abs(targetExplosion-explosion)>.0004){explosion=T.MathUtils.damp(explosion,targetExplosion,4,dt);model.setExplosion(explosion);explosionUI();fit();moving=true;}else if(explosion!==targetExplosion){explosion=targetExplosion;model.setExplosion(explosion);explosionUI();moving=true;}
   controls!.update();if(selected){const p=model.parts.find(p=>p.id===selected)!;selection.box.setFromObject(p.group);}
   if(dirty||moving){scene.updateMatrixWorld(true);placeLabels();renderer!.render(scene,camera);frames++;dirty=false;}status();
  });
  (window as any).filtrationQA={snapshot:()=>({...model.snapshot(),biology:bio.snapshot(),process:process.snapshot(),system,paused,selected,isolate,time,experimentTime,sequence,frames,triangles:renderer!.info.render.triangles,calls:renderer!.info.render.calls,ready:model.isReady()}),project:(id:string)=>{const p=model.parts.find(p=>p.id===id)!;const box=new T.Box3().setFromObject(p.group),v=box.getCenter(new T.Vector3()).project(camera),b=viewport.getBoundingClientRect();return{x:b.x+(v.x*.5+.5)*b.width,y:b.y+(-v.y*.5+.5)*b.height};}};
-}catch(error){console.error(error);$('loading').hidden=true;$('fallback').hidden=false;}
+}catch(error){console.warn('Using the animated filter diagram:',error);animation.fallback();}
