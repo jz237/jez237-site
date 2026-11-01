@@ -31,3 +31,7 @@ The cadence above is an editorial guideline. No recurring research or automatic 
 - `../scripts/build_aquarium_diagrams.py`: regenerate original SVG illustrations.
 - `../scripts/build_aquarium_journal.py`: regenerate the landing page, local readers, static articles and credits.
 - Run the editorial, practical-content, practical-browser, reader and journal test suites before publication; run browser suites again against the live domain afterward.
+
+## Humanizer scope (Jez, November 1, 2026)
+
+Apply the humanizer skill only to headings: titles, deks and section headings. Do not run it on article body text. Body copy is written and edited by hand.
