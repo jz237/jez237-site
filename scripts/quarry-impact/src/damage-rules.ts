@@ -35,3 +35,22 @@ export const SMASH={health:25,slowmo:.5,scale:.35} as const;
 export const isSmash=(healthLoss:number)=>Number.isFinite(healthLoss)&&healthLoss>=SMASH.health;
 export const smashLabel=(closing:number)=>`SMASH · ${Math.round(Math.max(0,Number.isFinite(closing)?closing:0)*3.6)} KM/H`;
 export const impactSoundScale=(closing:number)=>Math.sqrt(impactSpeedFactor(closing));
+/** A smash the player survives with their own car at HANGING_ON health or less (still running). */
+export const HANGING_ON=20;
+export const hangingOn=(playerHealth:number)=>Number.isFinite(playerHealth)&&playerHealth>0&&playerHealth<=HANGING_ON;
+/** Weight matters (offline): in a car-to-car crash each car takes a share of the damage by how much of the crash's change in
+ * speed it takes, 2·other/(own+other): equal weights are unchanged, a light car hit by a heavy one takes more (up to
+ * MASS_SHARE.max) and the heavy car less (down to MASS_SHARE.min). Shed weight counts, so a stripped wreck gets more fragile. */
+export const MASS_SHARE={min:.6,max:1.4} as const;
+export function massShare(own:number,other:number){
+ if(!(own>0)||!(other>0)||!Number.isFinite(own)||!Number.isFinite(other))return 1;
+ return Math.min(MASS_SHARE.max,Math.max(MASS_SHARE.min,2*other/(own+other)));
+}
+/** A car's damage after its weight share, still within the single-hit cap (an unshared hit is left exactly as it was). */
+export const sharedDamage=(damage:number,share:number)=>share===1||!Number.isFinite(share)?damage:Math.min(IMPACT_SPEED.cap,damage*share);
+/** Derby durability (offline derbies, the demo's too): cars take DERBY_WEAR.damage of the crash damage, and no single crash
+ * (weight share included) takes more than DERBY_WEAR.cap off a car. Before 2026-11-01 the opening charge alone took about
+ * half of every car's health and a player's car could be wrecked inside 15 seconds. Races, banger races, online events and
+ * every record keep their own balance. */
+export const DERBY_WEAR={damage:.55,cap:38} as const;
+export const derbyWear=(derby:boolean)=>derby?DERBY_WEAR:{damage:1,cap:IMPACT_SPEED.cap};

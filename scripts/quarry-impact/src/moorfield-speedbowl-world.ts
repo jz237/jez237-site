@@ -2,6 +2,9 @@ import {createVenueCrowd,type SpectatorPlace} from './venue-crowd';
 import {createRaceMudTextures} from './race-mud';
 import {withBarrierBoardsOf,boardSeed} from './barrier-boards';
 import * as T from 'three';
+import {createPhotoTrees,type PhotoTree} from './photo-trees';
+import {turf} from './turf';
+import {antiTile} from './anti-tile';
 import {MOORFIELD_SOLIDS} from './moorfield-speedbowl-arena';
 import {freezeSceneryTransforms} from './render-work';
 /** Moorfield Speedbowl: a raked-dirt stadium oval with grandstands along both straights,
@@ -9,9 +12,9 @@ import {freezeSceneryTransforms} from './render-work';
 export function createMoorfieldWorld(){
  const root=new T.Group();root.name='moorfield_speedbowl';
  const materials=withBarrierBoardsOf({concrete:new T.MeshStandardMaterial({color:0xc2bba8,roughness:.97}),red:new T.MeshStandardMaterial({color:0xa8352c,roughness:.88}),steel:new T.MeshStandardMaterial({color:0x2f3639,roughness:.7,metalness:.35}),seat:new T.MeshStandardMaterial({color:0x2c5a7a,roughness:.85}),roof:new T.MeshStandardMaterial({color:0xd8d2c0,roughness:.8}),lamp:new T.MeshStandardMaterial({color:0xfff2cc,emissive:0xfff2cc,emissiveIntensity:1.3,roughness:.4}),cream:new T.MeshStandardMaterial({color:0xe6dcc0,roughness:.9}),tree:new T.MeshStandardMaterial({color:0x3e5a33,roughness:1})},'red',boardSeed('moorfield-speedbowl-v1'));
- const floorMaterial=new T.MeshStandardMaterial({color:0xffffff,roughness:1}),floorGeometry=new T.PlaneGeometry(160,100),apronGeometry=new T.PlaneGeometry(1600,1600),apronMaterial=new T.MeshStandardMaterial({color:0x5f7442,roughness:1}),boxGeometry=new T.BoxGeometry(),coneGeometry=new T.ConeGeometry(1,1,7),textures:T.Texture[]=[];
+ const floorMaterial=new T.MeshStandardMaterial({color:0xffffff,roughness:1}),floorGeometry=new T.PlaneGeometry(160,100),apronGeometry=new T.PlaneGeometry(1600,1600),apronMaterial=turf(new T.MeshStandardMaterial({color:0x5f7442,roughness:1})),boxGeometry=new T.BoxGeometry(),coneGeometry=new T.ConeGeometry(1,1,7),textures:T.Texture[]=[];
  const mud=createRaceMudTextures();textures.push(mud.diffuse,mud.normal,mud.roughness);for(const t of [mud.diffuse,mud.normal,mud.roughness])t.repeat.set(40,25);
- floorMaterial.map=mud.diffuse;floorMaterial.normalMap=mud.normal;floorMaterial.roughnessMap=mud.roughness;floorMaterial.color.set(0xb4a48e);floorMaterial.normalScale.setScalar(.5);
+ floorMaterial.map=mud.diffuse;floorMaterial.normalMap=mud.normal;floorMaterial.roughnessMap=mud.roughness;floorMaterial.color.set(0xb4a48e);floorMaterial.normalScale.setScalar(.5);antiTile(floorMaterial);
  const floor=new T.Mesh(floorGeometry,floorMaterial);floor.name='moorfield_dirt';floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;root.add(floor);
  const apron=new T.Mesh(apronGeometry,apronMaterial);apron.name='moorfield_grass';apron.rotation.x=-Math.PI/2;apron.position.y=-.03;apron.receiveShadow=true;root.add(apron);
  const batches=new Map<string,{geometry:T.BufferGeometry;list:T.Matrix4[]}>(),matrix=new T.Matrix4(),q=new T.Quaternion(),up=new T.Vector3(0,1,0);
@@ -33,7 +36,9 @@ export function createMoorfieldWorld(){
  // Pit hut, tyre heaps and a ring of trees on the skyline.
  box(-90,2,0,8,4,22,'cream');box(-90,4.3,0,9,.4,23,'red');
  let seed=17;const rand=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
- for(let i=0;i<80;i++){const a=i/80*Math.PI*2,r=120+rand()*50,h=8+rand()*8;put(coneGeometry,'tree',Math.sin(a)*r*1.3,h*.5,Math.cos(a)*r,h*.45,h,h*.45);}
+ const belt:PhotoTree[]=[];
+ for(let i=0;i<80;i++){const a=i/80*Math.PI*2,r=120+rand()*50,h=8+rand()*8;belt.push({kind:i%4===0?'maple':i%2?'spruce':'hemlock',x:Math.sin(a)*r*1.3,y:0,z:Math.cos(a)*r,height:h*1.05,tint:.9+(i%5)*.04});}
+ const forest=createPhotoTrees(belt,'moorfield_trees');root.add(forest.root);
  const signGeometry=new T.PlaneGeometry(24,3.4),signMaterial=new T.MeshStandardMaterial({color:0xeee6cc,roughness:.85,side:T.DoubleSide});
  if(typeof document!=='undefined'){
   const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=146;const ctx=canvas.getContext('2d');
@@ -43,5 +48,5 @@ export function createMoorfieldWorld(){
  for(const [key,{geometry,list}] of batches){const finish=key.split(':')[1];const mesh=new T.InstancedMesh(geometry,materials[finish as keyof typeof materials],list.length);list.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name='moorfield_'+key.replace(':','_');mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
  const crowd=createVenueCrowd(spectators);root.add(crowd.root);
  root.userData.solidRecords=MOORFIELD_SOLIDS;freezeSceneryTransforms(root);
- let disposed=false;return{root,update:crowd.update,dispose(){if(disposed)return;disposed=true;crowd.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});[floorGeometry,apronGeometry,boxGeometry,coneGeometry,signGeometry].forEach(g=>g.dispose());[floorMaterial,apronMaterial,signMaterial,...Object.values(materials)].forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,update:crowd.update,dispose(){if(disposed)return;disposed=true;forest.dispose();crowd.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});[floorGeometry,apronGeometry,boxGeometry,coneGeometry,signGeometry].forEach(g=>g.dispose());[floorMaterial,apronMaterial,signMaterial,...Object.values(materials)].forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }

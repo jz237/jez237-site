@@ -2,6 +2,7 @@ import {createVenueCrowd,type SpectatorPlace} from './venue-crowd';
 import {createRaceMudTextures} from './race-mud';
 import {createWrenfordPitLandmarks} from './wrenford-pit-landmarks';
 import * as T from 'three';
+import {antiTile} from './anti-tile';
 import {WRENFORD_PIT_BARRIERS} from './wrenford-pit-arena';
 import {freezeSceneryTransforms} from './render-work';
 export function createWrenfordPitWorld(){
@@ -10,7 +11,7 @@ export function createWrenfordPitWorld(){
  const floorMaterial=new T.MeshStandardMaterial({color:0x82705a,roughness:.91}),floorGeometry=new T.PlaneGeometry(480,480),boxGeometry=new T.BoxGeometry(),textures:T.Texture[]=[];
  const mud=createRaceMudTextures();textures.push(mud.diffuse,mud.normal,mud.roughness);
  for(const t of textures)t.repeat.set(120,120);
- floorMaterial.color.set(0xffffff);floorMaterial.roughness=1;floorMaterial.map=mud.diffuse;floorMaterial.normalMap=mud.normal;floorMaterial.roughnessMap=mud.roughness;floorMaterial.normalScale.setScalar(.6);
+ floorMaterial.color.set(0xffffff);floorMaterial.roughness=1;floorMaterial.map=mud.diffuse;floorMaterial.normalMap=mud.normal;floorMaterial.roughnessMap=mud.roughness;floorMaterial.normalScale.setScalar(.6);antiTile(floorMaterial);
  const floor=new T.Mesh(floorGeometry,floorMaterial);floor.name='wrenford_pit_mud';floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;root.add(floor);
  const spectators:SpectatorPlace[]=[];
  const batches=new Map<keyof typeof materials,T.Matrix4[]>(),matrix=new T.Matrix4(),q=new T.Quaternion();
