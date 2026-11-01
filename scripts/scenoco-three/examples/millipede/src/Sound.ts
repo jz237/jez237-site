@@ -14,11 +14,12 @@ export type SoundName =
   | 'queenHit' | 'queenDeath' | 'clink';
 export type MusicName = 'musicTitle' | 'musicGame' | 'musicBoss';
 
+// The audio lives beside the editions, shared with the classic one: games/2026-04-28/millipede/audio/.
 const FILES: Record<string, string> = {
-  musicTitle: 'audio/music-title.mp3', musicGame: 'audio/music-game.mp3', musicBoss: 'audio/music-boss.mp3',
-  queenWarn: 'audio/sfx-queen-warn.mp3', queenDeath: 'audio/sfx-queen-death.mp3', death: 'audio/sfx-death.mp3',
-  bomb: 'audio/sfx-bomb.mp3', oneup: 'audio/sfx-oneup.mp3', wave: 'audio/sfx-wave.mp3', gameover: 'audio/sfx-gameover.mp3',
-  shot: 'audio/sfx-shot.mp3',
+  musicTitle: '../audio/music-title.mp3', musicGame: '../audio/music-game.mp3', musicBoss: '../audio/music-boss.mp3',
+  queenWarn: '../audio/sfx-queen-warn.mp3', queenDeath: '../audio/sfx-queen-death.mp3', death: '../audio/sfx-death.mp3',
+  bomb: '../audio/sfx-bomb.mp3', oneup: '../audio/sfx-oneup.mp3', wave: '../audio/sfx-wave.mp3', gameover: '../audio/sfx-gameover.mp3',
+  shot: '../audio/sfx-shot.mp3',
 };
 const SAMPLE_GAIN: Record<string, number> = { queenWarn: 0.8, queenDeath: 0.9, death: 0.85, bomb: 0.9, oneup: 0.6, wave: 0.5, gameover: 0.8, shot: 0.34 };
 const LOUDNESS = 2.25;

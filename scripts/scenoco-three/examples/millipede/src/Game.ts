@@ -19,7 +19,7 @@ export type Phase = 'title' | 'playing' | 'upgrade' | 'paused' | 'over';
 type Power = Pickup['power'];
 type Path = 'volley' | 'lance' | 'drone';
 
-const VERSION = 'v3.0.0';
+const VERSION = 'v3.0.1';
 const EXTRA_LIFE_EVERY = 60000;
 const MAX_LIVES = 5;
 const MAX_BOMBS = 3;
