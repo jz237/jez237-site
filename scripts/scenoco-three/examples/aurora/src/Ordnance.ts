@@ -1,4 +1,15 @@
-import { Color, CustomBlending, OneFactor, OneMinusSrcAlphaFactor, ShaderMaterial, type Group, type Mesh, type MeshStandardMaterial, type Object3D } from 'three';
+import { Color, CustomBlending, OneFactor, OneMinusSrcAlphaFactor, ShaderMaterial, Vector3, type Camera, type Group, type Mesh, type MeshStandardMaterial, type Object3D } from 'three';
+
+/**
+ * Depth without changing the game: a point is drawn further along the line from the camera through where
+ * it really is. On screen it sits exactly where it plays — a tap still meets it — but it is further off,
+ * smaller, fogged, its trail running back into the distance. `k` 1 is the battle plane; above 1 is beyond.
+ */
+const through = new Vector3();
+function along(camera: Camera, at: Vector3, k: number, out: Vector3): void {
+  camera.getWorldPosition(through);
+  out.copy(at).sub(through).multiplyScalar(k).add(through);
+}
 import { Behaviour, destroy } from '@scenoco-three/core';
 import type { WarheadKind } from './assets';
 import { SPAWN_Y, half } from './world';
@@ -35,6 +46,10 @@ export class Warhead extends Behaviour<Group> {
   alive = true;
   whistled = false;
   game!: Theatre;
+  /** Where it really is, on the battle plane: what blasts and the ground test. The node is drawn in depth. */
+  readonly gp = new Vector3();
+  /** How far beyond the battle plane it starts — it closes in as it falls. */
+  depth = 2.6;
   private travelled = 0;
   private length = 1;
 
@@ -45,8 +60,9 @@ export class Warhead extends Behaviour<Group> {
   aim(x: number, y: number, tx: number, ty: number, speed: number, delay: number): void {
     this.sx = x;
     this.sy = y;
+    this.gp.set(x, y, 0);
     // Waiting, it is parked far above the sky, so its trail does not glow where it will come in.
-    this.node.position.set(x, delay > 0 ? 400 : y, 0);
+    this.node.position.set(x, 400, 0);
     this.tx = tx;
     this.ty = ty;
     this.speed = speed;
@@ -65,10 +81,13 @@ export class Warhead extends Behaviour<Group> {
     if (this.delay > 0) {
       this.delay -= d;
       this.node.visible = false;
-      if (this.delay <= 0) this.node.position.set(this.sx, this.sy, 0);
+      if (this.delay <= 0) {
+        this.gp.set(this.sx, this.sy, 0);
+        this.draw();
+      }
       return;
     }
-    const p = this.node.position;
+    const p = this.gp;
     const dx = this.tx - p.x;
     const dy = this.ty - p.y;
     const len = Math.hypot(dx, dy) || 1;
@@ -79,15 +98,27 @@ export class Warhead extends Behaviour<Group> {
     this.travelled += step;
     this.progress = this.travelled / this.length;
     this.point();
+    this.draw();
     this.revealed = Math.max(0, this.revealed - dt);
     this.node.visible = !this.stealth || this.revealed > 0;
     if (len <= step || p.y <= this.ty + 0.05) this.game.landed(this);
   }
 
+  /** How far back it is drawn now: deep at first, on the battle plane for the last third of its fall. */
+  get k(): number {
+    return 1 + this.depth * Math.max(0, 1 - this.progress / 0.8) ** 1.6;
+  }
+
+  private draw(): void {
+    along(this.camera, this.gp, this.k, this.node.position);
+  }
+
   /** Nose toward the target. */
   private point(): void {
-    const p = this.node.position;
+    const p = this.gp;
     this.node.rotation.z = Math.atan2(this.tx - p.x, -(this.ty - p.y));
+    // Leaning out of the distance toward the camera while it closes in.
+    this.node.rotation.x = -0.7 * Math.max(0, 1 - this.progress / 0.8);
   }
 
   kill(): void {
@@ -102,19 +133,25 @@ export class Interceptor extends Behaviour<Group> {
   ty = 0;
   speed = 15;
   game!: Theatre;
+  /** Where it really is on the battle plane; it is drawn arcing out toward the camera on the way. */
+  readonly gp = new Vector3();
   private done = false;
+  private total = 1;
+  private gone = 0;
 
   launch(x: number, y: number, tx: number, ty: number, speed: number): void {
+    this.gp.set(x, y, 0);
     this.node.position.set(x, y, 0);
     this.tx = tx;
     this.ty = ty;
     this.speed = speed;
+    this.total = Math.max(0.5, Math.hypot(tx - x, ty - y));
     this.node.rotation.z = Math.atan2(-(tx - x), ty - y);
   }
 
   override update(dt: number): void {
     if (this.done) return;
-    const p = this.node.position;
+    const p = this.gp;
     const dx = this.tx - p.x;
     const dy = this.ty - p.y;
     const len = Math.hypot(dx, dy);
@@ -128,6 +165,9 @@ export class Interceptor extends Behaviour<Group> {
     }
     p.x += (dx / len) * step;
     p.y += (dy / len) * step;
+    this.gone += step;
+    // An arc: drawn up to a fifth nearer the camera mid-flight, back on the plane where it bursts.
+    along(this.camera, p, 1 - 0.34 * Math.sin(Math.PI * Math.min(1, this.gone / this.total)), this.node.position);
   }
 }
 

@@ -23,7 +23,7 @@ const Country = () => (
   <Group>
     <Mesh name="plain" position={[0, 0, -60]} rotation={[-1.5708, 0, 0]}>
       <PlaneGeometry args={[420, 200]} />
-      <MeshStandardMaterial color="#03070e" emissive="#2fbf8f" emissiveIntensity={0.85} roughness={0.85} metalness={0.2}>
+      <MeshStandardMaterial color="#1a2433" emissive="#2fbf8f" emissiveIntensity={0.85} roughness={0.7} metalness={0.2}>
         <NeonGridTexture attach="emissiveMap" repeat={[105, 50]} />
       </MeshStandardMaterial>
     </Mesh>

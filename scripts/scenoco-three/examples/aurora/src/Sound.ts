@@ -24,6 +24,16 @@ const POOLS: Record<string, string[]> = {
 };
 const MUTE_KEY = 'auroraSiege3d_muted';
 
+interface Falling {
+  tone: OscillatorNode;
+  second: OscillatorNode;
+  air: AudioBufferSourceNode;
+  band: BiquadFilterNode;
+  toneGain: GainNode;
+  airGain: GainNode;
+  pan: StereoPannerNode | null;
+}
+
 export class Sound extends Behaviour {
   muted = false;
   /** Shown when the commander speaks: the line in words. */
@@ -32,6 +42,8 @@ export class Sound extends Behaviour {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
   private noise: AudioBuffer | null = null;
+  private air: AudioBuffer | null = null;
+  private readonly falling = new Map<object, Falling>();
   private readonly music = new Audio();
   private track = 0;
   private wantMusic = false;
@@ -76,6 +88,11 @@ export class Sound extends Behaviour {
         this.noise = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
         const data = this.noise.getChannelData(0);
         for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / len);
+        // A loop of even noise for the rush of air round a falling warhead.
+        this.air = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
+        const air = this.air.getChannelData(0);
+        let last = 0;
+        for (let i = 0; i < len; i++) air[i] = last = last * 0.6 + (Math.random() * 2 - 1) * 0.4;
         this.drone();
       }
       if (this.ctx.state === 'suspended') void this.ctx.resume();
@@ -133,6 +150,84 @@ export class Sound extends Behaviour {
       void this.voice.play().catch(() => {});
     } catch {
       // the line is shown, if not heard
+    }
+  }
+
+  // --- incoming warheads ---------------------------------------------------------------------
+
+  /**
+   * The falling warheads' whistles: each a tone sliding down as it drops, with a rush of air round it,
+   * swelling as it nears the ground and panned to where it is. Called every frame with the ones to voice
+   * (the nearest few); any not in the list fades out. An empty list silences them all.
+   */
+  incoming(list: { id: object; pan: number; progress: number; nuke: boolean }[]): void {
+    if (!this.live || !this.air) {
+      for (const [id, f] of this.falling) this.release(id, f);
+      return;
+    }
+    const ctx = this.ctx!;
+    const t = ctx.currentTime;
+    const keep = new Set(list.map((l) => l.id));
+    for (const [id, f] of this.falling) if (!keep.has(id)) this.release(id, f);
+    for (const l of list) {
+      let f = this.falling.get(l.id);
+      if (!f) {
+        f = this.fall(l.nuke);
+        this.falling.set(l.id, f);
+      }
+      const k = Math.min(1, Math.max(0, l.progress));
+      const pitch = l.nuke ? 240 - 140 * k : 1650 - 1200 * k;
+      f.tone.frequency.setTargetAtTime(pitch, t, 0.06);
+      f.second.frequency.setTargetAtTime(pitch * 1.006 + 4, t, 0.06);
+      f.band.frequency.setTargetAtTime(l.nuke ? 380 : pitch * 1.7, t, 0.06);
+      const loud = (l.nuke ? 0.07 : 0.03) * (0.12 + 0.88 * k ** 1.6);
+      f.toneGain.gain.setTargetAtTime(loud, t, 0.08);
+      f.airGain.gain.setTargetAtTime(loud * (l.nuke ? 2.2 : 1.5), t, 0.08);
+      f.pan?.pan.setTargetAtTime(Math.max(-0.8, Math.min(0.8, l.pan * 0.8)), t, 0.05);
+    }
+  }
+
+  private fall(nuke: boolean): Falling {
+    const ctx = this.ctx!;
+    const tone = ctx.createOscillator();
+    const second = ctx.createOscillator();
+    tone.type = nuke ? 'sawtooth' : 'sine';
+    second.type = 'triangle';
+    const toneGain = ctx.createGain();
+    toneGain.gain.value = 0;
+    const air = ctx.createBufferSource();
+    air.buffer = this.air;
+    air.loop = true;
+    const band = ctx.createBiquadFilter();
+    band.type = 'bandpass';
+    band.Q.value = nuke ? 0.8 : 2.5;
+    const airGain = ctx.createGain();
+    airGain.gain.value = 0;
+    const pan = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
+    const out: AudioNode = pan ?? this.master!;
+    tone.connect(toneGain);
+    second.connect(toneGain);
+    toneGain.connect(out);
+    air.connect(band).connect(airGain).connect(out);
+    if (pan) pan.connect(this.master!);
+    tone.start();
+    second.start();
+    air.start(0, Math.random() * 1.5);
+    return { tone, second, air, band, toneGain, airGain, pan };
+  }
+
+  private release(id: object, f: Falling): void {
+    this.falling.delete(id);
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime;
+    f.toneGain.gain.setTargetAtTime(0, t, 0.04);
+    f.airGain.gain.setTargetAtTime(0, t, 0.04);
+    for (const node of [f.tone, f.second, f.air]) {
+      try {
+        node.stop(t + 0.3);
+      } catch {
+        // already stopped
+      }
     }
   }
 

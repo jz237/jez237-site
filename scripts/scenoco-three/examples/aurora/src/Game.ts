@@ -1,4 +1,4 @@
-import { type Mesh, type Object3D } from 'three';
+import { PointLight, type Mesh, type Object3D } from 'three';
 import {
   Behaviour, Input, KeyCode, Random, Time, WaitForSeconds, WaitForSecondsRealtime, destroy, findObjectOfType,
   findObjectsOfType, instantiate, type Prefab,
@@ -20,7 +20,7 @@ export type Phase = 'title' | 'playing' | 'tally' | 'arsenal' | 'paused' | 'over
 type Boss = 'bomber' | 'orbital' | 'meteor' | 'stealth' | 'nuke';
 type Upgrade = 'blast' | 'speed' | 'ammo' | 'flak' | 'aegis' | 'rebuild';
 
-const VERSION = 'v1.0.1';
+const VERSION = 'v1.0.2';
 const FIRE_KEY = 'auroraSiege3d_rapid';
 const DIFF_KEY = 'auroraSiege3d_difficulty';
 const DIFFICULTIES = { easy: 0.82, normal: 1, hard: 1.28 } as const;
@@ -107,6 +107,8 @@ export class Game extends Behaviour implements Theatre {
   private flags = { mirv: false, smart: false, ammoLow: false, chain: false };
   private readonly tiers: Record<Upgrade, number> = { blast: 0, speed: 0, ammo: 0, flak: 0, aegis: 0, rebuild: 0 };
   private offered: Upgrade[] = [];
+  /** A few lights the blasts borrow: an explosion lights the towers, the ground and the smoke round it. */
+  private readonly flashes: PointLight[] = [];
 
   // --- Theatre: what the ordnance asks of the game -----------------------------------------------
 
@@ -116,14 +118,14 @@ export class Game extends Behaviour implements Theatre {
 
   landed(w: Warhead): void {
     if (!w.alive) return;
-    const p = w.node.position;
+    const p = w.gp;
     w.kill();
     if (w.kind === 'nuke') return this.nukeLands(p.x);
     this.groundHit(p.x, 64 * 1.4 * PX);
   }
 
   arrived(i: Interceptor): void {
-    const p = i.node.position;
+    const p = i.gp;
     this.detonate(p.x, p.y, (60 + Math.random() * 26) * 1.4 * PX * (1 + this.tiers.blast * 0.15), true);
     if (this.tiers.flak > 0) this.startCoroutine(this.flak(p.x, p.y));
   }
@@ -132,7 +134,8 @@ export class Game extends Behaviour implements Theatre {
     const targets = this.targets();
     const t = targets[Random.rangeInt(0, targets.length)] ?? { x: Random.range(-half(), half()), y: 0 };
     for (let i = 0; i < count; i++) {
-      this.launchWarhead('bomb', x + Random.range(-0.3, 0.3), y, t.x + (count > 1 ? Random.range(-1.5, 1.5) : 0), 0, (50 + this.ew() * 8) * PX, 0);
+      // Dropped from a plane on the battle plane: no depth to close.
+      this.launchWarhead('bomb', x + Random.range(-0.3, 0.3), y, t.x + (count > 1 ? Random.range(-1.5, 1.5) : 0), 0, (50 + this.ew() * 8) * PX, 0).depth = 0;
     }
     this.sound.whistle();
   }
@@ -158,6 +161,11 @@ export class Game extends Behaviour implements Theatre {
 
   override awake(): void {
     this.hud = new Hud();
+    for (let i = 0; i < 4; i++) {
+      const light = new PointLight('#ffb060', 0, 30, 1.25);
+      this.node.add(light);
+      this.flashes.push(light);
+    }
     this.sound = findObjectOfType(Sound)!;
     this.aim = findObjectOfType(Aim)!;
     this.sky = findObjectOfType(Sky)!;
@@ -227,6 +235,7 @@ export class Game extends Behaviour implements Theatre {
     this.hud.silos(this.silos.map((s) => ({ x: s.node.position.x, y: s.node.position.y, ammo: s.ammo, alive: s.alive })), this.camera);
     this.aim.node.visible = this.phase === 'title' || this.phase === 'playing';
     for (const s of this.silos) s.aimAt(this.aim.x, this.aim.y);
+    this.voiceIncoming();
     if (this.phase === 'title') return this.demo(dt);
     if (this.phase !== 'playing' && this.phase !== 'tally') return;
 
@@ -242,7 +251,17 @@ export class Game extends Behaviour implements Theatre {
     } else this.aim.shots.length = 0;
   }
 
+  /** Lend the dimmest of the blast lights to a new explosion. */
+  private flash(x: number, y: number, power: number, colour: string): void {
+    const light = this.flashes.reduce((a, b) => (b.intensity < a.intensity ? b : a));
+    light.color.set(colour);
+    light.position.set(x, y, 3);
+    light.intensity = Math.max(light.intensity, power);
+  }
+
   override lateUpdate(): void {
+    const fade = Math.exp(-Time.deltaTime * 4.5);
+    for (const light of this.flashes) light.intensity = light.intensity < 0.5 ? 0 : light.intensity * fade;
     this.blasts(this.phase === 'title' || this.phase === 'over');
   }
 
@@ -292,9 +311,9 @@ export class Game extends Behaviour implements Theatre {
     this.rapidTimer -= dt;
     if (this.rapidTimer <= 0) {
       this.rapidTimer = 0.55;
-      const target = live.filter((w) => !w.waiting && w.node.position.y < SKY - 1).sort((a, b) => a.node.position.y - b.node.position.y)[0];
+      const target = live.filter((w) => !w.waiting && w.gp.y < SKY - 1).sort((a, b) => a.gp.y - b.gp.y)[0];
       if (target) {
-        const p = target.node.position;
+        const p = target.gp;
         const silo = this.nearestSilo(p.x, true);
         if (silo) {
           const d = Math.hypot(p.x - silo.node.position.x, p.y);
@@ -548,6 +567,7 @@ export class Game extends Behaviour implements Theatre {
     b.friendly = friendly;
     b.life = friendly ? 1 : 1.2;
     this.burst(friendly ? this.burstAir : this.burstImpact, x, y);
+    this.flash(x, y, size * (friendly ? 110 : 150), friendly ? '#ffb060' : '#ff6a2a');
     if (!quiet) {
       this.sound.explosion(friendly ? 1 : 1.2, this.chain || 1);
       this.rig?.impact(friendly ? 0.08 : 0.25);
@@ -566,7 +586,7 @@ export class Game extends Behaviour implements Theatre {
       const r = b.radius;
       for (const w of warheads) {
         if (!w.alive || w.waiting || b.hit.has(w)) continue;
-        const q = w.node.position;
+        const q = w.gp;
         if ((q.x - p.x) ** 2 + (q.y - p.y) ** 2 <= r * r) {
           b.hit.add(w);
           this.killWarhead(w, demo);
@@ -625,7 +645,7 @@ export class Game extends Behaviour implements Theatre {
   }
 
   private killWarhead(w: Warhead, demo: boolean): void {
-    const q = w.node.position.clone();
+    const q = w.gp.clone();
     const nuke = w.kind === 'nuke';
     w.kill();
     if (nuke) {
@@ -678,6 +698,7 @@ export class Game extends Behaviour implements Theatre {
 
   private groundHit(x: number, size: number): void {
     this.detonate(x, 0.3, size, false);
+    this.ring(this.ringFx, x, 0, size * 2.6, 0.8, true);
     this.rig?.impact(0.35);
     if (this.phase === 'title') {
       for (const c of this.cities) if (c.alive && Math.abs(c.node.position.x - x) < world.width * 0.05) this.cityFalls(c, true);
@@ -691,6 +712,8 @@ export class Game extends Behaviour implements Theatre {
     this.detonate(x, 0.4, 130 * PX * 1.4, false);
     this.burst(this.burstNuke, x, 0.6);
     this.ring(this.ringFx, x, 0.4, 14);
+    this.ring(this.ringFx, x, 0, 30, 1.6, true);
+    this.flash(x, 3, 2500, '#fff2c0');
     this.rig?.impact(1);
     this.hud.flash('white');
     this.sound.nuke();
@@ -746,11 +769,7 @@ export class Game extends Behaviour implements Theatre {
     const live = this.cities.filter((c) => c.alive);
     for (const w of findObjectsOfType(Warhead)) {
       if (!w.alive || w.waiting) continue;
-      const p = w.node.position;
-      if (!w.whistled && p.y < SKY) {
-        w.whistled = true;
-        this.sound.whistle();
-      }
+      const p = w.gp;
       if (w.kind === 'smart' && live.length) {
         const near = blasts.find((b) => Math.hypot(b.node.position.x - p.x, b.node.position.y - p.y) < b.radius + 3.4);
         if (near) w.tx += Math.sign(p.x - near.node.position.x) * 1.1 * dt;
@@ -766,12 +785,24 @@ export class Game extends Behaviour implements Theatre {
         for (let i = 0; i < 2 + (this.wave > 12 ? 1 : 0); i++) {
           const t = live[Random.rangeInt(0, live.length)];
           const tx = (t ? t.node.position.x : Random.range(-half(), half())) + Random.range(-2, 2);
-          this.launchWarhead('normal', p.x, p.y, tx, 0, w.speed * 1.1, 0);
+          // The pieces carry on from the depth the bus had reached.
+          this.launchWarhead('normal', p.x, p.y, tx, 0, w.speed * 1.1, 0).depth = w.k - 1;
         }
         this.burst(this.burstKill, p.x, p.y);
         this.sound.whistle();
       }
     }
+  }
+
+  /** The nearest few falling warheads whistle as they come; nothing whistles off the battle, or paused. */
+  private voiceIncoming(): void {
+    if (this.phase !== 'playing') return this.sound.incoming([]);
+    const list = findObjectsOfType(Warhead)
+      .filter((w) => w.alive && !w.waiting && w.gp.y < SKY + 1.5 && (!w.stealth || w.revealed > 0 || w.gp.y < SKY * 0.45))
+      .sort((a, b) => b.progress - a.progress)
+      .slice(0, 5)
+      .map((w) => ({ id: w, pan: w.gp.x / half(), progress: w.progress, nuke: w.kind === 'nuke' }));
+    this.sound.incoming(list);
   }
 
   private bossTick(dt: number): void {
@@ -786,7 +817,7 @@ export class Game extends Behaviour implements Theatre {
       const front = (this.radarTimer / 1.5) * 34;
       for (const w of findObjectsOfType(Warhead)) {
         if (!w.stealth || !w.alive) continue;
-        const d = w.node.position.length();
+        const d = w.gp.length();
         if (Math.abs(d - front) < 1.2) w.revealed = 0.45;
       }
     }
@@ -801,8 +832,8 @@ export class Game extends Behaviour implements Theatre {
 
   private threats(): void {
     const list = findObjectsOfType(Warhead)
-      .filter((w) => w.alive && (w.waiting ? w.delay < 1.4 : w.node.position.y > SKY + 0.6) && (!w.stealth || w.revealed > 0))
-      .map((w) => ({ x: w.node.position.x, y: SKY + 1, kind: w.kind }));
+      .filter((w) => w.alive && (w.waiting ? w.delay < 1.4 : w.gp.y > SKY + 0.6) && (!w.stealth || w.revealed > 0))
+      .map((w) => ({ x: w.gp.x, y: SKY + 1, kind: w.kind }));
     this.hud.threats(list, this.camera);
   }
 
@@ -1018,9 +1049,11 @@ export class Game extends Behaviour implements Theatre {
     if (prefab) instantiate(prefab, { position: [x, y, 0.3] });
   }
 
-  private ring(prefab: Prefab | null, x: number, y: number, size: number, seconds = 0.7): void {
+  /** A shock ring: upright in the sky, or `flat` — racing out across the ground. */
+  private ring(prefab: Prefab | null, x: number, y: number, size: number, seconds = 0.7, flat = false): void {
     if (!prefab) return;
-    const node: Object3D = instantiate(prefab, { position: [x, y, -0.1] });
+    const node: Object3D = instantiate(prefab, { position: flat ? [x, 0.06, 0.4] : [x, y, -0.1] });
+    if (flat) node.rotation.x = -Math.PI / 2;
     const ring = node.getComponent(Shockwave);
     if (ring) {
       ring.size = size;

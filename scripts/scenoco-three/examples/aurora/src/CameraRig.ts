@@ -36,9 +36,13 @@ export class CameraRig extends Behaviour<PerspectiveCamera> {
     const t = Time.unscaledTime * 22;
     const nx = (Mathf.perlinNoise(t, 0.1) - 0.5) * 2;
     const ny = (Mathf.perlinNoise(0.7, t) - 0.5) * 2;
-    const sway = Math.sin(Time.unscaledTime * 0.13) * 0.6;
-    camera.position.set(this.home.x + sway + nx * jolt, this.home.y + ny * jolt, this.home.z);
-    this.look.set(this.target.x + sway * 0.3, this.target.y, this.target.z);
+    // A slow drift round the city — a few degrees each way — so the near towers slide past the far
+    // mountains and the scene reads as a place, not a picture.
+    const t2 = Time.unscaledTime;
+    const orbit = Math.sin(t2 * 0.07) * 0.14;
+    const sway = Math.sin(orbit) * this.home.z;
+    camera.position.set(this.home.x + sway + nx * jolt, this.home.y + Math.sin(t2 * 0.11) * 0.5 + ny * jolt, this.home.z * Math.cos(orbit));
+    this.look.set(this.target.x + sway * 0.12, this.target.y, this.target.z);
     // Upright, the front fills the width and leaves height to spare: aim lower until the ground sits near
     // the bottom of the frame, so the spare height goes to the sky.
     if (camera.aspect < 0.85) {
@@ -48,7 +52,7 @@ export class CameraRig extends Behaviour<PerspectiveCamera> {
     this.look.y += this.lift;
     camera.lookAt(this.look);
     camera.rotateZ(nx * jolt * 0.03);
-    if (camera.aspect !== this.aspect || half() !== this.width || Time.frameCount % 30 === 0) this.fit();
+    this.fit();
   }
 
   /** The narrowest fov that keeps the sky's corners, the ground and the HUD strip in frame. */
