@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#0a141a" />
+    <meta
+      name="description"
+      content="Subway Siege: Ironline. A three-dimensional underground arcade shooter. Eight weapons, three drones, evolving bosses and worldwide high scores."
+    />
+    <link rel="icon" href="../icon.svg" type="image/svg+xml" />
+    <title>Subway Siege: Ironline</title>
+    <script type="module" crossorigin src="./assets/index-DM3qo3N8.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-sJ3CvtbW.css">
+  </head>
+  <body>
+    <canvas id="world" aria-label="Three-dimensional subway shooter"></canvas>
+    <div id="vignette"></div>
+    <div id="damage"></div>
+    <div id="loading">
+      <span class="eyebrow">UNDERGROUND DEFENCE AUTHORITY</span>
+      <h1>IRONLINE</h1>
+      <p id="load-note">Powering the rails…</p>
+    </div>
+    <header id="hud" hidden>
+      <div class="hud-score">
+        <span class="label">SCORE</span><strong id="score">000000</strong
+        ><small id="best">GLOBAL BEST —</small>
+      </div>
+      <div class="hud-centre">
+        <span class="label" id="station">01 / COPPER EXCHANGE</span
+        ><strong id="wave">WAVE 01</strong>
+        <div id="wave-meter"><i></i></div>
+      </div>
+      <div class="hud-right">
+        <button id="fire-toggle" class="mini">AUTO FIRE</button
+        ><button id="pause" class="mini" aria-label="Pause">Ⅱ</button>
+      </div>
+    </header>
+    <aside id="instruments" hidden>
+      <div><span class="label">HULL</span><b id="lives">● ● ●</b></div>
+      <div>
+        <span class="label">SHIELD</span>
+        <div class="meter"><i id="shield"></i></div>
+      </div>
+      <div>
+        <span class="label">PULSE</span>
+        <div class="meter amber"><i id="charge"></i></div>
+      </div>
+      <span id="weapon">TWIN LASER</span>
+    </aside>
+    <div id="combo" hidden><strong>×1</strong><span>CHAIN</span></div>
+    <div id="boss-hud" hidden>
+      <span id="boss-name">SIGNAL WARDEN</span>
+      <div><i id="boss-hp"></i></div>
+      <small id="boss-phase">PHASE I</small>
+    </div>
+    <div id="toast" role="status">
+      <small></small><strong></strong><span></span>
+    </div>
+    <div id="radio" aria-live="polite"></div>
+    <div id="popups"></div>
+    <footer id="flight-bar" hidden>
+      <span id="flight-note"
+        >WASD / ARROWS · SPACE fire · X pulse · P pause</span
+      ><button id="pulse">RAIL PULSE <small>X / RMB</small></button>
+    </footer>
+    <main id="menu" class="screen">
+      <div class="menu-content">
+        <a class="back-link" href="../">← EDITIONS</a>
+        <div class="eyebrow">
+          <i></i> UNDERGROUND DEFENCE AUTHORITY <span>EST. 2089</span>
+        </div>
+        <div class="wordmark">
+          <span>SUBWAY SIEGE</span>
+          <h1>IRON<span>LINE</span><b>3D</b></h1>
+        </div>
+        <p class="tagline">
+          LAST DRONE. LIVE RAILS.<br /><em>KEEP THE LINE OPEN.</em>
+        </p>
+        <p class="menu-copy">
+          An underground uprising. An armoured rail drone.<br />Twenty stations
+          between you and the surface.
+        </p>
+        <div id="ships" class="ships" aria-label="Choose your rail drone"></div>
+        <button id="deploy" class="primary">DEPLOY DRONE <span>↗</span></button>
+        <div class="menu-actions">
+          <button id="watch">WATCH DEMO</button
+          ><button id="scores-open">HIGH SCORES</button
+          ><button id="help-open">HOW TO PLAY</button
+          ><button id="settings-open">OPTIONS</button>
+        </div>
+        <div id="menu-boards" class="menu-boards"></div>
+        <div class="menu-foot">
+          <span>3 SHIPS / 8 WEAPONS / NO LAST STOP</span
+          ><span>v3.0.0 · JEZ237 × KOSH</span>
+        </div>
+      </div>
+      <div class="scene-label">
+        <span class="live-dot"></span> LIVE FEED / COPPER EXCHANGE
+        <small>SECTOR 01 · SIGNAL UNSTABLE</small>
+      </div>
+    </main>
+    <section
+      id="dialog"
+      class="screen modal"
+      hidden
+      aria-modal="true"
+      role="dialog"
+      aria-labelledby="dialog-title"
+    >
+      <div class="panel">
+        <span class="eyebrow" id="dialog-kicker">IRONLINE</span>
+        <h2 id="dialog-title"></h2>
+        <div id="dialog-body"></div>
+        <div id="dialog-actions" class="actions"></div>
+      </div>
+    </section>
+    <div id="demo-bar" hidden>
+      LIVE DEMONSTRATION · UNRANKED <button id="demo-exit">TAKE CONTROL</button>
+    </div>
+  </body>
+</html>
