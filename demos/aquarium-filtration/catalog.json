@@ -1,0 +1,266 @@
+[
+  {
+    "id": "038",
+    "title": "UV Atelier",
+    "category": "3D · Inline ultraviolet treatment",
+    "description": "Slide a viewing window through an inline UV sterilizer, inspect textured quartz and seals, and scrub its mechanical service sequence. Compare synchronized water journeys, examine particle shielding, and diagnose four hidden faults.",
+    "url": "uv-studio/",
+    "image": "assets/uv-studio.jpg",
+    "imageAlt": "The UV Atelier cutaway showing a compact ultraviolet lamp inside its quartz sleeve, flowing water, threaded connections, mounting brackets and external ballast",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/uv-studio",
+    "features": [
+      "Sliding section window & 14 selectable assemblies",
+      "Threaded cap, connector release & service timeline",
+      "Three synchronized exposure comparisons",
+      "Particle shielding & four diagnostic challenges"
+    ],
+    "facts": [
+      "Aquatop-informed teaching model",
+      "Mouse, touch & keyboard",
+      "Self-hosted 3D"
+    ],
+    "note": "3D with animated diagram fallback · Desktop & mobile · Illustrative exposure, not calibrated dosing · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
+    "id": "037",
+    "title": "Bio-Wheel Atelier",
+    "category": "3D · Water-driven biological filtration",
+    "description": "Explore a detailed hang-on-back filter with a freely turning pleated biological wheel. Follow one pleat through water and air, open the cartridge and magnetic pump, enlarge the attached biofilm, and animate two different maintenance procedures.",
+    "url": "biowheel-studio/",
+    "image": "assets/biowheel-studio.jpg",
+    "imageAlt": "The Bio-Wheel Atelier with a fibrous pleated wheel, cutaway cartridge, clear intake, flowing spillway and aquarium section",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/biowheel-studio",
+    "features": [
+      "14 assemblies, nine lessons & eight experiments",
+      "Textured pleats, wet sheen & water-driven rotation",
+      "Cartridge change & axle-care animations",
+      "Biofilm microscope & complete water journey"
+    ],
+    "facts": [
+      "Penguin-style teaching model",
+      "Mouse, touch & keyboard",
+      "Self-hosted 3D"
+    ],
+    "note": "3D with animated diagram fallback · Desktop & mobile · Illustrative biology and hydraulics · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
+    "id": "036",
+    "title": "Fleece Atelier",
+    "category": "3D · Automatic mechanical filtration",
+    "description": "Follow water through a sensor-driven fleece roller. Inspect the continuous nonwoven web, shrinking clean roll and growing waste roll. Watch the level sensor trigger a geared advance, explore the fibers up close, and investigate jams, high sump water and roll replacement.",
+    "url": "roller-studio/",
+    "image": "assets/roller-studio.jpg",
+    "imageAlt": "The working Fleece Atelier showing clean and used fleece rolls, a cutaway wet chamber, level sensors, exposed drive gears and receiving sump",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/roller-studio",
+    "features": [
+      "14 assemblies, eight lessons & six experiments",
+      "Layered rolls, tensioning fabric & wet surface detail",
+      "Working gear reduction & five-stage human service",
+      "Track one fleece patch from supply to waste roll"
+    ],
+    "facts": [
+      "ReefMat-inspired teaching model",
+      "Mouse, touch & keyboard",
+      "Self-hosted 3D"
+    ],
+    "note": "3D with animated diagram fallback · Desktop & mobile · Illustrative hydraulics and control · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
+    "id": "035",
+    "title": "Skimmer Atelier",
+    "category": "3D · Marine foam fractionation",
+    "description": "Follow air through a needle-wheel marine skimmer. Inspect the bubble cloud, tapered neck and collection cup, then enlarge one air–water interface to see how surface-active molecules collect. Compare wet and dry skimming and investigate air restriction, power loss and overflow.",
+    "url": "skimmer-studio/",
+    "image": "assets/skimmer-studio.jpg",
+    "imageAlt": "The working Skimmer Atelier with a clear cone-shaped chamber, fine bubbles, rising foam, collection cup and exposed needle-wheel pump",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/skimmer-studio",
+    "features": [
+      "12 assemblies, eight lessons & seven experiments",
+      "Turbulent bubble plumes, folding foam & rippled skimmate",
+      "Detailed slow-motion pump & air–water microscope",
+      "Wet/dry operation, restricted air & overflow studies"
+    ],
+    "facts": [
+      "Original marine teaching design",
+      "Mouse, touch & keyboard",
+      "Self-hosted 3D"
+    ],
+    "note": "3D with animated diagram fallback · Desktop & mobile · Illustrative foam response · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
+    "id": "034",
+    "title": "Sand Atelier",
+    "category": "3D · Fluidized biological filtration",
+    "description": "Lift thousands of sand grains with upward water flow. Explore a clear reactor, its distributor and gravity return, then travel to the living surface of a single grain. Adjust the flow, interrupt the pump, and watch the bed expand, settle or lose fine media.",
+    "url": "sand-studio/",
+    "image": "assets/sand-studio.jpg",
+    "imageAlt": "The working Sand Atelier with a clear vertical sand reactor, individually animated grains, feed pump, height scale and gravity return",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/sand-studio",
+    "features": [
+      "12 assemblies, eight lessons & six experiments",
+      "Continuous grain motion, refractive water & pump section",
+      "Guided water journey & live bed-height history",
+      "Attached biofilm colonies & new/mature comparison"
+    ],
+    "facts": [
+      "Original biological teaching design",
+      "Mouse, touch & keyboard",
+      "Self-hosted 3D"
+    ],
+    "note": "3D with animated diagram fallback · Desktop & mobile · Illustrative hydraulics and biology · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
+    "id": "033",
+    "title": "Drum Atelier",
+    "category": "3D · Mechanical filtration",
+    "description": "Follow suspended waste into an automatic drum filter. Inspect the woven screen, watch the clean-water level trigger a wash, and trace the captured solids through a stationary trough to the waste outlet.",
+    "url": "drum-studio/",
+    "image": "assets/drum-studio.jpg",
+    "imageAlt": "The working Drum Atelier with a cutaway cylindrical screen, geared drive, six rinse nozzles, separate water levels and component explorer",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/drum-studio",
+    "features": [
+      "18 assemblies, nine lessons & six experiments",
+      "Distinct water depths, wet finishes & waste discharge",
+      "Guided particle journey & independent cutaway layers",
+      "Gravity-fed level response & fault studies"
+    ],
+    "facts": [
+      "Original mechanical teaching design",
+      "Mouse, touch & keyboard",
+      "Self-hosted 3D"
+    ],
+    "note": "3D with animated diagram fallback · Desktop & mobile · Illustrative loading and hydraulics · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
+    "id": "031",
+    "title": "Moving Bed Atelier",
+    "category": "3D · Biological filtration",
+    "description": "Explore a living biological filter, from hundreds of tumbling carriers to the protected film inside one hollow surface. Follow separate air and water circuits, open the diaphragm pump, and experiment with aeration, media loading and biological establishment.",
+    "url": "moving-bed-studio/",
+    "image": "assets/moving-bed-studio.jpg",
+    "imageAlt": "The Moving Bed Atelier showing a cutaway aerated reactor with hundreds of hollow carriers, separate mechanical and return-pump bays and an interactive component explorer",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/moving-bed-studio",
+    "features": [
+      "18 assemblies, nine lessons & six experiments",
+      "Rippled refractive water & moving floor light",
+      "Textured carrier macro & flexing pump section",
+      "Four close-ups & independent flow-route controls"
+    ],
+    "facts": [
+      "Original biological teaching design",
+      "Mouse, touch & keyboard",
+      "Self-hosted 3D"
+    ],
+    "note": "3D with animated diagram fallback · Desktop & mobile · Illustrative circulation and biology · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
+    "id": "030",
+    "title": "Trickle Atelier",
+    "category": "3D · Filtration engineering",
+    "description": "Follow a drop through a complete wet/dry circuit: overflow, drip distributor, open bio-balls, bubble baffles and return pump. Take 18 assemblies apart, then turn the power off and watch the sump receive the water above.",
+    "url": "trickle-studio/",
+    "image": "assets/trickle-studio.jpg",
+    "imageAlt": "The working Trickle Atelier showing an aquarium overflow above a cutaway wet/dry tower, ribbed bio-balls, baffles, clear water levels and a component explorer",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/trickle-studio",
+    "features": [
+      "18 selectable assemblies & seven close-ups",
+      "Wet ribs, pendant drops & polished acrylic",
+      "Staged restart & residual drain-down",
+      "Overflow section & gradual pad loading"
+    ],
+    "facts": [
+      "Original wet/dry teaching design",
+      "Mouse, touch & keyboard",
+      "Self-hosted 3D"
+    ],
+    "note": "3D with animated diagram fallback · Desktop & mobile · Illustrative hydraulics · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
+    "id": "027",
+    "title": "AquaClear Atelier",
+    "category": "3D · Filtration engineering",
+    "description": "Take a Fluval AquaClear AC70 apart in 3D. Follow the intake, magnetic impeller and spillway, explore three filtration media, and discover what changes when water takes another lap through the filter.",
+    "url": "aquaclear-studio/",
+    "image": "assets/aquaclear-studio.jpg",
+    "imageAlt": "The working AquaClear Atelier showing a cutaway hang-on-back filter, foam and ceramic media, labeled intake and a component explorer",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/aquaclear-studio",
+    "features": [
+      "15 selectable assemblies",
+      "Explode, cutaway & inspect alone",
+      "Working pump & loaded-foam lab",
+      "Loose media, clear plastic & refractive water"
+    ],
+    "facts": [
+      "Current AC70 layout",
+      "Mouse, touch & keyboard",
+      "Self-hosted 3D"
+    ],
+    "note": "3D with animated diagram fallback · Desktop & mobile · Educational reconstruction · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
+    "id": "028",
+    "title": "FiltoClear 5200 Studio",
+    "category": "3D · Pond filtration",
+    "description": "Open a pressurized pond filter and discover its foam stack, UV clarification core and cleaning mechanism. Follow the water through the OASE FiltoClear 5200 and explore every selectable assembly.",
+    "url": "filtoclear-studio/",
+    "image": "assets/filtoclear-studio.jpg",
+    "imageAlt": "The working FiltoClear studio showing a cylindrical pond filter cut open to reveal colored foam rings and the central UV assembly",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/filtoclear-studio",
+    "features": [
+      "32 selectable assemblies",
+      "Exploded & cutaway views",
+      "Normal flow & Easy-Clean",
+      "Guided lessons & pond sizing"
+    ],
+    "facts": [
+      "OASE FiltoClear 5200",
+      "Pressure-filter study",
+      "Mouse & touch"
+    ],
+    "note": "3D with animated diagram fallback · Desktop & touch · Educational reconstruction · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
+    "id": "029",
+    "title": "Inside the Reef · Filtration Studio",
+    "category": "3D · Reef life support",
+    "description": "Explore the hidden support system beneath a reef aquarium. Take apart a fleece roller, protein skimmer and return pump, inspect living-rock filtration, and trace the circuit through a transparent sump.",
+    "url": "reef-filtration/",
+    "image": "assets/reef-filtration.jpg",
+    "imageAlt": "The working reef filtration studio showing a transparent sump with a fleece roller, bubbling protein skimmer, live-rock chamber and return pump",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/reef-filtration",
+    "features": [
+      "Four filtration assemblies",
+      "37 selectable components",
+      "Water, air & waste paths",
+      "Exploded views & guided circuit"
+    ],
+    "facts": [
+      "One continuous circuit",
+      "Reef sump study",
+      "Mouse & touch"
+    ],
+    "note": "3D with animated diagram fallback · Desktop & touch · Educational reconstruction · Actual demo screenshot",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  }
+]
