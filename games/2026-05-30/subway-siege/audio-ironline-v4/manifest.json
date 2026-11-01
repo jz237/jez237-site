@@ -318,5 +318,29 @@
     "duration_requested": 20.0,
     "loop": true,
     "prompt": "Ambient loop near a tunnel mouth opening to the city surface, gusting wind, distant city traffic, faint birds, open air, seamless, no music no speech."
+  },
+  {
+    "file": "transform.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 1.4,
+    "loop": false,
+    "prompt": "Small combat drone transforming its weapons, rapid mechanical servo whirs and metal plates locking into place with heavy clacks, ending in a bright energy power-up hum, sci-fi mech transformation, isolated, no music no speech."
+  },
+  {
+    "file": "drone_join.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 0.9,
+    "loop": false,
+    "prompt": "Small escort drone docking into formation beside a fighter, quick rising servo chirp and soft magnetic lock-on click with a bright electronic blip, sci-fi, isolated, no music no speech."
+  },
+  {
+    "file": "ring_form.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 2.0,
+    "loop": false,
+    "prompt": "Several escort drones locking into a spinning defensive ring around a ship, a rising rotating whoosh with phasing hum and a resonant energy lock at the end, sci-fi power-up, isolated, no music no speech."
   }
 ]

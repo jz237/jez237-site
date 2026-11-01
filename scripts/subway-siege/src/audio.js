@@ -42,6 +42,9 @@ const FILES = [
   "wave_alarm",
   "arc",
   "game_over",
+  "transform",
+  "drone_join",
+  "ring_form",
   "amb_station",
   "amb_forge",
   "amb_water",
@@ -360,6 +363,20 @@ export class Sound {
   bossPhase(x, z) {
     this.voice("boss_phase", { gain: 0.7, x, z, gap: 0.5, wet: 1.2 });
     this.sub(0.6, 0.9);
+  }
+  transform(x, z) {
+    this.voice("transform", { gain: 0.62, x, z, gap: 0.2, wet: 0.7 });
+    this.sub(0.3, 0.45);
+  }
+  kitOff(x, z) {
+    this.voice("transform", { gain: 0.3, rate: 1.35, x, z, gap: 0.2, wet: 0.6 });
+  }
+  droneJoin(x, z) {
+    this.voice("drone_join", { gain: 0.55, x, z, gap: 0.2 });
+  }
+  ringForm() {
+    this.voice("ring_form", { gain: 0.7, gap: 1, wet: 1.1 });
+    this.sub(0.5, 1);
   }
   waveClear() {
     this.voice("wave_clear", { gain: 0.34, gap: 1, wet: 0.8 });

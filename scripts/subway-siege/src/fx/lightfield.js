@@ -287,7 +287,7 @@ export function makeHaze(layers) {
           vec3 lf = lfSample(vW, 2.2) + 0.5 * lfSample(vW, 4.0);
           lf /= 1.0 + dot(lf, vec3(0.33)) * 0.06;
           float wall = smoothstep(12.5, 8.0, abs(vW.x));
-          vec3 c = (lf * 0.04 + tint * 0.0025) * m * density * wall;
+          vec3 c = (lf * 0.032 + tint * 0.0022) * m * density * wall;
           gl_FragColor = vec4(c, 1.0);
         }`,
       transparent: true,

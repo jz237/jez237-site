@@ -1,4 +1,4 @@
-# Subway Siege: Ironline v3.1.0
+# Subway Siege: Ironline v3.2.0
 
 Three.js 0.184 / Vite 8. A separate 3D edition of the original Subway Siege,
 commissioned by Jez on 2026-11-01. No external runtime CDN or generative API calls.
@@ -72,6 +72,17 @@ Serve the repository root, not the source directory, to test the built game.
   stay screen-readable on phones, and do not rotate with the item.
 
 ## Rules / balancing
+
+v3.2: every temporary weapon bolts its own kit onto the drone (`weaponKit()` in
+`world.js`; lance coils, plasma ring, tri turret, heavy pods with recoil,
+overheat gatling with heat vents, nova fan, twin saw blades) with an elastic
+morph-in, spark spiral and `transform` sound, and retracts when it expires.
+Escort drones (module or rare `drone` pickup; bosses drop one until the ring
+is full) fly in formation up to three; the fourth locks all of them into a
+spinning halo (max six) that swats hostile shots it touches. Enemy fire uses a
+budget: base intervals are about 30% longer, live hostile shots are capped at
+12 + wave (max 34) and volleys are staggered 0.16 s apart, which halves the
+worst-case shot density measured with the player not firing.
 
 Three drones; eight temporary weapons; seven normal enemy behaviours; three
 boss archetypes with health-driven phases; a boss every fourth wave; permanent

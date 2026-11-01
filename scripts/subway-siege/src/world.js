@@ -275,7 +275,7 @@ export function droneModel(type = "vanguard", enemy = false) {
   const flame = new T.Sprite(
     new T.SpriteMaterial({
       map: glowTex,
-      color: new T.Color(c).multiplyScalar(2.4),
+      color: new T.Color(c).multiplyScalar(1.9),
       transparent: true,
       depthWrite: false,
       blending: T.AdditiveBlending,
@@ -376,6 +376,139 @@ export function trainModel() {
   return g;
 }
 
+// Weapon kits: each temporary weapon bolts its own hardware onto the drone.
+// Parts named "spin" turn about their local z, "coil"/"pulse" throb, "recoil"
+// kicks back on each shot, "heat" glows with the trigger held. Animated
+// groups start with zero rotation so clones keep their Euler angles.
+const kitTemplates = new Map();
+export function weaponKit(weapon, color) {
+  if (kitTemplates.has(weapon)) return kitTemplates.get(weapon).clone();
+  const g = new T.Group(),
+    glow = new T.MeshStandardMaterial({
+      color,
+      emissive: color,
+      emissiveIntensity: 1.7,
+      metalness: 0.4,
+      roughness: 0.3,
+    }),
+    shell = metal(new T.Color(color).lerp(new T.Color(0x3a5560), 0.6).getHex()),
+    tube = (r, len) => new T.CylinderGeometry(r, r, len, 12).rotateX(Math.PI / 2),
+    named = (name, o) => ((o.name = name), o);
+  if (weapon === "lance") {
+    for (const s of [-1, 1]) {
+      box(g, dark, s * 0.3, 0.5, -1.2, 0.12, 0.12, 1.55);
+      box(g, glow, s * 0.3, 0.575, -1.2, 0.035, 0.03, 1.5);
+      for (let k = 0; k < 4; k++)
+        named(
+          "coil",
+          part(g, new T.TorusGeometry(0.12, 0.028, 6, 18), glow, s * 0.3, 0.5, -0.65 - k * 0.32),
+        );
+    }
+    box(g, shell, 0, 0.72, 0.05, 0.44, 0.16, 0.62);
+    box(g, glow, 0, 0.81, 0.05, 0.3, 0.02, 0.46);
+  } else if (weapon === "plasma") {
+    const mount = new T.Group();
+    mount.position.set(0, 0.98, 0.05);
+    mount.rotation.x = -Math.PI / 2;
+    const spin = named("spin", new T.Group());
+    spin.userData.speed = 2.6;
+    part(spin, new T.TorusGeometry(0.6, 0.035, 6, 48), glow, 0, 0, 0);
+    for (let i = 0; i < 3; i++) {
+      const a = (i * Math.PI * 2) / 3;
+      part(spin, sphereGeo, glow, Math.cos(a) * 0.6, Math.sin(a) * 0.6, 0, 0.1, 0.1, 0.1);
+    }
+    mount.add(spin);
+    g.add(mount);
+    for (const s of [-1, 1]) box(g, shell, s * 0.3, 0.78, 0.05, 0.06, 0.4, 0.06);
+    named("pulse", part(g, sphereGeo, glow, 0, 0.42, -0.74, 0.17, 0.17, 0.17));
+  } else if (weapon === "tri") {
+    part(g, cylGeo, shell, 0, 0.7, 0.1, 0.24, 0.14, 0.24);
+    box(g, dark, 0, 0.82, -0.05, 0.38, 0.14, 0.44);
+    for (const i of [-1, 0, 1]) {
+      const b = new T.Group();
+      b.position.set(i * 0.13, 0.84, -0.22);
+      b.rotation.y = -i * 0.24;
+      part(b, tube(0.045, 0.72), steel, 0, 0, -0.36);
+      part(b, tube(0.06, 0.08), glow, 0, 0, -0.72);
+      g.add(b);
+    }
+    for (const s of [-1, 1]) {
+      box(g, shell, s * 0.82, 0.42, 0.28, 0.46, 0.04, 0.52, s * 0.5);
+      box(g, glow, s * 1.0, 0.45, 0.1, 0.24, 0.02, 0.05, s * 0.5);
+    }
+  } else if (weapon === "heavy") {
+    for (const s of [-1, 1]) {
+      const pod = named("recoil", new T.Group());
+      pod.position.set(s * 0.9, 0.42, -0.12);
+      pod.userData.z0 = -0.12;
+      part(pod, tube(0.21, 1.15), dark, 0, 0, 0);
+      part(pod, tube(0.24, 0.2), shell, 0, 0, 0.42);
+      part(pod, new T.TorusGeometry(0.2, 0.045, 6, 18), glow, 0, 0, -0.58);
+      box(pod, shell, 0, 0.22, 0.05, 0.3, 0.08, 0.7);
+      g.add(pod);
+      box(g, steel, s * 0.66, 0.45, -0.1, 0.22, 0.12, 0.3);
+    }
+  } else if (weapon === "overheat") {
+    const mount = new T.Group();
+    mount.position.set(0, 0.3, -0.72);
+    const spin = named("spin", new T.Group());
+    spin.userData.speed = 34;
+    for (let i = 0; i < 6; i++) {
+      const a = (i * Math.PI) / 3;
+      part(spin, tube(0.035, 0.85), steel, Math.cos(a) * 0.11, Math.sin(a) * 0.11, -0.42);
+    }
+    part(spin, tube(0.05, 0.9), dark, 0, 0, -0.42);
+    mount.add(spin);
+    part(mount, tube(0.17, 0.3), shell, 0, 0, 0.05);
+    part(mount, new T.TorusGeometry(0.15, 0.03, 6, 18), glow, 0, 0, -0.86);
+    g.add(mount);
+    const heat = new T.MeshStandardMaterial({
+      color: 0x501010,
+      emissive: color,
+      emissiveIntensity: 1.2,
+      metalness: 0.6,
+      roughness: 0.4,
+    });
+    for (let i = 0; i < 4; i++)
+      named("heat", box(g, heat, -0.3 + i * 0.2, 0.64, 0.42, 0.06, 0.14, 0.32));
+  } else if (weapon === "nova") {
+    const fan = named("fan", new T.Group());
+    fan.position.set(0, 0.52, 0.5);
+    for (let i = 0; i < 5; i++) {
+      const pivot = new T.Group();
+      pivot.rotation.set(-0.3, (i - 2) * 0.42, 0);
+      box(pivot, shell, 0, 0, 0.48, 0.07, 0.05, 0.95);
+      box(pivot, glow, 0, 0.03, 0.97, 0.13, 0.04, 0.12);
+      fan.add(pivot);
+    }
+    g.add(fan);
+    for (const s of [-1, 1]) box(g, glow, s * 0.35, 0.62, -0.35, 0.05, 0.03, 0.5);
+  } else if (weapon === "saw") {
+    for (const s of [-1, 1]) {
+      box(g, dark, s * 0.78, 0.42, -0.2, 0.55, 0.08, 0.12);
+      const mount = new T.Group();
+      mount.position.set(s * 1.12, 0.44, -0.38);
+      mount.rotation.x = -Math.PI / 2;
+      const spin = named("spin", new T.Group());
+      spin.userData.speed = -s * 19;
+      part(spin, new T.TorusGeometry(0.3, 0.05, 6, 28), glow, 0, 0, 0);
+      part(spin, cylGeo, steel, 0, 0, 0, 0.12, 0.06, 0.12, Math.PI / 2);
+      for (let k = 0; k < 8; k++) {
+        const a = (k * Math.PI) / 4;
+        part(spin, boxGeo, steel, Math.cos(a) * 0.36, Math.sin(a) * 0.36, 0, 0.12, 0.07, 0.05, 0, 0, a + 0.5);
+      }
+      mount.add(spin);
+      g.add(mount);
+    }
+  }
+  g.traverse((o) => {
+    if (o.isMesh) o.castShadow = true;
+  });
+  g.userData.color = color;
+  kitTemplates.set(weapon, g);
+  return g.clone();
+}
+
 export class World {
   constructor(canvas, settings) {
     this.settings = settings;
@@ -404,7 +537,7 @@ export class World {
       new T.WebGLRenderTarget(1, 1, { type: T.HalfFloatType }),
     );
     this.composer.addPass(new RenderPass(this.scene, this.camera));
-    this.bloom = new UnrealBloomPass(new T.Vector2(1, 1), 0.62, 0.55, 0.92);
+    this.bloom = new UnrealBloomPass(new T.Vector2(1, 1), 0.46, 0.5, 1.0);
     this.composer.addPass(this.bloom);
     this.grade = makeGradePass();
     this.composer.addPass(this.grade);
@@ -1335,7 +1468,7 @@ export class World {
   }
   muzzle(x, z, color, power = 1) {
     const c = this.col2.set(color);
-    this.lightField.flash(x, z, c, 5.5 * power, 2.3, 30);
+    this.lightField.flash(x, z, c, 4.2 * power, 2.2, 30);
     this.flares.push({
       x,
       y: 0.72,
@@ -1498,7 +1631,7 @@ export class World {
           float ang = acos(clamp(dot(vP, hitDir), -1.0, 1.0));
           float rip = exp(-pow((ang - (1.0 - hit) * 2.6) / 0.28, 2.0)) * hit;
           float e = fres * 1.25 + lines * (0.18 + fres * 0.8) * (0.6 + 0.4 * scan) + rip * (2.2 + lines * 3.0) + hit * 0.35;
-          gl_FragColor = vec4(color * e * opacity * 5.0, 1.0);
+          gl_FragColor = vec4(color * e * opacity * 3.0, 1.0);
         }`,
       transparent: true,
       depthWrite: false,
@@ -1511,6 +1644,60 @@ export class World {
       this.shieldUniforms.opacity.value = material.opacity;
     };
     return mesh;
+  }
+  // Weapon kit bolting on: a spiral of sparks, a ring of light, a flash.
+  transformFx(x, z, color) {
+    const c = new T.Color(color),
+      n = Math.round(28 * this.fxScale);
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2,
+        sp = 3 + Math.random() * 3;
+      this.sparks.push({
+        x: x + Math.cos(a) * 0.5,
+        z: z + Math.sin(a) * 0.5,
+        y: 0.5,
+        vx: Math.cos(a + 1.2) * sp,
+        vz: Math.sin(a + 1.2) * sp,
+        vy: 2 + Math.random() * 3,
+        life: 0.35 + Math.random() * 0.3,
+        max: 1,
+        r: 0.5 + c.r * 0.5,
+        g: 0.5 + c.g * 0.5,
+        b: 0.5 + c.b * 0.5,
+      });
+    }
+    this.ring(x, z, color, 0.8);
+    this.fieldRings.push({ x, z, c, t: 0, life: 0.5, radius: 5, intensity: 5 });
+    this.lightField.flash(x, z, c, 9, 3.2, 7);
+    this.flares.push({ x, y: 0.6, z, r: c.r * 1.6, g: c.g * 1.6, b: c.b * 1.6, size: 1.1, life: 0.16, max: 0.16 });
+    this.shockwave(x, z, 0.012, 1.2);
+    this.post.aberration = Math.max(this.post.aberration, 0.5);
+  }
+  // Escorts snapping into the spinning halo.
+  haloFx(x, z) {
+    const c = new T.Color(0x8eddd4);
+    this.fieldRings.push({ x, z, c, t: 0, life: 0.7, radius: 8, intensity: 7 });
+    this.ring(x, z, 0x8eddd4, 0.5);
+    this.ring(x, z, 0xbff8ef, 0.3);
+    this.shockwave(x, z, 0.02, 1.6);
+    this.post.aberration = Math.max(this.post.aberration, 0.7);
+    this.fovKick = Math.max(this.fovKick, 2);
+  }
+  makeHalo() {
+    const m = new T.Mesh(
+      new T.TorusGeometry(1, 0.012, 4, 96),
+      new T.MeshBasicMaterial({
+        color: new T.Color(0x8eddd4).multiplyScalar(1.6),
+        transparent: true,
+        opacity: 0,
+        blending: T.AdditiveBlending,
+        depthWrite: false,
+      }),
+    );
+    m.rotation.x = -Math.PI / 2;
+    m.layers.enable(1);
+    this.scene.add(m);
+    return m;
   }
   // Live third rail shorting out: a jagged arc, a crackle of sparks and light.
   spawnArc() {
@@ -1666,6 +1853,15 @@ export class World {
         0.1,
       );
       bolt.position.z = 0.45;
+    } else if (type === "drone") {
+      box(model, dark, 0, 0, 0, 0.62, 0.34, 0.86);
+      box(model, paint, 0, 0.18, -0.08, 0.46, 0.18, 0.6);
+      for (const s of [-1, 1]) {
+        box(model, paint, s * 0.42, 0.02, 0.08, 0.32, 0.16, 0.58, s * 0.2);
+        box(model, light, s * 0.34, 0.04, -0.52, 0.08, 0.08, 0.1);
+      }
+      box(model, light, 0, 0.29, -0.3, 0.2, 0.05, 0.05);
+      model.rotation.x = -0.35;
     } else {
       box(model, dark, 0, 0, 0.18, 0.76, 0.48, 0.72);
       box(model, paint, 0, 0.23, 0.16, 0.6, 0.14, 0.57);
@@ -2044,12 +2240,25 @@ export class World {
     // Player, escorts and supplies.
     const p = game.player;
     if (game.playerMesh?.visible) {
-      LF.add(p.x, p.z + 0.95, c.setHex(game.ship.color), 3.2, 2.5);
+      LF.add(p.x, p.z + 0.95, c.setHex(game.ship.color), 2.3, 2.4);
       if (p.shield > 0 && game.state === "play")
-        LF.add(p.x, p.z, c.setHex(0x8bf4d7), 0.3 + p.shield * 0.005, 2.1);
+        LF.add(p.x, p.z, c.setHex(0x8bf4d7), 0.2 + p.shield * 0.003, 2.1);
     }
     for (const w of game.wings || [])
       LF.add(w.mesh.position.x, w.mesh.position.z + 0.5, c.setHex(0x8eddd4), 1.4, 1.6);
+    if (game.kit && game.playerMesh?.visible)
+      LF.add(p.x, p.z - 0.3, c.setHex(game.kit.color), 1.4 * game.kit.mesh.scale.x, 2.4);
+    const halo = (this.halo ||= this.makeHalo()),
+      ringOn = game.state === "play" && game.wings?.length >= 4;
+    halo.material.opacity += ((ringOn ? 0.75 : 0) - halo.material.opacity) * Math.min(1, dt * 5);
+    halo.visible = halo.material.opacity > 0.01;
+    if (ringOn) {
+      halo.position.set(p.x, 0.36, p.z);
+      halo.scale.set(game.haloRadius[0], game.haloRadius[1], 1);
+      LF.ring(p.x, p.z, c.setHex(0x8eddd4), 1.3, 2.6, 0.7);
+      for (const w of game.wings)
+        S.push(w.x, 0.33, w.z, (w.vx || 0) * 0.05, 0, (w.vz || 0) * 0.05, 0.06, 0.9, 2.2, 2, 0.8, KIND.spark);
+    }
     for (const item of game.pickups)
       LF.add(
         item.x,
@@ -2108,14 +2317,14 @@ export class World {
         nz = b.vz / sp,
         len = (b.len || 0.5) * 2.4;
       c.setHex(b.color);
-      S.push(b.x, 0.7, b.z, nx * len, 0, nz * len, b.r * 1.35, c.r * 2.6, c.g * 2.6, c.b * 2.6, 1, KIND.bolt);
+      S.push(b.x, 0.7, b.z, nx * len, 0, nz * len, b.r * 1.3, c.r * 1.95, c.g * 1.95, c.b * 1.95, 1, KIND.bolt);
       if (lit++ < 360)
-        LF.add(b.x, b.z + 0.4, c, 2.1 + b.r * 6, 1.6 + b.r * 2, 1.6, Math.atan2(b.vz, b.vx));
+        LF.add(b.x, b.z + 0.4, c, 1.6 + b.r * 5, 1.6 + b.r * 2, 1.6, Math.atan2(b.vz, b.vx));
     }
     for (const s of game.shots) {
       c.setHex(s.color);
-      S.push(s.x, 0.7, s.z, s.vx * 0.025, 0, s.vz * 0.025, s.r * 2.4, c.r * 2.4, c.g * 2.4, c.b * 2.4, 1, KIND.orb, s.x * 0.37 + s.z * 0.11);
-      if (lit++ < 520) LF.add(s.x, s.z, c, 2.6, 1.7);
+      S.push(s.x, 0.7, s.z, s.vx * 0.025, 0, s.vz * 0.025, s.r * 2.3, c.r * 1.85, c.g * 1.85, c.b * 1.85, 1, KIND.orb, s.x * 0.37 + s.z * 0.11);
+      if (lit++ < 520) LF.add(s.x, s.z, c, 2, 1.7);
     }
     // Sparks are drawn as velocity streaks.
     this.sparks = this.sparks.filter((q) => {
@@ -2135,14 +2344,14 @@ export class World {
         q.vz *= 0.7;
       }
       const fade = Math.min(1, q.life * 3);
-      S.push(q.x, q.y, q.z, q.vx * 0.03, q.vy * 0.03, q.vz * 0.03, 0.035, q.r * 3.2, q.g * 3.2, q.b * 3.2, fade, KIND.spark);
+      S.push(q.x, q.y, q.z, q.vx * 0.03, q.vy * 0.03, q.vz * 0.03, 0.035, q.r * 2.5, q.g * 2.5, q.b * 2.5, fade, KIND.spark);
       return true;
     });
     this.flares = this.flares.filter((f) => {
       f.life -= dt;
       if (f.life <= 0) return false;
       const k = f.life / f.max;
-      S.push(f.x, f.y, f.z, 0, 0, 0, f.size * (0.6 + 0.4 * k), f.r * 2, f.g * 2, f.b * 2, k, KIND.flare);
+      S.push(f.x, f.y, f.z, 0, 0, 0, f.size * (0.6 + 0.4 * k), f.r * 1.5, f.g * 1.5, f.b * 1.5, k, KIND.flare);
       return true;
     });
     // Third-rail arcs.

@@ -1,5 +1,5 @@
 import * as T from "three";
-import { SECTORS, droneModel, bossModel } from "./world.js";
+import { SECTORS, droneModel, bossModel, weaponKit } from "./world.js";
 export const SHIPS = [
   {
     id: "vanguard",
@@ -106,17 +106,17 @@ export const WEAPONS = {
 };
 const WEAPON_LIST = Object.keys(WEAPONS).filter((k) => k !== "laser");
 const ENEMIES = {
-  scout: { hp: 3, speed: 4.5, r: 0.53, value: 100, color: 0xea9b67, fire: 3.5 },
+  scout: { hp: 3, speed: 4.5, r: 0.53, value: 100, color: 0xea9b67, fire: 4.6 },
   swarm: { hp: 1.3, speed: 7, r: 0.35, value: 75, color: 0xffce78, fire: 99 },
-  weaver: { hp: 5, speed: 3.5, r: 0.7, value: 180, color: 0x88d6bf, fire: 2.4 },
-  hunter: { hp: 5, speed: 5, r: 0.55, value: 220, color: 0xcd9bdd, fire: 2.1 },
+  weaver: { hp: 5, speed: 3.5, r: 0.7, value: 180, color: 0x88d6bf, fire: 3.3 },
+  hunter: { hp: 5, speed: 5, r: 0.55, value: 220, color: 0xcd9bdd, fire: 2.9 },
   sentry: {
     hp: 8,
     speed: 2.6,
     r: 0.66,
     value: 260,
     color: 0xf0b367,
-    fire: 2.7,
+    fire: 3.5,
   },
   brute: {
     hp: 16,
@@ -124,7 +124,7 @@ const ENEMIES = {
     r: 0.85,
     value: 350,
     color: 0xd77b70,
-    fire: 2.8,
+    fire: 3.7,
   },
   splitter: {
     hp: 7,
@@ -132,7 +132,7 @@ const ENEMIES = {
     r: 0.72,
     value: 240,
     color: 0xb2b1f2,
-    fire: 3.1,
+    fire: 4,
   },
 };
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -224,8 +224,8 @@ export const UPGRADES = [
     id: "wing",
     name: "WING DRONE",
     icon: "⋈",
-    desc: "An escort cannon fires alongside you.",
-    max: 2,
+    desc: "An escort cannon fires alongside you. A fourth locks them all into a spinning halo that blocks fire.",
+    max: 6,
   },
 ];
 
@@ -277,6 +277,8 @@ export class Game {
     this.shieldMesh = this.world.makeShield();
     this.world.scene.add(this.shieldMesh);
     this.wings = [];
+    this.kit = null;
+    this.haloRadius = [1.8, 1.55];
   }
   selectShip(index) {
     this.settings.ship = index;
@@ -323,6 +325,8 @@ export class Game {
     this.hits = 0;
     this.fired = 0;
     this.slow = 0;
+    this.nextVolley = 0;
+    this.ringAngle = 0;
     this.hitWave = false;
     this.upgrades = {
       rate: 0,
@@ -562,6 +566,7 @@ export class Game {
       put(0.46, 0.3);
     }
     this.sound.fire(p.weapon, p.x, p.z);
+    if (this.kit) this.kit.recoil = 1;
     this.world.muzzle(
       p.x,
       p.z - 0.9,
@@ -571,7 +576,7 @@ export class Game {
     this.recoil = 0.1;
   }
   enemyShot(e, angle, speed = 8, color = 0xff9b6b, r = 0.17) {
-    if (this.shots.length >= 240) return;
+    if (this.shots.length >= 150) return;
     if (e.type !== "boss" && e.mesh) {
       this.sound.enemyFire(e.x, e.z, e.type === "brute");
       this.world.muzzle(e.x, e.z + 0.8, color, 0.7);
@@ -598,8 +603,8 @@ export class Game {
       base = this.aim(e),
       speed = 6.5 + Math.min(4, this.wave * 0.22);
     if (e.kind === 0) {
-      for (let i = -2 - phase; i <= 2 + phase; i++)
-        this.enemyShot(e, base + i * 0.15, speed, 0xff9d6b, 0.19);
+      for (let i = -1 - phase; i <= 1 + phase; i++)
+        this.enemyShot(e, base + i * 0.17, speed, 0xff9d6b, 0.19);
     } else if (e.kind === 1) {
       for (let k = -1; k <= 1; k++) {
         const port = { x: e.x + k * 1.9, z: e.z };
@@ -613,7 +618,7 @@ export class Game {
           );
       }
     } else {
-      const count = 10 + phase * 3;
+      const count = 8 + phase * 2;
       for (let i = 0; i < count; i++) {
         const angle = (i / count) * Math.PI * 2 + e.age * 0.23;
         this.enemyShot(e, angle, 5.5 + phase, 0xffbd76, 0.19);
@@ -746,6 +751,7 @@ export class Game {
       );
       this.drop(e.x - 1, e.z, "shield");
       this.drop(e.x + 1, e.z, "weapon");
+      if (this.wings.length < 6) this.drop(e.x, e.z + 1, "drone");
       for (const minion of this.enemies)
         if (minion !== e && !minion.dead) {
           minion.dead = true;
@@ -773,11 +779,13 @@ export class Game {
           e.z,
           guaranteed && this.player.shield < 25
             ? "shield"
-            : roll < 0.25
+            : roll < 0.23
               ? "shield"
-              : roll < 0.45
+              : roll < 0.41
                 ? "charge"
-                : "weapon",
+                : roll < 0.51 && this.wings.length < 6
+                  ? "drone"
+                  : "weapon",
         );
       }
     }
@@ -790,13 +798,17 @@ export class Game {
           ? "SHIELD +42"
           : type === "charge"
             ? "PULSE +40"
-            : WEAPONS[choice].name,
+            : type === "drone"
+              ? "WING DRONE +1"
+              : WEAPONS[choice].name,
       color =
         type === "shield"
           ? 0x8cf3d8
           : type === "charge"
             ? 0xffc66f
-            : WEAPONS[choice].color;
+            : type === "drone"
+              ? 0x8eddd4
+              : WEAPONS[choice].color;
     const p = {
       x,
       z,
@@ -821,22 +833,112 @@ export class Game {
     } else if (p.type === "charge") {
       this.player.charge = clamp(this.player.charge + 40, 0, 100);
       this.ui.toast("SUPPLY ACQUIRED", "ENERGY CELL", "+40 pulse energy");
+    } else if (p.type === "drone") {
+      if (!this.addWing())
+        this.player.charge = clamp(this.player.charge + 25, 0, 100);
     } else {
+      const fresh = this.player.weapon !== p.weapon;
       this.player.weapon = p.weapon;
       this.player.weaponT = 20;
+      if (fresh) this.setKit(p.weapon);
       this.ui.toast(
         "WEAPON ONLINE",
         WEAPONS[p.weapon].name,
-        "20 seconds · keep the pressure on",
+        "20 seconds · the drone rebuilds itself around it",
       );
     }
-    this.sound.pickup(p.type, p.x, p.z);
+    if (p.type !== "drone") this.sound.pickup(p.type, p.x, p.z);
     this.world.ring(p.x, p.z, p.type === "shield" ? 0x8cf3d8 : 0xffc878, 0.6);
     this.world.burst(p.x, p.z, p.type === "shield" ? 0x8cf3d8 : 0xffc878, 14);
     p.dead = true;
   }
+  addWing() {
+    if (this.wings.length >= 6) return false;
+    const mesh = droneModel("vanguard"),
+      p = this.player;
+    mesh.scale.multiplyScalar(0.45);
+    this.world.scene.add(mesh);
+    this.wings.push({ mesh, fire: 0, x: p.x, z: p.z + 0.6 });
+    const n = this.wings.length;
+    this.upgrades.wing = n;
+    if (n === 4) {
+      this.world.haloFx(p.x, p.z);
+      this.sound.ringForm();
+      this.ui.toast(
+        "FOUR ESCORTS",
+        "DRONE HALO",
+        "They lock into a spinning ring that swats enemy fire",
+      );
+    } else {
+      this.sound.droneJoin(p.x, p.z);
+      this.ui.toast(
+        "ESCORT ONLINE",
+        n > 4 ? "HALO +1" : "WING DRONE",
+        n > 4
+          ? `${n} drones in the ring`
+          : n === 3
+            ? "One more and they form a halo"
+            : `${n} escort${n > 1 ? "s" : ""} flying with you`,
+      );
+    }
+    return true;
+  }
+  // Each temporary weapon rebuilds the drone with its own hardware.
+  setKit(weapon) {
+    const old = this.kit;
+    if (!weapon || weapon === "laser") {
+      if (old && !old.out) {
+        old.out = true;
+        old.t = 0;
+        this.sound.kitOff(this.player.x, this.player.z);
+      }
+      return;
+    }
+    old?.mesh.removeFromParent();
+    const color = WEAPONS[weapon].color,
+      mesh = weaponKit(weapon, color),
+      parts = { spin: [], coil: [], recoil: [], heat: [], pulse: [], fan: [] };
+    mesh.traverse((o) => parts[o.name]?.push(o));
+    mesh.scale.setScalar(0.001);
+    this.playerMesh.add(mesh);
+    this.kit = { weapon, color, mesh, parts, t: 0, out: false, recoil: 0 };
+    this.world.transformFx(this.player.x, this.player.z, color);
+    this.sound.transform(this.player.x, this.player.z);
+  }
+  animateKit(dt) {
+    const k = this.kit;
+    if (!k) return;
+    k.t += dt;
+    if (k.out) {
+      const s = Math.max(0, 1 - k.t / 0.28);
+      k.mesh.scale.setScalar(Math.max(0.001, s * s * 1.3));
+      if (s === 0) {
+        k.mesh.removeFromParent();
+        this.kit = null;
+      }
+      return;
+    }
+    // Elastic snap into place, then each part does its job.
+    const x = Math.min(1, k.t / 0.55),
+      e = x === 1 ? 1 : 1 + Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * 2.094);
+    k.mesh.scale.setScalar(Math.max(0.001, e * 1.3));
+    k.recoil *= Math.exp(-dt * 14);
+    const firing = this.player.fire > 0;
+    for (const o of k.parts.spin)
+      o.rotation.z += dt * o.userData.speed * (k.weapon === "overheat" && !firing ? 0.25 : 1);
+    k.parts.coil.forEach((o, i) =>
+      o.scale.setScalar(1 + 0.4 * Math.max(0, Math.sin(this.time * 16 - (i % 4) * 1.3))),
+    );
+    for (const o of k.parts.recoil) o.position.z = o.userData.z0 + k.recoil * 0.2;
+    for (const o of k.parts.heat)
+      o.material.emissiveIntensity = 0.8 + (firing ? 2.6 : 0.6) * (0.75 + 0.25 * Math.sin(this.time * 9));
+    for (const o of k.parts.pulse) o.scale.setScalar(0.17 * (1 + 0.25 * Math.sin(this.time * 10)));
+    for (const o of k.parts.fan) o.scale.x = 0.4 + 0.6 * e;
+  }
   pickUpgrades() {
-    const pool = UPGRADES.filter((u) => this.upgrades[u.id] < u.max);
+    const pool = UPGRADES.filter((u) =>
+      u.id === "wing" ? this.wings.length < u.max : this.upgrades[u.id] < u.max,
+    );
     for (let i = pool.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [pool[i], pool[j]] = [pool[j], pool[i]];
@@ -853,12 +955,7 @@ export class Game {
     }
     if (id === "charge")
       this.player.charge = clamp(this.player.charge + 40, 0, 100);
-    if (id === "wing") {
-      const mesh = droneModel("vanguard");
-      mesh.scale.multiplyScalar(0.45);
-      this.world.scene.add(mesh);
-      this.wings.push({ mesh, fire: 0, side: this.wings.length ? -1 : 1 });
-    }
+    if (id === "wing") this.addWing();
     this.sound.play("pickup", 0.5);
     this.state = "play";
     this.ui.close();
@@ -938,7 +1035,11 @@ export class Game {
     p.invul = Math.max(0, p.invul - dt);
     p.fire = Math.max(0, p.fire - dt);
     p.weaponT = Math.max(0, p.weaponT - dt);
-    if (p.weaponT === 0) p.weapon = "laser";
+    if (p.weaponT === 0 && p.weapon !== "laser") {
+      p.weapon = "laser";
+      this.setKit(null);
+    }
+    this.animateKit(dt);
     p.px = p.x;
     p.pz = p.z;
     let kx =
@@ -1014,10 +1115,45 @@ export class Game {
       this.demo
     )
       this.fire();
+    const halo = this.wings.length >= 4,
+      slots = [
+        [1.35, 0.5],
+        [-1.35, 0.5],
+        [0, 1.6],
+      ];
+    this.ringAngle += dt * 2.4;
+    this.wings.forEach((wing, i) => {
+      let tx, tz;
+      if (halo) {
+        const a = this.ringAngle + (i / this.wings.length) * Math.PI * 2;
+        tx = p.x + Math.cos(a) * this.haloRadius[0];
+        tz = p.z + Math.sin(a) * this.haloRadius[1];
+      } else {
+        tx = p.x + slots[i][0];
+        tz = p.z + slots[i][1];
+      }
+      const k = 1 - Math.exp(-dt * (halo ? 16 : 10)),
+        px = wing.x ?? tx,
+        pz = wing.z ?? tz;
+      wing.x = px + (tx - px) * k;
+      wing.z = pz + (tz - pz) * k;
+      wing.vx = (wing.x - px) / dt;
+      wing.vz = (wing.z - pz) / dt;
+      wing.mesh.position.set(wing.x, halo ? 0.2 : 0.05, wing.z);
+      wing.mesh.rotation.z = clamp(-wing.vx * 0.06, -0.6, 0.6);
+    });
+    // The halo is a moving wall: escorts swat hostile shots they touch.
+    if (halo)
+      for (const s of this.shots)
+        for (const wing of this.wings)
+          if (s.life > 0 && (s.x - wing.x) ** 2 + (s.z - wing.z) ** 2 < 0.2) {
+            s.life = 0;
+            this.world.impact(s.x, s.z, 0x8eddd4);
+            this.sound.hit(s.x, s.z);
+          }
     for (const wing of this.wings) {
-      const x = p.x + wing.side * 1.35,
-        z = p.z + 0.5;
-      wing.mesh.position.set(x, 0.05, z);
+      const x = wing.x,
+        z = wing.z;
       this.animateModel(wing.mesh, dt);
       wing.fire -= dt;
       if (
@@ -1030,7 +1166,7 @@ export class Game {
           pad?.buttons[7]?.pressed ||
           this.demo)
       ) {
-        wing.fire = 0.33;
+        wing.fire = halo ? 0.42 : 0.33;
         this.bullet(x, z, 0, -32, WEAPONS.laser, 0.65);
       }
     }
@@ -1102,7 +1238,7 @@ export class Game {
         }
         if (e.fire <= 0) {
           this.bossVolley(e);
-          e.fire = 2.3 - e.phase * 0.4;
+          e.fire = 2.7 - e.phase * 0.35;
           e.warning = 0;
         }
         e.mesh.getObjectByName("crown").rotation.z += dt * (0.7 + phase * 0.6);
@@ -1124,7 +1260,19 @@ export class Game {
         if (e.fire < 0.55 && e.z > -15 && e.type !== "swarm")
           e.warning = e.fire;
         else e.warning = 0;
+        if (
+          e.fire <= 0 &&
+          e.z > -15 &&
+          e.z < p.z - 1 &&
+          (this.shots.length >= 12 + Math.min(22, this.wave) ||
+            this.time < this.nextVolley)
+        ) {
+          // Over the fire budget: hold the shot briefly instead of walling the lane.
+          e.fire = random(0.3, 0.8);
+          e.warning = 0;
+        }
         if (e.fire <= 0 && e.z > -15 && e.z < p.z - 1) {
+          this.nextVolley = this.time + 0.16;
           const a = this.aim(e, e.type === "hunter");
           if (e.type === "weaver") {
             this.enemyShot(e, a - 0.23, 7, 0xfbc688);
@@ -1136,7 +1284,7 @@ export class Game {
             this.enemyShot(e, a, e.type === "hunter" ? 10 : 7.2, 0xffb377);
           e.fire =
             ((ENEMIES[e.type].fire || 3) * random(0.8, 1.2)) /
-            (1 + Math.min(0.8, this.wave * 0.025));
+            (1 + Math.min(0.45, this.wave * 0.018));
         }
       }
       e.mesh.position.set(e.x, Math.sin(this.time * 4 + e.age) * 0.045, e.z);
