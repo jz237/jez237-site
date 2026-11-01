@@ -12,7 +12,7 @@ Editable ES modules live directly here. Serve the repository over HTTP and open 
 - Water lab: low/high pump setting, sump fill, loaded pad with uneven distribution, stop/restart power, low return-level protection and insufficient-reserve warning.
 - Small tangent-aligned directional arrows. Cyan marks the drain, mint the return, amber bypass or power-off drain-down. Return arrows reverse when power is off.
 - Falling droplets and short distributor jets, collection bubbles, mesh waves, visible water depth and meniscus cues. Main collection surface has bounded planar reflection and depth-guarded screen-space refraction.
-- Four care stages disable operation and separate relevant components. Pause/reduced motion freezes simulation time and drain-down while leaving camera controls available.
+- Four care stages disable operation and separate relevant components. Pause freezes simulation time and drain-down while leaving camera controls available.
 - Responsive controls, keyboard tabs/component selection, mobile tour navigation, fullscreen and readable component descriptions when WebGL fails.
 
 ## Evidence and limits
@@ -44,7 +44,7 @@ Bio-ball placement uses deterministic conservative sphere envelopes; spheres do 
 - `studio.js`: accessible UI, unified animation state/clock, guided cameras, selection, care and read-only diagnostics at `window.trickleStudio.snapshot()`.
 - `studio.css`: the HOB exhibit's responsive visual system, with water-lab state styling.
 
-All moving effects use controller-owned paused/reduced-motion clocks. Flow and arrow phase are integrated so moving a rate slider does not reposition every particle; rotor angle is integrated and held when power stops. The one-third-speed control scales operating time; camera transitions retain their ordinary interaction speed. Avoid adding independent timers for water or pump effects. Pure pose evaluation is also used while calculating camera bounds, so it must not increment physical time. Preserve the original opaque canvas and scene background: an alpha canvas can give physically transmissive acrylic pale halos.
+All moving effects use controller-owned pausable operating clocks. Flow and arrow phase are integrated so moving a rate slider does not reposition every particle; rotor angle is integrated and held when power stops. The one-third-speed control scales operating time; camera transitions retain their ordinary interaction speed. Avoid adding independent timers for water or pump effects. Pure pose evaluation is also used while calculating camera bounds, so it must not increment physical time. Preserve the original opaque canvas and scene background: an alpha canvas can give physically transmissive acrylic pale halos.
 
 ## Checks and publication
 
@@ -89,3 +89,7 @@ On restart the return-line charge travels upward for 1.4 animation seconds; the 
 The Water lab has a continuous 0–100% debris slider and a twelve-animation-second loading demonstration. The same pad goes from 28 to 520 deposits, darkens, pools above its upstream face, and progressively reduces active outlets from 63 to 21 with a deterministic mask. A visible bypass begins above 35% loading. No clogging curve, elapsed maintenance interval or actual distributor failure probability is implied. The original loaded-pad checkbox remains a clean/loaded shortcut. Navigation away cancels the automatic comparison; reset restores all controls and clocks.
 
 `realism-qa.cjs` checks transport order, finite residual drainage, matching outlet counts, progressive loading, pooling, sectioned drain, pause, care, restart, desktop/mobile layout and browser errors. `qa.cjs` additionally waits for residual film to end after bulk settling. All local imports use v3 cache keys.
+
+## Automatic startup (November 1, 2026)
+
+Operation starts automatically, including with OS reduced motion. Pause remains explicit and camera orbit is not forced. Shared [`../filter-runtime/README.md`](../filter-runtime/README.md) documents adaptive graphics, animated diagram fallback, and the collection-wide startup checks. The diagram is a simplified operating view; full 3D assembly and experiments require WebGL.

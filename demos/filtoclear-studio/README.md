@@ -23,3 +23,7 @@ This is an original approximate reconstruction, not a measured service model. In
 Publish this gallery demo here. Hidden Reef is maintained separately on Evo X2 and deployed only to https://hidden-reef.pages.dev/; see HIDDEN_REEF.md. Do not recreate storefront/header-preview copies in this repository. Local pond links adapt when mounted under `/learn/filtoclear/`. Exclude package.json and tests from public copies; preserve this source with the tests under `scripts/filtoclear-studio`.
 
 The jez237 Pages wrapper in root AGENTS.md is mandatory. The separate Hidden Reef Pages project publishes the full current `prototypes/hidden-reef` tree using its existing footer-link cleanup policy.
+
+## Automatic startup (November 1, 2026)
+
+Operation starts automatically, including with OS reduced motion. Pause remains explicit and camera orbit is not forced. Shared [`../filter-runtime/README.md`](../filter-runtime/README.md) documents adaptive graphics, animated diagram fallback, and the collection-wide startup checks. The diagram is a simplified operating view; full 3D assembly and experiments require WebGL.

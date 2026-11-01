@@ -34,7 +34,7 @@ No links to competing aquarium retailers. No store inventory claim is made. Hidd
 
 All water geometry, shader detail and particles use the simulation clock, so pause and reading modes remain consistent. The full curtain and its impact particles disappear as return delivery falls to zero. Main water rendering replaces the old bright drawn ripple pattern; the maintenance tray and enlarged biofilm keep a lighter independent finish. The cartridge-loading input now has a unique ID, fixing a collision with the loading overlay that positioned its slider across the 3D view.
 
-`simulation.js` contains substepped normalized flow, inertia, moisture, service state and the teaching dry-start interlock. This interlock is not claimed as real product electronics. All animation uses simulation time/travel; pause, exploded mode, Care reading view and hidden documents freeze it. Reduced motion starts paused and leaves orbit/zoom available. All topics remain readable when WebGL is unavailable.
+`simulation.js` contains substepped normalized flow, inertia, moisture, service state and the teaching dry-start interlock. This interlock is not claimed as real product electronics. All animation uses simulation time/travel; pause, exploded mode, Care reading view and hidden documents freeze it. Reduced motion starts in Light graphics with motion running and leaves orbit/zoom available. All topics remain readable when WebGL is unavailable.
 
 `model.js` owns geometry and rendering; `finishes.js` owns texture/shader detail; `data.js` owns components, lessons, experiments and quizzes; `studio.js` owns interaction and camera. The pump and cartridge close-ups hide obstructing assemblies, restoring them when the view ends. Runtime inspection is available through `window.biowheelStudio.snapshot()` and `.reset()`.
 
@@ -56,3 +56,7 @@ The pure tests cover rotation causality, jam isolation, restriction, moisture re
 Water-specific tests additionally check that the sheet clears the solid lip and lands at every modeled water height, responds to delivery, freezes on pause, stops/restarts with the pump, and hides its scene captures in separated/microscope views. Browser checks include the cartridge-loading control, mobile rendering and shader errors. `release-check.cjs` refreshes the gallery cover and checks the collection links and detail views.
 
 After tests, commit and push, then use the mandatory `deploy-reusing-stage.mjs --deploy` wrapper. Reuse the existing stage; preserve Pages Functions and the rest of the site. Do not create a new full-site copy or modify sibling demos to add this exhibit.
+
+## Automatic startup (November 1, 2026)
+
+Operation starts automatically, including with OS reduced motion. Pause remains explicit and camera orbit is not forced. Shared [`../filter-runtime/README.md`](../filter-runtime/README.md) documents adaptive graphics, animated diagram fallback, and the collection-wide startup checks. The diagram is a simplified operating view; full 3D assembly and experiments require WebGL.

@@ -23,7 +23,7 @@ New modules: `web-shape.js` (supported path and wrinkles), `transport.js` (parti
 
 ## Version 2 — visible winding and surface detail
 
-The Explore panel now has **Watch one advance**. It loads the wet chamber enough to trigger the existing level sensor, moves to the front of the mechanism and runs at one-third speed. It respects reduced-motion preferences (press Resume). The motor still runs intermittently; the demonstration does not turn the spindles continuously when no fleece is being consumed. Initial arrival starts with a partially loaded web so the first automatic burst can be seen promptly. Reset retains the original clean-start experiment.
+The Explore panel now has **Watch one advance**. It loads the wet chamber enough to trigger the existing level sensor, moves to the front of the mechanism and runs at one-third speed. It starts running with Light graphics for reduced-motion preferences. The motor still runs intermittently; the demonstration does not turn the spindles continuously when no fleece is being consumed. Initial arrival starts with a partially loaded web so the first automatic burst can be seen promptly. Reset retains the original clean-start experiment.
 
 The fleece has physical-distance UVs, advected mottled soil, a locally generated 1024-pixel nonwoven texture, slight cross-web wrinkles, 1,100 raised fiber segments and 260 attached dirt flecks. Surface detail travels only when the web advances. The used roll has uneven staining and speckles. Guide rollers use their actual model radius to derive rotation; both spindle angles integrate web travel divided by the changing roll radius. Amber/black index marks make rotation visible against stationary bearings. Fasteners and screw slots add scale cues. All geometry and materials are original code-generated assets.
 
@@ -48,7 +48,7 @@ No links to other aquarium retailers. Current manufacturer manuals govern real i
 - `data.js`: content and scenario definitions.
 - `index.html`: readable science/care/source content, including no-JavaScript fallback.
 
-Default automatic care replaces nearly exhausted rolls (5.5% remaining) and resumes the user's inflow preference. User can disable it to study exhaustion and trigger service manually. Clearing a jam is an abstract inspection/repair action. Pause, exploded mode, Care tab and hidden document freeze physical/service clocks. Reduced-motion starts paused; camera remains interactive. Reset restores default automatic care. Presets retain the user's care preference.
+Default automatic care replaces nearly exhausted rolls (5.5% remaining) and resumes the user's inflow preference. User can disable it to study exhaustion and trigger service manually. Clearing a jam is an abstract inspection/repair action. Pause, exploded mode, Care tab and hidden document freeze physical/service clocks. Reduced-motion starts in Light graphics with motion running; camera remains interactive. Reset restores default automatic care. Presets retain the user's care preference.
 
 ## Verification and publishing
 
@@ -68,3 +68,7 @@ The browser check exercises four views, all parts/lessons, live advance, jam/byp
 Uses self-hosted Three.js and OrbitControls from AquaClear, studio lighting from Drum and base styles/finish helpers from Sand/Trickle. Preserve those paths; there are no CDN/runtime dependencies. No edits to those sibling demos are needed.
 
 Add only one child card to the filtration catalog; keep the main demo gallery's single Aquarium Filtration entry. Use the root deployment reuse wrapper after committing and pushing. Do not create a full-site copy or deploy static assets without the Pages Functions bundle. This publication is on jez237.com only; Hidden Reef's storefront is owned separately by OpenClaw on Evo X2.
+
+## Automatic startup (November 1, 2026)
+
+Operation starts automatically, including with OS reduced motion. Pause remains explicit and camera orbit is not forced. Shared [`../filter-runtime/README.md`](../filter-runtime/README.md) documents adaptive graphics, animated diagram fallback, and the collection-wide startup checks. The diagram is a simplified operating view; full 3D assembly and experiments require WebGL.

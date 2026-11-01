@@ -13,7 +13,7 @@ Serve the repository over HTTP, then open `/demos/aquaclear-studio/`. All runtim
 - Flow-lab pump study, paused/reduced-motion compatibility, illustrative axial-in/radial-out arrows, and clean/loaded foam comparison with retained brown deposits on the upstream underside. Enlarged incoming particles stop at that face. Restricted media reduces normal delivery and activates the labeled amber bypass.
 - A curved spillway sheet meeting the selected aquarium surface, mesh-based interference ripples, small impact bubbles and splash droplets. Water-level control spans 0–38 mm below the output with the manufacturer maximum-gap reference mark. No water simulation runs during care or explosion.
 - Four care stages with pump animation disabled; single-component inspection; orbit, fit, camera presets, fullscreen, labels and pause controls.
-- Responsive layout, keyboard component selector and tabs, reduced-motion support, and a text explorer when WebGL is unavailable.
+- Responsive layout, keyboard component selector and tabs, reduced-motion support, and an animated diagram and text explorer when WebGL is unavailable.
 
 ## Evidence and limits
 
@@ -70,3 +70,7 @@ node scripts/build-demos.mjs
 QA uses Playwright and Chrome; set `CHROME_PATH` when necessary. It checks all components, display modes, isolation, care, tour completion, pause, camera drag, keyboard tabs, mobile overflow, reduced motion, WebGL failure, console and failed requests. Upgrade checks also cover sheet-to-water contact at three levels, clean/loaded deposit counts and delivery, rotating/paused pump, care shutdown and mobile pump framing. Optics QA additionally checks grazing/underwater views and renderer-state restoration; the main suite checks bounded desktop/mobile capture sizes and capture shutdown during care. Screenshots go to ignored `tmp/aquaclear-qa/`. The read-only `window.filterStudio.snapshot()` is for diagnostics.
 
 The gallery cover is a screenshot of the working demo. Capture with `scripts/aquaclear-studio/covers.cjs` against the local server; pass `aquaclear-studio` to capture only this exhibit; without a name it also captures the pond and reef exhibits. Add the public files and gallery together. Follow root AGENTS.md and the workspace `deploy-reusing-stage.mjs` wrapper; do not deploy static-only or create another full-site staging copy. Hidden Reef storefront/Lab are separate projects.
+
+## Automatic startup (November 1, 2026)
+
+Operation starts automatically, including with OS reduced motion. Pause remains explicit and camera orbit is not forced. Shared [`../filter-runtime/README.md`](../filter-runtime/README.md) documents adaptive graphics, animated diagram fallback, and the collection-wide startup checks. The diagram is a simplified operating view; full 3D assembly and experiments require WebGL.

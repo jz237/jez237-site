@@ -1,3 +1,4 @@
+import {createFilterAnimation} from '../filter-runtime/runtime.js?v=1';
 import * as T from '../aquaclear-studio/vendor/three.module.js';
 import { OrbitControls } from '../aquaclear-studio/vendor/OrbitControls.js';
 import { studioEnvironment } from '../aquaclear-studio/realism.js?v=material-5';
@@ -7,7 +8,7 @@ import { PARTS, LESSONS, CARE, hydraulics } from './data.js?v=3';
 import {transport} from './dynamics.js?v=3';
 import { createWaterOptics } from './optics.js?v=3';
 const $=id=>document.getElementById(id), reduced=matchMedia('(prefers-reduced-motion: reduce)');
-const state={mode:'cutaway',tab:'explore',amount:0,target:0,rate:70,fill:25,blocked:false,loading:0,runAge:20,coastAge:20,comparison:false,power:true,drainback:0,selected:'biomedia',isolated:false,paused:reduced.matches,rotate:false,labels:true,tour:-1,care:-1,sequence:false,sequenceTime:0,time:0,flowTime:0,arrowTime:0,rotorAngle:0,slow:false,ready:false};
+const state={mode:'cutaway',tab:'explore',amount:0,target:0,rate:70,fill:25,blocked:false,loading:0,runAge:20,coastAge:20,comparison:false,power:true,drainback:0,selected:'biomedia',isolated:false,paused:false,rotate:false,labels:true,tour:-1,care:-1,sequence:false,sequenceTime:0,time:0,flowTime:0,arrowTime:0,rotorAngle:0,slow:false,ready:false};
 let scene,camera,renderer,controls,filter,optics,studioFloor,camTween,last=0,down=null;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),smooth=t=>t*t*(3-2*t),v=(x,y,z)=>new T.Vector3(x,y,z);
 const stage=$('viewport'),raycaster=new T.Raycaster(),pointer=new T.Vector2();
@@ -120,10 +121,10 @@ $('labels-toggle').onclick=()=>{state.labels=!state.labels;pressed('labels-toggl
 $('isolate').onclick=()=>{state.isolated=!state.isolated;pressed('isolate',state.isolated);$('isolate').textContent=state.isolated?'Return to assembly':'Inspect alone';stopSequence();fit();};
 $('clear').onclick=()=>{state.isolated=false;pressed('isolate',false);$('isolate').textContent='Inspect alone';fit();};
 $('tour').onclick=()=>lesson(0);$('previous').onclick=()=>lesson(state.tour-1);$('next').onclick=()=>state.tour===LESSONS.length-1?endTour():lesson(state.tour+1);$('end-tour').onclick=endTour;$('stage-previous').onclick=()=>lesson(state.tour-1);$('stage-next').onclick=()=>state.tour===LESSONS.length-1?endTour():lesson(state.tour+1);
-$('reset').onclick=()=>{endTour();Object.assign(state,{rate:70,fill:25,blocked:false,loading:0,runAge:20,coastAge:20,comparison:false,power:true,drainback:0,flowTime:0,arrowTime:0,rotorAngle:0,slow:false,rotate:false,paused:reduced.matches,labels:true,isolated:false});$('rate').value=70;$('fill').value=25;$('blocked').checked=false;pressed('compare-pad',false);pressed('slow',false);$('slow').textContent='Slow motion';pressed('rotate',false);pressed('pause',state.paused);pressed('labels-toggle',true);$('pause').textContent=state.paused?'Resume motion':'Pause motion';tab('explore',{syncMode:false});setMode('cutaway');select('biomedia');updateFlowText();};
+$('reset').onclick=()=>{endTour();Object.assign(state,{rate:70,fill:25,blocked:false,loading:0,runAge:20,coastAge:20,comparison:false,power:true,drainback:0,flowTime:0,arrowTime:0,rotorAngle:0,slow:false,rotate:false,paused:false,labels:true,isolated:false});$('rate').value=70;$('fill').value=25;$('blocked').checked=false;pressed('compare-pad',false);pressed('slow',false);$('slow').textContent='Slow motion';pressed('rotate',false);pressed('pause',state.paused);pressed('labels-toggle',true);$('pause').textContent=state.paused?'Resume motion':'Pause motion';tab('explore',{syncMode:false});setMode('cutaway');select('biomedia');updateFlowText();};
 $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{$('fullscreen').textContent='Fullscreen unavailable';}};
 document.addEventListener('fullscreenchange',()=>{$('fullscreen').setAttribute('aria-label',document.fullscreenElement?'Exit fullscreen':'Enter fullscreen');});
-reduced.addEventListener('change',e=>{if(e.matches){state.paused=true;pressed('pause',true);$('pause').textContent='Resume motion';}});
+reduced.addEventListener('change',()=>{if(reduced.matches){state.rotate=false;document.getElementById('rotate')?.setAttribute('aria-pressed','false');}});
 pressed('pause',state.paused);if(state.paused)$('pause').textContent='Resume motion';select('biomedia');updateFlowText();
 function labels(){
   const placed=[],w=stage.clientWidth,h=stage.clientHeight;
@@ -138,9 +139,10 @@ function labels(){
   }
 }
 function intersect(e){const r=stage.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);raycaster.setFromCamera(pointer,camera);return raycaster.intersectObjects(filter.pickables,false).find(hit=>{let o=hit.object;while(o){if(!o.visible)return false;o=o.parent;}return true;});}
+const animation=createFilterAnimation({id:'trickle-studio',viewport:stage,getState:()=>state});
 async function init(){
   try{
-    renderer=new T.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.transmissionResolutionScale=stage.clientWidth<760?.5:.8;renderer.setSize(stage.clientWidth,stage.clientHeight);renderer.setClearColor('#10242c',1);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFShadowMap;stage.append(renderer.domElement);
+    renderer=animation.makeRenderer(T,{antialias:true,alpha:false,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.transmissionResolutionScale=stage.clientWidth<760?.5:.8;renderer.setSize(stage.clientWidth,stage.clientHeight);renderer.setClearColor('#10242c',1);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFShadowMap;stage.append(renderer.domElement);
     scene=new T.Scene();const backdrop=document.createElement('canvas');backdrop.width=backdrop.height=512;const bg=backdrop.getContext('2d'),gradient=bg.createRadialGradient(300,240,20,256,256,410);gradient.addColorStop(0,'#233c43');gradient.addColorStop(.6,'#142b33');gradient.addColorStop(1,'#0a1a22');bg.fillStyle=gradient;bg.fillRect(0,0,512,512);const background=new T.CanvasTexture(backdrop);background.colorSpace=T.SRGBColorSpace;scene.background=background;camera=new T.PerspectiveCamera(36,stage.clientWidth/stage.clientHeight,.1,150);camera.position.set(10,8,13);controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.075;controls.minDistance=.6;controls.maxDistance=70;controls.maxPolarAngle=Math.PI*.82;controls.target.set(0,2,0);controls.addEventListener('start',()=>{camTween=null;});
     const environment=studioEnvironment(renderer);scene.environment=environment.texture;scene.environmentIntensity=1.0;
     scene.add(new T.HemisphereLight('#e4e8eb','#171b20',.28));
@@ -152,12 +154,12 @@ async function init(){
     renderer.domElement.addEventListener('pointerup',e=>{if(down&&Math.hypot(e.clientX-down.x,e.clientY-down.y)<6){const hit=intersect(e);if(hit){endTour();if(state.mode==='care')setMode('cutaway',{changeTab:false});tab('explore',{syncMode:false});select(hit.object.userData.part);}}down=null;});
     renderer.domElement.addEventListener('pointermove',e=>{if(down)return;const hit=intersect(e);$('tooltip').hidden=!hit;renderer.domElement.style.cursor=hit?'pointer':'grab';if(hit){$('tooltip').textContent=filter.parts.get(hit.object.userData.part).name;const r=stage.getBoundingClientRect();$('tooltip').style.left=clamp(e.clientX-r.left+15,12,r.width-220)+'px';$('tooltip').style.top=clamp(e.clientY-r.top-30,10,r.height-35)+'px';}});
     renderer.domElement.addEventListener('pointerleave',()=>{$('tooltip').hidden=true;down=null;});renderer.domElement.addEventListener('pointercancel',()=>{down=null;});
-    renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();state.ready=false;$('error').hidden=false;$('error').querySelector('b').textContent='The 3D view was interrupted. Reload to restore it.';});
+
     new ResizeObserver(()=>{if(!stage.clientWidth||!stage.clientHeight)return;renderer.transmissionResolutionScale=stage.clientWidth<760?.5:.8;camera.aspect=stage.clientWidth/stage.clientHeight;camera.updateProjectionMatrix();renderer.setSize(stage.clientWidth,stage.clientHeight);fit();}).observe(stage);
-    filter.pose(state);state.ready=true;$('loading').hidden=true;document.body.dataset.ready='true';select('biomedia');fit();renderer.setAnimationLoop(frame);
+    filter.pose(state);state.ready=true;$('loading').hidden=true;document.body.dataset.ready='true';select('biomedia');fit();animation.start(renderer,scene,frame);
     // Read-only diagnostics for repeatable browser checks; no hidden mutation API.
     window.trickleStudio={snapshot:()=>({...state,partCount:filter.parts.size,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,camera:camera.position.toArray(),effects:filter.snapshot(),optics:optics.snapshot()})};
-  }catch(err){console.error('Trickle studio:',err);$('loading').hidden=true;$('error').hidden=false;}
+  }catch(error){console.warn('Using the animated filter diagram:',error.message);animation.fallback();}
 }
 function frame(now){
   const dt=Math.min((now-last)/1000,.05);last=now;if(!state.ready||document.hidden)return;
@@ -165,7 +167,7 @@ function frame(now){
   state.amount+= (state.target-state.amount)*(reduced.matches?1:Math.min(1,dt*5));if(Math.abs(state.target-state.amount)<.0001)state.amount=state.target;
   filter.pose(state,dt);studioFloor.visible=!state.isolated&&!['pump','media','overflow'].includes(state.mode);studioFloor.position.y=-.34-state.amount*1.4;updateFlowText();
   if(camTween){camTween.elapsed+=dt;const t=smooth(Math.min(1,camTween.elapsed/.8));camera.position.lerpVectors(camTween.from,camTween.to,t);controls.target.lerpVectors(camTween.fromTarget,camTween.target,t);if(t>=1)camTween=null;}
-  controls.autoRotate=state.rotate&&!state.paused;controls.autoRotateSpeed=.5;controls.update();labels();optics.capture(state.time);renderer.render(scene,camera);
+  controls.autoRotate=state.rotate&&!state.paused;controls.autoRotateSpeed=.5;controls.update();labels();animation.capture(()=>optics.capture(state.time));renderer.render(scene,camera);
   if(document.activeElement!==$('explode'))$('explode').value=Math.round(state.amount*100);$('explode-value').textContent=Math.round(state.amount*100)+'%';document.body.dataset.explosion=String(Math.round(state.amount*100));document.body.dataset.motion=state.paused?'paused':'running';
 }
 init();

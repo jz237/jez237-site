@@ -21,7 +21,7 @@ The default population is 354 individual instanced carriers; the controls range 
 
 Each carrier has a distinct position, velocity, phase and rotation. A prescribed spatial flow field rises near the center, spreads near the top and returns near the walls, with asymmetric depth/time perturbations. Small positive buoyancy remains as air declines. Three spatial-hash position-constraint passes use conservative sphere envelopes to prevent major overlap; this is not rib-level rigid-body collision. Air strength decays smoothly; water through-flow is independent. A fixed 1/60-second simulation step allows up to three updates per rendered frame. Reset restores the deterministic initial state without rebuilding GPU resources.
 
-Air and water arrows use independently integrated phases, so adjusting a rate does not jump their positions. Pausing freezes operating clocks, media, surface ripples, bubble motion, transport markers and pump motion. Slow motion advances these clocks at one third speed. Care, exploded and isolated modes suspend operating effects. The enlarged carrier and pump section animate their explanatory mechanisms while the main bed is suspended. Reduced-motion preference starts paused; keyboard tabs use arrow/Home/End navigation and all parts are available through a native select.
+Air and water arrows use independently integrated phases, so adjusting a rate does not jump their positions. Pausing freezes operating clocks, media, surface ripples, bubble motion, transport markers and pump motion. Slow motion advances these clocks at one third speed. Care, exploded and isolated modes suspend operating effects. The enlarged carrier and pump section animate their explanatory mechanisms while the main bed is suspended. Reduced-motion preference starts in Light graphics with motion running; keyboard tabs use arrow/Home/End navigation and all parts are available through a native select.
 
 The read-only `window.movingBedStudio.snapshot()` exposes state, motion bounds, population, effect visibility and renderer diagnostics for QA. It is not an editor API.
 
@@ -78,3 +78,7 @@ The local `optics.js` combines broad surface swell, smaller advected ripples, pe
 All animation uses the existing simulation clock: pause and care modes freeze surface and floor-light motion. Reflection/refraction remain resolution-capped, and no new textures, external services or paid assets are needed. The other filter demos retain their existing renderers and materials.
 
 Run `node scripts/moving-bed-studio/texture-qa.cjs` against the local server (or pass the full deployed URL). It checks shader loading, six material profiles, the detailed water surface, pause/care clocks, assembled/cutaway bead visibility and mobile overflow, and captures surface, diffuser, carrier, film and metal close-ups. The full interaction and refinement suites continue to cover the existing learning experience.
+
+## Automatic startup (November 1, 2026)
+
+Operation starts automatically, including with OS reduced motion. Pause remains explicit and camera orbit is not forced. Shared [`../filter-runtime/README.md`](../filter-runtime/README.md) documents adaptive graphics, animated diagram fallback, and the collection-wide startup checks. The diagram is a simplified operating view; full 3D assembly and experiments require WebGL.

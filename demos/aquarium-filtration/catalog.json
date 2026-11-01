@@ -43,7 +43,7 @@
       "Mouse, touch & keyboard",
       "Self-hosted 3D"
     ],
-    "note": "WebGL 2 · Desktop & mobile · Illustrative biology and hydraulics · Actual demo screenshot",
+    "note": "3D with animated diagram fallback · Desktop & mobile · Illustrative biology and hydraulics · Actual demo screenshot",
     "imageWidth": 1440,
     "imageHeight": 900
   },
@@ -67,7 +67,7 @@
       "Mouse, touch & keyboard",
       "Self-hosted 3D"
     ],
-    "note": "WebGL 2 · Desktop & mobile · Illustrative hydraulics and control · Actual demo screenshot",
+    "note": "3D with animated diagram fallback · Desktop & mobile · Illustrative hydraulics and control · Actual demo screenshot",
     "imageWidth": 1440,
     "imageHeight": 900
   },
@@ -91,7 +91,7 @@
       "Mouse, touch & keyboard",
       "Self-hosted 3D"
     ],
-    "note": "WebGL 2 · Desktop & mobile · Illustrative foam response · Actual demo screenshot",
+    "note": "3D with animated diagram fallback · Desktop & mobile · Illustrative foam response · Actual demo screenshot",
     "imageWidth": 1440,
     "imageHeight": 900
   },
@@ -115,7 +115,7 @@
       "Mouse, touch & keyboard",
       "Self-hosted 3D"
     ],
-    "note": "WebGL 2 · Desktop & mobile · Illustrative hydraulics and biology · Actual demo screenshot",
+    "note": "3D with animated diagram fallback · Desktop & mobile · Illustrative hydraulics and biology · Actual demo screenshot",
     "imageWidth": 1440,
     "imageHeight": 900
   },
@@ -139,7 +139,7 @@
       "Mouse, touch & keyboard",
       "Self-hosted 3D"
     ],
-    "note": "WebGL 2 · Desktop & mobile · Illustrative loading and hydraulics · Actual demo screenshot",
+    "note": "3D with animated diagram fallback · Desktop & mobile · Illustrative loading and hydraulics · Actual demo screenshot",
     "imageWidth": 1440,
     "imageHeight": 900
   },
@@ -163,7 +163,7 @@
       "Mouse, touch & keyboard",
       "Self-hosted 3D"
     ],
-    "note": "WebGL 2 · Desktop & mobile · Illustrative circulation and biology · Actual demo screenshot",
+    "note": "3D with animated diagram fallback · Desktop & mobile · Illustrative circulation and biology · Actual demo screenshot",
     "imageWidth": 1440,
     "imageHeight": 900
   },
@@ -187,7 +187,7 @@
       "Mouse, touch & keyboard",
       "Self-hosted 3D"
     ],
-    "note": "WebGL 2 · Desktop & mobile · Illustrative hydraulics · Actual demo screenshot",
+    "note": "3D with animated diagram fallback · Desktop & mobile · Illustrative hydraulics · Actual demo screenshot",
     "imageWidth": 1440,
     "imageHeight": 900
   },
@@ -211,7 +211,7 @@
       "Mouse, touch & keyboard",
       "Self-hosted 3D"
     ],
-    "note": "WebGL 2 · Desktop & mobile · Educational reconstruction · Actual demo screenshot",
+    "note": "3D with animated diagram fallback · Desktop & mobile · Educational reconstruction · Actual demo screenshot",
     "imageWidth": 1440,
     "imageHeight": 900
   },
@@ -235,7 +235,7 @@
       "Pressure-filter study",
       "Mouse & touch"
     ],
-    "note": "WebGL 2 · Desktop & touch · Educational reconstruction · Actual demo screenshot",
+    "note": "3D with animated diagram fallback · Desktop & touch · Educational reconstruction · Actual demo screenshot",
     "imageWidth": 1440,
     "imageHeight": 900
   },
@@ -259,7 +259,7 @@
       "Reef sump study",
       "Mouse & touch"
     ],
-    "note": "WebGL 2 · Desktop & touch · Educational reconstruction · Actual demo screenshot",
+    "note": "3D with animated diagram fallback · Desktop & touch · Educational reconstruction · Actual demo screenshot",
     "imageWidth": 1440,
     "imageHeight": 900
   }

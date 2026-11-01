@@ -19,7 +19,7 @@ No retailer links or external runtime assets. The shared local Three.js runtime 
 
 - `model.js`: 12,000 instanced faceted grains, deterministic continuous up/down movement, reactor fittings, rippled water, arrow routes, carryover route and separate microscope. Grain size is exaggerated; motion is not collision simulation or CFD. Generated canvas textures retain asset independence. Phase advances only with the simulation clock.
 - `simulation.js`: dimensionless flow lag, size-dependent fluidization threshold, biofilm-sensitive expansion, damped settling/restart and persistent illustrative media loss. Reset replenishes media. The activity index depends on establishment, oxygen and flow; it is not a measured treatment rate. No concentrations or water safety prediction.
-- `studio.js`: orbit/zoom, raycast and keyboard-accessible assembly selector, view presets, tabs, lessons, controls, reduced-motion default pause, hidden-tab suspension and WebGL fallback.
+- `studio.js`: orbit/zoom, raycast and keyboard-accessible assembly selector, view presets, tabs, lessons, controls, reduced-motion Light graphics, hidden-tab suspension and WebGL fallback.
 - `data.js`: authored assembly notes, lessons and presets.
 
 Transparent water is lightly tinted with a separate animated surface/meniscus so it remains visible. Arrows are a teaching overlay drawn through plumbing. Macro grain, film, organisms and molecules have independently enlarged scales; transformations show nitrification order only. No fictional aeration, instantaneous biological maturation or nitrogen disappearance.
@@ -65,3 +65,7 @@ node scripts/sand-studio/release-check.cjs
 ```
 
 `refinement-qa.cjs` captures the pump section, four guided stages, bed-history view, mature biofilm and phone layout. It checks guide completion/pause/stop, history, micro comparison and layer visibility, mechanical controls, wet-animation pause, reduced motion and skipped grain uploads. Existing `qa.cjs` remains the baseline regression suite. Figures are illustrative throughout: no CFD, collision solver, pump curve, real chemical concentration or capacity prediction has been added.
+
+## Automatic startup (November 1, 2026)
+
+Operation starts automatically, including with OS reduced motion. Pause remains explicit and camera orbit is not forced. Shared [`../filter-runtime/README.md`](../filter-runtime/README.md) documents adaptive graphics, animated diagram fallback, and the collection-wide startup checks. The diagram is a simplified operating view; full 3D assembly and experiments require WebGL.

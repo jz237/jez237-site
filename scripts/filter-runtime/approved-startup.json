@@ -1,0 +1,241 @@
+{
+  "checkedAt": "2026-11-01T19:22:05.961910+00:00",
+  "scope": "Automatic animation startup for all eleven Aquarium Filtration studies",
+  "browserChecks": [
+    {
+      "id": "aquaclear-studio",
+      "kind": "normal",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "trickle-studio",
+      "kind": "normal",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "moving-bed-studio",
+      "kind": "normal",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "drum-studio",
+      "kind": "normal",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "sand-studio",
+      "kind": "normal",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "skimmer-studio",
+      "kind": "normal",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "roller-studio",
+      "kind": "normal",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "biowheel-studio",
+      "kind": "normal",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "filtoclear-studio",
+      "kind": "normal",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "reef-filtration",
+      "kind": "normal",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "uv-studio",
+      "kind": "normal",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "aquaclear-studio",
+      "kind": "reduced",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "trickle-studio",
+      "kind": "reduced",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "moving-bed-studio",
+      "kind": "reduced",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "drum-studio",
+      "kind": "reduced",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "sand-studio",
+      "kind": "reduced",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "skimmer-studio",
+      "kind": "reduced",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "roller-studio",
+      "kind": "reduced",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "biowheel-studio",
+      "kind": "reduced",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "filtoclear-studio",
+      "kind": "reduced",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "reef-filtration",
+      "kind": "reduced",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "uv-studio",
+      "kind": "reduced",
+      "startMode": "3d",
+      "pass": true
+    },
+    {
+      "id": "aquaclear-studio",
+      "kind": "no-webgl",
+      "startMode": "diagram",
+      "pass": true
+    },
+    {
+      "id": "trickle-studio",
+      "kind": "no-webgl",
+      "startMode": "diagram",
+      "pass": true
+    },
+    {
+      "id": "moving-bed-studio",
+      "kind": "no-webgl",
+      "startMode": "diagram",
+      "pass": true
+    },
+    {
+      "id": "drum-studio",
+      "kind": "no-webgl",
+      "startMode": "diagram",
+      "pass": true
+    },
+    {
+      "id": "sand-studio",
+      "kind": "no-webgl",
+      "startMode": "diagram",
+      "pass": true
+    },
+    {
+      "id": "skimmer-studio",
+      "kind": "no-webgl",
+      "startMode": "diagram",
+      "pass": true
+    },
+    {
+      "id": "roller-studio",
+      "kind": "no-webgl",
+      "startMode": "diagram",
+      "pass": true
+    },
+    {
+      "id": "biowheel-studio",
+      "kind": "no-webgl",
+      "startMode": "diagram",
+      "pass": true
+    },
+    {
+      "id": "filtoclear-studio",
+      "kind": "no-webgl",
+      "startMode": "diagram",
+      "pass": true
+    },
+    {
+      "id": "reef-filtration",
+      "kind": "no-webgl",
+      "startMode": "diagram",
+      "pass": true
+    },
+    {
+      "id": "uv-studio",
+      "kind": "no-webgl",
+      "startMode": "diagram",
+      "pass": true
+    }
+  ],
+  "adaptationChecks": [
+    "low hardware hints start Light 3D with motion",
+    "sustained slow frames lower graphics without pausing",
+    "very slow frames continue in animated diagram",
+    "fallback honors pause and disables unavailable geometry controls"
+  ],
+  "reefRegressionChecks": {
+    "completeParts": true,
+    "allAssembliesExplodeInspectIsolate": true,
+    "sensorTriggeredAdvanceThenStop": true,
+    "bubbleMotion": true,
+    "pause": true,
+    "pointerSelection": true,
+    "assemblySequence": true,
+    "reset": true,
+    "pausedIdle": true,
+    "mobileReducedMotion": true,
+    "noRuntimeErrors": true
+  },
+  "visualReview": [
+    "Desktop 3D and diagram views retain written topics and pause controls.",
+    "390px reduced-motion views start in Light 3D without horizontal page overflow.",
+    "FiltoClear opens in visible flow mode.",
+    "Fallback sketches are simplified; unavailable geometry controls are disabled."
+  ],
+  "sha256": {
+    "demos/filter-runtime/runtime.js": "a0a575ddd47a1db7ea16cd07f90448a1afaba5bae2ce7d815149911cb2341f1a",
+    "demos/filter-runtime/runtime.css": "2e5b779ea0ee33929553598bb5934aee0900a4a765651caf51363ad82a43c406",
+    "demos/filter-runtime/schematic.js": "819579609bc0dee0ad4fbebae40d7a6b533c2b9a0c7bc78314946d5ec78607d4",
+    "demos/reef-filtration/assets/index-BVkrN8Bl.css": "084fc53d4f92786be2db25e5d56a25fe00257d54664d2edfd8ab8366cf859893",
+    "demos/reef-filtration/assets/index-CC5FRSkO.js": "f5c026effaafe42103c379c6c7a24b5b9b0f983a44f20f9d9d71decae2cf23a6"
+  },
+  "limitations": [
+    "Slow frame rates and low hardware hints were simulated in Chrome; no claim of testing every old PC.",
+    "Fallback is an operating diagram, not all numerical experiments or 3D maintenance sequences.",
+    "Hidden pages and the offscreen reef viewport intentionally suspend motion."
+  ]
+}

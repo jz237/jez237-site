@@ -1,3 +1,4 @@
+import {createFilterAnimation} from '../filter-runtime/runtime.js?v=1';
 import * as T from './vendor/three.module.js';
 import { OrbitControls } from './vendor/OrbitControls.js';
 import { studioEnvironment } from './realism.js?v=material-5';
@@ -6,7 +7,7 @@ import { PARTS, LESSONS, CARE, flowModel } from './data.js?v=material-5';
 
 import { createWaterOptics } from './optics.js?v=water-6';
 const $=id=>document.getElementById(id), reduced=matchMedia('(prefers-reduced-motion: reduce)');
-const state={mode:'cutaway',tab:'explore',amount:0,target:0,flow:100,restricted:false,selected:'foam',isolated:false,paused:reduced.matches,rotate:false,labels:true,tour:-1,care:-1,sequence:false,sequenceTime:0,time:0,ready:false,waterLevel:26,showDebris:true};
+const state={mode:'cutaway',tab:'explore',amount:0,target:0,flow:100,restricted:false,selected:'foam',isolated:false,paused:false,rotate:false,labels:true,tour:-1,care:-1,sequence:false,sequenceTime:0,time:0,ready:false,waterLevel:26,showDebris:true};
 let scene,camera,renderer,controls,filter,optics,camTween,last=0,down=null;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),smooth=t=>t*t*(3-2*t),v=(x,y,z)=>new T.Vector3(x,y,z);
 const stage=$('viewport'),raycaster=new T.Raycaster(),pointer=new T.Vector2();
@@ -113,10 +114,10 @@ $('isolate').onclick=()=>{state.isolated=!state.isolated;pressed('isolate',state
 $('clear').onclick=()=>{state.isolated=false;pressed('isolate',false);$('isolate').textContent='Inspect alone';fit();};
 $('flow').addEventListener('input',e=>{state.flow=+e.target.value;updateFlowText();});$('restricted').onchange=e=>{state.restricted=e.target.checked;updateFlowText();};
 $('tour').onclick=()=>lesson(0);$('previous').onclick=()=>lesson(state.tour-1);$('next').onclick=()=>state.tour===LESSONS.length-1?endTour():lesson(state.tour+1);$('end-tour').onclick=endTour;$('stage-previous').onclick=()=>lesson(state.tour-1);$('stage-next').onclick=()=>state.tour===LESSONS.length-1?endTour():lesson(state.tour+1);
-$('reset').onclick=()=>{endTour();state.flow=100;state.restricted=false;state.waterLevel=26;state.showDebris=true;$('water-level').value=26;$('water-level-value').textContent='26 mm below output';$('show-debris').checked=true;state.rotate=false;state.paused=reduced.matches;state.labels=true;state.isolated=false;$('flow').value=100;$('restricted').checked=false;pressed('rotate',false);pressed('pause',state.paused);pressed('labels-toggle',true);$('pause').textContent=state.paused?'Resume motion':'Pause motion';tab('explore',{syncMode:false});setMode('cutaway');select('foam');updateFlowText();};
+$('reset').onclick=()=>{endTour();state.flow=100;state.restricted=false;state.waterLevel=26;state.showDebris=true;$('water-level').value=26;$('water-level-value').textContent='26 mm below output';$('show-debris').checked=true;state.rotate=false;state.paused=false;state.labels=true;state.isolated=false;$('flow').value=100;$('restricted').checked=false;pressed('rotate',false);pressed('pause',state.paused);pressed('labels-toggle',true);$('pause').textContent=state.paused?'Resume motion':'Pause motion';tab('explore',{syncMode:false});setMode('cutaway');select('foam');updateFlowText();};
 $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{$('fullscreen').textContent='Fullscreen unavailable';}};
 document.addEventListener('fullscreenchange',()=>{$('fullscreen').setAttribute('aria-label',document.fullscreenElement?'Exit fullscreen':'Enter fullscreen');});
-reduced.addEventListener('change',e=>{if(e.matches){state.paused=true;pressed('pause',true);$('pause').textContent='Resume motion';}});
+reduced.addEventListener('change',()=>{if(reduced.matches){state.rotate=false;document.getElementById('rotate')?.setAttribute('aria-pressed','false');}});
 pressed('pause',state.paused);if(state.paused)$('pause').textContent='Resume motion';select('foam');updateFlowText();
 function labels(){
   const placed=[],w=stage.clientWidth,h=stage.clientHeight;
@@ -131,9 +132,10 @@ function labels(){
   }
 }
 function intersect(e){const r=stage.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);raycaster.setFromCamera(pointer,camera);return raycaster.intersectObjects(filter.pickables,false).find(hit=>{let o=hit.object;while(o){if(!o.visible)return false;o=o.parent;}return true;});}
+const animation=createFilterAnimation({id:'aquaclear-studio',viewport:stage,getState:()=>state});
 async function init(){
   try{
-    renderer=new T.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.transmissionResolutionScale=stage.clientWidth<760?.5:.8;renderer.setSize(stage.clientWidth,stage.clientHeight);renderer.setClearColor('#10242c',1);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFShadowMap;stage.append(renderer.domElement);
+    renderer=animation.makeRenderer(T,{antialias:true,alpha:false,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.transmissionResolutionScale=stage.clientWidth<760?.5:.8;renderer.setSize(stage.clientWidth,stage.clientHeight);renderer.setClearColor('#10242c',1);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFShadowMap;stage.append(renderer.domElement);
     scene=new T.Scene();scene.background=new T.Color('#10242c');camera=new T.PerspectiveCamera(36,stage.clientWidth/stage.clientHeight,.1,150);camera.position.set(10,8,13);controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.075;controls.minDistance=2;controls.maxDistance=45;controls.maxPolarAngle=Math.PI*.82;controls.target.set(0,2,0);controls.addEventListener('start',()=>{camTween=null;});
     const environment=studioEnvironment(renderer);scene.environment=environment.texture;scene.environmentIntensity=1.0;
     scene.add(new T.HemisphereLight('#e4e8eb','#171b20',.28));
@@ -144,12 +146,12 @@ async function init(){
     renderer.domElement.addEventListener('pointerup',e=>{if(down&&Math.hypot(e.clientX-down.x,e.clientY-down.y)<6){const hit=intersect(e);if(hit){endTour();tab('explore',{syncMode:false});select(hit.object.userData.part);}}down=null;});
     renderer.domElement.addEventListener('pointermove',e=>{if(down)return;const hit=intersect(e);$('tooltip').hidden=!hit;renderer.domElement.style.cursor=hit?'pointer':'grab';if(hit){$('tooltip').textContent=filter.parts.get(hit.object.userData.part).name;const r=stage.getBoundingClientRect();$('tooltip').style.left=clamp(e.clientX-r.left+15,12,r.width-220)+'px';$('tooltip').style.top=clamp(e.clientY-r.top-30,10,r.height-35)+'px';}});
     renderer.domElement.addEventListener('pointerleave',()=>{$('tooltip').hidden=true;down=null;});renderer.domElement.addEventListener('pointercancel',()=>{down=null;});
-    renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();state.ready=false;$('error').hidden=false;$('error').querySelector('b').textContent='The 3D view was interrupted. Reload to restore it.';});
+
     new ResizeObserver(()=>{if(!stage.clientWidth||!stage.clientHeight)return;renderer.transmissionResolutionScale=stage.clientWidth<760?.5:.8;camera.aspect=stage.clientWidth/stage.clientHeight;camera.updateProjectionMatrix();renderer.setSize(stage.clientWidth,stage.clientHeight);fit();}).observe(stage);
-    filter.pose(0,state.mode,0,100,false,'foam',false);state.ready=true;$('loading').hidden=true;document.body.dataset.ready='true';select('foam');fit();renderer.setAnimationLoop(frame);
+    filter.pose(0,state.mode,0,100,false,'foam',false);state.ready=true;$('loading').hidden=true;document.body.dataset.ready='true';select('foam');fit();animation.start(renderer,scene,frame);
     // Read-only diagnostics for repeatable browser checks; no hidden mutation API.
     window.filterStudio={snapshot:()=>({...state,partCount:filter.parts.size,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,camera:camera.position.toArray(),effects:filter.effectsSnapshot(),optics:optics.snapshot()})};
-  }catch(err){console.error('AquaClear studio:',err);$('loading').hidden=true;$('error').hidden=false;}
+  }catch(error){console.warn('Using the animated filter diagram:',error.message);animation.fallback();}
 }
 function frame(now){
   const dt=Math.min((now-last)/1000,.05);last=now;if(!state.ready||document.hidden)return;
@@ -157,7 +159,7 @@ function frame(now){
   state.amount+= (state.target-state.amount)*(reduced.matches?1:Math.min(1,dt*5));if(Math.abs(state.target-state.amount)<.0001)state.amount=state.target;
   filter.pose(state.amount,state.mode,state.time,state.flow,state.restricted,state.selected,state.isolated,state.care,dt,reduced.matches,state.waterLevel,state.tour>=0?LESSONS[state.tour].part:null,state.showDebris);
   if(camTween){camTween.elapsed+=dt;const t=smooth(Math.min(1,camTween.elapsed/.8));camera.position.lerpVectors(camTween.from,camTween.to,t);controls.target.lerpVectors(camTween.fromTarget,camTween.target,t);if(t>=1)camTween=null;}
-  controls.autoRotate=state.rotate&&!state.paused;controls.autoRotateSpeed=.5;controls.update();labels();optics.capture(state.time);renderer.render(scene,camera);
+  controls.autoRotate=state.rotate&&!state.paused;controls.autoRotateSpeed=.5;controls.update();labels();animation.capture(()=>optics.capture(state.time));renderer.render(scene,camera);
   if(document.activeElement!==$('explode'))$('explode').value=Math.round(state.amount*100);$('explode-value').textContent=Math.round(state.amount*100)+'%';document.body.dataset.explosion=String(Math.round(state.amount*100));document.body.dataset.motion=state.paused?'paused':'running';
 }
 init();

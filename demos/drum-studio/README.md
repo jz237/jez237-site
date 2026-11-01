@@ -12,7 +12,7 @@ An original interactive gravity-fed rotating drum filter. It joins the existing 
 - Fine screen weave, removable-panel cage, gear teeth, support rollers, a rinse strainer/pump, six brass nozzles, fan sprays, captured deposits and traveling waste droplets.
 - Two water levels and a clean-side float, with masked ripple surfaces, planar reflection, depth-guarded refraction and material grain.
 - An enlarged woven-screen study built from actual crossing wires, with 60/100/150 micrometre nominal aperture comparisons and enlarged rigid particles.
-- Keyboard tabs and native component selection, reduced-motion pause, mobile layout, readable explanations and sources if WebGL is unavailable.
+- Keyboard tabs and native component selection, reduced-motion Light graphics, mobile layout, readable explanations and sources if WebGL is unavailable.
 
 ## Operating model
 
@@ -108,3 +108,7 @@ Three independent Cutaway layer checkboxes open the housing, section the screen/
 Run `node scripts/drum-studio/journey-qa.cjs` in addition to the existing simulation and browser checks. It covers all six stages, actual rinse/discharge activation, pause, replay/stop and ordinary-view interruption, independent layers, mobile overflow, and speech-control calls using a browser mock. It does not assert that a device has a working audio voice. Inspect the captured images to verify marker visibility and water/material appearance.
 
 The explanatory route was rechecked against the existing AquaForte drum-filter principle and OASE gravity-fed product references on October 31, 2026. No manufacturer capacities or measurements are assigned to this original teaching model.
+
+## Automatic startup (November 1, 2026)
+
+Operation starts automatically, including with OS reduced motion. Pause remains explicit and camera orbit is not forced. Shared [`../filter-runtime/README.md`](../filter-runtime/README.md) documents adaptive graphics, animated diagram fallback, and the collection-wide startup checks. The diagram is a simplified operating view; full 3D assembly and experiments require WebGL.
