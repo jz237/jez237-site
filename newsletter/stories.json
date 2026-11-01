@@ -6,7 +6,7 @@
     "kind": "Practical guide",
     "date": "Evergreen guide · no publication date shown",
     "title": "Match aquarium lighting to your plants’ needs",
-    "dek": "Choose light for the species and planting positions in your tank; a brighter fixture is not automatically a better match.",
+    "dek": "Choose light for the species you keep and where each one sits in the tank. A brighter fixture is not automatically a better match.",
     "image": "planted-tank.webp",
     "source": "Tropica Aquarium Plants",
     "url": "https://tropica.com/en/plants/plantdetails/Anubiasbarterinana(101TC)/18895",
@@ -52,15 +52,15 @@
     "blocks": [
       {
         "type": "p",
-        "text": "Before turning up the light, make a plant list. Do you want a few leafy accents on wood, an open foreground, or a carpet? Put each plant's requirements beside its name. The equipment decision becomes much easier to think about when you know what you want it to grow."
+        "text": "Before turning up the light, make a plant list: a few leafy accents on wood, an open foreground, or a carpet. Write each plant's requirements beside its name. Choosing equipment is much easier once you know what it has to grow."
       },
       {
         "type": "heading",
-        "text": "Check the plant, not just the planting style"
+        "text": "Check each plant's own rating"
       },
       {
         "type": "p",
-        "text": "Two compact plants can ask quite different things of a tank. Tropica rates Anubias barteri nana as low in light demand, while its Eleocharis pusilla 'Mini' has a medium rating. Both can suit a small layout; they are not interchangeable lighting projects. The useful question is not whether a plant looks beginner-friendly, but what its individual care information says.",
+        "text": "Two compact plants can ask quite different things of a tank. Tropica rates Anubias barteri nana as low in light demand and its Eleocharis pusilla 'Mini' as medium. Both can suit a small layout, but they need different light. Go by each plant's care information, not by whether it looks beginner-friendly.",
         "refs": [
           "r1",
           "r2"
@@ -72,29 +72,29 @@
       },
       {
         "type": "p",
-        "text": "Watts tell you about electricity use, not a directly comparable amount of light across different technologies. Tropica's lighting guide makes that distinction and offers lumen-per-liter bands as a starting point. It also says those recommendations grew out of experience with T5 fluorescent lighting. Treat them as a grower's guide, not a measurement of what reaches a particular leaf under your LED.",
+        "text": "Watts measure electricity use. They do not compare light output across different lamp technologies, a point Tropica's lighting guide makes before offering lumen-per-liter bands as a starting point. Tropica also says those bands grew out of experience with T5 fluorescent lighting, so treat them as a grower's guide. They do not measure what reaches a particular leaf under your LED.",
         "refs": [
           "r3"
         ]
       },
       {
         "type": "p",
-        "text": "For a closer look, an underwater PAR meter measures the light arriving at a planting position. Its reading is called photosynthetic photon flux density: how many photons arrive per unit of area and time in the conventional 400–700-nanometer range. Apogee's documentation explains why the sensor must also account for the immersion effect. Use a meter intended or correctly configured for underwater measurements; waterproofing a sensor alone is not enough.",
+        "text": "An underwater PAR meter measures the light arriving at a planting position. Its reading, photosynthetic photon flux density, counts the photons in the conventional 400 to 700 nanometer range that arrive per unit of area and time. Apogee's documentation explains that the sensor also has to account for the immersion effect, so waterproofing a sensor is not enough on its own. Use a meter intended or correctly configured for underwater measurements.",
         "refs": [
           "r4"
         ]
       },
       {
         "type": "heading",
-        "text": "Check these before buying anything"
+        "text": "Before buying a fixture"
       },
       {
         "type": "list",
         "ordered": false,
         "items": [
-          "Where will the demanding plants sit? Tropica's measurements show that distance below a lamp and position toward the corners can change the available light substantially. A specification for the fixture does not describe every planting position.",
-          "What else does the plant need? Tropica distinguishes plants that can manage without supplementary CO2 from more demanding choices. A brighter fixture does not remove the need to consider carbon and other nutrients.",
-          "Is the schedule deliberate? Tropica's growing-in guide recommends a shorter lighting period during a new planting's early weeks, then a longer one later. That is establishment guidance, not a single timetable for every established aquarium."
+          "Where will the demanding plants sit? Tropica's measurements show that available light changes substantially with distance below the lamp and toward the corners, which no fixture specification can describe for every position.",
+          "What else does the plant need? Tropica separates plants that can manage without supplementary CO2 from more demanding ones. Under a brighter fixture you still have to plan for carbon and other nutrients.",
+          "Is the schedule deliberate? Tropica's growing-in guide recommends a shorter lighting period for a new planting's early weeks and a longer one later. That advice covers establishment; it is not a timetable for every established aquarium."
         ],
         "refs": [
           "r3",
@@ -104,15 +104,15 @@
       },
       {
         "type": "heading",
-        "text": "Make the next change readable"
+        "text": "Keep a lighting log"
       },
       {
         "type": "p",
-        "text": "Our practical preference is to keep a small lighting log: plant names, fixture setting, on-and-off times, and a photograph from the same position. Write down what you change rather than relying on how bright the tank looked last weekend. If you are comparing settings, resist changing the whole arrangement at once. Give yourself a record you can actually interpret."
+        "text": "We like a small log: plant names, fixture setting, on and off times, and a photo taken from the same spot each time. Write down each change instead of relying on how bright the tank looked last weekend. When comparing settings, change one thing at a time so the record means something."
       },
       {
         "type": "p",
-        "text": "And leave room for a modest ambition. A few well-chosen plants around a piece of wood can be the finished design, not an unfinished version of a carpeted aquascape. Choose the aquarium you want to live with, then choose its light."
+        "text": "A modest plan is fine. A few well-chosen plants around a piece of wood can be a finished design in its own right. Choose the aquarium you want to live with, then light it."
       }
     ],
     "archive": false
@@ -124,7 +124,7 @@
     "kind": "Practical guide",
     "date": "Evergreen guide",
     "title": "Replace evaporation with freshwater, not saltwater",
-    "dek": "Separate top-offs from water changes, then check the instrument and both water samples before making a salinity adjustment.",
+    "dek": "Keep top-offs and water changes separate, and check the instrument and both water samples before adjusting salinity.",
     "image": "reef-scene.webp",
     "source": "UF/IFAS; Hanna Instruments; Red Sea",
     "url": "https://edis.ifas.ufl.edu/publication/4H433/pdf",
@@ -152,7 +152,7 @@
     "blocks": [
       {
         "type": "p",
-        "text": "Evaporation removes water while leaving salt behind. Replace that loss with suitable freshwater, not another batch of saltwater. UF/IFAS specifies fresh reverse-osmosis water for this job. A water change is different: you deliberately remove aquarium water, including its dissolved salt, and replace it with prepared saltwater. Do not treat these two jobs as interchangeable bucket refills.",
+        "text": "Evaporation removes water and leaves the salt behind, so the loss is replaced with freshwater. UF/IFAS specifies fresh reverse-osmosis water for the job. A top-off is not a water change. In a water change you remove aquarium water, dissolved salt included, and replace it with prepared saltwater.",
         "refs": [
           "r1",
           "r3"
@@ -160,13 +160,13 @@
       },
       {
         "type": "heading",
-        "text": "Name the job before opening the container"
+        "text": "Which job is it?"
       },
       {
         "type": "list",
         "items": [
-          "Top-off: replace water lost through evaporation. Do not assume every unexplained fall in water level is evaporation; investigate a possible leak or other removal first.",
-          "Water change: prepare a separate batch of saltwater. Follow the salt manufacturer's mixing directions rather than adding dry salt directly to the occupied aquarium."
+          "Top-off: replaces water lost to evaporation. If you can't explain a drop in level, rule out a leak or other removal first.",
+          "Water change: uses a separate batch of saltwater, mixed to the salt manufacturer's directions. Dry salt does not go straight into the occupied aquarium."
         ],
         "refs": [
           "r1",
@@ -175,18 +175,18 @@
       },
       {
         "type": "heading",
-        "text": "Make the measurement trustworthy"
+        "text": "Calibrate by your meter's own manual"
       },
       {
         "type": "p",
-        "text": "Use an instrument intended for seawater and follow its own calibration procedure. For its HI98319 conductivity-based tester, Hanna specifies a fresh calibration standard, rinsing and drying before calibration, clearing trapped bubbles during measurement, and waiting for the stability indicator. Those instructions belong to that instrument; do not transfer a different meter's calibration recipe to yours.",
+        "text": "Use an instrument intended for seawater and follow its calibration procedure. For the HI98319, a conductivity-based tester, Hanna specifies a fresh calibration standard, rinsing and drying before calibration, clearing trapped bubbles while measuring, and waiting for the stability indicator. Those steps belong to that meter; don't carry another meter's recipe over to yours.",
         "refs": [
           "r2"
         ]
       },
       {
         "type": "p",
-        "text": "Record the unit as well as the reading. The Hanna tester can display ppt, PSU or specific gravity: a number without its selected scale is an incomplete record. Our suggested log includes the instrument, calibration date, temperature, tank reading and replacement-water reading. Repeat an unexpected result after checking the procedure before deciding what to change.",
+        "text": "Write down the unit with the reading. The Hanna tester can display ppt, PSU or specific gravity, and a bare number does not say which. We suggest logging the instrument, calibration date, temperature, tank reading and replacement-water reading. If a result is unexpected, check the procedure and repeat the test before deciding what to change.",
         "refs": [
           "r2"
         ]
@@ -197,15 +197,15 @@
       },
       {
         "type": "p",
-        "text": "Red Sea recommends testing both the aquarium and newly mixed water before a change, and bringing dissolved replacement water to the aquarium's temperature. Follow your salt's mixing and storage instructions; one formulation's timings are not a universal recipe.",
+        "text": "Red Sea recommends testing both the aquarium and the newly mixed water before a change, and bringing the replacement water to the aquarium's temperature once the salt has dissolved. Mixing and storage timings vary by formulation, so follow the instructions for your salt.",
         "refs": [
           "r3"
         ]
       },
       {
         "type": "aside",
-        "title": "A simple labeling habit",
-        "text": "Our suggestion: label containers by purpose, not merely by color. Write “freshwater top-off” or “prepared saltwater,” plus the preparation date. Keep the test record with the batch. If salinity is unexpectedly wrong, pause routine maintenance and establish a tank-specific correction plan; this guide does not prescribe a universal correction dose or speed."
+        "title": "Label containers by what's in them",
+        "text": "Label by purpose as well as by color. Write “freshwater top-off” or “prepared saltwater” on each container with the date it was made, and keep the test record with the batch. If salinity is unexpectedly wrong, pause routine maintenance and work out a correction plan for that tank. This guide does not prescribe a universal correction dose or speed."
       }
     ],
     "archive": false,
@@ -218,7 +218,7 @@
     "kind": "Practical guide",
     "date": "Evergreen guide",
     "title": "Clean filter media according to its job",
-    "dek": "Clear trapped debris while retaining established biological media; a filter is not one disposable component.",
+    "dek": "Clear trapped debris but keep the established biological media, because the parts of a filter do different jobs.",
     "image": "freshwater-fish.webp",
     "source": "RSPCA Australia; Seachem; Aqueon",
     "url": "https://kb.rspca.org.au/categories/companion-animals/fish/how-should-i-care-for-my-tropical-fish",
@@ -246,7 +246,7 @@
     "blocks": [
       {
         "type": "p",
-        "text": "Clean a filter to remove accumulated waste, not to make every surface look new. Biological filtration depends on bacteria living on filter surfaces. Their work changes ammonia into nitrite and then nitrate; mechanical filtration instead catches particles. One piece of sponge can do both jobs, so identify what you are handling before deciding to discard it.",
+        "text": "Cleaning a filter is for removing accumulated waste. The surfaces shouldn't look new afterward, because biological filtration depends on bacteria living on them, turning ammonia into nitrite and then nitrate. Mechanical filtration catches particles. One piece of sponge can do both jobs, so know what you are holding before you throw it away.",
         "refs": [
           "r3"
         ]
@@ -258,10 +258,10 @@
       {
         "type": "list",
         "items": [
-          "Mechanical pads and floss: remove trapped debris; replace material that is worn out or cannot be cleaned adequately.",
-          "Biological media: gently rinse away accumulated debris in removed aquarium water. Routine cleaning is not a reason to replace the whole biological stage.",
-          "Chemical media: replacement or regeneration depends on the particular material and its instructions. Rinsing is not a universal way to renew it.",
-          "Combination cartridges: check whether they also support biological filtration. Avoid replacing every established cartridge together."
+          "Mechanical pads and floss: remove trapped debris, and replace material that is worn out or can't be cleaned properly.",
+          "Biological media: rinse off debris gently in water taken from the aquarium. Routine cleaning is no reason to replace the whole biological stage.",
+          "Chemical media: whether you replace or regenerate it depends on the material and its instructions. Rinsing does not renew every type.",
+          "Combination cartridges: check whether they also carry biological filtration, and don't replace every established cartridge at once."
         ],
         "refs": [
           "r2"
@@ -269,30 +269,30 @@
       },
       {
         "type": "heading",
-        "text": "Set up a small, controlled job"
+        "text": "Rinse in tank water"
       },
       {
         "type": "p",
-        "text": "Use a dedicated aquarium bucket. Lightly rinse established media in removed tank water, rather than untreated chlorinated tap water, and avoid soap or detergent. The aim is to dislodge the obstruction without aggressively stripping the surfaces supporting beneficial bacteria.",
+        "text": "Use a bucket kept only for the aquarium. Rinse established media lightly in water removed from the tank instead of untreated chlorinated tap water, and keep soap and detergent away from it. Loosen the clog without stripping the surfaces that hold beneficial bacteria.",
         "refs": [
           "r1"
         ]
       },
       {
         "type": "p",
-        "text": "Unplug the filter before opening it, then follow its manual for access and reassembly. Return the media and restart once the aquarium is refilled appropriately. Check basket order against the manual.",
+        "text": "Unplug the filter before opening it and follow its manual for access and reassembly, including the basket order. Put the media back and restart the filter once the aquarium is refilled.",
         "refs": [
           "r2"
         ]
       },
       {
         "type": "aside",
-        "title": "A useful maintenance note",
-        "text": "Record the date, the part cleaned, any part replaced, and whether the outlet flow returned to its usual appearance. A note saying “intake sponge rinsed” is more useful next time than “filter done.” Photograph unfamiliar basket arrangements before taking them apart."
+        "title": "What to write down",
+        "text": "Note the date, the part you cleaned, anything you replaced, and whether the outlet flow looks normal again. “Intake sponge rinsed” will help you more next time than “filter done.” Photograph an unfamiliar basket layout before taking it apart."
       },
       {
         "type": "p",
-        "text": "Do not turn that record into one cleaning deadline for every filter. Media roles and equipment differ. Nor does filter servicing replace partial water changes. Keep those as separate entries in your maintenance record so neither task disappears behind the other.",
+        "text": "Media and equipment differ, so the record won't give you one cleaning deadline for every filter. Servicing the filter doesn't replace partial water changes either. Log them as separate entries so neither job gets lost behind the other.",
         "refs": [
           "r3"
         ]
@@ -308,7 +308,7 @@
     "kind": "Practical guide",
     "date": "Evergreen guide",
     "title": "Match coral placement to the coral, not one turnover target",
-    "dek": "Use species and grower guidance to choose a position; pump output alone does not describe the water movement there.",
+    "dek": "Use species and grower guidance to choose a position. Pump output alone doesn't tell you how the water moves at that spot.",
     "image": "duncan-coral.webp",
     "source": "EcoTech Marine; Oceans, Reefs & Aquariums",
     "url": "https://support.ecotechmarine.com/hc/en-us/articles/216533377-What-VorTech-mode-is-best",
@@ -336,25 +336,25 @@
     "blocks": [
       {
         "type": "p",
-        "text": "Choose a coral's position from its care requirements and the flow at that location, not a single tank-wide turnover target. EcoTech Marine identifies livestock, rockwork, aquarium size, pump placement and other flow sources as factors in choosing a pump mode. Our practical conclusion: a pump specification is a starting point, not a placement map.",
+        "text": "Place a coral by its care requirements and the flow where it will sit, which a tank-wide turnover target can't tell you. EcoTech Marine lists livestock, rockwork, aquarium size, pump placement and other flow sources as factors in choosing a pump mode, which is why we treat a pump specification as only a starting point for placement.",
         "refs": [
           "r1"
         ]
       },
       {
         "type": "heading",
-        "text": "Two grower examples that resist a simple rule"
+        "text": "One grower, two corals, two placements"
       },
       {
         "type": "p",
-        "text": "ORA describes its Duncanopsammia axifuga as an LPS coral and recommends moderate-to-strong flow, medium-to-high lighting and a middle-to-upper position. The page concerns ORA's particular cultured Duncan, including its tightly clustered growth form. It is useful starting information for that stock, not permission to assign every large-polyp coral the same place.",
+        "text": "ORA describes its Duncanopsammia axifuga as an LPS coral and recommends moderate-to-strong flow, medium-to-high lighting and a middle-to-upper position. That page is about ORA's own cultured Duncan, with its tightly clustered growth form. It is useful starting information for that stock and says nothing about where every large-polyp coral belongs.",
         "refs": [
           "r2"
         ]
       },
       {
         "type": "p",
-        "text": "For its Montipora setosa, an SPS coral, ORA instead lists low-to-moderate flow and bottom-to-middle placement, again with medium-to-high lighting. The grower describes tolerance of a range of conditions. Taken together, these examples show why “SPS means strongest flow” and “LPS means weakest flow” are inadequate purchasing instructions. Ask for the actual coral's care information rather than stopping at its broad hobby category.",
+        "text": "For its Montipora setosa, an SPS coral, ORA lists low-to-moderate flow and bottom-to-middle placement, again with medium-to-high lighting, and describes it as tolerant of a range of conditions. The shorthand “SPS means strongest flow, LPS means weakest” gets both of these named stocks wrong. Ask for the actual coral's care information as well as its broad hobby category.",
         "refs": [
           "r2",
           "r3"
@@ -362,14 +362,14 @@
       },
       {
         "type": "heading",
-        "text": "Make a placement record"
+        "text": "Keep a placement record"
       },
       {
         "type": "list",
         "items": [
-          "Sketch the rockwork and pump positions. Note other flow sources and obstructions; EcoTech explicitly identifies these as relevant.",
-          "Write the coral's identity and grower's flow and lighting guidance beside the proposed location. Keep separate entries for different corals.",
-          "Save a photograph and the pump settings before making a change. Our preference is to document one adjustment at a time rather than rearrange everything together."
+          "Sketch the rockwork and pump positions, and mark other flow sources and obstructions. EcoTech identifies these as relevant.",
+          "Beside the proposed spot, write the coral's identity and the grower's flow and lighting guidance, with a separate entry for each coral.",
+          "Save a photo and the pump settings before any change. We prefer to make and record one adjustment at a time."
         ],
         "refs": [
           "r1"
@@ -377,12 +377,12 @@
       },
       {
         "type": "aside",
-        "title": "Ask for a useful comparison",
-        "text": "Instead of asking only “Is this high flow?”, ask the supplier which coral the advice concerns and how its current position compares with yours. Bring your sketch. An answer tied to a named animal and an actual layout is more useful than an unexplained pump percentage."
+        "title": "Take the sketch to the supplier",
+        "text": "Ask which coral the advice is about and how its current position compares with the spot you have in mind. An answer tied to a named animal and a real layout helps more than an unexplained pump percentage."
       },
       {
         "type": "p",
-        "text": "Treat the record as an ongoing husbandry conversation, not proof that the first placement is correct. If the coral appears unwell, describe the observations and seek species-specific help rather than repeatedly increasing pump power. This guide deliberately supplies neither a universal turnover number nor a promise that one setting suits every colony."
+        "text": "The record doesn't prove the first placement was right; keep adding to it. If the coral looks unwell, write down what you see and get species-specific help instead of turning the pump up again. This guide gives no universal turnover number and makes no promise that one setting suits every colony."
       }
     ],
     "archive": false
@@ -428,7 +428,7 @@
     "blocks": [
       {
         "type": "p",
-        "text": "Tropica’s 1-2-Grow cups contain young plants for dividing into portions, not a finished planting to tip straight into an aquarium.",
+        "text": "Tropica’s 1-2-Grow cups hold young plants meant to be divided into portions before they go into the aquarium.",
         "refs": [
           "r1"
         ]
@@ -439,7 +439,7 @@
       },
       {
         "type": "p",
-        "text": "Read the species label first. Anubias barteri nana and Eleocharis pusilla 'Mini' both come in tissue-culture cups, but their destinations differ: Tropica recommends stone or wood for the Anubias, while the Eleocharis is a foreground carpeting plant. The grower also rates the latter's light and CO2 demand as medium, versus low for the Anubias. A shared package is not a shared care plan.",
+        "text": "Read the species label first. Anubias barteri nana and Eleocharis pusilla 'Mini' both come in tissue-culture cups but go to different places: Tropica recommends stone or wood for the Anubias, and the Eleocharis is a foreground carpeting plant. The grower also rates the Eleocharis as medium in light and CO2 demand, against low for the Anubias.",
         "refs": [
           "r3",
           "r4"
@@ -447,7 +447,7 @@
       },
       {
         "type": "p",
-        "text": "Keep the cup sealed until you are ready to work. That is Dennerle Plants' handling instruction for its Plantit range. Our preparation suggestion: set out tweezers, a small work surface and your planting plan first, so you are not hunting for tools with the plant already out of its container.",
+        "text": "Dennerle Plants says to keep its Plantit cups sealed until you are ready to work. We'd also set out tweezers, a small work surface and the planting plan first, so you aren't hunting for tools with the plant already out of its container.",
         "refs": [
           "r2"
         ]
@@ -458,7 +458,7 @@
       },
       {
         "type": "p",
-        "text": "Ease the plant material out, then rinse away the liquid or gel around it. Dennerle specifies lukewarm water and a gentle touch; Tropica likewise instructs users to rinse off the medium under the tap. Follow the cup's own directions. The job is to remove the growing medium, not scrub the small plants clean with force.",
+        "text": "Ease the plant material out and rinse away the liquid or gel around it. Dennerle specifies lukewarm water and a gentle touch, and Tropica tells users to rinse the medium off under the tap. Follow your cup's own directions. Once the medium is gone, stop; the small plants don't need scrubbing.",
         "refs": [
           "r1",
           "r2"
@@ -466,11 +466,11 @@
       },
       {
         "type": "heading",
-        "text": "3. Divide for the job, not into equal shares"
+        "text": "3. Divide to suit the planting"
       },
       {
         "type": "p",
-        "text": "Tropica suggests six to eight portions for small foreground plants, planted with tweezers—not a rule for every species. Its Eleocharis guidance calls for small portions spaced across the planting area. Let the carpet grow rather than installing one solid plug.",
+        "text": "For small foreground plants, Tropica suggests six to eight portions planted with tweezers, though that number does not apply to every species. Its Eleocharis guidance calls for small portions spaced across the planting area so the carpet can grow in, rather than one solid plug.",
         "refs": [
           "r1",
           "r4"
@@ -478,26 +478,26 @@
       },
       {
         "type": "p",
-        "text": "Anubias needs a different finish. Attach it to suitable stone or wood rather than treating it like a grass tuft. Tropica warns against burying its rhizome—the thick stem from which the plant grows—because it can rot. Choose the planting method from the species information, even when the cup's general instructions show tweezers pushing plants into substrate.",
+        "text": "Anubias goes onto suitable stone or wood. Tropica warns against burying its rhizome (the thick stem the plant grows from) because it can rot. Follow the species information here even if the cup's general instructions show tweezers pushing plants into substrate.",
         "refs": [
           "r3"
         ]
       },
       {
         "type": "heading",
-        "text": "4. Troubleshoot the planting, not the whole aquarium"
+        "text": "4. If a portion floats up"
       },
       {
         "type": "p",
-        "text": "If a substrate-planted portion keeps floating up, Dennerle suggests checking whether it is too large and dividing it further. For a new setup, the grower recommends planting with little or no water, then filling slowly without disturbing the substrate. That is a setup technique, not a reason to drain an occupied tank.",
+        "text": "If a portion planted in substrate keeps floating up, Dennerle suggests checking whether it is too large and dividing it further. For a new setup, Dennerle recommends planting with little or no water in the tank, then filling slowly without disturbing the substrate. That is setup advice; don't drain an occupied tank to follow it.",
         "refs": [
           "r2"
         ]
       },
       {
         "type": "aside",
-        "title": "What the sealed cup does—and does not—promise",
-        "text": "Tropica guarantees its own 1-2-Grow range is free of snails, algae and pesticides. That manufacturer statement is not an independent test of every tissue-culture product, nor a promise that an aquarium will remain algae-free after planting.",
+        "title": "What the sealed cup promises",
+        "text": "Tropica guarantees that its own 1-2-Grow range is free of snails, algae and pesticides. That is a manufacturer's statement, not an independent test of every tissue-culture product, and it says nothing about whether the aquarium stays algae-free after planting.",
         "refs": [
           "r1"
         ]
@@ -516,7 +516,7 @@
     "image": "lionfish.webp",
     "source": "NOAA; Florida Museum; Georgia Aquarium",
     "url": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blue-tang/",
-    "caption": "A red lionfish (Pterois volitans) at Aquarium Finisterrae. An example of a fish whose adult needs must be researched, not a stocking recommendation.",
+    "caption": "A red lionfish (Pterois volitans) at Aquarium Finisterrae, shown as a fish whose adult needs take research. It is not a stocking recommendation.",
     "references": [
       {
         "id": "r1",
@@ -540,54 +540,54 @@
     "blocks": [
       {
         "type": "p",
-        "text": "Before buying a marine fish, write a plan for its adult life rather than its current display size. Start with the scientific name, expected adult dimensions and the animals already living in your tank. Our recommendation is to leave unresolved questions on paper instead of bringing them home in a fish bag."
+        "text": "Before buying a marine fish, plan for the adult it will become. Start with the scientific name, the expected adult size and the animals already in your tank. Any question you can't answer yet should stay on paper instead of coming home in a fish bag."
       },
       {
         "type": "heading",
-        "text": "A juvenile is not a space estimate"
+        "text": "Plan for the adult size"
       },
       {
         "type": "p",
-        "text": "NOAA's account of red lionfish and devil firefish notes that juveniles can measure an inch or less while adults can reach 18 inches. That contrast is a reason to research the species before purchase, not a formula for calculating tank volume. Ask an experienced marine keeper to assess your tank's dimensions and layout for the adult animal; “I will upgrade later” is not an existing home. Lionfish also have venomous spines; they are examples here, not a beginner stocking recommendation.",
+        "text": "NOAA's account of red lionfish and devil firefish notes that juveniles can measure an inch or less and adults can reach 18 inches. That gap is a reason to research a species before buying, but it gives you no formula for tank volume. Ask an experienced marine keeper to judge whether the dimensions and layout of the tank you have now, not a planned upgrade, suit the adult animal. Lionfish also have venomous spines; they are an example here, not a beginner stocking recommendation.",
         "refs": [
           "r1"
         ]
       },
       {
         "type": "heading",
-        "text": "Social behavior needs its own check"
+        "text": "Check social behavior separately"
       },
       {
         "type": "p",
-        "text": "Florida Museum identifies its blue tang as Acanthurus coeruleus. It reports a length of approximately 12 inches and describes wild individuals living alone, in pairs or in groups, with reef crevices used as nighttime shelter. Those observations do not establish that several will share your aquarium successfully. A photograph of wild schooling is not a tested captive stocking plan.",
+        "text": "The blue tang in Florida Museum's profile is Acanthurus coeruleus. The museum reports a length of approximately 12 inches and describes wild individuals living alone, in pairs or in groups, sheltering in reef crevices at night. None of that shows several will share your aquarium successfully, and a photo of a wild school is not a tested captive stocking plan.",
         "refs": [
           "r2"
         ]
       },
       {
         "type": "p",
-        "text": "Predation is a separate compatibility question from chasing. Georgia Aquarium lists small fish, shrimp, crabs and other invertebrates in the red lionfish's diet and describes it as a solitary hunter. It also reports that adults defend their home range against other lionfish and other species. Our takeaway is to assess potential prey as well as potential rivals. A quiet fish is not necessarily a safe neighbor for every smaller resident.",
+        "text": "Predation is a different compatibility question from chasing. Georgia Aquarium lists small fish, shrimp, crabs and other invertebrates in the red lionfish's diet, describes it as a solitary hunter, and reports that adults defend their home range against other lionfish and other species. So look at which residents could be prey as well as which could be rivals. A quiet fish may still be a danger to smaller tankmates.",
         "refs": [
           "r3"
         ]
       },
       {
         "type": "heading",
-        "text": "Bring this worksheet to the fish room"
+        "text": "Take these questions to the fish room"
       },
       {
         "type": "list",
         "items": [
           "Identity and housing: What exact species is offered, what adult size is documented, and can the present aquarium accommodate it?",
-          "Social fit: What is known about this species with its own kind and with each existing resident? Ask for the reasoning, not just a “community” label.",
+          "Social fit: What is known about this species with its own kind and with each current resident? Ask for the reasoning behind any “community” label.",
           "Feeding fit: Could any current fish or invertebrate be prey? Can you provide the proposed fish's normal diet?",
-          "Contingency: Who can help assess a conflict, and what suitable separate accommodation is genuinely available if the combination fails?"
+          "Backup plan: Who can help assess a conflict, and what suitable separate housing do you actually have if the combination fails?"
         ]
       },
       {
         "type": "aside",
-        "title": "A shortlist can get shorter",
-        "text": "Do not buy a fish merely to fill an empty visual space. If adult housing or compatibility remains uncertain, keep it off the purchase list. These examples explain what to investigate; they do not endorse a particular pairing, group size or minimum tank volume."
+        "title": "Leave uncertain fish off the list",
+        "text": "An empty-looking space is no reason to buy a fish. If adult housing or compatibility is still uncertain, keep that fish off the purchase list. The examples above show what to investigate. They do not endorse any pairing, group size or minimum tank volume."
       }
     ],
     "archive": false
@@ -599,7 +599,7 @@
     "kind": "Practical guide",
     "date": "Evergreen guide",
     "title": "Record aquarium test results with units and context",
-    "dek": "Use the kit's method consistently, then keep a record that distinguishes a real change from a different testing routine.",
+    "dek": "Use the kit's method the same way each time, and keep a record that shows whether a change came from the water or from how you tested.",
     "image": "freshwater-fish.webp",
     "source": "API Fishcare; JBL; RSPCA Australia",
     "url": "https://www.jbl.de/en/blog/detail/171/inaccurate-water-tests-or-did-i-do-something-wrong-after-all?country=fi",
@@ -627,7 +627,7 @@
     "blocks": [
       {
         "type": "p",
-        "text": "Write down the result, its units and what was happening in the aquarium. “Water fine” cannot be compared with next week's result. A useful record lets you see both the measurement and the circumstances, without pretending a color match is more precise than it really is."
+        "text": "Write down the result, its units and what was going on in the aquarium at the time. You can't compare “water fine” with next week's result. A good record shows the measurement and the circumstances, and is honest about how precise a color match can be."
       },
       {
         "type": "heading",
@@ -635,14 +635,14 @@
       },
       {
         "type": "p",
-        "text": "Read the instructions for the specific test, not just the kit's name. API distinguishes vigorously mixing designated reagent bottles from more gently mixing capped test tubes. It also advises rinsing tubes promptly after testing. Do not assume every bottle needs identical handling or borrow another kit's sequence.",
+        "text": "Read the instructions for each test in the kit. API tells users to mix designated reagent bottles vigorously and capped test tubes more gently, and to rinse tubes promptly after testing. Don't assume every bottle is handled the same way, and don't borrow another kit's sequence.",
         "refs": [
           "r2"
         ]
       },
       {
         "type": "p",
-        "text": "Check expiry information and note when reagents were opened. Measure the specified sample volume and time each required wait. Use the instructed viewing arrangement and suitable light; colored aquarium lighting is not a neutral comparison setting. Contamination, incorrect quantities and reading at the wrong time can all distort the result.",
+        "text": "Check expiry information and note when each reagent was opened. Measure the specified sample volume and time every required wait. Read the color with the instructed viewing arrangement in suitable light, because colored aquarium lighting skews the comparison. Contamination, incorrect quantities and reading at the wrong time can all distort the result.",
         "refs": [
           "r1"
         ]
@@ -662,22 +662,22 @@
       },
       {
         "type": "p",
-        "text": "For example, an entry can say “between these two chart colors” rather than inventing an extra decimal place. If you change kits, mark that change: tests can use different scale intervals, so two readings need not align perfectly. Substantial disagreement warrants checking the method rather than choosing the more reassuring number.",
+        "text": "An entry can say “between these two chart colors” instead of inventing an extra decimal place. If you switch kits, note the switch. Tests can use different scale intervals, so two readings won't always line up exactly. When they disagree substantially, check the method before trusting the more reassuring number.",
         "refs": [
           "r1"
         ]
       },
       {
         "type": "aside",
-        "title": "Let the aquarium determine the questions",
-        "text": "Monitor ammonia, nitrite and nitrate alongside pH and temperature. Increase attention during establishment rather than treating a new tank like an established one. Testing helps assess filtration and husbandry; it is not merely a check on how clear the water looks.",
+        "title": "What to monitor",
+        "text": "Monitor ammonia, nitrite and nitrate along with pH and temperature, and pay closer attention while a new tank is establishing. Testing tells you how filtration and husbandry are working, which clear-looking water can't.",
         "refs": [
           "r3"
         ]
       },
       {
         "type": "p",
-        "text": "Use species-specific requirements when interpreting pH, not a universal freshwater target. API also warns that ammonia and nitrite matter even at low levels. An unexpected reading deserves prompt investigation; a tidy log is useful evidence, not permission to ignore a possible water-quality problem.",
+        "text": "Judge pH against your species' requirements; there is no universal freshwater target. API also warns that ammonia and nitrite matter even at low levels. Look into an unexpected reading promptly. A tidy log is useful evidence, but keeping one is no reason to ignore a possible water-quality problem.",
         "refs": [
           "r2"
         ]
@@ -720,62 +720,62 @@
     "blocks": [
       {
         "type": "p",
-        "text": "A breeder can have eggs, clean water and attentive care, yet still be missing the meal that makes the next stage possible. For marine fish larvae, food must fit a tiny mouth, trigger a hunting response and deliver the right nutrients. A tank full of unsuitable prey is not a nursery full of fed fish.",
+        "text": "A breeder can have eggs, clean water and attentive care and still be missing the meal that gets larvae to the next stage. For marine fish larvae, food has to fit a tiny mouth, trigger a hunting response and deliver the right nutrients.",
         "refs": [
           "r3"
         ]
       },
       {
         "type": "p",
-        "text": "That problem sits behind the University of Florida’s February 25, 2025 account of ornamental-fish research. Its teams had raised blue tangs in captivity, but the achievement depended partly on learning to grow the live foods larvae needed at different stages. The university described a practical ambition: develop methods that fish farmers could use, rather than leave each producer to solve the life cycle alone.",
+        "text": "The University of Florida’s February 25, 2025 account of its ornamental-fish research comes back to this problem. UF teams had raised blue tangs in captivity, and that depended partly on learning to grow the live foods the larvae needed at different stages. The university described the goal as methods fish farmers could use, so that each producer would not have to solve the life cycle alone.",
         "refs": [
           "r1"
         ]
       },
       {
         "type": "heading",
-        "text": "An egg is only the beginning"
+        "text": "How clownfish differ"
       },
       {
         "type": "p",
-        "text": "Clownfish offer a useful contrast. Their eggs adhere to a surface, which can be a tile or clay pot in a breeding system; the male tends the nest. The larvae hatch relatively well developed and can take enriched rotifers as their first food. Many pelagic spawners release buoyant eggs and hatch less-developed larvae that need smaller prey. The successful clownfish routine is not a universal recipe.",
+        "text": "Clownfish eggs stick to a surface, which in a breeding system can be a tile or clay pot, and the male tends the nest. The larvae hatch relatively well developed and can take enriched rotifers as their first food. Many pelagic spawners release buoyant eggs instead, and their less-developed larvae need smaller prey, so a routine that works for clownfish does not carry over to every species.",
         "refs": [
           "r2"
         ]
       },
       {
         "type": "p",
-        "text": "Even that contrast has exceptions. UF/IFAS notes that damselfishes also lay eggs on surfaces and provide parental care, yet their larvae often need small copepod nauplii. Watching where a fish lays its eggs cannot tell a breeder everything about what will hatch. The larva’s capabilities matter as much as the parents’ behavior.",
+        "text": "There are exceptions. UF/IFAS notes that damselfishes also lay eggs on surfaces and provide parental care, yet their larvae often need small copepod nauplii. Where a fish lays its eggs doesn't tell a breeder everything about what will hatch; the larva’s capabilities matter as much as the parents’ behavior.",
         "refs": [
           "r2"
         ]
       },
       {
         "type": "heading",
-        "text": "The nursery behind the nursery"
+        "text": "Growing the food"
       },
       {
         "type": "p",
-        "text": "Rotifers are useful because they can be grown densely, but breeders enrich them to improve their nutritional value. Brine shrimp are convenient to hatch, yet can be too large for the earliest feeding stage. Copepod nauplii offer another combination of size, movement and nutrition; maintaining their supply brings its own culture challenges. The hatchery is managing food organisms as well as fish.",
+        "text": "Rotifers can be grown densely, and breeders enrich them to improve their nutritional value. Brine shrimp are convenient to hatch but can be too large for the earliest feeding stage. Copepod nauplii offer a different mix of size, movement and nutrition, though keeping up their supply brings its own culture challenges.",
         "refs": [
           "r3"
         ]
       },
       {
         "type": "p",
-        "text": "This explains why a first breeding success and dependable production are different milestones. UF’s account describes intensive labor and cost in developing larval diets and environments. A farmer needs a method that can be repeated, not simply evidence that one batch once survived. The research is about making that passage less precarious.",
+        "text": "That is why breeding a species once and producing it dependably are separate milestones. UF’s account describes the intensive labor and cost of developing larval diets and environments. A farmer needs a method that works batch after batch, and the research aims to make that stage less precarious.",
         "refs": [
           "r1"
         ]
       },
       {
         "type": "aside",
-        "title": "At the fish room: three questions worth asking",
-        "text": "Our suggested conversation starts with the individual fish: Who bred it, and can its origin be documented? What is it eating here, and can I watch it feed? What adult size, social behavior and housing needs should I plan for? Ask these questions about the fish being offered, not just the species on the label. A familiar appearance is not a record of where an animal was born."
+        "title": "Questions to ask about the fish in front of you",
+        "text": "Who bred this fish, and can its origin be documented? What is it eating here, and can I watch it feed? What adult size, social behavior and housing needs should I plan for? Ask about the individual fish being offered as well as the species on the label; a familiar appearance is no record of where an animal was born."
       },
       {
         "type": "p",
-        "text": "Captive breeding can offer an alternative to collecting fish, but UF’s account also acknowledges uncertainty about wild harvest’s effects. Our editorial view is to ask for a traceable origin rather than turn that uncertainty into a blanket verdict on every wild fish. Nor should a sourcing decision be mistaken for habitat protection. Appreciating the work of a hatchery and caring about living reefs belong in the same conversation.",
+        "text": "Captive breeding can offer an alternative to collecting fish, although UF’s account also acknowledges uncertainty about wild harvest’s effects. Our view is to ask for a traceable origin instead of turning that uncertainty into a blanket verdict on every wild fish. Choosing a fish's source is also not the same as protecting its habitat. Valuing a hatchery's work and caring about living reefs go together.",
         "refs": [
           "r1"
         ]
@@ -818,7 +818,7 @@
     "blocks": [
       {
         "type": "p",
-        "text": "For a suitable stem plant, cut the longest shoot just above a lower leaf and replant the removed shoot within the group. The rooted stem can produce new shoots. Work in small sessions rather than treating every plant in the aquarium to one severe haircut; different growth forms need different trimming methods.",
+        "text": "On a suitable stem plant, cut the longest shoot just above a lower leaf and replant the cut shoot in the same group; the rooted stem left behind can produce new shoots. Trim in small sessions. Different growth forms need different methods, so one severe haircut for every plant in the tank won't suit them all.",
         "refs": [
           "r1"
         ]
@@ -829,22 +829,22 @@
       },
       {
         "type": "p",
-        "text": "Look below the attractive tips. Repeated trimming encourages branching, but a dense group can leave lower stems shaded and weak. Thin selected stems rather than simply shaving the top again. Where the lower portion has deteriorated, remove that stem, discard its weakened base and retain the sound upper portion for replanting.",
+        "text": "Look below the tips. Repeated trimming encourages branching, but a dense group can leave its lower stems shaded and weak, and shaving the top again won't fix that. Thin out selected stems. Where a stem's lower part has deteriorated, remove it, discard the weakened base and keep the sound upper portion for replanting.",
         "refs": [
           "r2"
         ]
       },
       {
         "type": "heading",
-        "text": "Give the cuttings a destination"
+        "text": "Plan where the cuttings go"
       },
       {
         "type": "p",
-        "text": "Before cutting, choose the gap you want to fill. Our practical suggestion is to keep a small tray beside the aquarium and separate retained shoots from material being discarded. This makes it easier to finish one group deliberately instead of collecting an unplanned heap of cuttings."
+        "text": "Pick the gap you want to fill before you cut. We suggest a small tray beside the aquarium, with shoots to keep on one side and discards on the other. It makes it easier to finish one group deliberately and avoids an unplanned heap of cuttings."
       },
       {
         "type": "p",
-        "text": "Plant retained shoots in less-dense areas, not automatically back into an already crowded center. For a sloping group, arrange shorter cuttings toward the front and longer ones behind. Replanting is a chance to rebuild the shape rather than preserve every stem in its old position.",
+        "text": "Put kept shoots where the group is less dense; an already crowded center doesn't need them. For a sloping group, set shorter cuttings toward the front and longer ones behind. Replanting lets you rebuild the shape, so stems don't have to go back where they were.",
         "refs": [
           "r2"
         ]
@@ -852,22 +852,22 @@
       {
         "type": "aside",
         "title": "A species example: Bacopa caroliniana",
-        "text": "This Bacopa can be propagated by taking a side shoot and planting it in the substrate. Tropica describes it as relatively slow-growing for a stem plant. That makes it a useful reminder to judge the individual plant rather than assume every stem group needs frequent cutting.",
+        "text": "You can propagate this Bacopa by taking a side shoot and planting it in the substrate. Tropica describes it as relatively slow-growing for a stem plant, a reminder to judge the individual plant before assuming a stem group needs frequent cutting.",
         "refs": [
           "r3"
         ]
       },
       {
         "type": "heading",
-        "text": "Leave a record of what you changed"
+        "text": "Record what you changed"
       },
       {
         "type": "p",
-        "text": "Photograph the group from the same viewing position before and after the work. Note which patch was shortened, which was thinned and where cuttings were replanted. On the next visit, compare those specific areas instead of judging only the overall silhouette. These are different maintenance decisions, and a record helps you avoid repeating the same operation by habit."
+        "text": "Photograph the group from the same viewing position before and after. Note which patch you shortened, which you thinned and where the cuttings went. Next time, compare those areas specifically as well as the overall silhouette. Shortening, thinning and replanting are different decisions, and a record keeps you from repeating one out of habit."
       },
       {
         "type": "p",
-        "text": "There is no need to give all the groups matching heights or matching appointments in the calendar. Make the next session a response to the plants in front of you, not an obligation to repeat the last haircut."
+        "text": "Groups don't need matching heights or matching dates on the calendar. Base the next session on the plants in front of you."
       }
     ],
     "archive": false
@@ -907,35 +907,35 @@
     "blocks": [
       {
         "type": "p",
-        "text": "The important number is not just how many corals moved, but how many different genetic identities went with them. In its August 20, 2026 announcement, Coral Restoration Foundation reported transferring approximately 1,000 corals representing 130 genotypes from Tavernier Nursery to Elbow Nursery in the Florida Keys. Two dives began a planned relocation of roughly 3,500 corals, intended to duplicate the genetic collection held at Tavernier.",
+        "text": "In its August 20, 2026 announcement, Coral Restoration Foundation reported transferring approximately 1,000 corals representing 130 genotypes from Tavernier Nursery to Elbow Nursery in the Florida Keys. For a gene bank, the second number matters as much as the first. Two dives began a planned relocation of roughly 3,500 corals, intended to duplicate the genetic collection held at Tavernier.",
         "refs": [
           "r1"
         ]
       },
       {
         "type": "p",
-        "text": "A genotype is not a species count. Coral propagation can produce multiple colonies with the same genetic identity: a fragment grows, but it does not become a new genetic individual simply by living separately. Banking living corals therefore means preserving different lineages, not merely accumulating more pieces. Sexual reproduction, by contrast, can produce new combinations of parental genes.",
+        "text": "A genotype is a genetic identity, and it is a different count from species. Coral propagation can produce many colonies with the same genotype: a fragment grows into a separate colony without becoming a new genetic individual. A living gene bank is therefore measured in lineages rather than pieces. Sexual reproduction, by contrast, can produce new combinations of parental genes.",
         "refs": [
           "r2"
         ]
       },
       {
         "type": "p",
-        "text": "The first transfer prioritized founding staghorn and elkhorn genotypes and much of CRF’s Orbicella collection. Elbow adds an ocean-based backup alongside Tavernier, complementing land-based banking at The Reef Institute. CRF reports stronger water movement at Elbow, but does not yet know whether relocated corals will withstand heat as successfully as some corals already living nearby.",
+        "text": "The first transfer prioritized founding staghorn and elkhorn genotypes and much of CRF’s Orbicella collection. Elbow gives the bank an ocean-based backup alongside Tavernier, in addition to land-based banking at The Reef Institute. CRF reports stronger water movement at Elbow but does not yet know whether the relocated corals will withstand heat as successfully as some corals already living nearby.",
         "refs": [
           "r1"
         ]
       },
       {
         "type": "p",
-        "text": "This is also why a gene bank and a restored reef are different achievements. NOAA describes genetic storage as a reserve for future restoration, alongside breeding and outplanting. Keeping a lineage alive preserves the possibility of using it later; it does not establish that a self-sustaining population has returned to the reef.",
+        "text": "A gene bank and a restored reef are different achievements. NOAA describes genetic storage as a reserve for future restoration, alongside breeding and outplanting. A lineage kept alive can be used later, but that does not establish that a self-sustaining population has returned to the reef.",
         "refs": [
           "r3"
         ]
       },
       {
         "type": "p",
-        "text": "The August announcement made further transfers dependent on heat and reef conditions. It did not report all 3,500 corals in place. Maintenance and monitoring follow the move: the immediate accomplishment is a second location for vulnerable genetic stock, not a guarantee against the next bleaching event.",
+        "text": "The August announcement made further transfers dependent on heat and reef conditions, and it did not report all 3,500 corals in place. Maintenance and monitoring follow the move. So far the accomplishment is a second location for vulnerable genetic stock, which is no guarantee against the next bleaching event.",
         "refs": [
           "r1"
         ]
@@ -972,43 +972,43 @@
     "blocks": [
       {
         "type": "p",
-        "text": "Picture a group of fish drawing closer together, their bodies pointing the same way. It is tempting to call that better teamwork. A University of Bristol study published on September 2, 2026, offers a more interesting answer: whether coordination helped depended on the water and the group. The subjects were three-spined sticklebacks, not a mixed community of aquarium fish.",
+        "text": "When fish draw closer together with their bodies pointing the same way, it looks like better teamwork. A University of Bristol study published on September 2, 2026, found that whether that coordination helped depended on the water and the group. The subjects were three-spined sticklebacks, not a mixed community of aquarium fish.",
         "refs": [
           "r1"
         ]
       },
       {
         "type": "heading",
-        "text": "First, watch what happens before the food"
+        "text": "Before the food appeared"
       },
       {
         "type": "p",
-        "text": "Bristol reports that in cloudy water the fish generally moved closer and aligned more strongly before food appeared. Small groups were especially responsive to nearby fish. When the feeding opportunity arrived, however, cloudiness still slowed the response overall. The fish had adjusted their behavior; they had not made reduced visibility irrelevant.",
+        "text": "Bristol reports that in cloudy water the fish generally moved closer and aligned more strongly before food appeared, and small groups were especially responsive to nearby fish. Once the feeding opportunity arrived, though, cloudiness still slowed the response overall. Adjusting their behavior did not cancel out the effect of reduced visibility.",
         "refs": [
           "r1"
         ]
       },
       {
         "type": "p",
-        "text": "The paper puts numbers on that movement. Researchers examined the fishes' positions and orientations in the second before the food stimulus appeared. They also compared changes in swimming speed between neighbors during the preceding minute. In pairs in turbid water, fish responded to a neighbor's speed changes with less delay than in clear water; that difference was not evident in larger groups.",
+        "text": "The paper measured this from the fishes' positions and orientations in the second before the food stimulus appeared, and from changes in swimming speed between neighbors during the preceding minute. In pairs in turbid water, fish responded to a neighbor's speed changes with less delay than in clear water. That difference was not evident in larger groups.",
         "refs": [
           "r2"
         ]
       },
       {
         "type": "heading",
-        "text": "Then ask when togetherness helped"
+        "text": "When tighter groups did better"
       },
       {
         "type": "p",
-        "text": "In small groups in turbid water, closer spacing and stronger alignment were associated with quicker attacks on the food stimulus. In larger groups in clear water, those same features were associated with slower responses. Cohesion describes how tightly the fish gather; polarization describes how similarly they orient. The study therefore separates two things a casual glance might bundle together as schooling.",
+        "text": "In small groups in turbid water, closer spacing and stronger alignment were associated with quicker attacks on the food stimulus. In larger groups in clear water, the same features were associated with slower responses. The study treats them separately: cohesion is how tightly the fish gather, polarization how similarly they orient, and a casual glance would bundle both together as schooling.",
         "refs": [
           "r2"
         ]
       },
       {
         "type": "p",
-        "text": "For us, the intriguing part is the reversal: a neat formation is not automatically the most effective one. This is an invitation to observe more carefully, not to cloud a home aquarium or add fish to reproduce a laboratory result. The experiment does not establish a stocking rule or a welfare score for aquarium species.",
+        "text": "The reversal is what we find most interesting, since the neatest formation was not always the most effective. It is a reason to watch your own fish more carefully. Clouding a home aquarium or adding fish to reproduce a laboratory result would misread it, and the experiment does not establish a stocking rule or a welfare score for aquarium species.",
         "refs": [
           "r2"
         ]
@@ -1051,7 +1051,7 @@
     "blocks": [
       {
         "type": "p",
-        "text": "A fragment can grow into another coral colony without creating another genetic identity. Sexual reproduction does something different: eggs and sperm combine, producing offspring with new combinations of genes. That distinction matters whenever a restoration project counts its corals. More colonies and more genetic variety are not interchangeable measures of progress.",
+        "text": "A fragment can grow into another coral colony without creating another genetic identity. In sexual reproduction, eggs and sperm combine and produce offspring with new combinations of genes. So when a restoration project counts its corals, more colonies and more genetic variety measure different kinds of progress.",
         "refs": [
           "r2"
         ]
@@ -1062,32 +1062,32 @@
       },
       {
         "type": "p",
-        "text": "Broadcast-spawning corals release eggs and sperm into the water. Their timing helps gametes from separated colonies meet; temperature, lunar cycles and light contribute to that coordination. After fertilization, embryos develop into swimming larvae called planulae. A suitable surface and settlement cues help a larva make the transition to an attached polyp. Brooding corals take a different route: fertilization and early development occur inside the parent before larvae are released.",
+        "text": "Broadcast-spawning corals release eggs and sperm into the water, timed so that gametes from separated colonies can meet; temperature, lunar cycles and light contribute to that coordination. After fertilization, embryos develop into swimming larvae called planulae, and a suitable surface and settlement cues help a larva become an attached polyp. Brooding corals take a different route: fertilization and early development occur inside the parent before larvae are released.",
         "refs": [
           "r2"
         ]
       },
       {
         "type": "p",
-        "text": "For restoration, producing larvae is therefore an opening, not the finish. Young corals must survive settlement and early growth. Miller and colleagues’ 2024 research paper describes this period as particularly vulnerable to competition, predation and disease. A successful spawning night can supply a new generation; it cannot by itself deliver a reef of adult colonies.",
+        "text": "For restoration, producing larvae is only the start. Young corals then have to survive settlement and early growth, a period Miller and colleagues’ 2024 research paper describes as particularly vulnerable to competition, predation and disease. A successful spawning night can supply a new generation, but it cannot by itself deliver a reef of adult colonies.",
         "refs": [
           "r3"
         ]
       },
       {
         "type": "heading",
-        "text": "More combinations, not guaranteed winners"
+        "text": "Breeding for heat tolerance"
       },
       {
         "type": "p",
-        "text": "NOAA’s July 21, 2025 account of Florida restoration describes an effort to breed genetically varied offspring while selecting parents for heat tolerance. Researchers were also testing beneficial algae and bacteria, and developing protective hydrogel capsules to support larval settlement. These are separate problems: which parents to cross, which microbial partners to establish, and how to keep tiny corals alive. A promising answer to one does not settle the others.",
+        "text": "NOAA’s July 21, 2025 account of Florida restoration describes breeding genetically varied offspring while selecting parents for heat tolerance. Researchers were also testing beneficial algae and bacteria and developing protective hydrogel capsules to support larval settlement. Choosing parents, establishing microbial partners and keeping tiny corals alive are separate problems, and a promising answer to one does not settle the others.",
         "refs": [
           "r1"
         ]
       },
       {
         "type": "p",
-        "text": "There is encouraging field evidence, with an important qualification. Miller’s team surveyed sexually propagated corals across five Caribbean regions during the 2023 heatwave. Many young corals resisted bleaching better than comparison colonies. But the study was observational, with uneven comparisons across species and sites; it did not establish the mechanism responsible. An older cohort of sexually propagated elkhorn corals suffered badly. The authors warned that the resistance seen in juveniles could diminish with age. Sexual origin alone is not evidence of lifelong heat protection.",
+        "text": "Some field evidence is encouraging, with an important qualification. During the 2023 heatwave, Miller's team surveyed sexually propagated corals across five Caribbean regions and found that many young corals resisted bleaching better than comparison colonies. The study was observational, though, with uneven comparisons across species and sites, and it did not establish the mechanism responsible. An older cohort of sexually propagated elkhorn corals suffered badly, and the authors warned that the resistance seen in juveniles could diminish with age. Sexual origin alone is not evidence of lifelong heat protection.",
         "refs": [
           "r3"
         ]
@@ -1098,7 +1098,7 @@
       },
       {
         "type": "p",
-        "text": "NOAA’s program still includes growing fragments from bleaching survivors. Fragmentation can multiply existing stock; breeding can generate new genetic combinations. Neither makes environmental conditions irrelevant. The 2024 study explicitly places restoration alongside the need to address warming and local pollution, not in place of that work.",
+        "text": "NOAA’s program still includes growing fragments from bleaching survivors. Fragmentation can multiply existing stock and breeding can generate new genetic combinations, but neither makes environmental conditions irrelevant. The 2024 study explicitly presents restoration as work that goes alongside addressing warming and local pollution, not a substitute for it.",
         "refs": [
           "r1",
           "r3"
@@ -1107,7 +1107,7 @@
       {
         "type": "aside",
         "title": "How we read a restoration milestone",
-        "text": "Ask what was achieved: more fragments, more parent lineages, successful settlement, or surviving adults? Those are different accomplishments. Keeping the distinction visible lets us welcome real progress without asking a baby coral to stand in for a recovered reef."
+        "text": "We ask what was achieved: more fragments, more parent lineages, successful settlement, or surviving adults. Each is a different accomplishment, and keeping them apart lets us welcome real progress without asking a baby coral to stand in for a recovered reef."
       }
     ],
     "archive": true
