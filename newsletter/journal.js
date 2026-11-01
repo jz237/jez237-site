@@ -95,6 +95,8 @@
   }
   function openReader(slug, source = null, fromHistory = false) {
     if (!templates.has(slug) || closingHistory) return;
+    // Save the browsing position before fixed-body locking changes window.scrollY.
+    if (!fromHistory) history.pushState({...history.state, [stateKey]: slug}, '', location.href);
     if (!dialog.open) {
       trigger = source?.getAttribute('aria-hidden') === 'true'
         ? source.closest('.story')?.querySelector('h3 a') : source;
@@ -107,7 +109,6 @@
       dialog.showModal();
       content.querySelector('.reader-title').focus({preventScroll: true});
     } else render(slug);
-    if (!fromHistory) history.pushState({...history.state, [stateKey]: slug}, '', location.href);
   }
   function closeReader() {
     if (!dialog.open || closingHistory) return;

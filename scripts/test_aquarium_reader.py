@@ -30,12 +30,13 @@ try:
             page.wait_for_function("document.querySelector('.reader-figure img').complete&&document.querySelector('.reader-figure img').naturalWidth>0")
         def wait_closed():
             page.wait_for_function("!document.getElementById('article-reader').open&&!history.state?.aquariumJournalReader")
+            page.evaluate('()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))')
             assert page.evaluate("getComputedStyle(document.body).position")!='fixed'
         page.goto(base+'/newsletter/',wait_until='networkidle');page.evaluate('document.fonts.ready')
         assert page.locator('dialog[open]').count()==0
         for i,story in enumerate(stories):
             link=page.locator('.story h3 a').nth(i)
-            link.scroll_into_view_if_needed();page.wait_for_timeout(100)
+            link.evaluate("e=>e.scrollIntoView({block:'center',behavior:'instant'})");page.wait_for_timeout(100)
             y=page.evaluate('scrollY');url=page.url
             link.click();wait_open()
             assert page.url==url
@@ -44,7 +45,8 @@ try:
             assert page.locator('.reader-takeaway p').inner_text()==story['takeaway']
             assert page.locator('.reader-sources>a').get_attribute('href')==story['url']
             assert page.locator('.reader-sources>a').get_attribute('target')=='_blank'
-            assert page.locator('iframe').count()==0
+            # Cloudflare may inject a hidden challenge frame outside the reader.
+            assert page.locator('#article-reader iframe').count()==0
             assert page.evaluate("getComputedStyle(document.body).position")=='fixed'
             page.locator('#reader-close').click();wait_closed()
             assert abs(page.evaluate('scrollY')-y)<=2,(i,y,page.evaluate('scrollY'))
