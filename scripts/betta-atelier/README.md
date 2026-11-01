@@ -1,15 +1,26 @@
-# Living Silk — Betta Atelier 1.7
+# Living Silk — Betta Atelier 1.13
 
-The standalone published build remains 1.7. Shared source also includes the globe
-1.4 motion revision: broad fins bend across their full span rather than pinning
-the inner half to a target; ray-length constraints, root attachment and the
-one-second display remain. Optional host locomotion supplies model-space speed
+The standalone published build is 1.13: the Betta Bowl's eleven colour varieties, five water
+tints, a slow orbit and photo saving, rebuilt on the current shared swim and fin source
+([Atelier 1.13](#atelier-113-2026-11-01)). 1.12 made the pectoral fins keep their size when the swim
+mode changes ([Atelier 1.12](#atelier-112-2026-10-23)), on top of 1.11, which added the gait's
+`stroke` reading, which the globe uses so the fish only gains speed while its tail is working
+([Atelier 1.11](#atelier-111-2026-10-23)), and 1.10, which added the globe's mirror, lap and rest
+pectoral poses ([Atelier 1.10](#atelier-110-2026-10-23)) and 1.9, which added the pelvic-feeler attachment fix and
+the shared hover-sculling and startle-tuck pectoral behaviour described in
+[Atelier 1.9](#atelier-19-2026-10-23) below, on top of the 1.8 shared-source changes
+made for the globe: broad fins bend across their full span (globe 1.4) with a stiffer
+root third and trimmed shear/billow so the free edge flexes more than the base
+(globe 1.5). Ray-length constraints, root attachment and the one-second display
+remain. Optional host locomotion supplies model-space speed
 and a separate voluntary `steerRate` for delayed head-to-tail tangent memory and
 deep, curvature-limited turns. The globe anchors its route at the neck and keeps
-passive fluid rotation separate from muscle flexion. See
+passive fluid rotation separate from muscle flexion. Host `locomotion.gulp` and
+`locomotion.gulpGill` (0..1.1, default 0) drive the jaw opening and opercular pulse
+of the globe's surface air gulp; each replaces the breathing value only while larger.
+See [Atelier 1.8](#atelier-18-2026-10-23) below for what the standalone itself gained, and
 [`../globes/HOSTING.md`](../globes/HOSTING.md) for the integration and verification
-procedure. Rebuilding this standalone directory would adopt the shared-source
-changes; the globe revision deliberately does not rebuild its compiled demo.
+procedure.
 
 An interactive, genuinely volumetric male halfmoon Betta study for Jez237.
 Live: https://jez237.com/demos/betta-atelier/
@@ -313,5 +324,133 @@ Animated materials expose `userData.bettaDeform` so a CPU adapter can evaluate t
 same spine, cover lift and fin displacement used by the WebGL vertex shader.
 Optional `fish.userData.externalFlow` is a world-frame velocity in Atelier units;
 when present it replaces the artistic current for both effort and membrane drag.
-The globe adapter converts its solver units explicitly. These are additive hooks;
-the standalone v1.7 compiled demo is not changed by the integration release.
+The globe adapter converts its solver units explicitly. These are additive hooks.
+
+## Atelier 1.8 (2026-10-23)
+
+Jez asked for the globe's betta realism improvements on the bowl-free Living Silk
+demo. Rebuilt from the shared source; the following are the standalone-specific
+parts.
+
+- **Head-led turns.** The standalone choreography now feeds its heading rate to
+  `BodyMotion.advanceTurn`, so the 180-degree pivot leads with the head and the
+  body uncoils behind it as a U-bend (the 1.7 build used a symmetric C-bend). The
+  uncoil takes about one second longer than the 1.7 swing.
+- **Surface air gulp.** `src/surface-gulp.js` schedules a labyrinth-fish breath:
+  during the second hover of every third 32-second cycle (t mod 96 in
+  [17.4, 25.2)) the betta climbs, pitches nose-up with its lip pinned just under the
+  surface, opens the jaw with a delayed gill-cover pulse, and dives back. The
+  climb waits 1.4 s so the preceding turn has uncoiled. It is scheduled, not
+  fluid-driven, runs only in the portrait view and not in inspection views, and is
+  frozen by pause and reduced-motion.
+- **Water surface.** A dark silvery rippled plane sits at the gulp height; a ripple
+  ring starts at the lip during the gulp. It is a shader approximation with no
+  true reflection of the fish.
+- **Fin rays and skin.** The membrane shader modulates opacity and normals with
+  anti-aliased two-level ray lines, adds a back-glow from the key lights, and the
+  skin gains a faint thin-film hue shift over the flank. The reference textures
+  already carry rays, so these changes are subtle.
+- **Not ported.** The globe's sun self-shadow and sand shadow (no sun or sand in
+  this scene).
+- `window.__betta.advance(seconds)` steps the simulation at 60 Hz for
+  deterministic QA captures.
+
+Tests: `npm test` runs the existing suites plus `surface-gulp.test.mjs`
+(window edges, monotone lift, gulp clock only at full lift, mouth/gill envelopes,
+periodicity, propulsion assist only during climb and dive). Browser QA covered the
+portrait overview, gulp sequence, both head-led turns, a 390-px phone portrait,
+flared/relaxed fins, water flow, reduced-motion start-paused and an interleaved
+old-vs-new frame-rate comparison (both ~58–60 fps on the host GPU; not a phone
+benchmark).
+
+## Atelier 1.9 (2026-10-23)
+
+- **Pelvic feelers stay attached.** The two ventral feelers (fin kind 4) are rooted
+  at a computed insertion point on the belly (`pelvicInsertion`, `PELVIC_*` in
+  `src/fish.js`) instead of floating off the body at some poses. Kind 4 now uses 8
+  constraint passes and kind 3 uses 12, and the final ray clamp is skipped for kind 3,
+  so the root cannot detach under strong flow or turning.
+- **Hover sculling.** `locomotion.mode` hover/surface/gulp now drives a continuous
+  alternating pectoral fanning stroke (`scull`, `SCULL_HZ = 3.8` in
+  `src/swim-gait.js`). Rise scales it to 0.7 and glide to 0.3.
+- **Startle tuck.** Mode `startle` (supplied by the globe host) folds both pectorals
+  against the body (`tuck`) for the C-start and dart.
+- Tests: `pelvic-attachment.test.mjs` and the sculling/tuck cases in
+  `fin-dynamics.test.mjs`; `npm test` runs 27 tests.
+
+## Atelier 1.10 (2026-10-23)
+
+- **Behaviour poses.** `POSES` in `src/fish.js` gains `mirror` (full sculling while it
+  faces the glass), `lap` (0.15, a slow patrol) and `rest` (0.25, easy fins on the sand).
+  The host (Globes 1.8) supplies those modes; the standalone page never sets them.
+- Caustics on the body and fins are a Globes shader feature (`betta_dapple` in
+  `scripts/globes/src/fish/bettaWGSL.ts`); the Atelier's own lighting is unchanged.
+- Tests: unchanged (`npm test` runs 27).
+
+## Atelier 1.11 (2026-10-23)
+
+- **Stroke reading.** `SwimGait.stroke` (0..1, also `fish.userData.stroke`) is how hard the
+  tail and pectorals are working: the tail's beat frequency times its amplitude
+  (`tailAmplitude(effort)` in `src/swim-gait.js`, shared with `body-motion.js` so the two cannot
+  drift apart), scaled to a full-effort stroke, with the pectoral sculling as a floor
+  (`0.15 * scull`). The globe passes it back into its locomotion, which can then only speed up
+  as fast as the stroke allows. Nothing in the standalone page reads it.
+- **Dive pose.** `POSES.dive` (`scull: 0.5`) keeps the pectorals working while the fish swims
+  back down from a gulp.
+- Tests: unchanged (`npm test` runs 27).
+
+## Atelier 1.12 (2026-10-23)
+
+- **Pectoral fins keep their size across swim-mode changes.** The fin's beat-averaged side-view
+  area used to jump at each mode change, worst at a startle (about a quarter of the fin's rest
+  area in the browser). Three causes, three fixes:
+  - The startle tuck was a 30/s snap in, 6/s out, folding the fin about 0.85 of its beat power
+    and 0.40 of its stroke offset. It is now a critically damped spring (11/s in, 4.5/s out) and
+    a gentler fold (`1 - 0.25 * tuck` power, `0.10 * tuck` offset in `fin-dynamics.js`).
+  - The fin's beat power and cadence followed the tail's `effort` directly (cadence
+    `1.6 + 5.8 * effort` Hz). `SwimGait` now exposes `pectoralEffort` (effort filtered at 1.1/s) and
+    `pectoralScull` (scull filtered at 2.2/s); cadence is `2.8 + 1.8 * pectoralEffort` Hz, rising
+    to `SCULL_HZ` with `pectoralScull`, and beat power is `0.62 + 0.36 * pectoralEffort`
+    (+ `0.05 * pectoralScull`). The body, tail and breath still use the fast `effort`.
+  - The pectoral roots and edge (`PECTORAL_ROOTS`, `PECTORAL_EDGE`) are exported from `fish.js`
+    so tests drive the real fin geometry.
+- Measured on a 56-transition recorded run (headless replay of the live behaviour, area as a
+  fraction of rest area, +/-0.5 s of a 0.8 s boxcar): worst change 0.18 to 0.055, cruise to startle
+  +0.09..0.18 to under 0.015. In a synthetic cruise/startle/glide chain on the real fin geometry
+  the cruise-to-startle change is 0.21 before and 0.03 now. The remaining 0.04-0.05 at glide to
+  hover is the trunk straightening after a turn and is slow.
+- Flow response is kept: mean edge deflection under a +/-0.6 cross-current is 0.008 hover,
+  0.015 glide, 0.006 cruise (1.11: 0.007, 0.026, 0.005).
+- Tests: `pectoral-transitions.test.mjs` (new, drives chains of mode changes through the real
+  pectoral fin); `fin-dynamics.test.mjs` now expects the narrower cadence band and the gentler
+  tuck. `npm test` runs 29 tests.
+
+## Atelier 1.13 (2026-11-01)
+
+- **Colour varieties.** The Betta Bowl's eleven varieties (`../globes/src/fish/varieties.mjs`: Classic,
+  Super Red, Royal Blue, Black Samurai, Mustard Gas, Butterfly, Koi Marble, Platinum White, Copper,
+  Pineapple, Galaxy Koi) on the Atelier's own WebGL materials. `src/varieties.js` measures the
+  photographs' brightness once as they load and paints each variety's two colour maps a few ms a
+  frame with the bowl's `bettaPaint.mjs`; `src/look.js` adds the bowl shader's look (bettaWGSL.ts) to
+  the skin, gill covers and all seven fins: colour map times the photographs' luminance (every scale,
+  ray and fold kept), the fins' outer band, the scales' tinted play of colour and the metallic coat.
+  The coat here also reaches part-way over the head, fading to the snout (the head is seen closer than
+  in the bowl), and painted colours are capped at 0.7 albedo (0.62 for a band) so pale fish and bands
+  do not bloom into a halo. The eyes keep the photographs' colours. Classic (`uLook[0].x = 0`) is the
+  photographed fish unchanged. Every material compiles once with this code; a change of variety is
+  uniforms and two small canvas textures, never a new program.
+- **Water tints.** Teal depths (the original), Blackwater, Midnight, Planted green and Studio black:
+  the backdrop's glow and light shafts, the surface seen from below, the motes, fog and fill light.
+- **Colour menu.** The swatch button first in the toolbar opens Fish and Water lists (radio groups,
+  arrow keys try each in turn, Escape or a press outside closes). Both choices are remembered on this
+  device (`atelier.variety`, `atelier.water`, apart from the bowl's), and `?variety=koi&water=midnight`
+  chooses them for a link. Keys: C opens the menu, V / Shift+V step through the varieties.
+- **Orbit and photo.** Orbit (O) circles the fish slowly with OrbitControls' auto-rotate, stopped while
+  paused. The photo button (P) saves exactly the frame shown as `living-silk-<variety>-<water>.png`.
+- **Shared source.** Rebuilt on the current shared body, fin and gait source (the bowl's work since
+  1.12). A 32-second fixed-step film of the live 1.12 build and 1.13 shows the same path, turns and
+  gulp timing, with slightly fuller dorsal and caudal carriage.
+- QA (headless Chrome on the desktop GPU, R2 textures through a CORS fixture): all eleven varieties
+  and five waters screenshotted, 390 px phone layout with the menu open, a 30-second colour reel, no
+  page errors (the one HLSL X4122 precision warning is also in 1.12). Uncapped frame time 0.9 ms (1.12:
+  1.5 ms) with Classic or Koi Marble; not a phone measurement. `npm test`: 30 tests.

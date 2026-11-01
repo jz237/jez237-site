@@ -1,5 +1,29 @@
 [
   {
+    "id": "032",
+    "title": "Aquarium Filtration",
+    "category": "3D · Interactive filter collection",
+    "description": "One collection for all eleven filter studies: inline ultraviolet treatment, water-driven Bio-Wheel biology, automatic fleece rolling, marine protein skimming, fluidized sand, drum screening, moving-bed biology, wet/dry trickle, AquaClear hang-on-back, FiltoClear pond canister and reef-sump filtration. Open the machinery, follow the water and explore the biology.",
+    "url": "aquarium-filtration/",
+    "image": "assets/moving-bed-studio.jpg",
+    "imageAlt": "Cutaway biological filter with animated carriers, one of eleven detailed interactive filtration studies",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/aquarium-filtration",
+    "features": [
+      "Eleven complete interactive filter demos",
+      "Exploded assemblies & close-up mechanisms",
+      "Animated water paths & operating experiments",
+      "Biology, maintenance & guided explanations"
+    ],
+    "facts": [
+      "Aquarium, reef & pond",
+      "Eleven filter studies",
+      "Mouse, touch & keyboard"
+    ],
+    "note": "Collection gallery · Interactive studies require WebGL · Existing direct demo links preserved",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
     "id": "022",
     "title": "The Living Reef",
     "category": "3D · Living systems",
@@ -408,7 +432,33 @@
       "GPU fluid simulation",
       "MIT licensed"
     ],
-    "note": "Requires WebGPU · Best on a recent desktop GPU · Preview supplied by the original project"
+    "note": "Requires WebGPU · Best on a recent desktop GPU · Preview supplied by the original project",
+    "alternateUrl": "procedural-fire/",
+    "alternateLabel": "Procedural Fire"
+  },
+  {
+    "id": "026",
+    "title": "Procedural Fire",
+    "category": "WebGPU · Campfire simulation",
+    "description": "Light a campfire made entirely from computation: curling flames, glowing logs, drifting sparks and crackling sound. Stoke the fire, send a gust through it and orbit the physically based scene.",
+    "url": "procedural-fire/",
+    "image": "assets/procedural-fire.jpg",
+    "imageAlt": "Bright procedural campfire flames above charred logs and glowing coals, from Leon Lin’s original project",
+    "imageWidth": 1920,
+    "imageHeight": 1080,
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/procedural-fire",
+    "features": [
+      "3D combustion & volumetric flames",
+      "Procedural crackling fire audio",
+      "Stoke, sparks, gusts & fire size",
+      "Orbit camera & three quality levels"
+    ],
+    "facts": [
+      "By Leon Lin",
+      "No texture or audio samples",
+      "MIT licensed"
+    ],
+    "note": "Requires advanced WebGPU features · Best on a recent desktop GPU · Preview supplied by the original project"
   },
   {
     "id": "018",
@@ -531,10 +581,34 @@
     "note": "Requires WebGPU · Best on a fast desktop GPU · Lighter settings on phones · Preview supplied by the original project"
   },
   {
+    "id": "025",
+    "title": "Betta Bowl · Living Silk",
+    "category": "WebGPU · Living aquarium",
+    "description": "A betta lives in a glass bowl of real simulated water on a studio table: a gnarled driftwood arch, dark river rocks and plants that sway in the current, in 3D on a bed of sand, lit by the lamp in its lid. Feed it: the lid lifts off, pellets drop onto the water and the betta rises to take them. Tip the bowl and it rolls on the table while the water and sand slosh round the rocks, or wait for it to rest, flare at its reflection and rebuild its bubble nest.",
+    "url": "betta-bowl/",
+    "image": "assets/betta-bowl.jpg",
+    "imageAlt": "A round glass betta bowl with a black lid and lamp on a dark table in front of a blue backdrop, a turquoise and crimson betta above a driftwood arch, dark rocks and green plants on golden sand",
+    "imageWidth": 1120,
+    "imageHeight": 630,
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/globes",
+    "features": [
+      "Feed it pellets through the lid",
+      "Tip it to roll it; its water & sand respond",
+      "Plants that sway with the water",
+      "Flare fins, air gulps & mirror displays"
+    ],
+    "facts": [
+      "GPU fluid simulation",
+      "Ray-traced glass",
+      "Built on Globes by Will Waltz"
+    ],
+    "note": "Requires WebGPU · Best on a fast desktop GPU · Lighter settings on phones · Preview captured from the running bowl"
+  },
+  {
     "id": "024",
     "title": "Living Silk · Betta Atelier",
     "category": "3D · Living specimen",
-    "description": "Look closely at a halfmoon Betta in turquoise and crimson. Orbit its iridescent scales, follow the rippling fins, and explore the tiny details of its eyes, gills and branching fin rays. An intimate living study built with six GPT-generated reference images, including magnified head, scale and membrane studies.",
+    "description": "Look closely at a halfmoon Betta in turquoise and crimson, or in any of ten more varieties from koi marble to black samurai, in five colours of water. Orbit its iridescent scales, follow the rippling fins, and explore the tiny details of its eyes, gills and branching fin rays. An intimate living study built with six GPT-generated reference images, including magnified head, scale and membrane studies.",
     "url": "betta-atelier/",
     "image": "assets/betta-atelier-v1-2.png",
     "imageAlt": "The actual Living Silk 3D showcase: an iridescent turquoise Betta with broad translucent crimson fins against dark water",
@@ -542,10 +616,10 @@
     "imageHeight": 1000,
     "source": "https://github.com/jz237/jez237-site/tree/main/scripts/betta-atelier",
     "features": [
+      "Eleven colour varieties & five water tints",
       "Magnified head, scale & fin textures",
       "Natural glides, hovering & full turns",
-      "Four close-up inspection views",
-      "Orbit, pause, relax fins & change light"
+      "Four close-up views, slow orbit & photo saving"
     ],
     "facts": [
       "Seven separate fins",

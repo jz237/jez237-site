@@ -1,13 +1,17 @@
 import * as T from "three";
 import { addMacroSurface } from "./surfaces.js";
+import { addVarietyLook } from "./look.js";
 import { FinDynamics, water, waterVelocity } from "./fin-dynamics.js";
 import { BodyMotion, bodyGLSL, SPINE_COUNT } from "./body-motion.js";
 import { DisplayMotion, EyeMotion } from "./display-motion.js";
 import { SwimGait } from "./swim-gait.js";
+import { gulpState, gulpPresentation, SURFACE_Y, MOUTH_DEPTH, GULP_PITCH } from "./surface-gulp.js";
 const PI = Math.PI,
   lerp = T.MathUtils.lerp,
   clamp = T.MathUtils.clamp;
-const SCALE = 0.0032;
+export const SCALE = 0.0032;
+// Pectoral pose by locomotion mode: fan to hold station when still, fold in for the startle dart.
+export const POSES = { hover: { scull: 1 }, surface: { scull: 1 }, gulp: { scull: 1 }, rise: { scull: 0.7 }, dive: { scull: 0.5 }, glide: { scull: 0.3 }, startle: { tuck: 1 }, mirror: { scull: 1 }, lap: { scull: 0.15 }, rest: { scull: 0.25 } };
 const world = ([x, y]) => [(x - 680) * SCALE, (420 - y) * SCALE];
 const texUV = ([x, y]) => [x / 1536, 1 - y / 1024];
 export const uniforms = {
@@ -77,7 +81,8 @@ const sections = [
   [960, 392, 482, 26],
   [1010, 409, 471, 20],
 ];
-function section(x) {
+// (Into out, when given: the fin solver asks for one at every paired-fin node of every substep.)
+export function section(x, out = [0, 0, 0, 0]) {
   let i = 0;
   while (i < sections.length - 2 && sections[i + 1][0] < x) i++;
   const a = sections[i],
@@ -85,18 +90,18 @@ function section(x) {
     u = clamp((x - a[0]) / (b[0] - a[0]), 0, 1);
   const before = sections[Math.max(0, i - 1)],
     after = sections[Math.min(sections.length - 1, i + 2)];
-  return a.map((v, j) => {
-    if (j === 0) return x;
+  out[0] = x;
+  for (let j = 1; j < 4; j++) {
     const dx = b[0] - a[0],
       m0 = ((b[j] - before[j]) / (b[0] - before[0])) * dx,
       m1 = ((after[j] - a[j]) / (after[0] - a[0])) * dx;
-    return (
-      (2 * u ** 3 - 3 * u * u + 1) * v +
+    out[j] =
+      (2 * u ** 3 - 3 * u * u + 1) * a[j] +
       (u ** 3 - 2 * u * u + u) * m0 +
       (-2 * u ** 3 + 3 * u * u) * b[j] +
-      (u ** 3 - u * u) * m1
-    );
-  });
+      (u ** 3 - u * u) * m1;
+  }
+  return out;
 }
 function makeBody(compact = false) {
   const p = [],
@@ -201,7 +206,7 @@ function addBreathingAnatomy(fish, skin) {
     // The row direction runs down the flank; reverse the near-side winding so
     // both covers have outward normals, matching the underlying skin.
     if (side > 0) for (let i = 0; i < ci.length; i += 3) [ci[i + 1], ci[i + 2]] = [ci[i + 2], ci[i + 1]];
-    const coverMaterial = addMacroSurface(animate(skin.clone(), null, true), fish.userData.macroTextures);
+    const coverMaterial = addVarietyLook(addMacroSurface(animate(skin.clone(), null, true), fish.userData.macroTextures));
     coverMaterial.side = T.DoubleSide;
     const cover = new T.Mesh(geometry(cp, cu, ci, lift), coverMaterial);
     cover.name = `Hinged operculum ${side > 0 ? 'left' : 'right'}`; fish.add(cover);
@@ -225,6 +230,71 @@ function sample(points, t) {
         (-a[j] + 3 * v - 3 * c[j] + d[j]) * u * u * u),
   );
 }
+// The pelvic rays rise out of the belly skin beside the ventral midline. The reference
+// outline starts a little below the belly, so the 3D insertion sinks into the flank
+// (texture coordinates still follow the reference footprint) and the feelers never
+// show a gap at the root.
+export const PELVIC_ROOTS = [
+    [361, 523],
+    [378, 529],
+    [400, 534],
+  ],
+  PELVIC_EDGE = [
+    [369, 543],
+    [385, 610],
+    [403, 685],
+    [444, 775],
+    [483, 860],
+    [535, 917],
+  ];
+export const PECTORAL_ROOTS = [
+    [397, 439],
+    [399, 454],
+    [401, 468],
+  ],
+  PECTORAL_EDGE = [
+    [410, 406],
+    [445, 393],
+    [482, 400],
+    [504, 430],
+    [505, 467],
+    [493, 500],
+    [461, 525],
+    [435, 524],
+  ];
+const PELVIC_BASE_Z = 0.045,
+  PELVIC_TIP_Z = 0.19,
+  PELVIC_SINK = 0.014;
+function pelvicInsertion(r) {
+  const [, top, bottom, thick] = section(r[0]),
+    q = Math.sqrt(Math.max(0, 1 - (PELVIC_BASE_Z / (thick * SCALE)) ** 2));
+  return [r[0], (top + bottom) / 2 + ((bottom - top) / 2) * q - PELVIC_SINK / SCALE];
+}
+export function finGrid(roots, edge, kind, side, u, v) {
+  const r = sample(roots, u),
+    e = sample(edge, u),
+    g = kind === 4 ? pelvicInsertion(r) : r,
+    edgeInset =
+      1 -
+      0.004 * (0.5 + 0.5 * Math.sin(u * PI * 142)) -
+      0.002 * (0.5 + 0.5 * Math.sin(u * PI * 57)),
+    vv = v * edgeInset;
+  const [x, y] = world([lerp(g[0], e[0], vv), lerp(g[1], e[1], vv)]);
+  const ridges =
+    Math.sin(u * PI * 56) * 0.006 + Math.sin(u * PI * 9 + v * 3) * 0.055;
+  let z = Math.pow(v, 1.5) * ridges;
+  if (kind === 3) z = side * (0.267 + v * 0.19) + v * 0.006 * Math.sin(u * 70);
+  else if (kind === 4)
+    z = side * lerp(PELVIC_BASE_Z, PELVIC_TIP_Z, v) + v * ridges * 0.4;
+  const [rx, ry] = world(g);
+  return {
+    x, y, z, rx, ry,
+    rz: kind === 3 ? side * 0.267 : kind === 4 ? side * PELVIC_BASE_Z : 0,
+    px: lerp(r[0], e[0], vv),
+    py: lerp(r[1], e[1], vv),
+    vv,
+  };
+}
 function makeFin(fish, texture, roots, edge, kind = 0, side = 0, atlas = null) {
   const p = [],
     uv = [],
@@ -234,32 +304,12 @@ function makeFin(fish, texture, roots, edge, kind = 0, side = 0, atlas = null) {
     nu = fish.userData.compact ? 28 : 180,
     nv = fish.userData.compact ? 16 : 52;
   for (let i = 0; i <= nu; i++) {
-    const u = i / nu,
-      r = sample(roots, u),
-      e = sample(edge, u);
+    const u = i / nu;
     for (let j = 0; j <= nv; j++) {
       const v = j / nv,
-        edgeInset =
-          1 -
-          0.004 * (0.5 + 0.5 * Math.sin(u * PI * 142)) -
-          0.002 * (0.5 + 0.5 * Math.sin(u * PI * 57)),
-        vv = v * edgeInset,
-        px = lerp(r[0], e[0], vv),
-        py = lerp(r[1], e[1], vv),
-        [x, y] = world([px, py]),
-        [rx, ry] = world(r);
-      const ridges =
-        Math.sin(u * PI * 56) * 0.006 + Math.sin(u * PI * 9 + v * 3) * 0.055;
-      let z = Math.pow(v, 1.5) * ridges;
-      if (kind === 3)
-        z = side * (0.267 + v * 0.19) + v * 0.006 * Math.sin(u * 70);
-      else if (kind === 4) z = side * (0.14 + v * 0.05) + v * ridges * 0.4;
+        { x, y, z, rx, ry, rz, px, py, vv } = finGrid(roots, edge, kind, side, u, v);
       p.push(x, y, z);
-      root.push(
-        rx,
-        ry,
-        kind === 3 ? side * 0.267 : kind === 4 ? side * 0.14 : 0,
-      );
+      root.push(rx, ry, rz);
       if (atlas) {
         const ar = sample(atlas.roots, u),
           ae = sample(atlas.edge, u);
@@ -290,13 +340,7 @@ function makeFin(fish, texture, roots, edge, kind = 0, side = 0, atlas = null) {
   const dynamics = new FinDynamics({
     kind, side,
     point(u, v) {
-      const r = sample(roots, u), e = sample(edge, u);
-      const vv = v * (1 - 0.004 * (0.5 + 0.5 * Math.sin(u * PI * 142)) - 0.002 * (0.5 + 0.5 * Math.sin(u * PI * 57)));
-      const [x, y] = world([lerp(r[0], e[0], vv), lerp(r[1], e[1], vv)]);
-      const ridges = Math.sin(u * PI * 56) * 0.006 + Math.sin(u * PI * 9 + v * 3) * 0.055;
-      let z = v ** 1.5 * ridges;
-      if (kind === 3) z = side * (0.267 + v * 0.19) + v * 0.006 * Math.sin(u * 70);
-      else if (kind === 4) z = side * (0.14 + v * 0.05) + v * ridges * 0.4;
+      const { x, y, z } = finGrid(roots, edge, kind, side, u, v);
       return [x, y, z];
     },
   });
@@ -322,13 +366,15 @@ function makeFin(fish, texture, roots, edge, kind = 0, side = 0, atlas = null) {
     }),
     dynamics,
   );
-  const mat =
+  const mat = addVarietyLook(
     kind < 3
       ? addMacroSurface(baseMat, fish.userData.macroTextures, {
           fin: true,
           caudal: kind === 0,
         })
-      : baseMat;
+      : baseMat,
+    { fin: true, caudal: kind === 0 },
+  );
   const mesh = new T.Mesh(g, mat);
   mesh.frustumCulled = false;
   mesh.userData.kind = kind;
@@ -336,12 +382,19 @@ function makeFin(fish, texture, roots, edge, kind = 0, side = 0, atlas = null) {
   fish.add(mesh);
   return mesh;
 }
-export function createBetta({ compact = false } = {}) {
+export function createBetta({ compact = false, textures = true } = {}) {
   const fish = new T.Group();
   fish.userData.compact = compact;
+  // (textures: false, for a host that only moves the fish, in a worker where no image can load:
+  // each photograph an empty stand-in, the fish ready at once.)
+  const load = (url, done, fail) => {
+    if (textures) return new T.TextureLoader().load(url, done, undefined, fail);
+    done();
+    return new T.Texture();
+  };
   const finDynamics = [];
   const bodyMotion = new BodyMotion();
-  const spineTexture = new T.DataTexture(bodyMotion.data, SPINE_COUNT, 1, T.RGBAFormat, T.FloatType);
+  const spineTexture = new T.DataTexture(bodyMotion.texels, SPINE_COUNT, 2, T.RGBAFormat, T.FloatType);
   spineTexture.needsUpdate = true;
   uniforms.uSpine.value = spineTexture;
   fish.userData.finDynamics = finDynamics;
@@ -351,10 +404,9 @@ export function createBetta({ compact = false } = {}) {
     resolveTexture = resolve;
     rejectTexture = reject;
   });
-  const texture = new T.TextureLoader().load(
+  const texture = load(
     "https://media.jez237.com/demos/betta-atelier/references/2026-10-22/01-profile.jpg?v=69e062016b32",
     () => resolveTexture(),
-    undefined,
     rejectTexture,
   );
   texture.colorSpace = T.SRGBColorSpace;
@@ -364,10 +416,9 @@ export function createBetta({ compact = false } = {}) {
     resolveFin = resolve;
     rejectFin = reject;
   });
-  const finTexture = new T.TextureLoader().load(
+  const finTexture = load(
     "https://media.jez237.com/demos/betta-atelier/references/2026-10-22/03-fin-material.jpg?v=11641b5eba25",
     () => resolveFin(),
-    undefined,
     rejectFin,
   );
   finTexture.colorSpace = T.SRGBColorSpace;
@@ -389,12 +440,7 @@ export function createBetta({ compact = false } = {}) {
         fail = rej;
       }),
     );
-    const m = new T.TextureLoader().load(
-      macroUrls[name],
-      done,
-      undefined,
-      fail,
-    );
+    const m = load(macroUrls[name], done, fail);
     m.colorSpace = T.SRGBColorSpace;
     m.anisotropy = 8;
     return m;
@@ -405,7 +451,7 @@ export function createBetta({ compact = false } = {}) {
     fin: loadMacro("06-membrane-macro"),
   };
   fish.userData.macroTextures = macroTextures;
-  const skin = addMacroSurface(
+  const skin = addVarietyLook(addMacroSurface(
     animate(
       new T.MeshPhysicalMaterial({
         map: texture,
@@ -421,7 +467,7 @@ export function createBetta({ compact = false } = {}) {
       }),
     ),
     macroTextures,
-  );
+  ));
   const body = new T.Mesh(makeBody(compact), skin);
   body.name = "Arc-length muscular trunk with open buccal cavity";
   fish.add(body);
@@ -555,48 +601,8 @@ export function createBetta({ compact = false } = {}) {
   const pectorals = [], eyes = [];
   const display = new DisplayMotion(), gaze = new EyeMotion();
   for (const side of [-1, 1]) {
-    makeFin(
-      fish,
-      texture,
-      [
-        [361, 523],
-        [378, 529],
-        [400, 534],
-      ],
-      [
-        [369, 543],
-        [385, 610],
-        [403, 685],
-        [444, 775],
-        [483, 860],
-        [535, 917],
-      ],
-      4,
-      side,
-    );
-    pectorals.push(
-      makeFin(
-        fish,
-        texture,
-        [
-          [397, 439],
-          [399, 454],
-          [401, 468],
-        ],
-        [
-          [410, 406],
-          [445, 393],
-          [482, 400],
-          [504, 430],
-          [505, 467],
-          [493, 500],
-          [461, 525],
-          [435, 524],
-        ],
-        3,
-        side,
-      ),
-    );
+    makeFin(fish, texture, PELVIC_ROOTS, PELVIC_EDGE, 4, side);
+    pectorals.push(makeFin(fish, texture, PECTORAL_ROOTS, PECTORAL_EDGE, 3, side));
     // Volumetric iris and a dark convex pupil aligned with the lateral reference.
     const eyeGeo = new T.SphereGeometry(0.083, compact ? 20 : 48, compact ? 12 : 32),
       ep = eyeGeo.attributes.position,
@@ -654,14 +660,19 @@ export function createBetta({ compact = false } = {}) {
     heading = 0.12,
     tx = 0.3,
     ty = 0,
-    turn = 0;
+    turn = 0,
+    lift = 0,
+    gulpOpen = 0,
+    gulpGill = 0;
   const cycle = 32;
+  const lipLocal = [0, 0, 0, 0], lipWorld = new T.Vector3(), contour = [0, 0, 0, 0];
   fish.userData = {
     ready: Promise.all([loaded, finLoaded, ...macroPending]),
     macroTextures,
     scaleCount: 0,
     finCount: 7,
-    revision: "1.7",
+    revision: "1.13",
+    gulp: { lift: 0, phase: "none", clock: -1, lip: [0, 0, 0], surfaceY: SURFACE_Y },
     display, eyes,
     gait,
     bodyMotion,
@@ -734,6 +745,14 @@ export function createBetta({ compact = false } = {}) {
       // Optional host-owned locomotion (e.g. the globe). Without it the
       // standalone Atelier keeps its original inspection choreography.
       const locomotion = fish.userData.locomotion;
+      // Standalone surface air gulp; a host with its own locomotion supplies its own.
+      const trip = locomotion || inspect ? null : gulpState(t);
+      lift = T.MathUtils.damp(lift, trip ? trip.lift : 0, 6, dt);
+      if (lift < 1e-4 && !trip?.lift) lift = 0;
+      const shown = gulpPresentation(trip, lift);
+      gulpOpen = T.MathUtils.damp(gulpOpen, shown.mouth, 25, dt);
+      gulpGill = T.MathUtils.damp(gulpGill, shown.gill, 25, dt);
+      if (trip && trip.phase !== "none") { desired += 0.14 * trip.swim; mode = "surface"; }
       if (locomotion) { desired = locomotion.drive; mode = locomotion.mode; }
       drive = T.MathUtils.damp(drive, desired, 3, dt);
       const old = heading;
@@ -759,8 +778,17 @@ export function createBetta({ compact = false } = {}) {
       fish.rotation.set(
         0.004 * Math.sin(t * 0.57),
         heading,
-        0.004 * Math.sin(t * 0.71) - drive * 0.025,
+        0.004 * Math.sin(t * 0.71) - drive * 0.025 - lift * GULP_PITCH,
       );
+      if (lift > 1e-4) {
+        // Hold the mouth just under the surface, blended in with the climb.
+        fish.updateMatrixWorld(true);
+        bodyMotion.transform(-1.68, 0.0832, 0, lipLocal);
+        fish.localToWorld(lipWorld.set(lipLocal[0], lipLocal[1], lipLocal[2]));
+        const shift = lift * (SURFACE_Y - MOUTH_DEPTH - lipWorld.y);
+        fish.position.y += shift;
+        lipWorld.y += shift;
+      }
       if (locomotion) {
         fish.position.fromArray(locomotion.position);
         fish.rotation.set(locomotion.roll ?? 0, heading, -locomotion.pitch, 'YZX');
@@ -781,10 +809,18 @@ export function createBetta({ compact = false } = {}) {
         };
       }
       const relativeFlow = Math.hypot(...localFlow.map((v, i) => v - velocity[i]));
-      gait.advance(dt, drive, relativeFlow, turn);
-      const { phase, effort, breathPhase, pectoralPhase } = gait;
-      if (locomotion) bodyMotion.advanceTurn(dt, locomotion.steerRate ?? angularVelocity, locomotion.speed ?? 0);
-      bodyMotion.update(phase, effort, turn, breathPhase);
+      gait.advance(dt, drive, relativeFlow, turn, POSES[mode] ?? {});
+      const { phase, effort, breathPhase, pectoralPhase, scull, tuck, pectoralEffort, pectoralScull } = gait;
+      // The standalone turn also leads with the neck; the rear follows the head's tangent.
+      bodyMotion.advanceTurn(dt, locomotion ? locomotion.steerRate ?? angularVelocity : turn, locomotion ? locomotion.speed ?? 0 : Math.hypot(...velocity));
+      // And so with the head's own tipping up or down (not the water's turning the whole fish).
+      bodyMotion.advancePitch(dt, locomotion?.pitchSpeed ?? 0, locomotion ? locomotion.speed ?? 0 : Math.hypot(...velocity));
+      bodyMotion.update(phase, gait.tailEffort, turn, breathPhase, locomotion?.gulp ?? gulpOpen, locomotion?.gulpGill ?? gulpGill);
+      if (lift > 0 || fish.userData.gulp.lift > 0) {
+        const g = fish.userData.gulp;
+        g.lift = lift; g.phase = shown.phase; g.clock = shown.clock;
+        lipWorld.toArray(g.lip);
+      }
       spineTexture.needsUpdate = dt > 0;
       uniforms.uPhase.value = phase;
       uniforms.uDrive.value = drive;
@@ -793,14 +829,15 @@ export function createBetta({ compact = false } = {}) {
       uniforms.uMouth.value = bodyMotion.mouth;
       uniforms.uGill.value = bodyMotion.gill;
       const state = {
-        body: bodyMotion, time: t, phase, pectoralPhase, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value,
+        body: bodyMotion, time: t, phase, pectoralPhase, scull, tuck, pectoralEffort, pectoralScull, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value, clamp: display.clamp,
         heading, angularVelocity, velocity, origin: fish.position.toArray(),
         localHydrodynamics,
         strength: flowStrength, direction: water.direction, externalFlow: fish.userData.externalFlow,
         bodyRadius(x, y) {
           const pixelX = x / SCALE + 680;
           if (pixelX < 155 || pixelX > 1010) return 0;
-          const [, top, bottom, thick] = section(pixelX);
+          section(pixelX, contour);
+          const top = contour[1], bottom = contour[2], thick = contour[3];
           const mid = (420 - (top + bottom) / 2) * SCALE, radius = (bottom - top) * 0.5 * SCALE;
           const q = (y - mid) / radius;
           return Math.abs(q) >= 1 ? 0 : Math.sqrt(1 - q * q) * thick * SCALE;
@@ -814,6 +851,7 @@ export function createBetta({ compact = false } = {}) {
       fish.userData.mode = mode;
       fish.userData.drive = drive;
       fish.userData.effort = effort;
+      fish.userData.stroke = gait.stroke;
       fish.userData.breathPhase = breathPhase;
       fish.userData.turn = turn;
     },
