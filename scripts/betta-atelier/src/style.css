@@ -491,3 +491,106 @@ body:not([data-view="portrait"]) .hint {
     display: none;
   }
 }
+/* Colours (1.13): the fish's variety and the water's, in a list that opens above the toolbar. */
+.colour-wrap {
+  position: relative;
+}
+.controls #colours {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 14px 10px 10px;
+}
+.colour-swatch {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--body, #2b6f97) 50%, var(--fins, #b3202b) 50%);
+  box-shadow: inset 0 0 0 1px #ffffff40, 0 0 0 1px #00080d55;
+}
+.colour-menu {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 14px);
+  width: 300px;
+  max-height: min(70vh, 560px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 10px;
+  border-radius: 18px;
+  background: #0b2222f2;
+  border: 1px solid #91b2a84d;
+  box-shadow: 0 14px 40px #000a;
+  scrollbar-width: thin;
+  scrollbar-color: #91b2a855 transparent;
+  z-index: 6;
+}
+.colour-menu[hidden] {
+  display: none;
+}
+.menu-heading {
+  margin: 4px 8px 6px;
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  color: #84a99a;
+}
+.menu-heading:not(:first-child) {
+  margin-top: 12px;
+}
+.variety-list,
+.water-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+.colour-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 36px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  color: #dbe7e0;
+  font-size: 12px;
+  line-height: 1.2;
+  cursor: pointer;
+}
+.colour-option:hover,
+.colour-option:has(input:focus-visible) {
+  background: #ffffff12;
+}
+.colour-option:has(input:checked) {
+  background: #2b5a52b0;
+  color: #fff;
+}
+.colour-option input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  pointer-events: none;
+}
+.controls #orbit[aria-pressed="true"] {
+  background: #94bbaa22;
+  color: #fff;
+}
+@media (max-width: 700px) {
+  .controls #colours {
+    padding: 8px 10px 8px 8px;
+  }
+  .colour-menu {
+    position: fixed;
+    left: 13px;
+    right: 13px;
+    bottom: calc(max(16px, env(safe-area-inset-bottom)) + 168px);
+    width: auto;
+    max-height: 52vh;
+  }
+  .colour-option {
+    min-height: 32px;
+    font-size: 11px;
+  }
+}

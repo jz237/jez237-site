@@ -8,6 +8,7 @@ import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { createBetta, uniforms } from "./fish.js";
 import { water, waterVelocity } from "./fin-dynamics.js";
+import { VARIETIES, VarietyPainter, keepVariety, startingVariety, varietyOf } from "./varieties.js";
 import "./style.css";
 const PI = Math.PI;
 const $ = (s) => document.querySelector(s);
@@ -62,15 +63,25 @@ lights.warm.position.set(-5, -1, 2);
 Object.values(lights).forEach((l) => scene.add(l));
 const fish = createBetta();
 scene.add(fish);
+// The water's colour, chosen with the fish's (the colour menu): the backdrop's depth and light
+// shafts, the surface seen from below, the drifting motes and the fill light. Teal is the original.
+const WATERS = [
+  { id: "teal", name: "Teal depths", bg: "#07191b", low: [0.002, 0.006, 0.007], high: [0.009, 0.025, 0.025], shaft: [0.35, 0.6, 0.48], dust: [0.5, 0.76, 0.68], window: [0.05, 0.15, 0.15], mirror: [0.006, 0.02, 0.021], sky: 0x8fcbd0, ground: 0x102528 },
+  { id: "blackwater", name: "Blackwater", bg: "#130c05", low: [0.005, 0.003, 0.001], high: [0.027, 0.015, 0.006], shaft: [0.62, 0.46, 0.24], dust: [0.78, 0.62, 0.4], window: [0.15, 0.1, 0.045], mirror: [0.02, 0.012, 0.005], sky: 0xd2b48a, ground: 0x1e1309 },
+  { id: "midnight", name: "Midnight", bg: "#040915", low: [0.001, 0.002, 0.005], high: [0.006, 0.011, 0.032], shaft: [0.32, 0.44, 0.78], dust: [0.56, 0.66, 0.92], window: [0.04, 0.07, 0.17], mirror: [0.006, 0.01, 0.024], sky: 0x8ea8e0, ground: 0x0a1226 },
+  { id: "planted", name: "Planted green", bg: "#08140a", low: [0.002, 0.005, 0.002], high: [0.011, 0.027, 0.011], shaft: [0.42, 0.66, 0.32], dust: [0.6, 0.8, 0.5], window: [0.06, 0.14, 0.06], mirror: [0.008, 0.019, 0.008], sky: 0x9fd09a, ground: 0x0f2210 },
+  { id: "studio", name: "Studio black", bg: "#060606", low: [0.0015, 0.0015, 0.0015], high: [0.011, 0.011, 0.011], shaft: [0.3, 0.3, 0.3], dust: [0.62, 0.62, 0.62], window: [0.08, 0.08, 0.08], mirror: [0.01, 0.01, 0.01], sky: 0xc8cccc, ground: 0x161616 },
+];
+const v3 = (a) => new T.Vector3(...a);
 // The scene is a quietly lit body of water, not a fishbowl: depth, light and drifting motes.
 const bg = new T.Mesh(
   new T.PlaneGeometry(45, 30),
   new T.ShaderMaterial({
-    uniforms: { time: { value: 0 } },
+    uniforms: { time: { value: 0 }, low: { value: v3(WATERS[0].low) }, high: { value: v3(WATERS[0].high) }, shaftColour: { value: v3(WATERS[0].shaft) } },
     vertexShader:
       "varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}",
-    fragmentShader: `varying vec2 vUv;uniform float time;
-float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}void main(){vec2 p=vUv;float glow=exp(-length((p-vec2(.49,.56))*vec2(4.,3.))*2.);vec3 c=mix(vec3(.002,.006,.007),vec3(.009,.025,.025),glow);float shaft=0.;for(int i=0;i<5;i++){float x=.20+float(i)*.15+(p.y-.6)*.24+sin(time*.07+float(i))* .012;float w=.012+.014*(1.-p.y);shaft+=exp(-pow((p.x-x)/w,2.))*smoothstep(.1,.95,p.y)*.035;}c+=vec3(.35,.6,.48)*shaft;gl_FragColor=vec4(c,1.);}`,
+    fragmentShader: `varying vec2 vUv;uniform float time;uniform vec3 low,high,shaftColour;
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}void main(){vec2 p=vUv;float glow=exp(-length((p-vec2(.49,.56))*vec2(4.,3.))*2.);vec3 c=mix(low,high,glow);float shaft=0.;for(int i=0;i<5;i++){float x=.20+float(i)*.15+(p.y-.6)*.24+sin(time*.07+float(i))* .012;float w=.012+.014*(1.-p.y);shaft+=exp(-pow((p.x-x)/w,2.))*smoothstep(.1,.95,p.y)*.035;}c+=shaftColour*shaft;gl_FragColor=vec4(c,1.);}`,
   }),
 );
 bg.position.z = -7;
@@ -89,10 +100,12 @@ const surface = new T.Mesh(
       ripplePos: { value: new T.Vector2() },
       fogColor: { value: scene.fog.color },
       fogDensity: { value: scene.fog.density },
+      mirrorColour: { value: v3(WATERS[0].mirror) },
+      windowColour: { value: v3(WATERS[0].window) },
     },
     vertexShader:
       "varying vec3 vW;void main(){vec4 w=modelMatrix*vec4(position,1.);vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}",
-    fragmentShader: `varying vec3 vW;uniform float time,ripple,fogDensity;uniform vec2 ripplePos;uniform vec3 fogColor;
+    fragmentShader: `varying vec3 vW;uniform float time,ripple,fogDensity;uniform vec2 ripplePos;uniform vec3 fogColor,mirrorColour,windowColour;
 float wave(vec2 p){return sin(dot(p,vec2(1.3,.7))*2.1+time*.6)*.5+sin(dot(p,vec2(-.8,1.4))*3.3-time*.8)*.3+sin(dot(p,vec2(2.1,-1.1))*5.7+time*1.1)*.18+sin(dot(p,vec2(-2.7,-1.9))*9.1-time*1.5)*.1;}
 void main(){
  vec2 p=vW.xz,e=vec2(.02,0.);
@@ -104,8 +117,8 @@ void main(){
  float c=clamp(dot(n,v),0.,1.);
  float refl=smoothstep(.62,.78,sqrt(1.-c*c));
  float mottle=clamp(.5+.5*wave(p*1.7+vec2(time*.1,-time*.07)),0.,1.);
- vec3 mirror=vec3(.006,.020,.021)*(.7+2.4*pow(mottle,3.))+vec3(.010,.022,.020)*pow(1.-c,3.);
- vec3 window=vec3(.05,.15,.15)*(.7+.5*mottle);
+ vec3 mirror=mirrorColour*(.7+2.4*pow(mottle,3.))+mirrorColour*1.1*pow(1.-c,3.);
+ vec3 window=windowColour*(.7+.5*mottle);
  vec3 col=mix(window,mirror,refl)+vec3(.55,.8,.75)*max(ring,0.)*.05;
  float d=length(cameraPosition-vW);
  col=mix(col,fogColor,1.-exp(-fogDensity*fogDensity*d*d));
@@ -160,9 +173,9 @@ dustGeo.setAttribute("phase", new T.BufferAttribute(phase, 1));
 const dustMat = new T.ShaderMaterial({
   transparent: true,
   depthWrite: false,
-  uniforms: { time: { value: 0 }, ratio: { value: renderer.getPixelRatio() } },
+  uniforms: { time: { value: 0 }, ratio: { value: renderer.getPixelRatio() }, dust: { value: v3(WATERS[0].dust) } },
   vertexShader: `attribute float size;attribute float phase;uniform float time;uniform float ratio;varying float fade;void main(){vec3 p=position;p.y=mod(p.y+6.+time*.026,12.)-6.;p.x+=sin(time*.17+phase)*.10;vec4 mv=modelViewMatrix*vec4(p,1.);gl_Position=projectionMatrix*mv;gl_PointSize=clamp(size*ratio*10./-mv.z,1.,7.);fade=.12+.14*sin(phase+time*.25);}`,
-  fragmentShader: `varying float fade;void main(){float d=length(gl_PointCoord-.5);float a=exp(-d*d*17.)*smoothstep(.5,.2,d)*fade;gl_FragColor=vec4(.50,.76,.68,a);}`,
+  fragmentShader: `varying float fade;uniform vec3 dust;void main(){float d=length(gl_PointCoord-.5);float a=exp(-d*d*17.)*smoothstep(.5,.2,d)*fade;gl_FragColor=vec4(dust,a);}`,
 });
 scene.add(new T.Points(dustGeo, dustMat));
 const composer = new EffectComposer(renderer);
@@ -193,6 +206,8 @@ let transition = null,
   paused = matchMedia("(prefers-reduced-motion: reduce)").matches,
   cinematic = true,
   flare = false,
+  orbit = false,
+  snap = false,
   t = 0,
   last = performance.now(),
   ready = false;
@@ -279,6 +294,112 @@ $("#info-toggle").onclick = () => {
   $("#info-toggle").setAttribute("aria-expanded", String(show));
   $("#info-toggle span").textContent = show ? "−" : "+";
 };
+// Colours: the fish's variety (varieties.js: the Betta Bowl's eleven) and the water's, each
+// remembered on this device; ?variety= and ?water= in the address choose them for a link.
+const keptWater = () => {
+  try {
+    return localStorage.getItem("atelier.water");
+  } catch {
+    return null;
+  }
+};
+const knownWater = (id) => WATERS.some((w) => w.id === id);
+let variety = startingVariety(),
+  waterId = [new URLSearchParams(location.search).get("water"), keptWater()].find(knownWater) ?? "teal";
+const painter = new VarietyPainter(fish);
+function label() {
+  const v = varietyOf(variety),
+    w = WATERS.find((x) => x.id === waterId);
+  const fishName = v.id === "classic" ? "CLASSIC · TURQUOISE × CRIMSON" : v.name.toUpperCase();
+  $("#scene-label").textContent = fishName + (w.id === "teal" ? "" : ` · ${w.name.toUpperCase()}`);
+  $("#colours .colour-name").textContent = v.name;
+  const swatch = $("#colours .colour-swatch");
+  swatch.style.setProperty("--body", v.swatch[0]);
+  swatch.style.setProperty("--fins", v.swatch[1]);
+  $("#colours").setAttribute("aria-label", `Colours: ${v.name}, ${w.name} water`);
+}
+function setVariety(id, keep = true) {
+  variety = varietyOf(id).id;
+  if (keep) keepVariety(variety);
+  painter.show(variety);
+  for (const i of document.querySelectorAll('input[name="variety"]')) i.checked = i.value === variety;
+  label();
+}
+function setWater(id, keep = true) {
+  const w = WATERS.find((x) => x.id === id) ?? WATERS[0];
+  waterId = w.id;
+  if (keep)
+    try {
+      localStorage.setItem("atelier.water", w.id);
+    } catch {}
+  scene.background.set(w.bg);
+  scene.fog.color.set(w.bg);
+  const u = bg.material.uniforms;
+  u.low.value.set(...w.low);
+  u.high.value.set(...w.high);
+  u.shaftColour.value.set(...w.shaft);
+  surface.material.uniforms.mirrorColour.value.set(...w.mirror);
+  surface.material.uniforms.windowColour.value.set(...w.window);
+  dustMat.uniforms.dust.value.set(...w.dust);
+  lights.fill.color.set(w.sky);
+  lights.fill.groundColor.set(w.ground);
+  document.querySelector('meta[name="theme-color"]').content = w.bg;
+  for (const i of document.querySelectorAll('input[name="water"]')) i.checked = i.value === waterId;
+  label();
+}
+function addOption(list, name, value, text, swatch) {
+  const option = document.createElement("label");
+  option.className = "colour-option";
+  const input = document.createElement("input");
+  input.type = "radio";
+  input.name = name;
+  input.value = value;
+  const chip = document.createElement("span");
+  chip.className = "colour-swatch";
+  chip.setAttribute("aria-hidden", "true");
+  chip.style.setProperty("--body", swatch[0]);
+  chip.style.setProperty("--fins", swatch[1]);
+  const words = document.createElement("span");
+  words.textContent = text;
+  option.append(input, chip, words);
+  list.append(option);
+  input.addEventListener("change", () => (name === "variety" ? setVariety(value) : setWater(value)));
+}
+for (const v of VARIETIES) addOption($(".variety-list"), "variety", v.id, v.name, v.swatch);
+const hex = (c) => "#" + c.map((x) => Math.round(Math.min(x * 1.4, 1) * 255).toString(16).padStart(2, "0")).join("");
+for (const w of WATERS) addOption($(".water-list"), "water", w.id, w.name, [w.bg, hex(w.shaft)]);
+function menu(open, refocus = false) {
+  $("#colour-menu").hidden = !open;
+  $("#colours").setAttribute("aria-expanded", String(open));
+  if (open) $('#colour-menu input[name="variety"]:checked')?.focus();
+  else if (refocus) $("#colours").focus();
+}
+$("#colours").onclick = () => menu($("#colour-menu").hidden);
+document.addEventListener("pointerdown", (e) => {
+  if (!$("#colour-menu").hidden && !e.target.closest(".colour-wrap")) menu(false);
+});
+setVariety(variety, false);
+setWater(waterId, false);
+// A slow circle round the fish (stopped while paused), and a photo of exactly what is shown.
+controls.autoRotateSpeed = 0.55;
+function syncOrbit() {
+  $("#orbit").setAttribute("aria-pressed", String(orbit));
+}
+$("#orbit").onclick = () => {
+  orbit = !orbit;
+  syncOrbit();
+};
+$("#photo").onclick = () => (snap = true);
+function savePhoto() {
+  renderer.domElement.toBlob((blob) => {
+    if (!blob) return;
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `living-silk-${variety}-${waterId}.png`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  }, "image/png");
+}
 controls.addEventListener("start", () => {
   transition = null;
   $("#hint").style.opacity = "0";
@@ -291,6 +412,22 @@ window.addEventListener("keydown", (e) => {
     e.preventDefault();
     paused = !paused;
     syncMotion();
+  }
+  const field = document.activeElement;
+  if (!(field.tagName === "SELECT" || (field.tagName === "INPUT" && field.type === "range")) && !e.ctrlKey && !e.metaKey && !e.altKey) {
+    const k = e.key.toLowerCase();
+    if (k === "v") {
+      const i = VARIETIES.findIndex((v) => v.id === variety);
+      setVariety(VARIETIES[(i + (e.shiftKey ? VARIETIES.length - 1 : 1)) % VARIETIES.length].id);
+    } else if (k === "c") menu($("#colour-menu").hidden);
+    else if (k === "o") {
+      orbit = !orbit;
+      syncOrbit();
+    } else if (k === "p") snap = true;
+  }
+  if (e.key === "Escape" && !$("#colour-menu").hidden) {
+    menu(false, true);
+    return;
   }
   if (e.key === "Escape") {
     $("#info").hidden = true;
@@ -349,8 +486,13 @@ function draw(now) {
     controls.target.lerpVectors(transition.a, transition.b, s);
     if (u === 1) transition = null;
   }
-  controls.update();
+  controls.autoRotate = orbit && !paused;
+  controls.update(dt);
   composer.render();
+  if (snap) {
+    snap = false;
+    savePhoto();
+  }
   if (!ready && textureReady && ++frame > 3) {
     ready = true;
     $("#loading").classList.add("done");
@@ -370,6 +512,10 @@ window.__betta = {
   uniforms,
   view,
   surface,
+  painter,
+  setVariety,
+  setWater,
+  waters: WATERS,
   advance(seconds) {
     const steps = Math.max(1, Math.round(seconds * 60));
     for (let i = 0; i < steps; i++) {

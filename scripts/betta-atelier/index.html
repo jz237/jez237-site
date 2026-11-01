@@ -9,7 +9,7 @@
     <meta name="theme-color" content="#071617" />
     <meta
       name="description"
-      content="An intimate 3D study of a halfmoon Betta: reference-textured iridescent skin, branching fin rays, breathing gills and flowing translucent fins."
+      content="An intimate 3D study of a halfmoon Betta in eleven colour varieties: reference-textured iridescent skin, branching fin rays, breathing gills and flowing translucent fins."
     />
     <link rel="icon" href="data:," />
     <title>Betta Atelier · Living Silk — Jez237</title>
@@ -32,8 +32,8 @@
     </section>
     <aside class="specimen">
       <span class="status-dot"></span
-      ><span id="scene-label">TURQUOISE × CRIMSON</span
-      ><span class="specimen-line"></span><span>3D STUDY · v1.12</span>
+      ><span id="scene-label">CLASSIC · TURQUOISE × CRIMSON</span
+      ><span class="specimen-line"></span><span>3D STUDY · v1.13</span>
     </aside>
     <button
       id="info-toggle"
@@ -60,6 +60,12 @@
         <dd>
           Seven flexible fins, supported by rays. The fish powers each stroke;
           water bends the membranes and carries their trailing edges.
+        </dd>
+        <dt>Colours</dt>
+        <dd>
+          Eleven varieties, from the photographed turquoise and crimson to
+          koi marble, black samurai and butterfly. Each is painted over the
+          reference textures, keeping every scale, ray and fold.
         </dd>
         <dt>Life</dt>
         <dd>
@@ -95,7 +101,19 @@
         </select>
       </div>
       <div class="controls" role="toolbar" aria-label="Fish controls">
-        <button id="motion" aria-pressed="false">
+        <div class="colour-wrap">
+          <button id="colours" aria-haspopup="dialog" aria-expanded="false" aria-controls="colour-menu" title="Choose the fish’s and the water’s colours (C)">
+            <span class="colour-swatch" aria-hidden="true"></span><span class="colour-name">Classic</span>
+          </button>
+          <div id="colour-menu" class="colour-menu" role="dialog" aria-label="Colours" hidden>
+            <p class="menu-heading">FISH</p>
+            <div class="variety-list" role="radiogroup" aria-label="Fish colour variety"></div>
+            <p class="menu-heading">WATER</p>
+            <div class="water-list" role="radiogroup" aria-label="Water colour"></div>
+          </div>
+        </div>
+        <span class="divider"></span
+        ><button id="motion" aria-pressed="false">
           <span class="button-icon">Ⅱ</span> Pause</button
         ><button id="flare" aria-pressed="false">
           <span class="button-icon">◔</span> Fins relaxed</button
@@ -109,6 +127,9 @@
           </select></label
         ><button id="light" aria-pressed="false">
           <span class="button-icon">☼</span> Studio light</button
+        ><button id="orbit" aria-pressed="false" title="Circle slowly round the fish (O)">
+          <span class="button-icon">◌</span> Orbit</button
+        ><button id="photo" aria-label="Save a photo" title="Save a photo (P)">◉</button
         ><button id="reset" aria-label="Reset view">↺</button>
       </div>
       <p class="footer-note">

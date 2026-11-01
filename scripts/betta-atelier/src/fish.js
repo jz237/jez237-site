@@ -1,5 +1,6 @@
 import * as T from "three";
 import { addMacroSurface } from "./surfaces.js";
+import { addVarietyLook } from "./look.js";
 import { FinDynamics, water, waterVelocity } from "./fin-dynamics.js";
 import { BodyMotion, bodyGLSL, SPINE_COUNT } from "./body-motion.js";
 import { DisplayMotion, EyeMotion } from "./display-motion.js";
@@ -205,7 +206,7 @@ function addBreathingAnatomy(fish, skin) {
     // The row direction runs down the flank; reverse the near-side winding so
     // both covers have outward normals, matching the underlying skin.
     if (side > 0) for (let i = 0; i < ci.length; i += 3) [ci[i + 1], ci[i + 2]] = [ci[i + 2], ci[i + 1]];
-    const coverMaterial = addMacroSurface(animate(skin.clone(), null, true), fish.userData.macroTextures);
+    const coverMaterial = addVarietyLook(addMacroSurface(animate(skin.clone(), null, true), fish.userData.macroTextures));
     coverMaterial.side = T.DoubleSide;
     const cover = new T.Mesh(geometry(cp, cu, ci, lift), coverMaterial);
     cover.name = `Hinged operculum ${side > 0 ? 'left' : 'right'}`; fish.add(cover);
@@ -365,13 +366,15 @@ function makeFin(fish, texture, roots, edge, kind = 0, side = 0, atlas = null) {
     }),
     dynamics,
   );
-  const mat =
+  const mat = addVarietyLook(
     kind < 3
       ? addMacroSurface(baseMat, fish.userData.macroTextures, {
           fin: true,
           caudal: kind === 0,
         })
-      : baseMat;
+      : baseMat,
+    { fin: true, caudal: kind === 0 },
+  );
   const mesh = new T.Mesh(g, mat);
   mesh.frustumCulled = false;
   mesh.userData.kind = kind;
@@ -448,7 +451,7 @@ export function createBetta({ compact = false, textures = true } = {}) {
     fin: loadMacro("06-membrane-macro"),
   };
   fish.userData.macroTextures = macroTextures;
-  const skin = addMacroSurface(
+  const skin = addVarietyLook(addMacroSurface(
     animate(
       new T.MeshPhysicalMaterial({
         map: texture,
@@ -464,7 +467,7 @@ export function createBetta({ compact = false, textures = true } = {}) {
       }),
     ),
     macroTextures,
-  );
+  ));
   const body = new T.Mesh(makeBody(compact), skin);
   body.name = "Arc-length muscular trunk with open buccal cavity";
   fish.add(body);
@@ -668,7 +671,7 @@ export function createBetta({ compact = false, textures = true } = {}) {
     macroTextures,
     scaleCount: 0,
     finCount: 7,
-    revision: "1.12",
+    revision: "1.13",
     gulp: { lift: 0, phase: "none", clock: -1, lip: [0, 0, 0], surfaceY: SURFACE_Y },
     display, eyes,
     gait,

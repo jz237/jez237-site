@@ -1,6 +1,8 @@
-# Living Silk — Betta Atelier 1.12
+# Living Silk — Betta Atelier 1.13
 
-The standalone published build is 1.12. It makes the pectoral fins keep their size when the swim
+The standalone published build is 1.13: the Betta Bowl's eleven colour varieties, five water
+tints, a slow orbit and photo saving, rebuilt on the current shared swim and fin source
+([Atelier 1.13](#atelier-113-2026-11-01)). 1.12 made the pectoral fins keep their size when the swim
 mode changes ([Atelier 1.12](#atelier-112-2026-10-23)), on top of 1.11, which added the gait's
 `stroke` reading, which the globe uses so the fish only gains speed while its tail is working
 ([Atelier 1.11](#atelier-111-2026-10-23)), and 1.10, which added the globe's mirror, lap and rest
@@ -422,3 +424,33 @@ benchmark).
 - Tests: `pectoral-transitions.test.mjs` (new, drives chains of mode changes through the real
   pectoral fin); `fin-dynamics.test.mjs` now expects the narrower cadence band and the gentler
   tuck. `npm test` runs 29 tests.
+
+## Atelier 1.13 (2026-11-01)
+
+- **Colour varieties.** The Betta Bowl's eleven varieties (`../globes/src/fish/varieties.mjs`: Classic,
+  Super Red, Royal Blue, Black Samurai, Mustard Gas, Butterfly, Koi Marble, Platinum White, Copper,
+  Pineapple, Galaxy Koi) on the Atelier's own WebGL materials. `src/varieties.js` measures the
+  photographs' brightness once as they load and paints each variety's two colour maps a few ms a
+  frame with the bowl's `bettaPaint.mjs`; `src/look.js` adds the bowl shader's look (bettaWGSL.ts) to
+  the skin, gill covers and all seven fins: colour map times the photographs' luminance (every scale,
+  ray and fold kept), the fins' outer band, the scales' tinted play of colour and the metallic coat.
+  The coat here also reaches part-way over the head, fading to the snout (the head is seen closer than
+  in the bowl), and painted colours are capped at 0.7 albedo (0.62 for a band) so pale fish and bands
+  do not bloom into a halo. The eyes keep the photographs' colours. Classic (`uLook[0].x = 0`) is the
+  photographed fish unchanged. Every material compiles once with this code; a change of variety is
+  uniforms and two small canvas textures, never a new program.
+- **Water tints.** Teal depths (the original), Blackwater, Midnight, Planted green and Studio black:
+  the backdrop's glow and light shafts, the surface seen from below, the motes, fog and fill light.
+- **Colour menu.** The swatch button first in the toolbar opens Fish and Water lists (radio groups,
+  arrow keys try each in turn, Escape or a press outside closes). Both choices are remembered on this
+  device (`atelier.variety`, `atelier.water`, apart from the bowl's), and `?variety=koi&water=midnight`
+  chooses them for a link. Keys: C opens the menu, V / Shift+V step through the varieties.
+- **Orbit and photo.** Orbit (O) circles the fish slowly with OrbitControls' auto-rotate, stopped while
+  paused. The photo button (P) saves exactly the frame shown as `living-silk-<variety>-<water>.png`.
+- **Shared source.** Rebuilt on the current shared body, fin and gait source (the bowl's work since
+  1.12). A 32-second fixed-step film of the live 1.12 build and 1.13 shows the same path, turns and
+  gulp timing, with slightly fuller dorsal and caudal carriage.
+- QA (headless Chrome on the desktop GPU, R2 textures through a CORS fixture): all eleven varieties
+  and five waters screenshotted, 390 px phone layout with the menu open, a 30-second colour reel, no
+  page errors (the one HLSL X4122 precision warning is also in 1.12). Uncapped frame time 0.9 ms (1.12:
+  1.5 ms) with Classic or Koi Marble; not a phone measurement. `npm test`: 30 tests.
