@@ -309,6 +309,7 @@ export class Game {
     this.world.rings.forEach((r) => this.world.remove(r.mesh, true));
     this.world.rings = [];
     this.world.particles = [];
+    this.world.shards = [];
     this.keys = {};
     this.pointer = { active: false };
   }
@@ -678,7 +679,10 @@ export class Game {
     this.world.shake = 0.4;
     this.ui.damage();
     this.sound.tone(65, 0.3, 0.17);
-    if (p.lives <= 0) this.finish();
+    if (p.lives <= 0) {
+      this.world.shatter(this.playerMesh, p.x, p.z, 0xffbd8b, 2);
+      this.finish();
+    }
     return true;
   }
   kill(e, cause = "shot") {
@@ -698,11 +702,18 @@ export class Game {
       100,
     );
     this.world.pop(e.x, e.z, "+" + pts);
+    this.world.shatter(
+      e.mesh,
+      e.x,
+      e.z,
+      e.color,
+      e.type === "boss" ? 2.8 : e.type === "brute" ? 1.5 : 1,
+    );
     this.world.burst(
       e.x,
       e.z,
       e.color,
-      e.type === "boss" ? 100 : 18 + Math.floor(Math.random() * 12),
+      e.type === "boss" ? 65 : 10 + Math.floor(Math.random() * 8),
       e.type === "boss" || e.type === "brute",
     );
     if (Math.random() < 0.7 || e.type === "boss")
@@ -743,6 +754,13 @@ export class Game {
       for (const minion of this.enemies)
         if (minion !== e && !minion.dead) {
           minion.dead = true;
+          this.world.shatter(
+            minion.mesh,
+            minion.x,
+            minion.z,
+            minion.color,
+            0.6,
+          );
           this.world.burst(minion.x, minion.z, minion.color, 12);
         }
       this.spawned = this.waveTotal;
@@ -770,15 +788,33 @@ export class Game {
     }
   }
   drop(x, z, type, weapon) {
+    const choice =
+        weapon || WEAPON_LIST[Math.floor(Math.random() * WEAPON_LIST.length)],
+      name =
+        type === "shield"
+          ? "SHIELD +42"
+          : type === "charge"
+            ? "PULSE +40"
+            : WEAPONS[choice].name,
+      color =
+        type === "shield"
+          ? 0x8cf3d8
+          : type === "charge"
+            ? 0xffc66f
+            : WEAPONS[choice].color;
     const p = {
       x,
       z,
       age: 0,
       type,
-      weapon:
-        weapon || WEAPON_LIST[Math.floor(Math.random() * WEAPON_LIST.length)],
-      mesh: this.world.pickupModel(type),
+      weapon: choice,
+      name,
+      mesh: this.world.pickupModel(type, choice, name, color),
     };
+    p.mesh.position.set(x, 0.15, z);
+    p.rotor = p.mesh.getObjectByName("pickup-rotor");
+    p.rotor.rotation.y = Math.random() * Math.PI * 2;
+    p.labelMesh = p.mesh.getObjectByName("pickup-label");
     this.pickups.push(p);
     this.world.scene.add(p.mesh);
     return p;
@@ -1141,6 +1177,7 @@ export class Game {
           this.escapes++;
           this.resolved += e.child ? 0 : 1;
           this.world.burst(e.x, e.z, e.color, 20);
+          this.world.shatter(e.mesh, e.x, e.z, e.color);
         }
       }
     }
@@ -1155,6 +1192,7 @@ export class Game {
         t.dead = true;
         this.score += 1250;
         this.world.pop(t.x, t.z, "EXPRESS +1250");
+        this.world.shatter(t.mesh, t.x, t.z - 3.5, 0xffba76, 3.2);
         for (let j = 0; j < 3; j++) {
           this.world.burst(t.x, t.z - j * 3.4, 0xffba76, 40, true);
           this.world.ring(t.x, t.z - j * 3.4, 0xffd58d, 1.2);
@@ -1275,7 +1313,8 @@ export class Game {
         0.15 + Math.sin(this.time * 4 + item.age) * 0.13,
         item.z,
       );
-      item.mesh.rotation.y += dt * 1.6;
+      item.rotor.rotation.y += dt * 1.9;
+      item.rotor.rotation.z = Math.sin(this.time * 1.8 + item.age) * 0.13;
       if (d < 0.85) this.collect(item);
       if (item.age > 15 || item.z > 14) item.dead = true;
     }

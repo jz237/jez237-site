@@ -1,4 +1,4 @@
-# Subway Siege: Ironline v3.0.0
+# Subway Siege: Ironline v3.0.1
 
 Three.js 0.184 / Vite 8. A separate 3D edition of the original Subway Siege,
 commissioned by Jez on 2026-11-01. No external runtime CDN or generative API calls.
@@ -32,6 +32,12 @@ Serve the repository root, not the source directory, to test the built game.
   Existing original soundtrack is reused; it is not presented as newly generated.
   No API credentials are shipped. All effects are pre-generated static files.
 - All visual assets are procedural geometry / canvas textures, not generated images.
+- Explosions launch cached hull-outline edges as tumbling 3D vector fragments,
+  with bright cores, colored glow and velocity trails. Three instanced layers
+  share a 480-fragment cap; low quality retains the effect at a smaller count.
+- Pickups are rotating shield crests, energy cells and weapon-specific miniature
+  models. Their cached billboard labels name the actual weapon or supply amount,
+  stay screen-readable on phones, and do not rotate with the item.
 
 ## Rules / balancing
 

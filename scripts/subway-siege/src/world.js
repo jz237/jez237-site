@@ -157,6 +157,8 @@ const threatMat = new T.MeshBasicMaterial({
 });
 const threatGeo = new T.RingGeometry(0.8, 0.84, 24);
 const templates = new Map();
+const wreckEdges = new WeakMap();
+const shardAxis = new T.Vector3(1, 0, 0);
 export function droneModel(type = "vanguard", enemy = false) {
   const key = type + enemy;
   if (templates.has(key)) return templates.get(key).clone();
@@ -403,6 +405,7 @@ export class World {
     this.trainTemplate = trainModel();
     this.makeEnvironment();
     this.makeParticleSystem();
+    this.makeWreckageSystem();
     this.makeProjectileBatches();
     this.ray = new T.Raycaster();
     this.plane = new T.Plane(new T.Vector3(0, 1, 0), -0.55);
@@ -861,6 +864,169 @@ export class World {
     this.boltObj = new T.Object3D();
     this.boltColor = new T.Color();
   }
+  makeWreckageSystem() {
+    this.shards = [];
+    this.shardCapacity = 480;
+    const layer = (opacity) => {
+      const mesh = new T.InstancedMesh(
+        boxGeo,
+        new T.MeshBasicMaterial({
+          color: 0xffffff,
+          transparent: true,
+          opacity,
+          blending: T.AdditiveBlending,
+          depthWrite: false,
+        }),
+        this.shardCapacity,
+      );
+      mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);
+      mesh.frustumCulled = false;
+      mesh.count = 0;
+      this.scene.add(mesh);
+      return mesh;
+    };
+    this.shardGlow = layer(0.38);
+    this.shardCore = layer(1);
+    this.shardTrail = layer(0.34);
+    this.shardObj = new T.Object3D();
+    this.shardSpin = new T.Quaternion();
+    this.shardColor = new T.Color();
+    this.shardDirection = new T.Vector3();
+  }
+  shatter(mesh, x, z, color, scale = 1) {
+    // Launch actual hull edges, not another cloud of glowing dots.
+    const sources = [];
+    let total = 0;
+    mesh.updateMatrixWorld(true);
+    mesh.traverse((o) => {
+      if (!o.isMesh || !o.visible) return;
+      if (!wreckEdges.has(o.geometry)) {
+        const edges = new T.EdgesGeometry(o.geometry, 28),
+          positions = edges.getAttribute("position").array,
+          kept = [];
+        for (let i = 0; i < positions.length; i += 6) {
+          if (
+            Math.hypot(
+              positions[i] - positions[i + 3],
+              positions[i + 1] - positions[i + 4],
+              positions[i + 2] - positions[i + 5],
+            ) > 0.16
+          )
+            kept.push(...positions.slice(i, i + 6));
+        }
+        edges.dispose();
+        wreckEdges.set(o.geometry, new Float32Array(kept));
+      }
+      const edges = wreckEdges.get(o.geometry);
+      if (edges.length) {
+        total += edges.length / 6;
+        sources.push({ edges, matrix: o.matrixWorld, end: total });
+      }
+    });
+    if (!total) return;
+    const c = new T.Color(color),
+      count = Math.round((12 + scale * 10) * (this.low ? 0.6 : 1)),
+      a = new T.Vector3(),
+      b = new T.Vector3();
+    for (let i = 0; i < count; i++) {
+      const choice = Math.floor(Math.random() * total),
+        source = sources.find((s) => choice < s.end),
+        j = (choice - (source.end - source.edges.length / 6)) * 6;
+      a.fromArray(source.edges, j).applyMatrix4(source.matrix);
+      b.fromArray(source.edges, j + 3).applyMatrix4(source.matrix);
+      const dir = b.clone().sub(a),
+        length = Math.min(2.2, dir.length()),
+        center = a.clone().add(b).multiplyScalar(0.5),
+        angle =
+          Math.atan2(center.x - x, center.z - z) + (Math.random() - 0.5) * 1.8,
+        speed = 3 + Math.random() * (4 + scale * 2),
+        life = 0.85 + Math.random() * 0.75;
+      this.shards.push({
+        x: center.x,
+        y: Math.max(0.15, center.y),
+        z: center.z,
+        vx: Math.sin(angle) * speed,
+        vz: Math.cos(angle) * speed,
+        vy: 2 + Math.random() * 5,
+        length,
+        width: 0.035 + Math.random() * 0.035,
+        rotation: new T.Quaternion().setFromUnitVectors(
+          shardAxis,
+          dir.normalize(),
+        ),
+        axis: new T.Vector3(
+          Math.random() - 0.5,
+          Math.random() - 0.5,
+          Math.random() - 0.5,
+        ).normalize(),
+        spin: (Math.random() - 0.5) * 15,
+        life,
+        max: life,
+        r: c.r,
+        g: c.g,
+        b: c.b,
+      });
+    }
+    if (this.shards.length > this.shardCapacity)
+      this.shards.splice(0, this.shards.length - this.shardCapacity);
+  }
+  updateWreckage(dt) {
+    for (const p of this.shards) {
+      p.life -= dt;
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.z += p.vz * dt;
+      p.vy -= 8 * dt;
+      const drag = Math.exp(-dt * 0.7);
+      p.vx *= drag;
+      p.vz *= drag;
+      p.rotation.premultiply(
+        this.shardSpin.setFromAxisAngle(p.axis, p.spin * dt),
+      );
+      if (p.y < 0.08) {
+        p.y = 0.08;
+        p.vy = Math.abs(p.vy) * 0.35;
+      }
+    }
+    this.shards = this.shards.filter((p) => p.life > 0);
+    this.shards.forEach((p, i) => {
+      const fade = Math.min(1, p.life * 2.4),
+        o = this.shardObj;
+      o.position.set(p.x, p.y, p.z);
+      o.quaternion.copy(p.rotation);
+      o.scale.set(p.length, p.width * 3, p.width * 3);
+      o.updateMatrix();
+      this.shardGlow.setMatrixAt(i, o.matrix);
+      this.shardColor.setRGB(p.r * 3 * fade, p.g * 3 * fade, p.b * 3 * fade);
+      this.shardGlow.setColorAt(i, this.shardColor);
+      o.scale.set(p.length, p.width, p.width);
+      o.updateMatrix();
+      this.shardCore.setMatrixAt(i, o.matrix);
+      this.shardColor.setRGB(
+        (0.7 + p.r) * fade,
+        (0.7 + p.g) * fade,
+        (0.7 + p.b) * fade,
+      );
+      this.shardCore.setColorAt(i, this.shardColor);
+      this.shardDirection.set(p.vx, p.vy, p.vz);
+      const trail = Math.min(1.5, this.shardDirection.length() * 0.09);
+      o.position.addScaledVector(this.shardDirection, -0.045);
+      o.quaternion.setFromUnitVectors(
+        shardAxis,
+        this.shardDirection.normalize(),
+      );
+      o.scale.set(trail, p.width * 0.7, p.width * 0.7);
+      o.updateMatrix();
+      this.shardTrail.setMatrixAt(i, o.matrix);
+      this.shardColor.setRGB(p.r * fade, p.g * fade, p.b * fade);
+      this.shardTrail.setColorAt(i, this.shardColor);
+    });
+    for (const mesh of [this.shardGlow, this.shardCore, this.shardTrail]) {
+      mesh.count = this.shards.length;
+      mesh.instanceMatrix.needsUpdate = true;
+      if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+    }
+  }
   burst(x, z, color = 0xffb45d, n = 24, big = false) {
     const c = new T.Color(color);
     for (let i = 0; i < n * (this.low ? 0.55 : 1); i++) {
@@ -918,26 +1084,266 @@ export class World {
     this.scene.add(g);
     return g;
   }
-  pickupModel(type) {
-    if (templates.has("pickup" + type))
-      return templates.get("pickup" + type).clone();
+  pickupModel(type, weapon = "laser", name, color) {
+    const key = "pickup:" + (type === "weapon" ? weapon : type);
+    if (templates.has(key)) return templates.get(key).clone();
     const col =
-        type === "shield" ? 0x8cf3d8 : type === "charge" ? 0xffc66f : 0xb4b7ff,
-      g = new T.Group();
-    part(g, sphereGeo, metal(col, col, 2.5), 0, 0.65, 0, 0.26, 0.35, 0.26);
+        color ??
+        (type === "shield"
+          ? 0x8cf3d8
+          : type === "charge"
+            ? 0xffc66f
+            : 0xb4b7ff),
+      paint = metal(col),
+      light = metal(col, col, 1.3),
+      g = new T.Group(),
+      model = new T.Group(),
+      rotor = new T.Group(),
+      owned = [];
+    const geo = (geometry) => {
+      owned.push(geometry);
+      return geometry;
+    };
+    const emblem = (points, material, depth = 0.13) => {
+      const s = new T.Shape();
+      points.forEach(([x, y], i) => (i ? s.lineTo(x, y) : s.moveTo(x, y)));
+      s.closePath();
+      return part(
+        model,
+        geo(
+          new T.ExtrudeGeometry(s, {
+            depth,
+            bevelEnabled: true,
+            bevelSize: 0.035,
+            bevelThickness: 0.025,
+            bevelSegments: 1,
+          }),
+        ),
+        material,
+        0,
+        0,
+        -depth / 2,
+      );
+    };
+    if (type === "shield") {
+      emblem(
+        [
+          [-0.56, 0.56],
+          [0.56, 0.56],
+          [0.5, -0.2],
+          [0, -0.7],
+          [-0.5, -0.2],
+        ],
+        steel,
+        0.22,
+      );
+      const face = emblem(
+        [
+          [-0.44, 0.43],
+          [0.44, 0.43],
+          [0.37, -0.16],
+          [0, -0.53],
+          [-0.37, -0.16],
+        ],
+        paint,
+      );
+      face.position.z += 0.18;
+      box(model, light, 0, 0.02, 0.3, 0.17, 0.64, 0.08);
+      box(model, light, 0, 0.08, 0.3, 0.55, 0.17, 0.08);
+      model.rotation.x = -0.6;
+    } else if (type === "charge") {
+      part(model, cylGeo, dark, 0, 0, 0, 0.42, 1.1, 0.42);
+      for (const y of [-0.53, 0.53])
+        part(model, cylGeo, steel, 0, y, 0, 0.48, 0.13, 0.48);
+      for (let i = 0; i < 4; i++) {
+        const a = (i * Math.PI) / 2;
+        box(
+          model,
+          light,
+          Math.sin(a) * 0.4,
+          0,
+          Math.cos(a) * 0.4,
+          0.12,
+          0.72,
+          0.12,
+          a,
+        );
+      }
+      const bolt = emblem(
+        [
+          [0.1, 0.42],
+          [-0.24, -0.02],
+          [0.02, -0.02],
+          [-0.1, -0.43],
+          [0.28, 0.08],
+          [0.04, 0.08],
+        ],
+        ivory,
+        0.1,
+      );
+      bolt.position.z = 0.45;
+    } else {
+      box(model, dark, 0, 0, 0.18, 0.76, 0.48, 0.72);
+      box(model, paint, 0, 0.23, 0.16, 0.6, 0.14, 0.57);
+      box(model, steel, 0, -0.3, 0.36, 0.24, 0.34, 0.28);
+      const barrel = (x, y, length = 1.1, radius = 0.1, angle = 0) => {
+        const b = new T.Group();
+        part(
+          b,
+          cylGeo,
+          steel,
+          0,
+          0,
+          -length * 0.4,
+          radius,
+          length,
+          radius,
+          Math.PI / 2,
+        );
+        part(
+          b,
+          cylGeo,
+          light,
+          0,
+          0,
+          -length * 0.9,
+          radius * 1.1,
+          0.12,
+          radius * 1.1,
+          Math.PI / 2,
+        );
+        b.position.set(x, y, 0);
+        b.rotation.y = angle;
+        model.add(b);
+      };
+      if (weapon === "saw") {
+        part(
+          model,
+          geo(new T.TorusGeometry(0.54, 0.13, 6, 24)),
+          steel,
+          0,
+          0.18,
+          -0.45,
+          1,
+          1,
+          1,
+        );
+        for (let i = 0; i < 10; i++) {
+          const a = (i * Math.PI) / 5;
+          part(
+            model,
+            boxGeo,
+            light,
+            Math.sin(a) * 0.58,
+            0.18 + Math.cos(a) * 0.58,
+            -0.45,
+            0.22,
+            0.25,
+            0.16,
+            0,
+            0,
+            -a + 0.35,
+          );
+        }
+      } else if (weapon === "plasma") {
+        part(model, sphereGeo, light, 0, 0.15, -0.48, 0.38, 0.38, 0.5);
+        for (const z of [-0.2, -0.6])
+          part(
+            model,
+            geo(new T.TorusGeometry(0.45, 0.055, 6, 20)),
+            steel,
+            0,
+            0.15,
+            z,
+          );
+      } else if (weapon === "nova") {
+        for (let i = -2; i <= 2; i++)
+          barrel(i * 0.2, 0.1, 0.8, 0.075, -i * 0.22);
+      } else if (weapon === "overheat") {
+        for (let i = 0; i < 6; i++) {
+          const a = (i * Math.PI) / 3;
+          barrel(Math.sin(a) * 0.28, Math.cos(a) * 0.28, 1.05, 0.07);
+        }
+      } else if (weapon === "tri") {
+        barrel(-0.27, 0);
+        barrel(0.27, 0);
+        barrel(0, 0.32);
+      } else if (weapon === "heavy") {
+        barrel(0, 0.08, 1.25, 0.25);
+        box(model, paint, -0.5, 0, -0.24, 0.23, 0.4, 0.65);
+        box(model, paint, 0.5, 0, -0.24, 0.23, 0.4, 0.65);
+      } else if (weapon === "lance") {
+        barrel(0, 0, 1.65, 0.12);
+        for (const x of [-0.23, 0.23])
+          box(model, light, x, 0.06, -0.74, 0.09, 0.2, 1.16);
+      } else {
+        barrel(-0.24, 0);
+        barrel(0.24, 0);
+      }
+    }
+    rotor.name = "pickup-rotor";
+    rotor.position.y = 1.1;
+    rotor.scale.setScalar(1.2);
+    rotor.add(bake(model));
+    g.add(rotor);
     part(
       g,
-      new T.TorusGeometry(0.48, 0.035, 5, 20),
-      metal(col, col, 2),
+      geo(new T.TorusGeometry(0.72, 0.035, 5, 28)),
+      light,
       0,
-      0.65,
+      0.15,
       0,
       1,
       1,
       1,
       Math.PI / 2,
     );
-    templates.set("pickup" + type, g);
+    const label =
+        name ||
+        (type === "shield"
+          ? "SHIELD +42"
+          : type === "charge"
+            ? "PULSE +40"
+            : weapon.toUpperCase()),
+      font = "bold 32px ui-monospace, monospace",
+      measure = document.createElement("canvas").getContext("2d");
+    measure.font = font;
+    const width = Math.ceil(measure.measureText(label).width) + 36,
+      map = canvasTexture(width, 64, (c, w, h) => {
+        c.fillStyle = "#07151eef";
+        c.fillRect(0, 0, w, h);
+        c.strokeStyle = "#" + col.toString(16).padStart(6, "0");
+        c.lineWidth = 3;
+        c.strokeRect(1.5, 1.5, w - 3, h - 3);
+        c.fillStyle = "#f0f9ef";
+        c.font = font;
+        c.textAlign = "center";
+        c.textBaseline = "middle";
+        c.fillText(label, w / 2, h / 2 + 1);
+      }),
+      tag = new T.Sprite(
+        new T.SpriteMaterial({
+          map,
+          transparent: true,
+          depthTest: false,
+          depthWrite: false,
+          toneMapped: false,
+          sizeAttenuation: false,
+        }),
+      );
+    tag.name = "pickup-label";
+    tag.position.y = 2.35;
+    tag.frustumCulled = false;
+    tag.userData.aspect = width / 64;
+    tag.renderOrder = 20;
+    g.add(tag);
+    g.userData = { label, type, weapon };
+    templates.set(key, g);
+    // Emblem and baked source geometries are no longer needed. The base ring is shared by clones.
+    const ringGeometry = g.children.find((o) => o.isMesh)?.geometry;
+    owned
+      .filter((geometry) => geometry !== ringGeometry)
+      .forEach((geometry) => geometry.dispose());
     return g.clone();
   }
   pointer(x, y) {
@@ -987,7 +1393,60 @@ export class World {
       this.tiltZ * this.camDistance + this.lookZ,
     );
     this.camera.lookAt(this.camX, 0, this.lookZ);
+    this.camera.updateMatrixWorld();
     this.flash.intensity *= Math.exp(-dt * 10);
+    this.updateWreckage(dt);
+    const pickupTags = [];
+    for (const item of game.pickups) {
+      const label = item.labelMesh;
+      if (!label) continue;
+      // Screen-stable billboards stay readable while the actual item tumbles beneath them.
+      const pixelH = this.width < 700 ? 26 : 28,
+        pixelW = pixelH * label.userData.aspect,
+        unit = (2 * Math.tan((this.camera.fov * Math.PI) / 360)) / this.height;
+      label.scale.set(pixelW * unit, pixelH * unit, 1);
+      const screen = this.project(
+          item.x,
+          item.z,
+          item.mesh.position.y + label.position.y,
+        ),
+        sx = (screen.x * 0.5 + 0.5) * this.width,
+        sy = (-screen.y * 0.5 + 0.5) * this.height;
+      label.center.x = Math.max(
+        0,
+        Math.min(
+          1,
+          Math.min(
+            (sx - 8) / pixelW,
+            Math.max(0.5, 1 - (this.width - 8 - sx) / pixelW),
+          ),
+        ),
+      );
+      const left = sx - label.center.x * pixelW;
+      let lift = 0;
+      // Nearby drops stack their labels instead of covering one another on phones.
+      while (
+        pickupTags.some(
+          (r) =>
+            left < r.right + 4 &&
+            left + pixelW > r.left - 4 &&
+            sy - pixelH / 2 - lift < r.bottom + 4 &&
+            sy + pixelH / 2 - lift > r.top - 4,
+        )
+      ) {
+        lift += pixelH + 5;
+        if (lift > (game.pickups.length + 1) * (pixelH + 5)) break;
+      }
+      label.center.y = 0.5 - lift / pixelH;
+      const bounds = {
+        left,
+        right: left + pixelW,
+        top: sy - pixelH / 2 - lift,
+        bottom: sy + pixelH / 2 - lift,
+      };
+      label.userData.bounds = bounds;
+      pickupTags.push(bounds);
+    }
     this.particles.forEach((p) => {
       p.life -= dt;
       p.x += p.vx * dt;
