@@ -1,0 +1,110 @@
+[
+  {
+    "slug": "a-new-home-for-coral",
+    "category": "reef",
+    "label": "Reef & ocean",
+    "kind": "Conservation news",
+    "date": "August 20, 2026",
+    "title": "A second home for irreplaceable corals",
+    "dek": "A second ocean-based gene bank gives Florida's coral diversity another place to survive.",
+    "image": "coral-detail.webp",
+    "source": "Coral Restoration Foundation",
+    "url": "https://coralrestoration.org/as-el-nino-strengthens-crf-establishes-second-in-water-coral-gene-bank-to-safeguard-irreplaceable-genetic-diversity/",
+    "paragraphs": [
+      "Coral Restoration Foundation reported moving approximately 1,000 corals representing 130 genotypes to its Elbow Nursery. This was the first stage of a planned transfer of about 3,500 corals, intended to replicate the genetic diversity held at its Tavernier Nursery.",
+      "The goal is to avoid keeping irreplaceable genetic stock at a single ocean-based site. The foundation says the two in-water gene banks also complement land-based banking at The Reef Institute. Different nursery conditions offer options, not a guarantee against heat stress."
+    ],
+    "takeaway": "For reef keepers, this is a window into the work behind coral propagation and conservation. It is not a product announcement or a claim that these corals are available for home aquariums.",
+    "caption": "Illustrative coral photograph; not a photograph of this nursery."
+  },
+  {
+    "slug": "a-greener-kind-of-aquarium",
+    "category": "freshwater",
+    "label": "Freshwater",
+    "kind": "Practical reading",
+    "date": "Evergreen guide · no publication date shown",
+    "title": "A greener aquarium starts with the right light",
+    "dek": "Before chasing brighter lights, match your plants to the aquarium you actually want to maintain.",
+    "image": "planted-tank.webp",
+    "source": "Tropica Aquarium Plants",
+    "url": "https://tropica.com/en/guide/make-your-aquarium-a-success/light/",
+    "paragraphs": [
+      "Tropica groups aquarium plants by their requirements, including how much light they need. Its guidance emphasizes matching the lighting to the plants rather than treating a brighter fixture as an automatic upgrade.",
+      "The guide also notes that tank depth, fixture efficiency and reflectors affect how much light reaches the plants. A number printed on a light is only part of the picture."
+    ],
+    "takeaway": "Start with the plants you want to grow and check their individual requirements. Use the manufacturer's guide as a starting point, not a universal lighting prescription for every tank.",
+    "caption": "Illustrative planted aquarium; not a product demonstration or a store display."
+  },
+  {
+    "slug": "how-fish-find-their-crowd",
+    "category": "freshwater",
+    "label": "Freshwater",
+    "kind": "Research spotlight",
+    "date": "September 2, 2026",
+    "title": "How fish find their crowd",
+    "dek": "When water gets murky, sticklebacks change how they move together. New research explores that social response.",
+    "image": "freshwater-fish.webp",
+    "source": "University of Bristol",
+    "url": "https://www.bristol.ac.uk/news/2026/september/muddying-the-waters-makes-fish-more-sociable-study-finds.html",
+    "paragraphs": [
+      "University of Bristol researchers studied how groups of three-spined sticklebacks responded to food in clear and cloudy water. In murkier conditions the fish generally took longer to approach food, but they also changed their shoaling behavior.",
+      "Small groups in cloudy water found food faster when they stayed closer and aligned their movements. In larger groups in clear water, tighter coordination could instead slow the response. The effect depended on both the environment and the group."
+    ],
+    "takeaway": "Fish behavior can change with environmental conditions. This is not a recommendation to cloud aquarium water, increase stocking, or apply stickleback results to every aquarium species.",
+    "caption": "Illustrative freshwater aquarium photograph; these are not the sticklebacks in the study."
+  },
+  {
+    "slug": "behind-captive-bred-fish",
+    "category": "reef",
+    "label": "Reef & ocean",
+    "kind": "From the research archive",
+    "date": "February 25, 2025",
+    "title": "The patient science behind captive-bred fish",
+    "dek": "Meet the research that helps more ornamental fish complete their life cycles in managed care.",
+    "image": "clownfish.webp",
+    "source": "University of Florida IFAS",
+    "url": "https://blogs.ifas.ufl.edu/news/2025/02/25/scientists-study-breeding-of-pet-fish-to-help-protect-reefs-fuel-floridas-economy/",
+    "paragraphs": [
+      "University of Florida IFAS describes research helping fish farmers breed popular marine species, including clownfish and blue tangs. The aim is to support aquaculture while reducing the need to collect fish from wild reefs.",
+      "The article connects this work with conservation and the aquarium trade. Progress with one species does not mean that every fish can be bred the same way, or that every specimen offered for sale is captive-bred."
+    ],
+    "takeaway": "Ask about the origin of an individual fish rather than assuming its breeding history from its appearance. This background feature does not represent Hidden Reef's current stock.",
+    "caption": "Illustrative clownfish photograph; it does not establish that the pictured fish is captive-bred."
+  },
+  {
+    "slug": "little-cups-big-potential",
+    "category": "freshwater",
+    "label": "Freshwater",
+    "kind": "Plant-room notes",
+    "date": "Evergreen guide · no publication date shown",
+    "title": "Little cups, big planted-tank potential",
+    "dek": "A closer look at tissue-cultured aquarium plants, from sealed cup to a new underwater landscape.",
+    "image": "shrimp.webp",
+    "source": "Tropica Aquarium Plants",
+    "url": "https://tropica.com/en/plants/tropica-products/",
+    "paragraphs": [
+      "Tropica describes its 1-2-Grow plants as tissue-cultured plants raised in laboratory conditions. The company says they are supplied without snails, algae or pesticides and can be used in aquariums containing shrimp and fish.",
+      "The same guide cautions that these young plants need attention to their growing conditions from the start. It also distinguishes them from other product types, including mature potted plants and plants attached to wood or stone."
+    ],
+    "takeaway": "These are the manufacturer's claims about its own product range, not an independent test of every tissue-culture brand. Check the individual plant's care requirements before buying.",
+    "caption": "Illustrative shrimp photograph, not a product test or a photograph of tissue-culture plants."
+  },
+  {
+    "slug": "when-coral-spawns",
+    "category": "reef",
+    "label": "Reef & ocean",
+    "kind": "From the conservation archive",
+    "date": "July 21, 2025",
+    "title": "Growing the next generation of reefs",
+    "dek": "Why coral restoration researchers are looking beyond fragments to breeding and genetic diversity.",
+    "image": "reef-scene.webp",
+    "source": "NOAA Fisheries",
+    "url": "https://www.fisheries.noaa.gov/feature-story/noaa-and-partners-launch-next-generation-coral-restoration-following-florida-coral",
+    "paragraphs": [
+      "NOAA describes a restoration effort that combines coral breeding, rearing and new technologies to help Florida's reefs recover after severe bleaching. One focus is raising new generations from spawning events, including offspring of parents selected for heat tolerance.",
+      "Growing fragments can increase coral cover, but those fragments may be genetically identical. Sexual reproduction offers a route to new genetic combinations. Researchers are also investigating beneficial algae, bacteria and ways to improve young corals' survival."
+    ],
+    "takeaway": "This is a conservation research program, not a home-aquarium treatment or a promise of bleaching-proof corals. It explains why both propagation and genetic diversity matter.",
+    "caption": "Illustrative reef photograph; not a photograph of the research project."
+  }
+]

@@ -48,6 +48,7 @@ use these instructions before writing code or snippets.
   artifact archive views.
 - `/experiments/image-gen-2-benchmark/mirthcap-story.html` - Mirthcap
   story/artifact page.
+- `/newsletter/` - standalone Aquarium Journal design preview for The Hidden Reef, covering freshwater and reef topics. This is NOT a duplicate storefront or the store's official publication. Source content is `newsletter/stories.json`, image attribution is `newsletter/photo-credits.json`, and `python3 scripts/build_aquarium_journal.py` regenerates the static edition, six article pages and credits. Photos are illustrative. There is no scheduled research, email capture, or automatic publication. Preserve the preview/noindex labels and primary-source dates; do not present archive or evergreen material as new news. The existing Hidden Reef prototype redirect paths remain untouched.
 - `/ai-news/` - curated AI model and tooling news feed.
 - `/computer-chronicle/` - daily historical computer newspaper section,
   focused on personal computers and personal computer gaming from 40
