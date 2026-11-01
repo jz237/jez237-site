@@ -1,0 +1,458 @@
+{
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "visualProfile": {
+    "tone": "The champion’s challenge and the graphical frontier",
+    "motifs": [
+      "Apple II and Commodore 64 platform-game screens",
+      "gold bricks, ladders and guards",
+      "Macintosh halftone video capture"
+    ],
+    "layout": "Dense warm newsprint with red and blue section boxes"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Largest headline and halftone platform-game scene for Championship Lode Runner",
+    "secondaryRail": "GEM, MacVision, electronic novels and rock radio",
+    "archiveNavigation": "Weekly archive and previous/next controls"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 147 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of May 20-26, 1985",
+    "price": "75 cents"
+  },
+  "currentDate": "2026-11-01",
+  "historicDate": "1985-05-20",
+  "displayDate": "Week of May 20-26, 1985",
+  "edition": "Issue 147 - Weekly 1985 Computer & Culture Chronicle",
+  "sources": [
+    {
+      "title": "Selby Bateman, GEM: A New Look For IBM And Atari, COMPUTE! 60",
+      "url": "https://www.atarimagazines.com/compute/issue60/175_1_GEM_A_New_Look_For_IBM_And_Atari.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Michael B. Williams, Championship Lode Runner, COMPUTE! 60",
+      "url": "https://www.atarimagazines.com/compute/issue60/187_1_REVIEWS_Championship_Lode_Runner.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Charles Brannon, MacVision For Apple Macintosh, COMPUTE! 60",
+      "url": "https://www.atarimagazines.com/compute/issue60/188_1_REVIEWS_MacVision_For_Apple_Macintosh.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Arthur Leyenberger, Relax Stress Reduction System, COMPUTE! 60",
+      "url": "https://www.atarimagazines.com/compute/issue60/185_1_REVIEWS_Relax_Stress_Reduction_System.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Richard Mansfield, Sidekick For PC And PCjr, COMPUTE! 60",
+      "url": "https://www.atarimagazines.com/compute/issue60/186_1_REVIEWS_Sidekick_For_PC_And_PCjr.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Electronic Novels, COMPUTE! 60 News & Products",
+      "url": "https://www.atarimagazines.com/compute/issue60/217_3_NEWS_PRODUCTS_Electronic_Novels.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Arlan R. Levitan, Telecomputing Today: Uploading And Downloading, COMPUTE! 60",
+      "url": "https://www.atarimagazines.com/compute/issue60/191_1_TELECOMPUTING_TODAY.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Chris Seibold, May 24, 1985: Jobs Fails to Oust Sculley (retrospective; URL has erroneous 1989 slug)",
+      "url": "https://www.applematters.com/article/may-24-1989-jobs-fails-to-oust-sculley/",
+      "date": "2011-05-24"
+    },
+    {
+      "title": "Apple reorganization report (AFTER dossier week; boundary check only)",
+      "url": "https://www.upi.com/Archives/1985/05/31/Apple-Computer-Inc-is-planning-a-big-reorganization-that/7400690560318/",
+      "date": "1985-05-31"
+    },
+    {
+      "title": "Jennifer Hillner, America Online: original name and founding date (retrospective)",
+      "url": "https://www.wired.com/1999/10/aoldata/",
+      "date": "1999-10-01"
+    },
+    {
+      "title": "Lily Rothman, AOL at 30 (retrospective; search metadata corroboration)",
+      "url": "https://time.com/3857628/aol-1985-history/",
+      "date": "2015-05-22"
+    },
+    {
+      "title": "Billboard Mainstream Rock Airplay, chart dated May 25, 1985",
+      "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-05-25/",
+      "date": "1985-05-25"
+    },
+    {
+      "title": "The Numbers: Weekend Domestic Box Office May 24, 1985",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/05/24",
+      "date": "1985-05-24"
+    },
+    {
+      "title": "Hansard, Copyright (Computer Software) Amendment Bill, HL vol 463 cc865–875",
+      "url": "https://api.parliament.uk/historic-hansard/lords/1985/may/10/copyright-computer-software-amendment",
+      "date": "1985-05-10"
+    },
+    {
+      "title": "Edward Rasen, Compact Discs: Sound of the Future, first SPIN issue, May 1985 (reprint)",
+      "url": "https://www.spinmagazine.com/1985/05/compact-discs-sound-of-the-future/",
+      "date": "1985-05"
+    },
+    {
+      "title": "Alamgir Mohiuddin, A cyclone smashed coastal fishing villages, UPI (search excerpt; full fetch blocked)",
+      "url": "https://www.upi.com/Archives/1985/05/25/A-cyclone-smashed-coastal-fishing-villages-along-the-Bay/5174485841600/",
+      "date": "1985-05-25"
+    },
+    {
+      "title": "NOAA AOML, 30th anniversary of Bangladesh cyclone (retrospective; search excerpt)",
+      "url": "https://www.aoml.noaa.gov/es/hurricane_blog/30th-anniversary-of-bangladesh-cyclone/",
+      "date": "2015-05-27"
+    }
+  ],
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-05-20.jpg",
+    "alt": "Computer Chronicle newspaper front page for May 20-26, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "A weekly visit to the games counter, computer desk and modem room.",
+  "morningLine": "Fifty rooms for the expert, a graphical desktop for the programmer, and pictures for the Macintosh.",
+  "lead": {
+    "headline": "Fifty punishing rooms put Lode Runner veterans to the test",
+    "body": [
+      "Brøderbund has a demanding assignment for players who have exhausted Lode Runner: fifty more rooms, built to punish complacency. Championship Lode Runner is the subject of Michael B. Williams’s review in the May issue of COMPUTE!, and its audience is the veteran rather than the newcomer. The original game’s 150 screens form the apprenticeship; this collection is the examination.",
+      "The familiar business of ladders, gold and pursuing guards now requires unusually careful planning. The new collection does not include the original design mode. Instead of inviting players to construct their own playground, it concentrates on a fixed set of difficult puzzles. Williams describes a game designed by champion Lode Runners for champion Lode Runners.",
+      "The review covers the Commodore 64 with disk drive and Apple II-series machines with at least 48K and a disk drive; a joystick is optional. The listed price is $34.95, with a separate $9.95 hint book for those who need a way out. These are May review prices, not a claim of a launch during this week.",
+      "Persistence earns a place in the record: high scores carry an eight-character name, and completing the game allows a nineteen-character victory message and a personalized champion certificate from Brøderbund. Saving offers a little mercy, but not unlimited escape. A saved game can be restored once without penalty; further restorations of that save cost a life."
+    ],
+    "sourceRefs": [
+      1
+    ],
+    "confidence": "same-month",
+    "dek": "Brøderbund’s advanced sequel trades the construction kit for fifty hard-won puzzles."
+  },
+  "stories": [
+    {
+      "headline": "GEM promises a graphical bridge between IBM PCs and Atari",
+      "body": [
+        "Digital Research’s Graphics Environment Manager proposes a common visual language for IBM-compatible machines and Atari’s Motorola 68000-based ST line. Selby Bateman’s May COMPUTE! feature describes icons, pull-down menus, overlapping windows and a desktop trash can. GEM sits above an operating system rather than replacing it.",
+        "The attraction is a less forbidding computer, but the programmer still has work to do. Moving application source between the IBM and Atari environments calls for recompilation, not merely copying a disk. A $500 developer toolkit supplies desktop software, sample applications, debugging tools and the Resource Construction Set.",
+        "Atari’s January CES projections of about $399 for the 128K 130ST and $599 for the 512K 520ST remain announced figures in this May account, not confirmed street prices. The debate is equally unsettled: a mouse can make a program easier to learn while adding steps and consuming memory. Microsoft Windows is still described as long-awaited."
+      ],
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "MacVision turns videotape and camera pictures into Macintosh illustrations",
+      "body": [
+        "Koala Technologies’ MacVision puts a television picture within reach of the Macintosh document. Charles Brannon’s May review lists the digitizing box and software at $399.95. A camera, videotape deck or laserdisc player supplies an NTSC signal, while the box connects to the Mac’s printer or modem port.",
+        "The program works as a desk accessory. Pictures can go into MacWrite, receive further attention in MacPaint, and reach paper through an Imagewriter. Varying dot densities stand in for shades of gray; brightness and contrast adjustments determine how much detail survives the journey.",
+        "This is not instantaneous television on the desktop. A small-window scan takes about six seconds and a full-screen scan takes twenty-two, requiring a still subject. For documents that need an illustration rather than moving pictures, the result offers a new bridge between home video and personal publishing."
+      ],
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Synapse sells adventures as electronic novels",
+      "body": [
+        "Synapse is presenting text adventures as electronic novels. The May COMPUTE! product notice names Mindwheel and Essex first: one sends the reader-player through four dead people’s minds in pursuit of the Wheel of Wisdom; the other casts an intergalactic search-and-rescue mission.",
+        "The notice places IBM and Apple versions at $44.95 and Atari and Commodore versions at $39.95. It also describes Brimstone, Breakers and Ronin as works underway, rather than a shelf already filled. No exact release day accompanies the announcement.",
+        "The pitch gives the keyboard a literary role. Instead of relying on a bright arcade screen, these adventures ask prose and the player’s decisions to carry the spectacle. The distinction is a statement of ambition, not a guarantee that every announced title has reached every machine."
+      ],
+      "sourceRefs": [
+        5
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "MacVision",
+      "summary": "Koala NTSC video digitizer for Macintosh; serial connection; $399.95.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "title": "Atari ST preview",
+      "summary": "May feature recaps January CES projections for 130ST/520ST and GEM. Shipping and final bundle prices not established.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Synapse Relax",
+      "summary": "EMG headband plus interface, software, workbook and audio tape; supported versions for C64, Atari, Apple II, PC and Enhanced PCjr; $139.95.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Borland Sidekick",
+      "detail": "May review requires PC/compatible with 64K RAM and disk, or Enhanced PCjr; desktop tools include notepad, calculator, calendar and telephone support. Protected version $49; non-copy-protected version $79.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "name": "GEM developer toolkit",
+      "detail": "Digital Research; $500 programmer package; application source portability is not binary portability.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "name": "Synapse electronic novels",
+      "detail": "Mindwheel and Essex; more titles announced as in development.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+      "items": [
+        "Championship Lode Runner — fifty advanced screens; May review, $34.95.",
+        "Lode Runner — the original 150-screen challenge discussed in the sequel review.",
+        "Mindwheel — Synapse’s journey through four minds, named in the May product notice.",
+        "Essex — Synapse’s intergalactic search-and-rescue electronic novel.",
+        "Relax balloon game — biofeedback activity inside the $139.95 Relax package, not a separate game release."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        1,
+        5,
+        3
+      ]
+    },
+    {
+      "label": "Top 5 Movies — May 24-26 domestic weekend box office",
+      "items": [
+        "1. Rambo: First Blood Part II",
+        "2. A View to a Kill",
+        "3. Brewster’s Millions",
+        "4. Beverly Hills Cop",
+        "5. Police Academy 2: Their First Assignment"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        12
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Trapped",
+      "song": "Trapped",
+      "artist": "Bruce Springsteen",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-05-25",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        11
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Little By Little",
+      "song": "Little By Little",
+      "artist": "Robert Plant",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-05-25",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        11
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Say You’re Wrong",
+      "song": "Say You’re Wrong",
+      "artist": "Julian Lennon",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-05-25",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        11
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Would I Lie To You",
+      "song": "Would I Lie To You",
+      "artist": "Eurythmics",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-05-25",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        11
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Rebels",
+      "song": "Rebels",
+      "artist": "Tom Petty",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-05-25",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        11
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Championship Lode Runner",
+      "price": "$34.95",
+      "note": "May review; optional hint book $9.95",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "MacVision",
+      "price": "$399.95",
+      "note": "Digitizer and software, May review",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "Sidekick",
+      "price": "$49 / $79",
+      "note": "Copy-protected / non-copy-protected versions, May review",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "item": "Relax",
+      "price": "$139.95",
+      "note": "Biofeedback package, May review",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Sony D-5",
+      "price": "$300",
+      "note": "May SPIN survey price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        14
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Sidekick keeps desktop tools a keystroke away",
+      "summary": "Borland’s notepad, calculator, calendar and telephone support share a PC desktop; the May review lists protected and unprotected versions at $49 and $79.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "The expert’s next fifty rooms",
+    "summary": "Championship Lode Runner: $34.95 in the May COMPUTE! review. Optional hint book $9.95. A period product spotlight, not a reproduced advertisement.",
+    "tagline": "For the player who finished the first 150.",
+    "sourceRefs": [
+      1
+    ]
+  },
+  "market": {
+    "headline": "Two prices for a desktop companion",
+    "summary": "Sidekick’s May review lists $49 for a copy-protected version and $79 for a non-copy-protected version: a visible price distinction in the software aisle, not a measure of industry sales.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      4
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Cyclone strikes Bangladesh coast",
+    "summary": "A cyclone struck Bangladesh’s coastal fishing villages on May 25, driving a destructive surge into communities along the Bay of Bengal.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      15,
+      16
+    ]
+  },
+  "bbsNote": {
+    "headline": "The BBS learning curve: saving downloads and preparing mail offline",
+    "summary": "Arlan R. Levitan's May COMPUTE! column answers novice questions about exchanging files on BBSs and commercial services; no invented contemporary posts or sysop announcements.",
+    "posts": [
+      {
+        "topic": "Readers ask how to save online material",
+        "platform": "BBSs and commercial information services, as discussed in COMPUTE!",
+        "text": "Editorial paraphrase, not a recovered BBS post: readers ask how to download files and send their own programs; Levitan stresses terminal-software capabilities and compatible transfer protocols."
+      },
+      {
+        "topic": "Compose mail before paying for online time",
+        "platform": "Commercial online services",
+        "text": "Editorial paraphrase: one recurring reader question concerns preparing electronic mail ahead of time to avoid paying while typing online. The column promises more money-saving discussion next month."
+      },
+      {
+        "topic": "XMODEM becomes common ground",
+        "platform": "BBSs, CompuServe and Delphi",
+        "text": "Levitan reports XMODEM support on almost every BBS and on CompuServe and Delphi; text capture and error-checked program transfer serve different needs. No real message transcript is claimed."
+      }
+    ],
+    "confidence": "same-month",
+    "sourceRefs": [
+      6
+    ]
+  },
+  "curiosity": {
+    "headline": "A headband lets a computer game read your tension",
+    "summary": "Synapse's $139.95 Relax package turns forehead muscle signals into on-screen biofeedback.",
+    "detail": "Arthur Leyenberger's May review describes an EMG headband, kaleidoscope patterns and a balloon game that rises as the user relaxes. Documentation is credited to clinical psychologist Dr. Martha Davis. The review also says Synapse's existing Atari game Chicken can accept the headband as a paddle-style input. Treat therapeutic and subliminal-message benefits as vendor/reviewer claims, not established medical results.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      3
+    ]
+  },
+  "gadgetWatch": {
+    "headline": "Portable compact discs find a price tag",
+    "summary": "May SPIN lists Sony’s portable D-5 at $300 and surveys home CD players from $199 to more than $1,000. This is the month’s consumer-audio coverage, not a new launch this week.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      14
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "May magazine items are review and product-notice pegs, not exact-week releases.",
+      "Game selections are editorial, not a sales chart.",
+      "Movies use The Numbers May 24 weekend table; ranks four and five spot-checked.",
+      "Music follows the May 25 Billboard rock chart.",
+      "Apple internal conflict omitted: contemporary public timing unresolved.",
+      "No casualty total, suspect MacVision resolution or unsupported medical benefit printed."
+    ]
+  }
+}

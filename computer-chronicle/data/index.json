@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-01",
+      "historicDate": "1985-05-20",
+      "displayDate": "Week of May 20-26, 1985",
+      "edition": "Issue 147 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Fifty rooms for the expert, a graphical desktop for the programmer, and pictures for the Macintosh.",
+      "leadHeadline": "Fifty punishing rooms put Lode Runner veterans to the test",
+      "storyHeadlines": [
+        "GEM promises a graphical bridge between IBM PCs and Atari",
+        "MacVision turns videotape and camera pictures into Macintosh illustrations",
+        "Synapse sells adventures as electronic novels"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-05-20.jpg",
+      "thumb": "media/thumbs/1985-05-20.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-31",
       "historicDate": "1985-05-13",
       "displayDate": "Week of May 13-19, 1985",

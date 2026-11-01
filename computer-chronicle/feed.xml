@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 31 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 01 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of May 20-26, 1985 — Fifty punishing rooms put Lode Runner veterans to the test</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-05-20</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-05-20</guid>
+      <pubDate>Sun, 01 Nov 2026 12:00:00 GMT</pubDate>
+      <description>Brøderbund’s advanced sequel trades the construction kit for fifty hard-won puzzles. Brøderbund has a demanding assignment for players who have exhausted Lode Runner: fifty more rooms, built to punish complacency. Championship Lode Runner is the subject of Michael B. Williams’s review in the May issue of COMPUTE!, and its audience is the veteran rather than the newcomer. The original game’s 150 screens form the apprenticeship; this collection is the examination. Also this week: GEM promises a graphical bridge between IBM PCs and Atari · MacVision turns videotape and camera pictures into Macintosh illustrations · Synapse sells adventures as electronic novels.</description>
+    </item>
     <item>
       <title>Week of May 13-19, 1985 — Mastertronic pitches Commodore games at $9.99</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-05-13</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-01-07</guid>
       <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
       <description>Jack Tramiel puts a new 68000 computer family against the established names; software and delivery will decide the contest. Atari is taking aim at the price of personal computing. As Winter CES closes January 8, Jack Tramiel’s company is promoting an ST family announced at $400–$600. The demonstrations began over the preceding weekend; the quoted range is an announced computer price, not a complete system already sitting on a dealer’s shelf. Also this week: Commodore answers with the C128—and a portable proposal · Nintendo proposes an Advanced Video System for America · PlayNet puts C64 board games on the telephone line.</description>
-    </item>
-    <item>
-      <title>Week of December 31, 1984-January 6, 1985 — Atari shows a $599 512K ST, challenging the high-end divide</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-12-31</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-12-31</guid>
-      <pubDate>Mon, 12 Oct 2026 12:00:00 GMT</pubDate>
-      <description>Winter CES opens with 68000 power, GEM windows and unfinished prototypes. LAS VEGAS — Winter CES opens January 5 with Atari putting a new family of personal computers before the trade. The 512K 520ST carries an announced computer price of $599; the 128K 130ST is announced at $399. Neither figure buys a complete monitor-and-drive system. The show runs through January 8, with its opening two days falling in this week. Also this week: Commodore 128 promises three computers in one · Coleco pulls out of Adam; inventory sale points to bargains · Epyx puts young players in charge of its CES demonstrations · Commodore’s LCD portable packs office tools and a modem.</description>
     </item>
   </channel>
 </rss>
