@@ -20,7 +20,7 @@ export type Phase = 'title' | 'playing' | 'upgrade' | 'paused' | 'over';
 type Power = Pickup['power'];
 type Path = 'volley' | 'lance' | 'drone';
 
-const VERSION = 'v3.0.5';
+const VERSION = 'v3.0.6';
 const FIRE_KEY = 'millipede_neon_autofire';
 const EXTRA_LIFE_EVERY = 60000;
 const MAX_LIVES = 5;
@@ -162,7 +162,7 @@ export class Game extends Behaviour implements Arena {
     this.board = createScoreBoard({
       // Its own board: the Classic edition keeps `neon-myriapod`.
       game: 'millipede-neon',
-      title: 'MILLIPEDE · NEON 3D',
+      title: 'MILLIPEDE 3D',
       levelLabel: 'WAVE',
       accent: '#2ff5d2',
       accent2: '#ffa21c',

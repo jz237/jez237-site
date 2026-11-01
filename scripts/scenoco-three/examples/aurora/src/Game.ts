@@ -20,7 +20,7 @@ export type Phase = 'title' | 'playing' | 'tally' | 'arsenal' | 'paused' | 'over
 type Boss = 'bomber' | 'orbital' | 'meteor' | 'stealth' | 'nuke';
 type Upgrade = 'blast' | 'speed' | 'ammo' | 'flak' | 'aegis' | 'rebuild';
 
-const VERSION = 'v1.0.0';
+const VERSION = 'v1.0.1';
 const FIRE_KEY = 'auroraSiege3d_rapid';
 const DIFF_KEY = 'auroraSiege3d_difficulty';
 const DIFFICULTIES = { easy: 0.82, normal: 1, hard: 1.28 } as const;
@@ -167,7 +167,7 @@ export class Game extends Behaviour implements Theatre {
     this.sound.onVoice = (text) => this.hud.voice(text);
     this.board = createScoreBoard({
       game: 'aurora-siege-3d',
-      title: 'AURORA SIEGE · NEON 3D',
+      title: 'AURORA SIEGE 3D',
       levelLabel: 'WAVE',
       accent: '#53ffa3',
       accent2: '#55d2ff',

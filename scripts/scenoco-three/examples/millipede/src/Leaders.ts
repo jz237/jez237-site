@@ -1,7 +1,7 @@
 /**
  * The global high scores, out where they can be seen — the title screen's top fives and the HUD's HI —
  * as the Classic edition shows them. Each edition has its own board on the site's game-scores worker;
- * this reads the Neon 3D one (a run's score is posted by the high-score board, `jez237/scores.ts`).
+ * this reads the 3D one (a run's score is posted by the high-score board, `jez237/scores.ts`).
  */
 export interface Row {
   initials: string;
