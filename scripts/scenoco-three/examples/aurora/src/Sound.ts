@@ -32,6 +32,7 @@ interface Falling {
   toneGain: GainNode;
   airGain: GainNode;
   pan: StereoPannerNode | null;
+  lfo: OscillatorNode;
 }
 
 export class Sound extends Behaviour {
@@ -43,6 +44,7 @@ export class Sound extends Behaviour {
   private master: GainNode | null = null;
   private noise: AudioBuffer | null = null;
   private air: AudioBuffer | null = null;
+  private lastWhistle = 0;
   private readonly falling = new Map<object, Falling>();
   private readonly music = new Audio();
   private track = 0;
@@ -180,9 +182,10 @@ export class Sound extends Behaviour {
       f.tone.frequency.setTargetAtTime(pitch, t, 0.06);
       f.second.frequency.setTargetAtTime(pitch * 1.006 + 4, t, 0.06);
       f.band.frequency.setTargetAtTime(l.nuke ? 380 : pitch * 1.7, t, 0.06);
-      const loud = (l.nuke ? 0.07 : 0.03) * (0.12 + 0.88 * k ** 1.6);
+      // Heard from the moment it appears, swelling to as loud as a blast just before it lands.
+      const loud = (l.nuke ? 0.26 : 0.17) * (0.5 + 0.5 * k ** 1.3);
       f.toneGain.gain.setTargetAtTime(loud, t, 0.08);
-      f.airGain.gain.setTargetAtTime(loud * (l.nuke ? 2.2 : 1.5), t, 0.08);
+      f.airGain.gain.setTargetAtTime(loud * (l.nuke ? 1.6 : 0.9), t, 0.08);
       f.pan?.pan.setTargetAtTime(Math.max(-0.8, Math.min(0.8, l.pan * 0.8)), t, 0.05);
     }
   }
@@ -210,10 +213,19 @@ export class Sound extends Behaviour {
     toneGain.connect(out);
     air.connect(band).connect(airGain).connect(out);
     if (pan) pan.connect(this.master!);
+    // The falling-bomb warble: a slow wobble on the pitch.
+    const lfo = ctx.createOscillator();
+    const depth = ctx.createGain();
+    lfo.frequency.value = nuke ? 3 : 6.5;
+    depth.gain.value = nuke ? 6 : 22;
+    lfo.connect(depth);
+    depth.connect(tone.frequency);
+    depth.connect(second.frequency);
+    lfo.start();
     tone.start();
     second.start();
     air.start(0, Math.random() * 1.5);
-    return { tone, second, air, band, toneGain, airGain, pan };
+    return { tone, second, air, band, toneGain, airGain, pan, lfo };
   }
 
   private release(id: object, f: Falling): void {
@@ -222,7 +234,7 @@ export class Sound extends Behaviour {
     const t = this.ctx.currentTime;
     f.toneGain.gain.setTargetAtTime(0, t, 0.04);
     f.airGain.gain.setTargetAtTime(0, t, 0.04);
-    for (const node of [f.tone, f.second, f.air]) {
+    for (const node of [f.tone, f.second, f.air, f.lfo]) {
       try {
         node.stop(t + 0.3);
       } catch {
@@ -297,8 +309,28 @@ export class Sound extends Behaviour {
     this.hiss(0.3, 0.12, 300, 3000);
   }
 
-  whistle(): void {
-    this.burst(780, 0.42, 0.08, 'sine', 0.38);
+  /** A warhead breaking into view: a bright falling whistle, panned to where it is. Not more than four a second. */
+  whistle(pan = 0, nuke = false): void {
+    if (!this.live) return;
+    const ctx = this.ctx!;
+    const t = ctx.currentTime;
+    if (t - this.lastWhistle < 0.25) return;
+    this.lastWhistle = t;
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = nuke ? 'sawtooth' : 'sine';
+    o.frequency.setValueAtTime(nuke ? 420 : 2100, t);
+    o.frequency.exponentialRampToValueAtTime(nuke ? 160 : 900, t + 0.7);
+    g.gain.setValueAtTime(0.001, t);
+    g.gain.exponentialRampToValueAtTime(nuke ? 0.22 : 0.16, t + 0.04);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.75);
+    const p = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
+    if (p) p.pan.value = Math.max(-0.8, Math.min(0.8, pan * 0.8));
+    o.connect(g);
+    if (p) g.connect(p).connect(this.master!);
+    else g.connect(this.master!);
+    o.start(t);
+    o.stop(t + 0.8);
   }
 
   explosion(power = 1, combo = 1): void {

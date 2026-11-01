@@ -20,7 +20,7 @@ export type Phase = 'title' | 'playing' | 'tally' | 'arsenal' | 'paused' | 'over
 type Boss = 'bomber' | 'orbital' | 'meteor' | 'stealth' | 'nuke';
 type Upgrade = 'blast' | 'speed' | 'ammo' | 'flak' | 'aegis' | 'rebuild';
 
-const VERSION = 'v1.0.2';
+const VERSION = 'v1.0.3';
 const FIRE_KEY = 'auroraSiege3d_rapid';
 const DIFF_KEY = 'auroraSiege3d_difficulty';
 const DIFFICULTIES = { easy: 0.82, normal: 1, hard: 1.28 } as const;
@@ -354,7 +354,8 @@ export class Game extends Behaviour implements Theatre {
     this.hud.banner(null);
     this.hud.score(0);
     this.hud.hi(this.best);
-    this.sound.setMusic(true, 0.3);
+    // The soundtrack steps back in play, so the incoming whistles carry over it.
+    this.sound.setMusic(true, 0.22);
     this.startWave(true);
   }
 
@@ -363,8 +364,9 @@ export class Game extends Behaviour implements Theatre {
     for (const kind of kinds) for (const b of findObjectsOfType(kind)) destroy(b.node);
   }
 
+  /** How hard this wave hits. The siege opens as the classic's third wave did: no slow warm-up. */
   private ew(): number {
-    const w = this.wave;
+    const w = this.wave + 2;
     return (w <= 16 ? w : 16 + (w - 16) * 0.25) * DIFFICULTIES[this.difficulty];
   }
 
@@ -393,8 +395,8 @@ export class Game extends Behaviour implements Theatre {
       this.sound.announce(first ? 'vo-incoming' : 'wave', first);
     }
     if (!first) this.sound.fanfare();
-    const count = 6 + Math.floor(this.ew() * 2);
-    const gap = Math.max(0.45, 1.8 - this.ew() * 0.05);
+    const count = 8 + Math.floor(this.ew() * 2);
+    const gap = Math.max(0.4, 1.45 - this.ew() * 0.05);
     switch (this.boss) {
       case 'bomber': {
         const dir = w % 8 === 4 ? 1 : -1;
@@ -436,7 +438,7 @@ export class Game extends Behaviour implements Theatre {
         break;
       default:
         for (let i = 0; i < count; i++) this.enemy(i * gap + Random.range(0, 0.6) + 1);
-        if (w >= 8) {
+        if (w >= 6) {
           const sats = 1 + Math.floor((this.ew() - 8) / 4);
           for (let s = 0; s < sats; s++) {
             const sat = this.make(this.satellite, Satellite);
@@ -457,8 +459,8 @@ export class Game extends Behaviour implements Theatre {
     const roll = Random.value;
     let kind: WarheadKind = 'normal';
     if (this.phase !== 'title') {
-      if (w >= 6 && roll < 0.2) kind = 'mirv';
-      else if (w >= 10 && roll < 0.35) kind = 'smart';
+      if (w >= 3 && roll < 0.2) kind = 'mirv';
+      else if (w >= 7 && roll < 0.35) kind = 'smart';
     }
     const t = this.target();
     const speed = Random.range(28 + this.ew() * 7, 40 + this.ew() * 10) * PX * speedScale;
@@ -797,6 +799,12 @@ export class Game extends Behaviour implements Theatre {
   /** The nearest few falling warheads whistle as they come; nothing whistles off the battle, or paused. */
   private voiceIncoming(): void {
     if (this.phase !== 'playing') return this.sound.incoming([]);
+    // A sharp whistle the moment each warhead breaks into view — the cue to look up.
+    for (const w of findObjectsOfType(Warhead)) {
+      if (!w.alive || w.waiting || w.whistled || w.gp.y > SKY + 0.5 || (w.stealth && w.revealed <= 0)) continue;
+      w.whistled = true;
+      this.sound.whistle(w.gp.x / half(), w.kind === 'nuke');
+    }
     const list = findObjectsOfType(Warhead)
       .filter((w) => w.alive && !w.waiting && w.gp.y < SKY + 1.5 && (!w.stealth || w.revealed > 0 || w.gp.y < SKY * 0.45))
       .sort((a, b) => b.progress - a.progress)
