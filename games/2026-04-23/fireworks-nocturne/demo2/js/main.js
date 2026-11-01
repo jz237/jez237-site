@@ -1,18 +1,18 @@
 import * as THREE from 'three';
-import { TIERS, detectTier } from './quality.js?v=3';
-import { Particles } from './particles.js?v=3';
-import { Lights } from './lights.js?v=3';
-import { Smoke } from './smoke.js?v=3';
-import { World } from './world.js?v=3';
-import { Post } from './post.js?v=3';
-import { Fireworks } from './fireworks.js?v=3';
-import { Show } from './show.js?v=3';
-import { AudioEngine } from './audio.js?v=3';
-import { CameraRig } from './camera.js?v=3';
-import { CAMERAS } from './site.js?v=3';
-import { SHELL_NAMES } from './shells.js?v=3';
-import { Crowd } from './crowd.js?v=3';
-import { Workshop } from './workshop.js?v=3';
+import { TIERS, detectTier } from './quality.js?v=4';
+import { Particles } from './particles.js?v=4';
+import { Lights } from './lights.js?v=4';
+import { Smoke } from './smoke.js?v=4';
+import { World } from './world.js?v=4';
+import { Post } from './post.js?v=4';
+import { Fireworks } from './fireworks.js?v=4';
+import { Show } from './show.js?v=4';
+import { AudioEngine } from './audio.js?v=4';
+import { CameraRig, Director } from './camera.js?v=4';
+import { CAMERAS } from './site.js?v=4';
+import { SHELL_NAMES } from './shells.js?v=4';
+import { Crowd } from './crowd.js?v=4';
+import { Workshop } from './workshop.js?v=4';
 
 const Q = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
@@ -50,6 +50,7 @@ const wind = [2.2, 0, -0.7];
 const fw = new Fireworks({ particles, smoke, lights, audio, tier, wind });
 const show = new Show(fw, world, audio);
 const rig = new CameraRig(camera);
+const director = new Director(rig, fw, $('fade'));
 
 // one scene: sky, far world and fireworks on layer 0 (seen in the water too),
 // the near bank and the people on layer 1 (main view only)
@@ -81,6 +82,7 @@ const state = {
 
 const camIndex = Math.max(0, CAMERAS.findIndex(c => c.id === Q.get('cam')));
 rig.set(camIndex, true);
+if (Q.has('cam')) director.on = false;
 rig.update(0, innerWidth / innerHeight);
 show.seed = Number(Q.get('seed') || 1);
 show.begin(0, show.seed);
@@ -211,6 +213,7 @@ function step(dt) {
   world.update(t, camera);
   crowd.update(t);
   workshop.update(t);
+  director.update(t, show.act(t), show.on && !workshop.on);
   $('act').textContent = workshop.on ? 'Workshop' : show.on ? show.act(t) : 'Free launch';
 }
 
@@ -269,6 +272,7 @@ canvas.addEventListener('pointermove', (e) => {
     const [a, b] = [...pointers.values()];
     const d = Math.hypot(a.x - b.x, a.y - b.y);
     rig.zoomBy(d / pinch);
+    takeCamera();
     pinch = d;
     return;
   }
@@ -276,6 +280,7 @@ canvas.addEventListener('pointermove', (e) => {
   const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
   if (Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) > 7) drag.moved = true;
   if (drag.moved) {
+    takeCamera();
     const k = camera.fov * Math.PI / 180 / innerHeight;
     rig.look(dx * k, dy * k);
   }
@@ -289,7 +294,7 @@ const endPointer = (e) => {
 };
 canvas.addEventListener('pointerup', endPointer);
 canvas.addEventListener('pointercancel', endPointer);
-canvas.addEventListener('wheel', (e) => { e.preventDefault(); rig.zoomBy(Math.exp(-e.deltaY * 0.0012)); }, { passive: false });
+canvas.addEventListener('wheel', (e) => { e.preventDefault(); takeCamera(); rig.zoomBy(Math.exp(-e.deltaY * 0.0012)); }, { passive: false });
 
 function tapLaunch(x, y) {
   const ndcX = x / innerWidth * 2 - 1, ndcY = -(y / innerHeight) * 2 + 1;
@@ -317,7 +322,8 @@ addEventListener('keydown', (e) => {
   if (e.target.tagName === 'INPUT') return;
   audioUnlock();
   const k = e.key.toLowerCase();
-  if (k >= '1' && k <= '4') setView(Number(k) - 1);
+  if (k >= '1' && k <= '4') { takeCamera(); setView(Number(k) - 1); }
+  else if (k === 'c') $('camBtn').click();
   else if (k === ' ') { e.preventDefault(); if (workshop.on) workshop.fire(); else launchChoice(null); }
   else if (k === 'w') $('labBtn').click();
   else if (k === 'f') $('finaleBtn').click();
@@ -335,7 +341,19 @@ function setView(i) {
   rig.set(i);
   setLabel('viewBtn', 'View: ' + rig.preset.name, rig.preset.name);
 }
-$('viewBtn').onclick = () => setView(rig.index + 1);
+$('viewBtn').onclick = () => { takeCamera(); setView(rig.index + 1); };
+// Auto camera follows the show until the viewer drags, zooms or picks a view.
+function camLabel() {
+  setLabel('camBtn', director.on ? 'Auto camera' : 'Auto camera: Off', director.on ? 'Auto cam' : 'Cam off');
+  $('camBtn').classList.toggle('on', director.on);
+}
+function takeCamera() {
+  if (!director.on) return;
+  director.setOn(false);
+  camLabel();
+}
+$('camBtn').onclick = () => { director.setOn(!director.on); camLabel(); };
+director.onCut = () => setLabel('viewBtn', 'View: ' + rig.preset.name, rig.preset.name);
 $('autoBtn').onclick = () => {
   show.setOn(!show.on, state.t);
   $('autoBtn').classList.toggle('on', show.on);
@@ -416,6 +434,7 @@ setLabel('slowBtn', 'Slow motion', 'Slow-mo');
 setLabel('longBtn', 'Long exposure', 'Long exp.');
 setLabel('soundBtn', 'Sound: On', 'Sound');
 setLabel('labBtn', 'Workshop', 'Workshop');
+camLabel();
 layout();
 
 const picker = $('picker');
@@ -465,7 +484,7 @@ function seek(t) {
 if (Q.has('t')) seek(Number(Q.get('t')));
 if (Q.has('workshop')) $('labBtn').click();
 window.__fw = {
-  THREE, renderer, scene, camera, rig, post, particles, smoke, lights, world, fw, show, state, audio, crowd, tier, workshop,
+  THREE, renderer, scene, camera, rig, director, post, particles, smoke, lights, world, fw, show, state, audio, crowd, tier, workshop,
   seek,
   // Advance the show by dt seconds and draw one frame (works with the page hidden).
   tick(dt = 1 / 60) { window.__manual = true; rig.update(dt, innerWidth / innerHeight); step(dt); render(dt); },

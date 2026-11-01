@@ -2,7 +2,7 @@
 // the smoke layer and the glow the bursts put into the haze between the eye
 // and each surface; then bloom, a slow eye adaptation, ACES, vignette, grain.
 import * as THREE from 'three';
-import { LIGHTS, HASH } from './glsl.js?v=3';
+import { LIGHTS, HASH } from './glsl.js?v=4';
 
 const FS_VS = /* glsl */ `
 varying vec2 vUv;

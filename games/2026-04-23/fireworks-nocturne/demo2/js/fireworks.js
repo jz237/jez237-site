@@ -2,10 +2,10 @@
 // drag curve with a fuse or tail, and break at the apex; the break builds its
 // star records, smoke, light and sound events. Everything is placed at its
 // scheduled show time, so late frames and seeking still land things exactly.
-import { StarBatch, K_FLASH, K_FUSE, K_GERB, K_CRACKLE, T_GOLD, T_SILVER, T_GLITTER, T_COLOR, T_FALL } from './particles.js?v=3';
-import { SHELLS, colorOf } from './shells.js?v=3';
-import { starPos, starVel, aimShell, rng } from './physics.js?v=3';
-import { SITE } from './site.js?v=3';
+import { StarBatch, K_FLASH, K_FUSE, K_GERB, K_CRACKLE, T_GOLD, T_SILVER, T_GLITTER, T_COLOR, T_FALL } from './particles.js?v=4';
+import { SHELLS, colorOf } from './shells.js?v=4';
+import { starPos, starVel, aimShell, rng } from './physics.js?v=4';
+import { SITE } from './site.js?v=4';
 
 const SHELL_C = 0.0032, SHELL_KG = 0.07;
 // Workshop modifiers; every value is clamped again here so no setting can
@@ -34,6 +34,7 @@ export class Fireworks {
     this.onBreak = null;
     this.tailRate = tier.sparkK / 64;
     this.waterfallUntil = -1;
+    this.breaks = []; // upcoming and recent breaks { t, inches }, for the camera director
   }
 
   seed(s) { this.r = rng(s); }
@@ -51,7 +52,7 @@ export class Fireworks {
     }
   }
 
-  clear() { this.queue.length = 0; this.waterfallUntil = -1; }
+  clear() { this.queue.length = 0; this.waterfallUntil = -1; this.breaks.length = 0; }
 
   bargePos(i, spread = 14) {
     const b = SITE.barges[(i + SITE.barges.length) % SITE.barges.length];
@@ -72,6 +73,8 @@ export class Fireworks {
     const tgt = target || [mortar[0] + (r() - 0.5) * 50, H, mortar[2] + (r() - 0.5) * 40];
     const aim = aimShell(mortar, tgt, SHELL_C, SHELL_KG, this.wind);
     const tb = aim.t;
+    this.breaks.push({ t: t + tb, inches });
+    if (this.breaks.length > 80) this.breaks.shift();
     rise = rise || r.pick(['tail', 'tail', 'none', 'none', 'silver', 'whistle', 'glitter']);
     const batch = new StarBatch(4);
     const riser = { p0: mortar, t0: t, v0: aim.v0, c: SHELL_C, kg: SHELL_KG, life: tb, kind: K_FUSE, colA: [0.5, 0.2, 0.05], glowR: 0.25, head: rise === 'none' || rise === 'whistle' ? 0.25 : 0.5, seed: r() };

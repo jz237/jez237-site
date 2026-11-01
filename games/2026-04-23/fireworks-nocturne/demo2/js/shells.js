@@ -1,7 +1,7 @@
 // The shell library. Each break type lays out its stars (direction, speed,
 // burn time, colour chemistry, tails) the way the real product is built, plus
 // how much smoke it leaves, how bright it lights the air and how it sounds.
-import { K_STAR, K_CRACKLE, K_FLASH, T_GOLD, T_SILVER, T_GLITTER, T_COLOR, T_KAMURO, T_STROBE } from './particles.js?v=3';
+import { K_STAR, K_CRACKLE, K_FLASH, T_GOLD, T_SILVER, T_GLITTER, T_COLOR, T_KAMURO, T_STROBE } from './particles.js?v=4';
 
 // Linear-light colours of the metal salts, with relative brightness.
 export const COLORS = {
