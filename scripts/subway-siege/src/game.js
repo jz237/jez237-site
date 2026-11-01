@@ -266,22 +266,15 @@ export class Game {
     this.menuT = 0;
     this.createPlayer();
     this.addInputs();
+    this.world.onArc = (x, z) => this.sound.arc(x, z);
+    this.world.onBlast = (x, z, size) => this.sound.explode(size, x, z);
   }
   createPlayer() {
     if (this.playerMesh) this.world.remove(this.playerMesh);
     this.playerMesh = droneModel(this.ship.id);
     this.world.scene.add(this.playerMesh);
     if (this.shieldMesh) this.world.remove(this.shieldMesh, true);
-    this.shieldMesh = new T.Mesh(
-      new T.SphereGeometry(1, 16, 10),
-      new T.MeshBasicMaterial({
-        color: 0x8bf4d7,
-        transparent: true,
-        opacity: 0.11,
-        wireframe: true,
-        depthWrite: false,
-      }),
-    );
+    this.shieldMesh = this.world.makeShield();
     this.world.scene.add(this.shieldMesh);
     this.wings = [];
   }
@@ -369,6 +362,7 @@ export class Game {
     this.demo = false;
     this.wave = 1;
     this.world.setSector(0);
+    this.sound.setSector(0);
     this.player.x = 3;
     this.player.z = 5;
     this.player.invul = 0;
@@ -380,6 +374,7 @@ export class Game {
   }
   beginWave() {
     this.world.setSector(Math.floor((this.wave - 1) / 4) % SECTORS.length);
+    this.sound.setSector(this.world.sector);
     this.isBoss = this.wave % 4 === 0;
     this.bossDead = false;
     this.waveTotal = this.isBoss
@@ -504,7 +499,7 @@ export class Game {
     e.mesh.position.set(e.x, 0, e.z);
     this.world.scene.add(e.mesh);
     this.enemies.push(e);
-    this.sound.play("boss", 0.75);
+    this.sound.bossArrive();
     return e;
   }
   spawnTrain(x) {
@@ -515,7 +510,7 @@ export class Game {
       "EXPRESS / LIVE TRACK",
       `Train inbound on ${x < 0 ? "left" : x > 0 ? "right" : "centre"} track. Clear the amber lane.`,
     );
-    this.sound.play("train", 0.6, 1, x);
+    this.sound.trainWarn(x);
   }
   bullet(x, z, vx, vz, w, damageMul = 1) {
     const b = {
@@ -566,20 +561,21 @@ export class Game {
       put(-0.46, -0.3);
       put(0.46, 0.3);
     }
-    this.sound.play(
-      "railgun",
-      p.weapon === "heavy" ? 0.37 : p.weapon === "lance" ? 0.28 : 0.14,
-      p.weapon === "lance"
-        ? 0.8
-        : p.weapon === "overheat"
-          ? 1.4
-          : 1 + random(-0.07, 0.07),
+    this.sound.fire(p.weapon, p.x, p.z);
+    this.world.muzzle(
       p.x,
+      p.z - 0.9,
+      w.color,
+      p.weapon === "heavy" || p.weapon === "lance" ? 1.6 : 1,
     );
     this.recoil = 0.1;
   }
   enemyShot(e, angle, speed = 8, color = 0xff9b6b, r = 0.17) {
     if (this.shots.length >= 240) return;
+    if (e.type !== "boss" && e.mesh) {
+      this.sound.enemyFire(e.x, e.z, e.type === "brute");
+      this.world.muzzle(e.x, e.z + 0.8, color, 0.7);
+    }
     this.shots.push({
       x: e.x,
       z: e.z + 0.7,
@@ -633,7 +629,8 @@ export class Game {
           0.2,
         );
     }
-    this.sound.tone(95, 0.1, 0.06);
+    this.sound.bossVolley(e.x, e.z);
+    this.world.muzzle(e.x, e.z + 1.6, 0xffb46c, 2.4);
   }
   pulse() {
     if (this.state !== "play" || this.player.charge < 100) return false;
@@ -641,6 +638,7 @@ export class Game {
     this.world.ring(this.player.x, this.player.z, 0xa6f6e6, 2);
     this.world.ring(this.player.x, this.player.z, 0xffc578, 1.6);
     this.world.burst(this.player.x, this.player.z, 0xb5ffe2, 60, true);
+    this.world.pulseWave(this.player.x, this.player.z);
     this.world.shake = 0.5;
     this.slow = 0.3;
     this.shots = [];
@@ -652,7 +650,7 @@ export class Game {
         else this.world.burst(e.x, e.z, e.color, 10);
       }
     for (const t of this.trains) t.hp -= 22;
-    this.sound.play("pulse", 0.8);
+    this.sound.pulse();
     this.ui.toast(
       "CAPACITOR DISCHARGED",
       "RAIL PULSE",
@@ -669,20 +667,23 @@ export class Game {
     this.combo = 0;
     this.comboT = 0;
     this.overdriveReady = true;
-    if (p.shield > 0) {
+    const shielded = p.shield > 0;
+    if (shielded) {
       p.shield = Math.max(0, p.shield - 34);
       this.world.burst(p.x, p.z, 0x8bf7d7, 20);
     } else {
       p.lives--;
       this.world.burst(p.x, p.z, 0xff986d, 50, true);
     }
+    this.world.playerHit(shielded, p.x, p.z);
     this.world.shake = 0.4;
     this.ui.damage();
-    this.sound.tone(65, 0.3, 0.17);
     if (p.lives <= 0) {
       this.world.shatter(this.playerMesh, p.x, p.z, 0xffbd8b, 2);
+      this.world.explode(p.x, p.z, 0xffbd8b, 2);
+      this.sound.playerDeath(p.x, p.z);
       this.finish();
-    }
+    } else this.sound.playerHit(shielded, p.x, p.z);
     return true;
   }
   kill(e, cause = "shot") {
@@ -702,36 +703,30 @@ export class Game {
       100,
     );
     this.world.pop(e.x, e.z, "+" + pts);
-    this.world.shatter(
-      e.mesh,
-      e.x,
-      e.z,
-      e.color,
-      e.type === "boss" ? 2.8 : e.type === "brute" ? 1.5 : 1,
-    );
-    this.world.burst(
-      e.x,
-      e.z,
-      e.color,
-      e.type === "boss" ? 65 : 10 + Math.floor(Math.random() * 8),
-      e.type === "boss" || e.type === "brute",
-    );
-    if (Math.random() < 0.7 || e.type === "boss")
-      this.world.ring(
-        e.x,
-        e.z,
-        e.color,
-        e.type === "boss" ? 2.5 : 0.5 + Math.random() * 0.4,
-      );
-    this.sound.play(
-      "rupture",
-      e.type === "boss" ? 0.9 : 0.23 + Math.random() * 0.1,
-      random(0.83, 1.2),
-      e.x,
-    );
+    if (e.type === "boss") {
+      // Chain detonation; the world plays each blast (and its sound) in sequence.
+      this.world.bossDeath(e.mesh, e.x, e.z, e.color);
+      this.world.ring(e.x, e.z, e.color, 2.5);
+      this.sound.explode(1.5, e.x, e.z);
+    } else {
+      const size =
+        e.type === "brute"
+          ? 1.5
+          : e.type === "swarm"
+            ? 0.6
+            : e.type === "sentry" || e.type === "splitter"
+              ? 1.15
+              : 0.9;
+      this.world.shatter(e.mesh, e.x, e.z, e.color, size);
+      this.world.explode(e.x, e.z, e.color, size);
+      if (Math.random() < 0.7)
+        this.world.ring(e.x, e.z, e.color, 0.5 + Math.random() * 0.4);
+      this.sound.explode(size, e.x, e.z);
+    }
     if (this.combo >= 12 && this.overdriveReady) {
       this.overdrive = 7;
       this.overdriveReady = false;
+      this.sound.overdrive();
       this.ui.toast(
         "12 KILL CHAIN",
         "OVERDRIVE",
@@ -761,7 +756,7 @@ export class Game {
             minion.color,
             0.6,
           );
-          this.world.burst(minion.x, minion.z, minion.color, 12);
+          this.world.explode(minion.x, minion.z, minion.color, 0.6);
         }
       this.spawned = this.waveTotal;
     } else {
@@ -835,8 +830,9 @@ export class Game {
         "20 seconds · keep the pressure on",
       );
     }
-    this.sound.play("pickup", 0.4);
+    this.sound.pickup(p.type, p.x, p.z);
     this.world.ring(p.x, p.z, p.type === "shield" ? 0x8cf3d8 : 0xffc878, 0.6);
+    this.world.burst(p.x, p.z, p.type === "shield" ? 0x8cf3d8 : 0xffc878, 14);
     p.dead = true;
   }
   pickUpgrades() {
@@ -1062,6 +1058,7 @@ export class Game {
         const mesh = this.world.trainTemplate.clone();
         mesh.rotation.y = Math.PI;
         this.world.scene.add(mesh);
+        this.sound.trainPass(w.x);
         this.trains.push({
           x: w.x,
           z: -23,
@@ -1093,10 +1090,16 @@ export class Game {
           );
           this.world.ring(e.x, e.z, 0xff9e73, 2);
           this.world.burst(e.x, e.z, 0xffd18f, 30, true);
+          this.world.explode(e.x + random(-1.5, 1.5), e.z, 0xffd18f, 1.4);
+          this.world.shockwave(e.x, e.z, 0.04, 3);
+          this.sound.bossPhase(e.x, e.z);
         }
         e.x = Math.sin(e.age * (0.55 + e.phase * 0.1)) * 5;
         e.z += (-10.5 - e.z) * Math.min(1, dt * 1.1);
-        if (e.fire < 0.7) e.warning = Math.max(e.warning, e.fire);
+        if (e.fire < 0.7) {
+          if (!e.warning) this.sound.charge(e.x, e.z);
+          e.warning = Math.max(e.warning, e.fire);
+        }
         if (e.fire <= 0) {
           this.bossVolley(e);
           e.fire = 2.3 - e.phase * 0.4;
@@ -1194,10 +1197,10 @@ export class Game {
         this.world.pop(t.x, t.z, "EXPRESS +1250");
         this.world.shatter(t.mesh, t.x, t.z - 3.5, 0xffba76, 3.2);
         for (let j = 0; j < 3; j++) {
-          this.world.burst(t.x, t.z - j * 3.4, 0xffba76, 40, true);
+          this.world.explode(t.x, t.z - j * 3.4, 0xffba76, j ? 1.6 : 2.6);
           this.world.ring(t.x, t.z - j * 3.4, 0xffd58d, 1.2);
         }
-        this.sound.play("rupture", 0.8, 0.7, t.x);
+        this.sound.explode(3.2, t.x, t.z);
         this.drop(t.x, t.z, "charge");
       }
     }
@@ -1242,12 +1245,12 @@ export class Game {
           target.train.hp -= b.damage;
           b.life = 0;
           this.hits++;
-          this.world.burst(
+          this.world.impact(
             b.px + (b.x - b.px) * target.at,
             b.pz + (b.z - b.pz) * target.at,
             0xffdfb5,
-            4,
           );
+          this.sound.hit(b.x, b.z);
           break;
         }
         const e = target.enemy;
@@ -1256,7 +1259,12 @@ export class Game {
           b.hit.add(e.id);
           e.hp -= b.damage;
           this.hits++;
-          this.world.burst(e.x, e.z, 0xffdfb5, 3);
+          this.world.impact(
+            b.px + (b.x - b.px) * target.at,
+            b.pz + (b.z - b.pz) * target.at,
+            b.color,
+          );
+          if (e.hp > 0) this.sound.hit(e.x, e.z);
           if (e.hp <= 0) this.kill(e);
           if (b.splash) {
             for (const other of this.enemies)
@@ -1339,6 +1347,7 @@ export class Game {
             "FLAWLESS",
             `Station bonus +${bonus}`,
           );
+        this.sound.waveClear();
         if (this.wave % 2 === 0) {
           this.state = "upgrade";
           this.sound.play("pickup", 0.5);

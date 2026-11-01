@@ -18,6 +18,14 @@ settings.ship = Math.max(0, Math.min(2, Number(settings.ship) || 0));
 settings.sfx = Math.max(0, Math.min(1, Number(settings.sfx) || 0));
 settings.music = Math.max(0, Math.min(1, Number(settings.music) || 0));
 const save = () => store.set("subway_siege_ironline_settings", settings);
+// Auto starts at the top tier on desktop-class screens and steps down if the
+// frame rate stays low; phones start at high.
+const autoTier = () =>
+  matchMedia("(pointer: coarse)").matches ||
+  Math.min(screen.width, screen.height) < 700
+    ? "high"
+    : "ultra";
+const tierFor = (q) => (q === "auto" ? autoTier() : q);
 let game,
   world,
   sound,
@@ -358,7 +366,7 @@ function showHelp() {
 function showSettings(from = "menu") {
   openDialog(
     "DRONE SYSTEMS",
-    `<label class="setting">MUSIC <input id="music-vol" type="range" min="0" max="1" step=".05" value="${settings.music}" aria-label="Music volume"></label><label class="setting">EFFECTS <input id="sfx-vol" type="range" min="0" max="1" step=".05" value="${settings.sfx}" aria-label="Effects volume"></label><div class="setting"><span>FIRE MODE</span><button id="option-fire">${settings.auto ? "AUTO FIRE" : "HOLD TO FIRE"}</button></div><div class="setting"><span>REDUCED MOTION</span><button id="option-motion">${settings.motion ? "ON" : "OFF"}</button></div><div class="setting"><span>VISUAL QUALITY</span><button id="option-quality">${settings.quality.toUpperCase()}</button></div><p>Three-dimensional geometry is retained in every mode. Low effects disables bloom and reduces particles. Auto adapts if the frame rate stays low.</p>`,
+    `<label class="setting">MUSIC <input id="music-vol" type="range" min="0" max="1" step=".05" value="${settings.music}" aria-label="Music volume"></label><label class="setting">EFFECTS <input id="sfx-vol" type="range" min="0" max="1" step=".05" value="${settings.sfx}" aria-label="Effects volume"></label><div class="setting"><span>FIRE MODE</span><button id="option-fire">${settings.auto ? "AUTO FIRE" : "HOLD TO FIRE"}</button></div><div class="setting"><span>REDUCED MOTION</span><button id="option-motion">${settings.motion ? "ON" : "OFF"}</button></div><div class="setting"><span>VISUAL QUALITY</span><button id="option-quality">${settings.quality.toUpperCase()}</button></div><p>Ultra adds full-resolution light, three haze layers and sharper shadows. High keeps wet-floor reflections, volumetric haze and post effects. Low disables bloom, reflections and haze and reduces particles. Auto starts at the best tier for your screen and steps down if the frame rate stays low.</p>`,
   );
   for (const name of ["music", "sfx"])
     $(name + "-vol").oninput = (e) => {
@@ -386,10 +394,10 @@ function showSettings(from = "menu") {
     $("option-motion").textContent = settings.motion ? "ON" : "OFF";
   };
   $("option-quality").onclick = () => {
-    const modes = ["auto", "high", "low"];
-    settings.quality = modes[(modes.indexOf(settings.quality) + 1) % 3];
+    const modes = ["auto", "ultra", "high", "low"];
+    settings.quality = modes[(modes.indexOf(settings.quality) + 1) % 4];
     save();
-    world.setQuality(settings.quality === "low");
+    world.setQuality(tierFor(settings.quality));
     $("option-quality").textContent = settings.quality.toUpperCase();
   };
   action("BACK", () => (from === "pause" ? ui.pause() : close()), true);
@@ -399,7 +407,7 @@ async function boot() {
   boards = new Scores();
   sound = new Sound(settings);
   world = new World($("world"), settings);
-  world.setQuality(settings.quality === "low");
+  world.setQuality(tierFor(settings.quality));
   game = new Game(world, sound, settings, ui);
   $("deploy").onclick = () => game.start();
   $("watch").onclick = () => game.start(true);
@@ -447,6 +455,7 @@ async function boot() {
       steps++;
     }
     world.update(Math.min(0.05, dt), game);
+    sound.update(Math.min(0.05, dt), game);
     frames++;
     lifeFrames++;
     elapsed += realDt;
@@ -455,12 +464,16 @@ async function boot() {
       frames = 0;
       elapsed = 0;
       if (settings.quality === "auto" && !world.low) {
-        slowWindows = fps < 33 ? slowWindows + 1 : 0;
+        slowWindows = fps < (world.level === "ultra" ? 50 : 33) ? slowWindows + 1 : 0;
         if (slowWindows >= 3) {
-          world.setQuality(true);
+          slowWindows = 0;
+          const next = world.level === "ultra" ? "high" : "low";
+          world.setQuality(next);
           ui.radio(
             "SYSTEMS / ADAPTIVE RENDER",
-            "Low-effects mode enabled to keep the line moving.",
+            next === "high"
+              ? "Render tier lowered to High to hold the frame rate."
+              : "Low-effects mode enabled to keep the line moving.",
           );
         }
       }
@@ -479,7 +492,12 @@ async function boot() {
         drawCalls: world.renderer.info.render.calls,
         triangles: world.renderer.info.render.triangles,
         low: !!world.low,
+        level: world.level,
         particles: world.particles.length,
+        sparks: world.sparks.length,
+        smoke: world.smoke.puffs.length,
+        lights: world.lightField.count,
+        streaks: world.streaks.count,
         settings: { ...settings },
       }),
       start: () => game.start(),

@@ -5,6 +5,41 @@ import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js"
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+import {
+  LightField,
+  installFieldLighting,
+  patchLitShader,
+  fieldUniforms,
+  makeHaze,
+  makeDust,
+} from "./fx/lightfield.js";
+import { Streaks, KIND } from "./fx/streaks.js";
+import { Smoke, Scorch } from "./fx/smoke.js";
+import { makeGradePass } from "./fx/post.js";
+
+// Lit materials sample the shared light field; patch before anything compiles.
+installFieldLighting();
+export const TIERS = {
+  ultra: {
+    ratio: 2,
+    shadow: 2048,
+    field: 1.45,
+    haze: 3,
+    reflect: 0.5,
+    dust: 2600,
+    fx: 1.25,
+  },
+  high: {
+    ratio: 1.5,
+    shadow: 1024,
+    field: 1,
+    haze: 2,
+    reflect: 0.4,
+    dust: 1500,
+    fx: 1,
+  },
+  low: { ratio: 1, shadow: 0, field: 0.6, haze: 0, reflect: 0, dust: 500, fx: 0.5 },
+};
 
 export const SECTORS = [
   {
@@ -240,7 +275,7 @@ export function droneModel(type = "vanguard", enemy = false) {
   const flame = new T.Sprite(
     new T.SpriteMaterial({
       map: glowTex,
-      color: c,
+      color: new T.Color(c).multiplyScalar(2.4),
       transparent: true,
       depthWrite: false,
       blending: T.AdditiveBlending,
@@ -249,6 +284,7 @@ export function droneModel(type = "vanguard", enemy = false) {
   flame.position.set(0, 0.25, 0.95);
   flame.scale.set(1.2, 0.7, 1);
   flame.name = "flame";
+  flame.layers.enable(1);
   group.add(flame);
   if (enemy) {
     const telegraph = new T.Mesh(threatGeo, threatMat);
@@ -368,9 +404,41 @@ export class World {
       new T.WebGLRenderTarget(1, 1, { type: T.HalfFloatType }),
     );
     this.composer.addPass(new RenderPass(this.scene, this.camera));
-    this.bloom = new UnrealBloomPass(new T.Vector2(1, 1), 0.48, 0.5, 1.05);
+    this.bloom = new UnrealBloomPass(new T.Vector2(1, 1), 0.62, 0.55, 0.92);
     this.composer.addPass(this.bloom);
+    this.grade = makeGradePass();
+    this.composer.addPass(this.grade);
     this.composer.addPass(new OutputPass());
+    this.lightField = new LightField(this.renderer);
+    this.streaks = new Streaks(6000);
+    this.scene.add(this.streaks.mesh);
+    this.smoke = new Smoke(1100);
+    this.scene.add(this.smoke.mesh);
+    this.scorch = new Scorch(56);
+    this.scene.add(this.scorch.mesh);
+    this.haze = makeHaze(3);
+    this.scene.add(this.haze);
+    this.reflectCam = new T.PerspectiveCamera();
+    this.reflectCam.layers.set(1);
+    this.reflectMatrix = new T.Matrix4();
+    this.reflectTarget = new T.WebGLRenderTarget(1, 1, {
+      type: T.HalfFloatType,
+      depthBuffer: true,
+    });
+    this.sparks = [];
+    this.flares = [];
+    this.waves = [];
+    this.fieldRings = [];
+    this.arcs = [];
+    this.timeline = [];
+    this.arcT = 1.5;
+    this.trauma = 0;
+    this.fovKick = 0;
+    this.post = { damage: 0, flash: 0, aberration: 0, slow: 0 };
+    this.fxScale = 1;
+    this.tier = TIERS.high;
+    this.col = new T.Color();
+    this.col2 = new T.Color();
     this.scene.add(new T.HemisphereLight(0xa5d5de, 0x292019, 1.8));
     const sun = new T.DirectionalLight(0xffd5a2, 4.2);
     sun.position.set(-7, 16, 7);
@@ -406,7 +474,6 @@ export class World {
     this.makeEnvironment();
     this.makeParticleSystem();
     this.makeWreckageSystem();
-    this.makeProjectileBatches();
     this.ray = new T.Raycaster();
     this.plane = new T.Plane(new T.Vector3(0, 1, 0), -0.55);
     this.tmpVec = new T.Vector3();
@@ -414,6 +481,7 @@ export class World {
     this.distance = 0;
     this.shake = 0;
     this.sector = 0;
+    this.sectorLook(0);
     this.resize();
     this.renderer.info.autoReset = false;
     addEventListener("resize", () => this.resize());
@@ -439,15 +507,38 @@ export class World {
     this.scene.fog.density = 0.026 / this.camDistance;
     this.renderer.setSize(w, h);
     this.composer.setSize(w, h);
-    this.particleMaterial.uniforms.pixelScale.value = h / this.viewH;
+    const ratio = this.renderer.getPixelRatio();
+    this.particleMaterial.uniforms.pixelScale.value = (h * ratio) / this.viewH;
+    this.dust.material.uniforms.pixelScale.value = (h * ratio) / this.viewH;
+    this.grade.uniforms.resolution.value.set(w * ratio, h * ratio);
+    const k = this.tier?.reflect || 0.25;
+    this.reflectTarget.setSize(
+      Math.max(1, Math.round(w * ratio * k)),
+      Math.max(1, Math.round(h * ratio * k)),
+    );
     this.width = w;
     this.height = h;
   }
-  setQuality(low) {
-    this.low = low;
-    this.renderer.shadowMap.enabled = !low;
-    this.renderer.setPixelRatio(Math.min(devicePixelRatio, low ? 1 : 1.35));
+  // "ultra" | "high" | "low" (a boolean still means low / high).
+  setQuality(level) {
+    if (typeof level === "boolean") level = level ? "low" : "high";
+    const tier = TIERS[level] || TIERS.high;
+    this.level = level;
+    this.tier = tier;
+    this.low = level === "low";
+    this.fxScale = tier.fx;
+    this.renderer.shadowMap.enabled = tier.shadow > 0;
+    if (tier.shadow && this.sun.shadow.mapSize.x !== tier.shadow) {
+      this.sun.shadow.mapSize.set(tier.shadow, tier.shadow);
+      this.sun.shadow.map?.dispose();
+      this.sun.shadow.map = null;
+    }
+    this.renderer.setPixelRatio(Math.min(devicePixelRatio, tier.ratio));
     this.composer.setPixelRatio(this.renderer.getPixelRatio());
+    this.lightField.setResolution(tier.field);
+    this.haze.children.forEach((m, i) => (m.visible = i < tier.haze));
+    this.dust.geometry.setDrawRange(0, tier.dust);
+    this.floorUniforms.reflectOn.value = tier.reflect ? 1 : 0;
     this.resize();
   }
   makeEnvironment() {
@@ -488,6 +579,64 @@ export class World {
       metalness: 0.48,
       roughness: 0.32,
     });
+    this.floorUniforms = {
+      reflectTex: { value: this.reflectTarget.texture },
+      reflectMatrix: { value: this.reflectMatrix },
+      reflectOn: { value: 1 },
+      scrollZ: { value: 0 },
+      time: { value: 0 },
+    };
+    // Wet track bed: puddles that travel with the tunnel, darker and glossier,
+    // mirroring every bolt, flame and fireball above them.
+    floor.onBeforeCompile = (shader) => {
+      Object.assign(shader.uniforms, this.floorUniforms);
+      const wet = /* glsl */ `
+        uniform sampler2D reflectTex;
+        uniform mat4 reflectMatrix;
+        uniform float reflectOn, scrollZ, time;
+        float wh(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+        float wn(vec2 p) {
+          vec2 i = floor(p), f = fract(p);
+          f = f * f * (3.0 - 2.0 * f);
+          return mix(mix(wh(i), wh(i + vec2(1, 0)), f.x), mix(wh(i + vec2(0, 1)), wh(i + 1.0), f.x), f.y);
+        }
+        float wfbm(vec2 p) { return wn(p) * 0.55 + wn(p * 2.1 + 3.7) * 0.3 + wn(p * 4.3 + 9.1) * 0.15; }
+        vec2 tunnelXZ() { return vec2(vLfWorld.x, vLfWorld.z - scrollZ); }
+        float wetness() {
+          float lane = smoothstep(8.8, 7.6, abs(vLfWorld.x));
+          return smoothstep(0.42, 0.6, wfbm(tunnelXZ() * vec2(0.19, 0.13))) * lane;
+        }`;
+      shader.fragmentShader = shader.fragmentShader
+        .replace("#include <common>", "#include <common>\n" + wet)
+        .replace(
+          "#include <map_fragment>",
+          "#include <map_fragment>\nfloat wetK = wetness();\ndiffuseColor.rgb *= mix(1.0, 0.42, wetK);",
+        )
+        .replace(
+          "#include <roughnessmap_fragment>",
+          "#include <roughnessmap_fragment>\nroughnessFactor = mix(roughnessFactor, 0.06, wetK);",
+        )
+        .replace(
+          "#include <opaque_fragment>",
+          `if (reflectOn > 0.5) {
+            vec2 tp = tunnelXZ();
+            vec2 rip = vec2(wn(tp * 2.2 + time * 0.6), wn(tp * 2.2 - time * 0.55 + 7.0)) - 0.5;
+            vec4 rc = reflectMatrix * vec4(vLfWorld, 1.0);
+            vec2 ruv = rc.xy / rc.w + rip * mix(0.022, 0.004, wetK);
+            float spread = mix(0.011, 0.0025, wetK);
+            vec3 refl = texture2D(reflectTex, ruv).rgb * 0.36;
+            refl += texture2D(reflectTex, ruv + vec2(spread, 0.0)).rgb * 0.16;
+            refl += texture2D(reflectTex, ruv - vec2(spread, 0.0)).rgb * 0.16;
+            refl += texture2D(reflectTex, ruv + vec2(0.0, spread * 1.6)).rgb * 0.16;
+            refl += texture2D(reflectTex, ruv - vec2(0.0, spread * 1.6)).rgb * 0.16;
+            outgoingLight += refl * mix(0.12, 1.3, wetK);
+          }
+          #include <opaque_fragment>`,
+        );
+      // Field lighting goes in last so its varying is declared above the wet code.
+      patchLitShader(shader);
+    };
+    floor.customProgramCacheKey = () => "wet-floor";
     const deck = box(this.scene, floor, 0, -0.3, -22, 65, 0.3, 120);
     deck.receiveShadow = true;
     const ties = new T.InstancedMesh(boxGeo, rust, 400),
@@ -760,24 +909,7 @@ export class World {
       debris.setMatrixAt(i, o.matrix);
     }
     this.scene.add(debris);
-    const dustGeo = new T.BufferGeometry(),
-      arr = new Float32Array(450);
-    for (let i = 0; i < arr.length; i += 3) {
-      arr[i] = Math.sin(i * 5.62) * 14;
-      arr[i + 1] = ((i * 7.3) % 4) + 0.3;
-      arr[i + 2] = -45 + ((i * 3.141) % 64);
-    }
-    dustGeo.setAttribute("position", new T.BufferAttribute(arr, 3));
-    this.dust = new T.Points(
-      dustGeo,
-      new T.PointsMaterial({
-        color: 0xb6d8cc,
-        size: 0.035,
-        transparent: true,
-        opacity: 0.4,
-        depthWrite: false,
-      }),
-    );
+    this.dust = makeDust(TIERS.ultra.dust);
     this.scene.add(this.dust);
   }
   signTexture(i) {
@@ -817,6 +949,24 @@ export class World {
       x.material.map = this.signTexture(i);
       x.material.needsUpdate = true;
     });
+    this.sectorLook(index);
+  }
+  // Per-sector colour grade, haze and mote tint.
+  sectorLook(index) {
+    const s = SECTORS[index],
+      look = {
+        station: [[0, 0.004, 0.006], [0.98, 1.02, 1.05], 1.05],
+        forge: [[0.008, 0.003, 0], [1.08, 1, 0.88], 1.08],
+        water: [[0, 0.004, 0.01], [0.94, 1.02, 1.1], 1.02],
+        ghost: [[0.005, 0.003, 0.01], [1, 0.95, 1.08], 0.85],
+        surface: [[0.004, 0.005, 0.001], [1.05, 1.04, 0.95], 1.08],
+      }[s.kind],
+      G = this.grade.uniforms;
+    G.lift.value.fromArray(look[0]);
+    G.gain.value.fromArray(look[1]);
+    G.saturation.value = look[2];
+    this.sectorTint = new T.Color(s.color);
+    this.dust.material.uniforms.tint.value.setHex(s.accent).lerp(new T.Color(0xb6d8cc), 0.5);
   }
   makeParticleSystem() {
     const count = 1100;
@@ -853,16 +1003,8 @@ export class World {
     });
     const points = new T.Points(this.particleGeo, this.particleMaterial);
     points.frustumCulled = false;
+    points.layers.enable(1);
     this.scene.add(points);
-  }
-  makeProjectileBatches() {
-    this.boltMat = new T.MeshBasicMaterial({ color: 0xffffff });
-    this.bolts = new T.InstancedMesh(sphereGeo, this.boltMat, 700);
-    this.bolts.instanceMatrix.setUsage(T.DynamicDrawUsage);
-    this.bolts.frustumCulled = false;
-    this.scene.add(this.bolts);
-    this.boltObj = new T.Object3D();
-    this.boltColor = new T.Color();
   }
   makeWreckageSystem() {
     this.shards = [];
@@ -882,6 +1024,7 @@ export class World {
       mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);
       mesh.frustumCulled = false;
       mesh.count = 0;
+      mesh.layers.enable(1);
       this.scene.add(mesh);
       return mesh;
     };
@@ -1027,19 +1170,21 @@ export class World {
       if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
     }
   }
-  burst(x, z, color = 0xffb45d, n = 24, big = false) {
-    const c = new T.Color(color);
-    for (let i = 0; i < n * (this.low ? 0.55 : 1); i++) {
+  burst(x, z, color = 0xffb45d, n = 24, big = false, light = true) {
+    const c = new T.Color(color),
+      count = Math.round(n * this.fxScale);
+    for (let i = 0; i < count; i++) {
       const a = Math.random() * Math.PI * 2,
-        s = 1 + Math.random() * (big ? 10 : 6);
-      this.particles.push({
+        spark = light && i % 3 !== 0,
+        s = (1 + Math.random() * (big ? 10 : 6)) * (spark ? 1.7 : 1);
+      (spark ? this.sparks : this.particles).push({
         x,
         z,
         y: 0.65,
         vx: Math.sin(a) * s,
         vz: Math.cos(a) * s,
-        vy: 1 + Math.random() * 5,
-        life: 0.35 + Math.random() * 0.7,
+        vy: 1 + Math.random() * (spark ? 7 : 5),
+        life: spark ? 0.25 + Math.random() * 0.55 : 0.35 + Math.random() * 0.7,
         max: 1,
         size: 0.15 + Math.random() * (big ? 0.9 : 0.5),
         r: c.r,
@@ -1049,11 +1194,350 @@ export class World {
     }
     if (this.particles.length > 1100)
       this.particles.splice(0, this.particles.length - 1100);
+    if (this.sparks.length > 2400)
+      this.sparks.splice(0, this.sparks.length - 2400);
+    if (light)
+      this.lightField.flash(
+        x,
+        z,
+        c,
+        big ? 14 : 3,
+        big ? 5.5 : 2.2,
+        big ? 6 : 14,
+      );
     if (big) {
       this.flash.position.set(x, 2, z);
       this.flash.intensity = 70;
       this.shake = Math.max(this.shake, 0.22);
     }
+  }
+  // A real blast: light flash, fireball cooling into lit smoke, sparks,
+  // embers, a refracting shockwave, a burn mark and a kick to the camera.
+  explode(x, z, color = 0xffb45d, size = 1) {
+    const c = new T.Color(color),
+      hot = new T.Color(0xffa860).lerp(c, 0.3),
+      f = this.fxScale,
+      grow = Math.pow(size, 0.7),
+      rnd = Math.random;
+    this.lightField.flash(
+      x,
+      z,
+      hot,
+      16 * Math.min(size, 2.2),
+      3.6 + 2 * Math.min(size, 3),
+      5.5,
+      1,
+    );
+    this.flash.position.set(x, 2, z);
+    this.flash.color.copy(hot);
+    this.flash.intensity = Math.max(
+      this.flash.intensity,
+      28 * Math.min(size, 2.2),
+    );
+    const fire = Math.round((5 + 6 * size) * f);
+    for (let i = 0; i < fire; i++) {
+      const a = rnd() * Math.PI * 2,
+        sp = (1.2 + rnd() * 3.2) * Math.pow(size, 0.6);
+      this.smoke.spawn({
+        x: x + (rnd() - 0.5) * 0.4 * size,
+        y: 0.55 + rnd() * 0.5,
+        z: z + (rnd() - 0.5) * 0.4 * size,
+        vx: Math.sin(a) * sp,
+        vz: Math.cos(a) * sp,
+        vy: 0.4 + rnd() * 2.2,
+        size: (0.4 + rnd() * 0.35) * grow,
+        grow: (1.4 + rnd()) * grow,
+        life: 0.55 + rnd() * 0.6,
+        heat: 1,
+        cool: 1.5 + rnd() * 1.1,
+        drag: 3.4,
+        lift: 0.3,
+        alpha: 0.9,
+        tint: 0.1,
+      });
+    }
+    const smoke = Math.round((4 + 4.5 * size) * f);
+    for (let i = 0; i < smoke; i++) {
+      const a = rnd() * Math.PI * 2,
+        sp = (0.6 + rnd() * 1.8) * Math.pow(size, 0.5);
+      this.smoke.spawn({
+        x: x + (rnd() - 0.5) * 0.6 * size,
+        y: 0.5 + rnd() * 0.7,
+        z: z + (rnd() - 0.5) * 0.6 * size,
+        vx: Math.sin(a) * sp,
+        vz: Math.cos(a) * sp,
+        vy: 0.3 + rnd() * 0.9,
+        size: (0.55 + rnd() * 0.5) * grow,
+        grow: (0.8 + rnd() * 0.7) * grow,
+        life: 2 + rnd() * 1.8,
+        heat: 0.3 + rnd() * 0.2,
+        cool: 2.6,
+        drag: 1.7,
+        lift: 0.3,
+        alpha: 0.5 + rnd() * 0.15,
+        tint: 0.1 + rnd() * 0.07,
+      });
+    }
+    this.burst(x, z, color, 12 + 14 * size, size >= 1.4);
+    for (let i = 0; i < Math.round(10 * size * f); i++) {
+      const a = rnd() * Math.PI * 2,
+        sp = 5 + rnd() * 12;
+      this.sparks.push({
+        x,
+        z,
+        y: 0.7,
+        vx: Math.sin(a) * sp,
+        vz: Math.cos(a) * sp,
+        vy: 2 + rnd() * 8,
+        life: 0.4 + rnd() * 0.8,
+        max: 1,
+        r: 1,
+        g: 0.62,
+        b: 0.25,
+      });
+    }
+    this.flares.push({
+      x,
+      y: 0.9,
+      z,
+      r: hot.r,
+      g: hot.g,
+      b: hot.b,
+      size: 0.75 * grow,
+      life: 0.1,
+      max: 0.1,
+    });
+    this.shockwave(x, z, 0.012 * Math.min(3, size), size);
+    this.fieldRings.push({
+      x,
+      z,
+      c: hot,
+      t: 0,
+      life: 0.38 + 0.12 * size,
+      radius: 3 + 3.5 * size,
+      intensity: 5 * Math.min(size, 2.2),
+    });
+    this.scorch.add(x, z, 0.5 + 0.45 * size);
+    this.shake = Math.max(this.shake, 0.12 + 0.13 * size);
+    this.post.aberration = Math.max(this.post.aberration, 0.35 * size);
+    if (size >= 2) this.post.flash = Math.max(this.post.flash, 0.08 * size);
+  }
+  shockwave(x, z, strength, size = 1) {
+    this.waves.push({
+      x,
+      z,
+      t: 0,
+      life: 0.5 + 0.12 * size,
+      speed: 8 + 4.5 * size,
+      strength,
+    });
+    if (this.waves.length > 8) this.waves.shift();
+  }
+  muzzle(x, z, color, power = 1) {
+    const c = this.col2.set(color);
+    this.lightField.flash(x, z, c, 5.5 * power, 2.3, 30);
+    this.flares.push({
+      x,
+      y: 0.72,
+      z,
+      r: c.r * 2,
+      g: c.g * 2,
+      b: c.b * 2,
+      size: 0.42 * power,
+      life: 0.055,
+      max: 0.055,
+    });
+  }
+  impact(x, z, color) {
+    const c = this.col2.set(color);
+    for (let i = 0; i < Math.round(6 * this.fxScale); i++) {
+      const a = (Math.random() - 0.5) * 2.6,
+        sp = 4 + Math.random() * 9;
+      this.sparks.push({
+        x,
+        z,
+        y: 0.7,
+        vx: Math.sin(a) * sp,
+        vz: Math.cos(a) * sp,
+        vy: 1 + Math.random() * 4,
+        life: 0.15 + Math.random() * 0.3,
+        max: 1,
+        r: 0.6 + c.r * 0.4,
+        g: 0.6 + c.g * 0.4,
+        b: 0.6 + c.b * 0.4,
+      });
+    }
+    this.lightField.flash(x, z, c, 4.5, 1.8, 20);
+    this.flares.push({
+      x,
+      y: 0.75,
+      z,
+      r: 1.5,
+      g: 1.4,
+      b: 1.2,
+      size: 0.32,
+      life: 0.05,
+      max: 0.05,
+    });
+  }
+  playerHit(shielded, x, z) {
+    this.shieldUniforms.hit.value = 1;
+    this.shieldUniforms.hitDir.value
+      .set((Math.random() - 0.5) * 0.6, 0.2, -1)
+      .normalize();
+    this.post.aberration = Math.max(this.post.aberration, shielded ? 0.8 : 1.6);
+    this.post.damage = Math.max(this.post.damage, shielded ? 0.25 : 1);
+    this.lightField.flash(
+      x,
+      z,
+      this.col2.set(shielded ? 0x8bf7d7 : 0xff7050),
+      shielded ? 14 : 24,
+      4,
+      7,
+    );
+  }
+  pulseWave(x, z) {
+    const c = new T.Color(0xa6f6e6);
+    this.fieldRings.push({ x, z, c, t: 0, life: 1.1, radius: 30, intensity: 6 });
+    this.fieldRings.push({
+      x,
+      z,
+      c: new T.Color(0xffc578),
+      t: -0.08,
+      life: 0.9,
+      radius: 22,
+      intensity: 3.5,
+    });
+    this.lightField.flash(x, z, c, 12, 6, 7);
+    this.waves.push({ x, z, t: 0, life: 0.9, speed: 30, strength: 0.05 });
+    this.post.flash = Math.max(this.post.flash, 0.18);
+    this.post.aberration = Math.max(this.post.aberration, 1.4);
+    this.fovKick = Math.max(this.fovKick, 5);
+  }
+  // The boss keeps shuddering while internal blasts tear it open, then goes up.
+  bossDeath(mesh, x, z, color) {
+    const ghost = mesh.clone();
+    ghost.position.copy(mesh.position);
+    ghost.rotation.copy(mesh.rotation);
+    ghost.scale.copy(mesh.scale);
+    this.scene.add(ghost);
+    const at = this.t;
+    for (let i = 0; i < 8; i++)
+      this.timeline.push({
+        at: at + 0.12 + i * 0.17 + Math.random() * 0.08,
+        fn: () => {
+          const ox = (Math.random() - 0.5) * 4.2,
+            oz = (Math.random() - 0.5) * 2.2;
+          this.explode(x + ox, z + oz, i % 2 ? color : 0xffb46c, 1.05);
+          this.onBlast?.(x + ox, z + oz, 1.05);
+        },
+      });
+    this.timeline.push({
+      at: at + 1.6,
+      fn: () => {
+        this.remove(ghost);
+        this.shatter(ghost, x, z, color, 3.4);
+        this.explode(x, z, 0xfff0d0, 4.2);
+        this.post.flash = Math.max(this.post.flash, 0.4);
+        this.fovKick = Math.max(this.fovKick, 6);
+        this.fieldRings.push({
+          x,
+          z,
+          c: new T.Color(0xffd8a0),
+          t: 0,
+          life: 1.2,
+          radius: 34,
+          intensity: 7,
+        });
+        this.onBlast?.(x, z, 4.2);
+        this.dying = null;
+      },
+    });
+    this.dying = { mesh: ghost, x, z };
+  }
+  makeShield() {
+    this.shieldUniforms = {
+      color: { value: new T.Color(0x8bf4d7) },
+      opacity: { value: 0.1 },
+      time: { value: 0 },
+      hit: { value: 0 },
+      hitDir: { value: new T.Vector3(0, 0, -1) },
+    };
+    const material = new T.ShaderMaterial({
+      uniforms: this.shieldUniforms,
+      vertexShader: /* glsl */ `
+        varying vec3 vN;
+        varying vec3 vV;
+        varying vec3 vP;
+        void main() {
+          vec4 mv = modelViewMatrix * vec4(position, 1.0);
+          vN = normalize(normalMatrix * normal);
+          vV = -mv.xyz;
+          vP = normalize(position);
+          gl_Position = projectionMatrix * mv;
+        }`,
+      fragmentShader: /* glsl */ `
+        uniform vec3 color, hitDir;
+        uniform float opacity, time, hit;
+        varying vec3 vN;
+        varying vec3 vV;
+        varying vec3 vP;
+        vec2 hexCell(vec2 p) {
+          const vec2 s = vec2(1.0, 1.7320508);
+          vec4 hc = floor(vec4(p, p - vec2(0.5, 1.0)) / s.xyxy) + 0.5;
+          vec4 h = vec4(p - hc.xy * s, p - (hc.zw + 0.5) * s);
+          return dot(h.xy, h.xy) < dot(h.zw, h.zw) ? h.xy : h.zw;
+        }
+        void main() {
+          float fres = pow(1.0 - abs(dot(normalize(vN), normalize(vV))), 2.2);
+          vec2 sp = vec2(atan(vP.z, vP.x) * 3.8, acos(clamp(vP.y, -1.0, 1.0)) * 4.4);
+          vec2 h = abs(hexCell(sp));
+          float edge = 0.5 - max(dot(h, normalize(vec2(1.0, 1.7320508))), h.x);
+          float lines = 1.0 - smoothstep(0.0, 0.06, edge);
+          float scan = 0.5 + 0.5 * sin(vP.y * 18.0 - time * 4.0);
+          float ang = acos(clamp(dot(vP, hitDir), -1.0, 1.0));
+          float rip = exp(-pow((ang - (1.0 - hit) * 2.6) / 0.28, 2.0)) * hit;
+          float e = fres * 1.25 + lines * (0.18 + fres * 0.8) * (0.6 + 0.4 * scan) + rip * (2.2 + lines * 3.0) + hit * 0.35;
+          gl_FragColor = vec4(color * e * opacity * 5.0, 1.0);
+        }`,
+      transparent: true,
+      depthWrite: false,
+      blending: T.AdditiveBlending,
+      side: T.DoubleSide,
+    });
+    const mesh = new T.Mesh(new T.SphereGeometry(1.05, 40, 24), material);
+    mesh.layers.enable(1);
+    mesh.onBeforeRender = () => {
+      this.shieldUniforms.opacity.value = material.opacity;
+    };
+    return mesh;
+  }
+  // Live third rail shorting out: a jagged arc, a crackle of sparks and light.
+  spawnArc() {
+    const lanes = [-6, -3, 0, 3, 6],
+      x0 =
+        lanes[Math.floor(Math.random() * 5)] +
+        (Math.random() < 0.5 ? -0.53 : 0.53),
+      z0 = -30 + Math.random() * 36,
+      pts = [[x0, 0.04, z0]],
+      steps = 6 + Math.floor(Math.random() * 4),
+      reach = (Math.random() < 0.5 ? -1 : 1) * (0.5 + Math.random() * 1.3);
+    for (let i = 1; i <= steps; i++) {
+      const k = i / steps;
+      pts.push([
+        x0 + (Math.random() - 0.5) * 0.35 + Math.sin(k * Math.PI) * 0.15,
+        0.04 + Math.sin(k * Math.PI) * (0.35 + Math.random() * 0.45),
+        z0 + reach * k + (Math.random() - 0.5) * 0.18,
+      ]);
+    }
+    this.arcs.push({
+      pts,
+      t: 0,
+      life: 0.16 + Math.random() * 0.22,
+      seed: Math.random(),
+    });
+    this.burst(x0, z0 + reach * 0.5, 0xbff8ef, 7, false, false);
+    this.onArc?.(x0, z0);
   }
   ring(x, z, color = 0xffb45d, scale = 1) {
     const mesh = new T.Mesh(
@@ -1372,6 +1856,7 @@ export class World {
     const moving = game.state === "play" || game.state === "menu";
     const velocity =
       game.state === "menu" ? 3 : 5 + Math.min(6, game.wave * 0.15);
+    const scroll = moving ? velocity : 0;
     if (moving) {
       this.distance += dt * velocity;
       this.segments.forEach((p) => {
@@ -1379,20 +1864,33 @@ export class World {
         if (p.position.z > 15) p.position.z -= 75;
       });
       this.ties.position.z = this.distance % 1.1;
-      this.dust.position.z = (this.t * 0.4) % 8;
     }
     const menu = game.state === "menu";
     const desiredX = menu ? -6 : game.player.x * 0.08;
     this.camX =
       (this.camX || 0) + (desiredX - (this.camX || 0)) * Math.min(1, dt * 2);
     this.shake = Math.max(0, this.shake - dt);
-    const s = this.settings.motion ? 0 : this.shake * 0.4;
+    // Smooth trauma shake (squared, layered sines) instead of per-frame jitter.
+    const trauma = Math.min(1, this.shake * 1.6),
+      amp = this.settings.motion ? 0 : trauma * trauma * 0.55,
+      t = this.t;
     this.camera.position.set(
-      this.camX + (Math.random() - 0.5) * s,
-      this.tiltY * this.camDistance,
+      this.camX +
+        amp *
+          (Math.sin(t * 41) * 0.5 +
+            Math.sin(t * 67 + 1.3) * 0.3 +
+            Math.sin(t * 113 + 2) * 0.2),
+      this.tiltY * this.camDistance +
+        amp * 0.6 * (Math.sin(t * 47 + 0.7) * 0.6 + Math.sin(t * 89 + 2.1) * 0.4),
       this.tiltZ * this.camDistance + this.lookZ,
     );
     this.camera.lookAt(this.camX, 0, this.lookZ);
+    this.fovKick *= Math.exp(-dt * 3.5);
+    const fov = 50 + (this.settings.motion ? 0 : this.fovKick);
+    if (Math.abs(this.camera.fov - fov) > 0.01) {
+      this.camera.fov = fov;
+      this.camera.updateProjectionMatrix();
+    }
     this.camera.updateMatrixWorld();
     this.flash.intensity *= Math.exp(-dt * 10);
     this.updateWreckage(dt);
@@ -1488,25 +1986,6 @@ export class World {
       }
       return true;
     });
-    let count = 0;
-    for (const b of [...game.bullets, ...game.shots]) {
-      if (count >= 700) break;
-      this.boltObj.position.set(b.x, 0.7, b.z);
-      this.boltObj.rotation.y = Math.atan2(b.vx, b.vz);
-      this.boltObj.scale.set(
-        b.r * 1.1,
-        b.r * 0.75,
-        Math.max(b.r * 2, b.len || 0.45),
-      );
-      this.boltObj.updateMatrix();
-      this.bolts.setMatrixAt(count, this.boltObj.matrix);
-      this.boltColor.setHex(b.color);
-      this.boltColor.multiplyScalar(b.friendly ? 2.3 : 3);
-      this.bolts.setColorAt(count++, this.boltColor);
-    }
-    this.bolts.count = count;
-    this.bolts.instanceMatrix.needsUpdate = true;
-    if (this.bolts.instanceColor) this.bolts.instanceColor.needsUpdate = true;
     if (moving && Math.random() < dt * 7 && !this.low) {
       const side = Math.random() < 0.5 ? -1 : 1;
       this.burst(
@@ -1514,11 +1993,270 @@ export class World {
         Math.random() * 30 - 18,
         SECTORS[this.sector].accent,
         2,
+        false,
+        false,
       );
     }
+    this.updateEffects(dt, game, scroll);
     this.renderer.info.reset();
+    this.lightField.render();
     if (this.low) this.renderer.render(this.scene, this.camera);
-    else this.composer.render();
+    else {
+      if (this.tier.reflect) this.renderReflection();
+      this.composer.render();
+    }
+  }
+  updateEffects(dt, game, scroll) {
+    const LF = this.lightField,
+      S = this.streaks,
+      c = this.col,
+      t = this.t;
+    for (; this.timeline.length && this.timeline[0].at <= t; )
+      this.timeline.shift().fn();
+    this.timeline.sort((a, b) => a.at - b.at);
+    LF.begin();
+    S.begin(t);
+    this.smoke.uniforms.ambient.value.copy(this.scene.fog.color);
+    this.smoke.update(dt, scroll);
+    this.scorch.update(dt, scroll);
+    this.floorUniforms.scrollZ.value = this.distance % 4000;
+    this.floorUniforms.time.value = t;
+    this.haze.update(t, this.distance, this.sectorTint);
+    const du = this.dust.material.uniforms;
+    du.time.value = t;
+    du.scroll.value = this.distance % 74;
+    // Platform edge strips and wall neon: steady light that rolls past.
+    const sector = SECTORS[this.sector],
+      flicker =
+        sector.kind === "ghost"
+          ? 0.55 + 0.45 * (Math.sin(t * 23) > -0.7 ? 1 : 0.2) * (0.8 + 0.2 * Math.sin(t * 61))
+          : 1;
+    this.sectorLight.intensity = 28 * flicker;
+    const accent = this.col2.setHex(sector.accent);
+    c.setHex(sector.color);
+    for (const g of this.segments) {
+      const z = g.position.z;
+      for (const s of [-1, 1]) {
+        LF.add(s * 8.75, z, accent, 0.7, 1.3, 1.7, Math.PI / 2, 0.5);
+        LF.add(s * 9.9, z - 1.4, c, 0.75 * flicker, 2.6, 1, 0, 0.6);
+      }
+    }
+    // Player, escorts and supplies.
+    const p = game.player;
+    if (game.playerMesh?.visible) {
+      LF.add(p.x, p.z + 0.95, c.setHex(game.ship.color), 3.2, 2.5);
+      if (p.shield > 0 && game.state === "play")
+        LF.add(p.x, p.z, c.setHex(0x8bf4d7), 0.3 + p.shield * 0.005, 2.1);
+    }
+    for (const w of game.wings || [])
+      LF.add(w.mesh.position.x, w.mesh.position.z + 0.5, c.setHex(0x8eddd4), 1.4, 1.6);
+    for (const item of game.pickups)
+      LF.add(
+        item.x,
+        item.z,
+        c.setHex(item.mesh.userData.type === "shield" ? 0x8cf3d8 : item.mesh.userData.type === "charge" ? 0xffc66f : 0xb4b7ff),
+        2.4 + Math.sin(t * 5 + item.age * 3) * 0.8,
+        2.2,
+      );
+    // Hostiles: engines, firing tells and the boss core.
+    for (const e of game.enemies) {
+      if (e.dead) continue;
+      c.setHex(e.color);
+      if (e.type === "boss") {
+        LF.add(e.x, e.z + 1.1, c, 7 + Math.sin(t * 6) * 1.5, 4.5);
+        LF.add(e.x, e.z - 2.2, c.setHex(0xffb46c), 4, 3.2, 1.6);
+      } else LF.add(e.x, e.z - 0.95, c, 1.7, 1.9);
+      if (e.warning > 0) {
+        const k = 1 - e.warning / (e.type === "boss" ? 0.7 : 0.55);
+        LF.add(e.x, e.z + 0.4, c.setHex(0xff5a36), 2 + k * 9, e.type === "boss" ? 4.5 : 2.4);
+      }
+    }
+    // Express trains: headlight beam down the track, lit windows, wheel sparks.
+    for (const tr of game.trains) {
+      const front = tr.z + 1.6;
+      LF.add(tr.x, front + 5.5, c.setHex(0xfff0d0), 11, 2.1, 3.4, Math.PI / 2, 0.25);
+      LF.add(tr.x, tr.z - 3.4, c.setHex(0x95f5db), 2.2, 1.7, 3.6, Math.PI / 2);
+      for (const s of [-1, 1])
+        this.flares.push({ x: tr.x + s * 0.55, y: 0.52, z: front + 0.05, r: 3, g: 2.6, b: 2, size: 0.55, life: 0.02, max: 0.04 });
+      if (Math.random() < dt * 40) {
+        const s = Math.random() < 0.5 ? -1 : 1;
+        this.sparks.push({
+          x: tr.x + s * 0.85,
+          z: tr.z - Math.random() * 8,
+          y: 0.06,
+          vx: s * (2 + Math.random() * 4),
+          vz: 3 + Math.random() * 6,
+          vy: 1 + Math.random() * 3,
+          life: 0.25 + Math.random() * 0.3,
+          max: 1,
+          r: 1,
+          g: 0.7,
+          b: 0.35,
+        });
+      }
+    }
+    for (const w of game.warnings) {
+      const on = Math.floor(w.t * 5) % 2 === 0 || this.settings.motion;
+      LF.add(w.x, -4, c.setHex(0xff6a3a), on ? 3.2 : 0.8, 1.3, 15, Math.PI / 2, 0.5);
+      LF.add(w.x, -22, c.setHex(0xfff0d0), (2.4 - w.t) * 5, 3.2, 1.6, Math.PI / 2);
+    }
+    // Shots: every bolt lights the floor it flies over.
+    let lit = 0;
+    for (const b of game.bullets) {
+      const sp = Math.hypot(b.vx, b.vz) || 1,
+        nx = b.vx / sp,
+        nz = b.vz / sp,
+        len = (b.len || 0.5) * 2.4;
+      c.setHex(b.color);
+      S.push(b.x, 0.7, b.z, nx * len, 0, nz * len, b.r * 1.35, c.r * 2.6, c.g * 2.6, c.b * 2.6, 1, KIND.bolt);
+      if (lit++ < 360)
+        LF.add(b.x, b.z + 0.4, c, 2.1 + b.r * 6, 1.6 + b.r * 2, 1.6, Math.atan2(b.vz, b.vx));
+    }
+    for (const s of game.shots) {
+      c.setHex(s.color);
+      S.push(s.x, 0.7, s.z, s.vx * 0.025, 0, s.vz * 0.025, s.r * 2.4, c.r * 2.4, c.g * 2.4, c.b * 2.4, 1, KIND.orb, s.x * 0.37 + s.z * 0.11);
+      if (lit++ < 520) LF.add(s.x, s.z, c, 2.6, 1.7);
+    }
+    // Sparks are drawn as velocity streaks.
+    this.sparks = this.sparks.filter((q) => {
+      q.life -= dt;
+      if (q.life <= 0) return false;
+      q.x += q.vx * dt;
+      q.y += q.vy * dt;
+      q.z += q.vz * dt;
+      q.vy -= dt * 14;
+      const drag = Math.exp(-dt * 1.4);
+      q.vx *= drag;
+      q.vz *= drag;
+      if (q.y < 0.03) {
+        q.y = 0.03;
+        q.vy = Math.abs(q.vy) * 0.35;
+        q.vx *= 0.7;
+        q.vz *= 0.7;
+      }
+      const fade = Math.min(1, q.life * 3);
+      S.push(q.x, q.y, q.z, q.vx * 0.03, q.vy * 0.03, q.vz * 0.03, 0.035, q.r * 3.2, q.g * 3.2, q.b * 3.2, fade, KIND.spark);
+      return true;
+    });
+    this.flares = this.flares.filter((f) => {
+      f.life -= dt;
+      if (f.life <= 0) return false;
+      const k = f.life / f.max;
+      S.push(f.x, f.y, f.z, 0, 0, 0, f.size * (0.6 + 0.4 * k), f.r * 2, f.g * 2, f.b * 2, k, KIND.flare);
+      return true;
+    });
+    // Third-rail arcs.
+    if (scroll && !this.low) {
+      this.arcT -= dt;
+      if (this.arcT <= 0) {
+        this.arcT = 0.7 + Math.random() * 2.4;
+        this.spawnArc();
+      }
+    }
+    this.arcs = this.arcs.filter((a) => {
+      a.t += dt;
+      if (a.t >= a.life) return false;
+      for (const pt of a.pts) pt[2] += scroll * dt;
+      const k = 1 - a.t / a.life,
+        on = Math.sin(t * 90 + a.seed * 20) > -0.4 ? 1 : 0.25;
+      for (let i = 1; i < a.pts.length; i++) {
+        const [x0, y0, z0] = a.pts[i - 1],
+          [x1, y1, z1] = a.pts[i];
+        S.push(x1, y1, z1, x1 - x0, y1 - y0, z1 - z0, 0.06, 1.4, 3.2, 3.0, k, KIND.arc, a.seed + i);
+      }
+      const [x, , z] = a.pts[a.pts.length >> 1];
+      LF.add(x, z, c.setHex(0x9ff6e4), 16 * k * on, 3.2);
+      return true;
+    });
+    // Expanding rings of light (pulse, blasts).
+    this.fieldRings = this.fieldRings.filter((r) => {
+      r.t += dt;
+      if (r.t < 0) return true;
+      const k = r.t / r.life;
+      if (k >= 1) return false;
+      LF.ring(r.x, r.z, r.c, r.intensity * (1 - k) * (1 - k), 0.6 + r.radius * Math.sqrt(k), 0.82);
+      return true;
+    });
+    LF.updateFlashes(dt, scroll);
+    S.end();
+    // Shield shimmer and hit ripple.
+    if (this.shieldUniforms) {
+      this.shieldUniforms.time.value = t;
+      this.shieldUniforms.hit.value = Math.max(0, this.shieldUniforms.hit.value - dt * 1.6);
+    }
+    // The dying boss shudders in place until the final blast.
+    if (this.dying) {
+      const m = this.dying.mesh;
+      m.position.x = this.dying.x + (Math.random() - 0.5) * 0.18;
+      m.position.z = this.dying.z + (Math.random() - 0.5) * 0.12;
+      m.rotation.z = (Math.random() - 0.5) * 0.06;
+    }
+    // Post: shockwaves, chroma kicks, flashes, slow motion, sector grade.
+    const P = this.post,
+      G = this.grade.uniforms,
+      calm = this.settings.motion ? 0.3 : 1;
+    P.aberration *= Math.exp(-dt * 5);
+    P.damage *= Math.exp(-dt * 2.4);
+    P.flash *= Math.exp(-dt * 5.5);
+    P.slow += ((game.slow > 0 ? 1 : 0) - P.slow) * Math.min(1, dt * 6);
+    G.time.value = t;
+    G.aberration.value = 0.12 + Math.min(2, P.aberration) * calm;
+    G.damage.value = Math.min(1, P.damage);
+    G.flash.value = Math.min(1.2, P.flash) * (this.settings.motion ? 0.4 : 1);
+    G.slow.value = P.slow;
+    const asp = this.width / this.height,
+      v = this.tmpVec;
+    this.waves = this.waves.filter((w) => {
+      w.t += dt;
+      w.z += scroll * dt;
+      return w.t < w.life;
+    });
+    for (let i = 0; i < 8; i++) {
+      const w = this.waves[i],
+        out = this.grade.waves[i];
+      if (!w) {
+        out.set(0, 0, 0, 0);
+        continue;
+      }
+      const k = w.t / w.life,
+        r = 0.3 + w.speed * w.t;
+      v.set(w.x, 0.5, w.z).project(this.camera);
+      const cx = v.x * 0.5 + 0.5,
+        cy = v.y * 0.5 + 0.5;
+      v.set(w.x + r, 0.5, w.z).project(this.camera);
+      const rr = Math.abs(v.x * 0.5 + 0.5 - cx) * asp;
+      out.set(cx, cy, rr, w.strength * (1 - k) * (1 - k) * calm);
+    }
+  }
+  renderReflection() {
+    const cam = this.camera,
+      rc = this.reflectCam,
+      h = -0.15,
+      fwd = this.tmpVec.set(0, 0, -1).applyQuaternion(cam.quaternion);
+    rc.position.set(cam.position.x, 2 * h - cam.position.y, cam.position.z);
+    rc.up.set(0, 1, 0).applyQuaternion(cam.quaternion);
+    rc.up.y = -rc.up.y;
+    rc.lookAt(
+      cam.position.x + fwd.x,
+      2 * h - (cam.position.y + fwd.y),
+      cam.position.z + fwd.z,
+    );
+    rc.updateMatrixWorld();
+    rc.projectionMatrix.copy(cam.projectionMatrix);
+    rc.projectionMatrixInverse.copy(cam.projectionMatrixInverse);
+    this.reflectMatrix
+      .set(0.5, 0, 0, 0.5, 0, 0.5, 0, 0.5, 0, 0, 0.5, 0.5, 0, 0, 0, 1)
+      .multiply(rc.projectionMatrix)
+      .multiply(rc.matrixWorldInverse);
+    const r = this.renderer,
+      bg = this.scene.background;
+    this.scene.background = null;
+    r.setRenderTarget(this.reflectTarget);
+    r.setClearColor(0x000000, 1);
+    r.clear();
+    r.render(this.scene, rc);
+    r.setRenderTarget(null);
+    this.scene.background = bg;
   }
   remove(mesh, dispose = false) {
     if (!mesh) return;

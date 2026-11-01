@@ -1,4 +1,4 @@
-# Subway Siege: Ironline v3.0.1
+# Subway Siege: Ironline v3.1.0
 
 Three.js 0.184 / Vite 8. A separate 3D edition of the original Subway Siege,
 commissioned by Jez on 2026-11-01. No external runtime CDN or generative API calls.
@@ -27,14 +27,46 @@ Serve the repository root, not the source directory, to test the built game.
 - `src/scores.js`: local top ten and existing global worker. Board slug
   **`subway-siege-ironline`**; send `initials`, integer `score`, `wave`, `level`.
   Classic retains **`subway-siege`** and its original localStorage keys.
-- `src/audio.js`: six **ElevenLabs SFX v3** effects, explicitly requested with
-  `model_id: eleven_text_to_sound_v3`. Prompt manifest lives beside the MP3s.
-  Existing original soundtrack is reused; it is not presented as newly generated.
-  No API credentials are shipped. All effects are pre-generated static files.
+- `src/fx/lightfield.js`: the **light field**. Every bolt, engine, muzzle flash,
+  blast, train headlight, warning lane, third-rail arc and platform strip is
+  splatted each frame into a top-down HalfFloat irradiance map (one instanced
+  draw). All MeshStandard/Physical materials sample it via a prototype
+  `onBeforeCompile` hook, so hundreds of moving lights cost one small pass.
+  The same map drives the volumetric haze layers and the floating dust.
+- `src/fx/streaks.js`: one instanced batch of camera-facing capsules for player
+  bolts (white-hot core + halo), enemy plasma orbs, velocity-streaked sparks,
+  flares and arc segments.
+- `src/fx/smoke.js`: fireball puffs that cool through a blackbody ramp into
+  smoke lit by the light field, plus burn marks with cooling embers. Both live
+  in the tunnel frame (they scroll past).
+- `src/fx/post.js`: final HDR grade before ACES: shockwave refraction (8
+  analytic waves), impact chromatic split, exposure flash, slow-motion
+  desaturation, damage bleed, per-sector grade, vignette and grain.
+- Wet track bed (in `world.js`): moving puddles, darker/glossier, reflecting a
+  mirrored render of FX layer 1 (bolts, flames, fireballs, sparks, shield).
+- Tiers (`TIERS` in `world.js`): ultra / high / low. Auto picks ultra on
+  desktop-class screens, high on phones, and steps down on sustained low fps.
+- `src/audio.js`: spatial mix. Voices are panned across the tunnel, quieter,
+  duller and wetter up the line, with a short speed-of-sound delay; a synthetic
+  per-sector tunnel reverb (flutter echoes, darkening tail, foundry metal
+  rings) crossfades between sectors; music runs through WebAudio so it ducks
+  under big blasts and muffles on hull hits and during the rail-pulse slow
+  motion; sector ambience loops; synthesised sub-bass under explosions, drone
+  engine hum, tinnitus, low-hull heartbeat, train doppler.
+  Effects: **40 ElevenLabs SFX v3** clips in `audio-ironline-v4/` (8 per-weapon
+  shots, impacts, 4 explosion sizes + boss chain, shield/hull, pickups, train,
+  boss, stingers, 5 ambience loops; prompts in its `manifest.json`), plus the
+  six v3 clips still used for pulse, train pass and boss arrival. Loudness is
+  normalised to about -16 LUFS (loops -24). Existing original soundtrack is
+  reused; it is not presented as newly generated. No API credentials are
+  shipped. All effects are pre-generated static files.
 - All visual assets are procedural geometry / canvas textures, not generated images.
 - Explosions launch cached hull-outline edges as tumbling 3D vector fragments,
   with bright cores, colored glow and velocity trails. Three instanced layers
   share a 480-fragment cap; low quality retains the effect at a smaller count.
+  `world.explode()` adds the fireball, smoke, sparks, light flash, light ring,
+  shockwave, burn mark and camera trauma. Bosses die in a 1.6 s chain of
+  internal blasts while the hull shudders, then one final detonation.
 - Pickups are rotating shield crests, energy cells and weapon-specific miniature
   models. Their cached billboard labels name the actual weapon or supply amount,
   stay screen-readable on phones, and do not rotate with the item.
@@ -63,6 +95,11 @@ explicit, guarded against double-clicks, and reports remote failure truthfully.
 ## Verification
 
 `?qa=1` exposes a bounded `window.__ironline` test harness, absent by default.
+The built-in preview pane is often hidden, which stalls requestAnimationFrame:
+step frames yourself (`game.update(1/60); world.update(1/60, game)`) and read
+the canvas with `toDataURL` straight after a `world.update`. Offline audio
+checks: swap `window.AudioContext` for an `OfflineAudioContext`, build a new
+`Sound`, trigger events from `ctx.suspend(t)` callbacks and render.
 Tests must intercept **all score POSTs**: never pollute real boards with test rows.
 Browser QA receipts/screenshots are retained in GameMaster's
 `artifacts/subway-siege-20261101/`. Validate desktop and 390/375 px touch layouts,

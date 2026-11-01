@@ -1,0 +1,322 @@
+[
+  {
+    "file": "w_laser.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 0.6,
+    "loop": false,
+    "prompt": "Single crisp twin energy laser blaster shot, bright snappy zap with a tight electric snap and short shimmering tail, premium sci-fi arcade shooter weapon, isolated, dry, no music no speech."
+  },
+  {
+    "file": "w_lance.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 1.2,
+    "loop": false,
+    "prompt": "Single magnetic rail lance shot, a violent high-voltage crack with a supersonic whip and a deep metallic thunk, sizzling ionized tail, powerful sci-fi weapon, isolated, no music no speech."
+  },
+  {
+    "file": "w_plasma.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 0.6,
+    "loop": false,
+    "prompt": "Single plasma cannon pulse, wet bubbling energy blob launched with a soft throaty whoomp and a fizzing tail, sci-fi weapon, isolated, no music no speech."
+  },
+  {
+    "file": "w_tri.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 0.7,
+    "loop": false,
+    "prompt": "Three rapid sci-fi energy blaster shots fired in a tight burst, crisp bright pew pew pew, punchy arcade weapon, isolated, no music no speech."
+  },
+  {
+    "file": "w_heavy.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 1.0,
+    "loop": false,
+    "prompt": "Single heavy energy blaster cannon shot, chunky deep thump with a booming low-end punch and crackling energy discharge, mech weapon, isolated, no music no speech."
+  },
+  {
+    "file": "w_overheat.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 0.5,
+    "loop": false,
+    "prompt": "Single very short rapid-fire minigun energy round, tight sharp spit with a hot metallic ring, sci-fi gatling, isolated, no music no speech."
+  },
+  {
+    "file": "w_nova.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 0.8,
+    "loop": false,
+    "prompt": "Single sci-fi spread shotgun blast of five energy bolts fanning out, bright airy whoosh with a punchy crack, arcade weapon, isolated, no music no speech."
+  },
+  {
+    "file": "w_saw.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 1.0,
+    "loop": false,
+    "prompt": "Single spinning energy saw disc launched, a rising mechanical whirr with a metallic shing as it flies off, sci-fi weapon, isolated, no music no speech."
+  },
+  {
+    "file": "e_shot.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 0.6,
+    "loop": false,
+    "prompt": "Single hostile robot drone energy shot, low menacing buzzy blip with a nasty electric edge, sci-fi enemy fire, isolated, no music no speech."
+  },
+  {
+    "file": "e_charge.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 0.8,
+    "loop": false,
+    "prompt": "Short rising electrical charge-up whine of a robot weapon about to fire, quick crescendo of buzzing energy, warning tell, isolated, no music no speech."
+  },
+  {
+    "file": "boss_volley.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 1.5,
+    "loop": false,
+    "prompt": "Huge robot war machine fires a volley of heavy plasma cannons, multiple deep booming discharges with metallic clanks and energy roar, isolated, no music no speech."
+  },
+  {
+    "file": "hit_1.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 0.5,
+    "loop": false,
+    "prompt": "Single energy bolt striking armored robot hull, sharp metallic ping with a small electric spark crackle, isolated, dry, no music no speech."
+  },
+  {
+    "file": "hit_2.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 0.5,
+    "loop": false,
+    "prompt": "Single laser hit on thick steel plating, dull metallic clank with a hissing spark, isolated, dry, no music no speech."
+  },
+  {
+    "file": "boom_s1.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 1.2,
+    "loop": false,
+    "prompt": "Small flying robot drone explodes, a tight punchy pop with a burst of crackling sparks and small metal bits, game sound effect, isolated, no music no speech."
+  },
+  {
+    "file": "boom_s2.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 1.2,
+    "loop": false,
+    "prompt": "Small drone destroyed, sharp electrical bang with a quick fiery puff and tinkling debris, game sound effect, isolated, no music no speech."
+  },
+  {
+    "file": "boom_m1.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 2.0,
+    "loop": false,
+    "prompt": "Medium robot explosion, a deep punchy fireball blast with metallic tearing and debris scattering across concrete, game sound effect, isolated, no music no speech."
+  },
+  {
+    "file": "boom_m2.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 2.0,
+    "loop": false,
+    "prompt": "Armored drone blows apart, powerful boom with a crunchy metal rupture and electrical sizzle afterwards, game sound effect, isolated, no music no speech."
+  },
+  {
+    "file": "boom_l.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 3.0,
+    "loop": false,
+    "prompt": "Large heavy war robot explodes in a concrete tunnel, massive deep detonation with a rolling fireball roar, heavy metal plates crashing and clattering, cinematic, no music no speech."
+  },
+  {
+    "file": "boom_boss.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 5.0,
+    "loop": false,
+    "prompt": "Colossal boss machine destroyed, a chain of rapid internal explosions building into one enormous earth-shaking final detonation with a long rumbling debris tail, cinematic, no music no speech."
+  },
+  {
+    "file": "debris.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 2.0,
+    "loop": false,
+    "prompt": "Scattered metal debris and small bolts raining down and bouncing on a concrete floor after an explosion, clattering tinkling tail, isolated, no music no speech."
+  },
+  {
+    "file": "shield_hit.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 1.0,
+    "loop": false,
+    "prompt": "Energy force field absorbs a heavy hit, a resonant electric whomp with a crystalline shimmer and fizz, sci-fi shield impact, isolated, no music no speech."
+  },
+  {
+    "file": "hull_hit.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 1.2,
+    "loop": false,
+    "prompt": "Small spacecraft hull takes a direct hit, violent metallic crunch with sparks and a short distorted alarm chirp, sci-fi damage, isolated, no music no speech."
+  },
+  {
+    "file": "player_death.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 3.0,
+    "loop": false,
+    "prompt": "Player fighter drone destroyed, a sharp violent explosion followed by a dying electronic power-down whine and falling wreckage, cinematic game over hit, no music no speech."
+  },
+  {
+    "file": "pulse_ready.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 1.0,
+    "loop": false,
+    "prompt": "Weapon capacitor fully charged notification, a quick rising electric hum ending in a clean bright two-tone ready chime, sci-fi interface, isolated, no music no speech."
+  },
+  {
+    "file": "overdrive.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 2.0,
+    "loop": false,
+    "prompt": "Overdrive power surge activates, a fast turbine spin-up with a rising electric roar and a punchy bass hit at the end, sci-fi power-up, no music no speech."
+  },
+  {
+    "file": "pick_weapon.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 1.0,
+    "loop": false,
+    "prompt": "Sci-fi weapon power-up collected, a heavy mechanical gun loading clack followed by a bright energy charge ring, premium arcade, no music no speech."
+  },
+  {
+    "file": "pick_shield.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 1.0,
+    "loop": false,
+    "prompt": "Shield recharge collected, a soft rising crystalline shimmer with a warm resonant energy swell, sci-fi arcade power-up, no music no speech."
+  },
+  {
+    "file": "pick_charge.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 1.0,
+    "loop": false,
+    "prompt": "Energy cell collected, a quick electric zap-up with bright sparkling arpeggio blips, sci-fi arcade pickup, no music no speech."
+  },
+  {
+    "file": "train_horn.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 2.5,
+    "loop": false,
+    "prompt": "Subway train horn blasting two long loud tones echoing down a tunnel, approaching, no music no speech."
+  },
+  {
+    "file": "train_approach.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 3.0,
+    "loop": false,
+    "prompt": "Underground subway train approaching from a distance in a tunnel, building rumble, rails singing and screeching, rising wind, no music no speech."
+  },
+  {
+    "file": "boss_phase.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 2.5,
+    "loop": false,
+    "prompt": "Giant robot armor plates breaking off with a heavy metallic crack, followed by an angry mechanical roar and alarm siren whoop, boss phase change, no music no speech."
+  },
+  {
+    "file": "wave_clear.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 2.0,
+    "loop": false,
+    "prompt": "Short sector-cleared victory stinger, a triumphant synth brass swell with a sparkling shimmer, sci-fi arcade, no speech."
+  },
+  {
+    "file": "wave_alarm.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 2.0,
+    "loop": false,
+    "prompt": "Subway station emergency klaxon alarm, two short deep pulsing whoops echoing in a tunnel, no music no speech."
+  },
+  {
+    "file": "arc.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 1.0,
+    "loop": false,
+    "prompt": "Electric arc from a live subway third rail, violent crackling buzz and snapping sparks, isolated, no music no speech."
+  },
+  {
+    "file": "game_over.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 3.0,
+    "loop": false,
+    "prompt": "Dramatic game over sting, a deep descending power-down synth with a final low boom, dark sci-fi, no speech."
+  },
+  {
+    "file": "amb_station.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 20.0,
+    "loop": true,
+    "prompt": "Ambient loop of an abandoned underground subway station, deep electrical hum, distant water drips, faint distant train rumble and air ventilation, dark and atmospheric, seamless, no music no speech."
+  },
+  {
+    "file": "amb_forge.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 20.0,
+    "loop": true,
+    "prompt": "Ambient loop inside an underground foundry, roaring furnaces, rhythmic distant hammering machinery, hissing steam vents, low industrial drone, seamless, no music no speech."
+  },
+  {
+    "file": "amb_water.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 20.0,
+    "loop": true,
+    "prompt": "Ambient loop of a flooded underground tunnel, rushing water, constant dripping and splashing echoes, gurgling pipes, cavernous, seamless, no music no speech."
+  },
+  {
+    "file": "amb_ghost.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 20.0,
+    "loop": true,
+    "prompt": "Ambient loop of a haunted empty subway terminal, eerie low drone, flickering fluorescent light buzz, distant metallic creaks and faint wind, seamless, no music no speech."
+  },
+  {
+    "file": "amb_surface.mp3",
+    "provider": "ElevenLabs",
+    "model": "eleven_text_to_sound_v3",
+    "duration_requested": 20.0,
+    "loop": true,
+    "prompt": "Ambient loop near a tunnel mouth opening to the city surface, gusting wind, distant city traffic, faint birds, open air, seamless, no music no speech."
+  }
+]
