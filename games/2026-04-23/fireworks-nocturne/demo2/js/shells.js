@@ -1,7 +1,7 @@
 // The shell library. Each break type lays out its stars (direction, speed,
 // burn time, colour chemistry, tails) the way the real product is built, plus
 // how much smoke it leaves, how bright it lights the air and how it sounds.
-import { K_STAR, K_CRACKLE, K_FLASH, T_GOLD, T_SILVER, T_GLITTER, T_COLOR, T_KAMURO, T_STROBE } from './particles.js?v=4';
+import { K_STAR, K_CRACKLE, K_FLASH, T_GOLD, T_SILVER, T_GLITTER, T_COLOR, T_KAMURO, T_STROBE } from './particles.js?v=5';
 
 // Linear-light colours of the metal salts, with relative brightness.
 export const COLORS = {
@@ -354,10 +354,88 @@ export const SHELLS = {
   heart(B) { pattern(B, 'heart'); },
   smiley(B) { pattern(B, 'smiley'); },
   starshape(B) { pattern(B, 'star'); },
+  butterfly(B) { pattern(B, 'butterfly'); },
+  flower(B) { pattern(B, 'flower'); },
+  spiral(B) { pattern(B, 'spiral'); },
+  clover(B) { pattern(B, 'clover'); },
+  crescent(B) { pattern(B, 'crescent'); },
+  rings(B) { pattern(B, 'rings'); },
+  cube(B) { cube(B); },
+
+  // colour wave: every star changes colour, top first, so a band of the new
+  // colour sweeps down through the burst
+  ghost(B) {
+    const a = B.color || pickColor(B), b = second(B, true, a) || pickColor(B, a);
+    fib(B.count(120), B.r).forEach(d => star(B, d, { colA: col(a), colB: col(b), tChange: 0.18 + 0.55 * (1 - d[1]) / 2, life: 2.4 + B.inches * 0.08, lj: 0.04 }));
+    B.light(mix(col(a), col(b)), 1.0);
+    B.smokeLevel(1);
+    B.caption(`${COLORS[a].n} to ${COLORS[b].n} colour wave`);
+  },
+
+  // confetti: every star a different colour
+  confetti(B) {
+    const pal = B.palette || COLOR_KEYS;
+    fib(B.count(130), B.r).forEach(d => star(B, d, { colA: col(B.r.pick(pal)), life: 1.8 + B.inches * 0.07, glowR: 0.5 }));
+    B.light([1, 0.85, 0.85], 1.0);
+    B.smokeLevel(1);
+    B.caption('confetti peony');
+  },
+
+  // falling leaves: slow gold stars that flicker as they tumble down
+  leaves(B) {
+    const a = B.color && B.color !== 'gold' ? B.color : null;
+    fib(B.count(42), B.r).forEach(d => star(B, d, { colA: a ? col(a, 1.2) : col('gold', 1.3), life: 5.2, q: 2.5, R: B.R * 0.6, kg: 2.2, glowR: 0.8, strobe: 2.4 + B.r() * 2.6, flicker: 0.3 }));
+    B.light(a ? col(a) : [1, 0.6, 0.25], 0.5, 5);
+    B.smokeLevel(0.9);
+    B.caption(a ? `${COLORS[a].n} falling leaves` : 'gold falling leaves');
+  },
+
+  // glitter tips: coloured stars that burst into glitter as they burn out
+  glittertips(B) {
+    const a = B.color || pickColor(B);
+    const life = 2.2 + B.inches * 0.08;
+    fib(B.count(100), B.r).forEach(d => star(B, d, { colA: col(a), life, tail: { kind: T_GLITTER, rate: 34 * B.tailRate, life: 1.1, eject: 1.4, inherit: 0.12, ks: 2.6, power: 0.42 / B.tailRate, delay: life * 0.55 } }));
+    B.light(col(a), 1.0, 2.8);
+    B.smokeLevel(1.2);
+    B.caption(`${COLORS[a].n} peony with glitter tips`);
+  },
+
+  // snowfall: white stars drifting down slowly in a haze of sparkle
+  snowfall(B) {
+    const a = B.color && B.color !== 'white' ? B.color : 'white';
+    fib(B.count(64), B.r).forEach(d => star(B, d, { colA: col(a, 0.55), life: 5.4, q: 2.6, R: B.R * 0.7, kg: 2.0, glowR: 0.5, flicker: 0.35, tail: tailGlitter(B, 2.4, 14, 0.36) }));
+    B.light(a === 'white' ? [0.95, 0.97, 1] : col(a), 0.5, 5.2);
+    B.smokeLevel(0.9);
+    B.caption(a === 'white' ? 'snowfall' : `${COLORS[a].n} snowfall`);
+  },
+
+  // diadem: a gold crown with a coloured pistil at its heart
+  diadem(B) {
+    const p = B.color2 && B.color2 !== 'none' ? B.color2 : pickColor(B);
+    fib(B.count(110), B.r).forEach(d => star(B, d, { colA: col('gold', 0.34), life: 3.8 + B.inches * 0.1, q: 4.2, kg: 1.05, glowR: 0.5, tail: tailKamuro(B, 2.6 + B.inches * 0.06, 26, 0.3), flicker: 0.4 }));
+    fib(Math.round(B.count(110) * 0.35), B.r).forEach(d => star(B, d, { colA: col(p, 1.2), R: B.R * 0.36, life: 1.8, glowR: 0.55 }));
+    B.light([1.0, 0.6, 0.3], 1.1, 3.6);
+    B.smokeLevel(2.2);
+    B.caption(`gold diadem with ${COLORS[p].n} pistil`);
+  },
 };
 
+const PATTERN_COLOURS = {
+  heart: ['red', 'pink', 'red'], smiley: ['yellow', 'lemon', 'orange'], star: ['white', 'aqua', 'green', 'blue'],
+  butterfly: ['purple', 'aqua', 'pink', 'blue'], flower: ['pink', 'red', 'purple', 'orange'], spiral: ['aqua', 'white', 'green', 'lemon'],
+  clover: ['green', 'lemon'], crescent: ['lemon', 'yellow', 'white'],
+};
+const PATTERN_NAMES = {
+  heart: 'heart pattern shell', smiley: 'smiley-face pattern shell', star: 'five-point star pattern shell', butterfly: 'butterfly pattern shell',
+  flower: 'flower pattern shell', spiral: 'two-armed spiral', clover: 'four-leaf clover', crescent: 'crescent moon', rings: 'linked rings',
+};
+
+// Outline shells: the stars are laid out in a flat shape and fly at speeds
+// proportional to their distance from the centre, so the shape grows whole.
+// The plane roughly faces the terrace, so from some angles it is edge-on,
+// as with the real thing.
 function pattern(B, kind) {
-  const a = B.color || (kind === 'heart' ? B.r.pick(['red', 'pink', 'red']) : kind === 'smiley' ? B.r.pick(['yellow', 'lemon', 'orange']) : B.r.pick(['white', 'aqua', 'green', 'blue']));
+  const a = B.color || B.r.pick(PATTERN_COLOURS[kind] || PATTERN_COLOURS.star);
   const nrm = facingPlane(B, 0.35);
   let [u, v] = basis(nrm);
   // keep the shape upright: v closest to world up
@@ -367,17 +445,42 @@ function pattern(B, kind) {
   const v2 = [u[0] * sa + v[0] * ca, u[1] * sa + v[1] * ca, u[2] * sa + v[2] * ca];
   u = u2; v = v2;
   if (v[1] < 0) { v = v.map(x => -x); u = u.map(x => -x); }
-  const pts = [];
+  const pts = []; // [x, y, colour key?]
   const N = B.count(70);
+  const curve = (n, f) => { for (let i = 0; i < n; i++) { const t = i / n * Math.PI * 2; pts.push(f(t)); } };
   if (kind === 'heart') {
-    for (let i = 0; i < N; i++) {
-      const t = i / N * Math.PI * 2;
-      pts.push([16 * Math.sin(t) ** 3 / 17, (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)) / 17]);
-    }
+    curve(N, (t) => [16 * Math.sin(t) ** 3 / 17, (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)) / 17]);
   } else if (kind === 'smiley') {
-    for (let i = 0; i < N; i++) { const t = i / N * Math.PI * 2; pts.push([Math.cos(t), Math.sin(t)]); }
+    curve(N, (t) => [Math.cos(t), Math.sin(t)]);
     for (let i = 0; i < 10; i++) { const t = i / 10 * Math.PI * 2; pts.push([-0.35 + Math.cos(t) * 0.08, 0.3 + Math.sin(t) * 0.08]); pts.push([0.35 + Math.cos(t) * 0.08, 0.3 + Math.sin(t) * 0.08]); }
     for (let i = 0; i <= 20; i++) { const t = Math.PI * (1.15 + 0.7 * i / 20); pts.push([Math.cos(t) * 0.55, -0.05 + Math.sin(t) * 0.55]); }
+  } else if (kind === 'butterfly') {
+    // four wings, the top pair larger, and a body down the middle
+    curve(Math.round(N * 1.2), (t) => { const r = Math.abs(Math.sin(2 * t)) * (Math.sin(t) > 0 ? 1 : 0.72); return [Math.cos(t) * r, Math.sin(t) * r * 0.9 + 0.05]; });
+    for (let i = 0; i < 9; i++) pts.push([0, -0.42 + i * 0.1, B.color2 && B.color2 !== 'none' ? B.color2 : a]);
+    for (const s of [-1, 1]) for (let i = 1; i <= 4; i++) pts.push([s * i * 0.05, 0.45 + i * 0.07]);
+  } else if (kind === 'flower') {
+    // six petals around a different-coloured centre
+    curve(Math.round(N * 1.3), (t) => { const r = 0.3 + 0.7 * Math.abs(Math.sin(3 * t)); return [Math.cos(t) * r, Math.sin(t) * r]; });
+    const c2 = B.color2 && B.color2 !== 'none' ? B.color2 : 'yellow';
+    for (let i = 0; i < 16; i++) { const t = i / 16 * Math.PI * 2; pts.push([Math.cos(t) * 0.16, Math.sin(t) * 0.16, c2]); }
+  } else if (kind === 'spiral') {
+    for (let arm = 0; arm < 2; arm++) for (let i = 1; i <= Math.round(N * 0.7); i++) {
+      const f = i / Math.round(N * 0.7), t = f * Math.PI * 2.6 + arm * Math.PI;
+      pts.push([Math.cos(t) * f, Math.sin(t) * f]);
+    }
+  } else if (kind === 'clover') {
+    curve(Math.round(N * 1.2), (t) => { const r = Math.abs(Math.cos(2 * t)) * 0.85 + 0.08; return [Math.cos(t + Math.PI / 4) * r, Math.sin(t + Math.PI / 4) * r + 0.1]; });
+    for (let i = 1; i <= 9; i++) { const f = i / 9; pts.push([0.04 + f * 0.18, 0.1 - f * 0.95]); }
+  } else if (kind === 'crescent') {
+    for (let i = 0; i < N; i++) { const t = (0.15 + 0.7 * i / N) * Math.PI * 2; pts.push([Math.cos(t), Math.sin(t)]); }
+    for (let i = 0; i < Math.round(N * 0.7); i++) { const t = (0.2 + 0.6 * i / Math.round(N * 0.7)) * Math.PI * 2; pts.push([0.42 + Math.cos(t) * 0.72, Math.sin(t) * 0.72]); }
+  } else if (kind === 'rings') {
+    // a chain of four linked rings, each its own colour
+    const set = B.r.pick([['pink', 'aqua', 'lemon', 'purple'], ['orange', 'aqua', 'pink', 'lemon'], ['purple', 'green', 'orange', 'aqua']]);
+    const rings = [-0.78, -0.26, 0.26, 0.78].map((cx, i) => [cx, i % 2 ? -0.1 : 0.1, set[i]]);
+    const n = Math.max(14, Math.round(N * 0.5));
+    for (const [cx, cy, k] of rings) for (let i = 0; i < n; i++) { const t = i / n * Math.PI * 2; pts.push([cx + Math.cos(t) * 0.31, cy + Math.sin(t) * 0.31, k]); }
   } else {
     const P = [];
     for (let i = 0; i < 10; i++) { const t = Math.PI / 2 + i / 10 * Math.PI * 2; const r = i % 2 ? 0.42 : 1; P.push([Math.cos(t) * r, Math.sin(t) * r]); }
@@ -389,21 +492,49 @@ function pattern(B, kind) {
   }
   const { c: cq } = speedFor(B.R, 4.5);
   const vBase = 4.5 / cq;
-  for (const [x, y] of pts) {
+  for (const [x, y, k] of pts) {
     const dir = [u[0] * x + v[0] * y, u[1] * x + v[1] * y, u[2] * x + v[2] * y];
     const m = Math.hypot(...dir) || 1;
     // speed proportional to distance from centre keeps the shape as it grows
-    B.add({ p0: B.pos, t0: B.t, v0: [dir[0] * vBase + B.vel[0] * 0.5, dir[1] * vBase + B.vel[1] * 0.5, dir[2] * vBase + B.vel[2] * 0.5], c: cq / Math.max(m, 0.15), kg: 0.85, life: 2.2, colA: col(a, 1.1), glowR: 0.6, seed: B.r(), flicker: 0.12 });
+    B.add({ p0: B.pos, t0: B.t, v0: [dir[0] * vBase + B.vel[0] * 0.5, dir[1] * vBase + B.vel[1] * 0.5, dir[2] * vBase + B.vel[2] * 0.5], c: cq / Math.max(m, 0.12), kg: 0.85, life: 2.2, colA: col(k || a, 1.1), glowR: 0.6, seed: B.r(), flicker: 0.12 });
+  }
+  B.light(kind === 'rings' ? [1, 0.9, 0.85] : col(a), 0.7);
+  B.smokeLevel(0.7);
+  B.caption(kind === 'rings' ? PATTERN_NAMES.rings : `${COLORS[a].n} ${PATTERN_NAMES[kind] || PATTERN_NAMES.star}`);
+}
+
+// A wireframe cube: stars along its twelve edges, turned at random, so it
+// reads as a solid shape from every viewpoint.
+function cube(B) {
+  const a = B.color || B.r.pick(['aqua', 'white', 'lemon', 'pink', 'blue']);
+  const rot = rotation(B.r);
+  const V = [];
+  for (let i = 0; i < 8; i++) V.push([(i & 1 ? 1 : -1) * 0.577, (i & 2 ? 1 : -1) * 0.577, (i & 4 ? 1 : -1) * 0.577]);
+  const per = Math.max(5, Math.round(B.count(84) / 12));
+  const { c: cq } = speedFor(B.R, 4.5);
+  const vBase = 4.5 / cq;
+  for (let i = 0; i < 8; i++) for (const bit of [1, 2, 4]) {
+    const j = i | bit;
+    if (j === i) continue;
+    for (let k = 0; k <= per; k++) {
+      if (k === per && bit !== 4) continue; // corners once
+      const f = k / per;
+      const p = mul(rot, [V[i][0] + (V[j][0] - V[i][0]) * f, V[i][1] + (V[j][1] - V[i][1]) * f, V[i][2] + (V[j][2] - V[i][2]) * f]);
+      const m = Math.hypot(...p) || 1;
+      B.add({ p0: B.pos, t0: B.t, v0: [p[0] * vBase + B.vel[0] * 0.5, p[1] * vBase + B.vel[1] * 0.5, p[2] * vBase + B.vel[2] * 0.5], c: cq / Math.max(m, 0.12), kg: 0.85, life: 2.4, colA: col(a, 1.1), glowR: 0.6, seed: B.r(), flicker: 0.1 });
+    }
   }
   B.light(col(a), 0.7);
   B.smokeLevel(0.7);
-  B.caption(kind === 'heart' ? 'heart pattern shell' : kind === 'smiley' ? 'smiley-face pattern shell' : 'five-point star pattern shell');
+  B.caption(`${COLORS[a].n} cube`);
 }
 
 export const SHELL_NAMES = {
   peony: 'Peony', chrysanthemum: 'Chrysanthemum', pistil: 'Pistil peony', dahlia: 'Dahlia', willow: 'Willow', kamuro: 'Kamuro',
   brocade: 'Brocade', palm: 'Palm', horsetail: 'Horsetail', ring: 'Ring', saturn: 'Saturn', crossette: 'Crossette', strobe: 'Strobe',
   crackle: 'Crackle', glitter: 'Glitter', spider: 'Spider', salute: 'Salute', multibreak: 'Multi-break', heart: 'Heart', smiley: 'Smiley', starshape: 'Star',
+  butterfly: 'Butterfly', flower: 'Flower', spiral: 'Spiral', clover: 'Clover', crescent: 'Crescent moon', rings: 'Linked rings', cube: 'Cube',
+  ghost: 'Colour wave', confetti: 'Confetti', leaves: 'Falling leaves', diadem: 'Diadem', glittertips: 'Glitter tips', snowfall: 'Snowfall',
 };
 
 function norm3(a) { const l = Math.hypot(...a); return a.map(v => v / l); }

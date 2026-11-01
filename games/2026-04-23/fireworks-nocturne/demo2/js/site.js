@@ -15,5 +15,6 @@ export const CAMERAS = [
   { id: 'terrace', name: 'Terrace', pos: [0, 19.75, -6.4], look: [-30, 132, -700], fov: 46, sway: 'hand' },
   { id: 'boat', name: 'On the water', pos: [-170, 2.6, -330], look: [-50, 200, -700], fov: 62, sway: 'boat' },
   { id: 'drone', name: 'Drone', pos: [0, 0, 0], look: [-45, 150, -700], fov: 58, sway: 'orbit' },
-  { id: 'postcard', name: 'Long lens', pos: [760, 128, 240], look: [-60, 120, -700], fov: 27, sway: 'tripod' },
+  { id: 'postcard', name: 'Long lens', pos: [760, 128, 240], look: [100, 110, -760], fov: 27, sway: 'tripod' },
+  { id: 'bridge', name: 'By the bridge', pos: [330, 26, 30], look: [180, 105, -820], fov: 48, sway: 'hand' },
 ];

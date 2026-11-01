@@ -1,18 +1,18 @@
 import * as THREE from 'three';
-import { TIERS, detectTier } from './quality.js?v=4';
-import { Particles } from './particles.js?v=4';
-import { Lights } from './lights.js?v=4';
-import { Smoke } from './smoke.js?v=4';
-import { World } from './world.js?v=4';
-import { Post } from './post.js?v=4';
-import { Fireworks } from './fireworks.js?v=4';
-import { Show } from './show.js?v=4';
-import { AudioEngine } from './audio.js?v=4';
-import { CameraRig, Director } from './camera.js?v=4';
-import { CAMERAS } from './site.js?v=4';
-import { SHELL_NAMES } from './shells.js?v=4';
-import { Crowd } from './crowd.js?v=4';
-import { Workshop } from './workshop.js?v=4';
+import { TIERS, detectTier } from './quality.js?v=5';
+import { Particles } from './particles.js?v=5';
+import { Lights } from './lights.js?v=5';
+import { Smoke } from './smoke.js?v=5';
+import { World } from './world.js?v=5';
+import { Post } from './post.js?v=5';
+import { Fireworks } from './fireworks.js?v=5';
+import { Show } from './show.js?v=5';
+import { AudioEngine } from './audio.js?v=5';
+import { CameraRig, Director } from './camera.js?v=5';
+import { CAMERAS } from './site.js?v=5';
+import { SHELL_NAMES } from './shells.js?v=5';
+import { Crowd } from './crowd.js?v=5';
+import { Workshop } from './workshop.js?v=5';
 
 const Q = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
@@ -50,7 +50,7 @@ const wind = [2.2, 0, -0.7];
 const fw = new Fireworks({ particles, smoke, lights, audio, tier, wind });
 const show = new Show(fw, world, audio);
 const rig = new CameraRig(camera);
-const director = new Director(rig, fw, $('fade'));
+const director = new Director(rig, fw, $('fade'), world);
 
 // one scene: sky, far world and fireworks on layer 0 (seen in the water too),
 // the near bank and the people on layer 1 (main view only)
@@ -84,10 +84,24 @@ const camIndex = Math.max(0, CAMERAS.findIndex(c => c.id === Q.get('cam')));
 rig.set(camIndex, true);
 if (Q.has('cam')) director.on = false;
 rig.update(0, innerWidth / innerHeight);
-show.seed = Number(Q.get('seed') || 1);
+// a new programme every visit (pin one with ?seed=), announced by caption
+show.seed = Number(Q.get('seed')) || 1 + Math.floor(Math.random() * 999999);
+function caption(small, text, ms = 3800) {
+  const el = $('caption');
+  el.innerHTML = `<small>${small}</small>${text}`;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), ms);
+}
+show.onProgram = (s) => {
+  if (workshop && workshop.on) return;
+  state.lastCaption = state.t + 2;
+  caption(`Programme ${s.number} · ${s.theme.name}`, `on ${s.weather.name}`, 5200);
+};
+let workshop = null;
 show.begin(0, show.seed);
 
-const workshop = new Workshop({
+workshop = new Workshop({
   fw, world, smoke, rig, camera, getTime: () => state.t,
   onToggle: (on) => {
     document.body.classList.toggle('ws', on);
@@ -104,11 +118,7 @@ fw.onBreak = (info) => {
   workshop.noteBreak(info);
   if (info.inches >= 4 && state.t - state.lastCaption > 1.3 && info.caption) {
     state.lastCaption = state.t;
-    const el = $('caption');
-    el.innerHTML = `<small>${info.inches}-inch shell</small>${info.caption}`;
-    el.classList.add('show');
-    clearTimeout(el._t);
-    el._t = setTimeout(() => el.classList.remove('show'), 3800);
+    caption(`${info.inches}-inch shell`, info.caption);
   }
   if (info.manual && info.inches >= 8 && Math.random() < 0.7) audio.crowd(Math.random() < 0.5 ? 'ooh' : 'wow', info.t + 0.4, 0.8);
 };
@@ -198,7 +208,11 @@ function step(dt) {
   const sdt = state.paused ? 0 : dt * state.scale;
   state.t += sdt;
   const t = state.t;
-  let wx = 2.2 + 1.3 * Math.sin(t * 0.011 + 1), wz = -0.7 + 0.6 * Math.sin(t * 0.017);
+  const W = show.weather || { wind: 2.2, clouds: 1, haze: 1e-4 };
+  let wx = W.wind * (0.85 + 0.25 * Math.sin(t * 0.011 + 1)), wz = -W.wind * 0.3 + 0.5 * Math.sin(t * 0.017);
+  const ease = Math.min(1, dt * 0.12);
+  world.skyU.uClouds.value += (W.clouds - world.skyU.uClouds.value) * ease;
+  lights.uniforms.uHaze.value += (W.haze - lights.uniforms.uHaze.value) * ease;
   if (workshop.on) { const w = workshop.wind(); wx = w * 0.94 + Math.min(w, 1.5) * 0.15 * Math.sin(t * 0.6); wz = -w * 0.34; }
   // ease toward it so drifting smoke and falling stars never jump
   const k = Math.min(1, sdt * 0.25);
@@ -213,8 +227,8 @@ function step(dt) {
   world.update(t, camera);
   crowd.update(t);
   workshop.update(t);
-  director.update(t, show.act(t), show.on && !workshop.on);
-  $('act').textContent = workshop.on ? 'Workshop' : show.on ? show.act(t) : 'Free launch';
+  director.update(t, show.actKey(t), show.on && !workshop.on);
+  $('act').textContent = workshop.on ? 'Workshop' : show.on ? `${show.act(t)} · ${show.theme.name}` : 'Free launch';
 }
 
 let last = performance.now();
@@ -304,7 +318,7 @@ function tapLaunch(x, y) {
   else launchChoice(target);
 }
 
-const MANUAL = ['peony', 'chrysanthemum', 'pistil', 'dahlia', 'willow', 'kamuro', 'brocade', 'palm', 'horsetail', 'ring', 'saturn', 'crossette', 'strobe', 'crackle', 'glitter', 'spider', 'salute', 'multibreak', 'heart', 'smiley', 'starshape'];
+const MANUAL = ['peony', 'chrysanthemum', 'pistil', 'dahlia', 'ghost', 'confetti', 'glittertips', 'willow', 'kamuro', 'diadem', 'brocade', 'palm', 'horsetail', 'leaves', 'snowfall', 'ring', 'saturn', 'crossette', 'strobe', 'crackle', 'glitter', 'spider', 'salute', 'multibreak', 'heart', 'smiley', 'starshape', 'butterfly', 'flower', 'spiral', 'clover', 'crescent', 'rings', 'cube'];
 function launchChoice(target) {
   const t = state.t;
   let kind = state.shell;
@@ -322,7 +336,7 @@ addEventListener('keydown', (e) => {
   if (e.target.tagName === 'INPUT') return;
   audioUnlock();
   const k = e.key.toLowerCase();
-  if (k >= '1' && k <= '4') { takeCamera(); setView(Number(k) - 1); }
+  if (k >= '1' && k <= '5') { takeCamera(); setView(Number(k) - 1); }
   else if (k === 'c') $('camBtn').click();
   else if (k === ' ') { e.preventDefault(); if (workshop.on) workshop.fire(); else launchChoice(null); }
   else if (k === 'w') $('labBtn').click();

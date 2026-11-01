@@ -2,10 +2,10 @@
 // drag curve with a fuse or tail, and break at the apex; the break builds its
 // star records, smoke, light and sound events. Everything is placed at its
 // scheduled show time, so late frames and seeking still land things exactly.
-import { StarBatch, K_FLASH, K_FUSE, K_GERB, K_CRACKLE, T_GOLD, T_SILVER, T_GLITTER, T_COLOR, T_FALL } from './particles.js?v=4';
-import { SHELLS, colorOf } from './shells.js?v=4';
-import { starPos, starVel, aimShell, rng } from './physics.js?v=4';
-import { SITE } from './site.js?v=4';
+import { StarBatch, K_FLASH, K_FUSE, K_GERB, K_CRACKLE, T_GOLD, T_SILVER, T_GLITTER, T_COLOR, T_FALL } from './particles.js?v=5';
+import { SHELLS, colorOf } from './shells.js?v=5';
+import { starPos, starVel, aimShell, rng } from './physics.js?v=5';
+import { SITE } from './site.js?v=5';
 
 const SHELL_C = 0.0032, SHELL_KG = 0.07;
 // Workshop modifiers; every value is clamped again here so no setting can
@@ -35,6 +35,7 @@ export class Fireworks {
     this.tailRate = tier.sparkK / 64;
     this.waterfallUntil = -1;
     this.breaks = []; // upcoming and recent breaks { t, inches }, for the camera director
+    this.waterfallFrom = Infinity;
   }
 
   seed(s) { this.r = rng(s); }
@@ -66,7 +67,7 @@ export class Fireworks {
   }
 
   // Shell from a barge to a break point. target [x, y, z] or null for a natural height.
-  launchShell({ t, type, inches = 6, barge, target, color, color2, rise, from, manual = false, mods }) {
+  launchShell({ t, type, inches = 6, barge, target, color, color2, palette, rise, from, manual = false, mods }) {
     const r = this.r;
     const mortar = from || this.bargePos(barge ?? r.int(0, SITE.barges.length - 1));
     const H = 32 * inches * (0.9 + r() * 0.2);
@@ -101,11 +102,11 @@ export class Fireworks {
     else if (rise !== 'none') this.audio.event('rise', t + 0.05, mortar, { size: inches });
     const pos = starPos([0, 0, 0], mortar, aim.v0, SHELL_C, SHELL_KG, tb, this.wind);
     const vel = starVel([0, 0, 0], aim.v0, SHELL_C, SHELL_KG, tb, this.wind);
-    this.schedule(t + tb, (tt) => this.burst({ t: tt, pos, vel, type, inches, color, color2, manual, mods }));
+    this.schedule(t + tb, (tt) => this.burst({ t: tt, pos, vel, type, inches, color, color2, palette, manual, mods }));
     return { tBreak: t + tb, pos };
   }
 
-  burst({ t, pos, vel = [0, 0, 0], type = 'peony', inches = 6, color, color2, depth = 0, manual = false, mods }) {
+  burst({ t, pos, vel = [0, 0, 0], type = 'peony', inches = 6, color, color2, palette, depth = 0, manual = false, mods }) {
     const r = this.r;
     const batch = new StarBatch(256);
     const recs = [];
@@ -117,7 +118,7 @@ export class Fireworks {
     const M = cleanMods(mods);
     const starCap = Math.round(1400 * T.starScale);
     const B = {
-      t, pos, vel, r, inches, R: 11 * inches * (mods ? 0.97 + r() * 0.06 : 0.9 + r() * 0.2) * M.spread, color, color2, axis, skew: (r() - 0.5) * 0.12,
+      t, pos, vel, r, inches, R: 11 * inches * (mods ? 0.97 + r() * 0.06 : 0.9 + r() * 0.2) * M.spread, color, color2, palette, axis, skew: (r() - 0.5) * 0.12,
       tailRate: this.tailRate,
       count: (base) => Math.min(starCap, Math.max(8, Math.round(base * 1.5 * Math.pow(inches / 6, 1.25) * T.starScale * M.count))),
       add: (s) => {
@@ -129,7 +130,7 @@ export class Fireworks {
           s.kg = (s.kg ?? 0.85) * M.hang;
           s.colA = s.colA.map(v => v * M.bright);
           if (s.colB) s.colB = s.colB.map(v => v * M.bright);
-          if (s.tail) s.tail = { ...s.tail, life: s.tail.life * M.tail, power: s.tail.power * M.bright };
+          if (s.tail) s.tail = { ...s.tail, life: s.tail.life * M.tail, power: s.tail.power * M.bright, delay: (s.tail.delay || 0) * M.life };
         }
         if (s.tail) {
           const maxRate = (tailK - 1) / (s.tail.life * 1.45);
@@ -276,6 +277,7 @@ export class Fireworks {
       this.smoke.puff(p, t0 + r() * life, [(r() - 0.5), -1.5, (r() - 0.5)], 0.6, 3, 2.5, 30 + r() * 15, 9, [0.8, 0.8, 0.82]);
     }
     this.audio.waterfall(t0, t1, world.bridgeAt(0.5, B.deckY - 20, 0));
+    this.waterfallFrom = t0;
     this.waterfallUntil = t1;
   }
 }

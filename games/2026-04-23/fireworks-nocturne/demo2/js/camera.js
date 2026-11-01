@@ -3,9 +3,15 @@
 // wheel or a pinch zooms, and switching glides from one view to the next.
 // The director cuts between views during the auto show, like a broadcast.
 import * as THREE from 'three';
-import { CAMERAS, SITE } from './site.js?v=4';
+import { CAMERAS, SITE } from './site.js?v=5';
 
 const v3 = (a) => new THREE.Vector3(a[0], a[1], a[2]);
+
+// Keep a usable width on tall screens: at least 72% of the 16:9 width.
+export function fitFov(fov, aspect) {
+  const hf = 2 * Math.atan(Math.tan(fov * Math.PI / 360) * (16 / 9)) * 0.72;
+  return Math.min(Math.max(fov, 2 * Math.atan(Math.tan(hf / 2) / aspect) * 180 / Math.PI), 100);
+}
 
 export class CameraRig {
   constructor(camera) {
@@ -39,8 +45,8 @@ export class CameraRig {
   }
   zoomBy(f) { this.tZoom = Math.max(0.6, Math.min(4, this.tZoom * f)); }
 
-  pose(t, out) {
-    const p = this.preset;
+  pose(t, out, index = this.index, offsets = true) {
+    const p = CAMERAS[index];
     const pos = v3(p.pos), look = v3(p.look);
     let roll = 0;
     if (p.sway === 'orbit') {
@@ -58,9 +64,9 @@ export class CameraRig {
     out.pos.copy(pos);
     const fwd = look.clone().sub(pos).normalize();
     // user look offsets
-    const yawQ = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), this.yaw);
+    const yawQ = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), offsets ? this.yaw : 0);
     fwd.applyQuaternion(yawQ);
-    const el = Math.asin(Math.max(-1, Math.min(1, fwd.y))) + this.pitch;
+    const el = Math.asin(Math.max(-1, Math.min(1, fwd.y))) + (offsets ? this.pitch : 0);
     const az = Math.atan2(fwd.x, -fwd.z);
     const ce = Math.max(-1.2, Math.min(1.35, el));
     fwd.set(Math.sin(az) * Math.cos(ce), Math.sin(ce), -Math.cos(az) * Math.cos(ce));
@@ -77,11 +83,9 @@ export class CameraRig {
     this.pitch += (this.tPitch - this.pitch) * k;
     this.zoom += (this.tZoom - this.zoom) * k;
     const o = { pos: new THREE.Vector3(), q: new THREE.Quaternion(), fov: 50 };
+    this.aspect = aspect;
     this.pose(this.clock, o);
-    // keep a usable width on tall screens
-    const hf = 2 * Math.atan(Math.tan(o.fov * Math.PI / 360) * (16 / 9)) * 0.72;
-    let fov = Math.max(o.fov, 2 * Math.atan(Math.tan(hf / 2) / aspect) * 180 / Math.PI);
-    fov = Math.min(fov, 100) / this.zoom;
+    let fov = fitFov(o.fov, aspect) / this.zoom;
     if (this.blend < 1 && this.from) {
       this.blend = Math.min(1, this.blend + dt / 2.6);
       const s = this.blend * this.blend * (3 - 2 * this.blend);
@@ -124,21 +128,26 @@ export class CameraRig {
 const PLAN = {
   Overture: ['terrace'],
   Colour: ['terrace', 'boat', 'postcard'],
-  'Gold and the falls': ['drone', 'postcard', 'terrace'],
-  Wonders: ['boat', 'terrace', 'drone'],
+  Gold: ['bridge', 'drone', 'postcard', 'terrace'],
+  Wonders: ['boat', 'terrace', 'drone', 'bridge'],
   Showpieces: ['postcard', 'terrace'],
   Finale: ['terrace'],
   Intermission: ['terrace'],
 };
+// views that can take in the bridge waterfall, best first
+const FALLS = ['bridge', 'terrace', 'postcard', 'boat', 'drone'];
 
 // Auto camera: a new view at each act, another every 15-24 s within an act,
 // never in the seconds around a big shell's break, and a quick dip to black
-// for each cut so the camera never flies through the scene.
+// for each cut so the camera never flies through the scene. While the bridge
+// waterfall pours, every view it uses has the falls in frame, so you can see
+// where that roar is coming from.
 export class Director {
-  constructor(rig, fw, fade) {
+  constructor(rig, fw, fade, world) {
     this.rig = rig;
     this.fw = fw;
     this.fade = fade;
+    this.world = world;
     this.on = true;
     this.act = null;
     this.k = 0;
@@ -146,6 +155,9 @@ export class Director {
     this.busy = false;
     this.onCut = null;
     this.log = [];
+    this.probe = new THREE.PerspectiveCamera(50, 1, 0.5, 16000);
+    this._o = { pos: new THREE.Vector3(), q: new THREE.Quaternion(), fov: 50 };
+    this._v = new THREE.Vector3();
   }
 
   index(id) { return CAMERAS.findIndex(c => c.id === id); }
@@ -153,6 +165,36 @@ export class Director {
 
   // no cut from 2.5 s before a big shell breaks to 2 s after
   quiet(t) { return !this.fw.breaks.some(b => b.inches >= 8 && b.t > t - 2 && b.t < t + 2.5); }
+
+  fallsOn(t) { return this.fw.waterfallFrom <= t && this.fw.waterfallUntil > t + 1; }
+
+  // Does this view show the waterfall? Two of three points along the curtain
+  // must land well inside the frame.
+  sees(id) {
+    const i = this.index(id);
+    if (i < 0) return false;
+    const o = this.rig.pose(this.rig.clock + 0.3, this._o, i, false);
+    const cam = this.probe;
+    cam.position.copy(o.pos);
+    cam.quaternion.copy(o.q);
+    cam.aspect = this.rig.aspect || 16 / 9;
+    cam.fov = fitFov(o.fov, cam.aspect);
+    cam.updateProjectionMatrix();
+    cam.updateMatrixWorld(true);
+    const B = SITE.bridge;
+    let n = 0;
+    for (const sp of [0.36, 0.5, 0.64]) {
+      const p = this.world.bridgeAt(sp, B.deckY - 18, -(B.width / 2));
+      const v = this._v.set(p[0], p[1], p[2]).project(cam);
+      if (v.z < 1 && Math.abs(v.x) < 0.9 && Math.abs(v.y) < 0.9) n++;
+    }
+    return n >= 2;
+  }
+
+  pickFalls(prefer) {
+    for (const id of [...prefer, ...FALLS]) if (this.sees(id)) return id;
+    return 'bridge';
+  }
 
   cut(id, t) {
     const i = this.index(id);
@@ -182,24 +224,41 @@ export class Director {
     this.busy = !!this.pending || now < (this.settle || 0);
     if (!this.on || !live || this.busy) return;
     const plan = PLAN[act] || ['terrace'];
+    const falls = this.fallsOn(t);
+    const usable = falls ? plan.filter(id => this.sees(id)) : plan;
     if (act !== this.act) {
+      const first = usable[0] || this.pickFalls(plan);
       // a new act's view waits (up to 12 s) for a moment without a big break
-      if (this.current() !== plan[0] && !this.quiet(t)) {
+      if (this.current() !== first && !this.quiet(t)) {
         if (this.waitFrom === undefined) this.waitFrom = t;
         if (t - this.waitFrom < 12) return;
       }
       this.waitFrom = undefined;
       this.act = act;
-      this.k = 0;
+      this.k = Math.max(0, plan.indexOf(first));
       this.next = t + 15 + Math.random() * 9;
-      if (this.current() !== plan[0]) this.cut(plan[0], t);
+      this.fallsCheck = t + 1;
+      if (this.current() !== first) this.cut(first, t);
       return;
     }
-    if (plan.length < 2 || t < this.next) return;
+    // the waterfall has started, or the drone has drifted round: bring it back
+    if (falls && t >= (this.fallsCheck || 0)) {
+      this.fallsCheck = t + 1;
+      if (!this.sees(this.current())) {
+        if (this.quiet(t) || t - (this.fallsWait ?? t) > 3) {
+          this.fallsWait = undefined;
+          this.cut(this.pickFalls(plan), t);
+          this.next = t + 15 + Math.random() * 9;
+          return;
+        }
+        if (this.fallsWait === undefined) this.fallsWait = t;
+      }
+    }
+    if (usable.length < 2 || t < this.next) return;
     if (!this.quiet(t)) { this.next = t + 0.5; return; }
-    this.k = (this.k + 1) % plan.length;
-    if (plan[this.k] === this.current()) this.k = (this.k + 1) % plan.length;
-    this.cut(plan[this.k], t);
+    let pick = usable[(usable.indexOf(this.current()) + 1) % usable.length];
+    if (pick === this.current()) pick = usable[(usable.indexOf(pick) + 1) % usable.length];
+    this.cut(pick, t);
     this.next = t + 15 + Math.random() * 9;
   }
 }

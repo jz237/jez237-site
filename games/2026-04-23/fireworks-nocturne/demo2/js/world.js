@@ -1,9 +1,9 @@
 // The harbour at night: sky, water, skyline, bridge, barges, boats, the far
 // quay and its Ferris wheel, and the terrace you watch from.
 import * as THREE from 'three';
-import { HASH, LIGHTS, NOISE } from './glsl.js?v=4';
-import { SITE } from './site.js?v=4';
-import { rng } from './physics.js?v=4';
+import { HASH, LIGHTS, NOISE } from './glsl.js?v=5';
+import { SITE } from './site.js?v=5';
+import { rng } from './physics.js?v=5';
 
 const FOG = /* glsl */ `
 uniform vec3 uFogCol;
@@ -96,7 +96,9 @@ const SPRITE_FS = /* glsl */ `
 varying vec3 vCol; varying vec2 vUV;
 void main() {
   float r2 = dot(vUV, vUV);
-  gl_FragColor = vec4(vCol * (exp(-r2 * 1.1) + 0.02 * exp(-r2 * 0.12)), 1.0);
+  // fade to nothing inside the quad so a bright, close lamp stays round
+  float win = 1.0 - smoothstep(4.0, 9.0, r2);
+  gl_FragColor = vec4(vCol * (exp(-r2 * 1.1) + 0.02 * exp(-r2 * 0.12)) * win, 1.0);
 }
 `;
 
@@ -198,7 +200,7 @@ void main() {
     vec3 P = cameraPosition + dir * t;
     vec2 q = P.xz / 1900.0 + vec2(uTime * 0.0021, uTime * 0.0006);
     float n = fbm(q);
-    float cov = smoothstep(0.5, 0.85, n) * uClouds;
+    float cov = min(1.0, smoothstep(0.5 - 0.08 * max(uClouds - 1.0, 0.0), 0.85, n) * uClouds);
     float cityUnder = exp(-length(P.xz - vec2(-200.0, -2600.0)) / 3200.0);
     vec3 cc = uCloudGlow * (0.35 + 1.6 * cityUnder) * (0.7 + 0.6 * n);
     cc += lightAt(P) * 0.55 * (0.6 + 0.8 * n);
@@ -708,7 +710,7 @@ export class World {
       this.litU.uLampC.value[i].set(1.0 * 3.2, 0.7 * 3.2, 0.4 * 3.2, 0);
     });
     // our bank's promenade lights to the sides, seen from other cameras
-    for (let x = -2000; x < 2000; x += 26) if (x < T.x0 || x > T.x1) sp.add([x, T.y + 4.2, T.wallZ + 1], 0.5, [1.0, 0.68, 0.38, 60], null, 1.1);
+    for (let x = -2000; x < 2000; x += 26) if (x < T.x0 || x > T.x1) sp.add([x, T.y + 4.2, T.wallZ + 1], 0.35, [1.0, 0.68, 0.38, 26], null, 1.1);
     this.near.add(new THREE.Mesh(b.geometry(), this.litMat()));
     this.near.add(sp.mesh());
     this.lampSprites = sp;

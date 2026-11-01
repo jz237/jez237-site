@@ -3,9 +3,9 @@
 // break height is kept where that calibre can actually get to with its stars
 // clear of the water, so nothing can be set up to look wrong.
 import * as THREE from 'three';
-import { SITE } from './site.js?v=4';
-import { SHELL_NAMES } from './shells.js?v=4';
-import { aimShell } from './physics.js?v=4';
+import { SITE } from './site.js?v=5';
+import { SHELL_NAMES } from './shells.js?v=5';
+import { aimShell } from './physics.js?v=5';
 
 const SWATCH = {
   red: '#ff3b2b', orange: '#ff8a22', yellow: '#ffd23f', lemon: '#e0ff5c', green: '#56ff4a', aqua: '#2ee8d8',
@@ -45,11 +45,24 @@ const TYPES = {
   heart: { colours: ALL, tails: false, fly: fly(4.5, 1, 0.85, () => 2.2) },
   smiley: { colours: ALL, tails: false, fly: fly(4.5, 1, 0.85, () => 2.2) },
   starshape: { colours: ALL, tails: false, fly: fly(4.5, 1, 0.85, () => 2.2) },
+  butterfly: { colours: ALL, second: ['Body', ALL, false], tails: false, fly: fly(4.5, 1, 0.85, () => 2.2) },
+  flower: { colours: ALL, second: ['Centre', ALL, false], tails: false, fly: fly(4.5, 1, 0.85, () => 2.2) },
+  spiral: { colours: ALL, tails: false, fly: fly(4.5, 1, 0.85, () => 2.2) },
+  clover: { colours: ALL, tails: false, fly: fly(4.5, 1, 0.85, () => 2.2) },
+  crescent: { colours: ALL, tails: false, fly: fly(4.5, 1, 0.85, () => 2.2) },
+  rings: { colours: null, tails: false, fly: fly(4.5, 1, 0.85, () => 2.2) },
+  cube: { colours: ALL, tails: false, fly: fly(4.5, 1, 0.85, () => 2.4) },
+  ghost: { colours: ALL, second: ['Turns to', ALL, false], tails: false, fly: fly(5, 1, 0.85, (i) => 2.4 + i * 0.08) },
+  confetti: { colours: null, tails: false, fly: fly(5, 1, 0.85, (i) => 1.8 + i * 0.07) },
+  leaves: { colours: ['gold', ...ALL], tails: false, fly: fly(2.5, 0.6, 2.2, () => 5.2) },
+  diadem: { colours: null, second: ['Pistil (centre)', ALL, false], tails: true, fly: fly(4.2, 1, 1.05, (i) => 3.8 + i * 0.1, 3.8) },
+  glittertips: { colours: ALL, tails: true, fly: fly(5, 1, 0.85, (i) => 2.2 + i * 0.08, 1.6) },
+  snowfall: { colours: ['white', ...ALL.filter(c => c !== 'white')], tails: true, fly: fly(2.6, 0.7, 2.0, () => 5.4, 3.4) },
   fan: { colours: ['gold', 'silver', ...ALL.filter(c => c !== 'silver')], tails: true, ground: true, label: 'Comet fan' },
   mine: { colours: ['gold', ...ALL], tails: true, ground: true, label: 'Mine' },
   waterfall: { colours: ['silver', 'gold'], tails: false, ground: true, label: 'Waterfall' },
 };
-const SHELL_ORDER = ['peony', 'chrysanthemum', 'pistil', 'dahlia', 'willow', 'kamuro', 'brocade', 'palm', 'horsetail', 'ring', 'saturn', 'crossette', 'strobe', 'crackle', 'glitter', 'spider', 'salute', 'multibreak', 'heart', 'smiley', 'starshape'];
+const SHELL_ORDER = ['peony', 'chrysanthemum', 'pistil', 'dahlia', 'ghost', 'confetti', 'glittertips', 'willow', 'kamuro', 'diadem', 'brocade', 'palm', 'horsetail', 'leaves', 'snowfall', 'ring', 'saturn', 'crossette', 'strobe', 'crackle', 'glitter', 'spider', 'salute', 'multibreak', 'heart', 'smiley', 'starshape', 'butterfly', 'flower', 'spiral', 'clover', 'crescent', 'rings', 'cube'];
 const RISES = [['tail', 'Gold tail'], ['silver', 'Silver tail'], ['glitter', 'Glitter'], ['whistle', 'Whistle'], ['none', 'Dark']];
 
 export const DEFAULTS = Object.freeze({
