@@ -48,3 +48,9 @@ export function massShare(own:number,other:number){
 }
 /** A car's damage after its weight share, still within the single-hit cap (an unshared hit is left exactly as it was). */
 export const sharedDamage=(damage:number,share:number)=>share===1||!Number.isFinite(share)?damage:Math.min(IMPACT_SPEED.cap,damage*share);
+/** Derby durability (offline derbies, the demo's too): cars take DERBY_WEAR.damage of the crash damage, and no single crash
+ * (weight share included) takes more than DERBY_WEAR.cap off a car. Before 2026-11-01 the opening charge alone took about
+ * half of every car's health and a player's car could be wrecked inside 15 seconds. Races, banger races, online events and
+ * every record keep their own balance. */
+export const DERBY_WEAR={damage:.55,cap:38} as const;
+export const derbyWear=(derby:boolean)=>derby?DERBY_WEAR:{damage:1,cap:IMPACT_SPEED.cap};

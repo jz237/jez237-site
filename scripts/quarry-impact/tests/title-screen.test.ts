@@ -8,9 +8,11 @@ test('the title screen steps through the cars and keeps the full roster behind A
   assert.ok(menu.includes('<div class="car-picker" id="car-list" hidden>'),'the roster starts closed');assert.ok(menu.includes('data-car="${k}"'),'controller navigation keeps its data-car identity');
   assert.ok(menu.includes("kind=roster[(roster.indexOf(kind)+by+roster.length)%roster.length]"),'wraps round both ends');
 });
-test('every menu route sits in the hub grid, and the class line under the car',()=>{
+test('every menu route sits in the hub grid, the demo buttons in their own row under it, and the class line under the car',()=>{
   assert.equal((menu.match(/ui\.querySelector\('\.intro'\)!\.append\(/g)??[]).length,0);
-  for(const v of ['garageButton','profileButton','dailyButton','trialButton','cupButton','venueButton','eventButton','watch','careerButton','demoSetup'])assert.ok(menu.includes(`hub.append(${v})`),v);
+  for(const v of ['garageButton','profileButton','dailyButton','trialButton','cupButton','venueButton','eventButton','careerButton'])assert.ok(menu.includes(`hub.append(${v})`),v);
+  assert.ok(menu.includes("const demoRow=document.createElement('div');demoRow.className='demo-row';hub.after(demoRow);")&&menu.includes('demoRow.append(watch,demoSetup);')&&!menu.includes('hub.append(watch)'));
+  assert.ok(css.includes('.demo-row{display:grid;')&&css.includes('.menu .intro.picking .demo-row{display:none}'),'set apart, and out of the way while the roster is open');
   assert.ok(menu.includes("ui.querySelector('.car-name')!.append(classInfo);"));
 });
 test('the mode cards and START stay on screen: the upper column scrolls on its own instead of pushing them off',()=>{

@@ -29,9 +29,9 @@ test('a large stretch is dulled once, keeping its own shader edits and a program
   assert.ok(shader.fragmentShader.startsWith('uniform float groundSheen;')&&shader.uniforms.groundSheen===groundSheen);
   assert.equal(dullSheen(own),false);
 });
-test('dry ground keeps a third of its sheen; rain gives it all back',()=>{
+test('dry ground keeps a third of its sheen; rain gives much of it back (not all: wet ground at a distance washed out to white)',()=>{
   setGroundWet(false);assert.equal(groundSheen.value,GROUND.specular);assert.ok(GROUND.specular>0&&GROUND.specular<.5);
-  setGroundWet(true);assert.equal(groundSheen.value,1);setGroundWet(false);assert.equal(groundSheen.value,GROUND.specular);
+  setGroundWet(true);assert.equal(groundSheen.value,GROUND.wet);assert.ok(GROUND.wet>GROUND.specular&&GROUND.wet<1);setGroundWet(false);assert.equal(groundSheen.value,GROUND.specular);
 });
 test('midday: a strong sun over a modest fill; the afternoon follows; every venue is dulled as it is built',()=>{
   assert.ok(QUARRY_DAYLIGHT.sun/QUARRY_DAYLIGHT.ambient>15,'sunlit and shaded ground read apart');

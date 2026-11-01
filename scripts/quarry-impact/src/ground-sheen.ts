@@ -2,13 +2,13 @@ import * as T from 'three';
 /** Dry ground: soil, gravel, rock and old asphalt are rough and dusty, and hardly shine. The standard shading gives every
  * surface a glassy sheen of the sky at grazing angles, which washes a sunlit floor out to near white in the chase camera's
  * view. Large rough surfaces of a venue (at least GROUND.area m² across the ground, not metal, not see-through, not
- * glossy) reflect GROUND.specular of that; in the rain (setGroundWet) the wet ground keeps its full shine. Applied once
+ * glossy) reflect GROUND.specular of that; in the rain (setGroundWet) the wet ground shines more (GROUND.wet). Applied once
  * to a venue as it is built, before its shaders are compiled. */
-export const GROUND={specular:.3,area:300,metal:.05,rough:.5} as const;
+export const GROUND={specular:.3,wet:.55,area:300,metal:.05,rough:.5} as const;
 /** How much of its sheen dry ground keeps (one value shared by every dulled material). */
 export const groundSheen={value:GROUND.specular as number};
 /** Rain on the event: the ground is wet and shines in full; dry again: dulled. */
-export function setGroundWet(wet:boolean){groundSheen.value=wet?1:GROUND.specular;}
+export function setGroundWet(wet:boolean){groundSheen.value=wet?GROUND.wet:GROUND.specular;}
 /** Whether a material is dry ground (by its own settings; the mesh decides by size). */
 export function isDryGround(m:T.Material):m is T.MeshStandardMaterial{
   const s=m as T.MeshStandardMaterial;

@@ -2,7 +2,7 @@ import * as T from 'three';
 /** Raindrops landing (offline rain): SPLASHES.count little rings spread over the ground within SPLASHES.reach m of the
  * camera, each opening out to SPLASHES.radius m and fading over SPLASHES.life s before landing again somewhere else.
  * One draw call; positions are set on the CPU as each ring lands (the ground height from the course). */
-export const SPLASHES={count:480,reach:14,radius:.18,life:[.35,.6],alpha:.42} as const;
+export const SPLASHES={count:480,reach:14,radius:.18,life:[.35,.6],alpha:.55,fade:[5,14]} as const;
 export type GroundHeight=(x:number,z:number)=>number;
 type Splash={age:number;life:number};
 export function createRainSplashes(scene:T.Object3D,random=Math.random){
@@ -11,8 +11,10 @@ export function createRainSplashes(scene:T.Object3D,random=Math.random){
   const offset=new T.InstancedBufferAttribute(new Float32Array(SPLASHES.count*3),3).setUsage(T.DynamicDrawUsage),phase=new T.InstancedBufferAttribute(new Float32Array(SPLASHES.count),1).setUsage(T.DynamicDrawUsage);
   geometry.setAttribute('offset',offset);geometry.setAttribute('phase',phase);geometry.instanceCount=SPLASHES.count;
   const material=new T.ShaderMaterial({transparent:true,depthWrite:false,uniforms:{radius:{value:SPLASHES.radius},alpha:{value:SPLASHES.alpha}},
-    vertexShader:`attribute vec3 offset;attribute float phase;uniform float radius;varying float vT;void main(){vT=phase;vec3 p=offset+position*radius*(.15+.85*phase);gl_Position=projectionMatrix*viewMatrix*vec4(p,1.);}`,
-    fragmentShader:`uniform float alpha;varying float vT;void main(){float a=alpha*(1.-vT)*smoothstep(0.,.12,vT);gl_FragColor=vec4(vec3(.82,.86,.9)*a,a);}`,blending:T.AdditiveBlending});
+    // A soft ripple, not a drawn circle: the band fades in from its inner edge and out to its outer one, and rings further
+    // off than SPLASHES.fade[0] m fade away by SPLASHES.reach (tiny crisp circles in the distance read as specks).
+    vertexShader:`attribute vec3 offset;attribute float phase;uniform float radius;varying float vT;varying float vBand;varying float vNear;void main(){vT=phase;vBand=length(position.xz);vec3 p=offset+position*radius*(.15+.85*phase);vNear=1.-smoothstep(${SPLASHES.fade[0].toFixed(1)},${SPLASHES.reach.toFixed(1)},distance(p,cameraPosition));gl_Position=projectionMatrix*viewMatrix*vec4(p,1.);}`,
+    fragmentShader:`uniform float alpha;varying float vT;varying float vBand;varying float vNear;void main(){float a=alpha*(1.-vT)*smoothstep(0.,.12,vT)*smoothstep(.72,.86,vBand)*(1.-smoothstep(.86,1.,vBand))*vNear;gl_FragColor=vec4(vec3(.82,.86,.9)*a,a);}`,blending:T.AdditiveBlending});
   const mesh=new T.Mesh(geometry,material);mesh.name='rain_splashes';mesh.frustumCulled=false;mesh.visible=false;mesh.renderOrder=2;scene.add(mesh);
   const drops:Splash[]=Array.from({length:SPLASHES.count},()=>({age:0,life:0}));let active=false,landed=0;
   const land=(i:number,c:T.Vector3,ground:GroundHeight,stagger:boolean)=>{const d=drops[i],a=random()*Math.PI*2,r=Math.sqrt(random())*SPLASHES.reach,x=c.x+Math.cos(a)*r,z=c.z+Math.sin(a)*r,y=ground(x,z);

@@ -4,6 +4,7 @@ import {withBarrierBoardsOf,boardSeed} from './barrier-boards';
 import * as T from 'three';
 import {createPhotoTrees,type PhotoTree} from './photo-trees';
 import {turf} from './turf';
+import {antiTile} from './anti-tile';
 import {MOORFIELD_SOLIDS} from './moorfield-speedbowl-arena';
 import {freezeSceneryTransforms} from './render-work';
 /** Moorfield Speedbowl: a raked-dirt stadium oval with grandstands along both straights,
@@ -13,7 +14,7 @@ export function createMoorfieldWorld(){
  const materials=withBarrierBoardsOf({concrete:new T.MeshStandardMaterial({color:0xc2bba8,roughness:.97}),red:new T.MeshStandardMaterial({color:0xa8352c,roughness:.88}),steel:new T.MeshStandardMaterial({color:0x2f3639,roughness:.7,metalness:.35}),seat:new T.MeshStandardMaterial({color:0x2c5a7a,roughness:.85}),roof:new T.MeshStandardMaterial({color:0xd8d2c0,roughness:.8}),lamp:new T.MeshStandardMaterial({color:0xfff2cc,emissive:0xfff2cc,emissiveIntensity:1.3,roughness:.4}),cream:new T.MeshStandardMaterial({color:0xe6dcc0,roughness:.9}),tree:new T.MeshStandardMaterial({color:0x3e5a33,roughness:1})},'red',boardSeed('moorfield-speedbowl-v1'));
  const floorMaterial=new T.MeshStandardMaterial({color:0xffffff,roughness:1}),floorGeometry=new T.PlaneGeometry(160,100),apronGeometry=new T.PlaneGeometry(1600,1600),apronMaterial=turf(new T.MeshStandardMaterial({color:0x5f7442,roughness:1})),boxGeometry=new T.BoxGeometry(),coneGeometry=new T.ConeGeometry(1,1,7),textures:T.Texture[]=[];
  const mud=createRaceMudTextures();textures.push(mud.diffuse,mud.normal,mud.roughness);for(const t of [mud.diffuse,mud.normal,mud.roughness])t.repeat.set(40,25);
- floorMaterial.map=mud.diffuse;floorMaterial.normalMap=mud.normal;floorMaterial.roughnessMap=mud.roughness;floorMaterial.color.set(0xb4a48e);floorMaterial.normalScale.setScalar(.5);
+ floorMaterial.map=mud.diffuse;floorMaterial.normalMap=mud.normal;floorMaterial.roughnessMap=mud.roughness;floorMaterial.color.set(0xb4a48e);floorMaterial.normalScale.setScalar(.5);antiTile(floorMaterial);
  const floor=new T.Mesh(floorGeometry,floorMaterial);floor.name='moorfield_dirt';floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;root.add(floor);
  const apron=new T.Mesh(apronGeometry,apronMaterial);apron.name='moorfield_grass';apron.rotation.x=-Math.PI/2;apron.position.y=-.03;apron.receiveShadow=true;root.add(apron);
  const batches=new Map<string,{geometry:T.BufferGeometry;list:T.Matrix4[]}>(),matrix=new T.Matrix4(),q=new T.Quaternion(),up=new T.Vector3(0,1,0);

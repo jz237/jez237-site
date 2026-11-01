@@ -95,7 +95,7 @@ import {loadGhostLibrary,saveGhostLibrary,findTrialGhost,raceTrialGhost,sharedTr
 import {TrialGhostView,createTrialGhostView} from './trial-ghost-view';
 import {formatTrialDelta} from './time-trial';
 import {createRedbankWorld} from './redbank-world';
-import {DAMAGE_RULES,sessionDamageRule,collisionDamageMultiplier,impactSpeedFactor,IMPACT_SPEED,DERBY_PACE,SMASH,isSmash,smashLabel,impactSoundScale,hangingOn,massShare,sharedDamage,damageRecordKey} from './damage-rules';
+import {DAMAGE_RULES,sessionDamageRule,collisionDamageMultiplier,impactSpeedFactor,IMPACT_SPEED,DERBY_PACE,SMASH,isSmash,smashLabel,impactSoundScale,hangingOn,massShare,sharedDamage,damageRecordKey,derbyWear} from './damage-rules';
 import {eventGridSetup,eventPerformanceGrid} from './grid-setup';
 import {gridCarKind,gridRecordKey,GRID_LINEUPS,GRID_PERFORMANCE} from './grid-rules';
 import {timedRaceLimit,timedRaceFinished,timedRaceOrder,timedRaceResult,timedRaceRecordScore} from './timed-race';
@@ -995,9 +995,10 @@ function menu() {
   if(mode==='playground'){const practice=document.createElement('button');practice.id='free-drive-setup';practice.className='small-button';practice.textContent='FREE DRIVE OPTIONS';practice.onclick=()=>{eventSetupOpen=true;keys.clear();showFreeDriveSetup(ui,eventOptions,()=>{traffic=eventOptions.playgroundTraffic??true;try{localStorage.setItem(EVENT_KEY,JSON.stringify(eventOptions));return true;}catch{return false;}},()=>{eventSetupOpen=false;menu();});};hub.append(practice);}
   const watch=document.createElement('button');watch.id='watch-demo';watch.className='small-button';watch.textContent='WATCH DEMO ▷';
   watch.onclick=()=>{if(mode==='playground')mode='derby';void start(true);};
-  hub.append(watch);
+  // The demo buttons stand apart from the menu routes: their own row under the grid, larger and in their own colour.
+  const demoRow=document.createElement('div');demoRow.className='demo-row';hub.after(demoRow);
   const careerButton=document.createElement('button');careerButton.id='career-open';careerButton.className='small-button';careerButton.textContent='CAREER · CHOOSE YOUR PATH';careerButton.onclick=()=>openCareer();hub.append(careerButton);
-  const demoSetup=document.createElement('button');demoSetup.className='small-button';demoSetup.id='demo-options';demoSetup.textContent='DEMO OPTIONS';demoSetup.onclick=()=>{eventSetupOpen=true;showDemoSetup(ui,demoOptions,kind,value=>{try{localStorage.setItem(DEMO_KEY,JSON.stringify(value));return true;}catch{return false;}},()=>{eventSetupOpen=false;},demoMode=>{mode=demoMode;void start(true);},garage);};hub.append(demoSetup);
+  const demoSetup=document.createElement('button');demoSetup.className='small-button';demoSetup.id='demo-options';demoSetup.textContent='DEMO OPTIONS';demoSetup.onclick=()=>{eventSetupOpen=true;showDemoSetup(ui,demoOptions,kind,value=>{try{localStorage.setItem(DEMO_KEY,JSON.stringify(value));return true;}catch{return false;}},()=>{eventSetupOpen=false;},demoMode=>{mode=demoMode;void start(true);},garage);};demoRow.append(watch,demoSetup);
   document.querySelector<HTMLButtonElement>('#settings')!.onclick = () =>
     pause(true);
   document.querySelector<HTMLButtonElement>('#fullscreen')!.onclick =
@@ -1530,7 +1531,7 @@ let pinEscapes=0,sandwiches=0;
 /** Pinned (offline): a car shoved hard against a wall or a second car crushes in at both contacts while it is held there,
  * credited to the car doing the shoving. */
 function pinCars(contacts:readonly {a?:Vehicle;b?:Vehicle;point1:T.Vector3;point2:T.Vector3;normal:T.Vector3;impulse:number}[],dt:number){
-  const scale=collisionDamageMultiplier(mode==='race'&&!bangerRace(),damageRule());
+  const scale=collisionDamageMultiplier(mode==='race'&&!bangerRace(),damageRule())*derbyWear(mode==='derby'&&!online?.active).damage;
   for(const c of cars){
     if(c.health<=0||!c.extendedDamage){c.pinTime=c.pinTick=0;pinNoted.delete(c.id);pinFed.delete(c.id);pinScoring.delete(c.id);continue;}
     const pushes:PinPush[]=[],points:T.Vector3[]=[];
@@ -2250,7 +2251,9 @@ function step(dt: number) {
     a?.scar(point1,scarDirection,onA);
     b?.scar(point2,scarDirection.clone().negate(),onB);
   }
-  for(const {contact:{a,b,point,point1,point2,va,vb,impulse,material,closing},damage,feedback} of impactAdjudicator.adjudicate(contacts,elapsed,collisionDamageMultiplier(mode==='race'&&!bangerRace(),damageRule()),online?.active?undefined:impactSpeedFactor,IMPACT_SPEED.cap)){
+  // Offline derbies wear cars more slowly than one hard charge can wreck them (DERBY_WEAR).
+  const wear=derbyWear(mode==='derby'&&!online?.active);
+  for(const {contact:{a,b,point,point1,point2,va,vb,impulse,material,closing},damage,feedback} of impactAdjudicator.adjudicate(contacts,elapsed,collisionDamageMultiplier(mode==='race'&&!bangerRace(),damageRule())*wear.damage,online?.active?undefined:impactSpeedFactor,wear.cap)){
     // A feedback-only contact still clears stale glass/debris flags in hit().
     const smashLoss={a:0,b:0};
     // A fast ram nose-first into the end of another car climbs onto it (offline).
@@ -2276,7 +2279,7 @@ function step(dt: number) {
     const pitsA=a?.pitSpins??0,pitsB=b?.pitSpins??0,engineInA=!a?.engineOut,engineInB=!b?.engineOut,wingsA=a?.wingsTorn??0,wingsB=b?.wingsTorn??0;
     if(a){
       const before=a.health;
-      const strippedA=stripCount(a);a.collisionHit(point1,vb.clone().sub(va).normalize(),sharedDamage(damage,shareA),elapsed,b?.paintColor,closing);if(b)creditStrip(b,a,strippedA);
+      const strippedA=stripCount(a);a.collisionHit(point1,vb.clone().sub(va).normalize(),Math.min(wear.cap,sharedDamage(damage,shareA)),elapsed,b?.paintColor,closing);if(b)creditStrip(b,a,strippedA);
       if(b){b.inflicted+=before-a.health;const wreck=eventAwards.hit(b.id,a.id,before-a.health,before>0&&a.health<=0,elapsed,closing);if(wreck)wreckedBy.set(a.id,b.id);if(wreck&&!online?.active&&closing>=WRECK_BURST.closing)a.wreckBurst(a.current.clone().sub(b.current));if(wreck)sound.crowd(b.id===0?1:.7);if(wreck&&b.id===0&&!demo&&!online?.active){slowMoUntil=clock+TAKEDOWN_SLOWMO.seconds;slowMoScale=TAKEDOWN_SLOWMO.scale;crowdFlashes(TAKEDOWN_FLASHES);}else if(before-a.health>=12)sound.crowd(b.id===0?.6:.4);if(wreck&&b.id===0){callout('TAKEDOWN',a);playerTakedown();}else if(b.id===0&&before-a.health>=12)callout('BIG HIT',a);combat.hit(b.id,a.id,before,a.health,elapsed);if(mode==='derby')combat.contact(scoreMotion[b.id],scoreMotion[a.id],before-a.health,elapsed);}
       if(b?.id===0)telemetry?.impact(a.id,before,a.health);
       smashLoss.a=before-a.health;
@@ -2284,7 +2287,7 @@ function step(dt: number) {
     }
     if(b){
       const before=b.health;
-      const strippedB=stripCount(b);b.collisionHit(point2,va.clone().sub(vb).normalize(),sharedDamage(damage,shareB),elapsed,a?.paintColor,closing);if(a)creditStrip(a,b,strippedB);
+      const strippedB=stripCount(b);b.collisionHit(point2,va.clone().sub(vb).normalize(),Math.min(wear.cap,sharedDamage(damage,shareB)),elapsed,a?.paintColor,closing);if(a)creditStrip(a,b,strippedB);
       if(a){a.inflicted+=before-b.health;const wreck=eventAwards.hit(a.id,b.id,before-b.health,before>0&&b.health<=0,elapsed,closing);if(wreck)wreckedBy.set(b.id,a.id);if(wreck&&!online?.active&&closing>=WRECK_BURST.closing)b.wreckBurst(b.current.clone().sub(a.current));if(wreck)sound.crowd(a.id===0?1:.7);if(wreck&&a.id===0&&!demo&&!online?.active){slowMoUntil=clock+TAKEDOWN_SLOWMO.seconds;slowMoScale=TAKEDOWN_SLOWMO.scale;crowdFlashes(TAKEDOWN_FLASHES);}else if(before-b.health>=12)sound.crowd(a.id===0?.6:.4);if(wreck&&a.id===0){callout('TAKEDOWN',b);playerTakedown();}else if(a.id===0&&before-b.health>=12)callout('BIG HIT',b);combat.hit(a.id,b.id,before,b.health,elapsed);if(mode==='derby')combat.contact(scoreMotion[a.id],scoreMotion[b.id],before-b.health,elapsed);}
       if(a?.id===0)telemetry?.impact(b.id,before,b.health);
       smashLoss.b=before-b.health;
