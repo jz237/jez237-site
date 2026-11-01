@@ -116,7 +116,14 @@ try:
         for story in stories:
             r=page.goto(base+'/newsletter/stories/'+story['slug']+'/',wait_until='networkidle');assert r is not None and r.status==200
             assert page.locator('h1').inner_text()==story['title']
-            assert page.locator('.source-box a').get_attribute('href')==story['url']
+            assert page.locator('.editorial-sources li a').evaluate_all('(a)=>a.map(e=>e.getAttribute("href"))')==[ref['url'] for ref in story['references']]
+            assert page.locator('.editorial-content [data-block-index]').count()==len(story['blocks'])
+            assert not page.locator('.editorial-sources').evaluate('(e)=>e.open')
+            article_url=page.url
+            page.locator('.editorial-citation').first.click()
+            assert page.url==article_url
+            assert page.locator('.editorial-sources').evaluate('(e)=>e.open')
+            page.locator('.editorial-sources summary').click()
             assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
             assert page.locator('.article-image img').evaluate('(i)=>i.complete&&i.naturalWidth>0')
         results['checks'].append('six article routes, primary sources and images on mobile')

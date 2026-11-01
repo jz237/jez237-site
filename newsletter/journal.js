@@ -137,7 +137,7 @@
   dialog.addEventListener('cancel', event => { event.preventDefault(); closeReader(); });
   dialog.addEventListener('keydown', event => {
     if (event.key !== 'Tab') return;
-    const focusable = [...dialog.querySelectorAll('a[href], button:not(:disabled), [tabindex="0"]')]
+    const focusable = [...dialog.querySelectorAll('a[href], button:not(:disabled), summary, [tabindex="0"]')]
       .filter(element => element.getClientRects().length > 0);
     const first = focusable[0];
     const last = focusable.at(-1);

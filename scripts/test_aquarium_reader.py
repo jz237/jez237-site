@@ -41,21 +41,32 @@ try:
             link.click();wait_open()
             assert page.url==url
             assert page.locator('#reader-title').inner_text()==story['title']
-            assert page.locator('.reader-body>p').count()==len(story['paragraphs'])
-            assert page.locator('.reader-takeaway p').inner_text()==story['takeaway']
-            assert page.locator('.reader-sources>a').get_attribute('href')==story['url']
-            assert page.locator('.reader-sources>a').get_attribute('target')=='_blank'
+            blocks=page.locator('#reader-content [data-block-index]')
+            assert blocks.count()==len(story['blocks'])
+            for n,block in enumerate(story['blocks']):
+                actual=blocks.nth(n).text_content()
+                for text in block.get('items',[block.get('text','')]):
+                    assert text in actual,(story['slug'],n)
+            notes=page.locator('#reader-content .editorial-sources')
+            assert not notes.evaluate('(e)=>e.open')
+            assert notes.locator('li a').evaluate_all('(links)=>links.map(a=>a.getAttribute("href"))')==[r['url'] for r in story['references']]
+            assert notes.locator('li a').evaluate_all('(links)=>links.every(a=>a.target==="_blank")')
+            page.locator('#reader-content .editorial-citation').first.click()
+            assert notes.evaluate('(e)=>e.open') and page.url==url
+            assert page.evaluate("document.activeElement.matches('.editorial-sources li')")
+            notes.locator('summary').click()
+            assert not notes.evaluate('(e)=>e.open')
             # Cloudflare may inject a hidden challenge frame outside the reader.
             assert page.locator('#article-reader iframe').count()==0
             assert page.evaluate("getComputedStyle(document.body).position")=='fixed'
             page.locator('#reader-close').click();wait_closed()
             assert abs(page.evaluate('scrollY')-y)<=2,(i,y,page.evaluate('scrollY'))
             assert link.evaluate('(e)=>document.activeElement===e')
-        results['checks'].append('all six stories open in-place with matching full summaries, photos, takeaways and optional sources; close restores exact scroll/focus')
+        results['checks'].append('all six complete article bodies match their editorial blocks; quiet endnotes and on-page citations work; close restores exact scroll/focus')
         # First hero link and final feature link use the same reader.
         page.locator('.cover .button-link').click();wait_open()
         assert page.locator('#reader-title').inner_text()==stories[0]['title']
-        for _ in range(12):
+        for _ in range(30):
             page.keyboard.press('Tab')
             assert page.evaluate("document.getElementById('article-reader').contains(document.activeElement)")
         page.keyboard.press('Escape');wait_closed()
@@ -93,7 +104,7 @@ try:
         page.locator('#reader-scroll').evaluate('(e)=>e.scrollTop=e.scrollHeight')
         page.screenshot(path=str(args.output/'reader-desktop-body.png'))
         # Backdrop closes; clicks inside the article do not.
-        page.locator('.reader-body>p').first.click()
+        page.locator('.reader-body .editorial-content>p').first.click()
         assert page.locator('#article-reader').evaluate('(e)=>e.open')
         page.mouse.click(8,8);wait_closed()
         results['checks'].append('backdrop dismissal without accidental inside-click dismissal')
@@ -119,7 +130,11 @@ try:
         np=nojs.new_page();np.goto(base+'/newsletter/',wait_until='networkidle')
         np.locator('.story h3 a').first.click();np.wait_for_url('**/stories/a-new-home-for-coral/')
         assert np.locator('h1').inner_text()==stories[0]['title']
-        results['checks'].append('without JavaScript, normal local article URLs still work')
+        assert np.locator('.editorial-sources').evaluate('(e)=>e.open')
+        np.locator('.editorial-citation').first.click()
+        assert '#article-a-new-home-for-coral-ref-' in np.url
+        assert np.locator('.editorial-sources li').first.is_visible()
+        results['checks'].append('without JavaScript, complete local articles and reference anchors still work')
         assert not errors,errors
         assert not failed,failed
         results['console_errors']=errors;results['failed_same_origin_responses']=failed;results['status']='passed'

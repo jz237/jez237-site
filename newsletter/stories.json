@@ -5,106 +5,566 @@
     "label": "Reef & ocean",
     "kind": "Conservation news",
     "date": "August 20, 2026",
-    "title": "A second home for irreplaceable corals",
-    "dek": "A second ocean-based gene bank gives Florida's coral diversity another place to survive.",
+    "title": "A second address for Florida’s coral inheritance",
+    "dek": "Why a second ocean nursery matters: it protects a collection of genetic lineages, not just a head count of coral fragments.",
     "image": "coral-detail.webp",
     "source": "Coral Restoration Foundation",
     "url": "https://coralrestoration.org/as-el-nino-strengthens-crf-establishes-second-in-water-coral-gene-bank-to-safeguard-irreplaceable-genetic-diversity/",
-    "paragraphs": [
-      "Coral Restoration Foundation reported moving approximately 1,000 corals representing 130 genotypes to its Elbow Nursery. This was the first stage of a planned transfer of about 3,500 corals, intended to replicate the genetic diversity held at its Tavernier Nursery.",
-      "The goal is to avoid keeping irreplaceable genetic stock at a single ocean-based site. The foundation says the two in-water gene banks also complement land-based banking at The Reef Institute. Different nursery conditions offer options, not a guarantee against heat stress."
+    "caption": "Illustrative coral photograph; not a photograph of this nursery.",
+    "references": [
+      {
+        "id": "r1",
+        "label": "Coral Restoration Foundation — As El Niño Strengthens, CRF Establishes Second In-Water Coral Gene Bank to Safeguard Irreplaceable Genetic Diversity",
+        "url": "https://coralrestoration.org/as-el-nino-strengthens-crf-establishes-second-in-water-coral-gene-bank-to-safeguard-irreplaceable-genetic-diversity/",
+        "date": "August 20, 2026"
+      },
+      {
+        "id": "r2",
+        "label": "NOAA Coral Disease & Health Consortium — Coral Reproduction",
+        "url": "https://cdhc.noaa.gov/coral-biology/coral-reproduction/",
+        "date": "undated"
+      },
+      {
+        "id": "r3",
+        "label": "NOAA Fisheries — NOAA and Partners Launch Next-Generation Coral Restoration Following Florida Coral Bleaching",
+        "url": "https://www.fisheries.noaa.gov/feature-story/noaa-and-partners-launch-next-generation-coral-restoration-following-florida-coral",
+        "date": "July 21, 2025; updated November 21, 2025"
+      }
     ],
-    "takeaway": "For reef keepers, this is a window into the work behind coral propagation and conservation. It is not a product announcement or a claim that these corals are available for home aquariums.",
-    "caption": "Illustrative coral photograph; not a photograph of this nursery."
+    "blocks": [
+      {
+        "type": "p",
+        "text": "The important number is not just how many corals moved, but how many different genetic identities went with them. In its August 20, 2026 announcement, Coral Restoration Foundation reported transferring approximately 1,000 corals representing 130 genotypes from Tavernier Nursery to Elbow Nursery in the Florida Keys. Two dives began a planned relocation of roughly 3,500 corals, intended to duplicate the genetic collection held at Tavernier.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "A genotype is not a species count. Coral propagation can produce multiple colonies with the same genetic identity: a fragment grows, but it does not become a new genetic individual simply by living separately. Banking living corals therefore means preserving different lineages, not merely accumulating more pieces. Sexual reproduction, by contrast, can produce new combinations of parental genes.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "The first transfer prioritized founding staghorn and elkhorn genotypes and much of CRF’s Orbicella collection. Elbow adds an ocean-based backup alongside Tavernier, complementing land-based banking at The Reef Institute. CRF reports stronger water movement at Elbow, but does not yet know whether relocated corals will withstand heat as successfully as some corals already living nearby.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "This is also why a gene bank and a restored reef are different achievements. NOAA describes genetic storage as a reserve for future restoration, alongside breeding and outplanting. Keeping a lineage alive preserves the possibility of using it later; it does not establish that a self-sustaining population has returned to the reef.",
+        "refs": [
+          "r3"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "The August announcement made further transfers dependent on heat and reef conditions. It did not report all 3,500 corals in place. Maintenance and monitoring follow the move: the immediate accomplishment is a second location for vulnerable genetic stock, not a guarantee against the next bleaching event.",
+        "refs": [
+          "r1"
+        ]
+      }
+    ]
   },
   {
     "slug": "a-greener-kind-of-aquarium",
     "category": "freshwater",
     "label": "Freshwater",
-    "kind": "Practical reading",
+    "kind": "Practical checklist",
     "date": "Evergreen guide · no publication date shown",
-    "title": "A greener aquarium starts with the right light",
-    "dek": "Before chasing brighter lights, match your plants to the aquarium you actually want to maintain.",
+    "title": "Before you turn up the light",
+    "dek": "A planted-tank lighting checklist that starts with the leaves, not the biggest number on the box.",
     "image": "planted-tank.webp",
     "source": "Tropica Aquarium Plants",
-    "url": "https://tropica.com/en/guide/make-your-aquarium-a-success/light/",
-    "paragraphs": [
-      "Tropica groups aquarium plants by their requirements, including how much light they need. Its guidance emphasizes matching the lighting to the plants rather than treating a brighter fixture as an automatic upgrade.",
-      "The guide also notes that tank depth, fixture efficiency and reflectors affect how much light reaches the plants. A number printed on a light is only part of the picture."
+    "url": "https://tropica.com/en/plants/plantdetails/Anubiasbarterinana(101TC)/18895",
+    "caption": "Illustrative planted aquarium; not a product demonstration or a store display.",
+    "references": [
+      {
+        "id": "r1",
+        "label": "Tropica Aquarium Plants — Anubias barteri nana",
+        "url": "https://tropica.com/en/plants/plantdetails/Anubiasbarterinana(101TC)/18895",
+        "date": "undated"
+      },
+      {
+        "id": "r2",
+        "label": "Tropica Aquarium Plants — Eleocharis pusilla 'Mini'",
+        "url": "https://tropica.com/en/plants/plantdetails/Eleocharispusilla(132BTC)/4571",
+        "date": "undated"
+      },
+      {
+        "id": "r3",
+        "label": "Tropica Aquarium Plants — Light",
+        "url": "https://tropica.com/en/guide/make-your-aquarium-a-success/light/",
+        "date": "undated"
+      },
+      {
+        "id": "r4",
+        "label": "Apogee Instruments — PAR Meters for Aquariums",
+        "url": "https://www.apogeeinstruments.com/aquarium-par-meters/",
+        "date": "undated"
+      },
+      {
+        "id": "r5",
+        "label": "Tropica Aquarium Plants — Fertiliser and CO2",
+        "url": "https://tropica.com/en/guide/make-your-aquarium-a-success/fertiliser-and-co2/",
+        "date": "undated"
+      },
+      {
+        "id": "r6",
+        "label": "Tropica Aquarium Plants — Growing-in",
+        "url": "https://tropica.com/en/guide/get-the-right-start/growing-in",
+        "date": "undated"
+      }
     ],
-    "takeaway": "Start with the plants you want to grow and check their individual requirements. Use the manufacturer's guide as a starting point, not a universal lighting prescription for every tank.",
-    "caption": "Illustrative planted aquarium; not a product demonstration or a store display."
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Before turning up the light, make a plant list. Do you want a few leafy accents on wood, an open foreground, or a carpet? Put each plant's requirements beside its name. The equipment decision becomes much easier to think about when you know what you want it to grow."
+      },
+      {
+        "type": "heading",
+        "text": "Check the plant, not just the planting style"
+      },
+      {
+        "type": "p",
+        "text": "Two compact plants can ask quite different things of a tank. Tropica rates Anubias barteri nana as low in light demand, while its Eleocharis pusilla 'Mini' has a medium rating. Both can suit a small layout; they are not interchangeable lighting projects. The useful question is not whether a plant looks beginner-friendly, but what its individual care information says.",
+        "refs": [
+          "r1",
+          "r2"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Look past watts"
+      },
+      {
+        "type": "p",
+        "text": "Watts tell you about electricity use, not a directly comparable amount of light across different technologies. Tropica's lighting guide makes that distinction and offers lumen-per-liter bands as a starting point. It also says those recommendations grew out of experience with T5 fluorescent lighting. Treat them as a grower's guide, not a measurement of what reaches a particular leaf under your LED.",
+        "refs": [
+          "r3"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "For a closer look, an underwater PAR meter measures the light arriving at a planting position. Its reading is called photosynthetic photon flux density: how many photons arrive per unit of area and time in the conventional 400–700-nanometer range. Apogee's documentation explains why the sensor must also account for the immersion effect. Use a meter intended or correctly configured for underwater measurements; waterproofing a sensor alone is not enough.",
+        "refs": [
+          "r4"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Check these before buying anything"
+      },
+      {
+        "type": "list",
+        "ordered": false,
+        "items": [
+          "Where will the demanding plants sit? Tropica's measurements show that distance below a lamp and position toward the corners can change the available light substantially. A specification for the fixture does not describe every planting position.",
+          "What else does the plant need? Tropica distinguishes plants that can manage without supplementary CO2 from more demanding choices. A brighter fixture does not remove the need to consider carbon and other nutrients.",
+          "Is the schedule deliberate? Tropica's growing-in guide recommends a shorter lighting period during a new planting's early weeks, then a longer one later. That is establishment guidance, not a single timetable for every established aquarium."
+        ],
+        "refs": [
+          "r3",
+          "r5",
+          "r6"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Make the next change readable"
+      },
+      {
+        "type": "p",
+        "text": "Our practical preference is to keep a small lighting log: plant names, fixture setting, on-and-off times, and a photograph from the same position. Write down what you change rather than relying on how bright the tank looked last weekend. If you are comparing settings, resist changing the whole arrangement at once. Give yourself a record you can actually interpret."
+      },
+      {
+        "type": "p",
+        "text": "And leave room for a modest ambition. A few well-chosen plants around a piece of wood can be the finished design, not an unfinished version of a carpeted aquascape. Choose the aquarium you want to live with, then choose its light."
+      }
+    ]
   },
   {
     "slug": "how-fish-find-their-crowd",
     "category": "freshwater",
     "label": "Freshwater",
-    "kind": "Research spotlight",
+    "kind": "Behavior under the microscope",
     "date": "September 2, 2026",
-    "title": "How fish find their crowd",
-    "dek": "When water gets murky, sticklebacks change how they move together. New research explores that social response.",
+    "title": "A tighter shoal is not always a faster shoal",
+    "dek": "Sticklebacks adjusted their movements in cloudy water—but the advantage depended on the size of the group.",
     "image": "freshwater-fish.webp",
     "source": "University of Bristol",
     "url": "https://www.bristol.ac.uk/news/2026/september/muddying-the-waters-makes-fish-more-sociable-study-finds.html",
-    "paragraphs": [
-      "University of Bristol researchers studied how groups of three-spined sticklebacks responded to food in clear and cloudy water. In murkier conditions the fish generally took longer to approach food, but they also changed their shoaling behavior.",
-      "Small groups in cloudy water found food faster when they stayed closer and aligned their movements. In larger groups in clear water, tighter coordination could instead slow the response. The effect depended on both the environment and the group."
+    "caption": "Illustrative freshwater aquarium photograph; these are not the sticklebacks in the study.",
+    "references": [
+      {
+        "id": "r1",
+        "label": "University of Bristol — Muddying the waters makes fish more sociable, study finds",
+        "url": "https://www.bristol.ac.uk/news/2026/september/muddying-the-waters-makes-fish-more-sociable-study-finds.html",
+        "date": "September 2, 2026"
+      },
+      {
+        "id": "r2",
+        "label": "Ioannou, Cordery and Rands, Proceedings of the Royal Society B — Plasticity in collective behaviour helps fish shoals mitigate limited visual information from water turbidity",
+        "url": "https://doi.org/10.1098/rspb.2026.0731",
+        "date": "September 2, 2026"
+      }
     ],
-    "takeaway": "Fish behavior can change with environmental conditions. This is not a recommendation to cloud aquarium water, increase stocking, or apply stickleback results to every aquarium species.",
-    "caption": "Illustrative freshwater aquarium photograph; these are not the sticklebacks in the study."
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Picture a group of fish drawing closer together, their bodies pointing the same way. It is tempting to call that better teamwork. A University of Bristol study published on September 2, 2026, offers a more interesting answer: whether coordination helped depended on the water and the group. The subjects were three-spined sticklebacks, not a mixed community of aquarium fish.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "First, watch what happens before the food"
+      },
+      {
+        "type": "p",
+        "text": "Bristol reports that in cloudy water the fish generally moved closer and aligned more strongly before food appeared. Small groups were especially responsive to nearby fish. When the feeding opportunity arrived, however, cloudiness still slowed the response overall. The fish had adjusted their behavior; they had not made reduced visibility irrelevant.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "The paper puts numbers on that movement. Researchers examined the fishes' positions and orientations in the second before the food stimulus appeared. They also compared changes in swimming speed between neighbors during the preceding minute. In pairs in turbid water, fish responded to a neighbor's speed changes with less delay than in clear water; that difference was not evident in larger groups.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Then ask when togetherness helped"
+      },
+      {
+        "type": "p",
+        "text": "In small groups in turbid water, closer spacing and stronger alignment were associated with quicker attacks on the food stimulus. In larger groups in clear water, those same features were associated with slower responses. Cohesion describes how tightly the fish gather; polarization describes how similarly they orient. The study therefore separates two things a casual glance might bundle together as schooling.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "For us, the intriguing part is the reversal: a neat formation is not automatically the most effective one. This is an invitation to observe more carefully, not to cloud a home aquarium or add fish to reproduce a laboratory result. The experiment does not establish a stocking rule or a welfare score for aquarium species.",
+        "refs": [
+          "r2"
+        ]
+      }
+    ]
   },
   {
     "slug": "behind-captive-bred-fish",
     "category": "reef",
     "label": "Reef & ocean",
-    "kind": "From the research archive",
+    "kind": "Breeding feature · research archive",
     "date": "February 25, 2025",
-    "title": "The patient science behind captive-bred fish",
-    "dek": "Meet the research that helps more ornamental fish complete their life cycles in managed care.",
+    "title": "Before the fish, a food chain",
+    "dek": "Why raising a marine fish begins with raising its dinner—and why an origin label should start a conversation, not finish it.",
     "image": "clownfish.webp",
-    "source": "University of Florida IFAS",
-    "url": "https://blogs.ifas.ufl.edu/news/2025/02/25/scientists-study-breeding-of-pet-fish-to-help-protect-reefs-fuel-floridas-economy/",
-    "paragraphs": [
-      "University of Florida IFAS describes research helping fish farmers breed popular marine species, including clownfish and blue tangs. The aim is to support aquaculture while reducing the need to collect fish from wild reefs.",
-      "The article connects this work with conservation and the aquarium trade. Progress with one species does not mean that every fish can be bred the same way, or that every specimen offered for sale is captive-bred."
+    "source": "University of Florida",
+    "url": "https://news.ufl.edu/2025/02/pet-fish-breeding-research/",
+    "caption": "Illustrative clownfish photograph; it does not establish that the pictured fish is captive-bred.",
+    "references": [
+      {
+        "id": "r1",
+        "label": "University of Florida — Scientists study breeding of pet fish to help protect reefs, fuel Florida’s economy",
+        "url": "https://news.ufl.edu/2025/02/pet-fish-breeding-research/",
+        "date": "February 25, 2025"
+      },
+      {
+        "id": "r2",
+        "label": "UF/IFAS Extension — Overview of Commonly Cultured Marine Ornamental Fish (FA224)",
+        "url": "https://edis.ifas.ufl.edu/publication/FA224",
+        "date": "undated"
+      },
+      {
+        "id": "r3",
+        "label": "UF/IFAS Extension — Choosing an Appropriate Live Feed for Larviculture of Marine Fish (FA167)",
+        "url": "https://edis.ifas.ufl.edu/publication/FA167",
+        "date": "undated"
+      }
     ],
-    "takeaway": "Ask about the origin of an individual fish rather than assuming its breeding history from its appearance. This background feature does not represent Hidden Reef's current stock.",
-    "caption": "Illustrative clownfish photograph; it does not establish that the pictured fish is captive-bred."
+    "blocks": [
+      {
+        "type": "p",
+        "text": "A breeder can have eggs, clean water and attentive care, yet still be missing the meal that makes the next stage possible. For marine fish larvae, food must fit a tiny mouth, trigger a hunting response and deliver the right nutrients. A tank full of unsuitable prey is not a nursery full of fed fish.",
+        "refs": [
+          "r3"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "That problem sits behind the University of Florida’s February 25, 2025 account of ornamental-fish research. Its teams had raised blue tangs in captivity, but the achievement depended partly on learning to grow the live foods larvae needed at different stages. The university described a practical ambition: develop methods that fish farmers could use, rather than leave each producer to solve the life cycle alone.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "An egg is only the beginning"
+      },
+      {
+        "type": "p",
+        "text": "Clownfish offer a useful contrast. Their eggs adhere to a surface, which can be a tile or clay pot in a breeding system; the male tends the nest. The larvae hatch relatively well developed and can take enriched rotifers as their first food. Many pelagic spawners release buoyant eggs and hatch less-developed larvae that need smaller prey. The successful clownfish routine is not a universal recipe.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Even that contrast has exceptions. UF/IFAS notes that damselfishes also lay eggs on surfaces and provide parental care, yet their larvae often need small copepod nauplii. Watching where a fish lays its eggs cannot tell a breeder everything about what will hatch. The larva’s capabilities matter as much as the parents’ behavior.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "The nursery behind the nursery"
+      },
+      {
+        "type": "p",
+        "text": "Rotifers are useful because they can be grown densely, but breeders enrich them to improve their nutritional value. Brine shrimp are convenient to hatch, yet can be too large for the earliest feeding stage. Copepod nauplii offer another combination of size, movement and nutrition; maintaining their supply brings its own culture challenges. The hatchery is managing food organisms as well as fish.",
+        "refs": [
+          "r3"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "This explains why a first breeding success and dependable production are different milestones. UF’s account describes intensive labor and cost in developing larval diets and environments. A farmer needs a method that can be repeated, not simply evidence that one batch once survived. The research is about making that passage less precarious.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "aside",
+        "title": "At the fish room: three questions worth asking",
+        "text": "Our suggested conversation starts with the individual fish: Who bred it, and can its origin be documented? What is it eating here, and can I watch it feed? What adult size, social behavior and housing needs should I plan for? Ask these questions about the fish being offered, not just the species on the label. A familiar appearance is not a record of where an animal was born."
+      },
+      {
+        "type": "p",
+        "text": "Captive breeding can offer an alternative to collecting fish, but UF’s account also acknowledges uncertainty about wild harvest’s effects. Our editorial view is to ask for a traceable origin rather than turn that uncertainty into a blanket verdict on every wild fish. Nor should a sourcing decision be mistaken for habitat protection. Appreciating the work of a hatchery and caring about living reefs belong in the same conversation.",
+        "refs": [
+          "r1"
+        ]
+      }
+    ]
   },
   {
     "slug": "little-cups-big-potential",
     "category": "freshwater",
     "label": "Freshwater",
-    "kind": "Plant-room notes",
+    "kind": "Hands-on planting guide",
     "date": "Evergreen guide · no publication date shown",
-    "title": "Little cups, big planted-tank potential",
-    "dek": "A closer look at tissue-cultured aquarium plants, from sealed cup to a new underwater landscape.",
+    "title": "From sealed cup to planted corner",
+    "dek": "Rinse, divide, then plant for the species in your hand—not simply for the container it came in.",
     "image": "shrimp.webp",
     "source": "Tropica Aquarium Plants",
-    "url": "https://tropica.com/en/plants/tropica-products/",
-    "paragraphs": [
-      "Tropica describes its 1-2-Grow plants as tissue-cultured plants raised in laboratory conditions. The company says they are supplied without snails, algae or pesticides and can be used in aquariums containing shrimp and fish.",
-      "The same guide cautions that these young plants need attention to their growing conditions from the start. It also distinguishes them from other product types, including mature potted plants and plants attached to wood or stone."
+    "url": "https://tropica.com/en/plants/1-2-grow/",
+    "caption": "Illustrative shrimp photograph, not a product test or a photograph of tissue-culture plants.",
+    "references": [
+      {
+        "id": "r1",
+        "label": "Tropica Aquarium Plants — 1-2-Grow!",
+        "url": "https://tropica.com/en/plants/1-2-grow/",
+        "date": "undated"
+      },
+      {
+        "id": "r2",
+        "label": "Dennerle Plants — Help / FAQ",
+        "url": "https://dennerleplants.com/en/support/faq/",
+        "date": "undated"
+      },
+      {
+        "id": "r3",
+        "label": "Tropica Aquarium Plants — Anubias barteri nana",
+        "url": "https://tropica.com/en/plants/plantdetails/Anubiasbarterinana(101TC)/18895",
+        "date": "undated"
+      },
+      {
+        "id": "r4",
+        "label": "Tropica Aquarium Plants — Eleocharis pusilla 'Mini'",
+        "url": "https://tropica.com/en/plants/plantdetails/Eleocharispusilla(132BTC)/4571",
+        "date": "undated"
+      }
     ],
-    "takeaway": "These are the manufacturer's claims about its own product range, not an independent test of every tissue-culture brand. Check the individual plant's care requirements before buying.",
-    "caption": "Illustrative shrimp photograph, not a product test or a photograph of tissue-culture plants."
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Tropica describes its laboratory-grown 1-2-Grow plants as young material to divide into multiple portions. Think of the cup as the beginning of a planting session, not something to tip straight into the aquarium.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "1. Decide where it belongs before opening"
+      },
+      {
+        "type": "p",
+        "text": "Read the species label first. Anubias barteri nana and Eleocharis pusilla 'Mini' both come in tissue-culture cups, but their destinations differ: Tropica recommends stone or wood for the Anubias, while the Eleocharis is a foreground carpeting plant. The grower also rates the latter's light and CO2 demand as medium, versus low for the Anubias. A shared package is not a shared care plan.",
+        "refs": [
+          "r3",
+          "r4"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Keep the cup sealed until you are ready to work. That is Dennerle Plants' handling instruction for its Plantit range. Our preparation suggestion: set out tweezers, a small work surface and your planting plan first, so you are not hunting for tools with the plant already out of its container.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "2. Remove the growing medium gently"
+      },
+      {
+        "type": "p",
+        "text": "Ease the plant material out, then rinse away the liquid or gel around it. Dennerle specifies lukewarm water and a gentle touch; Tropica likewise instructs users to rinse off the medium under the tap. Follow the cup's own directions. The job is to remove the growing medium, not scrub the small plants clean with force.",
+        "refs": [
+          "r1",
+          "r2"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "3. Divide for the job, not into equal shares"
+      },
+      {
+        "type": "p",
+        "text": "For small foreground plants, Tropica suggests dividing a cup into six to eight portions with fingers or sharp scissors, then planting with tweezers. That is a preparation example, not a rule for every species. Its Eleocharis guidance specifically calls for small portions spread across the planting area. Leave the finished carpet to grow; you do not need to install one solid plug.",
+        "refs": [
+          "r1",
+          "r4"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Anubias needs a different finish. Attach it to suitable stone or wood rather than treating it like a grass tuft. Tropica warns against burying its rhizome—the thick stem from which the plant grows—because it can rot. Choose the planting method from the species information, even when the cup's general instructions show tweezers pushing plants into substrate.",
+        "refs": [
+          "r3"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "4. Troubleshoot the planting, not the whole aquarium"
+      },
+      {
+        "type": "p",
+        "text": "If a substrate-planted portion keeps floating up, Dennerle suggests checking whether it is too large and dividing it further. For a new setup, the grower recommends planting with little or no water, then filling slowly without disturbing the substrate. That is a setup technique, not a reason to drain an occupied tank.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "aside",
+        "title": "What the sealed cup does—and does not—promise",
+        "text": "Tropica guarantees its own 1-2-Grow range is free of snails, algae and pesticides. That manufacturer statement is not an independent test of every tissue-culture product, nor a promise that an aquarium will remain algae-free after planting.",
+        "refs": [
+          "r1"
+        ]
+      }
+    ]
   },
   {
     "slug": "when-coral-spawns",
     "category": "reef",
     "label": "Reef & ocean",
-    "kind": "From the conservation archive",
+    "kind": "Reef science explainer · research archive",
     "date": "July 21, 2025",
-    "title": "Growing the next generation of reefs",
-    "dek": "Why coral restoration researchers are looking beyond fragments to breeding and genetic diversity.",
+    "title": "More corals, or more coral diversity?",
+    "dek": "Fragments preserve a coral’s genetic identity. Spawning reshuffles it. Restoration needs to understand both—and keep the offspring alive.",
     "image": "reef-scene.webp",
     "source": "NOAA Fisheries",
     "url": "https://www.fisheries.noaa.gov/feature-story/noaa-and-partners-launch-next-generation-coral-restoration-following-florida-coral",
-    "paragraphs": [
-      "NOAA describes a restoration effort that combines coral breeding, rearing and new technologies to help Florida's reefs recover after severe bleaching. One focus is raising new generations from spawning events, including offspring of parents selected for heat tolerance.",
-      "Growing fragments can increase coral cover, but those fragments may be genetically identical. Sexual reproduction offers a route to new genetic combinations. Researchers are also investigating beneficial algae, bacteria and ways to improve young corals' survival."
+    "caption": "Illustrative reef photograph; not a photograph of the research project.",
+    "references": [
+      {
+        "id": "r1",
+        "label": "NOAA Fisheries — NOAA and Partners Launch Next-Generation Coral Restoration Following Florida Coral Bleaching",
+        "url": "https://www.fisheries.noaa.gov/feature-story/noaa-and-partners-launch-next-generation-coral-restoration-following-florida-coral",
+        "date": "July 21, 2025; updated November 21, 2025"
+      },
+      {
+        "id": "r2",
+        "label": "NOAA Coral Disease & Health Consortium — Coral Reproduction",
+        "url": "https://cdhc.noaa.gov/coral-biology/coral-reproduction/",
+        "date": "undated"
+      },
+      {
+        "id": "r3",
+        "label": "Miller and colleagues, PLOS ONE — Assisted sexual coral recruits show high thermal tolerance to the 2023 Caribbean mass bleaching event",
+        "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0309719",
+        "date": "September 18, 2024"
+      }
     ],
-    "takeaway": "This is a conservation research program, not a home-aquarium treatment or a promise of bleaching-proof corals. It explains why both propagation and genetic diversity matter.",
-    "caption": "Illustrative reef photograph; not a photograph of the research project."
+    "blocks": [
+      {
+        "type": "p",
+        "text": "A fragment can grow into another coral colony without creating another genetic identity. Sexual reproduction does something different: eggs and sperm combine, producing offspring with new combinations of genes. That distinction matters whenever a restoration project counts its corals. More colonies and more genetic variety are not interchangeable measures of progress.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "A fragment grows; a larva settles"
+      },
+      {
+        "type": "p",
+        "text": "Broadcast-spawning corals release eggs and sperm into the water. Their timing helps gametes from separated colonies meet; temperature, lunar cycles and light contribute to that coordination. After fertilization, embryos develop into swimming larvae called planulae. A suitable surface and settlement cues help a larva make the transition to an attached polyp. Brooding corals take a different route: fertilization and early development occur inside the parent before larvae are released.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "For restoration, producing larvae is therefore an opening, not the finish. Young corals must survive settlement and early growth. Miller and colleagues’ 2024 research paper describes this period as particularly vulnerable to competition, predation and disease. A successful spawning night can supply a new generation; it cannot by itself deliver a reef of adult colonies.",
+        "refs": [
+          "r3"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "More combinations, not guaranteed winners"
+      },
+      {
+        "type": "p",
+        "text": "NOAA’s July 21, 2025 account of Florida restoration describes an effort to breed genetically varied offspring while selecting parents for heat tolerance. Researchers were also testing beneficial algae and bacteria, and developing protective hydrogel capsules to support larval settlement. These are separate problems: which parents to cross, which microbial partners to establish, and how to keep tiny corals alive. A promising answer to one does not settle the others.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "There is encouraging field evidence, with an important qualification. Miller’s team surveyed sexually propagated corals across five Caribbean regions during the 2023 heatwave. Many young corals resisted bleaching better than comparison colonies. But the study was observational, with uneven comparisons across species and sites; it did not establish the mechanism responsible. An older cohort of sexually propagated elkhorn corals suffered badly. The authors warned that the resistance seen in juveniles could diminish with age. Sexual origin alone is not evidence of lifelong heat protection.",
+        "refs": [
+          "r3"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Two tools, different jobs"
+      },
+      {
+        "type": "p",
+        "text": "NOAA’s program still includes growing fragments from bleaching survivors. Fragmentation can multiply existing stock; breeding can generate new genetic combinations. Neither makes environmental conditions irrelevant. The 2024 study explicitly places restoration alongside the need to address warming and local pollution, not in place of that work.",
+        "refs": [
+          "r1",
+          "r3"
+        ]
+      },
+      {
+        "type": "aside",
+        "title": "How we read a restoration milestone",
+        "text": "Ask what was achieved: more fragments, more parent lineages, successful settlement, or surviving adults? Those are different accomplishments. Keeping the distinction visible lets us welcome real progress without asking a baby coral to stand in for a recovered reef."
+      }
+    ]
   }
 ]
