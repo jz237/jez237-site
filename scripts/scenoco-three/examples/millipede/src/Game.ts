@@ -20,7 +20,8 @@ export type Phase = 'title' | 'playing' | 'upgrade' | 'paused' | 'over';
 type Power = Pickup['power'];
 type Path = 'volley' | 'lance' | 'drone';
 
-const VERSION = 'v3.0.4';
+const VERSION = 'v3.0.5';
+const FIRE_KEY = 'millipede_neon_autofire';
 const EXTRA_LIFE_EVERY = 60000;
 const MAX_LIVES = 5;
 const MAX_BOMBS = 3;
@@ -124,6 +125,8 @@ export class Game extends Behaviour implements Arena {
   private dying = false;
   private awaitingTitle = false;
   private biome = -1;
+  /** Fires on its own, or only while the trigger is held: the player's choice, remembered. */
+  private autoFire = true;
   /** Seconds the swarm has had nothing on screen to shoot. */
   private unseen = 0;
   /** The best score anyone has — the global board's top, or this device's, whichever is higher. */
@@ -167,6 +170,12 @@ export class Game extends Behaviour implements Arena {
       font: 'Orbitron, sans-serif',
     });
     this.refreshLeaders();
+    try {
+      this.autoFire = localStorage.getItem(FIRE_KEY) !== '0';
+    } catch {
+      // storage refused: auto fire
+    }
+    this.hud.fireMode(this.autoFire);
     const scores = document.getElementById('scores-button');
     scores?.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -229,6 +238,7 @@ export class Game extends Behaviour implements Arena {
   private controls(): void {
     if (Input.getButtonDown('Sound') || Input.getKeyDown(KeyCode.M)) this.hud.sound(this.sound.toggleMute());
     if (this.board.isOpen) return;
+    if (Input.getButtonDown('FireMode') || Input.getKeyDown(KeyCode.F)) this.toggleFire();
     const go = Input.getButtonDown('Continue') || Input.getKeyDown(KeyCode.Return) || Input.getKeyDown(KeyCode.JoystickButton0);
     switch (this.phase) {
       case 'title':
@@ -429,8 +439,36 @@ export class Game extends Behaviour implements Arena {
     if (this.dying) return;
     this.fireTimer -= dt;
     if (this.fireTimer > 0) return;
+    if (!this.autoFire && !this.triggerHeld) {
+      this.fireTimer = 0; // the first shot goes the moment the trigger is pressed
+      return;
+    }
     this.fireTimer = Math.max(0.045, 0.088 - Math.min(10, this.wave) * 0.0018 - this.paths.lance * 0.006);
     this.shoot(false);
+  }
+
+  /** Hold-to-fire's trigger: a mouse button or finger on the field, J / K / X / Z, or a pad's A or RT. */
+  private get triggerHeld(): boolean {
+    return (
+      this.player.pointerHeld ||
+      Input.getKey(KeyCode.J) || Input.getKey(KeyCode.K) || Input.getKey(KeyCode.X) || Input.getKey(KeyCode.Z) ||
+      Input.getKey(KeyCode.JoystickButton0) || Input.getKey(KeyCode.JoystickButton7)
+    );
+  }
+
+  private toggleFire(): void {
+    this.autoFire = !this.autoFire;
+    try {
+      localStorage.setItem(FIRE_KEY, this.autoFire ? '1' : '0');
+    } catch {
+      // not remembered
+    }
+    this.hud.fireMode(this.autoFire);
+    this.sound.play('tick');
+    if (this.phase === 'playing') {
+      const p = this.player.node.position;
+      this.hud.popup(this.autoFire ? 'AUTO FIRE' : 'HOLD TO FIRE', p.x, p.y + 1.6, 0.5, this.camera, 'big');
+    }
   }
 
   private shoot(demo: boolean): void {

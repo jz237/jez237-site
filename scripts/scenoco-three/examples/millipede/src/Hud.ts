@@ -60,6 +60,7 @@ export class Hud {
     this.el.bar.classList.toggle('shown', on);
     this.el.bomb.classList.toggle('shown', on);
     this.el.pauseButton.classList.toggle('shown', on);
+    document.getElementById('fire-hud')?.classList.toggle('shown', on);
     this.el.splash.classList.toggle('gone', on);
     if (!on) {
       this.el.combo.textContent = '';
@@ -209,6 +210,21 @@ export class Hud {
   /** Time slowed — frost or the inchworm: the edges ice over. */
   frost(on: boolean): void {
     this.el.ui.classList.toggle('frozen', on);
+  }
+
+  /** Both fire-mode buttons — the title's and the HUD's — say which mode is on. */
+  fireMode(auto: boolean): void {
+    for (const button of document.querySelectorAll<HTMLElement>('[data-button="FireMode"]')) {
+      button.classList.toggle('auto', auto);
+      button.classList.toggle('hold', !auto);
+      const label = button.querySelector('.mode');
+      if (label) label.textContent = auto ? 'AUTO FIRE' : 'HOLD TO FIRE';
+      button.setAttribute('aria-label', `Fire mode: ${auto ? 'auto fire' : 'hold to fire'} — tap to switch`);
+    }
+    const how = document.getElementById('how-fire');
+    if (how) how.textContent = auto ? 'IT FIRES ON ITS OWN' : 'HOLD THE MOUSE BUTTON, J OR Z TO FIRE';
+    const touch = document.getElementById('how-fire-touch');
+    if (touch) touch.textContent = auto ? 'IT FIRES ON ITS OWN' : 'KEEP YOUR FINGER DOWN TO FIRE';
   }
 
   sound(muted: boolean): void {

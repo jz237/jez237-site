@@ -34,6 +34,8 @@ export class Player extends Behaviour<Group> {
   private lastX = 0;
   private bound = false;
   private dragId: number | null = null;
+  /** Pointers pressed on the field now: a held mouse button or finger is the trigger in hold-to-fire. */
+  private readonly pressed = new Set<number>();
   private readonly lastTouch = new Vector3();
   private readonly ray = new Raycaster();
   private readonly plane = new Plane(new Vector3(0, 0, 1), -0.4);
@@ -79,6 +81,11 @@ export class Player extends Behaviour<Group> {
       this.body.visible = !this.hidden && (this.invulnerable <= 0 || Math.floor(Time.unscaledTime * 14) % 2 === 0);
     }
     if (this.barrel) this.barrel.position.y = 0.55 - this.recoil * 0.18;
+  }
+
+  /** A mouse button or finger is down on the field. */
+  get pointerHeld(): boolean {
+    return this.pressed.size > 0;
   }
 
   /** It fired: the barrel kicks. */
@@ -130,6 +137,7 @@ export class Player extends Behaviour<Group> {
     this.bound = true;
     canvas.addEventListener('pointerdown', (e) => {
       if (this.demo) return;
+      this.pressed.add(e.pointerId);
       if (e.pointerType === 'mouse') this.point(e);
       else if (this.dragId === null && this.toWorld(e, this.lastTouch)) this.dragId = e.pointerId;
     });
@@ -144,8 +152,10 @@ export class Player extends Behaviour<Group> {
       this.clampTarget();
     });
     const up = (e: PointerEvent) => {
+      this.pressed.delete(e.pointerId);
       if (e.pointerId === this.dragId) this.dragId = null;
     };
+    window.addEventListener('blur', () => this.pressed.clear());
     window.addEventListener('pointerup', up);
     window.addEventListener('pointercancel', up);
   }
