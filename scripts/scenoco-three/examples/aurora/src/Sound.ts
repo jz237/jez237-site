@@ -33,6 +33,25 @@ interface Falling {
   airGain: GainNode;
   pan: StereoPannerNode | null;
   lfo: OscillatorNode;
+  voice: Voice;
+}
+
+interface Voice {
+  base: number;
+  drop: number;
+  curve: number;
+  interval: number;
+  beat: number;
+  airPitch: number;
+  airMix: number;
+  level: number;
+  weave: number;
+  phase: number;
+  shape: OscillatorType;
+  second: OscillatorType;
+  rate: number;
+  depth: number;
+  q: number;
 }
 
 export class Sound extends Behaviour {
@@ -162,7 +181,7 @@ export class Sound extends Behaviour {
    * swelling as it nears the ground and panned to where it is. Called every frame with the ones to voice
    * (the nearest few); any not in the list fades out. An empty list silences them all.
    */
-  incoming(list: { id: object; pan: number; progress: number; nuke: boolean }[]): void {
+  incoming(list: { id: object; pan: number; progress: number; kind: string; speed: number }[]): void {
     if (!this.live || !this.air) {
       for (const [id, f] of this.falling) this.release(id, f);
       return;
@@ -174,58 +193,86 @@ export class Sound extends Behaviour {
     for (const l of list) {
       let f = this.falling.get(l.id);
       if (!f) {
-        f = this.fall(l.nuke);
+        f = this.fall(l.kind, l.speed);
         this.falling.set(l.id, f);
       }
+      const v = f.voice;
       const k = Math.min(1, Math.max(0, l.progress));
-      const pitch = l.nuke ? 240 - 140 * k : 1650 - 1200 * k;
-      f.tone.frequency.setTargetAtTime(pitch, t, 0.06);
-      f.second.frequency.setTargetAtTime(pitch * 1.006 + 4, t, 0.06);
-      f.band.frequency.setTargetAtTime(l.nuke ? 380 : pitch * 1.7, t, 0.06);
-      // Heard from the moment it appears, swelling to as loud as a blast just before it lands.
-      const loud = (l.nuke ? 0.26 : 0.17) * (0.5 + 0.5 * k ** 1.3);
+      // Its own fall: from its own pitch, dropping by its own share, faster toward the end for a quick one.
+      let pitch = v.base * (1 - v.drop * k ** v.curve);
+      // A smart warhead's tone wavers as it weaves; a MIRV bus wails up and down before it splits.
+      if (l.kind === 'smart') pitch *= 1 + 0.07 * Math.sin(t * v.weave + v.phase);
+      if (l.kind === 'mirv') pitch *= 1 + 0.05 * Math.sin(t * 2.2 + v.phase);
+      f.tone.frequency.setTargetAtTime(pitch, t, 0.05);
+      f.second.frequency.setTargetAtTime(pitch * v.interval + v.beat, t, 0.05);
+      f.band.frequency.setTargetAtTime(Math.min(9000, pitch * v.airPitch), t, 0.06);
+      const loud = v.level * (0.5 + 0.5 * k ** 1.3);
       f.toneGain.gain.setTargetAtTime(loud, t, 0.08);
-      f.airGain.gain.setTargetAtTime(loud * (l.nuke ? 1.6 : 0.9), t, 0.08);
+      f.airGain.gain.setTargetAtTime(loud * v.airMix, t, 0.08);
       f.pan?.pan.setTargetAtTime(Math.max(-0.8, Math.min(0.8, l.pan * 0.8)), t, 0.05);
     }
   }
 
-  private fall(nuke: boolean): Falling {
+  /**
+   * A falling warhead's voice: no two alike. Each draws its own pitch, fall, waveform, warble and rush of
+   * air, within a character for its kind — a fast one higher and quicker to drop, a heavy one lower.
+   */
+  private fall(kind: string, speed: number): Falling {
     const ctx = this.ctx!;
+    const r = (a: number, b: number) => a + Math.random() * (b - a);
+    const quick = Math.max(0.75, Math.min(1.3, speed / 1.8));
+    const shapes: OscillatorType[] = ['sine', 'sine', 'triangle'];
+    let v: Voice = {
+      base: r(1150, 2100) * quick, drop: r(0.55, 0.75), curve: r(0.9, 1.6), interval: r(1.003, 1.012), beat: r(1, 7),
+      airPitch: r(1.3, 2.4), airMix: r(0.6, 1.3), level: r(0.13, 0.19), weave: r(5, 9), phase: r(0, 6.28),
+      shape: shapes[Math.floor(Math.random() * shapes.length)]!, second: 'triangle', rate: r(4.5, 8.5), depth: r(10, 34), q: r(1.8, 4),
+    };
+    if (kind === 'nuke') v = { ...v, base: r(210, 290), drop: r(0.45, 0.6), shape: 'sawtooth', second: 'sawtooth', interval: r(0.497, 0.503), beat: r(0.5, 2), airPitch: r(1.2, 1.8), airMix: r(1.4, 1.9), level: r(0.22, 0.28), rate: r(2, 3.5), depth: r(4, 9), q: r(0.6, 1) };
+    if (kind === 'mirv') v = { ...v, base: v.base * 0.82, interval: r(1.18, 1.26), level: v.level * 1.05, depth: v.depth * 0.6 };
+    if (kind === 'smart') v = { ...v, shape: 'triangle', second: 'square', interval: r(1.49, 1.51), level: v.level * 0.85, airMix: v.airMix * 0.7 };
+    if (kind === 'bomb') v = { ...v, base: r(700, 1100), drop: r(0.5, 0.65), shape: 'triangle', rate: r(9, 13), depth: r(6, 14), airMix: v.airMix * 1.3 };
+    if (kind === 'stealth') v = { ...v, level: v.level * 0.55, airMix: 1.8, depth: 3, q: 0.9 };
     const tone = ctx.createOscillator();
     const second = ctx.createOscillator();
-    tone.type = nuke ? 'sawtooth' : 'sine';
-    second.type = 'triangle';
+    tone.type = v.shape;
+    second.type = v.second;
+    tone.frequency.value = v.base;
+    second.frequency.value = v.base * v.interval;
     const toneGain = ctx.createGain();
     toneGain.gain.value = 0;
     const air = ctx.createBufferSource();
     air.buffer = this.air;
     air.loop = true;
+    air.playbackRate.value = r(0.8, 1.25);
     const band = ctx.createBiquadFilter();
     band.type = 'bandpass';
-    band.Q.value = nuke ? 0.8 : 2.5;
+    band.Q.value = v.q;
     const airGain = ctx.createGain();
     airGain.gain.value = 0;
+    // The second partial a little quieter, so the pair beats rather than buzzes.
+    const secondGain = ctx.createGain();
+    secondGain.gain.value = v.second === 'square' || v.second === 'sawtooth' ? 0.18 : 0.45;
     const pan = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
     const out: AudioNode = pan ?? this.master!;
     tone.connect(toneGain);
-    second.connect(toneGain);
+    second.connect(secondGain).connect(toneGain);
     toneGain.connect(out);
     air.connect(band).connect(airGain).connect(out);
     if (pan) pan.connect(this.master!);
-    // The falling-bomb warble: a slow wobble on the pitch.
+    // The warble: its own speed and depth.
     const lfo = ctx.createOscillator();
     const depth = ctx.createGain();
-    lfo.frequency.value = nuke ? 3 : 6.5;
-    depth.gain.value = nuke ? 6 : 22;
+    lfo.frequency.value = v.rate;
+    depth.gain.value = v.depth;
     lfo.connect(depth);
     depth.connect(tone.frequency);
     depth.connect(second.frequency);
-    lfo.start();
-    tone.start();
-    second.start();
-    air.start(0, Math.random() * 1.5);
-    return { tone, second, air, band, toneGain, airGain, pan, lfo };
+    const start = ctx.currentTime + Math.random() * 0.05;
+    lfo.start(start);
+    tone.start(start);
+    second.start(start);
+    air.start(start, Math.random() * 1.5);
+    return { tone, second, air, band, toneGain, airGain, pan, lfo, voice: v };
   }
 
   private release(id: object, f: Falling): void {
@@ -316,21 +363,24 @@ export class Sound extends Behaviour {
     const t = ctx.currentTime;
     if (t - this.lastWhistle < 0.25) return;
     this.lastWhistle = t;
+    const r = (a: number, b: number) => a + Math.random() * (b - a);
     const o = ctx.createOscillator();
     const g = ctx.createGain();
-    o.type = nuke ? 'sawtooth' : 'sine';
-    o.frequency.setValueAtTime(nuke ? 420 : 2100, t);
-    o.frequency.exponentialRampToValueAtTime(nuke ? 160 : 900, t + 0.7);
+    o.type = nuke ? 'sawtooth' : Math.random() < 0.7 ? 'sine' : 'triangle';
+    const from = nuke ? r(360, 480) : r(1700, 2600);
+    const len = r(0.5, 0.9);
+    o.frequency.setValueAtTime(from, t);
+    o.frequency.exponentialRampToValueAtTime(from * r(0.38, 0.55), t + len);
     g.gain.setValueAtTime(0.001, t);
-    g.gain.exponentialRampToValueAtTime(nuke ? 0.22 : 0.16, t + 0.04);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.75);
+    g.gain.exponentialRampToValueAtTime((nuke ? 0.22 : 0.16) * r(0.75, 1.1), t + 0.04);
+    g.gain.exponentialRampToValueAtTime(0.001, t + len + 0.05);
     const p = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
     if (p) p.pan.value = Math.max(-0.8, Math.min(0.8, pan * 0.8));
     o.connect(g);
     if (p) g.connect(p).connect(this.master!);
     else g.connect(this.master!);
     o.start(t);
-    o.stop(t + 0.8);
+    o.stop(t + 1);
   }
 
   explosion(power = 1, combo = 1): void {

@@ -20,7 +20,7 @@ export type Phase = 'title' | 'playing' | 'tally' | 'arsenal' | 'paused' | 'over
 type Boss = 'bomber' | 'orbital' | 'meteor' | 'stealth' | 'nuke';
 type Upgrade = 'blast' | 'speed' | 'ammo' | 'flak' | 'aegis' | 'rebuild';
 
-const VERSION = 'v1.0.3';
+const VERSION = 'v1.0.4';
 const FIRE_KEY = 'auroraSiege3d_rapid';
 const DIFF_KEY = 'auroraSiege3d_difficulty';
 const DIFFICULTIES = { easy: 0.82, normal: 1, hard: 1.28 } as const;
@@ -809,7 +809,7 @@ export class Game extends Behaviour implements Theatre {
       .filter((w) => w.alive && !w.waiting && w.gp.y < SKY + 1.5 && (!w.stealth || w.revealed > 0 || w.gp.y < SKY * 0.45))
       .sort((a, b) => b.progress - a.progress)
       .slice(0, 5)
-      .map((w) => ({ id: w, pan: w.gp.x / half(), progress: w.progress, nuke: w.kind === 'nuke' }));
+      .map((w) => ({ id: w, pan: w.gp.x / half(), progress: w.progress, kind: w.stealth ? 'stealth' : w.kind, speed: w.speed }));
     this.sound.incoming(list);
   }
 
