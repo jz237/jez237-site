@@ -10,6 +10,7 @@ import { Bee, Enemy, Flea, Inchworm, Scorpion, Spider, Spore, type Arena } from 
 import { Field, type Shroom } from './Field';
 import { COLS, LEFT, RIGHT, TOP, ZONE_TOP, cellX, cellY, colAt, rowAt } from './grid';
 import { Hud, type Chip } from './Hud';
+import { globalTop, localTop, renderTitle } from './Leaders';
 import { Bolt, Drone, NeonFlicker, Pickup, Shockwave } from './misc';
 import { Player } from './Player';
 import { Sound } from './Sound';
@@ -19,7 +20,7 @@ export type Phase = 'title' | 'playing' | 'upgrade' | 'paused' | 'over';
 type Power = Pickup['power'];
 type Path = 'volley' | 'lance' | 'drone';
 
-const VERSION = 'v3.0.1';
+const VERSION = 'v3.0.2';
 const EXTRA_LIFE_EVERY = 60000;
 const MAX_LIVES = 5;
 const MAX_BOMBS = 3;
@@ -123,6 +124,8 @@ export class Game extends Behaviour implements Arena {
   private dying = false;
   private awaitingTitle = false;
   private biome = -1;
+  /** The best score anyone has — the global board's top, or this device's, whichever is higher. */
+  private best = 0;
   private spawn = { spider: 3.5, flea: 6, scorpion: 9, bee: 14, inchworm: 22, side: 6, demoSpider: 6 };
 
   // --- Arena: what an enemy asks of the game -------------------------------------------------
@@ -161,6 +164,7 @@ export class Game extends Behaviour implements Arena {
       font: 'Orbitron, sans-serif',
     });
     migrateClassicScores();
+    this.refreshLeaders();
     const scores = document.getElementById('scores-button');
     scores?.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -697,6 +701,7 @@ export class Game extends Behaviour implements Arena {
     const gain = Math.round(base * combo * double);
     this.score += gain;
     this.hud.score(this.score);
+    this.hud.hi(Math.max(this.best, this.score));
     if (!quiet) {
       const text = `${prefix}${combo * double > 1 ? `×${combo * double} ` : ''}+${gain}`;
       this.hud.popup(text, x, y, 0.6, this.camera, hot || combo > 1 ? 'hot' : double > 1 ? 'good' : '');
@@ -939,6 +944,7 @@ export class Game extends Behaviour implements Arena {
     this.player.hidden = false;
     this.player.invulnerable = 0;
     this.setBiome(0);
+    this.refreshLeaders();
   }
 
   private pause(on: boolean): void {
@@ -951,6 +957,23 @@ export class Game extends Behaviour implements Arena {
       Time.timeScale = 1;
       this.hud.banner(null);
     }
+  }
+
+  /**
+   * The title screen's global and local top fives, and the HUD's HI: shown at once from this device,
+   * then again when the global board answers.
+   */
+  private refreshLeaders(): void {
+    const el = document.getElementById('title-scores');
+    const local = localTop();
+    this.best = Math.max(this.best, local[0]?.score ?? 0);
+    this.hud.hi(this.best);
+    if (el) renderTitle(el, local, undefined);
+    void globalTop().then((global) => {
+      this.best = Math.max(this.best, global?.[0]?.score ?? 0);
+      this.hud.hi(Math.max(this.best, this.score));
+      if (el) renderTitle(el, localTop(), global);
+    });
   }
 
   // --- looks ----------------------------------------------------------------------------------

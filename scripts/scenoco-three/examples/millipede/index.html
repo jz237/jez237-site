@@ -123,6 +123,19 @@
       .row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
       .ghost { position: relative; z-index: 2; padding: 10px 16px; border-radius: 11px; border: 1px solid rgba(120, 160, 255, 0.45); background: rgba(8, 12, 28, 0.7); color: var(--ink); font-family: Orbitron, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 2px; text-decoration: none; pointer-events: auto; box-shadow: 0 0 14px rgba(47, 245, 210, 0.25); }
       .ghost.amber { border-color: rgba(255, 162, 28, 0.6); color: #ffd9a0; box-shadow: 0 0 14px rgba(255, 162, 28, 0.25); }
+      .hi { margin-top: 3px; font-size: 9px; letter-spacing: 1.5px; color: var(--gold); text-shadow: 0 0 6px rgba(255, 210, 63, 0.7); }
+      #title-scores { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin: 0 0 16px; pointer-events: auto; }
+      #title-scores .board { min-width: 210px; padding: 8px 12px 9px; border-radius: 12px; background: rgba(8, 12, 28, 0.78); border: 1px solid rgba(255, 210, 63, 0.4); text-align: left; }
+      #title-scores .board.local { border-color: rgba(47, 245, 210, 0.4); }
+      #title-scores h3 { margin: 0 0 5px; font-size: 10px; letter-spacing: 2px; color: var(--gold); }
+      #title-scores .local h3 { color: var(--cyan); }
+      #title-scores ol { list-style: none; margin: 0; padding: 0; font-size: 11px; font-variant-numeric: tabular-nums; }
+      #title-scores li { display: grid; grid-template-columns: 1.7em 1.5em 2.8em 1fr 3.2em; gap: 4px; align-items: center; padding: 1px 0; color: #dfe8ff; }
+      #title-scores li b { text-align: right; color: var(--dim); font-weight: 700; }
+      #title-scores li em { font-style: normal; text-align: right; }
+      #title-scores li small { color: #9fb2d8; font-size: 10px; padding-left: 6px; }
+      #title-scores li.top { color: #ffe680; font-weight: 900; }
+      #title-scores li.note { display: block; color: var(--dim); }
       #how { font-size: 11px; letter-spacing: 2px; color: #c9d6f2; text-shadow: 0 1px 3px #000; }
       #how .line { margin: 6px 0; }
       #how span { white-space: nowrap; }
@@ -160,7 +173,12 @@
       #ui.portrait #level { font-size: 20px; }
       #ui.portrait .panel { padding: 7px 10px 8px; }
       #ui.portrait .up-card { width: 100%; max-width: 320px; min-height: 0; }
+      #ui.portrait #title-scores .board { min-width: 0; flex: 1 1 150px; padding: 6px 8px; }
+      #ui.portrait #title-scores li { grid-template-columns: 1.5em 1.3em 2.6em 1fr; }
+      #title-scores li.note { text-wrap: balance; }
+      #ui.portrait #title-scores li small { display: none; }
       @media (max-height: 460px) {
+        #title-scores { display: none; }
         #title { margin-bottom: 10px; } #title-name { font-size: 54px; } #play { padding: 11px 30px; margin-bottom: 10px; } .row { margin-bottom: 8px; } #how .line { margin: 3px 0; }
         .up-card { min-height: 0; width: 180px; padding-bottom: 24px; } #up-line { margin: 4px 0 10px; } .up-title { font-size: 20px; }
         #headline { font-size: 44px; }
@@ -178,7 +196,7 @@
   <body>
     <div id="ui">
       <div class="bar" id="hud">
-        <div class="side"><div class="panel"><div class="shade"></div><div class="label">SCORE</div><div id="score">000000</div></div></div>
+        <div class="side"><div class="panel"><div class="shade"></div><div class="label">SCORE</div><div id="score">000000</div><div class="hi">🌐 HI <span id="hi">0</span></div></div></div>
         <div class="panel middle"><div class="shade"></div><div class="label">WAVE</div><div id="level">1</div></div>
         <div class="side right"><div class="panel right"><div class="shade"></div><div class="label">LIVES</div><div id="lives"></div><div id="bombs">✦</div></div></div>
       </div>
@@ -213,6 +231,7 @@
           <button class="ghost" id="scores-button">HIGH SCORES</button>
           <a class="ghost amber" id="classic" href="../">◂ ALL EDITIONS</a>
         </div>
+        <div id="title-scores" aria-live="polite"></div>
         <div id="how">
           <div class="line keys"><span>MOUSE · WASD · ARROWS TO MOVE</span> · <span>IT FIRES ON ITS OWN</span></div>
           <div class="line keys"><span>SPACE SMART BOMB</span> · <span>P PAUSE</span> · <span>M SOUND</span> · <span>GAMEPAD OK</span></div>
@@ -225,7 +244,7 @@
     </div>
     <div id="loading"><div class="title">MILLIPEDE</div><div id="loading-bar"><div id="loading-fill"></div></div><div class="label">LOADING</div></div>
     <!-- jez237.com: visible version, bumped on every publish. Built on SceNoCo (RomaRogov, MIT). -->
-    <div id="version">Millipede · v3.0.1</div>
+    <div id="version">Millipede · v3.0.2</div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

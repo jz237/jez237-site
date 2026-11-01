@@ -23,6 +23,7 @@ export class Hud {
     ui: $('ui'),
     bar: $('hud'),
     score: $('score'),
+    hi: $('hi'),
     level: $('level'),
     lives: $('lives'),
     bombs: $('bombs'),
@@ -74,6 +75,12 @@ export class Hud {
     this.shownScore = value;
     this.el.score.textContent = String(value).padStart(6, '0');
     this.flick(this.el.score, 'bump', 90);
+  }
+
+  /** The score to beat, beside your own. */
+  hi(value: number): void {
+    const text = Math.floor(value).toLocaleString('en-US');
+    if (this.el.hi.textContent !== text) this.el.hi.textContent = text;
   }
 
   wave(n: number): void {
