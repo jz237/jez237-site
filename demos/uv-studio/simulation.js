@@ -19,10 +19,19 @@ export function physics(s,service=false){
  const exposure=flow>.01?intensity*residence:0;
  return {flow,lamp,transmission,intensity,residence,exposure,paths:[.66,1,1.24].map(f=>exposure*f),regime:service?'Power isolated · human service':!s.pump||flow<=.01?'No circulation · UV held off':!s.lamp?'Water moving · UV off':s.output<25?'Lamp output diminished':s.fouling>60?'Sleeve limits transmission':s.clarity<45?'Water attenuates UV':'Closed chamber · UV operating'};
 }
-export function createSimulation(){let time=0,travel=0,serviceTime=null,completed=0;
- return {reset(){time=travel=completed=0;serviceTime=null;},startService(){serviceTime=0;},cancelService(){serviceTime=null;},
+// The cloth wraps around the sleeve and traverses its length. Deposits are
+// removed only behind this contact front; the same function drives geometry.
+export function serviceWipe(progress){const seconds=progress*SERVICE_SECONDS,coverage=clamp((seconds-13.2)/2.5);return {active:seconds>=13.2&&seconds<=15.7,coverage,front:-2.3+coverage*4.8};}
+const referenceTransit=1/(defaults.flow/100*.12),referenceIntensity=physics(defaults).intensity;
+export function createSimulation(){let time=0,travel=0,serviceTime=null,completed=0,parcel;
+ const freshParcel=()=>({active:false,progress:0,contact:0,exposure:0,complete:false,hold:0,journeys:0});parcel=freshParcel();
+ return {reset(){time=travel=completed=0;serviceTime=null;parcel=freshParcel();},startParcel(){parcel={...freshParcel(),active:true};},startService(){serviceTime=0;parcel.active=false;},cancelService(){serviceTime=null;},
  step(dt,state){dt=clamp(Number.isFinite(dt)?dt:0,0,.1);time+=dt;
   if(serviceTime!==null){serviceTime+=dt;if(serviceTime>=SERVICE_SECONDS){serviceTime=null;completed++;state.fouling=0;state.output=100;}}
   const p=serviceTime!==null&&serviceTime>=20?physics({...state,lamp:false}):physics(state,serviceTime!==null);travel+=dt*p.flow;
- },snapshot(state){const service=serviceTime!==null,p=service&&serviceTime>=20?{...physics({...state,lamp:false}),regime:'Refilling · UV disconnected'}:physics(state,service);return {time,travel,service,serviceProgress:service?serviceTime/SERVICE_SECONDS:0,servicePhase:service?Math.min(5,Math.floor(serviceTime/4)):-1,completed,...p};}};
+  if(parcel.active&&serviceTime===null){
+   if(parcel.complete){if(p.flow>.01)parcel.hold+=dt;if(parcel.hold>=1.8)parcel={...freshParcel(),active:true,journeys:parcel.journeys};}
+   else {const transit=p.flow>.01?Math.min(dt,(1-parcel.progress)/(p.flow*.12)):dt;parcel.contact+=transit;parcel.exposure+=transit*p.intensity/(referenceIntensity*referenceTransit);parcel.progress=clamp(parcel.progress+transit*p.flow*.12);if(parcel.progress>=1-1e-9){parcel.progress=1;parcel.complete=true;parcel.journeys++;}}
+  }
+ },snapshot(state){const service=serviceTime!==null,p=service&&serviceTime>=20?{...physics({...state,lamp:false}),regime:'Refilling · UV disconnected'}:physics(state,service);return {time,travel,service,serviceProgress:service?serviceTime/SERVICE_SECONDS:0,servicePhase:service?Math.min(5,Math.floor(serviceTime/4)):-1,completed,parcel:{...parcel},...p};}};
 }
