@@ -2,12 +2,23 @@
 // drag curve with a fuse or tail, and break at the apex; the break builds its
 // star records, smoke, light and sound events. Everything is placed at its
 // scheduled show time, so late frames and seeking still land things exactly.
-import { StarBatch, K_FLASH, K_FUSE, K_GERB, T_GOLD, T_SILVER, T_GLITTER, T_FALL } from './particles.js';
-import { SHELLS } from './shells.js';
+import { StarBatch, K_FLASH, K_FUSE, K_GERB, K_CRACKLE, T_GOLD, T_SILVER, T_GLITTER, T_COLOR, T_FALL } from './particles.js';
+import { SHELLS, colorOf } from './shells.js';
 import { starPos, starVel, aimShell, rng } from './physics.js';
 import { SITE } from './site.js';
 
 const SHELL_C = 0.0032, SHELL_KG = 0.07;
+// Workshop modifiers; every value is clamped again here so no setting can
+// take a shell outside what the real thing does.
+const MOD_RANGE = { count: [0.5, 1.6], spread: [0.7, 1.3], life: [0.7, 1.4], bright: [0.6, 1.5], tail: [0.6, 1.5], hang: [0.75, 1.4] };
+export function cleanMods(m) {
+  const out = {};
+  for (const k in MOD_RANGE) {
+    const v = m && Number.isFinite(m[k]) ? m[k] : 1;
+    out[k] = Math.min(MOD_RANGE[k][1], Math.max(MOD_RANGE[k][0], v));
+  }
+  return out;
+}
 const scratch = [0, 0, 0];
 
 export class Fireworks {
@@ -54,7 +65,7 @@ export class Fireworks {
   }
 
   // Shell from a barge to a break point. target [x, y, z] or null for a natural height.
-  launchShell({ t, type, inches = 6, barge, target, color, rise, from, manual = false }) {
+  launchShell({ t, type, inches = 6, barge, target, color, color2, rise, from, manual = false, mods }) {
     const r = this.r;
     const mortar = from || this.bargePos(barge ?? r.int(0, SITE.barges.length - 1));
     const H = 32 * inches * (0.9 + r() * 0.2);
@@ -87,11 +98,11 @@ export class Fireworks {
     else if (rise !== 'none') this.audio.event('rise', t + 0.05, mortar, { size: inches });
     const pos = starPos([0, 0, 0], mortar, aim.v0, SHELL_C, SHELL_KG, tb, this.wind);
     const vel = starVel([0, 0, 0], aim.v0, SHELL_C, SHELL_KG, tb, this.wind);
-    this.schedule(t + tb, (tt) => this.burst({ t: tt, pos, vel, type, inches, color, manual }));
+    this.schedule(t + tb, (tt) => this.burst({ t: tt, pos, vel, type, inches, color, color2, manual, mods }));
     return { tBreak: t + tb, pos };
   }
 
-  burst({ t, pos, vel = [0, 0, 0], type = 'peony', inches = 6, color, depth = 0, manual = false }) {
+  burst({ t, pos, vel = [0, 0, 0], type = 'peony', inches = 6, color, color2, depth = 0, manual = false, mods }) {
     const r = this.r;
     const batch = new StarBatch(256);
     const recs = [];
@@ -100,11 +111,23 @@ export class Fireworks {
     const tailK = T.sparkK;
     const info = { t, pos, inches, type, manual, caption: '', sound: null, light: null, smoke: 1, albedo: null, pops: [] };
     const axis = r.dir();
+    const M = cleanMods(mods);
+    const starCap = Math.round(1400 * T.starScale);
     const B = {
-      t, pos, vel, r, inches, R: 11 * inches * (0.9 + r() * 0.2), color, axis, skew: (r() - 0.5) * 0.12,
+      t, pos, vel, r, inches, R: 11 * inches * (mods ? 0.97 + r() * 0.06 : 0.9 + r() * 0.2) * M.spread, color, color2, axis, skew: (r() - 0.5) * 0.12,
       tailRate: this.tailRate,
-      count: (base) => Math.max(8, Math.round(base * 1.5 * Math.pow(inches / 6, 1.25) * T.starScale)),
+      count: (base) => Math.min(starCap, Math.max(8, Math.round(base * 1.5 * Math.pow(inches / 6, 1.25) * T.starScale * M.count))),
       add: (s) => {
+        if (mods && !s.modded && s.kind !== K_FLASH) {
+          s.modded = true;
+          s.life *= M.life;
+          if (s.tChange !== undefined) s.tChange *= M.life;
+          if (s.kind === K_CRACKLE && s.popT !== undefined) s.popT *= M.life;
+          s.kg = (s.kg ?? 0.85) * M.hang;
+          s.colA = s.colA.map(v => v * M.bright);
+          if (s.colB) s.colB = s.colB.map(v => v * M.bright);
+          if (s.tail) s.tail = { ...s.tail, life: s.tail.life * M.tail, power: s.tail.power * M.bright };
+        }
         if (s.tail) {
           const maxRate = (tailK - 1) / (s.tail.life * 1.45);
           if (s.tail.rate > maxRate) { s.tail.power *= s.tail.rate / maxRate; s.tail.rate = maxRate; }
@@ -114,10 +137,10 @@ export class Fireworks {
       },
       pos3: (s, tau) => starPos([0, 0, 0], s.p0, s.v0, s.c, s.kg, tau, wind),
       vel3: (s, tau) => starVel([0, 0, 0], s.v0, s.c, s.kg, tau, wind),
-      light: (c, scale = 1, life = 2.2, flash = 1) => { info.light = { c, scale, life, flash }; },
+      light: (c, scale = 1, life = 2.2, flash = 1) => { info.light = { c, scale: scale * M.bright, life: life * M.life, flash }; },
       smokeLevel: (lvl, albedo) => { info.smoke = lvl; info.albedo = albedo; },
       pops: (list) => info.pops.push(...list),
-      child: (dt, p, ty, inch, colr) => this.schedule(t + dt, (tt) => this.burst({ t: tt, pos: p, vel: [0, 0, 0], type: ty, inches: inch, color: colr, depth: depth + 1 })),
+      child: (dt, p, ty, inch, colr) => this.schedule(t + dt, (tt) => this.burst({ t: tt, pos: p, vel: [0, 0, 0], type: ty, inches: inch, color: colr, color2: mods ? 'none' : undefined, depth: depth + 1, mods })),
       sound: (k) => { info.sound = k; },
       caption: (c) => { info.caption = c; },
     };
@@ -125,6 +148,8 @@ export class Fireworks {
     // the bursting charge's own flash
     if (type !== 'salute') batch.push({ p0: pos, t0: t, v0: [0, 0, 0], c: 0, kg: 1, life: 0.06, kind: K_FLASH, colA: [9 * inches / 6, 8 * inches / 6, 6.5 * inches / 6], glowR: 3 + inches * 0.6, seed: r() });
     batch.commit(this.P);
+    info.stars = recs.length;
+    info.radius = B.R;
 
     // light in the air
     const L = info.light || { c: [1, 0.8, 0.6], scale: 1, life: 2.2, flash: 1 };
@@ -160,21 +185,28 @@ export class Fireworks {
   }
 
   // A fan of comets from a barge (cake).
-  fan({ t, barge, n = 7, spread = 0.45, tilt = 0, kind = 'gold', color, speed = 1 }) {
+  fan({ t, barge, n = 7, spread = 0.45, tilt = 0, kind = 'gold', color, speed = 1, mods }) {
     const r = this.r;
+    const M = cleanMods(mods);
     const base = this.bargePos(barge, 6);
     const batch = new StarBatch(16);
-    const tail = kind === 'silver'
+    if (typeof color === 'string') {
+      if (color === 'silver' || color === 'white') { kind = 'silver'; color = null; } else if (color === 'gold') { kind = 'gold'; color = null; } else color = colorOf(color, 1.15);
+    }
+    const tail0 = kind === 'silver'
       ? { kind: T_SILVER, rate: 44 * this.tailRate, life: 0.45, eject: 4, inherit: 0.15, ks: 4, power: 0.34 / this.tailRate }
       : { kind: T_GOLD, rate: 56 * this.tailRate, life: 0.9, eject: 1.8, inherit: 0.18, ks: 3, power: 0.3 / this.tailRate };
-    const colA = color ? color : kind === 'silver' ? [1.6, 1.65, 1.75] : [1.6, 0.8, 0.22];
+    // coloured comets shed sparks in their own colour so the colour reads
+    if (color) Object.assign(tail0, { kind: T_COLOR, life: 0.55, eject: 1.6, power: 0.34 / this.tailRate });
+    const tail = { ...tail0, life: tail0.life * M.tail, power: tail0.power * M.bright };
+    const colA = (color ? color : kind === 'silver' ? [1.6, 1.65, 1.75] : [1.6, 0.8, 0.22]).map(v => v * M.bright);
     for (let i = 0; i < n; i++) {
       const f = n === 1 ? 0 : i / (n - 1) * 2 - 1;
       const a = f * spread + tilt;
       const sp = (58 + r() * 10) * speed;
       const d = [Math.sin(a), Math.cos(a), (r() - 0.5) * 0.08];
       const tt = t + i * 0.035 * r();
-      const s = { p0: base, t0: tt, v0: [d[0] * sp, d[1] * sp, d[2] * sp], c: 0.006, kg: 0.35, life: 1.9 + r() * 0.6, colA, glowR: 0.9, seed: r(), tail, flicker: 0.12 };
+      const s = { p0: base, t0: tt, v0: [d[0] * sp, d[1] * sp, d[2] * sp], c: 0.006, kg: 0.35 * M.hang, life: (1.9 + r() * 0.6) * M.life, colA, glowR: 0.9, seed: r(), tail, flicker: 0.12 };
       const maxRate = (this.tier.sparkK - 1) / (tail.life * 1.45);
       if (tail.rate > maxRate) s.tail = { ...tail, rate: maxRate, power: tail.power * tail.rate / maxRate };
       batch.push(s);
@@ -189,17 +221,20 @@ export class Fireworks {
   }
 
   // Mine: a burst fired straight out of the mortar at the barge.
-  mine({ t, barge, color, count = 60 }) {
+  mine({ t, barge, color, count = 60, cone = 0.38, speed = 1, mods }) {
     const r = this.r;
+    const M = cleanMods(mods);
     const base = this.bargePos(barge, 6);
     const batch = new StarBatch(count + 2);
-    const c = color || [1.6, 0.75, 0.2];
-    for (let i = 0; i < Math.round(count * this.tier.starScale + 8); i++) {
-      const a = r() * Math.PI * 2, s = Math.sqrt(r()) * 0.38;
+    if (typeof color === 'string') color = colorOf(color, 1.1);
+    const c = (color || [1.6, 0.75, 0.2]).map(v => v * M.bright);
+    const tl = 0.6 * M.tail;
+    for (let i = 0; i < Math.round(count * M.count * this.tier.starScale + 8); i++) {
+      const a = r() * Math.PI * 2, s = Math.sqrt(r()) * cone * M.spread;
       const d = [Math.cos(a) * s, 1, Math.sin(a) * s];
       const l = Math.hypot(...d);
-      const sp = 30 + r() * 30;
-      batch.push({ p0: base, t0: t, v0: [d[0] / l * sp, d[1] / l * sp, d[2] / l * sp], c: 0.02, kg: 0.8, life: 1.4 + r() * 0.8, colA: c, glowR: 0.6, seed: r(), tail: { kind: T_GOLD, rate: Math.min(30 * this.tailRate, (this.tier.sparkK - 1) / (0.6 * 1.45)), life: 0.6, eject: 1.5, inherit: 0.2, ks: 3, power: 0.2 / this.tailRate } });
+      const sp = (30 + r() * 30) * speed;
+      batch.push({ p0: base, t0: t, v0: [d[0] / l * sp, d[1] / l * sp, d[2] / l * sp], c: 0.02, kg: 0.8 * M.hang, life: (1.4 + r() * 0.8) * M.life, colA: c, glowR: 0.6, seed: r(), tail: { kind: T_GOLD, rate: Math.min(30 * this.tailRate, (this.tier.sparkK - 1) / (tl * 1.45)), life: tl, eject: 1.5, inherit: 0.2, ks: 3, power: 0.2 / this.tailRate * M.bright } });
     }
     batch.push({ p0: base, t0: t, v0: [0, 0, 0], c: 0, kg: 1, life: 0.07, kind: K_FLASH, colA: [14, 9, 5], glowR: 6, seed: r() });
     batch.commit(this.P);
@@ -209,7 +244,7 @@ export class Fireworks {
   }
 
   // Niagara falls of sparks from the bridge deck between t0 and t1.
-  waterfall({ t0, t1, gold = false }, world) {
+  waterfall({ t0, t1, gold = false, bright = 1 }, world) {
     const r = this.r;
     const B = SITE.bridge;
     const n = this.tier.gerbs;
@@ -222,7 +257,7 @@ export class Fireworks {
       const p = world.bridgeAt(s, B.deckY - 4.6, -(B.width / 2 + 0.6));
       batch.push({
         p0: p, t0: t0 + r() * 0.8, v0: [0, 0, 0], c: 0, kg: 1, life, kind: K_GERB, colA: gold ? [1.2, 0.6, 0.2] : [1.3, 1.25, 1.15], glowR: 0.35, seed: r(), head: 0.7,
-        tail: { kind: T_FALL, rate, life: sparkLife * (0.8 + r() * 0.3), eject: 2.4, inherit: 0, ks: 1.15, power: (gold ? 0.09 : 0.11) * 14 / rate * (0.25 + Math.pow(r(), 2) * 2.2) },
+        tail: { kind: T_FALL, rate, life: sparkLife * (0.8 + r() * 0.3), eject: 2.4, inherit: 0, ks: 1.15, power: (gold ? 0.09 : 0.11) * 14 / rate * (0.25 + Math.pow(r(), 2) * 2.2) * Math.min(1.5, Math.max(0.6, bright)) },
       });
     }
     batch.commit(this.P);

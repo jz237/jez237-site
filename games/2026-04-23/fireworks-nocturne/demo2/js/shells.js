@@ -21,6 +21,7 @@ export const COLORS = {
 const COLOR_KEYS = ['red', 'orange', 'yellow', 'lemon', 'green', 'aqua', 'blue', 'purple', 'pink', 'white', 'silver'];
 const PAIRS = [['red', 'green'], ['blue', 'yellow'], ['purple', 'lemon'], ['pink', 'aqua'], ['red', 'white'], ['blue', 'white'], ['green', 'purple'], ['orange', 'blue'], ['yellow', 'red'], ['aqua', 'red'], ['white', 'red'], ['lemon', 'blue']];
 
+export const colorOf = (k, gain = 1) => col(k, gain);
 const col = (k, gain = 1) => { const c = COLORS[k]; return [c.c[0] * c.p * gain, c.c[1] * c.p * gain, c.c[2] * c.p * gain]; };
 
 // Burst geometry helpers -------------------------------------------------
@@ -95,6 +96,15 @@ const tailSilver = (B, life = 0.35, rate = 40, power = 0.3) => ({ kind: T_SILVER
 const tailKamuro = (B, life = 3.0, rate = 18, power = 0.32) => ({ kind: T_KAMURO, rate: rate * B.tailRate, life, eject: 0.8, inherit: 0.08, ks: 2.4, power: power / B.tailRate });
 const tailGlitter = (B, life = 1.6, rate = 26, power = 0.35) => ({ kind: T_GLITTER, rate: rate * B.tailRate, life, eject: 1.1, inherit: 0.1, ks: 2.6, power: power / B.tailRate });
 
+// Workshop choices: B.color is a colour key or undefined (the shell's own pick);
+// B.color2 is undefined (own pick), 'none', or a colour key.
+function second(B, roll, avoid) {
+  if (B.color2 === undefined) return roll ? pickColor(B, avoid) : null;
+  return B.color2 === 'none' ? null : B.color2;
+}
+const goldOr = (B, roll) => (B.color ? (B.color === 'gold' ? null : B.color) : (roll ? pickColor(B) : null));
+const isSilver = (B, roll) => (B.color ? B.color === 'silver' || B.color === 'white' : roll);
+
 function pickColor(B, avoid) {
   let k;
   do { k = B.r.pick(COLOR_KEYS); } while (k === avoid);
@@ -106,11 +116,11 @@ function pickColor(B, avoid) {
 export const SHELLS = {
   peony(B) {
     const roll = B.r();
-    const a = B.color || pickColor(B), b = B.r.chance(0.3) ? pickColor(B, a) : null;
+    const a = B.color || pickColor(B), b = second(B, B.r.chance(0.3), a);
     const n = B.count(110);
     const dirs = fib(n, B.r);
-    const split = roll < 0.25 && b; // two-colour halves
-    const change = !split && b && roll < 0.55;
+    const split = B.color2 === undefined && roll < 0.25 && b; // two-colour halves
+    const change = !split && b && (B.color2 !== undefined || roll < 0.55);
     dirs.forEach(d => {
       let ca = col(a), cb = null;
       if (split) ca = d[0] * B.axis[2] - d[2] * B.axis[0] > 0 ? col(a) : col(b);
@@ -124,7 +134,7 @@ export const SHELLS = {
 
   chrysanthemum(B) {
     const a = B.color || pickColor(B);
-    const silver = B.r.chance(0.35);
+    const silver = B.color2 === undefined ? B.r.chance(0.35) : B.color2 === 'silver';
     const n = B.count(95);
     fib(n, B.r).forEach(d => star(B, d, { colA: col(a), life: 1.8 + B.inches * 0.07, tail: silver ? tailSilver(B) : tailGold(B, 0.8 + B.inches * 0.05) }));
     B.light(col(a), 1.1);
@@ -133,7 +143,9 @@ export const SHELLS = {
   },
 
   pistil(B) {
-    const [a, b] = B.r.pick(PAIRS);
+    let [a, b] = B.r.pick(PAIRS);
+    if (B.color) { a = B.color; if (b === a) b = pickColor(B, a); }
+    if (B.color2 && B.color2 !== 'none') b = B.color2;
     const n = B.count(110);
     fib(n, B.r).forEach(d => star(B, d, { colA: col(a), life: 2.0 + B.inches * 0.08 }));
     fib(Math.round(n * 0.4), B.r).forEach(d => star(B, d, { colA: col(b), R: B.R * 0.42, life: 1.6 + B.inches * 0.06, glowR: 0.5 }));
@@ -166,7 +178,7 @@ export const SHELLS = {
 
   kamuro(B) {
     const n = B.count(120);
-    const silver = B.r.chance(0.35);
+    const silver = isSilver(B, B.r.chance(0.35));
     fib(n, B.r).forEach(d => star(B, d, { colA: silver ? col('silver', 0.3) : col('gold', 0.32), life: 4.0 + B.inches * 0.12, q: 4.2, kg: 1.05, glowR: 0.5, tail: { kind: T_KAMURO, rate: 30 * B.tailRate, life: 2.9 + B.inches * 0.07, eject: 0.5, inherit: 0.05, ks: 3.6, power: (silver ? 0.36 : 0.32) / B.tailRate }, flicker: 0.4 }));
     B.light(silver ? [0.95, 0.9, 0.85] : [1.0, 0.55, 0.2], 1.1, 3.8);
     B.smokeLevel(2.6);
@@ -175,7 +187,7 @@ export const SHELLS = {
 
   brocade(B) {
     const n = B.count(90);
-    const tip = B.r.chance(0.5) ? pickColor(B) : null;
+    const tip = second(B, B.r.chance(0.5));
     fib(n, B.r).forEach(d => star(B, d, { colA: tip ? col(tip) : col('gold', 0.8), colB: col('gold', 0.5), tChange: tip ? 0.15 : undefined, life: 2.8 + B.inches * 0.08, q: 6, kg: 1.0, tail: tailKamuro(B, 1.8, 28, 0.32) }));
     B.light([1.0, 0.6, 0.25], 1.1, 3);
     B.smokeLevel(2);
@@ -184,7 +196,7 @@ export const SHELLS = {
 
   palm(B) {
     const arms = B.r.int(6, 10);
-    const a = B.r.chance(0.5) ? pickColor(B) : null;
+    const a = goldOr(B, B.r.chance(0.5));
     for (let i = 0; i < arms; i++) {
       const ang = i / arms * Math.PI * 2 + B.r() * 0.3;
       const up = 0.35 + B.r() * 0.35;
@@ -200,7 +212,7 @@ export const SHELLS = {
 
   horsetail(B) {
     const n = B.count(60);
-    const silver = B.r.chance(0.4);
+    const silver = isSilver(B, B.r.chance(0.4));
     for (let i = 0; i < n; i++) {
       const ang = B.r() * Math.PI * 2, s = B.r() * 0.6;
       const d = norm3([Math.cos(ang) * s, 0.5 - B.r() * 0.8, Math.sin(ang) * s]);
@@ -213,9 +225,10 @@ export const SHELLS = {
 
   ring(B) {
     const a = B.color || pickColor(B);
-    const double = B.r.chance(0.35);
+    const inner = second(B, B.r.chance(0.35), a);
+    const double = !!inner;
     const nrm = facingPlane(B, 0.9);
-    const rings = double ? [[a, 1], [pickColor(B, a), 0.62]] : [[a, 1]];
+    const rings = double ? [[a, 1], [inner, 0.62]] : [[a, 1]];
     rings.forEach(([k, s], ri) => {
       const [u, v] = basis(ri ? jitter(nrm, 0.5, B.r) : nrm);
       const n = Math.round(B.count(60) * s);
@@ -231,7 +244,8 @@ export const SHELLS = {
   },
 
   saturn(B) {
-    const a = pickColor(B), b = pickColor(B, a);
+    const a = B.color || pickColor(B);
+    const b = B.color2 && B.color2 !== 'none' ? B.color2 : pickColor(B, a);
     fib(B.count(55), B.r).forEach(d => star(B, d, { colA: col(a), R: B.R * 0.5, life: 2.0 }));
     const nrm = jitter([0.15, 1, 0.2], 0.7, B.r);
     const [u, v] = basis(norm3(nrm));
@@ -247,7 +261,7 @@ export const SHELLS = {
 
   crossette(B) {
     const n = Math.round(B.count(14) * 0.7 + 6);
-    const a = B.r.chance(0.5) ? pickColor(B) : null;
+    const a = goldOr(B, B.r.chance(0.5));
     const split = 0.75 + B.r() * 0.3;
     fib(n, B.r).forEach(d => {
       const s = star(B, d, { colA: col('gold', 0.8), life: split, q: 3, glowR: 0.7, tail: tailGold(B, 0.7, 50, 0.3), lj: 0.02 });
@@ -273,7 +287,7 @@ export const SHELLS = {
 
   strobe(B) {
     const n = B.count(90);
-    const c2 = B.r.chance(0.4) ? pickColor(B, 'white') : null;
+    const c2 = B.color ? (B.color === 'white' ? null : B.color) : (B.r.chance(0.4) ? pickColor(B, 'white') : null);
     fib(n, B.r).forEach(d => star(B, d, { colA: c2 ? col(c2, 1.4) : col('white', 1.1), life: 3.2, q: 4, strobe: 7 + B.r() * 6, kg: 1.1 }));
     B.light(c2 ? col(c2) : [1, 1, 1], 0.5, 3.2);
     B.smokeLevel(1);
@@ -283,7 +297,7 @@ export const SHELLS = {
   crackle(B) {
     const n = B.count(130);
     const pops = [];
-    const base = B.r.chance(0.5) ? pickColor(B) : null;
+    const base = B.color || (B.r.chance(0.5) ? pickColor(B) : null);
     if (base) fib(Math.round(n * 0.3), B.r).forEach(d => star(B, d, { colA: col(base), life: 1.0, R: B.R * 0.8 }));
     for (let i = 0; i < n; i++) {
       const d = B.r.dir();
@@ -323,10 +337,10 @@ export const SHELLS = {
   },
 
   multibreak(B) {
-    const a = pickColor(B);
+    const a = B.color || pickColor(B);
     fib(B.count(70), B.r).forEach(d => star(B, d, { colA: col(a), life: 1.6 }));
     const k = B.r.int(4, 6);
-    const b = pickColor(B, a);
+    const b = B.color2 && B.color2 !== 'none' ? B.color2 : pickColor(B, a);
     for (let i = 0; i < k; i++) {
       const ang = i / k * Math.PI * 2 + B.r() * 0.4;
       const off = [Math.cos(ang) * B.R * 0.9, (B.r() - 0.3) * B.R * 0.6, Math.sin(ang) * B.R * 0.9];
@@ -343,7 +357,7 @@ export const SHELLS = {
 };
 
 function pattern(B, kind) {
-  const a = kind === 'heart' ? B.r.pick(['red', 'pink', 'red']) : kind === 'smiley' ? B.r.pick(['yellow', 'lemon', 'orange']) : B.r.pick(['white', 'aqua', 'green', 'blue']);
+  const a = B.color || (kind === 'heart' ? B.r.pick(['red', 'pink', 'red']) : kind === 'smiley' ? B.r.pick(['yellow', 'lemon', 'orange']) : B.r.pick(['white', 'aqua', 'green', 'blue']));
   const nrm = facingPlane(B, 0.35);
   let [u, v] = basis(nrm);
   // keep the shape upright: v closest to world up

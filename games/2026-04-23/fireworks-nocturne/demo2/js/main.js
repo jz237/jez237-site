@@ -12,6 +12,7 @@ import { CameraRig } from './camera.js';
 import { CAMERAS } from './site.js';
 import { SHELL_NAMES } from './shells.js';
 import { Crowd } from './crowd.js';
+import { Workshop } from './workshop.js';
 
 const Q = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
@@ -84,7 +85,21 @@ rig.update(0, innerWidth / innerHeight);
 show.seed = Number(Q.get('seed') || 1);
 show.begin(0, show.seed);
 
+const workshop = new Workshop({
+  fw, world, smoke, rig, camera, getTime: () => state.t,
+  onToggle: (on) => {
+    document.body.classList.toggle('ws', on);
+    if (show.on === on) show.setOn(!on, state.t);
+    $('autoBtn').classList.toggle('on', show.on);
+    picker.classList.remove('show');
+    $('shellBtn').classList.remove('on');
+    labels();
+    layout();
+  },
+});
+
 fw.onBreak = (info) => {
+  workshop.noteBreak(info);
   if (info.inches >= 4 && state.t - state.lastCaption > 1.3 && info.caption) {
     state.lastCaption = state.t;
     const el = $('caption');
@@ -110,7 +125,7 @@ function resize() {
 function layout() {
   document.documentElement.style.setProperty('--barH', $('bar').getBoundingClientRect().height + 'px');
 }
-addEventListener('resize', () => { resize(); layout(); });
+addEventListener('resize', () => { resize(); labels(); layout(); });
 resize();
 layout();
 setTimeout(() => { if (innerWidth <= 760) $('title').classList.add('faded'); }, 12000);
@@ -181,8 +196,12 @@ function step(dt) {
   const sdt = state.paused ? 0 : dt * state.scale;
   state.t += sdt;
   const t = state.t;
-  wind[0] = 2.2 + 1.3 * Math.sin(t * 0.011 + 1);
-  wind[2] = -0.7 + 0.6 * Math.sin(t * 0.017);
+  let wx = 2.2 + 1.3 * Math.sin(t * 0.011 + 1), wz = -0.7 + 0.6 * Math.sin(t * 0.017);
+  if (workshop.on) { const w = workshop.wind(); wx = w * 0.94 + Math.min(w, 1.5) * 0.15 * Math.sin(t * 0.6); wz = -w * 0.34; }
+  // ease toward it so drifting smoke and falling stars never jump
+  const k = Math.min(1, sdt * 0.25);
+  wind[0] += Math.max(-k, Math.min(k, wx - wind[0]));
+  wind[2] += Math.max(-k, Math.min(k, wz - wind[2]));
   particles.uniforms.uWind.value.set(wind[0], wind[1], wind[2]);
   show.update(t);
   fw.update(t);
@@ -191,7 +210,8 @@ function step(dt) {
   lights.update(t);
   world.update(t, camera);
   crowd.update(t);
-  $('act').textContent = show.on ? show.act(t) : 'Free launch';
+  workshop.update(t);
+  $('act').textContent = workshop.on ? 'Workshop' : show.on ? show.act(t) : 'Free launch';
 }
 
 let last = performance.now();
@@ -275,7 +295,8 @@ function tapLaunch(x, y) {
   const ndcX = x / innerWidth * 2 - 1, ndcY = -(y / innerHeight) * 2 + 1;
   const target = rig.aimAt(ndcX, ndcY);
   if (!target) return;
-  launchChoice(target);
+  if (workshop.on) workshop.tap(target);
+  else launchChoice(target);
 }
 
 const MANUAL = ['peony', 'chrysanthemum', 'pistil', 'dahlia', 'willow', 'kamuro', 'brocade', 'palm', 'horsetail', 'ring', 'saturn', 'crossette', 'strobe', 'crackle', 'glitter', 'spider', 'salute', 'multibreak', 'heart', 'smiley', 'starshape'];
@@ -297,7 +318,8 @@ addEventListener('keydown', (e) => {
   audioUnlock();
   const k = e.key.toLowerCase();
   if (k >= '1' && k <= '4') setView(Number(k) - 1);
-  else if (k === ' ') { e.preventDefault(); launchChoice(null); }
+  else if (k === ' ') { e.preventDefault(); if (workshop.on) workshop.fire(); else launchChoice(null); }
+  else if (k === 'w') $('labBtn').click();
   else if (k === 'f') $('finaleBtn').click();
   else if (k === 'l') $('longBtn').click();
   else if (k === 's') $('slowBtn').click();
@@ -306,15 +328,18 @@ addEventListener('keydown', (e) => {
 });
 
 // ------------------------------------------------------------------ UI
+const LABELS = {};
+function setLabel(id, long, short = long) { LABELS[id] = [long, short]; $(id).textContent = innerWidth <= 760 ? short : long; }
+function labels() { for (const id in LABELS) $(id).textContent = innerWidth <= 760 ? LABELS[id][1] : LABELS[id][0]; }
 function setView(i) {
   rig.set(i);
-  $('viewBtn').textContent = 'View: ' + rig.preset.name;
+  setLabel('viewBtn', 'View: ' + rig.preset.name, rig.preset.name);
 }
 $('viewBtn').onclick = () => setView(rig.index + 1);
 $('autoBtn').onclick = () => {
   show.setOn(!show.on, state.t);
   $('autoBtn').classList.toggle('on', show.on);
-  $('autoBtn').textContent = show.on ? 'Auto show' : 'Show paused';
+  setLabel('autoBtn', show.on ? 'Auto show' : 'Show paused', show.on ? 'Auto' : 'Paused');
 };
 $('finaleBtn').onclick = () => {
   if (!show.on) $('autoBtn').click();
@@ -334,7 +359,7 @@ $('longBtn').onclick = () => {
 $('soundBtn').onclick = () => {
   audio.setEnabled(!audio.enabled);
   $('soundBtn').classList.toggle('on', audio.enabled);
-  $('soundBtn').textContent = audio.enabled ? 'Sound: On' : 'Sound: Off';
+  setLabel('soundBtn', audio.enabled ? 'Sound: On' : 'Sound: Off', audio.enabled ? 'Sound' : 'Muted');
 };
 $('photoBtn').onclick = () => {
   render(0);
@@ -347,6 +372,52 @@ $('photoBtn').onclick = () => {
     setTimeout(() => URL.revokeObjectURL(a.href), 4000);
   }, 'image/png');
 };
+$('labBtn').onclick = () => {
+  workshop.setOn(!workshop.on);
+  setLabel('labBtn', workshop.on ? 'Back to the show' : 'Workshop', workshop.on ? 'Show' : 'Workshop');
+  $('labBtn').classList.toggle('on', workshop.on);
+};
+
+// Full screen. Inside the two-demo page, the frame itself goes full screen so
+// the tab bar gets out of the way; on its own the page goes full screen.
+function fsCtx() {
+  try { if (window.frameElement && window.top.document) return { doc: window.top.document, el: window.frameElement }; } catch (e) { /* cross-origin */ }
+  return { doc: document, el: document.documentElement };
+}
+const fsOn = (doc) => !!(doc.fullscreenElement || doc.webkitFullscreenElement);
+async function toggleFs() {
+  const { doc, el } = fsCtx();
+  try {
+    if (fsOn(doc)) await (doc.exitFullscreen || doc.webkitExitFullscreen).call(doc);
+    else await (el.requestFullscreen || el.webkitRequestFullscreen).call(el, { navigationUI: 'hide' });
+  } catch (e) {
+    try { if (fsOn(document)) await document.exitFullscreen(); else await document.documentElement.requestFullscreen(); } catch (e2) { /* not allowed here */ }
+  }
+}
+function fsLabel() {
+  const on = fsOn(fsCtx().doc) || fsOn(document);
+  setLabel('fsBtn', on ? 'Exit full screen' : 'Full screen', on ? 'Exit full' : 'Full screen');
+  $('fsBtn').classList.toggle('on', on);
+}
+{
+  const { doc, el } = fsCtx();
+  const ok = !!(el.requestFullscreen || el.webkitRequestFullscreen) && (doc.fullscreenEnabled || doc.webkitFullscreenEnabled);
+  if (!ok) $('fsBtn').remove();
+  else {
+    $('fsBtn').onclick = toggleFs;
+    for (const d of new Set([doc, document])) { d.addEventListener('fullscreenchange', fsLabel); d.addEventListener('webkitfullscreenchange', fsLabel); }
+    fsLabel();
+  }
+}
+setLabel('autoBtn', 'Auto show', 'Auto');
+setLabel('viewBtn', 'View: ' + rig.preset.name, rig.preset.name);
+setLabel('shellBtn', 'Shell: Random', 'Random');
+setLabel('slowBtn', 'Slow motion', 'Slow-mo');
+setLabel('longBtn', 'Long exposure', 'Long exp.');
+setLabel('soundBtn', 'Sound: On', 'Sound');
+setLabel('labBtn', 'Workshop', 'Workshop');
+layout();
+
 const picker = $('picker');
 const addPick = (id, label) => {
   const b = document.createElement('button');
@@ -355,7 +426,7 @@ const addPick = (id, label) => {
   b.dataset.id = id;
   b.onclick = () => {
     state.shell = id;
-    $('shellBtn').textContent = 'Shell: ' + label;
+    setLabel('shellBtn', 'Shell: ' + label, label);
     picker.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
     picker.classList.remove('show');
     $('shellBtn').classList.remove('on');
@@ -392,8 +463,9 @@ function seek(t) {
   step(0);
 }
 if (Q.has('t')) seek(Number(Q.get('t')));
+if (Q.has('workshop')) $('labBtn').click();
 window.__fw = {
-  THREE, renderer, scene, camera, rig, post, particles, smoke, lights, world, fw, show, state, audio, crowd, tier,
+  THREE, renderer, scene, camera, rig, post, particles, smoke, lights, world, fw, show, state, audio, crowd, tier, workshop,
   seek,
   // Advance the show by dt seconds and draw one frame (works with the page hidden).
   tick(dt = 1 / 60) { window.__manual = true; rig.update(dt, innerWidth / innerHeight); step(dt); render(dt); },

@@ -15,14 +15,19 @@ html,body{margin:0;height:100%;background:#02060d;color:#f7f3ea;overflow:hidden}
 .tabs a:hover{color:#fff}
 .tabs a.on{color:#fff;background:linear-gradient(180deg,rgba(255,217,135,0.34),rgba(255,108,47,0.16));box-shadow:0 0 16px rgba(255,185,97,0.18)}
 .tabs a:focus-visible{outline:2px solid #ffd48d;outline-offset:1px}
+.fs{margin-left:auto;appearance:none;background:transparent;border:1px solid rgba(197,225,255,0.18);color:#c4d0df;border-radius:999px;padding:6px 12px;font:600 12px/1 "Trebuchet MS",Verdana,sans-serif;letter-spacing:.03em;cursor:pointer;white-space:nowrap}
+.fs:hover{color:#fff;border-color:rgba(255,230,190,0.4)}
+.fs:focus-visible{outline:2px solid #ffd48d;outline-offset:1px}
 .back{margin-left:auto;color:#c4d0df;font-size:12px;text-decoration:none;white-space:nowrap}
+.fs + .back{margin-left:10px}
 .back:hover{color:#fff}
 iframe{position:fixed;left:0;right:0;bottom:0;top:calc(42px + env(safe-area-inset-top,0px));width:100%;height:calc(100% - 42px - env(safe-area-inset-top,0px));border:0;display:block;background:#02060d}
 @media (max-width:620px){
   .name,.back .w{display:none}
   .tabs{flex:1}
   .tabs a{flex:1;text-align:center;padding:7px 6px}
-  .tabs .w{display:none}
+  .tabs .w,.fs .w{display:none}
+  .fs{padding:6px 9px}
 }
 </style>
 </head>
@@ -33,6 +38,7 @@ iframe{position:fixed;left:0;right:0;bottom:0;top:calc(42px + env(safe-area-inse
     <a href="#demo1" data-d="1">Demo 1<span class="w"> · Classic 2D</span></a>
     <a href="#demo2" data-d="2">Demo 2<span class="w"> · 3D Harbour</span></a>
   </nav>
+  <button class="fs" id="fs" type="button" aria-label="Full screen">&#x26F6;<span class="w"> Full screen</span></button>
   <a class="back" href="../../" target="_top">← <span class="w">Games</span></a>
 </div>
 <iframe id="demo" allow="autoplay; fullscreen" title="Fireworks demo"></iframe>
@@ -48,6 +54,10 @@ iframe{position:fixed;left:0;right:0;bottom:0;top:calc(42px + env(safe-area-inse
     document.title = d === '1' ? 'Night Fireworks Show · Demo 1' : 'Night Fireworks Show · Demo 2 · Harbour Nocturne';
   }
   frame.addEventListener('load', () => { try { frame.contentWindow.focus(); } catch (e) {} });
+  const fs = document.getElementById('fs');
+  const req = frame.requestFullscreen || frame.webkitRequestFullscreen;
+  if (!req || !(document.fullscreenEnabled || document.webkitFullscreenEnabled)) fs.remove();
+  else fs.onclick = () => { try { const p = req.call(frame, { navigationUI: 'hide' }); if (p && p.catch) p.catch(() => {}); } catch (e) {} };
   addEventListener('hashchange', show);
   show();
 })();

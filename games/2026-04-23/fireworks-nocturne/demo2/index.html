@@ -23,7 +23,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block;cursor:crossh
 h1{margin:0;font-size:clamp(18px,3.2vw,28px);line-height:1;font-weight:700;letter-spacing:.02em}
 .meta{margin-top:6px;color:var(--muted);font:500 11px/1.4 "Trebuchet MS",Verdana,sans-serif}
 .meta b{color:var(--text);font-weight:600}
-.bar{position:fixed;right:12px;top:calc(12px + env(safe-area-inset-top,0px));display:flex;flex-wrap:wrap;gap:7px;justify-content:flex-end;max-width:min(54vw,560px);padding:9px}
+.bar{position:fixed;right:12px;top:calc(12px + env(safe-area-inset-top,0px));display:flex;flex-wrap:wrap;gap:7px;justify-content:flex-end;max-width:min(62vw,660px);padding:9px}
 button{appearance:none;border:1px solid rgba(255,239,207,0.18);background:linear-gradient(180deg,rgba(255,228,170,0.16),rgba(255,134,74,0.08));color:var(--text);border-radius:999px;min-height:38px;padding:0 13px;font:600 12.5px/1 "Trebuchet MS",Verdana,sans-serif;letter-spacing:.03em;cursor:pointer;white-space:nowrap}
 button:hover{border-color:rgba(255,230,190,0.4)}
 button.on{background:linear-gradient(180deg,rgba(255,217,135,0.36),rgba(255,108,47,0.16));box-shadow:0 0 18px rgba(255,185,97,0.2)}
@@ -41,6 +41,43 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .fail{position:fixed;inset:0;display:none;align-items:center;justify-content:center;text-align:center;padding:24px;font:500 15px/1.5 "Trebuchet MS",Verdana,sans-serif}
 .fail a{color:var(--accent)}
 .hide{opacity:0!important}
+body.ws #autoBtn,body.ws #shellBtn,body.ws #finaleBtn,body.ws .title,body.ws .picker{display:none}
+.lab{position:fixed;left:12px;top:calc(12px + env(safe-area-inset-top,0px));width:360px;max-height:calc(100% - 24px - env(safe-area-inset-top,0px));display:flex;flex-direction:column;z-index:4;font-family:"Trebuchet MS",Verdana,sans-serif}
+.lab.hide{display:none}
+.lab-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 12px 8px}
+.lab-title .eyebrow{margin-bottom:4px}
+.lab-title b{display:block;font:700 17px/1.1 Georgia,"Times New Roman",serif}
+.lab-min{min-height:30px;padding:0 11px;font-size:11.5px}
+.lab-body{overflow-y:auto;padding:0 12px 6px;overscroll-behavior:contain;touch-action:pan-y}
+.lab.min .lab-body{display:none}
+.lab-hint{margin:0 0 6px;color:var(--muted);font-size:11.5px;line-height:1.4}
+.lab-sec{font:600 10.5px/1.2 "Trebuchet MS",Verdana,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:11px 0 6px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chips button{min-height:28px;padding:0 9px;font-size:11.5px}
+.swatches{display:flex;flex-wrap:wrap;gap:6px}
+.sw{width:26px;height:26px;min-height:0;padding:0;border-radius:50%;border:2px solid rgba(255,255,255,0.16);box-shadow:inset 0 0 0 2px rgba(0,0,0,0.35)}
+.sw.on{border-color:#fff;box-shadow:0 0 0 2px rgba(255,212,141,0.55),inset 0 0 0 2px rgba(0,0,0,0.35)}
+.sw.auto{background:conic-gradient(#ff3b2b,#ffd23f,#56ff4a,#2ee8d8,#3f6dff,#a94dff,#ff62aa,#ff3b2b)}
+.sw.none{background:linear-gradient(135deg,transparent 44%,rgba(255,255,255,0.75) 45%,rgba(255,255,255,0.75) 55%,transparent 56%),rgba(10,16,28,0.85)}
+.sliders{display:grid;gap:9px;margin-top:13px}
+.slider{display:block}
+.slider.off{opacity:.32}
+.sl-top{display:flex;justify-content:space-between;gap:8px;font-size:11.5px;color:var(--muted);margin-bottom:3px}
+.sl-val{color:var(--text);font-variant-numeric:tabular-nums}
+.slider input{width:100%;accent-color:#ffd48d;margin:0}
+.lab-read{margin:12px 0 4px;padding:9px 10px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(197,225,255,0.12);color:#e6edf7;font-size:11.5px;line-height:1.45}
+.lab-actions{display:flex;flex-wrap:wrap;gap:6px;padding:9px 12px 12px;border-top:1px solid rgba(197,225,255,0.1)}
+.lab-actions button{min-height:34px;padding:0 11px;font-size:12px}
+.lab-actions .fire{background:linear-gradient(180deg,rgba(255,196,110,0.55),rgba(255,96,40,0.3));border-color:rgba(255,220,170,0.5);padding:0 20px}
+.lab-actions .reset{margin-left:auto}
+.target{position:fixed;left:0;top:0;width:36px;height:36px;margin:-18px 0 0 -18px;border-radius:50%;border:1.5px solid rgba(255,222,170,0.8);pointer-events:none;z-index:2;box-shadow:0 0 10px rgba(255,190,110,0.3)}
+.target::before,.target::after{content:"";position:absolute;left:50%;top:50%;background:rgba(255,222,170,0.85)}
+.target::before{width:1.5px;height:10px;margin:-5px 0 0 -0.75px}
+.target::after{width:10px;height:1.5px;margin:-0.75px 0 0 -5px}
+.target.hide{display:none}
+.target.fired{animation:fired .7s ease-out}
+@keyframes fired{0%{box-shadow:0 0 0 0 rgba(255,210,140,0.75)}100%{box-shadow:0 0 0 26px rgba(255,210,140,0)}}
+body.ws .caption{left:388px}
 @media (max-width:760px){
   .bar{left:8px;right:8px;top:auto;bottom:calc(8px + env(safe-area-inset-bottom,0px));max-width:none;justify-content:center;gap:5px;padding:7px}
   button{min-height:34px;padding:0 10px;font-size:11.5px}
@@ -49,6 +86,15 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .hint{bottom:calc(var(--barH,112px) + 18px + env(safe-area-inset-bottom,0px));white-space:normal;width:max-content;max-width:86vw;text-align:center}
   .title{max-width:calc(100vw - 24px)}
   .title.faded{opacity:0}
+  .lab{left:8px;right:8px;width:auto;top:auto;bottom:calc(var(--barH,60px) + 14px + env(safe-area-inset-bottom,0px));max-height:52vh}
+  body.ws .caption,body.ws .hint{display:none}
+  .lab .lng,.lab-hint{display:none}
+  .lab-head{padding:9px 11px 6px}
+  .lab-title b{font-size:15px}
+  .lab-actions{flex-wrap:nowrap;padding:8px 10px 10px;gap:5px}
+  .lab-actions button{padding:0 10px;flex:1 1 auto}
+  .lab-actions .fire{padding:0 14px}
+  .lab-actions .reset{margin-left:0}
 }
 </style>
 <script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
@@ -69,6 +115,8 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   <button id="longBtn" type="button">Long exposure</button>
   <button id="soundBtn" class="on" type="button">Sound: On</button>
   <button id="photoBtn" type="button">Photo</button>
+  <button id="labBtn" type="button">Workshop</button>
+  <button id="fsBtn" type="button">Full screen</button>
 </div>
 <div class="picker glass" id="picker"></div>
 <div class="caption" id="caption"></div>
@@ -76,6 +124,6 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 <div class="sound glass hide" id="soundHint">Tap anywhere for sound</div>
 <div class="stats" id="stats"></div>
 <div class="fail" id="fail"><div>This demo needs WebGL 2, which this browser does not offer.<br><a href="../demo1/" target="_top">Open Demo 1 · Classic 2D</a></div></div>
-<script type="module" src="./js/main.js?v=1"></script>
+<script type="module" src="./js/main.js?v=2"></script>
 </body>
 </html>
