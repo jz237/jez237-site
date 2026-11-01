@@ -75,8 +75,9 @@ try:
         page.on('response',lambda r:bad.append([r.status,r.url]) if r.status>=400 and urlparse(r.url).netloc==urlparse(base).netloc else None)
         response=page.goto(base+'/newsletter/',wait_until='networkidle');assert response is not None and response.status==200
         page.evaluate("document.querySelectorAll('img').forEach(i=>i.loading='eager')")
-        page.wait_for_function("Array.from(document.images).every(i=>i.complete&&i.naturalWidth>0)")
+        # Await actual decoding without eval-based polling (strict live CSP).
         page.evaluate("Promise.all(Array.from(document.images).map(i=>i.decode()))")
+        assert page.evaluate("Array.from(document.images).every(i=>i.complete&&i.naturalWidth>0)")
         page.locator('.story').last.scroll_into_view_if_needed()
         page.wait_for_timeout(250)
         page.evaluate('window.scrollTo(0,0)')
@@ -107,8 +108,9 @@ try:
             assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), f'Overflow at {width}'
             if width==390:
                 page.evaluate("document.querySelectorAll('img').forEach(i=>i.loading='eager')")
-                page.wait_for_function("Array.from(document.images).every(i=>i.complete&&i.naturalWidth>0)")
+                # Await actual decoding without eval-based polling (strict live CSP).
                 page.evaluate("Promise.all(Array.from(document.images).map(i=>i.decode()))")
+                assert page.evaluate("Array.from(document.images).every(i=>i.complete&&i.naturalWidth>0)")
                 page.locator('.story').last.scroll_into_view_if_needed()
                 page.wait_for_timeout(250)
                 page.evaluate('window.scrollTo(0,0)')
