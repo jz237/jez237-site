@@ -2,8 +2,8 @@
 // waterfall register lights with simple time curves; each frame the brightest
 // NL go to the shaders that light the smoke, haze, water, city and crowd.
 import * as THREE from 'three';
-import { NL } from './glsl.js?v=5';
-import { G } from './physics.js?v=5';
+import { NL } from './glsl.js?v=6';
+import { G } from './physics.js?v=6';
 
 export class Lights {
   constructor() {

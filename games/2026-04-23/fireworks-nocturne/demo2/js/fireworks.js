@@ -2,10 +2,10 @@
 // drag curve with a fuse or tail, and break at the apex; the break builds its
 // star records, smoke, light and sound events. Everything is placed at its
 // scheduled show time, so late frames and seeking still land things exactly.
-import { StarBatch, K_FLASH, K_FUSE, K_GERB, K_CRACKLE, T_GOLD, T_SILVER, T_GLITTER, T_COLOR, T_FALL } from './particles.js?v=5';
-import { SHELLS, colorOf } from './shells.js?v=5';
-import { starPos, starVel, aimShell, rng } from './physics.js?v=5';
-import { SITE } from './site.js?v=5';
+import { StarBatch, K_FLASH, K_FUSE, K_GERB, K_CRACKLE, T_GOLD, T_SILVER, T_GLITTER, T_COLOR, T_FALL } from './particles.js?v=6';
+import { SHELLS, colorOf } from './shells.js?v=6';
+import { starPos, starVel, aimShell, rng } from './physics.js?v=6';
+import { SITE } from './site.js?v=6';
 
 const SHELL_C = 0.0032, SHELL_KG = 0.07;
 // Workshop modifiers; every value is clamped again here so no setting can
@@ -99,7 +99,7 @@ export class Fireworks {
     }
     this.audio.event('launch', t, mortar, { size: inches });
     if (rise === 'whistle') this.audio.event('whistle', t + 0.1, mortar, { size: inches, follow: { v0: aim.v0, c: SHELL_C, kg: SHELL_KG } });
-    else if (rise !== 'none') this.audio.event('rise', t + 0.05, mortar, { size: inches });
+    else if (rise !== 'none') this.audio.event('rise', t + 0.05, mortar, { size: inches, kind: rise });
     const pos = starPos([0, 0, 0], mortar, aim.v0, SHELL_C, SHELL_KG, tb, this.wind);
     const vel = starVel([0, 0, 0], aim.v0, SHELL_C, SHELL_KG, tb, this.wind);
     this.schedule(t + tb, (tt) => this.burst({ t: tt, pos, vel, type, inches, color, color2, palette, manual, mods }));
@@ -183,7 +183,6 @@ export class Fireworks {
     if (info.sound === 'salute') this.audio.event('salute', t, pos, { size: inches });
     else this.audio.event('boom', t, pos, { size: inches, type });
     if (info.pops.length) this.audio.pops(info.pops, pos, inches);
-    if (type === 'willow' || type === 'kamuro' || type === 'glitter' || type === 'brocade' || type === 'horsetail') this.audio.event('sizzle', t + 0.4, pos, { size: inches });
     if (this.onBreak && depth === 0) this.onBreak(info);
     return info;
   }
@@ -220,8 +219,8 @@ export class Fireworks {
     this.lights.flash({ t0: t, pos: [base[0], 6, base[2]], color: [1, 0.7, 0.4], power: 5e4, tau: 0.06, radius: 5 });
     this.lights.burst({ t0: t + 0.3, pos: [base[0], 60, base[2]], color: kind === 'silver' ? [0.9, 0.92, 1] : [1, 0.6, 0.25], flash: 0, glow: 8e3, life: 2.2, radius: 40, kg: 0 });
     this.smoke.puff([base[0], 5, base[2]], t, [0, 6, 0], 1, 2.5, 3, 30 + r() * 10, 12, [0.75, 0.74, 0.74]);
-    this.audio.event('launch', t, base, { size: 3, gain: 0.55, rate: 1.35 });
-    this.audio.event('rise', t + 0.05, base, { size: 3, gain: 0.5 });
+    this.audio.event('volley', t, base, { gain: 0.55 + n * 0.03 });
+    this.audio.event('rise', t + 0.05, base, { size: 3, gain: 0.4, kind: kind === 'silver' ? 'silver' : 'tail' });
   }
 
   // Mine: a burst fired straight out of the mortar at the barge.
@@ -244,7 +243,7 @@ export class Fireworks {
     batch.commit(this.P);
     this.lights.burst({ t0: t, pos: [base[0], 30, base[2]], color: normalise(c), flash: 8e4, flashTau: 0.05, glow: 1.4e4, life: 1.8, radius: 30, kg: 0 });
     this.smoke.puff([base[0], 8, base[2]], t, [0, 8, 0], 1, 4, 3, 35, 22, [0.75, 0.74, 0.74]);
-    this.audio.event('boom', t, base, { size: 3, gain: 0.7 });
+    this.audio.event('mine', t, base, { gain: 0.8 });
   }
 
   // Niagara falls of sparks from the bridge deck between t0 and t1.

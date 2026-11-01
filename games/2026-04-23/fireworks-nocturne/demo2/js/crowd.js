@@ -2,8 +2,8 @@
 // bright water, picked out by the bursts at their edges. A few hold phones up,
 // and the screens show the sky they are filming.
 import * as THREE from 'three';
-import { SITE } from './site.js?v=5';
-import { rng } from './physics.js?v=5';
+import { SITE } from './site.js?v=6';
+import { rng } from './physics.js?v=6';
 
 const SCREEN_VS = /* glsl */ `
 varying vec2 vUv; varying vec3 vW;

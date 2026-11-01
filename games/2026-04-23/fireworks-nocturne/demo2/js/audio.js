@@ -19,6 +19,45 @@ const FILES = {
   cheer: ['crowd_cheer_1'],
   amb: ['amb_harbor'],
   falls: ['waterfall_loop'],
+  launchBig: ['launch_big_1'],
+  launchSmall: ['launch_small_1'],
+  riseSilver: ['rise_silver_1'],
+  riseGlitter: ['rise_glitter_1'],
+  double: ['boom_double_1'],
+  pattern: ['boom_pattern_1'],
+  strobe: ['strobe_1'],
+  glitter: ['glitter_1'],
+  brocade: ['brocade_1'],
+  comet: ['comet_1'],
+  spider: ['spider_1'],
+  crossette: ['crossette_1'],
+  mine: ['mine_1'],
+  volley: ['fan_volley_1'],
+  leaves: ['leaves_1'],
+};
+
+// What each shell sounds like: the break ('big'/'med' by size, a softer
+// 'pattern' pop, 'double' boom-and-crackle, 'spider' hiss), plus a layer
+// that starts as the stars ignite (delay s, gain).
+const VOICES = {
+  chrysanthemum: { brk: 'double', chance: 0.6 },
+  dahlia: { brk: 'double', chance: 0.4 },
+  willow: { layer: ['brocade', 0.5, 0.55] },
+  kamuro: { layer: ['brocade', 0.45, 0.7] },
+  diadem: { layer: ['brocade', 0.45, 0.65] },
+  brocade: { layer: ['brocade', 0.35, 0.7] },
+  horsetail: { layer: ['brocade', 0.4, 0.5] },
+  glitter: { layer: ['glitter', 0.5, 0.75] },
+  glittertips: { layer: ['glitter', 1.2, 0.6] },
+  snowfall: { brk: 'pattern', layer: ['glitter', 0.6, 0.6] },
+  leaves: { brk: 'pattern', layer: ['leaves', 0.5, 0.7] },
+  strobe: { layer: ['strobe', 0.35, 0.75] },
+  palm: { layer: ['comet', 0.05, 0.75] },
+  spider: { brk: 'spider' },
+  crossette: { layer: ['crossette', 0.6, 0.8] },
+  heart: { brk: 'pattern' }, smiley: { brk: 'pattern' }, starshape: { brk: 'pattern' }, butterfly: { brk: 'pattern' },
+  flower: { brk: 'pattern' }, spiral: { brk: 'pattern' }, clover: { brk: 'pattern' }, crescent: { brk: 'pattern' },
+  rings: { brk: 'pattern' }, cube: { brk: 'pattern' },
 };
 const C = 343;
 
@@ -173,21 +212,38 @@ export class AudioEngine {
     const size = o.size || 6;
     const v = (lo, hi) => lo + Math.random() * (hi - lo);
     switch (kind) {
-      case 'launch':
-        this.play(this.pick('launch'), t, pos, { gain: 0.75 * Math.pow(size / 6, 0.6) * (o.gain ?? 1), rate: (o.rate ?? 1) * v(0.9, 1.08) * Math.pow(6 / size, 0.18) });
+      case 'launch': {
+        const k = size >= 10 && this.buf.launch_big_1 ? 'launchBig' : size <= 3 && this.buf.launch_small_1 ? 'launchSmall' : 'launch';
+        this.play(this.pick(k), t, pos, { gain: 0.75 * Math.pow(size / 6, 0.6) * (o.gain ?? 1), rate: (o.rate ?? 1) * v(0.9, 1.08) * (k === 'launch' ? Math.pow(6 / size, 0.18) : k === 'launchBig' ? 0.84 : 1) });
         break;
-      case 'rise':
-        this.play(this.pick('rise'), t, pos, { gain: 0.22 * (o.gain ?? 1), rate: v(0.85, 1.15) });
+      }
+      case 'rise': {
+        const k = o.kind === 'silver' ? 'riseSilver' : o.kind === 'glitter' ? 'riseGlitter' : 'rise';
+        this.play(this.pick(k) || this.pick('rise'), t, pos, { gain: (k === 'rise' ? 0.22 : 0.3) * (o.gain ?? 1), rate: v(0.88, 1.12) });
+        break;
+      }
+      case 'volley':
+        this.play(this.pick('volley') || this.pick('launch'), t, pos, { gain: 0.6 * (o.gain ?? 1), rate: v(0.92, 1.08) });
+        break;
+      case 'mine':
+        this.play(this.pick('mine') || this.pick('med'), t, pos, { gain: 0.8 * (o.gain ?? 1), rate: v(0.92, 1.06) });
         break;
       case 'whistle':
         this.play(this.pick('whistle'), t, [pos[0], pos[1] + 80, pos[2]], { gain: 0.32, rate: v(0.9, 1.12) });
         break;
       case 'boom': {
         const big = size >= 7.5;
-        const k = big ? 'big' : 'med';
-        const gain = Math.pow(size / 6, 0.85) * (big ? 1.05 : 0.95) * (o.gain ?? 1);
+        const voice = VOICES[o.type] || {};
+        let k = big ? 'big' : 'med';
+        if (voice.brk && this.pick(voice.brk) && Math.random() < (voice.chance ?? 1)) k = voice.brk;
+        const soft = k === 'pattern' ? 0.7 : 1;
+        const gain = Math.pow(size / 6, 0.85) * (big ? 1.05 : 0.95) * soft * (o.gain ?? 1);
         this.play(this.pick(k), t, pos, { gain, rate: v(0.92, 1.06) * (size < 4 ? 1.25 : 1) * Math.pow(6 / size, 0.12) });
-        if (big) this.play(this.pick('thunder'), t + 0.12, pos, { gain: gain * 0.45, rate: v(0.85, 1.0) });
+        if (big && k !== 'pattern') this.play(this.pick('thunder'), t + 0.12, pos, { gain: gain * 0.45, rate: v(0.85, 1.0) });
+        if (voice.layer && this.pick(voice.layer[0])) {
+          const [lk, dl, lg] = voice.layer;
+          this.play(this.pick(lk), t + dl, pos, { gain: lg * Math.pow(size / 6, 0.5), rate: v(0.9, 1.1) });
+        }
         break;
       }
       case 'salute':

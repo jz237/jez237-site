@@ -4,8 +4,8 @@
 // theme and weather, the waterfall moves between acts, and the overture and
 // the finale each come in several versions (never the same finale twice in a
 // row).
-import { rng } from './physics.js?v=5';
-import { SITE } from './site.js?v=5';
+import { rng } from './physics.js?v=6';
+import { SITE } from './site.js?v=6';
 
 const NB = SITE.barges.length;
 

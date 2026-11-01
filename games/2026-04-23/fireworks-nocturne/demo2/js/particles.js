@@ -3,7 +3,7 @@
 // star's own light smeared over the eye's persistence, or a camera exposure)
 // and as points (the sparks each star sheds along its path).
 import * as THREE from 'three';
-import { HASH, MOTION, BLACKBODY } from './glsl.js?v=5';
+import { HASH, MOTION, BLACKBODY } from './glsl.js?v=6';
 
 export const STRIDE = 32; // floats per star record (8 x vec4)
 
