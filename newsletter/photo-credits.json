@@ -82,5 +82,29 @@
     "changes": "EXIF orientation normalized; resized without cropping; converted to WebP quality 80. No generative editing. Display layouts may crop the edges. This derivative image remains licensed CC BY-SA 4.0.",
     "width": 1000,
     "height": 665
+  },
+  {
+    "filename": "lionfish.webp",
+    "title": "Pterois volitans.401 - Aquarium Finisterrae.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Pterois_volitans.401_-_Aquarium_Finisterrae.jpg",
+    "author": "Fernando Losada Rodríguez",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "width": 1200,
+    "height": 900,
+    "alt": "A striped red lionfish with long, fanned fins beside a textured aquarium wall.",
+    "changes": "EXIF orientation normalized; resized without cropping; converted to WebP quality 82. No generative editing. Display layouts may crop the edges. This derivative image remains licensed CC BY-SA 4.0."
+  },
+  {
+    "filename": "duncan-coral.webp",
+    "title": "Whiskers coral.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Whiskers_coral.jpg",
+    "author": "Julia Sumangil",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "width": 1000,
+    "height": 656,
+    "alt": "A Duncan coral colony with pale tentacles extending from clustered round polyps against a dark background.",
+    "changes": "EXIF orientation normalized; resized without cropping; converted to WebP quality 82. No generative editing. Display layouts may crop the edges. This derivative image remains licensed CC BY-SA 4.0."
   }
 ]

@@ -62,7 +62,7 @@ try:
             page.locator('#reader-close').click();wait_closed()
             assert abs(page.evaluate('scrollY')-y)<=2,(i,y,page.evaluate('scrollY'))
             assert link.evaluate('(e)=>document.activeElement===e')
-        results['checks'].append('all six complete article bodies match their editorial blocks; quiet endnotes and on-page citations work; close restores exact scroll/focus')
+        results['checks'].append('all complete article bodies match their editorial blocks; quiet endnotes and on-page citations work; close restores exact scroll/focus')
         # First hero link and final feature link use the same reader.
         page.locator('.cover .button-link').click();wait_open()
         assert page.locator('#reader-title').inner_text()==stories[0]['title']
@@ -71,9 +71,9 @@ try:
             assert page.evaluate("document.getElementById('article-reader').contains(document.activeElement)")
         page.keyboard.press('Escape');wait_closed()
         page.locator('.interlude .button-link').click();wait_open()
-        assert page.locator('#reader-title').inner_text()==stories[1]['title']
+        assert page.locator('#reader-title').inner_text()==next(s['title'] for s in stories if s['slug']=='a-new-home-for-coral')
         page.locator('#reader-close').click();wait_closed()
-        results['checks'].append('hero and planted-feature links; native modal keyboard containment and Escape')
+        results['checks'].append('practical hero and conservation feature links; native modal keyboard containment and Escape')
         # Browser back closes the reader; forward reopens it without a page navigation.
         page.locator('.story h3 a').first.click();wait_open();url=page.url
         page.go_back();wait_closed();assert page.url==url
@@ -84,19 +84,20 @@ try:
         page.get_by_role('button',name='Freshwater',exact=True).click()
         titles=page.locator('.story:visible h3 a').all_text_contents()
         page.locator('.story:visible h3 a').first.click();wait_open()
-        assert page.locator('#reader-position').inner_text()=='1 of 3'
+        assert page.locator('#reader-position').inner_text()==f'1 of {len(titles)}'
         assert page.locator('#reader-previous').is_disabled()
         page.locator('#reader-scroll').evaluate('(e)=>e.scrollTop=e.scrollHeight')
         page.locator('#reader-next').click()
         assert page.locator('#reader-title').inner_text()==titles[1]
         assert page.locator('#reader-scroll').evaluate('(e)=>e.scrollTop')==0
-        page.locator('#reader-next').click()
-        assert page.locator('#reader-title').inner_text()==titles[2]
+        for index in range(2,len(titles)):
+            page.locator('#reader-next').click()
+            assert page.locator('#reader-title').inner_text()==titles[index]
         assert page.locator('#reader-next').is_disabled()
         page.locator('#reader-previous').click()
-        assert page.locator('#reader-title').inner_text()==titles[1]
+        assert page.locator('#reader-title').inner_text()==titles[-2]
         page.locator('#reader-close').click();wait_closed()
-        assert page.locator('.story:visible').count()==3 and 'topic=freshwater' in page.url
+        assert page.locator('.story:visible').count()==len(titles) and 'topic=freshwater' in page.url
         results['checks'].append('previous/next constrained to visible category, pagination boundaries and per-story scroll reset')
         page.get_by_role('button',name='All stories',exact=True).click()
         page.locator('.story h3 a').nth(1).click();wait_open()
@@ -128,11 +129,11 @@ try:
         results['checks'].append('five rapid open/close cycles leave scrolling unlocked')
         nojs=browser.new_context(java_script_enabled=False)
         np=nojs.new_page();np.goto(base+'/newsletter/',wait_until='networkidle')
-        np.locator('.story h3 a').first.click();np.wait_for_url('**/stories/a-new-home-for-coral/')
+        np.locator('.story h3 a').first.click();np.wait_for_url('**/stories/'+stories[0]['slug']+'/')
         assert np.locator('h1').inner_text()==stories[0]['title']
         assert np.locator('.editorial-sources').evaluate('(e)=>e.open')
         np.locator('.editorial-citation').first.click()
-        assert '#article-a-new-home-for-coral-ref-' in np.url
+        assert '#article-'+stories[0]['slug']+'-ref-' in np.url
         assert np.locator('.editorial-sources li').first.is_visible()
         results['checks'].append('without JavaScript, complete local articles and reference anchors still work')
         assert not errors,errors

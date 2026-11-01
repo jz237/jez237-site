@@ -30,9 +30,9 @@ class Links(HTMLParser):
 
 stories = json.loads((ROOT/'newsletter/stories.json').read_text())
 photos = json.loads((ROOT/'newsletter/photo-credits.json').read_text())
-assert len(stories)==6 and len({s['slug'] for s in stories})==6
-assert sum(s['category']=='freshwater' for s in stories)==3
-assert sum(s['category']=='reef' for s in stories)==3
+assert len(stories)>=6 and len({s['slug'] for s in stories})==len(stories)
+category_counts={c:sum(s['category']==c for s in stories) for c in ['freshwater','reef']}
+assert category_counts['freshwater']==category_counts['reef']
 for photo in photos:
     with Image.open(ROOT/'newsletter/images'/photo['filename']) as image:
         assert image.size==(photo['width'],photo['height'])
@@ -81,20 +81,24 @@ try:
         page.wait_for_timeout(250)
         page.evaluate('window.scrollTo(0,0)')
         page.wait_for_timeout(150)
-        assert page.locator('.story:visible').count()==6
+        assert page.locator('.story:visible').count()==len(stories)
         assert page.locator('h1').inner_text()=='Small worlds.\nEndless wonder.'
+        assert page.locator('#daily-check .check-grid > li').count()==4
+        assert page.locator('#daily-check .check-grid > li p:visible').count()==4
+        assert page.locator('.story .source-date').count()==0
+        assert page.locator('.cover .button-link').get_attribute('href')=='stories/'+stories[0]['slug']+'/'
         page.screenshot(path=str(args.output/'desktop.png'),full_page=True)
         page.screenshot(path=str(args.output/'desktop-top.png'))
         page.get_by_role('button',name='Freshwater',exact=True).click()
-        assert page.locator('.story:visible').count()==3
+        assert page.locator('.story:visible').count()==category_counts['freshwater']
         assert page.locator('.story:visible').evaluate_all("els=>els.every(e=>e.dataset.category==='freshwater')")
         assert '?topic=freshwater' in page.url
-        page.reload(wait_until='networkidle');assert page.locator('.story:visible').count()==3
+        page.reload(wait_until='networkidle');assert page.locator('.story:visible').count()==category_counts['freshwater']
         page.get_by_role('button',name='Reef & ocean',exact=True).click()
-        assert page.locator('.story:visible').count()==3
+        assert page.locator('.story:visible').count()==category_counts['freshwater']
         assert page.locator('.story:visible').evaluate_all("els=>els.every(e=>e.dataset.category==='reef')")
         button=page.get_by_role('button',name='All stories',exact=True);button.focus();page.keyboard.press('Enter')
-        assert page.locator('.story:visible').count()==6
+        assert page.locator('.story:visible').count()==len(stories)
         assert '?topic=' not in page.url
         results['checks'].append('desktop filters, URL persistence and keyboard activation')
         for width in [320,390,768,1440]:
@@ -126,17 +130,18 @@ try:
             page.locator('.editorial-sources summary').click()
             assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
             assert page.locator('.article-image img').evaluate('(i)=>i.complete&&i.naturalWidth>0')
-        results['checks'].append('six article routes, primary sources and images on mobile')
+        results['checks'].append(f'{len(stories)} article routes, primary sources and images on mobile')
         r=page.goto(base+'/newsletter/credits.html',wait_until='networkidle');assert r is not None and r.status==200
         assert page.locator('.credit-item').count()==len(photos)
         assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
         results['checks'].append('all image credit entries rendered')
         page.goto(base+'/newsletter/?topic=not-a-category',wait_until='networkidle')
-        assert page.locator('.story:visible').count()==6
+        assert page.locator('.story:visible').count()==len(stories)
         results['checks'].append('invalid topic safely falls back to all stories')
         nojs=browser.new_context(java_script_enabled=False,viewport={'width':390,'height':844})
-        np=nojs.new_page();np.goto(base+'/newsletter/',wait_until='networkidle');assert np.locator('.story').count()==6
+        np=nojs.new_page();np.goto(base+'/newsletter/',wait_until='networkidle');assert np.locator('.story').count()==len(stories)
         assert np.locator('noscript').is_visible()
+        assert np.locator('#daily-check .check-grid > li p:visible').count()==4
         results['checks'].append('readable without JavaScript')
         assert not errors, errors
         assert not bad, bad

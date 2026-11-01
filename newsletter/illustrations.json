@@ -1,0 +1,38 @@
+[
+  {
+    "filename": "tissue-culture-steps.svg",
+    "title": "From cup to aquarium",
+    "alt": "Four illustrated steps: open a tissue-culture cup, rinse away growing medium, separate small portions, and plant. Substrate-planting example only.",
+    "width": 960,
+    "height": 680,
+    "caption": "Original schematic: substrate planting is shown. Keep Anubias rhizomes exposed; follow the species instructions.",
+    "sources": [
+      "https://tropica.com/en/plants/1-2-grow/",
+      "https://dennerleplants.com/en/support/faq/"
+    ]
+  },
+  {
+    "filename": "reef-top-off.svg",
+    "title": "Two different water replacements",
+    "alt": "Evaporation removes water but leaves salt behind: top off with appropriate fresh water. A saltwater water change removes both: replace with prepared saltwater.",
+    "width": 960,
+    "height": 680,
+    "caption": "Original schematic, not a dosing chart. Verify the cause of a water-level change and measure salinity.",
+    "sources": [
+      "https://edis.ifas.ufl.edu/publication/4H433/pdf",
+      "https://g1.redseafish.com/how-to-mix-salt/"
+    ]
+  },
+  {
+    "filename": "filter-media.svg",
+    "title": "The jobs inside a filter",
+    "alt": "Mechanical media trap particles; biological media host microbes; chemical media target substances. A medium can perform more than one job.",
+    "width": 960,
+    "height": 680,
+    "caption": "Original schematic. Identify each medium’s job and follow the filter manufacturer’s care instructions.",
+    "sources": [
+      "https://www.aqueon.com/articles/aquarium-filtration-basics",
+      "https://seachem.zendesk.com/hc/en-us/articles/360038209893-Guide-Caring-for-the-Freshwater-Tank"
+    ]
+  }
+]

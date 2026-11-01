@@ -1,0 +1,35 @@
+{
+  "title": "Look at the aquarium before you reach for the tools",
+  "dek": "A simple observation routine for freshwater and reef keepers. The whole checklist is here—nothing to open.",
+  "items": [
+    {
+      "title": "Watch the animals",
+      "text": "Look for a change from their usual activity, appearance or interest in food. Make observation part of feeding, rather than dropping food in and walking away.",
+      "icon": "fish",
+      "refs": ["maintenance"]
+    },
+    {
+      "title": "Check the equipment",
+      "text": "Look at filter output and confirm the lighting timer is following its intended schedule. A running motor is not a substitute for checking the water flow.",
+      "icon": "flow",
+      "refs": ["maintenance"]
+    },
+    {
+      "title": "Read the thermometer",
+      "text": "Compare the measured temperature with the needs of your livestock. Read the water temperature, not just the heater’s setting.",
+      "icon": "temperature",
+      "refs": ["temperature"]
+    },
+    {
+      "title": "Leave a useful note",
+      "text": "Our suggestion: jot down today’s reading, anything unusual and the last change you made. Bring that record when asking for help rather than relying on memory.",
+      "icon": "note",
+      "refs": []
+    }
+  ],
+  "note": "This is an observation checklist, not a complete maintenance or health assessment. Keep your aquarium’s species-specific testing, cleaning and water-change routine.",
+  "references": [
+    {"id": "maintenance", "label": "Aqueon — Maintaining a Planted Aquarium", "url": "https://www.aqueon.com/articles/maintain-planted-aquarium", "date": "Undated manufacturer guidance; the checklist above is our editorial selection, not its complete schedule."},
+    {"id": "temperature", "label": "Aqueon — Water Temperature and Fish Health", "url": "https://www.aqueon.com/articles/fish-tanks-and-water-temperature", "date": "Undated manufacturer guidance."}
+  ]
+}

@@ -11,7 +11,7 @@ STORIES=json.loads((Path(__file__).resolve().parents[1]/'newsletter/stories.json
 
 class EditorialTests(unittest.TestCase):
     def test_complete_varied_articles(self):
-        self.assertEqual(len(STORIES),6)
+        self.assertEqual(len(STORIES),12)
         structures={tuple(b['type'] for b in s['blocks']) for s in STORIES}
         self.assertGreaterEqual(len(structures),4)
         lengths=[word_count(s) for s in STORIES]
