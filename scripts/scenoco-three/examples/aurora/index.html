@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#04101f" />
+    <meta name="description" content="Aurora Siege Neon 3D: defend six cities under the aurora in a real-time three.js missile-defense game — bosses, chains, an Arsenal of upgrades and global high scores." />
+    <title>Aurora Siege — Neon 3D Edition</title>
+    <link rel="icon" href="data:," />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@1,800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet" />
+    <style>
+      html, body { margin: 0; height: 100%; background: #02040a; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; position: fixed; inset: 0; overscroll-behavior: none; }
+      canvas { display: block; }
+      button { appearance: none; margin: 0; padding: 0; border: 0; background: none; font: inherit; color: inherit; touch-action: manipulation; cursor: pointer; }
+
+      :root { --cyan: #2ff5d2; --pink: #ff3dd8; --gold: #ffd23f; --amber: #ffa21c; --ink: #e9f2ff; --dim: #6f86b3; }
+      /* The UI lets the pointer through to the game; a control takes it back with pointer-events: auto. */
+      #ui { position: absolute; inset: 0; pointer-events: none; font-family: Orbitron, sans-serif; font-weight: bold; color: var(--ink); }
+      .shade { position: absolute; border-width: 0; border-style: solid; pointer-events: none; }
+      .hidden { display: none !important; }
+
+      /* The bar: three glass panels, numbers glowing in neon. It drops in when a run starts. */
+      .bar {
+        position: absolute; left: max(10px, env(safe-area-inset-left)); right: max(10px, env(safe-area-inset-right)); top: max(8px, env(safe-area-inset-top));
+        display: flex; align-items: flex-start; translate: 0 -140%; opacity: 0;
+        transition: translate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s, opacity 0.4s ease 0.15s;
+      }
+      .bar.shown { translate: 0 0; opacity: 1; }
+      .side { flex: 1 1 0; display: flex; }
+      .side.right { justify-content: flex-end; }
+      .panel {
+        position: relative; display: flex; flex-direction: column; padding: 8px 13px 9px; border-radius: 14px;
+        background-image: url(/ui/panel-face.png); background-size: 100% 100%;
+        border: 1px solid rgba(120, 160, 255, 0.22); border-top-color: rgba(170, 195, 255, 0.3);
+      }
+      .panel > .shade { left: -41px; top: -41px; right: -41px; bottom: -41px; border-image: url(/ui/panel-shadow.png) 108 fill / 54px; }
+      .panel.middle { align-items: center; margin: 0 10px; }
+      .panel.right { align-items: flex-end; }
+      .label { font-size: 9px; letter-spacing: 2.5px; color: var(--dim); margin-bottom: 4px; }
+      #score { font-family: 'Exo 2', sans-serif; font-size: 28px; font-style: italic; letter-spacing: 2.4px; color: var(--cyan); text-shadow: 0 0 8px rgba(47, 245, 210, 0.8); transition: scale 0.13s ease-out; }
+      #level { font-family: 'Exo 2', sans-serif; font-style: italic; font-size: 24px; color: var(--amber); text-shadow: 0 0 8px rgba(255, 162, 28, 0.8); }
+      #lives { display: flex; padding-top: 3px; min-height: 7px; }
+      .pip { position: relative; width: 20px; height: 7px; margin-left: 6px; border-radius: 4px; background-color: var(--pink); transition: scale 0.26s ease-out, background-color 0.26s; }
+      .pip > .shade { left: -10px; top: -10px; right: -10px; bottom: -10px; background-image: url(/ui/pip-glow.png); background-size: 100% 100%; }
+      .pip.losing { scale: 1.8 2.2; background-color: #ffffff; }
+      .pip.losing > .shade { background-image: url(/ui/pip-burst.png); }
+      #bombs { margin-top: 5px; font-size: 13px; letter-spacing: 3px; color: var(--gold); text-shadow: 0 0 8px rgba(255, 210, 63, 0.9); }
+
+      #combo { position: absolute; left: 50%; translate: -50% 0; top: calc(max(8px, env(safe-area-inset-top)) + 82px); padding: 6px 12px; border-radius: 10px; background: rgba(8, 12, 28, 0.78); border: 1px solid rgba(255, 210, 63, 0.5); font-size: 13px; letter-spacing: 2.5px; color: var(--gold); text-shadow: 0 0 10px rgba(255, 210, 63, 0.9); transition: scale 0.13s ease-out; white-space: nowrap; }
+      #combo:empty { display: none; }
+      #combo[data-tier='3'] { color: #ffa94b; text-shadow: 0 0 12px rgba(255, 140, 60, 0.95); }
+      #combo[data-tier='5'] { color: var(--pink); text-shadow: 0 0 14px rgba(255, 61, 216, 0.95); }
+      .bump { scale: 1.18; transition: scale 0.09s ease-out; }
+
+      /* Running power-ups: a chip each, its bar draining as its time runs out. */
+      #effects { position: absolute; left: 0; right: 0; bottom: calc(max(12px, env(safe-area-inset-bottom)) + 4px); display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; }
+      .chip { min-width: 70px; padding: 6px 10px 7px; text-align: center; font-size: 10px; letter-spacing: 1.5px; border-radius: 10px; border: 1px solid; background: rgba(8, 12, 28, 0.78); color: var(--c); border-color: var(--c); box-shadow: 0 0 14px color-mix(in srgb, var(--c) 55%, transparent); }
+      .chip .timer { height: 3px; margin-top: 5px; border-radius: 2px; transform-origin: left; background: var(--c); }
+      .chip.spread { --c: #56fff0; } .chip.laser { --c: #ff4fc4; } .chip.shield { --c: #ffe66b; } .chip.frost { --c: #9fdcff; } .chip.score { --c: #a7ff55; }
+
+      /* Points, rising from where they were won. */
+      #popups { position: absolute; inset: 0; overflow: hidden; }
+      .popup {
+        position: absolute; translate: -50% -60px; opacity: 0; font-size: 15px; letter-spacing: 0.6px; color: #ffffff; white-space: nowrap;
+        text-shadow: 0 0 3px #000, 0 0 3px #000, 0 0 10px rgba(47, 245, 210, 0.9);
+        transition: translate 0.9s cubic-bezier(0.33, 1, 0.68, 1), opacity 0.9s cubic-bezier(0.33, 1, 0.68, 1), scale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .popup.start { translate: -50% 0; opacity: 1; scale: 0.6; transition-duration: 0s; }
+      .popup.hot { color: var(--gold); font-size: 18px; text-shadow: 0 0 3px #000, 0 0 3px #000, 0 0 12px rgba(255, 210, 63, 0.95); }
+      .popup.good { color: #a7ff55; font-size: 17px; text-shadow: 0 0 3px #000, 0 0 3px #000, 0 0 12px rgba(167, 255, 85, 0.9); }
+      .popup.cold { color: #c6ecff; font-size: 16px; text-shadow: 0 0 3px #000, 0 0 3px #000, 0 0 12px rgba(159, 220, 255, 0.9); }
+      .popup.big { font-size: 22px; letter-spacing: 3px; color: #fff; text-shadow: 0 0 16px rgba(255, 61, 216, 0.95); }
+
+      #flash { position: absolute; inset: 0; background-image: url(/ui/flash.png); background-size: 100% 100%; opacity: 0; transition: opacity 0.83s ease-out; }
+      #flash[data-kind='white'] { background: radial-gradient(circle, rgba(255, 250, 220, 0.55), rgba(255, 210, 63, 0.18) 60%, transparent); }
+      #flash[data-kind='gold'] { background: radial-gradient(circle, transparent 40%, rgba(255, 210, 63, 0.45)); }
+      #flash.on { opacity: 1; transition: opacity 0.07s ease-out; }
+
+      /* A wave's name sweeping in and out. */
+      #intro { position: absolute; left: 50%; transform: translateX(-50%); width: max-content; max-width: calc(100% - 24px); box-sizing: border-box; top: 36%; padding: 16px 28px 18px; border-radius: 18px; background: rgba(2, 4, 10, 0.72); backdrop-filter: blur(6px); box-shadow: 0 0 40px rgba(2, 4, 10, 0.9); display: flex; flex-direction: column; align-items: center; text-align: center; opacity: 0; font-size: 44px; letter-spacing: 5px; color: #ffffff; text-shadow: 0 0 14px rgba(47, 245, 210, 0.9); transition: opacity 0.55s ease-in, translate 0.55s ease-in; }
+      #intro.enter { opacity: 0; translate: 60px 0; letter-spacing: 22px; transition-duration: 0s; }
+      #intro.shown { opacity: 1; translate: 0 0; letter-spacing: 5px; transition: opacity 0.4s cubic-bezier(0.33, 1, 0.68, 1), translate 0.4s cubic-bezier(0.33, 1, 0.68, 1), letter-spacing 0.4s cubic-bezier(0.33, 1, 0.68, 1); }
+      #intro.leave { opacity: 0; translate: -40px 0; }
+      #intro-stage { margin-bottom: 8px; font-size: 15px; letter-spacing: 8px; color: var(--cyan); }
+      #intro-tell { margin-top: 10px; font-size: 11px; letter-spacing: 3px; color: var(--amber); text-shadow: 0 0 8px rgba(255, 162, 28, 0.8); }
+
+      #banner { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background-image: url(/ui/banner.png); background-size: 100% 100%; opacity: 0; visibility: hidden; transition: opacity 0.45s ease, visibility 0s 0.45s; }
+      #banner.shown { opacity: 1; visibility: visible; pointer-events: auto; cursor: pointer; transition: opacity 0.45s ease; }
+      #headline { font-size: 62px; letter-spacing: 5px; text-align: center; color: #ffffff; margin-bottom: 20px; text-shadow: 0 0 40px rgba(47, 245, 210, 0.8); scale: 0.6; opacity: 0; transition: scale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease; }
+      #banner.bad #headline { text-shadow: 0 0 40px rgba(255, 61, 107, 0.85); }
+      #banner.shown #headline { scale: 1; opacity: 1; }
+      .blink { font-size: 13px; letter-spacing: 4px; color: var(--dim); animation: blink 1.2s steps(2) infinite; }
+      @keyframes blink { 50% { opacity: 0.3; } }
+
+      /* Fire mode: one obvious switch, on the title and in the HUD. */
+      .firemode { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px; border: 2px solid var(--c); background: rgba(8, 12, 28, 0.85); color: var(--c); font-family: Orbitron, sans-serif; font-weight: 900; font-size: 13px; letter-spacing: 2px; pointer-events: auto; box-shadow: 0 0 18px color-mix(in srgb, var(--c) 45%, transparent); transition: scale 0.1s ease, box-shadow 0.2s; }
+      .firemode:active { scale: 0.95; }
+      .firemode.tap { --c: #53ffa3; }
+      .firemode.rapid { --c: #ffa21c; }
+      .firemode .icon { font-size: 16px; }
+      .firemode.tap .rapid-icon, .firemode.rapid .tap-icon { display: none; }
+      .firemode .swap.touch { display: none; }
+      @media (pointer: coarse) { .firemode .swap.keys { display: none; } .firemode .swap.touch { display: inline; } }
+      .firemode .swap { font-size: 10px; letter-spacing: 1.5px; color: #c9d6f2; font-weight: 700; }
+      #fire-title { margin-bottom: 16px; }
+      /* In play: under the lives on a wide screen, bottom centre on an upright one. */
+      #fire-hud { position: absolute; right: max(14px, env(safe-area-inset-right)); top: calc(max(8px, env(safe-area-inset-top)) + 134px); border-radius: 999px; width: auto; height: auto; }
+      /* Upright: compact, up by the sound switch — out of the thumb's way at the bottom. */
+      #ui.portrait #fire-hud { top: calc(max(8px, env(safe-area-inset-top)) + 134px); padding: 7px 11px; font-size: 11px; letter-spacing: 1.5px; }
+      /* The pause menu. */
+      #pause-menu { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 16px; background: rgba(2, 4, 10, 0.74); backdrop-filter: blur(6px); opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0s 0.25s; }
+      #pause-menu.shown { opacity: 1; visibility: visible; pointer-events: auto; transition: opacity 0.25s ease; }
+      .pm-title { font-size: 46px; letter-spacing: 6px; color: #fff; text-shadow: 0 0 30px rgba(47, 245, 210, 0.85); }
+      #pause-line { margin-bottom: 8px; font-size: 12px; letter-spacing: 2.5px; color: var(--amber); }
+      .pm-btn { width: min(280px, 80vw); padding: 14px 18px; border-radius: 12px; border: 1px solid rgba(120, 160, 255, 0.45); background: rgba(8, 12, 28, 0.85); color: var(--ink); font-family: Orbitron, sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 3px; pointer-events: auto; transition: scale 0.1s ease, border-color 0.15s ease; }
+      .pm-btn:hover, .pm-btn:focus-visible { border-color: #fff; outline: none; scale: 1.03; }
+      .pm-btn.primary { background: var(--cyan); color: #02040a; border-color: var(--cyan); box-shadow: 0 0 22px rgba(47, 245, 210, 0.5); }
+      .pm-btn.danger { border-color: rgba(255, 61, 107, 0.6); color: #ffb3c6; }
+      .pm-note { max-width: 300px; margin-top: 4px; padding: 6px 10px; border-radius: 8px; background: rgba(2, 4, 10, 0.7); font-size: 11px; line-height: 1.5; letter-spacing: 1px; color: #c9d6f2; text-align: center; }
+      @media (max-height: 460px) { .pm-title { font-size: 30px; } .pm-btn { padding: 9px 14px; font-size: 13px; } #pause-menu { gap: 7px; } .pm-note { display: none; } }
+      /* Between queens: three paths, one pick. */
+      #upgrade { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; background: rgba(2, 4, 10, 0.72); backdrop-filter: blur(5px); opacity: 0; visibility: hidden; transition: opacity 0.35s ease, visibility 0s 0.35s; }
+      #upgrade.shown { opacity: 1; visibility: visible; pointer-events: auto; transition: opacity 0.35s ease; }
+      .up-title { font-size: 26px; letter-spacing: 5px; color: #fff; text-shadow: 0 0 18px rgba(255, 61, 216, 0.9); text-align: center; }
+      #up-line { margin: 10px 0 18px; font-size: 12px; letter-spacing: 1.5px; color: #c9d6f2; text-align: center; }
+      .up-cards { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+      .up-card { position: relative; width: 210px; min-height: 120px; padding: 14px 14px 30px; text-align: left; border-radius: 14px; border: 1px solid var(--c); background: rgba(8, 12, 28, 0.85); box-shadow: 0 0 22px color-mix(in srgb, var(--c) 40%, transparent); color: var(--ink); pointer-events: auto; transition: scale 0.12s ease, opacity 0.2s; }
+      .up-card:hover, .up-card:focus-visible { scale: 1.04; outline: none; }
+      .up-card b { display: block; font-size: 13px; letter-spacing: 2px; color: var(--c); margin-bottom: 8px; }
+      .up-card span { font-family: system-ui, sans-serif; font-weight: 600; font-size: 13px; line-height: 1.4; color: #c8d4f0; }
+      .up-card i { position: absolute; right: 10px; bottom: 8px; font-style: normal; font-size: 11px; color: var(--c); border: 1px solid var(--c); border-radius: 5px; padding: 1px 6px; }
+      .up-card.closed { opacity: 0.35; }
+      #up-volley { --c: #56fff0; } #up-lance { --c: #ff4fc4; } #up-drone { --c: #ffe66b; }
+
+      /* The title screen, over the demo running behind it. */
+      #splash { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 16px; background: radial-gradient(ellipse 55% 50% at 50% 46%, rgba(2, 4, 10, 0.62), rgba(2, 4, 10, 0.22) 70%, transparent); background-size: 100% 100%; pointer-events: auto; transition: opacity 0.5s ease, visibility 0s 0.5s; }
+      #splash.gone { opacity: 0; visibility: hidden; pointer-events: none; }
+      #title { display: flex; flex-direction: column; align-items: center; margin-bottom: 26px; animation: arrive 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+      @keyframes arrive { from { scale: 0.6; opacity: 0; } }
+      #title-name { font-family: 'Exo 2', sans-serif; font-size: clamp(46px, 11vw, 108px); letter-spacing: 0.05em; font-style: italic; color: #ffffff; text-shadow: 0 0 34px rgba(83, 255, 163, 0.8), 0 0 80px rgba(179, 129, 255, 0.45); }
+      #title-tag { margin-top: 12px; font-size: clamp(11px, 2.6vw, 17px); letter-spacing: 0.5em; color: var(--amber); text-shadow: 0 0 10px rgba(255, 162, 28, 0.8); }
+      #play { position: relative; margin-bottom: 20px; padding: 17px 40px 17px 46px; font-size: 22px; letter-spacing: 6.6px; color: #02040a; border-radius: 14px; background-color: var(--cyan); pointer-events: auto; }
+      #play > .shade { left: -90px; top: -90px; right: -90px; bottom: -90px; border-image: url(/ui/play-glow.png) 208 fill / 104px; }
+      #play > #play-glow { border-image: url(/ui/play-glow-bright.png) 208 fill / 104px; animation: glow 1.6s ease-in-out infinite; }
+      @keyframes glow { 50% { opacity: 0; } }
+      #play:active { scale: 0.96; }
+      .row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+      .ghost { position: relative; z-index: 2; padding: 10px 16px; border-radius: 11px; border: 1px solid rgba(120, 160, 255, 0.45); background: rgba(8, 12, 28, 0.7); color: var(--ink); font-family: Orbitron, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 2px; text-decoration: none; pointer-events: auto; box-shadow: 0 0 14px rgba(47, 245, 210, 0.25); }
+      .ghost.amber { border-color: rgba(255, 162, 28, 0.6); color: #ffd9a0; box-shadow: 0 0 14px rgba(255, 162, 28, 0.25); }
+      .hi { margin-top: 3px; font-size: 11px; letter-spacing: 1.5px; color: var(--gold); text-shadow: 0 0 6px rgba(255, 210, 63, 0.7); }
+      #title-scores { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin: 0 0 16px; pointer-events: auto; }
+      #title-scores .board { min-width: 210px; padding: 8px 12px 9px; border-radius: 12px; background: rgba(8, 12, 28, 0.78); border: 1px solid rgba(255, 210, 63, 0.4); text-align: left; }
+      #title-scores .board.local { border-color: rgba(47, 245, 210, 0.4); }
+      #title-scores h3 { margin: 0 0 5px; font-size: 10px; letter-spacing: 2px; color: var(--gold); }
+      #title-scores .local h3 { color: var(--cyan); }
+      #title-scores ol { list-style: none; margin: 0; padding: 0; font-size: 11px; font-variant-numeric: tabular-nums; }
+      #title-scores li { display: grid; grid-template-columns: 1.7em 1.5em 2.8em 1fr 3.2em; gap: 4px; align-items: center; padding: 1px 0; color: #dfe8ff; }
+      #title-scores li b { text-align: right; color: var(--dim); font-weight: 700; }
+      #title-scores li em { font-style: normal; text-align: right; }
+      #title-scores li small { color: #9fb2d8; font-size: 10px; padding-left: 6px; }
+      #title-scores li.top { color: #ffe680; font-weight: 900; }
+      #title-scores li.note { display: block; color: var(--dim); }
+      #how { font-size: 11px; letter-spacing: 2px; color: #c9d6f2; text-shadow: 0 1px 3px #000; }
+      #how .line { margin: 6px 0; }
+      #how span { white-space: nowrap; }
+      #how .touch { display: none; }
+      @media (pointer: coarse) { #how .touch { display: block; } #how .keys { display: none; } }
+
+      /* Round controls: the smart bomb and pause for touch, the sound switch for everyone. */
+      .round { position: absolute; display: flex; align-items: center; justify-content: center; border-radius: 50%; pointer-events: auto; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0s 0.3s; }
+      .round.shown { opacity: 1; visibility: visible; transition: opacity 0.3s; }
+      #bomb { right: max(14px, env(safe-area-inset-right)); bottom: calc(max(14px, env(safe-area-inset-bottom)) + 46px); width: 66px; height: 66px; font-size: 28px; color: #fff; background: radial-gradient(circle, rgba(255, 210, 63, 0.5), rgba(255, 61, 216, 0.25)); border: 2px solid var(--gold); box-shadow: 0 0 22px rgba(255, 210, 63, 0.6); }
+      #bomb.spent { opacity: 0.3; box-shadow: none; }
+      #bomb-count { position: absolute; right: -2px; top: -2px; min-width: 20px; height: 20px; border-radius: 10px; background: var(--pink); font-size: 11px; line-height: 20px; }
+      #pause { left: max(14px, env(safe-area-inset-left)); bottom: calc(max(14px, env(safe-area-inset-bottom)) + 46px); width: 46px; height: 46px; font-size: 14px; letter-spacing: 1px; color: var(--cyan); background: rgba(8, 12, 28, 0.7); border: 1px solid rgba(120, 160, 255, 0.35); }
+      #sound { position: absolute; right: max(14px, env(safe-area-inset-right)); top: calc(max(8px, env(safe-area-inset-top)) + 84px); width: 40px; height: 40px; border-radius: 12px; color: var(--cyan); background-color: rgba(8, 12, 28, 0.85); border: 1px solid rgba(47, 245, 210, 0.6); box-shadow: 0 0 12px rgba(47, 245, 210, 0.35); pointer-events: auto; z-index: 3; }
+      #sound > .shade { left: -17px; top: -17px; right: -17px; bottom: -17px; background-image: url(/ui/sound-glow.png); background-size: 100% 100%; }
+      #sound .icon { position: absolute; left: 9px; top: 9px; width: 22px; height: 22px; background-image: url(/ui/speaker.png); background-size: 100% 100%; }
+      #sound.off > .shade { display: none; }
+      #sound.off .icon { background-image: url(/ui/speaker-off.png); }
+
+      /* Frost or a slain inchworm: time slows and the edges ice over. */
+      #ui::before { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity 0.4s ease; background: radial-gradient(ellipse at center, transparent 55%, rgba(120, 210, 255, 0.28)); box-shadow: inset 0 0 60px rgba(159, 220, 255, 0.35); }
+      #ui.frozen::before { opacity: 1; }
+      #fade { position: absolute; inset: 0; background-color: #02040a; opacity: 0; transition: opacity 0.6s ease; }
+      #fade.shut { opacity: 1; }
+
+      /* Wide screens: the field fills the height, so the wave panel and the combo move off it, under the score. */
+      #ui:not(.portrait) .panel.middle { position: absolute; left: 0; top: 84px; margin: 0; align-items: flex-start; }
+      #ui:not(.portrait) #combo { left: max(10px, env(safe-area-inset-left)); translate: 0 0; top: calc(max(8px, env(safe-area-inset-top)) + 160px); }
+      #ui:not(.portrait) #effects { left: max(10px, env(safe-area-inset-left)); right: auto; bottom: auto; top: calc(max(8px, env(safe-area-inset-top)) + 200px); flex-direction: column; align-items: flex-start; }
+      #ui.portrait #sound { top: calc(max(8px, env(safe-area-inset-top)) + 84px); }
+      /* A phone held upright: smaller words. */
+      #ui.portrait #headline { font-size: 40px; }
+      #ui.portrait #intro { font-size: 30px; }
+      #ui.portrait #score { font-size: 22px; }
+      #ui.portrait #level { font-size: 20px; }
+      #ui.portrait .panel { padding: 7px 10px 8px; }
+      #ui.portrait .up-card { width: 100%; max-width: 320px; min-height: 0; }
+      #ui.portrait #title-scores .board { min-width: 0; flex: 1 1 150px; padding: 6px 8px; }
+      #ui.portrait #title-scores li { grid-template-columns: 1.5em 1.3em 2.6em 1fr; }
+      #title-scores li.note { text-wrap: balance; }
+      #ui.portrait #title-scores li small { display: none; }
+      @media (max-height: 460px) {
+        #title-scores { display: none; }
+        #title { margin-bottom: 10px; } #title-name { font-size: 54px; } #play { padding: 11px 30px; margin-bottom: 10px; } .row { margin-bottom: 8px; } #how .line { margin: 3px 0; }
+        .up-card { min-height: 0; width: 180px; padding-bottom: 24px; } #up-line { margin: 4px 0 10px; } .up-title { font-size: 20px; }
+        #headline { font-size: 44px; }
+      }
+
+      #loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background-color: #02040a; font-family: Orbitron, sans-serif; font-weight: bold; transition: opacity 0.5s ease; z-index: 10; }
+      #loading .title { font-family: 'Exo 2', sans-serif; font-size: 46px; margin-bottom: 18px; font-style: italic; letter-spacing: 3px; color: #ffffff; text-shadow: 0 0 24px rgba(47, 245, 210, 0.85); }
+      #loading-bar { width: min(320px, 70vw); height: 8px; border-radius: 4px; background-color: rgba(47, 245, 210, 0.15); overflow: hidden; margin-bottom: 18px; }
+      #loading-fill { height: 100%; width: 0; background-color: var(--cyan); transition: width 0.25s ease-out; }
+      #loading .label { font-size: 14px; letter-spacing: 3.4px; color: var(--cyan); }
+      #loading.done { opacity: 0; pointer-events: none; }
+      #version { position: fixed; left: max(8px, env(safe-area-inset-left)); bottom: max(6px, env(safe-area-inset-bottom)); z-index: 20; pointer-events: none; font: 600 10px/1.2 system-ui, sans-serif; letter-spacing: 0.06em; color: rgba(255, 255, 255, 0.62); text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85); }
+    
+      /* ---- Aurora Siege ---- */
+      #pause { left: auto; bottom: auto; right: calc(max(14px, env(safe-area-inset-right)) + 50px); top: calc(max(8px, env(safe-area-inset-top)) + 84px); width: 40px; height: 40px; border-radius: 12px; }
+      :root { --aurora: #53ffa3; --violet: #b381ff; }
+      #cities { display: flex; padding-top: 3px; min-height: 7px; }
+      .pip.spent { background-color: rgba(255, 255, 255, 0.12); }
+      .pip.spent > .shade { display: none; }
+      .pip.shielded { background-color: #9ff6ff; box-shadow: 0 0 8px #38e1ff; }
+      #ui:not(.portrait) .panel.middle { position: absolute; left: 0; top: 84px; margin: 0; align-items: flex-start; }
+      /* Each battery's rounds, under it. */
+      .ammo { position: absolute; translate: -50% 0; padding: 3px 8px; border-radius: 8px; background: rgba(4, 10, 20, 0.78); border: 1px solid rgba(83, 255, 163, 0.55); color: var(--aurora); font-family: 'Exo 2', sans-serif; font-style: italic; font-weight: 800; font-size: 15px; letter-spacing: 1px; text-shadow: 0 0 6px rgba(83, 255, 163, 0.8); opacity: 0; transition: opacity 0.3s; }
+      .ammo.shown { opacity: 1; }
+      .ammo.low { color: #ffd23f; border-color: rgba(255, 210, 63, 0.7); text-shadow: 0 0 6px rgba(255, 210, 63, 0.8); }
+      .ammo.out { color: #ff6b8a; border-color: rgba(255, 61, 107, 0.7); text-shadow: 0 0 6px rgba(255, 61, 107, 0.8); }
+      /* Chains, boss kills, rebuilt batteries: a plate high in the middle. */
+      #chain { position: absolute; left: 50%; top: 22%; translate: -50% 0; padding: 10px 20px 11px; border-radius: 14px; text-align: center; background: rgba(4, 10, 20, 0.66); border: 1px solid rgba(83, 255, 163, 0.5); opacity: 0; scale: 0.8; transition: opacity 0.25s ease, scale 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); white-space: nowrap; }
+      #chain.shown { opacity: 1; scale: 1; }
+      #chain-big { font-size: 22px; letter-spacing: 3px; color: #fff; text-shadow: 0 0 14px rgba(83, 255, 163, 0.9); }
+      #chain-small { margin-top: 4px; font-size: 10px; letter-spacing: 2px; color: var(--aurora); }
+      #intro.boss #intro-stage { color: #ff6b8a; }
+      #intro.boss #intro-name { text-shadow: 0 0 18px rgba(255, 61, 107, 0.9); }
+      #flash[data-kind='violet'] { background: radial-gradient(circle, rgba(200, 160, 255, 0.4), rgba(120, 60, 255, 0.2) 60%, transparent); }
+      /* The commander's words. */
+      #voice { position: absolute; left: 50%; top: calc(max(8px, env(safe-area-inset-top)) + 88px); translate: -50% 0; padding: 6px 14px; border-radius: 10px; background: rgba(2, 6, 14, 0.7); color: #bfe4ff; font-size: clamp(11px, 2.4vw, 15px); letter-spacing: 3px; white-space: nowrap; opacity: 0; transition: opacity 0.35s; }
+      #voice.shown { opacity: 1; }
+      #voice::before { content: '◉ '; color: #ff6b8a; }
+      /* The end-of-wave tally. */
+      #tally { position: absolute; left: 50%; top: 40%; translate: -50% -50%; min-width: 280px; padding: 18px 26px; border-radius: 16px; background: rgba(4, 10, 20, 0.8); border: 1px solid rgba(83, 255, 163, 0.55); box-shadow: 0 0 34px rgba(83, 255, 163, 0.25); text-align: center; opacity: 0; scale: 0.85; transition: opacity 0.3s, scale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+      #tally.shown { opacity: 1; scale: 1; }
+      #tally h2 { margin: 0 0 12px; font-size: 18px; letter-spacing: 4px; color: #fff; text-shadow: 0 0 14px rgba(83, 255, 163, 0.9); }
+      #tally .row2 { display: flex; justify-content: space-between; gap: 18px; margin: 6px 0; font-size: 13px; letter-spacing: 1.5px; color: #c9d6f2; }
+      #tally .row2 b { color: var(--aurora); font-family: 'Exo 2', sans-serif; font-style: italic; font-size: 16px; }
+      #tally-total { margin-top: 10px; font-family: 'Exo 2', sans-serif; font-style: italic; font-size: 30px; color: var(--gold); text-shadow: 0 0 14px rgba(255, 210, 63, 0.8); }
+      /* Arrows over warheads still above the frame. */
+      #threats { position: absolute; left: 0; right: 0; top: 0; height: 30px; }
+      .threat { position: absolute; top: calc(max(8px, env(safe-area-inset-top)) + 4px); translate: -50% 0; font-size: 20px; color: #ff6a3a; text-shadow: 0 0 8px rgba(255, 106, 58, 0.9); animation: threat 0.6s ease-in-out infinite alternate; }
+      .threat[data-kind='nuke'] { color: #ffe23f; font-size: 20px; text-shadow: 0 0 10px rgba(255, 226, 63, 0.95); }
+      .threat[data-kind='smart'] { color: #ff4fd8; }
+      .threat[data-kind='mirv'] { color: #ffb347; }
+      @keyframes threat { to { translate: -50% 5px; } }
+      #ui.portrait #threats { top: 150px; }
+      /* The Arsenal between boss waves. */
+      #arsenal { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; background: rgba(2, 4, 10, 0.72); backdrop-filter: blur(5px); opacity: 0; visibility: hidden; transition: opacity 0.35s ease, visibility 0s 0.35s; }
+      #arsenal.shown { opacity: 1; visibility: visible; pointer-events: auto; transition: opacity 0.35s ease; }
+      #arsenal-line { margin: 10px 0 18px; font-size: 12px; letter-spacing: 1.5px; color: #c9d6f2; text-align: center; }
+      #arsenal-cards { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+      #arsenal .card { position: relative; width: 210px; min-height: 118px; padding: 14px 14px 30px; text-align: left; border-radius: 14px; border: 1px solid var(--c); background: rgba(8, 12, 28, 0.85); box-shadow: 0 0 22px color-mix(in srgb, var(--c) 40%, transparent); color: var(--ink); pointer-events: auto; transition: scale 0.12s ease; }
+      #arsenal .card:hover, #arsenal .card:focus-visible { scale: 1.04; outline: none; }
+      #arsenal .card b { display: block; font-size: 13px; letter-spacing: 2px; color: var(--c); margin-bottom: 8px; }
+      #arsenal .card span { font-family: system-ui, sans-serif; font-weight: 600; font-size: 13px; line-height: 1.4; color: #c8d4f0; }
+      #arsenal .card i { position: absolute; right: 10px; bottom: 8px; font-style: normal; font-size: 11px; color: var(--c); border: 1px solid var(--c); border-radius: 5px; padding: 1px 6px; }
+      .card.up-blast { --c: #ffb347; } .card.up-speed { --c: #9ff6ff; } .card.up-ammo { --c: #53ffa3; } .card.up-flak { --c: #ff4fd8; } .card.up-aegis { --c: #38e1ff; } .card.up-rebuild { --c: #ffd23f; }
+      #effects:empty { display: none; }
+      #ui { overflow: hidden; }
+      /* A phone on its side: compact panels and an icon-sized fire switch. */
+      @media (max-height: 520px) {
+        #ui .panel { padding: 5px 9px 6px; }
+        #ui .label { font-size: 8px; margin-bottom: 2px; }
+        #ui #score { font-size: 18px; }
+        #ui #level { font-size: 16px; }
+        #ui .hi { font-size: 9px; }
+        #ui:not(.portrait) .panel.middle { top: 76px; }
+        #ui .pip { width: 13px; margin-left: 4px; }
+        #version { opacity: 0.5; }
+        #fire-hud .mode, #fire-hud .swap { display: none; }
+        #fire-hud { padding: 8px; top: calc(max(8px, env(safe-area-inset-top)) + 128px); }
+        #ui:not(.portrait) #effects { top: 120px; }
+      }
+      #ui.paused #intro, #ui.paused #chain, #ui.paused #voice, #ui.paused #effects { opacity: 0 !important; }
+      #ui.portrait #arsenal .card { width: 100%; max-width: 320px; min-height: 0; }
+      #effects { left: max(10px, env(safe-area-inset-left)); right: auto; bottom: auto; top: calc(max(8px, env(safe-area-inset-top)) + 160px); display: block; max-width: 300px; padding: 4px 8px; border-radius: 8px; background: rgba(2, 6, 14, 0.6); font-size: 10px; letter-spacing: 1.5px; line-height: 1.6; color: var(--aurora); text-shadow: 0 0 6px rgba(83, 255, 163, 0.6); }
+      #ui.portrait #effects { top: auto; bottom: calc(max(12px, env(safe-area-inset-bottom)) + 8px); left: 50%; translate: -50% 0; text-align: center; max-width: 90%; }
+      .ghost.violet { border-color: rgba(179, 129, 255, 0.6); color: #e2c8ff; box-shadow: 0 0 14px rgba(179, 129, 255, 0.25); }
+      #difficulty-value { color: var(--gold); }
+      #ui.portrait .ammo { font-size: 13px; }
+      /* Upright: compact panels, and the switches in a row along the bottom, below the ground. */
+      #ui.portrait .label { font-size: 8px; letter-spacing: 1.5px; }
+      #ui.portrait #score { font-size: 18px; letter-spacing: 1px; }
+      #ui.portrait #level { font-size: 18px; }
+      #ui.portrait .panel { padding: 6px 8px 7px; }
+      #ui.portrait .pip { width: 12px; margin-left: 4px; }
+      #ui.portrait .bar { left: max(6px, env(safe-area-inset-left)); right: max(6px, env(safe-area-inset-right)); }
+      #ui.portrait #pause { top: auto; right: auto; left: max(14px, env(safe-area-inset-left)); bottom: calc(max(14px, env(safe-area-inset-bottom)) + 30px); }
+      #ui.portrait #sound { top: auto; right: max(14px, env(safe-area-inset-right)); bottom: calc(max(14px, env(safe-area-inset-bottom)) + 30px); }
+      #ui.portrait #fire-hud { top: auto; right: auto; left: 50%; translate: -50% 0; bottom: calc(max(14px, env(safe-area-inset-bottom)) + 30px); }
+      #ui.portrait #effects { bottom: calc(max(14px, env(safe-area-inset-bottom)) + 84px); }
+      .popup { color: var(--gold); }
+      #how { padding: 6px 14px; border-radius: 10px; background: rgba(2, 4, 10, 0.62); }
+      #ui.portrait #title-scores .board.local { display: none; }
+      #ui.portrait #title-scores .board { max-width: 260px; }
+      #ui.portrait #how { display: none; }
+      #ui.portrait #splash { justify-content: flex-start; padding-top: calc(max(16px, env(safe-area-inset-top)) + 9vh); }
+      #ui.portrait #splash .row { width: min(320px, 88vw); }
+      #ui.portrait #splash .row .ghost { flex: 1 1 42%; text-align: center; }
+      #splash::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to bottom, rgba(2, 4, 10, 0.25), rgba(2, 4, 10, 0.55) 55%, rgba(2, 4, 10, 0.8)); }
+      #splash { z-index: 0; }
+      #fire-title { padding: 7px 13px; font-size: 11px; letter-spacing: 1.5px; box-shadow: none; }
+      @media (pointer: coarse) { .firemode .swap.touch { display: none; } }
+      #title-scores li.note { font-family: Orbitron, sans-serif; font-size: 10px; }
+</style>
+  </head>
+  <body>
+    <div id="ui">
+      <div class="bar" id="hud">
+        <div class="side"><div class="panel"><div class="shade"></div><div class="label">SCORE</div><div id="score">0000000</div><div class="hi">🌐 HI <span id="hi">0</span></div></div></div>
+        <div class="panel middle"><div class="shade"></div><div class="label">WAVE</div><div id="level">1</div></div>
+        <div class="side right"><div class="panel right"><div class="shade"></div><div class="label">CITIES</div><div id="cities"></div></div></div>
+      </div>
+      <div id="threats"></div>
+      <div class="ammo" id="ammo-0">0</div>
+      <div class="ammo" id="ammo-1">0</div>
+      <div class="ammo" id="ammo-2">0</div>
+      <div id="effects"></div>
+      <div id="popups"></div>
+      <template id="popup"><div class="popup start"></div></template>
+      <div id="flash"></div>
+      <div id="chain"><div id="chain-big"></div><div id="chain-small"></div></div>
+      <div id="intro"><div id="intro-stage"></div><div id="intro-name"></div><div id="intro-tell"></div></div>
+      <div id="voice"></div>
+      <div id="tally"><h2>SECTOR SECURED</h2><div class="row2"><span>CITIES</span><b id="tally-cities"></b></div><div class="row2"><span>ROUNDS LEFT</span><b id="tally-ammo"></b></div><div id="tally-total"></div></div>
+
+      <button class="round" id="pause" data-button="Pause" aria-label="Pause">❚❚</button>
+      <button class="firemode tap round" id="fire-hud" data-button="FireMode" title="Fire mode (F)"><span class="icon tap-icon">👆</span><span class="icon rapid-icon">🔥</span><span class="mode">TAP TO FIRE</span><span class="swap">⇄</span></button>
+      <button id="sound" data-button="Sound" aria-label="Sound on or off" title="Sound (M)"><div class="shade"></div><div class="icon"></div></button>
+
+      <div id="arsenal">
+        <div class="up-title">THE ARSENAL</div>
+        <div id="arsenal-line"></div>
+        <div id="arsenal-cards"></div>
+      </div>
+
+      <div id="pause-menu" role="dialog" aria-label="Paused">
+        <div class="pm-title">PAUSED</div>
+        <div id="pause-line"></div>
+        <button class="pm-btn primary" data-button="Resume">▶ RESUME</button>
+        <button class="pm-btn" data-button="MainMenu">⌂ MAIN MENU</button>
+        <button class="pm-btn danger" data-button="QuitGame">✕ QUIT GAME</button>
+        <div class="pm-note">Main Menu and Quit end this run. A top‑ten score still gets your initials.</div>
+      </div>
+      <div id="banner" data-button="Continue"><div id="headline"></div><div id="hint" class="blink"></div></div>
+
+      <div id="splash">
+        <div id="title"><div id="title-name">AURORA SIEGE</div><div id="title-tag">NEON 3D · MISSILE DEFENSE</div></div>
+        <button id="play" data-button="Play"><div class="shade"></div><div id="play-glow" class="shade"></div>DEFEND</button>
+        <div class="row">
+          <button class="ghost" id="scores-button">HIGH SCORES</button>
+          <button class="ghost violet" data-button="Difficulty">DIFFICULTY: <span id="difficulty-value">NORMAL</span></button>
+          <a class="ghost amber" id="classic" href="../../../missile-command/">◂ ALL EDITIONS</a>
+        </div>
+        <button class="firemode tap" id="fire-title" data-button="FireMode" title="Fire mode (F)"><span class="icon tap-icon">👆</span><span class="icon rapid-icon">🔥</span><span class="mode">TAP TO FIRE</span><span class="swap keys">· SWITCH: CLICK OR F</span><span class="swap touch">⇄ TAP</span></button>
+        <div id="title-scores" aria-live="polite"></div>
+        <div id="how">
+          <div class="line keys"><span id="how-fire">CLICK WHERE IT WILL BE — ONE SHOT A CLICK</span></div>
+          <div class="line keys"><span>1 2 3 FIRE FROM A BATTERY</span> · <span>ARROWS + SPACE</span> · <span>P PAUSE</span> · <span>M SOUND</span> · <span>GAMEPAD OK</span></div>
+          <div class="line touch"><span>TAP THE SKY TO LAUNCH</span></div>
+          <div class="line touch"><span id="how-fire-touch">TAP WHERE IT WILL BE — ONE SHOT A TAP</span></div>
+        </div>
+      </div>
+      <div id="fade"></div>
+    </div>
+    <div id="loading"><div class="title">AURORA SIEGE</div><div id="loading-bar"><div id="loading-fill"></div></div><div class="label">LOADING</div></div>
+    <!-- jez237.com: visible version, bumped on every publish. Built on SceNoCo (RomaRogov, MIT). -->
+    <div id="version">Aurora Siege 3D · v1.0.0</div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
