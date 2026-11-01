@@ -1,11 +1,85 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-10-31",
+  "updated": "2026-11-01",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-10-31",
+  "coverageEnd": "2026-11-01",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "id": "d-1566471305513934943-spectral-isometry-proof",
+      "title": "An AI-written proof links a number to hidden mathematical structure",
+      "takeaway": "Researchers report a proof of a 24-year-old question: under the stated conditions, a transformation that preserves one numerical feature of mathematical objects must also preserve how they behave when squared. Think of a single measurement revealing more about an object than expected. GPT-6 Astra found the proof; Matthew Colbrook and George Stepaniants explored it further with ChatGPT 6 and wrote the paper themselves. The authors supply a Lean computer-checkable proof, but that proof has not been rebuilt for this coverage, and independent expert confirmation is not established.",
+      "category": "Mathematics",
+      "status": "Author-reported proof with Lean files; independent confirmation not established",
+      "evidenceKind": "proof",
+      "modelNote": "GPT-6 Astra is reported to have found the proof after simple prompts. Matthew Colbrook and George Stepaniants used ChatGPT 6 for further exploration and wrote the paper themselves. Lean is the reported proof-checking system, not the discovery model; its files have not been rebuilt for this coverage.",
+      "sources": [
+        "https://arxiv.org/abs/2610.40470",
+        "https://github.com/MColbrook/Proof-of-the-spectral-isometry-conjecture-for-C-star-algebras",
+        "https://maccus.fr/en/ai-spectral-isometry-conjecture/"
+      ],
+      "context": "🔬 AI Discovery Watch · November 1, 2026\n\n- AI supplies a proof for a 24-year-old mathematics question · October 29\n  Cambridge researchers report that a transformation preserving one particular numerical feature of every mathematical object must also preserve how those objects behave when squared, under the conjecture’s stated conditions. This settles the spectral-isometry question they study, connecting a numerical property to deeper mathematical structure. GPT-6 Astra found the proof after simple prompts; Matthew Colbrook and George Stepaniants explored it further with ChatGPT 6 and wrote the paper themselves. Early result; computer checking reported by the authors: they provide a Lean proof, but I have not rebuilt it, and independent expert confirmation is not established.\n  Paper: https://arxiv.org/abs/2610.40470\n  Proof files: https://github.com/MColbrook/Proof-of-the-spectral-isometry-conjecture-for-C-star-algebras\n  Reporting: https://maccus.fr/en/ai-spectral-isometry-conjecture/",
+      "coveredOn": "2026-11-01"
+    },
+    {
+      "id": "d-1566471610146234381-hera-laboratory-tests",
+      "title": "An AI laboratory assistant passes two hidden-answer tests",
+      "takeaway": "HERA chose measurements, operated laboratory equipment and interpreted results to identify how graphene layers were stacked. Its answers matched an expert’s sealed conclusions for both tested devices—like checking an investigator’s answer against an envelope opened afterward. In another campaign, it measured a known material’s superconductivity, where electricity flows without resistance, after researchers corrected its instructions twice. People built the devices, supplied goals and laboratory knowledge, and checked results. This is an early demonstration of experimental decision-making, not a new superconducting material; expert guidance remained important, and independent replication is not established.",
+      "category": "Research in action",
+      "status": "Early live-laboratory demonstration dependent on expert guidance; not independently replicated",
+      "evidenceKind": "demo",
+      "modelNote": "Live experiments used Claude Fable 5, Opus 5 and Opus 4.8 across different tests, as reported. HERA is the agent system coordinating measurements and interpretation, not a separate underlying model identity. The confirmed account does not map each model to each campaign. People supplied devices, goals and laboratory knowledge, corrected instructions and checked results.",
+      "sources": [
+        "https://arxiv.org/abs/2610.39074",
+        "https://github.com/sharpelab/hera-paper-data"
+      ],
+      "context": "🔬 AI Discovery Watch · November 1, 2026\n\n- AI runs low-temperature experiments—and its conclusions are tested · October 29\n  HERA chose measurements, ran laboratory equipment and interpreted results to identify how graphene layers were stacked; its answers matched an expert’s sealed conclusions on both tested devices. In a separate campaign, it found and measured a known material’s superconductivity—electricity flowing without resistance—after researchers corrected its instructions twice. People built the devices, supplied goals and laboratory knowledge, and checked the results; live experiments used Claude Fable 5, Opus 5 and Opus 4.8 across different tests. Early autonomous-research demonstration, not a new superconducting material: the study shows consequential experimental choices, but also dependence on expert guidance and failures when that guidance was incomplete; it has not been independently replicated.\n  Paper: https://arxiv.org/abs/2610.39074\n  Data and experiment records: https://github.com/sharpelab/hera-paper-data",
+      "coveredOn": "2026-11-01"
+    },
+    {
+      "id": "d-1566471780866990122-quanta-competing-explanations",
+      "title": "An AI experimenter narrows the possibilities—and leaves the answer open",
+      "takeaway": "QUANTA investigated whether an unusual electrical signal in a material came from electronic behavior or heating. It ran measurements, interpreted results and chose follow-up tests, much as a repair technician tests competing explanations for a fault. It ruled out simple explanations but concluded that the remaining possibilities could not be separated with the available evidence. People supplied samples, goals, laboratory records and analysis options, and handled physical equipment changes. This early demonstration shows useful investigation and restraint, not a new physical law; access to prior records of the same materials limits claims about unfamiliar ones.",
+      "category": "Research in action",
+      "status": "Early experiment; remaining explanations unresolved and independent replication not established",
+      "evidenceKind": "demo",
+      "modelNote": "The confirmed source names OpenAI Astra Ultra as the model used by QUANTA for measurements, interpretation and follow-up choices. No further model version is identified, and none is inferred from the agent’s name. Humans supplied samples, goals, records and analysis options and performed physical equipment changes.",
+      "sources": [
+        "https://arxiv.org/abs/2610.38850"
+      ],
+      "context": "🔬 AI Discovery Watch · November 1, 2026\n\n- AI tests competing explanations for a material’s electrical behavior · October 28\n  QUANTA, using the source-named OpenAI Astra Ultra, ran measurements, interpreted them and chose follow-up tests to investigate whether an unusual electrical signal came from electronic behavior or heating. Its tests ruled out simple explanations, but it concluded that the available evidence could not distinguish the remaining possibilities. People supplied the samples, goals, laboratory records and available analysis options, and handled physical changes to the equipment. Early autonomous-research demonstration, not a new physical law: this shows an AI refining an investigation and recognizing its limits; it used prior records of the same materials, so it does not establish success on unfamiliar materials or independent replication.\n  Paper: https://arxiv.org/abs/2610.38850",
+      "coveredOn": "2026-11-01"
+    },
+    {
+      "id": "d-1566471970084753472-tempo-smaller-calculation",
+      "title": "A smaller internal calculation could expand quantum simulations",
+      "takeaway": "Claude Opus 5.5 found a way to shrink an internal calculation in TEMPO, a method for simulating quantum systems interacting with their surroundings. It is like reducing the working notes needed for a calculation without making the entire problem size-free: the new internal structure depends on the system’s connection to its environment, but the final calculation still depends on system size. Valentin Link guided development, presents the mathematical argument and reports code checks and larger simulations. The method retains its usual time-step approximation, not perfect accuracy; independent replication is not established.",
+      "category": "Computing & engineering",
+      "status": "Early human–AI algorithm result; approximation remains and independent replication is not established",
+      "evidenceKind": "early",
+      "modelNote": "Claude Opus 5.5 is credited with finding the internal TEMPO reduction. Valentin Link guided algorithm development, presents the mathematical argument and reports code checks and simulations. TEMPO is the simulation method, not another AI model; no separate checking model is identified in the confirmed report.",
+      "sources": [
+        "https://arxiv.org/abs/2610.37012"
+      ],
+      "context": "🔬 AI Discovery Watch · November 1, 2026\n\n- Claude finds a smaller mathematical structure for quantum simulations · October 27\n  Claude Opus 5.5 found a way to shrink the internal calculation used by TEMPO, a method for simulating quantum systems interacting with their surroundings. The new internal structure depends on how the system connects to its environment, rather than growing with the system’s size; the final calculation still depends on that size. Valentin Link guided the algorithm development, presents the mathematical argument and reports code checks and simulations that reach larger examples than the earlier method. Early human–AI result: the reduction keeps the method’s usual level of time-step approximation, not perfect accuracy, and independent replication is not established.\n  Paper: https://arxiv.org/abs/2610.37012",
+      "coveredOn": "2026-11-01"
+    },
+    {
+      "id": "d-1566472294149263392-mouse-gene-therapy-demonstration",
+      "title": "An AI selects and delivers an experimental mouse treatment under supervision",
+      "takeaway": "Exin Therapeutics reports that Claude Sonnet 5 chose a gene therapy from 19 candidates, selected a brain target using published research and controlled the injection rig in a mouse study. This tested AI treatment planning and equipment control—not whether the treatment works. People built the equipment, prepared the mouse and performed the opening and closing surgery; a veterinarian approved every irreversible step. A positioning fault needed human intervention. Evidence comes from the founder’s public account and WIRED reporting, not a peer-reviewed study, and whether the treatment reduces seizures is still unknown.",
+      "category": "Medicine & biology",
+      "status": "Preliminary founder-reported demonstration; supervised procedure and treatment benefit unknown",
+      "evidenceKind": "demo",
+      "modelNote": "Exin Therapeutics credits Claude Sonnet 5 with selecting the gene therapy and brain target and controlling the injection rig. People performed the opening and closing surgery, a veterinarian approved irreversible steps, and humans intervened after a positioning fault. The account does not establish treatment effectiveness or an unattended operation.",
+      "sources": [
+        "https://threadreaderapp.com/scrolly/2115442964574908902",
+        "https://www.wired.com/story/an-ai-agent-did-brain-surgery-on-live-mouse/"
+      ],
+      "context": "🔬 AI Discovery Watch · November 1, 2026\n\n- AI chooses an experimental treatment and controls its delivery in a mouse study · October 28; reported by WIRED October 31\n  Exin Therapeutics reports that Claude Sonnet 5 selected a gene therapy from 19 candidates, chose a brain target using published research, and controlled a rig delivering the injection. People built the equipment, prepared the mouse and performed the opening and closing surgery; a veterinarian approved every irreversible step. A positioning fault required human intervention, so this was not an unattended procedure. Preliminary research-capability demonstration: the primary evidence is the founder’s public account, with additional reporting by WIRED—not a peer-reviewed study—and whether the treatment reduces seizures is still unknown.\n  Researcher’s account: https://threadreaderapp.com/scrolly/2115442964574908902\n  WIRED: https://www.wired.com/story/an-ai-agent-did-brain-surgery-on-live-mouse/",
+      "coveredOn": "2026-11-01"
+    },
     {
       "title": "AI helps repair a gap in an older mathematics proof",
       "takeaway": "A proof is like a chain: every link must hold. Axiom reports that its AxiomProver system found examples showing that one step in an older proof about finite symmetries did not work, then produced a supporting theorem to repair that route. Human experts contributed earlier ideas and guidance, and the team reports checking the replacement with Lean proof-checking software. The established classification remains intact because other proofs exist; people also found a shorter workaround. This is the team’s account, not an independently confirmed result here.",
