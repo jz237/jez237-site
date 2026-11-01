@@ -36,6 +36,8 @@ export class Hud {
     introName: $('intro-name'),
     introTell: $('intro-tell'),
     banner: $('banner'),
+    pause: $('pause-menu'),
+    pauseLine: $('pause-line'),
     headline: $('headline'),
     hint: $('hint'),
     splash: $('splash'),
@@ -43,7 +45,7 @@ export class Hud {
     upLine: $('up-line'),
     bomb: $('bomb'),
     bombCount: $('bomb-count'),
-    pause: $('pause'),
+    pauseButton: $('pause'),
     sound: $('sound'),
     fade: $('fade'),
   };
@@ -57,7 +59,7 @@ export class Hud {
   playing(on: boolean): void {
     this.el.bar.classList.toggle('shown', on);
     this.el.bomb.classList.toggle('shown', on);
-    this.el.pause.classList.toggle('shown', on);
+    this.el.pauseButton.classList.toggle('shown', on);
     this.el.splash.classList.toggle('gone', on);
     if (!on) {
       this.el.combo.textContent = '';
@@ -180,6 +182,15 @@ export class Hud {
     if (headline === null) return;
     this.el.headline.textContent = headline;
     this.el.hint.textContent = hint;
+  }
+
+  /** The pause menu, with the run's wave and score on it; null closes it. */
+  pauseMenu(line: string | null): void {
+    this.el.pause.classList.toggle('shown', line !== null);
+    if (line !== null) {
+      this.el.pauseLine.textContent = line;
+      (this.el.pause.querySelector('[data-button="Resume"]') as HTMLElement | null)?.focus({ preventScroll: true });
+    }
   }
 
   /** The three paths between waves: each card's tier and what its next pick does. Null hides them. */

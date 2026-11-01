@@ -1,7 +1,7 @@
 /**
  * The global high scores, out where they can be seen — the title screen's top fives and the HUD's HI —
- * as the Classic edition shows them. Both editions share one board on the site's game-scores worker;
- * this only reads it (a run's score is posted by the high-score board, `jez237/scores.ts`).
+ * as the Classic edition shows them. Each edition has its own board on the site's game-scores worker;
+ * this reads the Neon 3D one (a run's score is posted by the high-score board, `jez237/scores.ts`).
  */
 export interface Row {
   initials: string;
@@ -9,8 +9,9 @@ export interface Row {
   level?: number;
 }
 
-const API = 'https://game-scores.jez237.workers.dev/scores/neon-myriapod';
-const LOCAL_KEY = 'neon-myriapod_highscores';
+// The Neon 3D edition's own board; the Classic edition keeps `neon-myriapod`.
+const API = 'https://game-scores.jez237.workers.dev/scores/millipede-neon';
+const LOCAL_KEY = 'millipede-neon_highscores';
 
 export async function globalTop(): Promise<Row[] | null> {
   try {

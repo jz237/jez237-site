@@ -141,11 +141,26 @@ export class Swarm extends Behaviour {
     const r = Math.max(0, Math.min(ROWS - 1, Math.round(rowAt(y))));
     this.spawn({ kind: 'child', length, speed, side: { row: r, dir } });
     const chain = this.chains[this.chains.length - 1]!;
+    // At a wall the swarmlet heads back across the field, never out through the wall.
+    if (c + dir < 0 || c + dir >= COLS) dir = -dir as 1 | -1;
+    chain.dir = dir;
     chain.c = c;
     chain.tc = c + dir;
     chain.path = [];
     for (let i = length + 1; i >= 0; i--) chain.path.push(new Vector2(cellX(c) - dir * i * SPACING * 0.5, cellY(r)));
     if (r >= ZONE_TOP) chain.vdir = -1;
+  }
+
+  /** A chain gone without a trace: no mushroom, no points. */
+  private drop(chain: Chain): void {
+    for (const seg of chain.segs) destroy(seg.node);
+    const i = this.chains.indexOf(chain);
+    if (i >= 0) this.chains.splice(i, 1);
+  }
+
+  /** How many segments are on the field and visible — what the player can actually shoot. */
+  get visibleCount(): number {
+    return this.chains.reduce((n, c) => n + c.segs.filter((s) => s.node.visible).length, 0);
   }
 
   clear(): void {
@@ -177,6 +192,12 @@ export class Swarm extends Behaviour {
       const hy = cellY(chain.r) + (cellY(chain.tr) - cellY(chain.r)) * chain.t;
       this.lay(chain, hx, hy, step);
       if (chain.r >= ZONE_TOP) chain.zoneTime += dt;
+      // A chain whose head has got outside the field can never be shot and would hold the wave open
+      // for ever: it goes, quietly. (Nothing should get it there; this is the backstop.)
+      if (hx < LEFT - 1.6 || hx > RIGHT + 1.6 || hy < -1.5 || hy > TOP + chain.segs.length * SPACING + 6) {
+        this.drop(chain);
+        continue;
+      }
       if (chain.variant === 'spitter' && chain.segs.length && chain.r >= 1 && chain.r < ZONE_TOP - 3) {
         chain.spit -= dt;
         if (chain.spit <= 0) {
@@ -191,6 +212,9 @@ export class Swarm extends Behaviour {
   /** At a cell centre: where next. Across until blocked, then a row down (or up, in the zone) and back. */
   private choose(chain: Chain): void {
     const { c, r } = chain;
+    // Outside a side wall — coming in — the only way is in.
+    if (c < 0) chain.dir = 1;
+    else if (c >= COLS) chain.dir = -1;
     if (r < 0) {
       chain.tc = c;
       chain.tr = r + 1;

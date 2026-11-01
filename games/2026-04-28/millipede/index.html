@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#02040a">
-  <meta name="description" content="Choose your Millipede: the Neon 3D Edition v3.0.2 on three.js, or the original Classic Edition v2.2.0. One global high-score board for both.">
+  <meta name="description" content="Choose your Millipede: the Neon 3D Edition v3.0.3 on three.js, or the original Classic Edition v2.2.0. Each edition keeps its own global high-score board.">
   <link rel="canonical" href="https://jez237.com/games/2026-04-28/millipede/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Millipede — Choose Your Edition">
-  <meta property="og:description" content="Two complete fungal swarm shooters in one: the Neon 3D Edition v3.0.2 or the original Classic Edition v2.2.0.">
+  <meta property="og:description" content="Two complete fungal swarm shooters in one: the Neon 3D Edition v3.0.3 or the original Classic Edition v2.2.0.">
   <meta property="og:url" content="https://jez237.com/games/2026-04-28/millipede/">
   <title>Millipede — Choose Your Edition</title>
   <style>
@@ -39,7 +39,11 @@
     .play{margin-top:auto;color:#fff;font-weight:bold;font-size:12px;letter-spacing:.15em}
     .credit{margin:22px 0 0;color:#8aa6bd;font-size:11px;line-height:1.6}
     .credit a{color:#8dffe9}
-    .leaders{margin:22px auto 0;max-width:520px;padding:14px 18px 16px;border:1px solid #6b5a1c;background:linear-gradient(155deg,rgba(40,30,6,.9),rgba(6,6,14,.96));box-shadow:0 0 26px #ffd23f22;text-align:left}
+    .leaders-wrap{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+    .leaders.classic{border-color:#5d3f8a;background:linear-gradient(155deg,rgba(30,12,48,.9),rgba(6,4,16,.96));box-shadow:0 0 26px #8a3cff22}
+    .leaders.classic h3{color:#e2c8ff;text-shadow:0 0 10px #b57cff88}
+    .leaders.neon h3{color:#8dffe9;text-shadow:0 0 10px #2ff5d288}
+    .leaders{margin:0;padding:14px 18px 16px;border:1px solid #6b5a1c;background:linear-gradient(155deg,rgba(40,30,6,.9),rgba(6,6,14,.96));box-shadow:0 0 26px #ffd23f22;text-align:left}
     .leaders h3{margin:0 0 4px;color:#ffd23f;font-size:12px;letter-spacing:.2em;text-shadow:0 0 10px #ffd23f88}
     .leaders .sub{margin:0 0 10px;color:#9a8a5a;font-size:9px;letter-spacing:.12em}
     .leaders ol{list-style:none;margin:0;padding:0;font-size:12px;font-variant-numeric:tabular-nums}
@@ -48,7 +52,7 @@
     .leaders li.top{color:#ffe680;font-weight:bold}.leaders li.mid{color:#d8e6ff}
     .leaders li.note{display:block;color:#7d8aa8;border:0}
     .back{display:inline-block;margin-top:14px;color:#6f86b3;font-size:10px;letter-spacing:.14em;text-decoration:none}
-    @media(max-width:680px){body{align-items:start;padding-top:max(26px,env(safe-area-inset-top))}.edition p{min-height:0}.editions{grid-template-columns:1fr}.edition{min-height:250px;padding:18px}.edition h2{margin-top:26px}.subtitle{margin-bottom:18px}}
+    @media(max-width:680px){.leaders-wrap{grid-template-columns:1fr}body{align-items:start;padding-top:max(26px,env(safe-area-inset-top))}.edition p{min-height:0}.editions{grid-template-columns:1fr}.edition{min-height:250px;padding:18px}.edition h2{margin-top:26px}.subtitle{margin-bottom:18px}}
     @media(max-height:500px) and (orientation:landscape){body{align-items:start}.eyebrow,.subtitle,.credit,.back{display:none}h1{font-size:34px;margin:0 0 12px}.edition{min-height:210px;padding:14px}.edition h2{margin-top:16px;font-size:25px}.features{margin:8px 0}.editions{gap:10px}}
   </style>
 </head>
@@ -59,7 +63,7 @@
     <p class="subtitle">CHOOSE YOUR EDITION</p>
     <section class="editions" aria-label="Millipede editions">
       <a class="edition neon" href="neon/">
-        <span class="badge">NEW · THREE.JS · v3.0.2</span>
+        <span class="badge">NEW · THREE.JS · v3.0.3</span>
         <h2>NEON 3D EDITION</h2>
         <p>Rebuilt from the ground up in real-time 3D: bloom-lit glass mushrooms, walking millipedes that split where you shoot them, and crowned queens.</p>
         <ul class="features">
@@ -81,32 +85,41 @@
         <span class="play">PLAY CLASSIC EDITION →</span>
       </a>
     </section>
-    <section class="leaders" aria-label="Global high scores">
-      <h3>🌐 GLOBAL HIGH SCORES</h3>
-      <p class="sub">ONE BOARD FOR BOTH EDITIONS · THE BEST TEN</p>
-      <ol id="leaders"><li class="note">Loading…</li></ol>
+    <section class="leaders-wrap" aria-label="Global high scores">
+      <div class="leaders neon">
+        <h3>🌐 NEON 3D EDITION</h3>
+        <p class="sub">GLOBAL HIGH SCORES · THE BEST TEN</p>
+        <ol id="leaders-neon" data-board="millipede-neon"><li class="note">Loading…</li></ol>
+      </div>
+      <div class="leaders classic">
+        <h3>🌐 CLASSIC EDITION</h3>
+        <p class="sub">GLOBAL HIGH SCORES · THE BEST TEN</p>
+        <ol id="leaders-classic" data-board="neon-myriapod"><li class="note">Loading…</li></ol>
+      </div>
     </section>
-    <p class="credit">Both editions share one global high-score board. The Neon 3D Edition is built on <a href="neon/LICENSE.txt">SceNoCo</a> (RomaRogov, MIT) and three.js.</p>
+    <p class="credit">Each edition keeps its own global high-score board. The Neon 3D Edition is built on <a href="neon/LICENSE.txt">SceNoCo</a> (RomaRogov, MIT) and three.js.</p>
     <a class="back" href="../../">← ALL GAMES</a>
   </main>
   <script>
-    (async () => {
-      const list = document.getElementById('leaders');
-      const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => '&#' + c.charCodeAt(0) + ';');
-      try {
-        const ctl = new AbortController();
-        const timer = setTimeout(() => ctl.abort(), 7000);
-        const res = await fetch('https://game-scores.jez237.workers.dev/scores/neon-myriapod', { signal: ctl.signal, cache: 'no-store' });
-        clearTimeout(timer);
-        const data = await res.json();
-        const rows = (Array.isArray(data) ? data : data.scores || []).filter((r) => r && typeof r.score === 'number').sort((a, b) => b.score - a.score).slice(0, 10);
-        list.innerHTML = rows.length
-          ? rows.map((r, i) => `<li class="${i === 0 ? 'top' : i < 3 ? 'mid' : ''}"><b>${i + 1}.</b><i>${i === 0 ? '👑' : i === 1 ? '🥈' : i === 2 ? '🥉' : '✦'}</i><span>${esc(r.initials)}</span><em>${Math.floor(r.score).toLocaleString('en-US')}</em><small>WAVE ${esc(r.level ?? '–')}</small></li>`).join('')
-          : '<li class="note">No scores yet — be the first!</li>';
-      } catch {
-        list.innerHTML = '<li class="note">The global board is offline right now.</li>';
-      }
-    })();
+    // Each edition's own board, read live from the site's game-scores worker.
+    const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => '&#' + c.charCodeAt(0) + ';');
+    for (const list of document.querySelectorAll('ol[data-board]')) {
+      (async () => {
+        try {
+          const ctl = new AbortController();
+          const timer = setTimeout(() => ctl.abort(), 7000);
+          const res = await fetch('https://game-scores.jez237.workers.dev/scores/' + list.dataset.board, { signal: ctl.signal, cache: 'no-store' });
+          clearTimeout(timer);
+          const data = await res.json();
+          const rows = (Array.isArray(data) ? data : data.scores || []).filter((r) => r && typeof r.score === 'number').sort((a, b) => b.score - a.score).slice(0, 10);
+          list.innerHTML = rows.length
+            ? rows.map((r, i) => `<li class="${i === 0 ? 'top' : i < 3 ? 'mid' : ''}"><b>${i + 1}.</b><i>${i === 0 ? '👑' : i === 1 ? '🥈' : i === 2 ? '🥉' : '✦'}</i><span>${esc(r.initials)}</span><em>${Math.floor(r.score).toLocaleString('en-US')}</em><small>WAVE ${esc(r.level ?? '–')}</small></li>`).join('')
+            : '<li class="note">No scores yet — be the first!</li>';
+        } catch {
+          list.innerHTML = '<li class="note">The global board is offline right now.</li>';
+        }
+      })();
+    }
   </script>
 </body>
 </html>

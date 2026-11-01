@@ -20,7 +20,7 @@ export type Phase = 'title' | 'playing' | 'upgrade' | 'paused' | 'over';
 type Power = Pickup['power'];
 type Path = 'volley' | 'lance' | 'drone';
 
-const VERSION = 'v3.0.2';
+const VERSION = 'v3.0.3';
 const EXTRA_LIFE_EVERY = 60000;
 const MAX_LIVES = 5;
 const MAX_BOMBS = 3;
@@ -124,6 +124,8 @@ export class Game extends Behaviour implements Arena {
   private dying = false;
   private awaitingTitle = false;
   private biome = -1;
+  /** Seconds the swarm has had nothing on screen to shoot. */
+  private unseen = 0;
   /** The best score anyone has — the global board's top, or this device's, whichever is higher. */
   private best = 0;
   private spawn = { spider: 3.5, flea: 6, scorpion: 9, bee: 14, inchworm: 22, side: 6, demoSpider: 6 };
@@ -155,15 +157,15 @@ export class Game extends Behaviour implements Arena {
     this.sound = findObjectOfType(Sound)!;
     this.hud = new Hud();
     this.board = createScoreBoard({
-      game: 'neon-myriapod',
-      title: 'MILLIPEDE',
+      // Its own board: the Classic edition keeps `neon-myriapod`.
+      game: 'millipede-neon',
+      title: 'MILLIPEDE · NEON 3D',
       levelLabel: 'WAVE',
       accent: '#2ff5d2',
       accent2: '#ffa21c',
       panel: 'linear-gradient(160deg,rgba(10,28,40,.95),rgba(4,6,16,.97))',
       font: 'Orbitron, sans-serif',
     });
-    migrateClassicScores();
     this.refreshLeaders();
     const scores = document.getElementById('scores-button');
     scores?.addEventListener('click', (e) => {
@@ -207,6 +209,11 @@ export class Game extends Behaviour implements Arena {
     this.powersTick(dt);
     this.guns(dt);
     this.spawns(dt);
+    this.unseen = this.swarm.chains.length && !this.swarm.visibleCount ? this.unseen + dt : 0;
+    if (this.unseen > 6) {
+      this.swarm.clear();
+      this.unseen = 0;
+    }
     if (!this.swarm.chains.length && !this.clearing) this.startCoroutine(this.waveCleared());
   }
 
@@ -232,7 +239,9 @@ export class Game extends Behaviour implements Arena {
         if (Input.getButtonDown('Pause') || Input.getKeyDown(KeyCode.P) || Input.getKeyDown(KeyCode.Escape) || Input.getKeyDown(KeyCode.JoystickButton9)) this.pause(true);
         break;
       case 'paused':
-        if (go || Input.getButtonDown('Pause') || Input.getKeyDown(KeyCode.P) || Input.getKeyDown(KeyCode.Escape) || Input.getKeyDown(KeyCode.Space) || Input.getKeyDown(KeyCode.JoystickButton9)) this.pause(false);
+        if (Input.getButtonDown('MainMenu') || Input.getKeyDown(KeyCode.Q)) this.endRun('title');
+        else if (Input.getButtonDown('QuitGame')) this.endRun('quit');
+        else if (Input.getButtonDown('Resume') || Input.getButtonDown('Pause') || Input.getKeyDown(KeyCode.P) || Input.getKeyDown(KeyCode.Escape) || Input.getKeyDown(KeyCode.Space) || Input.getKeyDown(KeyCode.JoystickButton9)) this.pause(false);
         break;
       case 'upgrade': {
         const picks: [Path, string, KeyCode][] = [['volley', 'Volley', KeyCode.Alpha1], ['lance', 'Lance', KeyCode.Alpha2], ['drone', 'Drone', KeyCode.Alpha3]];
@@ -951,12 +960,32 @@ export class Game extends Behaviour implements Arena {
     if (on && this.phase === 'playing') {
       this.phase = 'paused';
       Time.timeScale = 0;
-      this.hud.banner('PAUSED', 'TAP OR P TO RESUME');
+      this.hud.pauseMenu(`WAVE ${this.wave} · SCORE ${this.score.toLocaleString('en-US')}`);
     } else if (!on && this.phase === 'paused') {
       this.phase = 'playing';
       Time.timeScale = 1;
-      this.hud.banner(null);
+      this.hud.pauseMenu(null);
     }
+  }
+
+  /**
+   * Leaving a run from the pause menu: to this edition's title, or out to the edition picker. Either
+   * way the run ends as a game over does — a top-ten score still gets its initials and is saved.
+   */
+  private endRun(where: 'title' | 'quit'): void {
+    if (this.phase !== 'paused') return;
+    this.hud.pauseMenu(null);
+    this.phase = 'over';
+    Time.timeScale = 1;
+    this.hud.chips([]);
+    this.hud.combo(1, 0);
+    for (const k of Object.keys(this.powers) as Power[]) this.powers[k] = 0;
+    if (this.player.beam) this.player.beam.visible = false;
+    if (this.player.shield) this.player.shield.visible = false;
+    this.player.hidden = true;
+    const leave = () => (where === 'title' ? this.toTitle() : window.location.assign('../'));
+    if (this.score > 0) this.board.submit(this.score, this.wave, leave);
+    else leave();
   }
 
   /**
@@ -1005,23 +1034,5 @@ export class Game extends Behaviour implements Arena {
       scene.background = new Color(biome.sky);
       if (scene.fog instanceof Fog) scene.fog.color.set(biome.sky);
     }
-  }
-}
-
-/** The classic edition's local table, carried over the first time this edition runs. */
-function migrateClassicScores(): void {
-  try {
-    if (localStorage.getItem('neon-myriapod_highscores')) return;
-    const old = JSON.parse(localStorage.getItem('millipede_scores_v1') || '[]');
-    if (Array.isArray(old) && old.length) {
-      const rows = old
-        .filter((e) => e && typeof e.score === 'number')
-        .map((e) => ({ initials: String(e.initials || 'AAA').slice(0, 3), score: e.score, level: e.level ?? 1, ts: e.ts ?? 0 }))
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 10);
-      localStorage.setItem('neon-myriapod_highscores', JSON.stringify(rows));
-    }
-  } catch {
-    // nothing to carry
   }
 }
