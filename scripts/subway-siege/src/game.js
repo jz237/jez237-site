@@ -1140,8 +1140,11 @@ export class Game {
         }
       }
       e.mesh.position.set(e.x, Math.sin(this.time * 4 + e.age) * 0.045, e.z);
-      e.mesh.rotation.z =
-        e.type === "boss" ? Math.sin(e.age) * 0.015 : (e.x - e.px) * -0.5;
+      // Clones re-derive Euler angles from the quaternion, so the template's
+      // 180° yaw comes back as x = z = -π; setting only z would flip the
+      // drone upside down beneath the track bed. Set all three.
+      if (e.type === "boss") e.mesh.rotation.z = Math.sin(e.age) * 0.015;
+      else e.mesh.rotation.set(0, Math.PI, (e.x - e.px) * -0.5);
       this.animateModel(e.mesh, dt);
       const threat = e.mesh.getObjectByName("threat");
       if (threat) {
