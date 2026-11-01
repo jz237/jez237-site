@@ -3,16 +3,16 @@
     "id": "038",
     "title": "UV Atelier",
     "category": "3D · Inline ultraviolet treatment",
-    "description": "Open an inline UV sterilizer, inspect the dry paired lamp and quartz sleeve, and follow an amber water parcel with live contact-time and relative-exposure readings. Explore the complete aquarium circuit, compare optical conditions, and watch the cloth clean the extracted sleeve.",
+    "description": "Slide a viewing window through an inline UV sterilizer, inspect textured quartz and seals, and scrub its mechanical service sequence. Compare synchronized water journeys, examine particle shielding, and diagnose four hidden faults.",
     "url": "uv-studio/",
     "image": "assets/uv-studio.jpg",
     "imageAlt": "The UV Atelier cutaway showing a compact ultraviolet lamp inside its quartz sleeve, flowing water, threaded connections, mounting brackets and external ballast",
     "source": "https://github.com/jz237/jez237-site/tree/main/demos/uv-studio",
     "features": [
-      "14 assemblies, ten lessons & eight experiments",
-      "Refractive water, quartz optics & textured materials",
-      "Tracked parcel & complete aquarium circuit",
-      "Spatial sleeve cleaning & adaptive animated graphics"
+      "Sliding section window & 14 selectable assemblies",
+      "Threaded cap, connector release & service timeline",
+      "Three synchronized exposure comparisons",
+      "Particle shielding & four diagnostic challenges"
     ],
     "facts": [
       "Aquatop-informed teaching model",

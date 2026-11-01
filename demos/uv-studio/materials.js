@@ -29,7 +29,7 @@ export function createOpticalMaterials(clock){
  vec3 R=reflect(-V,N);float broad=pow(max(dot(R,normalize(vec3(-.6,.8,1.))),0.),32.);float strip=pow(max(dot(R,normalize(vec3(.2,.7,-.9))),0.),110.);
  vec2 uv=screenPoint.xy/screenPoint.w*.5+.5,bend=(mat3(viewMatrix)*N).xy*mix(.0015,.002,wet);vec2 sampleUV=clamp(uv+bend,vec2(.001),vec2(.999));
  vec4 background=vec4(0.);if(captureOn>.5){if(texture2D(depthMap,sampleUV).r<gl_FragCoord.z-.0001)sampleUV=uv;background=texture2D(sceneMap,sampleUV);background.a*=(1.-step(.99999,texture2D(depthMap,sampleUV).r))*mix(.7,.4,wet);}
- float streak=pow(max(0.,wave*.55),8.)*wet;float density=mix(.055,.16,wet)+fresnel*.3+streak*.16;
+ float polish=(1.-wet)*.004*(.5+.5*sin(localPoint.x*139.+sin(localPoint.y*153.)));float streak=pow(max(0.,wave*.55),8.)*wet;float density=polish+mix(.055,.16,wet)+fresnel*.3+streak*.16;
  vec3 tint=mix(vec3(.39,.63,.64),vec3(.06,.31,.42),wet);float alpha=background.a*(1.-density)+density;
  vec3 color=(background.rgb*background.a*(1.-density)+tint*density)/max(alpha,.001);
  color+=vec3(.72,.9,.96)*(broad*(.15+.5*fresnel)+strip*.55+streak*.2);

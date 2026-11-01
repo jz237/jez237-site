@@ -25,9 +25,9 @@ export function serviceWipe(progress){const seconds=progress*SERVICE_SECONDS,cov
 const referenceTransit=1/(defaults.flow/100*.12),referenceIntensity=physics(defaults).intensity;
 export function createSimulation(){let time=0,travel=0,serviceTime=null,completed=0,parcel;
  const freshParcel=()=>({active:false,progress:0,contact:0,exposure:0,complete:false,hold:0,journeys:0});parcel=freshParcel();
- return {reset(){time=travel=completed=0;serviceTime=null;parcel=freshParcel();},startParcel(){parcel={...freshParcel(),active:true};},startService(){serviceTime=0;parcel.active=false;},cancelService(){serviceTime=null;},
+ return {reset(){time=travel=completed=0;serviceTime=null;parcel=freshParcel();},startParcel(){parcel={...freshParcel(),active:true};},startService(){serviceTime=0;parcel.active=false;},cancelService(){serviceTime=null;},seekService(progress){serviceTime=clamp(progress)*SERVICE_SECONDS;parcel.active=false;},
  step(dt,state){dt=clamp(Number.isFinite(dt)?dt:0,0,.1);time+=dt;
-  if(serviceTime!==null){serviceTime+=dt;if(serviceTime>=SERVICE_SECONDS){serviceTime=null;completed++;state.fouling=0;state.output=100;}}
+  if(serviceTime!==null){serviceTime+=dt;if(serviceTime>=SERVICE_SECONDS){serviceTime=null;completed++;if(state.serviceTask!=='lamp')state.fouling=0;if(state.serviceTask!=='sleeve')state.output=100;}}
   const p=serviceTime!==null&&serviceTime>=20?physics({...state,lamp:false}):physics(state,serviceTime!==null);travel+=dt*p.flow;
   if(parcel.active&&serviceTime===null){
    if(parcel.complete){if(p.flow>.01)parcel.hold+=dt;if(parcel.hold>=1.8)parcel={...freshParcel(),active:true,journeys:parcel.journeys};}
