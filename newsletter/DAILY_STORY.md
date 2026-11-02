@@ -86,7 +86,7 @@ CHECK="python3 $SITE/scripts/aquarium_daily_story_check.py"
      through `refs` (a `brief` may rest on one primary source). Sources sit in the quiet
      endnotes, not as the destination.
    - **Per-source derivation limit:** no more than 200 cited words per source URL across the
-     whole edition including `checklist.json` (enforced by the tests; also judge uncited
+     whole edition (enforced by the tests; also judge uncited
      wording, the title, dek and any diagram text).
    - **No store content invented:** no inventory, prices, staff quotes, store endorsement or
      customer stories. No competitor stores.

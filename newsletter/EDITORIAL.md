@@ -27,7 +27,6 @@ Each story carries topic tags (Plants, Fish, Shrimp & snails, Ponds, Coral, Equi
 ## Source files and verification
 
 - `stories.json`: complete original articles and references.
-- `checklist.json`: complete no-click homepage checklist and its sources.
 - `photo-credits.json`: licensed photography; do not discard attribution.
 - `illustrations.json`: generated original-diagram manifest, separate from photography.
 - `../scripts/build_aquarium_diagrams.py`: regenerate original SVG illustrations.
@@ -64,7 +63,7 @@ The tests enforce the formats, word ranges per format, the facts box, units, the
 
 ## Pagination (Jez, November 1, 2026, 22:02)
 
-Never more than 10 stories on a page. `/newsletter/` is page 1 (with the lead story and the checklist); older stories continue on `/newsletter/page/2/`, `/page/3/` and so on, newest first, linked by Newer / Older and page numbers. Filters work across every story and show matching stories 10 at a time. The builder generates the pages; the tests fail if a page has more than 10 cards or a story is missing or repeated.
+Never more than 10 stories on a page. `/newsletter/` is page 1 (with the lead story); older stories continue on `/newsletter/page/2/`, `/page/3/` and so on, newest first, linked by Newer / Older and page numbers. Filters work across every story and show matching stories 10 at a time. The builder generates the pages; the tests fail if a page has more than 10 cards or a story is missing or repeated.
 
 ## Humanizer scope (Jez, November 1, 2026)
 

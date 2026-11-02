@@ -8,12 +8,10 @@ import xml.etree.ElementTree as ET
 from aquarium_editorial import word_count, background_date, plain_date, related_stories, TAGS, tags_markup, showroom_markup, validate, KINDS, FACT_LABELS, facts_markup
 from copy import deepcopy
 import re
-from aquarium_home import checklist_markup
 
 ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/'newsletter'
 STORIES=json.loads((OUT/'stories.json').read_text())
-CHECK=json.loads((OUT/'checklist.json').read_text())
 DRAWINGS=json.loads((OUT/'illustrations.json').read_text())
 EXPANSION={'clean-filter-media-without-replacing-the-biofilter','read-and-record-aquarium-water-tests','trim-stem-plants-and-replant-cuttings','top-off-with-freshwater-change-with-saltwater','match-coral-placement-to-local-flow','choose-marine-fish-for-adult-life'}
 ORIGINAL={'a-new-home-for-coral','a-greener-kind-of-aquarium','how-fish-find-their-crowd','behind-captive-bred-fish','little-cups-big-potential','when-coral-spawns'}
@@ -99,21 +97,12 @@ class PracticalTests(unittest.TestCase):
         self.assertIn('not photographs',credits)
         self.assertIn('AI-assisted diagrams',credits)
 
-    def test_complete_checklist_without_script_or_disclosure(self):
-        html=checklist_markup(CHECK)
-        visible=html.split('<details')[0]
-        self.assertEqual(len(CHECK['items']),4)
-        for item in CHECK['items']:
-            self.assertIn(item['text'],visible)
-        self.assertNotIn('<script',html)
-        # Compact, plain layout: no decorative icons, eyebrow or em-dash copy.
-        self.assertEqual(visible.count('<svg'),0)
-        self.assertNotIn('eyebrow',visible)
-        self.assertNotIn('—',visible)
-        self.assertEqual(visible.count('<li>'),4)
-        self.assertIn(CHECK['note'],visible)
-        self.assertIn(CHECK['source_note'],html.split('<details')[1])
-        self.assertIn('id="daily-check"',(OUT/'index.html').read_text())
+    def test_no_homepage_checklist(self):
+        # Jez removed the homepage checklist entirely (November 1, 2026).
+        self.assertFalse((OUT/'checklist.json').exists())
+        for f in edition_pages():
+            html=f.read_text()
+            self.assertNotIn('daily-check',html);self.assertNotIn('check-list',html)
 
     def test_homepage_and_article_source_budgets(self):
         budgets=defaultdict(int)
@@ -122,10 +111,6 @@ class PracticalTests(unittest.TestCase):
             for b in s['blocks']:
                 for rid in b.get('refs',[]):
                     budgets[refs[rid]]+=word_count({'blocks':[b]})
-        refs={r['id']:r['url'] for r in CHECK['references']}
-        for item in CHECK['items']:
-            for rid in item['refs']:
-                budgets[refs[rid]]+=word_count({'blocks':[{'type':'p','text':item['text']}]})
         self.assertTrue(all(n<=200 for n in budgets.values()),dict(budgets))
 
     def test_topic_tags(self):
@@ -277,7 +262,7 @@ class PracticalTests(unittest.TestCase):
             self.assertIn(f'<link rel="canonical" href="{canon}">',html)
             if n>1:
                 self.assertIn(f'<title>Aquarium News, page {n}</title>',html)
-                self.assertNotIn('class="cover',html);self.assertNotIn('id="daily-check"',html)
+                self.assertNotIn('class="cover',html)
             # Every pagination link resolves to a generated page.
             pager=re.search(r'id="static-pager".*?</nav>',html,re.S).group(0)
             for href in re.findall(r'href="([^"]+)"',pager):
@@ -289,7 +274,7 @@ class PracticalTests(unittest.TestCase):
         self.assertEqual(sorted(seen),sorted(s['slug'] for s in STORIES))  # each story on exactly one page
         self.assertEqual(len(seen),len(set(seen)))
         home=(OUT/'index.html').read_text()
-        self.assertIn('class="cover',home);self.assertIn('id="daily-check"',home)
+        self.assertIn('class="cover',home)
         mods={u.find('s:loc',NS).text for u in ET.parse(ROOT/'sitemap.xml').getroot().findall('s:url',NS)}
         for n in range(2,len(pages)+1):self.assertIn(f'https://jez237.com/newsletter/page/{n}/',mods)
         self.assertFalse((OUT/'page'/str(len(pages)+1)).exists())

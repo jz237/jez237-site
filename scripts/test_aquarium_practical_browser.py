@@ -21,7 +21,7 @@ if args.base_url:base=args.base_url.rstrip('/')
 else:
     server=http.server.ThreadingHTTPServer(('127.0.0.1',0),functools.partial(Quiet,directory=str(ROOT)))
     threading.Thread(target=server.serve_forever,daemon=True).start();base=f'http://127.0.0.1:{server.server_port}'
-stories=json.loads((ROOT/'newsletter/stories.json').read_text());check=json.loads((ROOT/'newsletter/checklist.json').read_text())
+stories=json.loads((ROOT/'newsletter/stories.json').read_text())
 results={'base':base,'widths':[],'illustrated_articles':[]}
 try:
     with sync_playwright() as pw:
@@ -31,17 +31,8 @@ try:
         for width in [320,390,768,1440]:
             page.set_viewport_size({'width':width,'height':900})
             page.goto(base+'/newsletter/',wait_until='networkidle')
-            for item in check['items']:
-                assert item['text'] in page.locator('#daily-check').inner_text()
-            assert page.locator('#daily-check svg').count()==0
-            # Keep the checklist a compact note rather than a full-width feature block.
-            height=page.locator('#daily-check').evaluate('(e)=>e.getBoundingClientRect().height')
-            assert height<={320:680,390:600,768:520,1440:340}[width],(width,height)
-            results.setdefault('checklist_heights',{})[width]=round(height)
-            assert page.locator('#daily-check details').evaluate('(e)=>!e.open')
+            assert page.locator('#daily-check').count()==0
             assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
-            if width in [390,1440]:
-                page.locator('#daily-check').screenshot(path=str(args.output/f'checklist-{width}.png'))
             for i,s in enumerate(stories):
                 if not s.get('diagram') and not s['image'].endswith('.svg'):continue
                 n=i//10+1

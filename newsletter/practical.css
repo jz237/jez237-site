@@ -1,17 +1,13 @@
 /* Useful information stays on the page; illustrations never crop away labels. */
 .practical-cover .cover-copy{max-width:680px}.practical-cover .cover-copy h2{font-size:clamp(36px,4.3vw,58px)}
-.daily-check{margin:36px 0 44px;padding:22px 28px 18px;background:var(--mint);border:1px solid var(--line);border-radius:4px;display:grid;grid-template-columns:minmax(180px,250px) minmax(0,1fr);gap:8px 40px;align-items:start}
-.daily-check h2{font-size:27px;line-height:1.15;margin:0}
-.check-body{max-width:740px}.check-list{margin:0;padding:0 0 0 1.3em;font-size:15px;line-height:1.6}.check-list li{margin:0 0 6px;padding-left:4px}.check-list li::marker{color:var(--green);font-weight:650}.check-foot{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 18px;margin-top:8px;font-size:13px;color:var(--muted)}.check-note{margin:0;line-height:1.5}.check-sources{font-size:12px}.check-sources summary{cursor:pointer;padding:4px 0}.check-sources p{margin:6px 0}.check-sources ul{margin:0;padding-left:1.1em}.check-sources li{margin:8px 0}.check-sources small{display:block;margin-top:3px}
 .updated-line{margin:10px 0 0;font-size:12px;letter-spacing:.02em;color:var(--muted)}
 .archive-note{display:block;font-size:12px;letter-spacing:.01em;color:var(--muted);margin-top:9px}.reader-heading .archive-note{margin-bottom:12px}
 .story-image.diagram-image{background:var(--mint);display:flex;flex-direction:column;aspect-ratio:auto}.story-image.diagram-image img{height:auto;flex:none}.story-image.diagram-image img{object-fit:contain;transform:none!important}.diagram-image .story-label{position:static;display:block;background:var(--ink);color:var(--paper);padding:4px 12px}
 .article-image:has(img[src$=".svg"]) img,.reader-figure:has(img[src$=".svg"]) img{object-fit:contain;height:auto;max-height:none;aspect-ratio:960/680;background:var(--paper)}
 .explainer-diagram{margin:0 0 36px}.explainer-diagram img{width:100%;height:auto;object-fit:contain}.explainer-diagram figcaption{font-size:12px;line-height:1.7;color:var(--muted);margin-top:12px}
 .illustration-credits{margin:60px 0}.illustration-credits>h2{font-size:36px}.illustration-credits>p{max-width:780px}.diagram-credit{min-width:0}.diagram-credit img{width:100%;height:auto}.diagram-credit h3{font-size:25px;margin:20px 0 12px}.diagram-credit p{font-size:14px}
-@media(max-width:1000px){.daily-check{grid-template-columns:1fr}.practical-cover .cover-copy{max-width:620px}}
-@media(max-width:600px){.daily-check{margin:26px 0 36px;padding:18px 18px 14px;gap:8px}.daily-check h2{font-size:23px}.check-list{font-size:14.5px;line-height:1.55}.practical-cover .cover-copy{padding:30px 26px 48px}.practical-cover .cover-copy h2{font-size:38px}.practical-cover .cover-copy p{font-size:14px}.interlude-copy h2{font-size:34px}}
-@media print{.daily-check{break-inside:avoid}.check-sources{display:none}}
+@media(max-width:1000px){.practical-cover .cover-copy{max-width:620px}}
+@media(max-width:600px){.practical-cover .cover-copy{padding:30px 26px 48px}.practical-cover .cover-copy h2{font-size:38px}.practical-cover .cover-copy p{font-size:14px}.interlude-copy h2{font-size:34px}}
 .story-tags{list-style:none;display:flex;flex-wrap:wrap;gap:5px;margin:10px 0 0;padding:0}.story-tags li{font-size:11px;line-height:1.5;letter-spacing:.02em;color:var(--green);background:var(--mint);border-radius:3px;padding:1px 8px}.article-heading .story-tags,.reader-heading .story-tags{margin:2px 0 8px}
 .tag-filters{margin-top:8px}.tag-filters .filter{min-height:36px;padding-block:6px}
 .share-line{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;margin:6px 0 4px;font-size:12px;color:var(--muted)}.copy-link{display:none;border:1px solid var(--line);border-radius:30px;background:transparent;color:var(--green);font:inherit;font-size:12px;min-height:36px;padding:6px 14px;cursor:pointer}.copy-link:hover{border-color:var(--green)}.share-status{min-height:1em}.share-url{color:var(--green);overflow-wrap:anywhere}
@@ -47,3 +43,10 @@
 .pager [aria-current="page"]{border-color:var(--ink);color:var(--ink);font-weight:650}
 .pager [aria-disabled="true"]{opacity:.45;padding:6px 10px}
 .page-intro h1{font-size:clamp(34px,5vw,58px)}
+/* Filters: pills on wider screens, two labelled dropdowns on phones; hidden without JavaScript. */
+.filter-selects{display:none}
+html:not(.js-filters) .filters,html:not(.js-filters) .filter-selects{display:none!important}
+.filter-select{display:flex;flex:1 1 0;flex-direction:column;gap:3px;min-width:0;font-family:var(--sans);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.filter-select select{width:100%;min-height:42px;padding:8px 32px 8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23255d4b' stroke-width='1.8'/%3E%3C/svg%3E") no-repeat right 12px center;color:var(--ink);font:500 15px var(--sans);letter-spacing:0;text-transform:none;appearance:none}
+.filter-select select:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+@media(max-width:640px){.section-head .filters{display:none}.filter-selects{display:flex;gap:10px;margin-top:16px;width:100%}}

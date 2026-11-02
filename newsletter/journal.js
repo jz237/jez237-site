@@ -1,6 +1,10 @@
 (() => {
   'use strict';
+  // Filter controls only make sense with JavaScript; without it the static pages stay as published.
+  document.documentElement.classList.add('js-filters');
   const filters = [...document.querySelectorAll('[data-filter]')];
+  const waterSelect = document.querySelector('[data-filter-select]');
+  const topicSelect = document.querySelector('[data-tag-select]');
   const tagFilters = [...document.querySelectorAll('[data-tag-filter]')];
   const grid = document.getElementById('story-grid');
   const count = document.getElementById('story-count');
@@ -31,6 +35,8 @@
   function apply(updateURL) {
     filters.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === category)));
     tagFilters.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.tagFilter === tag)));
+    if (waterSelect) waterSelect.value = category;
+    if (topicSelect) topicSelect.value = tag;
     if (!grid) return;
     if (!filtering()) {
       // Unfiltered: the server-rendered page stays exactly as published.
@@ -78,6 +84,9 @@
   }
   filters.forEach(button => button.addEventListener('click', () => select(button.dataset.filter)));
   tagFilters.forEach(button => button.addEventListener('click', () => selectTag(button.dataset.tagFilter)));
+  // Phone dropdowns drive the same filter state and pagination as the pills.
+  waterSelect?.addEventListener('change', () => select(waterSelect.value));
+  topicSelect?.addEventListener('change', () => selectTag(topicSelect.value));
   filterPager?.addEventListener('click', event => {
     const button = event.target.closest('[data-page-target]');
     if (!button) return;
@@ -153,8 +162,16 @@
     window.scrollTo({top: pageY, behavior: 'instant'});
     if (trigger?.isConnected) trigger.focus({preventScroll: true});
   }
+  // Every story opens at its top: stop any momentum scroll, reset before and after rendering.
+  function resetScroll() {
+    for (const el of [scroller, dialog]) { el.style.overflowY = 'hidden'; el.scrollTop = 0; }
+    requestAnimationFrame(() => {
+      for (const el of [scroller, dialog]) { el.style.overflowY = ''; el.scrollTop = 0; }
+    });
+  }
   function render(slug) {
     current = slug;
+    resetScroll();
     content.replaceChildren(templates.get(slug).content.cloneNode(true));
     const title = content.querySelector('.reader-title');
     title.id = 'reader-title';
@@ -166,6 +183,7 @@
     next.disabled = index >= sequence.length - 1;
     position.textContent = `${index + 1} of ${sequence.length}`;
     scroller.scrollTop = 0;
+    dialog.scrollTop = 0;
     if (dialog.open) title.focus({preventScroll: true});
   }
   function openReader(slug, source = null, fromHistory = false) {

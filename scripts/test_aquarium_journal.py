@@ -111,8 +111,6 @@ try:
         assert page.locator('.story .story-date').count()==len(first)
         assert page.locator('.story .story-date').all_inner_texts()==[plain_date(s['published']) for s in first]
         assert page.locator('.brand small').inner_text().lower()=='aquarium news · a concept'
-        assert page.locator('#daily-check .check-list > li').count()==4
-        assert page.locator('#daily-check .check-list > li:visible').count()==4
         assert page.locator('.story .source-date').count()==0
         assert page.locator('.cover .button-link').get_attribute('href')=='stories/'+stories[0]['slug']+'/'
         page.screenshot(path=str(args.output/'desktop.png'),full_page=True)
@@ -166,14 +164,14 @@ try:
             r=page.goto(url,wait_until='networkidle');assert r is not None and r.status==200,url
             slugs=page.locator('.story:visible h3 a').evaluate_all("as=>as.map(a=>a.getAttribute('href').split('/').slice(-2)[0])")
             assert slugs==[s['slug'] for s in items],(n,slugs)
-            assert page.locator('.cover').count()==(1 if n==1 else 0) and page.locator('#daily-check').count()==(1 if n==1 else 0)
+            assert page.locator('.cover').count()==(1 if n==1 else 0) and page.locator('#daily-check').count()==0
             if n>1: assert page.title()==f'Aquarium News, page {n}'
             for href in page.locator('#static-pager a').evaluate_all("as=>as.map(a=>a.href)"):
                 rr=page.request.get(href);assert rr.status==200,href
             if n<len(pages):
                 page.locator('#static-pager a[rel="next"]').click();page.wait_for_load_state('networkidle')
                 assert page.url.rstrip('/').endswith(f'page/{n+1}'),page.url
-        results['checks'].append(f'{len(pages)} static pages of at most {PER}, Newer/Older and page links resolve, hero/checklist on page 1 only')
+        results['checks'].append(f'{len(pages)} static pages of at most {PER}, Newer/Older and page links resolve, hero on page 1 only, no checklist')
         results['checks'].append('topic tag filter alone and combined with Freshwater/Reef, with URL persistence')
         for width in [320,390,768,1440]:
             page.set_viewport_size({'width':width,'height':844})
@@ -223,6 +221,27 @@ try:
         assert page.locator('.credit-item').count()==len(photos)
         assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
         results['checks'].append('all image credit entries rendered')
+        # Phones: two labelled dropdowns replace the pills and drive the same filter and pagination.
+        page.set_viewport_size({'width':390,'height':844})
+        page.goto(base+'/newsletter/',wait_until='networkidle')
+        assert page.locator('#water-select').is_visible() and page.locator('#topic-select').is_visible()
+        assert not page.locator('[data-filter="reef"]').is_visible() and not page.locator('[data-tag-filter="fish"]').is_visible()
+        assert page.locator('label:has(#water-select)').inner_text().lower().startswith('water')
+        page.locator('#water-select').select_option('reef')
+        reef=[s['slug'] for s in stories if s['category']=='reef']
+        assert page.locator('.story:visible h3 a').evaluate_all("as=>as.map(a=>a.getAttribute('href').split('/').slice(-2)[0])")==reef[:PER]
+        assert 'topic=reef' in page.url and page.locator('[data-filter="reef"]').get_attribute('aria-pressed')=='true'
+        page.locator('#topic-select').select_option('coral')
+        both=[s['slug'] for s in stories if s['category']=='reef' and 'Coral' in s['tags']]
+        assert page.locator('.story:visible').count()==min(PER,len(both)) and 'tag=coral' in page.url
+        page.reload(wait_until='networkidle')
+        assert page.locator('#water-select').input_value()=='reef' and page.locator('#topic-select').input_value()=='coral'
+        page.locator('#water-select').select_option('all');page.locator('#topic-select').select_option('all')
+        assert page.locator('.story:visible').count()==len(first)
+        assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
+        page.set_viewport_size({'width':1440,'height':1000});page.goto(base+'/newsletter/',wait_until='networkidle')
+        assert not page.locator('#water-select').is_visible() and page.locator('[data-filter="reef"]').is_visible()
+        results['checks'].append('phone dropdowns (Water, Topic) drive filters and pagination; pills on desktop')
         page.goto(base+'/newsletter/?topic=not-a-category',wait_until='networkidle')
         assert page.locator('.story:visible').count()==len(first)
         results['checks'].append('invalid topic safely falls back to all stories')
@@ -233,7 +252,7 @@ try:
             assert np.locator('.story').count()==min(PER,len(stories)-PER) and np.locator('noscript').count()==1
             np.goto(base+'/newsletter/',wait_until='networkidle')
         assert np.locator('noscript').is_visible()
-        assert np.locator('#daily-check .check-list > li:visible').count()==4
+        assert not np.locator('#water-select').is_visible() and not np.locator('[data-filter="reef"]').is_visible()
         assert np.locator('.story-tags').first.is_visible()
         sp=nojs.new_page();sp.goto(base+'/newsletter/stories/'+stories[0]['slug']+'/',wait_until='networkidle')
         assert sp.locator('.share-url').is_visible() and not sp.locator('.copy-link').is_visible()

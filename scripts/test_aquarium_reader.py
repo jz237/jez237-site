@@ -194,6 +194,25 @@ try:
                 page.screenshot(path=str(args.output/'reader-mobile-body.png'))
             page.locator('#reader-close').click();wait_closed()
         results['checks'].append('reader fits at 320/390/768px with no horizontal overflow, fixed reachable Close and internal scrolling')
+        # On a phone, a story scrolled to the bottom must not carry its scroll into the next one.
+        page.set_viewport_size({'width':390,'height':844})
+        page.goto(base+'/newsletter/',wait_until='networkidle')
+        page.locator('.story h3 a').nth(0).click();wait_open()
+        tops="()=>[document.querySelector('#reader-scroll').scrollTop,document.querySelector('#article-reader').scrollTop]"
+        for action in ['next','related','previous']:
+            box=page.locator('#reader-scroll').bounding_box()
+            page.mouse.move(box['x']+box['width']/2,box['y']+box['height']/2)
+            for _ in range(12): page.mouse.wheel(0,1500)
+            page.wait_for_timeout(150)
+            assert page.evaluate("document.querySelector('#reader-scroll').scrollTop")>500,action
+            if action=='next': page.locator('#reader-next').click()
+            elif action=='previous': page.locator('#reader-previous').click()
+            else: page.locator('#reader-content .related-stories a').first.click()
+            page.evaluate('()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))')
+            assert page.evaluate(tops)==[0,0],(action,page.evaluate(tops))
+            assert page.locator('#reader-content .reader-title').is_visible()
+        page.locator('#reader-close').click();wait_closed()
+        results['checks'].append('390px: Next, Related and Previous always open the story at its top')
         # Rapid repeat interactions must not leave the page locked or an old close event active.
         for _ in range(5):
             page.locator('.story h3 a').first.click();wait_open()
