@@ -1,0 +1,774 @@
+// The shell library. Each break type lays out its stars (direction, speed,
+// burn time, colour chemistry, tails) the way the real product is built, plus
+// how much smoke it leaves, how bright it lights the air and how it sounds.
+import { K_STAR, K_CRACKLE, K_FLASH, T_GOLD, T_SILVER, T_GLITTER, T_COLOR, T_KAMURO, T_STROBE } from './particles.js?v=8';
+
+// Linear-light colours of the metal salts, with relative brightness.
+export const COLORS = {
+  red: { c: [1.0, 0.05, 0.028], p: 1.55, n: 'strontium red' },
+  orange: { c: [1.0, 0.3, 0.045], p: 1.6, n: 'calcium orange' },
+  yellow: { c: [1.0, 0.68, 0.11], p: 1.8, n: 'sodium yellow' },
+  lemon: { c: [0.8, 1.0, 0.22], p: 1.6, n: 'lemon' },
+  green: { c: [0.2, 1.0, 0.15], p: 1.45, n: 'barium green' },
+  aqua: { c: [0.08, 0.8, 0.75], p: 1.25, n: 'aqua' },
+  blue: { c: [0.08, 0.25, 1.0], p: 1.1, n: 'copper blue' },
+  purple: { c: [0.55, 0.12, 1.0], p: 1.2, n: 'strontium-copper violet' },
+  pink: { c: [1.0, 0.26, 0.52], p: 1.45, n: 'pink' },
+  white: { c: [1.0, 0.96, 0.9], p: 2.4, n: 'magnalium white' },
+  silver: { c: [0.9, 0.94, 1.0], p: 2.0, n: 'titanium silver' },
+  gold: { c: [1.0, 0.48, 0.13], p: 1.35, n: 'charcoal gold' },
+};
+const COLOR_KEYS = ['red', 'orange', 'yellow', 'lemon', 'green', 'aqua', 'blue', 'purple', 'pink', 'white', 'silver'];
+const PAIRS = [['red', 'green'], ['blue', 'yellow'], ['purple', 'lemon'], ['pink', 'aqua'], ['red', 'white'], ['blue', 'white'], ['green', 'purple'], ['orange', 'blue'], ['yellow', 'red'], ['aqua', 'red'], ['white', 'red'], ['lemon', 'blue']];
+
+export const colorOf = (k, gain = 1) => col(k, gain);
+const col = (k, gain = 1) => { const c = COLORS[k]; return [c.c[0] * c.p * gain, c.c[1] * c.p * gain, c.c[2] * c.p * gain]; };
+
+// Burst geometry helpers -------------------------------------------------
+function fib(n, r) {
+  const out = [];
+  const ga = Math.PI * (3 - Math.sqrt(5));
+  const rot = rotation(r);
+  for (let i = 0; i < n; i++) {
+    const y = 1 - (i + 0.5) / n * 2;
+    const rad = Math.sqrt(1 - y * y);
+    const a = i * ga;
+    let d = [Math.cos(a) * rad, y, Math.sin(a) * rad];
+    d = mul(rot, d);
+    d = jitter(d, 0.06, r);
+    out.push(d);
+  }
+  return out;
+}
+function rotation(r) {
+  const a = r() * Math.PI * 2, b = Math.acos(r() * 2 - 1), c = r() * Math.PI * 2;
+  const ca = Math.cos(a), sa = Math.sin(a), cb = Math.cos(b), sb = Math.sin(b), cc = Math.cos(c), sc = Math.sin(c);
+  return [ca * cc - sa * cb * sc, -ca * sc - sa * cb * cc, sa * sb, sa * cc + ca * cb * sc, -sa * sc + ca * cb * cc, -ca * sb, sb * sc, sb * cc, cb];
+}
+const mul = (m, v) => [m[0] * v[0] + m[1] * v[1] + m[2] * v[2], m[3] * v[0] + m[4] * v[1] + m[5] * v[2], m[6] * v[0] + m[7] * v[1] + m[8] * v[2]];
+function jitter(d, s, r) {
+  const x = d[0] + (r() - 0.5) * s, y = d[1] + (r() - 0.5) * s, z = d[2] + (r() - 0.5) * s;
+  const l = Math.hypot(x, y, z);
+  return [x / l, y / l, z / l];
+}
+function basis(n) {
+  const a = Math.abs(n[1]) < 0.9 ? [0, 1, 0] : [1, 0, 0];
+  let u = [n[1] * a[2] - n[2] * a[1], n[2] * a[0] - n[0] * a[2], n[0] * a[1] - n[1] * a[0]];
+  const l = Math.hypot(...u); u = u.map(v => v / l);
+  const v = [n[1] * u[2] - n[2] * u[1], n[2] * u[0] - n[0] * u[2], n[0] * u[1] - n[1] * u[0]];
+  return [u, v];
+}
+// A plane that roughly faces the main viewing terrace, tilted at random.
+function facingPlane(B, tilt) {
+  const to = [0 - B.pos[0], 20 - B.pos[1], 0 - B.pos[2]];
+  const l = Math.hypot(...to);
+  let n = to.map(v => v / l);
+  n = jitter(n, tilt, B.r);
+  return n;
+}
+
+// Star speed so the burst reaches radius R about 2 s in, with bloom rate q.
+function speedFor(R, q) {
+  const c = Math.log(1 + 2 * q) / R;
+  return { c, v: q / c };
+}
+
+// Builds stars into B.batch. dir: unit vector; o: options.
+function star(B, dir, o) {
+  const { c, v } = speedFor(o.R ?? B.R, o.q ?? 5);
+  const sv = v * (o.speed ?? 1) * (1 + (B.r() - 0.5) * (o.vj ?? 0.08)) * (1 + B.skew * (dir[0] * B.axis[0] + dir[1] * B.axis[1] + dir[2] * B.axis[2]));
+  const life = (o.life ?? 2) * (1 + (B.r() - 0.5) * (o.lj ?? 0.18));
+  const s = {
+    p0: o.p0 ?? B.pos, t0: o.t0 ?? B.t,
+    v0: [dir[0] * sv + B.vel[0] * 0.6, dir[1] * sv + B.vel[1] * 0.6, dir[2] * sv + B.vel[2] * 0.6],
+    c: o.c ?? c, kg: o.kg ?? 0.85, life,
+    colA: o.colA, colB: o.colB, tChange: o.tChange !== undefined ? o.tChange * life : undefined,
+    strobe: o.strobe, glowR: o.glowR ?? 0.55, seed: B.r(), kind: o.kind ?? K_STAR,
+    popT: o.popT, flicker: o.flicker ?? 0.18, head: o.head ?? 1,
+    tail: o.tail ? { ...o.tail, life: o.tail.life * (0.85 + 0.3 * B.r()) } : null,
+  };
+  B.add(s);
+  return s;
+}
+
+const tailGold = (B, life = 0.9, rate = 34, power = 0.22) => ({ kind: T_GOLD, rate: rate * B.tailRate, life, eject: 1.6, inherit: 0.22, ks: 3.2, power: power / B.tailRate });
+const tailSilver = (B, life = 0.35, rate = 40, power = 0.3) => ({ kind: T_SILVER, rate: rate * B.tailRate, life, eject: 5, inherit: 0.15, ks: 4, power: power / B.tailRate });
+const tailKamuro = (B, life = 3.0, rate = 18, power = 0.32) => ({ kind: T_KAMURO, rate: rate * B.tailRate, life, eject: 0.8, inherit: 0.08, ks: 2.4, power: power / B.tailRate });
+const tailGlitter = (B, life = 1.6, rate = 26, power = 0.35) => ({ kind: T_GLITTER, rate: rate * B.tailRate, life, eject: 1.1, inherit: 0.1, ks: 2.6, power: power / B.tailRate });
+
+// Workshop choices: B.color is a colour key or undefined (the shell's own pick);
+// B.color2 is undefined (own pick), 'none', or a colour key.
+function second(B, roll, avoid) {
+  if (B.color2 === undefined) return roll ? pickColor(B, avoid) : null;
+  return B.color2 === 'none' ? null : B.color2;
+}
+const goldOr = (B, roll) => (B.color ? (B.color === 'gold' ? null : B.color) : (roll ? pickColor(B) : null));
+const isSilver = (B, roll) => (B.color ? B.color === 'silver' || B.color === 'white' : roll);
+
+function pickColor(B, avoid) {
+  let k;
+  do { k = B.r.pick(COLOR_KEYS); } while (k === avoid);
+  return k;
+}
+
+// Shell types --------------------------------------------------------------
+// Each receives B: { t, pos, vel, r, inches, R, n (star count scale), add, puffs, light, pops, child, caption }
+export const SHELLS = {
+  peony(B) {
+    const roll = B.r();
+    const a = B.color || pickColor(B), b = second(B, B.r.chance(0.3), a);
+    const n = B.count(110);
+    const dirs = fib(n, B.r);
+    const split = B.color2 === undefined && roll < 0.25 && b; // two-colour halves
+    const change = !split && b && (B.color2 !== undefined || roll < 0.55);
+    dirs.forEach(d => {
+      let ca = col(a), cb = null;
+      if (split) ca = d[0] * B.axis[2] - d[2] * B.axis[0] > 0 ? col(a) : col(b);
+      if (change) cb = col(b);
+      star(B, d, { colA: ca, colB: cb, tChange: change ? 0.5 : undefined, life: 1.9 + B.inches * 0.08 });
+    });
+    B.light(mix(col(a), b ? col(b) : col(a)), 1.0);
+    B.smokeLevel(1);
+    B.caption(split ? `${COLORS[a].n} and ${COLORS[b].n} split peony` : change ? `${COLORS[a].n} to ${COLORS[b].n} peony` : `${COLORS[a].n} peony`);
+  },
+
+  chrysanthemum(B) {
+    const a = B.color || pickColor(B);
+    const silver = B.color2 === undefined ? B.r.chance(0.35) : B.color2 === 'silver';
+    const n = B.count(95);
+    fib(n, B.r).forEach(d => star(B, d, { colA: col(a), life: 1.8 + B.inches * 0.07, tail: silver ? tailSilver(B) : tailGold(B, 0.8 + B.inches * 0.05) }));
+    B.light(col(a), 1.1);
+    B.smokeLevel(1.4);
+    B.caption(`${COLORS[a].n} chrysanthemum, ${silver ? 'titanium' : 'charcoal'} tails`);
+  },
+
+  pistil(B) {
+    let [a, b] = B.r.pick(PAIRS);
+    if (B.color) { a = B.color; if (b === a) b = pickColor(B, a); }
+    if (B.color2 && B.color2 !== 'none') b = B.color2;
+    const n = B.count(110);
+    fib(n, B.r).forEach(d => star(B, d, { colA: col(a), life: 2.0 + B.inches * 0.08 }));
+    fib(Math.round(n * 0.4), B.r).forEach(d => star(B, d, { colA: col(b), R: B.R * 0.42, life: 1.6 + B.inches * 0.06, glowR: 0.5 }));
+    if (B.inches >= 8 && B.r.chance(0.6)) {
+      const c = pickColor(B, a);
+      fib(Math.round(n * 0.22), B.r).forEach(d => star(B, d, { colA: col(c), R: B.R * 0.2, life: 1.3, glowR: 0.45 }));
+    }
+    B.light(mix(col(a), col(b)), 1.15);
+    B.smokeLevel(1.1);
+    B.caption(`${COLORS[a].n} peony with ${COLORS[b].n} pistil`);
+  },
+
+  dahlia(B) {
+    const a = B.color || pickColor(B);
+    const n = Math.round(B.count(46));
+    fib(n, B.r).forEach(d => star(B, d, { colA: col(a, 1.6), life: 2.9 + B.inches * 0.08, q: 3.2, glowR: 0.9, kg: 0.7, tail: { kind: T_COLOR, rate: 22 * B.tailRate, life: 0.5, eject: 1.2, inherit: 0.25, ks: 3.5, power: 0.3 / B.tailRate } }));
+    B.light(col(a), 0.9);
+    B.smokeLevel(1);
+    B.caption(`${COLORS[a].n} dahlia`);
+  },
+
+  willow(B) {
+    const n = B.count(80);
+    // dim charcoal stars that slow at once and weep down on long hanging tails
+    fib(n, B.r).forEach(d => star(B, d, { colA: col('gold', 0.22), life: 5.2 + B.inches * 0.15, q: 3.2, R: B.R * 0.8, kg: 0.95, glowR: 0.45, tail: { kind: T_KAMURO, rate: 24 * B.tailRate, life: 3.6 + B.inches * 0.08, eject: 0.35, inherit: 0.04, ks: 4.2, power: 0.3 / B.tailRate }, flicker: 0.45 }));
+    B.light([1.0, 0.5, 0.15], 0.75, 4.6);
+    B.smokeLevel(2.2);
+    B.caption(`golden willow`);
+  },
+
+  kamuro(B) {
+    const n = B.count(120);
+    const silver = isSilver(B, B.r.chance(0.35));
+    fib(n, B.r).forEach(d => star(B, d, { colA: silver ? col('silver', 0.3) : col('gold', 0.32), life: 4.0 + B.inches * 0.12, q: 4.2, kg: 1.05, glowR: 0.5, tail: { kind: T_KAMURO, rate: 30 * B.tailRate, life: 2.9 + B.inches * 0.07, eject: 0.5, inherit: 0.05, ks: 3.6, power: (silver ? 0.36 : 0.32) / B.tailRate }, flicker: 0.4 }));
+    B.light(silver ? [0.95, 0.9, 0.85] : [1.0, 0.55, 0.2], 1.1, 3.8);
+    B.smokeLevel(2.6);
+    B.caption(silver ? 'silver kamuro crown' : 'gold kamuro crown');
+  },
+
+  brocade(B) {
+    const n = B.count(90);
+    const tip = second(B, B.r.chance(0.5));
+    fib(n, B.r).forEach(d => star(B, d, { colA: tip ? col(tip) : col('gold', 0.8), colB: col('gold', 0.5), tChange: tip ? 0.15 : undefined, life: 2.8 + B.inches * 0.08, q: 6, kg: 1.0, tail: tailKamuro(B, 1.8, 28, 0.32) }));
+    B.light([1.0, 0.6, 0.25], 1.1, 3);
+    B.smokeLevel(2);
+    B.caption(tip ? `brocade crown with ${COLORS[tip].n} tips` : 'brocade crown');
+  },
+
+  palm(B) {
+    const arms = B.r.int(6, 10);
+    const a = goldOr(B, B.r.chance(0.5));
+    for (let i = 0; i < arms; i++) {
+      const ang = i / arms * Math.PI * 2 + B.r() * 0.3;
+      const up = 0.35 + B.r() * 0.35;
+      const d = norm3([Math.cos(ang) * (1 - up), up, Math.sin(ang) * (1 - up)]);
+      star(B, d, { colA: a ? col(a, 1.3) : col('gold', 1.0), life: 2.6, q: 4, glowR: 1.1, kg: 0.55, tail: tailGold(B, 1.3, 70, 0.36), head: 1.4 });
+    }
+    // the trunk keeps climbing a moment with its own tail
+    star(B, [0, 1, 0], { colA: col('gold', 0.6), life: 0.9, q: 2, R: B.R * 0.2, kg: 0.5, tail: tailGold(B, 1.1, 60, 0.3) });
+    B.light(a ? col(a) : [1.0, 0.6, 0.25], 0.8, 2.8);
+    B.smokeLevel(1.4);
+    B.caption(a ? `${COLORS[a].n} palm` : 'gold palm tree');
+  },
+
+  horsetail(B) {
+    const n = B.count(60);
+    const silver = isSilver(B, B.r.chance(0.4));
+    for (let i = 0; i < n; i++) {
+      const ang = B.r() * Math.PI * 2, s = B.r() * 0.6;
+      const d = norm3([Math.cos(ang) * s, 0.5 - B.r() * 0.8, Math.sin(ang) * s]);
+      star(B, d, { colA: silver ? col('silver', 0.6) : col('gold', 0.7), life: 3.6, q: 2.2, R: B.R * 0.35, kg: 0.9, tail: silver ? tailSilver(B, 0.9, 30, 0.3) : tailKamuro(B, 2.2, 18, 0.3) });
+    }
+    B.light([1.0, 0.6, 0.3], 0.6, 3.6);
+    B.smokeLevel(1.6);
+    B.caption(silver ? 'silver horsetail' : 'gold horsetail');
+  },
+
+  ring(B) {
+    const a = B.color || pickColor(B);
+    const inner = second(B, B.r.chance(0.35), a);
+    const double = !!inner;
+    const nrm = facingPlane(B, 0.9);
+    const rings = double ? [[a, 1], [inner, 0.62]] : [[a, 1]];
+    rings.forEach(([k, s], ri) => {
+      const [u, v] = basis(ri ? jitter(nrm, 0.5, B.r) : nrm);
+      const n = Math.round(B.count(60) * s);
+      for (let i = 0; i < n; i++) {
+        const t = i / n * Math.PI * 2;
+        const d = norm3([u[0] * Math.cos(t) + v[0] * Math.sin(t), u[1] * Math.cos(t) + v[1] * Math.sin(t), u[2] * Math.cos(t) + v[2] * Math.sin(t)]);
+        star(B, d, { colA: col(k), R: B.R * s, life: 2.1, vj: 0.03 });
+      }
+    });
+    B.light(col(a), 0.8);
+    B.smokeLevel(0.8);
+    B.caption(double ? 'double ring' : `${COLORS[a].n} ring`);
+  },
+
+  saturn(B) {
+    const a = B.color || pickColor(B);
+    const b = B.color2 && B.color2 !== 'none' ? B.color2 : pickColor(B, a);
+    fib(B.count(55), B.r).forEach(d => star(B, d, { colA: col(a), R: B.R * 0.5, life: 2.0 }));
+    const nrm = jitter([0.15, 1, 0.2], 0.7, B.r);
+    const [u, v] = basis(norm3(nrm));
+    const n = B.count(70);
+    for (let i = 0; i < n; i++) {
+      const t = i / n * Math.PI * 2;
+      star(B, norm3([u[0] * Math.cos(t) + v[0] * Math.sin(t), u[1] * Math.cos(t) + v[1] * Math.sin(t), u[2] * Math.cos(t) + v[2] * Math.sin(t)]), { colA: col(b), life: 2.2, vj: 0.03 });
+    }
+    B.light(mix(col(a), col(b)), 0.9);
+    B.smokeLevel(0.9);
+    B.caption(`saturn: ${COLORS[a].n} planet, ${COLORS[b].n} ring`);
+  },
+
+  crossette(B) {
+    const n = Math.round(B.count(14) * 0.7 + 6);
+    const a = goldOr(B, B.r.chance(0.5));
+    const split = 0.75 + B.r() * 0.3;
+    fib(n, B.r).forEach(d => {
+      const s = star(B, d, { colA: col('gold', 0.8), life: split, q: 3, glowR: 0.7, tail: tailGold(B, 0.7, 50, 0.3), lj: 0.02 });
+      // four children leave at right angles from where the parent breaks
+      const p = B.pos3(s, s.life), v = B.vel3(s, s.life);
+      const vl = Math.hypot(...v) || 1;
+      const [u, w] = basis(v.map(x => x / vl));
+      for (let k = 0; k < 4; k++) {
+        const ang = k * Math.PI / 2 + B.r() * 0.3;
+        const dd = [u[0] * Math.cos(ang) + w[0] * Math.sin(ang), u[1] * Math.cos(ang) + w[1] * Math.sin(ang), u[2] * Math.cos(ang) + w[2] * Math.sin(ang)];
+        B.add({
+          p0: p, t0: B.t + s.life, v0: [dd[0] * 32 + v[0] * 0.5, dd[1] * 32 + v[1] * 0.5, dd[2] * 32 + v[2] * 0.5], c: 0.05, kg: 0.9,
+          life: 1.1 + B.r() * 0.3, colA: a ? col(a) : col('gold', 0.9), glowR: 0.55, seed: B.r(), flicker: 0.25,
+          tail: a ? null : tailGold(B, 0.6, 36, 0.24),
+        });
+      }
+      B.pops([{ t: B.t + s.life, pos: p, loud: 0.5 }]);
+    });
+    B.light(a ? col(a) : [1.0, 0.6, 0.25], 0.7, 2.2);
+    B.smokeLevel(1.2);
+    B.caption(a ? `${COLORS[a].n} crossette` : 'gold crossette');
+  },
+
+  strobe(B) {
+    const n = B.count(90);
+    const c2 = B.color ? (B.color === 'white' ? null : B.color) : (B.r.chance(0.4) ? pickColor(B, 'white') : null);
+    fib(n, B.r).forEach(d => star(B, d, { colA: c2 ? col(c2, 1.4) : col('white', 1.1), life: 3.2, q: 4, strobe: 7 + B.r() * 6, kg: 1.1 }));
+    B.light(c2 ? col(c2) : [1, 1, 1], 0.5, 3.2);
+    B.smokeLevel(1);
+    B.caption(c2 ? `${COLORS[c2].n} strobe` : 'white strobe');
+  },
+
+  crackle(B) {
+    const n = B.count(130);
+    const pops = [];
+    const base = B.color || (B.r.chance(0.5) ? pickColor(B) : null);
+    if (base) fib(Math.round(n * 0.3), B.r).forEach(d => star(B, d, { colA: col(base), life: 1.0, R: B.R * 0.8 }));
+    for (let i = 0; i < n; i++) {
+      const d = B.r.dir();
+      const popT = 0.55 + B.r() * 1.4;
+      const s = star(B, d, { colA: col('gold', 0.2), kind: K_CRACKLE, popT, life: popT + 0.05, q: 4, R: B.R * (0.5 + B.r() * 0.45), glowR: 0.9, tail: tailGold(B, 0.25, 24, 0.12) });
+      if (i % 3 === 0) pops.push({ t: B.t + popT, pos: B.pos3(s, popT), loud: 0.35 + B.r() * 0.5 });
+    }
+    B.pops(pops);
+    B.light([1.0, 0.85, 0.6], 0.5, 1.9);
+    B.smokeLevel(1.3);
+    B.caption(base ? `${COLORS[base].n} with crackling dragon eggs` : 'crackling dragon eggs');
+  },
+
+  glitter(B) {
+    const n = B.count(85);
+    fib(n, B.r).forEach(d => star(B, d, { colA: col('gold', 0.5), life: 2.6, q: 4.5, kg: 1.3, tail: tailGlitter(B, 1.9, 24, 0.4) }));
+    B.light([1.0, 0.7, 0.35], 0.7, 3);
+    B.smokeLevel(1.6);
+    B.caption('glitter time-rain');
+  },
+
+  spider(B) {
+    const n = B.count(70);
+    fib(n, B.r).forEach(d => star(B, d, { colA: col('gold', 0.9), life: 1.5, q: 9, speed: 1.15, kg: 0.7, tail: tailGold(B, 1.4, 60, 0.3) }));
+    B.light([1.0, 0.6, 0.25], 1.0, 2);
+    B.smokeLevel(1.6);
+    B.caption('gold spider');
+  },
+
+  salute(B) {
+    star(B, [0, 1, 0], { colA: [60, 58, 55], kind: K_FLASH, life: 0.09, R: 1, q: 0.1, glowR: 12 });
+    fib(B.count(40), B.r).forEach(d => star(B, d, { colA: col('white', 0.8), life: 0.45, q: 10, R: B.R * 0.25, tail: tailSilver(B, 0.25, 30, 0.4) }));
+    B.light([1, 0.97, 0.92], 2.6, 0.5, 6);
+    B.smokeLevel(0.7, [0.92, 0.92, 0.95]);
+    B.sound('salute');
+    B.caption('titanium salute');
+  },
+
+  multibreak(B) {
+    const a = B.color || pickColor(B);
+    fib(B.count(70), B.r).forEach(d => star(B, d, { colA: col(a), life: 1.6 }));
+    const k = B.r.int(4, 6);
+    const b = B.color2 && B.color2 !== 'none' ? B.color2 : pickColor(B, a);
+    for (let i = 0; i < k; i++) {
+      const ang = i / k * Math.PI * 2 + B.r() * 0.4;
+      const off = [Math.cos(ang) * B.R * 0.9, (B.r() - 0.3) * B.R * 0.6, Math.sin(ang) * B.R * 0.9];
+      B.child(1.1 + B.r() * 0.5, [B.pos[0] + off[0], B.pos[1] + off[1], B.pos[2] + off[2]], 'peony', 3, b);
+    }
+    B.light(col(a), 0.9);
+    B.smokeLevel(1);
+    B.caption(`${COLORS[a].n} peony with ${COLORS[b].n} satellite breaks`);
+  },
+
+  heart(B) { pattern(B, 'heart'); },
+  starshape(B) { pattern(B, 'star'); },
+  butterfly(B) { pattern(B, 'butterfly'); },
+  flower(B) { pattern(B, 'flower'); },
+  spiral(B) { pattern(B, 'spiral'); },
+  clover(B) { pattern(B, 'clover'); },
+  crescent(B) { pattern(B, 'crescent'); },
+  rings(B) { pattern(B, 'rings'); },
+  cube(B) { cube(B); },
+
+  // colour wave: every star changes colour, top first, so a band of the new
+  // colour sweeps down through the burst
+  ghost(B) {
+    const a = B.color || pickColor(B), b = second(B, true, a) || pickColor(B, a);
+    fib(B.count(120), B.r).forEach(d => star(B, d, { colA: col(a), colB: col(b), tChange: 0.18 + 0.55 * (1 - d[1]) / 2, life: 2.4 + B.inches * 0.08, lj: 0.04 }));
+    B.light(mix(col(a), col(b)), 1.0);
+    B.smokeLevel(1);
+    B.caption(`${COLORS[a].n} to ${COLORS[b].n} colour wave`);
+  },
+
+  // confetti: every star a different colour
+  confetti(B) {
+    const pal = B.palette || COLOR_KEYS;
+    fib(B.count(130), B.r).forEach(d => star(B, d, { colA: col(B.r.pick(pal)), life: 1.8 + B.inches * 0.07, glowR: 0.5 }));
+    B.light([1, 0.85, 0.85], 1.0);
+    B.smokeLevel(1);
+    B.caption('confetti peony');
+  },
+
+  // falling leaves: slow gold stars that flicker as they tumble down
+  leaves(B) {
+    const a = B.color && B.color !== 'gold' ? B.color : null;
+    fib(B.count(42), B.r).forEach(d => star(B, d, { colA: a ? col(a, 1.2) : col('gold', 1.3), life: 5.2, q: 2.5, R: B.R * 0.6, kg: 2.2, glowR: 0.8, strobe: 2.4 + B.r() * 2.6, flicker: 0.3 }));
+    B.light(a ? col(a) : [1, 0.6, 0.25], 0.5, 5);
+    B.smokeLevel(0.9);
+    B.caption(a ? `${COLORS[a].n} falling leaves` : 'gold falling leaves');
+  },
+
+  // glitter tips: coloured stars that burst into glitter as they burn out
+  glittertips(B) {
+    const a = B.color || pickColor(B);
+    const life = 2.2 + B.inches * 0.08;
+    fib(B.count(100), B.r).forEach(d => star(B, d, { colA: col(a), life, tail: { kind: T_GLITTER, rate: 34 * B.tailRate, life: 1.1, eject: 1.4, inherit: 0.12, ks: 2.6, power: 0.42 / B.tailRate, delay: life * 0.55 } }));
+    B.light(col(a), 1.0, 2.8);
+    B.smokeLevel(1.2);
+    B.caption(`${COLORS[a].n} peony with glitter tips`);
+  },
+
+  // snowfall: white stars drifting down slowly in a haze of sparkle
+  snowfall(B) {
+    const a = B.color && B.color !== 'white' ? B.color : 'white';
+    fib(B.count(64), B.r).forEach(d => star(B, d, { colA: col(a, 0.55), life: 5.4, q: 2.6, R: B.R * 0.7, kg: 2.0, glowR: 0.5, flicker: 0.35, tail: tailGlitter(B, 2.4, 14, 0.36) }));
+    B.light(a === 'white' ? [0.95, 0.97, 1] : col(a), 0.5, 5.2);
+    B.smokeLevel(0.9);
+    B.caption(a === 'white' ? 'snowfall' : `${COLORS[a].n} snowfall`);
+  },
+
+  // diadem: a gold crown with a coloured pistil at its heart
+  diadem(B) {
+    const p = B.color2 && B.color2 !== 'none' ? B.color2 : pickColor(B);
+    fib(B.count(110), B.r).forEach(d => star(B, d, { colA: col('gold', 0.34), life: 3.8 + B.inches * 0.1, q: 4.2, kg: 1.05, glowR: 0.5, tail: tailKamuro(B, 2.6 + B.inches * 0.06, 26, 0.3), flicker: 0.4 }));
+    fib(Math.round(B.count(110) * 0.35), B.r).forEach(d => star(B, d, { colA: col(p, 1.2), R: B.R * 0.36, life: 1.8, glowR: 0.55 }));
+    B.light([1.0, 0.6, 0.3], 1.1, 3.6);
+    B.smokeLevel(2.2);
+    B.caption(`gold diadem with ${COLORS[p].n} pistil`);
+  },
+
+  // ---- layered shells: the real products' multi-effect stars
+
+  // Kiku with colour tips: charcoal stars stream gold tails most of the way
+  // out, then flare into colour at the tips.
+  tipped(B) {
+    const TIPS = ['red', 'green', 'blue', 'purple', 'aqua', 'pink', 'lemon', 'orange'];
+    const a = B.color || B.r.pick(TIPS);
+    let b = B.color2 === undefined ? (B.r.chance(0.45) ? B.r.pick(TIPS) : null) : second(B, false, a);
+    if (b === a) b = null;
+    const life = 2.5 + B.inches * 0.08;
+    fib(B.count(100), B.r).forEach((d, i) => star(B, d, { colA: col('gold', 0.4), colB: col(b && i % 2 ? b : a, 1.8), tChange: 0.56, life, glowR: 0.65, tail: tailGold(B, 0.7 + B.inches * 0.03, 26, 0.2) }));
+    B.light(b ? mix(col(a), col(b)) : col(a), 1.0, 2.6);
+    B.smokeLevel(1.4);
+    B.caption(`chrysanthemum with ${b ? `${COLORS[a].n} and ${COLORS[b].n}` : COLORS[a].n} tips`);
+  },
+
+  // A brocade crown whose stars, as their gold tails die away, each leave a
+  // slow-falling strobe that keeps twinkling for a few seconds.
+  brocadestrobe(B) {
+    const s2 = B.color || B.r.pick(['white', 'white', 'green', 'aqua', 'red']);
+    fib(B.count(80), B.r).forEach(d => {
+      const s = star(B, d, { colA: col('gold', 0.75), life: 2.3 + B.inches * 0.06, q: 6, kg: 1.0, tail: tailKamuro(B, 1.6, 26, 0.3) });
+      const p = B.pos3(s, s.life), v = B.vel3(s, s.life);
+      B.add({ p0: p, t0: B.t + s.life, v0: [v[0] * 0.6, v[1] * 0.6, v[2] * 0.6], c: 0.05, kg: 1.6, life: 1.8 + B.r() * 0.8, colA: col(s2, 1.3), strobe: 9 + B.r() * 6, glowR: 0.55, seed: B.r(), flicker: 0.2 });
+    });
+    B.light([1.0, 0.6, 0.25], 1.1, 3.2);
+    B.smokeLevel(2);
+    B.caption(`brocade crown falling to ${COLORS[s2].n} strobes`);
+  },
+
+  // A willow whose long gold strands end, low in the sky, in a fizz of
+  // crackling dragon eggs.
+  crackwillow(B) {
+    const pops = [];
+    fib(B.count(70), B.r).forEach((d, i) => {
+      const s = star(B, d, { colA: col('gold', 0.22), life: 4.4 + B.inches * 0.12, q: 3.2, R: B.R * 0.8, kg: 0.95, glowR: 0.45, flicker: 0.45, tail: { kind: T_KAMURO, rate: 22 * B.tailRate, life: 3.2 + B.inches * 0.07, eject: 0.35, inherit: 0.04, ks: 4.2, power: 0.28 / B.tailRate } });
+      const p = B.pos3(s, s.life), v = B.vel3(s, s.life);
+      for (let j = 0; j < 3; j++) {
+        const popT = 0.05 + B.r() * 0.5, e = B.r.dir();
+        const cr = { p0: p, t0: B.t + s.life, v0: [e[0] * 7 + v[0] * 0.4, e[1] * 7 + v[1] * 0.4, e[2] * 7 + v[2] * 0.4], c: 0.12, kg: 0.9, life: popT + 0.05, popT, kind: K_CRACKLE, colA: col('gold', 0.2), glowR: 0.9, seed: B.r(), flicker: 0.18 };
+        B.add(cr);
+        if (j === 0 && i % 2 === 0) pops.push({ t: cr.t0 + cr.popT, pos: p, loud: 0.3 + B.r() * 0.4 });
+      }
+    });
+    B.pops(pops);
+    B.light([1.0, 0.5, 0.15], 0.75, 4.6);
+    B.smokeLevel(2.2);
+    B.caption('crackling willow');
+  },
+
+  // A palm of heavy gold comets, each ending in a burst of crackle.
+  palmcrackle(B) {
+    const arms = B.r.int(7, 10);
+    const per = Math.min(24, Math.max(6, Math.round(B.count(8) * 0.6)));
+    const pops = [];
+    for (let i = 0; i < arms; i++) {
+      const ang = i / arms * Math.PI * 2 + B.r() * 0.3, up = 0.3 + B.r() * 0.35;
+      const s = star(B, norm3([Math.cos(ang) * (1 - up), up, Math.sin(ang) * (1 - up)]), { colA: col('gold', 1.0), life: 2.0, lj: 0.08, q: 4, glowR: 1.1, kg: 0.55, tail: tailGold(B, 1.3, 70, 0.36), head: 1.4 });
+      const p = B.pos3(s, s.life), v = B.vel3(s, s.life);
+      for (let j = 0; j < per; j++) {
+        const popT = 0.15 + B.r() * 0.7, e = B.r.dir();
+        const cr = { p0: p, t0: B.t + s.life, v0: [e[0] * 14 + v[0] * 0.5, e[1] * 14 + v[1] * 0.5, e[2] * 14 + v[2] * 0.5], c: 0.1, kg: 0.9, life: popT + 0.05, popT, kind: K_CRACKLE, colA: col('gold', 0.2), glowR: 0.9, seed: B.r(), flicker: 0.18 };
+        B.add(cr);
+        if (j % 4 === 0) pops.push({ t: cr.t0 + cr.popT, pos: p, loud: 0.35 + B.r() * 0.45 });
+      }
+    }
+    star(B, [0, 1, 0], { colA: col('gold', 0.6), life: 0.9, q: 2, R: B.R * 0.2, kg: 0.5, tail: tailGold(B, 1.1, 60, 0.3) });
+    B.pops(pops);
+    B.light([1.0, 0.6, 0.25], 0.8, 2.8);
+    B.smokeLevel(1.6);
+    B.caption('gold palm with crackling coconuts');
+  },
+
+  // Yaezaki, the double-petal peony: a sphere inside a sphere, both changing
+  // colour at the same moment, around a small core of silver flitter.
+  doublepetal(B) {
+    let [a, b] = B.r.pick(PAIRS);
+    if (B.color) { a = B.color; if (b === a) b = pickColor(B, a); }
+    let c = B.color2 && B.color2 !== 'none' ? B.color2 : pickColor(B, a);
+    let d = pickColor(B, c);
+    const n = B.count(105), life = 2.2 + B.inches * 0.08;
+    fib(n, B.r).forEach(v => star(B, v, { colA: col(a), colB: col(b), tChange: 0.5, life, lj: 0.06, vj: 0.03 }));
+    fib(Math.round(n * 0.55), B.r).forEach(v => star(B, v, { colA: col(c), colB: col(d), tChange: 0.5, R: B.R * 0.6, life, lj: 0.06, vj: 0.03, glowR: 0.5 }));
+    fib(Math.round(n * 0.18), B.r).forEach(v => star(B, v, { colA: col('silver', 0.5), R: B.R * 0.2, life: 1.4, q: 4, glowR: 0.4, tail: tailGlitter(B, 0.8, 20, 0.3) }));
+    B.light(mix(col(a), col(c)), 1.15);
+    B.smokeLevel(1.2);
+    const nm = (k) => COLORS[k].n.split(' ').pop();
+    B.caption(`double-petal peony, ${nm(a)} to ${nm(b)} around ${nm(c)} to ${nm(d)}`);
+  },
+
+  // A titanium chrysanthemum with a strobing pistil that keeps twinkling
+  // after the outer petal has burned out.
+  strobepistil(B) {
+    const p = B.color || B.r.pick(['green', 'white', 'pink', 'aqua', 'white']);
+    const n = B.count(95);
+    fib(n, B.r).forEach(d => star(B, d, { colA: col('silver', 0.7), life: 1.9 + B.inches * 0.07, tail: tailSilver(B, 0.5, 40, 0.3) }));
+    fib(Math.round(n * 0.45), B.r).forEach(d => star(B, d, { colA: col(p, 1.3), R: B.R * 0.38, life: 3.4, q: 4, kg: 1.1, strobe: 8 + B.r() * 6, glowR: 0.55 }));
+    B.light([0.9, 0.92, 1.0], 1.0, 3.2);
+    B.smokeLevel(1.3);
+    B.caption(`titanium chrysanthemum with ${COLORS[p].n} strobe pistil`);
+  },
+
+  // ---- rare showpieces: each built in several stages, seen once in a while
+
+  // Senrin, "a thousand flowers": the shell is packed with small shells. The
+  // break throws them out on faint gold tails and each one opens a moment
+  // later into its own little flower, with a rattle of reports.
+  senrin(B) {
+    const own = B.palette || B.r.pick([['red', 'green', 'yellow'], ['pink', 'aqua', 'lemon'], ['purple', 'lemon', 'aqua'], ['red', 'white', 'blue'], ['orange', 'green', 'pink']]);
+    const set = [...new Set(B.color ? [B.color, ...(B.color2 && B.color2 !== 'none' ? [B.color2] : [])] : own)];
+    const k = Math.min(40, B.count(9));
+    const pops = [];
+    fib(k, B.r).forEach((d, i) => {
+      const s = star(B, d, { colA: col('gold', 0.22), life: 0.9 + B.r() * 1.1, lj: 0, q: 3, R: B.R * 0.95, kg: 0.9, glowR: 0.35, flicker: 0.3, tail: tailGold(B, 0.45, 22, 0.16) });
+      const p = B.pos3(s, s.life);
+      B.child(s.life, p, 'floret', B.inches * 0.22, set[i % set.length]);
+      pops.push({ t: B.t + s.life, pos: p, loud: 0.6 + B.r() * 0.4 });
+    });
+    B.pops(pops);
+    B.light([1.0, 0.7, 0.4], 0.45, 1.6);
+    B.smokeLevel(0.8);
+    B.caption(`senrin: a thousand flowers in ${listColours(set)}`);
+  },
+
+  // one of the senrin's small flowers
+  floret(B) {
+    const a = B.color || pickColor(B);
+    const change = B.color2 === undefined && B.r.chance(0.35) ? pickColor(B, a) : null;
+    fib(B.count(46), B.r).forEach(d => star(B, d, { colA: col(a, 1.15), colB: change ? col(change) : null, tChange: change ? 0.55 : undefined, life: 1.4, q: 6, glowR: 0.5, vj: 0.1 }));
+    B.light(col(a), 0.35, 1.3, 0.15);
+    B.smokeLevel(0.3);
+    B.sound('quiet');
+  },
+
+  // Yonjushin, the quadruple pistil: four spheres packed one inside another,
+  // each its own colour, and every star changes colour at the same moment,
+  // so the whole flower turns over its colours at once.
+  yonjushin(B) {
+    let set = B.r.pick([['red', 'green', 'yellow', 'blue'], ['purple', 'lemon', 'pink', 'aqua'], ['blue', 'white', 'red', 'green'], ['orange', 'aqua', 'purple', 'lemon']]);
+    if (B.palette && !B.color) set = [0, 1, 2, 3].map(i => B.palette[i % B.palette.length]);
+    if (B.color) set = [B.color, ...set.filter(c => c !== B.color)].slice(0, 4);
+    const base = B.count(120);
+    const life = 2.4 + B.inches * 0.08;
+    [[1, 1], [0.76, 0.72], [0.53, 0.5], [0.3, 0.3]].forEach(([rf, nf], li) => {
+      const a = set[li], b = set[(li + 1) % 4];
+      fib(Math.max(10, Math.round(base * nf)), B.r).forEach(d => star(B, d, { colA: col(a, 1.05), colB: col(b, 1.05), tChange: 0.5, R: B.R * rf, life, lj: 0.05, vj: 0.025, glowR: 0.55 - li * 0.04 }));
+    });
+    B.light(mix(col(set[0]), col(set[2])), 1.25);
+    B.smokeLevel(1.4);
+    B.caption(`quadruple pistil: ${listColours([...new Set(set)])} spheres, all changing colour at once`);
+  },
+
+  // A spiral galaxy: a bright core, two or three arms laid out in a tilted
+  // disc and a dust of twinkling stars between them. As with the pattern
+  // shells, each star's speed is in proportion to its place in the shape, so
+  // the galaxy grows without losing its form.
+  galaxy(B) {
+    const f0 = facingPlane(B, 0.3);
+    const nrm = norm3([f0[0], f0[1] + 0.9, f0[2]]);
+    const [u, v] = basis(nrm);
+    const arms = B.r.chance(0.6) ? 2 : 3;
+    const tint = B.r.pick([['white', 'aqua', 'blue', 'purple'], ['white', 'lemon', 'pink', 'purple'], ['white', 'aqua', 'purple', 'pink']]);
+    const { c: cq } = speedFor(B.R, 4.5);
+    const vBase = 4.5 / cq;
+    const put = (x, y, h, o) => {
+      const dir = [u[0] * x + v[0] * y + nrm[0] * h, u[1] * x + v[1] * y + nrm[1] * h, u[2] * x + v[2] * y + nrm[2] * h];
+      const m = Math.hypot(...dir) || 1;
+      B.add({ p0: B.pos, t0: B.t, v0: [dir[0] * vBase + B.vel[0] * 0.5, dir[1] * vBase + B.vel[1] * 0.5, dir[2] * vBase + B.vel[2] * 0.5], c: cq / Math.max(m, 0.08), kg: 0.85, seed: B.r(), flicker: 0.12, glowR: 0.55, ...o });
+    };
+    // the core: a dense, warm bulge
+    for (let i = 0, n = B.count(36); i < n; i++) {
+      const d = B.r.dir(), s = 0.05 + 0.13 * Math.cbrt(B.r());
+      put(d[0] * s, d[1] * s, d[2] * s * 0.6, { life: 2.4, colA: col(B.r.chance(0.5) ? 'yellow' : 'white', 1.3), glowR: 0.7 });
+    }
+    // the arms wind a little over a turn, white at the core to colour at the rim
+    const per = Math.round(B.count(130) / arms);
+    for (let a = 0; a < arms; a++) for (let i = 0; i < per; i++) {
+      const f = 0.12 + 0.88 * i / per, th = a * Math.PI * 2 / arms + f * Math.PI * 2.2, w = 0.14 * f;
+      put(Math.cos(th) * f + (B.r() - 0.5) * w, Math.sin(th) * f + (B.r() - 0.5) * w, (B.r() - 0.5) * 0.04, { life: 2.9 + B.r() * 0.3, colA: col(tint[Math.min(3, Math.floor(f * 4))], 1.1 - f * 0.25) });
+    }
+    // dust: dim twinkling stars scattered through the disc
+    for (let i = 0, n = B.count(50); i < n; i++) {
+      const f = Math.sqrt(B.r()) * 0.95, th = B.r() * Math.PI * 2;
+      put(Math.cos(th) * f, Math.sin(th) * f, (B.r() - 0.5) * 0.06, { life: 3.6, colA: col('white', 0.6), strobe: 8 + B.r() * 6, glowR: 0.4, flicker: 0.3 });
+    }
+    B.light([0.75, 0.8, 1.0], 0.85, 2.8);
+    B.smokeLevel(0.8);
+    B.caption(`${arms === 2 ? 'two' : 'three'}-armed spiral galaxy`);
+  },
+
+  // Three stages from one shell: titanium comets fly out and split into four
+  // coloured stars at a sharp report, and each of those burns out in a
+  // crackle of tiny flashes.
+  cascade(B) {
+    const a = goldOr(B, B.r.chance(0.65));
+    const n = Math.round(B.count(14) * 0.7 + 8);
+    const pops = [];
+    const tail2 = a ? { kind: T_COLOR, rate: 20 * B.tailRate, life: 0.4, eject: 1.2, inherit: 0.25, ks: 3.5, power: 0.26 / B.tailRate } : tailGold(B, 0.6, 36, 0.24);
+    fib(n, B.r).forEach(d => {
+      const s = star(B, d, { colA: col('silver', 0.9), life: 0.8 + B.r() * 0.2, lj: 0.02, q: 3, glowR: 0.7, tail: tailSilver(B, 0.5, 44, 0.32) });
+      const p = B.pos3(s, s.life), v = B.vel3(s, s.life);
+      const vl = Math.hypot(...v) || 1;
+      const [bu, bw] = basis(v.map(x => x / vl));
+      pops.push({ t: B.t + s.life, pos: p, loud: 0.55 });
+      for (let k = 0; k < 4; k++) {
+        const ang = k * Math.PI / 2 + B.r() * 0.3;
+        const dd = [bu[0] * Math.cos(ang) + bw[0] * Math.sin(ang), bu[1] * Math.cos(ang) + bw[1] * Math.sin(ang), bu[2] * Math.cos(ang) + bw[2] * Math.sin(ang)];
+        const c = {
+          p0: p, t0: B.t + s.life, v0: [dd[0] * 30 + v[0] * 0.5, dd[1] * 30 + v[1] * 0.5, dd[2] * 30 + v[2] * 0.5], c: 0.05, kg: 0.9,
+          life: 1.0 + B.r() * 0.25, colA: a ? col(a, 1.1) : col('gold', 0.9), glowR: 0.55, seed: B.r(), flicker: 0.2, tail: { ...tail2 },
+        };
+        B.add(c);
+        // the third stage, where each piece burns out
+        const q = B.pos3(c, c.life), w = B.vel3(c, c.life);
+        for (let j = 0; j < 2; j++) {
+          const popT = 0.08 + B.r() * 0.45, e = B.r.dir();
+          const cr = { p0: q, t0: c.t0 + c.life, v0: [e[0] * 9 + w[0] * 0.5, e[1] * 9 + w[1] * 0.5, e[2] * 9 + w[2] * 0.5], c: 0.12, kg: 0.9, life: popT + 0.05, popT, kind: K_CRACKLE, colA: col('gold', 0.2), glowR: 0.9, seed: B.r(), flicker: 0.18 };
+          B.add(cr);
+          if (j === 0 && k % 2 === 0) pops.push({ t: cr.t0 + cr.popT, pos: q, loud: 0.3 + B.r() * 0.4 });
+        }
+      }
+    });
+    B.pops(pops);
+    B.light([0.95, 0.95, 1.0], 1.0, 3.0);
+    B.smokeLevel(1.4);
+    B.caption(`three-stage cascade: titanium, ${a ? COLORS[a].n : 'gold'} crossettes, crackle`);
+  },
+};
+export const RARE = ['senrin', 'yonjushin', 'galaxy', 'cascade'];
+// the outline shapes: kept as an occasional surprise, not the show's mainstay
+export const SHAPES = ['heart', 'starshape', 'butterfly', 'flower', 'spiral', 'clover', 'crescent', 'rings', 'cube'];
+const listColours = (keys) => {
+  const n = keys.map(k => COLORS[k].n.split(' ').pop());
+  return n.length > 1 ? `${n.slice(0, -1).join(', ')} and ${n[n.length - 1]}` : n[0];
+};
+
+const PATTERN_COLOURS = {
+  heart: ['red', 'pink', 'red'], star: ['white', 'aqua', 'green', 'blue'],
+  butterfly: ['purple', 'aqua', 'pink', 'blue'], flower: ['pink', 'red', 'purple', 'orange'], spiral: ['aqua', 'white', 'green', 'lemon'],
+  clover: ['green', 'lemon'], crescent: ['lemon', 'yellow', 'white'],
+};
+const PATTERN_NAMES = {
+  heart: 'heart pattern shell', star: 'five-point star pattern shell', butterfly: 'butterfly pattern shell',
+  flower: 'flower pattern shell', spiral: 'two-armed spiral', clover: 'four-leaf clover', crescent: 'crescent moon', rings: 'linked rings',
+};
+
+// Outline shells: the stars are laid out in a flat shape and fly at speeds
+// proportional to their distance from the centre, so the shape grows whole.
+// The plane roughly faces the terrace, so from some angles it is edge-on,
+// as with the real thing.
+function pattern(B, kind) {
+  const a = B.color || B.r.pick(PATTERN_COLOURS[kind] || PATTERN_COLOURS.star);
+  const nrm = facingPlane(B, 0.35);
+  let [u, v] = basis(nrm);
+  // keep the shape upright: v closest to world up
+  const ang = Math.atan2(u[1], v[1]);
+  const ca = Math.cos(ang), sa = Math.sin(ang);
+  const u2 = [u[0] * ca - v[0] * sa, u[1] * ca - v[1] * sa, u[2] * ca - v[2] * sa];
+  const v2 = [u[0] * sa + v[0] * ca, u[1] * sa + v[1] * ca, u[2] * sa + v[2] * ca];
+  u = u2; v = v2;
+  if (v[1] < 0) { v = v.map(x => -x); u = u.map(x => -x); }
+  const pts = []; // [x, y, colour key?]
+  const N = B.count(70);
+  const curve = (n, f) => { for (let i = 0; i < n; i++) { const t = i / n * Math.PI * 2; pts.push(f(t)); } };
+  if (kind === 'heart') {
+    curve(N, (t) => [16 * Math.sin(t) ** 3 / 17, (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)) / 17]);
+  } else if (kind === 'butterfly') {
+    // four wings, the top pair larger, and a body down the middle
+    curve(Math.round(N * 1.2), (t) => { const r = Math.abs(Math.sin(2 * t)) * (Math.sin(t) > 0 ? 1 : 0.72); return [Math.cos(t) * r, Math.sin(t) * r * 0.9 + 0.05]; });
+    for (let i = 0; i < 9; i++) pts.push([0, -0.42 + i * 0.1, B.color2 && B.color2 !== 'none' ? B.color2 : a]);
+    for (const s of [-1, 1]) for (let i = 1; i <= 4; i++) pts.push([s * i * 0.05, 0.45 + i * 0.07]);
+  } else if (kind === 'flower') {
+    // six petals around a different-coloured centre
+    curve(Math.round(N * 1.3), (t) => { const r = 0.3 + 0.7 * Math.abs(Math.sin(3 * t)); return [Math.cos(t) * r, Math.sin(t) * r]; });
+    const c2 = B.color2 && B.color2 !== 'none' ? B.color2 : 'yellow';
+    for (let i = 0; i < 16; i++) { const t = i / 16 * Math.PI * 2; pts.push([Math.cos(t) * 0.16, Math.sin(t) * 0.16, c2]); }
+  } else if (kind === 'spiral') {
+    for (let arm = 0; arm < 2; arm++) for (let i = 1; i <= Math.round(N * 0.7); i++) {
+      const f = i / Math.round(N * 0.7), t = f * Math.PI * 2.6 + arm * Math.PI;
+      pts.push([Math.cos(t) * f, Math.sin(t) * f]);
+    }
+  } else if (kind === 'clover') {
+    curve(Math.round(N * 1.2), (t) => { const r = Math.abs(Math.cos(2 * t)) * 0.85 + 0.08; return [Math.cos(t + Math.PI / 4) * r, Math.sin(t + Math.PI / 4) * r + 0.1]; });
+    for (let i = 1; i <= 9; i++) { const f = i / 9; pts.push([0.04 + f * 0.18, 0.1 - f * 0.95]); }
+  } else if (kind === 'crescent') {
+    for (let i = 0; i < N; i++) { const t = (0.15 + 0.7 * i / N) * Math.PI * 2; pts.push([Math.cos(t), Math.sin(t)]); }
+    for (let i = 0; i < Math.round(N * 0.7); i++) { const t = (0.2 + 0.6 * i / Math.round(N * 0.7)) * Math.PI * 2; pts.push([0.42 + Math.cos(t) * 0.72, Math.sin(t) * 0.72]); }
+  } else if (kind === 'rings') {
+    // a chain of four linked rings, each its own colour
+    const set = B.r.pick([['pink', 'aqua', 'lemon', 'purple'], ['orange', 'aqua', 'pink', 'lemon'], ['purple', 'green', 'orange', 'aqua']]);
+    const rings = [-0.78, -0.26, 0.26, 0.78].map((cx, i) => [cx, i % 2 ? -0.1 : 0.1, set[i]]);
+    const n = Math.max(14, Math.round(N * 0.5));
+    for (const [cx, cy, k] of rings) for (let i = 0; i < n; i++) { const t = i / n * Math.PI * 2; pts.push([cx + Math.cos(t) * 0.31, cy + Math.sin(t) * 0.31, k]); }
+  } else {
+    const P = [];
+    for (let i = 0; i < 10; i++) { const t = Math.PI / 2 + i / 10 * Math.PI * 2; const r = i % 2 ? 0.42 : 1; P.push([Math.cos(t) * r, Math.sin(t) * r]); }
+    for (let i = 0; i < N; i++) {
+      const f = i / N * 10, k = Math.floor(f), w = f - k;
+      const p0 = P[k], p1 = P[(k + 1) % 10];
+      pts.push([p0[0] + (p1[0] - p0[0]) * w, p0[1] + (p1[1] - p0[1]) * w]);
+    }
+  }
+  const { c: cq } = speedFor(B.R, 4.5);
+  const vBase = 4.5 / cq;
+  for (const [x, y, k] of pts) {
+    const dir = [u[0] * x + v[0] * y, u[1] * x + v[1] * y, u[2] * x + v[2] * y];
+    const m = Math.hypot(...dir) || 1;
+    // speed proportional to distance from centre keeps the shape as it grows
+    B.add({ p0: B.pos, t0: B.t, v0: [dir[0] * vBase + B.vel[0] * 0.5, dir[1] * vBase + B.vel[1] * 0.5, dir[2] * vBase + B.vel[2] * 0.5], c: cq / Math.max(m, 0.12), kg: 0.85, life: 2.2, colA: col(k || a, 1.1), glowR: 0.6, seed: B.r(), flicker: 0.12 });
+  }
+  B.light(kind === 'rings' ? [1, 0.9, 0.85] : col(a), 0.7);
+  B.smokeLevel(0.7);
+  B.caption(kind === 'rings' ? PATTERN_NAMES.rings : `${COLORS[a].n} ${PATTERN_NAMES[kind] || PATTERN_NAMES.star}`);
+}
+
+// A wireframe cube: stars along its twelve edges, turned at random, so it
+// reads as a solid shape from every viewpoint.
+function cube(B) {
+  const a = B.color || B.r.pick(['aqua', 'white', 'lemon', 'pink', 'blue']);
+  const rot = rotation(B.r);
+  const V = [];
+  for (let i = 0; i < 8; i++) V.push([(i & 1 ? 1 : -1) * 0.577, (i & 2 ? 1 : -1) * 0.577, (i & 4 ? 1 : -1) * 0.577]);
+  const per = Math.max(5, Math.round(B.count(84) / 12));
+  const { c: cq } = speedFor(B.R, 4.5);
+  const vBase = 4.5 / cq;
+  for (let i = 0; i < 8; i++) for (const bit of [1, 2, 4]) {
+    const j = i | bit;
+    if (j === i) continue;
+    for (let k = 0; k <= per; k++) {
+      if (k === per && bit !== 4) continue; // corners once
+      const f = k / per;
+      const p = mul(rot, [V[i][0] + (V[j][0] - V[i][0]) * f, V[i][1] + (V[j][1] - V[i][1]) * f, V[i][2] + (V[j][2] - V[i][2]) * f]);
+      const m = Math.hypot(...p) || 1;
+      B.add({ p0: B.pos, t0: B.t, v0: [p[0] * vBase + B.vel[0] * 0.5, p[1] * vBase + B.vel[1] * 0.5, p[2] * vBase + B.vel[2] * 0.5], c: cq / Math.max(m, 0.12), kg: 0.85, life: 2.4, colA: col(a, 1.1), glowR: 0.6, seed: B.r(), flicker: 0.1 });
+    }
+  }
+  B.light(col(a), 0.7);
+  B.smokeLevel(0.7);
+  B.caption(`${COLORS[a].n} cube`);
+}
+
+export const SHELL_NAMES = {
+  peony: 'Peony', chrysanthemum: 'Chrysanthemum', pistil: 'Pistil peony', dahlia: 'Dahlia', willow: 'Willow', kamuro: 'Kamuro',
+  brocade: 'Brocade', palm: 'Palm', horsetail: 'Horsetail', ring: 'Ring', saturn: 'Saturn', crossette: 'Crossette', strobe: 'Strobe',
+  crackle: 'Crackle', glitter: 'Glitter', spider: 'Spider', salute: 'Salute', multibreak: 'Multi-break', heart: 'Heart', starshape: 'Star',
+  butterfly: 'Butterfly', flower: 'Flower', spiral: 'Spiral', clover: 'Clover', crescent: 'Crescent moon', rings: 'Linked rings', cube: 'Cube',
+  ghost: 'Colour wave', confetti: 'Confetti', leaves: 'Falling leaves', diadem: 'Diadem', glittertips: 'Glitter tips', snowfall: 'Snowfall',
+  tipped: 'Colour-tipped chrysanthemum', brocadestrobe: 'Brocade to strobe', crackwillow: 'Crackling willow', palmcrackle: 'Crackling palm',
+  doublepetal: 'Double-petal peony', strobepistil: 'Strobe pistil',
+  senrin: 'Thousand flowers', yonjushin: 'Quadruple pistil', galaxy: 'Spiral galaxy', cascade: 'Three-stage cascade',
+};
+
+function norm3(a) { const l = Math.hypot(...a); return a.map(v => v / l); }
+function mix(a, b) { return [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2]; }
