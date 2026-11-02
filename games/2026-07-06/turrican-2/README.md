@@ -24,13 +24,21 @@ Lives at `jez237.com/games/2026-07-06/turrican-2/` (the folder keeps its old pat
 - `water.mjs` the water (see below) and waterfalls.
 - `materials.mjs` triplanar procedural terrain shader (strata, cracks, panels, caustics, veins) and the crystal material.
 - `backdrop.mjs` sky dome, planets and rings, distant buttes, clouds, light shafts and per-world set pieces (foundry machinery and molten channel, spire columns, rift islands).
-- `fx.mjs` GPU particles with closed-form motion, debris, tracers, arc-lance beam, shockwall, rings, pooled dynamic lights.
-- `post.mjs` MSAA HDR (with a depth texture), the water pass, bloom, ACES, then grading, vignette, chromatic hits, grain, cryo frost, damage.
+- `fx.mjs` GPU particles with closed-form motion, debris, shell casings, tracers, missile trails, flames, prism bolts and charge orb, death styles (burn-up, ice shatter, crystal burst), arc-lance beam, shockwall, rings, pooled dynamic lights.
+- `post.mjs` MSAA HDR (with a depth texture), the water pass, the shockwave/heat-haze distortion pass, bloom, ACES, then grading, vignette, chromatic hits, grain, cryo frost, damage.
 - `hud.mjs` HUD on the overlay canvas.
 - `worlds.mjs` per-world art direction.
 - `actors/` hero, fighter, enemies, bosses, pickups, mines.
 
 ## Features
+
+- **Weapons.** Six guns, each with three levels; a weapon orb grants the next gun not yet owned (`WEAPON_ORDER`), then upgrades. Q cycles, 1-6 pick directly.
+  - Scatter (fan, aims up/down, ejects brass), Arc Lance (sweeping beam), Ricochet (bouncing shots).
+  - Seeker Swarm: 1-3 micro-missiles launch in a fan, lock onto the nearest target ahead (the boss when close), and burst with splash damage (`detonate`).
+  - Solar Flare: a short piercing plume (about 95-120 px) that ticks damage once per enemy per frame and sets it alight (`e.burn`, water puts it out); flames in water turn to steam.
+  - Prism Cannon: hold fire to charge (`p.charge`), release to fire. A tap is a small shard; a charge fires a bolt that pierces every enemy once and splits into a fan of shards, back off a wall or onward in the open (`splitPrism`).
+  - Kills record their cause (`e.lastHit`), so the renderer picks the death: burn-up for flames, ice shatter while frozen, crystal burst for the prism.
+  - Shockwaves (big blasts, missile bursts, charged prism shots, cryo) and the flamer's heat haze are a screen-space distortion pass (`post.setShock`) before bloom.
 
 - **Crawlspaces.** Each platform stage gets up to two low mounds with a one-tile tunnel at ground level. Only the rolled-up wheel (16 px) fits the 20 px gap; walkers jump over. The tunnel holds a crystal stash (and a power-up in long ones). They are laid after everything else on their own random stream, so the rest of each stage is unchanged. `level.crawls` lists them; the demo pilot has a `crawl` edge for each.
 - **World board.** Full runs started at World 1 post to `https://game-scores.jez237.workers.dev/scores/shard-assault-v1` (`{initials, score, stage, diff, speed}`) after the player enters initials. World-select and demo-takeover runs only go to this device's top 5. Test with Playwright `page.route` so nothing reaches the real board.
@@ -74,5 +82,5 @@ Bump the `?v=` query on `assets/shard3d.js` (and any other changed script) in `i
 - `?q=ultra|high|low` picks the quality tier (the Quality button saves it in `shard.quality`).
 - `?fixed` disables the dynamic-resolution scaler.
 - `?qa` on localhost shows the scene/pose test panel.
-- `window.__shard`: `start(world)`, `goToStage(i)`, `clearStage()`, `demo.start()`, `demo.takeOver()`, `zoom`, `setFX(on)`, `run`, `results`, `progress`, `settings`, `snapshot()`, `graphics` (renderer stats).
+- `window.__shard`: `start(world)`, `goToStage(i)`, `clearStage()`, `demo.start()`, `demo.takeOver()`, `zoom`, `setFX(on)`, `run`, `results`, `progress`, `settings`, `snapshot()`, `graphics` (renderer stats), `state` (live engine state: give weapons with `state.player.weapons`).
 - `window.__modernGraphics.stats`: draw calls, triangles, frame ms, resolution, level build time.

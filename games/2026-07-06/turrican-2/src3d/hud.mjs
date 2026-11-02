@@ -1,6 +1,7 @@
 // HUD on the 2D overlay canvas. Virtual space: height 540, width 540*aspect (no stretching).
-const WCOL={spread:'#ffd23f',beam:'#6cf3ff',bounce:'#ff7ad9'};
-const WNAME={spread:'SCATTER',beam:'ARC LANCE',bounce:'RICOCHET'};
+const WCOL={spread:'#ffd23f',beam:'#6cf3ff',bounce:'#ff7ad9',seeker:'#ff9a3c',flare:'#ff6a2a',prism:'#d9a8ff'};
+const WNAME={spread:'SCATTER',beam:'ARC LANCE',bounce:'RICOCHET',seeker:'SEEKER SWARM',flare:'SOLAR FLARE',prism:'PRISM CANNON'};
+const WORDER=['spread','beam','bounce','seeker','flare','prism'];
 
 export function createHUD(dx){
   let banner=null;
@@ -29,6 +30,14 @@ export function createHUD(dx){
     const cx=vw*.36,wc=WCOL[p.weapon]||'#fff',lvl=p.weapons[p.weapon]||1;
     dx.save();dx.shadowColor=wc;dx.shadowBlur=10;text(p.morph?'ROLL CORE':WNAME[p.weapon],cx,26,15,wc,'left','700');dx.restore();
     for(let i=0;i<3;i++){dx.fillStyle=i<lvl?wc:'rgba(255,255,255,.15)';dx.beginPath();dx.moveTo(cx+i*14,40);dx.lineTo(cx+i*14+10,40);dx.lineTo(cx+i*14+7,46);dx.lineTo(cx+i*14-3,46);dx.closePath();dx.fill();}
+    // owned weapons (number keys 1-6 pick directly): lit diamonds, the gun in hand ringed
+    WORDER.forEach((w,i)=>{const own=(p.weapons[w]||0)>0,x=cx+3+i*9,y=55;dx.fillStyle=own?WCOL[w]:'rgba(255,255,255,.12)';dx.globalAlpha=own?(w===p.weapon?1:.55):1;
+      dx.beginPath();dx.moveTo(x,y-3.4);dx.lineTo(x+3.4,y);dx.lineTo(x,y+3.4);dx.lineTo(x-3.4,y);dx.closePath();dx.fill();dx.globalAlpha=1;
+      if(w===p.weapon){dx.strokeStyle='rgba(255,255,255,.85)';dx.lineWidth=1;dx.strokeRect(x-4.5,y-4.5,9,9);}});
+    // prism charge meter: fills, then pulses white when the shot is fully built
+    if(p.weapon==='prism'&&p.charging&&p.charge>0.02){const f=Math.min(1,p.charge),full=f>=1,w=64,x=cx+60,y=55;dx.fillStyle='rgba(8,16,26,.75)';dx.fillRect(x-1,y-3,w+2,6);
+      const gr=dx.createLinearGradient(x,0,x+w,0);gr.addColorStop(0,'#7fe6ff');gr.addColorStop(.5,'#d9a8ff');gr.addColorStop(1,'#ffb3e6');dx.fillStyle=full?(Math.sin(clock*24)>0?'#ffffff':'#ffe9ff'):gr;dx.fillRect(x,y-2,w*f,4);
+      text(full?'READY':'CHARGE',x+w+5,y+3,9,full?'#ffffff':'#d9a8ff','left','700');}
     text('CRYO',cx+52,46,10,'#a9eeff');for(let i=0;i<p.bombs;i++){dx.fillStyle='#a9eeff';dx.fillRect(cx+80+i*7,39,4,7);}
     text('SHOCK',cx+52+Math.max(48,p.bombs*7+34),46,10,'#67ffd4');for(let i=0;i<p.lines;i++){dx.fillStyle='#67ffd4';dx.fillRect(cx+52+Math.max(48,p.bombs*7+34)+36+i*7,39,4,7);}
     // timer

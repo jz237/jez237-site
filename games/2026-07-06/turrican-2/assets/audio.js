@@ -8,7 +8,7 @@
 (function (root, factory) { root.TAudio = factory(); })(typeof self !== 'undefined' ? self : this, function () {
   'use strict';
 
-  const A = 'assets/audio/', AV = '?v=sa2'; // AV: bump when audio files are replaced in place (cache bust)
+  const A = 'assets/audio/', AV = '?v=sa3'; // AV: bump when audio files are replaced in place (cache bust)
   const VIEW_W = 640, VIEW_H = 360;
   const LOOP_PAD = 0.1;     // produced loops carry 0.1 s of wrap-around pre/post roll
 
@@ -23,6 +23,8 @@
     tele: v('tele', 2), coreopen: v('coreopen', 1), clink: v('clink', 4), bosshit: v('bosshit', 4),
     bossdie: v('bossdie', 2), phase: v('phase', 2), morph: v('morph', 2), splash: v('splash', 2),
     drip: v('drip', 3), plip: v('plip', 2), stroke: v('stroke', 3),
+    missile: v('missile', 3), blast: v('blast', 2), prism: v('prism', 2), prismtap: v('prismtap', 2), ready: v('ready', 1),
+    shatter: v('shatter', 2), ice: v('ice', 2), swap: v('swap', 2), steam: v('steam', 2), ignite: v('ignite', 1),
     jump: v('jump', 4), land: v('land', 4), line: v('line', 2), checkpoint: v('checkpoint', 1),
     gem: v('gem', 4), power: v('power', 2), die: v('die', 2), bomb: v('bomb', 2), tick: v('tick', 1),
     'boss-warden': v('boss-warden', 1), 'boss-maw': v('boss-maw', 1), 'boss-gunship': v('boss-gunship', 1),
@@ -34,7 +36,8 @@
   };
   const STEPS = { rock: v('step-rock', 4), wet: v('step-wet', 4), metal: v('step-metal', 4), organic: v('step-organic', 4) };
   const LOOPS = { beam: A + 'sfx/loop-beam.mp3', engine: A + 'sfx/loop-engine.mp3', roll: A + 'sfx/loop-roll.mp3', heart: A + 'sfx/loop-heart.mp3',
-    lap: A + 'sfx/loop-lap.mp3', under: A + 'sfx/loop-under.mp3' };
+    lap: A + 'sfx/loop-lap.mp3', under: A + 'sfx/loop-under.mp3',
+    flare: A + 'sfx/loop-flare.mp3', charge: A + 'sfx/loop-charge.mp3', burn: A + 'sfx/loop-burn.mp3' };
   const AMB = { 1: A + 'amb/amb-world1.mp3', 2: A + 'amb/amb-world2.mp3', 3: A + 'amb/amb-world3.mp3', 4: A + 'amb/amb-world4.mp3', 5: A + 'amb/amb-world5.mp3' };
   const AMB_GAIN = { 1: 0.8, 2: 0.9, 3: 0.7, 4: 0.75, 5: 0.9 };
   const SURFACE = { 1: 'rock', 2: 'wet', 3: null, 4: 'metal', 5: 'organic' };
@@ -50,6 +53,11 @@
   const DEF = {
     shoot: { gain: 0.5, pitch: 0.07, max: 3, gap: 0.045 }, shootb: { gain: 0.6, pitch: 0.07, max: 3, gap: 0.06 },
     beamon: { gain: 0.55, pitch: 0.04, max: 1, gap: 0.2 }, hit: { gain: 0.85, pitch: 0.08, max: 2, gap: 0.08 },
+    missile: { gain: 0.5, pitch: 0.08, max: 3, gap: 0.06 }, blast: { gain: 0.65, pitch: 0.1, max: 4, gap: 0.04 },
+    prism: { gain: 0.85, pitch: 0.04, max: 2, gap: 0.1 }, prismtap: { gain: 0.5, pitch: 0.08, max: 3, gap: 0.05 },
+    ready: { gain: 0.45, pitch: 0.02, max: 1, gap: 0.3 }, shatter: { gain: 0.7, pitch: 0.08, max: 3, gap: 0.05 },
+    ice: { gain: 0.75, pitch: 0.1, max: 3, gap: 0.04 }, swap: { gain: 0.5, pitch: 0.05, max: 1, gap: 0.08 },
+    steam: { gain: 0.45, pitch: 0.12, max: 2, gap: 0.12 }, ignite: { gain: 0.6, pitch: 0.06, max: 1, gap: 0.25 },
     explode: { gain: 0.8, pitch: 0.1, max: 4, gap: 0.04 }, 'explode-small': { gain: 0.8, pitch: 0.1, max: 4, gap: 0.04 },
     'explode-medium': { gain: 0.85, pitch: 0.08, max: 3, gap: 0.05 }, 'explode-large': { gain: 0.95, pitch: 0.06, max: 2, gap: 0.12 },
     crate: { gain: 0.7, pitch: 0.08, max: 2, gap: 0.05 }, eshoot: { gain: 0.45, pitch: 0.1, max: 4, gap: 0.05 },
@@ -168,7 +176,8 @@
     }
     const PRELOAD_ORDER = ['shoot', 'shootb', 'hit', 'explode', 'eshoot', 'jump', 'land', 'gem', 'clink', 'bosshit', 'power', 'die',
       'beamon', 'crate', 'morph', 'splash', 'line', 'bomb', 'checkpoint', 'ui-move', 'ui-select', 'ui-back', 'ui-start',
-      'flame', 'hatch', 'stomp', 'dash', 'spawn', 'warning', 'tele', 'coreopen', 'phase', 'bossdie', 'tick', 'complete'];
+      'flame', 'hatch', 'stomp', 'dash', 'spawn', 'warning', 'tele', 'coreopen', 'phase', 'bossdie', 'tick', 'complete',
+      'missile', 'blast', 'prism', 'prismtap', 'ready', 'shatter', 'ice', 'swap', 'steam', 'ignite'];
     function preloadSfx() {
       if (sfxPreloaded || !ctx) return; sfxPreloaded = true;
       for (const k of PRELOAD_ORDER) for (const u of BANK[k]) queueLoad(u);
@@ -346,7 +355,7 @@
 
     // ---- produced one-shots with variants, voice limiting --------------------
     const vstate = {}; let liveVoices = [];
-    let gemLast = -9, gemStep = 0, beamLast = -9, beamX = null, beamY = null;
+    let gemLast = -9, gemStep = 0, beamLast = -9, beamX = null, beamY = null, flareLast = -9;
     function pickVariant(name, urls, st) {
       let i = Math.floor(Math.random() * urls.length);
       if (urls.length > 1 && i === st.idx) i = (i + 1) % urls.length;
@@ -384,6 +393,7 @@
     function play(name, x, y, opts) {
       if (!sfxOn || muted || !name) return; ensure(); if (!ctx) return;
       if (name === 'beam') { beamLast = ctx.currentTime; beamX = x; beamY = y; return; }   // loop trigger
+      if (name === 'flare') { flareLast = ctx.currentTime; return; }                        // loop trigger
       const def = DEF[name] || { gain: 0.8, max: 4, gap: 0.03 };
       const sp = spatial(x, y, def.np || def.ui);
       if (!sp) return;                                      // far offscreen: inaudible, skip
@@ -568,7 +578,7 @@
     }
 
     // ---- per-frame driver ------------------------------------------------------
-    let stepT = 0, prevGround = true, beamWasOn = false, curLP = 20000, lastState = null;
+    let stepT = 0, prevGround = true, beamWasOn = false, flareWasOn = false, curLP = 20000, lastState = null;
     // open water surfaces of a level (game coords), cached per level
     let wsLevel = null, wsList = null;
     function waterSurfaces(l) {
@@ -600,6 +610,18 @@
       if (beamOn && !beamWasOn) play('beamon', px, py);
       beamWasOn = beamOn;
       loopSet('beam', beamOn, 0.5, 1 + 0.025 * Math.sin(now * 9), px, py);
+      // Solar Flare roar (ignition whoomp on the first frame), Prism charge hum rising with the charge
+      const flareOn = live && (!!p.flaring || now - flareLast < 0.1) && !p.inWater;
+      if (flareOn && !flareWasOn) play('ignite', px, py);
+      flareWasOn = flareOn;
+      loopSet('flare', flareOn, 0.55, 1 + 0.03 * Math.sin(now * 7), px, py);
+      const ch = p.charging ? (p.charge || 0) : 0;
+      loopSet('charge', live && ch > 0.06, 0.25 + 0.35 * ch, 0.8 + 0.55 * ch, px, py);
+      // burning enemies crackle (nearest one on screen)
+      let burnX = null, burnD = 1e9;
+      if (live && state.enemies) for (const en of state.enemies) if (en.alive && en.burn > 0) {
+        const d = Math.abs(en.x - px); if (d < burnD && d < VIEW_W * 0.7) { burnD = d; burnX = en; } }
+      loopSet('burn', !!burnX, 0.4, 1, burnX ? burnX.x + burnX.w / 2 : px, burnX ? burnX.y : py);
       // fighter engine: pitch rides the ship's speed
       const spd = Math.sqrt((p.vx || 0) * (p.vx || 0) + (p.vy || 0) * (p.vy || 0));
       loopSet('engine', live && shmup, 0.5, 0.85 + Math.min(0.45, spd / 520), px, py);
@@ -812,6 +834,7 @@
       lowtime: ["Clock's running out. Move it!", 'Time critical! Hurry, trooper!'],
       weapon: ['Weapon upgraded!', 'Firepower boosted!', "Now that's firepower!"],
       'weapon-scatter': ['Scatter!'], 'weapon-lance': ['Arc Lance!'], 'weapon-ricochet': ['Ricochet!'],
+      'weapon-seeker': ['Seeker Swarm!'], 'weapon-flare': ['Solar Flare!'], 'weapon-prism': ['Prism Cannon!'],
       death: ['Trooper down! Get back in there!', "You're hit! Shake it off!"],
       gameover: ['Mission failed. Kethra falls to the Sovereign.', 'Signal lost. The Sovereign endures... for now.'],
       victory: ['The Sovereign is shattered! Kethra is free! Magnificent work, trooper!', "It's over! The Spire has fallen, and Kethra is free!"],

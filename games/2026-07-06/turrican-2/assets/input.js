@@ -109,6 +109,7 @@
         switchPressed: edge('switch'),
         bombPressed: edge('bomb'),
         linePressed: edge('line'),
+        pick: [1, 2, 3, 4, 5, 6].find(n => tapped['Digit' + n] || tapped['Numpad' + n]) || 0,
         pausePressed: edge('pause'),
         mutePressed: edge('mute'),
         startPressed: edge('start') || edge('jump'),

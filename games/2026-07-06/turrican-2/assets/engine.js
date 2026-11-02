@@ -128,9 +128,9 @@
       energy: carry.energy != null ? carry.energy : 100, maxEnergy: 100,
       lives: carry.lives != null ? carry.lives : 3,
       score: carry.score || 0, gems: carry.gems || 0,
-      weapons: carry.weapons || { spread: 1, beam: 0, bounce: 0 },
+      weapons: Object.assign({ spread: 0, beam: 0, bounce: 0, seeker: 0, flare: 0, prism: 0 }, carry.weapons || { spread: 1 }),
       weapon: carry.weapon || 'spread',
-      cooldown: 0, invuln: 0, beamAngle: 0,
+      cooldown: 0, invuln: 0, beamAngle: 0, charge: 0, charging: false, flaring: false, flareAim: 0,
       bombs: carry.bombs != null ? carry.bombs : 2,
       lines: carry.lines != null ? carry.lines : 3,
       dead: false, deathTimer: 0,
@@ -198,7 +198,14 @@
     const p = s.player;
     const w = WEAPONS[p.weapon];
     const lvl = p.weapons[p.weapon];
-    if (lvl <= 0) return;
+    if (!(lvl > 0)) return;
+    // the prism charges while fire is held and fires on release (releasePrism)
+    if (p.weapon === 'prism') {
+      const was = p.charge;
+      p.charge = Math.min(1, p.charge + D.DT / w.chargeTime[lvl - 1]); p.charging = true;
+      if (was < 1 && p.charge >= 1) emit(s, 'sfx', p.x + p.w / 2, p.y + 11, { name: 'ready' });
+      return;
+    }
     if (p.cooldown > 0) return;
 
     const muzzleX = p.x + p.w / 2 + p.facing * 12;
@@ -243,7 +250,63 @@
       }
       emit(s, 'muzzle', muzzleX, muzzleY, { color: w.color });
       emit(s, 'sfx', muzzleX, muzzleY, { name: 'shootb' }); // bounce has its own report
+    } else if (p.weapon === 'seeker') {
+      p.cooldown = w.cooldownByLevel[lvl - 1];
+      const n = w.countByLevel[lvl - 1], shm = s.level.type === 'shmup';
+      for (let i = 0; i < n; i++) {
+        // launch fan, up and forward; the missiles then curve onto their targets
+        const a = (n === 1 ? -0.5 : -0.95 + i * (1.1 / (n - 1))) * (shm ? 0.6 : 1);
+        s.pshots.push({
+          x: muzzleX, y: muzzleY - 2, w: 7, h: 5,
+          vx: Math.cos(a) * w.launch * p.facing, vy: Math.sin(a) * w.launch,
+          dmg: w.damage, life: w.life, kind: 'seeker', target: null, age: 0,
+        });
+      }
+      emit(s, 'muzzle', muzzleX, muzzleY, { color: w.color });
+      emit(s, 'sfx', muzzleX, muzzleY, { name: 'missile' });
+    } else if (p.weapon === 'flare') {
+      p.cooldown = w.cooldown;
+      const shm = s.level.type === 'shmup';
+      let ang = 0;
+      if (input && input.up && !shm) ang = -0.75;
+      else if (input && input.down && !p.onGround && !shm) ang = 0.75;
+      p.flareAim = ang;
+      const L = lvl - 1, a = ang + (Math.random() - 0.5) * 0.22, sp = w.speed * (0.85 + Math.random() * 0.3);
+      s.pshots.push({
+        x: muzzleX - 4, y: muzzleY - 4, w: 8, h: 8,
+        vx: Math.cos(a) * sp * p.facing + p.vx * 0.4, vy: Math.sin(a) * sp + p.vy * 0.2,
+        dmg: w.dps[L], life: w.life[L], life0: w.life[L], kind: 'flame', burn: w.burn,
+      });
+      if ((s.frame % 3) === 0) emit(s, 'sfx', muzzleX, muzzleY, { name: 'flare' }); // loop trigger
     }
+  }
+
+  // prism release: a quick tap fires a small shard; a charge fires the piercing bolt
+  function releasePrism(s, input) {
+    const p = s.player, w = WEAPONS.prism, lvl = Math.max(1, p.weapons.prism || 1), c = p.charge;
+    p.charge = 0; p.charging = false;
+    if (p.cooldown > 0 || p.morph || p.dead) return;
+    p.cooldown = w.cooldown;
+    const shm = s.level.type === 'shmup', up = !!(input && input.up && !shm);
+    const mx = up ? p.x + p.w / 2 : p.x + p.w / 2 + p.facing * 12;
+    const my = up ? p.y - 4 : (shm ? p.y + p.h / 2 : p.y + (p.crouch ? 16 : 11));
+    const vx = up ? 0 : p.facing, vy = up ? -1 : 0;
+    if (c < 0.3) {
+      s.pshots.push({ x: mx, y: my - 2, w: 8, h: 4, vx: vx * w.tapSpeed, vy: vy * w.tapSpeed, dmg: w.tapDamage, life: 0.9, kind: 'prism' });
+      emit(s, 'muzzle', mx, my, { color: w.color });
+      emit(s, 'sfx', mx, my, { name: 'prismtap' });
+      return;
+    }
+    const full = c >= 1, size = 10 + 10 * c;
+    s.pshots.push({
+      x: mx - size / 2, y: my - size / 2, w: size, h: size, vx: vx * w.speed, vy: vy * w.speed,
+      dmg: w.damage[lvl - 1] * (0.35 + 0.65 * c), life: 1.2, kind: 'prismBig', charge: c,
+      shards: Math.round(w.shardsByLevel[lvl - 1] * (full ? 1 : 0.5)), hitSet: [],
+    });
+    if (!shm && !up) p.vx -= p.facing * 70 * c; // recoil kick
+    emit(s, 'prismfire', mx, my, { charge: c, dx: vx, dy: vy });
+    emit(s, 'sfx', mx, my, { name: full ? 'prism' : 'prismtap' });
+    s.shake = Math.min(10, s.shake + 3 * c);
   }
 
   function updateBeam(s, input, dt) {
@@ -279,7 +342,7 @@
       for (const e of s.enemies) {
         if (!e.alive || struck.has(e)) continue;
         if (bx >= e.x && bx <= e.x + e.w && by >= e.y && by <= e.y + e.h) {
-          e.hp -= beamTick; e.hitFlash = 0.08; struck.add(e);
+          e.hp -= beamTick; e.hitFlash = 0.08; e.lastHit = 'beam'; struck.add(e);
         }
       }
       const bb = s.boss;
@@ -294,11 +357,28 @@
   // ---- projectiles --------------------------------------------------------
   function updateShots(s, dt) {
     const lvl = s.level;
+    // seekers that struck something last frame burst where they stopped
+    for (const b of s.pshots) if (b.life <= 0 && b.kind === 'seeker' && !b.done) detonate(s, b);
     for (const b of s.pshots) {
+      if (b.life <= 0) continue;
       b.life -= dt;
       if (b.hitT > 0) b.hitT -= dt;
+      if (b.kind === 'seeker') steerSeeker(s, b, dt);
+      else if (b.kind === 'flame') {
+        // the plume slows, rises and swells as it burns out
+        const f = Math.exp(-2.4 * dt), g = 70 * dt;
+        b.vx *= f; b.vy = b.vy * f - 70 * dt; b.x -= g / 2; b.y -= g / 2; b.w += g; b.h += g;
+      }
       b.x += b.vx * dt; b.y += b.vy * dt;
-      if (b.kind === 'bounce') {
+      if (b.kind === 'flame') {
+        const cx = b.x + b.w / 2, cy = b.y + b.h / 2;
+        if (tileAt(lvl, Math.floor(cx / TILE), Math.floor(cy / TILE)) === T.WATER) { b.life = 0; if ((s.frame & 1) === 0) emit(s, 'steam', cx, cy); }
+        else if (crackAtPx(s, cx, cy) !== 'none') { b.vx *= -0.15; b.vy *= 0.5; b.life = Math.min(b.life, 0.06); }
+      } else if (b.kind === 'prismBig') {
+        const hit = crackAtPx(s, b.x + b.w / 2 + Math.sign(b.vx) * b.w / 2, b.y + b.h / 2 + Math.sign(b.vy) * b.h / 2);
+        if (hit === 'solid') { b.life = 0; splitPrism(s, b, true); }
+        else if (b.life <= 0) splitPrism(s, b, false);
+      } else if (b.kind === 'bounce') {
         b.vy += 900 * dt;
         const floorHit = crackAtPx(s, b.x, b.y + b.h);
         if (floorHit === 'solid') { b.vy = -Math.abs(b.vy) * 0.86; b.bounces--; }
@@ -307,10 +387,11 @@
         if (b.bounces <= 0) b.life = 0;
       } else {
         const hit = crackAtPx(s, b.x + b.w / 2, b.y + b.h / 2);
-        if (hit !== 'none') { b.life = 0; if (hit === 'solid') emit(s, 'spark', b.x, b.y); }
+        if (hit !== 'none') { b.life = 0; if (hit === 'solid' && b.kind !== 'seeker') emit(s, 'spark', b.x, b.y); }
       }
+      if (b.kind === 'seeker' && b.life <= 0) detonate(s, b);
     }
-    s.pshots = s.pshots.filter(b => b.life > 0);
+    s.pshots = s.pshots.filter(b => b.life > 0 || (b.kind === 'seeker' && !b.done));
 
     for (const b of s.eshots) {
       b.life -= dt;
@@ -321,6 +402,69 @@
     s.eshots = s.eshots.filter(b => b.life > 0);
   }
 
+  // nearest live target roughly ahead of the missile (the boss when it is close)
+  function seekTarget(s, b) {
+    let best = null, bd = 1e9;
+    const dir = Math.sign(b.vx) || 1;
+    for (const e of s.enemies) {
+      if (!e.alive) continue;
+      const dx = e.x + e.w / 2 - b.x, dy = e.y + e.h / 2 - b.y;
+      if (dx * dir < -40) continue;
+      const d = Math.hypot(dx, dy * 1.3);
+      if (d < 340 && d < bd) { bd = d; best = e; }
+    }
+    const bb = s.boss;
+    if (bb && bb.alive && bb.awake && !bb.dying) {
+      const d = Math.hypot(bb.x + bb.w / 2 - b.x, bb.y + bb.h / 2 - b.y) * 0.8;
+      if (d < bd && d < 520) best = bb;
+    }
+    return best;
+  }
+  function steerSeeker(s, b, dt) {
+    const w = WEAPONS.seeker;
+    b.age += dt;
+    const t0 = b.target;
+    if (!t0 || !t0.alive || (t0 === s.boss && (t0.dying || !t0.awake))) b.target = seekTarget(s, b);
+    const ang = Math.atan2(b.vy, b.vx), sp = Math.min(w.speed, Math.hypot(b.vx, b.vy) + w.accel * dt);
+    let na = ang;
+    const t = b.target;
+    if (t && b.age > 0.08) {
+      const d = Math.atan2(t.y + t.h / 2 - b.y, t.x + t.w / 2 - b.x) - ang;
+      const turn = w.turn * dt * (b.age < 0.3 ? 1.6 : 1);
+      na = ang + clamp(Math.atan2(Math.sin(d), Math.cos(d)), -turn, turn);
+    } else if (!t && b.age > 0.15) {
+      // nothing to chase: level out and fly straight on
+      const d = (b.vx >= 0 ? 0 : Math.PI) - ang;
+      na = ang + clamp(Math.atan2(Math.sin(d), Math.cos(d)), -2.5 * dt, 2.5 * dt);
+    }
+    b.vx = Math.cos(na) * sp; b.vy = Math.sin(na) * sp;
+  }
+  // missile burst: splash damage to everything inside the radius
+  function detonate(s, b) {
+    b.done = true; b.life = 0;
+    const w = WEAPONS.seeker, cx = b.x + b.w / 2, cy = b.y + b.h / 2, r2 = w.radius * w.radius;
+    const near = (o) => { const dx = Math.max(o.x - cx, 0, cx - (o.x + o.w)), dy = Math.max(o.y - cy, 0, cy - (o.y + o.h)); return dx * dx + dy * dy < r2; };
+    for (const e of s.enemies) if (e.alive && near(e)) { e.hp -= w.splash; e.hitFlash = 0.1; e.lastHit = 'seeker'; }
+    const bb = s.boss;
+    if (bb && bb.alive && bb.awake && !bb.dying && near(bb)) { bb.hp -= w.splash * (bb.open ? 1 : D.BOSS_GUARD); bb.hitFlash = 0.08; }
+    emit(s, 'blast', cx, cy); emit(s, 'sfx', cx, cy, { name: 'blast' });
+    s.shake = Math.min(6, s.shake + 1.2);
+  }
+  // the charged bolt shatters into a fan of shards: back off a wall, onward in the open
+  function splitPrism(s, b, wall) {
+    if (b.split) return; b.split = true;
+    const n = b.shards || 0, cx = b.x + b.w / 2, cy = b.y + b.h / 2;
+    const heading = Math.atan2(b.vy, b.vx), base = wall ? heading + Math.PI : heading, spread = wall ? 1.25 : 0.7;
+    const bx = cx - Math.cos(heading) * (wall ? 6 : 0), by = cy - Math.sin(heading) * (wall ? 6 : 0);
+    emit(s, 'shatter', bx, by, { charge: b.charge || 0, n });
+    emit(s, 'sfx', bx, by, { name: 'shatter' });
+    for (let i = 0; i < n; i++) {
+      const a = base + (n === 1 ? 0 : -spread + (2 * spread * i) / (n - 1));
+      s.pshots.push({ x: bx - 3, y: by - 3, w: 6, h: 6, vx: Math.cos(a) * 430, vy: Math.sin(a) * 430,
+        dmg: WEAPONS.prism.shardDamage, life: 0.55, kind: 'shard', hue: n > 1 ? i / (n - 1) : 0.5 });
+    }
+  }
+
   // ---- enemies ------------------------------------------------------------
   function updateEnemies(s, dt) {
     const p = s.player;
@@ -328,6 +472,11 @@
       if (!e.alive) continue;
       e.t += dt;
       if (e.hitFlash > 0) e.hitFlash -= dt;
+      if (e.burn > 0) {
+        e.burn -= dt; e.hp -= WEAPONS.flare.burnDps * dt;
+        const cx = e.x + e.w / 2, cy = e.y + e.h / 2;
+        if (tileAt(s.level, Math.floor(cx / TILE), Math.floor(cy / TILE)) === T.WATER) { e.burn = 0; emit(s, 'steam', cx, cy); }
+      }
       const frozen = s.freeze > 0;
 
       if (!frozen) {
@@ -435,19 +584,31 @@
       for (const b of s.pshots) {
         if (b.life <= 0) continue;
         if (b.hitT > 0) continue;
-        if (rects(b, e)) { e.hp -= b.dmg; e.hitFlash = 0.08;
-          if (b.kind !== 'bounce') b.life = 0; else b.hitT = 0.3;
-          emit(s, 'spark', b.x, b.y); }
+        if (!rects(b, e)) continue;
+        if (b.kind === 'flame') {
+          // flames pass through: one burn tick per enemy per frame, then it smoulders
+          if (e.flameF !== s.frame) { e.flameF = s.frame; e.hp -= b.dmg * dt; e.hitFlash = 0.05; e.burn = Math.max(e.burn || 0, b.burn); e.lastHit = 'flame'; }
+          continue;
+        }
+        if (b.kind === 'prismBig') {
+          if (b.hitSet.indexOf(e) < 0) { b.hitSet.push(e); e.hp -= b.dmg; e.hitFlash = 0.12; e.lastHit = 'prism'; emit(s, 'shardhit', b.x + b.w / 2, b.y + b.h / 2); }
+          continue;
+        }
+        e.hp -= b.dmg; e.hitFlash = 0.08; e.lastHit = b.kind;
+        if (b.kind !== 'bounce') b.life = 0; else b.hitT = 0.3;
+        emit(s, 'spark', b.x, b.y);
       }
       // morph mines
-      for (const m of s.mines) if (m.life > 0 && rects(m, e)) { e.hp -= 3; m.life = 0; emit(s, 'explosion', m.x, m.y); }
+      for (const m of s.mines) if (m.life > 0 && rects(m, e)) { e.hp -= 3; m.life = 0; e.lastHit = 'mine'; emit(s, 'explosion', m.x, m.y); }
 
       if (e.hp <= 0) {
         e.alive = false;
         p.score += e.cfg.score;
         s.floats.push({ x: e.x, y: e.y, text: '+' + e.cfg.score, life: 0.9, vy: -30 });
-        emit(s, 'explosion', e.x + e.w / 2, e.y + e.h / 2);
-        emit(s, 'sfx', e.x + e.w / 2, e.y + e.h / 2, { name: 'explode' });
+        // how it went down picks the death: shattered while frozen, burnt up, or split by the prism
+        const kind = s.freeze > 0 ? 'ice' : e.lastHit === 'flame' ? 'burn' : (e.lastHit === 'prism' || e.lastHit === 'shard') ? 'crystal' : null;
+        emit(s, 'explosion', e.x + e.w / 2, e.y + e.h / 2, kind ? { kind } : null);
+        emit(s, 'sfx', e.x + e.w / 2, e.y + e.h / 2, { name: kind === 'ice' ? 'ice' : 'explode' });
         s.shake = Math.min(6, s.shake + 3);
         continue;
       }
@@ -673,6 +834,18 @@
       if (sh.life <= 0 || sh.hitT > 0) continue;
       if (rects(sh, b)) {
         const mult = b.open ? 1 : D.BOSS_GUARD;
+        if (sh.kind === 'flame') {
+          if (b.flameF !== s.frame) { b.flameF = s.frame; b.hp -= sh.dmg * dt * mult; b.hitFlash = 0.05;
+            if ((s.frame % 8) === 0) emit(s, b.open ? 'spark' : 'clinkfx', sh.x + sh.w / 2, sh.y + sh.h / 2); }
+          continue;
+        }
+        if (sh.kind === 'prismBig') {
+          if (sh.hitBoss) continue;
+          sh.hitBoss = true; b.hp -= sh.dmg * mult; b.hitFlash = 0.12;
+          emit(s, 'shardhit', sh.x + sh.w / 2, sh.y + sh.h / 2);
+          emit(s, 'sfx', sh.x, sh.y, { name: b.open ? 'bosshit' : 'clink' });
+          continue;
+        }
         b.hp -= sh.dmg * mult; b.hitFlash = 0.08;
         if (sh.kind !== 'bounce') sh.life = 0; else sh.hitT = 0.3;
         emit(s, b.open ? 'spark' : 'clinkfx', sh.x, sh.y);
@@ -776,7 +949,7 @@
       const cur = p.weapon;
       if (p.weapons[cur] < WEAPONS[cur].maxLevel) p.weapons[cur]++;
       else {
-        const next = WEAPON_ORDER.find(w => p.weapons[w] === 0);
+        const next = WEAPON_ORDER.find(w => !p.weapons[w]);
         if (next) { p.weapons[next] = 1; p.weapon = next; }
         else p.weapons[cur] = Math.min(WEAPONS[cur].maxLevel, p.weapons[cur] + 1);
       }
@@ -965,15 +1138,27 @@
     // weapons
     if (input.fire && !p.morph) fireWeapon(s, input);
     else if (!input.fire) p.aimDir = 0;
+    if (p.charging && (!input.fire || p.morph || p.weapon !== 'prism')) {
+      if (!input.fire && !p.morph && p.weapon === 'prism') releasePrism(s, input);
+      else { p.charge = 0; p.charging = false; }
+    }
+    p.flaring = p.weapon === 'flare' && !!input.fire && !p.morph && p.weapons.flare > 0;
+    if (!p.flaring) p.flareAim = 0;
     updateBeam(s, input, dt);
 
-    // weapon switch
+    // weapon switch (cycle, or pick one directly with the number keys)
+    const was = p.weapon;
     if (input.switchPressed) {
       const owned = WEAPON_ORDER.filter(w => p.weapons[w] > 0);
       if (owned.length > 1) {
         const i = owned.indexOf(p.weapon);
         p.weapon = owned[(i + 1) % owned.length];
       }
+    }
+    if (input.pick) { const w = WEAPON_ORDER[input.pick - 1]; if (w && p.weapons[w] > 0) p.weapon = w; }
+    if (p.weapon !== was) {
+      emit(s, 'swap', p.x + p.w / 2, p.y + 11, { weapon: p.weapon });
+      emit(s, 'sfx', p.x + p.w / 2, p.y + 11, { name: 'swap' });
     }
     // smart bomb / freeze (heavy boss damage per SPEC §2.4)
     if (input.bombPressed && p.bombs > 0) {
@@ -1083,14 +1268,14 @@
       let topY = 0; while (topY < lv.rows && lv.tiles[topY * lv.cols + col] !== T.EMPTY) topY++;
       let botY = lv.rows - 1; while (botY >= 0 && lv.tiles[botY * lv.cols + col] !== T.EMPTY) botY--;
       p.y = topY <= botY ? ((topY + botY) / 2) * TILE : (lv.rows / 2) * TILE;
-      p.energy = p.maxEnergy; p.invuln = 2.5; p.morph = false;
+      p.energy = p.maxEnergy; p.invuln = 2.5; p.morph = false; p.charge = 0; p.charging = false;
       s.freeze = 0;
       s.time = s.timeLimit; // fresh clock with the fresh life (difficulty-scaled)
       return;
     }
     const spawn = s.checkpoint || ps;
     p.dead = false; p.x = spawn.x; p.y = spawn.y; p.vx = 0; p.vy = 0;
-    p.energy = p.maxEnergy; p.invuln = 2; p.morph = false; p.h = 30; p.w = 14; p.crouch = false;
+    p.energy = p.maxEnergy; p.invuln = 2; p.morph = false; p.h = 30; p.w = 14; p.crouch = false; p.charge = 0; p.charging = false;
     // rewind camera near spawn
     s.freeze = 0;
     s.time = s.timeLimit; // fresh clock with the fresh life (difficulty-scaled)

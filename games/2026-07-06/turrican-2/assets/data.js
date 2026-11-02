@@ -68,8 +68,28 @@
       bouncesByLevel: [2, 4, 6],
       countByLevel: [1, 2, 3],
     },
+    // homing micro-missiles: launch in a fan, lock on, burst with splash damage
+    seeker: {
+      id: 'seeker', name: 'SEEKER SWARM', color: '#ff9a3c',
+      maxLevel: 3, cooldownByLevel: [0.5, 0.42, 0.36], countByLevel: [1, 2, 3],
+      launch: 150, speed: 430, accel: 900, turn: 6.5, life: 2.2,
+      damage: 2.2, splash: 1.6, radius: 30,
+    },
+    // plasma flamethrower: short piercing cone, sets targets alight
+    flare: {
+      id: 'flare', name: 'SOLAR FLARE', color: '#ff6a2a',
+      maxLevel: 3, cooldown: 0.045, speed: 400,
+      life: [0.3, 0.36, 0.42], dps: [9, 12, 15], burn: 1.6, burnDps: 1.4,
+    },
+    // hold to charge, release: a piercing crystal bolt that splits into shards
+    prism: {
+      id: 'prism', name: 'PRISM CANNON', color: '#d9a8ff',
+      maxLevel: 3, cooldown: 0.22, chargeTime: [1.0, 0.8, 0.65],
+      tapDamage: 1.3, tapSpeed: 520, speed: 560, damage: [5, 7, 9],
+      shardsByLevel: [3, 5, 7], shardDamage: 1.2,
+    },
   };
-  const WEAPON_ORDER = ['spread', 'beam', 'bounce'];
+  const WEAPON_ORDER = ['spread', 'beam', 'bounce', 'seeker', 'flare', 'prism'];
 
   // ---- enemies ------------------------------------------------------------
   // Archetypes carry the behavior; the per-world `roster` maps them to themed
@@ -736,7 +756,7 @@
     WEAPONS, WEAPON_ORDER, ENEMIES, ROSTERS, LOB_SKINS, BOSSES, BOSS_GUARD, WORLDS, STAGES_PER_WORLD, DIFFICULTY,
     DEFAULT_SPEED: SPEED, SPEEDS, REACH,
     mulberry32, buildLevel,
-    VERSION: '2.3.1',
+    VERSION: '2.4.0',
   };
   // game speed is a player option: the engine reads api.DT every tick
   api.setSpeed = (v) => { api.SPEED = v; api.DT = STEP * v; };

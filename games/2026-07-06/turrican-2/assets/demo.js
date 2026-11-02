@@ -79,7 +79,7 @@
       left: false, right: false, up: false, down: false, jump: false, fire: false, morph: false,
       jumpPressed: false, jumpReleased: false, upPressed: false, downPressed: false,
       leftPressed: false, rightPressed: false, firePressed: false, morphPressed: false,
-      switchPressed: false, bombPressed: false, linePressed: false,
+      switchPressed: false, bombPressed: false, linePressed: false, pick: 0,
       pausePressed: false, mutePressed: false, startPressed: false,
     };
   }
@@ -670,9 +670,11 @@
         const cx = P.blastX != null ? P.blastX : p.x + p.w / 2, dx = cx - (p.x + p.w / 2);
         inp.left = dx < -1.5; inp.right = dx > 1.5; return;
       }
-      // riding an updraft: drift under the crystals we will rise through
-      if (G.lift(p.x + p.w / 2) && p.vy < -40) {
-        const px = p.x + p.w / 2; let g = null, gs = 1e9;
+      // riding an updraft: drift under the crystals we will rise through (only inside the column -
+      // a breach hop out of the pool beside it must keep its own jump)
+      const ud = state.level.updraft, upx = p.x + p.w / 2;
+      if (ud && upx > ud.x0 && upx < ud.x1 && p.vy < -40) {
+        const px = upx; let g = null, gs = 1e9;
         for (const it of state.pickups) if (it.type === 'gem' && it.y + 16 < p.y + 4 && Math.abs(it.x + 8 - px) < 150) {
           const sc = Math.abs(it.x + 8 - px) + (p.y - it.y) * 0.25; if (sc < gs) { gs = sc; g = it; }
         }
@@ -887,9 +889,18 @@
       else if (target) {
         const tx = target.x + target.w / 2 - cx, ty = target.y + target.h / 2 - cy;
         const obstructed = solidAt(s.level, cx + tx * .5, cy + ty * .5);
-        desired = obstructed || (Math.abs(ty) > 35 && Math.abs(tx) > 60) ? 'bounce' : (near.length <= 2 && Math.abs(tx) < 220 ? 'beam' : 'spread');
-        if (desired === 'beam' && Math.sign(tx) !== p.facing) desired = 'spread';
-        if (near.length) P.intent = desired === 'beam' ? 'Tracking target · arc lance' : desired === 'bounce' ? 'Ricocheting around cover' : 'Suppressing enemies · scatter';
+        const boss = target === s.boss, ax = Math.abs(tx), ay = Math.abs(ty), shm = s.level.type === 'shmup';
+        const ahead = shm || Math.sign(tx) === p.facing, owns = (w) => p.weapons[w] > 0;
+        // pick the gun for the shot: missiles for targets overhead or crowds, the flamer up close,
+        // the prism down a clear lane (and into an open boss core), the lance or scatter otherwise
+        if (obstructed || (ay > 35 && ax > 60)) desired = owns('seeker') && ty < -35 ? 'seeker' : 'bounce';
+        else if (owns('flare') && ahead && ax < 110 && ay < 34 && !p.inWater && !boss) desired = 'flare';
+        else if (owns('prism') && ahead && (boss ? (target.open || s.freeze > 0) : (ay < 14 && ax > 130 && near.length <= 2))) desired = 'prism';
+        else if (owns('seeker') && (near.length >= 3 || (boss && ay > 40))) desired = 'seeker';
+        else desired = near.length <= 2 && ax < 220 ? 'beam' : 'spread';
+        if (desired === 'beam' && !ahead) desired = 'spread';
+        if (near.length || boss) P.intent = ({ beam: 'Tracking target · arc lance', bounce: 'Ricocheting around cover', seeker: 'Seeker swarm · locking on',
+          flare: 'Solar flare · burning them out', prism: 'Charging the prism cannon', spread: 'Suppressing enemies · scatter' })[desired];
         if (p.weapon === 'beam' && s.level.type !== 'shmup' && !p.inWater) {
           if (Math.sign(tx) !== p.facing || Math.abs(tx) > 230) i.fire = false;
           else {
@@ -899,9 +910,18 @@
           }
         }
       } else if (p.weapon === 'beam') i.fire = false;
+      // prism: hold to build the charge (also between targets), let go once it is lined up and built
+      if (p.weapon === 'prism' && !P.forceSpread) {
+        if (!target) i.fire = true;
+        else {
+          const ty = target.y + target.h / 2 - cy, ahead = s.level.type === 'shmup' || Math.sign(target.x + target.w / 2 - cx) === p.facing;
+          const lined = ahead && Math.abs(ty) < target.h / 2 + 10;
+          i.fire = !(lined && p.charge >= (target === s.boss ? 0.6 : 0.85));
+        }
+      }
       // switch with purpose: hold a weapon at least a second unless the vault plug needs the scatter fan
       if (p.weapon !== desired && p.weapons[desired] > 0 && (P.switchCd <= 0 || (P.forceSpread && desired === 'spread'))) {
-        i.switchPressed = true; P.switchCd = 1.1; i.fire = false; P.switches++;
+        i.pick = D.WEAPON_ORDER.indexOf(desired) + 1; P.switchCd = 1.1; i.fire = false; P.switches++;
       }
       if (target || P.forceSpread) P.lastWeapon = desired;
       if ((danger || near.length >= 3) && p.bombs > 0 && P.bombCd <= 0 && s.freeze <= 0 && (p.energy < 65 || near.length >= 3)) {

@@ -144,24 +144,56 @@ function createRenderer(display){
   function consume(events,s){
     for(let e of events){
       switch(e.type){
-        case 'explosion':{let size=1;const b=s.boss;if(b&&(b.dying||!b.alive)&&e.x>=b.x-20&&e.x<=b.x+b.w+20)size=b.alive?1.5:2.6;
+        case 'explosion':{
+          if(e.kind==='burn'){fx.burnUp(e.x,e.y,theme);break;}
+          if(e.kind==='ice'){fx.iceShatter(e.x,e.y);shockwave(e.x,e.y,30,.35,.35);break;}
+          if(e.kind==='crystal'){fx.crystalBurst(e.x,e.y,.6);break;}
+          let size=1;const b=s.boss;if(b&&(b.dying||!b.alive)&&e.x>=b.x-20&&e.x<=b.x+b.w+20)size=b.alive?1.5:2.6;
           else{const near=s.enemies.find(en=>!en.alive&&Math.abs(en.x+en.w/2-e.x)<4&&Math.abs(en.y+en.h/2-e.y)<4);if(near&&(near.type==='drifter'||near.type==='hugger'||near.type==='egg'))size=.75;}
-          fx.explosion(e.x,e.y,size,theme);if(terrain.water&&terrain.water.splash(e.x,e.y,size*1.3))splashFX(e.x,-terrain.water.surfaceAt(e.x).y,size*.8);break;}
+          fx.explosion(e.x,e.y,size,theme);if(size>=1.4)shockwave(e.x,e.y,55*size,.55,.6);
+          if(terrain.water&&terrain.water.splash(e.x,e.y,size*1.3))splashFX(e.x,-terrain.water.surfaceAt(e.x).y,size*.8);break;}
+        case 'blast':fx.blast(e.x,e.y,theme);shockwave(e.x,e.y,38,.55,.38);if(terrain.water&&terrain.water.splash(e.x,e.y,.8))splashFX(e.x,-terrain.water.surfaceAt(e.x).y,.5);break;
+        case 'steam':fx.puff(e.x,e.y,'#e6f0f2',2,6,{life:1,speed:24,rise:46,alpha:.35,grav:10});break;
+        case 'shatter':fx.crystalBurst(e.x,e.y,e.charge||0);shockwave(e.x,e.y,30+40*(e.charge||0),.4+.5*(e.charge||0),.42);break;
+        case 'prismfire':{const c=e.charge||0,m=(e.dy||0)===0?muzzleAt(s.player):e;fx.prismFire(m.x,m.y,c,e.dx||1,e.dy||0);if(c>.5)shockwave(m.x,m.y,26+34*c,.35+.45*c,.34);break;}
+        case 'shardhit':fx.sparks(e.x,e.y,'#f2e2ff',10,200,{life:.6});fx.glowBall(e.x,e.y,'#e8c8ff',12,.1,6,2);break;
+        case 'swap':{const m=muzzleAt(s.player),c=WCOL[e.weapon]||'#ffffff';fx.ring(m.x,m.y,c,14,.22,{start:1});fx.sparks(m.x,m.y,c,8,110,{life:.5});fx.flashLight(m.x,m.y,c,2,80,.15);break;}
         case 'spark':fx.sparks(e.x,e.y,'#ffe0a0',6,140,{life:.6});fx.glowBall(e.x,e.y,'#ffc070',6,.08);break;
         case 'muzzle':{const c=e.color||'#ffd23f';if(level.type!=='shmup'&&hero&&hero.getMuzzle&&hero.root.visible){hero.getMuzzle(mz);e={...e,x:mz.x,y:-mz.y};}fx.glowBall(e.x,e.y,c,9,.06,6,2.2);fx.sparks(e.x,e.y,c,3,120,{life:.4});fx.flashLight(e.x,e.y,c,2.4,110,.07);
-          if(Math.random()<.35)fx.puff(e.x,e.y,'#8a8a90',1,4,{life:.5,speed:20,alpha:.25});break;}
+          if(Math.random()<.35)fx.puff(e.x,e.y,'#8a8a90',1,4,{life:.5,speed:20,alpha:.25});
+          if(s.player.weapon==='spread'&&level.type!=='shmup')fx.casing(e.x-s.player.facing*6,e.y,s.player.facing);break;}
         case 'pickup':fx.sparks(e.x+8,e.y+8,e.color||'#9be6ff',18,150,{grav:-60,life:1.4});fx.ring(e.x+8,e.y+8,e.color||'#9be6ff',22,.35);fx.flashLight(e.x+8,e.y+8,e.color||'#9be6ff',2.5,90,.25);break;
         case 'splash':{const w=terrain.water,sf=w&&w.surfaceAt(e.x),sy=sf?-sf.y:e.y;if(w)w.splash(e.x,sy,1.4);splashFX(e.x,sy,1);break;}
         case 'land':fx.puff(e.x,e.y,theme.top.color,5,6,{life:.7,speed:55,rise:8,alpha:.45,grav:-10});break;
         case 'bubble':fx.glow.emit(e.x,-e.y,2,(Math.random()-.5)*10,30,0,.4,.8,.9,.7,1.6,1.4,1.8,40,.5,0,0);break;
         case 'updraft':fx.glow.emit(e.x+(Math.random()-.5)*20,-e.y,(Math.random()-.5)*30,0,160,0,.5,.8,1,.6,.6,1.2,.4,0,.5,.02,0);break;
         case 'hurt':hurt=1;ca=Math.max(ca,.012);fx.shakeImpulse(.35);fx.sparks(s.player.x+7,s.player.y+15,'#ff8a8a',10,140);break;
-        case 'flash':flash=1;fx.ring(s.player.x+7,s.player.y+15,'#a9eeff',260,.9,{start:4});fx.ring(s.player.x+7,s.player.y+15,'#ffffff',140,.5,{start:2});
+        case 'flash':flash=1;shockwave(s.player.x+7,s.player.y+15,260,.9,.85);fx.ring(s.player.x+7,s.player.y+15,'#a9eeff',260,.9,{start:4});fx.ring(s.player.x+7,s.player.y+15,'#ffffff',140,.5,{start:2});
           for(let i=0;i<70;i++){const a=Math.random()*6.28,v=80+Math.random()*260;fx.glow.emit(s.player.x+7,-(s.player.y+15),(Math.random()-.5)*40,Math.cos(a)*v,Math.sin(a)*v,(Math.random()-.5)*90,.6,.9,1.2,1,1.2,2.2,.5,-80,1.8,.01,3);}break;
         case 'line':fx.shockwall(e.x,viewY,Hv);break;
         case 'banner':hud.setBanner(e.text,e.sub);if(e.text==='WARNING')bossCue=1.8;break;
       }
     }
+  }
+
+  // ---------------------------------------------------------------- weapon effects that follow the player
+  const WCOL={spread:'#ffd23f',beam:'#6cf3ff',bounce:'#ff7ad9',seeker:'#ff9a3c',flare:'#ff6a2a',prism:'#d9a8ff'};
+  const rips=[];
+  function shockwave(x,y,size,str,life=.5){if(rips.length>=6)rips.shift();rips.push({x,y,size,str,life,age:0});}
+  function muzzleAt(p){if(level.type!=='shmup'&&hero&&hero.getMuzzle&&hero.root.visible){hero.getMuzzle(mz);return {x:mz.x,y:-mz.y};}return {x:p.x+p.w/2+p.facing*(p.w/2+4),y:p.y+p.h/2};}
+  function weaponFX(s,dt){
+    const p=s.player,live=!p.dead&&!p.morph;let haze=null;
+    if(live&&(p.flaring||p.charging)){const m=muzzleAt(p);
+      if(p.flaring&&!p.inWater){fx.nozzle(m.x,m.y,p.facing,dt);const hx=m.x+p.facing*48,hy=m.y-8+(p.flareAim||0)*30,c=project(hx,hy),e=project(hx+70,hy);
+        if(c&&e)haze={x:c.x,y:1-c.y,r:Math.abs(e.x-c.x)*aspect,a:.9};}
+      fx.charge(m.x,m.y,p.charging?p.charge:0,dt,clock);}
+    else fx.charge(0,0,0,dt,clock);
+    if(dt>0)for(const e of s.enemies)if(e.alive&&e.burn>0&&e.x>viewX-40&&e.x<viewX+VW+40)fx.burning(e.x,e.y,e.w,e.h,dt);
+    for(let i=rips.length-1;i>=0;i--){rips[i].age+=dt;if(rips[i].age>=rips[i].life)rips.splice(i,1);}
+    const out=[];
+    for(const r of rips){const a=r.age/r.life,c=project(r.x,r.y),e=project(r.x+r.size,r.y);if(!c||!e)continue;
+      out.push({x:c.x,y:1-c.y,r:Math.abs(e.x-c.x)*aspect*(.1+.9*(1-Math.pow(1-a,2.4))),a:r.str*(1-a)*(1-a)});}
+    post.setShock(out,haze,aspect,clock);
   }
 
   // ---------------------------------------------------------------- water feedback
@@ -287,7 +319,7 @@ function createRenderer(display){
     updateCamera(s,dt);
     updateActors(s,dt);
     let beamFrom=null;if(level.type!=='shmup'&&s.player.beamActive&&hero.getMuzzle){hero.getMuzzle(mz);beamFrom={x:mz.x,y:-mz.y};}
-    fx.drawShots(s,viewX,VW);fx.drawBeam(s.player,clock,theme,beamFrom);fx.moveWalls(s.floats);
+    fx.drawShots(s,viewX,VW,dt);fx.drawBeam(s.player,clock,theme,beamFrom);fx.moveWalls(s.floats);weaponFX(s,dt);
     if(dt>0){ambient(s,dt);for(const f of terrain.falls)if(f.x>viewX-60&&f.x<viewX+VW+60){if(Math.random()<dt*14)fx.puff(f.x+(Math.random()-.5)*20,-(f.bot+40),'#e8f6ff',1,10,{life:1.6,speed:30,rise:26,alpha:.3,z:-40});
       if(Math.random()<dt*30)fx.glow.emit(f.x+(Math.random()-.5)*20,f.bot+40,-40,(Math.random()-.5)*60,40+Math.random()*60,(Math.random()-.5)*30,.5,.7,.8,.7,.7,1.2,.5,-300,.6,.01,0);}}
     props.update(s,clock);terrain.update(clock,dt,s);backdrop.update(clock,camera);
@@ -342,6 +374,7 @@ function createRenderer(display){
     fx.light(p.x+7,-(p.y+10),20,theme.accent,.5,80);
     terrain.update(clock,dt,fake);backdrop.update(clock,camera);
     fx.update(dt,clock,level,{x:tgt.x},()=>false);
+    rips.length=0;post.setShock(rips,null,aspect,clock);fx.charge(0,0,0,dt,clock);
     const u=post.u;u.uTime.value=clock;u.uHurt.value=0;u.uFlash.value=0;u.uFrost.value=0;u.uCA.value=0;u.uFade.value=Math.max(0,1-titleT*1.2);
     draw();dx.clearRect(0,0,960,540);
   }

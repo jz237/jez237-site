@@ -7,7 +7,7 @@ const C = {
   pouch: '#434336', metal: '#767c86', gun: '#3a3e45', steel: '#9aa3ad',
 };
 const VISOR = lin('#6cf3ff', 3.6), SEAM = lin('#6cf3ff', 2.4), THRUST = lin('#86dcff', 3.2), RED = lin('#ff4d3a', 4), GREEN = lin('#5dff8a', 4), WHITE = [5, 5, 5];
-export const WEAPON_GLOW = { spread: '#ffd23f', beam: '#6cf3ff', bounce: '#ff7ad9' };
+export const WEAPON_GLOW = { spread: '#ffd23f', beam: '#6cf3ff', bounce: '#ff7ad9', seeker: '#ff9a3c', flare: '#ff6a2a', prism: '#d9a8ff' };
 
 // helper: translate a geometry
 const at = (g, x, y, z, r, s) => xf(g, [x, y, z], r, s);
@@ -250,6 +250,7 @@ export function heroAnimator(inst, kitMats) {
     let aimT = 0, beam = false;
     if (p.beamActive && p.beam) { aimT = Math.atan2(-p.beam.dy, Math.abs(p.beam.dx) || 1e-3); beam = true; }
     else if (p.weapon === 'spread' && p.aimDir) aimT = p.aimDir < 0 ? Math.PI / 2 : -Math.PI / 2;
+    else if (p.flaring && p.flareAim) aimT = -p.flareAim;
     if (p.crouch) aimT = Math.min(aimT, 0) - 0.04;
     st.aim = approach(st.aim, aimT, beam ? 40 : 22, dt);
     st.aimDown = approach(st.aimDown, !ground && aimT < -1 ? 1 : 0, 16, dt);
@@ -257,6 +258,8 @@ export function heroAnimator(inst, kitMats) {
     if (p.cooldown > st.lastCd + 1e-4 && !beam) { st.recoil = 1; st.fireGlow = 1; }
     st.lastCd = p.cooldown || 0;
     if (beam) { st.recoil = Math.max(st.recoil, 0.25 + 0.15 * Math.sin(st.time * 90)); st.fireGlow = 1; }
+    if (p.flaring) { st.recoil = Math.max(st.recoil, 0.18 + 0.1 * Math.sin(st.time * 70)); st.fireGlow = 1; }
+    if (p.charging) st.fireGlow = Math.max(st.fireGlow, 0.3 + 0.7 * (p.charge || 0) * (0.8 + 0.2 * Math.sin(st.time * 30)));
     st.recoil = Math.max(0, st.recoil - dt * 9); st.fireGlow = Math.max(0, st.fireGlow - dt * 5);
 
     // ---- pose blend -----------------------------------------------------------

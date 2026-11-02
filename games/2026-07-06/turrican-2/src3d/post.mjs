@@ -33,6 +33,22 @@ class GameAO extends GTAOPass{
   _restoreVisibility(){for(const o of this._hidden)o.visible=true;this._hidden=[];super._restoreVisibility();}
 }
 
+// Screen-space distortion before bloom: up to six expanding shockwave rings (with a slight
+// colour split on the crest) and a shimmering heat haze in front of the flamer.
+const ShockShader={
+  uniforms:{tDiffuse:{value:null},uRip:{value:[0,1,2,3,4,5].map(()=>new THREE.Vector4())},uHaze:{value:new THREE.Vector4()},uAspect:{value:1},uTime:{value:0}},
+  vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}`,
+  fragmentShader:`uniform sampler2D tDiffuse;uniform vec4 uRip[6];uniform vec4 uHaze;uniform float uAspect,uTime;varying vec2 vUv;
+    void main(){vec2 uv=vUv,off=vec2(0.);float crest=0.;vec2 asp=vec2(uAspect,1.);
+      for(int i=0;i<6;i++){vec4 r=uRip[i];if(r.w<=0.)continue;vec2 d=(uv-r.xy)*asp;float L=length(d);
+        float x=(L-r.z)/(.012+r.z*.22);float ring=exp(-x*x)*r.w;crest+=ring;off+=(L>1e-4?d/L:vec2(0.))*ring*.022/asp*sign(-x+.0001);}
+      if(uHaze.w>0.){vec2 d=(uv-uHaze.xy)*asp;float m=smoothstep(uHaze.z,uHaze.z*.15,length(d))*uHaze.w;
+        off+=vec2(sin(uv.y*150.+uTime*23.)*sin(uv.x*70.-uTime*13.),sin((uv.x+uv.y)*190.+uTime*31.))*m*.0032;}
+      vec2 q=clamp(uv+off,0.,1.);vec2 ca=off*.6;
+      vec3 c=vec3(texture2D(tDiffuse,q+ca).r,texture2D(tDiffuse,q).g,texture2D(tDiffuse,q-ca).b);
+      gl_FragColor=vec4(c*(1.+crest*.08),1.);}`
+};
+
 const FinalShader={
   uniforms:{tDiffuse:{value:null},uTime:{value:0},uVignette:{value:.32},uCA:{value:0},uGrain:{value:.035},uFrost:{value:0},uHurt:{value:0},uFlash:{value:0},
     uLift:{value:new THREE.Vector3()},uGain:{value:new THREE.Vector3(1,1,1)},uSat:{value:1},uScan:{value:0},uRes:{value:new THREE.Vector2(1,1)},uFade:{value:0}},
@@ -66,12 +82,16 @@ export function createPost(gl,scene,camera,quality){
   let ao=null;
   if(quality==='ultra'){ao=new GameAO(scene,camera,size.x,size.y);ao.output=GTAOPass.OUTPUT.Default;ao.blendIntensity=.85;
     ao.updateGtaoMaterial({radius:16,distanceExponent:1.6,thickness:6,distanceFallOff:1,scale:1.15,samples:12});ao.updatePdMaterial({lumaPhi:10,depthPhi:2,normalPhi:3,radius:5,rings:2,samples:12});composer.addPass(ao);}
+  const shock=new ShaderPass(ShockShader);shock.enabled=false;composer.addPass(shock);
   const bloom=new UnrealBloomPass(new THREE.Vector2(size.x,size.y),.6,.55,.92);composer.addPass(bloom);
   composer.addPass(new OutputPass());
   const final=new ShaderPass(FinalShader);composer.addPass(final);
   const u=final.uniforms;
   return {composer,bloom,final,u,ao,
     setWater(w){water.water=w;water.enabled=!!w;},
+    // rips: [{x,y (uv), r (screen heights), a}], haze: {x,y,r,a} or null
+    setShock(rips,haze,aspect,t){const U=shock.uniforms;for(let i=0;i<6;i++){const r=rips[i];U.uRip.value[i].set(r?r.x:0,r?r.y:0,r?r.r:0,r?r.a:0);}
+      if(haze)U.uHaze.value.set(haze.x,haze.y,haze.r,haze.a);else U.uHaze.value.w=0;U.uAspect.value=aspect;U.uTime.value=t;shock.enabled=rips.length>0||!!haze;},
     setSize(w,h){composer.setSize(w,h);u.uRes.value.set(w,h);bloom.resolution.set(w,h);},
     setGrade(g){u.uLift.value.set(...g.lift);u.uGain.value.set(...g.gain);u.uSat.value=g.sat;},
     render(){composer.render();}};

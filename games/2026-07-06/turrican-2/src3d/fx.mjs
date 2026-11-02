@@ -1,5 +1,5 @@
-// Effects: GPU particles (closed-form motion), debris, tracers, the arc-lance beam,
-// shockwall, rings and a pooled dynamic-light allocator.
+// Effects: GPU particles (closed-form motion), debris, shell casings, tracers, missiles, flames,
+// prism bolts and charge orb, the arc-lance beam, shockwall, rings and a pooled dynamic-light allocator.
 import * as THREE from 'three';
 import {GLSL_NOISE} from './noise.mjs';
 
@@ -65,6 +65,25 @@ export function createFX(scene,quality){
   // embers that glow (hot debris)
   const hotMat=new THREE.MeshStandardMaterial({color:'#000',emissive:new THREE.Color('#ff7a2a'),emissiveIntensity:4});
   const hot=new THREE.InstancedMesh(chunkGeo,hotMat,low?40:120);hot.count=0;hot.instanceMatrix.setUsage(THREE.DynamicDrawUsage);scene.add(hot);const hots=[];
+
+  // spent brass from the scatter gun: little cylinders that tumble and bounce like the debris
+  const shellGeo=new THREE.CylinderGeometry(.55,.55,2.4,7,1);
+  const shellMat=new THREE.MeshStandardMaterial({color:'#d8a548',roughness:.32,metalness:.95,emissive:new THREE.Color('#3a2408'),emissiveIntensity:.4});
+  const shell=new THREE.InstancedMesh(shellGeo,shellMat,low?24:60);shell.instanceMatrix.setUsage(THREE.DynamicDrawUsage);shell.count=0;shell.castShadow=!low;scene.add(shell);const shells=[];
+
+  // prism charge orb: a billboard of crystal light (core, rotating star rays, refracted fringe)
+  const orbU={uTime:{value:0},uC:{value:0}};
+  const orbMat=new THREE.ShaderMaterial({uniforms:orbU,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+    vertexShader:`varying vec2 vUv;void main(){vUv=uv*2.-1.;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+    fragmentShader:`varying vec2 vUv;uniform float uTime,uC;
+      vec3 hue(float h){return clamp(abs(mod(h*6.+vec3(0.,4.,2.),6.)-3.)-1.,0.,1.);}
+      void main(){float r=length(vUv);if(r>1.)discard;float a=atan(vUv.y,vUv.x);
+        float core=exp(-r*r*(34.-14.*uC));float halo=exp(-r*5.)*.5;
+        float rays=pow(max(0.,cos(a*6.+uTime*3.)),24.)*exp(-r*3.)*uC;float rays2=pow(max(0.,cos(a*4.-uTime*5.)),40.)*exp(-r*2.4)*uC*uC;
+        float fringe=smoothstep(.12,0.,abs(r-.42-.08*sin(uTime*9.)))*uC;
+        vec3 c=vec3(1.)*core*1.5+vec3(.62,.4,1.)*halo+vec3(.8,.62,1.)*(rays+rays2)*1.2+hue(a/6.2832+uTime*.4)*fringe*2.2;
+        gl_FragColor=vec4(c*(.35+.65*uC),1.);}`});
+  const orb=new THREE.Mesh(new THREE.PlaneGeometry(1,1),orbMat);orb.visible=false;orb.renderOrder=7;orb.frustumCulled=false;scene.add(orb);
 
   // tracers: instanced glowing capsules + additive halo billboards share one list
   const boltGeo=new THREE.CapsuleGeometry(1,1,3,8);
@@ -135,6 +154,69 @@ export function createFX(scene,quality){
     flashLight(x,y,'#ffa050',9*s,170*s,.32+.1*s);shakeImpulse(.25*s);
   }
 
+  // rainbow colour for prism light (h 0..1)
+  function hueCol(h,l=.62){return tmpC.setHSL(((h%1)+1)%1,1,l);}
+
+  // seeker burst: tight white-orange fireball, sparks, a puff of smoke and a quick ring
+  function blast(x,y,theme){
+    glowBall(x,y,'#fff0d0',16,.12,10,2.6);glowBall(x,y,'#ff9a3c',26,.28,8,1.6);
+    for(let i=0;i<9;i++){const a=R()*Math.PI*2,v=40+R()*90;glow.emit(x,-y,(R()-.5)*14,Math.cos(a)*v,Math.sin(a)*v,(R()-.5)*v,2.2,1,.35,1,.28+R()*.2,5+R()*4,11+R()*6,40,4,0,1.5);}
+    sparks(x,y,'#ffd08a',16,230,{grav:-520});
+    puff(x,y,theme&&theme.key==='vaults'?'#3a5458':'#3a3230',4,8,{life:1.2,speed:35,rise:26,alpha:.5});
+    ring(x,y,'#ffb070',30,.28);flashLight(x,y,'#ff9a50',6,120,.22);shakeImpulse(.12);
+  }
+  // enemy deaths by cause
+  function burnUp(x,y,theme){
+    explosion(x,y,.7,theme);
+    for(let i=0;i<26;i++){const a=R()*Math.PI*2,v=20+R()*70;glow.emit(x+(R()-.5)*14,-y+(R()-.5)*10,(R()-.5)*12,Math.cos(a)*v*.6,Math.abs(Math.sin(a))*v+40,(R()-.5)*20,2.2,.75,.18,1,.4+R()*.5,4+R()*4,9+R()*6,90,2.5,0,2);}
+    for(let i=0;i<14;i++)glow.emit(x+(R()-.5)*16,-y,(R()-.5)*10,(R()-.5)*60,60+R()*120,(R()-.5)*30,2,.7,.15,1,1+R()*1.2,1.4,.4,-30,1.2,.02,0);   // embers
+    puff(x,y,'#16110e',8,10,{life:2.2,speed:30,rise:44,alpha:.7});
+    chunks2(x,y,'#241c18',6,150,1.8,.7);
+  }
+  function iceShatter(x,y){
+    glowBall(x,y,'#e8fbff',22,.18,10,2.2);glowBall(x,y,'#7fd8ff',34,.35,8,1.1);
+    chunks2(x,y,'#cdeeff',14,230,2.1,0);
+    for(let i=0;i<34;i++){const a=R()*Math.PI*2,v=80+R()*220;glow.emit(x,-y,(R()-.5)*20,Math.cos(a)*v,Math.sin(a)*v,(R()-.5)*v*.6,1.4,1.9,2.3,1,.35+R()*.45,1.6+R(),.4,-380,2.4,.02,0);}
+    puff(x,y,'#d8f0ff',4,6,{life:.9,speed:45,rise:14,alpha:.2,grav:-6});
+    ring(x,y,'#bdf2ff',40,.35);flashLight(x,y,'#a8ecff',5,130,.3);shakeImpulse(.15);
+  }
+  function crystalBurst(x,y,charge=.5){
+    glowBall(x,y,'#ffffff',16+10*charge,.14,10,2.6);
+    for(let i=0;i<30+30*charge;i++){const a=R()*Math.PI*2,v=90+R()*240,c=hueCol(R());glow.emit(x,-y,(R()-.5)*20,Math.cos(a)*v,Math.sin(a)*v,(R()-.5)*v*.5,c.r*2.2,c.g*2.2,c.b*2.2,1,.3+R()*.4,1.8+R(),.4,-200,2.6,.025,0);}
+    const n=Math.round(6+8*charge);for(let i=0;i<n;i++){chunks2(x,y,'#'+hueCol(i/n,.7).getHexString(),1,200+120*charge,1.7,0);}
+    ring(x,y,'#e6c8ff',30+30*charge,.32);ring(x,y,'#9ff4ff',18+20*charge,.24,{start:1});
+    flashLight(x,y,'#d7a8ff',4+5*charge,140,.25);shakeImpulse(.08+.15*charge);
+  }
+  // the prism bolt leaves the barrel: white flare, spokes of colour, a kick
+  function prismFire(x,y,c,dx,dy){
+    glowBall(x,y,'#ffffff',10+18*c,.1+.08*c,10,2.8);glowBall(x,y,'#d9a8ff',18+26*c,.22,8,1.4);
+    for(let i=0;i<10+30*c;i++){const sp=(R()-.5)*1.2,a=Math.atan2(-dy,dx)+sp,v=120+R()*260*c,col=hueCol(R());glow.emit(x,-y,(R()-.5)*10,Math.cos(a)*v,Math.sin(a)*v,(R()-.5)*40,col.r*2,col.g*2,col.b*2,1,.18+R()*.25,1.6,.4,0,3,.03,0);}
+    if(c>.6)ring(x,y,'#f0dcff',26+30*c,.3);flashLight(x,y,'#e6c4ff',4+8*c,150,.18);shakeImpulse(.1+.25*c);
+  }
+  function casing(x,y,facing){if(shells.length>=shell.instanceMatrix.count)shells.shift();
+    shells.push({x,y:-y,z:4+R()*3,vx:-facing*(50+R()*50),vy:90+R()*70,vz:(R()-.5)*30,rx:R()*6,ry:R()*6,wr:(R()-.5)*30,s:1,life:2.2+R(),age:0});}
+  // per-frame: flames licking a burning enemy
+  function burning(x,y,w,h,dt){const k=Math.min(3,dt*60);
+    for(let i=0;i<k*1.6;i++){const px=x+R()*w,py=y+h*(.2+R()*.8);glow.emit(px,-py,6+(R()-.5)*8,(R()-.5)*14,30+R()*40,0,2.2,.8+R()*.3,.2,1,.25+R()*.25,2.5+R()*2.5,5+R()*3,60,2,0,2);}
+    if(R()<dt*10)smoke.emit(x+R()*w,-(y),2,(R()-.5)*8,24,0,.12,.1,.09,.45,1.4,4,12,14,1,0,0);
+    light(x+w/2,-(y+h/2),14,'#ff7a2a',1.1,80);}
+  // per-frame: the flamer's nozzle — a hot core and a few sparks
+  function nozzle(x,y,dx,dt){const k=Math.min(3,dt*60);glowBall(x,y,'#ffe7b0',5,.035,6,1.4*k);
+    if(R()<k*.5)glow.emit(x,-y,6,dx*(80+R()*120),(R()-.3)*60,(R()-.5)*30,2.2,1.2,.4,1,.2,1.2,.3,-260,2,.02,0);
+    light(x+dx*30,-y,16,'#ff8a3a',2.4,120);}
+  // per-frame: the prism charge orb plus motes spiralling in
+  let lastC=0;
+  function charge(x,y,c,dt,t){
+    orb.visible=c>0.02;if(!orb.visible){lastC=0;return;}
+    orb.position.set(x,-y,7);const sz=8+22*c+(c>=1?2*Math.sin(t*30):0);orb.scale.set(sz,sz,1);orbU.uC.value=Math.min(1,c);orbU.uTime.value=t;
+    const k=Math.min(3,dt*60);
+    for(let i=0;i<k*(1+3*c);i++){const a=R()*Math.PI*2,r0=16+10*c,life=.22,kd=6,f=(1-Math.exp(-kd*life))/kd,col=hueCol(R(),.7);
+      glow.emit(x+Math.cos(a)*r0,-y+Math.sin(a)*r0,7,-Math.cos(a)*r0/f,-Math.sin(a)*r0/f,0,col.r*1.8,col.g*1.8,col.b*1.8,1,life,1.4,.5,0,kd,.02,0);}
+    light(x,-y,16,'#e0b8ff',.8+2.6*c,90+60*c);
+    if(c>=1&&lastC<1){ring(x,y,'#ffffff',18,.25,{start:1});ring(x,y,'#d9a8ff',30,.35,{start:1});flashLight(x,y,'#f0d8ff',4,110,.15);}
+    lastC=c;
+  }
+
   function update(dt,t,level,camPos,tileSolid){
     glow.update(t);smoke.update(t);
     // debris
@@ -144,7 +226,7 @@ export function createFX(scene,quality){
         c.z+=c.vz*dt;c.vz*=.98;c.rx+=c.wr*dt;c.ry+=c.wr*.7*dt;}
       list.forEach((c,i)=>{const k=1-Math.max(0,(c.age-c.life+.4)/.4);dm.position.set(c.x,c.y,c.z);dm.rotation.set(c.rx,c.ry,0);dm.scale.setScalar(c.s*k);dm.updateMatrix();mesh.setMatrixAt(i,dm.matrix);if(colorize)mesh.setColorAt(i,c.c);});
       mesh.count=list.length;mesh.instanceMatrix.needsUpdate=true;if(colorize&&mesh.instanceColor)mesh.instanceColor.needsUpdate=true;};
-    step(chunks,debris,true);step(hots,hot,false);
+    step(chunks,debris,true);step(hots,hot,false);step(shells,shell,false);
     for(let i=hots.length-1;i>=0;i--)if(R()<dt*20)glow.emit(hots[i].x,hots[i].y,hots[i].z,0,10,0,1.6,.6,.2,1,.25,1.6,.4,0,1,0,0);
     for(let i=rings.length-1;i>=0;i--){const r=rings[i];r.age+=dt;const a=r.age/r.life;if(a>=1){scene.remove(r.m);r.m.material.dispose();rings.splice(i,1);continue;}
       r.m.scale.setScalar(r.start+a*r.radius);r.m.material.uniforms.uA.value=(1-a)*(1-a);}
@@ -159,11 +241,28 @@ export function createFX(scene,quality){
 
   // per-frame drawing helpers
   const bm=new THREE.Object3D(),up=new THREE.Vector3(0,1,0),v=new THREE.Vector3();
-  function drawShots(s,viewX,viewW){
-    let n=0;const c=new THREE.Color();
+  function drawShots(s,viewX,viewW,dt=.016){
+    let n=0;const c=new THREE.Color(),k=Math.min(3,dt*60),t=s.frame/60;let fl=0;
     const put=(x,y,vx,vy,len,rad,color,bright)=>{if(n>=MAXB)return;bm.position.set(x,-y,4);v.set(vx||1,-(vy||0),0).normalize();bm.quaternion.setFromUnitVectors(up,v);bm.scale.set(rad,len,rad);bm.updateMatrix();bolts.setMatrixAt(n,bm.matrix);c.set(color).multiplyScalar(bright);bolts.setColorAt(n,c);n++;};
     for(const q of s.pshots){if(q.life<=0||q.x<viewX-40||q.x>viewX+viewW+40)continue;
       if(q.kind==='bounce'){put(q.x,q.y,q.vx,q.vy,2.6,2.6,'#ff7ad9',3.2);if(R()<.7)glow.emit(q.x,-q.y,4,0,0,0,1.6,.5,1.3,1,.25,4,1,0,1,0,0);light(q.x,-q.y,14,'#ff6ad0',.5,70);}
+      else if(q.kind==='seeker'){const sp=Math.hypot(q.vx,q.vy)||1,ux=q.vx/sp,uy=q.vy/sp,tx=q.x-ux*5,ty=q.y-uy*5;
+        put(q.x,q.y,q.vx,q.vy,3.4,1.45,'#ffe6c8',2.2);put(tx,ty,q.vx,q.vy,2.2,1.1,'#ff9a3c',4);
+        for(let i=0;i<k;i++)glow.emit(tx,-ty,4,-ux*70+(R()-.5)*24,uy*70+(R()-.5)*24,(R()-.5)*10,2.4,1.2,.4,1,.08+R()*.05,3,1,0,2,0,0);
+        for(let i=0;i<k*2;i++){const back=R()*sp*.016;smoke.emit(tx-ux*back+(R()-.5)*1.5,-(ty-uy*back)+(R()-.5)*1.5,(R()-.5)*4,(R()-.5)*6,(R()-.5)*6+5,0,.62,.6,.58,.2,.55+R()*.45,3,9,7,1.5,0,0);}
+        light(q.x,-q.y,12,'#ff9a3c',.7,70);}
+      else if(q.kind==='flame'){const a=1-q.life/(q.life0||.35),cx=q.x+q.w/2,cy=q.y+q.h/2;
+        const r=a<.2?2:a<.55?1.8:.9,g=a<.2?1.15:a<.55?.55:.2,b=a<.2?.35:a<.55?.1:.04;
+        for(let i=0;i<k*1.4;i++)glow.emit(cx+(R()-.5)*q.w*.5,-cy+(R()-.5)*q.h*.5,4+(R()-.5)*q.w*.4,q.vx*.25+(R()-.5)*20,-q.vy*.25+20+R()*20,(R()-.5)*20,r,g,b,1,.1+R()*.07,3+a*8,5+a*13,40,2,0,2);
+        if(a>.3&&R()<k*.45)smoke.emit(cx+(R()-.5)*q.w*.4,-cy+(R()-.5)*q.h*.4,(R()-.5)*8,q.vx*.2,24,0,1,.42,.12,.32,.35,3+a*5,7+a*8,30,2,0,0);
+        if(a>.6&&R()<k*.35)smoke.emit(cx,-cy,(R()-.5)*8,q.vx*.2,30,0,.14,.12,.1,.4,1.2,4+a*6,13+a*10,16,1,0,0);
+        if((fl++)%4===0)light(cx,-cy,14,'#ff7a2a',1.3,90);}
+      else if(q.kind==='prism'){put(q.x,q.y,q.vx,q.vy,4.2,1.2,'#f6ecff',2.8);if(R()<k*.6){const col=hueCol(R());glow.emit(q.x,-q.y,4,(R()-.5)*30,(R()-.5)*30,0,col.r*1.6,col.g*1.6,col.b*1.6,1,.18,1.8,.4,0,2,0,0);}light(q.x,-q.y,12,'#e2c4ff',.5,60);}
+      else if(q.kind==='prismBig'){const cx=q.x+q.w/2,cy=q.y+q.h/2,cc=q.charge||.5;
+        put(cx,cy,q.vx,q.vy,q.w*.6,q.w*.18,'#f6eeff',2.4);glowBall(cx,cy,'#'+hueCol(t*1.7,.55).getHexString(),q.w*1.1,.04,6,.9*k);
+        for(let i=0;i<k*(2+4*cc);i++){const col=hueCol(R()*.85+t,.55);glow.emit(cx+(R()-.5)*q.w*.6,-cy+(R()-.5)*q.h*.6,4+(R()-.5)*8,-q.vx*.1+(R()-.5)*60,(R()-.5)*60,(R()-.5)*30,col.r*1.5,col.g*1.5,col.b*1.5,1,.35+R()*.3,3+R()*2.5,.6,0,2.4,.012,0);}
+        light(cx,-cy,16,'#e0b0ff',2+2*cc,130);}
+      else if(q.kind==='shard'){const col=hueCol(q.hue||0,.66);put(q.x,q.y,q.vx,q.vy,3.2,.95,'#'+col.getHexString(),3.2);if(R()<k*.7)glow.emit(q.x,-q.y,4,0,0,0,col.r*1.4,col.g*1.4,col.b*1.4,1,.15,2.2,.5,0,1,0,0);}
       else{const sp=Math.hypot(q.vx,q.vy);put(q.x,q.y,q.vx,q.vy,Math.max(4,sp*.016),1.05,'#ffd23f',2.2);if(R()<.3)glow.emit(q.x,-q.y,4,0,0,0,1.1,.8,.25,1,.1,2.4,.6,0,1,0,0);}}
     for(const q of s.eshots){if(q.life<=0||q.x<viewX-40||q.x>viewX+viewW+40)continue;
       if(q.kind==='wave'){put(q.x+q.w/2,q.y+q.h/2,q.vx,0,6,5,'#ffb070',3);glow.emit(q.x+q.w/2,-(q.y+q.h),2,0,40,0,1.8,.9,.4,1,.3,7,2,0,1,0,0);light(q.x,-q.y,10,'#ff9040',.8,70);}
@@ -189,7 +288,7 @@ export function createFX(scene,quality){
     for(let i=0;i<30;i++)glow.emit(x+(R()-.5)*10,-(viewTop+R()*viewH),8,(R()-.5)*60,(R()-.5)*60,(R()-.5)*40,.6,1.6,1.3,1,.4,3,.5,0,2,.01,0);
     light(x,-(viewTop+viewH/2),20,'#67ffd4',4,260);}
   function moveWalls(floats){let i=0;for(const f of floats)if(f.line&&walls[i]){walls[i].m.position.x=f.x;i++;}}
-  function clear(){glow.clear();smoke.clear();chunks.length=0;hots.length=0;debris.count=0;hot.count=0;for(const r of rings){scene.remove(r.m);r.m.material.dispose();}rings.length=0;for(const w of walls){scene.remove(w.m);}walls.length=0;flashes.length=0;}
-  return {glow,smoke,sparks,puff,glowBall,ring,chunks:chunks2,explosion,update,drawShots,drawBeam,shockwall,moveWalls,light,flashLight,shakeImpulse,get shake(){return shake;},clear,
+  function clear(){glow.clear();smoke.clear();chunks.length=0;hots.length=0;shells.length=0;debris.count=0;hot.count=0;shell.count=0;orb.visible=false;for(const r of rings){scene.remove(r.m);r.m.material.dispose();}rings.length=0;for(const w of walls){scene.remove(w.m);}walls.length=0;flashes.length=0;}
+  return {glow,smoke,sparks,puff,glowBall,ring,chunks:chunks2,explosion,blast,burnUp,iceShatter,crystalBurst,prismFire,casing,burning,nozzle,charge,update,drawShots,drawBeam,shockwall,moveWalls,light,flashLight,shakeImpulse,get shake(){return shake;},clear,
     stats:()=>({debris:chunks.length,rings:rings.length,lights:NL})};
 }

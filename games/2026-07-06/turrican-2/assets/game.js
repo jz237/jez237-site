@@ -71,8 +71,8 @@
   const firstStageOf = (w) => PLAN.findIndex(p => p.world === w);
   // a run started further in gets the kit a trooper would carry by then
   const LOADOUT = [
-    { spread: 1, beam: 0, bounce: 0 }, { spread: 2, beam: 1, bounce: 0 }, { spread: 2, beam: 1, bounce: 1 },
-    { spread: 2, beam: 2, bounce: 1 }, { spread: 3, beam: 2, bounce: 2 },
+    { spread: 1, beam: 0, bounce: 0 }, { spread: 2, beam: 1, bounce: 0 }, { spread: 2, beam: 1, bounce: 1, seeker: 1 },
+    { spread: 2, beam: 2, bounce: 1, seeker: 1, flare: 1 }, { spread: 3, beam: 2, bounce: 2, seeker: 2, flare: 1, prism: 1 },
   ];
   const MEDALS = [null, { name: 'BRONZE', color: '#e0955a' }, { name: 'SILVER', color: '#d9e4f2' }, { name: 'GOLD', color: '#ffd23f' }];
   // where this run began: only full runs from World 1 post to the world board
@@ -105,7 +105,7 @@
     pilot = window.TDemo.createPilot();
     audio.rollVoice();
     planIdx = 0; continues = 0; newBest = false;
-    carry = { lives: 3, score: 0, gems: 0, weapons: { spread: 2, beam: 2, bounce: 2 },
+    carry = { lives: 3, score: 0, gems: 0, weapons: { spread: 2, beam: 2, bounce: 2, seeker: 2, flare: 2, prism: 2 },
       weapon: 'spread', bombs: 3, lines: 3 };
     loadStage();
   }
@@ -537,7 +537,7 @@
             audio.playVoice('bosswarn-' + b.key, true);
             if (audio.bossRoar) audio.bossRoar(b.key, b.x + b.w / 2, b.y + b.h / 2);
           } else if (ev.name === 'weapon' && Math.random() < 0.6) {
-            audio.playVoice('weapon-' + ({ spread: 'scatter', beam: 'lance', bounce: 'ricochet' }[w] || 'scatter'), !!ev.pr);
+            audio.playVoice('weapon-' + ({ spread: 'scatter', beam: 'lance', bounce: 'ricochet', seeker: 'seeker', flare: 'flare', prism: 'prism' }[w] || 'scatter'), !!ev.pr);
           } else audio.playVoice(ev.name, !!ev.pr);
         }
       }
@@ -1098,7 +1098,7 @@
     const poses=['normal','run','jump','crouch','beam','bounce','morph','freeze','boss'];
     const preview=(i,pose)=>{
       if(!Number.isInteger(i)||i<0||i>=PLAN.length||!poses.includes(pose))throw Error('Invalid scene');
-      isDemo=false;qaHold=true;planIdx=i;carry={lives:3,weapons:{spread:3,beam:3,bounce:3},weapon:'spread',bombs:3,lines:3};loadStage();mode='playing';
+      isDemo=false;qaHold=true;planIdx=i;carry={lives:3,weapons:{spread:3,beam:3,bounce:3,seeker:3,flare:3,prism:3},weapon:'spread',bombs:3,lines:3};loadStage();mode='playing';
       const p=state.player;for(let k=0;k<40;k++)E.step(state,{},D.VIEW_W,D.VIEW_H);
       if(pose==='boss'&&state.boss){const b=state.boss;b.awake=true;b.open=true;p.x=b.x-145;p.y=b.y+b.h-p.h;state.cam.x=Math.max(0,b.x-350);state.cam.y=Math.max(0,b.y+b.h-300);}
       if(pose==='run')p.vx=205;

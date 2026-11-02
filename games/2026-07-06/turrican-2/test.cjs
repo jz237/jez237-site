@@ -8,7 +8,7 @@ assert.deepEqual(D.REACH,reach,'Update D.REACH in data.js to '+JSON.stringify(re
  assert.ok(Math.abs(t(1)-1)<1e-6&&Math.abs(t(0.7)-0.7)<1e-6,'Game speed must scale the clock');D.setSpeed(D.DEFAULT_SPEED);}
 for(let w=0;w<5;w++)for(let stage=0;stage<D.STAGES_PER_WORLD[w];stage++){
  Math.random=D.mulberry32(900+w*10+stage);
- const s=E.createGame(D.buildLevel(w,stage),{lives:3,score:0,gems:0,weapons:{spread:2,beam:2,bounce:2},weapon:'spread',bombs:3,lines:3},{difficulty:'normal'}),bot=B.createPilot();bot.reset();
+ const s=E.createGame(D.buildLevel(w,stage),{lives:3,score:0,gems:0,weapons:{spread:2,beam:2,bounce:2,seeker:2,flare:2,prism:2},weapon:'spread',bombs:3,lines:3},{difficulty:'normal'}),bot=B.createPilot();bot.reset();
  for(let n=0;n<60*420&&!s.won&&!s.gameOver;n++){
    const before=n%600===0?JSON.stringify(s):null;
    const i=bot.frame(s);
@@ -25,6 +25,6 @@ for(let w=0;w<5;w++)for(let stage=0;stage<D.STAGES_PER_WORLD[w];stage++){
  assert.equal(bot.rescues,0);gems+=s.player.gems;clears++;
  console.log(`World ${w+1}.${stage+1}: cleared, ${s.player.gems} crystals, ${bot.deaths} deaths`);
 }
-for(const k of ['spread','beam','bounce','mines','linePressed','bombPressed','morphPressed'])assert.ok(total[k]>0,`Must use ${k}`);
+for(const k of ['spread','beam','bounce','seeker','flare','prism','mines','linePressed','bombPressed','morphPressed'])assert.ok(total[k]>0,`Must use ${k}`);
 assert.ok(crawls>=12,'Platform stages carry crawlspaces');
 console.log(JSON.stringify({clears,gems,crawls:crawled+'/'+crawls,actions:total}));
