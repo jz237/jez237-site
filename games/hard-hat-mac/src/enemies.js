@@ -27,12 +27,15 @@ export class NavGrid {
     for (let x = bx0 + CELL / 2, i = 0; x < bx1; x += CELL, i++) for (let z = bz0 + CELL / 2, j = 0; z < bz1; z += CELL, j++) {
       const here = world.query(x - .25, z - .25, x + .25, z + .25).filter(b => !(b.noFloor || b.ghost || b.dyn || b.socket) && b.y1 <= 30);
       const tops = [];
-      for (const b of here) if (x >= b.x0 && x <= b.x1 && z >= b.z0 && z <= b.z1 && !tops.some(t => Math.abs(t - b.y1) < .1)) tops.push(b.y1);
-      // drop surfaces buried under another box (dirt under a concrete slab)
-      for (let k = tops.length - 1; k >= 0; k--) if (here.some(b => x > b.x0 && x < b.x1 && z > b.z0 && z < b.z1 && b.y0 < tops[k] + .04 && b.y1 > tops[k] + .04)) tops.splice(k, 1);
+      for (const b of here) if (x >= b.x0 && x <= b.x1 && z >= b.z0 && z <= b.z1 && !tops.some(t => Math.abs(t - b.y1) < .005)) tops.push(b.y1);
+      // drop surfaces buried under another box (dirt under a concrete slab), then merge near-equal heights keeping the top one
+      for (let k = tops.length - 1; k >= 0; k--) if (here.some(b => x > b.x0 && x < b.x1 && z > b.z0 && z < b.z1 && b.y0 < tops[k] + .005 && b.y1 > tops[k] + .005)) tops.splice(k, 1);
+      tops.sort((a, b) => b - a);
+      for (let k = tops.length - 1; k > 0; k--) if (tops[k - 1] - tops[k] < .1) tops.splice(k, 1);
       for (const y of tops) {
         // the footprint must be supported at the same height (union of boxes, so deck seams are fine)
-        const sup = (px, pz) => here.some(b => Math.abs(b.y1 - y) < .06 && px >= b.x0 && px <= b.x1 && pz >= b.z0 && pz <= b.z1);
+        // a corner may overhang ground up to a step lower (curbs, slab edges) - the player stands there fine
+        const sup = (px, pz) => here.some(b => b.y1 < y + .06 && b.y1 > y - .36 && px >= b.x0 && px <= b.x1 && pz >= b.z0 && pz <= b.z1);
         if (!(sup(x - .22, z - .22) && sup(x + .22, z - .22) && sup(x - .22, z + .22) && sup(x + .22, z + .22))) continue;
         if (avoid.some(a => x > a.x0 && x < a.x1 && z > a.z0 && z < a.z1)) continue;
         // headroom
@@ -76,6 +79,19 @@ export class NavGrid {
       }
     }
   }
+  // connected regions (all link types treated as two-way); tiny ones are nav artefacts, never a starting point
+  markOrphans(minSize = 40) {
+    const N = this.nodes, adj = N.map(() => []);
+    for (const n of N) for (const l of n.links) { adj[n.id].push(l.to); adj[l.to].push(n.id); }
+    const comp = new Int32Array(N.length).fill(-1);
+    for (let i = 0, c = 0; i < N.length; i++) {
+      if (comp[i] >= 0) continue;
+      const q = [i], members = [i]; comp[i] = c;
+      while (q.length) { const k = q.pop(); for (const m of adj[k]) if (comp[m] < 0) { comp[m] = c; q.push(m); members.push(m); } }
+      if (members.length < minSize) for (const m of members) N[m].orphan = true;
+      c++;
+    }
+  }
   addRide(fromPos, toPos, ride, cost) {
     const a = this.nearest(fromPos.x, fromPos.y + .3, fromPos.z, 2.5), b = this.nearest(toPos.x, toPos.y + .3, toPos.z, 2.5);
     if (a && b) a.links.push({ to: b.id, cost, ride });
@@ -104,7 +120,7 @@ export class NavGrid {
     for (let di = -R; di <= R; di++) for (let dj = -R; dj <= R; dj++) {
       for (const n of this.cols.get(this.key(i0 + di, j0 + dj)) || []) {
         const dy = (n.y - y) * 3, d = (n.x - x) ** 2 + (n.z - z) ** 2 + dy * dy;
-        if (d < bd && n.y <= y + .5) { bd = d; best = n; }
+        if (d < bd && n.y <= y + .5 && !n.orphan) { bd = d; best = n; }
       }
     }
     return best;

@@ -17,7 +17,9 @@ No build step: plain ES modules, three.js r181 vendored in `vendor/three/`.
 
 **Demo playthrough:** `WATCH DEMO` on the title, `?demo` in the URL, or 45 s idle on the title starts an autopilot (`src/bot.js`) that plays all four shifts with ordinary controls and narrates what it's doing. Any key / gamepad button / STOP ends it. Demo runs never touch the leaderboard, high score or unlocks, and deaths don't cost lives.
 
-After Shift 4 the game loops into a faster round (enemy speed +12%, hazards +15%, timers −8% per round, capped). Extra hard hat every 25,000 points. Falls of more than ~7 m are fatal; one floor (4 m) is safe.
+**Checkpoints:** each shift has 2–4 posts on the main route (`B.checkpoints` in `levels.js`). Touching one turns it green; after a death Mac respawns at the last one touched with all objective progress kept. A new shift starts from its own spawn.
+
+After Shift 4 the game loops into a faster round (enemy speed +12%, hazards +15%, timers −8% per round, capped). Extra hard hat every 25,000 points. Falls of more than ~7 m are fatal; one floor (4 m) is safe. Deaths respawn at the last checkpoint.
 
 ## Files
 

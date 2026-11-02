@@ -40,18 +40,27 @@ export class Bot {
     p.grabFilter = null;
     let want = null, raw = null; // smoothed desire {x, z, m} or an immediate push {x, z}
     if (g.state !== 'play') return out;
-    if (p.dead) { this.path = null; this.ride = null; this.goal = null; this.engage = null; this.sx = this.sz = 0; this.say('Shaking it off…'); return out; }
+    if (p.dead) {
+      if (!this.mourned) { // don't walk back into the same ambush: avoid any ladder right where we went down
+        this.mourned = true;
+        for (const L of g.level.ladders) if (Math.hypot(L.x - p.body.x, L.z - p.body.z) < 3.5 && p.body.y > L.y0 - 1 && p.body.y < L.y1 + 1.5) this.avoid.set(L, g.time + 40);
+      }
+      this.path = null; this.ride = null; this.goal = null; this.engage = null; this.sx = this.sz = 0; this.say('Shaking it off…'); return out;
+    }
+    this.mourned = false;
     if (p.state === 'rivet') {
       // let go of the rivet gun to step out from under a falling bolt (rivet progress is kept)
       const bolts = g.level.hazards.find(h => h.constructor.name === 'Bolts'), o = bolts && bolts.nearest(p.body.x, p.body.y, p.body.z);
-      if (o && o.t > o.warn * .35) { this.say('Dodging a falling bolt'); return out; }
+      if (o && o.t > o.warn * .4 && Math.hypot(p.body.x - o.x, p.body.z - o.z) < .95) { this.say('Dodging a falling bolt'); return out; }
       out.actHeld = true; this.say(`Riveting (${Math.min(4, p.rivetSock.rivets + 1)}/4)`); this.sx = this.sz = 0; return out;
     }
     const riding = this.ride && this.ride.phase !== 'wait';
     const r = riding ? this.doRide(dt) : this.fight(out, dt) || this.dodge() || this.brace() || (this.ride ? this.doRide(dt) : this.work(out, dt));
     if (r) { if (r.raw) raw = r; else want = r; }
     if (raw) { this.sx = raw.x; this.sz = raw.z; this.steer(out, raw.x, raw.z, 1); return out; }
-    const k = 1 - Math.exp(-11 * dt), tx = want ? want.x * want.m : 0, tz = want ? want.z * want.m : 0;
+    let tx = want ? want.x * want.m : 0, tz = want ? want.z * want.m : 0;
+    if (this.lean && want) { tx += this.lean.x; tz += this.lean.z; }
+    const k = 1 - Math.exp(-11 * dt);
     this.sx += (tx - this.sx) * k; this.sz += (tz - this.sz) * k;
     const m = Math.hypot(this.sx, this.sz);
     if (m > .04) this.steer(out, this.sx, this.sz, Math.min(1, m));
@@ -96,13 +105,17 @@ export class Bot {
     o.pickups.forEach((pk, i) => {
       if (pk.taken || (pk.type === 'hardhat' && p.shield)) return;
       const lunch = pk.type === 'lunch';
-      c.push({ key: 'get' + i, type: 'collect', obj: pk, extra: lunch ? 0 : 40, maxDetour: lunch ? 1e9 : 30,
+      c.push({ key: 'get' + i, type: 'collect', obj: pk, extra: lunch ? 0 : pk.type === 'hardhat' ? 10 : 40, maxDetour: lunch ? 0 : pk.type === 'hardhat' ? 70 : 30,
         label: lunch ? 'Going for a lunchbox' : { coffee: 'Grabbing a coffee', hardhat: 'Grabbing the gold hard hat', stopwatch: 'Grabbing the stopwatch', cash: 'Grabbing the cash' }[pk.type],
         ok: n => Math.abs(n.x - pk.pos.x) < .5 && Math.abs(n.z - pk.pos.z) < .5 && Math.abs(n.y - pk.pos.y) < .6 });
     });
     // never plan to stand still (rivet, pick up, place) inside a hazard's sweep
     const zones = this.hazards().filter(h => h.zone && h.constructor.name !== 'Pipes');
     if (zones.length) for (const x of c) { const ok = x.ok; x.ok = n => ok(n) && !zones.some(h => h.zone(n.x, n.y, n.z)); }
+    o.checkpoints.forEach((cp, i) => {
+      if (cp.active) return;
+      c.push({ key: 'cp' + i, type: 'checkpoint', obj: cp, extra: 8, maxDetour: 26, label: 'Tagging the checkpoint', ok: n => Math.hypot(n.x - cp.pos.x, n.z - cp.pos.z) < 1 && Math.abs(n.y - cp.pos.y) < .5 });
+    });
     let out = c.filter(x => !this.blocked.has(x.key));
     if (!out.length && c.length) { this.blocked.clear(); out = c; }
     return out;
@@ -124,13 +137,13 @@ export class Bot {
       const n = N[cur];
       for (const c of cands) if (!found.has(c) && c.ok(n)) { found.set(c, { id: cur, cost }); if (found.size === cands.length) budget = cost; }
       for (const l of n.links) {
-        const ng = cost + l.cost + (l.ladder && (this.avoid.get(l.ladder) || 0) > this.g.time ? 400 : 0);
+        const ng = cost + l.cost + ((l.ladder && (this.avoid.get(l.ladder) || 0) > this.g.time) || (this.avoid.get(l) || 0) > this.g.time ? 400 : 0);
         if (ng < (g.get(l.to) ?? Infinity)) { g.set(l.to, ng); came.set(l.to, cur); open.push(ng, l.to); }
       }
     }
     let best = null, bc = Infinity, cur = null, cc = Infinity;
     for (const [c, f] of found) {
-      if (c.type === 'collect' && c.obj.type !== 'lunch' && f.cost > c.maxDetour) continue;
+      if (c.maxDetour && f.cost > c.maxDetour) continue;
       const total = f.cost + (c.extra || 0);
       if (total < bc) { bc = total; best = { ...c, end: f.id }; }
       if (this.goal && c.key === this.goal.key) { cc = total; cur = { ...c, end: f.id }; }
@@ -139,7 +152,7 @@ export class Bot {
     if (!best) { this.goal = null; this.path = null; return; }
     const path = [best.end]; let k = best.end; while (came.has(k)) { k = came.get(k); path.push(k); }
     path.reverse();
-    if (!this.goal || this.goal.key !== best.key) { this.goalT = 0; this.stuckLv = 0; }
+    if (!this.goal || this.goal.key !== best.key) { this.goalT = 0; this.stuckLv = 0; this.goalWait = 0; }
     this.goal = best; this.path = path; this.pi = path.length > 1 ? 1 : 0; this.carrot = null; this.waitT = 0;
   }
   goalDone() {
@@ -149,6 +162,7 @@ export class Bot {
       case 'place': return !p.carry || o.state !== 'empty';
       case 'deliver': return !p.carry;
       case 'rivet': return o.state !== 'placed';
+      case 'checkpoint': return o.active;
       default: return o.taken;
     }
   }
@@ -212,6 +226,9 @@ export class Bot {
       const moved = Math.hypot(b.x - this.progX, b.z - this.progZ) + Math.abs(b.y - this.progY);
       if (moved < .35 && p.state !== 'climb') {
         this.stuckLv++;
+        // stuck on a ledge drop or a ladder: route around that link for a while instead of retrying it
+        const lk = this.pi > 0 ? nav.linkBetween(path[this.pi - 1], path[this.pi]) : null;
+        if (lk && (lk.drop || lk.ladder) && this.stuckLv >= 2) { this.avoid.set(lk.ladder || lk, g.time + 30); this.stuckLv = 0; this.replanT = 0; this.progT = 0; return null; }
         if (this.stuckLv === 1) this.replanT = 0;
         else if (this.stuckLv === 2) { const q = nav.nodes[path[Math.max(0, this.pi - 3)]]; this.backup = { x: q.x, z: q.z, t: .8 }; }
         else { this.block(); return null; }
@@ -262,7 +279,7 @@ export class Bot {
     const foeAhead = e => e.ko <= 0 && ((e.state === 'climb' && e.ladder === L) || (Math.abs(e.body.y - fy) < 1.3 && Math.hypot(e.body.x - fx, e.body.z - fz) < 3.2));
     if (p.state === 'climb') {
       // somebody on the ladder or waiting at the top: climb back the way we came and deal with it there
-      const back = g.enemies.some(foeAhead) && Math.abs(b.y - fy) > 1.2;
+      const back = g.enemies.some(foeAhead) && Math.abs(b.y - fy) > .5;
       if (back) this.say('Backing down the ladder'); else { this.ladderWait = 0; this.guard = null; }
       return { raw: true, x: (up !== back) ? -L.fx : L.fx, z: (up !== back) ? -L.fz : L.fz };
     }
@@ -270,16 +287,16 @@ export class Bot {
     if (d > .28 && !((this.ladderWait || 0) > 0 && d < 2.6)) { this.ladderWait = 0; return this.dir(ex - b.x, ez - b.z, clamp(d / .9, .25, 1)); }
     // don't climb into trouble: an active hazard or an enemy at the far end, on the ladder, or chasing us here
     const hz = this.dangerAt(fx, fy, fz);
-    const foe = g.enemies.find(foeAhead) || g.enemies.find(e => e.ko <= 0 && e.state === 'chase' && Math.hypot(e.body.x - b.x, e.body.z - b.z) + Math.abs(e.body.y - b.y) < 10);
+    const foe = (this.goalWait || 0) < 12 ? g.enemies.find(foeAhead) : null;
     if (hz || foe) {
-      this.ladderWait = (this.ladderWait || 0) + this.dt; this.progT = 0;
+      this.ladderWait = (this.ladderWait || 0) + this.dt; this.progT = 0; this.goalWait = (this.goalWait || 0) + this.dt;
       if (this.ladderWait > 8) { this.avoid.set(L, g.time + 25); this.ladderWait = 0; this.replanT = 0; this.say('Taking another way round'); return null; }
       this.say(foe ? `Waiting for the ${foe.kind === 'dog' ? 'yard dog' : foe.kind} to come down` : HAZARD_SAY[hz.constructor.name] || 'Waiting for a safe moment');
       if (!foe) return null;
       // stand back from the foot of the ladder so whoever comes down walks into the hammer, not into Mac
       if (!this.guard || this.guard.L !== L) {
         const ox = up ? L.fx : -L.fx, oz = up ? L.fz : -L.fz, px = -oz, pz = ox;
-        const spots = [[ox * 1.9, oz * 1.9], [ox * 1.4, oz * 1.4], [px * 1.7 + ox * .5, pz * 1.7 + oz * .5], [-px * 1.7 + ox * .5, -pz * 1.7 + oz * .5], [ox, oz]];
+        const spots = [[px * 1.15 + ox * .3, pz * 1.15 + oz * .3], [-px * 1.15 + ox * .3, -pz * 1.15 + oz * .3], [ox * 1.4, oz * 1.4], [px * 1.7 + ox * .5, pz * 1.7 + oz * .5], [-px * 1.7 + ox * .5, -pz * 1.7 + oz * .5], [ox, oz]];
         const sp = spots.find(([dx, dz]) => this.clearLine(ex, ez, b.y, ex + dx, ez + dz));
         this.guard = { L, x: sp ? ex + sp[0] : ex, z: sp ? ez + sp[1] : ez };
       }
@@ -306,6 +323,9 @@ export class Bot {
     const hz = this.dangerAt(n.x, n.y, n.z) || this.dangerAt(prev.x, prev.y, prev.z);
     if (hz && (this.dropWait = (this.dropWait || 0) + this.dt) < 8) { this.progT = 0; this.say(HAZARD_SAY[hz.constructor.name] || 'Waiting for a safe moment'); return null; }
     this.dropWait = 0;
+    if (this.dropLink !== prev.id + ':' + n.id) { this.dropLink = prev.id + ':' + n.id; this.dropT = 0; }
+    this.dropT += this.dt;
+    if (this.dropT > 4) { const lk = this.g.level.nav.linkBetween(prev.id, n.id); if (lk) this.avoid.set(lk, this.g.time + 30); this.dropT = 0; this.replanT = 0; return null; }
     const ux = n.x - prev.x, uz = n.z - prev.z, ul = Math.hypot(ux, uz) || 1;
     return this.dir(n.x + ux / ul * .6 - b.x, n.z + uz / ul * .6 - b.z, .55);
   }
@@ -371,7 +391,8 @@ export class Bot {
     }
     // swing so the strike lands as it arrives (time-to-contact, so a charging dog gets met early)
     const closing = Math.max(0, -(e.body.vx * dx + e.body.vz * dz) / (d || 1)), atStrike = d - closing * .2;
-    if (atStrike < 1.7 && atStrike > .55 && p.canSwing()) out.attack = true;
+    const lowOnLadder = e.state === 'climb' && e.body.y - b.y < 1.3 && e.body.y - b.y > -.5 && d < 1.8;
+    if (((atStrike < 1.7 && atStrike > .55) || lowOnLadder) && p.canSwing()) out.attack = true;
     this.say(`Knocking out the ${name}!`);
     if (d > 1.6) {
       const ax = b.x + dx / d * .7, az = b.z + dz / d * .7, gnd = g.world.groundBelow(ax, az, b.y + .3, .1);
@@ -384,7 +405,7 @@ export class Bot {
     if (p.state !== 'normal') return null;
     if (this.dodgeT > 0 && this.dodgeDir) { this.say('Dodging a falling bolt'); return this.dir(this.dodgeDir.x, this.dodgeDir.z, 1); }
     const bolts = g.level.hazards.find(h => h.constructor.name === 'Bolts'); if (!bolts) return null;
-    const o = bolts.nearest(b.x, b.y, b.z); if (!o) return null;
+    const o = bolts.nearest(b.x, b.y, b.z); if (!o || o.t < o.warn * .4 || Math.hypot(b.x - o.x, b.z - o.z) > .95) return null;
     let dx = b.x - o.x, dz = b.z - o.z; if (Math.hypot(dx, dz) < .05) { dx = Math.sin(p.yaw); dz = Math.cos(p.yaw); }
     const l = Math.hypot(dx, dz);
     for (const [ux, uz] of [[dx / l, dz / l], [-dz / l, dx / l], [dz / l, -dx / l]]) {
@@ -393,10 +414,14 @@ export class Bot {
     return null;
   }
   brace() {
-    const g = this.g, p = g.player;
-    if (p.state === 'climb' || g.wind.lengthSq() < 3) return null;
-    const w = g.wind; this.say('Bracing against the wind'); this.progT = 0;
-    return this.dir(-w.x, -w.z, Math.min(1, w.length() * .7 / 5.4 * 1.2));
+    const g = this.g, p = g.player, b = p.body, w = g.wind, wl = w.length();
+    this.lean = null;
+    if (p.state === 'climb' || wl < 1.7) return null;
+    const ux = w.x / wl, uz = w.z / wl, gnd = g.world.groundBelow(b.x + ux * 1.7, b.z + uz * 1.7, b.y + .3, .1);
+    const edge = !gnd || b.y - gnd.y1 > .4;
+    if (!edge) { this.lean = { x: -w.x * .1, z: -w.z * .1 }; return null; } // open deck: keep working, lean into the gust
+    this.say('Bracing against the wind'); this.progT = 0;
+    return this.dir(-w.x, -w.z, Math.min(1, wl * .7 / 5.4 * 1.2));
   }
   // ---------------- riding the crane magnet ----------------
   doRide(dt) {

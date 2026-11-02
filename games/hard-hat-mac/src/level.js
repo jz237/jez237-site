@@ -41,6 +41,7 @@ export function buildLevel(index, M, quality) {
     const d = m.d, bx = d.cx + Math.cos(d.aB) * d.R, bz = d.cz + Math.sin(d.aB) * d.R, ax = d.cx + Math.cos(d.aA) * d.R, az = d.cz + Math.sin(d.aA) * d.R;
     L.nav.addRide({ x: ax, y: 0, z: az + d.size / 2 + 1.7 }, { x: bx - d.size / 2 - .35, y: d.yDrop - .32, z: bz }, { mover: m }, 80);
   }
+  L.nav.markOrphans();
   L.update = (dt, game) => {
     for (const m of L.movers) m.update(dt, game);
     for (const h of L.hazards) h.update(dt, game);

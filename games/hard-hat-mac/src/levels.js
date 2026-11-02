@@ -146,6 +146,7 @@ function build1(B) {
   B.block(-19.6, 0, 8.4, -14.4, .12, 9.6, M.wood, { visualOnly: true }, 1);
   B.items.push({ type: 'coffee', x: 3, y: 4, z: -3 }, { type: 'hardhat', x: -9, y: 16, z: -6 }, { type: 'cash', x: 26, y: 0, z: -20 });
   B.hazards.push({ type: 'bolts', rate: 3.2 });
+  B.checkpoints.push({ x: -10.2, y: 4, z: 6 }, { x: 10.6, y: 8, z: -3.6 }, { x: -10.4, y: 12, z: 3.8 });
   B.enemies.push({ kind: 'vandal', x: 18, y: 0, z: -14 }, { kind: 'inspector', x: -6, y: 8, z: -6, minRound: 2 }, { kind: 'vandal', x: -4, y: 16, z: -6, minRound: 3 });
   // yard dressing
   yardFence(B, -36, -26, 36, 26, [-6, 6]);
@@ -222,6 +223,7 @@ function build2(B) {
   B.items.push({ type: 'lunch', x: 16, y: 0, z: -15 }, { type: 'lunch', x: -16.5, y: 7.77, z: -10 }, { type: 'lunch', x: -15.2, y: 7.8, z: 8.6 },
     { type: 'lunch', x: 12.2, y: 8.6, z: -8.4 }, { type: 'lunch', x: -18.9, y: 5.18, z: -.5 });
   B.items.push({ type: 'coffee', x: -21, y: 2.59, z: -10 }, { type: 'stopwatch', x: 22, y: 0, z: 1 }, { type: 'hardhat', x: -20, y: 2.6, z: 7 });
+  B.checkpoints.push({ x: -23, y: 2.59, z: -10 }, { x: -21, y: 5.2, z: 9.2 });
   B.enemies.push({ kind: 'vandal', x: 8, y: 0, z: -12 }, { kind: 'dog', x: 18, y: 0, z: -20 }, { kind: 'vandal', x: -18, y: 2.6, z: 8, minRound: 2 }, { kind: 'inspector', x: -6, y: 0, z: 10, minRound: 3 });
   Object.assign(B, {
     name: 'CRANE YARD', time: '6:30 PM', sky: 'dusk', music: 'mus_l2', amb: 'amb_yard', timeLimit: 210,
@@ -292,6 +294,7 @@ function build3(B) {
     const glow = new THREE.Mesh(new THREE.CircleGeometry(.55, 16), M.glow(0xffd9a0, 0)); glow.rotation.x = Math.PI / 2; glow.position.set(x, 15.94, z); B.group.add(glow);
     B.lamps.push({ mesh: glow, pos: new THREE.Vector3(x, 15.5, z), color: 0xffcf96 });
   }
+  B.checkpoints.push({ x: -18.5, y: 4, z: 1.5 }, { x: 18.6, y: 8, z: -3.4 }, { x: -12.5, y: 12, z: -11.6 });
   B.enemies.push({ kind: 'inspector', x: 8, y: 12, z: -11 }, { kind: 'vandal', x: -18, y: 0, z: -10 }, { kind: 'vandal', x: 16, y: 4, z: -6, minRound: 2 });
   Object.assign(B, {
     name: 'THE MILL', time: '11:00 PM', sky: 'night', music: 'mus_l3', amb: 'amb_mill', timeLimit: 220,
@@ -345,6 +348,7 @@ function build4(B) {
   B.block(5, 0, 3.2, 10, .14, 4.4, M.wood, { visualOnly: true }, 1);
   towerCrane(B, -11.5, -7.6, 26, 24, { spin: .03, phase: 1.2 });
   B.items.push({ type: 'coffee', x: 9, y: 4, z: -6 }, { type: 'hardhat', x: -9, y: 8, z: -6 }, { type: 'stopwatch', x: 0, y: 0, z: -7.5 });
+  B.checkpoints.push({ x: -10.4, y: 4, z: 6 }, { x: 10.4, y: 4, z: 6 }, { x: -4.4, y: 8, z: -2.3 }, { x: 4.4, y: 8, z: -2.3 });
   B.enemies.push({ kind: 'vandal', x: 10, y: 4, z: -6 }, { kind: 'inspector', x: -6, y: 0, z: -3, minRound: 2 }, { kind: 'vandal', x: -9, y: 8, z: 0, minRound: 2 });
   B.sign(['TOPPING OUT', 'FLOOR 40'], -14.15, 1.6, 0, 3.6, 1.4, -Math.PI / 2, { bg: '#f2b10a' });
   Object.assign(B, {

@@ -155,7 +155,7 @@ class Game {
     this.player.shield = false; this.player.koT = 0; this.player.reset(this.level.spawn);
     this.cam.snap(this.player, this.level.camYaw);
     this.timeMax = Math.round(this.level.timeLimit * Math.max(.65, 1 - (this.round - 1) * .08)); this.timeLeft = this.timeMax;
-    this.deaths = 0; this.kos = 0; this.hitStop = 0; this.hurried = false; this.frozen = false; this.freezeT = 0; this.wind.set(0, 0, 0); this.cheer = false; this.topBeam = null; this.finale = null;
+    this.deaths = 0; this.kos = 0; this.hitStop = 0; this.checkpoint = null; this.hurried = false; this.frozen = false; this.freezeT = 0; this.wind.set(0, 0, 0); this.cheer = false; this.topBeam = null; this.finale = null;
     this.scoreAtStart = this.score; this.fx.clear(); this.ui.clearPopups();
     this.audio.ambience(this.level.amb);
     this.prewarm();
@@ -258,6 +258,11 @@ class Game {
     this.fx.sparks(pos, 18, 0xffe14a);
     this.toast(p.koChain > 1 ? `KNOCKOUT ×${p.koChain}!` : 'KNOCKOUT!');
   }
+  reachCheckpoint(cp) {
+    this.checkpoint = cp;
+    this.toast('CHECKPOINT!'); this.audio.play('ding', { vol: .7, rate: 1.15 }); this.audio.play('ui_confirm', { vol: .5 });
+    this.fx.sparks(V.copy(cp.pos).setY(cp.pos.y + 1.5), 16, 0x6ee06e);
+  }
   socketRiveted(s) {
     s.state = 'riveted';
     for (const dot of s.rivetDots) dot.visible = false;
@@ -319,8 +324,9 @@ class Game {
   async playerDeadDone() {
     if (!this.demo) this.lives--;
     if (this.lives < 0) return this.gameOver();
-    const p = this.player, keepShield = false;
-    p.reset(this.level.spawn); p.shield = keepShield;
+    const p = this.player, cp = this.checkpoint;
+    p.reset(cp ? { x: cp.pos.x, y: cp.pos.y + .05, z: cp.pos.z, yaw: cp.yaw } : this.level.spawn); p.shield = false;
+    if (cp) this.cam.snap(p, this.cam.yaw);
     for (const e of this.enemies) e.reset();
     this.level.clearTransient(); this.frozen = false; this.freezeT = 0;
     if (this.timeLeft <= 0) this.timeLeft = Math.round(this.timeMax * .6);

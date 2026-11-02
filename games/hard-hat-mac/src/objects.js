@@ -102,6 +102,7 @@ export class Objects {
       else this.addPickup(d.type, d);
     }
     this.sockets = B.sockets.map(d => this.makeSocket(d));
+    this.checkpoints = (B.checkpoints || []).map(d => this.makeCheckpoint(d));
     if (B.hopper) {
       this.hopper = Object.assign({}, B.hopper);
       this.hopper.beacon = beacon(0xff8a30, 18); this.hopper.beacon.position.set(B.hopper.x, B.hopper.y + 1.3, B.hopper.z); this.group.add(this.hopper.beacon);
@@ -145,6 +146,18 @@ export class Objects {
     }
     if (s.final) { s.holo.visible = false; s.beacon.visible = false; s.locked = true; }
     return s;
+  }
+  // Respawn post: grey until Mac touches it, then green; deaths respawn at the last one touched.
+  makeCheckpoint(d) {
+    const g = new THREE.Group(); g.position.set(d.x, d.y, d.z);
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(.04, .04, 1.7, 8), this.M.galv); pole.position.y = .85; pole.castShadow = true; g.add(pole);
+    const base = new THREE.Mesh(new THREE.CylinderGeometry(.2, .24, .08, 14), this.M.hazard); base.position.y = .04; g.add(base);
+    const flagMat = new THREE.MeshStandardMaterial({ color: 0x9aa0a6, roughness: .7, side: THREE.DoubleSide, emissive: 0x000000 });
+    const flag = new THREE.Mesh(new THREE.PlaneGeometry(.62, .4, 6, 1), flagMat); flag.geometry.translate(.31, 0, 0); flag.position.y = 1.48; g.add(flag);
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0xffb347, transparent: true, opacity: .45, blending: THREE.AdditiveBlending, depthWrite: false });
+    const ring = new THREE.Mesh(new THREE.RingGeometry(.75, .88, 32), ringMat); ring.rotation.x = -Math.PI / 2; ring.position.y = .03; g.add(ring);
+    this.group.add(g);
+    return { pos: new THREE.Vector3(d.x, d.y, d.z), yaw: d.yaw ?? Math.PI, active: false, g, flag, flagMat, ring, ringMat };
   }
   socketDist(s, p) {
     const d = s.d, b = p.body;
@@ -291,6 +304,15 @@ export class Objects {
       if (!p.dead && Math.abs(b.x - o.pos.x) < .8 && Math.abs(b.z - o.pos.z) < .8 && b.y > o.pos.y - 1 && b.y < o.pos.y + 1) {
         o.taken = true; this.group.remove(o.mesh, o.halo); if (o.beacon) this.group.remove(o.beacon);
         game.collect(o);
+      }
+    }
+    for (const cp of this.checkpoints) {
+      cp.flag.rotation.y = Math.sin(t * 3 + cp.pos.x) * .35;
+      cp.ringMat.opacity = cp.active ? .25 : .35 + .2 * Math.sin(t * 4);
+      const b = p.body;
+      if (!cp.active && !p.dead && b.onGround && Math.abs(b.y - cp.pos.y) < .8 && Math.hypot(b.x - cp.pos.x, b.z - cp.pos.z) < 1.4) {
+        cp.active = true; cp.flagMat.color.setHex(0x37d66b); cp.flagMat.emissive.setHex(0x1f8f45); cp.ringMat.color.setHex(0x37d66b);
+        game.reachCheckpoint(cp);
       }
     }
     if (this.hopper) {
