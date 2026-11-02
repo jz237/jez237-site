@@ -291,6 +291,14 @@
         }
       }
     }
+    for (const c of (l.crawls || [])) {                          // a crawlspace: roll through to the far mouth
+      if (n.wet || n.plat || n.ty !== c.gy || (n.tx !== c.x0 - 1 && n.tx !== c.x1 + 1)) continue;
+      const d = n.tx < c.x0 ? 1 : -1, m = this.get(d > 0 ? c.x1 + 1 : c.x0 - 1, c.gy, false);
+      if (!m) continue;
+      const got = new Set();
+      this.reg.touch({ x: c.x0 * TILE, y: (c.gy - 1) * TILE + 4, w: (c.x1 - c.x0 + 1) * TILE, h: 16 }, got);
+      out.push({ kind: 'crawl', from: n, to: m, d, crawl: c, cost: (c.x1 - c.x0 + 3) * TILE / PH.morphSpeed + 0.6, gems: got.size ? [...got] : null });
+    }
     const close = (a, b) => a && b && (a === b || (a.swim === b.swim && a.ty === b.ty && Math.abs(a.tx - b.tx) <= 1));
     if (!n.wet) for (const a of (lift ? JUMPS.filter(j => j.hold === FULL && !j.lift) : JUMPS)) {
       const o = { jump: true, hold: a.hold, mv: a.air, groundMv: a.lift ? a.d : null, frame: 0, max };
@@ -352,7 +360,7 @@
 
     function reset(state) {
       P.jumpT = P.dodgeCd = P.bombCd = P.switchCd = P.lineCd = 0;
-      P.morphT = P.morphCd = 0; P.bossT = 0; P.elapsed = 0; P.lastMorph = -1e9; P.roll = null; P.safeT = 0;
+      P.morphT = P.morphCd = 0; P.bossT = 0; P.elapsed = 0; P.lastMorph = -1e9; P.roll = null; P.safeT = 0; P.crawl = null;
       P.held = blankInput(); P.goal = null; P.path = []; P.air = null; P.replanT = 0;
       P.banned = new Map(); P.blast = 0; P.forceSpread = false; P.progressX = -1e9; P.progressT = 0;
       P.airMv = 0; P.airHold = 0; P.hopCd = 0; P.runup = 0; P.wasWet = false; P.lastNode = null;
@@ -369,7 +377,7 @@
 
       if (p.dead) {
         if (!P.wasDead) { P.deaths++; P.wasDead = true; }
-        P.jumpT = 0; P.morphT = 0; P.goal = null; P.path = []; P.air = null; P.blast = 0; P.roll = null;
+        P.jumpT = 0; P.morphT = 0; P.goal = null; P.path = []; P.air = null; P.blast = 0; P.roll = null; P.crawl = null;
         return finish(inp);
       }
       P.wasDead = false;
@@ -500,7 +508,9 @@
 
       P.groundT = p.onGround ? (P.groundT || 0) + 1 : 0;
       watchdog(state);
-      if (p.morph && !p.onGround && !p.inWater && P.roll && P.roll.drop) inp[P.roll.drop > 0 ? 'right' : 'left'] = true;   // rolling off a step
+      const e0 = P.path[0];
+      if (P.crawl || (e0 && e0.kind === 'crawl' && p.onGround && !p.inWater && G.at(bodyOf(p)) === e0.from)) crawl(state, inp);
+      else if (p.morph && !p.onGround && !p.inWater && P.roll && P.roll.drop) inp[P.roll.drop > 0 ? 'right' : 'left'] = true;   // rolling off a step
       else {
         if (p.morph && (p.inWater || !p.onGround)) unroll(inp);     // the wheel sinks and can't steer a jump
         if (p.inWater) swim(state, inp);
@@ -568,7 +578,7 @@
       P.replanT -= DT;
       if ((P.replanT <= 0 && !runup) || !P.goal || !valid(state, P.goal)) plan(state, cur);
       const e = P.path[0];
-      if (p.morph && !rollable(e)) { inp.left = inp.right = false; unroll(inp); return; }   // jumps, drops and pickups need feet
+      if (p.morph && !rollable(e) && !(e && e.kind === 'crawl')) { inp.left = inp.right = false; unroll(inp); return; }   // jumps, drops and pickups need feet
       if (!e && overhead(state, inp, cur)) return;
 
       if (!e) {
@@ -833,6 +843,29 @@
       if (!keep) { inp.left = inp.right = false; unroll(inp); return true; }
       if (run < need) { inp.left = inp.right = false; return true; }   // shots still flying: sit tight, rolled up
       return false;                                                     // grounded() steers the walk edges
+    }
+
+    // a crawlspace: roll up at the mouth, roll through, stand up clear of the roof
+    function crawl(state, inp) {
+      const p = state.player;
+      if (!P.crawl) { P.crawl = { e: P.path[0], t: 0 }; P.rolls++; }
+      const C = P.crawl, e = C.e, c = e.crawl, d = e.d;
+      C.t += DT;
+      P.intent = 'Rolling through a crawlspace';
+      inp.fire = false;
+      if (C.t > 5) { P.crawl = null; P.lastNode = null; P.replanT = 0; if (p.morph) unroll(inp); return; }   // knocked about: think again
+      const mouth = d > 0 ? c.x0 * TILE : (c.x1 + 1) * TILE;                                   // the roof's near edge
+      const out = d > 0 ? p.x >= (c.x1 + 1) * TILE + 1 : p.x + p.w <= c.x0 * TILE - 1;           // wholly past the far edge
+      if (!p.morph) {
+        if (out) { P.crawl = null; if (P.path[0] === e) P.path.shift(); P.lastNode = null; P.replanT = 0; return; }
+        const room = d > 0 ? mouth - (p.x + 16) : p.x - mouth;                                  // the wheel is wider than the trooper
+        if (room < 0.5) { inp[d > 0 ? 'left' : 'right'] = true; return; }
+        if (room > 24) { inp[d > 0 ? 'right' : 'left'] = true; return; }
+        if (P.morphCd <= 0 && p.onGround) { inp.morphPressed = true; P.morphCd = 0.3; P.roll = { why: 'crawl', t: 0 }; P.lastMorph = P.elapsed; }
+        return;
+      }
+      if (!out) { inp[d > 0 ? 'right' : 'left'] = true; return; }
+      unroll(inp);                                                                               // waits out the cooldown
     }
 
     // ---- boss duels: roll under the barrage ---------------------------------

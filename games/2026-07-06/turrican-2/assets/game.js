@@ -29,7 +29,7 @@
     for (let s = 0; s < STAGES_PER_WORLD[w]; s++) PLAN.push({ world: w, stage: s });
 
   let qaHold = false;
-  let mode = 'title';        // title | playing | paused | stageclear | gameover | win
+  let mode = 'title';        // title | worlds | scores | options | intro | playing | paused | stageclear | gameover | entername | win
   let state = null;          // engine state
   let planIdx = 0;
   let carry = null;
@@ -44,24 +44,45 @@
   // ---- settings (persisted) ------------------------------------------------
   const SETTINGS_KEY = 'turrican2_hd_settings_v2';
   const settings = Object.assign(
-    { master: 1, music: 1, sfx: 1, voice: 1, crt: false, difficulty: 'normal' },
+    { master: 1, music: 1, sfx: 1, voice: 1, crt: false, difficulty: 'normal', speed: D.DEFAULT_SPEED },
     (() => { try { return JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}; } catch (e) { return {}; } })());
+  if (!D.SPEEDS.includes(settings.speed)) settings.speed = D.DEFAULT_SPEED;
+  const pctLabel = (v) => Math.round(v * 100) + '%';
   function saveSettings() { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch (e) {} }
   function applySettings() {
     audio.setLevels(settings.master * settings.music, settings.master * settings.sfx);
     audio.setVoiceLevel(settings.master * settings.voice);
     renderer.setCRT(!!settings.crt);
   }
-  let menuIdx = 0, optIdx = 0, pauseIdx = 0;
+  let menuIdx = 0, optIdx = 0, pauseIdx = 0, worldIdx = 0;
   let introT = 0;            // stage intro card timer
   let continues = 3;
   let newBest = false;
   let stageCarry = null;     // snapshot at stage entry (for RESTART STAGE)
+  let stageTime = 0;         // real seconds spent playing this stage
+  let results = null;        // the stage just cleared: crystals, secrets, time, medal
+
+  // ---- campaign progress (persisted): worlds opened, best medal per stage --
+  const PROGRESS_KEY = 'shard.progress.v1';
+  const progress = Object.assign({ world: 0, medals: {} },
+    (() => { try { return JSON.parse(localStorage.getItem(PROGRESS_KEY)) || {}; } catch (e) { return {}; } })());
+  function saveProgress() { try { localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress)); } catch (e) {} }
+  const firstStageOf = (w) => PLAN.findIndex(p => p.world === w);
+  // a run started further in gets the kit a trooper would carry by then
+  const LOADOUT = [
+    { spread: 1, beam: 0, bounce: 0 }, { spread: 2, beam: 1, bounce: 0 }, { spread: 2, beam: 1, bounce: 1 },
+    { spread: 2, beam: 2, bounce: 1 }, { spread: 3, beam: 2, bounce: 2 },
+  ];
+  const MEDALS = [null, { name: 'BRONZE', color: '#e0955a' }, { name: 'SILVER', color: '#d9e4f2' }, { name: 'GOLD', color: '#ffd23f' }];
+  // where this run began: only full runs from World 1 post to the world board
+  let run = { from: 0, takeover: false };
+  const postsWorld = () => run.from === 0 && !run.takeover;
 
   // ---- attract mode (the autopilot demo) -----------------------------------
   // Boots to the title; if nobody touches anything, the demo pilot plays the
-  // whole campaign, then hands the title back and waits to do it again. Any
-  // input at all drops the player straight back to the menu.
+  // whole campaign, then hands the title back and waits to do it again. Fire,
+  // jump or start takes over the run from that exact spot; any other input
+  // drops the player back to the menu.
   const ATTRACT_IDLE = 4;   // seconds of quiet on the title before the demo runs
   const DEMO_DIFF = 'normal';
   let isDemo = false, pilot = null, demoAbort = false, idleT = 0, demoRetry = 0, winT = 0;
@@ -69,14 +90,17 @@
   const grabbed = (i) => i.startPressed || i.firePressed || i.jumpPressed || i.pausePressed ||
     i.leftPressed || i.rightPressed || i.upPressed || i.downPressed ||
     i.morphPressed || i.switchPressed || i.bombPressed || i.linePressed;
-  // Keyboard players can leave attract mode; touch viewers use the Play button.
-  window.addEventListener('keydown', () => { if (isDemo) demoAbort = true; });
+  // Keyboard players can leave attract mode; touch viewers use the Take over / Play button.
+  const TAKE_KEYS = new Set([...input.MAP.fire, ...input.MAP.jump, ...input.MAP.start]);
+  window.addEventListener('keydown', (e) => { if (isDemo && !TAKE_KEYS.has(e.code)) demoAbort = true; });
+  const canTakeOver = () => isDemo && (mode === 'playing' || mode === 'intro') && !!state;
 
   function startDemo() {
     qaHold = false;
     if (!canDemo()) return;
     isDemo = true; demoAbort = false; demoRetry = 0; winT = 0;
     document.body.dataset.demo = 'true';
+    D.setSpeed(D.DEFAULT_SPEED);   // the pilot's jump tables are tuned at the default speed
     pilot = window.TDemo.createPilot();
     audio.rollVoice();
     planIdx = 0; continues = 0; newBest = false;
@@ -90,6 +114,16 @@
     mode = 'title'; menuIdx = 0;
     toTitleAudio();
   }
+  // a viewer grabs the controls mid-demo: the run carries on as theirs
+  function takeOver() {
+    isDemo = false; pilot = null; demoAbort = false; idleT = 0;
+    document.body.dataset.demo = 'false';
+    run = { from: PLAN[planIdx].world, takeover: true };
+    continues = 3; newBest = false;
+    D.setSpeed(settings.speed);
+    audio.resume(); uiSound('start');
+    voiceToast = { text: 'You have control', t: 2.4 };
+  }
   // the pilot ran out of lives: re-arm quietly and keep the show on the road
   function demoWiped() {
     if (++demoRetry > 2) { demoRetry = 0; planIdx++; }
@@ -99,28 +133,70 @@
     loadStage();
   }
 
-  // ---- high scores (local top 5) -------------------------------------------
+  // ---- high scores: this device's top 5 + the world top 10 ---------------
   const HISCORE_KEY = 'turrican2_hiscores_v1';
-  const LB_URL = 'https://game-scores.jez237.workers.dev/scores/turrican-2';
+  const LB_URL = 'https://game-scores.jez237.workers.dev/scores/shard-assault-v1';
   const NAME_KEY = 'turrican2_initials_v1';
-  let globalBest = null, globalFetchStarted = false;
+  const NAME_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let globalScores = null, globalFetchedAt = -1e9;
+  let pendingScore = null;          // the run that just ended, waiting on initials
+  let nameBuf = ['A', 'A', 'A'], nameIdx = 0, nameTyped = false;
+  let scoresHi = null;              // the row to highlight on the scores screen
   function loadScores() {
     try { return JSON.parse(localStorage.getItem(HISCORE_KEY)) || []; } catch (e) { return []; }
   }
   function cleanInitials(raw) {
-    return (raw || 'AAA').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3) || 'AAA';
+    return String(raw || 'AAA').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3) || 'AAA';
   }
-  async function fetchGlobalScores() {}
-  async function submitGlobalScore() {}
-  function pushScore(score, stageLabel) {
-    if (!score) return false;
-    const scores = loadScores();
-    scores.push({ score, stage: stageLabel, diff: settings.difficulty });
-    scores.sort((a, b) => b.score - a.score);
-    const top = scores.slice(0, 5);
-    try { localStorage.setItem(HISCORE_KEY, JSON.stringify(top)); } catch (e) {}
-    submitGlobalScore(score, stageLabel);
-    return top[0] && top[0].score === score;
+  const cleanStage = (v) => (/^[0-9A-Z-]{1,6}$/.test(String(v)) ? String(v) : '');
+  async function fetchGlobalScores(force) {
+    if (!force && performance.now() - globalFetchedAt < 30000) return;
+    globalFetchedAt = performance.now();
+    try {
+      const res = await fetch(LB_URL, AbortSignal.timeout ? { signal: AbortSignal.timeout(5000) } : {});
+      if (!res.ok) return;
+      const rows = await res.json();
+      if (Array.isArray(rows)) globalScores = rows.filter(r => r && Number.isFinite(r.score)).slice(0, 10);
+    } catch (e) {}
+  }
+  async function submitGlobalScore(initials, e) {
+    try {
+      await fetch(LB_URL, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ initials, score: e.score, stage: e.stage, diff: e.diff, speed: Math.round(e.speed * 100) }),
+      });
+    } catch (err) {}
+    fetchGlobalScores(true);
+  }
+  const beatsBest = (score) => score > 0 && score > ((loadScores()[0] || {}).score || 0);
+  const makesWorldBoard = (score) => !globalScores || globalScores.length < 10 || score > globalScores[9].score;
+  // the run is over: initials for the world board, else straight to the device list
+  function endRun(label) {
+    const score = state ? state.player.score : 0;
+    pendingScore = { score, stage: label, diff: settings.difficulty, speed: D.SPEED, from: run.from, takeover: run.takeover };
+    if (score > 0 && postsWorld() && makesWorldBoard(score)) {
+      nameBuf = cleanInitials(localStorage.getItem(NAME_KEY) || 'AAA').padEnd(3, 'A').split('');
+      nameIdx = 0; mode = 'entername'; uiSound('select');
+      return;
+    }
+    recordScore(null);
+  }
+  function recordScore(initials) {
+    const e = pendingScore; pendingScore = null; scoresHi = null;
+    if (e && e.score > 0) {
+      const row = { score: e.score, stage: e.stage, diff: e.diff, speed: e.speed, from: e.from, name: initials || '', t: Date.now() };
+      const scores = loadScores();
+      scores.push(row);
+      scores.sort((a, b) => b.score - a.score);
+      try { localStorage.setItem(HISCORE_KEY, JSON.stringify(scores.slice(0, 5))); } catch (err) {}
+      if (initials) {
+        try { localStorage.setItem(NAME_KEY, initials); } catch (err) {}
+        submitGlobalScore(initials, e);
+        scoresHi = { score: e.score, initials };
+      }
+    }
+    if (scoresHi) mode = 'scores';
+    else { mode = 'title'; toTitleAudio(); }
   }
   function stageLabel() {
     const p = PLAN[Math.min(planIdx, PLAN.length - 1)];
@@ -147,14 +223,17 @@
     dx.restore();
   }
 
-  function newRun() {
+  function newRun(world) {
+    world = world || 0;
     qaHold = false;
     uiSound('start');
     audio.rollVoice();   // a different announcer voice every game
-    planIdx = 0;
+    D.setSpeed(settings.speed);
+    planIdx = firstStageOf(world);
+    run = { from: world, takeover: false };
     continues = 3;
     newBest = false;
-    carry = { lives: 3, score: 0, gems: 0, weapons: { spread: 1, beam: 0, bounce: 0 }, weapon: 'spread', bombs: 2, lines: 3 };
+    carry = { lives: 3, score: 0, gems: 0, weapons: Object.assign({}, LOADOUT[world]), weapon: 'spread', bombs: 2, lines: 3 };
     loadStage();
     audio.playVoice('start', true);
   }
@@ -163,6 +242,7 @@
     const level = D.buildLevel(p.world, p.stage);
     if (carry) carry.energy = 100;
     stageCarry = JSON.parse(JSON.stringify(carry));
+    stageTime = 0;
     state = E.createGame(level, carry, { difficulty: isDemo ? DEMO_DIFF : settings.difficulty });
     if (isDemo && pilot) pilot.reset(state);   // the pilot maps the stage during the load pause
     renderer.setLevel(level);
@@ -180,20 +260,35 @@
       weapon: pl.weapon, bombs: 2, lines: 3, energy: 100 };
     loadStage();
   }
+  // crystals against what the stage lets a trooper reach, secrets opened, time
+  function stageResults() {
+    const st = state.stats, lvl = state.level;
+    const total = D.REACH[planIdx] || lvl.entities.filter(e => e.type === 'gem').length;
+    const gems = Math.min(st.gems, total), pct = total ? gems / total : 1;
+    const medal = pct >= 0.9 ? 3 : pct >= 0.7 ? 2 : pct >= 0.45 ? 1 : 0;
+    const r = { gems, total, pct, medal, secrets: Object.keys(st.found).length, secretsTotal: lvl.secrets || 0,
+      time: stageTime, deaths: st.deaths, best: false };
+    if (!isDemo && medal > (progress.medals[planIdx] || 0)) { progress.medals[planIdx] = medal; r.best = true; }
+    return r;
+  }
   function nextStage() {
     // carry stats forward
     const p = state.player;
+    results = stageResults();
     carry = { lives: p.lives, score: p.score, gems: p.gems, weapons: p.weapons,
       weapon: p.weapon, bombs: p.bombs, lines: p.lines, energy: 100 };
     planIdx++;
     demoRetry = 0;
+    if (!isDemo && planIdx < PLAN.length) progress.world = Math.max(progress.world, PLAN[planIdx].world);   // reaching a world opens it
+    if (!isDemo) saveProgress();
     if (planIdx >= PLAN.length) {
       mode = 'win'; winT = 0; audio.stopMusic(); audio.play('victory'); audio.playVoice('victory', true);
-      newBest = isDemo ? false : pushScore(p.score, 'CLEAR');   // the demo doesn't get a high score
+      newBest = isDemo ? false : beatsBest(p.score);   // the demo doesn't get a high score
       return;
     }
-    mode = 'stageclear'; stageClearT = 2.2; audio.play('complete'); audio.playVoice('clear');
+    mode = 'stageclear'; stageClearT = STAGECLEAR_T; audio.play('complete'); audio.playVoice('clear');
   }
+  const STAGECLEAR_T = 4.4;
 
   // ---- main loop ----------------------------------------------------------
   let lastInp = null;   // last merged input frame (keyboard+touch+pad) — QA hook
@@ -210,17 +305,21 @@
     // global keys
     if (inp.mutePressed) audio.toggleMute();
 
-    // the demo yields the moment a human touches anything
-    if (isDemo && (demoAbort || grabbed(inp))) { endDemo(); drawTitle(); return; }
+    // the demo yields the moment a human touches anything: fire, jump or start takes the run over
+    if (isDemo && canTakeOver() && !demoAbort && (inp.firePressed || inp.jumpPressed || inp.startPressed)) takeOver();
+    else if (isDemo && (demoAbort || grabbed(inp))) { endDemo(); drawTitle(); return; }
 
     if (mode === 'title') {
-      const N = 3;
+      const N = MENU.length;
       if (inp.upPressed) { menuIdx = (menuIdx + N - 1) % N; uiSound('move'); }
       if (inp.downPressed) { menuIdx = (menuIdx + 1) % N; uiSound('move'); }
       if (inp.startPressed || inp.firePressed) {
         audio.resume();
-        if (menuIdx === 0) newRun();
-        else if (menuIdx === 1) startDemo();
+        const pick = MENU[menuIdx];
+        if (pick === 'START MISSION') newRun(0);
+        else if (pick === 'SELECT WORLD') { mode = 'worlds'; worldIdx = Math.min(progress.world, 4); }
+        else if (pick === 'WATCH DEMO') startDemo();
+        else if (pick === 'HIGH SCORES') { mode = 'scores'; scoresHi = null; fetchGlobalScores(true); }
         else { mode = 'options'; optIdx = 0; }
         uiSound('select');
         idleT = 0;
@@ -233,8 +332,41 @@
       if (mode === 'title') drawTitle();
       return;
     }
+    if (mode === 'worlds') {
+      const N = D.WORLDS.length + 1;   // five worlds + back
+      if (inp.upPressed) { worldIdx = (worldIdx + N - 1) % N; uiSound('move'); }
+      if (inp.downPressed) { worldIdx = (worldIdx + 1) % N; uiSound('move'); }
+      if (inp.pausePressed || ((inp.startPressed || inp.firePressed) && worldIdx === N - 1)) { mode = 'title'; uiSound('back'); }
+      else if (inp.startPressed || inp.firePressed) {
+        if (worldIdx <= progress.world) { audio.resume(); newRun(worldIdx); }
+        else uiSound('back');
+      }
+      if (mode === 'worlds') drawWorlds();
+      return;
+    }
+    if (mode === 'scores') {
+      fetchGlobalScores();
+      if (inp.pausePressed || inp.startPressed || inp.firePressed) { mode = 'title'; uiSound('back'); if (scoresHi) toTitleAudio(); scoresHi = null; }
+      if (mode === 'scores') drawScores();
+      return;
+    }
+    if (mode === 'entername') {
+      if (nameTyped) nameTyped = false;          // a typed letter this frame: its key may double as a game key
+      else {
+        const k = NAME_CHARS.indexOf(nameBuf[nameIdx]);
+        if (inp.upPressed) { nameBuf[nameIdx] = NAME_CHARS[(k + 1) % NAME_CHARS.length]; uiSound('move'); }
+        if (inp.downPressed) { nameBuf[nameIdx] = NAME_CHARS[(k + NAME_CHARS.length - 1) % NAME_CHARS.length]; uiSound('move'); }
+        if (inp.leftPressed) { nameIdx = Math.max(0, nameIdx - 1); uiSound('move'); }
+        if (inp.rightPressed) { nameIdx = Math.min(2, nameIdx + 1); uiSound('move'); }
+        if (inp.startPressed || (inp.firePressed && nameIdx === 2)) { uiSound('select'); recordScore(nameBuf.join('')); }
+        else if (inp.firePressed) { nameIdx++; uiSound('adjust'); }
+        else if (inp.pausePressed) { uiSound('back'); recordScore(null); }
+      }
+      if (mode === 'entername') { renderer.render(state, 0); drawEnterName(); }
+      return;
+    }
     if (mode === 'options') {
-      const ROWS = 7; // master, music, sfx, voice, difficulty, crt, back
+      const ROWS = 8; // master, music, sfx, voice, difficulty, speed, crt, back
       if (inp.upPressed) { optIdx = (optIdx + ROWS - 1) % ROWS; uiSound('move'); }
       if (inp.downPressed) { optIdx = (optIdx + 1) % ROWS; uiSound('move'); }
       const adj = (inp.leftPressed ? -1 : 0) + (inp.rightPressed ? 1 : 0);
@@ -248,12 +380,15 @@
           const order = ['easy', 'normal', 'hard'];
           const i = order.indexOf(settings.difficulty);
           settings.difficulty = order[(i + adj + 3) % 3];
-        } else if (optIdx === 5) settings.crt = !settings.crt;
+        } else if (optIdx === 5) {
+          const i = D.SPEEDS.indexOf(settings.speed), n = D.SPEEDS.length;
+          settings.speed = D.SPEEDS[Math.max(0, Math.min(n - 1, i + adj))];
+        } else if (optIdx === 6) settings.crt = !settings.crt;
         applySettings(); saveSettings(); uiSound('adjust');
       }
       if (inp.startPressed || inp.firePressed) {
-        if (optIdx === 5) { settings.crt = !settings.crt; applySettings(); saveSettings(); uiSound('adjust'); }
-        else if (optIdx === 6) { mode = 'title'; uiSound('select'); }
+        if (optIdx === 6) { settings.crt = !settings.crt; applySettings(); saveSettings(); uiSound('adjust'); }
+        else if (optIdx === 7) { mode = 'title'; uiSound('select'); }
       }
       if (inp.pausePressed) { mode = 'title'; uiSound('back'); }
       drawOptions();
@@ -261,7 +396,7 @@
     }
     if (mode === 'gameover') {
       if (inp.startPressed && continues > 0) { audio.resume(); useContinue(); return; }
-      if (inp.pausePressed || (inp.startPressed && continues <= 0)) { mode = 'title'; toTitleAudio(); }
+      if (inp.pausePressed || (inp.startPressed && continues <= 0)) { endRun(stageLabel()); return; }
       renderer.render(state, 0);
       drawGameOver();
       drawVoiceToast(dt);
@@ -269,7 +404,7 @@
     }
     if (mode === 'win') {
       if (isDemo) { winT += dt; if (winT > 9) { endDemo(); drawTitle(); return; } }
-      else if (inp.startPressed) { mode = 'title'; toTitleAudio(); }
+      else if (inp.startPressed) { endRun('CLEAR'); return; }
       renderer.render(state, 0);
       drawWin();
       drawVoiceToast(dt);
@@ -289,7 +424,7 @@
       stageClearT -= dt;
       renderer.render(state, dt * D.SPEED); if (audio.update) audio.update(state, dt);
       drawStageClear();
-      if (stageClearT <= 0) loadStage();
+      if (stageClearT <= 0 || (!isDemo && stageClearT < STAGECLEAR_T - 0.8 && (inp.startPressed || inp.firePressed))) loadStage();
       if (isDemo) drawDemoTag();
       return;
     }
@@ -321,6 +456,7 @@
       // the autopilot writes a fresh input frame per tick, exactly like a pad
       const tick = isDemo && pilot ? pilot.frame(state) : inp;
       E.step(state, tick, D.VIEW_W, D.VIEW_H);
+      stageTime += D.STEP;
       visualEvents.push(...state.events.filter(e=>!["sfx","voice","music"].includes(e.type)));
       acc -= D.STEP; steps++;
       // consume sfx / music events
@@ -356,7 +492,7 @@
       if (state.gameOver) {
         if (isDemo) { demoWiped(); break; }
         mode = 'gameover'; audio.stopMusic(); if (audio.stopScene) audio.stopScene(); audio.play('gameover'); audio.playVoice('gameover', true);
-        newBest = pushScore(state.player.score, stageLabel());
+        newBest = beatsBest(state.player.score);
         break;
       }
     }
@@ -446,12 +582,12 @@
     dx.strokeStyle = 'rgba(120,90,255,0.10)'; dx.lineWidth = 1;
     for (let y = (uiT * 40) % 40; y < DH; y += 40) { dx.beginPath(); dx.moveTo(0, y); dx.lineTo(DW, y); dx.stroke(); }
     }
-    drawLogo(DW / 2, DH / 2 - 92);
+    drawLogo(DW / 2, DH / 2 - 98);
     // menu
-    const items = ['START MISSION', 'WATCH DEMO', 'OPTIONS'];
+    const items = MENU;
     for (let i = 0; i < items.length; i++) {
       const sel = i === menuIdx;
-      const y = DH / 2 + 40 + i * 32;
+      const y = DH / 2 + 26 + i * 27;
       if (sel) {
         dx.save(); dx.shadowColor = '#ffd23f'; dx.shadowBlur = 10;
         centerText('▶ ' + items[i] + ' ◀', DW / 2, y, 22, '#ffd23f', '900'); dx.restore();
@@ -459,11 +595,12 @@
         centerText(items[i], DW / 2, y, 20, 'rgba(200,210,255,0.75)', 'bold');
       }
     }
-    centerText('DIFFICULTY: ' + D.DIFFICULTY[settings.difficulty].label, DW / 2, DH / 2 + 134, 13, 'rgba(255,210,63,0.7)', 'bold');
+    centerText('DIFFICULTY ' + D.DIFFICULTY[settings.difficulty].label + '  ·  SPEED ' + pctLabel(settings.speed), DW / 2, DH / 2 + 166, 13, 'rgba(255,210,63,0.7)', 'bold');
     const best = loadScores()[0];
-    if (best) centerText('HI-SCORE  ' + String(best.score).padStart(7, '0') + '  (' + best.stage + ')', DW / 2, 40, 15, 'rgba(139,233,255,0.8)', 'bold');
-    if (globalBest) centerText('GLOBAL  ' + String(globalBest.score || 0).padStart(7, '0') + '  ' + (globalBest.initials || globalBest.name || '???'), DW / 2, 62, 13, 'rgba(255,210,63,0.75)', 'bold');
-    centerText('MOVE ←→ · JUMP SPACE · FIRE J/X · AIM ↑↓ · ROLL SHIFT · SWITCH Q · CRYO C · SHOCKWALL V · PAUSE P', DW / 2, DH / 2 + 158, 12, 'rgba(200,210,255,0.65)', 'normal');
+    if (best) centerText('HI-SCORE  ' + String(best.score).padStart(7, '0') + '  (' + cleanStage(best.stage) + ')', DW / 2, 40, 15, 'rgba(139,233,255,0.8)', 'bold');
+    const top = globalScores && globalScores[0];
+    if (top) centerText('WORLD BEST  ' + String(top.score).padStart(7, '0') + '  ' + cleanInitials(top.initials), DW / 2, 62, 13, 'rgba(255,210,63,0.75)', 'bold');
+    centerText('MOVE ←→ · JUMP SPACE · FIRE J/X · AIM ↑↓ · ROLL SHIFT · SWITCH Q · CRYO C · SHOCKWALL V · PAUSE P', DW / 2, DH / 2 + 188, 12, 'rgba(200,210,255,0.65)', 'normal');
     centerText('v' + D.VERSION, DW - 40, DH - 20, 12, 'rgba(255,255,255,0.4)', 'normal');
   }
   // crystalline SHARD ASSAULT logo with a travelling glint
@@ -492,10 +629,94 @@
     if ('letterSpacing' in dx) dx.letterSpacing = '0px';
     dx.restore();
   }
+  const MENU = ['START MISSION', 'SELECT WORLD', 'WATCH DEMO', 'HIGH SCORES', 'OPTIONS'];
   // attract-mode badge: below the HUD strip, above the boss bar's turf
   function drawDemoTag() {
     dx.save();dx.font='600 11px system-ui';dx.textAlign='center';dx.fillStyle='#8bdfe5';
-    dx.fillText('DEMO  ·  SELECT PLAY TO TAKE CONTROL',DW/2,69);dx.restore();
+    dx.fillText(canTakeOver() ? 'DEMO  ·  PRESS FIRE TO TAKE OVER  ·  ESC FOR MENU' : 'DEMO',DW/2,69);dx.restore();
+  }
+
+  // ---- world select ------------------------------------------------------
+  function medalPip(x, y, m, r) {
+    dx.beginPath(); dx.arc(x, y, r, 0, 7);
+    if (m) { dx.fillStyle = MEDALS[m].color; dx.fill(); }
+    else { dx.strokeStyle = 'rgba(160,180,220,0.45)'; dx.lineWidth = 1.5; dx.stroke(); }
+  }
+  function drawWorlds() {
+    if (renderer.renderTitle) { renderer.renderTitle(frameDt); overlayDim(); } else bgPanel();
+    dx.save(); dx.shadowColor = '#6cf3ff'; dx.shadowBlur = 12;
+    centerText('SELECT WORLD', DW / 2, 70, 40, '#6cf3ff', '900'); dx.restore();
+    for (let w = 0; w <= D.WORLDS.length; w++) {
+      const y = 140 + w * 50, sel = w === worldIdx;
+      if (sel) { dx.fillStyle = 'rgba(255,210,63,0.10)'; dx.fillRect(DW / 2 - 300, y - 21, 600, 42); }
+      dx.textBaseline = 'middle';
+      if (w === D.WORLDS.length) {
+        dx.textAlign = 'left'; dx.font = (sel ? '900 20px' : 'bold 18px') + ' "Trebuchet MS", system-ui, sans-serif';
+        dx.fillStyle = sel ? '#ffd23f' : 'rgba(200,210,255,0.8)'; dx.fillText((sel ? '▶ ' : '  ') + 'BACK', DW / 2 - 280, y);
+        continue;
+      }
+      const open = w <= progress.world, wd = D.WORLDS[w];
+      dx.textAlign = 'left';
+      dx.font = (sel ? '900 20px' : 'bold 18px') + ' "Trebuchet MS", system-ui, sans-serif';
+      dx.fillStyle = !open ? 'rgba(150,160,190,0.45)' : sel ? '#ffd23f' : 'rgba(200,210,255,0.85)';
+      dx.fillText((sel ? '▶ ' : '  ') + (w + 1) + '   ' + wd.name, DW / 2 - 280, y);
+      dx.textAlign = 'right';
+      if (!open) { dx.font = 'bold 14px "Trebuchet MS", system-ui, sans-serif'; dx.fillStyle = 'rgba(150,160,190,0.55)'; dx.fillText('LOCKED', DW / 2 + 280, y); continue; }
+      const first = firstStageOf(w), n = D.STAGES_PER_WORLD[w];
+      for (let k = 0; k < n; k++) medalPip(DW / 2 + 280 - (n - 1 - k) * 22 - 8, y, progress.medals[first + k] || 0, 7);
+    }
+    const sel = Math.min(worldIdx, D.WORLDS.length - 1);
+    const note = worldIdx === D.WORLDS.length ? '' : worldIdx > progress.world ? 'Reach this world in a run to open it.'
+      : worldIdx === 0 ? 'A full run from World 1 posts to the world score board.'
+      : 'Starts with the gear a trooper carries by World ' + (sel + 1) + '. Scores stay on this device.';
+    centerText(note, DW / 2, DH - 72, 14, 'rgba(255,210,63,0.75)', 'normal');
+    centerText('↑↓ select · ENTER start · ESC back', DW / 2, DH - 44, 14, 'rgba(200,210,255,0.6)', 'normal');
+  }
+
+  // ---- high score tables -------------------------------------------------
+  function drawScores() {
+    if (renderer.renderTitle) { renderer.renderTitle(frameDt); overlayDim(); } else bgPanel();
+    dx.save(); dx.shadowColor = '#6cf3ff'; dx.shadowBlur = 12;
+    centerText('HIGH SCORES', DW / 2, 62, 40, '#6cf3ff', '900'); dx.restore();
+    const tag = (r) => ((D.DIFFICULTY[r.diff] || D.DIFFICULTY.normal).label[0]) + ' ' + (Number.isFinite(+r.speed) ? (r.speed > 2 ? Math.round(r.speed) : Math.round(r.speed * 100)) + '%' : '');
+    const col = (x, title, rows, n, fmt, hi) => {
+      dx.textBaseline = 'middle'; dx.textAlign = 'left';
+      dx.font = '900 16px "Trebuchet MS", system-ui, sans-serif'; dx.fillStyle = '#ffd23f'; dx.fillText(title, x, 116);
+      dx.font = 'bold 15px monospace';
+      for (let i = 0; i < n; i++) {
+        const r = rows && rows[i], y = 146 + i * 27;
+        dx.fillStyle = r && hi(r) ? '#8bf7a0' : r ? 'rgba(220,230,255,0.88)' : 'rgba(160,180,220,0.35)';
+        dx.fillText(String(i + 1).padStart(2, ' ') + '. ' + (r ? fmt(r) : '---'), x, y);
+      }
+    };
+    col(DW / 2 - 400, 'WORLD TOP 10', globalScores, 10, (r) => cleanInitials(r.initials).padEnd(3, ' ') + '  ' + String(r.score).padStart(7, '0') + '  ' + cleanStage(r.stage).padEnd(5, ' ') + ' ' + tag(r),
+      (r) => scoresHi && r.score === scoresHi.score && cleanInitials(r.initials) === scoresHi.initials);
+    col(DW / 2 + 40, 'THIS DEVICE', loadScores(), 5, (r) => String(r.score).padStart(7, '0') + '  ' + cleanStage(r.stage).padEnd(5, ' ') + ' ' + tag(r) + (r.from ? '  W' + (r.from + 1) : ''),
+      (r) => scoresHi && r.score === scoresHi.score);
+    if (!globalScores) centerText('connecting to the world board…', DW / 2 - 240, 146 + 10 * 27, 12, 'rgba(200,210,255,0.5)', 'normal');
+    centerText('World scores come from full runs started at World 1  ·  E/N/H = difficulty, % = game speed', DW / 2, DH - 64, 12, 'rgba(255,210,63,0.7)', 'normal');
+    centerText('ENTER or ESC to return', DW / 2, DH - 40, 14, 'rgba(200,210,255,0.6)', 'normal');
+  }
+
+  // ---- initials for the world board --------------------------------------
+  window.addEventListener('keydown', (e) => {
+    if (mode !== 'entername' || e.repeat || !/^Key[A-Z]$|^Digit[0-9]$/.test(e.code)) return;
+    nameBuf[nameIdx] = e.code.slice(-1); nameIdx = Math.min(2, nameIdx + 1); nameTyped = true; uiSound('adjust');
+  });
+  function drawEnterName() {
+    overlayDim();
+    dx.save(); dx.shadowColor = '#ffd23f'; dx.shadowBlur = 14;
+    centerText('WORLD TOP 10!', DW / 2, DH / 2 - 120, 40, '#ffd23f', '900'); dx.restore();
+    centerText('SCORE ' + String(pendingScore ? pendingScore.score : 0).padStart(7, '0'), DW / 2, DH / 2 - 76, 22, '#fff', 'bold');
+    centerText('ENTER YOUR INITIALS', DW / 2, DH / 2 - 40, 15, 'rgba(200,210,255,0.8)', 'bold');
+    for (let i = 0; i < 3; i++) {
+      const x = DW / 2 + (i - 1) * 70, y = DH / 2 + 20, sel = i === nameIdx;
+      dx.fillStyle = sel ? 'rgba(255,210,63,0.16)' : 'rgba(10,14,30,0.6)'; dx.fillRect(x - 26, y - 32, 52, 64);
+      dx.strokeStyle = sel ? '#ffd23f' : 'rgba(140,170,220,0.5)'; dx.lineWidth = 2; dx.strokeRect(x - 26, y - 32, 52, 64);
+      centerText(nameBuf[i], x, y + 2, 40, sel ? '#ffd23f' : '#e6f0ff', '900');
+      if (sel && Math.floor(uiT * 3) % 2 === 0) { centerText('▲', x, y - 46, 14, '#ffd23f', 'bold'); centerText('▼', x, y + 48, 14, '#ffd23f', 'bold'); }
+    }
+    centerText('type letters or use ↑↓ ←→ · ENTER save · ESC skip', DW / 2, DH / 2 + 104, 14, 'rgba(200,210,255,0.65)', 'normal');
   }
 
   function drawOptions() {
@@ -509,11 +730,12 @@
       ['SOUND FX', bar(settings.sfx)],
       ['VOICE', bar(settings.voice)],
       ['DIFFICULTY', '◀ ' + D.DIFFICULTY[settings.difficulty].label + ' ▶'],
+      ['GAME SPEED', '◀ ' + pctLabel(settings.speed) + ' ▶'],
       ['CRT SCANLINES', settings.crt ? 'ON' : 'OFF'],
       ['BACK', ''],
     ];
     for (let i = 0; i < rows.length; i++) {
-      const y = 160 + i * 44;
+      const y = 148 + i * 41;
       const sel = i === optIdx;
       dx.textAlign = 'left'; dx.textBaseline = 'middle';
       dx.font = (sel ? '900 20px' : 'bold 18px') + ' "Trebuchet MS", system-ui, sans-serif';
@@ -524,6 +746,7 @@
       dx.fillStyle = sel ? '#8be9ff' : 'rgba(160,180,220,0.7)';
       dx.fillText(rows[i][1], DW / 2 + 240, y);
     }
+    if (optIdx === 5) centerText('How fast the whole world runs: 100% is full speed, 70% gives the most time to react', DW / 2, DH - 70, 13, 'rgba(255,210,63,0.7)', 'normal');
     centerText('↑↓ select · ←→ adjust · ENTER confirm · ESC back', DW / 2, DH - 44, 14, 'rgba(200,210,255,0.6)', 'normal');
   }
   function overlayDim() { dx.fillStyle = 'rgba(4,4,16,0.6)'; dx.fillRect(0, 0, DW, DH); }
@@ -539,11 +762,46 @@
     }
     centerText('↑↓ select · ENTER confirm · P resume', DW / 2, DH / 2 + 118, 13, '#cfe0ff', 'normal');
   }
+  const fmtTime = (t) => Math.floor(t / 60) + ':' + String(Math.floor(t % 60)).padStart(2, '0');
   function drawStageClear() {
     overlayDim();
-    const p = PLAN[planIdx];
-    centerText('STAGE CLEAR', DW / 2, DH / 2 - 30, 46, '#54e36b', '900');
-    centerText('SCORE ' + state.player.score, DW / 2, DH / 2 + 20, 20, '#fff', 'bold');
+    const r = results, t = STAGECLEAR_T - stageClearT;
+    centerText('STAGE CLEAR', DW / 2, 96, 46, '#54e36b', '900');
+    if (r) {
+      const rows = [
+        ['CRYSTALS', r.gems + ' / ' + r.total + '    ' + Math.round(r.pct * 100) + '%'],
+        ['SECRETS', r.secretsTotal ? r.secrets + ' / ' + r.secretsTotal : '—'],
+        ['TIME', fmtTime(r.time)],
+        ['DEATHS', String(r.deaths)],
+      ];
+      dx.textBaseline = 'middle';
+      rows.forEach((row, i) => {
+        if (t < 0.2 + i * 0.2) return;
+        const y = 162 + i * 34;
+        dx.textAlign = 'left'; dx.font = 'bold 18px "Trebuchet MS", system-ui, sans-serif'; dx.fillStyle = 'rgba(200,210,255,0.8)';
+        dx.fillText(row[0], DW / 2 - 170, y);
+        dx.textAlign = 'right'; dx.font = 'bold 19px monospace'; dx.fillStyle = '#ffffff';
+        dx.fillText(row[1], DW / 2 + 170, y);
+      });
+      if (t > 1.1) {
+        const m = MEDALS[r.medal], y = 334, pop = Math.min(1, (t - 1.1) / 0.18);
+        dx.save(); dx.translate(DW / 2 - 70, y); dx.scale(pop, pop);
+        if (m) {
+          const g = dx.createRadialGradient(-6, -8, 2, 0, 0, 26);
+          g.addColorStop(0, '#ffffff'); g.addColorStop(0.35, m.color); g.addColorStop(1, 'rgba(40,30,10,0.9)');
+          dx.shadowColor = m.color; dx.shadowBlur = 18; dx.fillStyle = g;
+          dx.beginPath(); dx.arc(0, 0, 24, 0, 7); dx.fill();
+        } else medalPip(0, 0, 0, 22);
+        dx.restore();
+        dx.textAlign = 'left'; dx.textBaseline = 'middle';
+        dx.font = '900 26px "Trebuchet MS", system-ui, sans-serif'; dx.fillStyle = m ? m.color : 'rgba(200,210,255,0.6)';
+        dx.fillText(m ? m.name : 'NO MEDAL', DW / 2 - 34, y - (r.best ? 8 : 0));
+        if (r.best) { dx.font = 'bold 13px "Trebuchet MS", system-ui, sans-serif'; dx.fillStyle = '#8bf7a0'; dx.fillText('NEW BEST FOR THIS STAGE', DW / 2 - 34, y + 16); }
+      }
+      centerText('GOLD 90%  ·  SILVER 70%  ·  BRONZE 45% of the crystals', DW / 2, 384, 12, 'rgba(200,210,255,0.55)', 'normal');
+    }
+    centerText('SCORE ' + state.player.score, DW / 2, 422, 20, '#fff', 'bold');
+    if (!isDemo && t > 0.8) centerText('ENTER to continue', DW / 2, 456, 13, 'rgba(200,210,255,0.6)', 'normal');
   }
   function drawGameOver() {
     overlayDim(); dx.save(); dx.shadowColor = '#ff3b6b'; dx.shadowBlur = 14;
@@ -631,7 +889,8 @@
       // tapping the playfield acts as START/confirm on menu screens
       display.addEventListener('pointerdown', () => {
         if (isDemo) return;
-        if (mode === 'title' || mode === 'gameover' || mode === 'win' || mode === 'intro' || mode === 'stageclear') {
+        if (mode === 'title' || mode === 'gameover' || mode === 'win' || mode === 'intro' || mode === 'stageclear' ||
+            mode === 'worlds' || mode === 'scores' || mode === 'entername') {
           input.setTouch('start', true);
           setTimeout(() => input.setTouch('start', false), 60);
         }
@@ -726,11 +985,15 @@
   window.__shard = window.__turrican = {
     get mode() { return mode; },
     get state() { return state; },
-    start() { if(isDemo)endDemo(); audio.resume(); newRun(); },
+    start(world) { if(isDemo)endDemo(); audio.resume(); newRun(world || 0); },
+    get run() { return Object.assign({ posts: postsWorld(), speed: D.SPEED }, run); },
+    get results() { return results; },
+    progress, settings,
     setQuality(scale) { renderer.setResolution(scale); },
     get tactics() { return pilot ? pilot.stats.intent : ''; },
     get graphics() { return window.__modernGraphics?.stats || {backend:'HD compatibility'}; },
     goToStage(i) { planIdx = i; loadStage(); },
+    clearStage() { if (state) state.won = true; },
     step(n, inp) { for (let k = 0; k < (n || 1); k++) E.step(state, inp || {}, D.VIEW_W, D.VIEW_H); return snap(); },
     snapshot: snap, plan: PLAN, D,
     setInput(o) { window.__forceInput = o; },
@@ -739,8 +1002,8 @@
     voice: { roll() { audio.rollVoice(); return audio.getVoiceSet(); },
              set() { return audio.getVoiceSet(); },
              say(n) { audio.resume(); audio.playVoice(n, true); } },
-    demo: { start: startDemo, stop: endDemo, get on() { return isDemo; },
-            get idle() { return idleT; }, get stage() { return planIdx; } },
+    demo: { start: startDemo, stop: endDemo, get on() { return isDemo; }, takeOver() { if (canTakeOver()) takeOver(); },
+            get canTakeOver() { return canTakeOver(); }, get idle() { return idleT; }, get stage() { return planIdx; } },
   };
   function snap() {
     if (!state) return { mode };

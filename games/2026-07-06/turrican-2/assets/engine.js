@@ -147,7 +147,7 @@
         en.maxHp = en.hp; // damage checks compare against SCALED hp
         enemies.push(en);
       } else if (e.type.startsWith('pu_') || e.type === 'gem') {
-        pickups.push({ type: e.type, x: px + 2, y: py + 2, w: 16, h: 16, t: 0, taken: false, baseY: py + 2 });
+        pickups.push({ type: e.type, x: px + 2, y: py + 2, w: 16, h: 16, t: 0, taken: false, baseY: py + 2, secret: e.secret || null });
       }
     }
 
@@ -177,6 +177,7 @@
       shake: 0, boss, bossDead: !boss,
       diffDmg: diff.dmg, diffHp: diff.hp,
       checkpoint: null,
+      stats: { gems: 0, deaths: 0, found: {} },    // this stage only: crystals, deaths, secrets opened
     };
   }
 
@@ -736,7 +737,7 @@
     const p = s.player;
     if (s.godMode) return;
     if (p.dead) return;
-    p.dead = true; p.deathTimer = 1.4; p.lives -= 1;
+    p.dead = true; p.deathTimer = 1.4; p.lives -= 1; s.stats.deaths++;
     emit(s, 'explosion', p.x + p.w / 2, p.y + p.h / 2);
     emit(s, 'sfx', p.x + p.w / 2, p.y + p.h / 2, { name: 'die' });
     if (p.lives > 0) emit(s, 'voice', 0, 0, { name: 'death' });
@@ -752,6 +753,7 @@
       it.y = it.baseY + Math.sin(it.t * 3) * 3;
       if (rects(p, it)) {
         it.taken = true;
+        if (it.secret) s.stats.found[it.secret] = true;
         applyPickup(s, it.type);
       }
     }
@@ -761,7 +763,7 @@
   function applyPickup(s, type) {
     const p = s.player;
     const px = p.x + p.w / 2, py = p.y + p.h / 2;
-    if (type === 'gem') { p.gems++; p.score += 25;
+    if (type === 'gem') { p.gems++; p.score += 25; s.stats.gems++;
       emit(s, 'pickup', px, py, { color: '#9be6ff' });
       if (p.gems % 50 === 0) { p.lives++; emit(s, 'voice', 0, 0, { name: 'oneup' });
         s.floats.push({ x: p.x, y: p.y - 6, text: '1UP', life: 1.2, vy: -24 }); }

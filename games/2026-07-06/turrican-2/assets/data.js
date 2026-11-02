@@ -14,9 +14,10 @@
   const VIEW_W = 640;         // internal render width
   const VIEW_H = 360;         // internal render height
   const FPS = 60;
-  const SPEED = 0.8;          // game speed: each tick simulates 80% of a 60 Hz frame (the whole world runs 20% slower)
+  const SPEED = 0.8;          // default game speed: each tick simulates 80% of a 60 Hz frame (the whole world runs 20% slower)
   const STEP = 1 / FPS;       // real seconds per simulation tick
-  const DT = STEP * SPEED;    // simulated seconds per tick
+  const DT = STEP * SPEED;    // simulated seconds per tick (api.setSpeed changes the live api.SPEED / api.DT)
+  const SPEEDS = [0.7, 0.8, 0.9, 1];
 
   // ---- physics feel (px / s) ---------------------------------------------
   const PHYS = {
@@ -592,8 +593,9 @@
       for (let dy = 0; dy < 2; dy++) { set(vx, gy + dy, T.EMPTY); set(vx + 1, gy + dy, T.EMPTY); }
       for (let dx2 = -1; dx2 < 3; dx2++) for (let dy = 2; dy < 4; dy++) set(vx + dx2, gy + dy, T.EMPTY);
       set(vx, gy, T.CRATE); set(vx + 1, gy, T.CRATE);          // the plug
-      for (let dx2 = -1; dx2 < 3; dx2++) entities.push({ type: 'gem', tx: vx + dx2, ty: gy + 3 });
-      entities.push({ type: rnd() < 0.5 ? 'pu_bomb' : 'pu_life', tx: vx + 1, ty: gy + 2 });
+      const secret = 'v' + vaults.length;
+      for (let dx2 = -1; dx2 < 3; dx2++) entities.push({ type: 'gem', tx: vx + dx2, ty: gy + 3, secret });
+      entities.push({ type: rnd() < 0.5 ? 'pu_bomb' : 'pu_life', tx: vx + 1, ty: gy + 2, secret });
       vaults.push(vx);
     }
 
@@ -614,6 +616,53 @@
       for (let n = 0; n < 2; n++) {
         const nx = 30 + Math.floor(rnd() * (Math.min(cols, arenaStart) - 60));
         for (let i = 0; i < 3; i++) addOnSurface(nx + i * 2, 'egg', 'eggpod');
+      }
+    }
+
+    // ---- CRAWLSPACES: low burrows only the rolled-up wheel fits through ----
+    // A two-tile mound with a one-tile tunnel at ground level: walkers jump
+    // over it, the 16 px wheel rolls through the 20 px gap and takes the stash
+    // inside. Laid last, on a random stream of its own, so the rest of the
+    // stage stays exactly as it was.
+    const crawls = [];
+    {
+      const rc = mulberry32((g.seed * 31 + stageIndex * 104729 + 0x5eed) >>> 0);
+      const ckCol = Math.floor(cols * 0.55);
+      const upX = world.updraftFinale && stageIndex === 1 ? Math.floor(cols * 0.62) - 8 : cols + 999;
+      const fits = (x0, x1) => {
+        if (x0 < 14 || x1 > Math.min(cols - 12, arenaStart - 8) || x1 >= upX) return false;
+        if (x1 > ckCol - 4 && x0 < ckCol + 4) return false;
+        if (vaults.some(v => x1 > v - 8 && x0 < v + 10)) return false;
+        const gy = groundTop[x0];
+        if (world.water && gy > waterY) return false;               // the tunnel must stay dry: the wheel sinks
+        for (let x = x0 - 2; x <= x1 + 2; x++) if (isPit[x]) return false;
+        for (let x = x0 - 1; x <= x1 + 1; x++) {                     // flat floor, open air above (the wheel can't climb)
+          if (groundTop[x] !== gy) return false;
+          for (let y = gy - 5; y < gy; y++) if (get(x, y) !== T.EMPTY) return false;
+        }
+        for (const pl of platforms) if (pl.x <= x1 + 1 && pl.x + pl.w >= x0 - 1 && pl.y >= gy - 6) return false;
+        for (const c of crawls) if (x0 < c.x1 + 24 && x1 > c.x0 - 24) return false;
+        return true;
+      };
+      for (const [fa, fb] of [[0.12, 0.5], [0.5, 0.95]]) {
+        const lo = Math.floor(cols * fa), hi = Math.floor(cols * fb);
+        let L = 5 + Math.floor(rc() * 4);                           // 5..8 tiles of tunnel, shorter if the ground is choppy
+        const s0 = Math.floor(rc() * (hi - lo));
+        let x0 = -1;
+        for (; L >= 4 && x0 < 0; L--) for (let k = 0; k < hi - lo && x0 < 0; k++) { const x = lo + ((s0 + k) % (hi - lo)); if (fits(x, x + L - 1)) x0 = x; }
+        if (x0 < 0) continue;
+        L++;
+        const x1 = x0 + L - 1, gy = groundTop[x0], secret = 'c' + crawls.length;
+        for (let x = x0; x <= x1; x++) set(x, gy - 2, T.SOLID);
+        // whatever stood here now stands on the roof; the tunnel holds only the stash
+        for (let i = entities.length - 1; i >= 0; i--) {
+          const e = entities[i];
+          if (e.tx < x0 || e.tx > x1 || (e.ty !== gy - 1 && e.ty !== gy - 2)) continue;
+          if (e.type === 'gem' && e.ty === gy - 1) entities.splice(i, 1); else e.ty = gy - 3;
+        }
+        const mid = x0 + (L >> 1);
+        for (let x = x0 + 1; x < x1; x++) entities.push({ type: L >= 7 && x === mid ? (crawls.length ? 'pu_bomb' : 'pu_weapon') : 'gem', tx: x, ty: gy - 1, secret });
+        crawls.push({ x0, x1, gy });
       }
     }
 
@@ -663,7 +712,7 @@
       theme: world.theme, palette: world.palette,
       cols, rows, tile: TILE, tiles, platforms, entities, playerStart, exit,
       bossSpawn, windX: world.windX || 0, updraft, hasWater: !!world.water,
-      checkpoint, decors,
+      checkpoint, decors, crawls, secrets: vaults.length + crawls.length,
       timeLimit: bossKey ? 420 : 300,
     };
   }
@@ -677,10 +726,19 @@
     hard:   { dmg: 1.4, hp: 1.25, time: 0.85, label: 'HARD' },
   };
 
-  return {
+  // crystals a trooper can reach in each stage (campaign order), counted by
+  // demo.js reachable(): the stage results score against these. test.cjs
+  // checks them against the live level builders.
+  const REACH = [62, 57, 68, 54, 65, 64, 69, 103, 89, 72, 62];
+
+  const api = {
     TILE, VIEW_W, VIEW_H, FPS, SPEED, STEP, DT, PHYS, T, SOLID_TILES, SHMUP,
     WEAPONS, WEAPON_ORDER, ENEMIES, ROSTERS, LOB_SKINS, BOSSES, BOSS_GUARD, WORLDS, STAGES_PER_WORLD, DIFFICULTY,
+    DEFAULT_SPEED: SPEED, SPEEDS, REACH,
     mulberry32, buildLevel,
-    VERSION: '2.1.0',
+    VERSION: '2.2.0',
   };
+  // game speed is a player option: the engine reads api.DT every tick
+  api.setSpeed = (v) => { api.SPEED = v; api.DT = STEP * v; };
+  return api;
 });
