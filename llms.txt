@@ -48,6 +48,7 @@ use these instructions before writing code or snippets.
   artifact archive views.
 - `/experiments/image-gen-2-benchmark/mirthcap-story.html` - Mirthcap
   story/artifact page.
+- `/newsletter/` - retired November 2, 2026. Aquarium News moved to The Hidden Reef: https://thehiddenreef.net/news/ (its source is the store site's own repository). Every old `/newsletter/` URL returns a 301 to the matching `/news/` page.
 - `/ai-news/` - curated AI model and tooling news feed.
 - `/computer-chronicle/` - daily historical computer newspaper section,
   focused on personal computers and personal computer gaming from 40
@@ -281,6 +282,11 @@ Template for an existing plant page:
   </ul>
 </article>
 ```
+
+The first photo on a page is its largest visible image, so it loads at once:
+give that one `fetchpriority="high"` and no `loading="lazy"`. When a new
+entry goes in above it, move those two attributes to the new top photo and
+put `loading="lazy"` back on the old one.
 
 For a new plant page, copy the structure from an existing page such as
 `/plants/dwarf-peach-tree/index.html`, then add a directory card to

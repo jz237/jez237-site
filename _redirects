@@ -1,4 +1,16 @@
 https://www.jez237.com/* https://jez237.com/:splat 301
+# Aquarium News moved to thehiddenreef.net (Jez, Nov 1 2026); its source is the store site's repository.
+/newsletter/stories/:slug/ https://thehiddenreef.net/news/stories/:slug/ 301
+/newsletter/stories/:slug https://thehiddenreef.net/news/stories/:slug/ 301
+/newsletter/page/:n/ https://thehiddenreef.net/news/page/:n/ 301
+/newsletter/page/:n https://thehiddenreef.net/news/page/:n/ 301
+/newsletter/credits.html https://thehiddenreef.net/news/credits/ 301
+/newsletter/credits https://thehiddenreef.net/news/credits/ 301
+/newsletter/credits/ https://thehiddenreef.net/news/credits/ 301
+/newsletter/ https://thehiddenreef.net/news/ 301
+/newsletter https://thehiddenreef.net/news/ 301
+/newsletter/* https://thehiddenreef.net/news/ 301
+
 /news.html /ai-news/ 301
 /news /ai-news/ 301
 /photos/garden/images/* https://media.jez237.com/photos/garden/images/:splat 302
