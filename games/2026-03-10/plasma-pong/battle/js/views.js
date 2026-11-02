@@ -1,9 +1,9 @@
 // Meshes for the things on court: paddles, balls, bolts, orbs, drones, cells, cores, hazards.
 import * as THREE from '../vendor/three.module.min.js';
-import { F, POWERUPS } from './config.js?v=1';
-import { CELL_HALF } from './sim.js?v=1';
-import { NOISE } from './shaders.js?v=1';
-import { Ribbon } from './fx.js?v=1';
+import { F, POWERUPS } from './config.js?v=2';
+import { CELL_HALF } from './sim.js?v=2';
+import { NOISE } from './shaders.js?v=2';
+import { Ribbon } from './fx.js?v=2';
 
 export const BALL_Y = 0.36;
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);

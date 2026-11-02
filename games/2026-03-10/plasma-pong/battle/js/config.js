@@ -1,5 +1,5 @@
 // Plasma Pong: Battle Edition — tuning, pilots, arenas and power-ups.
-export const VERSION = 'v1.0.0';
+export const VERSION = 'v1.0.1';
 
 // World units. Side +1 is the near player (P1, positive z), side -1 the far one.
 export const F = {
@@ -109,9 +109,9 @@ export const ARENAS = [
 export const LADDER = ['volt', 'nyx', 'krank', 'seraph', 'monolith'];
 
 export const DIFFICULTY = {
-  easy:   { label: 'EASY',   ai: { noise: 1.6, speed: 0.82, react: 1.5, fire: 0.6 }, scoreMul: 0.7 },
-  normal: { label: 'NORMAL', ai: { noise: 1.0, speed: 1.0, react: 1.0, fire: 1.0 }, scoreMul: 1 },
-  hard:   { label: 'HARD',   ai: { noise: 0.6, speed: 1.12, react: 0.7, fire: 1.2 }, scoreMul: 1.5 },
+  easy:   { label: 'EASY',   ai: { noise: 1.6, speed: 0.82, react: 1.5, fire: 0.55, smash: 0.35 }, scoreMul: 0.7 },
+  normal: { label: 'NORMAL', ai: { noise: 1.0, speed: 1.0, react: 1.0, fire: 1.0, smash: 0.75 }, scoreMul: 1 },
+  hard:   { label: 'HARD',   ai: { noise: 0.6, speed: 1.12, react: 0.7, fire: 1.2, smash: 1 }, scoreMul: 1.5 },
 };
 
 // Power-ups: icon glyph is drawn on a canvas; voice = announcer clip, sfx = effect clip.

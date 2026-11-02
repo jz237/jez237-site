@@ -2,9 +2,9 @@
 // broadcast shots and, because it can read the AI's forecasts, sees core breaches coming and
 // drops into slow motion on the right camera *before* they happen.
 import * as THREE from '../vendor/three.module.min.js';
-import { F } from './config.js?v=1';
-import { predictToPlane } from './predict.js?v=1';
-import { cellIndex } from './sim.js?v=1';
+import { F } from './config.js?v=2';
+import { predictToPlane } from './predict.js?v=2';
+import { cellIndex } from './sim.js?v=2';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 const _v = new THREE.Vector3(), _q = new THREE.Vector3();
@@ -36,6 +36,7 @@ export class Director {
   setMode(mode) {
     this.mode = mode;
     this.shot = null;
+    this.cutCooldown = 0;
     this.fitCache = {};
     this.snap = true;
   }
@@ -163,7 +164,7 @@ export class Director {
         break;
       }
     }
-    if (!this.breach && (this.shotT > (this.shot ? this.shot.dur : 0) || !this.shot) && this.cutCooldown <= 0) this.pickShot(W);
+    if (!this.shot || (!this.breach && this.shotT > this.shot.dur && this.cutCooldown <= 0)) this.pickShot(W);
     const s = this.shot;
     const ball = W.balls.find((b) => b.id === (s.ball ?? -1)) || W.balls[0];
     switch (s.kind) {

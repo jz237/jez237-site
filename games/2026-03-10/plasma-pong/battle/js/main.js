@@ -1,15 +1,15 @@
 // Plasma Pong: Battle Edition — game flow, controls, scoring, commentary and the frame loop.
 import * as THREE from '../vendor/three.module.min.js';
-import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS } from './config.js?v=1';
-import { makeWorld, step, drainEvents, STEP, paddlesOf } from './sim.js?v=1';
-import { AIPilot } from './ai.js?v=1';
-import { predictToPlane } from './predict.js?v=1';
-import { Renderer, pickQuality } from './render.js?v=1';
-import { Director } from './director.js?v=1';
-import { Audio } from './audio.js?v=1';
-import { Input } from './input.js?v=1';
-import { UI, $, hex } from './ui.js?v=1';
-import { Scores } from './scores.js?v=1';
+import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS } from './config.js?v=2';
+import { makeWorld, step, drainEvents, STEP, paddlesOf } from './sim.js?v=2';
+import { AIPilot } from './ai.js?v=2';
+import { predictToPlane } from './predict.js?v=2';
+import { Renderer, pickQuality } from './render.js?v=2';
+import { Director } from './director.js?v=2';
+import { Audio } from './audio.js?v=2';
+import { Input } from './input.js?v=2';
+import { UI, $, hex } from './ui.js?v=2';
+import { Scores } from './scores.js?v=2';
 
 // ------------------------------------------------------------------ settings
 const SKEY = 'ppb.settings.v1';
@@ -591,6 +591,7 @@ I.on('pause', () => {
 });
 I.on('any', () => {
   G.idleT = 0;
+  if (G.demoBoot) { G.demoBoot = false; A.unlock(); A.ctx && A.ctx.resume(); A.musicName = null; A.playMusic(G.W.arena.music); return; }
   if (G.state === 'boot') return enterTitle();
   if (G.mode === 'demo' && G.state !== 'title') { goTitle(); }
 });
@@ -951,7 +952,8 @@ G.mode = 'attract';
 G.simOn = true;
 G.state = 'boot';
 U.show('boot');
-if (params.has('demo')) { G.bootReady = true; }
+// ?demo opens straight into the demo; the first tap only switches the sound on
+if (params.has('demo')) { G.demoBoot = true; startDemo(); }
 requestAnimationFrame(frame);
 // test hooks
 window.__ppb.tick = (dt, n = 1) => { for (let i = 0; i < n; i++) tick(dt); };

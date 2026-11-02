@@ -4,9 +4,9 @@
 // power-ups on the way, and its own risk of fluffing an edge hit. Personas set reaction time, aim
 // noise, speed and taste (smash, spin, bank shots, trigger-happiness). The plan is public, so the
 // demo mode can draw it.
-import { F } from './config.js?v=1';
-import { returnShot, paddlesOf, cellIndex } from './sim.js?v=1';
-import { predictToPlane, shotPath } from './predict.js?v=1';
+import { F } from './config.js?v=2';
+import { returnShot, paddlesOf, cellIndex } from './sim.js?v=2';
+import { predictToPlane, shotPath } from './predict.js?v=2';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 const sigmoid = (x) => 1 / (1 + Math.exp(-x));
@@ -23,6 +23,8 @@ export class AIPilot {
       speed: a.speed * diff.speed,
       react: a.react * diff.react,
       fire: Math.min(1, a.fire * diff.fire),
+      smash: a.smash * (diff.smash ?? 1),
+      lunge: a.lunge * (diff.smash ?? 1),
     };
     this.name = persona.name;
     this.rand = Math.random;
