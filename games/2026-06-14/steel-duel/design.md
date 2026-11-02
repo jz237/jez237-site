@@ -47,8 +47,9 @@ Two tanks duel in a fixed walled maze around a central minefield, top-down, on a
   The AI's pathfinder uses the live wall grid, so new holes open new routes.
 
 ## Tech
-- Vanilla JS + Canvas 2D, no build step. `audio.js` (synth), `art.js` (render/particles/CRT),
-  `game.js` (sim/AI/UI/scores/tests).
+- Vanilla JS, no build step. `game.js` (sim/AI/UI/scores/tests), `render3d.js` (three.js 3D renderer, ES module,
+  three r181 vendored in `vendor/`), `audio.js` (ElevenLabs sample bank in `audio/` + synth fallbacks), `art.js`
+  (2D renderer for the 1974 mode and the no-WebGL fallback). The sim emits events; effects and audio consume them.
 - **Fixed-timestep deterministic sim** (1/60) with a seeded PRNG (mulberry32) — required for the
   self-test harness and bot-vs-bot soak runs.
 - Global leaderboard via the shared scores worker, namespace **`steel-duel`**. Because the core game
