@@ -1449,8 +1449,8 @@
     try {
       const res = await fetch(onlineHttpBase() + '/rooms', { cache: 'no-store' });
       const data = await res.json();
-      // Plasma Pong's online rooms share this relay (PPB- prefix); they are not duels
-      const rooms = (Array.isArray(data.rooms) ? data.rooms : []).filter(room => !/^PPB-/.test(String(room && room.room || '')));
+      // Plasma Pong (PPB-) and Asteroids 2026 (A26-) share this relay; their rooms are not duels
+      const rooms = (Array.isArray(data.rooms) ? data.rooms : []).filter(room => !/^(PPB|A26)-/.test(String(room && room.room || '')));
       if (!rooms.length) {
         box.innerHTML = '<div class="room-empty">No open rooms right now</div>';
         return;
