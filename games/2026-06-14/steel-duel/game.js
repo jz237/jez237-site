@@ -59,7 +59,9 @@
   };
   const CAMP_LIVES = 3;
   const WARDEN_ARC = 1.05;      // front-armor half-arc (rad); shells inside it deflect
-  const CAMP_ALLY_SPAWNS = [{ c: 2, r: 8, a: 0 }, { c: 2, r: 5, a: 0 }, { c: 2, r: 11, a: 0 }, { c: 4, r: 8, a: 0 }];
+  const CAMP_ALLY_SPAWNS = [{ c: 2, r: 8, a: 0 }, { c: 2, r: 5, a: 0 }, { c: 2, r: 11, a: 0 }, { c: 2, r: 14, a: 0 }];   // all clear of every arena's walls
+  // Supply crates (campaign + survival only; Versus stays faithful): dropped by destroyed enemy tanks.
+  const PICKUP_LIFE = 14, PICKUP_R = 20, DROP_CHANCE = 0.24, SHIELD_TIME = 6, RAPID_TIME = 8;
   const CAMP_ENEMY_SPAWNS = [
     { c: 25, r: 3, a: Math.PI }, { c: 25, r: 14, a: Math.PI }, { c: 25, r: 8, a: Math.PI },
     { c: 14, r: 2, a: Math.PI / 2 }, { c: 14, r: 15, a: -Math.PI / 2 }, { c: 20, r: 5, a: Math.PI }, { c: 20, r: 12, a: Math.PI },
@@ -112,8 +114,17 @@
   let watchLevel = [45, 45];    // CPU 1 / CPU 2 watch-mode sliders
   let visualMode = 'hd';
   let muted = false, headless = false, touchActive = false, autoFire = true;
-  let tanks = [], shells = [], mines = [];
+  let tanks = [], shells = [], mines = [], pickups = [];
+  let shellSeq = 0, pickupSeq = 0, layoutVer = 0;
   let tankSkill = [0.45, 0.45, 0.55, 0.62];
+  // Sim → presentation events (effects, audio, announcer). The host forwards them to online clients in snapshots.
+  const events = [], netEvents = [];
+  function emit(k, o) {
+    const e = o || {}; e.k = k;
+    events.push(e); if (events.length > 240) events.shift();
+    if (online.connected && online.role === 'p1') { netEvents.push(e); if (netEvents.length > 60) netEvents.shift(); }
+    return e;
+  }
   let score = { p1: 0, p2: 0 };
   let timeLeft = DEFAULT_TIME, matchTime = DEFAULT_TIME;
   let freezeT = 0, winner = null, tick = 0, shake = 0;
@@ -131,25 +142,25 @@
 
   let controls = [ctrl(), ctrl(), ctrl(), ctrl()];
   function ctrl() { return { fwd: false, back: false, left: false, right: false, fire: false, driveVec: null, aimVec: null }; }
-  function silent() { return headless || state === 'attract'; }
 
   /* ===================== entities ===================== */
   function spawnFor(id) { return mode === 'coop' ? COOP_SPAWNS[id] : SPAWNS[id]; }
   function makeTank(id) {
     const s = spawnFor(id), p = tileCenter(s.c, s.r);
     const team = s.team || (id === 0 ? 'p1' : 'p2');
-    return { id, team, x: p.x, y: p.y, heading: s.a, turret: s.a, speed: 0, vx: 0, vy: 0, dist: 0, cd: 0, flash: 0, hp: TANK_MAX_HP, alive: true, path: null, pathTick: -999 };
+    return { id, team, x: p.x, y: p.y, heading: s.a, turret: s.a, speed: 0, vx: 0, vy: 0, dist: 0, cd: 0, flash: 0, hp: TANK_MAX_HP, alive: true, path: null, pathTick: -999, invuln: 0, shieldT: 0, rapidT: 0 };
   }
   function resetMatch(seed) {
     rng = mulberry32((seed | 0) || 1);
     buildMaze();
     const count = mode === 'coop' ? 4 : 2;
     tanks = Array.from({ length: count }, (_, id) => makeTank(id));
-    shells = []; mines = [];
+    shells = []; mines = []; pickups = [];
     placeMines();
     score = { p1: 0, p2: 0 };
     timeLeft = matchTime; freezeT = 0; winner = null; tick = 0; shake = 0;
-    if (SDArt) { TRACKS.clear(); PARTS.clear(); DECALS.clear(); }
+    layoutVer++;
+    if (SDArt && TRACKS) { TRACKS.clear(); PARTS.clear(); DECALS.clear(); }
   }
   function copyGrid(g) { return g.map(row => row.slice()); }
   function encodeHPGrid(g) { return g.map(row => row.map(v => v === Infinity ? 'I' : v)); }
@@ -159,6 +170,7 @@
       id: t.id, team: t.team, x: t.x, y: t.y, heading: t.heading, turret: t.turret,
       speed: t.speed, vx: t.vx, vy: t.vy, dist: t.dist, cd: t.cd, flash: t.flash,
       hp: t.hp, alive: t.alive, path: null, pathTick: -999,
+      invuln: t.invuln || 0, shieldT: t.shieldT || 0, rapidT: t.rapidT || 0,
     };
   }
   function makeSnapshot() {
@@ -168,8 +180,10 @@
       tanks: tanks.map(tankNet),
       shells: shells.map(s => ({ ...s })),
       mines: mines.map(m => ({ ...m })),
+      pickups: pickups.map(p => ({ ...p })),
       solid: copyGrid(solid),
       wallHP: encodeHPGrid(wallHP),
+      events: netEvents.splice(0),
     };
   }
   function applySnapshot(s) {
@@ -191,6 +205,8 @@
     }
     shells = Array.isArray(s.shells) ? s.shells.map(sh => ({ ...sh })) : [];
     mines = Array.isArray(s.mines) ? s.mines.map(m => ({ ...m })) : [];
+    pickups = Array.isArray(s.pickups) ? s.pickups.map(p => ({ ...p })) : [];
+    if (Array.isArray(s.events) && !headless) for (const e of s.events.slice(0, 60)) if (e && typeof e.k === 'string' && e.k !== 'start') { events.push(e); if (events.length > 240) events.shift(); }   // clients announce their own start
     if (Array.isArray(s.solid)) for (let r = 0; r < ROWS; r++) solid[r] = s.solid[r].slice();
     if (Array.isArray(s.wallHP)) {
       const hp = decodeHPGrid(s.wallHP);
@@ -212,6 +228,7 @@
     return {
       id, team: 'ally', type: 'player', x: p.x, y: p.y, heading: s.a, turret: s.a, speed: 0, vx: 0, vy: 0, dist: 0, cd: 0, flash: 0,
       hp: TANK_MAX_HP, maxHp: TANK_MAX_HP, alive: true, path: null, pathTick: -999, spdMul: 1, fireCd: FIRE_CD, dmg: 1, invuln: 0, respawnT: null, spawn: s,
+      shieldT: 0, rapidT: 0,
     };
   }
   function enemyTank(id, type, s) {
@@ -221,9 +238,10 @@
       id, team: 'enemy', type, x: p.x, y: p.y, heading: s.a, turret: s.a, speed: 0, vx: 0, vy: 0, dist: 0, cd: 0.3 + rng() * 0.5, flash: 0,
       hp: d.hp, maxHp: d.hp, alive: true, path: null, pathTick: -999, spdMul: d.spd, fireCd: FIRE_CD / d.fireMul, dmg: d.dmg, skill: sk,
       range: d.range, flank: !!d.flank, push: !!d.push, keepFar: !!d.keepFar, lays: !!d.lays, frontArmor: !!d.frontArmor, faceFoe: !!d.faceFoe,
-      mineCd: 1.6 + rng() * 1.4, minesLeft: 4, enemyColor: d.color, scoreVal: d.score, invuln: 0,
+      mineCd: 1.6 + rng() * 1.4, minesLeft: 4, enemyColor: d.color, scoreVal: d.score, invuln: 0, shieldT: 0, rapidT: 0,
     };
   }
+  function spawnFx(t) { emit('spawn', { id: t.id, x: t.x, y: t.y, team: t.team, color: t.enemyColor || null }); }
   function placeCampaignMines(n) {
     const cand = [];
     for (let r = 4; r < ROWS - 4; r++) for (let c = 8; c < COLS - 8; c++) if (!solid[r][c]) cand.push(tileCenter(c, r));
@@ -234,7 +252,7 @@
     const mx = t.x - Math.cos(t.heading) * 24, my = t.y - Math.sin(t.heading) * 24;   // drop behind so the layer doesn't self-detonate
     if (isSolidAt(mx, my)) return;
     mines.push({ x: mx, y: my, ph: rng() * 7 });
-    if (SDArt) DECALS.add(mx, my, 10);
+    emit('mineDrop', { x: mx, y: my });
   }
   function startCampaign(levelIdx, players, difficulty, seed) {
     mode = 'campaign';
@@ -255,17 +273,19 @@
   function loadCampaignLevel() {
     const lv = LEVELS[campaign.levelIdx];
     buildMazeFrom(ARENAS[lv.arena] || ARENAS.open);
-    shells = []; mines = [];
+    shells = []; mines = []; pickups = [];
     if (lv.mines) placeCampaignMines(lv.mines);
     tanks = [];
     for (let i = 0; i < campaign.players; i++) tanks.push(playerTank(i, CAMP_ALLY_SPAWNS[i] || CAMP_ALLY_SPAWNS[0]));
     bots = tanks.map(() => false);
     campaign.waveIdx = 0; campaign.phase = 'fight'; campaign.timer = 0; campaign.banner = lv.name;
+    campaign.best = Math.max(campaign.best || 0, campaign.levelIdx);
+    layoutVer++;
     spawnCampaignWave();
     score = { p1: campaign.score, p2: 0 }; timeLeft = 9999; matchTime = 9999; freezeT = 0; winner = null; tick = 0; shake = 0;
     state = 'playing';
-    if (SDArt) { TRACKS.clear(); PARTS.clear(); DECALS.clear(); }
-    if (!headless) hideAllOverlays();
+    if (SDArt && TRACKS) { TRACKS.clear(); PARTS.clear(); DECALS.clear(); }
+    if (!headless) { hideAllOverlays(); saveCampaignBest(campaign.levelIdx); }
   }
   function waveScaled(types) {
     const extra = campaign.players > 1 ? Math.round(types.length * 0.35 * (campaign.players - 1)) : 0;
@@ -276,10 +296,15 @@
   function spawnCampaignWave() {
     const lv = LEVELS[campaign.levelIdx];
     const raw = lv.waves[campaign.waveIdx] || [];
-    if (raw.indexOf('__boss__') >= 0) {                         // boss wave: spawn the level's boss (never scaled by count)
+    // co-op revive: a teammate who went down with no lives left rejoins at the start of the next wave
+    if (tanks.some(t => t.team === 'ally' && t.alive)) for (const t of tanks) if (t.team === 'ally' && !t.alive && t.respawnT == null) respawnAlly(t);
+    const boss = raw.indexOf('__boss__') >= 0;
+    emit('wave', { lv: campaign.levelIdx, wave: campaign.waveIdx, waves: lv.waves.length, boss: boss ? lv.boss : null, name: lv.name });
+    if (boss) {                                                 // boss wave: spawn the level's boss (never scaled by count)
       const id = tanks.length;
       tanks.push(bossTank(id, lv.boss, BOSS_SPAWN));
       bots[id] = false;
+      spawnFx(tanks[id]);
       return;
     }
     const types = waveScaled(raw);
@@ -289,32 +314,34 @@
       const id = tanks.length;
       tanks.push(enemyTank(id, type, s));
       bots[id] = true;
+      spawnFx(tanks[id]);
     }
   }
   function aliveCount(team) { let n = 0; for (const t of tanks) if (t.team === team && t.alive) n++; return n; }
   function onCampaignKill(t) {
     if (t.team === 'enemy') {
       campaign.score += t.scoreVal || 10; score.p1 = campaign.score;
-      if (!silent()) SDAudio.point();
     } else {
       campaign.lives--;
       t.respawnT = campaign.lives > 0 ? 1.6 : null;
+      emit('lifeLost', { id: t.id, lives: campaign.lives });
     }
   }
   function respawnAlly(t) {
     const s = t.spawn || CAMP_ALLY_SPAWNS[0], p = tileCenter(s.c, s.r);
-    t.x = p.x; t.y = p.y; t.heading = s.a; t.turret = s.a; t.speed = 0; t.vx = 0; t.vy = 0;
-    t.hp = t.maxHp; t.alive = true; t.cd = 0.3; t.path = null; t.respawnT = null; t.invuln = 1.2;
+    t.x = p.x; t.y = p.y; t.heading = s.a; t.turret = s.a; t.speed = 0; t.vx = 0; t.vy = 0; t.flash = 0;
+    t.hp = t.maxHp; t.alive = true; t.cd = 0.3; t.path = null; t.respawnT = null; t.invuln = 1.2; t.shieldT = 0; t.rapidT = 0;
+    spawnFx(t);
   }
   function endCampaign(won) {
     state = 'over'; campaign.phase = won ? 'won' : 'lost';
     winner = won ? 'p1' : 'p2'; score.p1 = campaign.score;
-    if (!headless) { SDAudio.roundEnd(); SDAudio.engine(0); maybeOfferScore(); showOverlay('over'); }
+    emit('campEnd', { won });
+    if (!headless) { maybeOfferScore(); showOverlay('over'); }
   }
   function campaignTick() {
     if (!campaign || state !== 'playing') return;
     for (const t of tanks) {
-      if (t.invuln > 0) t.invuln -= STEP;
       if (t.team === 'ally' && !t.alive && t.respawnT != null) { t.respawnT -= STEP; if (t.respawnT <= 0) respawnAlly(t); }
     }
     const enemies = aliveCount('enemy');
@@ -322,16 +349,24 @@
     if (aliveCount('ally') === 0 && !pendingRespawn) { endCampaign(false); return; }
     if (campaign.phase === 'fight' && enemies === 0) {
       const lv = LEVELS[campaign.levelIdx];
-      if (campaign.waveIdx < lv.waves.length - 1) { campaign.phase = 'clear'; campaign.timer = 1.3; campaign.banner = 'WAVE CLEAR'; }
-      else if (campaign.levelIdx < LEVELS.length - 1) { campaign.phase = 'levelclear'; campaign.timer = 2.2; campaign.banner = 'LEVEL CLEAR'; }
+      if (campaign.waveIdx < lv.waves.length - 1) { campaign.phase = 'clear'; campaign.timer = 1.3; campaign.banner = 'WAVE CLEAR'; emit('waveClear', {}); }
+      else if (campaign.levelIdx < LEVELS.length - 1) { campaign.phase = 'levelclear'; campaign.timer = 2.2; campaign.banner = 'LEVEL CLEAR'; emit('levelClear', { lv: campaign.levelIdx, boss: !!lv.boss }); }
       else { endCampaign(true); return; }
     }
     if (campaign.phase === 'clear') { campaign.timer -= STEP; if (campaign.timer <= 0) { campaign.waveIdx++; campaign.phase = 'fight'; campaign.banner = ''; spawnCampaignWave(); } }
-    if (campaign.phase === 'levelclear') { campaign.timer -= STEP; if (campaign.timer <= 0) { campaign.levelIdx++; campaign.lives = Math.min(2 + campaign.players + 2, campaign.lives + 1); loadCampaignLevel(); } }
+    if (campaign.phase === 'levelclear') {
+      campaign.timer -= STEP;
+      if (campaign.timer <= 0) {
+        const cap = 2 + campaign.players + 2, before = campaign.lives;
+        campaign.levelIdx++; campaign.lives = Math.min(cap, campaign.lives + 1);
+        loadCampaignLevel();
+        if (campaign.lives > before) emit('lifeUp', { lives: campaign.lives });
+      }
+    }
   }
 
   /* ===================== bosses ===================== */
-  const BOSS_SPAWN = { c: 14, r: 5, a: Math.PI / 2 };
+  const BOSS_SPAWN = { c: 14, r: 6, a: Math.PI / 2 };   // row 6 keeps even the Warlord's 33px body clear of the ring wall
   const BOSS_DEFS = {
     bastion: { hp: 18, spd: 0.00, color: '#ff7043', name: 'THE BASTION',  hitR: 30, stationary: true, score: 200 },
     mauler:  { hp: 16, spd: 1.05, color: '#ef5350', name: 'MAULER',       hitR: 26, frontArmor: true, armorArc: 0.6, score: 320 },
@@ -360,17 +395,18 @@
   }
   function bossFire(t, ang) {
     const bx = t.x + Math.cos(ang) * ((t.hitR || 22) + 4), by = t.y + Math.sin(ang) * ((t.hitR || 22) + 4);
-    shells.push({ x: bx, y: by, vx: Math.cos(ang) * SHELL_SPD * 0.85, vy: Math.sin(ang) * SHELL_SPD * 0.85, life: SHELL_LIFE * 1.4, owner: t.id, dmg: 1 });
-    if (!silent()) SDAudio.fire();
+    shells.push({ x: bx, y: by, vx: Math.cos(ang) * SHELL_SPD * 0.85, vy: Math.sin(ang) * SHELL_SPD * 0.85, life: SHELL_LIFE * 1.4, owner: t.id, dmg: 1, sid: ++shellSeq, sx: bx, sy: by });
+    emit('fire', { id: t.id, x: bx, y: by, a: ang, big: true });
   }
   function spawnAdds(type, n) {
-    for (let k = 0; k < n; k++) { const s = CAMP_ENEMY_SPAWNS[(tanks.length + k) % CAMP_ENEMY_SPAWNS.length]; const id = tanks.length; tanks.push(enemyTank(id, type, s)); bots[id] = true; }
+    for (let k = 0; k < n; k++) { const s = CAMP_ENEMY_SPAWNS[(tanks.length + k) % CAMP_ENEMY_SPAWNS.length]; const id = tanks.length; tanks.push(enemyTank(id, type, s)); bots[id] = true; spawnFx(tanks[id]); }
   }
   function mineRing(t) {
     for (let j = 0; j < 8; j++) { const a = j / 8 * Math.PI * 2, mx = t.x + Math.cos(a) * 64, my = t.y + Math.sin(a) * 64; if (!isSolidAt(mx, my) && mines.length < 30) mines.push({ x: mx, y: my, ph: rng() * 7 }); }
   }
   function onBossPhase(t, phase) {
-    shake = Math.max(shake, 7); if (!silent()) SDAudio.explosion();
+    shake = Math.max(shake, 7);
+    emit('phase', { id: t.id, x: t.x, y: t.y, phase, boss: t.bossType });
     if (t.bossType === 'bastion' && phase === 2) spawnAdds('grunt', 2);
     if (t.bossType === 'mauler' && phase === 2) { mineRing(t); spawnAdds('scout', 2); }
     if (t.bossType === 'warlord' && phase === 2) spawnAdds('scout', 3);
@@ -563,33 +599,36 @@
     if (state !== 'playing' && state !== 'attract') return;
     if (online.connected && online.role !== 'p1' && state === 'playing') return;
     if (freezeT > 0) { freezeT -= STEP; if (freezeT <= 0) reviveTanks(); }
-    let moving = 0;
     const cmd = { turn: 0, throttle: 0, aim: null, fire: false, aimInstant: false, turretTurn: TURRET_TURN };
     for (let i = 0; i < tanks.length; i++) {
       const t = tanks[i]; if (!t.alive) continue;
+      if (t.invuln > 0) t.invuln -= STEP;
+      if (t.shieldT > 0) t.shieldT -= STEP;
+      if (t.rapidT > 0) t.rapidT -= STEP;
       cmd.turn = 0; cmd.throttle = 0; cmd.aim = null; cmd.fire = false; cmd.aimInstant = false; cmd.turretTurn = TURRET_TURN; cmd.moveVec = null;
       if (t.boss) bossCommand(i, cmd); else if (bots[i]) aiCommand(i, cmd); else humanCommand(i, cmd);
       applyCommand(t, cmd);
       if (t.boss) bossAttack(t);
-      if (Math.abs(t.speed) > 0.4) { t.dist += Math.abs(t.speed); if (SDArt && tick % 3 === 0) TRACKS.add(t.x, t.y, t.heading); moving += Math.abs(t.speed); }
+      if (Math.abs(t.speed) > 0.4) t.dist += Math.abs(t.speed);
       if (t.flash > 0) t.flash -= STEP * 6;
       if (t.cd > 0) t.cd -= STEP;
-      const inFlight = shells.filter(s => s.owner === i).length;
-      if (cmd.fire && t.cd <= 0 && freezeT <= 0 && inFlight < MAX_SHELLS) fire(t);
+      let inFlight = 0; for (const s of shells) if (s.owner === i) inFlight++;
+      if (cmd.fire && t.cd <= 0 && freezeT <= 0 && inFlight < (t.rapidT > 0 ? 2 : MAX_SHELLS)) fire(t);
       if (t.lays && mode === 'campaign') { t.mineCd -= STEP; if (t.mineCd <= 0 && t.minesLeft > 0 && mines.length < 30) { dropMine(t); t.minesLeft--; t.mineCd = 2.4 + rng() * 1.4; } }
       if (!t.boss) for (let m = mines.length - 1; m >= 0; m--) {
         if (Math.hypot(mines[m].x - t.x, mines[m].y - t.y) < MINE_R + TANK_R - 4) {
           const mx = mines[m].x, my = mines[m].y; mines.splice(m, 1);
-          if (SDArt) { PARTS.explosion(mx, my, '#ff8a4f'); DECALS.add(mx, my, 26); }
-          if (!silent()) SDAudio.mine(); killTank(i); break;
+          emit('mine', { x: mx, y: my, id: i });
+          if (t.shieldT > 0) { t.shieldT = 0; t.invuln = Math.max(t.invuln, 0.5); shake = Math.max(shake, 6); emit('hit', { id: i, x: t.x, y: t.y, hp: t.hp, shielded: true }); break; }   // a supply shield soaks one mine
+          killTank(i, -1, 'mine'); break;
         }
       }
+      if (pickups.length && t.team === 'ally') collectPickups(t);
     }
-    if (!silent()) SDAudio.engine(Math.min(0.12, moving * 0.02));
 
     for (let s = shells.length - 1; s >= 0; s--) {
       const sh = shells[s]; sh.x += sh.vx; sh.y += sh.vy; sh.life -= STEP;
-      if (sh.life <= 0) { shells.splice(s, 1); continue; }
+      if (sh.life <= 0) { shells.splice(s, 1); emit('shellEnd', { x: sh.x, y: sh.y }); continue; }
       if (isSolidAt(sh.x, sh.y)) { damageWall(sh.x, sh.y); shells.splice(s, 1); continue; }
       let hit = false;
       for (let i = 0; i < tanks.length; i++) {
@@ -600,19 +639,56 @@
               t.armorChip = (t.armorChip || 0) + 0.4;
               if (t.armorChip >= 1) { t.armorChip -= 1; damageTank(i, sh.owner, 1); hit = true; break; }
             }
-            t.flash = Math.max(t.flash, 0.5); if (SDArt) PARTS.chips(sh.x, sh.y, '#cfe0ff'); if (!silent()) SDAudio.wall(); shake = Math.max(shake, 1.5); hit = true; break;
+            t.flash = Math.max(t.flash, 0.5); shake = Math.max(shake, 1.5);
+            emit('deflect', { id: i, x: sh.x, y: sh.y, by: sh.owner, boss: !!t.boss });
+            hit = true; break;
           }
           damageTank(i, sh.owner, sh.dmg || 1); hit = true; break;
         }
       }
       if (hit) shells.splice(s, 1);
     }
+    if (mode === 'campaign') shellsCollide();
+    if (pickups.length) for (let p = pickups.length - 1; p >= 0; p--) { pickups[p].t -= STEP; if (pickups[p].t <= 0) pickups.splice(p, 1); }
     if (shake > 0) shake *= 0.85;
 
     if (mode === 'campaign') { campaignTick(); return; }
 
+    const before = timeLeft;
     timeLeft -= STEP;
+    if (state === 'playing') for (const mark of [20, 10]) if (before > mark && timeLeft <= mark) emit('time', { s: mark });
     if (timeLeft <= 0) { timeLeft = 0; if (state === 'attract') startAttract(); else endMatch(); }
+  }
+  // Campaign only: opposing shells that meet cancel in a small airburst (lets you shoot down boss salvos).
+  function shellsCollide() {
+    for (let a = shells.length - 1; a >= 0; a--) {
+      const A = shells[a], ta = tanks[A.owner];
+      for (let b = a - 1; b >= 0; b--) {
+        const B = shells[b];
+        if (!opposing(ta, tanks[B.owner]) || Math.abs(A.x - B.x) > 9 || Math.abs(A.y - B.y) > 9 || Math.hypot(A.x - B.x, A.y - B.y) > 8) continue;
+        emit('flak', { x: (A.x + B.x) / 2, y: (A.y + B.y) / 2 });
+        shells.splice(a, 1); shells.splice(b, 1); a--; break;
+      }
+    }
+  }
+  function maybeDrop(t) {
+    if (!(mode === 'campaign' || mode === 'coop') || t.team !== 'enemy' || isSolidAt(t.x, t.y)) return;
+    if (!t.boss && rng() >= DROP_CHANCE) return;
+    const r = rng(), kind = t.boss ? 'life' : r < 0.07 ? 'life' : r < 0.42 ? 'repair' : r < 0.72 ? 'shield' : 'rapid';
+    const p = { id: ++pickupSeq, kind, x: t.x, y: t.y, t: PICKUP_LIFE };
+    pickups.push(p); emit('drop', { x: p.x, y: p.y, kind });
+  }
+  function collectPickups(t) {
+    for (let p = pickups.length - 1; p >= 0; p--) {
+      const pk = pickups[p];
+      if (Math.hypot(pk.x - t.x, pk.y - t.y) > PICKUP_R) continue;
+      pickups.splice(p, 1);
+      if (pk.kind === 'repair') t.hp = Math.min(t.maxHp || TANK_MAX_HP, t.hp + 2);
+      else if (pk.kind === 'shield') { t.shieldT = SHIELD_TIME; t.invuln = Math.max(t.invuln, SHIELD_TIME); }
+      else if (pk.kind === 'rapid') t.rapidT = RAPID_TIME;
+      else if (pk.kind === 'life') { if (campaign) campaign.lives = Math.min(9, campaign.lives + 1); else t.hp = t.maxHp || TANK_MAX_HP; }
+      emit('pick', { id: t.id, x: pk.x, y: pk.y, kind: pk.kind });
+    }
   }
 
   function applyCommand(t, cmd) {
@@ -638,40 +714,54 @@
     else if (cmd.aimInstant) t.turret = cmd.aim;
     else t.turret = rotToward(t.turret, cmd.aim, cmd.turretTurn || TURRET_TURN);
   }
+  function bodyR(t) { return t.boss ? (t.hitR || TANK_R) : TANK_R; }    // bosses collide with their full hull, not a 12px dot
   function moveTank(t) {
-    const nx = t.x + Math.cos(t.heading) * t.speed, ny = t.y + Math.sin(t.heading) * t.speed;
-    if (!circleHitsWall(nx, t.y)) t.x = nx; else t.speed *= 0.3;
-    if (!circleHitsWall(t.x, ny)) t.y = ny; else t.speed *= 0.3;
+    const nx = t.x + Math.cos(t.heading) * t.speed, ny = t.y + Math.sin(t.heading) * t.speed, r = bodyR(t);
+    if (!circleHitsWall(nx, t.y, r)) t.x = nx; else t.speed *= 0.3;
+    if (!circleHitsWall(t.x, ny, r)) t.y = ny; else t.speed *= 0.3;
     pushApart(t);
   }
   function moveTankVel(t) {
-    const nx = t.x + t.vx, ny = t.y + t.vy;
-    if (!circleHitsWall(nx, t.y)) t.x = nx; else t.vx *= 0.2;
-    if (!circleHitsWall(t.x, ny)) t.y = ny; else t.vy *= 0.2;
+    const nx = t.x + t.vx, ny = t.y + t.vy, r = bodyR(t);
+    if (!circleHitsWall(nx, t.y, r)) t.x = nx; else t.vx *= 0.2;
+    if (!circleHitsWall(t.x, ny, r)) t.y = ny; else t.vy *= 0.2;
     pushApart(t);
   }
   function pushApart(t) {
+    if (t.stationary) return;                            // the Bastion can't be shoved around
+    const r = bodyR(t);
     for (const o of tanks) {
       if (!o || o.id === t.id || !o.alive) continue;
-      const dx = t.x - o.x, dy = t.y - o.y, d = Math.hypot(dx, dy);
-      if (d > 0 && d < TANK_R * 2) { const push = (TANK_R * 2 - d) / 2; t.x += dx / d * push; t.y += dy / d * push; }
+      const dx = t.x - o.x, dy = t.y - o.y, d = Math.hypot(dx, dy), min = r + bodyR(o);
+      if (d > 0 && d < min) {
+        const push = (min - d) * (o.stationary || (o.boss && !t.boss) ? 1 : 0.5), nx = t.x + dx / d * push, ny = t.y + dy / d * push;
+        if (!circleHitsWall(nx, ny, r)) { t.x = nx; t.y = ny; }               // never shove a tank into a wall
+        else if (!circleHitsWall(nx, t.y, r)) t.x = nx;
+        else if (!circleHitsWall(t.x, ny, r)) t.y = ny;
+      }
     }
   }
-  function circleHitsWall(x, y) { for (let a = 0; a < 8; a++) { const ang = a / 8 * 7; if (isSolidAt(x + Math.cos(ang) * TANK_R, y + Math.sin(ang) * TANK_R)) return true; } return isSolidAt(x, y); }
+  function circleHitsWall(x, y, r) {
+    r = r || TANK_R;
+    const n = r > 16 ? 16 : 8;
+    for (let a = 0; a < n; a++) { const ang = a / n * Math.PI * 2; if (isSolidAt(x + Math.cos(ang) * r, y + Math.sin(ang) * r)) return true; }
+    return isSolidAt(x, y);
+  }
   function fire(t) {
-    t.cd = t.fireCd || FIRE_CD; t.flash = 1;
+    t.cd = (t.fireCd || FIRE_CD) * (t.rapidT > 0 ? 0.5 : 1); t.flash = 1;
     const bx = t.x + Math.cos(t.turret) * 21, by = t.y + Math.sin(t.turret) * 21;
-    shells.push({ x: bx, y: by, vx: Math.cos(t.turret) * SHELL_SPD, vy: Math.sin(t.turret) * SHELL_SPD, life: SHELL_LIFE, owner: t.id, dmg: t.dmg || 1 });
-    if (!silent()) SDAudio.fire();
+    shells.push({ x: bx, y: by, vx: Math.cos(t.turret) * SHELL_SPD, vy: Math.sin(t.turret) * SHELL_SPD, life: SHELL_LIFE, owner: t.id, dmg: t.dmg || 1, sid: ++shellSeq, sx: bx, sy: by });
+    emit('fire', { id: t.id, x: bx, y: by, a: t.turret });
   }
   function damageWall(x, y) {
     const c = Math.floor(x / TILE), r = Math.floor((y - HUD_H) / TILE);
     if (r < 0 || r >= ROWS || c < 0 || c >= COLS) return;
-    if (SDArt) PARTS.explosion(x, y, '#cfd6e6'); if (!silent()) SDAudio.wall(); shake = Math.max(shake, 2.5);
-    if (!isFinite(wallHP[r][c])) return;               // border: indestructible
+    shake = Math.max(shake, 2.5);
+    if (!isFinite(wallHP[r][c])) { emit('wall', { x, y, c, r, border: true }); return; }   // border: indestructible
     wallHP[r][c] -= 1;
-    if (wallHP[r][c] <= 0) { solid[r][c] = false; wallHP[r][c] = 0; if (SDArt) { PARTS.chips(x, y, '#8a93a6'); DECALS.add(c * TILE + TILE / 2, HUD_H + r * TILE + TILE / 2, 22); } }
-    else if (SDArt) PARTS.chips(x, y, '#8a93a6');
+    const broke = wallHP[r][c] <= 0;
+    if (broke) { solid[r][c] = false; wallHP[r][c] = 0; }
+    emit('wall', { x, y, c, r, hp: wallHP[r][c], broke });
   }
   function tankColor(i) {
     const t = tanks[i];
@@ -682,12 +772,12 @@
     return i === 0 ? '#ffb347' : '#46d6e8';
   }
   function damageTank(i, owner, dmg) {
-    const t = tanks[i]; if (!t.alive || t.invuln > 0) return;
+    const t = tanks[i]; if (!t.alive) return;
+    if (t.invuln > 0) { if (t.shieldT > 0) emit('deflect', { id: i, x: t.x, y: t.y, by: owner, shield: true }); return; }
     t.hp = Math.max(0, (t.hp == null ? TANK_MAX_HP : t.hp) - (dmg || 1));
     t.flash = 1; shake = Math.max(shake, 3);
-    if (t.hp <= 0) { killTank(i, owner); return; }
-    if (SDArt) { PARTS.chips(t.x, t.y, tankColor(i)); DECALS.add(t.x, t.y, 12); }
-    if (!silent()) SDAudio.tankHit();
+    if (t.hp <= 0) { killTank(i, owner, 'shell'); return; }
+    emit('hit', { id: i, x: t.x, y: t.y, hp: t.hp, max: t.maxHp || TANK_MAX_HP, by: owner, team: t.team });
   }
   function awardDeath(i) {
     if (mode === 'coop') {
@@ -697,26 +787,42 @@
     }
     if (i === 0) score.p2++; else score.p1++;
   }
-  function killTank(i) {
+  function killTank(i, by, cause) {
     const t = tanks[i]; if (!t.alive) return; t.alive = false; t.hp = 0;
-    if (SDArt) { PARTS.explosion(t.x, t.y, tankColor(i)); DECALS.add(t.x, t.y, 30); }
-    if (!silent()) SDAudio.explosion();
+    emit('kill', { id: i, x: t.x, y: t.y, team: t.team, type: t.type || null, boss: t.boss ? t.bossType : null, by: by == null ? -1 : by, cause: cause || 'shell', color: tankColor(i), val: t.scoreVal || 0 });
+    maybeDrop(t);
     if (mode === 'campaign') { shake = Math.max(shake, 6); onCampaignKill(t); return; }
-    if (!silent()) SDAudio.point();
     shake = 9; awardDeath(i); freezeT = FREEZE;
+    emit('score', { p1: score.p1, p2: score.p2, victim: i, team: t.team });
   }
   function reviveTanks() {
-    for (let i = 0; i < tanks.length; i++) if (!tanks[i].alive) { const s = spawnFor(i), p = tileCenter(s.c, s.r); const t = tanks[i]; t.x = p.x; t.y = p.y; t.heading = s.a; t.turret = s.a; t.speed = 0; t.hp = TANK_MAX_HP; t.alive = true; t.cd = 0.3; t.path = null; }
+    for (let i = 0; i < tanks.length; i++) if (!tanks[i].alive) {
+      const s = spawnFor(i), p = tileCenter(s.c, s.r), t = tanks[i];
+      t.x = p.x; t.y = p.y; t.heading = s.a; t.turret = s.a; t.speed = 0; t.vx = 0; t.vy = 0; t.flash = 0;   // clear leftover momentum
+      t.hp = TANK_MAX_HP; t.alive = true; t.cd = 0.3; t.path = null; t.invuln = 0;
+      spawnFx(t);
+    }
   }
-  function endMatch() { state = 'over'; winner = score.p1 === score.p2 ? 'draw' : (score.p1 > score.p2 ? 'p1' : 'p2'); if (!headless) { SDAudio.roundEnd(); SDAudio.engine(0); maybeOfferScore(); } showOverlay('over'); }
+  function endMatch() {
+    state = 'over'; winner = score.p1 === score.p2 ? 'draw' : (score.p1 > score.p2 ? 'p1' : 'p2');
+    emit('end', { winner, mode, p1: score.p1, p2: score.p2 });
+    if (!headless) maybeOfferScore();
+    showOverlay('over');
+  }
 
   /* ===================== render ===================== */
-  let ctx, canvas, dpr = 1, viewW = LW, viewH = LH, mobileView = false;
+  let ctx, canvas, glCanvas = null, dpr = 1, viewW = LW, viewH = LH, mobileView = false;
+  let gl3d = false, gl3dVer = -1, frameDt = STEP;
   const cam = { x: 0, y: 0, zoom: 1 };
+  function use3d() { return gl3d && visualMode !== 'classic' && !!window.SD3D && SD3D.ready; }
   function hasTouchScreen() { return ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || matchMedia('(pointer: coarse)').matches; }
   function clampCam(v, max) { return max <= 0 ? max / 2 : Math.max(0, Math.min(max, v)); }
   function updateCamera() {
-    if (!mobileView) { cam.x = 0; cam.y = 0; cam.zoom = 1; return cam; }
+    if (!mobileView) {                                    // desktop 2D: fit the whole arena, centred
+      cam.zoom = Math.min(viewW / LW, viewH / LH);
+      cam.x = clampCam(0, LW - viewW / cam.zoom); cam.y = clampCam(0, LH - viewH / cam.zoom);
+      return cam;
+    }
     const portrait = viewH >= viewW;
     cam.zoom = portrait ? 0.92 : 0.86;
     const vw = viewW / cam.zoom, vh = viewH / cam.zoom;
@@ -731,38 +837,99 @@
   function screenToWorld(clientX, clientY) {
     if (!canvas) return { x: clientX, y: clientY };
     const r = canvas.getBoundingClientRect();
+    if (use3d()) { const p = SD3D.pick(clientX, clientY, r); if (p) return p; }
     const sx = (clientX - r.left) / Math.max(1, r.width) * viewW;
     const sy = (clientY - r.top) / Math.max(1, r.height) * viewH;
     const c = updateCamera();
     return { x: c.x + sx / c.zoom, y: c.y + sy / c.zoom };
   }
-  function render() {
+  function toScreen(x, y, h) {                            // world point (+ height in 3D) → overlay pixels
+    if (use3d()) return SD3D.toScreen(x, y, h || 0);
+    return { x: (x - cam.x) * cam.zoom, y: (y - cam.y) * cam.zoom - (h || 0) * 0.6 * cam.zoom };
+  }
+  function render(dt) {
     if (!ctx) return;
     document.body.classList.toggle('classic-mode', visualMode === 'classic');
+    const three = use3d();
+    if (glCanvas) glCanvas.style.visibility = three ? 'visible' : 'hidden';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     const T = SDArt.theme(visualMode);
+    if (three) {
+      if (gl3dVer !== layoutVer) { gl3dVer = layoutVer; SD3D.reset(); }
+      SD3D.render(dt == null ? frameDt : dt);
+      ctx.clearRect(0, 0, viewW, viewH);
+      drawPlayerNames(); drawPopups();
+      drawHUD(T); drawBanner(); drawFloatingStick(); drawScreenFlash();
+      return;
+    }
     const sx = (Math.random() - 0.5) * shake, sy = (Math.random() - 0.5) * shake;
     const c = updateCamera();
     const bg = ctx.createLinearGradient(0, 0, 0, viewH); bg.addColorStop(0, T.bg1); bg.addColorStop(1, T.bg0);
     ctx.fillStyle = bg; ctx.fillRect(0, 0, viewW, viewH);
     ctx.save();
-    if (mobileView) { ctx.scale(c.zoom, c.zoom); ctx.translate(-c.x + sx, -c.y + sy); }
-    else ctx.translate(sx, sy);
+    ctx.scale(c.zoom, c.zoom); ctx.translate(-c.x + sx, -c.y + sy);
     SDArt.drawFloor(ctx, 0, HUD_H, FIELD_W, FIELD_H, visualMode);
     if (SDArt && visualMode !== 'classic') DECALS.draw(ctx);
     SDArt.drawWalls(ctx, { solid, hp: wallHP, MAX: WALL_MAX, COLS, ROWS, TILE, HUD_H }, visualMode);
     if (SDArt && visualMode !== 'classic') TRACKS.draw(ctx);
     const tm = tick * STEP;
     for (const m of mines) SDArt.drawMine(ctx, m, tm, visualMode);
+    for (const p of pickups) drawPickup2D(p, tm);
     for (const t of tanks) if (t.alive) { if (t.boss) drawBossEntity(t, tm); else SDArt.drawTank(ctx, t, tm, visualMode); }
-    drawPlayerNames();
     for (const s of shells) SDArt.drawShell(ctx, s, visualMode);
     if (SDArt && visualMode !== 'classic') PARTS.draw(ctx);
     if (visualMode !== 'classic' && state === 'playing' && mouseAimActive() && tanks[0] && tanks[0].alive && mouseFresh > 0) SDArt.drawReticle(ctx, mouseX, mouseY, T.p1);
     ctx.restore();
+    drawPlayerNames(); if (visualMode !== 'classic') drawPopups();
     drawHUD(T);
+    if (visualMode !== 'classic') drawBanner();
     drawFloatingStick();
     if (visualMode === 'classic') SDArt.classicOverlay(ctx, viewW, viewH);
+  }
+  const PICK_COL = { repair: '#5dff7a', shield: '#5fd8ff', rapid: '#ffa040', life: '#ff5fa8' };
+  function drawPickup2D(p, tm) {
+    if (p.t < 3 && Math.sin(tm * 18) < 0) return;
+    const col = visualMode === 'classic' ? '#fff' : (PICK_COL[p.kind] || '#fff');
+    ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(tm * 1.5);
+    ctx.strokeStyle = col; ctx.lineWidth = 2.5; ctx.strokeRect(-8, -8, 16, 16);
+    ctx.fillStyle = col; ctx.globalAlpha = 0.3; ctx.fillRect(-8, -8, 16, 16);
+    ctx.restore();
+    ctx.fillStyle = col; ctx.font = 'bold 10px Menlo,Consolas,monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText({ repair: '+', shield: 'S', rapid: 'R', life: '♥' }[p.kind] || '?', p.x, p.y + 0.5);
+  }
+  /* ---- overlay effects: floating popups, centre banners, screen flashes ---- */
+  const popups = []; let banner = null, hurtT = 0;
+  function popup(x, y, text, color, big) { popups.push({ x, y, text, color: color || '#fff', t: big ? 1.6 : 1.1, max: big ? 1.6 : 1.1, big: !!big }); if (popups.length > 24) popups.shift(); }
+  function showBanner(text, sub, color, dur) { banner = { text, sub: sub || '', color: color || '#eef3ff', t: dur || 2.2, max: dur || 2.2 }; }
+  function drawPopups() {
+    for (const p of popups) {
+      const s = toScreen(p.x, p.y, 26); if (!s || s.behind) continue;
+      const k = 1 - p.t / p.max, a = Math.min(1, p.t * 3);
+      ctx.save(); ctx.globalAlpha = a; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.font = 'bold ' + (p.big ? 18 : 14) + 'px Menlo,Consolas,monospace';
+      ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(0,0,0,.7)'; ctx.strokeText(p.text, s.x, s.y - k * 34);
+      ctx.fillStyle = p.color; ctx.fillText(p.text, s.x, s.y - k * 34);
+      ctx.restore();
+    }
+  }
+  function drawBanner() {
+    if (!banner) return;
+    const k = 1 - banner.t / banner.max, a = Math.min(1, banner.t * 2.5, k * 8), sc = 1 + Math.max(0, 0.25 - k * 2);
+    ctx.save(); ctx.globalAlpha = a; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.translate(viewW / 2, viewH * 0.36); ctx.scale(sc, sc);
+    const big = mobileView ? 30 : 46;
+    ctx.font = '900 ' + big + 'px Menlo,Consolas,monospace';
+    ctx.lineWidth = 7; ctx.strokeStyle = 'rgba(0,0,0,.65)'; ctx.strokeText(banner.text, 0, 0);
+    ctx.fillStyle = banner.color; ctx.fillText(banner.text, 0, 0);
+    if (banner.sub) { ctx.font = 'bold ' + (mobileView ? 13 : 16) + 'px Menlo,Consolas,monospace'; ctx.lineWidth = 4; ctx.strokeText(banner.sub, 0, big * 0.85); ctx.fillStyle = '#c9d4ea'; ctx.fillText(banner.sub, 0, big * 0.85); }
+    ctx.restore();
+  }
+  function drawScreenFlash() {
+    const f = Math.max(SD3D.flash || 0, hurtT);
+    if (f <= 0.01) return;
+    const g = ctx.createRadialGradient(viewW / 2, viewH / 2, Math.min(viewW, viewH) * 0.3, viewW / 2, viewH / 2, Math.max(viewW, viewH) * 0.75);
+    g.addColorStop(0, 'rgba(255,40,20,0)'); g.addColorStop(1, 'rgba(255,40,20,' + (0.42 * f).toFixed(3) + ')');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, viewW, viewH);
   }
 
   function drawFloatingStick() {
@@ -780,7 +947,7 @@
     ctx.restore();
   }
   function drawBossEntity(t, tm) {
-    const r = t.hitR || 26, hit = t.flash > 0;
+    const r = t.hitR || 26, hit = t.flash > 0, arc = t.armorArc || WARDEN_ARC;
     ctx.save();
     ctx.translate(t.x, t.y);
     // ground shadow
@@ -794,7 +961,7 @@
     ctx.strokeStyle = 'rgba(0,0,0,.30)'; ctx.lineWidth = 2;
     for (let a = 0; a < 8; a++) { const ang = a / 8 * Math.PI * 2; ctx.beginPath(); ctx.moveTo(Math.cos(ang) * (r * 0.45), Math.sin(ang) * (r * 0.45)); ctx.lineTo(Math.cos(ang) * r, Math.sin(ang) * r); ctx.stroke(); }
     // front-armor highlight (Mauler)
-    if (t.frontArmor) { ctx.fillStyle = 'rgba(190,215,255,.5)'; ctx.beginPath(); ctx.arc(0, 0, r, t.heading - WARDEN_ARC, t.heading + WARDEN_ARC); ctx.arc(0, 0, r - 8, t.heading + WARDEN_ARC, t.heading - WARDEN_ARC, true); ctx.closePath(); ctx.fill(); }
+    if (t.frontArmor) { ctx.fillStyle = 'rgba(190,215,255,.5)'; ctx.beginPath(); ctx.arc(0, 0, r, t.heading - arc, t.heading + arc); ctx.arc(0, 0, r - 8, t.heading + arc, t.heading - arc, true); ctx.closePath(); ctx.fill(); }
     // core glow keyed to phase
     ctx.fillStyle = t.phase >= 3 ? 'rgba(255,90,40,.9)' : t.phase >= 2 ? 'rgba(255,170,60,.75)' : 'rgba(255,230,180,.5)';
     ctx.beginPath(); ctx.arc(0, 0, r * 0.28 + (t.phase >= 3 ? 2 : 0), 0, Math.PI * 2); ctx.fill();
@@ -806,19 +973,23 @@
   function drawPlayerNames() {
     if (!online.connected || visualMode === 'classic') return;
     ctx.save();
-    ctx.font = 'bold 9px Menlo,Consolas,monospace';
+    ctx.font = 'bold ' + (use3d() ? 11 : 9) + 'px Menlo,Consolas,monospace';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     for (const t of tanks) {
       if (!t || !t.alive || t.id > 1) continue;
       const role = t.id === 0 ? 'p1' : 'p2';
       const name = String(online.names[role] || role.toUpperCase()).slice(0, 12);
-      const y = t.y - 24;
+      const s = toScreen(t.x, t.y - (use3d() ? 0 : 24), use3d() ? 34 : 0); if (!s) continue;
       ctx.strokeStyle = 'rgba(0,0,0,.7)'; ctx.lineWidth = 3;
-      ctx.strokeText(name, t.x, y);
+      ctx.strokeText(name, s.x, s.y);
       ctx.fillStyle = role === 'p1' ? '#ffb347' : '#a8f06f';
-      ctx.fillText(name, t.x, y);
+      ctx.fillText(name, s.x, s.y);
     }
     ctx.restore();
+  }
+  function hudBand(w, h, a) {                              // solid in 2D; a soft fade over the 3D view
+    if (use3d()) { const g = ctx.createLinearGradient(0, 0, 0, h + 26); g.addColorStop(0, 'rgba(4,7,12,' + (a + 0.22) + ')'); g.addColorStop(0.7, 'rgba(4,7,12,' + a * 0.7 + ')'); g.addColorStop(1, 'rgba(4,7,12,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h + 26); }
+    else { ctx.fillStyle = 'rgba(0,0,0,' + a + ')'; ctx.fillRect(0, 0, w, h); }
   }
   function drawHUD(T) {
     const w = viewW, h = mobileView ? 56 : HUD_H;
@@ -832,7 +1003,7 @@
       ctx.fillStyle = '#fff'; ctx.fillRect(0, h - 9, w, 9);
       return;
     }
-    ctx.fillStyle = 'rgba(0,0,0,0.48)'; ctx.fillRect(0, 0, w, h);
+    hudBand(w, h, 0.48);
     ctx.font = 'bold 40px Menlo,Consolas,monospace'; ctx.textBaseline = 'middle';
     ctx.fillStyle = visualMode === 'classic' ? '#fff' : T.p1; ctx.textAlign = 'left'; ctx.fillText(String(score.p1).padStart(2, '0'), mobileView ? 14 : 28, h / 2);
     ctx.fillStyle = visualMode === 'classic' ? '#bdbdbd' : (mode === 'coop' ? '#ff5277' : T.p2); ctx.textAlign = 'right'; ctx.fillText(String(score.p2).padStart(2, '0'), w - (mobileView ? 14 : 28), h / 2);
@@ -848,7 +1019,7 @@
     if (freezeT > 0 && state === 'playing') { ctx.fillStyle = T.inkDim; ctx.font = 'bold 13px Menlo,Consolas,monospace'; ctx.fillText('- RELOADING -', w / 2, h / 2 + 22); }
   }
   function drawCampaignHUD(T, w, h) {
-    ctx.fillStyle = 'rgba(0,0,0,0.52)'; ctx.fillRect(0, 0, w, h);
+    hudBand(w, h, 0.52);
     ctx.textBaseline = 'middle';
     const padL = mobileView ? 12 : 22, padR = mobileView ? 12 : 22;
     // left: score + lives
@@ -882,11 +1053,19 @@
       ctx.fillStyle = '#fff'; ctx.font = 'bold 10px Menlo,Consolas,monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
       ctx.fillText(boss.bossName + '  ·  PHASE ' + boss.phase + '/3', w / 2, by + 19);
     }
-    // big mid-field banner during clear / level-clear
-    if (campaign.phase === 'clear' || campaign.phase === 'levelclear') {
+    // big mid-field banner during clear / level-clear (2D; the 3D view uses the animated centre banner)
+    if ((campaign.phase === 'clear' || campaign.phase === 'levelclear') && !use3d()) {
       ctx.fillStyle = campaign.phase === 'levelclear' ? '#a8f06f' : T.ink;
       ctx.font = 'bold 34px Menlo,Consolas,monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.fillText(campaign.banner, w / 2, HUD_H + FIELD_H / 2);
+      ctx.fillText(campaign.banner, w / 2, viewH / 2);
+    }
+    // supply-crate buffs on the local player
+    const me = tanks[0];
+    if (me && me.alive && (me.shieldT > 0 || me.rapidT > 0)) {
+      ctx.font = 'bold 11px Menlo,Consolas,monospace'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+      let bx = padL, by = h + 14;
+      if (me.shieldT > 0) { ctx.fillStyle = '#5fd8ff'; ctx.fillText('SHIELD ' + Math.ceil(me.shieldT), bx, by); bx += 92; }
+      if (me.rapidT > 0) { ctx.fillStyle = '#ffa040'; ctx.fillText('RAPID ' + Math.ceil(me.rapidT), bx, by); }
     }
   }
   function drawHealthPips(T, w, h) {
@@ -920,10 +1099,12 @@
     const map = { title: 'ovTitle', online: 'ovOnline', how: 'ovHow', options: 'ovOptions', paused: 'ovPause', over: 'ovOver', scores: 'ovScores' };
     if (map[which]) { const e = $(map[which]); if (e) e.classList.remove('hidden'); }
     if (which === 'over') {
-      const w = $('overResult');
+      const w = $('overResult'), retry = $('btnRetry');
+      if (retry) retry.style.display = 'none';
       if (mode === 'campaign' && campaign) {
         if (w) w.textContent = campaign.phase === 'won' ? 'CAMPAIGN COMPLETE' : 'GAME OVER';
         const sc = $('overScore'); if (sc) sc.textContent = 'SCORE ' + campaign.score + ' · REACHED LV' + (campaign.levelIdx + 1);
+        if (retry && campaign.phase !== 'won' && campaign.levelIdx > 0) { retry.style.display = ''; retry.textContent = 'RETRY LEVEL ' + (campaign.levelIdx + 1) + ' (score resets)'; }
       } else {
         if (w) w.textContent = winner === 'draw' ? 'DRAW' : (winner === 'p1' ? (mode === 'cpu' ? 'YOU WIN' : (mode === 'watch' ? 'CPU 1 WINS' : (mode === 'coop' ? 'TEAM WINS' : 'PLAYER 1 WINS'))) : (mode === 'cpu' ? 'CPU WINS' : (mode === 'watch' ? 'CPU 2 WINS' : (mode === 'coop' ? 'ENEMY TANKS WIN' : 'PLAYER 2 WINS'))));
         const sc = $('overScore'); if (sc) sc.textContent = score.p1 + ' — ' + score.p2;
@@ -940,8 +1121,26 @@
     matchTime = DEFAULT_TIME;
     resetMatch(seed == null ? ((Math.random() * 1e9) | 0) : seed);
     state = 'playing'; hideAllOverlays();
+    emit('start', { mode });
     if (!headless) { SDAudio.init(); SDAudio.start(); }
     applyCursor(); updateTouchLayout();
+  }
+  function playAgain() {
+    if (mode === 'campaign' && campaign) { startCampaign(0, campaign.players, aiLevel, (Math.random() * 1e9) | 0); return; }   // was restarting a broken 2-tank "campaign"
+    if (online.connected && online.role === 'p1') startOnlineHost(mode); else startGame(mode);
+  }
+  function campaignStartLevel() { const s = $('campStart'); return s ? Math.max(0, parseInt(s.value, 10) || 0) : 0; }
+  function loadCampaignBest() { try { return Math.max(0, parseInt(localStorage.getItem('sd_camp_best'), 10) || 0); } catch (e) { return 0; } }
+  function saveCampaignBest(idx) { try { if (idx > loadCampaignBest()) localStorage.setItem('sd_camp_best', String(idx)); } catch (e) {} refreshCampStart(); }
+  function refreshCampStart() {                          // checkpoints unlock after each boss you reach past
+    const s = $('campStart'), wrap = $('campStartRow'); if (!s) return;
+    const best = loadCampaignBest(), opts = [[0, 'LEVEL 1 · BOOT CAMP']];
+    if (best >= 4) opts.push([4, 'LEVEL 5 · AFTER THE BASTION']);
+    if (best >= 8) opts.push([8, 'LEVEL 9 · AFTER THE MAULER']);
+    const cur = s.value;
+    s.innerHTML = opts.map(([v, l]) => '<option value="' + v + '">' + l + '</option>').join('');
+    if (opts.some(o => String(o[0]) === cur)) s.value = cur;
+    if (wrap) wrap.style.display = opts.length > 1 ? '' : 'none';
   }
 
   /* ===================== online rooms ===================== */
@@ -1277,7 +1476,7 @@
   const Scores = {
     BASE: 'https://game-scores.jez237.workers.dev/scores/', NS: 'steel-duel', cache: {}, last: null,
     ns() { return mode === 'campaign' ? 'steel-duel-campaign' : 'steel-duel'; },   // campaign ranks on its own board
-    async fetch() { const ns = this.ns(); try { const r = await fetch(this.BASE + ns, { cache: 'no-store' }); const d = await r.json(); this.cache[ns] = (Array.isArray(d) ? d : (d.scores || [])).map(s => ({ name: String(s.initials || s.name || '???').slice(0, 3).toUpperCase(), score: s.score | 0 })).sort((a, b) => b.score - a.score).slice(0, 8); } catch (e) { this.cache[ns] = 'offline'; } return this.cache[ns]; },
+    async fetch(nsOverride) { const ns = nsOverride || this.ns(); try { const r = await fetch(this.BASE + ns, { cache: 'no-store' }); const d = await r.json(); this.cache[ns] = (Array.isArray(d) ? d : (d.scores || [])).map(s => ({ name: String(s.initials || s.name || '???').slice(0, 3).toUpperCase(), score: s.score | 0 })).sort((a, b) => b.score - a.score).slice(0, 8); } catch (e) { this.cache[ns] = 'offline'; } return this.cache[ns]; },
     async submit(name, sc) { const ns = this.ns(); this.last = { name, score: sc }; try { await fetch(this.BASE + ns, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ initials: name, score: sc }) }); this.cache[ns] = null; } catch (e) {} },
   };
   function scoreSubject() {
@@ -1302,10 +1501,14 @@
     if (el) el.classList.remove('hidden');
     const v = $('overYourScore'); if (v) v.textContent = s.label + ' scored ' + s.points + ' in ' + s.mode;
   }
-  async function refreshBoard() {
+  let boardTab = null;
+  async function refreshBoard(tab) {
     const box = $('scoreBoard'); if (!box) return; box.innerHTML = '<div class="sb-row">loading…</div>';
-    const head = `<div class="sb-row" style="opacity:.55;font-size:11px;letter-spacing:1px"><span>${mode === 'campaign' ? 'CAMPAIGN' : 'VERSUS'} BOARD</span><span>${mode === 'campaign' ? 'score / lvl' : 'pts'}</span></div>`;
-    const list = await Scores.fetch();
+    boardTab = tab || boardTab || (mode === 'campaign' ? 'campaign' : 'versus');
+    const camp = boardTab === 'campaign';
+    document.querySelectorAll('.sb-tab').forEach(b => b.classList.toggle('on', b.dataset.tab === boardTab));
+    const head = `<div class="sb-row" style="opacity:.55;font-size:11px;letter-spacing:1px"><span>${camp ? 'CAMPAIGN' : 'VERSUS'} BOARD</span><span>${camp ? 'score / lvl' : 'pts'}</span></div>`;
+    const list = await Scores.fetch(camp ? 'steel-duel-campaign' : 'steel-duel');
     if (list === 'offline') { box.innerHTML = head + '<div class="sb-row">leaderboard offline</div>'; return; }
     if (!list.length) { box.innerHTML = head + '<div class="sb-row">no scores yet — be the first</div>'; return; }
     box.innerHTML = head + list.map((s, i) => `<div class="sb-row"><span>${i + 1}. ${s.name}</span><span>${Math.floor(s.score / 100)} <small style="opacity:.5">/${s.score % 100}</small></span></div>`).join('');
@@ -1313,17 +1516,173 @@
   function diffName(v) { return v <= 8 ? 'Stupid' : v <= 30 ? 'Rookie' : v <= 55 ? 'Seasoned' : v <= 80 ? 'Crack Shot' : v < 100 ? 'Lethal' : "Can't Defeat"; }
 
   /* ===================== loop ===================== */
-  let lastT = 0, acc = 0, rafId = 0;
+  let lastT = 0, acc = 0, rafId = 0, slowMo = 0;
   function frame(t) {
     rafId = requestAnimationFrame(frame);
-    const dt = Math.min(0.05, (t - lastT) / 1000) || 0; lastT = t;
-    if (state === 'playing' || state === 'attract') { acc += dt; let n = 0; while (acc >= STEP && n < 5) { update(); acc -= STEP; n++; } }
+    const dt = Math.min(0.05, (t - lastT) / 1000) || 0; lastT = t; frameDt = dt;
+    const simScale = slowMo > 0 && !online.connected ? 0.3 : 1; slowMo = Math.max(0, slowMo - dt);   // kill-cam slow motion on boss kills
+    if (state === 'playing' || state === 'attract') { acc += dt * simScale; let n = 0; while (acc >= STEP && n < 5) { update(); acc -= STEP; n++; } }
     sendOnlineInput(t);
     sendOnlineSnapshot(t, false);
     sendOnlinePing(t);
     smoothOnlineView(dt);
-    if (SDArt) { PARTS.update(dt); TRACKS.update(dt); }
-    render();
+    consumeEvents();
+    present(dt);
+    if (SDArt) { PARTS.update(dt); TRACKS.update(dt); if (!use3d()) layTracks2D(); }
+    render(dt);
+  }
+
+  /* ===================== presentation: events → effects, audio, announcer ===================== */
+  const pres = { streak: 0, lastKill: -9, flankSaid: false, lastScoreVo: -9, trackDist: {} };
+  function consumeEvents() { while (events.length) dispatch(events.shift()); }
+  function dispatch(e) {
+    if (use3d()) SD3D.event(e); else fx2d(e);
+    if (state === 'attract' || headless) return;          // the attract duel is visual only
+    sound(e);
+  }
+  function fx2d(e) {
+    if (!PARTS) return;
+    switch (e.k) {
+      case 'wall': PARTS.explosion(e.x, e.y, '#cfd6e6'); PARTS.chips(e.x, e.y, '#8a93a6'); if (e.broke) DECALS.add(e.c * TILE + TILE / 2, HUD_H + e.r * TILE + TILE / 2, 22); break;
+      case 'hit': PARTS.chips(e.x, e.y, tankColor(e.id)); DECALS.add(e.x, e.y, 12); break;
+      case 'deflect': PARTS.chips(e.x, e.y, '#cfe0ff'); break;
+      case 'kill': PARTS.explosion(e.x, e.y, e.color || '#ff5277'); DECALS.add(e.x, e.y, 30); break;
+      case 'mine': PARTS.explosion(e.x, e.y, '#ff8a4f'); DECALS.add(e.x, e.y, 26); break;
+      case 'mineDrop': DECALS.add(e.x, e.y, 10); break;
+      case 'flak': PARTS.chips(e.x, e.y, '#fff4c2'); break;
+      case 'pick': PARTS.chips(e.x, e.y, PICK_COL[e.kind] || '#fff'); break;
+    }
+  }
+  function layTracks2D() {
+    for (const t of tanks) {
+      if (!t || !t.alive) continue;
+      const last = pres.trackDist[t.id];
+      if (last == null || t.dist < last) { pres.trackDist[t.id] = t.dist; continue; }
+      if (t.dist - last > 7) { TRACKS.add(t.x, t.y, t.heading); pres.trackDist[t.id] = t.dist; }
+    }
+  }
+  function localTankId() { return online.connected && online.role === 'p2' ? 1 : 0; }
+  function isMine(id) {                                   // a tank a human on this screen drives
+    const t = tanks[id]; if (!t || mode === 'watch') return false;
+    if (online.connected) return id === localTankId();
+    return !bots[id] && !t.boss && t.team !== 'enemy';
+  }
+  function panOf(x) { return x == null ? 0 : Math.max(-0.8, Math.min(0.8, (x - FIELD_W / 2) / (FIELD_W / 2) * 0.7)); }
+  function nearGain(x, y) {
+    const f = focusTank(); if (!f || x == null) return 1;
+    return 0.55 + 0.45 * Math.max(0, 1 - Math.hypot(x - f.x, y - f.y) / 700);
+  }
+  const BOSS_TITLES = { bastion: 'THE BASTION', mauler: 'MAULER', warlord: 'IRON WARLORD' };
+  function sound(e) {
+    const at = v => ({ pan: panOf(e.x), gain: v * nearGain(e.x, e.y) }), now = perfNow() / 1000;
+    switch (e.k) {
+      case 'fire': SDAudio.play('cannon', Object.assign(at(e.big ? 0.72 : 0.55), { rate: e.big ? 0.78 : 1 })); break;
+      case 'wall': SDAudio.play(e.broke ? 'wallbreak' : 'wall', Object.assign(at(e.broke ? 0.8 : e.border ? 0.35 : 0.45), { minGap: e.broke ? 0 : 0.04, rate: e.border ? 1.25 : 1 })); break;
+      case 'hit':
+        SDAudio.play('hit', at(0.75));
+        if (isMine(e.id)) { hurtT = 0.7; if (navigator.vibrate && touchActive) try { navigator.vibrate(40); } catch (er) {} }
+        break;
+      case 'deflect':
+        SDAudio.play('ricochet', at(0.7));
+        if (mode === 'campaign' && !e.shield && !pres.flankSaid && isMine(e.by)) { pres.flankSaid = true; SDAudio.say('flank', 2); popup(e.x, e.y, 'FLANK IT!', '#9fc2ff'); }
+        break;
+      case 'kill': {
+        SDAudio.play('explode', Object.assign(at(e.boss ? 1 : 0.85), { rate: e.boss ? 0.8 : 1 }));
+        if (e.boss) { SDAudio.play('explode', { gain: 0.8, rate: 0.62, delay: 0.3 }); SDAudio.say('bossdown', 3); slowMo = 1.4; showBanner(BOSS_TITLES[e.boss] || 'BOSS', 'DESTROYED', '#ffd27a', 2.4); }
+        if (isMine(e.id)) hurtT = 1;
+        if (e.team === 'enemy' && (mode === 'campaign' || mode === 'coop') && tanks[e.by] && tanks[e.by].team === 'ally') {
+          if (e.val) popup(e.x, e.y, '+' + e.val, e.color);
+          pres.streak = now - pres.lastKill < 3.2 ? pres.streak + 1 : 1; pres.lastKill = now;
+          if (pres.streak === 2) { SDAudio.say('double', 1); showBanner('DOUBLE KILL', '', '#ffd27a', 1.2); }
+          else if (pres.streak === 3) { SDAudio.say('triple', 2); showBanner('TRIPLE KILL', '', '#ffb347', 1.4); }
+          else if (pres.streak === 5) { SDAudio.say('rampage', 2); showBanner('UNSTOPPABLE', '', '#ff7a4f', 1.6); }
+        }
+        break;
+      }
+      case 'mine': SDAudio.play('mine', at(1)); break;
+      case 'mineDrop': SDAudio.blip(160); break;
+      case 'flak': SDAudio.play('flak', at(0.7)); popup(e.x, e.y, 'FLAK', '#fff4c2'); break;
+      case 'phase': SDAudio.play('bosshorn', { gain: 0.7 }); SDAudio.say('phase', 2); showBanner('PHASE ' + e.phase, BOSS_TITLES[e.boss] || '', '#ff7a4f', 1.6); break;
+      case 'wave': {
+        const lvName = 'LV' + (e.lv + 1) + ' · ' + String(e.name || '').toUpperCase();
+        if (e.boss) { SDAudio.play('bosshorn', { gain: 0.85 }); SDAudio.say(e.boss, 3); showBanner(BOSS_TITLES[e.boss] || 'BOSS', lvName, '#ff7a4f', 2.8); }
+        else {
+          SDAudio.play('klaxon', { gain: 0.4 });
+          SDAudio.say(e.wave === 0 ? 'wave1' : (e.wave === e.waves - 1 && e.waves > 2) ? 'wave3' : 'wave2', 2);
+          showBanner(e.wave === 0 ? lvName : 'WAVE ' + (e.wave + 1), e.wave === 0 ? 'WAVE 1 / ' + e.waves : (e.wave === e.waves - 1 ? 'FINAL WAVE' : ''), '#eef3ff', 2);
+        }
+        break;
+      }
+      case 'waveClear': SDAudio.say('waveclear', 2); showBanner('WAVE CLEAR', '', '#eef3ff', 1.3); break;
+      case 'levelClear': SDAudio.say('levelclear', 2); SDAudio.play('pickup', { gain: 0.4 }); showBanner('LEVEL CLEAR', e.boss ? 'CHECKPOINT UNLOCKED' : '', '#a8f06f', 2.2); break;
+      case 'lifeLost': SDAudio.say(e.lives === 1 ? 'lastlife' : 'tankdown', 2); break;
+      case 'lifeUp': SDAudio.say('extralife', 1); break;
+      case 'campEnd': SDAudio.play(e.won ? 'victory' : 'defeat', { gain: 0.8 }); SDAudio.say(e.won ? 'complete' : 'gameover', 3); break;
+      case 'end': {
+        const w = e.winner, cpu = mode === 'cpu', coop = mode === 'coop';
+        const youWon = (cpu && w === 'p1') || (coop && w === 'p1') || (online.connected && ((online.role === 'p1' && w === 'p1') || (online.role === 'p2' && w === 'p2')));
+        const lost = (cpu || coop) && w === 'p2';
+        SDAudio.play(lost ? 'defeat' : 'victory', { gain: 0.75 });
+        SDAudio.say(w === 'draw' ? 'draw' : cpu ? (w === 'p1' ? 'youwin' : 'cpuwins') : coop ? (w === 'p1' ? 'teamwins' : 'gameover') : (youWon ? 'youwin' : w === 'p1' ? 'p1wins' : 'p2wins'), 3);
+        break;
+      }
+      case 'score': {
+        if (now - pres.lastScoreVo < 1.6) break; pres.lastScoreVo = now;
+        if (mode === 'coop') SDAudio.say(e.team === 'enemy' ? 'teamscores' : 'enemyscores', 1);
+        else if (mode === 'cpu') SDAudio.say(e.victim === 1 ? 'teamscores' : 'enemyscores', 1);
+        else SDAudio.say(e.victim === 0 ? 'p2scores' : 'p1scores', 1);
+        break;
+      }
+      case 'time': SDAudio.say(e.s === 20 ? '20s' : '10s', 2); SDAudio.blip(e.s === 10 ? 1240 : 920); break;
+      case 'start': SDAudio.say('ready', 3); SDAudio.say('fight', 1); break;
+      case 'drop': SDAudio.blip(1480); break;
+      case 'pick': {
+        SDAudio.play(e.kind === 'repair' ? 'repair' : e.kind === 'shield' ? 'shield' : 'pickup', { gain: 0.75 });
+        SDAudio.say(e.kind === 'life' ? 'extralife' : e.kind, 1);
+        popup(e.x, e.y, { repair: 'REPAIR +2', shield: 'SHIELD', rapid: 'RAPID FIRE', life: mode === 'campaign' ? '+1 LIFE' : 'FULL REPAIR' }[e.kind] || '', PICK_COL[e.kind], true);
+        break;
+      }
+    }
+  }
+  function present(dt) {
+    for (let i = popups.length - 1; i >= 0; i--) { popups[i].t -= dt; if (popups[i].t <= 0) popups.splice(i, 1); }
+    if (banner) { banner.t -= dt; if (banner.t <= 0) banner = null; }
+    hurtT = Math.max(0, hurtT - dt * 1.6);
+    if (!SDAudio.context) return;                        // audio starts on the first tap/click
+    const boss = mode === 'campaign' && tanks.some(t => t.boss && t.alive);
+    SDAudio.music(state === 'playing' || state === 'paused' ? (boss ? 'boss' : 'battle') : 'menu');
+    SDAudio.tick();
+    let lvl = 0, mot = 0;
+    if (state === 'playing') { const f = focusTank(); if (f && f.alive && isMine(f.id)) { mot = Math.min(1, Math.abs(f.speed) / MAX_FWD); lvl = 0.35 + 0.65 * mot; } }
+    SDAudio.engine(lvl, mot);
+  }
+  function focusTank() {                                  // the tank the camera and the mix centre on
+    if (state !== 'playing' && state !== 'paused') return null;
+    if (mode === 'watch' || (online.connected && online.role === 'spectator')) return null;
+    return tanks[localTankId()] || null;
+  }
+  function layoutInfo() {
+    const col = i => ['#ffb347', '#46d6e8', '#ff5277', '#ff5277'][i];
+    if (mode === 'campaign') return { arena: campaign ? LEVELS[campaign.levelIdx].arena : 'open', mineRect: null, spawns: CAMP_ALLY_SPAWNS.slice(0, campaign ? campaign.players : 1).map((s, i) => ({ c: s.c, r: s.r, color: ['#ffb347', '#a8f06f', '#6fb7f0', '#f0d96f'][i] })) };
+    if (mode === 'coop') return { arena: 'duel', mineRect: MINE_RECT, spawns: COOP_SPAWNS.map((s, i) => ({ c: s.c, r: s.r, color: i < 2 ? ['#ffb347', '#a8f06f'][i] : '#ff5277' })) };
+    return { arena: 'duel', mineRect: MINE_RECT, spawns: SPAWNS.map((s, i) => ({ c: s.c, r: s.r, color: col(i) })) };
+  }
+  const api3d = {
+    consts: () => ({ COLS, ROWS, TILE, HUD_H, FW: FIELD_W, FH: FIELD_H, WALL_MAX, TANK_R }),
+    solid: () => solid, wallHP: () => wallHP, mines: () => mines, tanks: () => tanks, shells: () => shells, pickups: () => pickups,
+    state: () => state, mobile: () => mobileView, hudH: () => (mobileView ? 56 : HUD_H),
+    focus: () => focusTank(),
+    reticle: () => (state === 'playing' && mouseAimActive() && tanks[0] && tanks[0].alive && mouseFresh > 0) ? { x: mouseX, y: mouseY, from: tanks[0] } : null,
+    layout: layoutInfo,
+    onLost: () => { gl3d = false; },
+  };
+  function init3d() {
+    if (gl3d || !glCanvas || !window.SD3D || new URLSearchParams(location.search).has('no3d')) return;
+    if (SD3D.init(glCanvas, api3d)) {
+      gl3d = true; gl3dVer = -1;
+      SD3D.setQuality(gfxQuality); SD3D.setCamMode(camPref);
+      resize();
+    }
   }
 
   /* ===================== input ===================== */
@@ -1340,12 +1699,18 @@
     if (twoLocal) {
       c1.fwd = !!keys['ArrowUp']; c1.back = !!keys['ArrowDown']; c1.left = !!keys['ArrowLeft']; c1.right = !!keys['ArrowRight']; c1.fire = !!(keys['Enter'] || keys['ShiftRight']);
     }
-    if (!down) return;
-    if (c === 'KeyP' || c === 'Escape') { if (state === 'playing') { state = 'paused'; showOverlay('paused'); } else if (state === 'paused') { state = 'playing'; hideAllOverlays(); } }
+    if (!down || e.repeat) return;
+    if (e.target && e.target.closest && e.target.closest('input, select')) return;
+    // pausing the host would silently freeze the remote player, so online matches don't pause
+    if ((c === 'KeyP' || c === 'Escape') && !online.connected) { if (state === 'playing') { state = 'paused'; showOverlay('paused'); } else if (state === 'paused') { state = 'playing'; hideAllOverlays(); } }
     if (c === 'KeyM') setMuted(!muted);
     if (c === 'KeyC') toggleVisual();
+    if (c === 'KeyV') cycleCamera();
   }
-  function toggleVisual() { visualMode = visualMode === 'hd' ? 'classic' : 'hd'; const b = $('btnClassic'); if (b) b.textContent = visualMode === 'classic' ? '1974' : 'HD'; }
+  function toggleVisual() { visualMode = visualMode === 'hd' ? 'classic' : 'hd'; syncVisualButton(); }
+  function syncVisualButton() { const b = $('btnClassic'); if (b) b.textContent = visualMode === 'classic' ? '1974' : (gl3d ? '3D' : 'HD'); }
+  const CAM_MODES = ['auto', 'overview', 'follow'], CAM_LABEL = { auto: 'AUTO', overview: 'WHOLE ARENA', follow: 'FOLLOW TANK' };
+  function cycleCamera() { setCamPref(CAM_MODES[(CAM_MODES.indexOf(camPref) + 1) % CAM_MODES.length]); if (use3d() && state === 'playing') popup(tanks[0] ? tanks[0].x : FIELD_W / 2, tanks[0] ? tanks[0].y : HUD_H + FIELD_H / 2, 'CAMERA: ' + CAM_LABEL[camPref], '#cfe0ff'); }
   function mouseAimActive() { return !touchActive && (mode === 'cpu' || mode === 'coop' || (mode === 'campaign' && campaign && campaign.players === 1)); }
   function applyCursor() { if (canvas) canvas.style.cursor = (state === 'playing' && mouseAimActive()) ? 'none' : 'default'; }
   function updateTouchLayout() {                          // assisted modes use floating drag anywhere; duel keeps twin sticks for two local players
@@ -1371,8 +1736,32 @@
     const o = $('optAutoFire'); if (o) o.textContent = autoFire ? '🎯 AUTO-FIRE: ON' : '🎯 AUTO-FIRE: OFF';
     persist('sd_autofire', autoFire); updateTouchLayout();
   }
+  let musicPref = true, gfxQuality = 'auto', camPref = 'auto';
+  const GFX = ['auto', 'high', 'medium', 'low'];
+  function setMusicPref(v) {
+    musicPref = !!v; if (SDAudio.setMusic) SDAudio.setMusic(musicPref);
+    const o = $('optMusic'); if (o) o.textContent = musicPref ? '🎵 MUSIC: ON' : '🎵 MUSIC: OFF';
+    persist('sd_music', musicPref);
+  }
+  function setGfx(q) {
+    gfxQuality = GFX.includes(q) ? q : 'auto';
+    if (gl3d) SD3D.setQuality(gfxQuality);
+    const o = $('optGfx'); if (o) o.textContent = '✨ GRAPHICS: ' + gfxQuality.toUpperCase();
+    try { localStorage.setItem('sd_gfx', gfxQuality); } catch (e) {}
+  }
+  function setCamPref(m) {
+    camPref = CAM_MODES.includes(m) ? m : 'auto';
+    if (gl3d) SD3D.setCamMode(camPref);
+    const o = $('optCam'); if (o) o.textContent = '🎥 CAMERA: ' + CAM_LABEL[camPref];
+    try { localStorage.setItem('sd_cam', camPref); } catch (e) {}
+  }
   function loadSettings() {
-    try { const m = localStorage.getItem('sd_muted'); if (m != null) muted = m === '1'; const a = localStorage.getItem('sd_autofire'); if (a != null) autoFire = a === '1'; } catch (e) {}
+    try {
+      const m = localStorage.getItem('sd_muted'); if (m != null) muted = m === '1';
+      const a = localStorage.getItem('sd_autofire'); if (a != null) autoFire = a === '1';
+      const mu = localStorage.getItem('sd_music'); if (mu != null) musicPref = mu === '1';
+      gfxQuality = localStorage.getItem('sd_gfx') || 'auto'; camPref = localStorage.getItem('sd_cam') || 'auto';
+    } catch (e) {}
   }
 
   function screenPoint(clientX, clientY) {
@@ -1402,7 +1791,8 @@
     const startStick = e => {
       if (uiTarget(e) || state !== 'playing' || !assistedControls(0)) return;
       aimAt(e);
-      if (e.pointerType === 'mouse') { mouseDown = true; controls[0].fire = true; }
+      // a mouse click only force-fires; starting a drag stick here used to override WASD and stall the tank while firing
+      if (e.pointerType === 'mouse') { mouseDown = true; controls[0].fire = true; e.preventDefault(); return; }
       const p = screenPoint(e.clientX, e.clientY); if (!p) return;
       stick.active = true; stick.id = e.pointerId; stick.ox = p.x; stick.oy = p.y; stick.dx = 0; stick.dy = 0;
       try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
@@ -1474,17 +1864,13 @@
     dpr = Math.min(2, window.devicePixelRatio || 1);
     mobileView = hasTouchScreen() && !headless;
     document.body.classList.toggle('mobile-play', mobileView);
-    if (mobileView) {
-      viewW = Math.max(1, window.innerWidth);
-      viewH = Math.max(1, window.innerHeight);
-      canvas.width = Math.round(viewW * dpr); canvas.height = Math.round(viewH * dpr);
-      canvas.style.width = viewW + 'px'; canvas.style.height = viewH + 'px';
-    } else {
-      viewW = LW; viewH = LH;
-      canvas.width = LW * dpr; canvas.height = LH * dpr;
-      const scale = Math.min(window.innerWidth / LW, (window.innerHeight - 4) / LH);
-      canvas.style.width = (LW * scale) + 'px'; canvas.style.height = (LH * scale) + 'px';
-    }
+    // both layers fill the window: WebGL arena underneath, 2D HUD (or the whole 1974 mode) on top
+    viewW = Math.max(1, window.innerWidth);
+    viewH = Math.max(1, window.innerHeight);
+    canvas.width = Math.round(viewW * dpr); canvas.height = Math.round(viewH * dpr);
+    canvas.style.width = viewW + 'px'; canvas.style.height = viewH + 'px';
+    if (glCanvas) { glCanvas.style.width = viewW + 'px'; glCanvas.style.height = viewH + 'px'; }
+    if (gl3d) SD3D.resize(viewW, viewH, window.devicePixelRatio || 1);
   }
 
   /* ===================== self-tests ===================== */
@@ -1714,6 +2100,72 @@
     const perCamp = (perfNow() - tpc) / 400;
     ok('T-perf+ campaign sim<=8ms', perCamp <= 8 && !pnan, perCamp.toFixed(3) + 'ms, ' + tanks.length + ' tanks');
 
+    // ---- v30: logic fixes + new features ----
+    // T-revive momentum: a respawned vs-CPU tank used to keep sliding with its pre-death velocity
+    mode = 'cpu'; resetMatch(8); state = 'playing'; bots = [false, false]; controls = fresh();
+    tanks[0].vx = 2.4; tanks[0].vy = 1.1; killTank(0); for (let i = 0; i < 90; i++) update();
+    const sp0 = tileCenter(SPAWNS[0].c, SPAWNS[0].r);
+    ok('T-revive clears momentum', tanks[0].alive && tanks[0].vx === 0 && tanks[0].vy === 0 && Math.hypot(tanks[0].x - sp0.x, tanks[0].y - sp0.y) < 1, 'vx=' + tanks[0].vx + ' dx=' + Math.round(tanks[0].x - sp0.x));
+
+    // T-boss hull vs walls: bosses collide with their whole body (they used to clip 14-21px into walls)
+    startCampaign(LEVELS.findIndex(l => l.boss === 'mauler'), 1, 60, 41); headless = true; bots[0] = true; tankSkill[0] = 0.6;
+    const mb = tanks.find(t => t.boss); let bossClip = false;
+    for (let i = 0; i < 900 && state === 'playing'; i++) { update(); if (mb.alive && circleHitsWall(mb.x, mb.y, mb.hitR - 2)) bossClip = true; }
+    ok('T-boss hull vs walls', !bossClip, 'clip=' + bossClip);
+
+    // T-bastion immovable: tanks can no longer shove the stationary fortress around
+    startCampaign(LEVELS.findIndex(l => l.boss === 'bastion'), 1, 45, 42); headless = true; controls = fresh();
+    const bas = tanks.find(t => t.boss), bx0 = bas.x, by0 = bas.y;
+    tanks[0].x = bas.x - bas.hitR - 4; tanks[0].y = bas.y; controls[0].right = true;
+    for (let i = 0; i < 60; i++) update();
+    const basGap = Math.hypot(tanks[0].x - bas.x, tanks[0].y - bas.y);
+    ok('T-bastion immovable', Math.hypot(bas.x - bx0, bas.y - by0) < 0.01 && basGap >= bas.hitR + TANK_R - 0.5, 'moved=' + Math.hypot(bas.x - bx0, bas.y - by0).toFixed(2) + ' gap=' + basGap.toFixed(1));
+
+    // T-campaign spawns: every ally spawn (and the boss spawn) is open floor in every arena — P4 used to start inside a wall
+    let spawnsOk = true;
+    for (const k of Object.keys(ARENAS)) {
+      buildMazeFrom(ARENAS[k]);
+      for (const s of CAMP_ALLY_SPAWNS) { const p = tileCenter(s.c, s.r); if (circleHitsWall(p.x, p.y, TANK_R)) spawnsOk = false; }
+      const bp = tileCenter(BOSS_SPAWN.c, BOSS_SPAWN.r); if (k === 'arena' && circleHitsWall(bp.x, bp.y, 33)) spawnsOk = false;
+    }
+    ok('T-campaign spawns clear', spawnsOk);
+
+    // T-campaign play again: PLAY AGAIN after a campaign used to start a broken 2-tank match that ended instantly
+    startCampaign(3, 2, 45, 45); headless = true; campaign.lives = 0; endCampaign(false);
+    playAgain(); headless = true;
+    ok('T-campaign play again', mode === 'campaign' && state === 'playing' && campaign.levelIdx === 0 && campaign.players === 2 && aliveCount('ally') === 2 && aliveCount('enemy') > 0, 'lv=' + (campaign && campaign.levelIdx) + ' state=' + state);
+
+    // T-co-op revive: a teammate down with no lives left rejoins at the next wave (designed, never implemented)
+    startCampaign(1, 2, 45, 46); headless = true; campaign.lives = 1;
+    killTank(1); const downOk = !tanks[1].alive && tanks[1].respawnT == null;
+    for (const t of tanks) if (t.team === 'enemy') { t.alive = false; t.hp = 0; }
+    let rejoined = false; for (let i = 0; i < 200; i++) { update(); if (tanks[1].alive) { rejoined = true; break; } }
+    ok('T-co-op revive next wave', downOk && rejoined && state === 'playing', 'down=' + downOk + ' rejoined=' + rejoined);
+
+    // T-supply crates: crates apply on contact, enemies drop them, a shield soaks one mine
+    startCampaign(0, 1, 45, 43); headless = true; controls = fresh();
+    const pl = tanks[0]; pl.hp = 1;
+    pickups.push({ id: 91, kind: 'repair', x: pl.x + 6, y: pl.y, t: 5 }, { id: 92, kind: 'shield', x: pl.x, y: pl.y + 6, t: 5 }, { id: 93, kind: 'rapid', x: pl.x, y: pl.y, t: 5 });
+    update();
+    const gotAll = pl.hp === 3 && pl.shieldT > 5 && pl.rapidT > 7 && pickups.length === 0;
+    let dropped = false;
+    for (let k = 0; k < 40 && !dropped; k++) { const en = enemyTank(tanks.length, 'grunt', { c: 14, r: 8, a: 0 }); tanks.push(en); bots[en.id] = false; killTank(en.id, 0); dropped = pickups.length > 0; }
+    mines.push({ x: pl.x, y: pl.y, ph: 0 }); update();
+    const shieldSaved = pl.alive && pl.shieldT === 0;
+    ok('T-supply crates', gotAll && dropped && shieldSaved, 'got=' + gotAll + ' drop=' + dropped + ' shield=' + shieldSaved);
+
+    // T-flak: opposing shells that meet mid-air cancel (campaign)
+    startCampaign(0, 1, 45, 44); headless = true; events.length = 0;
+    const eIdx = tanks.findIndex(t => t.team === 'enemy'); for (const t of tanks) if (t.team === 'enemy') t.alive = false;
+    shells = [{ x: 300, y: 300, vx: SHELL_SPD, vy: 0, life: 1, owner: 0, dmg: 1 }, { x: 330, y: 300, vx: -SHELL_SPD, vy: 0, life: 1, owner: eIdx, dmg: 1 }];
+    for (let i = 0; i < 3; i++) update();
+    ok('T-flak shells collide', shells.length === 0 && events.some(e => e.k === 'flak'), 'shells=' + shells.length);
+
+    // T-events: the sim reports fire/kill events (drives 3D effects, audio and online clients)
+    events.length = 0; mode = 'duel'; resetMatch(7); state = 'playing'; controls = fresh(); tanks[0].cd = 0; fire(tanks[0]); killTank(1, 0);
+    ok('T-events', events.some(e => e.k === 'fire' && e.id === 0) && events.some(e => e.k === 'kill' && e.id === 1 && e.by === 0) && shells[0].sid > 0);
+    events.length = 0; netEvents.length = 0;
+
     campaign = pcamp;
     online = ponline;
     headless = ph; mode = pmode; state = ps;
@@ -1723,7 +2175,7 @@
 
   /* ===================== shot scenes ===================== */
   function setupShot(scene) {
-    headless = true; if (SDArt) PARTS.clear();
+    headless = true; if (SDArt) PARTS.clear(); if (use3d()) SD3D.snapCamera();
     hideAllOverlays(); if (scene === 'title') { const e = $('ovTitle'); if (e) e.classList.remove('hidden'); }
     if (scene === 'campaign' || scene === 'coop' || scene === 'boss') {
       visualMode = 'hd';
@@ -1734,8 +2186,8 @@
       if (tanks[0] && tanks[0].alive) { tanks[0].turret = scene === 'boss' ? -1.2 : -0.35; tanks[0].cd = 0; fire(tanks[0]); }
       let fired = 0; for (const t of tanks) if (t.team === 'enemy' && t.alive && (t.boss || fired++ < 2)) { if (t.boss) { t.atkCd = 0; bossAttack(t); } else { t.cd = 0; fire(t); } }
       for (let i = 0; i < 5; i++) update();
-      if (SDArt) for (let i = 0; i < 6; i++) { PARTS.update(STEP); TRACKS.update(STEP); }
-      render(); return;
+      consumeEvents(); if (SDArt) for (let i = 0; i < 6; i++) { PARTS.update(STEP); TRACKS.update(STEP); if (use3d()) SD3D.advance(STEP); }
+      render(STEP); return;
     }
     mode = scene === 'classic' ? 'duel' : 'cpu'; visualMode = scene === 'classic' ? 'classic' : 'hd';
     tankSkill = [0.75, 0.7];
@@ -1745,23 +2197,32 @@
     else if (scene === 'duel' || scene === 'classic') { bots = [true, true]; for (let i = 0; i < 120; i++) update(); tanks[0].turret = 0.2; tanks[1].turret = Math.PI + 0.2; tanks[0].cd = 0; tanks[1].cd = 0; fire(tanks[0]); fire(tanks[1]); for (let i = 0; i < 6; i++) update(); }
     else if (scene === 'explosion') { bots = [true, true]; for (let i = 0; i < 60; i++) update(); tanks[1].x = tileCenter(8, 4).x; tanks[1].y = tileCenter(8, 4).y; tanks[1].alive = true; tanks[0].x = tileCenter(5, 4).x; tanks[0].y = tileCenter(5, 4).y; killTank(1); }
     else if (scene === 'minefield') { tanks[0].x = tileCenter(11, 8).x; tanks[0].y = tileCenter(11, 8).y; tanks[0].turret = 0.6; tanks[1].x = tileCenter(16, 9).x; tanks[1].y = tileCenter(16, 9).y; tanks[1].turret = Math.PI; for (let i = 0; i < 4; i++) update(); }
-    const vf = scene === 'explosion' ? 9 : 2; if (SDArt) for (let i = 0; i < vf; i++) { PARTS.update(STEP); TRACKS.update(STEP); }
-    render();
+    consumeEvents();
+    const vf = scene === 'explosion' ? 9 : 2; if (SDArt) for (let i = 0; i < vf; i++) { PARTS.update(STEP); TRACKS.update(STEP); if (use3d()) SD3D.advance(STEP); }
+    render(STEP);
   }
 
   /* ===================== boot ===================== */
   let TRACKS, PARTS, DECALS;
   function boot() {
     canvas = $('game'); if (!canvas) return; ctx = canvas.getContext('2d');
+    glCanvas = $('gl');
     TRACKS = new SDArt.Tracks(); PARTS = new SDArt.Particles(); DECALS = new SDArt.Decals();
     window.addEventListener('keydown', e => onKey(e, true)); window.addEventListener('keyup', e => onKey(e, false));
     setupPointerControls(); setupTouch(); setupForceFireButton();
+    loadSettings();
     resize(); window.addEventListener('resize', resize);
+    init3d(); if (!gl3d) window.addEventListener('sd3d-ready', () => { init3d(); syncVisualButton(); }, { once: true });
 
     const click = (id, fn) => { const e = $(id); if (e) e.addEventListener('click', () => { SDAudio.ui(); fn(); }); };
     click('btnDuel', () => { disconnectOnline(); startGame('duel'); }); click('btnCoop', () => { disconnectOnline(); startGame('coop'); }); click('btnCpu', () => { disconnectOnline(); startGame('cpu'); }); click('btnWatch', () => { disconnectOnline(); startGame('watch'); });
-    click('btnCampaign', () => { disconnectOnline(); startCampaign(0, 1, aiLevel, (Math.random() * 1e9) | 0); });
-    click('btnCampaign2', () => { disconnectOnline(); startCampaign(0, 2, aiLevel, (Math.random() * 1e9) | 0); });
+    click('btnCampaign', () => { disconnectOnline(); startCampaign(campaignStartLevel(), 1, aiLevel, (Math.random() * 1e9) | 0); });
+    click('btnCampaign2', () => { disconnectOnline(); startCampaign(campaignStartLevel(), 2, aiLevel, (Math.random() * 1e9) | 0); });
+    click('btnRetry', () => { if (campaign) startCampaign(campaign.levelIdx, campaign.players, aiLevel, (Math.random() * 1e9) | 0); });
+    click('optMusic', () => setMusicPref(!musicPref));
+    click('optGfx', () => setGfx(GFX[(GFX.indexOf(gfxQuality) + 1) % GFX.length]));
+    click('optCam', () => setCamPref(CAM_MODES[(CAM_MODES.indexOf(camPref) + 1) % CAM_MODES.length]));
+    document.querySelectorAll('.sb-tab').forEach(b => b.addEventListener('click', () => { SDAudio.ui(); refreshBoard(b.dataset.tab); }));
     click('btnOnline', () => { showOverlay('online'); refreshOpenRooms(); const r = $('onlineRoom'); if (r) r.focus(); });
     click('btnOnlineConnect', connectOnline);
     click('btnRoomsRefresh', refreshOpenRooms);
@@ -1774,7 +2235,7 @@
     click('btnOptions', () => { state = 'options'; showOverlay('options'); }); click('btnOptionsBack', () => { startAttract(); showOverlay('title'); });
     click('optSound', () => setMuted(!muted)); click('optAutoFire', () => setAutoFire(!autoFire));
     click('btnResume', () => { state = 'playing'; hideAllOverlays(); }); click('btnQuit', () => { disconnectOnline(); startAttract(); showOverlay('title'); });
-    click('btnAgain', () => (online.connected && online.role === 'p1') ? startOnlineHost(mode) : startGame(mode)); click('btnMenu', () => { disconnectOnline(); startAttract(); showOverlay('title'); });
+    click('btnAgain', playAgain); click('btnMenu', () => { disconnectOnline(); startAttract(); showOverlay('title'); });
     const room = $('onlineRoom'); if (room && !room.value) room.value = randomRoom();
     const name = $('onlineName'); if (name && !name.value) name.value = online.name;
     const sl = $('diffSlider'), lab = $('diffLabel');
@@ -1788,8 +2249,10 @@
     bindWatch(0, 'watchSliderA', 'watchLabelA'); bindWatch(1, 'watchSliderB', 'watchLabelB');
     const mb = $('btnMute'); if (mb) mb.addEventListener('click', () => { SDAudio.ui(); setMuted(!muted); });
     const cb = $('btnClassic'); if (cb) cb.addEventListener('click', toggleVisual);
-    const sub = $('btnSubmit'); if (sub) sub.addEventListener('click', async () => { const inp = $('initials'); const nm = (inp && inp.value || 'YOU').toUpperCase().slice(0, 3) || 'YOU'; await Scores.submit(nm, scoreValue()); const f = $('overScoreForm'); if (f) f.classList.add('hidden'); state = 'scores'; showOverlay('scores'); refreshBoard(); });
-    loadSettings(); setMuted(muted); setAutoFire(autoFire);   // restore + sync persisted options
+    const camB = $('btnCam'); if (camB) camB.addEventListener('click', () => { SDAudio.ui(); cycleCamera(); });
+    const sub = $('btnSubmit'); if (sub) sub.addEventListener('click', async () => { const inp = $('initials'); const nm = (inp && inp.value || 'YOU').toUpperCase().slice(0, 3) || 'YOU'; await Scores.submit(nm, scoreValue()); const f = $('overScoreForm'); if (f) f.classList.add('hidden'); state = 'scores'; showOverlay('scores'); refreshBoard(mode === 'campaign' ? 'campaign' : 'versus'); });
+    setMuted(muted); setAutoFire(autoFire); setMusicPref(musicPref); setGfx(gfxQuality); setCamPref(camPref);   // restore + sync persisted options
+    refreshCampStart(); syncVisualButton();
 
     const q = new URLSearchParams(location.search);
     const invitedRoom = q.get('online') || q.get('room');
@@ -1826,8 +2289,11 @@
     setBot(p, on) { bots[p] = !!on; }, input(p, a, d) { if (controls[p]) controls[p][a] = !!d; },
     touch(x, y, down) { stick.active = down !== false; if (stick.active) { stick.ox = x; stick.oy = y; stick.dx = 32; stick.dy = 0; } else { stick.dx = 0; stick.dy = 0; } return true; },
     start: startGame, attract: startAttract,
-    step(n) { n = n || 1; for (let i = 0; i < n; i++) update(); render(); return true; },
-    snap() { render(); return true; }, fire(i) { fire(tanks[i || 0]); }, kill(i) { killTank(i || 0); },
+    step(n) { n = n || 1; for (let i = 0; i < n; i++) { update(); consumeEvents(); present(STEP); if (i < n - 1 && use3d()) SD3D.advance(STEP); } render(STEP); return true; },
+    frames(n, dt) { for (let i = 0; i < (n || 1); i++) { consumeEvents(); present(dt || STEP); render(dt || STEP); } return true; },
+    snapCam() { if (use3d()) SD3D.snapCamera(); }, get use3d() { return use3d(); }, get pickups() { return pickups; }, get events() { return events; },
+    playAgain, setCam: setCamPref, setGfx, banner: showBanner,
+    snap() { render(STEP); return true; }, fire(i) { fire(tanks[i || 0]); }, kill(i) { killTank(i || 0); },
     shot: setupShot, runTests, hash: snapHash, scores: () => Scores,
     // ---- campaign hooks ----
     startCampaign(level, players, difficulty, seed) { headless = headless || false; return startCampaign(level || 0, players || 1, difficulty == null ? 45 : difficulty, seed == null ? 1 : seed); },
