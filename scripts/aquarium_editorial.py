@@ -1,5 +1,6 @@
 """Shared, escaped editorial blocks for both reader and standalone articles."""
 from html import escape as e
+from datetime import date
 from math import ceil
 import re
 from urllib.parse import urlparse
@@ -17,8 +18,30 @@ def reading_time(story):
     return max(1, ceil(word_count(story) / 200))
 
 
+def plain_date(iso):
+    """2026-11-01 -> November 1, 2026."""
+    d = date.fromisoformat(iso)
+    return f'{d:%B} {d.day}, {d.year}'
+
+
+def background_date(story):
+    """Research/background date. Every story now shows its own publication date,
+    so the older "no publication date shown" qualifier is dropped from display."""
+    return story['date'].replace(' · no publication date shown', '')
+
+
+def related_stories(story, stories, limit=3):
+    """Up to three others: same category first, then the other category, in edition order."""
+    others = [s for s in stories if s['slug'] != story['slug']]
+    same = [s for s in others if s['category'] == story['category']]
+    rest = [s for s in others if s['category'] != story['category']]
+    return (same + rest)[:limit]
+
+
 def validate(story):
     assert re.fullmatch(r'[a-z0-9-]+', story['slug'])
+    assert re.fullmatch(r'\d{4}-\d{2}-\d{2}', story['published']), story['slug']
+    date.fromisoformat(story['published'])
     references = story['references']
     ids = [ref['id'] for ref in references]
     assert references and len(ids) == len(set(ids)), story['slug']
@@ -78,7 +101,7 @@ def render(story, *, reader=False):
     notes = [f'<details class="editorial-sources" id="{prefix}-sources"{disclosure}><summary>Sources &amp; editorial notes <span>{len(references)} references</span></summary><ol>']
     for ref in references:
         notes.append(f'<li id="{prefix}-ref-{ref["id"]}" tabindex="-1"><a href="{e(ref["url"], quote=True)}" target="_blank" rel="noopener noreferrer">{e(ref["label"])}<span class="sr-only"> (opens a new tab)</span></a><small>{e(ref["date"])}</small></li>')
-    notes.append(f'</ol><p class="source-context">Background: {e(story["date"])} · November 1, 2026 pilot edition.</p><p>Original editorial writing for an independent design preview. Research and reporting dates are preserved above; earlier work is not presented as a new announcement. Product statements are attributed to their manufacturers. No store inventory or endorsement is implied.</p></details>')
+    notes.append(f'</ol><p class="source-context">Background: {e(background_date(story))} · Published {plain_date(story["published"])}.</p><p>Original editorial writing for an independent design preview. Research and reporting dates are preserved above; earlier work is not presented as a new announcement. Product statements are attributed to their manufacturers. No store inventory or endorsement is implied.</p></details>')
     # Standalone notes start open for no-JS footnote navigation. The small shared
     # enhancement collapses them, opening the specific reference when requested.
     return body + ''.join(notes)

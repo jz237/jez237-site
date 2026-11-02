@@ -1,4 +1,4 @@
-# Aquarium Journal editorial rhythm
+# Aquarium News editorial rhythm
 
 This is a design preview, not The Hidden Reef's official newsletter.
 

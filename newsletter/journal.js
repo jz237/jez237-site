@@ -85,7 +85,9 @@
     content.replaceChildren(templates.get(slug).content.cloneNode(true));
     const title = content.querySelector('.reader-title');
     title.id = 'reader-title';
-    document.title = `${title.textContent} · The Aquarium Journal`;
+    document.title = `${title.textContent} · Aquarium News`;
+    // A related-story link can lead outside the filtered sequence; fall back to every story.
+    if (!sequence.includes(slug)) sequence = [...templates.keys()];
     const index = sequence.indexOf(slug);
     previous.disabled = index <= 0;
     next.disabled = index >= sequence.length - 1;
@@ -96,7 +98,12 @@
   function openReader(slug, source = null, fromHistory = false) {
     if (!templates.has(slug) || closingHistory) return;
     // Save the browsing position before fixed-body locking changes window.scrollY.
-    if (!fromHistory) history.pushState({...history.state, [stateKey]: slug}, '', location.href);
+    // A related-story link inside an open reader swaps the article in place, so Close
+    // still takes a single Back step to the edition.
+    if (!fromHistory) {
+      if (dialog.open) history.replaceState({...history.state, [stateKey]: slug}, '', location.href);
+      else history.pushState({...history.state, [stateKey]: slug}, '', location.href);
+    }
     if (!dialog.open) {
       trigger = source?.getAttribute('aria-hidden') === 'true'
         ? source.closest('.story')?.querySelector('h3 a') : source;

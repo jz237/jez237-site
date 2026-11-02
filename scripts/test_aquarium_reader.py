@@ -4,6 +4,9 @@ from pathlib import Path
 import argparse, functools, http.server, json, threading
 from urllib.parse import urlparse
 from playwright.sync_api import sync_playwright
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parent))
+from aquarium_editorial import plain_date, related_stories
 
 ROOT=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);p.add_argument('--base-url',default='');args=p.parse_args()
@@ -109,6 +112,46 @@ try:
         assert page.locator('#article-reader').evaluate('(e)=>e.open')
         page.mouse.click(8,8);wait_closed()
         results['checks'].append('backdrop dismissal without accidental inside-click dismissal')
+        # Related stories close each article and open in the same reader without adding history steps.
+        page.locator('.story h3 a').first.click();wait_open();url=page.url
+        depth=page.evaluate('history.length')
+        assert plain_date(stories[0]['published']) in page.locator('#reader-content .editorial-byline').inner_text()
+        expected=related_stories(stories[0],stories)
+        rel=page.locator('#reader-content .related-stories a')
+        assert rel.all_inner_texts()==[r['title'] for r in expected]
+        page.locator('#reader-scroll').evaluate('(e)=>e.scrollTop=e.scrollHeight')
+        rel.first.click()
+        page.wait_for_function("t=>document.querySelector('#reader-title')?.textContent===t",arg=expected[0]['title'])
+        assert page.url==url and page.evaluate('history.length')==depth
+        assert page.locator('#reader-scroll').evaluate('(e)=>e.scrollTop')==0
+        assert page.locator('#reader-content .related-stories a').all_inner_texts()==[r['title'] for r in related_stories(expected[0],stories)]
+        page.locator('#reader-close').click();wait_closed()
+        results['checks'].append('related stories (same category first) open in the same reader; Close still returns to the edition')
+        # Large reading room: ~min(1100px,92vw) x 92vh on desktop, full screen on phones.
+        sizes={}
+        for vw,vh in [(1366,768),(1440,900),(1920,1080),(390,844)]:
+            page.set_viewport_size({'width':vw,'height':vh})
+            page.goto(base+'/newsletter/',wait_until='networkidle')
+            page.locator('.story h3 a').nth(0).click();wait_open()
+            box=page.locator('#article-reader').bounding_box()
+            m=page.evaluate('''()=>{const r=document.querySelector('#article-reader'),b=r.querySelector('.reader-body .editorial-content'),f=r.querySelector('.reader-figure img'),s=r.querySelector('#reader-scroll');
+              return {body:b.getBoundingClientRect().width,img:f.getBoundingClientRect().width,imgh:f.getBoundingClientRect().height,font:parseFloat(getComputedStyle(b).fontSize),sw:s.scrollWidth,cw:s.clientWidth,docw:document.documentElement.scrollWidth}}''')
+            assert box['x']>=-0.5 and box['y']>=-0.5 and box['x']+box['width']<=vw+0.5 and box['y']+box['height']<=vh+0.5,(vw,vh,box)
+            assert m['sw']<=m['cw'] and m['docw']<=vw,(vw,m)
+            if vw>760:
+                assert abs(box['width']-min(1100,0.92*vw))<=2,(vw,box)
+                assert abs(box['height']-0.92*vh)<=2,(vh,box)
+                chars=m['body']/(m['font']*0.5)  # rough characters per line
+                assert 560<=m['body']<=720 and 55<=chars<=80,(vw,m)
+                assert m['img']>=0.85*box['width'],(vw,m)
+            else:
+                assert abs(box['width']-vw)<=1 and abs(box['height']-vh)<=1,(vw,box)
+            sizes[f'{vw}x{vh}']={'dialog':[round(box['width']),round(box['height'])],'text_column':round(m['body']),'image':[round(m['img']),round(m['imgh'])]}
+            page.screenshot(path=str(args.output/f'reader-{vw}x{vh}.png'))
+            page.locator('#reader-close').click();wait_closed()
+        results['reader_sizes']=sizes
+        results['checks'].append('reader fills 1366x768, 1440x900, 1920x1080 at ~min(1100px,92vw) x 92vh and 390x844 full screen without overflow')
+        page.set_viewport_size({'width':1440,'height':1000})
         for width in [320,390,768]:
             page.set_viewport_size({'width':width,'height':844})
             page.goto(base+'/newsletter/',wait_until='networkidle')
@@ -135,7 +178,10 @@ try:
         np.locator('.editorial-citation').first.click()
         assert '#article-'+stories[0]['slug']+'-ref-' in np.url
         assert np.locator('.editorial-sources li').first.is_visible()
-        results['checks'].append('without JavaScript, complete local articles and reference anchors still work')
+        first=related_stories(stories[0],stories)[0]
+        np.locator('.related-stories a').first.click();np.wait_for_url('**/stories/'+first['slug']+'/')
+        assert np.locator('h1').inner_text()==first['title']
+        results['checks'].append('without JavaScript, complete local articles, reference anchors and related-story links still work')
         assert not errors,errors
         assert not failed,failed
         results['console_errors']=errors;results['failed_same_origin_responses']=failed;results['status']='passed'

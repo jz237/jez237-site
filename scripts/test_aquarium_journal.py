@@ -11,6 +11,9 @@ from urllib.parse import urljoin, urlparse, unquote
 from html.parser import HTMLParser
 from PIL import Image
 from playwright.sync_api import sync_playwright
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parent))
+from aquarium_editorial import plain_date, related_stories
 
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
@@ -38,10 +41,23 @@ for photo in photos:
         assert image.size==(photo['width'],photo['height'])
         assert image.format=='WEBP'
     assert photo['author'] and photo['license'] and photo['license_url'].startswith('https://')
+sitemap=(ROOT/'sitemap.xml').read_text()
+robots=(ROOT/'robots.txt').read_text()
+assert 'Allow: /' in robots and 'Disallow: /newsletter' not in robots
 for file in (ROOT/'newsletter').rglob('*.html'):
     parsed=Links();parsed.feed(file.read_text())
     assert len(parsed.ids)==len(set(parsed.ids)), f'Duplicate IDs in {file}'
-    assert 'noindex,follow' in file.read_text()
+    html=file.read_text()
+    # Aquarium News is indexable on jez237.com: no noindex, a canonical URL, a sitemap entry,
+    # and the visible independent-preview note stays.
+    assert 'noindex' not in html, file
+    assert 'Aquarium Journal' not in html and 'aquarium journal' not in html.lower(), file
+    assert 'Independent design preview for The Hidden Reef' in html, file
+    canonical=re.search(r'<link rel="canonical" href="([^"]+)"',html).group(1)
+    rel=file.relative_to(ROOT).as_posix().removesuffix('index.html')
+    assert canonical=='https://jez237.com/'+rel, (file,canonical)
+    assert f'<loc>{canonical}</loc><lastmod>' in sitemap, canonical
+    assert '· Aquarium News</title>' in html and 'content="Aquarium News"' in html, file
     for link in parsed.paths:
         url=urlparse(link)
         if url.scheme or url.netloc:continue
@@ -84,6 +100,13 @@ try:
         page.wait_for_timeout(150)
         assert page.locator('.story:visible').count()==len(stories)
         assert page.locator('h1').inner_text()=='Small worlds.\nEndless wonder.'
+        newest=max(s['published'] for s in stories)
+        assert page.locator('.updated-line time').get_attribute('datetime')==newest
+        assert page.locator('.updated-line').inner_text()=='Updated '+plain_date(newest)
+        assert page.locator('.updated-line').evaluate('(e)=>e.getBoundingClientRect().top')<400
+        assert page.locator('.story .story-date').count()==len(stories)
+        assert page.locator('.story .story-date').all_inner_texts()==[plain_date(s['published']) for s in stories]
+        assert page.locator('.brand small').inner_text().lower()=='aquarium news · a concept'
         assert page.locator('#daily-check .check-list > li').count()==4
         assert page.locator('#daily-check .check-list > li:visible').count()==4
         assert page.locator('.story .source-date').count()==0
@@ -132,6 +155,10 @@ try:
             page.locator('.editorial-sources summary').click()
             assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
             assert page.locator('.article-image img').evaluate('(i)=>i.complete&&i.naturalWidth>0')
+            assert plain_date(story['published']) in page.locator('.editorial-byline').inner_text()
+            expected=[r['slug'] for r in related_stories(story,stories)]
+            hrefs=page.locator('.related-stories a').evaluate_all('(a)=>a.map(e=>e.getAttribute("href"))')
+            assert hrefs==[f'../{slug}/' for slug in expected],(story['slug'],hrefs)
         results['checks'].append(f'{len(stories)} article routes, primary sources and images on mobile')
         r=page.goto(base+'/newsletter/credits.html',wait_until='networkidle');assert r is not None and r.status==200
         assert page.locator('.credit-item').count()==len(photos)

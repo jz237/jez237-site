@@ -5,7 +5,7 @@ from collections import Counter, defaultdict
 import json
 import unittest
 import xml.etree.ElementTree as ET
-from aquarium_editorial import word_count
+from aquarium_editorial import word_count, background_date, plain_date, related_stories
 from aquarium_home import checklist_markup
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -37,7 +37,29 @@ class PracticalTests(unittest.TestCase):
         self.assertNotIn('Source: Evergreen guide',html)
         self.assertNotIn('class="reader-date">Background:',html)
         for s in STORIES:
-            self.assertIn(s['date'], (OUT/'stories'/s['slug']/'index.html').read_text())
+            page=(OUT/'stories'/s['slug']/'index.html').read_text()
+            self.assertIn(background_date(s), page)
+            self.assertNotIn('no publication date shown', page)
+
+    def test_dates_and_related_stories(self):
+        html=(OUT/'index.html').read_text()
+        newest=max(s['published'] for s in STORIES)
+        self.assertIn(f'Updated <time datetime="{newest}">{plain_date(newest)}</time>',html)
+        self.assertNotIn('Prepared November 1, 2026',html)
+        for s in STORIES:
+            rel=related_stories(s,STORIES)
+            self.assertEqual(len(rel),min(3,len(STORIES)-1))
+            self.assertNotIn(s,rel)
+            same=[r for r in rel if r['category']==s['category']]
+            self.assertEqual(rel[:len(same)],same)
+            page=(OUT/'stories'/s['slug']/'index.html').read_text()
+            self.assertIn(f'<time datetime="{s["published"]}">{plain_date(s["published"])}</time>',page)
+            for r in rel:
+                self.assertIn(f'<a href="../{r["slug"]}/">',page)
+        # Same category fills first; the other category only fills a shortfall.
+        tiny=[{'slug':'a','category':'reef'},{'slug':'b','category':'freshwater'},{'slug':'c','category':'reef'},{'slug':'d','category':'freshwater'}]
+        self.assertEqual([r['slug'] for r in related_stories(tiny[0],tiny)],['c','b','d'])
+        self.assertEqual(related_stories(tiny[0],tiny[:1]),[])
 
     def test_tissue_culture_image_and_original_diagrams(self):
         tissue=next(s for s in STORIES if s['slug']=='little-cups-big-potential')
