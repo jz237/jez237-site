@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Descent II Browser Edition — Source</title>
+<style>
+  :root { --bg: #07090d; --panel: #10141c; --line: #232b3a; --text: #dfe6f2; --dim: #8b96a8; --accent2: #ffb347; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { width: min(760px, 100% - 32px); margin: 32px auto; }
+  a { color: var(--accent2); }
+  h1 { font-size: 24px; margin: 0 0 8px; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px 22px; margin: 16px 0; }
+  code { background: #0b0e14; border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; font-size: 13px; word-break: break-all; }
+  li { margin: 4px 0; }
+  .small { color: var(--dim); font-size: 13px; }
+</style>
+</head>
+<body>
+<main>
+  <p><a href="../">← Back to the game</a></p>
+  <h1>Source for this build</h1>
+  <p>The engine is <a href="https://github.com/dxx-redux/dxx-redux">DXX-Redux</a>, a Descent II source port, compiled to
+    WebAssembly with Emscripten. The browser changes are published here under the same license as the engine.</p>
+
+  <div class="panel">
+    <h2>Files</h2>
+    <ul>
+      <li><a href="redux-web.patch">redux-web.patch</a> — every engine change, against DXX-Redux commit
+        <code>9fd90f03</code>. The browser glue lives in <code>d2/arch/web/</code>.</li>
+      <li><a href="build.py">build.py</a> — the build script (Emscripten 3.1.46, Ninja).</li>
+      <li><a href="../d2loader.js">d2loader.js</a> and <a href="../">index.html</a> — the page: file import, browser storage, CD audio, boot.</li>
+      <li><a href="COPYING-DXX.txt">COPYING-DXX.txt</a> — Parallax / D1X license for the engine.</li>
+      <li><a href="LICENSE-PhysFS.txt">LICENSE-PhysFS.txt</a> — zlib license for PhysFS 3.2.0.</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h2>Rebuilding</h2>
+    <ol>
+      <li>Clone <code>https://github.com/dxx-redux/dxx-redux</code> into <code>src/redux</code>, check out <code>9fd90f03</code>
+        and apply the patch with <code>git apply redux-web.patch</code>.</li>
+      <li>Clone <code>https://github.com/icculus/physfs</code> tag <code>release-3.2.0</code> into <code>src/physfs</code>.</li>
+      <li>Install the Emscripten SDK 3.1.46 and Ninja, set <code>EMSDK</code> to the SDK folder, then run
+        <code>python build.py</code>. The output is <code>web/d2x.js</code> and <code>web/d2x.wasm</code>.</li>
+    </ol>
+    <p class="small">No Descent II game data is distributed here. The game page reads your own copy and keeps it in your browser.</p>
+  </div>
+</main>
+</body>
+</html>

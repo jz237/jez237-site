@@ -1,0 +1,1031 @@
+diff --git a/d2/arch/ogl/gr.c b/d2/arch/ogl/gr.c
+index c5cca0b..c0e7162 100644
+--- a/d2/arch/ogl/gr.c
++++ b/d2/arch/ogl/gr.c
+@@ -30,6 +30,7 @@
+ 
+ #include <errno.h>
+ #include <SDL.h>
++#include "web.h"
+ #include "hudmsg.h"
+ #include "game.h"
+ #include "text.h"
+@@ -116,6 +117,9 @@ void ogl_swap_buffers_internal(void)
+ #else
+ 	SDL_GL_SwapBuffers();
+ #endif
++#ifdef __EMSCRIPTEN__
++	d2web_frame_wait();
++#endif
+ }
+ 
+ #ifdef RPI
+@@ -424,7 +428,9 @@ int ogl_init_window(int x, int y)
+ 		con_printf(CON_DEBUG, "EGL: made context current\n");
+ 	}
+ #endif
++#ifndef __EMSCRIPTEN__
+ 	glewInit();
++#endif
+ #ifdef OGL_MERGE
+ 	ogl_init_prog();
+ #endif
+diff --git a/d2/arch/ogl/ogl.c b/d2/arch/ogl/ogl.c
+index c536c46..3650b6d 100644
+--- a/d2/arch/ogl/ogl.c
++++ b/d2/arch/ogl/ogl.c
+@@ -10,7 +10,13 @@
+ #include <windows.h>
+ #include <stddef.h>
+ #endif
++#ifndef __EMSCRIPTEN__
+ #include <GL/glew.h>
++#else
++#define GL_GLEXT_PROTOTYPES
++#include <GL/gl.h>
++#include <GL/glext.h>
++#endif
+ #if defined(__APPLE__) && defined(__MACH__)
+ #include <OpenGL/gl.h>
+ #include <OpenGL/glu.h>
+@@ -83,7 +89,7 @@ int GL_texclamp_enabled=-1;
+ GLfloat ogl_maxanisotropy = 0;
+ 
+ int r_texcount = 0, r_cachedtexcount = 0;
+-#ifdef OGLES
++#if defined(OGLES) || defined(__EMSCRIPTEN__)	// WebGL only takes unsized formats
+ int ogl_rgba_internalformat = GL_RGBA;
+ int ogl_rgb_internalformat = GL_RGB;
+ #else
+@@ -149,6 +155,11 @@ void ogl_init_texture(ogl_texture* t, int w, int h, int flags)
+ 		// use GL_INTENSITY instead of GL_RGB
+ 		if (flags & OGL_FLAG_ALPHA)
+ 		{
++#ifdef __EMSCRIPTEN__
++			// WebGL has no INTENSITY formats; luminance-alpha keeps glyphs white so glColor tints them
++			t->internalformat = GL_LUMINANCE_ALPHA;
++			t->format = GL_LUMINANCE_ALPHA;
++#else
+ 			if (GameArg.DbgGlIntensity4Ok)
+ 			{
+ 				t->internalformat = GL_INTENSITY4;
+@@ -169,6 +180,7 @@ void ogl_init_texture(ogl_texture* t, int w, int h, int flags)
+ 				t->internalformat = ogl_rgba_internalformat;
+ 				t->format = GL_RGBA;
+ 			}
++#endif
+ 		}
+ 		else
+ 		{
+diff --git a/d2/arch/sdl/key.c b/d2/arch/sdl/key.c
+index 92eee47..874ec30 100644
+--- a/d2/arch/sdl/key.c
++++ b/d2/arch/sdl/key.c
+@@ -448,7 +448,11 @@ void key_init()
+ void key_flush()
+ {
+  	int i;
++#ifdef __EMSCRIPTEN__
++	Uint8 *keystate = NULL;	// keycodes are not small array indices in the browser SDL
++#else
+ 	Uint8 *keystate = SDL_GetKeyState(NULL);
++#endif
+ 
+ 	if (!Installed)
+ 		key_init();
+@@ -458,7 +462,7 @@ void key_flush()
+ 		unicode_frame_buffer[i] = '\0';
+ 
+ 	for (i=0; i<256; i++ )	{
+-		if (key_ismodlck(i) == KEY_ISLCK && keystate[key_properties[i].sym] && !GameArg.CtlNoStickyKeys) // do not flush status of sticky keys
++		if (key_ismodlck(i) == KEY_ISLCK && keystate && keystate[key_properties[i].sym] && !GameArg.CtlNoStickyKeys) // do not flush status of sticky keys
+ 		{
+ 			keyd_pressed[i] = 1;
+ 			key_data.state[i] = 0;
+diff --git a/d2/arch/sdl/timer.c b/d2/arch/sdl/timer.c
+index 3e7949c..2dca829 100644
+--- a/d2/arch/sdl/timer.c
++++ b/d2/arch/sdl/timer.c
+@@ -5,6 +5,9 @@
+  */
+ 
+ #include <SDL.h>
++#ifdef __EMSCRIPTEN__
++#include <emscripten.h>
++#endif
+ 
+ #include "maths.h"
+ #include "timer.h"
+@@ -25,7 +28,14 @@ void timer_update(void)
+ 	}
+ 
+ 	if (last_tv < cur_tv) // in case SDL_GetTicks wraps, don't update and have a little hickup
++	{
++#ifdef __EMSCRIPTEN__
++		// browsers stop the frame loop in background tabs; don't let game time leap ahead on return
++		if (cur_tv - last_tv > F1_0/5)
++			last_tv = cur_tv - F1_0/5;
++#endif
+ 		F64_RunTime += (cur_tv - last_tv); // increment! this value will overflow long after we are all dead... so why bother checking?
++	}
+ 	last_tv = cur_tv;
+ }
+ 
+@@ -36,13 +46,22 @@ fix64 timer_query(void)
+ 
+ void timer_delay(fix seconds)
+ {
++#ifdef __EMSCRIPTEN__
++	int ms = f2i(fixmul(seconds, i2f(1000)));
++	if (ms > 0)
++		emscripten_sleep(ms);
++#else
+ 	SDL_Delay(f2i(fixmul(seconds, i2f(1000))));
++#endif
+ }
+ 
+ // Replacement for timer_delay which considers calc time the program needs between frames (not reentrant)
+ void timer_delay2(int fps)
+ {
+ 	static u_int32_t FrameStart=0;
++#ifdef __EMSCRIPTEN__
++	return;	// frames are paced by requestAnimationFrame in gr_flip
++#endif
+ 	u_int32_t FrameLoop=0;
+ 
+ 	while (FrameLoop < 1000u/(GameCfg.VSync?MAXIMUM_FPS:fps))
+diff --git a/d2/arch/web/SDL_keysym.h b/d2/arch/web/SDL_keysym.h
+new file mode 100644
+index 0000000..f8c55f7
+--- /dev/null
++++ b/d2/arch/web/SDL_keysym.h
+@@ -0,0 +1,2 @@
++/* SDL 1.2 SDL_keysym.h shim for Emscripten's SDL 1.3-style headers. */
++#include <SDL.h>
+diff --git a/d2/arch/web/library_d2web.js b/d2/arch/web/library_d2web.js
+new file mode 100644
+index 0000000..6917053
+--- /dev/null
++++ b/d2/arch/web/library_d2web.js
+@@ -0,0 +1,155 @@
++// Emscripten JS library: browser glue for the Descent II web build.
++// The page fills Module.d2cd.tracks[n] with object URLs of the ripped CD tracks
++// (index = CD track number; track 1 is the data track and stays empty).
++
++addToLibrary({
++  $D2CD__postset: 'D2CD.init();',
++  $D2CD: {
++    audio: null,
++    first: 0,
++    last: 0,
++    cur: 0,
++    state: 0, // 0 stopped, 1 playing, 2 paused
++    volume: 1,
++    // status for the page (and tests): which CD track is playing and where
++    init() {
++      Module.cdStatus = () => ({
++        state: D2CD.state,
++        track: D2CD.cur,
++        time: D2CD.audio ? D2CD.audio.currentTime : 0,
++        paused: D2CD.audio ? D2CD.audio.paused : true,
++        volume: D2CD.volume,
++      });
++    },
++    tracks() {
++      return (Module.d2cd && Module.d2cd.tracks) || [];
++    },
++    el() {
++      if (!D2CD.audio) {
++        D2CD.audio = new Audio();
++        D2CD.audio.preload = 'auto';
++        D2CD.audio.addEventListener('ended', () => {
++          if (D2CD.state !== 1) return;
++          if (D2CD.cur < D2CD.last && D2CD.start(D2CD.cur + 1)) return;
++          D2CD.state = 0;
++        });
++      }
++      return D2CD.audio;
++    },
++    start(n) {
++      const url = D2CD.tracks()[n];
++      if (!url) return false;
++      const a = D2CD.el();
++      D2CD.cur = n;
++      a.src = url;
++      a.volume = D2CD.volume;
++      a.play().catch((e) => console.warn('CD audio play failed', e));
++      D2CD.state = 1;
++      if (Module.onCdTrack) Module.onCdTrack(n);
++      return true;
++    },
++  },
++
++  d2web_cd_numtracks__deps: ['$D2CD'],
++  d2web_cd_numtracks: () => {
++    const t = D2CD.tracks();
++    return t.length ? t.length - 1 : 0;
++  },
++
++  d2web_cd_play__deps: ['$D2CD'],
++  d2web_cd_play: (first, last) => {
++    const n = D2CD.tracks().length - 1;
++    if (first < 1 || first > n) return 0;
++    D2CD.first = first;
++    D2CD.last = Math.min(Math.max(last, first), n);
++    return D2CD.start(first) ? 1 : 0;
++  },
++
++  d2web_cd_stop__deps: ['$D2CD'],
++  d2web_cd_stop: () => {
++    if (D2CD.audio) D2CD.audio.pause();
++    D2CD.state = 0;
++  },
++
++  d2web_cd_pause__deps: ['$D2CD'],
++  d2web_cd_pause: () => {
++    if (D2CD.state === 1 && D2CD.audio) {
++      D2CD.audio.pause();
++      D2CD.state = 2;
++    }
++  },
++
++  d2web_cd_resume__deps: ['$D2CD'],
++  d2web_cd_resume: () => {
++    if (D2CD.state === 2 && D2CD.audio) {
++      D2CD.audio.play().catch(() => {});
++      D2CD.state = 1;
++    }
++  },
++
++  d2web_cd_status__deps: ['$D2CD'],
++  d2web_cd_status: () => D2CD.state,
++
++  d2web_cd_track__deps: ['$D2CD'],
++  d2web_cd_track: () => D2CD.cur,
++
++  d2web_cd_volume__deps: ['$D2CD'],
++  d2web_cd_volume: (v) => {
++    D2CD.volume = Math.max(0, Math.min(8, v)) / 8;
++    if (D2CD.audio) D2CD.audio.volume = D2CD.volume;
++  },
++
++  d2web_frame_wait__async: true,
++  d2web_frame_wait: () => Asyncify.handleSleep((wakeUp) => {
++    if (Module.onFrame) Module.onFrame();
++    requestAnimationFrame(() => wakeUp());
++  }),
++
++  // Relative mouse motion for pointer-locked flight controls.
++  $D2Mouse: {
++    dx: 0,
++    dy: 0,
++    hooked: false,
++    hook() {
++      if (D2Mouse.hooked) return;
++      D2Mouse.hooked = true;
++      document.addEventListener('mousemove', (e) => {
++        if (document.pointerLockElement !== Module.canvas) return;
++        D2Mouse.dx += e.movementX || 0;
++        D2Mouse.dy += e.movementY || 0;
++      });
++    },
++  },
++  SDL_GetRelativeMouseState__deps: ['$D2Mouse'],
++  SDL_GetRelativeMouseState: (px, py) => {
++    D2Mouse.hook();
++    if (px) HEAP32[px >> 2] = Math.round(D2Mouse.dx);
++    if (py) HEAP32[py >> 2] = Math.round(D2Mouse.dy);
++    D2Mouse.dx = 0;
++    D2Mouse.dy = 0;
++    return 0;
++  },
++
++  d2web_quit: () => {
++    FS.syncfs(false, (err) => {
++      if (err) console.warn('Saving to browser storage failed', err);
++      if (Module.onQuit) Module.onQuit();
++    });
++  },
++
++  $D2Saves: { timer: 0, busy: false, again: false },
++  d2web_sync_saves__deps: ['$D2Saves'],
++  d2web_sync_saves: () => {
++    if (D2Saves.timer) clearTimeout(D2Saves.timer);
++    D2Saves.timer = setTimeout(function run() {
++      D2Saves.timer = 0;
++      if (D2Saves.busy) { D2Saves.again = true; return; }
++      D2Saves.busy = true;
++      FS.syncfs(false, (err) => {
++        D2Saves.busy = false;
++        if (err) console.warn('Saving to browser storage failed', err);
++        if (D2Saves.again) { D2Saves.again = false; run(); }
++      });
++    }, 750);
++  },
++});
+diff --git a/d2/arch/web/rbaudio_web.c b/d2/arch/web/rbaudio_web.c
+new file mode 100644
+index 0000000..bc5fa7e
+--- /dev/null
++++ b/d2/arch/web/rbaudio_web.c
+@@ -0,0 +1,157 @@
++/*
++ * Redbook (CD audio) for the browser build.
++ * Tracks come from the player's own Descent II disc image, ripped by the page.
++ */
++
++#include "pstypes.h"
++#include "rbaudio.h"
++#include "console.h"
++#include "timer.h"
++#include "web.h"
++
++static int initialised = 0;
++void (*redbook_finished_hook)() = NULL;
++
++void RBAExit()
++{
++	d2web_cd_stop();
++}
++
++void RBAInit()
++{
++	if (initialised)
++		return;
++	if (d2web_cd_numtracks() < 2)
++	{
++		con_printf(CON_NORMAL, "RBAudio: no CD audio tracks loaded\n");
++		return;
++	}
++	initialised = 1;
++	RBAList();
++}
++
++int RBAEnabled()
++{
++	return initialised;
++}
++
++int RBAPlayTrack(int a)
++{
++	if (!initialised)
++		return -1;
++	if (d2web_cd_play(a, a))
++	{
++		con_printf(CON_VERBOSE, "RBAudio: Playing track %i\n", a);
++		return a;
++	}
++	return -1;
++}
++
++void RBAStop()
++{
++	if (!initialised)
++		return;
++	d2web_cd_stop();
++	redbook_finished_hook = NULL;
++}
++
++void RBAEjectDisk()
++{
++	RBAStop();
++}
++
++void RBASetVolume(int volume)
++{
++	d2web_cd_volume(volume);
++}
++
++void RBAPause()
++{
++	if (initialised)
++		d2web_cd_pause();
++}
++
++int RBAResume()
++{
++	if (!initialised)
++		return -1;
++	d2web_cd_resume();
++	return 1;
++}
++
++int RBAPauseResume()
++{
++	if (!initialised)
++		return 0;
++	switch (d2web_cd_status())
++	{
++		case 1: d2web_cd_pause(); return 1;
++		case 2: d2web_cd_resume(); return 1;
++	}
++	return 0;
++}
++
++int RBAGetNumberOfTracks()
++{
++	if (!initialised)
++		return -1;
++	return d2web_cd_numtracks();
++}
++
++// the browser reports the end of the requested track range; check from the event loops
++void RBACheckFinishedHook()
++{
++	static fix64 last_check_time = 0;
++
++	if (!initialised)
++		return;
++	if ((timer_query() - last_check_time) >= F1_0)
++	{
++		if (d2web_cd_status() == 0 && redbook_finished_hook)
++		{
++			con_printf(CON_VERBOSE, "RBAudio: Playback done, calling finished-hook\n");
++			redbook_finished_hook();
++		}
++		last_check_time = timer_query();
++	}
++}
++
++// plays tracks first through last, inclusive
++int RBAPlayTracks(int first, int last, void (*hook_finished)(void))
++{
++	if (!initialised)
++		return 0;
++	redbook_finished_hook = hook_finished;
++	con_printf(CON_VERBOSE, "RBAudio: Playing tracks %i to %i\n", first, last);
++	return d2web_cd_play(first, last);
++}
++
++int RBAGetTrackNum()
++{
++	if (!initialised || d2web_cd_status() != 1)
++		return 0;
++	return d2web_cd_track();
++}
++
++int RBAPeekPlayStatus()
++{
++	if (!initialised)
++		return 0;
++	switch (d2web_cd_status())
++	{
++		case 1: return 1;
++		case 2: return -1;	// hack so it doesn't keep restarting paused music
++	}
++	return 0;
++}
++
++// songs.c uses GameCfg.OrigTrackOrder to accept the disc, so no CDDB id is needed
++unsigned long RBAGetDiscID()
++{
++	return 0;
++}
++
++void RBAList(void)
++{
++	con_printf(CON_VERBOSE, "RBAudio: %d CD tracks available\n", d2web_cd_numtracks());
++}
+diff --git a/d2/arch/web/web.c b/d2/arch/web/web.c
+new file mode 100644
+index 0000000..cd9eba4
+--- /dev/null
++++ b/d2/arch/web/web.c
+@@ -0,0 +1,127 @@
++/*
++ * Browser (Emscripten) replacements for desktop-only pieces:
++ * message boxes, GLU mipmapping and GL 1.1 calls WebGL lacks.
++ */
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <emscripten.h>
++#include <SDL.h>
++#include "ogl_init.h"
++#include "messagebox.h"
++
++EM_JS(void, d2web_show_message, (const char *msg, int is_error), {
++	const text = UTF8ToString(msg);
++	if (is_error) console.error(text); else console.warn(text);
++	if (Module.onGameMessage) Module.onGameMessage(text, !!is_error);
++});
++
++void msgbox_warning(char *message)
++{
++	d2web_show_message(message, 0);
++}
++
++void msgbox_error(const char *message)
++{
++	d2web_show_message(message, 1);
++}
++
++static int is_pow2(int v)
++{
++	return v > 0 && (v & (v - 1)) == 0;
++}
++
++GLint gluBuild2DMipmaps(GLenum target, GLint internalFormat, GLsizei width, GLsizei height,
++	GLenum format, GLenum type, const void *data)
++{
++	// WebGL wants the internal format to match the upload format
++	glTexImage2D(target, 0, format, width, height, 0, format, type, data);
++	if (is_pow2(width) && is_pow2(height))
++		glGenerateMipmap(target);
++	return 0;
++}
++
++void glPrioritizeTextures(GLsizei n, const GLuint *textures, const GLclampf *priorities)
++{
++}
++
++// WebGL always reads back from the buffer being drawn, which is what the game asks for
++void glReadBuffer(GLenum mode)
++{
++}
++
++/*
++ * Emscripten's JS SDL leaves SDL_AllocRW unimplemented and its own RWops can't be
++ * read through the function pointers SDL_RWread uses, so provide real ones in C.
++ */
++SDL_RWops *SDL_AllocRW(void)
++{
++	return calloc(1, sizeof(SDL_RWops));
++}
++
++void SDL_FreeRW(SDL_RWops *area)
++{
++	free(area);
++}
++
++static long mem_seek(SDL_RWops *rw, long offset, int whence)
++{
++	Uint8 *p;
++
++	switch (whence)
++	{
++		case RW_SEEK_SET: p = rw->hidden.mem.base + offset; break;
++		case RW_SEEK_CUR: p = rw->hidden.mem.here + offset; break;
++		case RW_SEEK_END: p = rw->hidden.mem.stop + offset; break;
++		default: return -1;
++	}
++	if (p < rw->hidden.mem.base)
++		p = rw->hidden.mem.base;
++	if (p > rw->hidden.mem.stop)
++		p = rw->hidden.mem.stop;
++	rw->hidden.mem.here = p;
++	return (long)(p - rw->hidden.mem.base);
++}
++
++static size_t mem_read(SDL_RWops *rw, void *ptr, size_t size, size_t maxnum)
++{
++	size_t avail, n;
++
++	if (!size)
++		return 0;
++	avail = (size_t)(rw->hidden.mem.stop - rw->hidden.mem.here);
++	n = maxnum;
++	if (n * size > avail)
++		n = avail / size;
++	memcpy(ptr, rw->hidden.mem.here, n * size);
++	rw->hidden.mem.here += n * size;
++	return n;
++}
++
++static size_t mem_nowrite(SDL_RWops *rw, const void *ptr, size_t size, size_t num)
++{
++	return 0;
++}
++
++static int mem_close(SDL_RWops *rw)
++{
++	SDL_FreeRW(rw);
++	return 0;
++}
++
++SDL_RWops *SDL_RWFromConstMem(const void *mem, int size)
++{
++	SDL_RWops *rw = SDL_AllocRW();
++
++	if (!rw)
++		return NULL;
++	rw->seek = mem_seek;
++	rw->read = mem_read;
++	rw->write = mem_nowrite;
++	rw->close = mem_close;
++	rw->hidden.mem.base = (Uint8 *)mem;
++	rw->hidden.mem.here = rw->hidden.mem.base;
++	rw->hidden.mem.stop = rw->hidden.mem.base + size;
++	return rw;
++}
+diff --git a/d2/arch/web/web.h b/d2/arch/web/web.h
+new file mode 100644
+index 0000000..f4322fd
+--- /dev/null
++++ b/d2/arch/web/web.h
+@@ -0,0 +1,34 @@
++/* Browser (Emscripten) glue for D2X-Redux. Implemented in library_d2web.js. */
++#ifndef _D2WEB_H
++#define _D2WEB_H
++
++#ifdef __EMSCRIPTEN__
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++/* Yield to the browser until the next display refresh (requestAnimationFrame). */
++void d2web_frame_wait(void);
++
++/* CD audio emulation: the page rips the Descent II disc image into per-track audio. */
++int d2web_cd_numtracks(void);
++int d2web_cd_play(int first, int last);
++void d2web_cd_stop(void);
++void d2web_cd_pause(void);
++void d2web_cd_resume(void);
++int d2web_cd_status(void);	/* 0 stopped, 1 playing, 2 paused */
++int d2web_cd_track(void);
++void d2web_cd_volume(int volume);	/* 0..8 */
++
++/* Persist the player/save directory to IndexedDB (debounced). */
++void d2web_sync_saves(void);
++
++/* The player chose Quit: flush saves and hand control back to the page. */
++void d2web_quit(void);
++
++#ifdef __cplusplus
++}
++#endif
++#endif
++
++#endif
+diff --git a/d2/arch/web/web_config.h b/d2/arch/web/web_config.h
+new file mode 100644
+index 0000000..b33cc74
+--- /dev/null
++++ b/d2/arch/web/web_config.h
+@@ -0,0 +1,104 @@
++/* Forced-include config for the browser build. */
++#define SHAREPATH "/usr/share/games/d2x-redux"
++#include <stddef.h>
++#ifndef SDL_arraysize
++#define SDL_arraysize(a) (sizeof(a) / sizeof((a)[0]))
++#endif
++/* SDL 1.2 names missing from Emscripten's SDL 1.3-style headers */
++#define SDL_GL_SWAP_CONTROL 16
++#define SDLK_WORLD_0 0
++#define SDLK_WORLD_1 0
++#define SDLK_WORLD_2 0
++#define SDLK_WORLD_3 0
++#define SDLK_WORLD_4 0
++#define SDLK_WORLD_5 0
++#define SDLK_WORLD_6 0
++#define SDLK_WORLD_7 0
++#define SDLK_WORLD_8 0
++#define SDLK_WORLD_9 0
++#define SDLK_WORLD_10 0
++#define SDLK_WORLD_11 0
++#define SDLK_WORLD_12 0
++#define SDLK_WORLD_13 0
++#define SDLK_WORLD_14 0
++#define SDLK_WORLD_15 0
++#define SDLK_WORLD_16 0
++#define SDLK_WORLD_17 0
++#define SDLK_WORLD_18 0
++#define SDLK_WORLD_19 0
++#define SDLK_WORLD_20 0
++#define SDLK_WORLD_21 0
++#define SDLK_WORLD_22 0
++#define SDLK_WORLD_23 0
++#define SDLK_WORLD_24 0
++#define SDLK_WORLD_25 0
++#define SDLK_WORLD_26 0
++#define SDLK_WORLD_27 0
++#define SDLK_WORLD_28 0
++#define SDLK_WORLD_29 0
++#define SDLK_WORLD_30 0
++#define SDLK_WORLD_31 0
++#define SDLK_WORLD_32 0
++#define SDLK_WORLD_33 0
++#define SDLK_WORLD_34 0
++#define SDLK_WORLD_35 0
++#define SDLK_WORLD_36 0
++#define SDLK_WORLD_37 0
++#define SDLK_WORLD_38 0
++#define SDLK_WORLD_39 0
++#define SDLK_WORLD_40 0
++#define SDLK_WORLD_41 0
++#define SDLK_WORLD_42 0
++#define SDLK_WORLD_43 0
++#define SDLK_WORLD_44 0
++#define SDLK_WORLD_45 0
++#define SDLK_WORLD_46 0
++#define SDLK_WORLD_47 0
++#define SDLK_WORLD_48 0
++#define SDLK_WORLD_49 0
++#define SDLK_WORLD_50 0
++#define SDLK_WORLD_51 0
++#define SDLK_WORLD_52 0
++#define SDLK_WORLD_53 0
++#define SDLK_WORLD_54 0
++#define SDLK_WORLD_55 0
++#define SDLK_WORLD_56 0
++#define SDLK_WORLD_57 0
++#define SDLK_WORLD_58 0
++#define SDLK_WORLD_59 0
++#define SDLK_WORLD_60 0
++#define SDLK_WORLD_61 0
++#define SDLK_WORLD_62 0
++#define SDLK_WORLD_63 0
++#define SDLK_WORLD_64 0
++#define SDLK_WORLD_65 0
++#define SDLK_WORLD_66 0
++#define SDLK_WORLD_67 0
++#define SDLK_WORLD_68 0
++#define SDLK_WORLD_69 0
++#define SDLK_WORLD_70 0
++#define SDLK_WORLD_71 0
++#define SDLK_WORLD_72 0
++#define SDLK_WORLD_73 0
++#define SDLK_WORLD_74 0
++#define SDLK_WORLD_75 0
++#define SDLK_WORLD_76 0
++#define SDLK_WORLD_77 0
++#define SDLK_WORLD_78 0
++#define SDLK_WORLD_79 0
++#define SDLK_WORLD_80 0
++#define SDLK_WORLD_81 0
++#define SDLK_WORLD_82 0
++#define SDLK_WORLD_83 0
++#define SDLK_WORLD_84 0
++#define SDLK_WORLD_85 0
++#define SDLK_WORLD_86 0
++#define SDLK_WORLD_87 0
++#define SDLK_WORLD_88 0
++#define SDLK_WORLD_89 0
++#define SDLK_WORLD_90 0
++#define SDLK_WORLD_91 0
++#define SDLK_WORLD_92 0
++#define SDLK_WORLD_93 0
++#define SDLK_WORLD_94 0
++#define SDLK_WORLD_95 0
+diff --git a/d2/include/ogl_init.h b/d2/include/ogl_init.h
+index af0b258..ec43620 100644
+--- a/d2/include/ogl_init.h
++++ b/d2/include/ogl_init.h
+@@ -11,7 +11,13 @@
+ #include <stddef.h>
+ #endif
+ 
++#ifndef __EMSCRIPTEN__
+ #include <GL/glew.h>
++#else
++#define GL_GLEXT_PROTOTYPES
++#include <GL/gl.h>
++#include <GL/glext.h>
++#endif
+ #ifdef _WIN32
+ #include "loadgl.h"
+ int ogl_init_load_library(void);
+diff --git a/d2/libmve/mveplay.c b/d2/libmve/mveplay.c
+index bfa69f6..22d5043 100644
+--- a/d2/libmve/mveplay.c
++++ b/d2/libmve/mveplay.c
+@@ -19,6 +19,9 @@
+ #endif // _WIN32
+ 
+ #include <SDL.h>
++#ifdef __EMSCRIPTEN__
++#include <emscripten.h>
++#endif
+ #ifdef USE_SDLMIXER
+ #include <SDL_mixer.h>
+ #endif
+@@ -191,6 +194,40 @@ static void timer_start(void)
+ 	timer_started=1;
+ }
+ 
++#ifdef __EMSCRIPTEN__
++// The browser can't block mid-frame (it would show a half-drawn screen), so instead of
++// sleeping until the next movie frame is due we report whether it is due yet.
++static int timer_frame_due(void)
++{
++	struct timeval tv;
++	long long now, expire;
++
++	if (!timer_started)
++		return 1;
++	gettimeofday(&tv, NULL);
++	now = (long long)tv.tv_sec * 1000000 + tv.tv_usec;
++	expire = (long long)timer_expire.tv_sec * 1000000 + timer_expire.tv_usec;
++	if (now < expire)
++		return 0;
++	if (now - expire > 1000000)	// fell far behind (tab was hidden): don't fast-forward
++		timer_start();
++	return 1;
++}
++
++static void timer_advance(void)
++{
++	int nsec;
++
++	timer_expire.tv_usec += micro_frame_delay;
++	if (timer_expire.tv_usec > 1000000)
++	{
++		nsec = timer_expire.tv_usec / 1000000;
++		timer_expire.tv_sec += nsec;
++		timer_expire.tv_usec -= nsec*1000000;
++	}
++}
++#endif
++
+ static void do_timer_wait(void)
+ {
+ 	int nsec=0;
+@@ -216,6 +253,8 @@ static void do_timer_wait(void)
+ 	Sleep(ts.tv_sec * 1000 + ts.tv_nsec / 1000000);
+ #elif defined(macintosh)
+ 	Delay(ts.tv_sec * 1000 + ts.tv_nsec / 1000000, NULL);
++#elif defined(__EMSCRIPTEN__)
++	emscripten_sleep(ts.tv_sec * 1000 + ts.tv_nsec / 1000000);
+ #else
+ 	if (nanosleep(&ts, NULL) == -1  &&  errno == EINTR)
+ 		exit(1);
+@@ -745,6 +784,16 @@ int MVE_rmStepMovie()
+ 	if (!timer_started)
+ 		timer_start();
+ 
++#ifdef __EMSCRIPTEN__
++	if (init_timer && !timer_frame_due())
++	{
++		// next movie frame isn't due: redraw the current one for this display frame
++		if (g_vBackBuf1 && video_initialized)
++			mve_showframe(g_vBackBuf1, g_destX, g_destY, g_width, g_height, g_screenWidth, g_screenHeight);
++		return 0;
++	}
++#endif
++
+ 	while (cont && !g_frameUpdated) // make a "step" be a frame, not a chunk...
+ 		cont = mve_play_next_chunk(mve);
+ 	g_frameUpdated = 0;
+@@ -757,7 +806,12 @@ int MVE_rmStepMovie()
+ 		init_timer = 1;
+ 	}
+ 
++#ifdef __EMSCRIPTEN__
++	if (init_timer)
++		timer_advance();
++#else
+ 	do_timer_wait();
++#endif
+ 
+ 	return 0;
+ }
+diff --git a/d2/main/inferno.c b/d2/main/inferno.c
+index dc6e44a..3c6d310 100644
+--- a/d2/main/inferno.c
++++ b/d2/main/inferno.c
+@@ -25,6 +25,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ 
+ char copyright[] = "DESCENT II  COPYRIGHT (C) 1994-1996 PARALLAX SOFTWARE CORPORATION";
+ 
++#include "web.h"
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -519,5 +520,8 @@ int main(int argc, char *argv[])
+ 	PHYSFSX_removeArchiveContent();
+ 	reset_observatory_stats();
+ 
++#ifdef __EMSCRIPTEN__
++	d2web_quit();	// save to browser storage and return to the page
++#endif
+ 	return(0);		//presumably successful exit
+ }
+diff --git a/d2/main/newdemo.c b/d2/main/newdemo.c
+index 79cf5fb..e27f272 100644
+--- a/d2/main/newdemo.c
++++ b/d2/main/newdemo.c
+@@ -87,7 +87,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ #include "editor/editor.h"
+ #endif
+ 
+-extern int init_hoard_data();
++extern void init_hoard_data();
+ extern void init_seismic_disturbances(void);
+ 
+ #define ND_EVENT_EOF				0	// EOF
+diff --git a/d2/main/playsave.c b/d2/main/playsave.c
+index 1944a8c..7b95e97 100644
+--- a/d2/main/playsave.c
++++ b/d2/main/playsave.c
+@@ -126,8 +126,14 @@ int new_player_config()
+ 	PlayerCfg.AutomapFreeFlight = 0;
+ 	PlayerCfg.NoFireAutoselect = 0;
+ 	PlayerCfg.CycleAutoselectOnly = 0;
++#ifdef __EMSCRIPTEN__
++	// the browser edition defaults new pilots to the enhanced look
++	PlayerCfg.AlphaEffects = 1;
++	PlayerCfg.DynLightColor = 1;
++#else
+ 	PlayerCfg.AlphaEffects = 0;
+ 	PlayerCfg.DynLightColor = 0;
++#endif
+ 	PlayerCfg.DisableCockpit = 0;  /* DisableCockpit */ 
+ 	PlayerCfg.StickyRearview = 0; /* StickyRearview */ 
+ 	PlayerCfg.SelectAfterFire = 1;  /* SelectAfterFire */
+diff --git a/d2/main/powerup.c b/d2/main/powerup.c
+index 650f69e..68d5617 100644
+--- a/d2/main/powerup.c
++++ b/d2/main/powerup.c
+@@ -255,7 +255,7 @@ int pick_up_vulcan_ammo(void)
+ 
+ extern void invalidate_escort_goal(void);
+ extern char GetKeyValue(char);
+-extern void check_to_use_primary(int);
++extern int check_to_use_primary(int);
+ extern void multi_send_got_flag (char);
+ 
+ //	returns true if powerup consumed
+diff --git a/d2/misc/args.c b/d2/misc/args.c
+index cb81385..d2aa251 100644
+--- a/d2/misc/args.c
++++ b/d2/misc/args.c
+@@ -152,9 +152,9 @@ void ReadCmdArgs(void)
+ 	GameArg.CtlNoJoystick 		= FindArg("-nojoystick");
+ 	GameArg.CtlNoStickyKeys		= FindArg("-nostickykeys");
+ 	if (GameArg.CtlNoStickyKeys) // Must happen before SDL_Init!
+-		SDL_putenv("SDL_DISABLE_LOCK_KEYS=1");
++		putenv("SDL_DISABLE_LOCK_KEYS=1");
+ 	else
+-		SDL_putenv("SDL_DISABLE_LOCK_KEYS=0");
++		putenv("SDL_DISABLE_LOCK_KEYS=0");
+ 
+ 	// Sound Options
+ 
+diff --git a/d2/misc/physfsrwops.c b/d2/misc/physfsrwops.c
+index a6ab6fd..c789b14 100644
+--- a/d2/misc/physfsrwops.c
++++ b/d2/misc/physfsrwops.c
+@@ -23,7 +23,15 @@
+ #include <stdio.h>  /* used for SEEK_SET, SEEK_CUR, SEEK_END ... */
+ #include "physfsrwops.h"
+ 
+-static int physfsrwops_seek(SDL_RWops *rw, int offset, int whence)
++#ifdef __EMSCRIPTEN__
++typedef long rw_off_t;
++typedef size_t rw_size_t;
++#else
++typedef int rw_off_t;
++typedef int rw_size_t;
++#endif
++
++static rw_off_t physfsrwops_seek(SDL_RWops *rw, rw_off_t offset, int whence)
+ {
+     PHYSFS_file *handle = (PHYSFS_file *) rw->hidden.unknown.data1;
+     int pos = 0;
+@@ -97,7 +105,7 @@ static int physfsrwops_seek(SDL_RWops *rw, int offset, int whence)
+ } /* physfsrwops_seek */
+ 
+ 
+-static int physfsrwops_read(SDL_RWops *rw, void *ptr, int size, int maxnum)
++static rw_size_t physfsrwops_read(SDL_RWops *rw, void *ptr, rw_size_t size, rw_size_t maxnum)
+ {
+     PHYSFS_file *handle = (PHYSFS_file *) rw->hidden.unknown.data1;
+     PHYSFS_sint64 rc = PHYSFS_read(handle, ptr, size, maxnum);
+@@ -107,18 +115,18 @@ static int physfsrwops_read(SDL_RWops *rw, void *ptr, int size, int maxnum)
+             SDL_SetError("PhysicsFS error: %s", PHYSFS_getLastError());
+     } /* if */
+ 
+-    return((int) rc);
++    return((rw_size_t) rc);
+ } /* physfsrwops_read */
+ 
+ 
+-static int physfsrwops_write(SDL_RWops *rw, const void *ptr, int size, int num)
++static rw_size_t physfsrwops_write(SDL_RWops *rw, const void *ptr, rw_size_t size, rw_size_t num)
+ {
+     PHYSFS_file *handle = (PHYSFS_file *) rw->hidden.unknown.data1;
+     PHYSFS_sint64 rc = PHYSFS_write(handle, ptr, size, num);
+     if (rc != num)
+         SDL_SetError("PhysicsFS error: %s", PHYSFS_getLastError());
+ 
+-    return((int) rc);
++    return((rw_size_t) rc);
+ } /* physfsrwops_write */
+ 
+ 
+diff --git a/d2/xmodel/strfunc.h b/d2/xmodel/strfunc.h
+index 86dbf86..284c6a7 100644
+--- a/d2/xmodel/strfunc.h
++++ b/d2/xmodel/strfunc.h
+@@ -79,6 +79,9 @@ static void strupr8(char *s) {
+ #endif
+ 
+ #ifndef WIN32
++#ifdef __EMSCRIPTEN__
++#define strlwr xmodel_strlwr
++#endif
+ static char *strlwr(char *s) {
+ 	for (char *p = s, c; (c = *p); p++)
+ 		if (c >= 'A' && c <= 'Z')
