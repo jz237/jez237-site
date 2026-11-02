@@ -1,4 +1,4 @@
-/* Turrican II — Redux : input.js
+/* Shard Assault : input.js
  * Keyboard + touch + gamepad -> per-frame input with edge-triggered flags.
  */
 (function (root, factory) { root.TInput = factory(); })(typeof self !== 'undefined' ? self : this, function () {
@@ -109,6 +109,7 @@
         switchPressed: edge('switch'),
         bombPressed: edge('bomb'),
         linePressed: edge('line'),
+        pick: [1, 2, 3, 4, 5, 6].find(n => tapped['Digit' + n] || tapped['Numpad' + n]) || 0,
         pausePressed: edge('pause'),
         mutePressed: edge('mute'),
         startPressed: edge('start') || edge('jump'),
