@@ -1,8 +1,8 @@
 // AI pilots. Every few tenths of a second a pilot re-reads the belt: it forecasts every rock, shot and
 // hazard against its own path, picks an objective (dodge, duel, shard play, mining, a power-up) and
 // writes the plan down. The demo's overlay draws that plan and the captions read it out.
-import { F } from './config.js?v=2';
-import { dX, dZ, fwd, angleTo, angDiff } from './sim.js?v=2';
+import { F } from './config.js?v=3';
+import { dX, dZ, fwd, angleTo, angDiff } from './sim.js?v=3';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 const gauss = () => (Math.random() + Math.random() + Math.random() - 1.5) * 1.15;

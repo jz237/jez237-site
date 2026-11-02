@@ -2,12 +2,12 @@
 // bends around gravity, instanced noise-carved rocks, ships with trails, shots, hazards, the Maw, and
 // every explosion. Everything is synced from the simulation each frame; nothing here changes W.
 import * as THREE from '../vendor/three.module.min.js';
-import { F, ARENAS, POWERUPS, KIND_INDEX, ROCK_KINDS } from './config.js?v=2';
-import { fwd, dX, dZ } from './sim.js?v=2';
-import { NOISE } from './shaders.js?v=2';
-import { Post } from './post.js?v=2';
-import { Sparks, Smoke, Shards, patchShardMaterial, Lightning, Rings, Ribbon } from './fx.js?v=2';
-import { rockGeometry, buildShip, buildBoss, buildOrb, buildMine, buildDrone } from './models.js?v=2';
+import { F, ARENAS, POWERUPS, KIND_INDEX, ROCK_KINDS } from './config.js?v=3';
+import { fwd, dX, dZ } from './sim.js?v=3';
+import { NOISE } from './shaders.js?v=3';
+import { Post } from './post.js?v=3';
+import { Sparks, Smoke, Shards, patchShardMaterial, Lightning, Rings, Ribbon } from './fx.js?v=3';
+import { rockGeometry, buildShip, buildBoss, buildOrb, buildMine, buildDrone } from './models.js?v=3';
 
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
@@ -675,8 +675,9 @@ export class Renderer {
       this.skyMat.uniforms.uC.value.set(A.sky[2]);
       this.planetMat.uniforms.uColor.value.set(A.planet);
       this.gridMat.uniforms.uGrid.value.copy(hdr(A.grid, 1.2));
-      if (this.env) this.env.dispose();
-      this.env = this.makeEnv(A);
+      // one reflection map per sector, made once (building it mid-countdown cost a frame)
+      this.envs = this.envs || {};
+      this.env = this.envs[A.key] || (this.envs[A.key] = this.makeEnv(A));
       this.hemi.color.set(A.sky[2]).lerp(new THREE.Color(0x8fb0ff), 0.6);
     }
     this.sides = sides;
@@ -765,6 +766,70 @@ export class Renderer {
     b.group.add(coreGlow);
     this.scene.add(b.group);
     return { group: b.group, shell, spikes: b.spikes, eyes, core, coreGlow, phase: 1 };
+  }
+
+  // ------------------------------------------------------------------ warm-up
+  // WebGL compiles a shader the first time something is drawn, which can stall a frame for 100+ ms
+  // (an orb, a mine, a storm warning, a ring...). Draw one of everything once behind the boot screen.
+  warmUp() {
+    if (!this.env || !this.W) return;
+    this.envs = this.envs || {};
+    for (const A of ARENAS) if (!this.envs[A.key]) this.envs[A.key] = this.makeEnv(A);
+    const S = this.scene, tmp = [];
+    const views = ['ace', 'razor', 'lyra', 'grit', 'cipher', 'maw'].map((look, i) => {
+      const v = new ShipView(this, { id: -100 - i, look, a: 0, x: 0, z: 0 }, 0x39f3ff, 0xffffff);
+      v.shield.visible = true; v.aura.visible = true; v.ghost.visible = true;
+      return v;
+    });
+    const fake = { t: 1, hole: this.W.hole, ships: [], rocks: [], arcs: [], boss: null,
+      orbs: [{ id: -1, kind: 'triple', x: 0, z: 0, vx: 0, vz: 0, life: 10, born: 0 }],
+      mines: [{ id: -2, side: 1, x: 2, z: 0, vx: 0, vz: 0, armT: 0, life: 10 }],
+      drones: [{ id: -3, side: 1, x: -2, z: 0, ang: 0 }],
+      wells: [{ id: -4, side: 1, x: 0, z: 2, vx: 0, vz: 0, life: 3, born: 0 }],
+      strikes: [{ id: -5, x: 0, z: -2, r: 3.4, t: 1, max: 1.35 }],
+      lanes: [{ x: 0, z: 0, dx: 1, dz: 0 }] };
+    this.syncOrbs(fake, 0.016, 1); this.syncMines(fake, 1); this.syncDrones(fake, 0.016, 1); this.syncHazards(fake, 0.016, 1);
+    const wellsW = { ...fake, hole: null };
+    this.syncWells(wellsW, 1);
+    const boss = this.makeBoss();
+    boss.core.visible = true; boss.coreGlow.visible = true;
+    const hole = this.makeHole(1, 0xffb050, 0x8a3cff);
+    const portal = this.makePortal({ x: 0, z: 0 }, 0);
+    tmp.push(boss.group, ...boss.eyes.map((e) => e.g), hole.group, portal.group);
+    this.event({ k: 'wave', edge: 0 }, fake);
+    this.explode(0, 0, 2, 0xffa040);
+    this.smoke.burst({ x: 0, y: 0.3, z: 0, n: 4, speed: 1, color: 0x555555, intensity: 1, size: 1, life: 1 });
+    this.debris.burst({ x: 0, y: 0, z: 0, n: 4, speed: 4, color: 0x888888, intensity: 1 });
+    this.embers.burst({ x: 0, y: 0, z: 0, n: 4, speed: 4, color: 0xff8040, intensity: 2 });
+    this.lightning.strike(_va.set(0, 5, 0), _vb.set(2, 0, 2), 0xb46bff, 0.2, 0.1, 0.3);
+    this.beam.visible = true;
+    this.markers[0].visible = true;
+    this.paths[0].set([0, 0, 4, 4], 0.3);
+    this.shots.count = 1;
+    this.shots.setMatrixAt(0, _m4.identity());
+    for (const s of [this.sparks, this.glows, this.smoke, this.debris, this.embers]) s.update(0.001);
+    this.rings.update(0.001);
+    this.lightning.update(0.001, this.camera.position);
+    for (const o of [S]) o.traverse((m) => { if (m.isMesh || m.isPoints || m.isSprite) m.userData.wasCulled = m.frustumCulled, m.frustumCulled = false; });
+    this.render(0.016, { bloom: 1 });
+    S.traverse((m) => { if (m.userData.wasCulled !== undefined) { m.frustumCulled = m.userData.wasCulled; delete m.userData.wasCulled; } });
+    // and tidy everything away again
+    for (const v of views) v.remove();
+    for (const o of tmp) S.remove(o);
+    const empty = { ...fake, orbs: [], mines: [], drones: [], wells: [], strikes: [], lanes: [] };
+    this.syncOrbs(empty, 0, 1); this.syncMines(empty, 1); this.syncDrones(empty, 0, 1); this.syncHazards(empty, 0, 1); this.syncWells(empty, 1);
+    for (const e of this.edgeWarn) S.remove(e.m);
+    this.edgeWarn = [];
+    this.beam.visible = false;
+    this.markers[0].visible = false;
+    this.paths[0].hide();
+    this.shots.count = 0;
+    for (const s of [this.sparks, this.glows, this.smoke, this.debris, this.embers]) s.clear();
+    for (const r of this.rings.pool) { r.life = 0; r.m.visible = false; }
+    for (const l of this.lightning.pool) { l.life = 0; l.r.mesh.visible = false; }
+    for (const l of this.lights) { l.life = 0; l.L.intensity = 0; }
+    this.shocks = []; this.ripples = [];
+    this.kick.flash.w = 0;
   }
 
   // ------------------------------------------------------------------ per-frame sync
@@ -1224,6 +1289,18 @@ export class Renderer {
         break;
       }
       case 'orb': this.rings.spawn(e.x, e.z, POWERUPS[e.kind].color, 3, 0.5, 0.1); break;
+      case 'shipdown': {
+        const c = sideCol(e.side).getHex();
+        this.explode(e.x, e.z, 3.2, c);
+        this.explode(e.x, e.z, 1.6, 0xffffff);
+        this.embers.burst({ x: e.x, y: 0, z: e.z, n: 40, speed: 12, w: 1, h: 0.5, up: 4, scale: 1.1, life: 2.2, color: c, intensity: 3, drag: 0.6 });
+        this.debris.burst({ x: e.x, y: 0, z: e.z, n: 24, speed: 10, w: 1, h: 0.5, up: 4, scale: 1.2, life: 2.4, color: 0x404850, intensity: 1, drag: 0.5 });
+        this.rings.spawn(e.x, e.z, c, 14, 0.9, 0.15);
+        this.shock(e.x, e.z, 0.8);
+        this.flash(0.15, c);
+        break;
+      }
+      case 'respawn': this.rings.spawn(e.x, e.z, 0x39f3ff, 6, 0.8, 0.12); this.rings.spawn(e.x, e.z, 0xffffff, 3, 0.5, 0.15); this.sparks.burst({ x: e.x, y: 0.3, z: e.z, n: 40, speed: 6, color: 0x39f3ff, intensity: 3, size: 0.3, life: 0.6, flat: 0.5 }); break;
       case 'pu': {
         const c = POWERUPS[e.kind].color;
         this.sparks.burst({ x: e.x, y: 0.4, z: e.z, n: 40, speed: 7, color: c, intensity: 3.5, size: 0.28, life: 0.6, flat: 0.5 });

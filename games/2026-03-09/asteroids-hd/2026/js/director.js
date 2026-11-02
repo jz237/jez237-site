@@ -2,8 +2,8 @@
 // cuts between broadcast shots and, because it can forecast every shot and shard against every ship,
 // sees a big hit coming and drops into slow motion on the right camera before it lands.
 import * as THREE from '../vendor/three.module.min.js';
-import { F } from './config.js?v=2';
-import { dX, dZ, fwd } from './sim.js?v=2';
+import { F } from './config.js?v=3';
+import { dX, dZ, fwd } from './sim.js?v=3';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 const { AW, AH } = F;
@@ -150,11 +150,11 @@ export class Director {
     if (this.scanT <= 0) {
       this.scanT = 0.06;
       const f = this.forecast(W);
-      if (f && (!this.impact || W.t > this.impact.until) && (f.lethal || f.v >= 2 || Math.random() < 0.35)) {
+      if (f && (!this.impact || W.t > this.impact.until) && (f.lethal || f.v >= 2)) {
         this.impact = { ...f, until: W.t + f.t + 0.6, at: W.t + f.t };
         this.shot = { kind: 'impact', side: f.side };
         this.shotT = 0;
-        this.slowMo(f.lethal ? 0.18 : 0.32, f.t + (f.lethal ? 1.1 : 0.55));
+        this.slowMo(f.lethal ? 0.2 : 0.4, f.t + (f.lethal ? 1.0 : 0.45));
         this.cutT = 2.2;
       }
     }

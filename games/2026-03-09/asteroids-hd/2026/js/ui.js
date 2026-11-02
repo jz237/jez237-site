@@ -1,6 +1,6 @@
 // DOM: HUD panels, floating pop-ups, banners, power-up toasts and screen switching.
-import { F, POWERUPS } from './config.js?v=2';
-import { bossHP, bossMax, dashLen, odLen } from './sim.js?v=2';
+import { F, POWERUPS } from './config.js?v=3';
+import { bossHP, bossMax, dashLen, odLen, rockMassLeft } from './sim.js?v=3';
 
 const $ = (id) => document.getElementById(id);
 const hex = (c) => '#' + c.toString(16).padStart(6, '0');
@@ -33,6 +33,16 @@ export class UI {
       const el = $('hud-' + s);
       el.style.setProperty('--c', hex(d.color));
       const ship = W.ships.find((q) => q.side === s);
+      if (!ship && W.solo) {
+        el.innerHTML = `
+          <div class="pname" style="color:${hex(d.color)};text-shadow:0 0 10px ${hex(d.color)}">${d.name}</div>
+          <div class="ptitle">${d.title} · ${W.arena.name}</div>
+          <div class="row"><span class="lbl">ROCKS</span><div class="hpbar belt"><i></i></div></div>
+          <div class="row"><span class="lbl">LEFT</span><b class="rockn">0</b></div>
+          <div class="fxs"></div>`;
+        this.cache.set(s, { belt: true, el: { bar: el.querySelector('.hpbar i'), n: el.querySelector('.rockn') }, last: {} });
+        continue;
+      }
       if (!ship && W.boss) {
         el.innerHTML = `
           <div class="pname" style="color:${hex(d.color)};text-shadow:0 0 10px ${hex(d.color)}">${d.name}</div>
@@ -49,8 +59,9 @@ export class UI {
         <div class="ptitle">${d.title}</div>
         <div class="row"><span class="lbl">HULL</span><div class="pips">${'<i class="pip"></i>'.repeat(max)}</div></div>
         <div class="row"><span class="lbl">BOOST</span><div class="dash"><i></i></div><div class="odbar"><i></i></div></div>
+        ${W.solo ? '<div class="row"><span class="lbl">SHIPS</span><div class="lives"></div></div>' : ''}
         <div class="fxs"></div>`;
-      this.cache.set(s, { el: { pips: [...el.querySelectorAll('.pip')], dash: el.querySelector('.dash'), dashi: el.querySelector('.dash i'), od: el.querySelector('.odbar'), odi: el.querySelector('.odbar i'), fxs: el.querySelector('.fxs') }, last: {} });
+      this.cache.set(s, { el: { lives: el.querySelector('.lives'), pips: [...el.querySelectorAll('.pip')], dash: el.querySelector('.dash'), dashi: el.querySelector('.dash i'), od: el.querySelector('.odbar'), odi: el.querySelector('.odbar i'), fxs: el.querySelector('.fxs') }, last: {} });
     }
     document.documentElement.style.setProperty('--p1', hex(sides[1].color));
     document.documentElement.style.setProperty('--p2', hex(sides[-1].color));
@@ -61,6 +72,17 @@ export class UI {
       const c = this.cache.get(s);
       if (!c) continue;
       const { el, last } = c;
+      if (c.belt) {
+        let n = 0;
+        for (const r of W.rocks) if (r.life < 0) n++;
+        const k = n + '|' + rockMassLeft(W);
+        if (last.k !== k) {
+          last.k = k;
+          el.n.textContent = n;
+          el.bar.style.width = Math.round(Math.min(1, rockMassLeft(W) / (W.mass0 || 1)) * 100) + '%';
+        }
+        continue;
+      }
       if (c.boss) {
         const B = W.boss;
         if (!B) continue;
@@ -74,6 +96,7 @@ export class UI {
       }
       const ship = W.ships.find((q) => q.side === s);
       if (!ship) continue;
+      if (el.lives && last.lives !== W.lives) { last.lives = W.lives; el.lives.innerHTML = W.lives > 0 ? '<i class="life"></i>'.repeat(Math.min(8, W.lives)) + (W.lives > 8 ? `<small>+${W.lives - 8}</small>` : '') : '<small>LAST SHIP</small>'; }
       const hk = ship.hp + '|' + ship.max;
       if (last.hp !== hk) {
         last.hp = hk;

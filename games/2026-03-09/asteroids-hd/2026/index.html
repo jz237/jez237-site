@@ -93,6 +93,15 @@ button { appearance: none; border: 0; background: none; font: inherit; color: in
   .world li:nth-child(n+2) { display: none; }
 }
 @media (max-height: 560px) and (orientation: landscape) { .world { display: none; } }
+.lives { display: flex; gap: 4px; align-items: center; min-height: 12px; }
+.lives .life { width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 11px solid var(--c); filter: drop-shadow(0 0 4px var(--c)); }
+.lives small { font-size: 8px; letter-spacing: .14em; color: var(--dim); }
+.right .lives { justify-content: flex-end; }
+.rockn { font-family: 'Exo 2'; font-style: italic; font-weight: 900; font-size: 18px; color: #fff; }
+.hpbar.belt i { background: linear-gradient(90deg, var(--c), #ffffff); box-shadow: 0 0 10px var(--c); }
+.hstabs { display: flex; gap: 8px; margin: -4px 0 12px; }
+.mbtn.tab { padding: 8px 14px; font-size: 10px; letter-spacing: .2em; }
+.mbtn.tab.on { border-color: var(--gold); color: #fff; box-shadow: 0 0 14px rgba(255, 210, 63, .35); }
 #ore { font-size: 9px; letter-spacing: .2em; color: #9affc0; margin-top: 2px; text-shadow: 0 0 8px rgba(77, 255, 138, .5); }
 #medal-toast { position: absolute; left: 50%; top: calc(max(8px, env(safe-area-inset-top)) + 104px); transform: translateX(-50%); display: flex; gap: 12px; align-items: center; padding: 10px 16px 10px 12px; border-radius: 14px; background: linear-gradient(160deg, rgba(60, 46, 10, .92), rgba(16, 12, 4, .94)); border: 1px solid rgba(255, 210, 63, .7); box-shadow: 0 0 30px rgba(255, 210, 63, .35); max-width: min(520px, 92vw); }
 #medal-toast.go { animation: medalIn .5s cubic-bezier(.2, 1.5, .4, 1); }
@@ -376,6 +385,7 @@ body.calm .odbar.full i, body.calm #t-od.ready, body.calm .vsmark { animation: n
     <div class="logo glitch">ASTEROIDS<em>2026</em></div>
     <div class="menu" id="mainmenu">
       <button class="mbtn primary" data-act="campaign">CAMPAIGN<small>FOUR RIVAL ACES · ONE MAW</small></button>
+      <button class="mbtn" data-act="belt">BELT RUN<small>YOU VS THE ASTEROIDS · ENDLESS WAVES</small></button>
       <button class="mbtn" data-act="versus">VERSUS<small>SAME SCREEN OR CPU · PARTY TWISTS</small></button>
       <button class="mbtn" data-act="online">ONLINE<small>1V1 DOGFIGHTS, ANYONE, ANYWHERE</small></button>
       <button class="mbtn" data-act="demo">SMART DEMO<small>WATCH THE AI THINK</small></button>
@@ -466,6 +476,12 @@ body.calm .odbar.full i, body.calm #t-od.ready, body.calm .vsmark { animation: n
       <h3>PILOTS</h3>
       <p>Beat a rival in the campaign to unlock them as your own pilot. Each one flies with a perk.</p>
       <div class="pugrid" id="pilotlist"></div>
+      <h3>BELT RUN</h3>
+      <ul>
+        <li><b>Just you and the rocks</b> — no rival ship. Clear every rock to finish a wave; the next one is bigger and faster, and the sector changes every three waves.</li>
+        <li><b>Spare ships</b> — you start with two spares and earn another every 20,000 points. Big rocks hit for two, and a few stragglers drift in if you take too long.</li>
+        <li><b>Hangar</b> — after every third wave, spend your ore on upgrades. Belt Run has its own global high-score board.</li>
+      </ul>
       <h3>HANGAR &amp; MEDALS</h3>
       <ul>
         <li><b>Ore</b> — in the campaign every rock you break, hit you land and round you win puts ore in your hold (gold rocks are rich).</li>
@@ -491,6 +507,7 @@ body.calm .odbar.full i, body.calm #t-od.ready, body.calm .vsmark { animation: n
   <section class="screen dim hidden" id="scores">
     <div class="card">
       <h2>HIGH SCORES</h2>
+      <div class="hstabs"><button class="mbtn tab" data-hs="campaign">CAMPAIGN</button><button class="mbtn tab" data-hs="belt">BELT RUN</button></div>
       <p class="rank hidden" id="hs-rank"></p>
       <div class="hsgrid">
         <div><h3>🌐 GLOBAL</h3><table class="hs" id="hs-global"></table></div>
@@ -578,6 +595,6 @@ body.calm .odbar.full i, body.calm #t-od.ready, body.calm .vsmark { animation: n
     </div>
   </section>
 </div>
-<script type="module" src="js/main.js?v=2"></script>
+<script type="module" src="js/main.js?v=3"></script>
 </body>
 </html>

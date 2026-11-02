@@ -1,16 +1,16 @@
 // Asteroids 2026 — game flow, controls, scoring, commentary and the frame loop.
 import * as THREE from '../vendor/three.module.min.js';
-import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS, PERKS, ROSTER, SHADOW, TWISTS, ROCK_KINDS, UPGRADES, UP_KEYS, UP_COST, MEDALS } from './config.js?v=2';
-import { makeWorld, step, drainEvents, STEP, shipOf } from './sim.js?v=2';
-import { AIPilot } from './ai.js?v=2';
-import { Renderer, pickQuality, CALM } from './render.js?v=2';
-import { Director } from './director.js?v=2';
-import { Audio } from './audio.js?v=2';
-import { Input } from './input.js?v=2';
-import { UI, $, hex } from './ui.js?v=2';
-import { Scores } from './scores.js?v=2';
-import { Recorder } from './replay.js?v=2';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=2';
+import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS, PERKS, ROSTER, SHADOW, TWISTS, ROCK_KINDS, UPGRADES, UP_KEYS, UP_COST, MEDALS } from './config.js?v=3';
+import { makeWorld, step, drainEvents, STEP, shipOf, LIFE_STEP } from './sim.js?v=3';
+import { AIPilot } from './ai.js?v=3';
+import { Renderer, pickQuality, CALM } from './render.js?v=3';
+import { Director } from './director.js?v=3';
+import { Audio } from './audio.js?v=3';
+import { Input } from './input.js?v=3';
+import { UI, $, hex } from './ui.js?v=3';
+import { Scores } from './scores.js?v=3';
+import { Recorder } from './replay.js?v=3';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=3';
 
 // ------------------------------------------------------------------ settings
 const SKEY = 'a26.settings.v1';
@@ -29,6 +29,7 @@ const A = new Audio('./');
 const I = new Input(R.camera);
 const U = new UI();
 const HS = new Scores('asteroids-2026');
+const HSB = new Scores('asteroids-2026-belt');
 const REC = new Recorder();
 const NET = new Online({ status: onStatus, joined: onJoined, start: (cfg) => onlineRound(cfg), left: onLeft, chat: onChat },
   { relay: params.get('relay') || undefined, lag: +params.get('netlag') || 0 });
@@ -73,7 +74,7 @@ function say(name, cd = 0, o = {}) {
 const ann = (n, cd, o) => say('ann_' + n, cd, o);
 function pilotSay(side, line, o = {}) {
   const info = G.sides && G.sides[side];
-  if (!info || !info.persona || settings.talk === 'off') return;
+  if (!info || !info.persona || !PILOTS[info.persona.key] || settings.talk === 'off') return;
   const t = now();
   const before = lastLine;
   say(`${info.persona.key}_${line}`, o.cd ?? 60, { queue: true, ...o });
@@ -83,7 +84,9 @@ function sideInfo(c) {
   if (c.human) return { name: c.human.name, title: c.human.title, color: c.human.color, accent: c.human.accent, look: c.human.look, human: true, pilot: c.human.pilot };
   return { name: c.persona.name, title: c.persona.title, color: c.persona.color, accent: c.persona.accent, look: c.persona.look, persona: c.persona };
 }
-const solo = () => G.mode === 'campaign' || G.mode === 'online' || (G.mode === 'versus' && !!(G.vs && G.vs.cpu));
+const solo = () => G.mode === 'campaign' || G.mode === 'belt' || G.mode === 'online' || (G.mode === 'versus' && !!(G.vs && G.vs.cpu));
+// Belt Run's 'opponent' is the belt itself
+const BELT = { key: 'belt', name: 'THE BELT', title: 'WAVE 1', color: 0x2a7bff, accent: 0xffffff, look: 'ace' };
 const soloSide = () => (G.mode === 'online' ? NET.side || 1 : 1);
 const isHuman = (side) => G.humans.some((h) => h.s.side === side);
 
@@ -179,7 +182,7 @@ function startMatch(cfg) {
     looks[s] = h ? h.look : c.persona.look;
   }
   if (boss) hull[1] = F.bossHull;
-  const W = makeWorld({ arena: cfg.arena, seed: cfg.seed ?? ((Math.random() * 1e9) | 0), boss, perks, looks, hull, twists: cfg.twists, diffBoss: cfg.diffBoss ?? 1, up: cfg.up });
+  const W = makeWorld({ arena: cfg.arena, seed: cfg.seed ?? ((Math.random() * 1e9) | 0), boss, perks, looks, hull, twists: cfg.twists, diffBoss: cfg.diffBoss ?? 1, up: cfg.up, ...(cfg.belt || {}) });
   G.W = W; G.ai = {}; G.aiList = []; G.humans = []; G.cfg = cfg; G.ko = null;
   for (const s of [1, -1]) {
     const c = cfg.sides[s];
@@ -328,9 +331,9 @@ function countdown() {
   D.setMode(camMode());
   updateMid();
   showTouch();
-  const label = G.mode === 'campaign' ? (G.stage === 4 ? 'THE MAW' : `SECTOR ${G.stage + 1}`) : `ROUND ${G.round}`;
+  const label = G.mode === 'belt' ? `WAVE ${G.wave}` : G.mode === 'campaign' ? (G.stage === 4 ? 'THE MAW' : `SECTOR ${G.stage + 1}`) : `ROUND ${G.round}`;
   U.showBanner(G.mode === 'campaign' && G.stage < 4 && G.round > 1 ? `ROUND ${G.round}` : label, G.W.arena.name, hex(G.W.arena.grid), 1.3);
-  if (G.round === 3) ann('final', 0, KEY);
+  if (G.round === 3 && G.mode !== 'belt') ann('final', 0, KEY);
   ['3', '2', '1'].forEach((t, i) => after(1.5 + i * 0.7, () => { U.showBanner(t, '', '#ffffff', 0.65); A.play('beep', { vary: 0, gap: 0 }); }));
   after(1.5 + 3 * 0.7, () => {
     U.showBanner('ENGAGE!', '', '#ffd23f', 0.9);
@@ -341,6 +344,52 @@ function countdown() {
     G.simOn = true;
   });
   G.simOn = false;
+}
+
+// ------------------------------------------------------------------ Belt Run: you against the asteroids
+function startBelt(pilot = 'p1') {
+  G.mode = 'belt';
+  G.p1Pilot = isOpen(pilot) ? pilot : 'p1';
+  G.wave = params.has('wave') ? Math.max(1, +params.get('wave') | 0) : 1;
+  G.lives = 2;
+  G.score = 0;
+  G.ore = 0;
+  G.up = {};
+  beltWave();
+}
+const beltArena = (w) => Math.floor((w - 1) / 3) % 4;
+function beltWave() {
+  clearTimers();
+  G.mode = 'belt';
+  G.menuCam = false;
+  G.round = 1;
+  G.shownPts = -1;
+  const w = G.wave, arena = beltArena(w);
+  const me = G.p1Pilot || 'p1';
+  const you = humanPilot(me, 1, me === 'p1' ? 'BELT RUNNER' : `YOU · ${PERKS[me].name}`);
+  const belt = { ...BELT, color: ARENAS[arena].grid, title: `WAVE ${w}` };
+  startMatch({ arena, up: { 1: G.up }, sides: { 1: { kind: 'human', human: you, who: 'solo' }, '-1': { kind: 'none', persona: belt } },
+    belt: { solo: true, wave: w, lives: G.lives, pts: G.score, rocks: Math.min(12, 3 + w), mega: w % 5 === 0 ? 1 + Math.floor(w / 10) : 0, rockK: Math.min(2, 1.1 + 0.06 * (w - 1)) } });
+  D.setMode(camMode());
+  A.playMusic(ARENAS[arena].music);
+  countdown();
+}
+function onWaveClear(e) {
+  if (G.mode !== 'belt' || G.state === 'waveclear') return;
+  G.state = 'waveclear';
+  const bonus = 500 * G.wave;
+  G.score = e.pts + bonus;
+  G.lives = e.lives;
+  // the bonus can earn a spare ship too
+  if (Math.floor(G.score / LIFE_STEP) > Math.floor(e.pts / LIFE_STEP)) { G.lives++; A.play('gold', { gap: 0, delay: 0.4 }); }
+  G.ore += 10;
+  $('score').textContent = G.score.toLocaleString();
+  U.showBanner(`WAVE ${G.wave} CLEAR`, `BONUS +${bonus.toLocaleString()}`, '#ffd23f', 2.6);
+  A.play('go', { gap: 0 });
+  A.play('pucollect', { gap: 0, delay: 0.2 });
+  const sectorDone = G.wave % 3 === 0;
+  if (sectorDone) after(1.2, () => ann('stageclear', 0, KEY));
+  after(2.8, () => { G.wave++; if (sectorDone) openHangar(); else beltWave(); });
 }
 
 // p2 = null: a CPU rival flies the other ship
@@ -411,7 +460,7 @@ function setDemoUI(on) {
 }
 
 function showTouch() {
-  const t = I.isTouch && (G.mode === 'campaign' || G.mode === 'versus' || G.mode === 'online');
+  const t = I.isTouch && (G.mode === 'campaign' || G.mode === 'belt' || G.mode === 'versus' || G.mode === 'online');
   $('touch').classList.toggle('hidden', !t);
 }
 
@@ -425,11 +474,16 @@ function updateMid() {
     $('ore').classList.remove('hidden'); $('ore').textContent = `◆ ${G.ore} ORE`;
   } else if (G.mode === 'versus') { $('stage-line').textContent = `ROUND ${G.round} · ${G.wins[1]} – ${G.wins[-1]}`; sc.classList.add('hidden'); }
   else if (G.mode === 'online') { const me = soloSide(); $('stage-line').textContent = `ONLINE · ROUND ${G.round} · ${G.wins[me]} – ${G.wins[-me]}`; sc.classList.add('hidden'); }
+  else if (G.mode === 'belt') {
+    $('stage-line').textContent = `BELT RUN · WAVE ${G.wave}`;
+    sc.classList.remove('hidden'); sc.textContent = (G.W && G.W.solo ? G.W.pts : G.score).toLocaleString();
+    $('ore').classList.remove('hidden'); $('ore').textContent = `◆ ${G.ore} ORE`;
+  }
   else { $('stage-line').textContent = 'AI vs AI · DEMO'; sc.classList.add('hidden'); }
 }
 
 function addOre(n) {
-  if (G.mode !== 'campaign' || (G.state !== 'play' && G.state !== 'ko')) return;
+  if ((G.mode !== 'campaign' && G.mode !== 'belt') || (G.state !== 'play' && G.state !== 'ko')) return;
   G.ore += n;
   $('ore').textContent = `◆ ${G.ore} ORE`;
 }
@@ -463,7 +517,7 @@ function onKO(e) {
   const winner = e.winner;
   G.ko = { x: e.x, z: e.z, side: e.side };
   const info = { n: W.n, side: e.side, x: e.x, z: e.z };
-  D.slowMo(0.22, 2.4);
+  D.slowMo(0.4, 0.9);
   D.addTrauma(1);
   if (G.mode !== 'campaign') { rumble(e.side, 1, 1, 700); rumble(winner, 0.4, 0.6, 400); }
   A.play('ko', { gap: 0, noSlow: true });
@@ -477,6 +531,7 @@ function onKO(e) {
     G.wins[winner]++;
     foldStats();
     const match = G.wins[winner] >= roundsToWin();
+    if (match) D.slowMo(0.22, 2.2);
     if (won) {
       addScore(1500 + (flawless ? 1500 : 0), e.x, e.z, flawless ? 'FLAWLESS' : 'KO', true);
       G.ore += 10;
@@ -503,6 +558,7 @@ function onKO(e) {
   } else if (G.mode === 'versus') {
     G.wins[winner]++;
     const match = G.wins[winner] >= 2;
+    if (match) D.slowMo(0.22, 2.2);
     const cpu = G.vs && G.vs.cpu;
     if (match) after(1.3, () => ann(cpu ? (winner === 1 ? 'victory' : 'defeat') : winner === 1 ? 'p1wins' : 'p2wins', 0, KEY));
     if (comeback) after(2.6, () => ann('comeback', 0, { queue: true, chance: 0.5 }));
@@ -514,12 +570,21 @@ function onKO(e) {
     G.wins[winner]++;
     const me = soloSide(), won = winner === me;
     const match = G.wins[winner] >= 2;
+    if (match) D.slowMo(0.22, 2.2);
     if (match) after(1.3, () => ann(won ? 'victory' : 'defeat', 0, KEY));
     if (comeback) after(2.6, () => ann('comeback', 0, { queue: true, chance: 0.5 }));
     U.showBanner(won ? 'YOU WIN' : `${G.sides[winner].name} WINS`, match ? 'THE MATCH' : `ROUND ${G.round} · ${G.wins[me]} – ${G.wins[-me]}`, hex(G.sides[winner].color), 3.6);
     if (match) { after(2, () => A.sting(won ? 'victory' : 'defeat')); after(4.6, () => onlineResults(winner)); }
     else if (me === 1) after(4.6, () => { if (G.mode === 'online') { G.round++; onlineNextRound(); } });
+  } else if (G.mode === 'belt') {
+    D.slowMo(0.22, 2.2);
+    G.score = W.pts;
+    U.showBanner('GAME OVER', `WAVE ${G.wave} · ${G.score.toLocaleString()}`, '#ff3040', 3.6);
+    after(1.3, () => ann('gameover', 0, KEY));
+    after(2, () => A.sting('defeat'));
+    after(3.6, () => withReplay(info, () => endRun()));
   } else if (G.mode === 'demo') {
+    D.slowMo(0.22, 2.2);
     after(1.2, () => pilotSay(winner, 'win', { chance: 0.5 }));
     if (comeback) after(1.3, () => ann('comeback', 0, { queue: true, chance: 0.5 }));
     U.showBanner(`${G.sides[winner].name} WINS`, comeback ? 'WHAT A COMEBACK' : 'DEMO', hex(G.sides[winner].color), 4);
@@ -623,8 +688,9 @@ function gameOver() {
 
 async function endRun() {
   U.hideBanner();
-  await HS.fetchGlobal();
-  if (HS.qualifies(G.score)) initialsEntry();
+  G.board = G.mode === 'belt' ? HSB : HS;
+  await G.board.fetchGlobal();
+  if (G.board.qualifies(G.score)) initialsEntry();
   else showScores(true);
 }
 
@@ -659,14 +725,15 @@ async function saveIni() {
   if (G.state !== 'initials') return;
   G.state = 'saving';
   A.play('uiok', { gap: 0 });
-  const e = await HS.submit(INI.chars.join(''), G.score, G.stage + 1);
-  await HS.fetchGlobal();
+  const B = G.board || HS;
+  const e = await B.submit(INI.chars.join(''), G.score, G.mode === 'belt' ? G.wave : G.stage + 1);
+  await B.fetchGlobal();
   showScores(true, INI.chars.join(''));
-  const g = HS.global || [];
+  const g = B.global || [];
   const gi = g.findIndex((r) => r.initials === e.initials && Math.floor(r.score) === e.score);
-  const li = HS.local().findIndex((r) => r.initials === e.initials && r.score === e.score && r.ts === e.ts);
+  const li = B.local().findIndex((r) => r.initials === e.initials && r.score === e.score && r.ts === e.ts);
   const rank = $('hs-rank');
-  rank.textContent = gi >= 0 ? `🌐 GLOBAL RANK #${gi + 1}` : HS.global === null ? 'SAVED · GLOBAL BOARD OFFLINE' : li >= 0 ? `🏠 #${li + 1} ON THIS DEVICE` : 'SAVED';
+  rank.textContent = gi >= 0 ? `🌐 GLOBAL RANK #${gi + 1}` : B.global === null ? 'SAVED · GLOBAL BOARD OFFLINE' : li >= 0 ? `🏠 #${li + 1} ON THIS DEVICE` : 'SAVED';
   rank.classList.remove('hidden');
   if (gi === 0) ann('champion', 0, KEY);
 }
@@ -679,9 +746,12 @@ function showScores(fromRun = false, me = null) {
       ? rows.slice(0, 10).map((r, i) => `<tr class="${me && r.initials === me && r.score === G.score ? 'me' : ''}"><td>${i + 1}.</td><td>${String(r.initials).replace(/[^A-Z0-9]/gi, '')}</td><td>${Math.floor(r.score).toLocaleString()}</td></tr>`).join('')
       : `<tr><td colspan="3" style="color:#7a8cb8">${rows === null ? 'Global board offline' : 'No scores yet — be the first!'}</td></tr>`;
   };
-  fill($('hs-local'), HS.local());
-  fill($('hs-global'), HS.global);
-  if (!fromRun) HS.fetchGlobal().then((g) => fill($('hs-global'), g));
+  const board = fromRun ? G.board || HS : G.hsTab === 'belt' ? HSB : HS;
+  G.hsTab = board === HSB ? 'belt' : 'campaign';
+  document.querySelectorAll('[data-hs]').forEach((b) => b.classList.toggle('on', b.dataset.hs === G.hsTab));
+  fill($('hs-local'), board.local());
+  fill($('hs-global'), board.global);
+  if (!fromRun) board.fetchGlobal().then((g) => { if ((G.hsTab === 'belt' ? HSB : HS) === board) fill($('hs-global'), g); });
   U.show('scores');
   menuSel(0);
 }
@@ -766,10 +836,12 @@ document.getElementById('ui').addEventListener('click', (e) => {
   if (diff) return pickThen('CAMPAIGN · YOUR PILOT', (k) => startCampaign(diff, k), { def: settings.pilot });
   if (b.dataset.pilot) return pickPilot(b.dataset.pilot);
   if (b.dataset.up) return buyUpgrade(b.dataset.up);
+  if (b.dataset.hs) { const end = G.state === 'scores-end'; G.hsTab = b.dataset.hs; G.board = null; showScores(false); if (end) G.state = 'scores-end'; return; }
   if (b.dataset.opp) { settings.vsOpp = b.dataset.opp; saveSettings(); A.play('uimove', { gap: 0 }); return renderVsetup(); }
   if (b.dataset.tw) { const tw = settings.twists || (settings.twists = {}); tw[b.dataset.tw] = !tw[b.dataset.tw]; saveSettings(); A.play('uimove', { gap: 0 }); return renderVsetup(); }
   switch (act) {
     case 'campaign': G.state = 'difficulty'; U.show('difficulty'); menuSel(1); break;
+    case 'belt': pickThen('BELT RUN · YOUR PILOT', (k) => startBelt(k), { def: settings.pilot }); break;
     case 'versus': openVersus(); break;
     case 'vsgo': vsGo(); break;
     case 'online': openOnline(); break;
@@ -781,7 +853,7 @@ document.getElementById('ui').addEventListener('click', (e) => {
     case 'on-copy': copyInvite(b); break;
     case 'demo': startDemo(); break;
     case 'howto': case 'options': case 'scores': case 'medals': openSub(act); break;
-    case 'launch': if (G.state === 'hangar') { G.stage++; stageIntro(); } break;
+    case 'launch': if (G.state === 'hangar') { if (G.mode === 'belt') beltWave(); else { G.stage++; stageIntro(); } } break;
     case 'back': back(); break;
     case 'resume': resume(); break;
     case 'quit': G.paused = false; A.muffle(false); goTitle(); break;
@@ -932,6 +1004,10 @@ function handleEvents(list) {
         else if (e.kind === 'ice') A.play('ice', { x: e.x, vol: 0.45, gap: 0.05 });
         else if (e.kind === 'gold') { A.play('gold', { x: e.x, vol: 0.8, gap: 0 }); if (!attract && e.side) { const p = R.project(e.x, 1, e.z); U.pop(p.x, p.y, 'GOLD!', '#ffd23f'); } }
         D.addTrauma(big ? 0.12 : 0.04);
+        if (e.side === 1 && G.mode === 'belt' && !attract && (e.size >= 3 || e.kind === 'gold')) {
+          const p = R.project(e.x, 1, e.z);
+          U.pop(p.x, p.y + 22, `+${ROCK_PTS[e.size] * (ROCK_KINDS[e.kind] ? ROCK_KINDS[e.kind].score : 1)}`, '#ffd23f', 'small');
+        }
         if (e.side === 1) {
           addScore(ROCK_PTS[e.size] * (ROCK_KINDS[e.kind] ? ROCK_KINDS[e.kind].score : 1), e.x, e.z, e.kind === 'gold' ? 'GOLD' : e.size >= 3);
           addOre([0, 1, 2, 3, 4][e.size] + (e.kind === 'gold' ? 12 : 0));
@@ -944,7 +1020,7 @@ function handleEvents(list) {
         const human = isHuman(e.side);
         A.play('hullhit', { x: e.x, vol: 0.75, gap: 0 });
         D.addTrauma(human ? 0.45 : 0.25);
-        G.hitstop = Math.max(G.hitstop, e.dmg >= 2 ? 0.07 : 0.035);
+        if ((e.dmg >= 2 || e.src === 'shard') && (human || isHuman(e.by))) G.hitstop = Math.max(G.hitstop, 0.04);
         if (!attract) {
           const p = R.project(e.x, 1.2, e.z);
           const label = e.src === 'shard' ? 'SHARD STRIKE!' : e.src === 'ram' ? 'RAMMED!' : e.src === 'beam' ? 'SEARED!' : e.src === 'storm' ? 'STRUCK!' : e.src === 'hole' ? 'SPAGHETTIFIED!' : e.dmg >= 2 ? 'CRITICAL HIT' : 'HIT';
@@ -977,6 +1053,22 @@ function handleEvents(list) {
       case 'boom': if (!e.small) { A.play('boom_big', { x: e.x, vol: 0.9, gap: 0 }); A.play('mineboom', { x: e.x, vol: 0.5, gap: 0 }); D.addTrauma(0.35); } else A.play('boom_small', { x: e.x, vol: 0.5 }); break;
       case 'mineboom': A.play('mineboom', { x: e.x, vol: 0.8, gap: 0 }); D.addTrauma(0.3); break;
       case 'ko': onKO(e); break;
+      case 'shipdown': {
+        A.play('shipboom', { x: e.x, gap: 0 });
+        D.addTrauma(0.9);
+        rumble(e.side, 1, 1, 600);
+        if (G.mode === 'belt') U.hurt();
+        if (e.lives > 0) U.showBanner('SHIP LOST', `${e.lives} SPARE SHIP${e.lives > 1 ? 'S' : ''} LEFT`, '#ff3040', 2.2);
+        break;
+      }
+      case 'respawn': A.play('spawn', { x: e.x, gap: 0 }); U.showBanner('', 'NEW SHIP · STAY SHARP', '#39f3ff', 1.2); break;
+      case 'extralife': {
+        A.play('gold', { gap: 0 }); A.play('pucollect', { gap: 0, delay: 0.15 });
+        U.showBanner('', 'EXTRA SHIP!', '#ffd23f', 1.4);
+        rumble(1, 0, 0.5, 120);
+        break;
+      }
+      case 'waveclear': onWaveClear(e); break;
       case 'orb': A.play('puspawn', { x: e.x, vol: 0.45 }); break;
       case 'pu': {
         const def = POWERUPS[e.kind];
@@ -1082,7 +1174,7 @@ function openHangar() {
 }
 function renderHangar() {
   $('hg-ore').textContent = G.ore;
-  $('hg-next').textContent = G.stage + 1 === 4 ? 'LAUNCH → THE MAW' : `LAUNCH → SECTOR ${G.stage + 2}`;
+  $('hg-next').textContent = G.mode === 'belt' ? `LAUNCH → WAVE ${G.wave}` : G.stage + 1 === 4 ? 'LAUNCH → THE MAW' : `LAUNCH → SECTOR ${G.stage + 2}`;
   $('upgrid').innerHTML = UP_KEYS.map((k) => {
     const D2 = UPGRADES[k], lv = G.up[k] || 0, max = lv >= 3, cost = UP_COST[lv], can = !max && G.ore >= cost;
     return `<button class="mbtn upg ${max ? 'max' : can ? '' : 'poor'}" data-up="${k}" style="--uc:${hex(D2.color)}"><i>${D2.glyph}</i><b>${D2.name}</b>`
@@ -1114,6 +1206,7 @@ function hangarAuto() {
     if (!k) break;
     buyUpgrade(k);
   }
+  if (G.mode === 'belt') return beltWave();
   G.stage++;
   stageIntro();
 }
@@ -1429,13 +1522,13 @@ function tick(dt) {
   if (G.replay && replayFrame(dt)) { engineHum(); return; }
   const W = G.W;
   let scale = G.simOn && !G.paused ? D.slow : 0;
-  if (G.hitstop > 0) { G.hitstop -= dt; scale *= 0.12; }
+  if (G.hitstop > 0) { G.hitstop -= dt; scale *= 0.3; }
   if (G.simOn && !G.paused) A.setRate(1 - (1 - Math.min(1, D.slow)) * 0.55);
   const sdt = dt * scale;
   if (W) {
     const online = G.mode === 'online' && NET.W === W;
     const host = online && NET.side === 1, guest = online && NET.side === -1;
-    const rec = settings.replay !== 'off' && (G.mode === 'campaign' || G.mode === 'versus' || G.mode === 'demo') && G.simOn;
+    const rec = settings.replay !== 'off' && (G.mode === 'campaign' || G.mode === 'belt' || G.mode === 'versus' || G.mode === 'demo') && G.simOn;
     if (guest) handleEvents(NET.guestSync(W));
     G.acc += sdt;
     let n = 0;
@@ -1466,6 +1559,7 @@ function tick(dt) {
   look.chroma = (1 - D.slow) * 0.004;
   R.render(dt, look);
   if (W && !U.hud.classList.contains('hidden')) U.updateHud(W);
+  if (G.mode === 'belt' && W && W.solo && W.pts !== G.shownPts) { G.shownPts = W.pts; $('score').textContent = W.pts.toLocaleString(); }
   updateCaptions(dt);
   updateStick();
   engineHum();
@@ -1520,15 +1614,18 @@ function updateCaptions(dt) {
   }
 }
 
-let perfAcc = 0, perfN = 0, perfT = 0;
+const perfDts = [];
+let perfT = 0, perfSlow = 0;
 function perf(dt) {
   if (params.has('fixed')) return;
-  perfAcc += dt; perfN++; perfT += dt;
+  perfDts.push(dt); perfT += dt;
   if (perfT < 2) return;
-  const avg = perfAcc / perfN;
-  perfAcc = 0; perfN = 0; perfT = 0;
-  if (avg > 1 / 45 && R.scale > 0.55) { R.scale = Math.max(0.55, R.scale - 0.1); R.resize(); }
-  else if (avg < 1 / 58 && R.scale < 1) { R.scale = Math.min(1, R.scale + 0.05); R.resize(); }
+  perfT = 0;
+  perfDts.sort((a, b) => a - b);
+  const typical = perfDts[Math.floor(perfDts.length * 0.75)];
+  perfDts.length = 0;
+  if (typical > 1 / 45) { if (++perfSlow >= 2 && R.scale > 0.55) { perfSlow = 0; R.scale = Math.max(0.55, R.scale - 0.1); R.resize(); } }
+  else { perfSlow = 0; if (typical < 1 / 58 && R.scale < 1) { R.scale = Math.min(1, R.scale + 0.05); R.resize(); } }
 }
 
 function frame(t) {
@@ -1548,6 +1645,7 @@ for (const ev of ['pointerup', 'touchend', 'click', 'keydown']) {
 // boot: the belt plays itself behind the logo while sounds load
 A.unlock();
 randomAIMatch(false);
+R.warmUp();
 G.mode = 'attract';
 G.simOn = true;
 G.state = 'boot';
@@ -1557,6 +1655,6 @@ requestAnimationFrame(frame);
 // test hooks
 Object.assign(window.__a26, {
   tick: (dt, n = 1) => { for (let i = 0; i < n; i++) tick(dt); },
-  startDemo, startCampaign, startVersus, goTitle, enterTitle, endRun, unlock, startReplay, choosePilot, openVersus, hangarAuto, award, medals,
+  startDemo, startCampaign, startVersus, startBelt, goTitle, enterTitle, endRun, unlock, startReplay, choosePilot, openVersus, hangarAuto, award, medals,
   online: { openOnline, showOnline, onlineQuick, onlineHost, onlineJoin, setPilot: (k) => { G.onPilot = k; } },
 });

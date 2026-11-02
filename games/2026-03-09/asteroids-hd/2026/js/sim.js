@@ -1,7 +1,7 @@
 // The belt: a deterministic 120 Hz simulation. Everything random comes from the world's own RNG
 // (W.rs), so a cloned world fed the same ship inputs replays a fight exactly (instant replays).
 // Nothing outside step() may change W during a recorded match.
-import { F, ARENAS, POWERUPS, POWERUP_KEYS, PERKS } from './config.js?v=2';
+import { F, ARENAS, POWERUPS, POWERUP_KEYS, PERKS, ROCK_KINDS } from './config.js?v=3';
 
 export const STEP = 1 / 120;
 const { AW, AH } = F;
@@ -62,7 +62,12 @@ export function makeWorld(o = {}) {
   });
   const tiny = W.tw.tiny ? 0.6 : 1;
   const hullFor = (s) => (W.tw.glass ? 3 : (o.hull?.[s] ?? F.hull) + 2 * W.up[s].hull);
-  if (A.hazard === 'boss' && o.boss) {
+  if (o.solo) {
+    // Belt Run: just you and the rocks
+    W.solo = true; W.lives = o.lives ?? 2; W.pts = o.pts ?? 0; W.respawnT = 0; W.rockK = o.rockK ?? 1; W.cleared = false;
+    W.dropT = o.dropT ?? 22; W.drops = o.drops ?? 2; W.wave = o.wave ?? 1;
+    W.ships.push(newShip(W.nextId++, 1, 0, AH * 0.45, 0, { hp: (o.hull?.[1] ?? 3) + 2 * W.up[1].hull, look: o.looks?.[1] }));
+  } else if (A.hazard === 'boss' && o.boss) {
     W.ships.push(newShip(W.nextId++, 1, 0, AH * 0.62, 0, { hp: (o.hull?.[1] ?? F.bossHull) + 2 * W.up[1].hull, look: o.looks?.[1] }));
     makeBoss(W);
   } else {
@@ -74,7 +79,9 @@ export function makeWorld(o = {}) {
   if (A.hazard === 'hole') W.hole = { x: 0, z: 0, m: 1 };
   if (A.hazard === 'comet') W.portals = [{ x: -AW * 0.55, z: -AH * 0.42 }, { x: AW * 0.55, z: AH * 0.42 }];
   const big = W.tw.mega ? 4 : 3;
-  for (let i = 0; i < A.rocks; i++) spawnRock(W, big, null, i);
+  for (let i = 0; i < (o.rocks ?? A.rocks); i++) spawnRock(W, big, null, i);
+  for (let i = 0; i < (o.mega || 0); i++) spawnRock(W, 4, null, i);
+  if (W.solo) W.mass0 = rockMassLeft(W);
   return W;
 }
 
@@ -114,7 +121,7 @@ export function spawnRock(W, size, edge = null, i = 0) {
     if (W.boss && Math.hypot(dX(x, W.boss.x), dZ(z, W.boss.z)) < W.boss.r + 5) ok = false;
     if (ok) break;
   }
-  const [lo, hi] = F.rockSpeed[size];
+  const [lo, hi] = F.rockSpeed[size].map((v) => v * (W.rockK || 1));
   let ang = W.rand() * TAU;
   if (edge === 0) ang = rr(W, 0.4, 2.7);
   else if (edge === 1) ang = -rr(W, 0.4, 2.7);
@@ -141,6 +148,12 @@ function breakRock(W, rock, by, dirx = 0, dirz = 0, cause = 'shot') {
   if (i < 0) return;
   W.rocks.splice(i, 1);
   emit(W, { k: 'rock', id: rock.id, x: rock.x, z: rock.z, size: rock.size, kind: rock.kind, side: by, cause, vx: rock.vx, vz: rock.vz });
+  if (W.solo && by === 1) {
+    // Belt Run scoring lives in the sim: an extra ship every 10,000
+    const before = W.pts;
+    W.pts += [0, 100, 50, 20, 10][rock.size] * (ROCK_KINDS[rock.kind] ? ROCK_KINDS[rock.kind].score : 1);
+    if (Math.floor(W.pts / LIFE_STEP) > Math.floor(before / LIFE_STEP)) { W.lives++; emit(W, { k: 'extralife', lives: W.lives }); }
+  }
   if (by) {
     const st = W.stats[by];
     st.rocks++;
@@ -156,7 +169,7 @@ function breakRock(W, rock, by, dirx = 0, dirz = 0, cause = 'shot') {
     for (let c = 0; c < n; c++) {
       const a = base + (c - (n - 1) / 2) * 1.9 + rr(W, -0.35, 0.35);
       const [lo, hi] = F.rockSpeed[rock.size - 1];
-      const sp = rr(W, lo, hi) * 0.85;
+      const sp = rr(W, lo, hi) * 0.85 * (W.rockK || 1);
       let vx = rock.vx * 0.55 + Math.cos(a) * sp, vz = rock.vz * 0.55 + Math.sin(a) * sp;
       if (by && cause !== 'blast') {
         const kick = F.shardKick * (W.perk[by].shard ? 1.35 : 1);
@@ -238,8 +251,40 @@ export function damageShip(W, s, dmg, src, by, x, z, o = {}) {
   W.stats[s.side].taken += dmg;
   if (by && by !== s.side) { W.stats[by].hits++; if (src === 'shard') W.stats[by].shards++; if (src === 'ram') W.stats[by].rams++; }
   emit(W, { k: 'hit', side: s.side, by, dmg, src, x: x ?? s.x, z: z ?? s.z, hp: s.hp, claim: o.claimed ? 1 : 0, ref: o.ref });
-  if (s.hp <= 0 && !W.predict) knockOut(W, s.side, s.x, s.z);
+  if (s.hp <= 0 && !W.predict) { if (W.solo) loseShip(W, s); else knockOut(W, s.side, s.x, s.z); }
   return true;
+}
+
+// Belt Run: an extra ship every LIFE_STEP points
+export const LIFE_STEP = 20000;
+// Belt Run: a ship goes down; a spare one warps in after a moment, or the run is over
+function loseShip(W, s) {
+  s.alive = false;
+  s.vx *= 0.3; s.vz *= 0.3;
+  emit(W, { k: 'shipdown', side: s.side, x: s.x, z: s.z, lives: W.lives });
+  if (W.lives > 0) W.respawnT = 2.4;
+  else { W.over = true; W.overT = W.t; W.winner = -1; emit(W, { k: 'ko', winner: -1, side: s.side, x: s.x, z: s.z, solo: 1 }); }
+}
+// the clearest spot in the belt for a fresh ship
+function respawn(W, s) {
+  let best = null, bv = -1e9;
+  for (const [cx, cz] of [[0, 0.45], [0, 0], [0, -0.45], [-0.5, 0], [0.5, 0], [-0.5, 0.45], [0.5, 0.45], [-0.5, -0.45], [0.5, -0.45]]) {
+    const x = cx * AW, z = cz * AH;
+    let v = 99;
+    for (const r of W.rocks) v = Math.min(v, Math.hypot(dX(x, r.x), dZ(z, r.z)) - r.r);
+    if (W.hole) v = Math.min(v, Math.hypot(x - W.hole.x, z - W.hole.z) - 4);
+    if (v > bv) { bv = v; best = [x, z]; }
+  }
+  s.x = best[0]; s.z = best[1]; s.vx = 0; s.vz = 0; s.a = 0;
+  s.hp = s.max; s.alive = true; s.inv = 3; s.dashT = 0; s.odTime = 0;
+  if (W.up[s.side].shield) { s.fx.shield = W.up[s.side].shield; s.fx.shieldT = 600; }
+  W.lives--;
+  emit(W, { k: 'respawn', side: s.side, x: s.x, z: s.z, lives: W.lives });
+}
+export function rockMassLeft(W) {
+  let m = 0;
+  for (const r of W.rocks) if (r.life < 0) m += [0, 1, 3, 7, 15][r.size];
+  return m;
 }
 
 function knockOut(W, side, x, z, boss = false) {
@@ -799,6 +844,25 @@ export function step(W, dt) {
       }
     }
   }
+  // Belt Run: spare ships, and the wave is over when the last rock is gone
+  if (W.solo && auth && !W.over) {
+    if (W.respawnT > 0) { W.respawnT -= dt; if (W.respawnT <= 0) respawn(W, W.ships[0]); }
+    W.dropT -= dt;
+    if (W.dropT <= 0 && W.drops > 0) {
+      W.drops--;
+      W.dropT = Math.max(12, 24 - W.wave);
+      const edge = (W.rand() * 4) | 0, n = W.wave >= 6 ? 2 : 1;
+      W.pending.push({ kind: 'wave', t: 1.6, n, edge });
+      emit(W, { k: 'wave', edge, n });
+    }
+    let left = 0;
+    for (const r of W.rocks) if (r.life < 0) left++;
+    if (!left && !W.pending.length) {
+      if (!W.ships[0].alive && W.respawnT > 0) { W.respawnT = 0; W.lives--; }
+      W.cleared = true; W.over = true; W.overT = W.t; W.winner = 1;
+      emit(W, { k: 'waveclear', pts: W.pts, lives: W.lives });
+    }
+  }
   if (W.over) W.overT2 = W.t - W.overT;
 }
 
@@ -856,7 +920,7 @@ function rockMeetsShip(W, r, s, dx, dz, d, rad) {
   if (vo < 5) { s.vx += nx * (5 - vo); s.vz += nz * (5 - vo); }
   const shard = r.owner && r.owner === -s.side && r.ownT > 0;
   const src = shard ? 'shard' : 'rock';
-  const dmg = shard ? W.perk[r.owner].shard || 2 : 1;
+  const dmg = shard ? W.perk[r.owner].shard || 2 : W.solo && r.size >= 3 ? 2 : 1;
   const was = s.inv <= 0 && s.dashT <= 0;
   emit(W, { k: 'bump', side: s.side, x: s.x - nx * s.r, z: s.z - nz * s.r, k2: Math.min(1, Math.abs(vn) / 16), rock: r.id });
   const sh = s.fx.shield;
@@ -996,8 +1060,8 @@ function collect(W, s, kind, x, z, snipe) {
 function hazards(W, dt) {
   if (W.over) return;
   const A = W.arena;
-  // keep the belt full: when the field thins out a new wave drifts in from one edge
-  let mass = 0;
+  // keep the belt full: when the field thins out a new wave drifts in from one edge (not in Belt Run: clear them all)
+  let mass = W.solo ? 99 : 0;
   for (const r of W.rocks) if (r.life < 0) mass += [0, 1, 2, 4, 8][r.size];
   W.waveT -= dt;
   const floor = A.hazard === 'boss' ? 4 : 11;

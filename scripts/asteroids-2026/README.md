@@ -24,6 +24,12 @@ config.js; their effects live in `W.up` so replays stay exact), 15 sector medals
 `a26.medals.v1`, awarded in main.js), visible ship damage (smoke/sparks/fire in render.js) and gamepad/phone
 vibration (Options → Vibration). Test hooks: `__a26.hangarAuto()`, `__a26.award(id)`, `__a26.medals`.
 
+Belt Run (v1.2): `makeWorld({ solo: true, wave, lives, pts, rocks, mega, rockK })` — one ship, spare ships and the
+points live in the sim (`W.lives`, `W.pts`, extra ship every `LIFE_STEP`), so extra ships and the final death replay
+exactly; waves end with a `waveclear` event, stragglers drift in (`W.drops`). Board `asteroids-2026-belt`.
+`node belt_check.mjs` runs an AI through the waves. `?wave=N` starts Belt Run at wave N; `__a26.startBelt()`.
+The renderer draws one of everything behind the boot screen (`R.warmUp()`) so no shader compiles mid-fight.
+
 Online play shares the Steel Duel relay (`A26-` rooms, quick match `A26-Q-`); Steel Duel's room list hides them.
 The host runs the belt and streams snapshots; the guest flies its own ship locally, sends its shots (the host
 re-creates them by client id) and reports the hits it takes on its own screen.

@@ -2,7 +2,7 @@
 // touch (a virtual stick on the left, buttons on the right). Everything resolves to one ship control:
 // { turn, aim, thrust, fire } per player, plus edge events for dash, overdrive, pause and menus.
 import * as THREE from '../vendor/three.module.min.js';
-import { angleTo } from './sim.js?v=2';
+import { angleTo } from './sim.js?v=3';
 
 const ray = new THREE.Raycaster();
 const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);

@@ -1,7 +1,7 @@
 // HDR post: scene -> MSAA half-float target -> dual-filter bloom chain -> one composite pass with
 // shockwave refraction, black-hole lensing, chromatic aberration, ACES, grade, vignette and grain.
 import * as THREE from '../vendor/three.module.min.js';
-import { TONE, NOISE } from './shaders.js?v=2';
+import { TONE, NOISE } from './shaders.js?v=3';
 
 const VERT = /* glsl */ `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`;
 

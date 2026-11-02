@@ -1,5 +1,5 @@
 // Asteroids 2026 — tuning, pilots, sectors, power-ups and party twists.
-export const VERSION = 'v1.1.0';
+export const VERSION = 'v1.2.0';
 
 // World units. The belt is a wrap-around rectangle on the XZ plane: x in [-AW, AW], z in [-AH, AH].
 // Screen up is -z. A heading of 0 points up the screen; positive angles turn clockwise.
