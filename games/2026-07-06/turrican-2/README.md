@@ -12,7 +12,7 @@ Lives at `jez237.com/games/2026-07-06/turrican-2/` (the folder keeps its old pat
 | `assets/game.js` | Main loop, menus, stage flow, title, QA hooks (`window.__shard`). |
 | `assets/audio.js` | Web Audio engine: positional SFX, loops, per-world ambience + reverb, music, announcer voices. |
 | `assets/audio/` | ElevenLabs-produced sound: `sfx/`, `amb/`, `music/`, `vo/<voice>-<event>-<n>.mp3`. |
-| `assets/demo.js` | Attract-mode autopilot. |
+| `assets/demo.js` | Attract-mode autopilot: maps each stage's standable spots and simulates the jumps between them with the engine's own physics (`moveBox`), then routes to crystals, vaults and power-ups with Dijkstra. `reachable(state)` reports how many crystals a stage lets you reach. |
 | `assets/render.js` | 2D fallback renderer, used only when WebGL2 is unavailable. |
 | `src3d/` | The 3D renderer source. `npm run build` bundles it to `assets/shard3d.js`. |
 | `assets/shard3d.js` | Built bundle (commit it with the source). |

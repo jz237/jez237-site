@@ -164,7 +164,7 @@
     if (carry) carry.energy = 100;
     stageCarry = JSON.parse(JSON.stringify(carry));
     state = E.createGame(level, carry, { difficulty: isDemo ? DEMO_DIFF : settings.difficulty });
-    if (isDemo && pilot) pilot.reset();
+    if (isDemo && pilot) pilot.reset(state);   // the pilot maps the stage during the load pause
     renderer.setLevel(level);
     audio.startMusic(level.world);
     if (audio.setScene) audio.setScene(level.world, level.type);
