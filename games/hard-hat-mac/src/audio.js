@@ -6,14 +6,21 @@ const BASE = './assets/audio/';
 const SFX = ['step_steel_a', 'step_steel_b', 'step_dirt', 'step_wood', 'jump', 'land', 'ladder', 'pickup', 'place', 'rivet', 'rivet_done', 'bolt_fall', 'clink',
   'stomp', 'dizzy', 'splat', 'zap', 'steam', 'press', 'sizzle', 'lunchbox', 'coffee', 'hardhat', 'extra_life', 'tick', 'ui_click', 'ui_confirm', 'spring',
   'wrecking', 'firework', 'cheer', 'yank', 'ding', 'gust', 'crate_drop', 'hopper', 'magnet', 'flag', 'timeup', 'elevator_loop', 'conveyor_loop', 'crane_loop',
-  'dog_bark', 'dog_whine', 'swing', 'bonk', 'ko_bell'];
+  'dog_bark', 'dog_whine', 'swing', 'bonk', 'ko_bell', 'shove', 'pile_driver', 'pump_on', 'valve', 'splash', 'gull', 'gull_dive', 'boat_horn',
+  'crumble', 'debris', 'unbolt', 'scrap_drop', 'thunder', 'lightning_charge', 'switch_on', 'medal', 'skyline', 'coop_join', 'water_loop'];
 const VOICE = ['fm_l1', 'fm_l2', 'fm_l3', 'fm_l4', 'fm_clear1', 'fm_clear2', 'fm_hurry', 'fm_gameover', 'fm_round', 'fm_topped', 'mac_whoa', 'mac_yeah', 'mac_gotit',
-  'mac_oof', 'mac_heave', 'vd_laugh', 'vd_taunt', 'vd_ow', 'in_cite', 'in_halt', 'an_title', 'an_go', 'an_gameover', 'an_record', 'in_ow', 'mac_take', 'mac_lights', 'fm_demo'];
+  'mac_oof', 'mac_heave', 'vd_laugh', 'vd_taunt', 'vd_ow', 'in_cite', 'in_halt', 'an_title', 'an_go', 'an_gameover', 'an_record', 'in_ow', 'mac_take', 'mac_lights', 'fm_demo',
+  'fm_l5', 'fm_l6', 'fm_l7', 'fm_l8', 'fm_coop', 'mac_shove', 'an_newbest'];
 const LINES = {
   fm_l1: 'Foreman: "Mornin\', Mac! Four girders need settin\' on the frame. Drop \'em in the gaps and rivet \'em tight!"',
   fm_l2: 'Foreman: "Crane yard, Mac. The crew left their lunchboxes all over the site. Round up all five!"',
   fm_l3: 'Foreman: "Night shift at the mill. Load four crates into the hopper, and stay clear of the hot stuff!"',
   fm_l4: 'Foreman: "Topping out! Forty floors up. Set the last beams and raise the flag. Hold onto that hat!"',
+  fm_l5: 'Foreman: "Down in the pit, Mac! The storm flooded the foundation. Get four pumps runnin\' before the water swallows the job!"',
+  fm_l6: 'Foreman: "River span today. Set the deck girders across the bridge and rivet \'em down. And watch those gulls, they bite!"',
+  fm_l7: 'Foreman: "Wreckin\' crew, Mac. Unbolt four old beams and haul \'em to the scrap bin. Keep off the cracked floors!"',
+  fm_l8: 'Foreman: "Storm\'s rollin\' in! Light up the warning beacons on the frame before the lightning finds ya!"',
+  fm_coop: 'Foreman: "Two of ya? Good. Double the hands, half the excuses!"', mac_shove: 'Mac: "Outta my way!"',
   fm_clear1: 'Foreman: "That\'s how it\'s done, Mac!"', fm_clear2: 'Foreman: "Shift complete. Nice work!"', fm_hurry: 'Foreman: "Clock\'s runnin\' out, Mac! Move it!"',
   fm_gameover: 'Foreman: "That\'s a wrap, Mac. Go home and get some rest."', fm_round: 'Foreman: "New round, Mac. They\'re gettin\' faster!"', fm_topped: 'Foreman: "We topped out! Drinks are on me tonight!"',
   vd_taunt: 'Vandal: "Catch me if you can, hard hat!"', vd_laugh: 'Vandal: (snickers)', vd_ow: 'Vandal: "Ow! Hey!"',

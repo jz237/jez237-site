@@ -81,6 +81,9 @@ export class FX {
   pour(p, n) {
     for (let k = 0; k < n; k++) this.add.emit(p.x + rr(-.1, .1), p.y, p.z + rr(-.15, .15), rr(-.2, .2), rr(-1, 0), rr(-.2, .2), 0xffa040, rr(.14, .24), rr(.9, 1.2), 9, 0, -.3);
   }
+  splash(p, n, s = 1) {
+    for (let k = 0; k < n; k++) { const a = Math.random() * TAU, sp = rr(.4, 2.2) * s; this.alpha.emit(p.x + rr(-.2, .2), p.y + .05, p.z + rr(-.2, .2), Math.cos(a) * sp, rr(2, 5.5) * s, Math.sin(a) * sp, 0xd8ecf4, rr(.05, .11), rr(.5, .9), 14, .4); }
+  }
   confetti(p, n) {
     const cols = [0xffc21a, 0xff4a3a, 0x3ac8ff, 0x6ee06e, 0xffffff, 0xff7ad8];
     for (let k = 0; k < n; k++) { const a = Math.random() * TAU, s = rr(2, 7); this.alpha.emit(p.x, p.y, p.z, Math.cos(a) * s, rr(4, 10), Math.sin(a) * s, cols[k % cols.length], rr(.07, .12), rr(2.5, 4.5), 3.5, 1.6); }

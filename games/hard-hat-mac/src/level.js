@@ -2,7 +2,7 @@
 import * as THREE from 'three';
 import { Builder } from './builder.js';
 import { LEVELS } from './levels.js';
-import { makeMover, makeHazard, Molten } from './hazards.js';
+import { makeMover, makeHazard, Molten, Water } from './hazards.js';
 import { Objects } from './objects.js';
 import { NavGrid } from './enemies.js';
 
@@ -15,11 +15,15 @@ export function buildLevel(index, M, quality) {
   const L = {
     index, name: B.name, time: B.time, brief: B.brief, sky: B.sky, music: B.music, amb: B.amb, voice: B.voice, timeLimit: B.timeLimit,
     spawn: B.spawn, camYaw: B.camYaw || 0, killY: B.killY, bounds: B.bounds, high: !!B.high, indoor: !!B.indoor, tower: B.tower, citySeed: B.citySeed,
+    cityHole: B.cityHole, river: B.river, rain: !!B.rain, par: B.par,
     group: B.group, world: B.world, ladders: B.ladders, lamps: B.lamps, belts: B.belts || [], cranes: B.cranes || [], spinners: B.spinners || [],
     enemyDefs: B.enemies, objectiveType: B.objective.type,
   };
   L.movers = B.movers.map(d => makeMover(d, ctx)).filter(Boolean);
   L.hazards = B.hazards.map(d => makeHazard(d, ctx)).filter(Boolean);
+  const waters = L.hazards.filter(h => h instanceof Water);
+  if (waters.length) L.waterDepth = (x, y, z) => { let d = -1e9; for (const w of waters) d = Math.max(d, w.depth(x, y, z)); return d; };
+  L.flood = waters.find(w => w.d.rate) || null;
   const molten = L.hazards.find(h => h instanceof Molten);
   if (molten) L.molten = { contains: p => p.x > molten.d.x0 && p.x < molten.d.x1 && p.z > molten.d.z0 && p.z < molten.d.z1 && p.y < molten.d.y + .4 };
   L.objects = new Objects(B, ctx);

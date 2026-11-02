@@ -1,11 +1,12 @@
 // The four shifts. Each build fn fills a Builder with geometry, physics and descriptors.
 import * as THREE from 'three';
 import { boxGeo } from './builder.js';
+import { rr } from './util.js';
 
 const HW = 1.0, JB = 0.7;
 
 // Grid floor: spec.x[zi] = string per X-line (one char per segment), spec.z[xi] per Z-line.
-// 'D' decked walkway, 'B' bare I-beam (tightrope), 'G' girder socket, '0' nothing.
+// 'D' decked walkway, 'B' bare I-beam (tightrope), 'G' girder socket, 'R' old bolted beam (demolition), '0' nothing.
 function gridFloor(B, y, XS, ZS, spec) {
   const sx = (zi, i) => (i < 0 || i >= XS.length - 1) ? '0' : spec.x[zi][i];
   const sz = (xi, j) => (j < 0 || j >= ZS.length - 1) ? '0' : spec.z[xi][j];
@@ -14,7 +15,7 @@ function gridFloor(B, y, XS, ZS, spec) {
     if (a.includes('D')) return HW;
     return a.some(c => c !== '0') ? JB : 0;
   };
-  const off = c => c === 'D' ? HW : c === 'G' ? 0.27 : 0.15;
+  const off = c => c === 'D' ? HW : c === 'G' || c === 'R' ? 0.27 : 0.15;
   for (let xi = 0; xi < XS.length; xi++) for (let zi = 0; zi < ZS.length; zi++) {
     const h = node(xi, zi); if (!h) continue;
     B.deck(XS[xi] - h, ZS[zi] - h, XS[xi] + h, ZS[zi] + h, y, { beams: false });
@@ -24,13 +25,13 @@ function gridFloor(B, y, XS, ZS, spec) {
     const c = sx(zi, i), x0 = XS[i] + node(i, zi), x1 = XS[i + 1] - node(i + 1, zi), z = ZS[zi];
     if (c === 'D') { B.deck(x0, z - HW, x1, z + HW, y, { beams: false, toe: spec.toe ? ['z0', 'z1'] : null }); B.ibeam('x', x0, x1, y - .12, z); }
     else if (c === 'B') { B.ibeam('x', x0, x1, y, z); B.solid(x0, y - .42, z - .15, x1, y, z + .15, { surf: 'steel', beam: true }); }
-    else if (c === 'G') B.sockets.push({ axis: 'x', a0: x0, a1: x1, c: z, y });
+    else if (c === 'G' || c === 'R') B.sockets.push({ axis: 'x', a0: x0, a1: x1, c: z, y, demo: c === 'R' });
   }
   for (let xi = 0; xi < XS.length; xi++) for (let j = 0; j < ZS.length - 1; j++) {
     const c = sz(xi, j), z0 = ZS[j] + node(xi, j), z1 = ZS[j + 1] - node(xi, j + 1), x = XS[xi];
     if (c === 'D') { B.deck(x - HW, z0, x + HW, z1, y, { beams: false }); B.ibeam('z', z0, z1, y - .12, x); }
     else if (c === 'B') { B.ibeam('z', z0, z1, y, x); B.solid(x - .15, y - .42, z0, x + .15, y, z1, { surf: 'steel', beam: true }); }
-    else if (c === 'G') B.sockets.push({ axis: 'z', a0: z0, a1: z1, c: x, y });
+    else if (c === 'G' || c === 'R') B.sockets.push({ axis: 'z', a0: z0, a1: z1, c: x, y, demo: c === 'R' });
   }
   for (const [i, j] of spec.plates || []) {
     const x0 = XS[i] + off(sz(i, j)), x1 = XS[i + 1] - off(sz(i + 1, j));
@@ -262,9 +263,10 @@ function build3(B) {
   B.conveyor(-13, -5.2, 13, -3.8, 8, 2.4, 0);
   for (const x of [-7, 0, 7]) { B.geo(boxGeo(.3, 8.8, .3, 1, x, 3.6, -4.5), M.beam); }
   // T (y=12) upper gantry with hopper
-  B.deck(-16, -13, 16, -10, 12, { toe: ['z1'] });
-  for (const x of [-16, -8, 8, 16]) B.column(x, -10, 8, 12, true, .3);
-  B.rail(-16, -13, 16, -13, 12);
+  // the gantry runs the full width so each side has two ladders up (the inspector can't block both)
+  B.deck(-20, -13, 20, -10, 12, { toe: ['z1'] });
+  for (const x of [-20, -16, -8, 8, 16, 20]) B.column(x, -10, 8, 12, Math.abs(x) < 20, .3); // the corner posts stay out of the way of the drop to M1
+  B.rail(-20, -13, 20, -13, 12);
   B.block(-1.7, 12, -13, 1.7, 13.3, -11.4, M.dark, { surf: 'steel' });
   B.block(-1.4, 13.3, -12.8, 1.4, 13.35, -11.6, M.glow(0xff7a20, 2.2), { visualOnly: true });
   B.hopper = { x: 0, y: 12, z: -11.6 };
@@ -272,6 +274,7 @@ function build3(B) {
   B.ladder(-14, 4.25, 0, 4, '+z'); B.ladder(16, .25, 0, 4, '+z');
   B.ladder(-17, -.75, 4, 8, '+z'); B.ladder(17, -.75, 4, 8, '+z');
   B.ladder(-15, -9.75, 8, 12, '+z'); B.ladder(15, -9.75, 8, 12, '+z');
+  B.ladder(-18.6, -9.75, 8, 12, '+z'); B.ladder(18.6, -9.75, 8, 12, '+z');
   // hazards
   B.hazards.push({ type: 'press', x: -3.2, z: -11.5, y: 4, w: 2.2, phase: 0 }, { type: 'press', x: 3.2, z: -11.5, y: 4, w: 2.2, phase: 2.2 });
   B.hazards.push({ type: 'vent', x: 0, y: 0, z: -8.2, phase: 0, power: 17.5 });
@@ -359,10 +362,201 @@ function build4(B) {
   });
 }
 
-export const LEVELS = [build1, build2, build3, build4];
+
+// ===================== THE PIT: flooded foundation =====================
+function buildPit(B) {
+  const M = B.M;
+  // street level around the excavation (the hole is x -16..16, z -12..8)
+  B.block(-44, -10, -32, 44, 0, -12, M.dirt, { surf: 'dirt' }, 7);
+  B.block(-44, -10, 8, 44, 0, 32, M.dirt, { surf: 'dirt' }, 7);
+  B.block(-44, -10, -12, -16, 0, 8, M.dirt, { surf: 'dirt' }, 7);
+  B.block(16, -10, -12, 44, 0, 8, M.dirt, { surf: 'dirt' }, 7);
+  B.block(-6, 0, 10, 6, .1, 32, M.concrete, { surf: 'concrete' }, 4);
+  // mud floor 8 m down, concrete benches cut into the north and east walls 4 m down
+  B.block(-16, -12, -12, 16, -8, 8, M.dirt, { surf: 'dirt' }, 5);
+  B.block(-16, -8, -12, 16, -4, -7, M.concrete, { surf: 'concrete' }, 4);
+  B.block(11, -8, -7, 16, -4, 8, M.concrete, { surf: 'concrete' }, 4);
+  // shoring: soldier piles with timber lagging
+  for (const x of [-12, -8, -4, 0, 4, 8, 12]) { B.column(x, -11.82, -4, .5, false, .3); B.column(x, 7.82, -8, .5, false, .3); }
+  for (const z of [-6, -2, 2, 6]) B.column(-15.82, z, -8, .5, false, .3);
+  for (const z of [-5, 3, 7]) B.column(15.82, z, -4, .5, false, .3);
+  for (let y = -3.75; y < -.1; y += .46) { B.geo(boxGeo(32, .4, .06, 2, 0, y, -11.94), M.wood); B.geo(boxGeo(.06, .4, 15, 2, 15.94, y, .5), M.wood); }
+  for (let y = -7.75; y < -.1; y += .46) { B.geo(boxGeo(32, .4, .06, 2, 0, y, 7.94), M.wood); B.geo(boxGeo(.06, .4, 20, 2, -15.94, y, -2), M.wood); }
+  for (const [a, b, c, d] of [[-16.2, -12.25, 16.2, -12], [-16.2, 8, 16.2, 8.25], [-16.25, -12, -16, 8], [16, -12, 16.25, 8]]) B.block(a, 0, b, c, .03, d, M.hazard, { visualOnly: true }, 1);
+  // ladders: street - north bench - floor, floor - east bench - street, and one long one up the south wall
+  B.ladder(-10, -11.95, -4, 0, '+z'); B.ladder(10, -11.95, -4, 0, '+z');
+  B.ladder(-4, -7.05, -8, -4, '+z'); B.ladder(6, -7.05, -8, -4, '+z');
+  B.ladder(11.05, 2, -8, -4, '-x'); B.ladder(15.95, -2, -4, 0, '-x');
+  B.ladder(-6, 7.95, -8, 0, '-z');
+  // the four pumps (hold ACT on the valve); the water rises until they run
+  B.stations.push({ kind: 'valve', x: -13.4, y: -8, z: 5, yaw: Math.PI / 2, need: 3.4 }, { kind: 'valve', x: 8.6, y: -8, z: 6.6, yaw: Math.PI, need: 3.4 },
+    { kind: 'valve', x: 13.6, y: -4, z: -11.2, yaw: 0, need: 3.4 }, { kind: 'valve', x: -24, y: 0, z: -16, yaw: 0, need: 3.4 });
+  B.hazards.push({ type: 'water', x0: -16, z0: -12, x1: 16, z1: 8, y0: -8.7, max: -6, rate: .017, color: 0x5d5642, deadly: .9 });
+  B.hazards.push({ type: 'piledriver', x: -8.6, y: -8, z: -2.4 });
+  B.hazards.push({ type: 'bolts', kind: 'rock', rate: 4.4 });
+  // generator and hose for the street pump
+  B.block(-27.2, 0, -18.2, -25.2, 1.7, -14, M.paint(0x2f6a3a, .5, .4), { surf: 'steel' });
+  B.geo(boxGeo(.16, .16, 3.4, 1, -23.6, .08, -14.1), M.dark); B.geo(boxGeo(7.6, .16, .16, 1, -19.8, .08, -12.4), M.dark); B.geo(boxGeo(.16, 8, .16, 1, -16, -4, -12.4), M.dark);
+  B.items.push({ type: 'coffee', x: 9.5, y: -4, z: -9.5 }, { type: 'hardhat', x: 13.5, y: -4, z: 6 }, { type: 'stopwatch', x: -13, y: -8, z: -5 }, { type: 'cash', x: 26, y: 0, z: 20 });
+  B.checkpoints.push({ x: -12.5, y: -4, z: -9.6 }, { x: -1, y: -8, z: 6.5 }, { x: 13.6, y: -4, z: 2.5 });
+  B.enemies.push({ kind: 'dog', x: 0, y: -8, z: 4 }, { kind: 'vandal', x: 20, y: 0, z: -18 }, { kind: 'inspector', x: 2, y: -4, z: -9.5, minRound: 2 }, { kind: 'vandal', x: -20, y: 0, z: 14, minRound: 3 });
+  excavator(B, 26, -18); mixerTruck(B, 24, 16, 'x'); B.trailer(-26, 0, 16);
+  scatterProps(B, [['cone', -5, 0, 9], ['cone', 5, 0, 9], ['cone', -17, 0, 9], ['cone', 17, 0, 9], ['barrier', 22, -14, 'x', 3], ['pipes', -26, 4, 'z', 3], ['barrel', 20, 4], ['barrel', 20.7, 4.6, 0x8a2f2f]]);
+  for (const [x, z, d] of [[-18, 10, -.8], [18, 10, -2.3], [-18, -14, .8], [18, -14, 2.3]]) workLight(B, x, z, 8, d);
+  yardFence(B, -36, -26, 36, 26, [-6, 6]);
+  B.sign(['MAC & SONS', 'FOUNDATIONS'], 0, 3.2, 26.2, 7, 2, Math.PI);
+  B.sign(['DANGER', 'DEEP EXCAVATION'], 9, 1.3, 8.6, 3, 1.1, 0, { bg: '#c01c1c', fg: '#ffffff', stripe: false });
+  Object.assign(B, {
+    name: 'THE PIT', time: '5:50 AM', sky: 'dawn', music: 'mus_l5', amb: 'amb_pit', timeLimit: 220,
+    spawn: { x: 0, y: .1, z: 16, yaw: Math.PI }, camYaw: 0, killY: -20, cityHole: [-44, -32, 44, 32],
+    brief: 'Last night\'s storm flooded the foundation. Get all four pumps running (hold ACT on each valve) before the water rises over the pit floor. The yard dog doesn\'t mind getting wet.',
+    objective: { type: 'pumps' }, voice: 'fm_l5', bounds: [-30, -24, 30, 24],
+  });
+}
+
+// ===================== RIVER SPAN: steel bridge deck =====================
+function buildBridge(B) {
+  const M = B.M, XS = [-6, 0, 6], ZS = [-24, -18, -12, -6, 0, 6, 12, 18, 24];
+  // banks at road level, the river 9 m below
+  B.block(-60, -14, 24, 60, 0, 60, M.dirt, { surf: 'dirt' }, 7);
+  B.block(-60, -14, -60, 60, 0, -24, M.dirt, { surf: 'dirt' }, 7);
+  B.block(-60, -14.6, -24, 60, -14, 24, M.dirt, { visualOnly: true }, 7);
+  B.block(-60, -14, -24, 60, 0, -23.4, M.concrete, { surf: 'concrete' }, 4); B.block(-60, -14, 23.4, 60, 0, 24, M.concrete, { surf: 'concrete' }, 4);
+  B.block(-7, 0, 25, 7, .05, 60, M.concrete, { surf: 'concrete' }, 4); B.block(-7, 0, -60, 7, .05, -25, M.concrete, { surf: 'concrete' }, 4);
+  // the deck: decked side walkways, a bare centre beam, cross members; two cross lines still need their girders
+  gridFloor(B, 0, XS, ZS, { cols: false, toe: true, z: ['DDDDDDDD', 'BBBBBBBB', 'DDDDDDDD'], x: ['DD', 'DD', 'GG', 'BB', 'DD', 'BB', 'GG', 'DD', 'DD'], plates: [[0, 0], [1, 0], [0, 7], [1, 7]] });
+  for (const z of [-18, 0, 18]) B.block(-7, -14.5, z - .9, 7, -.6, z + .9, M.concrete, {}, 4);
+  // through trusses with a walkway on each top chord
+  for (const s of [-1, 1]) {
+    const x = s * 7.6;
+    for (const z of ZS.slice(1, -1)) B.column(x, z, 0, 5, true, .3);
+    for (let k = 1; k < ZS.length - 2; k++) {
+      const z0 = ZS[k], z1 = ZS[k + 1], L = Math.hypot(z1 - z0, 5), g = new THREE.BoxGeometry(.18, L, .18);
+      g.rotateX((k & 1 ? 1 : -1) * Math.atan2(z1 - z0, 5)); g.translate(x, 2.5, (z0 + z1) / 2); B.geo(g, M.beam);
+    }
+    B.deck(x - .6, -18, x + .6, 18, 5, { beams: false }); B.ibeam('z', -18, 18, 4.88, x, .4, .5);
+    B.rail(x + s * .6, -18, x + s * .6, 18, 5);
+  }
+  B.ladder(-6.95, -15, 0, 5, '+x'); B.ladder(-6.95, 9, 0, 5, '+x'); B.ladder(6.95, -9, 0, 5, '-x'); B.ladder(6.95, 15, 0, 5, '-x');
+  for (const z of [-12, 12]) B.ibeam('x', -7.6, 7.6, 5.55, z, .4, .3);
+  B.ibeam('x', -7, 7, 5, 0); B.solid(-7, 4.58, -.15, 7, 5, .15, { surf: 'steel', beam: true }); // overhead brace you can walk
+  // river, barges, a crawler crane swinging a girder bundle across the deck
+  B.hazards.push({ type: 'water', x0: -60, z0: -24, x1: 60, z1: 24, y0: -9, deadly: -.3, color: 0x2f5a62, flow: [1, 0], opacity: 1 });
+  B.hazards.push({ type: 'boats', y: -9.25, lanes: [[-9, 1], [11, -1]] });
+  B.hazards.push({ type: 'wreck', load: 'girders', px: 0, py: 15, pz: 6, L: 14, amp: .5, period: 8, axis: 'x', noBoom: true });
+  B.block(17.5, 0, 4, 21.5, 1.2, 8, M.dark, { surf: 'steel' }, 2); B.block(18, 1.2, 4.6, 21, 3.4, 7.4, M.yellow, { surf: 'steel' }, 2);
+  const boom = new THREE.Group(); boom.position.set(18, 3, 6); boom.rotation.z = Math.PI - Math.atan2(12.4, 18); boom.add(B.boom(21.9, 1, M.yellow)); B.group.add(boom);
+  B.hazards.push({ type: 'bolts', kind: 'gull', rate: 3.8 }, { type: 'wind', power: 6 });
+  // girders on both banks
+  B.items.push({ type: 'girder', x: -11, y: 0, z: 30, axis: 'x' }, { type: 'girder', x: -11, y: .45, z: 30, axis: 'x' }, { type: 'girder', x: 11, y: 0, z: -30, axis: 'x' }, { type: 'girder', x: 11, y: .45, z: -30, axis: 'x' });
+  B.items.push({ type: 'coffee', x: -7.6, y: 5, z: 3 }, { type: 'hardhat', x: 7.6, y: 5, z: -3 }, { type: 'stopwatch', x: 0, y: 0, z: 0 }, { type: 'cash', x: -12, y: 0, z: -34 });
+  B.checkpoints.push({ x: 3, y: 0, z: 21 }, { x: 3.5, y: 0, z: 0 }, { x: -3, y: 0, z: -21 });
+  B.enemies.push({ kind: 'vandal', x: 8, y: 0, z: -30 }, { kind: 'vandal', x: 7.6, y: 5, z: 10, minRound: 2 }, { kind: 'inspector', x: -6, y: 0, z: 30, minRound: 2 });
+  scatterProps(B, [['barrier', -4, 40, 'x', 3], ['barrier', 4, 40, 'x', 3], ['cone', -8, 0, 26], ['cone', 8, 0, 26], ['cone', -8, 0, -26], ['cone', 8, 0, -26], ['pipes', 18, -32, 'x', 3], ['crate', -18, 34], ['crate', -16.9, 34.2, .9]]);
+  B.trailer(-22, 0, 40); portaPotty(B, 22, 38); B.trailer(22, 0, -40);
+  B.sign(['MAC & SONS', 'RIVER SPAN'], -10.5, 2.2, 25.6, 5, 1.6, 0);
+  Object.assign(B, {
+    name: 'RIVER SPAN', time: '12:10 PM', sky: 'noon', music: 'mus_l6', amb: 'amb_river', timeLimit: 230,
+    spawn: { x: 0, y: .05, z: 33, yaw: Math.PI }, camYaw: 0, killY: -12, river: { z0: -24, z1: 24, y: -9 },
+    brief: 'Four deck girders are missing from the new bridge. Carry them out from both banks, drop them in the gaps and rivet them. Mind the swinging bundle, the gusts and the gulls. It\'s a long way down to the river.',
+    objective: { type: 'girders' }, voice: 'fm_l6', bounds: [-16, -38, 16, 38],
+  });
+}
+
+// ===================== WRECKING CREW: demolition =====================
+function buildWreck(B) {
+  const M = B.M, XS = [-12, -6, 0, 6, 12], ZS = [-6, 0, 6];
+  B.block(-40, -2, -30, 40, 0, 30, M.dirt, { surf: 'dirt' }, 7);
+  B.block(-13.4, 0, -7.4, 13.4, .12, 7.4, M.concrete, { surf: 'concrete' }, 4);
+  // three old slab floors; 'R' marks a bolted old beam to take out, gaps are ladder wells or cracked slabs
+  gridFloor(B, 4, XS, ZS, { x: ['DDDD', 'DRDD', 'DDDD'], z: ['DD', 'DD', 'DD', 'DD', 'DD'], plates: [[0, 0], [1, 0], [2, 0], [3, 0], [0, 1], [1, 1], [3, 1]] });
+  gridFloor(B, 8, XS, ZS, { x: ['DDDD', 'DDDD', 'DDRD'], z: ['DD', 'DD', 'DD', 'DD', 'DD'], plates: [[1, 0], [3, 0], [0, 1], [2, 1]] });
+  gridFloor(B, 12, XS, ZS, { x: ['RDDD', 'DDDD', 'DDDR'], z: ['DD', 'DD', 'DD', 'DD', 'DD'], plates: [[0, 0], [1, 0], [2, 1], [3, 1]], colTop: 1.2 });
+  B.hazards.push({ type: 'crumble', slabs: [[-11, -5, -7, -1, 8], [7, 1, 11, 5, 8], [-5, 1, -1, 5, 12], [1, -5, 5, -1, 12]] });
+  B.ladder(-9, 7.25, 0, 4, '+z'); B.ladder(9, -7.25, 0, 4, '-z');
+  B.ladder(-3, 1.25, 4, 8, '+z'); B.ladder(3, -1.25, 4, 8, '-z');
+  B.ladder(9, -1.25, 8, 12, '-z'); B.ladder(-9, 1.25, 8, 12, '+z');
+  // what's left of the walls, rubble and rebar
+  const brick = M.brick;
+  for (const [x0, x1, h] of [[-13.2, -10, 3.4], [-10, -7.4, 2.2], [-7.4, -4, 2.9], [-4, -2.2, 1.4]]) B.block(x0, .12, -7.4, x1, .12 + h, -7.05, brick, { surf: 'concrete' }, 3);
+  for (const [z0, z1, h] of [[-7.4, -4, 2.6], [-4, -1.5, 1.7]]) B.block(13.05, 4, z0, 13.4, 4 + h, z1, brick, { surf: 'concrete' }, 3);
+  B.block(-13.4, 8, 3, -13.05, 9.8, 7.4, brick, { surf: 'concrete' }, 3);
+  for (const [x, z, s] of [[-20, 6, 1.2], [-18.6, 7.2, .8], [20, -4, 1.4], [21.2, -2.6, .9], [-6, 11, .9], [8, -12, 1.1]]) B.block(x - s, 0, z - s, x + s, s * .5, z + s, M.dirt, { surf: 'dirt' }, 3);
+  for (let k = 0; k < 14; k++) { const x = -12 + k * 1.8, g = boxGeo(.04, .04, .9, 1, x, 11.9, 7.4 + .45); g.rotateX(rr(-.4, .3)); B.geo(g, M.dark); }
+  // scrap bin by the gate
+  const green = M.paint(0x2f6a3a, .55, .35);
+  B.block(15.2, 0, 7.6, 18.8, .25, 10.4, M.dark, { surf: 'steel' }, 1);
+  for (const [a, b, c, d] of [[15.2, 7.6, 18.8, 7.8], [15.2, 10.2, 18.8, 10.4], [15.2, 7.6, 15.4, 10.4], [18.6, 7.6, 18.8, 10.4]]) B.block(a, 0, b, c, 1.6, d, green, { surf: 'steel' }, 1);
+  B.sign(['SCRAP'], 17, .95, 10.45, 1.8, .6, 0, { bg: '#f2b10a' });
+  B.bin = { x: 17, y: 0, z: 9 };
+  // the demolition crane's wrecking ball keeps working the west face, bricks drop from above
+  B.lattice(-19, 0, 0, 22.5, 1.6); B.block(-21, 0, -2, -17, .6, 2, M.concrete, {}, 3);
+  B.geo(boxGeo(8, .7, .7, 1, -16.2, 21.6, 0), M.yellow);
+  B.hazards.push({ type: 'wreck', px: -12.6, py: 21.2, pz: 0, L: 16.2, amp: .42, period: 7.4, axis: 'z', noBoom: true });
+  B.hazards.push({ type: 'bolts', kind: 'brick', rate: 3.6 });
+  B.items.push({ type: 'coffee', x: -9, y: 4, z: -3 }, { type: 'hardhat', x: 3, y: 12, z: 3 }, { type: 'stopwatch', x: -20, y: 0, z: 2 }, { type: 'cash', x: -10.2, y: 8, z: 4 });
+  B.checkpoints.push({ x: -3, y: 4, z: -3 }, { x: -3.5, y: 8, z: -3 }, { x: -9.5, y: 12, z: -3 });
+  B.enemies.push({ kind: 'inspector', x: 9.5, y: 8, z: -3 }, { kind: 'vandal', x: -20, y: 0, z: -14 }, { kind: 'dog', x: 22, y: 0, z: -10 }, { kind: 'vandal', x: -3, y: 12, z: -3, minRound: 2 });
+  yardFence(B, -36, -26, 36, 26, [-6, 6]);
+  for (const [x, z, d] of [[-16, 13, -.8], [16, 13, -2.3], [-16, -12, .8], [16, -12, 2.3]]) workLight(B, x, z, 7, d);
+  scatterProps(B, [['barrier', 0, -12, 'x', 4], ['barrier', 24, 4, 'z', 3], ['cone', -4, 0, 13], ['cone', 4, 0, 13], ['barrel', 24, 14], ['barrel', 24.7, 14.6, 0x8a2f2f]]);
+  mixerTruck(B, -24, 16, 'x');
+  B.sign(['MAC & SONS', 'DEMOLITION'], 0, 3.2, 26.2, 7, 2, Math.PI);
+  B.sign(['KEEP OFF', 'CRACKED SLABS'], 13.5, 1.5, 3, 2.6, 1.1, Math.PI / 2, { bg: '#ffffff', fg: '#c01c1c', stripe: false });
+  Object.assign(B, {
+    name: 'WRECKING CREW', time: '3:15 PM', sky: 'overcast', music: 'mus_l7', amb: 'amb_demo', timeLimit: 240,
+    spawn: { x: 0, y: 0, z: 12, yaw: Math.PI }, camYaw: 0, killY: -20,
+    brief: 'The old frame is coming down. Hold ACT to unbolt the four marked beams, then haul each one down to the scrap bin by the gate. Cracked slabs give way under you, and the wrecking ball is still swinging.',
+    objective: { type: 'scrap' }, voice: 'fm_l7', bounds: [-36, -26, 36, 26],
+  });
+}
+
+// ===================== STORM WATCH: beacons in a thunderstorm =====================
+function buildStorm(B) {
+  const M = B.M, XS = [-12, -6, 0, 6, 12], ZS = [-6, 0, 6];
+  B.block(-40, -2, -30, 40, 0, 30, M.dirt, { surf: 'dirt' }, 7);
+  B.block(-13.4, 0, -7.4, 13.4, .12, 7.4, M.concrete, { surf: 'concrete' }, 4);
+  for (const x of XS) for (const z of ZS) B.block(x - .45, .12, z - .45, x + .45, .3, z + .45, M.concrete, {}, 2);
+  gridFloor(B, 4, XS, ZS, { x: ['DDDD', 'BDDB', 'DDDD'], z: ['DD', 'BB', 'DD', 'BB', 'DD'], plates: [[0, 0], [2, 1]] });
+  gridFloor(B, 8, XS, ZS, { x: ['DD0D', 'DDDD', 'DDBD'], z: ['DD', '0B', 'DB', 'DD', 'DD'], plates: [[3, 1]] });
+  gridFloor(B, 12, XS, ZS, { x: ['DDDD', 'DDDD', 'DB0D'], z: ['DD', 'BD', 'DB', '0D', 'DD'], plates: [[0, 0], [1, 0]] });
+  gridFloor(B, 16, XS, ZS, { x: ['D00D', 'DDDD', 'DDDD'], z: ['DD', '0B', 'DD', '0B', 'DD'], colTop: 2.6 });
+  B.ladder(-9, -7.25, 0, 4, '-z'); B.ladder(9, 7.25, 0, 4, '+z');
+  B.ladder(-9, -1.25, 4, 8, '-z'); B.ladder(9, 1.25, 8, 12, '+z'); B.ladder(-3, -1.25, 12, 16, '-z');
+  B.lattice(17.1, 0, 0, 20, 1.2, M.galv);
+  B.movers.push({ type: 'elevator', x0: 13.1, z0: -1.3, x1: 16.2, z1: 1.3, stops: [0.25, 4, 8, 12, 16], wait: 1.8, speed: 2.4 });
+  B.block(13, 0, -1.6, 16.6, .1, 1.6, M.hazard, { visualOnly: true }, 1);
+  // five aircraft warning beacons on the frame: hold ACT on each switch box
+  const bea = (x, y, z, yaw) => B.stations.push({ kind: 'beacon', x, y, z, yaw });
+  bea(-12.3, 16, -6.3, .785); bea(12.3, 16, 6.3, -2.356); bea(12.3, 12, -6.3, -.785); bea(-12.3, 8, 6.3, 2.356); bea(-12.3, 12, 6.3, 2.356);
+  B.hazards.push({ type: 'bolts', kind: 'lightning', rate: 4.6 }, { type: 'wind', power: 8.5 });
+  B.items.push({ type: 'coffee', x: 3, y: 4, z: 3 }, { type: 'hardhat', x: -9, y: 16, z: 6 }, { type: 'stopwatch', x: 0, y: 8, z: 0 }, { type: 'cash', x: 26, y: 0, z: 20 });
+  B.checkpoints.push({ x: -10.2, y: 4, z: -6 }, { x: 10.6, y: 8, z: 3.6 }, { x: -10.4, y: 12, z: -3.8 });
+  B.enemies.push({ kind: 'vandal', x: 16, y: 0, z: 10 }, { kind: 'inspector', x: -6, y: 8, z: 6 }, { kind: 'vandal', x: -4, y: 16, z: 6, minRound: 2 });
+  yardFence(B, -36, -26, 36, 26, [-6, 6]);
+  towerCrane(B, 20, 15, 30, 26, { spin: .08, phase: 2 });
+  B.trailer(27, 0, -15); portaPotty(B, 31, -20); mixerTruck(B, -20, -15);
+  for (const [x, z] of [[-6, 10], [5, 11], [-15, -10], [18, 3], [-22, 5]]) B.block(x - 1.4, 0, z - .9, x + 1.4, .02, z + .9, M.paint(0x223044, .03, .85), { visualOnly: true }, 1);
+  scatterProps(B, [['cone', -4, 0, -13], ['cone', 4, 0, -13], ['barrier', 0, 12, 'x', 4], ['pipes', -24, 12, 'x', 3], ['crate', 24, -4], ['crate', 22.8, -4.2, .9], ['barrel', -22, -4]]);
+  for (const [x, z, d] of [[-15, 13, -.8], [15, 13, -2.3], [-15, -12, .8], [15, -12, 2.3]]) workLight(B, x, z, 7, d);
+  B.sign(['MAC & SONS', 'STORM WATCH'], 0, 3.2, -26.2, 7, 2, 0);
+  Object.assign(B, {
+    name: 'STORM WATCH', time: '9:40 PM', sky: 'storm', music: 'mus_l8', amb: 'amb_storm', timeLimit: 230, rain: true,
+    spawn: { x: 0, y: 0, z: -12, yaw: 0 }, camYaw: Math.PI, killY: -20,
+    brief: 'A thunderstorm is rolling over the frame. Switch on the five aircraft warning beacons (hold ACT at each switch box). Lightning strikes where the ground crackles, gusts shove you around and the bare beams are slick with rain.',
+    objective: { type: 'beacons' }, voice: 'fm_l8', bounds: [-36, -26, 36, 26],
+  });
+}
+
+export const LEVELS = [build1, build2, build3, buildPit, buildBridge, buildWreck, buildStorm, build4];
+// id keys the per-shift records (medals, best times, ghosts, boards); par is the medal time in seconds
 export const LEVEL_INFO = [
-  { name: 'STEEL SKELETON', time: '7:00 AM', desc: 'Set & rivet 4 girders' },
-  { name: 'CRANE YARD', time: '6:30 PM', desc: 'Find 5 lunchboxes' },
-  { name: 'THE MILL', time: '11:00 PM', desc: 'Load 4 crates' },
-  { name: 'TOPPING OUT', time: '7:40 PM', desc: 'Top out the tower' },
+  { id: 'skeleton', name: 'STEEL SKELETON', time: '7:00 AM', desc: 'Set & rivet 4 girders', par: 110 },
+  { id: 'yard', name: 'CRANE YARD', time: '6:30 PM', desc: 'Find 5 lunchboxes', par: 100 },
+  { id: 'mill', name: 'THE MILL', time: '11:00 PM', desc: 'Load 4 crates', par: 130 },
+  { id: 'pit', name: 'THE PIT', time: '5:50 AM', desc: 'Get 4 pumps running', par: 75 },
+  { id: 'bridge', name: 'RIVER SPAN', time: '12:10 PM', desc: 'Set 4 deck girders', par: 120 },
+  { id: 'wreck', name: 'WRECKING CREW', time: '3:15 PM', desc: 'Scrap 4 old beams', par: 165 },
+  { id: 'storm', name: 'STORM WATCH', time: '9:40 PM', desc: 'Light 5 beacons', par: 105 },
+  { id: 'topout', name: 'TOPPING OUT', time: '7:40 PM', desc: 'Top out the tower', par: 120 },
 ];

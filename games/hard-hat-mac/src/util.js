@@ -30,11 +30,14 @@ const SKEY = 'hhm3d-settings-v1';
 export const settings = Object.assign({
   quality: 'auto', music: 0.7, sfx: 0.9, voice: 1.0, muted: false,
   camSens: 1.0, invertY: false, shake: true, fps: false, captions: true, hud: 1,
+  assistSpeed: 1, assistTime: 1, assistLives: false, ghost: true, keys: {},
 }, (() => { try { return JSON.parse(localStorage.getItem(SKEY)) || {}; } catch { return {}; } })());
 export function saveSettings() { try { localStorage.setItem(SKEY, JSON.stringify(settings)); } catch {} }
 
 const PKEY = 'hhm3d-progress-v1';
-export const progress = Object.assign({ unlocked: 1, hi: 0, initials: 'MAC' },
+export const assistOn = () => settings.assistSpeed < 1 || settings.assistTime > 1 || settings.assistLives;
+
+export const progress = Object.assign({ unlocked: 1, hi: 0, initials: 'MAC', built: [] },
   (() => { try { return JSON.parse(localStorage.getItem(PKEY)) || {}; } catch { return {}; } })());
 export function saveProgress() { try { localStorage.setItem(PKEY, JSON.stringify(progress)); } catch {} }
 

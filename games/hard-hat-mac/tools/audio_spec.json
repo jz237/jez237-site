@@ -268,6 +268,126 @@
       "name": "ko_bell",
       "dur": 1.6,
       "text": "boxing ring bell ringing twice, ding ding, clear"
+    },
+    {
+      "name": "shove",
+      "dur": 0.6,
+      "text": "quick heavy shoulder barge into a person, dull body thump and cloth rustle, no voice"
+    },
+    {
+      "name": "pile_driver",
+      "dur": 1.6,
+      "text": "massive diesel pile driver hammer slamming a steel pile into the ground, huge metallic boom and deep ground thud"
+    },
+    {
+      "name": "pump_on",
+      "dur": 2.0,
+      "text": "big industrial water pump motor starting up, rumble rising to a steady whir with water gurgling"
+    },
+    {
+      "name": "valve",
+      "dur": 1.2,
+      "text": "large rusty steel valve wheel being turned by hand, metallic squeak and ratchet clicks"
+    },
+    {
+      "name": "splash",
+      "dur": 1.2,
+      "text": "person falling into deep water, big heavy splash"
+    },
+    {
+      "name": "gull",
+      "dur": 1.0,
+      "text": "seagull crying, two sharp squawks, outdoors"
+    },
+    {
+      "name": "gull_dive",
+      "dur": 0.9,
+      "text": "large bird swooping down fast, wing flaps and whoosh ending in a sharp squawk"
+    },
+    {
+      "name": "boat_horn",
+      "dur": 2.5,
+      "text": "deep tugboat horn blast on a river, slightly distant"
+    },
+    {
+      "name": "crumble",
+      "dur": 1.6,
+      "text": "concrete floor slab cracking and crumbling apart, rubble falling"
+    },
+    {
+      "name": "debris",
+      "dur": 1.2,
+      "text": "bricks and chunks of concrete falling and smashing on the ground"
+    },
+    {
+      "name": "unbolt",
+      "dur": 0.9,
+      "text": "pneumatic impact wrench loosening a big steel bolt, rapid ratcheting zip"
+    },
+    {
+      "name": "scrap_drop",
+      "dur": 1.4,
+      "text": "heavy steel beam dropped into a metal dumpster, huge clanging crash"
+    },
+    {
+      "name": "thunder",
+      "dur": 4.0,
+      "text": "close loud thunderclap followed by a long rolling rumble"
+    },
+    {
+      "name": "lightning_charge",
+      "dur": 1.2,
+      "text": "electric crackle and buzzing static building up before a lightning strike"
+    },
+    {
+      "name": "switch_on",
+      "dur": 1.2,
+      "text": "heavy industrial breaker switch thrown with a clunk, then an electrical hum starting"
+    },
+    {
+      "name": "medal",
+      "dur": 1.4,
+      "text": "bright triumphant arcade achievement chime, sparkling bell arpeggio"
+    },
+    {
+      "name": "skyline",
+      "dur": 1.6,
+      "text": "soft magical whoosh with a shimmering chime, a grand reveal"
+    },
+    {
+      "name": "coop_join",
+      "dur": 0.8,
+      "text": "friendly two-tone arcade notification chime, player joined"
+    },
+    {
+      "name": "water_loop",
+      "dur": 4.0,
+      "text": "steady rushing water pouring into a flooded pit, continuous churning loop",
+      "loop": true
+    },
+    {
+      "name": "amb_pit",
+      "dur": 20.0,
+      "text": "ambience of a muddy flooded construction pit at dawn, dripping water, distant pumps, birds, far-off city traffic",
+      "loop": true
+    },
+    {
+      "name": "amb_river",
+      "dur": 20.0,
+      "text": "ambience high on a steel bridge over a river, water lapping below, breeze, distant gulls and city traffic",
+      "loop": true
+    },
+    {
+      "name": "amb_demo",
+      "dur": 20.0,
+      "text": "ambience of a demolition site, distant heavy machinery, occasional falling rubble, wind through broken windows",
+      "loop": true
+    },
+    {
+      "name": "amb_storm",
+      "dur": 20.0,
+      "text": "heavy rain and gusting wind on a high steel construction frame at night, rain drumming on metal",
+      "loop": true
     }
   ],
   "tts": [
@@ -410,6 +530,41 @@
       "name": "fm_demo",
       "voice": "foreman",
       "text": "Watch close, kid. This is how a pro works the site."
+    },
+    {
+      "name": "fm_l5",
+      "voice": "foreman",
+      "text": "Down in the pit, Mac! The storm flooded the foundation. Get four pumps runnin' before the water swallows the job!"
+    },
+    {
+      "name": "fm_l6",
+      "voice": "foreman",
+      "text": "River span today. Set the deck girders across the bridge and rivet 'em down. And watch those gulls, they bite!"
+    },
+    {
+      "name": "fm_l7",
+      "voice": "foreman",
+      "text": "Wreckin' crew, Mac. Unbolt four old beams and haul 'em to the scrap bin. Keep off the cracked floors!"
+    },
+    {
+      "name": "fm_l8",
+      "voice": "foreman",
+      "text": "Storm's rollin' in! Light up the warning beacons on the frame before the lightning finds ya!"
+    },
+    {
+      "name": "fm_coop",
+      "voice": "foreman",
+      "text": "Two of ya? Good. Double the hands, half the excuses!"
+    },
+    {
+      "name": "mac_shove",
+      "voice": "mac",
+      "text": "Outta my way!"
+    },
+    {
+      "name": "an_newbest",
+      "voice": "announcer",
+      "text": "New best time!"
     }
   ],
   "music": [
@@ -454,6 +609,30 @@
       "ms": 10000,
       "trim": 7.0,
       "prompt": "Short comedic game over jingle, sad trombone style melody over funky bass, ends on a final low note. Instrumental."
+    },
+    {
+      "name": "mus_l5",
+      "ms": 90000,
+      "loop": true,
+      "prompt": "Gritty swampy funk-rock groove for a video game level in a flooded construction pit at dawn. Low twangy baritone guitar, stomping drums, tuba-like bass, harmonica stabs. Determined and urgent. Instrumental, no vocals."
+    },
+    {
+      "name": "mus_l6",
+      "ms": 90000,
+      "loop": true,
+      "prompt": "Breezy, sweeping, adventurous video game platformer music high on a steel bridge over a river at midday. Bright electric and acoustic guitars, rolling drums, warm horns. Optimistic and wide open. Instrumental, no vocals."
+    },
+    {
+      "name": "mus_l7",
+      "ms": 90000,
+      "loop": true,
+      "prompt": "Heavy, crunchy industrial rock video game music for a building demolition site. Chugging distorted guitar riffs, pounding drums, clanking metal percussion, menacing bass. Instrumental, no vocals."
+    },
+    {
+      "name": "mus_l8",
+      "ms": 90000,
+      "loop": true,
+      "prompt": "Tense, dramatic storm-night video game music. Driving staccato strings, pulsing synth bass, thunderous tom drums, urgent brass hits. Rain-soaked, high stakes. Instrumental, no vocals."
     }
   ]
 }

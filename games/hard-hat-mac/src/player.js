@@ -21,7 +21,7 @@ export class Player {
     const b = this.body; Object.assign(b, { x: sp.x, y: sp.y, z: sp.z, vx: 0, vy: 0, vz: 0, onGround: false, ground: null });
     this.yaw = sp.yaw || 0; this.state = 'normal'; this.carry = null; this.ladder = null; this.climbPhase = 0;
     this.coyote = 0; this.jumpBuf = 0; this.airMax = sp.y; this.invuln = 2.2; this.coffee = 0; this.shield = this.shield || false;
-    this.dead = false; this.deadT = 0; this.noGrab = 0; this.rivetSock = null; this.rivetSnd = 0; this.lastStep = 0; this.screamed = false; this.swingT = 0; this.swingCd = 0; this.swingHit = false;
+    this.dead = false; this.deadT = 0; this.noGrab = 0; this.rivetSock = null; this.rivetSnd = 0; this.lastStep = 0; this.screamed = false; this.swingT = 0; this.swingCd = 0; this.swingHit = false; this.shoveT = 0;
     this.rig.body.visible = true; this.rig.body.rotation.set(0, 0, 0); this.rig.body.position.set(0, 0, 0);
     this.root.position.set(b.x, b.y, b.z); this.root.rotation.y = this.yaw;
   }
@@ -38,6 +38,7 @@ export class Player {
     this.invuln = Math.max(0, this.invuln - dt); this.coffee = Math.max(0, this.coffee - dt); this.noGrab = Math.max(0, this.noGrab - dt);
     this.swingCd = Math.max(0, this.swingCd - dt);
     if (this.swingT > 0) { this.swingT += dt; this.updateSwing(); if (this.swingT > .45 || this.state !== 'normal') this.swingT = 0; }
+    if (this.shoveT > 0) { this.shoveT += dt; this.updateShove(); if (this.shoveT > .35 || this.state !== 'normal') this.shoveT = 0; }
     if (this.dead) {
       this.deadT -= dt;
       if (this.deathMode === 'knock') {
@@ -52,10 +53,13 @@ export class Player {
 
     if (this.state === 'climb') { this.updateClimb(dt, inp, wx, wz); return; }
     if (this.state === 'rivet') { this.updateRivet(dt, inp); return; }
+    if (this.state === 'crank') { this.updateCrank(dt, inp); return; }
 
     // ---- ground / air movement
-    const maxS = RUN * (this.coffee > 0 ? 1.38 : 1) * (this.carry ? .86 : 1) * (this.swingT > 0 ? .45 : 1);
-    const k = b.onGround ? 16 : 5.5, f = 1 - Math.exp(-k * dt);
+    const wade = g.level.waterDepth ? g.level.waterDepth(b.x, b.y, b.z) : -1;
+    const maxS = RUN * (this.coffee > 0 ? 1.38 : 1) * (this.carry ? .86 : 1) * (this.swingT > 0 ? .45 : 1) * (this.shoveT > 0 ? 1.2 : 1) * (wade > .25 ? .62 : 1);
+    // rain makes the bare beams slick
+    const k = b.onGround ? (g.level.rain && b.ground && b.ground.beam ? 6.5 : 16) : 5.5, f = 1 - Math.exp(-k * dt);
     b.vx += (wx * maxS - b.vx) * f; b.vz += (wz * maxS - b.vz) * f;
     this.coyote = b.onGround ? .11 : this.coyote - dt;
     this.jumpBuf = inp.jump ? .14 : this.jumpBuf - dt;
@@ -117,7 +121,9 @@ export class Player {
   }
   // Hammer swing: auto-aims at the nearest standing enemy in front, connects on the strike frame.
   canSwing() { return !this.dead && this.state === 'normal' && !this.carry && this.swingCd <= 0; }
+  canShove() { return !this.dead && this.state === 'normal' && !!this.carry && this.swingCd <= 0; }
   swing() {
+    if (this.carry) return this.shove();
     if (!this.canSwing()) return false;
     // auto-aim: turn to the nearest standing enemy within reach (in any direction), preferring ones in front
     const b = this.body; let best = null, bs = Infinity;
@@ -143,6 +149,36 @@ export class Player {
       if (d > .3 && (dx * fx + dz * fz) / d < .35) continue; // must be in front (~70 degrees)
       this.swingHit = true;
       g.knockOut(e, dx / (d || 1), dz / (d || 1), 'hammer');
+    }
+  }
+  // Shoulder shove while carrying: knocks an enemy back and dazes it briefly (no knockout).
+  shove() {
+    if (!this.canShove()) return false;
+    const b = this.body; let best = null, bs = Infinity;
+    for (const e of this.game.enemies) {
+      if (e.ko > 0) continue;
+      const dx = e.body.x - b.x, dz = e.body.z - b.z, d = Math.hypot(dx, dz);
+      if (d > 2.4 || Math.abs(e.body.y - b.y) > 1.2) continue;
+      const sc = d + Math.abs(wrapAngle(Math.atan2(dx, dz) - this.yaw)) * .4;
+      if (sc < bs) { bs = sc; best = e; }
+    }
+    if (best) this.yaw = Math.atan2(best.body.x - b.x, best.body.z - b.z);
+    this.shoveT = .001; this.swingCd = .7; this.swingHit = false;
+    b.vx += Math.sin(this.yaw) * 3.2; b.vz += Math.cos(this.yaw) * 3.2;
+    this.game.audio.play('swing', { vol: .5, rate: .8 });
+    if (Math.random() < .3) this.game.audio.voice('mac_shove', .8);
+    return true;
+  }
+  updateShove() {
+    if (this.swingHit || this.shoveT < .06 || this.shoveT > .22) return;
+    const b = this.body, g = this.game, fx = Math.sin(this.yaw), fz = Math.cos(this.yaw);
+    for (const e of g.enemies) {
+      if (e.ko > 0) continue;
+      const dx = e.body.x - b.x, dz = e.body.z - b.z, d = Math.hypot(dx, dz);
+      if (d > 1.35 + e.body.r || Math.abs(e.body.y - b.y) > 1.3) continue;
+      if (d > .3 && (dx * fx + dz * fz) / d < .3) continue;
+      this.swingHit = true;
+      g.shoved(e, dx / (d || 1), dz / (d || 1));
     }
   }
   grab(L, y) {
@@ -174,20 +210,41 @@ export class Player {
     }
   }
   startRivet(s) { this.state = 'rivet'; this.rivetSock = s; const b = this.body; b.vx = b.vz = 0; }
+  // pumps and beacons: hold ACT at the station until it's on
+  startCrank(s) { this.state = 'crank'; this.crankSt = s; const b = this.body; b.vx = b.vz = 0; this.crankSnd = 0; }
+  updateCrank(dt, inp) {
+    const g = this.game, s = this.crankSt, b = this.body;
+    b.vy -= GRAVITY * dt; moveBody(g.world, b, dt);
+    if (!inp.actHeld || !s || s.on || !b.onGround || Math.hypot(b.x - s.use.x, b.z - s.use.z) > 1.4) { this.state = 'normal'; this.crankSt = null; return; }
+    this.yaw = angleDamp(this.yaw, Math.atan2(s.dev.x - b.x, s.dev.z - b.z), 12, dt);
+    s.prog += dt * (this.coffee > 0 ? 1.4 : 1);
+    if (g.coopGuest && (this.crankNet = (this.crankNet || 0) - dt) <= 0) { this.crankNet = .3; s.netLock = performance.now() + 900; g.netAct('station', { si: g.objects.stations.indexOf(s), p: Math.round(s.prog * 10) / 10 }); }
+    if (s.kind === 'valve') s.wheel.rotation.z -= dt * 7; else s.wheel.rotation.x = .8 - 1.6 * Math.min(1, s.prog / s.need);
+    this.crankSnd -= dt;
+    if (this.crankSnd <= 0) { this.crankSnd = s.kind === 'valve' ? .55 : .45; g.audio.play(s.kind === 'valve' ? 'valve' : 'lightning_charge', { pos: s.dev, vol: s.kind === 'valve' ? .7 : .22, rate: s.kind === 'valve' ? rr(.9, 1.1) : 1.7 }); }
+    if (s.kind !== 'valve' && Math.random() < .35) g.fx.sparks(V.set(s.dev.x, s.dev.y + 1, s.dev.z), 1, 0xffc860);
+    if (s.prog >= s.need) { g.stationOn(s); this.state = 'normal'; this.crankSt = null; }
+  }
   updateRivet(dt, inp) {
     const g = this.game, s = this.rivetSock, b = this.body;
     b.vy -= GRAVITY * dt; moveBody(g.world, b, dt);
-    if (!inp.actHeld || !s || s.state !== 'placed' || !b.onGround) { this.state = 'normal'; this.rivetSock = null; return; }
-    // turn to face the next rivet
-    const dot = s.rivetDots[s.rivets].position;
+    if (!inp.actHeld || !s || !(s.state === 'placed' || (s.demo && s.state === 'riveted')) || !b.onGround) { this.state = 'normal'; this.rivetSock = null; return; }
+    // turn to face the next rivet (demolition: the next bolt to come out)
+    const di = s.demo ? s.rivets - 1 : s.rivets, dot = s.rivetDots[di].position;
     this.yaw = angleDamp(this.yaw, Math.atan2(dot.x - b.x, dot.z - b.z), 12, dt);
     s.progress += dt / .42 * (this.coffee > 0 ? 1.4 : 1);
     this.rivetSnd -= dt;
-    if (this.rivetSnd <= 0) { this.rivetSnd = .3; g.audio.play('rivet', { vol: .6, rate: rr(.95, 1.08) }); }
+    if (this.rivetSnd <= 0) { this.rivetSnd = .3; g.audio.play(s.demo ? 'unbolt' : 'rivet', { vol: .6, rate: rr(.95, 1.08) }); }
     if (Math.random() < .6) g.fx.sparks(dot, 2, 0xffc860);
+    if (s.demo && s.progress >= 1) {
+      s.progress = 0; s.rivetDots[di].visible = false; g.fx.sparks(dot, 16, 0xffe2a0); s.rivets--;
+      g.audio.play('rivet_done', { vol: .6, rate: 1.3 - s.rivets * .06 }); g.addScore(100, dot); g.netRivet && g.netRivet(s);
+      if (s.rivets <= 0) { g.socketUnbolted(s); this.state = 'normal'; this.rivetSock = null; }
+      return;
+    }
     if (s.progress >= 1) {
       s.progress = 0; s.rivetDots[s.rivets].material.color.setHex(0x3a3a3a); s.rivetDots[s.rivets].scale.setScalar(.8);
-      g.fx.sparks(dot, 16, 0xffe2a0); s.rivets++;
+      g.fx.sparks(dot, 16, 0xffe2a0); s.rivets++; g.netRivet && g.netRivet(s);
       g.audio.play('rivet_done', { vol: .7, rate: 1 + s.rivets * .06 });
       g.addScore(100, dot);
       if (s.rivets >= 4) { g.socketRiveted(s); this.state = 'normal'; this.rivetSock = null; }
@@ -196,12 +253,14 @@ export class Player {
   die(mode) {
     if (this.dead) return;
     const g = this.game, b = this.body;
-    this.dead = true; this.deadT = mode === 'void' ? 1.6 : 2.4; this.deathMode = mode === 'fall' || mode === 'squash' ? 'flat' : mode === 'void' || mode === 'molten' ? 'gone' : 'knock';
+    const sunk = mode === 'molten' || mode === 'drown' || mode === 'splash';
+    this.dead = true; this.deadT = mode === 'void' ? 1.6 : sunk ? 2 : 2.4; this.deathMode = mode === 'fall' || mode === 'squash' ? 'flat' : mode === 'void' || sunk ? 'gone' : 'knock';
     this.state = 'normal'; this.ladder = null;
     const fl = g.world.groundBelow(b.x, b.z, b.y + .1, .2); this.deadFloor = fl ? fl.y1 : -1e9;
     if (this.deathMode === 'knock') { b.vy = 7; b.vx = -Math.sin(this.yaw) * 3; b.vz = -Math.cos(this.yaw) * 3; }
     if (this.deathMode === 'flat') { g.audio.play('splat', { vol: 1 }); g.fx.dust(V.set(b.x, b.y + .1, b.z), 26); g.shake(.4, null); }
     if (mode === 'molten') { this.rig.body.visible = false; g.fx.embers(V.set(b.x, b.y + .5, b.z), 50); }
+    if (mode === 'drown' || mode === 'splash') { this.rig.body.visible = false; g.audio.voice('mac_whoa', .8); }
     if (this.deathMode === 'knock') { g.audio.play('dizzy', { vol: .8 }); g.audio.voice('mac_oof', .9); }
     if (this.carry) { const o = this.carry; this.carry = null; g.objects.sendHome(o); }
   }
@@ -217,10 +276,11 @@ export class Player {
       if (this.deathMode === 'knock') r.body.rotation.y += dt * 9;
     } else if (this.state === 'climb') mode = 'climb';
     else if (this.state === 'rivet') mode = 'rivet';
+    else if (this.state === 'crank') mode = 'crank';
     else if (!b.onGround) mode = 'air';
     else if (speed > .08) mode = 'walk';
     if (g.cheer) mode = 'cheer';
-    r.update(dt, { mode, speed, vy: b.vy, carry: this.carry ? this.carry.kind : null, climbPhase: this.climbPhase, swing: this.swingT > 0 ? this.swingT / .45 : 0 });
+    r.update(dt, { mode, speed, vy: b.vy, carry: this.carry ? this.carry.kind : null, climbPhase: this.climbPhase, swing: this.swingT > 0 ? this.swingT / .45 : 0, shove: this.shoveT > 0 ? this.shoveT / .35 : 0 });
     if (this.dead && this.deathMode === 'flat') r.body.scale.set(1.3, .22, 1.3);
     // invulnerability blink, gold hat shield tint
     r.root.visible = !(this.invuln > 0 && !this.dead && Math.floor(this.invuln * 12) % 2 === 0 && this.invuln < 2);

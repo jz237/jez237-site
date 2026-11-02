@@ -31,7 +31,7 @@ export class Builder {
     this.M = M; this.world = new PhysWorld(); this.group = new THREE.Group();
     this.buckets = new Map();
     this.ladders = []; this.items = []; this.sockets = []; this.movers = []; this.hazards = [];
-    this.lights = []; this.lamps = []; this.signs = []; this.navExtra = []; this.enemies = []; this.checkpoints = [];
+    this.lights = []; this.lamps = []; this.signs = []; this.navExtra = []; this.enemies = []; this.checkpoints = []; this.stations = [];
   }
   geo(g, mat) { let a = this.buckets.get(mat); if (!a) this.buckets.set(mat, a = []); a.push(g); return g; }
   solid(x0, y0, z0, x1, y1, z1, props = {}) { return this.world.add(Object.assign({ x0, y0, z0, x1, y1, z1, surf: 'steel' }, props)); }

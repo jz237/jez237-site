@@ -1,6 +1,7 @@
 // Moving platforms and hazards. Each has update(dt, game) and optional dispose().
 import * as THREE from 'three';
 import { boxGeo } from './builder.js';
+import { cutaway } from './textures.js';
 import { clamp, lerp, rr, TAU, smooth } from './util.js';
 
 const V = new THREE.Vector3();
@@ -39,8 +40,10 @@ export class Elevator {
       for (const hh of [1.1, .55]) add(ax === 'z' ? boxGeo(.05, .05, L, 1, x, hh, z) : boxGeo(L, .05, .05, 1, x, hh, z), M.yellow);
     for (const [x, z] of [[w / 2, -dd / 2], [w / 2, dd / 2], [-w / 2, -dd / 2], [-w / 2, dd / 2]]) add(boxGeo(.08, 1.15, .08, 1, x * .97, .57, z * .97), M.yellow);
     this.lamp = new THREE.Mesh(new THREE.SphereGeometry(.1, 10, 8), M.glow(0x40ff60, 3)); this.lamp.position.set(w / 2 - .1, 1.3, 0); g.add(this.lamp);
-    group.add(g);
+    group.add(g); this.world = world;
   }
+  sync() { return [Math.round(this.box.y1 * 100) / 100, this.idx, this.dir, Math.round(this.wait * 100) / 100]; }
+  setSync(a) { if (Math.abs(this.box.y1 - a[0]) > .25 || this.idx !== a[1]) { this.idx = a[1]; this.dir = a[2]; this.wait = a[3]; this.setY(a[0], this.world); } }
   setY(y, world) {
     const d = this.d; world.moveDyn(this.box, d.x0, y - .3, d.z0);
     world.moveDyn(this.rails[0], d.x1 - .08, y, d.z0); world.moveDyn(this.rails[1], d.x0, y, d.z0); world.moveDyn(this.rails[2], d.x0, y, d.z1 - .08);
@@ -171,14 +174,42 @@ export class SwingBeam {
 }
 
 // ---------------- hazards ----------------
+// Everything that drops on Mac after a ground-ring warning. warn = seconds of warning, r = hit radius, h = drop height.
+const DROPS = {
+  bolt: { warn: 1.05, r: .62, h: 3.6, snd: 'bolt_fall', hit: 'clink', reason: 'bolt', ring: 0xff3a1a, spark: 0xffd27a },
+  rock: { warn: 1.1, r: .66, h: 4.6, snd: 'debris', hit: 'debris', reason: 'rock', ring: 0xff8a1a, spark: 0x8a7a62, dust: true },
+  brick: { warn: 1.1, r: .7, h: 5, snd: 'debris', hit: 'debris', reason: 'debris', ring: 0xff5a2a, spark: 0xb4583a, dust: true },
+  gull: { warn: 1.3, r: .6, h: 7, snd: 'gull_dive', hit: 'gull', reason: 'gull', ring: 0xf4f4f4, swoop: true },
+  lightning: { warn: 1.4, r: 1.3, h: 0, snd: 'lightning_charge', hit: 'thunder', reason: 'zap', ring: 0x9fd8ff, strike: true },
+};
+function dropMesh(kind, mat) {
+  const g = new THREE.Group(), add = (geo, m, x = 0, y = 0, z = 0) => { const o = new THREE.Mesh(geo, m); o.position.set(x, y, z); o.castShadow = true; g.add(o); return o; };
+  if (kind === 'bolt') { for (const geo of hexBolt()) add(geo, mat); g.scale.setScalar(1.6); }
+  else if (kind === 'rock') { add(new THREE.DodecahedronGeometry(.26, 0), mat); add(new THREE.DodecahedronGeometry(.16, 0), mat, .22, .05, .1); }
+  else if (kind === 'brick') { for (let k = 0; k < 3; k++) add(new THREE.BoxGeometry(.3, .11, .14), mat, rr(-.15, .15), k * .12, rr(-.1, .1)).rotation.y = rr(0, 3); }
+  else if (kind === 'gull') {
+    const white = new THREE.MeshStandardMaterial({ color: 0xf2f2ee, roughness: .7 }), grey = new THREE.MeshStandardMaterial({ color: 0x8a9096, roughness: .7 });
+    add(new THREE.SphereGeometry(.16, 10, 8), white).scale.set(.8, .75, 1.7);
+    add(new THREE.SphereGeometry(.09, 8, 6), white, 0, .08, .25);
+    add(new THREE.ConeGeometry(.03, .14, 6).rotateX(Math.PI / 2), new THREE.MeshStandardMaterial({ color: 0xf2a020 }), 0, .06, .38);
+    g.userData.wings = [-1, 1].map(s => { const w = new THREE.Group(); w.position.set(s * .1, .05, 0); g.add(w); const m = new THREE.Mesh(new THREE.BoxGeometry(.6, .02, .2), grey); m.position.x = s * .3; m.castShadow = true; w.add(m); return w; });
+  }
+  return g;
+}
 export class Bolts {
   constructor(d, ctx) {
-    this.d = d; this.ctx = ctx; this.timer = 4; this.list = [];
-    this.mat = new THREE.MeshStandardMaterial({ color: 0x9aa0a6, roughness: .3, metalness: .95 });
-    this.ringMat = new THREE.MeshBasicMaterial({ color: 0xff3a1a, transparent: true, opacity: .8, depthWrite: false });
+    this.d = d; this.ctx = ctx; this.timer = 4; this.list = []; this.kind = d.kind || 'bolt'; this.K = DROPS[this.kind];
+    this.mat = this.kind === 'rock' ? new THREE.MeshStandardMaterial({ color: 0x6b5842, roughness: .95 }) : this.kind === 'brick' ? new THREE.MeshStandardMaterial({ color: 0xa4482e, roughness: .9 }) : new THREE.MeshStandardMaterial({ color: 0x9aa0a6, roughness: .3, metalness: .95 });
+    this.ringMat = new THREE.MeshBasicMaterial({ color: this.K.ring, transparent: true, opacity: .8, depthWrite: false });
+    if (this.K.strike) {
+      const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(18 * 3), 3));
+      this.zap = new THREE.Line(geo, new THREE.LineBasicMaterial({ color: 0xe8f4ff, transparent: true, opacity: 1, blending: THREE.AdditiveBlending, fog: false }));
+      this.zap.frustumCulled = false; this.zap.visible = false; ctx.group.add(this.zap); this.zapT = 0;
+    }
   }
   update(dt, game) {
     const p = game.player, b = p.body;
+    this.post(dt);
     if (!game.frozen) this.timer -= dt;
     if (this.timer <= 0 && !p.dead && p.state !== 'climb' && b.onGround) {
       this.timer = this.d.rate / game.diff.hazard * rr(.75, 1.25);
@@ -187,12 +218,14 @@ export class Bolts {
         const x = b.x + Math.cos(a) * r + b.vx * .6, z = b.z + Math.sin(a) * r + b.vz * .6;
         const gnd = game.world.groundBelow(x, z, b.y + .4, .05);
         if (!gnd || Math.abs(gnd.y1 - b.y) > .45 || gnd.dyn) continue;
-        const ring = new THREE.Mesh(new THREE.RingGeometry(.35, .5, 24), this.ringMat.clone()); ring.rotation.x = -Math.PI / 2; ring.position.set(x, gnd.y1 + .03, z);
-        const bolt = new THREE.Group(); for (const g of hexBolt()) { const m = new THREE.Mesh(g, this.mat); m.castShadow = true; bolt.add(m); }
-        bolt.position.set(x, gnd.y1 + 3.6, z); bolt.visible = false; bolt.scale.setScalar(1.6);
+        const K = this.K, rs = K.r / .62;
+        const ring = new THREE.Mesh(new THREE.RingGeometry(.35 * rs, .5 * rs, 28), this.ringMat.clone()); ring.rotation.x = -Math.PI / 2; ring.position.set(x, gnd.y1 + .03, z);
+        const bolt = dropMesh(this.kind, this.mat);
+        bolt.position.set(x, gnd.y1 + K.h, z); bolt.visible = false;
         this.ctx.group.add(ring, bolt);
-        this.list.push({ x, z, y: gnd.y1, t: 0, ring, bolt, warn: 1.05 });
-        game.audio.play('bolt_fall', { pos: ring.position, vol: .6, rate: rr(.9, 1.1) });
+        const a2 = Math.random() * TAU;
+        this.list.push({ x, z, y: gnd.y1, t: 0, ring, bolt, warn: K.warn, ux: Math.cos(a2), uz: Math.sin(a2) });
+        game.audio.play(K.snd, { pos: ring.position, vol: this.kind === 'lightning' ? .8 : .6, rate: rr(.9, 1.1) });
         break;
       }
     }
@@ -201,20 +234,47 @@ export class Bolts {
       if (game.frozen && o.t < o.warn) continue;
       o.t += dt;
       const k = o.t / o.warn;
+      const K = this.K;
       o.ring.scale.setScalar(1.6 - .7 * clamp(k, 0, 1)); o.ring.material.opacity = .4 + .5 * Math.abs(Math.sin(o.t * 14));
-      if (k >= .55) { o.bolt.visible = true; const f = clamp((k - .55) / .45, 0, 1); o.bolt.position.y = o.y + 3.6 - 3.5 * f * f; o.bolt.rotation.x += dt * 12; }
+      if (K.swoop) { // gull: dive in from the side, then off again
+        if (k >= .3) { o.bolt.visible = true; const f = clamp((k - .3) / .7, 0, 1), e = f * f; o.bolt.position.set(o.x + o.ux * 8 * (1 - e), o.y + .9 + 6 * (1 - f) * (1 - f), o.z + o.uz * 8 * (1 - e)); o.bolt.rotation.y = Math.atan2(-o.ux, -o.uz); o.bolt.rotation.x = .5 * (1 - f); }
+        for (const w of o.bolt.userData.wings) w.rotation.z = Math.sin(o.t * 30) * .5 * (w.position.x > 0 ? 1 : -1);
+      } else if (K.strike) { // lightning: the spot crackles, then the bolt hits
+        if (Math.random() < .5) game.fx.sparks(V.set(o.x + rr(-.4, .4), o.y + .1, o.z + rr(-.4, .4)), 2, 0x9fd8ff);
+      } else if (k >= .55) { o.bolt.visible = true; const f = clamp((k - .55) / .45, 0, 1); o.bolt.position.y = o.y + K.h - (K.h - .1) * f * f; o.bolt.rotation.x += dt * 12; }
       if (k >= 1) {
-        game.fx.sparks(V.set(o.x, o.y + .1, o.z), 14, 0xffd27a); game.audio.play('clink', { pos: V, vol: .8 });
+        V.set(o.x, o.y + .1, o.z);
+        if (K.dust) game.fx.dust(V, 12); else game.fx.sparks(V, K.strike ? 40 : 14, K.spark || 0xffd27a);
+        if (K.strike) { this.strike(o, game); game.audio.play('thunder', { vol: 1 }); game.shake(.35, V); }
+        else game.audio.play(K.hit, { pos: V, vol: .8 });
         const dx = b.x - o.x, dz = b.z - o.z;
-        if (!p.dead && dx * dx + dz * dz < .62 * .62 && b.y > o.y - .3 && b.y < o.y + 1.2) game.hitPlayer('bolt');
-        this.ctx.group.remove(o.ring, o.bolt); o.ring.geometry.dispose(); o.ring.material.dispose();
+        if (!p.dead && dx * dx + dz * dz < K.r * K.r && b.y > o.y - .3 && b.y < o.y + (K.strike ? 2.4 : 1.2)) game.hitPlayer(K.reason);
+        if (K.swoop) { o.leave = .8; this.leaving = this.leaving || []; this.leaving.push(o); this.ctx.group.remove(o.ring); }
+        else this.ctx.group.remove(o.ring, o.bolt);
+        o.ring.geometry.dispose(); o.ring.material.dispose();
         this.list.splice(i, 1);
       }
     }
   }
-  clear() { for (const o of this.list) this.ctx.group.remove(o.ring, o.bolt); this.list.length = 0; this.timer = 4; }
-  danger(x, y, z) { return this.list.some(o => Math.abs(x - o.x) < .9 && Math.abs(z - o.z) < .9 && Math.abs(y - o.y) < .7); }
-  nearest(x, y, z) { let best = null, bd = 1.2; for (const o of this.list) { const d = Math.hypot(x - o.x, z - o.z); if (d < bd && Math.abs(y - o.y) < .7) { bd = d; best = o; } } return best; }
+  // after-effects: gulls flying off, the lightning bolt fading
+  post(dt) {
+    if (this.leaving) for (let i = this.leaving.length - 1; i >= 0; i--) {
+      const o = this.leaving[i]; o.leave -= dt; o.t += dt;
+      o.bolt.position.x -= o.ux * 9 * dt; o.bolt.position.z -= o.uz * 9 * dt; o.bolt.position.y += 5 * dt; o.bolt.rotation.x = -.5;
+      for (const w of o.bolt.userData.wings) w.rotation.z = Math.sin(o.t * 30) * .5 * (w.position.x > 0 ? 1 : -1);
+      if (o.leave <= 0) { this.ctx.group.remove(o.bolt); this.leaving.splice(i, 1); }
+    }
+    if (this.zap && this.zapT > 0) { this.zapT -= dt; this.zap.material.opacity = Math.max(0, this.zapT / .22); this.zap.visible = this.zapT > 0; }
+  }
+  strike(o, game) {
+    const a = this.zap.geometry.attributes.position, top = o.y + 46;
+    for (let i = 0; i < 18; i++) { const f = i / 17, j = f < 1 ? (1 - f) * 2.2 : 0; a.setXYZ(i, o.x + (i ? rr(-j, j) : 0), lerp(top, o.y, f), o.z + (i ? rr(-j, j) : 0)); }
+    a.setXYZ(17, o.x, o.y, o.z); a.needsUpdate = true; this.zapT = .22; this.zap.visible = true;
+    if (game.env && game.env.flash) game.env.flash(1);
+  }
+  clear() { for (const o of this.list) this.ctx.group.remove(o.ring, o.bolt); for (const o of this.leaving || []) this.ctx.group.remove(o.bolt); this.list.length = 0; this.leaving = []; this.timer = 4; }
+  danger(x, y, z) { const r = this.K.r + .28; return this.list.some(o => Math.abs(x - o.x) < r && Math.abs(z - o.z) < r && Math.abs(y - o.y) < .7); }
+  nearest(x, y, z) { let best = null, bd = this.K.r + .6; for (const o of this.list) { const d = Math.hypot(x - o.x, z - o.z); if (d < bd && Math.abs(y - o.y) < .7) { bd = d; best = o; } } return best; }
 }
 
 export class Pipes {
@@ -224,19 +284,28 @@ export class Pipes {
     const cap = new THREE.RingGeometry(d.r * .75, d.r, 22);
     this.geo = g; this.cap = cap; this.mat = ctx.M.concrete; this.inner = new THREE.MeshStandardMaterial({ color: 0x3b3b3b, roughness: 1, side: THREE.DoubleSide });
   }
+  make(x, sp) {
+    const d = this.d, m = new THREE.Group();
+    const body = new THREE.Mesh(this.geo, this.mat); body.castShadow = true; m.add(body);
+    const inner = new THREE.Mesh(new THREE.CylinderGeometry(d.r * .76, d.r * .76, 2.18, 18, 1, true).rotateX(Math.PI / 2), this.inner); m.add(inner);
+    for (const s of [-1, 1]) { const c = new THREE.Mesh(this.cap, this.mat); c.position.z = s * 1.1; c.rotation.y = s > 0 ? 0 : Math.PI; m.add(c); }
+    m.position.set(x, d.r, d.z); this.ctx.group.add(m);
+    const o = { m, x, sp }; this.list.push(o); return o;
+  }
+  sync() { return [Math.round(this.timer * 100) / 100, ...this.list.flatMap(o => [Math.round(o.x * 100) / 100, Math.round(o.sp * 100) / 100])]; }
+  setSync(a) {
+    this.timer = 99; const n = (a.length - 1) / 2;
+    while (this.list.length > n) { const o = this.list.pop(); this.ctx.group.remove(o.m); }
+    for (let i = 0; i < n; i++) { const x = a[1 + i * 2], sp = a[2 + i * 2], o = this.list[i] || this.make(x, sp); if (Math.abs(o.x - x) > .4) o.x = x; o.sp = sp; }
+  }
   update(dt, game) {
     const d = this.d, b = game.player.body;
-    if (!game.frozen) {
+    if (!game.frozen && !game.coopGuest) {
       this.timer -= dt;
       if (this.timer <= 0) {
         this.timer = d.every / game.diff.hazard * rr(.8, 1.3);
-        const m = new THREE.Group();
-        const body = new THREE.Mesh(this.geo, this.mat); body.castShadow = true; m.add(body);
-        const inner = new THREE.Mesh(new THREE.CylinderGeometry(d.r * .76, d.r * .76, 2.18, 18, 1, true).rotateX(Math.PI / 2), this.inner); m.add(inner);
-        for (const s of [-1, 1]) { const c = new THREE.Mesh(this.cap, this.mat); c.position.z = s * 1.1; c.rotation.y = s > 0 ? 0 : Math.PI; m.add(c); }
-        m.position.set(d.x0, d.r, d.z); this.ctx.group.add(m);
-        this.list.push({ m, x: d.x0, sp: d.speed * game.diff.speed * rr(.9, 1.15) });
-        game.audio.play('pickup', { pos: m.position, vol: .7, rate: .6 });
+        const o = this.make(d.x0, d.speed * game.diff.speed * rr(.9, 1.15));
+        game.audio.play('pickup', { pos: o.m.position, vol: .7, rate: .6 });
       }
     }
     const dir = Math.sign(d.x1 - d.x0);
@@ -439,10 +508,15 @@ export class Ladle {
 export class Wreck {
   constructor(d, ctx) {
     const { M, group } = ctx; this.d = d; this.t = 0;
-    this.ball = new THREE.Mesh(new THREE.SphereGeometry(.9, 28, 20), new THREE.MeshStandardMaterial({ color: 0x2a2a2c, roughness: .35, metalness: .85 }));
+    if (d.load === 'girders') { // a bundle of girders swinging from a crane hook
+      this.ball = new THREE.Group();
+      for (let k = 0; k < 3; k++) { const m = new THREE.Mesh(boxGeo(.34, .42, 3.4, 2, (k - 1) * .36, -.2 - (k === 1 ? .44 : 0), 0), M.beam); m.castShadow = true; this.ball.add(m); }
+      this.ball.add(new THREE.Mesh(boxGeo(1.2, .08, .08, 1, 0, .3, 0), M.cable));
+      if (d.axis === 'x') this.ball.rotation.y = 0; else this.ball.rotation.y = Math.PI / 2;
+    } else this.ball = new THREE.Mesh(new THREE.SphereGeometry(.9, 28, 20), new THREE.MeshStandardMaterial({ color: 0x2a2a2c, roughness: .35, metalness: .85 }));
     this.ball.castShadow = true; group.add(this.ball);
     this.cab = cable(M.cable); group.add(this.cab);
-    const boom = new THREE.Mesh(boxGeo(.8, .8, 10, 1, d.px, d.py + .4, d.pz + (d.axis === 'z' ? 0 : -4)), M.yellow); boom.castShadow = true; group.add(boom);
+    if (!d.noBoom) { const boom = new THREE.Mesh(boxGeo(.8, .8, 10, 1, d.px, d.py + .4, d.pz + (d.axis === 'z' ? 0 : -4)), M.yellow); boom.castShadow = true; group.add(boom); }
     this.wasNear = false;
   }
   pos(t) {
@@ -455,7 +529,7 @@ export class Wreck {
     aimCable(this.cab, new THREE.Vector3(this.d.px, this.d.py, this.d.pz), this.ball.position);
     const b = game.player.body, cy = clamp(y, b.y + .3, b.y + b.h - .3);
     const dx = b.x - x, dy = cy - y, dz = b.z - z, dist = Math.hypot(dx, dy, dz);
-    if (dist < 4 && !this.wasNear) game.audio.play('wrecking', { pos: this.ball.position, vol: .9 });
+    if (dist < 4 && !this.wasNear) game.audio.play(this.d.load ? 'crane_loop' : 'wrecking', { pos: this.ball.position, vol: .9 });
     this.wasNear = dist < 4;
     if (dist < .9 + b.r && !game.player.dead) {
       const [x2, , z2] = this.pos(this.t + .05);
@@ -476,20 +550,198 @@ Wreck.prototype.danger = function (x, y, z) {
 };
 
 export class Wind {
-  constructor(d, ctx) { this.t = 0; this.next = 7; this.state = 'calm'; this.dir = 1; this.f = 0; }
+  constructor(d, ctx) { this.d = d; this.t = 0; this.next = 7; this.state = 'calm'; this.dir = 1; this.f = 0; }
   update(dt, game) {
     this.t += dt; this.next -= dt;
-    if (this.next <= 0) {
+    if (this.next <= 0 && !game.coopGuest) {
       if (this.state === 'calm') { this.state = 'warn'; this.next = 1.6; this.dir = Math.random() < .5 ? -1 : 1; game.audio.play('gust', { vol: .9 }); game.caption('Wind gust incoming!'); }
       else if (this.state === 'warn') { this.state = 'gust'; this.next = 2.4; }
       else { this.state = 'calm'; this.next = rr(6, 10) / game.diff.hazard; }
     }
     const target = this.state === 'gust' ? 1 : this.state === 'warn' ? .15 : 0;
     this.f = lerp(this.f, target, 1 - Math.exp(-4 * dt));
-    game.wind.set(this.dir * this.f * 7.5, 0, 0);
+    game.wind.set(this.dir * this.f * (this.d.power || 7.5), 0, 0);
     if (this.f > .1 || this.state === 'warn') game.fx.windStreaks(game.player.body, this.dir, this.state === 'warn' ? .4 : this.f);
   }
 }
+
+// Water: the flooding pit (rises until the pumps run; resets when Mac is wiped out) or a river (fixed level, deadly).
+let waterNormal = null;
+function waterNormalTex() {
+  if (waterNormal) return waterNormal;
+  const N = 128, c = document.createElement('canvas'); c.width = c.height = N; const g = c.getContext('2d'), img = g.createImageData(N, N);
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+    const X = x / N * TAU * 3, Y = y / N * TAU * 3; // whole periods across the tile so it repeats seamlessly
+    const dx = Math.cos(X) * .5 + Math.cos(X + Y) * .35 + Math.cos(2 * X - Y) * .2, dy = Math.sin(Y) * .5 + Math.sin(Y - X) * .35 + Math.sin(2 * Y + X) * .2;
+    const i = (y * N + x) * 4; img.data[i] = 128 + dx * 70; img.data[i + 1] = 128 + dy * 70; img.data[i + 2] = 235; img.data[i + 3] = 255;
+  }
+  g.putImageData(img, 0, 0);
+  waterNormal = new THREE.CanvasTexture(c); waterNormal.wrapS = waterNormal.wrapT = THREE.RepeatWrapping;
+  return waterNormal;
+}
+export function waterMaterial(color, w, h, opacity = .9) {
+  const tex = waterNormalTex().clone(); tex.needsUpdate = true; tex.wrapS = tex.wrapT = THREE.RepeatWrapping; tex.repeat.set(w / 7, h / 7);
+  return new THREE.MeshStandardMaterial({ color, roughness: .1, metalness: .25, normalMap: tex, normalScale: new THREE.Vector2(.55, .55), transparent: opacity < 1, opacity });
+}
+export class Water {
+  constructor(d, ctx) {
+    this.d = d; this.level = d.y0; this.t = 0; this.rising = 0;
+    const w = d.x1 - d.x0, h = d.z1 - d.z0;
+    this.mat = waterMaterial(d.color || 0x4a5040, w, h, d.opacity ?? .9);
+    this.mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), this.mat); this.mesh.rotation.x = -Math.PI / 2;
+    this.mesh.position.set((d.x0 + d.x1) / 2, this.level, (d.z0 + d.z1) / 2); this.mesh.receiveShadow = true; this.mesh.renderOrder = 1;
+    ctx.group.add(this.mesh);
+  }
+  inside(x, z) { const d = this.d; return x > d.x0 && x < d.x1 && z > d.z0 && z < d.z1; }
+  update(dt, game) {
+    const d = this.d, p = game.player, b = p.body; this.t += dt;
+    if (d.rate) {
+      const st = game.objects.stations, on = st.filter(s => s.on).length;
+      this.rising = game.frozen ? 0 : d.rate * Math.max(0, 1 - on / Math.max(1, st.length) * 1.25);
+      this.level = Math.min(d.max, this.level + this.rising * dt * game.diff.hazard);
+      game.audio.motor('water_loop', this, V.set(clamp(b.x, d.x0, d.x1), this.level, clamp(b.z, d.z0, d.z1)), this.rising > .001 ? .3 : 0);
+    }
+    this.mesh.position.y = this.level;
+    const f = d.flow || [0, 0], tx = this.mat.normalMap;
+    tx.offset.x += (f[0] * .08 + .006) * dt; tx.offset.y += (f[1] * .08 + .004) * dt;
+    if (!p.dead && this.inside(b.x, b.z)) {
+      const depth = this.level - b.y;
+      if (depth > (d.deadly ?? .9)) {
+        game.fx.splash(V.set(b.x, this.level, b.z), 30); game.audio.play('splash', { vol: 1 });
+        game.killPlayer(d.rate ? 'drown' : 'splash');
+      } else if (depth > .08 && Math.hypot(b.vx, b.vz) > 1 && Math.random() < dt * 9) game.fx.splash(V.set(b.x, this.level, b.z), 2);
+    }
+  }
+  depth(x, y, z) { return this.inside(x, z) ? this.level - y : -1e9; }
+  danger(x, y, z) { return this.inside(x, z) && this.level + this.rising * 6 - y > .55; }
+  zone(x, y, z) { return this.danger(x, y, z); }
+  blocks(x, y, z) { return this.inside(x, z) && this.level + this.rising * 12 - y > .35; } // planning: don't route through water this deep
+  clear() { if (this.d.rate) this.level = this.d.y0; } // after a wipe-out the pumps catch up
+}
+
+// Diesel pile driver: the hammer creeps up its leader, hangs (warning lamp), then slams the pile.
+export class PileDriver {
+  constructor(d, ctx) {
+    const { world, M, group } = ctx; this.d = d; this.t = d.phase || 0; this.k = 0; this.left = 9;
+    const g = new THREE.Group(); g.position.set(d.x, d.y, d.z); group.add(g);
+    const add = (geo, mat, x, y, z) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = m.receiveShadow = true; g.add(m); return m; };
+    for (const s of [-1, 1]) add(boxGeo(.16, 9.2, .16, 1), M.yellow, s * .62, 4.6, -.72);
+    for (let y = 1; y < 9; y += 1.6) add(boxGeo(1.4, .08, .08, 1), M.yellow, 0, y, -.72);
+    add(boxGeo(1.6, .5, .6, 1), M.dark, 0, 9.3, -.5);
+    add(boxGeo(.5, 1.0, .5, 1), M.beam, 0, .5, 0); // the pile
+    world.add({ x0: d.x - .25, y0: d.y, z0: d.z - .25, x1: d.x + .25, y1: d.y + 1, z1: d.z + .25, surf: 'steel' });
+    world.add({ x0: d.x - .8, y0: d.y, z0: d.z - .9, x1: d.x + .8, y1: d.y + 9.2, z1: d.z - .6, surf: 'steel', noFloor: true });
+    const ring = add(new THREE.RingGeometry(.9, 1.15, 32), new THREE.MeshBasicMaterial({ color: 0xffb020, transparent: true, opacity: .5, depthWrite: false }), 0, .04, 0); ring.rotation.x = -Math.PI / 2; this.ring = ring;
+    this.hammer = new THREE.Group(); g.add(this.hammer);
+    const hm = new THREE.Mesh(boxGeo(1.3, 1.7, 1.3, 1), M.dark); hm.castShadow = true; this.hammer.add(hm); hm.position.y = .85;
+    const band = new THREE.Mesh(boxGeo(1.34, .25, 1.34, 1), M.hazard); band.position.y = .3; this.hammer.add(band);
+    this.lamp = new THREE.Mesh(new THREE.SphereGeometry(.14, 10, 8), M.glow(0xff3010, 0)); this.lamp.position.set(0, 9.65, -.5); g.add(this.lamp);
+    this.up = 6.2; this.down = 1.0; this.y = this.up;
+  }
+  update(dt, game) {
+    const d = this.d; if (!game.frozen) this.t += dt * game.diff.hazard;
+    const P = [2.8, .9, .14, 1.1], T = 4.94; let t = this.t % T, k = 0;
+    while (t > P[k]) { t -= P[k]; k++; }
+    this.k = k; this.left = P[k] - t;
+    const y = k === 0 ? lerp(this.down, this.up, smooth(t / P[0])) : k === 1 ? this.up + Math.sin(t * 50) * .03 : k === 2 ? lerp(this.up, this.down, (t / P[2]) ** 2) : this.down;
+    this.y = y; this.hammer.position.y = y;
+    this.lamp.material.emissiveIntensity = k === 1 || k === 2 ? ((t * 8) % 1 < .5 ? 5 : .5) : .2;
+    this.ring.material.opacity = k === 1 || k === 2 ? .45 + .4 * Math.abs(Math.sin(t * 12)) : .18;
+    const p = game.player, b = p.body, dx = b.x - d.x, dz = b.z - d.z;
+    if (k === 3 && this.last !== 3) {
+      V.set(d.x, d.y + .2, d.z); game.fx.dust(V, 26); game.audio.play('pile_driver', { pos: V, vol: 1 }); game.shake(.55, V);
+      if (!p.dead && b.onGround && Math.hypot(dx, dz) < 3.4 && Math.abs(b.y - d.y) < 1.2 && p.state === 'normal') { b.vy = 4.2; b.onGround = false; b.ground = null; } // the ground jumps
+    }
+    this.last = k;
+    if ((k === 2 || (k === 3 && t < .1)) && !p.dead && Math.abs(dx) < .65 + b.r && Math.abs(dz) < .65 + b.r && b.y < d.y + y + .1 && b.y + b.h > d.y + y - .2) game.killPlayer('squash');
+  }
+  danger(x, y, z) {
+    const d = this.d; if (Math.abs(x - d.x) > 1.6 || Math.abs(z - d.z) > 1.6 || y < d.y - .3 || y > d.y + 1.5) return false;
+    return !(this.k === 0 && this.left > 1.3) && !(this.k === 3 && this.left < 1.0 && this.left > .2) ;
+  }
+}
+
+// Cracked slabs in the demolition job: stand on one and it shakes, drops away, and comes back a few seconds later.
+let crackTex = null;
+function crackMaterial() {
+  if (!crackTex) {
+    const c = document.createElement('canvas'); c.width = c.height = 256; const g = c.getContext('2d');
+    g.fillStyle = '#8d8a84'; g.fillRect(0, 0, 256, 256);
+    for (let i = 0; i < 1400; i++) { g.fillStyle = `rgba(${Math.random() < .5 ? '60,58,55' : '170,166,160'},.25)`; g.fillRect(Math.random() * 256, Math.random() * 256, 2, 2); }
+    g.strokeStyle = '#2a2622'; g.lineWidth = 2.2;
+    for (let k = 0; k < 7; k++) { g.beginPath(); let x = 128 + rr(-30, 30), y = 128 + rr(-30, 30); g.moveTo(x, y); for (let s = 0; s < 9; s++) { x += rr(-34, 34); y += rr(-34, 34); g.lineTo(x, y); } g.stroke(); }
+    g.fillStyle = 'rgba(242,177,10,.85)'; for (let x = 0; x < 256; x += 32) { g.fillRect(x, 0, 16, 10); g.fillRect(x + 16, 246, 16, 10); }
+    crackTex = new THREE.CanvasTexture(c); crackTex.colorSpace = THREE.SRGBColorSpace;
+  }
+  return cutaway(new THREE.MeshStandardMaterial({ map: crackTex, roughness: .95, metalness: 0 }));
+}
+export class Crumble {
+  constructor(d, ctx) {
+    const { world, group } = ctx; this.ctx = ctx; const mat = crackMaterial();
+    this.slabs = d.slabs.map(([x0, z0, x1, z1, y]) => {
+      const box = world.addDyn({ x0, y0: y - .3, z0, x1, y1: y, z1, surf: 'concrete', crumble: true });
+      const mesh = new THREE.Mesh(boxGeo(x1 - x0, .3, z1 - z0, 2), mat); mesh.castShadow = mesh.receiveShadow = true; group.add(mesh);
+      const s = { x0, z0, x1, z1, y, box, mesh, state: 'solid', t: 0, vy: 0 }; this.place(s); return s;
+    });
+  }
+  place(s) { s.mesh.position.set((s.x0 + s.x1) / 2, s.y - .15, (s.z0 + s.z1) / 2); s.mesh.rotation.set(0, 0, 0); s.mesh.visible = true; s.mesh.scale.setScalar(1); s.box.enabled = true; s.state = 'solid'; }
+  update(dt, game) {
+    const p = game.player, b = p.body;
+    for (const s of this.slabs) {
+      const c = V.set((s.x0 + s.x1) / 2, s.y, (s.z0 + s.z1) / 2);
+      if (s.state === 'solid') { if (!p.dead && b.onGround && b.ground === s.box) { s.state = 'shake'; s.t = .75; game.audio.play('crumble', { pos: c, vol: .45, rate: 1.4 }); } }
+      else if (s.state === 'shake') {
+        s.t -= dt; s.mesh.position.x = c.x + rr(-.04, .04); s.mesh.position.z = c.z + rr(-.04, .04);
+        if (Math.random() < .3) game.fx.dust(V.set(rr(s.x0, s.x1), s.y - .3, rr(s.z0, s.z1)), 2);
+        if (s.t <= 0) { s.state = 'fall'; s.vy = 0; s.box.enabled = false; game.audio.play('crumble', { pos: c, vol: 1 }); game.fx.dust(c, 22); s.spin = rr(-1, 1); }
+      } else if (s.state === 'fall') {
+        s.vy -= 30 * dt; s.mesh.position.y += s.vy * dt; s.mesh.rotation.x += s.spin * dt; s.mesh.rotation.z += s.spin * .6 * dt;
+        if (s.mesh.position.y < s.y - 16) { s.state = 'gone'; s.mesh.visible = false; s.t = 6; }
+      } else if (s.state === 'gone') {
+        s.t -= dt;
+        const over = b.x > s.x0 - .4 && b.x < s.x1 + .4 && b.z > s.z0 - .4 && b.z < s.z1 + .4 && Math.abs(b.y - s.y) < 2;
+        if (s.t <= 0 && !over) { this.place(s); s.state = 'rise'; s.t = .6; s.mesh.scale.setScalar(.01); }
+      } else if (s.state === 'rise') { s.t -= dt; s.mesh.scale.setScalar(clamp(1 - s.t / .6, .01, 1)); if (s.t <= 0) s.state = 'solid'; }
+    }
+  }
+  clear() { for (const s of this.slabs) this.place(s); }
+}
+
+// Barges sliding along the river under the bridge (scenery, with a horn as they pass).
+export class Boats {
+  constructor(d, ctx) {
+    const { M, group } = ctx; this.d = d;
+    this.list = (d.lanes || [[-8, 1], [10, -1]]).map(([z, dir], i) => {
+      const g = new THREE.Group(); group.add(g);
+      const add = (geo, mat, x, y, zz) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, zz); m.castShadow = true; g.add(m); return m; };
+      const hull = M.paint([0x8a2f22, 0x2f4f6a][i % 2], .6, .3);
+      add(boxGeo(16, 1.6, 5, 2), hull, 0, .3, 0); add(boxGeo(15.6, .2, 4.6, 2), M.dark, 0, 1.15, 0);
+      add(boxGeo(3, 2.4, 3.4, 1), M.paint(0xf0f0ea, .5, .1), -5.5 * dir, 2.4, 0); add(boxGeo(3.05, .6, 3.45, 1), M.glass, -5.5 * dir, 3.1, 0);
+      for (let k = 0; k < 3; k++) add(boxGeo(2.2, 1.2, 4, 1), M.corr([0xb5402a, 0x2a6db5, 0xd8a21c][k]), 1 + k * 2.6 * dir, 1.85, 0);
+      return { g, z, dir, x: rr(-80, 80), v: rr(3, 4.5), honked: false };
+    });
+  }
+  update(dt, game) {
+    for (const o of this.list) {
+      o.x += o.v * o.dir * dt; if (o.x * o.dir > 110) { o.x = -110 * o.dir; o.honked = false; }
+      o.g.position.set(o.x, this.d.y, o.z); o.g.rotation.y = o.dir > 0 ? 0 : Math.PI;
+      if (!o.honked && Math.abs(o.x) < 22) { o.honked = true; game.audio.play('boat_horn', { pos: o.g.position, vol: .9, range: 90 }); }
+    }
+  }
+}
+
+// co-op: the guest's hazard clocks follow the host's (small drift is eased out, big jumps snap)
+const clockSync = {
+  sync() { return [Math.round(this.t * 100) / 100]; },
+  setSync(a, lag = 0) { const t = a[0] + lag, e = t - this.t; this.t = Math.abs(e) > .3 ? t : this.t + e * .25; },
+};
+for (const C of [CraneMagnet, SwingBeam, Press, Vent, Arc, Ladle, Wreck, PileDriver]) Object.assign(C.prototype, clockSync);
+Water.prototype.sync = function () { return [Math.round(this.level * 1000) / 1000, Math.round(this.rising * 10000) / 10000]; };
+Water.prototype.setSync = function (a) { this.level = Math.abs(this.level - a[0]) > .08 ? a[0] : this.level + (a[0] - this.level) * .3; this.rising = a[1]; };
+Wind.prototype.sync = function () { return [['calm', 'warn', 'gust'].indexOf(this.state), Math.round(this.f * 100) / 100, this.dir, Math.round(this.next * 100) / 100]; };
+Wind.prototype.setSync = function (a) { const s = ['calm', 'warn', 'gust'][a[0]] || 'calm'; this.state = s; this.f = a[1]; this.dir = a[2]; this.next = a[3] + 1; };
+Boats.prototype.sync = function () { return this.list.map(o => Math.round(o.x * 10) / 10); };
+Boats.prototype.setSync = function (a) { this.list.forEach((o, i) => { if (a[i] !== undefined && Math.abs(o.x - a[i]) > 1) o.x = a[i]; }); };
 
 // ---------------- factory ----------------
 export function makeMover(d, ctx) {
@@ -508,5 +760,9 @@ export function makeHazard(d, ctx) {
     case 'ladle': return new Ladle(d, ctx);
     case 'wreck': return new Wreck(d, ctx);
     case 'wind': return new Wind(d, ctx);
+    case 'water': return new Water(d, ctx);
+    case 'piledriver': return new PileDriver(d, ctx);
+    case 'crumble': return new Crumble(d, ctx);
+    case 'boats': return new Boats(d, ctx);
   }
 }

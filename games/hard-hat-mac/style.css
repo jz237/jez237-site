@@ -81,6 +81,23 @@ a { color: var(--hat); }
 .shifts button span { font-size: 19px; color: var(--hat); }
 .shifts button em { font: 400 13px Rubik, sans-serif; color: #eadfc4; font-style: normal; }
 .shifts button[disabled] { opacity: .4; cursor: not-allowed; }
+.shifts button em.rec { font: 600 13px Rubik, sans-serif; color: var(--paper); margin-top: auto; }
+.shifts button em.rec b { font-weight: 400; }
+.shifts button em.par { font-size: 11px; color: #b8a77e; letter-spacing: .06em; }
+.star { opacity: .25; margin-left: 3px; filter: grayscale(1); }
+.star.on { opacity: 1; filter: none; }
+.tally .medal b { font-size: 17px; }
+.rec-entry { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; background: rgba(255,194,26,.07); }
+.rec-entry p { font-size: 14px; margin-bottom: 8px; }
+.rec-row { display: flex; gap: 10px; align-items: center; }
+#c-ini { width: 92px; font: 26px Bungee, sans-serif; text-align: center; text-transform: uppercase; background: #1c170e; color: var(--hat); border: 2px solid #6d5a33; border-radius: 6px; padding: 4px 6px; }
+.rec-row button { flex: 1; }
+.settings button.capture { border-color: var(--hat); color: var(--hat); animation: pulse 1s infinite; }
+.panel .hint { font-size: 13px; color: #b8a77e; margin: -8px 0 12px; }
+.coop-form input { font: 600 17px Rubik, sans-serif; width: 190px; background: #1c170e; color: var(--paper); border: 2px solid #6d5a33; border-radius: 6px; padding: 7px 10px; text-transform: uppercase; letter-spacing: .08em; }
+.coop-form input:focus { outline: none; border-color: var(--hat); }
+.coop-status { margin: 14px 0 6px; font-size: 14px; color: #ffe9b0; min-height: 21px; line-height: 1.45; }
+#c-wait { margin: 10px 0 0; text-align: center; }
 
 /* settings */
 .settings { display: grid; gap: 8px; }
@@ -110,6 +127,8 @@ a { color: var(--hat); }
 .board li b { font-family: Bungee, sans-serif; font-weight: 400; color: var(--hat); }
 .board li i { font-style: normal; font-size: 12px; color: #b8a77e; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .board li.me { outline: 2px solid var(--hat); }
+.board li.empty { display: block; text-align: center; color: #cdbf9c; }
+.board li.empty::before { content: none; }
 
 /* ---------- HUD ---------- */
 #hud { position: fixed; inset: 0; pointer-events: none; z-index: 5; font-family: Bungee, Impact, sans-serif; text-shadow: 0 2px 0 rgba(0,0,0,.55), 0 0 12px rgba(0,0,0,.4); }
@@ -125,6 +144,8 @@ a { color: var(--hat); }
 .clock-bar i { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, #ffb000, #ffe066); transition: background .3s; }
 .clock-bar i.low { background: linear-gradient(90deg, #ff3b1f, #ff8a3d); animation: pulse .6s infinite; }
 .clock span { font-size: 16px; min-width: 48px; }
+.hud-tc .best { font: 600 12px Rubik, sans-serif; color: #e8ddc0; letter-spacing: .06em; margin-top: 3px; min-height: 14px; }
+.rec-row.menu.row { margin-top: 0; justify-content: flex-start; }
 .hud-tr { top: calc(12px + var(--safe-t)); right: calc(66px + var(--safe-r)); text-align: right; transform-origin: top right; transform: scale(var(--hud-scale)); }
 .lives { display: flex; gap: 4px; justify-content: flex-end; font-size: 26px; line-height: 1; }
 .lives i { width: 30px; height: 22px; display: inline-block; background: radial-gradient(ellipse 50% 70% at 50% 100%, var(--hat) 96%, transparent 100%); position: relative; filter: drop-shadow(0 2px 0 rgba(0,0,0,.5)); }
@@ -166,6 +187,7 @@ a { color: var(--hat); }
   .objective { font-size: 13px; } .tbtn.bonk { right: calc(118px + var(--safe-r)); bottom: calc(118px + var(--safe-b)); width: 64px; height: 64px; font-size: 13px; border-color: rgba(255,120,80,.6); }
 .tbtn.pause { top: auto; bottom: calc(140px + var(--safe-b)); left: auto; right: calc(40px + var(--safe-r)); transform: none; }
 }
+@media (max-width: 520px) { .hud-tc { top: calc(64px + var(--safe-t)); } .clock-bar { width: 48vw; } } /* portrait phones: clock below the score and hard hats */
 #err { position: fixed; left: 8px; bottom: 8px; z-index: 99; background: #600; color: #fff; padding: 6px 10px; border-radius: 6px; font: 12px monospace; max-width: 90vw; }
 
 /* short landscape screens (phones): logo beside the menu, compact panels */

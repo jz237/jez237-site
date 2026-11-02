@@ -18,12 +18,14 @@ function mesh(geo, mat, x = 0, y = 0, z = 0, parent) { const m = new THREE.Mesh(
 const STYLES = {
   mac: { skin: 0xe2a57c, shirt: 'plaid', vest: 0xff7413, pants: 0x2f4c7c, boots: 0x6b4423, hat: 0xffc21a, glove: 0xc9a26a, build: 1.0, belly: 1.05, mustache: 0x3b2414, hair: 0x3b2414 },
   vandal: { skin: 0xc68e66, shirt: 0x6b3fa0, pants: 0x30343c, boots: 0xeeeeee, beanie: 0xd63a2f, glove: 0xc68e66, build: .95, belly: .9, lanky: 1.08, hood: true },
+  mac2: { skin: 0xc98d68, shirt: 'plaid', vest: 0x2f7cff, pants: 0x3a3f48, boots: 0x4a3423, hat: 0xf4f4f4, glove: 0xc9a26a, build: .98, belly: 1.0, mustache: 0x1c1410, hair: 0x1c1410 },
   inspector: { skin: 0xf0c09a, shirt: 0xf4f4f0, pants: 0xb59a6a, boots: 0x2a1d14, hat: 0xffffff, tie: 0xb51f2a, glove: 0xf0c09a, build: .95, belly: 1.25, glasses: true, clipboard: true, mustache: 0x9a9a9a },
 };
 
 export class Puppet {
   constructor(kind = 'mac') {
     const S = STYLES[kind]; this.kind = kind; this.S = S;
+    const mac = kind === 'mac' || kind === 'mac2';
     if (!PLAID) PLAID = plaidTexture();
     const skin = std(S.skin, .55), pants = std(S.pants, .85), boots = std(S.boots, .7, .05), glove = std(S.glove, .8);
     const shirt = S.shirt === 'plaid' ? std(0xffffff, .8, 0, { map: PLAID }) : std(S.shirt, .8);
@@ -57,7 +59,7 @@ export class Puppet {
     }
     // belt
     mesh(new THREE.BoxGeometry(.39 * S.build, .06, .25 * S.belly + .01), std(0x3b2414, .6), 0, .02, 0, this.spine);
-    if (kind === 'mac') {
+    if (mac) {
       mesh(new THREE.BoxGeometry(.07, .05, .02), std(0xd8b04a, .3, .9), 0, .02, .13 * S.belly + .005, this.spine);
       mesh(new RoundedBoxGeometry(.12, .14, .1, 2, .03), std(0x7a4b25, .7), .2, -.05, .02, this.spine);
       const hammer = this.beltHammer = joint(this.spine, -.21, -.02, .02);
@@ -106,7 +108,7 @@ export class Puppet {
       mesh(new THREE.SphereGeometry(.075, 10, 8), torsoMat, 0, 0, 0, sh);
       sh.add(capsule(.06, .2 * L, shirt));
       const el = joint(sh, 0, -.3 * L, 0);
-      el.add(capsule(.052, .18 * L, kind === 'mac' ? skin : shirt));
+      el.add(capsule(.052, .18 * L, mac ? skin : shirt));
       const hand = joint(el, 0, -.28 * L, 0);
       mesh(new THREE.SphereGeometry(.058, 10, 8), glove, 0, 0, .01, hand).scale.set(1, 1.1, 1.2);
       return { sh, el, hand };
@@ -121,14 +123,14 @@ export class Puppet {
       this.can = can;
     }
     // hand hammer for knockout swings (Mac only): handle in the fist, head pointing forward
-    if (kind === 'mac') {
+    if (mac) {
       const hh = this.handHammer = new THREE.Group(); this.arms[1].hand.add(hh); hh.position.set(0, -.02, .02); hh.rotation.x = Math.PI / 2;
       mesh(new THREE.CylinderGeometry(.02, .02, .42, 8), std(0x9b6b3a, .7), 0, .14, 0, hh);
       mesh(new THREE.BoxGeometry(.075, .075, .2), std(0x55575a, .35, .85), 0, .34, 0, hh);
       hh.visible = false;
     }
     // rivet gun (Mac only, shown while riveting)
-    if (kind === 'mac') {
+    if (mac) {
       const gun = new THREE.Group(); this.arms[1].hand.add(gun); gun.position.set(0, -.04, .06);
       mesh(new THREE.BoxGeometry(.07, .09, .26), std(0x2b2f36, .4, .7), 0, 0, .06, gun);
       mesh(new THREE.CylinderGeometry(.02, .025, .14, 8), std(0x9aa0a6, .3, .9), 0, 0, .25, gun).rotation.x = Math.PI / 2;
@@ -207,6 +209,12 @@ export class Puppet {
         lean = .45; headX = .35; if (this.gun) this.gun.visible = true;
         break;
       }
+      case 'crank': { // both hands turning a valve wheel / working a lever
+        const q = t * 7;
+        set(aL.sh, -1.35 + Math.sin(q) * .35, 0, -.1); set(aR.sh, -1.35 - Math.sin(q) * .35, 0, .1); set(aL.el, -.4 + Math.cos(q) * .3); set(aR.el, -.4 - Math.cos(q) * .3);
+        set(lL.hip, -.35); set(lR.hip, -.1); set(lL.knee, .55); set(lR.knee, .3); hipsY -= .08; lean = .28;
+        break;
+      }
       case 'hurt': {
         this.stars.visible = true; this.stars.rotation.y = t * 6;
         set(aL.sh, -.4, 0, -1.1); set(aR.sh, -.4, 0, 1.1); set(lL.hip, -.2); set(lR.hip, .1); set(lL.knee, .4); set(lR.knee, .2);
@@ -251,6 +259,7 @@ export class Puppet {
       set(aR.sh, rx, 0, .25); set(aR.el, el); set(aL.sh, -.6, 0, -.35); set(aL.el, -.9);
       twist += tw; lean += ln;
     }
+    if (p.shove > 0) lean += .45 * Math.sin(Math.min(1, p.shove * 1.6) * Math.PI); // shoulder barge
     this.hips.position.y = hipsY;
     this.spine.rotation.set(lean, twist, 0);
     // lie flat on the back when knocked out (pivot at the feet)

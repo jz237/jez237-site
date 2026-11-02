@@ -1,6 +1,20 @@
 // Keyboard + mouse + gamepad + touch, merged into one per-frame state.
 import { settings, clamp } from './util.js';
 
+// Rebindable keyboard actions: [id, label, default keys]. A custom key replaces the first default.
+export const ACTIONS = [
+  ['up', 'Move / climb up', ['KeyW', 'ArrowUp']], ['down', 'Move / climb down', ['KeyS', 'ArrowDown']],
+  ['left', 'Move left', ['KeyA', 'ArrowLeft']], ['right', 'Move right', ['KeyD', 'ArrowRight']],
+  ['jump', 'Jump', ['Space', 'KeyK']], ['act', 'Pick up · place · hold to rivet', ['KeyE', 'ShiftLeft', 'ShiftRight', 'KeyJ', 'Enter', 'NumpadEnter']],
+  ['attack', 'Hammer bonk · shove', ['KeyF', 'KeyL']], ['rotL', 'Turn camera left', ['KeyQ']], ['rotR', 'Turn camera right', ['KeyR']],
+  ['recenter', 'Recenter camera', ['KeyC']], ['pause', 'Pause', ['Escape', 'KeyP']],
+];
+export function keyName(code) {
+  if (!code) return '—';
+  const named = { Space: 'SPACE', Escape: 'ESC', Enter: 'ENTER', NumpadEnter: 'NUM ENTER', ShiftLeft: 'L-SHIFT', ShiftRight: 'R-SHIFT', ControlLeft: 'L-CTRL', ControlRight: 'R-CTRL', AltLeft: 'L-ALT', AltRight: 'R-ALT', ArrowUp: '↑', ArrowDown: '↓', ArrowLeft: '←', ArrowRight: '→', Tab: 'TAB', Backspace: 'BKSP' };
+  return named[code] || code.replace(/^Key|^Digit/, '').replace(/^Numpad/, 'NUM ').toUpperCase();
+}
+
 export class Input {
   constructor(canvas) {
     this.keys = new Set(); this.pressed = new Set(); this.canvas = canvas;
@@ -9,9 +23,11 @@ export class Input {
     this.menuNav = null; this.menuOk = false; this.menuBack = false; this.any = false;
     this.touch = { stickId: null, sx: 0, sy: 0, x: 0, y: 0, lookId: null, lx: 0, ly: 0, jump: false, act: false, jumpEdge: false, actEdge: false, pauseEdge: false };
     this.mouse = { down: false, x: 0, y: 0, dx: 0, dy: 0 };
-    this.padPrev = []; this.usingPad = false; this.usingTouch = false;
+    this.padPrev = []; this.usingPad = false; this.usingTouch = false; this.capture = null;
+    this.rebind();
     addEventListener('keydown', e => {
       if (e.target && e.target.tagName === 'INPUT') return;
+      if (this.capture) { e.preventDefault(); const f = this.capture; this.capture = null; f(e.code); return; } // controls screen: next key binds
       if (!e.repeat) this.pressed.add(e.code);
       this.keys.add(e.code); this.any = true; this.usingPad = false;
       if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code) && (document.activeElement === document.body || document.activeElement === canvas)) e.preventDefault();
@@ -68,15 +84,21 @@ export class Input {
     };
     canvas.addEventListener('touchend', end); canvas.addEventListener('touchcancel', end);
   }
+  rebind() {
+    const custom = settings.keys || {}, taken = new Set(Object.values(custom));
+    this.bind = {};
+    for (const [id, , def] of ACTIONS) { const c = custom[id]; this.bind[id] = (c ? [c, ...def.slice(1)] : def).filter(k => k === c || !taken.has(k)); }
+  }
   down(...codes) { return codes.some(c => this.keys.has(c)); }
   hit(...codes) { return codes.some(c => this.pressed.has(c)); }
   poll(dt) {
     const k = this, T = this.touch;
-    let mx = (k.down('KeyD', 'ArrowRight') ? 1 : 0) - (k.down('KeyA', 'ArrowLeft') ? 1 : 0);
-    let my = (k.down('KeyW', 'ArrowUp') ? 1 : 0) - (k.down('KeyS', 'ArrowDown') ? 1 : 0);
-    let jump = k.hit('Space', 'KeyK'), jumpHeld = k.down('Space', 'KeyK');
-    let act = k.hit('KeyE', 'ShiftLeft', 'ShiftRight', 'KeyJ', 'Enter', 'NumpadEnter'), actHeld = k.down('KeyE', 'ShiftLeft', 'ShiftRight', 'KeyJ', 'Enter', 'NumpadEnter');
-    let pause = k.hit('Escape', 'KeyP'), rotL = k.hit('KeyQ'), rotR = k.hit('KeyR'), recenter = k.hit('KeyC'), attack = k.hit('KeyF', 'KeyL');
+    const B = this.bind;
+    let mx = (k.down(...B.right) ? 1 : 0) - (k.down(...B.left) ? 1 : 0);
+    let my = (k.down(...B.up) ? 1 : 0) - (k.down(...B.down) ? 1 : 0);
+    let jump = k.hit(...B.jump), jumpHeld = k.down(...B.jump);
+    let act = k.hit(...B.act), actHeld = k.down(...B.act);
+    let pause = k.hit(...B.pause), rotL = k.hit(...B.rotL), rotR = k.hit(...B.rotR), recenter = k.hit(...B.recenter), attack = k.hit(...B.attack);
     let keyEdge = this.pressed.size > 0;
     let camX = 0, camY = 0;
     let nav = k.hit('ArrowUp', 'KeyW') ? 'up' : k.hit('ArrowDown', 'KeyS') ? 'down' : k.hit('ArrowLeft', 'KeyA') ? 'left' : k.hit('ArrowRight', 'KeyD') ? 'right' : null;

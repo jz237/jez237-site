@@ -169,13 +169,16 @@ export class Enemy {
   }
   reset() {
     Object.assign(this.body, this.spawn, { vx: 0, vy: 0, vz: 0, onGround: false, ground: null });
-    this.state = 'patrol'; this.path = null; this.pi = 0; this.think = rr(0, .4); this.ko = 0; this.koFly = false; this.yaw = rr(0, 6); this.ladder = null;
+    this.state = 'patrol'; this.path = null; this.pi = 0; this.think = rr(0, .4); this.ko = 0; this.koFly = false; this.staggered = false; this.yaw = rr(0, 6); this.ladder = null;
     this.grace = 4; this.goal = null; this.stuckT = 0; this.lastPos = { x: this.body.x, z: this.body.z }; this.yankT = 0; this.yankSock = null; this.voiceCd = rr(2, 6); this.hitCd = 0;
     this.root.position.set(this.body.x, this.body.y, this.body.z);
   }
-  speed() { return (this.state === 'chase' ? this.K.chase : this.K.walk) * this.game.diff.speed; }
+  speed() {
+    const L = this.game.level, wet = L.waterDepth && L.waterDepth(this.body.x, this.body.y, this.body.z) > .25; // wading slows everyone
+    return (this.state === 'chase' ? this.K.chase : this.K.walk) * this.game.diff.speed * (wet ? .6 : 1);
+  }
   update(dt) {
-    const g = this.game, b = this.body, nav = g.level.nav, p = g.player, pb = p.body;
+    const g = this.game, b = this.body, nav = g.level.nav, p = g.targetFor ? g.targetFor(this.body) : g.player, pb = p.body;
     this.voiceCd -= dt; this.hitCd -= dt; this.grace -= dt;
     if (g.frozen) return;
     if (this.ko > 0) {
@@ -184,8 +187,8 @@ export class Enemy {
       const fr = b.onGround ? Math.exp(-7 * dt) : 1; b.vx *= fr; b.vz *= fr;
       b.vy -= GRAVITY * dt; moveBody(g.world, b, dt);
       if (b.onGround && this.koFly) { this.koFly = false; g.fx.dust(this.root.position, 10); g.audio.play('land', { pos: this.root.position, vol: .7, rate: .8 }); }
-      if (b.y < g.level.killY) { this.reset(); this.grace = 3; return; }
-      if (this.ko <= 0) { this.state = 'patrol'; this.grace = 1.2; this.think = .3; this.path = null; }
+      if (b.y < g.level.killY || this.soaked()) { this.reset(); this.grace = 3; return; }
+      if (this.ko <= 0) { this.state = 'patrol'; this.grace = this.staggered ? .6 : 1.2; this.think = .3; this.path = null; this.staggered = false; }
       return;
     }
     if (this.state === 'climb') { this.updateClimb(dt); return; }
@@ -272,16 +275,17 @@ export class Enemy {
     // don't walk off edges
     if (b.onGround && sp > 0) {
       const ax = b.x + vx * .25, az = b.z + vz * .25, gnd = g.world.groundBelow(ax, az, b.y + .3, .05);
-      if (!gnd || b.y - gnd.y1 > .5) { vx = 0; vz = 0; this.think = Math.min(this.think, .1); this.goal = null; }
+      if (!gnd || b.y - gnd.y1 > .5 || (gnd.dyn && gnd !== b.ground)) { vx = 0; vz = 0; this.think = Math.min(this.think, .1); this.goal = null; } // no ledges, no stepping onto moving platforms
     }
     const f = 1 - Math.exp(-10 * dt);
     b.vx += (vx - b.vx) * f; b.vz += (vz - b.vz) * f;
     b.vy -= GRAVITY * dt;
     moveBody(g.world, b, dt);
-    if (b.y < g.level.killY) this.reset();
+    if (b.y < g.level.killY || this.soaked()) { this.reset(); this.grace = 3; return; }
     if (Math.hypot(b.vx, b.vz) > .3) this.yaw = angleDamp(this.yaw, Math.atan2(b.vx, b.vz), 10, dt);
     this.contact();
   }
+  soaked() { const L = this.game.level; return !!L.waterDepth && L.waterDepth(this.body.x, this.body.y, this.body.z) > 1.1; }
   startClimb(L, up, target) {
     const b = this.body; this.state = 'climb'; this.ladder = L; this.climbUp = up; this.climbTarget = target; this.climbPh = 0;
     b.x = L.x + L.fx * .42; b.z = L.z + L.fz * .42; if (!up) b.y = L.y1 - .3; b.vx = b.vz = b.vy = 0;
@@ -294,9 +298,18 @@ export class Enemy {
     else if (!this.climbUp && b.y <= L.y0) { b.y = L.y0; this.endClimb(); }
     this.contact();
   }
+  // Shoulder shove from a loaded Mac: stagger back a couple of metres, dazed for a moment.
+  shove(dx, dz) {
+    const b = this.body, wasUp = this.ko <= 0;
+    this.ko = 1.5 / this.game.diff.speed; this.staggered = true;
+    this.state = 'ko'; this.ladder = null; this.yankSock = null; this.path = null; this.goal = null;
+    b.vx = dx * 6.5; b.vz = dz * 6.5; b.vy = Math.max(b.vy, 2.5); b.onGround = false; b.ground = null;
+    this.yaw = Math.atan2(-dx, -dz);
+    return wasUp;
+  }
   // Hammer or stomp: fly back along (dx, dz), lie out cold. Returns true if the enemy was standing.
   knockOut(dx, dz, power) {
-    const b = this.body, wasUp = this.ko <= 0;
+    const b = this.body, wasUp = this.ko <= 0; this.staggered = false;
     this.ko = (this.kind === 'inspector' ? 6.5 : 8) / this.game.diff.speed;
     this.state = 'ko'; this.ladder = null; this.yankSock = null; this.path = null; this.goal = null;
     b.vx = dx * power; b.vz = dz * power; b.vy = Math.max(b.vy, 2 + power * .45); b.onGround = false; b.ground = null; this.koFly = true;
@@ -305,8 +318,15 @@ export class Enemy {
   }
   endClimb() { this.state = 'patrol'; this.ladder = null; this.think = 0; const p = this.path; if (p) this.pi = Math.min(this.pi + 1, p.length); }
   contact() {
-    const g = this.game, p = g.player, pb = p.body, b = this.body;
-    if (p.dead || this.ko > 0) return;
+    const g = this.game, b = this.body;
+    if (this.ko > 0) return;
+    const P2 = g.partner; // co-op host: hits on the other Mac are sent to that player's game
+    if (P2 && g.coopHost && !P2.dead && !P2.invuln && P2.hitCd <= 0) {
+      const dx = P2.body.x - b.x, dz = P2.body.z - b.z, d = Math.hypot(dx, dz), dy = P2.body.y - b.y;
+      if (d < b.r + P2.body.r + .08 && dy < b.h * .55 && dy > -P2.body.h + .2) { P2.hitCd = 1.2; g.partnerHit(this.kind, dx / (d || 1) * 7, dz / (d || 1) * 7); }
+    }
+    const p = g.player, pb = p.body;
+    if (p.dead) return;
     const dx = pb.x - b.x, dz = pb.z - b.z, d = Math.hypot(dx, dz), dy = pb.y - b.y;
     if (d > b.r + pb.r + .08 || dy > b.h + .3 || dy < -pb.h + .2) return;
     // stomp from above
@@ -327,7 +347,8 @@ export class Enemy {
     this.root.position.set(b.x, b.y, b.z); this.root.rotation.y = this.yaw;
     const frozen = this.game.frozen;
     let mode = 'idle';
-    if (this.ko > .9) mode = 'ko';
+    if (this.ko > 0 && this.staggered) mode = 'hurt';
+    else if (this.ko > .9) mode = 'ko';
     else if (this.ko > 0) mode = 'hurt';
     else if (this.state === 'climb') mode = 'climb';
     else if (this.state === 'yank') mode = 'yank';

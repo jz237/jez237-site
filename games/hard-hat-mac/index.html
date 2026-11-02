@@ -14,29 +14,31 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Rubik:wght@400;600;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./style.css?v=3">
+<link rel="stylesheet" href="./style.css?v=4">
 <script type="importmap">
 { "imports": {
   "three": "./vendor/three/three.module.min.js?v=181",
   "three/addons/": "./vendor/three/addons/",
-  "./src/audio.js": "./src/audio.js?v=3",
+  "./src/audio.js": "./src/audio.js?v=4",
   "./src/bot.js": "./src/bot.js?v=4",
-  "./src/builder.js": "./src/builder.js?v=3",
-  "./src/characters.js": "./src/characters.js?v=3",
-  "./src/enemies.js": "./src/enemies.js?v=3",
-  "./src/env.js": "./src/env.js?v=3",
-  "./src/fx.js": "./src/fx.js?v=3",
-  "./src/hazards.js": "./src/hazards.js?v=3",
-  "./src/input.js": "./src/input.js?v=3",
-  "./src/level.js": "./src/level.js?v=3",
-  "./src/levels.js": "./src/levels.js?v=3",
-  "./src/objects.js": "./src/objects.js?v=3",
-  "./src/physics.js": "./src/physics.js?v=3",
-  "./src/player.js": "./src/player.js?v=3",
-  "./src/render.js": "./src/render.js?v=3",
-  "./src/textures.js": "./src/textures.js?v=3",
-  "./src/ui.js": "./src/ui.js?v=3",
-  "./src/util.js": "./src/util.js?v=3"
+  "./src/builder.js": "./src/builder.js?v=4",
+  "./src/characters.js": "./src/characters.js?v=4",
+  "./src/coop.js": "./src/coop.js?v=4",
+  "./src/enemies.js": "./src/enemies.js?v=4",
+  "./src/env.js": "./src/env.js?v=4",
+  "./src/fx.js": "./src/fx.js?v=4",
+  "./src/hazards.js": "./src/hazards.js?v=4",
+  "./src/input.js": "./src/input.js?v=4",
+  "./src/level.js": "./src/level.js?v=4",
+  "./src/levels.js": "./src/levels.js?v=4",
+  "./src/objects.js": "./src/objects.js?v=4",
+  "./src/physics.js": "./src/physics.js?v=4",
+  "./src/player.js": "./src/player.js?v=4",
+  "./src/records.js": "./src/records.js?v=4",
+  "./src/render.js": "./src/render.js?v=4",
+  "./src/textures.js": "./src/textures.js?v=4",
+  "./src/ui.js": "./src/ui.js?v=4",
+  "./src/util.js": "./src/util.js?v=4"
 } }
 </script>
 </head>
@@ -57,6 +59,7 @@
   <div class="hud-tc">
     <div class="shift" id="h-shift">SHIFT 1</div>
     <div class="clock"><div class="clock-bar"><i id="h-time"></i></div><span id="h-time-n">3:00</span></div>
+    <div class="best" id="h-best"></div>
   </div>
   <div class="hud-tr">
     <div class="lives" id="h-lives"></div>
@@ -80,6 +83,7 @@
       <button data-act="start" class="primary">START SHIFT</button>
       <button data-act="select">SHIFT SELECT</button>
       <button data-act="demo">WATCH DEMO</button>
+      <button data-act="coop">ONLINE CO-OP</button>
       <button data-act="scores">LEADERBOARD</button>
       <button data-act="help">HOW TO PLAY</button>
       <button data-act="settings">SETTINGS</button>
@@ -109,6 +113,7 @@
 <div id="pause" class="screen">
   <div class="panel">
     <h2>COFFEE BREAK</h2>
+    <p id="p-coop" class="hint" hidden>Co-op games keep running while you're on a break.</p>
     <nav class="menu">
       <button data-act="resume" class="primary">RESUME</button>
       <button data-act="restart">RESTART SHIFT</button>
@@ -123,6 +128,11 @@
   <div class="panel">
     <h2 id="c-title">SHIFT COMPLETE</h2>
     <div class="tally" id="c-tally"></div>
+    <div id="c-record" class="entry rec-entry" hidden>
+      <p>Top-10 time for this shift.</p>
+      <div class="rec-row menu row"><input id="c-ini" maxlength="3" autocomplete="off" spellcheck="false" aria-label="Initials"><button data-act="postTime">POST TIME</button></div>
+    </div>
+    <p id="c-wait" class="hint" hidden>Co-op: waiting for the host to start the next shift…</p>
     <nav class="menu"><button data-act="next" class="primary">NEXT SHIFT</button></nav>
   </div>
 </div>
@@ -148,9 +158,10 @@
 <div id="scores" class="screen">
   <div class="panel">
     <h2>LEADERBOARD</h2>
+    <h3 id="s-title">HIGH SCORES</h3>
     <div class="board-src" id="s-src">Loading…</div>
     <ol class="board" id="s-list"></ol>
-    <nav class="menu row"><button data-act="back" class="primary">BACK</button></nav>
+    <nav class="menu row"><button data-act="boardPrev" aria-label="Previous board">◀</button><button data-act="back" class="primary">BACK</button><button data-act="boardNext" aria-label="Next board">▶</button></nav>
   </div>
 </div>
 
@@ -160,24 +171,57 @@
     <div class="help-grid">
       <div>
         <h3>The job</h3>
-        <p>Each shift has one job: set and rivet girders, round up lunchboxes, load crates into the hopper, or top out the tower. Beat the clock for a bonus. Falls of more than one floor, enemies and hazards cost a hard hat (life).</p>
+        <p>Eight shifts, one job each: set and rivet girders, round up lunchboxes, load crates, run the pumps before the pit floods, bridge a river, unbolt and scrap old beams, light storm beacons, and top out the tower. Falls of more than one floor, enemies and hazards cost a hard hat (life). Checkpoint flags save your spot.</p>
+        <h3>Medals &amp; best times</h3>
+        <p>Every shift has three stars: ⏱ beat the par time, ❤ no injuries, ★ every bonus item. 1 star = bronze, 2 = silver, 3 = gold. Your fastest run comes back as a see-through ghost to race (switch it off in Settings), and top-10 times go on that shift's board. Each finished job joins the city skyline.</p>
         <h3>Crew &amp; trouble</h3>
-        <p><b>Vandal</b> — pulls out girders you haven't riveted.<br><b>Inspector</b> — his hard hat makes him stomp-proof.<br><b>Yard dog</b> — fast, but can't climb ladders.<br><b>Knock them out:</b> swing your hammer (<kbd>F</kbd> / <b>Y</b> / <b>BONK</b>) or jump on the vandal and the dog. Out cold for a few seconds — chain knockouts for bigger points.</p>
+        <p><b>Vandal</b> — pulls out girders you haven't riveted.<br><b>Inspector</b> — his hard hat makes him stomp-proof.<br><b>Yard dog</b> — fast, but can't climb ladders.<br><b>Knock them out:</b> swing your hammer (<kbd>F</kbd> / <b>Y</b> / <b>BONK</b>) or jump on the vandal and the dog. Out cold for a few seconds — chain knockouts for bigger points.<br><b>Carrying something?</b> The same button gives a shoulder <b>shove</b> that knocks trouble back without dropping your load.</p>
         <h3>Power-ups</h3>
         <p>☕ Coffee: speed · ⛑ Gold hat: one free hit · ⏱ Stopwatch: freezes trouble · 💰 Cash: bonus points</p>
       </div>
       <div>
         <h3>Keyboard</h3>
-        <p><kbd>WASD</kbd>/<kbd>Arrows</kbd> move &amp; climb · <kbd>Space</kbd> jump · <kbd>E</kbd>/<kbd>Shift</kbd> pick up, place, hold to rivet · <kbd>F</kbd> hammer bonk · <kbd>Q</kbd>/<kbd>R</kbd> turn camera · drag or right-drag mouse to look · wheel zoom · <kbd>C</kbd> recenter · <kbd>Esc</kbd> pause · <kbd>M</kbd> mute</p>
+        <p><kbd>WASD</kbd>/<kbd>Arrows</kbd> move &amp; climb · <kbd>Space</kbd> jump · <kbd>E</kbd>/<kbd>Shift</kbd> pick up, place, hold to rivet · <kbd>F</kbd> hammer bonk · <kbd>Q</kbd>/<kbd>R</kbd> turn camera · drag or right-drag mouse to look · wheel zoom · <kbd>C</kbd> recenter · <kbd>Esc</kbd> pause · <kbd>M</kbd> mute. Change keys in Settings → Keyboard controls.</p>
         <h3>Gamepad</h3>
         <p>Left stick move · Right stick camera · <b>A</b> jump · <b>X</b>/<b>B</b> action · <b>Y</b> bonk · <b>LB/RB</b> turn camera · <b>Start</b> pause</p>
         <h3>Touch</h3>
         <p>Left thumb: drag anywhere to move. Right side: <b>JUMP</b>, <b>ACT</b> and <b>BONK</b> buttons, drag empty space to look.</p>
         <h3>Demo</h3>
-        <p><b>Watch Demo</b> on the title screen lets the crew's best hand play all four shifts. The demo also starts by itself if the title sits idle. Press any key to take over.</p>
+        <p><b>Watch Demo</b> on the title screen lets the crew's best hand play all eight shifts, with a few camera cuts along the way. The demo also starts by itself if the title sits idle. Press any key to take over.</p>
+        <h3>Online co-op &amp; assists</h3>
+        <p><b>Online Co-op</b>: one player hosts a room and shares its 5-letter code, the other joins. Score and hard hats are shared. <b>Assists</b> in Settings slow the enemies, add time or give unlimited hard hats (assisted runs don't go on the boards).</p>
       </div>
     </div>
     <nav class="menu row"><button data-act="back" class="primary">BACK</button></nav>
+  </div>
+</div>
+
+<div id="coop" class="screen">
+  <div class="panel">
+    <h2>ONLINE CO-OP</h2>
+    <p>Two Macs, one shift. One of you hosts a room and reads out its code, the other joins with it. Score and hard hats are shared.</p>
+    <div class="settings coop-form">
+      <div class="row"><label for="cp-name">Your name</label><input id="cp-name" maxlength="12" autocomplete="off" spellcheck="false"></div>
+      <div class="row"><label for="cp-room">Room code</label><input id="cp-room" maxlength="5" autocomplete="off" spellcheck="false" placeholder="ABCDE"></div>
+    </div>
+    <div class="coop-status" id="cp-status" aria-live="polite">Not connected.</div>
+    <nav class="menu">
+      <button data-act="coopHost" class="primary">HOST A NEW ROOM</button>
+      <button data-act="coopJoin">JOIN ROOM</button>
+      <button data-act="coopShift" hidden>SHIFT: 1</button>
+      <button data-act="coopStart" class="primary" hidden>START CO-OP SHIFT</button>
+      <button data-act="coopLeave" hidden>LEAVE ROOM</button>
+      <button data-act="back">BACK</button>
+    </nav>
+  </div>
+</div>
+
+<div id="controls" class="screen">
+  <div class="panel wide">
+    <h2>KEYBOARD CONTROLS</h2>
+    <p class="hint">Select an action, then press the key you want. Arrow keys, Enter and Esc always work in menus.</p>
+    <div class="settings" id="ctl-list"></div>
+    <nav class="menu row"><button data-act="ctlReset">RESET KEYS</button><button data-act="back" class="primary">BACK</button></nav>
   </div>
 </div>
 
@@ -215,6 +259,6 @@
     el.hidden = false; el.textContent = 'Error: ' + (e.message || e.error);
   });
 </script>
-<script type="module" src="./src/main.js?v=3"></script>
+<script type="module" src="./src/main.js?v=4"></script>
 </body>
 </html>

@@ -1,8 +1,11 @@
 // DOM screens, HUD, menus (mouse / keyboard / gamepad), popups.
 import * as THREE from 'three';
 import { settings, saveSettings, progress, isTouch } from './util.js';
+import { ACTIONS, keyName } from './input.js';
 import { LEVEL_INFO } from './levels.js';
 import { QUALITY_NAMES } from './render.js';
+import { fmtTime, scoreToTime, MEDAL_ICON, STAR_ICON, STAR_TIP } from './records.js';
+import { roomCode, cleanName, cleanRoom } from './coop.js';
 
 const $ = id => document.getElementById(id);
 const V = new THREE.Vector3();
@@ -29,7 +32,7 @@ export class UI {
   }
   push(id) { this.stack.push(this.screen); this.show(id); }
   pop() { const s = this.stack.pop(); this.show(s ?? null); return s; }
-  buttons() { const s = this.screen && $(this.screen); return s ? [...s.querySelectorAll('button:not([hidden]):not([disabled])')] : []; }
+  buttons() { const s = this.screen && $(this.screen); return s ? [...s.querySelectorAll('button:not([hidden]):not([disabled])')].filter(b => !b.closest('[hidden]')) : []; }
   setFocus(i, sound = true) {
     const list = this.buttons(); if (!list.length) return;
     this.focus = (i + list.length) % list.length;
@@ -41,8 +44,10 @@ export class UI {
     if (!this.screen || this.screen === 'loading') return;
     if (this.screen === 'over' && this.entryActive) { this.entryNav(inp); return; }
     if (this.screen === 'intro') { if (inp.menuOk || inp.jump || inp.act) this.g.beginPlay(); return; }
+    if (this.g.input.capture) return; // waiting for a key to bind
     const list = this.buttons(); if (!list.length) return;
     const grid = this.screen === 'select';
+    if (this.screen === 'scores' && (inp.menuNav === 'left' || inp.menuNav === 'right')) { this.board = (this.board + (inp.menuNav === 'left' ? -1 : 1) + LEVEL_INFO.length + 1) % (LEVEL_INFO.length + 1); this.loadScores(); return; }
     if (inp.menuNav === 'down' || (grid && inp.menuNav === 'right')) this.setFocus(this.focus + 1);
     if (inp.menuNav === 'up' || (grid && inp.menuNav === 'left')) this.setFocus(this.focus - 1);
     if (this.screen === 'settings' && (inp.menuNav === 'left' || inp.menuNav === 'right')) { const b = list[this.focus]; if (b && b.dataset.set) this.cycleSetting(b, inp.menuNav === 'left' ? -1 : 1); }
@@ -59,7 +64,15 @@ export class UI {
       case 'start': g.startGame(0); break;
       case 'demo': g.startDemo(false); break;
       case 'select': this.buildSelect(); this.push('select'); break;
-      case 'scores': this.push('scores'); this.loadScores(); break;
+      case 'scores': this.board = 0; this.push('scores'); this.loadScores(); break;
+      case 'boardPrev': case 'boardNext': this.board = (this.board + (act === 'boardPrev' ? -1 : 1) + LEVEL_INFO.length + 1) % (LEVEL_INFO.length + 1); this.loadScores(); break;
+      case 'postTime': this.postTime(); break;
+      case 'coop': this.coopOpen(); break;
+      case 'coopHost': { const code = roomCode(); $('cp-room').value = code; g.net.connect('host', code, this.coopName()); this.coopRefresh(); break; }
+      case 'coopJoin': { const code = cleanRoom($('cp-room').value); if (code.length < 5) { this.coopStatus('Type the 5-letter room code your partner sees, then press JOIN.'); $('cp-room').focus(); break; } g.net.connect('guest', code, this.coopName()); this.coopRefresh(); break; }
+      case 'coopShift': this.coopShiftI = ((this.coopShiftI || 0) + 1) % Math.max(1, progress.unlocked); this.coopRefresh(); break;
+      case 'coopStart': g.startCoopGame(this.coopShiftI || 0); break;
+      case 'coopLeave': g.net.leave(); if (g.partner) { g.partner.dispose(); g.partner = null; } this.coopRefresh(); break;
       case 'help': this.push('help'); break;
       case 'settings': this.push('settings'); break;
       case 'back': this.pop(); break;
@@ -72,13 +85,17 @@ export class UI {
       case 'submit': this.submitEntry(); break;
       case 'shift': g.startGame(+btn.dataset.level); break;
       case 'set': this.cycleSetting(btn, 1); break;
+      case 'bind': this.captureKey(btn); break;
+      case 'ctlReset': settings.keys = {}; saveSettings(); g.input.rebind(); this.buildControls(); break;
     }
   }
   buildSelect() {
     const el = $('shift-list'); el.innerHTML = '';
     LEVEL_INFO.forEach((L, i) => {
       const b = document.createElement('button'); b.dataset.act = 'shift'; b.dataset.level = i;
-      b.innerHTML = `<small>SHIFT ${i + 1} · ${L.time}</small><span>${L.name}</span><em>${L.desc}</em>`;
+      const r = this.g.records.get(L.id);
+      const rec = r.medal < 0 ? '<em class="rec">Not finished yet</em>' : `<em class="rec"><b>${MEDAL_ICON[r.medal]}</b> ${fmtTime(r.best)} ${r.starsEver.map((s, k) => `<span class="star${s ? ' on' : ''}" title="${STAR_TIP[k]}">${STAR_ICON[k]}</span>`).join('')}</em>`;
+      b.innerHTML = `<small>SHIFT ${i + 1} · ${L.time}</small><span>${L.name}</span><em>${L.desc}</em>${rec}<em class="par">Par ${fmtTime(L.par)}</em>`;
       if (i + 1 > progress.unlocked) { b.disabled = true; b.innerHTML += '<em>🔒 Reach this shift to unlock</em>'; }
       b.addEventListener('click', () => { this.g.audio.unlock(); this.onAct('shift', b); });
       b.addEventListener('mouseenter', () => { const list = this.buttons(); const k = list.indexOf(b); if (k >= 0) this.setFocus(k, false); });
@@ -97,6 +114,11 @@ export class UI {
       ['captions', 'Voice captions', () => settings.captions ? 'ON' : 'OFF'],
       ['hud', 'HUD size', () => Math.round(settings.hud * 100) + '%'],
       ['fps', 'Show FPS', () => settings.fps ? 'ON' : 'OFF'],
+      ['ghost', 'Best-run ghost', () => settings.ghost ? 'ON' : 'OFF'],
+      ['assistSpeed', 'Assist: enemy speed', () => Math.round(settings.assistSpeed * 100) + '%'],
+      ['assistTime', 'Assist: shift clock', () => settings.assistTime > 1 ? '+' + Math.round((settings.assistTime - 1) * 100) + '%' : 'NORMAL'],
+      ['assistLives', 'Assist: unlimited hard hats', () => settings.assistLives ? 'ON' : 'OFF'],
+      ['controls', 'Keyboard controls', () => 'CHANGE…'],
     ];
     const el = $('set-list'); el.innerHTML = '';
     this.setRows = rows;
@@ -120,12 +142,39 @@ export class UI {
     } else if (k === 'music' || k === 'sfx' || k === 'voice') { settings[k] = vol(settings[k]); g.audio.applyVolumes(); g.audio.play('ui_click'); }
     else if (k === 'camSens') { const o = [.5, .7, 1, 1.3, 1.6, 2], i = o.indexOf(settings.camSens); settings.camSens = o[((i < 0 ? 2 : i) + dir + o.length) % o.length]; }
     else if (k === 'hud') { const o = [.8, .9, 1, 1.15, 1.3], i = o.indexOf(settings.hud); settings.hud = o[((i < 0 ? 2 : i) + dir + o.length) % o.length]; this.applyHud(); }
+    else if (k === 'assistSpeed') { const o = [1, .85, .7, .55], i = o.indexOf(settings.assistSpeed); settings.assistSpeed = o[((i < 0 ? 0 : i) + dir + o.length) % o.length]; }
+    else if (k === 'assistTime') { const o = [1, 1.25, 1.5, 2], i = o.indexOf(settings.assistTime); settings.assistTime = o[((i < 0 ? 0 : i) + dir + o.length) % o.length]; }
+    else if (k === 'controls') { this.buildControls(); this.push('controls'); return; }
     else settings[k] = !settings[k];
     saveSettings();
     const row = this.setRows.find(r => r[0] === k); btn.textContent = row[2]();
     $('h-fps').hidden = !settings.fps;
   }
   applyHud() { document.documentElement.style.setProperty('--hud-scale', settings.hud); $('h-fps').hidden = !settings.fps; }
+  // ---- keyboard remapping
+  buildControls() {
+    const el = $('ctl-list'), B = this.g.input.bind; el.innerHTML = '';
+    for (const [id, label] of ACTIONS) {
+      const row = document.createElement('div'); row.className = 'row';
+      const l = document.createElement('label'); l.textContent = label;
+      const b = document.createElement('button'); b.dataset.act = 'bind'; b.dataset.bind = id;
+      b.textContent = keyName(B[id][0]) + (B[id][1] ? '  ·  ' + keyName(B[id][1]) : '');
+      b.addEventListener('click', () => { this.g.audio.unlock(); this.captureKey(b); });
+      b.addEventListener('mouseenter', () => { const list = this.buttons(); const i = list.indexOf(b); if (i >= 0) this.setFocus(i, false); });
+      row.append(l, b); el.appendChild(row);
+    }
+    if (this.screen === 'controls') this.setFocus(this.focus, false);
+  }
+  captureKey(btn) {
+    const id = btn.dataset.bind, inp = this.g.input;
+    btn.textContent = 'PRESS A KEY…  (ESC cancels)'; btn.classList.add('capture');
+    setTimeout(() => {
+      inp.capture = code => {
+        if (code !== 'Escape') { settings.keys = Object.assign({}, settings.keys, { [id]: code }); saveSettings(); inp.rebind(); this.g.audio.play('ui_confirm', { vol: .6 }); }
+        const f = this.focus; this.buildControls(); this.setFocus(f, false);
+      };
+    }, 0);
+  }
   // ---- HUD
   showHud(on) { this.hud.hidden = !on; $('touch').hidden = !(isTouch && on && !this.g.demo); }
   demo(on) { $('demo-banner').hidden = !on; $('h-bot').hidden = !on; $('demo-banner').querySelector('small').textContent = isTouch ? 'Tap STOP to play' : 'Press any key to play'; this.lastBot = null; }
@@ -139,6 +188,8 @@ export class UI {
     const tb = $('h-time'); tb.style.width = (Math.max(0, s.time / s.timeMax) * 100).toFixed(1) + '%'; tb.classList.toggle('low', s.time < 30);
     if (L.shift !== s.shift) { $('h-shift').textContent = s.shift; L.shift = s.shift; }
     if (L.round !== s.round) { $('h-round').textContent = 'ROUND ' + s.round; L.round = s.round; }
+    const rk = s.run == null ? '' : fmtTime(Math.floor(s.run * 10) / 10).slice(0, -1) + (s.best != null ? '  ·  BEST ' + fmtTime(s.best) : '');
+    if (L.rk !== rk) { $('h-best').textContent = rk; L.rk = rk; }
     const lk = s.lives + (s.shield ? 'g' : '');
     if (L.lives !== lk) { $('h-lives').innerHTML = (s.shield ? '<i class="gold" title="Gold hat"></i>' : '') + '<i></i>'.repeat(Math.max(0, s.lives)); L.lives = lk; }
     const ok = s.objKey; if (L.obj !== ok) { $('h-obj').innerHTML = s.objHtml; L.obj = ok; }
@@ -172,7 +223,7 @@ export class UI {
   intro(level, round) {
     $('i-time').textContent = level.time; $('i-name').textContent = level.name;
     $('i-shift').textContent = `SHIFT ${level.index + 1} · ROUND ${round}`; $('i-brief').textContent = level.brief;
-    $('i-go').innerHTML = isTouch ? 'Tap to start' : 'Press <kbd>Space</kbd> / <kbd>A</kbd> or click to start';
+    $('i-go').innerHTML = this.g.coopGuest ? 'Co-op: waiting for the host to start…' : isTouch ? 'Tap to start' : 'Press <kbd>Space</kbd> / <kbd>A</kbd> or click to start';
     this.show('intro');
     $('intro').onclick = () => this.g.beginPlay();
   }
@@ -182,6 +233,46 @@ export class UI {
     rows.forEach(([l, v, cls], i) => { const d = document.createElement('div'); if (cls) d.className = cls; d.style.animationDelay = (i * .25) + 's'; d.innerHTML = `<span>${l}</span><b>${v}</b>`; el.appendChild(d); });
     this.show('clear');
   }
+  // shift-time board entry on the tally screen (R null hides it)
+  recordEntry(R) {
+    const box = $('c-record'); box.hidden = !R;
+    if (!R) return;
+    const inp = $('c-ini'); inp.value = (progress.initials || 'MAC').slice(0, 3); inp.hidden = false;
+    box.querySelector('p').innerHTML = `Top-10 time for this shift: <b>${fmtTime(R.secs)}</b>. Post it as`;
+    box.querySelector('button').hidden = false;
+    inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); this.postTime(); } };
+    inp.oninput = () => { inp.value = inp.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3); };
+    const list = this.buttons(), next = list.findIndex(x => x.dataset.act === 'next'); this.setFocus(next < 0 ? 0 : next, false); // NEXT SHIFT keeps the focus
+  }
+  async postTime() {
+    const ini = ($('c-ini').value || 'MAC').toUpperCase().replace(/[^A-Z0-9]/g, '').padEnd(3, 'A').slice(0, 3);
+    $('c-record').querySelector('p').textContent = 'Posting…';
+    await this.g.postShiftTime(ini);
+    $('c-record').querySelector('p').textContent = `Posted as ${ini}! See it under Leaderboard → shift times.`;
+    $('c-record').querySelector('button').hidden = true; $('c-ini').hidden = true;
+    this.setFocus(0, false);
+  }
+  // ---- online co-op lobby
+  coopName() { const n = cleanName($('cp-name').value) || progress.initials || 'MAC'; progress.coopName = n; try { localStorage.setItem('hhm3d-progress-v1', JSON.stringify(progress)); } catch {} return n; }
+  coopOpen() {
+    $('cp-name').value = progress.coopName || progress.initials || 'MAC';
+    if (this.screen !== 'coop') { if (this.screen === 'title') this.push('coop'); else { this.stack = ['title']; this.show('coop'); } }
+    this.coopRefresh();
+  }
+  coopStatus(t) { $('cp-status').textContent = t; this.coopRefresh(); }
+  coopRefresh() {
+    const n = this.g.net, on = !!n.ws, linked = n.linked, host = n.role === 'host', el = $('coop');
+    el.querySelector('[data-act=coopHost]').hidden = on; el.querySelector('[data-act=coopJoin]').hidden = on;
+    el.querySelector('[data-act=coopLeave]').hidden = !on;
+    const sb = el.querySelector('[data-act=coopShift]'), st = el.querySelector('[data-act=coopStart]');
+    sb.hidden = st.hidden = !(linked && host);
+    const i = Math.min(this.coopShiftI || 0, Math.max(0, progress.unlocked - 1)); this.coopShiftI = i;
+    sb.textContent = `SHIFT: ${i + 1} · ${LEVEL_INFO[i].name}`;
+    $('cp-room').readOnly = on;
+    if (this.screen === 'coop') this.setFocus(Math.min(this.focus, this.buttons().length - 1), false);
+  }
+  coopWaiting(on) { $('c-wait').hidden = !on; $('clear').querySelector('[data-act=next]').hidden = on; }
+  coopPause(on) { $('p-coop').hidden = !on; }
   gameOver(score, qualifies, continued) {
     $('o-score').textContent = score.toLocaleString();
     this.entryActive = qualifies && !continued; $('o-entry').hidden = !this.entryActive;
@@ -219,10 +310,15 @@ export class UI {
     this.stack = ['title']; this.show('scores'); this.loadScores(ini);
   }
   async loadScores(mine) {
+    const bi = this.board || 0, info = bi ? LEVEL_INFO[bi - 1] : null, ticket = this.boardTicket = (this.boardTicket || 0) + 1;
+    $('s-title').textContent = info ? `SHIFT ${bi} · ${info.name}` : 'HIGH SCORES';
     $('s-src').textContent = 'Loading…'; $('s-list').innerHTML = '';
-    const { rows, global } = await this.g.scores.fetch();
-    $('s-src').textContent = global ? 'Global leaderboard' : 'Offline — showing scores from this device';
-    $('s-list').innerHTML = rows.length ? rows.map(r => `<li class="${mine && r.name === mine && r.score === this.g.score ? 'me' : ''}"><b>${r.name}</b><span>${r.score.toLocaleString()}</span><i>${r.extra || ''}</i></li>`).join('') : '<li><span>No scores yet — be the first!</span></li>';
+    const { rows, global } = await (info ? this.g.shiftBoard(info.id) : this.g.scores).fetch();
+    if (ticket !== this.boardTicket) return;
+    $('s-src').textContent = (info ? 'Fastest shift times · ' : '') + (global ? 'Global leaderboard' : 'Offline — showing this device') + '  ·  ◀ ▶ switch board';
+    const fmt = r => info ? fmtTime(scoreToTime(r.score)) : r.score.toLocaleString();
+    if (info) rows.splice(0, rows.length, ...rows.filter(r => scoreToTime(r.score) >= 25));
+    $('s-list').innerHTML = rows.length ? rows.map(r => `<li class="${mine && r.name === mine && r.score === this.g.score ? 'me' : ''}"><b>${r.name}</b><span>${fmt(r)}</span><i>${info ? (r.extra || '').split(' · ')[0] : r.extra || ''}</i></li>`).join('') : '<li class="empty"><span>No times yet — be the first!</span></li>';
   }
   loading(f, text) { $('load-bar').style.width = (f * 100).toFixed(0) + '%'; if (text) $('load-text').textContent = text; }
 }

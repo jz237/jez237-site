@@ -8,6 +8,7 @@ import { Heap } from './enemies.js';
 const HAZARD_SAY = {
   Press: 'Timing the press', Arc: 'Waiting for the arc to drop', Pipes: 'Waiting for a gap in the pipes', Vent: 'Steering clear of the steam vent',
   Wreck: 'Letting the wrecking ball swing past', Elevator: 'Keeping out from under the hoist', CraneMagnet: 'Waiting for the magnet to lift', Molten: 'Too hot to cross',
+  Water: 'Too deep to wade', PileDriver: 'Timing the pile driver',
 };
 
 function sockDist(s, x, z) {
@@ -32,6 +33,17 @@ export class Bot {
   say(t) { this.status = t; }
   hazards() { const L = this.g.level; return this._hz && this._hzL === L ? this._hz : (this._hzL = L, this._hz = [...L.hazards, ...L.movers].filter(h => h.danger && h.constructor.name !== 'Bolts')); }
   dangerAt(x, y, z) { for (const h of this.hazards()) if (h.danger(x, y, z)) return h; return null; }
+  drops() { return this.g.level.hazards.filter(h => h.nearest); } // bolts, rocks, bricks, gulls, lightning
+  threat() {
+    const b = this.g.player.body;
+    return this.g.enemies.some(e => { if (e.ko > 0 || Math.abs(e.body.y - b.y) > 1.2) return false; const d = Math.hypot(e.body.x - b.x, e.body.z - b.z); return d < 1.9 || (e.state === 'chase' && d < 3.4); });
+  }
+  // something telegraphed is about to land on us: [hazard, drop] or null
+  incoming() {
+    const b = this.g.player.body;
+    for (const h of this.drops()) { const o = h.nearest(b.x, b.y, b.z); if (o && o.t > o.warn * .4 && Math.hypot(b.x - o.x, b.z - o.z) < h.K.r + .35) return [h, o]; }
+    return null;
+  }
   // ---------------- main tick ----------------
   update(dt) {
     const g = this.g, p = g.player, out = { mx: 0, my: 0, jump: false, jumpHeld: false, act: false, actHeld: false, attack: false, camX: 0, camY: 0 };
@@ -48,11 +60,14 @@ export class Bot {
       this.path = null; this.ride = null; this.goal = null; this.engage = null; this.sx = this.sz = 0; this.say('Shaking it off…'); return out;
     }
     this.mourned = false;
-    if (p.state === 'rivet') {
-      // let go of the rivet gun to step out from under a falling bolt (rivet progress is kept)
-      const bolts = g.level.hazards.find(h => h.constructor.name === 'Bolts'), o = bolts && bolts.nearest(p.body.x, p.body.y, p.body.z);
-      if (o && o.t > o.warn * .4 && Math.hypot(p.body.x - o.x, p.body.z - o.z) < .95) { this.say('Dodging a falling bolt'); return out; }
-      out.actHeld = true; this.say(`Riveting (${Math.min(4, p.rivetSock.rivets + 1)}/4)`); this.sx = this.sz = 0; return out;
+    if (p.state === 'rivet' || p.state === 'crank') {
+      // let go to step out from under anything about to land, or to deal with trouble (rivet / valve progress is kept)
+      if (this.incoming()) { this.say('Dodging!'); return out; }
+      if (this.threat()) { this.say('Dealing with trouble first'); return out; }
+      out.actHeld = true; this.sx = this.sz = 0;
+      if (p.state === 'crank') this.say(p.crankSt && p.crankSt.kind === 'valve' ? 'Opening the pump valve' : 'Switching on the beacon');
+      else this.say(p.rivetSock.demo ? `Unbolting (${5 - p.rivetSock.rivets}/4)` : `Riveting (${Math.min(4, p.rivetSock.rivets + 1)}/4)`);
+      return out;
     }
     const riding = this.ride && this.ride.phase !== 'wait';
     const r = riding ? this.doRide(dt) : this.fight(out, dt) || this.dodge() || this.brace() || (this.ride ? this.doRide(dt) : this.work(out, dt));
@@ -62,6 +77,17 @@ export class Bot {
     if (this.lean && want) { tx += this.lean.x; tz += this.lean.z; }
     const k = 1 - Math.exp(-11 * dt);
     this.sx += (tx - this.sx) * k; this.sz += (tz - this.sz) * k;
+    // edge guard: never walk off a ledge by accident (drops are deliberate and flagged)
+    const b = p.body;
+    if (p.state === 'normal' && b.onGround && !this.dropping) {
+      const sm = Math.hypot(this.sx, this.sz);
+      if (sm > .05) {
+        const la = Math.min(.22 + Math.hypot(b.vx, b.vz) * .075, (this.wantD ?? 9) + .05), ux = this.sx / sm, uz = this.sz / sm, gnd = g.world.groundBelow(b.x + ux * la, b.z + uz * la, b.y + .35, .2); // Mac stands on anything within ~.24 of his centre
+        if (!gnd || gnd.crumble || b.y - gnd.y1 > .5) { this.sx *= .1; this.sz *= .1; this.edgeT = (this.edgeT || 0) + dt; if (this.edgeT > 1.2) { this.edgeT = 0; this.replanT = 0; this.carrot = null; } }
+        else this.edgeT = 0;
+      }
+    }
+    this.dropping = false;
     const m = Math.hypot(this.sx, this.sz);
     if (m > .04) this.steer(out, this.sx, this.sz, Math.min(1, m));
     return out;
@@ -71,12 +97,15 @@ export class Bot {
     const wx = dx / l * mag, wz = dz / l * mag, y = this.g.cam.yaw;
     out.mx = wx * Math.cos(y) - wz * Math.sin(y); out.my = -wx * Math.sin(y) - wz * Math.cos(y);
   }
-  dir(dx, dz, m = 1) { const l = Math.hypot(dx, dz) || 1; return { x: dx / l, z: dz / l, m }; }
+  dir(dx, dz, m = 1) { const l = Math.hypot(dx, dz) || 1; this.wantD = l; return { x: dx / l, z: dz / l, m }; }
   // ---------------- planning ----------------
   candidates() {
     const g = this.g, p = g.player, o = g.objects, T = g.level.objectiveType, c = [], carry = p.carry;
     if (carry) {
-      if (carry.kind === 'crate' && o.hopper) {
+      if (o.bin && carry.kind === 'girder') {
+        const h = o.bin;
+        c.push({ key: 'bin', type: 'deliver', obj: h, label: 'Hauling the old beam to the scrap bin', ok: n => Math.hypot(n.x - h.x, n.z - h.z) < 2.3 && Math.abs(n.y - h.y) < .5 });
+      } else if (carry.kind === 'crate' && o.hopper) {
         const h = o.hopper;
         c.push({ key: 'deliver', type: 'deliver', obj: h, label: 'Taking the crate up to the hopper', ok: n => Math.hypot(n.x - h.x, n.z - h.z) < 2.2 && Math.abs(n.y - h.y) < .5 });
       } else o.sockets.forEach((s, i) => {
@@ -88,12 +117,17 @@ export class Bot {
         if (s.state !== 'placed') return;
         c.push({ key: 'rivet' + i, type: 'rivet', obj: s, extra: -60, label: `Riveting gap ${i + 1}`, ok: n => sockDist(s, n.x, n.z) < 1.5 && n.y - s.d.y > -1 && n.y - s.d.y < .6 });
       });
+      o.sockets.forEach((s, i) => {
+        if (!s.demo || s.state !== 'riveted') return;
+        c.push({ key: 'ub' + i, type: 'unbolt', obj: s, extra: -20, label: 'Unbolting an old beam', ok: n => sockDist(s, n.x, n.z) < 1.5 && n.y - s.d.y > -1 && n.y - s.d.y < .6 });
+      });
       const empties = o.sockets.filter(s => s.state === 'empty' && !s.locked);
       o.carry.forEach((it, i) => {
         if (it.state !== 'rest' || it.dropIn > 0) return;
         if (T === 'crates' ? it.kind !== 'crate' : it.kind === 'crate') return;
         let extra;
         if (it.kind === 'crate') { const h = o.hopper; extra = (Math.hypot(it.pos.x - h.x, it.pos.z - h.z) + Math.abs(it.pos.y - h.y) * 2.5) * 2; }
+        else if (o.bin) { const h = o.bin; extra = (Math.hypot(it.pos.x - h.x, it.pos.z - h.z) + Math.abs(it.pos.y - h.y) * 2.5) * 2; }
         else {
           const targets = empties.filter(s => (it.kind === 'topbeam') === s.final); if (!targets.length) return;
           extra = Math.min(...targets.map(s => Math.hypot(it.pos.x - s.center.x, it.pos.z - s.center.z) + Math.abs(it.pos.y - s.d.y) * 2.5)) * 2;
@@ -108,6 +142,13 @@ export class Bot {
       c.push({ key: 'get' + i, type: 'collect', obj: pk, extra: lunch ? 0 : pk.type === 'hardhat' ? 10 : 40, maxDetour: lunch ? 0 : pk.type === 'hardhat' ? 70 : 30,
         label: lunch ? 'Going for a lunchbox' : { coffee: 'Grabbing a coffee', hardhat: 'Grabbing the gold hard hat', stopwatch: 'Grabbing the stopwatch', cash: 'Grabbing the cash' }[pk.type],
         ok: n => Math.abs(n.x - pk.pos.x) < .5 && Math.abs(n.z - pk.pos.z) < .5 && Math.abs(n.y - pk.pos.y) < .6 });
+    });
+    const minY = Math.min(...o.stations.map(s => s.use.y));
+    o.stations.forEach((st, i) => {
+      if (st.on) return;
+      const u = st.use;
+      c.push({ key: 'st' + i, type: 'station', obj: st, extra: T === 'pumps' ? (u.y - minY) * 5 : 0, label: st.kind === 'valve' ? 'Heading for a pump' : 'Heading for a beacon',
+        ok: n => Math.hypot(n.x - u.x, n.z - u.z) < .6 && Math.abs(n.y - u.y) < .5 });
     });
     // never plan to stand still (rivet, pick up, place) inside a hazard's sweep
     const zones = this.hazards().filter(h => h.zone && h.constructor.name !== 'Pipes');
@@ -130,6 +171,7 @@ export class Bot {
     const N = nav.nodes, g = new Map([[start.id, 0]]), came = new Map(), open = new Heap(), closed = new Set(), found = new Map();
     open.push(0, start.id);
     let budget = 2500;
+    const walls = this.hazards().filter(h => h.blocks), wet = walls.length ? n => walls.some(h => h.blocks(n.x, n.y, n.z)) : null;
     while (open.size) {
       const [cost, cur] = open.pop();
       if (closed.has(cur)) continue; closed.add(cur);
@@ -137,6 +179,7 @@ export class Bot {
       const n = N[cur];
       for (const c of cands) if (!found.has(c) && c.ok(n)) { found.set(c, { id: cur, cost }); if (found.size === cands.length) budget = cost; }
       for (const l of n.links) {
+        if (wet && wet(N[l.to])) continue; // flooded: not a way through
         const ng = cost + l.cost + ((l.ladder && (this.avoid.get(l.ladder) || 0) > this.g.time) || (this.avoid.get(l) || 0) > this.g.time ? 400 : 0);
         if (ng < (g.get(l.to) ?? Infinity)) { g.set(l.to, ng); came.set(l.to, cur); open.push(ng, l.to); }
       }
@@ -163,6 +206,8 @@ export class Bot {
       case 'deliver': return !p.carry;
       case 'rivet': return o.state !== 'placed';
       case 'checkpoint': return o.active;
+      case 'station': return o.on;
+      case 'unbolt': return o.state !== 'riveted';
       default: return o.taken;
     }
   }
@@ -192,9 +237,12 @@ export class Bot {
         if (o.placeTarget(p, p.carry) === G.obj) { if (this.actCd <= 0) { out.act = true; this.actCd = .7; this.replanT = .3; } return null; }
         const c = G.obj.center || G.obj; return toward(c.x, c.z, .3);
       }
-      case 'rivet':
-        if (o.rivetTarget(p) === G.obj && G.obj.anim >= 1) { out.actHeld = true; return null; }
+      case 'rivet': case 'unbolt':
+        if (o.rivetTarget(p) === G.obj) { if (G.obj.anim >= 1) out.actHeld = true; return null; } // wait for the girder to settle
         return toward(G.obj.center.x, G.obj.center.z, .3);
+      case 'station':
+        if (o.stationTarget(p) === G.obj) { out.actHeld = true; return null; }
+        return toward(G.obj.use.x, G.obj.use.z, .3);
       default: return toward(G.obj.pos.x, G.obj.pos.z, .5);
     }
   }
@@ -204,7 +252,7 @@ export class Bot {
     const w = this.g.world, L = Math.hypot(x1 - x0, z1 - z0), n = Math.max(1, Math.ceil(L / .25));
     for (let i = 1; i <= n; i++) {
       const t = i / n, x = x0 + (x1 - x0) * t, z = z0 + (z1 - z0) * t;
-      const gnd = w.groundBelow(x, z, y + .35, .16); if (!gnd || y - gnd.y1 > .3) return false;
+      const gnd = w.groundBelow(x, z, y + .35, .16); if (!gnd || gnd.crumble || y - gnd.y1 > .3) return false; // cracked slabs aren't footing
       for (const b of w.query(x - .34, z - .34, x + .34, z + .34)) {
         if (b.ghost || b.y1 <= y + .4 || b.y0 >= y + 1.6) continue;
         const cx = clamp(x, b.x0, b.x1), cz = clamp(z, b.z0, b.z1); if ((x - cx) ** 2 + (z - cz) ** 2 < .32 * .32) return false;
@@ -316,10 +364,11 @@ export class Bot {
   drop(prev, n) {
     const p = this.g.player, b = p.body;
     this.say('Hopping down a floor');
-    if (!b.onGround) return this.dir(n.x - b.x, n.z - b.z, .7);
+    if (!b.onGround) { this.dropping = true; return this.dir(n.x - b.x, n.z - b.z, .7); }
     if (Math.abs(b.y - n.y) < .45) { if (Math.hypot(b.x - n.x, b.z - n.z) < 1.8) { this.pi++; this.carrot = null; } else this.replanT = 0; return null; }
     const d = Math.hypot(b.x - prev.x, b.z - prev.z);
-    if (d > .4 && Math.abs(b.y - prev.y) < .3) return this.dir(prev.x - b.x, prev.z - b.z, clamp(d / .9, .3, 1));
+    this.dropCommit = (this.dropCommit || 0) - this.dt;
+    if (this.dropCommit <= 0 && d > .4 && Math.abs(b.y - prev.y) < .3) return this.dir(prev.x - b.x, prev.z - b.z, clamp(d / .9, .3, 1));
     const hz = this.dangerAt(n.x, n.y, n.z) || this.dangerAt(prev.x, prev.y, prev.z);
     if (hz && (this.dropWait = (this.dropWait || 0) + this.dt) < 8) { this.progT = 0; this.say(HAZARD_SAY[hz.constructor.name] || 'Waiting for a safe moment'); return null; }
     this.dropWait = 0;
@@ -327,6 +376,7 @@ export class Bot {
     this.dropT += this.dt;
     if (this.dropT > 4) { const lk = this.g.level.nav.linkBetween(prev.id, n.id); if (lk) this.avoid.set(lk, this.g.time + 30); this.dropT = 0; this.replanT = 0; return null; }
     const ux = n.x - prev.x, uz = n.z - prev.z, ul = Math.hypot(ux, uz) || 1;
+    this.dropping = true; if (this.dropCommit <= 0) this.dropCommit = 1.2; // once stepping off, keep going (the last node can sit back from the edge)
     return this.dir(n.x + ux / ul * .6 - b.x, n.z + uz / ul * .6 - b.z, .55);
   }
   // stand still before an active hazard; if we're already in one, retreat to a safe spot and commit to it
@@ -380,17 +430,20 @@ export class Bot {
         if ((coming && d < (this.atLadder > 0 ? 6.5 : 3.8)) || d < 1.8 || (e.state === 'climb' && d < 2.7)) if (d < bd) { bd = d; best = e; }
       }
       if (!best) return null;
-      if (p.carry && bd > 2.3) return null; // keep carrying unless it's right on top of us
+      if (p.carry && bd > 2.6) return null; // keep carrying unless it's right on top of us
       E = this.engage = { e: best, t: 0 };
     } else return null;
     const e = E.e, dx = e.body.x - b.x, dz = e.body.z - b.z, d = Math.hypot(dx, dz), name = e.kind === 'dog' ? 'yard dog' : e.kind;
     this.progT = 0;
     if (p.carry) {
-      if (this.actCd <= 0 && !g.objects.placeTarget(p, p.carry)) { out.act = true; this.actCd = .6; this.say(`Putting the load down to deal with the ${name}`); }
-      return this.dir(dx, dz, .1);
+      // shoulder-shove it out of the way and keep the load
+      const atShove = d - Math.max(0, -(e.body.vx * dx + e.body.vz * dz) / (d || 1)) * .15;
+      if (atShove < 1.45 && atShove > .3 && p.canShove()) out.attack = true;
+      this.say(`Shoving the ${name} out of the way`);
+      return this.dir(dx, dz, d > 1.2 ? .5 : .1);
     }
     // swing so the strike lands as it arrives (time-to-contact, so a charging dog gets met early)
-    const closing = Math.max(0, -(e.body.vx * dx + e.body.vz * dz) / (d || 1)), atStrike = d - closing * .2;
+    const closing = Math.max(0, -((e.body.vx - b.vx) * dx + (e.body.vz - b.vz) * dz) / (d || 1)), atStrike = d - closing * .2; // our own approach counts too
     const lowOnLadder = e.state === 'climb' && e.body.y - b.y < 1.3 && e.body.y - b.y > -.5 && d < 1.8;
     if (((atStrike < 1.7 && atStrike > .55) || lowOnLadder) && p.canSwing()) out.attack = true;
     this.say(`Knocking out the ${name}!`);
@@ -403,13 +456,15 @@ export class Bot {
   dodge() {
     const g = this.g, p = g.player, b = p.body;
     if (p.state !== 'normal') return null;
-    if (this.dodgeT > 0 && this.dodgeDir) { this.say('Dodging a falling bolt'); return this.dir(this.dodgeDir.x, this.dodgeDir.z, 1); }
-    const bolts = g.level.hazards.find(h => h.constructor.name === 'Bolts'); if (!bolts) return null;
-    const o = bolts.nearest(b.x, b.y, b.z); if (!o || o.t < o.warn * .4 || Math.hypot(b.x - o.x, b.z - o.z) > .95) return null;
+    const SAY = { bolt: 'Dodging a falling bolt', rock: 'Dodging a falling rock', brick: 'Dodging falling bricks', gull: 'Ducking a diving gull', lightning: 'Getting clear of the lightning' };
+    if (this.dodgeT > 0 && this.dodgeDir) { this.say(this.dodgeSay); return this.dir(this.dodgeDir.x, this.dodgeDir.z, 1); }
+    const hit = this.incoming(); if (!hit) return null;
+    const [h, o] = hit; this.dodgeSay = SAY[h.kind] || 'Dodging!';
     let dx = b.x - o.x, dz = b.z - o.z; if (Math.hypot(dx, dz) < .05) { dx = Math.sin(p.yaw); dz = Math.cos(p.yaw); }
     const l = Math.hypot(dx, dz);
     for (const [ux, uz] of [[dx / l, dz / l], [-dz / l, dx / l], [dz / l, -dx / l]]) {
-      if (this.clearLine(b.x, b.z, b.y, b.x + ux * 1.1, b.z + uz * 1.1)) { this.dodgeDir = { x: ux, z: uz }; this.dodgeT = .55; this.say('Dodging a falling bolt'); return this.dir(ux, uz, 1); }
+      const reach = h.K.r + .6;
+      if (this.clearLine(b.x, b.z, b.y, b.x + ux * reach, b.z + uz * reach)) { this.dodgeDir = { x: ux, z: uz }; this.dodgeT = .3 + reach * .2; this.say(this.dodgeSay); return this.dir(ux, uz, 1); }
     }
     return null;
   }
