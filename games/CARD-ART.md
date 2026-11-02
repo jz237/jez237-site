@@ -11,3 +11,5 @@ Public gallery: https://jez237.com/games/
 Local preview: http://127.0.0.1:8778/games/
 
 Validation: JavaScript syntax and deployment guard; all 52 catalog entries and links retained; 51 new covers plus original SKYNET; unique SVG IDs; real animation; off-screen pausing; search and filters; desktop and mobile screenshots; reduced motion; no page or SVG attribute errors. Preview tooling is in `D:/Projects/Skynet-Cyberdyne-Logo/serve-gallery-preview.mjs` and `verify-gallery-art.mjs`.
+
+2026-11-02: the retired "Turrican II" mapping became "Shard Assault" with its own `shard` scene (crystal mesa, trooper with arm cannon, rippling pool, floating shards).
