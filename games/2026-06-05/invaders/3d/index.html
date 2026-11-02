@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#050816">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <meta name="description" content="Invaders 3D Edition: the arcade defense run rebuilt in real-time three.js 3D with voxel alien fleets, a flying gunship, energy bunkers, three boss warships and a new ElevenLabs soundtrack.">
+  <link rel="canonical" href="https://jez237.com/games/2026-06-05/invaders/3d/">
+  <link rel="modulepreload" href="./vendor/three/three.core.min.js">
+  <link rel="modulepreload" href="./vendor/three/three.module.min.js">
+  <link rel="icon" href="data:,">
+  <title>Invaders — 3D Edition</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --gutter: 0px;
+      --cyan: #35f4ff;
+      --pink: #ff3df2;
+      --lime: #a7ff3d;
+      --gold: #ffd23d;
+      --red: #ff4d6d;
+      --panel: rgba(7, 12, 26, 0.72);
+      --ink: #eaf9ff;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      overscroll-behavior: none;
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 15%, rgba(255, 61, 242, 0.18), transparent 28%),
+        radial-gradient(circle at 80% 18%, rgba(53, 244, 255, 0.16), transparent 30%),
+        linear-gradient(180deg, #060816 0%, #090d21 44%, #04050c 100%);
+      color: var(--ink);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.035) 0,
+        rgba(255, 255, 255, 0.035) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+      mix-blend-mode: screen;
+      opacity: 0.16;
+      z-index: 5;
+    }
+
+    .shell {
+      position: fixed;
+      inset: 0;
+    }
+
+    .cabinet {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      image-rendering: auto;
+    }
+
+    #gl,
+    #fx {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    #gl {
+      touch-action: none;
+      cursor: crosshair;
+      background: #010208;
+    }
+
+    #fx {
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .edition-links {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 14px 0 0;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .edition-links a {
+      color: rgba(53, 244, 255, 0.82);
+      text-decoration: none;
+    }
+
+    .edition-links a:hover,
+    .edition-links a:focus-visible {
+      color: #fff;
+      text-shadow: 0 0 10px rgba(53, 244, 255, 0.8);
+    }
+
+    .boot-note {
+      margin: -8px 0 14px;
+      color: rgba(255, 210, 61, 0.85);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+    }
+
+    body.ready .boot-note {
+      display: none;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: progress;
+    }
+
+    .panel {
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+    }
+
+    .overlay {
+      background: radial-gradient(circle, rgba(7, 12, 26, 0.55), rgba(2, 4, 12, 0.28) 55%, transparent 72%);
+    }
+
+    .hud {
+      position: absolute;
+      inset: max(14px, env(safe-area-inset-top))
+        calc(max(16px, env(safe-area-inset-right)) + 156px + var(--gutter))
+        auto
+        calc(max(16px, env(safe-area-inset-left)) + var(--gutter));
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .meter {
+      min-width: 0;
+      padding: 9px 10px;
+      border: 1px solid rgba(53, 244, 255, 0.34);
+      background: var(--panel);
+      box-shadow: inset 0 0 22px rgba(53, 244, 255, 0.08);
+      text-shadow: 0 0 9px rgba(53, 244, 255, 0.85);
+    }
+
+    .meter b {
+      display: block;
+      color: rgba(234, 249, 255, 0.62);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0;
+      margin-bottom: 3px;
+    }
+
+    .meter span {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: clamp(13px, 1.8vw, 18px);
+      font-weight: 800;
+    }
+
+    .shield-meter i {
+      display: block;
+      width: 100%;
+      height: 4px;
+      margin-top: 5px;
+      transform-origin: left center;
+      background: linear-gradient(90deg, var(--cyan), var(--lime));
+      box-shadow: 0 0 10px rgba(53, 244, 255, 0.8);
+    }
+
+    .shield-meter.low i {
+      background: linear-gradient(90deg, var(--red), var(--gold));
+      box-shadow: 0 0 10px rgba(255, 77, 109, 0.8);
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      z-index: 4;
+      background: radial-gradient(circle, rgba(7, 12, 26, 0.72), rgba(2, 4, 12, 0.48) 55%, transparent 72%);
+    }
+
+    .panel {
+      width: min(640px, 92vw);
+      max-height: calc(100vh - 32px);
+      max-height: calc(100dvh - 32px);
+      overflow: auto;
+      overscroll-behavior: contain;
+      border: 1px solid rgba(255, 61, 242, 0.42);
+      background: rgba(5, 8, 22, 0.84);
+      box-shadow:
+        0 0 40px rgba(255, 61, 242, 0.24),
+        inset 0 0 36px rgba(53, 244, 255, 0.07);
+      padding: clamp(22px, 4vw, 38px);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      color: #fff;
+      font-size: clamp(34px, 8vw, 76px);
+      line-height: 0.9;
+      letter-spacing: 0;
+      text-shadow:
+        0 0 7px #fff,
+        0 0 24px var(--cyan),
+        0 0 44px var(--pink);
+    }
+
+    .title-version {
+      margin: -2px 0 14px;
+      color: rgba(53, 244, 255, 0.82);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-shadow: 0 0 12px rgba(53, 244, 255, 0.55);
+    }
+
+    .tagline {
+      margin: 0 0 22px;
+      color: rgba(234, 249, 255, 0.76);
+      font-size: clamp(14px, 2.3vw, 18px);
+      line-height: 1.55;
+    }
+
+    .enemy-roster {
+      display: grid;
+      gap: 8px;
+      margin: 16px 0 18px;
+      color: rgba(234, 249, 255, 0.78);
+      font-size: 12px;
+      line-height: 1.25;
+    }
+
+    .enemy-roster h2 {
+      margin: 0;
+      color: rgba(255, 210, 61, 0.88);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .enemy-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .enemy-card {
+      min-width: 0;
+      padding: 7px 6px;
+      border: 1px solid rgba(53, 244, 255, 0.34);
+      background: rgba(53, 244, 255, 0.06);
+      text-align: center;
+    }
+
+    .enemy-card canvas {
+      display: block;
+      width: 92px;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto 4px;
+      image-rendering: auto;
+    }
+
+    .enemy-card b {
+      color: #fff;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .powerups {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin: 0 0 24px;
+      color: rgba(234, 249, 255, 0.78);
+      font-size: 12px;
+      line-height: 1.3;
+    }
+
+    .powerups h2 {
+      grid-column: 1 / -1;
+      margin: 0 0 2px;
+      color: rgba(167, 255, 61, 0.88);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .powerup {
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      gap: 8px;
+      align-items: start;
+      min-width: 0;
+      padding: 7px 8px;
+      border: 1px solid rgba(53, 244, 255, 0.18);
+      background: rgba(53, 244, 255, 0.06);
+    }
+
+    .powerup i {
+      position: relative;
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+      box-shadow: 0 0 12px currentColor;
+    }
+
+    .powerup i::before,
+    .powerup i::after {
+      content: "";
+      position: absolute;
+      inset: 3px;
+      background: currentColor;
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    .powerup i[data-core="spread"] {
+      clip-path: polygon(50% 0, 100% 100%, 50% 74%, 0 100%);
+    }
+
+    .powerup i[data-core="laser"]::before {
+      inset: 2px 6px;
+    }
+
+    .powerup i[data-core="laser"]::after {
+      inset: 6px 2px;
+    }
+
+    .powerup i[data-core="shield"] {
+      clip-path: polygon(50% 0, 94% 25%, 82% 88%, 50% 100%, 18% 88%, 6% 25%);
+    }
+
+    .powerup i[data-core="repair"]::before {
+      inset: 2px 6px;
+    }
+
+    .powerup i[data-core="repair"]::after {
+      inset: 6px 2px;
+    }
+
+    .powerup i[data-core="overdrive"] {
+      clip-path: polygon(46% 0, 100% 42%, 58% 46%, 96% 100%, 0 54%, 42% 50%);
+    }
+
+    .powerup i[data-core="overdrive"]::before,
+    .powerup i[data-core="overdrive"]::after {
+      content: none;
+    }
+
+    .powerup i[data-core="bomb"] {
+      border-radius: 50%;
+    }
+
+    .powerup i[data-core="bomb"]::before {
+      inset: 3px;
+      border-radius: 50%;
+    }
+
+    .powerup i[data-core="bomb"]::after {
+      inset: -2px 6px 12px 6px;
+      box-shadow: none;
+    }
+
+    .powerup b {
+      color: #fff;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .scores-panel {
+      display: grid;
+      gap: 8px;
+      margin: 0 0 18px;
+      color: rgba(234, 249, 255, 0.78);
+      font-size: 12px;
+      line-height: 1.3;
+    }
+
+    .scores-panel h2 {
+      margin: 0;
+      color: rgba(53, 244, 255, 0.9);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .score-row {
+      display: grid;
+      grid-template-columns: 28px 1fr auto;
+      gap: 8px;
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(53, 244, 255, 0.12);
+    }
+
+    .score-row.gold {
+      color: var(--gold);
+      text-shadow: 0 0 10px rgba(255, 210, 61, 0.5);
+    }
+
+    .score-entry {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      padding: 8px;
+      border: 1px solid rgba(255, 210, 61, 0.28);
+      background: rgba(255, 210, 61, 0.08);
+    }
+
+    .score-entry-title {
+      grid-column: 1 / -1;
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .score-entry input {
+      width: 100%;
+      min-height: 38px;
+      border: 1px solid rgba(53, 244, 255, 0.34);
+      background: rgba(2, 5, 15, 0.78);
+      color: #fff;
+      font: inherit;
+      font-size: 18px;
+      font-weight: 900;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .score-entry button {
+      width: auto;
+      min-height: 38px;
+      padding: 0 14px;
+      font-size: 12px;
+    }
+
+    .overlay.game-over .enemy-roster,
+    .overlay.game-over .powerups {
+      display: none;
+    }
+
+    .overlay.game-over .scores-panel {
+      margin-top: 14px;
+    }
+
+    .title-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    button {
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid rgba(167, 255, 61, 0.7);
+      background: linear-gradient(90deg, rgba(53, 244, 255, 0.16), rgba(167, 255, 61, 0.24));
+      color: #fff;
+      font: inherit;
+      font-size: 16px;
+      font-weight: 900;
+      text-transform: uppercase;
+      cursor: pointer;
+      touch-action: manipulation;
+      box-shadow: 0 0 24px rgba(167, 255, 61, 0.24);
+    }
+
+    button.secondary {
+      border-color: rgba(53, 244, 255, 0.55);
+      background: linear-gradient(90deg, rgba(255, 61, 242, 0.12), rgba(53, 244, 255, 0.2));
+      box-shadow: 0 0 24px rgba(53, 244, 255, 0.18);
+    }
+
+    button:hover,
+    button:focus-visible {
+      outline: none;
+      background: linear-gradient(90deg, rgba(53, 244, 255, 0.28), rgba(167, 255, 61, 0.38));
+      box-shadow: 0 0 32px rgba(167, 255, 61, 0.38);
+    }
+
+    .controls {
+      position: absolute;
+      top: max(14px, env(safe-area-inset-top));
+      right: calc(max(16px, env(safe-area-inset-right)) + var(--gutter));
+      display: flex;
+      gap: 8px;
+      z-index: 3;
+    }
+
+    .controls button {
+      width: 42px;
+      min-height: 46px;
+      padding: 0;
+      border-color: rgba(53, 244, 255, 0.4);
+      background: rgba(7, 12, 26, 0.66);
+      box-shadow: inset 0 0 22px rgba(53, 244, 255, 0.08);
+      color: rgba(234, 249, 255, 0.86);
+      font-size: 17px;
+      line-height: 1;
+    }
+
+    .hint {
+      margin: -14px 0 20px;
+      color: rgba(234, 249, 255, 0.55);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .overlay.game-over .hint {
+      display: none;
+    }
+
+    .version {
+      position: absolute;
+      right: calc(max(12px, env(safe-area-inset-right)) + var(--gutter));
+      bottom: max(10px, env(safe-area-inset-bottom));
+      z-index: 3;
+      color: rgba(234, 249, 255, 0.46);
+      font-size: 11px;
+      pointer-events: none;
+      text-shadow: 0 0 8px rgba(53, 244, 255, 0.65);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .mode-note {
+      margin: -6px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: rgba(234, 249, 255, 0.62);
+    }
+
+    .daily-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 11px;
+      border: 1px solid rgba(255, 210, 61, 0.5);
+      background: rgba(255, 210, 61, 0.1);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(255, 210, 61, 0.45);
+    }
+
+    .daily-badge b {
+      color: #fff;
+      font-weight: 900;
+    }
+
+    .title-actions.triple .wide {
+      grid-column: 1 / -1;
+    }
+
+    button.daily {
+      border-color: rgba(255, 210, 61, 0.8);
+      background: linear-gradient(90deg, rgba(255, 210, 61, 0.24), rgba(255, 122, 45, 0.26));
+      box-shadow: 0 0 24px rgba(255, 210, 61, 0.3);
+    }
+
+    button.daily:hover,
+    button.daily:focus-visible {
+      background: linear-gradient(90deg, rgba(255, 210, 61, 0.38), rgba(255, 122, 45, 0.4));
+      box-shadow: 0 0 32px rgba(255, 210, 61, 0.45);
+    }
+
+    .controls button.bomb {
+      border-color: rgba(255, 210, 61, 0.55);
+      color: var(--gold);
+      position: relative;
+    }
+
+    .controls button.bomb[data-count="0"] {
+      opacity: 0.45;
+      border-color: rgba(234, 249, 255, 0.2);
+      color: rgba(234, 249, 255, 0.5);
+    }
+
+    .controls button.bomb::after {
+      content: attr(data-count);
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 3px;
+      border-radius: 8px;
+      background: var(--gold);
+      color: #04050c;
+      font-size: 10px;
+      font-weight: 900;
+      line-height: 16px;
+      text-align: center;
+      box-shadow: 0 0 8px rgba(255, 210, 61, 0.8);
+    }
+
+    @media (max-width: 760px), (pointer: coarse) {
+      .hud {
+        inset: max(8px, env(safe-area-inset-top))
+          calc(max(8px, env(safe-area-inset-right)) + 136px + var(--gutter))
+          auto
+          calc(max(8px, env(safe-area-inset-left)) + var(--gutter));
+        grid-template-columns: 1.3fr 0.68fr 1.12fr 1fr;
+        gap: 4px;
+      }
+
+      .meter {
+        padding: 7px 6px;
+      }
+
+      .meter:nth-child(4) {
+        display: none;
+      }
+
+      .controls {
+        top: max(8px, env(safe-area-inset-top));
+        right: calc(max(8px, env(safe-area-inset-right)) + var(--gutter));
+      }
+
+      .controls button {
+        width: 38px;
+        min-height: 44px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .overlay {
+        align-items: start;
+        padding: max(10px, env(safe-area-inset-top)) 12px max(10px, env(safe-area-inset-bottom));
+      }
+
+      .panel {
+        width: min(92vw, 640px);
+        max-height: calc(100dvh - 20px);
+        padding: 16px;
+      }
+
+      h1 {
+        font-size: clamp(30px, 11vw, 48px);
+      }
+
+      .powerups {
+        grid-template-columns: 1fr;
+      }
+
+      .enemy-grid,
+      .title-actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="cabinet" aria-label="Invaders arcade cabinet">
+      <canvas id="gl"></canvas>
+      <canvas id="fx" aria-hidden="true"></canvas>
+      <div class="hud" aria-hidden="true">
+        <div class="meter"><b>SCORE</b><span id="score">0</span></div>
+        <div class="meter"><b>WAVE</b><span id="wave">1</span></div>
+        <div class="meter"><b>LIVES</b><span id="lives">3</span></div>
+        <div class="meter"><b>WEAPON</b><span id="weapon">PULSE</span></div>
+        <div class="meter shield-meter" id="shieldMeter"><b>SHIELD</b><span id="shield">100%</span><i id="shieldFill"></i></div>
+      </div>
+      <div class="overlay" id="overlay">
+        <div class="panel">
+          <h1>Invaders</h1>
+          <div class="title-version">3D Edition · v3.0.0 · Daily Ops</div>
+          <p class="boot-note" id="bootNote">Loading the 3D engine…</p>
+          <p class="tagline" id="message">The arcade defense run rebuilt in real-time 3D: voxel fleets that shatter into glowing debris, a banking gunship, energy bunkers and three boss warships over a ringed world. Chain combos into Overdrive and bank smart bombs.</p>
+          <div class="mode-note" id="dailyNote"></div>
+          <p class="hint" id="controlsHint"></p>
+          <div class="enemy-roster" aria-label="Enemy ship guide">
+            <h2>Hostiles</h2>
+            <div class="enemy-grid">
+              <div class="enemy-card"><canvas width="92" height="54" data-enemy-sprite="drone"></canvas><b>Scout Drone</b></div>
+              <div class="enemy-card"><canvas width="92" height="54" data-enemy-sprite="striker"></canvas><b>Gold Striker</b></div>
+              <div class="enemy-card"><canvas width="92" height="54" data-enemy-sprite="diver"></canvas><b>Red Diver</b></div>
+              <div class="enemy-card"><canvas width="92" height="54" data-enemy-sprite="splitter"></canvas><b>Splitter</b></div>
+              <div class="enemy-card"><canvas width="92" height="54" data-enemy-sprite="zealot"></canvas><b>Zealot</b></div>
+              <div class="enemy-card"><canvas width="92" height="54" data-enemy-sprite="boss"></canvas><b>Boss Fleet ×3</b></div>
+            </div>
+          </div>
+          <div class="powerups" aria-label="Power-up guide">
+            <h2>Power Cores</h2>
+            <div class="powerup"><i data-core="spread" style="color:#ff3df2"></i><span><b>Spread</b><br>Five-shot fan.</span></div>
+            <div class="powerup"><i data-core="laser" style="color:#35f4ff"></i><span><b>Laser</b><br>Twin fast beams.</span></div>
+            <div class="powerup"><i data-core="overdrive" style="color:#ffd23d"></i><span><b>Overdrive</b><br>Rapid piercing fire.</span></div>
+            <div class="powerup"><i data-core="bomb" style="color:#ff4d6d"></i><span><b>Smart Bomb</b><br>Bank a screen-clear.</span></div>
+            <div class="powerup"><i data-core="shield" style="color:#a7ff3d"></i><span><b>Shield</b><br>Overcharge armor.</span></div>
+            <div class="powerup"><i data-core="repair" style="color:#ffffff"></i><span><b>Repair</b><br>+1 life &amp; shield.</span></div>
+          </div>
+          <div class="scores-panel hidden" id="scoresPanel" aria-live="polite"></div>
+          <div class="title-actions triple">
+            <button id="startButton" type="button" disabled>Arcade Run</button>
+            <button id="dailyButton" class="daily" type="button" disabled>Daily Challenge</button>
+            <button id="scoresButton" class="secondary wide" type="button" disabled>High Scores</button>
+          </div>
+          <p class="edition-links"><a href="../">◂ All editions</a><a href="../classic/">Classic Edition ▸</a></p>
+        </div>
+      </div>
+      <div class="controls hidden" id="controlsBar">
+        <button id="bombButton" class="bomb" data-count="0" type="button" aria-label="Smart bomb" title="Smart Bomb (B)">💣</button>
+        <button id="pauseButton" type="button" aria-label="Pause" title="Pause (P)">⏸</button>
+        <button id="muteButton" type="button" aria-label="Mute sound" aria-pressed="false" title="Mute (M)">🔊</button>
+      </div>
+      <div class="version" aria-hidden="true">3D v3.0.0</div>
+    </section>
+  </main>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./vendor/three/three.module.min.js",
+        "three/addons/": "./vendor/three/addons/"
+      }
+    }
+  </script>
+  <script type="module" src="./game.js?v=1"></script>
+  <script>
+    // If the module never boots (old browser, no WebGL 2), point at the Classic Edition.
+    setTimeout(function () {
+      if (document.body.classList.contains("ready")) return;
+      var note = document.getElementById("bootNote");
+      if (note) note.innerHTML = 'Still loading the 3D engine… if nothing happens, <a href="../classic/" style="color:#35f4ff">play the Classic Edition</a>.';
+    }, 8000);
+  </script>
+</body>
+</html>
