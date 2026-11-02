@@ -8,7 +8,8 @@ from urllib.parse import urlparse
 # Topic tags (allow several per story) and their URL-safe filter keys.
 TAGS = {'Plants': 'plants', 'Fish': 'fish', 'Shrimp & snails': 'shrimp-snails', 'Ponds': 'ponds', 'Coral': 'coral',
         'Equipment': 'equipment', 'Water care': 'water-care'}
-KINDS = {'Practical guide', 'Research', 'Conservation news', 'Species profile'}
+KINDS = {'Practical guide', 'Research', 'Conservation news', 'Species profile',
+         'Myth vs fact', 'Odd and amazing', 'History corner', 'Beginner basics'}
 # Story shapes rotate (EDITORIAL.md). Word ranges are for the body text.
 FORMATS = {
     'brief': (120, 200),      # quick news brief, no headings

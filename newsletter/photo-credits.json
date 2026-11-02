@@ -154,5 +154,65 @@
     "changes": "Panel C cropped from the published figure to remove the panel letter, scale bar and neighbouring panels; not resized; converted to WebP quality 82. No generative editing.",
     "width": 861,
     "height": 423
+  },
+  {
+    "filename": "heat-stressed-coral.webp",
+    "title": "Colorful Coral Bleaching",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Colorful_Coral_Bleaching.jpg",
+    "author": "Ryan Goehrung",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "alt": "Pale pastel table corals across a shallow reef, showing heat stress before bleaching.",
+    "changes": "Resized without cropping; converted to WebP quality 82. No generative editing. Display layouts may crop the edges. This derivative image remains licensed CC BY-SA 4.0.",
+    "width": 1600,
+    "height": 1200
+  },
+  {
+    "filename": "clownfish-anemone.webp",
+    "title": "Pez payaso común (Amphiprion ocellaris) en una anémona magnífica (Heteractis magnifica), Anilao, Filipinas, 2023-08-22, DD 08",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Pez_payaso_com%C3%BAn_(Amphiprion_ocellaris)_en_una_an%C3%A9mona_magn%C3%ADfica_(Heteractis_magnifica),_Anilao,_Filipinas,_2023-08-22,_DD_08.jpg",
+    "author": "Diego Delso",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "alt": "An orange and white clownfish nestled among the tentacles of a sea anemone.",
+    "changes": "Resized without cropping; converted to WebP quality 82. No generative editing. Display layouts may crop the edges. This derivative image remains licensed CC BY-SA 4.0.",
+    "width": 1600,
+    "height": 1067
+  },
+  {
+    "filename": "corydoras-aeneus-albino.webp",
+    "title": "Corydoras aeneus 01",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Corydoras_aeneus_01.jpg",
+    "author": "Gabriel Resende Veiga",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "alt": "Several pale albino corydoras catfish feeding together on the aquarium bottom.",
+    "changes": "Bottom 20% cropped to remove the aquarium frame; resized; converted to WebP quality 82. No generative editing. Display layouts may crop the edges. This derivative image remains licensed CC BY-SA 4.0.",
+    "width": 1600,
+    "height": 853
+  },
+  {
+    "filename": "snapping-shrimp.webp",
+    "title": "Lembeh, Indonesia - Snapping shrimp (Synalpheus stimpsoni)",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Snapping_shrimp_(Synalpheus_stimpsoni)_(24408552966).jpg",
+    "author": "Rickard Zerpe",
+    "license": "CC BY-SA 2.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+    "alt": "Two small spotted snapping shrimp sheltering among the golden arms of a feather star.",
+    "changes": "Resized without cropping; converted to WebP quality 82. No generative editing. Display layouts may crop the edges. This derivative image remains licensed CC BY-SA 2.0.",
+    "width": 1600,
+    "height": 1200
+  },
+  {
+    "filename": "gosse-dredging-1854.webp",
+    "title": "The aquarium: an unveiling of the wonders of the deep sea (1856 edition), plate “Dredging off Whitenose”",
+    "source_url": "https://commons.wikimedia.org/wiki/File:The_aquarium-_an_unveiling_of_the_wonders_of_the_deep_sea_(8536062063).jpg",
+    "author": "Philip Henry Gosse (scan: Biodiversity Heritage Library)",
+    "license": "Public domain",
+    "license_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "alt": "A Victorian engraving of people dredging from a small sailing boat off chalk cliffs.",
+    "changes": "Page margins and printed caption cropped; converted to WebP quality 82. No generative editing.",
+    "width": 1400,
+    "height": 968
   }
 ]

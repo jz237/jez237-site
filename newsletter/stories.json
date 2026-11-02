@@ -1,5 +1,501 @@
 [
   {
+    "slug": "bleached-coral-recovers-touching-healthy-clone",
+    "category": "reef",
+    "label": "Reef & ocean",
+    "kind": "Research",
+    "tags": [
+      "Coral"
+    ],
+    "format": "brief",
+    "date": "October 14, 2026 (Science Advances; Stanford Doerr School of Sustainability)",
+    "published": "2026-11-01",
+    "title": "Bleached coral recovered after a week touching a healthy clone",
+    "dek": "In Stanford lab trials, symbiotic algae crossed fused tissue into the bleached fragment. Pieces from different colonies fought instead.",
+    "image": "heat-stressed-coral.webp",
+    "caption": "Heat-stressed corals on a reef, paling before full bleaching. Illustrative photo; not the corals in the study.",
+    "source": "Science Advances; Stanford Doerr School of Sustainability",
+    "url": "https://doi.org/10.1126/sciadv.aeh1580",
+    "references": [
+      {
+        "id": "r1",
+        "label": "Collins et al. — Rapid coral bleaching recovery via symbiont transfer from healthy corals, Science Advances",
+        "url": "https://doi.org/10.1126/sciadv.aeh1580",
+        "date": "Published October 14, 2026"
+      },
+      {
+        "id": "r2",
+        "label": "Stanford Doerr School of Sustainability — Stanford scientists discover a way to reverse coral bleaching at record speed",
+        "url": "https://sustainability.stanford.edu/news/stanford-scientists-discover-way-reverse-coral-bleaching-record-speed/",
+        "date": "October 14, 2026"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "p",
+        "text": "A bleached coral can get its algae back from a healthy fragment of the same colony. In Science Advances on October 14, 2026, a Stanford team led by Danny Collins reported that brief contact lets the symbiotic algae pass through fused tissue into the bleached piece, which then recovers on its own.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "In the first trial, all five bleached fragments that touched a healthy partner recovered within seven weeks, while the five kept a few millimeters away died. A single week of contact was enough, and in some cases three days. After a week the algae were doubling about every four days, up to ten times faster than most recovery recorded on reefs.",
+        "refs": [
+          "r1",
+          "r2"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "The tissue only fuses between corals of the same genet, so pairings of different colonies turned antagonistic. Stanford’s account notes that the method needs a healthy, genetically identical copy of every bleached coral, which isn’t feasible at reef scale, and the team plans to explore other ways of delivering the algae.",
+        "refs": [
+          "r1",
+          "r2"
+        ]
+      }
+    ],
+    "archive": false
+  },
+  {
+    "slug": "cycle-a-new-aquarium",
+    "category": "freshwater",
+    "label": "Freshwater",
+    "kind": "Beginner basics",
+    "tags": [
+      "Water care",
+      "Fish"
+    ],
+    "format": "steps",
+    "date": "Beginner guide; UF/IFAS VM144 August 2003 (archived); OATA care sheet, undated",
+    "published": "2026-11-01",
+    "title": "Cycle a new tank: stock lightly for four to six weeks and wait for nitrite to fall",
+    "dek": "The bacteria that make fish waste safe take weeks to build up. Start with a few fish, test often, and add more slowly.",
+    "image": "nitrogen-cycle.svg",
+    "caption": "Original diagram of the nitrogen cycle in a new aquarium. Simplified and not to scale.",
+    "source": "UF/IFAS Extension; Ornamental Aquatic Trade Association",
+    "url": "https://journals.flvc.org/edis/article/download/109188/104367/152407",
+    "references": [
+      {
+        "id": "r1",
+        "label": "UF/IFAS Extension — Aquarium Setup and Maintenance (VM144)",
+        "url": "https://journals.flvc.org/edis/article/download/109188/104367/152407",
+        "date": "August 2003; archived copy"
+      },
+      {
+        "id": "r2",
+        "label": "Ornamental Aquatic Trade Association — How to look after Siamese fighting fish (Bettas)",
+        "url": "https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-fish/how-to-look-after-siamese-fighting-fish-bettas/",
+        "date": "Undated care sheet"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "p",
+        "text": "A brand-new aquarium has clean water and almost none of the bacteria that make fish waste safe. Fish food is rich in protein, and fish release the resulting ammonia across their gills. UF/IFAS Extension explains that one group of nitrifying bacteria turns ammonia into nitrite and a second turns nitrite into nitrate, which is generally less toxic. Hobbyists call the wait for those bacteria to settle in cycling.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "The first six weeks"
+      },
+      {
+        "type": "list",
+        "ordered": true,
+        "items": [
+          "Wash the gravel, set up the tank and give the heater a full day to bring the water to a steady temperature before any fish go in.",
+          "Dechlorinate the tap water. If your supply uses chloramine, watch for the ammonia it releases.",
+          "Start with only a few fish. UF/IFAS advises a light stocking rate for the first four to six weeks while the biological filter becomes established.",
+          "Test total ammonia, nitrite and pH closely during that time. The filter is established when nitrite drops."
+        ],
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "After that, go slowly"
+      },
+      {
+        "type": "p",
+        "text": "The Ornamental Aquatic Trade Association calls the result of rushing “new tank syndrome”: too few nitrifying bacteria for the waste, so ammonia and nitrite climb to levels that can make fish ill or kill them. Its advice is to raise the number of fish gradually, because the bacteria have to increase every time fish are added and feeding goes up.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Tank size helps too. The same UF/IFAS guide says larger aquariums are easier to work with than small ones and suggests about 30 gallons as a starter tank, big enough to dilute wastes while the system settles.",
+        "refs": [
+          "r1"
+        ]
+      }
+    ],
+    "archive": false
+  },
+  {
+    "slug": "clownfish-dont-need-an-anemone",
+    "category": "reef",
+    "label": "Reef & ocean",
+    "kind": "Myth vs fact",
+    "tags": [
+      "Fish"
+    ],
+    "format": "qa",
+    "date": "OATA care sheet, undated; Florida Museum species profile, undated",
+    "published": "2026-11-01",
+    "title": "Myth vs fact: clownfish don’t need an anemone in an aquarium",
+    "dek": "Wild clownfish live in a few kinds of sea anemone, but they can be kept successfully without one. A pair needs about 16 gallons.",
+    "image": "clownfish-anemone.webp",
+    "caption": "An ocellaris clownfish in a magnificent sea anemone off Anilao, Philippines. Illustrative photo, not store stock.",
+    "source": "Ornamental Aquatic Trade Association; Florida Museum",
+    "url": "https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-marine-fish/how-to-look-after-clown-fish/",
+    "references": [
+      {
+        "id": "r1",
+        "label": "Ornamental Aquatic Trade Association — How to look after clown fish",
+        "url": "https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-marine-fish/how-to-look-after-clown-fish/",
+        "date": "Undated care sheet"
+      },
+      {
+        "id": "r2",
+        "label": "Florida Museum — Clown Anemonefish (Discover Fishes)",
+        "url": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/clown-anemonefish/",
+        "date": "Undated species profile"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Most pictures of a clownfish include the anemone it is tucked into, so it is easy to assume a tank needs one. It doesn’t. The Ornamental Aquatic Trade Association’s care sheet says that although most clownfish live with anemones in the wild, anemones are not required to keep clownfish successfully in aquariums.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Where does the idea come from?"
+      },
+      {
+        "type": "p",
+        "text": "From the reef. The Florida Museum describes each clown anemonefish forming a relationship with a particular sea anemone, most often the magnificent sea anemone, Heteractis magnifica. The fish gets used to its host by brushing against the tentacles until its mucus protects it from the stings. The anemone shelters the fish and its nest, and may in turn benefit when the fish eats parasites and fans water through its tentacles.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "What does an aquarium clownfish need instead?"
+      },
+      {
+        "type": "p",
+        "text": "The care sheet’s list is about water and space. Ammonia and nitrite should be at zero, and it recommends an aquarium of at least 60 liters (about 16 gallons) for a single pair of the smaller species, such as common or percula clownfish, and at least 120 liters (about 32 gallons) for larger species.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "What if you want an anemone anyway?"
+      },
+      {
+        "type": "p",
+        "text": "Then plan for a second animal. The association suggests asking about the setup needed to keep an anemone healthy and choosing a species your clownfish will live with.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Where the fish comes from matters as well. The Florida Museum notes that clown anemonefish are raised in aquaculture facilities, which reduces pressure on wild populations, and that over-collecting for the aquarium trade has hurt some local populations.",
+        "refs": [
+          "r2"
+        ]
+      }
+    ],
+    "archive": false
+  },
+  {
+    "slug": "bronze-corydoras-profile",
+    "category": "freshwater",
+    "label": "Freshwater",
+    "kind": "Species profile",
+    "tags": [
+      "Fish"
+    ],
+    "format": "profile",
+    "date": "Species profile; Aqueon care guide and FishBase, accessed November 1, 2026",
+    "published": "2026-11-01",
+    "title": "Bronze corydoras do best in a group of five or more in a mature tank",
+    "dek": "These armored catfish sift the bottom and gulp air at the surface. Aqueon suggests 30 gallons and soft, rounded substrate.",
+    "image": "corydoras-aeneus-albino.webp",
+    "caption": "Albino bronze corydoras (Corydoras aeneus) feeding together. Illustrative photo, not store stock.",
+    "source": "Aqueon; FishBase",
+    "url": "https://www.aqueon.com/resources/care-guides/corydoras-catfish",
+    "facts": [
+      {
+        "label": "Adult size",
+        "value": "Up to about 3.0 in",
+        "detail": "7.5 cm standard length",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "label": "Temperature",
+        "value": "74–80°F",
+        "detail": "captive-bred fish",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "label": "Minimum tank",
+        "value": "30 gal suggested",
+        "detail": "most Corydoras; pygmy species less",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "label": "Difficulty",
+        "value": "Needs a mature tank",
+        "detail": "not for new aquariums",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "label": "Diet",
+        "value": "Omnivore; sinking foods",
+        "refs": [
+          "r1",
+          "r2"
+        ]
+      },
+      {
+        "label": "Temperament",
+        "value": "Peaceful; keep 5 or more",
+        "refs": [
+          "r2"
+        ]
+      }
+    ],
+    "references": [
+      {
+        "id": "r1",
+        "label": "FishBase — Corydoras aeneus species summary",
+        "url": "https://www.fishbase.se/summary/Corydoras-aeneus.html",
+        "date": "Accessed November 1, 2026"
+      },
+      {
+        "id": "r2",
+        "label": "Aqueon — Corydoras Catfish Care Guide",
+        "url": "https://www.aqueon.com/resources/care-guides/corydoras-catfish",
+        "date": "Accessed November 1, 2026"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "p",
+        "text": "The bronze corydoras, Corydoras aeneus, comes from South America east of the Andes, from Colombia and Trinidad south to the La Plata basin. FishBase describes it living mostly in quiet, shallow water over soft bottoms, with adults in schools of 20 to 30.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "In the aquarium trade its albino form is just as familiar. Aqueon notes that an albino cory or one of its relatives is one of the first bottom feeders many aquarists buy.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "A fish that breathes with its gut"
+      },
+      {
+        "type": "p",
+        "text": "Watch a group for a while and one will dart to the surface and back. Corydoras aeneus is a facultative air breather that takes air into its intestine, between once and 45 times an hour according to FishBase.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Aqueon calls the occasional trip normal, but says constant gasping at the surface can mean poor water quality or low oxygen.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Setting up for them"
+      },
+      {
+        "type": "p",
+        "text": "Aqueon suggests a 30-gallon aquarium for most species, sand or fine gravel with rounded edges so the fish don’t damage their barbels while foraging, open space near the front and some cover. Captive-bred corydoras tolerate a wide range of water chemistry, but the guide insists on very clean water and says they should never go into a new or neglected aquarium.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Living with them"
+      },
+      {
+        "type": "p",
+        "text": "Buy them as a group of five or more; different species often school together. Aqueon describes corys as active in the daytime, and warns that their fin spines are sharp and in some species carry a mild toxin, so handle them carefully.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "FishBase lists the wild fish as nocturnal, so expect some evening activity too. It records worms, crustaceans, insects and plant matter in their natural diet; in a tank, that points to sinking foods that reach the bottom.",
+        "refs": [
+          "r1"
+        ]
+      }
+    ],
+    "archive": false
+  },
+  {
+    "slug": "pistol-shrimp-snap-bubble",
+    "category": "reef",
+    "label": "Reef & ocean",
+    "kind": "Odd and amazing",
+    "tags": [
+      "Shrimp & snails"
+    ],
+    "format": "photo",
+    "date": "Earlier research: Science, September 22, 2000; NOAA Office of National Marine Sanctuaries, December 2021",
+    "published": "2026-11-01",
+    "title": "A pistol shrimp’s snap comes from a collapsing bubble, one of the loudest sounds in the sea",
+    "dek": "The claw shuts so fast that it shoots out a jet of water and a bubble. NOAA puts the bang at 183–210 decibels.",
+    "image": "snapping-shrimp.webp",
+    "caption": "A pair of snapping shrimp (Synalpheus stimpsoni) on a feather star in Lembeh, Indonesia. Illustrative photo.",
+    "source": "Science; NOAA Office of National Marine Sanctuaries",
+    "url": "https://doi.org/10.1126/science.289.5487.2114",
+    "references": [
+      {
+        "id": "r1",
+        "label": "Versluis et al. — How Snapping Shrimp Snap: Through Cavitating Bubbles, Science",
+        "url": "https://doi.org/10.1126/science.289.5487.2114",
+        "date": "September 22, 2000"
+      },
+      {
+        "id": "r2",
+        "label": "NOAA Office of National Marine Sanctuaries — Oh Snap! What Tiny Shrimp Can Tell Us About Habitat Health",
+        "url": "https://sanctuaries.noaa.gov/news/dec21/oh-snap.html",
+        "date": "December 2021"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Some of the loudest animals on a reef are a couple of centimeters long, under an inch. Snapping shrimp, also called pistol shrimp, are a group of species with one oversized claw that can grow to half the size of the body. NOAA’s sanctuary scientists put their snaps at 183 to 210 decibels, which ranks them among the loudest sound makers in the ocean.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "A team led by Michel Versluis filmed the claw of Alpheus heterochaelis at high speed while recording with a hydrophone, and reported in Science in 2000 that the sound comes from a bubble rather than the claw itself. The claw closes so fast that it fires a jet of water quick enough to make a cavitation bubble, and the snap is heard when that bubble collapses. The snap can stun or kill small prey.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Together, their snaps make the crackle divers hear, which NOAA compares to milk poured on Rice Krispies. Its listening project found snapping varies by place, season and time of day, generally rising as water warms. Researchers now track it as a possible sign of how well a damaged habitat is recovering.",
+        "refs": [
+          "r2"
+        ]
+      }
+    ],
+    "archive": true
+  },
+  {
+    "slug": "gosse-and-the-first-home-aquariums",
+    "category": "reef",
+    "label": "Reef & ocean",
+    "kind": "History corner",
+    "tags": [
+      "Equipment"
+    ],
+    "format": "report",
+    "date": "History: 1852–1871; Devon and Exeter Institution, 2020; Horniman Museum, March 15, 2014",
+    "published": "2026-11-01",
+    "title": "Home aquariums took off in 1850s Britain after Philip Gosse kept seawater fresh with seaweed",
+    "dek": "His 1852 jar experiment led to London’s zoo fish house in 1853 and a short-lived craze for parlour tanks.",
+    "image": "gosse-dredging-1854.webp",
+    "caption": "“Dredging off Whitenose,” an engraving from the 1856 edition of Philip Henry Gosse’s The Aquarium, first published in 1854. Public domain.",
+    "source": "Devon and Exeter Institution; Horniman Museum; P. H. Gosse",
+    "url": "https://devonandexeterinstitution.org/ponds-in-the-parlour-the-invention-of-the-seawater-aquarium/",
+    "references": [
+      {
+        "id": "r1",
+        "label": "Devon and Exeter Institution — Ponds in the Parlour: the invention of the seawater aquarium",
+        "url": "https://devonandexeterinstitution.org/ponds-in-the-parlour-the-invention-of-the-seawater-aquarium/",
+        "date": "2020"
+      },
+      {
+        "id": "r2",
+        "label": "Horniman Museum and Gardens — Inventing the aquarium: a short history",
+        "url": "https://www.horniman.ac.uk/story/inventing-the-aquarium-a-short-history/",
+        "date": "March 15, 2014"
+      },
+      {
+        "id": "r3",
+        "label": "Philip Henry Gosse — The Aquarium: an Unveiling of the Wonders of the Deep Sea (Internet Archive scan)",
+        "url": "https://archive.org/details/bub_gb_lgDbAAAAMAAJ",
+        "date": "1854"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "p",
+        "text": "On May 3, 1852, the naturalist Philip Henry Gosse put about three pints of seawater, some seaweeds and small sea animals into a confectioner’s show-glass about ten inches deep. He only topped it up to replace evaporation, yet the water stayed fresh and the animals healthy for more than two months, according to his son Edmund’s 1890 biography. The plants supplied oxygen in the light, a trick Gosse had already used in freshwater vases.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Others were close behind or ahead of him. The Horniman Museum notes that Robert Warington published the same finding about plants and animals living in balance, independently, in 1852, and that Sir John Dalyell had kept sea anemones alive for years in the 1820s by changing their seawater every day. Horniman also credits Gosse with coining the modern word aquarium.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "In December 1852 Gosse began setting up a tank in the new Fish House at the Zoological Gardens in Regent’s Park, stocked with about two hundred animals and plants collected in Devon. Its popularity persuaded the Zoological Society to make the new aquarium a feature of the gardens.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "His 1854 book, The Aquarium, sold “like wild-fire.” Its color plates showed sea creatures among rocks and weed as they would look in a tank, and its last chapter told readers how to set one up at home, from the tank’s size and shape to where to place it for light.",
+        "refs": [
+          "r1",
+          "r3"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "A craze followed. Horniman points to the 1845 repeal of the glass duty, which made plate glass cheaper, and London shops selling ready-made “parlour pond” tanks. The enthusiasm faded once many households found the tanks hard to look after. Public aquariums kept growing, though: the success of the zoo’s fish house, which opened in 1853, led to others in Britain, Europe and the United States over the next two decades.",
+        "refs": [
+          "r2"
+        ]
+      }
+    ],
+    "archive": false
+  },
+  {
     "slug": "yellow-tang-larvae-vibrio-brine-shrimp",
     "category": "reef",
     "label": "Reef & ocean",

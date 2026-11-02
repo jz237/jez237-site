@@ -34,5 +34,17 @@
       "https://www.aqueon.com/articles/aquarium-filtration-basics",
       "https://seachem.zendesk.com/hc/en-us/articles/360038209893-Guide-Caring-for-the-Freshwater-Tank"
     ]
+  },
+  {
+    "filename": "nitrogen-cycle.svg",
+    "title": "How a new tank builds its biofilter",
+    "alt": "Schematic: fish waste and food become ammonia; bacteria turn ammonia into nitrite, then nitrate; water changes remove nitrate. Stock lightly for the first weeks and test until nitrite falls.",
+    "width": 960,
+    "height": 680,
+    "caption": "Original schematic of the nitrogen cycle in a new aquarium; simplified and not to scale.",
+    "sources": [
+      "https://journals.flvc.org/edis/article/download/109188/104367/152407",
+      "https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-fish/how-to-look-after-siamese-fighting-fish-bettas/"
+    ]
   }
 ]

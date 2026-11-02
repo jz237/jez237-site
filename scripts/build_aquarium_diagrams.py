@@ -51,10 +51,26 @@ for x,a,b in [(52,'Traps','particles'),(362,'Hosts','microbes'),(672,'Targets','
     content += text(x,510,a,32) + text(x,552,b,32)
 (OUT/'images/filter-media.svg').write_text(svg('Mechanical media trap particles, biological media host microbes, and chemical media target substances. Some media serve more than one role.',content))
 
+content = text(44,72,'A NEW TANK BUILDS ITS BIOFILTER',38)
+steps=[(40,'#e1edf0','Fish waste','& food'),(270,'#eee5d6','Ammonia','most toxic'),(500,'#e2ebdf','Nitrite','also toxic'),(730,'#e1edf0','Nitrate','less toxic')]
+for x,color,a,b in steps:
+    content += f'<rect x="{x}" y="130" width="190" height="230" rx="18" fill="{color}"/>' + text(x+18,300,a,30) + text(x+18,340,b,24)
+content += f'<g fill="{INK}"><ellipse cx="135" cy="205" rx="52" ry="24"/><path d="M180 205l28-20v40z"/></g><circle cx="118" cy="200" r="5" fill="{PAPER}"/>'
+content += f'<text x="320" y="230" font-family="Arial,sans-serif" font-size="46" font-weight="700" fill="{INK}">NH₃</text><text x="548" y="230" font-family="Arial,sans-serif" font-size="46" font-weight="700" fill="{INK}">NO₂</text><text x="778" y="230" font-family="Arial,sans-serif" font-size="46" font-weight="700" fill="{INK}">NO₃</text>'
+for x in [236,466,696]:
+    content += f'<path d="M{x} 245h24m-10-10 10 10-10 10" fill="none" stroke="{GREEN}" stroke-width="6" stroke-linecap="round"/>'
+for x in [480,710]:
+    content += f'<path d="M{x} 262v118" stroke="{GREEN}" stroke-width="3" stroke-dasharray="6 7"/><text x="{x}" y="408" text-anchor="middle" font-family="Arial,sans-serif" font-size="24" font-weight="600" fill="{GREEN}">bacteria</text>'
+content += f'<path d="M825 366v44m-12-12 12 12 12-12" fill="none" stroke="{BLUE}" stroke-width="6" stroke-linecap="round"/><text x="900" y="446" text-anchor="end" font-family="Arial,sans-serif" font-size="24" font-weight="600" fill="{BLUE}">removed by water changes</text>'
+content += f'<path d="M60 476h840" stroke="{INK}" stroke-width="3"/>'
+content += text(60,520,'Weeks 1–6: stock lightly, test ammonia, nitrite and pH',28) + text(60,566,'Established: nitrite falls back down',28) + text(60,630,'Simplified; not to scale',22)
+(OUT/'images/nitrogen-cycle.svg').write_text(svg('Fish waste and food produce ammonia; bacteria convert it to nitrite and then nitrate, which water changes remove. A new tank needs weeks for these bacteria to build up.',content))
+
 records = [
  {'filename':'tissue-culture-steps.svg','title':'From cup to aquarium','alt':'Four illustrated steps: open a tissue-culture cup, rinse away growing medium, separate small portions, and plant. Substrate-planting example only.','width':960,'height':680,'caption':'Original schematic: substrate planting is shown. Keep Anubias rhizomes exposed; follow the species instructions.','sources':['https://tropica.com/en/plants/1-2-grow/','https://dennerleplants.com/en/support/faq/']},
  {'filename':'reef-top-off.svg','title':'Two different water replacements','alt':'Evaporation removes water but leaves salt behind: top off with appropriate fresh water. A saltwater water change removes both: replace with prepared saltwater.','width':960,'height':680,'caption':'Original schematic, not a dosing chart. Verify the cause of a water-level change and measure salinity.','sources':['https://edis.ifas.ufl.edu/publication/4H433/pdf','https://g1.redseafish.com/how-to-mix-salt/']},
- {'filename':'filter-media.svg','title':'The jobs inside a filter','alt':'Mechanical media trap particles; biological media host microbes; chemical media target substances. A medium can perform more than one job.','width':960,'height':680,'caption':'Original schematic. Identify each medium’s job and follow the filter manufacturer’s care instructions.','sources':['https://www.aqueon.com/articles/aquarium-filtration-basics','https://seachem.zendesk.com/hc/en-us/articles/360038209893-Guide-Caring-for-the-Freshwater-Tank']}
+ {'filename':'filter-media.svg','title':'The jobs inside a filter','alt':'Mechanical media trap particles; biological media host microbes; chemical media target substances. A medium can perform more than one job.','width':960,'height':680,'caption':'Original schematic. Identify each medium’s job and follow the filter manufacturer’s care instructions.','sources':['https://www.aqueon.com/articles/aquarium-filtration-basics','https://seachem.zendesk.com/hc/en-us/articles/360038209893-Guide-Caring-for-the-Freshwater-Tank']},
+ {'filename':'nitrogen-cycle.svg','title':'How a new tank builds its biofilter','alt':'Schematic: fish waste and food become ammonia; bacteria turn ammonia into nitrite, then nitrate; water changes remove nitrate. Stock lightly for the first weeks and test until nitrite falls.','width':960,'height':680,'caption':'Original schematic of the nitrogen cycle in a new aquarium; simplified and not to scale.','sources':['https://journals.flvc.org/edis/article/download/109188/104367/152407','https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-fish/how-to-look-after-siamese-fighting-fish-bettas/']}
 ]
 (OUT/'illustrations.json').write_text(json.dumps(records,indent=2,ensure_ascii=False)+'\n')
 print(f'Built {len(records)} original SVG illustrations and their manifest.')
