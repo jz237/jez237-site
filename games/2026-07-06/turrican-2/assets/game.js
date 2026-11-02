@@ -15,6 +15,7 @@
 
   const renderer = R.createRenderer(display);
   const audio = A.createAudio();
+  renderer.onWater = (kind, x, y) => audio.play(kind, x, y);   // drips, shots plunging in, swim strokes
   const input = I.createInput(window);
 
   // painted title key-art (async; procedural scene is the fallback until ready)
@@ -109,14 +110,71 @@
     loadStage();
   }
   function endDemo() {
-    isDemo = false; pilot = null; demoAbort = false; idleT = 0;
+    isDemo = false; pilot = null; demoAbort = false; idleT = 0; resetZoom();
     document.body.dataset.demo = 'false';
     mode = 'title'; menuIdx = 0;
     toTitleAudio();
   }
+  // ---- demo camera: pinch (touch) or the wheel / trackpad pinch (desktop) zooms,
+  // a two-finger drag looks around, a double tap resets. Only while the demo plays.
+  const ZMIN = 0.75, ZMAX = 2.8, TOUCH = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  let zoom = 1, panX = 0, panY = 0, pinch = null, lastTap = 0;
+  const panLim = () => Math.max(0, 0.5 - 0.5 / zoom) + 0.06;
+  function applyZoom() {
+    panX = Math.max(-panLim(), Math.min(panLim(), panX)); panY = Math.max(-panLim(), Math.min(panLim(), panY));
+    if (zoom <= 1.001) { panX *= 0.5; panY *= 0.5; }
+    if (renderer.setZoom) renderer.setZoom(zoom, panX, panY);
+  }
+  function resetZoom() { zoom = 1; panX = panY = 0; pinch = null; applyZoom(); }
+  // zoom by f about a point (fx, fy as fractions of the stage): that point stays put on screen
+  function zoomAbout(f, fx, fy) {
+    const z0 = zoom; zoom = Math.max(ZMIN, Math.min(ZMAX, zoom * f));
+    panX += (fx - 0.5) * (1 / z0 - 1 / zoom); panY -= (fy - 0.5) * (1 / z0 - 1 / zoom);
+    applyZoom();
+  }
+  {
+    const stageEl = document.getElementById('stage');
+    const dist = (a, b) => Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    stageEl.addEventListener('touchstart', (e) => {
+      if (!isDemo) return;
+      if (e.touches.length === 2) {
+        e.preventDefault();
+        const [a, b] = e.touches, r = stageEl.getBoundingClientRect();
+        pinch = { d: dist(a, b), z: zoom, px: panX, py: panY, mx: (a.clientX + b.clientX) / 2, my: (a.clientY + b.clientY) / 2, r };
+      } else if (e.touches.length === 1) {
+        const now = performance.now();
+        if (now - lastTap < 320) resetZoom();
+        lastTap = now;
+      }
+    }, { passive: false });
+    stageEl.addEventListener('touchmove', (e) => {
+      if (!isDemo || !pinch || e.touches.length < 2) return;
+      e.preventDefault();
+      const [a, b] = e.touches, P = pinch, r = P.r;
+      const z1 = Math.max(ZMIN, Math.min(ZMAX, P.z * dist(a, b) / Math.max(20, P.d)));
+      const fx = (P.mx - r.left) / r.width, fy = (P.my - r.top) / r.height;
+      const mx = (a.clientX + b.clientX) / 2, my = (a.clientY + b.clientY) / 2;
+      zoom = z1;
+      panX = P.px + (fx - 0.5) * (1 / P.z - 1 / z1) - (mx - P.mx) / r.width / z1;
+      panY = P.py - (fy - 0.5) * (1 / P.z - 1 / z1) + (my - P.my) / r.height / z1;
+      applyZoom();
+    }, { passive: false });
+    const lift = (e) => { if (pinch && e.touches.length < 2) pinch = null; };
+    stageEl.addEventListener('touchend', lift); stageEl.addEventListener('touchcancel', lift);
+    stageEl.addEventListener('wheel', (e) => {
+      if (!isDemo) return;
+      e.preventDefault();
+      const r = stageEl.getBoundingClientRect();
+      zoomAbout(Math.exp(-e.deltaY * (e.ctrlKey ? 0.01 : 0.0016)), (e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height);
+    }, { passive: false });
+    stageEl.addEventListener('dblclick', () => { if (isDemo) resetZoom(); });
+    // iOS Safari: keep its own page pinch out of the way
+    for (const g of ['gesturestart', 'gesturechange']) document.addEventListener(g, (e) => e.preventDefault(), { passive: false });
+  }
+
   // a viewer grabs the controls mid-demo: the run carries on as theirs
   function takeOver() {
-    isDemo = false; pilot = null; demoAbort = false; idleT = 0;
+    isDemo = false; pilot = null; demoAbort = false; idleT = 0; resetZoom();
     document.body.dataset.demo = 'false';
     run = { from: PLAN[planIdx].world, takeover: true };
     continues = 3; newBest = false;
@@ -633,7 +691,7 @@
   // attract-mode badge: below the HUD strip, above the boss bar's turf
   function drawDemoTag() {
     dx.save();dx.font='600 11px system-ui';dx.textAlign='center';dx.fillStyle='#8bdfe5';
-    dx.fillText(canTakeOver() ? 'DEMO  ·  PRESS FIRE TO TAKE OVER  ·  ESC FOR MENU' : 'DEMO',DW/2,69);dx.restore();
+    dx.fillText(!canTakeOver() ? 'DEMO' : TOUCH ? 'DEMO  ·  PINCH TO ZOOM  ·  TAKE OVER TO PLAY' : 'DEMO  ·  SCROLL TO ZOOM  ·  PRESS FIRE TO TAKE OVER  ·  ESC FOR MENU',DW/2,69);dx.restore();
   }
 
   // ---- world select ------------------------------------------------------
@@ -990,6 +1048,7 @@
     get results() { return results; },
     progress, settings,
     setQuality(scale) { renderer.setResolution(scale); },
+    setFX(on) { renderer.setFX(on); },
     get tactics() { return pilot ? pilot.stats.intent : ''; },
     get graphics() { return window.__modernGraphics?.stats || {backend:'HD compatibility'}; },
     goToStage(i) { planIdx = i; loadStage(); },
@@ -1002,6 +1061,7 @@
     voice: { roll() { audio.rollVoice(); return audio.getVoiceSet(); },
              set() { return audio.getVoiceSet(); },
              say(n) { audio.resume(); audio.playVoice(n, true); } },
+    zoom: { get value() { return zoom; }, set(z, px, py) { zoom = z; panX = px || 0; panY = py || 0; applyZoom(); }, about: zoomAbout, reset: resetZoom },
     demo: { start: startDemo, stop: endDemo, get on() { return isDemo; }, takeOver() { if (canTakeOver()) takeOver(); },
             get canTakeOver() { return canTakeOver(); }, get idle() { return idleT; }, get stage() { return planIdx; } },
   };

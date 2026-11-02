@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import {mergeVertices,mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import {fbm3,ridge3,noise3,rng} from './noise.mjs';
 import {terrainMaterial,crystalMaterial} from './materials.mjs';
+import {buildWater,waterfall} from './water.mjs';
 
 export const TILE=20,Z_FRONT=26,Z_BACK=-72;
 const TT={EMPTY:0,SOLID:1,SPIKE:2,PLATFORM:3,DECO:4,WATER:5,CRATE:6};
@@ -22,7 +23,8 @@ export function buildTerrain(level,theme,quality){
   let waterMask=null;
   if(level.hasWater){const data=new Uint8Array(cols*rows);for(let i=0;i<cols*rows;i++)data[i]=tiles[i]===TT.WATER?255:0;
     waterMask=new THREE.DataTexture(data,cols,rows,THREE.RedFormat,THREE.UnsignedByteType);waterMask.flipY=false;waterMask.magFilter=waterMask.minFilter=THREE.NearestFilter;waterMask.needsUpdate=true;}
-  const mat=terrainMaterial(theme,{waterMask,cols,rows});
+  let waterTop=-1e4;if(level.hasWater)for(let i=0;i<cols*rows;i++)if(tiles[i]===TT.WATER){waterTop=-Math.floor(i/cols)*T-3;break;}
+  const mat=terrainMaterial(theme,{waterMask,cols,rows,waterTop});
   const mats=[mat];
 
   // column surface heights (top of the ground mass touching the bottom) and ceilings
@@ -152,7 +154,7 @@ export function buildTerrain(level,theme,quality){
 
   // --- water
   let water=null;
-  if(level.hasWater)water=buildWater(level,theme,tileAt,enclosed?-330:-700);
+  if(level.hasWater)water=buildWater(level,theme,tileAt,enclosed?-330:-700,quality,T,Z_FRONT);
   if(water)group.add(water.group);
 
   // --- crystal clusters on surfaces (decor), vegetation
@@ -160,17 +162,17 @@ export function buildTerrain(level,theme,quality){
 
   // --- waterfalls
   const falls=[];
-  for(const d of level.decors||[])if(d.type==='waterfall'){const f=waterfall(d,theme);group.add(f.mesh);falls.push(f);}
+  for(const d of level.decors||[])if(d.type==='waterfall'){const f=waterfall(d,theme,T);group.add(f.mesh);falls.push(f);}
 
   function update(t,dt,s){
     for(const m of mats)if(m.userData.uniforms)m.userData.uniforms.uTime.value=t;
-    if(water)water.update(t);for(const f of falls)f.mat.uniforms.uTime.value=t;decor.update(t);
+    for(const f of falls)f.mat.uniforms.uTime.value=t;decor.update(t);
     for(const p of platformMeshes){if(p.glow)p.glow.rotation.y=t*1.5;if(p.belt)p.belt.material.map.offset.x=-t*p.pl.belt*.9;}
   }
   function removeCrate(ti){const i=crateIndex.get(ti);if(i==null)return null;const m=new THREE.Matrix4();crates.getMatrixAt(i,m);const p=new THREE.Vector3().setFromMatrixPosition(m);
     m.makeScale(0,0,0);crates.setMatrixAt(i,m);crates.instanceMatrix.needsUpdate=true;crateIndex.delete(ti);return p;}
   function dispose(){group.traverse(o=>{if(o.geometry)o.geometry.dispose();});for(const m of mats)m.dispose();if(waterMask)waterMask.dispose();if(water)water.dispose();decor.dispose();}
-  return {group,update,removeCrate,crateIndex,dispose,fg:decor.fg,falls,ground,ceil,enclosed,hasCeiling,sample:(px)=>sample(ground,px),floorAt:(x,z)=>backY(x,z,true),material:mat};
+  return {group,update,removeCrate,crateIndex,dispose,fg:decor.fg,falls,water,ground,ceil,enclosed,hasCeiling,sample:(px)=>sample(ground,px),floorAt:(x,z)=>backY(x,z,true),material:mat};
 }
 
 function splitByX(g,width){
@@ -223,50 +225,6 @@ function beltMesh(w,dir){
   const tex=new THREE.CanvasTexture(c);tex.wrapS=THREE.RepeatWrapping;tex.repeat.set(w/16,1);tex.colorSpace=THREE.SRGBColorSpace;
   const m=new THREE.Mesh(new THREE.PlaneGeometry(w,30),new THREE.MeshStandardMaterial({map:tex,emissiveMap:tex,emissive:new THREE.Color('#ff7a2a'),emissiveIntensity:1.2,metalness:.3,roughness:.6}));
   m.rotation.x=-Math.PI/2;m.position.set(w/2,.3,-4);const grp=new THREE.Group();grp.add(m);grp.material=m.material;return grp;
-}
-
-function buildWater(level,theme,tileAt,zFar){
-  const T=TILE,cols=level.cols,rows=level.rows,group=new THREE.Group();
-  const deep=new THREE.Color(theme.key==='vaults'?'#021a20':'#0d2a40'),shallow=new THREE.Color(theme.key==='vaults'?'#1a8a84':'#3a8ab0');
-  const uniforms={uTime:{value:0},uDeep:{value:deep},uShallow:{value:shallow},uSky:{value:new THREE.Color(theme.sky.glow)}};
-  const surf=new THREE.ShaderMaterial({uniforms,transparent:true,depthWrite:false,side:THREE.DoubleSide,
-    vertexShader:`varying vec3 vW;uniform float uTime;void main(){vec3 p=position;vec4 w=modelMatrix*vec4(p,1.);w.y+=sin(w.x*.05+uTime*1.6)*.8+sin(w.z*.09-uTime*1.1)*.6;vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}`,
-    fragmentShader:`varying vec3 vW;uniform float uTime;uniform vec3 uDeep,uShallow,uSky;
-      float h(vec2 p){return sin(p.x*.08+uTime*1.3)*sin(p.y*.11-uTime*.9)+sin((p.x+p.y)*.05+uTime*.7)*.6;}
-      void main(){vec2 p=vW.xz;float e=.6;vec3 n=normalize(vec3(h(p+vec2(e,0))-h(p-vec2(e,0)),2.2,h(p+vec2(0,e))-h(p-vec2(0,e))));
-      vec3 v=normalize(cameraPosition-vW);float fr=pow(1.-max(dot(n,v),0.),3.);vec3 l=normalize(vec3(-.4,.8,.5));float sp=pow(max(dot(reflect(-l,n),v),0.),60.)*.7;
-      vec3 c=mix(uDeep*1.4+uShallow*.25,uSky*.55,fr*.7)+sp;float a=.5+fr*.35;gl_FragColor=vec4(c,a);}`});
-  const front=new THREE.ShaderMaterial({uniforms,transparent:true,depthWrite:false,
-    vertexShader:`varying vec3 vW;void main(){vec4 w=modelMatrix*vec4(position,1.);vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}`,
-    fragmentShader:`varying vec3 vW;uniform float uTime;uniform vec3 uDeep,uShallow;uniform float uTop;
-      void main(){float rays=pow(max(0.,sin(vW.x*.03+sin(vW.y*.02+uTime*.4)*2.+uTime*.3)),6.)*.25;
-      vec3 c=uDeep*1.1+uShallow*(.08+rays*.6);gl_FragColor=vec4(c,.58);}`});
-  // horizontal runs of surface tiles and vertical faces per water tile
-  const surfGeos=[],frontGeos=[];
-  for(let ty=0;ty<rows;ty++){let tx=0;while(tx<cols){if(tileAt(tx,ty)===5){let e=tx;while(e<cols&&tileAt(e,ty)===5)e++;
-      const x0=tx*T,x1=e*T,y0=-ty*T,y1=y0-T;
-      const f=new THREE.PlaneGeometry(x1-x0,T);f.translate((x0+x1)/2,(y0+y1)/2,Z_FRONT+1.5);frontGeos.push(f);
-      // surface where the tile above is not water
-      let sx=tx;while(sx<e){if(tileAt(sx,ty-1)!==5){let se=sx;while(se<e&&tileAt(se,ty-1)!==5)se++;
-          const yS=-ty*T-3,g=new THREE.PlaneGeometry((se-sx)*T,Z_FRONT+1.5-zFar,Math.max(1,(se-sx)*2),12);g.rotateX(-Math.PI/2);g.translate((sx+se)*T/2,yS,(Z_FRONT+1.5+zFar)/2);surfGeos.push(g);sx=se;}else sx++;}
-      tx=e;}else tx++;}}
-  if(!surfGeos.length&&!frontGeos.length)return null;
-  if(frontGeos.length){const m=new THREE.Mesh(mergeGeometries(frontGeos),front);m.renderOrder=3;group.add(m);}
-  if(surfGeos.length){const m=new THREE.Mesh(mergeGeometries(surfGeos),surf);m.renderOrder=2;group.add(m);}
-  return {group,update(t){uniforms.uTime.value=t;},dispose(){surf.dispose();front.dispose();}};
-}
-
-function waterfall(d,theme){
-  const T=TILE,x=d.tx*T+T/2,top=-d.topTy*T+6,bot=-(d.botTy+1)*T-90,h=top-bot;
-  const uniforms={uTime:{value:0},uColor:{value:new THREE.Color(theme.key==='mesa'?'#bfe8ff':'#9ff')}};
-  const mat=new THREE.ShaderMaterial({uniforms,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
-    vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
-    fragmentShader:`varying vec2 vUv;uniform float uTime;uniform vec3 uColor;
-      float n(vec2 p){return fract(sin(dot(floor(p),vec2(12.9,78.2)))*43758.5);}
-      void main(){vec2 p=vec2(vUv.x*14.,vUv.y*6.+uTime*5.5);float a=n(p)*.6+n(p*vec2(1.,2.3)+3.)*.4;float edge=smoothstep(0.,.25,vUv.x)*smoothstep(1.,.75,vUv.x);
-      float s=smoothstep(.3,1.,a)*edge;float foam=smoothstep(.12,0.,vUv.y);gl_FragColor=vec4(uColor*(.35+s*1.2+foam*1.5),1.)*(.5*edge+s*.6+foam*.5);}`});
-  const mesh=new THREE.Mesh(new THREE.PlaneGeometry(28,h,1,1),mat);mesh.position.set(x,bot+h/2,-40);
-  return {mesh,mat,x,top,bot};
 }
 
 function buildSurfaceDecor(level,theme,ground,ceil,enclosed,r,quality){

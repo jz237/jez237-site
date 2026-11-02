@@ -13,7 +13,7 @@ export function terrainMaterial(theme,opts={}){
     uTop:{value:lin(opts.top||theme.top.color)},uTopRough:{value:theme.top.rough},uStrata:{value:opts.strata??theme.rock.strata},
     uWet:{value:theme.rock.wet},uCrystal:{value:lin(theme.crystal)},uVein:{value:opts.vein??(industrial?0:1)},
     uIndustrial:{value:industrial?1:0},uBump:{value:opts.bump??(industrial?1.2:2.2)},
-    uWaterMask:{value:opts.waterMask||null},uHasWater:{value:opts.waterMask?1:0},uLevelSize:{value:new THREE.Vector2(opts.cols||1,opts.rows||1)},
+    uWaterMask:{value:opts.waterMask||null},uHasWater:{value:opts.waterMask?1:0},uWaterTop:{value:opts.waterTop??-1e4},uLevelSize:{value:new THREE.Vector2(opts.cols||1,opts.rows||1)},
     uHeat:{value:opts.heat??(theme.key==='foundry'?1:0)},uPulse:{value:theme.key==='spire'?1:0},uAccent:{value:lin(theme.accent)}
   };
   m.userData.uniforms=u;
@@ -23,12 +23,16 @@ export function terrainMaterial(theme,opts={}){
       .replace('#include <project_vertex>','#include <project_vertex>\nvWPos=(modelMatrix*vec4(transformed,1.)).xyz;vWNormal=normalize(mat3(modelMatrix)*objectNormal);');
     sh.fragmentShader=sh.fragmentShader.replace('#include <common>',`#include <common>
 varying vec3 vWPos;varying vec3 vWNormal;
-uniform sampler2D uDetail;uniform float uTime,uTopRough,uStrata,uWet,uVein,uIndustrial,uBump,uHasWater,uHeat,uPulse;
+uniform sampler2D uDetail;uniform float uTime,uTopRough,uStrata,uWet,uVein,uIndustrial,uBump,uHasWater,uHeat,uPulse,uWaterTop;
 uniform vec3 uRockBase,uRockDark,uRockLight,uTop,uCrystal,uAccent;uniform sampler2D uWaterMask;uniform vec2 uLevelSize;
-float gH,gGrain,gWet,gVein,gUnder,gCaus,gSeam,gLit;
+float gH,gGrain,gWet,gVein,gUnder,gSeam,gLit;vec3 gCaus;
 float h21(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}
 vec4 tri4(vec3 p,vec3 w,float s){return texture2D(uDetail,p.zy*s)*w.x+texture2D(uDetail,p.xz*s)*w.y+texture2D(uDetail,p.xy*s)*w.z;}
-float caustic(vec2 p,float t){vec2 q=p;float c=0.;for(int i=0;i<3;i++){q+=vec2(sin(q.y*1.31+t*.83),cos(q.x*1.17-t*.71))*.55;c+=abs(sin(q.x*1.1+q.y*.9));}c/=3.;return pow(1.-c,4.)*2.2;}
+// sharp caustic web (iterated warp), one sample per colour so the bright lines split into a faint spectrum
+float caustic(vec2 p,float t){p=mod(p,6.2832)-250.;vec2 i=p;float c=1.;for(int n=0;n<4;n++){float tt=t*(1.-3.5/float(n+1));
+  i=p+vec2(cos(tt-i.x)+sin(tt+i.y),sin(tt-i.y)+cos(tt+i.x));c+=1./length(vec2(p.x/(sin(i.x+tt)/.005),p.y/(cos(i.y+tt)/.005)));}
+  c/=4.;c=1.17-pow(c,1.4);return pow(abs(c),8.);}
+vec3 causticRGB(vec2 p,float t){return vec3(caustic(p+vec2(.035,0.),t),caustic(p,t),caustic(p-vec2(.035,0.),t));}
 vec3 perturbN(vec3 sp,vec3 sn,vec2 dH,float fd){vec3 sx=normalize(dFdx(sp)),sy=normalize(dFdy(sp));vec3 r1=cross(sy,sn),r2=cross(sn,sx);float det=dot(sx,r1)*fd;vec3 g=sign(det)*(dH.x*r1+dH.y*r2);return normalize(abs(det)*sn-g);}
 `).replace('#include <map_fragment>',`
 vec3 wn=normalize(vWNormal);vec3 tw=pow(abs(wn),vec3(4.));tw/=dot(tw,vec3(1.));
@@ -61,10 +65,10 @@ if(uIndustrial>.5){
 }
 gVein=uVein*smoothstep(.9,.985,crack)*smoothstep(.68,.9,broad)*(1.-up);
 gWet=uWet*(.35+.65*up);
-gUnder=0.;gCaus=0.;
+gUnder=0.;gCaus=vec3(0.);
 if(uHasWater>.5){vec3 sp=vWPos+wn*3.;vec2 tc=vec2(sp.x/20.,-sp.y/20.);float wm=texture2D(uWaterMask,(floor(tc)+.5)/uLevelSize).r;
   float wa=texture2D(uWaterMask,(floor(tc-vec2(0.,1.))+.5)/uLevelSize).r;gUnder=max(wm,wa*smoothstep(4.,0.,fract(tc.y)*20.));
-  gCaus=caustic(vWPos.xz*.045+vWPos.y*.012,uTime*1.4)*gUnder;col*=mix(vec3(1.),vec3(.5,.82,.88),gUnder);gWet=max(gWet,gUnder);}
+  if(gUnder>.01){float dep=max(0.,uWaterTop-vWPos.y);gCaus=causticRGB(vWPos.xz*.028+vec2(vWPos.y*.009,0.),uTime*.55)*gUnder*exp(-dep*.009)*(.35+.65*max(0.,wn.y));}col*=mix(vec3(1.),vec3(.82,.93,.95),gUnder);gWet=max(gWet,gUnder);}
 diffuseColor.rgb*=col;
 `).replace('#include <roughnessmap_fragment>',`float roughnessFactor=roughness*(.75+gGrain*.45);roughnessFactor=mix(roughnessFactor,uTopRough,0.);roughnessFactor=mix(roughnessFactor,.42,gWet);roughnessFactor=mix(roughnessFactor,.35,gSeam*uIndustrial);`)
     .replace('#include <normal_fragment_maps>',`#include <normal_fragment_maps>
@@ -72,7 +76,7 @@ normal=perturbN(-vViewPosition,normal,vec2(dFdx(gH),dFdy(gH))*uBump*(1.-.75*smoo
     .replace('#include <emissivemap_fragment>',`#include <emissivemap_fragment>
 float pulse=.75+.25*sin(uTime*2.2+vWPos.x*.031+vWPos.y*.05);
 totalEmissiveRadiance+=uCrystal*gVein*1.1*pulse;
-totalEmissiveRadiance+=vec3(.25,.75,.85)*gCaus*.18;
+totalEmissiveRadiance+=vec3(.55,1.,1.)*gCaus*1.1;
 totalEmissiveRadiance+=uAccent*gLit*.7;
 if(uPulse>.5){float vv=smoothstep(.9,.985,d.g)*smoothstep(.6,.85,d2.a);totalEmissiveRadiance+=uAccent*vv*(.6+.6*sin(uTime*3.+vWPos.x*.02))*1.4;}
 if(uHeat>.5){float glow=smoothstep(-150.,-430.,vWPos.y)*0.;totalEmissiveRadiance+=vec3(1.,.35,.08)*glow;}`);

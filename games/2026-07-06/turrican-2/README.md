@@ -20,11 +20,12 @@ Lives at `jez237.com/games/2026-07-06/turrican-2/` (the folder keeps its old pat
 `src3d/`:
 
 - `main.mjs` renderer entry: canvas, lights, shadows, camera director, actor management, event effects, title scene.
-- `terrain.mjs` tile map to sculpted 3D lane blocks (watertight displacement), the landscape behind the lane, cave ceilings and back walls, crates, hazards, water, platforms, waterfalls, pebbles, foreground silhouettes.
+- `terrain.mjs` tile map to sculpted 3D lane blocks (watertight displacement), the landscape behind the lane, cave ceilings and back walls, crates, hazards, platforms, pebbles, foreground silhouettes.
+- `water.mjs` the water (see below) and waterfalls.
 - `materials.mjs` triplanar procedural terrain shader (strata, cracks, panels, caustics, veins) and the crystal material.
 - `backdrop.mjs` sky dome, planets and rings, distant buttes, clouds, light shafts and per-world set pieces (foundry machinery and molten channel, spire columns, rift islands).
 - `fx.mjs` GPU particles with closed-form motion, debris, tracers, arc-lance beam, shockwall, rings, pooled dynamic lights.
-- `post.mjs` MSAA HDR, bloom, ACES, then grading, vignette, chromatic hits, grain, cryo frost, damage.
+- `post.mjs` MSAA HDR (with a depth texture), the water pass, bloom, ACES, then grading, vignette, chromatic hits, grain, cryo frost, damage.
 - `hud.mjs` HUD on the overlay canvas.
 - `worlds.mjs` per-world art direction.
 - `actors/` hero, fighter, enemies, bosses, pickups, mines.
@@ -36,6 +37,21 @@ Lives at `jez237.com/games/2026-07-06/turrican-2/` (the folder keeps its old pat
 - **World select.** Reaching a world in a run opens it (`shard.progress.v1` in localStorage, with the best medal per stage). A run started later begins with the gear a trooper would carry by then (`LOADOUT` in game.js).
 - **Stage results.** Crystals found against `D.REACH`, secrets opened (vaults and crawlspaces), time and deaths. Gold at 90%, silver 70%, bronze 45%.
 - **Demo takeover.** Fire, jump or start during the demo hands the run to the player at that spot (the Play button reads "Take over" then). Any other key returns to the menu.
+
+## Water
+
+The water meshes live on layer 1, so the main render pass skips them. `WaterPass` (post.mjs) copies the finished opaque frame, then draws the water sampling that frame's colour and depth:
+
+- **Surface:** slow swell plus a ripple-tank height field, detail normals, refraction that never pulls in foreground objects, Beer-Lambert absorption over the real path length through the water, screen-space reflections (ray march + binary refine, sky fallback), sun glints, and foam where the surface meets something or on fresh ripple crests.
+- **Side glass** (the cut through the water facing the camera): shimmer and refraction, absorption by thickness and by depth below the surface, ray-marched light shafts and parallax silt on fixed depth slices, and a meniscus with a band of total internal reflection at the waterline.
+- **Ripples:** a CPU wave simulation (256x48 cells, 4x6 units) that follows the camera. Splashes, the trooper paddling, shots and swimmers crossing the surface, explosions and cave drips disturb it.
+- **Caustics:** the terrain shader draws a sharp, colour-split caustic web on submerged rock, fading with depth (`uWaterTop`).
+- **Sound:** drips, shot plops and swim strokes come back from the renderer through `renderer.onWater`; a lapping loop plays near open water and a muffled bed while submerged.
+- **Performance mode** (`setFX(false)`) switches the water to a lite alpha-blended version on the main pass.
+
+## Demo zoom
+
+During the demo, pinch (touch) or scroll / trackpad pinch (desktop) zooms from 0.75x to 2.8x about the fingers or cursor, a two-finger drag looks around, and a double tap resets. Zoomed in, the camera frames the trooper; zoomed out, the view stays inside the level. Zoom resets when the demo ends or a viewer takes over. `__shard.zoom.set(z, panX, panY)` drives it in tests.
 
 ## Game speed
 
@@ -58,5 +74,5 @@ Bump the `?v=` query on `assets/shard3d.js` (and any other changed script) in `i
 - `?q=ultra|high|low` picks the quality tier (the Quality button saves it in `shard.quality`).
 - `?fixed` disables the dynamic-resolution scaler.
 - `?qa` on localhost shows the scene/pose test panel.
-- `window.__shard`: `start(world)`, `goToStage(i)`, `clearStage()`, `demo.start()`, `demo.takeOver()`, `run`, `results`, `progress`, `settings`, `snapshot()`, `graphics` (renderer stats).
+- `window.__shard`: `start(world)`, `goToStage(i)`, `clearStage()`, `demo.start()`, `demo.takeOver()`, `zoom`, `setFX(on)`, `run`, `results`, `progress`, `settings`, `snapshot()`, `graphics` (renderer stats).
 - `window.__modernGraphics.stats`: draw calls, triangles, frame ms, resolution, level build time.

@@ -22,6 +22,7 @@
     stomp: v('stomp', 2), dash: v('dash', 2), spawn: v('spawn', 2), warning: v('warning', 1),
     tele: v('tele', 2), coreopen: v('coreopen', 1), clink: v('clink', 4), bosshit: v('bosshit', 4),
     bossdie: v('bossdie', 2), phase: v('phase', 2), morph: v('morph', 2), splash: v('splash', 2),
+    drip: v('drip', 3), plip: v('plip', 2), stroke: v('stroke', 3),
     jump: v('jump', 4), land: v('land', 4), line: v('line', 2), checkpoint: v('checkpoint', 1),
     gem: v('gem', 4), power: v('power', 2), die: v('die', 2), bomb: v('bomb', 2), tick: v('tick', 1),
     'boss-warden': v('boss-warden', 1), 'boss-maw': v('boss-maw', 1), 'boss-gunship': v('boss-gunship', 1),
@@ -32,7 +33,8 @@
     complete: [A + 'sfx/sfx-complete.mp3'], victory: [A + 'sfx/sfx-victory.mp3'], gameover: [A + 'sfx/sfx-gameover.mp3'],
   };
   const STEPS = { rock: v('step-rock', 4), wet: v('step-wet', 4), metal: v('step-metal', 4), organic: v('step-organic', 4) };
-  const LOOPS = { beam: A + 'sfx/loop-beam.mp3', engine: A + 'sfx/loop-engine.mp3', roll: A + 'sfx/loop-roll.mp3', heart: A + 'sfx/loop-heart.mp3' };
+  const LOOPS = { beam: A + 'sfx/loop-beam.mp3', engine: A + 'sfx/loop-engine.mp3', roll: A + 'sfx/loop-roll.mp3', heart: A + 'sfx/loop-heart.mp3',
+    lap: A + 'sfx/loop-lap.mp3', under: A + 'sfx/loop-under.mp3' };
   const AMB = { 1: A + 'amb/amb-world1.mp3', 2: A + 'amb/amb-world2.mp3', 3: A + 'amb/amb-world3.mp3', 4: A + 'amb/amb-world4.mp3', 5: A + 'amb/amb-world5.mp3' };
   const AMB_GAIN = { 1: 0.8, 2: 0.9, 3: 0.7, 4: 0.75, 5: 0.9 };
   const SURFACE = { 1: 'rock', 2: 'wet', 3: null, 4: 'metal', 5: 'organic' };
@@ -58,6 +60,8 @@
     clink: { gain: 0.45, pitch: 0.12, max: 3, gap: 0.05 }, bosshit: { gain: 0.6, pitch: 0.1, max: 3, gap: 0.045 },
     bossdie: { gain: 1.0, max: 1, gap: 1.0 }, phase: { gain: 0.9, pitch: 0.04, max: 1, gap: 0.4 },
     morph: { gain: 0.6, pitch: 0.05, max: 1, gap: 0.08 }, splash: { gain: 0.7, pitch: 0.08, max: 2, gap: 0.1 },
+    drip: { gain: 0.42, pitch: 0.12, max: 3, gap: 0.12 }, plip: { gain: 0.4, pitch: 0.12, max: 3, gap: 0.05 },
+    stroke: { gain: 0.38, pitch: 0.1, max: 2, gap: 0.22 },
     jump: { gain: 0.5, pitch: 0.08, max: 1, gap: 0.06 }, land: { gain: 0.7, pitch: 0.08, max: 1, gap: 0.08 },
     line: { gain: 0.85, pitch: 0.04, max: 2, gap: 0.15 }, checkpoint: { gain: 0.7, max: 1, gap: 0.5, np: true },
     gem: { gain: 0.45, pitch: 0.04, max: 3, gap: 0.035 }, power: { gain: 0.75, max: 1, gap: 0.15, np: true },
@@ -565,6 +569,19 @@
 
     // ---- per-frame driver ------------------------------------------------------
     let stepT = 0, prevGround = true, beamWasOn = false, curLP = 20000, lastState = null;
+    // open water surfaces of a level (game coords), cached per level
+    let wsLevel = null, wsList = null;
+    function waterSurfaces(l) {
+      if (!l || !l.hasWater) return null;
+      if (l === wsLevel) return wsList;
+      wsLevel = l; wsList = [];
+      for (let ty = 1; ty < l.rows; ty++) for (let tx = 0; tx < l.cols; tx++) {
+        if (l.tiles[ty * l.cols + tx] !== 5 || l.tiles[(ty - 1) * l.cols + tx] === 5) continue;
+        const last = wsList[wsList.length - 1];
+        if (last && last.ty === ty && last.x1 === tx * 20) last.x1 += 20; else wsList.push({ ty, x0: tx * 20, x1: tx * 20 + 20, y: ty * 20 + 3 });
+      }
+      return wsList;
+    }
     function update(state, dt) {
       if (!ctx || !state) return;
       lastState = state;
@@ -588,6 +605,12 @@
       loopSet('engine', live && shmup, 0.5, 0.85 + Math.min(0.45, spd / 520), px, py);
       // morph-ball roll
       loopSet('roll', live && !shmup && !!p.morph && !!p.onGround && avx > 30, 0.55, 0.75 + Math.min(0.6, avx / 350), px, py);
+      // water: lapping when the trooper is near an open surface, a deep muffled bed once under
+      const ws = waterSurfaces(state.level);
+      let near = 1e9;
+      if (ws) for (const w of ws) { const dx = px < w.x0 ? w.x0 - px : px > w.x1 ? px - w.x1 : 0; near = Math.min(near, Math.hypot(dx, py - w.y)); }
+      loopSet('lap', live && !!ws && near < 320, 0.5 * Math.max(0, 1 - near / 320), 1, px, ws ? py : null);
+      loopSet('under', live && !!p.inWater, 0.55, 1, null, null);
       // low-armour heartbeat (faster as energy falls)
       const e = p.energy != null ? p.energy : 100;
       loopSet('heart', live && e > 0 && e < 30, 0.7, 1 + (30 - e) / 90, null, null);

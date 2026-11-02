@@ -52,7 +52,8 @@ function createRenderer(display){
   let clock=0,levelClock=0,previousFrame=-1,hurt=0,flash=0,frost=0,ca=0,lastFreeze=0,lastGemPulse=0,wasDead=false,lastBossFlash=0;
   const hitSeen=new WeakMap(),mz=new THREE.Vector3();
   let aspect=16/9,Wv=640,Hv=360,viewX=0,viewY=0,bw=0,bh=0,prScale=1,fxOn=true,crt=false;
-  const cam={x:0,y:0,yaw:0,pitch:.07,fov:30,lead:0,init:false};
+  const cam={x:0,y:0,yaw:0,pitch:.07,fov:30,lead:0,init:false,zoom:1,panX:0,panY:0};
+  const zoomT={z:1,x:0,y:0};let VW=640,onWater=null;   // VW: width of world actually on screen (wider when zoomed out)
   let titleMode=false,titleT=0,titlePlayer=null,bossCue=0;
   window.__modernGraphics={stats,get scene(){return scene;},get camera(){return camera;},get renderer(){return gl;},get hero(){return hero;},kit,fx};
 
@@ -61,7 +62,7 @@ function createRenderer(display){
   function resize(){
     const rect=canvas.getBoundingClientRect();const w=Math.max(2,rect.width),h=Math.max(2,rect.height);aspect=w/h;
     const pr=prCap()*prScale,nw=Math.round(w*pr),nh=Math.round(h*pr);
-    if(nw!==bw||nh!==bh){bw=nw;bh=nh;gl.setSize(bw,bh,false);post.setSize(bw,bh);}
+    if(nw!==bw||nh!==bh){bw=nw;bh=nh;gl.setSize(bw,bh,false);post.setSize(bw,bh);if(terrain&&terrain.water)terrain.water.setSize(bw,bh);}
     [Wv,Hv]=viewSize(aspect);camera.aspect=aspect;stats.resolution=+(pr).toFixed(2);
   }
 
@@ -88,6 +89,8 @@ function createRenderer(display){
     clearActors();fx.clear();
     level=lv;theme=worldOf(lv);
     terrain=buildTerrain(lv,theme,quality);scene.add(terrain.group);
+    const wat=terrain.water;post.setWater(wat);
+    if(wat){wat.setSize(bw,bh);wat.setLite(!fxOn);wat.onEvent=waterEvent;}
     backdrop=buildBackdrop(lv,theme,terrain,quality);scene.add(backdrop.group,backdrop.sky);
     props=buildProps(lv,theme,terrain);scene.add(props.group);
     if(!hero){hero=kit.hero();scene.add(hero.root);fighter=kit.fighter();scene.add(fighter.root);shield=makeShield();scene.add(shield);
@@ -143,13 +146,12 @@ function createRenderer(display){
       switch(e.type){
         case 'explosion':{let size=1;const b=s.boss;if(b&&(b.dying||!b.alive)&&e.x>=b.x-20&&e.x<=b.x+b.w+20)size=b.alive?1.5:2.6;
           else{const near=s.enemies.find(en=>!en.alive&&Math.abs(en.x+en.w/2-e.x)<4&&Math.abs(en.y+en.h/2-e.y)<4);if(near&&(near.type==='drifter'||near.type==='hugger'||near.type==='egg'))size=.75;}
-          fx.explosion(e.x,e.y,size,theme);break;}
+          fx.explosion(e.x,e.y,size,theme);if(terrain.water&&terrain.water.splash(e.x,e.y,size*1.3))splashFX(e.x,-terrain.water.surfaceAt(e.x).y,size*.8);break;}
         case 'spark':fx.sparks(e.x,e.y,'#ffe0a0',6,140,{life:.6});fx.glowBall(e.x,e.y,'#ffc070',6,.08);break;
         case 'muzzle':{const c=e.color||'#ffd23f';if(level.type!=='shmup'&&hero&&hero.getMuzzle&&hero.root.visible){hero.getMuzzle(mz);e={...e,x:mz.x,y:-mz.y};}fx.glowBall(e.x,e.y,c,9,.06,6,2.2);fx.sparks(e.x,e.y,c,3,120,{life:.4});fx.flashLight(e.x,e.y,c,2.4,110,.07);
           if(Math.random()<.35)fx.puff(e.x,e.y,'#8a8a90',1,4,{life:.5,speed:20,alpha:.25});break;}
         case 'pickup':fx.sparks(e.x+8,e.y+8,e.color||'#9be6ff',18,150,{grav:-60,life:1.4});fx.ring(e.x+8,e.y+8,e.color||'#9be6ff',22,.35);fx.flashLight(e.x+8,e.y+8,e.color||'#9be6ff',2.5,90,.25);break;
-        case 'splash':for(let i=0;i<22;i++)fx.glow.emit(e.x+(Math.random()-.5)*10,-e.y,(Math.random()-.5)*30,(Math.random()-.5)*120,90+Math.random()*170,(Math.random()-.5)*60,.55,.85,1,.9,.6,1.6,.6,-700,.8,.012,0);
-          fx.ring(e.x,e.y,'#9fe8ff',26,.5,{flat:true,z:0});break;
+        case 'splash':{const w=terrain.water,sf=w&&w.surfaceAt(e.x),sy=sf?-sf.y:e.y;if(w)w.splash(e.x,sy,1.4);splashFX(e.x,sy,1);break;}
         case 'land':fx.puff(e.x,e.y,theme.top.color,5,6,{life:.7,speed:55,rise:8,alpha:.45,grav:-10});break;
         case 'bubble':fx.glow.emit(e.x,-e.y,2,(Math.random()-.5)*10,30,0,.4,.8,.9,.7,1.6,1.4,1.8,40,.5,0,0);break;
         case 'updraft':fx.glow.emit(e.x+(Math.random()-.5)*20,-e.y,(Math.random()-.5)*30,0,160,0,.5,.8,1,.6,.6,1.2,.4,0,.5,.02,0);break;
@@ -161,6 +163,20 @@ function createRenderer(display){
       }
     }
   }
+
+  // ---------------------------------------------------------------- water feedback
+  // a splash: a crown of droplets, a white burst, spray drifting off, a foam ring on the surface
+  function splashFX(x,y,s){const R=Math.random;
+    for(let i=0;i<Math.round(34*s);i++){const a=R()*Math.PI,v=(80+R()*190)*s;
+      fx.glow.emit(x+(R()-.5)*8,-y,(R()-.5)*24,Math.cos(a)*v*.55,Math.sin(a)*v,(R()-.5)*70,.7,.95,1.1,.95,.55+R()*.5,1.1+R()*1.2,.5,-760,.6,.016,0);}
+    for(let i=0;i<Math.round(10*s);i++)fx.glow.emit(x+(R()-.5)*14,-y+2,(R()-.5)*16,(R()-.5)*30,40+R()*70,0,.9,1,1.1,.6,.35,4+R()*3,9,-200,2,0,0);
+    fx.puff(x,y-4,'#dff6f8',Math.round(4*s),9*s,{life:1.1,speed:26,rise:18,alpha:.28,z:4});
+    fx.ring(x,y,'#bff4ff',30*s,.7,{flat:true,z:0});fx.ring(x,y,'#ffffff',16*s,.4,{flat:true,z:0});}
+  function waterEvent(kind,x,y,a){
+    if(kind==='plip'){fx.sparks(x,y,'#cdf6ff',5,90,{life:.45,grav:-500});fx.ring(x,y,'#bff4ff',10,.45,{flat:true,z:0});}
+    else if(kind==='splash')splashFX(x,y,.7);
+    else if(kind==='drip'){fx.ring(x,y,'#bff4ff',9,.6,{flat:true,z:0});}
+    if(onWater)onWater(kind,x,y,a);}
 
   // ---------------------------------------------------------------- camera director
   function updateCamera(s,dt){
@@ -181,13 +197,18 @@ function createRenderer(display){
     if(bossCue>0&&s.boss){bossCue-=dt;const k=Math.sin(Math.min(1,bossCue/1.8)*Math.PI)*.5;tx+=((s.boss.x+s.boss.w/2)-tx)*.0;yaw+=-.08*k*Math.sign((s.boss.x+s.boss.w/2)-cam.x);pitch-=.03*k;distMul*=1-.08*k;}
     if(s.won||s.gameOver){yaw+=Math.sin(levelClock*.25)*.12;distMul*=.92;}
     const fov=cam.fov;camera.fov=fov;camera.updateProjectionMatrix();
-    const d=(Hv/2)/Math.tan(THREE.MathUtils.degToRad(fov/2))*distMul;
+    const d=(Hv/2)/Math.tan(THREE.MathUtils.degToRad(fov/2))*distMul/cam.zoom;
     const sh=fx.shake+Math.min(1.5,s.shake*.12),jx=(Math.sin(clock*71)+Math.sin(clock*113)*.5)*sh*2.2,jy=(Math.cos(clock*83)+Math.cos(clock*127)*.5)*sh*2.2;
     const target=new THREE.Vector3(cam.x+jx,-cam.y+jy,0);
     if(intro>0){target.x=cam.x*(1-ease)+(p.x+7)*ease;target.y=-(cam.y*(1-ease)+(p.y+15)*ease);}
+    // viewer zoom (pinch / wheel in the demo): closer frames the trooper, a two-finger drag looks around
+    cam.zoom=damp(cam.zoom,zoomT.z,9,dt);cam.panX=damp(cam.panX,zoomT.x,9,dt);cam.panY=damp(cam.panY,zoomT.y,9,dt);
+    const zf=cam.zoom,kz=clamp((zf-1)/.7,0,1)*.85;
+    target.x+=((p.x+7)-target.x)*kz+cam.panX*Wv;target.y+=(-(p.y+15)-target.y)*kz+cam.panY*Hv;
+    if(zf<1){const hw=Wv/zf/2,hh=Hv/zf/2;target.x=clamp(target.x,Math.min(hw,LW/2),Math.max(LW-hw,LW/2));target.y=clamp(target.y,-Math.max(LH-hh,LH/2),-Math.min(hh,LH/2));}
     camera.position.set(target.x+Math.sin(yaw)*Math.cos(pitch)*d,target.y+Math.sin(pitch)*d,Math.cos(yaw)*Math.cos(pitch)*d);
     camera.lookAt(target);camera.rotateZ(sh*.004*Math.sin(clock*57));
-    viewX=cam.x-Wv/2;viewY=cam.y-Hv/2;
+    VW=Wv/Math.min(1,zf);viewX=(zf<1?target.x:cam.x)-VW/2;viewY=cam.y-Hv/2;
     // sun shadow box follows the view (texel snapped)
     const sd=new THREE.Vector3(...theme.sun.dir).normalize();const ext=Math.max(Wv,Hv)*.75+120;
     const sc=sun.shadow.camera;sc.left=-ext;sc.right=ext;sc.top=ext*.8;sc.bottom=-ext*.8;sc.near=10;sc.far=2400;sc.updateProjectionMatrix();
@@ -197,7 +218,7 @@ function createRenderer(display){
   }
 
   // ---------------------------------------------------------------- actors
-  function inView(x,margin){return x>viewX-margin&&x<viewX+Wv+margin;}
+  function inView(x,margin){return x>viewX-margin&&x<viewX+VW+margin;}
   function updateActors(s,dt){
     const p=s.player,flight=level.type==='shmup';
     const blink=p.invuln>0&&!p.dead?(Math.floor(clock*18)%3!==0):true;
@@ -242,7 +263,7 @@ function createRenderer(display){
 
   // ---------------------------------------------------------------- ambient particles
   function ambient(s,dt){
-    const k=theme.ambient,area=Wv*Hv/230400,x0=viewX-60,y0=viewY;const R=Math.random;
+    const k=theme.ambient,area=VW*Hv/230400,x0=viewX-60,y0=viewY;const R=Math.random,Wv=VW;
     const wind=(level.windX||0)*(s.windPhase||0);
     if(k==='dust'){for(let i=0;i<area*dt*30;i++)fx.smoke.emit(x0+R()*(Wv+120),-(y0+R()*Hv),-60+R()*90,60+wind*.8+R()*40,(R()-.5)*14,0,.85,.68,.5,.18,3,1.4,2.4,0,.2,0,0);
       if(Math.abs(wind)>60&&R()<dt*4)fx.smoke.emit(x0+R()*Wv,-(y0+Hv*.6+R()*Hv*.4),-40+R()*60,wind*1.6,10,0,.8,.6,.45,.12,2.2,18,46,0,.4,0,0);}
@@ -266,10 +287,11 @@ function createRenderer(display){
     updateCamera(s,dt);
     updateActors(s,dt);
     let beamFrom=null;if(level.type!=='shmup'&&s.player.beamActive&&hero.getMuzzle){hero.getMuzzle(mz);beamFrom={x:mz.x,y:-mz.y};}
-    fx.drawShots(s,viewX,Wv);fx.drawBeam(s.player,clock,theme,beamFrom);fx.moveWalls(s.floats);
-    if(dt>0){ambient(s,dt);for(const f of terrain.falls)if(f.x>viewX-60&&f.x<viewX+Wv+60){if(Math.random()<dt*14)fx.puff(f.x+(Math.random()-.5)*20,-(f.bot+40),'#e8f6ff',1,10,{life:1.6,speed:30,rise:26,alpha:.3,z:-40});
+    fx.drawShots(s,viewX,VW);fx.drawBeam(s.player,clock,theme,beamFrom);fx.moveWalls(s.floats);
+    if(dt>0){ambient(s,dt);for(const f of terrain.falls)if(f.x>viewX-60&&f.x<viewX+VW+60){if(Math.random()<dt*14)fx.puff(f.x+(Math.random()-.5)*20,-(f.bot+40),'#e8f6ff',1,10,{life:1.6,speed:30,rise:26,alpha:.3,z:-40});
       if(Math.random()<dt*30)fx.glow.emit(f.x+(Math.random()-.5)*20,f.bot+40,-40,(Math.random()-.5)*60,40+Math.random()*60,(Math.random()-.5)*30,.5,.7,.8,.7,.7,1.2,.5,-300,.6,.01,0);}}
     props.update(s,clock);terrain.update(clock,dt,s);backdrop.update(clock,camera);
+    if(terrain.water){camera.updateMatrixWorld();terrain.water.update(clock,dt,s,camera,viewX,VW);}
     for(const g of terrain.fg){const dxp=Math.abs(g.position.x-(s.player.x+7));g.visible=dxp>60||g.position.x<viewX-200||g.position.x>viewX+Wv+200?true:false;}
     fx.update(dt,clock,level,{x:cam.x},(x,y)=>{const tx=Math.floor(x/TILE),ty=Math.floor(y/TILE);if(tx<0||tx>=level.cols)return false;if(ty>=level.rows)return true;if(ty<0)return false;return level.tiles[ty*level.cols+tx]===1;});
     // post
@@ -327,8 +349,9 @@ function createRenderer(display){
   // ---------------------------------------------------------------- API
   function setResolution(scale){quality=scale>=6?'ultra':scale>=3?'high':'low';stats.quality=quality;prScale=1;bw=0;resize();
     const sm=quality==='ultra'?4096:quality==='high'?2048:1024;if(sun.shadow.mapSize.x!==sm){sun.shadow.mapSize.set(sm,sm);if(sun.shadow.map){sun.shadow.map.dispose();sun.shadow.map=null;}}}
-  function setFX(on){fxOn=on;if(!on){prScale=.7;bw=0;}}
-  return {setLevel,render,renderTitle,setCRT(on){crt=on;},setFX,setResolution,get buffer(){return canvas;},get quality(){return quality;},particles:[]};
+  function setFX(on){fxOn=on;if(!on){prScale=.7;bw=0;}if(on)camera.layers.disable(1);else camera.layers.enable(1);if(terrain&&terrain.water)terrain.water.setLite(!on);}
+  function setZoom(z,px,py){zoomT.z=z;zoomT.x=px||0;zoomT.y=py||0;}
+  return {setLevel,render,renderTitle,setCRT(on){crt=on;},setFX,setResolution,setZoom,get zoom(){return cam.zoom;},set onWater(f){onWater=f;},get buffer(){return canvas;},get quality(){return quality;},particles:[]};
 }
 
 window.TRender={createRenderer};

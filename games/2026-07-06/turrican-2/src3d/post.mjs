@@ -6,6 +6,24 @@ import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
 import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
 import {ShaderPass} from 'three/addons/postprocessing/ShaderPass.js';
 import {GTAOPass} from 'three/addons/postprocessing/GTAOPass.js';
+import {Pass,FullScreenQuad} from 'three/addons/postprocessing/Pass.js';
+import {CopyShader} from 'three/addons/shaders/CopyShader.js';
+
+// Water (layer 1) drawn over the finished opaque frame: copy the frame, then draw the water
+// meshes sampling that frame's colour and depth (refraction, absorption, reflections).
+class WaterPass extends Pass{
+  constructor(scene,camera){super();this.scene=scene;this.camera=camera;this.water=null;this.enabled=false;
+    this.copy=new FullScreenQuad(new THREE.ShaderMaterial({uniforms:THREE.UniformsUtils.clone(CopyShader.uniforms),vertexShader:CopyShader.vertexShader,fragmentShader:CopyShader.fragmentShader,depthTest:false,depthWrite:false}));}
+  render(r,writeBuffer,readBuffer){
+    r.setRenderTarget(this.renderToScreen?null:writeBuffer);r.clear(true,true,false);
+    this.copy.material.uniforms.tDiffuse.value=readBuffer.texture;this.copy.render(r);
+    const U=this.water.uniforms;U.tScene.value=readBuffer.texture;U.tDepth.value=readBuffer.depthTexture;
+    const bg=this.scene.background,auto=r.autoClear,sh=r.shadowMap.autoUpdate,mask=this.camera.layers.mask;
+    this.scene.background=null;r.autoClear=false;r.shadowMap.autoUpdate=false;this.camera.layers.set(1);
+    r.render(this.scene,this.camera);
+    this.camera.layers.mask=mask;r.shadowMap.autoUpdate=sh;r.autoClear=auto;this.scene.background=bg;}
+  dispose(){this.copy.dispose();this.copy.material.dispose();}
+}
 
 // Ambient occlusion that ignores particles, glows, water and the sky dome (they would print dark halos).
 class GameAO extends GTAOPass{
@@ -40,8 +58,10 @@ const FinalShader={
 export function createPost(gl,scene,camera,quality){
   const size=gl.getDrawingBufferSize(new THREE.Vector2());
   const rt=new THREE.WebGLRenderTarget(size.x,size.y,{type:THREE.HalfFloatType,samples:quality==='low'?0:4});
+  rt.depthTexture=new THREE.DepthTexture(size.x,size.y);rt.depthTexture.type=THREE.UnsignedIntType;   // read by the water pass
   const composer=new EffectComposer(gl,rt);
   const renderPass=new RenderPass(scene,camera);composer.addPass(renderPass);
+  const water=new WaterPass(scene,camera);composer.addPass(water);
   let ao=null;
   if(quality==='ultra'){ao=new GameAO(scene,camera,size.x,size.y);ao.output=GTAOPass.OUTPUT.Default;ao.blendIntensity=.85;
     ao.updateGtaoMaterial({radius:16,distanceExponent:1.6,thickness:6,distanceFallOff:1,scale:1.15,samples:12});ao.updatePdMaterial({lumaPhi:10,depthPhi:2,normalPhi:3,radius:5,rings:2,samples:12});composer.addPass(ao);}
@@ -50,6 +70,7 @@ export function createPost(gl,scene,camera,quality){
   const final=new ShaderPass(FinalShader);composer.addPass(final);
   const u=final.uniforms;
   return {composer,bloom,final,u,ao,
+    setWater(w){water.water=w;water.enabled=!!w;},
     setSize(w,h){composer.setSize(w,h);u.uRes.value.set(w,h);bloom.resolution.set(w,h);},
     setGrade(g){u.uLift.value.set(...g.lift);u.uGain.value.set(...g.gain);u.uSat.value=g.sat;},
     render(){composer.render();}};
