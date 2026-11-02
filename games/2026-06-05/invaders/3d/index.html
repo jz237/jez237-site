@@ -639,33 +639,51 @@
       box-shadow: 0 0 8px rgba(255, 210, 61, 0.8);
     }
 
-    @media (max-width: 760px), (pointer: coarse) {
-      .hud {
-        inset: max(8px, env(safe-area-inset-top))
-          calc(max(8px, env(safe-area-inset-right)) + 136px + var(--gutter))
-          auto
-          calc(max(8px, env(safe-area-inset-left)) + var(--gutter));
-        grid-template-columns: 1.3fr 0.68fr 1.12fr 1fr;
-        gap: 4px;
-      }
+    /* Phones, touch screens and narrow windows (set from resize()): four meters, with room
+       reserved on the right for the bomb, pause and mute buttons. */
+    html.compact-hud .hud {
+      inset: max(8px, env(safe-area-inset-top))
+        calc(max(8px, env(safe-area-inset-right)) + 136px + var(--gutter))
+        auto
+        calc(max(8px, env(safe-area-inset-left)) + var(--gutter));
+      grid-template-columns: 1.45fr 0.62fr 1.05fr 0.95fr;
+      gap: 4px;
+    }
 
-      .meter {
-        padding: 7px 6px;
-      }
+    html.compact-hud .meter {
+      padding: 7px 6px;
+    }
 
-      .meter:nth-child(4) {
-        display: none;
-      }
+    html.compact-hud .meter span {
+      font-size: clamp(12px, 3.4vw, 18px);
+    }
 
-      .controls {
-        top: max(8px, env(safe-area-inset-top));
-        right: calc(max(8px, env(safe-area-inset-right)) + var(--gutter));
-      }
+    html.compact-hud .meter:nth-child(4) {
+      display: none;
+    }
 
-      .controls button {
-        width: 38px;
-        min-height: 44px;
-      }
+    html.compact-hud .controls {
+      top: max(8px, env(safe-area-inset-top));
+      right: calc(max(8px, env(safe-area-inset-right)) + var(--gutter));
+    }
+
+    html.compact-hud .controls button {
+      width: 38px;
+      min-height: 44px;
+    }
+
+    /* Room beside the arena: the buttons sit just outside it and the HUD keeps its full width. */
+    html.wide-gutter .hud {
+      inset: max(14px, env(safe-area-inset-top))
+        calc(max(16px, env(safe-area-inset-right)) + var(--gutter))
+        auto
+        calc(max(16px, env(safe-area-inset-left)) + var(--gutter));
+    }
+
+    html.wide-gutter .controls {
+      top: max(14px, env(safe-area-inset-top));
+      right: auto;
+      left: calc(100% - var(--gutter) + 14px);
     }
 
     @media (max-width: 520px) {
@@ -760,7 +778,7 @@
       }
     }
   </script>
-  <script type="module" src="./game.js?v=1"></script>
+  <script type="module" src="./game.js?v=2"></script>
   <script>
     // If the module never boots (old browser, no WebGL 2), point at the Classic Edition.
     setTimeout(function () {

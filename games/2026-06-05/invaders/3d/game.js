@@ -748,10 +748,27 @@ function resize() {
   game.scale = Math.min(game.width / 1180, game.height / 760);
   game.fxLow = game.lowPower || game.autoLow;
   if (stage) {
+    const root = document.documentElement;
+    const placeHud = () => {
+      const field = stage.fieldScreen();
+      let gutter = Math.max(0, Math.round(Math.min(field.left, vw - field.right)));
+      if (gutter < 24) gutter = 0; // a sliver of margin on phones: let the HUD use the full width
+      root.style.setProperty("--gutter", gutter + "px");
+      return gutter;
+    };
     stage.resize(vw, vh);
-    const field = stage.fieldScreen();
-    const gutter = Math.max(0, Math.round(Math.min(field.left, vw - field.right)));
-    document.documentElement.style.setProperty("--gutter", gutter + "px");
+    // The bomb / pause / mute buttons go beside the arena when there is room; otherwise the
+    // HUD drops to four meters so the buttons never cover it.
+    const wideGutter = placeHud() >= 170;
+    const compactHud = !wideGutter || (window.matchMedia && matchMedia("(max-width: 760px), (pointer: coarse)").matches);
+    const before = root.className;
+    root.classList.toggle("wide-gutter", wideGutter);
+    root.classList.toggle("compact-hud", compactHud);
+    if (root.className !== before) {
+      // the camera fit keeps the arena below the HUD, so refit once for the new HUD height
+      stage.resize(vw, vh);
+      placeHud();
+    }
   }
   if (game.player) {
     syncPlayerLane();
