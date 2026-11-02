@@ -1,0 +1,297 @@
+{
+  "version": 1,
+  "source": "hosted",
+  "files": [
+    {
+      "key": "hosted/f1abf516512739c97b43e2e93611a2398fc9f8bc7a014095ebc2b6b2fd21b703",
+      "path": "descent2.hog",
+      "size": 7595079,
+      "sha256": "f1abf516512739c97b43e2e93611a2398fc9f8bc7a014095ebc2b6b2fd21b703",
+      "parts": [
+        {
+          "url": "data/descent2.hog.f1abf516512739c9.00.bin",
+          "size": 7595079
+        }
+      ]
+    },
+    {
+      "key": "hosted/5233242206c677d65db7f075dd61f2b0a1b7bbe8cd65f56d769efaee1cc38b4d",
+      "path": "descent2.ham",
+      "size": 1307598,
+      "sha256": "5233242206c677d65db7f075dd61f2b0a1b7bbe8cd65f56d769efaee1cc38b4d",
+      "parts": [
+        {
+          "url": "data/descent2.ham.5233242206c677d6.00.bin",
+          "size": 1307598
+        }
+      ]
+    },
+    {
+      "key": "hosted/d444c6f93476f8941936164d2981387a26b0a25e3f9d5e930ef96bfbb86c1e68",
+      "path": "descent2.s11",
+      "size": 2602492,
+      "sha256": "d444c6f93476f8941936164d2981387a26b0a25e3f9d5e930ef96bfbb86c1e68",
+      "parts": [
+        {
+          "url": "data/descent2.s11.d444c6f93476f894.00.bin",
+          "size": 2602492
+        }
+      ]
+    },
+    {
+      "key": "hosted/4f10632dd4efcbffe532c35b6763edd22817135442bbcc4171381706f3893728",
+      "path": "descent2.s22",
+      "size": 5160905,
+      "sha256": "4f10632dd4efcbffe532c35b6763edd22817135442bbcc4171381706f3893728",
+      "parts": [
+        {
+          "url": "data/descent2.s22.4f10632dd4efcbff.00.bin",
+          "size": 5160905
+        }
+      ]
+    },
+    {
+      "key": "hosted/811fc58caa3e2a72cdfa07d7530b2bb0ca71836a6a2d8a3cb401e4284949c233",
+      "path": "alien1.pig",
+      "size": 5016232,
+      "sha256": "811fc58caa3e2a72cdfa07d7530b2bb0ca71836a6a2d8a3cb401e4284949c233",
+      "parts": [
+        {
+          "url": "data/alien1.pig.811fc58caa3e2a72.00.bin",
+          "size": 5016232
+        }
+      ]
+    },
+    {
+      "key": "hosted/75ef8fa0cba03410c61ad1b58f57dcb1481f1f302985828aab0af90639926055",
+      "path": "alien2.pig",
+      "size": 4912053,
+      "sha256": "75ef8fa0cba03410c61ad1b58f57dcb1481f1f302985828aab0af90639926055",
+      "parts": [
+        {
+          "url": "data/alien2.pig.75ef8fa0cba03410.00.bin",
+          "size": 4912053
+        }
+      ]
+    },
+    {
+      "key": "hosted/26a5a5f4e91456abf31f79578d0922e7bc3348b6aa92489a84033de83f358156",
+      "path": "fire.pig",
+      "size": 4973944,
+      "sha256": "26a5a5f4e91456abf31f79578d0922e7bc3348b6aa92489a84033de83f358156",
+      "parts": [
+        {
+          "url": "data/fire.pig.26a5a5f4e91456ab.00.bin",
+          "size": 4973944
+        }
+      ]
+    },
+    {
+      "key": "hosted/facdde6cf8a2cab99ea39ba06931872a1fe5636fe211e61fb58c57d706bf627b",
+      "path": "groupa.pig",
+      "size": 4931752,
+      "sha256": "facdde6cf8a2cab99ea39ba06931872a1fe5636fe211e61fb58c57d706bf627b",
+      "parts": [
+        {
+          "url": "data/groupa.pig.facdde6cf8a2cab9.00.bin",
+          "size": 4931752
+        }
+      ]
+    },
+    {
+      "key": "hosted/ae6152ef69502b00e51a98d8f04b21f2855a332cd2988ecceb3b909a49fa26a1",
+      "path": "ice.pig",
+      "size": 4926111,
+      "sha256": "ae6152ef69502b00e51a98d8f04b21f2855a332cd2988ecceb3b909a49fa26a1",
+      "parts": [
+        {
+          "url": "data/ice.pig.ae6152ef69502b00.00.bin",
+          "size": 4926111
+        }
+      ]
+    },
+    {
+      "key": "hosted/de88ead87dcb32f16936b3e2a08b81a2248440f29e6f8be0c4c3a5f9fe4b63c1",
+      "path": "water.pig",
+      "size": 4833463,
+      "sha256": "de88ead87dcb32f16936b3e2a08b81a2248440f29e6f8be0c4c3a5f9fe4b63c1",
+      "parts": [
+        {
+          "url": "data/water.pig.de88ead87dcb32f1.00.bin",
+          "size": 4833463
+        }
+      ]
+    },
+    {
+      "key": "hosted/b40a60bccbb4e2eea5dad222f85fd63abd29f36a48b5bd60174e10820c174b84",
+      "path": "intro-h.mvl",
+      "size": 99782888,
+      "sha256": "b40a60bccbb4e2eea5dad222f85fd63abd29f36a48b5bd60174e10820c174b84",
+      "parts": [
+        {
+          "url": "data/intro-h.mvl.b40a60bccbb4e2ee.00.bin",
+          "size": 20971520
+        },
+        {
+          "url": "data/intro-h.mvl.b40a60bccbb4e2ee.01.bin",
+          "size": 20971520
+        },
+        {
+          "url": "data/intro-h.mvl.b40a60bccbb4e2ee.02.bin",
+          "size": 20971520
+        },
+        {
+          "url": "data/intro-h.mvl.b40a60bccbb4e2ee.03.bin",
+          "size": 20971520
+        },
+        {
+          "url": "data/intro-h.mvl.b40a60bccbb4e2ee.04.bin",
+          "size": 15896808
+        }
+      ]
+    },
+    {
+      "key": "hosted/e00a016f6064cbb96b791597d9bd1fe70b3cf2e573778cc3136e3814634fddd0",
+      "path": "other-h.mvl",
+      "size": 104199780,
+      "sha256": "e00a016f6064cbb96b791597d9bd1fe70b3cf2e573778cc3136e3814634fddd0",
+      "parts": [
+        {
+          "url": "data/other-h.mvl.e00a016f6064cbb9.00.bin",
+          "size": 20971520
+        },
+        {
+          "url": "data/other-h.mvl.e00a016f6064cbb9.01.bin",
+          "size": 20971520
+        },
+        {
+          "url": "data/other-h.mvl.e00a016f6064cbb9.02.bin",
+          "size": 20971520
+        },
+        {
+          "url": "data/other-h.mvl.e00a016f6064cbb9.03.bin",
+          "size": 20971520
+        },
+        {
+          "url": "data/other-h.mvl.e00a016f6064cbb9.04.bin",
+          "size": 20313700
+        }
+      ]
+    },
+    {
+      "key": "hosted/f491f078308a310b53bb46477b916f9de4cce9358a77b733e31b1bce86135b0a",
+      "path": "robots-h.mvl",
+      "size": 16766970,
+      "sha256": "f491f078308a310b53bb46477b916f9de4cce9358a77b733e31b1bce86135b0a",
+      "parts": [
+        {
+          "url": "data/robots-h.mvl.f491f078308a310b.00.bin",
+          "size": 16766970
+        }
+      ]
+    },
+    {
+      "key": "hosted/f56f833e1026a35e8a8755987a93d5a0eb5bb12b40b8f190b9e7621ff24cead8",
+      "path": "missions/d2-2plyr.hog",
+      "size": 194870,
+      "sha256": "f56f833e1026a35e8a8755987a93d5a0eb5bb12b40b8f190b9e7621ff24cead8",
+      "parts": [
+        {
+          "url": "data/d2-2plyr.hog.f56f833e1026a35e.00.bin",
+          "size": 194870
+        }
+      ]
+    },
+    {
+      "key": "hosted/cea8e7885330b09fadafc25c28c22149cf6403c0d687239ddf33d90c75e6f3e5",
+      "path": "missions/d2-2plyr.mn2",
+      "size": 93,
+      "sha256": "cea8e7885330b09fadafc25c28c22149cf6403c0d687239ddf33d90c75e6f3e5",
+      "parts": [
+        {
+          "url": "data/d2-2plyr.mn2.cea8e7885330b09f.00.bin",
+          "size": 93
+        }
+      ]
+    },
+    {
+      "key": "hosted/98acbdbc5d0180160337bac1ce28f3a30688378715fe89a45297b0ed6341b4cf",
+      "path": "missions/d2chaos.hog",
+      "size": 331847,
+      "sha256": "98acbdbc5d0180160337bac1ce28f3a30688378715fe89a45297b0ed6341b4cf",
+      "parts": [
+        {
+          "url": "data/d2chaos.hog.98acbdbc5d018016.00.bin",
+          "size": 331847
+        }
+      ]
+    },
+    {
+      "key": "hosted/9f1166d1f0635f62a21b4bd3109b58e290566a9c907b63039e01f227b8e4aa57",
+      "path": "missions/d2chaos.mn2",
+      "size": 119,
+      "sha256": "9f1166d1f0635f62a21b4bd3109b58e290566a9c907b63039e01f227b8e4aa57",
+      "parts": [
+        {
+          "url": "data/d2chaos.mn2.9f1166d1f0635f62.00.bin",
+          "size": 119
+        }
+      ]
+    },
+    {
+      "key": "hosted/e2fe2989350f14e270b954cbeae63d612493006778b29e2b66e318b679ae9e34",
+      "path": "demos/descent2.dem",
+      "size": 1168217,
+      "sha256": "e2fe2989350f14e270b954cbeae63d612493006778b29e2b66e318b679ae9e34",
+      "parts": [
+        {
+          "url": "data/descent2.dem.e2fe2989350f14e2.00.bin",
+          "size": 1168217
+        }
+      ]
+    }
+  ],
+  "cdTracks": [
+    {
+      "track": 2,
+      "url": "data/track02.710b3c283b0b04b4.mp3",
+      "size": 1105336
+    },
+    {
+      "track": 3,
+      "url": "data/track03.3cbcecd772922ac7.mp3",
+      "size": 7225512
+    },
+    {
+      "track": 4,
+      "url": "data/track04.db748d78c1218827.mp3",
+      "size": 5329649
+    },
+    {
+      "track": 5,
+      "url": "data/track05.de8d23d8bc04fee0.mp3",
+      "size": 5161630
+    },
+    {
+      "track": 6,
+      "url": "data/track06.263ac4806b8ecf37.mp3",
+      "size": 3361688
+    },
+    {
+      "track": 7,
+      "url": "data/track07.05a19970f7fd2d01.mp3",
+      "size": 6409865
+    },
+    {
+      "track": 8,
+      "url": "data/track08.18afaa45cf36b27e.mp3",
+      "size": 5305825
+    },
+    {
+      "track": 9,
+      "url": "data/track09.e39d0a26154601b5.mp3",
+      "size": 6457512
+    }
+  ],
+  "totalBytes": 268704413
+}

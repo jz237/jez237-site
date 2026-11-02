@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Descent II — Browser Edition</title>
-<meta name="description" content="Play your own copy of Descent II in the browser. Runs the open-source DXX-Redux engine compiled to WebAssembly; your game files stay on your computer.">
+<meta name="description" content="Play Descent II in your browser. Game files load automatically, with enhanced graphics, cutscenes and the original CD soundtrack.">
 <style>
   :root {
     --bg: #07090d;
@@ -69,15 +69,16 @@
 <header>
   <a class="back" href="../../">← Games</a>
   <h1>Descent II</h1>
-  <p class="tag">Browser Edition · your own copy, enhanced, no install</p>
+  <p class="tag">Browser Edition · enhanced graphics · just press Play</p>
   <span class="wip">🚧 Work in progress · desktop with keyboard and mouse</span>
 </header>
 
 <main>
   <section class="panel" id="importPanel" hidden>
-    <h2>One-time setup: load your game files</h2>
-    <p>This page runs the game engine, but the game data comes from <em>your</em> copy of Descent II.
-      Your files are stored only inside this browser and are never uploaded anywhere.</p>
+    <h2>Use a different copy (optional)</h2>
+    <p>The game is already ready to play. You can optionally load a different copy or custom missions here.
+      Files you select stay inside this browser and are never uploaded.</p>
+    <button class="btn ghost" id="cancelImport">Back to Play</button>
     <ol>
       <li>Click <b>Choose folder</b>.</li>
       <li>Open your Steam install, for example <code>D:\SteamLibrary\steamapps\common\Descent 2</code>.</li>
@@ -98,10 +99,11 @@
     <div class="row" style="justify-content: space-between">
       <div>
         <h2>Ready to fly</h2>
-        <div class="small" id="readyInfo"></div>
+        <div class="small" id="readyInfo">Checking game files…</div>
       </div>
-      <button class="btn big" id="play">PLAY</button>
+      <button class="btn big" id="play" disabled>PLAY</button>
     </div>
+    <p class="small">Game files download automatically the first time you play and are cached for faster return visits. No folder selection or upload needed.</p>
     <div class="settings">
       <label>Render resolution
         <select id="quality">
@@ -120,7 +122,7 @@
           <option value="off">Off</option>
         </select>
       </label>
-      <button class="btn ghost" id="reimport">Re-import game files</button>
+      <button class="btn ghost" id="reimport">Use other game files…</button>
     </div>
   </section>
 
@@ -143,7 +145,7 @@
     </div>
     <p class="small" style="margin-bottom:0">Saved pilots and games are kept in this browser. Enhancements: native-resolution
       rendering with trilinear filtering and MSAA, high-resolution cutscenes, smooth display-synced frame rate, the original
-      CD soundtrack ripped from your own disc image, and the game's own MIDI music for briefings (or the whole game) played through
+      CD soundtrack, and the game's own MIDI music for briefings (or the whole game) played through
       a General MIDI synthesizer. New pilots get mouse and gamepad flight set up; adjust them in <b>Options → Controls</b>.</p>
   </section>
 </main>
@@ -156,10 +158,10 @@
 
 <footer>
   Engine: <a href="https://github.com/dxx-redux/dxx-redux">DXX-Redux</a> (Descent 2 source by Parallax Software, non-commercial license),
-  compiled to WebAssembly (<a href="source/">source for this build</a>). Descent II game data is not included; you load your own copy.<br>
+  compiled to WebAssembly (<a href="source/">source for this build</a>). Game files load automatically.<br>
   MIDI music: <a href="https://github.com/spessasus/spessasynth_lib">SpessaSynth</a> with the
   <a href="https://www.schristiancollins.com/generaluser">GeneralUser GS</a> sound bank by S. Christian Collins.
 </footer>
-<script src="d2loader.js?v=20261102a"></script>
+<script src="d2loader.js?v=20261102b"></script>
 </body>
 </html>

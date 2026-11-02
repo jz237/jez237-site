@@ -1,9 +1,8 @@
-// Descent II in the browser: imports the player's own game files into
-// IndexedDB once, then boots the WebAssembly D2X-Redux engine from them.
-// No game data is ever uploaded or bundled with this page.
+// Descent II in the browser: download hosted resources automatically and cache
+// them locally. Optional folder imports remain available for custom copies.
 
 // Bump with every engine or loader release so browsers fetch the new files
-const BUILD = '20261102a';
+const BUILD = '20261102b';
 const DB_NAME = 'descent2-web';
 const DB_VERSION = 1;
 const SAVE_DIR = '/home/web_user/.d2x-redux';
@@ -286,6 +285,54 @@ function buildConfig(existing, settings, haveCd) {
 
 // ---------- Boot ----------
 
+async function loadHostedManifest() {
+  const response = await fetch(`data/manifest.json?v=${BUILD}`);
+  if (!response.ok) throw new Error('Game files are temporarily unavailable. Reload to try again.');
+  const manifest = await response.json();
+  if (manifest.source !== 'hosted' || !REQUIRED.every(name => manifest.files.some(f => f.path === name))) {
+    throw new Error('The game download is incomplete. Reload to try again.');
+  }
+  return manifest;
+}
+
+async function hostedFile(file, db, onBytes) {
+  // Cache each complete file separately so interrupted downloads can resume.
+  const cached = db ? await idbGet(db, 'files', file.key).catch(() => null) : null;
+  if (cached && cached.size === file.size) {
+    onBytes(file.size);
+    return new Uint8Array(await cached.arrayBuffer());
+  }
+  const data = new Uint8Array(file.size);
+  let offset = 0;
+  for (const part of file.parts) {
+    const response = await fetch(part.url);
+    if (!response.ok) throw new Error(`Could not download ${file.path}. Press Play to retry.`);
+    const reader = response.body.getReader();
+    let received = 0;
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      if (received + value.length > part.size || offset + value.length > data.length) {
+        await reader.cancel();
+        throw new Error(`Invalid download for ${file.path}. Press Play to retry.`);
+      }
+      data.set(value, offset);
+      offset += value.length;
+      received += value.length;
+      onBytes(value.length);
+    }
+    if (received !== part.size) throw new Error(`Download interrupted: ${file.path}. Press Play to retry.`);
+  }
+  const digest = [...new Uint8Array(await crypto.subtle.digest('SHA-256', data))]
+    .map(n => n.toString(16).padStart(2, '0')).join('');
+  if (offset !== file.size || digest !== file.sha256) {
+    throw new Error(`Download verification failed: ${file.path}. Press Play to retry.`);
+  }
+  // Storage quotas/private browsing must not prevent playing a downloaded copy.
+  if (db) await idbPut(db, 'files', file.key, new Blob([data])).catch(e => console.warn('Game cache unavailable', e));
+  return data;
+}
+
 function loadScript(src) {
   return new Promise((resolve, reject) => {
     const s = document.createElement('script');
@@ -298,23 +345,40 @@ function loadScript(src) {
 
 async function bootGame(manifest, ui) {
   const settings = loadSettings();
-  const db = await openDb();
-  ui.status('Loading your game files…');
+  const hosted = manifest.source === 'hosted';
+  const db = await openDb().catch(e => { if (!hosted) throw e; return null; });
+  ui.status('Loading game files…');
   const fileData = [];
   let loaded = 0;
-  for (const f of manifest.files) {
-    const blob = await idbGet(db, 'files', f.key);
-    if (!blob) throw new Error(`Stored file ${f.path} is missing. Import your game files again.`);
-    fileData.push({ path: f.path, data: new Uint8Array(await blob.arrayBuffer()) });
-    loaded += f.size;
-    ui.progress(loaded / manifest.totalBytes);
-  }
   const cdTracks = [];
-  for (const t of manifest.cdTracks) {
-    const blob = await idbGet(db, 'files', t.key);
-    if (blob) cdTracks[t.track] = URL.createObjectURL(blob);
+  try {
+    for (const f of manifest.files) {
+      ui.status(`Loading ${f.path}…`);
+      let data;
+      if (hosted) {
+        data = await hostedFile(f, db, bytes => {
+          loaded += bytes;
+          ui.progress(loaded / manifest.totalBytes);
+        });
+      } else {
+        const blob = await idbGet(db, 'files', f.key);
+        if (!blob) throw new Error(`Stored file ${f.path} is missing. Import your game files again.`);
+        data = new Uint8Array(await blob.arrayBuffer());
+        loaded += f.size;
+        ui.progress(loaded / manifest.totalBytes);
+      }
+      fileData.push({ path: f.path, data });
+    }
+    for (const t of manifest.cdTracks) {
+      if (hosted) cdTracks[t.track] = t.url;
+      else {
+        const blob = await idbGet(db, 'files', t.key);
+        if (blob) cdTracks[t.track] = URL.createObjectURL(blob);
+      }
+    }
+  } finally {
+    if (db) db.close();
   }
-  db.close();
   if (cdTracks.length) for (let i = 0; i < cdTracks.length; i++) if (!cdTracks[i]) cdTracks[i] = null;
 
   ui.status('Starting the engine…');
@@ -456,26 +520,29 @@ async function main() {
   updateResLabel();
 
   let manifest = null;
+  let hostedManifest = null;
   try {
-    const db = await openDb();
-    manifest = await idbGet(db, 'meta', 'manifest');
-    db.close();
+    hostedManifest = await loadHostedManifest();
+    manifest = hostedManifest;
   } catch (e) {
-    ui.message('This browser blocked local storage, so the game can\'t keep your files: ' + e.message, true);
+    ui.message(e.message, true);
+    $('readyInfo').textContent = 'Unable to load game files. Reload this page to retry.';
+    $('play').disabled = true;
   }
 
   const showReady = (m) => {
     manifest = m;
     $('importPanel').hidden = true;
     $('readyPanel').hidden = false;
-    $('readyInfo').textContent = `${m.files.length} game files (${fmtBytes(m.totalBytes)})` +
+    $('readyInfo').textContent = (m.source === 'hosted' ? 'No setup needed · ' : '') + `${m.files.length} game files (${fmtBytes(m.totalBytes)})` +
       (m.cdTracks.length ? ` · ${m.cdTracks.length} CD music tracks` : ' · no CD tracks, so the original MIDI music plays');
+    $('play').disabled = false;
   };
   const showImport = () => {
     $('importPanel').hidden = false;
     $('readyPanel').hidden = true;
   };
-  if (manifest) showReady(manifest); else showImport();
+  if (manifest) showReady(manifest); else $('readyPanel').hidden = false;
 
   const runImport = async (items) => {
     $('importBusy').hidden = false;
@@ -505,10 +572,16 @@ async function main() {
   });
 
   $('reimport').addEventListener('click', showImport);
+  $('cancelImport').addEventListener('click', () => {
+    if (hostedManifest) showReady(hostedManifest);
+    else { $('importPanel').hidden = true; $('readyPanel').hidden = false; }
+  });
   $('play').addEventListener('click', async () => {
     $('play').disabled = true;
     $('loadPanel').hidden = false;
     $('readyPanel').hidden = true;
+    $('message').hidden = true;
+    ui.progress(0);
     try {
       await bootGame(manifest, ui);
     } catch (e) {
