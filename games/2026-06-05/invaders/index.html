@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#050816">
-  <meta name="description" content="Choose your Invaders: the new 3D Edition v3.0.0 in real-time three.js with an ElevenLabs soundtrack, or the original Classic Edition v2.2. Each edition keeps its own global high-score board.">
+  <meta name="description" content="Choose your Invaders: the new 3D Edition v3.1.0 in real-time three.js — four warships, six star sectors, upgrades, Boss Rush and medals — with an ElevenLabs soundtrack, or the original Classic Edition v2.2. Each edition keeps its own global high-score board.">
   <link rel="canonical" href="https://jez237.com/games/2026-06-05/invaders/">
   <link rel="manifest" href="./manifest.webmanifest">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Invaders — Choose Your Edition">
-  <meta property="og:description" content="Two complete arcade defense runs: the real-time 3D Edition v3.0.0 or the original Classic Edition v2.2.">
+  <meta property="og:description" content="Two complete arcade defense runs: the real-time 3D Edition v3.1.0 or the original Classic Edition v2.2.">
   <meta property="og:url" content="https://jez237.com/games/2026-06-05/invaders/">
   <meta property="og:image" content="https://jez237.com/games/2026-06-05/invaders/preview-3d.jpg">
   <title>Invaders — Choose Your Edition</title>
@@ -39,6 +39,8 @@
     .features{margin:14px 0 18px;padding:0;list-style:none;color:#8fd0dc;font-size:10px;line-height:1.8}
     .classic .features{color:#d2a6d6}
     .play{margin-top:auto;color:#fff;font-weight:bold;font-size:12px;letter-spacing:.15em}
+    .medals{margin:-6px 0 16px;color:#ffd23d;font-size:11px;letter-spacing:.08em}
+    .medals span{letter-spacing:.2em}
     .leaders-wrap{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
     .leaders{margin:0;padding:14px 18px 16px;border:1px solid #2fa7b8;background:linear-gradient(155deg,rgba(8,34,52,.9),rgba(4,6,18,.96));box-shadow:0 0 26px #35f4ff22;text-align:left}
     .leaders.classic{border-color:#7a3f8a;background:linear-gradient(155deg,rgba(36,12,48,.9),rgba(8,4,16,.96));box-shadow:0 0 26px #ff3df222}
@@ -64,15 +66,16 @@
     <p class="subtitle">CHOOSE YOUR EDITION</p>
     <section class="editions" aria-label="Invaders editions">
       <a class="edition" href="3d/">
-        <div class="shot"><img src="preview-3d.jpg" width="640" height="360" alt="Invaders 3D Edition: voxel alien fleet over a neon grid arena with a ringed planet"><span class="badge">NEW · THREE.JS · v3.0.0</span></div>
+        <div class="shot"><img src="preview-3d.jpg" width="640" height="360" alt="Invaders 3D Edition: voxel alien fleet over a neon grid arena with a ringed planet"><span class="badge">NEW · THREE.JS · v3.1.0</span></div>
         <div class="body">
           <h2>3D EDITION</h2>
-          <p>The same arcade defense run rebuilt in real-time 3D: voxel aliens that shatter into glowing debris, a banking gunship, energy bunkers and boss warships over a ringed world, with a new ElevenLabs soundtrack.</p>
+          <p>The arcade defense run rebuilt in real-time 3D: voxel aliens that shatter into glowing debris, four boss warships met by a swooping camera, and a chase across six star sectors. Pick an upgrade after every warship, with a new ElevenLabs soundtrack that speeds up as the fleet closes in.</p>
           <ul class="features">
-            <li>VOXEL FLEETS · BLOOM · SHATTER PHYSICS</li>
-            <li>NEW MUSIC + 26 SPATIAL SOUND EFFECTS</li>
-            <li>DAILY CHALLENGE · OWN GLOBAL BOARD</li>
+            <li>VOXEL FLEETS · 6 STAR SECTORS · KILL CAMS</li>
+            <li>UPGRADES · BOSS RUSH · PRACTICE · DAILY</li>
+            <li>MEDALS · SHARE CARDS · CONTROLLER SUPPORT</li>
           </ul>
+          <p class="medals" id="medalLine" hidden></p>
           <span class="play">PLAY 3D EDITION →</span>
         </div>
       </a>
@@ -106,6 +109,16 @@
     <a class="back" href="../../">← ALL GAMES</a>
   </main>
   <script>
+    // Medals earned in the 3D Edition (stored by 3d/meta.js on this device).
+    try {
+      const m = JSON.parse(localStorage.getItem('invaders3d_medals_v1') || 'null');
+      const got = m && m.got ? Object.values(m.got).sort((a, b) => a.t - b.t) : [];
+      if (got.length) {
+        const line = document.getElementById('medalLine');
+        line.innerHTML = `🏅 MEDALS ${got.length} / ${m.total || got.length} &nbsp;<span>${got.slice(-8).map(g => String(g.icon || '').replace(/[<>&"']/g, '')).join('')}</span>`;
+        line.hidden = false;
+      }
+    } catch (e) {}
     // Each edition's own board, read live from the site's game-scores worker.
     const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => '&#' + c.charCodeAt(0) + ';');
     for (const list of document.querySelectorAll('ol[data-board]')) {

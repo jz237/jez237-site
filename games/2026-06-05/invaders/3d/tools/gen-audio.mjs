@@ -36,7 +36,22 @@ const SFX = {
   extralife:    [1.2, 'smart bomb gained, bright double chime with a soft bass pulse, ' + STYLE],
   march:        [0.5, 'single deep low synth bass thump, like a giant alien footstep, short and dry, ' + STYLE],
   bossShot:     [0.7, 'alien warship heavy cannon shot, low growling plasma blast, ' + STYLE],
-  enemyShot:    [0.5, 'small alien drops a sizzling plasma bomb, short downward zap, ' + STYLE]
+  enemyShot:    [0.5, 'small alien drops a sizzling plasma bomb, short downward zap, ' + STYLE],
+  // v3.1 additions
+  heartbeat:    [0.6, 'single deep heavy heartbeat-like sub-bass synth thump, dry and very short, tense, ' + STYLE],
+  saucer:       [3.0, 'alien flying saucer cruising overhead, steady warbling oscillating electronic hum, continuous and even, ' + STYLE],
+  saucerDown:   [1.6, 'alien flying saucer shot down, warbling electronic squeal collapsing into a bright explosion with a sparkling coin shimmer, ' + STYLE],
+  perkOffer:    [1.4, 'upgrade selection screen opens, three ascending crystal synth chimes with a soft whoosh, ' + STYLE],
+  perkPick:     [1.0, 'ship upgrade installed, satisfying mechanical clunk followed by a rising bright synth power-up, ' + STYLE],
+  medal:        [1.4, 'achievement unlocked, shiny metallic medal ring with a short triumphant synth sparkle, ' + STYLE],
+  split:        [0.8, 'alien jelly creature splits in two, wet electric pop with a glassy crack, ' + STYLE],
+  deflect:      [0.5, 'energy shield deflects a laser bolt, bright resonant force-field ping with a short ricochet, ' + STYLE],
+  blink:        [0.6, 'alien teleport blink, quick reversed zap with a glassy shimmer, ' + STYLE],
+  snipe:        [0.8, 'alien sniper fires an aimed needle laser, quick rising whine into a sharp crack, ' + STYLE],
+  slowmo:       [2.0, 'cinematic slow motion moment, deep time-stretch whoosh with a low reverb boom, ' + STYLE],
+  swoop:        [1.6, 'camera fly-by, big airy cinematic swoosh passing close by, ' + STYLE],
+  sector:       [2.2, 'starship hyperspace jump to a new star sector, rising warp drive whoosh into a shimmering arrival chime, ' + STYLE],
+  shutter:      [0.5, 'futuristic camera shutter snapshot click, ' + STYLE]
 };
 const MUSIC = {
   musicMenu: [60000, 'Instrumental synthwave title theme for a 3D neon space invaders arcade game. Slow 95 bpm, lush analog pads, shimmering arpeggios, deep warm bass, gated reverb drums entering softly, mysterious and cinematic, steady loopable groove, no vocals.'],

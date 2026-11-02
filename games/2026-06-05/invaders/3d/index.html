@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#050816">
   <link rel="manifest" href="../manifest.webmanifest">
-  <meta name="description" content="Invaders 3D Edition: the arcade defense run rebuilt in real-time three.js 3D with voxel alien fleets, a flying gunship, energy bunkers, three boss warships and a new ElevenLabs soundtrack.">
+  <meta name="description" content="Invaders 3D Edition: the arcade defense run rebuilt in real-time three.js 3D with voxel alien fleets, four boss warships, star sectors, upgrades, Boss Rush, medals, controller support and an ElevenLabs soundtrack.">
   <link rel="canonical" href="https://jez237.com/games/2026-06-05/invaders/3d/">
   <link rel="modulepreload" href="./vendor/three/three.core.min.js">
   <link rel="modulepreload" href="./vendor/three/three.module.min.js">
@@ -639,6 +639,374 @@
       box-shadow: 0 0 8px rgba(255, 210, 61, 0.8);
     }
 
+    /* ---- v3.1: roster, mode buttons, sub-panels, upgrades, toasts ---- */
+    .enemy-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .enemy-card small {
+      display: block;
+      margin-top: 2px;
+      color: rgba(234, 249, 255, 0.55);
+      font-size: 9px;
+      line-height: 1.25;
+    }
+
+    .title-actions .wide {
+      grid-column: 1 / -1;
+    }
+
+    .mini-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+      grid-auto-flow: column;
+      gap: 10px;
+    }
+
+    .mini-actions button,
+    #practiceButton,
+    #scoresButton {
+      min-height: 40px;
+      font-size: 13px;
+    }
+
+    .mini-actions button.hidden {
+      display: none;
+    }
+
+    button.rush {
+      border-color: rgba(255, 77, 109, 0.8);
+      background: linear-gradient(90deg, rgba(255, 77, 109, 0.24), rgba(255, 61, 242, 0.22));
+      box-shadow: 0 0 24px rgba(255, 77, 109, 0.3);
+    }
+
+    button.rush:hover,
+    button.rush:focus-visible {
+      background: linear-gradient(90deg, rgba(255, 77, 109, 0.4), rgba(255, 61, 242, 0.36));
+      box-shadow: 0 0 32px rgba(255, 77, 109, 0.45);
+    }
+
+    button.pad-focus {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+      background: linear-gradient(90deg, rgba(53, 244, 255, 0.32), rgba(167, 255, 61, 0.42));
+    }
+
+    .sub-panel {
+      display: grid;
+      gap: 8px;
+      margin: 0 0 18px;
+      padding: 12px;
+      border: 1px solid rgba(53, 244, 255, 0.28);
+      background: rgba(53, 244, 255, 0.05);
+      color: rgba(234, 249, 255, 0.82);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .sub-panel.hidden {
+      display: none;
+    }
+
+    .sub-panel h2 {
+      margin: 0 0 2px;
+      color: rgba(53, 244, 255, 0.9);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .panel-note {
+      margin: 0;
+      color: rgba(234, 249, 255, 0.6);
+    }
+
+    .setting-row {
+      display: grid;
+      grid-template-columns: 130px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      min-height: 36px;
+    }
+
+    .setting-row > span {
+      color: #fff;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-size: 11px;
+    }
+
+    .setting-row input[type=range] {
+      width: 100%;
+      accent-color: var(--cyan);
+      user-select: auto;
+    }
+
+    .setting-row output {
+      min-width: 42px;
+      text-align: right;
+      color: var(--cyan);
+    }
+
+    .seg {
+      grid-column: 2 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .seg button {
+      width: auto;
+      min-height: 34px;
+      padding: 0 12px;
+      font-size: 11px;
+      box-shadow: none;
+      border-color: rgba(53, 244, 255, 0.3);
+      background: rgba(7, 12, 26, 0.6);
+    }
+
+    .seg button[aria-pressed="true"] {
+      border-color: rgba(167, 255, 61, 0.85);
+      background: linear-gradient(90deg, rgba(53, 244, 255, 0.24), rgba(167, 255, 61, 0.34));
+      color: #fff;
+    }
+
+    .settings-reset {
+      min-height: 36px;
+      font-size: 11px;
+    }
+
+    .medal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 8px;
+    }
+
+    .medal {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      column-gap: 8px;
+      padding: 7px 8px;
+      border: 1px solid rgba(234, 249, 255, 0.12);
+      background: rgba(234, 249, 255, 0.03);
+      opacity: 0.58;
+    }
+
+    .medal.got {
+      opacity: 1;
+      border-color: rgba(255, 210, 61, 0.45);
+      background: rgba(255, 210, 61, 0.08);
+    }
+
+    .medal i {
+      grid-row: span 2;
+      font-size: 22px;
+      font-style: normal;
+      line-height: 30px;
+      text-align: center;
+    }
+
+    .medal b {
+      color: #fff;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .medal span {
+      color: rgba(234, 249, 255, 0.62);
+      font-size: 10px;
+    }
+
+    .medal em {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    .wave-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .wave-chips .chip {
+      width: auto;
+      min-width: 52px;
+      min-height: 38px;
+      padding: 0 10px;
+      font-size: 13px;
+    }
+
+    .wave-chips .chip.boss {
+      border-color: rgba(255, 77, 109, 0.7);
+    }
+
+    .share-preview {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid rgba(53, 244, 255, 0.3);
+    }
+
+    .share-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 8px;
+    }
+
+    .perk-overlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+      z-index: 4;
+      background: radial-gradient(circle, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.22) 60%, transparent 85%);
+    }
+
+    .perk-overlay.hidden {
+      display: none;
+    }
+
+    .perk-panel {
+      width: min(860px, 96vw);
+      text-align: center;
+      animation: perk-in 0.35s ease-out;
+    }
+
+    .perk-panel h2 {
+      margin: 0 0 14px;
+      color: var(--gold);
+      font-size: clamp(14px, 2.6vw, 22px);
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 14px rgba(255, 210, 61, 0.6);
+    }
+
+    .perk-cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .perk-card {
+      position: relative;
+      display: grid;
+      gap: 6px;
+      align-content: start;
+      justify-items: center;
+      min-height: 190px;
+      padding: 18px 12px 14px;
+      border: 1px solid rgba(255, 210, 61, 0.6);
+      background: rgba(5, 8, 22, 0.88);
+      box-shadow: 0 0 30px rgba(255, 210, 61, 0.18), inset 0 0 30px rgba(255, 61, 242, 0.08);
+      text-transform: none;
+    }
+
+    .perk-card:hover,
+    .perk-card:focus-visible,
+    .perk-card.pad-focus {
+      transform: translateY(-3px);
+      background: rgba(25, 20, 40, 0.92);
+      box-shadow: 0 0 40px rgba(255, 210, 61, 0.45), inset 0 0 30px rgba(255, 61, 242, 0.12);
+    }
+
+    .perk-key {
+      position: absolute;
+      top: 6px;
+      left: 8px;
+      color: rgba(234, 249, 255, 0.45);
+      font-size: 11px;
+    }
+
+    .perk-icon {
+      font-size: 34px;
+      line-height: 1.1;
+    }
+
+    .perk-card b {
+      color: #fff;
+      font-size: 15px;
+      text-transform: uppercase;
+    }
+
+    .perk-desc {
+      color: rgba(234, 249, 255, 0.75);
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .perk-level {
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 0.15em;
+    }
+
+    .perk-hint {
+      margin: 12px 0 0;
+      color: rgba(234, 249, 255, 0.5);
+      font-size: 11px;
+    }
+
+    @keyframes perk-in {
+      from { opacity: 0; transform: translateY(14px) scale(0.97); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .toast {
+      position: absolute;
+      left: 50%;
+      top: calc(max(14px, env(safe-area-inset-top)) + 84px);
+      z-index: 6;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: min(420px, 90vw);
+      padding: 10px 16px;
+      border: 1px solid rgba(255, 210, 61, 0.7);
+      background: rgba(5, 8, 22, 0.9);
+      box-shadow: 0 0 30px rgba(255, 210, 61, 0.35);
+      color: rgba(234, 249, 255, 0.85);
+      font-size: 12px;
+      line-height: 1.35;
+      pointer-events: none;
+      opacity: 0;
+      transform: translate(-50%, -12px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .toast.hidden {
+      display: none;
+    }
+
+    .toast i {
+      font-size: 26px;
+      font-style: normal;
+    }
+
+    /* with room beside the arena the toast sits in the left margin, off the battlefield */
+    html.wide-gutter .toast {
+      left: max(16px, env(safe-area-inset-left));
+      top: calc(max(14px, env(safe-area-inset-top)) + 96px);
+      max-width: calc(var(--gutter) - 32px);
+      transform: translate(-12px, 0);
+    }
+
+    html.wide-gutter .toast.show {
+      transform: none;
+    }
+
+    .toast b {
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
     /* Phones, touch screens and narrow windows (set from resize()): four meters, with room
        reserved on the right for the bomb, pause and mute buttons. */
     html.compact-hud .hud {
@@ -706,9 +1074,37 @@
         grid-template-columns: 1fr;
       }
 
-      .enemy-grid,
       .title-actions {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .setting-row {
+        grid-template-columns: 96px 1fr auto;
+        gap: 6px;
+      }
+
+      .perk-cards {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .perk-card {
+        min-height: 0;
+        grid-template-columns: 44px 1fr;
+        justify-items: start;
+        text-align: left;
+        padding: 10px 12px;
+        column-gap: 10px;
+        row-gap: 2px;
+      }
+
+      .perk-card .perk-icon {
+        grid-row: span 3;
+        align-self: center;
+      }
+
+      .perk-key {
+        display: none;
       }
     }
   </style>
@@ -720,7 +1116,7 @@
       <canvas id="fx" aria-hidden="true"></canvas>
       <div class="hud" aria-hidden="true">
         <div class="meter"><b>SCORE</b><span id="score">0</span></div>
-        <div class="meter"><b>WAVE</b><span id="wave">1</span></div>
+        <div class="meter"><b id="waveLabel">WAVE</b><span id="wave">1</span></div>
         <div class="meter"><b>LIVES</b><span id="lives">3</span></div>
         <div class="meter"><b>WEAPON</b><span id="weapon">PULSE</span></div>
         <div class="meter shield-meter" id="shieldMeter"><b>SHIELD</b><span id="shield">100%</span><i id="shieldFill"></i></div>
@@ -728,9 +1124,9 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Invaders</h1>
-          <div class="title-version">3D Edition · v3.0.0 · Daily Ops</div>
+          <div class="title-version">3D Edition · v3.1.0 · Sectors &amp; Medals</div>
           <p class="boot-note" id="bootNote">Loading the 3D engine…</p>
-          <p class="tagline" id="message">The arcade defense run rebuilt in real-time 3D: voxel fleets that shatter into glowing debris, a banking gunship, energy bunkers and three boss warships over a ringed world. Chain combos into Overdrive and bank smart bombs.</p>
+          <p class="tagline" id="message">The arcade defense run rebuilt in real-time 3D: voxel fleets that shatter into glowing debris, a banking gunship and four boss warships, chased across six star sectors. Pick an upgrade after every warship, chain combos into Overdrive and bank smart bombs.</p>
           <div class="mode-note" id="dailyNote"></div>
           <p class="hint" id="controlsHint"></p>
           <div class="enemy-roster" aria-label="Enemy ship guide">
@@ -741,7 +1137,10 @@
               <div class="enemy-card"><canvas width="92" height="54" data-enemy-sprite="diver"></canvas><b>Red Diver</b></div>
               <div class="enemy-card"><canvas width="92" height="54" data-enemy-sprite="splitter"></canvas><b>Splitter</b></div>
               <div class="enemy-card"><canvas width="92" height="54" data-enemy-sprite="zealot"></canvas><b>Zealot</b></div>
-              <div class="enemy-card"><canvas width="92" height="54" data-enemy-sprite="boss"></canvas><b>Boss Fleet ×3</b></div>
+              <div class="enemy-card"><canvas width="92" height="54" data-enemy-sprite="warden"></canvas><b>Warden</b><small>Barrier: hit it at an angle</small></div>
+              <div class="enemy-card"><canvas width="92" height="54" data-enemy-sprite="phantom"></canvas><b>Phantom</b><small>Blinks, then snipes</small></div>
+              <div class="enemy-card"><canvas width="92" height="54" data-enemy-sprite="saucer"></canvas><b>Bonus Saucer</b><small>Big points + a core</small></div>
+              <div class="enemy-card"><canvas width="92" height="54" data-enemy-sprite="hive"></canvas><b>Boss Fleet ×4</b><small>Carrier · Interceptor · Bulwark · Hive</small></div>
             </div>
           </div>
           <div class="powerups" aria-label="Power-up guide">
@@ -754,10 +1153,21 @@
             <div class="powerup"><i data-core="repair" style="color:#ffffff"></i><span><b>Repair</b><br>+1 life &amp; shield.</span></div>
           </div>
           <div class="scores-panel hidden" id="scoresPanel" aria-live="polite"></div>
+          <div class="sub-panel settings-panel hidden" id="settingsPanel"></div>
+          <div class="sub-panel medals-panel hidden" id="medalsPanel"></div>
+          <div class="sub-panel practice-panel hidden" id="practicePanel"></div>
+          <div class="sub-panel share-panel hidden" id="sharePanel"></div>
           <div class="title-actions triple">
-            <button id="startButton" type="button" disabled>Arcade Run</button>
+            <button id="startButton" class="wide" type="button" disabled>Arcade Run</button>
             <button id="dailyButton" class="daily" type="button" disabled>Daily Challenge</button>
-            <button id="scoresButton" class="secondary wide" type="button" disabled>High Scores</button>
+            <button id="rushButton" class="rush" type="button" disabled>Boss Rush</button>
+            <button id="practiceButton" class="secondary" type="button" disabled>Practice</button>
+            <button id="scoresButton" class="secondary" type="button" disabled>High Scores</button>
+            <div class="mini-actions wide">
+              <button id="medalsButton" class="secondary" type="button" disabled>🏅 Medals</button>
+              <button id="settingsButton" class="secondary" type="button" disabled>⚙ Settings</button>
+              <button id="shareButton" class="secondary hidden" type="button">📸 Share Card</button>
+            </div>
           </div>
           <p class="edition-links"><a href="../">◂ All editions</a><a href="../classic/">Classic Edition ▸</a></p>
         </div>
@@ -767,7 +1177,15 @@
         <button id="pauseButton" type="button" aria-label="Pause" title="Pause (P)">⏸</button>
         <button id="muteButton" type="button" aria-label="Mute sound" aria-pressed="false" title="Mute (M)">🔊</button>
       </div>
-      <div class="version" aria-hidden="true">3D v3.0.0</div>
+      <div class="perk-overlay hidden" id="perkOverlay" role="dialog" aria-labelledby="perkTitle">
+        <div class="perk-panel">
+          <h2 id="perkTitle">Warship down — choose an upgrade</h2>
+          <div class="perk-cards" id="perkCards"></div>
+          <p class="perk-hint">Tap a card · keys 1 2 3 · controller d-pad + A</p>
+        </div>
+      </div>
+      <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+      <div class="version" aria-hidden="true">3D v3.1.0</div>
     </section>
   </main>
   <script type="importmap">
@@ -778,7 +1196,7 @@
       }
     }
   </script>
-  <script type="module" src="./game.js?v=2"></script>
+  <script type="module" src="./game.js?v=3"></script>
   <script>
     // If the module never boots (old browser, no WebGL 2), point at the Classic Edition.
     setTimeout(function () {

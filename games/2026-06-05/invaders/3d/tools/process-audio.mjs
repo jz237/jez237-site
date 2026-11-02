@@ -22,15 +22,27 @@ const SFX_NAMES = {
   hit: 'sfx-hit', bunker: 'sfx-bunker', hurt: 'sfx-hurt', lifeLost: 'sfx-life-lost', powerup: 'sfx-powerup', bomb: 'sfx-bomb',
   overdrive: 'sfx-overdrive', warning: 'sfx-warning', beam: 'sfx-beam', bossArrive: 'sfx-boss-arrive', turretDown: 'sfx-turret-down',
   bossDown: 'sfx-boss-down', dive: 'sfx-dive', wave: 'sfx-wave', perfect: 'sfx-perfect', select: 'sfx-select', gameover: 'sfx-gameover',
-  extralife: 'sfx-extralife', march: 'sfx-march', bossShot: 'sfx-boss-shot', enemyShot: 'sfx-enemy-shot'
+  extralife: 'sfx-extralife', march: 'sfx-march', bossShot: 'sfx-boss-shot', enemyShot: 'sfx-enemy-shot',
+  heartbeat: 'sfx-heartbeat', saucer: 'sfx-saucer', saucerDown: 'sfx-saucer-down', perkOffer: 'sfx-perk-offer', perkPick: 'sfx-perk-pick',
+  medal: 'sfx-medal', split: 'sfx-split', deflect: 'sfx-deflect', blink: 'sfx-blink', snipe: 'sfx-snipe', slowmo: 'sfx-slowmo',
+  swoop: 'sfx-swoop', sector: 'sfx-sector', shutter: 'sfx-shutter'
 };
+const LOOPED = new Set(['saucer']); // seam-crossfaded so the hum can loop
 
 for (const [src, dst] of Object.entries(SFX_NAMES)) {
   const inFile = path.join(raw, src + '.mp3');
+  if (!fs.existsSync(inFile)) continue; // only process what this raw folder holds
   const trimmed = path.join(tmp, src + '.wav');
   ff(['-i', inFile, '-af', 'silenceremove=start_periods=1:start_threshold=-50dB:start_silence=0.004,areverse,silenceremove=start_periods=1:start_threshold=-55dB:start_silence=0.02,areverse', '-ac', '1', '-ar', '44100', trimmed]);
   const gain = -1 - maxVolume(trimmed);
   const d = dur(trimmed);
+  if (LOOPED.has(src)) {
+    const N = 0.5;
+    const graph = `[0]atrim=0:${N},asetpts=PTS-STARTPTS,afade=t=in:d=${N}[h];[0]atrim=${N}:${(d - N).toFixed(3)},asetpts=PTS-STARTPTS[b];[0]atrim=${(d - N).toFixed(3)},asetpts=PTS-STARTPTS,afade=t=out:d=${N}[t];[t][h]amix=inputs=2:normalize=0[s];[b][s]concat=n=2:v=0:a=1,volume=${gain.toFixed(2)}dB[out]`;
+    ff(['-i', trimmed, '-filter_complex', graph, '-map', '[out]', '-ac', '1', '-ar', '44100', '-b:a', '96k', path.join(out, dst + '.mp3')]);
+    console.log(dst, d.toFixed(2) + 's loop');
+    continue;
+  }
   const fade = Math.min(0.04, d * 0.2);
   ff(['-i', trimmed, '-af', `volume=${gain.toFixed(2)}dB,afade=t=out:st=${Math.max(0, d - fade).toFixed(3)}:d=${fade.toFixed(3)}`, '-ac', '1', '-ar', '44100', '-b:a', '96k', path.join(out, dst + '.mp3')]);
   console.log(dst, d.toFixed(2) + 's', 'gain', gain.toFixed(1));
@@ -38,6 +50,7 @@ for (const [src, dst] of Object.entries(SFX_NAMES)) {
 
 for (const [src, dst] of Object.entries(MUSIC)) {
   const inFile = path.join(raw, src + '.mp3');
+  if (!fs.existsSync(inFile)) continue;
   const trimmed = path.join(tmp, src + '.wav');
   ff(['-i', inFile, '-af', 'silenceremove=start_periods=1:start_threshold=-50dB:start_silence=0.01,areverse,silenceremove=start_periods=1:start_threshold=-50dB:start_silence=0.01,areverse', '-ar', '44100', trimmed]);
   const L = dur(trimmed) - 1.0; // drop the closing second, which is usually a fade

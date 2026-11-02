@@ -311,21 +311,32 @@ float starLayer(vec3 d, float scale, float density, float size) {
   float dist = length(p - star);
   return exp(-dist * dist / (size * size)) * (0.4 + 0.6 * hash3(cell + 9.2));
 }
+uniform vec3 uNebA; uniform vec3 uNebB; uniform vec3 uBand; uniform vec3 uBandDir; uniform vec3 uSeed;
 void main() {
   vec3 d = normalize(vDir);
-  float band = exp(-pow(dot(d, normalize(vec3(0.35, 0.8, -0.45))), 2.0) * 5.0);
-  float n1 = fbm(d * 2.4 + vec3(1.7, 0.0, 3.1));
-  float n2 = fbm(d * 3.6 + vec3(-4.2, 2.0, 0.5));
-  float n3 = fbm(d * 7.0);
+  float band = exp(-pow(dot(d, normalize(uBandDir)), 2.0) * 5.0);
+  float n1 = fbm(d * 2.4 + vec3(1.7, 0.0, 3.1) + uSeed);
+  float n2 = fbm(d * 3.6 + vec3(-4.2, 2.0, 0.5) + uSeed.zxy);
+  float n3 = fbm(d * 7.0 + uSeed.yzx);
   vec3 col = vec3(0.003, 0.004, 0.014);
-  col += vec3(0.20, 0.018, 0.17) * pow(smoothstep(0.35, 0.85, n1), 2.2) * (0.35 + band * 1.4);
-  col += vec3(0.0, 0.10, 0.17) * pow(smoothstep(0.38, 0.9, n2), 2.0) * (0.3 + band * 1.2);
-  col += vec3(0.05, 0.03, 0.12) * band * n3 * 0.6;
+  col += uNebA * pow(smoothstep(0.35, 0.85, n1), 2.2) * (0.35 + band * 1.4);
+  col += uNebB * pow(smoothstep(0.38, 0.9, n2), 2.0) * (0.3 + band * 1.2);
+  col += uBand * band * n3 * 0.6;
   col *= 0.9;
   float stars = starLayer(d, 420.0, 0.986, 0.16) * 1.4 + starLayer(d, 160.0, 0.993, 0.12) * 4.0;
   vec3 sc = mix(vec3(0.75, 0.85, 1.0), vec3(1.0, 0.75, 0.9), hash3(floor(d * 160.0) + 2.0));
   col += sc * stars * (0.6 + band);
   gl_FragColor = vec4(col, 1.0);
+}`;
+
+const BG_VERT = `varying vec3 vDir; void main() { vDir = position; vec4 p = projectionMatrix * vec4(mat3(viewMatrix) * position, 1.0); gl_Position = vec4(p.xy, p.w * 0.99999, p.w); }`;
+const BG_FRAG = `
+uniform samplerCube uCubeA; uniform samplerCube uCubeB; uniform float uMix;
+varying vec3 vDir;
+void main() {
+  vec3 d = normalize(vDir);
+  vec3 c = mix(textureCube(uCubeA, d).rgb, textureCube(uCubeB, d).rgb, uMix);
+  gl_FragColor = vec4(c, 1.0);
 }`;
 
 const PLANET_VERT = `
@@ -339,6 +350,8 @@ void main() {
 }`;
 const PLANET_FRAG = `
 uniform vec3 uSun; uniform float uTime;
+uniform vec3 uOcean; uniform vec3 uOceanBand; uniform vec3 uGround; uniform vec3 uGroundVar;
+uniform vec3 uCityA; uniform vec3 uCityB; uniform vec3 uAtmoA; uniform vec3 uAtmoB;
 varying vec3 vN; varying vec3 vObj; varying vec3 vWorld;
 ${NOISE_GLSL}
 void main() {
@@ -349,18 +362,18 @@ void main() {
   float h = fbm(p * 2.6);
   float land = smoothstep(0.5, 0.56, h);
   float bands = 0.5 + 0.5 * sin(p.y * 22.0 + fbm(p * 5.0) * 6.0);
-  vec3 ocean = vec3(0.012, 0.03, 0.09) + vec3(0.0, 0.03, 0.05) * bands;
-  vec3 ground = vec3(0.06, 0.03, 0.09) + vec3(0.05, 0.02, 0.05) * fbm(p * 9.0);
+  vec3 ocean = uOcean + uOceanBand * bands;
+  vec3 ground = uGround + uGroundVar * fbm(p * 9.0);
   vec3 albedo = mix(ocean, ground, land);
   float ndl = dot(N, uSun);
   float day = smoothstep(-0.08, 0.45, ndl);
   vec3 col = albedo * day * 2.6;
   float night = 1.0 - smoothstep(-0.25, 0.05, ndl);
   float city = land * smoothstep(0.62, 0.86, fbm(p * 34.0)) * night;
-  col += (vec3(1.0, 0.3, 0.8) * 0.55 + vec3(0.2, 0.85, 1.0) * 0.3) * city * 0.5;
+  col += (uCityA * 0.55 + uCityB * 0.3) * city * 0.5;
   float fres = pow(1.0 - max(dot(N, V), 0.0), 3.0);
   float lit = smoothstep(-0.55, 0.35, ndl);
-  col += mix(vec3(0.05, 0.55, 1.0), vec3(1.0, 0.25, 0.75), fres * 0.6) * fres * (0.12 + lit * 2.6);
+  col += mix(uAtmoA, uAtmoB, fres * 0.6) * fres * (0.12 + lit * 2.6);
   gl_FragColor = vec4(col, 1.0);
 }`;
 
@@ -378,7 +391,7 @@ void main() {
 const QUAD_VERT = `varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`;
 
 const RING_FRAG = `
-uniform vec3 uSun; uniform float uInner;
+uniform vec3 uSun; uniform float uInner; uniform vec3 uRingA; uniform vec3 uRingB;
 varying vec2 vUv; varying vec3 vWorldR;
 ${NOISE_GLSL}
 void main() {
@@ -387,7 +400,7 @@ void main() {
   float t = (r - uInner) / (1.0 - uInner);
   float bands = 0.55 + 0.45 * sin(t * 90.0 + vnoise(vec3(t * 40.0, 0.0, 0.0)) * 4.0);
   bands *= smoothstep(0.0, 0.08, t) * smoothstep(1.0, 0.86, t) * (1.0 - 0.7 * smoothstep(0.42, 0.46, t) * smoothstep(0.52, 0.48, t));
-  vec3 col = mix(vec3(0.45, 0.2, 0.55), vec3(0.2, 0.55, 0.75), t) * bands * 0.11;
+  vec3 col = mix(uRingA, uRingB, t) * bands * 0.11;
   gl_FragColor = vec4(col, 1.0);
 }`;
 const RING_VERT = `varying vec2 vUv; varying vec3 vWorldR; void main() { vUv = uv; vec4 w = modelMatrix * vec4(position, 1.0); vWorldR = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }`;
@@ -418,12 +431,12 @@ void main() {
 
 const DUST_VERT = `
 attribute float aSeed; attribute vec3 aColor;
-uniform float uTime; uniform float uProj; uniform float uMinZ; uniform float uRangeZ;
+uniform float uTime; uniform float uFlow; uniform float uProj; uniform float uMinZ; uniform float uRangeZ;
 varying vec3 vCol; varying float vA;
 void main() {
   vec3 p = position;
   float speed = 40.0 + aSeed * 220.0;
-  float k = mod(p.z - uMinZ + uTime * speed, uRangeZ);
+  float k = mod(p.z - uMinZ + uFlow * speed, uRangeZ);
   p.z = uMinZ + k;
   float u = k / uRangeZ;
   vec4 mv = modelViewMatrix * vec4(p, 1.0);
@@ -495,6 +508,37 @@ void main() {
 };
 
 // ---------------------------------------------------------------------------
+// Sectors: every few waves the fleet is chased into a new star system with its own
+// nebula, planet and rings. Sector 0 is the original look.
+// ---------------------------------------------------------------------------
+const SECTORS = [
+  { name: 'Neon Reach', nebA: [0.20, 0.018, 0.17], nebB: [0.0, 0.10, 0.17], band: [0.05, 0.03, 0.12], bandDir: [0.35, 0.8, -0.45], seed: [0, 0, 0],
+    ocean: [0.012, 0.03, 0.09], oceanBand: [0.0, 0.03, 0.05], ground: [0.06, 0.03, 0.09], groundVar: [0.05, 0.02, 0.05],
+    cityA: [1.0, 0.3, 0.8], cityB: [0.2, 0.85, 1.0], atmoA: [0.05, 0.55, 1.0], atmoB: [1.0, 0.25, 0.75], ringA: [0.45, 0.2, 0.55], ringB: [0.2, 0.55, 0.75], hemi: 0x8fa6ff },
+  { name: 'Ember Drift', nebA: [0.24, 0.06, 0.01], nebB: [0.13, 0.015, 0.05], band: [0.12, 0.05, 0.02], bandDir: [-0.5, 0.7, -0.3], seed: [5.1, 2.3, 7.7],
+    ocean: [0.09, 0.035, 0.01], oceanBand: [0.06, 0.03, 0.0], ground: [0.12, 0.05, 0.02], groundVar: [0.06, 0.03, 0.01],
+    cityA: [1.0, 0.45, 0.1], cityB: [1.0, 0.2, 0.3], atmoA: [1.0, 0.45, 0.1], atmoB: [1.0, 0.15, 0.3], ringA: [0.6, 0.3, 0.1], ringB: [0.5, 0.15, 0.2], hemi: 0xffb08f },
+  { name: 'Verdant Veil', nebA: [0.02, 0.17, 0.10], nebB: [0.0, 0.08, 0.16], band: [0.02, 0.10, 0.07], bandDir: [0.1, 0.9, 0.4], seed: [-3.3, 8.8, 1.9],
+    ocean: [0.005, 0.05, 0.05], oceanBand: [0.0, 0.04, 0.03], ground: [0.03, 0.08, 0.03], groundVar: [0.03, 0.05, 0.02],
+    cityA: [0.4, 1.0, 0.5], cityB: [0.2, 0.7, 1.0], atmoA: [0.2, 1.0, 0.6], atmoB: [0.1, 0.6, 1.0], ringA: [0.2, 0.55, 0.35], ringB: [0.15, 0.4, 0.6], hemi: 0x8fffc8 },
+  { name: 'Violet Abyss', nebA: [0.10, 0.02, 0.24], nebB: [0.03, 0.03, 0.18], band: [0.07, 0.03, 0.16], bandDir: [0.6, 0.6, 0.2], seed: [9.4, -2.6, 4.4],
+    ocean: [0.04, 0.04, 0.12], oceanBand: [0.03, 0.03, 0.08], ground: [0.12, 0.12, 0.18], groundVar: [0.06, 0.06, 0.08],
+    cityA: [0.8, 0.4, 1.0], cityB: [0.4, 0.6, 1.0], atmoA: [0.5, 0.5, 1.0], atmoB: [0.8, 0.3, 1.0], ringA: [0.5, 0.45, 0.8], ringB: [0.3, 0.35, 0.9], hemi: 0xb59fff },
+  { name: 'Solar Forge', nebA: [0.22, 0.14, 0.02], nebB: [0.18, 0.05, 0.0], band: [0.14, 0.09, 0.03], bandDir: [-0.2, 0.85, 0.5], seed: [2.2, 6.6, -5.5],
+    ocean: [0.10, 0.02, 0.0], oceanBand: [0.12, 0.04, 0.0], ground: [0.03, 0.02, 0.02], groundVar: [0.02, 0.01, 0.01],
+    cityA: [1.0, 0.4, 0.05], cityB: [1.0, 0.7, 0.2], atmoA: [1.0, 0.6, 0.2], atmoB: [1.0, 0.3, 0.1], ringA: [0.7, 0.5, 0.2], ringB: [0.6, 0.3, 0.1], hemi: 0xffd08f },
+  { name: 'Frost Halo', nebA: [0.08, 0.12, 0.22], nebB: [0.0, 0.14, 0.20], band: [0.08, 0.10, 0.14], bandDir: [0.4, 0.75, -0.6], seed: [-7.1, -4.4, 3.3],
+    ocean: [0.05, 0.08, 0.12], oceanBand: [0.04, 0.05, 0.07], ground: [0.16, 0.18, 0.22], groundVar: [0.06, 0.06, 0.07],
+    cityA: [0.6, 0.85, 1.0], cityB: [0.9, 0.9, 1.0], atmoA: [0.6, 0.85, 1.0], atmoB: [0.4, 0.6, 1.0], ringA: [0.6, 0.7, 0.85], ringB: [0.4, 0.6, 0.9], hemi: 0xbfe0ff }
+];
+const PLANET_KEYS = ['ocean', 'oceanBand', 'ground', 'groundVar', 'cityA', 'cityB', 'atmoA', 'atmoB'];
+const RING_KEYS = ['ringA', 'ringB'];
+
+// Colour-blind friendly enemy colours: they differ along blue / yellow and in brightness,
+// which deutan and protan eyes still separate.
+const CB_ENEMY = { drone: '#c3b1ff', striker: '#ffe14d', diver: '#2f86ff', zealot: '#ff9f1c', splitter: '#f2f2f2', warden: '#7fd6ff', phantom: '#ffffff' };
+
+// ---------------------------------------------------------------------------
 // The stage
 // ---------------------------------------------------------------------------
 export function createStage(opts) {
@@ -503,7 +547,10 @@ export function createStage(opts) {
   const touch = navigator.maxTouchPoints > 0;
   const qParam = params.get('q');
   let qi = qParam === 'low' ? 0 : qParam === 'med' ? 1 : qParam === 'high' ? 2 : (touch ? 1 : 2);
-  const qPinned = !!qParam;
+  let qPinned = !!qParam;
+  // options from the settings panel
+  const opt = { shake: 1, flash: 1, glow: 1, colorblind: false, cinema: true };
+  function setOptions(o) { Object.assign(opt, o); }
 
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance', stencil: false });
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -555,7 +602,8 @@ export function createStage(opts) {
   const arr = c => [c.r, c.g, c.b];
 
   // ---- lights ---------------------------------------------------------------
-  scene.add(new THREE.HemisphereLight(0x8fa6ff, 0x1a0820, 1.1));
+  const hemi = new THREE.HemisphereLight(0x8fa6ff, 0x1a0820, 1.1);
+  scene.add(hemi);
   const key = new THREE.DirectionalLight(0xffffff, 1.75);
   key.position.set(-0.35, 1, 0.75);
   scene.add(key);
@@ -579,33 +627,54 @@ export function createStage(opts) {
     l.color.copy(lin(hex));
     l.userData.life = life;
     l.userData.max = life;
-    l.userData.peak = peak;
-    l.intensity = peak;
+    l.userData.peak = peak * (0.35 + 0.65 * opt.flash);
+    l.intensity = l.userData.peak;
   }
 
   // ---- coordinates ------------------------------------------------------------
   function wx(x) { return x - game.width / 2; }
   function wz(y) { return y - game.height / 2; }
 
-  // ---- backdrop: baked nebula cube, planet, rings, dust ---------------------------
+  // ---- backdrop: baked nebula cubes, planet, rings, dust ---------------------------
+  // The nebula is baked into a cube map once per sector (one face per frame, so the
+  // bake never stalls a frame) and the sky crossfades from the old cube to the new one.
+  const vec3 = a => new THREE.Vector3(a[0], a[1], a[2]);
+  const skyUniforms = { uNebA: { value: new THREE.Vector3() }, uNebB: { value: new THREE.Vector3() }, uBand: { value: new THREE.Vector3() }, uBandDir: { value: new THREE.Vector3() }, uSeed: { value: new THREE.Vector3() } };
+  function setSkyUniforms(sec) {
+    for (const [u, k] of [['uNebA', 'nebA'], ['uNebB', 'nebB'], ['uBand', 'band'], ['uBandDir', 'bandDir'], ['uSeed', 'seed']]) skyUniforms[u].value.set(sec[k][0], sec[k][1], sec[k][2]);
+  }
   const skyScene = new THREE.Scene();
-  const skyMesh = new THREE.Mesh(new THREE.SphereGeometry(10, 48, 24), new THREE.ShaderMaterial({ vertexShader: SKY_VERT, fragmentShader: SKY_FRAG, side: THREE.BackSide, depthWrite: false }));
+  const skyMesh = new THREE.Mesh(new THREE.SphereGeometry(10, 48, 24), new THREE.ShaderMaterial({ vertexShader: SKY_VERT, fragmentShader: SKY_FRAG, uniforms: skyUniforms, side: THREE.BackSide, depthWrite: false }));
   skyScene.add(skyMesh);
-  const cubeRT = new THREE.WebGLCubeRenderTarget(touch ? 768 : 1024, { type: THREE.HalfFloatType, generateMipmaps: false });
-  const cubeCam = new THREE.CubeCamera(1, 100, cubeRT);
+  const cubeSize = touch ? 768 : 1024;
+  const cubeRTs = [0, 1].map(() => new THREE.WebGLCubeRenderTarget(cubeSize, { type: THREE.HalfFloatType, generateMipmaps: false }));
+  const cubeCam = new THREE.CubeCamera(1, 100, cubeRTs[0]);
+  setSkyUniforms(SECTORS[0]);
   cubeCam.update(renderer, skyScene);
-  skyMesh.geometry.dispose();
-  skyMesh.material.dispose();
-  scene.background = cubeRT.texture;
+  const bgMat = new THREE.ShaderMaterial({
+    vertexShader: BG_VERT,
+    fragmentShader: BG_FRAG,
+    uniforms: { uCubeA: { value: cubeRTs[0].texture }, uCubeB: { value: cubeRTs[0].texture }, uMix: { value: 0 } },
+    side: THREE.BackSide,
+    depthWrite: false,
+    depthTest: false
+  });
+  const bgMesh = new THREE.Mesh(new THREE.BoxGeometry(2, 2, 2), bgMat);
+  bgMesh.frustumCulled = false;
+  bgMesh.renderOrder = -100;
+  scene.add(bgMesh);
+  const sector = { index: 0, shown: 0, from: SECTORS[0], to: SECTORS[0], bakeFace: -1, bakeRT: 0, frontRT: 0, mix: 1, warp: 0 };
 
   const planetGroup = new THREE.Group();
   scene.add(planetGroup);
-  const planetMat = new THREE.ShaderMaterial({ vertexShader: PLANET_VERT, fragmentShader: PLANET_FRAG, uniforms: { uSun: { value: new THREE.Vector3(0, -1, 0) }, uTime: { value: 0 } } });
+  const planetUniforms = { uSun: { value: new THREE.Vector3(0, -1, 0) }, uTime: { value: 0 } };
+  for (const k of PLANET_KEYS) planetUniforms['u' + k[0].toUpperCase() + k.slice(1)] = { value: vec3(SECTORS[0][k]) };
+  const planetMat = new THREE.ShaderMaterial({ vertexShader: PLANET_VERT, fragmentShader: PLANET_FRAG, uniforms: planetUniforms });
   const planet = new THREE.Mesh(new THREE.SphereGeometry(1, 96, 64), planetMat);
   planetGroup.add(planet);
   const haloMat = new THREE.ShaderMaterial({ vertexShader: QUAD_VERT, fragmentShader: HALO_FRAG, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, uniforms: { uColor: { value: new THREE.Color(0.25, 0.75, 1.6) }, uSunScreen: { value: new THREE.Vector2(0, -1) } } });
   const halo = new THREE.Mesh(new THREE.PlaneGeometry(2.5, 2.5), haloMat);
-  const ringMat = new THREE.ShaderMaterial({ vertexShader: RING_VERT, fragmentShader: RING_FRAG, transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, uniforms: { uSun: { value: new THREE.Vector3() }, uInner: { value: 0.6 } } });
+  const ringMat = new THREE.ShaderMaterial({ vertexShader: RING_VERT, fragmentShader: RING_FRAG, transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending, uniforms: { uSun: { value: new THREE.Vector3() }, uInner: { value: 0.6 }, uRingA: { value: vec3(SECTORS[0].ringA) }, uRingB: { value: vec3(SECTORS[0].ringB) } } });
   const ring = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), ringMat);
   planetGroup.add(ring);
 
@@ -615,7 +684,7 @@ export function createStage(opts) {
     transparent: true,
     depthWrite: false,
     blending: THREE.AdditiveBlending,
-    uniforms: { uTime: { value: 0 }, uProj: { value: 600 }, uMinZ: { value: -1200 }, uRangeZ: { value: 2600 } }
+    uniforms: { uTime: { value: 0 }, uFlow: { value: 0 }, uProj: { value: 600 }, uMinZ: { value: -1200 }, uRangeZ: { value: 2600 } }
   });
   let dust = null;
   function buildDust() {
@@ -694,7 +763,7 @@ export function createStage(opts) {
   const invModels = {};
   const invMeshes = {};
   const INV_CAP = 220;
-  for (const kind of ['diver', 'striker', 'drone']) {
+  for (const kind of ['diver', 'striker', 'drone', 'warden', 'phantom']) {
     for (let frame = 0; frame < 2; frame++) {
       const pattern = patterns.invaderSprites[kind][frame];
       const model = voxelModel(pattern, {
@@ -876,30 +945,41 @@ export function createStage(opts) {
   scene.add(odRing2);
 
   // ---- boss -------------------------------------------------------------------------
-  const BOSS_BODY = { carrier: colors.enemy2, interceptor: colors.enemy3, bulwark: colors.player };
+  const BOSS_BODY = { carrier: colors.enemy2, interceptor: colors.enemy3, bulwark: colors.player, hive: colors.bullet };
   const bossModels = {};
   function bossModel(kind) {
     if (bossModels[kind]) return bossModels[kind];
     const body = arr(lin(BOSS_BODY[kind]));
     const pink = arr(lin(colors.enemy));
     const red = arr(lin(colors.enemy3));
-    const accent = (c, r) => {
-      if (r >= 2 && r <= 3 && c >= 10 && c <= 13) return pink;
-      if (r === 7 && ((c >= 4 && c <= 6) || (c >= 17 && c <= 19))) return pink;
-      if (r === 9 && ((c >= 2 && c <= 4) || (c >= 19 && c <= 21))) return red;
-      return body;
-    };
-    const model = voxelModel(patterns.bossPattern, {
+    const goldA = arr(lin(colors.gold));
+    const hive = kind === 'hive';
+    const accent = hive
+      ? (c, r) => {
+        if ((r === 5 || r === 6) && c >= 10 && c <= 13) return pink;
+        if (r === 2 && (c === 8 || c === 9 || c === 14 || c === 15)) return goldA;
+        if (r >= 9 && (c === 5 || c === 18)) return pink;
+        return body;
+      }
+      : (c, r) => {
+        if (r >= 2 && r <= 3 && c >= 10 && c <= 13) return pink;
+        if (r === 7 && ((c >= 4 && c <= 6) || (c >= 17 && c <= 19))) return pink;
+        if (r === 9 && ((c >= 2 && c <= 4) || (c >= 19 && c <= 21))) return red;
+        return body;
+      };
+    const model = voxelModel(hive ? patterns.hivePattern : patterns.bossPattern, {
       depthBase: 1.3,
       depthStep: 0.7,
       depthMax: 4.2,
       color: accent,
-      hot: (c, r) => (r === 4 && (c === 11 || c === 12)) ? 1 : 0,
+      hot: hive ? (c, r) => ((r === 5 || r === 6) && (c === 11 || c === 12)) ? 1 : 0 : (c, r) => (r === 4 && (c === 11 || c === 12)) ? 1 : 0,
       extras: kind === 'interceptor'
         ? [{ x: -13.5, y: 1, z: 0, w: 3, h: 1, d: 1.2, color: red, hot: 0 }, { x: 13.5, y: 1, z: 0, w: 3, h: 1, d: 1.2, color: red, hot: 0 }]
         : kind === 'bulwark'
           ? [{ x: 0, y: 6.4, z: 0, w: 8, h: 1.2, d: 3.4, color: body, hot: 0 }, { x: 0, y: -0.5, z: 2.4, w: 3.2, h: 3.2, d: 1.2, color: pink, hot: 0 }]
-          : [{ x: 0, y: 0.5, z: 2.2, w: 4, h: 1.2, d: 1, color: pink, hot: 0 }]
+          : hive
+            ? [{ x: 0, y: 0, z: 2.3, w: 3.2, h: 3.2, d: 1.2, color: pink, hot: 0 }, { x: -9, y: 2, z: 1.6, w: 1.6, h: 1.6, d: 1, color: goldA, hot: 0 }, { x: 9, y: 2, z: 1.6, w: 1.6, h: 1.6, d: 1, color: goldA, hot: 0 }]
+            : [{ x: 0, y: 0.5, z: 2.2, w: 4, h: 1.2, d: 1, color: pink, hot: 0 }]
     });
     const mat = voxelMaterial({ glow: 0.42, vertexColors: true, roughness: 0.3, metalness: 0.4 });
     const mesh = new THREE.Mesh(model.geometry, mat);
@@ -927,6 +1007,58 @@ export function createStage(opts) {
     return m;
   });
   const bossState = { lastX: 0, roll: 0, kind: null };
+
+  // ---- bonus saucer: a lathed hull with a glass dome and chasing rim lights ---------------
+  const saucerProfile = [[0, -0.42], [0.34, -0.46], [0.72, -0.3], [1, -0.05], [0.96, 0.06], [0.7, 0.16], [0.42, 0.24], [0.3, 0.26], [0, 0.27]];
+  const saucerGeo = new THREE.LatheGeometry(saucerProfile.map(([r, y]) => new THREE.Vector2(r, y)), 40);
+  saucerGeo.setAttribute('aHot', new THREE.Float32BufferAttribute(new Float32Array(saucerGeo.attributes.position.count), 1));
+  const saucerMat = voxelMaterial({ glow: 0.32, metalness: 0.75, roughness: 0.22, color: 0xd9c8ff });
+  const saucerHull = new THREE.Mesh(saucerGeo, saucerMat);
+  const saucerDome = new THREE.Mesh(new THREE.SphereGeometry(0.4, 32, 16, 0, TAU, 0, Math.PI / 2), new THREE.ShaderMaterial({
+    vertexShader: FRESNEL_VERT,
+    fragmentShader: FRESNEL_FRAG,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    uniforms: { uColor: { value: new THREE.Color(colors.player) }, uAlpha: { value: 0.85 }, uTime: { value: 0 }, uHex: { value: 0 }, uHit: { value: 0 } }
+  }));
+  saucerDome.position.y = 0.24;
+  saucerDome.renderOrder = 15;
+  const saucerGroup = new THREE.Group();
+  saucerGroup.add(saucerHull, saucerDome);
+  saucerGroup.visible = false;
+  scene.add(saucerGroup);
+  // points on the hull, used to break it into debris
+  const saucerShards = { voxels: [] };
+  for (let i = 0; i < 48; i++) {
+    const a = i / 48 * TAU, rr = i % 3 === 0 ? 0.45 : 0.9;
+    saucerShards.voxels.push({ x: Math.cos(a) * rr, y: (i % 2 ? 0.1 : -0.15), z: Math.sin(a) * rr, s: 0.16 });
+  }
+  const SAUCER_SIZE = 36;
+  const saucerLights = ['#ff3df2', '#35f4ff', '#ffd23d'];
+  function drawSaucer(dt) {
+    const s = game.saucer;
+    if (!s) { saucerGroup.visible = false; return; }
+    saucerGroup.visible = true;
+    const Y = INV_Y + 26 + Math.sin(clock * 3.1) * 3;
+    saucerGroup.position.set(wx(s.x), Y, wz(s.y));
+    const bank = clamp(s.vx / 900, -0.25, 0.25);
+    saucerGroup.rotation.set(0.32 - view.face * 0.15, 0, -bank, 'YXZ');
+    saucerHull.rotation.y += dt * 2.2;
+    saucerGroup.scale.setScalar(SAUCER_SIZE);
+    saucerDome.material.uniforms.uTime.value = clock;
+    saucerGroup.updateMatrixWorld(true);
+    s._m = saucerGroup.matrixWorld;
+    for (let i = 0; i < 12; i++) {
+      const a = i / 12 * TAU + clock * 3;
+      _v.set(Math.cos(a) * 0.98, 0, Math.sin(a) * 0.98).applyMatrix4(saucerGroup.matrixWorld);
+      const c = lin(saucerLights[(i + Math.floor(clock * 8)) % 3]);
+      fx.sprite(_v.x, _v.y, _v.z, 5.5, c.r * 3, c.g * 3, c.b * 3, 0.9);
+    }
+    const beam = lin(colors.player);
+    fx.flat(wx(s.x), PLATE_Y + 0.5, wz(s.y), 60, beam.r, beam.g, beam.b, 0.35, 3, 0);
+    fx.sprite(wx(s.x), Y - 6, wz(s.y), 34, beam.r, beam.g, beam.b, 0.25);
+  }
 
   // ---- power cores ----------------------------------------------------------------------
   const coreGeos = {};
@@ -1024,14 +1156,20 @@ export function createStage(opts) {
   // ---- camera fit ------------------------------------------------------------------------------
   const view = { vw: 1, vh: 1, pitch: 0.95, dist: 1500, lookZ: 0, face: 0.8, scale: 1 };
   const fitV = new THREE.Vector3();
+  const camTarget = new THREE.Vector3();
   function placeCamera(pitch, dist, lookZ, sx = 0, sy = 0, yaw = 0) {
     const cx = Math.sin(yaw) * Math.cos(pitch) * dist;
     const cz = Math.cos(yaw) * Math.cos(pitch) * dist;
     camera.position.set(cx + sx, Math.sin(pitch) * dist + sy, lookZ + cz);
     camera.up.set(0, 1, 0);
-    camera.lookAt(sx * 0.45, sy * 0.3, lookZ);
+    camTarget.set(sx * 0.45, sy * 0.3, lookZ);
+    camera.lookAt(camTarget);
     camera.updateMatrixWorld(true);
   }
+  // The gameplay pose without cinematics or shake: pointer steering and HUD layout use it,
+  // so a camera move never throws the ship off the player's finger.
+  const rayCam = new THREE.PerspectiveCamera();
+  function syncRayCam() { rayCam.copy(camera, false); rayCam.updateMatrixWorld(true); }
   function ndc(x, y, z) { return fitV.set(x, y, z).project(camera); }
   function fitCamera() {
     const W = game.width, H = game.height, vw = view.vw, vh = view.vh;
@@ -1073,6 +1211,7 @@ export function createStage(opts) {
     view.lookZ = best.lookZ;
     view.face = best.pitch * 0.8;
     placeCamera(view.pitch, view.dist, view.lookZ);
+    syncRayCam();
     // world px -> screen px at the player's depth (used for UI sizes)
     const a = ndc(0, 0, H / 2 - 60).clone();
     const b = ndc(100, 0, H / 2 - 60);
@@ -1146,8 +1285,8 @@ export function createStage(opts) {
 
   // ---- projection helpers -----------------------------------------------------------------------
   const projV = new THREE.Vector3();
-  function project(x, y, h = 0) {
-    projV.set(wx(x), h, wz(y)).project(camera);
+  function project(x, y, h = 0, cam = camera) {
+    projV.set(wx(x), h, wz(y)).project(cam);
     return { x: (projV.x + 1) / 2 * view.vw, y: (1 - projV.y) / 2 * view.vh };
   }
   const ray = new THREE.Raycaster();
@@ -1156,13 +1295,13 @@ export function createStage(opts) {
   function pointerToGameX(clientX, clientY) {
     const nx = clientX / view.vw * 2 - 1;
     const ny = 1 - clientY / view.vh * 2;
-    ray.setFromCamera({ x: nx, y: ny }, camera);
+    ray.setFromCamera({ x: nx, y: ny }, rayCam);
     if (!ray.ray.intersectPlane(plane, hit)) return game.width / 2;
     return hit.x + game.width / 2;
   }
   function fieldScreen() {
-    const l = project(0, game.height, 0);
-    const r = project(game.width, game.height, 0);
+    const l = project(0, game.height, 0, rayCam);
+    const r = project(game.width, game.height, 0, rayCam);
     return { left: l.x, right: r.x };
   }
 
@@ -1177,12 +1316,20 @@ export function createStage(opts) {
   const tmpQ = new THREE.Quaternion();
   const xAxis = new THREE.Vector3(1, 0, 0);
 
-  function invPixel(inv) { return inv.type === 'mini' ? 2.1 : inv.type === 'splitter' ? 3.35 : inv.type === 'drone' ? 3 : 3.1; }
-  function invKind(inv) { return inv.type === 'striker' ? 'striker' : inv.type === 'diver' ? 'diver' : 'drone'; }
+  function invPixel(inv) { return inv.sat ? 2.4 : inv.type === 'mini' ? 2.1 : inv.type === 'splitter' ? 3.35 : inv.type === 'drone' ? 3 : inv.type === 'warden' ? 3.3 : 3.1; }
+  function invKind(inv) { return inv.type === 'striker' || inv.type === 'diver' || inv.type === 'warden' || inv.type === 'phantom' ? inv.type : 'drone'; }
   function invColorHex(inv) {
+    if (inv.sat) return opt.colorblind ? CB_ENEMY.striker : colors.gold;
+    if (opt.colorblind) {
+      if (inv.type === 'mini') return CB_ENEMY.splitter;
+      if (inv.type === 'diver') return inv.zealot ? CB_ENEMY.zealot : CB_ENEMY.diver;
+      return CB_ENEMY[inv.type] || CB_ENEMY.drone;
+    }
     if (inv.type === 'splitter' || inv.type === 'mini') return colors.bullet;
     if (inv.type === 'drone') return colors.enemy;
     if (inv.type === 'striker') return colors.enemy2;
+    if (inv.type === 'warden') return colors.warden;
+    if (inv.type === 'phantom') return colors.phantom;
     return inv.zealot ? colors.fire : colors.enemy3;
   }
 
@@ -1218,11 +1365,18 @@ export function createStage(opts) {
         hOff = 6;
       }
     }
+    if (inv.type === 'phantom') {
+      // phantoms hover higher and shrink away while they blink to a new spot
+      scale *= Math.max(0.001, inv.fade ?? 1);
+      hOff = 10 + Math.sin(t * 3 + inv.col) * 4;
+      yaw = Math.sin(t * 2.2 + inv.col) * 0.5 + (1 - (inv.fade ?? 1)) * 3;
+    }
+    if (inv.sat) { hOff = 0; yaw = t * 2.4 + inv.col; }
     const s = invPixel(inv) * scale * 1.2;
     facingQ.setFromAxisAngle(xAxis, -view.face + pitchExtra);
     tmpQ.setFromEuler(_e.set(0, yaw, roll, 'YXZ'));
     facingQ.multiply(tmpQ);
-    return out.compose(_v.set(wx(inv.x + bobX), INV_Y + hOff, wz(inv.y + bobY)), facingQ, _s.set(s, s, s));
+    return out.compose(_v.set(wx(inv.x + bobX), (inv.h ?? INV_Y) + hOff, wz(inv.y + bobY)), facingQ, _s.set(s, s, s));
   }
 
   function drawInvaders(list, t) {
@@ -1256,7 +1410,11 @@ export function createStage(opts) {
         fx.sprite(_v.x, _v.y, _v.z, inv.r * 1.6, base.r, base.g, base.b, 0.32 * pulse);
       }
       if (inv.divePhase) drawDiveCue(inv, base, t);
+      if (inv.type === 'warden' && inv.barrier > 0) drawBarrier(inv, t);
+      if (inv.type === 'phantom') drawPhantomCue(inv, base, t);
     }
+    for (let i = barrierUsed; i < barrierPool.length; i++) barrierPool[i].visible = false;
+    barrierUsed = 0;
     for (const k in invMeshes) {
       const mesh = invMeshes[k];
       if (!mesh.count) continue;
@@ -1266,6 +1424,63 @@ export function createStage(opts) {
       mesh.instanceColor.clearUpdateRanges();
       mesh.instanceColor.addUpdateRange(0, mesh.count * 3);
       mesh.instanceColor.needsUpdate = true;
+    }
+  }
+
+  // Warden barrier: a curved energy wall on the side facing the player. Straight shots
+  // splash off it; angled shots get round it.
+  const barrierGeo = new THREE.CylinderGeometry(1, 1, 1, 28, 1, true, -1.25, 2.5);
+  const barrierPool = [];
+  let barrierUsed = 0;
+  function drawBarrier(inv, t) {
+    if (!barrierPool[barrierUsed]) {
+      const m = new THREE.Mesh(barrierGeo, new THREE.ShaderMaterial({
+        vertexShader: FRESNEL_VERT,
+        fragmentShader: FRESNEL_FRAG,
+        transparent: true,
+        depthWrite: false,
+        side: THREE.DoubleSide,
+        blending: THREE.AdditiveBlending,
+        uniforms: { uColor: { value: new THREE.Color() }, uAlpha: { value: 0.7 }, uTime: { value: 0 }, uHex: { value: 0.9 }, uHit: { value: 0 } }
+      }));
+      m.renderOrder = 16;
+      scene.add(m);
+      barrierPool.push(m);
+    }
+    const m = barrierPool[barrierUsed++];
+    const k = clamp(inv.barrier / Math.max(1, inv.barrierMax || 1), 0, 1);
+    const r = inv.r * 1.75;
+    m.visible = true;
+    m.position.set(wx(inv.x), INV_Y + 2, wz(inv.y) + 4);
+    m.scale.set(r, 26, r * 0.7);
+    m.quaternion.identity();
+    inv.barrierFlash = Math.max(0, (inv.barrierFlash || 0) - 0.05);
+    const u = m.material.uniforms;
+    u.uColor.value.copy(lin(opt.colorblind ? CB_ENEMY.warden : colors.barrier)).multiplyScalar(1.7);
+    u.uAlpha.value = (0.35 + k * 0.45) * (0.85 + Math.sin(t * 9 + inv.col) * 0.15);
+    u.uHit.value = inv.barrierFlash;
+    u.uTime.value = clock;
+  }
+
+  // Phantom: a dotted aim line while it charges, sparkles while it blinks.
+  function drawPhantomCue(inv, base, t) {
+    const X = wx(inv.x), Z = wz(inv.y);
+    if (inv.phase === 'aim' && game.player) {
+      const k = clamp(inv.phaseTime / (inv.aimTime || 0.8), 0, 1);
+      const tx = wx(inv.aimX ?? game.player.x), tz = wz(game.player.y);
+      const n = 22;
+      for (let i = 1; i < n; i++) {
+        if ((i + Math.floor(t * 20)) % 2) continue;
+        const u = i / n;
+        fx.sprite(lerp(X, tx, u), lerp(INV_Y + 12, PLAYER_Y, u), lerp(Z, tz, u), 2.6 + k * 1.6, base.r * 2.5, base.g * 2.5, base.b * 2.5, 0.25 + k * 0.6);
+      }
+      fx.flat(tx, PLATE_Y + 0.6, tz, 18 + (1 - k) * 22, base.r * 3, base.g * 3, base.b * 3, 0.5 + k * 0.5, 2, 0.12);
+      fx.sprite(X, INV_Y + 14, Z, 10 + k * 14, base.r * 3, base.g * 3, base.b * 3, 0.5 + k * 0.5);
+    } else if ((inv.fade ?? 1) < 0.98) {
+      for (let i = 0; i < 4; i++) {
+        const a = t * 9 + i * TAU / 4;
+        fx.sprite(X + Math.cos(a) * 16, INV_Y + 12 + Math.sin(a * 1.3) * 6, Z + Math.sin(a) * 16, 4, base.r * 2.5, base.g * 2.5, base.b * 2.5, 1 - (inv.fade ?? 1) * 0.6);
+      }
     }
   }
 
@@ -1463,6 +1678,15 @@ export function createStage(opts) {
         fx.sprite(wx(tt.x), Y + 14, wz(tt.y), tt.r * 0.6, 2, 2, 2, 0.8);
       }
     });
+    // hive: energy tethers to the orbiting guard drones (drawn with the invaders)
+    if (boss.kind === 'hive' && boss.sats && boss.intro <= 0) {
+      const tc = lin(opt.colorblind ? CB_ENEMY.striker : colors.gold);
+      for (const sat of boss.sats) {
+        if (sat.dead) continue;
+        const flick = 0.45 + Math.sin(clock * 14 + sat.col * 2) * 0.15;
+        fx.streak(wx(boss.x), Y, wz(boss.y), wx(sat.x), BOSS_Y + 4, wz(sat.y), 3.2, [tc.r, tc.g, tc.b, 0.1], [tc.r * 2.4, tc.g * 2.4, tc.b * 2.4, flick]);
+      }
+    }
     // beam warning column
     if (boss.warning > 0) {
       const alpha = clamp(boss.warning / 0.82, 0, 1);
@@ -1485,9 +1709,16 @@ export function createStage(opts) {
       fx.sprite(wx(b.x), SHOT_Y, wz(b.y), b.damage > 1 ? 6.5 : 5.5, c.r * 2, c.g * 2, c.b * 2, 0.9);
     }
     const red = lin(colors.enemy3), gold = lin(colors.gold);
+    const needleCol = lin(opt.colorblind ? CB_ENEMY.phantom : colors.phantom);
     for (const b of game.enemyBullets) {
       const speed = Math.max(1, Math.hypot(b.vx, b.vy));
       const beam = b.style === 'beam';
+      if (b.style === 'needle') {
+        const dx = b.vx / speed * 70, dy = b.vy / speed * 70;
+        fx.streak(wx(b.x - dx), SHOT_Y + 3, wz(b.y - dy), wx(b.x), SHOT_Y + 3, wz(b.y), 7, [needleCol.r, needleCol.g, needleCol.b, 0], [needleCol.r * 3.5, needleCol.g * 3.5, needleCol.b * 3.5, 1]);
+        fx.sprite(wx(b.x), SHOT_Y + 3, wz(b.y), 9, needleCol.r * 2.5, needleCol.g * 2.5, needleCol.b * 2.5, 1);
+        continue;
+      }
       const len = beam ? clamp(speed * 0.2, 70, 96) : clamp(speed * 0.12, 28, 48);
       const dx = b.vx / speed * len, dy = b.vy / speed * len;
       const head = beam ? red : lin(b.color === colors.enemy ? colors.enemy : colors.gold);
@@ -1534,15 +1765,17 @@ export function createStage(opts) {
   }
 
   function drawRings() {
+    // seen up close in a kill cam, shock rings fill the frame: tone them down there
+    const dim = 1 - cine.k * 0.7;
     for (const ring of game.rings) {
       const t = clamp(ring.life / ring.maxLife, 0, 1);
       const c = linRgb(ring.color);
       const w = clamp(ring.width * (0.4 + t * 0.6) * 1.6 / Math.max(8, ring.r), 0.015, 0.35);
-      fx.flat(wx(ring.x), SHOT_Y, wz(ring.y), ring.r, c.r * 2.4, c.g * 2.4, c.b * 2.4, t * 0.85, 2, w);
+      fx.flat(wx(ring.x), SHOT_Y, wz(ring.y), ring.r, c.r * 2.4, c.g * 2.4, c.b * 2.4, t * 0.85 * dim, 2, w);
     }
     for (const ring of localRings) {
       const t = clamp(ring.life / ring.max, 0, 1);
-      fx.flat(wx(ring.x), ring.h, wz(ring.y), ring.r, ring.c.r * 2.4, ring.c.g * 2.4, ring.c.b * 2.4, t * 0.9, 2, ring.width);
+      fx.flat(wx(ring.x), ring.h, wz(ring.y), ring.r, ring.c.r * 2.4, ring.c.g * 2.4, ring.c.b * 2.4, t * 0.9 * dim, 2, ring.width);
     }
   }
 
@@ -1561,6 +1794,8 @@ export function createStage(opts) {
       if (s.life <= 0) sparks.splice(i, 1);
     }
     if (sparks.length > 260) sparks.splice(0, sparks.length - 260);
+  }
+  function stepLights(dt) {
     for (const l of flashLights) {
       if (l.userData.life <= 0) { l.intensity = 0; continue; }
       l.userData.life -= dt;
@@ -1730,7 +1965,7 @@ export function createStage(opts) {
     g.textBaseline = 'middle';
     if (game.overdrive > 0) {
       g.globalCompositeOperation = 'lighter';
-      const t = clamp(game.overdrive / (helpers.hasMod('overcharged') ? 6 : 4), 0, 1);
+      const t = clamp(game.overdrive / Math.max(1, helpers.overdriveDuration()), 0, 1);
       const barW = Math.min(220 * k, view.vw * 0.5);
       g.fillStyle = 'rgba(255, 255, 255, 0.12)';
       g.fillRect(cx - barW / 2, y + 6 * k, barW, 4);
@@ -1759,11 +1994,12 @@ export function createStage(opts) {
     if (boss.intro > 0) {
       const t = clamp(1 - boss.intro / 1.85, 0, 1);
       g.save();
-      g.globalAlpha = 0.3 * (1 - t * 0.25);
+      const calm = 1 - cine.k * 0.8;
+      g.globalAlpha = 0.3 * (1 - t * 0.25) * calm;
       g.fillStyle = 'rgba(1, 2, 8, 0.72)';
       g.fillRect(0, 0, view.vw, view.vh);
       g.globalCompositeOperation = 'lighter';
-      g.globalAlpha = 0.2 + Math.sin(game.time * 18) * 0.04;
+      g.globalAlpha = (0.2 + Math.sin(game.time * 18) * 0.04) * calm;
       g.strokeStyle = colors.enemy3;
       g.lineWidth = 2;
       g.shadowColor = colors.enemy3;
@@ -1780,8 +2016,10 @@ export function createStage(opts) {
       g.font = `900 ${clamp(game.width * 0.024, 15, 24) * k}px ${MONO}`;
       g.textAlign = 'center';
       g.fillStyle = '#fff';
-      const names = { carrier: 'CARRIER', interceptor: 'INTERCEPTOR', bulwark: 'BULWARK' };
-      g.fillText(`WARNING: ${names[boss.kind] || 'CARRIER'} SIGNATURE LOCKED`, view.vw / 2, view.vh * 0.12);
+      const names = { carrier: 'CARRIER', interceptor: 'INTERCEPTOR', bulwark: 'BULWARK', hive: 'HIVE' };
+      const hudEl = document.querySelector('.hud');
+      const warnY = Math.max(view.vh * 0.12, (hudEl ? hudEl.getBoundingClientRect().bottom : 60) + 40 * k);
+      g.fillText(`WARNING: ${names[boss.kind] || 'CARRIER'} SIGNATURE LOCKED`, view.vw / 2, warnY);
       g.restore();
     }
     // hull bar under the HUD
@@ -1850,58 +2088,204 @@ export function createStage(opts) {
     }
   }
 
+  // ---- cinematic camera: boss arrival swoop + slow-motion kill close-ups --------------------------------
+  const cine = { type: null, t: 0, dur: 1, x: 0, y: 0, h: 0, R: 300, spin: 0.3, k: 0 };
+  const basePos = new THREE.Vector3();
+  const cinePos = new THREE.Vector3();
+  const cineTarget = new THREE.Vector3();
+  const lookAtV = new THREE.Vector3();
+  const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+  function startCine(type, o) {
+    if (!opt.cinema) return false;
+    Object.assign(cine, { type, t: 0 }, o);
+    return true;
+  }
+  function applyCine(dt) {
+    cine.k = 0;
+    if (!cine.type) return;
+    let k = 0;
+    if (cine.type === 'boss') {
+      const boss = game.boss;
+      if (!boss || boss.intro <= 0 || !(game.state === 'playing' || game.state === 'paused')) { cine.type = null; return; }
+      const u = clamp(1 - boss.intro / 1.85, 0, 1);
+      const ease = 1 - Math.pow(1 - u, 3);
+      k = smooth(0, 0.1, u) * (1 - smooth(0.5, 0.97, u));
+      cineTarget.set(wx(boss.x), BOSS_Y + (1 - ease) * 340, wz(boss.y));
+      const yaw = lerp(-0.8, 0.32, u);
+      const R = Math.max(420, game.width * 0.9);
+      cinePos.set(cineTarget.x + Math.sin(yaw) * R, cineTarget.y + lerp(-20, 90, u), cineTarget.z + Math.cos(yaw) * R);
+    } else {
+      cine.t += dt;
+      const u = cine.t / cine.dur;
+      if (u >= 1) { cine.type = null; return; }
+      k = smooth(0, 0.16, u) * (1 - smooth(0.62, 1, u));
+      cineTarget.set(wx(cine.x), cine.h, wz(cine.y));
+      _v.copy(basePos).sub(cineTarget);
+      _v.y = Math.max(_v.y, 0);
+      _v.normalize().applyAxisAngle(_v2.set(0, 1, 0), cine.spin * u);
+      cinePos.copy(cineTarget).addScaledVector(_v, cine.R);
+    }
+    camera.position.lerpVectors(basePos, cinePos, k);
+    lookAtV.lerpVectors(camTarget, cineTarget, k);
+    camera.lookAt(lookAtV);
+    camera.updateMatrixWorld(true);
+    cine.k = k;
+  }
+
+  // ---- sectors -------------------------------------------------------------------------------------------
+  const sectorFrom = {};
+  for (const k of PLANET_KEYS.concat(RING_KEYS)) sectorFrom[k] = vec3(SECTORS[0][k]);
+  const hemiFrom = new THREE.Color(SECTORS[0].hemi);
+  const hemiTo = new THREE.Color(SECTORS[0].hemi);
+  function sectorUniform(k) {
+    const name = 'u' + k[0].toUpperCase() + k.slice(1);
+    return RING_KEYS.includes(k) ? ringMat.uniforms[name] : planetUniforms[name];
+  }
+  function bakeFace(rt, face) {
+    const prev = renderer.getRenderTarget();
+    renderer.setRenderTarget(rt, face);
+    renderer.render(skyScene, cubeCam.children[face]);
+    renderer.setRenderTarget(prev);
+  }
+  function applySectorMix(m) {
+    for (const k of PLANET_KEYS.concat(RING_KEYS)) {
+      const to = sector.to[k];
+      const from = sectorFrom[k];
+      sectorUniform(k).value.set(lerp(from.x, to[0], m), lerp(from.y, to[1], m), lerp(from.z, to[2], m));
+    }
+    hemi.color.copy(hemiFrom).lerp(hemiTo, m);
+  }
+  function setSector(i, instant) {
+    const idx = ((i % SECTORS.length) + SECTORS.length) % SECTORS.length;
+    if (idx === sector.index && sector.bakeFace < 0 && !sector.fading) {
+      if (instant) sector.warp = 0;
+      return SECTORS[idx].name;
+    }
+    for (const k of PLANET_KEYS.concat(RING_KEYS)) sectorFrom[k].copy(sectorUniform(k).value);
+    hemiFrom.copy(hemi.color);
+    hemiTo.set(SECTORS[idx].hemi);
+    sector.index = idx;
+    sector.to = SECTORS[idx];
+    setSkyUniforms(sector.to);
+    if (instant) {
+      const rt = cubeRTs[sector.frontRT];
+      for (let f = 0; f < 6; f++) bakeFace(rt, f);
+      bgMat.uniforms.uCubeA.value = rt.texture;
+      bgMat.uniforms.uCubeB.value = rt.texture;
+      bgMat.uniforms.uMix.value = 0;
+      sector.bakeFace = -1;
+      sector.fading = false;
+      sector.warp = 0;
+      applySectorMix(1);
+    } else {
+      if (sector.fading) {
+        // changed again mid-fade: settle on whichever cube is mostly showing, bake into the other
+        if (bgMat.uniforms.uMix.value > 0.5) sector.frontRT = sector.bakeRT;
+        bgMat.uniforms.uCubeA.value = cubeRTs[sector.frontRT].texture;
+        bgMat.uniforms.uMix.value = 0;
+        sector.fading = false;
+      }
+      // bake one cube face per frame into the back buffer, then crossfade to it
+      sector.bakeRT = 1 - sector.frontRT;
+      sector.bakeFace = 0;
+      sector.mix = 0;
+      sector.warp = 1;
+    }
+    return SECTORS[idx].name;
+  }
+  function stepSector(dt) {
+    if (sector.bakeFace >= 0) {
+      setSkyUniforms(sector.to);
+      bakeFace(cubeRTs[sector.bakeRT], sector.bakeFace++);
+      if (sector.bakeFace >= 6) {
+        sector.bakeFace = -1;
+        sector.fading = true;
+        sector.mix = 0;
+        bgMat.uniforms.uCubeA.value = cubeRTs[sector.frontRT].texture;
+        bgMat.uniforms.uCubeB.value = cubeRTs[sector.bakeRT].texture;
+      }
+    }
+    if (sector.fading) {
+      sector.mix = Math.min(1, sector.mix + dt / 1.8);
+      const m = smooth(0, 1, sector.mix);
+      bgMat.uniforms.uMix.value = m;
+      applySectorMix(m);
+      if (sector.mix >= 1) {
+        sector.fading = false;
+        sector.frontRT = sector.bakeRT;
+        bgMat.uniforms.uCubeA.value = cubeRTs[sector.frontRT].texture;
+        bgMat.uniforms.uMix.value = 0;
+      }
+    }
+    sector.warp = Math.max(0, sector.warp - dt * 0.45);
+  }
+  function sectorName(i) { return SECTORS[((i % SECTORS.length) + SECTORS.length) % SECTORS.length].name; }
+
   // ---- main render ------------------------------------------------------------------------------------
+  let dustFlow = 0;
   function render(dt) {
-    clock += dt;
+    // slow motion and hit-stop slow the scene's own animation too; the camera keeps real time
+    const sdt = dt * (game.timeScale ?? 1);
+    clock += sdt;
     debrisThisFrame = 0;
     trackFrame(dt);
     const t = game.time;
     const p = game.player;
-    const playing = game.state === 'playing' || game.state === 'paused';
+    const playing = game.state === 'playing' || game.state === 'paused' || game.state === 'perk';
 
     // camera: base fit + sway toward the ship + shake; slow drift on the title screen
     introBlend = lerp(introBlend, game.state === 'ready' ? 1 : 0, clamp(dt * 1.8, 0, 1));
     const sway = p ? (p.x - game.width / 2) * 0.05 * (1 - introBlend) : 0;
-    const shake = playing ? game.shake : 0;
-    const sx = sway + (shake ? rand(-shake, shake) * 0.55 : 0);
-    const sy = shake ? rand(-shake, shake) * 0.4 : 0;
     const yaw = Math.sin(clock * 0.16) * 0.1 * introBlend;
     const pitch = view.pitch - 0.08 * introBlend;
-    placeCamera(pitch, view.dist * (1 + 0.04 * introBlend), view.lookZ, sx, sy, yaw);
+    const dist = view.dist * (1 + 0.04 * introBlend);
+    placeCamera(pitch, dist, view.lookZ, sway, 0, yaw);
+    syncRayCam();
+    const shake = playing ? game.shake * opt.shake : 0;
+    if (shake) placeCamera(pitch, dist, view.lookZ, sway + rand(-shake, shake) * 0.55, rand(-shake, shake) * 0.4, yaw);
+    basePos.copy(camera.position);
+    applyCine(dt);
     if (shake) { camera.rotateZ(rand(-1, 1) * shake * 0.0012); camera.updateMatrixWorld(true); }
 
     fx.begin(camera);
-    stepLocal(dt);
+    stepLocal(sdt);
+    stepLights(dt);
+    stepSector(dt);
+    dustFlow += sdt * (1 + sector.warp * sector.warp * 9);
     plateMat.uniforms.uTime.value = clock;
     dustMat.uniforms.uTime.value = clock;
+    dustMat.uniforms.uFlow.value = dustFlow;
     planetMat.uniforms.uTime.value = clock;
-    pylonMat.userData.glow.value = 0.55 + Math.sin(clock * 2.2) * 0.2;
+    pylonMat.userData.glow.value = 0.55 + Math.sin(clock * 2.2) * 0.2 + sector.warp * 1.5;
     const pulse = plateMat.uniforms.uPulse.value;
     pulse.multiplyScalar(Math.pow(0.04, dt));
 
-    const list = game.invaders.length ? game.invaders : (game.state === 'ready' ? animateShowcase() : game.invaders);
+    let list = game.invaders.length ? game.invaders : (game.state === 'ready' ? animateShowcase() : game.invaders);
+    const boss = game.boss;
+    if (boss && boss.sats && boss.intro <= 0) list = list.concat(boss.sats.filter(sat => !sat.dead));
     drawInvaders(list, game.state === 'ready' ? clock : t || clock);
     drawShields(t);
-    drawPlayer(t, dt);
-    drawBoss(t, dt);
+    drawPlayer(t, sdt);
+    drawBoss(t, sdt);
+    drawSaucer(sdt);
     drawBullets();
     drawCores(t);
     drawParticles();
     drawRings();
-    updateDebris(dt);
+    updateDebris(sdt);
     fx.end();
 
     // grade: flash, aberration, vignette
     aberr = Math.max(0, aberr - dt * 0.03);
     // the logic only fades its screen flash while playing; fade our copy on menus too
-    flashVis = playing ? game.screenFlash : Math.max(0, Math.min(flashVis, game.screenFlash) - dt * 2);
-    const flash = clamp(flashVis, 0, 0.42);
+    flashVis = game.state === 'playing' ? game.screenFlash : Math.max(0, Math.min(flashVis, game.screenFlash) - dt * 2);
+    const flash = clamp(flashVis, 0, 0.42) * opt.flash;
     const fc = linRgb(game.flashColor || '255, 241, 168');
     grade.uniforms.uFlash.value.set(fc.r, fc.g, fc.b).multiplyScalar(flash * 0.32);
-    grade.uniforms.uAberr.value = aberr;
+    grade.uniforms.uAberr.value = aberr * opt.flash;
     grade.uniforms.uTime.value = clock;
-    grade.uniforms.uVignette.value = 0.42 + (game.boss && game.boss.intro > 0 ? 0.2 : 0);
-    bloom.strength = 0.62 + flash * 0.5;
+    grade.uniforms.uVignette.value = 0.42 + (game.boss && game.boss.intro > 0 ? 0.2 : 0) + cine.k * 0.12;
+    bloom.strength = (0.62 * opt.glow + flash * 0.5) * (1 - cine.k * 0.3);
 
     renderer.info.reset();
     composer.render(dt);
@@ -1985,6 +2369,39 @@ export function createStage(opts) {
     muzzle(x, y, hex) {
       const c = lin(hex);
       fx.sprite(wx(x), SHOT_Y, wz(y), 10, c.r * 2, c.g * 2, c.b * 2, 0.8);
+    },
+    bossIntro() {
+      return startCine('boss', {});
+    },
+    killCam(x, y, big) {
+      return startCine('kill', { x, y, h: big ? BOSS_Y : INV_Y, dur: big ? 1.8 : 1.05, R: big ? 680 : 340, spin: big ? 0.5 : 0.3 });
+    },
+    saucerDown(s) {
+      const c = lin('#d9c8ff').clone().multiplyScalar(1.6);
+      shatterModel(saucerShards, saucerGroup.matrixWorld.clone(), SAUCER_SIZE, c, { force: 1.7, budget: 48, life: 1.3 });
+      addRing(s.x, s.y, INV_Y + 26, 160, colors.player, 0.55, 0.1);
+      addRing(s.x, s.y, INV_Y + 26, 90, colors.enemy, 0.4, 0.16);
+      flashLight(s.x, s.y, INV_Y + 40, colors.player, 1600, 0.6);
+      pulsePlate(colors.player, 0.5);
+      aberr = Math.max(aberr, 0.006);
+    },
+    barrierHit(inv) {
+      inv.barrierFlash = 1;
+    },
+    barrierBreak(inv) {
+      const c = lin(opt.colorblind ? CB_ENEMY.warden : colors.barrier).clone().multiplyScalar(1.6);
+      for (let i = 0; i < 18; i++) {
+        const a = rand(-1.2, 1.2);
+        spawnDebris(wx(inv.x) + Math.sin(a) * inv.r * 1.7, INV_Y + rand(-6, 10), wz(inv.y) + 4 + Math.cos(a) * inv.r * 1.2, Math.sin(a) * rand(80, 200), rand(60, 200), Math.cos(a) * rand(80, 220), rand(2, 4), c, rand(0.6, 1.1));
+      }
+      addRing(inv.x, inv.y, INV_Y, 70, colors.barrier, 0.4, 0.14);
+      flashLight(inv.x, inv.y, INV_Y + 16, colors.barrier, 700, 0.35);
+    },
+    blink(inv) {
+      addRing(inv.x, inv.y, INV_Y + 10, 44, colors.phantom, 0.3, 0.16);
+    },
+    heartbeat(k) {
+      pulsePlate(colors.red, 0.08 + k * 0.16);
     }
   };
 
@@ -2010,17 +2427,24 @@ export function createStage(opts) {
     for (const cv of canvases) {
       const type = cv.dataset.enemySprite;
       let mesh;
-      if (type === 'boss') {
-        mesh = new THREE.Mesh(bossModel('carrier').model.geometry, bossModel('carrier').mat);
+      if (type === 'boss' || type === 'hive') {
+        const b = bossModel(type === 'hive' ? 'hive' : 'carrier');
+        mesh = new THREE.Mesh(b.model.geometry, b.mat);
         mesh.scale.setScalar(2.9);
+        mesh.rotation.set(-0.25, -0.5, 0);
+      } else if (type === 'saucer') {
+        mesh = new THREE.Mesh(saucerGeo, saucerMat);
+        mesh.scale.setScalar(46);
+        mesh.rotation.set(0.5, 0, 0.12);
       } else {
-        const kind = type === 'striker' ? 'striker' : (type === 'diver' || type === 'zealot') ? 'diver' : 'drone';
-        const hex = type === 'drone' ? colors.enemy : type === 'striker' ? colors.enemy2 : type === 'diver' ? colors.enemy3 : type === 'zealot' ? colors.fire : colors.bullet;
-        const m = voxelMaterial({ glow: 0.45, roughness: 0.3, metalness: 0.3, color: new THREE.Color(hex) });
+        const kind = type === 'striker' || type === 'warden' || type === 'phantom' ? type : (type === 'diver' || type === 'zealot') ? 'diver' : 'drone';
+        const hex = type === 'drone' ? colors.enemy : type === 'striker' ? colors.enemy2 : type === 'diver' ? colors.enemy3 : type === 'zealot' ? colors.fire
+          : type === 'warden' ? colors.warden : type === 'phantom' ? colors.phantom : colors.bullet;
+        const m = voxelMaterial({ glow: 0.45, roughness: 0.3, metalness: 0.3, color: new THREE.Color(opt.colorblind ? (CB_ENEMY[type] || CB_ENEMY.drone) : hex) });
         mesh = new THREE.Mesh(invModels[kind + '0'].geometry, m);
         mesh.scale.setScalar(type === 'splitter' ? 5.6 : 5.2);
+        mesh.rotation.set(-0.25, -0.5, 0);
       }
-      mesh.rotation.set(-0.25, -0.5, 0);
       tScene.add(mesh);
       tCam.position.set(0, 0, 160);
       tCam.lookAt(0, 0, 0);
@@ -2057,10 +2481,24 @@ export function createStage(opts) {
     return { quality: QUALITY[qi].name, dpr: +view.dpr.toFixed(2), calls: r.calls, tris: r.triangles, fps: Math.round(perf.fps), pitch: Math.round(view.pitch * 180 / Math.PI), debris: debrisMesh.count, fx: fx.n };
   }
 
+  // 'auto' lets the frame-rate watchdog pick; a named level pins it.
   function setQuality(name) {
+    if (name === 'auto') { qPinned = false; return QUALITY[qi].name; }
     const i = QUALITY.findIndex(q => q.name === name);
-    if (i >= 0) { qi = i; applyQuality(); buildDust(); }
+    if (i >= 0) { qi = i; qPinned = true; applyQuality(); buildDust(); }
     return QUALITY[qi].name;
+  }
+
+  // A still of the current frame for the share card.
+  function snapshot(maxW = 1600) {
+    composer.render(0);
+    const src = renderer.domElement;
+    const k = Math.min(1, maxW / src.width);
+    const c = document.createElement('canvas');
+    c.width = Math.round(src.width * k);
+    c.height = Math.round(src.height * k);
+    c.getContext('2d').drawImage(src, 0, 0, c.width, c.height);
+    return c;
   }
 
   function debugFx() {
@@ -2074,5 +2512,5 @@ export function createStage(opts) {
     return bad;
   }
 
-  return { resize, render, pointerToGameX, fieldScreen, project, events, paintRoster, info, setQuality, renderer, debugFx };
+  return { resize, render, pointerToGameX, fieldScreen, project, events, paintRoster, info, setQuality, setOptions, setSector, sectorName, sectorCount: SECTORS.length, snapshot, renderer, debugFx, cineState: () => ({ type: cine.type, k: cine.k }) };
 }

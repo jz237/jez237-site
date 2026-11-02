@@ -1,6 +1,9 @@
-// Invaders — 3D Edition. Game logic is the Classic Edition's, unchanged in rules;
-// stage.js draws it in real-time 3D and the sound set is a new ElevenLabs suite.
-import { createStage } from "./stage.js?v=1";
+// Invaders — 3D Edition. Game logic grew out of the Classic Edition's; v3.1 adds Boss Rush and
+// Practice, upgrades after each boss, wardens, phantoms, a bonus saucer, the Hive warship,
+// controller support, tension music, medals and a share card. stage.js draws it in real-time
+// 3D; meta.js holds settings, medals and the share card; the sound set is ElevenLabs.
+import { createStage } from "./stage.js?v=2";
+import { loadSettings, saveSettings, renderSettings, createMedals, createToast, buildShareCard, canShareFiles, shareCardImage, downloadCardImage } from "./meta.js?v=1";
 
 const canvas = document.getElementById("gl");
 const fxCanvas = document.getElementById("fx");
@@ -24,8 +27,21 @@ const controlsHint = document.getElementById("controlsHint");
 const dailyNote = document.getElementById("dailyNote");
 const dailyButton = document.getElementById("dailyButton");
 const bombButton = document.getElementById("bombButton");
+const rushButton = document.getElementById("rushButton");
+const practiceButton = document.getElementById("practiceButton");
+const medalsButton = document.getElementById("medalsButton");
+const settingsButton = document.getElementById("settingsButton");
+const shareButton = document.getElementById("shareButton");
+const settingsPanel = document.getElementById("settingsPanel");
+const medalsPanel = document.getElementById("medalsPanel");
+const practicePanel = document.getElementById("practicePanel");
+const sharePanel = document.getElementById("sharePanel");
+const perkOverlay = document.getElementById("perkOverlay");
+const perkCards = document.getElementById("perkCards");
+const perkTitle = document.getElementById("perkTitle");
+const waveLabelEl = document.getElementById("waveLabel");
 
-const VERSION = "v3.0.0";
+const VERSION = "v3.1.0";
 const TAU = Math.PI * 2;
 const LOCAL_SCORES_KEY = "invaders3d_highscores_v1";
 const LOCAL_DAILY_PREFIX = "invaders3d_daily_";
@@ -34,6 +50,10 @@ const MUTE_KEY = "neon_invaders_muted";
 // The 3D Edition keeps its own global boards, apart from the Classic Edition's.
 const SCORES_BASE = "https://game-scores.jez237.workers.dev/scores/";
 const CLASSIC_SLUG = "invaders-3d";
+const RUSH_SLUG = "invaders-3d-bossrush";
+const LOCAL_RUSH_KEY = "invaders3d_bossrush_v1";
+const BEST_WAVE_KEY = "invaders3d_best_wave";
+const MODE_LABELS = { classic: "Arcade Run", daily: "Daily Challenge", bossrush: "Boss Rush", practice: "Practice" };
 const MUSIC_VOLUME = 0.36;
 // New ElevenLabs sound set for this edition (music + effects), see audio/.
 const MUSIC = {
@@ -67,7 +87,21 @@ const SFX_FILES = {
   extralife: "audio/sfx-extralife.mp3",
   march: "audio/sfx-march.mp3",
   bossShot: "audio/sfx-boss-shot.mp3",
-  enemyShot: "audio/sfx-enemy-shot.mp3"
+  enemyShot: "audio/sfx-enemy-shot.mp3",
+  heartbeat: "audio/sfx-heartbeat.mp3",
+  saucer: "audio/sfx-saucer.mp3",
+  saucerDown: "audio/sfx-saucer-down.mp3",
+  perkOffer: "audio/sfx-perk-offer.mp3",
+  perkPick: "audio/sfx-perk-pick.mp3",
+  medal: "audio/sfx-medal.mp3",
+  split: "audio/sfx-split.mp3",
+  deflect: "audio/sfx-deflect.mp3",
+  blink: "audio/sfx-blink.mp3",
+  snipe: "audio/sfx-snipe.mp3",
+  slowmo: "audio/sfx-slowmo.mp3",
+  swoop: "audio/sfx-swoop.mp3",
+  sector: "audio/sfx-sector.mp3",
+  shutter: "audio/sfx-shutter.mp3"
 };
 
 // --- Seeded gameplay RNG (Daily Challenge) -----------------------------
@@ -137,12 +171,38 @@ function refreshDaily() {
   DAILY_SLUG = "invaders-3d-daily-" + DAILY_KEY.replace(/-/g, "");
 }
 refreshDaily();
-const BOSS_KINDS = ["carrier", "interceptor", "bulwark"];
-const BOSS_NAMES = { carrier: "CARRIER", interceptor: "INTERCEPTOR", bulwark: "BULWARK" };
+const BOSS_KINDS = ["carrier", "interceptor", "bulwark", "hive"];
+const BOSS_NAMES = { carrier: "CARRIER", interceptor: "INTERCEPTOR", bulwark: "BULWARK", hive: "HIVE" };
 
 function activeModifier() { return game.mode === "daily" ? DAILY_MODIFIER : MODIFIERS[0]; }
 function hasMod(id) { return activeModifier().id === id; }
-function scoresSlug() { return game.mode === "daily" ? DAILY_SLUG : CLASSIC_SLUG; }
+function scoresSlug() { return game.mode === "daily" ? DAILY_SLUG : game.mode === "bossrush" ? RUSH_SLUG : CLASSIC_SLUG; }
+function scored() { return game.mode !== "practice"; }
+
+// Boss Rush runs its difficulty on the same wave scale (a warship every other step from
+// wave 4), but shows the player a simple boss count.
+function displayWave() { return game.mode === "bossrush" ? Math.max(1, (game.wave - 2) / 2) : game.wave; }
+function sectorForWave() { return game.mode === "bossrush" ? displayWave() - 1 : Math.floor((game.wave - 1) / 4); }
+
+// ---- upgrades offered after each warship ------------------------------------------------
+const PERKS = [
+  { id: "plating", icon: "🛡️", name: "Hardened Shields", max: 2, desc: "Shield cap +15 and an instant 30% top-up." },
+  { id: "overdrive", icon: "⚡", name: "Long Overdrive", max: 3, desc: "Overdrive burns 1.5 s longer." },
+  { id: "cycler", icon: "🔥", name: "Rapid Cycler", max: 3, desc: "Every weapon fires 12% faster." },
+  { id: "tractor", icon: "🧲", name: "Tractor Field", max: 2, desc: "Power cores drift toward your ship." },
+  { id: "bunkers", icon: "🧱", name: "Bunker Weld", max: 2, desc: "Bunker blocks take two more hits." },
+  { id: "battery", icon: "🔋", name: "Weapon Battery", max: 2, desc: "Spread and Laser last 4 s longer." },
+  { id: "keeper", icon: "🔗", name: "Combo Keeper", max: 2, desc: "Combo chains hold 1.2 s longer." },
+  { id: "bombbay", icon: "💣", name: "Bomb Bay", max: 3, desc: "+2 smart bombs now, and carry up to 6." },
+  { id: "hull", icon: "❤️", name: "Reserve Hull", max: 1, desc: "+1 life now, and one more life slot." },
+  { id: "phase", icon: "💨", name: "Phase Dash", max: 1, desc: "Dash recharges twice as fast and shields you longer.", needsDash: true }
+];
+function perkLevel(id) { return (game.perks && game.perks[id]) || 0; }
+function shieldCap() { return 92 + perkLevel("plating") * 15; }
+function overdriveDuration() { return (hasMod("overcharged") ? 6 : 4) + perkLevel("overdrive") * 1.5; }
+function maxLives() { return (hasMod("glass-cannon") ? 1 : 3) + perkLevel("hull"); }
+function bombCap() { return perkLevel("bombbay") ? 6 : 5; }
+function comboWindow() { return 2.8 + perkLevel("keeper") * 1.2; }
 
 let globalScoresCache = {};
 let globalScoresCacheTime = {};
@@ -202,7 +262,17 @@ const game = {
   fpsAcc: 0,
   fpsFrames: 0,
   fpsAvg: 60,
-  fpsWindow: 0
+  fpsWindow: 0,
+  timeScale: 1,
+  cineGuard: 0,
+  saucer: null,
+  nextSaucer: Infinity,
+  perks: {},
+  sector: 0,
+  chain: 0,
+  waveStartCount: 0,
+  practiceStart: 1,
+  stats: {}
 };
 const touchAim = {
   active: false,
@@ -218,7 +288,11 @@ const colors = {
   enemy3: "#ff4d6d",
   shield: "#35f4ff",
   gold: "#ffd23d",
-  fire: "#ff7a2d"
+  fire: "#ff7a2d",
+  red: "#ff4d6d",
+  warden: "#9a7dff",
+  barrier: "#c9b8ff",
+  phantom: "#e6e2ff"
 };
 
 let soundCtx = null;
@@ -243,6 +317,15 @@ let wakeLock = null;
 let overlayShownAt = 0;
 let viewScale = 1;
 let stage = null;
+const settings = loadSettings();
+let medals = null;
+let toast = null;
+let shareCanvas = null;
+let perkOpenedAt = 0;
+let tension = 0;
+let heartTimer = 0;
+let musicRate = 1;
+const qualityPinnedByUrl = /[?&]q=/.test(location.search);
 
 function applyMute() {
   if (masterGain && soundCtx) {
@@ -292,10 +375,10 @@ function ensureAudioContext() {
     masterGain.gain.value = muted ? 0 : 1;
     masterGain.connect(soundCtx.destination);
     sfxGain = soundCtx.createGain();
-    sfxGain.gain.value = 0.85;
+    sfxGain.gain.value = 0.85 * settings.sfx / 100;
     sfxGain.connect(masterGain);
     musicGain = soundCtx.createGain();
-    musicGain.gain.value = 1;
+    musicGain.gain.value = settings.music / 100;
     musicGain.connect(masterGain);
   } catch (error) {
     soundCtx = null;
@@ -351,8 +434,48 @@ function playSample(name, options) {
     activeVoices = Math.max(0, activeVoices - 1);
     try { src.disconnect(); gain.disconnect(); if (panner) panner.disconnect(); } catch (error) {}
   };
-  try { src.start(); } catch (error) { activeVoices = Math.max(0, activeVoices - 1); return false; }
+  try { src.start(soundCtx.currentTime + (opts.delay || 0)); } catch (error) { activeVoices = Math.max(0, activeVoices - 1); return false; }
   return true;
+}
+
+// A looping effect that follows a moving source (the saucer hum). Returns a handle for
+// panLoop / stopLoop, or null when sound is off or not loaded yet.
+function startLoop(name, gainValue, x) {
+  if (muted || !soundCtx || !sampleBuffers[name]) return null;
+  const src = soundCtx.createBufferSource();
+  src.buffer = sampleBuffers[name];
+  src.loop = true;
+  const gain = soundCtx.createGain();
+  gain.gain.value = 0;
+  gain.gain.setTargetAtTime(gainValue, soundCtx.currentTime, 0.12);
+  let tail = gain;
+  let panner = null;
+  if (soundCtx.createStereoPanner) {
+    panner = soundCtx.createStereoPanner();
+    panner.pan.value = panFor(x);
+    gain.connect(panner);
+    tail = panner;
+  }
+  src.connect(gain);
+  tail.connect(sfxGain);
+  try { src.start(); } catch (error) { return null; }
+  return { src, gain, panner };
+}
+function panLoop(loop, x) {
+  if (loop && loop.panner) loop.panner.pan.value = panFor(x);
+}
+function stopLoop(loop) {
+  if (!loop || !soundCtx) return;
+  try {
+    loop.gain.gain.setTargetAtTime(0, soundCtx.currentTime, 0.08);
+    loop.src.stop(soundCtx.currentTime + 0.4);
+    loop.src.onended = () => { try { loop.src.disconnect(); loop.gain.disconnect(); if (loop.panner) loop.panner.disconnect(); } catch (error) {} };
+  } catch (error) {}
+}
+
+function applyAudioSettings() {
+  if (sfxGain) sfxGain.gain.value = 0.85 * settings.sfx / 100;
+  if (musicGain) musicGain.gain.value = settings.music / 100;
 }
 
 function unlockAudio() {
@@ -397,6 +520,7 @@ function startMusicVoice(key) {
   const [start, end] = loopBounds(buffer);
   src.loopStart = start;
   src.loopEnd = end;
+  if (key !== "menu") src.playbackRate.value = musicRate;
   const gain = soundCtx.createGain();
   gain.gain.value = 0;
   src.connect(gain).connect(musicGain);
@@ -437,6 +561,55 @@ function stepMusic(dt) {
       voice.gain.gain.value = voice.vol;
     }
     if (target === 0 && voice.vol <= 0.001) stopMusicVoice(key);
+  }
+  stepTension(dt);
+}
+
+// Tension: as the formation thins and creeps down (or a warship nears death, or the shield
+// runs low) the battle music speeds up and a heartbeat thumps under it, faster and louder.
+function tensionTarget() {
+  const p = game.player;
+  if (game.state !== "playing" || !p) return 0;
+  let t = 0;
+  const boss = game.boss;
+  if (boss && boss.intro <= 0) t = clamp((0.55 - boss.hp / boss.maxHp) / 0.55, 0, 1) * 0.85;
+  if (!game.bossWave && game.invaders.length) {
+    let lowest = 0;
+    let count = 0;
+    for (const inv of game.invaders) {
+      if (inv.solo) continue;
+      count += 1;
+      if (!inv.divePhase) lowest = Math.max(lowest, inv.homeY ?? inv.y);
+    }
+    const top = game.height * 0.3;
+    const low = clamp((lowest - top) / Math.max(1, p.y - 42 - top), 0, 1);
+    const thin = game.waveStartCount ? clamp(1 - count / game.waveStartCount, 0, 1) : 0;
+    t = Math.max(t, Math.min(1, low * 0.85 + thin * thin * 0.45));
+  }
+  if (p.shield < 30) t = Math.max(t, 0.5);
+  return t;
+}
+
+function stepTension(dt) {
+  tension += (tensionTarget() - tension) * Math.min(1, dt * 1.2);
+  const rate = 1 + 0.085 * tension;
+  if (soundCtx && Math.abs(rate - musicRate) > 0.002) {
+    musicRate = rate;
+    for (const key of ["gameplay", "boss"]) {
+      const voice = musicVoices[key];
+      if (voice) voice.src.playbackRate.setTargetAtTime(rate, soundCtx.currentTime, 0.4);
+    }
+  }
+  if (game.state === "playing" && tension > 0.22) {
+    heartTimer -= dt;
+    if (heartTimer <= 0) {
+      const k = (tension - 0.22) / 0.78;
+      heartTimer = 1.05 - 0.67 * k;
+      sfx.heartbeat(k);
+      if (stage) stage.events.heartbeat(k);
+    }
+  } else {
+    heartTimer = Math.min(heartTimer, 0.3);
   }
 }
 
@@ -620,15 +793,78 @@ const sfx = {
     if (playSample("shatterBig", { gain: 0.8, rate: clamp(0.95 + (combo - 1) * 0.1, 0.95, 1.3), x })) return;
     playTone(880, 0.05, "square", 0.028, 1320);
     setTimeout(() => playTone(1180, 0.045, "triangle", 0.022, 760), 38);
+  },
+  heartbeat(k) {
+    // lub-dub: a second, softer thump right behind the first
+    const gain = 0.32 + 0.5 * k;
+    if (!playSample("heartbeat", { gain })) { playTone(62, 0.12, "sine", 0.05 * gain, 44); return; }
+    playSample("heartbeat", { gain: gain * 0.62, rate: 0.9, delay: 0.17 });
+  },
+  saucerHum(x) { return startLoop("saucer", 0.34, x); },
+  saucerDown(x) {
+    if (playSample("saucerDown", { gain: 0.95, x })) return;
+    playNoise(0.3, 0.08, 600);
+  },
+  perkOffer() {
+    if (playSample("perkOffer", { gain: 0.7 })) return;
+    playTone(660, 0.12, "triangle", 0.03, 990);
+  },
+  perkPick() {
+    if (playSample("perkPick", { gain: 0.8 })) return;
+    playTone(520, 0.1, "square", 0.03, 1040);
+  },
+  medal() {
+    if (playSample("medal", { gain: 0.7 })) return;
+    playTone(990, 0.14, "triangle", 0.03, 1480);
+  },
+  split(x) {
+    if (playSample("split", { gain: 0.55, x })) return;
+    playNoise(0.08, 0.04, 1200);
+  },
+  deflect(x) {
+    const now = performance.now();
+    if (now - lastHitSound < 45) return;
+    lastHitSound = now;
+    if (playSample("deflect", { gain: 0.42, rate: 0.92 + Math.random() * 0.16, x })) return;
+    playTone(1400, 0.05, "triangle", 0.02, 1800);
+  },
+  blink(x) {
+    if (playSample("blink", { gain: 0.5, x })) return;
+    playTone(1600, 0.06, "sine", 0.02, 600);
+  },
+  snipe(x) {
+    if (playSample("snipe", { gain: 0.6, x })) return;
+    playTone(1800, 0.1, "sawtooth", 0.02, 400);
+  },
+  slowmo() {
+    if (playSample("slowmo", { gain: 0.75 })) return;
+    playTone(120, 0.5, "sine", 0.04, 50);
+  },
+  swoop() {
+    if (playSample("swoop", { gain: 0.7 })) return;
+    playNoise(0.5, 0.05, 500);
+  },
+  sector() {
+    if (playSample("sector", { gain: 0.8 })) return;
+    playTone(220, 0.6, "sawtooth", 0.03, 880);
+  },
+  shutter() {
+    if (playSample("shutter", { gain: 0.8 })) return;
+    playNoise(0.05, 0.05, 2400);
   }
 };
+
+function buzz(ms) {
+  if (settings.rumble !== "on" || !navigator.vibrate) return;
+  try { navigator.vibrate(ms); } catch (error) {}
+}
 
 function sanitizeInitials(value) {
   return (value || "YOU").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 3).padEnd(3, "A");
 }
 
 function localScoresKey() {
-  return game.mode === "daily" ? LOCAL_DAILY_PREFIX + DAILY_KEY.replace(/-/g, "") : LOCAL_SCORES_KEY;
+  return game.mode === "daily" ? LOCAL_DAILY_PREFIX + DAILY_KEY.replace(/-/g, "") : game.mode === "bossrush" ? LOCAL_RUSH_KEY : LOCAL_SCORES_KEY;
 }
 
 function loadLocalScores() {
@@ -698,18 +934,29 @@ function scoreRows(scores, highlightTs) {
 }
 
 function renderScores(includeEntry = false, highlightTs = 0) {
-  const lastInitials = sanitizeInitials(localStorage.getItem(LAST_INITIALS_KEY) || "YOU");
-  const entryHtml = includeEntry && game.score > 0 && !game.scoreSubmitted
+  let lastInitials = "YOU";
+  try { lastInitials = sanitizeInitials(localStorage.getItem(LAST_INITIALS_KEY) || "YOU"); } catch (error) {}
+  const entryHtml = includeEntry && scored() && game.score > 0 && !game.scoreSubmitted
     ? `<div class="score-entry"><div class="score-entry-title">Enter Initials</div><input id="initialsInput" maxlength="3" value="${lastInitials}" autocomplete="off" autocapitalize="characters" spellcheck="false" enterkeyhint="done" aria-label="Initials"><button id="submitScoreButton" type="button">Save Score</button></div>`
     : "";
+  // practice runs aren't scored; their board view shows the Arcade tables
+  const boardMode = game.mode === "practice" ? "classic" : game.mode;
+  const savedMode = game.mode;
+  game.mode = boardMode;
+  const local = loadLocalScores();
+  game.mode = savedMode;
+  const label = MODE_LABELS[boardMode] || "Arcade Run";
   scoresPanel.innerHTML = `
     ${entryHtml}
-    <h2>Local High Scores</h2>
-    <div>${scoreRows(loadLocalScores(), highlightTs)}</div>
-    <h2>Global High Scores</h2>
+    <h2>Local High Scores · ${label}</h2>
+    <div>${scoreRows(local, highlightTs)}</div>
+    <h2>Global High Scores · ${label}</h2>
     <div id="globalScoreRows" style="opacity:.68">Loading...</div>
   `;
-  fetchGlobalScores().then(scores => {
+  game.mode = boardMode;
+  const pending = fetchGlobalScores();
+  game.mode = savedMode;
+  pending.then(scores => {
     const target = document.getElementById("globalScoreRows");
     if (!target) return;
     target.style.opacity = "1";
@@ -718,6 +965,7 @@ function renderScores(includeEntry = false, highlightTs = 0) {
 }
 
 function showScores(includeEntry = false, highlightTs = 0) {
+  hideSubPanels();
   renderScores(includeEntry, highlightTs);
   scoresPanel.classList.remove("hidden");
   scoresButton.textContent = "Hide Scores";
@@ -726,6 +974,50 @@ function showScores(includeEntry = false, highlightTs = 0) {
 function hideScores() {
   scoresPanel.classList.add("hidden");
   scoresButton.textContent = "High Scores";
+}
+
+// Settings / medals / practice / share live in the title panel; one shows at a time.
+const SUB_PANELS = () => [settingsPanel, medalsPanel, practicePanel, sharePanel];
+function hideSubPanels() {
+  for (const panel of SUB_PANELS()) panel.classList.add("hidden");
+  hideScores();
+}
+function toggleSubPanel(panel, render) {
+  const open = !panel.classList.contains("hidden");
+  hideSubPanels();
+  if (open) return false;
+  render();
+  panel.classList.remove("hidden");
+  panel.scrollIntoView({ block: "nearest" });
+  return true;
+}
+
+function bestWave() {
+  try { return Math.max(1, parseInt(localStorage.getItem(BEST_WAVE_KEY) || "1", 10) || 1); } catch (error) { return 1; }
+}
+function noteBestWave(wave) {
+  if (wave <= bestWave()) return;
+  try { localStorage.setItem(BEST_WAVE_KEY, String(wave)); } catch (error) {}
+}
+
+function renderPractice() {
+  const best = Math.min(bestWave(), 60);
+  const waves = [];
+  for (let w = 1; w <= best; w++) {
+    if (best <= 16 || w === 1 || w % 4 === 0 || w % 4 === 1 || w === best) waves.push(w);
+  }
+  practicePanel.innerHTML = `
+    <h2>Practice · start at any wave you've reached</h2>
+    <p class="panel-note">Practice runs aren't scored and don't earn medals. Starting later hands you one random upgrade for every warship skipped.</p>
+    <div class="wave-chips">
+      ${waves.map(w => `<button type="button" class="chip${w % 4 === 0 ? " boss" : ""}" data-wave="${w}">${w}${w % 4 === 0 ? " ★" : ""}</button>`).join("")}
+    </div>
+    ${best <= 1 ? '<p class="panel-note">Play an Arcade Run or Daily Challenge to unlock later waves.</p>' : ""}`;
+}
+
+function unlockMedal(id) {
+  if (!medals || !scored()) return;
+  medals.unlock(id);
 }
 
 function renderDailyNote() {
@@ -814,6 +1106,7 @@ function invaderHitRadius(inv, bullet) {
 function firstInvaderHit(b) {
   let best = null;
   for (const inv of game.invaders) {
+    if (inv.ghost) continue;
     const radius = invaderHitRadius(inv, b);
     const t = movingCircleHit(b, inv, radius);
     if (t === null || (best && t >= best.t)) continue;
@@ -836,16 +1129,22 @@ function syncPlayerLane() {
   game.player.x = clamp(game.player.x, 36, game.width - 36);
 }
 
-function resetGame(mode) {
-  game.mode = mode === "daily" ? "daily" : "classic";
+function resetGame(mode, startWave) {
+  game.mode = MODE_LABELS[mode] ? mode : "classic";
   game.state = "playing";
   game.time = 0;
   game.last = performance.now();
   game.score = 0;
-  game.wave = 1;
-  game.lives = hasMod("glass-cannon") ? 1 : 3;
-  game.bombs = hasMod("boss-rush") ? 3 : 2;
-  game.nextBombWave = 3;
+  game.perks = {};
+  game.stats = { saucers: 0, diveTags: 0, overdrives: 0, perks: 0, bosses: 0 };
+  game.chain = 0;
+  game.cineGuard = 0;
+  removeSaucer();
+  game.practiceStart = game.mode === "practice" ? Math.max(1, startWave || game.practiceStart || 1) : 1;
+  game.wave = game.mode === "bossrush" ? 4 : game.mode === "practice" ? game.practiceStart : 1;
+  game.lives = maxLives();
+  game.bombs = hasMod("boss-rush") || game.mode === "bossrush" ? 3 : 2;
+  game.nextBombWave = game.wave + 2;
   game.combo = 1;
   game.comboTimer = 0;
   game.overdrive = 0;
@@ -886,6 +1185,19 @@ function resetGame(mode) {
     weaponTimer: hasMod("laser-storm") ? 1e9 : 0,
     heat: 0
   };
+  // Practice from a later wave: one random upgrade per warship skipped.
+  if (game.mode === "practice") {
+    const kit = Math.floor((game.wave - 1) / 4);
+    for (let i = 0; i < kit; i++) {
+      const pool = availablePerks();
+      if (pool.length) applyPerk(pool[Math.floor(Math.random() * pool.length)], true);
+    }
+    game.lives = maxLives();
+  }
+  game.sector = sectorForWave();
+  stage.setSector(game.sector, false);
+  hideSubPanels();
+  shareButton.classList.add("hidden");
   makeShields();
   spawnWave();
   playMusic(game.boss ? "boss" : "gameplay");
@@ -898,7 +1210,7 @@ function resetGame(mode) {
 function makeShields(preserveDamage = false) {
   const oldShields = preserveDamage ? game.shields.slice() : [];
   const nextShields = [];
-  const shieldHp = hasMod("iron-bunkers") ? 5 : 3;
+  const shieldHp = (hasMod("iron-bunkers") ? 5 : 3) + perkLevel("bunkers") * 2;
   const mask = [
     "000111111000",
     "001111111100",
@@ -950,21 +1262,44 @@ function spawnWave() {
   game.enemyBullets = [];
   game.boss = null;
   game.waveDamage = 0;
+  removeSaucer();
+  const rush = game.mode === "bossrush";
   const bossEvery = hasMod("boss-rush") ? 2 : 4;
-  game.bossWave = game.wave % bossEvery === 0;
-  const bossOrdinal = game.bossWave ? Math.floor(game.wave / bossEvery) : 0;
+  game.bossWave = rush || game.wave % bossEvery === 0;
+  const bossOrdinal = rush ? displayWave() : game.bossWave ? Math.floor(game.wave / bossEvery) : 0;
   if (game.bossWave) game.bossKind = BOSS_KINDS[(bossOrdinal - 1) % BOSS_KINDS.length];
   game.invaderDir = 1;
   game.invaderStepTimer = 0;
   game.invaderMarchTimer = 0;
   game.invaderFrame = 0;
   game.nextDive = game.time + drand(9001, 2.4, 4.8);
+  // one bonus saucer chance per normal wave
+  game.nextSaucer = !game.bossWave && game.wave >= 2 && Math.random() < 0.8 ? game.time + rand(6, 14) : Infinity;
   const bossSub = game.bossKind === "interceptor" ? "Fast strike frigate"
     : game.bossKind === "bulwark" ? "Shielded siege platform"
+    : game.bossKind === "hive" ? "Swarm mothership"
     : "Capital ship contact";
+  let subtext = game.bossWave ? bossSub : game.wave % 3 === 0 ? "Red dive squadron" : game.wave % 2 === 0 ? "Striker pressure rising" : "Alien formation advancing";
+  // a new star sector every few waves: the sky, planet and rings change as the fleet runs
+  if (game.state === "playing") {
+    const sec = sectorForWave();
+    if (sec !== game.sector) {
+      game.sector = sec;
+      const name = stage.setSector(sec, false);
+      subtext = `Sector ${sec + 1} · ${name}`;
+      sfx.sector();
+      game.screenFlash = Math.max(game.screenFlash, 0.25);
+      game.flashColor = "53, 244, 255";
+      if (sec >= 2) unlockMedal("sector3");
+    }
+    if (game.mode === "classic" || game.mode === "daily") {
+      noteBestWave(game.wave);
+      if (game.wave >= 20) unlockMedal("wave20");
+    }
+  }
   game.waveBanner = {
     text: game.bossWave ? BOSS_NAMES[game.bossKind] + " INBOUND" : `WAVE ${game.wave}`,
-    subtext: game.bossWave ? bossSub : game.wave % 3 === 0 ? "Red dive squadron" : game.wave % 2 === 0 ? "Striker pressure rising" : "Alien formation advancing",
+    subtext,
     life: game.bossWave ? 2.8 : 2.05,
     maxLife: game.bossWave ? 2.8 : 2.05,
     boss: game.bossWave
@@ -994,17 +1329,20 @@ function spawnWave() {
   const doubleDivers = hasMod("double-divers");
   const splitterChance = game.wave >= 3 ? clamp(0.1 + game.wave * 0.012, 0.1, 0.32) : 0;
   const zealotChance = doubleDivers ? 0.7 : game.wave >= 5 ? clamp(0.12 + game.wave * 0.015, 0.12, 0.45) : 0;
+  const wardenChance = game.wave >= 6 ? clamp(0.08 + game.wave * 0.01, 0.08, 0.26) : 0;
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
       let type = y === 0 ? "diver" : y < 3 ? "striker" : "drone";
       if (doubleDivers && y === 1) type = "diver";
       if (type === "drone" && gpAt(y * 131 + x * 7 + 1) < splitterChance) type = "splitter";
+      if (type === "striker" && gpAt(y * 131 + x * 7 + 3) < wardenChance) type = "warden";
       const zealot = type === "diver" && gpAt(y * 131 + x * 7 + 2) < zealotChance;
       const hp = type === "diver" ? 2 + Math.floor(game.wave / 4)
         : type === "striker" ? 2 + Math.floor(game.wave / 9)
         : type === "splitter" ? 3 + Math.floor(game.wave / 6)
+        : type === "warden" ? 2 + Math.floor(game.wave / 7)
         : 1 + Math.floor(game.wave / 11);
-      game.invaders.push({
+      const inv = {
         x: startX + x * spacingX,
         y: startY + y * spacingY,
         baseX: startX + x * spacingX,
@@ -1018,16 +1356,37 @@ function spawnWave() {
         maxHp: hp,
         col: x,
         row: y
+      };
+      if (type === "warden") {
+        // a frontal energy barrier soaks straight shots; angled ones get round it
+        inv.barrier = 4 + Math.floor(game.wave / 4);
+        inv.barrierMax = inv.barrier;
+      }
+      game.invaders.push(inv);
+    }
+  }
+  // Phantoms: snipers that blink between spots above the formation and fire an aimed needle.
+  if (!game.bossWave && game.wave >= 8) {
+    const count = game.compact ? 1 : clamp(1 + Math.floor((game.wave - 8) / 6), 1, 3);
+    for (let i = 0; i < count; i++) {
+      const px = game.width * (i + 1) / (count + 1);
+      const py = Math.max(44, startY - spacingY * 0.95);
+      const hp = 2 + Math.floor(game.wave / 8);
+      game.invaders.push({
+        x: px, y: py, baseX: px, baseY: py, homeX: px, homeY: py, anchorX: px, anchorY: py,
+        r: 15, type: "phantom", solo: true, zealot: false, hp, maxHp: hp, col: cols + i, row: -1,
+        phase: "hover", phaseTime: 0, next: drand(9300 + i, 1.6, 3.2), fade: 1, ghost: false
       });
     }
   }
+  game.waveStartCount = game.invaders.filter(inv => !inv.solo).length;
   if (game.bossWave) spawnBoss(game.bossKind);
 }
 
 function spawnBoss(kind) {
   game.bossKind = kind;
   const baseHp = 48 + game.wave * 9;
-  const hpMul = kind === "interceptor" ? 0.68 : kind === "bulwark" ? 1.5 : 1;
+  const hpMul = kind === "interceptor" ? 0.68 : kind === "bulwark" ? 1.5 : kind === "hive" ? 1.1 : 1;
   const hp = Math.round(baseHp * hpMul);
   game.shake = Math.max(game.shake, 7);
   sfx.bossAppear();
@@ -1036,7 +1395,7 @@ function spawnBoss(kind) {
     x: game.width / 2,
     y: -88,
     targetY: Math.max(52, 62 * game.scale),
-    r: kind === "interceptor" ? 46 : kind === "bulwark" ? 64 : 58,
+    r: kind === "interceptor" ? 46 : kind === "bulwark" ? 64 : kind === "hive" ? 54 : 58,
     hp,
     maxHp: hp,
     nextPowerDropHp: hp * drand(9100, 0.46, 0.58),
@@ -1069,8 +1428,21 @@ function spawnBoss(kind) {
       });
     }
   }
+  if (kind === "hive") {
+    // guard drones on an orbit around the hull: they soak shots and grow back
+    const n = game.compact ? 4 : 6;
+    const satHp = 3 + Math.floor(game.wave / 6);
+    boss.sats = [];
+    for (let i = 0; i < n; i++) {
+      boss.sats.push({ a: i / n * TAU, x: boss.x, y: boss.y, r: 12, hp: satHp, maxHp: satHp, dead: false, regen: 0, type: "drone", sat: true, col: i, row: 0, h: 30 });
+    }
+  }
   game.boss = boss;
-  if (game.state === "playing") playMusic("boss");
+  if (game.state === "playing") {
+    playMusic("boss");
+    // the camera swoops in to meet it; the escorts hold fire until the swoop is over
+    if (stage.events.bossIntro()) sfx.swoop();
+  }
   return boss;
 }
 
@@ -1084,6 +1456,7 @@ function firePlayer() {
   const od = game.overdrive > 0;
   let rapid = p.weapon === "laser" ? 0.055 : p.weapon === "spread" ? 0.13 : 0.11;
   if (od) rapid *= 0.62;
+  rapid *= 1 - perkLevel("cycler") * 0.12;
   game.nextShot = game.time + rapid;
   p.heat = Math.min(1, p.heat + 0.18);
   const pierce = od ? 2 : 0;
@@ -1167,10 +1540,14 @@ function update(realDt) {
   // These run on real time so freeze/slow-mo feel snappy and self-terminate.
   game.hitStop = Math.max(0, game.hitStop - realDt);
   game.slowmo = Math.max(0, game.slowmo - realDt);
+  game.cineGuard = Math.max(0, game.cineGuard - realDt);
+  // flashes fade on real time, so slow motion never holds the screen white
+  game.screenFlash = Math.max(0, game.screenFlash - realDt * 3.8);
   updateRings(realDt);
   adaptQuality(realDt);
-  if (game.state !== "playing") return;
+  if (game.state !== "playing") { game.timeScale = 1; return; }
   const timeScale = game.hitStop > 0 ? 0 : game.slowmo > 0 ? 0.32 : 1;
+  game.timeScale = timeScale;
   const dt = realDt * timeScale;
   if (dt <= 0) return;
   const p = game.player;
@@ -1179,16 +1556,18 @@ function update(realDt) {
   syncPlayerLane();
   game.shake = Math.max(0, game.shake - dt * 18);
   game.comboTimer = Math.max(0, game.comboTimer - dt);
-  if (game.comboTimer === 0) game.combo = 1;
+  if (game.comboTimer === 0) { game.combo = 1; game.chain = 0; }
 
-  const left = keys.has("ArrowLeft") || keys.has("KeyA");
-  const right = keys.has("ArrowRight") || keys.has("KeyD");
-  const fire = keys.has("Space") || keys.has("Enter") || touchAim.active;
-  const dashPressed = keys.has("ShiftLeft") || keys.has("ShiftRight");
+  const padX = pad.axisX;
+  const left = keys.has("ArrowLeft") || keys.has("KeyA") || padX < -0.02;
+  const right = keys.has("ArrowRight") || keys.has("KeyD") || padX > 0.02;
+  const fire = keys.has("Space") || keys.has("Enter") || touchAim.active || pad.fire;
+  const dashPressed = keys.has("ShiftLeft") || keys.has("ShiftRight") || pad.dash;
+  pad.dash = false;
   const accel = 2100;
   const maxSpeed = dashPressed && p.dash <= 0 ? 680 : 410;
 
-  // Keyboard overrides a parked mouse-hover target; an active press always wins.
+  // Keyboard / controller override a parked mouse-hover target; an active press always wins.
   if (!touchAim.active && (left || right)) touchAim.x = null;
   const steering = touchAim.x !== null;
   if (steering) {
@@ -1196,8 +1575,11 @@ function update(realDt) {
     const delta = target - p.x;
     p.vx = clamp(delta * 9, -maxSpeed, maxSpeed);
     if (Math.abs(delta) < 3) p.vx *= 0.35;
+  } else if (padX) {
+    // analog stick: speed follows how far it is pushed
+    p.vx += (padX * maxSpeed - p.vx) * Math.min(1, dt * 14);
   } else if (left) p.vx -= accel * dt;
-  if (!steering && right) p.vx += accel * dt;
+  if (!steering && !padX && right) p.vx += accel * dt;
   if (!steering && !left && !right) p.vx *= Math.pow(0.0008, dt);
   p.vx = clamp(p.vx, -maxSpeed, maxSpeed);
   p.x = clamp(p.x + p.vx * dt, 30, game.width - 30);
@@ -1206,8 +1588,8 @@ function update(realDt) {
   p.heat = Math.max(0, p.heat - dt * 0.65);
   if (dashPressed && p.dash <= 0 && (left || right)) {
     p.vx = (right ? 1 : -1) * 760;
-    p.dash = 1.2;
-    p.invulnerable = Math.max(p.invulnerable, 0.18);
+    p.dash = perkLevel("phase") ? 0.6 : 1.2;
+    p.invulnerable = Math.max(p.invulnerable, perkLevel("phase") ? 0.42 : 0.18);
     burst(p.x, p.y + 8, colors.player, 18, 220);
   }
   if (fire) firePlayer();
@@ -1218,7 +1600,9 @@ function update(realDt) {
   }
 
   updateInvaders(dt);
+  updatePhantoms(dt);
   updateBoss(dt);
+  updateSaucer(dt);
   updateBullets(dt);
   updateEnemyBullets(dt);
   updateParticles(dt);
@@ -1232,7 +1616,8 @@ function update(realDt) {
 }
 
 function updateInvaders(dt) {
-  const liveCount = Math.max(1, game.invaders.length);
+  const formation = game.invaders.filter(inv => !inv.solo);
+  const liveCount = Math.max(1, formation.length);
   const urgency = clamp((game.bossWave ? 14 : 52) / liveCount, 1, 3.8);
   game.invaderMarchTimer += dt;
   for (const inv of game.invaders) {
@@ -1248,12 +1633,12 @@ function updateInvaders(dt) {
   const dropY = (game.compact ? 13 : 17) * clamp(1 + game.wave * 0.035, 1, 1.55);
   let lowest = 0;
   game.invaderStepTimer += dt;
-  if (game.invaderStepTimer >= interval && game.invaders.length) {
+  if (game.invaderStepTimer >= interval && formation.length) {
     game.invaderStepTimer = 0;
     game.invaderFrame = 1 - game.invaderFrame;
     sfx.step(game.invaderFrame);
     let hitEdge = false;
-    for (const inv of game.invaders) {
+    for (const inv of formation) {
       const nextX = (inv.homeX ?? inv.x) + stepX;
       if (nextX < inv.r + 14 || nextX > game.width - inv.r - 14) {
         hitEdge = true;
@@ -1262,24 +1647,32 @@ function updateInvaders(dt) {
     }
     if (hitEdge) {
       game.invaderDir *= -1;
-      for (const inv of game.invaders) {
+      for (const inv of formation) {
         inv.homeY = (inv.homeY ?? inv.y) + dropY;
         if (!inv.divePhase) inv.y = inv.homeY;
       }
     } else {
-      for (const inv of game.invaders) {
+      for (const inv of formation) {
         inv.homeX = (inv.homeX ?? inv.x) + stepX;
         if (!inv.divePhase) inv.x = inv.homeX;
       }
     }
   }
   updateDiverAttacks(dt);
-  for (const inv of game.invaders) lowest = Math.max(lowest, inv.y);
+  // `lowest` (divers included) picks the firing row as before; `landed` only counts ships
+  // still in formation, so a dive the player dodges no longer counts as the fleet landing.
+  let landed = 0;
+  for (const inv of game.invaders) {
+    if (inv.solo) continue;
+    lowest = Math.max(lowest, inv.y);
+    if (!inv.divePhase) landed = Math.max(landed, inv.y);
+  }
 
-  game.nextEnemyShot -= dt;
-  if (game.nextEnemyShot <= 0 && game.invaders.length) {
-    const bottomY = lowest; // already = max inv.y over all invaders (computed above)
-    const shooters = game.invaders.filter(inv => !inv.divePhase && inv.y >= bottomY - 4);
+  // escorts hold fire while the camera swoops in on an arriving warship
+  if (!(game.boss && game.boss.intro > 0)) game.nextEnemyShot -= dt;
+  if (game.nextEnemyShot <= 0 && formation.length) {
+    const bottomY = lowest; // already = max inv.y over the formation (computed above)
+    const shooters = formation.filter(inv => !inv.divePhase && inv.y >= bottomY - 4);
     if (shooters.length) {
       const volley = clamp(1 + Math.floor((game.wave - 3) / 4), 1, game.compact ? 2 : 3);
       for (let i = 0; i < volley; i++) {
@@ -1290,7 +1683,7 @@ function updateInvaders(dt) {
     game.nextEnemyShot = clamp(1.34 - game.wave * 0.06, 0.32, 1.34) * (hasMod("laser-storm") ? 0.7 : 1);
   }
 
-  if (lowest > game.player.y - 42) hitPlayer(70);
+  if (landed > game.player.y - 42) hitPlayer(70);
 }
 
 function startDiverAttack(inv) {
@@ -1400,6 +1793,215 @@ function updateDiverAttacks(dt) {
   if (game.invaders.some(i => i._crash)) game.invaders = game.invaders.filter(i => !i._crash);
 }
 
+// Phantoms hover above the formation, blink to a new spot, take aim (a dotted line shows
+// where) and fire one fast needle. They can't be hit while blinking.
+function phantomBandY() {
+  let top = Infinity;
+  for (const inv of game.invaders) if (!inv.solo && !inv.divePhase) top = Math.min(top, inv.homeY ?? inv.y);
+  return clamp((top === Infinity ? 90 : top) - 40, 44, game.height * 0.4);
+}
+
+function updatePhantoms(dt) {
+  const p = game.player;
+  for (const inv of game.invaders) {
+    if (inv.type !== "phantom") continue;
+    inv.phaseTime += dt;
+    if (inv.phase === "hover") {
+      inv.fade = 1;
+      inv.anchorY = Math.min(inv.anchorY, phantomBandY());
+      inv.x = inv.anchorX + Math.sin(game.time * 1.6 + inv.col) * 18;
+      inv.y = inv.anchorY + Math.cos(game.time * 1.3 + inv.col) * 6;
+      if (inv.phaseTime >= inv.next && !(game.boss && game.boss.intro > 0)) {
+        inv.phase = "out";
+        inv.phaseTime = 0;
+        inv.ghost = true;
+        sfx.blink(inv.x);
+        stage.events.blink(inv);
+      }
+    } else if (inv.phase === "out") {
+      inv.fade = clamp(1 - inv.phaseTime / 0.32, 0, 1);
+      if (inv.phaseTime >= 0.32) {
+        inv.anchorX = clamp(p.x + rand(-1, 1) * game.width * 0.4, 50, game.width - 50);
+        inv.anchorY = phantomBandY();
+        inv.x = inv.anchorX;
+        inv.y = inv.anchorY;
+        inv.phase = "in";
+        inv.phaseTime = 0;
+        stage.events.blink(inv);
+      }
+    } else if (inv.phase === "in") {
+      inv.fade = clamp(inv.phaseTime / 0.32, 0, 1);
+      if (inv.phaseTime >= 0.32) {
+        inv.fade = 1;
+        inv.ghost = false;
+        inv.phase = "aim";
+        inv.phaseTime = 0;
+        inv.aimTime = clamp(0.95 - game.wave * 0.008, 0.62, 0.95);
+        inv.aimX = p.x;
+      }
+    } else if (inv.phase === "aim") {
+      // tracks the ship loosely, then locks for the last stretch so a sidestep dodges it
+      if (inv.phaseTime < inv.aimTime * 0.65) inv.aimX += (p.x - inv.aimX) * Math.min(1, dt * 4);
+      if (inv.phaseTime >= inv.aimTime) {
+        const dx = inv.aimX - inv.x;
+        const dy = p.y - (inv.y + 12);
+        const len = Math.max(1, Math.hypot(dx, dy));
+        const speed = 520 + game.wave * 6;
+        game.enemyBullets.push({ x: inv.x, y: inv.y + 12, vx: dx / len * speed, vy: dy / len * speed, r: 4, color: colors.phantom, life: 3, style: "needle" });
+        burst(inv.x, inv.y + 12, colors.phantom, 10, 150, 32);
+        sfx.snipe(inv.x);
+        inv.phase = "hover";
+        inv.phaseTime = 0;
+        inv.next = rand(2.6, 4.4);
+      }
+    }
+  }
+}
+
+// ---- bonus saucer -------------------------------------------------------------------------
+function spawnSaucer() {
+  const dir = Math.random() < 0.5 ? 1 : -1;
+  const y = clamp(phantomBandY() - 10, 40, 70);
+  game.saucer = { x: dir > 0 ? -50 : game.width + 50, y, baseY: y, vx: dir * (150 + Math.min(80, game.wave * 3)), r: 30, phase: 0, hum: null };
+  game.saucer.hum = sfx.saucerHum(game.saucer.x);
+  game.nextSaucer = Infinity;
+}
+
+function removeSaucer() {
+  if (!game.saucer) return;
+  stopLoop(game.saucer.hum);
+  game.saucer = null;
+}
+
+function updateSaucer(dt) {
+  const s = game.saucer;
+  if (!s) {
+    if (game.mode !== "bossrush" && !game.bossWave && game.invaders.length >= 4 && !game.waveBanner && game.time >= game.nextSaucer) spawnSaucer();
+    return;
+  }
+  s.phase += dt;
+  if (!game.invaders.length) s.vx *= 1 + dt * 2.5; // the wave is gone: it bolts
+  s.x += s.vx * dt;
+  s.y = s.baseY + Math.sin(s.phase * 2.4) * 5;
+  panLoop(s.hum, s.x);
+  if (s.x < -70 || s.x > game.width + 70) removeSaucer();
+}
+
+function killSaucer() {
+  const s = game.saucer;
+  if (!s) return;
+  const table = [300, 500, 800, 1000];
+  const base = Math.round(table[Math.floor(Math.random() * table.length)] * (1 + Math.floor(game.wave / 5) * 0.25) / 50) * 50;
+  const got = addScore(base);
+  addFloatText(s.x, s.y + 10, `UFO +${got.toLocaleString()}`, colors.player, 1.3);
+  burst(s.x, s.y, colors.player, 30, 260, 46);
+  burst(s.x, s.y, colors.enemy, 18, 200, 46);
+  spawnRing(s.x, s.y, 140, "53, 244, 255", 5, 0.5);
+  dropPowerup(s.x, s.y + 16);
+  stage.events.saucerDown(s);
+  sfx.saucerDown(s.x);
+  rumble(0.3, 0.6, 160);
+  game.shake = Math.max(game.shake, 6);
+  removeSaucer();
+  game.stats.saucers += 1;
+  unlockMedal("saucer");
+  if (game.stats.saucers >= 5) unlockMedal("saucer5");
+}
+
+// ---- Hive: a swarm mothership ringed by guard drones -------------------------------------------
+function spawnMini(x, y, dir, col, row) {
+  game.invaders.push({
+    x, y, baseX: x, baseY: y, homeX: x, homeY: y,
+    r: 10, type: "mini", zealot: false, hp: 1, maxHp: 1, col, row,
+    mini: true, commit: true, divePhase: "swoop", diveTime: 0, diveHit: false,
+    diveDir: dir, diveStartX: x, diveStartY: y, tilt: dir * 0.3
+  });
+}
+
+function updateHive(boss, dt, targetY) {
+  boss.x = game.width / 2 + Math.sin(boss.phase * 0.55) * game.width * 0.27;
+  boss.y = targetY + 6 + Math.sin(boss.phase * 1.1) * 10;
+  const R = game.compact ? 62 : 84;
+  for (const sat of boss.sats) {
+    sat.a += dt * 1.25;
+    sat.prevX = sat.x;
+    sat.prevY = sat.y;
+    sat.x = boss.x + Math.cos(sat.a) * R;
+    sat.y = boss.y + Math.sin(sat.a) * R * 0.5 + 8;
+    sat.hitFlash = Math.max(0, (sat.hitFlash || 0) - dt * 4);
+    if (sat.dead) {
+      sat.regen -= dt;
+      if (sat.regen <= 0) {
+        sat.dead = false;
+        sat.hp = sat.maxHp;
+        burst(sat.x, sat.y, colors.gold, 10, 120, 30);
+      }
+    }
+  }
+  boss.shot -= dt;
+  if (boss.shot > 0) return;
+  const attack = boss.attackIndex % 3;
+  if (attack === 0) {
+    // rotating spiral of spores
+    const n = game.compact ? 9 : 12;
+    const base = boss.attackIndex * 0.37;
+    for (let i = 0; i < n; i++) {
+      const a = base + i / n * TAU;
+      game.enemyBullets.push({
+        x: boss.x, y: boss.y + 10,
+        vx: Math.cos(a) * (160 + game.wave * 5),
+        vy: Math.abs(Math.sin(a)) * (130 + game.wave * 5) + 70,
+        r: 5, color: colors.enemy, life: 5, style: "fireball"
+      });
+    }
+    burst(boss.x, boss.y + 10, colors.bullet, 12, 150, 30);
+    boss.shot = clamp(1.5 - game.wave * 0.02, 0.95, 1.5);
+    sfx.bossShot(boss.x);
+  } else if (attack === 1) {
+    // launches two minis that dive straight at the ship
+    if (game.invaders.filter(i => i.type === "mini").length < 6) {
+      spawnMini(boss.x - 34, boss.y + 22, -1, 1, 0);
+      spawnMini(boss.x + 34, boss.y + 22, 1, 2, 0);
+      sfx.dive(boss.x);
+      burst(boss.x, boss.y + 22, colors.bullet, 14, 160, 30);
+    }
+    boss.shot = 1.3;
+  } else {
+    // every guard drone fires one aimed shot
+    for (const sat of boss.sats) {
+      if (sat.dead) continue;
+      enemyFire(sat.x, sat.y + 6, 260 + game.wave * 7, 0, { r: 5, color: colors.enemy });
+    }
+    boss.shot = clamp(1.2 - game.wave * 0.015, 0.8, 1.2);
+    sfx.bossShot(boss.x);
+  }
+  boss.attackIndex += 1;
+}
+
+function firstSatHit(b) {
+  const boss = game.boss;
+  if (!boss || !boss.sats || boss.intro > 0) return null;
+  for (const sat of boss.sats) {
+    if (sat.dead) continue;
+    const rr = (b.r || 1) + sat.r + 3;
+    if (distSq(b, sat) < rr * rr) return sat;
+  }
+  return null;
+}
+
+function damageSat(sat, damage) {
+  sat.hp -= damage;
+  sat.hitFlash = 1;
+  burst(sat.x, sat.y, colors.gold, 6, 110, 30);
+  sfx.hit(sat.x);
+  if (sat.hp > 0) return;
+  sat.dead = true;
+  sat.regen = 7;
+  stage.events.invaderKilled(sat, false);
+  sfx.boom(false, game.combo, sat.x);
+  addScore(40);
+}
+
 function updateBoss(dt) {
   const boss = game.boss;
   if (!boss) return;
@@ -1407,6 +2009,7 @@ function updateBoss(dt) {
   const targetY = boss.targetY ?? Math.max(48, 62 * game.scale);
   if (boss.intro > 0) {
     boss.intro = Math.max(0, boss.intro - dt);
+    if (boss.intro === 0) boss.fightStart = game.time;
     const t = 1 - boss.intro / 1.85;
     const ease = 1 - Math.pow(1 - clamp(t, 0, 1), 3);
     boss.x = game.width / 2 + Math.sin(game.time * 2.2) * 18 * (1 - ease);
@@ -1417,6 +2020,7 @@ function updateBoss(dt) {
   }
   if (boss.kind === "interceptor") updateInterceptor(boss, dt, targetY);
   else if (boss.kind === "bulwark") updateBulwark(boss, dt, targetY);
+  else if (boss.kind === "hive") updateHive(boss, dt, targetY);
   else updateCarrier(boss, dt, targetY);
   syncBossTurrets(boss);
   updateBossTurretFire(boss, dt);
@@ -1554,9 +2158,24 @@ function updateBullets(dt) {
     if (invaderHit && (invaderHit.inv.divePhase || !shieldHit || invaderHit.t <= shieldHit.t)) {
       b.x = (b.px ?? b.x) + (b.x - (b.px ?? b.x)) * invaderHit.t;
       b.y = (b.py ?? b.y) + (b.y - (b.py ?? b.y)) * invaderHit.t;
-      const killed = damageInvader(invaderHit.inv, b.damage);
-      if (b.pierce > 0 && killed) b.pierce -= 1;
-      else b.life = 0;
+      const inv = invaderHit.inv;
+      if (inv.type === "warden" && inv.barrier > 0 && !inv.divePhase && Math.abs(b.vx) < 55 && !(b.pierce > 0)) {
+        // straight shots splash off the barrier; angled spread / overdrive shots get round it
+        b.life = 0;
+        inv.barrier = Math.max(0, inv.barrier - b.damage);
+        stage.events.barrierHit(inv);
+        burst(b.x, b.y + 6, colors.barrier, 6, 120, 22);
+        sfx.deflect(inv.x);
+        if (inv.barrier <= 0) {
+          stage.events.barrierBreak(inv);
+          sfx.turretDown(inv.x);
+          addFloatText(inv.x, inv.y - 20, "BARRIER DOWN", colors.barrier, 0.9);
+        }
+      } else {
+        const killed = damageInvader(inv, b.damage);
+        if (b.pierce > 0 && killed) b.pierce -= 1;
+        else b.life = 0;
+      }
     } else if (shieldHit) {
       b.life = 0;
       b.x = shieldHit.x;
@@ -1571,10 +2190,21 @@ function updateBullets(dt) {
         damageTurret(turret, b.damage);
         continue;
       }
+      const sat = firstSatHit(b);
+      if (sat) {
+        b.life = 0;
+        damageSat(sat, b.damage);
+        continue;
+      }
       if (game.boss.intro <= 0 && distSq(b, game.boss) < (b.r + game.boss.r) * (b.r + game.boss.r)) {
         b.life = 0;
         damageBoss(b.damage);
+        continue;
       }
+    }
+    if (game.saucer && distSq(b, game.saucer) < (b.r + game.saucer.r) * (b.r + game.saucer.r)) {
+      b.life = 0;
+      killSaucer();
     }
   }
   game.bullets = game.bullets.filter(b => b.life > 0 && b.y > -40 && b.y < game.height + 40);
@@ -1616,9 +2246,14 @@ function updateEnemyBullets(dt) {
 
 function updatePowerups(dt) {
   const p = game.player;
+  const tractor = perkLevel("tractor");
   for (const core of game.powerups) {
-    core.y += core.vy * dt;
+    core.y += core.vy * (1 + tractor * 0.35) * dt;
     core.phase += dt * 4;
+    if (tractor) {
+      const pull = (110 + tractor * 90) * dt;
+      core.x += clamp(p.x - core.x, -pull, pull);
+    }
     if (distSq(core, p) < (core.r + p.r + 8) * (core.r + p.r + 8)) {
       addPickupLabel(core);
       stage.events.pickup(core);
@@ -1678,7 +2313,6 @@ function updateWaveBanner(dt) {
 }
 
 function updateVisualEffects(dt) {
-  game.screenFlash = Math.max(0, game.screenFlash - dt * 3.8);
   if (game.powerFlash) {
     game.powerFlash.life -= dt;
     if (game.powerFlash.life <= 0) game.powerFlash = null;
@@ -1759,7 +2393,9 @@ function useBomb() {
   spawnRing(game.player.x, game.player.y, reach * 0.82, "255, 255, 255", 6, 0.5);
   sfx.bomb();
   stage.events.bomb();
+  rumble(0.9, 0.6, 420);
   const doomed = game.invaders.slice();
+  const formationKills = doomed.filter(inv => inv.type !== "mini").length;
   for (const inv of doomed) {
     burst(inv.x, inv.y, colors.gold, 6, 150);
     damageInvader(inv, 999);
@@ -1769,14 +2405,19 @@ function useBomb() {
   if (game.invaders.some(i => i.type === "mini")) {
     game.invaders = game.invaders.filter(i => i.type !== "mini");
   }
-  if (game.boss) damageBoss(18 + game.wave);
+  if (game.boss) {
+    if (game.boss.sats) for (const sat of game.boss.sats) if (!sat.dead) damageSat(sat, 999);
+    damageBoss(18 + game.wave);
+  }
+  if (game.saucer) killSaucer();
+  if (formationKills >= 30) unlockMedal("bomb30");
   addFloatText(game.player.x, game.player.y - 60, "SMART BOMB", colors.gold, 1.1);
-  if (navigator.vibrate) { try { navigator.vibrate(60); } catch (error) {} }
+  buzz(60);
   updateHud();
 }
 
 function triggerOverdrive() {
-  const dur = hasMod("overcharged") ? 6 : 4;
+  const dur = overdriveDuration();
   const fresh = game.overdrive <= 0;
   game.overdrive = Math.max(game.overdrive, dur);
   if (fresh) {
@@ -1785,11 +2426,13 @@ function triggerOverdrive() {
     game.screenFlash = Math.max(game.screenFlash, 0.3);
     game.flashColor = "255, 210, 61";
     sfx.overdrive();
+    game.stats.overdrives += 1;
+    if (game.stats.overdrives >= 10) unlockMedal("overdrive10");
   }
 }
 
 function grantBomb(count = 1) {
-  game.bombs = Math.min(5, game.bombs + count);
+  game.bombs = Math.min(bombCap(), game.bombs + count);
   updateHud();
 }
 
@@ -1888,6 +2531,7 @@ function checkWaveClear(dt) {
   if (game.invaders.length || game.boss) return;
   game.waveClearTimer += dt;
   if (game.waveClearTimer <= 1.1) return;
+  game.waveClearTimer = 0;
   if (game.waveDamage === 0) {
     game.perfectStreak += 1;
     const bonus = 200 * game.wave + game.perfectStreak * 100;
@@ -1897,12 +2541,20 @@ function checkWaveClear(dt) {
     game.screenFlash = Math.max(game.screenFlash, 0.35);
     game.flashColor = "167, 255, 61";
     sfx.perfect();
+    unlockMedal("perfect");
+    if (game.perfectStreak >= 5) unlockMedal("flawless5");
   } else {
     game.perfectStreak = 0;
   }
-  game.wave += 1;
+  // after a warship: pick an upgrade before the next wave
+  if (game.bossWave && availablePerks().length) openPerkPick(advanceWave);
+  else advanceWave();
+}
+
+function advanceWave() {
+  game.wave += game.mode === "bossrush" ? 2 : 1;
   game.waveClearTimer = 0;
-  game.player.shield = Math.min(92, game.player.shield + 7);
+  game.player.shield = Math.min(shieldCap(), game.player.shield + 7);
   if (game.wave >= game.nextBombWave) {
     grantBomb(1);
     game.nextBombWave = game.wave + 3;
@@ -1911,6 +2563,80 @@ function checkWaveClear(dt) {
   sfx.wave();
   makeShields();
   spawnWave();
+}
+
+// ---- upgrade pick ------------------------------------------------------------------------------
+function canDash() {
+  return pad.connected || !(window.matchMedia && matchMedia("(pointer: coarse)").matches);
+}
+
+function availablePerks() {
+  return PERKS.filter(perk => perkLevel(perk.id) < perk.max && (!perk.needsDash || canDash()));
+}
+
+function rollPerks() {
+  const pool = availablePerks().slice();
+  const offer = [];
+  for (let i = 0; i < 3 && pool.length; i++) {
+    // Daily runs roll from the shared seed so everyone sees the same choices
+    const pick = Math.floor(gpAt(7000 + i * 13) * pool.length) % pool.length;
+    offer.push(pool.splice(pick, 1)[0]);
+  }
+  return offer;
+}
+
+function applyPerk(perk, silent = false) {
+  const p = game.player;
+  game.perks[perk.id] = perkLevel(perk.id) + 1;
+  if (perk.id === "plating") p.shield = Math.min(shieldCap(), p.shield + 30);
+  else if (perk.id === "bombbay") grantBomb(2);
+  else if (perk.id === "hull") game.lives = Math.min(maxLives(), game.lives + 1);
+  if (silent) return;
+  game.stats.perks += 1;
+  if (game.stats.perks >= 5) unlockMedal("perks5");
+  addFloatText(p.x, p.y - 70, perk.name.toUpperCase(), colors.gold, 1.3);
+  spawnRing(p.x, p.y, 160, "255, 210, 61", 5, 0.5);
+  game.screenFlash = Math.max(game.screenFlash, 0.25);
+  game.flashColor = "255, 210, 61";
+  updateHud();
+}
+
+function openPerkPick(done) {
+  const offer = rollPerks();
+  if (!offer.length) { done(); return; }
+  game.state = "perk";
+  game.perkDone = done;
+  game.perkOffer = offer;
+  keys.clear();
+  touchAim.active = false;
+  touchAim.pointerId = null;
+  perkTitle.textContent = `${BOSS_NAMES[game.bossKind] || "WARSHIP"} DOWN — CHOOSE AN UPGRADE`;
+  perkCards.innerHTML = offer.map((perk, i) => {
+    const level = perkLevel(perk.id);
+    const pips = perk.max > 1 ? `<span class="perk-level">${"◆".repeat(level + 1)}${"◇".repeat(perk.max - level - 1)}</span>` : "";
+    return `<button class="perk-card" type="button" data-perk="${perk.id}"><span class="perk-key">${i + 1}</span><span class="perk-icon" aria-hidden="true">${perk.icon}</span><b>${perk.name}</b><span class="perk-desc">${perk.desc}</span>${pips}</button>`;
+  }).join("");
+  perkOverlay.classList.remove("hidden");
+  setControlsVisible(false);
+  perkOpenedAt = performance.now();
+  sfx.perkOffer();
+  if (pad.connected) focusFirst(perkCards);
+}
+
+function choosePerk(id) {
+  if (game.state !== "perk" || performance.now() - perkOpenedAt < 650) return;
+  const perk = PERKS.find(item => item.id === id);
+  if (!perk) return;
+  perkOverlay.classList.add("hidden");
+  game.state = "playing";
+  game.last = performance.now();
+  setControlsVisible(true);
+  applyPerk(perk);
+  sfx.perkPick();
+  rumble(0.2, 0.45, 100);
+  const done = game.perkDone;
+  game.perkDone = null;
+  if (done) done();
 }
 
 function damageInvader(inv, damage) {
@@ -1929,11 +2655,25 @@ function damageInvader(inv, damage) {
   burst(inv.x, inv.y, colors.enemy, 22, 210, 22);
   const idx = game.invaders.indexOf(inv);
   if (idx >= 0) game.invaders.splice(idx, 1);
-  const base = inv.type === "diver" ? 45 : inv.type === "splitter" ? 40 : inv.type === "striker" ? 30 : inv.type === "mini" ? 12 : 20;
+  const base = inv.type === "diver" ? 45 : inv.type === "splitter" ? 40 : inv.type === "striker" ? 30 : inv.type === "mini" ? 12
+    : inv.type === "warden" ? 50 : inv.type === "phantom" ? 60 : 20;
+  game.chain = game.comboTimer > 0 ? game.chain + 1 : 1;
+  if (game.chain >= 50) unlockMedal("chain50");
   addScore(base);
   game.shake = Math.max(game.shake, 4);
   if (inv.type === "splitter") splitInvader(inv);
+  if (inv.type === "warden" && inv.barrier > 0 && damage < 999) {
+    addScore(40);
+    addFloatText(inv.x, inv.y - 20, "FLANKED +40", colors.barrier, 0.9);
+    unlockMedal("flank");
+  }
+  if (inv.type === "phantom" && inv.phase === "aim" && damage < 999) {
+    addFloatText(inv.x, inv.y - 20, "GHOSTED", colors.phantom, 0.9);
+    unlockMedal("ghost");
+  }
   if (wasDiving) {
+    game.stats.diveTags += 1;
+    if (game.stats.diveTags >= 10) unlockMedal("divetag10");
     burst(inv.x, inv.y, colors.gold, 32, 270);
     burst(inv.x, inv.y, "#ffffff", 14, 180);
     addFloatText(inv.x, inv.y - 22, inv.zealot ? "ZEALOT DOWN +45" : "DIVE TAG +45", colors.gold, 1.05);
@@ -1947,7 +2687,23 @@ function damageInvader(inv, damage) {
   }
   maybeDrop(inv.x, inv.y);
   if (!wasDiving) sfx.boom(false, game.combo, inv.x);
+  if (!game.invaders.length && !game.boss && game.state === "playing") waveWiped(inv);
   return true;
+}
+
+// Last enemy of a wave: a slow-motion close-up on it (Camera moments setting).
+function waveWiped(inv) {
+  if (!stage.events.killCam(inv.x, inv.y, false)) return;
+  game.slowmo = Math.max(game.slowmo, 0.95);
+  game.cineGuard = Math.max(game.cineGuard, 1.6);
+  clearEnemyFire();
+  sfx.slowmo();
+}
+
+// Shots in flight fizzle when a kill cam takes the view off the player's ship.
+function clearEnemyFire() {
+  for (const b of game.enemyBullets) burst(b.x, b.y, colors.gold, 3, 80, 15);
+  game.enemyBullets = [];
 }
 
 function maybeComboPopup(inv) {
@@ -1957,34 +2713,10 @@ function maybeComboPopup(inv) {
 }
 
 function splitInvader(inv) {
-  for (let i = 0; i < 2; i++) {
-    const dir = i === 0 ? -1 : 1;
-    game.invaders.push({
-      x: inv.x,
-      y: inv.y,
-      baseX: inv.x,
-      baseY: inv.y,
-      homeX: inv.x,
-      homeY: inv.y,
-      r: 10,
-      type: "mini",
-      zealot: false,
-      hp: 1,
-      maxHp: 1,
-      col: inv.col,
-      row: inv.row,
-      mini: true,
-      commit: true,
-      divePhase: "swoop",
-      diveTime: 0,
-      diveHit: false,
-      diveDir: dir,
-      diveStartX: inv.x,
-      diveStartY: inv.y,
-      tilt: dir * 0.3
-    });
-  }
+  spawnMini(inv.x, inv.y, -1, inv.col, inv.row);
+  spawnMini(inv.x, inv.y, 1, inv.col, inv.row);
   burst(inv.x, inv.y, colors.bullet, 12, 180);
+  sfx.split(inv.x);
 }
 
 function firstTurretHit(b) {
@@ -2044,24 +2776,41 @@ function defeatBoss(boss) {
   spawnRing(boss.x, boss.y, 260, "255, 255, 255", 5, 0.5);
   stage.events.bossDown(boss);
   sfx.bossDown(boss.x);
+  rumble(1, 0.8, 700);
   game.shake = 16;
   game.slowmo = Math.max(game.slowmo, 0.45);
   game.screenFlash = Math.max(game.screenFlash, 0.6);
   game.flashColor = "255, 220, 150";
   game.boss = null;
+  // slow-motion close-up on the wreck (Camera moments setting)
+  if (game.state === "playing" && stage.events.killCam(boss.x, boss.y, true)) {
+    game.slowmo = Math.max(game.slowmo, 1.35);
+    game.cineGuard = Math.max(game.cineGuard, 2.1);
+    clearEnemyFire();
+    sfx.slowmo();
+  }
   grantBomb(1);
   addFloatText(boss.x, boss.y - 30, "WARSHIP DOWN  +💣", colors.gold, 1.3);
   for (let i = 0; i < 3; i++) dropPowerup(boss.x + rand(-50, 50), boss.y + rand(-10, 35));
   if (game.state === "playing") playMusic("gameplay");
+  game.stats.bosses += 1;
+  unlockMedal("firstboss");
+  if (boss.fightStart != null && game.time - boss.fightStart < 30) unlockMedal("quickboss");
+  if (scored() && medals && medals.noteBossKind(boss.kind) >= BOSS_KINDS.length) unlockMedal("fleet");
+  if (game.mode === "bossrush" && game.stats.bosses >= 4) unlockMedal("rush4");
 }
 
+// Adds points (with the combo and modifier multipliers) and returns what was added.
 function addScore(points) {
   const step = hasMod("overcharged") ? 0.14 : 0.08;
   game.combo = clamp(game.combo + step, 1, 3);
-  game.comboTimer = 2.8;
+  game.comboTimer = comboWindow();
   const mult = hasMod("glass-cannon") ? 2 : 1;
-  game.score += Math.round(points * game.combo * mult);
+  const added = Math.round(points * game.combo * mult);
+  game.score += added;
+  if (game.score >= 100000) unlockMedal("ace100k");
   if (game.combo >= 3 && game.overdrive <= 0) triggerOverdrive();
+  return added;
 }
 
 function maybeDrop(x, y) {
@@ -2099,19 +2848,19 @@ function applyPowerup(type) {
     shield: ["SHIELD SURGE", "#a7ff3d"],
     repair: ["REPAIR CORE", "#ffffff"]
   };
-  const maxLives = hasMod("glass-cannon") ? 1 : 3;
+  const plating = perkLevel("plating") * 15;
   if (type === "spread" || type === "laser") {
     p.weapon = type;
-    p.weaponTimer = 8;
+    p.weaponTimer = 8 + perkLevel("battery") * 4;
   } else if (type === "overdrive") {
-    game.overdrive = Math.max(game.overdrive, hasMod("overcharged") ? 10 : 8);
+    game.overdrive = Math.max(game.overdrive, (hasMod("overcharged") ? 10 : 8) + perkLevel("overdrive") * 1.5);
   } else if (type === "bomb") {
     grantBomb(1);
   } else if (type === "shield") {
-    p.shield = Math.min(105, p.shield + 22);
+    p.shield = Math.min(105 + plating, p.shield + 22);
   } else if (type === "repair") {
-    game.lives = Math.min(maxLives, game.lives + 1);
-    p.shield = Math.min(100, p.shield + 8);
+    game.lives = Math.min(maxLives(), game.lives + 1);
+    p.shield = Math.min(100 + plating, p.shield + 8);
   }
   const [text, color] = labels[type] || [type.toUpperCase(), colors.gold];
   game.powerFlash = { type, text, color, life: 0.82, maxLife: 0.82 };
@@ -2124,7 +2873,7 @@ function applyPowerup(type) {
 
 function hitPlayer(damage) {
   const p = game.player;
-  if (p.invulnerable > 0) return;
+  if (p.invulnerable > 0 || game.cineGuard > 0) return;
   p.shield -= damage;
   game.waveDamage += 1;
   game.shake = 14;
@@ -2134,14 +2883,15 @@ function hitPlayer(damage) {
   burst(p.x, p.y, colors.red, 36, 270, 14);
   sfx.hurt(p.x);
   stage.events.playerHit(false);
-  if (navigator.vibrate) {
-    try { navigator.vibrate(p.shield <= 0 ? 90 : 35); } catch (error) {}
-  }
+  buzz(p.shield <= 0 ? 90 : 35);
+  if (p.shield <= 0) rumble(1, 1, 480);
+  else rumble(0.45, 0.7, 180);
   if (p.shield <= 0) {
     sfx.lifeLost(p.x);
     stage.events.playerHit(true);
     game.lives -= 1;
     game.combo = 1;
+    game.chain = 0;
     game.overdrive = 0;
     p.shield = 82;
     p.weapon = "pulse";
@@ -2164,13 +2914,21 @@ function endGame() {
   touchAim.x = null;
   touchAim.pointerId = null;
   game.overdrive = 0;
+  removeSaucer();
   sfx.gameover();
   stopMusic();
   playMusic("menu");
-  const modeLabel = game.mode === "daily" ? `Daily Challenge · ${activeModifier().name}` : "Arcade run";
-  message.textContent = `${modeLabel} — final score ${game.score.toLocaleString()}, wave ${game.wave}. The fleet regroups.`;
-  startButton.textContent = game.mode === "daily" ? "Retry Daily" : "Play Again";
+  if (game.mode === "daily") unlockMedal("daily");
+  if (game.score >= 100000) unlockMedal("ace100k");
+  const modeLabel = game.mode === "daily" ? `Daily Challenge · ${activeModifier().name}` : MODE_LABELS[game.mode];
+  const reached = game.mode === "bossrush" ? `warship ${displayWave()}` : `wave ${game.wave}`;
+  message.textContent = game.mode === "practice"
+    ? `Practice from wave ${game.practiceStart} — reached wave ${game.wave} with ${game.score.toLocaleString()} points. Practice runs aren't scored.`
+    : `${modeLabel} — final score ${game.score.toLocaleString()}, ${reached}. The fleet regroups.`;
+  startButton.textContent = game.mode === "daily" ? "Retry Daily" : game.mode === "bossrush" ? "Retry Rush" : game.mode === "practice" ? "Retry Practice" : "Play Again";
   overlay.classList.add("game-over");
+  shareButton.classList.remove("hidden");
+  shareCanvas = null;
   showScores(true);
   overlay.classList.remove("hidden");
   if (!window.matchMedia || matchMedia("(pointer: fine)").matches) {
@@ -2283,8 +3041,30 @@ const invaderSprites = {
   drone: [
     ["000011000000","000111100000","001111110000","011011011000","111111111100","101111110100","101000010100","001011101000","010100010100","100000000010"],
     ["000011000000","000111100000","001111110000","011011011000","111111111100","101111110100","001000010000","010111110100","100100010010","000010100000"]
+  ],
+  warden: [
+    ["000011110000","001111111100","011011110110","111111111111","110111111011","111111111111","011100001110","001100001100","011000000110","110000000011"],
+    ["000011110000","001111111100","011011110110","111111111111","110111111011","111111111111","011100001110","001100001100","000110011000","000011110000"]
+  ],
+  phantom: [
+    ["000001100000","000011110000","000111111000","001101101100","011111111110","111011110111","100011110001","000110011000","001100001100","011000000110"],
+    ["000001100000","000011110000","000111111000","001101101100","011111111110","111011110111","100011110001","000011110000","000110011000","000100001000"]
   ]
 };
+const bossHivePattern = [
+  "000000111111111111000000",
+  "000011111111111111110000",
+  "001111110011110011111100",
+  "011111111111111111111110",
+  "111100111111111111001111",
+  "111111111100001111111111",
+  "111111111100001111111111",
+  "011111111111111111111110",
+  "001111011111111110111100",
+  "000111001111111100111000",
+  "000011000111111000110000",
+  "000001000011110000100000"
+];
 const bossCarrierPattern = [
   "000000001111111100000000",
   "000001111111111111100000",
@@ -2332,7 +3112,8 @@ function waveBannerY(height) {
 function updateHud() {
   if (!game.player) return;
   scoreEl.textContent = game.score.toLocaleString();
-  waveEl.textContent = String(game.wave);
+  waveEl.textContent = String(displayWave());
+  if (waveLabelEl) waveLabelEl.textContent = game.mode === "bossrush" ? "BOSS" : "WAVE";
   livesEl.textContent = "◆".repeat(Math.max(0, game.lives));
   const weaponLabels = { pulse: "PULSE", spread: "SPRD", laser: "LASER" };
   weaponEl.textContent = game.overdrive > 0 ? "O-DRIVE" : (weaponLabels[game.player.weapon] || game.player.weapon.toUpperCase());
@@ -2348,6 +3129,7 @@ function loop(now) {
   const dt = Math.min(0.033, Math.max(0, rawMs / 1000 || 0));
   game.last = now;
   trackPerf(rawMs);
+  pollPad(dt);
   update(dt);
   stage.render(dt);
   stepMusic(dt);
@@ -2370,6 +3152,124 @@ function trackPerf(rawMs) {
     game.pfCount = 0;
     game.pfWin = 0;
   }
+}
+
+// ---- game controller -----------------------------------------------------------------------------
+// Standard mapping: stick / d-pad steer, A / RT / RB fire, X / LB dash, B / Y smart bomb,
+// Start pause. On menus the d-pad moves between buttons, A presses, B closes a panel.
+const pad = { index: -1, prev: [], axisX: 0, fire: false, dash: false, connected: false, navCooldown: 0, navHeld: false };
+
+function getPad() {
+  if (!navigator.getGamepads) return null;
+  let pads;
+  try { pads = navigator.getGamepads(); } catch (error) { return null; }
+  if (!pads) return null;
+  const current = pads[pad.index];
+  if (current && current.connected) return current;
+  for (const gp of pads) {
+    if (gp && gp.connected && gp.buttons.length >= 10) { pad.index = gp.index; return gp; }
+  }
+  return null;
+}
+
+function rumble(strong, weak, ms) {
+  if (settings.rumble !== "on" || !pad.connected) return;
+  const gp = getPad();
+  const act = gp && gp.vibrationActuator;
+  if (!act || !act.playEffect) return;
+  try {
+    const result = act.playEffect("dual-rumble", { startDelay: 0, duration: ms, strongMagnitude: strong, weakMagnitude: weak });
+    if (result && result.catch) result.catch(() => {});
+  } catch (error) {}
+}
+
+function menuItems() {
+  const root = game.state === "perk" ? perkCards : overlay;
+  return [...root.querySelectorAll("button:not([disabled]), input[type=range], a[href]")].filter(el => el.offsetParent !== null);
+}
+
+function focusItem(el) {
+  for (const old of document.querySelectorAll(".pad-focus")) old.classList.remove("pad-focus");
+  if (!el) return;
+  el.focus({ preventScroll: true });
+  el.classList.add("pad-focus");
+  el.scrollIntoView({ block: "nearest" });
+}
+
+function focusFirst(root) {
+  const first = root.querySelector("button:not([disabled])");
+  if (first) focusItem(first);
+}
+
+function moveFocus(dir) {
+  const items = menuItems();
+  if (!items.length) return;
+  const idx = items.indexOf(document.activeElement);
+  focusItem(items[idx < 0 ? 0 : (idx + dir + items.length) % items.length]);
+}
+
+function onPadConnected() {
+  if (toast) toast.show("🎮", "Controller connected", "Stick steers · A fires · X dashes · B bombs · Start pauses");
+  controlsHint.textContent = "Controller: left stick or d-pad steers · A / RT fire · X / LB dash · B / Y smart bomb · Start pause. Chain kills for Overdrive.";
+}
+
+function pollPad(dt) {
+  const gp = getPad();
+  if (!gp) {
+    pad.axisX = 0;
+    pad.fire = false;
+    pad.connected = false;
+    pad.prev = [];
+    return;
+  }
+  if (!pad.connected) {
+    pad.connected = true;
+    onPadConnected();
+  }
+  const now = gp.buttons.map(b => !!b && (b.pressed || b.value > 0.5));
+  const edge = i => now[i] && !pad.prev[i];
+  let ax = gp.axes[0] || 0;
+  ax = Math.abs(ax) < 0.2 ? 0 : Math.sign(ax) * (Math.abs(ax) - 0.2) / 0.8;
+  if (now[14]) ax = -1;
+  if (now[15]) ax = 1;
+  pad.axisX = ax;
+  pad.fire = !!(now[0] || now[7] || now[5]);
+  if (edge(2) || edge(4)) pad.dash = true;
+  if (game.state === "playing") {
+    if (edge(1) || edge(3)) useBomb();
+    if (edge(9)) togglePause();
+  } else if (game.state === "perk" || !overlay.classList.contains("hidden")) {
+    pad.fire = false;
+    const horiz = now[14] ? -1 : now[15] ? 1 : Math.abs(gp.axes[0] || 0) > 0.6 ? Math.sign(gp.axes[0]) : 0;
+    const vert = now[12] ? -1 : now[13] ? 1 : Math.abs(gp.axes[1] || 0) > 0.6 ? Math.sign(gp.axes[1]) : 0;
+    const focused = document.activeElement;
+    pad.navCooldown -= dt;
+    if (horiz && focused && focused.type === "range") {
+      if (pad.navCooldown <= 0) {
+        focused.value = String(clamp(Number(focused.value) + horiz * 5, 0, 100));
+        focused.dispatchEvent(new Event("input", { bubbles: true }));
+        pad.navCooldown = 0.1;
+      }
+    } else if (vert || horiz) {
+      if (pad.navCooldown <= 0) {
+        moveFocus(vert || horiz);
+        pad.navCooldown = pad.navHeld ? 0.14 : 0.32;
+        pad.navHeld = true;
+      }
+    } else {
+      pad.navCooldown = 0;
+      pad.navHeld = false;
+    }
+    if (edge(0)) {
+      const items = menuItems();
+      if (items.includes(focused) && focused.type !== "range") focused.click();
+      else if (game.state === "perk") focusFirst(perkCards);
+      else startButton.click();
+    }
+    if (edge(9) && game.state !== "perk") startButton.click();
+    if (edge(1) && game.state !== "perk") hideSubPanels();
+  }
+  pad.prev = now;
 }
 
 function togglePause() {
@@ -2395,11 +3295,23 @@ function togglePause() {
 window.addEventListener("resize", resize);
 if (window.visualViewport) window.visualViewport.addEventListener("resize", resize);
 window.addEventListener("keydown", event => {
-  if (event.target && event.target.tagName === "INPUT") {
+  if (event.target && event.target.tagName === "INPUT" && event.target.type !== "range") {
     if (event.code === "Enter") {
       event.preventDefault();
       document.getElementById("submitScoreButton")?.click();
     }
+    return;
+  }
+  if (game.state === "perk") {
+    // 1 / 2 / 3 pick a card; arrows move between them; Enter / Space take the focused one
+    event.preventDefault();
+    if (event.repeat) return;
+    const cards = [...perkCards.querySelectorAll("[data-perk]")];
+    const n = { Digit1: 0, Digit2: 1, Digit3: 2, Numpad1: 0, Numpad2: 1, Numpad3: 2 }[event.code];
+    if (n != null && cards[n]) choosePerk(cards[n].dataset.perk);
+    else if (event.code === "ArrowLeft" || event.code === "ArrowUp") moveFocus(-1);
+    else if (event.code === "ArrowRight" || event.code === "ArrowDown") moveFocus(1);
+    else if ((event.code === "Enter" || event.code === "Space") && cards.includes(document.activeElement)) choosePerk(document.activeElement.dataset.perk);
     return;
   }
   if (["ArrowLeft", "ArrowRight", "Space", "Enter"].includes(event.code)) event.preventDefault();
@@ -2428,13 +3340,13 @@ document.addEventListener("visibilitychange", () => {
   else pauseMusic();
 });
 
-function beginRun(mode) {
+function beginRun(mode, startWave) {
   if (mode === "daily") { refreshDaily(); renderDailyNote(); }
   requestImmersiveMode();
   unlockAudio();
-  hideScores();
+  hideSubPanels();
   sfx.select();
-  resetGame(mode);
+  resetGame(mode, startWave);
 }
 
 startButton.addEventListener("click", () => {
@@ -2444,15 +3356,108 @@ startButton.addEventListener("click", () => {
     togglePause();
     return;
   }
-  hideScores();
+  hideSubPanels();
   sfx.select();
-  resetGame(game.mode || "classic");
+  // the title screen's big button is the Arcade Run; after a run it replays that mode
+  resetGame(game.state === "ready" ? "classic" : game.mode || "classic", game.practiceStart);
 });
 
 dailyButton.addEventListener("click", () => {
   dailyButton.blur();
   beginRun("daily");
 });
+
+rushButton.addEventListener("click", () => {
+  rushButton.blur();
+  beginRun("bossrush");
+});
+
+practiceButton.addEventListener("click", () => {
+  unlockAudio();
+  toggleSubPanel(practicePanel, renderPractice);
+});
+
+practicePanel.addEventListener("click", event => {
+  const chip = event.target.closest("[data-wave]");
+  if (!chip) return;
+  beginRun("practice", Number(chip.dataset.wave));
+});
+
+medalsButton.addEventListener("click", () => {
+  unlockAudio();
+  toggleSubPanel(medalsPanel, () => medals.render(medalsPanel));
+});
+
+settingsButton.addEventListener("click", () => {
+  unlockAudio();
+  toggleSubPanel(settingsPanel, () => renderSettings(settingsPanel, settings, onSettingsChange));
+});
+
+shareButton.addEventListener("click", () => {
+  unlockAudio();
+  toggleSubPanel(sharePanel, renderSharePanel);
+});
+
+sharePanel.addEventListener("click", async event => {
+  const action = event.target.closest("[data-share]");
+  if (!action || !shareCanvas) return;
+  const filename = `invaders-3d-${game.score}.png`;
+  const text = `I scored ${game.score.toLocaleString()} in Invaders 3D — can you beat it? https://jez237.com/games/2026-06-05/invaders/3d/`;
+  const result = action.dataset.share === "share"
+    ? await shareCardImage(shareCanvas, { title: "Invaders 3D", text, filename })
+    : await downloadCardImage(shareCanvas, filename);
+  const note = sharePanel.querySelector(".share-status");
+  if (note) note.textContent = result === "shared" ? "Shared." : result === "downloaded" ? "Saved to your downloads." : result === "cancelled" ? "" : "Couldn't share — try Save Image.";
+});
+
+perkCards.addEventListener("click", event => {
+  const card = event.target.closest("[data-perk]");
+  if (card) choosePerk(card.dataset.perk);
+});
+
+function renderSharePanel() {
+  sfx.shutter();
+  if (!shareCanvas) {
+    const modeName = game.mode === "daily" ? `Daily · ${activeModifier().name}` : MODE_LABELS[game.mode];
+    shareCanvas = buildShareCard({
+      shot: stage.snapshot(),
+      score: game.score,
+      waveLabel: game.mode === "bossrush" ? `WARSHIP ${displayWave()}` : `WAVE ${game.wave}`,
+      mode: modeName,
+      sector: stage.sectorName(game.sector),
+      medals: medals.count(),
+      total: medals.total,
+      url: "jez237.com/games/2026-06-05/invaders/3d"
+    });
+  }
+  const canShare = canShareFiles();
+  sharePanel.innerHTML = `
+    <h2>Share Card</h2>
+    <img class="share-preview" alt="Share card: score ${game.score.toLocaleString()}" src="${shareCanvas.toDataURL("image/jpeg", 0.86)}">
+    <div class="share-actions">
+      ${canShare ? '<button type="button" data-share="share">Share</button>' : ""}
+      <button type="button" class="secondary" data-share="save">Save Image</button>
+    </div>
+    <p class="share-status panel-note"></p>`;
+}
+
+function onSettingsChange(next, key) {
+  saveSettings(next);
+  applySettings(key);
+}
+
+function applySettings(key = "*") {
+  applyAudioSettings();
+  stage.setOptions({
+    shake: { off: 0, low: 0.45, full: 1 }[settings.shake] ?? 1,
+    flash: { off: 0, low: 0.45, full: 1 }[settings.flash] ?? 1,
+    glow: { low: 0.55, normal: 1, high: 1.4 }[settings.glow] ?? 1,
+    colorblind: settings.palette === "cb",
+    cinema: settings.cinema === "on"
+  });
+  if ((key === "*" || key === "quality") && !qualityPinnedByUrl) stage.setQuality(settings.quality);
+  if (key === "palette") { try { stage.paintRoster(document.querySelectorAll("[data-enemy-sprite]")); } catch (error) {} }
+}
 
 bombButton.addEventListener("click", () => {
   bombButton.blur();
@@ -2605,6 +3610,37 @@ window.__invadersQA = {
       enemyBullets: game.enemyBullets.length
     };
   },
+  startMode(mode, wave) { beginRun(mode, wave); return { mode: game.mode, wave: game.wave, display: displayWave(), sector: game.sector, perks: { ...game.perks }, lives: game.lives }; },
+  forceWave(wave) { game.wave = wave; spawnWave(); return { wave: game.wave, boss: game.bossWave, kind: game.bossKind, types: [...new Set(game.invaders.map(i => i.type))], sector: game.sector }; },
+  openPerks() { openPerkPick(advanceWave); perkOpenedAt = 0; return game.perkOffer ? game.perkOffer.map(p => p.id) : []; },
+  pickPerk(i = 0) { const card = perkCards.querySelectorAll("[data-perk]")[i]; if (card) choosePerk(card.dataset.perk); return { state: game.state, perks: { ...game.perks }, wave: game.wave }; },
+  spawnSaucer() { game.nextSaucer = 0; game.waveBanner = null; spawnSaucer(); return { x: game.saucer.x, y: game.saucer.y, hum: !!game.saucer.hum }; },
+  shootSaucer() { const s = game.saucer; if (!s) return null; const before = game.score; game.bullets.push({ x: s.x, y: s.y + 30, px: s.x, py: s.y + 40, vx: 0, vy: -700, r: 4, damage: 1, pierce: 0, color: colors.bullet, life: 1 }); updateBullets(0.016); return { killed: !game.saucer, gained: game.score - before, powerups: game.powerups.length }; },
+  wardenTest() {
+    const w = game.invaders.find(i => i.type === "warden");
+    if (!w) return null;
+    const savedShields = game.shields;
+    game.shields = [];
+    const shoot = vx => { game.bullets.push({ x: w.x - vx * 0.05, y: w.y + 40, px: w.x - vx * 0.08, py: w.y + 60, vx, vy: -700, r: 4, damage: 1, pierce: 0, color: colors.bullet, life: 1 }); updateBullets(0.03); };
+    const b0 = w.barrier, h0 = w.hp;
+    shoot(0);
+    const afterStraight = { barrier: w.barrier, hp: w.hp };
+    shoot(160);
+    const afterAngled = { barrier: w.barrier, hp: w.hp };
+    game.shields = savedShields;
+    return { b0, h0, afterStraight, afterAngled };
+  },
+  phantomState() { return game.invaders.filter(i => i.type === "phantom").map(i => ({ phase: i.phase, x: Math.round(i.x), y: Math.round(i.y), fade: i.fade, ghost: i.ghost })); },
+  hiveState() { const b = game.boss; return b && b.sats ? { kind: b.kind, sats: b.sats.filter(s => !s.dead).length, intro: b.intro } : null; },
+  killBoss() { if (!game.boss) return null; game.boss.intro = 0; damageBoss(99999); return { boss: !!game.boss, cine: stage.cineState(), slowmo: game.slowmo }; },
+  setSector(i) { game.sector = i; return stage.setSector(i, false); },
+  tension() { return { tension, target: tensionTarget(), musicRate, heartTimer }; },
+  settings() { return { ...settings }; },
+  medals() { return { count: medals.count(), total: medals.total }; },
+  unlock(id) { return medals.unlock(id); },
+  pad() { return { ...pad, prev: undefined }; },
+  shareCard() { shareCanvas = null; toggleSubPanel(sharePanel, renderSharePanel); return { w: shareCanvas.width, h: shareCanvas.height }; },
+  endRun() { game.lives = 1; game.player.invulnerable = 0; game.cineGuard = 0; game.player.shield = 1; hitPlayer(999); return game.state; },
   clearInvaders() { game.invaders = []; return true; },
   killAll(damage = 99) {
     for (const inv of game.invaders.slice()) damageInvader(inv, damage);
@@ -2738,8 +3774,8 @@ function boot() {
       game,
       colors,
       version: VERSION,
-      patterns: { invaderSprites, playerPattern, bossPattern: bossCarrierPattern },
-      helpers: { playerShieldRadius, waveBannerY, hasMod }
+      patterns: { invaderSprites, playerPattern, bossPattern: bossCarrierPattern, hivePattern: bossHivePattern },
+      helpers: { playerShieldRadius, waveBannerY, hasMod, overdriveDuration }
     });
   } catch (error) {
     document.body.classList.add("no-webgl");
@@ -2763,15 +3799,21 @@ function boot() {
   makeShields();
   updateHud();
   applyMute();
+  toast = createToast(document.getElementById("toast"));
+  medals = createMedals(medal => {
+    toast.show(medal.icon, "Medal unlocked", medal.name);
+    sfx.medal();
+  });
+  applySettings();
   if (/[?&]perf/i.test(location.search)) game.showPerf = true;
   controlsHint.textContent = window.matchMedia && matchMedia("(pointer: coarse)").matches
     ? "Drag anywhere — your ship follows your finger and auto-fires. Tap 💣 for a smart bomb. Chain kills to trigger Overdrive."
-    : "Mouse steers · Fire: hold mouse or Space · Move: ← → / A D · Dash: Shift · Bomb: B · Pause: P · Mute: M · Chain kills for Overdrive.";
+    : "Mouse steers · Fire: hold mouse or Space · Move: ← → / A D · Dash: Shift · Bomb: B · Pause: P · Mute: M · Controllers work too.";
   renderDailyNote();
   try { stage.paintRoster(document.querySelectorAll("[data-enemy-sprite]")); } catch (error) {}
   renderScores(false);
   document.body.classList.add("ready");
-  for (const button of [startButton, dailyButton, scoresButton]) button.disabled = false;
+  for (const button of [startButton, dailyButton, scoresButton, rushButton, practiceButton, medalsButton, settingsButton]) button.disabled = false;
   game.last = performance.now();
   requestAnimationFrame(loop);
 }
