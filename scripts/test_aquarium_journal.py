@@ -35,6 +35,9 @@ stories = json.loads((ROOT/'newsletter/stories.json').read_text())
 photos = json.loads((ROOT/'newsletter/photo-credits.json').read_text())
 assert len(stories)>=6 and len({s['slug'] for s in stories})==len(stories)
 category_counts={c:sum(s['category']==c for s in stories) for c in ['freshwater','reef']}
+PER=10
+first=stories[:PER]
+shown=lambda n:min(PER,n)
 for photo in photos:
     with Image.open(ROOT/'newsletter/images'/photo['filename']) as image:
         assert image.size==(photo['width'],photo['height'])
@@ -56,7 +59,9 @@ for file in (ROOT/'newsletter').rglob('*.html'):
     rel=file.relative_to(ROOT).as_posix().removesuffix('index.html')
     assert canonical=='https://jez237.com/'+rel, (file,canonical)
     assert f'<loc>{canonical}</loc><lastmod>' in sitemap, canonical
-    assert '· Aquarium News</title>' in html and 'content="Aquarium News"' in html, file
+    paged=re.fullmatch(r'newsletter/page/(\d+)/',rel)
+    title_ok=(f'<title>Aquarium News, page {paged.group(1)}</title>' in html) if paged else ('· Aquarium News</title>' in html)
+    assert title_ok and 'content="Aquarium News"' in html, file
     for link in parsed.paths:
         url=urlparse(link)
         if url.scheme or url.netloc:continue
@@ -97,14 +102,14 @@ try:
         page.wait_for_timeout(250)
         page.evaluate('window.scrollTo(0,0)')
         page.wait_for_timeout(150)
-        assert page.locator('.story:visible').count()==len(stories)
+        assert page.locator('.story:visible').count()==len(first)
         assert page.locator('h1').inner_text()=='Small worlds.\nEndless wonder.'
         newest=max(s['published'] for s in stories)
         assert page.locator('.updated-line time').get_attribute('datetime')==newest
         assert page.locator('.updated-line').inner_text()=='Updated '+plain_date(newest)
         assert page.locator('.updated-line').evaluate('(e)=>e.getBoundingClientRect().top')<400
-        assert page.locator('.story .story-date').count()==len(stories)
-        assert page.locator('.story .story-date').all_inner_texts()==[plain_date(s['published']) for s in stories]
+        assert page.locator('.story .story-date').count()==len(first)
+        assert page.locator('.story .story-date').all_inner_texts()==[plain_date(s['published']) for s in first]
         assert page.locator('.brand small').inner_text().lower()=='aquarium news · a concept'
         assert page.locator('#daily-check .check-list > li').count()==4
         assert page.locator('#daily-check .check-list > li:visible').count()==4
@@ -113,36 +118,62 @@ try:
         page.screenshot(path=str(args.output/'desktop.png'),full_page=True)
         page.screenshot(path=str(args.output/'desktop-top.png'))
         page.get_by_role('button',name='Freshwater',exact=True).click()
-        assert page.locator('.story:visible').count()==category_counts['freshwater']
+        assert page.locator('.story:visible').count()==shown(category_counts['freshwater'])
         assert page.locator('.story:visible').evaluate_all("els=>els.every(e=>e.dataset.category==='freshwater')")
         assert '?topic=freshwater' in page.url
-        page.reload(wait_until='networkidle');assert page.locator('.story:visible').count()==category_counts['freshwater']
+        page.reload(wait_until='networkidle');assert page.locator('.story:visible').count()==shown(category_counts['freshwater'])
+        # Filtered results paginate at 10 across all stories, client-side.
+        fw=[s['slug'] for s in stories if s['category']=='freshwater']
+        if len(fw)>PER:
+            assert page.locator('#filter-pager').is_visible() and not page.locator('#static-pager').is_visible()
+            page.locator('#filter-pager [data-page-target="2"]').first.click()
+            got=page.locator('.story:visible h3 a').evaluate_all("as=>as.map(a=>a.getAttribute('href').split('/').slice(-2)[0])")
+            assert got==fw[PER:2*PER],got
+            assert 'p=2' in page.url
+            page.reload(wait_until='networkidle')
+            assert page.locator('.story:visible h3 a').evaluate_all("as=>as.map(a=>a.getAttribute('href').split('/').slice(-2)[0])")==fw[PER:2*PER]
         page.get_by_role('button',name='Reef & ocean',exact=True).click()
-        assert page.locator('.story:visible').count()==category_counts['reef']
+        assert page.locator('.story:visible').count()==shown(category_counts['reef'])
         assert page.locator('.story:visible').evaluate_all("els=>els.every(e=>e.dataset.category==='reef')")
         button=page.get_by_role('button',name='All stories',exact=True);button.focus();page.keyboard.press('Enter')
-        assert page.locator('.story:visible').count()==len(stories)
+        assert page.locator('.story:visible').count()==len(first)
+        assert page.locator('#static-pager').is_visible() and not page.locator('#filter-pager').is_visible()
         assert '?topic=' not in page.url
         results['checks'].append('desktop filters, URL persistence and keyboard activation')
         # Topic tags combine with the aquarium-type filter.
         for name,key in TAGS.items():
             page.get_by_role('button',name=name,exact=True).click()
             expected=[s['slug'] for s in stories if name in s['tags']]
-            assert page.locator('.story:visible').count()==len(expected),(name,expected)
+            assert page.locator('.story:visible').count()==shown(len(expected)),(name,expected)
             assert f'tag={key}' in page.url
             for cat in ['freshwater','reef']:
                 page.locator(f'[data-filter="{cat}"]').click()
                 both=[s for s in stories if name in s['tags'] and s['category']==cat]
-                assert page.locator('.story:visible').count()==len(both),(name,cat)
+                assert page.locator('.story:visible').count()==shown(len(both)),(name,cat)
                 assert str(len(both)) in page.locator('#story-count').inner_text()
             page.locator('[data-filter="all"]').click()
         page.goto(base+'/newsletter/?topic=freshwater&tag=plants',wait_until='networkidle')
         plants=[s for s in stories if 'Plants' in s['tags'] and s['category']=='freshwater']
-        assert page.locator('.story:visible').count()==len(plants)
+        assert page.locator('.story:visible').count()==shown(len(plants))
         assert page.locator('[data-tag-filter="plants"]').get_attribute('aria-pressed')=='true'
         page.locator('[data-tag-filter="all"]').click();page.locator('[data-filter="all"]').click()
-        assert page.locator('.story:visible').count()==len(stories) and '?' not in page.url.split('/newsletter/')[1]
-        assert page.locator('.story .story-tags li').count()==sum(len(s['tags']) for s in stories)
+        assert page.locator('.story:visible').count()==len(first) and '?' not in page.url.split('/newsletter/')[1]
+        assert page.locator('.story .story-tags li').count()==sum(len(s['tags']) for s in first)
+        # Static pages: 10 per page, newest first; Newer/Older and numbers resolve; hero and checklist only on page 1.
+        pages=[stories[i:i+PER] for i in range(0,len(stories),PER)]
+        for n,items in enumerate(pages,1):
+            url=base+'/newsletter/'+('' if n==1 else f'page/{n}/')
+            r=page.goto(url,wait_until='networkidle');assert r is not None and r.status==200,url
+            slugs=page.locator('.story:visible h3 a').evaluate_all("as=>as.map(a=>a.getAttribute('href').split('/').slice(-2)[0])")
+            assert slugs==[s['slug'] for s in items],(n,slugs)
+            assert page.locator('.cover').count()==(1 if n==1 else 0) and page.locator('#daily-check').count()==(1 if n==1 else 0)
+            if n>1: assert page.title()==f'Aquarium News, page {n}'
+            for href in page.locator('#static-pager a').evaluate_all("as=>as.map(a=>a.href)"):
+                rr=page.request.get(href);assert rr.status==200,href
+            if n<len(pages):
+                page.locator('#static-pager a[rel="next"]').click();page.wait_for_load_state('networkidle')
+                assert page.url.rstrip('/').endswith(f'page/{n+1}'),page.url
+        results['checks'].append(f'{len(pages)} static pages of at most {PER}, Newer/Older and page links resolve, hero/checklist on page 1 only')
         results['checks'].append('topic tag filter alone and combined with Freshwater/Reef, with URL persistence')
         for width in [320,390,768,1440]:
             page.set_viewport_size({'width':width,'height':844})
@@ -193,10 +224,14 @@ try:
         assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
         results['checks'].append('all image credit entries rendered')
         page.goto(base+'/newsletter/?topic=not-a-category',wait_until='networkidle')
-        assert page.locator('.story:visible').count()==len(stories)
+        assert page.locator('.story:visible').count()==len(first)
         results['checks'].append('invalid topic safely falls back to all stories')
         nojs=browser.new_context(java_script_enabled=False,viewport={'width':390,'height':844})
-        np=nojs.new_page();np.goto(base+'/newsletter/',wait_until='networkidle');assert np.locator('.story').count()==len(stories)
+        np=nojs.new_page();np.goto(base+'/newsletter/',wait_until='networkidle');assert np.locator('.story').count()==len(first)
+        if len(stories)>PER:
+            np.locator('#static-pager a[rel="next"]').click();np.wait_for_load_state('networkidle')
+            assert np.locator('.story').count()==min(PER,len(stories)-PER) and np.locator('noscript').count()==1
+            np.goto(base+'/newsletter/',wait_until='networkidle')
         assert np.locator('noscript').is_visible()
         assert np.locator('#daily-check .check-list > li:visible').count()==4
         assert np.locator('.story-tags').first.is_visible()

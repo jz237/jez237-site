@@ -18,6 +18,13 @@ DRAWINGS=json.loads((OUT/'illustrations.json').read_text())
 EXPANSION={'clean-filter-media-without-replacing-the-biofilter','read-and-record-aquarium-water-tests','trim-stem-plants-and-replant-cuttings','top-off-with-freshwater-change-with-saltwater','match-coral-placement-to-local-flow','choose-marine-fish-for-adult-life'}
 ORIGINAL={'a-new-home-for-coral','a-greener-kind-of-aquarium','how-fish-find-their-crowd','behind-captive-bred-fish','little-cups-big-potential','when-coral-spawns'}
 
+NS={'s':'http://www.sitemaps.org/schemas/sitemap/0.9'}
+def edition_pages():
+    pages=[OUT/'index.html'];n=2
+    while (OUT/'page'/str(n)/'index.html').is_file():
+        pages.append(OUT/'page'/str(n)/'index.html');n+=1
+    return pages
+
 class PracticalTests(unittest.TestCase):
     def test_six_new_complete_articles_and_balance(self):
         # Daily stories may be added; the pilot's twelve (six of each) stay as a minimum.
@@ -197,13 +204,15 @@ class PracticalTests(unittest.TestCase):
             self.assertTrue((OUT/'images'/og.rsplit('/',1)[1]).is_file())
             self.assertIn('<meta property="og:type" content="article">',html)
             self.assertNotIn('noindex',html)
-        html=(OUT/'index.html').read_text();data=blocks(html);self.assertEqual(len(data),1);d=data[0]
-        self.assertEqual(d['@type'],'CollectionPage')
-        items=d['mainEntity']['itemListElement']
-        self.assertEqual(d['mainEntity']['@type'],'ItemList')
-        self.assertEqual([i['url'] for i in items],[f'https://jez237.com/newsletter/stories/{s["slug"]}/' for s in STORIES])
-        self.assertEqual([i['position'] for i in items],list(range(1,len(STORIES)+1)))
-        self.assertIn('<meta name="twitter:card" content="summary_large_image">',html)
+        listed=[]
+        for n,f in enumerate(edition_pages(),1):
+            html=f.read_text();data=blocks(html);self.assertEqual(len(data),1);d=data[0]
+            self.assertEqual(d['@type'],'CollectionPage');self.assertEqual(d['mainEntity']['@type'],'ItemList')
+            self.assertEqual(d['url'],'https://jez237.com/newsletter/'+('' if n==1 else f'page/{n}/'))
+            listed+=d['mainEntity']['itemListElement']
+            self.assertIn('<meta name="twitter:card" content="summary_large_image">',html)
+        self.assertEqual([i['url'] for i in listed],[f'https://jez237.com/newsletter/stories/{s["slug"]}/' for s in STORIES])
+        self.assertEqual([i['position'] for i in listed],list(range(1,len(STORIES)+1)))
 
     def test_sitemap_lastmod_current(self):
         root=ET.parse(ROOT/'sitemap.xml').getroot();ns={'s':'http://www.sitemaps.org/schemas/sitemap/0.9'}
@@ -247,9 +256,43 @@ class PracticalTests(unittest.TestCase):
         home=(OUT/'index.html').read_text()
         for name in credited:
             self.assertTrue(name in uses or f'images/{name}' in home,name)
-        html=home.split('<template')[0]
-        cards=re.findall(r'<article class="story[^>]*>.*?<img src="\./images/([^"]+)"',html,re.S)
+        cards=[]
+        for f in edition_pages():
+            html=f.read_text();grid=html[html.index('<div id="story-grid"'):html.index('id="filter-pager"')]
+            cards+=re.findall(r'<article class="story[^>]*>.*?<img src="(?:\./|\.\./\.\./)images/([^"]+)"',grid,re.S)
         self.assertEqual(len(cards),len(STORIES));self.assertEqual(len(set(cards)),len(STORIES))
+
+    def test_pagination(self):
+        pages=edition_pages();per=10
+        self.assertEqual(len(pages),-(-len(STORIES)//per))
+        seen=[]
+        for n,f in enumerate(pages,1):
+            html=f.read_text()
+            grid=html[html.index('<div id="story-grid"'):html.index('id="filter-pager"')]
+            slugs=re.findall(r'<h3><a href="(?:\./|\.\./\.\./)stories/([a-z0-9-]+)/">',grid)
+            self.assertLessEqual(len(slugs),per,f)            # never more than 10 cards on a page
+            self.assertEqual(slugs,[s['slug'] for s in STORIES[(n-1)*per:n*per]],f)  # newest first
+            seen+=slugs
+            canon='https://jez237.com/newsletter/'+('' if n==1 else f'page/{n}/')
+            self.assertIn(f'<link rel="canonical" href="{canon}">',html)
+            if n>1:
+                self.assertIn(f'<title>Aquarium News, page {n}</title>',html)
+                self.assertNotIn('class="cover',html);self.assertNotIn('id="daily-check"',html)
+            # Every pagination link resolves to a generated page.
+            pager=re.search(r'id="static-pager".*?</nav>',html,re.S).group(0)
+            for href in re.findall(r'href="([^"]+)"',pager):
+                target=(f.parent/href/'index.html').resolve()
+                self.assertTrue(target.is_file(),(f,href))
+            # All stories reachable from any page for filters and the reader.
+            self.assertEqual(html.count('data-card-template='),len(STORIES))
+            self.assertEqual(html.count('data-reader-template='),len(STORIES))
+        self.assertEqual(sorted(seen),sorted(s['slug'] for s in STORIES))  # each story on exactly one page
+        self.assertEqual(len(seen),len(set(seen)))
+        home=(OUT/'index.html').read_text()
+        self.assertIn('class="cover',home);self.assertIn('id="daily-check"',home)
+        mods={u.find('s:loc',NS).text for u in ET.parse(ROOT/'sitemap.xml').getroot().findall('s:url',NS)}
+        for n in range(2,len(pages)+1):self.assertIn(f'https://jez237.com/newsletter/page/{n}/',mods)
+        self.assertFalse((OUT/'page'/str(len(pages)+1)).exists())
 
     def test_freshwater_balance(self):
         fresh=[s for s in STORIES if s['category']=='freshwater']

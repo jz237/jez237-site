@@ -2,45 +2,97 @@
   'use strict';
   const filters = [...document.querySelectorAll('[data-filter]')];
   const tagFilters = [...document.querySelectorAll('[data-tag-filter]')];
-  const stories = [...document.querySelectorAll('.story[data-category]')];
+  const grid = document.getElementById('story-grid');
   const count = document.getElementById('story-count');
+  const staticPager = document.getElementById('static-pager');
+  const filterPager = document.getElementById('filter-pager');
+  const section = document.getElementById('stories');
+  const PER_PAGE = Number(section?.dataset.perPage) || 10;
+  // Every page carries a card template for every story (newest first), so filters can
+  // reach stories that live on other static pages.
+  const cardTemplates = [...document.querySelectorAll('template[data-card-template]')];
+  const staticCards = grid ? [...grid.children] : [];
   const names = {all: 'All stories', freshwater: 'Freshwater', reef: 'Reef & ocean'};
   const tagNames = Object.fromEntries(tagFilters.map(button => [button.dataset.tagFilter, button.textContent.trim()]));
   let category = 'all';
   let tag = 'all';
-  // The aquarium-type and topic filters combine: a story shows only when it matches both.
+  let page = 1;
+  const matches = item => (category === 'all' || item.dataset.category === category) &&
+    (tag === 'all' || (item.dataset.tags || '').split(' ').includes(tag));
+  const filtering = () => category !== 'all' || tag !== 'all';
+  // Slugs in the current filter across all pages (used by the reader's Previous/Next).
+  function currentSlugs() {
+    return cardTemplates.filter(matches).map(t => t.dataset.cardTemplate);
+  }
+  let markLinks = () => {};
+  function pagerButton(label, target, attrs = '') {
+    return `<button type="button" data-page-target="${target}" ${attrs}>${label}</button>`;
+  }
   function apply(updateURL) {
     filters.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === category)));
     tagFilters.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.tagFilter === tag)));
-    stories.forEach(story => {
-      const tags = (story.dataset.tags || '').split(' ');
-      story.hidden = (category !== 'all' && story.dataset.category !== category) || (tag !== 'all' && !tags.includes(tag));
-    });
-    const shown = stories.filter(story => !story.hidden).length;
-    const label = tag === 'all' ? names[category] : `${category === 'all' ? '' : names[category] + ' · '}${tagNames[tag]}`;
-    count.textContent = `${label} · ${shown} ${shown === 1 ? 'story' : 'stories'} in this pilot edition`;
+    if (!grid) return;
+    if (!filtering()) {
+      // Unfiltered: the server-rendered page stays exactly as published.
+      if (grid.children.length !== staticCards.length || [...grid.children].some((c, i) => c !== staticCards[i])) grid.replaceChildren(...staticCards);
+      if (staticPager) staticPager.hidden = false;
+      if (filterPager) { filterPager.hidden = true; filterPager.replaceChildren(); }
+      count.textContent = count.dataset.staticCount || count.textContent;
+      page = 1;
+    } else {
+      const found = cardTemplates.filter(matches);
+      const pages = Math.max(1, Math.ceil(found.length / PER_PAGE));
+      page = Math.min(Math.max(1, page), pages);
+      const slice = found.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+      grid.replaceChildren(...slice.map(t => t.content.firstElementChild.cloneNode(true)));
+      markLinks(grid);
+      if (staticPager) staticPager.hidden = true;
+      if (filterPager) {
+        if (pages > 1) {
+          const nums = Array.from({length: pages}, (_, i) => `<li>${pagerButton(String(i + 1), i + 1, `aria-label="Page ${i + 1}"${i + 1 === page ? ' aria-current="page"' : ''}`)}</li>`).join('');
+          filterPager.innerHTML = (page > 1 ? pagerButton('← Newer', page - 1) : '<span class="pager-step" aria-disabled="true">← Newer</span>') +
+            `<ol>${nums}</ol>` + (page < pages ? pagerButton('Older →', page + 1) : '<span class="pager-step" aria-disabled="true">Older →</span>');
+          filterPager.hidden = false;
+        } else { filterPager.hidden = true; filterPager.replaceChildren(); }
+      }
+      const label = tag === 'all' ? names[category] : `${category === 'all' ? '' : names[category] + ' · '}${tagNames[tag]}`;
+      count.textContent = `${label} · ${found.length} ${found.length === 1 ? 'story' : 'stories'}` + (pages > 1 ? ` · page ${page} of ${pages}` : '');
+    }
     if (updateURL) {
       const url = new URL(window.location.href);
-      if (category === 'all') url.searchParams.delete('topic');
-      else url.searchParams.set('topic', category);
-      if (tag === 'all') url.searchParams.delete('tag');
-      else url.searchParams.set('tag', tag);
+      if (category === 'all') url.searchParams.delete('topic'); else url.searchParams.set('topic', category);
+      if (tag === 'all') url.searchParams.delete('tag'); else url.searchParams.set('tag', tag);
+      if (filtering() && page > 1) url.searchParams.set('p', String(page)); else url.searchParams.delete('p');
       history.replaceState(history.state, '', url);
     }
   }
   function select(value, updateURL = true) {
     category = Object.hasOwn(names, value) ? value : 'all';
+    page = 1;
     apply(updateURL);
   }
   function selectTag(value, updateURL = true) {
     tag = Object.hasOwn(tagNames, value) ? value : 'all';
+    page = 1;
     apply(updateURL);
   }
   filters.forEach(button => button.addEventListener('click', () => select(button.dataset.filter)));
   tagFilters.forEach(button => button.addEventListener('click', () => selectTag(button.dataset.tagFilter)));
+  filterPager?.addEventListener('click', event => {
+    const button = event.target.closest('[data-page-target]');
+    if (!button) return;
+    page = Number(button.dataset.pageTarget);
+    apply(true);
+    section?.scrollIntoView({block: 'start', behavior: 'instant'});
+  });
   document.querySelectorAll('[data-topic-link]').forEach(link => link.addEventListener('click', () => select(link.dataset.topicLink)));
-  tag = Object.hasOwn(tagNames, new URLSearchParams(location.search).get('tag')) ? new URLSearchParams(location.search).get('tag') : 'all';
-  select(new URLSearchParams(location.search).get('topic') || 'all', false);
+  {
+    const params = new URLSearchParams(location.search);
+    tag = Object.hasOwn(tagNames, params.get('tag')) ? params.get('tag') : 'all';
+    category = Object.hasOwn(names, params.get('topic')) ? params.get('topic') : 'all';
+    page = Number(params.get('p')) || 1;
+    apply(false);
+  }
 
   // Progressive enhancement: normal article links remain the no-JS/old-browser fallback.
   const dialog = document.getElementById('article-reader');
@@ -70,13 +122,13 @@
     const url = new URL(link.href, document.baseURI);
     return url.origin === location.origin ? paths.get(url.pathname) : null;
   }
-  const links = [...document.querySelectorAll('a[href]')];
-  links.forEach(link => {
+  markLinks = root => root.querySelectorAll('a[href]').forEach(link => {
     if (slugForLink(link)) {
       link.setAttribute('aria-haspopup', 'dialog');
       link.setAttribute('aria-controls', 'article-reader');
     }
   });
+  markLinks(document);
 
   function lockPage() {
     pageY = window.scrollY;
@@ -128,10 +180,10 @@
     if (!dialog.open) {
       trigger = source?.getAttribute('aria-hidden') === 'true'
         ? source.closest('.story')?.querySelector('h3 a') : source;
-      if (!trigger) trigger = links.find(link => slugForLink(link) === slug && link.tabIndex >= 0);
-      const visible = stories.filter(story => !story.hidden)
-        .map(story => slugForLink(story.querySelector('h3 a'))).filter(Boolean);
-      sequence = visible.includes(slug) ? visible : [...templates.keys()];
+      if (!trigger) trigger = [...document.querySelectorAll('a[href]')].find(link => slugForLink(link) === slug && link.tabIndex >= 0);
+      // Previous/Next walk every story in the current filter, across all pages.
+      const inFilter = currentSlugs();
+      sequence = inFilter.includes(slug) ? inFilter : [...templates.keys()];
       lockPage();
       render(slug);
       dialog.showModal();

@@ -62,6 +62,10 @@ It's supposed to be interesting news an aquarium hobbyist would like. These rule
 
 The tests enforce the formats, word ranges per format, the facts box, units, the sidebar limit, neighbouring formats and the freshwater balance.
 
+## Pagination (Jez, November 1, 2026, 22:02)
+
+Never more than 10 stories on a page. `/newsletter/` is page 1 (with the lead story and the checklist); older stories continue on `/newsletter/page/2/`, `/page/3/` and so on, newest first, linked by Newer / Older and page numbers. Filters work across every story and show matching stories 10 at a time. The builder generates the pages; the tests fail if a page has more than 10 cards or a story is missing or repeated.
+
 ## Humanizer scope (Jez, November 1, 2026)
 
 Apply the humanizer skill only to headings: titles, deks and section headings. Do not run it on article body text. Body copy is written and edited by hand.

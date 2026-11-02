@@ -33,9 +33,11 @@ try:
             assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
             if width in [390,1440]:
                 page.locator('#daily-check').screenshot(path=str(args.output/f'checklist-{width}.png'))
-            for s in stories:
+            for i,s in enumerate(stories):
                 if not s.get('diagram') and not s['image'].endswith('.svg'):continue
-                page.locator(f'.story h3 a[href="stories/{s["slug"]}/"]').click()
+                n=i//10+1
+                page.goto(base+'/newsletter/'+('' if n==1 else f'page/{n}/'),wait_until='networkidle')
+                page.locator(f'.story h3 a[href$="stories/{s["slug"]}/"]').click()
                 page.wait_for_function("document.querySelector('#article-reader').open")
                 diagram=page.locator('#reader-content img[src$=".svg"]')
                 diagram.scroll_into_view_if_needed()

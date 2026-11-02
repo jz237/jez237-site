@@ -117,7 +117,11 @@ CHECK="python3 $SITE/scripts/aquarium_daily_story_check.py"
    from the previous story, word range, facts box, units, tags, image licence record,
    showroom limits).
 8. **Build.** `cd $SITE/scripts && python3 build_aquarium_diagrams.py && python3 build_aquarium_journal.py`
-   (regenerates the index, story pages, credits, JSON-LD and the sitemap `lastmod`).
+   (regenerates the index, story pages, credits, JSON-LD and the sitemap `lastmod`). The builder
+   also re-flows the paginated edition automatically: at most 10 cards per page, newest first,
+   `/newsletter/` as page 1 and `/newsletter/page/2/`, `/page/3/`… after it, with self-canonicals,
+   sitemap entries, and stale page folders removed. Adding a story moves the oldest card on each
+   page to the next page; commit every changed `newsletter/page/*` file with the story.
 9. **Full test suite**, all must pass:
    ```bash
    cd $SITE/scripts

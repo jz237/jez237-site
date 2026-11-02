@@ -37,8 +37,12 @@ try:
             assert page.evaluate("getComputedStyle(document.body).position")!='fixed'
         page.goto(base+'/newsletter/',wait_until='networkidle');page.evaluate('document.fonts.ready')
         assert page.locator('dialog[open]').count()==0
+        PER=10
         for i,story in enumerate(stories):
-            link=page.locator('.story h3 a').nth(i)
+            if i%PER==0:
+                n=i//PER+1
+                page.goto(base+'/newsletter/'+('' if n==1 else f'page/{n}/'),wait_until='networkidle');page.evaluate('document.fonts.ready')
+            link=page.locator('.story h3 a').nth(i%PER)
             link.evaluate("e=>e.scrollIntoView({block:'center',behavior:'instant'})");page.wait_for_timeout(100)
             y=page.evaluate('scrollY');url=page.url
             link.click();wait_open()
@@ -70,6 +74,7 @@ try:
             assert abs(page.evaluate('scrollY')-y)<=2,(i,y,page.evaluate('scrollY'))
             assert link.evaluate('(e)=>document.activeElement===e')
         results['checks'].append('all complete article bodies match their editorial blocks; quiet endnotes and on-page citations work; close restores exact scroll/focus')
+        page.goto(base+'/newsletter/',wait_until='networkidle')
         # First hero link and final feature link use the same reader.
         page.locator('.cover .button-link').click();wait_open()
         assert page.locator('#reader-title').inner_text()==stories[0]['title']
@@ -98,7 +103,8 @@ try:
         results['checks'].append('browser Back closes and Forward restores the reader on the same URL')
         # Pagination follows the active filter, not hidden stories.
         page.get_by_role('button',name='Freshwater',exact=True).click()
-        titles=page.locator('.story:visible h3 a').all_text_contents()
+        # Previous/Next walk every freshwater story, across all pages.
+        titles=[s['title'] for s in stories if s['category']=='freshwater']
         page.locator('.story:visible h3 a').first.click();wait_open()
         assert page.locator('#reader-position').inner_text()==f'1 of {len(titles)}'
         assert page.locator('#reader-previous').is_disabled()
@@ -113,7 +119,7 @@ try:
         page.locator('#reader-previous').click()
         assert page.locator('#reader-title').inner_text()==titles[-2]
         page.locator('#reader-close').click();wait_closed()
-        assert page.locator('.story:visible').count()==len(titles) and 'topic=freshwater' in page.url
+        assert page.locator('.story:visible').count()==min(PER,len(titles)) and 'topic=freshwater' in page.url
         results['checks'].append('previous/next constrained to visible category, pagination boundaries and per-story scroll reset')
         page.get_by_role('button',name='All stories',exact=True).click()
         page.locator('.story h3 a').nth(1).click();wait_open()
