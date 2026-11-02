@@ -5,6 +5,46 @@ from math import ceil
 import re
 from urllib.parse import urlparse
 
+# Topic tags (allow several per story) and their URL-safe filter keys.
+TAGS = {'Plants': 'plants', 'Fish': 'fish', 'Coral': 'coral', 'Equipment': 'equipment', 'Water care': 'water-care'}
+# 3D showroom pages a story may point to occasionally (verified on thehiddenreef.net).
+SHOWROOMS = {'drum-filter', 'fluidized-sand', 'protein-skimmer', 'biowheel', 'uv-sterilizer', 'betta-bowl'}
+SHOWROOM_BASE = 'https://thehiddenreef.net'
+SITE = 'https://jez237.com/newsletter/'
+
+
+def story_url(story):
+    return f'{SITE}stories/{story["slug"]}/'
+
+
+def tag_keys(story):
+    return [TAGS[t] for t in story['tags']]
+
+
+def tags_markup(story, tag='ul'):
+    """Plain labels; the homepage filter enhances them only with JavaScript."""
+    items = ''.join(f'<li>{e(t)}</li>' for t in story['tags'])
+    return f'<ul class="story-tags" aria-label="Topics">{items}</ul>'
+
+
+def share_markup(story):
+    """Copy-link button (shown only when the Clipboard API exists) plus a visible URL fallback."""
+    url = story_url(story)
+    shown = url.removeprefix('https://')
+    return (f'<div class="share-line" data-share-url="{e(url, quote=True)}">'
+            f'<button type="button" class="copy-link" data-copy-link="{e(url, quote=True)}">Copy link</button>'
+            f'<span class="share-status" role="status" aria-live="polite"></span>'
+            f'<span class="share-fallback">Link: <a class="share-url" href="{e(url, quote=True)}">{e(shown)}</a></span></div>')
+
+
+def showroom_markup(story, base=SHOWROOM_BASE):
+    room = story.get('showroom')
+    if not room:
+        return ''
+    href = base.rstrip('/') + room['path']
+    note = f', {e(room["note"])}' if room.get('note') else ''
+    return f'<p class="showroom-line">See it in 3D: <a href="{e(href, quote=True)}">{e(room["title"])}</a>{note}.</p>'
+
 
 def word_count(story):
     text = []
@@ -42,6 +82,16 @@ def validate(story):
     assert re.fullmatch(r'[a-z0-9-]+', story['slug'])
     assert re.fullmatch(r'\d{4}-\d{2}-\d{2}', story['published']), story['slug']
     date.fromisoformat(story['published'])
+    if 'modified' in story:
+        assert date.fromisoformat(story['modified']) >= date.fromisoformat(story['published']), story['slug']
+    tags = story.get('tags')
+    assert isinstance(tags, list) and tags and len(tags) == len(set(tags)), story['slug']
+    assert all(t in TAGS for t in tags), (story['slug'], tags)
+    if 'showroom' in story:
+        room = story['showroom']
+        assert set(room) <= {'path', 'title', 'note'} and room['title'], story['slug']
+        m = re.fullmatch(r'/showroom/([a-z0-9-]+)/', room['path'])
+        assert m and m.group(1) in SHOWROOMS, (story['slug'], room['path'])
     references = story['references']
     ids = [ref['id'] for ref in references]
     assert references and len(ids) == len(set(ids)), story['slug']
@@ -62,7 +112,7 @@ def validate(story):
             assert block['title']
 
 
-def render(story, *, reader=False):
+def render(story, *, reader=False, showroom_base=SHOWROOM_BASE):
     """References stay on-page; publisher links live in collapsed endnotes."""
     validate(story)
     prefix = ('reader-' if reader else 'article-') + story['slug']
@@ -96,7 +146,7 @@ def render(story, *, reader=False):
             tag = 'ol' if block.get('ordered', False) else 'ul'
             items = [f'<li>{e(item)}{cite if i == len(block["items"]) - 1 else ""}</li>' for i, item in enumerate(block['items'])]
             parts.append(f'<{tag} class="editorial-list" {attrs}>' + ''.join(items) + f'</{tag}>')
-    body = '<div class="editorial-content">' + ''.join(parts) + '</div>'
+    body = '<div class="editorial-content">' + ''.join(parts) + '</div>' + showroom_markup(story, showroom_base)
     disclosure = '' if reader else ' open'
     notes = [f'<details class="editorial-sources" id="{prefix}-sources"{disclosure}><summary>Sources &amp; editorial notes <span>{len(references)} references</span></summary><ol>']
     for ref in references:

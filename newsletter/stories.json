@@ -4,6 +4,10 @@
     "category": "freshwater",
     "label": "Freshwater",
     "kind": "Practical guide",
+    "tags": [
+      "Plants",
+      "Equipment"
+    ],
     "date": "Evergreen guide · no publication date shown",
     "published": "2026-11-01",
     "title": "Match aquarium lighting to your plants’ needs",
@@ -123,6 +127,9 @@
     "category": "reef",
     "label": "Reef & ocean",
     "kind": "Practical guide",
+    "tags": [
+      "Water care"
+    ],
     "date": "Evergreen guide",
     "published": "2026-11-01",
     "title": "Replace evaporation with freshwater, not saltwater",
@@ -218,6 +225,10 @@
     "category": "freshwater",
     "label": "Freshwater",
     "kind": "Practical guide",
+    "tags": [
+      "Equipment",
+      "Water care"
+    ],
     "date": "Evergreen guide",
     "published": "2026-11-01",
     "title": "Clean filter media according to its job",
@@ -302,13 +313,22 @@
       }
     ],
     "archive": false,
-    "diagram": "filter-media.svg"
+    "diagram": "filter-media.svg",
+    "showroom": {
+      "path": "/showroom/biowheel/",
+      "title": "Inside a Bio-Wheel Filter",
+      "note": "a 3D look at a filter’s biological stage"
+    }
   },
   {
     "slug": "match-coral-placement-to-local-flow",
     "category": "reef",
     "label": "Reef & ocean",
     "kind": "Practical guide",
+    "tags": [
+      "Coral",
+      "Equipment"
+    ],
     "date": "Evergreen guide",
     "published": "2026-11-01",
     "title": "Match coral placement to the coral, not one turnover target",
@@ -396,6 +416,9 @@
     "category": "freshwater",
     "label": "Freshwater",
     "kind": "Practical guide",
+    "tags": [
+      "Plants"
+    ],
     "date": "Evergreen guide · no publication date shown",
     "published": "2026-11-01",
     "title": "Rinse and divide tissue-culture plants before planting",
@@ -515,6 +538,9 @@
     "category": "reef",
     "label": "Reef & ocean",
     "kind": "Practical guide",
+    "tags": [
+      "Fish"
+    ],
     "date": "Evergreen guide",
     "published": "2026-11-01",
     "title": "Choose marine fish for adult size and compatible tankmates",
@@ -603,6 +629,9 @@
     "category": "freshwater",
     "label": "Freshwater",
     "kind": "Practical guide",
+    "tags": [
+      "Water care"
+    ],
     "date": "Evergreen guide",
     "published": "2026-11-01",
     "title": "Record aquarium test results with units and context",
@@ -697,6 +726,9 @@
     "category": "reef",
     "label": "Reef & ocean",
     "kind": "Research",
+    "tags": [
+      "Fish"
+    ],
     "date": "February 25, 2025",
     "published": "2026-11-01",
     "title": "Breeding marine fish requires the right live food for their larvae",
@@ -796,6 +828,9 @@
     "category": "freshwater",
     "label": "Freshwater",
     "kind": "Practical guide",
+    "tags": [
+      "Plants"
+    ],
     "date": "Evergreen guide",
     "published": "2026-11-01",
     "title": "Trim stem plants above leaves and replant healthy shoots",
@@ -886,6 +921,9 @@
     "category": "reef",
     "label": "Reef & ocean",
     "kind": "Conservation news",
+    "tags": [
+      "Coral"
+    ],
     "date": "August 20, 2026",
     "published": "2026-11-01",
     "title": "About 1,000 corals moved to a backup nursery in Florida",
@@ -958,6 +996,9 @@
     "category": "freshwater",
     "label": "Freshwater",
     "kind": "Research",
+    "tags": [
+      "Fish"
+    ],
     "date": "September 2, 2026",
     "published": "2026-11-01",
     "title": "Stickleback pairs in murky water approached food faster when coordinated",
@@ -1032,6 +1073,9 @@
     "category": "reef",
     "label": "Reef & ocean",
     "kind": "Research",
+    "tags": [
+      "Coral"
+    ],
     "date": "July 21, 2025",
     "published": "2026-11-01",
     "title": "Coral breeding mixes genes; fragmentation produces clones",

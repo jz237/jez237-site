@@ -20,3 +20,25 @@
     if (id && reveal(id)) event.preventDefault();
   });
 })();
+(() => {
+  'use strict';
+  // Copy link: the button is shown only where the Clipboard API exists; otherwise
+  // (and on any failure) the plain visible URL stays available. No third-party widgets.
+  const root = document.documentElement;
+  if (window.isSecureContext && navigator.clipboard && typeof navigator.clipboard.writeText === 'function') root.classList.add('can-copy-link');
+  document.addEventListener('click', async event => {
+    const button = event.target.closest('[data-copy-link]');
+    if (!button) return;
+    const line = button.closest('.share-line');
+    const status = line?.querySelector('.share-status');
+    try {
+      await navigator.clipboard.writeText(button.dataset.copyLink);
+      line?.classList.remove('share-failed');
+      if (status) status.textContent = 'Link copied';
+      setTimeout(() => { if (status) status.textContent = ''; }, 2500);
+    } catch {
+      line?.classList.add('share-failed');
+      if (status) status.textContent = 'Copy unavailable. Use the link below.';
+    }
+  });
+})();

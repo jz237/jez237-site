@@ -5,7 +5,9 @@ from collections import Counter, defaultdict
 import json
 import unittest
 import xml.etree.ElementTree as ET
-from aquarium_editorial import word_count, background_date, plain_date, related_stories
+from aquarium_editorial import word_count, background_date, plain_date, related_stories, TAGS, tags_markup, showroom_markup, validate
+from copy import deepcopy
+import re
 from aquarium_home import checklist_markup
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -13,14 +15,23 @@ OUT=ROOT/'newsletter'
 STORIES=json.loads((OUT/'stories.json').read_text())
 CHECK=json.loads((OUT/'checklist.json').read_text())
 DRAWINGS=json.loads((OUT/'illustrations.json').read_text())
+EXPANSION={'clean-filter-media-without-replacing-the-biofilter','read-and-record-aquarium-water-tests','trim-stem-plants-and-replant-cuttings','top-off-with-freshwater-change-with-saltwater','match-coral-placement-to-local-flow','choose-marine-fish-for-adult-life'}
 ORIGINAL={'a-new-home-for-coral','a-greener-kind-of-aquarium','how-fish-find-their-crowd','behind-captive-bred-fish','little-cups-big-potential','when-coral-spawns'}
 
 class PracticalTests(unittest.TestCase):
     def test_six_new_complete_articles_and_balance(self):
-        self.assertEqual(len(STORIES),12)
-        self.assertEqual(Counter(s['category'] for s in STORIES),{'freshwater':6,'reef':6})
-        new=[s for s in STORIES if s['slug'] not in ORIGINAL]
+        # Daily stories may be added; the pilot's twelve (six of each) stay as a minimum.
+        self.assertGreaterEqual(len(STORIES),12)
+        counts=Counter(s['category'] for s in STORIES)
+        self.assertEqual(set(counts),{'freshwater','reef'})
+        self.assertTrue(counts['freshwater']>=6 and counts['reef']>=6,counts)
+        slugs={s['slug'] for s in STORIES}
+        self.assertTrue(ORIGINAL<=slugs and EXPANSION<=slugs)
+        new=[s for s in STORIES if s['slug'] in EXPANSION]
         self.assertEqual(len(new),6)
+        for s in STORIES:
+            self.assertNotIn('?',s['title'])
+            self.assertNotIn('verification_notes',s)
         for s in new:
             self.assertGreaterEqual(word_count(s),250)
             self.assertGreaterEqual(len(s['references']),3)
@@ -30,7 +41,8 @@ class PracticalTests(unittest.TestCase):
 
     def test_practical_lead_and_simple_labels(self):
         self.assertEqual(STORIES[0]['kind'],'Practical guide')
-        self.assertEqual({s['kind'] for s in STORIES},{'Practical guide','Research','Conservation news'})
+        self.assertLessEqual({s['kind'] for s in STORIES},{'Practical guide','Research','Conservation news','Species feature'})
+        self.assertLessEqual({'Practical guide','Research','Conservation news'},{s['kind'] for s in STORIES})
         html=(OUT/'index.html').read_text()
         self.assertIn(f'href="stories/{STORIES[0]["slug"]}/">Read the practical guide',html)
         self.assertIn('Earlier research',html)
@@ -64,14 +76,14 @@ class PracticalTests(unittest.TestCase):
     def test_tissue_culture_image_and_original_diagrams(self):
         tissue=next(s for s in STORIES if s['slug']=='little-cups-big-potential')
         self.assertEqual(tissue['image'],'tissue-culture-steps.svg')
-        self.assertEqual(len(DRAWINGS),3)
+        self.assertGreaterEqual(len(DRAWINGS),3)
         for d in DRAWINGS:
             svg=ET.parse(OUT/'images'/d['filename']).getroot()
             self.assertEqual(svg.attrib['viewBox'],f'0 0 {d["width"]} {d["height"]}')
             self.assertTrue(d['alt'])
             self.assertIsNotNone(svg.find('{http://www.w3.org/2000/svg}title'))
             self.assertNotIn('<script',(OUT/'images'/d['filename']).read_text())
-        self.assertEqual(sum(bool(s.get('diagram')) for s in STORIES),2)
+        self.assertGreaterEqual(sum(bool(s.get('diagram')) for s in STORIES),2)
         credits=(OUT/'credits.html').read_text()
         self.assertIn('not photographs',credits)
         self.assertIn('AI-assisted diagrams',credits)
@@ -104,6 +116,98 @@ class PracticalTests(unittest.TestCase):
             for rid in item['refs']:
                 budgets[refs[rid]]+=word_count({'blocks':[{'type':'p','text':item['text']}]})
         self.assertTrue(all(n<=200 for n in budgets.values()),dict(budgets))
+
+    def test_topic_tags(self):
+        for s in STORIES:
+            self.assertTrue(s['tags'] and len(s['tags'])==len(set(s['tags'])),s['slug'])
+            self.assertLessEqual(set(s['tags']),set(TAGS),s['slug'])
+        used=Counter(t for s in STORIES for t in s['tags'])
+        self.assertEqual(set(used),set(TAGS),used)  # every topic has at least one story
+        self.assertGreater(sum(len(s['tags'])>1 for s in STORIES),0)
+        bad=deepcopy(STORIES[0]);bad['tags']=['Snails']
+        with self.assertRaises(AssertionError):validate(bad)
+        bad=deepcopy(STORIES[0]);bad['tags']=[]
+        with self.assertRaises(AssertionError):validate(bad)
+        html=(OUT/'index.html').read_text()
+        for name,key in TAGS.items():
+            self.assertIn(f'data-tag-filter="{key}"',html)
+        for s in STORIES:
+            self.assertIn(f'data-tags="{" ".join(TAGS[t] for t in s["tags"])}"',html)
+            page=(OUT/'stories'/s['slug']/'index.html').read_text()
+            self.assertIn(tags_markup(s),page)
+
+    def test_showroom_links_are_occasional_quiet_lines(self):
+        rooms=[s for s in STORIES if s.get('showroom')]
+        self.assertGreaterEqual(len(rooms),1)
+        self.assertLessEqual(len(rooms),max(3,len(STORIES)//4))  # occasional, never most stories
+        for s in rooms:
+            line=showroom_markup(s)
+            self.assertTrue(line.startswith('<p class="showroom-line">') and line.count('<a ')==1)
+            self.assertIn('href="https://thehiddenreef.net/showroom/',line)
+            page=(OUT/'stories'/s['slug']/'index.html').read_text()
+            self.assertIn(line,page)
+            self.assertIn(line,(OUT/'index.html').read_text())
+        bad=deepcopy(rooms[0]);bad['showroom']['path']='/showroom/not-a-room/'
+        with self.assertRaises(AssertionError):validate(bad)
+        bad=deepcopy(rooms[0]);bad['showroom']['path']='https://example.com/showroom/biowheel/'
+        with self.assertRaises(AssertionError):validate(bad)
+        for s in STORIES:
+            if not s.get('showroom'):
+                self.assertNotIn('showroom-line',(OUT/'stories'/s['slug']/'index.html').read_text())
+
+    def test_share_link_markup(self):
+        for s in STORIES:
+            page=(OUT/'stories'/s['slug']/'index.html').read_text()
+            url=f'https://jez237.com/newsletter/stories/{s["slug"]}/'
+            self.assertEqual(page.count(f'data-copy-link="{url}"'),1)
+            self.assertIn(f'<a class="share-url" href="{url}">',page)
+        html=(OUT/'index.html').read_text()
+        self.assertEqual(html.count('data-copy-link='),len(STORIES))
+        for bad in ['addthis','sharethis','facebook.com/sharer','twitter.com/intent','platform.twitter','connect.facebook']:
+            self.assertNotIn(bad,html.lower())
+
+    def test_structured_data_and_social_tags(self):
+        def blocks(html):
+            found=re.findall(r'<script type="application/ld\+json">(.*?)</script>',html,re.S)
+            return [json.loads(b) for b in found]
+        for s in STORIES:
+            html=(OUT/'stories'/s['slug']/'index.html').read_text()
+            data=blocks(html);self.assertEqual(len(data),1,s['slug']);d=data[0]
+            url=f'https://jez237.com/newsletter/stories/{s["slug"]}/'
+            self.assertEqual(d['@context'],'https://schema.org')
+            self.assertIn(d['@type'],{'Article','NewsArticle'})
+            self.assertEqual(d['headline'],s['title']);self.assertLessEqual(len(d['headline']),110)
+            self.assertEqual(d['datePublished'],s['published'])
+            self.assertEqual(d['dateModified'],s.get('modified',s['published']))
+            self.assertEqual(d['url'],url)
+            self.assertTrue(d['image'] and all(i.startswith('https://jez237.com/newsletter/images/') for i in d['image']))
+            for i in d['image']:
+                self.assertTrue((OUT/'images'/i.rsplit('/',1)[1]).is_file())
+            self.assertEqual(d['author']['name'],'Jez237')
+            self.assertEqual(d['publisher']['@type'],'Organization');self.assertEqual(d['publisher']['name'],'Jez237')
+            self.assertTrue(d['publisher']['logo']['url'].startswith('https://'))
+            self.assertIn(f'<link rel="canonical" href="{url}">',html)
+            self.assertIn('<meta name="twitter:card" content="summary_large_image">',html)
+            og=re.search(r'<meta property="og:image" content="([^"]+)">',html).group(1)
+            self.assertTrue(og.startswith('https://jez237.com/newsletter/images/') and not og.endswith('.svg'))
+            self.assertTrue((OUT/'images'/og.rsplit('/',1)[1]).is_file())
+            self.assertIn('<meta property="og:type" content="article">',html)
+            self.assertNotIn('noindex',html)
+        html=(OUT/'index.html').read_text();data=blocks(html);self.assertEqual(len(data),1);d=data[0]
+        self.assertEqual(d['@type'],'CollectionPage')
+        items=d['mainEntity']['itemListElement']
+        self.assertEqual(d['mainEntity']['@type'],'ItemList')
+        self.assertEqual([i['url'] for i in items],[f'https://jez237.com/newsletter/stories/{s["slug"]}/' for s in STORIES])
+        self.assertEqual([i['position'] for i in items],list(range(1,len(STORIES)+1)))
+        self.assertIn('<meta name="twitter:card" content="summary_large_image">',html)
+
+    def test_sitemap_lastmod_current(self):
+        root=ET.parse(ROOT/'sitemap.xml').getroot();ns={'s':'http://www.sitemaps.org/schemas/sitemap/0.9'}
+        mods={u.find('s:loc',ns).text:u.find('s:lastmod',ns).text for u in root.findall('s:url',ns)}
+        newest=max(s.get('modified',s['published']) for s in STORIES)
+        self.assertEqual(mods['https://jez237.com/newsletter/'],newest)
+        for s in STORIES:
+            self.assertEqual(mods[f'https://jez237.com/newsletter/stories/{s["slug"]}/'],s.get('modified',s['published']))
 
 if __name__=='__main__':
     unittest.main(verbosity=2)

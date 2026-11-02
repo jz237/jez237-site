@@ -20,7 +20,9 @@ Use simple visible categories: Practical guide, Research, Conservation news. Kee
 
 ## Implementation status
 
-The cadence above is an editorial guideline. No recurring research or automatic publication job is enabled by this file. Recurring publication should only be activated after the expanded preview has been verified and its operational workflow authorized. Any later automation must use the full-site guarded deploy contract in AGENTS.md, serialize releases, retain all existing site assets, and verify the live page after publishing.
+Jez turned on the automatic daily story on November 1, 2026 (19:43 EST): one run a day at 10:00 America/New_York, at most one story, or nothing on a quiet day. The exact run procedure, stop conditions and failure handling are in `DAILY_STORY.md`; the gates are scripted in `../scripts/aquarium_daily_story_check.py`. Releases use the full-site guarded deploy contract in AGENTS.md, retain all existing site assets and are verified live. The Hidden Reef Lab copy is not part of the daily job.
+
+Each story carries topic tags (Plants, Fish, Coral, Equipment, Water care; one or more), a Copy link control and, rarely, one quiet "See it in 3D" line to a directly relevant Hidden Reef showroom page. There are few 3D exhibits; most stories have none.
 
 ## Source files and verification
 

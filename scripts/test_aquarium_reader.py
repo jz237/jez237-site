@@ -59,6 +59,10 @@ try:
             assert page.evaluate("document.activeElement.matches('.editorial-sources li')")
             notes.locator('summary').click()
             assert not notes.evaluate('(e)=>e.open')
+            share=page.locator('#reader-content [data-copy-link]')
+            assert share.count()==1 and share.get_attribute('data-copy-link')=='https://jez237.com/newsletter/stories/'+story['slug']+'/'
+            assert page.locator('#reader-content .reader-heading .story-tags li').all_inner_texts()==story['tags']
+            assert page.locator('#reader-content .showroom-line').count()==(1 if story.get('showroom') else 0)
             # Cloudflare may inject a hidden challenge frame outside the reader.
             assert page.locator('#article-reader iframe').count()==0
             assert page.evaluate("getComputedStyle(document.body).position")=='fixed'
@@ -77,6 +81,15 @@ try:
         assert page.locator('#reader-title').inner_text()==next(s['title'] for s in stories if s['slug']=='a-new-home-for-coral')
         page.locator('#reader-close').click();wait_closed()
         results['checks'].append('practical hero and conservation feature links; native modal keyboard containment and Escape')
+        # Copy link inside the dialog copies the standalone URL and leaves the reader open.
+        page.context.grant_permissions(['clipboard-read','clipboard-write'],origin=base)
+        page.locator('.story h3 a').nth(2).click();wait_open();url=page.url
+        page.locator('#reader-content .copy-link').click()
+        page.wait_for_function("document.querySelector('#reader-content .share-status').textContent==='Link copied'")
+        assert page.evaluate('navigator.clipboard.readText()')=='https://jez237.com/newsletter/stories/'+stories[2]['slug']+'/'
+        assert page.locator('#article-reader').evaluate('(e)=>e.open') and page.url==url
+        page.locator('#reader-close').click();wait_closed()
+        results['checks'].append('copy link in the dialog copies the standalone URL without closing the reader')
         # Browser back closes the reader; forward reopens it without a page navigation.
         page.locator('.story h3 a').first.click();wait_open();url=page.url
         page.go_back();wait_closed();assert page.url==url

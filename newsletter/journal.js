@@ -1,24 +1,45 @@
 (() => {
   'use strict';
   const filters = [...document.querySelectorAll('[data-filter]')];
+  const tagFilters = [...document.querySelectorAll('[data-tag-filter]')];
   const stories = [...document.querySelectorAll('.story[data-category]')];
   const count = document.getElementById('story-count');
   const names = {all: 'All stories', freshwater: 'Freshwater', reef: 'Reef & ocean'};
-  function select(category, updateURL = true) {
-    if (!Object.hasOwn(names, category)) category = 'all';
+  const tagNames = Object.fromEntries(tagFilters.map(button => [button.dataset.tagFilter, button.textContent.trim()]));
+  let category = 'all';
+  let tag = 'all';
+  // The aquarium-type and topic filters combine: a story shows only when it matches both.
+  function apply(updateURL) {
     filters.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.filter === category)));
-    stories.forEach(story => { story.hidden = category !== 'all' && story.dataset.category !== category; });
+    tagFilters.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.tagFilter === tag)));
+    stories.forEach(story => {
+      const tags = (story.dataset.tags || '').split(' ');
+      story.hidden = (category !== 'all' && story.dataset.category !== category) || (tag !== 'all' && !tags.includes(tag));
+    });
     const shown = stories.filter(story => !story.hidden).length;
-    count.textContent = `${names[category]} · ${shown} ${shown === 1 ? 'story' : 'stories'} in this pilot edition`;
+    const label = tag === 'all' ? names[category] : `${category === 'all' ? '' : names[category] + ' · '}${tagNames[tag]}`;
+    count.textContent = `${label} · ${shown} ${shown === 1 ? 'story' : 'stories'} in this pilot edition`;
     if (updateURL) {
       const url = new URL(window.location.href);
       if (category === 'all') url.searchParams.delete('topic');
       else url.searchParams.set('topic', category);
-      history.replaceState(null, '', url);
+      if (tag === 'all') url.searchParams.delete('tag');
+      else url.searchParams.set('tag', tag);
+      history.replaceState(history.state, '', url);
     }
   }
+  function select(value, updateURL = true) {
+    category = Object.hasOwn(names, value) ? value : 'all';
+    apply(updateURL);
+  }
+  function selectTag(value, updateURL = true) {
+    tag = Object.hasOwn(tagNames, value) ? value : 'all';
+    apply(updateURL);
+  }
   filters.forEach(button => button.addEventListener('click', () => select(button.dataset.filter)));
+  tagFilters.forEach(button => button.addEventListener('click', () => selectTag(button.dataset.tagFilter)));
   document.querySelectorAll('[data-topic-link]').forEach(link => link.addEventListener('click', () => select(link.dataset.topicLink)));
+  tag = Object.hasOwn(tagNames, new URLSearchParams(location.search).get('tag')) ? new URLSearchParams(location.search).get('tag') : 'all';
   select(new URLSearchParams(location.search).get('topic') || 'all', false);
 
   // Progressive enhancement: normal article links remain the no-JS/old-browser fallback.
