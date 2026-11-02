@@ -2,10 +2,10 @@
 // drag curve with a fuse or tail, and break at the apex; the break builds its
 // star records, smoke, light and sound events. Everything is placed at its
 // scheduled show time, so late frames and seeking still land things exactly.
-import { StarBatch, K_FLASH, K_FUSE, K_GERB, K_CRACKLE, T_GOLD, T_SILVER, T_GLITTER, T_COLOR, T_FALL } from './particles.js?v=6';
-import { SHELLS, colorOf } from './shells.js?v=6';
-import { starPos, starVel, aimShell, rng } from './physics.js?v=6';
-import { SITE } from './site.js?v=6';
+import { StarBatch, K_FLASH, K_FUSE, K_GERB, K_CRACKLE, T_GOLD, T_SILVER, T_GLITTER, T_COLOR, T_FALL } from './particles.js?v=7';
+import { SHELLS, colorOf } from './shells.js?v=7';
+import { starPos, starVel, aimShell, rng } from './physics.js?v=7';
+import { SITE } from './site.js?v=7';
 
 const SHELL_C = 0.0032, SHELL_KG = 0.07;
 // Workshop modifiers; every value is clamped again here so no setting can
@@ -181,7 +181,7 @@ export class Fireworks {
 
     // sound
     if (info.sound === 'salute') this.audio.event('salute', t, pos, { size: inches });
-    else this.audio.event('boom', t, pos, { size: inches, type });
+    else if (info.sound !== 'quiet') this.audio.event('boom', t, pos, { size: inches, type });
     if (info.pops.length) this.audio.pops(info.pops, pos, inches);
     if (this.onBreak && depth === 0) this.onBreak(info);
     return info;

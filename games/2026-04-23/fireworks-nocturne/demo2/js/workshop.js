@@ -3,9 +3,9 @@
 // break height is kept where that calibre can actually get to with its stars
 // clear of the water, so nothing can be set up to look wrong.
 import * as THREE from 'three';
-import { SITE } from './site.js?v=6';
-import { SHELL_NAMES } from './shells.js?v=6';
-import { aimShell } from './physics.js?v=6';
+import { SITE } from './site.js?v=7';
+import { SHELL_NAMES, RARE } from './shells.js?v=7';
+import { aimShell } from './physics.js?v=7';
 
 const SWATCH = {
   red: '#ff3b2b', orange: '#ff8a22', yellow: '#ffd23f', lemon: '#e0ff5c', green: '#56ff4a', aqua: '#2ee8d8',
@@ -43,7 +43,6 @@ const TYPES = {
   salute: { colours: null, tails: true, fly: fly(10, 0.25, 0.85, () => 0.5, 0.3) },
   multibreak: { colours: ALL, second: ['Satellites', ALL, false], tails: false, fly: fly(5, 1.5, 0.85, () => 3.4) },
   heart: { colours: ALL, tails: false, fly: fly(4.5, 1, 0.85, () => 2.2) },
-  smiley: { colours: ALL, tails: false, fly: fly(4.5, 1, 0.85, () => 2.2) },
   starshape: { colours: ALL, tails: false, fly: fly(4.5, 1, 0.85, () => 2.2) },
   butterfly: { colours: ALL, second: ['Body', ALL, false], tails: false, fly: fly(4.5, 1, 0.85, () => 2.2) },
   flower: { colours: ALL, second: ['Centre', ALL, false], tails: false, fly: fly(4.5, 1, 0.85, () => 2.2) },
@@ -58,11 +57,15 @@ const TYPES = {
   diadem: { colours: null, second: ['Pistil (centre)', ALL, false], tails: true, fly: fly(4.2, 1, 1.05, (i) => 3.8 + i * 0.1, 3.8) },
   glittertips: { colours: ALL, tails: true, fly: fly(5, 1, 0.85, (i) => 2.2 + i * 0.08, 1.6) },
   snowfall: { colours: ['white', ...ALL.filter(c => c !== 'white')], tails: true, fly: fly(2.6, 0.7, 2.0, () => 5.4, 3.4) },
+  senrin: { colours: ALL, second: ['Second colour', ALL, true], tails: true, fly: fly(4, 1.08, 0.85, () => 3.0, 0.6) },
+  yonjushin: { colours: ALL, tails: false, fly: fly(5, 1.06, 0.85, (i) => 2.4 + i * 0.08) },
+  galaxy: { colours: null, tails: false, fly: fly(4.5, 1, 0.85, () => 3.6) },
+  cascade: { colours: ['gold', ...ALL], tails: true, fly: fly(3, 1.1, 0.9, () => 2.4, 0.8) },
   fan: { colours: ['gold', 'silver', ...ALL.filter(c => c !== 'silver')], tails: true, ground: true, label: 'Comet fan' },
   mine: { colours: ['gold', ...ALL], tails: true, ground: true, label: 'Mine' },
   waterfall: { colours: ['silver', 'gold'], tails: false, ground: true, label: 'Waterfall' },
 };
-const SHELL_ORDER = ['peony', 'chrysanthemum', 'pistil', 'dahlia', 'ghost', 'confetti', 'glittertips', 'willow', 'kamuro', 'diadem', 'brocade', 'palm', 'horsetail', 'leaves', 'snowfall', 'ring', 'saturn', 'crossette', 'strobe', 'crackle', 'glitter', 'spider', 'salute', 'multibreak', 'heart', 'smiley', 'starshape', 'butterfly', 'flower', 'spiral', 'clover', 'crescent', 'rings', 'cube'];
+const SHELL_ORDER = ['peony', 'chrysanthemum', 'pistil', 'dahlia', 'ghost', 'confetti', 'glittertips', 'willow', 'kamuro', 'diadem', 'brocade', 'palm', 'horsetail', 'leaves', 'snowfall', 'ring', 'saturn', 'crossette', 'strobe', 'crackle', 'glitter', 'spider', 'salute', 'multibreak', 'heart', 'starshape', 'butterfly', 'flower', 'spiral', 'clover', 'crescent', 'rings', 'cube'];
 const RISES = [['tail', 'Gold tail'], ['silver', 'Silver tail'], ['glitter', 'Glitter'], ['whistle', 'Whistle'], ['none', 'Dark']];
 
 export const DEFAULTS = Object.freeze({
@@ -268,6 +271,10 @@ export class Workshop {
     this.typeBox = el('div', 'chips');
     SHELL_ORDER.forEach(id => this.typeBox.append(this.chip(id, SHELL_NAMES[id])));
     body.append(this.typeBox);
+    body.append(el('div', 'lab-sec', 'Rare showpieces'));
+    this.rareBox = el('div', 'chips');
+    RARE.forEach(id => this.rareBox.append(this.chip(id, `★ ${SHELL_NAMES[id]}`)));
+    body.append(this.rareBox);
     body.append(el('div', 'lab-sec', 'From the barges and bridge'));
     this.groundBox = el('div', 'chips');
     ['fan', 'mine', 'waterfall'].forEach(id => this.groundBox.append(this.chip(id, TYPES[id].label)));
@@ -358,7 +365,7 @@ export class Workshop {
 
   refresh() {
     const s = this.s, info = TYPES[s.type];
-    for (const b of [...this.typeBox.children, ...this.groundBox.children]) b.classList.toggle('on', b.dataset.id === s.type);
+    for (const b of [...this.typeBox.children, ...this.rareBox.children, ...this.groundBox.children]) b.classList.toggle('on', b.dataset.id === s.type);
     const hasCol = !!info.colours;
     this.colLbl.style.display = this.colBox.style.display = hasCol ? '' : 'none';
     if (hasCol) {

@@ -1,18 +1,18 @@
 import * as THREE from 'three';
-import { TIERS, detectTier } from './quality.js?v=6';
-import { Particles } from './particles.js?v=6';
-import { Lights } from './lights.js?v=6';
-import { Smoke } from './smoke.js?v=6';
-import { World } from './world.js?v=6';
-import { Post } from './post.js?v=6';
-import { Fireworks } from './fireworks.js?v=6';
-import { Show } from './show.js?v=6';
-import { AudioEngine } from './audio.js?v=6';
-import { CameraRig, Director } from './camera.js?v=6';
-import { CAMERAS } from './site.js?v=6';
-import { SHELL_NAMES } from './shells.js?v=6';
-import { Crowd } from './crowd.js?v=6';
-import { Workshop } from './workshop.js?v=6';
+import { TIERS, detectTier } from './quality.js?v=7';
+import { Particles } from './particles.js?v=7';
+import { Lights } from './lights.js?v=7';
+import { Smoke } from './smoke.js?v=7';
+import { World } from './world.js?v=7';
+import { Post } from './post.js?v=7';
+import { Fireworks } from './fireworks.js?v=7';
+import { Show } from './show.js?v=7';
+import { AudioEngine } from './audio.js?v=7';
+import { CameraRig, Director } from './camera.js?v=7';
+import { CAMERAS } from './site.js?v=7';
+import { SHELL_NAMES, RARE } from './shells.js?v=7';
+import { Crowd } from './crowd.js?v=7';
+import { Workshop } from './workshop.js?v=7';
 
 const Q = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
@@ -116,11 +116,12 @@ workshop = new Workshop({
 
 fw.onBreak = (info) => {
   workshop.noteBreak(info);
-  if (info.inches >= 4 && state.t - state.lastCaption > 1.3 && info.caption) {
-    state.lastCaption = state.t;
-    caption(`${info.inches}-inch shell`, info.caption);
+  const rare = RARE.includes(info.type);
+  if (info.inches >= 4 && (rare || state.t - state.lastCaption > 1.3) && info.caption) {
+    state.lastCaption = state.t + (rare ? 3 : 0);
+    caption(rare ? `Rare showpiece · ${info.inches}-inch` : `${info.inches}-inch shell`, info.caption, rare ? 6000 : 3800);
   }
-  if (info.manual && info.inches >= 8 && Math.random() < 0.7) audio.crowd(Math.random() < 0.5 ? 'ooh' : 'wow', info.t + 0.4, 0.8);
+  if (info.manual && info.inches >= 10 && Math.random() < 0.3) audio.crowd(Math.random() < 0.5 ? 'ooh' : 'wow', info.t + 0.4, 0.7);
 };
 
 // ------------------------------------------------------------------ sizing
@@ -318,11 +319,12 @@ function tapLaunch(x, y) {
   else launchChoice(target);
 }
 
-const MANUAL = ['peony', 'chrysanthemum', 'pistil', 'dahlia', 'ghost', 'confetti', 'glittertips', 'willow', 'kamuro', 'diadem', 'brocade', 'palm', 'horsetail', 'leaves', 'snowfall', 'ring', 'saturn', 'crossette', 'strobe', 'crackle', 'glitter', 'spider', 'salute', 'multibreak', 'heart', 'smiley', 'starshape', 'butterfly', 'flower', 'spiral', 'clover', 'crescent', 'rings', 'cube'];
+const MANUAL = ['peony', 'chrysanthemum', 'pistil', 'dahlia', 'ghost', 'confetti', 'glittertips', 'willow', 'kamuro', 'diadem', 'brocade', 'palm', 'horsetail', 'leaves', 'snowfall', 'ring', 'saturn', 'crossette', 'strobe', 'crackle', 'glitter', 'spider', 'salute', 'multibreak', 'heart', 'starshape', 'butterfly', 'flower', 'spiral', 'clover', 'crescent', 'rings', 'cube'];
 function launchChoice(target) {
   const t = state.t;
   let kind = state.shell;
-  if (kind === 'random') kind = MANUAL[Math.floor(Math.random() * MANUAL.length)];
+  // the rare showpieces stay rare under Random too
+  if (kind === 'random') kind = Math.random() < 0.04 ? RARE[Math.floor(Math.random() * RARE.length)] : MANUAL[Math.floor(Math.random() * MANUAL.length)];
   const barge = fw.nearestBarge(target ? target[0] : -45);
   if (kind === 'fan') return fw.fan({ t, barge, n: 9, spread: 0.6, kind: Math.random() < 0.5 ? 'gold' : 'silver' });
   if (kind === 'mine') return fw.mine({ t, barge });
@@ -471,6 +473,7 @@ const lbl = (t) => { const d = document.createElement('div'); d.className = 'lbl
 lbl('Tap the sky to fire');
 addPick('random', 'Random').classList.add('on');
 MANUAL.forEach(id => addPick(id, SHELL_NAMES[id]));
+RARE.forEach(id => addPick(id, `★ ${SHELL_NAMES[id]}`));
 lbl('From the barges and bridge');
 addPick('fan', 'Comet fan');
 addPick('mine', 'Mine');

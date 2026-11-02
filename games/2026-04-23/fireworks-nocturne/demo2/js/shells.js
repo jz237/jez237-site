@@ -1,7 +1,7 @@
 // The shell library. Each break type lays out its stars (direction, speed,
 // burn time, colour chemistry, tails) the way the real product is built, plus
 // how much smoke it leaves, how bright it lights the air and how it sounds.
-import { K_STAR, K_CRACKLE, K_FLASH, T_GOLD, T_SILVER, T_GLITTER, T_COLOR, T_KAMURO, T_STROBE } from './particles.js?v=6';
+import { K_STAR, K_CRACKLE, K_FLASH, T_GOLD, T_SILVER, T_GLITTER, T_COLOR, T_KAMURO, T_STROBE } from './particles.js?v=7';
 
 // Linear-light colours of the metal salts, with relative brightness.
 export const COLORS = {
@@ -352,7 +352,6 @@ export const SHELLS = {
   },
 
   heart(B) { pattern(B, 'heart'); },
-  smiley(B) { pattern(B, 'smiley'); },
   starshape(B) { pattern(B, 'star'); },
   butterfly(B) { pattern(B, 'butterfly'); },
   flower(B) { pattern(B, 'flower'); },
@@ -418,15 +417,146 @@ export const SHELLS = {
     B.smokeLevel(2.2);
     B.caption(`gold diadem with ${COLORS[p].n} pistil`);
   },
+
+  // ---- rare showpieces: each built in several stages, seen once in a while
+
+  // Senrin, "a thousand flowers": the shell is packed with small shells. The
+  // break throws them out on faint gold tails and each one opens a moment
+  // later into its own little flower, with a rattle of reports.
+  senrin(B) {
+    const own = B.palette || B.r.pick([['red', 'green', 'yellow'], ['pink', 'aqua', 'lemon'], ['purple', 'lemon', 'aqua'], ['red', 'white', 'blue'], ['orange', 'green', 'pink']]);
+    const set = [...new Set(B.color ? [B.color, ...(B.color2 && B.color2 !== 'none' ? [B.color2] : [])] : own)];
+    const k = Math.min(40, B.count(9));
+    const pops = [];
+    fib(k, B.r).forEach((d, i) => {
+      const s = star(B, d, { colA: col('gold', 0.22), life: 0.9 + B.r() * 1.1, lj: 0, q: 3, R: B.R * 0.95, kg: 0.9, glowR: 0.35, flicker: 0.3, tail: tailGold(B, 0.45, 22, 0.16) });
+      const p = B.pos3(s, s.life);
+      B.child(s.life, p, 'floret', B.inches * 0.22, set[i % set.length]);
+      pops.push({ t: B.t + s.life, pos: p, loud: 0.6 + B.r() * 0.4 });
+    });
+    B.pops(pops);
+    B.light([1.0, 0.7, 0.4], 0.45, 1.6);
+    B.smokeLevel(0.8);
+    B.caption(`senrin: a thousand flowers in ${listColours(set)}`);
+  },
+
+  // one of the senrin's small flowers
+  floret(B) {
+    const a = B.color || pickColor(B);
+    const change = B.color2 === undefined && B.r.chance(0.35) ? pickColor(B, a) : null;
+    fib(B.count(46), B.r).forEach(d => star(B, d, { colA: col(a, 1.15), colB: change ? col(change) : null, tChange: change ? 0.55 : undefined, life: 1.4, q: 6, glowR: 0.5, vj: 0.1 }));
+    B.light(col(a), 0.35, 1.3, 0.15);
+    B.smokeLevel(0.3);
+    B.sound('quiet');
+  },
+
+  // Yonjushin, the quadruple pistil: four spheres packed one inside another,
+  // each its own colour, and every star changes colour at the same moment,
+  // so the whole flower turns over its colours at once.
+  yonjushin(B) {
+    let set = B.r.pick([['red', 'green', 'yellow', 'blue'], ['purple', 'lemon', 'pink', 'aqua'], ['blue', 'white', 'red', 'green'], ['orange', 'aqua', 'purple', 'lemon']]);
+    if (B.palette && !B.color) set = [0, 1, 2, 3].map(i => B.palette[i % B.palette.length]);
+    if (B.color) set = [B.color, ...set.filter(c => c !== B.color)].slice(0, 4);
+    const base = B.count(120);
+    const life = 2.4 + B.inches * 0.08;
+    [[1, 1], [0.76, 0.72], [0.53, 0.5], [0.3, 0.3]].forEach(([rf, nf], li) => {
+      const a = set[li], b = set[(li + 1) % 4];
+      fib(Math.max(10, Math.round(base * nf)), B.r).forEach(d => star(B, d, { colA: col(a, 1.05), colB: col(b, 1.05), tChange: 0.5, R: B.R * rf, life, lj: 0.05, vj: 0.025, glowR: 0.55 - li * 0.04 }));
+    });
+    B.light(mix(col(set[0]), col(set[2])), 1.25);
+    B.smokeLevel(1.4);
+    B.caption(`quadruple pistil: ${listColours([...new Set(set)])} spheres, all changing colour at once`);
+  },
+
+  // A spiral galaxy: a bright core, two or three arms laid out in a tilted
+  // disc and a dust of twinkling stars between them. As with the pattern
+  // shells, each star's speed is in proportion to its place in the shape, so
+  // the galaxy grows without losing its form.
+  galaxy(B) {
+    const f0 = facingPlane(B, 0.3);
+    const nrm = norm3([f0[0], f0[1] + 0.9, f0[2]]);
+    const [u, v] = basis(nrm);
+    const arms = B.r.chance(0.6) ? 2 : 3;
+    const tint = B.r.pick([['white', 'aqua', 'blue', 'purple'], ['white', 'lemon', 'pink', 'purple'], ['white', 'aqua', 'purple', 'pink']]);
+    const { c: cq } = speedFor(B.R, 4.5);
+    const vBase = 4.5 / cq;
+    const put = (x, y, h, o) => {
+      const dir = [u[0] * x + v[0] * y + nrm[0] * h, u[1] * x + v[1] * y + nrm[1] * h, u[2] * x + v[2] * y + nrm[2] * h];
+      const m = Math.hypot(...dir) || 1;
+      B.add({ p0: B.pos, t0: B.t, v0: [dir[0] * vBase + B.vel[0] * 0.5, dir[1] * vBase + B.vel[1] * 0.5, dir[2] * vBase + B.vel[2] * 0.5], c: cq / Math.max(m, 0.08), kg: 0.85, seed: B.r(), flicker: 0.12, glowR: 0.55, ...o });
+    };
+    // the core: a dense, warm bulge
+    for (let i = 0, n = B.count(36); i < n; i++) {
+      const d = B.r.dir(), s = 0.05 + 0.13 * Math.cbrt(B.r());
+      put(d[0] * s, d[1] * s, d[2] * s * 0.6, { life: 2.4, colA: col(B.r.chance(0.5) ? 'yellow' : 'white', 1.3), glowR: 0.7 });
+    }
+    // the arms wind a little over a turn, white at the core to colour at the rim
+    const per = Math.round(B.count(130) / arms);
+    for (let a = 0; a < arms; a++) for (let i = 0; i < per; i++) {
+      const f = 0.12 + 0.88 * i / per, th = a * Math.PI * 2 / arms + f * Math.PI * 2.2, w = 0.14 * f;
+      put(Math.cos(th) * f + (B.r() - 0.5) * w, Math.sin(th) * f + (B.r() - 0.5) * w, (B.r() - 0.5) * 0.04, { life: 2.9 + B.r() * 0.3, colA: col(tint[Math.min(3, Math.floor(f * 4))], 1.1 - f * 0.25) });
+    }
+    // dust: dim twinkling stars scattered through the disc
+    for (let i = 0, n = B.count(50); i < n; i++) {
+      const f = Math.sqrt(B.r()) * 0.95, th = B.r() * Math.PI * 2;
+      put(Math.cos(th) * f, Math.sin(th) * f, (B.r() - 0.5) * 0.06, { life: 3.6, colA: col('white', 0.6), strobe: 8 + B.r() * 6, glowR: 0.4, flicker: 0.3 });
+    }
+    B.light([0.75, 0.8, 1.0], 0.85, 2.8);
+    B.smokeLevel(0.8);
+    B.caption(`${arms === 2 ? 'two' : 'three'}-armed spiral galaxy`);
+  },
+
+  // Three stages from one shell: titanium comets fly out and split into four
+  // coloured stars at a sharp report, and each of those burns out in a
+  // crackle of tiny flashes.
+  cascade(B) {
+    const a = goldOr(B, B.r.chance(0.65));
+    const n = Math.round(B.count(14) * 0.7 + 8);
+    const pops = [];
+    const tail2 = a ? { kind: T_COLOR, rate: 20 * B.tailRate, life: 0.4, eject: 1.2, inherit: 0.25, ks: 3.5, power: 0.26 / B.tailRate } : tailGold(B, 0.6, 36, 0.24);
+    fib(n, B.r).forEach(d => {
+      const s = star(B, d, { colA: col('silver', 0.9), life: 0.8 + B.r() * 0.2, lj: 0.02, q: 3, glowR: 0.7, tail: tailSilver(B, 0.5, 44, 0.32) });
+      const p = B.pos3(s, s.life), v = B.vel3(s, s.life);
+      const vl = Math.hypot(...v) || 1;
+      const [bu, bw] = basis(v.map(x => x / vl));
+      pops.push({ t: B.t + s.life, pos: p, loud: 0.55 });
+      for (let k = 0; k < 4; k++) {
+        const ang = k * Math.PI / 2 + B.r() * 0.3;
+        const dd = [bu[0] * Math.cos(ang) + bw[0] * Math.sin(ang), bu[1] * Math.cos(ang) + bw[1] * Math.sin(ang), bu[2] * Math.cos(ang) + bw[2] * Math.sin(ang)];
+        const c = {
+          p0: p, t0: B.t + s.life, v0: [dd[0] * 30 + v[0] * 0.5, dd[1] * 30 + v[1] * 0.5, dd[2] * 30 + v[2] * 0.5], c: 0.05, kg: 0.9,
+          life: 1.0 + B.r() * 0.25, colA: a ? col(a, 1.1) : col('gold', 0.9), glowR: 0.55, seed: B.r(), flicker: 0.2, tail: { ...tail2 },
+        };
+        B.add(c);
+        // the third stage, where each piece burns out
+        const q = B.pos3(c, c.life), w = B.vel3(c, c.life);
+        for (let j = 0; j < 2; j++) {
+          const popT = 0.08 + B.r() * 0.45, e = B.r.dir();
+          const cr = { p0: q, t0: c.t0 + c.life, v0: [e[0] * 9 + w[0] * 0.5, e[1] * 9 + w[1] * 0.5, e[2] * 9 + w[2] * 0.5], c: 0.12, kg: 0.9, life: popT + 0.05, popT, kind: K_CRACKLE, colA: col('gold', 0.2), glowR: 0.9, seed: B.r(), flicker: 0.18 };
+          B.add(cr);
+          if (j === 0 && k % 2 === 0) pops.push({ t: cr.t0 + cr.popT, pos: q, loud: 0.3 + B.r() * 0.4 });
+        }
+      }
+    });
+    B.pops(pops);
+    B.light([0.95, 0.95, 1.0], 1.0, 3.0);
+    B.smokeLevel(1.4);
+    B.caption(`three-stage cascade: titanium, ${a ? COLORS[a].n : 'gold'} crossettes, crackle`);
+  },
+};
+export const RARE = ['senrin', 'yonjushin', 'galaxy', 'cascade'];
+const listColours = (keys) => {
+  const n = keys.map(k => COLORS[k].n.split(' ').pop());
+  return n.length > 1 ? `${n.slice(0, -1).join(', ')} and ${n[n.length - 1]}` : n[0];
 };
 
 const PATTERN_COLOURS = {
-  heart: ['red', 'pink', 'red'], smiley: ['yellow', 'lemon', 'orange'], star: ['white', 'aqua', 'green', 'blue'],
+  heart: ['red', 'pink', 'red'], star: ['white', 'aqua', 'green', 'blue'],
   butterfly: ['purple', 'aqua', 'pink', 'blue'], flower: ['pink', 'red', 'purple', 'orange'], spiral: ['aqua', 'white', 'green', 'lemon'],
   clover: ['green', 'lemon'], crescent: ['lemon', 'yellow', 'white'],
 };
 const PATTERN_NAMES = {
-  heart: 'heart pattern shell', smiley: 'smiley-face pattern shell', star: 'five-point star pattern shell', butterfly: 'butterfly pattern shell',
+  heart: 'heart pattern shell', star: 'five-point star pattern shell', butterfly: 'butterfly pattern shell',
   flower: 'flower pattern shell', spiral: 'two-armed spiral', clover: 'four-leaf clover', crescent: 'crescent moon', rings: 'linked rings',
 };
 
@@ -450,10 +580,6 @@ function pattern(B, kind) {
   const curve = (n, f) => { for (let i = 0; i < n; i++) { const t = i / n * Math.PI * 2; pts.push(f(t)); } };
   if (kind === 'heart') {
     curve(N, (t) => [16 * Math.sin(t) ** 3 / 17, (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)) / 17]);
-  } else if (kind === 'smiley') {
-    curve(N, (t) => [Math.cos(t), Math.sin(t)]);
-    for (let i = 0; i < 10; i++) { const t = i / 10 * Math.PI * 2; pts.push([-0.35 + Math.cos(t) * 0.08, 0.3 + Math.sin(t) * 0.08]); pts.push([0.35 + Math.cos(t) * 0.08, 0.3 + Math.sin(t) * 0.08]); }
-    for (let i = 0; i <= 20; i++) { const t = Math.PI * (1.15 + 0.7 * i / 20); pts.push([Math.cos(t) * 0.55, -0.05 + Math.sin(t) * 0.55]); }
   } else if (kind === 'butterfly') {
     // four wings, the top pair larger, and a body down the middle
     curve(Math.round(N * 1.2), (t) => { const r = Math.abs(Math.sin(2 * t)) * (Math.sin(t) > 0 ? 1 : 0.72); return [Math.cos(t) * r, Math.sin(t) * r * 0.9 + 0.05]; });
@@ -532,9 +658,10 @@ function cube(B) {
 export const SHELL_NAMES = {
   peony: 'Peony', chrysanthemum: 'Chrysanthemum', pistil: 'Pistil peony', dahlia: 'Dahlia', willow: 'Willow', kamuro: 'Kamuro',
   brocade: 'Brocade', palm: 'Palm', horsetail: 'Horsetail', ring: 'Ring', saturn: 'Saturn', crossette: 'Crossette', strobe: 'Strobe',
-  crackle: 'Crackle', glitter: 'Glitter', spider: 'Spider', salute: 'Salute', multibreak: 'Multi-break', heart: 'Heart', smiley: 'Smiley', starshape: 'Star',
+  crackle: 'Crackle', glitter: 'Glitter', spider: 'Spider', salute: 'Salute', multibreak: 'Multi-break', heart: 'Heart', starshape: 'Star',
   butterfly: 'Butterfly', flower: 'Flower', spiral: 'Spiral', clover: 'Clover', crescent: 'Crescent moon', rings: 'Linked rings', cube: 'Cube',
   ghost: 'Colour wave', confetti: 'Confetti', leaves: 'Falling leaves', diadem: 'Diadem', glittertips: 'Glitter tips', snowfall: 'Snowfall',
+  senrin: 'Thousand flowers', yonjushin: 'Quadruple pistil', galaxy: 'Spiral galaxy', cascade: 'Three-stage cascade',
 };
 
 function norm3(a) { const l = Math.hypot(...a); return a.map(v => v / l); }

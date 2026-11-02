@@ -3,7 +3,7 @@
 // wheel or a pinch zooms, and switching glides from one view to the next.
 // The director cuts between views during the auto show, like a broadcast.
 import * as THREE from 'three';
-import { CAMERAS, SITE } from './site.js?v=6';
+import { CAMERAS, SITE } from './site.js?v=7';
 
 const v3 = (a) => new THREE.Vector3(a[0], a[1], a[2]);
 

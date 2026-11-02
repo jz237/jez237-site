@@ -55,9 +55,10 @@ const VOICES = {
   palm: { layer: ['comet', 0.05, 0.75] },
   spider: { brk: 'spider' },
   crossette: { layer: ['crossette', 0.6, 0.8] },
-  heart: { brk: 'pattern' }, smiley: { brk: 'pattern' }, starshape: { brk: 'pattern' }, butterfly: { brk: 'pattern' },
+  heart: { brk: 'pattern' }, starshape: { brk: 'pattern' }, butterfly: { brk: 'pattern' },
   flower: { brk: 'pattern' }, spiral: { brk: 'pattern' }, clover: { brk: 'pattern' }, crescent: { brk: 'pattern' },
   rings: { brk: 'pattern' }, cube: { brk: 'pattern' },
+  yonjushin: { brk: 'double', chance: 0.7 }, galaxy: { layer: ['glitter', 0.9, 0.55] }, cascade: { layer: ['crossette', 0.85, 0.85] },
 };
 const C = 343;
 
@@ -264,8 +265,14 @@ export class AudioEngine {
     for (const p of list.slice(0, 60)) this.play(this.crackBuf, p.t, p.pos, { gain: 0.35 * p.loud, rate: 0.7 + Math.random() * 0.8 });
   }
 
+  // The crowd reacts now and then, not to every shell: after each reaction it
+  // stays quiet for a while (the closing cheer always plays).
   crowd(kind, t, gain = 1) {
-    this.play(this.pick(kind), t, this.listener.pos, { gain: 0.42 * gain, rate: 0.95 + Math.random() * 0.1, near: true });
+    if (!this.ready || !this.enabled || !this.running) return;
+    const at = this.when(t, 0);
+    if (kind !== 'cheer' && at < this.crowdRest) return;
+    this.crowdRest = at + 16;
+    this.play(this.pick(kind), t, this.listener.pos, { gain: 0.26 * gain, rate: 0.95 + Math.random() * 0.1, near: true });
   }
 
   waterfall(t0, t1, pos) {

@@ -4,8 +4,9 @@
 // theme and weather, the waterfall moves between acts, and the overture and
 // the finale each come in several versions (never the same finale twice in a
 // row).
-import { rng } from './physics.js?v=6';
-import { SITE } from './site.js?v=6';
+import { rng } from './physics.js?v=7';
+import { SITE } from './site.js?v=7';
+import { RARE } from './shells.js?v=7';
 
 const NB = SITE.barges.length;
 
@@ -29,7 +30,7 @@ export const WEATHER = [
 export const FINALES = ['Barrage', 'Golden crown', 'Rainbow sweeps', 'Strobe storm', 'Shapes in the sky', 'Thunder and crackle', 'Willow curtain', 'Grand chrysanthemums'];
 
 // Types that take a theme colour, and those that also take a second one.
-const PLAIN = new Set(['willow', 'glitter', 'spider', 'salute', 'horsetail', 'kamuro', 'brocade', 'diadem', 'confetti', 'rings', 'snowfall']);
+const PLAIN = new Set(['willow', 'glitter', 'spider', 'salute', 'horsetail', 'kamuro', 'brocade', 'diadem', 'confetti', 'rings', 'snowfall', 'senrin', 'yonjushin', 'galaxy']);
 const SECOND = new Set(['pistil', 'saturn', 'multibreak', 'ghost', 'flower', 'diadem']);
 
 export function buildProgram(seed, fw, world, audio, lastFinale = -1) {
@@ -67,6 +68,9 @@ export function buildProgram(seed, fw, world, audio, lastFinale = -1) {
   let finale;
   do { finale = r.int(0, FINALES.length - 1); } while (finale === lastFinale);
   const overture = r.int(0, 3);
+  // about one programme in five closes its showpieces with a rare shell
+  const rare = r.chance(0.2) ? r.pick(RARE) : null;
+  if (rare) durs.Showpieces += 6;
   const acts = [];
   let t = 0;
   const openDur = r.range(12, 16);
@@ -85,7 +89,7 @@ export function buildProgram(seed, fw, world, audio, lastFinale = -1) {
   const waterfall = (t0, dur) => {
     const gold = pal ? pal.includes('gold') || r.chance(0.2) : r.chance(0.3);
     at(t0, (tt) => fw.waterfall({ t0: tt, t1: tt + dur, gold }, world));
-    crowd(t0 + 3, 'wow', 0.8);
+    crowd(t0 + 3, 'wow', 0.7);
   };
 
   // ---------------------------------------------------------------- overture
@@ -155,24 +159,32 @@ export function buildProgram(seed, fw, world, audio, lastFinale = -1) {
     crowd(t0 + dur - 6 + 6.8, 'ooh', 1.1);
   };
   const wonders = (t0, dur) => {
-    const pool = ['crossette', 'strobe', 'crackle', 'saturn', 'ring', 'heart', 'smiley', 'starshape', 'spider', 'multibreak', 'butterfly', 'flower', 'spiral', 'cube', 'clover', 'rings', 'crescent', 'ghost', 'glittertips'];
-    const shapes = new Set(['heart', 'smiley', 'butterfly', 'flower', 'cube', 'rings', 'spiral']);
+    const pool = ['crossette', 'strobe', 'crackle', 'saturn', 'ring', 'heart', 'starshape', 'spider', 'multibreak', 'butterfly', 'flower', 'spiral', 'cube', 'clover', 'rings', 'crescent', 'ghost', 'glittertips'];
+    const shapes = new Set(['heart', 'butterfly', 'flower', 'cube', 'rings', 'spiral']);
     let x = t0 + 0.5;
     while (x < t0 + dur - 2) {
       const type = r.pick(pool);
       shell(x, type, r.pick([5, 6, 6, 7, 8]), { barge: anyBarge() });
-      if (shapes.has(type) && r.chance(0.6)) crowd(x + 5.6, r.chance(0.5) ? 'ooh' : 'wow', 0.7);
+      if (shapes.has(type) && r.chance(0.2)) crowd(x + 5.6, r.chance(0.5) ? 'ooh' : 'wow', 0.6);
       x += r.range(1.6, 2.6);
     }
   };
   const showpieces = (t0, dur) => {
     const pool = ['pistil', 'kamuro', 'chrysanthemum', 'willow', 'brocade', 'multibreak', 'diadem', 'ghost', 'cube', 'dahlia', 'flower', 'glittertips', 'confetti'];
     for (let i = pool.length - 1; i > 0; i--) { const j = r.int(0, i); [pool[i], pool[j]] = [pool[j], pool[i]]; }
-    const k = Math.max(3, Math.floor((dur - 2) / 5.2));
+    // a rare shell closes the act on its own, with the sky clear around it
+    const end = rare ? dur - 18.5 : dur - 3;
+    const k = rare ? Math.floor(end / 5.2) + 1 : Math.max(3, Math.floor((dur - 2) / 5.2));
     for (let i = 0; i < k; i++) {
-      const x = t0 + 0.5 + i * (dur - 3) / k;
+      const x = t0 + 0.5 + i * end / (rare ? Math.max(1, k - 1) : k);
       shell(x, pool[i], r.pick([10, 12]), { barge: 1 + (i % 3), rise: r.pick(['tail', 'glitter', 'whistle']) });
-      crowd(x + 6.6, i % 2 ? 'wow' : 'ooh', 1.1);
+      if ((!rare && i === k - 1) || r.chance(0.3)) crowd(x + 6.6, i % 2 ? 'wow' : 'ooh', 0.9);
+    }
+    if (rare) {
+      // broken lower than a plain 12-inch so all of it stays in view
+      const x = t0 + dur - 7;
+      shell(x, rare, 12, { barge: 2, rise: 'glitter', target: [SITE.barges[2].x + r.range(-20, 20), 260, SITE.barges[2].z] });
+      crowd(x + 6.2, 'wow', 0.9);
     }
   };
   const builders = { Colour: colour, Gold: gold, Wonders: wonders, Showpieces: showpieces };
@@ -229,7 +241,7 @@ export function buildProgram(seed, fw, world, audio, lastFinale = -1) {
       crowns(fEnd - 2.4, 'brocade', 10);
       break;
     case 4: { // shapes in the sky, then a burst of everything
-      const shapes = ['heart', 'smiley', 'butterfly', 'flower', 'starshape', 'cube', 'spiral', 'rings', 'clover', 'crescent'];
+      const shapes = ['heart', 'butterfly', 'flower', 'starshape', 'cube', 'spiral', 'rings', 'clover', 'crescent'];
       let x = f0;
       while (x < f0 + fd * 0.55) { shell(x, r.pick(shapes), r.pick([6, 7, 8]), { barge: anyBarge() }); x += r.range(0.7, 1.2); }
       crowd(x + 3, 'wow', 1);
@@ -258,9 +270,9 @@ export function buildProgram(seed, fw, world, audio, lastFinale = -1) {
       salutes(fEnd - 4);
       crowns(fEnd - 2.4, 'chrysanthemum', 12);
   }
-  crowd(fEnd + 5, 'cheer', 1.2);
+  crowd(fEnd + 5, 'cheer', 1);
 
-  return { cues, acts, finaleAt, finaleEnd, length: finaleEnd + 16, theme, weather, finale, overture };
+  return { cues, acts, finaleAt, finaleEnd, length: finaleEnd + 16, theme, weather, finale, overture, rare };
 }
 
 export class Show {
