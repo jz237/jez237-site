@@ -1,4 +1,4 @@
-/* Turrican II — Redux : render.js
+/* Shard Assault : render.js (2D fallback when WebGL2 is unavailable)
  * Canvas rendering with enhanced procedural graphics + particle system.
  * Browser-only. Draws to an internal buffer then scales to the display canvas.
  */
@@ -1125,7 +1125,7 @@
           bx.fillStyle = 'rgba(143,209,79,0.8)';
           bx.beginPath(); bx.arc(sx + 16 + i * 20, cy + 16, pu + 3, 0, 7); bx.fill();
         }
-      } else if (b.key === 'machine') {   // THE MACHINE — final boss
+      } else if (b.key === 'machine') {   // THE SOVEREIGN — final boss
         bx.fillStyle = '#14101c'; roundRect(sx, sy, b.w, b.h, 6); bx.fill();                     // monolith
         // armor plates (crack as phases advance)
         bx.fillStyle = '#2E2A3a';
