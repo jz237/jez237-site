@@ -1,4 +1,4 @@
-/* Turrican II — Redux (faithful tribute) : data.js
+/* Shard Assault : data.js
  * Constants, palettes, weapon/enemy configs, and deterministic level builders.
  * All content is ORIGINAL homage art/data — no copyrighted ROM assets.
  * UMD: usable in Node (headless tests) and the browser.
@@ -14,7 +14,10 @@
   const VIEW_W = 640;         // internal render width
   const VIEW_H = 360;         // internal render height
   const FPS = 60;
-  const DT = 1 / FPS;
+  const SPEED = 0.8;          // default game speed: each tick simulates 80% of a 60 Hz frame (the whole world runs 20% slower)
+  const STEP = 1 / FPS;       // real seconds per simulation tick
+  const DT = STEP * SPEED;    // simulated seconds per tick (api.setSpeed changes the live api.SPEED / api.DT)
+  const SPEEDS = [0.7, 0.8, 0.9, 1];
 
   // ---- physics feel (px / s) ---------------------------------------------
   const PHYS = {
@@ -46,13 +49,13 @@
   // lightning), and bounce. Each has upgrade levels collected via power-ups.
   const WEAPONS = {
     spread: {
-      id: 'spread', name: 'MULTIPLE', color: '#ffd23f',
+      id: 'spread', name: 'SCATTER', color: '#ffd23f',
       maxLevel: 3, cooldown: 0.11, speed: 460, damage: 1,
       // fan of bullets per level
       fan: [[0], [-0.14, 0, 0.14], [-0.26, -0.1, 0, 0.1, 0.26]],
     },
     beam: {
-      id: 'beam', name: 'BEAM', color: '#6cf3ff',
+      id: 'beam', name: 'ARC LANCE', color: '#6cf3ff',
       maxLevel: 3, cooldown: 0.02, damage: 0.6, length: 240,
       // beam sweeps within +/- range around facing; up/down rotate it
       sweepRange: 1.35,     // radians each way from horizontal
@@ -60,13 +63,33 @@
       widthByLevel: [6, 10, 15],
     },
     bounce: {
-      id: 'bounce', name: 'BOUNCE', color: '#ff7ad9',
+      id: 'bounce', name: 'RICOCHET', color: '#ff7ad9',
       maxLevel: 3, cooldown: 0.16, speed: 360, damage: 1,
       bouncesByLevel: [2, 4, 6],
       countByLevel: [1, 2, 3],
     },
+    // homing micro-missiles: launch in a fan, lock on, burst with splash damage
+    seeker: {
+      id: 'seeker', name: 'SEEKER SWARM', color: '#ff9a3c',
+      maxLevel: 3, cooldownByLevel: [0.5, 0.42, 0.36], countByLevel: [1, 2, 3],
+      launch: 150, speed: 430, accel: 900, turn: 6.5, life: 2.2,
+      damage: 2.2, splash: 1.6, radius: 30,
+    },
+    // plasma flamethrower: short piercing cone, sets targets alight
+    flare: {
+      id: 'flare', name: 'SOLAR FLARE', color: '#ff6a2a',
+      maxLevel: 3, cooldown: 0.045, speed: 400,
+      life: [0.3, 0.36, 0.42], dps: [9, 12, 15], burn: 1.6, burnDps: 1.4,
+    },
+    // hold to charge, release: a piercing crystal bolt that splits into shards
+    prism: {
+      id: 'prism', name: 'PRISM CANNON', color: '#d9a8ff',
+      maxLevel: 3, cooldown: 0.22, chargeTime: [1.0, 0.8, 0.65],
+      tapDamage: 1.3, tapSpeed: 520, speed: 560, damage: [5, 7, 9],
+      shardsByLevel: [3, 5, 7], shardDamage: 1.2,
+    },
   };
-  const WEAPON_ORDER = ['spread', 'beam', 'bounce'];
+  const WEAPON_ORDER = ['spread', 'beam', 'bounce', 'seeker', 'flare', 'prism'];
 
   // ---- enemies ------------------------------------------------------------
   // Archetypes carry the behavior; the per-world `roster` maps them to themed
@@ -98,7 +121,7 @@
   // ---- bosses (SPEC §4) ----------------------------------------------------
   // Boss template: telegraph -> attack cycle -> vulnerable open window.
   // Guarded body takes BOSS_GUARD weapon damage; open core takes full damage.
-  // Phases at 66%/33% HP speed the cycle up (The Machine swaps attack sets).
+  // Phases at 66%/33% HP speed the cycle up (the Sovereign swaps attack sets).
   const BOSS_GUARD = 0.22;
   const BOSSES = {
     warden: { // W1 — rock-armored guardian mech
@@ -147,7 +170,7 @@
       openEvery: 2, openDur: 2.4, tele: 0.8, hover: 30,
     },
     machine: { // W5-2 — FINAL BOSS
-      name: 'THE MACHINE', hp: 430, w: 86, h: 96, touch: 28, score: 20000,
+      name: 'THE SOVEREIGN', hp: 430, w: 86, h: 96, touch: 28, score: 20000,
       phases: [
         { attacks: [
           { kind: 'volley', count: 5, speed: 220, spread: 0.6 },
@@ -169,16 +192,13 @@
   };
 
   // ---- worlds (theme + palette + generator params) ------------------------
-  // Faithful in spirit to Turrican II's progression: outdoor "freedom"
-  // landscape -> machine interior -> a shoot-'em-up flight -> organic caverns
-  // -> the final fortress. Enhanced original palettes.
-  // Faithful to the researched blueprint (SPEC.md §1): 5 worlds / 11 stages
-  // (2/2/3/2/2). World 3 (Corridor) is an on-rails shmup — rendered with the
-  // platform engine for now; a dedicated shmup mode is a planned enhancement.
+  // Shard Assault: five worlds / 11 stages (2/2/3/2/2) on the crystal world Kethra.
+  // World 3 (Rift Run) is an auto-scrolling fighter stage. The 3D renderer
+  // (src3d/worlds.mjs) owns each world's look; palettes below feed the 2D fallback.
   const WORLDS = [
     {
-      id: 1, name: 'DESERT', subtitle: 'LANDORIN SURFACE', type: 'platform',
-      theme: 'Outdoor rocky desert surface — open sky, powerful winds, waterfalls.',
+      id: 1, name: 'SHATTERED MESA', subtitle: 'KETHRA HIGHLANDS', type: 'platform',
+      theme: 'Windswept red-rock highlands studded with living crystal — gusts and waterfalls.',
       palette: {
         sky: ['#0d1a3a', '#2A4C8A', '#4f83bd', '#6FA8DC'],
         far: '#3a4d72', mid: '#5a6d8f', near: '#6b4a2a',
@@ -191,8 +211,8 @@
       windX: 170,             // open-sky gusts (SPEC §2.1 contextual modifiers)
     },
     {
-      id: 2, name: 'SUBMERGED DUNGEON', type: 'platform',
-      theme: 'Underground caverns and an underwater lake; ends on a wind-climb.',
+      id: 2, name: 'DROWNED VAULTS', type: 'platform',
+      theme: 'Flooded crystal vaults lit by bioluminescence; ends on an updraft climb.',
       palette: {
         sky: ['#04141c', '#0E2E3E', '#13455c', '#1B5E7A'],
         far: '#0d2833', mid: '#1a4150', near: '#2C3A45',
@@ -206,8 +226,8 @@
       updraftFinale: true,    // 2-2 ends on a vertical wind-climb
     },
     {
-      id: 3, name: 'CORRIDOR', subtitle: 'SHMUP INTERLUDE', type: 'shmup',
-      theme: 'High-velocity mechanical tunnel blaster (on-rails shoot-em-up).',
+      id: 3, name: 'RIFT RUN', subtitle: 'FIGHTER ASSAULT', type: 'shmup',
+      theme: 'A full-throttle fighter run through the shattered canyon rift.',
       palette: {
         sky: ['#05060F', '#0a0c1e', '#141838', '#241d4a'],
         far: '#12142a', mid: '#3A3F5C', near: '#5C6486',
@@ -220,8 +240,8 @@
       scrolls: [62, 85, 132],   // auto-scroll px/s per stage: 3-1, 3-2, 3-3 finale
     },
     {
-      id: 4, name: 'WALKER FACTORY', type: 'platform',
-      theme: 'Industrial machine interior — fire-breathing statues, crush hazards.',
+      id: 4, name: 'CINDER FOUNDRY', type: 'platform',
+      theme: 'The Sovereign\'s automated foundry — molten channels, sentinels, crushers.',
       palette: {
         sky: ['#0a0a0d', '#1A1A1D', '#252529', '#33333a'],
         far: '#1c1c22', mid: '#3E3E46', near: '#57575F',
@@ -233,8 +253,8 @@
       bosses: { 1: 'colossus' },
     },
     {
-      id: 5, name: 'ALIEN SHIP', type: 'platform',
-      theme: 'Giger-esque biomechanical world — eggs, huggers, bone set pieces.',
+      id: 5, name: 'THE HOLLOW SPIRE', type: 'platform',
+      theme: 'The Sovereign\'s living crystal citadel — pods, crawlers, the throne of shard.',
       palette: {
         sky: ['#0a0710', '#1B1420', '#2E2233', '#463349'],
         far: '#1b1420', mid: '#2e2233', near: '#463349',
@@ -593,8 +613,9 @@
       for (let dy = 0; dy < 2; dy++) { set(vx, gy + dy, T.EMPTY); set(vx + 1, gy + dy, T.EMPTY); }
       for (let dx2 = -1; dx2 < 3; dx2++) for (let dy = 2; dy < 4; dy++) set(vx + dx2, gy + dy, T.EMPTY);
       set(vx, gy, T.CRATE); set(vx + 1, gy, T.CRATE);          // the plug
-      for (let dx2 = -1; dx2 < 3; dx2++) entities.push({ type: 'gem', tx: vx + dx2, ty: gy + 3 });
-      entities.push({ type: rnd() < 0.5 ? 'pu_bomb' : 'pu_life', tx: vx + 1, ty: gy + 2 });
+      const secret = 'v' + vaults.length;
+      for (let dx2 = -1; dx2 < 3; dx2++) entities.push({ type: 'gem', tx: vx + dx2, ty: gy + 3, secret });
+      entities.push({ type: rnd() < 0.5 ? 'pu_bomb' : 'pu_life', tx: vx + 1, ty: gy + 2, secret });
       vaults.push(vx);
     }
 
@@ -615,6 +636,53 @@
       for (let n = 0; n < 2; n++) {
         const nx = 30 + Math.floor(rnd() * (Math.min(cols, arenaStart) - 60));
         for (let i = 0; i < 3; i++) addOnSurface(nx + i * 2, 'egg', 'eggpod');
+      }
+    }
+
+    // ---- CRAWLSPACES: low burrows only the rolled-up wheel fits through ----
+    // A two-tile mound with a one-tile tunnel at ground level: walkers jump
+    // over it, the 16 px wheel rolls through the 20 px gap and takes the stash
+    // inside. Laid last, on a random stream of its own, so the rest of the
+    // stage stays exactly as it was.
+    const crawls = [];
+    {
+      const rc = mulberry32((g.seed * 31 + stageIndex * 104729 + 0x5eed) >>> 0);
+      const ckCol = Math.floor(cols * 0.55);
+      const upX = world.updraftFinale && stageIndex === 1 ? Math.floor(cols * 0.62) - 8 : cols + 999;
+      const fits = (x0, x1) => {
+        if (x0 < 14 || x1 > Math.min(cols - 12, arenaStart - 8) || x1 >= upX) return false;
+        if (x1 > ckCol - 4 && x0 < ckCol + 4) return false;
+        if (vaults.some(v => x1 > v - 8 && x0 < v + 10)) return false;
+        const gy = groundTop[x0];
+        if (world.water && gy > waterY) return false;               // the tunnel must stay dry: the wheel sinks
+        for (let x = x0 - 2; x <= x1 + 2; x++) if (isPit[x]) return false;
+        for (let x = x0 - 1; x <= x1 + 1; x++) {                     // flat floor, open air above (the wheel can't climb)
+          if (groundTop[x] !== gy) return false;
+          for (let y = gy - 5; y < gy; y++) if (get(x, y) !== T.EMPTY) return false;
+        }
+        for (const pl of platforms) if (pl.x <= x1 + 1 && pl.x + pl.w >= x0 - 1 && pl.y >= gy - 6) return false;
+        for (const c of crawls) if (x0 < c.x1 + 24 && x1 > c.x0 - 24) return false;
+        return true;
+      };
+      for (const [fa, fb] of [[0.12, 0.5], [0.5, 0.95]]) {
+        const lo = Math.floor(cols * fa), hi = Math.floor(cols * fb);
+        let L = 5 + Math.floor(rc() * 4);                           // 5..8 tiles of tunnel, shorter if the ground is choppy
+        const s0 = Math.floor(rc() * (hi - lo));
+        let x0 = -1;
+        for (; L >= 4 && x0 < 0; L--) for (let k = 0; k < hi - lo && x0 < 0; k++) { const x = lo + ((s0 + k) % (hi - lo)); if (fits(x, x + L - 1)) x0 = x; }
+        if (x0 < 0) continue;
+        L++;
+        const x1 = x0 + L - 1, gy = groundTop[x0], secret = 'c' + crawls.length;
+        for (let x = x0; x <= x1; x++) set(x, gy - 2, T.SOLID);
+        // whatever stood here now stands on the roof; the tunnel holds only the stash
+        for (let i = entities.length - 1; i >= 0; i--) {
+          const e = entities[i];
+          if (e.tx < x0 || e.tx > x1 || (e.ty !== gy - 1 && e.ty !== gy - 2)) continue;
+          if (e.type === 'gem' && e.ty === gy - 1) entities.splice(i, 1); else e.ty = gy - 3;
+        }
+        const mid = x0 + (L >> 1);
+        for (let x = x0 + 1; x < x1; x++) entities.push({ type: L >= 7 && x === mid ? (crawls.length ? 'pu_bomb' : 'pu_weapon') : 'gem', tx: x, ty: gy - 1, secret });
+        crawls.push({ x0, x1, gy });
       }
     }
 
@@ -664,7 +732,7 @@
       theme: world.theme, palette: world.palette,
       cols, rows, tile: TILE, tiles, platforms, entities, playerStart, exit,
       bossSpawn, windX: world.windX || 0, updraft, hasWater: !!world.water,
-      checkpoint, decors,
+      checkpoint, decors, crawls, secrets: vaults.length + crawls.length,
       timeLimit: bossKey ? 420 : 300,
     };
   }
@@ -678,10 +746,19 @@
     hard:   { dmg: 1.4, hp: 1.25, time: 0.85, label: 'HARD' },
   };
 
-  return {
-    TILE, VIEW_W, VIEW_H, FPS, DT, PHYS, T, SOLID_TILES, SHMUP,
+  // crystals a trooper can reach in each stage (campaign order), counted by
+  // demo.js reachable(): the stage results score against these. test.cjs
+  // checks them against the live level builders.
+  const REACH = [62, 57, 68, 54, 65, 64, 69, 103, 89, 72, 62];
+
+  const api = {
+    TILE, VIEW_W, VIEW_H, FPS, SPEED, STEP, DT, PHYS, T, SOLID_TILES, SHMUP,
     WEAPONS, WEAPON_ORDER, ENEMIES, ROSTERS, LOB_SKINS, BOSSES, BOSS_GUARD, WORLDS, STAGES_PER_WORLD, DIFFICULTY,
+    DEFAULT_SPEED: SPEED, SPEEDS, REACH,
     mulberry32, buildLevel,
-    VERSION: '1.24.0',
+    VERSION: '2.4.1',
   };
+  // game speed is a player option: the engine reads api.DT every tick
+  api.setSpeed = (v) => { api.SPEED = v; api.DT = STEP * v; };
+  return api;
 });

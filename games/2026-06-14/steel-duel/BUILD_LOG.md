@@ -293,3 +293,54 @@ enemies move, full playthrough → victory, 0 console errors.
 `jez237-site main` (→ GitHub + jez237.com). Note: jez237.com is behind Cloudflare
 ([[jez237-cloudflare-cache]]) — the domain needs a one-time CF cache purge (or its ~4h TTL) to show
 the update; the github.io origin reflects it immediately.
+
+## v31 — real-time 3D (three.js) + ElevenLabs audio + logic fixes  ✅ 38/38 tests green
+- **3D renderer** (`render3d.js`, ES module, three r181 vendored in `vendor/`, import map, no build step). The
+  deterministic sim is untouched; the renderer reads state through an api object and turns sim events into effects.
+  Lit/shadowed arena (low sun from behind-left, PMREM sky reflections, ACES + bloom), instanced concrete blocks that
+  crack, sag and leave rubble as they lose HP, contact shadows, steel hazard-striped border, floodlight towers and
+  props, procedural floor per layout (duel minefield hazard border + spawn pads). Tanks are built per enemy type
+  (scout/brute twin-gun/sniper long barrel/layer mine rack/warden glowing shield plate) with recoil, scrolling treads,
+  hull pitch, damage smoke/fire, hit flash, shield bubble; bosses get their own models (octagonal Bastion with 1/3/5
+  barrels by phase, Mauler dozer + glowing front armour, 4-barrel Warlord). Kills leave burning wrecks whose turret
+  blows off. Billboard fire/smoke/sparks, physical debris, scorch + track decals, pooled point lights, shockwave rings,
+  spawn beams, supply-crate drops. Cameras: fitted overview (desktop), follow (phones), orbit (attract / game over);
+  V cycles. Quality tiers auto/high/medium/low with adaptive step-down. 1974 mode (C) stays the original 2D renderer;
+  2D HD is the no-WebGL fallback. ~2.7 ms/frame at 1080p in the heaviest 4-player boss fight.
+- **Events**: the sim emits `fire/wall/hit/deflect/kill/mine/phase/wave/...` events instead of calling audio and
+  particles directly. The host forwards them to online clients inside snapshots, so remote players now get effects
+  and sound too (previously they got neither).
+- **Audio** (`audio.js` rewrite + `audio/`): 25 ElevenLabs SFX (cannon x3, armour hits, concrete hits, wall collapse,
+  explosions, mines, ricochets, flak, boss horn, klaxon, pickups, stings), seamless engine + tread loops, a 39-line
+  announcer (waves, bosses, streaks, scores, time warnings, results) on a radio EQ that ducks the music, and three
+  ElevenLabs Music tracks (menu, battle, boss) crossfaded at the loop seam. Stereo pan + distance falloff from the
+  player. Music on/off option.
+- **Logic fixes**: mouse click no longer starts the touch drag-stick (it overrode WASD and stalled the tank while
+  firing); PLAY AGAIN after a campaign restarts the campaign (it started a broken 2-tank match that ended instantly);
+  respawned tanks no longer keep pre-death momentum; bosses collide with their full hull (they clipped 14-21 px into
+  walls) and spawn clear of the ring; the Bastion can't be shoved; tanks can't be pushed into walls; P4's campaign
+  spawn was inside a wall on ring arenas; co-op revive-at-next-wave (in the design) is now implemented; the circle
+  collision sampled 7 rad instead of 2π; the boss armour arc drew the warden arc; the campaign leaderboard was
+  unreachable from the menu (scores now have tabs); pausing an online match froze the remote player silently (online
+  matches don't pause now).
+- **New features**: supply crates from destroyed enemies in campaign/survival (repair, shield that also soaks one mine,
+  rapid fire, rare extra life); opposing shells meeting mid-air cancel in campaign (shoot down boss salvos); kill
+  streak callouts; boss-kill slow motion; campaign checkpoints unlock after each boss (start at L5 / L9); retry-level
+  button on game over; floating score popups and animated centre banners.
+- New tests: T-revive momentum, T-boss hull vs walls, T-bastion immovable, T-campaign spawns, T-campaign play again,
+  T-co-op revive, T-supply crates, T-flak, T-events.
+
+## v32 — rarer announcer + Voice option  ✅ 38/38 tests green
+- User: the talking was monotonous. Every announcer line now goes through one gate in `audio.js` (`SDAudio.say`):
+  25 s of real time between lines, no repeat of the last line within 75 s, never two lines at once. Key lines
+  (results, game over / campaign complete, boss arrival, boss destroyed) skip the 25 s gap but wait for the current
+  line to finish. `game.js` `vo()` adds per-match "first time only" and chance gates for routine callouts.
+- Kept: one "Engage!" per match start (every time for the first duel, then 1 in 3), campaign opening "Wave one",
+  boss arrivals, boss destroyed, last tank, results, game over, campaign complete. Rarer: level clear (1 in 2),
+  final wave (3 in 10), boss phase (1 in 2), triple kill (first per match, 1 in 2), unstoppable (first per match),
+  reinforcements (first per match), pickups (first per kind per match, 1 in 2), scores (1 in 10), ten seconds
+  (35 in 100), flank hint (once per session). Cut: "Get ready", wave two, wave clear, double kill, we lost a tank,
+  twenty seconds. Banners and popups still show every time.
+- Options: VOICE ON/OFF (`sd_voice`, default ON). OFF = no announcer at all; sound effects and music unchanged.
+- Scripted real-time run (3 min campaign with a bot + 2.5 min CPU-vs-CPU duels): 65 lines before, 9 and 11
+  after (two runs; chance gates vary).

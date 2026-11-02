@@ -3,14 +3,26 @@
 // everything else — engine rumble, wind, clicks, whistles — is synthesized.
 // The synth versions remain as fallback until the samples finish decoding.
 
-import { MUTE_KEY } from './config.js?v=polish2';
-import { settings, setSetting } from './settings.js?v=polish2';
+import { MUTE_KEY } from './config.js?v=real2';
+import { settings, setSetting } from './settings.js?v=real2';
 
+const takes = (base, n) => Array.from({ length: n }, (_, i) => `${base}-${i + 1}`);
 const SAMPLES = {
   fire: ['shot-01', 'shot-02', 'shot-03', 'shot-04', 'shot-05'],
   explosion: ['explosion-01', 'explosion-02', 'explosion-03', 'explosion-04', 'explosion-05'],
   waveAlert: ['wave-alert'],
+  // munition recordings generated with ElevenLabs sound effects
+  boomHe: takes('boom-he', 3), boomArty: takes('boom-arty', 3), boomBomb: takes('boom-bomb', 2),
+  boomVehicle: takes('boom-vehicle', 2), boomFuel: takes('boom-fuel', 2), boomRocket: takes('boom-rocket', 2),
+  boomFar: takes('boom-far', 3), cookoff: takes('cookoff', 2), debris: takes('debris', 2),
+  // infantry: rifle cracks, falls, pain, and shouted orders (ElevenLabs v3 voices)
+  rifle: takes('rifle', 3), rifleFar: takes('rifle-far', 2), bodyfall: takes('bodyfall', 2), hurt: takes('hurt', 3),
+  'shout-cover': takes('shout-cover', 3), 'shout-incoming': takes('shout-incoming', 3), 'shout-tank': takes('shout-tank', 3),
+  'shout-advance': takes('shout-advance', 3), 'shout-medic': takes('shout-medic', 3),
 };
+const BOOM_SET = { he: 'boomHe', ap: 'boomHe', arty: 'boomArty', bomb: 'boomBomb', vehicle: 'boomVehicle', fuel: 'boomFuel', rocket: 'boomRocket', concrete: 'boomArty' };
+const BOOM_GAIN = { he: 0.95, ap: 0.8, arty: 1.15, bomb: 1.35, vehicle: 1.2, fuel: 1.05, rocket: 0.85, concrete: 1.05 };
+const SOUND_SPEED = 343;
 
 const MUSIC_TRACKS = {
   menu: './assets/audio/music-menu.mp3',
@@ -18,16 +30,41 @@ const MUSIC_TRACKS = {
 };
 const MUSIC_BASE = 0.62; // headroom under the combat SFX
 
+// ---- speech gate ----------------------------------------------------------
+// Every spoken clip (the radio commander and the soldiers' shouted orders)
+// passes through vo() / shout() below, so talk stays an occasional accent:
+// - radio: at most one line per RADIO_GAP s of real time; routine callouts
+//   are also chance-gated with long per-line cooldowns, and the same line
+//   never plays twice in a row. Major lines (battle start, the Colossus)
+//   skip the gap and cut off whatever is on the air.
+// - soldiers: one shout per SHOUT_GAP..+SHOUT_GAP_RAND s at most, only from
+//   men within SHOUT_RANGE m, never the same order back to back, never over
+//   the radio, and only SHOUT_CHANCE of the requests that pass.
+// - the Voice option (settings.voiceOn, default on) silences all of it.
+// Wordless sounds (pain cries, body falls, rifles) are not speech.
+const RADIO_GAP = 25;
+const SHOUT_GAP = 12, SHOUT_GAP_RAND = 8;
+const SHOUT_RANGE = 60;
+const SHOUT_CHANCE = 0.5;
+
 // commander voice lines (ElevenLabs "Harry"), played through a radio
-// bandpass. name: [variant count, per-line cooldown seconds]. Variants are
-// drawn at random but never the same take twice in a row.
+// bandpass. name: [takes, per-line cooldown s, chance, major]. Takes are
+// drawn at random but never the same take twice in a row. Lines not listed
+// here (kill, streak, ricochet, bounced, repaired, smoke, strike-in,
+// hulldown) were routine chatter; their HUD banners/floaters carry the info.
 const VO_LINES = {
-  deploy: [3, 0], armor: [3, 6], 'strike-ready': [3, 0], 'strike-in': [3, 0],
-  critical: [3, 20], 'wave-clear': [3, 0], convoy: [3, 0], repaired: [3, 8],
-  boss: [2, 0], streak: [2, 10], ricochet: [3, 14], bounced: [3, 12],
-  flanked: [3, 16], tracks: [2, 10], engine: [2, 12], hulldown: [2, 45],
-  artillery: [3, 20], smoke: [2, 6], rpg: [2, 30], destroyer: [2, 25],
-  kill: [3, 7], weather: [1, 0], dusk: [1, 0],
+  deploy: [3, 0, 1, true],        // battle start
+  boss: [2, 0, 1, true],          // Iron Colossus wave
+  'wave-clear': [3, 60, 0.5],
+  critical: [3, 90, 1],           // hull below 25%
+  'strike-ready': [3, 60, 1],
+  destroyer: [2, 300, 1],
+  convoy: [3, 120, 0.4],
+  armor: [3, 90, 0.2],            // wave start (patrols stay silent)
+  artillery: [3, 120, 0.35],
+  tracks: [2, 90, 0.35], engine: [2, 90, 0.35],
+  flanked: [3, 90, 0.25], rpg: [2, 120, 0.25],
+  weather: [1, 0, 0.35], dusk: [1, 0, 0.35],
 };
 
 export class GameAudio {
@@ -36,13 +73,31 @@ export class GameAudio {
     this.muted = localStorage.getItem(MUTE_KEY) === '1';
     this.engineNodes = null;
     this.windNodes = null;
-    this.buffers = { fire: [], explosion: [], waveAlert: [] };
+    this.buffers = Object.fromEntries(Object.keys(SAMPLES).map(k => [k, []]));
     this.musicBuffers = {};
     this.musicLoading = {};
     this.musicNodes = null;   // { src, gain, track }
     this.musicWant = null;    // requested before the ctx exists
     this.voBuffers = {};
-    this.voBusyUntil = 0;
+    this.voBusyUntil = 0;   // current radio line still on the air
+    this.voGapUntil = 0;    // global radio cooldown
+    this.voLastName = null;
+    this.voSrc = null;
+    this.shoutNext = 0;
+    this.shoutLast = null;
+  }
+
+  voiceOn() { return settings.voiceOn ?? true; }
+
+  setVoiceOn(on) {
+    setSetting('voiceOn', !!on);
+    if (!on) this.stopVoice();
+  }
+
+  stopVoice() {
+    try { this.voSrc?.stop(); } catch {}
+    this.voSrc = null;
+    if (this.ctx) this.voBusyUntil = Math.min(this.voBusyUntil, this.ctx.currentTime);
   }
 
   ensure() {
@@ -134,19 +189,32 @@ export class GameAudio {
     }
   }
 
-  vo(name, priority = false) {
-    if (!this.ctx || !(settings.voiceOn ?? true)) return;
+  // radio line through the speech gate (see the top of this file)
+  vo(name) {
+    const line = VO_LINES[name];
+    if (!this.ctx || !line || !this.voiceOn()) return false;
     const takes = (this.voBuffers[name] || []).map((b, i) => [b, i]).filter(([b]) => b);
-    if (!takes.length) return;
+    if (!takes.length) return false;
+    const [, cooldown, chance, major] = line;
     const now = this.ctx.currentTime;
-    if (!priority && now < this.voBusyUntil) return; // don't talk over yourself
-    if (!priority && now < (this.voNext[name] ?? 0)) return; // per-line cooldown
+    if (major) {
+      this.stopVoice(); // the big moments always get the air
+    } else {
+      if (now < this.voBusyUntil || now < this.voGapUntil) return false;
+      if (now < (this.voNext[name] ?? 0)) return false;
+      if (name === this.voLastName) return false;
+      if (Math.random() >= chance) return false;
+    }
     const fresh = takes.length > 1 ? takes.filter(([, i]) => i !== this.voLast[name]) : takes;
     const [buf, idx] = fresh[(Math.random() * fresh.length) | 0];
     this.voLast[name] = idx;
-    this.voNext[name] = now + (VO_LINES[name]?.[1] ?? 0);
+    this.voLastName = name;
+    this.voNext[name] = now + cooldown;
     this.voBusyUntil = now + buf.duration + 0.6;
+    this.voGapUntil = now + RADIO_GAP;
     const src = this.ctx.createBufferSource();
+    this.voSrc = src;
+    src.onended = () => { if (this.voSrc === src) this.voSrc = null; };
     src.buffer = buf;
     // radio squawk: bandpass + a touch of drive
     const bp = this.ctx.createBiquadFilter();
@@ -164,6 +232,19 @@ export class GameAudio {
     g.gain.value = 0.9;
     src.connect(bp).connect(shaper).connect(g).connect(this.master);
     src.start(now);
+    return true;
+  }
+
+  // a soldier's shouted order through the speech gate; dist in metres
+  shout(kind, vol, pan, dist) {
+    if (!this.ctx || !this.voiceOn() || dist > SHOUT_RANGE) return false;
+    const now = this.ctx.currentTime;
+    if (now < this.shoutNext || now < this.voBusyUntil || kind === this.shoutLast) return false;
+    if (!this.buffers[kind]?.length || Math.random() >= SHOUT_CHANCE) return false;
+    this.shoutNext = now + SHOUT_GAP + Math.random() * SHOUT_GAP_RAND;
+    this.shoutLast = kind;
+    const lp = dist > 30 ? Math.max(1800, 8000 - dist * 70) : 0;
+    return this.playSample(kind, vol * 0.8, 0.06, 0, pan, Math.min(0.5, dist / SOUND_SPEED), lp);
   }
 
   // rapid coax MG report — short filtered noise snap per round
@@ -195,17 +276,33 @@ export class GameAudio {
     }
   }
 
-  // returns false when the sample set isn't ready (caller falls back to synth)
-  playSample(set, vol = 1, rateJitter = 0.14, maxDuration = 0) {
+  // returns false when the sample set isn't ready (caller falls back to synth).
+  // pan -1..1, delay seconds (sound travel), lowpass Hz for distant muffling
+  playSample(set, vol = 1, rateJitter = 0.14, maxDuration = 0, pan = 0, delay = 0, lowpass = 0) {
     const list = this.buffers[set];
     if (!this.ctx || !list || list.length === 0) return false;
     const src = this.ctx.createBufferSource();
-    src.buffer = list[(Math.random() * list.length) | 0];
+    let pick = (Math.random() * list.length) | 0;
+    if (list.length > 1 && pick === this.lastPick?.[set]) pick = (pick + 1) % list.length;
+    (this.lastPick ||= {})[set] = pick;
+    src.buffer = list[pick];
     src.playbackRate.value = 1 - rateJitter / 2 + Math.random() * rateJitter;
     const g = this.ctx.createGain();
     g.gain.value = Math.min(1.4, vol);
-    src.connect(g).connect(this.master);
-    const t = this.ctx.currentTime;
+    let node = src;
+    if (lowpass > 0) {
+      const f = this.ctx.createBiquadFilter();
+      f.type = 'lowpass'; f.frequency.value = lowpass; f.Q.value = 0.5;
+      node = node.connect(f);
+    }
+    node = node.connect(g);
+    if (pan && this.ctx.createStereoPanner) {
+      const p = this.ctx.createStereoPanner();
+      p.pan.value = pan;
+      node = node.connect(p);
+    }
+    node.connect(this.master);
+    const t = this.ctx.currentTime + Math.max(0, delay);
     src.start(t);
     if (maxDuration > 0) {
       try { src.stop(t + Math.min(maxDuration, src.buffer.duration)); } catch {}
@@ -332,6 +429,45 @@ export class GameAudio {
     }
     this.blast({ freq: 42, dur: 0.7 * big + 0.3, vol: 1.0, noiseVol: 0.75, noiseFreq: 600 });
   }
+  // a munition going off at dist metres: its own recording, arriving at the
+  // speed of sound, muffled and swapped for a rolling rumble far away, with
+  // earth pattering down afterwards for near ground bursts
+  boom(kind, power, dist, pan = 0, surface = 'ground') {
+    if (!this.ctx) return;
+    const delay = Math.min(0.75, dist / SOUND_SPEED);
+    const near = Math.max(0, 1 - dist / 260);
+    const vol = Math.min(1.35, (BOOM_GAIN[kind] ?? 1) * (0.25 + 0.85 * near) * (0.75 + Math.min(1.6, power) * 0.25));
+    const far = dist > 150 && kind !== 'bomb';
+    const set = far ? 'boomFar' : BOOM_SET[kind] || 'boomHe';
+    const lp = dist > 60 ? Math.max(700, 9000 - dist * 30) : 0;
+    if (!this.playSample(set, vol, 0.1, 0, pan * Math.min(1, dist / 20), delay, lp)) {
+      this.explosion(Math.max(0.4, 1.3 - dist / 180) * power);
+      return;
+    }
+    if (dist < 45 && kind !== 'bomb') this.blast({ freq: 40, dur: 0.45, vol: 0.35 * near, noiseVol: 0, noiseFreq: 400 });
+    if (surface === 'ground' && dist < 70 && kind !== 'rocket') {
+      this.playSample('debris', 0.55 * (1 - dist / 70), 0.15, 0, pan, delay + 0.55 + Math.random() * 0.3);
+    }
+  }
+
+  cookoff(vol, pan, dist) {
+    this.playSample('cookoff', vol, 0.2, 0, pan, Math.min(0.6, dist / SOUND_SPEED), dist > 80 ? 2500 : 0);
+  }
+
+  // infantry sounds: rifle cracks (thin and echoing far away), falls, pain
+  // cries; shouted orders are speech and go through shout()'s gate
+  soldier(kind, vol, pan, dist) {
+    if (kind.startsWith('shout')) { this.shout(kind, vol, pan, dist); return; }
+    const delay = Math.min(0.5, dist / SOUND_SPEED);
+    if (kind === 'rifle') {
+      const far = dist > 70;
+      this.playSample(far ? 'rifleFar' : 'rifle', vol * (far ? 1.6 : 1.1), 0.12, 0, pan, delay, far ? 4200 : 0) || this.mgShot();
+      return;
+    }
+    const lp = dist > 30 ? Math.max(1800, 8000 - dist * 70) : 0;
+    this.playSample(kind, vol * (kind === 'bodyfall' ? 0.65 : 0.75), 0.14, 0, pan, delay, lp);
+  }
+
   hitTink() { this.blast({ freq: 220, dur: 0.12, vol: 0.25, noiseVol: 0.3, noiseFreq: 2400 }); }
   damaged() { this.blast({ freq: 90, dur: 0.3, vol: 0.5, noiseVol: 0.5, noiseFreq: 500 }); }
   whiz() { this.blast({ freq: 600, dur: 0.18, vol: 0.06, noiseVol: 0.3, noiseFreq: 3200 }); }
