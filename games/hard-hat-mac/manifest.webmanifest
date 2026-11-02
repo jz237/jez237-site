@@ -1,33 +1,16 @@
 {
-  "name": "Hard Hat Mac — Remastered",
+  "name": "Hard Hat Mac: Skyline",
   "short_name": "Hard Hat Mac",
-  "description": "A modern, accessible construction-platformer remake with desktop, touch, and gamepad controls.",
-  "id": "./",
+  "description": "3D construction-site platformer: set girders, rivet them tight and top out the tower.",
   "start_url": "./",
   "scope": "./",
   "display": "fullscreen",
-  "orientation": "any",
-  "background_color": "#0b0e1a",
-  "theme_color": "#ffc116",
-  "categories": ["games", "entertainment"],
+  "orientation": "landscape",
+  "background_color": "#14100a",
+  "theme_color": "#14100a",
   "icons": [
-    {
-      "src": "./icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "./icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "./icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    }
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }
   ]
 }
