@@ -3,7 +3,8 @@ import { Behaviour } from '@scenoco-three/core';
 /**
  * Aurora Siege's own sound, carried over: its synth (launch thumps, whistles, layered explosions, the
  * city crash, the fanfare, the nuke), its two soundtrack pieces, and the commander's voice — eleven
- * announcers, one picked per run. The files live beside the classic edition and are shared with it.
+ * announcers, one picked per run, heard rarely (`SAY`) and switched off with NARRATION. The files live
+ * beside the classic edition and are shared with it.
  */
 const TRACKS = ['../assets/last-life-ascent.mp3', '../assets/final-boss-approach.mp3'];
 const VOICES = ['harry', 'bella', 'brian', 'callum', 'charlie', 'chris', 'eric', 'jessica', 'liam', 'lily', 'matilda'];
@@ -22,7 +23,38 @@ const POOLS: Record<string, string[]> = {
   cityLost: ['vo-city-lost', 'vo-city-lost-2'],
   mirv: ['vo-mirv', 'vo-mirv-2'],
 };
+/**
+ * How rarely the commander speaks (v1.0.5: a line every wave, every city and every MIRV was monotonous).
+ * `key`: the big moments — the opening call, each boss's own line, the last city. They skip the
+ * quiet gap but never talk over a line: one arriving mid-line waits for it to end.
+ * `once`: only the first time in a run (the general boss warning; each boss's own line announces it after).
+ * `first`: heard the first time it comes up in a run, if the gap allows; after that only at `chance`.
+ * Anything else is heard only at `chance`, and only when the gap allows. An event not listed is silent.
+ */
+const SAY: Record<string, { key?: boolean; once?: boolean; first?: boolean; chance?: number }> = {
+  'vo-incoming': { key: true, once: true },
+  'vo-boss': { key: true, once: true },
+  'vo-bomber': { key: true },
+  'vo-orbital': { key: true },
+  'vo-meteor': { key: true },
+  'vo-stealth': { key: true },
+  'vo-nuke': { key: true },
+  'vo-last-city': { key: true },
+  cityLost: { first: true, chance: 0.1 },
+  mirv: { first: true },
+  'vo-smart': { first: true },
+  wave: { chance: 0.05 },
+  secure: { chance: 0.05 },
+  'vo-base-down': { chance: 0.08 },
+  'vo-chain': { chance: 0.1 },
+  'vo-ammo-low': { chance: 0.08 },
+};
+/** Seconds of real time between the end of one line and the start of the next, key lines aside. */
+const GAP = 25;
+/** A key line that has waited this long for another to finish is no longer news. */
+const STALE = 6000;
 const MUTE_KEY = 'auroraSiege3d_muted';
+const NARRATION_KEY = 'auroraSiege3d_narration';
 
 interface Falling {
   tone: OscillatorNode;
@@ -56,7 +88,9 @@ interface Voice {
 
 export class Sound extends Behaviour {
   muted = false;
-  /** Shown when the commander speaks: the line in words. */
+  /** The commander's voice on or off (remembered); off, no line is spoken or captioned. Whistles and music stay. */
+  narration = true;
+  /** Shown when the commander speaks: the line in words; '' when a line is cut short. */
   onVoice: ((text: string) => void) | null = null;
 
   private ctx: AudioContext | null = null;
@@ -70,15 +104,29 @@ export class Sound extends Behaviour {
   private wantMusic = false;
   private readonly voice = new Audio();
   private announcer = VOICES[0]!;
-  private voiceCooldown = 0;
+  /** A line is playing now. */
+  private speaking = false;
+  /** performance.now() when the last line ended (or started, while it plays). */
+  private quietSince = -Infinity;
+  private lastLine = '';
   private readonly lastPick: Record<string, string> = {};
+  /** Events heard this run, for `first`. */
+  private readonly heard = new Set<string>();
+  /** Key lines waiting for the one speaking to finish. */
+  private readonly waiting: { event: string; at: number }[] = [];
+  private voiceGuard = 0;
+  private line = 0;
 
   override awake(): void {
     try {
       this.muted = localStorage.getItem(MUTE_KEY) === '1';
+      this.narration = localStorage.getItem(NARRATION_KEY) !== '0';
     } catch {
       // storage refused
     }
+    const done = () => this.lineDone();
+    this.voice.addEventListener('ended', done);
+    this.voice.addEventListener('error', done);
     this.music.preload = 'auto';
     this.music.volume = 0.42;
     this.music.addEventListener('ended', () => {
@@ -91,10 +139,6 @@ export class Sound extends Behaviour {
     const unlock = () => this.unlock();
     window.addEventListener('pointerdown', unlock, true);
     window.addEventListener('keydown', unlock, true);
-  }
-
-  override update(dt: number): void {
-    this.voiceCooldown = Math.max(0, this.voiceCooldown - dt);
   }
 
   unlock(): void {
@@ -131,9 +175,23 @@ export class Sound extends Behaviour {
       // not remembered
     }
     if (this.master && this.ctx) this.master.gain.setTargetAtTime(this.muted ? 0 : 0.55, this.ctx.currentTime, 0.03);
-    if (this.muted) this.music.pause();
-    else if (this.wantMusic) void this.music.play().catch(() => {});
+    if (this.muted) {
+      this.music.pause();
+      this.hush();
+    } else if (this.wantMusic) void this.music.play().catch(() => {});
     return this.muted;
+  }
+
+  /** Narration on or off, remembered apart from the sound switch. Off cuts any line short. */
+  toggleNarration(): boolean {
+    this.narration = !this.narration;
+    try {
+      localStorage.setItem(NARRATION_KEY, this.narration ? '1' : '0');
+    } catch {
+      // not remembered
+    }
+    if (!this.narration) this.hush();
+    return this.narration;
   }
 
   /** The soundtrack on or off, and how loud: full on the title, stepped back under play. */
@@ -144,33 +202,83 @@ export class Sound extends Behaviour {
     else if (!this.muted && this.ctx && this.music.paused) void this.music.play().catch(() => {});
   }
 
-  /** A new announcer for a new run. */
-  newAnnouncer(): void {
+  /** A new run: a new announcer, and every `first` line may be heard again. */
+  newRun(): void {
     let next = VOICES[Math.floor(Math.random() * VOICES.length)]!;
     if (next === this.announcer) next = VOICES[(VOICES.indexOf(next) + 1) % VOICES.length]!;
     this.announcer = next;
+    this.heard.clear();
+    this.waiting.length = 0;
   }
 
-  /** The commander says something: a line from the event's pool, never the same twice running. */
-  announce(event: string, priority = false): void {
-    const pool = POOLS[event] ?? [event];
-    let pick = pool[0]!;
-    if (pool.length > 1) {
-      let guard = 0;
-      do pick = pool[Math.floor(Math.random() * pool.length)]!;
-      while (pick === this.lastPick[event] && ++guard < 8);
+  /**
+   * Something the commander might say. The one gate every line goes through: nothing with narration
+   * off or the sound muted; never over another line; never the same clip twice running; and, but for
+   * the `key` moments, only after GAP quiet seconds and then only as `SAY` allows.
+   */
+  announce(event: string): void {
+    if (this.muted || !this.narration) return;
+    const say = SAY[event] ?? {};
+    if (say.once && this.heard.has(event)) return;
+    if (say.key) {
+      if (this.speaking) {
+        if (this.waiting.length < 2) this.waiting.push({ event, at: performance.now() });
+        return;
+      }
+    } else {
+      if (this.speaking || performance.now() - this.quietSince < GAP * 1000) return;
+      const fresh = say.first && !this.heard.has(event);
+      if (!fresh && !(Math.random() < (say.chance ?? 0))) return;
     }
-    this.lastPick[event] = pick;
-    if (this.muted || (this.voiceCooldown > 0 && !priority)) return;
-    this.voiceCooldown = 1.6;
+    this.speak(event);
+  }
+
+  /** Stop talking: the line cut short, its caption cleared, nothing left waiting. */
+  hush(): void {
+    this.waiting.length = 0;
+    if (!this.speaking) return;
+    this.voice.pause();
+    this.lineDone();
+    this.onVoice?.('');
+  }
+
+  private speak(event: string): void {
+    // From the event's pool, never the clip just heard, nor this event's last line if it has another.
+    const pool = (POOLS[event] ?? [event]).filter((p) => p !== this.lastLine);
+    const fresh = pool.filter((p) => p !== this.lastPick[event]);
+    const from = fresh.length ? fresh : pool;
+    const pick = from[Math.floor(Math.random() * from.length)];
+    if (!pick) return;
+    this.lastPick[event] = this.lastLine = pick;
+    this.heard.add(event);
+    this.speaking = true;
+    this.quietSince = performance.now();
     this.onVoice?.(VOICE_TEXT[pick] ?? '');
+    // A clip that never reports its end does not hold the voice for good; a late failure of an
+    // earlier line does not end this one.
+    const line = ++this.line;
+    const failed = () => line === this.line && this.lineDone();
+    clearTimeout(this.voiceGuard);
+    this.voiceGuard = window.setTimeout(failed, 6000);
     try {
       this.voice.src = `../assets/vo/${this.announcer}/${pick}.mp3`;
       this.voice.volume = 0.9;
       this.voice.currentTime = 0;
-      void this.voice.play().catch(() => {});
+      void this.voice.play().catch(failed);
     } catch {
-      // the line is shown, if not heard
+      failed();
+    }
+  }
+
+  /** The line has ended (or failed): the quiet starts now, and a key line waiting gets its turn. */
+  private lineDone(): void {
+    if (!this.speaking) return;
+    this.speaking = false;
+    clearTimeout(this.voiceGuard);
+    this.quietSince = performance.now();
+    while (this.waiting.length) {
+      const next = this.waiting.shift()!;
+      if (performance.now() - next.at < STALE) return this.announce(next.event);
     }
   }
 

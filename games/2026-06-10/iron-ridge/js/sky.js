@@ -3,7 +3,7 @@
 // ridge" backdrop), circling birds, hemisphere + directional sun lighting.
 
 import * as THREE from 'three';
-import { Simplex2, makeRng } from './noise.js?v=real1';
+import { Simplex2, makeRng } from './noise.js?v=real2';
 
 export const SUN_DIR = new THREE.Vector3(0.55, 0.62, 0.38).normalize();
 

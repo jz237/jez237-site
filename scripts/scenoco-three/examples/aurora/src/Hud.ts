@@ -160,8 +160,10 @@ export class Hud {
     ];
   }
 
+  /** The commander's words while a line plays; '' takes them down at once. */
   voice(text: string): void {
-    if (!text) return;
+    clearTimeout(this.voiceTimer);
+    if (!text) return void this.el.voice.classList.remove('shown');
     this.el.voice.textContent = text;
     this.el.voice.classList.add('shown');
     clearTimeout(this.voiceTimer);
@@ -261,6 +263,16 @@ export class Hud {
 
   sound(muted: boolean): void {
     this.el.sound.classList.toggle('off', muted);
+  }
+
+  /** Every NARRATION button — the title's and the pause menu's — says whether the commander speaks. */
+  narration(on: boolean): void {
+    for (const button of document.querySelectorAll<HTMLElement>('[data-button="Narration"]')) {
+      button.classList.toggle('off', !on);
+      button.setAttribute('aria-pressed', String(on));
+      const value = button.querySelector('.narration-value');
+      if (value) value.textContent = on ? 'ON' : 'OFF';
+    }
   }
 
   portrait(on: boolean): void {

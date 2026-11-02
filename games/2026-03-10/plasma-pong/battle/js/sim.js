@@ -1,6 +1,6 @@
 // The battle simulation: pure game state + fixed-step rules. No three.js in here, so the AI can
 // run the very same ball physics forward (predict.js) and the renderer only reads state + events.
-import { F, ARENAS, POWERUPS, POWERUP_KEYS } from './config.js?v=4';
+import { F, ARENAS, POWERUPS, POWERUP_KEYS } from './config.js?v=5';
 
 export const STEP = 1 / 120;      // game tick
 const SUB = 2;                    // ball sub-steps per tick (240 Hz collisions)

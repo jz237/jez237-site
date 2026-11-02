@@ -3,8 +3,8 @@
 // events. The guest runs a local forecast of the host's world (W.predict), flies its own paddle
 // locally and reports its own hits; the host holds balls at the guest's shield until a hit report or a
 // miss notice arrives, so a save the guest sees on screen is a save that counts.
-import { F, POWERUP_KEYS } from './config.js?v=4';
-import { applyClaim, releaseHold, advanceBall, newPaddle } from './sim.js?v=4';
+import { F, POWERUP_KEYS } from './config.js?v=5';
+import { applyClaim, releaseHold, advanceBall, newPaddle } from './sim.js?v=5';
 
 export const PROTOCOL = 1;
 const RELAY = 'wss://steel-duel-online.jez237.workers.dev';

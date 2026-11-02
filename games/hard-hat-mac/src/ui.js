@@ -107,6 +107,7 @@ export class UI {
       ['quality', 'Graphics', () => settings.quality === 'auto' ? 'AUTO (' + QUALITY_NAMES[this.g.renderer ? this.g.renderer.q : 2] + ')' : QUALITY_NAMES[+settings.quality]],
       ['music', 'Music volume', () => Math.round(settings.music * 100) + '%'],
       ['sfx', 'Effects volume', () => Math.round(settings.sfx * 100) + '%'],
+      ['narration', 'Voice & narration', () => settings.narration ? 'ON' : 'OFF'],
       ['voice', 'Voice volume', () => Math.round(settings.voice * 100) + '%'],
       ['camSens', 'Camera sensitivity', () => settings.camSens.toFixed(1) + '×'],
       ['invertY', 'Invert camera Y', () => settings.invertY ? 'ON' : 'OFF'],
@@ -145,7 +146,7 @@ export class UI {
     else if (k === 'assistSpeed') { const o = [1, .85, .7, .55], i = o.indexOf(settings.assistSpeed); settings.assistSpeed = o[((i < 0 ? 0 : i) + dir + o.length) % o.length]; }
     else if (k === 'assistTime') { const o = [1, 1.25, 1.5, 2], i = o.indexOf(settings.assistTime); settings.assistTime = o[((i < 0 ? 0 : i) + dir + o.length) % o.length]; }
     else if (k === 'controls') { this.buildControls(); this.push('controls'); return; }
-    else settings[k] = !settings[k];
+    else { settings[k] = !settings[k]; if (k === 'narration') { if (!settings.narration) g.audio.stopSpeech(); g.audio.play('ui_click'); } }
     saveSettings();
     const row = this.setRows.find(r => r[0] === k); btn.textContent = row[2]();
     $('h-fps').hidden = !settings.fps;

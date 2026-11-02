@@ -1,11 +1,11 @@
 // The 3D arena: sky, planet, deck, mirror floor, rails, curtains, plus everything synced from the sim.
 import * as THREE from '../vendor/three.module.min.js';
-import { F, ARENAS, POWERUPS } from './config.js?v=4';
-import { bumperPos, sliderPos, cellIndex } from './sim.js?v=4';
-import { NOISE } from './shaders.js?v=4';
-import { Post } from './post.js?v=4';
-import { Sparks, Shards, patchShardMaterial, Lightning, Rings } from './fx.js?v=4';
-import { PaddleView, BallView, BoltView, OrbView, DroneView, CellView, CoreView, HoleView, glowSprite, floorGlow, BALL_Y, CALM } from './views.js?v=4';
+import { F, ARENAS, POWERUPS } from './config.js?v=5';
+import { bumperPos, sliderPos, cellIndex } from './sim.js?v=5';
+import { NOISE } from './shaders.js?v=5';
+import { Post } from './post.js?v=5';
+import { Sparks, Shards, patchShardMaterial, Lightning, Rings } from './fx.js?v=5';
+import { PaddleView, BallView, BoltView, OrbView, DroneView, CellView, CoreView, HoleView, glowSprite, floorGlow, BALL_Y, CALM } from './views.js?v=5';
 
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);

@@ -756,7 +756,7 @@
     WEAPONS, WEAPON_ORDER, ENEMIES, ROSTERS, LOB_SKINS, BOSSES, BOSS_GUARD, WORLDS, STAGES_PER_WORLD, DIFFICULTY,
     DEFAULT_SPEED: SPEED, SPEEDS, REACH,
     mulberry32, buildLevel,
-    VERSION: '2.4.0',
+    VERSION: '2.4.1',
   };
   // game speed is a player option: the engine reads api.DT every tick
   api.setSpeed = (v) => { api.SPEED = v; api.DT = STEP * v; };

@@ -51,6 +51,7 @@ After Shift 8 the game loops into a faster round (enemy speed +12%, hazards +15%
 - `src/coop.js` — relay connection, partner Mac, snapshot build/apply.
 - `src/characters.js` — procedural puppets (Mac, partner Mac, Vandal, Inspector) and the dog.
 - `src/textures.js`, `src/env.js` (sky presets incl. dawn/noon/overcast/storm with rain and lightning flashes, city, skyline landmarks, river through the city), `src/render.js`, `src/audio.js`, `src/input.js`, `src/ui.js`, `src/fx.js`, `src/util.js`.
+- `src/audio.js` speech gate — every worded line goes through `audio.say()`: one line at a time, 24 s of quiet before a routine line, key lines (title, first-time briefing, shift clear, round, game over, records) skip the gap but wait instead of overlapping, no back-to-back repeats, routine quips chance-gated and at most one per shift. Wordless oofs/heaves/screams/snickers go through `audio.grunt()` (rate-limited SFX). Settings → Voice & narration OFF (`narration` in `hhm3d-settings-v1`) silences every spoken line.
 - `assets/audio/` — all audio, generated with ElevenLabs.
 - `tools/gen_audio.py` + `tools/audio_spec.json` — regenerate audio: `python tools/gen_audio.py <raw_cache_dir> assets/audio [names…]` with `ELEVENLABS_API_KEY` set in the environment (never commit the key).
 

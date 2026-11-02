@@ -1,7 +1,7 @@
 // Persistent user settings — one JSON blob in localStorage. Nullable
 // defaults (aimAssist, autoFire) resolve per-device at the point of use.
 
-import { REVERSE_LOOK_KEY } from './config.js?v=real1';
+import { REVERSE_LOOK_KEY } from './config.js?v=real2';
 
 const KEY = 'iron_ridge_settings_v1';
 
@@ -18,7 +18,7 @@ export const DEFAULTS = {
   musicVol: 0.65,
   sfxVol: 1.0,
   showFps: true,
-  voiceOn: true,     // commander voice callouts
+  voiceOn: true,     // all speech: radio commander + soldier shouts
   haptics: true,     // vibration on touch devices
   shellArc: true,    // predicted shell path + impact marker
 };

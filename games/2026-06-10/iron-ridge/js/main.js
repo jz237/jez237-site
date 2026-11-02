@@ -8,30 +8,30 @@ import { RenderPass } from '../vendor/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from '../vendor/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from '../vendor/postprocessing/ShaderPass.js';
 
-import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, ENEMY_TYPES, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX, WEAPONS, MG, REPAIR, PERKS, DAILY, DAILY_STAMP, CG, CACHE, BOOST, INFANTRY, SMOKE, MODULES } from './config.js?v=real1';
-import { Infantry } from './infantry.js?v=real1';
-import { makeRng } from './noise.js?v=real1';
-import { buildTerrain, getHeight, raycastTerrain } from './terrain.js?v=real1';
-import { buildSky, weatherForWave } from './sky.js?v=real1';
-import { SmokeScreens } from './smoke.js?v=real1';
-import { Foliage } from './foliage.js?v=real1';
-import { treeOcclusion } from './tree-lod.js?v=real1';
-import { Props } from './props.js?v=real1';
-import { Tank } from './tank.js?v=real1';
-import { WaveManager } from './enemy.js?v=real1';
-import { Projectiles } from './projectiles.js?v=real1';
-import { Trajectory } from './trajectory.js?v=real1';
-import { surfaceDetail } from './surface-art.js?v=real1';
-import { ContactShadows } from './contact-shadows.js?v=real1';
-import { Effects } from './effects.js?v=real1';
-import { GameAudio } from './audio.js?v=real1';
-import { Input, isTouch } from './input.js?v=real1';
-import { settings, setSetting } from './settings.js?v=real1';
-import { Hud } from './hud.js?v=real1';
-import { QualityScaler, LEVELS } from './quality.js?v=real1';
-import { Minimap } from './minimap.js?v=real1';
-import * as LB from './leaderboard.js?v=real1';
-import { Multiplayer, cleanName, cleanRoom, randomRoom } from './multiplayer.js?v=real1';
+import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, ENEMY_TYPES, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX, WEAPONS, MG, REPAIR, PERKS, DAILY, DAILY_STAMP, CG, CACHE, BOOST, INFANTRY, SMOKE, MODULES } from './config.js?v=real2';
+import { Infantry } from './infantry.js?v=real2';
+import { makeRng } from './noise.js?v=real2';
+import { buildTerrain, getHeight, raycastTerrain } from './terrain.js?v=real2';
+import { buildSky, weatherForWave } from './sky.js?v=real2';
+import { SmokeScreens } from './smoke.js?v=real2';
+import { Foliage } from './foliage.js?v=real2';
+import { treeOcclusion } from './tree-lod.js?v=real2';
+import { Props } from './props.js?v=real2';
+import { Tank } from './tank.js?v=real2';
+import { WaveManager } from './enemy.js?v=real2';
+import { Projectiles } from './projectiles.js?v=real2';
+import { Trajectory } from './trajectory.js?v=real2';
+import { surfaceDetail } from './surface-art.js?v=real2';
+import { ContactShadows } from './contact-shadows.js?v=real2';
+import { Effects } from './effects.js?v=real2';
+import { GameAudio } from './audio.js?v=real2';
+import { Input, isTouch } from './input.js?v=real2';
+import { settings, setSetting } from './settings.js?v=real2';
+import { Hud } from './hud.js?v=real2';
+import { QualityScaler, LEVELS } from './quality.js?v=real2';
+import { Minimap } from './minimap.js?v=real2';
+import * as LB from './leaderboard.js?v=real2';
+import { Multiplayer, cleanName, cleanRoom, randomRoom } from './multiplayer.js?v=real2';
 
 const $ = (id) => document.getElementById(id);
 
@@ -164,16 +164,14 @@ effects.onCookoff = (pos) => {
 };
 effects.blast.prewarm();
 infantry.crowd.prewarm();
-// soldiers' voices and bodies: shouts, pain, falls (rate-limited, distance-faded)
-let shoutBusy = 0;
+// soldiers' voices and bodies: pain, falls, distance-faded; shouted orders
+// go through the audio speech gate (rare, nearby men only, Voice option)
 infantry.onEvent = (u, kind) => {
   if (G.state === 'menu') return;
   const { dist, pan } = soundAt(u.x, u.gy + 1.5, u.z);
-  if (kind.startsWith('shout')) {
-    if (dist > 75 || G.time < shoutBusy) return;
-    shoutBusy = G.time + 2.4;
-  } else if (dist > 60) return;
-  audio.soldier(kind, Math.max(0.12, 1 - dist / 80), pan, dist);
+  const vol = Math.max(0.12, 1 - dist / 80);
+  if (kind.startsWith('shout')) audio.shout(kind, vol, pan, dist);
+  else if (dist <= 60) audio.soldier(kind, vol, pan, dist);
 };
 const multiplayer = new Multiplayer({
   scene,
@@ -375,7 +373,7 @@ const PLAYER_FACING = {
   rear: { mult: 1.35, label: 'HIT · REAR ARMOR', vo: 'flanked' },
   side: { mult: 1.1, label: 'HIT · SIDE ARMOR' },
   front: { mult: 0.85, label: 'HIT · FRONT ARMOR' },
-  oblique: { mult: 0.3, label: 'BOUNCED · ANGLED ARMOR', vo: 'bounced' },
+  oblique: { mult: 0.3, label: 'BOUNCED · ANGLED ARMOR' },
   top: { mult: 1.2, label: 'HIT · ROOF' },
 };
 
@@ -911,10 +909,6 @@ function creditKillLocal(points) {
     hud.setStrike(true);
     hud.banner('AIRSTRIKE READY', 'press F (or tap ✈) to call it in on your reticle', 3);
     audio.vo('strike-ready');
-  } else if (G.streakKills === G.perks.strikeNeed - 1) {
-    audio.vo('streak');
-  } else {
-    audio.vo('kill');
   }
 }
 
@@ -1062,11 +1056,11 @@ function onShellHit(hit) {
         if (face === 'side' && Math.random() < MODULES.playerTrackChance) {
           tk.trackJamT = MODULES.playerTrackJam;
           hud.floater('TRACKS HIT — IMMOBILIZED', 'warn');
-          audio.vo('tracks', true);
+          audio.vo('tracks');
         } else if (face === 'rear' && Math.random() < MODULES.playerEngineChance) {
           tk.engineHitT = MODULES.playerEngineHit;
           hud.floater('ENGINE HIT — HALF POWER', 'warn');
-          audio.vo('engine', true);
+          audio.vo('engine');
         }
       }
       hud.incomingCall(F.label, face === 'oblique' ? 'good' : face === 'rear' ? 'bad' : '');
@@ -1083,7 +1077,6 @@ function onShellHit(hit) {
           let label = F.label;
           if (face === 'oblique') {
             audio.ricochet();
-            audio.vo('ricochet');
             effects.ricochet(pos, s.vel, hit.normal);
           } else {
             audio.penetrate(face === 'rear');
@@ -1391,7 +1384,6 @@ function updateRepair(dt) {
     }
     if (p.hp >= p.maxHp) {
       G.repairing = false;
-      audio.vo('repaired');
       hud.floater('REPAIRS COMPLETE', 'good');
       haptic(30);
     }
@@ -1423,7 +1415,6 @@ function playerSmoke() {
   }
   G.smokeCd = SMOKE.cooldown;
   fireSmoke(p);
-  audio.vo('smoke', true);
   hud.floater('💨 SMOKE — relocate behind it', 'good');
   haptic(15);
 }
@@ -1457,7 +1448,6 @@ function updateHullDown(dt) {
     if (down && !G.hullDownSaid) {
       G.hullDownSaid = true;
       hud.floater('HULL DOWN — the crest covers your hull', 'good');
-      audio.vo('hulldown');
     }
   }
 }
@@ -1512,7 +1502,7 @@ function compassDir(dx, dz) {
   return ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][oct];
 }
 
-function announceContacts(spawned, label = 'ARMOR INBOUND', withBanner = true) {
+function announceContacts(spawned, label = 'ARMOR INBOUND', withBanner = true, voice = true) {
   if (!spawned.length || !G.player) return;
   const pp = G.player.body.position;
   const e0 = spawned[0].tank.body.position;
@@ -1522,7 +1512,7 @@ function announceContacts(spawned, label = 'ARMOR INBOUND', withBanner = true) {
   }
   for (const e of spawned) minimap.ping(e.tank.body.position.x, e.tank.body.position.z);
   audio.click();
-  audio.vo('armor');
+  if (voice) audio.vo('armor');
 }
 
 // every wave rolls its own sky (deterministic by wave, so co-op agrees)
@@ -1554,7 +1544,7 @@ function startWave(w) {
   const bossWave = spec.tanks.includes('boss');
   if (bossWave) {
     hud.banner(`WAVE ${w} — IRON COLOSSUS`, 'a breakthrough monster leads this assault', 3.2);
-    audio.vo('boss', true);
+    audio.vo('boss');
   } else {
     hud.banner(`WAVE ${w}`, parts.join(' • '));
   }
@@ -1562,7 +1552,7 @@ function startWave(w) {
   const fresh = waves.enemies.slice(before);
   announceContacts(fresh, 'ARMOR INBOUND', !bossWave);
   if (fresh.some(e => e.typeName === 'destroyer')) {
-    setTimeout(() => audio.vo('destroyer', true), 2600);
+    setTimeout(() => audio.vo('destroyer'), 2600);
     hud.floater('▼ TANK DESTROYER — fixed gun, circle it', 'warn');
   }
   // infantry screen from wave 2: rifles that sting, tracks that squish
@@ -1683,7 +1673,7 @@ function checkWaveClear(dt) {
   if (G.quietT > 25) {
     G.quietT = 0;
     const spawned = waves.spawnPatrol(scene, world, pp, G.wave);
-    announceContacts(spawned, 'PATROL INBOUND');
+    announceContacts(spawned, 'PATROL INBOUND', true, false);
   }
 }
 
@@ -1749,7 +1739,7 @@ function startGame() {
   audio.resume();
   audio.startEngine();
   audio.startMusic('battle');
-  audio.vo('deploy', true);
+  audio.vo('deploy');
   input.requestLock();
   if (isCoopClient()) {
     // the host's sim is already running — join its battle in progress
@@ -1977,7 +1967,7 @@ function fixedStep(dt) {
       if (G.artilleryT <= 0) {
         G.artilleryT = ARTILLERY.period * (0.85 + Math.random() * 0.3);
         hud.banner('⚠ ARTILLERY', 'get clear of the red markers', 1.6);
-        audio.vo('artillery', true);
+        audio.vo('artillery');
         audio.whistle();
         setTimeout(() => audio.whistle(), 650);
         const pp = p.body.position, pv = p.body.velocity;
@@ -2319,7 +2309,7 @@ bindCycle('btn-tscale',
   () => settings.touchScale,
   (v) => { setSetting('touchScale', v); applyTouchLayout(); });
 bindToggle('btn-fps', () => settings.showFps, (v) => { setSetting('showFps', v); applyFpsDisplay(); });
-bindToggle('btn-voice', () => settings.voiceOn ?? true, (v) => setSetting('voiceOn', v));
+bindToggle('btn-voice', () => audio.voiceOn(), (v) => audio.setVoiceOn(v));
 bindToggle('btn-haptics', () => settings.haptics ?? true, (v) => setSetting('haptics', v));
 
 // weapon panel buttons are tappable/clickable directly
@@ -2522,7 +2512,6 @@ function gameFrame(dt) {
       G.airstrike = false;
       hud.setStrike(false);
       audio.whistle();
-      audio.vo('strike-in', true);
       hud.banner('AIRSTRIKE INBOUND', 'danger close!', 1.8);
       camera.getWorldDirection(_dir);
       const fx = _dir.x, fz = _dir.z;

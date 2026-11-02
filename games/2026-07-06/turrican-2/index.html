@@ -87,7 +87,7 @@
   gtag('config', 'G-S7VKNPPZHV');
 </script></head>
 <body>
-<div id="graphics-note">SHARD ASSAULT 3D</div><nav id="controls" aria-label="Game controls"><button id="watch">Watch demo</button><button id="play">Play</button><button id="quality">Quality: HD</button><button id="fullscreen">Fullscreen</button></nav><div id="wrap">
+<div id="graphics-note">SHARD ASSAULT 3D</div><nav id="controls" aria-label="Game controls"><button id="watch">Watch demo</button><button id="play">Play</button><button id="quality">Quality: HD</button><button id="narration" title="Announcer voice: big moments only, or off">Narration: On</button><button id="fullscreen">Fullscreen</button></nav><div id="wrap">
   <div id="stage">
     <div id="tactics" aria-live="off"></div><canvas id="game" width="960" height="540"></canvas>
     <button id="fsbtn" aria-label="fullscreen">⛶</button>
@@ -109,15 +109,15 @@
   <div style="font-size:20px;font-weight:bold;color:#ffd23f">ROTATE YOUR PHONE</div>
   <div style="font-size:14px;color:rgba(200,210,255,0.8)">Shard Assault plays in landscape</div>
 </div>
-<script src="assets/data.js?v=sa-8"></script>
+<script src="assets/data.js?v=sa-9"></script>
 <script src="assets/engine.js?v=sa-6"></script>
 <script src="assets/render.js?v=sa-2"></script>
-<script src="assets/audio.js?v=sa-7"></script>
+<script src="assets/audio.js?v=sa-8"></script>
 <script src="assets/input.js?v=sa-3"></script>
 <script src="assets/demo.js?v=sa-6"></script>
 <script src="assets/shard3d.js?v=sa-8"></script>
-<script src="assets/game.js?v=sa-7"></script>
-<script src="assets/hd-ui.js?v=sa-6"></script><script>
+<script src="assets/game.js?v=sa-8"></script>
+<script src="assets/hd-ui.js?v=sa-7"></script><script>
 // Retire only this game's legacy offline worker so updates stay current.
 if('serviceWorker' in navigator) navigator.serviceWorker.getRegistration('./').then(r=>{
  if(r && r.scope === new URL('./',location.href).href) r.update().catch(()=>{});

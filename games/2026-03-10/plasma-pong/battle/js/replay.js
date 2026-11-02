@@ -1,7 +1,7 @@
 // Instant replay. The simulation is deterministic, so the recorder only keeps a cloned world every
 // half second plus every paddle's input for each tick; a replay re-runs the last few seconds from the
 // nearest clone and reproduces the winning hit exactly, with all of its effects and sounds.
-import { cloneWorld, step, drainEvents, STEP } from './sim.js?v=4';
+import { cloneWorld, step, drainEvents, STEP } from './sim.js?v=5';
 
 export class Recorder {
   constructor() { this.reset(); }

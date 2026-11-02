@@ -3,11 +3,11 @@
 // tread marks, and screen-shake trauma.
 
 import * as THREE from 'three';
-import { Simplex2 } from './noise.js?v=real1';
-import { treadTexture } from './surface-art.js?v=real1';
-import { getHeight, getNormal } from './terrain.js?v=real1';
-import { SCATTER } from './config.js?v=real1';
-import { Blast } from './blast.js?v=real1';
+import { Simplex2 } from './noise.js?v=real2';
+import { treadTexture } from './surface-art.js?v=real2';
+import { getHeight, getNormal } from './terrain.js?v=real2';
+import { SCATTER } from './config.js?v=real2';
+import { Blast } from './blast.js?v=real2';
 
 const _up = new THREE.Vector3(0, 1, 0);
 const _zeroM = new THREE.Matrix4().makeScale(0, 0, 0);

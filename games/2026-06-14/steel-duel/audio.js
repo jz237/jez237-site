@@ -18,7 +18,7 @@
   let muted = false, musicOn = true, loadStarted = false;
   const buf = {}, cursor = {}, lastPlay = {};
   let engine = null, treads = null, engineGain = null, treadGain = null;
-  let voQueue = [], voPlaying = null, voUntil = 0;
+  let voiceOn = true, voPlaying = null, voUntil = 0, voLast = '', voLastAt = -1e9, voPend = null;
   let mTrack = null, mWant = null, mCur = null, mLoading = {};
 
   function ensure() {
@@ -104,21 +104,40 @@
     s.connect(g); node.connect(sfxBus); s.start(now + (o.delay || 0));
   }
 
-  /* ---- announcer ---- */
-  function say(line, prio) {
-    if (!ensure() || muted) return;
-    prio = prio || 1;
-    const key = 'vo_' + line;
-    if (!buf[key]) return;
-    const now = ctx.currentTime;
-    if (voPlaying && now < voUntil) {
-      if (prio >= 3) { try { voPlaying.stop(); } catch (e) {} voQueue = []; }
-      else { if (voQueue.length < 2 && !voQueue.includes(line)) voQueue.push(line); return; }
-    }
+  /* ---- announcer: every spoken line goes through this one gate ----
+     - Voice option OFF (or sound muted) = silence.
+     - Never two lines at once: a line that arrives while another is speaking is dropped, except a key line (prio 3:
+       results, game over, boss arrival / kill), which waits for the current line to finish (if still fresh).
+     - Ordinary lines need VO_GAP seconds of real time since the last line started, and can't repeat the last line
+       (unless VO_REPEAT seconds have passed).
+     - Key lines skip the gap but restart it, so chatter can't follow straight after them.
+     Returns true when the line was spoken (or queued as a key line). */
+  const VO_GAP = 25, VO_REPEAT = 75, VO_KEY_WAIT = 4;
+  function speak(line) {
+    const key = 'vo_' + line, now = ctx.currentTime;
     const s = ctx.createBufferSource(); s.buffer = buf[key]; s.connect(voiceBus.input);
-    s.start(now); voPlaying = s; voUntil = now + buf[key].duration;
+    s.start(now); voPlaying = s; voUntil = now + buf[key].duration; voLast = line; voLastAt = now;
     duck.gain.cancelScheduledValues(now); duck.gain.setTargetAtTime(0.45, now, 0.05); duck.gain.setTargetAtTime(1, voUntil, 0.35);
-    s.onended = () => { if (voPlaying === s) { voPlaying = null; const nx = voQueue.shift(); if (nx) say(nx, 2); } };
+    s.onended = () => {
+      if (voPlaying !== s) return;
+      voPlaying = null;
+      const p = voPend; voPend = null;
+      if (p && voiceOn && !muted && ctx.currentTime - p.at < VO_KEY_WAIT) speak(p.line);
+    };
+  }
+  function say(line, prio) {
+    if (!voiceOn || !ensure() || muted) return false;
+    const key = 'vo_' + line;
+    if (!buf[key]) return false;
+    const now = ctx.currentTime, keyLine = (prio || 1) >= 3, busy = voPlaying && now < voUntil;
+    if (!keyLine && (busy || now - voLastAt < VO_GAP || (line === voLast && now - voLastAt < VO_REPEAT))) return false;
+    if (busy) { voPend = { line, at: now }; return true; }
+    speak(line); return true;
+  }
+  function stopVoice() {
+    voPend = null;
+    if (voPlaying) { const s = voPlaying; voPlaying = null; voUntil = 0; try { s.stop(); } catch (e) {} }
+    if (duck && ctx) { duck.gain.cancelScheduledValues(ctx.currentTime); duck.gain.setTargetAtTime(1, ctx.currentTime, 0.1); }
   }
 
   /* ---- music: crossfaded loops ---- */
@@ -167,6 +186,8 @@
     isMuted() { return muted; },
     setMusic(on) { musicOn = !!on; if (musicBus) musicBus.gain.value = musicOn ? 0.36 : 0; },
     get musicOn() { return musicOn; },
+    setVoice(on) { voiceOn = !!on; if (!voiceOn) stopVoice(); },
+    get voiceOn() { return voiceOn; },
     play, say, music, tick() { tickMusic(); },
     engine(level, motion) { if (ctx) engineLevel(level, motion); },
     loaded() { return Object.keys(buf).length; },

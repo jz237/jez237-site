@@ -123,11 +123,17 @@ check line-of-sight, and lead their shots.
   glow (gold yours, red theirs). Trees shed leaves or needles when hit or
   toppled. Grass lies flat under tanks, along your recent track path and
   around blasts.
-- **Voice:** 57 commander lines, all in one ElevenLabs voice ("Harry"). Each
-  event has 2–3 takes that never repeat back to back, and every line has its
-  own cooldown. Events covered: kills, ricochets, bounces, flanking hits,
-  track and engine hits, hull-down, artillery, smoke, rockets, tank
-  destroyers and weather.
+- **Voice:** commander lines in one ElevenLabs voice ("Harry"), 2–3 takes
+  each that never repeat back to back. Since real2 (November 2026) all speech
+  is rare and goes through one gate in `js/audio.js`: at most one radio line
+  per 25 s, routine callouts chance-gated with long per-line cooldowns, never
+  the same line twice in a row. Battle start and the Iron Colossus always get
+  the air. Kill, streak, ricochet, bounce, repair, smoke, airstrike-inbound
+  and hull-down callouts were cut (their banners and floaters remain).
+  Soldiers shout at most once per 12–20 s, only within 60 m, never the same
+  order twice running and never over the radio. **Options → Voice &
+  narration** turns all speech off (saved as `voiceOn` in
+  `iron_ridge_settings_v1`).
 - **Co-op guests** get the same armour-facing damage and callouts as the
   host. Remote tank facing is now synced for that.
 - **Phones:** below 560 px wide the HUD restacks so the gun panel, armour bar

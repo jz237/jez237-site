@@ -8,9 +8,9 @@
 // the field for a while before sinking away.
 
 import * as THREE from 'three';
-import { getHeight } from './terrain.js?v=real1';
-import { INFANTRY } from './config.js?v=real1';
-import { SoldierCrowd, SoldierRig, B, ANG, JOINTS, RIFLE_GRIP, RIFLE_GUARD, RIFLE_MUZZLE, TUBE_GUARD, TUBE_MUZZLE, TUBE_REAR } from './soldier-model.js?v=real1';
+import { getHeight } from './terrain.js?v=real2';
+import { INFANTRY } from './config.js?v=real2';
+import { SoldierCrowd, SoldierRig, B, ANG, JOINTS, RIFLE_GRIP, RIFLE_GUARD, RIFLE_MUZZLE, TUBE_GUARD, TUBE_MUZZLE, TUBE_REAR } from './soldier-model.js?v=real2';
 
 const CORPSES = 30;
 const CORPSE_LIFE = 24;

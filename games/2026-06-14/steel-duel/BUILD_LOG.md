@@ -329,3 +329,18 @@ the update; the github.io origin reflects it immediately.
   button on game over; floating score popups and animated centre banners.
 - New tests: T-revive momentum, T-boss hull vs walls, T-bastion immovable, T-campaign spawns, T-campaign play again,
   T-co-op revive, T-supply crates, T-flak, T-events.
+
+## v32 — rarer announcer + Voice option  ✅ 38/38 tests green
+- User: the talking was monotonous. Every announcer line now goes through one gate in `audio.js` (`SDAudio.say`):
+  25 s of real time between lines, no repeat of the last line within 75 s, never two lines at once. Key lines
+  (results, game over / campaign complete, boss arrival, boss destroyed) skip the 25 s gap but wait for the current
+  line to finish. `game.js` `vo()` adds per-match "first time only" and chance gates for routine callouts.
+- Kept: one "Engage!" per match start (every time for the first duel, then 1 in 3), campaign opening "Wave one",
+  boss arrivals, boss destroyed, last tank, results, game over, campaign complete. Rarer: level clear (1 in 2),
+  final wave (3 in 10), boss phase (1 in 2), triple kill (first per match, 1 in 2), unstoppable (first per match),
+  reinforcements (first per match), pickups (first per kind per match, 1 in 2), scores (1 in 10), ten seconds
+  (35 in 100), flank hint (once per session). Cut: "Get ready", wave two, wave clear, double kill, we lost a tank,
+  twenty seconds. Banners and popups still show every time.
+- Options: VOICE ON/OFF (`sd_voice`, default ON). OFF = no announcer at all; sound effects and music unchanged.
+- Scripted real-time run (3 min campaign with a bot + 2.5 min CPU-vs-CPU duels): 65 lines before, 9 and 11
+  after (two runs; chance gates vary).

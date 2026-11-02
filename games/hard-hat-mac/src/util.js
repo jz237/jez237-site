@@ -28,7 +28,7 @@ export const v3 = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
 // Settings persisted per browser (try/catch: storage may be blocked).
 const SKEY = 'hhm3d-settings-v1';
 export const settings = Object.assign({
-  quality: 'auto', music: 0.7, sfx: 0.9, voice: 1.0, muted: false,
+  quality: 'auto', music: 0.7, sfx: 0.9, voice: 1.0, narration: true, muted: false,
   camSens: 1.0, invertY: false, shake: true, fps: false, captions: true, hud: 1,
   assistSpeed: 1, assistTime: 1, assistLives: false, ghost: true, keys: {},
 }, (() => { try { return JSON.parse(localStorage.getItem(SKEY)) || {}; } catch { return {}; } })());

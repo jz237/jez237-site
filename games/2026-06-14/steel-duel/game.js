@@ -266,6 +266,7 @@
     rng = mulberry32((seed | 0) || 1);
     controls = fresh();
     loadCampaignLevel();
+    newMatchVoice();
     if (!headless) { SDAudio.init(); SDAudio.start(); }
     applyCursor(); updateTouchLayout();
     return true;
@@ -1534,7 +1535,20 @@
   }
 
   /* ===================== presentation: events → effects, audio, announcer ===================== */
-  const pres = { streak: 0, lastKill: -9, flankSaid: false, lastScoreVo: -9, trackDist: {} };
+  const pres = { streak: 0, lastKill: -9, flankSaid: false, trackDist: {}, once: new Set(), duels: 0 };
+  /* Announcer policy (v32): talk on big moments only. Every line goes through SDAudio.say(), whose gate drops a line
+     inside 25 s of real time after the previous one, never repeats the last line and never overlaps two lines; key
+     lines (results, game over, boss arrival / kill) skip the gap but still wait their turn. On top of that, routine
+     callouts here are first-time-per-match (once) and/or chance-gated. Banners and popups still show every time. */
+  function vo(line, o) {
+    o = o || {};
+    if (o.once && pres.once.has(o.once)) return false;
+    if (o.chance != null && Math.random() >= o.chance) return false;
+    const ok = SDAudio.say(line, o.key ? 3 : 2);
+    if (ok && o.once) pres.once.add(o.once);
+    return ok;
+  }
+  function newMatchVoice() { pres.once.clear(); }
   function consumeEvents() { while (events.length) dispatch(events.shift()); }
   function dispatch(e) {
     if (use3d()) SD3D.event(e); else fx2d(e);
@@ -1585,61 +1599,60 @@
         break;
       case 'deflect':
         SDAudio.play('ricochet', at(0.7));
-        if (mode === 'campaign' && !e.shield && !pres.flankSaid && isMine(e.by)) { pres.flankSaid = true; SDAudio.say('flank', 2); popup(e.x, e.y, 'FLANK IT!', '#9fc2ff'); }
+        if (mode === 'campaign' && !e.shield && !pres.flankSaid && isMine(e.by)) { pres.flankSaid = true; vo('flank'); popup(e.x, e.y, 'FLANK IT!', '#9fc2ff'); }
         break;
       case 'kill': {
         SDAudio.play('explode', Object.assign(at(e.boss ? 1 : 0.85), { rate: e.boss ? 0.8 : 1 }));
-        if (e.boss) { SDAudio.play('explode', { gain: 0.8, rate: 0.62, delay: 0.3 }); SDAudio.say('bossdown', 3); slowMo = 1.4; showBanner(BOSS_TITLES[e.boss] || 'BOSS', 'DESTROYED', '#ffd27a', 2.4); }
+        if (e.boss) { SDAudio.play('explode', { gain: 0.8, rate: 0.62, delay: 0.3 }); vo('bossdown', { key: true }); slowMo = 1.4; showBanner(BOSS_TITLES[e.boss] || 'BOSS', 'DESTROYED', '#ffd27a', 2.4); }
         if (isMine(e.id)) hurtT = 1;
         if (e.team === 'enemy' && (mode === 'campaign' || mode === 'coop') && tanks[e.by] && tanks[e.by].team === 'ally') {
           if (e.val) popup(e.x, e.y, '+' + e.val, e.color);
           pres.streak = now - pres.lastKill < 3.2 ? pres.streak + 1 : 1; pres.lastKill = now;
-          if (pres.streak === 2) { SDAudio.say('double', 1); showBanner('DOUBLE KILL', '', '#ffd27a', 1.2); }
-          else if (pres.streak === 3) { SDAudio.say('triple', 2); showBanner('TRIPLE KILL', '', '#ffb347', 1.4); }
-          else if (pres.streak === 5) { SDAudio.say('rampage', 2); showBanner('UNSTOPPABLE', '', '#ff7a4f', 1.6); }
+          if (pres.streak === 2) showBanner('DOUBLE KILL', '', '#ffd27a', 1.2);
+          else if (pres.streak === 3) { vo('triple', { once: 'triple', chance: 0.5 }); showBanner('TRIPLE KILL', '', '#ffb347', 1.4); }
+          else if (pres.streak === 5) { vo('rampage', { once: 'rampage' }); showBanner('UNSTOPPABLE', '', '#ff7a4f', 1.6); }
         }
         break;
       }
       case 'mine': SDAudio.play('mine', at(1)); break;
       case 'mineDrop': SDAudio.blip(160); break;
       case 'flak': SDAudio.play('flak', at(0.7)); popup(e.x, e.y, 'FLAK', '#fff4c2'); break;
-      case 'phase': SDAudio.play('bosshorn', { gain: 0.7 }); SDAudio.say('phase', 2); showBanner('PHASE ' + e.phase, BOSS_TITLES[e.boss] || '', '#ff7a4f', 1.6); break;
+      case 'phase': SDAudio.play('bosshorn', { gain: 0.7 }); vo('phase', { chance: 0.5 }); showBanner('PHASE ' + e.phase, BOSS_TITLES[e.boss] || '', '#ff7a4f', 1.6); break;
       case 'wave': {
         const lvName = 'LV' + (e.lv + 1) + ' · ' + String(e.name || '').toUpperCase();
-        if (e.boss) { SDAudio.play('bosshorn', { gain: 0.85 }); SDAudio.say(e.boss, 3); showBanner(BOSS_TITLES[e.boss] || 'BOSS', lvName, '#ff7a4f', 2.8); }
+        if (e.boss) { SDAudio.play('bosshorn', { gain: 0.85 }); vo(e.boss, { key: true }); showBanner(BOSS_TITLES[e.boss] || 'BOSS', lvName, '#ff7a4f', 2.8); }
         else {
           SDAudio.play('klaxon', { gain: 0.4 });
-          SDAudio.say(e.wave === 0 ? 'wave1' : (e.wave === e.waves - 1 && e.waves > 2) ? 'wave3' : 'wave2', 2);
+          if (e.wave === 0) vo('wave1', { once: 'opening' });                       // the run's opening line only
+          else if (e.wave === e.waves - 1 && e.waves > 2) vo('wave3', { chance: 0.3 });   // "final wave", now and then
           showBanner(e.wave === 0 ? lvName : 'WAVE ' + (e.wave + 1), e.wave === 0 ? 'WAVE 1 / ' + e.waves : (e.wave === e.waves - 1 ? 'FINAL WAVE' : ''), '#eef3ff', 2);
         }
         break;
       }
-      case 'waveClear': SDAudio.say('waveclear', 2); showBanner('WAVE CLEAR', '', '#eef3ff', 1.3); break;
-      case 'levelClear': SDAudio.say('levelclear', 2); SDAudio.play('pickup', { gain: 0.4 }); showBanner('LEVEL CLEAR', e.boss ? 'CHECKPOINT UNLOCKED' : '', '#a8f06f', 2.2); break;
-      case 'lifeLost': SDAudio.say(e.lives === 1 ? 'lastlife' : 'tankdown', 2); break;
-      case 'lifeUp': SDAudio.say('extralife', 1); break;
-      case 'campEnd': SDAudio.play(e.won ? 'victory' : 'defeat', { gain: 0.8 }); SDAudio.say(e.won ? 'complete' : 'gameover', 3); break;
+      case 'waveClear': showBanner('WAVE CLEAR', '', '#eef3ff', 1.3); break;
+      case 'levelClear': vo('levelclear', { chance: 0.5 }); SDAudio.play('pickup', { gain: 0.4 }); showBanner('LEVEL CLEAR', e.boss ? 'CHECKPOINT UNLOCKED' : '', '#a8f06f', 2.2); break;
+      case 'lifeLost': if (e.lives === 1) vo('lastlife'); break;                // "we lost a tank" is cut
+      case 'lifeUp': vo('extralife', { once: 'extralife' }); break;
+      case 'campEnd': SDAudio.play(e.won ? 'victory' : 'defeat', { gain: 0.8 }); vo(e.won ? 'complete' : 'gameover', { key: true }); break;
       case 'end': {
         const w = e.winner, cpu = mode === 'cpu', coop = mode === 'coop';
         const youWon = (cpu && w === 'p1') || (coop && w === 'p1') || (online.connected && ((online.role === 'p1' && w === 'p1') || (online.role === 'p2' && w === 'p2')));
         const lost = (cpu || coop) && w === 'p2';
         SDAudio.play(lost ? 'defeat' : 'victory', { gain: 0.75 });
-        SDAudio.say(w === 'draw' ? 'draw' : cpu ? (w === 'p1' ? 'youwin' : 'cpuwins') : coop ? (w === 'p1' ? 'teamwins' : 'gameover') : (youWon ? 'youwin' : w === 'p1' ? 'p1wins' : 'p2wins'), 3);
+        vo(w === 'draw' ? 'draw' : cpu ? (w === 'p1' ? 'youwin' : 'cpuwins') : coop ? (w === 'p1' ? 'teamwins' : 'gameover') : (youWon ? 'youwin' : w === 'p1' ? 'p1wins' : 'p2wins'), { key: true });
         break;
       }
-      case 'score': {
-        if (now - pres.lastScoreVo < 1.6) break; pres.lastScoreVo = now;
-        if (mode === 'coop') SDAudio.say(e.team === 'enemy' ? 'teamscores' : 'enemyscores', 1);
-        else if (mode === 'cpu') SDAudio.say(e.victim === 1 ? 'teamscores' : 'enemyscores', 1);
-        else SDAudio.say(e.victim === 0 ? 'p2scores' : 'p1scores', 1);
+      case 'score': {                                    // routine: the HUD shows it; spoken only now and then
+        const line = mode === 'coop' ? (e.team === 'enemy' ? 'teamscores' : 'enemyscores') : mode === 'cpu' ? (e.victim === 1 ? 'teamscores' : 'enemyscores') : (e.victim === 0 ? 'p2scores' : 'p1scores');
+        vo(line, { chance: 0.1 });
         break;
       }
-      case 'time': SDAudio.say(e.s === 20 ? '20s' : '10s', 2); SDAudio.blip(e.s === 10 ? 1240 : 920); break;
-      case 'start': SDAudio.say('ready', 3); SDAudio.say('fight', 1); break;
+      case 'time': if (e.s === 10) vo('10s', { chance: 0.35 }); SDAudio.blip(e.s === 10 ? 1240 : 920); break;   // "twenty seconds" is cut
+      case 'start': newMatchVoice(); pres.duels++; vo('fight', { chance: pres.duels === 1 ? 1 : 0.34 }); break;   // one line ("engage"), not "get ready" + "engage"
       case 'drop': SDAudio.blip(1480); break;
       case 'pick': {
         SDAudio.play(e.kind === 'repair' ? 'repair' : e.kind === 'shield' ? 'shield' : 'pickup', { gain: 0.75 });
-        SDAudio.say(e.kind === 'life' ? 'extralife' : e.kind, 1);
+        vo(e.kind === 'life' ? 'extralife' : e.kind, { once: e.kind === 'life' ? 'extralife' : 'pick_' + e.kind, chance: e.kind === 'life' ? 1 : 0.5 });
         popup(e.x, e.y, { repair: 'REPAIR +2', shield: 'SHIELD', rapid: 'RAPID FIRE', life: mode === 'campaign' ? '+1 LIFE' : 'FULL REPAIR' }[e.kind] || '', PICK_COL[e.kind], true);
         break;
       }
@@ -1737,12 +1750,17 @@
     const o = $('optAutoFire'); if (o) o.textContent = autoFire ? '🎯 AUTO-FIRE: ON' : '🎯 AUTO-FIRE: OFF';
     persist('sd_autofire', autoFire); updateTouchLayout();
   }
-  let musicPref = true, gfxQuality = 'auto', camPref = 'auto';
+  let musicPref = true, voicePref = true, gfxQuality = 'auto', camPref = 'auto';
   const GFX = ['auto', 'high', 'medium', 'low'];
   function setMusicPref(v) {
     musicPref = !!v; if (SDAudio.setMusic) SDAudio.setMusic(musicPref);
     const o = $('optMusic'); if (o) o.textContent = musicPref ? '🎵 MUSIC: ON' : '🎵 MUSIC: OFF';
     persist('sd_music', musicPref);
+  }
+  function setVoicePref(v) {                              // announcer only; sound effects and music are separate
+    voicePref = !!v; if (SDAudio.setVoice) SDAudio.setVoice(voicePref);
+    const o = $('optVoice'); if (o) o.textContent = voicePref ? '🗣️ VOICE: ON' : '🗣️ VOICE: OFF';
+    persist('sd_voice', voicePref);
   }
   function setGfx(q) {
     gfxQuality = GFX.includes(q) ? q : 'auto';
@@ -1761,6 +1779,7 @@
       const m = localStorage.getItem('sd_muted'); if (m != null) muted = m === '1';
       const a = localStorage.getItem('sd_autofire'); if (a != null) autoFire = a === '1';
       const mu = localStorage.getItem('sd_music'); if (mu != null) musicPref = mu === '1';
+      const vc = localStorage.getItem('sd_voice'); if (vc != null) voicePref = vc === '1';
       gfxQuality = localStorage.getItem('sd_gfx') || 'auto'; camPref = localStorage.getItem('sd_cam') || 'auto';
     } catch (e) {}
   }
@@ -2220,7 +2239,7 @@
     click('btnCampaign', () => { disconnectOnline(); startCampaign(campaignStartLevel(), 1, aiLevel, (Math.random() * 1e9) | 0); });
     click('btnCampaign2', () => { disconnectOnline(); startCampaign(campaignStartLevel(), 2, aiLevel, (Math.random() * 1e9) | 0); });
     click('btnRetry', () => { if (campaign) startCampaign(campaign.levelIdx, campaign.players, aiLevel, (Math.random() * 1e9) | 0); });
-    click('optMusic', () => setMusicPref(!musicPref));
+    click('optMusic', () => setMusicPref(!musicPref)); click('optVoice', () => setVoicePref(!voicePref));
     click('optGfx', () => setGfx(GFX[(GFX.indexOf(gfxQuality) + 1) % GFX.length]));
     click('optCam', () => setCamPref(CAM_MODES[(CAM_MODES.indexOf(camPref) + 1) % CAM_MODES.length]));
     document.querySelectorAll('.sb-tab').forEach(b => b.addEventListener('click', () => { SDAudio.ui(); refreshBoard(b.dataset.tab); }));
@@ -2252,7 +2271,7 @@
     const cb = $('btnClassic'); if (cb) cb.addEventListener('click', toggleVisual);
     const camB = $('btnCam'); if (camB) camB.addEventListener('click', () => { SDAudio.ui(); cycleCamera(); });
     const sub = $('btnSubmit'); if (sub) sub.addEventListener('click', async () => { const inp = $('initials'); const nm = (inp && inp.value || 'YOU').toUpperCase().slice(0, 3) || 'YOU'; await Scores.submit(nm, scoreValue()); const f = $('overScoreForm'); if (f) f.classList.add('hidden'); state = 'scores'; showOverlay('scores'); refreshBoard(mode === 'campaign' ? 'campaign' : 'versus'); });
-    setMuted(muted); setAutoFire(autoFire); setMusicPref(musicPref); setGfx(gfxQuality); setCamPref(camPref);   // restore + sync persisted options
+    setMuted(muted); setAutoFire(autoFire); setMusicPref(musicPref); setVoicePref(voicePref); setGfx(gfxQuality); setCamPref(camPref);   // restore + sync persisted options
     refreshCampStart(); syncVisualButton();
 
     const q = new URLSearchParams(location.search);

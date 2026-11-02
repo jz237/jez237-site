@@ -3,9 +3,9 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { Tank } from './tank.js?v=real1';
-import { getHeight, raycastTerrain } from './terrain.js?v=real1';
-import { ENEMY, ENEMY_TYPES, PILLBOX, SHELL, CG, PLAY_RADIUS } from './config.js?v=real1';
+import { Tank } from './tank.js?v=real2';
+import { getHeight, raycastTerrain } from './terrain.js?v=real2';
+import { ENEMY, ENEMY_TYPES, PILLBOX, SHELL, CG, PLAY_RADIUS } from './config.js?v=real2';
 
 const WRECK_LIFE = 90; // seconds a burnt-out hull stays on the field
 const WRECK_CAP = 7;   // most wrecks kept at once (newest win)

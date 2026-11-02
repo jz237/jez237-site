@@ -3,10 +3,10 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { tankSurface } from './surface-art.js?v=real1';
-import { batchRigidParts } from './render-batch.js?v=real1';
-import { TANK, SHELL, CG } from './config.js?v=real1';
-import { getHeight, groundSpeedFactor } from './terrain.js?v=real1';
+import { tankSurface } from './surface-art.js?v=real2';
+import { batchRigidParts } from './render-batch.js?v=real2';
+import { TANK, SHELL, CG } from './config.js?v=real2';
+import { getHeight, groundSpeedFactor } from './terrain.js?v=real2';
 
 const _conn = new CANNON.Vec3();
 const _connW = new CANNON.Vec3();

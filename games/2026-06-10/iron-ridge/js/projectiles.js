@@ -5,7 +5,7 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { SHELL, CG } from './config.js?v=real1';
+import { SHELL, CG } from './config.js?v=real2';
 
 const _from = new CANNON.Vec3();
 const _to = new CANNON.Vec3();

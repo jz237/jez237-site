@@ -147,7 +147,7 @@ button { appearance: none; border: 0; background: none; font: inherit; color: in
 .pu span { font-size: 10px; color: #9fb2d6; font-family: system-ui, sans-serif; }
 .cardfoot { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
 .cardfoot .mbtn { padding: 10px 16px; font-size: 11px; }
-.opt { display: grid; grid-template-columns: 130px 1fr auto; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, .06); font-size: 10px; letter-spacing: .16em; }
+.opt { display: grid; grid-template-columns: 130px 1fr auto; gap: 10px; align-items: center; padding: 6px 0; border-bottom: 1px solid rgba(255, 255, 255, .06); font-size: 10px; letter-spacing: .16em; }
 .opt input[type=range] { width: 100%; accent-color: var(--cyan); }
 .seg { display: flex; gap: 6px; flex-wrap: wrap; }
 .seg button { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--edge); font-size: 9px; letter-spacing: .14em; color: var(--dim); }
@@ -429,13 +429,14 @@ body.calm .odbar.full i, body.calm #t-od.ready, body.calm .vsmark { animation: n
       <div class="opt"><span>MUSIC</span><input type="range" min="0" max="100" data-vol="music"><span></span></div>
       <div class="opt"><span>EFFECTS</span><input type="range" min="0" max="100" data-vol="sfx"><span></span></div>
       <div class="opt"><span>VOICES</span><input type="range" min="0" max="100" data-vol="voice"><span></span></div>
+      <div class="opt"><span>NARRATION</span><div class="seg" data-opt="talk"><button data-v="on">ON</button><button data-v="off">OFF</button></div><span></span></div>
       <div class="opt"><span>GRAPHICS</span><div class="seg" data-opt="quality"><button data-v="auto">AUTO</button><button data-v="ultra">ULTRA</button><button data-v="high">HIGH</button><button data-v="low">LOW</button></div><span></span></div>
       <div class="opt"><span>CAMERA</span><div class="seg" data-opt="camera"><button data-v="auto">AUTO</button><button data-v="arena">BEHIND</button><button data-v="side">SIDE</button><button data-v="top">TOP</button></div><span></span></div>
       <div class="opt"><span>SCREEN SHAKE</span><div class="seg" data-opt="shake"><button data-v="1">ON</button><button data-v="0.4">LOW</button><button data-v="0">OFF</button></div><span></span></div>
       <div class="opt"><span>FLASHING</span><div class="seg" data-opt="flash"><button data-v="full">FULL</button><button data-v="reduced">REDUCED</button></div><span></span></div>
       <div class="opt"><span>INSTANT REPLAY</span><div class="seg" data-opt="replay"><button data-v="on">ON</button><button data-v="off">OFF</button></div><span></span></div>
       <div class="opt"><span>AI OVERLAY</span><div class="seg" data-opt="tactical"><button data-v="demo">DEMO ONLY</button><button data-v="always">ALWAYS</button><button data-v="never">NEVER</button></div><span></span></div>
-      <p style="margin-top:10px">Graphics changes apply on the next reload. Reduced flashing tones down screen flashes, shockwaves, colour fringing and lightning strobes. The AI overlay draws each pilot's forecast and planned shot on the floor.</p>
+      <p style="margin-top:10px">Graphics changes apply on the next reload. Reduced flashing tones down screen flashes, shockwaves, colour fringing and lightning strobes. Narration off silences the announcer and the rival pilots. The AI overlay draws each pilot's forecast and planned shot on the floor.</p>
       <div class="cardfoot"><button class="mbtn" data-act="back">BACK</button></div>
     </div>
   </section>
@@ -479,6 +480,6 @@ body.calm .odbar.full i, body.calm #t-od.ready, body.calm .vsmark { animation: n
     </div>
   </section>
 </div>
-<script type="module" src="js/main.js?v=4"></script>
+<script type="module" src="js/main.js?v=5"></script>
 </body>
 </html>

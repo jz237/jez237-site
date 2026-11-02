@@ -197,7 +197,7 @@ export class Enemy {
       const s = this.yankSock;
       if (!s || s.state !== 'placed') { this.state = 'patrol'; }
       else if (this.yankT <= 0) {
-        g.objects.unplace(s); g.audio.play('yank', { pos: s.center, vol: 1 }); g.audio.voice('vd_laugh', .9, s.center);
+        g.objects.unplace(s); g.audio.play('yank', { pos: s.center, vol: 1 }); g.audio.grunt('vd_laugh', .9, s.center, { gap: 10 });
         g.toast('GIRDER STOLEN!'); g.caption('The vandal yanked out a loose girder!');
         this.state = 'patrol'; this.think = 1.5;
       }
@@ -226,7 +226,9 @@ export class Enemy {
       if (!goal && !p.dead && this.grace <= 0 && p.invuln <= 0 && (d < this.K.see && Math.abs(dy) < 4.5)) {
         goal = nav.nearest(pb.x, pb.y + .2, pb.z, 2); chase = !!goal;
         if (chase && this.state !== 'chase' && this.voiceCd < 0 && d < 9) {
-          this.voiceCd = 14; g.audio.voice(this.kind === 'vandal' ? 'vd_taunt' : this.kind === 'inspector' ? 'in_halt' : 'dog_bark', .85, this.root.position);
+          this.voiceCd = 14;
+          if (this.kind === 'dog') g.audio.voice('dog_bark', .85, this.root.position);
+          else g.audio.say(this.kind === 'vandal' ? 'vd_taunt' : 'in_halt', { vol: .85, pos: this.root.position, quip: true, chance: .4 });
         }
       }
       this.state = chase ? 'chase' : 'patrol';
@@ -339,7 +341,7 @@ export class Enemy {
     }
     if (this.hitCd > 0) return;
     this.hitCd = 1;
-    if (this.kind === 'inspector') g.audio.voice('in_cite', 1, this.root.position);
+    if (this.kind === 'inspector') g.audio.say('in_cite', { pos: this.root.position, quip: true, chance: .35 });
     g.hitPlayer(this.kind, { push: new THREE.Vector3(dx / (d || 1) * 7, 6, dz / (d || 1) * 7) });
   }
   animate(dt) {

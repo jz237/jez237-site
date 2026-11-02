@@ -82,10 +82,10 @@ export class Player {
       if (fall > .9) {
         this.rig.land(Math.min(1.6, fall / 2.5)); g.audio.play('land', { vol: Math.min(1, .35 + fall / 6), rate: rr(.9, 1.05) });
         g.fx.dust(V.set(b.x, b.y + .05, b.z), Math.round(4 + fall * 3));
-        if (fall > 3.2) { g.shake(.25, null); g.audio.play('mac_oof', { bus: 'voice', vol: .7 }); }
+        if (fall > 3.2) { g.shake(.25, null); g.audio.grunt('mac_oof', .7, null, { gap: 20 }); }
       }
     }
-    if (!b.onGround) { this.airMax = Math.max(this.airMax, b.y); if (b.vy < -16 && !this.screamed && this.airMax - b.y > 5) { this.screamed = true; g.audio.voice('mac_whoa', .9); } }
+    if (!b.onGround) { this.airMax = Math.max(this.airMax, b.y); if (b.vy < -16 && !this.screamed && this.airMax - b.y > 5) { this.screamed = true; g.audio.grunt('mac_whoa', .9, null, { gap: 12 }); } }
     else { this.airMax = b.y; this.screamed = false; }
     if (b.y < g.level.killY) { this.die('void'); return; }
 
@@ -166,7 +166,7 @@ export class Player {
     this.shoveT = .001; this.swingCd = .7; this.swingHit = false;
     b.vx += Math.sin(this.yaw) * 3.2; b.vz += Math.cos(this.yaw) * 3.2;
     this.game.audio.play('swing', { vol: .5, rate: .8 });
-    if (Math.random() < .3) this.game.audio.voice('mac_shove', .8);
+    this.game.audio.say('mac_shove', { vol: .8, quip: true, chance: .25 });
     return true;
   }
   updateShove() {
@@ -260,8 +260,8 @@ export class Player {
     if (this.deathMode === 'knock') { b.vy = 7; b.vx = -Math.sin(this.yaw) * 3; b.vz = -Math.cos(this.yaw) * 3; }
     if (this.deathMode === 'flat') { g.audio.play('splat', { vol: 1 }); g.fx.dust(V.set(b.x, b.y + .1, b.z), 26); g.shake(.4, null); }
     if (mode === 'molten') { this.rig.body.visible = false; g.fx.embers(V.set(b.x, b.y + .5, b.z), 50); }
-    if (mode === 'drown' || mode === 'splash') { this.rig.body.visible = false; g.audio.voice('mac_whoa', .8); }
-    if (this.deathMode === 'knock') { g.audio.play('dizzy', { vol: .8 }); g.audio.voice('mac_oof', .9); }
+    if (mode === 'drown' || mode === 'splash') { this.rig.body.visible = false; g.audio.grunt('mac_whoa', .8, null, { gap: 12 }); }
+    if (this.deathMode === 'knock') { g.audio.play('dizzy', { vol: .8 }); g.audio.grunt('mac_oof', .9, null, { gap: 20 }); }
     if (this.carry) { const o = this.carry; this.carry = null; g.objects.sendHome(o); }
   }
   // per-frame visuals

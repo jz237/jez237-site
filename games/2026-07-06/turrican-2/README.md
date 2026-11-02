@@ -66,6 +66,18 @@ During the demo, pinch (touch) or scroll / trackpad pinch (desktop) zooms from 0
 
 `D.SPEED` in `assets/data.js` (0.8 by default) scales the whole world. Players pick 70%, 80%, 90% or 100% in Options; `D.setSpeed(v)` applies it when a run starts, and the demo always runs at the default because the pilot's jump tables are built for it. the loop still runs 60 ticks per real second, but each tick simulates `D.DT = D.STEP * D.SPEED` seconds, and the renderer's effects and animation get the same scaled time. Everything in the engine is in seconds, so players, enemies, bullets, bosses and timers all slow together. The demo pilot's tick counts go through `tk()` so its jump shapes keep the same game-time span.
 
+## Narration
+
+The announcer is rare on purpose. Every spoken line, from play, the title and the demo alike, goes through one gate in `assets/audio.js` (`VO_RULE`):
+
+- Only one line at a time, and at least 25 s of real time between lines (`VO_GAP`). The same event never plays twice in a row.
+- **Key** lines skip the gap but wait for a line still playing: title, mission start, a world's name (the first time a run reaches it, never on a retry), boss warnings, victory, game over.
+- **Big** lines need the gap: the clock running low.
+- **Routine** lines need the gap, a chance roll, and 90 s since the same event: boss down (50%), stage clear (30%), trooper down (30%), extra life (25%), armour critical (50%), and a gun's name (50%, only at its first pickup in a run).
+- Never spoken: cryo, shockwall, the shmup "fighter online" line and the generic "weapon upgraded" lines.
+
+Options > NARRATION (and the Narration button in the top bar) turns speech off completely; sound effects, boss roars and music carry on. It is saved as `narration` in the `turrican2_hd_settings_v2` localStorage settings (default on). `__shard.narration` / `__shard.setNarration(on)` drive it in tests.
+
 ## Build and test
 
 ```bash

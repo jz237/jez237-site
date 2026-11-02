@@ -118,6 +118,8 @@
       .pm-btn:hover, .pm-btn:focus-visible { border-color: #fff; outline: none; scale: 1.03; }
       .pm-btn.primary { background: var(--cyan); color: #02040a; border-color: var(--cyan); box-shadow: 0 0 22px rgba(47, 245, 210, 0.5); }
       .pm-btn.danger { border-color: rgba(255, 61, 107, 0.6); color: #ffb3c6; }
+      /* NARRATION: the commander's voice on or off. */
+      [data-button="Narration"].off { color: var(--dim); border-style: dashed; }
       .pm-note { max-width: 300px; margin-top: 4px; padding: 6px 10px; border-radius: 8px; background: rgba(2, 4, 10, 0.7); font-size: 11px; line-height: 1.5; letter-spacing: 1px; color: #c9d6f2; text-align: center; }
       @media (max-height: 460px) { .pm-title { font-size: 30px; } .pm-btn { padding: 9px 14px; font-size: 13px; } #pause-menu { gap: 7px; } .pm-note { display: none; } }
       /* Between queens: three paths, one pick. */
@@ -317,7 +319,7 @@
       @media (pointer: coarse) { .firemode .swap.touch { display: none; } }
       #title-scores li.note { font-family: Orbitron, sans-serif; font-size: 10px; }
 </style>
-    <script type="module" crossorigin src="./assets/index-BmslgnGN.js"></script>
+    <script type="module" crossorigin src="./assets/index-D9TSysYj.js"></script>
     <link rel="modulepreload" crossorigin href="./assets/three.module-zC1CTmic.js">
     <link rel="modulepreload" crossorigin href="./assets/BufferGeometryUtils-D_eRPc55.js">
   </head>
@@ -355,6 +357,7 @@
         <div class="pm-title">PAUSED</div>
         <div id="pause-line"></div>
         <button class="pm-btn primary" data-button="Resume">▶ RESUME</button>
+        <button class="pm-btn" data-button="Narration" aria-pressed="true" title="Narration (V)">◉ NARRATION: <span class="narration-value">ON</span></button>
         <button class="pm-btn" data-button="MainMenu">⌂ MAIN MENU</button>
         <button class="pm-btn danger" data-button="QuitGame">✕ QUIT GAME</button>
         <div class="pm-note">Main Menu and Quit end this run. A top‑ten score still gets your initials.</div>
@@ -367,13 +370,14 @@
         <div class="row">
           <button class="ghost" id="scores-button">HIGH SCORES</button>
           <button class="ghost violet" data-button="Difficulty">DIFFICULTY: <span id="difficulty-value">NORMAL</span></button>
+          <button class="ghost" data-button="Narration" aria-pressed="true" title="Narration (V)">NARRATION: <span class="narration-value">ON</span></button>
           <a class="ghost amber" id="classic" href="../../../missile-command/">◂ ALL EDITIONS</a>
         </div>
         <button class="firemode tap" id="fire-title" data-button="FireMode" title="Fire mode (F)"><span class="icon tap-icon">👆</span><span class="icon rapid-icon">🔥</span><span class="mode">TAP TO FIRE</span><span class="swap keys">· SWITCH: CLICK OR F</span><span class="swap touch">⇄ TAP</span></button>
         <div id="title-scores" aria-live="polite"></div>
         <div id="how">
           <div class="line keys"><span id="how-fire">CLICK WHERE IT WILL BE — ONE SHOT A CLICK</span></div>
-          <div class="line keys"><span>1 2 3 FIRE FROM A BATTERY</span> · <span>ARROWS + SPACE</span> · <span>P PAUSE</span> · <span>M SOUND</span> · <span>GAMEPAD OK</span></div>
+          <div class="line keys"><span>1 2 3 FIRE FROM A BATTERY</span> · <span>ARROWS + SPACE</span> · <span>P PAUSE</span> · <span>M SOUND</span> · <span>V NARRATION</span> · <span>GAMEPAD OK</span></div>
           <div class="line touch"><span>TAP THE SKY TO LAUNCH</span></div>
           <div class="line touch"><span id="how-fire-touch">TAP WHERE IT WILL BE — ONE SHOT A TAP</span></div>
         </div>
@@ -382,6 +386,6 @@
     </div>
     <div id="loading"><div class="title">AURORA SIEGE</div><div id="loading-bar"><div id="loading-fill"></div></div><div class="label">LOADING</div></div>
     <!-- jez237.com: visible version, bumped on every publish. Built on SceNoCo (RomaRogov, MIT). -->
-    <div id="version">Aurora Siege 3D · v1.0.4</div>
+    <div id="version">Aurora Siege 3D · v1.0.5</div>
   </body>
 </html>

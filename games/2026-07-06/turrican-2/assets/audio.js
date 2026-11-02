@@ -850,8 +850,43 @@
       'bosswarn-queen': ['Warning! The Hive Queen stirs!'],
       'bosswarn-machine': ['This is it. The Sovereign itself. End this, trooper!'],
     };
-    let voiceOn = true, voiceVol = 0.9, lastVoiceAt = 0, curVoice = null, toastCb = null;
-    const lastVoiceIdx = {};
+    // ---- the narration gate: every spoken line (game, title, demo) passes here.
+    // Talk is rare on purpose: one line at a time, a long quiet gap between
+    // lines, never the same event twice in a row, and routine callouts mostly
+    // stay silent. Tiers:
+    //   'key'  title, mission start, a new world's name (once per run), boss
+    //          warnings, victory, game over: skip the gap, and wait for a line
+    //          still playing instead of talking over it
+    //   'big'  the clock running out: only after the gap
+    //   0..1   routine callouts: the gap, then this chance, and the same event
+    //          not again within VO_SAME ms
+    //   none   never spoken (cryo, shockwall, the shmup "fighter online" line,
+    //          generic "weapon upgraded")
+    const VO_GAP = 25000, VO_SAME = 90000, VO_BUSY = 8000, VO_WAIT = 9000;
+    const VO_RULE = {
+      title: 'key', start: 'key', victory: 'key', gameover: 'key', bosswarn: 'key',
+      world1: 'key', world2: 'key', world3: 'key', world4: 'key', world5: 'key', lowtime: 'big',
+      bossdown: 0.5, clear: 0.3, death: 0.3, oneup: 0.25, lowenergy: 0.5,
+      'weapon-scatter': 0.5, 'weapon-lance': 0.5, 'weapon-ricochet': 0.5,
+      'weapon-seeker': 0.5, 'weapon-flare': 0.5, 'weapon-prism': 0.5,
+    };
+    let voiceOn = true, voiceVol = 0.9, lastVoiceAt = -1e9, curVoice = null, toastCb = null;
+    let lastSpoken = null, pendingKey = null;
+    const lastVoiceIdx = {}, saidAt = {};
+    const voNow = () => (typeof performance !== 'undefined' ? performance.now() : Date.now());
+    const speaking = () => !!(curVoice && !curVoice.paused && !curVoice.ended && voNow() - lastVoiceAt < VO_BUSY);
+    function stopVoice() {
+      pendingKey = null;
+      if (curVoice) { try { curVoice.pause(); } catch (e) {} }
+      curVoice = null;
+    }
+    // a key line that arrived mid-sentence goes out when that sentence ends
+    function flushPending() {
+      if (!pendingKey || speaking()) return;
+      if (!voiceOn || muted) { pendingKey = null; return; }
+      const pk = pendingKey; pendingKey = null;
+      if (voNow() - pk.at < VO_WAIT) speak(pk.name);
+    }
     // A DIFFERENT announcer every game: voice sets live at assets/audio/vo/<voice>-<event>-<i>.mp3
     const VOICES = ['harry', 'bella', 'brian', 'callum', 'charlie', 'chris', 'eric', 'jessica', 'liam', 'lily', 'matilda'];
     let voiceName = VOICES[Math.floor(Math.random() * VOICES.length)], lastVoiceName = null;
@@ -860,23 +895,45 @@
       if (VOICES.length > 1 && vn === lastVoiceName) vn = VOICES[(VOICES.indexOf(vn) + 1) % VOICES.length];
       lastVoiceName = vn; voiceName = vn;
     }
-    function playVoice(name, priority) {
-      if (!voiceOn || muted) return;
-      let lines = VO_LINES[name];
-      let family = null;
-      if (!lines) {                                   // unknown sub-event -> its family (e.g. bosswarn-xyz -> bosswarn)
-        family = String(name).split('-')[0]; lines = VO_LINES[family]; if (!lines) return; name = family;
+    // playVoice(name): ask for a line; the gate decides. force (QA only) skips the gate's timing.
+    function playVoice(name, force) {
+      if (!voiceOn || muted) return false;
+      name = String(name);
+      const fam = name.split('-')[0];
+      if (!VO_LINES[name] && !VO_LINES[fam]) return false;
+      const now = voNow();
+      if (force) { stopVoice(); return speak(name); }
+      const rule = VO_RULE[name] !== undefined ? VO_RULE[name] : VO_RULE[fam];
+      if (rule === undefined) return false;                       // cut lines
+      // never the same event twice in a row (unless it has been a minute)
+      if (name === lastSpoken && now - lastVoiceAt < 60000) return false;
+      if (rule === 'key') {
+        if (speaking()) {
+          pendingKey = { name, at: now };
+          setTimeout(flushPending, Math.max(50, lastVoiceAt + VO_BUSY - now + 30));   // in case 'ended' never fires
+          return true;
+        }
+        return speak(name);
       }
-      const now = (typeof performance !== 'undefined' ? performance.now() : Date.now());
-      if (!priority && now - lastVoiceAt < 1600) return;
-      const busy = curVoice && !curVoice.paused && !curVoice.ended;
-      if (priority && busy) { try { curVoice.pause(); } catch (e) {} }
-      else if (busy && !priority && now - lastVoiceAt < 8000) return; // 8s failsafe vs stuck elements
+      if (speaking() || pendingKey || now - lastVoiceAt < VO_GAP) return false;
+      if (typeof rule === 'number') {
+        if (now - (saidAt[name] || -1e9) < VO_SAME) return false;
+        if (Math.random() >= rule) return false;
+      }
+      return speak(name);
+    }
+    function speak(req) {
+      let name = req, lines = VO_LINES[name];
+      if (!lines) {                                   // unknown sub-event -> its family (e.g. bosswarn-xyz -> bosswarn)
+        const family = name.split('-')[0]; lines = VO_LINES[family]; if (!lines) return false; name = family;
+      }
+      const now = voNow();
+      lastSpoken = req; saidAt[req] = now;
       let i = Math.floor(Math.random() * lines.length);
       if (lines.length > 1 && i === lastVoiceIdx[name]) i = (i + 1) % lines.length;
       lastVoiceIdx[name] = i;
       lastVoiceAt = now;
-      if (typeof Audio === 'undefined') return;
+      if (typeof Audio === 'undefined') return true;
       // fallback chain: chosen voice -> Harry's set -> the event family's line -> silence
       const fam = name.indexOf('-') > 0 ? name.split('-')[0] : null;
       const chainUrls = [`${A}vo/${voiceName}-${name}-${i}.mp3`];
@@ -884,16 +941,19 @@
       if (fam && VO_LINES[fam]) chainUrls.push(`${A}vo/${voiceName}-${fam}-0.mp3`);
       let step = 0;
       const tryNext = () => {
-        if (step >= chainUrls.length) { curVoice = null; return; }
+        if (step >= chainUrls.length) { curVoice = null; flushPending(); return; }
         const a = new Audio(chainUrls[step++] + AV);
         a.volume = voiceVol; curVoice = a;
         a.onerror = () => { if (curVoice === a) tryNext(); };
+        a.onended = () => { if (curVoice === a) flushPending(); };
         const pr = a.play(); if (pr && pr.catch) pr.catch(() => { if (curVoice === a && a.error) tryNext(); });
       };
       tryNext();
       if (toastCb) toastCb(lines[i]);
+      return true;
     }
-    function setVoice(on) { voiceOn = on; }
+    // Options > NARRATION: off means no spoken lines at all (SFX and music carry on)
+    function setVoice(on) { voiceOn = !!on; if (!voiceOn) stopVoice(); }
     function setVoiceLevel(vv) { voiceVol = Math.max(0, Math.min(1, 0.9 * vv)); }
     function onVoiceToast(cb) { toastCb = cb; }
 
@@ -904,7 +964,7 @@
         wasPlayingBeforeMute = !!(schedTimer || curSource);
         stopMusic();
         if (master) master.gain.value = 0;
-        if (curVoice && !curVoice.paused) { try { curVoice.pause(); } catch (e) {} }
+        stopVoice();
         if (ctx) allLoopsOff(true);
       } else {
         if (master) master.gain.value = 0.85;
@@ -937,6 +997,7 @@
     return { resume, play, ui, bossRoar, update, setScene, stopScene, setPaused, setListener,
       startMusic, stopMusic, toggleMute, setMusic, setSfx, setLevels, duck,
       playVoice, setVoice, setVoiceLevel, onVoiceToast, rollVoice, getVoiceSet: () => voiceName,
+      get voiceOn() { return voiceOn; }, VO_RULE,
       get muted() { return muted; }, ensure, _debug: debug, VO_LINES };
   }
 

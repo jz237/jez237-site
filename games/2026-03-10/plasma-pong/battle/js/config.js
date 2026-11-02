@@ -1,5 +1,5 @@
 // Plasma Pong: Battle Edition — tuning, pilots, arenas and power-ups.
-export const VERSION = 'v1.1.0';
+export const VERSION = 'v1.1.1';
 
 // World units. Side +1 is the near player (P1, positive z), side -1 the far one.
 export const F = {

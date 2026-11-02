@@ -125,7 +125,7 @@ export class Audio {
     }
     const b = this.buf.get(name);
     const start = now + (o.delay || 0);
-    this.play(name, { bus: 'voice', vary: 0, noSlow: true, vol: o.vol ?? 1, gap: 0, delay: o.delay });
+    this.line = this.play(name, { bus: 'voice', vary: 0, noSlow: true, vol: o.vol ?? 1, gap: 0, delay: o.delay });
     this.speaking = start + b.duration;
     const d = this.duck.gain;
     d.cancelScheduledValues(now);
@@ -136,6 +136,18 @@ export class Audio {
       const n = this.voiceQ.shift();
       if (n) this.say(n.name, n.o);
     }, (this.speaking - now) * 1000 + 120);
+  }
+
+  hush() {
+    this.voiceQ = [];
+    clearTimeout(this.qTimer);
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    try { if (this.line) this.line.src.stop(); } catch { /* already ended */ }
+    this.line = null;
+    this.speaking = 0;
+    this.duck.gain.cancelScheduledValues(now);
+    this.duck.gain.setTargetAtTime(1, now, 0.2);
   }
 
   async playMusic(name, fade = 1.5) {

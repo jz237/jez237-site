@@ -26,12 +26,21 @@ const LINES = {
   vd_taunt: 'Vandal: "Catch me if you can, hard hat!"', vd_laugh: 'Vandal: (snickers)', vd_ow: 'Vandal: "Ow! Hey!"',
   in_cite: 'Inspector: "Citation! Safety violation!"', in_ow: 'Inspector: "Ow! That’s going in my report!"', fm_demo: 'Foreman: "Watch close, kid. This is how a pro works the site."', in_halt: 'Inspector: "Hold it right there!"', dog_bark: 'Yard dog: (barks)',
 };
+// Wordless vocal effort sounds: SFX, not speech. They stay when narration is off, but are rate-limited.
+const GRUNTS = new Set(['mac_whoa', 'mac_oof', 'mac_heave', 'vd_laugh']);
+// Speech gate (same policy in every jez237 game): one line at a time, SPEECH_GAP seconds of real time of
+// quiet after any line before a routine line may play and ROUTINE_GAP s between routine lines; key lines skip
+// both gaps but wait (up to KEY_WAIT s) for the current line instead of overlapping it; no back-to-back repeats;
+// routine quips are chance-gated, at most QUIPS_PER_SHIFT per shift and each line once per shift.
+// Settings > Voice & narration OFF = no spoken lines at all.
+const SPEECH_GAP = 24, ROUTINE_GAP = 150, KEY_WAIT = 6, QUIPS_PER_SHIFT = 1, GRUNT_GAP = 3;
 
 export class AudioEngine {
   constructor() {
     this.buf = new Map(); this.motors = new Map(); this.ready = false; this.ctx = null;
     this.listener = new THREE.Vector3(); this.right = new THREE.Vector3(1, 0, 0); this.ear = new THREE.Vector3();
     this.music = { els: [], cur: -1, name: null }; this.amb = null; this.ducks = 0; this.captionFn = null;
+    this.sp = { busyUntil: 0, lastEnd: -1e9, lastRoutine: -1e9, last: null, recent: [], heard: new Set(), shift: new Set(), quips: 0, cur: null, pendT: 0, gruntT: {}, gruntAny: -1e9 };
   }
   ensure() {
     if (this.ctx) return;
@@ -84,12 +93,58 @@ export class AudioEngine {
     src.connect(gain).connect(p).connect(o.bus === 'voice' ? this.voiceBus : this.sfxBus); src.start();
     return src;
   }
+  // Legacy entry point: dog sounds stay SFX, grunts go to grunt(), anything worded goes through the gate as a routine line.
   voice(name, vol = 1, pos = null) {
+    if (name === 'dog_bark' || name === 'dog_whine') { const src = this.play(name, { pos, vol, range: 30 }); if (src && this.captionFn && LINES[name]) this.captionFn(LINES[name]); return src; }
+    if (GRUNTS.has(name)) return this.grunt(name, vol, pos);
+    return this.say(name, { vol, pos });
+  }
+  // A worded line through the speech gate. names: one clip or variants (a recent one is avoided).
+  // o: { vol, pos, key (big moment: skips the gap, waits instead of overlapping), once (once per page visit),
+  //      quip (routine: counts toward the per-shift budget, once per shift per line), chance, when () => still wanted? }
+  say(names, o = {}) {
+    if (settings.narration === false) return null;
+    const S = this.sp, now = performance.now() / 1000;
+    let list = (Array.isArray(names) ? names : [names]).filter(n => n !== S.last && !(o.once && S.heard.has(n)) && !(o.quip && S.shift.has(n)));
+    if (list.length > 1) { const fresh = list.filter(n => !S.recent.includes(n)); if (fresh.length) list = fresh; }
+    if (!list.length) return null;
+    const name = list[Math.floor(Math.random() * list.length)];
+    if (!o.key) {
+      if (o.quip && S.quips >= QUIPS_PER_SHIFT) return null;
+      if (now < S.busyUntil || now - S.lastEnd < SPEECH_GAP || now - S.lastRoutine < ROUTINE_GAP) return null;
+      if (o.chance != null && Math.random() >= o.chance) return null;
+    } else if (now < S.busyUntil) {
+      const wait = S.busyUntil - now + .4;
+      if (wait > KEY_WAIT) return null;
+      clearTimeout(S.pendT); S.pendT = setTimeout(() => this.say(name, o), wait * 1000);
+      return null;
+    }
+    if (o.when && !o.when()) return null;
+    const src = this.play(name, { bus: 'voice', vol: o.vol ?? 1, pos: o.pos || null, range: 40 });
+    if (!src) return null;
+    const end = now + src.buffer.duration;
+    S.busyUntil = end; S.lastEnd = end; S.last = name; S.recent = [name, ...S.recent].slice(0, 4);
+    S.heard.add(name); S.shift.add(name); if (o.quip) S.quips++; if (!o.key) S.lastRoutine = now;
+    S.cur = src; src.addEventListener('ended', () => { if (S.cur === src) S.cur = null; });
     if (this.captionFn && LINES[name]) this.captionFn(LINES[name]);
-    if (name === 'dog_bark' || name === 'dog_whine') return this.play(name, { pos, vol, range: 30 });
-    const src = this.play(name, { bus: 'voice', vol, pos, range: 40 });
-    if (src && name.startsWith('fm_')) { this.ducks++; this.applyVolumes(); src.onended = () => { this.ducks--; this.applyVolumes(); }; }
+    if (name.startsWith('fm_')) { this.ducks++; this.applyVolumes(); src.addEventListener('ended', () => { this.ducks--; this.applyVolumes(); }); }
     return src;
+  }
+  // Wordless effort sound (oof, heave, scream, snicker): never under a spoken line, per-sound gap + a short shared gap.
+  grunt(name, vol = 1, pos = null, { chance = 1, gap = 8 } = {}) {
+    const S = this.sp, now = performance.now() / 1000;
+    if (now < S.busyUntil || now - (S.gruntT[name] ?? -1e9) < gap || now - S.gruntAny < GRUNT_GAP) return null;
+    if (chance < 1 && Math.random() >= chance) return null;
+    const src = this.play(name, { bus: 'voice', vol, pos, range: 40 });
+    if (src) { S.gruntT[name] = S.gruntAny = now; if (this.captionFn && LINES[name]) this.captionFn(LINES[name]); }
+    return src;
+  }
+  heard(name) { return this.sp.heard.has(name); }
+  newShift() { this.sp.shift.clear(); this.sp.quips = 0; }
+  stopSpeech() {
+    const S = this.sp; clearTimeout(S.pendT);
+    if (S.cur) { try { S.cur.stop(); } catch {} S.cur = null; }
+    S.busyUntil = 0;
   }
   // Persistent positional loop owned by an object (elevator, crane...). vol 0 fades it out.
   motor(name, owner, pos, vol, rate = 1) {

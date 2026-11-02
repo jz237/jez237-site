@@ -20,7 +20,7 @@ export type Phase = 'title' | 'playing' | 'tally' | 'arsenal' | 'paused' | 'over
 type Boss = 'bomber' | 'orbital' | 'meteor' | 'stealth' | 'nuke';
 type Upgrade = 'blast' | 'speed' | 'ammo' | 'flak' | 'aegis' | 'rebuild';
 
-const VERSION = 'v1.0.4';
+const VERSION = 'v1.0.5';
 const FIRE_KEY = 'auroraSiege3d_rapid';
 const DIFF_KEY = 'auroraSiege3d_difficulty';
 const DIFFICULTIES = { easy: 0.82, normal: 1, hard: 1.28 } as const;
@@ -205,6 +205,7 @@ export class Game extends Behaviour implements Theatre {
     document.getElementById('version')!.textContent = `Aurora Siege 3D · ${VERSION}`;
     this.layout();
     this.hud.sound(this.sound.muted);
+    this.hud.narration(this.sound.narration);
     this.hud.playing(false);
     this.refreshLeaders();
     this.sound.setMusic(true, 0.42);
@@ -269,6 +270,7 @@ export class Game extends Behaviour implements Theatre {
     if (Input.getButtonDown('Sound') || Input.getKeyDown(KeyCode.M)) this.hud.sound(this.sound.toggleMute());
     if (this.board.isOpen) return;
     if (Input.getButtonDown('FireMode') || Input.getKeyDown(KeyCode.F)) this.toggleFire();
+    if (Input.getButtonDown('Narration') || Input.getKeyDown(KeyCode.V)) this.toggleNarration();
     const go = Input.getButtonDown('Continue') || Input.getKeyDown(KeyCode.Return) || Input.getKeyDown(KeyCode.JoystickButton0);
     switch (this.phase) {
       case 'title':
@@ -333,7 +335,7 @@ export class Game extends Behaviour implements Theatre {
 
   private begin(): void {
     this.sound.unlock();
-    this.sound.newAnnouncer();
+    this.sound.newRun();
     this.clearSky();
     this.layout();
     this.score = 0;
@@ -387,12 +389,13 @@ export class Game extends Behaviour implements Theatre {
     if (this.boss) {
       const b = BOSSES[this.boss];
       this.hud.intro(`WAVE ${w} · BOSS WAVE`, b.title, b.tell, true);
-      this.sound.announce('vo-boss', true);
-      setTimeout(() => this.phase === 'playing' && this.wave === w && this.sound.announce(b.voice, true), 1400);
+      // The general warning (a run's first boss only), then the boss's own line once that has been said.
+      this.sound.announce('vo-boss');
+      this.sound.announce(b.voice);
       this.rig?.impact(0.4);
     } else {
       this.hud.intro(`WAVE ${w}`, w < 6 ? 'INITIAL BOMBARDMENT' : w < 10 ? 'MIRV SIGNATURES DETECTED' : 'SMART WEAPONS IN THE THEATRE', first ? 'TAP THE SKY WHERE THEY WILL BE' : 'HOLD THE LINE');
-      this.sound.announce(first ? 'vo-incoming' : 'wave', first);
+      this.sound.announce(first ? 'vo-incoming' : 'wave');
     }
     if (!first) this.sound.fanfare();
     const count = 8 + Math.floor(this.ew() * 2);
@@ -747,8 +750,7 @@ export class Game extends Behaviour implements Theatre {
     this.hud.flash('bad');
     this.updateCities();
     const alive = this.cities.filter((k) => k.alive).length;
-    if (alive === 1) this.sound.announce('vo-last-city', true);
-    else if (alive > 1) this.sound.announce('cityLost', true);
+    if (alive) this.sound.announce(alive === 1 ? 'vo-last-city' : 'cityLost');
     if (!alive) this.gameOver();
   }
 
@@ -956,6 +958,7 @@ export class Game extends Behaviour implements Theatre {
 
   private gameOver(): void {
     this.phase = 'over';
+    this.sound.hush();
     this.hud.threats([], null);
     this.hud.intro('THE SIEGE IS LOST', `SCORE ${this.score.toLocaleString('en-US')}`, `WAVE ${this.wave}`, true);
     this.sound.setMusic(true, 0.42);
@@ -969,6 +972,7 @@ export class Game extends Behaviour implements Theatre {
 
   private toTitle(): void {
     this.phase = 'title';
+    this.sound.hush();
     this.hud.banner(null);
     this.hud.tally(null);
     this.hud.arsenal(null);
@@ -1024,6 +1028,13 @@ export class Game extends Behaviour implements Theatre {
     this.hud.fireMode(this.rapid);
     this.sound.tick();
     if (this.phase === 'playing') this.hud.plate(this.rapid ? 'HOLD FOR RAPID FIRE' : 'ONE SHOT A TAP', 'FIRE MODE', 900);
+  }
+
+  private toggleNarration(): void {
+    const on = this.sound.toggleNarration();
+    this.hud.narration(on);
+    this.sound.tick();
+    if (this.phase === 'playing') this.hud.plate(on ? 'NARRATION ON' : 'NARRATION OFF', 'THE COMMANDER’S VOICE', 900);
   }
 
   private cycleDifficulty(): void {

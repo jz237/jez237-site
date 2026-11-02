@@ -1,23 +1,23 @@
 // Plasma Pong: Battle Edition — game flow, controls, scoring, commentary and the frame loop.
 import * as THREE from '../vendor/three.module.min.js';
-import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS, PERKS, ROSTER, SHADOW, TWISTS } from './config.js?v=4';
-import { makeWorld, step, drainEvents, STEP, paddlesOf } from './sim.js?v=4';
-import { AIPilot } from './ai.js?v=4';
-import { predictToPlane } from './predict.js?v=4';
-import { Renderer, pickQuality } from './render.js?v=4';
-import { Director } from './director.js?v=4';
-import { Audio } from './audio.js?v=4';
-import { Input } from './input.js?v=4';
-import { UI, $, hex } from './ui.js?v=4';
-import { Scores } from './scores.js?v=4';
-import { CALM } from './views.js?v=4';
-import { Recorder } from './replay.js?v=4';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=4';
+import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS, PERKS, ROSTER, SHADOW, TWISTS } from './config.js?v=5';
+import { makeWorld, step, drainEvents, STEP, paddlesOf } from './sim.js?v=5';
+import { AIPilot } from './ai.js?v=5';
+import { predictToPlane } from './predict.js?v=5';
+import { Renderer, pickQuality } from './render.js?v=5';
+import { Director } from './director.js?v=5';
+import { Audio } from './audio.js?v=5';
+import { Input } from './input.js?v=5';
+import { UI, $, hex } from './ui.js?v=5';
+import { Scores } from './scores.js?v=5';
+import { CALM } from './views.js?v=5';
+import { Recorder } from './replay.js?v=5';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=5';
 
 // ------------------------------------------------------------------ settings
 const SKEY = 'ppb.settings.v1';
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const settings = { music: 55, sfx: 90, voice: 100, quality: 'auto', camera: 'auto', shake: '1', tactical: 'demo', flash: reduceMotion ? 'reduced' : 'full', replay: 'on', twists: {}, vsOpp: 'human', pilot: 'p1', pilot2: 'p1' };
+const settings = { music: 55, sfx: 90, voice: 100, quality: 'auto', camera: 'auto', shake: '1', tactical: 'demo', flash: reduceMotion ? 'reduced' : 'full', replay: 'on', talk: 'on', twists: {}, vsOpp: 'human', pilot: 'p1', pilot2: 'p1' };
 try { Object.assign(settings, JSON.parse(localStorage.getItem(SKEY) || '{}')); } catch { /* defaults */ }
 const saveSettings = () => { try { localStorage.setItem(SKEY, JSON.stringify(settings)); } catch { /* ignore */ } };
 const params = new URLSearchParams(location.search);
@@ -58,18 +58,25 @@ window.__ppb = { G, R, D, A, I, settings, REC, NET };
 const now = () => performance.now() / 1000;
 function after(t, fn) { G.timers.push({ t, fn }); }
 function clearTimers() { G.timers = []; }
+// Talking is rare on purpose. Key lines (match start/result, boss, unlocks) always get through, one voice at
+// a time; everything else is colour that waits VOICE_GAP seconds after the last line and rolls its chance.
+const VOICE_GAP = 24;
+const KEY = { key: true, priority: true };
+let lastLine = -99;
 function say(name, cd = 0, o = {}) {
-  if (G.mode === 'attract') return;
+  if (G.mode === 'attract' || settings.talk === 'off') return;
   const t = now(), last = G.says.get(name) ?? -99;
-  if (t - last < cd) return;
+  if (t - last < cd || Math.random() > (o.chance ?? 1)) return;
+  if (!o.key && t - lastLine < VOICE_GAP) return;
   G.says.set(name, t);
+  lastLine = t;
   A.say(name, o);
 }
 const ann = (n, cd, o) => say('ann_' + n, cd, o);
-function pilotSay(side, line, chance = 1, o = { queue: true }) {
+function pilotSay(side, line, o = {}) {
   const info = G.sides && G.sides[side];
-  if (!info || !info.persona || Math.random() > chance) return;
-  say(`${info.persona.key}_${line}`, 4, o);
+  if (!info || !info.persona) return;
+  say(`${info.persona.key}_${line}`, o.cd ?? 4, { queue: true, ...o });
 }
 function sideInfo(c) {
   if (c.human) return { name: c.human.name, title: c.human.title, color: c.human.color, human: true, pilot: c.human.pilot };
@@ -235,10 +242,10 @@ function stageIntro() {
   U.show('vs');
   U.setHud(false);
   A.playMusic(ARENAS[G.stage].music);
-  if (pilot.boss) { A.play('alarm', { vol: 0.7, gap: 0 }); ann('boss', 0, { priority: true }); }
-  else if (G.stage === 0) ann('challenger', 0, { priority: true });
+  if (pilot.boss) { A.play('alarm', { vol: 0.7, gap: 0 }); ann('boss', 0, KEY); }
+  else if (G.stage === 0) ann('challenger', 300, KEY);
   else A.play('whoosh', { vol: 0.8 });
-  after(pilot.boss ? 3.1 : 1.9, () => pilotSay(-1, 'intro', 1, { priority: true }));
+  after(pilot.boss ? 3.1 : 1.9, () => pilotSay(-1, 'intro', { ...KEY, cd: 300 }));
   after(pilot.boss ? 7.4 : 5.2, () => countdown());
 }
 
@@ -261,13 +268,10 @@ function countdown() {
   D.setMode(camMode());
   updateMid();
   showTouch();
-  const r = G.mode === 'campaign' ? G.stage : G.round - 1;
-  const last = G.mode === 'campaign' ? G.stage === 4 : false;
   const label = G.mode === 'campaign' ? `STAGE ${G.stage + 1}` : `ROUND ${G.round}`;
   U.showBanner(label, G.W.arena.name, hex(G.W.arena.grid), 1.3);
-  ann(last ? 'final' : `round${Math.min(4, r + 1)}`, 0, { priority: true });
-  const steps = [['3', 'three'], ['2', 'two'], ['1', 'one']];
-  steps.forEach(([t, v], i) => after(1.5 + i * 0.75, () => { U.showBanner(t, '', '#ffffff', 0.7); A.play('beep', { vary: 0, gap: 0 }); ann(v, 0, { priority: true }); }));
+  if (G.mode !== 'campaign' && G.round === 3) ann('final', 0, KEY);
+  ['3', '2', '1'].forEach((t, i) => after(1.5 + i * 0.75, () => { U.showBanner(t, '', '#ffffff', 0.7); A.play('beep', { vary: 0, gap: 0 }); }));
   after(1.5 + 3 * 0.75, () => {
     U.showBanner('FIGHT!', '', '#ffd23f', 0.9);
     A.play('go', { gap: 0 });
@@ -309,7 +313,7 @@ function versusRound() {
     U.show('vs');
     U.setHud(false);
     G.simOn = false;
-    ann('challenger', 0, { priority: true });
+    ann('challenger', 0, KEY);
     after(3.6, () => countdown());
   } else countdown();
 }
@@ -332,8 +336,8 @@ function startDemo() {
   $('touch').classList.add('hidden');
   A.playMusic(G.W.arena.music);
   U.showBanner(`${G.sides[1].name} VS ${G.sides[-1].name}`, `DEMO · ${G.W.arena.name}`, hex(G.W.arena.grid), 2.2);
-  ann('demo', 0, { priority: true });
-  after(1.6, () => pilotSay(1, 'intro', 0.6));
+  ann('demo', Infinity, KEY);
+  after(1.6, () => pilotSay(1, 'intro', { chance: 0.5 }));
   G.tipT = 4;
 }
 
@@ -389,12 +393,11 @@ function onKO(e) {
   A.play('coreboom', { gap: 0, x: 0, noSlow: true });
   after(1.3, () => A.play('cheer', { gap: 0, noSlow: true }));
   if (G.mode === 'attract') { after(3.5, () => { if (G.mode === 'attract') { randomAIMatch(false); G.mode = 'attract'; applyVolumes(); } }); return; }
-  ann('ko', 0, { priority: true });
   const comeback = G.minHP[winner] <= 1;
   if (G.mode === 'campaign') {
     const won = winner === 1;
-    after(1.3, () => { if (won) { ann(comeback ? 'comeback' : W.cores[1].hp === W.cores[1].max ? 'perfect' : 'victory', 0, { queue: true }); } else ann('defeat', 0, { queue: true }); });
-    after(2.6, () => pilotSay(-1, won ? 'lose' : 'win', 1, { queue: true }));
+    after(1.3, () => ann(!won ? 'defeat' : comeback ? 'comeback' : W.cores[1].hp === W.cores[1].max ? 'perfect' : 'victory', 0, KEY));
+    after(2.6, () => pilotSay(-1, won ? 'lose' : 'win', { key: true, chance: 0.35 }));
     after(2.0, () => A.sting(won ? 'victory' : 'defeat'));
     U.showBanner(won ? 'K.O.!' : 'CORE LOST', won ? `${G.sides[-1].name} IS DOWN` : `${G.sides[-1].name} WINS`, won ? '#2ff5ff' : '#ff3040', 3.6);
     after(3.4, () => withReplay(info, () => (won ? stageResults() : continueScreen())));
@@ -402,9 +405,9 @@ function onKO(e) {
     G.wins[winner]++;
     const match = G.wins[winner] >= 2;
     const cpu = G.vs && G.vs.cpu;
-    after(1.3, () => ann(cpu ? (winner === 1 ? 'victory' : 'defeat') : winner === 1 ? 'p1wins' : 'p2wins', 0, { queue: true }));
-    if (comeback) after(2.6, () => ann('comeback', 0, { queue: true }));
-    if (cpu) after(2.6, () => pilotSay(-1, winner === 1 ? 'lose' : 'win', 1, { queue: true }));
+    if (match) after(1.3, () => ann(cpu ? (winner === 1 ? 'victory' : 'defeat') : winner === 1 ? 'p1wins' : 'p2wins', 0, KEY));
+    if (comeback) after(2.6, () => ann('comeback', 0, { queue: true, chance: 0.5 }));
+    if (cpu && match) after(2.6, () => pilotSay(-1, winner === 1 ? 'lose' : 'win', { key: true, chance: 0.35 }));
     U.showBanner(`${vsName(winner)} WINS`, match ? 'THE MATCH' : `ROUND ${G.round} · ${G.wins[1]} – ${G.wins[-1]}`, hex(G.sides[winner].color), 3.6);
     if (match) { after(2, () => A.sting(cpu && winner === -1 ? 'defeat' : 'victory')); after(3.4, () => withReplay(info, () => versusResults(winner))); }
     else after(4.6, () => { G.round++; versusRound(); });
@@ -412,14 +415,14 @@ function onKO(e) {
     G.wins[winner]++;
     const me = soloSide(), won = winner === me;
     const match = G.wins[winner] >= 2;
-    after(1.3, () => ann(won ? 'victory' : 'defeat', 0, { queue: true }));
-    if (comeback) after(2.6, () => ann('comeback', 0, { queue: true }));
+    if (match) after(1.3, () => ann(won ? 'victory' : 'defeat', 0, KEY));
+    if (comeback) after(2.6, () => ann('comeback', 0, { queue: true, chance: 0.5 }));
     U.showBanner(won ? 'YOU WIN' : `${G.sides[winner].name} WINS`, match ? 'THE MATCH' : `ROUND ${G.round} · ${G.wins[me]} – ${G.wins[-me]}`, hex(G.sides[winner].color), 3.6);
     if (match) { after(2, () => A.sting(won ? 'victory' : 'defeat')); after(4.6, () => onlineResults(winner)); }
     else if (me === 1) after(4.6, () => { if (G.mode === 'online') { G.round++; onlineNextRound(); } });
   } else if (G.mode === 'demo') {
-    after(1.2, () => pilotSay(winner, 'win', 1));
-    if (comeback) after(1.3, () => ann('comeback', 0, { queue: true }));
+    after(1.2, () => pilotSay(winner, 'win', { chance: 0.5 }));
+    if (comeback) after(1.3, () => ann('comeback', 0, { queue: true, chance: 0.5 }));
     U.showBanner(`${G.sides[winner].name} WINS`, comeback ? 'WHAT A COMEBACK' : 'DEMO', hex(G.sides[winner].color), 4);
     after(3.6, () => withReplay(info, () => { if (G.mode === 'demo') startDemo(); }));
   }
@@ -444,7 +447,7 @@ function stageResults() {
   $('res-title').textContent = G.stage === 4 ? 'THE MONOLITH FALLS' : `STAGE ${G.stage + 1} CLEAR`;
   $('res-stats').innerHTML = rows.map(([a, b]) => `<span>${a}</span><span>${b}</span>`).join('') + (mul !== 1 ? `<span>DIFFICULTY</span><span>×${mul}</span>` : '')
     + (fresh ? `<span class="unl">🔓 NEW PILOT</span><span class="unl">${PILOTS[beaten].name} · ${PERKS[beaten].name}</span>` : '');
-  if (fresh) after(0.9, () => ann('unlocked', 0, { priority: true }));
+  if (fresh) after(0.9, () => ann('unlocked', 0, KEY));
   $('res-total').textContent = G.score.toLocaleString();
   $('res-next').textContent = G.stage === 4 ? 'CHAMPION →' : 'NEXT STAGE →';
   G.state = 'results';
@@ -461,7 +464,7 @@ function champion() {
   G.state = 'champion';
   U.hideScreens();
   U.showBanner('CHAMPION', `FINAL SCORE ${G.score.toLocaleString()}`, '#ffd23f', 5);
-  ann('champion', 0, { priority: true });
+  ann('champion', 0, KEY);
   A.sting('victory');
   after(5, () => endRun());
 }
@@ -488,7 +491,7 @@ function continueScreen() {
   if (G.continues <= 0) return gameOver();
   G.state = 'cont';
   U.show('cont');
-  ann('continue', 0, { priority: true });
+  ann('continue', 0, KEY);
   let n = 9;
   $('cont-n').textContent = n;
   $('cont-sub').textContent = `${G.continues} CREDIT${G.continues > 1 ? 'S' : ''} LEFT · SCORE HALVES`;
@@ -509,7 +512,7 @@ function gameOver() {
   G.state = 'gameover';
   U.hideScreens();
   U.showBanner('GAME OVER', `SCORE ${G.score.toLocaleString()}`, '#ff3040', 3.5);
-  ann('gameover', 0, { priority: true });
+  ann('gameover', 0, KEY);
   A.sting('defeat');
   after(3.6, () => endRun());
 }
@@ -561,7 +564,7 @@ async function saveIni() {
   const rank = $('hs-rank');
   rank.textContent = gi >= 0 ? `🌐 GLOBAL RANK #${gi + 1}` : HS.global === null ? 'SAVED · GLOBAL BOARD OFFLINE' : li >= 0 ? `🏠 #${li + 1} ON THIS DEVICE` : 'SAVED';
   rank.classList.remove('hidden');
-  if (gi === 0) ann('champion', 0, { priority: true });
+  if (gi === 0) ann('champion', 0, KEY);
 }
 
 function showScores(fromRun = false, me = null) {
@@ -611,6 +614,7 @@ function buildOptions() {
       A.play('uimove', { gap: 0 });
       if (k === 'camera' && G.mode !== 'demo') D.setMode(camMode());
       if (k === 'flash') applyCalm();
+      if (k === 'talk' && b.dataset.v === 'off') A.hush();
     };
   }
 }
@@ -854,15 +858,15 @@ function handleEvents(list) {
           if (!attract) {
             const p = R.project(e.x, 1.2, e.z);
             U.pop(p.x, p.y, e.smash >= 9 ? 'SUPER SMASH!' : 'SMASH!', '#ffd23f', e.smash >= 9 ? 'big' : '');
-            if (e.smash >= 9) ann('supersmash', 7);
-            else if (Math.random() < 0.3) ann('smash', 9);
+            if (e.smash >= 9) ann('supersmash', 60, { chance: 0.4 });
+            else ann('smash', 60, { chance: 0.1 });
           }
           if (G.humans.some((h) => h.p.side === e.side)) addScore(25);
         }
         if (Math.abs(e.spin) > 4 && !attract) { const p = R.project(e.x, 0.9, e.z); U.pop(p.x, p.y + 30, 'CURVE', '#9affff', 'small'); }
         if (e.doused && !attract) { const p = R.project(e.x, 1, e.z); U.pop(p.x, p.y, 'DOUSED', '#ff8a1a', 'small'); }
         if (G.humans.some((h) => h.p.side === e.side)) addScore(10 + (Math.abs(e.spin) > 4 ? 15 : 0));
-        if (W.rally >= 16 && !G.rallyCalled) { G.rallyCalled = true; ann('rally', 20); }
+        if (W.rally >= 16 && !G.rallyCalled) { G.rallyCalled = true; ann('rally', 20, { chance: 0.4 }); }
         break;
       }
       case 'wall': A.play(Math.random() < 0.5 ? 'wall1' : 'wall2', { x: e.x, z: e.z, vol: 0.4 }); break;
@@ -875,7 +879,7 @@ function handleEvents(list) {
           if (!attract) {
             const p = R.project(e.x, 1.4, e.z);
             U.pop(p.x, p.y, e.pierce ? 'NOVA PIERCE' : 'SHIELD DOWN', hex(G.sides[e.side].color));
-            ann('shielddown', 14);
+            ann('shielddown', 45, { chance: 0.4 });
           }
           if (e.side === -1) addScore(100, e.x, e.z, true);
         } else { A.play('crack', { x: e.x, z: e.z, vol: 0.8 }); if (e.side === -1) addScore(30); }
@@ -896,11 +900,10 @@ function handleEvents(list) {
             const p = R.project(e.x, 1.6, e.z);
             U.pop(p.x, p.y, e.dmg > 1 ? 'DOUBLE BREACH!' : 'CORE BREACH!', '#ff4060', 'big');
             if (e.hp === 1) ann('matchpoint', 0, { priority: true });
-            else if (e.hp <= 2) ann('critical', 0, { priority: true });
-            else ann('breach', 0, { priority: true });
+            else if (e.hp <= 2) ann('critical', 0, { priority: true, chance: 0.5 });
             // the pilots react
-            if (G.sides[e.side].persona) pilotSay(e.side, 'hurt', 0.55);
-            else if (G.sides[-e.side] && G.sides[-e.side].persona) pilotSay(-e.side, 'score', 0.6);
+            if (G.sides[e.side].persona) pilotSay(e.side, 'hurt', { chance: 0.35 });
+            else if (G.sides[-e.side] && G.sides[-e.side].persona) pilotSay(-e.side, 'score', { chance: 0.35 });
           }
           if (G.humans.some((h) => h.p.side === e.side && G.mode === 'campaign')) U.hurt();
         }
@@ -914,7 +917,7 @@ function handleEvents(list) {
         if (!attract) {
           const p = R.project(e.x, 1.2, e.z);
           U.pop(p.x, p.y, 'STUNNED', '#9ad8ff');
-          if (G.humans.some((h) => h.p.side === e.side)) { ann('stunned', 12); pilotSay(-e.side, 'taunt', 0.35); }
+          if (G.humans.some((h) => h.p.side === e.side)) { ann('stunned', 45, { chance: 0.3 }); pilotSay(-e.side, 'taunt', { chance: 0.3 }); }
         }
         if (e.by === 1) addScore(40);
         break;
@@ -928,15 +931,15 @@ function handleEvents(list) {
         const def = POWERUPS[e.kind];
         A.play('pucollect', { x: e.x, gap: 0 });
         A.play(def.sfx, { x: e.x, vol: 0.8, gap: 0, delay: 0.08 });
-        if (!attract) { U.toast(e.side, e.kind); ann(def.voice, 0, { priority: true }); }
+        if (!attract) { U.toast(e.side, e.kind); ann(def.voice, 60, { chance: 0.2 }); }
         if (e.side === 1) addScore(50);
         break;
       }
       case 'serve': A.play('serve', { vol: 0.6 }); break;
-      case 'od': A.play('overdrive', { gap: 0 }); D.addTrauma(0.3); if (!attract) ann('overdrive', 0, { priority: true }); break;
+      case 'od': A.play('overdrive', { gap: 0 }); D.addTrauma(0.3); if (!attract) ann('overdrive', 60, { chance: 0.2 }); break;
       case 'bump': A.play('bumper', { x: e.x, vol: 0.7 }); break;
       case 'portal': A.play('portal', { x: e.x, vol: 0.7 }); break;
-      case 'barrier': A.play('barrier', { x: e.x, vol: e.bolt ? 0.3 : 0.6 }); if (!e.bolt && !attract) ann('denied', 15); break;
+      case 'barrier': A.play('barrier', { x: e.x, vol: e.bolt ? 0.3 : 0.6 }); if (!e.bolt && !attract) ann('denied', 45, { chance: 0.3 }); break;
       case 'lightning': A.play('storm', { x: e.x, delay: e.delay || 0, gap: 0, vol: 0.8 }); D.addTrauma(0.15); break;
       case 'catch': A.play('magnet', { x: e.x }); break;
       case 'release': A.play('smash', { x: e.x, vol: 0.8 }); break;
@@ -946,7 +949,7 @@ function handleEvents(list) {
       case 'phase2': {
         A.play('alarm', { gap: 0 });
         D.addTrauma(0.6);
-        if (!attract) { U.showBanner('PHASE 2', 'THE MONOLITH SPLITS', '#ff2a3a', 2); pilotSay(-1, 'phase2', 1, { priority: true }); }
+        if (!attract) { U.showBanner('PHASE 2', 'THE MONOLITH SPLITS', '#ff2a3a', 2); pilotSay(-1, 'phase2', KEY); }
         break;
       }
     }
@@ -1032,7 +1035,7 @@ function startReplay(info, then = () => {}) {
   R.setWorld(rp.W, G.sides);
   D.slow = 1; D.slowT = 0; D.trauma = 0; D.rp = false;
   A.play('rewind', { gap: 0, noSlow: true, vol: 0.8 });
-  ann('replay', 0, { priority: true });
+  ann('replay', Infinity, { key: true, queue: true });
   return true;
 }
 function stopReplay(run = true) {
@@ -1152,7 +1155,7 @@ function onStatus(text, kind) {
 function onJoined(peer) {
   if (G.state !== 'online-wait') return;
   A.play('uiok', { gap: 0 });
-  ann('found', 0, { priority: true });
+  ann('found', 0, KEY);
   $('on-wait').textContent = `${peer.ini || 'Your rival'} is here! Get ready…`;
   $('on-codewrap').classList.add('hidden');
   if (NET.side === 1) after(1.4, () => { if (NET.peer) onlineMatch(); });
@@ -1168,7 +1171,7 @@ function onLeft(reason) {
   G.mode = 'online-over';
   U.hideScreens();
   U.showBanner(reason === 'left' ? 'RIVAL LEFT' : 'CONNECTION LOST', 'BACK TO THE TITLE', '#ff3040', 3);
-  ann(reason === 'left' ? 'victory' : 'lost', 0, { priority: true });
+  ann(reason === 'left' ? 'victory' : 'lost', 0, KEY);
   after(3.2, () => goTitle());
 }
 function onChat(msg) {
@@ -1220,7 +1223,7 @@ function onlineRound(cfg) {
     U.show('vs');
     U.setHud(false);
     G.simOn = false;
-    ann('online', 0, { priority: true });
+    ann('online', 0, KEY);
     after(3.4, () => countdown());
   } else countdown();
 }
@@ -1277,8 +1280,8 @@ function enterTitle() {
   A.unlock();
   A.ctx && A.ctx.resume && A.ctx.resume();
   G.state = 'title';
-  say('ann_title', 0, { priority: true });
-  setTimeout(() => say('ann_battle', 0, { queue: true }), 900);
+  say('ann_title', 0, KEY);
+  setTimeout(() => say('ann_battle', 0, { key: true, queue: true }), 900);
   goTitle();
   // an invite link (?room=CODE) goes straight to that room
   const code = cleanCode(params.get('room'));

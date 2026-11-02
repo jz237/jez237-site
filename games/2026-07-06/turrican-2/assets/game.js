@@ -45,14 +45,16 @@
   // ---- settings (persisted) ------------------------------------------------
   const SETTINGS_KEY = 'turrican2_hd_settings_v2';
   const settings = Object.assign(
-    { master: 1, music: 1, sfx: 1, voice: 1, crt: false, difficulty: 'normal', speed: D.DEFAULT_SPEED },
+    { master: 1, music: 1, sfx: 1, voice: 1, narration: true, crt: false, difficulty: 'normal', speed: D.DEFAULT_SPEED },
     (() => { try { return JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}; } catch (e) { return {}; } })());
   if (!D.SPEEDS.includes(settings.speed)) settings.speed = D.DEFAULT_SPEED;
+  settings.narration = settings.narration !== false;   // Options > NARRATION (on = the rare announcer, off = no speech)
   const pctLabel = (v) => Math.round(v * 100) + '%';
   function saveSettings() { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch (e) {} }
   function applySettings() {
     audio.setLevels(settings.master * settings.music, settings.master * settings.sfx);
     audio.setVoiceLevel(settings.master * settings.voice);
+    audio.setVoice(settings.narration);
     renderer.setCRT(!!settings.crt);
   }
   let menuIdx = 0, optIdx = 0, pauseIdx = 0, worldIdx = 0;
@@ -77,6 +79,9 @@
   const MEDALS = [null, { name: 'BRONZE', color: '#e0955a' }, { name: 'SILVER', color: '#d9e4f2' }, { name: 'GOLD', color: '#ffd23f' }];
   // where this run began: only full runs from World 1 post to the world board
   let run = { from: 0, takeover: false };
+  // lines a run says at most once: a world's name when first reached, each gun's name at its first pickup
+  let spoken = new Set(), runFirst = 0;
+  const WEAPON_VO = { spread: 'scatter', beam: 'lance', bounce: 'ricochet', seeker: 'seeker', flare: 'flare', prism: 'prism' };
   const postsWorld = () => run.from === 0 && !run.takeover;
 
   // ---- attract mode (the autopilot demo) -----------------------------------
@@ -105,6 +110,7 @@
     pilot = window.TDemo.createPilot();
     audio.rollVoice();
     planIdx = 0; continues = 0; newBest = false;
+    spoken = new Set(); runFirst = 0;
     carry = { lives: 3, score: 0, gems: 0, weapons: { spread: 2, beam: 2, bounce: 2, seeker: 2, flare: 2, prism: 2 },
       weapon: 'spread', bombs: 3, lines: 3 };
     loadStage();
@@ -289,11 +295,12 @@
     D.setSpeed(settings.speed);
     planIdx = firstStageOf(world);
     run = { from: world, takeover: false };
+    spoken = new Set(); runFirst = planIdx;   // the start line covers the first world
     continues = 3;
     newBest = false;
     carry = { lives: 3, score: 0, gems: 0, weapons: Object.assign({}, LOADOUT[world]), weapon: 'spread', bombs: 2, lines: 3 };
     loadStage();
-    audio.playVoice('start', true);
+    audio.playVoice('start');
   }
   function loadStage() {
     const p = PLAN[planIdx];
@@ -306,8 +313,8 @@
     renderer.setLevel(level);
     audio.startMusic(level.world);
     if (audio.setScene) audio.setScene(level.world, level.type);
-    if (p.stage === 0 && planIdx > 0) audio.playVoice('world' + level.world, true);
-    if (level.type === 'shmup' && p.stage === 0) setTimeout(() => { if (state && state.level === level) audio.playVoice('shmup'); }, 2300);
+    const wk = 'world' + level.world;   // a world's name once per run, never again on a retry
+    if (p.stage === 0 && !spoken.has(wk)) { spoken.add(wk); if (planIdx !== runFirst) audio.playVoice(wk); }
     mode = 'intro'; introT = 2.0;
     window.__tState = state;
   }
@@ -340,7 +347,7 @@
     if (!isDemo && planIdx < PLAN.length) progress.world = Math.max(progress.world, PLAN[planIdx].world);   // reaching a world opens it
     if (!isDemo) saveProgress();
     if (planIdx >= PLAN.length) {
-      mode = 'win'; winT = 0; audio.stopMusic(); audio.play('victory'); audio.playVoice('victory', true);
+      mode = 'win'; winT = 0; audio.stopMusic(); audio.play('victory'); audio.playVoice('victory');
       newBest = isDemo ? false : beatsBest(p.score);   // the demo doesn't get a high score
       return;
     }
@@ -424,29 +431,32 @@
       return;
     }
     if (mode === 'options') {
-      const ROWS = 8; // master, music, sfx, voice, difficulty, speed, crt, back
+      const ROWS = OPT_ROWS.length;
       if (inp.upPressed) { optIdx = (optIdx + ROWS - 1) % ROWS; uiSound('move'); }
       if (inp.downPressed) { optIdx = (optIdx + 1) % ROWS; uiSound('move'); }
+      const row = OPT_ROWS[optIdx];
       const adj = (inp.leftPressed ? -1 : 0) + (inp.rightPressed ? 1 : 0);
       const clamp01 = (v) => Math.max(0, Math.min(1, Math.round(v * 10) / 10));
       if (adj !== 0) {
-        if (optIdx === 0) settings.master = clamp01(settings.master + adj * 0.1);
-        else if (optIdx === 1) settings.music = clamp01(settings.music + adj * 0.1);
-        else if (optIdx === 2) settings.sfx = clamp01(settings.sfx + adj * 0.1);
-        else if (optIdx === 3) settings.voice = clamp01(settings.voice + adj * 0.1);
-        else if (optIdx === 4) {
+        if (row === 'master') settings.master = clamp01(settings.master + adj * 0.1);
+        else if (row === 'music') settings.music = clamp01(settings.music + adj * 0.1);
+        else if (row === 'sfx') settings.sfx = clamp01(settings.sfx + adj * 0.1);
+        else if (row === 'narration') settings.narration = !settings.narration;
+        else if (row === 'voice') settings.voice = clamp01(settings.voice + adj * 0.1);
+        else if (row === 'difficulty') {
           const order = ['easy', 'normal', 'hard'];
           const i = order.indexOf(settings.difficulty);
           settings.difficulty = order[(i + adj + 3) % 3];
-        } else if (optIdx === 5) {
+        } else if (row === 'speed') {
           const i = D.SPEEDS.indexOf(settings.speed), n = D.SPEEDS.length;
           settings.speed = D.SPEEDS[Math.max(0, Math.min(n - 1, i + adj))];
-        } else if (optIdx === 6) settings.crt = !settings.crt;
+        } else if (row === 'crt') settings.crt = !settings.crt;
         applySettings(); saveSettings(); uiSound('adjust');
       }
       if (inp.startPressed || inp.firePressed) {
-        if (optIdx === 6) { settings.crt = !settings.crt; applySettings(); saveSettings(); uiSound('adjust'); }
-        else if (optIdx === 7) { mode = 'title'; uiSound('select'); }
+        if (row === 'crt') { settings.crt = !settings.crt; applySettings(); saveSettings(); uiSound('adjust'); }
+        else if (row === 'narration') { settings.narration = !settings.narration; applySettings(); saveSettings(); uiSound('adjust'); }
+        else if (row === 'back') { mode = 'title'; uiSound('select'); }
       }
       if (inp.pausePressed) { mode = 'title'; uiSound('back'); }
       drawOptions();
@@ -521,7 +531,6 @@
       for (const ev of state.events) {
         if (ev.type === 'sfx') {
           audio.play(ev.name, ev.x, ev.y);
-          if (ev.name === 'line' && Math.random() < 0.5) audio.playVoice('shockwall');
           if (ev.name === 'explode' || ev.name === 'bossdie' || ev.name === 'bomb' || ev.name === 'phase') {
             audio.duck(0.35, 0.3);
           }
@@ -532,13 +541,15 @@
         } else if (ev.type === 'music') {
           audio.startMusic(ev.name === 'boss' ? 'boss' : state.level.world);
         } else if (ev.type === 'voice') {
+          // every line goes through the audio narration gate (tiers, gap, chance): see audio.js VO_RULE
           const b = state.boss, w = state.player.weapon;
           if (ev.name === 'bosswarn' && b) {
-            audio.playVoice('bosswarn-' + b.key, true);
+            audio.playVoice('bosswarn-' + b.key);
             if (audio.bossRoar) audio.bossRoar(b.key, b.x + b.w / 2, b.y + b.h / 2);
-          } else if (ev.name === 'weapon' && Math.random() < 0.6) {
-            audio.playVoice('weapon-' + ({ spread: 'scatter', beam: 'lance', bounce: 'ricochet', seeker: 'seeker', flare: 'flare', prism: 'prism' }[w] || 'scatter'), !!ev.pr);
-          } else audio.playVoice(ev.name, !!ev.pr);
+          } else if (ev.name === 'weapon') {
+            const k = 'weapon-' + (WEAPON_VO[w] || 'scatter');
+            if (!spoken.has(k)) { spoken.add(k); audio.playVoice(k); }
+          } else audio.playVoice(ev.name);
         }
       }
       // one-shot edges must not replay into catch-up steps (double bomb bug)
@@ -549,7 +560,7 @@
       if (state.won) { nextStage(); break; }
       if (state.gameOver) {
         if (isDemo) { demoWiped(); break; }
-        mode = 'gameover'; audio.stopMusic(); if (audio.stopScene) audio.stopScene(); audio.play('gameover'); audio.playVoice('gameover', true);
+        mode = 'gameover'; audio.stopMusic(); if (audio.stopScene) audio.stopScene(); audio.play('gameover'); audio.playVoice('gameover');
         newBest = beatsBest(state.player.score);
         break;
       }
@@ -782,18 +793,20 @@
     dx.save(); dx.shadowColor = '#6cf3ff'; dx.shadowBlur = 12;
     centerText('OPTIONS', DW / 2, 86, 44, '#6cf3ff', '900'); dx.restore();
     const bar = (v) => '█'.repeat(Math.round(v * 10)) + '░'.repeat(10 - Math.round(v * 10));
-    const rows = [
-      ['MASTER VOLUME', bar(settings.master)],
-      ['MUSIC', bar(settings.music)],
-      ['SOUND FX', bar(settings.sfx)],
-      ['VOICE', bar(settings.voice)],
-      ['DIFFICULTY', '◀ ' + D.DIFFICULTY[settings.difficulty].label + ' ▶'],
-      ['GAME SPEED', '◀ ' + pctLabel(settings.speed) + ' ▶'],
-      ['CRT SCANLINES', settings.crt ? 'ON' : 'OFF'],
-      ['BACK', ''],
-    ];
+    const ROW = {
+      master: ['MASTER VOLUME', bar(settings.master)],
+      music: ['MUSIC', bar(settings.music)],
+      sfx: ['SOUND FX', bar(settings.sfx)],
+      narration: ['NARRATION', settings.narration ? 'ON' : 'OFF'],
+      voice: ['VOICE VOLUME', bar(settings.voice)],
+      difficulty: ['DIFFICULTY', '◀ ' + D.DIFFICULTY[settings.difficulty].label + ' ▶'],
+      speed: ['GAME SPEED', '◀ ' + pctLabel(settings.speed) + ' ▶'],
+      crt: ['CRT SCANLINES', settings.crt ? 'ON' : 'OFF'],
+      back: ['BACK', ''],
+    };
+    const rows = OPT_ROWS.map((k) => ROW[k]);
     for (let i = 0; i < rows.length; i++) {
-      const y = 148 + i * 41;
+      const y = 136 + i * 36;
       const sel = i === optIdx;
       dx.textAlign = 'left'; dx.textBaseline = 'middle';
       dx.font = (sel ? '900 20px' : 'bold 18px') + ' "Trebuchet MS", system-ui, sans-serif';
@@ -804,9 +817,12 @@
       dx.fillStyle = sel ? '#8be9ff' : 'rgba(160,180,220,0.7)';
       dx.fillText(rows[i][1], DW / 2 + 240, y);
     }
-    if (optIdx === 5) centerText('How fast the whole world runs: 100% is full speed, 70% gives the most time to react', DW / 2, DH - 70, 13, 'rgba(255,210,63,0.7)', 'normal');
+    const hint = { speed: 'How fast the whole world runs: 100% is full speed, 70% gives the most time to react',
+      narration: 'ON: the announcer speaks only at big moments (start, new worlds, bosses, the end). OFF: no speech at all' }[OPT_ROWS[optIdx]];
+    if (hint) centerText(hint, DW / 2, DH - 70, 13, 'rgba(255,210,63,0.7)', 'normal');
     centerText('↑↓ select · ←→ adjust · ENTER confirm · ESC back', DW / 2, DH - 44, 14, 'rgba(200,210,255,0.6)', 'normal');
   }
+  const OPT_ROWS = ['master', 'music', 'sfx', 'narration', 'voice', 'difficulty', 'speed', 'crt', 'back'];
   function overlayDim() { dx.fillStyle = 'rgba(4,4,16,0.6)'; dx.fillRect(0, 0, DW, DH); }
   function drawPaused() {
     overlayDim();
@@ -1030,7 +1046,7 @@
   // unlock WebAudio inside a real user gesture (iOS/Safari requirement)
   const unlockAudio = () => {
     audio.resume();
-    if (mode === 'title') { toTitleAudio(); if (!titleVoiced) { titleVoiced = true; if (audio.ui) audio.ui('title'); setTimeout(() => { if (mode === 'title') audio.playVoice('title', true); }, 500); } }
+    if (mode === 'title') { toTitleAudio(); if (!titleVoiced) { titleVoiced = true; if (audio.ui) audio.ui('title'); setTimeout(() => { if (mode === 'title') audio.playVoice('title'); }, 500); } }
     window.removeEventListener('pointerdown', unlockAudio);
     window.removeEventListener('keydown', unlockAudio);
     window.removeEventListener('touchstart', unlockAudio);
@@ -1061,6 +1077,8 @@
     voice: { roll() { audio.rollVoice(); return audio.getVoiceSet(); },
              set() { return audio.getVoiceSet(); },
              say(n) { audio.resume(); audio.playVoice(n, true); } },
+    get narration() { return settings.narration; },
+    setNarration(on) { settings.narration = !!on; applySettings(); saveSettings(); },
     zoom: { get value() { return zoom; }, set(z, px, py) { zoom = z; panX = px || 0; panY = py || 0; applyZoom(); }, about: zoomAbout, reset: resetZoom },
     demo: { start: startDemo, stop: endDemo, get on() { return isDemo; }, takeOver() { if (canTakeOver()) takeOver(); },
             get canTakeOver() { return canTakeOver(); }, get idle() { return idleT; }, get stage() { return planIdx; } },

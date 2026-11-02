@@ -8,7 +8,7 @@
 // its own recipe built from those parts.
 
 import * as THREE from 'three';
-import { getHeight } from './terrain.js?v=real1';
+import { getHeight } from './terrain.js?v=real2';
 
 const NOISE_GLSL = /* glsl */`
 vec3 mod289(vec3 x){return x-floor(x*(1./289.))*289.;}

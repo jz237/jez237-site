@@ -133,7 +133,7 @@ class Game {
   constructor() {
     this.state = 'boot'; this.time = 0; this.score = 0; this.lives = 3; this.round = 1; this.levelIndex = 0;
     this.wind = new THREE.Vector3(); this.frozen = false; this.freezeT = 0; this.diff = { speed: 1, hazard: 1 };
-    this.enemies = []; this.cheer = false; this.continued = false; this.timeScale = 1; this.kos = 0; this.hitStop = 0;
+    this.enemies = []; this.cheer = false; this.continued = false; this.timeScale = 1; this.kos = 0; this.hitStop = 0; this.briefOf = {};
   }
   async boot() {
     const canvas = document.getElementById('gl');
@@ -169,7 +169,7 @@ class Game {
     this.toTitle(true);
     const unlock = () => {
       this.audio.unlock();
-      if (this.state === 'title' && !this.titleVoiced) { this.titleVoiced = true; this.audio.playMusic('mus_title'); setTimeout(() => this.audio.voice('an_title', .9), 600); }
+      if (this.state === 'title' && !this.titleVoiced) { this.titleVoiced = true; this.audio.playMusic('mus_title'); setTimeout(() => this.audio.say('an_title', { vol: .9, key: true, once: true, when: () => this.state === 'title' }), 600); }
     };
     addEventListener('pointerdown', unlock); addEventListener('keydown', unlock); addEventListener('touchstart', unlock);
     document.addEventListener('visibilitychange', () => { if (document.hidden && this.state === 'play') this.pause(); });
@@ -205,7 +205,7 @@ class Game {
     this.deaths = 0; this.kos = 0; this.hitStop = 0; this.slowT = 0; this.fxScale = 1; this.cam.shot = null; this.checkpoint = null; this.hurried = false; this.frozen = false; this.freezeT = 0; this.wind.set(0, 0, 0); this.cheer = false; this.topBeam = null; this.finale = null;
     this.scoreAtStart = this.score; this.fx.clear(); this.ui.clearPopups();
     this.ghost.hide(); this.runT = 0; this.rec = null; this.lastRun = null;
-    this.audio.ambience(this.level.amb);
+    this.audio.ambience(this.level.amb); this.audio.newShift();
     this.prewarm();
   }
   prewarm() {
@@ -214,7 +214,7 @@ class Game {
     r.setRenderTarget(null);
   }
   startGame(i) {
-    this.score = 0; this.lives = 3; this.round = 1; this.continued = false; this.nextLife = 25000; this.assisted = assistOn();
+    this.score = 0; this.lives = 3; this.round = 1; this.continued = false; this.nextLife = 25000; this.assisted = assistOn(); this.goSaid = false;
     this.player.grabFilter = undefined;
     this.audio.unlock(); this.loadLevel(i); this.intro();
   }
@@ -224,14 +224,16 @@ class Game {
     this.cam.mode = 'orbit'; this.cam.orbit.c.set((x0 + x1) / 4, L.high ? 6 : 7, (z0 + z1) / 4); this.cam.orbit.d = L.index === 2 ? 30 : 32; this.cam.orbit.p = .42; this.cam.orbit.s = .1;
     this.cam.yaw = L.camYaw - .9;
     this.audio.playMusic(L.music); this.introT = 0;
-    const line = this.demo && L.index === 0 ? 'fm_demo' : L.voice;
-    clearTimeout(this.voiceT); this.voiceT = setTimeout(() => { if (this.state === 'intro') this.audio.voice(line, 1); }, 700);
+    // the shift briefing is spoken the first time per visit only (the card shows the same text every time)
+    const line = this.demo && L.index === 0 ? 'fm_demo' : L.voice; this.briefOf[L.index] = L.voice;
+    clearTimeout(this.voiceT); this.voiceT = setTimeout(() => this.audio.say(line, { key: true, once: true, when: () => this.state === 'intro' }), 700);
     if (this.coopHost) this.net.send('wv', { k: 'load', i: this.levelIndex, r: this.round, sc: this.score, lv: this.lives });
   }
   beginPlay() {
     if (this.state !== 'intro' || (this.coopGuest && !this.netGo)) return; // the co-op guest starts when the host does
     this.state = 'play'; this.ui.show(null); this.ui.showHud(true); this.cam.mode = 'follow'; this.cam.snap(this.player, this.level.camYaw); this.cam.pitch = .62;
-    this.audio.voice('an_go', .8); this.audio.play('timeup', { vol: .35 });
+    if (!this.goSaid) { this.goSaid = true; this.audio.say('an_go', { vol: .8 }); } // once per game, only if nothing was said lately
+    this.audio.play('timeup', { vol: .35 });
     this.player.invuln = 2;
     if (this.bot) this.bot.reset();
     // time trial: record this run's ghost and race the best one
@@ -246,12 +248,12 @@ class Game {
   canvasFocus() { try { document.getElementById('gl').focus({ preventScroll: true }); } catch {} }
   nextLevel() {
     let i = this.levelIndex + 1;
-    if (i >= LEVEL_INFO.length) { i = 0; this.round++; setTimeout(() => this.audio.voice('fm_round'), 1500); }
+    if (i >= LEVEL_INFO.length) { i = 0; this.round++; setTimeout(() => this.audio.say('fm_round', { key: true }), 1500); }
     if (!this.demo) { progress.unlocked = Math.max(progress.unlocked, Math.min(LEVEL_INFO.length, i + 1)); saveProgress(); }
     this.loadLevel(i); this.intro();
   }
   restartLevel() { this.score = this.scoreAtStart; this.loadLevel(this.levelIndex); this.intro(); }
-  continueGame() { this.score = 0; this.lives = 3; this.continued = true; this.assisted = assistOn(); this.nextLife = 25000; this.loadLevel(this.levelIndex); this.intro(); }
+  continueGame() { this.score = 0; this.lives = 3; this.continued = true; this.assisted = assistOn(); this.goSaid = false; this.nextLife = 25000; this.loadLevel(this.levelIndex); this.intro(); }
   toTitle(first = false) {
     if (this.coop || this.wasCoop) { if (this.coopHost) this.net.send('down', { k: 'quit' }); this.coop = false; this.wasCoop = false; this.net.leave(true); this.ui.coopStatus('Not connected.'); }
     if (this.partner) { this.partner.dispose(); this.partner = null; }
@@ -268,14 +270,14 @@ class Game {
   startCoopGame(i) {
     if (!this.net.linked || this.net.role !== 'host') return;
     this.coop = true; this.wasCoop = true; this.demo = false; this.bot = null;
-    this.score = 0; this.lives = 5; this.round = 1; this.continued = true; this.nextLife = 25000; this.assisted = assistOn();
+    this.score = 0; this.lives = 5; this.round = 1; this.continued = true; this.nextLife = 25000; this.assisted = assistOn(); this.goSaid = false;
     this.player.grabFilter = undefined; this.audio.unlock(); this.loadLevel(i); this.intro();
   }
   coopPartnerJoined(name) {
     if (this.partner) this.partner.dispose();
     this.partner = new Partner(this, name);
     this.audio.play('coop_join', { vol: .9 }); this.ui.coopRefresh();
-    if (this.ui.screen === 'coop') setTimeout(() => this.audio.voice('fm_coop', 1), 500);
+    if (this.ui.screen === 'coop') setTimeout(() => this.audio.say('fm_coop', { key: true, once: true, when: () => this.ui.screen === 'coop' }), 500);
   }
   coopPartnerLeft(msg) {
     const name = this.partner ? this.partner.name : 'Your partner';
@@ -292,7 +294,7 @@ class Game {
   }
   netAct(a, data = {}) { if (this.coopGuest) this.net.send('ck', Object.assign({ a }, data)); }
   netRivet(s) { if (this.coopGuest) { s.netLock = performance.now() + 900; this.netAct(s.demo ? 'unbolt' : 'rivet', { si: this.objects.sockets.indexOf(s), n: s.rivets }); } }
-  partnerHit(kind, px, pz) { this.net.send('hit', { r: kind, px: Math.round(px * 10) / 10, pz: Math.round(pz * 10) / 10 }); if (kind === 'inspector') this.audio.voice('in_cite', .8, this.partner && this.partner.root.position); }
+  partnerHit(kind, px, pz) { this.net.send('hit', { r: kind, px: Math.round(px * 10) / 10, pz: Math.round(pz * 10) / 10 }); if (kind === 'inspector') this.audio.say('in_cite', { vol: .8, pos: this.partner && this.partner.root.position, quip: true, chance: .35 }); }
   // enemies chase whichever Mac is closer (co-op host)
   targetFor(b) {
     const P = this.partner, p = this.player;
@@ -358,7 +360,7 @@ class Game {
   // ---------------- demo playthrough ----------------
   startDemo(attract = false) {
     this.demo = true; this.demoAttract = attract; this.bot = new Bot(this);
-    this.score = 0; this.lives = 3; this.round = 1; this.continued = true; this.nextLife = 25000;
+    this.score = 0; this.lives = 3; this.round = 1; this.continued = true; this.nextLife = 25000; this.goSaid = false;
     this.audio.unlock(); this.ui.demo(true);
     this.loadLevel(0); this.intro();
   }
@@ -409,8 +411,9 @@ class Game {
     if (hammer && this.demo && this.cam.mode === 'follow' && (this.time - (this.lastKoShot || -99) > 9 || p.koChain > 1)) { // demo director: slow-mo replay angle
       this.lastKoShot = this.time; this.slowT = .9; this.cam.cue('ko', { dur: 1.7, e, a0: p.yaw + Math.PI * .6 });
     }
-    this.audio.voice(e.kind === 'vandal' ? 'vd_ow' : e.kind === 'inspector' ? 'in_ow' : 'dog_whine', .85, pos);
-    if (hammer && Math.random() < .45) setTimeout(() => this.audio.voice(Math.random() < .5 ? 'mac_take' : 'mac_lights', .8), 450);
+    if (e.kind === 'dog') this.audio.voice('dog_whine', .85, pos);
+    else this.audio.say(e.kind === 'vandal' ? 'vd_ow' : 'in_ow', { vol: .85, pos, quip: true, chance: .3 });
+    if (hammer) setTimeout(() => this.audio.say(['mac_take', 'mac_lights'], { vol: .8, quip: true, chance: .25 }), 450);
     this.fx.sparks(pos, 18, 0xffe14a);
     this.toast(p.koChain > 1 ? `KNOCKOUT ×${p.koChain}!` : 'KNOCKOUT!');
   }
@@ -433,7 +436,7 @@ class Game {
     s.state = 'riveted';
     for (const dot of s.rivetDots) dot.visible = false;
     this.addScore(500, s.center); this.audio.play('rivet_done', { vol: 1, rate: .8 });
-    if (Math.random() < .6) this.audio.voice(Math.random() < .5 ? 'mac_yeah' : 'mac_gotit', .8);
+    this.audio.say(['mac_yeah', 'mac_gotit'], { vol: .8, quip: true, chance: .35 });
     if (s.final) { this.topOut(s); return; }
     this.toast('RIVETED!');
     const regular = this.objects.sockets.filter(x => !x.final);
@@ -451,7 +454,7 @@ class Game {
     this.audio.play(valve ? 'pump_on' : 'switch_on', { pos: s.dev, vol: 1 });
     this.fx.sparks(V.copy(s.dev).setY(s.dev.y + (valve ? 1 : 3.3)), 18, valve ? 0x7ac8ff : 0xff6a4a);
     this.toast(valve ? `PUMP ${n} RUNNING!` : `BEACON ${n} LIT!`);
-    if (Math.random() < .5) this.audio.voice('mac_gotit', .8);
+    this.audio.say('mac_gotit', { vol: .8, quip: true, chance: .35 });
     this.checkComplete();
   }
   socketUnbolted(s) {
@@ -463,7 +466,7 @@ class Game {
     const p = byPartner ? { } : this.player; // the partner's power-ups apply in the partner's game
     if (!byPartner) this.netAct('collect', { pi: this.objects.pickups.indexOf(o) });
     switch (o.type) {
-      case 'lunch': this.addScore(500, o.pos, true); this.audio.play('lunchbox', { vol: 1 }); this.toast('LUNCHBOX!'); if (Math.random() < .4) this.audio.voice('mac_gotit', .8); break;
+      case 'lunch': this.addScore(500, o.pos, true); this.audio.play('lunchbox', { vol: 1 }); this.toast('LUNCHBOX!'); this.audio.say('mac_gotit', { vol: .8, quip: true, chance: .3 }); break;
       case 'coffee': p.coffee = 9; this.addScore(100, o.pos); this.audio.play('coffee', { vol: 1 }); this.toast('COFFEE RUSH!'); break;
       case 'hardhat': p.shield = true; this.addScore(100, o.pos); this.audio.play('hardhat', { vol: 1 }); this.toast('GOLD HARD HAT!'); break;
       case 'stopwatch': this.frozen = true; this.freezeT = 7; this.addScore(100, o.pos); this.audio.play('magnet', { vol: .8, rate: 1.4 }); this.toast('TIME OUT!'); break;
@@ -498,7 +501,9 @@ class Game {
     if (p.carry) { this.objects.sendHome(p.carry); p.carry = null; }
     this.cheer = true; this.audio.sting('mus_clear');
     this.audio.play('cheer', { vol: .8 }); this.fx.confetti(V.copy(p.pos).setY(p.body.y + 2), 140);
-    setTimeout(() => this.audio.voice(final ? 'fm_topped' : Math.random() < .5 ? 'fm_clear1' : 'fm_clear2', 1), 900);
+    // one foreman line per shift change: stay quiet here when the next shift's first-time briefing is coming
+    const next = (this.levelIndex + 1) % LEVEL_INFO.length, nb = this.briefOf[next];
+    if (final || (nb && this.audio.heard(nb))) setTimeout(() => this.audio.say(final ? 'fm_topped' : ['fm_clear1', 'fm_clear2'], { key: true }), 900);
     this.toast(final ? 'TOPPED OUT!' : 'SHIFT COMPLETE!');
     const L = this.level, [x0, z0, x1, z1] = L.bounds, lm = this.newBuilding && this.env.city.addLandmark(this.newBuilding, true);
     const c = V2.set((x0 + x1) / 4, L.index === 3 ? -2 : L.high ? 7 : 8, (z0 + z1) / 4), r = clamp(Math.max(x1 - x0, z1 - z0) * .36, 18, 30) * (final ? 1.15 : 1);
@@ -515,7 +520,7 @@ class Game {
     if (rec) {
       rows.push(['Medal', `${MEDAL_ICON[rec.medal]} ${MEDAL_NAME[rec.medal]} ` + rec.stars.map((s, i) => `<span class="star${s ? ' on' : ''}" title="${STAR_TIP[i]}">${STAR_ICON[i]}</span>`).join(''), 'medal']);
       if (rec.newMedal && rec.medal > 0) setTimeout(() => this.audio.play('medal', { vol: .9 }), 1400);
-      if (rec.newBest && rec.prevBest != null) setTimeout(() => this.audio.voice('an_newbest', 1), 2200);
+      if (rec.newBest && rec.prevBest != null) setTimeout(() => this.audio.say('an_newbest', { key: true, when: () => this.state === 'tally' }), 2200);
     }
     if (fin) rows.push(['Topping-out bonus', fin.toLocaleString()]);
     rows.push(['Total score', this.score.toLocaleString(), 'total']);
@@ -552,10 +557,10 @@ class Game {
   async gameOver() {
     if (this.coopHost) this.net.send('down', { k: 'over', sc: this.score });
     this.state = 'over'; this.ui.showHud(false);
-    this.audio.sting('mus_gameover'); setTimeout(() => this.audio.voice('fm_gameover', 1), 1200);
+    this.audio.sting('mus_gameover'); setTimeout(() => this.audio.say('fm_gameover', { key: true, when: () => this.state === 'over' }), 1200);
     saveProgress();
     const q = !this.continued && !this.assisted && await this.scores.qualifies(this.score);
-    if (q) setTimeout(() => this.audio.voice('an_record', 1), 3800);
+    if (q) setTimeout(() => this.audio.say('an_record', { key: true, when: () => this.state === 'over' }), 3800);
     this.ui.gameOver(this.score, q, this.continued || this.assisted);
     this.cam.mode = 'orbit'; this.cam.orbit.c.copy(this.player.pos); this.cam.orbit.d = 14; this.cam.orbit.s = .1;
   }
@@ -652,7 +657,7 @@ class Game {
     if (!p.dead) {
       const before = Math.ceil(this.timeLeft); this.timeLeft -= dt; const now = Math.ceil(this.timeLeft);
       if (now !== before && now <= 10 && now > 0) this.audio.play('tick', { vol: .5, rate: now <= 3 ? 1.3 : 1 });
-      if (this.timeLeft < 30 && !this.hurried) { this.hurried = true; this.audio.voice('fm_hurry', 1); }
+      if (this.timeLeft < 30 && !this.hurried) { this.hurried = true; this.audio.say('fm_hurry', { chance: .5 }); } // the clock bar also turns red
       if (this.timeLeft <= 0 && this.coopGuest) this.timeLeft = 0; // the host calls time
       else if (this.timeLeft <= 0) { this.timeLeft = 0; this.audio.play('timeup', { vol: 1 }); this.killPlayer('time'); if (this.coopHost) this.net.send('hit', { r: 'time' }); }
     }
@@ -675,7 +680,7 @@ class Game {
         else if (p.state === 'normal') { const c = p.carry; p.carry = null; o.drop(c, p, this); this.netAct('drop', { ci, x: c.pos.x, y: c.pos.y, z: c.pos.z, ax: c.axis === 'z' ? 1 : 0 }); this.audio.play('pickup', { vol: .5, rate: .8 }); }
       } else if (p.state === 'normal' && p.body.onGround) {
         const c = o.nearCarry(p);
-        if (c) { c.netLock = performance.now() + 900; this.netAct('pick', { ci: o.carry.indexOf(c) }); o.pickUp(c); p.attachCarry(c); this.audio.play('pickup', { vol: .9 }); if (Math.random() < .35) this.audio.voice('mac_heave', .7); }
+        if (c) { c.netLock = performance.now() + 900; this.netAct('pick', { ci: o.carry.indexOf(c) }); o.pickUp(c); p.attachCarry(c); this.audio.play('pickup', { vol: .9 }); this.audio.grunt('mac_heave', .7, null, { chance: .25, gap: 30 }); }
       }
     }
     if (inp.actHeld && !p.carry && p.state === 'normal' && p.body.onGround) {
