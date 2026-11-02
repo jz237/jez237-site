@@ -93,7 +93,7 @@ export function crystalMaterial(color,intensity=2.2,opts={}){
   // facets glow at grazing angles and towards the tip, so shards read as lit crystal, not flat cards
   m.onBeforeCompile=sh=>{sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying float vLy;').replace('#include <begin_vertex>','#include <begin_vertex>\nvLy=position.y;');
     sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying float vLy;').replace('#include <emissivemap_fragment>',`#include <emissivemap_fragment>
-      float fres=pow(1.-abs(dot(normalize(normal),normalize(vViewPosition))),2.2);float tip=smoothstep(.5,1.,vLy);
+      float fres=pow(max(1.-abs(dot(normalize(normal),normalize(vViewPosition))),0.),2.2);float tip=smoothstep(.5,1.,vLy);
       totalEmissiveRadiance*=.14+fres*1.35+tip*.85;`);};
   m.customProgramCacheKey=()=>'crystal';
   return m;

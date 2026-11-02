@@ -13,7 +13,8 @@ import {CopyShader} from 'three/addons/shaders/CopyShader.js';
 // meshes sampling that frame's colour and depth (refraction, absorption, reflections).
 class WaterPass extends Pass{
   constructor(scene,camera){super();this.scene=scene;this.camera=camera;this.water=null;this.enabled=false;
-    this.copy=new FullScreenQuad(new THREE.ShaderMaterial({uniforms:THREE.UniformsUtils.clone(CopyShader.uniforms),vertexShader:CopyShader.vertexShader,fragmentShader:CopyShader.fragmentShader,depthTest:false,depthWrite:false}));}
+    this.copy=new FullScreenQuad(new THREE.ShaderMaterial({uniforms:{tDiffuse:{value:null}},vertexShader:CopyShader.vertexShader,depthTest:false,depthWrite:false,
+      fragmentShader:`uniform sampler2D tDiffuse;varying vec2 vUv;void main(){vec4 c=texture2D(tDiffuse,vUv);gl_FragColor=any(isnan(c))||any(isinf(c))?vec4(0.,0.,0.,1.):c;}`}));}
   render(r,writeBuffer,readBuffer){
     r.setRenderTarget(this.renderToScreen?null:writeBuffer);r.clear(true,true,false);
     this.copy.material.uniforms.tDiffuse.value=readBuffer.texture;this.copy.render(r);

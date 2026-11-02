@@ -107,6 +107,7 @@ void main(){vec4 w=modelMatrix*vec4(position,1.);float h=surfH(vec2(w.x,w.z-2.),
 // fog + output shared by both fragment shaders
 const FINISH = /* glsl */`
 vec3 fogIt(vec3 c,float d){return mix(c,uFogColor,smoothstep(uFogNear,uFogFar,d));}
+vec3 clean(vec3 c){return any(isnan(c))||any(isinf(c))?vec3(0.):clamp(c,0.,4e3);}
 `;
 
 const SURF_FS = /* glsl */`
@@ -143,13 +144,13 @@ vec4 ssr(vec3 Pw,vec3 Nw){
 void main(){
   vec3 n=nrm(vW.xz);vec3 V=normalize(cameraPosition-vW);float dMe=length(cameraPosition-vW);
 #ifdef LITE
-  float F=.02+.98*pow(1.-max(dot(n,V),0.),5.);vec3 H=normalize(uSunDir+V);
+  float F=.02+.98*pow(clamp(1.-dot(n,V),0.,1.),5.);vec3 H=normalize(uSunDir+V);
   vec3 c=mix(uScatter*.8,sky(reflect(-V,n)),F)+uSunCol*pow(max(dot(n,H),0.),300.)*4.;
   gl_FragColor=vec4(fogIt(c,dMe),.72+F*.25);return;
 #else
   vec2 suv=gl_FragCoord.xy/uRes;float zMe=lin(gl_FragCoord.z),zS=lin(texture2D(tDepth,suv).r);
   if(zS<zMe-.3)discard;
-  float NdV=max(dot(n,V),0.);float F=.02+.98*pow(1.-NdV,5.);
+  float NdV=clamp(dot(n,V),0.,1.);float F=.02+.98*pow(1.-NdV,5.);
   // refraction: bend by the slope, more where the water is deep, never pull in what's in front
   vec2 off=vec2(n.x,-n.z)*.045*clamp((zS-zMe)/50.,0.,1.);
   vec2 ruv=suv+off;float zR=lin(texture2D(tDepth,ruv).r);if(zR<zMe){ruv=suv;zR=zS;}
@@ -164,7 +165,7 @@ void main(){
   float foam=clamp(shore*(.35+lace*.9)+crest*lace,0.,1.);
   vec3 c=mix(below,refl,F)+uSunCol*spec*(1.-foam);
   c=mix(c,uFoam,foam*.75);
-  gl_FragColor=vec4(fogIt(c,dMe),1.);
+  gl_FragColor=vec4(clean(fogIt(c,dMe)),1.);
 #endif
 }`;
 
@@ -213,7 +214,7 @@ void main(){
   // the waterline: a bright meniscus, then a silvery band of total internal reflection just under it
   float men=smoothstep(1.6,0.,below);float tir=smoothstep(0.,2.,below)*smoothstep(9.,3.,below);
   c=mix(c,uSkyHor*.9+uFoam*.15,tir*.35)+uFoam*men*.7;
-  gl_FragColor=vec4(fogIt(c,dMe),1.);
+  gl_FragColor=vec4(clean(fogIt(c,dMe)),1.);
 #endif
 }`;
 

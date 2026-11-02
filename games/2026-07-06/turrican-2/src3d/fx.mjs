@@ -74,7 +74,7 @@ export function createFX(scene,quality){
   // shock rings
   const ringMat=new THREE.ShaderMaterial({uniforms:{uColor:{value:new THREE.Color()},uA:{value:1}},transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide,
     vertexShader:`varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
-    fragmentShader:`varying vec2 vUv;uniform vec3 uColor;uniform float uA;void main(){float d=abs(vUv.y-.5)*2.;float a=pow(1.-d,3.)*uA;gl_FragColor=vec4(uColor*a*2.,1.);}`});
+    fragmentShader:`varying vec2 vUv;uniform vec3 uColor;uniform float uA;void main(){float d=abs(vUv.y-.5)*2.;float a=pow(max(1.-d,0.),3.)*uA;gl_FragColor=vec4(uColor*a*2.,1.);}`});
   const ringGeo=new THREE.RingGeometry(.82,1,64,1);
   {const uv=ringGeo.attributes.uv,p=ringGeo.attributes.position;for(let i=0;i<p.count;i++){const rr=Math.hypot(p.getX(i),p.getY(i));uv.setXY(i,0,(rr-.82)/.18);}}
   const rings=[];

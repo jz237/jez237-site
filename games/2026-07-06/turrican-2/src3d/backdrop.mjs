@@ -23,7 +23,7 @@ export function buildBackdrop(level,theme,terrain,quality){
         vec3 c=mix(uHorizon,uMid,smoothstep(-.02,.14,y));c=mix(c,uZenith,smoothstep(.12,.6,y));
         c=mix(c,uHorizon*.55,smoothstep(.0,-.25,y));
         float sd=max(dot(d,normalize(uSun)),0.);c+=uGlow*pow(sd,6.)*.55+uGlow*pow(sd,60.)*1.2+vec3(1.,.95,.85)*smoothstep(.9993,.9997,sd)*6.;
-        if(uNebula>.5){vec2 q=d.xy/(abs(d.z)+.6)*2.3;float n=fbm(q+vec2(0.,uTime*.003))*fbm(q*2.1+7.);c+=uGlow*pow(n,2.2)*.9*smoothstep(-.1,.5,y);}
+        if(uNebula>.5){vec2 q=d.xy/(abs(d.z)+.6)*2.3;float n=fbm(q+vec2(0.,uTime*.003))*fbm(q*2.1+7.);c+=uGlow*pow(max(n,0.),2.2)*.9*smoothstep(-.1,.5,y);}
         c+=vec3(.9,.95,1.)*star(d)*uStars*smoothstep(.05,.4,y)*2.;
         gl_FragColor=vec4(c,1.);}`});
   const dome=new THREE.Mesh(new THREE.SphereGeometry(9000,48,24),skyMat);dome.renderOrder=-10;dome.frustumCulled=false;sky.add(dome);disposables.push(skyMat,dome.geometry);
@@ -34,7 +34,7 @@ export function buildBackdrop(level,theme,terrain,quality){
     const pm=new THREE.ShaderMaterial({uniforms:pu,fog:false,vertexShader:`varying vec3 vN;varying vec3 vP;void main(){vN=normalize(normalMatrix*normal);vP=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
       fragmentShader:`varying vec3 vN;varying vec3 vP;uniform vec3 uColor,uBand,uSun,uGlow;${GLSL_NOISE}
         void main(){float lat=vP.y/length(vP);float b=fbm(vec2(lat*9.,lat*3.+fbm(vec2(vP.x*.002,lat*4.))*1.5));vec3 c=mix(uColor,uBand,smoothstep(.35,.7,b));
-        vec3 L=normalize(vec3(-.6,.5,.6));float l=smoothstep(-.15,.6,dot(vN,L));float rim=pow(1.-max(vN.z,0.),3.);
+        vec3 L=normalize(vec3(-.6,.5,.6));float l=smoothstep(-.15,.6,dot(vN,L));float rim=pow(clamp(1.-vN.z,0.,1.),3.);
         gl_FragColor=vec4(c*(l*1.05+.16)+uGlow*rim*.7*l+uGlow*rim*.22,1.);}`});
     const planet=new THREE.Mesh(new THREE.SphereGeometry(P.r,64,32),pm);planet.position.set(...P.pos);sky.add(planet);disposables.push(pm,planet.geometry);
     if(P.ring){const rg=new THREE.RingGeometry(P.r*1.35,P.r*2.3,128,1);const ru={uColor:{value:C(P.ring)},uIn:{value:P.r*1.35},uOut:{value:P.r*2.3}};
@@ -82,7 +82,7 @@ export function buildBackdrop(level,theme,terrain,quality){
     const sm=new THREE.ShaderMaterial({uniforms:shaftU,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide,fog:false,
       vertexShader:`varying vec2 vUv;varying float vF;void main(){vUv=uv;vec4 p=modelViewMatrix*vec4(position,1.);vF=clamp(-p.z/1600.,0.,1.);gl_Position=projectionMatrix*p;}`,
       fragmentShader:`varying vec2 vUv;varying float vF;uniform float uTime;uniform vec3 uColor;${GLSL_NOISE}
-        void main(){float n=fbm(vec2(vUv.x*5.+uTime*.05,vUv.y*1.5-uTime*.12));float a=smoothstep(0.,.35,vUv.x)*smoothstep(1.,.65,vUv.x)*pow(vUv.y,1.4)*(.45+n*.8);
+        void main(){float n=fbm(vec2(vUv.x*5.+uTime*.05,vUv.y*1.5-uTime*.12));float a=smoothstep(0.,.35,vUv.x)*smoothstep(1.,.65,vUv.x)*pow(clamp(vUv.y,0.,1.),1.4)*(.45+n*.8);
         gl_FragColor=vec4(uColor*a*.16*(1.-vF*.5),1.);}`});
     disposables.push(sm);const shafts=quality==='low'?10:24;
     for(let i=0;i<shafts;i++){const x=r()*W,col=Math.min(level.cols-1,Math.max(0,Math.floor(x/T))),top=terrain.ceil[col]<100?terrain.ceil[col]:0,bot=terrain.ground[col]>-H?terrain.ground[col]:-H;

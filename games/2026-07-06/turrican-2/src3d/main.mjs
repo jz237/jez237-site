@@ -137,7 +137,7 @@ function createRenderer(display){
   }
   function makeShield(){const m=new THREE.Mesh(new THREE.SphereGeometry(1,32,16),new THREE.ShaderMaterial({uniforms:{uTime:{value:0},uA:{value:0}},transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
       vertexShader:`varying vec3 vN;varying vec3 vV;varying vec3 vP;void main(){vN=normalize(normalMatrix*normal);vec4 mv=modelViewMatrix*vec4(position,1.);vV=normalize(-mv.xyz);vP=position;gl_Position=projectionMatrix*mv;}`,
-      fragmentShader:`varying vec3 vN;varying vec3 vV;varying vec3 vP;uniform float uTime,uA;void main(){float f=pow(1.-abs(dot(vN,vV)),2.5);float hex=step(.82,fract((vP.x+vP.y*.58)*6.)+fract(vP.y*6.-uTime));
+      fragmentShader:`varying vec3 vN;varying vec3 vV;varying vec3 vP;uniform float uTime,uA;void main(){float f=pow(max(1.-abs(dot(vN,vV)),0.),2.5);float hex=step(.82,fract((vP.x+vP.y*.58)*6.)+fract(vP.y*6.-uTime));
         gl_FragColor=vec4(vec3(.35,.85,1.)*(f*1.6+hex*.25)*uA,1.);}`}));m.visible=false;return m;}
 
   // ---------------------------------------------------------------- events -> effects
