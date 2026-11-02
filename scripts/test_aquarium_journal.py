@@ -10,7 +10,7 @@ import threading
 from urllib.parse import urljoin, urlparse, unquote
 from html.parser import HTMLParser
 from PIL import Image
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, expect
 import sys
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 from aquarium_editorial import plain_date, related_stories, TAGS
@@ -209,7 +209,7 @@ try:
         cc.grant_permissions(['clipboard-read','clipboard-write'],origin=base)
         cp=cc.new_page();cp.goto(base+'/newsletter/stories/'+stories[1]['slug']+'/',wait_until='networkidle')
         cp.locator('.copy-link').click()
-        cp.wait_for_function("document.querySelector('.share-status').textContent==='Link copied'")
+        expect(cp.locator('.share-status')).to_have_text('Link copied')  # no eval under live CSP
         assert cp.evaluate('navigator.clipboard.readText()')=='https://jez237.com/newsletter/stories/'+stories[1]['slug']+'/'
         cc.close()
         fc=browser.new_context(viewport={'width':390,'height':844})

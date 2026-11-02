@@ -3,7 +3,7 @@
 from pathlib import Path
 import argparse, functools, http.server, json, threading
 from urllib.parse import urlparse
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, expect
 import sys
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 from aquarium_editorial import plain_date, related_stories
@@ -85,7 +85,7 @@ try:
         page.context.grant_permissions(['clipboard-read','clipboard-write'],origin=base)
         page.locator('.story h3 a').nth(2).click();wait_open();url=page.url
         page.locator('#reader-content .copy-link').click()
-        page.wait_for_function("document.querySelector('#reader-content .share-status').textContent==='Link copied'")
+        expect(page.locator('#reader-content .share-status')).to_have_text('Link copied')  # no eval under live CSP
         assert page.evaluate('navigator.clipboard.readText()')=='https://jez237.com/newsletter/stories/'+stories[2]['slug']+'/'
         assert page.locator('#article-reader').evaluate('(e)=>e.open') and page.url==url
         page.locator('#reader-close').click();wait_closed()
