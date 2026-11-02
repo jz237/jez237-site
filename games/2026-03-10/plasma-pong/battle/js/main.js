@@ -197,6 +197,7 @@ function goTitle() {
   D.flip = false;
   setFlip(false);
   $('res-quit').classList.add('hidden');
+  backTo = 'title';
   G.state = 'title';
   renderWorld();
   G.idleT = 0;
