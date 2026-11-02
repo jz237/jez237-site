@@ -5,24 +5,41 @@ from copy import deepcopy
 import json
 from pathlib import Path
 import unittest
-from aquarium_editorial import render, validate, word_count
+from aquarium_editorial import render, validate, word_count, FORMATS
+import re
 
 STORIES=json.loads((Path(__file__).resolve().parents[1]/'newsletter/stories.json').read_text())
 
 class EditorialTests(unittest.TestCase):
     def test_complete_varied_articles(self):
         # Daily publishing adds stories; the twelve-story pilot is the floor.
-        self.assertGreaterEqual(len(STORIES),12)
-        structures={tuple(b['type'] for b in s['blocks']) for s in STORIES}
-        self.assertGreaterEqual(len(structures),4)
-        lengths=[word_count(s) for s in STORIES]
-        self.assertTrue(all(250<=n<=650 for n in lengths),lengths)
-        self.assertGreaterEqual(max(lengths)-min(lengths),150)
-        self.assertTrue(any(b['type']=='list' for s in STORIES for b in s['blocks']))
+        self.assertGreaterEqual(len(STORIES),16)
+        # Shapes rotate: many distinct block structures, no two neighbours share a format.
+        structures={tuple((b['type'],bool(b.get('ordered'))) for b in s['blocks']) for s in STORIES}
+        self.assertGreaterEqual(len(structures),min(len(STORIES)-2,12))
+        formats=[s['format'] for s in STORIES]
+        self.assertGreaterEqual(len(set(formats)),7,formats)
+        for a,b in zip(formats,formats[1:]):self.assertNotEqual(a,b,formats)
+        # The sidebar box is the exception, not the default.
+        self.assertLessEqual(sum(any(b['type']=='aside' for b in s['blocks']) for s in STORIES),len(STORIES)//4)
         for s in STORIES:
             validate(s)
-            self.assertGreaterEqual(len(s['references']),2)
+            lo,hi=FORMATS[s['format']]
+            self.assertTrue(lo<=word_count(s)<=hi,(s['slug'],s['format'],word_count(s)))
+            self.assertGreaterEqual(len(s['references']),1 if s['format']=='brief' else 2,s['slug'])
             self.assertNotIn('verification_notes',s)
+        self.assertTrue(any(b['type']=='list' and b.get('ordered') for s in STORIES for b in s['blocks']))
+
+    def test_us_units(self):
+        # Metric values appear only beside a US conversion (gallons, °F, inches, fluid ounces).
+        metric=re.compile(r'\b\d[\d.,]*(?:–\d[\d.,]*)?[- ]?(?:liters?|litres?|L|°C|cm|mm|milliliters?|ml)\b')
+        us=re.compile(r'gallons?|gal\b|°F|inch|\bin\b|fluid ounces?|feet')
+        for s in STORIES:
+            texts=[s['title'],s['dek']]+[x for b in s['blocks'] for x in ([b.get('text','')]+b.get('items',[]))]
+            for text in texts:
+                for sentence in re.split(r'(?<=[.!?])\s+',text):
+                    if metric.search(sentence):self.assertRegex(sentence,us,(s['slug'],sentence))
+                self.assertNotRegex(text,r'\d\s*°C(?![^()]*\))(?!.*°F)',s['slug'])
 
     def test_source_budgets_across_edition(self):
         budgets=defaultdict(int)

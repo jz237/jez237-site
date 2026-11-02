@@ -29,7 +29,13 @@ CHECK="python3 $SITE/scripts/aquarium_daily_story_check.py"
    ancestor of `origin/main` and refuses if a story with today's `published` date already
    exists. Then `git merge --ff-only origin/main`. Dirty files or diverged history: stop and
    report; never stash, reset or force-push someone else's work.
-2. **Research.** Look for current freshwater and reef developments and practical topics in
+2. **Research, news first.** Start with real news from the last ~60 days that a hobbyist
+   would enjoy: newly described species (ZooKeys, Zootaxa, PeerJ, PLOS and other journals),
+   conservation results, research findings, and aquarium-equipment safety recalls (check
+   `https://www.saferproducts.gov/RestWebServices/Recall?format=json&RecallDateStart=<60 days ago>`
+   for aquarium, fish tank, pond and heater products). Then practical guides and species
+   profiles. Keep freshwater varied: fish, shrimp, snails and ponds as well as plants (see
+   `$CHECK preflight` → `balance`). Look for current freshwater and reef developments and practical topics in
    real primary sources: research papers and university/extension pages (UF/IFAS etc.),
    NOAA and other agencies, public aquariums, conservation programmes, and manufacturer or
    grower documentation (attributed as such). Read each page body; a 200 status is not
@@ -43,22 +49,35 @@ CHECK="python3 $SITE/scripts/aquarium_daily_story_check.py"
 4. **No duplicates.** `$CHECK candidate <slug> "<title>"` must pass. It compares against every
    existing slug and title; also read the closest existing stories yourself and make sure the
    new piece is a meaningfully different topic, not a reworded one.
-5. **Write the story** as one new object in `newsletter/stories.json` (schema in
+5. **Pick a format** different from the newest story's (`$CHECK preflight` prints
+   `previous_format`): `brief` (120–200 words, no headings), `steps`, `profile`, `feature`
+   (700–900 words, occasionally), `photo`, `qa`, `guide`, `checklist`, `report`, `explainer`.
+   No sidebar box (`aside`) by default.
+   **Write the story** as one new object in `newsletter/stories.json` (schema in
    `scripts/aquarium_editorial.py`, examples in the existing stories):
    - `slug`, `category` (`freshwater` | `reef`), `label` (`Freshwater` | `Reef & ocean`),
-     `kind` (`Practical guide` | `Research` | `Conservation news`), `tags`, `date` (source /
+     `kind` (`Practical guide` | `Research` | `Conservation news` | `Species profile`), `tags`,
+     `format`, `date` (source /
      background date text), `published` (today, `YYYY-MM-DD`), `title`, `dek`, `image`,
      `caption`, `source`, `url`, `references`, `blocks`, `archive`; optional `diagram`,
-     `showroom`, `modified`.
+     `showroom`, `modified`; `facts` for profiles.
+   - **Species profile facts box** (`format: profile`, `kind: Species profile`): `facts` is
+     exactly Adult size, Temperature, Minimum tank, Difficulty, Diet, Temperament, each
+     `{label, value, detail?, refs}`. Values in inches, °F and US gallons; the metric source
+     value goes in `detail`. Every fact cites a reference; no source, no profile.
+   - **Units:** US gallons, °F, inches. Convert metric accurately at the source's precision
+     and keep metric only in parentheses or the facts detail line.
    - **Answer-first title and dek:** the useful finding is in the headline. No questions,
      teasers or withheld answers.
-   - **Complete original article**, 250-650 words, readable on the page. Vary the opening and
+   - **Complete original article** in the format's word range (brief 120–200, feature
+     700–900, most others 250–650), readable on the page. Vary the opening and
      structure (`p`, `heading`, `list`, `aside`); the first block is a `p`. No "read the rest
      at the source" and no forced takeaway box.
    - **Attributed claims:** manufacturer and grower guidance is attributed to them, never
      stated as a universal rule or an independent test. Keep qualifications and uncertainty.
    - **Endnote references:** at least two `{id, label, url, date}` entries, cited from blocks
-     through `refs`. Sources sit in the quiet endnotes, not as the destination.
+     through `refs` (a `brief` may rest on one primary source). Sources sit in the quiet
+     endnotes, not as the destination.
    - **Per-source derivation limit:** no more than 200 cited words per source URL across the
      whole edition including `checklist.json` (enforced by the tests; also judge uncited
      wording, the title, dek and any diagram text).
@@ -66,14 +85,14 @@ CHECK="python3 $SITE/scripts/aquarium_daily_story_check.py"
      customer stories. No competitor stores.
    - **Humanizer on headings only:** run the humanizer skill on the title, dek and section
      `heading` blocks. Never on body text.
-   - **Tags:** one or more of `Plants`, `Fish`, `Coral`, `Equipment`, `Water care`.
+   - **Tags:** one or more of `Plants`, `Fish`, `Shrimp & snails`, `Ponds`, `Coral`,
+     `Equipment`, `Water care`.
    - **Showroom (rare):** add `"showroom": {"path": "/showroom/<room>/", "title": "<page title>",
      "note": "<short phrase>"}` only when the article is directly about that equipment. Allowed
      rooms: drum-filter, fluidized-sand, protein-skimmer, biowheel, uv-sterilizer, betta-bowl
      (check `https://thehiddenreef.net/showroom/<room>/` returns 200 with the right page title
      first). Most stories get none; skip it if one of the last several stories already has one.
-   - **Position:** a new `Practical guide` goes first in the array (it becomes the hero); any
-     other kind goes second, directly after the current hero.
+   - **Position:** the new story goes first in the array (newest first; it becomes the hero).
    - Never include private `verification_notes` or research receipts.
 6. **Image.** Either
    - a **properly licensed photograph** (CC BY, CC BY-SA, CC0 or public domain; no NC/ND, no
@@ -85,8 +104,9 @@ CHECK="python3 $SITE/scripts/aquarium_daily_story_check.py"
    - a **clearly labelled original diagram** added to `scripts/build_aquarium_diagrams.py`
      (which regenerates `illustrations.json` with its caption and sources).
    If no properly licensed image exists, **skip the day**. Never use an unlicensed image.
-7. **Gate.** `$CHECK validate` (one new story at most, today's date, schema, tags, image
-   licence record, showroom limits).
+7. **Gate.** `$CHECK validate` (one new story at most, today's date, schema, format differs
+   from the previous story, word range, facts box, units, tags, image licence record,
+   showroom limits).
 8. **Build.** `cd $SITE/scripts && python3 build_aquarium_diagrams.py && python3 build_aquarium_journal.py`
    (regenerates the index, story pages, credits, JSON-LD and the sitemap `lastmod`).
 9. **Full test suite**, all must pass:

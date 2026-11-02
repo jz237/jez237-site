@@ -18,7 +18,7 @@ import json, re, subprocess, sys, time, urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'newsletter'
 sys.path.insert(0, str(ROOT / 'scripts'))
-from aquarium_editorial import validate, word_count, TAGS, SHOWROOMS  # noqa: E402
+from aquarium_editorial import validate, word_count, TAGS, SHOWROOMS, FORMATS  # noqa: E402
 
 LICENCES = {'CC BY 4.0', 'CC BY-SA 4.0', 'CC BY 3.0', 'CC BY-SA 3.0', 'CC BY 2.0', 'CC BY-SA 2.0', 'CC0 1.0', 'Public domain'}
 PHOTO_FIELDS = ['filename', 'title', 'source_url', 'author', 'license', 'license_url', 'alt', 'changes', 'width', 'height']
@@ -64,7 +64,11 @@ def preflight():
     published_today = [s['slug'] for s in stories if s['published'] == today()]
     if published_today:
         done(False, step='preflight', reason='a story is already published today (limit one per day)', today=today(), slugs=published_today)
+    fresh = [s for s in stories if s['category'] == 'freshwater']
+    balance = {tag: sum(tag in s.get('tags', []) for s in fresh) for tag in TAGS}
     done(True, step='preflight', today=today(), stories=len(stories), behind=git('rev-list', '--count', 'HEAD..origin/main').stdout.strip(),
+         previous_format=stories[0].get('format') if stories else None, recent_formats=[s.get('format') for s in stories[:5]],
+         freshwater_tag_counts=balance,
          existing=[{'slug': s['slug'], 'title': s['title'], 'tags': s.get('tags', [])} for s in stories])
 
 
@@ -108,10 +112,23 @@ def validate_edition():
         if '?' in s['title'] or '?' in s['dek']:
             problems.append(f'{s["slug"]}: question in title/dek; give the answer first')
         n = word_count(s)
-        if not 250 <= n <= 650:
-            problems.append(f'{s["slug"]}: {n} words; complete articles run 250-650')
-        if len(s['references']) < 2:
-            problems.append(f'{s["slug"]}: needs at least two references')
+        lo, hi = FORMATS.get(s.get('format'), (250, 650))
+        if not lo <= n <= hi:
+            problems.append(f'{s["slug"]}: {n} words; a {s.get("format")} runs {lo}-{hi}')
+        if len(s['references']) < (1 if s.get('format') == 'brief' else 2):
+            problems.append(f'{s["slug"]}: too few references')
+        if stories and stories[0]['slug'] != s['slug']:
+            problems.append(f'{s["slug"]}: the new story goes first (newest first)')
+        prev = next((o for o in stories if o['slug'] != s['slug']), None)
+        if prev and prev.get('format') == s.get('format'):
+            problems.append(f'{s["slug"]}: same format as the previous story ({prev.get("format")}); pick another shape')
+        if any(b['type'] == 'aside' for b in s['blocks']) and sum(any(b['type'] == 'aside' for b in o['blocks']) for o in stories[:6]) > 1:
+            problems.append(f'{s["slug"]}: sidebar box used recently; leave it out')
+        texts = [s['title'], s['dek']] + [x for b in s['blocks'] for x in [b.get('text', '')] + b.get('items', [])]
+        for text in texts:
+            for sentence in re.split(r'(?<=[.!?])\s+', text):
+                if re.search(r'\b\d[\d.,]*[- ]?(?:liters?|litres?|L|°C|cm|mm|milliliters?|ml)\b', sentence) and not re.search(r'gallons?|gal\b|°F|inch|\bin\b|fluid ounces?|feet', sentence):
+                    problems.append(f'{s["slug"]}: metric value without US units: {sentence[:80]}')
         if 'verification_notes' in s:
             problems.append(f'{s["slug"]}: private verification_notes must not be published')
         if not set(s.get('tags', [])) <= set(TAGS) or not s.get('tags'):
@@ -135,6 +152,9 @@ def validate_edition():
                     problems.append(f'{s["slug"]}: photo {name} credit record missing {missing}')
                 elif p['license'] not in LICENCES or not p['license_url'].startswith('https://') or not p['source_url'].startswith('https://'):
                     problems.append(f'{s["slug"]}: photo {name} licence {p["license"]!r} is not on the allowed list {sorted(LICENCES)}')
+    fresh = [s for s in stories if s['category'] == 'freshwater']
+    if fresh and sum(s['tags'][0] == 'Plants' for s in fresh) > 0.4 * len(fresh):
+        problems.append('plant stories dominate freshwater coverage; choose fish, shrimp, snails or ponds')
     rooms = [s for s in stories if s.get('showroom')]
     if len(rooms) > max(3, len(stories) // 4):
         problems.append(f'{len(rooms)} showroom links; keep them occasional')

@@ -21,3 +21,20 @@
 .article-heading .story-tags,.article-heading .share-line{justify-content:center}
 .share-status:empty{display:none}
 .article-heading h1{text-wrap:balance}
+/* Species profile "At a glance" box, after the store's spec rows: small caps title, label left, value right, metric beneath. */
+.glance-box{margin:0 0 30px;padding:14px 18px 10px;background:var(--white);border:1px solid var(--line);border-top:3px solid var(--green);border-radius:4px;font-family:var(--sans);max-width:560px}
+.glance-title{margin:0 0 8px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green)}
+.glance-box dl{display:grid;gap:0;margin:0}
+.glance-row{display:flex;align-items:baseline;justify-content:space-between;gap:4px 16px;padding:7px 0;border-top:1px solid var(--line)}
+.glance-row:first-child{border-top:0}
+.glance-row dt{flex:0 0 auto;font-size:13px;color:var(--muted)}
+.glance-row dd{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:baseline;gap:0 6px;margin:0;text-align:right;min-width:0}
+.glance-row dd strong{font-size:14px;font-weight:650;color:var(--ink)}
+.glance-row dd span{font-size:12px;color:var(--muted)}
+.glance-row .editorial-citations{margin-left:-2px}
+@media(max-width:480px){.glance-row{display:block}.glance-row dd{justify-content:flex-start;text-align:left;margin-top:2px}}
+/* Single-photo story: let the photograph run larger. */
+.format-photo .article-image img{max-height:none;aspect-ratio:3/2;height:auto}
+.reader-article.format-photo .reader-figure img{height:min(68vh,640px)}
+
+#cover-title{text-wrap:balance}

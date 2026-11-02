@@ -1,5 +1,437 @@
 [
   {
+    "slug": "yellow-tang-larvae-vibrio-brine-shrimp",
+    "category": "reef",
+    "label": "Reef & ocean",
+    "kind": "Research",
+    "tags": [
+      "Fish"
+    ],
+    "format": "brief",
+    "date": "September 21, 2026 (PeerJ); October 7, 2026 (Hawaiʻi Pacific University)",
+    "published": "2026-11-01",
+    "title": "Vibrio peaked in yellow tang larvae as brine shrimp joined their diet",
+    "dek": "A Hawaiʻi Pacific University team tracked one cohort of larvae for 76 days. Gut microbes shifted with each new food.",
+    "image": "yellow-tang.webp",
+    "caption": "A yellow tang (Zebrasoma flavescens) in a public aquarium. Illustrative photo; it is not one of the study’s fish.",
+    "source": "PeerJ; Hawaiʻi Pacific University",
+    "url": "https://doi.org/10.7717/peerj.21690",
+    "references": [
+      {
+        "id": "r1",
+        "label": "Deck et al. — Succession of the yellow tang (Zebrasoma flavescens) microbiome from hatch to settlement in a recirculating aquaculture system, PeerJ",
+        "url": "https://doi.org/10.7717/peerj.21690",
+        "date": "Published September 21, 2026"
+      },
+      {
+        "id": "r2",
+        "label": "Hawaiʻi Pacific University — HPU Researchers Publish New Findings on Yellow Tang Development",
+        "url": "https://www.hpu.edu/about-us/the-ohana/article.php?nid=nc10072602",
+        "date": "October 7, 2026"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Hatcheries raising sought-after reef fish such as the yellow tang struggle to get enough larvae through to the juvenile stage. A study published in PeerJ on September 21, 2026, looked at one part of that early stage: the microbes in the gut. Researchers at Hawaiʻi Pacific University and its Oceanic Institute followed a single cohort in a recirculating system from hatching to 76 days, sampling the larvae, their food and the rearing water at eight points.",
+        "refs": [
+          "r1",
+          "r2"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "The gut community changed with each stage of development, and its biggest swings lined up with changes in food. Bacteria of the genus Vibrio made up 97.2% of the gut sequences at 36 days and 94.2% at 55 days. Both peaks came when enriched Artemia brine shrimp were added to the diet.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "These are proportions from one cohort in one system. They show a timing pattern and do not establish a cause or any effect on the fish’s health. The authors say live foods may shape a young fish’s microbes and that the Vibrio species carried in feed need closer study.",
+        "refs": [
+          "r1"
+        ]
+      }
+    ],
+    "archive": false
+  },
+  {
+    "slug": "betta-tank-size-and-plants",
+    "category": "freshwater",
+    "label": "Freshwater",
+    "kind": "Species profile",
+    "tags": [
+      "Fish"
+    ],
+    "format": "profile",
+    "date": "Species profile; studies published 2024; UF/IFAS March 2019",
+    "published": "2026-11-01",
+    "title": "Bettas swim more in planted tanks of 2.6 gallons or more than in small bowls",
+    "dek": "Two 2024 studies found more swimming and less hovering in bigger, furnished tanks. Male bettas still need a tank each, however large.",
+    "image": "betta-splendens.webp",
+    "caption": "A betta (Betta splendens) with its fins spread. Illustrative photo, not store stock.",
+    "source": "Animal Welfare; UF/IFAS Extension; FishBase",
+    "url": "https://doi.org/10.1017/awf.2024.1",
+    "facts": [
+      {
+        "label": "Adult size",
+        "value": "Up to 2.6 in",
+        "detail": "6.5 cm total length",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "label": "Temperature",
+        "value": "75–86°F",
+        "detail": "24–30°C",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "label": "Minimum tank",
+        "value": "2.6 gal or more",
+        "detail": "10 L, for full swimming",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "label": "Difficulty",
+        "value": "Hardy",
+        "detail": "UF/IFAS",
+        "refs": [
+          "r4"
+        ]
+      },
+      {
+        "label": "Diet",
+        "value": "Dry foods, plus live or frozen",
+        "refs": [
+          "r4"
+        ]
+      },
+      {
+        "label": "Temperament",
+        "value": "Males fight other males",
+        "refs": [
+          "r2",
+          "r4"
+        ]
+      }
+    ],
+    "references": [
+      {
+        "id": "r1",
+        "label": "FishBase — Betta splendens species summary",
+        "url": "https://www.fishbase.se/summary/Betta-splendens.html",
+        "date": "Accessed November 1, 2026"
+      },
+      {
+        "id": "r2",
+        "label": "Oldfield and Klerekoper Murphy — Life in a fishbowl: Space and environmental enrichment affect behaviour of Betta splendens, Animal Welfare",
+        "url": "https://doi.org/10.1017/awf.2024.1",
+        "date": "2024"
+      },
+      {
+        "id": "r3",
+        "label": "Clark-Shen et al. — Life beyond a jar: Effects of tank size and furnishings on the behaviour and welfare of Siamese fighting fish, Animal Welfare",
+        "url": "https://doi.org/10.1017/awf.2024.67",
+        "date": "Published December 23, 2024"
+      },
+      {
+        "id": "r4",
+        "label": "UF/IFAS Extension — Evolution, Culture, and Care for Betta splendens (FA212)",
+        "url": "https://doi.org/10.32473/edis-fa212-2019",
+        "date": "March 2019"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Male bettas usually reach stores in small plastic cups, and many go home to a bowl. Two studies published in 2024 asked whether that much room is enough. Both found that bettas behaved differently once they had more space and something to swim around.",
+        "refs": [
+          "r4"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "What the tank-size studies found"
+      },
+      {
+        "type": "p",
+        "text": "Ronald Oldfield and Emily Klerekoper Murphy watched single males in a 0.5-liter bowl (about 0.13 gallon) and in aquariums of 10, 38 and 208 liters (about 2.6, 10 and 55 gallons). The fish swam less in the bowl. The authors concluded that a betta needs at least a 10-liter (2.6-gallon) tank to show its full range of swimming, and fish swam more often when the container held gravel, rocks and live plants.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Naomi Clark-Shen and colleagues moved 13 males through five setups, from a 1.5-liter jar to 19.3-liter tanks (about 0.4 to 5.1 gallons). In the large furnished tank the fish were more active and spent less time resting, hovering or swimming in repeated patterns. A large tank with no gravel, plants or hiding places produced more of those abnormal behaviors than the furnished one. The team suggested 5.6 liters (about 1.5 gallons) as the least a store should use for display and sale, and a bigger tank at home.",
+        "refs": [
+          "r3"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Where the older advice differs"
+      },
+      {
+        "type": "p",
+        "text": "A 2019 UF/IFAS Extension publication takes another view. It argues that domestic male bettas, which evolved in shallow, warm water, do well in small aquariums and bowls when water quality, nutrition and health care are looked after, and it cites a Thai study in which males grew better in 150 milliliters (about 5 fluid ounces) than in 300. That work measured growth, while the 2024 studies measured behavior, which may account for some of the disagreement.",
+        "refs": [
+          "r4"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Keeping one"
+      },
+      {
+        "type": "p",
+        "text": "UF/IFAS notes that bettas do poorly in cold water. If one lives in an unheated, unfiltered container, the room should stay at 71.6°F or warmer. Bettas prefer calm water, and UF/IFAS cautions that heavy filtration may harm them. Dry commercial foods can be the whole diet, and live or frozen foods are an option on top.",
+        "refs": [
+          "r4"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Keep males apart. In Oldfield and Klerekoper Murphy’s pair trials, bigger planted tanks reduced approaches and displays between two males but not attacks, and the authors found that even very large aquariums could not guarantee the pair would live peacefully. The largest they tested held 378 liters, about 100 gallons.",
+        "refs": [
+          "r2"
+        ]
+      }
+    ],
+    "archive": false
+  },
+  {
+    "slug": "a-new-home-for-coral",
+    "category": "reef",
+    "label": "Reef & ocean",
+    "kind": "Conservation news",
+    "tags": [
+      "Coral"
+    ],
+    "format": "photo",
+    "date": "August 20, 2026",
+    "published": "2026-11-01",
+    "title": "About 1,000 corals moved to a backup nursery in Florida",
+    "dek": "The first transfer carried 130 genotypes, giving the coral gene bank another location for its living collection.",
+    "image": "coral-detail.webp",
+    "source": "Coral Restoration Foundation",
+    "url": "https://coralrestoration.org/as-el-nino-strengthens-crf-establishes-second-in-water-coral-gene-bank-to-safeguard-irreplaceable-genetic-diversity/",
+    "caption": "Illustrative coral photograph; not a photograph of this nursery.",
+    "references": [
+      {
+        "id": "r1",
+        "label": "Coral Restoration Foundation — As El Niño Strengthens, CRF Establishes Second In-Water Coral Gene Bank to Safeguard Irreplaceable Genetic Diversity",
+        "url": "https://coralrestoration.org/as-el-nino-strengthens-crf-establishes-second-in-water-coral-gene-bank-to-safeguard-irreplaceable-genetic-diversity/",
+        "date": "August 20, 2026"
+      },
+      {
+        "id": "r2",
+        "label": "NOAA Coral Disease & Health Consortium — Coral Reproduction",
+        "url": "https://cdhc.noaa.gov/coral-biology/coral-reproduction/",
+        "date": "undated"
+      },
+      {
+        "id": "r3",
+        "label": "NOAA Fisheries — NOAA and Partners Launch Next-Generation Coral Restoration Following Florida Coral Bleaching",
+        "url": "https://www.fisheries.noaa.gov/feature-story/noaa-and-partners-launch-next-generation-coral-restoration-following-florida-coral",
+        "date": "July 21, 2025; updated November 21, 2025"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "p",
+        "text": "The important number is not just how many corals moved, but how many different genetic identities went with them. In its August 20, 2026 announcement, Coral Restoration Foundation reported transferring approximately 1,000 corals representing 130 genotypes from Tavernier Nursery to Elbow Nursery in the Florida Keys. Two dives began a planned relocation of roughly 3,500 corals, intended to duplicate the genetic collection held at Tavernier.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "A genotype is not a species count. Coral propagation can produce multiple colonies with the same genetic identity: a fragment grows, but it does not become a new genetic individual simply by living separately. Banking living corals therefore means preserving different lineages, not merely accumulating more pieces. Sexual reproduction, by contrast, can produce new combinations of parental genes.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "The first transfer prioritized founding staghorn and elkhorn genotypes and much of CRF’s Orbicella collection. Elbow adds an ocean-based backup alongside Tavernier, complementing land-based banking at The Reef Institute. CRF reports stronger water movement at Elbow, but does not yet know whether relocated corals will withstand heat as successfully as some corals already living nearby.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "This is also why a gene bank and a restored reef are different achievements. NOAA describes genetic storage as a reserve for future restoration, alongside breeding and outplanting. Keeping a lineage alive preserves the possibility of using it later; it does not establish that a self-sustaining population has returned to the reef.",
+        "refs": [
+          "r3"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "The August announcement made further transfers dependent on heat and reef conditions. It did not report all 3,500 corals in place. Maintenance and monitoring follow the move: the immediate accomplishment is a second location for vulnerable genetic stock, not a guarantee against the next bleaching event.",
+        "refs": [
+          "r1"
+        ]
+      }
+    ],
+    "archive": false
+  },
+  {
+    "slug": "five-new-caridina-shrimp-southern-thailand",
+    "category": "freshwater",
+    "label": "Freshwater",
+    "kind": "Research",
+    "tags": [
+      "Shrimp & snails"
+    ],
+    "format": "brief",
+    "date": "September 15, 2026 (ZooKeys)",
+    "published": "2026-11-01",
+    "title": "Five new Caridina shrimp species described from southern Thailand",
+    "dek": "A ZooKeys review now counts 21 Caridina species in the region, almost half found nowhere else. Its authors ask for protection of streamside plants.",
+    "image": "caridina-nangroma.webp",
+    "caption": "Caridina nangroma, one of the five newly described species, photographed alive. Cropped from Macharoenboon et al. 2026, Figure 23C.",
+    "source": "ZooKeys",
+    "url": "https://doi.org/10.3897/zookeys.1292.193168",
+    "references": [
+      {
+        "id": "r1",
+        "label": "Macharoenboon et al. — A taxonomic review of the freshwater shrimp genus Caridina (Decapoda, Atyidae) from southern Thailand, with descriptions of five new species, ZooKeys 1292",
+        "url": "https://doi.org/10.3897/zookeys.1292.193168",
+        "date": "Published September 15, 2026"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Southern Thailand has five more named freshwater shrimp. In ZooKeys on September 15, 2026, Kongkit Macharoenboon and five co-authors described Caridina kuehnei, C. nangroma, C. srivijaya, C. takkola and C. tambralinga, after field surveys across the region’s rivers and streams.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Caridina shrimp can look alike, and individuals of one species can vary a lot, so the team paired body measurements with DNA from two mitochondrial genes. The tree showed 18 lineages. With older records added, the region now has 21 known Caridina species, and almost half of them are endemic.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "The paper’s conservation section names habitat loss and overharvesting for the ornamental pet trade as threats to many Caridina species. In Thailand, the authors saw stream banks being lined with concrete and riprap, which removes the riverside plants several species live among. They single out landlocked species with tiny ranges, including the new C. kuehnei and C. srivijaya, as needing particular attention.",
+        "refs": [
+          "r1"
+        ]
+      }
+    ],
+    "archive": false
+  },
+  {
+    "slug": "top-off-with-freshwater-change-with-saltwater",
+    "category": "reef",
+    "label": "Reef & ocean",
+    "kind": "Practical guide",
+    "tags": [
+      "Water care"
+    ],
+    "format": "steps",
+    "date": "Evergreen guide",
+    "published": "2026-11-01",
+    "title": "Replace evaporation with freshwater, not saltwater",
+    "dek": "Keep top-offs and water changes separate, and check the instrument and both water samples before adjusting salinity.",
+    "image": "reef-scene.webp",
+    "source": "UF/IFAS; Hanna Instruments; Red Sea",
+    "url": "https://edis.ifas.ufl.edu/publication/4H433/pdf",
+    "caption": "Illustrative reef photograph; not a demonstration of salinity testing or water preparation.",
+    "references": [
+      {
+        "id": "r1",
+        "label": "UF/IFAS — Marine Aquarium Project Book, page 22",
+        "url": "https://edis.ifas.ufl.edu/publication/4H433/pdf",
+        "date": "June 2023"
+      },
+      {
+        "id": "r2",
+        "label": "Hanna Instruments — HI98319 instruction manual",
+        "url": "https://pages.hannainst.com/hubfs/product-manuals/IST98319_12_18.pdf",
+        "date": "undated"
+      },
+      {
+        "id": "r3",
+        "label": "Red Sea — How to mix perfect saltwater from Red Sea Salts",
+        "url": "https://g1.redseafish.com/how-to-mix-salt/",
+        "date": "undated"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Evaporation removes water while leaving salt behind. Replace that loss with suitable freshwater, not another batch of saltwater. UF/IFAS specifies fresh reverse-osmosis water for this job. A water change is different: you deliberately remove aquarium water, including its dissolved salt, and replace it with prepared saltwater. Do not treat these two jobs as interchangeable bucket refills.",
+        "refs": [
+          "r1",
+          "r3"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Which job is it?"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Top-off: replace water lost through evaporation. Do not assume every unexplained fall in water level is evaporation; investigate a possible leak or other removal first.",
+          "Water change: prepare a separate batch of saltwater. Follow the salt manufacturer's mixing directions rather than adding dry salt directly to the occupied aquarium."
+        ],
+        "refs": [
+          "r1",
+          "r3"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Before you adjust salinity"
+      },
+      {
+        "type": "list",
+        "ordered": true,
+        "items": [
+          "Use an instrument intended for seawater and follow its own calibration procedure. For its HI98319 conductivity-based tester, Hanna specifies a fresh calibration standard, rinsing and drying before calibration, clearing trapped bubbles during measurement, and waiting for the stability indicator. Those instructions belong to that instrument; do not transfer a different meter's calibration recipe to yours.",
+          "Record the unit as well as the reading. The Hanna tester can display ppt, PSU or specific gravity: a number without its selected scale is an incomplete record. Our suggested log includes the instrument, calibration date, temperature, tank reading and replacement-water reading. Repeat an unexpected result after checking the procedure before deciding what to change."
+        ],
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Compare before pouring"
+      },
+      {
+        "type": "p",
+        "text": "Red Sea recommends testing both the aquarium and newly mixed water before a change, and bringing dissolved replacement water to the aquarium's temperature. Follow your salt's mixing and storage instructions; one formulation's timings are not a universal recipe.",
+        "refs": [
+          "r3"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Label containers by what's in them"
+      },
+      {
+        "type": "p",
+        "text": "Our suggestion: label containers by purpose, not merely by color. Write “freshwater top-off” or “prepared saltwater,” plus the preparation date. Keep the test record with the batch. If salinity is unexpectedly wrong, pause routine maintenance and establish a tank-specific correction plan; this guide does not prescribe a universal correction dose or speed."
+      }
+    ],
+    "archive": false,
+    "diagram": "reef-top-off.svg"
+  },
+  {
     "slug": "a-greener-kind-of-aquarium",
     "category": "freshwater",
     "label": "Freshwater",
@@ -8,6 +440,7 @@
       "Plants",
       "Equipment"
     ],
+    "format": "guide",
     "date": "Evergreen guide · no publication date shown",
     "published": "2026-11-01",
     "title": "Match aquarium lighting to your plants’ needs",
@@ -123,159 +556,149 @@
     "archive": false
   },
   {
-    "slug": "top-off-with-freshwater-change-with-saltwater",
+    "slug": "choose-marine-fish-for-adult-life",
     "category": "reef",
     "label": "Reef & ocean",
     "kind": "Practical guide",
     "tags": [
-      "Water care"
+      "Fish"
     ],
+    "format": "checklist",
     "date": "Evergreen guide",
     "published": "2026-11-01",
-    "title": "Replace evaporation with freshwater, not saltwater",
-    "dek": "Keep top-offs and water changes separate, and check the instrument and both water samples before adjusting salinity.",
-    "image": "reef-scene.webp",
-    "source": "UF/IFAS; Hanna Instruments; Red Sea",
-    "url": "https://edis.ifas.ufl.edu/publication/4H433/pdf",
-    "caption": "Illustrative reef photograph; not a demonstration of salinity testing or water preparation.",
+    "title": "Choose marine fish for adult size and compatible tankmates",
+    "dek": "Check identity, eventual size, feeding risks and social behavior before buying a small juvenile.",
+    "image": "lionfish.webp",
+    "source": "NOAA; Florida Museum; Georgia Aquarium",
+    "url": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blue-tang/",
+    "caption": "A red lionfish (Pterois volitans) at Aquarium Finisterrae. An example of a fish whose adult needs must be researched, not a stocking recommendation.",
     "references": [
       {
         "id": "r1",
-        "label": "UF/IFAS — Marine Aquarium Project Book, page 22",
-        "url": "https://edis.ifas.ufl.edu/publication/4H433/pdf",
-        "date": "June 2023"
-      },
-      {
-        "id": "r2",
-        "label": "Hanna Instruments — HI98319 instruction manual",
-        "url": "https://pages.hannainst.com/hubfs/product-manuals/IST98319_12_18.pdf",
+        "label": "NOAA National Ocean Service — What is a lionfish?",
+        "url": "https://oceanservice.noaa.gov/facts/lionfish-facts.html",
         "date": "undated"
       },
       {
+        "id": "r2",
+        "label": "Florida Museum — Blue Tang (Acanthurus coeruleus)",
+        "url": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blue-tang/",
+        "date": "Updated May 29, 2025"
+      },
+      {
         "id": "r3",
-        "label": "Red Sea — How to mix perfect saltwater from Red Sea Salts",
-        "url": "https://g1.redseafish.com/how-to-mix-salt/",
+        "label": "Georgia Aquarium — Red Lionfish",
+        "url": "https://www.georgiaaquarium.org/animal/red-lionfish/",
         "date": "undated"
       }
     ],
     "blocks": [
       {
         "type": "p",
-        "text": "Evaporation removes water while leaving salt behind. Replace that loss with suitable freshwater, not another batch of saltwater. UF/IFAS specifies fresh reverse-osmosis water for this job. A water change is different: you deliberately remove aquarium water, including its dissolved salt, and replace it with prepared saltwater. Do not treat these two jobs as interchangeable bucket refills.",
-        "refs": [
-          "r1",
-          "r3"
-        ]
+        "text": "Before buying a marine fish, write a plan for its adult life rather than its current display size. Start with the scientific name, expected adult dimensions and the animals already living in your tank. Our recommendation is to leave unresolved questions on paper instead of bringing them home in a fish bag."
       },
       {
         "type": "heading",
-        "text": "Which job is it?"
+        "text": "Take these questions to the fish room"
       },
       {
         "type": "list",
         "items": [
-          "Top-off: replace water lost through evaporation. Do not assume every unexplained fall in water level is evaporation; investigate a possible leak or other removal first.",
-          "Water change: prepare a separate batch of saltwater. Follow the salt manufacturer's mixing directions rather than adding dry salt directly to the occupied aquarium."
-        ],
-        "refs": [
-          "r1",
-          "r3"
+          "Identity and housing: What exact species is offered, what adult size is documented, and can the present aquarium accommodate it?",
+          "Social fit: What is known about this species with its own kind and with each existing resident? Ask for the reasoning, not just a “community” label.",
+          "Feeding fit: Could any current fish or invertebrate be prey? Can you provide the proposed fish's normal diet?",
+          "Contingency: Who can help assess a conflict, and what suitable separate accommodation is genuinely available if the combination fails?"
         ]
       },
       {
         "type": "heading",
-        "text": "Calibrate by your meter's own manual"
+        "text": "Plan for the adult size"
       },
       {
         "type": "p",
-        "text": "Use an instrument intended for seawater and follow its own calibration procedure. For its HI98319 conductivity-based tester, Hanna specifies a fresh calibration standard, rinsing and drying before calibration, clearing trapped bubbles during measurement, and waiting for the stability indicator. Those instructions belong to that instrument; do not transfer a different meter's calibration recipe to yours.",
+        "text": "NOAA's account of red lionfish and devil firefish notes that juveniles can measure an inch or less while adults can reach 18 inches. That contrast is a reason to research the species before purchase, not a formula for calculating tank volume. Ask an experienced marine keeper to assess your tank's dimensions and layout for the adult animal; “I will upgrade later” is not an existing home. Lionfish also have venomous spines; they are examples here, not a beginner stocking recommendation.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Check social behavior separately"
+      },
+      {
+        "type": "p",
+        "text": "Florida Museum identifies its blue tang as Acanthurus coeruleus. It reports a length of approximately 12 inches and describes wild individuals living alone, in pairs or in groups, with reef crevices used as nighttime shelter. Those observations do not establish that several will share your aquarium successfully. A photograph of wild schooling is not a tested captive stocking plan.",
         "refs": [
           "r2"
         ]
       },
       {
         "type": "p",
-        "text": "Record the unit as well as the reading. The Hanna tester can display ppt, PSU or specific gravity: a number without its selected scale is an incomplete record. Our suggested log includes the instrument, calibration date, temperature, tank reading and replacement-water reading. Repeat an unexpected result after checking the procedure before deciding what to change.",
-        "refs": [
-          "r2"
-        ]
-      },
-      {
-        "type": "heading",
-        "text": "Compare before pouring"
-      },
-      {
-        "type": "p",
-        "text": "Red Sea recommends testing both the aquarium and newly mixed water before a change, and bringing dissolved replacement water to the aquarium's temperature. Follow your salt's mixing and storage instructions; one formulation's timings are not a universal recipe.",
+        "text": "Predation is a separate compatibility question from chasing. Georgia Aquarium lists small fish, shrimp, crabs and other invertebrates in the red lionfish's diet and describes it as a solitary hunter. It also reports that adults defend their home range against other lionfish and other species. Our takeaway is to assess potential prey as well as potential rivals. A quiet fish is not necessarily a safe neighbor for every smaller resident.",
         "refs": [
           "r3"
         ]
       },
       {
-        "type": "aside",
-        "title": "Label containers by what's in them",
-        "text": "Our suggestion: label containers by purpose, not merely by color. Write “freshwater top-off” or “prepared saltwater,” plus the preparation date. Keep the test record with the batch. If salinity is unexpectedly wrong, pause routine maintenance and establish a tank-specific correction plan; this guide does not prescribe a universal correction dose or speed."
+        "type": "p",
+        "text": "Do not buy a fish merely to fill an empty visual space. If adult housing or compatibility remains uncertain, keep it off the purchase list. These examples explain what to investigate; they do not endorse a particular pairing, group size or minimum tank volume."
       }
     ],
-    "archive": false,
-    "diagram": "reef-top-off.svg"
+    "archive": false
   },
   {
-    "slug": "clean-filter-media-without-replacing-the-biofilter",
+    "slug": "winterize-a-fish-pond",
     "category": "freshwater",
     "label": "Freshwater",
     "kind": "Practical guide",
     "tags": [
-      "Equipment",
-      "Water care"
+      "Ponds",
+      "Fish"
     ],
-    "date": "Evergreen guide",
+    "format": "steps",
+    "date": "Seasonal guide; Penn State Extension updated May 19, 2025; K-State June 2010",
     "published": "2026-11-01",
-    "title": "Clean filter media according to its job",
-    "dek": "Clear trapped debris but keep the established biological media, because the parts of a filter do different jobs.",
-    "image": "freshwater-fish.webp",
-    "source": "RSPCA Australia; Seachem; Aqueon",
-    "url": "https://kb.rspca.org.au/categories/companion-animals/fish/how-should-i-care-for-my-tropical-fish",
-    "caption": "Illustrative freshwater aquarium photograph; the filter and maintenance procedure are not shown.",
+    "title": "Winterize a fish pond: stop feeding below 50°F and keep an opening in the ice",
+    "dek": "Clear out leaves, shut down waterfalls and plan for a patch of open water before the pond freezes. Never hit the ice to break it.",
+    "image": "frozen-koi-pond.webp",
+    "caption": "A frozen koi pond at Kasugai Gardens in Kelowna, British Columbia. Illustrative photo.",
+    "source": "Penn State Extension; K-State Research and Extension",
+    "url": "https://extension.psu.edu/winterkill-in-ponds",
     "references": [
       {
         "id": "r1",
-        "label": "RSPCA Australia — How should I care for my tropical fish?",
-        "url": "https://kb.rspca.org.au/categories/companion-animals/fish/how-should-i-care-for-my-tropical-fish",
-        "date": "Updated May 1, 2024"
+        "label": "Penn State Extension — Winterkill in Ponds",
+        "url": "https://extension.psu.edu/winterkill-in-ponds",
+        "date": "Updated May 19, 2025"
       },
       {
         "id": "r2",
-        "label": "Seachem Knowledge Base — Guide: Caring for the Freshwater Tank, filter-maintenance section",
-        "url": "https://seachem.zendesk.com/hc/en-us/articles/360038209893-Guide-Caring-for-the-Freshwater-Tank",
-        "date": "undated"
-      },
-      {
-        "id": "r3",
-        "label": "Aqueon — Aquarium filtration basics",
-        "url": "https://www.aqueon.com/articles/aquarium-filtration-basics",
-        "date": "undated"
+        "label": "K-State Research and Extension — Water Gardening: Maintenance (MF2913)",
+        "url": "https://bookstore.ksre.ksu.edu/pubs/MF2913.pdf",
+        "date": "June 2010"
       }
     ],
     "blocks": [
       {
         "type": "p",
-        "text": "Clean a filter to remove accumulated waste, not to make every surface look new. Biological filtration depends on bacteria living on filter surfaces. Their work changes ammonia into nitrite and then nitrate; mechanical filtration instead catches particles. One piece of sponge can do both jobs, so identify what you are handling before deciding to discard it.",
+        "text": "Fish in a backyard pond get through a cold winter on the oxygen already in the water. Penn State Extension explains how that supply runs short. Ice stops oxygen moving in from the air, snow on the ice cuts the light that plants and algae need to make more, and rotting leaves and plants on the bottom keep using it up. Fish lost this way are called winterkill, and Penn State notes that a bottom covered in leaves and dead plants makes it more likely.",
         "refs": [
-          "r3"
+          "r1"
         ]
       },
       {
         "type": "heading",
-        "text": "Identify the part before cleaning it"
+        "text": "Work through these in November"
       },
       {
         "type": "list",
+        "ordered": true,
         "items": [
-          "Mechanical pads and floss: remove trapped debris; replace material that is worn out or cannot be cleaned adequately.",
-          "Biological media: gently rinse away accumulated debris in removed aquarium water. Routine cleaning is not a reason to replace the whole biological stage.",
-          "Chemical media: replacement or regeneration depends on the particular material and its instructions. Rinsing is not a universal way to renew it.",
-          "Combination cartridges: check whether they also support biological filtration. Avoid replacing every established cartridge together."
+          "Net or skim out fallen leaves. K-State Research and Extension lists leaf netting or skimming as fall work.",
+          "Stop feeding fish once the water is below 50°F, and wait until it is back above 50°F in spring before you start again. Our suggestion: read a thermometer in the pond water rather than going by the air temperature.",
+          "Lower tender plants when a heavy frost is coming, and trim hardy submerged plants to below the level the ice will reach.",
+          "Turn off waterfalls, streams and fountains. Clean the biofilter, then winterize the pump and the UV unit.",
+          "Set up a winter bubbler or de-icer to hold an opening in the ice. Never hit the ice to break it: K-State warns that the shockwave can kill fish, and it is hard on the liner too."
         ],
         "refs": [
           "r2"
@@ -283,42 +706,31 @@
       },
       {
         "type": "heading",
-        "text": "Rinse in tank water"
+        "text": "A few cautions"
       },
       {
         "type": "p",
-        "text": "Use a dedicated aquarium bucket. Lightly rinse established media in removed tank water, rather than untreated chlorinated tap water, and avoid soap or detergent. The aim is to dislodge the obstruction without aggressively stripping the surfaces supporting beneficial bacteria.",
+        "text": "Penn State’s advice is written for farm ponds and small lakes. It suggests running an aeration system once ice forms and leaving it off while the pond is open. Garden ponds differ a great deal in depth, size and stocking, so use these steps as a checklist and follow the instructions for your own equipment.",
         "refs": [
           "r1"
         ]
       },
       {
         "type": "p",
-        "text": "Unplug the filter before opening it, then follow its manual for access and reassembly. Return the media and restart once the aquarium is refilled appropriately. Check basket order against the manual.",
+        "text": "Penn State also suggests keeping about 30% of the ice free of lasting snow so light reaches the water, but only where the ice is safe to work on.",
         "refs": [
-          "r2"
+          "r1"
         ]
-      },
-      {
-        "type": "aside",
-        "title": "What to write down",
-        "text": "Record the date, the part cleaned, any part replaced, and whether the outlet flow returned to its usual appearance. A note saying “intake sponge rinsed” is more useful next time than “filter done.” Photograph unfamiliar basket arrangements before taking them apart."
       },
       {
         "type": "p",
-        "text": "Do not turn that record into one cleaning deadline for every filter. Media roles and equipment differ. Nor does filter servicing replace partial water changes. Keep those as separate entries in your maintenance record so neither task disappears behind the other.",
+        "text": "If you clean the pond before winter, K-State advises against power-washing the liner. The film on its sides is home to useful microorganisms.",
         "refs": [
-          "r3"
+          "r2"
         ]
       }
     ],
-    "archive": false,
-    "diagram": "filter-media.svg",
-    "showroom": {
-      "path": "/showroom/biowheel/",
-      "title": "Inside a Bio-Wheel Filter",
-      "note": "a 3D look at a filter’s biological stage"
-    }
+    "archive": false
   },
   {
     "slug": "match-coral-placement-to-local-flow",
@@ -329,6 +741,7 @@
       "Coral",
       "Equipment"
     ],
+    "format": "guide",
     "date": "Evergreen guide",
     "published": "2026-11-01",
     "title": "Match coral placement to the coral, not one turnover target",
@@ -397,7 +810,8 @@
         ],
         "refs": [
           "r1"
-        ]
+        ],
+        "ordered": true
       },
       {
         "type": "aside",
@@ -412,6 +826,406 @@
     "archive": false
   },
   {
+    "slug": "clean-filter-media-without-replacing-the-biofilter",
+    "category": "freshwater",
+    "label": "Freshwater",
+    "kind": "Practical guide",
+    "tags": [
+      "Equipment",
+      "Water care"
+    ],
+    "format": "report",
+    "date": "Evergreen guide",
+    "published": "2026-11-01",
+    "title": "Clean filter media according to its job",
+    "dek": "Clear trapped debris but keep the established biological media, because the parts of a filter do different jobs.",
+    "image": "freshwater-fish.webp",
+    "source": "RSPCA Australia; Seachem; Aqueon",
+    "url": "https://kb.rspca.org.au/categories/companion-animals/fish/how-should-i-care-for-my-tropical-fish",
+    "caption": "Illustrative freshwater aquarium photograph; the filter and maintenance procedure are not shown.",
+    "references": [
+      {
+        "id": "r1",
+        "label": "RSPCA Australia — How should I care for my tropical fish?",
+        "url": "https://kb.rspca.org.au/categories/companion-animals/fish/how-should-i-care-for-my-tropical-fish",
+        "date": "Updated May 1, 2024"
+      },
+      {
+        "id": "r2",
+        "label": "Seachem Knowledge Base — Guide: Caring for the Freshwater Tank, filter-maintenance section",
+        "url": "https://seachem.zendesk.com/hc/en-us/articles/360038209893-Guide-Caring-for-the-Freshwater-Tank",
+        "date": "undated"
+      },
+      {
+        "id": "r3",
+        "label": "Aqueon — Aquarium filtration basics",
+        "url": "https://www.aqueon.com/articles/aquarium-filtration-basics",
+        "date": "undated"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Clean a filter to remove accumulated waste, not to make every surface look new. Biological filtration depends on bacteria living on filter surfaces. Their work changes ammonia into nitrite and then nitrate; mechanical filtration instead catches particles. One piece of sponge can do both jobs, so identify what you are handling before deciding to discard it.",
+        "refs": [
+          "r3"
+        ]
+      },
+      {
+        "type": "list",
+        "items": [
+          "Mechanical pads and floss: remove trapped debris; replace material that is worn out or cannot be cleaned adequately.",
+          "Biological media: gently rinse away accumulated debris in removed aquarium water. Routine cleaning is not a reason to replace the whole biological stage.",
+          "Chemical media: replacement or regeneration depends on the particular material and its instructions. Rinsing is not a universal way to renew it.",
+          "Combination cartridges: check whether they also support biological filtration. Avoid replacing every established cartridge together."
+        ],
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Use a dedicated aquarium bucket. Lightly rinse established media in removed tank water, rather than untreated chlorinated tap water, and avoid soap or detergent. The aim is to dislodge the obstruction without aggressively stripping the surfaces supporting beneficial bacteria.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Unplug the filter before opening it, then follow its manual for access and reassembly. Return the media and restart once the aquarium is refilled appropriately. Check basket order against the manual.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Record the date, the part cleaned, any part replaced, and whether the outlet flow returned to its usual appearance. A note saying “intake sponge rinsed” is more useful next time than “filter done.” Photograph unfamiliar basket arrangements before taking them apart."
+      },
+      {
+        "type": "p",
+        "text": "Do not turn that record into one cleaning deadline for every filter. Media roles and equipment differ. Nor does filter servicing replace partial water changes. Keep those as separate entries in your maintenance record so neither task disappears behind the other.",
+        "refs": [
+          "r3"
+        ]
+      }
+    ],
+    "archive": false,
+    "diagram": "filter-media.svg",
+    "showroom": {
+      "path": "/showroom/biowheel/",
+      "title": "Inside a Bio-Wheel Filter",
+      "note": "a 3D look at a filter’s biological stage"
+    }
+  },
+  {
+    "slug": "when-coral-spawns",
+    "category": "reef",
+    "label": "Reef & ocean",
+    "kind": "Research",
+    "tags": [
+      "Coral"
+    ],
+    "format": "explainer",
+    "date": "July 21, 2025",
+    "published": "2026-11-01",
+    "title": "Coral breeding mixes genes; fragmentation produces clones",
+    "dek": "Breeding creates new genetic combinations. Growing fragments multiplies existing stock. Neither guarantees protection from bleaching.",
+    "image": "reef-scene.webp",
+    "source": "NOAA Fisheries",
+    "url": "https://www.fisheries.noaa.gov/feature-story/noaa-and-partners-launch-next-generation-coral-restoration-following-florida-coral",
+    "caption": "Illustrative reef photograph; not a photograph of the research project.",
+    "references": [
+      {
+        "id": "r1",
+        "label": "NOAA Fisheries — NOAA and Partners Launch Next-Generation Coral Restoration Following Florida Coral Bleaching",
+        "url": "https://www.fisheries.noaa.gov/feature-story/noaa-and-partners-launch-next-generation-coral-restoration-following-florida-coral",
+        "date": "July 21, 2025; updated November 21, 2025"
+      },
+      {
+        "id": "r2",
+        "label": "NOAA Coral Disease & Health Consortium — Coral Reproduction",
+        "url": "https://cdhc.noaa.gov/coral-biology/coral-reproduction/",
+        "date": "undated"
+      },
+      {
+        "id": "r3",
+        "label": "Miller and colleagues, PLOS ONE — Assisted sexual coral recruits show high thermal tolerance to the 2023 Caribbean mass bleaching event",
+        "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0309719",
+        "date": "September 18, 2024"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "p",
+        "text": "A fragment can grow into another coral colony without creating another genetic identity. Sexual reproduction does something different: eggs and sperm combine, producing offspring with new combinations of genes. That distinction matters whenever a restoration project counts its corals. More colonies and more genetic variety are not interchangeable measures of progress.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "A fragment grows; a larva settles"
+      },
+      {
+        "type": "p",
+        "text": "Broadcast-spawning corals release eggs and sperm into the water. Their timing helps gametes from separated colonies meet; temperature, lunar cycles and light contribute to that coordination. After fertilization, embryos develop into swimming larvae called planulae. A suitable surface and settlement cues help a larva make the transition to an attached polyp. Brooding corals take a different route: fertilization and early development occur inside the parent before larvae are released.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "For restoration, producing larvae is therefore an opening, not the finish. Young corals must survive settlement and early growth. Miller and colleagues’ 2024 research paper describes this period as particularly vulnerable to competition, predation and disease. A successful spawning night can supply a new generation; it cannot by itself deliver a reef of adult colonies.",
+        "refs": [
+          "r3"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Breeding for heat tolerance"
+      },
+      {
+        "type": "p",
+        "text": "NOAA’s July 21, 2025 account of Florida restoration describes an effort to breed genetically varied offspring while selecting parents for heat tolerance. Researchers were also testing beneficial algae and bacteria, and developing protective hydrogel capsules to support larval settlement. These are separate problems: which parents to cross, which microbial partners to establish, and how to keep tiny corals alive. A promising answer to one does not settle the others.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "There is encouraging field evidence, with an important qualification. Miller’s team surveyed sexually propagated corals across five Caribbean regions during the 2023 heatwave. Many young corals resisted bleaching better than comparison colonies. But the study was observational, with uneven comparisons across species and sites; it did not establish the mechanism responsible. An older cohort of sexually propagated elkhorn corals suffered badly. The authors warned that the resistance seen in juveniles could diminish with age. Sexual origin alone is not evidence of lifelong heat protection.",
+        "refs": [
+          "r3"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Two tools, different jobs"
+      },
+      {
+        "type": "p",
+        "text": "NOAA’s program still includes growing fragments from bleaching survivors. Fragmentation can multiply existing stock; breeding can generate new genetic combinations. Neither makes environmental conditions irrelevant. The 2024 study explicitly places restoration alongside the need to address warming and local pollution, not in place of that work.",
+        "refs": [
+          "r1",
+          "r3"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "How we read a restoration milestone"
+      },
+      {
+        "type": "p",
+        "text": "Ask what was achieved: more fragments, more parent lineages, successful settlement, or surviving adults? Those are different accomplishments. Keeping the distinction visible lets us welcome real progress without asking a baby coral to stand in for a recovered reef."
+      }
+    ],
+    "archive": true
+  },
+  {
+    "slug": "read-and-record-aquarium-water-tests",
+    "category": "freshwater",
+    "label": "Freshwater",
+    "kind": "Practical guide",
+    "tags": [
+      "Water care"
+    ],
+    "format": "qa",
+    "date": "Evergreen guide",
+    "published": "2026-11-01",
+    "title": "Record aquarium test results with units and context",
+    "dek": "Use the kit's method the same way each time, and keep a record that shows whether a change came from the water or from how you tested.",
+    "image": "freshwater-fish.webp",
+    "source": "API Fishcare; JBL; RSPCA Australia",
+    "url": "https://www.jbl.de/en/blog/detail/171/inaccurate-water-tests-or-did-i-do-something-wrong-after-all?country=fi",
+    "caption": "Illustrative freshwater aquarium photograph; it does not show a water test or establish the water's condition.",
+    "references": [
+      {
+        "id": "r1",
+        "label": "JBL — Inaccurate water tests – or did I do something wrong after all?",
+        "url": "https://www.jbl.de/en/blog/detail/171/inaccurate-water-tests-or-did-i-do-something-wrong-after-all?country=fi",
+        "date": "October 22, 2016"
+      },
+      {
+        "id": "r2",
+        "label": "API Fishcare — Freshwater Master Test Kit, instructions and FAQs",
+        "url": "https://www.apifishcare.com/products/api-freshwater-master-test-kit",
+        "date": "undated"
+      },
+      {
+        "id": "r3",
+        "label": "RSPCA Australia — How should I care for my tropical fish?",
+        "url": "https://kb.rspca.org.au/categories/companion-animals/fish/how-should-i-care-for-my-tropical-fish",
+        "date": "Updated May 1, 2024"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "p",
+        "text": "Write down the result, its units and what was happening in the aquarium. “Water fine” cannot be compared with next week's result. A useful record lets you see both the measurement and the circumstances, without pretending a color match is more precise than it really is."
+      },
+      {
+        "type": "heading",
+        "text": "How do I make a test repeatable?"
+      },
+      {
+        "type": "p",
+        "text": "Read the instructions for the specific test, not just the kit's name. API distinguishes vigorously mixing designated reagent bottles from more gently mixing capped test tubes. It also advises rinsing tubes promptly after testing. Do not assume every bottle needs identical handling or borrow another kit's sequence.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Check expiry information and note when reagents were opened. Measure the specified sample volume and time each required wait. Use the instructed viewing arrangement and suitable light; colored aquarium lighting is not a neutral comparison setting. Contamination, incorrect quantities and reading at the wrong time can all distort the result.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "What goes in each log entry?"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Tank name; date and time; whether the sample was aquarium water or replacement water.",
+          "Test name; kit or method; result and units exactly as displayed; any uncertainty in the color match.",
+          "Before or after a water change; recent filter work; changes in feeding or livestock; observations of fish behavior.",
+          "What you checked next, with the repeat result entered separately rather than overwriting the first."
+        ]
+      },
+      {
+        "type": "p",
+        "text": "For example, an entry can say “between these two chart colors” rather than inventing an extra decimal place. If you change kits, mark that change: tests can use different scale intervals, so two readings need not align perfectly. Substantial disagreement warrants checking the method rather than choosing the more reassuring number.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "What should I monitor?"
+      },
+      {
+        "type": "p",
+        "text": "Monitor ammonia, nitrite and nitrate alongside pH and temperature. Increase attention during establishment rather than treating a new tank like an established one. Testing helps assess filtration and husbandry; it is not merely a check on how clear the water looks.",
+        "refs": [
+          "r3"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Use species-specific requirements when interpreting pH, not a universal freshwater target. API also warns that ammonia and nitrite matter even at low levels. An unexpected reading deserves prompt investigation; a tidy log is useful evidence, not permission to ignore a possible water-quality problem.",
+        "refs": [
+          "r2"
+        ]
+      }
+    ],
+    "archive": false
+  },
+  {
+    "slug": "behind-captive-bred-fish",
+    "category": "reef",
+    "label": "Reef & ocean",
+    "kind": "Research",
+    "tags": [
+      "Fish"
+    ],
+    "format": "explainer",
+    "date": "February 25, 2025",
+    "published": "2026-11-01",
+    "title": "Breeding marine fish requires the right live food for their larvae",
+    "dek": "Young fish need prey of the right size and nutritional value. Hatcheries raise food organisms alongside the fish.",
+    "image": "clownfish.webp",
+    "source": "University of Florida",
+    "url": "https://news.ufl.edu/2025/02/pet-fish-breeding-research/",
+    "caption": "Illustrative clownfish photograph; it does not establish that the pictured fish is captive-bred.",
+    "references": [
+      {
+        "id": "r1",
+        "label": "University of Florida — Scientists study breeding of pet fish to help protect reefs, fuel Florida’s economy",
+        "url": "https://news.ufl.edu/2025/02/pet-fish-breeding-research/",
+        "date": "February 25, 2025"
+      },
+      {
+        "id": "r2",
+        "label": "UF/IFAS Extension — Overview of Commonly Cultured Marine Ornamental Fish (FA224)",
+        "url": "https://edis.ifas.ufl.edu/publication/FA224",
+        "date": "undated"
+      },
+      {
+        "id": "r3",
+        "label": "UF/IFAS Extension — Choosing an Appropriate Live Feed for Larviculture of Marine Fish (FA167)",
+        "url": "https://edis.ifas.ufl.edu/publication/FA167",
+        "date": "undated"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "p",
+        "text": "A breeder can have eggs, clean water and attentive care, yet still be missing the meal that makes the next stage possible. For marine fish larvae, food must fit a tiny mouth, trigger a hunting response and deliver the right nutrients. A tank full of unsuitable prey is not a nursery full of fed fish.",
+        "refs": [
+          "r3"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "That problem sits behind the University of Florida’s February 25, 2025 account of ornamental-fish research. Its teams had raised blue tangs in captivity, but the achievement depended partly on learning to grow the live foods larvae needed at different stages. The university described a practical ambition: develop methods that fish farmers could use, rather than leave each producer to solve the life cycle alone.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "How clownfish differ"
+      },
+      {
+        "type": "p",
+        "text": "Clownfish offer a useful contrast. Their eggs adhere to a surface, which can be a tile or clay pot in a breeding system; the male tends the nest. The larvae hatch relatively well developed and can take enriched rotifers as their first food. Many pelagic spawners release buoyant eggs and hatch less-developed larvae that need smaller prey. The successful clownfish routine is not a universal recipe.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "Even that contrast has exceptions. UF/IFAS notes that damselfishes also lay eggs on surfaces and provide parental care, yet their larvae often need small copepod nauplii. Watching where a fish lays its eggs cannot tell a breeder everything about what will hatch. The larva’s capabilities matter as much as the parents’ behavior.",
+        "refs": [
+          "r2"
+        ]
+      },
+      {
+        "type": "heading",
+        "text": "Growing the food"
+      },
+      {
+        "type": "p",
+        "text": "Rotifers are useful because they can be grown densely, but breeders enrich them to improve their nutritional value. Brine shrimp are convenient to hatch, yet can be too large for the earliest feeding stage. Copepod nauplii offer another combination of size, movement and nutrition; maintaining their supply brings its own culture challenges. The hatchery is managing food organisms as well as fish.",
+        "refs": [
+          "r3"
+        ]
+      },
+      {
+        "type": "p",
+        "text": "This explains why a first breeding success and dependable production are different milestones. UF’s account describes intensive labor and cost in developing larval diets and environments. A farmer needs a method that can be repeated, not simply evidence that one batch once survived. The research is about making that passage less precarious.",
+        "refs": [
+          "r1"
+        ]
+      },
+      {
+        "type": "aside",
+        "title": "Questions to ask about the fish in front of you",
+        "text": "Our suggested conversation starts with the individual fish: Who bred it, and can its origin be documented? What is it eating here, and can I watch it feed? What adult size, social behavior and housing needs should I plan for? Ask these questions about the fish being offered, not just the species on the label. A familiar appearance is not a record of where an animal was born."
+      },
+      {
+        "type": "p",
+        "text": "Captive breeding can offer an alternative to collecting fish, but UF’s account also acknowledges uncertainty about wild harvest’s effects. Our editorial view is to ask for a traceable origin rather than turn that uncertainty into a blanket verdict on every wild fish. Nor should a sourcing decision be mistaken for habitat protection. Appreciating the work of a hatchery and caring about living reefs belong in the same conversation.",
+        "refs": [
+          "r1"
+        ]
+      }
+    ],
+    "archive": true
+  },
+  {
     "slug": "little-cups-big-potential",
     "category": "freshwater",
     "label": "Freshwater",
@@ -419,6 +1233,7 @@
     "tags": [
       "Plants"
     ],
+    "format": "steps",
     "date": "Evergreen guide · no publication date shown",
     "published": "2026-11-01",
     "title": "Rinse and divide tissue-culture plants before planting",
@@ -523,8 +1338,11 @@
         ]
       },
       {
-        "type": "aside",
-        "title": "What the sealed cup promises",
+        "type": "heading",
+        "text": "What the sealed cup promises"
+      },
+      {
+        "type": "p",
         "text": "Tropica guarantees its own 1-2-Grow range is free of snails, algae and pesticides. That manufacturer statement is not an independent test of every tissue-culture product, nor a promise that an aquarium will remain algae-free after planting.",
         "refs": [
           "r1"
@@ -534,294 +1352,82 @@
     "archive": false
   },
   {
-    "slug": "choose-marine-fish-for-adult-life",
-    "category": "reef",
-    "label": "Reef & ocean",
-    "kind": "Practical guide",
-    "tags": [
-      "Fish"
-    ],
-    "date": "Evergreen guide",
-    "published": "2026-11-01",
-    "title": "Choose marine fish for adult size and compatible tankmates",
-    "dek": "Check identity, eventual size, feeding risks and social behavior before buying a small juvenile.",
-    "image": "lionfish.webp",
-    "source": "NOAA; Florida Museum; Georgia Aquarium",
-    "url": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blue-tang/",
-    "caption": "A red lionfish (Pterois volitans) at Aquarium Finisterrae. An example of a fish whose adult needs must be researched, not a stocking recommendation.",
-    "references": [
-      {
-        "id": "r1",
-        "label": "NOAA National Ocean Service — What is a lionfish?",
-        "url": "https://oceanservice.noaa.gov/facts/lionfish-facts.html",
-        "date": "undated"
-      },
-      {
-        "id": "r2",
-        "label": "Florida Museum — Blue Tang (Acanthurus coeruleus)",
-        "url": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/blue-tang/",
-        "date": "Updated May 29, 2025"
-      },
-      {
-        "id": "r3",
-        "label": "Georgia Aquarium — Red Lionfish",
-        "url": "https://www.georgiaaquarium.org/animal/red-lionfish/",
-        "date": "undated"
-      }
-    ],
-    "blocks": [
-      {
-        "type": "p",
-        "text": "Before buying a marine fish, write a plan for its adult life rather than its current display size. Start with the scientific name, expected adult dimensions and the animals already living in your tank. Our recommendation is to leave unresolved questions on paper instead of bringing them home in a fish bag."
-      },
-      {
-        "type": "heading",
-        "text": "Plan for the adult size"
-      },
-      {
-        "type": "p",
-        "text": "NOAA's account of red lionfish and devil firefish notes that juveniles can measure an inch or less while adults can reach 18 inches. That contrast is a reason to research the species before purchase, not a formula for calculating tank volume. Ask an experienced marine keeper to assess your tank's dimensions and layout for the adult animal; “I will upgrade later” is not an existing home. Lionfish also have venomous spines; they are examples here, not a beginner stocking recommendation.",
-        "refs": [
-          "r1"
-        ]
-      },
-      {
-        "type": "heading",
-        "text": "Check social behavior separately"
-      },
-      {
-        "type": "p",
-        "text": "Florida Museum identifies its blue tang as Acanthurus coeruleus. It reports a length of approximately 12 inches and describes wild individuals living alone, in pairs or in groups, with reef crevices used as nighttime shelter. Those observations do not establish that several will share your aquarium successfully. A photograph of wild schooling is not a tested captive stocking plan.",
-        "refs": [
-          "r2"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "Predation is a separate compatibility question from chasing. Georgia Aquarium lists small fish, shrimp, crabs and other invertebrates in the red lionfish's diet and describes it as a solitary hunter. It also reports that adults defend their home range against other lionfish and other species. Our takeaway is to assess potential prey as well as potential rivals. A quiet fish is not necessarily a safe neighbor for every smaller resident.",
-        "refs": [
-          "r3"
-        ]
-      },
-      {
-        "type": "heading",
-        "text": "Take these questions to the fish room"
-      },
-      {
-        "type": "list",
-        "items": [
-          "Identity and housing: What exact species is offered, what adult size is documented, and can the present aquarium accommodate it?",
-          "Social fit: What is known about this species with its own kind and with each existing resident? Ask for the reasoning, not just a “community” label.",
-          "Feeding fit: Could any current fish or invertebrate be prey? Can you provide the proposed fish's normal diet?",
-          "Contingency: Who can help assess a conflict, and what suitable separate accommodation is genuinely available if the combination fails?"
-        ]
-      },
-      {
-        "type": "aside",
-        "title": "Leave uncertain fish off the list",
-        "text": "Do not buy a fish merely to fill an empty visual space. If adult housing or compatibility remains uncertain, keep it off the purchase list. These examples explain what to investigate; they do not endorse a particular pairing, group size or minimum tank volume."
-      }
-    ],
-    "archive": false
-  },
-  {
-    "slug": "read-and-record-aquarium-water-tests",
+    "slug": "how-fish-find-their-crowd",
     "category": "freshwater",
     "label": "Freshwater",
-    "kind": "Practical guide",
-    "tags": [
-      "Water care"
-    ],
-    "date": "Evergreen guide",
-    "published": "2026-11-01",
-    "title": "Record aquarium test results with units and context",
-    "dek": "Use the kit's method the same way each time, and keep a record that shows whether a change came from the water or from how you tested.",
-    "image": "freshwater-fish.webp",
-    "source": "API Fishcare; JBL; RSPCA Australia",
-    "url": "https://www.jbl.de/en/blog/detail/171/inaccurate-water-tests-or-did-i-do-something-wrong-after-all?country=fi",
-    "caption": "Illustrative freshwater aquarium photograph; it does not show a water test or establish the water's condition.",
-    "references": [
-      {
-        "id": "r1",
-        "label": "JBL — Inaccurate water tests – or did I do something wrong after all?",
-        "url": "https://www.jbl.de/en/blog/detail/171/inaccurate-water-tests-or-did-i-do-something-wrong-after-all?country=fi",
-        "date": "October 22, 2016"
-      },
-      {
-        "id": "r2",
-        "label": "API Fishcare — Freshwater Master Test Kit, instructions and FAQs",
-        "url": "https://www.apifishcare.com/products/api-freshwater-master-test-kit",
-        "date": "undated"
-      },
-      {
-        "id": "r3",
-        "label": "RSPCA Australia — How should I care for my tropical fish?",
-        "url": "https://kb.rspca.org.au/categories/companion-animals/fish/how-should-i-care-for-my-tropical-fish",
-        "date": "Updated May 1, 2024"
-      }
-    ],
-    "blocks": [
-      {
-        "type": "p",
-        "text": "Write down the result, its units and what was happening in the aquarium. “Water fine” cannot be compared with next week's result. A useful record lets you see both the measurement and the circumstances, without pretending a color match is more precise than it really is."
-      },
-      {
-        "type": "heading",
-        "text": "Make the measurement repeatable"
-      },
-      {
-        "type": "p",
-        "text": "Read the instructions for the specific test, not just the kit's name. API distinguishes vigorously mixing designated reagent bottles from more gently mixing capped test tubes. It also advises rinsing tubes promptly after testing. Do not assume every bottle needs identical handling or borrow another kit's sequence.",
-        "refs": [
-          "r2"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "Check expiry information and note when reagents were opened. Measure the specified sample volume and time each required wait. Use the instructed viewing arrangement and suitable light; colored aquarium lighting is not a neutral comparison setting. Contamination, incorrect quantities and reading at the wrong time can all distort the result.",
-        "refs": [
-          "r1"
-        ]
-      },
-      {
-        "type": "heading",
-        "text": "Use one line per observation"
-      },
-      {
-        "type": "list",
-        "items": [
-          "Tank name; date and time; whether the sample was aquarium water or replacement water.",
-          "Test name; kit or method; result and units exactly as displayed; any uncertainty in the color match.",
-          "Before or after a water change; recent filter work; changes in feeding or livestock; observations of fish behavior.",
-          "What you checked next, with the repeat result entered separately rather than overwriting the first."
-        ]
-      },
-      {
-        "type": "p",
-        "text": "For example, an entry can say “between these two chart colors” rather than inventing an extra decimal place. If you change kits, mark that change: tests can use different scale intervals, so two readings need not align perfectly. Substantial disagreement warrants checking the method rather than choosing the more reassuring number.",
-        "refs": [
-          "r1"
-        ]
-      },
-      {
-        "type": "aside",
-        "title": "What to monitor",
-        "text": "Monitor ammonia, nitrite and nitrate alongside pH and temperature. Increase attention during establishment rather than treating a new tank like an established one. Testing helps assess filtration and husbandry; it is not merely a check on how clear the water looks.",
-        "refs": [
-          "r3"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "Use species-specific requirements when interpreting pH, not a universal freshwater target. API also warns that ammonia and nitrite matter even at low levels. An unexpected reading deserves prompt investigation; a tidy log is useful evidence, not permission to ignore a possible water-quality problem.",
-        "refs": [
-          "r2"
-        ]
-      }
-    ],
-    "archive": false
-  },
-  {
-    "slug": "behind-captive-bred-fish",
-    "category": "reef",
-    "label": "Reef & ocean",
     "kind": "Research",
     "tags": [
       "Fish"
     ],
-    "date": "February 25, 2025",
+    "format": "qa",
+    "date": "September 2, 2026",
     "published": "2026-11-01",
-    "title": "Breeding marine fish requires the right live food for their larvae",
-    "dek": "Young fish need prey of the right size and nutritional value. Hatcheries raise food organisms alongside the fish.",
-    "image": "clownfish.webp",
-    "source": "University of Florida",
-    "url": "https://news.ufl.edu/2025/02/pet-fish-breeding-research/",
-    "caption": "Illustrative clownfish photograph; it does not establish that the pictured fish is captive-bred.",
+    "title": "Stickleback pairs in murky water approached food faster when coordinated",
+    "dek": "The advantage depended on the conditions: larger groups in clear water could respond more slowly when tightly coordinated.",
+    "image": "freshwater-fish.webp",
+    "source": "University of Bristol",
+    "url": "https://www.bristol.ac.uk/news/2026/september/muddying-the-waters-makes-fish-more-sociable-study-finds.html",
+    "caption": "Illustrative freshwater aquarium photograph; these are not the sticklebacks in the study.",
     "references": [
       {
         "id": "r1",
-        "label": "University of Florida — Scientists study breeding of pet fish to help protect reefs, fuel Florida’s economy",
-        "url": "https://news.ufl.edu/2025/02/pet-fish-breeding-research/",
-        "date": "February 25, 2025"
+        "label": "University of Bristol — Muddying the waters makes fish more sociable, study finds",
+        "url": "https://www.bristol.ac.uk/news/2026/september/muddying-the-waters-makes-fish-more-sociable-study-finds.html",
+        "date": "September 2, 2026"
       },
       {
         "id": "r2",
-        "label": "UF/IFAS Extension — Overview of Commonly Cultured Marine Ornamental Fish (FA224)",
-        "url": "https://edis.ifas.ufl.edu/publication/FA224",
-        "date": "undated"
-      },
-      {
-        "id": "r3",
-        "label": "UF/IFAS Extension — Choosing an Appropriate Live Feed for Larviculture of Marine Fish (FA167)",
-        "url": "https://edis.ifas.ufl.edu/publication/FA167",
-        "date": "undated"
+        "label": "Ioannou, Cordery and Rands, Proceedings of the Royal Society B — Plasticity in collective behaviour helps fish shoals mitigate limited visual information from water turbidity",
+        "url": "https://doi.org/10.1098/rspb.2026.0731",
+        "date": "September 2, 2026"
       }
     ],
     "blocks": [
       {
         "type": "p",
-        "text": "A breeder can have eggs, clean water and attentive care, yet still be missing the meal that makes the next stage possible. For marine fish larvae, food must fit a tiny mouth, trigger a hunting response and deliver the right nutrients. A tank full of unsuitable prey is not a nursery full of fed fish.",
-        "refs": [
-          "r3"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "That problem sits behind the University of Florida’s February 25, 2025 account of ornamental-fish research. Its teams had raised blue tangs in captivity, but the achievement depended partly on learning to grow the live foods larvae needed at different stages. The university described a practical ambition: develop methods that fish farmers could use, rather than leave each producer to solve the life cycle alone.",
+        "text": "Picture a group of fish drawing closer together, their bodies pointing the same way. It is tempting to call that better teamwork. A University of Bristol study published on September 2, 2026, offers a more interesting answer: whether coordination helped depended on the water and the group. The subjects were three-spined sticklebacks, not a mixed community of aquarium fish.",
         "refs": [
           "r1"
         ]
       },
       {
         "type": "heading",
-        "text": "How clownfish differ"
+        "text": "What changed before the food appeared?"
       },
       {
         "type": "p",
-        "text": "Clownfish offer a useful contrast. Their eggs adhere to a surface, which can be a tile or clay pot in a breeding system; the male tends the nest. The larvae hatch relatively well developed and can take enriched rotifers as their first food. Many pelagic spawners release buoyant eggs and hatch less-developed larvae that need smaller prey. The successful clownfish routine is not a universal recipe.",
+        "text": "Bristol reports that in cloudy water the fish generally moved closer and aligned more strongly before food appeared. Small groups were especially responsive to nearby fish. When the feeding opportunity arrived, however, cloudiness still slowed the response overall. The fish had adjusted their behavior; they had not made reduced visibility irrelevant.",
         "refs": [
-          "r2"
+          "r1"
         ]
       },
       {
         "type": "p",
-        "text": "Even that contrast has exceptions. UF/IFAS notes that damselfishes also lay eggs on surfaces and provide parental care, yet their larvae often need small copepod nauplii. Watching where a fish lays its eggs cannot tell a breeder everything about what will hatch. The larva’s capabilities matter as much as the parents’ behavior.",
+        "text": "The paper puts numbers on that movement. Researchers examined the fishes' positions and orientations in the second before the food stimulus appeared. They also compared changes in swimming speed between neighbors during the preceding minute. In pairs in turbid water, fish responded to a neighbor's speed changes with less delay than in clear water; that difference was not evident in larger groups.",
         "refs": [
           "r2"
         ]
       },
       {
         "type": "heading",
-        "text": "Growing the food"
+        "text": "When did tighter groups do better?"
       },
       {
         "type": "p",
-        "text": "Rotifers are useful because they can be grown densely, but breeders enrich them to improve their nutritional value. Brine shrimp are convenient to hatch, yet can be too large for the earliest feeding stage. Copepod nauplii offer another combination of size, movement and nutrition; maintaining their supply brings its own culture challenges. The hatchery is managing food organisms as well as fish.",
+        "text": "In small groups in turbid water, closer spacing and stronger alignment were associated with quicker attacks on the food stimulus. In larger groups in clear water, those same features were associated with slower responses. Cohesion describes how tightly the fish gather; polarization describes how similarly they orient. The study therefore separates two things a casual glance might bundle together as schooling.",
         "refs": [
-          "r3"
+          "r2"
         ]
       },
       {
         "type": "p",
-        "text": "This explains why a first breeding success and dependable production are different milestones. UF’s account describes intensive labor and cost in developing larval diets and environments. A farmer needs a method that can be repeated, not simply evidence that one batch once survived. The research is about making that passage less precarious.",
+        "text": "For us, the intriguing part is the reversal: a neat formation is not automatically the most effective one. This is an invitation to observe more carefully, not to cloud a home aquarium or add fish to reproduce a laboratory result. The experiment does not establish a stocking rule or a welfare score for aquarium species.",
         "refs": [
-          "r1"
-        ]
-      },
-      {
-        "type": "aside",
-        "title": "Questions to ask about the fish in front of you",
-        "text": "Our suggested conversation starts with the individual fish: Who bred it, and can its origin be documented? What is it eating here, and can I watch it feed? What adult size, social behavior and housing needs should I plan for? Ask these questions about the fish being offered, not just the species on the label. A familiar appearance is not a record of where an animal was born."
-      },
-      {
-        "type": "p",
-        "text": "Captive breeding can offer an alternative to collecting fish, but UF’s account also acknowledges uncertainty about wild harvest’s effects. Our editorial view is to ask for a traceable origin rather than turn that uncertainty into a blanket verdict on every wild fish. Nor should a sourcing decision be mistaken for habitat protection. Appreciating the work of a hatchery and caring about living reefs belong in the same conversation.",
-        "refs": [
-          "r1"
+          "r2"
         ]
       }
     ],
-    "archive": true
+    "archive": false
   },
   {
     "slug": "trim-stem-plants-and-replant-cuttings",
@@ -831,6 +1437,7 @@
     "tags": [
       "Plants"
     ],
+    "format": "steps",
     "date": "Evergreen guide",
     "published": "2026-11-01",
     "title": "Trim stem plants above leaves and replant healthy shoots",
@@ -869,45 +1476,31 @@
       },
       {
         "type": "heading",
-        "text": "Decide whether the patch needs shortening or renewal"
+        "text": "Work through one group at a time"
       },
       {
-        "type": "p",
-        "text": "Look below the attractive tips. Repeated trimming encourages branching, but a dense group can leave lower stems shaded and weak. Thin selected stems rather than simply shaving the top again. Where the lower portion has deteriorated, remove that stem, discard its weakened base and retain the sound upper portion for replanting.",
+        "type": "list",
+        "ordered": true,
+        "items": [
+          "Look below the attractive tips. Repeated trimming encourages branching, but a dense group can leave lower stems shaded and weak. Thin selected stems rather than simply shaving the top again. Where the lower portion has deteriorated, remove that stem, discard its weakened base and retain the sound upper portion for replanting.",
+          "Before cutting, choose the gap you want to fill. Our practical suggestion is to keep a small tray beside the aquarium and separate retained shoots from material being discarded. This makes it easier to finish one group deliberately instead of collecting an unplanned heap of cuttings.",
+          "Plant retained shoots in less-dense areas, not automatically back into an already crowded center. For a sloping group, arrange shorter cuttings toward the front and longer ones behind. Replanting is a chance to rebuild the shape rather than preserve every stem in its old position.",
+          "Photograph the group from the same viewing position before and after the work. Note which patch was shortened, which was thinned and where cuttings were replanted. On the next visit, compare those specific areas instead of judging only the overall silhouette. These are different maintenance decisions, and a record helps you avoid repeating the same operation by habit."
+        ],
         "refs": [
           "r2"
         ]
       },
       {
         "type": "heading",
-        "text": "Plan where the cuttings go"
+        "text": "A species example: Bacopa caroliniana"
       },
       {
         "type": "p",
-        "text": "Before cutting, choose the gap you want to fill. Our practical suggestion is to keep a small tray beside the aquarium and separate retained shoots from material being discarded. This makes it easier to finish one group deliberately instead of collecting an unplanned heap of cuttings."
-      },
-      {
-        "type": "p",
-        "text": "Plant retained shoots in less-dense areas, not automatically back into an already crowded center. For a sloping group, arrange shorter cuttings toward the front and longer ones behind. Replanting is a chance to rebuild the shape rather than preserve every stem in its old position.",
-        "refs": [
-          "r2"
-        ]
-      },
-      {
-        "type": "aside",
-        "title": "A species example: Bacopa caroliniana",
         "text": "This Bacopa can be propagated by taking a side shoot and planting it in the substrate. Tropica describes it as relatively slow-growing for a stem plant. That makes it a useful reminder to judge the individual plant rather than assume every stem group needs frequent cutting.",
         "refs": [
           "r3"
         ]
-      },
-      {
-        "type": "heading",
-        "text": "Record what you changed"
-      },
-      {
-        "type": "p",
-        "text": "Photograph the group from the same viewing position before and after the work. Note which patch was shortened, which was thinned and where cuttings were replanted. On the next visit, compare those specific areas instead of judging only the overall silhouette. These are different maintenance decisions, and a record helps you avoid repeating the same operation by habit."
       },
       {
         "type": "p",
@@ -915,257 +1508,5 @@
       }
     ],
     "archive": false
-  },
-  {
-    "slug": "a-new-home-for-coral",
-    "category": "reef",
-    "label": "Reef & ocean",
-    "kind": "Conservation news",
-    "tags": [
-      "Coral"
-    ],
-    "date": "August 20, 2026",
-    "published": "2026-11-01",
-    "title": "About 1,000 corals moved to a backup nursery in Florida",
-    "dek": "The first transfer carried 130 genotypes, giving the coral gene bank another location for its living collection.",
-    "image": "coral-detail.webp",
-    "source": "Coral Restoration Foundation",
-    "url": "https://coralrestoration.org/as-el-nino-strengthens-crf-establishes-second-in-water-coral-gene-bank-to-safeguard-irreplaceable-genetic-diversity/",
-    "caption": "Illustrative coral photograph; not a photograph of this nursery.",
-    "references": [
-      {
-        "id": "r1",
-        "label": "Coral Restoration Foundation — As El Niño Strengthens, CRF Establishes Second In-Water Coral Gene Bank to Safeguard Irreplaceable Genetic Diversity",
-        "url": "https://coralrestoration.org/as-el-nino-strengthens-crf-establishes-second-in-water-coral-gene-bank-to-safeguard-irreplaceable-genetic-diversity/",
-        "date": "August 20, 2026"
-      },
-      {
-        "id": "r2",
-        "label": "NOAA Coral Disease & Health Consortium — Coral Reproduction",
-        "url": "https://cdhc.noaa.gov/coral-biology/coral-reproduction/",
-        "date": "undated"
-      },
-      {
-        "id": "r3",
-        "label": "NOAA Fisheries — NOAA and Partners Launch Next-Generation Coral Restoration Following Florida Coral Bleaching",
-        "url": "https://www.fisheries.noaa.gov/feature-story/noaa-and-partners-launch-next-generation-coral-restoration-following-florida-coral",
-        "date": "July 21, 2025; updated November 21, 2025"
-      }
-    ],
-    "blocks": [
-      {
-        "type": "p",
-        "text": "The important number is not just how many corals moved, but how many different genetic identities went with them. In its August 20, 2026 announcement, Coral Restoration Foundation reported transferring approximately 1,000 corals representing 130 genotypes from Tavernier Nursery to Elbow Nursery in the Florida Keys. Two dives began a planned relocation of roughly 3,500 corals, intended to duplicate the genetic collection held at Tavernier.",
-        "refs": [
-          "r1"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "A genotype is not a species count. Coral propagation can produce multiple colonies with the same genetic identity: a fragment grows, but it does not become a new genetic individual simply by living separately. Banking living corals therefore means preserving different lineages, not merely accumulating more pieces. Sexual reproduction, by contrast, can produce new combinations of parental genes.",
-        "refs": [
-          "r2"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "The first transfer prioritized founding staghorn and elkhorn genotypes and much of CRF’s Orbicella collection. Elbow adds an ocean-based backup alongside Tavernier, complementing land-based banking at The Reef Institute. CRF reports stronger water movement at Elbow, but does not yet know whether relocated corals will withstand heat as successfully as some corals already living nearby.",
-        "refs": [
-          "r1"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "This is also why a gene bank and a restored reef are different achievements. NOAA describes genetic storage as a reserve for future restoration, alongside breeding and outplanting. Keeping a lineage alive preserves the possibility of using it later; it does not establish that a self-sustaining population has returned to the reef.",
-        "refs": [
-          "r3"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "The August announcement made further transfers dependent on heat and reef conditions. It did not report all 3,500 corals in place. Maintenance and monitoring follow the move: the immediate accomplishment is a second location for vulnerable genetic stock, not a guarantee against the next bleaching event.",
-        "refs": [
-          "r1"
-        ]
-      }
-    ],
-    "archive": false
-  },
-  {
-    "slug": "how-fish-find-their-crowd",
-    "category": "freshwater",
-    "label": "Freshwater",
-    "kind": "Research",
-    "tags": [
-      "Fish"
-    ],
-    "date": "September 2, 2026",
-    "published": "2026-11-01",
-    "title": "Stickleback pairs in murky water approached food faster when coordinated",
-    "dek": "The advantage depended on the conditions: larger groups in clear water could respond more slowly when tightly coordinated.",
-    "image": "freshwater-fish.webp",
-    "source": "University of Bristol",
-    "url": "https://www.bristol.ac.uk/news/2026/september/muddying-the-waters-makes-fish-more-sociable-study-finds.html",
-    "caption": "Illustrative freshwater aquarium photograph; these are not the sticklebacks in the study.",
-    "references": [
-      {
-        "id": "r1",
-        "label": "University of Bristol — Muddying the waters makes fish more sociable, study finds",
-        "url": "https://www.bristol.ac.uk/news/2026/september/muddying-the-waters-makes-fish-more-sociable-study-finds.html",
-        "date": "September 2, 2026"
-      },
-      {
-        "id": "r2",
-        "label": "Ioannou, Cordery and Rands, Proceedings of the Royal Society B — Plasticity in collective behaviour helps fish shoals mitigate limited visual information from water turbidity",
-        "url": "https://doi.org/10.1098/rspb.2026.0731",
-        "date": "September 2, 2026"
-      }
-    ],
-    "blocks": [
-      {
-        "type": "p",
-        "text": "Picture a group of fish drawing closer together, their bodies pointing the same way. It is tempting to call that better teamwork. A University of Bristol study published on September 2, 2026, offers a more interesting answer: whether coordination helped depended on the water and the group. The subjects were three-spined sticklebacks, not a mixed community of aquarium fish.",
-        "refs": [
-          "r1"
-        ]
-      },
-      {
-        "type": "heading",
-        "text": "Before the food appeared"
-      },
-      {
-        "type": "p",
-        "text": "Bristol reports that in cloudy water the fish generally moved closer and aligned more strongly before food appeared. Small groups were especially responsive to nearby fish. When the feeding opportunity arrived, however, cloudiness still slowed the response overall. The fish had adjusted their behavior; they had not made reduced visibility irrelevant.",
-        "refs": [
-          "r1"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "The paper puts numbers on that movement. Researchers examined the fishes' positions and orientations in the second before the food stimulus appeared. They also compared changes in swimming speed between neighbors during the preceding minute. In pairs in turbid water, fish responded to a neighbor's speed changes with less delay than in clear water; that difference was not evident in larger groups.",
-        "refs": [
-          "r2"
-        ]
-      },
-      {
-        "type": "heading",
-        "text": "When tighter groups did better"
-      },
-      {
-        "type": "p",
-        "text": "In small groups in turbid water, closer spacing and stronger alignment were associated with quicker attacks on the food stimulus. In larger groups in clear water, those same features were associated with slower responses. Cohesion describes how tightly the fish gather; polarization describes how similarly they orient. The study therefore separates two things a casual glance might bundle together as schooling.",
-        "refs": [
-          "r2"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "For us, the intriguing part is the reversal: a neat formation is not automatically the most effective one. This is an invitation to observe more carefully, not to cloud a home aquarium or add fish to reproduce a laboratory result. The experiment does not establish a stocking rule or a welfare score for aquarium species.",
-        "refs": [
-          "r2"
-        ]
-      }
-    ],
-    "archive": false
-  },
-  {
-    "slug": "when-coral-spawns",
-    "category": "reef",
-    "label": "Reef & ocean",
-    "kind": "Research",
-    "tags": [
-      "Coral"
-    ],
-    "date": "July 21, 2025",
-    "published": "2026-11-01",
-    "title": "Coral breeding mixes genes; fragmentation produces clones",
-    "dek": "Breeding creates new genetic combinations. Growing fragments multiplies existing stock. Neither guarantees protection from bleaching.",
-    "image": "reef-scene.webp",
-    "source": "NOAA Fisheries",
-    "url": "https://www.fisheries.noaa.gov/feature-story/noaa-and-partners-launch-next-generation-coral-restoration-following-florida-coral",
-    "caption": "Illustrative reef photograph; not a photograph of the research project.",
-    "references": [
-      {
-        "id": "r1",
-        "label": "NOAA Fisheries — NOAA and Partners Launch Next-Generation Coral Restoration Following Florida Coral Bleaching",
-        "url": "https://www.fisheries.noaa.gov/feature-story/noaa-and-partners-launch-next-generation-coral-restoration-following-florida-coral",
-        "date": "July 21, 2025; updated November 21, 2025"
-      },
-      {
-        "id": "r2",
-        "label": "NOAA Coral Disease & Health Consortium — Coral Reproduction",
-        "url": "https://cdhc.noaa.gov/coral-biology/coral-reproduction/",
-        "date": "undated"
-      },
-      {
-        "id": "r3",
-        "label": "Miller and colleagues, PLOS ONE — Assisted sexual coral recruits show high thermal tolerance to the 2023 Caribbean mass bleaching event",
-        "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0309719",
-        "date": "September 18, 2024"
-      }
-    ],
-    "blocks": [
-      {
-        "type": "p",
-        "text": "A fragment can grow into another coral colony without creating another genetic identity. Sexual reproduction does something different: eggs and sperm combine, producing offspring with new combinations of genes. That distinction matters whenever a restoration project counts its corals. More colonies and more genetic variety are not interchangeable measures of progress.",
-        "refs": [
-          "r2"
-        ]
-      },
-      {
-        "type": "heading",
-        "text": "A fragment grows; a larva settles"
-      },
-      {
-        "type": "p",
-        "text": "Broadcast-spawning corals release eggs and sperm into the water. Their timing helps gametes from separated colonies meet; temperature, lunar cycles and light contribute to that coordination. After fertilization, embryos develop into swimming larvae called planulae. A suitable surface and settlement cues help a larva make the transition to an attached polyp. Brooding corals take a different route: fertilization and early development occur inside the parent before larvae are released.",
-        "refs": [
-          "r2"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "For restoration, producing larvae is therefore an opening, not the finish. Young corals must survive settlement and early growth. Miller and colleagues’ 2024 research paper describes this period as particularly vulnerable to competition, predation and disease. A successful spawning night can supply a new generation; it cannot by itself deliver a reef of adult colonies.",
-        "refs": [
-          "r3"
-        ]
-      },
-      {
-        "type": "heading",
-        "text": "Breeding for heat tolerance"
-      },
-      {
-        "type": "p",
-        "text": "NOAA’s July 21, 2025 account of Florida restoration describes an effort to breed genetically varied offspring while selecting parents for heat tolerance. Researchers were also testing beneficial algae and bacteria, and developing protective hydrogel capsules to support larval settlement. These are separate problems: which parents to cross, which microbial partners to establish, and how to keep tiny corals alive. A promising answer to one does not settle the others.",
-        "refs": [
-          "r1"
-        ]
-      },
-      {
-        "type": "p",
-        "text": "There is encouraging field evidence, with an important qualification. Miller’s team surveyed sexually propagated corals across five Caribbean regions during the 2023 heatwave. Many young corals resisted bleaching better than comparison colonies. But the study was observational, with uneven comparisons across species and sites; it did not establish the mechanism responsible. An older cohort of sexually propagated elkhorn corals suffered badly. The authors warned that the resistance seen in juveniles could diminish with age. Sexual origin alone is not evidence of lifelong heat protection.",
-        "refs": [
-          "r3"
-        ]
-      },
-      {
-        "type": "heading",
-        "text": "Two tools, different jobs"
-      },
-      {
-        "type": "p",
-        "text": "NOAA’s program still includes growing fragments from bleaching survivors. Fragmentation can multiply existing stock; breeding can generate new genetic combinations. Neither makes environmental conditions irrelevant. The 2024 study explicitly places restoration alongside the need to address warming and local pollution, not in place of that work.",
-        "refs": [
-          "r1",
-          "r3"
-        ]
-      },
-      {
-        "type": "aside",
-        "title": "How we read a restoration milestone",
-        "text": "Ask what was achieved: more fragments, more parent lineages, successful settlement, or surviving adults? Those are different accomplishments. Keeping the distinction visible lets us welcome real progress without asking a baby coral to stand in for a recovered reef."
-      }
-    ],
-    "archive": true
   }
 ]

@@ -5,7 +5,7 @@ from collections import Counter, defaultdict
 import json
 import unittest
 import xml.etree.ElementTree as ET
-from aquarium_editorial import word_count, background_date, plain_date, related_stories, TAGS, tags_markup, showroom_markup, validate
+from aquarium_editorial import word_count, background_date, plain_date, related_stories, TAGS, tags_markup, showroom_markup, validate, KINDS, FACT_LABELS, facts_markup
 from copy import deepcopy
 import re
 from aquarium_home import checklist_markup
@@ -39,12 +39,16 @@ class PracticalTests(unittest.TestCase):
             self.assertEqual(s['kind'],'Practical guide')
             self.assertNotIn('verification_notes',s)
 
-    def test_practical_lead_and_simple_labels(self):
-        self.assertEqual(STORIES[0]['kind'],'Practical guide')
-        self.assertLessEqual({s['kind'] for s in STORIES},{'Practical guide','Research','Conservation news','Species feature'})
-        self.assertLessEqual({'Practical guide','Research','Conservation news'},{s['kind'] for s in STORIES})
+    def test_news_first_lead_and_simple_labels(self):
+        self.assertLessEqual({s['kind'] for s in STORIES},KINDS)
+        self.assertLessEqual({'Practical guide','Research','Conservation news','Species profile'},{s['kind'] for s in STORIES})
+        # News first: research and conservation stories make up a real share, and news leads the edition's top three.
+        news=[s for s in STORIES if s['kind'] in {'Research','Conservation news'}]
+        self.assertGreaterEqual(len(news),len(STORIES)//3)
+        self.assertTrue(any(s['kind'] in {'Research','Conservation news'} for s in STORIES[:3]))
         html=(OUT/'index.html').read_text()
-        self.assertIn(f'href="stories/{STORIES[0]["slug"]}/">Read the practical guide',html)
+        label={'Practical guide':'Read the practical guide','Species profile':'Read the profile'}.get(STORIES[0]['kind'],'Read the story')
+        self.assertIn(f'href="stories/{STORIES[0]["slug"]}/">{label}',html)
         self.assertIn('Earlier research',html)
         self.assertNotIn('Source: Evergreen guide',html)
         self.assertNotIn('class="reader-date">Background:',html)
@@ -208,6 +212,33 @@ class PracticalTests(unittest.TestCase):
         self.assertEqual(mods['https://jez237.com/newsletter/'],newest)
         for s in STORIES:
             self.assertEqual(mods[f'https://jez237.com/newsletter/stories/{s["slug"]}/'],s.get('modified',s['published']))
+
+    def test_species_profiles_have_sourced_facts(self):
+        profiles=[s for s in STORIES if s['format']=='profile']
+        self.assertGreaterEqual(len(profiles),1)
+        for s in profiles:
+            self.assertEqual(s['kind'],'Species profile')
+            self.assertEqual([f['label'] for f in s['facts']],FACT_LABELS)
+            ids={r['id'] for r in s['references']}
+            for f in s['facts']:
+                self.assertTrue(f['refs'] and set(f['refs'])<=ids,(s['slug'],f['label']))
+            page=(OUT/'stories'/s['slug']/'index.html').read_text()
+            self.assertIn('<p class="glance-title">At a glance</p>',page)
+            for f in s['facts']:self.assertIn(f'<dt>{f["label"]}</dt><dd><strong>',page)
+            self.assertIn(facts_markup(s,reader=True),(OUT/'index.html').read_text())
+        bad=deepcopy(profiles[0]);bad['facts'][1]['value']='24–30°C'
+        with self.assertRaises(AssertionError):validate(bad)
+        bad=deepcopy(profiles[0]);bad['facts'][0]['refs']=[]
+        with self.assertRaises(AssertionError):validate(bad)
+        for s in STORIES:
+            if s['format']!='profile':self.assertNotIn('glance-box',(OUT/'stories'/s['slug']/'index.html').read_text())
+
+    def test_freshwater_balance(self):
+        fresh=[s for s in STORIES if s['category']=='freshwater']
+        plants=[s for s in fresh if s['tags']==['Plants'] or s['tags'][0]=='Plants']
+        self.assertLessEqual(len(plants),len(fresh)*0.4,[s['slug'] for s in plants])
+        for tag in ['Fish','Shrimp & snails','Ponds']:
+            self.assertTrue(any(tag in s['tags'] for s in fresh),tag)
 
 if __name__=='__main__':
     unittest.main(verbosity=2)

@@ -106,5 +106,53 @@
     "height": 656,
     "alt": "A Duncan coral colony with pale tentacles extending from clustered round polyps against a dark background.",
     "changes": "EXIF orientation normalized; resized without cropping; converted to WebP quality 82. No generative editing. Display layouts may crop the edges. This derivative image remains licensed CC BY-SA 4.0."
+  },
+  {
+    "filename": "yellow-tang.webp",
+    "title": "Zebrasoma flavescens 2589",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Zebrasoma_flavescens_2589.jpg",
+    "author": "Amada44",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0",
+    "alt": "A bright yellow tang swimming past coral in an aquarium.",
+    "changes": "Resized without cropping; converted to WebP quality 82. No generative editing. Display layouts may crop the edges.",
+    "width": 1600,
+    "height": 1201
+  },
+  {
+    "filename": "betta-splendens.webp",
+    "title": "Bojownik syjamski",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Bojownik_syjamski.jpg",
+    "author": "Henryk Niestrój",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0",
+    "alt": "A red and blue betta with long, spread fins in an aquarium.",
+    "changes": "Resized without cropping; converted to WebP quality 82. No generative editing. Display layouts may crop the edges.",
+    "width": 1600,
+    "height": 1237
+  },
+  {
+    "filename": "frozen-koi-pond.webp",
+    "title": "Frozen koi pond at Kasugai Gardens in Kelowna, British Columbia, Canada",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Prozen_koi_pond_at_Kasugai_Gardens_in_Kelowna,_British_Columbia,_Canada.jpg",
+    "author": "Accuruss (Russ Dionne)",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "alt": "Looking down at a frozen garden pond with leaves on the ice and stones along the edge.",
+    "changes": "Resized without cropping; converted to WebP quality 82. No generative editing. Display layouts may crop the edges. This derivative image remains licensed CC BY-SA 3.0.",
+    "width": 1600,
+    "height": 1067
+  },
+  {
+    "filename": "caridina-nangroma.webp",
+    "title": "Macharoenboon et al. 2026, ZooKeys 1292, Figure 23C: Caridina nangroma sp. nov., living paratype",
+    "source_url": "https://doi.org/10.3897/zookeys.1292.193168",
+    "author": "Kongkit Macharoenboon, Thomas von Rintelen, Werner Klotz, Chirasak Sutcharit, Warut Siriwut and Ekgachai Jeratthitikul (ZooKeys)",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0",
+    "alt": "A small translucent grey-green shrimp with yellow-orange patches and fine dark speckles, side view.",
+    "changes": "Panel C cropped from the published figure to remove the panel letter, scale bar and neighbouring panels; not resized; converted to WebP quality 82. No generative editing.",
+    "width": 861,
+    "height": 423
   }
 ]
