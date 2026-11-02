@@ -79,6 +79,10 @@ def candidate(slug, title):
         problems.append('slug must be lowercase letters, digits and hyphens')
     if '?' in title:
         problems.append('answer-first titles do not ask questions')
+    # Jez rejected fix-it troubleshooting stories (cloudy water, algae, ich and similar).
+    fixit = re.search(r"\b(cloudy|milky|green) water\b|\balgae (outbreak|bloom|problem|control)|\bget rid of\b|\b(treat|cure|beat|fix|troubleshoot\w*)\b|\bich\b|white spot", (title + ' ' + slug.replace('-', ' ')).lower())
+    if fixit:
+        problems.append(f'fix-it troubleshooting stories are not approved ("{fixit.group(0)}")')
     new = words(title + ' ' + slug.replace('-', ' '))
     for s in stories:
         if s['slug'] == slug:

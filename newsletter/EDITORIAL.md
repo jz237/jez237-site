@@ -39,6 +39,12 @@ Each story carries topic tags (Plants, Fish, Shrimp & snails, Ponds, Coral, Equi
 It's supposed to be interesting news an aquarium hobbyist would like. These rules apply to every story, including the daily 10:00 run.
 
 - **News first.** Most stories are real, recent, well-sourced news hobbyists care about: newly described species, conservation results, research findings, and aquarium-equipment safety recalls (CPSC and similar agencies). Mix in practical guides and species profiles. "Recent" means within roughly the last 60 days, from the primary source (paper, agency, university, aquarium). Never present an old event as new; older research is labelled Earlier research.
+- **Story types (Jez, November 1, 2026, 19:56).** Around the news-first core, rotate in these approved types:
+  - *Myth vs fact*, occasionally: a common hobby belief checked against sources.
+  - *Odd and amazing*: strange behaviour, deep-sea finds, record animals.
+  - *History corner*: early home aquariums, how the hobby began, early public aquariums.
+  - *Beginner basics*: cycling a new tank, first fish, first-week mistakes.
+  Rejected: "fix-it" troubleshooting stories (cloudy water, algae outbreaks, ich and similar problems). Don't write them. "How the gear works" and "seasonal prep" are not approved story types; don't add them as recurring types. A story type is the subject; `format` is the shape, and any type can use any suitable format.
 - **Varied shapes.** Rotate formats (`format` in `stories.json`) and never repeat the previous story's format:
   - `brief`: quick news brief, 120–200 words, no headings or box.
   - `steps`: numbered step-by-step (an ordered list, or numbered sections).

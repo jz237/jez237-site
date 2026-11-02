@@ -41,6 +41,13 @@ CHECK="python3 $SITE/scripts/aquarium_daily_story_check.py"
    grower documentation (attributed as such). Read each page body; a 200 status is not
    verification and soft 404s are rejected. Note each source's own date. Exclude competitor
    stores, store openings, promotions, rumours and anything you cannot verify.
+   Besides news, practical guides and species profiles, the approved story types are
+   **Myth vs fact** (occasionally), **Odd and amazing** (strange behaviour, deep-sea finds,
+   record animals), **History corner** (early home aquariums, how the hobby began, early
+   public aquariums) and **Beginner basics** (cycling a new tank, first fish, first-week
+   mistakes). The core mix stays news-first. Never write "fix-it" troubleshooting stories
+   (cloudy water, algae, ich and similar); "how the gear works" and "seasonal prep" are not
+   approved story types. `$CHECK candidate` rejects obvious fix-it titles.
 3. **Decide or skip.** Publish only if there is a worthwhile new development or a ready,
    useful evergreen guide. Balance freshwater and reef across the week and lean towards
    practical care. Older research is fine only when labelled as earlier research
