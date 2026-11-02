@@ -278,7 +278,7 @@
     }
     if (mode === 'intro') {
       introT -= dt;
-      renderer.render(state, dt); if (audio.update) audio.update(state, dt);
+      renderer.render(state, dt * D.SPEED); if (audio.update) audio.update(state, dt);
       drawIntroCard();
       if (introT <= 0 || (!isDemo && inp.startPressed)) mode = 'playing';
       drawVoiceToast(dt);
@@ -287,7 +287,7 @@
     }
     if (mode === 'stageclear') {
       stageClearT -= dt;
-      renderer.render(state, dt); if (audio.update) audio.update(state, dt);
+      renderer.render(state, dt * D.SPEED); if (audio.update) audio.update(state, dt);
       drawStageClear();
       if (stageClearT <= 0) loadStage();
       if (isDemo) drawDemoTag();
@@ -310,19 +310,19 @@
     }
 
     // playing
-    if(qaHold){renderer.render(state,dt);return;}
+    if(qaHold){renderer.render(state,dt*D.SPEED);return;}
     if (inp.pausePressed) { mode = 'paused'; pauseIdx = 0; return; }
     window.__tBeamAim = (state.player.weapon === 'beam' && inp.fire);
 
     acc += dt;
     let steps = 0;
     const visualEvents=[];
-    while (acc >= D.DT && steps < 5) {
+    while (acc >= D.STEP && steps < 5) {
       // the autopilot writes a fresh input frame per tick, exactly like a pad
       const tick = isDemo && pilot ? pilot.frame(state) : inp;
       E.step(state, tick, D.VIEW_W, D.VIEW_H);
       visualEvents.push(...state.events.filter(e=>!["sfx","voice","music"].includes(e.type)));
-      acc -= D.DT; steps++;
+      acc -= D.STEP; steps++;
       // consume sfx / music events
       for (const ev of state.events) {
         if (ev.type === 'sfx') {
@@ -360,7 +360,8 @@
         break;
       }
     }
-    if (mode === 'playing') { state.events=visualEvents; renderer.render(state, dt); if (audio.update) audio.update(state, dt); }
+    // effects and animation run on game time too, so the whole world moves at D.SPEED
+    if (mode === 'playing') { state.events=visualEvents; renderer.render(state, dt * D.SPEED); if (audio.update) audio.update(state, dt); }
     drawVoiceToast(dt);
     if (isDemo && mode === 'playing') drawDemoTag();
   }

@@ -14,7 +14,9 @@
   const VIEW_W = 640;         // internal render width
   const VIEW_H = 360;         // internal render height
   const FPS = 60;
-  const DT = 1 / FPS;
+  const SPEED = 0.8;          // game speed: each tick simulates 80% of a 60 Hz frame (the whole world runs 20% slower)
+  const STEP = 1 / FPS;       // real seconds per simulation tick
+  const DT = STEP * SPEED;    // simulated seconds per tick
 
   // ---- physics feel (px / s) ---------------------------------------------
   const PHYS = {
@@ -676,9 +678,9 @@
   };
 
   return {
-    TILE, VIEW_W, VIEW_H, FPS, DT, PHYS, T, SOLID_TILES, SHMUP,
+    TILE, VIEW_W, VIEW_H, FPS, SPEED, STEP, DT, PHYS, T, SOLID_TILES, SHMUP,
     WEAPONS, WEAPON_ORDER, ENEMIES, ROSTERS, LOB_SKINS, BOSSES, BOSS_GUARD, WORLDS, STAGES_PER_WORLD, DIFFICULTY,
     mulberry32, buildLevel,
-    VERSION: '2.0.0',
+    VERSION: '2.1.0',
   };
 });

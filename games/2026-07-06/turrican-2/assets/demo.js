@@ -23,6 +23,8 @@
 
   const { TILE, T, VIEW_W } = D;
   const DT = D.DT, PH = D.PHYS;
+  // tick counts below were tuned for 1/60 s ticks: tk() keeps the same span of game time at any D.SPEED
+  const tk = (n) => Math.round(n / (60 * DT));
 
   // ---- tile probes (mirror the engine's rules exactly) ---------------------
   function tileAt(lvl, tx, ty) {
@@ -37,6 +39,20 @@
     const y0 = Math.floor(b.y / TILE), y1 = Math.floor((b.y + b.h) / TILE);
     for (let ty = y0; ty <= y1; ty++) for (let tx = x0; tx <= x1; tx++) if (tileAt(lvl, tx, ty) === T.SPIKE) return true;
     return false;
+  }
+  // swimming body centre for a water cell: the 14x30 body must clear the rock and the centre stay in
+  // this cell (above the surface row the swimmer would breach); aim mid-cell, or mid-window when tight
+  function swimY(lvl, n) {
+    if (n.fitY !== undefined) return n.fitY;
+    const top = n.ty * TILE;
+    const fits = (cy) => {
+      for (let r = Math.floor((cy - 15) / TILE); r <= Math.floor((cy + 15 - 0.01) / TILE); r++) if (isSolid(tileAt(lvl, n.tx, r))) return false;
+      return true;
+    };
+    let lo = null, hi = null;
+    for (let cy = top + 1; cy <= top + 19; cy++) if (fits(cy)) { if (lo == null) lo = cy; hi = cy; }
+    if (lo == null) return (n.fitY = null);
+    return (n.fitY = hi - lo >= 3 ? Math.max(lo + 1.5, Math.min(hi - 1.5, top + 10)) : (lo + hi) / 2);
   }
   function onFloor(lvl, b) { const y = b.y + b.h + 1; return solidAt(lvl, b.x + 2, y) || solidAt(lvl, b.x + b.w - 2, y); }
   const overlap = (a, b) => a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
@@ -128,13 +144,14 @@
   function fly(lvl, b, o) {
     const touched = o.reg ? new Set() : null;
     let air = false, jumpAt = o.jump ? 0 : -1, wasWet = b.wet;
-    for (let t = 0; t < (o.max || 110); t++) {
+    const max = o.max || tk(110);
+    for (let t = 0; t < max; t++) {
       if (o.breach && jumpAt < 0 && wasWet && !b.wet) jumpAt = t;
       const jp = t === jumpAt, jr = (jumpAt >= 0 && t === jumpAt + o.hold) || (o.rel != null && t === o.rel);
       const mv = (!air && o.groundMv != null) ? o.groundMv : o.mv;
       wasWet = b.wet;
       stepBody(lvl, b, mv, jp, jr, o.breach ? b.wet : !!o.up, o.frame + t, o.wind);
-      if (o.breach && b.wet && t > 70) return { ok: false, t, b, touched };
+      if (o.breach && b.wet && t > tk(70)) return { ok: false, t, b, touched };
       if (touched) o.reg.touch(b, touched);
       if (o.item && !o.got) {
         const it = o.item, iy = it.baseY + Math.sin((it.t + (t + 1) * DT) * 3) * 3;
@@ -146,14 +163,14 @@
       else if (air) {
         if (o.settle) {
           const land = { x: b.x, y: b.y };
-          for (let k = 0; k < o.settle; k++) { stepBody(lvl, b, o.settleMv || 0, false, false, false, o.frame + t + k + 1, o.wind); if (b.dead || b.hurt || b.wet) return { ok: false, t, b, touched }; }
+          for (let k = 0; k < o.settle; k++) { stepBody(lvl, b, o.settleMv || 0, false, false, false, o.frame + t + k + 1, o.wind); if (b.dead || b.hurt || b.wet || !b.g) return { ok: false, t, b, touched }; }
           b.x = land.x; b.y = land.y;
         }
         return { ok: true, t, b, touched };
       }
-      else if (!o.jump && t > 24) return { ok: false, t, b, touched };   // never left the ledge
+      else if (!o.jump && t > tk(24)) return { ok: false, t, b, touched };   // never left the ledge
     }
-    return { ok: false, t: o.max || 110, b, touched };
+    return { ok: false, t: max, b, touched };
   }
 
   // ---- pickup registry: which tiles each crystal / power-up overlaps -------
@@ -184,9 +201,10 @@
   // tiles of headroom, one-way ledges) plus swim cells. Edges are computed
   // lazily by flying the real physics from the node.
   const JUMPS = [];
-  for (const d of [-1, 1]) for (const run of [0, 1]) for (const hold of [6, 11, 17, 30]) JUMPS.push({ d, run, hold, air: d });
-  for (const hold of [12, 30]) JUMPS.push({ d: 0, run: 0, hold, air: 0 });
-  for (const d of [-1, 1]) JUMPS.push({ d, run: 0, hold: 30, air: 0, lift: true });   // pop straight up from a walk
+  const FULL = tk(30);                                   // a full-height hold
+  for (const d of [-1, 1]) for (const run of [0, 1]) for (const hold of [6, 11, 17, 30]) JUMPS.push({ d, run, hold: tk(hold), air: d });
+  for (const hold of [12, 30]) JUMPS.push({ d: 0, run: 0, hold: tk(hold), air: 0 });
+  for (const d of [-1, 1]) JUMPS.push({ d, run: 0, hold: FULL, air: 0, lift: true });   // pop straight up from a walk
 
   function Graph(s) {
     this.l = s.level; this.nodes = new Map(); this.reg = new Registry(s.pickups);
@@ -239,19 +257,19 @@
   Graph.prototype.lift = function (x) { const u = this.l.updraft; return !!u && x > u.x0 - 120 && x < u.x1 + 40; };
   Graph.prototype.edges = function (n) {
     if (n.edges) return n.edges;
-    const l = this.l, out = [], lift = this.lift(n.x), max = lift ? 460 : 110;
+    const l = this.l, out = [], lift = this.lift(n.x), max = tk(lift ? 460 : 110);
     if (n.swim) {
       for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
         if (!dx && !dy) continue;
         const m = this.get(n.tx + dx, n.ty + dy, true);
-        if (m) out.push({ kind: 'swim', from: n, to: m, cost: dx && dy ? 0.21 : 0.15 });
+        if (m && swimY(l, m) != null) out.push({ kind: 'swim', from: n, to: m, cost: dx && dy ? 0.21 : 0.15 });
       }
       const floor = this.get(n.tx, n.ty + 1, false);
       if (floor) out.push({ kind: 'swim', from: n, to: floor, cost: 0.2 });
       if (tileAt(l, n.tx, n.ty - 1) !== T.WATER) {            // surface cell: breach-hop to a bank
         for (const d of [-1, 0, 1]) {
           const r = fly(l, { x: n.x - 7, y: n.y - 15, w: 14, h: 30, vx: d * 120, vy: -120, g: false, coy: 0, buf: 0, wet: true, hurt: false, dead: false },
-            { breach: true, hold: 30, mv: d, frame: 0, reg: this.reg, max: 150 });
+            { breach: true, hold: FULL, mv: d, frame: 0, reg: this.reg, max: tk(150) });
           const m = r.ok ? this.at(r.b) : null;
           if (m && !m.swim && !m.wet) out.push({ kind: 'breach', from: n, to: m, d, cost: r.t * DT + 0.1, gems: r.touched.size ? [...r.touched] : null });
         }
@@ -274,7 +292,7 @@
       }
     }
     const close = (a, b) => a && b && (a === b || (a.swim === b.swim && a.ty === b.ty && Math.abs(a.tx - b.tx) <= 1));
-    if (!n.wet) for (const a of (lift ? JUMPS.filter(j => j.hold === 30 && !j.lift) : JUMPS)) {
+    if (!n.wet) for (const a of (lift ? JUMPS.filter(j => j.hold === FULL && !j.lift) : JUMPS)) {
       const o = { jump: true, hold: a.hold, mv: a.air, groundMv: a.lift ? a.d : null, frame: 0, max };
       const r = fly(l, Object.assign({}, base, { vx: a.run ? a.d * 205 : 0 }), Object.assign({ reg: this.reg }, o));
       const m = land(r);
@@ -326,7 +344,7 @@
   // ---- the pilot -----------------------------------------------------------
   function createPilot() {
     const P = {
-      jumpT: 0, dodgeCd: 0, bombCd: 0, switchCd: 0, lineCd: 0, morphT: 0, morphCd: 0,
+      jumpT: 0, dodgeCd: 0, bombCd: 0, switchCd: 0, lineCd: 0, morphT: 0, morphCd: 0, rolls: 0, switches: 0,
       rescues: 0, deaths: 0, wasDead: false, bossT: 0, elapsed: 0, held: blankInput(),
       intent: 'Finding a safe route',
     };
@@ -334,7 +352,7 @@
 
     function reset(state) {
       P.jumpT = P.dodgeCd = P.bombCd = P.switchCd = P.lineCd = 0;
-      P.morphT = P.morphCd = 0; P.bossT = 0; P.elapsed = 0; P.lastMorph = 0;
+      P.morphT = P.morphCd = 0; P.bossT = 0; P.elapsed = 0; P.lastMorph = -1e9; P.roll = null; P.safeT = 0;
       P.held = blankInput(); P.goal = null; P.path = []; P.air = null; P.replanT = 0;
       P.banned = new Map(); P.blast = 0; P.forceSpread = false; P.progressX = -1e9; P.progressT = 0;
       P.airMv = 0; P.airHold = 0; P.hopCd = 0; P.runup = 0; P.wasWet = false; P.lastNode = null;
@@ -351,7 +369,7 @@
 
       if (p.dead) {
         if (!P.wasDead) { P.deaths++; P.wasDead = true; }
-        P.jumpT = 0; P.morphT = 0; P.goal = null; P.path = []; P.air = null; P.blast = 0;
+        P.jumpT = 0; P.morphT = 0; P.goal = null; P.path = []; P.air = null; P.blast = 0; P.roll = null;
         return finish(inp);
       }
       P.wasDead = false;
@@ -482,9 +500,13 @@
 
       P.groundT = p.onGround ? (P.groundT || 0) + 1 : 0;
       watchdog(state);
-      if (p.inWater) swim(state, inp);
-      else if (!p.onGround) airborne(state, inp);
-      else grounded(state, inp);
+      if (p.morph && !p.onGround && !p.inWater && P.roll && P.roll.drop) inp[P.roll.drop > 0 ? 'right' : 'left'] = true;   // rolling off a step
+      else {
+        if (p.morph && (p.inWater || !p.onGround)) unroll(inp);     // the wheel sinks and can't steer a jump
+        if (p.inWater) swim(state, inp);
+        else if (!p.onGround) airborne(state, inp);
+        else if (!wheel(state, inp)) grounded(state, inp);
+      }
       P.wasWet = !!p.inWater;
 
       // straight-overhead threat: aim the fan skyward (not while cracking a vault)
@@ -495,7 +517,6 @@
           if (ey < -30 && ey > -200 && Math.abs(ex) < 50) { inp.up = true; break; }
         }
       }
-      morphing(state, inp);
       if (P.jumpT > 0) { inp.jump = true; P.jumpT--; }
     }
 
@@ -537,14 +558,17 @@
         const ok = cur === e.to || (cur && cur.ty === e.to.ty && Math.abs(cur.tx - e.to.tx) <= 1);
         if (!ok && ++e.fails >= 2) { const i = e.from.edges ? e.from.edges.indexOf(e) : -1; if (i >= 0) e.from.edges.splice(i, 1); }
       }
-      if (cur !== P.lastNode) {
+      // backing up for a running jump leaves the take-off spot on purpose: keep the plan
+      const runup = P.runup > 0 && P.path[0] && P.path[0].kind === 'jump' && cur.ty === P.path[0].from.ty && Math.abs(cur.tx - P.path[0].from.tx) <= 3;
+      if (cur !== P.lastNode && !runup) {
         while (P.path.length && P.path[0].from !== cur && P.path.some(e => e.from === cur)) P.path.shift();
         if (!P.path.length || P.path[0].from !== cur) P.replanT = 0;
         P.lastNode = cur;
       }
       P.replanT -= DT;
-      if (P.replanT <= 0 || !P.goal || !valid(state, P.goal)) plan(state, cur);
+      if ((P.replanT <= 0 && !runup) || !P.goal || !valid(state, P.goal)) plan(state, cur);
       const e = P.path[0];
+      if (p.morph && !rollable(e)) { inp.left = inp.right = false; unroll(inp); return; }   // jumps, drops and pickups need feet
       if (!e && overhead(state, inp, cur)) return;
 
       if (!e) {
@@ -556,7 +580,7 @@
           P.nudgeT = (P.nudgeT || 0) + DT;
           if (P.nudgeT > 0.3 && canPress()) {
             for (const a of JUMPS) {
-              const o = { jump: true, hold: a.hold, mv: a.air, groundMv: a.lift ? a.d : null, frame: state.frame + 1, wind: true, item: it };
+              const o = { jump: true, hold: a.hold, mv: a.air, groundMv: a.lift ? a.d : null, frame: state.frame + 1, wind: true, item: it, settle: tk(8) };
               const r = fly(state.level, bodyOf(p), o);
               if (r.ok && o.got && G.at(r.b)) { P.jumpT = a.hold; P.air = { mv: a.air, to: G.at(r.b) }; P.lastNode = null; P.nudgeT = 0; return; }
             }
@@ -569,7 +593,7 @@
         return;
       }
       if (e.kind === 'walk' || e.kind === 'fall' || e.kind === 'drop') {
-        if (hopEnemy(state, inp, e.d)) return;
+        if (!p.morph && hopEnemy(state, inp, e.d)) return;
         inp[e.d > 0 ? 'right' : 'left'] = true;
         P.air = { mv: e.kind === 'drop' ? 0 : e.d, to: e.to, gems: e.gems, edge: e };
         return;
@@ -581,11 +605,11 @@
     // Line up and jump only when a simulation from the live state says the
     // arc lands where the plan wants (trying the other jump shapes if needed).
     function takeoff(state, inp, cur, e) {
-      const p = state.player, a = e.act, px = p.x + p.w / 2, dx = cur.x - px;
+      const p = state.player, a = e.act, px = p.x + p.w / 2, dx = e.from.x - px;
       const item = P.goal && P.goal.e === e && P.goal.it ? P.goal.it : null;
       const close = (m, to) => m && (m === to || (m.swim === to.swim && m.ty === to.ty && Math.abs(m.tx - to.tx) <= 1));
       const tryJump = (act) => {
-        const o = { jump: true, hold: act.hold, mv: act.air, groundMv: act.lift ? act.d : null, frame: state.frame + 1, wind: true, item, settle: 8 };
+        const o = { jump: true, hold: act.hold, mv: act.air, groundMv: act.lift ? act.d : null, frame: state.frame + 1, wind: true, item, settle: tk(8) };
         const r = fly(state.level, bodyOf(p), o);
         return r.ok && (item ? o.got && G.at(r.b) : close(G.at(r.b), e.to)) ? r : null;
       };
@@ -642,17 +666,17 @@
         for (const it of state.pickups) if (it.type === 'gem' && it.y + 16 < p.y + 4 && Math.abs(it.x + 8 - px) < 150) {
           const sc = Math.abs(it.x + 8 - px) + (p.y - it.y) * 0.25; if (sc < gs) { gs = sc; g = it; }
         }
-        if (g) { const dx = g.x + 8 - px; P.airMv = Math.abs(dx) > 4 ? Math.sign(dx) : 0; P.airHold = 2; inp.left = P.airMv < 0; inp.right = P.airMv > 0; P.intent = 'Riding the updraft for crystals'; return; }
+        if (g) { const dx = g.x + 8 - px; P.airMv = Math.abs(dx) > 4 ? Math.sign(dx) : 0; P.airHold = tk(2); inp.left = P.airMv < 0; inp.right = P.airMv > 0; P.intent = 'Riding the updraft for crystals'; return; }
       }
-      if (P.air && P.air.breach && !P.breachJumped && P.wasWet && p.vy < 0 && canPress()) { P.jumpT = 30; P.breachJumped = true; P.path.shift(); P.lastNode = null; }
+      if (P.air && P.air.breach && !P.breachJumped && P.wasWet && p.vy < 0 && canPress()) { P.jumpT = FULL; P.breachJumped = true; P.path.shift(); P.lastNode = null; }
       const target = P.air && P.air.to;
       if (P.airHold-- <= 0) {
         const want = P.air ? P.air.mv : 0, prevMv = P.airMv;
         let best = want, bestScore = -1e9;
-        const max = G.lift(p.x + p.w / 2) ? 460 : 90;
+        const long = G.lift(p.x + p.w / 2), max = tk(long ? 460 : 90);
         const near = (m) => m && target && (m === target || (m.swim === target.swim && m.ty === target.ty && Math.abs(m.tx - target.tx) <= 1));
         const release = P.jumpT > 0 ? P.jumpT : null;
-        const sim = (mv) => fly(state.level, bodyOf(p), { jump: false, mv, frame: state.frame + 1, wind: true, max, settle: 10, settleMv: 0, hold: release, rel: release });
+        const sim = (mv) => fly(state.level, bodyOf(p), { jump: false, mv, frame: state.frame + 1, wind: true, max, settle: tk(10), settleMv: 0, hold: release, rel: release });
         const planned = P.air && P.air.edge ? sim(want) : null;
         const cands = planned && planned.ok && (!target || near(G.at(planned.b))) ? [want] : [prevMv, want, 0, -prevMv || 1];
         for (const mv of cands) {
@@ -665,7 +689,7 @@
           else if (prevMv && mv === -prevMv) sc -= 10;   // reversing mid-air looks frantic
           if (sc > bestScore) { bestScore = sc; best = mv; }
         }
-        P.airMv = best; P.airHold = max > 90 ? 8 : 3;
+        P.airMv = best; P.airHold = tk(long ? 8 : 3);
       }
       inp.left = P.airMv < 0; inp.right = P.airMv > 0;
     }
@@ -678,12 +702,14 @@
       if (cur && (cur !== P.lastNode || P.replanT <= 0 || !P.goal)) { P.lastNode = cur; plan(state, cur); }
       const e = P.path[0];
       let tx, ty;
-      if (e) { tx = e.to.x; ty = e.to.swim ? e.to.y : e.to.y - 40; if (e.kind === 'breach') ty = -1e9; }
+      if (e) { tx = e.to.x; ty = e.to.swim ? swimY(state.level, e.to) : e.to.y - 40; if (e.kind === 'breach') ty = -1e9; }
       else { tx = state.level.exit.x; ty = p.y; }
       const px = p.x + p.w / 2, py = p.y + p.h / 2;
       const hx = e && e.kind === 'breach' ? (e.d ? e.d * 1e9 : 0) : tx - px;
       if (Math.abs(hx) > (P.swimDir ? 2 : 8)) { P.swimDir = Math.sign(hx); inp[hx > 0 ? 'right' : 'left'] = true; } else P.swimDir = 0;
-      if (ty < py - 4) inp.up = true; else if (ty > py + 8) inp.down = true;
+      // ease onto the target depth: water is floaty, so brake with the opposite stroke instead of overshooting
+      const want = Math.max(-150, Math.min(150, (ty - py) * 10));
+      if (p.vy > want + 8) inp.up = true; else if (p.vy < want - 8) inp.down = true;
       P.air = e && e.kind === 'breach' ? { mv: e.d, to: e.to, breach: true } : null; P.breachJumped = false;
     }
 
@@ -711,7 +737,7 @@
       if (Math.abs(dx) > 3) { if (!(Math.abs(dx) < 8 && Math.abs(p.vx) > 60)) inp[dx > 0 ? 'right' : 'left'] = true; return; }
       if (p.weapon !== 'spread') { P.forceSpread = true; return; }
       if (!canPress()) return;
-      v.tries++; P.blast = 0.9; P.jumpT = 14; P.blastX = cx; P.air = null; P.progressT = 0; P.progressX = p.x - 100;
+      v.tries++; P.blast = 0.9; P.jumpT = tk(14); P.blastX = cx; P.air = null; P.progressT = 0; P.progressX = p.x - 100;
     }
 
     // a walker in our lane: hop it if a safe arc exists
@@ -721,8 +747,8 @@
       const foe = state.enemies.find(e => e.alive && (e.x + e.w / 2 - px) * d > 0 && Math.abs(e.x + e.w / 2 - px) < 40 &&
         e.y < p.y + p.h && e.y + e.h > p.y + 4 && state.freeze <= 0);
       if (!foe || !canPress()) return false;
-      for (const hold of [17, 30]) {
-        const r = fly(state.level, bodyOf(p), { jump: true, hold, mv: d, frame: state.frame + 1, wind: true });
+      for (const hold of [tk(17), FULL]) {
+        const r = fly(state.level, bodyOf(p), { jump: true, hold, mv: d, frame: state.frame + 1, wind: true, settle: tk(8) });
         if (r.ok && G.at(r.b) && (r.b.x - foe.x) * d > 0) { P.jumpT = hold; P.air = { mv: d, to: G.at(r.b) }; P.hopCd = 0.8; P.lastNode = null; return true; }
       }
       return false;
@@ -732,7 +758,7 @@
       const p = state.player, dir = state.level.exit.x > p.x ? 1 : -1;
       let best = null;
       for (const a of JUMPS) {
-        const r = fly(state.level, bodyOf(p), { jump: true, hold: a.hold, mv: a.air, frame: state.frame + 1, wind: true });
+        const r = fly(state.level, bodyOf(p), { jump: true, hold: a.hold, mv: a.air, frame: state.frame + 1, wind: true, settle: tk(8) });
         if (!r.ok) continue;
         const sc = (r.b.x - p.x) * dir + (G.at(r.b) ? 50 : 0);
         if (!best || sc > best.sc) best = { a, sc, to: G.at(r.b) };
@@ -740,23 +766,76 @@
       if (best) { P.jumpT = best.a.hold; P.air = { mv: best.a.air, to: best.to }; P.lastNode = null; P.goal = null; P.path = []; }
     }
 
-    // showboating: the wheel on a long, flat, empty run of the route
-    function morphing(state, inp) {
-      const p = state.player;
-      if (p.morph) {
-        P.morphT -= DT;
-        const next = P.path[0];
-        if ((P.morphT <= 0 || !next || next.kind !== 'walk' || !p.onGround) && P.morphCd <= 0) { inp.morphPressed = true; P.morphCd = 0.3; }
-        return;
+    // ---- the wheel ------------------------------------------------------------
+    // Rolled up, the trooper shrugs off shots and contact, grinds ground troops,
+    // lays mines and outruns a walk, but it can't jump, climb a ledge or ride a
+    // one-way ledge: it only rolls along flat, solid stretches of the route.
+    const rollable = (e) => e && !e.from.plat && !e.to.plat && !e.to.wet && ((e.kind === 'walk' && e.to.ty === e.from.ty) || rollDrop(e));
+    function rollDrop(e) {
+      if (e.kind !== 'fall' || e.to.ty !== e.from.ty + 1) return false;
+      for (let k = 1; k <= 4; k++) { const m = G.get(e.from.tx + k * e.d, e.to.ty, false); if (!m || m.plat || m.wet || wheelMisses(m)) return false; }
+      return true;
+    }
+    function wheelMisses(n) {                 // a crystal at chest height: the wheel would pass under it
+      if (n.gems) for (const i of n.gems) { const it = G.reg.items[i]; if (!it.taken && (it.baseY != null ? it.baseY : it.y) < n.y - 32) return true; }
+      return false;
+    }
+    function flatRun() {                      // rollable route edges straight ahead
+      let k = 0;
+      for (const e of P.path) { if (!rollable(e) || e.d !== P.path[0].d || wheelMisses(e.to)) break; k++; }
+      return k;
+    }
+    function incoming(s, horizon) {           // an enemy shot that will pass through us soon
+      const p = s.player, cx = p.x + p.w / 2, cy = p.y + p.h / 2;
+      return s.eshots.some(q => {
+        if (q.life <= 0) return false;
+        const vx = (q.vx || 0) - p.vx, vy = (q.vy || 0) - p.vy, dx = q.x - cx, dy = q.y - cy;
+        const t = Math.max(0, Math.min(horizon, -(dx * vx + dy * vy) / (vx * vx + vy * vy || 1)));
+        return t > 0 && Math.hypot(dx + vx * t, dy + vy * t) < 25;
+      });
+    }
+    function laneFoe(s, d, range) {           // a ground trooper in our lane ahead
+      const p = s.player, px = p.x + p.w / 2, feet = p.y + p.h;
+      return s.enemies.find(e => e.alive && (e.x + e.w / 2 - px) * d > 0 && Math.abs(e.x + e.w / 2 - px) < range && e.y + e.h > feet - 26 && e.y < feet + 2);
+    }
+    function unroll(inp) {
+      if (P.morphCd > 0) return;
+      inp.morphPressed = true; P.morphCd = 0.3; P.roll = null; P.lastMorph = P.elapsed;
+    }
+    // true = the wheel handled this tick (grounded() sits it out)
+    function wheel(state, inp) {
+      const p = state.player, e = P.path[0];
+      const cur = G.at(bodyOf(p));
+      const solid = cur && !cur.plat && !cur.wet && !P.blast && !p.inWater;
+      const run = solid ? flatRun() : 0, d = e ? e.d : 0;
+      const threat = incoming(state, 0.45);
+      const bossZone = state.level.bossSpawn && p.x > state.level.bossSpawn.wakeX - 360;
+      if (!p.morph) {
+        if (!solid || P.morphCd > 0 || bossZone) return false;
+        let why = null;
+        if (threat && (run >= 2 || !e)) why = 'shield';                                         // shots pass over the wheel
+        else if (run >= 3 && laneFoe(state, d, Math.min(150, run * TILE))) why = 'grind';         // roll through, mine the lane
+        else if (run >= 4 && P.elapsed - P.lastMorph > 0.6) why = 'cruise';                       // a flat stretch: roll it
+        if (!why) return false;
+        inp.morphPressed = true; P.morphCd = 0.3; P.roll = { why, t: 0 }; P.safeT = 0; P.rolls++;
+        inp.left = inp.right = false;
+        return true;
       }
-      if (P.morphCd > 0 || !p.onGround || p.inWater || p.energy < 55 || P.elapsed - P.lastMorph < 12 || P.blast) return;
-      if (state.level.bossSpawn && p.x > state.level.bossSpawn.wakeX - 420) return;
-      const run = P.path.slice(0, 8);
-      if (run.length < 8 || run.some(e => e.kind !== 'walk' || e.d !== run[0].d || e.to.ty !== run[0].from.ty)) return;
-      if (state.enemies.some(e => e.alive && Math.abs(e.x - p.x) < 190)) return;
-      inp.morphPressed = true; P.morphT = 0.7; P.lastMorph = P.elapsed; P.morphCd = 0.3;
+      const R = P.roll || (P.roll = { why: 'cruise', t: 0 });
+      R.t += DT; P.safeT = threat ? 0 : P.safeT + DT;
+      R.drop = e && e.kind === 'fall' && run ? e.d : 0;
+      if (threat) R.why = 'shield';
+      else if (R.why === 'shield' && P.safeT > 0.35) R.why = run >= 6 ? 'cruise' : laneFoe(state, d, 150) ? 'grind' : 'done';
+      else if (R.why === 'grind' && !laneFoe(state, d, 150) && !laneFoe(state, -d, 40)) R.why = run >= 6 ? 'cruise' : 'done';
+      P.intent = R.why === 'shield' ? 'Rolling under incoming fire' : R.why === 'grind' ? 'Rolling assault · mining the lane' : 'Rolling at full speed';
+      const need = 2;                                                  // stand up with room to stop before the flat ends
+      const keep = R.t < 6 && R.why !== 'done' && (run >= need || (R.why === 'shield' && threat && solid));
+      if (!keep) { inp.left = inp.right = false; unroll(inp); return true; }
+      if (run < need) { inp.left = inp.right = false; return true; }   // shots still flying: sit tight, rolled up
+      return false;                                                     // grounded() steers the walk edges
     }
 
+    // ---- boss duels: roll under the barrage ---------------------------------
     // ---- weapons, bombs, dodges --------------------------------------------
     function tactics(s, i) {
       const p = s.player, cx = p.x + p.w / 2, cy = p.y + p.h / 2;
@@ -768,8 +847,9 @@
         const t = Math.max(0, Math.min(.45, -(dx * vx + dy * vy) / (vx * vx + vy * vy || 1)));
         return t > 0 && Math.hypot(dx + vx * t, dy + vy * t) < 25;
       });
-      if (p.morph) { i.fire = Math.floor(P.elapsed * 8) % 2 === 0; P.intent = 'Rolling shield · laying mines'; return; }
-      let desired = 'spread';
+      if (p.morph) { i.fire = near.length > 0 && Math.floor(P.elapsed * 8) % 2 === 0; return; }
+      P.calmT = target ? 0 : (P.calmT || 0) + DT;
+      let desired = P.calmT > 1.5 ? 'spread' : (P.lastWeapon || p.weapon);   // keep the gun in hand between targets
       if (P.forceSpread) desired = 'spread';
       else if (target) {
         const tx = target.x + target.w / 2 - cx, ty = target.y + target.h / 2 - cy;
@@ -786,17 +866,21 @@
           }
         }
       } else if (p.weapon === 'beam') i.fire = false;
-      if (p.weapon !== desired && p.weapons[desired] > 0 && P.switchCd <= 0) { i.switchPressed = true; P.switchCd = .22; i.fire = false; }
+      // switch with purpose: hold a weapon at least a second unless the vault plug needs the scatter fan
+      if (p.weapon !== desired && p.weapons[desired] > 0 && (P.switchCd <= 0 || (P.forceSpread && desired === 'spread'))) {
+        i.switchPressed = true; P.switchCd = 1.1; i.fire = false; P.switches++;
+      }
+      if (target || P.forceSpread) P.lastWeapon = desired;
       if ((danger || near.length >= 3) && p.bombs > 0 && P.bombCd <= 0 && s.freeze <= 0 && (p.energy < 65 || near.length >= 3)) {
         i.bombPressed = true; P.bombCd = 7; P.intent = 'Freezing incoming threats';
       }
       if (p.lines > 0 && P.elapsed > P.lineCd && near.some(e => Math.abs(e.x + e.w / 2 - cx) < 21)) {
         i.linePressed = true; P.lineCd = P.elapsed + 3; P.intent = 'Shockwall · vertical strike';
       }
-      if (danger && p.onGround && !p.inWater && P.dodgeCd <= 0 && G && s.level.type !== 'shmup' && !(s.boss && s.boss.awake && s.boss.alive) && !P.held.jump) {
+      if (danger && p.onGround && !p.inWater && P.dodgeCd <= 0 && G && s.level.type !== 'shmup' && !(s.boss && s.boss.awake && s.boss.alive) && !P.held.jump && !i.morphPressed) {
         const d = i.right ? 1 : i.left ? -1 : 0;
-        for (const hold of [12, 17]) {
-          const r = fly(s.level, bodyOf(p), { jump: true, hold, mv: d, frame: s.frame + 1, wind: true });
+        for (const hold of [tk(12), tk(17)]) {
+          const r = fly(s.level, bodyOf(p), { jump: true, hold, mv: d, frame: s.frame + 1, wind: true, settle: tk(8) });
           if (r.ok && G.at(r.b)) { P.jumpT = hold; P.air = { mv: d, to: G.at(r.b) }; P.dodgeCd = .6; P.lastNode = null; i.jump = true; P.intent = 'Evading incoming fire'; break; }
         }
       }
@@ -823,14 +907,22 @@
       const gap = Math.abs(bcx - pcx);
       P.bossT += DT;
       P.intent = b.open ? 'Core exposed · pouring it on' : 'Dueling the guardian';
+      const STAND = 150;
+      const dash = b.state === 'attack' && b.attack && b.attack.kind === 'dash' && gap < 150;
+      const shots = state.eshots.some(q => q.life > 0 && q.kind !== 'wave') && incoming(state, 0.35);
+      const cur = G && G.at(bodyOf(p));
       if (p.morph) {
-        P.morphT = 0;
-        if (P.morphCd <= 0) { inp.morphPressed = true; P.morphCd = 0.3; }
-        inp[side > 0 ? 'left' : 'right'] = true;
+        P.safeT = shots || dash ? 0 : P.safeT + DT;
+        P.intent = dash ? 'Rolling through the charge' : 'Rolling under the barrage';
+        if (P.safeT > 0.3 || !p.onGround) unroll(inp);
+        else if (gap < STAND - 30) inp[side > 0 ? 'left' : 'right'] = true;
+        return;
+      }
+      if ((shots || dash) && p.onGround && !p.inWater && P.morphCd <= 0 && cur && !cur.plat) {
+        inp.morphPressed = true; P.morphCd = 0.3; P.safeT = 0; P.rolls++; P.roll = { why: 'shield', t: 0 };
         return;
       }
       inp.fire = true;
-      const STAND = 150;
       if (gap > STAND + 20) inp[side > 0 ? 'right' : 'left'] = true;
       else if (gap < STAND - 30) inp[side > 0 ? 'left' : 'right'] = true;
       else if (p.facing !== side) inp[side > 0 ? 'right' : 'left'] = true;
@@ -842,7 +934,7 @@
           const dx = s.x - pcx, dy = s.y - (p.y + p.h / 2);
           const closing = (s.vx || 0) * -Math.sign(dx || 1) > 0;
           const wave = s.kind === 'wave';
-          if (Math.abs(dx) < (wave ? 110 : 76) && Math.abs(dy) < 40 && closing) { P.jumpT = wave ? 17 : 13; P.dodgeCd = 0.42; break; }
+          if (Math.abs(dx) < (wave ? 110 : 76) && Math.abs(dy) < 40 && closing) { P.jumpT = tk(wave ? 17 : 13); P.dodgeCd = 0.42; break; }
         }
       }
       if (P.jumpT > 0) { inp.jump = true; P.jumpT--; }
