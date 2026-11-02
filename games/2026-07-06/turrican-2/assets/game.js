@@ -1,4 +1,4 @@
-/* Turrican II — Redux : game.js
+/* Shard Assault : game.js
  * Main loop, state machine, stage progression, menus, touch, QA hooks.
  */
 (function () {
@@ -21,7 +21,7 @@
   const titleImg = new Image();
   let titleReady = false;
   titleImg.onload = () => { titleReady = true; };
-  titleImg.src = 'assets/img/crystalline-canyon.png';
+  if (!renderer.renderTitle) titleImg.src = 'assets/img/crystalline-canyon.png';
 
   const STAGES_PER_WORLD = D.STAGES_PER_WORLD; // faithful blueprint: 5 worlds / 11 stages
   const PLAN = [];
@@ -34,7 +34,9 @@
   let planIdx = 0;
   let carry = null;
   let acc = 0, last = 0;
-  let uiT = 0;
+  let uiT = 0, frameDt = 0, lastPaused = false, titleVoiced = false;
+  const uiSound = (n) => (audio.ui ? audio.ui(n) : audio.play(n === 'move' ? 'gem' : n === 'adjust' ? 'shoot' : 'power'));
+  const toTitleAudio = () => { if (audio.stopScene) audio.stopScene(); audio.startMusic('title'); };
   let stageClearT = 0;
   let voiceToast = null;     // { text, t }
   audio.onVoiceToast((text) => { voiceToast = { text, t: 2.6 }; });
@@ -86,7 +88,7 @@
     isDemo = false; pilot = null; demoAbort = false; idleT = 0;
     document.body.dataset.demo = 'false';
     mode = 'title'; menuIdx = 0;
-    audio.startMusic('title');
+    toTitleAudio();
   }
   // the pilot ran out of lives: re-arm quietly and keep the show on the road
   function demoWiped() {
@@ -147,6 +149,7 @@
 
   function newRun() {
     qaHold = false;
+    uiSound('start');
     audio.rollVoice();   // a different announcer voice every game
     planIdx = 0;
     continues = 3;
@@ -164,7 +167,9 @@
     if (isDemo && pilot) pilot.reset();
     renderer.setLevel(level);
     audio.startMusic(level.world);
-    if (level.type === 'shmup' && p.stage === 0) audio.playVoice('shmup', true);
+    if (audio.setScene) audio.setScene(level.world, level.type);
+    if (p.stage === 0 && planIdx > 0) audio.playVoice('world' + level.world, true);
+    if (level.type === 'shmup' && p.stage === 0) setTimeout(() => { if (state && state.level === level) audio.playVoice('shmup'); }, 2300);
     mode = 'intro'; introT = 2.0;
     window.__tState = state;
   }
@@ -196,7 +201,8 @@
     requestAnimationFrame(loop);
     if (!last) last = ts;
     let dt = (ts - last) / 1000; last = ts; if (dt > 0.1) dt = 0.1;
-    uiT += dt;
+    uiT += dt; frameDt = dt;
+    if (audio.setPaused && (mode === 'paused') !== lastPaused) { lastPaused = mode === 'paused'; audio.setPaused(lastPaused); }
 
     const inp = input.frame();
     lastInp = inp;
@@ -209,14 +215,14 @@
 
     if (mode === 'title') {
       const N = 3;
-      if (inp.upPressed) { menuIdx = (menuIdx + N - 1) % N; audio.play('gem'); }
-      if (inp.downPressed) { menuIdx = (menuIdx + 1) % N; audio.play('gem'); }
+      if (inp.upPressed) { menuIdx = (menuIdx + N - 1) % N; uiSound('move'); }
+      if (inp.downPressed) { menuIdx = (menuIdx + 1) % N; uiSound('move'); }
       if (inp.startPressed || inp.firePressed) {
         audio.resume();
         if (menuIdx === 0) newRun();
         else if (menuIdx === 1) startDemo();
         else { mode = 'options'; optIdx = 0; }
-        audio.play('power');
+        uiSound('select');
         idleT = 0;
       } else if (grabbed(inp)) {
         idleT = 0;                                   // somebody's there — hold the attract off
@@ -229,8 +235,8 @@
     }
     if (mode === 'options') {
       const ROWS = 7; // master, music, sfx, voice, difficulty, crt, back
-      if (inp.upPressed) { optIdx = (optIdx + ROWS - 1) % ROWS; audio.play('gem'); }
-      if (inp.downPressed) { optIdx = (optIdx + 1) % ROWS; audio.play('gem'); }
+      if (inp.upPressed) { optIdx = (optIdx + ROWS - 1) % ROWS; uiSound('move'); }
+      if (inp.downPressed) { optIdx = (optIdx + 1) % ROWS; uiSound('move'); }
       const adj = (inp.leftPressed ? -1 : 0) + (inp.rightPressed ? 1 : 0);
       const clamp01 = (v) => Math.max(0, Math.min(1, Math.round(v * 10) / 10));
       if (adj !== 0) {
@@ -243,19 +249,19 @@
           const i = order.indexOf(settings.difficulty);
           settings.difficulty = order[(i + adj + 3) % 3];
         } else if (optIdx === 5) settings.crt = !settings.crt;
-        applySettings(); saveSettings(); audio.play('shoot');
+        applySettings(); saveSettings(); uiSound('adjust');
       }
       if (inp.startPressed || inp.firePressed) {
-        if (optIdx === 5) { settings.crt = !settings.crt; applySettings(); saveSettings(); audio.play('shoot'); }
-        else if (optIdx === 6) { mode = 'title'; audio.play('power'); }
+        if (optIdx === 5) { settings.crt = !settings.crt; applySettings(); saveSettings(); uiSound('adjust'); }
+        else if (optIdx === 6) { mode = 'title'; uiSound('select'); }
       }
-      if (inp.pausePressed) mode = 'title';
+      if (inp.pausePressed) { mode = 'title'; uiSound('back'); }
       drawOptions();
       return;
     }
     if (mode === 'gameover') {
       if (inp.startPressed && continues > 0) { audio.resume(); useContinue(); return; }
-      if (inp.pausePressed || (inp.startPressed && continues <= 0)) { mode = 'title'; audio.startMusic('title'); }
+      if (inp.pausePressed || (inp.startPressed && continues <= 0)) { mode = 'title'; toTitleAudio(); }
       renderer.render(state, 0);
       drawGameOver();
       drawVoiceToast(dt);
@@ -263,7 +269,7 @@
     }
     if (mode === 'win') {
       if (isDemo) { winT += dt; if (winT > 9) { endDemo(); drawTitle(); return; } }
-      else if (inp.startPressed) { mode = 'title'; audio.startMusic('title'); }
+      else if (inp.startPressed) { mode = 'title'; toTitleAudio(); }
       renderer.render(state, 0);
       drawWin();
       drawVoiceToast(dt);
@@ -272,7 +278,7 @@
     }
     if (mode === 'intro') {
       introT -= dt;
-      renderer.render(state, dt);
+      renderer.render(state, dt); if (audio.update) audio.update(state, dt);
       drawIntroCard();
       if (introT <= 0 || (!isDemo && inp.startPressed)) mode = 'playing';
       drawVoiceToast(dt);
@@ -281,7 +287,7 @@
     }
     if (mode === 'stageclear') {
       stageClearT -= dt;
-      renderer.render(state, dt);
+      renderer.render(state, dt); if (audio.update) audio.update(state, dt);
       drawStageClear();
       if (stageClearT <= 0) loadStage();
       if (isDemo) drawDemoTag();
@@ -289,14 +295,14 @@
     }
     if (mode === 'paused') {
       const N = 3;
-      if (inp.upPressed) { pauseIdx = (pauseIdx + N - 1) % N; audio.play('gem'); }
-      if (inp.downPressed) { pauseIdx = (pauseIdx + 1) % N; audio.play('gem'); }
+      if (inp.upPressed) { pauseIdx = (pauseIdx + N - 1) % N; uiSound('move'); }
+      if (inp.downPressed) { pauseIdx = (pauseIdx + 1) % N; uiSound('move'); }
       if (inp.pausePressed) { mode = 'playing'; }
       else if (inp.startPressed || inp.firePressed) {
         if (pauseIdx === 0) mode = 'playing';
         else if (pauseIdx === 1) { carry = stageCarry; loadStage(); }
-        else { mode = 'title'; audio.startMusic('title'); }
-        audio.play('power');
+        else { mode = 'title'; toTitleAudio(); }
+        uiSound('select');
       }
       renderer.render(state, 0);
       drawPaused();
@@ -320,7 +326,8 @@
       // consume sfx / music events
       for (const ev of state.events) {
         if (ev.type === 'sfx') {
-          audio.play(ev.name);
+          audio.play(ev.name, ev.x, ev.y);
+          if (ev.name === 'line' && Math.random() < 0.5) audio.playVoice('shockwall');
           if (ev.name === 'explode' || ev.name === 'bossdie' || ev.name === 'bomb' || ev.name === 'phase') {
             audio.duck(0.35, 0.3);
           }
@@ -331,7 +338,13 @@
         } else if (ev.type === 'music') {
           audio.startMusic(ev.name === 'boss' ? 'boss' : state.level.world);
         } else if (ev.type === 'voice') {
-          audio.playVoice(ev.name, !!ev.pr);
+          const b = state.boss, w = state.player.weapon;
+          if (ev.name === 'bosswarn' && b) {
+            audio.playVoice('bosswarn-' + b.key, true);
+            if (audio.bossRoar) audio.bossRoar(b.key, b.x + b.w / 2, b.y + b.h / 2);
+          } else if (ev.name === 'weapon' && Math.random() < 0.6) {
+            audio.playVoice('weapon-' + ({ spread: 'scatter', beam: 'lance', bounce: 'ricochet' }[w] || 'scatter'), !!ev.pr);
+          } else audio.playVoice(ev.name, !!ev.pr);
         }
       }
       // one-shot edges must not replay into catch-up steps (double bomb bug)
@@ -342,12 +355,12 @@
       if (state.won) { nextStage(); break; }
       if (state.gameOver) {
         if (isDemo) { demoWiped(); break; }
-        mode = 'gameover'; audio.stopMusic(); audio.play('gameover'); audio.playVoice('gameover', true);
+        mode = 'gameover'; audio.stopMusic(); if (audio.stopScene) audio.stopScene(); audio.play('gameover'); audio.playVoice('gameover', true);
         newBest = pushScore(state.player.score, stageLabel());
         break;
       }
     }
-    if (mode === 'playing') { state.events=visualEvents; renderer.render(state, dt); }
+    if (mode === 'playing') { state.events=visualEvents; renderer.render(state, dt); if (audio.update) audio.update(state, dt); }
     drawVoiceToast(dt);
     if (isDemo && mode === 'playing') drawDemoTag();
   }
@@ -365,6 +378,13 @@
   }
   function drawTitle() {
     fetchGlobalScores();
+    if (renderer.renderTitle) {
+      renderer.renderTitle(frameDt);
+      const vg = dx.createLinearGradient(0, 0, 0, DH);
+      vg.addColorStop(0, 'rgba(2,5,12,0.62)'); vg.addColorStop(0.36, 'rgba(2,5,12,0.06)');
+      vg.addColorStop(0.6, 'rgba(2,5,12,0.18)'); vg.addColorStop(1, 'rgba(2,5,12,0.86)');
+      dx.fillStyle = vg; dx.fillRect(0, 0, DW, DH);
+    } else {
     bgPanel();
     dx.save();
     if (titleReady) {
@@ -424,15 +444,8 @@
     // animated scanline grid
     dx.strokeStyle = 'rgba(120,90,255,0.10)'; dx.lineWidth = 1;
     for (let y = (uiT * 40) % 40; y < DH; y += 40) { dx.beginPath(); dx.moveTo(0, y); dx.lineTo(DW, y); dx.stroke(); }
-    // title
-    dx.save();
-    const glow = 12 + Math.sin(uiT * 2) * 6;
-    dx.shadowColor = '#ff5d3b'; dx.shadowBlur = glow;
-    centerText('TURRICAN II', DW / 2, DH / 2 - 96, 74, '#ffd23f', '900');
-    dx.shadowColor = '#6cf3ff'; dx.shadowBlur = 8;
-    centerText('THE FINAL FIGHT', DW / 2, DH / 2 - 44, 30, '#6cf3ff', 'bold');
-    dx.restore();
-    centerText('— 2.5D · CRYSTAL EDITION —', DW / 2, DH / 2 - 10, 14, 'rgba(200,210,255,0.6)', 'normal');
+    }
+    drawLogo(DW / 2, DH / 2 - 92);
     // menu
     const items = ['START MISSION', 'WATCH DEMO', 'OPTIONS'];
     for (let i = 0; i < items.length; i++) {
@@ -449,8 +462,34 @@
     const best = loadScores()[0];
     if (best) centerText('HI-SCORE  ' + String(best.score).padStart(7, '0') + '  (' + best.stage + ')', DW / 2, 40, 15, 'rgba(139,233,255,0.8)', 'bold');
     if (globalBest) centerText('GLOBAL  ' + String(globalBest.score || 0).padStart(7, '0') + '  ' + (globalBest.initials || globalBest.name || '???'), DW / 2, 62, 13, 'rgba(255,210,63,0.75)', 'bold');
-    centerText('MOVE ←→ · JUMP SPACE · FIRE J/X · AIM ↑↓ · MORPH SHIFT · SWITCH Q · FREEZE C · PAUSE P', DW / 2, DH / 2 + 158, 12, 'rgba(200,210,255,0.65)', 'normal');
+    centerText('MOVE ←→ · JUMP SPACE · FIRE J/X · AIM ↑↓ · ROLL SHIFT · SWITCH Q · CRYO C · SHOCKWALL V · PAUSE P', DW / 2, DH / 2 + 158, 12, 'rgba(200,210,255,0.65)', 'normal');
     centerText('v' + D.VERSION, DW - 40, DH - 20, 12, 'rgba(255,255,255,0.4)', 'normal');
+  }
+  // crystalline SHARD ASSAULT logo with a travelling glint
+  function drawLogo(cx, cy) {
+    dx.save();
+    dx.textAlign = 'center'; dx.textBaseline = 'middle';
+    dx.font = '900 84px "Rajdhani", "Trebuchet MS", system-ui, sans-serif';
+    if ('letterSpacing' in dx) dx.letterSpacing = '6px';
+    const w = dx.measureText('SHARD ASSAULT').width;
+    const g = dx.createLinearGradient(cx - w / 2, cy - 40, cx + w / 2, cy + 40);
+    g.addColorStop(0, '#9ff3ff'); g.addColorStop(0.45, '#ffffff'); g.addColorStop(0.55, '#7fd8ff'); g.addColorStop(1, '#3f7cff');
+    dx.shadowColor = 'rgba(80,220,255,0.85)'; dx.shadowBlur = 26 + Math.sin(uiT * 1.7) * 8;
+    dx.fillStyle = g; dx.fillText('SHARD ASSAULT', cx, cy);
+    dx.shadowBlur = 0; dx.lineWidth = 1.5; dx.strokeStyle = 'rgba(10,30,60,0.9)'; dx.strokeText('SHARD ASSAULT', cx, cy);
+    const gx = cx - w / 2 + ((uiT * 260) % (w + 400)) - 200;
+    dx.globalCompositeOperation = 'source-atop';
+    const sg = dx.createLinearGradient(gx - 60, 0, gx + 60, 0);
+    sg.addColorStop(0, 'rgba(255,255,255,0)'); sg.addColorStop(0.5, 'rgba(255,255,255,0.85)'); sg.addColorStop(1, 'rgba(255,255,255,0)');
+    dx.fillStyle = sg; dx.fillRect(gx - 60, cy - 50, 120, 100);
+    dx.globalCompositeOperation = 'source-over';
+    if ('letterSpacing' in dx) dx.letterSpacing = '0px';
+    dx.fillStyle = 'rgba(120,230,255,0.75)'; dx.fillRect(cx - w / 2, cy + 50, w, 1.5);
+    dx.font = '600 15px "Rajdhani", "Trebuchet MS", system-ui, sans-serif';
+    if ('letterSpacing' in dx) dx.letterSpacing = '5px';
+    dx.fillStyle = 'rgba(205,235,255,0.82)'; dx.fillText('FIVE WORLDS  ·  ONE TROOPER  ·  BREAK THE SOVEREIGN', cx, cy + 68);
+    if ('letterSpacing' in dx) dx.letterSpacing = '0px';
+    dx.restore();
   }
   // attract-mode badge: below the HUD strip, above the boss bar's turf
   function drawDemoTag() {
@@ -459,7 +498,7 @@
   }
 
   function drawOptions() {
-    bgPanel();
+    if (renderer.renderTitle) { renderer.renderTitle(frameDt); overlayDim(); } else bgPanel();
     dx.save(); dx.shadowColor = '#6cf3ff'; dx.shadowBlur = 12;
     centerText('OPTIONS', DW / 2, 86, 44, '#6cf3ff', '900'); dx.restore();
     const bar = (v) => '█'.repeat(Math.round(v * 10)) + '░'.repeat(10 - Math.round(v * 10));
@@ -519,9 +558,9 @@
     }
   }
   function drawWin() {
-    bgPanel(); dx.save(); dx.shadowColor = '#ffd23f'; dx.shadowBlur = 18;
-    centerText('THE MACHINE IS DESTROYED', DW / 2, DH / 2 - 60, 40, '#ffd23f', '900'); dx.restore();
-    centerText('Landorin is free.', DW / 2, DH / 2 - 18, 18, '#cfe0ff', 'normal');
+    overlayDim(); dx.save(); dx.shadowColor = '#6cf3ff'; dx.shadowBlur = 18;
+    centerText('THE SOVEREIGN IS SHATTERED', DW / 2, DH / 2 - 60, 40, '#bff6ff', '900'); dx.restore();
+    centerText('Kethra is free.', DW / 2, DH / 2 - 18, 18, '#cfe0ff', 'normal');
     centerText('FINAL SCORE ' + (state ? state.player.score : 0), DW / 2, DH / 2 + 22, 26, '#6cf3ff', 'bold');
     if (newBest) centerText('★ NEW HIGH SCORE ★', DW / 2, DH / 2 + 56, 18, '#ffd23f', '900');
     centerText('press ENTER for the title', DW / 2, DH / 2 + 92, 15, '#cfe0ff', 'normal');
@@ -667,13 +706,13 @@
     if (document.hidden) { audio.stopMusic(); }
     else if (!audio.muted && (mode === 'playing' || mode === 'paused' || mode === 'intro')) {
       audio.startMusic(state && state.boss && state.boss.awake && state.boss.alive ? 'boss' : (state ? state.level.world : 'title'));
-    } else if (!audio.muted && mode === 'title') audio.startMusic('title');
+    } else if (!audio.muted && mode === 'title') toTitleAudio();
   });
 
   // unlock WebAudio inside a real user gesture (iOS/Safari requirement)
   const unlockAudio = () => {
     audio.resume();
-    if (mode === 'title') audio.startMusic('title');
+    if (mode === 'title') { toTitleAudio(); if (!titleVoiced) { titleVoiced = true; if (audio.ui) audio.ui('title'); setTimeout(() => { if (mode === 'title') audio.playVoice('title', true); }, 500); } }
     window.removeEventListener('pointerdown', unlockAudio);
     window.removeEventListener('keydown', unlockAudio);
     window.removeEventListener('touchstart', unlockAudio);
@@ -683,11 +722,11 @@
   window.addEventListener('touchstart', unlockAudio);
 
   // ---- QA hooks (headless testing) ---------------------------------------
-  window.__turrican = {
+  window.__shard = window.__turrican = {
     get mode() { return mode; },
     get state() { return state; },
     start() { if(isDemo)endDemo(); audio.resume(); newRun(); },
-    setQuality(scale) { renderer.setResolution(scale);display.width=DW*scale/1.5;display.height=DH*scale/1.5;dx.setTransform(scale/1.5,0,0,scale/1.5,0,0); },
+    setQuality(scale) { renderer.setResolution(scale); },
     get tactics() { return pilot ? pilot.stats.intent : ''; },
     get graphics() { return window.__modernGraphics?.stats || {backend:'HD compatibility'}; },
     goToStage(i) { planIdx = i; loadStage(); },
@@ -727,7 +766,7 @@
       display.width = DW; display.height = DH;               // DPR 1
       dx.setTransform(1, 0, 0, 1, 0, 0);
       renderer.setFX(false); renderer.setResolution(2);
-      console.log('[Turrican II] slow device: dropped to performance mode');
+      console.log('[Shard Assault] slow device: dropped to performance mode');
     }
   }
 
@@ -757,5 +796,5 @@
   }
   applySettings();
   requestAnimationFrame(loop);
-  console.log('[Turrican II Redux] v' + D.VERSION + ' booted');
+  console.log('[Shard Assault] v' + D.VERSION + ' booted');
 })();

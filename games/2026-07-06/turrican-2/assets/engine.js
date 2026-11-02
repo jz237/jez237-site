@@ -1,4 +1,4 @@
-/* Turrican II — Redux : engine.js
+/* Shard Assault : engine.js
  * Pure, deterministic game logic (no rendering / audio). UMD for Node tests.
  * Fixed 60Hz tick via step(state, input). Emits cosmetic `events` for the
  * renderer to turn into particles/sound.
@@ -47,7 +47,7 @@
       if (tx >= 0 && tx < lvl.cols && ty >= 0 && ty < lvl.rows) lvl.tiles[ty * lvl.cols + tx] = T.EMPTY;
       s.player.score += 10;
       emit(s, 'explosion', tx * TILE + TILE / 2, ty * TILE + TILE / 2);
-      emit(s, 'sfx', 0, 0, { name: 'crate' });
+      emit(s, 'sfx', tx * TILE + TILE / 2, ty * TILE + TILE / 2, { name: 'crate' });
       return 'crate';
     }
     return tid === T.SOLID ? 'solid' : 'none';
@@ -228,7 +228,7 @@
         });
       }
       emit(s, 'muzzle', mx, my, { color: w.color });
-      emit(s, 'sfx', 0, 0, { name: 'shoot' });
+      emit(s, 'sfx', mx, my, { name: 'shoot' });
     } else if (p.weapon === 'bounce') {
       p.cooldown = w.cooldown;
       const count = w.countByLevel[Math.min(lvl - 1, 2)];
@@ -241,7 +241,7 @@
         });
       }
       emit(s, 'muzzle', muzzleX, muzzleY, { color: w.color });
-      emit(s, 'sfx', 0, 0, { name: 'shootb' }); // bounce has its own report
+      emit(s, 'sfx', muzzleX, muzzleY, { name: 'shootb' }); // bounce has its own report
     }
   }
 
@@ -287,7 +287,7 @@
         bb.hp -= beamTick * (bb.open ? 1 : D.BOSS_GUARD); bb.hitFlash = 0.06; bossStruck = true;
       }
     }
-    if ((s.frame % 3) === 0) emit(s, 'sfx', 0, 0, { name: 'beam' });
+    if ((s.frame % 3) === 0) emit(s, 'sfx', ox, oy, { name: 'beam' });
   }
 
   // ---- projectiles --------------------------------------------------------
@@ -341,7 +341,7 @@
               e.fireT = e.cfg.fireEvery * 1.3;
               s.eshots.push({ x: e.x + e.w / 2, y: e.y, w: 7, h: 7,
                 vx: clamp((p.x - e.x) * 0.9, -220, 220), vy: -250, grav: 560, life: 4, kind: 'lob' });
-              emit(s, 'sfx', 0, 0, { name: 'eshoot' });
+              emit(s, 'sfx', e.x + e.w / 2, e.y, { name: 'eshoot' });
             } else if (e.skin === 'statue' && dist < 190) {
               // walker statue: short-range flame cone
               e.fireT = e.cfg.fireEvery * 1.4;
@@ -350,13 +350,13 @@
                 s.eshots.push({ x: e.x + e.w / 2 + dir * 10, y: e.y + 6, w: 8, h: 8,
                   vx: dir * 190, vy: i * 55, life: 0.6, kind: 'flame' });
               }
-              emit(s, 'sfx', 0, 0, { name: 'flame' });
+              emit(s, 'sfx', e.x + e.w / 2, e.y + 6, { name: 'flame' });
             } else if (e.skin !== 'statue') {
               e.fireT = e.cfg.fireEvery;
               const a = e.aim;
               s.eshots.push({ x: e.x + e.w / 2, y: e.y + e.h / 2, w: 6, h: 6,
                 vx: Math.cos(a) * e.cfg.shotSpeed, vy: Math.sin(a) * e.cfg.shotSpeed, life: 3 });
-              emit(s, 'sfx', 0, 0, { name: 'eshoot' });
+              emit(s, 'sfx', e.x + e.w / 2, e.y + e.h / 2, { name: 'eshoot' });
             } else e.fireT = 0.2; // statue idles until the player is close
           }
         } else if (e.type === 'drifter') {
@@ -387,7 +387,7 @@
           if ((near || hurt) && !p.dead) {
             e.alive = false;
             emit(s, 'explosion', e.x + e.w / 2, e.y + e.h / 2);
-            emit(s, 'sfx', 0, 0, { name: 'hatch' });
+            emit(s, 'sfx', e.x + e.w / 2, e.y + e.h / 2, { name: 'hatch' });
             const hug = makeEnemy('hugger', 'hugger', e.x, e.y + e.h - ENEMIES.hugger.h);
             hug.vy = -200; hug.t = 0;
             s.enemies.push(hug);
@@ -446,16 +446,16 @@
         p.score += e.cfg.score;
         s.floats.push({ x: e.x, y: e.y, text: '+' + e.cfg.score, life: 0.9, vy: -30 });
         emit(s, 'explosion', e.x + e.w / 2, e.y + e.h / 2);
-        emit(s, 'sfx', 0, 0, { name: 'explode' });
+        emit(s, 'sfx', e.x + e.w / 2, e.y + e.h / 2, { name: 'explode' });
         s.shake = Math.min(6, s.shake + 3);
         continue;
       }
       // touch damage to player (mines detonate on contact — even on the wheel)
       if (rects(p, e) && p.invuln <= 0 && !p.morph) {
         hurtPlayer(s, e.cfg.touch, e.x + e.w / 2);
-        if (e.cfg.boom) { e.alive = false; emit(s, 'explosion', e.x + e.w / 2, e.y + e.h / 2); emit(s, 'sfx', 0, 0, { name: 'explode' }); }
+        if (e.cfg.boom) { e.alive = false; emit(s, 'explosion', e.x + e.w / 2, e.y + e.h / 2); emit(s, 'sfx', e.x + e.w / 2, e.y + e.h / 2, { name: 'explode' }); }
       } else if (rects(p, e) && p.morph) {
-        if (e.cfg.boom) { e.alive = false; emit(s, 'explosion', e.x + e.w / 2, e.y + e.h / 2); emit(s, 'sfx', 0, 0, { name: 'explode' }); }
+        if (e.cfg.boom) { e.alive = false; emit(s, 'explosion', e.x + e.w / 2, e.y + e.h / 2); emit(s, 'sfx', e.x + e.w / 2, e.y + e.h / 2, { name: 'explode' }); }
         else { e.hp -= 6 * dt; e.hitFlash = 0.06; } // morph grinds enemies
       }
     }
@@ -483,7 +483,7 @@
         s.eshots.push({ x: b.x + b.w / 2 - 6, y: b.groundY - 10, w: 16, h: 10, vx: sp, vy: 0, life: 2.6, boss: true, kind: 'wave' });
       }
       s.shake = Math.min(10, s.shake + 6);
-      emit(s, 'sfx', 0, 0, { name: 'stomp' });
+      emit(s, 'sfx', b.x + b.w / 2, b.groundY, { name: 'stomp' });
     } else if (atk.kind === 'lob') {
       b.attackT = 0.6;
       for (let i = 0; i < atk.count; i++) {
@@ -491,7 +491,7 @@
         const vx = dir * (atk.speed * 0.4 + t * atk.speed * 0.8);
         s.eshots.push({ x: b.x + b.w / 2, y: b.y + 8, w: 8, h: 8, vx, vy: -320 - t * 90, life: 4, boss: true, grav: 620, kind: 'lob' });
       }
-      emit(s, 'sfx', 0, 0, { name: 'eshoot' });
+      emit(s, 'sfx', b.x + b.w / 2, b.y + 8, { name: 'eshoot' });
     } else if (atk.kind === 'volley') {
       b.attackT = 0.6;
       const cx = b.x + b.w / 2, cy = b.y + b.h * 0.4;
@@ -500,11 +500,11 @@
         const off = atk.count === 1 ? 0 : (i / (atk.count - 1) - 0.5) * (atk.spread || 0.6);
         bossShoot(s, b, Math.cos(base + off) * atk.speed, Math.sin(base + off) * atk.speed + (atk.rise || 0), { kind: 'orb' });
       }
-      emit(s, 'sfx', 0, 0, { name: 'eshoot' });
+      emit(s, 'sfx', cx, cy, { name: 'eshoot' });
     } else if (atk.kind === 'dash') {
       b.attackT = 1.1;
       b.dashVx = dir * atk.speed;
-      emit(s, 'sfx', 0, 0, { name: 'dash' });
+      emit(s, 'sfx', b.x + b.w / 2, b.y + b.h / 2, { name: 'dash' });
     } else if (atk.kind === 'spawn') {
       b.attackT = 0.7;
       const kind = atk.minion || 'flyer';
@@ -514,7 +514,7 @@
         sp.t = i * 0.7;
         s.enemies.push(sp);
       }
-      emit(s, 'sfx', 0, 0, { name: 'spawn' });
+      emit(s, 'sfx', b.x + b.w / 2, b.y + 10, { name: 'spawn' });
     } else if (atk.kind === 'barrage') {
       b.attackT = atk.dur || 1.4;
       b.barrageLeft = atk.count; b.barrageTick = 0;
@@ -545,7 +545,7 @@
         // until the scroll carries it into the arena
         if (s.level.type !== 'shmup' || p.x > (b.wallCol + 1) * TILE + 4) sealArena(s, true);
         emit(s, 'banner', 0, 0, { text: 'WARNING', sub: b.name });
-        emit(s, 'sfx', 0, 0, { name: 'warning' });
+        emit(s, 'sfx', b.x + b.w / 2, b.y + b.h / 2, { name: 'warning' });
         emit(s, 'music', 0, 0, { name: 'boss' });
         emit(s, 'voice', 0, 0, { name: 'bosswarn', pr: true });
       }
@@ -572,7 +572,7 @@
       b.deathT -= dt;
       if ((s.frame % 9) === 0) {
         emit(s, 'explosion', b.x + Math.random() * b.w, b.y + Math.random() * b.h);
-        emit(s, 'sfx', 0, 0, { name: 'explode' });
+        emit(s, 'sfx', b.x + b.w / 2, b.y + b.h / 2, { name: 'explode' });
       }
       s.shake = Math.min(8, s.shake + 2 * dt * 60);
       if (b.deathT <= 0) {
@@ -580,7 +580,7 @@
         p.score += b.cfg.score;
         s.floats.push({ x: b.x, y: b.y, text: '+' + b.cfg.score, life: 1.4, vy: -26 });
         emit(s, 'explosion', b.x + b.w / 2, b.y + b.h / 2);
-        emit(s, 'sfx', 0, 0, { name: 'bossdie' });
+        emit(s, 'sfx', b.x + b.w / 2, b.y + b.h / 2, { name: 'bossdie' });
         emit(s, 'banner', 0, 0, { text: 'TARGET DESTROYED', sub: '' });
         emit(s, 'music', 0, 0, { name: 'world' });
         emit(s, 'voice', 0, 0, { name: 'bossdown', pr: true });
@@ -600,7 +600,7 @@
       b.phase = wantPhase;
       b.state = 'open'; b.stateT = 1.3; b.open = true; b.attack = null;
       emit(s, 'explosion', b.x + b.w / 2, b.y + b.h / 2);
-      emit(s, 'sfx', 0, 0, { name: 'phase' });
+      emit(s, 'sfx', b.x + b.w / 2, b.y + b.h / 2, { name: 'phase' });
       s.shake = Math.min(12, s.shake + 8);
     }
 
@@ -624,7 +624,7 @@
       b.stateT -= dt * (b.state === 'idle' ? speedMult : 1);
       if (b.state === 'idle' && b.stateT <= 0) {
         b.state = 'tele'; b.stateT = b.cfg.tele;
-        emit(s, 'sfx', 0, 0, { name: 'tele' });
+        emit(s, 'sfx', b.x + b.w / 2, b.y + b.h / 2, { name: 'tele' });
       } else if (b.state === 'tele' && b.stateT <= 0) {
         const list = bossAttacks(b);
         startBossAttack(s, b, list[b.ai % list.length]);
@@ -644,7 +644,7 @@
             const a = Math.atan2((p.y + p.h / 2) - (b.y + b.h * 0.4), (p.x + p.w / 2) - (b.x + b.w / 2))
               + (Math.random() - 0.5) * 1.2;
             bossShoot(s, b, Math.cos(a) * atk.speed, Math.sin(a) * atk.speed, { kind: 'orb' });
-            if ((b.barrageLeft % 3) === 0) emit(s, 'sfx', 0, 0, { name: 'eshoot' });
+            if ((b.barrageLeft % 3) === 0) emit(s, 'sfx', b.x + b.w / 2, b.y + b.h * 0.4, { name: 'eshoot' });
           }
         } else if (atk.kind === 'beam') {
           b.sweepTick -= dt;
@@ -658,7 +658,7 @@
         if (b.attackT <= 0) {
           b.ai++;
           if (b.ai % b.cfg.openEvery === 0) { b.state = 'open'; b.stateT = b.cfg.openDur; b.open = true;
-            emit(s, 'sfx', 0, 0, { name: 'coreopen' }); }
+            emit(s, 'sfx', b.x + b.w / 2, b.y + b.h / 2, { name: 'coreopen' }); }
           else { b.state = 'idle'; b.stateT = 0.9; }
           b.attack = null;
         }
@@ -675,7 +675,7 @@
         b.hp -= sh.dmg * mult; b.hitFlash = 0.08;
         if (sh.kind !== 'bounce') sh.life = 0; else sh.hitT = 0.3;
         emit(s, b.open ? 'spark' : 'clinkfx', sh.x, sh.y);
-        emit(s, 'sfx', 0, 0, { name: b.open ? 'bosshit' : 'clink' });
+        emit(s, 'sfx', sh.x, sh.y, { name: b.open ? 'bosshit' : 'clink' });
       }
     }
     // mines vs boss
@@ -691,7 +691,7 @@
     if (b.hp <= 0 && !b.dying) {
       b.dying = true; b.deathT = 2.2; b.open = false;
       s.eshots.length = 0; // clear bullets for the victory moment
-      emit(s, 'sfx', 0, 0, { name: 'phase' });
+      emit(s, 'sfx', b.x + b.w / 2, b.y + b.h / 2, { name: 'phase' });
     }
   }
   // seal / reopen the arena with a wall of solid tiles behind the player
@@ -727,7 +727,7 @@
     }
     s.hitstop = 0.06; // brief freeze sells the impact
     s.shake = Math.min(9, s.shake + 5);
-    emit(s, 'sfx', 0, 0, { name: 'hit' });
+    emit(s, 'sfx', p.x + p.w / 2, p.y + p.h / 2, { name: 'hit' });
     emit(s, 'hurt', 0, 0); // red damage vignette
     if (p.energy <= 0) killPlayer(s);
   }
@@ -738,7 +738,7 @@
     if (p.dead) return;
     p.dead = true; p.deathTimer = 1.4; p.lives -= 1;
     emit(s, 'explosion', p.x + p.w / 2, p.y + p.h / 2);
-    emit(s, 'sfx', 0, 0, { name: 'die' });
+    emit(s, 'sfx', p.x + p.w / 2, p.y + p.h / 2, { name: 'die' });
     if (p.lives > 0) emit(s, 'voice', 0, 0, { name: 'death' });
     s.shake = 10;
   }
@@ -765,8 +765,8 @@
       emit(s, 'pickup', px, py, { color: '#9be6ff' });
       if (p.gems % 50 === 0) { p.lives++; emit(s, 'voice', 0, 0, { name: 'oneup' });
         s.floats.push({ x: p.x, y: p.y - 6, text: '1UP', life: 1.2, vy: -24 }); }
-      emit(s, 'sfx', 0, 0, { name: 'gem' }); return; }
-    emit(s, 'sfx', 0, 0, { name: 'power' });
+      emit(s, 'sfx', px, py, { name: 'gem' }); return; }
+    emit(s, 'sfx', px, py, { name: 'power' });
     emit(s, 'pickup', px, py, { color: type === 'pu_energy' ? '#54e36b' : type === 'pu_life' ? '#ff5d7a' : '#ffd23f' });
     if (type === 'pu_weapon') {
       emit(s, 'voice', 0, 0, { name: 'weapon' });
@@ -826,12 +826,12 @@
         if (!solidOverlap(s.level, test)) {
           p.morph = false; p.morphCooldown = 0.25;
           p.y = p.y + p.h - 30; p.h = 30; p.w = 14;
-          emit(s, 'sfx', 0, 0, { name: 'morph' });
+          emit(s, 'sfx', p.x + p.w / 2, p.y + p.h / 2, { name: 'morph' });
         }
       } else {
         p.morph = true; p.morphCooldown = 0.25;
         p.y = p.y + p.h - 16; p.h = 16; p.w = 16;
-        emit(s, 'sfx', 0, 0, { name: 'morph' });
+        emit(s, 'sfx', p.x + p.w / 2, p.y + p.h / 2, { name: 'morph' });
       }
     }
 
@@ -866,7 +866,7 @@
       Math.floor((p.y + p.h / 2) / TILE)) === T.WATER;
     if (p.inWater !== wasInWater) {
       emit(s, 'splash', p.x + p.w / 2, p.y + (p.inWater ? 0 : p.h));
-      emit(s, 'sfx', 0, 0, { name: 'splash' });
+      emit(s, 'sfx', p.x + p.w / 2, p.y + (p.inWater ? 0 : p.h), { name: 'splash' });
       if (!p.inWater && p.vy < 0) { p.vy *= 1.15; p._coyote = PHYS.coyote; } // breach hop
     }
 
@@ -875,7 +875,7 @@
     p._buf = input.jumpPressed ? PHYS.jumpBuffer : Math.max(0, (p._buf || 0) - dt);
     if (p._buf > 0 && p._coyote > 0 && !p.morph && !p.inWater) {
       p.vy = -PHYS.jumpVel; p._coyote = 0; p._buf = 0; p.onGround = false;
-      emit(s, 'sfx', 0, 0, { name: 'jump' });
+      emit(s, 'sfx', p.x + p.w / 2, p.y + p.h, { name: 'jump' });
     }
     // variable jump height: a single cut on release (SPEC §2.1 JUMP_CUT_MULT)
     if (input.jumpReleased && p.vy < 0 && !p.inWater) p.vy *= PHYS.jumpCut;
@@ -931,7 +931,7 @@
     // heavy landing: dust + thud
     if (!wasOnGround && info.onGround && prevVy > 430) {
       emit(s, 'land', p.x + p.w / 2, p.y + p.h);
-      emit(s, 'sfx', 0, 0, { name: 'land' });
+      emit(s, 'sfx', p.x + p.w / 2, p.y + p.h, { name: 'land' });
     }
     p.onGround = info.onGround || (p.onGround && !info.hitY && p.vy >= 0 && onFloor(s.level, p));
     if (!info.onGround) p.onGround = onFloor(s.level, p);
@@ -979,7 +979,7 @@
       if (s.boss && s.boss.alive && s.boss.awake && !s.boss.dying) {
         s.boss.hp -= s.boss.maxHp * 0.08; s.boss.hitFlash = 0.15;
       }
-      emit(s, 'flash', 0, 0); emit(s, 'sfx', 0, 0, { name: 'bomb' });
+      emit(s, 'flash', 0, 0); emit(s, 'sfx', p.x + p.w / 2, p.y + p.h / 2, { name: 'bomb' });
       emit(s, 'voice', 0, 0, { name: 'freeze' });
     }
     // power line
@@ -989,7 +989,7 @@
       const lx = p.x + p.w / 2;
       for (const e of s.enemies) if (e.alive && Math.abs((e.x + e.w / 2) - lx) < 22) e.hp -= 12;
       s.floats.push({ x: lx, y: p.y - 20, text: '', life: 0.4, vy: 0, line: true });
-      emit(s, 'line', lx, p.y); emit(s, 'sfx', 0, 0, { name: 'line' });
+      emit(s, 'line', lx, p.y); emit(s, 'sfx', lx, p.y, { name: 'line' });
     }
 
     // enemy shot hits player
@@ -1003,7 +1003,7 @@
     if (cp && !s.checkpoint && p.x > cp.x && p.onGround) {
       s.checkpoint = cp;
       s.floats.push({ x: p.x, y: p.y - 14, text: 'CHECKPOINT', life: 1.4, vy: -20 });
-      emit(s, 'sfx', 0, 0, { name: 'checkpoint' });
+      emit(s, 'sfx', p.x + p.w / 2, p.y + p.h / 2, { name: 'checkpoint' });
     }
 
     // exit (locked until the stage boss, if any, is destroyed)
@@ -1132,7 +1132,7 @@
     s.time -= dt;
     const secAfter = Math.ceil(s.time);
     if (secAfter !== secBefore && secAfter <= 10 && secAfter > 0 && !s.player.dead) {
-      emit(s, 'sfx', 0, 0, { name: 'tick' }); // low-time warning
+      emit(s, 'sfx', s.player.x + s.player.w / 2, s.player.y + s.player.h / 2, { name: 'tick' }); // low-time warning
     }
     if (secAfter === 20 && secBefore === 21 && !s.player.dead) emit(s, 'voice', 0, 0, { name: 'lowtime' });
     if (s.time <= 0 && !s.player.dead) { s.time = 0; killPlayer(s); }

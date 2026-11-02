@@ -1,4 +1,4 @@
-/* Turrican II — Redux : demo.js
+/* Shard Assault : demo.js
  * ATTRACT MODE. A reactive autopilot that plays the real engine through the
  * whole campaign — it reads the tilemap and the live entity lists and returns
  * an input frame per 60Hz tick, exactly like a human on the pad.

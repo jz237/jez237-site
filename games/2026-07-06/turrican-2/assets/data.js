@@ -1,4 +1,4 @@
-/* Turrican II — Redux (faithful tribute) : data.js
+/* Shard Assault : data.js
  * Constants, palettes, weapon/enemy configs, and deterministic level builders.
  * All content is ORIGINAL homage art/data — no copyrighted ROM assets.
  * UMD: usable in Node (headless tests) and the browser.
@@ -46,13 +46,13 @@
   // lightning), and bounce. Each has upgrade levels collected via power-ups.
   const WEAPONS = {
     spread: {
-      id: 'spread', name: 'MULTIPLE', color: '#ffd23f',
+      id: 'spread', name: 'SCATTER', color: '#ffd23f',
       maxLevel: 3, cooldown: 0.11, speed: 460, damage: 1,
       // fan of bullets per level
       fan: [[0], [-0.14, 0, 0.14], [-0.26, -0.1, 0, 0.1, 0.26]],
     },
     beam: {
-      id: 'beam', name: 'BEAM', color: '#6cf3ff',
+      id: 'beam', name: 'ARC LANCE', color: '#6cf3ff',
       maxLevel: 3, cooldown: 0.02, damage: 0.6, length: 240,
       // beam sweeps within +/- range around facing; up/down rotate it
       sweepRange: 1.35,     // radians each way from horizontal
@@ -60,7 +60,7 @@
       widthByLevel: [6, 10, 15],
     },
     bounce: {
-      id: 'bounce', name: 'BOUNCE', color: '#ff7ad9',
+      id: 'bounce', name: 'RICOCHET', color: '#ff7ad9',
       maxLevel: 3, cooldown: 0.16, speed: 360, damage: 1,
       bouncesByLevel: [2, 4, 6],
       countByLevel: [1, 2, 3],
@@ -98,7 +98,7 @@
   // ---- bosses (SPEC §4) ----------------------------------------------------
   // Boss template: telegraph -> attack cycle -> vulnerable open window.
   // Guarded body takes BOSS_GUARD weapon damage; open core takes full damage.
-  // Phases at 66%/33% HP speed the cycle up (The Machine swaps attack sets).
+  // Phases at 66%/33% HP speed the cycle up (the Sovereign swaps attack sets).
   const BOSS_GUARD = 0.22;
   const BOSSES = {
     warden: { // W1 — rock-armored guardian mech
@@ -147,7 +147,7 @@
       openEvery: 2, openDur: 2.4, tele: 0.8, hover: 30,
     },
     machine: { // W5-2 — FINAL BOSS
-      name: 'THE MACHINE', hp: 430, w: 86, h: 96, touch: 28, score: 20000,
+      name: 'THE SOVEREIGN', hp: 430, w: 86, h: 96, touch: 28, score: 20000,
       phases: [
         { attacks: [
           { kind: 'volley', count: 5, speed: 220, spread: 0.6 },
@@ -169,16 +169,13 @@
   };
 
   // ---- worlds (theme + palette + generator params) ------------------------
-  // Faithful in spirit to Turrican II's progression: outdoor "freedom"
-  // landscape -> machine interior -> a shoot-'em-up flight -> organic caverns
-  // -> the final fortress. Enhanced original palettes.
-  // Faithful to the researched blueprint (SPEC.md §1): 5 worlds / 11 stages
-  // (2/2/3/2/2). World 3 (Corridor) is an on-rails shmup — rendered with the
-  // platform engine for now; a dedicated shmup mode is a planned enhancement.
+  // Shard Assault: five worlds / 11 stages (2/2/3/2/2) on the crystal world Kethra.
+  // World 3 (Rift Run) is an auto-scrolling fighter stage. The 3D renderer
+  // (src3d/worlds.mjs) owns each world's look; palettes below feed the 2D fallback.
   const WORLDS = [
     {
-      id: 1, name: 'DESERT', subtitle: 'LANDORIN SURFACE', type: 'platform',
-      theme: 'Outdoor rocky desert surface — open sky, powerful winds, waterfalls.',
+      id: 1, name: 'SHATTERED MESA', subtitle: 'KETHRA HIGHLANDS', type: 'platform',
+      theme: 'Windswept red-rock highlands studded with living crystal — gusts and waterfalls.',
       palette: {
         sky: ['#0d1a3a', '#2A4C8A', '#4f83bd', '#6FA8DC'],
         far: '#3a4d72', mid: '#5a6d8f', near: '#6b4a2a',
@@ -191,8 +188,8 @@
       windX: 170,             // open-sky gusts (SPEC §2.1 contextual modifiers)
     },
     {
-      id: 2, name: 'SUBMERGED DUNGEON', type: 'platform',
-      theme: 'Underground caverns and an underwater lake; ends on a wind-climb.',
+      id: 2, name: 'DROWNED VAULTS', type: 'platform',
+      theme: 'Flooded crystal vaults lit by bioluminescence; ends on an updraft climb.',
       palette: {
         sky: ['#04141c', '#0E2E3E', '#13455c', '#1B5E7A'],
         far: '#0d2833', mid: '#1a4150', near: '#2C3A45',
@@ -206,8 +203,8 @@
       updraftFinale: true,    // 2-2 ends on a vertical wind-climb
     },
     {
-      id: 3, name: 'CORRIDOR', subtitle: 'SHMUP INTERLUDE', type: 'shmup',
-      theme: 'High-velocity mechanical tunnel blaster (on-rails shoot-em-up).',
+      id: 3, name: 'RIFT RUN', subtitle: 'FIGHTER ASSAULT', type: 'shmup',
+      theme: 'A full-throttle fighter run through the shattered canyon rift.',
       palette: {
         sky: ['#05060F', '#0a0c1e', '#141838', '#241d4a'],
         far: '#12142a', mid: '#3A3F5C', near: '#5C6486',
@@ -220,8 +217,8 @@
       scrolls: [62, 85, 132],   // auto-scroll px/s per stage: 3-1, 3-2, 3-3 finale
     },
     {
-      id: 4, name: 'WALKER FACTORY', type: 'platform',
-      theme: 'Industrial machine interior — fire-breathing statues, crush hazards.',
+      id: 4, name: 'CINDER FOUNDRY', type: 'platform',
+      theme: 'The Sovereign\'s automated foundry — molten channels, sentinels, crushers.',
       palette: {
         sky: ['#0a0a0d', '#1A1A1D', '#252529', '#33333a'],
         far: '#1c1c22', mid: '#3E3E46', near: '#57575F',
@@ -233,8 +230,8 @@
       bosses: { 1: 'colossus' },
     },
     {
-      id: 5, name: 'ALIEN SHIP', type: 'platform',
-      theme: 'Giger-esque biomechanical world — eggs, huggers, bone set pieces.',
+      id: 5, name: 'THE HOLLOW SPIRE', type: 'platform',
+      theme: 'The Sovereign\'s living crystal citadel — pods, crawlers, the throne of shard.',
       palette: {
         sky: ['#0a0710', '#1B1420', '#2E2233', '#463349'],
         far: '#1b1420', mid: '#2e2233', near: '#463349',
@@ -682,6 +679,6 @@
     TILE, VIEW_W, VIEW_H, FPS, DT, PHYS, T, SOLID_TILES, SHMUP,
     WEAPONS, WEAPON_ORDER, ENEMIES, ROSTERS, LOB_SKINS, BOSSES, BOSS_GUARD, WORLDS, STAGES_PER_WORLD, DIFFICULTY,
     mulberry32, buildLevel,
-    VERSION: '1.24.0',
+    VERSION: '2.0.0',
   };
 });

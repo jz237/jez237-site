@@ -1,4 +1,4 @@
-/* Turrican II — Redux : input.js
+/* Shard Assault : input.js
  * Keyboard + touch + gamepad -> per-frame input with edge-triggered flags.
  */
 (function (root, factory) { root.TInput = factory(); })(typeof self !== 'undefined' ? self : this, function () {
