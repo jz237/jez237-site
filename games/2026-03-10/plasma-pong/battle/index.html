@@ -63,6 +63,28 @@ button { appearance: none; border: 0; background: none; font: inherit; color: in
 .caption b { color: #fff; font-weight: 700; }
 #demo-badge { position: absolute; left: 50%; bottom: max(14px, env(safe-area-inset-bottom)); transform: translateX(-50%); font-size: 11px; letter-spacing: 3px; padding: 7px 14px; border-radius: 10px; background: rgba(0, 0, 0, .5); border: 1px solid rgba(255, 210, 63, .5); color: var(--gold); white-space: nowrap; }
 #demo-badge span { animation: blink 1.2s infinite; }
+.world { position: absolute; right: max(24px, 4vw); top: 50%; transform: translateY(-50%); width: 236px; padding: 12px 14px 10px; border-radius: 14px; background: linear-gradient(160deg, rgba(20, 30, 60, .66), rgba(6, 8, 20, .78)); border: 1px solid var(--edge); border-top-color: rgba(255, 210, 63, .35); box-shadow: 0 8px 30px rgba(0, 0, 0, .45); text-align: left; cursor: pointer; }
+.world h4 { margin: 0 0 7px; font-size: 9.5px; letter-spacing: .26em; color: var(--gold); text-shadow: 0 0 10px rgba(255, 210, 63, .6); font-weight: 700; }
+.world ol { list-style: none; margin: 0; padding: 0; font-size: 11px; font-variant-numeric: tabular-nums; }
+.world li { display: grid; grid-template-columns: 1.7em 3.2em 1fr; gap: 6px; padding: 3px 0; border-bottom: 1px solid rgba(255, 255, 255, .06); color: #d8e6ff; }
+.world li b { color: var(--dim); font-weight: 500; }
+.world li em { font-style: normal; text-align: right; color: var(--gold); }
+.world li:first-child { color: #ffe680; text-shadow: 0 0 8px rgba(255, 210, 63, .5); }
+.world .note { display: block; color: var(--dim); font-size: 10px; letter-spacing: .08em; border: 0; }
+.world:hover { border-color: var(--gold); }
+#attract-board { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; animation: abIn .5s ease-out; }
+#attract-board .card { width: min(420px, 90vw); text-align: center; pointer-events: none; }
+#attract-board .card h2 { color: var(--gold); text-shadow: 0 0 14px rgba(255, 210, 63, .7); }
+#attract-board table.hs td:nth-child(2) { text-align: left; }
+.abfoot { margin: 12px 0 0; font-size: 9px !important; letter-spacing: .24em !important; color: var(--cyan) !important; font-family: Orbitron, sans-serif !important; animation: blink 1.2s infinite; }
+.card .rank { margin: -6px 0 12px; font-family: 'Exo 2'; font-style: italic; font-weight: 900; font-size: 20px; letter-spacing: .06em; color: var(--gold); text-shadow: 0 0 12px rgba(255, 210, 63, .7); }
+@keyframes abIn { from { opacity: 0; transform: scale(.94); } }
+@media (max-width: 960px) {
+  .world { position: static; transform: none; width: min(320px, 82vw); margin-top: 12px; padding: 8px 12px 6px; }
+  .world h4 { margin-bottom: 4px; }
+  .world li:nth-child(n+2) { display: none; }
+}
+@media (max-height: 560px) and (orientation: landscape) { .world { display: none; } }
 #tip { position: absolute; left: 50%; bottom: calc(max(14px, env(safe-area-inset-bottom)) + 40px); transform: translateX(-50%); font-size: 10px; letter-spacing: 1.5px; color: #cfe8ff; padding: 6px 12px; border-radius: 8px; background: rgba(0, 10, 30, .6); border: 1px solid var(--edge); max-width: 92vw; text-align: center; transition: opacity .5s; }
 
 /* floating texts + banners */
@@ -218,6 +240,7 @@ table.hs tr.me td { color: #fff; text-shadow: 0 0 8px var(--cyan); }
   <div id="toasts"><div id="toast-1"></div><div id="toast--1"></div></div>
   <div id="banner" class="hidden"><div class="b1"></div><div class="b2"></div></div>
   <div id="tip" class="hidden"></div>
+  <div id="attract-board" class="hidden"><div class="card"><h2>🌐 GLOBAL HIGH SCORES</h2><table class="hs" id="ab-rows"></table><p class="abfoot">PLAY THE CAMPAIGN TO JOIN THE BOARD</p></div></div>
   <div id="demo-badge" class="hidden"><span>DEMO</span> · PRESS ANY KEY OR TAP</div>
   <div id="touch" class="hidden">
     <button class="tbtn" id="t-fire">FIRE</button>
@@ -241,6 +264,7 @@ table.hs tr.me td { color: #fff; text-shadow: 0 0 8px var(--cyan); }
       <div class="mbtn row2"><button class="mbtn" data-act="howto">HOW TO PLAY</button><button class="mbtn" data-act="scores">HIGH SCORES</button></div>
       <button class="mbtn" data-act="options">OPTIONS</button>
     </div>
+    <div class="world clickable" id="world"></div>
     <div class="foot"><a href="../">← EDITIONS</a><span class="vtxt"></span></div>
   </section>
 
@@ -287,6 +311,7 @@ table.hs tr.me td { color: #fff; text-shadow: 0 0 8px var(--cyan); }
   <section class="screen dim hidden" id="scores">
     <div class="card">
       <h2>HIGH SCORES</h2>
+      <p class="rank hidden" id="hs-rank"></p>
       <div class="hsgrid">
         <div><h3>🌐 GLOBAL</h3><table class="hs" id="hs-global"></table></div>
         <div><h3>🏠 THIS DEVICE</h3><table class="hs" id="hs-local"></table></div>
@@ -349,6 +374,6 @@ table.hs tr.me td { color: #fff; text-shadow: 0 0 8px var(--cyan); }
     </div>
   </section>
 </div>
-<script type="module" src="js/main.js?v=2"></script>
+<script type="module" src="js/main.js?v=3"></script>
 </body>
 </html>

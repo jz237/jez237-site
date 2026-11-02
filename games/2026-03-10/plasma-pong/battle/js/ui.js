@@ -1,5 +1,5 @@
 // DOM: HUD panels, floating pop-ups, banners, power-up toasts and screen switching.
-import { F, POWERUPS } from './config.js?v=2';
+import { F, POWERUPS } from './config.js?v=3';
 
 const $ = (id) => document.getElementById(id);
 const hex = (c) => '#' + c.toString(16).padStart(6, '0');

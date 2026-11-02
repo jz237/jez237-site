@@ -1,15 +1,15 @@
 // Plasma Pong: Battle Edition — game flow, controls, scoring, commentary and the frame loop.
 import * as THREE from '../vendor/three.module.min.js';
-import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS } from './config.js?v=2';
-import { makeWorld, step, drainEvents, STEP, paddlesOf } from './sim.js?v=2';
-import { AIPilot } from './ai.js?v=2';
-import { predictToPlane } from './predict.js?v=2';
-import { Renderer, pickQuality } from './render.js?v=2';
-import { Director } from './director.js?v=2';
-import { Audio } from './audio.js?v=2';
-import { Input } from './input.js?v=2';
-import { UI, $, hex } from './ui.js?v=2';
-import { Scores } from './scores.js?v=2';
+import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS } from './config.js?v=3';
+import { makeWorld, step, drainEvents, STEP, paddlesOf } from './sim.js?v=3';
+import { AIPilot } from './ai.js?v=3';
+import { predictToPlane } from './predict.js?v=3';
+import { Renderer, pickQuality } from './render.js?v=3';
+import { Director } from './director.js?v=3';
+import { Audio } from './audio.js?v=3';
+import { Input } from './input.js?v=3';
+import { UI, $, hex } from './ui.js?v=3';
+import { Scores } from './scores.js?v=3';
 
 // ------------------------------------------------------------------ settings
 const SKEY = 'ppb.settings.v1';
@@ -125,9 +125,32 @@ function startAttract() {
 }
 
 // ------------------------------------------------------------------ screens / flow
+// the world top five on the title screen
+const esc = (v) => String(v ?? '').replace(/[^A-Z0-9]/gi, '');
+function boardRows(rows, n) {
+  return rows.slice(0, n).map((r, i) => `<tr><td>${i + 1}.</td><td>${esc(r.initials)}</td><td>${Math.floor(r.score).toLocaleString()}</td></tr>`).join('');
+}
+async function renderWorld() {
+  const g = await HS.fresh();
+  const rows = g ? g.slice(0, 5).map((r, i) => `<li><b>${i + 1}.</b><span>${esc(r.initials)}</span><em>${Math.floor(r.score).toLocaleString()}</em></li>`).join('') : '';
+  $('world').innerHTML = `<h4>🌐 WORLD TOP 5</h4><ol>${rows || `<li class="note">${g === null ? 'Global board offline' : 'No scores yet — be the first!'}</li>`}</ol>`;
+}
+$('world').addEventListener('click', () => { if (G.state === 'title') { A.play('uiok', { gap: 0 }); openSub('scores'); } });
+
+// arcade attract: the global board drops in between demo rallies
+async function showAttractBoard() {
+  const g = await HS.fresh(120000);
+  if (G.mode !== 'demo') return;
+  $('ab-rows').innerHTML = g && g.length ? boardRows(g, 10) : `<tr><td colspan="3" style="color:#7a8cb8">${g === null ? 'Global board offline' : 'No scores yet — be the first!'}</td></tr>`;
+  $('attract-board').classList.remove('hidden');
+  clearTimeout(G.abTimer);
+  G.abTimer = setTimeout(() => $('attract-board').classList.add('hidden'), 7000);
+}
+
 function goTitle() {
   clearTimers();
   G.state = 'title';
+  renderWorld();
   G.idleT = 0;
   startAttract();
   U.hideBanner();
@@ -253,6 +276,8 @@ function startDemo() {
 
 function setDemoUI(on) {
   $('demo-badge').classList.toggle('hidden', !on);
+  if (!on) { clearTimeout(G.abTimer); $('attract-board').classList.add('hidden'); }
+  G.boardT = 22;
   $('cap-l').classList.toggle('hidden', !on);
   $('cap-r').classList.toggle('hidden', !on);
   if (!on) $('tip').classList.add('hidden');
@@ -441,13 +466,22 @@ async function saveIni() {
   if (G.state !== 'initials') return;
   G.state = 'saving';
   A.play('uiok', { gap: 0 });
-  await HS.submit(INI.chars.join(''), G.score, G.stage + 1);
+  const e = await HS.submit(INI.chars.join(''), G.score, G.stage + 1);
   await HS.fetchGlobal();
   showScores(true, INI.chars.join(''));
+  // where did that land?
+  const g = HS.global || [];
+  const gi = g.findIndex((r) => r.initials === e.initials && Math.floor(r.score) === e.score);
+  const li = HS.local().findIndex((r) => r.initials === e.initials && r.score === e.score && r.ts === e.ts);
+  const rank = $('hs-rank');
+  rank.textContent = gi >= 0 ? `🌐 GLOBAL RANK #${gi + 1}` : HS.global === null ? 'SAVED · GLOBAL BOARD OFFLINE' : li >= 0 ? `🏠 #${li + 1} ON THIS DEVICE` : 'SAVED';
+  rank.classList.remove('hidden');
+  if (gi === 0) ann('champion', 0, { priority: true });
 }
 
 function showScores(fromRun = false, me = null) {
   G.state = fromRun ? 'scores-end' : 'scores';
+  $('hs-rank').classList.add('hidden');
   const fill = (el, rows) => {
     el.innerHTML = rows && rows.length
       ? rows.slice(0, 10).map((r, i) => `<tr class="${me && r.initials === me && r.score === G.score ? 'me' : ''}"><td>${i + 1}.</td><td>${String(r.initials).replace(/[^A-Z0-9]/gi, '')}</td><td>${Math.floor(r.score).toLocaleString()}</td></tr>`).join('')
@@ -903,6 +937,8 @@ function updateCaptions(dt) {
     const txt = `${ai.name} ▸ <b>${ai.caption || 'READING THE PLAY'}</b>`;
     if (el._t !== txt) { el._t = txt; el.innerHTML = txt; }
   }
+  G.boardT -= dt;
+  if (G.boardT <= 0) { G.boardT = 45; showAttractBoard(); }
   G.tipT -= dt;
   if (G.tipT <= 0) {
     G.tipT = 9;
@@ -962,6 +998,7 @@ window.__ppb.startCampaign = startCampaign;
 window.__ppb.startVersus = startVersus;
 window.__ppb.goTitle = goTitle;
 window.__ppb.enterTitle = enterTitle;
+window.__ppb.endRun = endRun;
 window.__ppb.shot = async (name, q = 0.85) => {
   tick(1 / 60);
   const url = $('gl').toDataURL('image/jpeg', q);

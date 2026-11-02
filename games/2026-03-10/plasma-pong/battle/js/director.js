@@ -2,9 +2,9 @@
 // broadcast shots and, because it can read the AI's forecasts, sees core breaches coming and
 // drops into slow motion on the right camera *before* they happen.
 import * as THREE from '../vendor/three.module.min.js';
-import { F } from './config.js?v=2';
-import { predictToPlane } from './predict.js?v=2';
-import { cellIndex } from './sim.js?v=2';
+import { F } from './config.js?v=3';
+import { predictToPlane } from './predict.js?v=3';
+import { cellIndex } from './sim.js?v=3';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 const _v = new THREE.Vector3(), _q = new THREE.Vector3();

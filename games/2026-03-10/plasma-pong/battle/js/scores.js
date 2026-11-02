@@ -18,6 +18,11 @@ export class Scores {
     const q = (rows) => rows.length < 10 || score > rows[rows.length - 1].score;
     return q(L) || q(G);
   }
+  // the global board, refetched when older than maxAge ms
+  async fresh(maxAge = 60000) {
+    if (this.global && Date.now() - (this.fetchedAt || 0) < maxAge) return this.global;
+    return this.fetchGlobal();
+  }
   initials() { try { return (localStorage.getItem(INITIALS_KEY) || 'AAA').slice(0, 3).toUpperCase(); } catch { return 'AAA'; } }
   async fetchGlobal() {
     try {
@@ -28,6 +33,7 @@ export class Scores {
       const data = await res.json();
       const rows = Array.isArray(data) ? data : data.scores || [];
       this.global = rows.filter((r) => r && typeof r.score === 'number').sort((a, b) => b.score - a.score).slice(0, 10);
+      this.fetchedAt = Date.now();
     } catch { this.global = null; }
     return this.global;
   }

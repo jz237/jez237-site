@@ -1,6 +1,6 @@
 // Trajectory forecasting: runs the simulation's own ball physics forward on a probe.
-import { F } from './config.js?v=2';
-import { stepBallFree } from './sim.js?v=2';
+import { F } from './config.js?v=3';
+import { stepBallFree } from './sim.js?v=3';
 
 const PDT = 1 / 90;
 
