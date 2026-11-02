@@ -93,6 +93,42 @@ button { appearance: none; border: 0; background: none; font: inherit; color: in
   .world li:nth-child(n+2) { display: none; }
 }
 @media (max-height: 560px) and (orientation: landscape) { .world { display: none; } }
+#ore { font-size: 9px; letter-spacing: .2em; color: #9affc0; margin-top: 2px; text-shadow: 0 0 8px rgba(77, 255, 138, .5); }
+#medal-toast { position: absolute; left: 50%; top: calc(max(8px, env(safe-area-inset-top)) + 104px); transform: translateX(-50%); display: flex; gap: 12px; align-items: center; padding: 10px 16px 10px 12px; border-radius: 14px; background: linear-gradient(160deg, rgba(60, 46, 10, .92), rgba(16, 12, 4, .94)); border: 1px solid rgba(255, 210, 63, .7); box-shadow: 0 0 30px rgba(255, 210, 63, .35); max-width: min(520px, 92vw); }
+#medal-toast.go { animation: medalIn .5s cubic-bezier(.2, 1.5, .4, 1); }
+#medal-toast i { font-style: normal; font-size: 32px; }
+#medal-toast small { display: block; font-size: 8px; letter-spacing: .24em; color: #ffd23f; }
+#medal-toast b { display: block; font-family: 'Exo 2'; font-style: italic; font-weight: 900; font-size: 20px; letter-spacing: .08em; color: #fff; }
+#medal-toast span { display: block; font-size: 10px; color: #e8dcb8; font-family: system-ui, sans-serif; margin-top: 2px; }
+@keyframes medalIn { from { opacity: 0; transform: translate(-50%, -16px) scale(.85); } }
+.medals { position: absolute; left: max(24px, 4vw); top: 50%; transform: translateY(-50%); width: 236px; padding: 12px 14px 10px; border-radius: 14px; background: linear-gradient(160deg, rgba(20, 30, 60, .66), rgba(6, 8, 20, .78)); border: 1px solid var(--edge); border-top-color: rgba(255, 210, 63, .35); box-shadow: 0 8px 30px rgba(0, 0, 0, .45); text-align: left; cursor: pointer; }
+.medals:hover { border-color: var(--gold); }
+.medals h4 { margin: 0 0 8px; font-size: 9.5px; letter-spacing: .26em; color: var(--gold); font-weight: 700; display: flex; justify-content: space-between; }
+.medals h4 b { color: #fff; }
+.mrow { display: grid; grid-template-columns: 1fr repeat(3, 16px); gap: 6px; align-items: center; padding: 3px 0; border-bottom: 1px solid rgba(255, 255, 255, .06); }
+.mrow span { font-size: 8px; letter-spacing: .14em; color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mrow i { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .2); background: rgba(255, 255, 255, .04); }
+.mrow i.on { background: radial-gradient(circle at 40% 35%, #fff6c8, #ffd23f 45%, #b07a10); border-color: #ffe680; box-shadow: 0 0 8px rgba(255, 210, 63, .7); }
+@media (max-width: 960px), (max-height: 560px) { .medals { display: none; } }
+.pu.medal { opacity: .55; }
+.pu.medal.on { opacity: 1; border-color: rgba(255, 210, 63, .45); background: rgba(255, 210, 63, .07); }
+.upgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.mbtn.upg { display: grid; grid-template-columns: 34px 1fr auto; grid-template-rows: auto auto auto; column-gap: 10px; row-gap: 3px; text-align: left; padding: 12px 12px; letter-spacing: .12em; border-color: color-mix(in srgb, var(--uc) 40%, transparent); }
+.mbtn.upg i { grid-row: 1 / 4; font-style: normal; font-size: 26px; align-self: center; text-align: center; color: #fff; text-shadow: 0 0 12px var(--uc); font-family: 'Segoe UI Symbol', 'Noto Sans Symbols 2', sans-serif; }
+.mbtn.upg b { font-size: 11px; color: #fff; }
+.mbtn.upg .lvl { grid-column: 3; grid-row: 1; display: flex; gap: 4px; align-items: center; }
+.mbtn.upg .lvl em { width: 9px; height: 9px; border-radius: 2px; border: 1px solid var(--uc); }
+.mbtn.upg .lvl em.on { background: var(--uc); box-shadow: 0 0 8px var(--uc); }
+.mbtn.upg small { grid-column: 2 / 4; margin: 0; font-family: system-ui, sans-serif; letter-spacing: .02em; font-size: 11px; color: #c6d4ee; text-transform: none; }
+.mbtn.upg .cost { grid-column: 2 / 4; font-size: 11px; color: #9affc0; }
+.mbtn.upg.poor { opacity: .5; }
+.mbtn.upg.poor .cost { color: #ff8090; }
+.mbtn.upg.max .cost { color: var(--gold); }
+.mbtn.upg:hover, .mbtn.upg.sel { border-color: var(--uc); box-shadow: 0 0 22px color-mix(in srgb, var(--uc) 45%, transparent), inset 0 0 18px color-mix(in srgb, var(--uc) 15%, transparent); }
+#hg-orebox { display: inline-block; margin: 0 0 14px; padding: 6px 12px; border-radius: 10px; border: 1px solid rgba(77, 255, 138, .5); color: #9affc0; font-size: 12px; letter-spacing: .2em; }
+#hg-orebox b { color: #fff; font-size: 16px; }
+#hg-orebox.short { animation: short .4s; }
+@keyframes short { 25% { transform: translateX(-6px); border-color: #ff4060; } 75% { transform: translateX(6px); border-color: #ff4060; } }
 #tip { position: absolute; left: 50%; bottom: calc(max(14px, env(safe-area-inset-bottom)) + 40px); transform: translateX(-50%); font-size: 10px; letter-spacing: 1.5px; color: #cfe8ff; padding: 6px 12px; border-radius: 8px; background: rgba(0, 10, 30, .6); border: 1px solid var(--edge); max-width: 92vw; text-align: center; transition: opacity .5s; }
 
 /* floating texts + banners */
@@ -306,6 +342,7 @@ body.calm .odbar.full i, body.calm #t-od.ready, body.calm .vsmark { animation: n
       <div id="arena-name">KUIPER DRIFT</div>
       <div id="stage-line">SECTOR 1 / 5</div>
       <div id="score">0</div>
+      <div id="ore" class="hidden"></div>
     </div>
     <div class="panel pside right" id="hud--1"></div>
   </div>
@@ -314,6 +351,7 @@ body.calm .odbar.full i, body.calm #t-od.ready, body.calm .vsmark { animation: n
   <div id="popups"></div>
   <div id="toasts"><div id="toast-1"></div><div id="toast--1"></div></div>
   <div id="banner" class="hidden"><div class="b1"></div><div class="b2"></div></div>
+  <div id="medal-toast" class="hidden"></div>
   <div id="tip" class="hidden"></div>
   <div id="attract-board" class="hidden"><div class="card"><h2>🌐 GLOBAL HIGH SCORES</h2><table class="hs" id="ab-rows"></table><p class="abfoot">FLY THE CAMPAIGN TO JOIN THE BOARD</p></div></div>
   <div id="demo-badge" class="hidden"><span>DEMO</span> · PRESS ANY KEY OR TAP</div>
@@ -342,9 +380,10 @@ body.calm .odbar.full i, body.calm #t-od.ready, body.calm .vsmark { animation: n
       <button class="mbtn" data-act="online">ONLINE<small>1V1 DOGFIGHTS, ANYONE, ANYWHERE</small></button>
       <button class="mbtn" data-act="demo">SMART DEMO<small>WATCH THE AI THINK</small></button>
       <div class="mbtn row2"><button class="mbtn" data-act="howto">HOW TO PLAY</button><button class="mbtn" data-act="scores">HIGH SCORES</button></div>
-      <button class="mbtn" data-act="options">OPTIONS</button>
+      <div class="mbtn row2"><button class="mbtn" data-act="medals">MEDALS</button><button class="mbtn" data-act="options">OPTIONS</button></div>
     </div>
     <div class="world clickable" id="world"></div>
+    <div class="medals clickable" id="medalpanel"></div>
     <div class="foot"><a href="../">← EDITIONS</a><span class="vtxt"></span></div>
   </section>
 
@@ -427,6 +466,13 @@ body.calm .odbar.full i, body.calm #t-od.ready, body.calm .vsmark { animation: n
       <h3>PILOTS</h3>
       <p>Beat a rival in the campaign to unlock them as your own pilot. Each one flies with a perk.</p>
       <div class="pugrid" id="pilotlist"></div>
+      <h3>HANGAR &amp; MEDALS</h3>
+      <ul>
+        <li><b>Ore</b> — in the campaign every rock you break, hit you land and round you win puts ore in your hold (gold rocks are rich).</li>
+        <li><b>Hangar</b> — between sectors, spend ore on hull plating, cannon, afterburners, reactor and a shield emitter. Upgrades last for the rest of the run.</li>
+        <li><b>Medals</b> — every sector hides three challenges, from flawless rounds to beating the Maw in under two minutes. Earned medals stay on this device; see them from the title screen.</li>
+        <li><b>Damage</b> — a hurt ship smokes, sparks and finally burns. Gamepads rumble and phones buzz on hits and boosts (Options → Vibration).</li>
+      </ul>
       <h3>VERSUS, ONLINE &amp; REPLAYS</h3>
       <ul>
         <li><b>Versus</b> — a friend on the same screen (keyboard halves or two gamepads) or a CPU rival, with optional party twists.</li>
@@ -465,9 +511,10 @@ body.calm .odbar.full i, body.calm #t-od.ready, body.calm .vsmark { animation: n
       <div class="opt"><span>CAMERA</span><div class="seg" data-opt="camera"><button data-v="auto">TILTED</button><button data-v="top">TOP DOWN</button><button data-v="low">LOW ANGLE</button></div><span></span></div>
       <div class="opt"><span>SCREEN SHAKE</span><div class="seg" data-opt="shake"><button data-v="1">ON</button><button data-v="0.4">LOW</button><button data-v="0">OFF</button></div><span></span></div>
       <div class="opt"><span>FLASHING</span><div class="seg" data-opt="flash"><button data-v="full">FULL</button><button data-v="reduced">REDUCED</button></div><span></span></div>
+      <div class="opt"><span>VIBRATION</span><div class="seg" data-opt="rumble"><button data-v="on">ON</button><button data-v="off">OFF</button></div><span></span></div>
       <div class="opt"><span>INSTANT REPLAY</span><div class="seg" data-opt="replay"><button data-v="on">ON</button><button data-v="off">OFF</button></div><span></span></div>
       <div class="opt"><span>AI OVERLAY</span><div class="seg" data-opt="tactical"><button data-v="demo">DEMO ONLY</button><button data-v="always">ALWAYS</button><button data-v="never">NEVER</button></div><span></span></div>
-      <p style="margin-top:10px">Graphics changes apply on the next reload. Reduced flashing tones down screen flashes, shockwaves, colour fringing and lightning strobes. Narration off silences the announcer and the rival pilots. The AI overlay draws each pilot's aim, course and the threats it is tracking.</p>
+      <p style="margin-top:10px">Graphics changes apply on the next reload. Reduced flashing tones down screen flashes, shockwaves, colour fringing and lightning strobes. Narration off silences the announcer and the rival pilots. Vibration shakes gamepads and phones when you are hit, boost or overdrive. The AI overlay draws each pilot's aim, course and the threats it is tracking.</p>
       <div class="cardfoot"><button class="mbtn" data-act="back">BACK</button></div>
     </div>
   </section>
@@ -479,6 +526,26 @@ body.calm .odbar.full i, body.calm #t-od.ready, body.calm .vsmark { animation: n
       <button class="mbtn" data-act="options">OPTIONS</button>
       <button class="mbtn" data-act="howto">HOW TO PLAY</button>
       <button class="mbtn" data-act="quit">QUIT TO TITLE</button>
+    </div>
+  </section>
+
+  <section class="screen dim hidden" id="hangar">
+    <div class="card" style="max-width:760px">
+      <h2>HANGAR</h2>
+      <p>Spend the ore you mined on your ship before the next sector. Upgrades last for the rest of this campaign, continues included.</p>
+      <div id="hg-orebox">◆ <b id="hg-ore">0</b> ORE</div>
+      <div class="upgrid" id="upgrid"></div>
+      <div class="cardfoot"><button class="mbtn primary" id="hg-next" data-act="launch">LAUNCH →</button></div>
+    </div>
+  </section>
+
+  <section class="screen dim hidden" id="medals">
+    <div class="card">
+      <h2>MEDALS</h2>
+      <p class="rank" id="med-count"></p>
+      <p>Three challenges in every sector of the campaign, on any difficulty.</p>
+      <div id="medlist"></div>
+      <div class="cardfoot"><button class="mbtn" data-act="back">BACK</button></div>
     </div>
   </section>
 
@@ -511,6 +578,6 @@ body.calm .odbar.full i, body.calm #t-od.ready, body.calm .vsmark { animation: n
     </div>
   </section>
 </div>
-<script type="module" src="js/main.js?v=1"></script>
+<script type="module" src="js/main.js?v=2"></script>
 </body>
 </html>

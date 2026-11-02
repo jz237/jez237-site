@@ -1,21 +1,21 @@
 // Asteroids 2026 — game flow, controls, scoring, commentary and the frame loop.
 import * as THREE from '../vendor/three.module.min.js';
-import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS, PERKS, ROSTER, SHADOW, TWISTS, ROCK_KINDS } from './config.js?v=1';
-import { makeWorld, step, drainEvents, STEP, shipOf } from './sim.js?v=1';
-import { AIPilot } from './ai.js?v=1';
-import { Renderer, pickQuality, CALM } from './render.js?v=1';
-import { Director } from './director.js?v=1';
-import { Audio } from './audio.js?v=1';
-import { Input } from './input.js?v=1';
-import { UI, $, hex } from './ui.js?v=1';
-import { Scores } from './scores.js?v=1';
-import { Recorder } from './replay.js?v=1';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=1';
+import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS, PERKS, ROSTER, SHADOW, TWISTS, ROCK_KINDS, UPGRADES, UP_KEYS, UP_COST, MEDALS } from './config.js?v=2';
+import { makeWorld, step, drainEvents, STEP, shipOf } from './sim.js?v=2';
+import { AIPilot } from './ai.js?v=2';
+import { Renderer, pickQuality, CALM } from './render.js?v=2';
+import { Director } from './director.js?v=2';
+import { Audio } from './audio.js?v=2';
+import { Input } from './input.js?v=2';
+import { UI, $, hex } from './ui.js?v=2';
+import { Scores } from './scores.js?v=2';
+import { Recorder } from './replay.js?v=2';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=2';
 
 // ------------------------------------------------------------------ settings
 const SKEY = 'a26.settings.v1';
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const settings = { music: 55, sfx: 90, voice: 100, quality: 'auto', camera: 'auto', shake: '1', tactical: 'demo', flash: reduceMotion ? 'reduced' : 'full', replay: 'on', talk: 'on', twists: {}, vsOpp: 'human', pilot: 'p1', pilot2: 'p1' };
+const settings = { music: 55, sfx: 90, voice: 100, quality: 'auto', camera: 'auto', shake: '1', tactical: 'demo', flash: reduceMotion ? 'reduced' : 'full', replay: 'on', talk: 'on', rumble: 'on', twists: {}, vsOpp: 'human', pilot: 'p1', pilot2: 'p1' };
 try { Object.assign(settings, JSON.parse(localStorage.getItem(SKEY) || '{}')); } catch { /* defaults */ }
 const saveSettings = () => { try { localStorage.setItem(SKEY, JSON.stringify(settings)); } catch { /* ignore */ } };
 const params = new URLSearchParams(location.search);
@@ -48,6 +48,7 @@ const G = {
   stage: 0, diff: 'normal', score: 0, continues: 3, matchT: 0, round: 1, wins: { 1: 0, '-1': 0 }, vsArenas: [],
   idleT: 0, tipT: 0, tipI: 0, acc: 0, hitstop: 0, paused: false, simOn: false, timers: [], says: new Map(),
   autopilot: params.has('autoplay'), fade: 0, menuCam: true, ko: null, stageStats: null, closeT: 0,
+  ore: 0, up: {}, ch: null, newMedals: [],
 };
 window.__a26 = { G, R, D, A, I, settings, REC, NET };
 
@@ -98,6 +99,55 @@ function unlock(k) {
   return true;
 }
 const lockHint = (k) => (k === 'maw' ? 'FINISH THE CAMPAIGN' : `BEAT ${PILOTS[k].name} IN THE CAMPAIGN`);
+
+// ------------------------------------------------------------------ medals (three challenges per sector)
+const MKEY = 'a26.medals.v1';
+const medals = new Set();
+try { for (const k of JSON.parse(localStorage.getItem(MKEY) || '[]')) if (MEDALS.some((m) => m.id === k)) medals.add(k); } catch { /* none yet */ }
+function award(id) {
+  if (G.mode !== 'campaign' || medals.has(id)) return;
+  const m = MEDALS.find((q) => q.id === id);
+  if (!m) return;
+  medals.add(id);
+  try { localStorage.setItem(MKEY, JSON.stringify([...medals])); } catch { /* private mode */ }
+  G.newMedals.push(m);
+  const el = $('medal-toast');
+  el.innerHTML = `<i>🏅</i><div><small>MEDAL EARNED · ${ARENAS[m.sector].name}</small><b>${m.name}</b><span>${m.desc}</span></div>`;
+  el.classList.remove('hidden', 'go');
+  void el.offsetWidth;
+  el.classList.add('go');
+  clearTimeout(G.medalT);
+  G.medalT = setTimeout(() => el.classList.add('hidden'), 4200);
+  A.play('gold', { gap: 0, vol: 0.7, noSlow: true });
+}
+function renderMedalPanel() {
+  const n = medals.size;
+  $('medalpanel').innerHTML = `<h4>🏅 MEDALS <b>${n} / ${MEDALS.length}</b></h4><div class="mgrid">${ARENAS.map((A2, s) => `<div class="mrow"><span>${A2.name}</span>${MEDALS.filter((m) => m.sector === s).map((m) => `<i class="${medals.has(m.id) ? 'on' : ''}" title="${m.name}"></i>`).join('')}</div>`).join('')}</div>`;
+  const b = document.querySelector('[data-act="medals"]');
+  if (b) b.innerHTML = `MEDALS <small>${n} / ${MEDALS.length}</small>`;
+}
+function buildMedals() {
+  $('medlist').innerHTML = ARENAS.map((A2, s) => `<h3>SECTOR ${s + 1} · ${A2.name}</h3><div class="pugrid">${MEDALS.filter((m) => m.sector === s).map((m) => {
+    const on = medals.has(m.id);
+    return `<div class="pu medal ${on ? 'on' : ''}" style="--fc:${on ? '#ffd23f' : '#3a4460'}"><i>${on ? '🏅' : '○'}</i><div><b>${m.name}</b><span>${m.desc}</span></div></div>`;
+  }).join('')}</div>`).join('');
+  $('med-count').textContent = `${medals.size} OF ${MEDALS.length} EARNED`;
+}
+// challenge counters for the sector being flown
+const newChallenge = () => ({ gold: 0, shards: 0, snipes: 0, struck: 0, swallowed: 0, gates: 0, dodges: 0 });
+
+// ------------------------------------------------------------------ rumble: gamepads shake, phones buzz
+function rumble(side, strong, weak, ms) {
+  if (settings.rumble === 'off' || G.mode === 'demo' || G.mode === 'attract' || !isHuman(side)) return;
+  const pads = I.pads();
+  const two = G.mode === 'versus' && !solo();
+  const list = two ? [pads[side === 1 ? 0 : 1]] : pads.slice(0, 1);
+  for (const g of list) {
+    const act = g && g.vibrationActuator;
+    if (act && act.playEffect) act.playEffect('dual-rumble', { duration: ms, strongMagnitude: Math.min(1, strong), weakMagnitude: Math.min(1, weak) }).catch(() => {});
+  }
+  if (I.isTouch && !two && navigator.vibrate) { try { navigator.vibrate(Math.round(ms * 0.6)); } catch { /* not allowed */ } }
+}
 function humanPilot(key, slot = 1, title) {
   const base = slot === 2 ? HUMAN2 : HUMAN;
   if (!PILOTS[key]) return { ...base, pilot: 'p1', title: title || base.title, blurb: `${PERKS.p1.name} — ${PERKS.p1.desc}` };
@@ -129,7 +179,7 @@ function startMatch(cfg) {
     looks[s] = h ? h.look : c.persona.look;
   }
   if (boss) hull[1] = F.bossHull;
-  const W = makeWorld({ arena: cfg.arena, seed: cfg.seed ?? ((Math.random() * 1e9) | 0), boss, perks, looks, hull, twists: cfg.twists, diffBoss: cfg.diffBoss ?? 1 });
+  const W = makeWorld({ arena: cfg.arena, seed: cfg.seed ?? ((Math.random() * 1e9) | 0), boss, perks, looks, hull, twists: cfg.twists, diffBoss: cfg.diffBoss ?? 1, up: cfg.up });
   G.W = W; G.ai = {}; G.aiList = []; G.humans = []; G.cfg = cfg; G.ko = null;
   for (const s of [1, -1]) {
     const c = cfg.sides[s];
@@ -181,6 +231,7 @@ async function renderWorld() {
   $('world').innerHTML = `<h4>🌐 WORLD TOP 5</h4><ol>${rows || `<li class="note">${g === null ? 'Global board offline' : 'No scores yet — be the first!'}</li>`}</ol>`;
 }
 $('world').addEventListener('click', () => { if (G.state === 'title') { A.play('uiok', { gap: 0 }); openSub('scores'); } });
+$('medalpanel').addEventListener('click', () => { if (G.state === 'title') { A.play('uiok', { gap: 0 }); openSub('medals'); } });
 
 async function showAttractBoard() {
   const g = await HS.fresh(120000);
@@ -200,6 +251,7 @@ function goTitle() {
   backTo = 'title';
   G.state = 'title';
   renderWorld();
+  renderMedalPanel();
   G.idleT = 0;
   startAttract();
   U.hideBanner();
@@ -217,6 +269,8 @@ function startCampaign(diff, pilot = 'p1') {
   G.stage = params.has('stage') ? Math.max(0, Math.min(4, +params.get('stage') - 1)) : 0;
   G.score = 0;
   G.continues = 3;
+  G.ore = 0;
+  G.up = {};
   stageIntro();
 }
 
@@ -225,7 +279,7 @@ function campaignMatch() {
   const me = G.p1Pilot || 'p1';
   const pilot = rivalPersona(LADDER[G.stage], me);
   const you = humanPilot(me, 1, me === 'p1' ? 'CHALLENGER' : `YOU · ${PERKS[me].name}`);
-  startMatch({ arena: G.stage, diffAI: DIFFICULTY[G.diff].ai, diffBoss: DIFFICULTY[G.diff].boss, sides: { 1: { kind: 'human', human: you, who: 'solo' }, '-1': { kind: 'ai', persona: pilot } } });
+  startMatch({ arena: G.stage, diffAI: DIFFICULTY[G.diff].ai, diffBoss: DIFFICULTY[G.diff].boss, up: { 1: G.up }, sides: { 1: { kind: 'human', human: you, who: 'solo' }, '-1': { kind: 'ai', persona: pilot } } });
   return { pilot, you, me };
 }
 function newStageStats() { return { rocks: 0, hits: 0, shards: 0, pickups: 0, dodges: 0, taken: 0, gold: 0, eyes: 0, time: 0 }; }
@@ -237,12 +291,14 @@ function stageIntro() {
   G.round = 1;
   G.wins = { 1: 0, '-1': 0 };
   G.stageStats = newStageStats();
+  G.ch = newChallenge();
+  G.newMedals = [];
   const { pilot, you, me } = campaignMatch();
   D.setMode(camMode());
   G.simOn = false;
   G.state = 'vs';
   const fmt = pilot.boss ? 'THE FINAL STAND' : 'BEST OF THREE';
-  fillVs(G.sides[1], G.sides[-1], `SECTOR ${G.stage + 1} / 5 · <b>${ARENAS[G.stage].name}</b> · ${fmt}`, me === 'p1' ? 'A fast ship, a hot cannon and a belt full of rocks.' : you.blurb, pilot.blurb);
+  fillVs(G.sides[1], G.sides[-1], `SECTOR ${G.stage + 1} / 5 · <b>${ARENAS[G.stage].name}</b> · ${fmt}`, (me === 'p1' ? 'A fast ship, a hot cannon and a belt full of rocks.' : you.blurb) + upLine(), pilot.blurb);
   U.show('vs');
   U.setHud(false);
   A.playMusic(ARENAS[G.stage].music);
@@ -360,16 +416,27 @@ function showTouch() {
 }
 
 function updateMid() {
+  $('ore').classList.add('hidden');
   $('arena-name').textContent = G.W ? G.W.arena.name : '';
   const sc = $('score');
   if (G.mode === 'campaign') {
     $('stage-line').textContent = G.stage === 4 ? `THE FINAL STAND · ${DIFFICULTY[G.diff].label}` : `SECTOR ${G.stage + 1} / 5 · ROUND ${G.round} · ${G.wins[1]} – ${G.wins[-1]}`;
     sc.classList.remove('hidden'); sc.textContent = G.score.toLocaleString();
+    $('ore').classList.remove('hidden'); $('ore').textContent = `◆ ${G.ore} ORE`;
   } else if (G.mode === 'versus') { $('stage-line').textContent = `ROUND ${G.round} · ${G.wins[1]} – ${G.wins[-1]}`; sc.classList.add('hidden'); }
   else if (G.mode === 'online') { const me = soloSide(); $('stage-line').textContent = `ONLINE · ROUND ${G.round} · ${G.wins[me]} – ${G.wins[-me]}`; sc.classList.add('hidden'); }
   else { $('stage-line').textContent = 'AI vs AI · DEMO'; sc.classList.add('hidden'); }
 }
 
+function addOre(n) {
+  if (G.mode !== 'campaign' || (G.state !== 'play' && G.state !== 'ko')) return;
+  G.ore += n;
+  $('ore').textContent = `◆ ${G.ore} ORE`;
+}
+const upLine = () => {
+  const l = UP_KEYS.filter((k) => G.up[k]).map((k) => `${UPGRADES[k].name} ${'I'.repeat(G.up[k])}`);
+  return l.length ? `<br><span class="twl">${l.join(' · ')}</span>` : '';
+};
 function addScore(n, x, z, label, force) {
   if (G.mode !== 'campaign' || (G.state !== 'play' && !force)) return;
   const v = Math.round(n * DIFFICULTY[G.diff].scoreMul);
@@ -398,6 +465,7 @@ function onKO(e) {
   const info = { n: W.n, side: e.side, x: e.x, z: e.z };
   D.slowMo(0.22, 2.4);
   D.addTrauma(1);
+  if (G.mode !== 'campaign') { rumble(e.side, 1, 1, 700); rumble(winner, 0.4, 0.6, 400); }
   A.play('ko', { gap: 0, noSlow: true });
   A.play('shipboom', { gap: 0, x: e.x, noSlow: true });
   if (G.mode === 'attract') { after(3.5, () => { if (G.mode === 'attract') { randomAIMatch(false); G.mode = 'attract'; applyVolumes(); } }); return; }
@@ -409,7 +477,19 @@ function onKO(e) {
     G.wins[winner]++;
     foldStats();
     const match = G.wins[winner] >= roundsToWin();
-    if (won) addScore(1500 + (flawless ? 1500 : 0), e.x, e.z, flawless ? 'FLAWLESS' : 'KO', true);
+    if (won) {
+      addScore(1500 + (flawless ? 1500 : 0), e.x, e.z, flawless ? 'FLAWLESS' : 'KO', true);
+      G.ore += 10;
+      if (flawless && G.stage < 4) award(`s${G.stage + 1}flaw`);
+      if (match) {
+        const C = G.ch || newChallenge(), S = G.stageStats;
+        if (G.stage === 0 && G.wins[-1] === 0) award('s1sweep');
+        if (G.stage === 1 && C.struck === 0) award('s2storm');
+        if (G.stage === 2 && C.swallowed === 0) award('s3escape');
+        if (G.stage === 4 && S.time < 120) award('s5fast');
+        if (G.stage === 4 && S.taken <= 3) award('s5clean');
+      }
+    }
     if (match) {
       after(1.3, () => ann(!won ? 'defeat' : comeback ? 'comeback' : flawless ? 'perfect' : 'victory', 0, KEY));
       after(2.6, () => pilotSay(-1, won ? 'lose' : 'win', { key: true, chance: 0.35 }));
@@ -419,6 +499,7 @@ function onKO(e) {
     U.showBanner(won ? (boss ? 'THE MAW FALLS' : 'K.O.!') : 'SHIP DOWN', match ? (won ? (boss ? 'THE BELT IS SAFE' : `${G.sides[-1].name} IS DOWN`) : `${G.sides[-1].name} WINS`) : `ROUND ${G.round} · ${G.wins[1]} – ${G.wins[-1]}`, won ? '#39f3ff' : '#ff3040', 3.6);
     if (match) after(3.4, () => withReplay(info, () => (won ? stageResults() : continueScreen())));
     else after(4.4, () => withReplay(info, () => { G.round++; campaignMatch(); countdown(); }, true));
+    rumble(1, won ? 0.4 : 1, won ? 0.6 : 1, won ? 400 : 700);
   } else if (G.mode === 'versus') {
     G.wins[winner]++;
     const match = G.wins[winner] >= 2;
@@ -465,15 +546,18 @@ function stageResults() {
   ];
   $('res-title').textContent = G.stage === 4 ? 'THE MAW FALLS' : `SECTOR ${G.stage + 1} CLEAR`;
   $('res-stats').innerHTML = rows.map(([a, b]) => `<span>${a}</span><span>${b}</span>`).join('') + (mul !== 1 ? `<span>DIFFICULTY</span><span>×${mul}</span>` : '')
-    + (fresh ? `<span class="unl">🔓 NEW PILOT</span><span class="unl">${PILOTS[beaten].name} · ${PERKS[beaten].name}</span>` : '');
+    + (fresh ? `<span class="unl">🔓 NEW PILOT</span><span class="unl">${PILOTS[beaten].name} · ${PERKS[beaten].name}</span>` : '')
+    + G.newMedals.map((m) => `<span class="unl">🏅 MEDAL</span><span class="unl">${m.name}</span>`).join('')
+    + (G.stage < 4 ? `<span>ORE IN THE HOLD</span><span>◆ ${G.ore}</span>` : '');
+  G.newMedals = [];
   if (fresh) after(0.9, () => ann('unlocked', 0, KEY));
   else after(0.6, () => ann('stageclear', 0, { key: true, chance: 0.5 }));
   $('res-total').textContent = G.score.toLocaleString();
-  $('res-next').textContent = G.stage === 4 ? 'CHAMPION →' : 'NEXT SECTOR →';
+  $('res-next').textContent = G.stage === 4 ? 'CHAMPION →' : 'HANGAR →';
   G.state = 'results';
   G.resultsNext = () => {
     if (G.stage === 4) champion();
-    else { G.stage++; stageIntro(); }
+    else openHangar();
   };
   U.show('results');
   menuSel(0);
@@ -660,6 +744,7 @@ function openSub(id) {
   G.state = id;
   if (id === 'howto') buildHowto();
   if (id === 'options') buildOptions();
+  if (id === 'medals') buildMedals();
   if (id === 'scores') return showScores(false);
   U.show(id);
   menuSel(0);
@@ -680,6 +765,7 @@ document.getElementById('ui').addEventListener('click', (e) => {
   if (act || diff) A.play('uiok', { gap: 0 });
   if (diff) return pickThen('CAMPAIGN · YOUR PILOT', (k) => startCampaign(diff, k), { def: settings.pilot });
   if (b.dataset.pilot) return pickPilot(b.dataset.pilot);
+  if (b.dataset.up) return buyUpgrade(b.dataset.up);
   if (b.dataset.opp) { settings.vsOpp = b.dataset.opp; saveSettings(); A.play('uimove', { gap: 0 }); return renderVsetup(); }
   if (b.dataset.tw) { const tw = settings.twists || (settings.twists = {}); tw[b.dataset.tw] = !tw[b.dataset.tw]; saveSettings(); A.play('uimove', { gap: 0 }); return renderVsetup(); }
   switch (act) {
@@ -694,7 +780,8 @@ document.getElementById('ui').addEventListener('click', (e) => {
     case 'on-cancel': NET.close(); showOnline(); break;
     case 'on-copy': copyInvite(b); break;
     case 'demo': startDemo(); break;
-    case 'howto': case 'options': case 'scores': openSub(act); break;
+    case 'howto': case 'options': case 'scores': case 'medals': openSub(act); break;
+    case 'launch': if (G.state === 'hangar') { G.stage++; stageIntro(); } break;
     case 'back': back(); break;
     case 'resume': resume(); break;
     case 'quit': G.paused = false; A.muffle(false); goTitle(); break;
@@ -758,7 +845,7 @@ I.on('dash', (who) => dash(who));
 I.on('od', (who) => overdrive(who));
 I.on('pause', () => {
   if (G.state === 'pause') return resume();
-  if (['howto', 'options', 'scores', 'difficulty', 'scores-end', 'pilot', 'vsetup', 'online', 'online-wait', 'online-join'].includes(G.state)) return back();
+  if (['howto', 'options', 'scores', 'medals', 'difficulty', 'scores-end', 'pilot', 'vsetup', 'online', 'online-wait', 'online-join'].includes(G.state)) return back();
   pause();
 });
 I.on('any', () => {
@@ -800,7 +887,7 @@ I.on('fire', (who, src) => {
   if (MENU_STATES.includes(G.state)) { const b = visibleButtons()[G.menuI]; if (b) b.click(); }
   if (G.state === 'initials') saveIni();
 });
-const MENU_STATES = ['title', 'difficulty', 'pause', 'results', 'cont', 'howto', 'options', 'scores', 'scores-end', 'pilot', 'vsetup', 'online', 'online-wait', 'online-join'];
+const MENU_STATES = ['title', 'difficulty', 'pause', 'results', 'cont', 'howto', 'options', 'scores', 'medals', 'hangar', 'scores-end', 'pilot', 'vsetup', 'online', 'online-wait', 'online-join'];
 
 // ------------------------------------------------------------------ control
 function controls(W, dt) {
@@ -845,7 +932,11 @@ function handleEvents(list) {
         else if (e.kind === 'ice') A.play('ice', { x: e.x, vol: 0.45, gap: 0.05 });
         else if (e.kind === 'gold') { A.play('gold', { x: e.x, vol: 0.8, gap: 0 }); if (!attract && e.side) { const p = R.project(e.x, 1, e.z); U.pop(p.x, p.y, 'GOLD!', '#ffd23f'); } }
         D.addTrauma(big ? 0.12 : 0.04);
-        if (e.side === 1) addScore(ROCK_PTS[e.size] * (ROCK_KINDS[e.kind] ? ROCK_KINDS[e.kind].score : 1), e.x, e.z, e.kind === 'gold' ? 'GOLD' : e.size >= 3);
+        if (e.side === 1) {
+          addScore(ROCK_PTS[e.size] * (ROCK_KINDS[e.kind] ? ROCK_KINDS[e.kind].score : 1), e.x, e.z, e.kind === 'gold' ? 'GOLD' : e.size >= 3);
+          addOre([0, 1, 2, 3, 4][e.size] + (e.kind === 'gold' ? 12 : 0));
+          if (e.kind === 'gold' && G.ch && G.mode === 'campaign') { G.ch.gold++; if (G.stage === 0 && G.ch.gold >= 3) award('s1gold'); }
+        }
         break;
       }
       case 'chip': A.play('rockhit', { x: e.x, vol: 0.35, gap: 0.03 }); break;
@@ -864,15 +955,25 @@ function handleEvents(list) {
           else if (e.by && G.sides[e.by] && G.sides[e.by].persona) pilotSay(e.by, e.src === 'shard' ? 'taunt' : 'score', { chance: 0.3 });
         }
         if (human && G.mode !== 'demo') U.hurt();
-        if (e.by === 1 && e.side === -1) addScore(e.src === 'shard' ? 300 : e.src === 'ram' ? 200 : 150, e.x, e.z, e.src === 'shard');
+        rumble(e.side, 0.7 + 0.15 * e.dmg, 0.6, 160 + 70 * e.dmg);
+        if (e.by === 1 && e.side === -1) {
+          addScore(e.src === 'shard' ? 300 : e.src === 'ram' ? 200 : 150, e.x, e.z, e.src === 'shard');
+          addOre(e.src === 'shard' ? 5 : 2);
+          if (e.src === 'shard' && G.ch && G.mode === 'campaign' && G.state === 'play') { G.ch.shards++; if (G.stage === 1 && G.ch.shards >= 3) award('s2shard'); }
+        }
+        if (e.side === 1 && G.ch && G.mode === 'campaign') {
+          if (e.src === 'storm' || e.src === 'arc') G.ch.struck++;
+          if (e.src === 'hole') G.ch.swallowed++;
+        }
         break;
       }
-      case 'shield': A.play('shieldhit', { x: e.x, vol: 0.8, gap: 0 }); break;
+      case 'shield': A.play('shieldhit', { x: e.x, vol: 0.8, gap: 0 }); rumble(e.side, 0.3, 0.6, 110); break;
       case 'dodge': {
         if (!attract && isHuman(e.side) && now() - G.closeT > 1.2) { G.closeT = now(); const p = R.project(e.x, 1, e.z); U.pop(p.x, p.y - 20, 'CLOSE CALL', '#9affff', 'small'); addScore(25); }
+        if (e.side === 1 && G.ch && G.mode === 'campaign' && G.state === 'play') { G.ch.dodges++; if (G.stage === 3 && G.ch.dodges >= 5) award('s4dare'); }
         break;
       }
-      case 'bump': A.play('bump', { x: e.x, vol: 0.25 + (e.k2 || 0) * 0.5, gap: 0.08 }); break;
+      case 'bump': A.play('bump', { x: e.x, vol: 0.25 + (e.k2 || 0) * 0.5, gap: 0.08 }); if (e.side && (e.k2 || 0) > 0.3) rumble(e.side, 0.25 * e.k2, 0.35, 70); break;
       case 'boom': if (!e.small) { A.play('boom_big', { x: e.x, vol: 0.9, gap: 0 }); A.play('mineboom', { x: e.x, vol: 0.5, gap: 0 }); D.addTrauma(0.35); } else A.play('boom_small', { x: e.x, vol: 0.5 }); break;
       case 'mineboom': A.play('mineboom', { x: e.x, vol: 0.8, gap: 0 }); D.addTrauma(0.3); break;
       case 'ko': onKO(e); break;
@@ -887,16 +988,18 @@ function handleEvents(list) {
           ann(def.voice, 60, { chance: 0.2 });
         }
         if (e.side === 1) addScore(50);
+        rumble(e.side, 0, 0.35, 60);
+        if (e.snipe && e.side === 1 && G.ch && G.mode === 'campaign' && G.state === 'play') { G.ch.snipes++; if (G.stage === 2 && G.ch.snipes >= 3) award('s3snipe'); }
         break;
       }
-      case 'dash': A.play('dash', { x: e.x, vol: isHuman(e.side) ? 0.6 : 0.4, gap: 0 }); break;
-      case 'od': A.play('overdrive', { gap: 0 }); D.addTrauma(0.3); if (!attract) ann('overdrive', 60, { chance: 0.2 }); break;
+      case 'dash': A.play('dash', { x: e.x, vol: isHuman(e.side) ? 0.6 : 0.4, gap: 0 }); rumble(e.side, 0.1, 0.45, 90); break;
+      case 'od': A.play('overdrive', { gap: 0 }); D.addTrauma(0.3); rumble(e.side, 0.5, 0.7, 320); if (!attract) ann('overdrive', 60, { chance: 0.2 }); break;
       case 'wave': A.play('wave', { vol: 0.5, gap: 0 }); if (!attract) ann('wave', 90, { chance: 0.15 }); break;
       case 'strikewarn': A.play('beep', { x: e.x, vol: 0.25, gap: 0 }); break;
       case 'strike': A.play('storm', { x: e.x, gap: 0, vol: 0.85 }); D.addTrauma(0.25); if (!attract) ann('storm', 120, { chance: 0.12 }); break;
       case 'cometwarn': A.play('alarm', { vol: 0.25, gap: 0 }); break;
       case 'comet': A.play('comet', { x: e.x, vol: 0.8, gap: 0 }); if (!attract) ann('comet', 120, { chance: 0.15 }); break;
-      case 'portal': A.play('portal', { x: e.x, vol: 0.55 }); break;
+      case 'portal': A.play('portal', { x: e.x, vol: 0.55 }); if (e.ship === 1 && G.ch && G.mode === 'campaign' && G.state === 'play') { G.ch.gates++; if (G.stage === 3 && G.ch.gates >= 6) award('s4gate'); } break;
       case 'eat': A.play(e.ship ? 'well' : 'boom_small', { x: e.x, vol: e.ship ? 0.7 : 0.25, gap: 0.1 }); break;
       case 'nova': A.play('nova', { x: e.x, gap: 0 }); D.addTrauma(0.6); break;
       case 'well': A.play('well', { x: e.x, vol: 0.7 }); break;
@@ -914,6 +1017,7 @@ function handleEvents(list) {
         D.addTrauma(0.6);
         if (!attract) { const p = R.project(e.x, 1.4, e.z); U.pop(p.x, p.y, e.left ? `EYE DOWN · ${e.left} LEFT` : 'ALL EYES DOWN', '#ffd23f', 'big'); }
         addScore(1000, e.x, e.z);
+        addOre(15);
         break;
       }
       case 'phase2': {
@@ -922,6 +1026,8 @@ function handleEvents(list) {
         D.slowMo(0.3, 1.2);
         if (!attract) { U.showBanner('PHASE 2', 'THE CORE IS EXPOSED', '#ff2a48', 2.2); pilotSay(-1, 'phase2', KEY); }
         addScore(2000, e.x, e.z);
+        addOre(20);
+        if (G.mode === 'campaign' && G.stage === 4 && G.matchT < 60) award('s5eyes');
         break;
       }
     }
@@ -962,6 +1068,54 @@ function pickPilot(k) {
   const cb = pickCb;
   pickCb = null;
   cb(k);
+}
+
+// ------------------------------------------------------------------ the hangar (between campaign sectors)
+function openHangar() {
+  clearTimers();
+  G.state = 'hangar';
+  renderHangar();
+  U.show('hangar');
+  const btns = visibleButtons();
+  const first = btns.findIndex((b) => b.dataset.up && !b.classList.contains('poor') && !b.classList.contains('max'));
+  menuSel(first >= 0 ? first : btns.length - 1);
+}
+function renderHangar() {
+  $('hg-ore').textContent = G.ore;
+  $('hg-next').textContent = G.stage + 1 === 4 ? 'LAUNCH → THE MAW' : `LAUNCH → SECTOR ${G.stage + 2}`;
+  $('upgrid').innerHTML = UP_KEYS.map((k) => {
+    const D2 = UPGRADES[k], lv = G.up[k] || 0, max = lv >= 3, cost = UP_COST[lv], can = !max && G.ore >= cost;
+    return `<button class="mbtn upg ${max ? 'max' : can ? '' : 'poor'}" data-up="${k}" style="--uc:${hex(D2.color)}"><i>${D2.glyph}</i><b>${D2.name}</b>`
+      + `<span class="lvl">${[0, 1, 2].map((i) => `<em class="${i < lv ? 'on' : ''}"></em>`).join('')}</span>`
+      + `<small>${max ? 'FULLY UPGRADED' : D2.lv[lv]}</small><span class="cost">${max ? 'MAX' : '◆ ' + cost}</span></button>`;
+  }).join('');
+}
+function buyUpgrade(k) {
+  if (G.state !== 'hangar') return;
+  const lv = G.up[k] || 0;
+  if (lv >= 3 || G.ore < UP_COST[lv]) {
+    A.play('uiback', { gap: 0 });
+    const o = $('hg-orebox');
+    o.classList.remove('short'); void o.offsetWidth; o.classList.add('short');
+    return;
+  }
+  G.ore -= UP_COST[lv];
+  G.up[k] = lv + 1;
+  A.play('repair', { gap: 0, vol: 0.7 });
+  const i = G.menuI;
+  renderHangar();
+  menuSel(i);
+}
+// tests: spend the ore on the cheapest upgrades, then launch
+function hangarAuto() {
+  if (G.state !== 'hangar') return;
+  for (;;) {
+    const k = UP_KEYS.filter((q) => (G.up[q] || 0) < 3 && G.ore >= UP_COST[G.up[q] || 0]).sort((a, b) => (G.up[a] || 0) - (G.up[b] || 0))[0];
+    if (!k) break;
+    buyUpgrade(k);
+  }
+  G.stage++;
+  stageIntro();
 }
 
 // ------------------------------------------------------------------ versus setup
@@ -1403,6 +1557,6 @@ requestAnimationFrame(frame);
 // test hooks
 Object.assign(window.__a26, {
   tick: (dt, n = 1) => { for (let i = 0; i < n; i++) tick(dt); },
-  startDemo, startCampaign, startVersus, goTitle, enterTitle, endRun, unlock, startReplay, choosePilot, openVersus,
+  startDemo, startCampaign, startVersus, goTitle, enterTitle, endRun, unlock, startReplay, choosePilot, openVersus, hangarAuto, award, medals,
   online: { openOnline, showOnline, onlineQuick, onlineHost, onlineJoin, setPilot: (k) => { G.onPilot = k; } },
 });

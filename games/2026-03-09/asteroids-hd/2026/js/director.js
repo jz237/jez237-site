@@ -2,8 +2,8 @@
 // cuts between broadcast shots and, because it can forecast every shot and shard against every ship,
 // sees a big hit coming and drops into slow motion on the right camera before it lands.
 import * as THREE from '../vendor/three.module.min.js';
-import { F } from './config.js?v=1';
-import { dX, dZ, fwd } from './sim.js?v=1';
+import { F } from './config.js?v=2';
+import { dX, dZ, fwd } from './sim.js?v=2';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 const { AW, AH } = F;

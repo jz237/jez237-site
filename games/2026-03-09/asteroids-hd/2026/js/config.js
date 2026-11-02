@@ -1,5 +1,5 @@
 // Asteroids 2026 — tuning, pilots, sectors, power-ups and party twists.
-export const VERSION = 'v1.0.0';
+export const VERSION = 'v1.1.0';
 
 // World units. The belt is a wrap-around rectangle on the XZ plane: x in [-AW, AW], z in [-AH, AH].
 // Screen up is -z. A heading of 0 points up the screen; positive angles turn clockwise.
@@ -127,6 +127,36 @@ export const DIFFICULTY = {
   normal: { label: 'NORMAL', scoreMul: 1, ai: { aim: 1, react: 1, fire: 1, dodge: 1 }, boss: 1 },
   hard: { label: 'HARD', scoreMul: 1.5, ai: { aim: 0.6, react: 0.7, fire: 1.2, dodge: 1.15 }, boss: 1.25 },
 };
+
+// Campaign hangar: ore you mine buys upgrades between sectors (they last for the rest of the run)
+export const UP_COST = [60, 110, 170];
+export const UPGRADES = {
+  hull: { name: 'HULL PLATING', glyph: '⬢', color: 0x4dff8a, lv: ['+2 hull', '+4 hull', '+6 hull'] },
+  cannon: { name: 'CANNON', glyph: '»', color: 0xffd23f, lv: ['Fires 12% faster', 'Fires 24% faster', '24% faster + twin-linked shots'] },
+  boost: { name: 'AFTERBURNERS', glyph: '➤', color: 0x9affff, lv: ['Boost recharges 20% faster', 'Boost recharges 40% faster', 'Boost recharges 60% faster'] },
+  od: { name: 'REACTOR', glyph: '✦', color: 0xffa02a, lv: ['Overdrive charges 25% faster, lasts +1 s', 'Charges 50% faster, lasts +2 s', 'Charges 75% faster, lasts +3 s'] },
+  shield: { name: 'SHIELD EMITTER', glyph: '⬡', color: 0x6ad8ff, lv: ['Start every round behind a 1-hit shield', '2-hit shield', '3-hit shield'] },
+};
+export const UP_KEYS = Object.keys(UPGRADES);
+
+// Medals: three challenges per sector, earned in the campaign on any difficulty
+export const MEDALS = [
+  { id: 's1flaw', sector: 0, name: 'UNSCRATCHED', desc: 'Win a round in Kuiper Drift without losing any hull' },
+  { id: 's1sweep', sector: 0, name: 'CLEAN SWEEP', desc: 'Beat Razor two rounds to nil' },
+  { id: 's1gold', sector: 0, name: 'GOLD DIGGER', desc: 'Break three gold rocks in Kuiper Drift' },
+  { id: 's2flaw', sector: 1, name: 'UNSCRATCHED', desc: 'Win a round in the Ion Storm without losing any hull' },
+  { id: 's2storm', sector: 1, name: 'STORM CHASER', desc: 'Beat Lyra without being hit by lightning or a crystal arc' },
+  { id: 's2shard', sector: 1, name: 'SHARD MASTER', desc: 'Land three shard strikes in the Ion Storm' },
+  { id: 's3flaw', sector: 2, name: 'UNSCRATCHED', desc: 'Win a round at the Event Horizon without losing any hull' },
+  { id: 's3escape', sector: 2, name: 'ESCAPE VELOCITY', desc: 'Beat Grit without ever falling into the black hole' },
+  { id: 's3snipe', sector: 2, name: 'SNIPER', desc: 'Claim three power-ups by shooting them at the Event Horizon' },
+  { id: 's4flaw', sector: 3, name: 'UNSCRATCHED', desc: 'Win a round in Comet Lane without losing any hull' },
+  { id: 's4gate', sector: 3, name: 'WORMHOLE ACE', desc: 'Fly through the warp gates six times in Comet Lane' },
+  { id: 's4dare', sector: 3, name: 'DAREDEVIL', desc: 'Boost through danger five times in Comet Lane' },
+  { id: 's5fast', sector: 4, name: 'SPEED KILL', desc: 'Defeat the Maw in under two minutes' },
+  { id: 's5clean', sector: 4, name: 'UNTOUCHABLE', desc: 'Defeat the Maw losing three hull or less' },
+  { id: 's5eyes', sector: 4, name: 'EYE SURGEON', desc: 'Shut all four of the Maw\'s eyes within a minute' },
+];
 
 // Versus party twists
 export const TWISTS = {

@@ -1,7 +1,7 @@
 // The belt: a deterministic 120 Hz simulation. Everything random comes from the world's own RNG
 // (W.rs), so a cloned world fed the same ship inputs replays a fight exactly (instant replays).
 // Nothing outside step() may change W during a recorded match.
-import { F, ARENAS, POWERUPS, POWERUP_KEYS, PERKS } from './config.js?v=1';
+import { F, ARENAS, POWERUPS, POWERUP_KEYS, PERKS } from './config.js?v=2';
 
 export const STEP = 1 / 120;
 const { AW, AH } = F;
@@ -58,16 +58,19 @@ export function makeWorld(o = {}) {
     portals: [], hole: null, boss: null, ev: [], over: false, winner: 0, overT: 0,
     stats: { 1: STATS(), '-1': STATS() }, perk: { 1: o.perks?.[1] || {}, '-1': o.perks?.[-1] || {} },
     waveT: 6, waves: 0, orbCD: 4, stormT: 6, cometT: 7, arcT: 0, bossDiff: o.diffBoss ?? 1, predict: false, claims: [],
+    up: { 1: { ...NO_UP, ...(o.up?.[1] || {}) }, '-1': { ...NO_UP, ...(o.up?.[-1] || {}) } },
   });
   const tiny = W.tw.tiny ? 0.6 : 1;
-  const hullFor = (s) => (W.tw.glass ? 3 : o.hull?.[s] ?? F.hull);
+  const hullFor = (s) => (W.tw.glass ? 3 : (o.hull?.[s] ?? F.hull) + 2 * W.up[s].hull);
   if (A.hazard === 'boss' && o.boss) {
-    W.ships.push(newShip(W.nextId++, 1, 0, AH * 0.62, 0, { hp: o.hull?.[1] ?? F.bossHull, look: o.looks?.[1] }));
+    W.ships.push(newShip(W.nextId++, 1, 0, AH * 0.62, 0, { hp: (o.hull?.[1] ?? F.bossHull) + 2 * W.up[1].hull, look: o.looks?.[1] }));
     makeBoss(W);
   } else {
     W.ships.push(newShip(W.nextId++, 1, -AW * 0.62, AH * 0.18, Math.PI / 2, { hp: hullFor(1), r: F.shipR * tiny, look: o.looks?.[1] }));
     W.ships.push(newShip(W.nextId++, -1, AW * 0.62, -AH * 0.18, -Math.PI / 2, { hp: hullFor(-1), r: F.shipR * tiny, look: o.looks?.[-1] }));
   }
+  // the shield emitter: every round starts behind a few hits of shield
+  for (const s of W.ships) if (W.up[s.side].shield) { s.fx.shield = W.up[s.side].shield; s.fx.shieldT = 600; }
   if (A.hazard === 'hole') W.hole = { x: 0, z: 0, m: 1 };
   if (A.hazard === 'comet') W.portals = [{ x: -AW * 0.55, z: -AH * 0.42 }, { x: AW * 0.55, z: AH * 0.42 }];
   const big = W.tw.mega ? 4 : 3;
@@ -75,6 +78,11 @@ export function makeWorld(o = {}) {
   return W;
 }
 
+const NO_UP = { hull: 0, cannon: 0, boost: 0, od: 0, shield: 0 };
+// overdrive charge and length with the reactor upgrade
+export const odGain = (W, side) => (W.perk[side]?.od || 1) * (1 + 0.25 * (W.up?.[side]?.od || 0));
+export const odLen = (W, side) => F.odTime + (W.up?.[side]?.od || 0);
+export const dashLen = (W, side) => F.dashCD * (W.perk[side]?.dashCD || 1) * (1 - 0.2 * (W.up?.[side]?.boost || 0));
 export const shipsOf = (W, side) => W.ships.filter((s) => s.side === side);
 export const shipOf = (W, side) => W.ships.find((s) => s.side === side) || null;
 export function drainEvents(W) { const e = W.ev; W.ev = []; return e; }
@@ -138,7 +146,7 @@ function breakRock(W, rock, by, dirx = 0, dirz = 0, cause = 'shot') {
     st.rocks++;
     if (rock.kind === 'gold') st.gold++;
     const s = shipOf(W, by);
-    if (s) s.od = Math.min(F.odMax, s.od + [0, 3, 4, 6, 8][rock.size] * (W.perk[by].od || 1));
+    if (s) s.od = Math.min(F.odMax, s.od + [0, 3, 4, 6, 8][rock.size] * odGain(W, by));
   }
   // children
   if (rock.size > 1 && rock.kind !== 'comet') {
@@ -215,7 +223,7 @@ export function damageShip(W, s, dmg, src, by, x, z, o = {}) {
   if (s.noDamage && !o.area && !o.claim) return false;
   if (W.predict && s.remote) return false;
   if (W.predict && o.area && !o.claim) return false;
-  if (s.dashT > 0 && !o.area && !o.claim) { emit(W, { k: 'dodge', side: s.side, x: s.x, z: s.z }); W.stats[s.side].dodges++; return false; }
+  if (s.dashT > 0 && !o.area && !o.claim) { if (!s.dodged) { s.dodged = true; emit(W, { k: 'dodge', side: s.side, x: s.x, z: s.z }); W.stats[s.side].dodges++; } return false; }
   if (s.inv > 0 && !o.claim) return false;
   if (s.fx.shield > 0 && src !== 'hole') {
     s.fx.shield--;
@@ -226,7 +234,7 @@ export function damageShip(W, s, dmg, src, by, x, z, o = {}) {
   s.hp = Math.max(0, s.hp - dmg);
   s.inv = F.inv;
   s.hitT = W.t;
-  s.od = Math.min(F.odMax, s.od + 7 * dmg);
+  s.od = Math.min(F.odMax, s.od + 7 * dmg * (1 + 0.25 * (W.up[s.side]?.od || 0)));
   W.stats[s.side].taken += dmg;
   if (by && by !== s.side) { W.stats[by].hits++; if (src === 'shard') W.stats[by].shards++; if (src === 'ram') W.stats[by].rams++; }
   emit(W, { k: 'hit', side: s.side, by, dmg, src, x: x ?? s.x, z: z ?? s.z, hp: s.hp, claim: o.claimed ? 1 : 0, ref: o.ref });
@@ -419,7 +427,8 @@ function fireShip(W, s) {
   else if (s.fx.missiles > 0) { kind = 'missile'; speed = 30; life = 1.5; home = 1; }
   if (perk.lock && kind === 'shot') home = 2; // gentle lock-on
   const angs = s.fx.triple > 0 ? [-0.17, 0, 0.17] : [0];
-  const offs = W.tw.twin ? [-0.45, 0.45] : [0];
+  const up = W.up[s.side] || NO_UP;
+  const offs = W.tw.twin || up.cannon >= 3 ? [-0.45, 0.45] : [0];
   const inherit = 0.5;
   for (const da of angs) {
     const a = s.a + da;
@@ -432,7 +441,7 @@ function fireShip(W, s) {
   }
   W.stats[s.side].shots++;
   emit(W, { k: 'fire', side: s.side, id: s.id, x: s.x, z: s.z, kind, n: angs.length * offs.length });
-  let cd = F.fireCD;
+  let cd = F.fireCD * (1 - 0.12 * Math.min(2, up.cannon));
   if (s.fx.rapid > 0) cd *= 0.5;
   if (od) cd *= 0.55;
   if (kind === 'rail') cd *= 1.6;
@@ -519,7 +528,8 @@ export function step(W, dt) {
       inp.dash = false;
       if (s.dashCD <= 0) {
         s.dashT = F.dashTime;
-        s.dashCD = F.dashCD * (W.perk[s.side].dashCD || 1);
+        s.dodged = false;
+        s.dashCD = dashLen(W, s.side);
         const sp = Math.hypot(s.vx, s.vz);
         s.vx = fx * F.dashSpeed + s.vx * 0.25; s.vz = fz * F.dashSpeed + s.vz * 0.25;
         W.stats[s.side].dashes++;
@@ -528,7 +538,7 @@ export function step(W, dt) {
     }
     if (inp.od) {
       inp.od = false;
-      if (s.od >= F.odMax && s.odTime <= 0) { s.odTime = F.odTime; s.od = 0; emit(W, { k: 'od', side: s.side, x: s.x, z: s.z }); }
+      if (s.od >= F.odMax && s.odTime <= 0) { s.odTime = odLen(W, s.side); s.od = 0; emit(W, { k: 'od', side: s.side, x: s.x, z: s.z }); }
     }
     if (s.dashT > 0) s.dashT -= dt;
     else {
@@ -876,7 +886,7 @@ function bulletHits(W, b) {
       if (hit || s.fx.shield < sh) W.claims.push({ kind: 'hit', ref: b.id, dmg: b.dmg, src: 'bullet', by: b.side });
       return true;
     }
-    if (s.dashT > 0) { emit(W, { k: 'dodge', side: s.side, x: s.x, z: s.z }); W.stats[s.side].dodges++; continue; }
+    if (s.dashT > 0) { if (!s.dodged) { s.dodged = true; emit(W, { k: 'dodge', side: s.side, x: s.x, z: s.z }); W.stats[s.side].dodges++; } continue; }
     damageShip(W, s, b.dmg, 'bullet', b.side, b.x, b.z, { ref: b.id });
     if (b.kind === 'missile') emit(W, { k: 'boom', x: b.x, z: b.z, r: 1.2, side: b.side, src: 'missile', small: 1 });
     return true;

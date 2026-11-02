@@ -2,12 +2,12 @@
 // bends around gravity, instanced noise-carved rocks, ships with trails, shots, hazards, the Maw, and
 // every explosion. Everything is synced from the simulation each frame; nothing here changes W.
 import * as THREE from '../vendor/three.module.min.js';
-import { F, ARENAS, POWERUPS, KIND_INDEX, ROCK_KINDS } from './config.js?v=1';
-import { fwd, dX, dZ } from './sim.js?v=1';
-import { NOISE } from './shaders.js?v=1';
-import { Post } from './post.js?v=1';
-import { Sparks, Shards, patchShardMaterial, Lightning, Rings, Ribbon } from './fx.js?v=1';
-import { rockGeometry, buildShip, buildBoss, buildOrb, buildMine, buildDrone } from './models.js?v=1';
+import { F, ARENAS, POWERUPS, KIND_INDEX, ROCK_KINDS } from './config.js?v=2';
+import { fwd, dX, dZ } from './sim.js?v=2';
+import { NOISE } from './shaders.js?v=2';
+import { Post } from './post.js?v=2';
+import { Sparks, Smoke, Shards, patchShardMaterial, Lightning, Rings, Ribbon } from './fx.js?v=2';
+import { rockGeometry, buildShip, buildBoss, buildOrb, buildMine, buildDrone } from './models.js?v=2';
 
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
@@ -393,6 +393,8 @@ class ShipView {
     this.pts = [];
     this.lastA = ship.a;
     this.bank = 0;
+    this.baseHull = b.materials[0].color.clone();
+    this.smokeAcc = 0;
     this.id = ship.id;
     this.dead = false;
   }
@@ -418,10 +420,27 @@ class ShipView {
       e.s.scale.setScalar(0.7 + th * 0.5);
       e.f.position.set(e.p.x, e.p.y, e.p.z + 0.35 + th * 0.5);
       e.f.scale.set(0.5 + th * 0.4, 0.5 + th * 0.4, 1).multiplyScalar(0.9 + Math.random() * 0.25);
-      e.f.material.opacity = Math.min(1, k);
+      e.f.material.opacity = Math.min(1, k) * (s.max && s.hp / s.max <= 0.3 && Math.random() < 0.18 ? 0.15 : 1);
     }
     const flash = Math.max(0, 1 - (W.t - s.hitT) * 4);
-    for (const m of this.model.materials.slice(0, 1)) m.emissive.copy(this.color).multiplyScalar(flash * 2 + (s.odTime > 0 ? 0.4 : 0));
+    // damage you can see: scorched plating, smoke, sparks, then fire and a red warning pulse
+    const frac = s.max ? s.hp / s.max : 1;
+    const crit = frac <= 0.3 ? (0.5 + 0.5 * Math.sin(time * 9)) * 0.7 : 0;
+    const hull = this.model.materials[0];
+    hull.color.copy(this.baseHull).lerp(SCORCH, (1 - frac) * 0.6);
+    hull.emissive.copy(this.color).multiplyScalar(flash * 2 + (s.odTime > 0 ? 0.4 : 0)).add(_c.set(0xff2010).multiplyScalar(crit));
+    if (dt > 0 && frac < 0.7) {
+      const R = this.R, dmg = 1 - frac / 0.7;
+      const [hx, hz] = fwd(s.a);
+      const rx = s.x - hx * 1.1, rz = s.z - hz * 1.1;
+      this.smokeAcc += dt * (5 + dmg * 26);
+      while (this.smokeAcc > 1) {
+        this.smokeAcc--;
+        R.smoke.burst({ x: rx + (Math.random() - 0.5) * 0.6, y: 0.3, z: rz + (Math.random() - 0.5) * 0.6, n: 1, speed: 0.9, color: dmg > 0.6 ? 0x3a3638 : 0x7a7a84, intensity: 1, hueJitter: 0, size: 1.1 + dmg * 1.2, life: 1.1 + dmg * 0.9, drag: 1.4, flat: 0.3 });
+      }
+      if (frac < 0.5 && Math.random() < dt * (2.5 + dmg * 9)) R.sparks.burst({ x: s.x + (Math.random() - 0.5), y: 0.45, z: s.z + (Math.random() - 0.5), n: 7, speed: 5.5, color: 0xffb060, intensity: 3, size: 0.18, life: 0.35, flat: 0.5, drag: 3 });
+      if (frac <= 0.3 && Math.random() < dt * 30) R.glows.burst({ x: rx, y: 0.35, z: rz, n: 1, speed: 1.3, color: 0xff6a1a, intensity: 1.7, size: 0.8, life: 0.45, drag: 2, flat: 0.3 });
+    }
     this.halo.material.color.copy(this.color).multiplyScalar(0.45 + (s.odTime > 0 ? 0.8 : 0) + flash);
     const sh = s.fx.shield > 0 ? 0.55 + 0.25 * s.fx.shield : 0;
     this.shield.material.uniforms.uAmt.value += (sh - this.shield.material.uniforms.uAmt.value) * Math.min(1, dt * 10);
@@ -593,6 +612,8 @@ export class Renderer {
     S.add(this.sparks.points);
     this.glows = new Sparks(1400);
     S.add(this.glows.points);
+    this.smoke = new Smoke(q.sparks > 4000 ? 2600 : 1500);
+    S.add(this.smoke.points);
     this.debris = new Shards(q.debris);
     this.debris.mesh.geometry.dispose();
     this.debris.mesh.geometry = new THREE.DodecahedronGeometry(0.22, 0);
@@ -667,7 +688,7 @@ export class Renderer {
       this.ships.set(s.id, new ShipView(this, s, info ? info.color : s.side === 1 ? 0x39f3ff : 0xff4fd8, info ? info.accent || 0xffffff : 0xffffff));
     }
     for (const m of [this.orbs, this.mines, this.drones, this.wells, this.warns, this.lanes]) { for (const v of m.values()) this.scene.remove(v.group || v.mesh || v); m.clear(); }
-    this.sparks.clear(); this.glows.clear(); this.debris.clear(); this.embers.clear();
+    this.sparks.clear(); this.glows.clear(); this.smoke.clear(); this.debris.clear(); this.embers.clear();
     this.shocks = []; this.ripples = [];
     // hazards
     if (this.hole) { this.scene.remove(this.hole.group); this.hole = null; }
@@ -782,6 +803,7 @@ export class Renderer {
     // effects
     this.sparks.update(dt);
     this.glows.update(dt);
+    this.smoke.update(dt);
     this.debris.update(dt);
     this.embers.update(dt);
     this.rings.update(dt);
@@ -1040,6 +1062,7 @@ export class Renderer {
       const P = W.ships[0];
       if (P) ev.pupil.position.set(clamp(dX(e.x, P.x) * 0.04, -0.5, 0.5), 0.75, clamp(dZ(e.z, P.z) * 0.04, -0.5, 0.5));
       if (!alive && Math.random() < 0.3) this.sparks.burst({ x: e.x, y: 1.4, z: e.z, n: 1, speed: 1.5, color: 0xff6a2a, intensity: 1.5, size: 0.5, life: 0.8, drag: 1.5, flat: 0.5 });
+      if (!alive && dt > 0 && Math.random() < dt * 14) this.smoke.burst({ x: e.x, y: 1.4, z: e.z, n: 1, speed: 1.2, color: 0x1e1a1c, intensity: 1, hueJitter: 0, size: 1.6, life: 1.6, drag: 1.2, flat: 0.4 });
     });
     // beam
     const bm = B.beam;
@@ -1274,6 +1297,7 @@ export class Renderer {
     if (this.dust) this.dust.material.uniforms.uScale.value = h * pr * 0.9;
     this.sparks.mat.uniforms.uScale.value = h * pr * 0.9;
     this.glows.mat.uniforms.uScale.value = h * pr * 0.9;
+    this.smoke.mat.uniforms.uScale.value = h * pr * 0.9;
   }
 
   render(dt, look) {
@@ -1310,5 +1334,5 @@ export class Renderer {
 }
 const _p = new THREE.Vector3(), _v = new THREE.Vector3(), _va = new THREE.Vector3(), _vb = new THREE.Vector3(), _up = new THREE.Vector3(0, 1, 0);
 const _m4 = new THREE.Matrix4(), _q = new THREE.Quaternion(), _s = new THREE.Vector3(), _c = new THREE.Color(), _c2 = new THREE.Color();
-const WHITE = new THREE.Color(1, 1, 1), RED = new THREE.Color(1, 0.15, 0.2), GOLD = new THREE.Color(1, 0.8, 0.25);
+const WHITE = new THREE.Color(1, 1, 1), RED = new THREE.Color(1, 0.15, 0.2), GOLD = new THREE.Color(1, 0.8, 0.25), SCORCH = new THREE.Color(0x120d0a);
 const ONE3 = new THREE.Vector3(1, 1, 1);

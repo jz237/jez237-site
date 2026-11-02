@@ -99,7 +99,7 @@ export class Sparks {
       const fade = f * f * (3 - 2 * f);
       this.col[i * 3] = this.base[i * 4]; this.col[i * 3 + 1] = this.base[i * 4 + 1]; this.col[i * 3 + 2] = this.base[i * 4 + 2];
       this.alpha[i] = fade;
-      this.size[i] = this.base[i * 4 + 3] * (0.4 + 0.6 * f);
+      this.size[i] = this.base[i * 4 + 3] * (this.grow ? 1 + (1 - f) * 2.2 : 0.4 + 0.6 * f);
       i++;
     }
     const g = this.geo;
@@ -117,6 +117,26 @@ export class Sparks {
   }
 
   clear() { this.n = 0; this.geo.setDrawRange(0, 0); }
+}
+
+// ------------------------------------------------------------------ smoke: soft dark puffs that grow as they fade (normal blending)
+const S_FRAG = /* glsl */ `
+varying vec3 vColor; varying float vAlpha;
+void main(){
+  vec2 d = gl_PointCoord - 0.5;
+  float r = dot(d, d) * 4.0;
+  if (r > 1.0) discard;
+  float a = 1.0 - r; a = a * a * vAlpha * 0.8;
+  gl_FragColor = vec4(vColor, a);
+}`;
+export class Smoke extends Sparks {
+  constructor(cap) {
+    super(cap);
+    this.grow = true;
+    this.mat = new THREE.ShaderMaterial({ vertexShader: P_VERT, fragmentShader: S_FRAG, transparent: true, depthWrite: false, blending: THREE.NormalBlending, uniforms: { uScale: { value: 300 } } });
+    this.points.material = this.mat;
+    this.points.renderOrder = 4;
+  }
 }
 
 // ------------------------------------------------------------------ shards (shattered shield cells, core debris)

@@ -1,6 +1,6 @@
 // DOM: HUD panels, floating pop-ups, banners, power-up toasts and screen switching.
-import { F, POWERUPS } from './config.js?v=1';
-import { bossHP, bossMax } from './sim.js?v=1';
+import { F, POWERUPS } from './config.js?v=2';
+import { bossHP, bossMax, dashLen, odLen } from './sim.js?v=2';
 
 const $ = (id) => document.getElementById(id);
 const hex = (c) => '#' + c.toString(16).padStart(6, '0');
@@ -79,9 +79,9 @@ export class UI {
         last.hp = hk;
         el.pips.forEach((p, i) => { p.classList.toggle('on', i < ship.hp); p.classList.toggle('crit', ship.hp <= 2); });
       }
-      const dk = ship.dashCD <= 0 ? 100 : Math.round((1 - ship.dashCD / (F.dashCD * (W.perk[s].dashCD || 1))) * 100);
+      const dk = ship.dashCD <= 0 ? 100 : Math.round((1 - ship.dashCD / dashLen(W, s)) * 100);
       if (last.dash !== dk) { last.dash = dk; el.dashi.style.width = Math.max(0, dk) + '%'; el.dash.classList.toggle('ready', dk >= 100); }
-      const od = ship.odTime > 0 ? Math.round((ship.odTime / F.odTime) * 100) : Math.round(ship.od);
+      const od = ship.odTime > 0 ? Math.round((ship.odTime / odLen(W, s)) * 100) : Math.round(ship.od);
       if (last.od !== od) {
         last.od = od;
         el.odi.style.width = od + '%';

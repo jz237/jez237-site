@@ -1,9 +1,9 @@
 // Instant replays must reproduce the knockout exactly: run AI duels in every sector with the recorder,
 // then re-run the last seconds from the nearest clone and compare the knockout tick, side and position.
-import { makeWorld, step, drainEvents, STEP, shipOf } from '../../games/2026-03-09/asteroids-hd/2026/js/sim.js?v=1';
-import { AIPilot } from '../../games/2026-03-09/asteroids-hd/2026/js/ai.js?v=1';
-import { Recorder } from '../../games/2026-03-09/asteroids-hd/2026/js/replay.js?v=1';
-import { PILOTS, PERKS, DIFFICULTY } from '../../games/2026-03-09/asteroids-hd/2026/js/config.js?v=1';
+import { makeWorld, step, drainEvents, STEP, shipOf } from '../../games/2026-03-09/asteroids-hd/2026/js/sim.js?v=2';
+import { AIPilot } from '../../games/2026-03-09/asteroids-hd/2026/js/ai.js?v=2';
+import { Recorder } from '../../games/2026-03-09/asteroids-hd/2026/js/replay.js?v=2';
+import { PILOTS, PERKS, DIFFICULTY } from '../../games/2026-03-09/asteroids-hd/2026/js/config.js?v=2';
 
 const keys = ['razor', 'lyra', 'grit', 'cipher'];
 let ok = 0, bad = 0;
@@ -11,7 +11,8 @@ for (let arena = 0; arena < 5; arena++) {
   for (let m = 0; m < 2; m++) {
     const boss = arena === 4;
     const tw = m && !boss ? { twin: 1, hyper: 1 } : {};
-    const W = makeWorld({ arena, seed: 77 + arena * 13 + m, boss, twists: tw, perks: { 1: PERKS[keys[m]] } });
+    const up = m ? { 1: { hull: 3, cannon: 3, boost: 2, od: 2, shield: 2 } } : undefined;
+    const W = makeWorld({ arena, seed: 77 + arena * 13 + m, boss, twists: tw, perks: { 1: PERKS[keys[m]] }, up });
     const ais = [new AIPilot(W, shipOf(W, 1), PILOTS[keys[(arena + m) % 4]], DIFFICULTY.normal.ai)];
     if (!boss) ais.push(new AIPilot(W, shipOf(W, -1), PILOTS[keys[(arena + m + 1) % 4]], DIFFICULTY.normal.ai));
     const REC = new Recorder();

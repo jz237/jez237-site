@@ -19,6 +19,11 @@ Test hooks in the page: `?autoplay` (an AI flies your ship), `?demo`, `?stage=5`
 `window.__a26.tick(dt, n)` steps the game when the tab can't animate; `__a26.startDemo()`,
 `__a26.startCampaign('normal')`, `__a26.startVersus('p1', null)`, `__a26.online.*`, `__a26.NET.stat`.
 
+Campaign extras (v1.1): ore from rocks/hits/round wins buys hangar upgrades between sectors (`UPGRADES` in
+config.js; their effects live in `W.up` so replays stay exact), 15 sector medals (`MEDALS`, stored in localStorage
+`a26.medals.v1`, awarded in main.js), visible ship damage (smoke/sparks/fire in render.js) and gamepad/phone
+vibration (Options → Vibration). Test hooks: `__a26.hangarAuto()`, `__a26.award(id)`, `__a26.medals`.
+
 Online play shares the Steel Duel relay (`A26-` rooms, quick match `A26-Q-`); Steel Duel's room list hides them.
 The host runs the belt and streams snapshots; the guest flies its own ship locally, sends its shots (the host
 re-creates them by client id) and reports the hits it takes on its own screen.
