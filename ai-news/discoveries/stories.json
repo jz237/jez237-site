@@ -1,11 +1,26 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-11-01",
+  "updated": "2026-11-02",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-11-01",
+  "coverageEnd": "2026-11-02",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "category": "Research in action",
+      "evidenceKind": "early",
+      "modelNote": "Source-reported: Claude Fable 5/5.1 and Opus 5/5.5, plus GPT-5.6, for searches and checks; GPT-6 Astra and GPT-6.1 Sol/Terra for follow-up supervision and analysis.",
+      "sources": [
+        "https://github.com/Snowstar38/eclipses-by-appointment",
+        "https://github.com/Snowstar38/eclipses-by-appointment/blob/main/paper.html"
+      ],
+      "status": "Preliminary author report; no journal review or independent confirmation. “Confirmed” refers to the project’s own checks.",
+      "takeaway": "An amateur astronomer’s AI team reports 917 pairs of stars that dim as one passes in front of the other, found in existing telescope data. Its own checks classify 812 as confirmed and 105 as probable, offering targets for follow-up observations. A person directed the project; AI systems searched the data and rechecked signals. This expanded release is not independently confirmed or journal-reviewed, its catalogue searches cannot guarantee every pair is new, and the search method was already known.",
+      "title": "AI team expands a search for eclipsing star pairs · November 2 update",
+      "id": "d-1566834157588578438-ai-eclipsing-star-search-expanded",
+      "coveredOn": "2026-11-02",
+      "context": "🔬 **AI Discovery Watch · November 2, 2026**\n\n**AI team expands a search for eclipsing star pairs · November 2 update**\nAn amateur astronomer’s AI team reports 917 pairs of stars that dim as one passes in front of the other, found in existing telescope data. Its own checks classify 812 as confirmed and 105 as probable, offering targets for follow-up observations. A person directed the project; AI systems searched the data and rechecked signals. This expanded release is not independently confirmed or journal-reviewed, its catalogue searches cannot guarantee every pair is new, and the search method was already known.\n\n**AI used:** Source-reported: Claude Fable 5/5.1 and Opus 5/5.5, plus GPT-5.6, for searches and checks; GPT-6 Astra and GPT-6.1 Sol/Terra for follow-up supervision and analysis.\n**Evidence:** Preliminary author report; no journal review or independent confirmation. “Confirmed” refers to the project’s own checks.\nOriginal source: <https://github.com/Snowstar38/eclipses-by-appointment>\nSupporting source: <https://github.com/Snowstar38/eclipses-by-appointment/blob/main/paper.html>"
+    },
     {
       "id": "d-1566471305513934943-spectral-isometry-proof",
       "title": "An AI-written proof links a number to hidden mathematical structure",
