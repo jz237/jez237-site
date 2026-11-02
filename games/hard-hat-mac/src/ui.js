@@ -25,7 +25,7 @@ export class UI {
     document.querySelectorAll('.screen').forEach(s => s.classList.toggle('show', s.id === id));
     this.screen = id; this.focus = 0;
     if (id) { this.setFocus(0, false); }
-    $('touch').hidden = !(isTouch && id === null && this.g.state === 'play');
+    $('touch').hidden = !(isTouch && id === null && this.g.state === 'play' && !this.g.demo);
   }
   push(id) { this.stack.push(this.screen); this.show(id); }
   pop() { const s = this.stack.pop(); this.show(s ?? null); return s; }
@@ -57,6 +57,7 @@ export class UI {
     const g = this.g;
     switch (act) {
       case 'start': g.startGame(0); break;
+      case 'demo': g.startDemo(false); break;
       case 'select': this.buildSelect(); this.push('select'); break;
       case 'scores': this.push('scores'); this.loadScores(); break;
       case 'help': this.push('help'); break;
@@ -126,7 +127,9 @@ export class UI {
   }
   applyHud() { document.documentElement.style.setProperty('--hud-scale', settings.hud); $('h-fps').hidden = !settings.fps; }
   // ---- HUD
-  showHud(on) { this.hud.hidden = !on; $('touch').hidden = !(isTouch && on); }
+  showHud(on) { this.hud.hidden = !on; $('touch').hidden = !(isTouch && on && !this.g.demo); }
+  demo(on) { $('demo-banner').hidden = !on; $('h-bot').hidden = !on; $('demo-banner').querySelector('small').textContent = isTouch ? 'Tap STOP to play' : 'Press any key to play'; this.lastBot = null; }
+  botStatus(t) { if (t !== this.lastBot) { this.lastBot = t; $('h-bot').textContent = '🤖 ' + t; } }
   updateHud(s) {
     const L = this.lastHud;
     if (L.score !== s.score) { $('h-score').textContent = s.score.toLocaleString(); L.score = s.score; }

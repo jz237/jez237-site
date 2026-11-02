@@ -66,6 +66,11 @@ export class Elevator {
   }
 }
 
+// ---- danger(x, y, z): true when standing there now (or very soon) would hurt. Used by the demo bot.
+Elevator.prototype.danger = function (x, y, z) {
+  const d = this.d; return x > d.x0 - .4 && x < d.x1 + .4 && z > d.z0 - .4 && z < d.z1 + .4 && y < this.box.y0 - .1;
+};
+
 export class CraneMagnet {
   constructor(d, ctx) {
     const { world, M, group, B } = ctx; this.d = d; this.t = 0;
@@ -106,6 +111,15 @@ export class CraneMagnet {
       case 6: return [lerp(d.aB, d.aA, f), d.yHigh, 'swing'];
       default: return [d.aA, lerp(d.yHigh, d.yLow, f), 'down'];
     }
+  }
+  // seconds left in the current phase, and whether the plate is at stop A or B
+  phaseInfo() {
+    const P = this.P; let t = this.t % this.T, k = 0;
+    while (t > P[k]) { t -= P[k]; k++; }
+    return { k, left: P[k] - t, atA: k === 0, atB: k === 4 };
+  }
+  danger(x, y, z) {
+    const b = this.box; return this.phase === 'down' && b.y1 < 4 && x > b.x0 - .4 && x < b.x1 + .4 && z > b.z0 - .4 && z < b.z1 + .4 && y < b.y0;
   }
   apply(t, world) {
     const d = this.d, [a, y, ph] = this.state(t), s = d.size;
@@ -199,6 +213,8 @@ export class Bolts {
     }
   }
   clear() { for (const o of this.list) this.ctx.group.remove(o.ring, o.bolt); this.list.length = 0; this.timer = 4; }
+  danger(x, y, z) { return this.list.some(o => Math.abs(x - o.x) < .9 && Math.abs(z - o.z) < .9 && Math.abs(y - o.y) < .7); }
+  nearest(x, y, z) { let best = null, bd = 1.2; for (const o of this.list) { const d = Math.hypot(x - o.x, z - o.z); if (d < bd && Math.abs(y - o.y) < .7) { bd = d; best = o; } } return best; }
 }
 
 export class Pipes {
@@ -234,6 +250,13 @@ export class Pipes {
     }
   }
   clear() { for (const o of this.list) this.ctx.group.remove(o.m); this.list.length = 0; }
+  zone(x, y, z) { const d = this.d; return Math.abs(z - d.z) < 1.9 && y < d.r * 2; } // standing in the lane at all
+  danger(x, y, z, la = 1.5) {
+    const d = this.d; if (Math.abs(z - d.z) > 1.9 || y > d.r * 2) return false;
+    const dir = Math.sign(d.x1 - d.x0), pad = d.r + .9;
+    if (this.timer < la && Math.abs(x - d.x0) < 9) return true;
+    return this.list.some(o => { const a = o.x, b = o.x + dir * o.sp * la; return x > Math.min(a, b) - pad && x < Math.max(a, b) + pad; });
+  }
 }
 
 export class Press {
@@ -257,6 +280,7 @@ export class Press {
     const d = this.d; if (!game.frozen) this.t += dt * game.diff.hazard;
     const P = [2.0, .75, .12, .55, .9], T = 4.32; let t = this.t % T, k = 0;
     while (t > P[k]) { t -= P[k]; k++; }
+    this.k = k; this.left = P[k] - t;
     let y = this.up;
     if (k === 1) y = this.up + Math.sin(t * 40) * .02;
     if (k === 2) y = lerp(this.up, this.down, (t / P[2]) ** 2);
@@ -274,6 +298,12 @@ export class Press {
   }
 }
 
+Press.prototype.danger = function (x, y, z) {
+  const d = this.d, h = d.w / 2 + .5;
+  if (Math.abs(x - d.x) > h || Math.abs(z - d.z) > h || y < d.y - .3 || y > d.y + 1.2) return false;
+  return !(this.k === 0 && this.left > 1.15);
+};
+
 export class Vent {
   constructor(d, ctx) {
     const { M, group } = ctx; this.d = d; this.t = d.phase || 0;
@@ -284,6 +314,7 @@ export class Vent {
   update(dt, game) {
     const d = this.d; this.t += dt;
     const T = 4.2, t = this.t % T, warn = t > 2.6 && t < 3.2, blast = t >= 3.2;
+    this.tt = t;
     const pos = V.set(d.x, d.y + .2, d.z);
     if (Math.random() < (blast ? .9 : warn ? .5 : .08)) game.fx.steam(pos, blast ? 4 : 1, blast ? 9 : 2.5);
     if (blast && this.lastPhase !== 'blast') game.audio.play('steam', { pos, vol: 1 });
@@ -295,6 +326,11 @@ export class Vent {
     }
   }
 }
+
+Vent.prototype.danger = function (x, y, z) {
+  const d = this.d; if (Math.hypot(x - d.x, z - d.z) > 1.15 || Math.abs(y - d.y) > 1) return false;
+  return !((this.tt || 0) < 1.7);
+};
 
 export class Arc {
   constructor(d, ctx) {
@@ -318,6 +354,7 @@ export class Arc {
   update(dt, game) {
     const d = this.d; if (!game.frozen) this.t += dt * game.diff.hazard;
     const T = d.on + d.off, t = this.t % T, on = t > d.off, warn = !on && t > d.off - .6;
+    this.offLeft = on ? 0 : d.off - t;
     for (const [k, l] of this.lines.entries()) {
       l.visible = on || (warn && k === 0 && Math.random() < .3);
       if (!l.visible) continue;
@@ -334,6 +371,11 @@ export class Arc {
     if (on && !game.player.dead && Math.abs(b.x - d.x) < .3 + b.r && b.z > Math.min(d.z0, d.z1) && b.z < Math.max(d.z0, d.z1) && b.y > d.y - .3 && b.y < d.y + 2.2) game.hitPlayer('zap');
   }
 }
+
+Arc.prototype.danger = function (x, y, z) {
+  const d = this.d; if (Math.abs(x - d.x) > .85 || z < Math.min(d.z0, d.z1) || z > Math.max(d.z0, d.z1) || y < d.y - .3 || y > d.y + 2.2) return false;
+  return !(this.offLeft > 1.0);
+};
 
 export class Molten {
   constructor(d, ctx) {
@@ -371,6 +413,8 @@ export class Molten {
   }
 }
 
+Molten.prototype.danger = function (x, y, z) { const d = this.d; return x > d.x0 - .4 && x < d.x1 + .4 && z > d.z0 - .4 && z < d.z1 + .4 && y < d.y + 1; };
+
 export class Ladle {
   constructor(d, ctx) {
     const { M, group } = ctx; this.t = 3;
@@ -406,7 +450,7 @@ export class Wreck {
     return [d.px + (d.axis === 'z' ? 0 : o), d.py - d.L * Math.cos(th), d.pz + (d.axis === 'z' ? o : 0)];
   }
   update(dt, game) {
-    if (!game.frozen) this.t += dt * game.diff.hazard;
+    this.hz = game.diff.hazard; if (!game.frozen) this.t += dt * game.diff.hazard;
     const [x, y, z] = this.pos(this.t); this.ball.position.set(x, y, z);
     aimCable(this.cab, new THREE.Vector3(this.d.px, this.d.py, this.d.pz), this.ball.position);
     const b = game.player.body, cy = clamp(y, b.y + .3, b.y + b.h - .3);
@@ -419,6 +463,17 @@ export class Wreck {
     }
   }
 }
+
+// the whole volume the ball sweeps through at body height
+Wreck.prototype.zone = function (x, y, z) {
+  const d = this.d, reach = d.L * Math.sin(d.amp) + 1.4, low = d.py - d.L - 1.2;
+  if (y + 1.8 < low || y > d.py - d.L * Math.cos(d.amp) + 1) return false;
+  return d.axis === 'z' ? Math.abs(x - d.px) < 1.7 && Math.abs(z - d.pz) < reach : Math.abs(z - d.pz) < 1.7 && Math.abs(x - d.px) < reach;
+};
+Wreck.prototype.danger = function (x, y, z) {
+  for (let k = 0; k <= 5; k++) { const [bx, by, bz] = this.pos(this.t + k * .25 * (this.hz || 1)); if (Math.hypot(x - bx, y + .9 - by, z - bz) < 2) return true; }
+  return false;
+};
 
 export class Wind {
   constructor(d, ctx) { this.t = 0; this.next = 7; this.state = 'calm'; this.dir = 1; this.f = 0; }

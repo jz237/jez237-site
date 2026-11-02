@@ -7,7 +7,7 @@ import { clamp, angleDamp, rr, pick } from './util.js';
 const CELL = 0.5;
 
 // binary min-heap of [priority, id]
-class Heap {
+export class Heap {
   constructor() { this.a = []; }
   get size() { return this.a.length; }
   push(p, v) { const a = this.a; a.push([p, v]); let i = a.length - 1; while (i > 0) { const j = (i - 1) >> 1; if (a[j][0] <= a[i][0]) break; [a[i], a[j]] = [a[j], a[i]]; i = j; } }
@@ -25,9 +25,11 @@ export class NavGrid {
     const key = (i, j) => i * 100003 + j;
     this.key = key;
     for (let x = bx0 + CELL / 2, i = 0; x < bx1; x += CELL, i++) for (let z = bz0 + CELL / 2, j = 0; z < bz1; z += CELL, j++) {
-      const here = world.query(x - .25, z - .25, x + .25, z + .25).filter(b => !(b.noFloor || b.ghost || b.conv || b.dyn || b.socket) && b.y1 <= 30);
+      const here = world.query(x - .25, z - .25, x + .25, z + .25).filter(b => !(b.noFloor || b.ghost || b.dyn || b.socket) && b.y1 <= 30);
       const tops = [];
       for (const b of here) if (x >= b.x0 && x <= b.x1 && z >= b.z0 && z <= b.z1 && !tops.some(t => Math.abs(t - b.y1) < .1)) tops.push(b.y1);
+      // drop surfaces buried under another box (dirt under a concrete slab)
+      for (let k = tops.length - 1; k >= 0; k--) if (here.some(b => x > b.x0 && x < b.x1 && z > b.z0 && z < b.z1 && b.y0 < tops[k] + .04 && b.y1 > tops[k] + .04)) tops.splice(k, 1);
       for (const y of tops) {
         // the footprint must be supported at the same height (union of boxes, so deck seams are fine)
         const sup = (px, pz) => here.some(b => Math.abs(b.y1 - y) < .06 && px >= b.x0 && px <= b.x1 && pz >= b.z0 && pz <= b.z1);
@@ -35,18 +37,18 @@ export class NavGrid {
         if (avoid.some(a => x > a.x0 && x < a.x1 && z > a.z0 && z < a.z1)) continue;
         // headroom
         let blocked = false;
-        for (const b of world.query(x - .2, z - .2, x + .2, z + .2)) {
+        for (const b of world.query(x - .3, z - .3, x + .3, z + .3)) {
           if (b.ghost || b.dyn || b.socket) continue;
-          if (x + .2 > b.x0 && x - .2 < b.x1 && z + .2 > b.z0 && z - .2 < b.z1 && b.y0 < y + 1.75 && b.y1 > y + .3) { blocked = true; break; }
+          if (x + .3 > b.x0 && x - .3 < b.x1 && z + .3 > b.z0 && z - .3 < b.z1 && b.y0 < y + 1.75 && b.y1 > y + .3) { blocked = true; break; }
         }
         if (blocked) continue;
-        const n = { i, j, x, y, z, links: [], id: this.nodes.length };
+        const n = { i, j, x, y, z, links: [], id: this.nodes.length, conv: here.some(b => b.conv && Math.abs(b.y1 - y) < .06 && x >= b.x0 && x <= b.x1 && z >= b.z0 && z <= b.z1) };
         this.nodes.push(n);
         const k = key(i, j); let c = this.cols.get(k); if (!c) this.cols.set(k, c = []); c.push(n);
       }
     }
     this.bx0 = bx0; this.bz0 = bz0;
-    const at = (i, j, y) => (this.cols.get(key(i, j)) || []).find(n => Math.abs(n.y - y) < .36);
+    const at = (i, j, y) => { let best = null; for (const n of this.cols.get(key(i, j)) || []) if (Math.abs(n.y - y) < .36 && (!best || Math.abs(n.y - y) < Math.abs(best.y - y))) best = n; return best; };
     for (const n of this.nodes) for (const [di, dj] of [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]]) {
       const m = at(n.i + di, n.j + dj, n.y); if (!m) continue;
       if (di && dj && (!at(n.i + di, n.j, n.y) || !at(n.i, n.j + dj, n.y))) continue;
@@ -54,10 +56,47 @@ export class NavGrid {
     }
     for (const L of ladders) {
       const bot = this.nearest(L.x + L.fx * .55, L.y0, L.z + L.fz * .55, 1.2), top = this.nearest(L.x - L.fx * .8, L.y1, L.z - L.fz * .8, 1.2);
-      if (!bot || !top || Math.abs(bot.y - L.y0) > .4 || Math.abs(top.y - L.y1) > .4) continue;
+      if (!top || Math.abs(top.y - L.y1) > .4) continue;
       const c = (L.y1 - L.y0) * 1.6 / CELL;
-      bot.links.push({ to: top.id, cost: c, ladder: L, up: true }); top.links.push({ to: bot.id, cost: c, ladder: L, up: false });
+      if (bot && Math.abs(bot.y - L.y0) < .4) { bot.links.push({ to: top.id, cost: c, ladder: L, up: true }); top.links.push({ to: bot.id, cost: c, ladder: L, up: false }); continue; }
+      // ladder that ends in mid-air (the silo): climb down, then drop to whatever is below
+      const below = this.nearest(L.x + L.fx * .6, L.y0 - .1, L.z + L.fz * .6, 1.5);
+      if (below && below.y > L.y0 - 4.6) top.links.push({ to: below.id, cost: c + 6, ladder: L, up: false, dropEnd: true });
     }
+    // safe drops off ledges (<= 4.6 m) for the demo bot; enemies never use them
+    for (const n of this.nodes) for (const [di, dj] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      if (n.conv || at(n.i + di, n.j + dj, n.y)) continue;
+      for (let k = 1; k <= 3; k++) {
+        let m = null;
+        for (const c of this.cols.get(key(n.i + di * k, n.j + dj * k)) || []) if (!c.conv && c.y < n.y - .6 && c.y > n.y - 4.6 && (!m || c.y > m.y)) m = c;
+        if (!m) continue;
+        if (!world.segmentBlocked(n.x, n.y + 1, n.z, m.x, n.y + 1, m.z, .25) && !world.segmentBlocked(m.x, n.y + .3, m.z, m.x, m.y + 1.2, m.z, .3))
+          n.links.push({ to: m.id, cost: 4 + k + (n.y - m.y) * .8, drop: true });
+        break;
+      }
+    }
+  }
+  addRide(fromPos, toPos, ride, cost) {
+    const a = this.nearest(fromPos.x, fromPos.y + .3, fromPos.z, 2.5), b = this.nearest(toPos.x, toPos.y + .3, toPos.z, 2.5);
+    if (a && b) a.links.push({ to: b.id, cost, ride });
+    return !!(a && b);
+  }
+  // Dijkstra for the demo bot: cheapest path from start to any node where ok(node) holds.
+  search(start, ok, maxCost = 6000) {
+    if (!start) return null;
+    const N = this.nodes, g = new Map([[start.id, 0]]), came = new Map(), open = new Heap(), closed = new Set();
+    open.push(0, start.id);
+    while (open.size) {
+      const [c, cur] = open.pop();
+      if (closed.has(cur)) continue; closed.add(cur);
+      if (ok(N[cur])) { const out = [cur]; let k = cur; while (came.has(k)) { k = came.get(k); out.push(k); } return { path: out.reverse(), cost: c }; }
+      if (c > maxCost) break;
+      for (const l of N[cur].links) {
+        const ng = c + l.cost;
+        if (ng < (g.get(l.to) ?? Infinity)) { g.set(l.to, ng); came.set(l.to, cur); open.push(ng, l.to); }
+      }
+    }
+    return null;
   }
   nearest(x, y, z, maxD = 2.5) {
     const i0 = Math.floor((x - this.bx0) / CELL), j0 = Math.floor((z - this.bz0) / CELL), R = Math.ceil(maxD / CELL);
@@ -84,7 +123,7 @@ export class NavGrid {
       }
       const gc = g.get(cur);
       for (const l of N[cur].links) {
-        if (noLadders && l.ladder) continue;
+        if ((noLadders && l.ladder) || l.drop || l.ride || l.dropEnd || N[l.to].conv) continue;
         const ng = gc + l.cost;
         if (ng < (g.get(l.to) ?? Infinity)) { g.set(l.to, ng); came.set(l.to, cur); open.push(ng + h(N[l.to]), l.to); }
       }
@@ -93,7 +132,7 @@ export class NavGrid {
   }
   linkBetween(a, b) { return this.nodes[a].links.find(l => l.to === b); }
   randomNear(n, R = 10) {
-    for (let k = 0; k < 20; k++) { const m = pick(this.nodes); if (Math.hypot(m.x - n.x, m.z - n.z) < R && Math.abs(m.y - n.y) < 4.5) return m; }
+    for (let k = 0; k < 20; k++) { const m = pick(this.nodes); if (!m.conv && Math.hypot(m.x - n.x, m.z - n.z) < R && Math.abs(m.y - n.y) < 4.5) return m; }
     return n;
   }
 }
@@ -114,7 +153,7 @@ export class Enemy {
   }
   reset() {
     Object.assign(this.body, this.spawn, { vx: 0, vy: 0, vz: 0, onGround: false, ground: null });
-    this.state = 'patrol'; this.path = null; this.pi = 0; this.think = rr(0, .4); this.stun = 0; this.yaw = rr(0, 6); this.ladder = null;
+    this.state = 'patrol'; this.path = null; this.pi = 0; this.think = rr(0, .4); this.ko = 0; this.koFly = false; this.yaw = rr(0, 6); this.ladder = null;
     this.grace = 4; this.goal = null; this.stuckT = 0; this.lastPos = { x: this.body.x, z: this.body.z }; this.yankT = 0; this.yankSock = null; this.voiceCd = rr(2, 6); this.hitCd = 0;
     this.root.position.set(this.body.x, this.body.y, this.body.z);
   }
@@ -123,9 +162,14 @@ export class Enemy {
     const g = this.game, b = this.body, nav = g.level.nav, p = g.player, pb = p.body;
     this.voiceCd -= dt; this.hitCd -= dt; this.grace -= dt;
     if (g.frozen) return;
-    if (this.stun > 0) {
-      this.stun -= dt; b.vx = b.vz = 0; b.vy -= GRAVITY * dt; moveBody(g.world, b, dt);
-      if (this.stun <= 0) this.state = 'patrol';
+    if (this.ko > 0) {
+      // knocked out: slide to a stop, lie there, then get up groggy
+      this.ko -= dt;
+      const fr = b.onGround ? Math.exp(-7 * dt) : 1; b.vx *= fr; b.vz *= fr;
+      b.vy -= GRAVITY * dt; moveBody(g.world, b, dt);
+      if (b.onGround && this.koFly) { this.koFly = false; g.fx.dust(this.root.position, 10); g.audio.play('land', { pos: this.root.position, vol: .7, rate: .8 }); }
+      if (b.y < g.level.killY) { this.reset(); this.grace = 3; return; }
+      if (this.ko <= 0) { this.state = 'patrol'; this.grace = 1.2; this.think = .3; this.path = null; }
       return;
     }
     if (this.state === 'climb') { this.updateClimb(dt); return; }
@@ -234,19 +278,26 @@ export class Enemy {
     else if (!this.climbUp && b.y <= L.y0) { b.y = L.y0; this.endClimb(); }
     this.contact();
   }
+  // Hammer or stomp: fly back along (dx, dz), lie out cold. Returns true if the enemy was standing.
+  knockOut(dx, dz, power) {
+    const b = this.body, wasUp = this.ko <= 0;
+    this.ko = (this.kind === 'inspector' ? 6.5 : 8) / this.game.diff.speed;
+    this.state = 'ko'; this.ladder = null; this.yankSock = null; this.path = null; this.goal = null;
+    b.vx = dx * power; b.vz = dz * power; b.vy = Math.max(b.vy, 2 + power * .45); b.onGround = false; b.ground = null; this.koFly = true;
+    this.yaw = Math.atan2(-dx, -dz);
+    return wasUp;
+  }
   endClimb() { this.state = 'patrol'; this.ladder = null; this.think = 0; const p = this.path; if (p) this.pi = Math.min(this.pi + 1, p.length); }
   contact() {
     const g = this.game, p = g.player, pb = p.body, b = this.body;
-    if (p.dead || this.stun > 0) return;
+    if (p.dead || this.ko > 0) return;
     const dx = pb.x - b.x, dz = pb.z - b.z, d = Math.hypot(dx, dz), dy = pb.y - b.y;
     if (d > b.r + pb.r + .08 || dy > b.h + .3 || dy < -pb.h + .2) return;
     // stomp from above
     if (pb.vy < -1 && dy > b.h * .55) {
       if (this.K.stomp) {
-        this.stun = 6; this.state = 'stunned'; pb.vy = 11; p.airMax = pb.y;
-        g.audio.play('stomp', { vol: 1 }); g.audio.voice(this.kind === 'vandal' ? 'vd_ow' : 'dog_whine', .8, this.root.position);
-        g.addScore(250 * (p.combo = (p.combo || 0) + 1), this.root.position, true); g.fx.sparks(this.root.position.clone().setY(b.y + b.h), 10, 0xffe14a);
-        if (this.yankSock) this.yankSock = null;
+        pb.vy = 11; p.airMax = pb.y;
+        g.knockOut(this, -dx / (d || 1), -dz / (d || 1), 'stomp');
       } else { pb.vy = 9; pb.vx = dx / (d || 1) * 4; pb.vz = dz / (d || 1) * 4; p.airMax = pb.y; g.audio.play('stomp', { vol: .7, rate: 1.3 }); }
       return;
     }
@@ -260,7 +311,8 @@ export class Enemy {
     this.root.position.set(b.x, b.y, b.z); this.root.rotation.y = this.yaw;
     const frozen = this.game.frozen;
     let mode = 'idle';
-    if (this.stun > 0) mode = 'hurt';
+    if (this.ko > .9) mode = 'ko';
+    else if (this.ko > 0) mode = 'hurt';
     else if (this.state === 'climb') mode = 'climb';
     else if (this.state === 'yank') mode = 'yank';
     else if (Math.hypot(b.vx, b.vz) > .2) mode = 'walk';

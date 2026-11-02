@@ -60,7 +60,7 @@ export class Puppet {
     if (kind === 'mac') {
       mesh(new THREE.BoxGeometry(.07, .05, .02), std(0xd8b04a, .3, .9), 0, .02, .13 * S.belly + .005, this.spine);
       mesh(new RoundedBoxGeometry(.12, .14, .1, 2, .03), std(0x7a4b25, .7), .2, -.05, .02, this.spine);
-      const hammer = joint(this.spine, -.21, -.02, .02);
+      const hammer = this.beltHammer = joint(this.spine, -.21, -.02, .02);
       mesh(new THREE.CylinderGeometry(.015, .015, .28, 6), std(0x9b6b3a, .7), 0, -.1, 0, hammer);
       mesh(new THREE.BoxGeometry(.04, .04, .12), std(0x55575a, .4, .8), 0, .03, 0, hammer);
     }
@@ -120,6 +120,13 @@ export class Puppet {
       const can = mesh(new THREE.CylinderGeometry(.03, .03, .16, 10), std(0x22c55e, .35, .6), 0, -.04, .05, this.arms[1].hand);
       this.can = can;
     }
+    // hand hammer for knockout swings (Mac only): handle in the fist, head pointing forward
+    if (kind === 'mac') {
+      const hh = this.handHammer = new THREE.Group(); this.arms[1].hand.add(hh); hh.position.set(0, -.02, .02); hh.rotation.x = Math.PI / 2;
+      mesh(new THREE.CylinderGeometry(.02, .02, .42, 8), std(0x9b6b3a, .7), 0, .14, 0, hh);
+      mesh(new THREE.BoxGeometry(.075, .075, .2), std(0x55575a, .35, .85), 0, .34, 0, hh);
+      hh.visible = false;
+    }
     // rivet gun (Mac only, shown while riveting)
     if (kind === 'mac') {
       const gun = new THREE.Group(); this.arms[1].hand.add(gun); gun.position.set(0, -.04, .06);
@@ -139,7 +146,7 @@ export class Puppet {
       st.position.set(Math.cos(a) * .2, 0, Math.sin(a) * .2); this.stars.add(st);
     }
     this.root.traverse(o => { if (o.isMesh) o.castShadow = true; });
-    this.t = 0; this.phase = 0; this.squash = 1; this.squashV = 0; this.blink = 0;
+    this.t = 0; this.phase = 0; this.squash = 1; this.squashV = 0; this.blink = 0; this.lie = 0;
   }
   land(intensity = 1) { this.squashV -= 2.2 * intensity; }
   // p: { mode, speed(0..1), vy, carry ('girder'|'crate'|null), climbPhase, t, rivet }
@@ -211,6 +218,13 @@ export class Puppet {
         set(aL.sh, -3, 0, -.5); set(aR.sh, -3, 0, .5); lean = 1.5; hipsY = .18;
         break;
       }
+      case 'ko': {
+        this.stars.visible = true; this.stars.rotation.y = t * 7;
+        set(aL.sh, -2.6, 0, -1.2); set(aR.sh, -2.4, 0, 1.3); set(aL.el, -.4); set(aR.el, -.6);
+        set(lL.hip, -.5); set(lL.knee, .9); set(lR.hip, -.15); set(lR.knee, .3);
+        headY = Math.sin(t * 2.2) * .4;
+        break;
+      }
       case 'cheer': {
         const b = Math.abs(Math.sin(t * 7));
         set(aL.sh, -2.9 - b * .2, 0, -.35); set(aR.sh, -2.9 - b * .2, 0, .35); set(aL.el, -.3); set(aR.el, -.3);
@@ -226,8 +240,22 @@ export class Puppet {
     // carry overrides arms
     if (p.carry === 'girder') { set(aR.sh, -2.75, 0, .25); set(aR.el, -1.6); set(aL.sh, -2.2, 0, .5); set(aL.el, -1.2); }
     else if (p.carry === 'crate' || p.carry === 'beam') { set(aL.sh, -1.25, 0, -.15); set(aR.sh, -1.25, 0, .15); set(aL.el, -.45); set(aR.el, -.45); lean -= .05; }
+    // knockout swing: wind up, strike, recover
+    if (this.handHammer) { this.handHammer.visible = p.swing > 0; this.beltHammer.visible = !(p.swing > 0); }
+    if (p.swing > 0) {
+      const sw = p.swing, ease = (a, b, k) => a + (b - a) * (k < 0 ? 0 : k > 1 ? 1 : k * k * (3 - 2 * k));
+      let rx, el, tw, ln = 0;
+      if (sw < .35) { const k = sw / .35; rx = ease(0, -2.9, k); el = ease(-.3, -1.5, k); tw = ease(0, -.45, k); }
+      else if (sw < .55) { const k = (sw - .35) / .2; rx = ease(-2.9, -.55, k); el = ease(-1.5, -.15, k); tw = ease(-.45, .45, k); ln = .22 * k; }
+      else { const k = (sw - .55) / .45; rx = ease(-.55, 0, k); el = ease(-.15, -.3, k); tw = ease(.45, 0, k); ln = .22 * (1 - k); }
+      set(aR.sh, rx, 0, .25); set(aR.el, el); set(aL.sh, -.6, 0, -.35); set(aL.el, -.9);
+      twist += tw; lean += ln;
+    }
     this.hips.position.y = hipsY;
     this.spine.rotation.set(lean, twist, 0);
+    // lie flat on the back when knocked out (pivot at the feet)
+    this.lie += ((p.mode === 'ko' ? 1 : 0) - this.lie) * (1 - Math.exp(-12 * dt));
+    this.body.rotation.x = -1.45 * this.lie; this.body.position.y = .16 * this.lie;
     this.neck.rotation.set(-lean * .6 + headX, headY, 0);
     // squash & stretch spring
     this.squashV += (1 - this.squash) * 180 * dt; this.squashV *= Math.exp(-14 * dt); this.squash += this.squashV * dt;
@@ -268,12 +296,15 @@ export class Dog {
     this.t += dt; const k = clamp(p.speed || 0, 0, 1.5);
     this.phase += dt * (6 + 10 * k);
     const s = Math.sin(this.phase);
-    this.stars.visible = p.mode === 'hurt'; this.stars.rotation.y = this.t * 6;
+    this.stars.visible = p.mode === 'hurt' || p.mode === 'ko'; this.stars.rotation.y = this.t * 6;
+    this.lie = (this.lie || 0) + ((p.mode === 'ko' ? 1 : 0) - (this.lie || 0)) * (1 - Math.exp(-12 * dt));
     const moving = p.mode === 'walk' && k > .05;
     this.legs.forEach((l, i) => { l.rotation.x = moving ? Math.sin(this.phase + (i === 0 || i === 3 ? 0 : Math.PI)) * .7 * k : 0; });
     this.body.position.y = .45 + (moving ? Math.abs(s) * .04 : 0);
     this.tail.rotation.z = Math.sin(this.t * (p.mode === 'hurt' ? 3 : 14)) * .6; this.tail.rotation.x = -.5;
     this.head.rotation.x = p.mode === 'hurt' ? .4 : moving ? -.1 + s * .05 : Math.sin(this.t * 1.3) * .1;
-    this.body.rotation.z = p.mode === 'hurt' ? Math.sin(this.t * 5) * .2 : 0;
+    this.body.rotation.z = p.mode === 'hurt' ? Math.sin(this.t * 5) * .2 : 1.45 * this.lie;
+    this.body.position.y -= .22 * this.lie;
+    if (this.lie > .5) this.legs.forEach((l, i) => { l.rotation.x = 0; l.rotation.z = (i & 1 ? -.4 : .4); }); else this.legs.forEach(l => l.rotation.z = 0);
   }
 }

@@ -10,6 +10,7 @@ import { UI } from './ui.js';
 import { Player } from './player.js';
 import { Enemy } from './enemies.js';
 import { buildLevel } from './level.js';
+import { Bot } from './bot.js';
 import { LEVEL_INFO } from './levels.js';
 import { settings, saveSettings, progress, saveProgress, clamp, damp, angleDamp, wrapAngle, rr, isTouch } from './util.js';
 
@@ -58,6 +59,13 @@ class CamRig {
       this.yawT += inp.camX; this.pitch = clamp(this.pitch + inp.camY, .16, 1.2);
       if (inp.rotL) this.yawT += Math.PI / 4; if (inp.rotR) this.yawT -= Math.PI / 4;
       if (inp.recenter) this.yawT = this.yaw + wrapAngle(p.yaw + Math.PI - this.yaw);
+      if (game.demo && performance.now() - (game.input.lookT || 0) > 2500) {
+        // demo camera: settle behind Mac's direction of travel, face the ladder while climbing
+        let want = null;
+        if (p.state === 'climb' && p.ladder) want = Math.atan2(p.ladder.fx, p.ladder.fz) + .35;
+        else if (game.bot && Math.hypot(game.bot.sx, game.bot.sz) > .5 && Math.hypot(b.vx, b.vz) > 1.5) want = Math.atan2(-game.bot.sx, -game.bot.sz) + .3;
+        if (want !== null) this.yawT += wrapAngle(want - this.yawT) * (1 - Math.exp(-.6 * dt));
+      }
       if (game.level && game.level.indoor) this.yawT = clamp(this.yawT, -1.2, 1.2);
       this.yaw = damp(this.yaw, this.yawT, 12, dt);
       this.distT = clamp(this.distT + (inp.zoomStep || 0) * 1.3, 6, 22); this.dist = damp(this.dist, this.distT, 8, dt);
@@ -80,7 +88,7 @@ class Game {
   constructor() {
     this.state = 'boot'; this.time = 0; this.score = 0; this.lives = 3; this.round = 1; this.levelIndex = 0;
     this.wind = new THREE.Vector3(); this.frozen = false; this.freezeT = 0; this.diff = { speed: 1, hazard: 1 };
-    this.enemies = []; this.cheer = false; this.continued = false;
+    this.enemies = []; this.cheer = false; this.continued = false; this.timeScale = 1; this.kos = 0; this.hitStop = 0;
   }
   async boot() {
     const canvas = document.getElementById('gl');
@@ -118,8 +126,12 @@ class Game {
     };
     addEventListener('pointerdown', unlock); addEventListener('keydown', unlock); addEventListener('touchstart', unlock);
     document.addEventListener('visibilitychange', () => { if (document.hidden && this.state === 'play') this.pause(); });
-    this.last = performance.now();
+    this.last = performance.now(); this.lastInput = this.last;
+    addEventListener('pointermove', () => { this.lastInput = performance.now(); }, { passive: true });
     requestAnimationFrame(t => this.frame(t));
+    const qs = new URLSearchParams(location.search);
+    if (qs.has('demo')) this.startDemo(false);
+    this.noAttract = qs.has('noattract') || navigator.webdriver;
   }
   onQuality(q) {
     const s = q >= 3 ? 4096 : q >= 2 ? 2048 : 1024, sh = this.env.sun.shadow;
@@ -140,10 +152,10 @@ class Game {
     this.diff = { speed: Math.min(1.5, 1 + (this.round - 1) * .12), hazard: Math.min(1.6, 1 + (this.round - 1) * .15) };
     this.enemies = attract ? [] : this.level.enemyDefs.filter(d => (d.minRound || 1) <= this.round).map(d => new Enemy(d, this));
     for (const e of this.enemies) this.scene.add(e.root);
-    this.player.shield = false; this.player.reset(this.level.spawn);
+    this.player.shield = false; this.player.koT = 0; this.player.reset(this.level.spawn);
     this.cam.snap(this.player, this.level.camYaw);
     this.timeMax = Math.round(this.level.timeLimit * Math.max(.65, 1 - (this.round - 1) * .08)); this.timeLeft = this.timeMax;
-    this.deaths = 0; this.hurried = false; this.frozen = false; this.freezeT = 0; this.wind.set(0, 0, 0); this.cheer = false; this.topBeam = null; this.finale = null;
+    this.deaths = 0; this.kos = 0; this.hitStop = 0; this.hurried = false; this.frozen = false; this.freezeT = 0; this.wind.set(0, 0, 0); this.cheer = false; this.topBeam = null; this.finale = null;
     this.scoreAtStart = this.score; this.fx.clear(); this.ui.clearPopups();
     this.audio.ambience(this.level.amb);
     this.prewarm();
@@ -155,6 +167,7 @@ class Game {
   }
   startGame(i) {
     this.score = 0; this.lives = 3; this.round = 1; this.continued = false; this.nextLife = 25000;
+    this.player.grabFilter = undefined;
     this.audio.unlock(); this.loadLevel(i); this.intro();
   }
   intro() {
@@ -162,21 +175,23 @@ class Game {
     const L = this.level, [x0, z0, x1, z1] = L.bounds;
     this.cam.mode = 'orbit'; this.cam.orbit.c.set((x0 + x1) / 4, L.high ? 6 : 7, (z0 + z1) / 4); this.cam.orbit.d = L.index === 2 ? 30 : 32; this.cam.orbit.p = .42; this.cam.orbit.s = .1;
     this.cam.yaw = L.camYaw - .9;
-    this.audio.playMusic(L.music);
-    clearTimeout(this.voiceT); this.voiceT = setTimeout(() => { if (this.state === 'intro') this.audio.voice(L.voice, 1); }, 700);
+    this.audio.playMusic(L.music); this.introT = 0;
+    const line = this.demo && L.index === 0 ? 'fm_demo' : L.voice;
+    clearTimeout(this.voiceT); this.voiceT = setTimeout(() => { if (this.state === 'intro') this.audio.voice(line, 1); }, 700);
   }
   beginPlay() {
     if (this.state !== 'intro') return;
     this.state = 'play'; this.ui.show(null); this.ui.showHud(true); this.cam.mode = 'follow'; this.cam.snap(this.player, this.level.camYaw); this.cam.pitch = .62;
     this.audio.voice('an_go', .8); this.audio.play('timeup', { vol: .35 });
     this.player.invuln = 2;
+    if (this.bot) this.bot.reset();
     this.canvasFocus();
   }
   canvasFocus() { try { document.getElementById('gl').focus({ preventScroll: true }); } catch {} }
   nextLevel() {
     let i = this.levelIndex + 1;
     if (i >= 4) { i = 0; this.round++; setTimeout(() => this.audio.voice('fm_round'), 1500); }
-    progress.unlocked = Math.max(progress.unlocked, Math.min(4, i + 1)); saveProgress();
+    if (!this.demo) { progress.unlocked = Math.max(progress.unlocked, Math.min(4, i + 1)); saveProgress(); }
     this.loadLevel(i); this.intro();
   }
   restartLevel() { this.score = this.scoreAtStart; this.loadLevel(this.levelIndex); this.intro(); }
@@ -184,9 +199,21 @@ class Game {
   toTitle(first = false) {
     this.state = 'title'; this.ui.showHud(false); this.ui.stack = []; this.ui.show('title');
     if (!first) { this.round = 1; this.loadLevel(0, true); }
+    this.lastInput = performance.now();
     this.cam.mode = 'orbit'; this.cam.orbit.c.set(0, 9, 0); this.cam.orbit.d = 38; this.cam.orbit.p = .3; this.cam.orbit.s = .05; this.cam.target.set(0, 9, 0); this.cam.yaw = -.5; this.cam.pitch = .3; this.cam.dist = 38;
     this.player.reset({ x: -2, y: 0, z: 9.5, yaw: .3 });
     if (this.titleVoiced) this.audio.playMusic('mus_title');
+  }
+  // ---------------- demo playthrough ----------------
+  startDemo(attract = false) {
+    this.demo = true; this.demoAttract = attract; this.bot = new Bot(this);
+    this.score = 0; this.lives = 3; this.round = 1; this.continued = true; this.nextLife = 25000;
+    this.audio.unlock(); this.ui.demo(true);
+    this.loadLevel(0); this.intro();
+  }
+  stopDemo() {
+    if (!this.demo) return;
+    this.demo = false; this.bot = null; this.player.grabFilter = undefined; this.ui.demo(false); this.toast(''); this.toTitle();
   }
   pause() { if (this.state !== 'play') return; this.state = 'pause'; this.ui.show('pause'); this.ui.stack = []; this.audio.applyVolumes(); }
   resume() { if (this.state !== 'pause') return; this.state = 'play'; this.ui.stack = []; this.ui.show(null); this.canvasFocus(); }
@@ -198,7 +225,7 @@ class Game {
     this.score += n;
     if (pos) this.ui.popup('+' + n, pos, isCombo ? '#ffc21a' : '#fff6e2');
     if (this.score >= this.nextLife) { this.nextLife += 25000; this.lives++; this.audio.play('extra_life'); this.toast('EXTRA HARD HAT!'); }
-    if (this.score > progress.hi) { progress.hi = this.score; }
+    if (this.score > progress.hi && !this.demo) { progress.hi = this.score; }
   }
   killPlayer(reason) {
     const p = this.player; if (p.dead || this.state !== 'play') return;
@@ -215,6 +242,21 @@ class Game {
       return;
     }
     this.killPlayer(reason);
+  }
+  // Hammer swing or stomp knocked an enemy out.
+  knockOut(e, dx, dz, how) {
+    const hammer = how === 'hammer', fresh = e.knockOut(dx, dz, hammer ? 7.5 : 3);
+    if (!fresh) return;
+    const p = this.player;
+    p.koChain = (p.koT > 0 ? p.koChain || 0 : 0) + 1; p.koT = 3; this.kos++;
+    const pos = V.copy(e.root.position).setY(e.body.y + e.body.h * .8).clone();
+    this.addScore((hammer ? 400 : 250) * p.koChain, pos, true);
+    this.audio.play(hammer ? 'bonk' : 'stomp', { pos, vol: 1 });
+    if (hammer) { this.audio.play('ko_bell', { vol: .5 }); this.hitStop = .07; this.shake(.22, pos); this.input.rumble(.6, 120); }
+    this.audio.voice(e.kind === 'vandal' ? 'vd_ow' : e.kind === 'inspector' ? 'in_ow' : 'dog_whine', .85, pos);
+    if (hammer && Math.random() < .45) setTimeout(() => this.audio.voice(Math.random() < .5 ? 'mac_take' : 'mac_lights', .8), 450);
+    this.fx.sparks(pos, 18, 0xffe14a);
+    this.toast(p.koChain > 1 ? `KNOCKOUT ×${p.koChain}!` : 'KNOCKOUT!');
   }
   socketRiveted(s) {
     s.state = 'riveted';
@@ -265,16 +307,17 @@ class Game {
     const secs = Math.max(0, Math.floor(this.timeLeft)), tb = secs * 10 * this.round, nd = this.deaths === 0 ? 2000 * this.round : 0, fin = this.finale ? 5000 * this.round : 0;
     this.addScore(tb + nd + fin);
     const rows = [['Shift score', (this.score - this.scoreAtStart - tb - nd - fin).toLocaleString()], [`Time bonus (${secs}s)`, tb.toLocaleString()], ['No-injury bonus', nd ? nd.toLocaleString() : '—']];
+    if (this.kos) rows.splice(1, 0, ['Knockouts', '×' + this.kos]);
     if (fin) rows.push(['Topping-out bonus', fin.toLocaleString()]);
     rows.push(['Total score', this.score.toLocaleString(), 'total']);
-    progress.unlocked = Math.max(progress.unlocked, Math.min(4, this.levelIndex + 2)); saveProgress();
-    this.state = 'tally'; this.ui.showHud(false);
+    if (!this.demo) { progress.unlocked = Math.max(progress.unlocked, Math.min(4, this.levelIndex + 2)); saveProgress(); }
+    this.state = 'tally'; this.ui.showHud(false); this.tallyT = 0;
     this.ui.tally(rows, this.finale ? 'TOWER TOPPED OUT!' : 'SHIFT COMPLETE');
     const nb = document.querySelector('#clear [data-act=next]'); nb.textContent = this.levelIndex === 3 ? 'START ROUND ' + (this.round + 1) : 'NEXT SHIFT';
     this.ui.setFocus(0, false);
   }
   async playerDeadDone() {
-    this.lives--;
+    if (!this.demo) this.lives--;
     if (this.lives < 0) return this.gameOver();
     const p = this.player, keepShield = false;
     p.reset(this.level.spawn); p.shield = keepShield;
@@ -300,11 +343,24 @@ class Game {
     if (!(dt > 0)) dt = 1 / 60;
     this.input.poll(dt);
     const inp = this.input;
+    if (inp.keyEdge || inp.camX || inp.camY) this.lastInput = now;
+    if (this.demo && inp.keyEdge) { this.stopDemo(); inp.menuOk = inp.menuBack = inp.pause = false; inp.menuNav = null; }
+    if (this.demo) {
+      if (this.state === 'intro' && (this.introT += dt) > 3.6) this.beginPlay();
+      if (this.state === 'tally' && (this.tallyT += dt) > 4.5) { if (this.levelIndex === 3) { this.stopDemo(); this.toast('DEMO COMPLETE'); } else this.nextLevel(); }
+    } else if (this.state === 'title' && this.ui.screen === 'title' && now - (this.lastInput || now) > 45000 && !this.noAttract) this.startDemo(true);
     if (inp.pause && (this.state === 'play' || this.state === 'pause')) { this.state === 'play' ? this.pause() : this.resume(); inp.menuBack = false; inp.menuOk = false; }
-    if (this.state !== 'play') this.ui.nav(inp);
-    if (this.state === 'play') this.playFrame(dt, inp);
+    if (this.state !== 'play' && !this.demo) this.ui.nav(inp);
+    if (this.state === 'play') {
+      if (this.demo) {
+        const bi = this.bot.update(dt * this.timeScale);
+        bi.camX = inp.camX; bi.camY = inp.camY; bi.zoomStep = inp.zoomStep;
+        this.playFrame(dt, bi); this.ui.botStatus(this.bot.status);
+      } else this.playFrame(dt, inp);
+    }
     else if (this.state === 'clear') {
       this.clearT += dt; this.simVisual(dt);
+      if (this.demo) this.ui.botStatus(this.finale ? 'Topped out! Time for fireworks' : 'Shift complete!');
       if (this.finale) {
         if (Math.random() < dt * 3.5) { const c = [0xffc21a, 0xff4a3a, 0x3ac8ff, 0x6ee06e, 0xff7ad8][Math.floor(Math.random() * 5)]; this.fx.firework(V.set(rr(-30, 30), rr(22, 40), rr(-30, 10)), c); this.audio.play('firework', { vol: .6, rate: rr(.9, 1.1) }); }
         if (this.finaleFlag) this.finaleFlag.rotation.y = Math.sin(this.clearT * 6) * .25;
@@ -312,6 +368,7 @@ class Game {
       if (this.clearT > (this.finale ? 7 : 3.4)) this.showTally();
     } else if (this.state === 'title' || this.state === 'intro' || this.state === 'tally' || this.state === 'over') this.simVisual(dt);
     this.cam.update(dt, this, this.state === 'play' ? inp : { camX: 0, camY: 0 });
+    if (this.demo && this.state === 'play') this.cam.distT = Math.min(this.cam.distT, 11);
     // keep the title backdrop clear of the menu column
     const w = innerWidth, h = innerHeight;
     if (this.state === 'title' && w > h) this.camera.setViewOffset(w, h, -w * .17, 0, w, h); else if (this.camera.view && this.camera.view.enabled) this.camera.clearViewOffset();
@@ -338,7 +395,9 @@ class Game {
   playFrame(dt, inp) {
     const p = this.player;
     this.actions(inp);
-    this.acc = Math.min((this.acc || 0) + dt, STEP * 10);
+    p.koT = Math.max(0, (p.koT || 0) - dt);
+    if (this.hitStop > 0) { this.hitStop -= dt; dt *= .08; } // brief freeze-frame on a hammer knockout
+    this.acc = Math.min((this.acc || 0) + dt * this.timeScale, STEP * 10 * this.timeScale);
     let first = true;
     while (this.acc >= STEP) {
       this.acc -= STEP; this.time += STEP;
@@ -368,6 +427,7 @@ class Game {
   actions(inp) {
     const p = this.player, o = this.objects;
     if (p.dead || this.state !== 'play') return;
+    if (inp.attack) p.swing();
     if (inp.act) {
       if (p.carry) {
         const t = o.placeTarget(p, p.carry);
@@ -384,6 +444,7 @@ class Game {
     }
   }
   key() { return this.input.usingTouch ? 'ACT' : this.input.usingPad ? 'X' : 'E'; }
+  bonkKey() { return this.input.usingTouch ? 'BONK' : this.input.usingPad ? 'Y' : 'F'; }
   promptText() {
     const p = this.player, o = this.objects, k = this.key();
     if (p.dead) return '';
@@ -396,6 +457,8 @@ class Game {
     if (p.state === 'climb') return '';
     const c = o.nearCarry(p); if (c && p.body.onGround) return `${k} — PICK UP ${c.kind === 'crate' ? 'CRATE' : c.kind === 'topbeam' ? 'TOPPING-OUT BEAM' : 'GIRDER'}`;
     const s = o.rivetTarget(p); if (s && s.anim >= 1 && p.body.onGround) return `HOLD ${k} — RIVET IT (${s.rivets}/4)`;
+    const b = p.body;
+    if (this.enemies.some(e => e.ko <= 0 && Math.hypot(e.body.x - b.x, e.body.z - b.z) < 3 && Math.abs(e.body.y - b.y) < 1.4)) return `${this.bonkKey()} — BONK!`;
     return '';
   }
   hudState() {
@@ -425,5 +488,8 @@ window.__hhm = {
   start: (i = 0) => { game.startGame(i); game.beginPlay(); },
   god: (on = true) => { game.player.invuln = on ? 1e9 : 0; },
   nav: () => game.level.nav.nodes.length,
+  demo: (attract = false) => game.startDemo(attract),
+  speed: (n = 1) => { game.timeScale = n; },
+  bot: () => game.bot && { status: game.bot.status, goal: game.bot.goal && game.bot.goal.key, ride: !!game.bot.ride },
 };
 game.boot().catch(e => { console.error(e); const el = document.getElementById('err'); el.hidden = false; el.textContent = 'Failed to start: ' + e.message; });

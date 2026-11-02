@@ -180,8 +180,8 @@ function build2(B) {
   B.ladder(-22, -8.53, 0, 2.59, '+z'); B.ladder(-21.28, -10, 2.59, 5.18, '-x'); B.ladder(-18.25, -10, 5.18, 7.77, '-x');
   B.container(-24, 0, -16, 'z', 0x7d4a9a); B.container(-8, 0, -18, 'x', 0x4a7d8f); B.container(-8, 2.59, -18, 'x', 0xb0402a);
   // ---- conveyor from the stack (5.18) south to the scaffold
-  B.conveyor(-18.7, -8.78, -17.3, 6, 5.18, 0, 2.2);
-  for (const z of [-4, 1, 5]) B.column(-18, z, 0, 5.0, true, .3);
+  B.conveyor(-19.6, -8.78, -18.2, 6, 5.18, 0, 2.2);
+  for (const z of [-4, 1, 5]) B.column(-18.9, z, 0, 5.0, true, .3);
   // ---- scaffold tower
   const sx0 = -22, sx1 = -14, sz0 = 6, sz1 = 10;
   for (const x of [sx0, -18, sx1]) for (const z of [sz0, sz1]) { B.geo(boxGeo(.08, 9, .08, 1, x, 4.5, z), M.galv); B.solid(x - .06, 0, z - .06, x + .06, 9, z + .06, { noFloor: true }); }
@@ -190,7 +190,7 @@ function build2(B) {
   B.plankDeck(sx0, sz0, sx1, 7.5, 5.2); B.plankDeck(sx0, 7.5, -16.7, sz1, 5.2); B.plankDeck(-15.3, 7.5, sx1, sz1, 5.2); B.plankDeck(-16.7, 9, -15.3, sz1, 5.2);
   B.plankDeck(sx0, sz0, sx1, 7.5, 7.8); B.plankDeck(sx0, 7.5, -20.7, sz1, 7.8); B.plankDeck(-19.3, 7.5, sx1, sz1, 7.8); B.plankDeck(-20.7, 9, -19.3, sz1, 7.8);
   B.ladder(-13.75, 8, 0, 2.6, '+x'); B.ladder(-16, 7.6, 2.6, 5.2, '+z'); B.ladder(-20, 7.6, 5.2, 7.8, '+z');
-  B.rail(sx0, sz1, sx1, sz1, 7.8); B.rail(sx0, sz0, sx0, sz1, 7.8); B.rail(sx1, sz0, sx1, sz1, 7.8); B.rail(-17.3, sz0, sx1, sz0, 7.8); B.rail(sx0, sz0, -18.7, sz0, 7.8);
+  B.rail(sx0, sz1, sx1, sz1, 7.8); B.rail(sx0, sz0, sx0, sz1, 7.8); B.rail(sx1, sz0, sx1, sz1, 7.8); B.rail(sx0, sz0, sx1, sz0, 7.8);
   B.rail(sx0, sz1, sx1, sz1, 5.2); B.rail(sx0, sz0, sx0, sz1, 5.2);
   // ---- silo (reachable only by the crane magnet; its ladder starts 4 m up)
   B.geo(new THREE.CylinderGeometry(2.3, 2.3, 8.6, 28).translate(12.2, 4.3, -8.4), M.galv);
@@ -201,7 +201,7 @@ function build2(B) {
   // ---- tower crane with magnet
   B.lattice(0, -4, 0, 24, 1.8); B.block(-2, 0, -6, 2, .6, -2, M.concrete, {}, 3);
   B.solid(-.95, 0, -4.95, .95, 24, -3.05, { noFloor: true });
-  B.movers.push({ type: 'crane', cx: 0, cz: -4, h: 24, R: 13, aA: Math.PI / 2, aB: -0.346, yLow: .35, yHigh: 10.6, yDrop: 8.92, size: 3.2 });
+  B.movers.push({ type: 'crane', cx: 0, cz: -4, h: 24, R: 13, aA: Math.PI / 2, aB: -0.346, yLow: .3, yHigh: 10.6, yDrop: 8.92, size: 3.2 });
   B.block(-2, 0, 7.4, 2, .06, 10.6, M.hazard, { visualOnly: true }, 1);
   // ---- rolling pipe lane (east -> west) along z = 2.5
   B.hazards.push({ type: 'pipes', z: 2.5, x0: 27, x1: -30, r: .62, speed: 4.6, every: 3.4 });
@@ -220,7 +220,7 @@ function build2(B) {
   B.sign(['NO LUNCH ON', 'THE CRANE!'], -9.9, 1.4, -5, 2.4, 1.2, Math.PI / 2, { bg: '#ffffff', fg: '#c01c1c', stripe: false });
   // lunchboxes
   B.items.push({ type: 'lunch', x: 16, y: 0, z: -15 }, { type: 'lunch', x: -16.5, y: 7.77, z: -10 }, { type: 'lunch', x: -15.2, y: 7.8, z: 8.6 },
-    { type: 'lunch', x: 12.2, y: 8.6, z: -8.4 }, { type: 'lunch', x: -18, y: 5.18, z: -.5 });
+    { type: 'lunch', x: 12.2, y: 8.6, z: -8.4 }, { type: 'lunch', x: -18.9, y: 5.18, z: -.5 });
   B.items.push({ type: 'coffee', x: -21, y: 2.59, z: -10 }, { type: 'stopwatch', x: 22, y: 0, z: 1 }, { type: 'hardhat', x: -20, y: 2.6, z: 7 });
   B.enemies.push({ kind: 'vandal', x: 8, y: 0, z: -12 }, { kind: 'dog', x: 18, y: 0, z: -20 }, { kind: 'vandal', x: -18, y: 2.6, z: 8, minRound: 2 }, { kind: 'inspector', x: -6, y: 0, z: 10, minRound: 3 });
   Object.assign(B, {
@@ -273,7 +273,7 @@ function build3(B) {
   // hazards
   B.hazards.push({ type: 'press', x: -3.2, z: -11.5, y: 4, w: 2.2, phase: 0 }, { type: 'press', x: 3.2, z: -11.5, y: 4, w: 2.2, phase: 2.2 });
   B.hazards.push({ type: 'vent', x: 0, y: 0, z: -8.2, phase: 0, power: 17.5 });
-  B.hazards.push({ type: 'arc', x: 15.5, y: 4, z0: -10, z1: 0, on: 1.4, off: 2.6 });
+  B.hazards.push({ type: 'arc', x: 13.6, y: 4, z0: -10, z1: 0, on: 1.4, off: 2.6 });
   B.hazards.push({ type: 'ladle' });
   // crates
   B.items.push({ type: 'crate', x: -16, y: 0, z: 6 }, { type: 'crate', x: 18, y: 0, z: -10 }, { type: 'crate', x: -16, y: 4, z: -6 }, { type: 'crate', x: 17, y: 8, z: -5 });

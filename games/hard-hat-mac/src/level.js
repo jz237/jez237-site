@@ -36,6 +36,11 @@ export function buildLevel(index, M, quality) {
   const [x0, z0, x1, z1] = B.bounds;
   const avoid = molten ? [{ x0: molten.d.x0 - .5, z0: molten.d.z0 - .5, x1: molten.d.x1 + .5, z1: molten.d.z1 + .5 }] : [];
   L.nav = new NavGrid(B.world, [x0 - 1, z0 - 1, x1 + 1, z1 + 1], B.ladders, { avoid });
+  // the crane magnet is the only way onto the silo in the Crane Yard (demo bot route)
+  for (const m of L.movers) if (m.constructor.name === 'CraneMagnet') {
+    const d = m.d, bx = d.cx + Math.cos(d.aB) * d.R, bz = d.cz + Math.sin(d.aB) * d.R, ax = d.cx + Math.cos(d.aA) * d.R, az = d.cz + Math.sin(d.aA) * d.R;
+    L.nav.addRide({ x: ax, y: 0, z: az + d.size / 2 + 1.7 }, { x: bx - d.size / 2 - .35, y: d.yDrop - .32, z: bz }, { mover: m }, 80);
+  }
   L.update = (dt, game) => {
     for (const m of L.movers) m.update(dt, game);
     for (const h of L.hazards) h.update(dt, game);

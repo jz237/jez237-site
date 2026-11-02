@@ -253,6 +253,21 @@
       "name": "dog_whine",
       "dur": 1.0,
       "text": "cartoon dog yelp followed by a short whimper"
+    },
+    {
+      "name": "swing",
+      "dur": 0.5,
+      "text": "fast whoosh of a heavy hammer swung through the air, short"
+    },
+    {
+      "name": "bonk",
+      "dur": 0.7,
+      "text": "cartoon hammer bonk on a hard head, hollow clonk with a comic ring"
+    },
+    {
+      "name": "ko_bell",
+      "dur": 1.6,
+      "text": "boxing ring bell ringing twice, ding ding, clear"
     }
   ],
   "tts": [
@@ -375,6 +390,26 @@
       "name": "an_record",
       "voice": "announcer",
       "text": "New high score!"
+    },
+    {
+      "name": "in_ow",
+      "voice": "inspector",
+      "text": "Ow! That's going in my report!"
+    },
+    {
+      "name": "mac_take",
+      "voice": "mac",
+      "text": "Take that!"
+    },
+    {
+      "name": "mac_lights",
+      "voice": "mac",
+      "text": "Lights out!"
+    },
+    {
+      "name": "fm_demo",
+      "voice": "foreman",
+      "text": "Watch close, kid. This is how a pro works the site."
     }
   ],
   "music": [

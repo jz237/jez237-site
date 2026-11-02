@@ -21,7 +21,7 @@ export class Player {
     const b = this.body; Object.assign(b, { x: sp.x, y: sp.y, z: sp.z, vx: 0, vy: 0, vz: 0, onGround: false, ground: null });
     this.yaw = sp.yaw || 0; this.state = 'normal'; this.carry = null; this.ladder = null; this.climbPhase = 0;
     this.coyote = 0; this.jumpBuf = 0; this.airMax = sp.y; this.invuln = 2.2; this.coffee = 0; this.shield = this.shield || false;
-    this.dead = false; this.deadT = 0; this.noGrab = 0; this.rivetSock = null; this.rivetSnd = 0; this.lastStep = 0; this.screamed = false;
+    this.dead = false; this.deadT = 0; this.noGrab = 0; this.rivetSock = null; this.rivetSnd = 0; this.lastStep = 0; this.screamed = false; this.swingT = 0; this.swingCd = 0; this.swingHit = false;
     this.rig.body.visible = true; this.rig.body.rotation.set(0, 0, 0); this.rig.body.position.set(0, 0, 0);
     this.root.position.set(b.x, b.y, b.z); this.root.rotation.y = this.yaw;
   }
@@ -36,7 +36,16 @@ export class Player {
   update(dt, inp) {
     const g = this.game, b = this.body, world = g.world;
     this.invuln = Math.max(0, this.invuln - dt); this.coffee = Math.max(0, this.coffee - dt); this.noGrab = Math.max(0, this.noGrab - dt);
-    if (this.dead) { this.deadT -= dt; if (this.deathMode === 'knock') { b.vy -= GRAVITY * dt; b.x += b.vx * dt; b.z += b.vz * dt; b.y += b.vy * dt; } return; }
+    this.swingCd = Math.max(0, this.swingCd - dt);
+    if (this.swingT > 0) { this.swingT += dt; this.updateSwing(); if (this.swingT > .45 || this.state !== 'normal') this.swingT = 0; }
+    if (this.dead) {
+      this.deadT -= dt;
+      if (this.deathMode === 'knock') {
+        b.vy -= GRAVITY * dt; b.x += b.vx * dt; b.z += b.vz * dt; b.y += b.vy * dt;
+        if (b.y < this.deadFloor) { b.y = this.deadFloor; b.vy = 0; b.vx *= .5; b.vz *= .5; } // land, don't sink through the floor
+      }
+      return;
+    }
     const yaw = g.cam.yaw, fx = -Math.sin(yaw), fz = -Math.cos(yaw), rx = Math.cos(yaw), rz = -Math.sin(yaw);
     let mx = inp.mx, my = inp.my; const mag = Math.min(1, Math.hypot(mx, my));
     const wx = rx * mx + fx * my, wz = rz * mx + fz * my;
@@ -45,7 +54,7 @@ export class Player {
     if (this.state === 'rivet') { this.updateRivet(dt, inp); return; }
 
     // ---- ground / air movement
-    const maxS = RUN * (this.coffee > 0 ? 1.38 : 1) * (this.carry ? .86 : 1);
+    const maxS = RUN * (this.coffee > 0 ? 1.38 : 1) * (this.carry ? .86 : 1) * (this.swingT > 0 ? .45 : 1);
     const k = b.onGround ? 16 : 5.5, f = 1 - Math.exp(-k * dt);
     b.vx += (wx * maxS - b.vx) * f; b.vz += (wz * maxS - b.vz) * f;
     this.coyote = b.onGround ? .11 : this.coyote - dt;
@@ -93,6 +102,7 @@ export class Player {
 
     // ---- ladders
     if (this.noGrab <= 0) for (const L of g.level.ladders) {
+      if (this.grabFilter !== undefined && this.grabFilter !== L) continue; // demo bot: only the ladder it means to use
       const lateral = L.fz !== 0 ? Math.abs(b.x - L.x) : Math.abs(b.z - L.z);
       if (lateral > .55) continue;
       const front = (b.x - L.x) * L.fx + (b.z - L.z) * L.fz, toward = -(wx * L.fx + wz * L.fz);
@@ -103,6 +113,36 @@ export class Player {
       }
       // grab from the top: standing on the deck behind the ladder and walking out over it
       if (b.onGround && Math.abs(b.y - L.y1) < .3 && front < 0 && front > -1.1 && -toward > .55) { this.grab(L, L.y1 - 1.1); break; }
+    }
+  }
+  // Hammer swing: auto-aims at the nearest standing enemy in front, connects on the strike frame.
+  canSwing() { return !this.dead && this.state === 'normal' && !this.carry && this.swingCd <= 0; }
+  swing() {
+    if (!this.canSwing()) return false;
+    // auto-aim: turn to the nearest standing enemy within reach (in any direction), preferring ones in front
+    const b = this.body; let best = null, bs = Infinity;
+    for (const e of this.game.enemies) {
+      if (e.ko > 0) continue;
+      const dx = e.body.x - b.x, dz = e.body.z - b.z, d = Math.hypot(dx, dz);
+      if (d > 2.8 || Math.abs(e.body.y - b.y) > 1.4) continue;
+      const sc = d + Math.abs(wrapAngle(Math.atan2(dx, dz) - this.yaw)) * .4;
+      if (sc < bs) { bs = sc; best = e; }
+    }
+    if (best) this.yaw = Math.atan2(best.body.x - b.x, best.body.z - b.z);
+    this.swingT = .001; this.swingCd = .55; this.swingHit = false;
+    this.game.audio.play('swing', { vol: .8, rate: rr(.92, 1.08) });
+    return true;
+  }
+  updateSwing() {
+    if (this.swingHit || this.swingT < .15 || this.swingT > .27) return;
+    const b = this.body, g = this.game, fx = Math.sin(this.yaw), fz = Math.cos(this.yaw);
+    for (const e of g.enemies) {
+      if (e.ko > 0) continue;
+      const dx = e.body.x - b.x, dz = e.body.z - b.z, d = Math.hypot(dx, dz);
+      if (d > 1.55 + e.body.r || e.body.y - b.y > 1.4 || b.y - e.body.y > 1.6) continue;
+      if (d > .3 && (dx * fx + dz * fz) / d < .35) continue; // must be in front (~70 degrees)
+      this.swingHit = true;
+      g.knockOut(e, dx / (d || 1), dz / (d || 1), 'hammer');
     }
   }
   grab(L, y) {
@@ -158,6 +198,7 @@ export class Player {
     const g = this.game, b = this.body;
     this.dead = true; this.deadT = mode === 'void' ? 1.6 : 2.4; this.deathMode = mode === 'fall' || mode === 'squash' ? 'flat' : mode === 'void' || mode === 'molten' ? 'gone' : 'knock';
     this.state = 'normal'; this.ladder = null;
+    const fl = g.world.groundBelow(b.x, b.z, b.y + .1, .2); this.deadFloor = fl ? fl.y1 : -1e9;
     if (this.deathMode === 'knock') { b.vy = 7; b.vx = -Math.sin(this.yaw) * 3; b.vz = -Math.cos(this.yaw) * 3; }
     if (this.deathMode === 'flat') { g.audio.play('splat', { vol: 1 }); g.fx.dust(V.set(b.x, b.y + .1, b.z), 26); g.shake(.4, null); }
     if (mode === 'molten') { this.rig.body.visible = false; g.fx.embers(V.set(b.x, b.y + .5, b.z), 50); }
@@ -179,7 +220,7 @@ export class Player {
     else if (!b.onGround) mode = 'air';
     else if (speed > .08) mode = 'walk';
     if (g.cheer) mode = 'cheer';
-    r.update(dt, { mode, speed, vy: b.vy, carry: this.carry ? this.carry.kind : null, climbPhase: this.climbPhase });
+    r.update(dt, { mode, speed, vy: b.vy, carry: this.carry ? this.carry.kind : null, climbPhase: this.climbPhase, swing: this.swingT > 0 ? this.swingT / .45 : 0 });
     if (this.dead && this.deathMode === 'flat') r.body.scale.set(1.3, .22, 1.3);
     // invulnerability blink, gold hat shield tint
     r.root.visible = !(this.invuln > 0 && !this.dead && Math.floor(this.invuln * 12) % 2 === 0 && this.invuln < 2);

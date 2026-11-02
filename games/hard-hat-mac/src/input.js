@@ -37,7 +37,8 @@ export class Input {
       const up = e => { e.preventDefault(); T[key] = false; el.classList.remove('on'); };
       el.addEventListener('touchend', up, { passive: false }); el.addEventListener('touchcancel', up, { passive: false });
     };
-    btn(jb, 'jump'); btn(ab, 'act');
+    btn(jb, 'jump'); btn(ab, 'act'); btn(document.getElementById('t-bonk'), 'bonk');
+    document.getElementById('demo-stop').addEventListener('click', () => { T.stopEdge = true; });
     pb.addEventListener('touchstart', e => { e.preventDefault(); T.pauseEdge = true; }, { passive: false });
     const canvas = this.canvas;
     canvas.addEventListener('touchstart', e => {
@@ -75,13 +76,15 @@ export class Input {
     let my = (k.down('KeyW', 'ArrowUp') ? 1 : 0) - (k.down('KeyS', 'ArrowDown') ? 1 : 0);
     let jump = k.hit('Space', 'KeyK'), jumpHeld = k.down('Space', 'KeyK');
     let act = k.hit('KeyE', 'ShiftLeft', 'ShiftRight', 'KeyJ', 'Enter', 'NumpadEnter'), actHeld = k.down('KeyE', 'ShiftLeft', 'ShiftRight', 'KeyJ', 'Enter', 'NumpadEnter');
-    let pause = k.hit('Escape', 'KeyP'), rotL = k.hit('KeyQ'), rotR = k.hit('KeyR'), recenter = k.hit('KeyC');
+    let pause = k.hit('Escape', 'KeyP'), rotL = k.hit('KeyQ'), rotR = k.hit('KeyR'), recenter = k.hit('KeyC'), attack = k.hit('KeyF', 'KeyL');
+    let keyEdge = this.pressed.size > 0;
     let camX = 0, camY = 0;
     let nav = k.hit('ArrowUp', 'KeyW') ? 'up' : k.hit('ArrowDown', 'KeyS') ? 'down' : k.hit('ArrowLeft', 'KeyA') ? 'left' : k.hit('ArrowRight', 'KeyD') ? 'right' : null;
     let anav = k.hit('ArrowUp') ? 'up' : k.hit('ArrowDown') ? 'down' : k.hit('ArrowLeft') ? 'left' : k.hit('ArrowRight') ? 'right' : null;
     let ok = k.hit('Enter', 'Space', 'NumpadEnter'), back = k.hit('Escape');
     // mouse look
     camX -= this.mouse.dx * .0042 * settings.camSens; camY += this.mouse.dy * .003 * settings.camSens * (settings.invertY ? -1 : 1);
+    if (camX || camY) this.lookT = performance.now();
     this.mouse.dx = this.mouse.dy = 0;
     // touch stick
     if (T.stickId !== null) {
@@ -91,7 +94,9 @@ export class Input {
     if (T.jumpEdge) jump = true; if (T.jump) jumpHeld = true;
     if (T.actEdge) act = true; if (T.act) actHeld = true;
     if (T.pauseEdge) pause = true;
-    T.jumpEdge = T.actEdge = T.pauseEdge = false;
+    if (T.bonkEdge) attack = true;
+    if (T.stopEdge) keyEdge = true;
+    T.jumpEdge = T.actEdge = T.pauseEdge = T.bonkEdge = T.stopEdge = false;
     // gamepads
     const pads = navigator.getGamepads ? navigator.getGamepads() : [];
     for (const gp of pads) {
@@ -104,14 +109,15 @@ export class Input {
       camX -= rx * 2.6 * dt * settings.camSens; camY += ry * 1.6 * dt * settings.camSens * (settings.invertY ? -1 : 1);
       if (e(0)) { jump = true; ok = true; } if (b(0)) jumpHeld = true;
       if (e(2) || e(1)) act = true; if (b(2) || b(1)) actHeld = true;
-      if (e(9)) pause = true; if (e(1)) back = true; if (e(8)) back = true;
+      if (e(9)) pause = true; if (e(1)) back = true; if (e(8)) back = true; if (e(3)) attack = true;
+      if (gp.buttons.some((x, i) => x.pressed && !prev[i])) keyEdge = true;
       if (e(4)) rotL = true; if (e(5)) rotR = true; if (e(11) || e(10)) recenter = true;
       if (e(12) || (ly < -.6 && !(prev.ly < -.6))) anav = nav = 'up'; if (e(13) || (ly > .6 && !(prev.ly > .6))) anav = nav = 'down';
       if (e(14) || (lx < -.6 && !(prev.lx < -.6))) anav = nav = 'left'; if (e(15) || (lx > .6 && !(prev.lx > .6))) anav = nav = 'right';
       this.padPrev[gp.index] = Object.assign(gp.buttons.map(x => x.pressed), { lx, ly });
     }
     const m = Math.hypot(mx, my); if (m > 1) { mx /= m; my /= m; }
-    Object.assign(this, { mx, my, jump, jumpHeld, act, actHeld, pause, rotL, rotR, recenter, camX, camY, menuNav: nav, menuNavArrows: anav, menuOk: ok, menuBack: back });
+    Object.assign(this, { mx, my, jump, jumpHeld, act, actHeld, pause, rotL, rotR, recenter, camX, camY, attack, keyEdge, menuNav: nav, menuNavArrows: anav, menuOk: ok, menuBack: back });
     this.zoomStep = this.zoom; this.zoom = 0;
     this.pressed.clear();
   }

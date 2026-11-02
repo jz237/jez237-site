@@ -6,9 +6,9 @@ const BASE = './assets/audio/';
 const SFX = ['step_steel_a', 'step_steel_b', 'step_dirt', 'step_wood', 'jump', 'land', 'ladder', 'pickup', 'place', 'rivet', 'rivet_done', 'bolt_fall', 'clink',
   'stomp', 'dizzy', 'splat', 'zap', 'steam', 'press', 'sizzle', 'lunchbox', 'coffee', 'hardhat', 'extra_life', 'tick', 'ui_click', 'ui_confirm', 'spring',
   'wrecking', 'firework', 'cheer', 'yank', 'ding', 'gust', 'crate_drop', 'hopper', 'magnet', 'flag', 'timeup', 'elevator_loop', 'conveyor_loop', 'crane_loop',
-  'dog_bark', 'dog_whine'];
+  'dog_bark', 'dog_whine', 'swing', 'bonk', 'ko_bell'];
 const VOICE = ['fm_l1', 'fm_l2', 'fm_l3', 'fm_l4', 'fm_clear1', 'fm_clear2', 'fm_hurry', 'fm_gameover', 'fm_round', 'fm_topped', 'mac_whoa', 'mac_yeah', 'mac_gotit',
-  'mac_oof', 'mac_heave', 'vd_laugh', 'vd_taunt', 'vd_ow', 'in_cite', 'in_halt', 'an_title', 'an_go', 'an_gameover', 'an_record'];
+  'mac_oof', 'mac_heave', 'vd_laugh', 'vd_taunt', 'vd_ow', 'in_cite', 'in_halt', 'an_title', 'an_go', 'an_gameover', 'an_record', 'in_ow', 'mac_take', 'mac_lights', 'fm_demo'];
 const LINES = {
   fm_l1: 'Foreman: "Mornin\', Mac! Four girders need settin\' on the frame. Drop \'em in the gaps and rivet \'em tight!"',
   fm_l2: 'Foreman: "Crane yard, Mac. The crew left their lunchboxes all over the site. Round up all five!"',
@@ -17,7 +17,7 @@ const LINES = {
   fm_clear1: 'Foreman: "That\'s how it\'s done, Mac!"', fm_clear2: 'Foreman: "Shift complete. Nice work!"', fm_hurry: 'Foreman: "Clock\'s runnin\' out, Mac! Move it!"',
   fm_gameover: 'Foreman: "That\'s a wrap, Mac. Go home and get some rest."', fm_round: 'Foreman: "New round, Mac. They\'re gettin\' faster!"', fm_topped: 'Foreman: "We topped out! Drinks are on me tonight!"',
   vd_taunt: 'Vandal: "Catch me if you can, hard hat!"', vd_laugh: 'Vandal: (snickers)', vd_ow: 'Vandal: "Ow! Hey!"',
-  in_cite: 'Inspector: "Citation! Safety violation!"', in_halt: 'Inspector: "Hold it right there!"', dog_bark: 'Yard dog: (barks)',
+  in_cite: 'Inspector: "Citation! Safety violation!"', in_ow: 'Inspector: "Ow! That’s going in my report!"', fm_demo: 'Foreman: "Watch close, kid. This is how a pro works the site."', in_halt: 'Inspector: "Hold it right there!"', dog_bark: 'Yard dog: (barks)',
 };
 
 export class AudioEngine {

@@ -14,28 +14,29 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Rubik:wght@400;600;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./style.css?v=1">
+<link rel="stylesheet" href="./style.css?v=2">
 <script type="importmap">
 { "imports": {
   "three": "./vendor/three/three.module.min.js?v=181",
   "three/addons/": "./vendor/three/addons/",
-  "./src/audio.js": "./src/audio.js?v=1",
-  "./src/builder.js": "./src/builder.js?v=1",
-  "./src/characters.js": "./src/characters.js?v=1",
-  "./src/enemies.js": "./src/enemies.js?v=1",
-  "./src/env.js": "./src/env.js?v=1",
-  "./src/fx.js": "./src/fx.js?v=1",
-  "./src/hazards.js": "./src/hazards.js?v=1",
-  "./src/input.js": "./src/input.js?v=1",
-  "./src/level.js": "./src/level.js?v=1",
-  "./src/levels.js": "./src/levels.js?v=1",
-  "./src/objects.js": "./src/objects.js?v=1",
-  "./src/physics.js": "./src/physics.js?v=1",
-  "./src/player.js": "./src/player.js?v=1",
-  "./src/render.js": "./src/render.js?v=1",
-  "./src/textures.js": "./src/textures.js?v=1",
-  "./src/ui.js": "./src/ui.js?v=1",
-  "./src/util.js": "./src/util.js?v=1"
+  "./src/audio.js": "./src/audio.js?v=2",
+  "./src/bot.js": "./src/bot.js?v=2",
+  "./src/builder.js": "./src/builder.js?v=2",
+  "./src/characters.js": "./src/characters.js?v=2",
+  "./src/enemies.js": "./src/enemies.js?v=2",
+  "./src/env.js": "./src/env.js?v=2",
+  "./src/fx.js": "./src/fx.js?v=2",
+  "./src/hazards.js": "./src/hazards.js?v=2",
+  "./src/input.js": "./src/input.js?v=2",
+  "./src/level.js": "./src/level.js?v=2",
+  "./src/levels.js": "./src/levels.js?v=2",
+  "./src/objects.js": "./src/objects.js?v=2",
+  "./src/physics.js": "./src/physics.js?v=2",
+  "./src/player.js": "./src/player.js?v=2",
+  "./src/render.js": "./src/render.js?v=2",
+  "./src/textures.js": "./src/textures.js?v=2",
+  "./src/ui.js": "./src/ui.js?v=2",
+  "./src/util.js": "./src/util.js?v=2"
 } }
 </script>
 </head>
@@ -65,6 +66,7 @@
     <div class="objective" id="h-obj"></div>
     <div class="powers" id="h-powers"></div>
   </div>
+  <div class="bot" id="h-bot" hidden></div>
   <div class="prompt" id="h-prompt"></div>
   <div class="toast" id="h-toast"></div>
   <div class="caption" id="h-caption" aria-live="polite"></div>
@@ -77,6 +79,7 @@
     <nav class="menu" id="title-menu">
       <button data-act="start" class="primary">START SHIFT</button>
       <button data-act="select">SHIFT SELECT</button>
+      <button data-act="demo">WATCH DEMO</button>
       <button data-act="scores">LEADERBOARD</button>
       <button data-act="help">HOW TO PLAY</button>
       <button data-act="settings">SETTINGS</button>
@@ -159,17 +162,19 @@
         <h3>The job</h3>
         <p>Each shift has one job: set and rivet girders, round up lunchboxes, load crates into the hopper, or top out the tower. Beat the clock for a bonus. Falls of more than one floor, enemies and hazards cost a hard hat (life).</p>
         <h3>Crew &amp; trouble</h3>
-        <p><b>Vandal</b> — pulls out girders you haven't riveted. Jump on his head to stun him.<br><b>Inspector</b> — can't be stomped. Keep away.<br><b>Yard dog</b> — fast, but can't climb ladders. Stompable.</p>
+        <p><b>Vandal</b> — pulls out girders you haven't riveted.<br><b>Inspector</b> — his hard hat makes him stomp-proof.<br><b>Yard dog</b> — fast, but can't climb ladders.<br><b>Knock them out:</b> swing your hammer (<kbd>F</kbd> / <b>Y</b> / <b>BONK</b>) or jump on the vandal and the dog. Out cold for a few seconds — chain knockouts for bigger points.</p>
         <h3>Power-ups</h3>
         <p>☕ Coffee: speed · ⛑ Gold hat: one free hit · ⏱ Stopwatch: freezes trouble · 💰 Cash: bonus points</p>
       </div>
       <div>
         <h3>Keyboard</h3>
-        <p><kbd>WASD</kbd>/<kbd>Arrows</kbd> move &amp; climb · <kbd>Space</kbd> jump · <kbd>E</kbd>/<kbd>Shift</kbd> pick up, place, hold to rivet · <kbd>Q</kbd>/<kbd>R</kbd> turn camera · drag or right-drag mouse to look · wheel zoom · <kbd>C</kbd> recenter · <kbd>Esc</kbd> pause · <kbd>M</kbd> mute</p>
+        <p><kbd>WASD</kbd>/<kbd>Arrows</kbd> move &amp; climb · <kbd>Space</kbd> jump · <kbd>E</kbd>/<kbd>Shift</kbd> pick up, place, hold to rivet · <kbd>F</kbd> hammer bonk · <kbd>Q</kbd>/<kbd>R</kbd> turn camera · drag or right-drag mouse to look · wheel zoom · <kbd>C</kbd> recenter · <kbd>Esc</kbd> pause · <kbd>M</kbd> mute</p>
         <h3>Gamepad</h3>
-        <p>Left stick move · Right stick camera · <b>A</b> jump · <b>X</b>/<b>B</b> action · <b>LB/RB</b> turn camera · <b>Start</b> pause</p>
+        <p>Left stick move · Right stick camera · <b>A</b> jump · <b>X</b>/<b>B</b> action · <b>Y</b> bonk · <b>LB/RB</b> turn camera · <b>Start</b> pause</p>
         <h3>Touch</h3>
-        <p>Left thumb: drag anywhere to move. Right side: <b>JUMP</b> and <b>ACT</b> buttons, drag empty space to look.</p>
+        <p>Left thumb: drag anywhere to move. Right side: <b>JUMP</b>, <b>ACT</b> and <b>BONK</b> buttons, drag empty space to look.</p>
+        <h3>Demo</h3>
+        <p><b>Watch Demo</b> on the title screen lets the crew's best hand play all four shifts. The demo also starts by itself if the title sits idle. Press any key to take over.</p>
       </div>
     </div>
     <nav class="menu row"><button data-act="back" class="primary">BACK</button></nav>
@@ -184,10 +189,13 @@
   </div>
 </div>
 
+<div id="demo-banner" hidden><span>▶ DEMO PLAYTHROUGH</span><small>Press any key to play</small><button id="demo-stop" aria-label="Stop demo">■ STOP</button></div>
+
 <div id="touch" hidden>
   <div class="stick" id="t-stick"><i></i></div>
   <button class="tbtn jump" id="t-jump" aria-label="Jump">JUMP</button>
   <button class="tbtn act" id="t-act" aria-label="Action">ACT</button>
+  <button class="tbtn bonk" id="t-bonk" aria-label="Bonk">BONK</button>
   <button class="tbtn pause" id="t-pause" aria-label="Pause">II</button>
 </div>
 
@@ -207,6 +215,6 @@
     el.hidden = false; el.textContent = 'Error: ' + (e.message || e.error);
   });
 </script>
-<script type="module" src="./src/main.js?v=1"></script>
+<script type="module" src="./src/main.js?v=2"></script>
 </body>
 </html>

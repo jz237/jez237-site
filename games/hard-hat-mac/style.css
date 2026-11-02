@@ -159,10 +159,12 @@ a { color: var(--hat); }
 .tbtn:active, .tbtn.on { background: rgba(255,194,26,.6); color: var(--ink); }
 .tbtn.jump { right: calc(26px + var(--safe-r)); bottom: calc(34px + var(--safe-b)); width: 92px; height: 92px; }
 .tbtn.act { right: calc(132px + var(--safe-r)); bottom: calc(26px + var(--safe-b)); width: 72px; height: 72px; }
+.tbtn.bonk { right: calc(118px + var(--safe-r)); bottom: calc(118px + var(--safe-b)); width: 64px; height: 64px; font-size: 13px; border-color: rgba(255,120,80,.6); }
 .tbtn.pause { left: 50%; transform: translateX(-50%); top: calc(64px + var(--safe-t)); width: 40px; height: 40px; font-size: 13px; }
 @media (max-width: 760px) {
   .hud-tl .score b { font-size: 24px; } .shift { font-size: 12px; } .lives i { width: 22px; height: 16px; }
-  .objective { font-size: 13px; } .tbtn.pause { top: auto; bottom: calc(140px + var(--safe-b)); left: auto; right: calc(40px + var(--safe-r)); transform: none; }
+  .objective { font-size: 13px; } .tbtn.bonk { right: calc(118px + var(--safe-r)); bottom: calc(118px + var(--safe-b)); width: 64px; height: 64px; font-size: 13px; border-color: rgba(255,120,80,.6); }
+.tbtn.pause { top: auto; bottom: calc(140px + var(--safe-b)); left: auto; right: calc(40px + var(--safe-r)); transform: none; }
 }
 #err { position: fixed; left: 8px; bottom: 8px; z-index: 99; background: #600; color: #fff; padding: 6px 10px; border-radius: 6px; font: 12px monospace; max-width: 90vw; }
 
@@ -180,3 +182,12 @@ a { color: var(--hat); }
   .caption { font-size: 12px; bottom: auto; top: calc(58px + var(--safe-t)); }
   .prompt { bottom: calc(30% + var(--safe-b)); font-size: 14px; }
 }
+
+/* demo playthrough */
+#demo-banner { position: fixed; top: calc(70px + var(--safe-t)); left: 50%; transform: translateX(-50%); z-index: 8; display: flex; align-items: center; gap: 12px; background: rgba(15,12,8,.72); border: 1px solid var(--line); border-radius: 22px; padding: 6px 8px 6px 16px; font: 14px Bungee, Impact, sans-serif; color: var(--hat); white-space: nowrap; }
+#demo-banner[hidden] { display: none; }
+#demo-banner small { font: 600 12px Rubik, sans-serif; color: #eadfc4; animation: pulse 1.6s infinite; }
+#demo-banner button { font: 12px Bungee, sans-serif; color: var(--ink); background: var(--hat); border: 0; border-radius: 14px; padding: 6px 12px; cursor: pointer; }
+.bot { left: calc(16px + var(--safe-l)); bottom: calc(96px + var(--safe-b)); font: 600 14px Rubik, sans-serif; color: #fff6e2; background: rgba(15,12,8,.6); border-left: 4px solid #6ad1ff; padding: 5px 12px; border-radius: 0 8px 8px 0; text-shadow: none; transform-origin: bottom left; transform: scale(var(--hud-scale)); }
+.bot[hidden] { display: none; }
+@media (max-height: 560px) { #demo-banner { top: calc(54px + var(--safe-t)); font-size: 12px; } #demo-banner small { display: none; } .bot { bottom: calc(80px + var(--safe-b)); font-size: 12px; } }
