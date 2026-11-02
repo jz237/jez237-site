@@ -2,9 +2,9 @@
 // them locally. Optional folder imports remain available for custom copies.
 
 // Bump with every engine or loader release so browsers fetch the new files
-const BUILD = '20261102b';
+const BUILD = '20261102c';
 const DB_NAME = 'descent2-web';
-const DB_VERSION = 1;
+const DB_VERSION = 2; // 2 adds the music folder store
 const SAVE_DIR = '/home/web_user/.d2x-redux';
 const DATA_DIR = '/data';
 
@@ -26,6 +26,7 @@ function openDb() {
       const db = req.result;
       if (!db.objectStoreNames.contains('files')) db.createObjectStore('files');
       if (!db.objectStoreNames.contains('meta')) db.createObjectStore('meta');
+      if (!db.objectStoreNames.contains('music')) db.createObjectStore('music');
     };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error);
@@ -210,6 +211,120 @@ async function importGame(items, onProgress) {
   return manifest;
 }
 
+// ---------- Music folder ----------
+
+// The player's own music files (for example D2X-XL's music/d2 folder) for the engine's
+// "jukebox" music type: songs by SONG_* number, then the level playlist.
+const MUSIC_EXT = { ogg: 'audio/ogg', oga: 'audio/ogg', opus: 'audio/ogg', mp3: 'audio/mpeg',
+  flac: 'audio/flac', wav: 'audio/wav', m4a: 'audio/mp4' };
+const MUSIC_SONGS = [['title', 'descent'], ['briefing'], ['endlevel', 'exit'], ['endgame', 'ending'], ['credits']];
+const MUSIC_SONG_NAMES = ['title', 'briefing', 'level end', 'game end', 'credits'];
+const musicExt = (name) => name.slice(name.lastIndexOf('.') + 1);
+const levelKey = (i) => `level/${String(i).padStart(3, '0')}`;
+
+async function classifyMusic(items) {
+  const all = items.map((it) => {
+    const parts = it.path.toLowerCase().replace(/\\/g, '/').split('/');
+    return { ...it, dirs: parts.slice(0, -1), dir: parts.slice(0, -1).join('/'), name: parts[parts.length - 1] };
+  });
+  const base = (n) => n.replace(/\.[^.]+$/, '');
+  let audio = all.filter((f) => f.name.includes('.') && musicExt(f.name) in MUSIC_EXT);
+  // a D2X-XL music folder keeps the Descent 1 and Descent II sets in d1/ and d2/
+  const d2 = audio.filter((f) => f.dirs.includes('d2'));
+  const notD1 = audio.filter((f) => !f.dirs.includes('d1'));
+  audio = d2.length ? d2 : notD1.length ? notD1 : audio;
+  if (!audio.length) throw new Error('That folder has no music files (OGG, MP3, FLAC, WAV, Opus or M4A).');
+  const songs = MUSIC_SONGS.map((names) => audio.find((f) => names.includes(base(f.name))) || null);
+  const rest = audio.filter((f) => !songs.includes(f))
+    .sort((a, b) => a.path.localeCompare(b.path, undefined, { numeric: true }));
+  // a playlist next to the music sets the level order (and which files play)
+  let levels = [];
+  const dirs = new Set(audio.map((f) => f.dir));
+  const playlist = all.find((f) => /^playlist\.(txt|m3u8?)$/.test(f.name) && dirs.has(f.dir));
+  if (playlist) {
+    for (const line of (await playlist.file.text()).split(/\r?\n/)) {
+      const name = line.trim().toLowerCase().replace(/\\/g, '/').split('/').pop();
+      const f = name && !name.startsWith('#') && rest.find((r) => r.name === name);
+      if (f && !levels.includes(f)) levels.push(f);
+    }
+  }
+  const fromPlaylist = levels.length > 0;
+  if (!fromPlaylist) levels = rest;
+  return { songs, levels, playlist: fromPlaylist };
+}
+
+async function importMusic(items, onProgress) {
+  const set = await classifyMusic(items);
+  const plan = [
+    ...set.songs.map((f, i) => f && { key: `song/${i}`, f }),
+    ...set.levels.map((f, i) => ({ key: levelKey(i), f })),
+  ].filter(Boolean);
+  const total = plan.reduce((a, p) => a + p.f.file.size, 0);
+  let done = 0;
+  const db = await openDb();
+  try {
+    await idbClear(db, 'music');
+    for (const p of plan) {
+      onProgress(done / total, p.f.name);
+      const buf = await p.f.file.arrayBuffer();
+      await idbPut(db, 'music', p.key, new Blob([buf], { type: MUSIC_EXT[musicExt(p.f.name)] }));
+      done += p.f.file.size;
+    }
+    const index = {
+      version: 1,
+      importedAt: new Date().toISOString(),
+      songs: set.songs.map((f) => (f ? f.name : null)),
+      levels: set.levels.map((f) => f.name),
+      playlist: set.playlist,
+      totalBytes: total,
+    };
+    await idbPut(db, 'music', 'index', index);
+    onProgress(1, 'done');
+    return index;
+  } catch (e) {
+    await idbClear(db, 'music').catch(() => {});
+    throw e;
+  } finally {
+    db.close();
+  }
+}
+
+async function withDb(fn) {
+  const db = await openDb();
+  try {
+    return await fn(db);
+  } finally {
+    db.close();
+  }
+}
+const musicIndex = () => withDb((db) => idbGet(db, 'music', 'index')).then((i) => i || null);
+const removeMusic = () => withDb((db) => idbClear(db, 'music'));
+
+// Object URLs for the engine (Module.d2music), or null without a stored folder.
+async function loadMusicFolder(db) {
+  const index = await idbGet(db, 'music', 'index');
+  if (!index) return null;
+  const url = async (key) => {
+    const blob = await idbGet(db, 'music', key);
+    return blob ? URL.createObjectURL(blob) : null;
+  };
+  const songs = [];
+  for (let i = 0; i < MUSIC_SONGS.length; i++) songs[i] = index.songs[i] ? await url(`song/${i}`) : null;
+  const levels = [];
+  for (let i = 0; i < index.levels.length; i++) {
+    const u = await url(levelKey(i));
+    if (u) levels.push(u);
+  }
+  return songs.some(Boolean) || levels.length ? { songs, levels } : null;
+}
+
+function describeMusic(index) {
+  const songs = MUSIC_SONG_NAMES.filter((_, i) => index.songs[i]);
+  return `${index.levels.length} level track${index.levels.length === 1 ? '' : 's'}` +
+    (index.playlist ? ' (in playlist order)' : '') +
+    (songs.length ? ` + ${songs.join(', ')}` : '') + ` · ${fmtBytes(index.totalBytes)}`;
+}
+
 // ---------- Settings ----------
 
 const SETTINGS_KEY = 'descent2-web-settings';
@@ -242,10 +357,10 @@ function renderResolution(quality) {
 
 const gcd = (a, b) => (b ? gcd(b, a % b) : a);
 
-// D2X music types: 0 none, 1 built-in (the game's MIDI songs), 2 CD audio
-const MUSIC_TYPES = { off: 0, midi: 1, cd: 2 };
+// D2X music types: 0 none, 1 built-in (the game's MIDI songs), 2 CD audio, 3 music folder
+const MUSIC_TYPES = { off: 0, midi: 1, cd: 2, folder: 3 };
 
-function buildConfig(existing, settings, haveCd) {
+function buildConfig(existing, settings, haveCd, haveFolder) {
   const { w, h } = renderResolution(settings.quality);
   const g = gcd(w, h);
   const forced = {
@@ -276,6 +391,7 @@ function buildConfig(existing, settings, haveCd) {
     if (name) settings.music = name;
   }
   let music = settings.music in MUSIC_TYPES ? settings.music : 'cd';
+  if (music === 'folder' && !haveFolder) music = 'cd';
   if (music === 'cd' && !haveCd) music = 'midi';
   forced.MusicType = MUSIC_TYPES[music];
   settings.musicWritten = forced.MusicType;
@@ -351,6 +467,7 @@ async function bootGame(manifest, ui) {
   const fileData = [];
   let loaded = 0;
   const cdTracks = [];
+  let music = null;
   try {
     for (const f of manifest.files) {
       ui.status(`Loading ${f.path}…`);
@@ -376,6 +493,7 @@ async function bootGame(manifest, ui) {
         if (blob) cdTracks[t.track] = URL.createObjectURL(blob);
       }
     }
+    if (db) music = await loadMusicFolder(db).catch((e) => { console.warn('Music folder unavailable', e); return null; });
   } finally {
     if (db) db.close();
   }
@@ -386,6 +504,7 @@ async function bootGame(manifest, ui) {
   window.Module = {
     canvas,
     d2cd: { tracks: cdTracks },
+    d2music: music,
     d2midi: midiPlayer(),
     print: (t) => console.log(t),
     printErr: (t) => console.warn(t),
@@ -414,7 +533,7 @@ async function bootGame(manifest, ui) {
           const cfgPath = SAVE_DIR + '/descent.cfg';
           let existing = null;
           try { existing = FS.readFile(cfgPath, { encoding: 'utf8' }); } catch {}
-          const cfg = buildConfig(existing, settings, cdTracks.length > 0);
+          const cfg = buildConfig(existing, settings, cdTracks.length > 0, !!music);
           saveSettings(settings);
           FS.writeFile(cfgPath, cfg.text);
           canvas.width = cfg.w;
@@ -429,8 +548,8 @@ async function bootGame(manifest, ui) {
       Module.callMain(['-hogdir', DATA_DIR, '-gl_gettexlevelparam_ok', '0', '-gl_intensity4_ok', '0',
         '-gl_luminance4_alpha4_ok', '0', '-gl_rgba2_ok', '0']);
       startSaveSync();
-      // fetch the MIDI sound bank in the background so the first briefing has music
-      if (settings.music !== 'off') Module.d2midi.load();
+      // fetch the MIDI sound bank in the background so its music starts without a wait
+      if (settings.music === 'midi' || settings.music === 'cd') Module.d2midi.load();
     },
     onAbort: (what) => ui.message('The game stopped unexpectedly: ' + what, true),
   };
@@ -510,6 +629,51 @@ async function main() {
     settings.music = $('music').value;
     delete settings.musicWritten; // the page's choice wins over the last in-game one
     saveSettings(settings);
+  });
+  // The music folder is stored apart from the game files, so it survives a game re-import.
+  const showMusic = (index) => {
+    $('musicFolderOption').hidden = $('musicFolderOption').disabled = !index;
+    $('music').value = index || settings.music !== 'folder' ? settings.music : 'cd';
+    $('musicInfo').textContent = index ? 'Music folder: ' + describeMusic(index) + ', stored in this browser.'
+      : 'Have Descent II music files, like the D2X-XL music folder? Load them to play them in the game.';
+    $('musicRemove').hidden = !index;
+  };
+  showMusic(await musicIndex().catch(() => null));
+  $('musicFolder').addEventListener('change', async (ev) => {
+    if (!ev.target.files.length) return;
+    $('musicBusy').hidden = false;
+    $('message').hidden = true;
+    try {
+      if (navigator.storage && navigator.storage.persist) await navigator.storage.persist();
+      const index = await importMusic(filesFromInput(ev.target.files), (f, label) => {
+        $('musicBar').style.width = Math.round(f * 100) + '%';
+        $('musicLabel').textContent = label === 'done' ? 'Done' : 'Storing ' + label;
+      });
+      settings.music = 'folder';
+      delete settings.musicWritten;
+      saveSettings(settings);
+      showMusic(index);
+      ui.message('Music folder stored. The game will play it.');
+    } catch (e) {
+      ui.message(e.message, true);
+    } finally {
+      $('musicBusy').hidden = true;
+      ev.target.value = '';
+    }
+  });
+  $('musicRemove').addEventListener('click', async () => {
+    try {
+      await removeMusic();
+    } catch (e) {
+      ui.message(e.message, true);
+      return;
+    }
+    if (settings.music === 'folder') {
+      settings.music = 'cd';
+      delete settings.musicWritten;
+      saveSettings(settings);
+    }
+    showMusic(null);
   });
   $('quality').addEventListener('change', () => { settings.quality = $('quality').value; saveSettings(settings); updateResLabel(); });
   $('msaa').addEventListener('change', () => { settings.msaa = $('msaa').checked; saveSettings(settings); });

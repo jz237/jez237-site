@@ -49,6 +49,9 @@
   .small { color: var(--dim); font-size: 13px; }
   .row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
   .settings { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+  .musicrow { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 14px; }
+  .musicrow .small { flex: 1 1 260px; }
+  .btn.slim { padding: 6px 12px; font-size: 13px; font-weight: 500; }
   select { background: #0b0e14; color: var(--text); border: 1px solid var(--line); border-radius: 7px; padding: 6px 8px; font: inherit; }
   label { display: inline-flex; gap: 8px; align-items: center; }
   .message { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); max-width: min(680px, 92vw);
@@ -118,11 +121,22 @@
       <label>Music
         <select id="music">
           <option value="cd">CD soundtrack</option>
+          <option value="folder" id="musicFolderOption" hidden disabled>Music folder</option>
           <option value="midi">Original MIDI soundtrack</option>
           <option value="off">Off</option>
         </select>
       </label>
       <button class="btn ghost" id="reimport">Use other game files…</button>
+    </div>
+    <div class="musicrow">
+      <span class="small" id="musicInfo"></span>
+      <label class="btn ghost slim" for="musicFolder">Load music folder…</label>
+      <button class="btn ghost slim" id="musicRemove" hidden>Remove</button>
+      <input type="file" id="musicFolder" webkitdirectory directory multiple>
+    </div>
+    <div id="musicBusy" hidden>
+      <div class="bar"><div id="musicBar"></div></div>
+      <div class="small" id="musicLabel">Reading…</div>
     </div>
   </section>
 
@@ -145,8 +159,9 @@
     </div>
     <p class="small" style="margin-bottom:0">Saved pilots and games are kept in this browser. Enhancements: native-resolution
       rendering with trilinear filtering and MSAA, high-resolution cutscenes, smooth display-synced frame rate, the original
-      CD soundtrack, and the game's own MIDI music for briefings (or the whole game) played through
-      a General MIDI synthesizer. New pilots get mouse and gamepad flight set up; adjust them in <b>Options → Controls</b>.</p>
+      CD soundtrack, the game's own MIDI music played through a General MIDI synthesizer, or a music folder of your own
+      (title, briefing, credits and level tracks; a <code>playlist.txt</code> sets the level order).
+      New pilots get mouse and gamepad flight set up; adjust them in <b>Options → Controls</b>.</p>
   </section>
 </main>
 
@@ -162,6 +177,6 @@
   MIDI music: <a href="https://github.com/spessasus/spessasynth_lib">SpessaSynth</a> with the
   <a href="https://www.schristiancollins.com/generaluser">GeneralUser GS</a> sound bank by S. Christian Collins.
 </footer>
-<script src="d2loader.js?v=20261102b"></script>
+<script src="d2loader.js?v=20261102c"></script>
 </body>
 </html>

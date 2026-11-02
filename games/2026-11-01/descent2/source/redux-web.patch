@@ -251,10 +251,10 @@ index 0000000..f8c55f7
 +#include <SDL.h>
 diff --git a/d2/arch/web/library_d2web.js b/d2/arch/web/library_d2web.js
 new file mode 100644
-index 0000000..491d02d
+index 0000000..1fbf9fb
 --- /dev/null
 +++ b/d2/arch/web/library_d2web.js
-@@ -0,0 +1,191 @@
+@@ -0,0 +1,311 @@
 +// Emscripten JS library: browser glue for the Descent II web build.
 +// The page fills Module.d2cd.tracks[n] with object URLs of the ripped CD tracks
 +// (index = CD track number; track 1 is the data track and stays empty).
@@ -367,6 +367,126 @@ index 0000000..491d02d
 +  d2web_midi_resume: () => { if (Module.d2midi) Module.d2midi.resume(); },
 +  d2web_midi_pause_resume: () => { if (Module.d2midi) Module.d2midi.toggle(); },
 +  d2web_midi_volume: (v) => { if (Module.d2midi) Module.d2midi.volume(Math.max(0, Math.min(8, v)) / 8); },
++
++  // Music folder: the page fills Module.d2music with object URLs of the player's own music
++  // files, songs[SONG_*] (title, briefing, endlevel, endgame, credits) and levels[] in play order.
++  $D2Music__postset: 'D2Music.init();',
++  $D2Music: {
++    audio: null,
++    state: 0, // 0 stopped, 1 playing, 2 paused
++    volume: 1,
++    label: '', // 'song 0' or 'level 3', for the page and tests
++    level: -1, // levels[] index while level music plays
++    next: null, // started when the current file ends
++    init() {
++      Module.musicStatus = () => ({
++        state: D2Music.state,
++        playing: D2Music.label,
++        level: D2Music.level,
++        time: D2Music.audio ? D2Music.audio.currentTime : 0,
++        paused: D2Music.audio ? D2Music.audio.paused : true,
++        volume: D2Music.volume,
++      });
++    },
++    set() {
++      return Module.d2music || { songs: [], levels: [] };
++    },
++    el() {
++      if (!D2Music.audio) {
++        D2Music.audio = new Audio();
++        D2Music.audio.preload = 'auto';
++        D2Music.audio.addEventListener('ended', () => {
++          if (D2Music.state !== 1) return;
++          if (D2Music.next) D2Music.next();
++          else D2Music.state = 0;
++        });
++      }
++      return D2Music.audio;
++    },
++    start(url, loop, label, next) {
++      const a = D2Music.el();
++      a.src = url;
++      a.loop = loop;
++      a.volume = D2Music.volume;
++      a.play().catch((e) => console.warn('Music play failed', e));
++      D2Music.state = 1;
++      D2Music.label = label;
++      D2Music.next = next || null;
++      if (Module.onMusicTrack) Module.onMusicTrack(label);
++    },
++    // level music plays through the playlist and wraps, like the CD
++    playLevel(i) {
++      const levels = D2Music.set().levels;
++      D2Music.level = ((i % levels.length) + levels.length) % levels.length;
++      D2Music.start(levels[D2Music.level], levels.length === 1, 'level ' + D2Music.level,
++        () => D2Music.playLevel(D2Music.level + 1));
++    },
++  },
++
++  d2web_music_has__deps: ['$D2Music'],
++  d2web_music_has: (songnum) => {
++    const s = D2Music.set();
++    if (songnum < 0) return s.levels.length || s.songs.some(Boolean) ? 1 : 0;
++    if (songnum >= 5) return s.levels.length ? 1 : 0; // SONG_FIRST_LEVEL_SONG
++    return s.songs[songnum] ? 1 : 0;
++  },
++
++  d2web_music_song__deps: ['$D2Music'],
++  d2web_music_song: (songnum, repeat, thenCredits) => {
++    const songs = D2Music.set().songs;
++    const url = songs[songnum];
++    if (!url) return 0;
++    D2Music.level = -1;
++    // the title plays once and hands over to the looping credits song, as on the CD
++    if (thenCredits && songs[4] && songnum !== 4) {
++      D2Music.start(url, false, 'song ' + songnum, () => D2Music.start(songs[4], true, 'song 4'));
++    } else {
++      D2Music.start(url, !!repeat, 'song ' + songnum);
++    }
++    return 1;
++  },
++
++  d2web_music_level__deps: ['$D2Music'],
++  d2web_music_level: (levelsong, offset) => {
++    if (!D2Music.set().levels.length) return 0;
++    D2Music.playLevel(offset && D2Music.level >= 0 ? D2Music.level + offset : levelsong);
++    return 1;
++  },
++
++  d2web_music_stop__deps: ['$D2Music'],
++  d2web_music_stop: () => {
++    if (D2Music.audio) D2Music.audio.pause();
++    D2Music.state = 0;
++    D2Music.label = '';
++    D2Music.next = null;
++  },
++
++  d2web_music_pause__deps: ['$D2Music'],
++  d2web_music_pause: () => {
++    if (D2Music.state === 1 && D2Music.audio) {
++      D2Music.audio.pause();
++      D2Music.state = 2;
++    }
++  },
++
++  d2web_music_resume__deps: ['$D2Music'],
++  d2web_music_resume: () => {
++    if (D2Music.state === 2 && D2Music.audio) {
++      D2Music.audio.play().catch(() => {});
++      D2Music.state = 1;
++    }
++  },
++
++  d2web_music_pause_resume__deps: ['$D2Music', 'd2web_music_pause', 'd2web_music_resume'],
++  d2web_music_pause_resume: () => {
++    if (D2Music.state === 1) _d2web_music_pause(); else _d2web_music_resume();
++  },
++
++  d2web_music_volume__deps: ['$D2Music'],
++  d2web_music_volume: (v) => {
++    D2Music.volume = Math.max(0, Math.min(8, v)) / 8;
++    if (D2Music.audio) D2Music.audio.volume = D2Music.volume;
++  },
 +
 +  // Chrome reports four gamepad slots, empty ones as null, and the stock SDL count includes
 +  // them; count up to the last connected pad so device indices still line up.
@@ -761,10 +881,10 @@ index 0000000..518bd91
 +}
 diff --git a/d2/arch/web/web.h b/d2/arch/web/web.h
 new file mode 100644
-index 0000000..8d6829f
+index 0000000..fe0dad5
 --- /dev/null
 +++ b/d2/arch/web/web.h
-@@ -0,0 +1,47 @@
+@@ -0,0 +1,58 @@
 +/* Browser (Emscripten) glue for D2X-Redux. Implemented in library_d2web.js. */
 +#ifndef _D2WEB_H
 +#define _D2WEB_H
@@ -796,6 +916,17 @@ index 0000000..8d6829f
 +void d2web_midi_volume(int volume);	/* 0..8 */
 +/* Converts a Descent .hmp song to MIDI and plays it (web.c). */
 +int d2web_play_hmp(const char *filename, int loop);
++
++/* Music folder (the "jukebox" music type): the player's own music files, stored by the page.
++ * songnum is a SONG_* number; level music steps through the folder's level playlist. */
++int d2web_music_has(int songnum);	/* -1: any music at all; SONG_FIRST_LEVEL_SONG: level music */
++int d2web_music_song(int songnum, int repeat, int then_credits);
++int d2web_music_level(int levelsong, int offset);	/* levelsong = level number - 1 */
++void d2web_music_stop(void);
++void d2web_music_pause(void);
++void d2web_music_resume(void);
++void d2web_music_pause_resume(void);
++void d2web_music_volume(int volume);	/* 0..8 */
 +
 +/* True once after a gamepad was connected or removed. */
 +int d2web_gamepads_changed(void);
@@ -1056,19 +1187,40 @@ index dc6e44a..3c6d310 100644
  	return(0);		//presumably successful exit
  }
 diff --git a/d2/main/menu.c b/d2/main/menu.c
-index 8301896..5b1b27d 100644
+index 8301896..4e5e9f6 100644
 --- a/d2/main/menu.c
 +++ b/d2/main/menu.c
-@@ -1820,7 +1820,7 @@ int sound_menuset(newmenu *menu, d_event *event, void *userdata)
+@@ -60,6 +60,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ #include "jukebox.h" // for jukebox_exts
+ #endif
+ #include "config.h"
++#ifdef __EMSCRIPTEN__
++#include "web.h"
++#endif
+ #include "movie.h"
+ #include "gamepal.h"
+ #include "gauges.h"
+@@ -1715,7 +1718,7 @@ int sound_menuset(newmenu *menu, d_event *event, void *userdata)
+ 				GameCfg.MusicType = MUSIC_TYPE_REDBOOK;
+ 				replay = 1;
+ 			}
+-#ifdef USE_SDLMIXER
++#if defined(USE_SDLMIXER) || defined(__EMSCRIPTEN__)
+ 			else if (citem == opt_sm_mtype3)
+ 			{
+ 				GameCfg.MusicType = MUSIC_TYPE_CUSTOM;
+@@ -1820,7 +1823,9 @@ int sound_menuset(newmenu *menu, d_event *event, void *userdata)
  #ifdef USE_SDLMIXER
  #define SOUND_MENU_NITEMS 33
  #else
 -#ifdef _WIN32
-+#if defined(_WIN32) || defined(__EMSCRIPTEN__)	// both add the built-in music choice
++#if defined(__EMSCRIPTEN__)	// adds the built-in music choice and, once loaded, the music folder
++#define SOUND_MENU_NITEMS 12
++#elif defined(_WIN32)	// adds the built-in music choice
  #define SOUND_MENU_NITEMS 11
  #else
  #define SOUND_MENU_NITEMS 10
-@@ -1858,7 +1858,10 @@ void do_sound_menu()
+@@ -1858,7 +1863,10 @@ void do_sound_menu()
  	opt_sm_mtype0 = nitems;
  	m[nitems].type = NM_TYPE_RADIO; m[nitems].text = "no music"; m[nitems].value = (GameCfg.MusicType == MUSIC_TYPE_NONE); m[nitems].group = 0; nitems++;
  
@@ -1080,6 +1232,32 @@ index 8301896..5b1b27d 100644
  	opt_sm_mtype1 = nitems;
  	m[nitems].type = NM_TYPE_RADIO; m[nitems].text = "built-in/addon music"; m[nitems].value = (GameCfg.MusicType == MUSIC_TYPE_BUILTIN); m[nitems].group = 0; nitems++;
  #endif
+@@ -1870,6 +1878,13 @@ void do_sound_menu()
+ 	opt_sm_mtype3 = nitems;
+ 	m[nitems].type = NM_TYPE_RADIO; m[nitems].text = "jukebox"; m[nitems].value = (GameCfg.MusicType == MUSIC_TYPE_CUSTOM); m[nitems].group = 0; nitems++;
+ 
++#elif defined(__EMSCRIPTEN__)
++	opt_sm_mtype3 = -1;
++	if (d2web_music_has(-1) || GameCfg.MusicType == MUSIC_TYPE_CUSTOM)
++	{
++		opt_sm_mtype3 = nitems;
++		m[nitems].type = NM_TYPE_RADIO; m[nitems].text = "music folder"; m[nitems].value = (GameCfg.MusicType == MUSIC_TYPE_CUSTOM); m[nitems].group = 0; nitems++;
++	}
+ #endif
+ 
+ 	m[nitems].type = NM_TYPE_TEXT; m[nitems++].text = "";
+@@ -1940,7 +1955,11 @@ void do_sound_menu()
+ 	m[nitems].type = NM_TYPE_INPUT; m[nitems].text = GameCfg.CMMiscMusic[SONG_ENDGAME]; m[nitems++].text_len = NM_MAX_TEXT_LEN-1;
+ #endif
+ 
++#ifdef __EMSCRIPTEN__
++	Assert(nitems <= SOUND_MENU_NITEMS);	// the music folder choice shows once one is loaded
++#else
+ 	Assert(nitems == SOUND_MENU_NITEMS);
++#endif
+ 
+ 	newmenu_do1( NULL, "Sound Effects & Music", nitems, m, sound_menuset, NULL, 0 );
+ 
 diff --git a/d2/main/newdemo.c b/d2/main/newdemo.c
 index 79cf5fb..e27f272 100644
 --- a/d2/main/newdemo.c
@@ -1171,7 +1349,7 @@ index 650f69e..68d5617 100644
  
  //	returns true if powerup consumed
 diff --git a/d2/main/songs.c b/d2/main/songs.c
-index cf9fb7d..01cce1e 100644
+index cf9fb7d..76e008b 100644
 --- a/d2/main/songs.c
 +++ b/d2/main/songs.c
 @@ -31,6 +31,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
@@ -1184,17 +1362,18 @@ index cf9fb7d..01cce1e 100644
  #include "config.h"
  #include "timer.h"
  #include "args.h"
-@@ -59,6 +62,9 @@ void songs_set_volume(int volume)
+@@ -59,6 +62,10 @@ void songs_set_volume(int volume)
  #ifdef USE_SDLMIXER
  	mix_set_music_volume(volume);
  #endif
 +#ifdef __EMSCRIPTEN__
 +	d2web_midi_volume(volume);
++	d2web_music_volume(volume);
 +#endif
  }
  
  // Set up everything for our music
-@@ -149,7 +155,7 @@ void songs_init()
+@@ -149,12 +156,14 @@ void songs_init()
  	if (1)
  #endif
  	{
@@ -1203,47 +1382,58 @@ index cf9fb7d..01cce1e 100644
  		if (GameCfg.MusicType == MUSIC_TYPE_BUILTIN)
  			GameCfg.MusicType = MUSIC_TYPE_NONE;
  #endif
-@@ -188,6 +194,9 @@ void songs_stop_all(void)
++#ifndef __EMSCRIPTEN__	// the page plays the music folder itself
+ 		if (GameCfg.MusicType == MUSIC_TYPE_CUSTOM)
+ 			GameCfg.MusicType = MUSIC_TYPE_NONE;
++#endif
+ 	}
+ 
+ 	if (GameCfg.MusicType == MUSIC_TYPE_REDBOOK)
+@@ -188,6 +197,10 @@ void songs_stop_all(void)
  #ifdef USE_SDLMIXER
  	mix_stop_music();
  #endif
 +#ifdef __EMSCRIPTEN__
 +	d2web_midi_stop();
++	d2web_music_stop();
 +#endif
  
  	Song_playing = -1;
  }
-@@ -202,6 +211,9 @@ void songs_pause(void)
+@@ -202,6 +215,10 @@ void songs_pause(void)
  #ifdef USE_SDLMIXER
  	mix_pause_music();
  #endif
 +#ifdef __EMSCRIPTEN__
 +	d2web_midi_pause();
++	d2web_music_pause();
 +#endif
  }
  
  void songs_resume(void)
-@@ -214,6 +226,9 @@ void songs_resume(void)
+@@ -214,6 +231,10 @@ void songs_resume(void)
  #ifdef USE_SDLMIXER
  	mix_resume_music();
  #endif
 +#ifdef __EMSCRIPTEN__
 +	d2web_midi_resume();
++	d2web_music_resume();
 +#endif
  }
  
  void songs_pause_resume(void)
-@@ -223,6 +238,9 @@ void songs_pause_resume(void)
+@@ -223,6 +244,10 @@ void songs_pause_resume(void)
  #ifdef USE_SDLMIXER
  	mix_pause_resume_music();
  #endif
 +#ifdef __EMSCRIPTEN__
 +	d2web_midi_pause_resume();
++	d2web_music_pause_resume();
 +#endif
  }
  
  /*
-@@ -300,6 +318,8 @@ int songs_play_file(char *filename, int repeat, void (*hook_finished_track)())
+@@ -300,6 +325,8 @@ int songs_play_file(char *filename, int repeat, void (*hook_finished_track)())
  		return digi_win32_play_midi_song( filename, repeat );
  #elif defined(USE_SDLMIXER)
  		return mix_play_file( filename, repeat, hook_finished_track );
@@ -1252,7 +1442,7 @@ index cf9fb7d..01cce1e 100644
  #else
  		return 0;
  #endif
-@@ -356,6 +376,18 @@ int songs_play_song( int songnum, int repeat )
+@@ -356,6 +383,18 @@ int songs_play_song( int songnum, int repeat )
  					Song_playing = songnum;
  				}
  			}
@@ -1271,6 +1461,76 @@ index cf9fb7d..01cce1e 100644
  			break;
  		}
  #ifdef USE_SDLMIXER
+@@ -373,6 +412,19 @@ int songs_play_song( int songnum, int repeat )
+ 				Song_playing = songnum;
+ 			break;
+ 		}
++#elif defined(__EMSCRIPTEN__)
++		case MUSIC_TYPE_CUSTOM:
++		{
++			// EXCEPTION: If the folder has no SONG_ENDLEVEL, continue playing level song.
++			if (Song_playing >= SONG_FIRST_LEVEL_SONG && songnum == SONG_ENDLEVEL && !d2web_music_has(songnum))
++				return Song_playing;
++
++			songs_stop_all();
++			// Play the credits song after the title song if original CD track order was chosen
++			if (d2web_music_song(songnum, repeat, songnum == SONG_TITLE && GameCfg.OrigTrackOrder))
++				Song_playing = songnum;
++			break;
++		}
+ #endif
+ 		default:
+ 			Song_playing = -1;
+@@ -489,6 +541,20 @@ int songs_play_level_song( int levelnum, int offset )
+ 
+ 			break;
+ 		}
++#elif defined(__EMSCRIPTEN__)
++		case MUSIC_TYPE_CUSTOM:
++		{
++			// we have just been told to play the same as we do already -> ignore
++			if (!offset && Song_playing >= SONG_FIRST_LEVEL_SONG && songnum + SONG_FIRST_LEVEL_SONG == Song_playing)
++				return Song_playing;
++
++			// The page keeps the folder's level playlist: it picks this level's track (or steps
++			// through the list by offset) and moves on to the next track when one ends.
++			songs_stop_all();
++			if (d2web_music_level(songnum, offset))
++				Song_playing = songnum + SONG_FIRST_LEVEL_SONG;
++			break;
++		}
+ #endif
+ 		default:
+ 			Song_playing = -1;
+diff --git a/d2/main/titles.c b/d2/main/titles.c
+index af6f092..1063d5d 100644
+--- a/d2/main/titles.c
++++ b/d2/main/titles.c
+@@ -49,6 +49,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ #include "mouse.h"
+ #include "console.h"
+ #include "args.h"
++#ifdef __EMSCRIPTEN__
++#include "config.h"
++#include "web.h"
++#endif
+ #ifdef OGL
+ #include "ogl_init.h"
+ #endif
+@@ -1412,7 +1416,12 @@ void do_briefing_screens(char *filename, int level_num)
+ 		return;
+ 	}
+ 
+-	if (EMULATING_D1 || is_SHAREWARE || is_MAC_SHARE || is_D2_OEM || !PLAYING_BUILTIN_MISSION)
++	if (EMULATING_D1 || is_SHAREWARE || is_MAC_SHARE || is_D2_OEM || !PLAYING_BUILTIN_MISSION
++#ifdef __EMSCRIPTEN__
++		// a music folder with a briefing song plays it instead of the hum
++		|| (GameCfg.MusicType == MUSIC_TYPE_CUSTOM && d2web_music_has(SONG_BRIEFING))
++#endif
++		)
+ 	{
+ 		if ((songs_is_playing() != SONG_BRIEFING) && (songs_is_playing() != SONG_ENDGAME))
+ 			songs_play_song( SONG_BRIEFING, 1 );
 diff --git a/d2/misc/args.c b/d2/misc/args.c
 index cb81385..d2aa251 100644
 --- a/d2/misc/args.c
