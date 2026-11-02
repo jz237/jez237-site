@@ -41,7 +41,12 @@ export class Bot {
     let want = null, raw = null; // smoothed desire {x, z, m} or an immediate push {x, z}
     if (g.state !== 'play') return out;
     if (p.dead) { this.path = null; this.ride = null; this.goal = null; this.engage = null; this.sx = this.sz = 0; this.say('Shaking it off…'); return out; }
-    if (p.state === 'rivet') { out.actHeld = true; this.say(`Riveting (${Math.min(4, p.rivetSock.rivets + 1)}/4)`); this.sx = this.sz = 0; return out; }
+    if (p.state === 'rivet') {
+      // let go of the rivet gun to step out from under a falling bolt (rivet progress is kept)
+      const bolts = g.level.hazards.find(h => h.constructor.name === 'Bolts'), o = bolts && bolts.nearest(p.body.x, p.body.y, p.body.z);
+      if (o && o.t > o.warn * .35) { this.say('Dodging a falling bolt'); return out; }
+      out.actHeld = true; this.say(`Riveting (${Math.min(4, p.rivetSock.rivets + 1)}/4)`); this.sx = this.sz = 0; return out;
+    }
     const riding = this.ride && this.ride.phase !== 'wait';
     const r = riding ? this.doRide(dt) : this.fight(out, dt) || this.dodge() || this.brace() || (this.ride ? this.doRide(dt) : this.work(out, dt));
     if (r) { if (r.raw) raw = r; else want = r; }
