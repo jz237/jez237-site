@@ -46,5 +46,17 @@
       "https://journals.flvc.org/edis/article/download/109188/104367/152407",
       "https://ornamentalfish.org/what-we-do/advice-information/care-sheets/caresheets-tropical-freshwater-fish/how-to-look-after-siamese-fighting-fish-bettas/"
     ]
+  },
+  {
+    "filename": "test-log.svg",
+    "title": "A water-test log entry",
+    "alt": "Three test vials beside a log card listing tank, date and time, test and kit, result with units, context and the next check. Example entry only, not a target value.",
+    "width": 960,
+    "height": 680,
+    "caption": "Original schematic of a test-log entry; the values are an example, not a recommended level.",
+    "sources": [
+      "https://www.apifishcare.com/products/api-freshwater-master-test-kit",
+      "https://www.jbl.de/en/blog/detail/171/inaccurate-water-tests-or-did-i-do-something-wrong-after-all?country=fi"
+    ]
   }
 ]

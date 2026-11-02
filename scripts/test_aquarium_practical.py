@@ -87,7 +87,7 @@ class PracticalTests(unittest.TestCase):
             self.assertTrue(d['alt'])
             self.assertIsNotNone(svg.find('{http://www.w3.org/2000/svg}title'))
             self.assertNotIn('<script',(OUT/'images'/d['filename']).read_text())
-        self.assertGreaterEqual(sum(bool(s.get('diagram')) for s in STORIES),2)
+        self.assertGreaterEqual(sum(bool(s.get('diagram')) for s in STORIES),1)
         credits=(OUT/'credits.html').read_text()
         self.assertIn('not photographs',credits)
         self.assertIn('AI-assisted diagrams',credits)
@@ -232,6 +232,24 @@ class PracticalTests(unittest.TestCase):
         with self.assertRaises(AssertionError):validate(bad)
         for s in STORIES:
             if s['format']!='profile':self.assertNotIn('glance-box',(OUT/'stories'/s['slug']/'index.html').read_text())
+
+    def test_every_story_has_its_own_image(self):
+        # Each story's image must show its subject, and no image may be used on more than one story.
+        uses=Counter([s['image'] for s in STORIES]+[s['diagram'] for s in STORIES if s.get('diagram')])
+        self.assertEqual({k:v for k,v in uses.items() if v>1},{})
+        self.assertEqual(len({s['image'] for s in STORIES}),len(STORIES))
+        photos=json.loads((OUT/'photo-credits.json').read_text())
+        credited={p['filename'] for p in photos}
+        for s in STORIES:
+            self.assertTrue(s['image'] in credited or s['image'].endswith('.svg'),s['slug'])
+            self.assertTrue(s['caption'],s['slug'])
+        # No orphan credit records: every credited photo appears in a story or on the homepage.
+        home=(OUT/'index.html').read_text()
+        for name in credited:
+            self.assertTrue(name in uses or f'images/{name}' in home,name)
+        html=home.split('<template')[0]
+        cards=re.findall(r'<article class="story[^>]*>.*?<img src="\./images/([^"]+)"',html,re.S)
+        self.assertEqual(len(cards),len(STORIES));self.assertEqual(len(set(cards)),len(STORIES))
 
     def test_freshwater_balance(self):
         fresh=[s for s in STORIES if s['category']=='freshwater']

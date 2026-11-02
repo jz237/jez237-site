@@ -111,6 +111,8 @@ CHECK="python3 $SITE/scripts/aquarium_daily_story_check.py"
    - a **clearly labelled original diagram** added to `scripts/build_aquarium_diagrams.py`
      (which regenerates `illustrations.json` with its caption and sources).
    If no properly licensed image exists, **skip the day**. Never use an unlicensed image.
+   Each story's image must show its actual subject. No image may be used on more than one story. Check `stories.json` and pick a new file; never reuse an existing story's image
+   or diagram, and never use an unrelated stand-in. `$CHECK validate` fails on any reuse.
 7. **Gate.** `$CHECK validate` (one new story at most, today's date, schema, format differs
    from the previous story, word range, facts box, units, tags, image licence record,
    showroom limits).

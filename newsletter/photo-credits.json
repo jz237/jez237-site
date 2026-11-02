@@ -24,30 +24,6 @@
     "height": 465
   },
   {
-    "filename": "freshwater-fish.webp",
-    "title": "Paracheirodon innesi 01",
-    "source_url": "https://commons.wikimedia.org/wiki/File:Paracheirodon_innesi_01.jpg",
-    "author": "Wojciech J. Płuciennik",
-    "license": "CC BY-SA 4.0",
-    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
-    "alt": "A small blue-and-red freshwater fish among aquarium plants.",
-    "changes": "EXIF orientation normalized; resized without cropping; converted to WebP quality 80. No generative editing. Display layouts may crop the edges. This derivative image remains licensed CC BY-SA 4.0.",
-    "width": 1000,
-    "height": 667
-  },
-  {
-    "filename": "shrimp.webp",
-    "title": "RedCherryShrimp",
-    "source_url": "https://commons.wikimedia.org/wiki/File:RedCherryShrimp.jpg",
-    "author": "Atulbhats",
-    "license": "CC BY-SA 4.0",
-    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
-    "alt": "A red freshwater shrimp beside textured rock and bright green aquatic plants.",
-    "changes": "EXIF orientation normalized; resized without cropping; converted to WebP quality 80. No generative editing. Display layouts may crop the edges. This derivative image remains licensed CC BY-SA 4.0.",
-    "width": 1000,
-    "height": 667
-  },
-  {
     "filename": "coral-detail.webp",
     "title": "Fluorescent coral in aquarium",
     "source_url": "https://commons.wikimedia.org/wiki/File:Fluorescent_coral_in_aquarium.jpg",
@@ -58,30 +34,6 @@
     "changes": "EXIF orientation normalized; resized without cropping; converted to WebP quality 80. No generative editing. Display layouts may crop the edges. This derivative image remains licensed CC BY-SA 4.0.",
     "width": 1000,
     "height": 667
-  },
-  {
-    "filename": "clownfish.webp",
-    "title": "Amphiprion allardi.002 - Aquarium Finisterrae",
-    "source_url": "https://commons.wikimedia.org/wiki/File:Amphiprion_allardi.002_-_Aquarium_Finisterrae.jpg",
-    "author": "Fernando Losada Rodríguez",
-    "license": "CC BY-SA 4.0",
-    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
-    "alt": "A yellow, white, and dark clownfish nestled among long anemone tentacles.",
-    "changes": "EXIF orientation normalized; resized without cropping; converted to WebP quality 80. No generative editing. Display layouts may crop the edges. This derivative image remains licensed CC BY-SA 4.0.",
-    "width": 1000,
-    "height": 750
-  },
-  {
-    "filename": "reef-scene.webp",
-    "title": "Colorful anemone growing on coral in London aquarium",
-    "source_url": "https://commons.wikimedia.org/wiki/File:Colorful_anemone_growing_on_coral_in_London_aquarium.jpg",
-    "author": "Aungraheeta",
-    "license": "CC BY-SA 4.0",
-    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
-    "alt": "An aquarium reef display with pale purple anemones and textured rock.",
-    "changes": "EXIF orientation normalized; resized without cropping; converted to WebP quality 80. No generative editing. Display layouts may crop the edges. This derivative image remains licensed CC BY-SA 4.0.",
-    "width": 1000,
-    "height": 665
   },
   {
     "filename": "lionfish.webp",
@@ -214,5 +166,65 @@
     "changes": "Page margins and printed caption cropped; converted to WebP quality 82. No generative editing.",
     "width": 1400,
     "height": 968
+  },
+  {
+    "filename": "three-spined-stickleback.webp",
+    "title": "Gasterosteus aculeatus - Epinoche - Three-spined stickleback",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Gasterosteus_aculeatus_-_Epinoche_-_Three-spined_stickleback.jpg",
+    "author": "Gilles San Martin",
+    "license": "CC BY-SA 2.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+    "alt": "A three-spined stickleback seen from the side, with an orange throat and blue-green sheen.",
+    "changes": "Resized without cropping; converted to WebP quality 82. No generative editing. Display layouts may crop the edges. This derivative image remains licensed CC BY-SA 2.0.",
+    "width": 1600,
+    "height": 1066
+  },
+  {
+    "filename": "coral-spawning-fgb.webp",
+    "title": "Coral Spawning (Flower Garden Banks National Marine Sanctuary)",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Coral_Spawning_(38797556434).jpg",
+    "author": "NOAA Office of National Marine Sanctuaries (Flower Garden Banks NMS)",
+    "license": "Public domain",
+    "license_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "alt": "Close-up of coral polyps releasing pale spawn bundles into dark water.",
+    "changes": "Resized without cropping; converted to WebP quality 82. No generative editing. Display layouts may crop the edges.",
+    "width": 1600,
+    "height": 1063
+  },
+  {
+    "filename": "rotifer-brachionus-plicatilis.webp",
+    "title": "Rotifer Brachionus plicatilis",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Brachionus_plicatilis.jpg",
+    "author": "Sofdrakou",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "alt": "A transparent rotifer under the microscope, with its ciliated head, body and an oval egg beside it.",
+    "changes": "Resized without cropping; converted to WebP quality 82. No generative editing. Display layouts may crop the edges. This derivative image remains licensed CC BY-SA 4.0.",
+    "width": 1600,
+    "height": 1200
+  },
+  {
+    "filename": "filter-media-mix.webp",
+    "title": "Filtermaterial 060227",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Filtermaterial_060227.jpg",
+    "author": "BS Thurner Hof (German Wikipedia)",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "alt": "Assorted aquarium filter media: pale foam, white ceramic rings, a black plastic bio-ball and reddish porous granules.",
+    "changes": "Resized without cropping; converted to WebP quality 82. No generative editing. Display layouts may crop the edges. This derivative image remains licensed CC BY-SA 3.0 (originally GFDL, relicensed).",
+    "width": 1600,
+    "height": 1023
+  },
+  {
+    "filename": "bacopa-caroliniana-stems.webp",
+    "title": "Bacopa caroliniana kz3",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Bacopa_caroliniana_kz3.jpg",
+    "author": "Krzysztof Ziarnek, Kenraiz",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "alt": "Upright green stems of Bacopa caroliniana with paired rounded leaves, growing above water.",
+    "changes": "Resized without cropping; converted to WebP quality 82. No generative editing. Display layouts may crop the edges. This derivative image remains licensed CC BY-SA 4.0.",
+    "width": 1600,
+    "height": 1067
   }
 ]

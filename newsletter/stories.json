@@ -841,10 +841,10 @@
     "published": "2026-11-01",
     "title": "Replace evaporation with freshwater, not saltwater",
     "dek": "Keep top-offs and water changes separate, and check the instrument and both water samples before adjusting salinity.",
-    "image": "reef-scene.webp",
+    "image": "reef-top-off.svg",
     "source": "UF/IFAS; Hanna Instruments; Red Sea",
     "url": "https://edis.ifas.ufl.edu/publication/4H433/pdf",
-    "caption": "Illustrative reef photograph; not a demonstration of salinity testing or water preparation.",
+    "caption": "Original diagram: a top-off replaces evaporated water with fresh water, while a water change replaces removed water with prepared saltwater.",
     "references": [
       {
         "id": "r1",
@@ -924,8 +924,7 @@
         "text": "Our suggestion: label containers by purpose, not merely by color. Write “freshwater top-off” or “prepared saltwater,” plus the preparation date. Keep the test record with the batch. If salinity is unexpectedly wrong, pause routine maintenance and establish a tank-specific correction plan; this guide does not prescribe a universal correction dose or speed."
       }
     ],
-    "archive": false,
-    "diagram": "reef-top-off.svg"
+    "archive": false
   },
   {
     "slug": "a-greener-kind-of-aquarium",
@@ -1335,10 +1334,10 @@
     "published": "2026-11-01",
     "title": "Clean filter media according to its job",
     "dek": "Clear trapped debris but keep the established biological media, because the parts of a filter do different jobs.",
-    "image": "freshwater-fish.webp",
+    "image": "filter-media-mix.webp",
     "source": "RSPCA Australia; Seachem; Aqueon",
     "url": "https://kb.rspca.org.au/categories/companion-animals/fish/how-should-i-care-for-my-tropical-fish",
-    "caption": "Illustrative freshwater aquarium photograph; the filter and maintenance procedure are not shown.",
+    "caption": "Assorted aquarium filter media: foam, ceramic rings, a plastic bio-ball and porous granules. Illustrative photo, not store stock.",
     "references": [
       {
         "id": "r1",
@@ -1426,10 +1425,10 @@
     "published": "2026-11-01",
     "title": "Coral breeding mixes genes; fragmentation produces clones",
     "dek": "Breeding creates new genetic combinations. Growing fragments multiplies existing stock. Neither guarantees protection from bleaching.",
-    "image": "reef-scene.webp",
+    "image": "coral-spawning-fgb.webp",
     "source": "NOAA Fisheries",
     "url": "https://www.fisheries.noaa.gov/feature-story/noaa-and-partners-launch-next-generation-coral-restoration-following-florida-coral",
-    "caption": "Illustrative reef photograph; not a photograph of the research project.",
+    "caption": "Reef-building coral releasing spawn at Flower Garden Banks National Marine Sanctuary in the Gulf. NOAA photo; not the Florida work described here.",
     "references": [
       {
         "id": "r1",
@@ -1530,10 +1529,10 @@
     "published": "2026-11-01",
     "title": "Record aquarium test results with units and context",
     "dek": "Use the kit's method the same way each time, and keep a record that shows whether a change came from the water or from how you tested.",
-    "image": "freshwater-fish.webp",
+    "image": "test-log.svg",
     "source": "API Fishcare; JBL; RSPCA Australia",
     "url": "https://www.jbl.de/en/blog/detail/171/inaccurate-water-tests-or-did-i-do-something-wrong-after-all?country=fi",
-    "caption": "Illustrative freshwater aquarium photograph; it does not show a water test or establish the water's condition.",
+    "caption": "Original diagram of a test-log entry: one line per observation, with units and context. The values are an example, not a target.",
     "references": [
       {
         "id": "r1",
@@ -1631,10 +1630,10 @@
     "published": "2026-11-01",
     "title": "Breeding marine fish requires the right live food for their larvae",
     "dek": "Young fish need prey of the right size and nutritional value. Hatcheries raise food organisms alongside the fish.",
-    "image": "clownfish.webp",
+    "image": "rotifer-brachionus-plicatilis.webp",
     "source": "University of Florida",
     "url": "https://news.ufl.edu/2025/02/pet-fish-breeding-research/",
-    "caption": "Illustrative clownfish photograph; it does not establish that the pictured fish is captive-bred.",
+    "caption": "A rotifer, Brachionus plicatilis, under the microscope with an egg beside it. Rotifers are one of the live foods discussed here. Illustrative photo.",
     "references": [
       {
         "id": "r1",
@@ -1860,10 +1859,10 @@
     "published": "2026-11-01",
     "title": "Stickleback pairs in murky water approached food faster when coordinated",
     "dek": "The advantage depended on the conditions: larger groups in clear water could respond more slowly when tightly coordinated.",
-    "image": "freshwater-fish.webp",
+    "image": "three-spined-stickleback.webp",
     "source": "University of Bristol",
     "url": "https://www.bristol.ac.uk/news/2026/september/muddying-the-waters-makes-fish-more-sociable-study-finds.html",
-    "caption": "Illustrative freshwater aquarium photograph; these are not the sticklebacks in the study.",
+    "caption": "A three-spined stickleback (Gasterosteus aculeatus), the species in the Bristol study. Illustrative photo; not one of the study’s fish.",
     "references": [
       {
         "id": "r1",
@@ -1938,10 +1937,10 @@
     "published": "2026-11-01",
     "title": "Trim stem plants above leaves and replant healthy shoots",
     "dek": "Keep useful cuttings, thin crowded growth and renew weakened stems instead of repeatedly shortening the same dense patch.",
-    "image": "planted-tank.webp",
+    "image": "bacopa-caroliniana-stems.webp",
     "source": "Tropica Aquarium Plants; Aqua Design Amano",
     "url": "https://tropica.com/en/guide/care/trimming/",
-    "caption": "Illustrative planted aquarium; the photograph is not a before-and-after demonstration and does not identify the plants discussed.",
+    "caption": "Upright stems of Bacopa caroliniana, the species example in this guide, growing emersed at the New York Botanical Garden. Illustrative photo.",
     "references": [
       {
         "id": "r1",

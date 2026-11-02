@@ -159,6 +159,11 @@ def validate_edition():
     fresh = [s for s in stories if s['category'] == 'freshwater']
     if fresh and sum(s['tags'][0] == 'Plants' for s in fresh) > 0.4 * len(fresh):
         problems.append('plant stories dominate freshwater coverage; choose fish, shrimp, snails or ponds')
+    from collections import Counter
+    uses = Counter([s['image'] for s in stories] + [s['diagram'] for s in stories if s.get('diagram')])
+    for name, n in uses.items():
+        if n > 1:
+            problems.append(f'{name} is used on {n} stories; every story needs its own image')
     rooms = [s for s in stories if s.get('showroom')]
     if len(rooms) > max(3, len(stories) // 4):
         problems.append(f'{len(rooms)} showroom links; keep them occasional')
