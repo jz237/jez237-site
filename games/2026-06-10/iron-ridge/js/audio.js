@@ -3,14 +3,26 @@
 // everything else — engine rumble, wind, clicks, whistles — is synthesized.
 // The synth versions remain as fallback until the samples finish decoding.
 
-import { MUTE_KEY } from './config.js?v=polish2';
-import { settings, setSetting } from './settings.js?v=polish2';
+import { MUTE_KEY } from './config.js?v=real1';
+import { settings, setSetting } from './settings.js?v=real1';
 
+const takes = (base, n) => Array.from({ length: n }, (_, i) => `${base}-${i + 1}`);
 const SAMPLES = {
   fire: ['shot-01', 'shot-02', 'shot-03', 'shot-04', 'shot-05'],
   explosion: ['explosion-01', 'explosion-02', 'explosion-03', 'explosion-04', 'explosion-05'],
   waveAlert: ['wave-alert'],
+  // munition recordings generated with ElevenLabs sound effects
+  boomHe: takes('boom-he', 3), boomArty: takes('boom-arty', 3), boomBomb: takes('boom-bomb', 2),
+  boomVehicle: takes('boom-vehicle', 2), boomFuel: takes('boom-fuel', 2), boomRocket: takes('boom-rocket', 2),
+  boomFar: takes('boom-far', 3), cookoff: takes('cookoff', 2), debris: takes('debris', 2),
+  // infantry: rifle cracks, falls, pain, and shouted orders (ElevenLabs v3 voices)
+  rifle: takes('rifle', 3), rifleFar: takes('rifle-far', 2), bodyfall: takes('bodyfall', 2), hurt: takes('hurt', 3),
+  'shout-cover': takes('shout-cover', 3), 'shout-incoming': takes('shout-incoming', 3), 'shout-tank': takes('shout-tank', 3),
+  'shout-advance': takes('shout-advance', 3), 'shout-medic': takes('shout-medic', 3),
 };
+const BOOM_SET = { he: 'boomHe', ap: 'boomHe', arty: 'boomArty', bomb: 'boomBomb', vehicle: 'boomVehicle', fuel: 'boomFuel', rocket: 'boomRocket', concrete: 'boomArty' };
+const BOOM_GAIN = { he: 0.95, ap: 0.8, arty: 1.15, bomb: 1.35, vehicle: 1.2, fuel: 1.05, rocket: 0.85, concrete: 1.05 };
+const SOUND_SPEED = 343;
 
 const MUSIC_TRACKS = {
   menu: './assets/audio/music-menu.mp3',
@@ -36,7 +48,7 @@ export class GameAudio {
     this.muted = localStorage.getItem(MUTE_KEY) === '1';
     this.engineNodes = null;
     this.windNodes = null;
-    this.buffers = { fire: [], explosion: [], waveAlert: [] };
+    this.buffers = Object.fromEntries(Object.keys(SAMPLES).map(k => [k, []]));
     this.musicBuffers = {};
     this.musicLoading = {};
     this.musicNodes = null;   // { src, gain, track }
@@ -195,17 +207,33 @@ export class GameAudio {
     }
   }
 
-  // returns false when the sample set isn't ready (caller falls back to synth)
-  playSample(set, vol = 1, rateJitter = 0.14, maxDuration = 0) {
+  // returns false when the sample set isn't ready (caller falls back to synth).
+  // pan -1..1, delay seconds (sound travel), lowpass Hz for distant muffling
+  playSample(set, vol = 1, rateJitter = 0.14, maxDuration = 0, pan = 0, delay = 0, lowpass = 0) {
     const list = this.buffers[set];
     if (!this.ctx || !list || list.length === 0) return false;
     const src = this.ctx.createBufferSource();
-    src.buffer = list[(Math.random() * list.length) | 0];
+    let pick = (Math.random() * list.length) | 0;
+    if (list.length > 1 && pick === this.lastPick?.[set]) pick = (pick + 1) % list.length;
+    (this.lastPick ||= {})[set] = pick;
+    src.buffer = list[pick];
     src.playbackRate.value = 1 - rateJitter / 2 + Math.random() * rateJitter;
     const g = this.ctx.createGain();
     g.gain.value = Math.min(1.4, vol);
-    src.connect(g).connect(this.master);
-    const t = this.ctx.currentTime;
+    let node = src;
+    if (lowpass > 0) {
+      const f = this.ctx.createBiquadFilter();
+      f.type = 'lowpass'; f.frequency.value = lowpass; f.Q.value = 0.5;
+      node = node.connect(f);
+    }
+    node = node.connect(g);
+    if (pan && this.ctx.createStereoPanner) {
+      const p = this.ctx.createStereoPanner();
+      p.pan.value = pan;
+      node = node.connect(p);
+    }
+    node.connect(this.master);
+    const t = this.ctx.currentTime + Math.max(0, delay);
     src.start(t);
     if (maxDuration > 0) {
       try { src.stop(t + Math.min(maxDuration, src.buffer.duration)); } catch {}
@@ -332,6 +360,44 @@ export class GameAudio {
     }
     this.blast({ freq: 42, dur: 0.7 * big + 0.3, vol: 1.0, noiseVol: 0.75, noiseFreq: 600 });
   }
+  // a munition going off at dist metres: its own recording, arriving at the
+  // speed of sound, muffled and swapped for a rolling rumble far away, with
+  // earth pattering down afterwards for near ground bursts
+  boom(kind, power, dist, pan = 0, surface = 'ground') {
+    if (!this.ctx) return;
+    const delay = Math.min(0.75, dist / SOUND_SPEED);
+    const near = Math.max(0, 1 - dist / 260);
+    const vol = Math.min(1.35, (BOOM_GAIN[kind] ?? 1) * (0.25 + 0.85 * near) * (0.75 + Math.min(1.6, power) * 0.25));
+    const far = dist > 150 && kind !== 'bomb';
+    const set = far ? 'boomFar' : BOOM_SET[kind] || 'boomHe';
+    const lp = dist > 60 ? Math.max(700, 9000 - dist * 30) : 0;
+    if (!this.playSample(set, vol, 0.1, 0, pan * Math.min(1, dist / 20), delay, lp)) {
+      this.explosion(Math.max(0.4, 1.3 - dist / 180) * power);
+      return;
+    }
+    if (dist < 45 && kind !== 'bomb') this.blast({ freq: 40, dur: 0.45, vol: 0.35 * near, noiseVol: 0, noiseFreq: 400 });
+    if (surface === 'ground' && dist < 70 && kind !== 'rocket') {
+      this.playSample('debris', 0.55 * (1 - dist / 70), 0.15, 0, pan, delay + 0.55 + Math.random() * 0.3);
+    }
+  }
+
+  cookoff(vol, pan, dist) {
+    this.playSample('cookoff', vol, 0.2, 0, pan, Math.min(0.6, dist / SOUND_SPEED), dist > 80 ? 2500 : 0);
+  }
+
+  // infantry sounds: rifle cracks (thin and echoing far away), shouts, falls
+  soldier(kind, vol, pan, dist) {
+    const delay = Math.min(0.5, dist / SOUND_SPEED);
+    if (kind === 'rifle') {
+      const far = dist > 70;
+      this.playSample(far ? 'rifleFar' : 'rifle', vol * (far ? 1.6 : 1.1), 0.12, 0, pan, delay, far ? 4200 : 0) || this.mgShot();
+      return;
+    }
+    const lp = dist > 30 ? Math.max(1800, 8000 - dist * 70) : 0;
+    const gain = kind.startsWith('shout') ? 0.8 : kind === 'bodyfall' ? 0.65 : 0.75;
+    this.playSample(kind, vol * gain, kind.startsWith('shout') ? 0.06 : 0.14, 0, pan, delay, lp);
+  }
+
   hitTink() { this.blast({ freq: 220, dur: 0.12, vol: 0.25, noiseVol: 0.3, noiseFreq: 2400 }); }
   damaged() { this.blast({ freq: 90, dur: 0.3, vol: 0.5, noiseVol: 0.5, noiseFreq: 500 }); }
   whiz() { this.blast({ freq: 600, dur: 0.18, vol: 0.06, noiseVol: 0.3, noiseFreq: 3200 }); }

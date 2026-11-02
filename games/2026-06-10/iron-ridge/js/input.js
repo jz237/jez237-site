@@ -1,7 +1,7 @@
 // Unified input: keyboard + pointer-lock mouse on desktop, twin virtual
 // sticks + fire button on touch. Exposes one normalized state object.
 
-import { settings, setSetting } from './settings.js?v=polish2';
+import { settings, setSetting } from './settings.js?v=real1';
 
 export const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 

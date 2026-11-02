@@ -133,6 +133,49 @@ check line-of-sight, and lead their shots.
 - **Phones:** below 560 px wide the HUD restacks so the gun panel, armour bar
   and weapon button no longer overlap.
 
+## Realism pass (real1, November 2026)
+
+- **Explosions** (`js/blast.js`): fireballs and smoke are instanced spheres
+  displaced by turbulent 3D noise that roll as they rise. A blackbody ramp
+  cools each lobe from yellow-white to red to soot. The smoke is lit by the
+  weather's sun and sky, glows from below while young, and erodes into wisps
+  as it dies. Ground bursts throw stretched spikes of soil that arc over and
+  break into a brown dust column, with tumbling clods and a dust skirt
+  racing along the ground. Sparks are velocity-stretched streaks. Each blast
+  sends a shock ring through the grade pass that refracts the scene. Every
+  munition has its own recipe: AP and HE shells, artillery, airstrike bombs
+  (with burning ground), rockets, fuel drums and trucks, pillbox concrete,
+  and tank kills. A tank kill fires hot armour shards trailing flame and
+  smoke, then cooks off two or three more times. The flash lights the
+  ground and then flickers with the fireball. The fireballs, smoke, sparks,
+  thrown earth and chunks each draw in one call. Their shaders compile
+  behind the title screen.
+- **Soldiers** (`js/soldier-model.js`, `js/infantry.js`): every soldier is
+  one sculpted, smoothly skinned body. Each has an M1-style helmet with
+  scrim netting, woodland-camouflage fatigues, webbing, ammo pouches, a field
+  pack and bedroll, boots, and a rifle or an anti-tank launcher. The whole
+  force is GPU-skinned in a single instanced draw from a bone texture, plus
+  a second level of detail beyond 42 m. Arms use two-bone IK onto the weapon.
+  Joint angles drive a run cycle, a crouched combat run, standing, kneeling
+  and prone aiming, and ducking with a hand clamping the helmet. A lowest
+  point solver keeps knees, toes and chests planted on the ground.
+- **Infantry tactics:** each man keeps his own lane and advances in short
+  rushes. Within fighting range he sprints for a tree, big rock or wreck
+  that gains ground, then alternates peeking out to fire with ducking back.
+  Shells landing nearby and MG rounds cracking past build suppression.
+  Suppressed men flinch, duck, then go prone, and a pinned man fires from
+  prone. A tank charging at a man makes him dive clear of its tracks. Dying
+  men buckle at the knees or are thrown by blasts with their weapons flying.
+  The bodies stay for about 25 s, then sink away. A prone man is a lower MG
+  target.
+- **Sound (ElevenLabs):** 46 new recordings: HE, artillery, bomb, vehicle,
+  fuel and rocket blasts, distant rolling rumbles, cook-off pops and falling
+  debris. The infantry have rifle cracks near and far, body falls, pain
+  cries, and five shouted orders in three voices. These are "Take cover!",
+  "Incoming! Get down!", "Tank! Move, move!", "Go, go! Push forward!" and
+  "Man down! Medic!". Blasts arrive at the speed of sound, pan with the
+  camera, are muffled with distance, and become a rolling rumble far away.
+
 ## Art and rendering
 
 Nearby trees have bark trunks, branches and individual leaf/needle sprays

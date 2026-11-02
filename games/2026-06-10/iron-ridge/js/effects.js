@@ -3,10 +3,11 @@
 // tread marks, and screen-shake trauma.
 
 import * as THREE from 'three';
-import { Simplex2 } from './noise.js?v=polish2';
-import { treadTexture } from './surface-art.js?v=polish2';
-import { getHeight, getNormal } from './terrain.js?v=polish2';
-import { SCATTER } from './config.js?v=polish2';
+import { Simplex2 } from './noise.js?v=real1';
+import { treadTexture } from './surface-art.js?v=real1';
+import { getHeight, getNormal } from './terrain.js?v=real1';
+import { SCATTER } from './config.js?v=real1';
+import { Blast } from './blast.js?v=real1';
 
 const _up = new THREE.Vector3(0, 1, 0);
 const _zeroM = new THREE.Matrix4().makeScale(0, 0, 0);
@@ -70,7 +71,9 @@ function bloodTexture() {
     ctx.arc(s / 2 + Math.cos(a) * r, s / 2 + Math.sin(a) * r, 0.8 + Math.random() * 1.8, 0, Math.PI * 2);
     ctx.fill();
   }
-  return new THREE.CanvasTexture(cv);
+  const tex = new THREE.CanvasTexture(cv);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
 }
 
 // Blast crater: dark burnt core, a lighter broken ring of thrown-out soil
@@ -304,7 +307,7 @@ export class Effects {
     for (let i = 0; i < 3; i++) {
       const l = new THREE.PointLight(0xffc278, 0, 36, 1.8);
       scene.add(l);
-      this.lights.push({ light: l, t: 0, dur: 0.001, peak: 0 });
+      this.lights.push({ light: l, t: 0, dur: 0.001, peak: 0, glow: 0, glowDur: 0.001 });
     }
 
     // scorch decals under explosions
@@ -353,8 +356,8 @@ export class Effects {
     // blood splats where infantry fall
     const bsGeo = new THREE.PlaneGeometry(1.5, 1.5);
     bsGeo.rotateX(-Math.PI / 2);
-    const bsMat = new THREE.MeshBasicMaterial({
-      map: bloodTexture(), transparent: true, opacity: 0.7, depthWrite: false,
+    const bsMat = new THREE.MeshLambertMaterial({
+      map: bloodTexture(), color: 0x6a5048, transparent: true, opacity: 0.6, depthWrite: false,
       polygonOffset: true, polygonOffsetFactor: -2,
     });
     this.splats = new THREE.InstancedMesh(bsGeo, bsMat, 90);
@@ -379,6 +382,9 @@ export class Effects {
     }
     this.leafHead = 0;
     this.leafTint = new THREE.Color();
+
+    // volumetric fireballs, lit smoke, thrown earth, sparks, shock fronts
+    this.blast = new Blast(scene, camera, this);
   }
 
   // burst of leaves from a crown: at (x, y, z) spread over `radius`
@@ -411,13 +417,13 @@ export class Effects {
     this.dummy.position.set(x, getHeight(x, z) + 0.05, z);
     this.dummy.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), n);
     this.dummy.rotateY(Math.random() * Math.PI * 2);
-    this.dummy.scale.setScalar(0.7 + Math.random() * 0.8);
+    this.dummy.scale.setScalar(0.45 + Math.random() * 0.5);
     this.dummy.updateMatrix();
     this.splats.setMatrixAt(i, this.dummy.matrix);
     this.splats.instanceMatrix.needsUpdate = true;
   }
 
-  setParticleScale(s) { this.particleScale = s;this.smoke.points.material.uniforms.pointLimit.value=128+64*s;this.fire.points.material.uniforms.pointLimit.value=128+64*s; }
+  setParticleScale(s) { this.particleScale = s;this.blast.setScale(Math.max(0.5,s));this.smoke.points.material.uniforms.pointLimit.value=128+64*s;this.fire.points.material.uniforms.pointLimit.value=128+64*s; }
 
   setShakeScale(s) { this.shakeScale = s; }
 
@@ -448,14 +454,29 @@ export class Effects {
 
   shake(amount) { this.trauma = Math.min(1.2, this.trauma + amount * (this.shakeScale ?? 1)); }
 
-  flashLight(pos, color, intensity, dur) {
-    let slot = this.lights[0];
-    for (const l of this.lights) if (l.t >= l.dur) { slot = l; break; }
+  // a sharp flash (peak over dur) plus an optional flickering fireball glow
+  // (glow over glowDur); takes whichever pooled light is dimmest now
+  flashLight(pos, color, intensity, dur, glow = 0, glowDur = 0) {
+    let slot = this.lights[0], low = Infinity;
+    for (const l of this.lights) {
+      const e = this.lightLevel(l);
+      if (e < low) { low = e; slot = l; }
+    }
     slot.light.position.copy(pos);
+    slot.light.position.y += 1.2;
     slot.light.color.set(color);
+    slot.light.distance = Math.min(70, 30 + Math.sqrt(intensity + glow) * 1.6);
     slot.t = 0;
     slot.dur = dur;
     slot.peak = intensity;
+    slot.glow = glow;
+    slot.glowDur = Math.max(0.001, glowDur);
+  }
+
+  lightLevel(l) {
+    const t = Math.min(1, l.t / l.dur), g = Math.min(1, l.t / l.glowDur);
+    const flick = 0.72 + 0.28 * Math.sin(this.time * 41 + l.glowDur * 7) * Math.sin(this.time * 23);
+    return l.peak * (1 - t) * (1 - t) + l.glow * Math.pow(1 - g, 1.5) * flick;
   }
 
   ring(pos, scale = 8, dur = 0.5, color = 0xffe6b8) {
@@ -521,76 +542,53 @@ export class Effects {
     this.flashLight(pos, 0xffc887, 90, 0.09);
   }
 
-  // Staged blast: white-hot flash → orange fireball that cools and rises →
-  // a dark smoke column that lingers for seconds → a low dust skirt racing
-  // out along the ground → thrown soil clods and a crater.
-  explosion(pos, power = 1) {
-    const ps = this.particleScale;
+  // Munition blast (see blast.js for the recipes) plus crater and shake.
+  // kind: he | ap | arty | bomb | rocket | vehicle | fuel | concrete;
+  // surface 'metal' skips the thrown earth for hits on armour and props.
+  explosion(pos, power = 1, kind = 'he', surface = 'ground') {
+    this.blast.explode(pos, power, kind, surface);
+    this.onBlast?.(pos, power, kind, surface);
     const gy = getHeight(pos.x, pos.z);
-    // 1. flash: a couple of huge, very short additive points
-    for (let i = 0; i < 2; i++) {
-      this.fire.emit(pos.x, pos.y + 0.6, pos.z, 0, 1, 0,
-        0.07 + i * 0.03, (7 + i * 3) * power, 1, 0.97, 0.86, { grow: 0.6 });
+    if (surface === 'ground' || pos.y - gy < 2.5) {
+      const crater = { ap: 1.2, rocket: 1.3, arty: 2.6, bomb: 3.6, fuel: 2.2, vehicle: 2.4, concrete: 2.2 }[kind] ?? 1.9;
+      this.addScorch(pos, crater * Math.sqrt(power));
     }
-    // 2. fireball: hot core, cools to deep red while it rises and shrinks
-    const nf = Math.floor(22 * ps * power) + 3;
-    for (let i = 0; i < nf; i++) {
-      const a = Math.random() * Math.PI * 2;
-      const el = Math.random() * Math.PI * 0.5;
-      const sp = (2 + Math.random() * 8) * power;
-      this.fire.emit(pos.x, pos.y + 0.3, pos.z,
-        Math.cos(a) * Math.cos(el) * sp, Math.sin(el) * sp + 2.5, Math.sin(a) * Math.cos(el) * sp,
-        0.35 + Math.random() * 0.45, (2.4 + Math.random() * 2.6) * power,
-        1, 0.82 + Math.random() * 0.12, 0.45,
-        { drag: 3.2, grow: 0.5, grav: 5, end: [0.55, 0.12, 0.03] });
-    }
-    // sparks + shrapnel streaks
-    const nk = Math.floor(16 * ps * power);
-    for (let i = 0; i < nk; i++) {
-      const a = Math.random() * Math.PI * 2;
-      const sp = (10 + Math.random() * 26) * power;
-      this.fire.emit(pos.x, pos.y + 0.4, pos.z,
-        Math.cos(a) * sp, 4 + Math.random() * 14, Math.sin(a) * sp,
-        0.3 + Math.random() * 0.45, 0.45,
-        1, 0.88, 0.55, { grav: -24, drag: 0.9, end: [0.9, 0.35, 0.08] });
-    }
-    // 3. smoke column: dark, slow, billowing — outlives the fire by seconds
-    const ns = Math.floor(14 * ps * power) + 2;
-    for (let i = 0; i < ns; i++) {
-      const g = 0.1 + Math.random() * 0.1;
-      const lift = 3 + Math.random() * 5;
-      this.smoke.emit(
-        pos.x + (Math.random() - 0.5) * 1.8 * power, pos.y + 0.6 + Math.random() * 1.6, pos.z + (Math.random() - 0.5) * 1.8 * power,
-        (Math.random() - 0.5) * 1.6, lift, (Math.random() - 0.5) * 1.6,
-        2.6 + Math.random() * 2.4, (2.4 + Math.random() * 2.6) * power,
-        g, g * 0.94, g * 0.88, { drag: 0.9, grow: 3.2, alpha: 0.7 });
-    }
-    // grey-brown ejecta plume thrown up with the soil
-    const ne = Math.floor(8 * ps * power) + 1;
-    for (let i = 0; i < ne; i++) {
-      const a = Math.random() * Math.PI * 2, sp = (1 + Math.random() * 3) * power;
-      this.smoke.emit(pos.x, gy + 0.4, pos.z,
-        Math.cos(a) * sp, 7 + Math.random() * 7 * power, Math.sin(a) * sp,
-        1.1 + Math.random() * 0.8, (1.2 + Math.random()) * power,
-        0.36, 0.3, 0.22, { drag: 1.6, grow: 2.2, grav: -9, alpha: 0.75 });
-    }
-    // 4. dust skirt: low, fast, wide ring hugging the ground
-    const nd = Math.floor(14 * ps * power) + 2;
-    for (let i = 0; i < nd; i++) {
-      const a = (i / nd) * Math.PI * 2 + Math.random() * 0.4, sp = (9 + Math.random() * 7) * power;
-      const g = 0.5 + Math.random() * 0.08;
-      this.smoke.emit(pos.x + Math.cos(a) * 0.8, gy + 0.35, pos.z + Math.sin(a) * 0.8,
-        Math.cos(a) * sp, 0.4 + Math.random() * 0.6, Math.sin(a) * sp,
-        1.2 + Math.random() * 0.7, (1.5 + Math.random() * 1.2) * power,
-        g, g * 0.9, g * 0.74, { drag: 3.4, grow: 2.6, alpha: 0.42 });
-    }
-    // 5. soil clods, crater, light, shake
-    this.spawnDebris(pos, 10 * power, power);
-    this.ring(pos, 6 * power, 0.32);
-    this.addScorch(pos, 1.9 * power);
-    this.flashLight(pos, 0xffb24f, 190 * power, 0.2);
+    const big = { bomb: 1.8, arty: 1.3, vehicle: 1.3, fuel: 1.2 }[kind] ?? 1;
     const d = this.camera.position.distanceTo(pos);
-    this.shake(Math.min(0.7, 26 * power / Math.max(8, d)));
+    this.shake(Math.min(0.85, 26 * power * big / Math.max(8, d)));
+  }
+
+  // rifle shot: a tiny star of flame and a wisp of smoke at the muzzle
+  rifleFlash(pos, toward) {
+    const dx = toward.x - pos.x, dy = toward.y - pos.y, dz = toward.z - pos.z, l = Math.hypot(dx, dy, dz) || 1;
+    for (let i = 0; i < 3; i++) {
+      const sp = 3 + Math.random() * 5;
+      this.fire.emit(pos.x, pos.y, pos.z, dx / l * sp, dy / l * sp, dz / l * sp, 0.05 + Math.random() * 0.03, 0.35 + Math.random() * 0.25, 1, 0.8, 0.45, { drag: 8 });
+    }
+    this.smoke.emit(pos.x, pos.y, pos.z, dx / l * 1.2, 0.4, dz / l * 1.2, 0.6, 0.3, 0.6, 0.6, 0.58, { grow: 2.5, drag: 2, alpha: 0.35 });
+  }
+
+  // anti-tank launcher backblast: a cone of grey dust and smoke out the rear
+  backblast(pos, dir) {
+    const n = Math.max(3, Math.floor(10 * this.particleScale));
+    for (let i = 0; i < n; i++) {
+      const sp = 4 + Math.random() * 8;
+      const g = 0.55 + Math.random() * 0.1;
+      this.smoke.emit(pos.x, pos.y, pos.z,
+        -dir.x * sp + (Math.random() - 0.5) * 3, -dir.y * sp + Math.random() * 1.5, -dir.z * sp + (Math.random() - 0.5) * 3,
+        1 + Math.random() * 0.8, 0.8 + Math.random() * 0.8, g, g * 0.95, g * 0.85, { grow: 3, drag: 2.4, alpha: 0.5 });
+    }
+    this.fire.emit(pos.x, pos.y, pos.z, -dir.x * 6, -dir.y * 6, -dir.z * 6, 0.08, 1.2, 1, 0.7, 0.3, { drag: 6 });
+  }
+
+  // a hit soldier: a quick fine red mist, gone in a moment
+  bloodMist(pos) {
+    const n = Math.max(2, Math.floor(6 * this.particleScale));
+    for (let i = 0; i < n; i++) {
+      this.smoke.emit(pos.x + (Math.random() - 0.5) * 0.3, pos.y + (Math.random() - 0.5) * 0.4, pos.z + (Math.random() - 0.5) * 0.3,
+        (Math.random() - 0.5) * 1.6, 0.2 + Math.random() * 0.8, (Math.random() - 0.5) * 1.6,
+        0.35 + Math.random() * 0.25, 0.25 + Math.random() * 0.2, 0.32, 0.03, 0.02, { grow: 2.2, drag: 3, grav: -2, alpha: 0.55 });
+    }
   }
 
   // pulsing red target disc where an artillery shell will land
@@ -832,9 +830,9 @@ export class Effects {
     // lights
     for (const l of this.lights) {
       l.t += dt;
-      const t = Math.min(1, l.t / l.dur);
-      l.light.intensity = l.peak * (1 - t) * (1 - t);
+      l.light.intensity = this.lightLevel(l);
     }
+    this.blast.update(dt);
 
     // MG tracers
     if (this.tracers) {

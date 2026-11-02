@@ -6,8 +6,8 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { buildTankMesh, charTankVisual } from './tank.js?v=polish2';
-import { ENEMY_TYPES, CG, TANK } from './config.js?v=polish2';
+import { buildTankMesh, charTankVisual } from './tank.js?v=real1';
+import { ENEMY_TYPES, CG, TANK } from './config.js?v=real1';
 
 const ROOM_KEY = 'iron_ridge_room';
 const MP_NAME_KEY = 'iron_ridge_mp_name';

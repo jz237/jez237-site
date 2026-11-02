@@ -5,8 +5,8 @@
 // and infantry consult before firing.
 
 import * as THREE from 'three';
-import { getHeight } from './terrain.js?v=polish2';
-import { SMOKE } from './config.js?v=polish2';
+import { getHeight } from './terrain.js?v=real1';
+import { SMOKE } from './config.js?v=real1';
 
 const SPRITES_PER_CLOUD = 7;
 const MAX_CLOUDS = 14;

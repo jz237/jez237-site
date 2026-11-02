@@ -8,30 +8,30 @@ import { RenderPass } from '../vendor/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from '../vendor/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from '../vendor/postprocessing/ShaderPass.js';
 
-import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, ENEMY_TYPES, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX, WEAPONS, MG, REPAIR, PERKS, DAILY, DAILY_STAMP, CG, CACHE, BOOST, INFANTRY, SMOKE, MODULES } from './config.js?v=polish2';
-import { Infantry } from './infantry.js?v=polish2';
-import { makeRng } from './noise.js?v=polish2';
-import { buildTerrain, getHeight, raycastTerrain } from './terrain.js?v=polish2';
-import { buildSky, weatherForWave } from './sky.js?v=polish2';
-import { SmokeScreens } from './smoke.js?v=polish2';
-import { Foliage } from './foliage.js?v=polish2';
-import { treeOcclusion } from './tree-lod.js?v=polish2';
-import { Props } from './props.js?v=polish2';
-import { Tank } from './tank.js?v=polish2';
-import { WaveManager } from './enemy.js?v=polish2';
-import { Projectiles } from './projectiles.js?v=polish2';
-import { Trajectory } from './trajectory.js?v=polish2';
-import { surfaceDetail } from './surface-art.js?v=polish2';
-import { ContactShadows } from './contact-shadows.js?v=polish2';
-import { Effects } from './effects.js?v=polish2';
-import { GameAudio } from './audio.js?v=polish2';
-import { Input, isTouch } from './input.js?v=polish2';
-import { settings, setSetting } from './settings.js?v=polish2';
-import { Hud } from './hud.js?v=polish2';
-import { QualityScaler, LEVELS } from './quality.js?v=polish2';
-import { Minimap } from './minimap.js?v=polish2';
-import * as LB from './leaderboard.js?v=polish2';
-import { Multiplayer, cleanName, cleanRoom, randomRoom } from './multiplayer.js?v=polish2';
+import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, ENEMY_TYPES, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX, WEAPONS, MG, REPAIR, PERKS, DAILY, DAILY_STAMP, CG, CACHE, BOOST, INFANTRY, SMOKE, MODULES } from './config.js?v=real1';
+import { Infantry } from './infantry.js?v=real1';
+import { makeRng } from './noise.js?v=real1';
+import { buildTerrain, getHeight, raycastTerrain } from './terrain.js?v=real1';
+import { buildSky, weatherForWave } from './sky.js?v=real1';
+import { SmokeScreens } from './smoke.js?v=real1';
+import { Foliage } from './foliage.js?v=real1';
+import { treeOcclusion } from './tree-lod.js?v=real1';
+import { Props } from './props.js?v=real1';
+import { Tank } from './tank.js?v=real1';
+import { WaveManager } from './enemy.js?v=real1';
+import { Projectiles } from './projectiles.js?v=real1';
+import { Trajectory } from './trajectory.js?v=real1';
+import { surfaceDetail } from './surface-art.js?v=real1';
+import { ContactShadows } from './contact-shadows.js?v=real1';
+import { Effects } from './effects.js?v=real1';
+import { GameAudio } from './audio.js?v=real1';
+import { Input, isTouch } from './input.js?v=real1';
+import { settings, setSetting } from './settings.js?v=real1';
+import { Hud } from './hud.js?v=real1';
+import { QualityScaler, LEVELS } from './quality.js?v=real1';
+import { Minimap } from './minimap.js?v=real1';
+import * as LB from './leaderboard.js?v=real1';
+import { Multiplayer, cleanName, cleanRoom, randomRoom } from './multiplayer.js?v=real1';
 
 const $ = (id) => document.getElementById(id);
 
@@ -120,7 +120,7 @@ const terrain = buildTerrain(scene, world);
 const sky = buildSky(scene);
 const foliage = new Foliage(scene, world);
 const props = new Props(scene, world);
-const infantry = new Infantry(scene);
+const infantry = new Infantry(scene, camera);
 const effects = new Effects(scene, camera);
 const contacts = new ContactShadows(scene);
 const projectiles = new Projectiles(scene, world);
@@ -131,6 +131,50 @@ const input = new Input(canvas);
 const hud = new Hud();
 const waves = new WaveManager();
 const minimap = new Minimap($('minimap'));
+
+// where a sound sits relative to the listener: distance and stereo pan
+const _sndV = new THREE.Vector3();
+function soundAt(x, y, z) {
+  _sndV.set(x - camera.position.x, y - camera.position.y, z - camera.position.z);
+  const dist = _sndV.length();
+  _sndV.applyQuaternion(_sndQ.copy(camera.quaternion).invert());
+  return { dist, pan: dist > 0.5 ? THREE.MathUtils.clamp(_sndV.x / dist, -1, 1) * 0.8 : 0 };
+}
+const _sndQ = new THREE.Quaternion();
+
+// infantry take cover behind standing trees, big rocks and burnt-out wrecks
+infantry.coverFn = (x, z, r) => {
+  const out = [];
+  for (const t of foliage.treesNear(x, z, r)) out.push({ x: t.x, z: t.z, r: 0.4 });
+  for (const k of foliage.rockContacts) {
+    if (k.scale > 0.95 && Math.abs(k.x - x) < r && Math.abs(k.z - z) < r) out.push({ x: k.x, z: k.z, r: k.scale * 0.62 });
+  }
+  for (const w of aiCtx.wrecks) if (Math.hypot(w.x - x, w.z - z) < r) out.push({ x: w.x, z: w.z, r: 2.4 });
+  return out;
+};
+// every blast plays its own recorded munition sound, delayed by distance
+effects.onBlast = (pos, power, kind, surface) => {
+  if (G.state === 'menu') return;
+  const { dist, pan } = soundAt(pos.x, pos.y, pos.z);
+  audio.boom(kind, power, dist, pan, surface);
+};
+effects.onCookoff = (pos) => {
+  const { dist, pan } = soundAt(pos.x, pos.y, pos.z);
+  if (dist < 220) audio.cookoff(Math.max(0.2, 1 - dist / 240), pan, dist);
+};
+effects.blast.prewarm();
+infantry.crowd.prewarm();
+// soldiers' voices and bodies: shouts, pain, falls (rate-limited, distance-faded)
+let shoutBusy = 0;
+infantry.onEvent = (u, kind) => {
+  if (G.state === 'menu') return;
+  const { dist, pan } = soundAt(u.x, u.gy + 1.5, u.z);
+  if (kind.startsWith('shout')) {
+    if (dist > 75 || G.time < shoutBusy) return;
+    shoutBusy = G.time + 2.4;
+  } else if (dist > 60) return;
+  audio.soldier(kind, Math.max(0.12, 1 - dist / 80), pan, dist);
+};
 const multiplayer = new Multiplayer({
   scene,
   world,
@@ -170,6 +214,8 @@ const gradePass = new ShaderPass({
   uniforms: {
     tDiffuse: { value: null },
     uExposure: { value: renderer.toneMappingExposure },
+    uShock: { value: [0, 1, 2, 3].map(() => new THREE.Vector4()) },
+    uAspect: { value: 1 },
   },
   vertexShader: /* glsl */`
     varying vec2 vUv;
@@ -180,6 +226,8 @@ const gradePass = new ShaderPass({
   fragmentShader: /* glsl */`
     uniform sampler2D tDiffuse;
     uniform float uExposure;
+    uniform vec4 uShock[4];
+    uniform float uAspect;
     varying vec2 vUv;
 
     vec3 rrtOdtFit(vec3 v) { // renamed: three predeclares RRTAndODTFit
@@ -205,7 +253,17 @@ const gradePass = new ShaderPass({
     }
 
     void main() {
-      vec4 c = texture2D(tDiffuse, vUv);
+      // blast shock fronts: a thin expanding ring that refracts the scene
+      vec2 uv = vUv;
+      for (int i = 0; i < 4; i++) {
+        vec4 s = uShock[i];
+        if (s.w <= 0.0) continue;
+        vec2 d = (vUv - s.xy) * vec2(uAspect, 1.0);
+        float r = length(d), w = 0.025 + s.z * 0.18;
+        float ring = exp(-pow((r - s.z) / w, 2.0)) - 0.6 * exp(-pow((r - s.z + w * 1.4) / w, 2.0));
+        uv += d / max(r, 1e-4) * ring * s.w / vec2(uAspect, 1.0);
+      }
+      vec4 c = texture2D(tDiffuse, uv);
       c.rgb = toSRGB(acesFilmic(c.rgb));
       c.rgb = mix(c.rgb, c.rgb * c.rgb * (3.0 - 2.0 * c.rgb), 0.26);
       float l = dot(c.rgb, vec3(0.299, 0.587, 0.114));
@@ -502,9 +560,7 @@ function handleRemoteEnemyFire(origin, dir, dmg) {
 // client: host confirmed an enemy kill (ghost already turned to wreck)
 function handleRemoteEnemyKill(id, pos, credit) {
   if (G.state === 'menu') return;
-  effects.explosion(pos, 1.6);
-  const camD = camera.position.distanceTo(pos);
-  if (camD < 200) audio.explosion(Math.max(0.4, 1.4 - camD / 200));
+  effects.explosion(pos, 1.6, 'vehicle');
   projectiles.explode(pos, 6, 2000);
   if (credit && credit === multiplayer.id && G.state === 'playing') {
     const tn = multiplayer.remoteEnemies.get(id)?.typeName;
@@ -515,7 +571,7 @@ function handleRemoteEnemyKill(id, pos, credit) {
   }
   if (G.state !== 'menu' && multiplayer.remoteEnemies.get(id)?.typeName === 'boss') {
     hud.banner('COLOSSUS DOWN', 'the breakthrough is broken', 2.4);
-    effects.explosion(pos, 2.6);
+    effects.explosion(pos, 2.6, 'fuel');
     if (G.state === 'playing') {
       props.spawnCrate(pos.x + 4, pos.z + 2);
       props.spawnCrate(pos.x - 3, pos.z - 3);
@@ -810,8 +866,7 @@ function killProp(it, byPlayer) {
   const pos = new THREE.Vector3().copy(it.body.position);
   if (it.kind === 'barrel') {
     props.removeItem(it);
-    effects.explosion(pos, 1.25);
-    audio.explosion(1.1);
+    effects.explosion(pos, 1.25, 'fuel');
     projectiles.explode(pos, 7.5, 2400);
     applySplashDamage(pos, 7.5, byPlayer, 26);
     if (byPlayer) { bumpCombo(); addScore(SCORING.barrel, 'BARREL', 'good'); }
@@ -822,8 +877,7 @@ function killProp(it, byPlayer) {
     if (byPlayer) { bumpCombo(); addScore(SCORING.target, 'TARGET', 'good'); }
   } else if (it.kind === 'pillbox') {
     props.removeItem(it);
-    effects.explosion(pos, 1.7);
-    audio.explosion(1.4);
+    effects.explosion(pos, 1.7, 'concrete');
     projectiles.explode(pos, 7, 2400);
     effects.spawnDebris(pos, 14, 1.2, 0x9b988e);
     if (byPlayer) { bumpCombo(); addScore(PILLBOX.points, 'PILLBOX', 'kill'); hud.hitmarker(true); }
@@ -870,8 +924,7 @@ function killEnemy(e, creditPeerId = null) {
   t.destroyVisual();
   const pos = t.visual.root.position.clone();
   pos.y += 1;
-  effects.explosion(pos, 1.6 * (e.type?.scale ?? 1));
-  audio.explosion(1.4);
+  effects.explosion(pos, 1.6 * (e.type?.scale ?? 1), 'vehicle');
   projectiles.explode(pos, 6, 2000);
   if (!creditPeerId && G.state === 'playing') {
     creditKillLocal(e.type?.points ?? ENEMY.points);
@@ -882,7 +935,7 @@ function killEnemy(e, creditPeerId = null) {
   // supply drop — the Colossus always leaves a double cache
   if (e.typeName === 'boss') {
     hud.banner('COLOSSUS DOWN', 'the breakthrough is broken', 2.4);
-    effects.explosion(pos, 2.6);
+    effects.explosion(pos, 2.6, 'fuel');
     props.spawnCrate(pos.x + 4, pos.z + 2);
     props.spawnCrate(pos.x - 3, pos.z - 3);
   } else if (Math.random() < PICKUP.dropChance) {
@@ -955,8 +1008,7 @@ function killTruck(truck, byPlayer) {
   truck.mesh.traverse(o => {
     if (o.isMesh) o.material = new THREE.MeshStandardMaterial({ color: 0x232323, roughness: 1 });
   });
-  effects.explosion(pos, 1.3);
-  audio.explosion(1.1);
+  effects.explosion(pos, 1.3, 'fuel');
   if (byPlayer) {
     bumpCombo();
     addScore(250, 'CONVOY TRUCK', 'kill');
@@ -982,9 +1034,11 @@ function onShellHit(hit) {
   const splDmg = W?.dmgSplash ?? SHELL.damageSplash;
   const fxScale = W ? Math.max(0.7, W.splashRadius / 6.5) : 1;
 
-  effects.explosion(pos, (s.fromPlayer ? 1 : 0.9) * power * fxScale);
-  const camD = camera.position.distanceTo(pos);
-  if (camD < 160) audio.explosion(Math.max(0.4, 1.2 - camD / 160) * power * fxScale);
+  const struck = hit.body?.userData?.kind;
+  const surface = (struck === 'tank' || struck === 'remoteEnemy' || struck === 'truck' || struck === 'prop' ||
+    pos.y - getHeight(pos.x, pos.z) > 1.6) ? 'metal' : 'ground';
+  const munition = s.owner?.bomb ? 'bomb' : s.owner?.arty ? 'arty' : s.owner?.rocket ? 'rocket' : W?.label === 'AP' ? 'ap' : 'he';
+  effects.explosion(pos, (s.fromPlayer ? 1 : 0.9) * power * fxScale, munition, surface);
 
   // real impulses into nearby rigid bodies
   const affected = projectiles.explode(pos, expR, expImp);
@@ -1139,7 +1193,8 @@ function onShellHit(hit) {
   if (G.blasts.length > 8) G.blasts.shift();
 
   // shells, artillery and airstrikes shred infantry
-  infantry.killRadius(pos.x, pos.z, Math.max(3.2, splashR), (u) => killSoldier(u, byPlayer));
+  infantry.suppress(pos.x, pos.z, Math.max(11, splashR * 2.8), munition === 'bomb' ? 1.4 : 0.95);
+  infantry.killRadius(pos.x, pos.z, Math.max(3.2, splashR), (u) => killSoldier(u, byPlayer), power * fxScale);
 }
 
 // ---------------------------------------------------------------- infantry
@@ -1158,7 +1213,9 @@ function infantryShoot(u, target, kind = 'rifle') {
     target.body.position.z + (Math.random() - 0.5) * 2.4,
   );
   effects.tracer(_infMuzzle, _infTarget);
-  if (camera.position.distanceTo(_infMuzzle) < 100) audio.mgShot();
+  effects.rifleFlash(_infMuzzle, _infTarget);
+  const snd = soundAt(_infMuzzle.x, _infMuzzle.y, _infMuzzle.z);
+  if (snd.dist < 160) audio.soldier('rifle', Math.max(0.15, 1 - snd.dist / 170), snd.pan, snd.dist);
   if (target.isPlayer && Math.random() < INFANTRY.hitChance) {
     damagePlayer(INFANTRY.dmg, { x: u.x, z: u.z }, true);
   }
@@ -1176,6 +1233,9 @@ function infantryRocket(u, target) {
   const dir = new THREE.Vector3(Math.sin(yaw) * Math.cos(elev), Math.sin(elev), Math.cos(yaw) * Math.cos(elev));
   projectiles.spawn(_infMuzzle.clone(), dir, v, { isPlayer: false, shellDmg: INFANTRY.rpgDamage, rocket: true }, onShellHit, 0.7);
   effects.muzzleFlash(_infMuzzle, dir);
+  // the launcher's backblast kicks up a cloud behind the gunner
+  infantry.rearOf(u, _infPos);
+  effects.backblast(_infPos, dir);
   const d = camera.position.distanceTo(_infMuzzle);
   if (d < 150) audio.rocket(Math.max(0.3, 1 - d / 150));
   if (target.isPlayer) {
@@ -1186,8 +1246,8 @@ function infantryRocket(u, target) {
 }
 
 function killSoldier(u, byPlayer = true) {
-  _infPos.set(u.x, getHeight(u.x, u.z) + 0.9, u.z);
-  effects.spawnDebris(_infPos, 4, 0.45, 0x5c6647);
+  _infPos.set(u.x, getHeight(u.x, u.z) + 1.0, u.z);
+  effects.bloodMist(_infPos);
   effects.dustPuff(u.x, getHeight(u.x, u.z), u.z, 0.7);
   effects.bloodSplat(u.x, u.z);
   if (byPlayer && G.state === 'playing') addScore(u.rpg ? INFANTRY.rpgPoints : INFANTRY.points, u.rpg ? 'RPG TEAM' : '');
@@ -1231,8 +1291,9 @@ function mgFire(dt) {
     // soldiers first: they have no physics bodies, so test the ray by hand
     const bodyDist = _mgRes.hasHit ? _mgRes.distance : MG.range;
     const infHit = infantry.mgHit(_mgOrigin, _mgDir, bodyDist);
+    infantry.nearMiss(_mgOrigin, _mgDir, infHit ? infHit.dist : bodyDist);
     if (infHit) {
-      infHit.unit.alive = false;
+      infantry.kill(infHit.unit, 'shot', _mgOrigin.x, _mgOrigin.z);
       killSoldier(infHit.unit, true);
       _mgEnd.copy(_mgOrigin).addScaledVector(_mgDir, infHit.dist);
       effects.sparks(_mgEnd);
@@ -1647,7 +1708,7 @@ function resetGame() {
   smoke.clear();
   sky.setWeather('clear', true);
   infantry.clear();
-  infantry.updateVisuals();
+  infantry.updateVisuals(0);
   G.perks = freshPerks(); G.perkPending = null; G.perkTimer = 0;
   hud.hidePerks();
   hud.setWeapon('ap');
@@ -1710,8 +1771,7 @@ function startDeath() {
   p.destroyVisual();
   const pos = p.visual.root.position.clone();
   pos.y += 1;
-  effects.explosion(pos, 2);
-  audio.explosion(1.6);
+  effects.explosion(pos, 2, 'vehicle');
   audio.stopEngine();
   projectiles.explode(pos, 8, 3000);
   if (inCoop()) multiplayer.sendDown();
@@ -1937,7 +1997,7 @@ function fixedStep(dt) {
           a.fired = true;
           const origin = new THREE.Vector3(a.x + (Math.random() - 0.5) * 2, getHeight(a.x, a.z) + 58, a.z + (Math.random() - 0.5) * 2);
           projectiles.spawn(origin, new THREE.Vector3(0, -1, 0), 42,
-            { isPlayer: false, shellDmg: ARTILLERY.damage }, onShellHit);
+            { isPlayer: false, shellDmg: ARTILLERY.damage, arty: true }, onShellHit);
         }
       }
       G.pendingArty = G.pendingArty.filter(a => !a.fired);
@@ -1953,7 +2013,7 @@ function fixedStep(dt) {
         b.fired = true;
         const origin = new THREE.Vector3(b.x + (Math.random() - 0.5) * 2, getHeight(b.x, b.z) + 65, b.z + (Math.random() - 0.5) * 2);
         projectiles.spawn(origin, new THREE.Vector3(0, -1, 0), 60,
-          { isPlayer: true, shellDmg: 0 }, onShellHit, 1.8);
+          { isPlayer: true, shellDmg: 0, bomb: true }, onShellHit, 1.8);
       }
     }
     G.pendingBombs = G.pendingBombs.filter(b => !b.fired);
@@ -2581,7 +2641,7 @@ function gameFrame(dt) {
     }
   }
   props.update(dt, G.time);
-  infantry.updateVisuals();
+  infantry.updateVisuals(dt);
   multiplayer.update(dt, multiplayerPacket());
 
   // co-op: host streams its enemies; clients smoke their damaged ghosts
@@ -2606,6 +2666,7 @@ function gameFrame(dt) {
   }
   foliage.update(dt, camera.position.x, camera.position.z);
   contacts.update(dt, camera, foliage, G.player, waves.enemies);
+  effects.blast.setLighting(sky.sun, sky.hemi);
   effects.update(dt);
   smoke.update(dt);
   updateBattleVisuals(dt);
@@ -2736,6 +2797,8 @@ function loop(now) {
     hud.setPerf(1 / quality.emaDt, LEVELS[quality.level].name);
   }
   quality.frame(realDt);
+  gradePass.uniforms.uAspect.value = camera.aspect;
+  effects.blast.shockUniforms(camera, gradePass.uniforms.uShock.value);
   composer.render();
 }
 
@@ -2756,7 +2819,7 @@ requestAnimationFrame(loop);
 
 // debug/testing handle (harmless in production)
 window.__IR = {
-  contacts, G, quality, world, startGame, waves, props, projectiles, effects, input, camera, multiplayer, infantry, foliage, hud, smoke, sky, startWave,
+  renderer, scene, composer, contacts, G, quality, world, startGame, waves, props, projectiles, effects, input, camera, multiplayer, infantry, foliage, hud, smoke, sky, startWave,
   onShellHit, audio, damagePlayer,
   player: () => G.player, frames: 0,
   // drive frames manually when rAF is suspended (headless testing)
