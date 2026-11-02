@@ -3,7 +3,7 @@
 // star's own light smeared over the eye's persistence, or a camera exposure)
 // and as points (the sparks each star sheds along its path).
 import * as THREE from 'three';
-import { HASH, MOTION, BLACKBODY } from './glsl.js?v=7';
+import { HASH, MOTION, BLACKBODY } from './glsl.js?v=8';
 
 export const STRIDE = 32; // floats per star record (8 x vec4)
 
@@ -138,7 +138,10 @@ varying vec3 vCol;
 varying vec2 vUV;
 void main() {
   float a = exp(-vUV.x * vUV.x * 2.4) * exp(-vUV.y * vUV.y * 1.2);
-  gl_FragColor = vec4(vCol * a, 1.0);
+  // with MSAA an edge pixel can be shaded just outside the ribbon, where the
+  // colour is extrapolated; a strobe's on/off step along the trail then
+  // swings it below zero (a black speck), so keep it in range
+  gl_FragColor = vec4(clamp(vCol * a, 0.0, 6.0e4), 1.0);
 }
 `;
 

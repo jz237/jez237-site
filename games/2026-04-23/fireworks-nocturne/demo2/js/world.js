@@ -1,9 +1,9 @@
 // The harbour at night: sky, water, skyline, bridge, barges, boats, the far
 // quay and its Ferris wheel, and the terrace you watch from.
 import * as THREE from 'three';
-import { HASH, LIGHTS, NOISE } from './glsl.js?v=7';
-import { SITE } from './site.js?v=7';
-import { rng } from './physics.js?v=7';
+import { HASH, LIGHTS, NOISE } from './glsl.js?v=8';
+import { SITE } from './site.js?v=8';
+import { rng } from './physics.js?v=8';
 
 const FOG = /* glsl */ `
 uniform vec3 uFogCol;

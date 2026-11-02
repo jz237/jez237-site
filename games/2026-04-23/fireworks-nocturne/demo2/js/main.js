@@ -1,18 +1,18 @@
 import * as THREE from 'three';
-import { TIERS, detectTier } from './quality.js?v=7';
-import { Particles } from './particles.js?v=7';
-import { Lights } from './lights.js?v=7';
-import { Smoke } from './smoke.js?v=7';
-import { World } from './world.js?v=7';
-import { Post } from './post.js?v=7';
-import { Fireworks } from './fireworks.js?v=7';
-import { Show } from './show.js?v=7';
-import { AudioEngine } from './audio.js?v=7';
-import { CameraRig, Director } from './camera.js?v=7';
-import { CAMERAS } from './site.js?v=7';
-import { SHELL_NAMES, RARE } from './shells.js?v=7';
-import { Crowd } from './crowd.js?v=7';
-import { Workshop } from './workshop.js?v=7';
+import { TIERS, detectTier } from './quality.js?v=8';
+import { Particles } from './particles.js?v=8';
+import { Lights } from './lights.js?v=8';
+import { Smoke } from './smoke.js?v=8';
+import { World } from './world.js?v=8';
+import { Post } from './post.js?v=8';
+import { Fireworks } from './fireworks.js?v=8';
+import { Show } from './show.js?v=8';
+import { AudioEngine } from './audio.js?v=8';
+import { CameraRig, Director } from './camera.js?v=8';
+import { CAMERAS } from './site.js?v=8';
+import { SHELL_NAMES, RARE, SHAPES } from './shells.js?v=8';
+import { Crowd } from './crowd.js?v=8';
+import { Workshop } from './workshop.js?v=8';
 
 const Q = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
@@ -319,12 +319,16 @@ function tapLaunch(x, y) {
   else launchChoice(target);
 }
 
-const MANUAL = ['peony', 'chrysanthemum', 'pistil', 'dahlia', 'ghost', 'confetti', 'glittertips', 'willow', 'kamuro', 'diadem', 'brocade', 'palm', 'horsetail', 'leaves', 'snowfall', 'ring', 'saturn', 'crossette', 'strobe', 'crackle', 'glitter', 'spider', 'salute', 'multibreak', 'heart', 'starshape', 'butterfly', 'flower', 'spiral', 'clover', 'crescent', 'rings', 'cube'];
+const MANUAL = ['peony', 'chrysanthemum', 'pistil', 'tipped', 'doublepetal', 'strobepistil', 'dahlia', 'ghost', 'confetti', 'glittertips', 'willow', 'crackwillow', 'kamuro', 'diadem', 'brocade', 'brocadestrobe', 'palm', 'palmcrackle', 'horsetail', 'leaves', 'snowfall', 'ring', 'saturn', 'crossette', 'strobe', 'crackle', 'glitter', 'spider', 'salute', 'multibreak', 'heart', 'starshape', 'butterfly', 'flower', 'spiral', 'clover', 'crescent', 'rings', 'cube'];
 function launchChoice(target) {
   const t = state.t;
   let kind = state.shell;
   // the rare showpieces stay rare under Random too
-  if (kind === 'random') kind = Math.random() < 0.04 ? RARE[Math.floor(Math.random() * RARE.length)] : MANUAL[Math.floor(Math.random() * MANUAL.length)];
+  if (kind === 'random') {
+    const pick = (list) => list[Math.floor(Math.random() * list.length)];
+    kind = Math.random() < 0.04 ? pick(RARE) : pick(MANUAL);
+    if (SHAPES.includes(kind)) kind = pick(MANUAL); // shapes come up half as often
+  }
   const barge = fw.nearestBarge(target ? target[0] : -45);
   if (kind === 'fan') return fw.fan({ t, barge, n: 9, spread: 0.6, kind: Math.random() < 0.5 ? 'gold' : 'silver' });
   if (kind === 'mine') return fw.mine({ t, barge });

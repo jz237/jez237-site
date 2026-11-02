@@ -58,6 +58,8 @@ const VOICES = {
   heart: { brk: 'pattern' }, starshape: { brk: 'pattern' }, butterfly: { brk: 'pattern' },
   flower: { brk: 'pattern' }, spiral: { brk: 'pattern' }, clover: { brk: 'pattern' }, crescent: { brk: 'pattern' },
   rings: { brk: 'pattern' }, cube: { brk: 'pattern' },
+  tipped: { brk: 'double', chance: 0.35 }, doublepetal: { brk: 'double', chance: 0.5 }, strobepistil: { layer: ['strobe', 0.5, 0.65] },
+  brocadestrobe: { layers: [['brocade', 0.4, 0.55], ['strobe', 2.6, 0.6]] }, crackwillow: { layer: ['brocade', 0.5, 0.5] }, palmcrackle: { layer: ['comet', 0.05, 0.75] },
   yonjushin: { brk: 'double', chance: 0.7 }, galaxy: { layer: ['glitter', 0.9, 0.55] }, cascade: { layer: ['crossette', 0.85, 0.85] },
 };
 const C = 343;
@@ -241,9 +243,8 @@ export class AudioEngine {
         const gain = Math.pow(size / 6, 0.85) * (big ? 1.05 : 0.95) * soft * (o.gain ?? 1);
         this.play(this.pick(k), t, pos, { gain, rate: v(0.92, 1.06) * (size < 4 ? 1.25 : 1) * Math.pow(6 / size, 0.12) });
         if (big && k !== 'pattern') this.play(this.pick('thunder'), t + 0.12, pos, { gain: gain * 0.45, rate: v(0.85, 1.0) });
-        if (voice.layer && this.pick(voice.layer[0])) {
-          const [lk, dl, lg] = voice.layer;
-          this.play(this.pick(lk), t + dl, pos, { gain: lg * Math.pow(size / 6, 0.5), rate: v(0.9, 1.1) });
+        for (const [lk, dl, lg] of voice.layers || (voice.layer ? [voice.layer] : [])) {
+          if (this.pick(lk)) this.play(this.pick(lk), t + dl, pos, { gain: lg * Math.pow(size / 6, 0.5), rate: v(0.9, 1.1) });
         }
         break;
       }

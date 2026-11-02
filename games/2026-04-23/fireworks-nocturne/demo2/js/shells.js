@@ -1,7 +1,7 @@
 // The shell library. Each break type lays out its stars (direction, speed,
 // burn time, colour chemistry, tails) the way the real product is built, plus
 // how much smoke it leaves, how bright it lights the air and how it sounds.
-import { K_STAR, K_CRACKLE, K_FLASH, T_GOLD, T_SILVER, T_GLITTER, T_COLOR, T_KAMURO, T_STROBE } from './particles.js?v=7';
+import { K_STAR, K_CRACKLE, K_FLASH, T_GOLD, T_SILVER, T_GLITTER, T_COLOR, T_KAMURO, T_STROBE } from './particles.js?v=8';
 
 // Linear-light colours of the metal salts, with relative brightness.
 export const COLORS = {
@@ -418,6 +418,108 @@ export const SHELLS = {
     B.caption(`gold diadem with ${COLORS[p].n} pistil`);
   },
 
+  // ---- layered shells: the real products' multi-effect stars
+
+  // Kiku with colour tips: charcoal stars stream gold tails most of the way
+  // out, then flare into colour at the tips.
+  tipped(B) {
+    const TIPS = ['red', 'green', 'blue', 'purple', 'aqua', 'pink', 'lemon', 'orange'];
+    const a = B.color || B.r.pick(TIPS);
+    let b = B.color2 === undefined ? (B.r.chance(0.45) ? B.r.pick(TIPS) : null) : second(B, false, a);
+    if (b === a) b = null;
+    const life = 2.5 + B.inches * 0.08;
+    fib(B.count(100), B.r).forEach((d, i) => star(B, d, { colA: col('gold', 0.4), colB: col(b && i % 2 ? b : a, 1.8), tChange: 0.56, life, glowR: 0.65, tail: tailGold(B, 0.7 + B.inches * 0.03, 26, 0.2) }));
+    B.light(b ? mix(col(a), col(b)) : col(a), 1.0, 2.6);
+    B.smokeLevel(1.4);
+    B.caption(`chrysanthemum with ${b ? `${COLORS[a].n} and ${COLORS[b].n}` : COLORS[a].n} tips`);
+  },
+
+  // A brocade crown whose stars, as their gold tails die away, each leave a
+  // slow-falling strobe that keeps twinkling for a few seconds.
+  brocadestrobe(B) {
+    const s2 = B.color || B.r.pick(['white', 'white', 'green', 'aqua', 'red']);
+    fib(B.count(80), B.r).forEach(d => {
+      const s = star(B, d, { colA: col('gold', 0.75), life: 2.3 + B.inches * 0.06, q: 6, kg: 1.0, tail: tailKamuro(B, 1.6, 26, 0.3) });
+      const p = B.pos3(s, s.life), v = B.vel3(s, s.life);
+      B.add({ p0: p, t0: B.t + s.life, v0: [v[0] * 0.6, v[1] * 0.6, v[2] * 0.6], c: 0.05, kg: 1.6, life: 1.8 + B.r() * 0.8, colA: col(s2, 1.3), strobe: 9 + B.r() * 6, glowR: 0.55, seed: B.r(), flicker: 0.2 });
+    });
+    B.light([1.0, 0.6, 0.25], 1.1, 3.2);
+    B.smokeLevel(2);
+    B.caption(`brocade crown falling to ${COLORS[s2].n} strobes`);
+  },
+
+  // A willow whose long gold strands end, low in the sky, in a fizz of
+  // crackling dragon eggs.
+  crackwillow(B) {
+    const pops = [];
+    fib(B.count(70), B.r).forEach((d, i) => {
+      const s = star(B, d, { colA: col('gold', 0.22), life: 4.4 + B.inches * 0.12, q: 3.2, R: B.R * 0.8, kg: 0.95, glowR: 0.45, flicker: 0.45, tail: { kind: T_KAMURO, rate: 22 * B.tailRate, life: 3.2 + B.inches * 0.07, eject: 0.35, inherit: 0.04, ks: 4.2, power: 0.28 / B.tailRate } });
+      const p = B.pos3(s, s.life), v = B.vel3(s, s.life);
+      for (let j = 0; j < 3; j++) {
+        const popT = 0.05 + B.r() * 0.5, e = B.r.dir();
+        const cr = { p0: p, t0: B.t + s.life, v0: [e[0] * 7 + v[0] * 0.4, e[1] * 7 + v[1] * 0.4, e[2] * 7 + v[2] * 0.4], c: 0.12, kg: 0.9, life: popT + 0.05, popT, kind: K_CRACKLE, colA: col('gold', 0.2), glowR: 0.9, seed: B.r(), flicker: 0.18 };
+        B.add(cr);
+        if (j === 0 && i % 2 === 0) pops.push({ t: cr.t0 + cr.popT, pos: p, loud: 0.3 + B.r() * 0.4 });
+      }
+    });
+    B.pops(pops);
+    B.light([1.0, 0.5, 0.15], 0.75, 4.6);
+    B.smokeLevel(2.2);
+    B.caption('crackling willow');
+  },
+
+  // A palm of heavy gold comets, each ending in a burst of crackle.
+  palmcrackle(B) {
+    const arms = B.r.int(7, 10);
+    const per = Math.min(24, Math.max(6, Math.round(B.count(8) * 0.6)));
+    const pops = [];
+    for (let i = 0; i < arms; i++) {
+      const ang = i / arms * Math.PI * 2 + B.r() * 0.3, up = 0.3 + B.r() * 0.35;
+      const s = star(B, norm3([Math.cos(ang) * (1 - up), up, Math.sin(ang) * (1 - up)]), { colA: col('gold', 1.0), life: 2.0, lj: 0.08, q: 4, glowR: 1.1, kg: 0.55, tail: tailGold(B, 1.3, 70, 0.36), head: 1.4 });
+      const p = B.pos3(s, s.life), v = B.vel3(s, s.life);
+      for (let j = 0; j < per; j++) {
+        const popT = 0.15 + B.r() * 0.7, e = B.r.dir();
+        const cr = { p0: p, t0: B.t + s.life, v0: [e[0] * 14 + v[0] * 0.5, e[1] * 14 + v[1] * 0.5, e[2] * 14 + v[2] * 0.5], c: 0.1, kg: 0.9, life: popT + 0.05, popT, kind: K_CRACKLE, colA: col('gold', 0.2), glowR: 0.9, seed: B.r(), flicker: 0.18 };
+        B.add(cr);
+        if (j % 4 === 0) pops.push({ t: cr.t0 + cr.popT, pos: p, loud: 0.35 + B.r() * 0.45 });
+      }
+    }
+    star(B, [0, 1, 0], { colA: col('gold', 0.6), life: 0.9, q: 2, R: B.R * 0.2, kg: 0.5, tail: tailGold(B, 1.1, 60, 0.3) });
+    B.pops(pops);
+    B.light([1.0, 0.6, 0.25], 0.8, 2.8);
+    B.smokeLevel(1.6);
+    B.caption('gold palm with crackling coconuts');
+  },
+
+  // Yaezaki, the double-petal peony: a sphere inside a sphere, both changing
+  // colour at the same moment, around a small core of silver flitter.
+  doublepetal(B) {
+    let [a, b] = B.r.pick(PAIRS);
+    if (B.color) { a = B.color; if (b === a) b = pickColor(B, a); }
+    let c = B.color2 && B.color2 !== 'none' ? B.color2 : pickColor(B, a);
+    let d = pickColor(B, c);
+    const n = B.count(105), life = 2.2 + B.inches * 0.08;
+    fib(n, B.r).forEach(v => star(B, v, { colA: col(a), colB: col(b), tChange: 0.5, life, lj: 0.06, vj: 0.03 }));
+    fib(Math.round(n * 0.55), B.r).forEach(v => star(B, v, { colA: col(c), colB: col(d), tChange: 0.5, R: B.R * 0.6, life, lj: 0.06, vj: 0.03, glowR: 0.5 }));
+    fib(Math.round(n * 0.18), B.r).forEach(v => star(B, v, { colA: col('silver', 0.5), R: B.R * 0.2, life: 1.4, q: 4, glowR: 0.4, tail: tailGlitter(B, 0.8, 20, 0.3) }));
+    B.light(mix(col(a), col(c)), 1.15);
+    B.smokeLevel(1.2);
+    const nm = (k) => COLORS[k].n.split(' ').pop();
+    B.caption(`double-petal peony, ${nm(a)} to ${nm(b)} around ${nm(c)} to ${nm(d)}`);
+  },
+
+  // A titanium chrysanthemum with a strobing pistil that keeps twinkling
+  // after the outer petal has burned out.
+  strobepistil(B) {
+    const p = B.color || B.r.pick(['green', 'white', 'pink', 'aqua', 'white']);
+    const n = B.count(95);
+    fib(n, B.r).forEach(d => star(B, d, { colA: col('silver', 0.7), life: 1.9 + B.inches * 0.07, tail: tailSilver(B, 0.5, 40, 0.3) }));
+    fib(Math.round(n * 0.45), B.r).forEach(d => star(B, d, { colA: col(p, 1.3), R: B.R * 0.38, life: 3.4, q: 4, kg: 1.1, strobe: 8 + B.r() * 6, glowR: 0.55 }));
+    B.light([0.9, 0.92, 1.0], 1.0, 3.2);
+    B.smokeLevel(1.3);
+    B.caption(`titanium chrysanthemum with ${COLORS[p].n} strobe pistil`);
+  },
+
   // ---- rare showpieces: each built in several stages, seen once in a while
 
   // Senrin, "a thousand flowers": the shell is packed with small shells. The
@@ -545,6 +647,8 @@ export const SHELLS = {
   },
 };
 export const RARE = ['senrin', 'yonjushin', 'galaxy', 'cascade'];
+// the outline shapes: kept as an occasional surprise, not the show's mainstay
+export const SHAPES = ['heart', 'starshape', 'butterfly', 'flower', 'spiral', 'clover', 'crescent', 'rings', 'cube'];
 const listColours = (keys) => {
   const n = keys.map(k => COLORS[k].n.split(' ').pop());
   return n.length > 1 ? `${n.slice(0, -1).join(', ')} and ${n[n.length - 1]}` : n[0];
@@ -661,6 +765,8 @@ export const SHELL_NAMES = {
   crackle: 'Crackle', glitter: 'Glitter', spider: 'Spider', salute: 'Salute', multibreak: 'Multi-break', heart: 'Heart', starshape: 'Star',
   butterfly: 'Butterfly', flower: 'Flower', spiral: 'Spiral', clover: 'Clover', crescent: 'Crescent moon', rings: 'Linked rings', cube: 'Cube',
   ghost: 'Colour wave', confetti: 'Confetti', leaves: 'Falling leaves', diadem: 'Diadem', glittertips: 'Glitter tips', snowfall: 'Snowfall',
+  tipped: 'Colour-tipped chrysanthemum', brocadestrobe: 'Brocade to strobe', crackwillow: 'Crackling willow', palmcrackle: 'Crackling palm',
+  doublepetal: 'Double-petal peony', strobepistil: 'Strobe pistil',
   senrin: 'Thousand flowers', yonjushin: 'Quadruple pistil', galaxy: 'Spiral galaxy', cascade: 'Three-stage cascade',
 };
 

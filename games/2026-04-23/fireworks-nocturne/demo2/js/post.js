@@ -2,7 +2,7 @@
 // the smoke layer and the glow the bursts put into the haze between the eye
 // and each surface; then bloom, a slow eye adaptation, ACES, vignette, grain.
 import * as THREE from 'three';
-import { LIGHTS, HASH } from './glsl.js?v=7';
+import { LIGHTS, HASH } from './glsl.js?v=8';
 
 const FS_VS = /* glsl */ `
 varying vec2 vUv;
@@ -20,8 +20,13 @@ ${LIGHTS}
 varying vec2 vUv;
 void main() {
   vec3 c = texture2D(uHdr, vUv).rgb;
-  if (any(isnan(c)) || any(isinf(c))) c = vec3(0.0);
-  c = min(c, vec3(6.0e4));
+  // NaN is dropped; a pixel that overflowed the half-float buffer (a crackle
+  // pop or strobe flash on a nearly still star) is just as bright as allowed
+  if (any(isnan(c))) c = vec3(0.0);
+  if (isinf(c.r)) c.r = 6.0e4;
+  if (isinf(c.g)) c.g = 6.0e4;
+  if (isinf(c.b)) c.b = 6.0e4;
+  c = clamp(c, vec3(0.0), vec3(6.0e4));
   float z = texture2D(uDepth, vUv).r;
   if (z < 0.999999) {
     vec4 w = uInvVP * vec4(vUv * 2.0 - 1.0, z * 2.0 - 1.0, 1.0);
@@ -72,7 +77,8 @@ void main() {
   vec3 s = texture2D(uLow, vUv).rgb * 4.0;
   s += (texture2D(uLow, vUv + vec2(t.x, 0.0)).rgb + texture2D(uLow, vUv - vec2(t.x, 0.0)).rgb + texture2D(uLow, vUv + vec2(0.0, t.y)).rgb + texture2D(uLow, vUv - vec2(0.0, t.y)).rgb) * 2.0;
   s += texture2D(uLow, vUv + t).rgb + texture2D(uLow, vUv - t).rgb + texture2D(uLow, vUv + vec2(t.x, -t.y)).rgb + texture2D(uLow, vUv + vec2(-t.x, t.y)).rgb;
-  gl_FragColor = vec4(s / 16.0 + texture2D(uCur, vUv).rgb * uW, 1.0);
+  // summed levels can pass the half-float limit; keep them finite
+  gl_FragColor = vec4(min(s / 16.0 + texture2D(uCur, vUv).rgb * uW, vec3(6.0e4)), 1.0);
 }
 `;
 
@@ -125,7 +131,7 @@ void main() {
     vec2 o = q * dot(q, q) * uCA;
     c = vec3(texture2D(uScene, vUv - o).r, texture2D(uScene, vUv).g, texture2D(uScene, vUv + o).b);
   } else c = texture2D(uScene, vUv).rgb;
-  c += texture2D(uBloom, vUv).rgb * uBloomK;
+  c += min(texture2D(uBloom, vUv).rgb, vec3(6.0e4)) * uBloomK;
   float lum = texture2D(uLum, vec2(0.5)).r;
   float e = uExposure * mix(1.0, clamp(pow(0.02 / max(lum, 1e-4), 0.3), 0.7, 1.2), uAdapt);
   c *= e / 0.6;

@@ -3,9 +3,9 @@
 // break height is kept where that calibre can actually get to with its stars
 // clear of the water, so nothing can be set up to look wrong.
 import * as THREE from 'three';
-import { SITE } from './site.js?v=7';
-import { SHELL_NAMES, RARE } from './shells.js?v=7';
-import { aimShell } from './physics.js?v=7';
+import { SITE } from './site.js?v=8';
+import { SHELL_NAMES, RARE } from './shells.js?v=8';
+import { aimShell } from './physics.js?v=8';
 
 const SWATCH = {
   red: '#ff3b2b', orange: '#ff8a22', yellow: '#ffd23f', lemon: '#e0ff5c', green: '#56ff4a', aqua: '#2ee8d8',
@@ -57,6 +57,12 @@ const TYPES = {
   diadem: { colours: null, second: ['Pistil (centre)', ALL, false], tails: true, fly: fly(4.2, 1, 1.05, (i) => 3.8 + i * 0.1, 3.8) },
   glittertips: { colours: ALL, tails: true, fly: fly(5, 1, 0.85, (i) => 2.2 + i * 0.08, 1.6) },
   snowfall: { colours: ['white', ...ALL.filter(c => c !== 'white')], tails: true, fly: fly(2.6, 0.7, 2.0, () => 5.4, 3.4) },
+  tipped: { colours: ALL, second: ['Second tips', ALL, true], tails: true, fly: fly(5, 1.1, 0.85, (i) => 2.6 + i * 0.08, 1.5) },
+  brocadestrobe: { colours: ALL, tails: true, fly: fly(6, 1, 1.0, (i) => 5.0 + i * 0.06, 1.8) },
+  crackwillow: { colours: null, tails: true, fly: fly(3.2, 0.84, 0.95, (i) => 5.2 + i * 0.12, 4.6) },
+  palmcrackle: { colours: null, tails: true, fly: fly(4, 1.1, 0.55, () => 2.9, 1.5) },
+  doublepetal: { colours: ALL, second: ['Inner petal', ALL, false], tails: false, fly: fly(5, 1.07, 0.85, (i) => 2.3 + i * 0.08) },
+  strobepistil: { colours: ALL, tails: true, fly: fly(5, 1.06, 0.85, (i) => 2.3 + i * 0.07, 1.3) },
   senrin: { colours: ALL, second: ['Second colour', ALL, true], tails: true, fly: fly(4, 1.08, 0.85, () => 3.0, 0.6) },
   yonjushin: { colours: ALL, tails: false, fly: fly(5, 1.06, 0.85, (i) => 2.4 + i * 0.08) },
   galaxy: { colours: null, tails: false, fly: fly(4.5, 1, 0.85, () => 3.6) },
@@ -65,7 +71,7 @@ const TYPES = {
   mine: { colours: ['gold', ...ALL], tails: true, ground: true, label: 'Mine' },
   waterfall: { colours: ['silver', 'gold'], tails: false, ground: true, label: 'Waterfall' },
 };
-const SHELL_ORDER = ['peony', 'chrysanthemum', 'pistil', 'dahlia', 'ghost', 'confetti', 'glittertips', 'willow', 'kamuro', 'diadem', 'brocade', 'palm', 'horsetail', 'leaves', 'snowfall', 'ring', 'saturn', 'crossette', 'strobe', 'crackle', 'glitter', 'spider', 'salute', 'multibreak', 'heart', 'starshape', 'butterfly', 'flower', 'spiral', 'clover', 'crescent', 'rings', 'cube'];
+const SHELL_ORDER = ['peony', 'chrysanthemum', 'pistil', 'tipped', 'doublepetal', 'strobepistil', 'dahlia', 'ghost', 'confetti', 'glittertips', 'willow', 'crackwillow', 'kamuro', 'diadem', 'brocade', 'brocadestrobe', 'palm', 'palmcrackle', 'horsetail', 'leaves', 'snowfall', 'ring', 'saturn', 'crossette', 'strobe', 'crackle', 'glitter', 'spider', 'salute', 'multibreak', 'heart', 'starshape', 'butterfly', 'flower', 'spiral', 'clover', 'crescent', 'rings', 'cube'];
 const RISES = [['tail', 'Gold tail'], ['silver', 'Silver tail'], ['glitter', 'Glitter'], ['whistle', 'Whistle'], ['none', 'Dark']];
 
 export const DEFAULTS = Object.freeze({

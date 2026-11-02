@@ -3,7 +3,7 @@
 // sky fills with glowing clouds the way a real show does. One ring buffer, one
 // draw call per pass, rendered at reduced resolution with soft depth.
 import * as THREE from 'three';
-import { HASH, LIGHTS } from './glsl.js?v=7';
+import { HASH, LIGHTS } from './glsl.js?v=8';
 
 const PSTRIDE = 16;
 
