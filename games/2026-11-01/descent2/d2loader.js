@@ -3,7 +3,7 @@
 // No game data is ever uploaded or bundled with this page.
 
 // Bump with every engine or loader release so browsers fetch the new files
-const BUILD = '20261101a';
+const BUILD = '20261102a';
 const DB_NAME = 'descent2-web';
 const DB_VERSION = 1;
 const SAVE_DIR = '/home/web_user/.d2x-redux';
@@ -215,7 +215,7 @@ async function importGame(items, onProgress) {
 
 const SETTINGS_KEY = 'descent2-web-settings';
 function loadSettings() {
-  const defaults = { quality: 'native', msaa: true };
+  const defaults = { quality: 'native', msaa: true, music: 'cd' };
   try {
     return { ...defaults, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') };
   } catch {
@@ -243,7 +243,10 @@ function renderResolution(quality) {
 
 const gcd = (a, b) => (b ? gcd(b, a % b) : a);
 
-function buildConfig(existing, settings) {
+// D2X music types: 0 none, 1 built-in (the game's MIDI songs), 2 CD audio
+const MUSIC_TYPES = { off: 0, midi: 1, cd: 2 };
+
+function buildConfig(existing, settings, haveCd) {
   const { w, h } = renderResolution(settings.quality);
   const g = gcd(w, h);
   const forced = {
@@ -254,7 +257,6 @@ function buildConfig(existing, settings) {
     WindowMode: 0,
     Multisample: settings.msaa ? 1 : 0,
     VSync: 1,
-    MusicType: 2, // CD audio (served from the imported disc image)
     OrigTrackOrder: 1,
   };
   const defaults = { DigiVolume: 8, MusicVolume: 6, TexFilt: 3, MovieTexFilt: 1, MovieSubtitles: 0,
@@ -267,6 +269,17 @@ function buildConfig(existing, settings) {
     }
   }
   for (const [k, v] of Object.entries(defaults)) if (!kv.has(k)) kv.set(k, String(v));
+  // The in-game Sound menu can switch music too: keep that choice unless the page's own
+  // Music setting changed since the last start.
+  const inGame = Number(kv.get('MusicType'));
+  if (settings.musicWritten !== undefined && inGame !== settings.musicWritten) {
+    const name = Object.keys(MUSIC_TYPES).find((k) => MUSIC_TYPES[k] === inGame);
+    if (name) settings.music = name;
+  }
+  let music = settings.music in MUSIC_TYPES ? settings.music : 'cd';
+  if (music === 'cd' && !haveCd) music = 'midi';
+  forced.MusicType = MUSIC_TYPES[music];
+  settings.musicWritten = forced.MusicType;
   for (const [k, v] of Object.entries(forced)) kv.set(k, String(v));
   return { text: [...kv].map(([k, v]) => `${k}=${v}`).join('\n') + '\n', w, h };
 }
@@ -309,6 +322,7 @@ async function bootGame(manifest, ui) {
   window.Module = {
     canvas,
     d2cd: { tracks: cdTracks },
+    d2midi: midiPlayer(),
     print: (t) => console.log(t),
     printErr: (t) => console.warn(t),
     onGameMessage: (text, isError) => ui.message(text, isError),
@@ -336,7 +350,8 @@ async function bootGame(manifest, ui) {
           const cfgPath = SAVE_DIR + '/descent.cfg';
           let existing = null;
           try { existing = FS.readFile(cfgPath, { encoding: 'utf8' }); } catch {}
-          const cfg = buildConfig(existing, settings);
+          const cfg = buildConfig(existing, settings, cdTracks.length > 0);
+          saveSettings(settings);
           FS.writeFile(cfgPath, cfg.text);
           canvas.width = cfg.w;
           canvas.height = cfg.h;
@@ -350,12 +365,32 @@ async function bootGame(manifest, ui) {
       Module.callMain(['-hogdir', DATA_DIR, '-gl_gettexlevelparam_ok', '0', '-gl_intensity4_ok', '0',
         '-gl_luminance4_alpha4_ok', '0', '-gl_rgba2_ok', '0']);
       startSaveSync();
+      // fetch the MIDI sound bank in the background so the first briefing has music
+      if (settings.music !== 'off') Module.d2midi.load();
     },
     onAbort: (what) => ui.message('The game stopped unexpectedly: ' + what, true),
   };
   // FS/IDBFS are exported on Module once the runtime script runs
   await loadScript(`d2x.js?v=${BUILD}`);
   Module.FS = Module.FS || window.FS;
+}
+
+// The engine's MIDI songs play through a General MIDI soft synth that loads on demand
+// (synth/d2synth.js + an 8 MB sound bank). Calls queue in order on the module import.
+function midiPlayer() {
+  let mod = null;
+  const get = () => (mod ||= import(`./synth/d2synth.js?v=${BUILD}`));
+  const call = (fn) => get().then(fn).catch((e) => console.warn('MIDI music unavailable', e));
+  return {
+    load: () => call((m) => m.load()),
+    play: (bytes, loop) => call((m) => m.play(bytes, loop)),
+    stop: () => call((m) => m.stop()),
+    pause: () => call((m) => m.pause()),
+    resume: () => call((m) => m.resume()),
+    toggle: () => call((m) => m.toggle()),
+    volume: (v) => call((m) => m.setVolume(v)),
+    status: () => get().then((m) => m.status()),
+  };
 }
 
 function startSaveSync() {
@@ -406,6 +441,12 @@ async function main() {
   const settings = loadSettings();
   $('quality').value = settings.quality;
   $('msaa').checked = settings.msaa;
+  $('music').value = settings.music;
+  $('music').addEventListener('change', () => {
+    settings.music = $('music').value;
+    delete settings.musicWritten; // the page's choice wins over the last in-game one
+    saveSettings(settings);
+  });
   $('quality').addEventListener('change', () => { settings.quality = $('quality').value; saveSettings(settings); updateResLabel(); });
   $('msaa').addEventListener('change', () => { settings.msaa = $('msaa').checked; saveSettings(settings); });
   const updateResLabel = () => {
@@ -428,7 +469,7 @@ async function main() {
     $('importPanel').hidden = true;
     $('readyPanel').hidden = false;
     $('readyInfo').textContent = `${m.files.length} game files (${fmtBytes(m.totalBytes)})` +
-      (m.cdTracks.length ? ` · ${m.cdTracks.length} CD music tracks` : ' · no CD music found');
+      (m.cdTracks.length ? ` · ${m.cdTracks.length} CD music tracks` : ' · no CD tracks, so the original MIDI music plays');
   };
   const showImport = () => {
     $('importPanel').hidden = false;

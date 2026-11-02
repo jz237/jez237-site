@@ -113,6 +113,13 @@
         <span class="small" id="reslabel"></span>
       </label>
       <label><input type="checkbox" id="msaa"> Anti-aliasing (MSAA)</label>
+      <label>Music
+        <select id="music">
+          <option value="cd">CD soundtrack</option>
+          <option value="midi">Original MIDI soundtrack</option>
+          <option value="off">Off</option>
+        </select>
+      </label>
       <button class="btn ghost" id="reimport">Re-import game files</button>
     </div>
   </section>
@@ -125,16 +132,19 @@
   <section class="panel">
     <h2>Playing in the browser</h2>
     <div class="keys">
-      <div><b>Click</b> the game to capture the mouse</div>
+      <div><b>Click</b> the game: the mouse flies the ship</div>
       <div><b>Esc</b> releases the mouse / game menu</div>
       <div><b>⛶ button</b> (top right) for full screen</div>
       <div><b>F1</b> in-game help</div>
       <div>Controls: <b>Options → Controls</b></div>
-      <div>Gamepads work after you press a button</div>
+      <div><b>Gamepad</b>: press any button to connect</div>
+      <div>Pad: left stick moves, right stick aims</div>
+      <div>Pad: triggers fire, bumpers bank, A/B up/down</div>
     </div>
     <p class="small" style="margin-bottom:0">Saved pilots and games are kept in this browser. Enhancements: native-resolution
-      rendering with trilinear filtering and MSAA, high-resolution cutscenes, smooth display-synced frame rate, and the original
-      CD soundtrack ripped from your own disc image.</p>
+      rendering with trilinear filtering and MSAA, high-resolution cutscenes, smooth display-synced frame rate, the original
+      CD soundtrack ripped from your own disc image, and the game's own MIDI music for briefings (or the whole game) played through
+      a General MIDI synthesizer. New pilots get mouse and gamepad flight set up; adjust them in <b>Options → Controls</b>.</p>
   </section>
 </main>
 
@@ -146,8 +156,10 @@
 
 <footer>
   Engine: <a href="https://github.com/dxx-redux/dxx-redux">DXX-Redux</a> (Descent 2 source by Parallax Software, non-commercial license),
-  compiled to WebAssembly (<a href="source/">source for this build</a>). Descent II game data is not included; you load your own copy.
+  compiled to WebAssembly (<a href="source/">source for this build</a>). Descent II game data is not included; you load your own copy.<br>
+  MIDI music: <a href="https://github.com/spessasus/spessasynth_lib">SpessaSynth</a> with the
+  <a href="https://www.schristiancollins.com/generaluser">GeneralUser GS</a> sound bank by S. Christian Collins.
 </footer>
-<script src="d2loader.js?v=20261101a"></script>
+<script src="d2loader.js?v=20261102a"></script>
 </body>
 </html>

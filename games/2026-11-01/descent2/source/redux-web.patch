@@ -1,3 +1,17 @@
+diff --git a/d2/arch/include/joy.h b/d2/arch/include/joy.h
+index 8e3f48d..872cf6a 100644
+--- a/d2/arch/include/joy.h
++++ b/d2/arch/include/joy.h
+@@ -23,6 +23,9 @@ struct d_event;
+ extern int joy_num_axes; // set to Joystick.n_axes. solve different?
+ extern void joy_init();
+ extern void joy_close();
++#ifdef __EMSCRIPTEN__
++extern void joy_rescan();
++#endif
+ extern void event_joystick_get_axis(struct d_event *event, int *axis, int *value);
+ extern void joy_flush();
+ extern int event_joystick_get_button(struct d_event *event);
 diff --git a/d2/arch/ogl/gr.c b/d2/arch/ogl/gr.c
 index c5cca0b..c0e7162 100644
 --- a/d2/arch/ogl/gr.c
@@ -77,6 +91,79 @@ index c536c46..3650b6d 100644
  		}
  		else
  		{
+diff --git a/d2/arch/sdl/event.c b/d2/arch/sdl/event.c
+index 5a20a70..14d4a74 100644
+--- a/d2/arch/sdl/event.c
++++ b/d2/arch/sdl/event.c
+@@ -16,6 +16,9 @@
+ #include "args.h"
+ 
+ #include "joy.h"
++#ifdef __EMSCRIPTEN__
++#include "web.h"
++#endif
+ 
+ extern void key_handler(SDL_KeyboardEvent *event);
+ extern void mouse_button_handler(SDL_MouseButtonEvent *mbe);
+@@ -31,6 +34,10 @@ void event_poll()
+ 	window *wind = window_get_front();
+ 	int idle = 1;
+ 	
++#ifdef __EMSCRIPTEN__
++	if (d2web_gamepads_changed())
++		joy_rescan();
++#endif
+ 	// If the front window changes, exit this loop, otherwise unintended behavior can occur
+ 	// like pressing 'Return' really fast at 'Difficulty Level' causing multiple games to be started
+ 	while ((wind == window_get_front()) && SDL_PollEvent(&event))
+diff --git a/d2/arch/sdl/joy.c b/d2/arch/sdl/joy.c
+index efbb67c..16ee34d 100644
+--- a/d2/arch/sdl/joy.c
++++ b/d2/arch/sdl/joy.c
+@@ -192,11 +192,19 @@ void joy_init()
+ {
+ 	int i,j,n;
+ 	char temp[64];
++#ifdef __EMSCRIPTEN__
++	// a rescan must not run SDL_Init again: the browser SDL would reset its keyboard state
++	static int sdl_joystick_ready = 0;
+ 
++	if (!sdl_joystick_ready)
++#endif
+ 	if (SDL_Init(SDL_INIT_JOYSTICK) < 0) {
+ 		con_printf(CON_NORMAL, "sdl-joystick: initialisation failed: %s.",SDL_GetError());
+ 		return;
+ 	}
++#ifdef __EMSCRIPTEN__
++	sdl_joystick_ready = 1;
++#endif
+ 
+ 	memset(&Joystick,0,sizeof(Joystick));
+ 	memset(joyaxis_text, 0, JOY_MAX_AXES * sizeof(char *));
+@@ -294,6 +302,23 @@ void joy_init()
+ 	joy_num_axes = Joystick.n_axes;
+ }
+ 
++#ifdef __EMSCRIPTEN__
++// Browsers only reveal a gamepad after its first button press, usually after the game started.
++void joy_rescan()
++{
++	int i;
++
++	for (i = 0; i < num_joysticks; i++)
++		SDL_JoystickClose(SDL_Joysticks[i].handle);
++	while (Joystick.n_axes-- > 0)
++		d_free(joyaxis_text[Joystick.n_axes]);
++	while (Joystick.n_buttons-- > 0)
++		d_free(joybutton_text[Joystick.n_buttons]);
++	num_joysticks = 0;
++	joy_init();
++}
++#endif
++
+ void joy_close()
+ {
+ 	SDL_JoystickClose(SDL_Joysticks[num_joysticks].handle);
 diff --git a/d2/arch/sdl/key.c b/d2/arch/sdl/key.c
 index 92eee47..874ec30 100644
 --- a/d2/arch/sdl/key.c
@@ -164,10 +251,10 @@ index 0000000..f8c55f7
 +#include <SDL.h>
 diff --git a/d2/arch/web/library_d2web.js b/d2/arch/web/library_d2web.js
 new file mode 100644
-index 0000000..6917053
+index 0000000..491d02d
 --- /dev/null
 +++ b/d2/arch/web/library_d2web.js
-@@ -0,0 +1,155 @@
+@@ -0,0 +1,191 @@
 +// Emscripten JS library: browser glue for the Descent II web build.
 +// The page fills Module.d2cd.tracks[n] with object URLs of the ripped CD tracks
 +// (index = CD track number; track 1 is the data track and stays empty).
@@ -267,6 +354,42 @@ index 0000000..6917053
 +  d2web_cd_volume: (v) => {
 +    D2CD.volume = Math.max(0, Math.min(8, v)) / 8;
 +    if (D2CD.audio) D2CD.audio.volume = D2CD.volume;
++  },
++
++  // MIDI music is played by the page's General MIDI synth (Module.d2midi, see d2loader.js).
++  d2web_midi_play: (data, len, loop) => {
++    if (!Module.d2midi) return 0;
++    Module.d2midi.play(HEAPU8.slice(data, data + len), !!loop);
++    return 1;
++  },
++  d2web_midi_stop: () => { if (Module.d2midi) Module.d2midi.stop(); },
++  d2web_midi_pause: () => { if (Module.d2midi) Module.d2midi.pause(); },
++  d2web_midi_resume: () => { if (Module.d2midi) Module.d2midi.resume(); },
++  d2web_midi_pause_resume: () => { if (Module.d2midi) Module.d2midi.toggle(); },
++  d2web_midi_volume: (v) => { if (Module.d2midi) Module.d2midi.volume(Math.max(0, Math.min(8, v)) / 8); },
++
++  // Chrome reports four gamepad slots, empty ones as null, and the stock SDL count includes
++  // them; count up to the last connected pad so device indices still line up.
++  SDL_NumJoysticks: () => {
++    const pads = navigator.getGamepads ? navigator.getGamepads() : [];
++    let n = 0;
++    for (let i = 0; i < pads.length; i++) if (pads[i]) n = i + 1;
++    return n;
++  },
++
++  // Browsers reveal a gamepad on its first button press; the engine rescans when this flips.
++  $D2Pads: { changed: false, hooked: false },
++  d2web_gamepads_changed__deps: ['$D2Pads'],
++  d2web_gamepads_changed: () => {
++    if (!D2Pads.hooked) {
++      D2Pads.hooked = true;
++      const mark = () => { D2Pads.changed = true; };
++      window.addEventListener('gamepadconnected', mark);
++      window.addEventListener('gamepaddisconnected', mark);
++    }
++    const changed = D2Pads.changed;
++    D2Pads.changed = false;
++    return changed ? 1 : 0;
 +  },
 +
 +  d2web_frame_wait__async: true,
@@ -488,10 +611,10 @@ index 0000000..bc5fa7e
 +}
 diff --git a/d2/arch/web/web.c b/d2/arch/web/web.c
 new file mode 100644
-index 0000000..cd9eba4
+index 0000000..518bd91
 --- /dev/null
 +++ b/d2/arch/web/web.c
-@@ -0,0 +1,127 @@
+@@ -0,0 +1,144 @@
 +/*
 + * Browser (Emscripten) replacements for desktop-only pieces:
 + * message boxes, GLU mipmapping and GL 1.1 calls WebGL lacks.
@@ -504,6 +627,9 @@ index 0000000..cd9eba4
 +#include <SDL.h>
 +#include "ogl_init.h"
 +#include "messagebox.h"
++#include "hmp.h"
++#include "u_mem.h"
++#include "web.h"
 +
 +EM_JS(void, d2web_show_message, (const char *msg, int is_error), {
 +	const text = UTF8ToString(msg);
@@ -519,6 +645,20 @@ index 0000000..cd9eba4
 +void msgbox_error(const char *message)
 +{
 +	d2web_show_message(message, 1);
++}
++
++int d2web_play_hmp(const char *filename, int loop)
++{
++	unsigned char *mid = NULL;
++	unsigned int len = 0;
++	int ok;
++
++	hmp2mid((char *)filename, &mid, &len);
++	if (!mid)
++		return 0;
++	ok = len ? d2web_midi_play(mid, len, loop) : 0;
++	d_free(mid);
++	return ok;
 +}
 +
 +static int is_pow2(int v)
@@ -621,10 +761,10 @@ index 0000000..cd9eba4
 +}
 diff --git a/d2/arch/web/web.h b/d2/arch/web/web.h
 new file mode 100644
-index 0000000..f4322fd
+index 0000000..8d6829f
 --- /dev/null
 +++ b/d2/arch/web/web.h
-@@ -0,0 +1,34 @@
+@@ -0,0 +1,47 @@
 +/* Browser (Emscripten) glue for D2X-Redux. Implemented in library_d2web.js. */
 +#ifndef _D2WEB_H
 +#define _D2WEB_H
@@ -646,6 +786,19 @@ index 0000000..f4322fd
 +int d2web_cd_status(void);	/* 0 stopped, 1 playing, 2 paused */
 +int d2web_cd_track(void);
 +void d2web_cd_volume(int volume);	/* 0..8 */
++
++/* MIDI music: the page plays standard MIDI data through a General MIDI soft synth. */
++int d2web_midi_play(const unsigned char *data, int len, int loop);
++void d2web_midi_stop(void);
++void d2web_midi_pause(void);
++void d2web_midi_resume(void);
++void d2web_midi_pause_resume(void);
++void d2web_midi_volume(int volume);	/* 0..8 */
++/* Converts a Descent .hmp song to MIDI and plays it (web.c). */
++int d2web_play_hmp(const char *filename, int loop);
++
++/* True once after a gamepad was connected or removed. */
++int d2web_gamepads_changed(void);
 +
 +/* Persist the player/save directory to IndexedDB (debounced). */
 +void d2web_sync_saves(void);
@@ -902,6 +1055,31 @@ index dc6e44a..3c6d310 100644
 +#endif
  	return(0);		//presumably successful exit
  }
+diff --git a/d2/main/menu.c b/d2/main/menu.c
+index 8301896..5b1b27d 100644
+--- a/d2/main/menu.c
++++ b/d2/main/menu.c
+@@ -1820,7 +1820,7 @@ int sound_menuset(newmenu *menu, d_event *event, void *userdata)
+ #ifdef USE_SDLMIXER
+ #define SOUND_MENU_NITEMS 33
+ #else
+-#ifdef _WIN32
++#if defined(_WIN32) || defined(__EMSCRIPTEN__)	// both add the built-in music choice
+ #define SOUND_MENU_NITEMS 11
+ #else
+ #define SOUND_MENU_NITEMS 10
+@@ -1858,7 +1858,10 @@ void do_sound_menu()
+ 	opt_sm_mtype0 = nitems;
+ 	m[nitems].type = NM_TYPE_RADIO; m[nitems].text = "no music"; m[nitems].value = (GameCfg.MusicType == MUSIC_TYPE_NONE); m[nitems].group = 0; nitems++;
+ 
+-#if defined(USE_SDLMIXER) || defined(_WIN32)
++#if defined(__EMSCRIPTEN__)
++	opt_sm_mtype1 = nitems;
++	m[nitems].type = NM_TYPE_RADIO; m[nitems].text = "original midi music"; m[nitems].value = (GameCfg.MusicType == MUSIC_TYPE_BUILTIN); m[nitems].group = 0; nitems++;
++#elif defined(USE_SDLMIXER) || defined(_WIN32)
+ 	opt_sm_mtype1 = nitems;
+ 	m[nitems].type = NM_TYPE_RADIO; m[nitems].text = "built-in/addon music"; m[nitems].value = (GameCfg.MusicType == MUSIC_TYPE_BUILTIN); m[nitems].group = 0; nitems++;
+ #endif
 diff --git a/d2/main/newdemo.c b/d2/main/newdemo.c
 index 79cf5fb..e27f272 100644
 --- a/d2/main/newdemo.c
@@ -916,10 +1094,55 @@ index 79cf5fb..e27f272 100644
  
  #define ND_EVENT_EOF				0	// EOF
 diff --git a/d2/main/playsave.c b/d2/main/playsave.c
-index 1944a8c..7b95e97 100644
+index 1944a8c..c7d0f7e 100644
 --- a/d2/main/playsave.c
 +++ b/d2/main/playsave.c
-@@ -126,8 +126,14 @@ int new_player_config()
+@@ -50,6 +50,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ #include "args.h"
+ #include "vers_id.h"
+ #include "newdemo.h"
++#include "kconfig.h"
+ #include "gauges.h"
+ 
+ //version 5  ->  6: added new highest level information
+@@ -87,6 +88,36 @@ int new_player_config()
+ 	PlayerCfg.ControlType=0; // Assume keyboard
+ 	memcpy(PlayerCfg.KeySettings, DefaultKeySettings, sizeof(DefaultKeySettings));
+ 	memcpy(PlayerCfg.KeySettingsD2X, DefaultKeySettingsD2X, sizeof(DefaultKeySettingsD2X));
++#ifdef __EMSCRIPTEN__
++	// Browser players click to capture the mouse and expect it to fly the ship, and the only
++	// controller layout a browser reports is the standard (Xbox-style) gamepad, so set both up.
++	PlayerCfg.ControlType = CONTROL_USING_MOUSE | CONTROL_USING_JOYSTICK;
++	{
++		static const ubyte pad[][2] = {
++			{ 0, 7 },	// fire primary: right trigger
++			{ 1, 6 },	// fire secondary: left trigger
++			{ 4, 2 },	// fire flare: X
++			{ 8, 0 },	// slide up: A
++			{ 9, 1 },	// slide down: B
++			{ 11, 4 },	// bank left: left bumper
++			{ 12, 5 },	// bank right: right bumper
++			{ 25, 15 },	// rear view: d-pad right
++			{ 26, 3 },	// drop bomb: Y
++			{ 27, 10 },	// afterburner: left stick click
++			{ 28, 12 },	// cycle primary: d-pad up
++			{ 29, 13 },	// cycle secondary: d-pad down
++			{ 30, 14 },	// headlight: d-pad left
++			{ 13, 3 },	// pitch: right stick Y
++			{ 15, 2 },	// turn: right stick X
++			{ 17, 0 },	// slide left/right: left stick X
++			{ 23, 1 },	// throttle: left stick Y
++		};
++		int i;
++
++		for (i = 0; i < sizeof(pad) / sizeof(pad[0]); i++)
++			PlayerCfg.KeySettings[1][pad[i][0]] = pad[i][1];
++	}
++#endif
+ 	kc_set_controls();
+ 
+ 	PlayerCfg.DefaultDifficulty = 1;
+@@ -126,8 +157,14 @@ int new_player_config()
  	PlayerCfg.AutomapFreeFlight = 0;
  	PlayerCfg.NoFireAutoselect = 0;
  	PlayerCfg.CycleAutoselectOnly = 0;
@@ -947,6 +1170,107 @@ index 650f69e..68d5617 100644
  extern void multi_send_got_flag (char);
  
  //	returns true if powerup consumed
+diff --git a/d2/main/songs.c b/d2/main/songs.c
+index cf9fb7d..01cce1e 100644
+--- a/d2/main/songs.c
++++ b/d2/main/songs.c
+@@ -31,6 +31,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ #include "digi_mixer_music.h"
+ #include "jukebox.h"
+ #endif
++#ifdef __EMSCRIPTEN__
++#include "web.h"
++#endif
+ #include "config.h"
+ #include "timer.h"
+ #include "args.h"
+@@ -59,6 +62,9 @@ void songs_set_volume(int volume)
+ #ifdef USE_SDLMIXER
+ 	mix_set_music_volume(volume);
+ #endif
++#ifdef __EMSCRIPTEN__
++	d2web_midi_volume(volume);
++#endif
+ }
+ 
+ // Set up everything for our music
+@@ -149,7 +155,7 @@ void songs_init()
+ 	if (1)
+ #endif
+ 	{
+-#ifndef _WIN32
++#if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
+ 		if (GameCfg.MusicType == MUSIC_TYPE_BUILTIN)
+ 			GameCfg.MusicType = MUSIC_TYPE_NONE;
+ #endif
+@@ -188,6 +194,9 @@ void songs_stop_all(void)
+ #ifdef USE_SDLMIXER
+ 	mix_stop_music();
+ #endif
++#ifdef __EMSCRIPTEN__
++	d2web_midi_stop();
++#endif
+ 
+ 	Song_playing = -1;
+ }
+@@ -202,6 +211,9 @@ void songs_pause(void)
+ #ifdef USE_SDLMIXER
+ 	mix_pause_music();
+ #endif
++#ifdef __EMSCRIPTEN__
++	d2web_midi_pause();
++#endif
+ }
+ 
+ void songs_resume(void)
+@@ -214,6 +226,9 @@ void songs_resume(void)
+ #ifdef USE_SDLMIXER
+ 	mix_resume_music();
+ #endif
++#ifdef __EMSCRIPTEN__
++	d2web_midi_resume();
++#endif
+ }
+ 
+ void songs_pause_resume(void)
+@@ -223,6 +238,9 @@ void songs_pause_resume(void)
+ #ifdef USE_SDLMIXER
+ 	mix_pause_resume_music();
+ #endif
++#ifdef __EMSCRIPTEN__
++	d2web_midi_pause_resume();
++#endif
+ }
+ 
+ /*
+@@ -300,6 +318,8 @@ int songs_play_file(char *filename, int repeat, void (*hook_finished_track)())
+ 		return digi_win32_play_midi_song( filename, repeat );
+ #elif defined(USE_SDLMIXER)
+ 		return mix_play_file( filename, repeat, hook_finished_track );
++#elif defined(__EMSCRIPTEN__)
++		return d2web_play_hmp( filename, repeat );
+ #else
+ 		return 0;
+ #endif
+@@ -356,6 +376,18 @@ int songs_play_song( int songnum, int repeat )
+ 					Song_playing = songnum;
+ 				}
+ 			}
++#ifdef __EMSCRIPTEN__
++			// The CD has no briefing, level-end or game-end tracks: the original game played its
++			// MIDI songs there, so do the same (a missing song keeps the current music going)
++			else if (songnum != SONG_TITLE && songnum != SONG_CREDITS && PHYSFSX_exists(BIMSongs[songnum].filename, 1))
++			{
++				if (songs_play_file(BIMSongs[songnum].filename, repeat, NULL))
++				{
++					Redbook_playing = 0;
++					Song_playing = songnum;
++				}
++			}
++#endif
+ 			break;
+ 		}
+ #ifdef USE_SDLMIXER
 diff --git a/d2/misc/args.c b/d2/misc/args.c
 index cb81385..d2aa251 100644
 --- a/d2/misc/args.c
