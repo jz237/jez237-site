@@ -1,27 +1,12 @@
-const CACHE = 'hard-hat-mac-v2.3.0';
-const CORE = ['./', './index.html', './game-support.js?v=2.2.0', './manifest.webmanifest', './icon.svg', './icon-192.png', './icon-512.png'];
-
-self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting()));
-});
-
+// Retirement worker: the 2D edition cached this folder cache-first. This version clears
+// those caches, unregisters itself and reloads open pages so they fetch the 3D build.
+self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', event => {
-  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key)))).then(() => self.clients.claim()));
-});
-
-self.addEventListener('fetch', event => {
-  const request = event.request;
-  if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return;
-  if (request.mode === 'navigate') {
-    event.respondWith(fetch(request).then(response => {
-      const copy = response.clone();
-      caches.open(CACHE).then(cache => cache.put('./index.html', copy));
-      return response;
-    }).catch(() => caches.match('./index.html')));
-    return;
-  }
-  event.respondWith(caches.match(request).then(cached => cached || fetch(request).then(response => {
-    if (response.ok) caches.open(CACHE).then(cache => cache.put(request, response.clone()));
-    return response;
-  })));
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.filter(k => k.startsWith('hard-hat-mac-v')).map(k => caches.delete(k)));
+    await self.registration.unregister();
+    const clients = await self.clients.matchAll({ type: 'window' });
+    for (const c of clients) c.navigate(c.url);
+  })());
 });
