@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="theme-color" content="#03020c">
-<meta name="description" content="Plasma Pong: Battle Edition — real-time 3D battle pong. Smash, curve and shoot through shield walls to destroy your rival's reactor core. Voiced rival pilots, a boss, five arenas, 13 power-ups and a smart demo mode.">
+<meta name="description" content="Plasma Pong: Battle Edition — real-time 3D battle pong. Smash, curve and shoot through shield walls to destroy your rival's reactor core. Voiced rival pilots you can unlock and fly, a boss, five arenas, 13 power-ups, party twists, online 1v1, instant replays and a smart demo mode.">
 <title>Plasma Pong — Battle Edition</title>
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -182,6 +182,56 @@ table.hs tr.me td { color: #fff; text-shadow: 0 0 8px var(--cyan); }
 .ini.sel .ch { color: var(--gold); text-shadow: 0 0 14px var(--gold); }
 #cont .count { font-family: 'Exo 2'; font-style: italic; font-weight: 900; font-size: 120px; color: #fff; text-shadow: 0 0 30px var(--pink); }
 
+/* pilots, versus setup, online, replay */
+.pgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; width: min(640px, 94vw); margin-top: 22px; }
+.mbtn.pick { padding: 16px 10px 14px; border-color: color-mix(in srgb, var(--pc) 45%, transparent); }
+.mbtn.pick b { display: block; font-family: 'Exo 2'; font-style: italic; font-weight: 900; font-size: 20px; letter-spacing: .08em; color: #fff; text-shadow: 0 0 12px var(--pc); }
+.mbtn.pick:hover, .mbtn.pick.sel { border-color: var(--pc); box-shadow: 0 0 22px color-mix(in srgb, var(--pc) 50%, transparent), inset 0 0 18px color-mix(in srgb, var(--pc) 18%, transparent); }
+.mbtn.pick.locked { opacity: .45; filter: grayscale(.8); }
+.mbtn.pick.locked b { text-shadow: none; }
+.pdesc { margin-top: 16px; min-height: 2.6em; max-width: min(560px, 92vw); font-size: 12px; line-height: 1.55; color: #c6d4ee; font-family: system-ui, sans-serif; letter-spacing: .03em; }
+.pdesc b { color: var(--gold); font-family: Orbitron, sans-serif; letter-spacing: .12em; font-size: 11px; }
+.menu.rowb { flex-direction: row; justify-content: center; width: auto; }
+.seg2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.twgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; }
+.mbtn.tw, .mbtn.tog { text-align: left; padding: 10px 12px 10px 34px; font-size: 11px; letter-spacing: .14em; }
+.mbtn.tw::before, .mbtn.tog::before { content: ''; position: absolute; left: 12px; top: 13px; width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--dim); }
+.mbtn.tw.on, .mbtn.tog.on { border-color: var(--gold); color: #fff; }
+.mbtn.tw.on::before, .mbtn.tog.on::before { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 10px var(--gold); }
+.mbtn.tw b { display: block; font-weight: 700; }
+.mbtn.tw small, .mbtn.tog small { letter-spacing: .04em; font-family: system-ui, sans-serif; text-transform: none; }
+.twl { display: inline-block; margin-top: 8px; color: var(--gold); letter-spacing: .2em; font-size: 10px; }
+.stats .unl { color: var(--gold) !important; text-shadow: 0 0 10px rgba(255, 210, 63, .6); font-weight: 700; }
+.onstat { margin: 0 0 14px; font-size: 12px; color: #c6d4ee; font-family: system-ui, sans-serif; }
+.onstat.err { color: #ff8090; }
+#online .card { max-width: 480px; text-align: center; }
+#online .menu { width: 100%; margin: 6px 0 0; }
+.oncode { font-family: 'Exo 2'; font-style: italic; font-weight: 900; font-size: 64px; letter-spacing: .18em; color: #fff; text-shadow: 0 0 18px var(--cyan), 0 0 40px var(--cyan); margin: 4px 0 6px; }
+.onlbl { font-size: 10px; letter-spacing: .3em; color: var(--dim); }
+.onwait { margin: 14px 0; font-size: 12px; letter-spacing: .14em; color: var(--ink); animation: blink 1.4s infinite; }
+#join-code { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--cyan); background: rgba(0, 0, 0, .35); color: #fff; font: italic 900 40px 'Exo 2', sans-serif; letter-spacing: .4em; text-align: center; text-transform: uppercase; outline: none; margin-bottom: 10px; user-select: text; -webkit-user-select: text; }
+#replay { position: absolute; inset: 0; }
+#replay .lb { position: absolute; left: 0; right: 0; height: 9vh; background: #000; animation: lbIn .4s ease-out; }
+#replay .lb.top { top: 0; } #replay .lb.bot { bottom: 0; }
+#replay .rtag { position: absolute; left: max(18px, 3vw); top: calc(4.5vh - 10px); font-family: 'Exo 2'; font-style: italic; font-weight: 900; font-size: 20px; letter-spacing: .14em; color: #fff; display: flex; align-items: center; gap: 10px; }
+#replay .rtag i { width: 12px; height: 12px; border-radius: 50%; background: #ff3040; box-shadow: 0 0 10px #ff3040; animation: blink 1s infinite; }
+#replay .rskip { position: absolute; right: max(18px, 3vw); bottom: calc(4.5vh - 6px); font-size: 9px; letter-spacing: .24em; color: var(--dim); }
+@keyframes lbIn { from { transform: scaleY(0); } }
+#hud.flip #hud-1 { order: 3; } #hud.flip .pmid { order: 2; } #hud.flip #hud--1 { order: 1; }
+#toasts.flip { flex-direction: row-reverse; }
+body.calm .logo.glitch { animation: none; }
+body.calm #flashframe.hurt { box-shadow: inset 0 0 120px 20px rgba(255, 30, 60, .22); }
+body.calm .pip.crit.on, body.calm .cell.h0, body.calm #replay .rtag i, body.calm .onwait { animation-duration: 2.4s; }
+body.calm .odbar.full i, body.calm #t-od.ready, body.calm .vsmark { animation: none; }
+@media (max-width: 720px) {
+  .pgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mbtn.pick b { font-size: 16px; }
+  .oncode { font-size: 48px; }
+  .twgrid { grid-template-columns: 1fr 1fr; }
+  .mbtn.tw small { display: none; }
+}
+@media (max-height: 480px) and (orientation: landscape) { .pgrid { grid-template-columns: repeat(6, minmax(0, 1fr)); margin-top: 10px; } .mbtn.pick { padding: 10px 6px; } }
+
 @keyframes blink { 50% { opacity: .35; } }
 @keyframes odpulse { from { filter: brightness(1); } to { filter: brightness(1.8); } }
 @keyframes popup { 0% { opacity: 0; transform: translate(-50%, -30%) scale(.6); } 15% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); } 30% { transform: translate(-50%, -55%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -140%) scale(.95); } }
@@ -242,6 +292,7 @@ table.hs tr.me td { color: #fff; text-shadow: 0 0 8px var(--cyan); }
   <div id="tip" class="hidden"></div>
   <div id="attract-board" class="hidden"><div class="card"><h2>🌐 GLOBAL HIGH SCORES</h2><table class="hs" id="ab-rows"></table><p class="abfoot">PLAY THE CAMPAIGN TO JOIN THE BOARD</p></div></div>
   <div id="demo-badge" class="hidden"><span>DEMO</span> · PRESS ANY KEY OR TAP</div>
+  <div id="replay" class="hidden"><div class="lb top"></div><div class="lb bot"></div><div class="rtag"><i></i>INSTANT REPLAY</div><div class="rskip">ANY KEY OR TAP TO SKIP</div></div>
   <div id="touch" class="hidden">
     <button class="tbtn" id="t-fire">FIRE</button>
     <button class="tbtn" id="t-od">OVER<br>DRIVE</button>
@@ -259,7 +310,8 @@ table.hs tr.me td { color: #fff; text-shadow: 0 0 8px var(--cyan); }
     <div class="logo glitch">PLASMA PONG<em>BATTLE EDITION</em></div>
     <div class="menu" id="mainmenu">
       <button class="mbtn primary" data-act="campaign">CAMPAIGN<small>FOUR RIVALS · ONE MONOLITH</small></button>
-      <button class="mbtn" data-act="versus">VERSUS<small>TWO PLAYERS · ONE SCREEN</small></button>
+      <button class="mbtn" data-act="versus">VERSUS<small>SAME SCREEN OR CPU · PARTY TWISTS</small></button>
+      <button class="mbtn" data-act="online">ONLINE<small>1V1 AGAINST ANYONE, ANYWHERE</small></button>
       <button class="mbtn" data-act="demo">DEMO<small>WATCH THE AI THINK</small></button>
       <div class="mbtn row2"><button class="mbtn" data-act="howto">HOW TO PLAY</button><button class="mbtn" data-act="scores">HIGH SCORES</button></div>
       <button class="mbtn" data-act="options">OPTIONS</button>
@@ -276,6 +328,48 @@ table.hs tr.me td { color: #fff; text-shadow: 0 0 8px var(--cyan); }
       <button class="mbtn primary" data-diff="normal">NORMAL<small>THE INTENDED BATTLE · ×1 SCORE</small></button>
       <button class="mbtn" data-diff="hard">HARD<small>RAZOR-SHARP AI · ×1.5 SCORE</small></button>
       <button class="mbtn" data-act="back">BACK</button>
+    </div>
+  </section>
+
+  <section class="screen dim hidden" id="pilot">
+    <div class="logo" style="font-size:clamp(28px,5.5vw,56px)">CHOOSE YOUR PILOT</div>
+    <div class="sub" id="pilot-for">PLAYER 1</div>
+    <div class="pgrid" id="pgrid"></div>
+    <div class="pdesc" id="pdesc">&nbsp;</div>
+    <div class="menu rowb"><button class="mbtn" data-act="back">BACK</button></div>
+  </section>
+
+  <section class="screen dim hidden" id="vsetup">
+    <div class="card" style="max-width:660px">
+      <h2>VERSUS</h2>
+      <h3>OPPONENT</h3>
+      <div class="seg2" id="vs-opp"></div>
+      <h3>PARTY TWISTS</h3>
+      <div class="twgrid" id="twgrid"></div>
+      <div class="cardfoot"><button class="mbtn" data-act="back">BACK</button><button class="mbtn primary" data-act="vsgo">PILOTS →</button></div>
+    </div>
+  </section>
+
+  <section class="screen dim hidden" id="online">
+    <div class="card">
+      <h2>ONLINE</h2>
+      <p class="onstat" id="on-status"></p>
+      <div id="on-menu" class="menu">
+        <button class="mbtn primary" data-act="on-quick">QUICK MATCH<small>PLAY WHOEVER IS WAITING</small></button>
+        <button class="mbtn" data-act="on-host">CREATE ROOM<small>GET A CODE FOR A FRIEND</small></button>
+        <button class="mbtn" data-act="on-join">JOIN ROOM<small>ENTER A FRIEND&#39;S CODE</small></button>
+        <button class="mbtn" data-act="back">BACK</button>
+      </div>
+      <div id="on-join" class="hidden">
+        <input id="join-code" maxlength="4" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="CODE" aria-label="Room code">
+        <div class="menu"><button class="mbtn primary" data-act="on-joingo">JOIN</button><button class="mbtn" data-act="back">BACK</button></div>
+      </div>
+      <div id="on-room" class="hidden">
+        <div id="on-codewrap"><div class="onlbl">ROOM CODE</div><div class="oncode" id="on-code"></div>
+          <div class="menu"><button class="mbtn" id="on-copy" data-act="on-copy">COPY INVITE LINK</button></div></div>
+        <div class="onwait" id="on-wait"></div>
+        <div class="menu"><button class="mbtn" data-act="on-cancel">CANCEL</button></div>
+      </div>
     </div>
   </section>
 
@@ -299,6 +393,15 @@ table.hs tr.me td { color: #fff; text-shadow: 0 0 8px var(--cyan); }
         <li><b>Curve</b> — sweep sideways as you hit: the ball kicks out, then bends back.</li>
         <li><b>Plasma bolts</b> — fire to <b>stun</b> the rival paddle, chip their shield, nudge a ball or <b>snipe power-ups</b> to claim them. Three charges; returns recharge them faster.</li>
         <li><b>Overdrive</b> — fills as you play (faster when you're hurt). Wider paddle, burning shots, unlimited bolts.</li>
+      </ul>
+      <h3>PILOTS</h3>
+      <p>Beat a rival in the campaign to unlock them as your own pilot. Each one flies with a perk.</p>
+      <div class="pugrid" id="pilotlist"></div>
+      <h3>VERSUS, ONLINE &amp; REPLAYS</h3>
+      <ul>
+        <li><b>Versus</b> — a friend on the same screen or a CPU rival, with optional party twists (twin balls, tiny paddles, power surges and more).</li>
+        <li><b>Online</b> — quick match, or create a room and send a friend the code or invite link. Best of three.</li>
+        <li><b>Instant replay</b> — every winning hit replays in slow motion. Any key skips it.</li>
       </ul>
       <h3>CONTROLS</h3>
       <div class="keys" id="keys"></div>
@@ -329,8 +432,10 @@ table.hs tr.me td { color: #fff; text-shadow: 0 0 8px var(--cyan); }
       <div class="opt"><span>GRAPHICS</span><div class="seg" data-opt="quality"><button data-v="auto">AUTO</button><button data-v="ultra">ULTRA</button><button data-v="high">HIGH</button><button data-v="low">LOW</button></div><span></span></div>
       <div class="opt"><span>CAMERA</span><div class="seg" data-opt="camera"><button data-v="auto">AUTO</button><button data-v="arena">BEHIND</button><button data-v="side">SIDE</button><button data-v="top">TOP</button></div><span></span></div>
       <div class="opt"><span>SCREEN SHAKE</span><div class="seg" data-opt="shake"><button data-v="1">ON</button><button data-v="0.4">LOW</button><button data-v="0">OFF</button></div><span></span></div>
+      <div class="opt"><span>FLASHING</span><div class="seg" data-opt="flash"><button data-v="full">FULL</button><button data-v="reduced">REDUCED</button></div><span></span></div>
+      <div class="opt"><span>INSTANT REPLAY</span><div class="seg" data-opt="replay"><button data-v="on">ON</button><button data-v="off">OFF</button></div><span></span></div>
       <div class="opt"><span>AI OVERLAY</span><div class="seg" data-opt="tactical"><button data-v="demo">DEMO ONLY</button><button data-v="always">ALWAYS</button><button data-v="never">NEVER</button></div><span></span></div>
-      <p style="margin-top:10px">Graphics changes apply on the next reload. The AI overlay draws each pilot's forecast and planned shot on the floor.</p>
+      <p style="margin-top:10px">Graphics changes apply on the next reload. Reduced flashing tones down screen flashes, shockwaves, colour fringing and lightning strobes. The AI overlay draws each pilot's forecast and planned shot on the floor.</p>
       <div class="cardfoot"><button class="mbtn" data-act="back">BACK</button></div>
     </div>
   </section>
@@ -350,7 +455,7 @@ table.hs tr.me td { color: #fff; text-shadow: 0 0 8px var(--cyan); }
       <h2 id="res-title">STAGE CLEAR</h2>
       <div class="stats" id="res-stats"></div>
       <div class="total" id="res-total"></div>
-      <div class="cardfoot"><button class="mbtn primary" id="res-next" data-act="next">NEXT</button></div>
+      <div class="cardfoot"><button class="mbtn hidden" id="res-quit" data-act="quit">QUIT</button><button class="mbtn primary" id="res-next" data-act="next">NEXT</button></div>
     </div>
   </section>
 
@@ -374,6 +479,6 @@ table.hs tr.me td { color: #fff; text-shadow: 0 0 8px var(--cyan); }
     </div>
   </section>
 </div>
-<script type="module" src="js/main.js?v=3"></script>
+<script type="module" src="js/main.js?v=4"></script>
 </body>
 </html>

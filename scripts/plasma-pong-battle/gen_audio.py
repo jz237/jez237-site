@@ -102,6 +102,7 @@ SFX = {
     'ko': (3.0, 0.5, 'Final knockout hit, giant cinematic boom with a ringing aftermath'),
     'arc': (0.6, 0.6, 'Short electric arc crackle'),
     'bhhum': (6.0, 0.4, 'Low ominous droning hum of a black hole, steady and seamless'),
+    'rewind': (1.2, 0.55, 'Fast VHS tape rewind whir with a glitchy sci-fi digital sweep, short, arcade replay transition'),
 }
 
 ATLAS = 'zfWx5IjUaWGWTId9hv9t'
@@ -118,6 +119,8 @@ ANNOUNCER = {
     'challenger': 'Here comes a new challenger!', 'demo': 'Demo mode.', 'continue': 'Continue?', 'gameover': 'Game over.',
     'comeback': 'What a comeback!', 'matchpoint': 'Match point!', 'rally': 'What a rally!', 'trickshot': 'Trick shot!',
     'denied': 'Denied!', 'champion': 'You are the champion!', 'three': 'Three!', 'two': 'Two!', 'one': 'One!',
+    'replay': 'Instant replay!', 'unlocked': 'New pilot unlocked!', 'pilot': 'Choose your pilot!', 'online': 'Online battle!',
+    'found': 'Opponent found!', 'lost': 'Connection lost.',
 }
 
 PILOTS = {

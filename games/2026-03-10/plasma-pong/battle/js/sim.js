@@ -1,6 +1,6 @@
 // The battle simulation: pure game state + fixed-step rules. No three.js in here, so the AI can
 // run the very same ball physics forward (predict.js) and the renderer only reads state + events.
-import { F, ARENAS, POWERUPS, POWERUP_KEYS } from './config.js?v=3';
+import { F, ARENAS, POWERUPS, POWERUP_KEYS } from './config.js?v=4';
 
 export const STEP = 1 / 120;      // game tick
 const SUB = 2;                    // ball sub-steps per tick (240 Hz collisions)
@@ -18,6 +18,25 @@ export function mulberry32(seed) {
   };
 }
 
+// The world's random stream keeps its state in W.rs, so structuredClone(W) captures it (the replay
+// re-runs a cloned world). The function itself is non-enumerable and re-attached after a clone.
+export function attachRand(W) {
+  Object.defineProperty(W, 'rand', {
+    configurable: true, writable: true, enumerable: false,
+    value: () => {
+      W.rs = (W.rs + 0x6d2b79f5) >>> 0;
+      let t = W.rs;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    },
+  });
+  return W;
+}
+export const cloneWorld = (W) => attachRand(structuredClone(W));
+
+const NO_PERK = { charges: F.boltCharges, recharge: 1, smash: 1, spin: 1, hw: 1, speed: 1, sight: false, core: 0 };
+
 export const cellX = (i) => -F.hw + (i + 0.5) * CELL_W;
 export const cellIndex = (x) => clamp(Math.floor((x + F.hw) / CELL_W), 0, F.cells - 1);
 export const CELL_HALF = CELL_W / 2 - F.cellGap;
@@ -26,7 +45,7 @@ function newFx() {
   return { titan: 0, shrink: 0, nova: 0, drone: 0, ghost: 0, magnet: 0, magnetT: 0, barrier: 0, barrierHits: 0, chrono: 0, scope: 0 };
 }
 
-function newPaddle(id, side, opts = {}) {
+export function newPaddle(id, side, opts = {}) {
   const homeZ = side * F.paddleZ;
   return {
     id, side, x: 0, z: homeZ, vx: 0, vz: 0, homeZ,
@@ -40,36 +59,44 @@ function newPaddle(id, side, opts = {}) {
   };
 }
 
-// opts: { arena (index), seed, boss (side of boss or 0), coreHP: {1,-1} }
+// opts: { arena (index), seed, boss (side of boss or 0), coreHP: {1,-1}, perks: {1,-1}, twists: {...} }
 export function makeWorld(opts = {}) {
   const arena = ARENAS[opts.arena || 0];
+  const tw = { ...(opts.twists || {}) };
   const W = {
-    t: 0, arenaIndex: opts.arena || 0, arena, rand: mulberry32(opts.seed || 1),
+    t: 0, n: 0, arenaIndex: opts.arena || 0, arena, rs: (opts.seed || 1) >>> 0, tw,
     balls: [], paddles: [], bolts: [], orbs: [], wells: [], drones: [], events: [],
     cells: { 1: [], '-1': [] }, cores: {}, fx: { 1: newFx(), '-1': newFx() },
-    meter: {}, stats: {}, nextId: 1,
-    serveTimer: 2.2, serveDir: opts.serveDir || (Math.random() < 0.5 ? 1 : -1), serveCount: 0,
-    nextOrb: 5 + Math.random() * 3, over: false, winner: 0, koT: 0,
+    meter: {}, stats: {}, nextId: 1, localN: 0,
+    perk: { 1: { ...NO_PERK, ...(opts.perks && opts.perks[1]) }, '-1': { ...NO_PERK, ...(opts.perks && opts.perks[-1]) } },
+    serveTimer: 2.2, serveDir: opts.serveDir || 1, serveCount: 0,
+    nextOrb: 0, over: false, winner: 0, koT: 0,
     hole: arena.hazards.hole ? { ...arena.hazards.hole } : null,
     bumpers: arena.hazards.bumpers ? { ...arena.hazards.bumpers } : null,
     portals: arena.hazards.portals ? { ...arena.hazards.portals } : null,
     sliders: arena.hazards.sliders ? { ...arena.hazards.sliders } : null,
     boss: null, rally: 0, maxRally: 0, slow: 1,
+    hold: null,       // online host: { side, max } — that side's shield waits for its player's hit report
+    predict: false,   // online guest: a local forecast of the host's world (no scoring, no spawns)
   };
+  attachRand(W);
+  W.nextOrb = (tw.surge ? 2.5 : 5) + W.rand() * 3;
   for (const s of [1, -1]) {
-    const cellHP = F.cellHP;
+    const pk = W.perk[s];
+    const cellHP = tw.glass ? 1 : F.cellHP;
     for (let i = 0; i < F.cells; i++) W.cells[s].push({ side: s, i, hp: cellHP, max: cellHP, x: cellX(i), hitT: -9, buildT: -9 });
-    const hp = (opts.coreHP && opts.coreHP[s]) || (opts.boss === s ? F.bossCoreHP : F.coreHP);
+    const hp = ((opts.coreHP && opts.coreHP[s]) || (opts.boss === s ? F.bossCoreHP : tw.glass ? 3 : F.coreHP)) + (pk.core || 0);
     W.cores[s] = { side: s, hp, max: hp, hitT: -9 };
-    W.meter[s] = { charges: F.boltCharges, chargeT: 0, cool: 0, od: 0, odTime: 0 };
+    W.meter[s] = { charges: pk.charges, max: pk.charges, chargeT: 0, cool: 0, od: 0, odTime: 0 };
     W.stats[s] = { hits: 0, smashes: 0, cells: 0, coreHits: 0, bolts: 0, stuns: 0, pickups: 0, curves: 0 };
   }
-  W.paddles.push(newPaddle(1, 1));
+  const tiny = tw.tiny ? 0.62 : 1;
+  W.paddles.push(newPaddle(1, 1, { hw: F.paddleHW * W.perk[1].hw * tiny }));
   if (opts.boss === -1) {
-    W.paddles.push(newPaddle(2, -1, { hw: 1.75, boss: true }));
+    W.paddles.push(newPaddle(2, -1, { hw: 1.75 * tiny, boss: true }));
     W.boss = { side: -1, phase: 1, turretT: 2.5, laserT: 9, laser: null };
   } else {
-    W.paddles.push(newPaddle(2, -1));
+    W.paddles.push(newPaddle(2, -1, { hw: F.paddleHW * W.perk[-1].hw * tiny }));
   }
   return W;
 }
@@ -99,7 +126,7 @@ export function stepBallFree(W, b, dt, t, hit) {
   const sp0 = Math.hypot(b.vx, b.vz);
   // Magnus curve: rotates the velocity, keeps its length
   if (b.spin) {
-    const ang = F.spinK * b.spin * h;
+    const ang = F.spinK * (W.tw && W.tw.curve ? 2.2 : 1) * b.spin * h;
     const c = Math.cos(ang), s = Math.sin(ang);
     const vx = b.vx * c - b.vz * s, vz = b.vx * s + b.vz * c;
     b.vx = vx; b.vz = vz;
@@ -203,7 +230,8 @@ export function returnShot(W, p, bx, rally, opts = {}) {
   const pvx = opts.pvx !== undefined ? opts.pvx : p.vx;
   const pvz = opts.pvz !== undefined ? opts.pvz : p.vz;
   const lunge = Math.max(0, -pvz * side);
-  let smash = lunge > 4.5 ? Math.min(11, (lunge - 3) * 1.1) : 0;
+  const pk = W.perk[side];
+  let smash = lunge > 4.5 ? Math.min(11, (lunge - 3) * 1.1) * pk.smash : 0;
   if (opts.catchRelease) smash = Math.max(smash, 7);
   const od = W.meter[side].odTime > 0;
   const speed = Math.min(F.maxSpeed, rally + smash + (od ? 5 : 0));
@@ -211,7 +239,7 @@ export function returnShot(W, p, bx, rally, opts = {}) {
   let vz = -side * Math.cos(ang) * speed;
   const k = speed / Math.hypot(vx, vz);
   vx *= k; vz *= k;
-  const spin = clamp(-side * pvx * 0.42, -10, 10);
+  const spin = clamp(-side * pvx * 0.42 * pk.spin, -10 * pk.spin, 10 * pk.spin);
   return { vx, vz, spin, speed, smash, u };
 }
 
@@ -228,9 +256,10 @@ export function spawnBall(W, x, z, vx, vz, owner, extra = {}) {
 function serve(W) {
   const dir = W.serveDir;
   const a = (W.rand() - 0.5) * 0.8;
-  const sp = F.serveSpeed;
-  spawnBall(W, (W.rand() - 0.5) * 2, 0, Math.sin(a) * sp, dir * Math.cos(a) * sp, 0);
+  const sp = F.serveSpeed * (W.tw.hyper ? 1.3 : 1);
+  spawnBall(W, (W.rand() - 0.5) * 2, 0, Math.sin(a) * sp, dir * Math.cos(a) * sp, 0, { rally: sp });
   W.serveCount++;
+  if (W.tw.twin) W.serveDir = -dir; // twin balls: the next serve goes the other way
   emit(W, { k: 'serve', dir });
 }
 
@@ -261,7 +290,8 @@ export function fireBolt(W, side, x, z, free = false, from = 'paddle') {
     m.charges -= 1;
   } else if (!free && m.cool > 0) return false;
   if (!free) m.cool = od ? 0.15 : F.boltCooldown;
-  W.bolts.push({ id: W.nextId++, side, x, z: z - side * 0.5, vz: -side * F.boltSpeed, born: W.t, from });
+  // a forecast world numbers its own bolts below zero so they never clash with the host's ids
+  W.bolts.push({ id: W.predict ? -(++W.localN) : W.nextId++, side, x, z: z - side * 0.5, vz: -side * F.boltSpeed, born: W.t, from, local: W.predict || undefined });
   W.stats[side].bolts++;
   emit(W, { k: 'bolt', side, x, z, from });
   return true;
@@ -322,16 +352,18 @@ export function applyPowerup(W, side, kind, src) {
 // ---------------------------------------------------------------- the tick
 export function step(W, dt = STEP) {
   W.t += dt;
+  W.n++;
   const t = W.t;
   updateTimers(W, dt);
   for (const p of W.paddles) movePaddle(W, p, dt);
   handleInputs(W);
-  if (W.boss) bossTick(W, dt);
+  if (W.boss && !W.predict) bossTick(W, dt);
 
-  // serve
-  if (!W.over && W.balls.length === 0) {
+  // serve (twin balls keeps two in play)
+  const want = W.tw.twin ? 2 : 1;
+  if (!W.over && !W.predict && W.balls.length < want) {
     W.serveTimer -= dt;
-    if (W.serveTimer <= 0) { serve(W); W.serveTimer = 1.5; }
+    if (W.serveTimer <= 0) { serve(W); W.serveTimer = W.balls.length < want ? 0.8 : 1.5; }
   }
 
   // caught balls ride their paddle
@@ -349,7 +381,12 @@ export function step(W, dt = STEP) {
   for (let s = 0; s < SUB; s++) {
     for (let i = W.balls.length - 1; i >= 0; i--) {
       const b = W.balls[i];
-      if (b.caught) continue;
+      if (b.caught || b.gone) continue;
+      // online host: a ball held at the remote player's shield waits for their hit report
+      if (b.holdT !== undefined && !b.holdDone) {
+        if (t - b.holdT < W.hold.max) continue;
+        b.holdDone = true;
+      }
       const pz = b.z;
       stepBallFree(W, b, h, t - dt + h * (s + 1), (kind, x, z, extra) => onFreeHit(W, b, kind, x, z, extra));
       paddleContacts(W, b);
@@ -360,6 +397,19 @@ export function step(W, dt = STEP) {
   stepOrbs(W, dt);
   stepDrones(W, dt);
   W.slow = 1;
+}
+
+// online guest: carry one ball forward by dt with every contact (used to bring a snapshot up to now)
+export function advanceBall(W, b, dt) {
+  const n = Math.max(1, Math.ceil(dt / (STEP / SUB)));
+  const h = dt / n;
+  for (let i = 0; i < n; i++) {
+    if (b.caught || b.gone) return;
+    const pz = b.z;
+    stepBallFree(W, b, h, W.t - dt + h * (i + 1), (kind, x, z, extra) => onFreeHit(W, b, kind, x, z, extra));
+    paddleContacts(W, b);
+    shieldContacts(W, b, pz);
+  }
 }
 
 function onFreeHit(W, b, kind, x, z, extra) {
@@ -376,9 +426,10 @@ function updateTimers(W, dt) {
       if (fx[k] > 0) { fx[k] = Math.max(0, fx[k] - dt); if (fx[k] === 0) { emit(W, { k: 'fxend', side: s, fx: k }); if (k === 'magnetT') fx.magnet = 0; if (k === 'barrier') fx.barrierHits = 0; } }
     }
     if (m.cool > 0) m.cool -= dt;
-    if (m.charges < F.boltCharges) {
+    if (m.charges < m.max) {
       m.chargeT += dt;
-      if (m.chargeT >= F.boltRecharge) { m.chargeT = 0; m.charges = Math.min(F.boltCharges, m.charges + 1); }
+      const need = F.boltRecharge * W.perk[s].recharge * (W.tw.ammo ? 0.2 : 1);
+      if (m.chargeT >= need) { m.chargeT = 0; m.charges = Math.min(m.max, m.charges + 1); }
     } else m.chargeT = 0;
     if (m.odTime > 0) { m.odTime -= dt; if (m.odTime <= 0) { m.odTime = 0; emit(W, { k: 'odend', side: s }); } }
   }
@@ -391,13 +442,16 @@ function movePaddle(W, p, dt) {
   p.scale += (target - p.scale) * Math.min(1, dt * 7);
   p.hw = p.hwBase * p.scale;
   p.flash = Math.max(0, p.flash - dt * 3);
-  if (p.stun > 0) {
+  if (p.remote) {
+    // driven from the network: position is set from outside, only timers run here
+    if (p.stun > 0) p.stun -= dt;
+  } else if (p.stun > 0) {
     p.stun -= dt;
     p.vx *= 0.8; p.vz *= 0.8;
     p.x += p.vx * dt; p.z += p.vz * dt;
   } else {
     const inp = p.input;
-    const maxS = p.maxSpeed * (m.odTime > 0 ? 1.15 : 1);
+    const maxS = p.maxSpeed * (m.odTime > 0 ? 1.15 : 1) * W.perk[p.side].speed;
     let dvx, dvz;
     if (inp.mode === 'vel') { dvx = inp.vx * maxS; dvz = inp.vz * maxS; }
     else { dvx = clamp((inp.tx - p.x) * p.gain, -maxS, maxS); dvz = clamp((inp.tz - p.z) * p.gain, -maxS, maxS); }
@@ -448,6 +502,7 @@ function release(W, p) {
 function paddleContacts(W, b) {
   for (const p of W.paddles) {
     const s = p.side;
+    if (p.claimOnly) continue; // online host: the remote player reports their own hits
     if ((b.vz - p.vz) * s <= 0) continue;
     const cx = clamp(b.x, p.x - p.hw, p.x + p.hw);
     const cz = clamp(b.z, p.z - p.hd, p.z + p.hd);
@@ -473,24 +528,71 @@ function paddleContacts(W, b) {
       return;
     }
     const r = returnShot(W, p, b.x, b.rally);
-    const enemyFire = b.fire && b.owner === -s;
-    b.vx = r.vx; b.vz = r.vz; b.spin = r.spin;
     b.z = p.z - s * (p.hd + b.r + 0.01);
-    b.rally = Math.min(F.maxRally, b.rally * 1.035 + 0.12);
-    b.owner = s; b.hits++; b.banks = 0;
-    b.fire = enemyFire ? false : (b.fire || fx.nova > 0 || W.meter[s].odTime > 0);
-    p.hitT = W.t;
-    W.rally++; W.maxRally = Math.max(W.maxRally, W.rally);
-    const st = W.stats[s];
-    st.hits++;
-    if (r.smash > 0) st.smashes++;
-    if (Math.abs(r.spin) > 3) st.curves++;
-    const m = W.meter[s];
-    if (m.odTime <= 0) m.od = Math.min(100, m.od + 6 + (r.smash > 0 ? 6 : 0));
-    m.chargeT += 0.6; // returns speed up bolt recharge
-    emit(W, { k: 'hit', side: s, x: b.x, z: b.z, speed: r.speed, smash: r.smash, u: r.u, spin: r.spin, id: b.id, pid: p.id, doused: enemyFire });
+    landHit(W, p, b, r);
     return;
   }
+}
+
+// a paddle has returned ball b with shot r (shared with the online hit reports)
+function landHit(W, p, b, r, extra) {
+  const s = p.side, fx = W.fx[s];
+  const enemyFire = b.fire && b.owner === -s;
+  b.vx = r.vx; b.vz = r.vz; b.spin = r.spin;
+  b.rally = Math.min(F.maxRally * (W.tw.hyper ? 1.25 : 1), b.rally * (W.tw.hyper ? 1.05 : 1.035) + 0.12);
+  b.owner = s; b.hits++; b.banks = 0;
+  b.fire = enemyFire ? false : (b.fire || fx.nova > 0 || W.meter[s].odTime > 0);
+  b.holdT = undefined; b.holdDone = false;
+  p.hitT = W.t;
+  W.rally++; W.maxRally = Math.max(W.maxRally, W.rally);
+  const st = W.stats[s];
+  st.hits++;
+  if (r.smash > 0) st.smashes++;
+  if (Math.abs(r.spin) > 3) st.curves++;
+  const m = W.meter[s];
+  if (m.odTime <= 0) m.od = Math.min(100, m.od + 6 + (r.smash > 0 ? 6 : 0));
+  m.chargeT += 0.6; // returns speed up bolt recharge
+  emit(W, { k: 'hit', side: s, x: b.x, z: b.z, speed: r.speed, smash: r.smash, u: r.u, spin: r.spin, id: b.id, pid: p.id, doused: enemyFire, ...extra });
+}
+
+// ---------------------------------------------------------------- online host: the remote player's reports
+// c: { kind: 'hit' | 'catch', id (ball), pid (paddle), hits (ball.hits before the hit), at (world time of
+// the hit), x, z, vx, vz, spin, rally, fire, speed, smash, u, off }
+export function applyClaim(W, c) {
+  const b = W.balls.find((q) => q.id === c.id);
+  const p = W.paddles.find((q) => q.id === c.pid);
+  if (!b || !p) return 'gone';
+  if (W.over) return 'over';
+  if (b.caught) return 'caught';
+  if (b.hits !== c.hits) return 'hits';
+  if (b.shieldS === p.side && b.shieldT > c.at - 0.05) return 'late'; // it already bounced off their shield
+  const s = p.side;
+  if (c.kind === 'catch') {
+    const fx = W.fx[s];
+    if (fx.magnet <= 0 || p.caught) return 'magnet';
+    fx.magnet--; if (fx.magnet <= 0) fx.magnetT = 0;
+    p.caught = b; p.catchT = 0; b.caught = p;
+    b.catchOff = clamp(+c.off || 0, -p.hw * 0.85, p.hw * 0.85);
+    b.owner = s; b.fire = b.fire && b.owner === s;
+    b.holdT = undefined; b.holdDone = false;
+    W.stats[s].hits++;
+    emit(W, { k: 'catch', side: s, x: b.x, z: b.z, id: b.id, claim: 1 });
+    return true;
+  }
+  b.x = clamp(+c.x, -F.hw + b.r, F.hw - b.r); b.z = +c.z;
+  landHit(W, p, b, { vx: +c.vx, vz: +c.vz, spin: clamp(+c.spin || 0, -20, 20), speed: +c.speed || 0, smash: +c.smash || 0, u: +c.u || 0 }, { claim: 1 });
+  b.rally = clamp(+c.rally || b.rally, F.serveSpeed * 0.8, F.maxRally * 1.3);
+  b.fire = !!c.fire;
+  // catch the ball up to the present
+  let late = Math.min(0.3, Math.max(0, W.t - c.at));
+  while (late > 1e-6) { const h = Math.min(1 / 240, late); stepBallFree(W, b, h, W.t - late + h); late -= h; }
+  return true;
+}
+
+// the remote player's ball sailed past their paddle: no report is coming, resolve it now
+export function releaseHold(W, id) {
+  const b = W.balls.find((q) => q.id === id);
+  if (b && b.holdT !== undefined) b.holdDone = true;
 }
 
 // returns true when the ball is gone (into a core)
@@ -498,22 +600,30 @@ function shieldContacts(W, b, prevZ) {
   const s = b.vz > 0 ? 1 : -1;
   const front = s * b.z + b.r, prevFront = s * prevZ + b.r;
   const fx = W.fx[s];
-  // barrier
   const barZ = F.cellZ - F.cellHD - 0.55;
+  const cz = F.cellZ - F.cellHD;
+  // online host: stop at the remote player's first line of defence until their report arrives
+  if (W.hold && s === W.hold.side && b.holdT === undefined) {
+    const plane = fx.barrier > 0 ? barZ : cz;
+    if (prevFront < plane && front >= plane) { b.holdT = W.t; b.holdDone = false; b.z = s * (plane - b.r) - s * 0.002; return false; }
+  }
+  // barrier
   if (fx.barrier > 0 && prevFront < barZ && front >= barZ) {
     b.vz = -b.vz; b.z = s * (barZ - b.r) - s * 0.01;
     b.rally = Math.max(F.serveSpeed, b.rally * 0.92);
+    b.holdT = undefined; b.shieldS = s; b.shieldT = W.t;
+    if (W.predict) return false;
     fx.barrierHits--;
     emit(W, { k: 'barrier', side: s, x: b.x, z: b.z, left: fx.barrierHits });
     if (fx.barrierHits <= 0) { fx.barrier = 0; emit(W, { k: 'fxend', side: s, fx: 'barrier' }); }
     return false;
   }
-  const cz = F.cellZ - F.cellHD;
   if (prevFront < cz && front >= cz) {
     const c = W.cells[s][cellIndex(b.x)];
     if (c.hp > 0) {
       const attacker = -s;
       if (b.fire && b.owner === attacker) {
+        if (W.predict) return false;
         c.hp = 0; c.hitT = W.t;
         b.fire = false;
         W.stats[attacker].cells++;
@@ -521,12 +631,14 @@ function shieldContacts(W, b, prevZ) {
         emit(W, { k: 'cell', side: s, idx: c.i, hp: 0, x: c.x, z: s * F.cellZ, pierce: true, by: b.owner });
         return false;
       }
-      c.hp = Math.max(0, c.hp - 1); c.hitT = W.t;
       b.vz = -b.vz; b.z = s * (cz - b.r) - s * 0.01;
       b.spin *= 0.3;
       b.rally = Math.max(F.serveSpeed, b.rally * 0.86);
       const sp = Math.hypot(b.vx, b.vz), k = Math.min(1, b.rally / sp);
       b.vx *= k; b.vz *= k;
+      b.holdT = undefined; b.shieldS = s; b.shieldT = W.t;
+      if (W.predict) return false; // the forecast bounces; the host decides the damage
+      c.hp = Math.max(0, c.hp - 1); c.hitT = W.t;
       if (c.hp <= 0) { W.stats[attacker].cells++; bumpOd(W, attacker, 10); }
       W.rally = 0;
       emit(W, { k: 'cell', side: s, idx: c.i, hp: c.hp, x: c.x, z: s * F.cellZ, by: b.owner });
@@ -535,6 +647,8 @@ function shieldContacts(W, b, prevZ) {
   }
   if (s * b.z + b.r >= F.goalZ) {
     const core = W.cores[s];
+    // the forecast parks the ball at the curtain and waits for the host's verdict
+    if (W.predict) { b.gone = W.t; b.z = s * (F.goalZ - b.r); return false; }
     if (W.over) return true;
     const dmg = b.fire && b.owner === -s ? 2 : 1;
     core.hp = Math.max(0, core.hp - dmg); core.hitT = W.t;
@@ -567,6 +681,7 @@ function stepBolts(W, dt) {
     for (const p of W.paddles) {
       if (p.side !== s) continue;
       if (Math.abs(o.x - p.x) < p.hw + 0.16 && (pz - p.z) * s <= p.hd && (o.z - p.z) * s >= -p.hd - 0.2) {
+        if (W.predict) { dead = true; break; }
         if (W.meter[s].odTime > 0 || W.t < p.immuneT) emit(W, { k: 'deflect', side: s, x: o.x, z: o.z });
         else {
           p.stun = F.stunTime * (p.boss ? 0.6 : 1) * (o.from === 'turret' ? 0.55 : 1); p.immuneT = W.t + p.stun + 1.6; W.stats[o.side].stuns++;
@@ -592,8 +707,7 @@ function stepBolts(W, dt) {
     if (!dead) for (let j = W.orbs.length - 1; j >= 0; j--) {
       const q = W.orbs[j];
       if (Math.abs(o.x - q.x) < q.r + 0.12 && Math.abs(o.z - q.z) < q.r + 0.5) {
-        W.orbs.splice(j, 1);
-        applyPowerup(W, o.side, q.kind, q);
+        if (!W.predict) { W.orbs.splice(j, 1); applyPowerup(W, o.side, q.kind, q); }
         dead = true; break;
       }
     }
@@ -610,8 +724,10 @@ function stepBolts(W, dt) {
     if (!dead) for (let j = W.drones.length - 1; j >= 0; j--) {
       const d = W.drones[j];
       if (d.side === s && Math.abs(o.x - d.x) < 0.55 && Math.abs(o.z - d.z) < 0.6) {
-        W.drones.splice(j, 1); W.fx[s].drone = 0;
-        emit(W, { k: 'dronekill', side: s, x: d.x, z: d.z });
+        if (!W.predict) {
+          W.drones.splice(j, 1); W.fx[s].drone = 0;
+          emit(W, { k: 'dronekill', side: s, x: d.x, z: d.z });
+        }
         dead = true; break;
       }
     }
@@ -619,17 +735,19 @@ function stepBolts(W, dt) {
       const fz = s * o.z;
       const barZ = F.cellZ - F.cellHD - 0.55;
       if (W.fx[s].barrier > 0 && s * pz < barZ && fz >= barZ) {
-        emit(W, { k: 'barrier', side: s, x: o.x, z: s * barZ, bolt: true });
+        if (!W.predict) emit(W, { k: 'barrier', side: s, x: o.x, z: s * barZ, bolt: true });
         dead = true;
       } else if (s * pz < F.cellZ - F.cellHD && fz >= F.cellZ - F.cellHD) {
         const c = W.cells[s][cellIndex(o.x)];
         if (c.hp > 0) {
-          // turret fire only splashes on shields; drones chip them lightly
-          const dmg = o.from === 'turret' ? 0 : o.from === 'drone' ? 0.25 : 0.5;
-          c.hp = Math.max(0, c.hp - dmg); c.hitT = W.t;
-          if (c.hp <= 0) W.stats[o.side].cells++;
-          emit(W, { k: 'boltcell', side: s, idx: c.i, hp: c.hp, x: o.x, z: s * F.cellZ });
           dead = true;
+          if (!W.predict) {
+            // turret fire only splashes on shields; drones chip them lightly
+            const dmg = o.from === 'turret' ? 0 : o.from === 'drone' ? 0.25 : 0.5;
+            c.hp = Math.max(0, c.hp - dmg); c.hitT = W.t;
+            if (c.hp <= 0) W.stats[o.side].cells++;
+            emit(W, { k: 'boltcell', side: s, idx: c.i, hp: c.hp, x: o.x, z: s * F.cellZ });
+          }
         }
       } else if (fz > F.goalZ) {
         emit(W, { k: 'fizzle', side: s, x: o.x, z: o.z });
@@ -641,9 +759,10 @@ function stepBolts(W, dt) {
 }
 
 function stepOrbs(W, dt) {
-  if (!W.over && W.t >= W.nextOrb) {
-    if (W.orbs.length < 2) spawnOrb(W);
-    W.nextOrb = W.t + 6.5 + W.rand() * 5.5;
+  if (!W.over && !W.predict && W.t >= W.nextOrb) {
+    const surge = W.tw.surge;
+    if (W.orbs.length < (surge ? 4 : 2)) spawnOrb(W);
+    W.nextOrb = W.t + (surge ? 1.8 + W.rand() * 1.6 : 6.5 + W.rand() * 5.5);
   }
   for (let i = W.orbs.length - 1; i >= 0; i--) {
     const o = W.orbs[i];
@@ -651,6 +770,7 @@ function stepOrbs(W, dt) {
     o.x += o.vx * dt; o.z += o.vz * dt;
     if (Math.abs(o.x) > 5.6) { o.vx = -o.vx; o.x = Math.sign(o.x) * 5.6; }
     if (Math.abs(o.z) > 4.6) { o.vz = -o.vz; o.z = Math.sign(o.z) * 4.6; }
+    if (W.predict) continue;
     if (o.life <= 0) { W.orbs.splice(i, 1); emit(W, { k: 'orbgone', id: o.id, x: o.x, z: o.z }); continue; }
     if (W.t - o.born < 0.6) continue; // materialising
     for (const b of W.balls) {
@@ -675,7 +795,7 @@ function stepDrones(W, dt) {
     const tx = foes.length ? foes[0].x : 0;
     d.x += clamp(tx - d.x, -7 * dt, 7 * dt);
     d.fireT -= dt;
-    if (d.fireT <= 0 && !W.over) { d.fireT = 1.05; fireBolt(W, d.side, d.x, d.z, true, 'drone'); }
+    if (d.fireT <= 0 && !W.over && !W.predict) { d.fireT = 1.05; fireBolt(W, d.side, d.x, d.z, true, 'drone'); }
   }
 }
 

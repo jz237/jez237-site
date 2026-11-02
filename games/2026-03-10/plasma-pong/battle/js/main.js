@@ -1,22 +1,29 @@
 // Plasma Pong: Battle Edition — game flow, controls, scoring, commentary and the frame loop.
 import * as THREE from '../vendor/three.module.min.js';
-import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS } from './config.js?v=3';
-import { makeWorld, step, drainEvents, STEP, paddlesOf } from './sim.js?v=3';
-import { AIPilot } from './ai.js?v=3';
-import { predictToPlane } from './predict.js?v=3';
-import { Renderer, pickQuality } from './render.js?v=3';
-import { Director } from './director.js?v=3';
-import { Audio } from './audio.js?v=3';
-import { Input } from './input.js?v=3';
-import { UI, $, hex } from './ui.js?v=3';
-import { Scores } from './scores.js?v=3';
+import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS, PERKS, ROSTER, SHADOW, TWISTS } from './config.js?v=4';
+import { makeWorld, step, drainEvents, STEP, paddlesOf } from './sim.js?v=4';
+import { AIPilot } from './ai.js?v=4';
+import { predictToPlane } from './predict.js?v=4';
+import { Renderer, pickQuality } from './render.js?v=4';
+import { Director } from './director.js?v=4';
+import { Audio } from './audio.js?v=4';
+import { Input } from './input.js?v=4';
+import { UI, $, hex } from './ui.js?v=4';
+import { Scores } from './scores.js?v=4';
+import { CALM } from './views.js?v=4';
+import { Recorder } from './replay.js?v=4';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=4';
 
 // ------------------------------------------------------------------ settings
 const SKEY = 'ppb.settings.v1';
-const settings = { music: 55, sfx: 90, voice: 100, quality: 'auto', camera: 'auto', shake: '1', tactical: 'demo' };
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const settings = { music: 55, sfx: 90, voice: 100, quality: 'auto', camera: 'auto', shake: '1', tactical: 'demo', flash: reduceMotion ? 'reduced' : 'full', replay: 'on', twists: {}, vsOpp: 'human', pilot: 'p1', pilot2: 'p1' };
 try { Object.assign(settings, JSON.parse(localStorage.getItem(SKEY) || '{}')); } catch { /* defaults */ }
 const saveSettings = () => { try { localStorage.setItem(SKEY, JSON.stringify(settings)); } catch { /* ignore */ } };
 const params = new URLSearchParams(location.search);
+// reduced flashing: strobes become pulses, flashes and shockwaves are toned down
+function applyCalm() { CALM.on = settings.flash === 'reduced'; document.body.classList.toggle('calm', CALM.on); }
+applyCalm();
 
 const quality = pickQuality(params.get('q') || (settings.quality !== 'auto' ? settings.quality : null));
 const R = new Renderer($('gl'), quality);
@@ -25,6 +32,9 @@ const A = new Audio('./');
 const I = new Input(R.camera);
 const U = new UI();
 const HS = new Scores('plasma-pong-battle');
+const REC = new Recorder();
+const NET = new Online({ status: onStatus, joined: onJoined, start: (cfg) => onlineRound(cfg), left: onLeft, chat: onChat },
+  { relay: params.get('relay') || undefined, lag: +params.get('netlag') || 0 });
 const TIPS = [
   'Move INTO the ball as it arrives to SMASH it',
   'Sweep sideways as you hit to CURVE the ball',
@@ -42,7 +52,7 @@ const G = {
   idleT: 0, tipT: 0, tipI: 0, acc: 0, hitstop: 0, paused: false, simOn: false, timers: [], says: new Map(),
   autopilot: params.has('autoplay'), scopeT: 0, scope: { 1: null, '-1': null }, rallyCalled: false, minHP: { 1: 99, '-1': 99 }, fade: 0, menuCam: true,
 };
-window.__ppb = { G, R, D, A, I, settings };
+window.__ppb = { G, R, D, A, I, settings, REC, NET };
 
 // ------------------------------------------------------------------ helpers
 const now = () => performance.now() / 1000;
@@ -62,14 +72,42 @@ function pilotSay(side, line, chance = 1, o = { queue: true }) {
   say(`${info.persona.key}_${line}`, 4, o);
 }
 function sideInfo(c) {
-  if (c.kind === 'human') return { name: c.human.name, title: c.human.title, color: c.human.color, human: true };
+  if (c.human) return { name: c.human.name, title: c.human.title, color: c.human.color, human: true, pilot: c.human.pilot };
   return { name: c.persona.name, title: c.persona.title, color: c.persona.color, persona: c.persona };
+}
+// one human against the machine (or against someone online): the solo controls apply
+const solo = () => G.mode === 'campaign' || G.mode === 'online' || (G.mode === 'versus' && !!(G.vs && G.vs.cpu));
+const soloSide = () => (G.mode === 'online' ? NET.side || 1 : 1);
+
+// ------------------------------------------------------------------ pilots you can fly
+const UKEY = 'ppb.unlocks.v1';
+const unlocks = new Set();
+try { for (const k of JSON.parse(localStorage.getItem(UKEY) || '[]')) if (PERKS[k]) unlocks.add(k); } catch { /* none yet */ }
+const isOpen = (k) => k === 'p1' || unlocks.has(k);
+function unlock(k) {
+  if (!PERKS[k] || k === 'p1' || unlocks.has(k)) return false;
+  unlocks.add(k);
+  try { localStorage.setItem(UKEY, JSON.stringify([...unlocks])); } catch { /* private mode */ }
+  return true;
+}
+const lockHint = (k) => (k === 'monolith' ? 'FINISH THE CAMPAIGN' : `BEAT ${PILOTS[k].name} IN THE CAMPAIGN`);
+// a human side flying pilot `key` (slot 2 gives the Challenger player two's colours)
+function humanPilot(key, slot = 1, title) {
+  const base = slot === 2 ? HUMAN2 : HUMAN;
+  if (!PILOTS[key]) return { ...base, pilot: 'p1', title: title || base.title, blurb: `${PERKS.p1.name} — ${PERKS.p1.desc}` };
+  const P = PILOTS[key], k = PERKS[key];
+  return { key, pilot: key, name: P.name, title: title || `PLAYER ${slot} · ${k.name}`, color: P.color, accent: P.accent, blurb: `${k.name} — ${k.desc}` };
+}
+// the AI version of a rival; meeting your own pilot in a mirror match gets the shadow colours
+function rivalPersona(key, vsPilot) {
+  const P = PILOTS[key];
+  return vsPilot === key ? { ...P, name: 'SHADOW ' + P.name, color: SHADOW[key] } : P;
 }
 const fmtT = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
 function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 function camMode() {
   if (settings.camera !== 'auto') return settings.camera;
-  if (G.mode === 'versus') return innerWidth > innerHeight ? 'side' : 'top';
+  if (G.mode === 'versus' && !solo()) return innerWidth > innerHeight ? 'side' : 'top';
   // very wide screens (phones held sideways) get the court laid out across the screen
   return innerWidth / innerHeight > 1.9 ? 'side' : 'arena';
 }
@@ -85,13 +123,16 @@ function startMatch(cfg) {
   const boss = cfg.sides[-1].persona && cfg.sides[-1].persona.boss ? -1 : 0;
   // the final stand: the challenger's core matches the Monolith's
   const coreHP = boss ? { 1: F.bossCoreHP } : undefined;
-  const W = makeWorld({ arena: cfg.arena, seed: (Math.random() * 1e9) | 0, boss, coreHP, serveDir: cfg.serveDir || (Math.random() < 0.5 ? 1 : -1) });
+  const perks = {};
+  for (const s of [1, -1]) { const h = cfg.sides[s].human; if (h && PERKS[h.pilot]) perks[s] = PERKS[h.pilot]; }
+  const W = makeWorld({ arena: cfg.arena, seed: cfg.seed ?? ((Math.random() * 1e9) | 0), boss, coreHP, perks, twists: cfg.twists, serveDir: cfg.serveDir || (Math.random() < 0.5 ? 1 : -1) });
   G.W = W; G.ai = {}; G.aiList = []; G.humans = []; G.cfg = cfg;
   for (const s of [1, -1]) {
     const c = cfg.sides[s];
     const p = paddlesOf(W, s)[0];
+    if (c.human && c.human.pilot === 'monolith') p.look = 'boss';
     if (c.kind === 'human') G.humans.push({ p, who: c.who, kbT: -9 });
-    else { const ai = new AIPilot(W, p, c.persona, cfg.diffAI || DIFFICULTY.normal.ai); G.ai[s] = ai; G.aiList.push(ai); }
+    else if (c.kind === 'ai') { const ai = new AIPilot(W, p, c.persona, cfg.diffAI || DIFFICULTY.normal.ai); G.ai[s] = ai; G.aiList.push(ai); }
   }
   G.sides = { 1: sideInfo(cfg.sides[1]), '-1': sideInfo(cfg.sides[-1]) };
   R.setWorld(W, G.sides);
@@ -101,6 +142,7 @@ function startMatch(cfg) {
   D.slow = 1; D.slowT = 0; D.forceShot = null; D.breach = null;
   A.setRate(1);
   applyVolumes();
+  REC.reset();
 }
 
 function randomAIMatch(demo) {
@@ -115,7 +157,7 @@ function randomAIMatch(demo) {
 function startAttract() {
   G.mode = 'attract';
   G.menuCam = true;
-  if (!G.W || G.W.over || G.cfg.sides[1].kind === 'human' || G.cfg.sides[-1].kind === 'human') randomAIMatch(false);
+  if (!G.W || G.W.over || G.cfg.sides[1].kind !== 'ai' || G.cfg.sides[-1].kind !== 'ai') randomAIMatch(false);
   G.mode = 'attract';
   G.simOn = true;
   G.paused = false;
@@ -149,6 +191,12 @@ async function showAttractBoard() {
 
 function goTitle() {
   clearTimers();
+  stopReplay(false);
+  NET.close();
+  NET.reset();
+  D.flip = false;
+  setFlip(false);
+  $('res-quit').classList.add('hidden');
   G.state = 'title';
   renderWorld();
   G.idleT = 0;
@@ -161,9 +209,10 @@ function goTitle() {
   menuSel(0);
 }
 
-function startCampaign(diff) {
+function startCampaign(diff, pilot = 'p1') {
   G.mode = 'campaign';
   G.diff = diff;
+  G.p1Pilot = isOpen(pilot) ? pilot : 'p1';
   G.stage = params.has('stage') ? Math.max(0, Math.min(4, +params.get('stage') - 1)) : 0;
   G.score = 0;
   G.continues = 3;
@@ -172,14 +221,16 @@ function startCampaign(diff) {
 
 function stageIntro() {
   clearTimers();
-  const pilot = PILOTS[LADDER[G.stage]];
+  const me = G.p1Pilot || 'p1';
+  const pilot = rivalPersona(LADDER[G.stage], me);
+  const you = humanPilot(me, 1, me === 'p1' ? 'CHALLENGER' : `YOU · ${PERKS[me].name}`);
   G.mode = 'campaign';
   G.menuCam = false;
-  startMatch({ arena: G.stage, diffAI: DIFFICULTY[G.diff].ai, sides: { 1: { kind: 'human', human: HUMAN, who: 'solo' }, '-1': { kind: 'ai', persona: pilot } } });
+  startMatch({ arena: G.stage, diffAI: DIFFICULTY[G.diff].ai, sides: { 1: { kind: 'human', human: you, who: 'solo' }, '-1': { kind: 'ai', persona: pilot } } });
   D.setMode(camMode());
   G.simOn = false;
   G.state = 'vs';
-  fillVs(G.sides[1], G.sides[-1], `STAGE ${G.stage + 1} / 5 · <b>${ARENAS[G.stage].name}</b>`, HUMAN.blurb || 'You. A paddle. A plasma cannon. A very bad idea.', pilot.blurb);
+  fillVs(G.sides[1], G.sides[-1], `STAGE ${G.stage + 1} / 5 · <b>${ARENAS[G.stage].name}</b>`, me === 'p1' ? 'You. A paddle. A plasma cannon. A very bad idea.' : you.blurb, pilot.blurb);
   U.show('vs');
   U.setHud(false);
   A.playMusic(ARENAS[G.stage].music);
@@ -220,29 +271,40 @@ function countdown() {
     U.showBanner('FIGHT!', '', '#ffd23f', 0.9);
     A.play('go', { gap: 0 });
     ann('fight', 0, { priority: true });
-    G.state = 'play';
+    if (G.state === 'pause') G.pausedState = 'play';
+    else G.state = 'play';
     G.simOn = true;
   });
 }
 
-function startVersus() {
+// p2 = null: a CPU rival flies the far side
+function startVersus(p1 = 'p1', p2 = 'p1') {
   G.mode = 'versus';
   G.wins = { 1: 0, '-1': 0 };
   G.round = 1;
   G.vsArenas = shuffle([0, 1, 2, 3]);
+  G.vs = { p1, p2, cpu: p2 === null ? shuffle(['volt', 'nyx', 'krank', 'seraph'])[0] : null, twists: { ...(settings.twists || {}) } };
   versusRound();
 }
+const twistNames = (tw) => Object.keys(TWISTS).filter((k) => tw && tw[k]).map((k) => TWISTS[k].name);
 
 function versusRound() {
   clearTimers();
   G.mode = 'versus';
   G.menuCam = false;
   const arena = G.vsArenas[(G.round - 1) % 4];
-  startMatch({ arena, sides: { 1: { kind: 'human', human: HUMAN, who: 'p1' }, '-1': { kind: 'human', human: HUMAN2, who: 'p2' } } });
+  const V = G.vs || { p1: 'p1', p2: 'p1', cpu: null, twists: {} };
+  const a = humanPilot(V.p1, 1, 'PLAYER 1');
+  const b = V.cpu ? { kind: 'ai', persona: rivalPersona(V.cpu, V.p1) } : { kind: 'human', human: humanPilot(V.p2, 2, 'PLAYER 2'), who: 'p2' };
+  if (!V.cpu && V.p2 === V.p1 && V.p1 !== 'p1') b.human = { ...b.human, color: SHADOW[V.p1] };
+  startMatch({ arena, twists: V.twists, diffAI: DIFFICULTY.normal.ai, sides: { 1: { kind: 'human', human: a, who: V.cpu ? 'solo' : 'p1' }, '-1': b } });
   A.playMusic(ARENAS[arena].music);
   if (G.round === 1) {
     G.state = 'vs';
-    fillVs(G.sides[1], G.sides[-1], `BEST OF THREE · <b>${ARENAS[arena].name}</b>`, 'Mouse · WASD · F fire · E overdrive · pad 1 · lower touch', 'Arrows · Enter fire · . overdrive · pad 2 · upper touch');
+    const tw = twistNames(V.twists);
+    const line = `BEST OF THREE · <b>${ARENAS[arena].name}</b>${tw.length ? `<br><span class="twl">${tw.join(' · ')}</span>` : ''}`;
+    const keysA = V.cpu ? (I.isTouch ? 'Drag to move · tap to fire' : 'Mouse or WASD · F fire · E overdrive') : 'Mouse · WASD · F fire · E overdrive · pad 1 · lower touch';
+    fillVs(G.sides[1], G.sides[-1], line, `${a.blurb}<br>${keysA}`, V.cpu ? G.sides[-1].persona.blurb : `${b.human.blurb}<br>Arrows · Enter fire · . overdrive · pad 2 · upper touch`);
     U.show('vs');
     U.setHud(false);
     G.simOn = false;
@@ -284,10 +346,10 @@ function setDemoUI(on) {
 }
 
 function showTouch() {
-  const t = I.isTouch && (G.mode === 'campaign' || G.mode === 'versus');
+  const t = I.isTouch && (G.mode === 'campaign' || G.mode === 'versus' || G.mode === 'online');
   $('touch').classList.toggle('hidden', !t);
-  $('t-fire').classList.toggle('hidden', G.mode !== 'campaign');
-  $('t-od').classList.toggle('hidden', G.mode !== 'campaign');
+  $('t-fire').classList.toggle('hidden', !solo());
+  $('t-od').classList.toggle('hidden', !solo());
 }
 
 function updateMid() {
@@ -295,6 +357,7 @@ function updateMid() {
   const sc = $('score');
   if (G.mode === 'campaign') { $('stage-line').textContent = `STAGE ${G.stage + 1} / 5 · ${DIFFICULTY[G.diff].label}`; sc.classList.remove('hidden'); sc.textContent = G.score.toLocaleString(); }
   else if (G.mode === 'versus') { $('stage-line').textContent = `ROUND ${G.round} · ${G.wins[1]} – ${G.wins[-1]}`; sc.classList.add('hidden'); }
+  else if (G.mode === 'online') { const me = soloSide(); $('stage-line').textContent = `ONLINE · ROUND ${G.round} · ${G.wins[me]} – ${G.wins[-me]}`; sc.classList.add('hidden'); }
   else { $('stage-line').textContent = 'AI vs AI · DEMO'; sc.classList.add('hidden'); }
 }
 
@@ -312,8 +375,12 @@ function addScore(n, x, z, label) {
 // ------------------------------------------------------------------ KO + results
 function onKO(e) {
   const W = G.W;
+  // online play never pauses: a menu opened mid-round closes at the KO
+  if (G.mode === 'online' && ['pause', 'options', 'howto'].includes(U.current)) U.hideScreens();
   G.state = 'ko';
   const winner = e.winner;
+  // what the instant replay needs: the tick of the KO, the core that fell, the ball that did it
+  const info = { n: W.n, side: e.side, ball: G.lastCore ? G.lastCore.id : -1, x: e.x, koT: W.t };
   D.slowMo(0.22, 2.3);
   D.forceShot = { kind: 'ko', side: e.side };
   D.addTrauma(1);
@@ -329,22 +396,34 @@ function onKO(e) {
     after(2.6, () => pilotSay(-1, won ? 'lose' : 'win', 1, { queue: true }));
     after(2.0, () => A.sting(won ? 'victory' : 'defeat'));
     U.showBanner(won ? 'K.O.!' : 'CORE LOST', won ? `${G.sides[-1].name} IS DOWN` : `${G.sides[-1].name} WINS`, won ? '#2ff5ff' : '#ff3040', 3.6);
-    after(4.6, () => (won ? stageResults() : continueScreen()));
+    after(3.4, () => withReplay(info, () => (won ? stageResults() : continueScreen())));
   } else if (G.mode === 'versus') {
     G.wins[winner]++;
     const match = G.wins[winner] >= 2;
-    after(1.3, () => ann(winner === 1 ? 'p1wins' : 'p2wins', 0, { queue: true }));
+    const cpu = G.vs && G.vs.cpu;
+    after(1.3, () => ann(cpu ? (winner === 1 ? 'victory' : 'defeat') : winner === 1 ? 'p1wins' : 'p2wins', 0, { queue: true }));
     if (comeback) after(2.6, () => ann('comeback', 0, { queue: true }));
-    U.showBanner(`PLAYER ${winner === 1 ? 1 : 2} WINS`, match ? 'THE MATCH' : `ROUND ${G.round} · ${G.wins[1]} – ${G.wins[-1]}`, hex(G.sides[winner].color), 3.6);
-    if (match) { after(2, () => A.sting('victory')); after(4.6, () => versusResults(winner)); }
+    if (cpu) after(2.6, () => pilotSay(-1, winner === 1 ? 'lose' : 'win', 1, { queue: true }));
+    U.showBanner(`${vsName(winner)} WINS`, match ? 'THE MATCH' : `ROUND ${G.round} · ${G.wins[1]} – ${G.wins[-1]}`, hex(G.sides[winner].color), 3.6);
+    if (match) { after(2, () => A.sting(cpu && winner === -1 ? 'defeat' : 'victory')); after(3.4, () => withReplay(info, () => versusResults(winner))); }
     else after(4.6, () => { G.round++; versusRound(); });
+  } else if (G.mode === 'online') {
+    G.wins[winner]++;
+    const me = soloSide(), won = winner === me;
+    const match = G.wins[winner] >= 2;
+    after(1.3, () => ann(won ? 'victory' : 'defeat', 0, { queue: true }));
+    if (comeback) after(2.6, () => ann('comeback', 0, { queue: true }));
+    U.showBanner(won ? 'YOU WIN' : `${G.sides[winner].name} WINS`, match ? 'THE MATCH' : `ROUND ${G.round} · ${G.wins[me]} – ${G.wins[-me]}`, hex(G.sides[winner].color), 3.6);
+    if (match) { after(2, () => A.sting(won ? 'victory' : 'defeat')); after(4.6, () => onlineResults(winner)); }
+    else if (me === 1) after(4.6, () => { if (G.mode === 'online') { G.round++; onlineNextRound(); } });
   } else if (G.mode === 'demo') {
     after(1.2, () => pilotSay(winner, 'win', 1));
     if (comeback) after(1.3, () => ann('comeback', 0, { queue: true }));
     U.showBanner(`${G.sides[winner].name} WINS`, comeback ? 'WHAT A COMEBACK' : 'DEMO', hex(G.sides[winner].color), 4);
-    after(5.2, () => { if (G.mode === 'demo') startDemo(); });
+    after(3.6, () => withReplay(info, () => { if (G.mode === 'demo') startDemo(); }));
   }
 }
+const vsName = (s) => (s === 1 ? 'PLAYER 1' : G.vs && G.vs.cpu ? G.sides[-1].name : 'PLAYER 2');
 
 function stageResults() {
   const W = G.W, st = W.stats[1];
@@ -353,6 +432,8 @@ function stageResults() {
   const bonus = { stage: 1000 * (G.stage + 1), core: coreLeft * 300, perfect: perfect ? 3000 : 0, time: timeBonus };
   const mul = DIFFICULTY[G.diff].scoreMul;
   const add = Math.round((bonus.stage + bonus.core + bonus.perfect + bonus.time) * mul);
+  const beaten = LADDER[G.stage];
+  const fresh = unlock(beaten);
   G.score += add;
   const rows = [
     ['RETURNS', st.hits], ['SMASHES', st.smashes], ['CURVES', st.curves], ['STUNS', st.stuns], ['CELLS BROKEN', st.cells],
@@ -360,7 +441,9 @@ function stageResults() {
     ['STAGE BONUS', '+' + bonus.stage], ['CORE INTACT', '+' + bonus.core], ['PERFECT', perfect ? '+3000' : '—'], ['TIME BONUS', '+' + bonus.time],
   ];
   $('res-title').textContent = G.stage === 4 ? 'THE MONOLITH FALLS' : `STAGE ${G.stage + 1} CLEAR`;
-  $('res-stats').innerHTML = rows.map(([a, b]) => `<span>${a}</span><span>${b}</span>`).join('') + (mul !== 1 ? `<span>DIFFICULTY</span><span>×${mul}</span>` : '');
+  $('res-stats').innerHTML = rows.map(([a, b]) => `<span>${a}</span><span>${b}</span>`).join('') + (mul !== 1 ? `<span>DIFFICULTY</span><span>×${mul}</span>` : '')
+    + (fresh ? `<span class="unl">🔓 NEW PILOT</span><span class="unl">${PILOTS[beaten].name} · ${PERKS[beaten].name}</span>` : '');
+  if (fresh) after(0.9, () => ann('unlocked', 0, { priority: true }));
   $('res-total').textContent = G.score.toLocaleString();
   $('res-next').textContent = G.stage === 4 ? 'CHAMPION →' : 'NEXT STAGE →';
   G.state = 'results';
@@ -387,9 +470,10 @@ function versusResults(winner) {
   const rows = [];
   for (const s of [1, -1]) {
     const st = W.stats[s];
-    rows.push([`P${s === 1 ? 1 : 2} RETURNS / SMASHES`, `${st.hits} / ${st.smashes}`], [`P${s === 1 ? 1 : 2} STUNS / CELLS`, `${st.stuns} / ${st.cells}`]);
+    const n = s === 1 ? 'P1' : G.vs && G.vs.cpu ? G.sides[-1].name : 'P2';
+    rows.push([`${n} RETURNS / SMASHES`, `${st.hits} / ${st.smashes}`], [`${n} STUNS / CELLS`, `${st.stuns} / ${st.cells}`]);
   }
-  $('res-title').textContent = `PLAYER ${winner === 1 ? 1 : 2} WINS`;
+  $('res-title').textContent = `${vsName(winner)} WINS`;
   $('res-stats').innerHTML = rows.map(([a, b]) => `<span>${a}</span><span>${b}</span>`).join('');
   $('res-total').textContent = `${G.wins[1]} – ${G.wins[-1]}`;
   $('res-next').textContent = 'TITLE →';
@@ -500,6 +584,10 @@ function buildHowto() {
     ? [['DRAG', 'move your paddle (push up to lunge / smash)'], ['TAP', 'fire a plasma bolt'], ['FIRE / OVERDRIVE', 'on-screen buttons'], ['VERSUS', 'each player drags on their own half']]
     : [['MOUSE', 'move (push forward to lunge / smash)'], ['W A S D / ARROWS', 'move (screen directions)'], ['CLICK · SPACE · F', 'fire a plasma bolt / release a caught ball'], ['RIGHT-CLICK · E · Q', 'overdrive'], ['P / ESC', 'pause'], ['GAMEPAD', 'stick moves · A fire · B overdrive'], ['VERSUS P2', 'arrows · Enter fire · . overdrive · pad 2'], ['DEMO', 'T toggles the AI overlay']];
   $('keys').innerHTML = keys.map(([a, b]) => `<b>${a}</b><span>${b}</span>`).join('');
+  $('pilotlist').innerHTML = ROSTER.map((k) => {
+    const name = k === 'p1' ? 'CHALLENGER' : PILOTS[k].name, c = k === 'p1' ? HUMAN.color : PILOTS[k].color;
+    return `<div class="pu" style="--fc:${hex(c)}"><i>${isOpen(k) ? '◆' : '🔒'}</i><div><b>${name} · ${PERKS[k].name}</b><span>${isOpen(k) ? PERKS[k].desc : lockHint(k).toLowerCase().replace(/^./, (m) => m.toUpperCase())}</span></div></div>`;
+  }).join('');
   $('pugrid').innerHTML = Object.values(POWERUPS).map((p) => `<div class="pu" style="--fc:${hex(p.color)}"><i>${p.glyph}</i><div><b>${p.name}</b><span>${p.desc}</span></div></div>`).join('');
 }
 function buildOptions() {
@@ -521,6 +609,7 @@ function buildOptions() {
       sync();
       A.play('uimove', { gap: 0 });
       if (k === 'camera' && G.mode !== 'demo') D.setMode(camMode());
+      if (k === 'flash') applyCalm();
     };
   }
 }
@@ -531,6 +620,7 @@ function menuSel(i) {
   const btns = visibleButtons();
   btns.forEach((b, k) => b.classList.toggle('sel', k === i));
   G.menuI = i;
+  if (G.state === 'pilot') pilotDesc(btns[i]);
 }
 function visibleButtons() {
   const scr = document.querySelector('.screen:not(.hidden)');
@@ -549,6 +639,7 @@ function openSub(id) {
 }
 function back() {
   A.play('uiback', { gap: 0 });
+  if (G.state === 'online-wait' || G.state === 'online-join') { NET.close(); return showOnline(); }
   if (G.state === 'scores-end') return goTitle();
   if (backTo === 'pause') { G.state = 'pause'; U.show('pause'); menuSel(0); return; }
   goTitle();
@@ -560,15 +651,27 @@ document.getElementById('ui').addEventListener('click', (e) => {
   A.unlock();
   const act = b.dataset.act, diff = b.dataset.diff;
   if (act || diff) A.play('uiok', { gap: 0 });
-  if (diff) return startCampaign(diff);
+  if (diff) return pickThen('CAMPAIGN · YOUR PILOT', (k) => startCampaign(diff, k), { def: settings.pilot });
+  if (b.dataset.pilot) return pickPilot(b.dataset.pilot);
+  if (b.dataset.opp) { settings.vsOpp = b.dataset.opp; saveSettings(); A.play('uimove', { gap: 0 }); return renderVsetup(); }
+  if (b.dataset.tw) { const tw = settings.twists || (settings.twists = {}); tw[b.dataset.tw] = !tw[b.dataset.tw]; saveSettings(); A.play('uimove', { gap: 0 }); return renderVsetup(); }
   switch (act) {
     case 'campaign': G.state = 'difficulty'; U.show('difficulty'); menuSel(1); break;
-    case 'versus': startVersus(); break;
+    case 'versus': openVersus(); break;
+    case 'vsgo': vsGo(); break;
+    case 'online': openOnline(); break;
+    case 'on-quick': onlineQuick(); break;
+    case 'on-host': onlineHost(); break;
+    case 'on-join': showJoin(); break;
+    case 'on-joingo': joinFromInput(); break;
+    case 'on-cancel': NET.close(); showOnline(); break;
+    case 'on-copy': copyInvite(b); break;
     case 'demo': startDemo(); break;
     case 'howto': case 'options': case 'scores': openSub(act); break;
     case 'back': back(); break;
     case 'resume': resume(); break;
     case 'quit': G.paused = false; A.muffle(false); goTitle(); break;
+    case 'skip': stopReplay(); break;
     case 'next': if (G.resultsNext) G.resultsNext(); break;
     case 'yes': if (G.state === 'cont') { G.continues--; G.score = Math.floor(G.score / 2); stageIntro(); } break;
     case 'no': if (G.state === 'cont') gameOver(); break;
@@ -589,6 +692,7 @@ $('t-pause').addEventListener('pointerdown', (e) => { e.preventDefault(); pause(
 function pause() {
   if (G.state !== 'play' && G.state !== 'countdown') return;
   if (G.mode === 'demo' || G.mode === 'attract') return;
+  if (G.mode === 'online') { G.pausedState = G.state; G.state = 'pause'; U.show('pause'); menuSel(0); return; }
   G.paused = true;
   G.pausedState = G.state;
   G.state = 'pause';
@@ -603,33 +707,38 @@ function resume() {
   U.hideScreens();
   A.muffle(false);
 }
-addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
+addEventListener('visibilitychange', () => { if (document.hidden && G.mode !== 'online') pause(); });
 
 function fire(who) {
   if (G.state !== 'play' || G.paused) return;
-  if (G.mode === 'campaign') who = 1;
+  if (solo()) who = soloSide();
+  if (G.mode === 'online' && NET.side === -1) NET.fireN++;
   for (const h of G.humans) if (h.p.side === who) h.p.input.fire = true;
 }
 function overdrive(who) {
   if (G.state !== 'play' || G.paused) return;
-  if (G.mode === 'campaign') who = 1;
+  if (solo()) who = soloSide();
+  if (G.mode === 'online' && NET.side === -1) NET.odN++;
   for (const h of G.humans) if (h.p.side === who) h.p.input.od = true;
 }
 
-I.on('fire', (who, src) => { if (G.mode === 'campaign' || G.mode === 'versus') { if (src === 'mouse' && G.mode === 'versus') who = 1; fire(who); } });
+I.on('fire', (who, src) => { if (G.mode === 'campaign' || G.mode === 'versus' || G.mode === 'online') { if (src === 'mouse' && G.mode === 'versus') who = 1; fire(who); } });
 I.on('od', (who) => overdrive(who));
 I.on('pause', () => {
   if (G.state === 'pause') return resume();
-  if (['howto', 'options', 'scores', 'difficulty', 'scores-end'].includes(G.state)) return back();
+  if (['howto', 'options', 'scores', 'difficulty', 'scores-end', 'pilot', 'vsetup', 'online', 'online-wait', 'online-join'].includes(G.state)) return back();
   pause();
 });
 I.on('any', () => {
   G.idleT = 0;
+  if (G.replay) { if (G.mode === 'demo') goTitle(); else stopReplay(); return; }
   if (G.demoBoot) { G.demoBoot = false; A.unlock(); A.ctx && A.ctx.resume(); A.musicName = null; A.playMusic(G.W.arena.music); return; }
   if (G.state === 'boot') return enterTitle();
   if (G.mode === 'demo' && G.state !== 'title') { goTitle(); }
 });
 I.on('key', (k, e) => {
+  // typing a room code
+  if (e && e.target && e.target.tagName === 'INPUT') { if (k === 'Enter' || k === 'NumpadEnter') joinFromInput(); return; }
   if (k === 'KeyT' && G.mode === 'demo') { settings.tactical = settings.tactical === 'never' ? 'demo' : 'never'; saveSettings(); }
   if (k === 'KeyC' && (G.state === 'play') && G.mode !== 'demo') {
     const order = ['arena', 'side', 'top'];
@@ -649,8 +758,7 @@ I.on('key', (k, e) => {
     return;
   }
   // menu navigation
-  const menuStates = ['title', 'difficulty', 'pause', 'results', 'cont', 'howto', 'options', 'scores', 'scores-end'];
-  if (!menuStates.includes(G.state)) return;
+  if (!MENU_STATES.includes(G.state)) return;
   const btns = visibleButtons();
   if (!btns.length) return;
   if (k === 'ArrowDown' || k === 'KeyS' || k === 'ArrowRight') { menuSel((G.menuI + 1) % btns.length); A.play('uimove', { vol: 0.4, gap: 0 }); }
@@ -660,12 +768,13 @@ I.on('key', (k, e) => {
 // gamepad A acts as Enter in menus
 I.on('fire', (who, src) => {
   if (src !== 'pad') return;
-  const menuStates = ['title', 'difficulty', 'pause', 'results', 'cont', 'howto', 'options', 'scores', 'scores-end'];
-  if (menuStates.includes(G.state)) { const b = visibleButtons()[G.menuI]; if (b) b.click(); }
+  if (MENU_STATES.includes(G.state)) { const b = visibleButtons()[G.menuI]; if (b) b.click(); }
   if (G.state === 'initials') saveIni();
 });
+const MENU_STATES = ['title', 'difficulty', 'pause', 'results', 'cont', 'howto', 'options', 'scores', 'scores-end', 'pilot', 'vsetup', 'online', 'online-wait', 'online-join'];
 I.assign = (t) => {
-  if (G.mode !== 'versus' || !G.W) return 1;
+  if (G.mode === 'online') return soloSide();
+  if (G.mode !== 'versus' || !G.W || solo()) return 1;
   // the finger belongs to whichever paddle is nearer on screen
   let best = 1, bd = 1e9;
   for (const h of G.humans) {
@@ -773,6 +882,7 @@ function handleEvents(list) {
         break;
       }
       case 'core': {
+        G.lastCore = e;
         A.play('corehit', { x: e.x, gap: 0 });
         D.addTrauma(0.65);
         G.hitstop = Math.max(G.hitstop, 0.09);
@@ -842,9 +952,321 @@ function handleEvents(list) {
   }
 }
 
+
+// ------------------------------------------------------------------ pilot select
+let pickCb = null, pickOpts = {};
+// skip the picker while only the Challenger is open
+function pickThen(label, cb, opts = {}) {
+  if (!unlocks.size) return cb('p1');
+  choosePilot(label, cb, opts);
+}
+function choosePilot(label, cb, opts = {}) {
+  pickCb = cb; pickOpts = opts;
+  G.state = 'pilot';
+  $('pilot-for').textContent = label;
+  $('pgrid').innerHTML = ROSTER.map((k) => {
+    const open = isOpen(k);
+    const c = k === 'p1' ? (opts.slot === 2 ? HUMAN2.color : HUMAN.color) : PILOTS[k].color;
+    const name = k === 'p1' ? 'CHALLENGER' : PILOTS[k].name;
+    return `<button class="mbtn pick ${open ? '' : 'locked'}" data-pilot="${k}" style="--pc:${hex(c)}"><b>${name}</b><small>${open ? PERKS[k].name : '🔒 LOCKED'}</small></button>`;
+  }).join('');
+  U.show('pilot');
+  const want = ROSTER.indexOf(isOpen(opts.def) ? opts.def : 'p1');
+  menuSel(Math.max(0, want));
+  if (!G.saidPilot) { G.saidPilot = true; ann('pilot', 0, { priority: true }); }
+}
+function pilotDesc(b) {
+  const k = b && b.dataset.pilot;
+  const el = $('pdesc');
+  if (!k) { el.innerHTML = '&nbsp;'; return; }
+  el.innerHTML = isOpen(k) ? `<b>${PERKS[k].name}</b> — ${PERKS[k].desc}` : `<b>LOCKED</b> — ${lockHint(k)} to fly this pilot.`;
+}
+function pickPilot(k) {
+  if (!isOpen(k) || !pickCb) { A.play('uiback', { gap: 0 }); return; }
+  if (pickOpts.slot === 2) settings.pilot2 = k; else settings.pilot = k;
+  saveSettings();
+  const cb = pickCb;
+  pickCb = null;
+  cb(k);
+}
+
+// ------------------------------------------------------------------ versus setup
+function openVersus() {
+  G.state = 'vsetup';
+  renderVsetup();
+  U.show('vsetup');
+  menuSel(visibleButtons().length - 1);
+}
+function renderVsetup() {
+  const tw = settings.twists || {}, cpu = settings.vsOpp === 'cpu';
+  $('vs-opp').innerHTML = `<button class="mbtn tog ${cpu ? '' : 'on'}" data-opp="human">PLAYER 2<small>SAME SCREEN</small></button>`
+    + `<button class="mbtn tog ${cpu ? 'on' : ''}" data-opp="cpu">CPU RIVAL<small>A RANDOM PILOT</small></button>`;
+  $('twgrid').innerHTML = Object.entries(TWISTS).map(([k, t]) => `<button class="mbtn tw ${tw[k] ? 'on' : ''}" data-tw="${k}"><b>${t.name}</b><small>${t.desc}</small></button>`).join('');
+  if (G.state === 'vsetup') menuSel(Math.min(G.menuI || 0, visibleButtons().length - 1));
+}
+function vsGo() {
+  const cpu = settings.vsOpp === 'cpu';
+  pickThen('PLAYER 1 · YOUR PILOT', (a) => {
+    if (cpu) return startVersus(a, null);
+    pickThen('PLAYER 2 · YOUR PILOT', (b) => startVersus(a, b), { slot: 2, def: settings.pilot2 });
+  }, { def: settings.pilot });
+}
+
+// ------------------------------------------------------------------ instant replay
+const RSND = { wall: 'wall1', bolt: 'fire1', stun: 'stun', pu: 'pucollect', bump: 'bumper', portal: 'portal', barrier: 'barrier', serve: 'serve', boltball: 'arc', boltcell: 'boltcell', od: 'overdrive', laser: 'arc', lasercharge: 'bosslaser', lightning: 'storm', release: 'smash', catch: 'magnet', phase2: 'alarm', slider: 'wall2' };
+function withReplay(info, then) {
+  if (settings.replay === 'off' || !startReplay(info, then)) then();
+}
+function startReplay(info, then = () => {}) {
+  const rp = REC.replay(info.n);
+  if (!rp) return false;
+  G.replay = { rp, info, then };
+  G.state = 'replay';
+  U.hideBanner();
+  U.setHud(false);
+  for (const id of ['demo-badge', 'cap-l', 'cap-r', 'tip', 'attract-board', 'touch']) $(id).classList.add('hidden');
+  $('replay').classList.remove('hidden');
+  $('popups').innerHTML = '';
+  for (const s2 of [1, -1]) $('toast-' + s2).innerHTML = '';
+  R.setWorld(rp.W, G.sides);
+  D.slow = 1; D.slowT = 0; D.trauma = 0; D.rp = false;
+  A.play('rewind', { gap: 0, noSlow: true, vol: 0.8 });
+  ann('replay', 0, { priority: true });
+  return true;
+}
+function stopReplay(run = true) {
+  const r = G.replay;
+  if (!r) return;
+  G.replay = null;
+  $('replay').classList.add('hidden');
+  D.endReplay();
+  A.setRate(1);
+  if (G.W) R.setWorld(G.W, G.sides);
+  if (run) r.then();
+}
+// one frame of the replay; false once it has finished (the game carries on this frame)
+function replayFrame(dt) {
+  const r = G.replay, rp = r.rp;
+  const toKO = rp.toKO;
+  // half speed into the last moments, a crawl through the hit itself, then the blast
+  const speed = toKO > 0.7 ? 0.55 : toKO > -0.3 ? 0.2 : 0.5;
+  A.setRate(1 - (1 - speed) * 0.55);
+  replayEvents(rp.advance(dt * speed), rp.W);
+  if (rp.done) { stopReplay(); return false; }
+  D.update(dt, { W: rp.W, replay: r.info, shake: +settings.shake });
+  R.sync(rp.W, dt * speed, { tactical: false, ai: {}, scope: {}, beat: 0 });
+  look.desat = 0.16; look.chroma = 0;
+  R.render(dt, look);
+  perf(dt);
+  return true;
+}
+function replayEvents(list, W) {
+  for (const e of list) {
+    R.event(e, W);
+    if (e.k === 'hit') {
+      A.play(['hit1', 'hit2', 'hit3'][(Math.random() * 3) | 0], { x: e.x, vol: 0.75 });
+      if (e.smash > 0) { A.play('smash', { x: e.x, vol: 0.7 }); D.addTrauma(0.2); }
+    } else if (e.k === 'cell') { A.play(e.hp <= 0 ? 'shatter' : 'crack', { x: e.x }); D.addTrauma(e.hp <= 0 ? 0.3 : 0.1); }
+    else if (e.k === 'core') { A.play('corehit', { x: e.x, gap: 0 }); D.addTrauma(0.65); }
+    else if (e.k === 'ko') { A.play('ko', { gap: 0, noSlow: true }); A.play('coreboom', { gap: 0, noSlow: true }); D.addTrauma(1); }
+    else if (RSND[e.k]) A.play(RSND[e.k], { x: e.x, vol: 0.5 });
+  }
+}
+
+// ------------------------------------------------------------------ online
+// saved initials (from a high score) name you online; none saved = P1 / P2
+const myIni = () => { try { return esc(localStorage.getItem('jez237_initials')).slice(0, 4); } catch { return ''; } };
+const onMe = () => ({ ini: myIni(), pilot: G.onPilot || 'p1' });
+function openOnline() {
+  pickThen('ONLINE · YOUR PILOT', (k) => { G.onPilot = k; showOnline(); }, { def: settings.pilot });
+}
+function showOnline(msg) {
+  NET.close();
+  NET.reset();
+  G.state = 'online';
+  const st = $('on-status');
+  st.textContent = msg || 'Battle a rival anywhere in the world. Best of three.';
+  st.classList.toggle('err', !!msg);
+  $('on-menu').classList.remove('hidden');
+  $('on-room').classList.add('hidden');
+  $('on-join').classList.add('hidden');
+  U.show('online');
+  menuSel(0);
+}
+function lobbyUI(text, code) {
+  G.state = 'online-wait';
+  $('on-status').classList.remove('err');
+  $('on-status').textContent = code ? 'Send a friend this code or the invite link.' : 'Best of three against a player anywhere in the world.';
+  $('on-menu').classList.add('hidden');
+  $('on-join').classList.add('hidden');
+  $('on-room').classList.remove('hidden');
+  $('on-codewrap').classList.toggle('hidden', !code);
+  $('on-code').textContent = code || '';
+  $('on-copy').textContent = navigator.share && I.isTouch ? 'SHARE INVITE' : 'COPY INVITE LINK';
+  $('on-wait').textContent = text;
+  U.show('online');
+  menuSel(0);
+}
+function onlineQuick() { lobbyUI('Searching for a rival…'); NET.quick(onMe()); }
+function onlineHost() {
+  const code = randomCode(4);
+  G.onCode = code;
+  lobbyUI('Waiting for your rival to join…', code);
+  NET.connect(ROOM + code, 'host', onMe());
+}
+function onlineJoin(code) {
+  if (!G.onPilot) G.onPilot = isOpen(settings.pilot) ? settings.pilot : 'p1';
+  lobbyUI(`Joining room ${code}…`);
+  NET.connect(ROOM + code, 'join', onMe());
+}
+function showJoin() {
+  G.state = 'online-join';
+  $('on-menu').classList.add('hidden');
+  $('on-join').classList.remove('hidden');
+  const inp = $('join-code');
+  inp.value = '';
+  menuSel(0);
+  setTimeout(() => inp.focus(), 30);
+}
+function joinFromInput() {
+  const code = cleanCode($('join-code').value);
+  if (code.length !== 4) { A.play('uiback', { gap: 0 }); $('join-code').focus(); return; }
+  $('join-code').blur();
+  A.play('uiok', { gap: 0 });
+  onlineJoin(code);
+}
+async function copyInvite(btn) {
+  const url = `${location.origin}${location.pathname}?room=${G.onCode}`;
+  try {
+    if (navigator.share && I.isTouch) await navigator.share({ title: 'Plasma Pong: Battle Edition', text: `Battle me online! Room ${G.onCode}`, url });
+    else { await navigator.clipboard.writeText(url); btn.textContent = 'COPIED!'; setTimeout(() => (btn.textContent = 'COPY INVITE LINK'), 1600); }
+  } catch { btn.textContent = url; }
+}
+// hooks from the connection
+function onStatus(text, kind) {
+  if (!['online', 'online-wait', 'online-join'].includes(G.state)) return;
+  if (kind === 'error') return showOnline(text);
+  if (text !== 'waiting') $('on-wait').textContent = text;
+}
+function onJoined(peer) {
+  if (G.state !== 'online-wait') return;
+  A.play('uiok', { gap: 0 });
+  ann('found', 0, { priority: true });
+  $('on-wait').textContent = `${peer.ini || 'Your rival'} is here! Get ready…`;
+  $('on-codewrap').classList.add('hidden');
+  if (NET.side === 1) after(1.4, () => { if (NET.peer) onlineMatch(); });
+}
+function onLeft(reason) {
+  if (G.mode !== 'online') {
+    if (['online', 'online-wait', 'online-join'].includes(G.state)) showOnline(reason === 'left' ? 'Your rival left' : 'Lost the connection to the online server');
+    return;
+  }
+  NET.close(true);
+  clearTimers();
+  G.simOn = false;
+  G.mode = 'online-over';
+  U.hideScreens();
+  U.showBanner(reason === 'left' ? 'RIVAL LEFT' : 'CONNECTION LOST', 'BACK TO THE TITLE', '#ff3040', 3);
+  ann(reason === 'left' ? 'victory' : 'lost', 0, { priority: true });
+  after(3.2, () => goTitle());
+}
+function onChat(msg) {
+  if (msg.k === 'again') { G.peerAgain = true; maybeRematch(); }
+}
+// host: a fresh best of three
+function onlineMatch() {
+  G.wins = { 1: 0, '-1': 0 };
+  G.round = 1;
+  G.vsArenas = shuffle([0, 1, 2, 3]);
+  onlineNextRound();
+}
+function onlineNextRound() {
+  if (!NET.peer) return;
+  const cfg = { r: G.round, ar: G.vsArenas[(G.round - 1) % 4], sd: (Math.random() * 1e9) | 0, dir: Math.random() < 0.5 ? 1 : -1,
+    w: [G.wins[1], G.wins[-1]], p1: G.onPilot || 'p1', p2: NET.peer.pilot, n1: myIni(), n2: NET.peer.ini };
+  NET.raw({ type: 'start', ...cfg });
+  onlineRound(cfg);
+}
+// both ends: set up a round from the host's start message
+function onlineRound(cfg) {
+  if (G.mode === 'online-over') return;
+  clearTimers();
+  G.mode = 'online';
+  G.menuCam = false;
+  G.round = cfg.r | 0 || 1;
+  G.wins = { 1: (cfg.w && cfg.w[0]) | 0, '-1': (cfg.w && cfg.w[1]) | 0 };
+  G.meAgain = false; G.peerAgain = false;
+  const me = NET.side;
+  const pk = { 1: PILOTS[cfg.p1] ? cfg.p1 : 'p1', '-1': PILOTS[cfg.p2] ? cfg.p2 : 'p1' };
+  const nm = { 1: esc(cfg.n1).slice(0, 4) || 'P1', '-1': esc(cfg.n2).slice(0, 4) || 'P2' };
+  const sides = {};
+  for (const s of [1, -1]) {
+    const h = humanPilot(pk[s], s === 1 ? 1 : 2, s === me ? `${nm[s]} · YOU` : `${nm[s]} · ONLINE`);
+    if (pk[s] === 'p1') h.name = nm[s];
+    sides[s] = s === me ? { kind: 'human', human: h, who: 'solo' } : { kind: 'remote', human: h };
+  }
+  if (pk[1] === pk[-1] && pk[1] !== 'p1') sides[-1].human = { ...sides[-1].human, color: SHADOW[pk[1]] };
+  const arena = ((cfg.ar | 0) % 4 + 4) % 4;
+  startMatch({ arena, seed: cfg.sd | 0, serveDir: cfg.dir === -1 ? -1 : 1, sides });
+  NET.bind(G.W);
+  D.flip = me === -1;
+  setFlip(me === -1);
+  $('res-quit').classList.add('hidden');
+  A.playMusic(ARENAS[arena].music);
+  if (G.round === 1) {
+    G.state = 'vs';
+    fillVs(G.sides[me], G.sides[-me], `ONLINE · BEST OF THREE · <b>${ARENAS[arena].name}</b>`, sides[me].human.blurb, sides[-me].human.blurb);
+    U.show('vs');
+    U.setHud(false);
+    G.simOn = false;
+    ann('online', 0, { priority: true });
+    after(3.4, () => countdown());
+  } else countdown();
+}
+function onlineResults(winner) {
+  const W = G.W, me = soloSide();
+  const rows = [];
+  for (const s of [me, -me]) {
+    const st = W.stats[s], n = G.sides[s].name;
+    rows.push([`${n} RETURNS / SMASHES`, `${st.hits} / ${st.smashes}`], [`${n} STUNS / CELLS`, `${st.stuns} / ${st.cells}`]);
+  }
+  $('res-title').textContent = winner === me ? 'YOU WIN THE MATCH' : `${G.sides[winner].name} WINS THE MATCH`;
+  $('res-stats').innerHTML = rows.map(([a, b]) => `<span>${a}</span><span>${b}</span>`).join('');
+  $('res-total').textContent = `${G.wins[me]} – ${G.wins[-me]}`;
+  $('res-next').textContent = 'REMATCH';
+  $('res-quit').classList.remove('hidden');
+  G.state = 'results';
+  G.resultsNext = () => {
+    if (G.meAgain) return;
+    G.meAgain = true;
+    NET.chat({ k: 'again' });
+    $('res-next').textContent = 'WAITING FOR YOUR RIVAL…';
+    maybeRematch();
+  };
+  U.show('results');
+  menuSel(0);
+}
+function maybeRematch() {
+  if (G.mode !== 'online' || !G.meAgain || !G.peerAgain) return;
+  if (NET.side === 1) onlineMatch(); // the guest waits for the host's start
+}
+// the guest hears nothing from the host for a while
+function waitingForHost() {
+  const stale = NET.stale && G.state === 'play';
+  if (stale && !G.staleShown) { G.staleShown = true; U.showBanner('WAITING FOR YOUR RIVAL', 'THE HOST HAS PAUSED OR LOST CONNECTION', '#ffd23f', 0); }
+  else if (!stale && G.staleShown) { G.staleShown = false; U.hideBanner(); }
+}
+// the online guest flies the far paddle: their own panel goes on the left
+function setFlip(on) {
+  $('hud').classList.toggle('flip', on);
+  $('toasts').classList.toggle('flip', on);
+  $('hud-1').classList.toggle('left', !on); $('hud-1').classList.toggle('right', on);
+  $('hud--1').classList.toggle('right', !on); $('hud--1').classList.toggle('left', on);
+}
+
 // ------------------------------------------------------------------ boot
 function bootProgress() {
-  const total = 47 + 50 + 31;
+  const total = 48 + 56 + 31;
   const n = A.buf.size;
   $('loadfill').style.width = Math.min(100, (n / total) * 100) + '%';
   return n / total;
@@ -857,35 +1279,55 @@ function enterTitle() {
   say('ann_title', 0, { priority: true });
   setTimeout(() => say('ann_battle', 0, { queue: true }), 900);
   goTitle();
+  // an invite link (?room=CODE) goes straight to that room
+  const code = cleanCode(params.get('room'));
+  if (code.length === 4) {
+    history.replaceState(null, '', location.pathname);
+    G.onPilot = isOpen(settings.pilot) ? settings.pilot : 'p1';
+    onlineJoin(code);
+  }
 }
 
 // ------------------------------------------------------------------ frame loop
 let last = performance.now();
 const look = { bloom: 1.5, exposure: 1, desat: 0, fade: 0, chroma: 0, tint: new THREE.Vector3(1, 1, 1) };
 function tick(dt) {
-  I.pollPads(G.mode === 'versus');
+  I.pollPads(G.mode === 'versus' && !solo());
   for (const t of G.timers.slice()) {
     if (G.paused) break;
     t.t -= dt;
     if (t.t <= 0) { G.timers.splice(G.timers.indexOf(t), 1); t.fn(); }
   }
+  if (G.replay && replayFrame(dt)) return;
   const W = G.W;
   let scale = G.simOn && !G.paused ? D.slow : 0;
   if (G.hitstop > 0) { G.hitstop -= dt; scale *= 0.1; }
   if (G.simOn && !G.paused) A.setRate(1 - (1 - Math.min(1, D.slow)) * 0.55);
   const sdt = dt * scale;
   if (W) {
+    const online = G.mode === 'online' && NET.W === W;
+    const host = online && NET.side === 1, guest = online && NET.side === -1;
+    const rec = settings.replay !== 'off' && (G.mode === 'campaign' || G.mode === 'versus' || G.mode === 'demo');
+    // the guest first takes in the host's newest snapshot
+    if (guest) handleEvents(NET.guestSync(W));
     G.acc += sdt;
     let n = 0;
     while (G.acc >= STEP && n < 16) {
+      if (host) NET.hostTick(W);
+      if (rec) REC.tick(W);
       controls(W, STEP);
+      if (rec) REC.input(W);
       step(W, STEP);
-      handleEvents(drainEvents(W));
+      const ev = drainEvents(W);
+      if (guest) handleEvents(NET.guestLocal(W, ev));
+      else { if (host) NET.hostEvents(ev); handleEvents(ev); }
       G.acc -= STEP;
       n++;
     }
     if (n >= 16) G.acc = 0;
     if (G.state === 'play') G.matchT += sdt;
+    if (host) NET.hostFrame(W, dt);
+    if (guest) { NET.guestFrame(W, dt); waitingForHost(); }
   }
   // the scope power-up: show the human every incoming path
   G.scopeT -= dt;
@@ -894,7 +1336,7 @@ function tick(dt) {
     for (const h of G.humans) {
       const s = h.p.side;
       G.scope[s] = null;
-      if (W.fx[s].scope <= 0) continue;
+      if (W.fx[s].scope <= 0 && !W.perk[s].sight) continue;
       const b = W.balls.find((q) => !q.caught && q.vz * s > 0);
       if (b) { const pr = predictToPlane(W, b, s * (F.cellZ - 0.6), 3, true); if (pr) G.scope[s] = pr.path; }
     }
@@ -920,7 +1362,7 @@ function tick(dt) {
     if (G.idleT > 28) startDemo();
   }
   // touch overdrive button state
-  if (G.mode === 'campaign' && W) $('t-od').classList.toggle('ready', W.meter[1].od >= 100 && W.meter[1].odTime <= 0);
+  if (solo() && W) { const m = W.meter[soloSide()]; $('t-od').classList.toggle('ready', m.od >= 100 && m.odTime <= 0); }
   // dynamic resolution
   perf(dt);
 }
@@ -999,6 +1441,11 @@ window.__ppb.startVersus = startVersus;
 window.__ppb.goTitle = goTitle;
 window.__ppb.enterTitle = enterTitle;
 window.__ppb.endRun = endRun;
+window.__ppb.unlock = unlock;
+window.__ppb.startReplay = startReplay;
+window.__ppb.choosePilot = choosePilot;
+window.__ppb.openVersus = openVersus;
+window.__ppb.online = { openOnline, showOnline, onlineQuick, onlineHost, onlineJoin, setPilot: (k) => { G.onPilot = k; } };
 window.__ppb.shot = async (name, q = 0.85) => {
   tick(1 / 60);
   const url = $('gl').toDataURL('image/jpeg', q);

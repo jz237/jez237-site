@@ -1,11 +1,13 @@
 // Meshes for the things on court: paddles, balls, bolts, orbs, drones, cells, cores, hazards.
 import * as THREE from '../vendor/three.module.min.js';
-import { F, POWERUPS } from './config.js?v=3';
-import { CELL_HALF } from './sim.js?v=3';
-import { NOISE } from './shaders.js?v=3';
-import { Ribbon } from './fx.js?v=3';
+import { F, POWERUPS } from './config.js?v=4';
+import { CELL_HALF } from './sim.js?v=4';
+import { NOISE } from './shaders.js?v=4';
+import { Ribbon } from './fx.js?v=4';
 
 export const BALL_Y = 0.36;
+// reduced flashing (Options): strobing glows become slow pulses
+export const CALM = { on: false };
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
 
 let glowTex = null;
@@ -172,11 +174,11 @@ export class PaddleView {
     // glow strength: hit flash, fire flash, stun flicker
     const stunned = p.stun > 0;
     let k = 4 + this.squash * 10 + p.flash * 6;
-    if (stunned) k = Math.random() < 0.5 ? 0.3 : 6;
+    if (stunned) k = CALM.on ? 2.2 + 1.8 * Math.sin(time * 7) : Math.random() < 0.5 ? 0.3 : 6;
     const immune = W.t < p.immuneT && !stunned;
     const c = this.stripMat.color;
     c.copy(this.color).multiplyScalar(k);
-    if (immune && Math.sin(time * 40) > 0) c.lerp(new THREE.Color(3, 3, 3), 0.4);
+    if (immune && Math.sin(time * (CALM.on ? 7 : 40)) > 0) c.lerp(new THREE.Color(3, 3, 3), CALM.on ? 0.2 : 0.4);
     // thrusters flare with speed
     const sp = Math.min(1, Math.hypot(p.vx, p.vz) / 15);
     for (const pod of this.pods) pod.userData.thr.scale.setScalar(0.6 + sp * 1.4 + Math.random() * 0.15);
@@ -249,7 +251,7 @@ export class BallView {
     this.heat += (Math.min(1, Math.max(0, sp - 18) / 16) - this.heat) * Math.min(1, dt * 4);
     u.uHeat.value = this.heat;
     const y = BALL_Y + (b.caught ? 0.06 : 0);
-    this.mesh.position.set(b.x, y, b.z);
+    this.mesh.position.set(b.x + (b.ox || 0), y, b.z + (b.oz || 0));
     const gk = (b.fire ? 3.5 : 2.2) * (1 - u.uGhost.value);
     this.glow.material.color.copy(b.fire ? FIRE : this.color).multiplyScalar(gk * (1 + this.heat));
     this.glow.scale.setScalar(2.4 + this.heat * 1.6 + (b.fire ? 1 : 0));

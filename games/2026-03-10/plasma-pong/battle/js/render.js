@@ -1,11 +1,11 @@
 // The 3D arena: sky, planet, deck, mirror floor, rails, curtains, plus everything synced from the sim.
 import * as THREE from '../vendor/three.module.min.js';
-import { F, ARENAS, POWERUPS } from './config.js?v=3';
-import { bumperPos, sliderPos, cellIndex } from './sim.js?v=3';
-import { NOISE } from './shaders.js?v=3';
-import { Post } from './post.js?v=3';
-import { Sparks, Shards, patchShardMaterial, Lightning, Rings } from './fx.js?v=3';
-import { PaddleView, BallView, BoltView, OrbView, DroneView, CellView, CoreView, HoleView, glowSprite, floorGlow, BALL_Y } from './views.js?v=3';
+import { F, ARENAS, POWERUPS } from './config.js?v=4';
+import { bumperPos, sliderPos, cellIndex } from './sim.js?v=4';
+import { NOISE } from './shaders.js?v=4';
+import { Post } from './post.js?v=4';
+import { Sparks, Shards, patchShardMaterial, Lightning, Rings } from './fx.js?v=4';
+import { PaddleView, BallView, BoltView, OrbView, DroneView, CellView, CoreView, HoleView, glowSprite, floorGlow, BALL_Y, CALM } from './views.js?v=4';
 
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
@@ -295,6 +295,7 @@ export class Renderer {
     this.barrierHit = { 1: [0, 9], '-1': [0, 9] };
     this.ripples = [];
     this.kick = { chroma: 0, flash: new THREE.Vector4(1, 1, 1, 0), fade: 0, desat: 0 };
+    this.calmFlash = new THREE.Vector4(1, 1, 1, 0);
     this.pending = [];
     this.arcT = 0;
     this.resize();
@@ -656,7 +657,7 @@ export class Renderer {
     for (const p of W.paddles) {
       if (!V.paddles.has(p.id)) {
         const pilot = this.sides[p.side];
-        const v = new PaddleView(p, this.colors[p.side], this.env, { boss: p.boss });
+        const v = new PaddleView(p, this.colors[p.side], this.env, { boss: p.boss || p.look === 'boss' });
         S.add(v.group, v.under);
         V.paddles.set(p.id, v);
       }
@@ -714,7 +715,7 @@ export class Renderer {
     if (W.arena.hazards.storm && !W.over) {
       this.stormT -= dt;
       if (this.stormT <= 0) {
-        this.stormT = 2.5 + Math.random() * 4;
+        this.stormT = (2.5 + Math.random() * 4) * (CALM.on ? 2.5 : 1);
         const a = new THREE.Vector3((Math.random() - 0.5) * 60, 30, -40 - Math.random() * 40);
         const b = new THREE.Vector3(a.x + (Math.random() - 0.5) * 20, -2, a.z + 10);
         this.lightning.strike(a, b, 0xff9a8a, 0.35, 0.4, 0.25);
@@ -727,9 +728,10 @@ export class Renderer {
     this.laserBeam.visible = !!(L && L.charge <= 0);
     if (L) {
       this.laserTele.position.x = L.x;
-      this.laserTele.material.opacity = 0.4 + 0.6 * Math.abs(Math.sin(time * (14 - L.charge * 6)));
+      this.laserTele.material.opacity = 0.4 + 0.6 * Math.abs(Math.sin(time * (CALM.on ? 4 : 14 - L.charge * 6)));
       this.laserBeam.position.x = L.x;
-      this.laserBeam.scale.set(1 + Math.random() * 0.4, 1, 1 + Math.random() * 0.4);
+      const j = CALM.on ? 0 : 0.4;
+      this.laserBeam.scale.set(1 + Math.random() * j, 1, 1 + Math.random() * j);
     }
 
     // side-wide effects
@@ -841,7 +843,7 @@ export class Renderer {
   stunArcs(W, dt) {
     this.arcT -= dt;
     if (this.arcT > 0) return;
-    this.arcT = 0.07;
+    this.arcT = CALM.on ? 0.3 : 0.07;
     for (const p of W.paddles) {
       if (p.stun <= 0) continue;
       const a = new THREE.Vector3(p.x + (Math.random() - 0.5) * p.hw * 2, 0.35 + Math.random() * 0.4, p.z);
@@ -860,7 +862,8 @@ export class Renderer {
       const v = this.views.balls.get(b.id);
       req.push({ pos: v.mesh.position, color: b.fire ? FIRE : v.color, k: b.fire ? 22 : 14, d: 9 });
     }
-    for (const f of this.flashLights) { f.life -= dt; if (f.life > 0) req.push({ pos: f.pos, color: f.color, k: f.k * (f.life / f.max), d: 16 }); }
+    const fk = CALM.on ? 0.35 : 1;
+    for (const f of this.flashLights) { f.life -= dt; if (f.life > 0) req.push({ pos: f.pos, color: f.color, k: f.k * fk * (f.life / f.max), d: 16 }); }
     this.flashLights = this.flashLights.filter((f) => f.life > 0);
     req.sort((a, b) => b.k - a.k);
     for (let i = 0; i < this.lights.length; i++) {
@@ -929,7 +932,7 @@ export class Renderer {
         this.addFlashLight(v3(0, 3, z), col, 120, 0.8);
         this.kick.chroma = 0.025;
         this.kick.flash.set(1, 1, 1, 0.35);
-        for (let i = 0; i < 5; i++) this.lightning.strike(v3(0, 1.7, z), v3((Math.random() - 0.5) * 10, 0, z - e.side * (1 + Math.random() * 4)), col.getHex(), 0.35, 0.09);
+        for (let i = 0; i < (CALM.on ? 2 : 5); i++) this.lightning.strike(v3(0, 1.7, z), v3((Math.random() - 0.5) * 10, 0, z - e.side * (1 + Math.random() * 4)), col.getHex(), 0.35, 0.09);
         break;
       }
       case 'ko': {
@@ -955,7 +958,7 @@ export class Renderer {
       case 'bolt': this.sparks.burst({ x: e.x, y: 0.45, z: e.z - e.side * 0.4, n: 8, speed: 5, color: c(e.side), intensity: 4, dir: [0, 0.2, -e.side], spread: 0.5, life: 0.25 }); break;
       case 'stun': {
         this.sparks.burst({ x: e.x, y: 0.5, z: e.z, n: 50, speed: 8, color: 0x9ad8ff, intensity: 5 });
-        for (let i = 0; i < 4; i++) this.lightning.strike(v3(e.x, 2.5, e.z), v3(e.x + (Math.random() - 0.5) * 3, 0.2, e.z + (Math.random() - 0.5)), 0x9ad8ff, 0.3, 0.07);
+        for (let i = 0; i < (CALM.on ? 1 : 4); i++) this.lightning.strike(v3(e.x, 2.5, e.z), v3(e.x + (Math.random() - 0.5) * 3, 0.2, e.z + (Math.random() - 0.5)), 0x9ad8ff, 0.3, 0.07);
         this.addFlashLight(v3(e.x, 1, e.z), 0x9ad8ff, 40, 0.3);
         break;
       }
@@ -1010,7 +1013,7 @@ export class Renderer {
         if (p) {
           this.rings.spawn(p.x, p.z, 0xffc23a, 9, 0.8);
           this.sparks.burst({ x: p.x, y: 0.5, z: p.z, n: 120, speed: 12, color: 0xffc23a, intensity: 5, up: 0.7 });
-          for (let i = 0; i < 6; i++) this.lightning.strike(v3(p.x, 4, p.z), v3(p.x + (Math.random() - 0.5) * 4, 0.3, p.z), 0xffd23f, 0.4, 0.08);
+          for (let i = 0; i < (CALM.on ? 2 : 6); i++) this.lightning.strike(v3(p.x, 4, p.z), v3(p.x + (Math.random() - 0.5) * 4, 0.3, p.z), 0xffd23f, 0.4, 0.08);
           this.shock(p.x, 0.5, p.z, 1);
         }
         this.kick.flash.set(1, 0.85, 0.4, 0.2);
@@ -1103,7 +1106,7 @@ export class Renderer {
       s.age += dt;
       const pp = this.project(s.p.x, s.p.y, s.p.z);
       if (pp.behind) continue;
-      shocks.push(new THREE.Vector4(pp.x / this.cssW, 1 - pp.y / this.cssH, s.age * 0.9 * s.k, Math.max(0, 1 - s.age * 1.4) * s.k));
+      shocks.push(new THREE.Vector4(pp.x / this.cssW, 1 - pp.y / this.cssH, s.age * 0.9 * s.k, Math.max(0, 1 - s.age * 1.4) * s.k * (CALM.on ? 0.3 : 1)));
     }
     this.shocks = this.shocks.filter((s) => s.age < 0.8);
     const lens = [];
@@ -1119,9 +1122,11 @@ export class Renderer {
     const k = this.kick;
     k.chroma = Math.max(0, k.chroma - dt * 0.05);
     k.flash.w = Math.max(0, k.flash.w - dt * 1.6);
+    const calm = CALM.on;
+    if (calm) this.calmFlash.copy(k.flash).setW(Math.min(0.05, k.flash.w * 0.15));
     this.post.render(this.scene, this.camera, {
-      bloom: look.bloom ?? 0.9, threshold: 1.0, exposure: look.exposure ?? 1.0, chroma: 0.0022 + k.chroma + (look.chroma || 0),
-      vignette: 0.5, time: this.time, desat: look.desat || 0, fade: look.fade || 0, flash: k.flash,
+      bloom: (look.bloom ?? 0.9) * (calm ? 0.8 : 1), threshold: 1.0, exposure: look.exposure ?? 1.0, chroma: calm ? 0.0012 : 0.0022 + k.chroma + (look.chroma || 0),
+      vignette: 0.5, time: this.time, desat: look.desat || 0, fade: look.fade || 0, flash: calm ? this.calmFlash : k.flash,
       tint: look.tint || ONE3, shocks, lens,
     });
   }

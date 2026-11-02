@@ -1,5 +1,5 @@
 // DOM: HUD panels, floating pop-ups, banners, power-up toasts and screen switching.
-import { F, POWERUPS } from './config.js?v=3';
+import { F, POWERUPS } from './config.js?v=4';
 
 const $ = (id) => document.getElementById(id);
 const hex = (c) => '#' + c.toString(16).padStart(6, '0');
@@ -37,7 +37,7 @@ export class UI {
         <div class="ptitle">${d.title}</div>
         <div class="row"><span class="lbl">CORE</span><div class="pips">${'<i class="pip"></i>'.repeat(W.cores[s].max)}</div></div>
         <div class="row"><span class="lbl">SHIELD</span><div class="cells">${'<i class="cell"></i>'.repeat(F.cells)}</div></div>
-        <div class="row"><span class="lbl">BOLTS</span><div class="bolts">${'<i class="bolt"></i>'.repeat(F.boltCharges)}</div><div class="odbar"><i></i></div></div>
+        <div class="row"><span class="lbl">BOLTS</span><div class="bolts">${'<i class="bolt"></i>'.repeat(W.meter[s].max)}</div><div class="odbar"><i></i></div></div>
         <div class="fxs"></div>`);
       const r = { pips: [...el.querySelectorAll('.pip')], cells: [...el.querySelectorAll('.cell')], bolts: [...el.querySelectorAll('.bolt')], od: el.querySelector('.odbar'), odi: el.querySelector('.odbar i'), fxs: el.querySelector('.fxs') };
       // the far side's cells read right-to-left from its own point of view; keep court order for clarity

@@ -1,5 +1,5 @@
 // Plasma Pong: Battle Edition — tuning, pilots, arenas and power-ups.
-export const VERSION = 'v1.0.2';
+export const VERSION = 'v1.1.0';
 
 // World units. Side +1 is the near player (P1, positive z), side -1 the far one.
 export const F = {
@@ -70,6 +70,33 @@ export const PILOTS = {
 
 export const HUMAN = { key: 'p1', name: 'PLAYER 1', title: 'CHALLENGER', color: COLORS.p1, accent: 0xffffff };
 export const HUMAN2 = { key: 'p2', name: 'PLAYER 2', title: 'CHALLENGER', color: COLORS.p2, accent: 0xffffff };
+
+// Pilots you can fly. The Challenger is always open; each rival unlocks once you beat them in the
+// campaign (the Monolith once you finish it). Perks only apply to human pilots: the AI personas are
+// balanced on their own. charges/recharge = bolts, smash/spin = shot power and curve, hw = paddle
+// width, speed = paddle speed, sight = permanent forecast line, core = extra core points.
+export const ROSTER = ['p1', 'volt', 'nyx', 'krank', 'seraph', 'monolith'];
+export const PERKS = {
+  p1:       { name: 'BALANCED',      desc: 'No tricks, no weaknesses. Pure skill.' },
+  volt:     { name: 'HAIR TRIGGER',  desc: '4 bolt charges that recharge 40% faster. Smashes a little softer.', charges: 4, recharge: 0.6, smash: 0.85 },
+  nyx:      { name: 'PHANTOM CURVE', desc: 'Sweep as you hit and the ball bends 70% harder.', spin: 1.7 },
+  krank:    { name: 'HEAVY HITTER',  desc: 'Smashes hit 40% harder. Only 2 bolt charges.', smash: 1.4, charges: 2 },
+  seraph:   { name: 'FORESIGHT',     desc: 'Always sees where incoming balls will land. Slightly narrower paddle.', sight: true, hw: 0.9 },
+  monolith: { name: 'FORTRESS',      desc: 'A huge paddle and an extra core point. Moves slower.', hw: 1.3, speed: 0.84, core: 1 },
+};
+// a second copy of a pilot (mirror matches) wears these colours
+export const SHADOW = { p1: 0xff3dd8, volt: 0x7aff3a, nyx: 0x3affd2, krank: 0xff2a6a, seraph: 0x8a9cff, monolith: 0xff9a2a };
+
+// Party twists for versus: rule changes applied to both sides.
+export const TWISTS = {
+  twin:  { name: 'TWIN BALLS',       desc: 'Two balls in play at all times.' },
+  tiny:  { name: 'TINY PADDLES',     desc: 'Both paddles shrink to 60%.' },
+  surge: { name: 'POWER SURGE',      desc: 'Power-ups rain down, up to four at once.' },
+  curve: { name: 'WILD CURVE',       desc: 'Every sweep bends the ball twice as hard.' },
+  hyper: { name: 'HYPER SPEED',      desc: 'Faster serves and rallies that heat up quicker.' },
+  glass: { name: 'GLASS CORES',      desc: 'One-hit shield cells and 3-point cores. Short and brutal.' },
+  ammo:  { name: 'BOTTOMLESS BOLTS', desc: 'Bolts recharge five times faster.' },
+};
 
 // Each arena: palette, music, hazards. Colours are linear-ish hex for shaders.
 export const ARENAS = [

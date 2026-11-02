@@ -4,11 +4,12 @@
 const SFX = ['hit1', 'hit2', 'hit3', 'wall1', 'wall2', 'smash', 'serve', 'fire1', 'fire2', 'stun', 'boltcell', 'crack', 'shatter',
   'corehit', 'coreboom', 'cheer', 'ooh', 'puspawn', 'pucollect', 'multi', 'titan', 'shrink', 'nova', 'repair', 'drone', 'singularity',
   'ghost', 'magnet', 'barrier', 'storm', 'chrono', 'scope', 'overdrive', 'bumper', 'portal', 'beep', 'go', 'uimove', 'uiok', 'uiback',
-  'whoosh', 'slowmo', 'alarm', 'bosslaser', 'ko', 'arc', 'bhhum'];
+  'whoosh', 'slowmo', 'alarm', 'bosslaser', 'ko', 'arc', 'bhhum', 'rewind'];
 const ANN = ['title', 'battle', 'round1', 'round2', 'round3', 'round4', 'final', 'fight', 'ready', 'breach', 'critical', 'shielddown',
   'destroyed', 'ko', 'victory', 'defeat', 'p1wins', 'p2wins', 'perfect', 'smash', 'supersmash', 'multi', 'titan', 'shrink', 'nova',
   'repair', 'drone', 'singularity', 'ghost', 'magnet', 'barrier', 'storm', 'chrono', 'scope', 'overdrive', 'stunned', 'boss',
-  'challenger', 'demo', 'continue', 'gameover', 'comeback', 'matchpoint', 'rally', 'trickshot', 'denied', 'champion', 'three', 'two', 'one'];
+  'challenger', 'demo', 'continue', 'gameover', 'comeback', 'matchpoint', 'rally', 'trickshot', 'denied', 'champion', 'three', 'two', 'one',
+  'replay', 'unlocked', 'pilot', 'online', 'found', 'lost'];
 const PILOT_LINES = { volt: 6, nyx: 6, krank: 6, seraph: 6, monolith: 7 };
 const LINES = ['intro', 'score', 'hurt', 'lose', 'win', 'taunt', 'phase2'];
 const V = '?v=1';

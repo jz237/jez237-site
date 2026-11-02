@@ -2,9 +2,9 @@
 // broadcast shots and, because it can read the AI's forecasts, sees core breaches coming and
 // drops into slow motion on the right camera *before* they happen.
 import * as THREE from '../vendor/three.module.min.js';
-import { F } from './config.js?v=3';
-import { predictToPlane } from './predict.js?v=3';
-import { cellIndex } from './sim.js?v=3';
+import { F } from './config.js?v=4';
+import { predictToPlane } from './predict.js?v=4';
+import { cellIndex } from './sim.js?v=4';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 const _v = new THREE.Vector3(), _q = new THREE.Vector3();
@@ -31,6 +31,7 @@ export class Director {
     this.swayX = 0;
     this.orbit = 0;
     this.fitCache = {};
+    this.flip = false;        // online guest: the game views look from the far end
   }
 
   setMode(mode) {
@@ -85,7 +86,8 @@ export class Director {
     this.t += dt;
     const W = ctx.W;
     let want;
-    if (ctx.demo && W) want = this.demoShot(dt, ctx);
+    if (ctx.replay && W) want = this.replayShot(dt, W, ctx.replay);
+    else if (ctx.demo && W) want = this.demoShot(dt, ctx);
     else if (ctx.menu) want = this.menuShot(dt);
     else {
       want = this.gameView(this.mode);
@@ -96,6 +98,7 @@ export class Director {
         this.swayX += ((bx / W.balls.length) * 0.08 - this.swayX) * Math.min(1, dt * 2);
         want = { pos: want.pos.clone().add(new THREE.Vector3(this.swayX, 0, 0)), look: want.look.clone().add(new THREE.Vector3(this.swayX * 0.5, 0, 0)), fov: want.fov };
       }
+      if (this.flip) want = { ...want, pos: new THREE.Vector3(-want.pos.x, want.pos.y, -want.pos.z), look: new THREE.Vector3(-want.look.x, want.look.y, -want.look.z) };
     }
     const k = this.snap || want.cut ? 1 : 1 - Math.exp(-dt * (want.speed || 4));
     this.snap = false;
@@ -214,6 +217,35 @@ export class Director {
     }
     return this.gameView('side');
   }
+
+  // ------------------------------------------------------------------ instant replay
+  // info: { side (the core that fell), ball (id of the ball that did it), x, koT (world time of the KO) }
+  replayShot(dt, W, info) {
+    const s = info.side;
+    const ball = W.balls.find((b) => b.id === info.ball);
+    const toKO = info.koT - W.t;
+    const first = !this.rp;
+    this.rp = true;
+    if (ball && toKO > 0.75) {
+      // ride alongside the ball, low over the deck, looking where it is going
+      const sp = Math.hypot(ball.vx, ball.vz) || 1;
+      const dx = ball.vx / sp, dz = ball.vz / sp;
+      const sideOff = (ball.x > 0 ? -1 : 1) * 2.6;
+      return { pos: new THREE.Vector3(clamp(ball.x - dx * 6 + sideOff, -11, 11), 3.4, ball.z - dz * 7.5), look: new THREE.Vector3(ball.x + dx * 4, 0.3, ball.z + dz * 4), fov: 54, speed: 3.2, cut: first };
+    }
+    if (toKO > 0.75) {
+      const v = this.gameView('side');
+      return { pos: v.pos.clone().add(new THREE.Vector3(0, -3, -s * 4)), look: new THREE.Vector3(0, 0, s * 4), fov: v.fov, speed: 2.5, cut: first };
+    }
+    // the finish: from the goal line inside the court, across the gap into the doomed core;
+    // after the blast the camera eases up and back
+    const x = info.x;
+    const back = toKO < 0 ? Math.min(1, -toKO * 1.2) : 0;
+    const cut = this.rpCut !== 'core';
+    this.rpCut = 'core';
+    return { pos: new THREE.Vector3((x > 0 ? -5.6 : 5.6) * (1 + back * 0.15), 2.3 + back * 2.2, s * (8.2 - back * 2.5)), look: new THREE.Vector3(x * 0.7, 0.9 + back * 0.6, s * 12.4), fov: 50 + back * 6, speed: 4, cut: cut || first };
+  }
+  endReplay() { this.rp = false; this.rpCut = null; this.snap = true; }
 
   cutTo(shot) {
     this.shot = { dur: 5, ...shot, fresh: true };

@@ -1448,7 +1448,8 @@
     try {
       const res = await fetch(onlineHttpBase() + '/rooms', { cache: 'no-store' });
       const data = await res.json();
-      const rooms = Array.isArray(data.rooms) ? data.rooms : [];
+      // Plasma Pong's online rooms share this relay (PPB- prefix); they are not duels
+      const rooms = (Array.isArray(data.rooms) ? data.rooms : []).filter(room => !/^PPB-/.test(String(room && room.room || '')));
       if (!rooms.length) {
         box.innerHTML = '<div class="room-empty">No open rooms right now</div>';
         return;
