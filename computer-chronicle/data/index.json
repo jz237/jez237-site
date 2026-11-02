@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-02",
+      "historicDate": "1985-05-27",
+      "displayDate": "Week of May 27-June 2, 1985",
+      "edition": "Issue 148 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Jobs remains chairman, but Macintosh operations pass into a unified organization.",
+      "leadHeadline": "Apple merges divisions; Jobs loses Macintosh command",
+      "storyHeadlines": [
+        "Championship Lode Runner challenges the veterans",
+        "GEM brings the graphical desktop to IBM and Atari",
+        "MacVision turns video into Macintosh pictures"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-05-27.jpg",
+      "thumb": "media/thumbs/1985-05-27.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-11-01",
       "historicDate": "1985-05-20",
       "displayDate": "Week of May 20-26, 1985",

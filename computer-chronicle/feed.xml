@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 01 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 02 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of May 27-June 2, 1985 — Apple merges divisions; Jobs loses Macintosh command</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-05-27</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-05-27</guid>
+      <pubDate>Mon, 02 Nov 2026 12:00:00 GMT</pubDate>
+      <description>May 31 realignment centralizes operations under Sculley; co-founder remains chairman. Apple has stripped Steve Jobs of operational command of its Macintosh division in a major realignment announced Friday, May 31. The Macintosh and Apple II divisions are being merged, while marketing and manufacturing are centralized to remove overlapping functions. John Sculley remains president and chief executive officer. Also this week: Championship Lode Runner challenges the veterans · GEM brings the graphical desktop to IBM and Atari · MacVision turns video into Macintosh pictures.</description>
+    </item>
     <item>
       <title>Week of May 20-26, 1985 — Fifty punishing rooms put Lode Runner veterans to the test</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-05-20</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-01-14</guid>
       <pubDate>Wed, 14 Oct 2026 12:00:00 GMT</pubDate>
       <description>January’s winter show offers a game machine with a home-computing ambition. Nintendo’s Advanced Video System offers a striking proposal for the living room: a sleek game unit that can be joined by an optional keyboard and tape-drive accessories. Demonstrated at the January 5–8 Winter Consumer Electronics Show in Las Vegas, the design remains one of the month’s notable consumer-computing talking points. Also this week: Atari challenges Macintosh prices with the ST · Commodore 128 offers three paths from one keyboard · Rails West! and Questron take the long route.</description>
-    </item>
-    <item>
-      <title>Week of January 7-13, 1985 — Atari challenges Macintosh with a $400–$600 ST family</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-01-07</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-01-07</guid>
-      <pubDate>Tue, 13 Oct 2026 12:00:00 GMT</pubDate>
-      <description>Jack Tramiel puts a new 68000 computer family against the established names; software and delivery will decide the contest. Atari is taking aim at the price of personal computing. As Winter CES closes January 8, Jack Tramiel’s company is promoting an ST family announced at $400–$600. The demonstrations began over the preceding weekend; the quoted range is an announced computer price, not a complete system already sitting on a dealer’s shelf. Also this week: Commodore answers with the C128—and a portable proposal · Nintendo proposes an Advanced Video System for America · PlayNet puts C64 board games on the telephone line.</description>
     </item>
   </channel>
 </rss>

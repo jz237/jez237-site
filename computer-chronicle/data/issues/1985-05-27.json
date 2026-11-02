@@ -1,0 +1,419 @@
+{
+  "currentDate": "2026-11-02",
+  "historicDate": "1985-05-27",
+  "displayDate": "Week of May 27-June 2, 1985",
+  "edition": "Issue 148 - Weekly 1985 Computer & Culture Chronicle",
+  "sources": [
+    {
+      "title": "Apple Unveils Major Reorganization; Jobs Gives Up a Key Post — Los Angeles Times",
+      "url": "https://www.latimes.com/archives/la-xpm-1985-06-01-fi-5486-story.html",
+      "date": "1985-06-01"
+    },
+    {
+      "title": "GEM: A New Look for IBM and Atari — Selby Bateman, COMPUTE!",
+      "url": "https://www.atarimagazines.com/compute/issue60/175_1_GEM_A_New_Look_For_IBM_And_Atari.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Championship Lode Runner — Michael B. Williams, COMPUTE!",
+      "url": "https://www.atarimagazines.com/compute/issue60/187_1_REVIEWS_Championship_Lode_Runner.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "MacVision — Charles Brannon, COMPUTE!",
+      "url": "https://www.atarimagazines.com/compute/issue60/188_1_REVIEWS_MacVision_For_Apple_Macintosh.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Sidekick — Richard Mansfield, COMPUTE!",
+      "url": "https://www.atarimagazines.com/compute/issue60/186_1_REVIEWS_Sidekick_For_PC_And_PCjr.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Relax — Arthur Leyenberger, COMPUTE!",
+      "url": "https://www.atarimagazines.com/compute/issue60/185_1_REVIEWS_Relax_Stress_Reduction_System.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Inexpensive Games for 64 and VIC — COMPUTE!",
+      "url": "https://www.atarimagazines.com/compute/issue60/218_2_NEWS_PRODUCTS_Inexpensive_Games_For_64_And_VIC.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Telecomputing Today — Arlan R. Levitan, COMPUTE!",
+      "url": "https://www.atarimagazines.com/compute/issue60/191_1_TELECOMPUTING_TODAY.php",
+      "date": "1985-05"
+    },
+    {
+      "title": "Billboard June 1, 1985 rock chart",
+      "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-06-01/",
+      "date": "1985-06-01"
+    },
+    {
+      "title": "Box Office History May 31–June 2, 1985",
+      "url": "https://boxofficehistory.com/weekend/1985-22",
+      "date": "1985-05-31/1985-06-02"
+    },
+    {
+      "title": "BBC Witness History: The Heysel Stadium Disaster",
+      "url": "https://www.bbc.co.uk/programmes/p02ryjg5",
+      "date": "retrospective; event 1985-05-29"
+    }
+  ],
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "visualProfile": {
+    "tone": "Extra Edition: Apple changes command",
+    "motifs": [
+      "Macintosh and Apple II halftones",
+      "corporate organization chart",
+      "Lode Runner ladders and gold"
+    ],
+    "layout": "Dense warm newsprint, brick red and royal blue boxes"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Apple leadership milestone dominates: business story is historically stronger this week",
+    "secondaryRail": "Lode Runner gaming feature, MacVision and GEM",
+    "archiveNavigation": "Weekly archive and previous/next controls"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 148 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of May 27-June 2, 1985",
+    "price": "75 cents"
+  },
+  "milestone": {
+    "title": "Steve Jobs loses operational control at Apple",
+    "note": "The May 31 reorganization removes Apple’s co-founder from Macintosh management, an era-defining shift in leadership at a central personal-computer company."
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-05-27.jpg",
+    "alt": "Computer Chronicle front page for May 27-June 2, 1985, covering Apple’s leadership reorganization",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "An Extra Edition at the computer desk: Apple changes command while the software shelves keep moving.",
+  "morningLine": "Jobs remains chairman, but Macintosh operations pass into a unified organization.",
+  "lead": {
+    "headline": "Apple merges divisions; Jobs loses Macintosh command",
+    "dek": "May 31 realignment centralizes operations under Sculley; co-founder remains chairman.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0
+    ],
+    "body": [
+      "Apple has stripped Steve Jobs of operational command of its Macintosh division in a major realignment announced Friday, May 31. The Macintosh and Apple II divisions are being merged, while marketing and manufacturing are centralized to remove overlapping functions. John Sculley remains president and chief executive officer.",
+      "Jobs remains chairman of Apple, with an 11.3 percent shareholding. This is a loss of operating authority, not a resignation or departure from the company. Sculley’s statement describes the co-founder as a “creator of powerful ideas and the champion of Apple’s spirit,” even as the new organization transfers day-to-day responsibility elsewhere.",
+      "Del Yocam becomes executive vice president of product operations; Bill Campbell becomes group executive for United States sales and marketing. The changes put a common management structure over product lines whose separate identities have become a source of friction. Analysts cited divisional rivalry as well as the personal-computer industry’s slowdown.",
+      "The financial setting is difficult. Apple acknowledged the previous week that current-quarter sales and earnings would fall below second-quarter results. Yocam told the Los Angeles Times that Jobs attended Friday’s nine o’clock management meeting and called the change difficult for him. Jobs was unavailable for comment and reportedly left for France on business and vacation."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Championship Lode Runner challenges the veterans",
+      "body": [
+        "Brøderbund’s Championship Lode Runner puts fifty difficult screens in front of players who already know the ropes. Michael B. Williams’s May COMPUTE! review treats it as a challenge for experienced hands, not an introductory course. The original’s 150 rooms make a useful apprenticeship for this smaller, tougher collection.",
+        "The listed $34.95 package runs on a Commodore 64 with disk drive or an Apple II-series computer with 48K and a drive; a joystick is optional. An optional hint book costs $9.95. There is no design mode: the object here is to master the supplied puzzles rather than build new ones.",
+        "Games and high scores can be saved, but repeated use of the same saved position carries a penalty: restoring it more than once costs a life. Conquerors can leave a nineteen-character victory message and receive a personalized champion certificate. These are the May reviewer’s findings, not a claim of a new release this week."
+      ],
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "GEM brings the graphical desktop to IBM and Atari",
+      "body": [
+        "Digital Research’s Graphics Environment Manager offers a mouse-led route through the desktop. Selby Bateman’s May COMPUTE! report describes icons, pull-down menus and overlapping windows, presenting GEM as an interface above an operating system rather than a replacement for it.",
+        "The company’s proposed family includes GEM Desktop, GEM Draw, GEM Wordchart and GEM Presentation Master. A $500 developer toolkit and Lifetree’s adaptation of Volkswriter as Gem Write point toward a broader application market. Existing DOS software can still run without modification.",
+        "Atari supplies another prospective home for the graphical environment. The January CES targets quoted in the May article—about $399 for a 128K 130ST and $599 for a 512K 520ST—are announced projections, not verified late-May retail offers. ROM residence and instant startup likewise remain contemporary plans, not proof of shipped configurations."
+      ],
+      "sourceRefs": [
+        1
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "MacVision turns video into Macintosh pictures",
+      "body": [
+        "Koala Technologies’ MacVision puts a camera or recorded video source within reach of the Macintosh page. Charles Brannon’s May COMPUTE! review lists the digitizer at $399.95. It connects through the printer or modem port and takes NTSC input from a camera, VCR or laserdisc source.",
+        "The software runs as a desk accessory and provides pictures for MacPaint and MacWrite. The price of that convenience is patience: the review times a window scan at about six seconds and a full-screen scan at about twenty-two seconds. Subjects must stay still while the picture is acquired.",
+        "Shades of gray become patterns of dots rather than a continuous photographic tone. Brannon warns of grain and the need to adjust controls. It is a practical invitation to experiment with electronic pictures, provided the buyer understands the limits of a slow scan."
+      ],
+      "sourceRefs": [
+        3
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "MacVision",
+      "summary": "Koala video digitizer for Macintosh, NTSC input and serial-port connection; $399.95.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "title": "Relax",
+      "summary": "Synapse EMG headband, interface and software for home computers; $139.95.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Sidekick",
+      "detail": "Borland desktop utilities for PC/PCjr, $49 protected or $79 unprotected.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "name": "GEM tools",
+      "detail": "Digital Research graphics interface and $500 programming toolkit described in May feature.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "name": "The Games Creator",
+      "detail": "C64 nonprogrammer construction set announced for $19.99; VIC tape counterpart The Games Designer announced at $12.99. Future availability in source, not confirmed shipped.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+      "items": [
+        "Championship Lode Runner — expert sequel reviewed in May, $34.95.",
+        "Chiller — named in May’s Mastertronic C64 budget-games notice.",
+        "BMX Racer — named in the same $9.99 C64 product notice.",
+        "Dark Star — another title in the magazine’s Mastertronic lineup.",
+        "Monty Python’s Quest for the Holy Grail — title as reported by COMPUTE!; release date not independently established."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        2,
+        6
+      ]
+    },
+    {
+      "label": "Top 5 Movies — May 31-June 2 domestic weekend box office",
+      "items": [
+        "1. Rambo: First Blood Part II",
+        "2. Fletch",
+        "3. A View to a Kill",
+        "4. Brewster’s Millions",
+        "5. Beverly Hills Cop"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        9
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Little By Little",
+      "artist": "Robert Plant",
+      "chart": "Billboard Top Rock Tracks (modern archive: Mainstream Rock Airplay)",
+      "chartDate": "1985-06-01",
+      "confidence": "exact-date",
+      "song": "Little By Little",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Would I Lie To You",
+      "artist": "Eurythmics",
+      "chart": "Billboard Top Rock Tracks (modern archive: Mainstream Rock Airplay)",
+      "chartDate": "1985-06-01",
+      "confidence": "exact-date",
+      "song": "Would I Lie To You",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Tough All Over",
+      "artist": "John Cafferty & The Beaver Brown Band",
+      "chart": "Billboard Top Rock Tracks (modern archive: Mainstream Rock Airplay)",
+      "chartDate": "1985-06-01",
+      "confidence": "exact-date",
+      "song": "Tough All Over",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Trapped",
+      "artist": "Bruce Springsteen",
+      "chart": "Billboard Top Rock Tracks (modern archive: Mainstream Rock Airplay)",
+      "chartDate": "1985-06-01",
+      "confidence": "exact-date",
+      "song": "Trapped",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Lucky In Love",
+      "artist": "Mick Jagger",
+      "chart": "Billboard Top Rock Tracks (modern archive: Mainstream Rock Airplay)",
+      "chartDate": "1985-06-01",
+      "confidence": "exact-date",
+      "song": "Lucky In Love",
+      "sourceRefs": [
+        8
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Championship Lode Runner",
+      "price": "$34.95",
+      "note": "Contemporary May 1985 magazine listed price, not street-price survey",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "MacVision",
+      "price": "$399.95",
+      "note": "Contemporary May 1985 magazine listed price, not street-price survey",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Relax",
+      "price": "$139.95",
+      "note": "Contemporary May 1985 magazine listed price, not street-price survey",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "item": "Sidekick protected",
+      "price": "$49.00",
+      "note": "Contemporary May 1985 magazine listed price, not street-price survey",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "item": "Sidekick unprotected",
+      "price": "$79.00",
+      "note": "Contemporary May 1985 magazine listed price, not street-price survey",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "item": "Mastertronic C64 games",
+      "price": "$9.99",
+      "note": "Contemporary May 1985 magazine listed price, not street-price survey",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Sidekick puts a price on unprotected software",
+      "summary": "Borland’s desktop utility lists for $49 with copy protection and $79 without it in May’s COMPUTE! review. Richard Mansfield objects to paying extra for the unprotected edition.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Fifty rooms for the expert",
+    "summary": "Championship Lode Runner, $34.95; optional hint book $9.95. Product spotlight based on May’s review, not a reproduced advertisement.",
+    "tagline": "The next examination for the practiced gold collector.",
+    "sourceRefs": [
+      2
+    ]
+  },
+  "market": {
+    "headline": "Apple reorganizes amid weaker expectations",
+    "summary": "Apple cites the industry slump and falling earnings as it combines divisions. The company had warned the previous week that current-quarter sales and earnings would trail second-quarter results.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Heysel stadium disaster shocks Europe",
+    "summary": "Thirty-nine people died at the Liverpool–Juventus European Cup final in Brussels on May 29. The death toll is the retrospective tally documented by BBC Witness History.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      10
+    ]
+  },
+  "bbsNote": {
+    "headline": "BBS file transfers become a beginner’s essential skill",
+    "summary": "Arlan R. Levitan’s May COMPUTE! Telecomputing Today column addresses saving online information, sharing self-written programs and composing mail offline to save connect-time charges.",
+    "posts": [
+      {
+        "topic": "File-transfer compatibility",
+        "platform": "BBSs; CompuServe; Delphi",
+        "text": "Editorial paraphrase, not a recovered BBS post: Levitan discusses terminal-program support, compatible protocols and the need for exact binary transfers; reports XMODEM availability on CompuServe and Delphi."
+      },
+      {
+        "topic": "The cost of typing online",
+        "platform": "Commercial information services",
+        "text": "Editorial paraphrase, not a user quotation: readers ask how to prepare mail before connecting so they do not pay to type online; later coverage is promised."
+      }
+    ],
+    "confidence": "same-month",
+    "sourceRefs": [
+      7
+    ]
+  },
+  "curiosity": {
+    "headline": "A $139.95 headband lets you fly a balloon by relaxing",
+    "summary": "Synapse’s Relax brings biofeedback to home computers.",
+    "detail": "Arthur Leyenberger’s May review describes headband sensors measuring muscle electrical activity, a control unit, workbook and audio tape. A balloon rises when the user relaxes; another display alters kaleidoscopic colors and shapes with tension. Documentation credited to clinical psychologist Dr. Martha Davis. Reviewer also reports playing Synapse’s Chicken using the headband instead of paddles. These are product/reviewer claims, not independent evidence of medical effectiveness.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      5
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Apple’s May 31 change removes operational command, not chairmanship; no later resignation is implied.",
+      "May reviews and product notices are monthly pegs, not newly verified launches.",
+      "GEM and Atari price/configuration projections are not shipping claims.",
+      "Game selections are editorial, not a sales ranking.",
+      "Music uses Billboard June 1 rock chart; movies use May 31-June 2 box office.",
+      "Relax benefits are reviewer/product claims, not established medical efficacy.",
+      "No cracking crew or breaking noncomputer gadget event established this week."
+    ]
+  }
+}
