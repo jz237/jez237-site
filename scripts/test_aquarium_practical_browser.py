@@ -3,6 +3,15 @@
 from pathlib import Path
 import argparse,functools,http.server,json,threading
 from playwright.sync_api import sync_playwright
+def poll(page, script, arg=None, timeout=15000):
+    # Eval-free wait: page.evaluate is allowed under the strict live CSP, while
+    # Playwright's string wait_for_function polling needs unsafe-eval.
+    import time
+    end=time.time()+timeout/1000
+    while True:
+        if page.evaluate(script, arg) if arg is not None else page.evaluate(script): return
+        if time.time()>end: raise TimeoutError(script)
+        page.wait_for_timeout(50)
 ROOT=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser();p.add_argument('--base-url',default='');p.add_argument('--output',type=Path,required=True);args=p.parse_args();args.output.mkdir(parents=True,exist_ok=True)
 class Quiet(http.server.SimpleHTTPRequestHandler):
@@ -38,7 +47,7 @@ try:
                 n=i//10+1
                 page.goto(base+'/newsletter/'+('' if n==1 else f'page/{n}/'),wait_until='networkidle')
                 page.locator(f'.story h3 a[href$="stories/{s["slug"]}/"]').click()
-                page.wait_for_function("document.querySelector('#article-reader').open")
+                poll(page,"()=>document.querySelector('#article-reader').open")
                 diagram=page.locator('#reader-content img[src$=".svg"]')
                 diagram.scroll_into_view_if_needed()
                 diagram.evaluate('(i)=>i.decode()')
@@ -48,7 +57,7 @@ try:
                 if width in [390,1440]:
                     page.screenshot(path=str(args.output/f'{s["slug"]}-{width}.png'))
                 page.locator('#reader-close').click()
-                page.wait_for_function("!document.querySelector('#article-reader').open&&!history.state?.aquariumJournalReader")
+                poll(page,"()=>!document.querySelector('#article-reader').open&&!history.state?.aquariumJournalReader")
             results['widths'].append(width)
         for image in ['lionfish.webp','duncan-coral.webp']:
             response=page.request.get(base+'/newsletter/images/'+image);assert response.status==200

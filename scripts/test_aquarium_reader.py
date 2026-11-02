@@ -4,6 +4,15 @@ from pathlib import Path
 import argparse, functools, http.server, json, threading
 from urllib.parse import urlparse
 from playwright.sync_api import sync_playwright, expect
+def poll(page, script, arg=None, timeout=15000):
+    # Eval-free wait: page.evaluate is allowed under the strict live CSP, while
+    # Playwright's string wait_for_function polling needs unsafe-eval.
+    import time
+    end=time.time()+timeout/1000
+    while True:
+        if page.evaluate(script, arg) if arg is not None else page.evaluate(script): return
+        if time.time()>end: raise TimeoutError(script)
+        page.wait_for_timeout(50)
 import sys
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 from aquarium_editorial import plain_date, related_stories
@@ -29,10 +38,11 @@ try:
         page.on('console',lambda x:errors.append(x.text) if x.type=='error' else None)
         page.on('response',lambda r:failed.append([r.status,r.url]) if r.status>=400 and urlparse(r.url).netloc==urlparse(base).netloc else None)
         def wait_open():
-            page.wait_for_function("document.getElementById('article-reader').open")
-            page.wait_for_function("document.querySelector('.reader-figure img').complete&&document.querySelector('.reader-figure img').naturalWidth>0")
+            poll(page,"()=>document.getElementById('article-reader').open")
+            page.locator('.reader-figure img').evaluate('(i)=>i.decode().catch(()=>0)')
+            poll(page,"()=>document.querySelector('.reader-figure img').complete&&document.querySelector('.reader-figure img').naturalWidth>0")
         def wait_closed():
-            page.wait_for_function("!document.getElementById('article-reader').open&&!history.state?.aquariumJournalReader")
+            poll(page,"()=>!document.getElementById('article-reader').open&&!history.state?.aquariumJournalReader")
             page.evaluate('()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)))')
             assert page.evaluate("getComputedStyle(document.body).position")!='fixed'
         page.goto(base+'/newsletter/',wait_until='networkidle');page.evaluate('document.fonts.ready')
@@ -140,7 +150,7 @@ try:
         assert rel.all_inner_texts()==[r['title'] for r in expected]
         page.locator('#reader-scroll').evaluate('(e)=>e.scrollTop=e.scrollHeight')
         rel.first.click()
-        page.wait_for_function("t=>document.querySelector('#reader-title')?.textContent===t",arg=expected[0]['title'])
+        poll(page,"(t)=>document.querySelector('#reader-title')?.textContent===t",expected[0]['title'])
         assert page.url==url and page.evaluate('history.length')==depth
         assert page.locator('#reader-scroll').evaluate('(e)=>e.scrollTop')==0
         assert page.locator('#reader-content .related-stories a').all_inner_texts()==[r['title'] for r in related_stories(expected[0],stories)]
