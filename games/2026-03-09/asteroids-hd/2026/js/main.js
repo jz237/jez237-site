@@ -1,16 +1,16 @@
 // Asteroids 2026 — game flow, controls, scoring, commentary and the frame loop.
 import * as THREE from '../vendor/three.module.min.js';
-import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS, PERKS, ROSTER, SHADOW, TWISTS, ROCK_KINDS, UPGRADES, UP_KEYS, UP_COST, MEDALS } from './config.js?v=3';
-import { makeWorld, step, drainEvents, STEP, shipOf, LIFE_STEP } from './sim.js?v=3';
-import { AIPilot } from './ai.js?v=3';
-import { Renderer, pickQuality, CALM } from './render.js?v=3';
-import { Director } from './director.js?v=3';
-import { Audio } from './audio.js?v=3';
-import { Input } from './input.js?v=3';
-import { UI, $, hex } from './ui.js?v=3';
-import { Scores } from './scores.js?v=3';
-import { Recorder } from './replay.js?v=3';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=3';
+import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS, PERKS, ROSTER, SHADOW, TWISTS, ROCK_KINDS, UPGRADES, UP_KEYS, UP_COST, MEDALS } from './config.js?v=4';
+import { makeWorld, step, drainEvents, STEP, shipOf, LIFE_STEP } from './sim.js?v=4';
+import { AIPilot } from './ai.js?v=4';
+import { Renderer, pickQuality, CALM } from './render.js?v=4';
+import { Director } from './director.js?v=4';
+import { Audio } from './audio.js?v=4';
+import { Input } from './input.js?v=4';
+import { UI, $, hex } from './ui.js?v=4';
+import { Scores } from './scores.js?v=4';
+import { Recorder } from './replay.js?v=4';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=4';
 
 // ------------------------------------------------------------------ settings
 const SKEY = 'a26.settings.v1';
@@ -1032,6 +1032,7 @@ function handleEvents(list) {
         }
         if (human && G.mode !== 'demo') U.hurt();
         rumble(e.side, 0.7 + 0.15 * e.dmg, 0.6, 160 + 70 * e.dmg);
+        if (G.mode === 'demo' && (e.dmg >= 2 || e.hp <= 1)) { const s2 = W.ships.find((q) => q.side === e.side); if (s2) D.react(W, s2, e.src); }
         if (e.by === 1 && e.side === -1) {
           addScore(e.src === 'shard' ? 300 : e.src === 'ram' ? 200 : 150, e.x, e.z, e.src === 'shard');
           addOre(e.src === 'shard' ? 5 : 2);

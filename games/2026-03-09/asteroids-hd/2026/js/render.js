@@ -2,12 +2,12 @@
 // bends around gravity, instanced noise-carved rocks, ships with trails, shots, hazards, the Maw, and
 // every explosion. Everything is synced from the simulation each frame; nothing here changes W.
 import * as THREE from '../vendor/three.module.min.js';
-import { F, ARENAS, POWERUPS, KIND_INDEX, ROCK_KINDS } from './config.js?v=3';
-import { fwd, dX, dZ } from './sim.js?v=3';
-import { NOISE } from './shaders.js?v=3';
-import { Post } from './post.js?v=3';
-import { Sparks, Smoke, Shards, patchShardMaterial, Lightning, Rings, Ribbon } from './fx.js?v=3';
-import { rockGeometry, buildShip, buildBoss, buildOrb, buildMine, buildDrone } from './models.js?v=3';
+import { F, ARENAS, POWERUPS, KIND_INDEX, ROCK_KINDS } from './config.js?v=4';
+import { fwd, dX, dZ } from './sim.js?v=4';
+import { NOISE } from './shaders.js?v=4';
+import { Post } from './post.js?v=4';
+import { Sparks, Smoke, Shards, patchShardMaterial, Lightning, Rings, Ribbon } from './fx.js?v=4';
+import { rockGeometry, buildShip, buildBoss, buildOrb, buildMine, buildDrone } from './models.js?v=4';
 
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);

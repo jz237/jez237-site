@@ -2,8 +2,8 @@
 // cuts between broadcast shots and, because it can forecast every shot and shard against every ship,
 // sees a big hit coming and drops into slow motion on the right camera before it lands.
 import * as THREE from '../vendor/three.module.min.js';
-import { F } from './config.js?v=3';
-import { dX, dZ, fwd } from './sim.js?v=3';
+import { F } from './config.js?v=4';
+import { dX, dZ, fwd } from './sim.js?v=4';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 const { AW, AH } = F;
@@ -125,22 +125,85 @@ export class Director {
     let best = null;
     for (const s of W.ships) {
       if (!s.alive || s.inv > 0.2 || s.dashT > 0) continue;
-      const test = (x, z, vx, vz, r, dmg) => {
-        const px = dX(s.x, x), pz = dZ(s.z, z);
-        const rvx = vx - s.vx, rvz = vz - s.vz, v2 = rvx * rvx + rvz * rvz;
-        if (v2 < 1) return;
-        const tc = -(px * rvx + pz * rvz) / v2;
-        if (tc < 0.12 || tc > 0.75) return;
-        const cx = px + rvx * tc, cz = pz + rvz * tc;
-        if (Math.hypot(cx, cz) > s.r + r) return;
+      const test = (o, r, dmg, bullet) => {
+        // cheap first: is it even heading our way?
+        const px = dX(s.x, o.x), pz = dZ(s.z, o.z);
+        if (px * px + pz * pz > 40 * 40) return;
+        const rvx = o.vx - s.vx, rvz = o.vz - s.vz;
+        if (px * rvx + pz * rvz >= 0 && px * px + pz * pz > 16) return;
+        const t = this.path(W, s, o, r, bullet);
+        if (t === null) return;
         const lethal = s.hp <= dmg && s.fx.shield <= 0;
         const v = (lethal ? 3 : 1) * dmg;
-        if (!best || v > best.v) best = { v, t: tc, side: s.side, ship: s, x: s.x + s.vx * tc, z: s.z + s.vz * tc, lethal };
+        if (!best || v > best.v) best = { v, t, side: s.side, ship: s, x: s.x + s.vx * t, z: s.z + s.vz * t, lethal, from: o };
       };
-      for (const b of W.bullets) if (b.side !== s.side) test(b.x, b.z, b.vx, b.vz, 0.2, b.dmg);
-      for (const r of W.rocks) if (r.owner === -s.side && r.ownT > 0) test(r.x, r.z, r.vx, r.vz, r.r, 2);
+      for (const b of W.bullets) if (b.side !== s.side) test(b, 0.2, b.dmg, true);
+      for (const r of W.rocks) if (r.owner === -s.side && r.ownT > 0) test(r, r.r, 2, false);
     }
     return best;
+  }
+
+  // step a shot forward (with the same gravity the sim uses); the time it meets ship s, or null if a rock,
+  // the black hole or its range gets it first
+  path(W, s, o, r, bullet) {
+    const h = 1 / 60;
+    let x = s.x + dX(s.x, o.x), z = s.z + dZ(s.z, o.z), vx = o.vx, vz = o.vz;
+    let sx = s.x, sz = s.z;
+    const life = bullet ? o.life : 9;
+    const pulls = [];
+    if (W.hole) pulls.push([W.hole.x, W.hole.z, bullet ? 110 : 45]);
+    for (const w of W.wells) if (w.side !== o.side) pulls.push([w.x, w.z, bullet ? 60 : 70]);
+    for (let t = h; t <= 0.75 && t <= life; t += h) {
+      for (const [gx, gz, m] of pulls) {
+        const dx = gx - x, dz = gz - z, d2 = dx * dx + dz * dz, d = Math.sqrt(d2) || 1, a = m / (d2 + 9);
+        vx += (dx / d) * a * h; vz += (dz / d) * a * h;
+      }
+      x += vx * h; z += vz * h;
+      sx += s.vx * h; sz += s.vz * h;
+      if (W.hole && Math.hypot(x - W.hole.x, z - W.hole.z) < 1.4) return null;
+      if (Math.hypot(x - sx, z - sz) < s.r + r) return t < 0.12 ? null : t;
+      if (bullet) {
+        for (const k of W.rocks) {
+          const kx = k.x + k.vx * t, kz = k.z + k.vz * t;
+          if (Math.abs(kx - x) < k.r + 0.2 && Math.abs(kz - z) < k.r + 0.2 && Math.hypot(kx - x, kz - z) < k.r + 0.15) return null;
+        }
+      }
+    }
+    return null;
+  }
+
+  // a heavy hit just landed (the forecast cannot see every swerve): slow down on the ship that took it
+  react(W, ship, src) {
+    if (this.impact && W.t < this.impact.until) return;
+    this.impact = { ship, side: ship.side, x: ship.x, z: ship.z, until: W.t + 0.7, at: W.t, hole: src === 'hole' };
+    this.shot = { kind: 'impact', side: ship.side };
+    this.shotT = 0;
+    this.slowMo(0.35, 0.65);
+    this.cutT = 2.2;
+  }
+
+  // a ship being dragged toward the black hole
+  holeDanger(W) {
+    if (!W.hole) return null;
+    let best = null;
+    for (const s of W.ships) {
+      if (!s.alive) continue;
+      const dx = s.x - W.hole.x, dz = s.z - W.hole.z, d = Math.hypot(dx, dz) || 1;
+      const inward = -(dx * s.vx + dz * s.vz) / d;
+      if (d < 6 && inward > 2 && (!best || d < best.d)) best = { d, ship: s };
+    }
+    return best;
+  }
+
+  // a wide enough view of every point that matters, centred between them
+  frame(pts, minSpan = 10) {
+    let cx = 0, cz = 0;
+    for (const p of pts) { cx += p[0]; cz += p[1]; }
+    cx /= pts.length; cz /= pts.length;
+    let span = minSpan;
+    for (const p of pts) span = Math.max(span, Math.abs(p[0] - cx) * 1.3 + 4, Math.abs(p[1] - cz) * 2 + 4);
+    const a = this.t * 0.12;
+    return { pos: new THREE.Vector3(cx + Math.sin(a) * span * 0.45, span * 1.25, cz + span * 1.05), look: new THREE.Vector3(cx, 0, cz), fov: 44 };
   }
 
   demoShot(dt, W) {
@@ -149,21 +212,31 @@ export class Director {
     this.scanT -= dt;
     if (this.scanT <= 0) {
       this.scanT = 0.06;
-      const f = this.forecast(W);
-      if (f && (!this.impact || W.t > this.impact.until) && (f.lethal || f.v >= 2)) {
-        this.impact = { ...f, until: W.t + f.t + 0.6, at: W.t + f.t };
-        this.shot = { kind: 'impact', side: f.side };
-        this.shotT = 0;
-        this.slowMo(f.lethal ? 0.2 : 0.4, f.t + (f.lethal ? 1.0 : 0.45));
-        this.cutT = 2.2;
+      // big hits slow the demo down when they land (react); the black hole gets its own moment here
+      const free = !this.impact || W.t > this.impact.until;
+      if (free && (!this.holeT || this.t > this.holeT)) {
+        // time slows as a ship falls toward the black hole: show the ship and the hole together
+        const hd = this.holeDanger(W);
+        if (hd) {
+          this.impact = { ship: hd.ship, side: hd.ship.side, x: hd.ship.x, z: hd.ship.z, hole: true, until: W.t + 0.9, at: W.t + 0.5 };
+          this.shot = { kind: 'impact', side: hd.ship.side };
+          this.shotT = 0;
+          this.holeT = this.t + 8;
+          this.slowMo(0.45, 0.9);
+          this.cutT = 2.2;
+        }
       }
     }
     const ships = W.ships.filter((s) => s.alive);
     if (this.impact && W.t < this.impact.until) {
+      // the ship in danger, what is coming for it, and the black hole if it is close
       const I = this.impact, s = I.ship;
       const x = s.alive ? s.x : I.x, z = s.alive ? s.z : I.z;
-      const a = this.t * 0.15;
-      return { pos: new THREE.Vector3(x + Math.sin(a) * 9, 13, z + 12 + Math.cos(a) * 3), look: new THREE.Vector3(x, 0, z), fov: 42, speed: this.shotT < 0.05 ? 99 : 6, cut: this.shotT < 0.02 };
+      const pts = [[x, z]];
+      const o = I.from;
+      if (o && (W.bullets.includes(o) || W.rocks.includes(o))) pts.push([x + dX(x, o.x), z + dZ(z, o.z)]);
+      if (W.hole && (I.hole || Math.hypot(x - W.hole.x, z - W.hole.z) < 14)) pts.push([W.hole.x, W.hole.z]);
+      return { ...this.frame(pts), speed: this.shotT < 0.05 ? 99 : 6, cut: this.shotT < 0.02 };
     }
     if (!this.shot || this.cutT <= 0 || this.shot.kind === 'impact') {
       const kinds = W.boss ? ['wide', 'boss', 'chase', 'duel'] : ['wide', 'duel', 'chase', 'hero', 'wide'];

@@ -80,8 +80,8 @@ export function rockGeometry(seed, detail = 4) {
 // nose points down -z; about 2.3 units long
 function extrude(shape, depth, bevel = 0.06) {
   const g = new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled: true, bevelSize: bevel, bevelThickness: bevel, bevelSegments: 2, curveSegments: 6 });
-  g.rotateX(-Math.PI / 2);
-  g.translate(0, -depth / 2, 0);
+  g.rotateX(Math.PI / 2);
+  g.translate(0, depth / 2, 0);
   return g;
 }
 function shapeOf(pts) {
