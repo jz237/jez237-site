@@ -461,7 +461,7 @@ index c536c46..720fe45 100644
  		glEnable(GL_SCISSOR_TEST);
 diff --git a/d2/arch/ogl/ogl_post.c b/d2/arch/ogl/ogl_post.c
 new file mode 100644
-index 0000000..139f5d8
+index 0000000..f493a72
 --- /dev/null
 +++ b/d2/arch/ogl/ogl_post.c
 @@ -0,0 +1,736 @@
@@ -579,7 +579,7 @@ index 0000000..139f5d8
 +	"uniform vec2 thresh;\n"
 +	"in vec2 v_uv;\n"
 +	"out vec4 o;\n"
-+	"vec3 at(vec2 d) { return texture(src, v_uv + d * texel).rgb; }\n"
++	"vec3 at(vec2 d) { return min(texture(src, v_uv + d * texel).rgb, vec3(64.0)); }\n"
 +	"float luma(vec3 c) { return dot(c, vec3(0.2126, 0.7152, 0.0722)); }\n"
 +	"void main() {\n"
 +	"	vec3 a = at(vec2(-2.0, -2.0)), b = at(vec2(0.0, -2.0)), c = at(vec2(2.0, -2.0));\n"
@@ -683,7 +683,7 @@ index 0000000..139f5d8
 +	"float hash(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }\n"
 +	"float lum(vec3 c) { return dot(c, vec3(0.2126, 0.7152, 0.0722)); }\n"
 +	"void main() {\n"
-+	"	vec3 c = texture(scene, v_uv).rgb;\n"
++	"	vec3 c = min(texture(scene, v_uv).rgb, vec3(64.0));\n"	// no infinite light
 +	"#ifdef AO\n"
 +	"	float a = texture(aotex, v_uv).r;\n"
 +	"	c *= mix(a, 1.0, smoothstep(0.7, 1.5, lum(c)));\n"	// lights themselves stay bright
@@ -726,7 +726,7 @@ index 0000000..139f5d8
 +	"	float k = look.y;\n"
 +	"	float t = m <= k ? m : k + (1.0 - k) * (1.0 - exp((k - m) / (1.0 - k)));\n"
 +	"	c *= t / max(m, 1e-4);\n"
-+	"	c = mix(c, vec3(t), smoothstep(1.0, 6.0, m) * 0.6);\n"	// very bright light burns white
++	"	c = mix(c, vec3(t), smoothstep(1.5, 8.0, m) * 0.35);\n"	// very bright light burns white
 +	"	c = clamp(c, 0.0, 1.0);\n"
 +	"	c = mix(c, c * c * (3.0 - 2.0 * c), look.z);\n"
 +	"	vec2 q = v_uv - 0.5;\n"
@@ -1079,7 +1079,7 @@ index 0000000..139f5d8
 +		glUseProgram(p);
 +		glUniform2f(glGetUniformLocation(p, "texel"), 1.0f / src->w, 1.0f / src->h);
 +		if (!i)
-+			glUniform2f(glGetUniformLocation(p, "thresh"), d2web_tune(7, 0.72f), d2web_tune(8, 0.36f));
++			glUniform2f(glGetUniformLocation(p, "thresh"), d2web_tune(7, 0.6f), d2web_tune(8, 0.36f));
 +		bind_target(&P.bloom[i]);
 +		bind_texture(0, src->tex);
 +		draw_quad();
@@ -1103,7 +1103,7 @@ index 0000000..139f5d8
 +	glUseProgram(P.ssao);
 +	set_view(P.ssao);
 +	glUniform2f(glGetUniformLocation(P.ssao, "texel"), 1.0f / P.w, 1.0f / P.h);
-+	glUniform2f(glGetUniformLocation(P.ssao, "ao"), d2web_tune(16, 5.0f), d2web_tune(17, 1.3f));
++	glUniform2f(glGetUniformLocation(P.ssao, "ao"), d2web_tune(16, 6.0f), d2web_tune(17, 2.0f));
 +	bind_target(&P.ao[0]);
 +	bind_texture(4, P.depth);
 +	draw_quad();
@@ -1123,7 +1123,7 @@ index 0000000..139f5d8
 +{
 +	float pos[MAX_HAZE][4], col[MAX_HAZE][3], hp[3], hd[3];
 +	int n = plight_haze_lights(pos, col, MAX_HAZE);
-+	glUniform4f(glGetUniformLocation(p, "hazep"), d2web_tune(13, 0.03f), d2web_tune(14, 0.0025f), d2web_tune(15, 0.0015f), 0);
++	glUniform4f(glGetUniformLocation(p, "hazep"), d2web_tune(13, 0.06f), d2web_tune(14, 0.0025f), d2web_tune(15, 0.0015f), 0);
 +	glUniform1i(glGetUniformLocation(p, "nhaze"), n);
 +	if (n) {
 +		glUniform4fv(glGetUniformLocation(p, "hpos"), n, pos[0]);
@@ -1164,7 +1164,7 @@ index 0000000..139f5d8
 +	fxaa = !P.samples;
 +	fin = final_program(P.look);
 +	glUseProgram(fin);
-+	glUniform4f(glGetUniformLocation(fin, "look"), d2web_tune(9, 0.32f), d2web_tune(10, 0.8f), d2web_tune(11, 0.1f), d2web_tune(12, 0.22f));
++	glUniform4f(glGetUniformLocation(fin, "look"), d2web_tune(9, 0.6f), d2web_tune(10, 0.8f), d2web_tune(11, 0.2f), d2web_tune(12, 0.32f));
 +	set_view(fin);
 +	if (P.look & LOOK_HAZE)
 +		haze_uniforms(fin);
@@ -4580,10 +4580,10 @@ index 1944a8c..c7d0f7e 100644
  	PlayerCfg.SelectAfterFire = 1;  /* SelectAfterFire */
 diff --git a/d2/main/plight.c b/d2/main/plight.c
 new file mode 100644
-index 0000000..b62d8ee
+index 0000000..9327661
 --- /dev/null
 +++ b/d2/main/plight.c
-@@ -0,0 +1,689 @@
+@@ -0,0 +1,699 @@
 +/*
 + * Per-pixel lighting of the mine's walls (browser edition, WebGL 2). Walls are drawn with a
 + * shader that lights each pixel from the nearest moving lights (shots, flares, explosions,
@@ -4649,7 +4649,8 @@ index 0000000..b62d8ee
 +	"#define MAX_LAMPS 4\n"
 +	"uniform sampler2D tex;\n"
 +	"uniform vec3 unscale;\n"
-+	"uniform vec4 mat;\n"			// emissive, bump, gloss, kind
++	"uniform vec4 mat;\n"
++	"uniform float pools;\n"		// 1: the lamp pools shade it (0 for moving surfaces alone)			// emissive, bump, gloss, kind
 +	"uniform vec2 texsize;\n"
 +	"uniform int nlights;\n"
 +	"uniform vec4 lpos[MAX_LIGHTS];\n"
@@ -4659,7 +4660,8 @@ index 0000000..b62d8ee
 +	"uniform int nlamps;\n"
 +	"uniform vec4 lamppos[MAX_LAMPS];\n"	// xyz, w strength
 +	"uniform vec3 lampcol[MAX_LAMPS];\n"
-+	"uniform vec4 tune[2];\n"	// relief, bump depth, headlight, moving-light shine; lamp shine, glow, light cap
++	"uniform vec4 tune[3];\n"	// relief, bump depth, headlight, moving-light shine; lamp shine, glow, light cap,
++					// moving-light gain; lamp pools: strength, dark away from lamps, bright near, reach
 +	"in vec2 v_uv;\n"
 +	"in vec4 v_color;\n"
 +	"in vec3 v_pos;\n"
@@ -4730,7 +4732,7 @@ index 0000000..b62d8ee
 +	"	vec3 base = v_color.rgb;\n"
 +	"	float lit = min(lum(base) * 2.0, 1.0);\n"
 +	// the room's lamps: the direction the bumps catch light from, and highlights
-+	"	vec3 ld = vec3(0.0), spec = vec3(0.0);\n"
++	"	vec3 ld = vec3(0.0), spec = vec3(0.0), pool = vec3(0.0);\n"
 +	"	float lw = 0.0;\n"
 +	"	for (int i = 0; i < MAX_LAMPS; i++) {\n"
 +	"		if (i >= nlamps) break;\n"
@@ -4741,7 +4743,12 @@ index 0000000..b62d8ee
 +	"		ld += L * f;\n"
 +	"		lw += f;\n"
 +	"		spec += lampcol[i] * f * pow(max(dot(Nb, normalize(L + V)), 0.0), shin);\n"
++	"		pool += lampcol[i] * max(dot(Nb, L), 0.0) * lamppos[i].w / (1.0 + d2 / (tune[2].w * tune[2].w));\n"
 +	"	}\n"
++	// pools of the lamps' own colored light; away from them the room falls darker
++	"	float pa = lum(pool), amt = pa / (pa + 0.4);\n"
++	"	vec3 tint = pa > 1e-4 ? pool / pa : vec3(1.0);\n"
++	"	vec3 shade = mix(vec3(1.0), mix(vec3(tune[2].y), tint * tune[2].z, amt), tune[2].x * pools);\n"
 +	"	vec3 Ld = lw > 1e-4 ? normalize(ld) : V;\n"
 +	"	float relief = clamp(1.0 + (dot(Nb, Ld) - dot(N, Ld)) * tune[0].x, 0.35, 1.7);\n"
 +	"	spec *= gloss * lit * tune[1].x;\n"
@@ -4752,7 +4759,7 @@ index 0000000..b62d8ee
 +	"		vec3 L = lpos[i].xyz - P;\n"
 +	"		float d = length(L);\n"
 +	"		L /= max(d, 1e-3);\n"
-+	"		vec3 e = lcol[i] * (smoothstep(lpos[i].w, lpos[i].w * 0.7, d) / max(d, 4.0));\n"
++	"		vec3 e = lcol[i] * (tune[1].w * smoothstep(lpos[i].w, lpos[i].w * 0.7, d) / max(d, 4.0));\n"
 +	"		dyn += e * (0.25 + 0.75 * max(dot(Nb, L), 0.0));\n"
 +	"		spec += e * pow(max(dot(Nb, normalize(L + V)), 0.0), shin) * gloss * tune[0].w;\n"
 +	"	}\n"
@@ -4766,11 +4773,11 @@ index 0000000..b62d8ee
 +	"		dyn += vec3(h) * (0.25 + 0.75 * max(dot(Nb, L), 0.0));\n"
 +	"		spec += vec3(h) * pow(max(dot(Nb, normalize(L + V)), 0.0), shin) * gloss * 0.5;\n"
 +	"	}\n"
-+	"	vec3 light = min(base * relief + dyn, vec3(tune[1].z));\n"
++	"	vec3 light = min(base * relief * shade + dyn, vec3(tune[1].z));\n"
 +	"	vec3 rgb = c.rgb * light + spec * mix(vec3(1.0), c.rgb * 1.6, 0.5);\n"
 +	// a lamp's bright parts give light: they glow
 +	"	float m = max(max(c.r, c.g), c.b);\n"
-+	"	rgb += c.rgb * smoothstep(0.45, 0.85, m) * mat.x * tune[1].y;\n"
++	"	rgb += c.rgb * smoothstep(0.55, 0.95, m) * mat.x * tune[1].y;\n"
 +	// reflections: march the reflected ray through last frame's view until it passes behind
 +	// what was seen there; shiny surfaces take that color, more at grazing angles
 +	"	if (refl.y > 0.5 && gloss > 0.4) {\n"	// smooth metal and water, not rock
@@ -4812,7 +4819,7 @@ index 0000000..b62d8ee
 +static struct {
 +	int tried;
 +	GLuint prog;
-+	GLint time, refl, reproj, hscale, tune, unscale, mat, texsize, nlights, lpos, lcol, headpos, headdir, nlamps, lamppos, lampcol;
++	GLint pools, time, refl, reproj, hscale, tune, unscale, mat, texsize, nlights, lpos, lcol, headpos, headdir, nlamps, lamppos, lampcol;
 +} W;
 +
 +typedef struct lamp {
@@ -4855,6 +4862,7 @@ index 0000000..b62d8ee
 +		glUniform1i(glGetUniformLocation(p, "tex"), 0);
 +		W.tune = glGetUniformLocation(p, "tune");
 +		W.time = glGetUniformLocation(p, "time");
++		W.pools = glGetUniformLocation(p, "pools");
 +		W.refl = glGetUniformLocation(p, "refl");
 +		W.reproj = glGetUniformLocation(p, "reproj");
 +		W.hscale = glGetUniformLocation(p, "hscale");
@@ -5100,8 +5108,9 @@ index 0000000..b62d8ee
 +	float pos[PP_MAX_LIGHTS][4], col[PP_MAX_LIGHTS][3];
 +	int i;
 +#ifdef __EMSCRIPTEN__
-+	glUniform4f(W.tune, d2web_tune(0, 1.5f), d2web_tune(1, 3.0f), d2web_tune(2, 0.08f), d2web_tune(3, 1.0f));
-+	glUniform4f(W.tune + 1, d2web_tune(4, 1.0f), d2web_tune(5, 1.2f), d2web_tune(6, 1.4f), 0);
++	glUniform4f(W.tune, d2web_tune(0, 2.6f), d2web_tune(1, 5.0f), d2web_tune(2, 0.1f), d2web_tune(3, 1.6f));
++	glUniform4f(W.tune + 1, d2web_tune(4, 2.5f), d2web_tune(5, 0.8f), d2web_tune(6, 1.8f), d2web_tune(24, 1.6f));
++	glUniform4f(W.tune + 2, d2web_tune(20, 1.0f), d2web_tune(21, 0.42f), d2web_tune(22, 1.9f), d2web_tune(23, 36.0f));
 +#endif
 +	glUniform3f(W.unscale, 1 / f2fl(Matrix_scale.x), 1 / f2fl(Matrix_scale.y), 1 / f2fl(Matrix_scale.z));
 +	glUniform1f(W.time, (float)(GameTime64 % (F1_0 * 3600LL)) / F1_0);
@@ -5205,6 +5214,7 @@ index 0000000..b62d8ee
 +		glUniform4f(W.mat, lit ? 1.0f : 0.0f, m->bump, m->gloss, kind);
 +	else
 +		glUniform4f(W.mat, 0, 0, 0, kind);
++	glUniform1f(W.pools, Face.lit ? 1 : 0);
 +	glUniform2f(W.texsize, bm->gltexture->tw, bm->gltexture->th);
 +	return 1;
 +}
@@ -6065,7 +6075,7 @@ index c53598c..97f0161 100644
  		return true;
  	}
 diff --git a/d2/xmodel/xmodel.cpp b/d2/xmodel/xmodel.cpp
-index d75a377..fcff1c2 100644
+index d75a377..decdd7d 100644
 --- a/d2/xmodel/xmodel.cpp
 +++ b/d2/xmodel/xmodel.cpp
 @@ -1,5 +1,6 @@
@@ -6811,8 +6821,8 @@ index d75a377..fcff1c2 100644
 +			float f = fabsf(n[0] * d[0] + n[1] * d[1] + n[2] * d[2]);
 +			float l = 0.25f + 0.75f * f;
 +			float *c = rm.verts[i].color;
-+			if (shine) {
-+				float f2 = f * f, f4 = f2 * f2, f16 = f4 * f4 * f4 * f4;
++			if (shine) {	// (some models' normals aren't unit length)
++				float fs = f < 1 ? f : 1, f2 = fs * fs, f4 = f2 * f2, f16 = f4 * f4 * f4 * f4;
 +				l += (f16 * 0.45f + f16 * f16 * f16 * 0.35f) * shine;
 +			}
 +			c[0] = l * lr;
