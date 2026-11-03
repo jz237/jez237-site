@@ -1,3 +1,42 @@
+diff --git a/d2/2d/font.c b/d2/2d/font.c
+index 5f62f04..3d2f1b9 100644
+--- a/d2/2d/font.c
++++ b/d2/2d/font.c
+@@ -701,6 +701,9 @@ int ogl_internal_string(int x, int y, const char *s )
+ 
+ 	if (grd_curscreen->sc_canvas.cv_bitmap.bm_type != BM_OGL)
+ 		Error("carp.\n");
++	// glyphs drawn several times their size get smooth edges at screen resolution
++	float glyph_scale = FONTSCALE_X(1) < FONTSCALE_Y(1) ? FONTSCALE_X(1) : FONTSCALE_Y(1);
++	int sharp = ogl_glyph_begin(glyph_scale);
+ 	while (next_row != NULL)
+ 	{
+ 		text_ptr1 = next_row;
+@@ -739,10 +742,14 @@ int ogl_internal_string(int x, int y, const char *s )
+ 				if (underline)
+ 				{
+ 					ubyte save_c = (unsigned char) COLOR;
+-					
++
++					if (sharp)
++						ogl_shader_end();
+ 					gr_setcolor(grd_curcanv->cv_font_fg_color);
+ 					gr_rect(xx, yy + grd_curcanv->cv_font->ft_baseline + 2, xx + grd_curcanv->cv_font->ft_w, yy + grd_curcanv->cv_font->ft_baseline + 3);
+ 					gr_setcolor(save_c);
++					if (sharp)
++						ogl_glyph_begin(glyph_scale);
+ 				}
+ 
+ 				continue;
+@@ -768,6 +775,8 @@ int ogl_internal_string(int x, int y, const char *s )
+ 		}
+ 
+ 	}
++	if (sharp)
++		ogl_shader_end();
+ 	return 0;
+ }
+ 
 diff --git a/d2/arch/include/joy.h b/d2/arch/include/joy.h
 index 8e3f48d..872cf6a 100644
 --- a/d2/arch/include/joy.h
@@ -45,7 +84,7 @@ index c5cca0b..c0e7162 100644
  	ogl_init_prog();
  #endif
 diff --git a/d2/arch/ogl/ogl.c b/d2/arch/ogl/ogl.c
-index c536c46..d17f458 100644
+index c536c46..98f8a7b 100644
 --- a/d2/arch/ogl/ogl.c
 +++ b/d2/arch/ogl/ogl.c
 @@ -10,7 +10,13 @@
@@ -91,12 +130,24 @@ index c536c46..d17f458 100644
  		}
  		else
  		{
-@@ -1644,6 +1656,174 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
+@@ -1093,7 +1105,11 @@ bool ogl_ubitblt_i(int dw,int dh,int dx,int dy, int sw, int sh, int sx, int sy,
+ 	glVertexPointer(2, GL_FLOAT, 0, vertex_array);
+ 	glColorPointer(4, GL_FLOAT, 0, color_array);
+ 	glTexCoordPointer(2, GL_FLOAT, 0, texcoord_array);  
++	// movies: a sharp upscale instead of a bilinear stretch
++	int sharp = ogl_upscale_begin(&tex, 0, 0, tex.u, tex.v, dh / (float)sh, 1);
+ 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);//replaced GL_QUADS
++	if (sharp)
++		ogl_shader_end();
+ 
+ 	glDisableClientState(GL_VERTEX_ARRAY);
+ 	glDisableClientState(GL_COLOR_ARRAY);
+@@ -1644,6 +1660,174 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
  }
  #endif
  
 +// the bitmap's palette indices, RLE decoded (into decodebuf)
-+static unsigned char *ogl_bitmap_indices(grs_bitmap *bm)
++unsigned char *ogl_bitmap_indices(grs_bitmap *bm)
 +{
 +	unsigned char *sbits, *dbits;
 +	int i, data_offset = bm->bm_flags & BM_FLAG_RLE_BIG ? 2 : 1;
@@ -266,7 +317,7 @@ index c536c46..d17f458 100644
  void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  {
  	unsigned char *buf;
-@@ -1663,23 +1843,18 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+@@ -1663,23 +1847,18 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  		png_data pdata;
  
  		sprintf(filename, /*"textures/"*/ "%s.png", bitmapname);
@@ -299,6 +350,219 @@ index c536c46..d17f458 100644
  				#ifdef OGL_MERGE
  				if (bm->bm_flags & BM_FLAG_SUPER_TRANSPARENT)
  					ogl_loadpngmask(&pdata, bm, texfilt);
+@@ -1959,7 +2138,12 @@ bool ogl_ubitmapm_cs(int x, int y,int dw, int dh, grs_bitmap *bm,int c, int scal
+ 	glVertexPointer(2, GL_FLOAT, 0, vertex_array);
+ 	glColorPointer(4, GL_FLOAT, 0, color_array);
+ 	glTexCoordPointer(2, GL_FLOAT, 0, texcoord_array);  
++	// HUD, menu and title art drawn larger than its pixels: a sharp upscale
++	float texels = (v2 - v1) * bm->gltexture->th;
++	int sharp = texels > 0 && ogl_upscale_begin(bm->gltexture, u1, v1, u2, v2, (yo - yf) * last_height * h / texels, 0);
+ 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);//replaced GL_QUADS
++	if (sharp)
++		ogl_shader_end();
+ 	glDisableClientState(GL_VERTEX_ARRAY);
+ 	glDisableClientState(GL_COLOR_ARRAY);
+ 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+diff --git a/d2/arch/ogl/ogl_shader.c b/d2/arch/ogl/ogl_shader.c
+new file mode 100644
+index 0000000..e726f89
+--- /dev/null
++++ b/d2/arch/ogl/ogl_shader.c
+@@ -0,0 +1,194 @@
++/*
++ * Shaders for 2D art drawn much larger than its pixels (browser edition). Movies get an
++ * edge-aware sharp upscale and HUD, menu and title art a sharp Catmull-Rom one, instead of a
++ * bilinear stretch; font glyphs keep their shapes with smooth edges at screen resolution
++ * instead of blurred or blocky pixels.
++ *
++ * The GL emulation runs these as user programs: it rewrites the legacy built-ins (gl_Vertex,
++ * gl_MultiTexCoord0, gl_Color, ftransform()) and keeps feeding the client arrays as usual.
++ */
++
++#define GL_GLEXT_PROTOTYPES
++#include <GL/gl.h>
++#include <GL/glext.h>
++#include <stdio.h>
++#include "ogl_init.h"
++#include "console.h"
++#ifdef __EMSCRIPTEN__
++#include "../web/web.h"
++#endif
++
++static const char *vs_src =
++	"void main() {\n"
++	"	gl_TexCoord[0] = gl_MultiTexCoord0;\n"
++	"	gl_FrontColor = gl_Color;\n"
++	"	gl_Position = ftransform();\n"
++	"}\n";
++
++// Catmull-Rom in nine bilinear taps (positions in texels), the result clamped to the four
++// nearest texels so edges stay sharp without halos. lim keeps taps inside the image (textures
++// are padded to a power of two, and HUD pieces can share one). Movies (MOVIE defined) also
++// blend Catmull-Rom samples along each edge, which smooths the staircase of their low-res
++// pixels, then sharpen. Transparent texels are black with alpha 0, so dividing by alpha keeps
++// dark fringes off the edges of cut-out art.
++static const char *upscale_fs_src =
++	"uniform sampler2D tex;\n"
++	"uniform vec2 size;\n"
++	"uniform vec4 lim;\n"
++	"vec4 at(vec2 t) { return texture2D(tex, clamp(t / size, lim.xy, lim.zw)); }\n"
++	"vec4 cr(vec2 p) {\n"
++	"	vec2 t1 = floor(p - 0.5) + 0.5;\n"
++	"	vec2 f = p - t1;\n"
++	"	vec2 w0 = f * (-0.5 + f * (1.0 - 0.5 * f));\n"
++	"	vec2 w1 = 1.0 + f * f * (-2.5 + 1.5 * f);\n"
++	"	vec2 w2 = f * (0.5 + f * (2.0 - 1.5 * f));\n"
++	"	vec2 w3 = f * f * (-0.5 + 0.5 * f);\n"
++	"	vec2 w12 = w1 + w2;\n"
++	"	vec2 u0 = t1 - 1.0, u3 = t1 + 2.0, u12 = t1 + w2 / w12;\n"
++	"	return (at(vec2(u0.x, u0.y)) * w0.x + at(vec2(u12.x, u0.y)) * w12.x + at(vec2(u3.x, u0.y)) * w3.x) * w0.y\n"
++	"		+ (at(vec2(u0.x, u12.y)) * w0.x + at(vec2(u12.x, u12.y)) * w12.x + at(vec2(u3.x, u12.y)) * w3.x) * w12.y\n"
++	"		+ (at(vec2(u0.x, u3.y)) * w0.x + at(vec2(u12.x, u3.y)) * w12.x + at(vec2(u3.x, u3.y)) * w3.x) * w3.y;\n"
++	"}\n"
++	"float lum(vec4 c) { return dot(c.rgb, vec3(0.3, 0.59, 0.11)); }\n"
++	"void main() {\n"
++	"	vec2 p = gl_TexCoord[0].xy * size;\n"
++	"	vec4 c = cr(p);\n"
++	"#ifdef MOVIE\n"
++	"	vec2 g = vec2(lum(at(p + vec2(1.0, 0.0))) - lum(at(p - vec2(1.0, 0.0))),\n"
++	"		lum(at(p + vec2(0.0, 1.0))) - lum(at(p - vec2(0.0, 1.0))));\n"
++	"	float gm = length(g) + 1e-6;\n"
++	"	vec2 t = vec2(-g.y, g.x) / gm;\n"
++	"	vec4 along = (c * 0.4 + (cr(p - t * 0.75) + cr(p + t * 0.75)) * 0.3 + (cr(p - t * 1.5) + cr(p + t * 1.5)) * 0.15) / 1.3;\n"
++	"	c = mix(c, along, clamp(gm * 6.0, 0.0, 1.0));\n"
++	"	vec4 blur = (at(p + vec2(0.7, 0.7)) + at(p + vec2(-0.7, 0.7)) + at(p + vec2(0.7, -0.7)) + at(p + vec2(-0.7, -0.7))) * 0.25;\n"
++	"	c += (c - blur) * 0.6;\n"
++	"#endif\n"
++	"	vec2 n = floor(p - 0.5) + 0.5;\n"
++	"	vec4 a = at(n), b = at(n + vec2(1.0, 0.0)), d = at(n + vec2(0.0, 1.0)), e = at(n + 1.0);\n"
++	"	c = clamp(c, min(min(a, b), min(d, e)), max(max(a, b), max(d, e)));\n"
++	"	gl_FragColor = vec4(c.rgb / max(c.a, 0.004), c.a) * gl_Color;\n"
++	"}\n";
++
++// The 0.5 coverage edge of the bilinear-filtered glyph, antialiased over one screen pixel.
++// Transparent texels are black with alpha 0, so rgb / alpha is the glyph's own color.
++static const char *glyph_fs_src =
++	"uniform sampler2D tex;\n"
++	"uniform float soft;\n"
++	"void main() {\n"
++	"	vec4 c = texture2D(tex, gl_TexCoord[0].xy);\n"
++	"	float a = smoothstep(0.5 - soft, 0.5 + soft, c.a);\n"
++	"	gl_FragColor = vec4(c.rgb / max(c.a, 0.004), a) * gl_Color;\n"
++	"}\n";
++
++static GLuint compile(GLenum type, const char *defines, const char *src)
++{
++	GLint ok = 0;
++	GLuint s = glCreateShader(type);
++	const char *parts[2] = { defines, src };
++	glShaderSource(s, 2, parts, NULL);
++	glCompileShader(s);
++	glGetShaderiv(s, GL_COMPILE_STATUS, &ok);
++	if (!ok) {
++		char log[512];
++		glGetShaderInfoLog(s, sizeof(log), NULL, log);
++		con_printf(CON_URGENT, "shader: %s\n", log);
++		glDeleteShader(s);
++		return 0;
++	}
++	return s;
++}
++
++static GLuint link(const char *defines, const char *fs_src)
++{
++	GLint ok = 0;
++	GLuint vs = compile(GL_VERTEX_SHADER, "", vs_src), fs = compile(GL_FRAGMENT_SHADER, defines, fs_src), p;
++	if (!vs || !fs)
++		return 0;
++	p = glCreateProgram();
++	glAttachShader(p, vs);
++	glAttachShader(p, fs);
++	glLinkProgram(p);
++	glGetProgramiv(p, GL_LINK_STATUS, &ok);
++	if (!ok) {
++		char log[512];
++		glGetProgramInfoLog(p, sizeof(log), NULL, log);
++		con_printf(CON_URGENT, "shader link: %s\n", log);
++		glDeleteProgram(p);
++		return 0;
++	}
++	return p;
++}
++
++typedef struct upscale_shader {
++	GLuint prog;
++	GLint size, lim;
++} upscale_shader;
++static upscale_shader upscale[2];	// art, movies
++static GLuint glyph_prog, active;
++static GLint glyph_soft;
++static int tried;
++
++static void upscale_init(upscale_shader *u, const char *defines)
++{
++	if (!(u->prog = link(defines, upscale_fs_src)))
++		return;
++	glUseProgram(u->prog);
++	glUniform1i(glGetUniformLocation(u->prog, "tex"), 0);
++	u->size = glGetUniformLocation(u->prog, "size");
++	u->lim = glGetUniformLocation(u->prog, "lim");
++}
++
++static int ogl_shaders_ready(void)
++{
++	if (!tried) {
++		tried = 1;
++		upscale_init(&upscale[0], "");
++		upscale_init(&upscale[1], "#define MOVIE 1\n");
++		if ((glyph_prog = link("", glyph_fs_src))) {
++			glUseProgram(glyph_prog);
++			glUniform1i(glGetUniformLocation(glyph_prog, "tex"), 0);
++			glyph_soft = glGetUniformLocation(glyph_prog, "soft");
++		}
++		glUseProgram(0);
++	}
++	return upscale[0].prog && upscale[1].prog && glyph_prog;
++}
++
++int ogl_sharp_enabled(void)
++{
++#ifdef __EMSCRIPTEN__
++	return d2web_option(D2WEB_OPTION_SHARP) && ogl_shaders_ready();
++#else
++	return 0;
++#endif
++}
++
++#define MIN_SCALE 1.25f
++
++// For the part u1,v1 - u2,v2 of a texture drawn magnified (scale = screen pixels per texel).
++// Not while glyphs are drawn: they have their own shader.
++int ogl_upscale_begin(ogl_texture *tex, float u1, float v1, float u2, float v2, float scale, int movie)
++{
++	upscale_shader *u = &upscale[movie ? 1 : 0];
++	if (scale < MIN_SCALE || active || !tex->tw || !tex->th || !ogl_sharp_enabled())
++		return 0;
++	glUseProgram(active = u->prog);
++	glUniform2f(u->size, tex->tw, tex->th);
++	glUniform4f(u->lim, u1 + 0.5f / tex->tw, v1 + 0.5f / tex->th, u2 - 0.5f / tex->tw, v2 - 0.5f / tex->th);
++	return 1;
++}
++
++// scale = screen pixels per glyph texel
++int ogl_glyph_begin(float scale)
++{
++	if (scale < MIN_SCALE || !ogl_sharp_enabled())
++		return 0;
++	glUseProgram(active = glyph_prog);
++	glUniform1f(glyph_soft, 0.5f / scale);
++	return 1;
++}
++
++void ogl_shader_end(void)
++{
++	glUseProgram(active = 0);
++}
 diff --git a/d2/arch/sdl/event.c b/d2/arch/sdl/event.c
 index 5a20a70..14d4a74 100644
 --- a/d2/arch/sdl/event.c
@@ -475,10 +739,10 @@ index 0000000..f8c55f7
 +#include <SDL.h>
 diff --git a/d2/arch/web/library_d2web.js b/d2/arch/web/library_d2web.js
 new file mode 100644
-index 0000000..6eee67e
+index 0000000..2a34b15
 --- /dev/null
 +++ b/d2/arch/web/library_d2web.js
-@@ -0,0 +1,338 @@
+@@ -0,0 +1,343 @@
 +// Emscripten JS library: browser glue for the Descent II web build.
 +// The page fills Module.d2cd.tracks[n] with object URLs of the ripped CD tracks
 +// (index = CD track number; track 1 is the data track and stays empty).
@@ -761,6 +1025,11 @@ index 0000000..6eee67e
 +    return 1;
 +  },
 +
++  d2web_option: (which) => {
++    const o = Module.d2options || {};
++    return o[['sharp', 'effects'][which]] === false ? 0 : 1;
++  },
++
 +  d2web_frame_wait__deps: ['$D2Touch'],
 +  d2web_frame_wait__async: true,
 +  d2web_frame_wait: () => Asyncify.handleSleep((wakeUp) => {
@@ -982,10 +1251,10 @@ index 0000000..bc5fa7e
 +}
 diff --git a/d2/arch/web/web.c b/d2/arch/web/web.c
 new file mode 100644
-index 0000000..d92f38d
+index 0000000..e6a9c5e
 --- /dev/null
 +++ b/d2/arch/web/web.c
-@@ -0,0 +1,189 @@
+@@ -0,0 +1,196 @@
 +/*
 + * Browser (Emscripten) replacements for desktop-only pieces:
 + * message boxes, GLU mipmapping and GL 1.1 calls WebGL lacks.
@@ -1169,6 +1438,13 @@ index 0000000..d92f38d
 +	return last;
 +}
 +
++/* Sets a robot's shields to percent of its full strength (damaged robots smoke). */
++EMSCRIPTEN_KEEPALIVE void d2web_test_shields(int objnum, int percent)
++{
++	if (objnum >= 0 && objnum <= Highest_object_index && Objects[objnum].type == OBJ_ROBOT)
++		Objects[objnum].shields = Robot_info[Objects[objnum].id].strength * percent / 100;
++}
++
 +/* 0 draws the game's own models instead of the loaded high-resolution ones. */
 +extern int xmodel_enabled;
 +EMSCRIPTEN_KEEPALIVE void d2web_test_hires_models(int on)
@@ -1177,10 +1453,10 @@ index 0000000..d92f38d
 +}
 diff --git a/d2/arch/web/web.h b/d2/arch/web/web.h
 new file mode 100644
-index 0000000..7430492
+index 0000000..1a6eed8
 --- /dev/null
 +++ b/d2/arch/web/web.h
-@@ -0,0 +1,73 @@
+@@ -0,0 +1,78 @@
 +/* Browser (Emscripten) glue for D2X-Redux. Implemented in library_d2web.js. */
 +#ifndef _D2WEB_H
 +#define _D2WEB_H
@@ -1238,6 +1514,11 @@ index 0000000..7430492
 +#define D2WEB_TOUCH_WEAPON		128
 +#define D2WEB_TOUCH_SECONDARY	256
 +#define D2WEB_TOUCH_MAP			512
++
++/* The page's look options (Module.d2options; on unless set false). */
++int d2web_option(int which);
++#define D2WEB_OPTION_SHARP		0	/* sharp upscaling of movies and smooth text */
++#define D2WEB_OPTION_EFFECTS	1	/* light halos, smoke and sparks */
 +
 +/* True once after a gamepad was connected or removed. */
 +int d2web_gamepads_changed(void);
@@ -1365,7 +1646,7 @@ index 0000000..b33cc74
 +#define SDLK_WORLD_94 0
 +#define SDLK_WORLD_95 0
 diff --git a/d2/include/ogl_init.h b/d2/include/ogl_init.h
-index af0b258..ec43620 100644
+index af0b258..c1f44b5 100644
 --- a/d2/include/ogl_init.h
 +++ b/d2/include/ogl_init.h
 @@ -11,7 +11,13 @@
@@ -1382,6 +1663,22 @@ index af0b258..ec43620 100644
  #ifdef _WIN32
  #include "loadgl.h"
  int ogl_init_load_library(void);
+@@ -79,6 +85,15 @@ extern int gl_initialized;
+ extern int active_texture_unit;
+ extern GLfloat ogl_maxanisotropy;
+ 
++// a bitmap's palette indices, RLE decoded (into a buffer shared with the next call)
++unsigned char *ogl_bitmap_indices(grs_bitmap *bm);
++
++// ogl_shader.c: sharp upscaling of movies and smooth-edged font glyphs
++int ogl_sharp_enabled(void);
++int ogl_upscale_begin(ogl_texture *tex, float u1, float v1, float u2, float v2, float scale, int movie);
++int ogl_glyph_begin(float scale);
++void ogl_shader_end(void);
++
+ void ogl_setActiveTexture(int t);
+ 
+ int ogl_init_window(int x, int y);//create a window/switch modes/etc
 diff --git a/d2/include/xmodel.h b/d2/include/xmodel.h
 index 2bc25cf..42c25a4 100644
 --- a/d2/include/xmodel.h
@@ -1489,6 +1786,951 @@ index bfa69f6..22d5043 100644
  
  	return 0;
  }
+diff --git a/d2/main/collide.c b/d2/main/collide.c
+index fdb2e78..4186519 100644
+--- a/d2/main/collide.c
++++ b/d2/main/collide.c
+@@ -24,6 +24,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ #include "rle.h"
+ #include "inferno.h"
+ #include "game.h"
++#include "fx.h"
+ #include "gr.h"
+ #include "stdlib.h"
+ #include "timer.h"
+@@ -824,6 +825,7 @@ void collide_weapon_and_wall( object * weapon, fix hitspeed, short hitseg, short
+ 				digi_link_sound_to_pos( Weapon_info[weapon->id].wall_hit_sound,weapon->segnum, 0, &weapon->pos, 0, volume );
+ 
+ 			if ( Weapon_info[weapon->id].wall_hit_vclip > -1 )	{
++				fx_impact(weapon, hitseg, hitwall, hitpt);
+ 				if ( Weapon_info[weapon->id].damage_radius )
+ 					explode_badass_weapon(weapon,hitpt);
+ 				else
+@@ -1656,6 +1658,7 @@ void collide_robot_and_weapon( object * robot, object * weapon, vms_vector *coll
+ 			multi_robot_request_change(robot, Objects[weapon->ctype.laser_info.parent_num].id);
+ #endif
+ 
++		fx_hit(weapon, collision_point);
+ 		if ( Robot_info[robot->id].exp1_vclip_num > -1 )
+ 			expl_obj = object_create_explosion( weapon->segnum, collision_point, (robot->size/2*3)/4, Robot_info[robot->id].exp1_vclip_num );
+ 		else if ( Weapon_info[weapon->id].robot_hit_vclip > -1 )
+diff --git a/d2/main/fireball.c b/d2/main/fireball.c
+index fe9b0d1..4cbbd67 100644
+--- a/d2/main/fireball.c
++++ b/d2/main/fireball.c
+@@ -31,6 +31,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ #include "object.h"
+ #include "vclip.h"
+ #include "game.h"
++#include "fx.h"
+ #include "polyobj.h"
+ #include "sounds.h"
+ #include "player.h"
+@@ -1355,6 +1356,7 @@ void do_explosion_sequence(object *obj)
+ 			expl_obj = object_create_badass_explosion( del_obj, del_obj->segnum, spawn_pos, fixmul(del_obj->size, EXPLOSION_SCALE), vclip_num, F1_0*Robot_info[del_obj->id].badass, i2f(4)*Robot_info[del_obj->id].badass, i2f(35)*Robot_info[del_obj->id].badass, -1 );
+ 		else
+ 			expl_obj = object_create_explosion( del_obj->segnum, spawn_pos, fixmul(del_obj->size, EXPLOSION_SCALE), vclip_num );
++		fx_explosion(spawn_pos, del_obj->segnum, fixmul(del_obj->size, EXPLOSION_SCALE));
+ 
+ 		if ((del_obj->contains_count > 0) && !(Game_mode & GM_MULTI)) { // Multiplayer handled outside of this code!!
+ 			//	If dropping a weapon that the player has, drop energy instead, unless it's vulcan, in which case drop vulcan ammo.
+diff --git a/d2/main/fx.c b/d2/main/fx.c
+new file mode 100644
+index 0000000..5e07d87
+--- /dev/null
++++ b/d2/main/fx.c
+@@ -0,0 +1,847 @@
++/*
++ * Light halos, smoke and sparks (browser edition).
++ *
++ * Halos glow over the lamps of the mine's light textures, placed where the lamp's bright
++ * pixels are on each wall the renderer draws, and go out with the light. Missiles leave smoke
++ * trails, damaged robots smoke harder the closer they are to dying, and shots and explosions
++ * throw sparks. Purely visual: nothing here feeds back into the game, and it has its own
++ * random numbers so the game's (and demos') stay as they were. The page's Effects option
++ * (Module.d2options.effects) turns it off.
++ */
++
++#define GL_GLEXT_PROTOTYPES
++#include <GL/gl.h>
++#include <math.h>
++#include <stdlib.h>
++#include <string.h>
++
++#include "fx.h"
++#include "segment.h"
++#include "gameseg.h"
++#include "game.h"
++#include "gameseq.h"
++#include "robot.h"
++#include "weapon.h"
++#include "laser.h"
++#include "player.h"
++#include "bm.h"
++#include "textures.h"
++#include "vclip.h"
++#include "piggy.h"
++#include "palette.h"
++#include "render.h"
++#include "../3d/globvars.h"
++#include "ogl_init.h"
++#include "internal.h"
++#ifdef __EMSCRIPTEN__
++#include "../arch/web/web.h"
++#endif
++
++#ifdef __EMSCRIPTEN__
++#include <emscripten.h>
++// for tests: lit sides seen, halos drawn, particles, vertices in the last 3D view
++static int fx_stats[4];
++EMSCRIPTEN_KEEPALIVE int *d2web_test_fx_stats(void) { return fx_stats; }
++#define STAT(i, v) (fx_stats[i] = (v))
++#else
++#define STAT(i, v)
++#endif
++
++static int fx_enabled(void)
++{
++#ifdef __EMSCRIPTEN__
++	return d2web_option(D2WEB_OPTION_EFFECTS);
++#else
++	return 0;
++#endif
++}
++
++static unsigned fx_seed = 0x2545f491;
++static float frand(void)	// 0..1
++{
++	fx_seed = fx_seed * 1664525u + 1013904223u;
++	return (fx_seed >> 8) * (1.0f / 16777216.0f);
++}
++
++static float dot(const float *a, const float *b) { return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; }
++static float len(const float *a) { return sqrtf(dot(a, a)); }
++static void fv(const vms_vector *v, float *o) { o[0] = f2fl(v->x); o[1] = f2fl(v->y); o[2] = f2fl(v->z); }
++static void madd(float *o, const float *a, const float *b, float s) { for (int k = 0; k < 3; k++) o[k] = a[k] + b[k] * s; }
++static float smooth(float e0, float e1, float x)
++{
++	float t = (x - e0) / (e1 - e0);
++	t = t < 0 ? 0 : t > 1 ? 1 : t;
++	return t * t * (3 - 2 * t);
++}
++
++static void rand_dir(float *d)
++{
++	float l2;
++	do {
++		for (int k = 0; k < 3; k++)
++			d[k] = frand() * 2 - 1;
++		l2 = dot(d, d);
++	} while (l2 > 1 || l2 < 0.01f);
++	l2 = 1 / sqrtf(l2);
++	for (int k = 0; k < 3; k++)
++		d[k] *= l2;
++}
++
++// ---------------------------------------------------------------------------------------
++// Particles
++
++enum { FX_SMOKE, FX_SPARK, FX_GLOW };
++
++typedef struct particle {
++	float pos[3], vel[3];
++	float age, life;	// seconds
++	float size, grow;	// half size in world units, growth per second
++	float angle, spin;
++	float drag;
++	float rgb[3], alpha;
++	unsigned char kind;
++} particle;
++
++#define MAX_PARTICLES 2048
++static particle particles[MAX_PARTICLES];
++static int n_particles;
++
++static particle *spawn(int kind)
++{
++	particle *p = n_particles < MAX_PARTICLES ? &particles[n_particles++] : &particles[(int)(frand() * (MAX_PARTICLES - 1))];
++	memset(p, 0, sizeof(*p));
++	p->kind = kind;
++	p->alpha = 1;
++	return p;
++}
++
++// how lit the segment is, for smoke (which the game's lighting doesn't reach)
++static float seg_light(int segnum)
++{
++	float l = segnum >= 0 && segnum <= Highest_segment_index ? f2fl(Segments[segnum].static_light) : 0.6f;
++	return l < 0.25f ? 0.25f : l > 1 ? 1 : l;
++}
++
++static void smoke(const float *pos, const float *vel, float size, float grow, float life, float grey, float alpha, int segnum)
++{
++	particle *p = spawn(FX_SMOKE);
++	float l = grey * (0.45f + 0.55f * seg_light(segnum));
++	memcpy(p->pos, pos, sizeof(p->pos));
++	memcpy(p->vel, vel, sizeof(p->vel));
++	p->size = size;
++	p->grow = grow;
++	p->life = life;
++	p->angle = frand() * 6.283f;
++	p->spin = (frand() - 0.5f) * 1.2f;
++	p->drag = 1.2f;
++	p->rgb[0] = p->rgb[1] = p->rgb[2] = l;
++	p->rgb[2] *= 1.04f;
++	p->alpha = alpha;
++}
++
++// sparks fly out of pos, off the surface with this normal when there is one
++static void sparks(const float *pos, const float *normal, int n, const float *rgb, float speed, float life)
++{
++	for (int i = 0; i < n; i++) {
++		particle *p = spawn(FX_SPARK);
++		float d[3];
++		rand_dir(d);
++		if (normal) {
++			float s = dot(d, normal);
++			if (s < 0)
++				madd(d, d, normal, -2 * s);
++			madd(d, d, normal, 0.5f);
++			s = 1 / len(d);
++			for (int k = 0; k < 3; k++)
++				d[k] *= s;
++			madd(p->pos, pos, normal, 0.15f);
++		} else
++			memcpy(p->pos, pos, sizeof(p->pos));
++		for (int k = 0; k < 3; k++)
++			p->vel[k] = d[k] * speed * (0.35f + 0.65f * frand());
++		p->life = life * (0.45f + 0.55f * frand());
++		p->size = 0.12f + 0.08f * frand();
++		p->drag = 2.5f;
++		memcpy(p->rgb, rgb, sizeof(p->rgb));
++	}
++}
++
++static void glow(const float *pos, float size, float life, const float *rgb, float alpha)
++{
++	particle *p = spawn(FX_GLOW);
++	memcpy(p->pos, pos, sizeof(p->pos));
++	p->size = size;
++	p->life = life;
++	memcpy(p->rgb, rgb, sizeof(p->rgb));
++	p->alpha = alpha;
++}
++
++// the color a weapon's shots glow in (as the colored dynamic light finds it), made hot
++static void weapon_color(object *weapon, float *rgb)
++{
++	weapon_info *wi = &Weapon_info[weapon->id];
++	grs_bitmap *bm = NULL;
++	float m;
++	if (wi->render_type == WEAPON_RENDER_LASER || wi->render_type == WEAPON_RENDER_BLOB)
++		bm = &GameBitmaps[wi->bitmap.index];
++	else if (wi->render_type == WEAPON_RENDER_VCLIP && wi->weapon_vclip >= 0)
++		bm = &GameBitmaps[Vclip[wi->weapon_vclip].frames[0].index];
++	rgb[0] = 1, rgb[1] = 0.7f, rgb[2] = 0.35f;	// matter: hot metal
++	if (bm && !wi->matter) {
++		float c[3] = { (float)bm->avg_color_rgb[0], (float)bm->avg_color_rgb[1], (float)bm->avg_color_rgb[2] };
++		m = c[0] > c[1] ? c[0] : c[1];
++		m = m > c[2] ? m : c[2];
++		if (m > 0)
++			for (int k = 0; k < 3; k++)
++				rgb[k] = 0.35f + 0.65f * c[k] / m;	// toward white: sparks are hot
++	}
++}
++
++void fx_impact(object *weapon, int segnum, int sidenum, vms_vector *pos)
++{
++	weapon_info *wi = &Weapon_info[weapon->id];
++	float p[3], n[3], rgb[3];
++	if (!fx_enabled())
++		return;
++	fv(pos, p);
++	fv(&Segments[segnum].sides[sidenum].normals[0], n);
++	weapon_color(weapon, rgb);
++	if (wi->damage_radius) {	// missiles
++		float hot[3] = { 1, 0.75f, 0.4f }, at[3];
++		sparks(p, n, 28, hot, 38, 1.0f);
++		for (int i = 0; i < 4; i++) {
++			float d[3];
++			rand_dir(d);
++			madd(at, p, n, 1.5f);
++			madd(d, d, n, 1.2f);
++			for (int k = 0; k < 3; k++)
++				d[k] *= 1.5f;
++			smoke(at, d, 2.2f, 2.4f, 2.4f + frand(), 0.28f, 0.5f, segnum);
++		}
++	} else if (wi->matter)	// vulcan, gauss: metal sparks
++		sparks(p, n, 7, rgb, 32, 0.4f);
++	else {
++		sparks(p, n, 10, rgb, 26, 0.45f);
++		glow(p, 1.6f, 0.18f, rgb, 0.5f);
++	}
++}
++
++void fx_hit(object *weapon, vms_vector *pos)
++{
++	float p[3], rgb[3];
++	if (!fx_enabled())
++		return;
++	fv(pos, p);
++	weapon_color(weapon, rgb);
++	sparks(p, NULL, Weapon_info[weapon->id].damage_radius ? 16 : 6, rgb, 24, 0.35f);
++}
++
++void fx_explosion(vms_vector *pos, int segnum, fix size)
++{
++	float p[3], s = f2fl(size), hot[3] = { 1, 0.7f, 0.35f };
++	int n = (int)(18 + s * 2.5f);
++	if (!fx_enabled())
++		return;
++	fv(pos, p);
++	sparks(p, NULL, n > 60 ? 60 : n, hot, 28 + s * 3, 1.1f);
++	n = (int)(3 + s / 3);
++	for (int i = 0; i < (n > 9 ? 9 : n); i++) {
++		float d[3], at[3];
++		rand_dir(d);
++		madd(at, p, d, s * 0.25f);
++		for (int k = 0; k < 3; k++)
++			d[k] *= s * 0.35f;
++		smoke(at, d, s * 0.35f, s * 0.3f, 2.6f + frand() * 1.2f, 0.32f, 0.6f, segnum);
++	}
++}
++
++// trails: puffs every TRAIL_STEP units along each missile's path
++#define TRAIL_STEP 1.1f
++static int trail_sig[MAX_OBJECTS];
++static float trail_last[MAX_OBJECTS][3], trail_acc[MAX_OBJECTS];
++static float smoke_acc[MAX_OBJECTS];
++static int smoke_sig[MAX_OBJECTS];
++
++static int is_missile(object *obj)
++{
++	weapon_info *wi = &Weapon_info[obj->id];
++	if (!wi->matter || wi->render_type != WEAPON_RENDER_POLYMODEL)
++		return 0;
++	switch (obj->id) {
++		case PROXIMITY_ID: case SUPERPROX_ID: case PMINE_ID: case ROBOT_SUPERPROX_ID:
++			return 0;
++	}
++	return 1;
++}
++
++static void missile_trail(object *obj, int objnum)
++{
++	float tail[3], back[3], d[3], l;
++	int n = 0;
++	fv(&obj->pos, tail);
++	fv(&obj->orient.fvec, back);
++	madd(tail, tail, back, -f2fl(obj->size) * 0.8f);
++	if (trail_sig[objnum] != obj->signature) {
++		trail_sig[objnum] = obj->signature;
++		memcpy(trail_last[objnum], tail, sizeof(tail));
++		trail_acc[objnum] = TRAIL_STEP;
++		return;
++	}
++	for (int k = 0; k < 3; k++)
++		d[k] = tail[k] - trail_last[objnum][k];
++	l = len(d);
++	for (float at = TRAIL_STEP - trail_acc[objnum]; at <= l && n < 16; at += TRAIL_STEP, n++) {
++		float p[3], v[3], hot[3] = { 1, 0.6f, 0.25f };
++		madd(p, trail_last[objnum], d, at / l);
++		rand_dir(v);
++		for (int k = 0; k < 3; k++)
++			v[k] *= 0.5f;
++		smoke(p, v, 0.5f, 1.6f, 1.1f + frand() * 0.5f, 0.85f, 0.5f, obj->segnum);
++		if (!n)
++			glow(p, 1.0f, 0.12f, hot, 0.6f);
++	}
++	trail_acc[objnum] = fmodf(trail_acc[objnum] + l, TRAIL_STEP);
++	memcpy(trail_last[objnum], tail, sizeof(tail));
++}
++
++// damaged robots (and other players' ships) smoke, harder the closer they are to dying
++static void damage_smoke(object *obj, int objnum, float dt)
++{
++	fix full = obj->type == OBJ_ROBOT ? Robot_info[obj->id].strength : i2f(100);
++	float frac, rate, pos[3], vel[3], view[3], s = f2fl(obj->size);
++	if (full <= 0 || obj->shields <= 0 || obj->shields >= full / 2)
++		return;
++	if (obj->type == OBJ_ROBOT ? Robot_info[obj->id].cloak_type : (Players[obj->id].flags & PLAYER_FLAGS_CLOAKED))
++		return;
++	fv(&obj->pos, pos);
++	fv(&View_position, view);
++	for (int k = 0; k < 3; k++)
++		view[k] -= pos[k];
++	if (len(view) > 250)
++		return;
++	if (smoke_sig[objnum] != obj->signature) {
++		smoke_sig[objnum] = obj->signature;
++		smoke_acc[objnum] = 0;
++	}
++	frac = f2fl(obj->shields) / f2fl(full);	// below 0.5
++	rate = 2 + (0.5f - frac) * 10;		// puffs per second
++	smoke_acc[objnum] += dt * rate;
++	fv(&obj->mtype.phys_info.velocity, vel);
++	while (smoke_acc[objnum] >= 1) {
++		float p[3], v[3];
++		smoke_acc[objnum] -= 1;
++		rand_dir(v);
++		madd(p, pos, v, s * 0.3f);
++		for (int k = 0; k < 3; k++)
++			v[k] = v[k] * 0.9f + vel[k] * 0.25f;
++		smoke(p, v, s * 0.22f, s * 0.35f, 1.4f + frand() * 0.7f, 0.26f, 0.55f, obj->segnum);
++	}
++	if (frac < 0.2f && frand() < dt * 1.5f) {
++		float hot[3] = { 1, 0.7f, 0.35f };
++		sparks(pos, NULL, 4, hot, 18, 0.4f);
++	}
++}
++
++static int fx_level = -1000;
++static void level_changed(void);
++
++void fx_frame(void)
++{
++	float dt = f2fl(FrameTime);
++	if (Current_level_num != fx_level)
++		level_changed();
++	if (dt <= 0)
++		return;
++	if (dt > 0.1f)
++		dt = 0.1f;
++	for (int i = 0; i < n_particles;) {
++		particle *p = &particles[i];
++		float drag;
++		p->age += dt;
++		if (p->age >= p->life) {
++			*p = particles[--n_particles];
++			continue;
++		}
++		drag = expf(-p->drag * dt);
++		for (int k = 0; k < 3; k++) {
++			p->vel[k] *= drag;
++			p->pos[k] += p->vel[k] * dt;
++		}
++		p->size += p->grow * dt;
++		p->angle += p->spin * dt;
++		i++;
++	}
++	if (!fx_enabled()) {
++		n_particles = 0;
++		return;
++	}
++	for (int i = 0; i <= Highest_object_index; i++) {
++		object *obj = &Objects[i];
++		if (obj->type == OBJ_WEAPON && is_missile(obj))
++			missile_trail(obj, i);
++		else if (obj->type == OBJ_ROBOT || (obj->type == OBJ_PLAYER && obj != Viewer && (Game_mode & GM_MULTI)))
++			damage_smoke(obj, i, dt);
++	}
++}
++
++// ---------------------------------------------------------------------------------------
++// Light halos
++
++// Where a light texture's lamps are: its bright pixels, one spot per connected patch.
++#define MAX_SPOTS 4
++typedef struct light_spots {
++	signed char n;		// -1: not looked at yet
++	float u[MAX_SPOTS], v[MAX_SPOTS], r[MAX_SPOTS];	// texture units
++	float rgb[3];
++} light_spots;
++static light_spots tex_spots[MAX_TEXTURES];
++
++#define MAX_TEX_SIZE 256
++static unsigned char spot_mask[MAX_TEX_SIZE * MAX_TEX_SIZE];
++static unsigned short spot_stack[MAX_TEX_SIZE * MAX_TEX_SIZE];
++
++static light_spots *texture_spots(int tmap)
++{
++	light_spots *ls = &tex_spots[tmap];
++	grs_bitmap *bm;
++	unsigned char *px;
++	int w, h, maxl = 0, thresh;
++	double rgb[3] = { 0, 0, 0 };
++	int nbright = 0, nopaque = 0;
++	float area[MAX_SPOTS];
++
++	if (ls->n >= 0)
++		return ls;
++	ls->n = 0;
++	// lava, water and force fields glow all over: no lamps there
++	if (TmapInfo[tmap].flags & (TMI_VOLATILE | TMI_WATER | TMI_FORCE_FIELD))
++		return ls;
++	PIGGY_PAGE_IN(Textures[tmap]);
++	bm = &GameBitmaps[Textures[tmap].index];
++	w = bm->bm_w;
++	h = bm->bm_h;
++	if (w <= 0 || h <= 0 || w > MAX_TEX_SIZE || h > MAX_TEX_SIZE || !bm->bm_data)
++		return ls;
++	px = ogl_bitmap_indices(bm);
++#define LUM(c) (gr_palette[(c) * 3] * 30 + gr_palette[(c) * 3 + 1] * 59 + gr_palette[(c) * 3 + 2] * 11)	// 0..6300
++	for (int i = 0; i < w * h; i++)
++		if (px[i] < 254 && LUM(px[i]) > maxl)
++			maxl = LUM(px[i]);
++	if (maxl < 3800)	// no lamp bright enough to glow
++		return ls;
++	thresh = maxl * 82 / 100;
++	for (int i = 0; i < w * h; i++) {
++		spot_mask[i] = px[i] < 254 && LUM(px[i]) >= thresh;
++		if (px[i] < 254)
++			nopaque++;
++		if (spot_mask[i]) {
++			for (int k = 0; k < 3; k++)
++				rgb[k] += gr_palette[px[i] * 3 + k];
++			nbright++;
++		}
++	}
++#undef LUM
++	if (nbright < 3 || nbright > nopaque * 35 / 100)	// a glowing surface, not a lamp
++		return ls;
++	// connected patches, biggest kept
++	for (int start = 0; start < w * h; start++) {
++		int sp = 0, n = 0;
++		double sx = 0, sy = 0;
++		if (spot_mask[start] != 1)
++			continue;
++		spot_mask[start] = 2;
++		spot_stack[sp++] = start;
++		while (sp) {
++			int i = spot_stack[--sp], x = i % w, y = i / w;
++			int nb[4] = { x > 0 ? i - 1 : -1, x < w - 1 ? i + 1 : -1, y > 0 ? i - w : -1, y < h - 1 ? i + w : -1 };
++			n++;
++			sx += x + 0.5;
++			sy += y + 0.5;
++			for (int k = 0; k < 4; k++)
++				if (nb[k] >= 0 && spot_mask[nb[k]] == 1) {
++					spot_mask[nb[k]] = 2;
++					spot_stack[sp++] = nb[k];
++				}
++		}
++		if (n < 4)
++			continue;
++		int slot = ls->n < MAX_SPOTS ? ls->n++ : -1;
++		if (slot < 0) {	// replace the smallest if this one is bigger
++			slot = 0;
++			for (int k = 1; k < MAX_SPOTS; k++)
++				if (area[k] < area[slot])
++					slot = k;
++			if (area[slot] >= n)
++				continue;
++		}
++		area[slot] = n;
++		ls->u[slot] = sx / n / w;
++		ls->v[slot] = sy / n / h;
++		ls->r[slot] = sqrtf(n / 3.14159f) / w;
++	}
++	{
++		float m = 0;
++		for (int k = 0; k < 3; k++) {
++			ls->rgb[k] = rgb[k] / nbright;
++			m = ls->rgb[k] > m ? ls->rgb[k] : m;
++		}
++		for (int k = 0; k < 3; k++)	// the lamp's color, a little toward white
++			ls->rgb[k] = 0.3f + 0.7f * ls->rgb[k] / m;
++	}
++	return ls;
++}
++
++// the sides drawn in this view that may carry a lamp
++#define MAX_LIT_SIDES 1024
++static int lit_sides[MAX_LIT_SIDES], n_lit_sides;
++static unsigned short side_stamp[MAX_SEGMENTS][MAX_SIDES_PER_SEGMENT], pass = 1;
++
++void fx_note_face(int segnum, int sidenum)
++{
++	side *sd = &Segments[segnum].sides[sidenum];
++	if (side_stamp[segnum][sidenum] == pass || n_lit_sides >= MAX_LIT_SIDES)
++		return;
++	side_stamp[segnum][sidenum] = pass;
++	if (TmapInfo[sd->tmap_num].lighting > 0 || (sd->tmap_num2 && TmapInfo[sd->tmap_num2 & 0x3fff].lighting > 0))
++		lit_sides[n_lit_sides++] = segnum * MAX_SIDES_PER_SEGMENT + sidenum;
++}
++
++static void level_changed(void)
++{
++	fx_level = Current_level_num;
++	n_particles = 0;
++	for (int i = 0; i < MAX_TEXTURES; i++)
++		tex_spots[i].n = -1;
++	memset(trail_sig, 0, sizeof(trail_sig));
++	memset(smoke_sig, 0, sizeof(smoke_sig));
++}
++
++// ---------------------------------------------------------------------------------------
++// Drawing
++
++typedef struct fxvert {
++	float pos[3];
++	float tex[2];
++	float color[4];
++} fxvert;
++
++#define MAX_HALOS 768
++#define MAX_FX_VERTS ((MAX_PARTICLES + MAX_HALOS) * 6)
++static fxvert fx_verts[MAX_FX_VERTS];
++static int n_verts;
++static float view_rows[3][3], view_pos[3], cam_right[3], cam_up[3];
++static GLuint glow_tex, smoke_tex;
++
++static void to_view(const float *p, float *o)
++{
++	float d[3] = { p[0] - view_pos[0], p[1] - view_pos[1], p[2] - view_pos[2] };
++	o[0] = dot(view_rows[0], d);
++	o[1] = dot(view_rows[1], d);
++	o[2] = -dot(view_rows[2], d);
++}
++
++static void vert(const float *p, float u, float v, const float *rgb, float a)
++{
++	fxvert *fv = &fx_verts[n_verts++];
++	to_view(p, fv->pos);
++	fv->tex[0] = u;
++	fv->tex[1] = v;
++	fv->color[0] = rgb[0];
++	fv->color[1] = rgb[1];
++	fv->color[2] = rgb[2];
++	fv->color[3] = a;
++}
++
++// a quad through the four world points, as two triangles
++static void quad(const float *a, const float *b, const float *c, const float *d, const float *rgb, float alpha)
++{
++	if (n_verts + 6 > MAX_FX_VERTS)
++		return;
++	vert(a, 0, 0, rgb, alpha); vert(b, 1, 0, rgb, alpha); vert(c, 1, 1, rgb, alpha);
++	vert(a, 0, 0, rgb, alpha); vert(c, 1, 1, rgb, alpha); vert(d, 0, 1, rgb, alpha);
++}
++
++// a camera-facing square, turned by angle
++static void billboard(const float *p, float size, float angle, const float *rgb, float alpha)
++{
++	float c = cosf(angle) * size, s = sinf(angle) * size, r[3], u[3], q[4][3];
++	for (int k = 0; k < 3; k++) {
++		r[k] = cam_right[k] * c + cam_up[k] * s;
++		u[k] = cam_up[k] * c - cam_right[k] * s;
++		q[0][k] = p[k] - r[k] + u[k];
++		q[1][k] = p[k] + r[k] + u[k];
++		q[2][k] = p[k] + r[k] - u[k];
++		q[3][k] = p[k] - r[k] - u[k];
++	}
++	quad(q[0], q[1], q[2], q[3], rgb, alpha);
++}
++
++// a spark: a glow stretched along its path, facing the camera
++static void streak(const float *head, const float *tail, float width, const float *rgb, float alpha)
++{
++	float d[3], to[3], side[3], q[4][3], l;
++	for (int k = 0; k < 3; k++) {
++		d[k] = head[k] - tail[k];
++		to[k] = view_pos[k] - head[k];
++	}
++	side[0] = d[1] * to[2] - d[2] * to[1];
++	side[1] = d[2] * to[0] - d[0] * to[2];
++	side[2] = d[0] * to[1] - d[1] * to[0];
++	l = len(side);
++	if (l < 1e-6f)
++		return;
++	l = width / l;
++	for (int k = 0; k < 3; k++) {
++		float e = d[k] * 0.3f;	// the glow's round ends reach past the path
++		q[0][k] = head[k] + e + side[k] * l;
++		q[1][k] = head[k] + e - side[k] * l;
++		q[2][k] = tail[k] - e - side[k] * l;
++		q[3][k] = tail[k] - e + side[k] * l;
++	}
++	quad(q[0], q[1], q[2], q[3], rgb, alpha);
++}
++
++static GLuint make_texture(int smoke_puff)
++{
++	static unsigned char img[64 * 64 * 4];
++	GLuint t;
++	for (int y = 0; y < 64; y++)
++		for (int x = 0; x < 64; x++) {
++			float dx = (x + 0.5f) / 32 - 1, dy = (y + 0.5f) / 32 - 1, r = sqrtf(dx * dx + dy * dy), a;
++			if (smoke_puff) {
++				// a soft puff with some billows
++				float n = 0.5f + 0.25f * sinf(dx * 7.1f + 1.3f) * sinf(dy * 6.3f + 0.4f)
++					+ 0.15f * sinf((dx + dy) * 12.7f) * sinf((dx - dy) * 11.3f + 2.1f);
++				a = smooth(1.0f, 0.25f, r) * (0.55f + 0.6f * n);
++			} else
++				a = expf(-r * r * 5.5f) * smooth(1.0f, 0.7f, r);	// a glow that fades to nothing at the edge
++			a = a < 0 ? 0 : a > 1 ? 1 : a;
++			img[(y * 64 + x) * 4] = img[(y * 64 + x) * 4 + 1] = img[(y * 64 + x) * 4 + 2] = 255;
++			img[(y * 64 + x) * 4 + 3] = (unsigned char)(a * 255);
++		}
++	glGenTextures(1, &t);
++	glBindTexture(GL_TEXTURE_2D, t);
++	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
++	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
++	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
++	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
++	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 64, 64, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
++	return t;
++}
++
++static int inside(const float *a, const float *b, const float *c, float u, float v, float *w)
++{
++	float d = (b[1] - c[1]) * (a[0] - c[0]) + (c[0] - b[0]) * (a[1] - c[1]);
++	if (fabsf(d) < 1e-6f)
++		return 0;
++	w[0] = ((b[1] - c[1]) * (u - c[0]) + (c[0] - b[0]) * (v - c[1])) / d;
++	w[1] = ((c[1] - a[1]) * (u - c[0]) + (a[0] - c[0]) * (v - c[1])) / d;
++	w[2] = 1 - w[0] - w[1];
++	return w[0] >= -0.02f && w[1] >= -0.02f && w[2] >= -0.02f;
++}
++
++static void halo(const float *at, const float *normal, float radius, const float *rgb)
++{
++	float to[3], dist, facing, fade, size, pull, p[3], c[3];
++	for (int k = 0; k < 3; k++)
++		to[k] = view_pos[k] - at[k];
++	dist = len(to);
++	if (dist < 0.01f)
++		return;
++	for (int k = 0; k < 3; k++)
++		to[k] /= dist;
++	facing = dot(normal, to);
++	size = radius * 5 + 1.5f;
++	size = size < 2 ? 2 : size > 10 ? 10 : size;
++	fade = smooth(0.05f, 0.5f, facing) * smooth(size * 0.4f, size * 1.5f, dist) * 0.5f;
++	if (fade < 0.01f)
++		return;
++	// Toward the camera, so its wall seen at an angle doesn't cut it (made smaller to look the
++	// same size from there).
++	pull = size * 2.5f < dist * 0.6f ? size * 2.5f : dist * 0.6f;
++	madd(p, at, to, pull);
++	for (int k = 0; k < 3; k++)
++		c[k] = rgb[k] * fade;
++	billboard(p, size * (dist - pull) / dist, 0, c, 1);
++}
++
++static void side_halos(int segnum, int sidenum)
++{
++	segment *seg = &Segments[segnum];
++	side *sd = &seg->sides[sidenum];
++	int t2 = sd->tmap_num2 & 0x3fff, rot = (sd->tmap_num2 >> 14) & 3, count = 0;
++	float P[4][3], U[4][2], n[3], minu = 1e9f, maxu = -1e9f, minv = 1e9f, maxv = -1e9f, scale, e0, e1;
++	light_spots *ls;
++
++	if (Light_subtracted[segnum] & (1 << sidenum))	// shot out or switched off
++		return;
++	if (sd->tmap_num2 && TmapInfo[t2].lighting > 0)
++		ls = texture_spots(t2);
++	else {
++		ls = texture_spots(sd->tmap_num);
++		rot = 0;
++	}
++	if (ls->n <= 0)
++		return;
++	for (int k = 0; k < 4; k++) {
++		fv(&Vertices[seg->verts[Side_to_verts[sidenum][k]]], P[k]);
++		U[k][0] = f2fl(sd->uvls[k].u);
++		U[k][1] = f2fl(sd->uvls[k].v);
++		minu = U[k][0] < minu ? U[k][0] : minu;
++		maxu = U[k][0] > maxu ? U[k][0] : maxu;
++		minv = U[k][1] < minv ? U[k][1] : minv;
++		maxv = U[k][1] > maxv ? U[k][1] : maxv;
++	}
++	fv(&sd->normals[0], n);
++	{	// world units per texture repeat
++		float d[3], du = U[1][0] - U[0][0], dv = U[1][1] - U[0][1];
++		for (int k = 0; k < 3; k++)
++			d[k] = P[1][k] - P[0][k];
++		e0 = sqrtf(du * du + dv * dv) > 1e-4f ? len(d) / sqrtf(du * du + dv * dv) : 0;
++		du = U[2][0] - U[1][0];
++		dv = U[2][1] - U[1][1];
++		for (int k = 0; k < 3; k++)
++			d[k] = P[2][k] - P[1][k];
++		e1 = sqrtf(du * du + dv * dv) > 1e-4f ? len(d) / sqrtf(du * du + dv * dv) : 0;
++		scale = e0 && e1 ? (e0 + e1) / 2 : e0 + e1;
++	}
++	for (int s = 0; s < ls->n; s++) {
++		float u = ls->u[s], v = ls->v[s];
++		// the overlay is turned on the wall as the texture merger turns it
++		switch (rot) {
++			case 1: u = ls->v[s]; v = 1 - ls->u[s]; break;
++			case 2: u = 1 - ls->u[s]; v = 1 - ls->v[s]; break;
++			case 3: u = 1 - ls->v[s]; v = ls->u[s]; break;
++		}
++		// every repeat of the texture on this side
++		for (int i = (int)floorf(minu - u); i <= (int)ceilf(maxu - u) && count < 16; i++)
++			for (int j = (int)floorf(minv - v); j <= (int)ceilf(maxv - v) && count < 16; j++) {
++				float w[3], at[3];
++				int a = 0, b = 1, c = 2;
++				if (!inside(U[0], U[1], U[2], u + i, v + j, w)) {
++					if (!inside(U[0], U[2], U[3], u + i, v + j, w))
++						continue;
++					b = 2;
++					c = 3;
++				}
++				for (int k = 0; k < 3; k++)
++					at[k] = P[a][k] * w[0] + P[b][k] * w[1] + P[c][k] * w[2];
++				halo(at, n, ls->r[s] * scale, ls->rgb);
++				count++;
++			}
++	}
++}
++
++static int smoke_order[MAX_PARTICLES];
++static float smoke_depth[MAX_PARTICLES];
++static int far_first(const void *a, const void *b)
++{
++	float da = smoke_depth[*(const int *)a], db = smoke_depth[*(const int *)b];
++	return da < db ? 1 : da > db ? -1 : 0;
++}
++
++static void draw(GLuint tex, int first, int count)
++{
++	if (count <= 0)
++		return;
++	glBindTexture(GL_TEXTURE_2D, tex);
++	glDrawArrays(GL_TRIANGLES, first, count);
++}
++
++void fx_render(void)
++{
++	int n_smoke = 0, smoke_verts, scissor;
++	pass = pass == 0xffff ? 1 : pass + 1;
++	if (!fx_enabled()) {
++		n_lit_sides = 0;
++		return;
++	}
++	if (Current_level_num != fx_level)
++		level_changed();
++	for (int r = 0; r < 3; r++) {
++		const vms_vector *row = r == 0 ? &View_matrix.rvec : r == 1 ? &View_matrix.uvec : &View_matrix.fvec;
++		fv(row, view_rows[r]);
++	}
++	fv(&View_position, view_pos);
++	fv(&Unscaled_matrix.rvec, cam_right);
++	fv(&Unscaled_matrix.uvec, cam_up);
++	n_verts = 0;
++
++	// smoke, far to near, blended over what is behind it
++	for (int i = 0; i < n_particles; i++)
++		if (particles[i].kind == FX_SMOKE) {
++			float v[3];
++			to_view(particles[i].pos, v);
++			if (v[2] > -0.5f)	// behind the camera
++				continue;
++			smoke_depth[i] = -v[2];
++			smoke_order[n_smoke++] = i;
++		}
++	qsort(smoke_order, n_smoke, sizeof(int), far_first);
++	for (int i = 0; i < n_smoke; i++) {
++		particle *p = &particles[smoke_order[i]];
++		float t = p->age / p->life;
++		billboard(p->pos, p->size, p->angle, p->rgb, p->alpha * smooth(0, 0.08f, t) * (1 - t) * sqrtf(1 - t));
++	}
++	smoke_verts = n_verts;
++
++	// glows: halos, sparks, flashes, added to the light
++	STAT(0, n_lit_sides);
++	{
++		int before = n_verts;
++		for (int i = 0; i < n_lit_sides; i++)
++			side_halos(lit_sides[i] / MAX_SIDES_PER_SEGMENT, lit_sides[i] % MAX_SIDES_PER_SEGMENT);
++		STAT(1, (n_verts - before) / 6);
++	}
++	n_lit_sides = 0;
++	for (int i = 0; i < n_particles; i++) {
++		particle *p = &particles[i];
++		float t = p->age / p->life, c[3];
++		if (p->kind == FX_SPARK) {
++			float tail[3], f = (1 - t) * (1 - t);
++			// cools from white-hot to the weapon's color and red
++			c[0] = p->rgb[0] * f;
++			c[1] = p->rgb[1] * f * (1 - 0.45f * t);
++			c[2] = p->rgb[2] * f * (1 - 0.8f * t);
++			madd(tail, p->pos, p->vel, -0.06f);
++			streak(p->pos, tail, p->size, c, 1);
++		} else if (p->kind == FX_GLOW) {
++			float f = p->alpha * (1 - t);
++			for (int k = 0; k < 3; k++)
++				c[k] = p->rgb[k] * f;
++			billboard(p->pos, p->size * (1 + t), 0, c, 1);
++		}
++	}
++	STAT(2, n_particles);
++	STAT(3, n_verts);
++	if (!n_verts)
++		return;
++
++	if (!glow_tex) {
++		glow_tex = make_texture(0);
++		smoke_tex = make_texture(1);
++	}
++	scissor = glIsEnabled(GL_SCISSOR_TEST);
++	glDisable(GL_SCISSOR_TEST);
++	glDisable(GL_CULL_FACE);
++	glDepthMask(GL_FALSE);
++	OGL_ENABLE(TEXTURE_2D);
++	glVertexPointer(3, GL_FLOAT, sizeof(fxvert), fx_verts[0].pos);
++	glTexCoordPointer(2, GL_FLOAT, sizeof(fxvert), fx_verts[0].tex);
++	glColorPointer(4, GL_FLOAT, sizeof(fxvert), fx_verts[0].color);
++	glEnableClientState(GL_VERTEX_ARRAY);
++	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
++	glEnableClientState(GL_COLOR_ARRAY);
++	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
++	draw(smoke_tex, 0, smoke_verts);
++	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
++	draw(glow_tex, smoke_verts, n_verts - smoke_verts);
++	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
++	glDisableClientState(GL_COLOR_ARRAY);
++	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
++	glDisableClientState(GL_VERTEX_ARRAY);
++	glDepthMask(GL_TRUE);
++	glEnable(GL_CULL_FACE);
++	if (scissor)
++		glEnable(GL_SCISSOR_TEST);
++}
+diff --git a/d2/main/fx.h b/d2/main/fx.h
+new file mode 100644
+index 0000000..a3e0ddd
+--- /dev/null
++++ b/d2/main/fx.h
+@@ -0,0 +1,18 @@
++/*
++ * Light halos, smoke and sparks (browser edition). Purely visual: nothing here feeds back
++ * into the game.
++ */
++
++#ifndef _FX_H
++#define _FX_H
++
++#include "object.h"
++
++void fx_frame(void);								// once per game frame: age particles, emit trails and smoke
++void fx_note_face(int segnum, int sidenum);			// the renderer draws this side now
++void fx_render(void);								// draws the effects into the 3D view being rendered
++void fx_impact(object *weapon, int segnum, int sidenum, vms_vector *pos);	// a shot hits a wall
++void fx_hit(object *weapon, vms_vector *pos);		// a shot hits a robot
++void fx_explosion(vms_vector *pos, int segnum, fix size);	// a robot, player or reactor blows up
++
++#endif
+diff --git a/d2/main/game.c b/d2/main/game.c
+index f15d413..4758a33 100644
+--- a/d2/main/game.c
++++ b/d2/main/game.c
+@@ -28,6 +28,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ #include "gr.h"
+ #include "inferno.h"
+ #include "game.h"
++#include "fx.h"
+ #include "key.h"
+ #include "object.h"
+ #include "physics.h"
+@@ -1481,6 +1482,7 @@ void GameProcessFrame(void)
+ 	omega_charge_frame();
+ 	slide_textures();
+ 	flicker_lights();
++	fx_frame();	// light halos, smoke and sparks
+ 
+ 	//if the player is taking damage, give up guided missile control
+ 	if (Players[Player_num].shields != player_shields)
 diff --git a/d2/main/inferno.c b/d2/main/inferno.c
 index dc6e44a..3c6d310 100644
 --- a/d2/main/inferno.c
@@ -1736,6 +2978,34 @@ index 650f69e..68d5617 100644
  extern void multi_send_got_flag (char);
  
  //	returns true if powerup consumed
+diff --git a/d2/main/render.c b/d2/main/render.c
+index 517bc8a..8326da6 100644
+--- a/d2/main/render.c
++++ b/d2/main/render.c
+@@ -27,6 +27,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ #include "bm.h"
+ #include "texmap.h"
+ #include "render.h"
++#include "fx.h"
+ #include "game.h"
+ #include "object.h"
+ #include "laser.h"
+@@ -211,6 +212,7 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+ 
+ 	Assert(nv <= 8);
+ 
++	fx_note_face(segnum, sidenum);
+ 	for (i=0; i<nv; i++) {
+ 		uvl_copy[i].u = uvlp[i].u;
+ 		uvl_copy[i].v = uvlp[i].v;
+@@ -1678,6 +1680,7 @@ void render_frame(fix eye_offset, int window_num)
+ 	#endif
+ 
+ 	render_mine(start_seg_num, eye_offset, window_num);
++	fx_render();	// light halos, smoke and sparks
+ 
+ 	g3_end_frame();
+ 
 diff --git a/d2/main/songs.c b/d2/main/songs.c
 index cf9fb7d..76e008b 100644
 --- a/d2/main/songs.c
@@ -2359,7 +3629,7 @@ index c53598c..97f0161 100644
  		return true;
  	}
 diff --git a/d2/xmodel/xmodel.cpp b/d2/xmodel/xmodel.cpp
-index d75a377..e65b9fc 100644
+index d75a377..d5532e9 100644
 --- a/d2/xmodel/xmodel.cpp
 +++ b/d2/xmodel/xmodel.cpp
 @@ -1,5 +1,6 @@
@@ -2369,7 +3639,7 @@ index d75a377..e65b9fc 100644
  #include <SDL.h>
  
  #include "xdescent.h"
-@@ -17,28 +18,67 @@ extern "C" {
+@@ -17,28 +18,68 @@ extern "C" {
  #undef FILENAME_LEN
  #include "polyobj.h"
  #include "texmap.h"
@@ -2427,6 +3697,7 @@ index d75a377..e65b9fc 100644
 +	struct anim_tex *anims;
 +	int nanims;
 +	float gain;			// light scale that makes it as bright as the game model (fit_brightness)
++	float part_gain[MAX_SUBMODELS];	// the same for each part, when the parts match the game model's
  	int glloaded;
  };
  
@@ -2440,7 +3711,7 @@ index d75a377..e65b9fc 100644
  
  // return -1 on error
  int xmodel_load_gl(void *model) {
-@@ -49,15 +89,32 @@ int xmodel_load_gl(void *model) {
+@@ -49,15 +90,32 @@ int xmodel_load_gl(void *model) {
  		glew_loaded = 1;
  	}
  	#endif
@@ -2476,7 +3747,7 @@ index d75a377..e65b9fc 100644
  		if (bm.BPP() == 4)
  			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
  				bm.Width(), bm.Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE,
-@@ -66,19 +123,17 @@ int xmodel_load_gl(void *model) {
+@@ -66,19 +124,17 @@ int xmodel_load_gl(void *model) {
  			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
  				bm.Width(), bm.Height(), 0, GL_RGB, GL_UNSIGNED_BYTE,
  				bm.Buffer());
@@ -2505,7 +3776,7 @@ index d75a377..e65b9fc 100644
  }
  
  void xmodel_free_gl(void *model) {
-@@ -87,8 +142,10 @@ void xmodel_free_gl(void *model) {
+@@ -87,8 +143,10 @@ void xmodel_free_gl(void *model) {
  		return;
  	glDeleteTextures(rm.m.m_textures.m_nBitmaps, rm.bmtex);
  	memset(rm.bmtex, 0, rm.m.m_textures.m_nBitmaps * sizeof(rm.bmtex[0]));
@@ -2518,7 +3789,7 @@ index d75a377..e65b9fc 100644
  	rm.glloaded = 0;
  }
  
-@@ -97,12 +154,21 @@ void xmodel_free(void *model) {
+@@ -97,12 +155,21 @@ void xmodel_free(void *model) {
  	render_model& rm = *rmp;
  	xmodel_free_gl(model);
  	delete[] rm.verts;
@@ -2542,15 +3813,17 @@ index d75a377..e65b9fc 100644
  // return NULL on error
  void *xmodel_load(const char *filename) {
  	render_model* rmp = new render_model();
-@@ -114,6 +180,7 @@ void *xmodel_load(const char *filename) {
+@@ -114,6 +181,9 @@ void *xmodel_load(const char *filename) {
  		return NULL;
  	}
  	rm.glloaded = 0;
 +	rm.gain = 1;
++	for (int i = 0; i < MAX_SUBMODELS; i++)
++		rm.part_gain[i] = 1;
  	int num_bitmaps = m.m_textures.m_nBitmaps;
  	for (int i = 0; i < num_bitmaps; i++) {
  		CBitmap& bm = m.m_textures.m_bitmaps[i];
-@@ -127,94 +194,584 @@ void *xmodel_load(const char *filename) {
+@@ -127,94 +197,602 @@ void *xmodel_load(const char *filename) {
  			data[j + 2] = x;
  		}
  	}
@@ -2735,7 +4008,9 @@ index d75a377..e65b9fc 100644
 +
 +#define W(p) (*(short *)(p))
 +#define MAX_SURFACE_POINTS 1000
-+static void game_surface(ubyte *p, vms_vector *pts, const float *tex_lum, int ntex, double *sum, double *area) {
++// subcalls 0 leaves out the parts that hang off this one
++static void game_surface(ubyte *p, vms_vector *pts, const float *tex_lum, int ntex, double *sum, double *area,
++	int subcalls = 1) {
 +	for (;;)
 +		switch (W(p)) {
 +			case 1: {	// OP_DEFPOINTS
@@ -2770,15 +4045,16 @@ index d75a377..e65b9fc 100644
 +				break;
 +			}
 +			case 4:	// OP_SORTNORM
-+				game_surface(p + W(p + 28), pts, tex_lum, ntex, sum, area);
-+				game_surface(p + W(p + 30), pts, tex_lum, ntex, sum, area);
++				game_surface(p + W(p + 28), pts, tex_lum, ntex, sum, area, subcalls);
++				game_surface(p + W(p + 30), pts, tex_lum, ntex, sum, area, subcalls);
 +				p += 32;
 +				break;
 +			case 5:	// OP_RODBM
 +				p += 36;
 +				break;
 +			case 6:	// OP_SUBCALL
-+				game_surface(p + W(p + 16), pts, tex_lum, ntex, sum, area);
++				if (subcalls)
++					game_surface(p + W(p + 16), pts, tex_lum, ntex, sum, area);
 +				p += 20;
 +				break;
 +			case 8:	// OP_GLOW
@@ -2790,8 +4066,12 @@ index d75a377..e65b9fc 100644
 +}
 +#undef W
 +
-+// The models often texture with grey metal what the game draws as bright flat polygons, so
-+// each robot is lit to look as bright overall as its game model.
++static int parts_match(render_model& rm, polymodel *po);
++static float clamp_gain(double g) { return g < 0.7 ? 0.7f : g > 1.8 ? 1.8f : (float)g; }
++
++// The models often texture with grey metal what the game draws as bright flat polygons
++// (Fiddler's claws), so each robot is lit to look as bright overall as its game model, and
++// part by part where its parts match the game model's.
 +static void fit_brightness(render_model& rm, polymodel *po) {
 +	static vms_vector pts[MAX_SURFACE_POINTS];
 +	float tex_lum[MAX_POLYOBJ_TEXTURES] = { 0 }, rgb[3];
@@ -2820,7 +4100,7 @@ index d75a377..e65b9fc 100644
 +			rgb[k] = c[k] / n / 255;
 +		blum[i] = luminance(rgb) * (rm.m.m_nFlat[i] != -2 ? 1 : TYPICAL_LIGHT);
 +	}
-+	double msum = 0, marea = 0;
++	double msum = 0, marea = 0, psum[MAX_SUBMODELS] = { 0 }, parea[MAX_SUBMODELS] = { 0 };
 +	for (int r = 0; r < rm.nranges; r++)
 +		for (int i = rm.ranges[r].first; i + 2 < rm.ranges[r].first + rm.ranges[r].count; i += 3) {
 +			const float *p0 = rm.verts[i].pos.v.vec, *p1 = rm.verts[i + 1].pos.v.vec, *p2 = rm.verts[i + 2].pos.v.vec;
@@ -2830,14 +4110,24 @@ index d75a377..e65b9fc 100644
 +			double a = sqrt(cx * cx + cy * cy + cz * cz) / 2;
 +			msum += a * blum[rm.ranges[r].bitmap];
 +			marea += a;
++			psum[rm.ranges[r].sub] += a * blum[rm.ranges[r].bitmap];
++			parea[rm.ranges[r].sub] += a;
 +		}
 +	delete[] blum;
-+	if (gsum > 0 && garea > 0 && msum > 0 && marea > 0) {
-+		float g = (float)((gsum / garea) / (msum / marea));
-+		rm.gain = g < 0.7f ? 0.7f : g > 1.8f ? 1.8f : g;
++	if (gsum > 0 && garea > 0 && msum > 0 && marea > 0)
++		rm.gain = clamp_gain((gsum / garea) / (msum / marea));
++	for (int i = 0; i < MAX_SUBMODELS; i++)
++		rm.part_gain[i] = rm.gain;
++	if (!parts_match(rm, po))
++		return;
++	for (int i = 0; i < rm.nsubs; i++) {
++		double s = 0, a = 0;
++		game_surface(po->model_data + po->submodel_ptrs[i], pts, tex_lum, ntex, &s, &a, 0);
++		if (s > 0 && a > 0 && psum[i] > 0 && parea[i] > 0)
++			rm.part_gain[i] = clamp_gain((s / a) / (psum[i] / parea[i]));
 +	}
 +}
-+
+ 
 +// The game model's flat-shaded polygon colors (15-bit RGB), each once, in the order the
 +// interpreter meets them: what the models' "colour N" materials stand for.
 +#define W(p) (*(short *)(p))
@@ -3042,12 +4332,13 @@ index d75a377..e65b9fc 100644
 +
 +// Shades like the game's own models: a quarter of the light, plus the rest on faces turned
 +// toward the viewer. view is the view direction in model coordinates.
-+static void shade(render_model& rm, const float *view, float rot[][9], g3s_lrgb *light, float alpha) {
-+	float lr = f2fl(light->r) * rm.gain, lg = f2fl(light->g) * rm.gain, lb = f2fl(light->b) * rm.gain;
++static void shade(render_model& rm, const float *view, float rot[][9], g3s_lrgb *light, float alpha, int parts) {
 +	float a = alpha;
 +	for (int r = 0; r < rm.nranges; r++) {
 +		range& rg = rm.ranges[r];
 +		const float *m = rot[rg.sub];
++		float gain = parts ? rm.part_gain[rg.sub] : rm.gain;
++		float lr = f2fl(light->r) * gain, lg = f2fl(light->g) * gain, lb = f2fl(light->b) * gain;
 +		if (rm.m.m_nFlat[rg.bitmap] != -2) {	// flat colors: the game draws its flat polygons unlit
 +			for (int i = rg.first; i < rg.first + rg.count; i++) {
 +				float *c = rm.verts[i].color;
@@ -3075,7 +4366,7 @@ index d75a377..e65b9fc 100644
 +		}
 +	}
 +}
- 
++
 +static void xmodel_draw(render_model& rm, int mpcolor, g3s_lrgb *light, const float *view,
 +	polymodel *po, vms_angvec *anim_angles, int root) {
 +	int num_bitmaps = rm.m.m_textures.m_nBitmaps;
@@ -3105,7 +4396,7 @@ index d75a377..e65b9fc 100644
  		OGL_ENABLE(TEXTURE_2D);
  		color_alpha = (grd_curcanv->cv_fade_level >= GR_FADE_OFF)?1.0:(1.0 - (float)grd_curcanv->cv_fade_level / ((float)GR_FADE_LEVELS - 1.0));
 -		glColor4f(f2fl(light->r), f2fl(light->g), f2fl(light->b), color_alpha);
-+		shade(rm, view, rot, light, color_alpha);
++		shade(rm, view, rot, light, color_alpha, parts);
 +		glColorPointer(4, GL_FLOAT, sizeof(vert), rm.verts[0].color);
 +		glEnableClientState(GL_COLOR_ARRAY);
  	}
@@ -3173,7 +4464,7 @@ index d75a377..e65b9fc 100644
  #if 0
  #define GLAPIENTRY
  #define GL_DEBUG_TYPE_ERROR               0x824C
-@@ -235,18 +792,20 @@ void gl_debug() {
+@@ -235,18 +813,20 @@ void gl_debug() {
  }
  #endif
  
@@ -3197,7 +4488,7 @@ index d75a377..e65b9fc 100644
  	vpos.z *= -1;
  
  	// create 4x4 lookat matrix
-@@ -263,30 +822,55 @@ void xmodel_show_at(void *model, vms_vector *pos, vms_matrix *orient, int mpcolo
+@@ -263,30 +843,55 @@ void xmodel_show_at(void *model, vms_vector *pos, vms_matrix *orient, int mpcolo
  	for (int j = 0; j < 3; j++)
  		fm[3 * 4 + j] = -f2fl(vpos_elem[j]);
  	fm[15] = 1;
@@ -3256,7 +4547,7 @@ index d75a377..e65b9fc 100644
  	if (!free_registered) {
  		atexit(xmodel_free_all);
  		free_registered = 1;
-@@ -297,12 +881,18 @@ void xmodel_load_gl_all() {
+@@ -297,12 +902,18 @@ void xmodel_load_gl_all() {
  	for (int i = 0; i < NUM_XMODELS; i++)
  		if (xmodels[i])
  			xmodel_load_gl(xmodels[i]);
@@ -3275,7 +4566,7 @@ index d75a377..e65b9fc 100644
  }
  
  static int xmodel_xlate(enum xmodel_type mt, int modelnum) {
-@@ -315,14 +905,48 @@ static int xmodel_xlate(enum xmodel_type mt, int modelnum) {
+@@ -315,14 +926,48 @@ static int xmodel_xlate(enum xmodel_type mt, int modelnum) {
  
  // returns 1 if drawn
  int xmodel_show_if_loaded(enum xmodel_type mt, int modelnum, vms_vector *pos, vms_matrix *orient, int mpcolor, g3s_lrgb *light) {

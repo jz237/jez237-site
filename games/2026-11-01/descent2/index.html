@@ -148,6 +148,8 @@
         <span class="small" id="reslabel"></span>
       </label>
       <label><input type="checkbox" id="msaa"> Anti-aliasing (MSAA)</label>
+      <label title="An edge-aware upscale for the movies and smooth edges for text and HUD art"><input type="checkbox" id="sharp"> Sharper movies and text</label>
+      <label title="Glows on the lamps, smoke trails, smoking damaged robots, sparks"><input type="checkbox" id="effects"> Light halos, smoke and sparks</label>
       <label>Music
         <select id="music">
           <option value="cd">CD soundtrack</option>
@@ -201,9 +203,11 @@
       <div>Touch: <b>KEYS</b> opens the phone keyboard for names</div>
     </div>
     <p class="small" style="margin-bottom:0">Saved pilots and games are kept in this browser. Enhancements: native-resolution
-      rendering with trilinear filtering and MSAA, high-resolution cutscenes, smooth display-synced frame rate, the original
+      rendering with trilinear filtering and MSAA, high-resolution cutscenes with an edge-aware sharp upscale, smooth-edged
+      text and HUD, glowing halos on the lamps, smoke trails behind missiles, smoking damaged robots and sparks where shots
+      hit and robots blow up, smooth display-synced frame rate, the original
       CD soundtrack, the game's own MIDI music played through a General MIDI synthesizer, or a music folder of your own
-      (title, briefing, credits and level tracks; a <code>playlist.txt</code> sets the level order). With a D2X-XL folder:
+      (title, briefing, credits and level tracks; a <code>playlist.txt</code> sets the level order). From D2X-XL:
       four-times-sharper textures, matched to each level's colors, and detailed 3D models of the robots (moving as the
       originals do), the ship, missiles and power-ups. New pilots get mouse and gamepad flight set up; adjust them in
       <b>Options → Controls</b>. On phones and tablets, on-screen controls appear.</p>
@@ -243,6 +247,6 @@
   Sharper textures and 3D models: from the <a href="https://sourceforge.net/projects/d2x-xl/">D2X-XL</a> 2.1.8 distribution
   (models by MetalBeast and others; <a href="d2x-xl/">their readmes</a>). Descent II and the Vertigo Series by Parallax Software.
 </footer>
-<script src="d2loader.js?v=20261102e"></script>
+<script src="d2loader.js?v=20261103a"></script>
 </body>
 </html>

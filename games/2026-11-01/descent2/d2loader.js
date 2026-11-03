@@ -2,7 +2,7 @@
 // them locally. Optional folder imports remain available for custom copies.
 
 // Bump with every engine or loader release so browsers fetch the new files
-const BUILD = '20261102e';
+const BUILD = '20261103a';
 const DB_NAME = 'descent2-web';
 const DB_VERSION = 3; // 2 adds the music folder store, 3 the D2X-XL textures and models
 const SAVE_DIR = '/home/web_user/.d2x-redux';
@@ -637,7 +637,7 @@ function touchControls() {
 const SETTINGS_KEY = 'descent2-web-settings';
 function loadSettings() {
   // phones render at 1080p by default: sharp, and light on the battery
-  const defaults = { quality: isTouchDevice() ? '1080' : 'native', msaa: true, music: 'cd', hires: true };
+  const defaults = { quality: isTouchDevice() ? '1080' : 'native', msaa: true, sharp: true, effects: true, music: 'cd', hires: true };
   try {
     return { ...defaults, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') };
   } catch {
@@ -828,6 +828,8 @@ async function bootGame(manifest, ui) {
     d2music: music,
     d2midi: midiPlayer(),
     d2touch: touch,
+    // read live by the engine (d2web_option): sharp movies and text, halos/smoke/sparks
+    d2options: { sharp: settings.sharp, effects: settings.effects },
     print: (t) => console.log(t),
     printErr: (t) => console.warn(t),
     onGameMessage: (text, isError) => ui.message(text, isError),
@@ -950,6 +952,8 @@ async function main() {
   const settings = loadSettings();
   $('quality').value = settings.quality;
   $('msaa').checked = settings.msaa;
+  $('sharp').checked = settings.sharp;
+  $('effects').checked = settings.effects;
   $('music').value = settings.music;
   $('music').addEventListener('change', () => {
     settings.music = $('music').value;
@@ -1047,6 +1051,13 @@ async function main() {
   });
   $('quality').addEventListener('change', () => { settings.quality = $('quality').value; saveSettings(settings); updateResLabel(); });
   $('msaa').addEventListener('change', () => { settings.msaa = $('msaa').checked; saveSettings(settings); });
+  // these two also apply at once to a running game
+  for (const id of ['sharp', 'effects'])
+    $(id).addEventListener('change', () => {
+      settings[id] = $(id).checked;
+      saveSettings(settings);
+      if (window.Module && Module.d2options) Module.d2options[id] = settings[id];
+    });
   const updateResLabel = () => {
     const { w, h } = renderResolution(settings.quality);
     $('reslabel').textContent = `${w} × ${h}`;

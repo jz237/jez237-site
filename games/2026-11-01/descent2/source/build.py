@@ -50,12 +50,12 @@ SRCS += files(f"{D2}/3d", "clipper.c", "draw.c", "globvars.c", "instance.c", "in
 SRCS += files(f"{D2}/arch/sdl", "event.c", "init.c", "joy.c", "key.c", "mouse.c", "timer.c",
               "window.c", "digi.c", "digi_audio.c")
 SRCS += files(f"{D2}/arch/web", "rbaudio_web.c", "web.c")
-SRCS += files(f"{D2}/arch/ogl", "gr.c", "ogl.c")
+SRCS += files(f"{D2}/arch/ogl", "gr.c", "ogl.c", "ogl_shader.c")
 SRCS += files(f"{D2}/iff", "iff.c")
 SRCS += files(f"{D2}/libmve", "decoder8.c", "decoder16.c", "mve_audio.c", "mvelib.c", "mveplay.c")
 SRCS += files(f"{D2}/main", "ai.c", "ai2.c", "aipath.c", "automap.c", "bm.c", "cntrlcen.c",
               "collide.c", "config.c", "console.c", "controls.c", "credits.c", "digiobj.c",
-              "dumpmine.c", "effects.c", "endlevel.c", "escort.c", "fireball.c", "fuelcen.c",
+              "dumpmine.c", "effects.c", "endlevel.c", "escort.c", "fireball.c", "fuelcen.c", "fx.c",
               "fvi.c", "game.c", "gamecntl.c", "gamefont.c", "gamemine.c", "gamepal.c",
               "gamerend.c", "gamesave.c", "gameseg.c", "gameseq.c", "gauges.c", "hostage.c",
               "hud.c", "inferno.c", "kconfig.c", "kmatrix.c", "laser.c", "lighting.c", "menu.c",
