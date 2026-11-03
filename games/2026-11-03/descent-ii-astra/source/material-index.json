@@ -1,0 +1,443 @@
+{
+  "materials": {
+    "m000.png": [
+      "cc_wall_01a_basecolor",
+      512
+    ],
+    "m001.png": [
+      "ind_metal_panel_01e_basecolor",
+      512
+    ],
+    "m002.png": [
+      "cc_wall_06a_basecolor",
+      512
+    ],
+    "m003.png": [
+      "ind_metal_panel_01r_basecolor",
+      512
+    ],
+    "m004.png": [
+      "ind_metal_panel_01m_basecolor",
+      512
+    ],
+    "m005.png": [
+      "cc_wall_03b_basecolor",
+      512
+    ],
+    "m006.png": [
+      "ind_metal_panel_01j_basecolor",
+      512
+    ],
+    "m007.png": [
+      "cc_wall_03d_basecolor",
+      512
+    ],
+    "m008.png": [
+      "ind_metal_panel_01b_basecolor",
+      512
+    ],
+    "m009.png": [
+      "cc_wall_04a_basecolor",
+      512
+    ],
+    "m010.png": [
+      "ind_metal_panel_01o_basecolor",
+      512
+    ],
+    "m011.png": [
+      "ind_metal_wall_12d_basecolor",
+      512
+    ],
+    "m012.png": [
+      "ind_metal_panel_01h_basecolor",
+      512
+    ],
+    "m013.png": [
+      "om_wall_36a_basecolor",
+      512
+    ],
+    "m014.png": [
+      "om_wall_12a_basecolor",
+      512
+    ],
+    "m015.png": [
+      "ind_stone_floor_01a_basecolor",
+      512
+    ],
+    "m016.png": [
+      "om_wall_42a_basecolor",
+      512
+    ],
+    "m017.png": [
+      "om_wall_39a_basecolor",
+      512
+    ],
+    "m018.png": [
+      "ind_stone_floor_09a_basecolor",
+      512
+    ],
+    "m019.png": [
+      "ind_stone_floor_05a_basecolor",
+      512
+    ],
+    "m020.png": [
+      "rockwall_01c_basecolor",
+      512
+    ],
+    "m021.png": [
+      "ind_stone_floor_07a_basecolor",
+      512
+    ],
+    "m022.png": [
+      "rockwall_01a_basecolor",
+      512
+    ],
+    "m023.png": [
+      "ind_stone_floor_01c_basecolor",
+      512
+    ],
+    "m024.png": [
+      "ind_stone_floor_08a_basecolor",
+      512
+    ],
+    "m025.png": [
+      "om_wall_31a_basecolor",
+      512
+    ],
+    "m026.png": [
+      "cc_monitor_01a_basecolor",
+      256
+    ],
+    "m027.png": [
+      "om_wall_20b_basecolor",
+      512
+    ],
+    "m028.png": [
+      "om_wall_17a_basecolor",
+      512
+    ],
+    "m029.png": [
+      "ind_metal_wall_13b_basecolor",
+      512
+    ],
+    "m030.png": [
+      "ind_metal_wall_03o_basecolor",
+      512
+    ],
+    "m031.png": [
+      "om_wall_18b_basecolor",
+      512
+    ],
+    "m032.png": [
+      "om_monitors_01a_basecolor",
+      256
+    ],
+    "m033.png": [
+      "ind_stone_floor_10a_basecolor",
+      512
+    ],
+    "m034.png": [
+      "ind_stone_floor_06a_basecolor",
+      512
+    ],
+    "m035.png": [
+      "ind_stone_floor_01b_basecolor",
+      512
+    ],
+    "m036.png": [
+      "stones_basecolor",
+      512
+    ],
+    "m037.png": [
+      "rockwall_04_basecolor",
+      512
+    ],
+    "m038.png": [
+      "ind_metal_wall_03e_basecolor",
+      512
+    ],
+    "m039.png": [
+      "om_wall_07a_basecolor",
+      512
+    ],
+    "m040.png": [
+      "om_wall_04a_basecolor",
+      512
+    ],
+    "m041.png": [
+      "om_wall_03b_basecolor",
+      512
+    ],
+    "m042.png": [
+      "ind_metal_wall_03j_basecolor",
+      512
+    ],
+    "m043.png": [
+      "ind_metal_wall_07a_basecolor",
+      512
+    ],
+    "m044.png": [
+      "om_floor_06c_basecolor",
+      512
+    ],
+    "m045.png": [
+      "ind_metal_wall_16a_basecolor",
+      512
+    ],
+    "m046.png": [
+      "om_floor_06e_basecolor",
+      512
+    ],
+    "m047.png": [
+      "ind_metal_wall_01c_basecolor",
+      512
+    ],
+    "m048.png": [
+      "ind_metal_wall_01f_basecolor",
+      512
+    ],
+    "m049.png": [
+      "om_floor_03a_basecolor",
+      512
+    ],
+    "m050.png": [
+      "om_floor_04a_basecolor",
+      512
+    ],
+    "m051.png": [
+      "cc_floor_01a_basecolor",
+      512
+    ],
+    "m052.png": [
+      "om_floor_01a_basecolor",
+      512
+    ],
+    "m053.png": [
+      "ind_metal_wall_01a_basecolor",
+      512
+    ],
+    "m054.png": [
+      "ind_metal_wall_03c_basecolor",
+      512
+    ],
+    "m055.png": [
+      "om_wall_34a_basecolor",
+      512
+    ],
+    "m056.png": [
+      "cc_floor_02a_basecolor",
+      512
+    ],
+    "m057.png": [
+      "om_wall_09a_basecolor",
+      512
+    ],
+    "m058.png": [
+      "cc_floor_01b_basecolor",
+      512
+    ],
+    "m059.png": [
+      "ind_metal_wall_01h_basecolor",
+      512
+    ],
+    "m060.png": [
+      "ind_metal_wall_10a_basecolor",
+      512
+    ],
+    "m061.png": [
+      "ind_metal_wall_03h_basecolor",
+      512
+    ],
+    "m062.png": [
+      "om_floor_06j_basecolor",
+      512
+    ],
+    "m063.png": [
+      "ind_metal_wall_03m_basecolor",
+      512
+    ],
+    "m064.png": [
+      "om_wall_19a_basecolor",
+      512
+    ],
+    "m065.png": [
+      "ind_metal_wall_14a_basecolor",
+      512
+    ],
+    "m066.png": [
+      "ind_metal_ceiling_01h_basecolor",
+      512
+    ],
+    "m067.png": [
+      "ind_metal_ceiling_01c_basecolor",
+      512
+    ],
+    "m068.png": [
+      "ind_metal_ceiling_01e_basecolor",
+      512
+    ],
+    "m069.png": [
+      "om_ceiling_03d_basecolor",
+      512
+    ],
+    "m070.png": [
+      "om_ceiling_07a_basecolor",
+      512
+    ],
+    "m071.png": [
+      "ind_metal_ceiling_06b_basecolor",
+      512
+    ],
+    "m072.png": [
+      "om_ceiling_03a_basecolor",
+      512
+    ],
+    "m073.png": [
+      "om_ceiling_01a_basecolor",
+      512
+    ],
+    "m074.png": [
+      "om_ceiling_04a_basecolor",
+      512
+    ],
+    "m075.png": [
+      "ind_metal_ceiling_01j_basecolor",
+      512
+    ],
+    "m076.png": [
+      "ind_metal_ceiling_08a_basecolor",
+      512
+    ],
+    "m077.png": [
+      "ind_metal_wall_12d_basecolor",
+      256
+    ],
+    "m078.png": [
+      "ind_metal_wall_10a_basecolor",
+      256
+    ],
+    "m079.png": [
+      "om_wall_17a_basecolor",
+      256
+    ],
+    "m080.png": [
+      "om_wall_31a_basecolor",
+      256
+    ],
+    "m081.png": [
+      "om_wall_09a_basecolor",
+      256
+    ],
+    "m082.png": [
+      "om_wall_04a_basecolor",
+      256
+    ],
+    "m083.png": [
+      "ind_metal_wall_03c_basecolor",
+      256
+    ],
+    "m084.png": [
+      "om_wall_39a_basecolor",
+      256
+    ],
+    "m085.png": [
+      "om_wall_36a_basecolor",
+      256
+    ],
+    "m086.png": [
+      "ind_metal_wall_03j_basecolor",
+      256
+    ],
+    "m087.png": [
+      "om_wall_03b_basecolor",
+      256
+    ],
+    "m088.png": [
+      "ind_metal_wall_01a_basecolor",
+      256
+    ],
+    "m089.png": [
+      "om_wall_15b_basecolor",
+      256
+    ],
+    "m090.png": [
+      "lava_02_basecolor",
+      256
+    ],
+    "m091.png": [
+      "ind_metal_wall_14a_basecolor",
+      256
+    ],
+    "m092.png": [
+      "om_wall_19a_basecolor",
+      256
+    ],
+    "m093.png": [
+      "ind_metal_wall_01h_basecolor",
+      256
+    ],
+    "m094.png": [
+      "ind_metal_wall_01f_basecolor",
+      256
+    ],
+    "m095.png": [
+      "ind_metal_wall_03h_basecolor",
+      256
+    ],
+    "m096.png": [
+      "ind_metal_wall_03e_basecolor",
+      256
+    ],
+    "m097.png": [
+      "ind_metal_wall_01c_basecolor",
+      256
+    ],
+    "m098.png": [
+      "om_wall_07a_basecolor",
+      256
+    ],
+    "m099.png": [
+      "ind_metal_wall_16a_basecolor",
+      256
+    ],
+    "m100.png": [
+      "lava_01_basecolor",
+      256
+    ],
+    "m101.png": [
+      "ind_metal_wall_07a_basecolor",
+      256
+    ],
+    "m102.png": [
+      "alien_door_01_basecolor",
+      256
+    ],
+    "m103.png": [
+      "om_wall_42a_basecolor",
+      256
+    ],
+    "m104.png": [
+      "alien_door_02_basecolor",
+      256
+    ],
+    "m105.png": [
+      "om_door_01_basecolor",
+      256
+    ],
+    "m106.png": [
+      "cc_door_01a_basecolor",
+      256
+    ],
+    "m107.png": [
+      "om_door_02_basecolor",
+      256
+    ]
+  },
+  "explosionSheets": [
+    "optimized_explodenoisy02",
+    "optimized_explode68",
+    "optimized_oilrigexplosion"
+  ],
+  "bitmapSlots": 1460,
+  "explosionFrames": 165
+}
