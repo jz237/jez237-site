@@ -1,11 +1,39 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-11-02",
+  "updated": "2026-11-03",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-11-02",
+  "coverageEnd": "2026-11-03",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "category": "Research in action",
+      "evidenceKind": "demo",
+      "modelNote": "AgentKerr tested GPT-6 Astra, GPT-6 Luna and GPT-5.6 Luna; a separate U-Net read microscope images.",
+      "sources": [
+        "https://arxiv.org/abs/2611.00299"
+      ],
+      "status": "Early experiment-control demonstration; author-reported experiments, not independently replicated here. Presented at an October 5–9 conference; preprint released October 30.",
+      "takeaway": "An AI-controlled microscope worked out how to turn magnetic stripes into tiny whirlpools, resize them and move them, choosing each pulse from fresh measurements. In one run it recovered after a pulse destroyed the whirlpools. People built the setup, trained its image reader and set goals and limits; they supplied a strategy for one task, but not several others. This shows adaptable experiment control, not new physics. The October 30 preprint describes a small, still-developing demonstration, not proven reliable unattended research.",
+      "title": "AI works out how to reshape tiny magnetic whirlpools",
+      "id": "d-1567196299848323213-agentkerr-magnetic-whirlpools",
+      "coveredOn": "2026-11-03",
+      "context": "🔬 **AI Discovery Watch · November 3, 2026**\n\n**AI works out how to reshape tiny magnetic whirlpools**\nAn AI-controlled microscope worked out how to turn magnetic stripes into tiny whirlpools, resize them and move them, choosing each pulse from fresh measurements. In one run it recovered after a pulse destroyed the whirlpools. People built the setup, trained its image reader and set goals and limits; they supplied a strategy for one task, but not several others. This shows adaptable experiment control, not new physics. The October 30 preprint describes a small, still-developing demonstration, not proven reliable unattended research.\n\n**AI used:** AgentKerr tested GPT-6 Astra, GPT-6 Luna and GPT-5.6 Luna; a separate U-Net read microscope images.\n**Evidence:** Early experiment-control demonstration; author-reported experiments, not independently replicated here. Presented at an October 5–9 conference; preprint released October 30.\nOriginal source: <https://arxiv.org/abs/2611.00299>"
+    },
+    {
+      "category": "Computing & engineering",
+      "evidenceKind": "demo",
+      "modelNote": "Claude Fable 5.1 designed the hidden-ring method and proof; Claude Opus 5/5.5 handled other cases. Lean was the proof checker.",
+      "sources": [
+        "https://arxiv.org/abs/2610.35595"
+      ],
+      "status": "Early research-capability demonstration; Lean checks reported by the author, not rebuilt here. Code release still pending; some other examples leave costly computation uncounted.",
+      "takeaway": "AI designed a search method and supplied a mathematical guarantee for how quickly it finds an answer, rather than relying on speed tests. On a researcher-designed puzzle involving a hidden ring, it found a way around a trap that makes a standard method extremely slow. A researcher supplied the puzzle, starting methods and step-by-step proof rules; the AI devised the replacement and its proof. This October 26–27 preprint demonstrates designing and checking algorithms together, not a new speed record or a demonstrated practical speedup.",
+      "title": "AI designs a search method and proves how its workload grows",
+      "id": "d-1567196777474428990-ai-designs-algorithm-and-runtime-proof",
+      "coveredOn": "2026-11-03",
+      "context": "🔬 **AI Discovery Watch · November 3, 2026**\n\n**AI designs a search method and proves how its workload grows**\nAI designed a search method and supplied a mathematical guarantee for how quickly it finds an answer, rather than relying on speed tests. On a researcher-designed puzzle involving a hidden ring, it found a way around a trap that makes a standard method extremely slow. A researcher supplied the puzzle, starting methods and step-by-step proof rules; the AI devised the replacement and its proof. This October 26–27 preprint demonstrates designing and checking algorithms together, not a new speed record or a demonstrated practical speedup.\n\n**AI used:** Claude Fable 5.1 designed the hidden-ring method and proof; Claude Opus 5/5.5 handled other cases. Lean was the proof checker.\n**Evidence:** Early research-capability demonstration; Lean checks reported by the author, not rebuilt here. Code release still pending; some other examples leave costly computation uncounted.\nOriginal source: <https://arxiv.org/abs/2610.35595>"
+    },
     {
       "category": "Research in action",
       "evidenceKind": "early",
