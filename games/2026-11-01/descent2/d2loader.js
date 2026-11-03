@@ -2,7 +2,7 @@
 // them locally. Optional folder imports remain available for custom copies.
 
 // Bump with every engine or loader release so browsers fetch the new files
-const BUILD = '20261103k';
+const BUILD = '20261103l';
 const DB_NAME = 'descent2-web';
 const DB_VERSION = 3; // 2 adds the music folder store, 3 the D2X-XL textures and models
 const SAVE_DIR = '/home/web_user/.d2x-redux';
