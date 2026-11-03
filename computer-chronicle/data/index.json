@@ -2,6 +2,183 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-03",
+      "historicDate": "1985-06-03",
+      "displayDate": "Week of June 3-9, 1985",
+      "edition": "Issue 149 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "A robot courts retailers; optical storage courts the home computer.",
+      "leadHeadline": "Nintendo brings a robot to its new Entertainment System",
+      "storyHeadlines": [
+        "Atari packs an encyclopedia onto an optical disc",
+        "ST and Commodore 128 approach stores, but delivery promises still matter",
+        "A poet takes on the text-adventure establishment"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-06-03.jpg",
+      "thumb": "media/thumbs/1985-06-03.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-11-02",
+      "historicDate": "1985-05-27",
+      "displayDate": "Week of May 27-June 2, 1985",
+      "edition": "Issue 148 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Jobs remains chairman, but Macintosh operations pass into a unified organization.",
+      "leadHeadline": "Apple merges divisions; Jobs loses Macintosh command",
+      "storyHeadlines": [
+        "Championship Lode Runner challenges the veterans",
+        "GEM brings the graphical desktop to IBM and Atari",
+        "MacVision turns video into Macintosh pictures"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-05-27.jpg",
+      "thumb": "media/thumbs/1985-05-27.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-11-01",
+      "historicDate": "1985-05-20",
+      "displayDate": "Week of May 20-26, 1985",
+      "edition": "Issue 147 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Fifty rooms for the expert, a graphical desktop for the programmer, and pictures for the Macintosh.",
+      "leadHeadline": "Fifty punishing rooms put Lode Runner veterans to the test",
+      "storyHeadlines": [
+        "GEM promises a graphical bridge between IBM PCs and Atari",
+        "MacVision turns videotape and camera pictures into Macintosh illustrations",
+        "Synapse sells adventures as electronic novels"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-05-20.jpg",
+      "thumb": "media/thumbs/1985-05-20.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-31",
+      "historicDate": "1985-05-13",
+      "displayDate": "Week of May 13-19, 1985",
+      "edition": "Issue 146 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Ten-dollar games crowd the rack as Atari prepares its return to the show floor.",
+      "leadHeadline": "Mastertronic pitches Commodore games at $9.99",
+      "storyHeadlines": [
+        "Atari rejoins Summer CES; ST clears FCC hurdle",
+        "GEM brings the desktop metaphor to PCs and Atari",
+        "Star offers near-letter-quality printing from $299"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-05-13.jpg",
+      "thumb": "media/thumbs/1985-05-13.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-30",
+      "historicDate": "1985-05-06",
+      "displayDate": "Week of May 6-12, 1985",
+      "edition": "Issue 145 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Fifty expert mazes, a mouse on the desktop, and a video picture in your document.",
+      "leadHeadline": "Championship Lode Runner turns veterans into certified champions",
+      "storyHeadlines": [
+        "Atari’s attack: 520ST reaches the hands-on test bench",
+        "Sidekick puts the desk inside the PC — at two prices",
+        "MacVision imports the video world into Macintosh documents"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-05-06.jpg",
+      "thumb": "media/thumbs/1985-05-06.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-29",
+      "historicDate": "1985-04-29",
+      "displayDate": "Week of April 29-May 5, 1985",
+      "edition": "Issue 144 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Wire a robot, hand over a keyboard, and weigh the next AT.",
+      "leadHeadline": "Build a robot, solve an adventure: programming becomes play",
+      "storyHeadlines": [
+        "AT competition widens: three rivals promise more choice",
+        "Buyers and vendors still divided over software protection",
+        "Share a screen over the telephone"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-04-29.jpg",
+      "thumb": "media/thumbs/1985-04-29.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-28",
+      "historicDate": "1985-04-22",
+      "displayDate": "Week of April 22-28, 1985",
+      "edition": "Issue 143 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Gribbly takes flight; Amstrad trades tape for disc; a holographic egg marks the genuine article.",
+      "leadHeadline": "Gribbly’s Day Out brings airborne rescue to the Commodore screen",
+      "storyHeadlines": [
+        "Amstrad puts disc storage at the center of its new home micro",
+        "Chuckie Egg packaging turns to holograms against copying",
+        "Atari’s announced ST machines promise a graphical desktop at home-computer prices"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-04-22.jpg",
+      "thumb": "media/thumbs/1985-04-22.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-27",
+      "historicDate": "1985-04-15",
+      "displayDate": "Week of April 15-21, 1985",
+      "edition": "Issue 142 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "A bomber crew needs a captain; software copyright reaches a Commons vote; new machines promise more for less.",
+      "leadHeadline": "Fifty Mission Crush puts the B-17 campaign on home computers",
+      "storyHeadlines": [
+        "Commons passes software-copyright bill at third reading",
+        "Atari promises a mouse-and-window computer for $599",
+        "Commodore 128 promises three ways to preserve a software library"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-04-15.jpg",
+      "thumb": "media/thumbs/1985-04-15.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-26",
+      "historicDate": "1985-04-08",
+      "displayDate": "Week of April 8-14, 1985",
+      "edition": "Issue 141 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Fifty missions test a bomber crew; Atari and Commodore promise more; Discovery lifts off.",
+      "leadHeadline": "Fifty missions, one crew: the bomber game that makes survival count",
+      "storyHeadlines": [
+        "Atari and Commodore promise a bargain-computer generation",
+        "Home-computer optimism meets the PCjr reckoning",
+        "Pooh opens the adventure door without a parser battle"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-04-08.jpg",
+      "thumb": "media/thumbs/1985-04-08.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-25",
+      "historicDate": "1985-04-01",
+      "displayDate": "Week of April 1-7, 1985",
+      "edition": "Issue 140 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Atari gathers support; Pooh opens the adventure door; low-cost modems beckon.",
+      "leadHeadline": "Atari’s ST gathers support as the 16-bit challenge approaches",
+      "storyHeadlines": [
+        "Commodore 128 promises three computing worlds without abandoning the 64",
+        "Disney and Sierra make adventure gaming accessible to younger players",
+        "A B-17 campaign in fifteen-minute installments",
+        "SpeedScript 3.0 brings a machine-language word processor to expanded VIC-20s"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-04-01.jpg",
+      "thumb": "media/thumbs/1985-04-01.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-24",
+      "historicDate": "1985-03-25",
+      "displayDate": "Week of March 25-31, 1985",
+      "edition": "Issue 139 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Home pilots take the mail route; Macintosh owners wait for Jazz.",
+      "leadHeadline": "Solo Flight puts a mail route inside a home-computer cockpit",
+      "storyHeadlines": [
+        "After IBM’s PCjr retreat, home-computer owners weigh compatibility and support",
+        "A $12.95 disk challenges the commercial word processor",
+        "Jazz misses its late-March date as Macintosh waits for office software"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-03-25.jpg",
+      "thumb": "media/thumbs/1985-03-25.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-23",
       "historicDate": "1985-03-18",
       "displayDate": "Week of March 18-24, 1985",
