@@ -1,9 +1,9 @@
 // Meshes for the things on court: paddles, balls, bolts, orbs, drones, cells, cores, hazards.
 import * as THREE from '../vendor/three.module.min.js';
-import { F, POWERUPS } from './config.js?v=5';
-import { CELL_HALF } from './sim.js?v=5';
-import { NOISE } from './shaders.js?v=5';
-import { Ribbon } from './fx.js?v=5';
+import { F, POWERUPS } from './config.js?v=6';
+import { CELL_HALF } from './sim.js?v=6';
+import { NOISE } from './shaders.js?v=6';
+import { Ribbon } from './fx.js?v=6';
 
 export const BALL_Y = 0.36;
 // reduced flashing (Options): strobing glows become slow pulses

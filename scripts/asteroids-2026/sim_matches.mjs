@@ -1,8 +1,8 @@
 // Headless AI-vs-AI duels in every sector: pacing, damage mix, NaN check.
 // usage: node sim_matches.mjs [matches per sector] [maxSeconds]
-import { makeWorld, step, drainEvents, STEP, shipOf, bossHP } from '../../games/2026-03-09/asteroids-hd/2026/js/sim.js?v=4';
-import { AIPilot } from '../../games/2026-03-09/asteroids-hd/2026/js/ai.js?v=4';
-import { PILOTS, PERKS, DIFFICULTY } from '../../games/2026-03-09/asteroids-hd/2026/js/config.js?v=4';
+import { makeWorld, step, drainEvents, STEP, shipOf, bossHP } from '../../games/2026-03-09/asteroids-hd/2026/js/sim.js?v=5';
+import { AIPilot } from '../../games/2026-03-09/asteroids-hd/2026/js/ai.js?v=5';
+import { PILOTS, PERKS, DIFFICULTY } from '../../games/2026-03-09/asteroids-hd/2026/js/config.js?v=5';
 
 const N = +process.argv[2] || 4, MAX = +process.argv[3] || 240;
 const keys = ['razor', 'lyra', 'grit', 'cipher'];

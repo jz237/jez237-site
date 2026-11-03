@@ -1,6 +1,6 @@
 // The battle simulation: pure game state + fixed-step rules. No three.js in here, so the AI can
 // run the very same ball physics forward (predict.js) and the renderer only reads state + events.
-import { F, ARENAS, POWERUPS, POWERUP_KEYS } from './config.js?v=5';
+import { F, ARENAS, POWERUPS, POWERUP_KEYS } from './config.js?v=6';
 
 export const STEP = 1 / 120;      // game tick
 const SUB = 2;                    // ball sub-steps per tick (240 Hz collisions)
@@ -76,6 +76,7 @@ export function makeWorld(opts = {}) {
     portals: arena.hazards.portals ? { ...arena.hazards.portals } : null,
     sliders: arena.hazards.sliders ? { ...arena.hazards.sliders } : null,
     boss: null, rally: 0, maxRally: 0, slow: 1,
+    ballK: opts.ballK || 1, // ball pace (the campaign's early stages are slower)
     hold: null,       // online host: { side, max } — that side's shield waits for its player's hit report
     predict: false,   // online guest: a local forecast of the host's world (no scoring, no spawns)
   };
@@ -256,7 +257,7 @@ export function spawnBall(W, x, z, vx, vz, owner, extra = {}) {
 function serve(W) {
   const dir = W.serveDir;
   const a = (W.rand() - 0.5) * 0.8;
-  const sp = F.serveSpeed * (W.tw.hyper ? 1.3 : 1);
+  const sp = F.serveSpeed * W.ballK * (W.tw.hyper ? 1.3 : 1);
   spawnBall(W, (W.rand() - 0.5) * 2, 0, Math.sin(a) * sp, dir * Math.cos(a) * sp, 0, { rally: sp });
   W.serveCount++;
   if (W.tw.twin) W.serveDir = -dir; // twin balls: the next serve goes the other way
@@ -539,7 +540,7 @@ function landHit(W, p, b, r, extra) {
   const s = p.side, fx = W.fx[s];
   const enemyFire = b.fire && b.owner === -s;
   b.vx = r.vx; b.vz = r.vz; b.spin = r.spin;
-  b.rally = Math.min(F.maxRally * (W.tw.hyper ? 1.25 : 1), b.rally * (W.tw.hyper ? 1.05 : 1.035) + 0.12);
+  b.rally = Math.min(F.maxRally * W.ballK * (W.tw.hyper ? 1.25 : 1), b.rally * (W.tw.hyper ? 1.05 : 1.035) + 0.12);
   b.owner = s; b.hits++; b.banks = 0;
   b.fire = enemyFire ? false : (b.fire || fx.nova > 0 || W.meter[s].odTime > 0);
   b.holdT = undefined; b.holdDone = false;
@@ -610,7 +611,7 @@ function shieldContacts(W, b, prevZ) {
   // barrier
   if (fx.barrier > 0 && prevFront < barZ && front >= barZ) {
     b.vz = -b.vz; b.z = s * (barZ - b.r) - s * 0.01;
-    b.rally = Math.max(F.serveSpeed, b.rally * 0.92);
+    b.rally = Math.max(F.serveSpeed * W.ballK, b.rally * 0.92);
     b.holdT = undefined; b.shieldS = s; b.shieldT = W.t;
     if (W.predict) return false;
     fx.barrierHits--;
@@ -633,7 +634,7 @@ function shieldContacts(W, b, prevZ) {
       }
       b.vz = -b.vz; b.z = s * (cz - b.r) - s * 0.01;
       b.spin *= 0.3;
-      b.rally = Math.max(F.serveSpeed, b.rally * 0.86);
+      b.rally = Math.max(F.serveSpeed * W.ballK, b.rally * 0.86);
       const sp = Math.hypot(b.vx, b.vz), k = Math.min(1, b.rally / sp);
       b.vx *= k; b.vz *= k;
       b.holdT = undefined; b.shieldS = s; b.shieldT = W.t;

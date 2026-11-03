@@ -1,8 +1,8 @@
 // Belt Run sanity: an AI clears waves alone; spare ships, extra ships, wave clears, replays exact.
-import { makeWorld, step, drainEvents, STEP, shipOf } from '../../games/2026-03-09/asteroids-hd/2026/js/sim.js?v=4';
-import { AIPilot } from '../../games/2026-03-09/asteroids-hd/2026/js/ai.js?v=4';
-import { Recorder } from '../../games/2026-03-09/asteroids-hd/2026/js/replay.js?v=4';
-import { PILOTS, DIFFICULTY } from '../../games/2026-03-09/asteroids-hd/2026/js/config.js?v=4';
+import { makeWorld, step, drainEvents, STEP, shipOf } from '../../games/2026-03-09/asteroids-hd/2026/js/sim.js?v=5';
+import { AIPilot } from '../../games/2026-03-09/asteroids-hd/2026/js/ai.js?v=5';
+import { Recorder } from '../../games/2026-03-09/asteroids-hd/2026/js/replay.js?v=5';
+import { PILOTS, DIFFICULTY } from '../../games/2026-03-09/asteroids-hd/2026/js/config.js?v=5';
 let lives = 2, pts = 0;
 for (let wave = 1; wave <= 30 && lives >= 0; wave++) {
   const arena = Math.floor((wave - 1) / 3) % 4;

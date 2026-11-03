@@ -1,5 +1,5 @@
 // Plasma Pong: Battle Edition — tuning, pilots, arenas and power-ups.
-export const VERSION = 'v1.1.1';
+export const VERSION = 'v1.1.2';
 
 // World units. Side +1 is the near player (P1, positive z), side -1 the far one.
 export const F = {
@@ -134,6 +134,22 @@ export const ARENAS = [
 
 // The campaign ladder: one pilot per arena.
 export const LADDER = ['volt', 'nyx', 'krank', 'seraph', 'monolith'];
+
+// Campaign build-up: the early stages are gentler and each one is a step harder. Each rival has its
+// own easing, measured with scripts/plasma-pong-battle/ramp_check.mjs so a steady stand-in pilot wins
+// less every stage (~90% / 70% / 40% / 25%). Multiplies the chosen difficulty's AI; ball = serve speed
+// and rally speed cap. The Monolith keeps its own difficulty.
+export const RAMP = [
+  { noise: 1.7, speed: 0.85, react: 1.45, fire: 0.6, smash: 0.6, ball: 0.88 },
+  { noise: 1.6, speed: 0.86, react: 1.35, fire: 0.65, smash: 0.65, ball: 0.92 },
+  { noise: 1.75, speed: 0.84, react: 1.35, fire: 0.6, smash: 0.55, ball: 0.96 },
+  { noise: 1.3, speed: 0.94, react: 1.12, fire: 0.85, smash: 0.85, ball: 1 },
+  { noise: 1, speed: 1, react: 1, fire: 1, smash: 1, ball: 1 },
+];
+export function rampAI(ai, stage) {
+  const r = RAMP[Math.max(0, Math.min(RAMP.length - 1, stage))];
+  return { noise: Math.min(3, ai.noise * r.noise), speed: ai.speed * r.speed, react: Math.min(2.4, ai.react * r.react), fire: ai.fire * r.fire, smash: (ai.smash ?? 1) * r.smash };
+}
 
 export const DIFFICULTY = {
   easy:   { label: 'EASY',   ai: { noise: 1.6, speed: 0.82, react: 1.5, fire: 0.55, smash: 0.35 }, scoreMul: 0.7 },

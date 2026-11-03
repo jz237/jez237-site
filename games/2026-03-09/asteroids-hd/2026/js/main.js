@@ -1,16 +1,16 @@
 // Asteroids 2026 — game flow, controls, scoring, commentary and the frame loop.
 import * as THREE from '../vendor/three.module.min.js';
-import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS, PERKS, ROSTER, SHADOW, TWISTS, ROCK_KINDS, UPGRADES, UP_KEYS, UP_COST, MEDALS } from './config.js?v=4';
-import { makeWorld, step, drainEvents, STEP, shipOf, LIFE_STEP } from './sim.js?v=4';
-import { AIPilot } from './ai.js?v=4';
-import { Renderer, pickQuality, CALM } from './render.js?v=4';
-import { Director } from './director.js?v=4';
-import { Audio } from './audio.js?v=4';
-import { Input } from './input.js?v=4';
-import { UI, $, hex } from './ui.js?v=4';
-import { Scores } from './scores.js?v=4';
-import { Recorder } from './replay.js?v=4';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=4';
+import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS, PERKS, ROSTER, SHADOW, TWISTS, ROCK_KINDS, UPGRADES, UP_KEYS, UP_COST, MEDALS, RAMP, rampAI, beltRocks, beltSpeed } from './config.js?v=5';
+import { makeWorld, step, drainEvents, STEP, shipOf, LIFE_STEP } from './sim.js?v=5';
+import { AIPilot } from './ai.js?v=5';
+import { Renderer, pickQuality, CALM } from './render.js?v=5';
+import { Director } from './director.js?v=5';
+import { Audio } from './audio.js?v=5';
+import { Input } from './input.js?v=5';
+import { UI, $, hex } from './ui.js?v=5';
+import { Scores } from './scores.js?v=5';
+import { Recorder } from './replay.js?v=5';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=5';
 
 // ------------------------------------------------------------------ settings
 const SKEY = 'a26.settings.v1';
@@ -182,7 +182,7 @@ function startMatch(cfg) {
     looks[s] = h ? h.look : c.persona.look;
   }
   if (boss) hull[1] = F.bossHull;
-  const W = makeWorld({ arena: cfg.arena, seed: cfg.seed ?? ((Math.random() * 1e9) | 0), boss, perks, looks, hull, twists: cfg.twists, diffBoss: cfg.diffBoss ?? 1, up: cfg.up, ...(cfg.belt || {}) });
+  const W = makeWorld({ arena: cfg.arena, seed: cfg.seed ?? ((Math.random() * 1e9) | 0), boss, perks, looks, hull, twists: cfg.twists, diffBoss: cfg.diffBoss ?? 1, up: cfg.up, rockK: cfg.rockK, ...(cfg.belt || {}) });
   G.W = W; G.ai = {}; G.aiList = []; G.humans = []; G.cfg = cfg; G.ko = null;
   for (const s of [1, -1]) {
     const c = cfg.sides[s];
@@ -282,7 +282,7 @@ function campaignMatch() {
   const me = G.p1Pilot || 'p1';
   const pilot = rivalPersona(LADDER[G.stage], me);
   const you = humanPilot(me, 1, me === 'p1' ? 'CHALLENGER' : `YOU · ${PERKS[me].name}`);
-  startMatch({ arena: G.stage, diffAI: DIFFICULTY[G.diff].ai, diffBoss: DIFFICULTY[G.diff].boss, up: { 1: G.up }, sides: { 1: { kind: 'human', human: you, who: 'solo' }, '-1': { kind: 'ai', persona: pilot } } });
+  startMatch({ arena: G.stage, diffAI: rampAI(DIFFICULTY[G.diff].ai, G.stage), rockK: RAMP[G.stage].rocks, diffBoss: DIFFICULTY[G.diff].boss, up: { 1: G.up }, sides: { 1: { kind: 'human', human: you, who: 'solo' }, '-1': { kind: 'ai', persona: pilot } } });
   return { pilot, you, me };
 }
 function newStageStats() { return { rocks: 0, hits: 0, shards: 0, pickups: 0, dodges: 0, taken: 0, gold: 0, eyes: 0, time: 0 }; }
@@ -369,7 +369,7 @@ function beltWave() {
   const you = humanPilot(me, 1, me === 'p1' ? 'BELT RUNNER' : `YOU · ${PERKS[me].name}`);
   const belt = { ...BELT, color: ARENAS[arena].grid, title: `WAVE ${w}` };
   startMatch({ arena, up: { 1: G.up }, sides: { 1: { kind: 'human', human: you, who: 'solo' }, '-1': { kind: 'none', persona: belt } },
-    belt: { solo: true, wave: w, lives: G.lives, pts: G.score, rocks: Math.min(12, 3 + w), mega: w % 5 === 0 ? 1 + Math.floor(w / 10) : 0, rockK: Math.min(2, 1.1 + 0.06 * (w - 1)) } });
+    belt: { solo: true, wave: w, lives: G.lives, pts: G.score, rocks: beltRocks(w), mega: w % 5 === 0 ? 1 + Math.floor(w / 10) : 0, rockK: beltSpeed(w) } });
   D.setMode(camMode());
   A.playMusic(ARENAS[arena].music);
   countdown();
