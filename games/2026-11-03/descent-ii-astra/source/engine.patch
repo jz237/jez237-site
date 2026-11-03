@@ -1,0 +1,1100 @@
+diff --git a/d2/3d/interp.c b/d2/3d/interp.c
+index daca4c2..e359d0c 100644
+--- a/d2/3d/interp.c
++++ b/d2/3d/interp.c
+@@ -69,6 +69,12 @@ static const vms_angvec zero_angles = {0,0,0};
+ static const g3s_point *point_list[MAX_POINTS_PER_POLY];
+ 
+ int glow_num = -1;
++int astra_hull;
++#include <math.h>
++#include "piggy.h"
++#include "astra_armor.inc"
++int astra_mesh_count(void){return astra_mesh_faces;}
++
+ 
+ #ifdef WORDS_BIGENDIAN
+ void short_swap(short *s)
+@@ -425,7 +431,22 @@ bool g3_draw_polygon_model(ubyte *p,grs_bitmap **model_bitmaps,vms_angvec *anim_
+ 					for (i=0;i<nv;i++)
+ 						point_list[i] = Interp_point_list + wp(p+30)[i];
+ 
+-					g3_draw_poly(nv,point_list);
++					if (astra_plates_enabled<0) astra_plates_enabled=EM_ASM_INT(return !!Module.astra);
++                    if(astra_hull && astra_plates_enabled && point_list[0]->p3_z<i2f(160)){
++                        static bitmap_index hullmat;
++                        if(!hullmat.index) hullmat=piggy_find_bitmap("metl009");
++                        PIGGY_PAGE_IN(hullmat);
++                        g3s_uvl uv[MAX_POINTS_PER_POLY];
++                        g3s_lrgb shade[MAX_POINTS_PER_POLY];
++                        int col=w(p+28);
++                        float facing=fmaxf(.24f, .45f-.55f*f2fl(vm_vec_dot(&View_matrix.fvec,vp(p+16))));
++                        for(int j=0;j<nv;j++){
++                            float angle=6.2831853f*j/nv;
++                            uv[j]=(g3s_uvl){(fix)(F1_0*(.5f+.48f*cosf(angle))),(fix)(F1_0*(.5f+.48f*sinf(angle))),F1_0};
++                            shade[j]=(g3s_lrgb){(fix)(model_light.r*facing*(.32f+((col>>10)&31)/19.f)),(fix)(model_light.g*facing*(.32f+((col>>5)&31)/19.f)),(fix)(model_light.b*facing*(.32f+(col&31)/19.f))};
++                        }
++                        astra_plate(nv,point_list,uv,shade,&GameBitmaps[hullmat.index],vp(p+16));
++                    } else g3_draw_poly(nv,point_list);
+ 				}
+ 
+ 				p += 30 + ((nv&~1)+1)*2;
+@@ -474,7 +495,9 @@ bool g3_draw_polygon_model(ubyte *p,grs_bitmap **model_bitmaps,vms_angvec *anim_
+ 					for (i=0;i<nv;i++)
+ 						point_list[i] = Interp_point_list + wp(p+30)[i];
+ 
+-					g3_draw_tmap(nv,point_list,uvl_list,lrgb_list,model_bitmaps[w(p+28)]);
++					if (astra_hull)
++                        astra_plate(nv,point_list,uvl_list,lrgb_list,model_bitmaps[w(p+28)],vp(p+16));
++                    else g3_draw_tmap(nv,point_list,uvl_list,lrgb_list,model_bitmaps[w(p+28)]);
+ 					d_free(lrgb_list);
+ 				}
+ 
+diff --git a/d2/arch/include/key.h b/d2/arch/include/key.h
+index 1812c5d..cac69b8 100644
+--- a/d2/arch/include/key.h
++++ b/d2/arch/include/key.h
+@@ -20,7 +20,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ #ifndef _KEY_H
+ #define _KEY_H 
+ 
+-#include <SDL_keysym.h>
++#include <SDL.h>
+ #include "pstypes.h"
+ #include "fix.h"
+ #include "event.h"
+diff --git a/d2/arch/ogl/gr.c b/d2/arch/ogl/gr.c
+index c5cca0b..687d249 100644
+--- a/d2/arch/ogl/gr.c
++++ b/d2/arch/ogl/gr.c
+@@ -316,11 +316,7 @@ int ogl_init_window(int x, int y)
+ 		ogl_smash_texture_list_internal();//if we are or were fullscreen, changing vid mode will invalidate current textures
+ 
+ 	SDL_WM_SetCaption(DESCENT_VERSION, "Descent II");
+-	SDL_Surface *icon = SDL_LoadBMP( "d2x-redux.bmp" );
+-	if (icon) {
+-		SDL_WM_SetIcon( icon, NULL );
+-		SDL_FreeSurface( icon );
+-	}
++	/* The HTML document owns the browser tab icon. */
+ 
+ 	use_x=x;
+ 	use_y=y;
+@@ -522,7 +518,7 @@ static void ogl_init_state(void)
+ void gr_set_draw_buffer(int buf)
+ {
+ #ifndef OGLES
+-	glDrawBuffer((buf == 0) ? GL_FRONT : GL_BACK);
++	/* WebGL has a single draw surface. */
+ #endif
+ }
+ 
+@@ -727,7 +723,7 @@ void gr_set_attributes(void)
+ 	SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE,0);
+ 	SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE,0);
+ 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER,1);
+-	SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL,GameCfg.VSync);
++	/* Browser compositor owns vsync. */
+ 	if (GameCfg.Multisample)
+ 	{
+ 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+@@ -874,8 +870,8 @@ unsigned char ogl_ugpixel( grs_bitmap * bitmap, int x, int y )
+ 	ubyte buf[4];
+ 
+ #ifndef OGLES
+-	glGetIntegerv(GL_DRAW_BUFFER, &gl_draw_buffer);
+-	glReadBuffer(gl_draw_buffer);
++	
++	/* Read the current WebGL drawing buffer. */
+ #endif
+ 
+ 	glReadPixels(bitmap->bm_x + x, SHEIGHT - bitmap->bm_y - y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, buf);
+@@ -1167,10 +1163,12 @@ void save_screen_shot(int automap_flag)
+ 		HUD_init_message(HM_DEFAULT, "%s '%s'", TXT_DUMPING_SCREEN, savename + strlen(SCRNS_DIR));
+ 
+ #ifndef OGLES
+-	glReadBuffer(GL_FRONT);
++	/* Read the current WebGL drawing buffer. */
+ #endif
+ 
+ 	write_bmp(savename,grd_curscreen->sc_w,grd_curscreen->sc_h);
+ 
+ 	start_time();
+ }
++
++
+diff --git a/d2/arch/ogl/ogl.c b/d2/arch/ogl/ogl.c
+index c536c46..b984330 100644
+--- a/d2/arch/ogl/ogl.c
++++ b/d2/arch/ogl/ogl.c
+@@ -198,6 +198,7 @@ void ogl_init_texture(ogl_texture* t, int w, int h, int flags)
+ 	t->h = h;
+ 	ogl_init_texture_stats(t);
+ 	t->is_png = 0;
++	t->material=0;
+ }
+ 
+ void ogl_reset_texture(ogl_texture* t)
+@@ -765,6 +766,10 @@ void draw_tmap_flat(grs_bitmap *bm,int nv,g3s_point **vertlist){
+ extern void (*tmap_drawer_ptr)(grs_bitmap *bm,int nv,g3s_point **vertlist);
+ 
+ 
++#include "astra_shader.inc"
++#include "astra_pyro.inc"
++#include "astra_blast.inc"
++
+ /*
+  * Everything texturemapped (walls, robots, ship)
+  */ 
+@@ -825,8 +830,9 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
+ 	if (tmap_drawer_ptr == draw_tmap) {
+ 		glTexCoordPointer(2, GL_FLOAT, 0, texcoord_array);  
+ 	}
+-	
++	int custom=tmap_drawer_ptr==draw_tmap && astra_material_begin(bm->gltexture,vertex_array,texcoord_array);
+ 	glDrawArrays(GL_TRIANGLE_FAN, 0, nv);
++	if(custom)glUseProgram(0);
+ 	
+ 	glDisableClientState(GL_VERTEX_ARRAY);
+ 	glDisableClientState(GL_COLOR_ARRAY);
+@@ -919,8 +925,10 @@ bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_
+ #ifndef OGL_MERGE
+ 	glVertexPointer(3, GL_FLOAT, 0, vertex_array);
+ 	glColorPointer(4, GL_FLOAT, 0, color_array);
+-	glTexCoordPointer(2, GL_FLOAT, 0, texcoordovl_array);
++	glTexCoordPointer(2, GL_FLOAT, 0, texcoordovl_array);  
++	int custom=astra_material_begin(bmovl->gltexture,vertex_array,texcoordovl_array);
+ 	glDrawArrays(GL_TRIANGLE_FAN, 0, nv);
++	if(custom)glUseProgram(0);
+ 	glDisableClientState(GL_VERTEX_ARRAY);
+ 	glDisableClientState(GL_COLOR_ARRAY);
+ 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+@@ -959,7 +967,9 @@ bool g3_draw_bitmap_full(vms_vector *pos,fix width,fix height,grs_bitmap *bm,
+ 	int i;
+ 	GLfloat vertex_array[12], color_array[16], texcoord_array[8];
+ 
+-	r_bitmapc++;
++	static unsigned blastDraws; const char *vname=piggy_game_bitmap_name(bm);
++    if(vname && !strncmp(vname,"exp",3)){++blastDraws;EM_ASM(Module.blastDraws=$0,blastDraws);}
++    r_bitmapc++;
+ 	v1.z=0;
+ 	
+ 	glEnableClientState(GL_VERTEX_ARRAY);
+@@ -1171,7 +1181,7 @@ void ogl_start_frame(void){
+ #ifdef OGLES
+ 	perspective(90.0,1.0,0.1,5000.0);   
+ #else
+-	gluPerspective(90.0,1.0,0.1,5000.0);
++	glFrustum(-0.1, 0.1, -0.1, 0.1, 0.1, 5000.0);
+ #endif
+ 	glMatrixMode(GL_MODELVIEW);
+ 	glLoadIdentity();//clear matrix
+@@ -1208,6 +1218,7 @@ void gr_flip(void)
+ 
+ 	ogl_do_palfx();
+ 	ogl_swap_buffers_internal();
++	emscripten_sleep(0);
+ 	glClear(GL_COLOR_BUFFER_BIT);
+ }
+ 
+@@ -1256,7 +1267,7 @@ void ogl_init_pixel_buffers(int w, int h)
+ 
+ 	if (texbuf)
+ 		d_free(texbuf);
+-	texbuf = d_malloc(max(w, 1024)*max(h, 1024)*4);	// must also fit big font texture
++	texbuf = d_malloc(max(w, 2048)*max(h, 2048)*4);	// must also fit big font texture
+ 
+ 	if ((pixels == NULL) || (texbuf == NULL))
+ 		Error("Not enough memory for current resolution");
+@@ -1272,7 +1283,7 @@ void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width
+ {
+ 	int x,y,c,i;
+ 
+-	if ((width > max(grd_curscreen->sc_w, 1024)) || (height > max(grd_curscreen->sc_h, 1024)))
++	if ((width > max(grd_curscreen->sc_w, 2048)) || (height > max(grd_curscreen->sc_h, 2048)))
+ 		Error("Texture is too big: %ix%i", width, height);
+ 
+ 	if (data_format) { // true color bitmap?
+@@ -1568,7 +1579,7 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
+ 	glGenTextures (1, &tex->handle);
+ #ifndef OGLES
+ 	//set priority
+-	glPrioritizeTextures (1, &tex->handle, &tex->prio);
++	/* WebGL manages texture residency. */
+ #endif
+ 	// Give our data to OpenGL.
+ 	OGL_BINDTEXTURE(tex->handle);
+@@ -1595,17 +1606,14 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
+ #ifndef OGLES // see comment above
+ 	if (texfilt)
+ 	{
+-		gluBuild2DMipmaps (
+-				GL_TEXTURE_2D, tex->internalformat, 
+-				tex->tw, tex->th, tex->format, 
+-				GL_UNSIGNED_BYTE, 
+-				bufP);
++		glTexImage2D(GL_TEXTURE_2D,0,tex->format,tex->tw,tex->th,0,tex->format,GL_UNSIGNED_BYTE,bufP);
++		glGenerateMipmap(GL_TEXTURE_2D);
+ 	}
+ 	else
+ #endif
+ 	{
+ 		glTexImage2D (
+-			GL_TEXTURE_2D, 0, tex->internalformat,
++			GL_TEXTURE_2D, 0, tex->format,
+ 			tex->tw, tex->th, 0, tex->format, // RGBA textures.
+ 			GL_UNSIGNED_BYTE, // imageData is a GLubyte pointer.
+ 			bufP);
+@@ -1644,6 +1652,10 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
+ }
+ #endif
+ 
++#include "astra_finish.inc"
++int astra_draw_count(void){return astra_shaded;}
++int astra_surface_count(void){return astra_surfaces;}
++int astra_blast_count(void){return astra_blasts;}
+ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+ {
+ 	unsigned char *buf;
+@@ -1668,6 +1680,7 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+ 			con_printf(CON_DEBUG,"%s: %ux%ux%i p=%i(%i) c=%i a=%i chans=%i\n", filename, pdata.width, pdata.height, pdata.depth, pdata.paletted, pdata.num_palette, pdata.color, pdata.alpha, pdata.channels);
+ 			if (pdata.depth == 8 && pdata.color)
+ 			{
++				astra_finish(bm,bitmapname,&pdata);
+ 				if (bm->gltexture == NULL)
+ 					ogl_init_texture(bm->gltexture = ogl_get_free_texture(), pdata.width, pdata.height, ((pdata.alpha || bm->bm_flags & BM_FLAG_TRANSPARENT) ? OGL_FLAG_ALPHA : 0));
+ 				unsigned char *data = pdata.data;
+@@ -1688,6 +1701,7 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+ 				if (pdata.palette)
+ 					free(pdata.palette);
+ 				bm->gltexture->is_png = 1;
++				bm->gltexture->material=astra_material_id(bitmapname);
+ 				return;
+ 			}
+ 			else
+@@ -1983,3 +1997,7 @@ void ogl_update_window_clip()
+ 		glEnable(GL_SCISSOR_TEST);
+ 	}
+ }
++
++
++
++
+diff --git a/d2/arch/sdl/key.c b/d2/arch/sdl/key.c
+index 92eee47..92be666 100644
+--- a/d2/arch/sdl/key.c
++++ b/d2/arch/sdl/key.c
+@@ -133,58 +133,58 @@ const key_props key_properties[256] = {
+ { "",       255,    SDLK_UNKNOWN                 },
+ { "",       255,    SDLK_UNKNOWN                 },
+ { "PAUSE",  255,    SDLK_PAUSE         },
+-{ "W0",     255,    SDLK_WORLD_0       },
+-{ "W1",     255,    SDLK_WORLD_1       },
+-{ "W2",     255,    SDLK_WORLD_2       }, // 100
+-{ "W3",     255,    SDLK_WORLD_3       },
+-{ "W4",     255,    SDLK_WORLD_4       },
+-{ "W5",     255,    SDLK_WORLD_5       },
+-{ "W6",     255,    SDLK_WORLD_6       },
+-{ "W7",     255,    SDLK_WORLD_7       },
+-{ "W8",     255,    SDLK_WORLD_8       },
+-{ "W9",     255,    SDLK_WORLD_9       },
+-{ "W10",    255,    SDLK_WORLD_10      },
+-{ "W11",    255,    SDLK_WORLD_11      },
+-{ "W12",    255,    SDLK_WORLD_12      }, // 110
+-{ "W13",    255,    SDLK_WORLD_13      },
+-{ "W14",    255,    SDLK_WORLD_14      },
+-{ "W15",    255,    SDLK_WORLD_15      },
+-{ "W16",    255,    SDLK_WORLD_16      },
+-{ "W17",    255,    SDLK_WORLD_17      },
+-{ "W18",    255,    SDLK_WORLD_18      },
+-{ "W19",    255,    SDLK_WORLD_19      },
+-{ "W20",    255,    SDLK_WORLD_20      },
+-{ "W21",    255,    SDLK_WORLD_21      },
+-{ "W22",    255,    SDLK_WORLD_22      }, // 120
+-{ "W23",    255,    SDLK_WORLD_23      },
+-{ "W24",    255,    SDLK_WORLD_24      },
+-{ "W25",    255,    SDLK_WORLD_25      },
+-{ "W26",    255,    SDLK_WORLD_26      },
+-{ "W27",    255,    SDLK_WORLD_27      },
+-{ "W28",    255,    SDLK_WORLD_28      },
+-{ "W29",    255,    SDLK_WORLD_29      },
+-{ "W30",    255,    SDLK_WORLD_30      },
+-{ "W31",    255,    SDLK_WORLD_31      },
+-{ "W32",    255,    SDLK_WORLD_32      }, // 130
+-{ "W33",    255,    SDLK_WORLD_33      },
+-{ "W34",    255,    SDLK_WORLD_34      },
+-{ "W35",    255,    SDLK_WORLD_35      },
+-{ "W36",    255,    SDLK_WORLD_36      },
+-{ "W37",    255,    SDLK_WORLD_37      },
+-{ "W38",    255,    SDLK_WORLD_38      },
+-{ "W39",    255,    SDLK_WORLD_39      },
+-{ "W40",    255,    SDLK_WORLD_40      },
+-{ "W41",    255,    SDLK_WORLD_41      },
+-{ "W42",    255,    SDLK_WORLD_42      }, // 140
+-{ "W43",    255,    SDLK_WORLD_43      },
+-{ "W44",    255,    SDLK_WORLD_44      },
+-{ "W45",    255,    SDLK_WORLD_45      },
+-{ "W46",    255,    SDLK_WORLD_46      },
+-{ "W47",    255,    SDLK_WORLD_47      },
+-{ "W48",    255,    SDLK_WORLD_48      },
+-{ "W49",    255,    SDLK_WORLD_49      },
+-{ "W50",    255,    SDLK_WORLD_50      },
+-{ "W51",    255,    SDLK_WORLD_51      },
++{ "W0",     255,    160       },
++{ "W1",     255,    161       },
++{ "W2",     255,    162       }, // 100
++{ "W3",     255,    163       },
++{ "W4",     255,    164       },
++{ "W5",     255,    165       },
++{ "W6",     255,    166       },
++{ "W7",     255,    167       },
++{ "W8",     255,    168       },
++{ "W9",     255,    169       },
++{ "W10",    255,    170      },
++{ "W11",    255,    171      },
++{ "W12",    255,    172      }, // 110
++{ "W13",    255,    173      },
++{ "W14",    255,    174      },
++{ "W15",    255,    175      },
++{ "W16",    255,    176      },
++{ "W17",    255,    177      },
++{ "W18",    255,    178      },
++{ "W19",    255,    179      },
++{ "W20",    255,    180      },
++{ "W21",    255,    181      },
++{ "W22",    255,    182      }, // 120
++{ "W23",    255,    183      },
++{ "W24",    255,    184      },
++{ "W25",    255,    185      },
++{ "W26",    255,    186      },
++{ "W27",    255,    187      },
++{ "W28",    255,    188      },
++{ "W29",    255,    189      },
++{ "W30",    255,    190      },
++{ "W31",    255,    191      },
++{ "W32",    255,    192      }, // 130
++{ "W33",    255,    193      },
++{ "W34",    255,    194      },
++{ "W35",    255,    195      },
++{ "W36",    255,    196      },
++{ "W37",    255,    197      },
++{ "W38",    255,    198      },
++{ "W39",    255,    199      },
++{ "W40",    255,    200      },
++{ "W41",    255,    201      },
++{ "W42",    255,    202      }, // 140
++{ "W43",    255,    203      },
++{ "W44",    255,    204      },
++{ "W45",    255,    205      },
++{ "W46",    255,    206      },
++{ "W47",    255,    207      },
++{ "W48",    255,    208      },
++{ "W49",    255,    209      },
++{ "W50",    255,    210      },
++{ "W51",    255,    211      },
+ { "",       255,    SDLK_UNKNOWN                 }, // 150
+ { "",       255,    SDLK_UNKNOWN                 },
+ { "",       255,    SDLK_UNKNOWN                 },
+@@ -247,50 +247,50 @@ const key_props key_properties[256] = {
+ { "PGDN",   255,    SDLK_PAGEDOWN      },
+ { "INS",    255,    SDLK_INSERT        }, // 210
+ { "DEL",    255,    SDLK_DELETE        },
+-{ "W52",    255,    SDLK_WORLD_52      },
+-{ "W53",    255,    SDLK_WORLD_53      },
+-{ "W54",    255,    SDLK_WORLD_54      },
+-{ "W55",    255,    SDLK_WORLD_55      },
+-{ "W56",    255,    SDLK_WORLD_56      },
+-{ "W57",    255,    SDLK_WORLD_57      },
+-{ "W58",    255,    SDLK_WORLD_58      },
+-{ "W59",    255,    SDLK_WORLD_59      },
+-{ "W60",    255,    SDLK_WORLD_60      }, // 220
+-{ "W61",    255,    SDLK_WORLD_61      },
+-{ "W62",    255,    SDLK_WORLD_62      },
+-{ "W63",    255,    SDLK_WORLD_63      },
+-{ "W64",    255,    SDLK_WORLD_64      },
+-{ "W65",    255,    SDLK_WORLD_65      },
+-{ "W66",    255,    SDLK_WORLD_66      },
+-{ "W67",    255,    SDLK_WORLD_67      },
+-{ "W68",    255,    SDLK_WORLD_68      },
+-{ "W69",    255,    SDLK_WORLD_69      },
+-{ "W70",    255,    SDLK_WORLD_70      }, // 230
+-{ "W71",    255,    SDLK_WORLD_71      },
+-{ "W72",    255,    SDLK_WORLD_72      },
+-{ "W73",    255,    SDLK_WORLD_73      },
+-{ "W74",    255,    SDLK_WORLD_74      },
+-{ "W75",    255,    SDLK_WORLD_75      },
+-{ "W76",    255,    SDLK_WORLD_76      },
+-{ "W77",    255,    SDLK_WORLD_77      },
+-{ "W78",    255,    SDLK_WORLD_78      },
+-{ "W79",    255,    SDLK_WORLD_79      },
+-{ "W80",    255,    SDLK_WORLD_80      }, // 240
+-{ "W81",    255,    SDLK_WORLD_81      },
+-{ "W82",    255,    SDLK_WORLD_82      },
+-{ "W83",    255,    SDLK_WORLD_83      },
+-{ "W84",    255,    SDLK_WORLD_84      },
+-{ "W85",    255,    SDLK_WORLD_85      },
+-{ "W86",    255,    SDLK_WORLD_86      },
+-{ "W87",    255,    SDLK_WORLD_87      },
+-{ "W88",    255,    SDLK_WORLD_88      },
+-{ "W89",    255,    SDLK_WORLD_89      },
+-{ "W90",    255,    SDLK_WORLD_90      }, // 250
+-{ "W91",    255,    SDLK_WORLD_91      },
+-{ "W92",    255,    SDLK_WORLD_92      },
+-{ "W93",    255,    SDLK_WORLD_93      },
+-{ "W94",    255,    SDLK_WORLD_94      },
+-{ "W95",    255,    SDLK_WORLD_95      }, // 255
++{ "W52",    255,    212      },
++{ "W53",    255,    213      },
++{ "W54",    255,    214      },
++{ "W55",    255,    215      },
++{ "W56",    255,    216      },
++{ "W57",    255,    217      },
++{ "W58",    255,    218      },
++{ "W59",    255,    219      },
++{ "W60",    255,    220      }, // 220
++{ "W61",    255,    221      },
++{ "W62",    255,    222      },
++{ "W63",    255,    223      },
++{ "W64",    255,    224      },
++{ "W65",    255,    225      },
++{ "W66",    255,    226      },
++{ "W67",    255,    227      },
++{ "W68",    255,    228      },
++{ "W69",    255,    229      },
++{ "W70",    255,    230      }, // 230
++{ "W71",    255,    231      },
++{ "W72",    255,    232      },
++{ "W73",    255,    233      },
++{ "W74",    255,    234      },
++{ "W75",    255,    235      },
++{ "W76",    255,    236      },
++{ "W77",    255,    237      },
++{ "W78",    255,    238      },
++{ "W79",    255,    239      },
++{ "W80",    255,    240      }, // 240
++{ "W81",    255,    241      },
++{ "W82",    255,    242      },
++{ "W83",    255,    243      },
++{ "W84",    255,    244      },
++{ "W85",    255,    245      },
++{ "W86",    255,    246      },
++{ "W87",    255,    247      },
++{ "W88",    255,    248      },
++{ "W89",    255,    249      },
++{ "W90",    255,    250      }, // 250
++{ "W91",    255,    251      },
++{ "W92",    255,    252      },
++{ "W93",    255,    253      },
++{ "W94",    255,    254      },
++{ "W95",    255,    255      }, // 255
+ };
+ 
+ typedef struct d_event_keycommand
+@@ -448,7 +448,7 @@ void key_init()
+ void key_flush()
+ {
+  	int i;
+-	Uint8 *keystate = SDL_GetKeyState(NULL);
++	const Uint8 *keystate = SDL_GetKeyboardState(NULL);
+ 
+ 	if (!Installed)
+ 		key_init();
+@@ -458,7 +458,7 @@ void key_flush()
+ 		unicode_frame_buffer[i] = '\0';
+ 
+ 	for (i=0; i<256; i++ )	{
+-		if (key_ismodlck(i) == KEY_ISLCK && keystate[key_properties[i].sym] && !GameArg.CtlNoStickyKeys) // do not flush status of sticky keys
++		if (key_ismodlck(i) == KEY_ISLCK && (unsigned)key_properties[i].sym < 65536 && keystate[key_properties[i].sym] && !GameArg.CtlNoStickyKeys) // do not flush status of sticky keys
+ 		{
+ 			keyd_pressed[i] = 1;
+ 			key_data.state[i] = 0;
+diff --git a/d2/arch/sdl/mouse.c b/d2/arch/sdl/mouse.c
+index 2cfce11..6ee4d39 100644
+--- a/d2/arch/sdl/mouse.c
++++ b/d2/arch/sdl/mouse.c
+@@ -131,8 +131,10 @@ void mouse_motion_handler(SDL_MouseMotionEvent *mme)
+ 	d_event_mouse_moved event;
+ 
+ 	Mouse.cursor_time = timer_query();
+-	Mouse.x += mme->xrel;
+-	Mouse.y += mme->yrel;
++	Mouse.delta_x += mme->xrel;
++	Mouse.delta_y += mme->yrel;
++	Mouse.x = mme->x;
++	Mouse.y = mme->y;
+ 	
+ 	event.type = EVENT_MOUSE_MOVED;
+ 	event.dx = mme->xrel;
+@@ -188,7 +190,7 @@ int mouse_in_window(window *wind)
+ 
+ void mouse_get_delta( int *dx, int *dy, int *dz )
+ {
+-	SDL_GetRelativeMouseState( &Mouse.delta_x, &Mouse.delta_y );
++	/* Relative movement accumulates from SDL motion events above. */
+ 	*dx = Mouse.delta_x;
+ 	*dy = Mouse.delta_y;
+ 	*dz = Mouse.delta_z;
+diff --git a/d2/include/ogl_init.h b/d2/include/ogl_init.h
+index af0b258..8bd08a5 100644
+--- a/d2/include/ogl_init.h
++++ b/d2/include/ogl_init.h
+@@ -64,6 +64,7 @@ typedef struct _ogl_texture {
+ 	int wrapstate;
+ 	unsigned long numrend;
+ 	int is_png;
++	int material;
+ } ogl_texture;
+ 
+ extern ogl_texture* ogl_get_free_texture();
+diff --git a/d2/main/fireball.c b/d2/main/fireball.c
+index fe9b0d1..ec31b81 100644
+--- a/d2/main/fireball.c
++++ b/d2/main/fireball.c
+@@ -441,8 +441,12 @@ object *object_create_debris(object *parent, int subobj_num)
+ 
+ void draw_fireball(object *obj)
+ {
+-	if ( obj->lifeleft > 0 )
+-		draw_vclip_object(obj,obj->lifeleft,0, obj->id);
++	if (obj->lifeleft > 0) {
++        extern void astra_blast(vms_vector *,fix,float,unsigned);
++        draw_vclip_object(obj,obj->lifeleft,0,obj->id);
++        if(obj->id<Num_vclips && Vclip[obj->id].play_time>0)
++            astra_blast(&obj->pos,obj->size,1.f-(float)obj->lifeleft/Vclip[obj->id].play_time,obj->signature);
++    }
+ 
+ }
+ 
+@@ -1620,3 +1624,5 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
+ 			expl_wall_swap(&ew[i], swap);
+ }
+ 
++
++
+diff --git a/d2/main/gamerend.c b/d2/main/gamerend.c
+index da0872e..95cb5fc 100644
+--- a/d2/main/gamerend.c
++++ b/d2/main/gamerend.c
+@@ -968,6 +968,15 @@ void update_cockpits()
+ 
+ void game_render_frame()
+ {
++    extern int astra_draw_count(void),astra_mesh_count(void),astra_surface_count(void),astra_blast_count(void);
++    static unsigned astra_frame;
++    if(!(astra_frame++ % 10) && ConsoleObject) {
++        EM_ASM({
++            Module.flightState=({level:$0,x:$1,y:$2,z:$3,frame:$4});
++            Module.artStats=({surfaces:$5,blastFrames:$6,armorFaces:$7,litFaces:$8});
++        },Current_level_num,ConsoleObject->pos.x,ConsoleObject->pos.y,ConsoleObject->pos.z,
++           astra_frame,astra_surface_count(),astra_blast_count(),astra_mesh_count(),astra_draw_count());
++    }
+ 	set_screen_mode( SCREEN_GAME );
+ 	play_homing_warning();
+ 	game_render_frame_mono(GameArg.DbgUseDoubleBuffer);
+@@ -995,3 +1004,4 @@ void show_boxed_message(char *msg, int RenderFlag)
+ 	if (!RenderFlag)
+ 		gr_flip();
+ }
++
+diff --git a/d2/main/gameseq.c b/d2/main/gameseq.c
+index 30de489..ef16380 100644
+--- a/d2/main/gameseq.c
++++ b/d2/main/gameseq.c
+@@ -1809,7 +1809,8 @@ void StartNewLevel(int level_num)
+ 		maybe_set_first_secret_visit(level_num);
+ 	}
+ 
+-	ShowLevelIntro(level_num);
++	extern int astra_skip_first_briefing(void);
++	if (!astra_skip_first_briefing()) ShowLevelIntro(level_num);
+ 
+ 	StartNewLevelSub(level_num, 1, 0 );
+ 
+diff --git a/d2/main/inferno.c b/d2/main/inferno.c
+index dc6e44a..cb6f7f9 100644
+--- a/d2/main/inferno.c
++++ b/d2/main/inferno.c
+@@ -44,6 +44,8 @@ char copyright[] = "DESCENT II  COPYRIGHT (C) 1994-1996 PARALLAX SOFTWARE CORPOR
+ #include "key.h"
+ #include "3d.h"
+ #include "bm.h"
++extern int astra_intro(void), astra_quick(void), astra_demo(void);
++#define SHAREPATH "/mine"
+ #include "inferno.h"
+ #include "dxxerror.h"
+ #include "game.h"
+@@ -415,7 +417,7 @@ int main(int argc, char *argv[])
+ 	con_printf( CON_DEBUG, "Initializing movie libraries...\n" );
+ 	init_movies();		//init movie libraries
+ 
+-	show_titles();
++	if (astra_intro()) show_titles();
+ 
+ 	set_screen_mode(SCREEN_MENU);
+ 
+@@ -487,7 +489,20 @@ int main(int argc, char *argv[])
+ #endif
+ 	{
+ 		Game_mode = GM_GAME_OVER;
+-		DoMenu();
++        if (!Players[Player_num].callsign[0]) {
++            new_player_config();
++            strcpy(Players[Player_num].callsign, "astra");
++            PlayerCfg.ControlType |= CONTROL_USING_MOUSE;
++            kc_set_controls();
++            write_player_file();
++        }
++        if (!astra_intro() && !astra_quick() && !astra_demo()) songs_play_song(SONG_TITLE, 1);
++        DoMenu();
++        if (astra_demo()) newdemo_start_playback("descent2.dem");
++        else if (astra_quick() && load_mission_by_name("d2")) {
++            Difficulty_level = PlayerCfg.DefaultDifficulty;
++            StartNewGame(1);
++        }
+ 	}
+ 
+ 	setjmp(LeaveEvents);
+@@ -521,3 +536,5 @@ int main(int argc, char *argv[])
+ 
+ 	return(0);		//presumably successful exit
+ }
++
++
+diff --git a/d2/main/menu.c b/d2/main/menu.c
+index 8301896..1fcccf0 100644
+--- a/d2/main/menu.c
++++ b/d2/main/menu.c
+@@ -501,7 +501,7 @@ void create_main_menu(newmenu_item *m, int *menu_choice, int *callers_num_option
+ 
+ 	ADD_ITEM(TXT_LOAD_GAME,MENU_LOAD_GAME,KEY_L);
+ #if defined(USE_UDP)
+-	ADD_ITEM(TXT_MULTIPLAYER_,MENU_MULTIPLAYER,-1);
++	/* This browser edition exposes the local campaign menus. */
+ #endif
+ 
+ 	ADD_ITEM(TXT_OPTIONS_, MENU_CONFIG, -1 );
+@@ -2753,3 +2753,4 @@ void do_sandbox_menu()
+ 	newmenu_do3( NULL, "Coder's sandbox", 2, m, sandbox_menuset, NULL, 0, NULL );
+ }
+ #endif
++
+diff --git a/d2/main/movie.c b/d2/main/movie.c
+index 33bd8ca..510e4aa 100644
+--- a/d2/main/movie.c
++++ b/d2/main/movie.c
+@@ -85,7 +85,7 @@ char movielib_files[4][FILENAME_LEN] = {"intro","other","robots"};
+ #define N_BUILTIN_MOVIE_LIBS (N_MOVIE_LIBS - 1)
+ #define EXTRA_ROBOT_LIB N_BUILTIN_MOVIE_LIBS
+ 
+-SDL_RWops *RoboFile;
++PHYSFS_File *RoboFile;
+ 
+ // Function Prototypes
+ int RunMovie(char *filename, int highres_flag, int allow_abort,int dx,int dy);
+@@ -110,7 +110,7 @@ void MPlayFree(void *p)
+ unsigned int FileRead(void *handle, void *buf, unsigned int count)
+ {
+     unsigned numread;
+-    numread = SDL_RWread((SDL_RWops *)handle, buf, 1, count);
++    numread = PHYSFS_readBytes((PHYSFS_File *)handle, buf, count);
+     return (numread == count);
+ }
+ 
+@@ -356,7 +356,7 @@ int RunMovie(char *filename, int hires_flag, int must_have,int dx,int dy)
+ {
+ 	window *wind;
+ 	movie *m;
+-	SDL_RWops *filehndl;
++	PHYSFS_File *filehndl;
+ 	int track = 0;
+ 	int aborted = 0;
+ 	int reshow = 0;
+@@ -386,13 +386,13 @@ int RunMovie(char *filename, int hires_flag, int must_have,int dx,int dy)
+ 
+ 	// Open Movie file.  If it doesn't exist, no movie, just return.
+ 
+-	filehndl = PHYSFSRWOPS_openRead(filename);
++	filehndl = PHYSFS_openRead(filename);
+ 
+ 	if (!filehndl && strlen(filename) < 13) {
+ 		char buf[13];
+ 		strcpy(buf, filename);
+ 		d_strupr(buf);
+-		filehndl = PHYSFSRWOPS_openRead(buf);
++		filehndl = PHYSFS_openRead(buf);
+ 	}
+ 
+ 	if (!filehndl)
+@@ -422,7 +422,7 @@ int RunMovie(char *filename, int hires_flag, int must_have,int dx,int dy)
+ 
+ 	if (MVE_rmPrepMovie((void *)filehndl, dx, dy, track)) {
+ 		Int3();
+-		SDL_FreeRW(filehndl);
++		PHYSFS_close(filehndl);
+ 		window_close(wind);
+ 		if (reshow)
+ 			show_menus();
+@@ -440,7 +440,7 @@ int RunMovie(char *filename, int hires_flag, int must_have,int dx,int dy)
+ 
+     MVE_rmEndMovie();
+ 
+-	SDL_FreeRW(filehndl);                           // Close Movie File
++	PHYSFS_close(filehndl);                           // Close Movie File
+ 	if (reshow)
+ 		show_menus();
+ 	aborted = m->aborted;
+@@ -469,7 +469,7 @@ int RotateRobot()
+ 
+ 	if (err == MVE_ERR_EOF)     //end of movie, so reset
+ 	{
+-		SDL_RWseek(RoboFile, 0, SEEK_SET);
++		PHYSFS_seek(RoboFile, 0);
+ 		if (MVE_rmPrepMovie(RoboFile, SWIDTH/2.3, SHEIGHT/2.3, 0))
+ 		{
+ 			Int3();
+@@ -489,7 +489,7 @@ int RotateRobot()
+ void DeInitRobotMovie(void)
+ {
+ 	MVE_rmEndMovie();
+-	SDL_FreeRW(RoboFile);                           // Close Movie File
++	PHYSFS_close(RoboFile);                           // Close Movie File
+ }
+ 
+ 
+@@ -506,13 +506,13 @@ int InitRobotMovie(char *filename)
+ 	MVE_palCallbacks(MovieSetPalette);
+ 	MVE_sndInit(-1);        //tell movies to play no sound for robots
+ 
+-	RoboFile = PHYSFSRWOPS_openRead(filename);
++	RoboFile = PHYSFS_openRead(filename);
+ 
+ 	if (!RoboFile && strlen(filename) < 13) {
+ 		char buf[13];
+ 		strcpy(buf, filename);
+ 		d_strupr(buf);
+-		RoboFile = PHYSFSRWOPS_openRead(buf);
++		RoboFile = PHYSFS_openRead(buf);
+ 	}
+ 
+ 	if (!RoboFile)
+@@ -746,3 +746,4 @@ void init_extra_robot_movie(char *movielib)
+ 	close_extra_robot_movie();
+ 	init_movie(movielib, 0);
+ }
++
+diff --git a/d2/main/newdemo.c b/d2/main/newdemo.c
+index 79cf5fb..30d117c 100644
+--- a/d2/main/newdemo.c
++++ b/d2/main/newdemo.c
+@@ -87,7 +87,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ #include "editor/editor.h"
+ #endif
+ 
+-extern int init_hoard_data();
++extern void init_hoard_data(void);
+ extern void init_seismic_disturbances(void);
+ 
+ #define ND_EVENT_EOF				0	// EOF
+@@ -3875,3 +3875,4 @@ void nd_render_extras (ubyte which,object *obj)
+ 	}
+ 
+ }
++
+diff --git a/d2/main/object.c b/d2/main/object.c
+index 602b2d5..e5d7ef6 100644
+--- a/d2/main/object.c
++++ b/d2/main/object.c
+@@ -425,6 +425,8 @@ void draw_cloaked_object(object *obj,g3s_lrgb light,fix *glow,fix64 cloak_start_
+ //draw an object which renders as a polygon model
+ void draw_polygon_object(object *obj)
+ {
++	extern int astra_hull;
++	astra_hull=(obj->type==OBJ_PLAYER || obj->type==OBJ_ROBOT || obj->type==OBJ_COOP);
+ 	g3s_lrgb light;
+ 	int	imsave;
+ 	fix engine_glow_value[2];		//element 0 is for engine glow, 1 for headlight
+diff --git a/d2/main/polyobj.c b/d2/main/polyobj.c
+index 823ccc1..260fc20 100644
+--- a/d2/main/polyobj.c
++++ b/d2/main/polyobj.c
+@@ -583,7 +583,9 @@ void draw_polygon_model(vms_vector *pos,vms_matrix *orient,vms_angvec *anim_angl
+ 
+ 	g3_start_instance_matrix(pos,orient);
+ 
+-	g3_set_interp_points(robot_points);
++	extern int astra_draw_pyro(g3s_lrgb);
++    if (!flags && model_num==Player_ship->model_num && tmap_drawer_ptr==draw_tmap && astra_draw_pyro(light)) { g3_done_instance();return; }
++    g3_set_interp_points(robot_points);
+ 
+ 	if (flags == 0)		//draw entire object
+ 
+@@ -846,3 +848,4 @@ void polygon_model_data_read(polymodel *pm, PHYSFS_file *fp)
+ 	//verify(pm->model_data);
+ 	g3_init_polygon_model(pm->model_data);
+ }
++
+diff --git a/d2/main/powerup.c b/d2/main/powerup.c
+index 650f69e..d39c443 100644
+--- a/d2/main/powerup.c
++++ b/d2/main/powerup.c
+@@ -255,7 +255,7 @@ int pick_up_vulcan_ammo(void)
+ 
+ extern void invalidate_escort_goal(void);
+ extern char GetKeyValue(char);
+-extern void check_to_use_primary(int);
++extern int check_to_use_primary(int);
+ extern void multi_send_got_flag (char);
+ 
+ //	returns true if powerup consumed
+@@ -766,3 +766,4 @@ extern int powerup_type_info_read_n(powerup_type_info *pti, int n, PHYSFS_file *
+ 	}
+ 	return i;
+ }
++
+diff --git a/d2/main/render.c b/d2/main/render.c
+index 517bc8a..01a05a0 100644
+--- a/d2/main/render.c
++++ b/d2/main/render.c
+@@ -197,6 +197,7 @@ void flash_frame()
+ //	they are used for our hideously hacked in headlight system.
+ //	vp is a pointer to vertex ids.
+ //	tmap1, tmap2 are texture map ids.  tmap2 is the pasty one.
++#include "astra_light.inc"
+ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2, uvl *uvlp, int wid_flags)
+ {
+ 	grs_bitmap  *bm;
+@@ -210,6 +211,7 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+ 	const g3s_point		*pointlist[8];
+ 
+ 	Assert(nv <= 8);
++	astra_room_lights(segnum);
+ 
+ 	for (i=0; i<nv; i++) {
+ 		uvl_copy[i].u = uvlp[i].u;
+diff --git a/d2/main/state.c b/d2/main/state.c
+index fde0fd3..50b1cd2 100644
+--- a/d2/main/state.c
++++ b/d2/main/state.c
+@@ -905,8 +905,8 @@ int state_save_all_sub(char *filename, char *desc)
+ #if defined(OGL)
+ 		buf = d_malloc(THUMBNAIL_W * THUMBNAIL_H * 4);
+ #ifndef OGLES
+- 		glGetIntegerv(GL_DRAW_BUFFER, &gl_draw_buffer);
+- 		glReadBuffer(gl_draw_buffer);
++ 		/* WebGL reads from the bound framebuffer. */
++ 		
+ #endif
+ 		glReadPixels(0, SHEIGHT - THUMBNAIL_H, THUMBNAIL_W, THUMBNAIL_H, GL_RGBA, GL_UNSIGNED_BYTE, buf);
+ 		k = THUMBNAIL_H;
+@@ -1793,3 +1793,4 @@ int state_get_game_id(char *filename)
+ 
+ 	return state_game_id;
+ }
++
+diff --git a/d2/misc/args.c b/d2/misc/args.c
+index cb81385..51533d2 100644
+--- a/d2/misc/args.c
++++ b/d2/misc/args.c
+@@ -152,9 +152,9 @@ void ReadCmdArgs(void)
+ 	GameArg.CtlNoJoystick 		= FindArg("-nojoystick");
+ 	GameArg.CtlNoStickyKeys		= FindArg("-nostickykeys");
+ 	if (GameArg.CtlNoStickyKeys) // Must happen before SDL_Init!
+-		SDL_putenv("SDL_DISABLE_LOCK_KEYS=1");
++		setenv("SDL_DISABLE_LOCK_KEYS","1",1);
+ 	else
+-		SDL_putenv("SDL_DISABLE_LOCK_KEYS=0");
++		setenv("SDL_DISABLE_LOCK_KEYS","0",1);
+ 
+ 	// Sound Options
+ 
+diff --git a/d2/misc/physfsx.c b/d2/misc/physfsx.c
+index 7e15772..74bab59 100644
+--- a/d2/misc/physfsx.c
++++ b/d2/misc/physfsx.c
+@@ -15,6 +15,7 @@
+ #include <ApplicationServices/ApplicationServices.h>
+ #endif
+ 
++#define SHAREPATH "/mine"
+ #include "physfsx.h"
+ #include "args.h"
+ #include "object.h"
+@@ -71,7 +72,7 @@ void PHYSFSX_init(int argc, char *argv[])
+ 	
+ #if defined(__unix__)
+ # if !(defined(__APPLE__) && defined(__MACH__))
+-	path = "~/.d2x-redux/";
++	path = "~/.d2-astra/";
+ # else
+ 	path = "~/Library/Preferences/D2X Redux/";
+ # endif
+@@ -580,3 +581,4 @@ void PHYSFSX_removeArchiveContent()
+ 	PHYSFS_freeList(list);
+ 	list = NULL;
+ }
++
+diff --git a/d2/misc/pngfile.c b/d2/misc/pngfile.c
+index 9d9dba2..6dd1531 100644
+--- a/d2/misc/pngfile.c
++++ b/d2/misc/pngfile.c
+@@ -8,121 +8,30 @@
+ #include "u_mem.h"
+ #include "pstypes.h"
+ 
+-static void PNGCBAPI png_read_data(png_structp png_ptr, png_bytep data, size_t length)
+-{
+-	SDL_RWops *rw = (SDL_RWops *)png_get_io_ptr(png_ptr);
+-	if (SDL_RWread(rw, data, 1, length) != length)
+-		png_error(png_ptr, "Read Error");
+-}
+-
+ int read_png(const char *filename, png_data *pdata)
+ {
+-	//ubyte header[8];
+-	png_structp png_ptr = NULL;
+-	png_infop info_ptr = NULL;
+-	png_bytepp row_pointers = NULL;
+-	png_uint_32 width, height;
+-	int depth, color_type;
+-	int i;
+-	PHYSFS_file *fp = NULL;
+-	char *fbuf = NULL;
+-	PHYSFS_sint64 fsize;
+-	SDL_RWops *rw;
+-
+-	if (!filename || !pdata)
+-		return 0;
+-
+-	if ((fp = PHYSFS_openRead(filename)) == NULL)
+-		return 0;
+-
+-	if ((fsize = PHYSFS_fileLength(fp)) == -1 ||
+-		!(fbuf = malloc(fsize))) {
+-		PHYSFS_close(fp);
+-		return 0;
+-	}
+-
+-	if (PHYSFS_readBytes(fp, fbuf, fsize) != fsize ||
+-		//!png_check_sig(fbuf, 8) ||
+-		!(rw = SDL_RWFromConstMem(fbuf, fsize))) {
+-		free(fbuf);
+-		PHYSFS_close(fp);
+-		return 0;
+-	}
+-
+-	PHYSFS_close(fp);
+-
+-	//SDL_RWseek(rw, 8, RW_SEEK_SET);
+-
+-	png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+-	info_ptr = png_create_info_struct(png_ptr);
+-
+-	pdata->data = pdata->palette = NULL;
+-	pdata->num_palette = 0;
+-	if (setjmp(png_jmpbuf(png_ptr)))
+-	{
+-		png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+-		if (pdata->data)
+-			free(pdata->data);
+-		if (pdata->palette)
+-			free(pdata->palette);
+-		if (row_pointers)
+-			free(row_pointers);
+-		SDL_RWclose(rw);
+-		free(fbuf);
+-		return 0;
+-	}
+-
+-	//png_init_io(png_ptr, fp);
+-	png_set_read_fn(png_ptr, (png_voidp)rw, png_read_data);
+-	//png_set_sig_bytes(png_ptr, 8);
+-	png_read_info(png_ptr, info_ptr);
+-	png_get_IHDR(png_ptr, info_ptr, &width, &height, &depth, &color_type, NULL, NULL, NULL);
+-
+-	pdata->width = width;
+-	pdata->height = height;
+-	pdata->depth = depth;
+-
+-	pdata->data = (ubyte*)malloc(png_get_rowbytes(png_ptr, info_ptr) * height);
+-	row_pointers = (png_bytep *)malloc(sizeof(png_bytep) * height);
+-	for (i = 0; i < height; i++)
+-		row_pointers[i] = &pdata->data[png_get_rowbytes(png_ptr, info_ptr) * i];
+-
+-	png_read_image(png_ptr, row_pointers);
+-	free(row_pointers);
+-	row_pointers=NULL;
+-	png_read_end(png_ptr, info_ptr);
+-
+-	if (color_type == PNG_COLOR_TYPE_PALETTE)
+-	{
+-		png_colorp palette;
+-
+-		if (png_get_PLTE(png_ptr, info_ptr, &palette, &pdata->num_palette))
+-		{
+-			pdata->palette = (ubyte*)malloc(pdata->num_palette * 3);
+-			memcpy(pdata->palette, palette, pdata->num_palette * 3);
+-		}
+-	}
+-
+-	pdata->paletted = (color_type & PNG_COLOR_MASK_PALETTE) > 0;
+-	pdata->color = (color_type & PNG_COLOR_MASK_COLOR) > 0;
+-	pdata->alpha = (color_type & PNG_COLOR_MASK_ALPHA) > 0;
+-	if (pdata->color && pdata->alpha)
+-		pdata->channels = 4;
+-	else if (pdata->color && !pdata->alpha)
+-		pdata->channels = 3;
+-	else if (!pdata->color && pdata->alpha)
+-		pdata->channels = 2;
+-	else //if (!pdata->color && !pdata->alpha)
+-		pdata->channels = 1;
+-
+-	png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+-
+-	SDL_RWclose(rw);
+-	free(fbuf);
+-
+-	return 1;
++    PHYSFS_File *file=PHYSFS_openRead(filename);
++    if (!file) return 0;
++    PHYSFS_sint64 n=PHYSFS_fileLength(file);
++    if(n<=0 || n>64*1024*1024) {PHYSFS_close(file);return 0;}
++    unsigned char *bytes=malloc((size_t)n);
++    int ok=bytes && PHYSFS_readBytes(file,bytes,n)==n;
++    PHYSFS_close(file);
++    png_image image={0};
++    image.version=PNG_IMAGE_VERSION;
++    ok=ok && png_image_begin_read_from_memory(&image,bytes,n);
++    if(ok){
++        memset(pdata,0,sizeof(*pdata));
++        pdata->alpha=(image.format&PNG_FORMAT_FLAG_ALPHA)!=0;
++        image.format=pdata->alpha?PNG_FORMAT_RGBA:PNG_FORMAT_RGB;
++        pdata->width=image.width;pdata->height=image.height;
++        pdata->channels=pdata->alpha?4:3;pdata->color=1;pdata->depth=8;
++        pdata->data=malloc(PNG_IMAGE_SIZE(image));
++        ok=pdata->data && png_image_finish_read(&image,NULL,pdata->data,0,NULL);
++        if(!ok) free(pdata->data);
++    }
++    png_image_free(&image);free(bytes);return ok;
+ }
+-
+ static void PNGCBAPI png_write_data(png_structp png_ptr, png_bytep data, size_t length)
+ {
+ 	PHYSFS_file *fp = (PHYSFS_File *)png_get_io_ptr(png_ptr);
+@@ -203,3 +112,4 @@ int write_png(const char *file_name, png_data *pdata)
+ 
+ 	return 1;
+ }
++
+diff --git a/d2/xmodel/strfunc.h b/d2/xmodel/strfunc.h
+index 86dbf86..aea8d96 100644
+--- a/d2/xmodel/strfunc.h
++++ b/d2/xmodel/strfunc.h
+@@ -79,7 +79,7 @@ static void strupr8(char *s) {
+ #endif
+ 
+ #ifndef WIN32
+-static char *strlwr(char *s) {
++static char *ase_strlwr(char *s) {
+ 	for (char *p = s, c; (c = *p); p++)
+ 		if (c >= 'A' && c <= 'Z')
+ 			*p = c - 'A' + 'a';
