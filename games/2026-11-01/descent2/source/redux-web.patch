@@ -6589,7 +6589,7 @@ index c53598c..97f0161 100644
  		return true;
  	}
 diff --git a/d2/xmodel/xmodel.cpp b/d2/xmodel/xmodel.cpp
-index d75a377..decdd7d 100644
+index d75a377..98bb1c4 100644
 --- a/d2/xmodel/xmodel.cpp
 +++ b/d2/xmodel/xmodel.cpp
 @@ -1,5 +1,6 @@
@@ -6609,7 +6609,7 @@ index d75a377..decdd7d 100644
  #include "internal.h"
  #include "../3d/globvars.h"
  #undef FILENAME_LEN
-@@ -17,28 +21,68 @@ extern "C" {
+@@ -17,28 +21,72 @@ extern "C" {
  #undef FILENAME_LEN
  #include "polyobj.h"
  #include "texmap.h"
@@ -6668,6 +6668,10 @@ index d75a377..decdd7d 100644
 +	int nanims;
 +	float gain;			// light scale that makes it as bright as the game model (fit_brightness)
 +	float part_gain[MAX_SUBMODELS];	// the same for each part, when the parts match the game model's
++	// from <model>.light beside the model ("gain 0.7 ceiling 1"), for models whose texture is a full-brightness
++	// painting with dark areas (an image-to-3D model) that the average-brightness fit would light far too brightly
++	float fixed_gain;		// used instead of fit_brightness when above 0
++	float light_ceiling;	// the most light any vertex gets (keeping its color) when above 0
  	int glloaded;
  };
  
@@ -6681,7 +6685,7 @@ index d75a377..decdd7d 100644
  
  // return -1 on error
  int xmodel_load_gl(void *model) {
-@@ -49,15 +93,32 @@ int xmodel_load_gl(void *model) {
+@@ -49,15 +97,32 @@ int xmodel_load_gl(void *model) {
  		glew_loaded = 1;
  	}
  	#endif
@@ -6717,7 +6721,7 @@ index d75a377..decdd7d 100644
  		if (bm.BPP() == 4)
  			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
  				bm.Width(), bm.Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE,
-@@ -66,19 +127,17 @@ int xmodel_load_gl(void *model) {
+@@ -66,19 +131,17 @@ int xmodel_load_gl(void *model) {
  			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
  				bm.Width(), bm.Height(), 0, GL_RGB, GL_UNSIGNED_BYTE,
  				bm.Buffer());
@@ -6746,7 +6750,7 @@ index d75a377..decdd7d 100644
  }
  
  void xmodel_free_gl(void *model) {
-@@ -87,8 +146,10 @@ void xmodel_free_gl(void *model) {
+@@ -87,8 +150,10 @@ void xmodel_free_gl(void *model) {
  		return;
  	glDeleteTextures(rm.m.m_textures.m_nBitmaps, rm.bmtex);
  	memset(rm.bmtex, 0, rm.m.m_textures.m_nBitmaps * sizeof(rm.bmtex[0]));
@@ -6759,7 +6763,7 @@ index d75a377..decdd7d 100644
  	rm.glloaded = 0;
  }
  
-@@ -97,12 +158,21 @@ void xmodel_free(void *model) {
+@@ -97,12 +162,21 @@ void xmodel_free(void *model) {
  	render_model& rm = *rmp;
  	xmodel_free_gl(model);
  	delete[] rm.verts;
@@ -6783,17 +6787,33 @@ index d75a377..decdd7d 100644
  // return NULL on error
  void *xmodel_load(const char *filename) {
  	render_model* rmp = new render_model();
-@@ -114,6 +184,9 @@ void *xmodel_load(const char *filename) {
+@@ -114,6 +188,25 @@ void *xmodel_load(const char *filename) {
  		return NULL;
  	}
  	rm.glloaded = 0;
 +	rm.gain = 1;
 +	for (int i = 0; i < MAX_SUBMODELS; i++)
 +		rm.part_gain[i] = 1;
++	rm.fixed_gain = rm.light_ceiling = 0;
++	{
++		char lightname[64], line[128];
++		const char *dot = strrchr(filename, '.');
++		int base = dot ? (int)(dot - filename) : (int)strlen(filename);
++		snprintf(lightname, sizeof(lightname), "%.*s.light", base, filename);
++		CFile cf;
++		if (cf.Open(lightname, "", "rb", 0))
++			while (cf.GetS(line, sizeof(line))) {
++				float v;
++				if (sscanf(line, " gain %f", &v) == 1)
++					rm.fixed_gain = v;
++				else if (sscanf(line, " ceiling %f", &v) == 1)
++					rm.light_ceiling = v;
++			}
++	}
  	int num_bitmaps = m.m_textures.m_nBitmaps;
  	for (int i = 0; i < num_bitmaps; i++) {
  		CBitmap& bm = m.m_textures.m_bitmaps[i];
-@@ -127,94 +200,612 @@ void *xmodel_load(const char *filename) {
+@@ -127,94 +220,624 @@ void *xmodel_load(const char *filename) {
  			data[j + 2] = x;
  		}
  	}
@@ -7044,6 +7064,12 @@ index d75a377..decdd7d 100644
 +// part by part where its parts match the game model's.
 +static void fit_brightness(render_model& rm, polymodel *po) {
 +	static vms_vector pts[MAX_SURFACE_POINTS];
++	if (rm.fixed_gain > 0) {
++		rm.gain = rm.fixed_gain;
++		for (int i = 0; i < MAX_SUBMODELS; i++)
++			rm.part_gain[i] = rm.gain;
++		return;
++	}
 +	float tex_lum[MAX_POLYOBJ_TEXTURES] = { 0 }, rgb[3];
 +	int ntex = po->n_textures < MAX_POLYOBJ_TEXTURES ? po->n_textures : MAX_POLYOBJ_TEXTURES;
 +	for (int t = 0; t < ntex; t++) {
@@ -7097,7 +7123,7 @@ index d75a377..decdd7d 100644
 +			rm.part_gain[i] = clamp_gain((s / a) / (psum[i] / parea[i]));
 +	}
 +}
-+
+ 
 +// The game model's flat-shaded polygon colors (15-bit RGB), each once, in the order the
 +// interpreter meets them: what the models' "colour N" materials stand for.
 +#define W(p) (*(short *)(p))
@@ -7342,11 +7368,17 @@ index d75a377..decdd7d 100644
 +			c[0] = l * lr;
 +			c[1] = l * lg;
 +			c[2] = l * lb;
++			if (rm.light_ceiling > 0) {	// at most this much light, same color
++				float top = c[0] > c[1] ? (c[0] > c[2] ? c[0] : c[2]) : (c[1] > c[2] ? c[1] : c[2]);
++				if (top > rm.light_ceiling)
++					for (int k = 0; k < 3; k++)
++						c[k] *= rm.light_ceiling / top;
++			}
 +			c[3] = a;
 +		}
 +	}
 +}
- 
++
 +static void xmodel_draw(render_model& rm, int mpcolor, g3s_lrgb *light, const float *view,
 +	polymodel *po, vms_angvec *anim_angles, int root) {
 +	int num_bitmaps = rm.m.m_textures.m_nBitmaps;
@@ -7444,7 +7476,7 @@ index d75a377..decdd7d 100644
  #if 0
  #define GLAPIENTRY
  #define GL_DEBUG_TYPE_ERROR               0x824C
-@@ -235,18 +826,20 @@ void gl_debug() {
+@@ -235,18 +858,20 @@ void gl_debug() {
  }
  #endif
  
@@ -7468,7 +7500,7 @@ index d75a377..decdd7d 100644
  	vpos.z *= -1;
  
  	// create 4x4 lookat matrix
-@@ -263,30 +856,55 @@ void xmodel_show_at(void *model, vms_vector *pos, vms_matrix *orient, int mpcolo
+@@ -263,30 +888,55 @@ void xmodel_show_at(void *model, vms_vector *pos, vms_matrix *orient, int mpcolo
  	for (int j = 0; j < 3; j++)
  		fm[3 * 4 + j] = -f2fl(vpos_elem[j]);
  	fm[15] = 1;
@@ -7527,7 +7559,7 @@ index d75a377..decdd7d 100644
  	if (!free_registered) {
  		atexit(xmodel_free_all);
  		free_registered = 1;
-@@ -297,12 +915,18 @@ void xmodel_load_gl_all() {
+@@ -297,12 +947,18 @@ void xmodel_load_gl_all() {
  	for (int i = 0; i < NUM_XMODELS; i++)
  		if (xmodels[i])
  			xmodel_load_gl(xmodels[i]);
@@ -7546,7 +7578,7 @@ index d75a377..decdd7d 100644
  }
  
  static int xmodel_xlate(enum xmodel_type mt, int modelnum) {
-@@ -315,14 +939,48 @@ static int xmodel_xlate(enum xmodel_type mt, int modelnum) {
+@@ -315,14 +971,48 @@ static int xmodel_xlate(enum xmodel_type mt, int modelnum) {
  
  // returns 1 if drawn
  int xmodel_show_if_loaded(enum xmodel_type mt, int modelnum, vms_vector *pos, vms_matrix *orient, int mpcolor, g3s_lrgb *light) {
