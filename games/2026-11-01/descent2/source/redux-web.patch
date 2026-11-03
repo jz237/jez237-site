@@ -2826,6 +2826,18 @@ index 0000000..b33cc74
 +#define SDLK_WORLD_93 0
 +#define SDLK_WORLD_94 0
 +#define SDLK_WORLD_95 0
+diff --git a/d2/include/args.h b/d2/include/args.h
+index 8983f5c..83d4b78 100644
+--- a/d2/include/args.h
++++ b/d2/include/args.h
+@@ -50,6 +50,7 @@ typedef struct Arg
+ 	int SysNoBorders;
+ 	int SysAutoDemo;
+ 	int SysNoMovies;
++	int SysNoTitles;
+ 	int CtlNoCursor;
+ 	int CtlNoMouse;
+ 	int CtlNoJoystick;
 diff --git a/d2/include/ogl_init.h b/d2/include/ogl_init.h
 index af0b258..f17d979 100644
 --- a/d2/include/ogl_init.h
@@ -4218,7 +4230,7 @@ index f15d413..4758a33 100644
  	//if the player is taking damage, give up guided missile control
  	if (Players[Player_num].shields != player_shields)
 diff --git a/d2/main/inferno.c b/d2/main/inferno.c
-index dc6e44a..3c6d310 100644
+index dc6e44a..83c5c17 100644
 --- a/d2/main/inferno.c
 +++ b/d2/main/inferno.c
 @@ -25,6 +25,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
@@ -4229,7 +4241,19 @@ index dc6e44a..3c6d310 100644
  #include <stdio.h>
  #include <stdlib.h>
  #include <string.h>
-@@ -519,5 +520,8 @@ int main(int argc, char *argv[])
+@@ -415,7 +416,10 @@ int main(int argc, char *argv[])
+ 	con_printf( CON_DEBUG, "Initializing movie libraries...\n" );
+ 	init_movies();		//init movie libraries
+ 
+-	show_titles();
++	if (GameArg.SysNoTitles)	// skip the intro movie and logo screens, straight to the title music
++		songs_play_song(SONG_TITLE, 1);
++	else
++		show_titles();
+ 
+ 	set_screen_mode(SCREEN_MENU);
+ 
+@@ -519,5 +523,8 @@ int main(int argc, char *argv[])
  	PHYSFSX_removeArchiveContent();
  	reset_observatory_stats();
  
@@ -5773,10 +5797,18 @@ index af6f092..1063d5d 100644
  		if ((songs_is_playing() != SONG_BRIEFING) && (songs_is_playing() != SONG_ENDGAME))
  			songs_play_song( SONG_BRIEFING, 1 );
 diff --git a/d2/misc/args.c b/d2/misc/args.c
-index cb81385..d2aa251 100644
+index cb81385..52a10c8 100644
 --- a/d2/misc/args.c
 +++ b/d2/misc/args.c
-@@ -152,9 +152,9 @@ void ReadCmdArgs(void)
+@@ -143,6 +143,7 @@ void ReadCmdArgs(void)
+ 	GameArg.SysWindow 		= FindArg("-window");
+ 	GameArg.SysNoBorders 		= FindArg("-noborders");
+ 	GameArg.SysNoMovies 		= FindArg("-nomovies");
++	GameArg.SysNoTitles 		= FindArg("-notitles");
+ 	GameArg.SysAutoDemo 		= FindArg("-autodemo");
+ 
+ 	// Control Options
+@@ -152,9 +153,9 @@ void ReadCmdArgs(void)
  	GameArg.CtlNoJoystick 		= FindArg("-nojoystick");
  	GameArg.CtlNoStickyKeys		= FindArg("-nostickykeys");
  	if (GameArg.CtlNoStickyKeys) // Must happen before SDL_Init!

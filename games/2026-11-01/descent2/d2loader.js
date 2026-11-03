@@ -2,7 +2,7 @@
 // them locally. Optional folder imports remain available for custom copies.
 
 // Bump with every engine or loader release so browsers fetch the new files
-const BUILD = '20261103e';
+const BUILD = '20261103f';
 const DB_NAME = 'descent2-web';
 const DB_VERSION = 3; // 2 adds the music folder store, 3 the D2X-XL textures and models
 const SAVE_DIR = '/home/web_user/.d2x-redux';
@@ -650,7 +650,7 @@ function touchControls() {
 const SETTINGS_KEY = 'descent2-web-settings';
 function loadSettings() {
   // phones render at 1080p by default: sharp, and light on the battery
-  const defaults = { quality: isTouchDevice() ? '1080' : 'native', msaa: true, music: 'cd', hires: true };
+  const defaults = { quality: isTouchDevice() ? '1080' : 'native', msaa: true, music: 'cd', hires: true, skipIntro: false };
   for (const id of LOOKS) defaults[id] = true;
   defaults.ultra = !isTouchDevice(); // the extra-sharp textures take GPU memory phones don't have
   try {
@@ -909,7 +909,7 @@ async function bootGame(manifest, ui) {
       ui.started();
       // WebGL lacks texture-level queries and the tiny GL 1.x internal formats
       Module.callMain(['-hogdir', DATA_DIR, '-gl_gettexlevelparam_ok', '0', '-gl_intensity4_ok', '0',
-        '-gl_luminance4_alpha4_ok', '0', '-gl_rgba2_ok', '0']);
+        '-gl_luminance4_alpha4_ok', '0', '-gl_rgba2_ok', '0', ...(settings.skipIntro ? ['-notitles'] : [])]);
       startSaveSync();
       // fetch the MIDI sound bank in the background so its music starts without a wait
       if (settings.music === 'midi' || settings.music === 'cd') Module.d2midi.load();
@@ -993,6 +993,7 @@ async function main() {
   const settings = loadSettings();
   $('quality').value = settings.quality;
   $('msaa').checked = settings.msaa;
+  $('skipIntro').checked = settings.skipIntro;
   for (const id of LOOKS) $(id).checked = settings[id];
   $('music').value = settings.music;
   $('music').addEventListener('change', () => {
@@ -1094,6 +1095,7 @@ async function main() {
   });
   $('quality').addEventListener('change', () => { settings.quality = $('quality').value; saveSettings(settings); updateResLabel(); });
   $('msaa').addEventListener('change', () => { settings.msaa = $('msaa').checked; saveSettings(settings); });
+  $('skipIntro').addEventListener('change', () => { settings.skipIntro = $('skipIntro').checked; saveSettings(settings); });
   // the look options also apply at once to a running game
   for (const id of LOOKS)
     $(id).addEventListener('change', () => {
