@@ -1,0 +1,37 @@
+Independent source build
+
+DXX-Redux upstream
+https://github.com/dxx-redux/dxx-redux
+9fd90f03513663ce1372c8cfa723b7a73c4219fa
+
+PhysicsFS upstream
+https://github.com/icculus/physfs
+eb3383b532c5f74bfeb42ec306ba2cf80eed988c
+
+Astra was built on Windows using Python 3.12, Emscripten 3.1.46, Ninja, FFmpeg, NumPy, Pillow and UnityPy. The finished game has no build-time dependencies.
+
+Place fresh checkouts at <build-dir>/redux and <build-dir>/physfs, at the revisions above. Set EMSDK to your activated Emscripten SDK. From this source folder run
+
+    python prepare_engine.py <build-dir>
+    python build_engine.py <build-dir>
+
+build_engine.py keeps Emscripten cache, temporary files and object files in that build directory. A populated Emscripten library cache can be copied to <build-dir>/cache for an offline build. The compile produces engine.js with embedded WebAssembly in the parent folder.
+
+The local asset pack can be rebuilt with a Python environment containing the dependencies above. D2 below is the original folder containing descent2.hog, and OL is Overload_Data.
+
+    python package.py "<D2>"
+    python materials.py "<OL>" "<D2>/groupa.pig"
+    python cockpit.py "<D2>" "<OL>"
+    python ship.py "<D2>"
+    python ship_skin.py "<OL>"
+
+engine.patch and the .inc files contain the platform and renderer changes relative to upstream. The port uses the unmodified upstream physics, AI and weapon simulation. The presentation shader in ship.frag is shared by the flight terminal and the in-game Pyro. material-index.json records the Unity texture names used in the local pack. Upstream engine notices are included in this directory.
+
+
+Field Refit 02 also requires the original Vertigo install. Its mission archive and descriptor are copied without modification. In the same source directory, generate the extension packs with
+
+    python vertigo.py "<original Vertigo files folder>"
+    python fleet.py "<OL>" "<build-dir>/redux"
+    python forge.py "<OL>"
+
+fleet.py requires SciPy in addition to the dependencies listed above. The generated fleet_types.inc supplies D2 model bindings. The live D2 polymodel supplies each ship's outer panels and articulated limbs. Overload render batches supply internal mechanisms and materials. The original game handles the robot's position, weapons, collisions and AI. The optional encounter drop places the player near an existing robot; Enter mine uses the mission's original start.

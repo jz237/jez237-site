@@ -1,0 +1,1 @@
+astraIndex.forge=[["forge-000.bin"],[["plume0.png",1155283],["plume1.png",991875],["plume2.png",706397],["plume3.png",683820],["forge.png",285122],["m180.png",294222],["n180.png",339149],["m181.png",282530],["n181.png",338638],["m182.png",316313],["n182.png",338476]]];
