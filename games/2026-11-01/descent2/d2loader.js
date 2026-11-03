@@ -2,7 +2,7 @@
 // them locally. Optional folder imports remain available for custom copies.
 
 // Bump with every engine or loader release so browsers fetch the new files
-const BUILD = '20261103j';
+const BUILD = '20261103k';
 const DB_NAME = 'descent2-web';
 const DB_VERSION = 3; // 2 adds the music folder store, 3 the D2X-XL textures and models
 const SAVE_DIR = '/home/web_user/.d2x-redux';
@@ -664,7 +664,9 @@ function saveSettings(s) {
 }
 
 // look options the engine reads while it runs (web.h D2WEB_OPTION_*), each a page checkbox
-const LOOKS = ['sharp', 'effects', 'glow', 'lighting', 'ao', 'haze', 'surfaces', 'explosions', 'reflections', 'ultra'];
+// (invertPitch isn't a look, but works the same way: on by default, read live)
+const LOOKS = ['sharp', 'effects', 'glow', 'lighting', 'ao', 'haze', 'surfaces', 'explosions', 'reflections', 'ultra',
+  'invertPitch'];
 
 function renderResolution(quality) {
   const dpr = window.devicePixelRatio || 1;

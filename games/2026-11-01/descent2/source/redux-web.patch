@@ -1788,7 +1788,7 @@ index 0000000..f8c55f7
 +#include <SDL.h>
 diff --git a/d2/arch/web/library_d2web.js b/d2/arch/web/library_d2web.js
 new file mode 100644
-index 0000000..59b5f7d
+index 0000000..7e1ff1a
 --- /dev/null
 +++ b/d2/arch/web/library_d2web.js
 @@ -0,0 +1,356 @@
@@ -2076,7 +2076,7 @@ index 0000000..59b5f7d
 +
 +  d2web_option: (which) => {
 +    const o = Module.d2options || {};
-+    return o[['sharp', 'effects', 'glow', 'lighting', 'ao', 'haze', 'surfaces', 'explosions', 'reflections', 'ultra'][which]] === false ? 0 : 1;
++    return o[['sharp', 'effects', 'glow', 'lighting', 'ao', 'haze', 'surfaces', 'explosions', 'reflections', 'ultra', 'invertPitch'][which]] === false ? 0 : 1;
 +  },
 +
 +  // development: Module.d2tune[i] overrides a look constant while the game runs
@@ -2768,10 +2768,10 @@ index 0000000..83cbef0
 +}
 diff --git a/d2/arch/web/web.h b/d2/arch/web/web.h
 new file mode 100644
-index 0000000..68e63f4
+index 0000000..b2f9617
 --- /dev/null
 +++ b/d2/arch/web/web.h
-@@ -0,0 +1,104 @@
+@@ -0,0 +1,105 @@
 +/* Browser (Emscripten) glue for D2X-Redux. Implemented in library_d2web.js. */
 +#ifndef _D2WEB_H
 +#define _D2WEB_H
@@ -2842,6 +2842,7 @@ index 0000000..68e63f4
 +#define D2WEB_OPTION_EXPLOSIONS	7	/* fireballs, shockwaves, debris and scorch marks */
 +#define D2WEB_OPTION_REFLECTIONS	8	/* reflections on smooth surfaces */
 +#define D2WEB_OPTION_ULTRA		9	/* the sharper (4x D2X-XL) texture set, where loaded */
++#define D2WEB_OPTION_INVERT_PITCH	10	/* reverse up/down for every control (mouse, gamepad, keys, touch) */
 +
 +/* A look constant, def unless Module.d2tune[i] overrides it (for tuning while it runs). */
 +float d2web_tune(int i, float def);
@@ -4510,7 +4511,7 @@ index dc6e44a..22c3ee3 100644
  	return(0);		//presumably successful exit
  }
 diff --git a/d2/main/kconfig.c b/d2/main/kconfig.c
-index d9aafbc..5b7bee7 100644
+index d9aafbc..a05fbd2 100644
 --- a/d2/main/kconfig.c
 +++ b/d2/main/kconfig.c
 @@ -97,6 +97,10 @@ fix Cruise_speed=0;
@@ -4524,7 +4525,7 @@ index d9aafbc..5b7bee7 100644
  
  #define INFO_Y (188)
  
-@@ -1740,6 +1744,35 @@ void kconfig_read_controls(d_event *event, int automap_flag)
+@@ -1740,6 +1744,41 @@ void kconfig_read_controls(d_event *event, int automap_flag)
  	if (Cruise_speed < 0 ) Cruise_speed = 0;
  	if (Controls.forward_thrust_time==0) Controls.forward_thrust_time = fixmul(Cruise_speed,FrameTime)/100;
  
@@ -4555,6 +4556,12 @@ index d9aafbc..5b7bee7 100644
 +#undef TOUCH_STATE
 +		}
 +	}
++#endif
++
++#ifdef __EMSCRIPTEN__
++	// the page's Reverse up/down: every control at once, before the overrun (worked out from these values)
++	if (d2web_option(D2WEB_OPTION_INVERT_PITCH))
++		Controls.pitch_time = -Controls.pitch_time;
 +#endif
 +
      //----------- Add overrun values
@@ -6487,10 +6494,10 @@ index 86dbf86..284c6a7 100644
  	for (char *p = s, c; (c = *p); p++)
  		if (c >= 'A' && c <= 'Z')
 diff --git a/d2/xmodel/tga.cpp b/d2/xmodel/tga.cpp
-index 8865faf..2558295 100644
+index 8865faf..33d3869 100644
 --- a/d2/xmodel/tga.cpp
 +++ b/d2/xmodel/tga.cpp
-@@ -644,12 +644,84 @@ return 1;
+@@ -644,12 +644,98 @@ return 1;
  
  #endif
  
@@ -6498,6 +6505,16 @@ index 8865faf..2558295 100644
 +extern "C" {
 +#include "pngfile.h"
 +}
++
++#ifdef __EMSCRIPTEN__
++// A big painted texture (the extra-sharp pack's robots) can ship as x.jpg instead of x.png.
++static int read_jpeg_beside (const char *pngName, png_data *pdata)
++{
++	char name [FILENAME_LEN];
++	snprintf (name, sizeof (name), "%.*s.jpg", (int) strlen (pngName) - 4, pngName);
++	return read_image_stb (name, pdata);
++}
++#endif
 +
 +// Model textures named "x.tga" in a model ship as x.png (D2X-XL 2.x); animated ones are
 +// vertical frame strips (name#0.png, frame k in row k): name#k is its own file or row k of
@@ -6516,6 +6533,10 @@ index 8865faf..2558295 100644
 +strcat (szName, ".png");
 +if (read_png (szName, &pdata))
 +	nFrame = 0;	// a file of its own, or a strip it is the first frame of
++#ifdef __EMSCRIPTEN__
++else if (!pszHash && read_jpeg_beside (szName, &pdata))
++	nFrame = 0;
++#endif
 +else {
 +	if (!nFrame)
 +		return 0;
