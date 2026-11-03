@@ -28434,5 +28434,99 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-03-factual-infographic-factual-infographic-milky-seas-the-ocea",
+    "title": "Factual infographic: Milky Seas — The Ocean’s Steady Living Glow",
+    "tests": "; archive_slot=2026-11-03T00:20; concept=milky-seas-bacteria-ocean-glow; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: factual-infographic",
+    "prompt": "Create a finished, exquisitely detailed scientific infographic directly on the canvas titled “MILKY SEAS” with subtitle “The ocean’s steady living glow”. An immense luminous, gently rippling night ocean fills the composition: a small research vessel crosses a broad continuous ghostly pale white-blue glow under a deep indigo sky, its wake not depicted as the source of the light. The visual journey flows from the atmospheric sea surface down into a beautifully enlarged, explicitly schematic microscopic study of luminous bacteria associated with microalgal material, then arcs upward to a small orbiting satellite observing the expanse. Use luminous environmental painting and precise scientific ink, varied scale, organically curved leader lines and generous breathing room; no panels, grids, poster mockup, frames, logos, or citations. Integrate these concise accurate labels naturally: “Rare, widespread steady glow”; “Luminous bacteria implicated”; “Dense populations: chemical quorum sensing can switch on light”; “Bacteria found with microalgae in one sampled event”; “Can persist days to weeks and drift with currents”; “VIIRS day-night band detects faint light from orbit”; “Moonlight and clouds complicate detection”. A small subtle contrasting ripple vignette labeled “Dinoflagellates: brief stimulated flashes” explains the difference without confusing the two organisms. Clearly label microscopic magnification “schematic”; do not imply that every milky sea has a proven identical cause: add “Formation and ecology remain under study”. Keep hierarchy elegant, lettering clear and concise, visual facts accurate and the ocean hero dominant.",
+    "image": "images/2026-11-03-factual-infographic-factual-infographic-milky-seas-the-ocea.jpg",
+    "thumb": "thumbs/2026-11-03-factual-infographic-factual-infographic-milky-seas-the-ocea.webp",
+    "color": "#435c6c",
+    "date": "2026-11-03",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "milky-seas-bacteria-ocean-glow",
+      "imageSha256": "9e554bf1d7f530dd00b6f4dc11295714234ce97aa15df75500c93ddfc767cad3",
+      "imageDHash": "7663073f43070923"
+    },
+    "factualInfographic": {
+      "topic": "How milky seas produce vast, steady marine bioluminescence and are detected from orbit",
+      "description": "Rare steady marine bioluminescence, bacterial hypothesis and satellite observation.",
+      "sourceNote": "Scientific Reports: https://www.nature.com/articles/s41598-021-94823-z; NASA Earth Observatory: https://science.nasa.gov/earth/earth-observatory/hunting-milky-seas-by-satellite-149017/; verified glow, bacterial evidence, uncertainty and satellite detection.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-03T05:20:42.676511+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Scientific Reports",
+            "title": "Honing in on bioluminescent milky seas from space",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.nature.com/articles/s41598-021-94823-z"
+          },
+          {
+            "id": "S2",
+            "publisher": "NASA Earth Observatory",
+            "title": "Hunting Milky Seas by Satellite",
+            "sourceType": "government-agency",
+            "url": "https://science.nasa.gov/earth/earth-observatory/hunting-milky-seas-by-satellite-149017/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Milky seas are rare expanses of steady whitish marine bioluminescence visible at night.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Luminous bacteria are implicated, but their precise ecological relationships and conditions producing milky seas remain uncertain.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "At high bacterial population density, chemical quorum sensing can trigger bacterial luminescence.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A 1985 sampled milky sea contained luminous bacteria associated with microalgae.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The glow may persist for days to weeks and drift with surface currents.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The VIIRS day-night band can detect the faint glow from orbit under favorable conditions; moonlight and clouds can complicate detection.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Unlike a milky sea’s steady glow, mechanically stimulated dinoflagellate bioluminescence typically flashes briefly.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
