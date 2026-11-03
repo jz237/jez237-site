@@ -1,9 +1,9 @@
 // Instant replays must reproduce the knockout exactly: run AI duels in every sector with the recorder,
 // then re-run the last seconds from the nearest clone and compare the knockout tick, side and position.
-import { makeWorld, step, drainEvents, STEP, shipOf } from '../../games/2026-03-09/asteroids-hd/2026/js/sim.js?v=4';
-import { AIPilot } from '../../games/2026-03-09/asteroids-hd/2026/js/ai.js?v=4';
-import { Recorder } from '../../games/2026-03-09/asteroids-hd/2026/js/replay.js?v=4';
-import { PILOTS, PERKS, DIFFICULTY } from '../../games/2026-03-09/asteroids-hd/2026/js/config.js?v=4';
+import { makeWorld, step, drainEvents, STEP, shipOf } from '../../games/2026-03-09/asteroids-hd/2026/js/sim.js?v=5';
+import { AIPilot } from '../../games/2026-03-09/asteroids-hd/2026/js/ai.js?v=5';
+import { Recorder } from '../../games/2026-03-09/asteroids-hd/2026/js/replay.js?v=5';
+import { PILOTS, PERKS, DIFFICULTY } from '../../games/2026-03-09/asteroids-hd/2026/js/config.js?v=5';
 
 const keys = ['razor', 'lyra', 'grit', 'cipher'];
 let ok = 0, bad = 0;

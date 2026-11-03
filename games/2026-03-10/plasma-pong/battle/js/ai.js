@@ -4,9 +4,9 @@
 // power-ups on the way, and its own risk of fluffing an edge hit. Personas set reaction time, aim
 // noise, speed and taste (smash, spin, bank shots, trigger-happiness). The plan is public, so the
 // demo mode can draw it.
-import { F } from './config.js?v=5';
-import { returnShot, paddlesOf, cellIndex } from './sim.js?v=5';
-import { predictToPlane, shotPath } from './predict.js?v=5';
+import { F } from './config.js?v=6';
+import { returnShot, paddlesOf, cellIndex } from './sim.js?v=6';
+import { predictToPlane, shotPath } from './predict.js?v=6';
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
 const sigmoid = (x) => 1 / (1 + Math.exp(-x));

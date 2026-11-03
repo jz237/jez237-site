@@ -1,7 +1,7 @@
 // The belt: a deterministic 120 Hz simulation. Everything random comes from the world's own RNG
 // (W.rs), so a cloned world fed the same ship inputs replays a fight exactly (instant replays).
 // Nothing outside step() may change W during a recorded match.
-import { F, ARENAS, POWERUPS, POWERUP_KEYS, PERKS, ROCK_KINDS } from './config.js?v=4';
+import { F, ARENAS, POWERUPS, POWERUP_KEYS, PERKS, ROCK_KINDS } from './config.js?v=5';
 
 export const STEP = 1 / 120;
 const { AW, AH } = F;
@@ -49,7 +49,7 @@ export function newShip(id, side, x, z, a, o = {}) {
   };
 }
 
-// o: { arena, seed, twists, perks: {1, -1}, hull: {1, -1}, looks: {1, -1}, boss: bool, diffBoss }
+// o: { arena, seed, twists, perks: {1, -1}, hull: {1, -1}, looks: {1, -1}, boss: bool, diffBoss, rockK (rock speed) }
 export function makeWorld(o = {}) {
   const A = ARENAS[o.arena ?? 0];
   const W = attachRand({
@@ -57,14 +57,14 @@ export function makeWorld(o = {}) {
     ships: [], bullets: [], rocks: [], orbs: [], mines: [], drones: [], wells: [], strikes: [], lanes: [], pending: [], arcs: [],
     portals: [], hole: null, boss: null, ev: [], over: false, winner: 0, overT: 0,
     stats: { 1: STATS(), '-1': STATS() }, perk: { 1: o.perks?.[1] || {}, '-1': o.perks?.[-1] || {} },
-    waveT: 6, waves: 0, orbCD: 4, stormT: 6, cometT: 7, arcT: 0, bossDiff: o.diffBoss ?? 1, predict: false, claims: [],
+    waveT: 6, waves: 0, rockK: o.rockK ?? 1, orbCD: 4, stormT: 6, cometT: 7, arcT: 0, bossDiff: o.diffBoss ?? 1, predict: false, claims: [],
     up: { 1: { ...NO_UP, ...(o.up?.[1] || {}) }, '-1': { ...NO_UP, ...(o.up?.[-1] || {}) } },
   });
   const tiny = W.tw.tiny ? 0.6 : 1;
   const hullFor = (s) => (W.tw.glass ? 3 : (o.hull?.[s] ?? F.hull) + 2 * W.up[s].hull);
   if (o.solo) {
     // Belt Run: just you and the rocks
-    W.solo = true; W.lives = o.lives ?? 2; W.pts = o.pts ?? 0; W.respawnT = 0; W.rockK = o.rockK ?? 1; W.cleared = false;
+    W.solo = true; W.lives = o.lives ?? 2; W.pts = o.pts ?? 0; W.respawnT = 0; W.cleared = false;
     W.dropT = o.dropT ?? 22; W.drops = o.drops ?? 2; W.wave = o.wave ?? 1;
     W.ships.push(newShip(W.nextId++, 1, 0, AH * 0.45, 0, { hp: (o.hull?.[1] ?? 3) + 2 * W.up[1].hull, look: o.looks?.[1] }));
   } else if (A.hazard === 'boss' && o.boss) {

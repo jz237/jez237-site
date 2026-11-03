@@ -1,18 +1,18 @@
 // Plasma Pong: Battle Edition — game flow, controls, scoring, commentary and the frame loop.
 import * as THREE from '../vendor/three.module.min.js';
-import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS, PERKS, ROSTER, SHADOW, TWISTS } from './config.js?v=5';
-import { makeWorld, step, drainEvents, STEP, paddlesOf } from './sim.js?v=5';
-import { AIPilot } from './ai.js?v=5';
-import { predictToPlane } from './predict.js?v=5';
-import { Renderer, pickQuality } from './render.js?v=5';
-import { Director } from './director.js?v=5';
-import { Audio } from './audio.js?v=5';
-import { Input } from './input.js?v=5';
-import { UI, $, hex } from './ui.js?v=5';
-import { Scores } from './scores.js?v=5';
-import { CALM } from './views.js?v=5';
-import { Recorder } from './replay.js?v=5';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=5';
+import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS, PERKS, ROSTER, SHADOW, TWISTS, RAMP, rampAI } from './config.js?v=6';
+import { makeWorld, step, drainEvents, STEP, paddlesOf } from './sim.js?v=6';
+import { AIPilot } from './ai.js?v=6';
+import { predictToPlane } from './predict.js?v=6';
+import { Renderer, pickQuality } from './render.js?v=6';
+import { Director } from './director.js?v=6';
+import { Audio } from './audio.js?v=6';
+import { Input } from './input.js?v=6';
+import { UI, $, hex } from './ui.js?v=6';
+import { Scores } from './scores.js?v=6';
+import { CALM } from './views.js?v=6';
+import { Recorder } from './replay.js?v=6';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=6';
 
 // ------------------------------------------------------------------ settings
 const SKEY = 'ppb.settings.v1';
@@ -132,7 +132,7 @@ function startMatch(cfg) {
   const coreHP = boss ? { 1: F.bossCoreHP } : undefined;
   const perks = {};
   for (const s of [1, -1]) { const h = cfg.sides[s].human; if (h && PERKS[h.pilot]) perks[s] = PERKS[h.pilot]; }
-  const W = makeWorld({ arena: cfg.arena, seed: cfg.seed ?? ((Math.random() * 1e9) | 0), boss, coreHP, perks, twists: cfg.twists, serveDir: cfg.serveDir || (Math.random() < 0.5 ? 1 : -1) });
+  const W = makeWorld({ arena: cfg.arena, seed: cfg.seed ?? ((Math.random() * 1e9) | 0), boss, coreHP, perks, twists: cfg.twists, ballK: cfg.ballK, serveDir: cfg.serveDir || (Math.random() < 0.5 ? 1 : -1) });
   G.W = W; G.ai = {}; G.aiList = []; G.humans = []; G.cfg = cfg;
   for (const s of [1, -1]) {
     const c = cfg.sides[s];
@@ -234,7 +234,7 @@ function stageIntro() {
   const you = humanPilot(me, 1, me === 'p1' ? 'CHALLENGER' : `YOU · ${PERKS[me].name}`);
   G.mode = 'campaign';
   G.menuCam = false;
-  startMatch({ arena: G.stage, diffAI: DIFFICULTY[G.diff].ai, sides: { 1: { kind: 'human', human: you, who: 'solo' }, '-1': { kind: 'ai', persona: pilot } } });
+  startMatch({ arena: G.stage, diffAI: rampAI(DIFFICULTY[G.diff].ai, G.stage), ballK: RAMP[G.stage].ball, sides: { 1: { kind: 'human', human: you, who: 'solo' }, '-1': { kind: 'ai', persona: pilot } } });
   D.setMode(camMode());
   G.simOn = false;
   G.state = 'vs';

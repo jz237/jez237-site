@@ -1,5 +1,5 @@
 // Asteroids 2026 — tuning, pilots, sectors, power-ups and party twists.
-export const VERSION = 'v1.2.1';
+export const VERSION = 'v1.2.2';
 
 // World units. The belt is a wrap-around rectangle on the XZ plane: x in [-AW, AW], z in [-AH, AH].
 // Screen up is -z. A heading of 0 points up the screen; positive angles turn clockwise.
@@ -121,6 +121,25 @@ export const POWERUPS = {
   well: { name: 'GRAVITY WELL', glyph: '◉', color: 0xc070ff, desc: 'Throws a black hole that drags rocks', time: 0, sfx: 'well', voice: 'well', w: 5 },
 };
 export const POWERUP_KEYS = Object.keys(POWERUPS);
+
+// Campaign build-up: the early sectors are gentler and each one is a step harder. Each rival has its
+// own easing (Razor's all-out rushing needs the most), measured with scripts/asteroids-2026/ramp_check.mjs
+// so a steady stand-in pilot wins less every sector (~90% / 70% / 45% / 20%). Multiplies the chosen
+// difficulty's AI; rocks = rock speed. The Maw keeps its own difficulty.
+export const RAMP = [
+  { aim: 3, react: 2.1, fire: 0.42, dodge: 0.45, rocks: 0.8 },
+  { aim: 1.55, react: 1.32, fire: 0.7, dodge: 0.74, rocks: 0.87 },
+  { aim: 1.32, react: 1.15, fire: 0.82, dodge: 0.85, rocks: 0.94 },
+  { aim: 1.7, react: 1.32, fire: 0.7, dodge: 0.75, rocks: 1 },
+  { aim: 1, react: 1, fire: 1, dodge: 1, rocks: 1 },
+];
+export function rampAI(ai, stage) {
+  const r = RAMP[Math.max(0, Math.min(RAMP.length - 1, stage))];
+  return { aim: Math.min(4, ai.aim * r.aim), react: Math.min(3, ai.react * r.react), fire: ai.fire * r.fire, dodge: ai.dodge * r.dodge };
+}
+// Belt Run: wave 1 = 3 slow rocks, then a few more and a little faster every wave (speed tops out by wave 15)
+export const beltRocks = (w) => Math.min(12, 2 + w);
+export const beltSpeed = (w) => Math.min(2, 0.8 + 0.05 * (w - 1) + 0.004 * (w - 1) * (w - 1));
 
 export const DIFFICULTY = {
   easy: { label: 'EASY', scoreMul: 0.7, ai: { aim: 1.8, react: 1.6, fire: 0.65, dodge: 0.7 }, boss: 0.75 },

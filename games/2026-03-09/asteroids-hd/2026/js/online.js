@@ -3,8 +3,8 @@
 // events. The guest flies its own ship locally (so steering never lags), fires its own shots at once
 // (the host re-creates them from the guest's report) and reports the hits it takes on its own screen,
 // so a dodge the guest sees is a dodge that counts.
-import { F, POWERUP_KEYS, KIND_INDEX } from './config.js?v=4';
-import { applyClaim, newShip, wrapX, wrapZ } from './sim.js?v=4';
+import { F, POWERUP_KEYS, KIND_INDEX } from './config.js?v=5';
+import { applyClaim, newShip, wrapX, wrapZ } from './sim.js?v=5';
 
 export const PROTOCOL = 1;
 const RELAY = 'wss://steel-duel-online.jez237.workers.dev';

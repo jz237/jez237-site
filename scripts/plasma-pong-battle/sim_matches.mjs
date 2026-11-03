@@ -1,8 +1,8 @@
 // Headless AI-vs-AI matches: sanity (no NaN), pacing (match length, rallies), and event mix.
 const base = new URL('../../games/2026-03-10/plasma-pong/battle/js/', import.meta.url).href;
-const { makeWorld, step, drainEvents, STEP, paddlesOf } = await import(base + 'sim.js?v=1');
-const { AIPilot } = await import(base + 'ai.js?v=1');
-const { PILOTS, ARENAS } = await import(base + 'config.js?v=1');
+const { makeWorld, step, drainEvents, STEP, paddlesOf } = await import(base + 'sim.js?v=6');
+const { AIPilot } = await import(base + 'ai.js?v=6');
+const { PILOTS, ARENAS } = await import(base + 'config.js?v=6');
 
 const keys = ['volt', 'nyx', 'krank', 'seraph'];
 const results = [];
