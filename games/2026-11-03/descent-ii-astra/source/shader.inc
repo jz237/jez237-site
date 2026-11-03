@@ -87,3 +87,47 @@ static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
     ++astra_shaded;return 1;
 }
 
+
+/* The polygon uses the same camera vertices as the textured face. Interpolated
+ * world coordinates put the light at the impact even on very large mine walls. */
+extern float astra_blast_positions[3][4],astra_blast_colors[3][4];
+extern int astra_room_blast_count;
+void astra_light_face(int count,const g3s_point **view,const int *ids)
+{
+    static GLuint program;static GLint bulbs,colors;static int failed;
+    if(!astra_room_blast_count || failed || count<3 || count>8)return;
+    float p[24],world[24],low[3],high[3];
+    for(int i=0;i<count;i++){
+        p[i*3]=f2fl(view[i]->p3_vec.x);p[i*3+1]=f2fl(view[i]->p3_vec.y);p[i*3+2]=-f2fl(view[i]->p3_vec.z);
+        const vms_vector *v=&Vertices[ids[i]];
+        float *w=world+3*i;w[0]=f2fl(v->x);w[1]=f2fl(v->y);w[2]=f2fl(v->z);
+        for(int a=0;a<3;a++){if(!i || w[a]<low[a])low[a]=w[a];if(!i || w[a]>high[a])high[a]=w[a];}
+    }
+    int near=0;
+    for(int i=0;i<3;i++){const float *b=astra_blast_positions[i];float d2=0;
+        for(int a=0;a<3;a++){float d=fmaxf(0,fmaxf(low[a]-b[a],b[a]-high[a]));d2+=d*d;}
+        if(b[3]>0 && d2<b[3]*b[3])near++;}
+    if(!near)return;
+    if(!program){
+        const char *vs="varying highp vec3 world;void main(){world=gl_MultiTexCoord0.xyz;gl_Position=ftransform();}";
+        const char *fs="precision highp float;varying highp vec3 world;uniform vec4 bulbs[3],colors[3];"
+          "void main(){vec3 light=vec3(0.);for(int i=0;i<3;i++){float r=bulbs[i].w;"
+          "float t=clamp(1.-distance(world,bulbs[i].xyz)/max(.001,r),0.,1.);"
+          "light+=colors[i].rgb*t*t*(.58+.42*t);}gl_FragColor=vec4(light,1.);}";
+        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);
+        if(!v||!f){failed=1;return;}
+        program=glCreateProgram();glAttachShader(program,v);glAttachShader(program,f);glLinkProgram(program);
+        glDeleteShader(v);glDeleteShader(f);GLint linked;glGetProgramiv(program,GL_LINK_STATUS,&linked);
+        if(!linked){failed=1;return;}bulbs=glGetUniformLocation(program,"bulbs[0]");colors=glGetUniformLocation(program,"colors[0]");
+    }
+    int fade=grd_curcanv->cv_fade_level,blend=grd_curcanv->cv_blend_func;
+    gr_settransblend(GR_FADE_OFF,GR_BLEND_ADDITIVE_A);glDepthMask(GL_FALSE);
+    /* Reflect more light from bright metal while retaining a little scatter in dark areas. */
+    glBlendFunc(GL_DST_COLOR,GL_ONE);glUseProgram(program);
+    glUniform4fv(bulbs,3,&astra_blast_positions[0][0]);glUniform4fv(colors,3,&astra_blast_colors[0][0]);
+    glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glVertexPointer(3,GL_FLOAT,0,p);glTexCoordPointer(3,GL_FLOAT,0,world);glDrawArrays(GL_TRIANGLE_FAN,0,count);
+    glDisableClientState(GL_VERTEX_ARRAY);glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glUseProgram(0);glDepthMask(GL_TRUE);gr_settransblend(fade,blend);
+    EM_ASM(Module.blastLitFaces=(Module.blastLitFaces||0)+1);
+}
