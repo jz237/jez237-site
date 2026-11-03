@@ -2450,10 +2450,10 @@ index 0000000..bc5fa7e
 +}
 diff --git a/d2/arch/web/web.c b/d2/arch/web/web.c
 new file mode 100644
-index 0000000..83cbef0
+index 0000000..4c0817d
 --- /dev/null
 +++ b/d2/arch/web/web.c
-@@ -0,0 +1,449 @@
+@@ -0,0 +1,475 @@
 +/*
 + * Browser (Emscripten) replacements for desktop-only pieces:
 + * message boxes, GLU mipmapping and GL 1.1 calls WebGL lacks.
@@ -2902,6 +2902,32 @@ index 0000000..83cbef0
 +		if (Objects[i].type == OBJ_ROBOT && Objects[i].id == id)
 +			n++;
 +	return n;
++}
++
++/* The modern HUD (Opus, d2loader.js): what the cockpit shows, refreshed each call. [0] game time (s, stops in
++ * menus), shields, energy, primary weapon, laser level, secondary weapon, its ammo, speed (units/s), score, lives,
++ * flags, cockpit mode, vulcan/gauss ammo, afterburner charge (0..1), primary weapons owned, secondary owned. */
++EMSCRIPTEN_KEEPALIVE float *d2web_hud(void)
++{
++	static float h[16];
++	player *pl = &Players[Player_num];
++	h[0] = (float)((double)GameTime64 / 65536.0);
++	h[1] = f2fl(pl->shields);
++	h[2] = f2fl(pl->energy);
++	h[3] = pl->primary_weapon;
++	h[4] = pl->laser_level;
++	h[5] = pl->secondary_weapon;
++	h[6] = pl->secondary_ammo[pl->secondary_weapon];
++	h[7] = ConsoleObject ? f2fl(vm_vec_mag(&ConsoleObject->mtype.phys_info.velocity)) : 0;
++	h[8] = pl->score;
++	h[9] = pl->lives;
++	h[10] = pl->flags;
++	h[11] = PlayerCfg.CurrentCockpitMode;
++	h[12] = pl->primary_ammo[1];
++	h[13] = f2fl(pl->afterburner_charge);
++	h[14] = pl->primary_weapon_flags;
++	h[15] = pl->secondary_weapon_flags;
++	return h;
 +}
 diff --git a/d2/arch/web/web.h b/d2/arch/web/web.h
 new file mode 100644

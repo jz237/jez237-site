@@ -2,7 +2,7 @@
 // them locally. Optional folder imports remain available for custom copies.
 
 // Bump with every engine or loader release so browsers fetch the new files
-const BUILD = 'opus-9';
+const BUILD = 'opus-10';
 const DB_NAME = 'descent2-web';
 const DB_VERSION = 3; // 2 adds the music folder store, 3 the D2X-XL textures and models
 const SAVE_DIR = '/home/web_user/.d2x-opus';	// Descent II Opus: its own pilots and saves (physfsx.c)
@@ -477,6 +477,104 @@ function showNewShip() {
   }, 1000);
 }
 
+// ---------- Modern HUD (Opus) ----------
+// Panels drawn over the cockpit's own gauge screens while flying in the full cockpit view: the weapons, a speed
+// readout and an energy/shield ring, from the engine's numbers (d2web_hud). Positions are fractions of the
+// cockpit picture, which the game stretches over the whole view.
+const PRIMARY_NAMES = ['LASER', 'VULCAN', 'SPREADFIRE', 'PLASMA', 'FUSION', 'SUPER LASER', 'GAUSS', 'HELIX', 'PHOENIX', 'OMEGA'];
+const SECONDARY_NAMES = ['CONCSN MISSILE', 'HOMING MISSILE', 'PROXIMITY BOMB', 'SMART MISSILE', 'MEGA MISSILE',
+  'FLASH MISSILE', 'GUIDED MISSILE', 'SMART MINE', 'MERCURY MISSILE', 'EARTHSHAKER'];
+function modernHud(canvas, settings) {
+  if (!settings.hud) return;
+  const hud = document.createElement('canvas');
+  hud.id = 'hud';
+  hud.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3';
+  canvas.parentNode.appendChild(hud);
+  const g = hud.getContext('2d');
+  let lastTime = -1, lastChange = 0, speedShown = 0;
+  const CYAN = '#3fd4ff', GREEN = '#5cff7a', DIM = 'rgba(160,220,255,0.7)';
+  function panel(x, y, w, h, r) {
+    g.beginPath();
+    g.moveTo(x + r, y); g.lineTo(x + w - r, y); g.lineTo(x + w, y + r); g.lineTo(x + w, y + h - r);
+    g.lineTo(x + w - r, y + h); g.lineTo(x + r, y + h); g.lineTo(x, y + h - r); g.lineTo(x, y + r); g.closePath();
+    const grad = g.createLinearGradient(0, y, 0, y + h);
+    grad.addColorStop(0, 'rgba(8,22,34,0.97)'); grad.addColorStop(1, 'rgba(3,10,16,0.97)');
+    g.fillStyle = grad; g.fill();
+    g.shadowColor = CYAN; g.shadowBlur = r * 0.9; g.strokeStyle = CYAN; g.lineWidth = Math.max(1.5, r * 0.12); g.stroke();
+    g.shadowBlur = 0;
+  }
+  function text(t, x, y, size, color, align = 'left', weight = 600) {
+    g.font = `${weight} ${size}px "Segoe UI", system-ui, sans-serif`;
+    g.textAlign = align; g.textBaseline = 'middle'; g.fillStyle = color;
+    g.shadowColor = color; g.shadowBlur = size * 0.35; g.fillText(t, x, y); g.shadowBlur = 0;
+  }
+  function frame() {
+    requestAnimationFrame(frame);
+    const dpr = window.devicePixelRatio || 1;
+    const cw = hud.clientWidth, ch = hud.clientHeight;
+    if (hud.width !== Math.round(cw * dpr) || hud.height !== Math.round(ch * dpr)) {
+      hud.width = Math.round(cw * dpr); hud.height = Math.round(ch * dpr);
+    }
+    g.setTransform(1, 0, 0, 1, 0, 0);
+    g.clearRect(0, 0, hud.width, hud.height);
+    if (!window.Module || !Module._d2web_hud || typeof HEAPF32 === 'undefined') return;
+    const o = Module._d2web_hud() >> 2, h = HEAPF32.subarray(o, o + 16);
+    const now = performance.now();
+    if (h[0] !== lastTime) { lastTime = h[0]; lastChange = now; }
+    if (now - lastChange > 250 || h[11] !== 0) return;	// a menu or pause, or not the full cockpit view
+    // the picture's place in the element (object-fit: contain)
+    const ar = canvas.width / canvas.height, er = cw / ch;
+    const vw = (er > ar ? ch * ar : cw) * dpr, vh = (er > ar ? ch : cw / ar) * dpr;
+    const vx = (cw * dpr - vw) / 2, vy = (ch * dpr - vh) / 2;
+    const X = (f) => vx + f * vw, Y = (f) => vy + f * vh;
+    const u = vh / 960;	// one cockpit-art pixel at 1280 x 960
+    // primary weapon, over the left screen
+    let x = X(0.192), y = Y(0.755), w = X(0.383) - x, hh = Y(0.981) - y;
+    panel(x, y, w, hh, 14 * u);
+    text('PRIMARY WEAPON', x + w / 2, y + 22 * u, 15 * u, DIM, 'center', 500);
+    const pw = h[3] | 0, lvl = (h[4] | 0) + 1;
+    text(PRIMARY_NAMES[pw] || '', x + w / 2, y + 78 * u, 30 * u, '#e8f6ff', 'center', 700);
+    text(pw === 0 || pw === 5 ? `LVL ${lvl}` : pw === 1 || pw === 6 ? `${Math.round(h[12] / 10) * 10 | 0}` : '', x + w / 2, y + 122 * u, 24 * u, GREEN, 'center', 700);
+    if (pw === 0 || pw === 5)
+      for (let i = 0; i < 6; i++) {
+        g.fillStyle = i < lvl ? GREEN : 'rgba(92,255,122,0.18)';
+        g.fillRect(x + w / 2 - 66 * u + i * 23 * u, y + 150 * u, 18 * u, 9 * u);
+      }
+    // secondary weapon, over the right screen
+    x = X(0.631); w = X(0.828) - x;
+    panel(x, y, w, hh, 14 * u);
+    text('SECONDARY WEAPON', x + w / 2, y + 22 * u, 15 * u, DIM, 'center', 500);
+    const words = (SECONDARY_NAMES[h[5] | 0] || '').split(' ');
+    text(words[0], x + w / 2, y + 66 * u, 27 * u, '#e8f6ff', 'center', 700);
+    text(words.slice(1).join(' '), x + w / 2, y + 98 * u, 27 * u, '#e8f6ff', 'center', 700);
+    text(String(h[6] | 0).padStart(3, '0'), x + w / 2, y + 148 * u, 34 * u, GREEN, 'center', 700);
+    // speed, over the two number boxes
+    speedShown += (h[7] - speedShown) * 0.25;
+    x = X(0.46); w = X(0.54) - x; y = Y(0.652); hh = Y(0.752) - y;
+    panel(x, y, w, hh, 10 * u);
+    text('SPEED', x + w / 2, y + 16 * u, 12 * u, DIM, 'center', 500);
+    text(String(Math.round(speedShown)), x + w / 2, y + 50 * u, 30 * u, '#e8f6ff', 'center', 700);
+    text('m/s', x + w / 2, y + 79 * u, 11 * u, DIM, 'center', 500);
+    // energy (cyan) and shield (blue) ring, over the round centre gauge
+    const cx = X(0.5), cy = Y(0.893), r = 98 * u;
+    g.beginPath(); g.ellipse(cx, cy - 4 * u, r * 1.2, r * 1.12, 0, 0, Math.PI * 2); g.fillStyle = 'rgba(3,10,16,0.98)'; g.fill();
+    g.strokeStyle = 'rgba(63,212,255,0.35)'; g.lineWidth = 2 * u; g.stroke();
+    const arc = (rad, frac, col, width, a0, span) => {
+      g.lineWidth = width; g.lineCap = 'butt';
+      g.strokeStyle = 'rgba(63,212,255,0.13)'; g.beginPath(); g.arc(cx, cy, rad, a0, a0 + span); g.stroke();
+      g.strokeStyle = col; g.shadowColor = col; g.shadowBlur = width;
+      g.beginPath(); g.arc(cx, cy, rad, a0, a0 + span * Math.max(0, Math.min(1, frac))); g.stroke(); g.shadowBlur = 0;
+    };
+    arc(r * 0.86, h[2] / 100, CYAN, 12 * u, Math.PI * 0.75, Math.PI * 1.5);
+    arc(r * 0.66, h[1] / 100, '#4d7dff', 8 * u, Math.PI * 0.75, Math.PI * 1.5);
+    text('ENERGY', cx, cy - 34 * u, 12 * u, DIM, 'center', 500);
+    text(`${Math.round(h[2])}%`, cx, cy - 6 * u, 30 * u, '#e8f6ff', 'center', 700);
+    text(`SHIELD ${Math.round(h[1])}`, cx, cy + 28 * u, 13 * u, '#9db8ff', 'center', 600);
+    if (h[13] > 0 && h[13] < 1) text(`BOOST ${Math.round(h[13] * 100)}%`, cx, cy + 50 * u, 11 * u, '#ffb060', 'center', 600);
+  }
+  requestAnimationFrame(frame);
+}
+
 // ---------- Touch controls ----------
 
 const isTouchDevice = () => !!(window.matchMedia && matchMedia('(pointer: coarse)').matches);
@@ -671,9 +769,9 @@ function saveSettings(s) {
 }
 
 // look options the engine reads while it runs (web.h D2WEB_OPTION_*), each a page checkbox
-// (invertPitch isn't a look, but works the same way: on by default, read live)
+// (invertPitch and hud aren't looks, but work the same way: on by default)
 const LOOKS = ['sharp', 'effects', 'glow', 'lighting', 'ao', 'haze', 'surfaces', 'explosions', 'reflections', 'ultra',
-  'invertPitch'];
+  'invertPitch', 'hud'];
 
 function renderResolution(quality) {
   const dpr = window.devicePixelRatio || 1;
@@ -920,6 +1018,7 @@ async function bootGame(manifest, ui) {
     ],
     onRuntimeInitialized: () => {
       ui.started();
+      modernHud(canvas, settings);	// before callMain, which doesn't return (the main loop unwinds it)
       // WebGL lacks texture-level queries and the tiny GL 1.x internal formats
       Module.callMain(['-hogdir', DATA_DIR, '-gl_gettexlevelparam_ok', '0', '-gl_intensity4_ok', '0',
         '-gl_luminance4_alpha4_ok', '0', '-gl_rgba2_ok', '0', ...(settings.skipIntro ? ['-notitles'] : [])]);
