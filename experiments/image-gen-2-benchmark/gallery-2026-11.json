@@ -92,5 +92,104 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-03-factual-infographic-factual-infographic-aphid-lion-to-lacew",
+    "title": "Factual infographic: Aphid Lion to Lacewing",
+    "tests": "; archive_slot=2026-11-03T04:20; concept=lacewing-larva-aphid-predation; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: bizarre-insect-life",
+    "prompt": "Create a finished richly detailed natural-history scientific plate infographic titled “APHID LION TO LACEWING” and subtitled “Chrysoperla rufilabris”. One enormous accurately proportioned whole larva dominates: an elongated gray-brown alligator-like six-legged aphid lion on living foliage, with inward-curved paired piercing mouthparts holding an aphid. Naturalistic macro detail, exquisitely rendered cuticle and fine hairs, lifelike lighting and believable scale. Arrange six to eight substantive supporting biological studies around the hero in a sophisticated readable scientific-plate composition, preserving breathing room and clear hierarchy. Include at least three large explanatory close-ups: curved paired tubular mouthparts impaling an aphid and drawing its contents; an oval egg on its long silk stalk attached to foliage; the delicate pale-green adult with golden eyes, long antennae, and four transparent veined wings held rooflike. Include a prominent labeled internal-anatomy cutaway clearly marked “generalized insect body plan — schematic”, not a literal dissection: show spiracles and branching tracheae, alimentary canal, and ventral nerve cord, with concise correct leaders. Show a concise sequential life cycle of stalked egg → three larval instars → round silk cocoon and pupa → winged adult, with explicit stage separation. Add an aphid-bearing crop foliage habitat vignette and a small adult scale cue “about 12–20 mm”. Label larva as predator and adult as feeding on nectar, pollen and honeydew. Elegant legible short labels, subtle organic transitions and finely drawn leaders; insect studies occupy most of the artwork, no filler or fictional biological features. Scientifically faithful, coherent anatomy and species-appropriate color. No citation URLs, mockup, frame, watermark, or dense text paragraphs.",
+    "image": "images/2026-11-03-factual-infographic-factual-infographic-aphid-lion-to-lacew.jpg",
+    "thumb": "thumbs/2026-11-03-factual-infographic-factual-infographic-aphid-lion-to-lacew.webp",
+    "color": "#c4c29d",
+    "date": "2026-11-03",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1199x1312",
+    "dedup": {
+      "conceptKey": "lacewing-larva-aphid-predation",
+      "imageSha256": "0f622875dc355355810effbd52d9e8a182d35506edbafaa6fafaba43ffdbdd9a",
+      "imageDHash": "5032b460f893137d"
+    },
+    "factualInfographic": {
+      "topic": "How Chrysoperla rufilabris lacewing larvae capture aphids and develop into delicate winged adults",
+      "description": "The predatory larva, life cycle, and adult of the green lacewing Chrysoperla rufilabris.",
+      "sourceNote": "Cornell University https://biocontrol.entomology.cornell.edu/predators/Chrysoperla.php and University of California IPM https://ipm.ucanr.edu/natural-enemies/green-lacewings/ support lacewing biology; Purdue University https://extension.entm.purdue.edu/401Book/default.php?page=insect_physiology supports generalized insect internal anatomy.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-03T09:20:55.047172+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Cornell University",
+            "title": "Chrysoperla carnea and C. rufilabris",
+            "sourceType": "university",
+            "url": "https://biocontrol.entomology.cornell.edu/predators/Chrysoperla.php"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of California IPM",
+            "title": "Green Lacewings",
+            "sourceType": "university",
+            "url": "https://ipm.ucanr.edu/natural-enemies/green-lacewings/"
+          },
+          {
+            "id": "S3",
+            "publisher": "Purdue University",
+            "title": "Insect Physiology",
+            "sourceType": "university",
+            "url": "https://extension.entm.purdue.edu/401Book/default.php?page=insect_physiology"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Chrysoperla rufilabris is a green lacewing found in North America; humid habitats include irrigated crops and greenhouses.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Adults are pale green, with golden eyes, long antennae and transparent wings; adult size is roughly 12–20 mm.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Eggs are laid singly on silken stalks on foliage.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Larvae have three instars, legs and large curved paired mouthparts; they impale aphids and suck body contents.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Mature larvae spin a round silken cocoon; the pupa develops before the adult emerges.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Chrysoperla adults feed on nectar, pollen and honeydew while larvae are predators.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Generalized insect body plan: spiracles admit air into branching tracheae; the alimentary canal carries food and the ventral nerve cord runs along the body.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
