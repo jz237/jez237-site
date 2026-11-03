@@ -599,10 +599,10 @@ index c536c46..58786e5 100644
  		glEnable(GL_SCISSOR_TEST);
 diff --git a/d2/arch/ogl/ogl_post.c b/d2/arch/ogl/ogl_post.c
 new file mode 100644
-index 0000000..78e717e
+index 0000000..7548cfc
 --- /dev/null
 +++ b/d2/arch/ogl/ogl_post.c
-@@ -0,0 +1,736 @@
+@@ -0,0 +1,807 @@
 +/*
 + * Post-processing of the 3D view (browser edition, WebGL 2). The mine is drawn into an
 + * off-screen HDR image (multisampled when the page asks for antialiasing), then ambient
@@ -807,6 +807,11 @@ index 0000000..78e717e
 +static const char *final_fs =
 +	"uniform sampler2D scene;\n"
 +	"uniform sampler2D bloom;\n"
++	"uniform int nblast;\n"			// live blasts (fx.c): view-space centre, shockwave radius
++	"uniform vec4 bpos[8];\n"
++	"uniform vec4 bprm[8];\n"		// age 0..1, size
++	"uniform vec4 fxp;\n"			// heat ripple, light shafts, lens streaks, colour fringe
++	"uniform float ftime;\n"
 +	"uniform sampler2D aotex;\n"
 +	"uniform sampler2D fogtex;\n"
 +	"uniform vec4 look;\n"	// bloom strength, knee, contrast, vignette
@@ -821,7 +826,33 @@ index 0000000..78e717e
 +	"float hash(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }\n"
 +	"float lum(vec3 c) { return dot(c, vec3(0.2126, 0.7152, 0.0722)); }\n"
 +	"void main() {\n"
-+	"	vec3 c = min(texture(scene, v_uv).rgb, vec3(64.0));\n"	// no infinite light
++	"	vec2 uv = v_uv;\n"
++	"	float flash = 0.0;\n"
++	"#ifdef GLOW\n"
++	// each blast's shockwave ring bends the view as it passes, and the hot air inside shimmers
++	"	for (int i = 0; i < 8; i++) {\n"
++	"		if (i >= nblast) break;\n"
++	"		vec3 L = bpos[i].xyz;\n"
++	"		vec2 cu = uv_of(L);\n"
++	"		vec2 ru = abs(vec2(uv_of(L + vec3(bpos[i].w, 0.0, 0.0)).x - cu.x, uv_of(L + vec3(0.0, bpos[i].w, 0.0)).y - cu.y));\n"
++	"		vec2 d = v_uv - cu;\n"
++	"		vec2 dn = d / max(ru, vec2(1e-4));\n"
++	"		float r = length(dn), t = bprm[i].x, fade = (1.0 - t) * (1.0 - t);\n"
++	"		float band = exp(-pow((r - 1.0) / 0.22, 2.0));\n"
++	"		uv += d / max(length(d), 1e-4) * band * fade * ru.x * 0.35 * fxp.x;\n"
++	"		float inside = smoothstep(1.1, 0.2, r) * fade;\n"
++	"		uv += vec2(sin(v_uv.y * 90.0 + ftime * 13.0), cos(v_uv.x * 80.0 - ftime * 11.0)) * inside * ru.x * 0.025 * fxp.x;\n"
++	"		flash += smoothstep(0.3, 0.0, t) * min(bprm[i].y / 6.0, 1.0);\n"
++	"	}\n"
++	"#endif\n"
++	"	vec3 c = min(texture(scene, uv).rgb, vec3(64.0));\n"	// no infinite light
++	"#ifdef GLOW\n"
++	// colour fringe: a faint one toward the edges always, a strong one in a big blast's first flash
++	"	float ca = fxp.w * (0.0012 + flash * 0.008);\n"
++	"	vec2 cd = (uv - 0.5) * ca;\n"
++	"	c.r = min(texture(scene, uv + cd).r, 64.0);\n"
++	"	c.b = min(texture(scene, uv - cd).b, 64.0);\n"
++	"#endif\n"
 +	"#ifdef AO\n"
 +	"	float a = texture(aotex, v_uv).r;\n"
 +	"	c *= mix(a, 1.0, smoothstep(0.7, 1.5, lum(c)));\n"	// lights themselves stay bright
@@ -860,6 +891,27 @@ index 0000000..78e717e
 +	"#endif\n"
 +	"#ifdef GLOW\n"
 +	"	c += texture(bloom, v_uv).rgb * look.x;\n"
++	// light shafts: the bloom smeared out from each blast's centre, rays through the smoke and dust
++	"	for (int i = 0; i < 8; i++) {\n"
++	"		if (i >= nblast) break;\n"
++	"		vec2 cu = uv_of(bpos[i].xyz);\n"
++	"		vec2 dir = (cu - v_uv) / 14.0;\n"
++	"		vec3 acc = vec3(0.0);\n"
++	"		float w = 1.0, j = hash(gl_FragCoord.xy + float(i));\n"
++	"		for (int k = 0; k < 14; k++) {\n"
++	"			acc += texture(bloom, v_uv + dir * (float(k) + j)).rgb * w;\n"
++	"			w *= 0.9;\n"
++	"		}\n"
++	"		float t = bprm[i].x;\n"
++	"		c += acc / 14.0 * (1.0 - t) * min(bprm[i].y / 3.0, 1.5) * fxp.y;\n"
++	"	}\n"
++	// anamorphic lens streaks: bright light smeared sideways, tinted cool
++	"	vec3 st = vec3(0.0);\n"
++	"	for (int k = 1; k <= 8; k++) {\n"
++	"		float o = float(k) * 0.014, wk = 1.0 - float(k) / 9.0;\n"
++	"		st += (texture(bloom, v_uv + vec2(o, 0.0)).rgb + texture(bloom, v_uv - vec2(o, 0.0)).rgb) * wk;\n"
++	"	}\n"
++	"	c += st * vec3(0.5, 0.68, 1.0) * fxp.z * 0.12;\n"
 +	"	float m = max(max(c.r, c.g), c.b);\n"
 +	"	float k = look.y;\n"
 +	"	float t = m <= k ? m : k + (1.0 - k) * (1.0 - exp((k - m) / (1.0 - k)));\n"
@@ -1257,6 +1309,23 @@ index 0000000..78e717e
 +	draw_quad();
 +}
 +
++int fx_blasts(float (*pos)[4], float (*prm)[4], int max);	// main/fx.c
++extern fix64 GameTime64;	// main/game.c
++
++static void blast_uniforms(GLuint p)
++{
++	float pos[8][4], prm[8][4];
++	int n = fx_blasts(pos, prm, 8);
++	glUniform1i(glGetUniformLocation(p, "nblast"), n);
++	if (n) {
++		glUniform4fv(glGetUniformLocation(p, "bpos"), n, pos[0]);
++		glUniform4fv(glGetUniformLocation(p, "bprm"), n, prm[0]);
++	}
++	// heat ripple, light shafts, lens streaks, colour fringe
++	glUniform4f(glGetUniformLocation(p, "fxp"), d2web_tune(40, 4.0f), d2web_tune(41, 4.0f), d2web_tune(42, 2.5f), d2web_tune(43, 2.0f));
++	glUniform1f(glGetUniformLocation(p, "ftime"), f2fl(GameTime64 & 0xffffffff));
++}
++
 +static void haze_uniforms(GLuint p)
 +{
 +	float pos[MAX_HAZE][4], col[MAX_HAZE][3], hp[3], hd[3];
@@ -1304,6 +1373,8 @@ index 0000000..78e717e
 +	glUseProgram(fin);
 +	glUniform4f(glGetUniformLocation(fin, "look"), d2web_tune(9, 0.65f), d2web_tune(10, 0.8f), d2web_tune(11, 0.26f), d2web_tune(12, 0.32f));
 +	set_view(fin);
++	if (P.look & LOOK_GLOW)
++		blast_uniforms(fin);
 +	if (P.look & LOOK_HAZE)
 +		haze_uniforms(fin);
 +	if (fxaa)
@@ -3298,10 +3369,10 @@ index fe9b0d1..73b73a7 100644
  			//	If dropping a weapon that the player has, drop energy instead, unless it's vulcan, in which case drop vulcan ammo.
 diff --git a/d2/main/fx.c b/d2/main/fx.c
 new file mode 100644
-index 0000000..c5bc9c8
+index 0000000..d7d620f
 --- /dev/null
 +++ b/d2/main/fx.c
-@@ -0,0 +1,1206 @@
+@@ -0,0 +1,1226 @@
 +/*
 + * Light halos, smoke and sparks (browser edition).
 + *
@@ -4327,6 +4398,26 @@ index 0000000..c5bc9c8
 +	n_batches++;
 +}
 +
++int fx_blasts(float (*pos)[4], float (*prm)[4], int max)
++{
++	int n = 0;
++	if (!boom_enabled())
++		return 0;
++	for (int i = 0; i < n_particles && n < max; i++) {
++		particle *p = &particles[i];
++		float v[3];
++		if (p->kind != FX_RING || p->age < 0)
++			continue;
++		to_view(p->pos, v);	// (view_rows are this frame's: fx_render ran before the post pass)
++		if (v[2] > -0.5f)
++			continue;
++		pos[n][0] = v[0], pos[n][1] = v[1], pos[n][2] = v[2], pos[n][3] = p->size;
++		prm[n][0] = p->age / p->life, prm[n][1] = p->grow / 9, prm[n][2] = prm[n][3] = 0;
++		n++;
++	}
++	return n;
++}
++
 +void fx_render(void)
 +{
 +	int n_smoke = 0, scissor, boom = boom_enabled();
@@ -4510,10 +4601,10 @@ index 0000000..c5bc9c8
 +}
 diff --git a/d2/main/fx.h b/d2/main/fx.h
 new file mode 100644
-index 0000000..95c2052
+index 0000000..db0816b
 --- /dev/null
 +++ b/d2/main/fx.h
-@@ -0,0 +1,19 @@
+@@ -0,0 +1,21 @@
 +/*
 + * Light halos, smoke and sparks (browser edition). Purely visual: nothing here feeds back
 + * into the game.
@@ -4530,7 +4621,9 @@ index 0000000..95c2052
 +void fx_impact(object *weapon, int segnum, int sidenum, vms_vector *pos);	// a shot hits a wall
 +void fx_hit(object *weapon, vms_vector *pos);		// a shot hits a robot
 +void fx_explosion(vms_vector *pos, int segnum, fix size);
-+int fx_replaces_fireballs(void);	// explosions are drawn here instead of as the game's flat fireball sprites	// a robot, player or reactor blows up
++int fx_replaces_fireballs(void);
++// the live blasts for the post pass: view-space centre and shockwave radius; age 0..1, size, -, -
++int fx_blasts(float (*pos)[4], float (*prm)[4], int max);	// explosions are drawn here instead of as the game's flat fireball sprites	// a robot, player or reactor blows up
 +
 +#endif
 diff --git a/d2/main/game.c b/d2/main/game.c
