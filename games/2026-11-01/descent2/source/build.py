@@ -78,7 +78,7 @@ SRCS += files(PHYS, "physfs.c", "physfs_byteorder.c", "physfs_unicode.c",
               "physfs_archiver_wad.c", "physfs_archiver_slb.c", "physfs_archiver_vdf.c")
 
 LINK = [
-    "-sLEGACY_GL_EMULATION=1", "-sMAX_WEBGL_VERSION=2",
+    "-sLEGACY_GL_EMULATION=1", "-sMAX_WEBGL_VERSION=2", "-sSTB_IMAGE=1", "-sGL_MAX_TEMP_BUFFER_SIZE=16777216",
     "-sASYNCIFY=1", "-sASYNCIFY_STACK_SIZE=524288",
     "-sALLOW_MEMORY_GROWTH=1", "-sINITIAL_MEMORY=268435456", "-sMAXIMUM_MEMORY=4294967296",
     "-sSTACK_SIZE=8388608",

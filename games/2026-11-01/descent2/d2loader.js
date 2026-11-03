@@ -2,7 +2,7 @@
 // them locally. Optional folder imports remain available for custom copies.
 
 // Bump with every engine or loader release so browsers fetch the new files
-const BUILD = '20261103d';
+const BUILD = '20261103e';
 const DB_NAME = 'descent2-web';
 const DB_VERSION = 3; // 2 adds the music folder store, 3 the D2X-XL textures and models
 const SAVE_DIR = '/home/web_user/.d2x-redux';
@@ -457,6 +457,19 @@ async function loadHostedHires(index, db, onBytes) {
 const describeHires = (index) =>
   `${index.textures} textures and ${index.models} models · ${fmtBytes(index.totalBytes)}`;
 
+// ?newship: the remodelled Medium Lifter (robot type 1, from the extra-sharp pack) doesn't appear
+// in the first levels, so put one ahead of the ship once a level is under way, as an enemy.
+function showNewShip() {
+  const timer = setInterval(() => {
+    if (!Module._d2web_test_count_robots) return;
+    let robots = 0;
+    for (let id = 0; id < 80; id++) robots += Module._d2web_test_count_robots(id);
+    if (!robots) return; // no level yet
+    for (const dist of [40, 30, 22, 15, 10]) if (Module._d2web_test_robot(1, dist, 1) >= 0) break;
+    clearInterval(timer);
+  }, 1000);
+}
+
 // ---------- Touch controls ----------
 
 const isTouchDevice = () => !!(window.matchMedia && matchMedia('(pointer: coarse)').matches);
@@ -639,6 +652,7 @@ function loadSettings() {
   // phones render at 1080p by default: sharp, and light on the battery
   const defaults = { quality: isTouchDevice() ? '1080' : 'native', msaa: true, music: 'cd', hires: true };
   for (const id of LOOKS) defaults[id] = true;
+  defaults.ultra = !isTouchDevice(); // the extra-sharp textures take GPU memory phones don't have
   try {
     return { ...defaults, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') };
   } catch {
@@ -650,7 +664,7 @@ function saveSettings(s) {
 }
 
 // look options the engine reads while it runs (web.h D2WEB_OPTION_*), each a page checkbox
-const LOOKS = ['sharp', 'effects', 'glow', 'lighting', 'ao', 'haze', 'surfaces', 'explosions', 'reflections'];
+const LOOKS = ['sharp', 'effects', 'glow', 'lighting', 'ao', 'haze', 'surfaces', 'explosions', 'reflections', 'ultra'];
 
 function renderResolution(quality) {
   const dpr = window.devicePixelRatio || 1;
@@ -818,6 +832,22 @@ async function bootGame(manifest, ui) {
           .catch((e) => { console.warn('Sharper textures unavailable', e); return []; });
       }
       for (const f of hires) fileData.push(f);
+      if (settings.ultra && hostedUltra) {
+        ui.status('Loading extra-sharp textures…');
+        let got = 0;
+        const bundle = await hostedFile(hostedUltra, db, (bytes) => { got += bytes; ui.progress(got / hostedUltra.size); })
+          .catch((e) => { console.warn('Extra-sharp textures unavailable', e); return null; });
+        if (bundle)
+          for (const f of hostedUltra.files) {
+            let data = bundle.subarray(f.offset, f.offset + f.size);
+            if (f.gzip) {	// a model
+              if (typeof DecompressionStream === 'undefined') continue;
+              const stream = new Blob([data]).stream().pipeThrough(new DecompressionStream('gzip'));
+              data = new Uint8Array(await new Response(stream).arrayBuffer());
+            }
+            fileData.push({ path: f.name, data });
+          }
+      }
     }
   } finally {
     if (db) db.close();
@@ -883,6 +913,7 @@ async function bootGame(manifest, ui) {
       startSaveSync();
       // fetch the MIDI sound bank in the background so its music starts without a wait
       if (settings.music === 'midi' || settings.music === 'cd') Module.d2midi.load();
+      if (new URLSearchParams(location.search).has('newship')) showNewShip();
     },
     onAbort: (what) => ui.message('The game stopped unexpectedly: ' + what, true),
   };
@@ -932,6 +963,7 @@ function fmtBytes(n) {
 
 let touch = null;
 let hostedHires = null;
+let hostedUltra = null; // tools/package_ultra.py: D2X-XL's textures upscaled four times more
 
 async function main() {
   touch = touchControls();
@@ -1015,6 +1047,9 @@ async function main() {
   });
   // D2X-XL textures and models are stored apart from the game files too
   hostedHires = await fetch(`data/hires.json?v=${BUILD}`).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  hostedUltra = await fetch(`data/ultra.json?v=${BUILD}`).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  $('ultraOption').hidden = !hostedUltra;
+  if (hostedUltra) $('ultraInfo').textContent = `${hostedUltra.textures} textures, ${fmtBytes(hostedUltra.size)}; applies when the game starts.`;
   const showHires = (index) => {
     $('hiresOption').hidden = !index && !hostedHires;
     $('hires').checked = settings.hires;
