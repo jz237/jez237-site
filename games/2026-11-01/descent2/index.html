@@ -154,6 +154,9 @@
       <label title="Shots, flares, explosions and the headlight light every pixel; textures get relief and shine (needs WebGL 2)"><input type="checkbox" id="lighting"> Per-pixel lighting</label>
       <label title="Soft shadows in corners and where things meet (needs WebGL 2)"><input type="checkbox" id="ao"> Ambient occlusion</label>
       <label title="Light glows in the air around lamps and lights; the headlight shows its beam (needs WebGL 2)"><input type="checkbox" id="haze"> Light haze</label>
+      <label title="Lava flows and glows, water ripples, force fields shimmer (needs WebGL 2)"><input type="checkbox" id="surfaces"> Animated lava, water and force fields</label>
+      <label title="Fireballs that cool from white-hot to red, shockwaves, glowing debris trailing smoke, scorch marks on the walls"><input type="checkbox" id="explosions"> Modern explosions</label>
+      <label title="Shiny metal and water reflect the room around them (with per-pixel lighting, needs WebGL 2)"><input type="checkbox" id="reflections"> Reflections</label>
       <label>Music
         <select id="music">
           <option value="cd">CD soundtrack</option>
@@ -210,8 +213,10 @@
       rendering with trilinear filtering and MSAA, high-resolution cutscenes with an edge-aware sharp upscale, smooth-edged
       text and HUD, glowing halos on the lamps, smoke trails behind missiles, smoking damaged robots and sparks where shots
       hit and robots blow up, HDR rendering with glow and a filmic tone curve, per-pixel lighting from shots, flares,
-      explosions and the headlight with relief and shine on the textures, ambient occlusion, light haze and a visible
-      headlight beam, smooth display-synced frame rate, the original
+      explosions and the headlight with relief and shine on the textures and robots, ambient occlusion, light haze and a
+      visible headlight beam, flowing lava, rippling water and shimmering force fields, explosions with layered fireballs,
+      shockwaves, glowing debris and scorch marks, reflections on smooth metal and water, smooth display-synced frame
+      rate, the original
       CD soundtrack, the game's own MIDI music played through a General MIDI synthesizer, or a music folder of your own
       (title, briefing, credits and level tracks; a <code>playlist.txt</code> sets the level order). From D2X-XL:
       four-times-sharper textures, matched to each level's colors, and detailed 3D models of the robots (moving as the
@@ -253,6 +258,6 @@
   Sharper textures and 3D models: from the <a href="https://sourceforge.net/projects/d2x-xl/">D2X-XL</a> 2.1.8 distribution
   (models by MetalBeast and others; <a href="d2x-xl/">their readmes</a>). Descent II and the Vertigo Series by Parallax Software.
 </footer>
-<script src="d2loader.js?v=20261103b"></script>
+<script src="d2loader.js?v=20261103c"></script>
 </body>
 </html>

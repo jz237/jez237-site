@@ -84,7 +84,7 @@ index c5cca0b..c0e7162 100644
  	ogl_init_prog();
  #endif
 diff --git a/d2/arch/ogl/ogl.c b/d2/arch/ogl/ogl.c
-index c536c46..0d24ed5 100644
+index c536c46..720fe45 100644
 --- a/d2/arch/ogl/ogl.c
 +++ b/d2/arch/ogl/ogl.c
 @@ -10,7 +10,13 @@
@@ -176,7 +176,30 @@ index c536c46..0d24ed5 100644
  	glDisableClientState(GL_VERTEX_ARRAY);
  	glDisableClientState(GL_COLOR_ARRAY);
  	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-@@ -1093,7 +1114,11 @@ bool ogl_ubitblt_i(int dw,int dh,int dx,int dy, int sw, int sh, int sx, int sy,
+@@ -952,6 +973,8 @@ bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_
+ /*
+  * 2d Sprites (Fireaballs, powerups, explosions). NOT hostages
+  */
++float ogl_sprite_glow;
++
+ bool g3_draw_bitmap_full(vms_vector *pos,fix width,fix height,grs_bitmap *bm,
+ 	GLfloat r, GLfloat g, GLfloat b)
+ {
+@@ -1014,7 +1037,12 @@ bool g3_draw_bitmap_full(vms_vector *pos,fix width,fix height,grs_bitmap *bm,
+ 	glVertexPointer(3, GL_FLOAT, 0, vertex_array);
+ 	glColorPointer(4, GL_FLOAT, 0, color_array);
+ 	glTexCoordPointer(2, GL_FLOAT, 0, texcoord_array);  
+-	glDrawArrays(GL_TRIANGLE_FAN, 0, 4); // Replaced GL_QUADS
++	if (ogl_sprite_glow > 0 && ogl_sprite_begin(bm->gltexture, ogl_post_active() ? ogl_sprite_glow : 1,
++			grd_curcanv->cv_blend_func != GR_BLEND_NORMAL)) {
++		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
++		ogl_shader_end();
++	} else
++		glDrawArrays(GL_TRIANGLE_FAN, 0, 4); // Replaced GL_QUADS
+ 	glDisableClientState(GL_VERTEX_ARRAY);
+ 	glDisableClientState(GL_COLOR_ARRAY);
+ 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+@@ -1093,7 +1121,11 @@ bool ogl_ubitblt_i(int dw,int dh,int dx,int dy, int sw, int sh, int sx, int sy,
  	glVertexPointer(2, GL_FLOAT, 0, vertex_array);
  	glColorPointer(4, GL_FLOAT, 0, color_array);
  	glTexCoordPointer(2, GL_FLOAT, 0, texcoord_array);  
@@ -188,7 +211,7 @@ index c536c46..0d24ed5 100644
  
  	glDisableClientState(GL_VERTEX_ARRAY);
  	glDisableClientState(GL_COLOR_ARRAY);
-@@ -1146,7 +1171,12 @@ void ogl_start_frame(void){
+@@ -1146,7 +1178,12 @@ void ogl_start_frame(void){
  
  	r_polyc=0;r_tpolyc=0;r_bitmapc=0;r_ubitbltc=0;r_upixelc=0;
  
@@ -202,7 +225,7 @@ index c536c46..0d24ed5 100644
  	glClearColor(0.0, 0.0, 0.0, 0.0);
  
  	glLineWidth(linedotscale);
-@@ -1644,6 +1674,174 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
+@@ -1644,6 +1681,174 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
  }
  #endif
  
@@ -377,7 +400,7 @@ index c536c46..0d24ed5 100644
  void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  {
  	unsigned char *buf;
-@@ -1663,23 +1861,18 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+@@ -1663,23 +1868,18 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  		png_data pdata;
  
  		sprintf(filename, /*"textures/"*/ "%s.png", bitmapname);
@@ -410,7 +433,7 @@ index c536c46..0d24ed5 100644
  				#ifdef OGL_MERGE
  				if (bm->bm_flags & BM_FLAG_SUPER_TRANSPARENT)
  					ogl_loadpngmask(&pdata, bm, texfilt);
-@@ -1959,7 +2152,12 @@ bool ogl_ubitmapm_cs(int x, int y,int dw, int dh, grs_bitmap *bm,int c, int scal
+@@ -1959,7 +2159,12 @@ bool ogl_ubitmapm_cs(int x, int y,int dw, int dh, grs_bitmap *bm,int c, int scal
  	glVertexPointer(2, GL_FLOAT, 0, vertex_array);
  	glColorPointer(4, GL_FLOAT, 0, color_array);
  	glTexCoordPointer(2, GL_FLOAT, 0, texcoord_array);  
@@ -423,7 +446,7 @@ index c536c46..0d24ed5 100644
  	glDisableClientState(GL_VERTEX_ARRAY);
  	glDisableClientState(GL_COLOR_ARRAY);
  	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-@@ -1976,8 +2174,10 @@ void ogl_update_window_clip()
+@@ -1976,8 +2181,10 @@ void ogl_update_window_clip()
  		Window_clip_right == cw - 1 && Window_clip_bot == ch - 1) {
  		glDisable(GL_SCISSOR_TEST);
  	} else {
@@ -438,10 +461,10 @@ index c536c46..0d24ed5 100644
  		glEnable(GL_SCISSOR_TEST);
 diff --git a/d2/arch/ogl/ogl_post.c b/d2/arch/ogl/ogl_post.c
 new file mode 100644
-index 0000000..6710254
+index 0000000..139f5d8
 --- /dev/null
 +++ b/d2/arch/ogl/ogl_post.c
-@@ -0,0 +1,659 @@
+@@ -0,0 +1,736 @@
 +/*
 + * Post-processing of the 3D view (browser edition, WebGL 2). The mine is drawn into an
 + * off-screen HDR image (multisampled when the page asks for antialiasing), then ambient
@@ -509,6 +532,16 @@ index 0000000..6710254
 +	GLuint down, prefilter, up, ssao, aoblur, fxaa;
 +	GLuint final[8];			// by LOOK_* bits
 +} P;
++
++// last frame's view (color and depth) and where it was seen from, for reflections
++static struct {
++	target t;
++	GLuint depth;
++	int valid;
++	vms_vector pos;
++	vms_matrix orient;
++	vms_vector scale;
++} H;
 +
 +static const char *quad_vs =
 +	"in vec4 a_position;\n"
@@ -903,6 +936,72 @@ index 0000000..6710254
 +	return P.active;
 +}
 +
++// Last frame's view for reflections, and the matrix from this view's space (unscaled, GL axes)
++// to that one's. 0 when there is none to use.
++int ogl_post_history(unsigned *color, unsigned *depth, float *reproj, float *scale)
++{
++	float rc[3][3], rp[3][3], dp[3], m[3][3];
++	const float s[3] = { 1, 1, -1 };
++	const vms_vector *rows_c[3] = { &Unscaled_matrix.rvec, &Unscaled_matrix.uvec, &Unscaled_matrix.fvec };
++	const vms_vector *rows_p[3] = { &H.orient.rvec, &H.orient.uvec, &H.orient.fvec };
++	int i, j, k;
++	if (!P.active || !H.valid || H.t.w != P.w || H.t.h != P.h)
++		return 0;
++	for (i = 0; i < 3; i++) {
++		rc[i][0] = f2fl(rows_c[i]->x); rc[i][1] = f2fl(rows_c[i]->y); rc[i][2] = f2fl(rows_c[i]->z);
++		rp[i][0] = f2fl(rows_p[i]->x); rp[i][1] = f2fl(rows_p[i]->y); rp[i][2] = f2fl(rows_p[i]->z);
++	}
++	dp[0] = f2fl(View_position.x - H.pos.x);
++	dp[1] = f2fl(View_position.y - H.pos.y);
++	dp[2] = f2fl(View_position.z - H.pos.z);
++	for (i = 0; i < 3; i++)
++		for (j = 0; j < 3; j++) {
++			m[i][j] = 0;
++			for (k = 0; k < 3; k++)
++				m[i][j] += rp[i][k] * rc[j][k];
++			reproj[j * 4 + i] = s[i] * s[j] * m[i][j];
++		}
++	for (i = 0; i < 3; i++) {
++		float t = 0;
++		for (k = 0; k < 3; k++)
++			t += rp[i][k] * dp[k];
++		reproj[12 + i] = s[i] * t;
++		reproj[i * 4 + 3] = 0;
++	}
++	reproj[15] = 1;
++	scale[0] = f2fl(H.scale.x);
++	scale[1] = f2fl(H.scale.y);
++	scale[2] = f2fl(H.scale.z);
++	*color = H.t.tex;
++	*depth = H.depth;
++	return 1;
++}
++
++static void history_keep(void)
++{
++	int want = 0;
++#ifdef __EMSCRIPTEN__
++	want = d2web_option(D2WEB_OPTION_REFLECTIONS) && d2web_option(D2WEB_OPTION_LIGHTING);
++#endif
++	H.valid = 0;
++	if (!want)
++		return;
++	if (H.t.w != P.w || H.t.h != P.h) {
++		target_free(&H.t);
++		if (H.depth)
++			glDeleteTextures(1, &H.depth);
++		H.depth = texture_make(P.w, P.h, GL_DEPTH_COMPONENT24);
++		target_make(&H.t, P.w, P.h, P.color_format, H.depth);
++	}
++	glBindFramebuffer(GL_READ_FRAMEBUFFER, P.scene.fbo);
++	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, H.t.fbo);
++	glBlitFramebuffer(0, 0, P.w, P.h, 0, 0, P.w, P.h, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_NEAREST);
++	H.pos = View_position;
++	H.orient = Unscaled_matrix;
++	H.scale = Matrix_scale;
++	H.valid = 1;
++}
++
 +void ogl_post_origin(int *x, int *y)
 +{
 +	*x = P.active ? P.x : 0;
@@ -1056,6 +1155,7 @@ index 0000000..6710254
 +	glDisable(GL_CULL_FACE);
 +	glDisable(GL_SCISSOR_TEST);
 +
++	history_keep();
 +	if (P.look & (LOOK_GLOW | LOOK_HAZE))	// haze takes its far glow from the bloom images
 +		bloom();
 +	if (P.look & LOOK_AO)
@@ -1103,10 +1203,10 @@ index 0000000..6710254
 +}
 diff --git a/d2/arch/ogl/ogl_shader.c b/d2/arch/ogl/ogl_shader.c
 new file mode 100644
-index 0000000..d1148e0
+index 0000000..f8df115
 --- /dev/null
 +++ b/d2/arch/ogl/ogl_shader.c
-@@ -0,0 +1,240 @@
+@@ -0,0 +1,304 @@
 +/*
 + * Shaders for 2D art drawn much larger than its pixels (browser edition). Movies get an
 + * edge-aware sharp upscale and HUD, menu and title art a sharp Catmull-Rom one, instead of a
@@ -1307,6 +1407,70 @@ index 0000000..d1148e0
 +#else
 +	return 0;
 +#endif
++}
++
++// Sprites that give light (explosions, glowing shots): their cut-out edges and the sprite's
++// square border fade softly instead of ending in blocky pixels, and with the HDR view they are
++// brighter than white so they glow. Additive sprites keep their colors premultiplied.
++static const char *sprite_vs =
++	"in vec4 a_position;\n"
++	"in vec4 a_texCoord0;\n"
++	"in vec4 a_color;\n"
++	"uniform mat4 u_modelView;\n"
++	"uniform mat4 u_projection;\n"
++	"out vec2 v_uv;\n"
++	"out vec4 v_color;\n"
++	"void main() {\n"
++	"	v_uv = a_texCoord0.xy;\n"
++	"	v_color = a_color;\n"
++	"	gl_Position = u_projection * u_modelView * a_position;\n"
++	"}\n";
++
++static const char *sprite_fs =
++	"uniform sampler2D tex;\n"
++	"uniform vec4 sp;\n"	// brightness, texture u and v extent, additive
++	"uniform vec2 texel;\n"
++	"in vec2 v_uv;\n"
++	"in vec4 v_color;\n"
++	"out vec4 o;\n"
++	"void main() {\n"
++	// the cut-out mask blurred over a texel and cut again: round outlines, not the
++	// staircase of the magnified pixels (transparent texels are black, so colors stay true)
++	"	vec2 t = texel * 0.8;\n"
++	"	vec4 c = (texture(tex, v_uv) * 2.0 + texture(tex, v_uv + t) + texture(tex, v_uv - t)\n"
++	"		+ texture(tex, v_uv + vec2(t.x, -t.y)) + texture(tex, v_uv + vec2(-t.x, t.y))) / 6.0;\n"
++	"	vec2 q = v_uv / sp.yz;\n"
++	"	float edge = smoothstep(0.0, 0.14, min(min(q.x, 1.0 - q.x), min(q.y, 1.0 - q.y)));\n"
++	"	float a = smoothstep(0.18, 0.62, c.a) * edge * v_color.a;\n"
++	"	if (a < 0.004) discard;\n"
++	"	vec3 rgb = c.rgb / max(c.a, 0.004) * v_color.rgb * sp.x;\n"
++	"	o = sp.w > 0.5 ? vec4(rgb * a, a) : vec4(rgb, a);\n"
++	"}\n";
++
++static GLuint sprite_prog;
++static GLint sprite_sp, sprite_texel;
++
++int ogl_sprite_begin(ogl_texture *tex, float brightness, int additive)
++{
++	static int tried;
++	if (!tried) {
++		tried = 1;
++#ifdef __EMSCRIPTEN__
++		if (d2web_gl_version() >= 2 && (sprite_prog = ogl_program3(sprite_vs, "", sprite_fs))) {
++			glUseProgram(sprite_prog);
++			glUniform1i(glGetUniformLocation(sprite_prog, "tex"), 0);
++			sprite_sp = glGetUniformLocation(sprite_prog, "sp");
++			sprite_texel = glGetUniformLocation(sprite_prog, "texel");
++			glUseProgram(0);
++		}
++#endif
++	}
++	if (!sprite_prog || active || !tex->u || !tex->v)
++		return 0;
++	glUseProgram(active = sprite_prog);
++	glUniform4f(sprite_sp, brightness, tex->u, tex->v, additive ? 1 : 0);
++	glUniform2f(sprite_texel, 1.0f / tex->tw, 1.0f / tex->th);
++	return 1;
 +}
 +
 +int ogl_sharp_enabled(void)
@@ -2048,10 +2212,10 @@ index 0000000..bc5fa7e
 +}
 diff --git a/d2/arch/web/web.c b/d2/arch/web/web.c
 new file mode 100644
-index 0000000..0c25609
+index 0000000..cdf1c85
 --- /dev/null
 +++ b/d2/arch/web/web.c
-@@ -0,0 +1,250 @@
+@@ -0,0 +1,280 @@
 +/*
 + * Browser (Emscripten) replacements for desktop-only pieces:
 + * message boxes, GLU mipmapping and GL 1.1 calls WebGL lacks.
@@ -2302,6 +2466,36 @@ index 0000000..0c25609
 +{
 +	Players[Player_num].flags |= flags;
 +}
++
++/* Like d2web_test_next_light, for sides whose texture has one of the TMI_* flags in mask
++ * (1 lava, 2 water, 4 force field). */
++EMSCRIPTEN_KEEPALIVE int d2web_test_next_surface(int from, int mask)
++{
++	int i;
++	for (i = from < 0 ? 0 : from; i < (Highest_segment_index + 1) * MAX_SIDES_PER_SEGMENT; i++) {
++		segment *sg = &Segments[i / MAX_SIDES_PER_SEGMENT];
++		side *s = &sg->sides[i % MAX_SIDES_PER_SEGMENT];
++		if ((sg->children[i % MAX_SIDES_PER_SEGMENT] == -1 || s->wall_num != -1) &&
++			((TmapInfo[s->tmap_num].flags | (s->tmap_num2 ? TmapInfo[s->tmap_num2 & 0x3fff].flags : 0)) & mask))
++			return i;
++	}
++	return -1;
++}
++
++/* Blows up a robot as if the ship shot it. */
++#include "collide.h"
++EMSCRIPTEN_KEEPALIVE void d2web_test_kill(int objnum)
++{
++	if (objnum >= 0 && objnum <= Highest_object_index && Objects[objnum].type == OBJ_ROBOT)
++		apply_damage_to_robot(&Objects[objnum], Objects[objnum].shields + F1_0, ConsoleObject - Objects);
++}
++
++/* 1 stops robots firing (for clean comparison shots). */
++#include "game.h"
++EMSCRIPTEN_KEEPALIVE void d2web_test_calm(int on)
++{
++	cheats.robotfiringsuspended = on;
++}
 diff --git a/d2/arch/web/web.h b/d2/arch/web/web.h
 new file mode 100644
 index 0000000..df289bc
@@ -2513,7 +2707,7 @@ index 0000000..b33cc74
 +#define SDLK_WORLD_94 0
 +#define SDLK_WORLD_95 0
 diff --git a/d2/include/ogl_init.h b/d2/include/ogl_init.h
-index af0b258..17d203e 100644
+index af0b258..f17d979 100644
 --- a/d2/include/ogl_init.h
 +++ b/d2/include/ogl_init.h
 @@ -11,7 +11,13 @@
@@ -2530,7 +2724,7 @@ index af0b258..17d203e 100644
  #ifdef _WIN32
  #include "loadgl.h"
  int ogl_init_load_library(void);
-@@ -79,6 +85,22 @@ extern int gl_initialized;
+@@ -79,6 +85,25 @@ extern int gl_initialized;
  extern int active_texture_unit;
  extern GLfloat ogl_maxanisotropy;
  
@@ -2543,12 +2737,15 @@ index af0b258..17d203e 100644
 +int ogl_glyph_begin(float scale);
 +void ogl_shader_end(void);
 +unsigned int ogl_program3(const char *vs, const char *defines, const char *fs);
++int ogl_sprite_begin(ogl_texture *tex, float brightness, int additive);	// ogl_shader_end() after
++extern float ogl_sprite_glow;	// render_object: > 0 draws the next sprites soft-edged, this bright
 +
 +// post-processing of the 3D view (ogl_post.c)
 +int ogl_post_begin(void);
 +void ogl_post_end(void);
 +int ogl_post_active(void);
 +void ogl_post_origin(int *x, int *y);
++int ogl_post_history(unsigned *color, unsigned *depth, float *reproj, float *scale);
 +
  void ogl_setActiveTexture(int t);
  
@@ -2710,10 +2907,10 @@ index fe9b0d1..4cbbd67 100644
  			//	If dropping a weapon that the player has, drop energy instead, unless it's vulcan, in which case drop vulcan ammo.
 diff --git a/d2/main/fx.c b/d2/main/fx.c
 new file mode 100644
-index 0000000..5e07d87
+index 0000000..a7d5009
 --- /dev/null
 +++ b/d2/main/fx.c
-@@ -0,0 +1,847 @@
+@@ -0,0 +1,1129 @@
 +/*
 + * Light halos, smoke and sparks (browser edition).
 + *
@@ -2772,6 +2969,16 @@ index 0000000..5e07d87
 +#endif
 +}
 +
++// fireballs, shockwaves, debris and scorch marks
++static int boom_enabled(void)
++{
++#ifdef __EMSCRIPTEN__
++	return d2web_option(D2WEB_OPTION_EXPLOSIONS);
++#else
++	return 0;
++#endif
++}
++
 +static unsigned fx_seed = 0x2545f491;
 +static float frand(void)	// 0..1
 +{
@@ -2806,7 +3013,7 @@ index 0000000..5e07d87
 +// ---------------------------------------------------------------------------------------
 +// Particles
 +
-+enum { FX_SMOKE, FX_SPARK, FX_GLOW };
++enum { FX_SMOKE, FX_SPARK, FX_GLOW, FX_FIRE, FX_RING, FX_DEBRIS };
 +
 +typedef struct particle {
 +	float pos[3], vel[3];
@@ -2815,6 +3022,7 @@ index 0000000..5e07d87
 +	float angle, spin;
 +	float drag;
 +	float rgb[3], alpha;
++	float acc;			// debris: time toward its next smoke puff
 +	unsigned char kind;
 +} particle;
 +
@@ -2913,10 +3121,124 @@ index 0000000..5e07d87
 +	}
 +}
 +
++// ---------------------------------------------------------------------------------------
++// Explosions: layered fireballs that cool from white-hot to red, a shockwave, glowing debris
++// that trails smoke, and scorch marks that stay on the walls a while
++
++static void fire_puffs(const float *p, float s, int n, float life)
++{
++	for (int i = 0; i < n; i++) {
++		particle *q = spawn(FX_FIRE);
++		float d[3];
++		rand_dir(d);
++		madd(q->pos, p, d, s * 0.35f * frand());
++		for (int k = 0; k < 3; k++)
++			q->vel[k] = d[k] * s * (0.6f + 0.9f * frand());
++		q->drag = 3.0f;
++		q->size = s * (0.12f + 0.1f * frand());
++		q->grow = s * (0.5f + 0.35f * frand());
++		q->life = life * (0.65f + 0.5f * frand());
++		q->angle = frand() * 6.283f;
++		q->spin = (frand() - 0.5f) * 2.5f;
++	}
++}
++
++static void shockwave(const float *p, float s)
++{
++	particle *q = spawn(FX_RING);
++	memcpy(q->pos, p, sizeof(q->pos));
++	q->size = s * 0.3f;
++	q->grow = s * 9.0f;
++	q->life = 0.38f;
++}
++
++static void debris(const float *p, float s, int n)
++{
++	for (int i = 0; i < n; i++) {
++		particle *q = spawn(FX_DEBRIS);
++		float d[3], speed = (s * 4 + 14) * (0.35f + 0.65f * frand());
++		rand_dir(d);
++		memcpy(q->pos, p, sizeof(q->pos));
++		for (int k = 0; k < 3; k++)
++			q->vel[k] = d[k] * speed;
++		q->drag = 0.7f;
++		q->size = (0.12f + 0.25f * frand()) * (s < 3 ? 1 : s / 3 > 2.5f ? 2.5f : s / 3);
++		q->life = 1.4f + frand() * 1.2f;
++		q->angle = frand() * 6.283f;
++		q->spin = (frand() - 0.5f) * 14;
++	}
++}
++
++#define MAX_DECALS 96
++typedef struct decal {
++	float pos[3], t1[3], t2[3];	// center, half axes along the wall
++	float age, life, alpha, ember;
++} decal;
++static decal decals[MAX_DECALS];
++static int n_decals, next_decal;
++
++static void scorch(int segnum, int sidenum, const float *p, float size, float alpha, float life, float ember)
++{
++	side *sd = &Segments[segnum].sides[sidenum];
++	float n[3], a[3] = { 0, 0, 0 }, t1[3], t2[3], l, c, sn, ang = frand() * 6.283f;
++	decal *d;
++	if (sd->wall_num != -1)	// doors and such move: the mark would float
++		return;
++	fv(&sd->normals[0], n);
++	a[fabsf(n[0]) < 0.6f ? 0 : 1] = 1;
++	t1[0] = n[1] * a[2] - n[2] * a[1];
++	t1[1] = n[2] * a[0] - n[0] * a[2];
++	t1[2] = n[0] * a[1] - n[1] * a[0];
++	l = 1 / len(t1);
++	for (int k = 0; k < 3; k++)
++		t1[k] *= l;
++	t2[0] = n[1] * t1[2] - n[2] * t1[1];
++	t2[1] = n[2] * t1[0] - n[0] * t1[2];
++	t2[2] = n[0] * t1[1] - n[1] * t1[0];
++	d = n_decals < MAX_DECALS ? &decals[n_decals++] : &decals[next_decal++ % MAX_DECALS];
++	c = cosf(ang) * size;
++	sn = sinf(ang) * size;
++	for (int k = 0; k < 3; k++) {
++		d->t1[k] = t1[k] * c + t2[k] * sn;
++		d->t2[k] = t2[k] * c - t1[k] * sn;
++	}
++	madd(d->pos, p, n, 0.04f);
++	d->age = 0;
++	d->life = life;
++	d->alpha = alpha;
++	d->ember = ember;
++}
++
++// a blast of size s (the exploding thing's radius)
++static void blast(const float *p, float s)
++{
++	float flash[3] = { 2.2f, 1.7f, 1.1f };
++	int n = (int)(4 + s * 0.35f);
++	fire_puffs(p, s, n > 10 ? 10 : n, 0.75f + s * 0.02f);
++	shockwave(p, s);
++	n = (int)(5 + s * 0.6f);
++	debris(p, s, n > 14 ? 14 : n);
++	glow(p, s * 1.6f, 0.16f, flash, 0.45f);
++}
++
 +void fx_impact(object *weapon, int segnum, int sidenum, vms_vector *pos)
 +{
 +	weapon_info *wi = &Weapon_info[weapon->id];
 +	float p[3], n[3], rgb[3];
++	if (boom_enabled()) {
++		fv(pos, p);
++		fv(&Segments[segnum].sides[sidenum].normals[0], n);
++		if (wi->damage_radius) {
++			float s = f2fl(wi->impact_size), at[3];
++			s = s < 2.5f ? 2.5f : s;
++			madd(at, p, n, s * 0.3f);
++			blast(at, s);
++			scorch(segnum, sidenum, p, s * 0.9f, 0.85f, 40, 1);
++		} else if (wi->matter)
++			scorch(segnum, sidenum, p, 0.4f, 0.7f, 20, 0);
++		else
++			scorch(segnum, sidenum, p, 0.75f, 0.45f, 12, 0.6f);
++	}
 +	if (!fx_enabled())
 +		return;
 +	fv(pos, p);
@@ -2945,9 +3267,13 @@ index 0000000..5e07d87
 +void fx_hit(object *weapon, vms_vector *pos)
 +{
 +	float p[3], rgb[3];
++	fv(pos, p);
++	if (boom_enabled() && Weapon_info[weapon->id].damage_radius) {
++		float s = f2fl(Weapon_info[weapon->id].impact_size);
++		blast(p, s < 2.5f ? 2.5f : s);
++	}
 +	if (!fx_enabled())
 +		return;
-+	fv(pos, p);
 +	weapon_color(weapon, rgb);
 +	sparks(p, NULL, Weapon_info[weapon->id].damage_radius ? 16 : 6, rgb, 24, 0.35f);
 +}
@@ -2956,9 +3282,11 @@ index 0000000..5e07d87
 +{
 +	float p[3], s = f2fl(size), hot[3] = { 1, 0.7f, 0.35f };
 +	int n = (int)(18 + s * 2.5f);
++	fv(pos, p);
++	if (boom_enabled())
++		blast(p, s);
 +	if (!fx_enabled())
 +		return;
-+	fv(pos, p);
 +	sparks(p, NULL, n > 60 ? 60 : n, hot, 28 + s * 3, 1.1f);
 +	n = (int)(3 + s / 3);
 +	for (int i = 0; i < (n > 9 ? 9 : n); i++) {
@@ -3087,10 +3415,32 @@ index 0000000..5e07d87
 +		p->angle += p->spin * dt;
 +		i++;
 +	}
-+	if (!fx_enabled()) {
-+		n_particles = 0;
++	for (int i = 0; i < n_decals;) {
++		decals[i].age += dt;
++		if (decals[i].age >= decals[i].life) {
++			decals[i] = decals[--n_decals];
++			continue;
++		}
++		i++;
++	}
++	if (!fx_enabled() && !boom_enabled()) {
++		n_particles = n_decals = 0;
 +		return;
 +	}
++	for (int i = 0, n = n_particles; i < n; i++) {	// hot debris trails smoke
++		particle *p = &particles[i];
++		if (p->kind != FX_DEBRIS || p->age > 1.1f)
++			continue;
++		for (p->acc += dt; p->acc > 0.045f; p->acc -= 0.045f) {
++			float v[3];
++			for (int k = 0; k < 3; k++)
++				v[k] = p->vel[k] * 0.08f;
++			smoke(p->pos, v, 0.22f, 1.1f, 0.7f + frand() * 0.4f, 0.32f, 0.5f * (1 - p->age / 1.1f), -1);
++			p = &particles[i];	// (spawning can move nothing, but stay safe)
++		}
++	}
++	if (!fx_enabled())
++		return;
 +	for (int i = 0; i <= Highest_object_index; i++) {
 +		object *obj = &Objects[i];
 +		if (obj->type == OBJ_WEAPON && is_missile(obj))
@@ -3225,7 +3575,7 @@ index 0000000..5e07d87
 +static void level_changed(void)
 +{
 +	fx_level = Current_level_num;
-+	n_particles = 0;
++	n_particles = n_decals = 0;
 +	for (int i = 0; i < MAX_TEXTURES; i++)
 +		tex_spots[i].n = -1;
 +	memset(trail_sig, 0, sizeof(trail_sig));
@@ -3246,7 +3596,7 @@ index 0000000..5e07d87
 +static fxvert fx_verts[MAX_FX_VERTS];
 +static int n_verts;
 +static float view_rows[3][3], view_pos[3], cam_right[3], cam_up[3];
-+static GLuint glow_tex, smoke_tex;
++static GLuint glow_tex, smoke_tex, fire_tex, ring_tex, chunk_tex, scorch_tex;
 +
 +static void to_view(const float *p, float *o)
 +{
@@ -3317,14 +3667,35 @@ index 0000000..5e07d87
 +	quad(q[0], q[1], q[2], q[3], rgb, alpha);
 +}
 +
-+static GLuint make_texture(int smoke_puff)
++enum { TEX_GLOW, TEX_SMOKE, TEX_FIRE, TEX_RING, TEX_CHUNK, TEX_SCORCH };
++
++static GLuint make_texture(int kind)
 +{
 +	static unsigned char img[64 * 64 * 4];
 +	GLuint t;
 +	for (int y = 0; y < 64; y++)
 +		for (int x = 0; x < 64; x++) {
-+			float dx = (x + 0.5f) / 32 - 1, dy = (y + 0.5f) / 32 - 1, r = sqrtf(dx * dx + dy * dy), a;
-+			if (smoke_puff) {
++			float dx = (x + 0.5f) / 32 - 1, dy = (y + 0.5f) / 32 - 1, r = sqrtf(dx * dx + dy * dy), a, shade = 1;
++			float th = atan2f(dy, dx);
++			if (kind == TEX_FIRE) {
++				// a turbulent ball of flame, densest in the middle
++				float n = 0.5f + 0.22f * sinf(dx * 9.3f + 0.7f) * sinf(dy * 8.1f + 2.2f)
++					+ 0.16f * sinf((dx + dy) * 17.9f + 1.1f) * sinf((dx - dy) * 15.3f)
++					+ 0.1f * sinf(th * 7 + r * 9);
++				a = smooth(1.0f, 0.1f, r + (n - 0.5f) * 0.5f) * (0.6f + 0.5f * n);
++			} else if (kind == TEX_RING) {
++				float q = (r - 0.72f) / 0.13f;
++				a = expf(-q * q) * smooth(1.0f, 0.9f, r) * (0.8f + 0.2f * sinf(th * 11));
++			} else if (kind == TEX_CHUNK) {
++				// a jagged lump of metal, lit from one side
++				float rr = 0.62f + 0.2f * sinf(th * 3 + 1) + 0.12f * sinf(th * 5 + 2.3f);
++				a = smooth(rr, rr - 0.1f, r);
++				shade = 0.55f + 0.45f * (0.5f - 0.35f * (dx + dy) - 0.3f * r);
++			} else if (kind == TEX_SCORCH) {
++				// soot, densest in the middle, with a ragged edge and streaks out from the blast
++				float n = 0.5f + 0.25f * sinf(th * 9 + 0.4f) * sinf(r * 13) + 0.2f * sinf(th * 23 + 1.7f);
++				a = smooth(1.0f, 0.25f, r + (n - 0.5f) * 0.35f) * (0.75f + 0.25f * n);
++			} else if (kind == TEX_SMOKE) {
 +				// a soft puff with some billows
 +				float n = 0.5f + 0.25f * sinf(dx * 7.1f + 1.3f) * sinf(dy * 6.3f + 0.4f)
 +					+ 0.15f * sinf((dx + dy) * 12.7f) * sinf((dx - dy) * 11.3f + 2.1f);
@@ -3332,7 +3703,8 @@ index 0000000..5e07d87
 +			} else
 +				a = expf(-r * r * 5.5f) * smooth(1.0f, 0.7f, r);	// a glow that fades to nothing at the edge
 +			a = a < 0 ? 0 : a > 1 ? 1 : a;
-+			img[(y * 64 + x) * 4] = img[(y * 64 + x) * 4 + 1] = img[(y * 64 + x) * 4 + 2] = 255;
++			shade = shade < 0 ? 0 : shade > 1 ? 1 : shade;
++			img[(y * 64 + x) * 4] = img[(y * 64 + x) * 4 + 1] = img[(y * 64 + x) * 4 + 2] = (unsigned char)(shade * 255);
 +			img[(y * 64 + x) * 4 + 3] = (unsigned char)(a * 255);
 +		}
 +	glGenTextures(1, &t);
@@ -3464,11 +3836,38 @@ index 0000000..5e07d87
 +	glDrawArrays(GL_TRIANGLES, first, count);
 +}
 +
++// fire cools from white-hot through orange to deep red (brighter than white for the glow)
++static void fire_color(float t, float *c)
++{
++	static const float k[4][3] = { { 1.3f, 1.1f, 0.75f }, { 1.05f, 0.5f, 0.17f }, { 0.45f, 0.13f, 0.035f }, { 0.1f, 0.02f, 0.01f } };
++	static const float at[4] = { 0, 0.15f, 0.5f, 1 };
++	int i = t < at[1] ? 0 : t < at[2] ? 1 : 2;
++	float f = (t - at[i]) / (at[i + 1] - at[i]), fade = smooth(0, 0.06f, t) * (1 - t);
++	for (int j = 0; j < 3; j++)
++		c[j] = (k[i][j] + (k[i + 1][j] - k[i][j]) * f) * fade;
++}
++
++// what fx_render draws, in order: each a texture and a blend over a range of fx_verts
++typedef struct batch {
++	GLuint *tex;
++	int additive, first;
++} batch;
++static batch batches[8];
++static int n_batches;
++
++static void batch_begin(GLuint *tex, int additive)
++{
++	batches[n_batches].tex = tex;
++	batches[n_batches].additive = additive;
++	batches[n_batches].first = n_verts;
++	n_batches++;
++}
++
 +void fx_render(void)
 +{
-+	int n_smoke = 0, smoke_verts, scissor;
++	int n_smoke = 0, scissor, boom = boom_enabled();
 +	pass = pass == 0xffff ? 1 : pass + 1;
-+	if (!fx_enabled()) {
++	if (!fx_enabled() && !boom) {
 +		n_lit_sides = 0;
 +		return;
 +	}
@@ -3482,8 +3881,40 @@ index 0000000..5e07d87
 +	fv(&Unscaled_matrix.rvec, cam_right);
 +	fv(&Unscaled_matrix.uvec, cam_up);
 +	n_verts = 0;
++	n_batches = 0;
++
++	// scorch marks darken the walls; fresh ones still glow
++	batch_begin(&scorch_tex, 0);
++	for (int i = 0; i < n_decals; i++) {
++		decal *d = &decals[i];
++		float q[4][3], dark[3] = { 0.03f, 0.025f, 0.02f };
++		for (int k = 0; k < 3; k++) {
++			q[0][k] = d->pos[k] - d->t1[k] - d->t2[k];
++			q[1][k] = d->pos[k] + d->t1[k] - d->t2[k];
++			q[2][k] = d->pos[k] + d->t1[k] + d->t2[k];
++			q[3][k] = d->pos[k] - d->t1[k] + d->t2[k];
++		}
++		quad(q[0], q[1], q[2], q[3], dark, d->alpha * (1 - smooth(d->life * 0.7f, d->life, d->age)));
++	}
++	batch_begin(&scorch_tex, 1);
++	for (int i = 0; i < n_decals; i++) {
++		decal *d = &decals[i];
++		float q[4][3], f = 1 - smooth(0, 1.8f, d->age), c[3];
++		if (d->ember <= 0 || f <= 0)
++			continue;
++		f *= f * d->ember;
++		c[0] = 2.0f * f, c[1] = 0.55f * f, c[2] = 0.12f * f;
++		for (int k = 0; k < 3; k++) {
++			q[0][k] = d->pos[k] - d->t1[k] * 0.7f - d->t2[k] * 0.7f;
++			q[1][k] = d->pos[k] + d->t1[k] * 0.7f - d->t2[k] * 0.7f;
++			q[2][k] = d->pos[k] + d->t1[k] * 0.7f + d->t2[k] * 0.7f;
++			q[3][k] = d->pos[k] - d->t1[k] * 0.7f + d->t2[k] * 0.7f;
++		}
++		quad(q[0], q[1], q[2], q[3], c, 1);
++	}
 +
 +	// smoke, far to near, blended over what is behind it
++	batch_begin(&smoke_tex, 0);
 +	for (int i = 0; i < n_particles; i++)
 +		if (particles[i].kind == FX_SMOKE) {
 +			float v[3];
@@ -3499,13 +3930,50 @@ index 0000000..5e07d87
 +		float t = p->age / p->life;
 +		billboard(p->pos, p->size, p->angle, p->rgb, p->alpha * smooth(0, 0.08f, t) * (1 - t) * sqrtf(1 - t));
 +	}
-+	smoke_verts = n_verts;
++
++	// debris: dark lumps, glowing while still hot
++	batch_begin(&chunk_tex, 0);
++	for (int i = 0; i < n_particles; i++) {
++		particle *p = &particles[i];
++		float heat, c[3], t;
++		if (p->kind != FX_DEBRIS)
++			continue;
++		t = p->age / p->life;
++		heat = 1 - smooth(0, 1.0f, p->age);
++		c[0] = 0.13f + 1.5f * heat;
++		c[1] = 0.11f + 0.6f * heat * heat;
++		c[2] = 0.1f + 0.15f * heat * heat * heat;
++		billboard(p->pos, p->size, p->angle, c, 1 - smooth(0.85f, 1, t));
++	}
++
++	// flames and shockwaves, added to the light
++	batch_begin(&fire_tex, 1);
++	for (int i = 0; i < n_particles; i++) {
++		particle *p = &particles[i];
++		float c[3];
++		if (p->kind != FX_FIRE)
++			continue;
++		fire_color(p->age / p->life, c);
++		billboard(p->pos, p->size, p->angle, c, 1);
++	}
++	batch_begin(&ring_tex, 1);
++	for (int i = 0; i < n_particles; i++) {
++		particle *p = &particles[i];
++		float t, f, c[3];
++		if (p->kind != FX_RING)
++			continue;
++		t = p->age / p->life;
++		f = (1 - t) * (1 - t) * 0.45f;
++		c[0] = 1.5f * f, c[1] = 1.15f * f, c[2] = 0.75f * f;
++		billboard(p->pos, p->size, 0, c, 1);
++	}
++	batch_begin(&glow_tex, 1);
 +
 +	// glows: halos, sparks, flashes, added to the light
 +	STAT(0, n_lit_sides);
 +	{
 +		int before = n_verts;
-+		for (int i = 0; i < n_lit_sides; i++)
++		for (int i = 0; i < n_lit_sides && fx_enabled(); i++)
 +			side_halos(lit_sides[i] / MAX_SIDES_PER_SEGMENT, lit_sides[i] % MAX_SIDES_PER_SEGMENT);
 +		STAT(1, (n_verts - before) / 6);
 +	}
@@ -3526,6 +3994,12 @@ index 0000000..5e07d87
 +			for (int k = 0; k < 3; k++)
 +				c[k] = p->rgb[k] * f;
 +			billboard(p->pos, p->size * (1 + t), 0, c, 1);
++		} else if (p->kind == FX_DEBRIS && p->age < 1.0f) {	// its hot glow, along its path
++			float tail[3], h = 1 - p->age;
++			h *= h;
++			c[0] = 1.4f * h, c[1] = 0.55f * h, c[2] = 0.15f * h;
++			madd(tail, p->pos, p->vel, -0.035f);
++			streak(p->pos, tail, p->size * 1.3f, c, 1);
 +		}
 +	}
 +	STAT(2, n_particles);
@@ -3533,9 +4007,14 @@ index 0000000..5e07d87
 +	if (!n_verts)
 +		return;
 +
++	batches[n_batches].first = n_verts;	// the end of the last one
 +	if (!glow_tex) {
-+		glow_tex = make_texture(0);
-+		smoke_tex = make_texture(1);
++		glow_tex = make_texture(TEX_GLOW);
++		smoke_tex = make_texture(TEX_SMOKE);
++		fire_tex = make_texture(TEX_FIRE);
++		ring_tex = make_texture(TEX_RING);
++		chunk_tex = make_texture(TEX_CHUNK);
++		scorch_tex = make_texture(TEX_SCORCH);
 +	}
 +	scissor = glIsEnabled(GL_SCISSOR_TEST);
 +	glDisable(GL_SCISSOR_TEST);
@@ -3548,10 +4027,10 @@ index 0000000..5e07d87
 +	glEnableClientState(GL_VERTEX_ARRAY);
 +	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 +	glEnableClientState(GL_COLOR_ARRAY);
-+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-+	draw(smoke_tex, 0, smoke_verts);
-+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-+	draw(glow_tex, smoke_verts, n_verts - smoke_verts);
++	for (int i = 0; i < n_batches; i++) {
++		glBlendFunc(GL_SRC_ALPHA, batches[i].additive ? GL_ONE : GL_ONE_MINUS_SRC_ALPHA);
++		draw(*batches[i].tex, batches[i].first, batches[i + 1].first - batches[i].first);
++	}
 +	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 +	glDisableClientState(GL_COLOR_ARRAY);
 +	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -3982,6 +4461,59 @@ index 79cf5fb..e27f272 100644
  extern void init_seismic_disturbances(void);
  
  #define ND_EVENT_EOF				0	// EOF
+diff --git a/d2/main/object.c b/d2/main/object.c
+index 602b2d5..9dbdef5 100644
+--- a/d2/main/object.c
++++ b/d2/main/object.c
+@@ -67,6 +67,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ #include "gameseq.h"
+ #include "playsave.h"
+ #include "timer.h"
++#include "ogl_init.h"
++#ifdef __EMSCRIPTEN__
++#include "../arch/web/web.h"
++#endif
+ #ifdef EDITOR
+ #include "editor/editor.h"
+ #endif
+@@ -799,14 +803,24 @@ void render_object(object *obj)
+ 			if ( PlayerCfg.AlphaEffects ) // set nice transparency/blending for certrain objects
+ 				gr_settransblend( GR_FADE_OFF, GR_BLEND_ADDITIVE_C );
+ 
++#ifdef __EMSCRIPTEN__
++			if (d2web_option(D2WEB_OPTION_EXPLOSIONS))	// soft-edged, and glowing in the HDR view
++				ogl_sprite_glow = 1.25f;
++#endif
+ 			draw_fireball(obj);
++			ogl_sprite_glow = 0;
+ 			break;
+ 
+ 		case RT_WEAPON_VCLIP:
+ 			if ( PlayerCfg.AlphaEffects && !is_proximity_bomb_or_smart_mine(obj->id)) // set nice transparency/blending for certain objects
+ 				gr_settransblend( 7, GR_BLEND_ADDITIVE_A );
+ 
++#ifdef __EMSCRIPTEN__
++			if (d2web_option(D2WEB_OPTION_GLOW) && !is_proximity_bomb_or_smart_mine(obj->id))
++				ogl_sprite_glow = 1.5f;
++#endif
+ 			draw_weapon_vclip(obj);
++			ogl_sprite_glow = 0;
+ 			break;
+ 
+ 		case RT_HOSTAGE:
+@@ -834,7 +848,12 @@ void render_object(object *obj)
+ 			if ( PlayerCfg.AlphaEffects ) // set nice transparency/blending for certrain objects
+ 				gr_settransblend( 7, GR_BLEND_ADDITIVE_A );
+ 
++#ifdef __EMSCRIPTEN__
++			if (d2web_option(D2WEB_OPTION_GLOW))
++				ogl_sprite_glow = 1.5f;
++#endif
+ 			Laser_render(obj);
++			ogl_sprite_glow = 0;
+ 			break;
+ 
+ 		default:
 diff --git a/d2/main/playsave.c b/d2/main/playsave.c
 index 1944a8c..c7d0f7e 100644
 --- a/d2/main/playsave.c
@@ -4048,10 +4580,10 @@ index 1944a8c..c7d0f7e 100644
  	PlayerCfg.SelectAfterFire = 1;  /* SelectAfterFire */
 diff --git a/d2/main/plight.c b/d2/main/plight.c
 new file mode 100644
-index 0000000..5207ada
+index 0000000..b62d8ee
 --- /dev/null
 +++ b/d2/main/plight.c
-@@ -0,0 +1,567 @@
+@@ -0,0 +1,689 @@
 +/*
 + * Per-pixel lighting of the mine's walls (browser edition, WebGL 2). Walls are drawn with a
 + * shader that lights each pixel from the nearest moving lights (shots, flares, explosions,
@@ -4132,9 +4664,44 @@ index 0000000..5207ada
 +	"in vec4 v_color;\n"
 +	"in vec3 v_pos;\n"
 +	"out vec4 o;\n"
++	"uniform float time;\n"		// seconds
++	"uniform sampler2D hcolor;\n"	// last frame, for reflections
++	"uniform sampler2D hdepth;\n"
++	"uniform mat4 reproj;\n"		// this view's space to last frame's
++	"uniform vec3 hscale;\n"
++	"uniform vec2 refl;\n"			// strength, on
++	"float hdist(vec2 uv) {\n"		// last frame's distance along its view axis, in units
++	"	float z = texture(hdepth, uv).r * 2.0 - 1.0;\n"
++	"	return 2.0 * 0.1 * 5000.0 / (5000.1 - z * 4999.9) / hscale.z;\n"
++	"}\n"
 +	"float lum(vec3 c) { return dot(c, vec3(0.299, 0.587, 0.114)); }\n"
++	"float hash2(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }\n"
++	"float vnoise(vec2 p) {\n"
++	"	vec2 i = floor(p), f = fract(p);\n"
++	"	f = f * f * (3.0 - 2.0 * f);\n"
++	"	return mix(mix(hash2(i), hash2(i + vec2(1.0, 0.0)), f.x), mix(hash2(i + vec2(0.0, 1.0)), hash2(i + vec2(1.0)), f.x), f.y);\n"
++	"}\n"
++	// water: the slope of three crossing ripple trains, in texture units
++	"vec2 ripples(vec2 uv) {\n"
++	"	const float TAU = 6.2832;\n"
++	"	vec2 d1 = vec2(1.0, 0.3), d2 = vec2(-0.4, 1.0), d3 = vec2(0.7, -0.8);\n"
++	"	return d1 * cos(dot(uv, d1) * TAU * 3.0 + time * 1.7) * 3.0 * 0.5\n"
++	"		+ d2 * cos(dot(uv, d2) * TAU * 4.0 - time * 2.1) * 4.0 * 0.35\n"
++	"		+ d3 * cos(dot(uv, d3) * TAU * 7.0 + time * 2.9) * 7.0 * 0.15;\n"
++	"}\n"
 +	"void main() {\n"
-+	"	vec4 c = texture(tex, v_uv);\n"
++	"	int kind = int(mat.w + 0.5);\n"	// 1 lava, 2 water, 3 force field
++	"	vec2 uv = v_uv;\n"
++	"	vec2 rip = vec2(0.0);\n"
++	"	if (kind == 1)\n"				// lava churns as it flows
++	"		uv += vec2(sin(v_uv.y * 9.4 + time * 0.7) + 0.5 * sin((v_uv.x + v_uv.y) * 12.6 - time * 1.1),\n"
++	"			cos(v_uv.x * 8.2 - time * 0.6) + 0.5 * cos((v_uv.x - v_uv.y) * 15.1 + time * 0.9)) * 0.011;\n"
++	"	else if (kind == 2) {\n"		// water bends what is under it
++	"		rip = ripples(v_uv);\n"
++	"		uv += rip * 0.004;\n"
++	"	} else if (kind == 3)\n"
++	"		uv.x += sin(v_uv.y * 18.8 + time * 4.0) * 0.004;\n"
++	"	vec4 c = texture(tex, uv);\n"
 +	"	if (c.a < 0.02) discard;\n"
 +	"	vec3 P = v_pos * unscale;\n"
 +	"	vec3 dpx = dFdx(P), dpy = dFdy(P);\n"
@@ -4144,19 +4711,21 @@ index 0000000..5207ada
 +	// relief: height from the texture's brightness, through the surface's own uv frame; it
 +	// fades out where texels get smaller than pixels, so distant walls don't shimmer
 +	"	vec2 dux = dFdx(v_uv), duy = dFdy(v_uv);\n"
++	"	vec3 sx = cross(dpy, N), sy = cross(N, dpx);\n"
++	"	vec3 T = sx * dux.x + sy * duy.x, B = sx * dux.y + sy * duy.y;\n"
++	"	float ts = inversesqrt(max(max(dot(T, T), dot(B, B)), 1e-12));\n"
 +	"	float foot = max(length(dux * texsize), length(duy * texsize));\n"
 +	"	float bump = mat.y * (1.0 - smoothstep(0.7, 2.5, foot));\n"
 +	"	vec3 Nb = N;\n"
 +	"	if (bump > 0.001) {\n"
 +	"		vec2 tx = vec2(1.0 / texsize.x, 0.0), ty = vec2(0.0, 1.0 / texsize.y);\n"
-+	"		vec2 g = vec2(lum(texture(tex, v_uv + tx).rgb) - lum(texture(tex, v_uv - tx).rgb),\n"
-+	"			lum(texture(tex, v_uv + ty).rgb) - lum(texture(tex, v_uv - ty).rgb)) * 0.5;\n"
-+	"		vec3 sx = cross(dpy, N), sy = cross(N, dpx);\n"
-+	"		vec3 T = sx * dux.x + sy * duy.x, B = sx * dux.y + sy * duy.y;\n"
-+	"		float s = inversesqrt(max(max(dot(T, T), dot(B, B)), 1e-12));\n"
-+	"		Nb = normalize(N - (T * g.x + B * g.y) * s * bump * tune[0].y);\n"
++	"		vec2 g = vec2(lum(texture(tex, uv + tx).rgb) - lum(texture(tex, uv - tx).rgb),\n"
++	"			lum(texture(tex, uv + ty).rgb) - lum(texture(tex, uv - ty).rgb)) * 0.5;\n"
++	"		Nb = normalize(N - (T * g.x + B * g.y) * ts * bump * tune[0].y);\n"
 +	"	}\n"
-+	"	float gloss = mat.z;\n"
++	"	if (kind == 2)\n"
++	"		Nb = normalize(Nb - (T * rip.x + B * rip.y) * ts * 0.05);\n"
++	"	float gloss = kind == 2 ? 0.85 : mat.z;\n"
 +	"	float shin = mix(10.0, 48.0, gloss);\n"
 +	"	vec3 base = v_color.rgb;\n"
 +	"	float lit = min(lum(base) * 2.0, 1.0);\n"
@@ -4202,13 +4771,48 @@ index 0000000..5207ada
 +	// a lamp's bright parts give light: they glow
 +	"	float m = max(max(c.r, c.g), c.b);\n"
 +	"	rgb += c.rgb * smoothstep(0.45, 0.85, m) * mat.x * tune[1].y;\n"
++	// reflections: march the reflected ray through last frame's view until it passes behind
++	// what was seen there; shiny surfaces take that color, more at grazing angles
++	"	if (refl.y > 0.5 && gloss > 0.4) {\n"	// smooth metal and water, not rock
++	"		vec3 R = reflect(-V, normalize(mix(N, Nb, 0.35)));\n"	// the relief only ruffles it
++	"		float fres = 0.04 + 0.96 * pow(1.0 - max(dot(Nb, V), 0.0), 5.0);\n"
++	"		float amt = refl.x * gloss * gloss * mix(0.25, 1.0, fres) * min(lum(base) * 3.0, 1.0);\n"
++	"		if (refl.x > 50.0) rgb = vec3(0.15, 0.0, 0.15);\n"
++	"		vec3 X = P + N * 0.05;\n"
++	"		float st = 0.8;\n"
++	"		for (int i = 0; i < 14; i++) {\n"
++	"			if (amt < 0.01) break;\n"
++	"			X += R * st;\n"
++	"			st *= 1.32;\n"
++	"			vec3 xp = (reproj * vec4(X, 1.0)).xyz;\n"
++	"			if (xp.z > -0.2) break;\n"
++	"			vec3 e = xp * hscale;\n"
++	"			vec2 u = e.xy / -e.z * 0.5 + 0.5;\n"
++	"			if (any(lessThan(u, vec2(0.0))) || any(greaterThan(u, vec2(1.0)))) break;\n"
++	"			float sd = hdist(u), rd = -xp.z;\n"
++	"			if (rd > sd + 0.02) {\n"
++	"				if (rd < sd + st * 1.5 + 0.5) {\n"
++	"					vec2 f = smoothstep(0.0, 0.08, u) * smoothstep(1.0, 0.92, u);\n"
++	"					vec3 hit = texture(hcolor, u).rgb * f.x * f.y * (1.0 - float(i) / 14.0);\n"
++	"					rgb = refl.x > 50.0 ? hit + vec3(0.0, 0.2, 0.0) : rgb * (1.0 - amt * 0.3) + hit * amt;\n"	// > 50: test view
++	"				}\n"
++	"				break;\n"
++	"			}\n"
++	"		}\n"
++	"	}\n"
++	"	if (kind == 1)\n"				// lava glows, brightest where it is hottest, in slow waves
++	"		rgb += c.rgb * smoothstep(0.2, 0.7, m) * (0.5 + 0.7 * vnoise(uv * 5.0 + vec2(time * 0.2, -time * 0.13))) * 0.9;\n"
++	"	else if (kind == 2)\n"			// water: brighter at grazing angles, like a reflection
++	"		rgb += base * c.rgb * pow(1.0 - max(dot(Nb, V), 0.0), 4.0) * 0.6;\n"
++	"	else if (kind == 3)\n"			// force fields shimmer with running bands of energy
++	"		rgb += c.rgb * (0.5 + 0.5 * sin(v_uv.y * 37.7 - time * 5.0)) * (0.4 + 0.6 * vnoise(v_uv * 9.0 + time * 1.5)) * 1.1;\n"
 +	"	o = vec4(rgb, c.a * v_color.a);\n"
 +	"}\n";
 +
 +static struct {
 +	int tried;
 +	GLuint prog;
-+	GLint tune, unscale, mat, texsize, nlights, lpos, lcol, headpos, headdir, nlamps, lamppos, lampcol;
++	GLint time, refl, reproj, hscale, tune, unscale, mat, texsize, nlights, lpos, lcol, headpos, headdir, nlamps, lamppos, lampcol;
 +} W;
 +
 +typedef struct lamp {
@@ -4232,7 +4836,7 @@ index 0000000..5207ada
 +static texmat Mats[MAX_TEXTURES];
 +
 +static struct {
-+	int on, seg, side, tmap1, tmap2;
++	int on, lit, seg, side, tmap1, tmap2;		// lit: per-pixel lighting (else only a moving surface)
 +} Face;
 +static int Frame_dirty, Lamps_seg = -1;
 +
@@ -4250,6 +4854,12 @@ index 0000000..5207ada
 +		glUseProgram(p);
 +		glUniform1i(glGetUniformLocation(p, "tex"), 0);
 +		W.tune = glGetUniformLocation(p, "tune");
++		W.time = glGetUniformLocation(p, "time");
++		W.refl = glGetUniformLocation(p, "refl");
++		W.reproj = glGetUniformLocation(p, "reproj");
++		W.hscale = glGetUniformLocation(p, "hscale");
++		glUniform1i(glGetUniformLocation(p, "hcolor"), 1);
++		glUniform1i(glGetUniformLocation(p, "hdepth"), 2);
 +		W.unscale = glGetUniformLocation(p, "unscale");
 +		W.mat = glGetUniformLocation(p, "mat");
 +		W.texsize = glGetUniformLocation(p, "texsize");
@@ -4452,19 +5062,32 @@ index 0000000..5207ada
 +	Face.on = 0;
 +}
 +
++static int surfaces_enabled(void)
++{
++#ifdef __EMSCRIPTEN__
++	return d2web_option(D2WEB_OPTION_SURFACES) && ready();
++#else
++	return 0;
++#endif
++}
++
++#define SURFACE_FLAGS (TMI_VOLATILE | TMI_WATER | TMI_FORCE_FIELD)
++
 +int plight_side(int segnum, int sidenum, int tmap1, int tmap2)
 +{
++	int lit = plight_enabled();
 +	Face.on = 0;
-+	if (!plight_enabled())
++	if (!lit && !(surfaces_enabled() && ((TmapInfo[tmap1].flags | (tmap2 ? TmapInfo[tmap2 & 0x3fff].flags : 0)) & SURFACE_FLAGS)))
 +		return 0;
 +	if (Built_level != Current_level_num || Built_segs != Highest_segment_index)
 +		build_lamps();
 +	Face.on = 1;
++	Face.lit = lit;
 +	Face.seg = segnum;
 +	Face.side = sidenum;
 +	Face.tmap1 = tmap1;
 +	Face.tmap2 = tmap2 & 0x3fff;
-+	return 1;
++	return lit;
 +}
 +
 +void plight_side_done(void)
@@ -4481,6 +5104,27 @@ index 0000000..5207ada
 +	glUniform4f(W.tune + 1, d2web_tune(4, 1.0f), d2web_tune(5, 1.2f), d2web_tune(6, 1.4f), 0);
 +#endif
 +	glUniform3f(W.unscale, 1 / f2fl(Matrix_scale.x), 1 / f2fl(Matrix_scale.y), 1 / f2fl(Matrix_scale.z));
++	glUniform1f(W.time, (float)(GameTime64 % (F1_0 * 3600LL)) / F1_0);
++	glUniform2f(W.refl, 0, 0);
++	if (!plight_enabled()) {	// only moving surfaces
++		glUniform1i(W.nlights, 0);
++		glUniform4f(W.headpos, 0, 0, 0, 0);
++		return;
++	}
++	{
++		unsigned hc, hd;
++		float reproj[16], hs[3];
++		if (d2web_option(D2WEB_OPTION_REFLECTIONS) && ogl_post_history(&hc, &hd, reproj, hs)) {
++			glActiveTexture(GL_TEXTURE1);
++			glBindTexture(GL_TEXTURE_2D, hc);
++			glActiveTexture(GL_TEXTURE2);
++			glBindTexture(GL_TEXTURE_2D, hd);
++			glActiveTexture(GL_TEXTURE0);
++			glUniformMatrix4fv(W.reproj, 1, GL_FALSE, reproj);
++			glUniform3f(W.hscale, hs[0], hs[1], hs[2]);
++			glUniform2f(W.refl, d2web_tune(19, 0.7f), 1);
++		}
++	}
 +	for (i = 0; i < Pp_num_lights; i++) {
 +		pp_light *l = &Pp_lights[i];
 +		to_view(&l->pos, pos[i]);
@@ -4530,7 +5174,7 @@ index 0000000..5207ada
 +
 +int plight_bind(grs_bitmap *bm, int overlay)
 +{
-+	int tmap, lit;
++	int tmap, lit, flags, kind;
 +	texmat *m;
 +	if (!Face.on || !bm->gltexture)
 +		return 0;
@@ -4541,7 +5185,10 @@ index 0000000..5207ada
 +		Frame_dirty = 0;
 +	}
 +	if (Lamps_seg != Face.seg) {
-+		upload_lamps(Face.seg);
++		if (Face.lit)
++			upload_lamps(Face.seg);
++		else
++			glUniform1i(W.nlamps, 0);
 +		Lamps_seg = Face.seg;
 +	}
 +	m = material(tmap);
@@ -4550,7 +5197,14 @@ index 0000000..5207ada
 +		lit |= TmapInfo[Face.tmap2].lighting > 0;
 +	if (Light_subtracted[Face.seg] & (1 << Face.side))
 +		lit = 0;
-+	glUniform4f(W.mat, lit ? 1.0f : 0.0f, m->bump, m->gloss, 0);
++	flags = surfaces_enabled() ? TmapInfo[tmap].flags : 0;
++	if (!overlay && Face.tmap2 && bm != &GameBitmaps[Textures[Face.tmap1].index])
++		flags |= surfaces_enabled() ? TmapInfo[Face.tmap2].flags : 0;
++	kind = flags & TMI_VOLATILE ? 1 : flags & TMI_WATER ? 2 : flags & TMI_FORCE_FIELD ? 3 : 0;
++	if (Face.lit)
++		glUniform4f(W.mat, lit ? 1.0f : 0.0f, m->bump, m->gloss, kind);
++	else
++		glUniform4f(W.mat, 0, 0, 0, kind);
 +	glUniform2f(W.texsize, bm->gltexture->tw, bm->gltexture->th);
 +	return 1;
 +}
@@ -5411,7 +6065,7 @@ index c53598c..97f0161 100644
  		return true;
  	}
 diff --git a/d2/xmodel/xmodel.cpp b/d2/xmodel/xmodel.cpp
-index d75a377..d5532e9 100644
+index d75a377..fcff1c2 100644
 --- a/d2/xmodel/xmodel.cpp
 +++ b/d2/xmodel/xmodel.cpp
 @@ -1,5 +1,6 @@
@@ -5421,7 +6075,17 @@ index d75a377..d5532e9 100644
  #include <SDL.h>
  
  #include "xdescent.h"
-@@ -17,28 +18,68 @@ extern "C" {
+@@ -10,6 +11,9 @@
+ #include "xmodel.h"
+ #include "xmodelnames.h"
+ extern "C" {
++#ifdef __EMSCRIPTEN__
++#include "../arch/web/web.h"
++#endif
+ #include "internal.h"
+ #include "../3d/globvars.h"
+ #undef FILENAME_LEN
+@@ -17,28 +21,68 @@ extern "C" {
  #undef FILENAME_LEN
  #include "polyobj.h"
  #include "texmap.h"
@@ -5493,7 +6157,7 @@ index d75a377..d5532e9 100644
  
  // return -1 on error
  int xmodel_load_gl(void *model) {
-@@ -49,15 +90,32 @@ int xmodel_load_gl(void *model) {
+@@ -49,15 +93,32 @@ int xmodel_load_gl(void *model) {
  		glew_loaded = 1;
  	}
  	#endif
@@ -5529,7 +6193,7 @@ index d75a377..d5532e9 100644
  		if (bm.BPP() == 4)
  			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
  				bm.Width(), bm.Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE,
-@@ -66,19 +124,17 @@ int xmodel_load_gl(void *model) {
+@@ -66,19 +127,17 @@ int xmodel_load_gl(void *model) {
  			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
  				bm.Width(), bm.Height(), 0, GL_RGB, GL_UNSIGNED_BYTE,
  				bm.Buffer());
@@ -5558,7 +6222,7 @@ index d75a377..d5532e9 100644
  }
  
  void xmodel_free_gl(void *model) {
-@@ -87,8 +143,10 @@ void xmodel_free_gl(void *model) {
+@@ -87,8 +146,10 @@ void xmodel_free_gl(void *model) {
  		return;
  	glDeleteTextures(rm.m.m_textures.m_nBitmaps, rm.bmtex);
  	memset(rm.bmtex, 0, rm.m.m_textures.m_nBitmaps * sizeof(rm.bmtex[0]));
@@ -5571,7 +6235,7 @@ index d75a377..d5532e9 100644
  	rm.glloaded = 0;
  }
  
-@@ -97,12 +155,21 @@ void xmodel_free(void *model) {
+@@ -97,12 +158,21 @@ void xmodel_free(void *model) {
  	render_model& rm = *rmp;
  	xmodel_free_gl(model);
  	delete[] rm.verts;
@@ -5595,7 +6259,7 @@ index d75a377..d5532e9 100644
  // return NULL on error
  void *xmodel_load(const char *filename) {
  	render_model* rmp = new render_model();
-@@ -114,6 +181,9 @@ void *xmodel_load(const char *filename) {
+@@ -114,6 +184,9 @@ void *xmodel_load(const char *filename) {
  		return NULL;
  	}
  	rm.glloaded = 0;
@@ -5605,7 +6269,7 @@ index d75a377..d5532e9 100644
  	int num_bitmaps = m.m_textures.m_nBitmaps;
  	for (int i = 0; i < num_bitmaps; i++) {
  		CBitmap& bm = m.m_textures.m_bitmaps[i];
-@@ -127,94 +197,602 @@ void *xmodel_load(const char *filename) {
+@@ -127,94 +200,612 @@ void *xmodel_load(const char *filename) {
  			data[j + 2] = x;
  		}
  	}
@@ -5909,7 +6573,7 @@ index d75a377..d5532e9 100644
 +			rm.part_gain[i] = clamp_gain((s / a) / (psum[i] / parea[i]));
 +	}
 +}
- 
++
 +// The game model's flat-shaded polygon colors (15-bit RGB), each once, in the order the
 +// interpreter meets them: what the models' "colour N" materials stand for.
 +#define W(p) (*(short *)(p))
@@ -6116,6 +6780,12 @@ index d75a377..d5532e9 100644
 +// toward the viewer. view is the view direction in model coordinates.
 +static void shade(render_model& rm, const float *view, float rot[][9], g3s_lrgb *light, float alpha, int parts) {
 +	float a = alpha;
++	// with the modern look, metal shines where it faces the light that reaches it from the
++	// viewer's side (scaled by that light, so it never shines in the dark)
++	float shine = 0;
++#ifdef __EMSCRIPTEN__
++	shine = d2web_option(D2WEB_OPTION_LIGHTING) ? 1.0f : 0.0f;
++#endif
 +	for (int r = 0; r < rm.nranges; r++) {
 +		range& rg = rm.ranges[r];
 +		const float *m = rot[rg.sub];
@@ -6141,6 +6811,10 @@ index d75a377..d5532e9 100644
 +			float f = fabsf(n[0] * d[0] + n[1] * d[1] + n[2] * d[2]);
 +			float l = 0.25f + 0.75f * f;
 +			float *c = rm.verts[i].color;
++			if (shine) {
++				float f2 = f * f, f4 = f2 * f2, f16 = f4 * f4 * f4 * f4;
++				l += (f16 * 0.45f + f16 * f16 * f16 * 0.35f) * shine;
++			}
 +			c[0] = l * lr;
 +			c[1] = l * lg;
 +			c[2] = l * lb;
@@ -6148,7 +6822,7 @@ index d75a377..d5532e9 100644
 +		}
 +	}
 +}
-+
+ 
 +static void xmodel_draw(render_model& rm, int mpcolor, g3s_lrgb *light, const float *view,
 +	polymodel *po, vms_angvec *anim_angles, int root) {
 +	int num_bitmaps = rm.m.m_textures.m_nBitmaps;
@@ -6246,7 +6920,7 @@ index d75a377..d5532e9 100644
  #if 0
  #define GLAPIENTRY
  #define GL_DEBUG_TYPE_ERROR               0x824C
-@@ -235,18 +813,20 @@ void gl_debug() {
+@@ -235,18 +826,20 @@ void gl_debug() {
  }
  #endif
  
@@ -6270,7 +6944,7 @@ index d75a377..d5532e9 100644
  	vpos.z *= -1;
  
  	// create 4x4 lookat matrix
-@@ -263,30 +843,55 @@ void xmodel_show_at(void *model, vms_vector *pos, vms_matrix *orient, int mpcolo
+@@ -263,30 +856,55 @@ void xmodel_show_at(void *model, vms_vector *pos, vms_matrix *orient, int mpcolo
  	for (int j = 0; j < 3; j++)
  		fm[3 * 4 + j] = -f2fl(vpos_elem[j]);
  	fm[15] = 1;
@@ -6329,7 +7003,7 @@ index d75a377..d5532e9 100644
  	if (!free_registered) {
  		atexit(xmodel_free_all);
  		free_registered = 1;
-@@ -297,12 +902,18 @@ void xmodel_load_gl_all() {
+@@ -297,12 +915,18 @@ void xmodel_load_gl_all() {
  	for (int i = 0; i < NUM_XMODELS; i++)
  		if (xmodels[i])
  			xmodel_load_gl(xmodels[i]);
@@ -6348,7 +7022,7 @@ index d75a377..d5532e9 100644
  }
  
  static int xmodel_xlate(enum xmodel_type mt, int modelnum) {
-@@ -315,14 +926,48 @@ static int xmodel_xlate(enum xmodel_type mt, int modelnum) {
+@@ -315,14 +939,48 @@ static int xmodel_xlate(enum xmodel_type mt, int modelnum) {
  
  // returns 1 if drawn
  int xmodel_show_if_loaded(enum xmodel_type mt, int modelnum, vms_vector *pos, vms_matrix *orient, int mpcolor, g3s_lrgb *light) {
