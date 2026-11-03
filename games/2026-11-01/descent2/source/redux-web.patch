@@ -98,7 +98,7 @@ index c5cca0b..c0e7162 100644
  	ogl_init_prog();
  #endif
 diff --git a/d2/arch/ogl/ogl.c b/d2/arch/ogl/ogl.c
-index c536c46..64cc5aa 100644
+index c536c46..58786e5 100644
 --- a/d2/arch/ogl/ogl.c
 +++ b/d2/arch/ogl/ogl.c
 @@ -10,7 +10,13 @@
@@ -135,7 +135,14 @@ index c536c46..64cc5aa 100644
  int ogl_rgba_internalformat = GL_RGBA;
  int ogl_rgb_internalformat = GL_RGB;
  #else
-@@ -149,6 +159,11 @@ void ogl_init_texture(ogl_texture* t, int w, int h, int flags)
+@@ -143,12 +153,18 @@ void ogl_init_texture_stats(ogl_texture* t){
+ void ogl_init_texture(ogl_texture* t, int w, int h, int flags)
+ {
+ 	t->handle = 0;
++	t->nmap = t->gmap = t->emap = 0;
+ #ifndef OGLES
+ 	if (flags & OGL_FLAG_NOCOLOR)
+ 	{
  		// use GL_INTENSITY instead of GL_RGB
  		if (flags & OGL_FLAG_ALPHA)
  		{
@@ -147,7 +154,7 @@ index c536c46..64cc5aa 100644
  			if (GameArg.DbgGlIntensity4Ok)
  			{
  				t->internalformat = GL_INTENSITY4;
-@@ -169,6 +184,7 @@ void ogl_init_texture(ogl_texture* t, int w, int h, int flags)
+@@ -169,6 +185,7 @@ void ogl_init_texture(ogl_texture* t, int w, int h, int flags)
  				t->internalformat = ogl_rgba_internalformat;
  				t->format = GL_RGBA;
  			}
@@ -155,7 +162,7 @@ index c536c46..64cc5aa 100644
  		}
  		else
  		{
-@@ -773,6 +789,7 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
+@@ -773,6 +790,7 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
  	int c, index2, index3, index4;
  	GLfloat vertex_array[MAX_VERTS * 3], color_array[MAX_VERTS * 4], texcoord_array[MAX_VERTS * 2];
  	GLfloat color_alpha = 1.0;
@@ -163,7 +170,7 @@ index c536c46..64cc5aa 100644
  
  	if (nv > MAX_VERTS)
  		Error("Too many vertices: %d", nv);
-@@ -785,6 +802,7 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
+@@ -785,6 +803,7 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
  		OGL_ENABLE(TEXTURE_2D);
  		ogl_bindbmtex(bm);
  		ogl_texwrap(bm->gltexture, GL_REPEAT);
@@ -171,7 +178,7 @@ index c536c46..64cc5aa 100644
  		r_tpolyc++;
  		color_alpha = (grd_curcanv->cv_fade_level >= GR_FADE_OFF)?1.0:(1.0 - (float)grd_curcanv->cv_fade_level / ((float)GR_FADE_LEVELS - 1.0));
  	} else if (tmap_drawer_ptr == draw_tmap_flat) {
-@@ -827,6 +845,8 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
+@@ -827,6 +846,8 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
  	}
  	
  	glDrawArrays(GL_TRIANGLE_FAN, 0, nv);
@@ -180,7 +187,7 @@ index c536c46..64cc5aa 100644
  	
  	glDisableClientState(GL_VERTEX_ARRAY);
  	glDisableClientState(GL_COLOR_ARRAY);
-@@ -920,7 +940,11 @@ bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_
+@@ -920,7 +941,11 @@ bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_
  	glVertexPointer(3, GL_FLOAT, 0, vertex_array);
  	glColorPointer(4, GL_FLOAT, 0, color_array);
  	glTexCoordPointer(2, GL_FLOAT, 0, texcoordovl_array);
@@ -193,7 +200,7 @@ index c536c46..64cc5aa 100644
  	glDisableClientState(GL_VERTEX_ARRAY);
  	glDisableClientState(GL_COLOR_ARRAY);
  	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-@@ -952,6 +976,8 @@ bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_
+@@ -952,6 +977,8 @@ bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_
  /*
   * 2d Sprites (Fireaballs, powerups, explosions). NOT hostages
   */
@@ -202,7 +209,7 @@ index c536c46..64cc5aa 100644
  bool g3_draw_bitmap_full(vms_vector *pos,fix width,fix height,grs_bitmap *bm,
  	GLfloat r, GLfloat g, GLfloat b)
  {
-@@ -1014,7 +1040,12 @@ bool g3_draw_bitmap_full(vms_vector *pos,fix width,fix height,grs_bitmap *bm,
+@@ -1014,7 +1041,12 @@ bool g3_draw_bitmap_full(vms_vector *pos,fix width,fix height,grs_bitmap *bm,
  	glVertexPointer(3, GL_FLOAT, 0, vertex_array);
  	glColorPointer(4, GL_FLOAT, 0, color_array);
  	glTexCoordPointer(2, GL_FLOAT, 0, texcoord_array);  
@@ -216,7 +223,7 @@ index c536c46..64cc5aa 100644
  	glDisableClientState(GL_VERTEX_ARRAY);
  	glDisableClientState(GL_COLOR_ARRAY);
  	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-@@ -1093,7 +1124,11 @@ bool ogl_ubitblt_i(int dw,int dh,int dx,int dy, int sw, int sh, int sx, int sy,
+@@ -1093,7 +1125,11 @@ bool ogl_ubitblt_i(int dw,int dh,int dx,int dy, int sw, int sh, int sx, int sy,
  	glVertexPointer(2, GL_FLOAT, 0, vertex_array);
  	glColorPointer(4, GL_FLOAT, 0, color_array);
  	glTexCoordPointer(2, GL_FLOAT, 0, texcoord_array);  
@@ -228,7 +235,7 @@ index c536c46..64cc5aa 100644
  
  	glDisableClientState(GL_VERTEX_ARRAY);
  	glDisableClientState(GL_COLOR_ARRAY);
-@@ -1146,7 +1181,12 @@ void ogl_start_frame(void){
+@@ -1146,7 +1182,12 @@ void ogl_start_frame(void){
  
  	r_polyc=0;r_tpolyc=0;r_bitmapc=0;r_ubitbltc=0;r_upixelc=0;
  
@@ -242,7 +249,7 @@ index c536c46..64cc5aa 100644
  	glClearColor(0.0, 0.0, 0.0, 0.0);
  
  	glLineWidth(linedotscale);
-@@ -1256,7 +1296,7 @@ void ogl_init_pixel_buffers(int w, int h)
+@@ -1256,7 +1297,7 @@ void ogl_init_pixel_buffers(int w, int h)
  
  	if (texbuf)
  		d_free(texbuf);
@@ -251,7 +258,7 @@ index c536c46..64cc5aa 100644
  
  	if ((pixels == NULL) || (texbuf == NULL))
  		Error("Not enough memory for current resolution");
-@@ -1272,7 +1312,7 @@ void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width
+@@ -1272,7 +1313,7 @@ void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width
  {
  	int x,y,c,i;
  
@@ -260,7 +267,7 @@ index c536c46..64cc5aa 100644
  		Error("Texture is too big: %ix%i", width, height);
  
  	if (data_format) { // true color bitmap?
-@@ -1644,6 +1684,211 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
+@@ -1644,6 +1685,247 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
  }
  #endif
  
@@ -420,6 +427,42 @@ index c536c46..64cc5aa 100644
 +	return read_png(filename, pdata);
 +}
 +
++#ifdef __EMSCRIPTEN__
++// Material maps beside a texture in the extra-sharp pack, for the per-pixel walls: ultra/<name>_n.jpg (normal),
++// _g.jpg (gloss in green, metal in red), _e.jpg (glow).
++static GLuint load_material_map(const char *name, const char *suffix)
++{
++	char filename[80];
++	png_data p;
++	GLuint t = 0;
++
++	snprintf(filename, sizeof(filename), "ultra/%s_%s.jpg", name, suffix);
++	if (!read_image_stb(filename, &p))
++		return 0;
++	glGenTextures(1, &t);
++	OGL_BINDTEXTURE(t);
++	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, p.width, p.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, p.data);
++	glGenerateMipmap(GL_TEXTURE_2D);
++	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
++	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
++	if (ogl_maxanisotropy > 1.0)
++		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, ogl_maxanisotropy);
++	free(p.data);
++	return t;
++}
++
++static void load_material_maps(ogl_texture *t, const char *name)
++{
++	if (strchr(name, '#') || d2web_gl_version() < 2 || !d2web_option(D2WEB_OPTION_ULTRA) || !d2web_option(D2WEB_OPTION_LIGHTING))
++		return;
++	t->nmap = load_material_map(name, "n");
++	t->gmap = load_material_map(name, "g");
++	t->emap = load_material_map(name, "e");
++	if (t->nmap || t->gmap || t->emap)
++		OGL_BINDTEXTURE(t->handle);
++}
++#endif
++
 +static int read_texture_png(const char *bitmapname, png_data *pdata)
 +{
 +	static char strip_name[64];
@@ -472,7 +515,7 @@ index c536c46..64cc5aa 100644
  void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  {
  	unsigned char *buf;
-@@ -1663,23 +1908,18 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+@@ -1663,23 +1945,18 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  		png_data pdata;
  
  		sprintf(filename, /*"textures/"*/ "%s.png", bitmapname);
@@ -505,7 +548,30 @@ index c536c46..64cc5aa 100644
  				#ifdef OGL_MERGE
  				if (bm->bm_flags & BM_FLAG_SUPER_TRANSPARENT)
  					ogl_loadpngmask(&pdata, bm, texfilt);
-@@ -1959,7 +2199,12 @@ bool ogl_ubitmapm_cs(int x, int y,int dw, int dh, grs_bitmap *bm,int c, int scal
+@@ -1688,6 +1965,9 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+ 				if (pdata.palette)
+ 					free(pdata.palette);
+ 				bm->gltexture->is_png = 1;
++#ifdef __EMSCRIPTEN__
++				load_material_maps(bm->gltexture, bitmapname);
++#endif
+ 				return;
+ 			}
+ 			else
+@@ -1842,6 +2122,12 @@ void ogl_loadbmtexture(grs_bitmap *bm)
+ 
+ void ogl_freetexture(ogl_texture *gltexture)
+ {
++	GLuint *maps[3] = { &gltexture->nmap, &gltexture->gmap, &gltexture->emap };
++	for (int i = 0; i < 3; i++)
++		if (*maps[i]) {
++			glDeleteTextures(1, maps[i]);
++			*maps[i] = 0;
++		}
+ 	if (gltexture->handle>0) {
+ 		r_texcount--;
+ 		glmprintf((0,"ogl_freetexture(%p):%i (%i left)\n",gltexture,gltexture->handle,r_texcount));
+@@ -1959,7 +2245,12 @@ bool ogl_ubitmapm_cs(int x, int y,int dw, int dh, grs_bitmap *bm,int c, int scal
  	glVertexPointer(2, GL_FLOAT, 0, vertex_array);
  	glColorPointer(4, GL_FLOAT, 0, color_array);
  	glTexCoordPointer(2, GL_FLOAT, 0, texcoord_array);  
@@ -518,7 +584,7 @@ index c536c46..64cc5aa 100644
  	glDisableClientState(GL_VERTEX_ARRAY);
  	glDisableClientState(GL_COLOR_ARRAY);
  	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-@@ -1976,8 +2221,10 @@ void ogl_update_window_clip()
+@@ -1976,8 +2267,10 @@ void ogl_update_window_clip()
  		Window_clip_right == cw - 1 && Window_clip_bot == ch - 1) {
  		glDisable(GL_SCISSOR_TEST);
  	} else {
@@ -3000,7 +3066,7 @@ index 8983f5c..83d4b78 100644
  	int CtlNoMouse;
  	int CtlNoJoystick;
 diff --git a/d2/include/ogl_init.h b/d2/include/ogl_init.h
-index af0b258..f17d979 100644
+index af0b258..99b034b 100644
 --- a/d2/include/ogl_init.h
 +++ b/d2/include/ogl_init.h
 @@ -11,7 +11,13 @@
@@ -3017,7 +3083,15 @@ index af0b258..f17d979 100644
  #ifdef _WIN32
  #include "loadgl.h"
  int ogl_init_load_library(void);
-@@ -79,6 +85,25 @@ extern int gl_initialized;
+@@ -64,6 +70,7 @@ typedef struct _ogl_texture {
+ 	int wrapstate;
+ 	unsigned long numrend;
+ 	int is_png;
++	GLuint nmap, gmap, emap;	// material maps beside it, for the per-pixel walls (0: none)
+ } ogl_texture;
+ 
+ extern ogl_texture* ogl_get_free_texture();
+@@ -79,6 +86,25 @@ extern int gl_initialized;
  extern int active_texture_unit;
  extern GLfloat ogl_maxanisotropy;
  
@@ -5021,10 +5095,10 @@ index 1944a8c..c7d0f7e 100644
  	PlayerCfg.SelectAfterFire = 1;  /* SelectAfterFire */
 diff --git a/d2/main/plight.c b/d2/main/plight.c
 new file mode 100644
-index 0000000..5eab839
+index 0000000..1e8f349
 --- /dev/null
 +++ b/d2/main/plight.c
-@@ -0,0 +1,701 @@
+@@ -0,0 +1,735 @@
 +/*
 + * Per-pixel lighting of the mine's walls (browser edition, WebGL 2). Walls are drawn with a
 + * shader that lights each pixel from the nearest moving lights (shots, flares, explosions,
@@ -5113,6 +5187,8 @@ index 0000000..5eab839
 +	"uniform mat4 reproj;\n"		// this view's space to last frame's
 +	"uniform vec3 hscale;\n"
 +	"uniform vec2 refl;\n"			// strength, on
++	"uniform sampler2D nmap, gmap, emap;\n"	// material maps: normal, gloss (g) and metal (r), glow
++	"uniform vec3 maps;\n"			// which of them this texture has
 +	"float hdist(vec2 uv) {\n"		// last frame's distance along its view axis, in units
 +	"	float z = texture(hdepth, uv).r * 2.0 - 1.0;\n"
 +	"	return 2.0 * 0.1 * 5000.0 / (5000.1 - z * 4999.9) / hscale.z;\n"
@@ -5160,7 +5236,11 @@ index 0000000..5eab839
 +	"	float foot = max(length(dux * texsize), length(duy * texsize));\n"
 +	"	float bump = mat.y * (1.0 - smoothstep(0.7, 2.5, foot));\n"
 +	"	vec3 Nb = N;\n"
-+	"	if (bump > 0.001) {\n"
++	"	if (maps.x > 0.5) {\n"		// a normal map: the surface's real shape (fading only far off; its mips smooth it)
++	"		vec3 n = texture(nmap, uv).xyz * 2.0 - 1.0;\n"
++	"		vec3 Nm = normalize(N * max(n.z, 0.05) + normalize(T) * n.x + normalize(B) * n.y);\n"
++	"		Nb = normalize(mix(N, Nm, (1.0 - smoothstep(2.0, 8.0, foot)) * tune[0].y / 5.0));\n"
++	"	} else if (bump > 0.001) {\n"
 +	"		vec2 tx = vec2(1.0 / texsize.x, 0.0), ty = vec2(0.0, 1.0 / texsize.y);\n"
 +	"		vec2 g = vec2(lum(texture(tex, uv + tx).rgb) - lum(texture(tex, uv - tx).rgb),\n"
 +	"			lum(texture(tex, uv + ty).rgb) - lum(texture(tex, uv - ty).rgb)) * 0.5;\n"
@@ -5168,7 +5248,12 @@ index 0000000..5eab839
 +	"	}\n"
 +	"	if (kind == 2)\n"
 +	"		Nb = normalize(Nb - (T * rip.x + B * rip.y) * ts * 0.05);\n"
-+	"	float gloss = kind == 2 ? 0.85 : mat.z;\n"
++	"	float gloss = kind == 2 ? 0.85 : mat.z, metal = 0.0;\n"
++	"	if (maps.y > 0.5 && kind != 2) {\n"
++	"		vec2 gm = texture(gmap, uv).gr;\n"
++	"		gloss = gm.x;\n"
++	"		metal = gm.y;\n"
++	"	}\n"
 +	"	float shin = mix(10.0, 48.0, gloss);\n"
 +	"	vec3 base = v_color.rgb;\n"
 +	"	float lit = min(lum(base) * 2.0, 1.0);\n"
@@ -5217,10 +5302,13 @@ index 0000000..5eab839
 +	"		spec += vec3(h) * pow(max(dot(Nb, normalize(L + V)), 0.0), shin) * gloss * 0.5;\n"
 +	"	}\n"
 +	"	vec3 light = min(base * relief * shade + dyn, vec3(tune[1].z));\n"
-+	"	vec3 rgb = c.rgb * light + spec * mix(vec3(1.0), c.rgb * 1.6, 0.5);\n"
-+	// a lamp's bright parts give light: they glow
++	"	vec3 rgb = c.rgb * light * (1.0 - metal * 0.4) + spec * mix(vec3(1.0), c.rgb * 1.6, mix(0.5, 1.0, metal));\n"	// metal tints its shine
++	// a lamp's bright parts give light: they glow (or what its glow map says)
 +	"	float m = max(max(c.r, c.g), c.b);\n"
-+	"	rgb += c.rgb * smoothstep(0.55, 0.95, m) * mat.x * tune[1].y;\n"
++	"	if (maps.z > 0.5)\n"
++	"		rgb += texture(emap, uv).rgb * tune[1].y * 1.5;\n"
++	"	else\n"
++	"		rgb += c.rgb * smoothstep(0.55, 0.95, m) * mat.x * tune[1].y;\n"
 +	// reflections: march the reflected ray through last frame's view until it passes behind
 +	// what was seen there; shiny surfaces take that color, more at grazing angles
 +	"	if (refl.y > 0.5 && gloss > 0.4) {\n"	// smooth metal and water, not rock
@@ -5262,7 +5350,7 @@ index 0000000..5eab839
 +static struct {
 +	int tried;
 +	GLuint prog;
-+	GLint pools, time, refl, reproj, hscale, tune, unscale, mat, texsize, nlights, lpos, lcol, headpos, headdir, nlamps, lamppos, lampcol;
++	GLint pools, time, refl, reproj, hscale, tune, unscale, mat, texsize, nlights, lpos, lcol, headpos, headdir, nlamps, lamppos, lampcol, maps;
 +} W;
 +
 +typedef struct lamp {
@@ -5311,6 +5399,10 @@ index 0000000..5eab839
 +		W.hscale = glGetUniformLocation(p, "hscale");
 +		glUniform1i(glGetUniformLocation(p, "hcolor"), 1);
 +		glUniform1i(glGetUniformLocation(p, "hdepth"), 2);
++		glUniform1i(glGetUniformLocation(p, "nmap"), 3);
++		glUniform1i(glGetUniformLocation(p, "gmap"), 4);
++		glUniform1i(glGetUniformLocation(p, "emap"), 5);
++		W.maps = glGetUniformLocation(p, "maps");
 +		W.unscale = glGetUniformLocation(p, "unscale");
 +		W.mat = glGetUniformLocation(p, "mat");
 +		W.texsize = glGetUniformLocation(p, "texsize");
@@ -5659,6 +5751,22 @@ index 0000000..5eab839
 +		glUniform4f(W.mat, 0, 0, 0, kind);
 +	glUniform1f(W.pools, Face.lit ? 1 : 0);
 +	glUniform2f(W.texsize, bm->gltexture->tw, bm->gltexture->th);
++	{	// material maps (merged with its overlay: the base texture's, which share its uvs)
++		ogl_texture *t = bm->gltexture;
++		grs_bitmap *base = &GameBitmaps[Textures[Face.tmap1].index];
++		if (!overlay && Face.tmap2 && bm != base && base->gltexture)
++			t = base->gltexture;
++		glUniform3f(W.maps, t->nmap ? 1 : 0, t->gmap ? 1 : 0, t->emap ? 1 : 0);
++		if (t->nmap || t->gmap || t->emap) {
++			glActiveTexture(GL_TEXTURE3);
++			glBindTexture(GL_TEXTURE_2D, t->nmap);
++			glActiveTexture(GL_TEXTURE4);
++			glBindTexture(GL_TEXTURE_2D, t->gmap);
++			glActiveTexture(GL_TEXTURE5);
++			glBindTexture(GL_TEXTURE_2D, t->emap);
++			glActiveTexture(GL_TEXTURE0);
++		}
++	}
 +	return 1;
 +}
 +
