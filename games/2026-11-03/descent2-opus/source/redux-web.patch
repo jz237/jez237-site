@@ -3266,7 +3266,7 @@ index fdb2e78..4186519 100644
  			expl_obj = object_create_explosion( weapon->segnum, collision_point, (robot->size/2*3)/4, Robot_info[robot->id].exp1_vclip_num );
  		else if ( Weapon_info[weapon->id].robot_hit_vclip > -1 )
 diff --git a/d2/main/fireball.c b/d2/main/fireball.c
-index fe9b0d1..4cbbd67 100644
+index fe9b0d1..73b73a7 100644
 --- a/d2/main/fireball.c
 +++ b/d2/main/fireball.c
 @@ -31,6 +31,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
@@ -3277,7 +3277,18 @@ index fe9b0d1..4cbbd67 100644
  #include "polyobj.h"
  #include "sounds.h"
  #include "player.h"
-@@ -1355,6 +1356,7 @@ void do_explosion_sequence(object *obj)
+@@ -441,6 +442,10 @@ object *object_create_debris(object *parent, int subobj_num)
+ 
+ void draw_fireball(object *obj)
+ {
++	// Opus: the modern explosions (fx.c) take the place of the flat fireball sprites; the fireball objects
++	// still light the room. The robot-making sparkle stays.
++	if (obj->control_type == CT_EXPLOSION && obj->id != VCLIP_MORPHING_ROBOT && fx_replaces_fireballs())
++		return;
+ 	if ( obj->lifeleft > 0 )
+ 		draw_vclip_object(obj,obj->lifeleft,0, obj->id);
+ 
+@@ -1355,6 +1360,7 @@ void do_explosion_sequence(object *obj)
  			expl_obj = object_create_badass_explosion( del_obj, del_obj->segnum, spawn_pos, fixmul(del_obj->size, EXPLOSION_SCALE), vclip_num, F1_0*Robot_info[del_obj->id].badass, i2f(4)*Robot_info[del_obj->id].badass, i2f(35)*Robot_info[del_obj->id].badass, -1 );
  		else
  			expl_obj = object_create_explosion( del_obj->segnum, spawn_pos, fixmul(del_obj->size, EXPLOSION_SCALE), vclip_num );
@@ -3287,10 +3298,10 @@ index fe9b0d1..4cbbd67 100644
  			//	If dropping a weapon that the player has, drop energy instead, unless it's vulcan, in which case drop vulcan ammo.
 diff --git a/d2/main/fx.c b/d2/main/fx.c
 new file mode 100644
-index 0000000..f3eebb0
+index 0000000..c5bc9c8
 --- /dev/null
 +++ b/d2/main/fx.c
-@@ -0,0 +1,1170 @@
+@@ -0,0 +1,1206 @@
 +/*
 + * Light halos, smoke and sparks (browser edition).
 + *
@@ -3357,6 +3368,11 @@ index 0000000..f3eebb0
 +#else
 +	return 0;
 +#endif
++}
++
++int fx_replaces_fireballs(void)
++{
++	return boom_enabled();
 +}
 +
 +static unsigned fx_seed = 0x2545f491;
@@ -3516,8 +3532,8 @@ index 0000000..f3eebb0
 +		for (int k = 0; k < 3; k++)
 +			q->vel[k] = d[k] * s * (0.6f + 0.9f * frand());
 +		q->drag = 3.0f;
-+		q->size = s * (0.12f + 0.1f * frand());
-+		q->grow = s * (0.5f + 0.35f * frand());
++		q->size = s * (0.1f + 0.1f * frand());
++		q->grow = s * (0.3f + 0.3f * frand());
 +		q->life = life * (0.65f + 0.5f * frand());
 +		q->angle = frand() * 6.283f;
 +		q->spin = (frand() - 0.5f) * 2.5f;
@@ -3609,27 +3625,27 @@ index 0000000..f3eebb0
 +static void blast(const float *p, float s)
 +{
 +	float flash[3] = { 1.6f, 1.4f, 1.1f }, core[3] = { 1.5f, 1.0f, 0.55f };
-+	int n = (int)(6 + s * 0.5f);
++	int n = (int)(7 + s * 0.5f);
 +	glow(p, s * 1.5f, 0.1f, flash, 0.4f);
 +	glow(p, s * 0.7f, 0.35f, core, 0.35f);
-+	fire_puffs(p, s, n > 14 ? 14 : n, 0.8f + s * 0.025f, 0);
-+	fire_puffs(p, s * 1.25f, n > 14 ? 7 : n / 2, 0.9f + s * 0.03f, 0.12f);	// the billows after
++	fire_puffs(p, s, n > 16 ? 16 : n, 1.1f + s * 0.03f, 0);
++	fire_puffs(p, s * 1.15f, n > 16 ? 8 : n / 2, 1.3f + s * 0.035f, 0.16f);	// the billows after
 +	shockwave(p, s);
 +	n = (int)(5 + s * 0.6f);
 +	debris(p, s, n > 14 ? 14 : n);
 +	n = (int)(8 + s * 1.5f);
 +	embers(p, s, n > 30 ? 30 : n);
 +	if (fx_enabled())
-+		for (int i = 0; i < 5; i++) {
++		for (int i = 0; i < 8; i++) {
 +			float d[3], at[3];
 +			particle *q;
 +			rand_dir(d);
 +			madd(at, p, d, s * 0.3f);
 +			for (int k = 0; k < 3; k++)
 +				d[k] *= s * 0.25f;
-+			smoke(at, d, s * 0.4f, s * 0.3f, 3.5f + frand() * 1.5f, 0.34f, 0.8f, -1);
++			smoke(at, d, s * 0.45f, s * 0.35f, 4.0f + frand() * 1.5f, 0.2f, 0.95f, -1);
 +			q = &particles[n_particles - 1];
-+			q->age = -(0.25f + 0.2f * frand());	// rises out of the fire as it dies down
++			q->age = -(0.1f + 0.15f * frand());	// rolls up through the fire, darkening it
 +		}
 +}
 +
@@ -4088,20 +4104,47 @@ index 0000000..f3eebb0
 +
 +enum { TEX_GLOW, TEX_SMOKE, TEX_FIRE, TEX_RING, TEX_CHUNK, TEX_SCORCH };
 +
++// layered value noise (0..1), for fire and smoke that look like they have depth
++static float lattice(int x, int y, int seed)
++{
++	unsigned h = (unsigned)(x * 374761393 + y * 668265263 + seed * 2147483647u);
++	h = (h ^ (h >> 13)) * 1274126177u;
++	return ((h ^ (h >> 16)) & 0xffff) / 65535.0f;
++}
++static float vnoise2(float x, float y, int seed)
++{
++	int ix = (int)floorf(x), iy = (int)floorf(y);
++	float fx = x - ix, fy = y - iy;
++	fx = fx * fx * (3 - 2 * fx);
++	fy = fy * fy * (3 - 2 * fy);
++	float a = lattice(ix, iy, seed), b = lattice(ix + 1, iy, seed), c = lattice(ix, iy + 1, seed), d = lattice(ix + 1, iy + 1, seed);
++	return (a + (b - a) * fx) * (1 - fy) + (c + (d - c) * fx) * fy;
++}
++static float fbm(float x, float y, int seed)
++{
++	float v = 0, amp = 0.5f, tot = 0;
++	for (int o = 0; o < 5; o++, x *= 2.03f, y *= 2.03f, amp *= 0.5f) {
++		v += vnoise2(x, y, seed + o * 17) * amp;
++		tot += amp;
++	}
++	return v / tot;
++}
++
 +static GLuint make_texture(int kind)
 +{
-+	static unsigned char img[64 * 64 * 4];
++	static unsigned char img[256 * 256 * 4];
++	int S = kind == TEX_FIRE || kind == TEX_SMOKE ? 256 : 64;
 +	GLuint t;
-+	for (int y = 0; y < 64; y++)
-+		for (int x = 0; x < 64; x++) {
-+			float dx = (x + 0.5f) / 32 - 1, dy = (y + 0.5f) / 32 - 1, r = sqrtf(dx * dx + dy * dy), a, shade = 1;
++	for (int y = 0; y < S; y++)
++		for (int x = 0; x < S; x++) {
++			float dx = (x + 0.5f) / (S / 2) - 1, dy = (y + 0.5f) / (S / 2) - 1, r = sqrtf(dx * dx + dy * dy), a, shade = 1;
 +			float th = atan2f(dy, dx);
 +			if (kind == TEX_FIRE) {
-+				// a turbulent ball of flame, densest in the middle
-+				float n = 0.5f + 0.22f * sinf(dx * 9.3f + 0.7f) * sinf(dy * 8.1f + 2.2f)
-+					+ 0.16f * sinf((dx + dy) * 17.9f + 1.1f) * sinf((dx - dy) * 15.3f)
-+					+ 0.1f * sinf(th * 7 + r * 9);
-+				a = smooth(1.0f, 0.1f, r + (n - 0.5f) * 0.5f) * (0.6f + 0.5f * n);
++				// a turbulent ball of flame: ragged licks at the edge, dark wisps of soot inside
++				float n = fbm(dx * 2.6f + 7.1f, dy * 2.6f + 3.3f, 11);
++				float w = fbm(dx * 5.3f + 1.7f, dy * 5.3f + 9.2f, 29);
++				a = smooth(1.0f, 0.12f, r + (n - 0.5f) * 1.1f) * (0.45f + 0.9f * n);
++				shade = 0.45f + 0.75f * smooth(0.25f, 0.75f, w) * (1 - 0.35f * r);
 +			} else if (kind == TEX_RING) {
 +				float q = (r - 0.72f) / 0.13f;
 +				a = expf(-q * q) * smooth(1.0f, 0.9f, r) * (0.8f + 0.2f * sinf(th * 11));
@@ -4115,24 +4158,26 @@ index 0000000..f3eebb0
 +				float n = 0.5f + 0.25f * sinf(th * 9 + 0.4f) * sinf(r * 13) + 0.2f * sinf(th * 23 + 1.7f);
 +				a = smooth(1.0f, 0.25f, r + (n - 0.5f) * 0.35f) * (0.75f + 0.25f * n);
 +			} else if (kind == TEX_SMOKE) {
-+				// a soft puff with some billows
-+				float n = 0.5f + 0.25f * sinf(dx * 7.1f + 1.3f) * sinf(dy * 6.3f + 0.4f)
-+					+ 0.15f * sinf((dx + dy) * 12.7f) * sinf((dx - dy) * 11.3f + 2.1f);
-+				a = smooth(1.0f, 0.25f, r) * (0.55f + 0.6f * n);
++				// a billowing puff, lit from above: rounded lumps, brighter tops, darker undersides
++				float n = fbm(dx * 2.2f + 4.4f, dy * 2.2f + 8.8f, 43);
++				float b = fbm(dx * 4.5f + 2.5f, dy * 4.5f + 6.1f, 61);
++				a = smooth(1.0f, 0.2f, r + (n - 0.5f) * 0.9f) * (0.35f + 0.95f * n);
++				shade = 0.5f + 0.35f * (0.5f - dy * 0.5f) + 0.3f * (b - 0.5f);
 +			} else
 +				a = expf(-r * r * 5.5f) * smooth(1.0f, 0.7f, r);	// a glow that fades to nothing at the edge
 +			a = a < 0 ? 0 : a > 1 ? 1 : a;
 +			shade = shade < 0 ? 0 : shade > 1 ? 1 : shade;
-+			img[(y * 64 + x) * 4] = img[(y * 64 + x) * 4 + 1] = img[(y * 64 + x) * 4 + 2] = (unsigned char)(shade * 255);
-+			img[(y * 64 + x) * 4 + 3] = (unsigned char)(a * 255);
++			img[(y * S + x) * 4] = img[(y * S + x) * 4 + 1] = img[(y * S + x) * 4 + 2] = (unsigned char)(shade * 255);
++			img[(y * S + x) * 4 + 3] = (unsigned char)(a * 255);
 +		}
 +	glGenTextures(1, &t);
 +	glBindTexture(GL_TEXTURE_2D, t);
-+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
++	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, S, S, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
++	glGenerateMipmap(GL_TEXTURE_2D);
++	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 +	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 +	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 +	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 64, 64, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
 +	return t;
 +}
 +
@@ -4373,6 +4418,8 @@ index 0000000..f3eebb0
 +		if (p->kind != FX_FIRE || p->age < 0)
 +			continue;
 +		fire_color(p->age / p->life, c);
++		for (int k = 0; k < 3; k++)
++			c[k] *= 0.5f;	// overlapping puffs add up: dimmer each, so they keep their shape
 +		billboard(p->pos, p->size, p->angle, c, 1);
 +	}
 +	batch_begin(&ring_tex, 1);
@@ -4463,10 +4510,10 @@ index 0000000..f3eebb0
 +}
 diff --git a/d2/main/fx.h b/d2/main/fx.h
 new file mode 100644
-index 0000000..a3e0ddd
+index 0000000..95c2052
 --- /dev/null
 +++ b/d2/main/fx.h
-@@ -0,0 +1,18 @@
+@@ -0,0 +1,19 @@
 +/*
 + * Light halos, smoke and sparks (browser edition). Purely visual: nothing here feeds back
 + * into the game.
@@ -4482,7 +4529,8 @@ index 0000000..a3e0ddd
 +void fx_render(void);								// draws the effects into the 3D view being rendered
 +void fx_impact(object *weapon, int segnum, int sidenum, vms_vector *pos);	// a shot hits a wall
 +void fx_hit(object *weapon, vms_vector *pos);		// a shot hits a robot
-+void fx_explosion(vms_vector *pos, int segnum, fix size);	// a robot, player or reactor blows up
++void fx_explosion(vms_vector *pos, int segnum, fix size);
++int fx_replaces_fireballs(void);	// explosions are drawn here instead of as the game's flat fireball sprites	// a robot, player or reactor blows up
 +
 +#endif
 diff --git a/d2/main/game.c b/d2/main/game.c
