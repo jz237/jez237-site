@@ -4229,6 +4229,42 @@ index f15d413..4758a33 100644
  
  	//if the player is taking damage, give up guided missile control
  	if (Players[Player_num].shields != player_shields)
+diff --git a/d2/main/gameseq.c b/d2/main/gameseq.c
+index 30de489..d8dd364 100644
+--- a/d2/main/gameseq.c
++++ b/d2/main/gameseq.c
+@@ -828,6 +828,8 @@ void InitPlayerObject()
+ 
+ extern void init_seismic_disturbances(void);
+ 
++static int Skip_level_intro;	// -notitles: a new game starts without the opening movie and briefing
++
+ //starts a new game on the given level
+ void StartNewGame(int start_level)
+ {
+@@ -843,10 +845,12 @@ void StartNewGame(int start_level)
+ 
+ 	N_players = 1;
+ 
++	Skip_level_intro = GameArg.SysNoTitles;
+ 	if (start_level < 0)
+ 		StartNewLevelSecret(start_level, 0);
+ 	else
+ 		StartNewLevel(start_level);
++	Skip_level_intro = 0;
+ 
+ 	Players[Player_num].starting_level = start_level;		// Mark where they started
+ 
+@@ -1809,7 +1813,8 @@ void StartNewLevel(int level_num)
+ 		maybe_set_first_secret_visit(level_num);
+ 	}
+ 
+-	ShowLevelIntro(level_num);
++	if (!Skip_level_intro)
++		ShowLevelIntro(level_num);
+ 
+ 	StartNewLevelSub(level_num, 1, 0 );
+ 
 diff --git a/d2/main/inferno.c b/d2/main/inferno.c
 index dc6e44a..83c5c17 100644
 --- a/d2/main/inferno.c
