@@ -18558,5 +18558,90 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-03-factual-infographic-factual-infographic-the-deep-ocean-carb",
+    "title": "Factual infographic: The Deep Ocean Carbon Pump",
+    "tests": "; archive_slot=2026-11-03T08:20; concept=ocean-carbon-marine-snow-sinking; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: factual-infographic",
+    "prompt": "Create a finished, landscape-format, artwork-led scientific infographic entitled “THE OCEAN’S CARBON PUMP”, directly on the canvas, not a poster mockup. A luminous, richly painted vertical ocean cross-section dominates: sunlit turquoise surface and delicate microscopic phytoplankton above, fading into a vast indigo deep sea. A graceful, branching downward drift of organic marine snow is the visual spine, dissolving into tiny particles and eventually the seabed. Use exquisitely observed, plausible organisms, subtle underwater light and suspended particulate texture, fine scientific ink and translucent watercolor-like shading. Integrate a few large, legible, unboxed close-up studies within the flowing scene, joined by curved fine leader lines: surface phytoplankton using light and dissolved CO₂ to build organic carbon; a zooplankton grazer eating phytoplankton and releasing a sinking fecal pellet; a close view of a loose aggregate of marine snow; deep-sea animals feeding on falling organic matter; a modest seabed deposition vignette. Use short exact labels “Photosynthesis”, “Phytoplankton”, “Zooplankton grazing”, “Fecal pellets”, “Marine snow”, “Carbon carried downward”, “Deep-sea food”, and “Some carbon stored in deep water and sediment”. Arrows clearly show the direction of sinking, without implying that all particles reach the bottom or that all carbon is permanently stored. Build a sophisticated asymmetric composition with generous open water and breathing room, varying the scale of studies; factual annotations flow organically through the art, not a rigid grid or detached boxes. Restrained ivory typography, strong hierarchy, readable spelling, no tiny paragraphs, no URLs, no logos or watermarks.",
+    "image": "images/2026-11-03-factual-infographic-factual-infographic-the-deep-ocean-carb.jpg",
+    "thumb": "thumbs/2026-11-03-factual-infographic-factual-infographic-the-deep-ocean-carb.webp",
+    "color": "#254a57",
+    "date": "2026-11-03",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "ocean-carbon-marine-snow-sinking",
+      "imageSha256": "5fec0ba88da0cbcf038b0c0736b4e9a479bf93f7f2a7454d6ac17b106be3ede8",
+      "imageDHash": "fd733b3d2d9a6109"
+    },
+    "factualInfographic": {
+      "topic": "How sinking marine organic particles carry carbon into the deep ocean",
+      "description": "How phytoplankton, marine snow, and zooplankton pellets move organic carbon into the deep ocean and support deep-sea life.",
+      "sourceNote": "NOAA Ocean Exploration, Snowstorm Under the Sea: https://oceanexplorer.noaa.gov/expedition-feature/19gulfofalaska-logs-aug1/; NASA, Tracking Carbon from the Ocean Surface to the Twilight Zone: https://www.nasa.gov/centers-and-facilities/goddard/tracking-carbon-from-the-ocean-surface-to-the-twilight-zone/. Verified phytoplankton carbon fixation, sinking particles, zooplankton pellets, deep food and carbon transport.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-03T13:21:28.657903+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NOAA Ocean Exploration",
+            "title": "Snowstorm Under the Sea",
+            "sourceType": "government-agency",
+            "url": "https://oceanexplorer.noaa.gov/expedition-feature/19gulfofalaska-logs-aug1/"
+          },
+          {
+            "id": "S2",
+            "publisher": "NASA",
+            "title": "Tracking Carbon from the Ocean Surface to the Twilight Zone",
+            "sourceType": "government-agency",
+            "url": "https://www.nasa.gov/centers-and-facilities/goddard/tracking-carbon-from-the-ocean-surface-to-the-twilight-zone/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Sunlit phytoplankton use photosynthesis to convert carbon dioxide into organic carbon.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Phytoplankton can aggregate into sinking marine snow.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Zooplankton eat phytoplankton and produce carbon-containing fecal pellets that sink.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Sinking particles transport organic carbon from surface waters toward the deep ocean.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Marine snow provides food to deep-sea animals and seafloor organisms.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Some carbon reaches deep waters and sediments, where it can remain stored for long periods.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
