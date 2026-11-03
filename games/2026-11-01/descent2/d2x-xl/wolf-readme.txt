@@ -1,0 +1,73 @@
+"Wolf" 3D model for D2X-XL
+============================================================================================
+Author Information
+============================================================================================
+Author: MetalBeast
+Email Address: M3talB3ast@gmx.net
+
+Designed and built by Metalbeast with some helpful input from karx11erx
+Based on a design by -Joffa-
+
+============================================================================================
+File Information
+============================================================================================
+Title: Wolf
+File Name: ship-wolf.7z
+File Size: xx,x Mb
+
+==================================================================
+# Credits: #
+==================================================================
+Thx to Diedel for making D2X-XL
+
+Additional Credits: 
+- All the people at descent2.de forum.
+- Joffa for all the Ship Sketches
+- and of course to the makers of great descent games: Parallax, Interplay
+
+=========================================================================
+Installation/Setup Information
+=========================================================================
+
+-------------
+Requirements: newest D2X-XL version
+-------------
+
+-------------
+Installation: unpack the files to your d2x-xl-models folder
+-------------
+
+----------
+Problems: beta version (may contain flaws)
+----------
+============================================================================================
+Construction Information
+============================================================================================
+
+Build Time: do not know, years ? :D
+
+Known Bugs: not known
+            report any bugs to M3talB3ast@gmx.net
+
+
+############################################################################################
+
+============================================================================================
+Copyright / Permissions
+============================================================================================
+
+THIS FILE IS NOT MADE, DISTRIBUTED, OR SUPPORTED BY INTERPLAY ENTERTAINMENT 
+COMPANY OR PARALAX SOFTWARE.
+
+You MAY distribute this file, provided you include this file, with
+no modifications.  You may distribute this file in any electronic
+format (BBS, Diskette, CD, etc) as long as you include this file 
+intact, with NO charge (other than incidental charges for time spent on-line).
+
+Using any content of this file for other projects (especially comercial use) 
+is NOT ALLOWED without permission of the author(s).
+
+============================================================================================
+
+All original Descent files are copyright by Interplay & Parallax companies.
+============================================================================================

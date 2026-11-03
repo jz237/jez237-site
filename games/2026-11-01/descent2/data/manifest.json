@@ -191,6 +191,30 @@
       ]
     },
     {
+      "key": "hosted/dcdc777daaa02a56cbba885c18d242414525e900644f7b9bca990ce0f2b734ae",
+      "path": "hoard.ham",
+      "size": 172112,
+      "sha256": "dcdc777daaa02a56cbba885c18d242414525e900644f7b9bca990ce0f2b734ae",
+      "parts": [
+        {
+          "url": "data/hoard.ham.dcdc777daaa02a56.00.bin",
+          "size": 172112
+        }
+      ]
+    },
+    {
+      "key": "hosted/2b5c1f1d3c20cebbbe3d109c0ab3f3bc916c70d5b45ec4292c1d5bda54deaa42",
+      "path": "d2x-h.mvl",
+      "size": 6076634,
+      "sha256": "2b5c1f1d3c20cebbbe3d109c0ab3f3bc916c70d5b45ec4292c1d5bda54deaa42",
+      "parts": [
+        {
+          "url": "data/d2x-h.mvl.2b5c1f1d3c20cebb.00.bin",
+          "size": 6076634
+        }
+      ]
+    },
+    {
       "key": "hosted/f56f833e1026a35e8a8755987a93d5a0eb5bb12b40b8f190b9e7621ff24cead8",
       "path": "missions/d2-2plyr.hog",
       "size": 194870,
@@ -249,6 +273,54 @@
           "size": 1168217
         }
       ]
+    },
+    {
+      "key": "hosted/97a4433833ec1f2fbdd2becc144a1e9726ca78b1210a71a49ddbec6182665fe6",
+      "path": "missions/d2x.hog",
+      "size": 4371791,
+      "sha256": "97a4433833ec1f2fbdd2becc144a1e9726ca78b1210a71a49ddbec6182665fe6",
+      "parts": [
+        {
+          "url": "data/d2x.hog.97a4433833ec1f2f.00.bin",
+          "size": 4371791
+        }
+      ]
+    },
+    {
+      "key": "hosted/42d1c04c96f4dad7e8d03a6fdf342ac9ccd22672c0db5886f965638bd325764d",
+      "path": "missions/d2x.mn2",
+      "size": 408,
+      "sha256": "42d1c04c96f4dad7e8d03a6fdf342ac9ccd22672c0db5886f965638bd325764d",
+      "parts": [
+        {
+          "url": "data/d2x.mn2.42d1c04c96f4dad7.00.bin",
+          "size": 408
+        }
+      ]
+    },
+    {
+      "key": "hosted/04864cbeefcf304a89dff96232e768400b9426bad7dc0e08e7bdb971780a3cee",
+      "path": "missions/panic.hog",
+      "size": 435804,
+      "sha256": "04864cbeefcf304a89dff96232e768400b9426bad7dc0e08e7bdb971780a3cee",
+      "parts": [
+        {
+          "url": "data/panic.hog.04864cbeefcf304a.00.bin",
+          "size": 435804
+        }
+      ]
+    },
+    {
+      "key": "hosted/059c02d1632c3b706b464b1a14e5a2d7b7711e18c1be579e884158703a25ab88",
+      "path": "missions/panic.mn2",
+      "size": 174,
+      "sha256": "059c02d1632c3b706b464b1a14e5a2d7b7711e18c1be579e884158703a25ab88",
+      "parts": [
+        {
+          "url": "data/panic.mn2.059c02d1632c3b70.00.bin",
+          "size": 174
+        }
+      ]
     }
   ],
   "cdTracks": [
@@ -293,5 +365,5 @@
       "size": 6457512
     }
   ],
-  "totalBytes": 268704413
+  "totalBytes": 279761336
 }

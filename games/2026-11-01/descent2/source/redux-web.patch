@@ -45,7 +45,7 @@ index c5cca0b..c0e7162 100644
  	ogl_init_prog();
  #endif
 diff --git a/d2/arch/ogl/ogl.c b/d2/arch/ogl/ogl.c
-index c536c46..3a189c4 100644
+index c536c46..d17f458 100644
 --- a/d2/arch/ogl/ogl.c
 +++ b/d2/arch/ogl/ogl.c
 @@ -10,7 +10,13 @@
@@ -91,7 +91,7 @@ index c536c46..3a189c4 100644
  		}
  		else
  		{
-@@ -1644,6 +1656,152 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
+@@ -1644,6 +1656,174 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
  }
  #endif
  
@@ -148,6 +148,28 @@ index c536c46..3a189c4 100644
 +			double v = rgba[i * 4 + k] * gain[k];
 +			rgba[i * 4 + k] = v > 255 ? 255 : (unsigned char)v;
 +		}
++}
++
++// The bitmap's average color (0..1) as the current palette shows it (xmodel.cpp).
++void ogl_bitmap_average(grs_bitmap *bm, float *rgb)
++{
++	const unsigned char *orig;
++	double sum[3] = { 0, 0, 0 };
++	int n = 0, i, k;
++
++	rgb[0] = rgb[1] = rgb[2] = 0;
++	if (!bm || !bm->bm_data || !bm->bm_w || !bm->bm_h)
++		return;
++	orig = ogl_bitmap_indices(bm);
++	for (i = 0; i < bm->bm_w * bm->bm_h; i++)
++		if (orig[i] < 254) {
++			for (k = 0; k < 3; k++)
++				sum[k] += ogl_pal[orig[i] * 3 + k];
++			n++;
++		}
++	if (n)
++		for (k = 0; k < 3; k++)
++			rgb[k] = sum[k] / n / 63;
 +}
 +
 +// For replacements of model textures (xmodel.cpp): match the game bitmap's colors.
@@ -244,7 +266,7 @@ index c536c46..3a189c4 100644
  void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  {
  	unsigned char *buf;
-@@ -1663,23 +1821,18 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+@@ -1663,23 +1843,18 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  		png_data pdata;
  
  		sprintf(filename, /*"textures/"*/ "%s.png", bitmapname);
@@ -1966,7 +1988,7 @@ index a6ab6fd..c789b14 100644
  
  
 diff --git a/d2/xmodel/ase.h b/d2/xmodel/ase.h
-index 11220f8..634f584 100644
+index 11220f8..73625f1 100644
 --- a/d2/xmodel/ase.h
 +++ b/d2/xmodel/ase.h
 @@ -25,7 +25,7 @@ class CFace {
@@ -1978,7 +2000,16 @@ index 11220f8..634f584 100644
  };
  
  class CSubModel {
-@@ -110,10 +110,11 @@ class CModel {
+@@ -89,6 +89,8 @@ class CModel {
+ 		int32_t					m_nVerts;
+ 		int32_t					m_nFaces;
+ 		int32_t					m_bCustom;
++		// per bitmap: -2 a texture; a flat color: N for a material named "colour N", else -1
++		int8_t					m_nFlat [64];
+ 
+ 	public:
+ 		CModel () { Init (); }
+@@ -110,10 +112,11 @@ class CModel {
  	private:
  		int32_t ReadTexture (CFile& cf, int32_t nBitmap);
  		int32_t ReadOpacity (CFile& cf, int32_t nBitmap);
@@ -1992,7 +2023,7 @@ index 11220f8..634f584 100644
  	};
  
 diff --git a/d2/xmodel/aseread.cpp b/d2/xmodel/aseread.cpp
-index 19cad13..7b42ad8 100644
+index 19cad13..a17dc91 100644
 --- a/d2/xmodel/aseread.cpp
 +++ b/d2/xmodel/aseread.cpp
 @@ -310,14 +310,12 @@ while ((pszToken = ReadLine (cf))) {
@@ -2016,7 +2047,15 @@ index 19cad13..7b42ad8 100644
  		}
  	}
  return CModel::Error ("unexpected end of file");
-@@ -699,38 +697,92 @@ return CModel::Error ("unexpected end of file");
+@@ -600,6 +598,7 @@ m_nModel = -1;
+ m_nSubModels = 0;
+ m_nVerts = 0;
+ m_nFaces = 0;
++memset (m_nFlat, -2, sizeof (m_nFlat));
+ }
+ 
+ //------------------------------------------------------------------------------
+@@ -699,38 +698,98 @@ return CModel::Error ("unexpected end of file");
  
  //------------------------------------------------------------------------------
  
@@ -2048,7 +2087,10 @@ index 19cad13..7b42ad8 100644
 +	}
 +return CModel::Error ("unexpected end of file");
 +}
-+
+ 
+-i = IntTok (" \t");
+-if ((i < 0) || (i >= m_textures.m_nBitmaps))
+-	return CModel::Error ("invalid bitmap number");
 +// a material without a texture is drawn in its diffuse color: a 1x1 bitmap of that color
 +static void SetFlatColor (CBitmap *pBm, const float *color)
 +{
@@ -2065,12 +2107,9 @@ index 19cad13..7b42ad8 100644
 +// bitmap of its sub-materials (nSubs of them) or -1 on error.
 +int32_t CModel::ReadMaterial (CFile& cf, int32_t& nSubs)
 +{
-+	int32_t	nBitmap = -1, nFirst = -1;
++	int32_t	nBitmap = -1, nFirst = -1, nColour = -1;
 +	float		color [3] = {1, 1, 1};
- 
--i = IntTok (" \t");
--if ((i < 0) || (i >= m_textures.m_nBitmaps))
--	return CModel::Error ("invalid bitmap number");
++
 +nSubs = 0;
  if (CharTok (" \t") != '{')
 -	return CModel::Error ("syntax error");
@@ -2093,19 +2132,25 @@ index 19cad13..7b42ad8 100644
 +			if (nUsedBitmaps >= MAX_ASE_BITMAPS)
 +				return CModel::Error ("too many materials"), -1;
 +			SetFlatColor (m_textures.m_bitmaps + (nBitmap = nUsedBitmaps++), color);
++			m_nFlat [nBitmap] = nColour;
 +			}
 +		return nBitmap;
  		}
 -	else if (!strcmp (pszToken, "*MAP_DIFFUSE")) {
 -		if (!ReadTexture (cf, i))
 -			return CModel::Error (NULL);
-+	if (!strcmp (pszToken, "*MATERIAL_DIFFUSE")) {
-+		for (int32_t i = 0; i < 3; i++)
-+			color [i] = FloatTok (" \t");
++	if (!strcmp (pszToken, "*MATERIAL_NAME")) {	// "colour N": the model's Nth flat color (xmodel.cpp)
++		const char *pszName = StrTok ("\"");
++		if (!strncmp (pszName, "COLOUR ", 7))
++			nColour = atoi (pszName + 7);
  		}
 -	else if (!strcmp (pszToken, "*MAP_OPACITY")) {
 -		if (!ReadOpacity (cf, i))
 -			return CModel::Error (NULL);
++	else if (!strcmp (pszToken, "*MATERIAL_DIFFUSE")) {
++		for (int32_t i = 0; i < 3; i++)
++			color [i] = FloatTok (" \t");
++		}
 +	else if ((!strcmp (pszToken, "*MAP_DIFFUSE") || !strcmp (pszToken, "*MAP_GENERIC")) && (nBitmap < 0)) {
 +		if (nUsedBitmaps >= MAX_ASE_BITMAPS)
 +			return CModel::Error ("too many materials"), -1;
@@ -2133,7 +2178,7 @@ index 19cad13..7b42ad8 100644
  }
  
  //------------------------------------------------------------------------------
-@@ -743,26 +795,47 @@ if (!(pszToken = ReadLine (cf)))
+@@ -743,26 +802,47 @@ if (!(pszToken = ReadLine (cf)))
  	return CModel::Error ("unexpected end of file");
  if (strcmp (pszToken, "*MATERIAL_COUNT"))
  	return CModel::Error ("material count missing");
@@ -2189,7 +2234,7 @@ index 19cad13..7b42ad8 100644
  //------------------------------------------------------------------------------
  
  int32_t CModel::ReadSubModel (CFile& cf)
-@@ -860,6 +933,7 @@ if (!nResult)
+@@ -860,6 +940,7 @@ if (!nResult)
  	Destroy ();
  else {
  	LinkSubModels ();
@@ -2314,7 +2359,7 @@ index c53598c..97f0161 100644
  		return true;
  	}
 diff --git a/d2/xmodel/xmodel.cpp b/d2/xmodel/xmodel.cpp
-index d75a377..8c2747f 100644
+index d75a377..e65b9fc 100644
 --- a/d2/xmodel/xmodel.cpp
 +++ b/d2/xmodel/xmodel.cpp
 @@ -1,5 +1,6 @@
@@ -2324,13 +2369,15 @@ index d75a377..8c2747f 100644
  #include <SDL.h>
  
  #include "xdescent.h"
-@@ -17,28 +18,48 @@ extern "C" {
+@@ -17,28 +18,67 @@ extern "C" {
  #undef FILENAME_LEN
  #include "polyobj.h"
  #include "texmap.h"
 +#include "console.h"
 +#include "piggy.h"
 +#include "bm.h"
++#include "vclip.h"
++#include "effects.h"
  }
  
  struct CGameFolders gameFolders;
@@ -2340,8 +2387,21 @@ index d75a377..8c2747f 100644
  struct vert {
  	CFloatVector3 pos;
  	tTexCoord2f tex;
-+	uint8_t color[4];	// shading, worked out again for each draw
++	float color[4];		// shading, worked out again for each draw: floats, since the game's
++				// model light goes above 1 in bright places and the GL emulation keeps it
 +};
++
++// A texture the game animates on the model (a boss's pulsing skin: an effect's
++// changing_object_texture): all its frames, shown as the game shows them
++struct anim_tex {
++	int bitmap;		// the model bitmap it stands for
++	int objbm;		// the ObjBitmaps entry the game animates
++	int nframes;
++	unsigned short game[VCLIP_MAX_FRAMES];	// the game's bitmap for each frame
++	CBitmap frames[VCLIP_MAX_FRAMES];
++	GLuint tex[VCLIP_MAX_FRAMES];
++};
++#define MAX_ANIM_TEX 8
 +
 +// one draw call: the faces of one part that use one texture
 +struct range {
@@ -2364,6 +2424,9 @@ index d75a377..8c2747f 100644
 +	int match;			// 0 not compared with the game model yet, 1 parts match, -1 they don't
  	GLuint *bmtex;
 -	GLuint vbo;
++	struct anim_tex *anims;
++	int nanims;
++	float gain;			// light scale that makes it as bright as the game model (fit_brightness)
  	int glloaded;
  };
  
@@ -2373,10 +2436,11 @@ index d75a377..8c2747f 100644
 +static signed char polyobj_xrobot[MAX_POLYGON_MODELS];
 +
 +static int is_pow2(int n) { return n > 0 && !(n & (n - 1)); }
++static void upload_texture(CBitmap& bm, GLuint tex);
  
  // return -1 on error
  int xmodel_load_gl(void *model) {
-@@ -49,13 +70,15 @@ int xmodel_load_gl(void *model) {
+@@ -49,15 +89,32 @@ int xmodel_load_gl(void *model) {
  		glew_loaded = 1;
  	}
  	#endif
@@ -2392,9 +2456,27 @@ index d75a377..8c2747f 100644
 +			used |= rm.ranges[r].bitmap == i;
 +		if (!bm.Width() || (!used && !bm.Team()))
  			continue;
- 		glBindTexture(GL_TEXTURE_2D, rm.bmtex[i]);
+-		glBindTexture(GL_TEXTURE_2D, rm.bmtex[i]);
++		upload_texture(bm, rm.bmtex[i]);
++	}
++	for (int a = 0; a < rm.nanims; a++) {
++		anim_tex& at = rm.anims[a];
++		glGenTextures(at.nframes, at.tex);
++		for (int k = 0; k < at.nframes; k++)
++			if (at.frames[k].Width())
++				upload_texture(at.frames[k], at.tex[k]);
++	}
++	rm.glloaded = 1;
++	return 0;
++}
++
++static void upload_texture(CBitmap& bm, GLuint tex) {
++	{
++		glBindTexture(GL_TEXTURE_2D, tex);
  		if (bm.BPP() == 4)
-@@ -66,17 +89,17 @@ int xmodel_load_gl(void *model) {
+ 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+ 				bm.Width(), bm.Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE,
+@@ -66,19 +123,17 @@ int xmodel_load_gl(void *model) {
  			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
  				bm.Width(), bm.Height(), 0, GL_RGB, GL_UNSIGNED_BYTE,
  				bm.Buffer());
@@ -2418,19 +2500,25 @@ index d75a377..8c2747f 100644
 -	glBufferData(GL_ARRAY_BUFFER, rm.vertcount * sizeof(rm.verts[0]), rm.verts, GL_STATIC_DRAW);
 -	glBindBuffer(GL_ARRAY_BUFFER, 0);
 -
- 	rm.glloaded = 1;
- 	return 0;
+-	rm.glloaded = 1;
+-	return 0;
  }
-@@ -87,8 +110,6 @@ void xmodel_free_gl(void *model) {
+ 
+ void xmodel_free_gl(void *model) {
+@@ -87,8 +142,10 @@ void xmodel_free_gl(void *model) {
  		return;
  	glDeleteTextures(rm.m.m_textures.m_nBitmaps, rm.bmtex);
  	memset(rm.bmtex, 0, rm.m.m_textures.m_nBitmaps * sizeof(rm.bmtex[0]));
 -	glDeleteBuffers(1, &rm.vbo);
 -	rm.vbo = 0;
++	for (int a = 0; a < rm.nanims; a++) {
++		glDeleteTextures(rm.anims[a].nframes, rm.anims[a].tex);
++		memset(rm.anims[a].tex, 0, sizeof(rm.anims[a].tex));
++	}
  	rm.glloaded = 0;
  }
  
-@@ -97,12 +118,20 @@ void xmodel_free(void *model) {
+@@ -97,12 +154,21 @@ void xmodel_free(void *model) {
  	render_model& rm = *rmp;
  	xmodel_free_gl(model);
  	delete[] rm.verts;
@@ -2439,6 +2527,7 @@ index d75a377..8c2747f 100644
 +	delete[] rm.normals;
 +	delete[] rm.ranges;
  	delete[] rm.bmtex;
++	delete[] rm.anims;
  	delete rmp;
  }
  
@@ -2453,7 +2542,15 @@ index d75a377..8c2747f 100644
  // return NULL on error
  void *xmodel_load(const char *filename) {
  	render_model* rmp = new render_model();
-@@ -127,94 +156,341 @@ void *xmodel_load(const char *filename) {
+@@ -114,6 +180,7 @@ void *xmodel_load(const char *filename) {
+ 		return NULL;
+ 	}
+ 	rm.glloaded = 0;
++	rm.gain = 1;
+ 	int num_bitmaps = m.m_textures.m_nBitmaps;
+ 	for (int i = 0; i < num_bitmaps; i++) {
+ 		CBitmap& bm = m.m_textures.m_bitmaps[i];
+@@ -127,94 +194,584 @@ void *xmodel_load(const char *filename) {
  			data[j + 2] = x;
  		}
  	}
@@ -2610,25 +2707,211 @@ index d75a377..8c2747f 100644
  
 -void xmodel_show(void *model, int mpcolor, g3s_lrgb *light) {
 -	render_model& rm = *(render_model *)model;
--	int num_bitmaps = rm.m.m_textures.m_nBitmaps;
 +extern "C" void ogl_match_bitmap_colors(grs_bitmap *bm, unsigned char *rgba, int w, int h);
++extern "C" void ogl_bitmap_average(grs_bitmap *bm, float *rgb);
++
++// How bright a model looks: its surface's average luminance per unit area, textured faces at
++// a typical light, flat ones unlit as the game draws its flat polygons.
++#define TYPICAL_LIGHT 0.75f
++static float luminance(const float *c) { return 0.3f * c[0] + 0.59f * c[1] + 0.11f * c[2]; }
++static float flat_rgb(short c, float *rgb) {
++	rgb[0] = ((c >> 10) & 31) / 31.0f;
++	rgb[1] = ((c >> 5) & 31) / 31.0f;
++	rgb[2] = (c & 31) / 31.0f;
++	return luminance(rgb);
++}
++
++static double polygon_area(const vms_vector *pts, const unsigned short *idx, int nv) {
++	double a = 0;
++	for (int i = 2; i < nv; i++) {
++		const vms_vector *p0 = &pts[idx[0]], *p1 = &pts[idx[i - 1]], *p2 = &pts[idx[i]];
++		double ux = f2fl(p1->x - p0->x), uy = f2fl(p1->y - p0->y), uz = f2fl(p1->z - p0->z);
++		double vx = f2fl(p2->x - p0->x), vy = f2fl(p2->y - p0->y), vz = f2fl(p2->z - p0->z);
++		double cx = uy * vz - uz * vy, cy = uz * vx - ux * vz, cz = ux * vy - uy * vx;
++		a += sqrt(cx * cx + cy * cy + cz * cz) / 2;
++	}
++	return a;
++}
++
++#define W(p) (*(short *)(p))
++#define MAX_SURFACE_POINTS 1000
++static void game_surface(ubyte *p, vms_vector *pts, const float *tex_lum, int ntex, double *sum, double *area) {
++	for (;;)
++		switch (W(p)) {
++			case 1: {	// OP_DEFPOINTS
++				int n = W(p + 2);
++				if (n <= MAX_SURFACE_POINTS)
++					memcpy(pts, p + 4, n * sizeof(vms_vector));
++				p += n * sizeof(vms_vector) + 4;
++				break;
++			}
++			case 7: {	// OP_DEFP_START
++				int n = W(p + 2), start = W(p + 4);
++				if (start >= 0 && start + n <= MAX_SURFACE_POINTS)
++					memcpy(pts + start, p + 8, n * sizeof(vms_vector));
++				p += n * sizeof(vms_vector) + 8;
++				break;
++			}
++			case 2:	// OP_FLATPOLY
++			case 3: {	// OP_TMAPPOLY
++				int nv = W(p + 2), ok = 1;
++				const unsigned short *idx = (const unsigned short *)(p + 30);
++				for (int i = 0; i < nv; i++)
++					ok &= idx[i] < MAX_SURFACE_POINTS;
++				if (ok) {
++					double a = polygon_area(pts, idx, nv);
++					float rgb[3];
++					float l = W(p) == 2 ? flat_rgb(W(p + 28), rgb)
++						: W(p + 28) < ntex ? tex_lum[W(p + 28)] * TYPICAL_LIGHT : 0;
++					*sum += a * l;
++					*area += a;
++				}
++				p += 30 + ((nv & ~1) + 1) * 2 + (W(p) == 3 ? nv * 12 : 0);
++				break;
++			}
++			case 4:	// OP_SORTNORM
++				game_surface(p + W(p + 28), pts, tex_lum, ntex, sum, area);
++				game_surface(p + W(p + 30), pts, tex_lum, ntex, sum, area);
++				p += 32;
++				break;
++			case 5:	// OP_RODBM
++				p += 36;
++				break;
++			case 6:	// OP_SUBCALL
++				game_surface(p + W(p + 16), pts, tex_lum, ntex, sum, area);
++				p += 20;
++				break;
++			case 8:	// OP_GLOW
++				p += 4;
++				break;
++			default:	// OP_EOF
++				return;
++		}
++}
++#undef W
++
++// The models often texture with grey metal what the game draws as bright flat polygons, so
++// each robot is lit to look as bright overall as its game model.
++static void fit_brightness(render_model& rm, polymodel *po) {
++	static vms_vector pts[MAX_SURFACE_POINTS];
++	float tex_lum[MAX_POLYOBJ_TEXTURES] = { 0 }, rgb[3];
++	int ntex = po->n_textures < MAX_POLYOBJ_TEXTURES ? po->n_textures : MAX_POLYOBJ_TEXTURES;
++	for (int t = 0; t < ntex; t++) {
++		bitmap_index bi = ObjBitmaps[ObjBitmapPtrs[po->first_texture + t]];
++		PIGGY_PAGE_IN(bi);
++		ogl_bitmap_average(&GameBitmaps[bi.index], rgb);
++		tex_lum[t] = luminance(rgb);
++	}
++	double gsum = 0, garea = 0;
++	game_surface(po->model_data, pts, tex_lum, ntex, &gsum, &garea);
++
+ 	int num_bitmaps = rm.m.m_textures.m_nBitmaps;
++	float *blum = new float[num_bitmaps]();
++	for (int i = 0; i < num_bitmaps; i++) {
++		CBitmap& bm = rm.m.m_textures.m_bitmaps[i];
++		double c[3] = { 0, 0, 0 };
++		int n = bm.Width() * bm.Height();
++		if (bm.BPP() != 4 || !n)
++			continue;
++		for (int j = 0; j < n; j++)
++			for (int k = 0; k < 3; k++)
++				c[k] += bm.Buffer()[j * 4 + k];
++		for (int k = 0; k < 3; k++)
++			rgb[k] = c[k] / n / 255;
++		blum[i] = luminance(rgb) * (rm.m.m_nFlat[i] != -2 ? 1 : TYPICAL_LIGHT);
++	}
++	double msum = 0, marea = 0;
++	for (int r = 0; r < rm.nranges; r++)
++		for (int i = rm.ranges[r].first; i + 2 < rm.ranges[r].first + rm.ranges[r].count; i += 3) {
++			const float *p0 = rm.verts[i].pos.v.vec, *p1 = rm.verts[i + 1].pos.v.vec, *p2 = rm.verts[i + 2].pos.v.vec;
++			double ux = p1[0] - p0[0], uy = p1[1] - p0[1], uz = p1[2] - p0[2];
++			double vx = p2[0] - p0[0], vy = p2[1] - p0[1], vz = p2[2] - p0[2];
++			double cx = uy * vz - uz * vy, cy = uz * vx - ux * vz, cz = ux * vy - uy * vx;
++			double a = sqrt(cx * cx + cy * cy + cz * cz) / 2;
++			msum += a * blum[rm.ranges[r].bitmap];
++			marea += a;
++		}
++	delete[] blum;
++	if (gsum > 0 && garea > 0 && msum > 0 && marea > 0) {
++		float g = (float)((gsum / garea) / (msum / marea));
++		rm.gain = g < 0.7f ? 0.7f : g > 1.8f ? 1.8f : g;
++	}
++}
++
++// The game model's flat-shaded polygon colors (15-bit RGB), each once, in the order the
++// interpreter meets them: what the models' "colour N" materials stand for.
++#define W(p) (*(short *)(p))
++static void flat_colors(ubyte *p, short *colors, int *n) {
++	for (;;)
++		switch (W(p)) {
++			case 0:	// OP_EOF
++				return;
++			case 1:	// OP_DEFPOINTS
++				p += W(p + 2) * sizeof(vms_vector) + 4;
++				break;
++			case 7:	// OP_DEFP_START
++				p += W(p + 2) * sizeof(vms_vector) + 8;
++				break;
++			case 2: {	// OP_FLATPOLY
++				int i;
++				for (i = 0; i < *n && colors[i] != W(p + 28); i++)
++					;
++				if (i == *n && *n < 16)
++					colors[(*n)++] = W(p + 28);
++				p += 30 + ((W(p + 2) & ~1) + 1) * 2;
++				break;
++			}
++			case 3:	// OP_TMAPPOLY
++				p += 30 + ((W(p + 2) & ~1) + 1) * 2 + W(p + 2) * 12;
++				break;
++			case 4:	// OP_SORTNORM
++				flat_colors(p + W(p + 28), colors, n);
++				flat_colors(p + W(p + 30), colors, n);
++				p += 32;
++				break;
++			case 5:	// OP_RODBM
++				p += 36;
++				break;
++			case 6:	// OP_SUBCALL
++				flat_colors(p + W(p + 16), colors, n);
++				p += 20;
++				break;
++			case 8:	// OP_GLOW
++				p += 4;
++				break;
++			default:
++				return;
++		}
++}
++#undef W
 +
 +// The game model's own textures settle the look: a robot's eye color is a frame of an
 +// animated texture, which the models name as frame 0, and the colors should match the
 +// game bitmaps (see ogl_fit_png).
 +static void fit_textures(render_model& rm, polymodel *po) {
-+	int changed = 0;
++	int changed = 0, nflat = 0;
++	short flat[16];
++	flat_colors(po->model_data, flat, &nflat);
 +	for (int i = 0; i < rm.m.m_textures.m_nBitmaps; i++) {
 +		CBitmap& bm = rm.m.m_textures.m_bitmaps[i];
 +		const char *file = rm.m.m_textures.m_names[i].Buffer();
 +		char name[64];
++		int c = rm.m.m_nFlat[i];
++		if (c >= 0 && c < nflat && bm.Buffer()) {	// as gr_find_closest_color_15bpp reads it
++			uint8_t *d = bm.Buffer();
++			d[0] = ((flat[c] >> 10) & 31) * 255 / 31;
++			d[1] = ((flat[c] >> 5) & 31) * 255 / 31;
++			d[2] = (flat[c] & 31) * 255 / 31;
++			changed = 1;
++		}
 +		if (!file || bm.BPP() != 4)
 +			continue;
 +		snprintf(name, sizeof(name), "%s", file);
 +		if (char *p = strrchr(name, '.'))
 +			*p = '\0';
 +		size_t base = strcspn(name, "#");
-+		for (int t = 0; t < po->n_textures; t++) {
++		int t;
++		for (t = 0; t < po->n_textures; t++) {
 +			bitmap_index bi = ObjBitmaps[ObjBitmapPtrs[po->first_texture + t]];
 +			PIGGY_PAGE_IN(bi);
 +			grs_bitmap *gb = &GameBitmaps[bi.index];
@@ -2644,9 +2927,46 @@ index d75a377..8c2747f 100644
 +			}
 +			ogl_match_bitmap_colors(gb, bm.Buffer(), bm.Width(), bm.Height());
 +			changed = 1;
++			int objbm = ObjBitmapPtrs[po->first_texture + t];
++			for (int e = 0; e < Num_effects; e++) {
++				vclip& vc = Effects[e].vc;
++				if (Effects[e].changing_object_texture != objbm || rm.nanims >= MAX_ANIM_TEX || vc.num_frames <= 0)
++					continue;
++				if (!rm.anims)
++					rm.anims = new anim_tex[MAX_ANIM_TEX]();
++				anim_tex& at = rm.anims[rm.nanims++];
++				at.bitmap = i;
++				at.objbm = objbm;
++				at.nframes = vc.num_frames < VCLIP_MAX_FRAMES ? vc.num_frames : VCLIP_MAX_FRAMES;
++				for (int k = 0; k < at.nframes; k++) {
++					grs_bitmap *fb = &GameBitmaps[at.game[k] = vc.frames[k].index];
++					const char *fname = piggy_game_bitmap_name(fb);
++					char ffile[64];
++					if (!fname)
++						continue;
++					snprintf(ffile, sizeof(ffile), "%s.png", fname);
++					CTGA ftga(&at.frames[k]);
++					if (!ftga.ReadModelTexture(ffile, 0))
++						continue;
++					PIGGY_PAGE_IN(vc.frames[k]);
++					ogl_match_bitmap_colors(fb, at.frames[k].Buffer(), at.frames[k].Width(), at.frames[k].Height());
++				}
++				break;
++			}
 +			break;
 +		}
++		// a texture the game model doesn't use (Vertigo's robots have textures of their own)
++		// still matches the game bitmap it is named after
++		if (t == po->n_textures) {
++			bitmap_index bi = piggy_find_bitmap(name);
++			if (bi.index > 0) {
++				PIGGY_PAGE_IN(bi);
++				ogl_match_bitmap_colors(&GameBitmaps[bi.index], bm.Buffer(), bm.Width(), bm.Height());
++				changed = 1;
++			}
++		}
 +	}
++	fit_brightness(rm, po);
 +	if (changed)
 +		xmodel_free_gl(&rm);
 +}
@@ -2660,7 +2980,7 @@ index d75a377..8c2747f 100644
 +			return 0;
 +	return 1;
 +}
- 
++
 +// Where each part is drawn: xf[i] maps the model's rest-pose coordinates of part i to the
 +// pose the game model has now (column-major 4x4). Follows the interpreter's submodel calls:
 +// a part rotates by its animation angles about its pivot, offset from its parent.
@@ -2723,11 +3043,19 @@ index d75a377..8c2747f 100644
 +// Shades like the game's own models: a quarter of the light, plus the rest on faces turned
 +// toward the viewer. view is the view direction in model coordinates.
 +static void shade(render_model& rm, const float *view, float rot[][9], g3s_lrgb *light, float alpha) {
-+	float lr = f2fl(light->r), lg = f2fl(light->g), lb = f2fl(light->b);
-+	uint8_t a = (uint8_t)(alpha * 255);
++	float lr = f2fl(light->r) * rm.gain, lg = f2fl(light->g) * rm.gain, lb = f2fl(light->b) * rm.gain;
++	float a = alpha;
 +	for (int r = 0; r < rm.nranges; r++) {
 +		range& rg = rm.ranges[r];
 +		const float *m = rot[rg.sub];
++		if (rm.m.m_nFlat[rg.bitmap] != -2) {	// flat colors: the game draws its flat polygons unlit
++			for (int i = rg.first; i < rg.first + rg.count; i++) {
++				float *c = rm.verts[i].color;
++				c[0] = c[1] = c[2] = 1;
++				c[3] = a;
++			}
++			continue;
++		}
 +		// the view direction in the part's rest-pose axes
 +		float d[3] = {
 +			m[0] * view[0] + m[1] * view[1] + m[2] * view[2],
@@ -2735,18 +3063,19 @@ index d75a377..8c2747f 100644
 +			m[6] * view[0] + m[7] * view[1] + m[8] * view[2] };
 +		for (int i = rg.first; i < rg.first + rg.count; i++) {
 +			const float *n = rm.normals + i * 3;
-+			float f = -(n[0] * d[0] + n[1] * d[1] + n[2] * d[2]);
-+			float l = 0.25f + 0.75f * (f > 0 ? f : 0);
-+			uint8_t *c = rm.verts[i].color;
-+			float x;
-+			x = l * lr; c[0] = x >= 1 ? 255 : (uint8_t)(x * 255);
-+			x = l * lg; c[1] = x >= 1 ? 255 : (uint8_t)(x * 255);
-+			x = l * lb; c[2] = x >= 1 ? 255 : (uint8_t)(x * 255);
++			// either side: some parts are modelled with the opposite winding, and faces turned
++			// away are hidden behind the near ones anyway
++			float f = fabsf(n[0] * d[0] + n[1] * d[1] + n[2] * d[2]);
++			float l = 0.25f + 0.75f * f;
++			float *c = rm.verts[i].color;
++			c[0] = l * lr;
++			c[1] = l * lg;
++			c[2] = l * lb;
 +			c[3] = a;
 +		}
 +	}
 +}
-+
+ 
 +static void xmodel_draw(render_model& rm, int mpcolor, g3s_lrgb *light, const float *view,
 +	polymodel *po, vms_angvec *anim_angles, int root) {
 +	int num_bitmaps = rm.m.m_textures.m_nBitmaps;
@@ -2777,7 +3106,7 @@ index d75a377..8c2747f 100644
  		color_alpha = (grd_curcanv->cv_fade_level >= GR_FADE_OFF)?1.0:(1.0 - (float)grd_curcanv->cv_fade_level / ((float)GR_FADE_LEVELS - 1.0));
 -		glColor4f(f2fl(light->r), f2fl(light->g), f2fl(light->b), color_alpha);
 +		shade(rm, view, rot, light, color_alpha);
-+		glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(vert), rm.verts[0].color);
++		glColorPointer(4, GL_FLOAT, sizeof(vert), rm.verts[0].color);
 +		glEnableClientState(GL_COLOR_ARRAY);
  	}
 -
@@ -2808,9 +3137,21 @@ index d75a377..8c2747f 100644
  			for (int j = 0; j < num_bitmaps; j++)
  				if (rm.m.m_textures.m_bitmaps[j].Team() == team)
  					glBindTexture(GL_TEXTURE_2D, rm.bmtex[j]);
- 		} else
- 			glBindTexture(GL_TEXTURE_2D, rm.bmtex[i]);
+-		} else
+-			glBindTexture(GL_TEXTURE_2D, rm.bmtex[i]);
 -		glDrawArrays(GL_TRIANGLES, rm.bmvertofs[i], rm.bmvertcount[i]);
++		} else {
++			GLuint tex = rm.bmtex[i];
++			for (int a = 0; a < rm.nanims; a++) {
++				anim_tex& at = rm.anims[a];
++				if (at.bitmap != i)
++					continue;
++				for (int k = 0; k < at.nframes; k++)
++					if (at.game[k] == ObjBitmaps[at.objbm].index && at.tex[k])
++						tex = at.tex[k];
++			}
++			glBindTexture(GL_TEXTURE_2D, tex);
++		}
 +		glDrawArrays(GL_TRIANGLES, rg.first, rg.count);
  	}
 +	if (cur >= 0)
@@ -2832,7 +3173,7 @@ index d75a377..8c2747f 100644
  #if 0
  #define GLAPIENTRY
  #define GL_DEBUG_TYPE_ERROR               0x824C
-@@ -235,18 +511,20 @@ void gl_debug() {
+@@ -235,18 +792,20 @@ void gl_debug() {
  }
  #endif
  
@@ -2856,7 +3197,7 @@ index d75a377..8c2747f 100644
  	vpos.z *= -1;
  
  	// create 4x4 lookat matrix
-@@ -263,30 +541,55 @@ void xmodel_show_at(void *model, vms_vector *pos, vms_matrix *orient, int mpcolo
+@@ -263,30 +822,55 @@ void xmodel_show_at(void *model, vms_vector *pos, vms_matrix *orient, int mpcolo
  	for (int j = 0; j < 3; j++)
  		fm[3 * 4 + j] = -f2fl(vpos_elem[j]);
  	fm[15] = 1;
@@ -2915,7 +3256,7 @@ index d75a377..8c2747f 100644
  	if (!free_registered) {
  		atexit(xmodel_free_all);
  		free_registered = 1;
-@@ -297,12 +600,18 @@ void xmodel_load_gl_all() {
+@@ -297,12 +881,18 @@ void xmodel_load_gl_all() {
  	for (int i = 0; i < NUM_XMODELS; i++)
  		if (xmodels[i])
  			xmodel_load_gl(xmodels[i]);
@@ -2934,7 +3275,7 @@ index d75a377..8c2747f 100644
  }
  
  static int xmodel_xlate(enum xmodel_type mt, int modelnum) {
-@@ -315,14 +624,48 @@ static int xmodel_xlate(enum xmodel_type mt, int modelnum) {
+@@ -315,14 +905,48 @@ static int xmodel_xlate(enum xmodel_type mt, int modelnum) {
  
  // returns 1 if drawn
  int xmodel_show_if_loaded(enum xmodel_type mt, int modelnum, vms_vector *pos, vms_matrix *orient, int mpcolor, g3s_lrgb *light) {
@@ -2986,7 +3327,7 @@ index d75a377..8c2747f 100644
  	return xmodelnum != -1 && xmodels[xmodelnum];
  }
 diff --git a/d2/xmodel/xmodelnames.h b/d2/xmodel/xmodelnames.h
-index c9a5a0e..52db31f 100644
+index c9a5a0e..baf8cbf 100644
 --- a/d2/xmodel/xmodelnames.h
 +++ b/d2/xmodel/xmodelnames.h
 @@ -219,7 +219,7 @@ const char *xmodelnames[] = {
@@ -2998,7 +3339,7 @@ index c9a5a0e..52db31f 100644
  	"laser5.ase",
  	"laser6.ase",
  	"shield.ase",
-@@ -228,6 +228,78 @@ const char *xmodelnames[] = {
+@@ -228,6 +228,91 @@ const char *xmodelnames[] = {
  
  #define NUM_XMODELS ((int)(sizeof(xmodelnames) / sizeof(xmodelnames[0])))
  
@@ -3070,6 +3411,19 @@ index c9a5a0e..52db31f 100644
 +	{89, "iceboss.ase"},
 +	{90, "spiderspawnclone.ase"},
 +	{91, "alienboss2.ase"},
++	// Vertigo (its robots follow the game's 166 models)
++	{166, "compactlifter.ase"},
++	{167, "fervid99.ase"},
++	{168, "fiddler.ase"},
++	{169, "class2heavydriller.ase"},
++	{170, "smelter2.ase"},
++	{171, "max.ase"},
++	{172, "sniperng.ase"},
++	{173, "logikill.ase"},
++	{174, "canary.ase"},
++	{175, "vertigoboss.ase"},
++	{176, "redguard.ase"},
++	{177, "spike.ase"},
 +};
 +
 +#define NUM_XROBOTS ((int)(sizeof(xmodel_robots) / sizeof(xmodel_robots[0])))

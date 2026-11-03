@@ -2,7 +2,7 @@
 // them locally. Optional folder imports remain available for custom copies.
 
 // Bump with every engine or loader release so browsers fetch the new files
-const BUILD = '20261102d';
+const BUILD = '20261102e';
 const DB_NAME = 'descent2-web';
 const DB_VERSION = 3; // 2 adds the music folder store, 3 the D2X-XL textures and models
 const SAVE_DIR = '/home/web_user/.d2x-redux';
@@ -349,6 +349,9 @@ const HIRES_MODELS = new Set([
   'greenspider', 'omegabot', 'louguard', 'alienboss1', 'redfattyjunior', 'd-claw-cloaked', 'smelter-cloaked',
   'smelterclone-cloaked', 'omegaspawn', 'smelterclone', 'omegaclone', 'bperclone', 'spiderclone',
   'spiderspawn', 'iceboss', 'spiderspawnclone', 'alienboss2',
+  // Vertigo robots
+  'compactlifter', 'fervid99', 'fiddler', 'class2heavydriller', 'smelter2', 'max', 'sniperng', 'logikill',
+  'canary', 'vertigoboss', 'redguard', 'spike',
 ]);
 const HIRES_NAME = /^[a-z0-9_#!-]+\.(png|ase)$/;
 // normal, height/specular and low-resolution maps D2X-XL draws with, not used here
@@ -429,6 +432,24 @@ async function loadHires(db, onFile) {
     const blob = await idbGet(db, 'hires', name);
     if (blob) out.push({ path: name, data: new Uint8Array(await blob.arrayBuffer()) });
     onFile(out.length / index.files.length);
+  }
+  return out;
+}
+
+// The D2X-XL textures and models hosted with the game (tools/package_hires.py): one
+// verified, cached bundle like the game files, with the models in it gzipped.
+async function loadHostedHires(index, db, onBytes) {
+  const bundle = await hostedFile(index, db, onBytes);
+  const out = [];
+  for (const f of index.files) {
+    if (!HIRES_NAME.test(f.name)) continue;
+    let data = bundle.subarray(f.offset, f.offset + f.size);
+    if (f.gzip) {
+      if (typeof DecompressionStream === 'undefined') continue;
+      const stream = new Blob([data]).stream().pipeThrough(new DecompressionStream('gzip'));
+      data = new Uint8Array(await new Response(stream).arrayBuffer());
+    }
+    out.push({ path: f.name, data });
   }
   return out;
 }
@@ -783,9 +804,15 @@ async function bootGame(manifest, ui) {
       }
     }
     if (db) music = await loadMusicFolder(db).catch((e) => { console.warn('Music folder unavailable', e); return null; });
-    if (db && settings.hires) {
+    if (settings.hires) {
+      // the player's own D2X-XL folder, else the copy hosted with the game
       ui.status('Loading sharper textures and models…');
-      const hires = await loadHires(db, ui.progress).catch((e) => { console.warn('D2X-XL textures unavailable', e); return []; });
+      let hires = db ? await loadHires(db, ui.progress).catch((e) => { console.warn('D2X-XL folder unavailable', e); return []; }) : [];
+      if (!hires.length && hostedHires) {
+        let got = 0;
+        hires = await loadHostedHires(hostedHires, db, (bytes) => { got += bytes; ui.progress(got / hostedHires.size); })
+          .catch((e) => { console.warn('Sharper textures unavailable', e); return []; });
+      }
       for (const f of hires) fileData.push(f);
     }
   } finally {
@@ -817,7 +844,7 @@ async function bootGame(manifest, ui) {
         for (const f of fileData) {
           const dir = f.path.includes('/') ? DATA_DIR + '/' + f.path.split('/').slice(0, -1).join('/') : null;
           if (dir) FS.mkdirTree(dir);
-          FS.writeFile(DATA_DIR + '/' + f.path, f.data);
+          FS.writeFile(DATA_DIR + '/' + f.path, f.data, { canOwn: true }); // no copy: hundreds of MB
         }
         fileData.length = 0;
         FS.mkdirTree(SAVE_DIR);
@@ -893,6 +920,7 @@ function fmtBytes(n) {
 }
 
 let touch = null;
+let hostedHires = null;
 
 async function main() {
   touch = touchControls();
@@ -974,10 +1002,13 @@ async function main() {
     showMusic(null);
   });
   // D2X-XL textures and models are stored apart from the game files too
+  hostedHires = await fetch(`data/hires.json?v=${BUILD}`).then((r) => (r.ok ? r.json() : null)).catch(() => null);
   const showHires = (index) => {
-    $('hiresOption').hidden = !index;
+    $('hiresOption').hidden = !index && !hostedHires;
     $('hires').checked = settings.hires;
-    $('hiresInfo').textContent = index ? 'D2X-XL: ' + describeHires(index) + ', stored in this browser.'
+    $('hiresInfo').textContent = index ? 'D2X-XL: ' + describeHires(index) + ', your own folder, stored in this browser.'
+      : hostedHires ? `Sharper textures and 3D models from D2X-XL (${hostedHires.textures} textures, ${hostedHires.models} ` +
+        `models): ${fmtBytes(hostedHires.size)}, downloaded with the game the first time.`
       : 'Have D2X-XL? Load its folder for sharper textures and 3D models of the robots, ship and power-ups.';
     $('hiresRemove').hidden = !index;
   };
