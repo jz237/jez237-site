@@ -64,6 +64,8 @@
   #canvas { width: 100%; height: 100%; object-fit: contain; display: block; outline: none; image-rendering: auto; }
   #fullscreen { position: absolute; right: 12px; top: 12px; z-index: 5; opacity: .25; transition: opacity .2s; padding: 8px 12px; font-size: 13px; }
   #fullscreen:hover { opacity: 1; }
+  #skipCutscene { position: absolute; right: 16px; bottom: 16px; z-index: 6; padding: 10px 20px; font-size: 15px; opacity: .8; }
+  #skipCutscene:hover { opacity: 1; }
   body.playing header, body.playing main, body.playing footer { display: none; }
   body.playing #stage { display: block; }
   /* touch controls: a stick where the left thumb lands, drag on the right to look, buttons */
@@ -231,6 +233,7 @@
 
 <div id="stage">
   <button class="btn ghost" id="fullscreen" title="Full screen">⛶ Full screen</button>
+  <button class="btn" id="skipCutscene" title="Skip the intro, movie or briefing (or press Esc)" hidden>Skip ›</button>
   <canvas id="canvas" tabindex="0" oncontextmenu="event.preventDefault()"></canvas>
   <div id="touch" class="menu" hidden>
     <div id="tLook" class="game"></div>
@@ -262,6 +265,6 @@
   Sharper textures and 3D models: from the <a href="https://sourceforge.net/projects/d2x-xl/">D2X-XL</a> 2.1.8 distribution
   (models by MetalBeast and others; <a href="d2x-xl/">their readmes</a>). Descent II and the Vertigo Series by Parallax Software.
 </footer>
-<script src="d2loader.js?v=20261103g"></script>
+<script src="d2loader.js?v=20261103h"></script>
 </body>
 </html>

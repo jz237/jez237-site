@@ -51,6 +51,20 @@ index 8e3f48d..872cf6a 100644
  extern void event_joystick_get_axis(struct d_event *event, int *axis, int *value);
  extern void joy_flush();
  extern int event_joystick_get_button(struct d_event *event);
+diff --git a/d2/arch/include/key.h b/d2/arch/include/key.h
+index 1812c5d..205c346 100644
+--- a/d2/arch/include/key.h
++++ b/d2/arch/include/key.h
+@@ -44,6 +44,9 @@ extern unsigned char unicode_frame_buffer[KEY_BUFFER_SIZE];
+ extern void key_flush();    // Clears the 256 char buffer
+ extern int event_key_get(d_event *event);	// Get the keycode from the EVENT_KEY_COMMAND event
+ extern int event_key_get_raw(d_event *event);	// same as above but without mod states
++#ifdef __EMSCRIPTEN__
++extern void key_send_escape(void);	// an Escape press for the window in front (the page's Skip button)
++#endif
+ extern unsigned char key_ascii();
+ 
+ // Set to 1 if the key is currently down, else 0
 diff --git a/d2/arch/ogl/gr.c b/d2/arch/ogl/gr.c
 index c5cca0b..c0e7162 100644
 --- a/d2/arch/ogl/gr.c
@@ -1570,7 +1584,7 @@ index 0000000..f8df115
 +	glUseProgram(active = 0);
 +}
 diff --git a/d2/arch/sdl/event.c b/d2/arch/sdl/event.c
-index 5a20a70..14d4a74 100644
+index 5a20a70..e7b9688 100644
 --- a/d2/arch/sdl/event.c
 +++ b/d2/arch/sdl/event.c
 @@ -16,6 +16,9 @@
@@ -1594,6 +1608,17 @@ index 5a20a70..14d4a74 100644
  	// If the front window changes, exit this loop, otherwise unintended behavior can occur
  	// like pressing 'Return' really fast at 'Difficulty Level' causing multiple games to be started
  	while ((wind == window_get_front()) && SDL_PollEvent(&event))
+@@ -163,6 +170,10 @@ void event_process(void)
+ 	timer_update();
+ 
+ 	event_poll();	// send input events first
++#ifdef __EMSCRIPTEN__
++	if (d2web_cutscene_skipping())	// the page's Skip button: Escape for the movie, title or briefing
++		key_send_escape();
++#endif
+ 
+ 	// Doing this prevents problems when a draw event can create a newmenu,
+ 	// such as some network menus when they report a problem
 diff --git a/d2/arch/sdl/joy.c b/d2/arch/sdl/joy.c
 index efbb67c..16ee34d 100644
 --- a/d2/arch/sdl/joy.c
@@ -1643,7 +1668,7 @@ index efbb67c..16ee34d 100644
  {
  	SDL_JoystickClose(SDL_Joysticks[num_joysticks].handle);
 diff --git a/d2/arch/sdl/key.c b/d2/arch/sdl/key.c
-index 92eee47..874ec30 100644
+index 92eee47..e709ef5 100644
 --- a/d2/arch/sdl/key.c
 +++ b/d2/arch/sdl/key.c
 @@ -448,7 +448,11 @@ void key_init()
@@ -1667,6 +1692,24 @@ index 92eee47..874ec30 100644
  		{
  			keyd_pressed[i] = 1;
  			key_data.state[i] = 0;
+@@ -478,6 +482,17 @@ int event_key_get(d_event *event)
+ }
+ 
+ // same as above but without mod states
++#ifdef __EMSCRIPTEN__
++void key_send_escape(void)
++{
++	d_event_keycommand event;
++
++	event.type = EVENT_KEY_COMMAND;
++	event.keycode = KEY_ESC;
++	event_send((d_event *)&event);
++}
++#endif
++
+ int event_key_get_raw(d_event *event)
+ {
+ 	int keycode = ((d_event_keycommand *)event)->keycode;
 diff --git a/d2/arch/sdl/mouse.c b/d2/arch/sdl/mouse.c
 index 2cfce11..0bb6b69 100644
 --- a/d2/arch/sdl/mouse.c
@@ -2270,10 +2313,10 @@ index 0000000..bc5fa7e
 +}
 diff --git a/d2/arch/web/web.c b/d2/arch/web/web.c
 new file mode 100644
-index 0000000..32391f3
+index 0000000..12e2ee1
 --- /dev/null
 +++ b/d2/arch/web/web.c
-@@ -0,0 +1,341 @@
+@@ -0,0 +1,370 @@
 +/*
 + * Browser (Emscripten) replacements for desktop-only pieces:
 + * message boxes, GLU mipmapping and GL 1.1 calls WebGL lacks.
@@ -2295,6 +2338,35 @@ index 0000000..32391f3
 +	if (is_error) console.error(text); else console.warn(text);
 +	if (Module.onGameMessage) Module.onGameMessage(text, !!is_error);
 +});
++
++EM_JS(void, d2web_cutscene_changed, (int on), {
++	if (Module.onCutscene) Module.onCutscene(!!on);
++});
++
++static int cutscene_depth, cutscene_skip;
++
++void d2web_cutscene(int begin)
++{
++	if (begin) {
++		if (cutscene_depth++ == 0)
++			d2web_cutscene_changed(1);
++	} else if (cutscene_depth > 0 && --cutscene_depth == 0) {
++		cutscene_skip = 0;
++		d2web_cutscene_changed(0);
++	}
++}
++
++// the page's Skip button: event_process sends Escape to the screen in front until the whole sequence is over
++EMSCRIPTEN_KEEPALIVE void d2web_skip_cutscene(void)
++{
++	if (cutscene_depth > 0)
++		cutscene_skip = 1;
++}
++
++int d2web_cutscene_skipping(void)
++{
++	return cutscene_skip && cutscene_depth > 0;
++}
 +
 +void msgbox_warning(char *message)
 +{
@@ -2617,10 +2689,10 @@ index 0000000..32391f3
 +}
 diff --git a/d2/arch/web/web.h b/d2/arch/web/web.h
 new file mode 100644
-index 0000000..a4718f1
+index 0000000..d2bf7d3
 --- /dev/null
 +++ b/d2/arch/web/web.h
-@@ -0,0 +1,95 @@
+@@ -0,0 +1,100 @@
 +/* Browser (Emscripten) glue for D2X-Redux. Implemented in library_d2web.js. */
 +#ifndef _D2WEB_H
 +#define _D2WEB_H
@@ -2709,6 +2781,11 @@ index 0000000..a4718f1
 +
 +/* The player chose Quit: flush saves and hand control back to the page. */
 +void d2web_quit(void);
++
++/* Around an intro, movie or briefing (they nest): the page shows a Skip button while one is up.
++   d2web_cutscene_skipping() is true once the button was pressed, until the outermost one ends. */
++void d2web_cutscene(int begin);
++int d2web_cutscene_skipping(void);
 +
 +#ifdef __cplusplus
 +}
@@ -4230,10 +4307,20 @@ index f15d413..4758a33 100644
  	//if the player is taking damage, give up guided missile control
  	if (Players[Player_num].shields != player_shields)
 diff --git a/d2/main/gameseq.c b/d2/main/gameseq.c
-index 30de489..d8dd364 100644
+index 30de489..a781d68 100644
 --- a/d2/main/gameseq.c
 +++ b/d2/main/gameseq.c
-@@ -828,6 +828,8 @@ void InitPlayerObject()
+@@ -106,6 +106,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ #include "segment.h"
+ #include "gameseg.h"
+ #include "multibot.h"
++#ifdef __EMSCRIPTEN__
++#include "web.h"
++#endif
+ 
+ 
+ void StartNewLevelSecret(int level_num, int page_in_textures);
+@@ -828,6 +831,8 @@ void InitPlayerObject()
  
  extern void init_seismic_disturbances(void);
  
@@ -4242,7 +4329,7 @@ index 30de489..d8dd364 100644
  //starts a new game on the given level
  void StartNewGame(int start_level)
  {
-@@ -843,10 +845,12 @@ void StartNewGame(int start_level)
+@@ -843,10 +848,12 @@ void StartNewGame(int start_level)
  
  	N_players = 1;
  
@@ -4255,7 +4342,27 @@ index 30de489..d8dd364 100644
  
  	Players[Player_num].starting_level = start_level;		// Mark where they started
  
-@@ -1809,7 +1813,8 @@ void StartNewLevel(int level_num)
+@@ -1743,6 +1750,9 @@ void ShowLevelIntro(int level_num)
+ 		ubyte save_pal[sizeof(gr_palette)];
+ 
+ 		memcpy(save_pal,gr_palette,sizeof(gr_palette));
++#ifdef __EMSCRIPTEN__
++		d2web_cutscene(1);	// the movie and briefing skip as one
++#endif
+ 
+ 		if (PLAYING_BUILTIN_MISSION) {
+ 
+@@ -1775,6 +1785,9 @@ void ShowLevelIntro(int level_num)
+ 		{
+ 			do_briefing_screens(Briefing_text_filename, level_num);
+ 		}
++#ifdef __EMSCRIPTEN__
++		d2web_cutscene(0);
++#endif
+ 
+ 		memcpy(gr_palette,save_pal,sizeof(gr_palette));
+ 	}
+@@ -1809,7 +1822,8 @@ void StartNewLevel(int level_num)
  		maybe_set_first_secret_visit(level_num);
  	}
  
@@ -4266,7 +4373,7 @@ index 30de489..d8dd364 100644
  	StartNewLevelSub(level_num, 1, 0 );
  
 diff --git a/d2/main/inferno.c b/d2/main/inferno.c
-index dc6e44a..83c5c17 100644
+index dc6e44a..22c3ee3 100644
 --- a/d2/main/inferno.c
 +++ b/d2/main/inferno.c
 @@ -25,6 +25,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
@@ -4277,19 +4384,26 @@ index dc6e44a..83c5c17 100644
  #include <stdio.h>
  #include <stdlib.h>
  #include <string.h>
-@@ -415,7 +416,10 @@ int main(int argc, char *argv[])
+@@ -415,7 +416,17 @@ int main(int argc, char *argv[])
  	con_printf( CON_DEBUG, "Initializing movie libraries...\n" );
  	init_movies();		//init movie libraries
  
 -	show_titles();
 +	if (GameArg.SysNoTitles)	// skip the intro movie and logo screens, straight to the title music
 +		songs_play_song(SONG_TITLE, 1);
-+	else
++	else {
++#ifdef __EMSCRIPTEN__
++		d2web_cutscene(1);
++#endif
 +		show_titles();
++#ifdef __EMSCRIPTEN__
++		d2web_cutscene(0);
++#endif
++	}
  
  	set_screen_mode(SCREEN_MENU);
  
-@@ -519,5 +523,8 @@ int main(int argc, char *argv[])
+@@ -519,5 +530,8 @@ int main(int argc, char *argv[])
  	PHYSFSX_removeArchiveContent();
  	reset_observatory_stats();
  
@@ -4643,6 +4757,34 @@ index 8301896..4e5e9f6 100644
  
  	newmenu_do1( NULL, "Sound Effects & Music", nitems, m, sound_menuset, NULL, 0 );
  
+diff --git a/d2/main/movie.c b/d2/main/movie.c
+index 33bd8ca..3a8fa33 100644
+--- a/d2/main/movie.c
++++ b/d2/main/movie.c
+@@ -53,6 +53,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ #include "ogl_init.h"
+ #endif
+ #include "args.h"
++#ifdef __EMSCRIPTEN__
++#include "web.h"
++#endif
+ 
+ extern char CDROM_dir[];
+ 
+@@ -148,7 +151,13 @@ int PlayMovie(const char *filename, int must_have)
+ 	// Start sound
+ 	MVE_sndInit(!GameArg.SndNoSound ? 1 : -1);
+ 
++#ifdef __EMSCRIPTEN__
++	d2web_cutscene(1);
++#endif
+ 	ret = RunMovie(name, GameArg.GfxMovieHires, must_have, -1, -1);
++#ifdef __EMSCRIPTEN__
++	d2web_cutscene(0);
++#endif
+ 
+ 	// MD2211: if using SDL_Mixer, we never reinit the sound system
+ 	if (!GameArg.SndNoSound
 diff --git a/d2/main/newdemo.c b/d2/main/newdemo.c
 index 79cf5fb..e27f272 100644
 --- a/d2/main/newdemo.c
@@ -5804,7 +5946,7 @@ index cf9fb7d..76e008b 100644
  		default:
  			Song_playing = -1;
 diff --git a/d2/main/titles.c b/d2/main/titles.c
-index af6f092..1063d5d 100644
+index af6f092..8cf8dbd 100644
 --- a/d2/main/titles.c
 +++ b/d2/main/titles.c
 @@ -49,6 +49,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
@@ -5832,6 +5974,21 @@ index af6f092..1063d5d 100644
  	{
  		if ((songs_is_playing() != SONG_BRIEFING) && (songs_is_playing() != SONG_ENDGAME))
  			songs_play_song( SONG_BRIEFING, 1 );
+@@ -1433,8 +1442,14 @@ void do_briefing_screens(char *filename, int level_num)
+ 
+ 	// Stay where we are in the stack frame until briefing done
+ 	// Too complicated otherwise
++#ifdef __EMSCRIPTEN__
++	d2web_cutscene(1);
++#endif
+ 	while (window_exists(wind))
+ 		event_process();
++#ifdef __EMSCRIPTEN__
++	d2web_cutscene(0);
++#endif
+ }
+ 
+ void do_end_briefing_screens(char *filename)
 diff --git a/d2/misc/args.c b/d2/misc/args.c
 index cb81385..52a10c8 100644
 --- a/d2/misc/args.c

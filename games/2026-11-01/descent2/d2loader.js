@@ -2,7 +2,7 @@
 // them locally. Optional folder imports remain available for custom copies.
 
 // Bump with every engine or loader release so browsers fetch the new files
-const BUILD = '20261103g';
+const BUILD = '20261103h';
 const DB_NAME = 'descent2-web';
 const DB_VERSION = 3; // 2 adds the music folder store, 3 the D2X-XL textures and models
 const SAVE_DIR = '/home/web_user/.d2x-redux';
@@ -872,6 +872,8 @@ async function bootGame(manifest, ui) {
     print: (t) => console.log(t),
     printErr: (t) => console.warn(t),
     onGameMessage: (text, isError) => ui.message(text, isError),
+    // an intro, movie or briefing is up: offer the Skip button
+    onCutscene: (on) => { $('skipCutscene').hidden = !on; },
     // Quit from the game menu: saves are already flushed, so start fresh at the page
     onQuit: () => {
       if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
@@ -1192,6 +1194,10 @@ async function main() {
   const canvas = $('canvas');
   canvas.addEventListener('click', () => {
     if (document.pointerLockElement !== canvas && canvas.requestPointerLock) canvas.requestPointerLock();
+  });
+  $('skipCutscene').addEventListener('click', () => {
+    if (window.Module && Module._d2web_skip_cutscene) Module._d2web_skip_cutscene();
+    canvas.focus();
   });
   $('fullscreen').addEventListener('click', async () => {
     const stage = $('stage');
