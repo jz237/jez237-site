@@ -109,7 +109,7 @@ function syncPilot() {
   saving=true;
   Module.FS.syncfs(false,err=>{saving=false;if(err)console.warn("Pilot save",err);});
 }
-async function launch(quick,demo=false) {
+async function launch(quick,demo=false,encounter=false) {
   const buttons=document.querySelectorAll(".launch");
   buttons.forEach(el=>el.disabled=true);
   try {
@@ -118,21 +118,22 @@ async function launch(quick,demo=false) {
     const music=player;
     music.src="music/02.flac"; music.volume=0;
     music.play().then(()=>{if(!astraDisc.track){music.pause();music.currentTime=0;music.volume=0.75;}}).catch(()=>{});
-    await readPack("game","Reading campaign");
-    if(astra){await readPack("art","Preparing mine materials");await readPack("cockpit","Fitting flight instruments");}
+    await readPack("game","Reading game data");
+    await readPack("vertigo","Reading original Vertigo mission");
+    if(astra){await readPack("art","Preparing mine materials");await readPack("cockpit","Fitting flight instruments");await readPack("fleet","Fitting Overload robot chassis");await readPack("forge","Preparing foundry lights and fireballs");}
     await readPack("movies","Reading cinematics");
     $("status").textContent="Starting flight computer";
     const canvas=$("view");
     const quality=Number($("res").value);
     const height=Math.round(quality*9/16);
     window.Module={
-      canvas,quick,demo,intro:!quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot","astra","-window","-nostickykeys",
+      canvas,quick,demo,encounter,campaign:$("campaign").value,wideHud:$("wideHud").checked,intro:!quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot","astra","-window","-nostickykeys",
         "-gl_gettexlevelparam_ok","0","-gl_intensity4_ok","0","-gl_luminance4_alpha4_ok","0","-gl_rgba2_ok","0"],
       print:console.log,printErr:console.warn,onAbort:astraFail,
       onExit:()=>{syncPilot();document.body.classList.remove("flying");$("status").textContent="Flight ended."; $("retry").hidden=false;},
       preRun:[()=>{
         const F=Module.FS, save="/home/web_user/.d2-astra";
-        F.mkdirTree("/mine/demos"); F.mkdirTree(save);
+        F.mkdirTree("/mine/demos");F.mkdirTree("/mine/missions"); F.mkdirTree(save);
         for(const [name,bytes] of mounted) F.writeFile("/mine/"+name,bytes,{canOwn:true});
         if(astra){
           const hull=window.astraHullBytes || Uint8Array.from(atob(window.astraHull.data),c=>c.charCodeAt(0));
@@ -163,10 +164,39 @@ async function launch(quick,demo=false) {
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js");
+    await script("engine.js?v=fleet2");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
+
+const saveSetting=(key,value)=>{try{localStorage.setItem(key,value?"1":"0");}catch{}};
+const getSetting=key=>{try{return localStorage.getItem(key);}catch{return null;}};
+const flipKey="astra.mouseInvertY",hudKey="astra.wideHud";
+const savedFlip=getSetting(flipKey);
+window.astraMouseFlip=savedFlip===null?null:savedFlip==="1";
+$("wideHud").checked=getSetting(hudKey)!=="0";
+$("wideHud").onchange=()=>saveSetting(hudKey,$("wideHud").checked);
+window.astraRefreshInput=value=>{
+  $("invertMouse").checked=value;
+  $("invertFlight").setAttribute("aria-pressed",String(value));
+  $("invertFlight").textContent="Invert Y · "+(value?"On":"Off");
+  window.astraMouseFlip=value;
+};
+function chooseFlip(value) {
+  if(window.Module?.inputReady)Module._astra_invert_mouse(+value);
+  window.astraRefreshInput(value);saveSetting(flipKey,value);
+}
+window.astraRememberInput=v=>{window.astraRefreshInput(v);saveSetting(flipKey,v);};
+if(savedFlip!==null)window.astraRefreshInput(window.astraMouseFlip);
+$("invertMouse").onchange=()=>chooseFlip($("invertMouse").checked);
+$("invertFlight").onclick=()=>{chooseFlip(!$("invertMouse").checked);$("view").focus();};
+window.addEventListener("keydown",e=>{
+  if(e.altKey&&e.code==="KeyI"&&document.body.classList.contains("flying")){
+    e.preventDefault();e.stopImmediatePropagation();if(!e.repeat)chooseFlip(!$("invertMouse").checked);
+  }
+},true);
+
 $("start").onclick=()=>launch(true);
+$("encounter").onclick=()=>launch(true,false,true);
 $("menus").onclick=()=>launch(false);
 $("demo").onclick=()=>launch(false,true);
 $("retry").onclick=()=>location.reload();
@@ -176,6 +206,7 @@ document.addEventListener("visibilitychange",()=>{if(document.hidden)syncPilot()
 window.addEventListener("pagehide",syncPilot);
 window.addEventListener("error",e=>{if(window.Module && e.message)astraFail(e.message);});
 $("view").addEventListener("webglcontextlost",e=>{e.preventDefault();syncPilot();astraFail("The graphics device reset. Reopen the flight terminal to continue.");});
+
 
 
 

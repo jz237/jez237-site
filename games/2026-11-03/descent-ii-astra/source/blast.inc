@@ -1,14 +1,15 @@
 /* Draw sparks and the initial pressure flash without creating any game objects. */
-void astra_blast(vms_vector *where,fix radius,float age,unsigned signature)
+int astra_blast(vms_vector *where,fix radius,float age,unsigned signature)
 {
     static int enabled=-1;
     if(enabled<0)enabled=EM_ASM_INT(return !!Module.astra);
-    if(!enabled || age<0 || age>=1 || radius<F1_0/3)return;
+    if(!enabled || age<0 || age>=1 || radius<F1_0/3)return 0;
     g3s_point center;g3_rotate_point(&center,where);
     float z=f2fl(center.p3_z),r=f2fl(radius);
-    if(z<r*.2f || z>260 || r/z<.003f)return;
+    if(z<r*.2f || z>260 || r/z<.003f)return 0;
     const float x=f2fl(center.p3_x),y=f2fl(center.p3_y),sx=f2fl(Matrix_scale.x),sy=f2fl(Matrix_scale.y);
     float vertices[420*3],colors[420*4];int count=0;
+    astra_fire_layers(where,radius,age,signature);
     int fade=grd_curcanv->cv_fade_level,blend=grd_curcanv->cv_blend_func;
     gr_settransblend(GR_FADE_OFF,GR_BLEND_ADDITIVE_A);
     OGL_DISABLE(TEXTURE_2D);glDepthMask(GL_FALSE);
@@ -46,5 +47,6 @@ void astra_blast(vms_vector *where,fix radius,float age,unsigned signature)
     glDrawArrays(GL_TRIANGLES,0,count);
     glDisableClientState(GL_COLOR_ARRAY);glDisableClientState(GL_VERTEX_ARRAY);
     glDepthMask(GL_TRUE);gr_settransblend(fade,blend);
+    return 1;
 }
 

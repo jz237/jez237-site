@@ -27,3 +27,11 @@ The local asset pack can be rebuilt with a Python environment containing the dep
 
 engine.patch and the .inc files contain the platform and renderer changes relative to upstream. The port uses the unmodified upstream physics, AI and weapon simulation. The presentation shader in ship.frag is shared by the flight terminal and the in-game Pyro. material-index.json records the Unity texture names used in the local pack. Upstream engine notices are included in this directory.
 
+
+Field Refit 02 also requires the original Vertigo install. Its mission archive and descriptor are copied without modification. In the same source directory, generate the extension packs with
+
+    python vertigo.py "<original Vertigo files folder>"
+    python fleet.py "<OL>" "<build-dir>/redux"
+    python forge.py "<OL>"
+
+fleet.py requires SciPy in addition to the dependencies listed above. The generated fleet_types.inc supplies D2 model bindings. The live D2 polymodel supplies each ship's outer panels and articulated limbs. Overload render batches supply internal mechanisms and materials. The original game handles the robot's position, weapons, collisions and AI. The optional encounter drop places the player near an existing robot; Enter mine uses the mission's original start.

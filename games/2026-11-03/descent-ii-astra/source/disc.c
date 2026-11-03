@@ -40,3 +40,9 @@ EM_JS(int, astra_intro, (), {return !!Module.intro;});
 EM_JS(int, astra_quick, (), {return !!Module.quick;});
 EM_JS(int, astra_skip_first_briefing, (), {if (!Module.quick) return 0; Module.quick=false; return 1;});
 EM_JS(int, astra_demo, (), {return !!Module.demo;});
+EM_JS(int, astra_wide_hud, (), {return !!Module.astra && !!Module.wideHud;});
+EM_JS(int,astra_saved_flip,(),{return window.astraMouseFlip==null?-1:+window.astraMouseFlip;});
+EM_JS(void,astra_input_ready,(int value),{Module.inputReady=true;window.astraRefreshInput(!!value);});
+
+EM_JS(int,astra_vertigo,(),{return Module.campaign!=="d2";});
+EM_JS(int,astra_initial_hud,(),{if(Module.usedLaunchHUD)return -1;Module.usedLaunchHUD=true;return +Module.wideHud;});
