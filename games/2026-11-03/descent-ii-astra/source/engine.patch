@@ -599,7 +599,7 @@ index af0b258..8bd08a5 100644
  
  extern ogl_texture* ogl_get_free_texture();
 diff --git a/d2/main/fireball.c b/d2/main/fireball.c
-index fe9b0d1..5a59d5a 100644
+index fe9b0d1..c2614a5 100644
 --- a/d2/main/fireball.c
 +++ b/d2/main/fireball.c
 @@ -22,6 +22,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
@@ -610,11 +610,18 @@ index fe9b0d1..5a59d5a 100644
  #include "fix.h"
  #include "vecmat.h"
  #include "gr.h"
-@@ -439,10 +440,16 @@ object *object_create_debris(object *parent, int subobj_num)
+@@ -439,10 +440,23 @@ object *object_create_debris(object *parent, int subobj_num)
  
  }
  
 +#include "piggy.h"
++static int astra_fire_clip(int id, const char *name)
++{
++    if(id==VCLIP_SMALL_EXPLOSION || id==VCLIP_VOLATILE_WALL_HIT || (name && !strncmp(name,"exp",3)))return 1;
++    for(int i=0;i<N_robot_types;i++)
++        if(id==Robot_info[i].exp2_vclip_num)return 1;
++    return 0;
++}
  void draw_fireball(object *obj)
  {
 -	if ( obj->lifeleft > 0 )
@@ -622,14 +629,14 @@ index fe9b0d1..5a59d5a 100644
 +	if (obj->lifeleft > 0) {
 +        extern int astra_blast(vms_vector *,fix,float,unsigned);
 +        const char *clip=obj->id<Num_vclips?piggy_game_bitmap_name(&GameBitmaps[Vclip[obj->id].frames[0].index]):NULL;
-+        if(clip && !strncmp(clip,"exp",3) && Vclip[obj->id].play_time>0 &&
++        if(obj->id<Num_vclips && astra_fire_clip(obj->id,clip) && Vclip[obj->id].play_time>0 &&
 +            astra_blast(&obj->pos,obj->size,1.f-(float)obj->lifeleft/Vclip[obj->id].play_time,obj->signature))return;
 +        draw_vclip_object(obj,obj->lifeleft,0,obj->id);
 +    }
  
  }
  
-@@ -1620,3 +1627,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
+@@ -1620,3 +1634,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
  			expl_wall_swap(&ew[i], swap);
  }
  
@@ -637,6 +644,63 @@ index fe9b0d1..5a59d5a 100644
 +
 +
 +
+diff --git a/d2/main/game.c b/d2/main/game.c
+index f15d413..f4d95d1 100644
+--- a/d2/main/game.c
++++ b/d2/main/game.c
+@@ -1108,6 +1108,13 @@ void game_render_frame();
+ 
+ window *Game_wind = NULL;
+ 
++#ifdef __EMSCRIPTEN__
++EMSCRIPTEN_KEEPALIVE void astra_reset_flight_input(void)
++{
++    game_flush_inputs();
++}
++#endif
++
+ // Event handler for the game
+ int game_handler(window *wind, d_event *event, void *data)
+ {
+@@ -1118,7 +1125,11 @@ int game_handler(window *wind, d_event *event, void *data)
+ 		case EVENT_WINDOW_ACTIVATED:
+ 			set_screen_mode(SCREEN_GAME);
+ 
+-			event_toggle_focus(1);
++#ifdef __EMSCRIPTEN__
++            EM_ASM({Browser.pointerLock=document.pointerLockElement===Module.canvas;window.astraFlightFocus(!!$0);},
++                   Newdemo_state!=ND_STATE_PLAYBACK);
++#endif
++            event_toggle_focus(1);
+ 			key_toggle_repeat(0);
+ 			game_flush_inputs();
+ 
+@@ -1134,8 +1145,11 @@ int game_handler(window *wind, d_event *event, void *data)
+ 			reset_cockpit();
+ 			break;
+ 
+-		case EVENT_WINDOW_DEACTIVATED:
+-			if (!(((Game_mode & GM_MULTI) && (Newdemo_state != ND_STATE_PLAYBACK)) && (!Endlevel_sequence)) )
++        case EVENT_WINDOW_DEACTIVATED:
++#ifdef __EMSCRIPTEN__
++            EM_ASM(window.astraFlightFocus(false));
++#endif
++            if (!(((Game_mode & GM_MULTI) && (Newdemo_state != ND_STATE_PLAYBACK)) && (!Endlevel_sequence)) )
+ 				stop_time();
+ 
+ 			if (!((Game_mode & GM_MULTI) && (Newdemo_state != ND_STATE_PLAYBACK)))
+@@ -1202,7 +1216,10 @@ int game_handler(window *wind, d_event *event, void *data)
+ #endif
+ 				show_menus();
+ 			Game_wind = NULL;
+-			event_toggle_focus(0);
++#ifdef __EMSCRIPTEN__
++            EM_ASM(window.astraFlightFocus(false));
++#endif
++            event_toggle_focus(0);
+ 			key_toggle_repeat(1);
+ 			break;
+ 
 diff --git a/d2/main/gamerend.c b/d2/main/gamerend.c
 index da0872e..28dcca5 100644
 --- a/d2/main/gamerend.c

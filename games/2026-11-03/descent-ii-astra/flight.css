@@ -6,3 +6,4 @@
 .setup{display:flex;gap:16px;flex-wrap:wrap;margin:0 0 16px}.setup label{display:flex;gap:6px;align-items:center;font:13px Segoe UI,sans-serif;letter-spacing:.01em}.setup input{accent-color:#f8b46a}.linksep{color:#7f958a;padding:0 6px}#invertFlight{position:absolute;right:3.3rem;top:.5rem;padding:6px 10px;background:#172823cd;border:1px solid #52665c;color:#e1eae3;font:12px Consolas,monospace;opacity:.70}#invertFlight[aria-pressed=true]{color:#ffca8a}#invertFlight:hover,#invertFlight:focus{opacity:1}
 
 footer a{color:#edbc86}
+#mouseHint{position:absolute;bottom:12%;left:50%;transform:translateX(-50%);pointer-events:none;padding:.45rem .8rem;background:#10191de8;border:1px solid #687a78;border-radius:3px;color:#f2ead6;text-align:center;font:13px system-ui,sans-serif}
