@@ -3369,10 +3369,10 @@ index fe9b0d1..73b73a7 100644
  			//	If dropping a weapon that the player has, drop energy instead, unless it's vulcan, in which case drop vulcan ammo.
 diff --git a/d2/main/fx.c b/d2/main/fx.c
 new file mode 100644
-index 0000000..d7d620f
+index 0000000..ecbc045
 --- /dev/null
 +++ b/d2/main/fx.c
-@@ -0,0 +1,1226 @@
+@@ -0,0 +1,1247 @@
 +/*
 + * Light halos, smoke and sparks (browser edition).
 + *
@@ -3491,11 +3491,14 @@ index 0000000..d7d620f
 +	float rgb[3], alpha;
 +	float acc;			// debris: time toward its next smoke puff
 +	unsigned char kind;
++	short seg;			// sparks and debris: the segment they're in (-1: not tracked), to bounce off walls
 +} particle;
 +
 +#define MAX_PARTICLES 2048
 +static particle particles[MAX_PARTICLES];
 +static int n_particles;
++
++static int spawn_seg = -1;	// the segment the effect being made is in (fx_impact, fx_hit, fx_explosion)
 +
 +static particle *spawn(int kind)
 +{
@@ -3503,6 +3506,7 @@ index 0000000..d7d620f
 +	memset(p, 0, sizeof(*p));
 +	p->kind = kind;
 +	p->alpha = 1;
++	p->seg = kind == FX_SPARK || kind == FX_DEBRIS ? spawn_seg : -1;
 +	return p;
 +}
 +
@@ -3722,6 +3726,7 @@ index 0000000..d7d620f
 +
 +void fx_impact(object *weapon, int segnum, int sidenum, vms_vector *pos)
 +{
++	spawn_seg = segnum;
 +	weapon_info *wi = &Weapon_info[weapon->id];
 +	float p[3], n[3], rgb[3];
 +	if (boom_enabled()) {
@@ -3767,6 +3772,7 @@ index 0000000..d7d620f
 +
 +void fx_hit(object *weapon, vms_vector *pos)
 +{
++	spawn_seg = weapon->segnum;
 +	float p[3], rgb[3];
 +	fv(pos, p);
 +	if (boom_enabled() && Weapon_info[weapon->id].damage_radius) {
@@ -3781,6 +3787,7 @@ index 0000000..d7d620f
 +
 +void fx_explosion(vms_vector *pos, int segnum, fix size)
 +{
++	spawn_seg = segnum;
 +	float p[3], s = f2fl(size), hot[3] = { 1, 0.7f, 0.35f };
 +	int n = (int)(18 + s * 2.5f);
 +	fv(pos, p);
@@ -3913,10 +3920,24 @@ index 0000000..d7d620f
 +			continue;
 +		}
 +		drag = expf(-p->drag * dt);
-+		for (int k = 0; k < 3; k++) {
++		for (int k = 0; k < 3; k++)
 +			p->vel[k] *= drag;
-+			p->pos[k] += p->vel[k] * dt;
++		if (p->seg >= 0 && p->seg <= Highest_segment_index) {	// ricochet off the walls instead of flying through them
++			vms_vector np;
++			int s;
++			np.x = fl2f(p->pos[0] + p->vel[0] * dt);
++			np.y = fl2f(p->pos[1] + p->vel[1] * dt);
++			np.z = fl2f(p->pos[2] + p->vel[2] * dt);
++			if ((s = find_point_seg(&np, p->seg)) < 0) {
++				float d[3];
++				rand_dir(d);
++				for (int k = 0; k < 3; k++)
++					p->vel[k] = -p->vel[k] * 0.45f + d[k] * len(p->vel) * 0.25f;
++			} else
++				p->seg = s;
 +		}
++		for (int k = 0; k < 3; k++)
++			p->pos[k] += p->vel[k] * dt;
 +		p->size += p->grow * dt;
 +		p->angle += p->spin * dt;
 +		i++;
