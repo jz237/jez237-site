@@ -1,14 +1,14 @@
 {
-  "total": 844,
+  "total": 845,
   "months": [
     {
       "key": "2026-11",
       "file": "gallery-2026-11.json",
-      "count": 3,
+      "count": 4,
       "dates": [
         {
           "date": "2026-11-03",
-          "count": 3
+          "count": 4
         }
       ]
     },

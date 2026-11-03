@@ -18643,5 +18643,118 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-03-factual-infographic-factual-infographic-the-scorpionfly-s-n",
+    "title": "Factual infographic: The Scorpionfly’s Nuptial Gift",
+    "tests": "Species identity and gift behavior verified; internal anatomy explicitly generalized.; archive_slot=2026-11-03T12:20; concept=panorpa-scorpionfly-nuptial-food-gift; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: bizarre-insect-life",
+    "prompt": "Create a finished, exceptionally detailed natural-history scientific plate, titled “THE SCORPIONFLY’S NUPTIAL GIFT” and subtitled “Panorpa communis”. A huge anatomically faithful whole adult male is the macro hero on a bramble leaf: six jointed legs, elongated beak with chewing mouthparts, two pairs of transparent dark-patterned wings and raised bulbous genital tip. Naturalistic amber, umber, leaf green, exquisite veining and tactile light; it is a small insect, not a monster. The curved tip is a mating organ, NOT a stinger. Use an elegant scientific plate with 6–8 substantive supporting studies, not a sterile dashboard; organic leaders and flowing composition, generous readable space and no decorative repetition. Include at least three large close-ups or diagrams: (1) male genital tip compared with tapering female abdomen, labeled “mating organ — not a sting”; (2) elongated head and chewing mouthparts; (3) patterned fore- and hindwings. Make a prominent labeled translucent internal study, explicitly “generalized insect anatomy — schematic”: digestive tract, spiracles leading to branching tracheae, and ventral nerve cord, no invented species-specific dissection. A legible curved three-step courtship sequence shows a male with a dead insect, presenting that nuptial food gift to a female, and the pair mating while she feeds; label it “food gift in courtship”. Another vignette shows adult scavenging dead insects and a separate web with an insect being scavenged; a life-cycle study shows eggs in moist ground, scavenging larva and soil pupa leading to adult, with the Panorpa-level life-cycle qualification. Include a woodland edge with nettle and bramble, and a modest scale cue “Panorpa: about 3/8 inch body length” as genus-level reference, not exact species measurement. Fine open callouts, legible brief facts only, accurate natural history; insect imagery dominates. No bibliography, logos, watermark, photographed poster, room, false sting or invented anatomical detail. Direct canvas, rich scientific illustration informed by macro photography.",
+    "image": "images/2026-11-03-factual-infographic-factual-infographic-the-scorpionfly-s-n.jpg",
+    "thumb": "thumbs/2026-11-03-factual-infographic-factual-infographic-the-scorpionfly-s-n.webp",
+    "color": "#cbbe9d",
+    "date": "2026-11-03",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "panorpa-scorpionfly-nuptial-food-gift",
+      "imageSha256": "90bdf6e1b6af3e018d6e2772a844e163ab070e3e34e88acfdfda0df94cbe6f40",
+      "imageDHash": "2170b2a6e826ec47"
+    },
+    "factualInfographic": {
+      "topic": "How Panorpa communis scorpionflies use nuptial food gifts during courtship and live as woodland scavengers",
+      "description": "Panorpa communis courtship food gifts, anatomy and woodland scavenging, with a clearly generalized internal insect schematic.",
+      "sourceNote": "Hampshire Cultural Trust https://collections.hampshireculture.org.uk/object/insect-mecoptera-scorpionfly; University of Minnesota Department of Entomology https://entomology.umn.edu/common-scorpionflies; Missouri Department of Conservation https://mdc.mo.gov/discover-nature/field-guide/common-scorpionflies; Purdue University https://extension.entm.purdue.edu/landscapelab/notes295N1/Lecture_notes/Lecture_4_Entm295.htm; species-specific courtship and habitat, genus-level life cycle and generalized insect anatomy.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-03T17:20:51.790024+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Hampshire Cultural Trust",
+            "title": "Insect / Mecoptera / Scorpionfly",
+            "sourceType": "museum",
+            "url": "https://collections.hampshireculture.org.uk/object/insect-mecoptera-scorpionfly"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of Minnesota Department of Entomology",
+            "title": "Common Scorpionflies",
+            "sourceType": "university",
+            "url": "https://entomology.umn.edu/common-scorpionflies"
+          },
+          {
+            "id": "S3",
+            "publisher": "Missouri Department of Conservation",
+            "title": "Common Scorpionflies",
+            "sourceType": "government-agency",
+            "url": "https://mdc.mo.gov/discover-nature/field-guide/common-scorpionflies"
+          },
+          {
+            "id": "S4",
+            "publisher": "Purdue University",
+            "title": "Internal Insect Anatomy",
+            "sourceType": "university",
+            "url": "https://extension.entm.purdue.edu/landscapelab/notes295N1/Lecture_notes/Lecture_4_Entm295.htm"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Panorpa communis is a scorpionfly in the order Mecoptera found in UK woodland edges and hedgerows on nettles and brambles.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The male presents a collected insect as a nuptial gift to a female during courtship; scorpionflies may also offer secreted saliva.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The male’s curved bulbous abdominal tip is genitalia used in mating, not a sting; the female abdomen tapers.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Panorpa have four patterned wings, a long beak bearing chewing mouthparts, and a yellowish-brown body.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Adults scavenge dead invertebrates and may take insects from spider webs.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Eggs are laid in a moist environment; larvae scavenge and pupate in soil, as described for Panorpa.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A generalized insect digestive tract processes food and absorbs nutrients; spiracles connect to branching tracheae carrying air; a ventral nerve cord connects ganglia.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "Scorpionflies are small insects; the 3/8 inch body-length reference applies to Panorpa generally rather than a precise species measurement.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
