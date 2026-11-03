@@ -84,7 +84,7 @@ index c5cca0b..c0e7162 100644
  	ogl_init_prog();
  #endif
 diff --git a/d2/arch/ogl/ogl.c b/d2/arch/ogl/ogl.c
-index c536c46..98f8a7b 100644
+index c536c46..0d24ed5 100644
 --- a/d2/arch/ogl/ogl.c
 +++ b/d2/arch/ogl/ogl.c
 @@ -10,7 +10,13 @@
@@ -101,7 +101,15 @@ index c536c46..98f8a7b 100644
  #if defined(__APPLE__) && defined(__MACH__)
  #include <OpenGL/gl.h>
  #include <OpenGL/glu.h>
-@@ -83,7 +89,7 @@ int GL_texclamp_enabled=-1;
+@@ -52,6 +58,7 @@
+ #include "byteswap.h"
+ #include "internal.h"
+ #include "gauges.h"
++#include "plight.h"
+ #include "playsave.h"
+ #include "args.h"
+ #include "xmodel.h"
+@@ -83,7 +90,7 @@ int GL_texclamp_enabled=-1;
  GLfloat ogl_maxanisotropy = 0;
  
  int r_texcount = 0, r_cachedtexcount = 0;
@@ -110,7 +118,7 @@ index c536c46..98f8a7b 100644
  int ogl_rgba_internalformat = GL_RGBA;
  int ogl_rgb_internalformat = GL_RGB;
  #else
-@@ -149,6 +155,11 @@ void ogl_init_texture(ogl_texture* t, int w, int h, int flags)
+@@ -149,6 +156,11 @@ void ogl_init_texture(ogl_texture* t, int w, int h, int flags)
  		// use GL_INTENSITY instead of GL_RGB
  		if (flags & OGL_FLAG_ALPHA)
  		{
@@ -122,7 +130,7 @@ index c536c46..98f8a7b 100644
  			if (GameArg.DbgGlIntensity4Ok)
  			{
  				t->internalformat = GL_INTENSITY4;
-@@ -169,6 +180,7 @@ void ogl_init_texture(ogl_texture* t, int w, int h, int flags)
+@@ -169,6 +181,7 @@ void ogl_init_texture(ogl_texture* t, int w, int h, int flags)
  				t->internalformat = ogl_rgba_internalformat;
  				t->format = GL_RGBA;
  			}
@@ -130,7 +138,45 @@ index c536c46..98f8a7b 100644
  		}
  		else
  		{
-@@ -1093,7 +1105,11 @@ bool ogl_ubitblt_i(int dw,int dh,int dx,int dy, int sw, int sh, int sx, int sy,
+@@ -773,6 +786,7 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
+ 	int c, index2, index3, index4;
+ 	GLfloat vertex_array[MAX_VERTS * 3], color_array[MAX_VERTS * 4], texcoord_array[MAX_VERTS * 2];
+ 	GLfloat color_alpha = 1.0;
++	int pl = 0;
+ 
+ 	if (nv > MAX_VERTS)
+ 		Error("Too many vertices: %d", nv);
+@@ -785,6 +799,7 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
+ 		OGL_ENABLE(TEXTURE_2D);
+ 		ogl_bindbmtex(bm);
+ 		ogl_texwrap(bm->gltexture, GL_REPEAT);
++		pl = plight_bind(bm, 0);	// a wall lit per pixel
+ 		r_tpolyc++;
+ 		color_alpha = (grd_curcanv->cv_fade_level >= GR_FADE_OFF)?1.0:(1.0 - (float)grd_curcanv->cv_fade_level / ((float)GR_FADE_LEVELS - 1.0));
+ 	} else if (tmap_drawer_ptr == draw_tmap_flat) {
+@@ -827,6 +842,8 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
+ 	}
+ 	
+ 	glDrawArrays(GL_TRIANGLE_FAN, 0, nv);
++	if (pl)
++		plight_unbind();
+ 	
+ 	glDisableClientState(GL_VERTEX_ARRAY);
+ 	glDisableClientState(GL_COLOR_ARRAY);
+@@ -920,7 +937,11 @@ bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_
+ 	glVertexPointer(3, GL_FLOAT, 0, vertex_array);
+ 	glColorPointer(4, GL_FLOAT, 0, color_array);
+ 	glTexCoordPointer(2, GL_FLOAT, 0, texcoordovl_array);
+-	glDrawArrays(GL_TRIANGLE_FAN, 0, nv);
++	if (plight_bind(bmovl, 1)) {
++		glDrawArrays(GL_TRIANGLE_FAN, 0, nv);
++		plight_unbind();
++	} else
++		glDrawArrays(GL_TRIANGLE_FAN, 0, nv);
+ 	glDisableClientState(GL_VERTEX_ARRAY);
+ 	glDisableClientState(GL_COLOR_ARRAY);
+ 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+@@ -1093,7 +1114,11 @@ bool ogl_ubitblt_i(int dw,int dh,int dx,int dy, int sw, int sh, int sx, int sy,
  	glVertexPointer(2, GL_FLOAT, 0, vertex_array);
  	glColorPointer(4, GL_FLOAT, 0, color_array);
  	glTexCoordPointer(2, GL_FLOAT, 0, texcoord_array);  
@@ -142,7 +188,21 @@ index c536c46..98f8a7b 100644
  
  	glDisableClientState(GL_VERTEX_ARRAY);
  	glDisableClientState(GL_COLOR_ARRAY);
-@@ -1644,6 +1660,174 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
+@@ -1146,7 +1171,12 @@ void ogl_start_frame(void){
+ 
+ 	r_polyc=0;r_tpolyc=0;r_bitmapc=0;r_ubitbltc=0;r_upixelc=0;
+ 
+-	OGL_VIEWPORT(grd_curcanv->cv_bitmap.bm_x,grd_curcanv->cv_bitmap.bm_y,Canvas_width,Canvas_height);
++	if (ogl_post_active()) {	// drawing into the off-screen view, which starts at its corner
++		glViewport(0, 0, Canvas_width, Canvas_height);
++		last_width = Canvas_width;
++		last_height = Canvas_height;
++	} else
++		OGL_VIEWPORT(grd_curcanv->cv_bitmap.bm_x,grd_curcanv->cv_bitmap.bm_y,Canvas_width,Canvas_height);
+ 	glClearColor(0.0, 0.0, 0.0, 0.0);
+ 
+ 	glLineWidth(linedotscale);
+@@ -1644,6 +1674,174 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
  }
  #endif
  
@@ -317,7 +377,7 @@ index c536c46..98f8a7b 100644
  void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  {
  	unsigned char *buf;
-@@ -1663,23 +1847,18 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+@@ -1663,23 +1861,18 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  		png_data pdata;
  
  		sprintf(filename, /*"textures/"*/ "%s.png", bitmapname);
@@ -350,7 +410,7 @@ index c536c46..98f8a7b 100644
  				#ifdef OGL_MERGE
  				if (bm->bm_flags & BM_FLAG_SUPER_TRANSPARENT)
  					ogl_loadpngmask(&pdata, bm, texfilt);
-@@ -1959,7 +2138,12 @@ bool ogl_ubitmapm_cs(int x, int y,int dw, int dh, grs_bitmap *bm,int c, int scal
+@@ -1959,7 +2152,12 @@ bool ogl_ubitmapm_cs(int x, int y,int dw, int dh, grs_bitmap *bm,int c, int scal
  	glVertexPointer(2, GL_FLOAT, 0, vertex_array);
  	glColorPointer(4, GL_FLOAT, 0, color_array);
  	glTexCoordPointer(2, GL_FLOAT, 0, texcoord_array);  
@@ -363,12 +423,690 @@ index c536c46..98f8a7b 100644
  	glDisableClientState(GL_VERTEX_ARRAY);
  	glDisableClientState(GL_COLOR_ARRAY);
  	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+@@ -1976,8 +2174,10 @@ void ogl_update_window_clip()
+ 		Window_clip_right == cw - 1 && Window_clip_bot == ch - 1) {
+ 		glDisable(GL_SCISSOR_TEST);
+ 	} else {
+-		glScissor(Window_clip_left + grd_curcanv->cv_bitmap.bm_x,
+-			grd_curscreen->sc_h - grd_curcanv->cv_bitmap.bm_y - Window_clip_bot - 1,
++		int ox, oy;
++		ogl_post_origin(&ox, &oy);
++		glScissor(Window_clip_left + grd_curcanv->cv_bitmap.bm_x - ox,
++			grd_curscreen->sc_h - grd_curcanv->cv_bitmap.bm_y - Window_clip_bot - 1 - oy,
+ 			Window_clip_right - Window_clip_left + 1,
+ 			Window_clip_bot - Window_clip_top + 1);
+ 		glEnable(GL_SCISSOR_TEST);
+diff --git a/d2/arch/ogl/ogl_post.c b/d2/arch/ogl/ogl_post.c
+new file mode 100644
+index 0000000..6710254
+--- /dev/null
++++ b/d2/arch/ogl/ogl_post.c
+@@ -0,0 +1,659 @@
++/*
++ * Post-processing of the 3D view (browser edition, WebGL 2). The mine is drawn into an
++ * off-screen HDR image (multisampled when the page asks for antialiasing), then ambient
++ * occlusion darkens creases and contact points, light haze scatters the lights in the air
++ * (with the headlight's beam), glow (bloom) spreads from everything bright, and a filmic curve
++ * maps it to the screen, with FXAA when there is no multisampling.
++ */
++
++#define GL_GLEXT_PROTOTYPES
++#include <GL/gl.h>
++#include <GL/glext.h>
++#include <math.h>
++#include "ogl_init.h"
++#include "internal.h"
++#include "gr.h"
++#include "config.h"
++#include "console.h"
++#include "../../3d/globvars.h"
++#include "plight.h"
++#ifdef __EMSCRIPTEN__
++#include "../web/web.h"
++#endif
++
++#ifndef GL_READ_FRAMEBUFFER
++#define GL_READ_FRAMEBUFFER 0x8CA8
++#define GL_DRAW_FRAMEBUFFER 0x8CA9
++#endif
++#ifndef GL_DEPTH_COMPONENT24
++#define GL_DEPTH_COMPONENT24 0x81A6
++#endif
++#define GL_R11F_G11F_B10F_ 0x8C3A
++#define GL_RGBA16F_ 0x881A
++#define GL_HALF_FLOAT_ 0x140B
++#define GL_MAX_SAMPLES_ 0x8D57
++
++void glBlitFramebuffer(GLint, GLint, GLint, GLint, GLint, GLint, GLint, GLint, GLbitfield, GLenum);
++void glRenderbufferStorageMultisample(GLenum, GLsizei, GLenum, GLsizei, GLsizei);
++
++#define BLOOM_LEVELS 6
++#define MAX_HAZE 16
++#define Z_NEAR 0.1f		// ogl_start_frame's projection
++#define Z_FAR 5000.0f
++
++#define LOOK_GLOW 1
++#define LOOK_AO 2
++#define LOOK_HAZE 4
++
++typedef struct target {
++	GLuint fbo, tex;
++	int w, h;
++} target;
++
++static struct {
++	int tried, ok;
++	GLenum color_format;		// of the HDR images
++	int w, h, samples;			// of the scene buffers now
++	GLuint ms_fbo, ms_color, ms_depth;	// multisampled scene
++	target scene, ldr;			// resolved scene (with depth), tone mapped before FXAA
++	GLuint depth;				// resolved depth texture
++	target bloom[BLOOM_LEVELS];
++	target ao[2];				// half size, before and after blurring one way
++	int levels;
++	int x, y;					// the view's origin in window coordinates
++	int active, look;
++	GLuint down, prefilter, up, ssao, aoblur, fxaa;
++	GLuint final[8];			// by LOOK_* bits
++} P;
++
++static const char *quad_vs =
++	"in vec4 a_position;\n"
++	"out vec2 v_uv;\n"
++	"void main() {\n"
++	"	v_uv = a_position.xy * 0.5 + 0.5;\n"
++	"	gl_Position = vec4(a_position.xy, 0.0, 1.0);\n"
++	"}\n";
++
++// View-space positions from the depth buffer, with the view's zoom and aspect undone (scale)
++// so lengths are in mine units, as plight.c gives its lights.
++static const char *depth_glsl =
++	"uniform sampler2D depth;\n"
++	"uniform vec3 scale;\n"
++	"uniform vec2 nearfar;\n"
++	"float dist_at(vec2 uv) {\n"	// along the view axis, in the view's scaled units
++	"	float z = texture(depth, uv).r * 2.0 - 1.0;\n"
++	"	return 2.0 * nearfar.x * nearfar.y / (nearfar.y + nearfar.x - z * (nearfar.y - nearfar.x));\n"
++	"}\n"
++	"vec3 view_at(vec2 uv) {\n"
++	"	float d = dist_at(uv);\n"
++	"	return vec3((uv * 2.0 - 1.0) * d, -d) / scale;\n"
++	"}\n"
++	"vec2 uv_of(vec3 p) {\n"
++	"	vec3 e = p * scale;\n"
++	"	return e.xy / max(-e.z, 1e-3) * 0.5 + 0.5;\n"
++	"}\n";
++
++// 13-tap downsample (Jimenez 2014). The first one keeps only what is brighter than the
++// threshold, with a soft knee, and weights its groups by 1/(1+luma) so single bright pixels
++// (sparks, far lamps) don't flicker.
++static const char *down_fs =
++	"uniform sampler2D src;\n"
++	"uniform vec2 texel;\n"
++	"uniform vec2 thresh;\n"
++	"in vec2 v_uv;\n"
++	"out vec4 o;\n"
++	"vec3 at(vec2 d) { return texture(src, v_uv + d * texel).rgb; }\n"
++	"float luma(vec3 c) { return dot(c, vec3(0.2126, 0.7152, 0.0722)); }\n"
++	"void main() {\n"
++	"	vec3 a = at(vec2(-2.0, -2.0)), b = at(vec2(0.0, -2.0)), c = at(vec2(2.0, -2.0));\n"
++	"	vec3 d = at(vec2(-1.0, -1.0)), e = at(vec2(1.0, -1.0));\n"
++	"	vec3 f = at(vec2(-2.0, 0.0)), g = at(vec2(0.0)), h = at(vec2(2.0, 0.0));\n"
++	"	vec3 i = at(vec2(-1.0, 1.0)), j = at(vec2(1.0, 1.0));\n"
++	"	vec3 k = at(vec2(-2.0, 2.0)), l = at(vec2(0.0, 2.0)), m = at(vec2(2.0, 2.0));\n"
++	"#ifdef PREFILTER\n"
++	"	vec3 g0 = (d + e + i + j) * 0.25, g1 = (a + b + f + g) * 0.25, g2 = (b + c + g + h) * 0.25;\n"
++	"	vec3 g3 = (f + g + k + l) * 0.25, g4 = (g + h + l + m) * 0.25;\n"
++	"	float w0 = 0.5 / (1.0 + luma(g0)), w1 = 0.125 / (1.0 + luma(g1)), w2 = 0.125 / (1.0 + luma(g2));\n"
++	"	float w3 = 0.125 / (1.0 + luma(g3)), w4 = 0.125 / (1.0 + luma(g4));\n"
++	"	vec3 s = (g0 * w0 + g1 * w1 + g2 * w2 + g3 * w3 + g4 * w4) / (w0 + w1 + w2 + w3 + w4);\n"
++	"	float br = mix(luma(s), max(max(s.r, s.g), s.b), 0.5);\n"	// saturated colors glow less
++	"	float soft = clamp(br - thresh.x + thresh.y, 0.0, 2.0 * thresh.y);\n"
++	"	soft = soft * soft / (4.0 * thresh.y + 1e-4);\n"
++	"	o = vec4(s * max(soft, br - thresh.x) / max(br, 1e-4), 1.0);\n"
++	"#else\n"
++	"	o = vec4((d + e + i + j) * 0.125 + (a + c + k + m) * 0.03125 + (b + f + h + l) * 0.0625 + g * 0.125, 1.0);\n"
++	"#endif\n"
++	"}\n";
++
++// 3x3 tent upsample, added onto the next larger level
++static const char *up_fs =
++	"uniform sampler2D src;\n"
++	"uniform vec2 texel;\n"
++	"uniform float scale;\n"
++	"in vec2 v_uv;\n"
++	"out vec4 o;\n"
++	"vec3 at(vec2 d) { return texture(src, v_uv + d * texel).rgb; }\n"
++	"void main() {\n"
++	"	vec3 c = at(vec2(-1.0, -1.0)) + at(vec2(1.0, -1.0)) + at(vec2(-1.0, 1.0)) + at(vec2(1.0, 1.0))\n"
++	"		+ 2.0 * (at(vec2(0.0, -1.0)) + at(vec2(-1.0, 0.0)) + at(vec2(1.0, 0.0)) + at(vec2(0.0, 1.0)))\n"
++	"		+ 4.0 * at(vec2(0.0));\n"
++	"	o = vec4(c * (scale / 16.0), 1.0);\n"
++	"}\n";
++
++// Ambient occlusion at half size: how much of the half-space above each pixel nearby surfaces
++// cover, from 12 depth samples on a spiral (turned per pixel; the blur evens that out).
++static const char *ssao_fs =
++	"uniform vec2 texel;\n"		// of the depth buffer
++	"uniform vec2 ao;\n"		// radius in units, strength
++	"in vec2 v_uv;\n"
++	"out vec4 o;\n"
++	"void main() {\n"
++	"	vec3 p = view_at(v_uv);\n"
++	"	vec3 pr = view_at(v_uv + vec2(texel.x, 0.0)) - p, pl = p - view_at(v_uv - vec2(texel.x, 0.0));\n"
++	"	vec3 pu = view_at(v_uv + vec2(0.0, texel.y)) - p, pd = p - view_at(v_uv - vec2(0.0, texel.y));\n"
++	"	vec3 n = normalize(cross(abs(pr.z) < abs(pl.z) ? pr : pl, abs(pu.z) < abs(pd.z) ? pu : pd));\n"
++	"	if (dot(n, p) > 0.0) n = -n;\n"
++	"	float d = -p.z * scale.z;\n"
++	"	if (d > 600.0) { o = vec4(1.0); return; }\n"
++	"	vec2 r = min(ao.x * scale.xy / d * 0.5, vec2(0.12));\n"
++	"	float a = fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715)))) * 6.2832;\n"
++	"	float occ = 0.0;\n"
++	"	for (int i = 0; i < 12; i++) {\n"
++	"		float t = (float(i) + 0.5) / 12.0;\n"
++	"		float ang = a + float(i) * 2.39996;\n"
++	"		vec3 v = view_at(v_uv + vec2(cos(ang), sin(ang)) * r * sqrt(t)) - p;\n"
++	"		float l = length(v);\n"
++	"		occ += max(dot(v / max(l, 1e-4), n) - 0.15, 0.0) * (1.0 - smoothstep(ao.x * 0.6, ao.x * 1.6, l));\n"
++	"	}\n"
++	"	o = vec4(vec3(clamp(1.0 - ao.y * occ / 12.0 * 1.6, 0.0, 1.0)), 1.0);\n"
++	"}\n";
++
++// separable blur that keeps edges: neighbors at another depth count less
++static const char *aoblur_fs =
++	"uniform sampler2D src;\n"
++	"uniform vec2 stepv;\n"
++	"in vec2 v_uv;\n"
++	"out vec4 o;\n"
++	"void main() {\n"
++	"	float d0 = dist_at(v_uv), sum = 0.0, wsum = 0.0;\n"
++	"	for (int i = -4; i <= 4; i++) {\n"
++	"		vec2 uv = v_uv + stepv * float(i);\n"
++	"		float w = exp(-float(i * i) / 10.0) * exp(-abs(dist_at(uv) - d0) / (0.04 * d0 + 0.2));\n"
++	"		sum += texture(src, uv).r * w;\n"
++	"		wsum += w;\n"
++	"	}\n"
++	"	o = vec4(vec3(sum / wsum), 1.0);\n"
++	"}\n";
++
++// Occlusion and haze, glow, then the filmic curve: colors up to the knee stay as the game drew
++// them, brighter ones roll off smoothly toward white instead of clipping; a little contrast and
++// vignette. Haze: light scattered toward the eye along each view ray up to the wall it hits, from
++// each light (an inverse-square integral that has a closed form) and the headlight's cone.
++static const char *final_fs =
++	"uniform sampler2D scene;\n"
++	"uniform sampler2D bloom;\n"
++	"uniform sampler2D aotex;\n"
++	"uniform sampler2D fogtex;\n"
++	"uniform vec4 look;\n"	// bloom strength, knee, contrast, vignette
++	"uniform vec4 hazep;\n"	// light haze, beam, fog, -
++	"uniform int nhaze;\n"
++	"uniform vec4 hpos[16];\n"
++	"uniform vec3 hcol[16];\n"
++	"uniform vec4 headpos;\n"
++	"uniform vec3 headdir;\n"
++	"in vec2 v_uv;\n"
++	"out vec4 o;\n"
++	"float hash(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }\n"
++	"float lum(vec3 c) { return dot(c, vec3(0.2126, 0.7152, 0.0722)); }\n"
++	"void main() {\n"
++	"	vec3 c = texture(scene, v_uv).rgb;\n"
++	"#ifdef AO\n"
++	"	float a = texture(aotex, v_uv).r;\n"
++	"	c *= mix(a, 1.0, smoothstep(0.7, 1.5, lum(c)));\n"	// lights themselves stay bright
++	"#endif\n"
++	"#ifdef HAZE\n"
++	"	vec3 pe = view_at(v_uv);\n"
++	"	float T = length(pe);\n"
++	"	vec3 D = pe / T;\n"
++	"	vec3 hz = vec3(0.0);\n"
++	"	for (int i = 0; i < 16; i++) {\n"
++	"		if (i >= nhaze) break;\n"
++	"		vec3 L = hpos[i].xyz;\n"
++	"		float t0 = dot(L, D);\n"
++	"		float h = max(length(L - D * t0), 0.4);\n"
++	"		float s = (atan((T - t0) / h) - atan(-t0 / h)) / h;\n"
++	"		vec2 lu = uv_of(L);\n"			// is the light itself behind a wall?
++	"		float vis = 0.5;\n"
++	"		if (L.z < 0.0 && all(greaterThan(lu, vec2(0.0))) && all(lessThan(lu, vec2(1.0))))\n"
++	"			vis = smoothstep(-2.0, 2.0, length(view_at(lu)) - length(L));\n"
++	"		hz += hcol[i] * s * vis;\n"
++	"	}\n"
++	"	hz *= hazep.x;\n"
++	"	if (headpos.w > 0.0) {\n"
++	"		float te = min(T, 160.0), beam = 0.0, dt = te / 12.0;\n"
++	"		float j = hash(gl_FragCoord.xy + 0.5);\n"
++	"		for (int i = 0; i < 12; i++) {\n"
++	"			vec3 x = D * ((float(i) + j) * dt) - headpos.xyz;\n"
++	"			float d = length(x);\n"
++	"			float cd = dot(x / max(d, 1e-3), headdir);\n"
++	"			beam += smoothstep(0.62, 0.92, cd) / (1.0 + d * d / 6000.0);\n"
++	"		}\n"
++	"		hz += vec3(1.0, 0.97, 0.9) * beam * dt * hazep.y;\n"
++	"	}\n"
++	"	hz += texture(fogtex, v_uv).rgb * (1.0 - exp(-T * hazep.z));\n"	// the room's own glow, far away
++	"	c += hz;\n"
++	"#endif\n"
++	"#ifdef GLOW\n"
++	"	c += texture(bloom, v_uv).rgb * look.x;\n"
++	"	float m = max(max(c.r, c.g), c.b);\n"
++	"	float k = look.y;\n"
++	"	float t = m <= k ? m : k + (1.0 - k) * (1.0 - exp((k - m) / (1.0 - k)));\n"
++	"	c *= t / max(m, 1e-4);\n"
++	"	c = mix(c, vec3(t), smoothstep(1.0, 6.0, m) * 0.6);\n"	// very bright light burns white
++	"	c = clamp(c, 0.0, 1.0);\n"
++	"	c = mix(c, c * c * (3.0 - 2.0 * c), look.z);\n"
++	"	vec2 q = v_uv - 0.5;\n"
++	"	c *= 1.0 - look.w * dot(q, q) * 2.0;\n"
++	"#endif\n"
++	"	c += (hash(gl_FragCoord.xy) - 0.5) / 255.0;\n"
++	"	o = vec4(c, 1.0);\n"
++	"}\n";
++
++// FXAA (after Timothy Lottes' console version) when the view isn't multisampled
++static const char *fxaa_fs =
++	"uniform sampler2D src;\n"
++	"uniform vec2 texel;\n"
++	"in vec2 v_uv;\n"
++	"out vec4 o;\n"
++	"float luma(vec3 c) { return dot(c, vec3(0.299, 0.587, 0.114)); }\n"
++	"void main() {\n"
++	"	vec3 nw = texture(src, v_uv + vec2(-1.0, -1.0) * texel).rgb;\n"
++	"	vec3 ne = texture(src, v_uv + vec2(1.0, -1.0) * texel).rgb;\n"
++	"	vec3 sw = texture(src, v_uv + vec2(-1.0, 1.0) * texel).rgb;\n"
++	"	vec3 se = texture(src, v_uv + vec2(1.0, 1.0) * texel).rgb;\n"
++	"	vec3 mc = texture(src, v_uv).rgb;\n"
++	"	float lnw = luma(nw), lne = luma(ne), lsw = luma(sw), lse = luma(se), lm = luma(mc);\n"
++	"	float lmin = min(lm, min(min(lnw, lne), min(lsw, lse)));\n"
++	"	float lmax = max(lm, max(max(lnw, lne), max(lsw, lse)));\n"
++	"	vec2 dir = vec2(-((lnw + lne) - (lsw + lse)), (lnw + lsw) - (lne + lse));\n"
++	"	float red = max((lnw + lne + lsw + lse) * 0.03125, 1.0 / 128.0);\n"
++	"	float rcp = 1.0 / (min(abs(dir.x), abs(dir.y)) + red);\n"
++	"	dir = clamp(dir * rcp, -8.0, 8.0) * texel;\n"
++	"	vec3 a = 0.5 * (texture(src, v_uv - dir / 6.0).rgb + texture(src, v_uv + dir / 6.0).rgb);\n"
++	"	vec3 b = a * 0.5 + 0.25 * (texture(src, v_uv - dir * 0.5).rgb + texture(src, v_uv + dir * 0.5).rgb);\n"
++	"	float lb = luma(b);\n"
++	"	o = vec4(lb < lmin || lb > lmax ? a : b, 1.0);\n"
++	"}\n";
++
++static GLuint program(const char *defines, const char *fs, int with_depth)
++{
++	static const char *samplers[] = { "src", "scene", "bloom", "aotex", "fogtex", "depth" };
++	static const int units[] = { 0, 0, 1, 2, 3, 4 };
++	char body[16384];
++	GLuint p;
++	int i;
++	snprintf(body, sizeof(body), "%s%s", with_depth ? depth_glsl : "", fs);
++	if (!(p = ogl_program3(quad_vs, defines, body)))
++		return 0;
++	glUseProgram(p);
++	for (i = 0; i < 6; i++) {
++		GLint loc = glGetUniformLocation(p, samplers[i]);
++		if (loc >= 0)
++			glUniform1i(loc, units[i]);
++	}
++	return p;
++}
++
++static int format_renders(GLenum ifmt)
++{
++	GLuint t, f;
++	int ok;
++	glGenTextures(1, &t);
++	glBindTexture(GL_TEXTURE_2D, t);
++	glTexImage2D(GL_TEXTURE_2D, 0, ifmt, 4, 4, 0, ifmt == GL_RGBA16F_ ? GL_RGBA : GL_RGB, GL_HALF_FLOAT_, NULL);
++	glGenFramebuffers(1, &f);
++	glBindFramebuffer(GL_FRAMEBUFFER, f);
++	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, t, 0);
++	ok = glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
++	glBindFramebuffer(GL_FRAMEBUFFER, 0);
++	glDeleteFramebuffers(1, &f);
++	glDeleteTextures(1, &t);
++	return ok;
++}
++
++static int ready(void)
++{
++	if (P.tried)
++		return P.ok;
++	P.tried = 1;
++#ifdef __EMSCRIPTEN__
++	if (d2web_gl_version() < 2)
++		return 0;
++#endif
++	P.down = program("", down_fs, 0);
++	P.prefilter = program("#define PREFILTER 1\n", down_fs, 0);
++	P.up = program("", up_fs, 0);
++	P.ssao = program("", ssao_fs, 1);
++	P.aoblur = program("", aoblur_fs, 1);
++	P.fxaa = program("", fxaa_fs, 0);
++	glUseProgram(0);
++	P.ok = P.down && P.prefilter && P.up && P.ssao && P.aoblur && P.fxaa;
++	if (!P.ok)
++		return 0;
++	P.color_format = format_renders(GL_R11F_G11F_B10F_) ? GL_R11F_G11F_B10F_ : format_renders(GL_RGBA16F_) ? GL_RGBA16F_ : GL_RGBA;
++	con_printf(CON_NORMAL, "post: HDR format %#x\n", P.color_format);
++	return 1;
++}
++
++static GLuint final_program(int look)
++{
++	if (!P.final[look]) {
++		char defines[96];
++		snprintf(defines, sizeof(defines), "%s%s%s", look & LOOK_GLOW ? "#define GLOW 1\n" : "",
++			look & LOOK_AO ? "#define AO 1\n" : "", look & LOOK_HAZE ? "#define HAZE 1\n" : "");
++		P.final[look] = program(defines, final_fs, 1);
++	}
++	return P.final[look];
++}
++
++static GLuint texture_make(int w, int h, GLenum ifmt)
++{
++	GLuint t;
++	GLenum fmt = ifmt == GL_R11F_G11F_B10F_ ? GL_RGB : ifmt == GL_DEPTH_COMPONENT24 ? GL_DEPTH_COMPONENT : GL_RGBA;
++	GLenum type = ifmt == GL_DEPTH_COMPONENT24 ? GL_UNSIGNED_INT : ifmt == GL_RGBA ? GL_UNSIGNED_BYTE : GL_HALF_FLOAT_;
++	GLenum filter = ifmt == GL_DEPTH_COMPONENT24 ? GL_NEAREST : GL_LINEAR;
++	glGenTextures(1, &t);
++	glBindTexture(GL_TEXTURE_2D, t);
++	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter);
++	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter);
++	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
++	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
++	glTexImage2D(GL_TEXTURE_2D, 0, ifmt, w, h, 0, fmt, type, NULL);
++	return t;
++}
++
++static void target_make(target *t, int w, int h, GLenum ifmt, GLuint depth)
++{
++	t->w = w;
++	t->h = h;
++	t->tex = texture_make(w, h, ifmt);
++	glGenFramebuffers(1, &t->fbo);
++	glBindFramebuffer(GL_FRAMEBUFFER, t->fbo);
++	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, t->tex, 0);
++	if (depth)
++		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth, 0);
++}
++
++static void target_free(target *t)
++{
++	if (t->fbo)
++		glDeleteFramebuffers(1, &t->fbo);
++	if (t->tex)
++		glDeleteTextures(1, &t->tex);
++	t->fbo = t->tex = 0;
++}
++
++static void buffers_free(void)
++{
++	int i;
++	target_free(&P.scene);
++	target_free(&P.ldr);
++	target_free(&P.ao[0]);
++	target_free(&P.ao[1]);
++	for (i = 0; i < BLOOM_LEVELS; i++)
++		target_free(&P.bloom[i]);
++	if (P.depth)
++		glDeleteTextures(1, &P.depth);
++	if (P.ms_fbo) {
++		glDeleteFramebuffers(1, &P.ms_fbo);
++		glDeleteRenderbuffers(1, &P.ms_color);
++		glDeleteRenderbuffers(1, &P.ms_depth);
++	}
++	P.depth = P.ms_fbo = P.ms_color = P.ms_depth = 0;
++	P.w = P.h = 0;
++}
++
++static void buffers_make(int w, int h, int samples)
++{
++	int i, bw = w, bh = h;
++	buffers_free();
++	P.w = w;
++	P.h = h;
++	P.samples = samples;
++	P.depth = texture_make(w, h, GL_DEPTH_COMPONENT24);
++	target_make(&P.scene, w, h, P.color_format, P.depth);
++	if (samples) {
++		glGenRenderbuffers(1, &P.ms_color);
++		glBindRenderbuffer(GL_RENDERBUFFER, P.ms_color);
++		glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, P.color_format == GL_RGBA ? GL_RGBA8 : P.color_format, w, h);
++		glGenRenderbuffers(1, &P.ms_depth);
++		glBindRenderbuffer(GL_RENDERBUFFER, P.ms_depth);
++		glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH_COMPONENT24, w, h);
++		glGenFramebuffers(1, &P.ms_fbo);
++		glBindFramebuffer(GL_FRAMEBUFFER, P.ms_fbo);
++		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, P.ms_color);
++		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, P.ms_depth);
++		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
++			con_printf(CON_URGENT, "post: no multisampling\n");
++			glDeleteFramebuffers(1, &P.ms_fbo);
++			glDeleteRenderbuffers(1, &P.ms_color);
++			glDeleteRenderbuffers(1, &P.ms_depth);
++			P.ms_fbo = P.ms_color = P.ms_depth = 0;
++			P.samples = 0;
++		}
++	}
++	target_make(&P.ldr, w, h, GL_RGBA, 0);
++	target_make(&P.ao[0], (w + 1) / 2, (h + 1) / 2, GL_RGBA, 0);
++	target_make(&P.ao[1], (w + 1) / 2, (h + 1) / 2, GL_RGBA, 0);
++	for (P.levels = 0; P.levels < BLOOM_LEVELS && bw > 16 && bh > 16; P.levels++) {
++		bw = (bw + 1) / 2;
++		bh = (bh + 1) / 2;
++		target_make(&P.bloom[P.levels], bw, bh, P.color_format, 0);
++	}
++	glBindFramebuffer(GL_FRAMEBUFFER, 0);
++	glBindRenderbuffer(GL_RENDERBUFFER, 0);
++}
++
++int ogl_post_active(void)
++{
++	return P.active;
++}
++
++void ogl_post_origin(int *x, int *y)
++{
++	*x = P.active ? P.x : 0;
++	*y = P.active ? P.y : 0;
++}
++
++// Before the 3D view of the main window is drawn into the current canvas.
++int ogl_post_begin(void)
++{
++	grs_bitmap *bm = &grd_curcanv->cv_bitmap;
++	int samples = 0;
++
++	P.active = 0;
++	P.look = 0;
++#ifdef __EMSCRIPTEN__
++	P.look = (d2web_option(D2WEB_OPTION_GLOW) ? LOOK_GLOW : 0) | (d2web_option(D2WEB_OPTION_AO) ? LOOK_AO : 0) |
++		(d2web_option(D2WEB_OPTION_HAZE) ? LOOK_HAZE : 0);
++#endif
++	if (!P.look || !ready() || bm->bm_w < 64 || bm->bm_h < 64)
++		return 0;
++	if (GameCfg.Multisample) {
++		GLint max = 0;
++		glGetIntegerv(GL_MAX_SAMPLES_, &max);
++		samples = max < 4 ? max : 4;
++	}
++	if (P.w != bm->bm_w || P.h != bm->bm_h || (P.samples != samples && samples))
++		buffers_make(bm->bm_w, bm->bm_h, samples);
++	P.x = bm->bm_x;
++	P.y = grd_curscreen->sc_h - bm->bm_y - bm->bm_h;
++	glBindFramebuffer(GL_FRAMEBUFFER, P.samples ? P.ms_fbo : P.scene.fbo);
++	glDisable(GL_SCISSOR_TEST);
++	glViewport(0, 0, P.w, P.h);
++	last_width = P.w;
++	last_height = P.h;
++	glClearColor(0, 0, 0, 1);
++	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
++	P.active = 1;
++	return 1;
++}
++
++static void draw_quad(void)
++{
++	static const GLfloat quad[8] = { -1, -1, 1, -1, 1, 1, -1, 1 };
++	glEnableClientState(GL_VERTEX_ARRAY);
++	glVertexPointer(2, GL_FLOAT, 0, quad);
++	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
++	glDisableClientState(GL_VERTEX_ARRAY);
++}
++
++static void bind_target(target *t)
++{
++	glBindFramebuffer(GL_FRAMEBUFFER, t->fbo);
++	glViewport(0, 0, t->w, t->h);
++}
++
++static void bind_texture(int unit, GLuint tex)
++{
++	glActiveTexture(GL_TEXTURE0 + unit);
++	glBindTexture(GL_TEXTURE_2D, tex);
++}
++
++// the depth-reading programs' view uniforms
++static void set_view(GLuint p)
++{
++	glUniform3f(glGetUniformLocation(p, "scale"), f2fl(Matrix_scale.x), f2fl(Matrix_scale.y), f2fl(Matrix_scale.z));
++	glUniform2f(glGetUniformLocation(p, "nearfar"), Z_NEAR, Z_FAR);
++}
++
++static void bloom(void)
++{
++	int i;
++	target *src = &P.scene;
++	for (i = 0; i < P.levels; i++) {
++		GLuint p = i ? P.down : P.prefilter;
++		glUseProgram(p);
++		glUniform2f(glGetUniformLocation(p, "texel"), 1.0f / src->w, 1.0f / src->h);
++		if (!i)
++			glUniform2f(glGetUniformLocation(p, "thresh"), d2web_tune(7, 0.72f), d2web_tune(8, 0.36f));
++		bind_target(&P.bloom[i]);
++		bind_texture(0, src->tex);
++		draw_quad();
++		src = &P.bloom[i];
++	}
++	glUseProgram(P.up);
++	glEnable(GL_BLEND);
++	glBlendFunc(GL_ONE, GL_ONE);
++	for (i = P.levels - 1; i > 0; i--) {
++		glUniform2f(glGetUniformLocation(P.up, "texel"), 1.0f / P.bloom[i].w, 1.0f / P.bloom[i].h);
++		glUniform1f(glGetUniformLocation(P.up, "scale"), 1.0f);
++		bind_target(&P.bloom[i - 1]);
++		bind_texture(0, P.bloom[i].tex);
++		draw_quad();
++	}
++	glDisable(GL_BLEND);
++}
++
++static void occlusion(void)
++{
++	glUseProgram(P.ssao);
++	set_view(P.ssao);
++	glUniform2f(glGetUniformLocation(P.ssao, "texel"), 1.0f / P.w, 1.0f / P.h);
++	glUniform2f(glGetUniformLocation(P.ssao, "ao"), d2web_tune(16, 5.0f), d2web_tune(17, 1.3f));
++	bind_target(&P.ao[0]);
++	bind_texture(4, P.depth);
++	draw_quad();
++	glUseProgram(P.aoblur);
++	set_view(P.aoblur);
++	glUniform2f(glGetUniformLocation(P.aoblur, "stepv"), 1.0f / P.ao[0].w, 0);
++	bind_target(&P.ao[1]);
++	bind_texture(0, P.ao[0].tex);
++	draw_quad();
++	glUniform2f(glGetUniformLocation(P.aoblur, "stepv"), 0, 1.0f / P.ao[0].h);
++	bind_target(&P.ao[0]);
++	bind_texture(0, P.ao[1].tex);
++	draw_quad();
++}
++
++static void haze_uniforms(GLuint p)
++{
++	float pos[MAX_HAZE][4], col[MAX_HAZE][3], hp[3], hd[3];
++	int n = plight_haze_lights(pos, col, MAX_HAZE);
++	glUniform4f(glGetUniformLocation(p, "hazep"), d2web_tune(13, 0.03f), d2web_tune(14, 0.0025f), d2web_tune(15, 0.0015f), 0);
++	glUniform1i(glGetUniformLocation(p, "nhaze"), n);
++	if (n) {
++		glUniform4fv(glGetUniformLocation(p, "hpos"), n, pos[0]);
++		glUniform3fv(glGetUniformLocation(p, "hcol"), n, col[0]);
++	}
++	if (plight_headlight(hp, hd)) {
++		glUniform4f(glGetUniformLocation(p, "headpos"), hp[0], hp[1], hp[2], 1);
++		glUniform3f(glGetUniformLocation(p, "headdir"), hd[0], hd[1], hd[2]);
++	} else
++		glUniform4f(glGetUniformLocation(p, "headpos"), 0, 0, 0, 0);
++}
++
++// After the 3D view is drawn: process it and show it in its place on the screen.
++void ogl_post_end(void)
++{
++	int fxaa;
++	GLuint fin;
++
++	if (!P.active)
++		return;
++	P.active = 0;
++	if (P.samples) {
++		glBindFramebuffer(GL_READ_FRAMEBUFFER, P.ms_fbo);
++		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, P.scene.fbo);
++		glBlitFramebuffer(0, 0, P.w, P.h, 0, 0, P.w, P.h, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_NEAREST);
++	}
++	glDisable(GL_BLEND);
++	glDisable(GL_DEPTH_TEST);
++	glDisable(GL_CULL_FACE);
++	glDisable(GL_SCISSOR_TEST);
++
++	if (P.look & (LOOK_GLOW | LOOK_HAZE))	// haze takes its far glow from the bloom images
++		bloom();
++	if (P.look & LOOK_AO)
++		occlusion();
++
++	fxaa = !P.samples;
++	fin = final_program(P.look);
++	glUseProgram(fin);
++	glUniform4f(glGetUniformLocation(fin, "look"), d2web_tune(9, 0.32f), d2web_tune(10, 0.8f), d2web_tune(11, 0.1f), d2web_tune(12, 0.22f));
++	set_view(fin);
++	if (P.look & LOOK_HAZE)
++		haze_uniforms(fin);
++	if (fxaa)
++		bind_target(&P.ldr);
++	else {
++		glBindFramebuffer(GL_FRAMEBUFFER, 0);
++		glViewport(P.x, P.y, P.w, P.h);
++	}
++	bind_texture(4, P.depth);
++	bind_texture(3, P.levels ? P.bloom[P.levels - 1].tex : 0);
++	bind_texture(2, P.ao[0].tex);
++	bind_texture(1, P.levels ? P.bloom[0].tex : 0);
++	bind_texture(0, P.scene.tex);
++	draw_quad();
++	if (fxaa) {
++		glUseProgram(P.fxaa);
++		glUniform2f(glGetUniformLocation(P.fxaa, "texel"), 1.0f / P.w, 1.0f / P.h);
++		glBindFramebuffer(GL_FRAMEBUFFER, 0);
++		glViewport(P.x, P.y, P.w, P.h);
++		bind_texture(0, P.ldr.tex);
++		draw_quad();
++	}
++
++	glUseProgram(0);
++	bind_texture(4, 0);
++	bind_texture(3, 0);
++	bind_texture(2, 0);
++	bind_texture(1, 0);
++	glActiveTexture(GL_TEXTURE0);
++	glEnable(GL_BLEND);
++	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
++	glViewport(0, 0, grd_curscreen->sc_w, grd_curscreen->sc_h);
++	last_width = grd_curscreen->sc_w;
++	last_height = grd_curscreen->sc_h;
++}
 diff --git a/d2/arch/ogl/ogl_shader.c b/d2/arch/ogl/ogl_shader.c
 new file mode 100644
-index 0000000..e726f89
+index 0000000..d1148e0
 --- /dev/null
 +++ b/d2/arch/ogl/ogl_shader.c
-@@ -0,0 +1,194 @@
+@@ -0,0 +1,240 @@
 +/*
 + * Shaders for 2D art drawn much larger than its pixels (browser edition). Movies get an
 + * edge-aware sharp upscale and HUD, menu and title art a sharp Catmull-Rom one, instead of a
@@ -383,6 +1121,8 @@ index 0000000..e726f89
 +#include <GL/gl.h>
 +#include <GL/glext.h>
 +#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
 +#include "ogl_init.h"
 +#include "console.h"
 +#ifdef __EMSCRIPTEN__
@@ -523,6 +1263,50 @@ index 0000000..e726f89
 +		glUseProgram(0);
 +	}
 +	return upscale[0].prog && upscale[1].prog && glyph_prog;
++}
++
++// A WebGL 2 program from GLSL ES 3.00 sources (without #version, which is added), handed to
++// WebGL unchanged. Inputs and matrices use the GL emulation's names (a_position, a_texCoord0,
++// a_color, a_normal, u_modelView, u_projection), so it feeds them from the usual client arrays.
++GLuint ogl_program3(const char *vs_body, const char *defines, const char *fs_body)
++{
++#ifdef __EMSCRIPTEN__
++	const char *bodies[2] = { vs_body, fs_body };
++	GLuint s[2], p;
++	GLint ok = 0;
++	int i;
++	for (i = 0; i < 2; i++) {
++		const char *head = i ? "#version 300 es\nprecision highp float;\nprecision highp int;\n" : "#version 300 es\nprecision highp float;\n";
++		size_t n = strlen(head) + strlen(defines) + strlen(bodies[i]) + 1;
++		char *src = malloc(n);
++		snprintf(src, n, "%s%s%s", head, defines, bodies[i]);
++		s[i] = glCreateShader(i ? GL_FRAGMENT_SHADER : GL_VERTEX_SHADER);
++		d2web_shader_source(s[i], src);
++		free(src);
++		glCompileShader(s[i]);
++		glGetShaderiv(s[i], GL_COMPILE_STATUS, &ok);
++		if (!ok) {
++			char log[1024];
++			glGetShaderInfoLog(s[i], sizeof(log), NULL, log);
++			con_printf(CON_URGENT, "shader: %s\n", log);
++			return 0;
++		}
++	}
++	p = glCreateProgram();
++	glAttachShader(p, s[0]);
++	glAttachShader(p, s[1]);
++	glLinkProgram(p);
++	glGetProgramiv(p, GL_LINK_STATUS, &ok);
++	if (!ok) {
++		char log[1024];
++		glGetProgramInfoLog(p, sizeof(log), NULL, log);
++		con_printf(CON_URGENT, "shader link: %s\n", log);
++		return 0;
++	}
++	return p;
++#else
++	return 0;
++#endif
 +}
 +
 +int ogl_sharp_enabled(void)
@@ -739,10 +1523,10 @@ index 0000000..f8c55f7
 +#include <SDL.h>
 diff --git a/d2/arch/web/library_d2web.js b/d2/arch/web/library_d2web.js
 new file mode 100644
-index 0000000..2a34b15
+index 0000000..1e64240
 --- /dev/null
 +++ b/d2/arch/web/library_d2web.js
-@@ -0,0 +1,343 @@
+@@ -0,0 +1,356 @@
 +// Emscripten JS library: browser glue for the Descent II web build.
 +// The page fills Module.d2cd.tracks[n] with object URLs of the ripped CD tracks
 +// (index = CD track number; track 1 is the data track and stays empty).
@@ -1027,7 +1811,20 @@ index 0000000..2a34b15
 +
 +  d2web_option: (which) => {
 +    const o = Module.d2options || {};
-+    return o[['sharp', 'effects'][which]] === false ? 0 : 1;
++    return o[['sharp', 'effects', 'glow', 'lighting', 'ao', 'haze', 'surfaces', 'explosions', 'reflections'][which]] === false ? 0 : 1;
++  },
++
++  // development: Module.d2tune[i] overrides a look constant while the game runs
++  d2web_tune: (i, def) => {
++    const t = Module.d2tune;
++    return t && typeof t[i] === 'number' ? t[i] : def;
++  },
++
++  d2web_gl_version: () => (GL.currentContext ? GL.currentContext.version : 0),
++
++  d2web_shader_source__deps: ['$UTF8ToString'],
++  d2web_shader_source: (shader, src) => {
++    GLctx.shaderSource(GL.shaders[shader], UTF8ToString(src));
 +  },
 +
 +  d2web_frame_wait__deps: ['$D2Touch'],
@@ -1251,10 +2048,10 @@ index 0000000..bc5fa7e
 +}
 diff --git a/d2/arch/web/web.c b/d2/arch/web/web.c
 new file mode 100644
-index 0000000..e6a9c5e
+index 0000000..0c25609
 --- /dev/null
 +++ b/d2/arch/web/web.c
-@@ -0,0 +1,196 @@
+@@ -0,0 +1,250 @@
 +/*
 + * Browser (Emscripten) replacements for desktop-only pieces:
 + * message boxes, GLU mipmapping and GL 1.1 calls WebGL lacks.
@@ -1406,6 +2203,9 @@ index 0000000..e6a9c5e
 +#include "gameseg.h"
 +#include "fuelcen.h"
 +#include "ai.h"
++#include "bm.h"
++#include "segment.h"
++#include "player.h"
 +
 +/* Puts robot type id dist units ahead of the ship, facing it (replacing the last one put
 + * there): with ai it moves its joints and fires like any robot, holding its place; without,
@@ -1451,12 +2251,63 @@ index 0000000..e6a9c5e
 +{
 +	xmodel_enabled = on;
 +}
++
++/* Puts the ship at the far side of segment segnum, looking at the middle of side sidenum.
++ * Returns 0 if there is no such segment. */
++EMSCRIPTEN_KEEPALIVE int d2web_test_view(int segnum, int sidenum)
++{
++	vms_vector from, to, center, fvec;
++	if (!ConsoleObject || segnum < 0 || segnum > Highest_segment_index || sidenum < 0 || sidenum >= MAX_SIDES_PER_SEGMENT)
++		return 0;
++	compute_segment_center(&center, &Segments[segnum]);
++	compute_center_point_on_side(&to, &Segments[segnum], sidenum);
++	compute_center_point_on_side(&from, &Segments[segnum], Side_opposite[sidenum]);
++	vm_vec_avg(&from, &from, &center);
++	vm_vec_sub(&fvec, &to, &from);
++	vm_vector_2_matrix(&ConsoleObject->orient, &fvec, NULL, NULL);
++	ConsoleObject->pos = from;
++	vm_vec_zero(&ConsoleObject->mtype.phys_info.velocity);
++	vm_vec_zero(&ConsoleObject->mtype.phys_info.rotvel);
++	obj_relink(ConsoleObject - Objects, segnum);
++	Players[Player_num].shields = MAX_SHIELDS;	// robots there may have been shooting
++	return 1;
++}
++
++/* The first side at or after seg * 6 + side (counting that way) whose texture gives light,
++ * as seg * 6 + side, or -1. */
++EMSCRIPTEN_KEEPALIVE int d2web_test_next_light(int from)
++{
++	int i;
++	for (i = from < 0 ? 0 : from; i < (Highest_segment_index + 1) * MAX_SIDES_PER_SEGMENT; i++) {
++		side *s = &Segments[i / MAX_SIDES_PER_SEGMENT].sides[i % MAX_SIDES_PER_SEGMENT];
++		if (Segments[i / MAX_SIDES_PER_SEGMENT].children[i % MAX_SIDES_PER_SEGMENT] == -1 &&
++			(TmapInfo[s->tmap_num].lighting > 0 || (s->tmap_num2 && TmapInfo[s->tmap_num2 & 0x3fff].lighting > 0)))
++			return i;
++	}
++	return -1;
++}
++
++/* Switches the view: 0 full cockpit, 2 status bar, 3 full screen (CM_*). */
++#include "playsave.h"
++extern void init_cockpit(void);
++EMSCRIPTEN_KEEPALIVE void d2web_test_cockpit(int mode)
++{
++	PlayerCfg.CurrentCockpitMode = mode;
++	init_cockpit();
++}
++
++/* Sets player flags (PLAYER_FLAGS_*), e.g. a headlight that is on. */
++#include "player.h"
++EMSCRIPTEN_KEEPALIVE void d2web_test_player_flags(int flags)
++{
++	Players[Player_num].flags |= flags;
++}
 diff --git a/d2/arch/web/web.h b/d2/arch/web/web.h
 new file mode 100644
-index 0000000..1a6eed8
+index 0000000..df289bc
 --- /dev/null
 +++ b/d2/arch/web/web.h
-@@ -0,0 +1,78 @@
+@@ -0,0 +1,94 @@
 +/* Browser (Emscripten) glue for D2X-Redux. Implemented in library_d2web.js. */
 +#ifndef _D2WEB_H
 +#define _D2WEB_H
@@ -1519,6 +2370,22 @@ index 0000000..1a6eed8
 +int d2web_option(int which);
 +#define D2WEB_OPTION_SHARP		0	/* sharp upscaling of movies and smooth text */
 +#define D2WEB_OPTION_EFFECTS	1	/* light halos, smoke and sparks */
++#define D2WEB_OPTION_GLOW		2	/* glow (bloom) and the filmic tone curve */
++#define D2WEB_OPTION_LIGHTING	3	/* per-pixel lights, bumpy and shiny surfaces */
++#define D2WEB_OPTION_AO			4	/* ambient occlusion */
++#define D2WEB_OPTION_HAZE		5	/* light in the air */
++#define D2WEB_OPTION_SURFACES	6	/* flowing lava, rippling water, shimmering force fields */
++#define D2WEB_OPTION_EXPLOSIONS	7	/* fireballs, shockwaves, debris and scorch marks */
++#define D2WEB_OPTION_REFLECTIONS	8	/* reflections on smooth surfaces */
++
++/* A look constant, def unless Module.d2tune[i] overrides it (for tuning while it runs). */
++float d2web_tune(int i, float def);
++
++/* WebGL version of the context (1 or 2). */
++int d2web_gl_version(void);
++
++/* Give a shader its GLSL ES 3.00 source unchanged (the GL emulation rewrites GLSL 1.10). */
++void d2web_shader_source(unsigned int shader, const char *src);
 +
 +/* True once after a gamepad was connected or removed. */
 +int d2web_gamepads_changed(void);
@@ -1646,7 +2513,7 @@ index 0000000..b33cc74
 +#define SDLK_WORLD_94 0
 +#define SDLK_WORLD_95 0
 diff --git a/d2/include/ogl_init.h b/d2/include/ogl_init.h
-index af0b258..c1f44b5 100644
+index af0b258..17d203e 100644
 --- a/d2/include/ogl_init.h
 +++ b/d2/include/ogl_init.h
 @@ -11,7 +11,13 @@
@@ -1663,7 +2530,7 @@ index af0b258..c1f44b5 100644
  #ifdef _WIN32
  #include "loadgl.h"
  int ogl_init_load_library(void);
-@@ -79,6 +85,15 @@ extern int gl_initialized;
+@@ -79,6 +85,22 @@ extern int gl_initialized;
  extern int active_texture_unit;
  extern GLfloat ogl_maxanisotropy;
  
@@ -1675,6 +2542,13 @@ index af0b258..c1f44b5 100644
 +int ogl_upscale_begin(ogl_texture *tex, float u1, float v1, float u2, float v2, float scale, int movie);
 +int ogl_glyph_begin(float scale);
 +void ogl_shader_end(void);
++unsigned int ogl_program3(const char *vs, const char *defines, const char *fs);
++
++// post-processing of the 3D view (ogl_post.c)
++int ogl_post_begin(void);
++void ogl_post_end(void);
++int ogl_post_active(void);
++void ogl_post_origin(int *x, int *y);
 +
  void ogl_setActiveTexture(int t);
  
@@ -2803,6 +3677,226 @@ index d9aafbc..5b7bee7 100644
      //----------- Add overrun values
      Controls.pitch_time += Controls.pitch_time_overrun;
      Controls.heading_time += Controls.heading_time_overrun;
+diff --git a/d2/main/lighting.c b/d2/main/lighting.c
+index 5e4f613..1e46ecb 100644
+--- a/d2/main/lighting.c
++++ b/d2/main/lighting.c
+@@ -45,10 +45,23 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ #include "bm.h"
+ #include "rle.h"
+ #include "wall.h"
++#include "plight.h"
++#include "../3d/globvars.h"
+ 
+ int	Do_dynamic_light=1;
+ int use_fcd_lighting = 0;
+ g3s_lrgb Dynamic_light[MAX_VERTICES];
++g3s_lrgb Dynamic_light_pp[MAX_VERTICES];	// the part of Dynamic_light from the lights plight.c draws per pixel
++pp_light Pp_lights[PP_MAX_LIGHTS];
++int Pp_num_lights;
++object *Pp_headlight;		// the viewer's own headlight, drawn per pixel
++static int pp_apply;		// apply_light: the light being applied is one of those
++
++#define ADD_LIGHT(v, R, G, B) do { \
++	fix r_ = (R), g_ = (G), b_ = (B); \
++	Dynamic_light[v].r += r_; Dynamic_light[v].g += g_; Dynamic_light[v].b += b_; \
++	if (pp_apply) { Dynamic_light_pp[v].r += r_; Dynamic_light_pp[v].g += g_; Dynamic_light_pp[v].b += b_; } \
++} while (0)
+ 
+ #define	HEADLIGHT_CONE_DOT	(F1_0*9/10)
+ #define	HEADLIGHT_SCALE		(F1_0*10)
+@@ -85,9 +98,7 @@ void apply_light(g3s_lrgb obj_light_emission, int obj_seg, vms_vector *obj_pos,
+ 					if (dist < MIN_LIGHT_DIST)
+ 						dist = MIN_LIGHT_DIST;
+ 
+-					Dynamic_light[vertnum].r += fixdiv(obj_light_emission.r, dist);
+-					Dynamic_light[vertnum].g += fixdiv(obj_light_emission.g, dist);
+-					Dynamic_light[vertnum].b += fixdiv(obj_light_emission.b, dist);
++					ADD_LIGHT(vertnum, fixdiv(obj_light_emission.r, dist), fixdiv(obj_light_emission.g, dist), fixdiv(obj_light_emission.b, dist));
+ 				}
+ 			}
+ 		} else {
+@@ -158,9 +169,7 @@ void apply_light(g3s_lrgb obj_light_emission, int obj_seg, vms_vector *obj_pos,
+ 						if (dot < F1_0/2)
+ 						{
+ 							// Do the normal thing, but darken around headlight.
+-							Dynamic_light[vertnum].r += fixdiv(obj_light_emission.r, fixmul(HEADLIGHT_SCALE, dist));
+-							Dynamic_light[vertnum].g += fixdiv(obj_light_emission.g, fixmul(HEADLIGHT_SCALE, dist));
+-							Dynamic_light[vertnum].b += fixdiv(obj_light_emission.b, fixmul(HEADLIGHT_SCALE, dist));
++							ADD_LIGHT(vertnum, fixdiv(obj_light_emission.r, fixmul(HEADLIGHT_SCALE, dist)), fixdiv(obj_light_emission.g, fixmul(HEADLIGHT_SCALE, dist)), fixdiv(obj_light_emission.b, fixmul(HEADLIGHT_SCALE, dist)));
+ 						}
+ 						else
+ 						{
+@@ -168,24 +177,18 @@ void apply_light(g3s_lrgb obj_light_emission, int obj_seg, vms_vector *obj_pos,
+ 							{
+ 								if (dist < max_headlight_dist)
+ 								{
+-									Dynamic_light[vertnum].r += fixmul(fixmul(dot, dot), obj_light_emission.r)/8;
+-									Dynamic_light[vertnum].g += fixmul(fixmul(dot, dot), obj_light_emission.g)/8;
+-									Dynamic_light[vertnum].b += fixmul(fixmul(dot, dot), obj_light_emission.b)/8;
++									ADD_LIGHT(vertnum, fixmul(fixmul(dot, dot), obj_light_emission.r)/8, fixmul(fixmul(dot, dot), obj_light_emission.g)/8, fixmul(fixmul(dot, dot), obj_light_emission.b)/8);
+ 								}
+ 							}
+ 							else
+ 							{
+-								Dynamic_light[vertnum].r += fixmul(fixmul(dot, dot), obj_light_emission.r)/8;
+-								Dynamic_light[vertnum].g += fixmul(fixmul(dot, dot), obj_light_emission.g)/8;
+-								Dynamic_light[vertnum].b += fixmul(fixmul(dot, dot), obj_light_emission.b)/8;
++								ADD_LIGHT(vertnum, fixmul(fixmul(dot, dot), obj_light_emission.r)/8, fixmul(fixmul(dot, dot), obj_light_emission.g)/8, fixmul(fixmul(dot, dot), obj_light_emission.b)/8);
+ 							}
+ 						}
+ 					}
+ 					else
+ 					{
+-						Dynamic_light[vertnum].r += fixdiv(obj_light_emission.r, dist);
+-						Dynamic_light[vertnum].g += fixdiv(obj_light_emission.g, dist);
+-						Dynamic_light[vertnum].b += fixdiv(obj_light_emission.b, dist);
++						ADD_LIGHT(vertnum, fixdiv(obj_light_emission.r, dist), fixdiv(obj_light_emission.g, dist), fixdiv(obj_light_emission.b, dist));
+ 					}
+ 				}
+ 			}
+@@ -197,6 +200,28 @@ void apply_light(g3s_lrgb obj_light_emission, int obj_seg, vms_vector *obj_pos,
+ #define FLASH_SCALE             (3*F1_0/FLASH_LEN_FIXED_SECONDS)
+ 
+ // ----------------------------------------------------------------------------------------------
++// A light for set_dynamic_light to apply
++typedef struct light_cand {
++	g3s_lrgb e;
++	vms_vector pos;
++	short seg, objnum;
++	fix score;
++	sbyte pp;
++} light_cand;
++
++static light_cand Light_cands[MAX_OBJECTS + MUZZLE_QUEUE_MAX];
++static int N_light_cands;
++
++static void add_light_cand(g3s_lrgb e, int seg, vms_vector *pos, int objnum)
++{
++	light_cand *c = &Light_cands[N_light_cands++];
++	c->e = e;
++	c->pos = *pos;
++	c->seg = seg;
++	c->objnum = objnum;
++	c->pp = 0;
++}
++
+ void cast_muzzle_flash_light(int n_render_vertices, int *render_vertices, int *vert_segnum_list)
+ {
+ 	fix64 current_time;
+@@ -214,7 +239,7 @@ void cast_muzzle_flash_light(int n_render_vertices, int *render_vertices, int *v
+ 			{
+ 				g3s_lrgb ml;
+ 				ml.r = ml.g = ml.b = ((FLASH_LEN_FIXED_SECONDS - time_since_flash) * FLASH_SCALE);
+-				apply_light(ml, Muzzle_data[i].segnum, &Muzzle_data[i].pos, n_render_vertices, render_vertices, vert_segnum_list, -1);
++				add_light_cand(ml, Muzzle_data[i].segnum, &Muzzle_data[i].pos, -1);
+ 			}
+ 			else
+ 			{
+@@ -224,6 +249,47 @@ void cast_muzzle_flash_light(int n_render_vertices, int *render_vertices, int *v
+ 	}
+ }
+ 
++// Picks the lights plight.c draws per pixel: the brightest near the viewer, and the viewer's
++// own headlight. Dim lights (which only reach their own segment) and markers stay per vertex.
++// With per-pixel lighting off they are still listed, for the light haze.
++static void select_pp_lights(void)
++{
++	int i, j, pp = plight_enabled();
++	Pp_num_lights = 0;
++	Pp_headlight = NULL;
++	if (!pp && !plight_haze_enabled())
++		return;
++	for (i = 0; i < N_light_cands; i++) {
++		light_cand *c = &Light_cands[i];
++		fix avg = (c->e.r + c->e.g + c->e.b) / 3;
++		object *o = c->objnum >= 0 ? &Objects[c->objnum] : NULL;
++		c->score = -1;
++		if (avg * 64 <= F1_0 * 8 || (o && o->type == OBJ_MARKER))
++			continue;
++		if (o && o->type == OBJ_PLAYER && (Players[o->id].flags & PLAYER_FLAGS_HEADLIGHT_ON)) {
++			if (o == Viewer && o->id == Player_num) {
++				Pp_headlight = o;
++				c->pp = pp;
++			}
++			continue;
++		}
++		c->score = fixdiv(avg, max(vm_vec_dist_quick(&c->pos, &View_position), F1_0 * 20));
++	}
++	for (j = 0; j < PP_MAX_LIGHTS; j++) {
++		int best = -1;
++		for (i = 0; i < N_light_cands; i++)
++			if (Light_cands[i].score > 0 && (best < 0 || Light_cands[i].score > Light_cands[best].score))
++				best = i;
++		if (best < 0)
++			break;
++		Light_cands[best].pp = pp;
++		Light_cands[best].score = -1;
++		Pp_lights[Pp_num_lights].pos = Light_cands[best].pos;
++		Pp_lights[Pp_num_lights].emission = Light_cands[best].e;
++		Pp_num_lights++;
++	}
++}
++
+ // Translation table to make flares flicker at different rates
+ fix Obj_light_xlate[16] = { 0x1234, 0x3321, 0x2468, 0x1735,
+ 			    0x0123, 0x19af, 0x3f03, 0x232a,
+@@ -504,21 +570,30 @@ void set_dynamic_light(void)
+ 		vertnum = render_vertices[vv];
+ 		Assert(vertnum >= 0 && vertnum <= Highest_vertex_index);
+ 		Dynamic_light[vertnum].r = Dynamic_light[vertnum].g = Dynamic_light[vertnum].b = 0;
++		Dynamic_light_pp[vertnum].r = Dynamic_light_pp[vertnum].g = Dynamic_light_pp[vertnum].b = 0;
+ 	}
+ 
++	N_light_cands = 0;
+ 	cast_muzzle_flash_light(n_render_vertices, render_vertices, vert_segnum_list);
+ 
+ 	for (objnum=0; objnum<=Highest_object_index; objnum++)
+ 	{
+ 		object		*obj = &Objects[objnum];
+-		vms_vector	*objpos = &obj->pos;
+ 		g3s_lrgb	obj_light_emission;
+ 
+ 		obj_light_emission = compute_light_emission(objnum);
+ 
+ 		if (((obj_light_emission.r+obj_light_emission.g+obj_light_emission.b)/3) > 0)
+-			apply_light(obj_light_emission, obj->segnum, objpos, n_render_vertices, render_vertices, vert_segnum_list, objnum);
++			add_light_cand(obj_light_emission, obj->segnum, &obj->pos, objnum);
++	}
++
++	select_pp_lights();
++	for (vv = 0; vv < N_light_cands; vv++) {
++		light_cand *c = &Light_cands[vv];
++		pp_apply = c->pp;
++		apply_light(c->e, c->seg, &c->pos, n_render_vertices, render_vertices, vert_segnum_list, c->objnum);
+ 	}
++	pp_apply = 0;
+ }
+ 
+ // ---------------------------------------------------------
+diff --git a/d2/main/lighting.h b/d2/main/lighting.h
+index 391321f..d4b465f 100644
+--- a/d2/main/lighting.h
++++ b/d2/main/lighting.h
+@@ -27,6 +27,18 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ 
+ extern fix Beam_brightness;
+ extern g3s_lrgb Dynamic_light[MAX_VERTICES];
++extern g3s_lrgb Dynamic_light_pp[MAX_VERTICES];
++
++// The lights plight.c draws per pixel this frame (their part of Dynamic_light is in
++// Dynamic_light_pp), and the viewer's headlight if it is on.
++#define PP_MAX_LIGHTS 16
++typedef struct pp_light {
++	vms_vector pos;
++	g3s_lrgb emission;
++} pp_light;
++extern pp_light Pp_lights[PP_MAX_LIGHTS];
++extern int Pp_num_lights;
++extern struct object *Pp_headlight;
+ 
+ extern void set_dynamic_light(void);
+ 
 diff --git a/d2/main/menu.c b/d2/main/menu.c
 index 8301896..4e5e9f6 100644
 --- a/d2/main/menu.c
@@ -2952,6 +4046,607 @@ index 1944a8c..c7d0f7e 100644
  	PlayerCfg.DisableCockpit = 0;  /* DisableCockpit */ 
  	PlayerCfg.StickyRearview = 0; /* StickyRearview */ 
  	PlayerCfg.SelectAfterFire = 1;  /* SelectAfterFire */
+diff --git a/d2/main/plight.c b/d2/main/plight.c
+new file mode 100644
+index 0000000..5207ada
+--- /dev/null
++++ b/d2/main/plight.c
+@@ -0,0 +1,567 @@
++/*
++ * Per-pixel lighting of the mine's walls (browser edition, WebGL 2). Walls are drawn with a
++ * shader that lights each pixel from the nearest moving lights (shots, flares, explosions,
++ * the ship's glow and its headlight cone) instead of only blending between corners, gives
++ * the textures relief and highlights from the room's lamps, and makes the lamps' bright parts
++ * glow. The game's own corner lighting stays the base, so rooms keep their look, and only
++ * where a room is lit do surfaces shine (no highlights through walls).
++ */
++
++#define GL_GLEXT_PROTOTYPES
++#include <GL/gl.h>
++#include <GL/glext.h>
++#include <math.h>
++#include <stdlib.h>
++#include <string.h>
++
++#include "plight.h"
++#include "inferno.h"
++#include "segment.h"
++#include "gameseg.h"
++#include "gameseq.h"
++#include "game.h"
++#include "object.h"
++#include "player.h"
++#include "lighting.h"
++#include "bm.h"
++#include "textures.h"
++#include "piggy.h"
++#include "palette.h"
++#include "timer.h"
++#include "../3d/globvars.h"
++#include "ogl_init.h"
++#ifdef __EMSCRIPTEN__
++#include "../arch/web/web.h"
++#endif
++
++#define LAMPS_PER_SEG 4
++#define LAMP_REACH 100.0f			// units from a segment's center to lamps that light it
++#define HEADLIGHT_EMISSION 10.0f	// lighting.c HEADLIGHT_SCALE
++
++static const char *world_vs =
++	"in vec4 a_position;\n"
++	"in vec4 a_texCoord0;\n"
++	"in vec4 a_color;\n"
++	"uniform mat4 u_modelView;\n"
++	"uniform mat4 u_projection;\n"
++	"out vec2 v_uv;\n"
++	"out vec4 v_color;\n"
++	"out vec3 v_pos;\n"
++	"void main() {\n"
++	"	vec4 p = u_modelView * a_position;\n"
++	"	v_uv = a_texCoord0.xy;\n"
++	"	v_color = a_color;\n"
++	"	v_pos = p.xyz;\n"
++	"	gl_Position = u_projection * p;\n"
++	"}\n";
++
++// Positions are in view space with the view's zoom and aspect undone (unscale), so lengths
++// are in mine units. Lights: xyz position, w reach; colors in the game's light units (a light
++// gives emission / distance, like lighting.c). The vertex color is the game's own light.
++static const char *world_fs =
++	"#define MAX_LIGHTS 16\n"
++	"#define MAX_LAMPS 4\n"
++	"uniform sampler2D tex;\n"
++	"uniform vec3 unscale;\n"
++	"uniform vec4 mat;\n"			// emissive, bump, gloss, kind
++	"uniform vec2 texsize;\n"
++	"uniform int nlights;\n"
++	"uniform vec4 lpos[MAX_LIGHTS];\n"
++	"uniform vec3 lcol[MAX_LIGHTS];\n"
++	"uniform vec4 headpos;\n"		// xyz, w emission (0: off)
++	"uniform vec3 headdir;\n"
++	"uniform int nlamps;\n"
++	"uniform vec4 lamppos[MAX_LAMPS];\n"	// xyz, w strength
++	"uniform vec3 lampcol[MAX_LAMPS];\n"
++	"uniform vec4 tune[2];\n"	// relief, bump depth, headlight, moving-light shine; lamp shine, glow, light cap
++	"in vec2 v_uv;\n"
++	"in vec4 v_color;\n"
++	"in vec3 v_pos;\n"
++	"out vec4 o;\n"
++	"float lum(vec3 c) { return dot(c, vec3(0.299, 0.587, 0.114)); }\n"
++	"void main() {\n"
++	"	vec4 c = texture(tex, v_uv);\n"
++	"	if (c.a < 0.02) discard;\n"
++	"	vec3 P = v_pos * unscale;\n"
++	"	vec3 dpx = dFdx(P), dpy = dFdy(P);\n"
++	"	vec3 N = normalize(cross(dpx, dpy));\n"
++	"	vec3 V = normalize(-P);\n"
++	"	if (dot(N, V) < 0.0) N = -N;\n"
++	// relief: height from the texture's brightness, through the surface's own uv frame; it
++	// fades out where texels get smaller than pixels, so distant walls don't shimmer
++	"	vec2 dux = dFdx(v_uv), duy = dFdy(v_uv);\n"
++	"	float foot = max(length(dux * texsize), length(duy * texsize));\n"
++	"	float bump = mat.y * (1.0 - smoothstep(0.7, 2.5, foot));\n"
++	"	vec3 Nb = N;\n"
++	"	if (bump > 0.001) {\n"
++	"		vec2 tx = vec2(1.0 / texsize.x, 0.0), ty = vec2(0.0, 1.0 / texsize.y);\n"
++	"		vec2 g = vec2(lum(texture(tex, v_uv + tx).rgb) - lum(texture(tex, v_uv - tx).rgb),\n"
++	"			lum(texture(tex, v_uv + ty).rgb) - lum(texture(tex, v_uv - ty).rgb)) * 0.5;\n"
++	"		vec3 sx = cross(dpy, N), sy = cross(N, dpx);\n"
++	"		vec3 T = sx * dux.x + sy * duy.x, B = sx * dux.y + sy * duy.y;\n"
++	"		float s = inversesqrt(max(max(dot(T, T), dot(B, B)), 1e-12));\n"
++	"		Nb = normalize(N - (T * g.x + B * g.y) * s * bump * tune[0].y);\n"
++	"	}\n"
++	"	float gloss = mat.z;\n"
++	"	float shin = mix(10.0, 48.0, gloss);\n"
++	"	vec3 base = v_color.rgb;\n"
++	"	float lit = min(lum(base) * 2.0, 1.0);\n"
++	// the room's lamps: the direction the bumps catch light from, and highlights
++	"	vec3 ld = vec3(0.0), spec = vec3(0.0);\n"
++	"	float lw = 0.0;\n"
++	"	for (int i = 0; i < MAX_LAMPS; i++) {\n"
++	"		if (i >= nlamps) break;\n"
++	"		vec3 L = lamppos[i].xyz - P;\n"
++	"		float d2 = dot(L, L);\n"
++	"		L *= inversesqrt(d2);\n"
++	"		float f = max(dot(N, L), 0.0) * lamppos[i].w / (1.0 + d2 / 900.0);\n"
++	"		ld += L * f;\n"
++	"		lw += f;\n"
++	"		spec += lampcol[i] * f * pow(max(dot(Nb, normalize(L + V)), 0.0), shin);\n"
++	"	}\n"
++	"	vec3 Ld = lw > 1e-4 ? normalize(ld) : V;\n"
++	"	float relief = clamp(1.0 + (dot(Nb, Ld) - dot(N, Ld)) * tune[0].x, 0.35, 1.7);\n"
++	"	spec *= gloss * lit * tune[1].x;\n"
++	// moving lights, per pixel
++	"	vec3 dyn = vec3(0.0);\n"
++	"	for (int i = 0; i < MAX_LIGHTS; i++) {\n"
++	"		if (i >= nlights) break;\n"
++	"		vec3 L = lpos[i].xyz - P;\n"
++	"		float d = length(L);\n"
++	"		L /= max(d, 1e-3);\n"
++	"		vec3 e = lcol[i] * (smoothstep(lpos[i].w, lpos[i].w * 0.7, d) / max(d, 4.0));\n"
++	"		dyn += e * (0.25 + 0.75 * max(dot(Nb, L), 0.0));\n"
++	"		spec += e * pow(max(dot(Nb, normalize(L + V)), 0.0), shin) * gloss * tune[0].w;\n"
++	"	}\n"
++	"	if (headpos.w > 0.0) {\n"
++	"		vec3 L = headpos.xyz - P;\n"
++	"		float d = length(L);\n"
++	"		L /= max(d, 1e-3);\n"
++	"		float cd = dot(-L, headdir);\n"
++	"		float cone = smoothstep(0.5, 0.85, cd) * pow(cd, 4.0) * headpos.w * tune[0].z / (1.0 + d * d / 40000.0);\n"
++	"		float h = max(cone, headpos.w / 10.0 / max(d, 4.0));\n"
++	"		dyn += vec3(h) * (0.25 + 0.75 * max(dot(Nb, L), 0.0));\n"
++	"		spec += vec3(h) * pow(max(dot(Nb, normalize(L + V)), 0.0), shin) * gloss * 0.5;\n"
++	"	}\n"
++	"	vec3 light = min(base * relief + dyn, vec3(tune[1].z));\n"
++	"	vec3 rgb = c.rgb * light + spec * mix(vec3(1.0), c.rgb * 1.6, 0.5);\n"
++	// a lamp's bright parts give light: they glow
++	"	float m = max(max(c.r, c.g), c.b);\n"
++	"	rgb += c.rgb * smoothstep(0.45, 0.85, m) * mat.x * tune[1].y;\n"
++	"	o = vec4(rgb, c.a * v_color.a);\n"
++	"}\n";
++
++static struct {
++	int tried;
++	GLuint prog;
++	GLint tune, unscale, mat, texsize, nlights, lpos, lcol, headpos, headdir, nlamps, lamppos, lampcol;
++} W;
++
++typedef struct lamp {
++	float pos[3];				// world, mine units
++	float col[3];
++	float strength;
++	short seg;
++	sbyte side;
++} lamp;
++
++static lamp Lamps[MAX_SEGMENTS * MAX_SIDES_PER_SEGMENT];
++static short Seg_lamps[MAX_SEGMENTS][LAMPS_PER_SEG];
++static ubyte Seg_nlamps[MAX_SEGMENTS];
++static int Built_level = -1000, Built_segs = -1;
++
++typedef struct texmat {
++	float gloss, bump;
++	char done;
++} texmat;
++
++static texmat Mats[MAX_TEXTURES];
++
++static struct {
++	int on, seg, side, tmap1, tmap2;
++} Face;
++static int Frame_dirty, Lamps_seg = -1;
++
++static int ready(void)
++{
++	if (!W.tried) {
++		GLuint p;
++		W.tried = 1;
++#ifdef __EMSCRIPTEN__
++		if (d2web_gl_version() < 2)
++			return 0;
++#endif
++		if (!(p = W.prog = ogl_program3(world_vs, "", world_fs)))
++			return 0;
++		glUseProgram(p);
++		glUniform1i(glGetUniformLocation(p, "tex"), 0);
++		W.tune = glGetUniformLocation(p, "tune");
++		W.unscale = glGetUniformLocation(p, "unscale");
++		W.mat = glGetUniformLocation(p, "mat");
++		W.texsize = glGetUniformLocation(p, "texsize");
++		W.nlights = glGetUniformLocation(p, "nlights");
++		W.lpos = glGetUniformLocation(p, "lpos");
++		W.lcol = glGetUniformLocation(p, "lcol");
++		W.headpos = glGetUniformLocation(p, "headpos");
++		W.headdir = glGetUniformLocation(p, "headdir");
++		W.nlamps = glGetUniformLocation(p, "nlamps");
++		W.lamppos = glGetUniformLocation(p, "lamppos");
++		W.lampcol = glGetUniformLocation(p, "lampcol");
++		glUseProgram(0);
++	}
++	return W.prog != 0;
++}
++
++int plight_enabled(void)
++{
++#ifdef __EMSCRIPTEN__
++	return d2web_option(D2WEB_OPTION_LIGHTING) && ready();
++#else
++	return 0;
++#endif
++}
++
++// How shiny and how bumpy a texture looks, from its pixels: grey, smooth metal shines; colorful
++// or noisy rock barely does and has deeper relief.
++static texmat *material(int tmap)
++{
++	texmat *m = &Mats[tmap];
++	if (!m->done) {
++		grs_bitmap *bm = &GameBitmaps[Textures[tmap].index];
++		unsigned char *px;
++		float *l, sat = 0, noise = 0, rough;
++		int w, h, x, y, n = 0;
++
++		m->done = 1;
++		m->gloss = 0.3f;
++		m->bump = 0.8f;
++		PIGGY_PAGE_IN(Textures[tmap]);
++		w = bm->bm_w;
++		h = bm->bm_h;
++		if (w < 4 || h < 4 || !(px = ogl_bitmap_indices(bm)) || !(l = malloc(w * h * sizeof(float))))
++			return m;
++		for (y = 0; y < h; y++)
++			for (x = 0; x < w; x++) {
++				int c = px[y * w + x];
++				float r = gr_palette[c * 3] / 63.0f, g = gr_palette[c * 3 + 1] / 63.0f, b = gr_palette[c * 3 + 2] / 63.0f;
++				float mx = fmaxf(r, fmaxf(g, b)), mn = fminf(r, fminf(g, b));
++				l[y * w + x] = 0.299f * r + 0.587f * g + 0.114f * b;
++				if (c != 255 && mx > 0.05f) {
++					sat += (mx - mn) / mx;
++					n++;
++				}
++			}
++		for (y = 0; y < h; y++)
++			for (x = 0; x < w; x++) {
++				float avg = (l[y * w + (x + 1) % w] + l[y * w + (x + w - 1) % w] + l[((y + 1) % h) * w + x] + l[((y + h - 1) % h) * w + x]) / 4;
++				noise += fabsf(l[y * w + x] - avg);
++			}
++		free(l);
++		sat = n ? sat / n : 0;
++		noise /= w * h;
++		rough = fminf(fmaxf((noise - 0.015f) / 0.06f, 0), 1);
++		m->gloss = fminf(fmaxf(0.75f - sat * 1.6f, 0.08f), 0.7f) * (1 - rough * 0.6f);
++		m->bump = 0.55f + rough * 0.6f;
++	}
++	return m;
++}
++
++static void bitmap_color(int tmap, float *col)
++{
++	grs_bitmap *bm = &GameBitmaps[Textures[tmap].index];
++	float mx;
++	PIGGY_PAGE_IN(Textures[tmap]);
++	col[0] = bm->avg_color_rgb[0];
++	col[1] = bm->avg_color_rgb[1];
++	col[2] = bm->avg_color_rgb[2];
++	mx = fmaxf(col[0], fmaxf(col[1], col[2]));
++	if (mx <= 0) {
++		col[0] = col[1] = col[2] = 1;
++		return;
++	}
++	// a lamp's color, as bright as white (the average includes its dark frame)
++	col[0] = 0.3f + 0.7f * col[0] / mx;
++	col[1] = 0.3f + 0.7f * col[1] / mx;
++	col[2] = 0.3f + 0.7f * col[2] / mx;
++}
++
++// The lamps (sides with light-giving textures) of the level and the strongest few that reach
++// each segment through its open sides.
++static void build_lamps(void)
++{
++	static int visit[MAX_SEGMENTS], stamp;
++	static short queue[MAX_SEGMENTS];
++	static sbyte depth[MAX_SEGMENTS];
++	static int first[MAX_SEGMENTS + 1];
++	int seg, sn, n = 0;
++
++	Built_level = Current_level_num;
++	Built_segs = Highest_segment_index;
++	memset(Mats, 0, sizeof(Mats));
++	for (seg = 0; seg <= Highest_segment_index; seg++) {
++		first[seg] = n;
++		for (sn = 0; sn < MAX_SIDES_PER_SEGMENT; sn++) {
++			side *s = &Segments[seg].sides[sn];
++			int t1 = s->tmap_num, t2 = s->tmap_num2 & 0x3fff;
++			fix light = TmapInfo[t1].lighting + (t2 ? TmapInfo[t2].lighting : 0);
++			vms_vector c, nrm;
++			lamp *l;
++			if (Segments[seg].children[sn] != -1 || light <= 0)
++				continue;
++			compute_center_point_on_side(&c, &Segments[seg], sn);
++			vm_vec_avg(&nrm, &s->normals[0], &s->normals[1]);
++			vm_vec_normalize_quick(&nrm);
++			vm_vec_scale_add2(&c, &nrm, F1_0);
++			l = &Lamps[n++];
++			l->pos[0] = f2fl(c.x);
++			l->pos[1] = f2fl(c.y);
++			l->pos[2] = f2fl(c.z);
++			bitmap_color(t2 && TmapInfo[t2].lighting > 0 ? t2 : t1, l->col);
++			l->strength = f2fl(light);
++			l->seg = seg;
++			l->side = sn;
++		}
++	}
++	first[seg] = n;
++
++	for (seg = 0; seg <= Highest_segment_index; seg++) {
++		float best[LAMPS_PER_SEG], cx, cy, cz;
++		int head = 0, tail = 0, k, cnt = 0;
++		vms_vector c;
++		compute_segment_center(&c, &Segments[seg]);
++		cx = f2fl(c.x);
++		cy = f2fl(c.y);
++		cz = f2fl(c.z);
++		stamp++;
++		queue[tail++] = seg;
++		visit[seg] = stamp;
++		depth[seg] = 0;
++		while (head < tail) {
++			int s = queue[head++], i;
++			for (i = first[s]; i < first[s + 1]; i++) {
++				float dx = Lamps[i].pos[0] - cx, dy = Lamps[i].pos[1] - cy, dz = Lamps[i].pos[2] - cz;
++				float d2 = dx * dx + dy * dy + dz * dz, score;
++				if (d2 > LAMP_REACH * LAMP_REACH)
++					continue;
++				score = Lamps[i].strength / (1 + d2 / 900);
++				// keep the best few, best first
++				if (cnt < LAMPS_PER_SEG)
++					k = cnt++;
++				else if (score > best[LAMPS_PER_SEG - 1])
++					k = LAMPS_PER_SEG - 1;
++				else
++					continue;
++				for (; k > 0 && best[k - 1] < score; k--) {
++					best[k] = best[k - 1];
++					Seg_lamps[seg][k] = Seg_lamps[seg][k - 1];
++				}
++				best[k] = score;
++				Seg_lamps[seg][k] = i;
++			}
++			if (depth[s] < 3)
++				for (i = 0; i < MAX_SIDES_PER_SEGMENT; i++) {
++					int ch = Segments[s].children[i];
++					if (ch >= 0 && visit[ch] != stamp) {
++						visit[ch] = stamp;
++						depth[ch] = depth[s] + 1;
++						queue[tail++] = ch;
++					}
++				}
++		}
++		Seg_nlamps[seg] = cnt;
++	}
++}
++
++static void to_view(const vms_vector *p, float *out)
++{
++	vms_vector t, r;
++	vm_vec_sub(&t, p, &View_position);
++	vm_vec_rotate(&r, &t, &Unscaled_matrix);
++	out[0] = f2fl(r.x);
++	out[1] = f2fl(r.y);
++	out[2] = -f2fl(r.z);
++}
++
++static void dir_to_view(const vms_vector *d, float *out)
++{
++	vms_vector r;
++	vm_vec_rotate(&r, d, &Unscaled_matrix);
++	out[0] = f2fl(r.x);
++	out[1] = f2fl(r.y);
++	out[2] = -f2fl(r.z);
++}
++
++void plight_frame(void)
++{
++	Frame_dirty = 1;
++	Lamps_seg = -1;
++	Face.on = 0;
++}
++
++int plight_side(int segnum, int sidenum, int tmap1, int tmap2)
++{
++	Face.on = 0;
++	if (!plight_enabled())
++		return 0;
++	if (Built_level != Current_level_num || Built_segs != Highest_segment_index)
++		build_lamps();
++	Face.on = 1;
++	Face.seg = segnum;
++	Face.side = sidenum;
++	Face.tmap1 = tmap1;
++	Face.tmap2 = tmap2 & 0x3fff;
++	return 1;
++}
++
++void plight_side_done(void)
++{
++	Face.on = 0;
++}
++
++static void upload_frame(void)
++{
++	float pos[PP_MAX_LIGHTS][4], col[PP_MAX_LIGHTS][3];
++	int i;
++#ifdef __EMSCRIPTEN__
++	glUniform4f(W.tune, d2web_tune(0, 1.5f), d2web_tune(1, 3.0f), d2web_tune(2, 0.08f), d2web_tune(3, 1.0f));
++	glUniform4f(W.tune + 1, d2web_tune(4, 1.0f), d2web_tune(5, 1.2f), d2web_tune(6, 1.4f), 0);
++#endif
++	glUniform3f(W.unscale, 1 / f2fl(Matrix_scale.x), 1 / f2fl(Matrix_scale.y), 1 / f2fl(Matrix_scale.z));
++	for (i = 0; i < Pp_num_lights; i++) {
++		pp_light *l = &Pp_lights[i];
++		to_view(&l->pos, pos[i]);
++		pos[i][3] = f2fl((l->emission.r + l->emission.g + l->emission.b) / 3) * 64;
++		col[i][0] = f2fl(l->emission.r);
++		col[i][1] = f2fl(l->emission.g);
++		col[i][2] = f2fl(l->emission.b);
++	}
++	glUniform1i(W.nlights, Pp_num_lights);
++	if (Pp_num_lights) {
++		glUniform4fv(W.lpos, Pp_num_lights, pos[0]);
++		glUniform3fv(W.lcol, Pp_num_lights, col[0]);
++	}
++	if (Pp_headlight) {
++		float hp[3], hd[3];
++		to_view(&Pp_headlight->pos, hp);
++		dir_to_view(&Pp_headlight->orient.fvec, hd);
++		glUniform4f(W.headpos, hp[0], hp[1], hp[2], HEADLIGHT_EMISSION);
++		glUniform3f(W.headdir, hd[0], hd[1], hd[2]);
++	} else
++		glUniform4f(W.headpos, 0, 0, 0, 0);
++}
++
++static void upload_lamps(int seg)
++{
++	float pos[LAMPS_PER_SEG][4], col[LAMPS_PER_SEG][3];
++	int i, n = 0;
++	for (i = 0; i < Seg_nlamps[seg]; i++) {
++		lamp *l = &Lamps[Seg_lamps[seg][i]];
++		vms_vector p;
++		if (Light_subtracted[l->seg] & (1 << l->side))
++			continue;
++		p.x = fl2f(l->pos[0]);
++		p.y = fl2f(l->pos[1]);
++		p.z = fl2f(l->pos[2]);
++		to_view(&p, pos[n]);
++		pos[n][3] = l->strength;
++		memcpy(col[n], l->col, sizeof(col[n]));
++		n++;
++	}
++	glUniform1i(W.nlamps, n);
++	if (n) {
++		glUniform4fv(W.lamppos, n, pos[0]);
++		glUniform3fv(W.lampcol, n, col[0]);
++	}
++}
++
++int plight_bind(grs_bitmap *bm, int overlay)
++{
++	int tmap, lit;
++	texmat *m;
++	if (!Face.on || !bm->gltexture)
++		return 0;
++	tmap = overlay ? Face.tmap2 : Face.tmap1;
++	glUseProgram(W.prog);
++	if (Frame_dirty) {
++		upload_frame();
++		Frame_dirty = 0;
++	}
++	if (Lamps_seg != Face.seg) {
++		upload_lamps(Face.seg);
++		Lamps_seg = Face.seg;
++	}
++	m = material(tmap);
++	lit = TmapInfo[tmap].lighting > 0;
++	if (!overlay && Face.tmap2 && bm != &GameBitmaps[Textures[Face.tmap1].index])	// merged with its overlay
++		lit |= TmapInfo[Face.tmap2].lighting > 0;
++	if (Light_subtracted[Face.seg] & (1 << Face.side))
++		lit = 0;
++	glUniform4f(W.mat, lit ? 1.0f : 0.0f, m->bump, m->gloss, 0);
++	glUniform2f(W.texsize, bm->gltexture->tw, bm->gltexture->th);
++	return 1;
++}
++
++void plight_unbind(void)
++{
++	glUseProgram(0);
++}
++
++int plight_haze_enabled(void)
++{
++#ifdef __EMSCRIPTEN__
++	return d2web_option(D2WEB_OPTION_HAZE) && d2web_gl_version() >= 2;
++#else
++	return 0;
++#endif
++}
++
++// The moving lights (not the ship's own glow and muzzle flashes, which would veil the whole
++// view) and the lamps that light the viewer's segment.
++int plight_haze_lights(float (*pos)[4], float (*col)[3], int max)
++{
++	int i, n = 0, seg = Viewer ? Viewer->segnum : -1;
++#ifdef __EMSCRIPTEN__
++	float lamp_gain = d2web_tune(18, 5.0f);
++#else
++	float lamp_gain = 5.0f;
++#endif
++	if (Built_level != Current_level_num || Built_segs != Highest_segment_index)
++		build_lamps();
++	for (i = 0; i < Pp_num_lights && n < max; i++) {
++		pp_light *l = &Pp_lights[i];
++		if (vm_vec_dist_quick(&l->pos, &View_position) < F1_0 * 8)
++			continue;
++		to_view(&l->pos, pos[n]);
++		pos[n][3] = 0;
++		col[n][0] = f2fl(l->emission.r);
++		col[n][1] = f2fl(l->emission.g);
++		col[n][2] = f2fl(l->emission.b);
++		n++;
++	}
++	if (seg >= 0 && seg <= Highest_segment_index)
++		for (i = 0; i < Seg_nlamps[seg] && n < max; i++) {
++			lamp *l = &Lamps[Seg_lamps[seg][i]];
++			vms_vector p;
++			if (Light_subtracted[l->seg] & (1 << l->side))
++				continue;
++			p.x = fl2f(l->pos[0]);
++			p.y = fl2f(l->pos[1]);
++			p.z = fl2f(l->pos[2]);
++			to_view(&p, pos[n]);
++			pos[n][3] = 0;
++			col[n][0] = l->col[0] * l->strength * lamp_gain;
++			col[n][1] = l->col[1] * l->strength * lamp_gain;
++			col[n][2] = l->col[2] * l->strength * lamp_gain;
++			n++;
++		}
++	return n;
++}
++
++int plight_headlight(float *pos, float *dir)
++{
++	if (!Viewer || Viewer->type != OBJ_PLAYER || !(Players[Viewer->id].flags & PLAYER_FLAGS_HEADLIGHT_ON))
++		return 0;
++	to_view(&Viewer->pos, pos);
++	dir_to_view(&Viewer->orient.fvec, dir);
++	return 1;
++}
+diff --git a/d2/main/plight.h b/d2/main/plight.h
+new file mode 100644
+index 0000000..629d5c7
+--- /dev/null
++++ b/d2/main/plight.h
+@@ -0,0 +1,22 @@
++/*
++ * Per-pixel lighting of the mine's walls (browser edition). Purely visual.
++ */
++
++#ifndef _PLIGHT_H
++#define _PLIGHT_H
++
++#include "gr.h"
++
++int plight_enabled(void);			// walls are lit per pixel (option on, WebGL 2)
++void plight_frame(void);			// a 3D view is about to be drawn
++int plight_side(int segnum, int sidenum, int tmap1, int tmap2);	// render_face draws this side next (1: per pixel)
++void plight_side_done(void);
++int plight_bind(grs_bitmap *bm, int overlay);	// g3_draw_tmap: draw the bound bitmap per pixel (1: program bound)
++void plight_unbind(void);
++
++// for the light haze (ogl_post.c): lights in view space (xyz, w unused) and their colors
++int plight_haze_enabled(void);
++int plight_haze_lights(float (*pos)[4], float (*col)[3], int max);
++int plight_headlight(float *pos, float *dir);	// 1: the viewer's headlight is on
++
++#endif
 diff --git a/d2/main/polyobj.c b/d2/main/polyobj.c
 index 823ccc1..2f8d7d3 100644
 --- a/d2/main/polyobj.c
@@ -2979,18 +4674,25 @@ index 650f69e..68d5617 100644
  
  //	returns true if powerup consumed
 diff --git a/d2/main/render.c b/d2/main/render.c
-index 517bc8a..8326da6 100644
+index 517bc8a..03ae248 100644
 --- a/d2/main/render.c
 +++ b/d2/main/render.c
-@@ -27,6 +27,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+@@ -27,6 +27,8 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
  #include "bm.h"
  #include "texmap.h"
  #include "render.h"
 +#include "fx.h"
++#include "plight.h"
  #include "game.h"
  #include "object.h"
  #include "laser.h"
-@@ -211,6 +212,7 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+@@ -206,11 +208,12 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+ 
+ 	g3s_uvl			uvl_copy[8];
+ 	g3s_lrgb		dyn_light[8];
+-	int			i;
++	int			i, pp;
+ 	const g3s_point		*pointlist[8];
  
  	Assert(nv <= 8);
  
@@ -2998,13 +4700,93 @@ index 517bc8a..8326da6 100644
  	for (i=0; i<nv; i++) {
  		uvl_copy[i].u = uvlp[i].u;
  		uvl_copy[i].v = uvlp[i].v;
-@@ -1678,6 +1680,7 @@ void render_frame(fix eye_offset, int window_num)
+@@ -238,6 +241,7 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+ #endif
+ 		Segments[segnum].sides[sidenum].tmap_num = 0;
+ 	}
++	pp = plight_side(segnum, sidenum, tmap1, tmap2);	// drawn per pixel: without the per-pixel lights' share
+ 
+ #ifdef OGL
+ 	if (GameArg.DbgAltTexMerge){
+@@ -270,13 +274,19 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+ 	//set light values for each vertex & build pointlist
+ 	for (i=0;i<nv;i++)
+ 	{
++		g3s_lrgb dl = Dynamic_light[vp[i]];
++		if (pp) {
++			dl.r -= Dynamic_light_pp[vp[i]].r;
++			dl.g -= Dynamic_light_pp[vp[i]].g;
++			dl.b -= Dynamic_light_pp[vp[i]].b;
++		}
+ 		//the uvl struct has static light already in it
+ 
+ 		//scale static light for destruction effect
+ 		if (Control_center_destroyed || Seismic_tremor_magnitude)	//make lights flash
+ 			uvl_copy[i].l = fixmul(flash_scale,uvl_copy[i].l);
+ 		//add in dynamic light (from explosions, etc.)
+-		uvl_copy[i].l += (Dynamic_light[vp[i]].r+Dynamic_light[vp[i]].g+Dynamic_light[vp[i]].b)/3;
++		uvl_copy[i].l += (dl.r+dl.g+dl.b)/3;
+ 		//saturate at max value
+ 		if (uvl_copy[i].l > MAX_LIGHT)
+ 			uvl_copy[i].l = MAX_LIGHT;
+@@ -298,9 +308,9 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+ 		}
+ 
+ 		// add light color
+-		dyn_light[i].r += Dynamic_light[vp[i]].r;
+-		dyn_light[i].g += Dynamic_light[vp[i]].g;
+-		dyn_light[i].b += Dynamic_light[vp[i]].b;
++		dyn_light[i].r += dl.r;
++		dyn_light[i].g += dl.g;
++		dyn_light[i].b += dl.b;
+ 		// saturate at max value
+ 		if (dyn_light[i].r > MAX_LIGHT)
+ 			dyn_light[i].r = MAX_LIGHT;
+@@ -333,6 +343,7 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+ 			g3_draw_tmap(nv,pointlist,uvl_copy,dyn_light,bm);
+ 
+ 	gr_settransblend(GR_FADE_OFF, GR_BLEND_NORMAL); // revert any transparency/blending setting back to normal
++	plight_side_done();
+ 
+ #ifndef NDEBUG
+ 	if (Outline_mode) draw_outline(nv, pointlist);
+@@ -1605,10 +1616,13 @@ fix Zoom_factor=F1_0;
+ //renders onto current canvas
+ void render_frame(fix eye_offset, int window_num)
+ {
+-	int start_seg_num;
++	int start_seg_num, post;
+ 
+ 	if (Endlevel_sequence) {
++		int post = window_num == 0 && ogl_post_begin();
+ 		render_endlevel_frame(eye_offset);
++		if (post)
++			ogl_post_end();
+ 		return;
+ 	}
+ 
+@@ -1623,7 +1637,9 @@ void render_frame(fix eye_offset, int window_num)
+    //Here:
+ 
+ 	start_lighting_frame(Viewer);		//this is for ugly light-smoothing hack
+-  
++
++	post = window_num == 0 && ogl_post_begin();	// main view: drawn off-screen for glow etc.
++	plight_frame();
+ 	g3_start_frame();
+ 
+ 	Viewer_eye = Viewer->pos;
+@@ -1678,8 +1694,11 @@ void render_frame(fix eye_offset, int window_num)
  	#endif
  
  	render_mine(start_seg_num, eye_offset, window_num);
 +	fx_render();	// light halos, smoke and sparks
  
  	g3_end_frame();
++	if (post)
++		ogl_post_end();
+ 
+    //RenderingType=0;
  
 diff --git a/d2/main/songs.c b/d2/main/songs.c
 index cf9fb7d..76e008b 100644

@@ -2,7 +2,7 @@
 // them locally. Optional folder imports remain available for custom copies.
 
 // Bump with every engine or loader release so browsers fetch the new files
-const BUILD = '20261103a';
+const BUILD = '20261103b';
 const DB_NAME = 'descent2-web';
 const DB_VERSION = 3; // 2 adds the music folder store, 3 the D2X-XL textures and models
 const SAVE_DIR = '/home/web_user/.d2x-redux';
@@ -637,7 +637,8 @@ function touchControls() {
 const SETTINGS_KEY = 'descent2-web-settings';
 function loadSettings() {
   // phones render at 1080p by default: sharp, and light on the battery
-  const defaults = { quality: isTouchDevice() ? '1080' : 'native', msaa: true, sharp: true, effects: true, music: 'cd', hires: true };
+  const defaults = { quality: isTouchDevice() ? '1080' : 'native', msaa: true, music: 'cd', hires: true };
+  for (const id of LOOKS) defaults[id] = true;
   try {
     return { ...defaults, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') };
   } catch {
@@ -647,6 +648,9 @@ function loadSettings() {
 function saveSettings(s) {
   try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); } catch {}
 }
+
+// look options the engine reads while it runs (web.h D2WEB_OPTION_*), each a page checkbox
+const LOOKS = ['sharp', 'effects', 'glow', 'lighting', 'ao', 'haze'];
 
 function renderResolution(quality) {
   const dpr = window.devicePixelRatio || 1;
@@ -822,14 +826,19 @@ async function bootGame(manifest, ui) {
 
   ui.status('Starting the engine…');
   const canvas = $('canvas');
+  // the engine asks for WebGL 2 (glow, per-pixel lighting...) wherever the browser has it; where it
+  // cannot make one, hide it so the engine starts with WebGL 1 and the classic look
+  try {
+    if (!document.createElement('canvas').getContext('webgl2')) window.WebGL2RenderingContext = undefined;
+  } catch {}
   window.Module = {
     canvas,
     d2cd: { tracks: cdTracks },
     d2music: music,
     d2midi: midiPlayer(),
     d2touch: touch,
-    // read live by the engine (d2web_option): sharp movies and text, halos/smoke/sparks
-    d2options: { sharp: settings.sharp, effects: settings.effects },
+    // read live by the engine (d2web_option)
+    d2options: Object.fromEntries(LOOKS.map((id) => [id, settings[id]])),
     print: (t) => console.log(t),
     printErr: (t) => console.warn(t),
     onGameMessage: (text, isError) => ui.message(text, isError),
@@ -952,8 +961,7 @@ async function main() {
   const settings = loadSettings();
   $('quality').value = settings.quality;
   $('msaa').checked = settings.msaa;
-  $('sharp').checked = settings.sharp;
-  $('effects').checked = settings.effects;
+  for (const id of LOOKS) $(id).checked = settings[id];
   $('music').value = settings.music;
   $('music').addEventListener('change', () => {
     settings.music = $('music').value;
@@ -1051,8 +1059,8 @@ async function main() {
   });
   $('quality').addEventListener('change', () => { settings.quality = $('quality').value; saveSettings(settings); updateResLabel(); });
   $('msaa').addEventListener('change', () => { settings.msaa = $('msaa').checked; saveSettings(settings); });
-  // these two also apply at once to a running game
-  for (const id of ['sharp', 'effects'])
+  // the look options also apply at once to a running game
+  for (const id of LOOKS)
     $(id).addEventListener('change', () => {
       settings[id] = $(id).checked;
       saveSettings(settings);
