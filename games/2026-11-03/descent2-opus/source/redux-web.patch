@@ -599,7 +599,7 @@ index c536c46..58786e5 100644
  		glEnable(GL_SCISSOR_TEST);
 diff --git a/d2/arch/ogl/ogl_post.c b/d2/arch/ogl/ogl_post.c
 new file mode 100644
-index 0000000..f493a72
+index 0000000..78e717e
 --- /dev/null
 +++ b/d2/arch/ogl/ogl_post.c
 @@ -0,0 +1,736 @@
@@ -1302,7 +1302,7 @@ index 0000000..f493a72
 +	fxaa = !P.samples;
 +	fin = final_program(P.look);
 +	glUseProgram(fin);
-+	glUniform4f(glGetUniformLocation(fin, "look"), d2web_tune(9, 0.6f), d2web_tune(10, 0.8f), d2web_tune(11, 0.2f), d2web_tune(12, 0.32f));
++	glUniform4f(glGetUniformLocation(fin, "look"), d2web_tune(9, 0.65f), d2web_tune(10, 0.8f), d2web_tune(11, 0.26f), d2web_tune(12, 0.32f));
 +	set_view(fin);
 +	if (P.look & LOOK_HAZE)
 +		haze_uniforms(fin);
@@ -3287,10 +3287,10 @@ index fe9b0d1..4cbbd67 100644
  			//	If dropping a weapon that the player has, drop energy instead, unless it's vulcan, in which case drop vulcan ammo.
 diff --git a/d2/main/fx.c b/d2/main/fx.c
 new file mode 100644
-index 0000000..a7d5009
+index 0000000..f3eebb0
 --- /dev/null
 +++ b/d2/main/fx.c
-@@ -0,0 +1,1129 @@
+@@ -0,0 +1,1170 @@
 +/*
 + * Light halos, smoke and sparks (browser edition).
 + *
@@ -3505,12 +3505,13 @@ index 0000000..a7d5009
 +// Explosions: layered fireballs that cool from white-hot to red, a shockwave, glowing debris
 +// that trails smoke, and scorch marks that stay on the walls a while
 +
-+static void fire_puffs(const float *p, float s, int n, float life)
++static void fire_puffs(const float *p, float s, int n, float life, float delay)
 +{
 +	for (int i = 0; i < n; i++) {
 +		particle *q = spawn(FX_FIRE);
 +		float d[3];
 +		rand_dir(d);
++		q->age = -delay * (0.6f + 0.8f * frand());
 +		madd(q->pos, p, d, s * 0.35f * frand());
 +		for (int k = 0; k < 3; k++)
 +			q->vel[k] = d[k] * s * (0.6f + 0.9f * frand());
@@ -3589,16 +3590,47 @@ index 0000000..a7d5009
 +	d->ember = ember;
 +}
 +
-+// a blast of size s (the exploding thing's radius)
++// embers: small hot bits that drift out slowly and glow a long while
++static void embers(const float *p, float s, int n)
++{
++	float hot[3] = { 1.4f, 0.62f, 0.2f };
++	for (int i = 0; i < n; i++) {
++		particle *q;
++		sparks(p, NULL, 1, hot, 4 + s * 1.2f, 2.6f);
++		q = &particles[n_particles - 1];
++		q->drag = 0.5f;
++		q->size = 0.06f + 0.05f * frand();
++		q->life = 1.6f + 1.8f * frand();
++	}
++}
++
++// a blast of size s (the exploding thing's radius), in stages: a white flash, the fireball, billows of
++// fire a moment later, embers, then slow dark smoke
 +static void blast(const float *p, float s)
 +{
-+	float flash[3] = { 2.2f, 1.7f, 1.1f };
-+	int n = (int)(4 + s * 0.35f);
-+	fire_puffs(p, s, n > 10 ? 10 : n, 0.75f + s * 0.02f);
++	float flash[3] = { 1.6f, 1.4f, 1.1f }, core[3] = { 1.5f, 1.0f, 0.55f };
++	int n = (int)(6 + s * 0.5f);
++	glow(p, s * 1.5f, 0.1f, flash, 0.4f);
++	glow(p, s * 0.7f, 0.35f, core, 0.35f);
++	fire_puffs(p, s, n > 14 ? 14 : n, 0.8f + s * 0.025f, 0);
++	fire_puffs(p, s * 1.25f, n > 14 ? 7 : n / 2, 0.9f + s * 0.03f, 0.12f);	// the billows after
 +	shockwave(p, s);
 +	n = (int)(5 + s * 0.6f);
 +	debris(p, s, n > 14 ? 14 : n);
-+	glow(p, s * 1.6f, 0.16f, flash, 0.45f);
++	n = (int)(8 + s * 1.5f);
++	embers(p, s, n > 30 ? 30 : n);
++	if (fx_enabled())
++		for (int i = 0; i < 5; i++) {
++			float d[3], at[3];
++			particle *q;
++			rand_dir(d);
++			madd(at, p, d, s * 0.3f);
++			for (int k = 0; k < 3; k++)
++				d[k] *= s * 0.25f;
++			smoke(at, d, s * 0.4f, s * 0.3f, 3.5f + frand() * 1.5f, 0.34f, 0.8f, -1);
++			q = &particles[n_particles - 1];
++			q->age = -(0.25f + 0.2f * frand());	// rises out of the fire as it dies down
++		}
 +}
 +
 +void fx_impact(object *weapon, int segnum, int sidenum, vms_vector *pos)
@@ -3638,9 +3670,11 @@ index 0000000..a7d5009
 +		}
 +	} else if (wi->matter)	// vulcan, gauss: metal sparks
 +		sparks(p, n, 7, rgb, 32, 0.4f);
-+	else {
-+		sparks(p, n, 10, rgb, 26, 0.45f);
-+		glow(p, 1.6f, 0.18f, rgb, 0.5f);
++	else {	// lasers: a hot splash of sparks and a flash in the shot's color
++		float hot[3] = { rgb[0] * 1.6f, rgb[1] * 1.6f, rgb[2] * 1.6f };
++		sparks(p, n, 16, hot, 30, 0.5f);
++		glow(p, 1.6f, 0.14f, hot, 0.4f);
++		glow(p, 0.7f, 0.28f, rgb, 0.5f);
 +	}
 +}
 +
@@ -3781,6 +3815,11 @@ index 0000000..a7d5009
 +	for (int i = 0; i < n_particles;) {
 +		particle *p = &particles[i];
 +		float drag;
++		if (p->age < 0) {	// a later stage of a blast, waiting its turn
++			p->age += dt;
++			i++;
++			continue;
++		}
 +		p->age += dt;
 +		if (p->age >= p->life) {
 +			*p = particles[--n_particles];
@@ -4296,7 +4335,7 @@ index 0000000..a7d5009
 +	// smoke, far to near, blended over what is behind it
 +	batch_begin(&smoke_tex, 0);
 +	for (int i = 0; i < n_particles; i++)
-+		if (particles[i].kind == FX_SMOKE) {
++		if (particles[i].kind == FX_SMOKE && particles[i].age >= 0) {
 +			float v[3];
 +			to_view(particles[i].pos, v);
 +			if (v[2] > -0.5f)	// behind the camera
@@ -4316,7 +4355,7 @@ index 0000000..a7d5009
 +	for (int i = 0; i < n_particles; i++) {
 +		particle *p = &particles[i];
 +		float heat, c[3], t;
-+		if (p->kind != FX_DEBRIS)
++		if (p->kind != FX_DEBRIS || p->age < 0)
 +			continue;
 +		t = p->age / p->life;
 +		heat = 1 - smooth(0, 1.0f, p->age);
@@ -4331,7 +4370,7 @@ index 0000000..a7d5009
 +	for (int i = 0; i < n_particles; i++) {
 +		particle *p = &particles[i];
 +		float c[3];
-+		if (p->kind != FX_FIRE)
++		if (p->kind != FX_FIRE || p->age < 0)
 +			continue;
 +		fire_color(p->age / p->life, c);
 +		billboard(p->pos, p->size, p->angle, c, 1);
@@ -4340,7 +4379,7 @@ index 0000000..a7d5009
 +	for (int i = 0; i < n_particles; i++) {
 +		particle *p = &particles[i];
 +		float t, f, c[3];
-+		if (p->kind != FX_RING)
++		if (p->kind != FX_RING || p->age < 0)
 +			continue;
 +		t = p->age / p->life;
 +		f = (1 - t) * (1 - t) * 0.45f;
@@ -4361,6 +4400,8 @@ index 0000000..a7d5009
 +	for (int i = 0; i < n_particles; i++) {
 +		particle *p = &particles[i];
 +		float t = p->age / p->life, c[3];
++		if (p->age < 0)
++			continue;
 +		if (p->kind == FX_SPARK) {
 +			float tail[3], f = (1 - t) * (1 - t);
 +			// cools from white-hot to the weapon's color and red
@@ -5095,7 +5136,7 @@ index 1944a8c..c7d0f7e 100644
  	PlayerCfg.SelectAfterFire = 1;  /* SelectAfterFire */
 diff --git a/d2/main/plight.c b/d2/main/plight.c
 new file mode 100644
-index 0000000..1e8f349
+index 0000000..5d48a6e
 --- /dev/null
 +++ b/d2/main/plight.c
 @@ -0,0 +1,735 @@
@@ -5645,7 +5686,7 @@ index 0000000..1e8f349
 +#ifdef __EMSCRIPTEN__
 +	glUniform4f(W.tune, d2web_tune(0, 2.6f), d2web_tune(1, 5.0f), d2web_tune(2, 0.1f), d2web_tune(3, 0.9f));
 +	glUniform4f(W.tune + 1, d2web_tune(4, 0.45f), d2web_tune(5, 0.8f), d2web_tune(6, 1.8f), d2web_tune(24, 1.6f));
-+	glUniform4f(W.tune + 2, d2web_tune(20, 1.0f), d2web_tune(21, 0.42f), d2web_tune(22, 1.9f), d2web_tune(23, 36.0f));
++	glUniform4f(W.tune + 2, d2web_tune(20, 1.0f), d2web_tune(21, 0.3f), d2web_tune(22, 2.3f), d2web_tune(23, 36.0f));
 +#endif
 +	glUniform3f(W.unscale, 1 / f2fl(Matrix_scale.x), 1 / f2fl(Matrix_scale.y), 1 / f2fl(Matrix_scale.z));
 +	glUniform1f(W.time, (float)(GameTime64 % (F1_0 * 3600LL)) / F1_0);
@@ -6277,6 +6318,19 @@ index a6ab6fd..c789b14 100644
  } /* physfsrwops_write */
  
  
+diff --git a/d2/misc/physfsx.c b/d2/misc/physfsx.c
+index 7e15772..af58c44 100644
+--- a/d2/misc/physfsx.c
++++ b/d2/misc/physfsx.c
+@@ -71,7 +71,7 @@ void PHYSFSX_init(int argc, char *argv[])
+ 	
+ #if defined(__unix__)
+ # if !(defined(__APPLE__) && defined(__MACH__))
+-	path = "~/.d2x-redux/";
++	path = "~/.d2x-opus/";	// Descent II Opus keeps its own pilots, saves and settings
+ # else
+ 	path = "~/Library/Preferences/D2X Redux/";
+ # endif
 diff --git a/d2/misc/pngfile.c b/d2/misc/pngfile.c
 index 9d9dba2..ac67b7d 100644
 --- a/d2/misc/pngfile.c
