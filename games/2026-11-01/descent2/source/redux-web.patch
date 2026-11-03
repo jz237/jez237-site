@@ -45,7 +45,7 @@ index c5cca0b..c0e7162 100644
  	ogl_init_prog();
  #endif
 diff --git a/d2/arch/ogl/ogl.c b/d2/arch/ogl/ogl.c
-index c536c46..3650b6d 100644
+index c536c46..3a189c4 100644
 --- a/d2/arch/ogl/ogl.c
 +++ b/d2/arch/ogl/ogl.c
 @@ -10,7 +10,13 @@
@@ -91,6 +91,192 @@ index c536c46..3650b6d 100644
  		}
  		else
  		{
+@@ -1644,6 +1656,152 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
+ }
+ #endif
+ 
++// the bitmap's palette indices, RLE decoded (into decodebuf)
++static unsigned char *ogl_bitmap_indices(grs_bitmap *bm)
++{
++	unsigned char *sbits, *dbits;
++	int i, data_offset = bm->bm_flags & BM_FLAG_RLE_BIG ? 2 : 1;
++
++	if (!(bm->bm_flags & BM_FLAG_RLE))
++		return bm->bm_data;
++	sbits = &bm->bm_data[4 + (bm->bm_h * data_offset)];
++	dbits = decodebuf;
++	for (i = 0; i < bm->bm_h; i++) {
++		gr_rle_decode(sbits, dbits);
++		if (bm->bm_flags & BM_FLAG_RLE_BIG)
++			sbits += (int)INTEL_SHORT(*((short *)&(bm->bm_data[4 + (i * data_offset)])));
++		else
++			sbits += (int)bm->bm_data[4 + i];
++		dbits += bm->bm_w;
++	}
++	return decodebuf;
++}
++
++// Scales an RGBA image's colors so its average matches the game bitmap it replaces, as the
++// current palette shows that bitmap (orig: its palette indices).
++static void ogl_match_colors(grs_bitmap *bm, const unsigned char *orig, unsigned char *rgba, int n)
++{
++	double osum[3] = { 0, 0, 0 }, psum[3] = { 0, 0, 0 }, gain[3];
++	int on = 0, pn = 0, i, k;
++
++	for (i = 0; i < bm->bm_w * bm->bm_h; i++)
++		if (orig[i] < 254) {
++			for (k = 0; k < 3; k++)
++				osum[k] += ogl_pal[orig[i] * 3 + k] * 4;
++			on++;
++		}
++	for (i = 0; i < n; i++)
++		if (rgba[i * 4 + 3] >= 128) {
++			for (k = 0; k < 3; k++)
++				psum[k] += rgba[i * 4 + k];
++			pn++;
++		}
++	if (!on || !pn)
++		return;
++	for (k = 0; k < 3; k++) {
++		gain[k] = psum[k] > 0 ? (osum[k] / on) / (psum[k] / pn) : 1;
++		gain[k] = gain[k] < 0.5 ? 0.5 : gain[k] > 3 ? 3 : gain[k];
++	}
++	if (fabs(gain[0] - 1) < 0.03 && fabs(gain[1] - 1) < 0.03 && fabs(gain[2] - 1) < 0.03)
++		return;
++	for (i = 0; i < n; i++)
++		for (k = 0; k < 3; k++) {
++			double v = rgba[i * 4 + k] * gain[k];
++			rgba[i * 4 + k] = v > 255 ? 255 : (unsigned char)v;
++		}
++}
++
++// For replacements of model textures (xmodel.cpp): match the game bitmap's colors.
++void ogl_match_bitmap_colors(grs_bitmap *bm, unsigned char *rgba, int w, int h)
++{
++	if (bm && bm->bm_data && bm->bm_w && bm->bm_h)
++		ogl_match_colors(bm, ogl_bitmap_indices(bm), rgba, w * h);
++}
++
++#ifdef HAVE_LIBPNG
++// Fits a replacement texture to the game bitmap it stands for. The hi-res packs were made
++// from one palette, often come out darker, and some lack the transparency the game needs
++// (muzzle flashes on black, say). So the copy takes the original's transparency where the
++// image has none, and the original's average color as this level's palette shows it.
++// Returns a new RGBA buffer.
++static unsigned char *ogl_fit_png(grs_bitmap *bm, png_data *pdata)
++{
++	int w = pdata->width, h = pdata->height, n = w * h, bpp = pdata->paletted ? 1 : pdata->channels, i;
++	unsigned char *rgba = malloc(n * 4), *orig = bm->bm_data ? ogl_bitmap_indices(bm) : NULL;
++	int alpha = pdata->alpha && !pdata->paletted && bpp == 4;
++
++	for (i = 0; i < n; i++) {
++		const unsigned char *s = pdata->paletted ? pdata->palette + pdata->data[i] * 3 : pdata->data + i * bpp;
++		unsigned char *d = rgba + i * 4;
++		d[0] = s[0];
++		d[1] = s[1];
++		d[2] = s[2];
++		d[3] = alpha ? s[3] : 255;
++		if (orig && !alpha) {
++			int c = orig[(i / w * bm->bm_h / h) * bm->bm_w + (i % w) * bm->bm_w / w];
++			if ((c == 255 && (bm->bm_flags & BM_FLAG_TRANSPARENT)) || (c == 254 && (bm->bm_flags & BM_FLAG_SUPER_TRANSPARENT)))
++				d[3] = 0;
++		}
++		if (d[0] == 120 && d[1] == 88 && d[2] == 128)	// D2X-XL's super transparency color
++			d[3] = 0;
++	}
++	if (orig)
++		ogl_match_colors(bm, orig, rgba, n);
++	return rgba;
++}
++
++// D2X-XL texture packs store an animation as one vertical strip of frames in name#0.png
++// (frame k in row k). Reads the replacement for one frame: name#k.png, or row k of the strip.
++static int read_texture_png(const char *bitmapname, png_data *pdata)
++{
++	static char strip_name[64];
++	static png_data strip;	// the last strip read, kept since its frames load one after another
++	const char *hash = strchr(bitmapname, '#');
++	int frame = hash ? atoi(hash + 1) : 0, bpp, size;
++	char filename[64];
++
++	snprintf(filename, sizeof(filename), "%s.png", bitmapname);
++	if (read_png(filename, pdata)) {
++		if (!hash || pdata->height <= pdata->width || pdata->height % pdata->width)
++			return 1;
++		frame = 0;	// a frame 0 file that holds the whole strip
++	} else {
++		if (!hash)
++			return 0;
++		snprintf(filename, sizeof(filename), "%.*s#0.png", (int)(hash - bitmapname), bitmapname);
++		if (strcmp(filename, strip_name)) {
++			if (strip.data)
++				free(strip.data);
++			if (strip.palette)
++				free(strip.palette);
++			strip.data = strip.palette = NULL;
++			strip_name[0] = 0;
++			if (!read_png(filename, &strip))
++				return 0;
++			strcpy(strip_name, filename);
++		}
++		if (strip.height <= strip.width || strip.height % strip.width)
++			return 0;
++		*pdata = strip;
++		if (strip.palette) {
++			pdata->palette = malloc(strip.num_palette * 3);
++			memcpy(pdata->palette, strip.palette, strip.num_palette * 3);
++		}
++		pdata->data = NULL;
++	}
++	bpp = pdata->paletted ? 1 : pdata->channels;
++	size = pdata->width * pdata->width * bpp;
++	frame %= pdata->height / pdata->width;
++	unsigned char *data = malloc(size);
++	memcpy(data, (pdata->data ? pdata->data : strip.data) + frame * size, size);
++	if (pdata->data)
++		free(pdata->data);
++	pdata->data = data;
++	pdata->height = pdata->width;
++	return 1;
++}
++#endif
++
+ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+ {
+ 	unsigned char *buf;
+@@ -1663,23 +1821,18 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+ 		png_data pdata;
+ 
+ 		sprintf(filename, /*"textures/"*/ "%s.png", bitmapname);
+-		if (read_png(filename, &pdata))
++		if (read_texture_png(bitmapname, &pdata))
+ 		{
+ 			con_printf(CON_DEBUG,"%s: %ux%ux%i p=%i(%i) c=%i a=%i chans=%i\n", filename, pdata.width, pdata.height, pdata.depth, pdata.paletted, pdata.num_palette, pdata.color, pdata.alpha, pdata.channels);
+-			if (pdata.depth == 8 && pdata.color)
++			if (pdata.depth == 8 && pdata.color && (!pdata.paletted || pdata.palette))
+ 			{
+-				if (bm->gltexture == NULL)
+-					ogl_init_texture(bm->gltexture = ogl_get_free_texture(), pdata.width, pdata.height, ((pdata.alpha || bm->bm_flags & BM_FLAG_TRANSPARENT) ? OGL_FLAG_ALPHA : 0));
+-				unsigned char *data = pdata.data;
+-				if (pdata.palette) {
+-					int size = pdata.width * pdata.height;
+-					data = malloc(size * 3);
+-					for (int i = 0; i < size; i++)
+-						memcpy(&data[i * 3], &pdata.palette[pdata.data[i] * 3], 3);
+-					free(pdata.data);
+-					pdata.data = data;
+-				}
+-				ogl_loadtexture(pdata.data, 0, 0, bm->gltexture, bm->bm_flags, pdata.paletted ? 3 : pdata.channels, texfilt);
++				ogl_init_texture(bm->gltexture ? bm->gltexture : (bm->gltexture = ogl_get_free_texture()), pdata.width, pdata.height, OGL_FLAG_ALPHA);
++				unsigned char *data = ogl_fit_png(bm, &pdata);
++				free(pdata.data);
++				pdata.data = data;
++				pdata.channels = 4;
++				pdata.paletted = 0;
++				ogl_loadtexture(pdata.data, 0, 0, bm->gltexture, bm->bm_flags, 4, texfilt);
+ 				#ifdef OGL_MERGE
+ 				if (bm->bm_flags & BM_FLAG_SUPER_TRANSPARENT)
+ 					ogl_loadpngmask(&pdata, bm, texfilt);
 diff --git a/d2/arch/sdl/event.c b/d2/arch/sdl/event.c
 index 5a20a70..14d4a74 100644
 --- a/d2/arch/sdl/event.c
@@ -189,6 +375,22 @@ index 92eee47..874ec30 100644
  		{
  			keyd_pressed[i] = 1;
  			key_data.state[i] = 0;
+diff --git a/d2/arch/sdl/mouse.c b/d2/arch/sdl/mouse.c
+index 2cfce11..0bb6b69 100644
+--- a/d2/arch/sdl/mouse.c
++++ b/d2/arch/sdl/mouse.c
+@@ -77,6 +77,11 @@ void mouse_button_handler(SDL_MouseButtonEvent *mbe)
+ 		return;
+ 
+ 	Mouse.cursor_time = timer_query();
++#ifdef __EMSCRIPTEN__
++	// a tap on a touch screen presses a button where no mouse moved first
++	Mouse.x = mbe->x;
++	Mouse.y = mbe->y;
++#endif
+ 
+ 	if (mbe->state == SDL_PRESSED) {
+ 		d_event_mouse_moved event2 = { EVENT_MOUSE_MOVED, 0, 0, 0 };
 diff --git a/d2/arch/sdl/timer.c b/d2/arch/sdl/timer.c
 index 3e7949c..2dca829 100644
 --- a/d2/arch/sdl/timer.c
@@ -251,10 +453,10 @@ index 0000000..f8c55f7
 +#include <SDL.h>
 diff --git a/d2/arch/web/library_d2web.js b/d2/arch/web/library_d2web.js
 new file mode 100644
-index 0000000..1fbf9fb
+index 0000000..6eee67e
 --- /dev/null
 +++ b/d2/arch/web/library_d2web.js
-@@ -0,0 +1,311 @@
+@@ -0,0 +1,338 @@
 +// Emscripten JS library: browser glue for the Descent II web build.
 +// The page fills Module.d2cd.tracks[n] with object URLs of the ripped CD tracks
 +// (index = CD track number; track 1 is the data track and stays empty).
@@ -512,8 +714,35 @@ index 0000000..1fbf9fb
 +    return changed ? 1 : 0;
 +  },
 +
++  // Touch controls: the page keeps their state in Module.d2touch (d2loader.js). The game
++  // reads controls several times a frame; each read in a frame gets the same stick and look
++  // values, and the first one the taps.
++  $D2Touch: { frame: 0, readFrame: -1, look: [0, 0] },
++  d2web_touch_read__deps: ['$D2Touch'],
++  d2web_touch_read: (out) => {
++    const t = Module.d2touch;
++    if (!t || !t.enabled) return 0;
++    t.lastRead = performance.now();
++    let taps = 0;
++    if (D2Touch.readFrame !== D2Touch.frame) {
++      D2Touch.readFrame = D2Touch.frame;
++      D2Touch.look = t.takeLook();
++      taps = t.takeTaps();
++    }
++    const o = out >> 2;
++    HEAPF32[o] = t.stickX;
++    HEAPF32[o + 1] = t.stickY;
++    HEAPF32[o + 2] = D2Touch.look[0];
++    HEAPF32[o + 3] = D2Touch.look[1];
++    HEAPF32[o + 4] = t.held;
++    HEAPF32[o + 5] = taps;
++    return 1;
++  },
++
++  d2web_frame_wait__deps: ['$D2Touch'],
 +  d2web_frame_wait__async: true,
 +  d2web_frame_wait: () => Asyncify.handleSleep((wakeUp) => {
++    D2Touch.frame++;
 +    if (Module.onFrame) Module.onFrame();
 +    requestAnimationFrame(() => wakeUp());
 +  }),
@@ -731,10 +960,10 @@ index 0000000..bc5fa7e
 +}
 diff --git a/d2/arch/web/web.c b/d2/arch/web/web.c
 new file mode 100644
-index 0000000..518bd91
+index 0000000..d92f38d
 --- /dev/null
 +++ b/d2/arch/web/web.c
-@@ -0,0 +1,144 @@
+@@ -0,0 +1,189 @@
 +/*
 + * Browser (Emscripten) replacements for desktop-only pieces:
 + * message boxes, GLU mipmapping and GL 1.1 calls WebGL lacks.
@@ -879,12 +1108,57 @@ index 0000000..518bd91
 +	rw->hidden.mem.stop = rw->hidden.mem.base + size;
 +	return rw;
 +}
++
++/* Test tools for the page (never called in normal play). */
++#include "object.h"
++#include "robot.h"
++#include "gameseg.h"
++#include "fuelcen.h"
++#include "ai.h"
++
++/* Puts robot type id dist units ahead of the ship, facing it (replacing the last one put
++ * there): with ai it moves its joints and fires like any robot, holding its place; without,
++ * it stays in its rest pose. Returns its object number or -1. */
++EMSCRIPTEN_KEEPALIVE int d2web_test_robot(int id, int dist, int ai)
++{
++	static int last = -1, last_sig;
++	vms_vector pos, back;
++	object *obj;
++	int seg;
++
++	if (last >= 0 && Objects[last].type == OBJ_ROBOT && Objects[last].signature == last_sig)
++		obj_delete(last);
++	last = -1;
++	if (!ConsoleObject || id < 0 || id >= N_robot_types)
++		return -1;
++	vm_vec_scale_add(&pos, &ConsoleObject->pos, &ConsoleObject->orient.fvec, i2f(dist));
++	if ((seg = find_point_seg(&pos, ConsoleObject->segnum)) < 0)
++		return -1;
++	if (!(obj = create_morph_robot(&Segments[seg], &pos, id)))
++		return -1;
++	back = ConsoleObject->orient.fvec;
++	vm_vec_negate(&back);
++	vm_vector_2_matrix(&obj->orient, &back, &ConsoleObject->orient.uvec, NULL);
++	obj->ctype.ai_info.behavior = AIB_STILL;
++	if (!ai)
++		obj->control_type = CT_NONE;
++	last = obj - Objects;
++	last_sig = obj->signature;
++	return last;
++}
++
++/* 0 draws the game's own models instead of the loaded high-resolution ones. */
++extern int xmodel_enabled;
++EMSCRIPTEN_KEEPALIVE void d2web_test_hires_models(int on)
++{
++	xmodel_enabled = on;
++}
 diff --git a/d2/arch/web/web.h b/d2/arch/web/web.h
 new file mode 100644
-index 0000000..fe0dad5
+index 0000000..7430492
 --- /dev/null
 +++ b/d2/arch/web/web.h
-@@ -0,0 +1,58 @@
+@@ -0,0 +1,73 @@
 +/* Browser (Emscripten) glue for D2X-Redux. Implemented in library_d2web.js. */
 +#ifndef _D2WEB_H
 +#define _D2WEB_H
@@ -927,6 +1201,21 @@ index 0000000..fe0dad5
 +void d2web_music_resume(void);
 +void d2web_music_pause_resume(void);
 +void d2web_music_volume(int volume);	/* 0..8 */
++
++/* Touch controls: the page's on-screen stick, look area and buttons. Fills out[6]: stick
++ * x, y (-1..1, y down), look x, y (turn time since the last frame), held buttons and the
++ * buttons tapped since the last frame (reported once per frame). Returns 0 without touch. */
++int d2web_touch_read(float *out);
++#define D2WEB_TOUCH_FIRE		1
++#define D2WEB_TOUCH_MISSILE		2
++#define D2WEB_TOUCH_UP			4
++#define D2WEB_TOUCH_DOWN		8
++#define D2WEB_TOUCH_BOOST		16
++#define D2WEB_TOUCH_FLARE		32
++#define D2WEB_TOUCH_BOMB		64
++#define D2WEB_TOUCH_WEAPON		128
++#define D2WEB_TOUCH_SECONDARY	256
++#define D2WEB_TOUCH_MAP			512
 +
 +/* True once after a gamepad was connected or removed. */
 +int d2web_gamepads_changed(void);
@@ -1071,6 +1360,19 @@ index af0b258..ec43620 100644
  #ifdef _WIN32
  #include "loadgl.h"
  int ogl_init_load_library(void);
+diff --git a/d2/include/xmodel.h b/d2/include/xmodel.h
+index 2bc25cf..42c25a4 100644
+--- a/d2/include/xmodel.h
++++ b/d2/include/xmodel.h
+@@ -22,6 +22,8 @@ void xmodel_free_all();
+ void xmodel_load_gl_all();
+ void xmodel_free_gl_all();
+ int xmodel_show_if_loaded(enum xmodel_type mt, int modelnum, vms_vector *pos, vms_matrix *orient, int mpcolor, g3s_lrgb *light);
++int xmodel_show_polyobj(int modelnum, vms_vector *pos, vms_matrix *orient, vms_angvec *anim_angles, int flags,
++	int mpcolor, g3s_lrgb *light);
+ int xmodel_exists(enum xmodel_type mt, int modelnum);
+ 
+ #ifdef __cplusplus
 diff --git a/d2/libmve/mveplay.c b/d2/libmve/mveplay.c
 index bfa69f6..22d5043 100644
 --- a/d2/libmve/mveplay.c
@@ -1186,6 +1488,57 @@ index dc6e44a..3c6d310 100644
 +#endif
  	return(0);		//presumably successful exit
  }
+diff --git a/d2/main/kconfig.c b/d2/main/kconfig.c
+index d9aafbc..5b7bee7 100644
+--- a/d2/main/kconfig.c
++++ b/d2/main/kconfig.c
+@@ -97,6 +97,10 @@ fix Cruise_speed=0;
+ #define STATE_BIT3		4
+ #define STATE_BIT4		8
+ #define STATE_BIT5		16
++#ifdef __EMSCRIPTEN__
++#include "web.h"
++#define TOUCH_BIT		32	// the page's touch controls
++#endif
+ 
+ #define INFO_Y (188)
+ 
+@@ -1740,6 +1744,35 @@ void kconfig_read_controls(d_event *event, int automap_flag)
+ 	if (Cruise_speed < 0 ) Cruise_speed = 0;
+ 	if (Controls.forward_thrust_time==0) Controls.forward_thrust_time = fixmul(Cruise_speed,FrameTime)/100;
+ 
++#ifdef __EMSCRIPTEN__
++	//----------- Touch controls (phones and tablets), from the page
++	{
++		float touch[6];	// stick x, y (-1..1); look x, y (turn time); held buttons; buttons tapped this frame
++		if (d2web_touch_read(touch))
++		{
++			int held = (int)touch[4], taps = (int)touch[5];
++#define TOUCH_STATE(field, bit) Controls.field = (held & (bit)) ? Controls.field | TOUCH_BIT : Controls.field & ~TOUCH_BIT
++			Controls.forward_thrust_time -= (fix)(touch[1] * FrameTime);
++			Controls.sideways_thrust_time += (fix)(touch[0] * FrameTime);
++			Controls.heading_time += fl2f(touch[2]);
++			Controls.pitch_time += fl2f(touch[3]);
++			if (held & D2WEB_TOUCH_UP) Controls.vertical_thrust_time += speed_factor*FrameTime;
++			if (held & D2WEB_TOUCH_DOWN) Controls.vertical_thrust_time -= speed_factor*FrameTime;
++			TOUCH_STATE(fire_primary_state, D2WEB_TOUCH_FIRE);
++			TOUCH_STATE(fire_secondary_state, D2WEB_TOUCH_MISSILE);
++			TOUCH_STATE(afterburner_state, D2WEB_TOUCH_BOOST);
++			if (taps & D2WEB_TOUCH_FIRE) Controls.fire_primary_count++;
++			if (taps & D2WEB_TOUCH_MISSILE) Controls.fire_secondary_count++;
++			if (taps & D2WEB_TOUCH_FLARE) Controls.fire_flare_count++;
++			if (taps & D2WEB_TOUCH_BOMB) Controls.drop_bomb_count++;
++			if (taps & D2WEB_TOUCH_WEAPON) Controls.cycle_primary_count++;
++			if (taps & D2WEB_TOUCH_SECONDARY) Controls.cycle_secondary_count++;
++			if (taps & D2WEB_TOUCH_MAP) Controls.automap_count++;
++#undef TOUCH_STATE
++		}
++	}
++#endif
++
+     //----------- Add overrun values
+     Controls.pitch_time += Controls.pitch_time_overrun;
+     Controls.heading_time += Controls.heading_time_overrun;
 diff --git a/d2/main/menu.c b/d2/main/menu.c
 index 8301896..4e5e9f6 100644
 --- a/d2/main/menu.c
@@ -1335,6 +1688,19 @@ index 1944a8c..c7d0f7e 100644
  	PlayerCfg.DisableCockpit = 0;  /* DisableCockpit */ 
  	PlayerCfg.StickyRearview = 0; /* StickyRearview */ 
  	PlayerCfg.SelectAfterFire = 1;  /* SelectAfterFire */
+diff --git a/d2/main/polyobj.c b/d2/main/polyobj.c
+index 823ccc1..2f8d7d3 100644
+--- a/d2/main/polyobj.c
++++ b/d2/main/polyobj.c
+@@ -528,7 +528,7 @@ void draw_polygon_model(vms_vector *pos,vms_matrix *orient,vms_angvec *anim_angl
+ 
+ #ifdef OGL
+ 	if (!(Game_mode & GM_MULTI) || Netgame.AllowCustomModelsTextures)
+-		if (xmodel_show_if_loaded(XM_POLYOBJ, model_num, pos, orient, alt_textures_to_ship_color(alt_textures), &light))
++		if (xmodel_show_polyobj(model_num, pos, orient, anim_angles, flags, alt_textures_to_ship_color(alt_textures), &light))
+ 			return;
+ #endif
+ 
 diff --git a/d2/main/powerup.c b/d2/main/powerup.c
 index 650f69e..68d5617 100644
 --- a/d2/main/powerup.c
@@ -1599,6 +1965,238 @@ index a6ab6fd..c789b14 100644
  } /* physfsrwops_write */
  
  
+diff --git a/d2/xmodel/ase.h b/d2/xmodel/ase.h
+index 11220f8..634f584 100644
+--- a/d2/xmodel/ase.h
++++ b/d2/xmodel/ase.h
+@@ -25,7 +25,7 @@ class CFace {
+ 		CFloatVector3			m_vNormal;
+ 		uint16_t					m_nVerts [3];	// indices of vertices
+ 		uint16_t					m_nTexCoord [3];
+-		//int16_t					m_nBitmap;
++		int16_t					m_nBitmap;		// material id, then bitmap (CModel::ResolveFaceBitmaps)
+ };
+ 
+ class CSubModel {
+@@ -110,10 +110,11 @@ class CModel {
+ 	private:
+ 		int32_t ReadTexture (CFile& cf, int32_t nBitmap);
+ 		int32_t ReadOpacity (CFile& cf, int32_t nBitmap);
+-		int32_t ReadMaterial (CFile& cf);
++		int32_t ReadMaterial (CFile& cf, int32_t& nSubs);
+ 		int32_t ReadMaterialList (CFile& cf);
+ 		int32_t FindSubModel (const char *pszName);
+ 		void LinkSubModels (void);
++		void ResolveFaceBitmaps (void);
+ 		int32_t ReadSubModel (CFile& cf);
+ 	};
+ 
+diff --git a/d2/xmodel/aseread.cpp b/d2/xmodel/aseread.cpp
+index 19cad13..7b42ad8 100644
+--- a/d2/xmodel/aseread.cpp
++++ b/d2/xmodel/aseread.cpp
+@@ -310,14 +310,12 @@ while ((pszToken = ReadLine (cf))) {
+ 			strtok (NULL, " :\t");
+ 			pf->m_nVerts [i] = IntTok (" :\t");
+ 			}
+-		#if 0
+-		do {
+-			pszToken = StrTok (" :\t");
+-			if (!*pszToken)
+-				return CModel::Error ("unexpected end of file");
+-			} while (strcmp (pszToken, "*MESH_MTLID"));
+-		pf->m_nBitmap = IntTok (" ");
+-		#endif
++		pf->m_nBitmap = 0;
++		while ((pszToken = strtok (NULL, " :\t")))
++			if (!strcmp (pszToken, "*MESH_MTLID")) {
++				pf->m_nBitmap = IntTok (" \t");
++				break;
++				}
+ 		}
+ 	}
+ return CModel::Error ("unexpected end of file");
+@@ -699,38 +697,92 @@ return CModel::Error ("unexpected end of file");
+ 
+ //------------------------------------------------------------------------------
+ 
+-int32_t CModel::ReadMaterial (CFile& cf)
++// Every material, and every sub-material of a multi/sub-object material, gets a bitmap of its
++// own; a face picks its bitmap by its submodel's material and its *MESH_MTLID (ResolveFaceBitmaps).
++#define MAX_ASE_BITMAPS		64
++#define MAX_ASE_MATERIALS	64
++
++static int32_t nUsedBitmaps;
++static int16_t matBase [MAX_ASE_MATERIALS], matCount [MAX_ASE_MATERIALS];
++
++// skips a { } block the reader doesn't use; the line that opened it has been read
++static int32_t SkipBlock (CFile& cf)
+ {
+-	int32_t		i;
+-	CBitmap	*pBm;
++	int32_t	nDepth = 1;
++
++while ((pszToken = ReadLine (cf))) {
++	if (*pszToken == '}') {
++		if (!--nDepth)
++			return 1;
++		}
++	else
++		while ((pszToken = strtok (NULL, " \t")))
++			if (*pszToken == '{')
++				nDepth++;
++	}
++return CModel::Error ("unexpected end of file");
++}
++
++// a material without a texture is drawn in its diffuse color: a 1x1 bitmap of that color
++static void SetFlatColor (CBitmap *pBm, const float *color)
++{
++pBm->SetWidth (1);
++pBm->SetHeight (1);
++pBm->SetBPP (4);
++pBm->CreateBuffer ();
++for (int32_t i = 0; i < 3; i++)
++	pBm->Buffer () [i] = (uint8_t) (color [i] < 0 ? 0 : color [i] > 1 ? 255 : color [i] * 255 + 0.5f);
++pBm->Buffer () [3] = 255;
++}
++
++// Reads a material or sub-material block. Returns the bitmap of a plain material, the first
++// bitmap of its sub-materials (nSubs of them) or -1 on error.
++int32_t CModel::ReadMaterial (CFile& cf, int32_t& nSubs)
++{
++	int32_t	nBitmap = -1, nFirst = -1;
++	float		color [3] = {1, 1, 1};
+ 
+-i = IntTok (" \t");
+-if ((i < 0) || (i >= m_textures.m_nBitmaps))
+-	return CModel::Error ("invalid bitmap number");
++nSubs = 0;
+ if (CharTok (" \t") != '{')
+-	return CModel::Error ("syntax error");
+-pBm = m_textures.m_bitmaps + i;
+-pBm->SetFlat (1);
++	return CModel::Error ("syntax error"), -1;
+ while ((pszToken = ReadLine (cf))) {
+-	if (*pszToken == '}')
+-		return 1;
+-	if (!strcmp (pszToken, "*MATERAL_DIFFUSE")) {
+-		//CRGBColor	avgRGB;
+-		//avgRGB.Red () = (uint8_t) FRound (FloatTok (" \t") * 255);
+-		//avgRGB.Green () = (uint8_t) FRound (FloatTok (" \t") * 255);
+-		//avgRGB.Blue () = (uint8_t) FRound (FloatTok (" \t") * 255);
+-		//pBm->SetAvgColor (avgRGB);
++	if (*pszToken == '}') {
++		if (nSubs)
++			return nFirst;
++		if (nBitmap < 0) {
++			if (nUsedBitmaps >= MAX_ASE_BITMAPS)
++				return CModel::Error ("too many materials"), -1;
++			SetFlatColor (m_textures.m_bitmaps + (nBitmap = nUsedBitmaps++), color);
++			}
++		return nBitmap;
+ 		}
+-	else if (!strcmp (pszToken, "*MAP_DIFFUSE")) {
+-		if (!ReadTexture (cf, i))
+-			return CModel::Error (NULL);
++	if (!strcmp (pszToken, "*MATERIAL_DIFFUSE")) {
++		for (int32_t i = 0; i < 3; i++)
++			color [i] = FloatTok (" \t");
+ 		}
+-	else if (!strcmp (pszToken, "*MAP_OPACITY")) {
+-		if (!ReadOpacity (cf, i))
+-			return CModel::Error (NULL);
++	else if ((!strcmp (pszToken, "*MAP_DIFFUSE") || !strcmp (pszToken, "*MAP_GENERIC")) && (nBitmap < 0)) {
++		if (nUsedBitmaps >= MAX_ASE_BITMAPS)
++			return CModel::Error ("too many materials"), -1;
++		if (!ReadTexture (cf, nBitmap = nUsedBitmaps++))
++			return CModel::Error (NULL), -1;
+ 		}
++	else if (!strcmp (pszToken, "*SUBMATERIAL")) {
++		int32_t nSubSubs, i;
++		IntTok (" \t");
++		if ((i = ReadMaterial (cf, nSubSubs)) < 0)
++			return -1;
++		if (!nSubs++)
++			nFirst = i;
++		}
++	else
++		while ((pszToken = strtok (NULL, " \t")))
++			if (*pszToken == '{') {
++				if (!SkipBlock (cf))
++					return -1;
++				break;
++				}
+ 	}
+-return CModel::Error ("unexpected end of file");
++return CModel::Error ("unexpected end of file"), -1;
+ }
+ 
+ //------------------------------------------------------------------------------
+@@ -743,26 +795,47 @@ if (!(pszToken = ReadLine (cf)))
+ 	return CModel::Error ("unexpected end of file");
+ if (strcmp (pszToken, "*MATERIAL_COUNT"))
+ 	return CModel::Error ("material count missing");
+-int32_t nBitmaps = IntTok (" \t");
+-if (!nBitmaps)
++int32_t nMaterials = IntTok (" \t");
++if ((nMaterials <= 0) || (nMaterials > MAX_ASE_MATERIALS))
+ 	return CModel::Error ("no bitmaps specified");
+-if (!(m_textures.Create (nBitmaps)))
++if (!(m_textures.Create (MAX_ASE_BITMAPS)))
+ 	return CModel::Error ("out of memory");
++nUsedBitmaps = 0;
++memset (matCount, 0, sizeof (matCount));
+ while ((pszToken = ReadLine (cf))) {
+ 	if (*pszToken == '}') {
+-		if (!nBitmaps)
+-			return 1;
+-		return CModel::Error ("bitmaps missing");
++		m_textures.m_nBitmaps = nUsedBitmaps;
++		return 1;
+ 		}
+ 	if (!strcmp (pszToken, "*MATERIAL")) {
+-		if (!ReadMaterial (cf))
++		int32_t i = IntTok (" \t"), nSubs, nBitmap;
++		if ((i < 0) || (i >= nMaterials))
++			return CModel::Error ("invalid material number");
++		if ((nBitmap = ReadMaterial (cf, nSubs)) < 0)
+ 			return CModel::Error (NULL);
+-		nBitmaps--;
++		matBase [i] = nBitmap;
++		matCount [i] = nSubs ? nSubs : 1;
+ 		}
+ 	}
+ return CModel::Error ("unexpected end of file");
+ }
+ 
++// a face's bitmap: its submodel's material, and the sub-material its *MESH_MTLID picks
++// (counting around, as 3ds Max does)
++void CModel::ResolveFaceBitmaps (void)
++{
++for (CSubModel *psm = m_subModels; psm; psm = psm->m_next) {
++	int32_t m = psm->m_nBitmap;
++	if ((m < 0) || (m >= MAX_ASE_MATERIALS) || !matCount [m])
++		m = 0;
++	for (int32_t i = 0; i < psm->m_nFaces; i++) {
++		CFace& f = psm->m_faces [i];
++		int32_t n = matCount [m] ? matBase [m] + f.m_nBitmap % matCount [m] : 0;
++		f.m_nBitmap = ((n >= 0) && (n < m_textures.m_nBitmaps)) ? n : 0;
++		}
++	}
++}
++
+ //------------------------------------------------------------------------------
+ 
+ int32_t CModel::ReadSubModel (CFile& cf)
+@@ -860,6 +933,7 @@ if (!nResult)
+ 	Destroy ();
+ else {
+ 	LinkSubModels ();
++	ResolveFaceBitmaps ();
+ 	//gameData.modelData.bHaveHiresModel [uint32_t (this - gameData.modelData.aseModels [bCustom != 0].Buffer ())] = 1;
+ 	if (bCacheModelData) {
+ 		//if (IsPlayerShip (nModel))
 diff --git a/d2/xmodel/strfunc.h b/d2/xmodel/strfunc.h
 index 86dbf86..284c6a7 100644
 --- a/d2/xmodel/strfunc.h
@@ -1613,3 +2211,869 @@ index 86dbf86..284c6a7 100644
  static char *strlwr(char *s) {
  	for (char *p = s, c; (c = *p); p++)
  		if (c >= 'A' && c <= 'Z')
+diff --git a/d2/xmodel/tga.cpp b/d2/xmodel/tga.cpp
+index 8865faf..2558295 100644
+--- a/d2/xmodel/tga.cpp
++++ b/d2/xmodel/tga.cpp
+@@ -644,12 +644,84 @@ return 1;
+ 
+ #endif
+ 
++#ifdef HAVE_LIBPNG
++extern "C" {
++#include "pngfile.h"
++}
++
++// Model textures named "x.tga" in a model ship as x.png (D2X-XL 2.x); animated ones are
++// vertical frame strips (name#0.png, frame k in row k): name#k is its own file or row k of
++// the strip. Loads as RGBA.
++static int32_t ReadPNG (CBitmap* pBm, const char *pszFile, int32_t alpha)
++{
++	char		szName [FILENAME_LEN], *psz, *pszHash;
++	png_data	pdata;
++	int32_t	nFrame = 0;
++
++CFile::SplitPath (pszFile, NULL, szName, NULL);
++if ((psz = strrchr (szName, '.')))
++	*psz = '\0';
++if ((pszHash = strchr (szName, '#')))
++	nFrame = atoi (pszHash + 1);
++strcat (szName, ".png");
++if (read_png (szName, &pdata))
++	nFrame = 0;	// a file of its own, or a strip it is the first frame of
++else {
++	if (!nFrame)
++		return 0;
++	strcpy (pszHash, "#0.png");
++	if (!read_png (szName, &pdata))
++		return 0;
++	}
++int32_t w = pdata.width, h = pdata.height, bpp = pdata.paletted ? 1 : pdata.channels, nOffset = 0;
++if (pdata.depth != 8 || (pdata.paletted && !pdata.palette)) {
++	free (pdata.data);
++	if (pdata.palette)
++		free (pdata.palette);
++	return 0;
++	}
++if (pszHash && h > w && !(h % w)) {
++	nOffset = (nFrame % (h / w)) * w * w;
++	h = w;
++	}
++pBm->SetName (pszFile);
++pBm->SetWidth (w);
++pBm->SetHeight (h);
++pBm->SetBPP (4);
++pBm->CreateBuffer ();
++uint8_t *d = pBm->Buffer ();
++for (int32_t i = nOffset; i < nOffset + w * h; i++, d += 4) {
++	const uint8_t *s = pdata.paletted ? pdata.palette + pdata.data [i] * 3 : pdata.data + i * bpp;
++	if (bpp >= 3 || pdata.paletted) {
++		d [0] = s [0];
++		d [1] = s [1];
++		d [2] = s [2];
++		}
++	else
++		d [0] = d [1] = d [2] = s [0];
++	d [3] = (bpp == 4) ? s [3] : (bpp == 2) ? s [1] : 255;
++	if ((d [0] == 120) && (d [1] == 88) && (d [2] == 128))	// D2X-XL super transparency
++		d [3] = 0;
++	else if (alpha >= 0)
++		d [3] = alpha;
++	}
++free (pdata.data);
++if (pdata.palette)
++	free (pdata.palette);
++return 1;
++}
++#endif
++
+ //---------------------------------------------------------------
+ 
+ int32_t CTGA::Read (const char *pszFile, const char *pszFolder, int32_t alpha, double brightness, int32_t bGrayScale, bool bAutoComplete)
+ {
+ 	int32_t	r;
+ 
++#ifdef HAVE_LIBPNG
++if (ReadPNG (m_pBm, pszFile, alpha))
++	return 1;
++#endif
+ #if USE_SDL_IMAGE
+ 
+ if (ReadImage (pszFile, pszFolder, alpha, brightness, bGrayScale))
+diff --git a/d2/xmodel/xdescent.h b/d2/xmodel/xdescent.h
+index c53598c..97f0161 100644
+--- a/d2/xmodel/xdescent.h
++++ b/d2/xmodel/xdescent.h
+@@ -94,7 +94,7 @@ public:
+ 	inline CBitmap *CurFrame() { return 0; }
+ 	inline bool CreateBuffer() {
+ 		if (m_data)
+-			m_data = NULL;
++			delete[] m_data;
+ 		m_data = new uint8_t[m_width * m_height * m_bpp];
+ 		return true;
+ 	}
+diff --git a/d2/xmodel/xmodel.cpp b/d2/xmodel/xmodel.cpp
+index d75a377..8c2747f 100644
+--- a/d2/xmodel/xmodel.cpp
++++ b/d2/xmodel/xmodel.cpp
+@@ -1,5 +1,6 @@
+ #include <stdio.h>
+ #include <stddef.h>
++#include <math.h>
+ #include <SDL.h>
+ 
+ #include "xdescent.h"
+@@ -17,28 +18,48 @@ extern "C" {
+ #undef FILENAME_LEN
+ #include "polyobj.h"
+ #include "texmap.h"
++#include "console.h"
++#include "piggy.h"
++#include "bm.h"
+ }
+ 
+ struct CGameFolders gameFolders;
+ struct CGameStates gameStates;
+ 
++// The GL emulation only reads vertex attributes interleaved with one stride
+ struct vert {
+ 	CFloatVector3 pos;
+ 	tTexCoord2f tex;
++	uint8_t color[4];	// shading, worked out again for each draw
++};
++
++// one draw call: the faces of one part that use one texture
++struct range {
++	int sub, bitmap, first, count;
+ };
+ 
+ struct render_model {
+ 	ASE::CModel m;
+-	int *bmvertofs;
+-	int *bmvertcount;
++	struct range *ranges;
++	int nranges;
+ 	struct vert *verts;
++	float *normals;		// per vertex, for the shading
+ 	int vertcount;
++	// Robots are split into $SUBMODEL0..n parts that match the game model's moving parts,
++	// so they can follow its animation; nsubs is 0 for models drawn in one piece.
++	int nsubs;
++	signed char parents[MAX_SUBMODELS];
++	int match;			// 0 not compared with the game model yet, 1 parts match, -1 they don't
+ 	GLuint *bmtex;
+-	GLuint vbo;
+ 	int glloaded;
+ };
+ 
+ void *xmodels[NUM_XMODELS];
++void *xrobots[NUM_XROBOTS];
++extern "C" { int xmodel_enabled = 1; }	// 0 draws the game's own models (for comparing)
++static signed char polyobj_xrobot[MAX_POLYGON_MODELS];
++
++static int is_pow2(int n) { return n > 0 && !(n & (n - 1)); }
+ 
+ // return -1 on error
+ int xmodel_load_gl(void *model) {
+@@ -49,13 +70,15 @@ int xmodel_load_gl(void *model) {
+ 		glew_loaded = 1;
+ 	}
+ 	#endif
+-
+ 	render_model& rm = *(render_model *)model;
+ 	int num_bitmaps = rm.m.m_textures.m_nBitmaps;
+ 	glGenTextures(num_bitmaps, rm.bmtex);
+ 	for (int i = 0; i < num_bitmaps; i++) {
+ 		CBitmap& bm = rm.m.m_textures.m_bitmaps[i];
+-		if (!bm.Width() || (!rm.bmvertcount[i] && !bm.Team()))
++		int used = 0;
++		for (int r = 0; r < rm.nranges; r++)
++			used |= rm.ranges[r].bitmap == i;
++		if (!bm.Width() || (!used && !bm.Team()))
+ 			continue;
+ 		glBindTexture(GL_TEXTURE_2D, rm.bmtex[i]);
+ 		if (bm.BPP() == 4)
+@@ -66,17 +89,17 @@ int xmodel_load_gl(void *model) {
+ 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+ 				bm.Width(), bm.Height(), 0, GL_RGB, GL_UNSIGNED_BYTE,
+ 				bm.Buffer());
+-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
++		// WebGL 1 can only mipmap and repeat power-of-two textures
++		if (is_pow2(bm.Width()) && is_pow2(bm.Height())) {
++			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
++			glGenerateMipmap(GL_TEXTURE_2D);
++		} else {
++			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
++			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
++			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
++		}
+ 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+-		glGenerateMipmap(GL_TEXTURE_2D);
+ 	}
+-
+-	glGenBuffers(1, &rm.vbo);
+-
+-	glBindBuffer(GL_ARRAY_BUFFER, rm.vbo);
+-	glBufferData(GL_ARRAY_BUFFER, rm.vertcount * sizeof(rm.verts[0]), rm.verts, GL_STATIC_DRAW);
+-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+-
+ 	rm.glloaded = 1;
+ 	return 0;
+ }
+@@ -87,8 +110,6 @@ void xmodel_free_gl(void *model) {
+ 		return;
+ 	glDeleteTextures(rm.m.m_textures.m_nBitmaps, rm.bmtex);
+ 	memset(rm.bmtex, 0, rm.m.m_textures.m_nBitmaps * sizeof(rm.bmtex[0]));
+-	glDeleteBuffers(1, &rm.vbo);
+-	rm.vbo = 0;
+ 	rm.glloaded = 0;
+ }
+ 
+@@ -97,12 +118,20 @@ void xmodel_free(void *model) {
+ 	render_model& rm = *rmp;
+ 	xmodel_free_gl(model);
+ 	delete[] rm.verts;
+-	delete[] rm.bmvertcount;
+-	delete[] rm.bmvertofs;
++	delete[] rm.normals;
++	delete[] rm.ranges;
+ 	delete[] rm.bmtex;
+ 	delete rmp;
+ }
+ 
++// the part number of a $SUBMODELn node, or -1
++static int part_number(ASE::CSubModel *sm) {
++	if (strncmp(sm->m_szName, "$SUBMODEL", 9))
++		return -1;
++	int n = atoi(sm->m_szName + 9);
++	return n >= 0 && n < MAX_SUBMODELS ? n : -1;
++}
++
+ // return NULL on error
+ void *xmodel_load(const char *filename) {
+ 	render_model* rmp = new render_model();
+@@ -127,94 +156,341 @@ void *xmodel_load(const char *filename) {
+ 			data[j + 2] = x;
+ 		}
+ 	}
+-	int *bmvertcount = rm.bmvertcount = new int[num_bitmaps]();
+-	int i, v;
++
++	// parts: use them only when every node is a $SUBMODELn with a known parent
+ 	ASE::CSubModel *sm;
+-	for (sm = m.m_subModels, i = 0; sm; sm = sm->m_next, i++) {
++	int nsubs = 0;
++	memset(rm.parents, -1, sizeof(rm.parents));
++	for (sm = m.m_subModels; sm; sm = sm->m_next) {
++		int n = part_number(sm);
++		if (n < 0) {
++			nsubs = 0;
++			break;
++		}
++		ASE::CSubModel *p;
++		for (p = m.m_subModels; p && p->m_nSubModel != sm->m_nParent; p = p->m_next)
++			;
++		rm.parents[n] = p ? part_number(p) : -1;
++		if (n + 1 > nsubs)
++			nsubs = n + 1;
++	}
++	rm.nsubs = nsubs;
++	rm.match = 0;
++
++	// one range per part and texture
++	int nkeys = (MAX_SUBMODELS + 1) * num_bitmaps;
++	int *count = new int[nkeys]();
++	int v = 0;
++	for (sm = m.m_subModels; sm; sm = sm->m_next) {
+ 		if (ExcludeSubModel(sm, 0, -1, 0, 0))
+ 			continue;
+-		for (int f = 0; f < sm->m_nFaces; f++)
+-			bmvertcount[sm->/*m_faces[f].*/m_nBitmap]+=3;
++		int sub = nsubs ? part_number(sm) : 0;
++		for (int fi = 0; fi < sm->m_nFaces; fi++)
++			count[sub * num_bitmaps + sm->m_faces[fi].m_nBitmap] += 3;
++		v += sm->m_nFaces * 3;
+ 	}
+-
+-	int *bmvertofs = rm.bmvertofs = new int[num_bitmaps]();
++	int vertcount = rm.vertcount = v;
++	int *start = new int[nkeys]();
++	rm.ranges = new range[nkeys];
++	rm.nranges = 0;
+ 	v = 0;
+-	for (int i = 0; i < num_bitmaps; i++) {
+-		bmvertofs[i] = v;
+-		v += bmvertcount[i];
++	for (int k = 0; k < nkeys; k++) {
++		start[k] = v;
++		if (!count[k])
++			continue;
++		range& r = rm.ranges[rm.nranges++];
++		r.sub = k / num_bitmaps;
++		r.bitmap = k % num_bitmaps;
++		r.first = v;
++		r.count = count[k];
++		v += count[k];
+ 	}
+-	int vertcount = rm.vertcount = v;
+-
+-	int *bmvertpos = new int[num_bitmaps]();
+-	memcpy(bmvertpos, rm.bmvertofs, num_bitmaps * sizeof(int));
+ 
+ 	vert *verts = rm.verts = new vert[vertcount];
++	float *normals = rm.normals = new float[vertcount * 3]();
++	float outward = 0;
+ 	for (sm = m.m_subModels; sm; sm = sm->m_next) {
+ 		if (ExcludeSubModel(sm, 0, -1, 0, 0))
+ 			continue;
+ 		int hastex = sm->m_nTexCoord;
+ 		CFloatVector3 ofs = sm->m_vOffset;
++		// Vertex normals: a face's corner averages the faces around that vertex that meet it at
++		// under 50 degrees, so curves shade smoothly and hard edges stay sharp.
++		int nf = sm->m_nFaces, nv = sm->m_nVerts;
++		float *fn = new float[nf * 3], *fu = new float[nf * 3];	// area-weighted, unit
++		int *vstart = new int[nv + 1](), *vfaces = new int[nf * 3];
++		for (int fi = 0; fi < nf; fi++) {
++			ASE::CFace& f = sm->m_faces[fi];
++			float *p[3];
++			for (int j = 0; j < 3; j++)
++				p[j] = sm->m_vertices[f.m_nVerts[j]].m_vertex.v.vec;
++			float a[3], b[3], *n = fn + fi * 3;
++			for (int j = 0; j < 3; j++) {
++				a[j] = p[1][j] - p[0][j];
++				b[j] = p[2][j] - p[0][j];
++			}
++			n[0] = a[1] * b[2] - a[2] * b[1];
++			n[1] = a[2] * b[0] - a[0] * b[2];
++			n[2] = a[0] * b[1] - a[1] * b[0];
++			float l = sqrtf(n[0] * n[0] + n[1] * n[1] + n[2] * n[2]);
++			for (int j = 0; j < 3; j++) {
++				fu[fi * 3 + j] = l > 0 ? n[j] / l : 0;
++				outward += n[j] * (p[0][j] + p[1][j] + p[2][j]);
++				vstart[f.m_nVerts[j] + 1]++;
++			}
++		}
++		for (int i = 0; i < nv; i++)
++			vstart[i + 1] += vstart[i];
++		int *fill = new int[nv];
++		memcpy(fill, vstart, nv * sizeof(int));
++		for (int fi = 0; fi < nf; fi++)
++			for (int j = 0; j < 3; j++)
++				vfaces[fill[sm->m_faces[fi].m_nVerts[j]]++] = fi;
++		delete[] fill;
++		int sub = nsubs ? part_number(sm) : 0;
+ 		for (int fi = 0; fi < sm->m_nFaces; fi++) {
+ 			ASE::CFace& f = sm->m_faces[fi];
+-			int bm = sm->m_nBitmap, v = bmvertpos[bm];
++			int key = sub * num_bitmaps + f.m_nBitmap;
++			int vi = start[key];
+ 			for (int j = 0; j < 3; j++) {
+-				verts[v + j].pos = sm->m_vertices[f.m_nVerts[j]].m_vertex + ofs;
++				verts[vi + j].pos = sm->m_vertices[f.m_nVerts[j]].m_vertex + ofs;
+ 				if (hastex)
+-					verts[v + j].tex = sm->m_texCoord[f.m_nTexCoord[j]];
++					verts[vi + j].tex = sm->m_texCoord[f.m_nTexCoord[j]];
++				float n[3] = { 0, 0, 0 }, *u = fu + fi * 3;
++				int v = f.m_nVerts[j];
++				for (int k = vstart[v]; k < vstart[v + 1]; k++) {
++					int g = vfaces[k];
++					if (u[0] * fu[g * 3] + u[1] * fu[g * 3 + 1] + u[2] * fu[g * 3 + 2] > 0.64f)
++						for (int c = 0; c < 3; c++)
++							n[c] += fn[g * 3 + c];
++				}
++				float l = sqrtf(n[0] * n[0] + n[1] * n[1] + n[2] * n[2]);
++				for (int k = 0; k < 3; k++)
++					normals[(vi + j) * 3 + k] = l > 0 ? n[k] / l : u[k];
+ 			}
+-			bmvertpos[bm] += 3;
++			start[key] += 3;
+ 		}
++		delete[] fn;
++		delete[] fu;
++		delete[] vstart;
++		delete[] vfaces;
+ 	}
+-	delete[] bmvertpos;
+-
++	// the face winding decides which way the normals point: make them face out of the model
++	if (outward < 0)
++		for (int i = 0; i < vertcount * 3; i++)
++			normals[i] = -normals[i];
++	delete[] start;
++	delete[] count;
+ 	rm.bmtex = new GLuint[num_bitmaps]();
+-	rm.vbo = 0;
+-
+ 	return rmp;
+ }
+ 
+-void xmodel_show(void *model, int mpcolor, g3s_lrgb *light) {
+-	render_model& rm = *(render_model *)model;
+-	int num_bitmaps = rm.m.m_textures.m_nBitmaps;
++extern "C" void ogl_match_bitmap_colors(grs_bitmap *bm, unsigned char *rgba, int w, int h);
++
++// The game model's own textures settle the look: a robot's eye color is a frame of an
++// animated texture, which the models name as frame 0, and the colors should match the
++// game bitmaps (see ogl_fit_png).
++static void fit_textures(render_model& rm, polymodel *po) {
++	int changed = 0;
++	for (int i = 0; i < rm.m.m_textures.m_nBitmaps; i++) {
++		CBitmap& bm = rm.m.m_textures.m_bitmaps[i];
++		const char *file = rm.m.m_textures.m_names[i].Buffer();
++		char name[64];
++		if (!file || bm.BPP() != 4)
++			continue;
++		snprintf(name, sizeof(name), "%s", file);
++		if (char *p = strrchr(name, '.'))
++			*p = '\0';
++		size_t base = strcspn(name, "#");
++		for (int t = 0; t < po->n_textures; t++) {
++			bitmap_index bi = ObjBitmaps[ObjBitmapPtrs[po->first_texture + t]];
++			PIGGY_PAGE_IN(bi);
++			grs_bitmap *gb = &GameBitmaps[bi.index];
++			const char *gname = piggy_game_bitmap_name(gb);
++			if (!gname || strncmp(gname, name, base) || (gname[base] && gname[base] != '#'))
++				continue;
++			if (strcmp(gname, name)) {
++				char gfile[64];
++				snprintf(gfile, sizeof(gfile), "%s.png", gname);
++				CTGA tga(&bm);
++				if (!tga.ReadModelTexture(gfile, 0))
++					break;
++			}
++			ogl_match_bitmap_colors(gb, bm.Buffer(), bm.Width(), bm.Height());
++			changed = 1;
++			break;
++		}
++	}
++	if (changed)
++		xmodel_free_gl(&rm);
++}
++
++// Robot parts must line up with the game model's: same count and the same parent for each.
++static int parts_match(render_model& rm, polymodel *po) {
++	if (!rm.nsubs || rm.nsubs != po->n_models)
++		return 0;
++	for (int i = 0; i < rm.nsubs; i++)
++		if (i ? rm.parents[i] != po->submodel_parents[i] || rm.parents[i] >= i : rm.parents[i] != -1)
++			return 0;
++	return 1;
++}
+ 
++// Where each part is drawn: xf[i] maps the model's rest-pose coordinates of part i to the
++// pose the game model has now (column-major 4x4). Follows the interpreter's submodel calls:
++// a part rotates by its animation angles about its pivot, offset from its parent.
++// root < 0 draws the whole model; else just that part and what hangs off it, centered on
++// the part (debris).
++static void part_transforms(render_model& rm, polymodel *po, vms_angvec *anim_angles, int root,
++	float xf[][16], int *draw, float rot[][9]) {
++	float pivot[MAX_SUBMODELS][3], lin[MAX_SUBMODELS][9], ofs[MAX_SUBMODELS][3];
++	for (int i = 0; i < rm.nsubs; i++) {
++		int p = i ? rm.parents[i] : -1;
++		float o[3] = { f2fl(po->submodel_offsets[i].x), f2fl(po->submodel_offsets[i].y), f2fl(po->submodel_offsets[i].z) };
++		if (p < 0)
++			for (int k = 0; k < 3; k++)
++				pivot[i][k] = 0;
++		else
++			for (int k = 0; k < 3; k++)
++				pivot[i][k] = pivot[p][k] + o[k];
++		draw[i] = root < 0 || i == root || (p >= 0 && draw[p]);
++		if (!draw[i])
++			continue;
++		if (i == root || p < 0) {
++			// the root keeps the model's axes; a debris piece is centered on its own middle
++			for (int k = 0; k < 9; k++)
++				lin[i][k] = k % 4 ? 0 : 1;
++			for (int k = 0; k < 3; k++)
++				ofs[i][k] = i == root ? -0.5f * (f2fl((&po->submodel_mins[i].x)[k]) + f2fl((&po->submodel_maxs[i].x)[k])) : 0;
++		} else {
++			// child -> parent is R^T p + offset, R from the part's animation angles
++			vms_matrix r;
++			vms_angvec zero = { 0, 0, 0 };
++			vm_angles_2_matrix(&r, anim_angles ? &anim_angles[i] : &zero);
++			float rt[9] = {	// columns: rvec, uvec, fvec
++				f2fl(r.rvec.x), f2fl(r.rvec.y), f2fl(r.rvec.z),
++				f2fl(r.uvec.x), f2fl(r.uvec.y), f2fl(r.uvec.z),
++				f2fl(r.fvec.x), f2fl(r.fvec.y), f2fl(r.fvec.z) };
++			for (int c = 0; c < 3; c++)
++				for (int k = 0; k < 3; k++)
++					lin[i][c * 3 + k] = lin[p][k] * rt[c * 3] + lin[p][3 + k] * rt[c * 3 + 1] + lin[p][6 + k] * rt[c * 3 + 2];
++			for (int k = 0; k < 3; k++)
++				ofs[i][k] = lin[p][k] * o[0] + lin[p][3 + k] * o[1] + lin[p][6 + k] * o[2] + ofs[p][k];
++		}
++	}
++	for (int i = 0; i < rm.nsubs; i++) {
++		if (!draw[i])
++			continue;
++		float *m = xf[i];
++		for (int c = 0; c < 3; c++) {
++			for (int k = 0; k < 3; k++)
++				m[c * 4 + k] = lin[i][c * 3 + k];
++			m[c * 4 + 3] = 0;
++		}
++		// rest-pose vertex v is at v - pivot in the part's own coordinates
++		for (int k = 0; k < 3; k++)
++			m[12 + k] = ofs[i][k] - (lin[i][k] * pivot[i][0] + lin[i][3 + k] * pivot[i][1] + lin[i][6 + k] * pivot[i][2]);
++		m[15] = 1;
++		memcpy(rot[i], lin[i], sizeof(rot[i]));
++	}
++}
++
++// Shades like the game's own models: a quarter of the light, plus the rest on faces turned
++// toward the viewer. view is the view direction in model coordinates.
++static void shade(render_model& rm, const float *view, float rot[][9], g3s_lrgb *light, float alpha) {
++	float lr = f2fl(light->r), lg = f2fl(light->g), lb = f2fl(light->b);
++	uint8_t a = (uint8_t)(alpha * 255);
++	for (int r = 0; r < rm.nranges; r++) {
++		range& rg = rm.ranges[r];
++		const float *m = rot[rg.sub];
++		// the view direction in the part's rest-pose axes
++		float d[3] = {
++			m[0] * view[0] + m[1] * view[1] + m[2] * view[2],
++			m[3] * view[0] + m[4] * view[1] + m[5] * view[2],
++			m[6] * view[0] + m[7] * view[1] + m[8] * view[2] };
++		for (int i = rg.first; i < rg.first + rg.count; i++) {
++			const float *n = rm.normals + i * 3;
++			float f = -(n[0] * d[0] + n[1] * d[1] + n[2] * d[2]);
++			float l = 0.25f + 0.75f * (f > 0 ? f : 0);
++			uint8_t *c = rm.verts[i].color;
++			float x;
++			x = l * lr; c[0] = x >= 1 ? 255 : (uint8_t)(x * 255);
++			x = l * lg; c[1] = x >= 1 ? 255 : (uint8_t)(x * 255);
++			x = l * lb; c[2] = x >= 1 ? 255 : (uint8_t)(x * 255);
++			c[3] = a;
++		}
++	}
++}
++
++static void xmodel_draw(render_model& rm, int mpcolor, g3s_lrgb *light, const float *view,
++	polymodel *po, vms_angvec *anim_angles, int root) {
++	int num_bitmaps = rm.m.m_textures.m_nBitmaps;
++	static float xf[MAX_SUBMODELS][16], rot[MAX_SUBMODELS][9];
++	int draw[MAX_SUBMODELS];
++	int parts = po && rm.match > 0;
++	if (parts)
++		part_transforms(rm, po, anim_angles, root, xf, draw, rot);
++	else
++		for (int i = 0; i < MAX_SUBMODELS; i++) {
++			for (int k = 0; k < 9; k++)
++				rot[i][k] = k % 4 ? 0 : 1;
++			draw[i] = 1;
++		}
+ 	if (GameCfg.ClassicDepth && !(Game_mode & GM_MULTI))
+ 		glEnable(GL_DEPTH_TEST);
+-
+ 	float color_alpha;
+-	if (tmap_drawer_ptr == draw_tmap_flat) { // cloaked effect
++	int cloaked = tmap_drawer_ptr == draw_tmap_flat;
++	if (cloaked) { // cloaked effect
+ 		OGL_DISABLE(TEXTURE_2D);
+-		color_alpha = 1.0 - (grd_curcanv->cv_fade_level/(GLfloat)GR_FADE_LEVELS) * 0.9;
++		color_alpha = 1.0 - (grd_curcanv->cv_fade_level/(GLfloat)NUM_LIGHTING_LEVELS);	// as g3_draw_tmap
+ 		glColor4f(0, 0, 0, color_alpha);
+ 	} else {
+ 		OGL_ENABLE(TEXTURE_2D);
+ 		color_alpha = (grd_curcanv->cv_fade_level >= GR_FADE_OFF)?1.0:(1.0 - (float)grd_curcanv->cv_fade_level / ((float)GR_FADE_LEVELS - 1.0));
+-		glColor4f(f2fl(light->r), f2fl(light->g), f2fl(light->b), color_alpha);
++		shade(rm, view, rot, light, color_alpha);
++		glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(vert), rm.verts[0].color);
++		glEnableClientState(GL_COLOR_ARRAY);
+ 	}
+-
+-	glBindBuffer(GL_ARRAY_BUFFER, rm.vbo);
+-	glVertexPointer(3, GL_FLOAT, sizeof(vert), (void *)0);
+-	glTexCoordPointer(2, GL_FLOAT, sizeof(vert), (void *)offsetof(vert, tex));
++	glVertexPointer(3, GL_FLOAT, sizeof(vert), &rm.verts[0].pos);
++	glTexCoordPointer(2, GL_FLOAT, sizeof(vert), &rm.verts[0].tex);
+ 	glEnableClientState(GL_VERTEX_ARRAY);
+ 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+ 	int team = mpcolor == -1 ? 0 : mpcolor >= 7 ? 1 : mpcolor + 2;
+-	for (int i = 0; i < num_bitmaps; i++) {
+-		if (!rm.bmvertcount[i])
++	int cur = -1;
++	for (int r = 0; r < rm.nranges; r++) {
++		range& rg = rm.ranges[r];
++		int i = rg.bitmap;
++		if (!draw[rg.sub])
+ 			continue;
++		if (parts && rg.sub != cur) {
++			if (cur >= 0)
++				glPopMatrix();
++			glPushMatrix();
++			glMultMatrixf(xf[rg.sub]);
++			cur = rg.sub;
++		}
+ 		if (rm.m.m_textures.m_bitmaps[i].Team() && team && rm.m.m_textures.m_bitmaps[i].Team() != team) {
+ 			for (int j = 0; j < num_bitmaps; j++)
+ 				if (rm.m.m_textures.m_bitmaps[j].Team() == team)
+ 					glBindTexture(GL_TEXTURE_2D, rm.bmtex[j]);
+ 		} else
+ 			glBindTexture(GL_TEXTURE_2D, rm.bmtex[i]);
+-		glDrawArrays(GL_TRIANGLES, rm.bmvertofs[i], rm.bmvertcount[i]);
++		glDrawArrays(GL_TRIANGLES, rg.first, rg.count);
+ 	}
++	if (cur >= 0)
++		glPopMatrix();
++	if (!cloaked)
++		glDisableClientState(GL_COLOR_ARRAY);
+ 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+ 	glDisableClientState(GL_VERTEX_ARRAY);
+-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+ 	if (GameCfg.ClassicDepth && !(Game_mode & GM_MULTI))
+ 		glDisable(GL_DEPTH_TEST);
+ }
+ 
++void xmodel_show(void *model, int mpcolor, g3s_lrgb *light) {
++	static const float view[3] = { 0, 0, 1 };
++	xmodel_draw(*(render_model *)model, mpcolor, light, view, NULL, NULL, -1);
++}
++
+ #if 0
+ #define GLAPIENTRY
+ #define GL_DEBUG_TYPE_ERROR               0x824C
+@@ -235,18 +511,20 @@ void gl_debug() {
+ }
+ #endif
+ 
+-void xmodel_show_at(void *model, vms_vector *pos, vms_matrix *orient, int mpcolor, g3s_lrgb *light) {
+-	if (!((render_model *)model)->glloaded)
++static void xmodel_show_posed(void *model, vms_vector *pos, vms_matrix *orient, int mpcolor, g3s_lrgb *light,
++	polymodel *po, vms_angvec *anim_angles, int root) {
++	render_model& rm = *(render_model *)model;
++	if (!rm.glloaded)
+ 		xmodel_load_gl(model);
+ 
+ 	vms_vector v,v2,vpos;
+ 	vms_matrix vmat,m;
++
+ 	vm_vec_sub(&v,&View_position,pos);
+ 	vm_vec_rotate(&v2,&v,orient);
+ 	vm_copy_transpose_matrix(&m,orient);
+ 	vm_matrix_x_matrix(&vmat,&m,&View_matrix);
+ 	vm_vec_rotate(&vpos,&v2,&vmat);
+-
+ 	vpos.z *= -1;
+ 
+ 	// create 4x4 lookat matrix
+@@ -263,30 +541,55 @@ void xmodel_show_at(void *model, vms_vector *pos, vms_matrix *orient, int mpcolo
+ 	for (int j = 0; j < 3; j++)
+ 		fm[3 * 4 + j] = -f2fl(vpos_elem[j]);
+ 	fm[15] = 1;
+-
+ 	// forward vec -> backward vec
+ 	for (int j = 0; j < 3; j++)
+ 		fm[2 + j * 4] *= -1;
+ 
++	// the view direction in model coordinates (the forward row of the model's view matrix)
++	float view[3] = { f2fl(vmat.fvec.x), f2fl(vmat.fvec.y), f2fl(vmat.fvec.z) };
++
+ 	glPushMatrix();
+ 	glLoadMatrixf(fm);
+-	xmodel_show(model, mpcolor, light);
++	xmodel_draw(rm, mpcolor, light, view, po, anim_angles, root);
+ 	glPopMatrix();
+ }
+ 
++void xmodel_show_at(void *model, vms_vector *pos, vms_matrix *orient, int mpcolor, g3s_lrgb *light) {
++	xmodel_show_posed(model, pos, orient, mpcolor, light, NULL, NULL, -1);
++}
++
+ void xmodel_free_all() {
+ 	for (int i = 0; i < NUM_XMODELS; i++)
+ 		if (xmodels[i]) {
+ 			xmodel_free(xmodels[i]);
+ 			xmodels[i] = NULL;
+ 		}
++	for (int i = 0; i < NUM_XROBOTS; i++)
++		if (xrobots[i]) {
++			xmodel_free(xrobots[i]);
++			xrobots[i] = NULL;
++		}
+ }
+ 
+ void xmodel_load_all() {
+ 	static int free_registered;
+-	for (int i = 0; i < NUM_XMODELS; i++)
++	int n = 0, nr = 0;
++	Uint32 t = SDL_GetTicks();
++	for (int i = 0; i < NUM_XMODELS; i++) {
+ 		if (!xmodels[i])
+ 			xmodels[i] = xmodel_load(xmodelnames[i]);
++		n += xmodels[i] != NULL;
++	}
++	memset(polyobj_xrobot, -1, sizeof(polyobj_xrobot));
++	for (int i = 0; i < NUM_XROBOTS; i++) {
++		if (!xrobots[i])
++			xrobots[i] = xmodel_load(xmodel_robots[i].name);
++		if (xrobots[i])
++			polyobj_xrobot[xmodel_robots[i].model] = i;
++		nr += xrobots[i] != NULL;
++	}
++	if (n || nr)
++		con_printf(CON_NORMAL, "Loaded %d models and %d robot models in %u ms\n", n, nr, SDL_GetTicks() - t);
+ 	if (!free_registered) {
+ 		atexit(xmodel_free_all);
+ 		free_registered = 1;
+@@ -297,12 +600,18 @@ void xmodel_load_gl_all() {
+ 	for (int i = 0; i < NUM_XMODELS; i++)
+ 		if (xmodels[i])
+ 			xmodel_load_gl(xmodels[i]);
++	for (int i = 0; i < NUM_XROBOTS; i++)
++		if (xrobots[i])
++			xmodel_load_gl(xrobots[i]);
+ }
+ 
+ void xmodel_free_gl_all() {
+ 	for (int i = 0; i < NUM_XMODELS; i++)
+ 		if (xmodels[i])
+ 			xmodel_free_gl(xmodels[i]);
++	for (int i = 0; i < NUM_XROBOTS; i++)
++		if (xrobots[i])
++			xmodel_free_gl(xrobots[i]);
+ }
+ 
+ static int xmodel_xlate(enum xmodel_type mt, int modelnum) {
+@@ -315,14 +624,48 @@ static int xmodel_xlate(enum xmodel_type mt, int modelnum) {
+ 
+ // returns 1 if drawn
+ int xmodel_show_if_loaded(enum xmodel_type mt, int modelnum, vms_vector *pos, vms_matrix *orient, int mpcolor, g3s_lrgb *light) {
+-	int xmodelnum = xmodel_xlate(mt, modelnum);
++	int xmodelnum = xmodel_enabled ? xmodel_xlate(mt, modelnum) : -1;
+ 	if (xmodelnum == -1 || !xmodels[xmodelnum])
+ 		return 0;
+ 	xmodel_show_at(xmodels[xmodelnum], pos, orient, xmodelnum == model_pyrogl ? mpcolor : -1, light);
+ 	return 1;
+ }
+ 
++// A game model: robots follow its animation (and break into its parts as debris, flags
++// being the parts to draw); returns 1 if drawn.
++int xmodel_show_polyobj(int modelnum, vms_vector *pos, vms_matrix *orient, vms_angvec *anim_angles, int flags,
++	int mpcolor, g3s_lrgb *light) {
++	if (modelnum < 0 || modelnum >= MAX_POLYGON_MODELS || !xmodel_enabled)
++		return 0;
++	if (polyobj_xrobot[modelnum] >= 0) {
++		render_model& rm = *(render_model *)xrobots[(int)polyobj_xrobot[modelnum]];
++		polymodel *po = &Polygon_models[modelnum];
++		if (!rm.match) {
++			fit_textures(rm, po);
++			rm.match = parts_match(rm, po) ? 1 : -1;
++			if (rm.match < 0)
++				con_printf(CON_VERBOSE, "%s: parts differ from model %d, drawn without animation\n",
++					xmodel_robots[(int)polyobj_xrobot[modelnum]].name, modelnum);
++		}
++		int root = -1;
++		if (flags) {
++			// debris is one part; without matching parts leave it to the game model
++			if (rm.match < 0)
++				return 0;
++			for (root = 0; !(flags & 1); flags >>= 1)
++				root++;
++			if (root >= rm.nsubs)
++				return 0;
++		}
++		xmodel_show_posed(&rm, pos, orient, -1, light, po, anim_angles, root);
++		return 1;
++	}
++	if (flags)
++		return 0;
++	return xmodel_show_if_loaded(XM_POLYOBJ, modelnum, pos, orient, mpcolor, light);
++}
++
+ int xmodel_exists(enum xmodel_type mt, int modelnum) {
+-	int xmodelnum = xmodel_xlate(mt, modelnum);
++	int xmodelnum = xmodel_enabled ? xmodel_xlate(mt, modelnum) : -1;
+ 	return xmodelnum != -1 && xmodels[xmodelnum];
+ }
+diff --git a/d2/xmodel/xmodelnames.h b/d2/xmodel/xmodelnames.h
+index c9a5a0e..52db31f 100644
+--- a/d2/xmodel/xmodelnames.h
++++ b/d2/xmodel/xmodelnames.h
+@@ -219,7 +219,7 @@ const char *xmodelnames[] = {
+ 	"sminepack.ase",
+ 	"smartmine.ase",
+ 	"superlaser.ase",
+-	"eshakersub.ase",
++	"shakrsub.ase",
+ 	"laser5.ase",
+ 	"laser6.ase",
+ 	"shield.ase",
+@@ -228,6 +228,78 @@ const char *xmodelnames[] = {
+ 
+ #define NUM_XMODELS ((int)(sizeof(xmodelnames) / sizeof(xmodelnames[0])))
+ 
++// Robot models by game model number, as D2X-XL pairs them (models/hiresmodels.cpp)
++struct xmodel_robot {
++	short model;
++	const char *name;
++};
++
++const struct xmodel_robot xmodel_robots[] = {
++	{0, "smallhulk.ase"},
++	{2, "mediumlifter.ase"},
++	{4, "spider.ase"},
++	{6, "class1drone.ase"},
++	{8, "class2drone.ase"},
++	{10, "class1driller-cloaked.ase"},
++	{14, "class2supervisor.ase"},
++	{15, "secondarylifter.ase"},
++	{17, "class1heavydriller.ase"},
++	{19, "class3gopher.ase"},
++	{20, "class1platform.ase"},
++	{21, "class2platform.ase"},
++	{23, "smallspider.ase"},
++	{25, "fusionhulk.ase"},
++	{26, "superhulk.ase"},
++	{28, "d1boss1.ase"},
++	{29, "cloakedlifter.ase"},
++	{31, "class1driller.ase"},
++	{33, "mediumhulk.ase"},
++	{35, "advancedlifter.ase"},
++	{37, "ptmcdefense.ase"},
++	{39, "d1boss2.ase"},
++	{40, "bper.ase"},
++	{41, "smelter.ase"},
++	{43, "icespider.ase"},
++	{44, "bulkdestroyer.ase"},
++	{45, "trnracer.ase"},
++	{46, "foxattackbot.ase"},
++	{47, "sidarm.ase"},
++	{49, "redfattyboss.ase"},
++	{51, "guidebot.ase"},
++	{54, "eviltwin.ase"},
++	{55, "itsc.ase"},
++	{56, "itdroid.ase"},
++	{58, "pest.ase"},
++	{60, "pig.ase"},
++	{62, "d-claw.ase"},
++	{64, "redhornet.ase"},
++	{65, "thief.ase"},
++	{67, "seeker.ase"},
++	{68, "e-bandit.ase"},
++	{69, "fireboss.ase"},
++	{70, "waterboss.ase"},
++	{71, "boarshead.ase"},
++	{72, "greenspider.ase"},
++	{73, "omegabot.ase"},
++	{75, "louguard.ase"},
++	{76, "alienboss1.ase"},
++	{77, "redfattyjunior.ase"},
++	{78, "d-claw-cloaked.ase"},
++	{80, "smelter-cloaked.ase"},
++	{81, "smelterclone-cloaked.ase"},
++	{82, "omegaspawn.ase"},
++	{83, "smelterclone.ase"},
++	{85, "omegaclone.ase"},
++	{86, "bperclone.ase"},
++	{87, "spiderclone.ase"},
++	{88, "spiderspawn.ase"},
++	{89, "iceboss.ase"},
++	{90, "spiderspawnclone.ase"},
++	{91, "alienboss2.ase"},
++};
++
++#define NUM_XROBOTS ((int)(sizeof(xmodel_robots) / sizeof(xmodel_robots[0])))
++
+ short xmodel_polyobj_xlate[] = {
+ 	model_mediumhulk,
+ 	model_mediumhulk,

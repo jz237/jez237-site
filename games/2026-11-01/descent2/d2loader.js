@@ -2,9 +2,9 @@
 // them locally. Optional folder imports remain available for custom copies.
 
 // Bump with every engine or loader release so browsers fetch the new files
-const BUILD = '20261102c';
+const BUILD = '20261102d';
 const DB_NAME = 'descent2-web';
-const DB_VERSION = 2; // 2 adds the music folder store
+const DB_VERSION = 3; // 2 adds the music folder store, 3 the D2X-XL textures and models
 const SAVE_DIR = '/home/web_user/.d2x-redux';
 const DATA_DIR = '/data';
 
@@ -27,6 +27,7 @@ function openDb() {
       if (!db.objectStoreNames.contains('files')) db.createObjectStore('files');
       if (!db.objectStoreNames.contains('meta')) db.createObjectStore('meta');
       if (!db.objectStoreNames.contains('music')) db.createObjectStore('music');
+      if (!db.objectStoreNames.contains('hires')) db.createObjectStore('hires');
     };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error);
@@ -325,11 +326,297 @@ function describeMusic(index) {
     (songs.length ? ` + ${songs.join(', ')}` : '') + ` · ${fmtBytes(index.totalBytes)}`;
 }
 
+// ---------- Sharper textures and models (D2X-XL) ----------
+
+// D2X-XL's high-resolution textures (textures/d2/<name>.png, four times the original size)
+// and 3D models (models/<name>.ase and their textures). The engine looks them up by name
+// in the game folder: textures by the game's own texture names, models by these names
+// (src/redux/d2/xmodel/xmodelnames.h).
+const HIRES_MODELS = new Set([
+  'pyrogl', 'concussion', 'homer', 'smartmsl', 'mega', 'fusionblob', 'laser1', 'laser2', 'laser3',
+  'laser4', 'extralife', 'laser', 'vulcan', 'spreadfire', 'plasma', 'fusion', 'pminepack', 'proxmine',
+  'concussion4', 'homer4', 'quadlaser', 'cloak', 'invul', 'bluekey', 'redkey', 'goldkey', 'vulcanammo',
+  'afterburner', 'ammorack', 'converter', 'eshaker', 'flash4', 'flashmsl', 'fullmap', 'gauss', 'guided4',
+  'guided', 'headlight', 'helix', 'mercury4', 'mercury', 'omega', 'phoenix', 'sminepack', 'smartmine',
+  'superlaser', 'shakrsub', 'laser5', 'laser6', 'shield', 'energy',
+  // robots
+  'smallhulk', 'mediumlifter', 'spider', 'class1drone', 'class2drone', 'class1driller-cloaked',
+  'class2supervisor', 'secondarylifter', 'class1heavydriller', 'class3gopher', 'class1platform',
+  'class2platform', 'smallspider', 'fusionhulk', 'superhulk', 'd1boss1', 'cloakedlifter', 'class1driller',
+  'mediumhulk', 'advancedlifter', 'ptmcdefense', 'd1boss2', 'bper', 'smelter', 'icespider', 'bulkdestroyer',
+  'trnracer', 'foxattackbot', 'sidarm', 'redfattyboss', 'guidebot', 'eviltwin', 'itsc', 'itdroid', 'pest',
+  'pig', 'd-claw', 'redhornet', 'thief', 'seeker', 'e-bandit', 'fireboss', 'waterboss', 'boarshead',
+  'greenspider', 'omegabot', 'louguard', 'alienboss1', 'redfattyjunior', 'd-claw-cloaked', 'smelter-cloaked',
+  'smelterclone-cloaked', 'omegaspawn', 'smelterclone', 'omegaclone', 'bperclone', 'spiderclone',
+  'spiderspawn', 'iceboss', 'spiderspawnclone', 'alienboss2',
+]);
+const HIRES_NAME = /^[a-z0-9_#!-]+\.(png|ase)$/;
+// normal, height/specular and low-resolution maps D2X-XL draws with, not used here
+const hiresExtraMap = (name) => /-(has|normal|lores)\.png$/.test(name);
+
+async function classifyHires(items) {
+  const textures = new Map();
+  const models = [];
+  const modelTextures = new Map();
+  for (const it of items) {
+    const parts = it.path.toLowerCase().replace(/\\/g, '/').split('/');
+    const name = parts[parts.length - 1];
+    const dir = parts[parts.length - 2];
+    if (!HIRES_NAME.test(name) || hiresExtraMap(name)) continue;
+    if (dir === 'd2' && parts[parts.length - 3] === 'textures' && name.endsWith('.png')) textures.set(name, it);
+    else if (dir === 'models' && name.endsWith('.ase') && HIRES_MODELS.has(name.slice(0, -4))) models.push({ ...it, name });
+    else if (dir === 'models' && name.endsWith('.png')) modelTextures.set(name, it);
+  }
+  // only the model textures the models use (the folder holds other ships' too); the rest of
+  // what they use are game textures from textures/d2
+  const used = new Set();
+  for (const m of models) {
+    for (const [, ref] of (await m.file.text()).matchAll(/\*BITMAP\s+"([^"]+)"/g)) {
+      used.add(ref.toLowerCase().replace(/\\/g, '/').split('/').pop().replace(/\.[^.]+$/, '') + '.png');
+    }
+  }
+  const files = [...textures].map(([name, it]) => ({ ...it, name }));
+  for (const m of models) files.push(m);
+  for (const [name, it] of modelTextures) if (used.has(name) && !textures.has(name)) files.push({ ...it, name });
+  if (!textures.size && !models.length) {
+    throw new Error("That folder doesn't have D2X-XL textures or models. Pick the D2X-XL folder " +
+      '(the one with the textures and models folders inside).');
+  }
+  return { files, textures: textures.size, models: models.length };
+}
+
+async function importHires(items, onProgress) {
+  const set = await classifyHires(items);
+  const total = set.files.reduce((a, f) => a + f.file.size, 0);
+  let done = 0;
+  const db = await openDb();
+  try {
+    await idbClear(db, 'hires');
+    for (const f of set.files) {
+      onProgress(done / total, f.name);
+      await idbPut(db, 'hires', f.name, new Blob([await f.file.arrayBuffer()]));
+      done += f.file.size;
+    }
+    const index = {
+      version: 1,
+      importedAt: new Date().toISOString(),
+      files: set.files.map((f) => f.name),
+      textures: set.textures,
+      models: set.models,
+      totalBytes: total,
+    };
+    await idbPut(db, 'hires', '#index', index);
+    onProgress(1, 'done');
+    return index;
+  } catch (e) {
+    await idbClear(db, 'hires').catch(() => {});
+    throw e;
+  } finally {
+    db.close();
+  }
+}
+
+const hiresIndex = () => withDb((db) => idbGet(db, 'hires', '#index')).then((i) => i || null);
+const removeHires = () => withDb((db) => idbClear(db, 'hires'));
+
+// [{path, data}] for the game folder, or [] without a stored pack
+async function loadHires(db, onFile) {
+  const index = await idbGet(db, 'hires', '#index');
+  if (!index) return [];
+  const out = [];
+  for (const name of index.files) {
+    if (!HIRES_NAME.test(name)) continue;
+    const blob = await idbGet(db, 'hires', name);
+    if (blob) out.push({ path: name, data: new Uint8Array(await blob.arrayBuffer()) });
+    onFile(out.length / index.files.length);
+  }
+  return out;
+}
+
+const describeHires = (index) =>
+  `${index.textures} textures and ${index.models} models · ${fmtBytes(index.totalBytes)}`;
+
+// ---------- Touch controls ----------
+
+const isTouchDevice = () => !!(window.matchMedia && matchMedia('(pointer: coarse)').matches);
+
+// Sends a key to the game as if typed (the engine's SDL listens on the document).
+function sendKey(keyCode, key) {
+  for (const type of ['keydown', 'keyup']) {
+    const e = new KeyboardEvent(type, { key, bubbles: true, cancelable: true });
+    Object.defineProperty(e, 'keyCode', { get: () => keyCode });
+    Object.defineProperty(e, 'which', { get: () => keyCode });
+    document.dispatchEvent(e);
+  }
+}
+
+// On-screen controls for phones and tablets, read by the engine through Module.d2touch
+// (d2web_touch_read): a stick where the left thumb lands, drag on the right to turn, and
+// buttons (bits as D2WEB_TOUCH_* in web.h). While the game isn't reading them (menus,
+// briefings, movies) only Menu, Keys and OK show and taps reach the game as mouse clicks.
+const LOOK_SPEED = 1 / 650; // turn time per CSS pixel dragged
+const STICK_RADIUS = 60;
+function touchControls() {
+  const el = $('touch');
+  // keeps a finger's moves coming to the element it went down on
+  const capture = (target, e) => {
+    try { target.setPointerCapture(e.pointerId); } catch {}
+  };
+  const t = {
+    enabled: false, stickX: 0, stickY: 0, held: 0, lastRead: 0, lookX: 0, lookY: 0, tapped: 0,
+    takeLook() {
+      const look = [this.lookX * LOOK_SPEED, this.lookY * LOOK_SPEED];
+      this.lookX = this.lookY = 0;
+      return look;
+    },
+    takeTaps() {
+      const taps = this.tapped;
+      this.tapped = 0;
+      return taps;
+    },
+  };
+  const show = (on) => {
+    t.enabled = on;
+    el.hidden = !on;
+  };
+
+  // the stick appears where the thumb lands in the left part of the screen
+  const stick = $('tStick');
+  const knob = $('tKnob');
+  let stickId = null;
+  let origin = null;
+  const moveStick = (e) => {
+    let dx = e.clientX - origin.x;
+    let dy = e.clientY - origin.y;
+    const d = Math.hypot(dx, dy);
+    if (d > STICK_RADIUS) {
+      dx *= STICK_RADIUS / d;
+      dy *= STICK_RADIUS / d;
+    }
+    t.stickX = dx / STICK_RADIUS;
+    t.stickY = dy / STICK_RADIUS;
+    knob.style.transform = `translate(${dx}px, ${dy}px)`;
+  };
+  const releaseStick = () => {
+    stickId = null;
+    t.stickX = t.stickY = 0;
+    stick.style.display = 'none';
+  };
+  $('tMove').addEventListener('pointerdown', (e) => {
+    if (stickId !== null) return;
+    stickId = e.pointerId;
+    capture(e.currentTarget, e);
+    const box = el.getBoundingClientRect();
+    origin = { x: e.clientX, y: e.clientY };
+    stick.style.left = origin.x - box.left + 'px';
+    stick.style.top = origin.y - box.top + 'px';
+    stick.style.display = 'block';
+    moveStick(e);
+  });
+  $('tMove').addEventListener('pointermove', (e) => { if (e.pointerId === stickId) moveStick(e); });
+  for (const type of ['pointerup', 'pointercancel']) {
+    $('tMove').addEventListener(type, (e) => { if (e.pointerId === stickId) releaseStick(); });
+  }
+
+  // dragging on the right turns the ship (finger up looks up)
+  const looks = new Map();
+  $('tLook').addEventListener('pointerdown', (e) => {
+    capture(e.currentTarget, e);
+    looks.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  });
+  $('tLook').addEventListener('pointermove', (e) => {
+    const last = looks.get(e.pointerId);
+    if (!last) return;
+    t.lookX += e.clientX - last.x;
+    t.lookY += e.clientY - last.y;
+    looks.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  });
+  for (const type of ['pointerup', 'pointercancel']) $('tLook').addEventListener(type, (e) => looks.delete(e.pointerId));
+
+  // buttons: held ones count while pressed, tap ones once per press
+  for (const b of el.querySelectorAll('.tb[data-bit]')) {
+    const bit = Number(b.dataset.bit);
+    const tap = 'tap' in b.dataset;
+    const up = () => {
+      b.classList.remove('on');
+      t.held &= ~bit;
+    };
+    b.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      capture(b, e);
+      b.classList.add('on');
+      t.tapped |= bit;
+      if (!tap) t.held |= bit;
+    });
+    b.addEventListener('pointerup', up);
+    b.addEventListener('pointercancel', up);
+  }
+  const press = (id, fn) => $(id).addEventListener('pointerdown', (e) => { e.preventDefault(); fn(); });
+  press('tMenu', () => sendKey(27, 'Escape'));
+  press('tEnter', () => sendKey(13, 'Enter'));
+
+  // typing (pilot names, savegame names) through the phone's keyboard: a hidden field whose
+  // edits become key presses; it keeps two characters so a backspace always has one to delete
+  const text = $('tText');
+  const KEEP = '__';
+  const resetText = () => {
+    text.value = KEEP;
+    text.setSelectionRange(KEEP.length, KEEP.length);
+  };
+  press('tKeys', () => {
+    resetText();
+    text.focus();
+  });
+  text.addEventListener('keydown', (e) => {
+    e.stopPropagation(); // the game gets the keys from the edits below
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      sendKey(13, 'Enter');
+      text.blur();
+    } else if (e.key === 'Backspace') {
+      e.preventDefault();
+      sendKey(8, 'Backspace');
+    }
+  });
+  text.addEventListener('keyup', (e) => e.stopPropagation());
+  text.addEventListener('input', () => {
+    const v = text.value;
+    if (v.length < KEEP.length) sendKey(8, 'Backspace');
+    for (const ch of v.slice(KEEP.length)) {
+      const c = ch.toUpperCase();
+      if (/[A-Z0-9 ]/.test(c)) sendKey(c.charCodeAt(0), ch);
+      else if (ch === '-') sendKey(189, '-');
+      else if (ch === '.') sendKey(190, '.');
+    }
+    resetText();
+  });
+
+  // game controls while the game reads them, otherwise the menu set
+  setInterval(() => {
+    const inGame = t.enabled && performance.now() - t.lastRead < 300;
+    if (el.classList.contains('menu') === !inGame) return;
+    el.classList.toggle('menu', !inGame);
+    if (!inGame) {
+      releaseStick();
+      looks.clear();
+      t.held = t.tapped = t.lookX = t.lookY = 0;
+      for (const b of el.querySelectorAll('.tb.on')) b.classList.remove('on');
+    }
+  }, 100);
+
+  // shown on phones and tablets, or once the screen is touched; a gamepad hides them
+  if (isTouchDevice()) show(true);
+  $('stage').addEventListener('pointerdown', (e) => { if (e.pointerType === 'touch' && !t.enabled) show(true); }, true);
+  window.addEventListener('gamepadconnected', () => show(false));
+  return t;
+}
+
 // ---------- Settings ----------
 
 const SETTINGS_KEY = 'descent2-web-settings';
 function loadSettings() {
-  const defaults = { quality: 'native', msaa: true, music: 'cd' };
+  // phones render at 1080p by default: sharp, and light on the battery
+  const defaults = { quality: isTouchDevice() ? '1080' : 'native', msaa: true, music: 'cd', hires: true };
   try {
     return { ...defaults, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') };
   } catch {
@@ -345,6 +632,8 @@ function renderResolution(quality) {
   // full-screen size; embedded/hidden views can report a zero screen, so fall back to the window
   let w = Math.round((screen.width || window.innerWidth || 1280) * dpr);
   let h = Math.round((screen.height || window.innerHeight || 720) * dpr);
+  // phones report the screen upright; the game plays sideways
+  if (isTouchDevice() && h > w) [w, h] = [h, w];
   const caps = { native: Infinity, '1440': 1440, '1080': 1080, '720': 720 };
   const cap = caps[quality] || Infinity;
   if (h > cap) {
@@ -494,6 +783,11 @@ async function bootGame(manifest, ui) {
       }
     }
     if (db) music = await loadMusicFolder(db).catch((e) => { console.warn('Music folder unavailable', e); return null; });
+    if (db && settings.hires) {
+      ui.status('Loading sharper textures and models…');
+      const hires = await loadHires(db, ui.progress).catch((e) => { console.warn('D2X-XL textures unavailable', e); return []; });
+      for (const f of hires) fileData.push(f);
+    }
   } finally {
     if (db) db.close();
   }
@@ -506,6 +800,7 @@ async function bootGame(manifest, ui) {
     d2cd: { tracks: cdTracks },
     d2music: music,
     d2midi: midiPlayer(),
+    d2touch: touch,
     print: (t) => console.log(t),
     printErr: (t) => console.warn(t),
     onGameMessage: (text, isError) => ui.message(text, isError),
@@ -597,7 +892,10 @@ function fmtBytes(n) {
   return n > 1e9 ? (n / 1e9).toFixed(2) + ' GB' : (n / 1e6).toFixed(0) + ' MB';
 }
 
+let touch = null;
+
 async function main() {
+  touch = touchControls();
   const ui = {
     status: (t) => { $('status').textContent = t; },
     progress: (f) => { $('bar').style.width = Math.round(f * 100) + '%'; },
@@ -614,7 +912,7 @@ async function main() {
       // Keep browser shortcuts (F5 reload, F1 help, Ctrl+key, Tab focus…) from firing mid-game.
       // Plain printable keys still reach the browser so the game gets their typed characters.
       window.addEventListener('keydown', (e) => {
-        if (e.key === 'F11') return;
+        if (e.key === 'F11' || e.target === $('tText')) return;
         const printable = e.key.length === 1 && !e.ctrlKey && !e.altKey && !e.metaKey;
         if (!printable || e.key === ' ') e.preventDefault();
       }, true);
@@ -674,6 +972,47 @@ async function main() {
       saveSettings(settings);
     }
     showMusic(null);
+  });
+  // D2X-XL textures and models are stored apart from the game files too
+  const showHires = (index) => {
+    $('hiresOption').hidden = !index;
+    $('hires').checked = settings.hires;
+    $('hiresInfo').textContent = index ? 'D2X-XL: ' + describeHires(index) + ', stored in this browser.'
+      : 'Have D2X-XL? Load its folder for sharper textures and 3D models of the robots, ship and power-ups.';
+    $('hiresRemove').hidden = !index;
+  };
+  showHires(await hiresIndex().catch(() => null));
+  $('hires').addEventListener('change', () => { settings.hires = $('hires').checked; saveSettings(settings); });
+  $('hiresFolder').addEventListener('change', async (ev) => {
+    if (!ev.target.files.length) return;
+    $('hiresBusy').hidden = false;
+    $('message').hidden = true;
+    try {
+      if (navigator.storage && navigator.storage.persist) await navigator.storage.persist();
+      $('hiresLabel').textContent = 'Reading the models…';
+      const index = await importHires(filesFromInput(ev.target.files), (f, label) => {
+        $('hiresBar').style.width = Math.round(f * 100) + '%';
+        $('hiresLabel').textContent = label === 'done' ? 'Done' : 'Storing ' + label;
+      });
+      settings.hires = true;
+      saveSettings(settings);
+      showHires(index);
+      ui.message('D2X-XL textures and models stored. The game will use them.');
+    } catch (e) {
+      ui.message(e.message, true);
+    } finally {
+      $('hiresBusy').hidden = true;
+      ev.target.value = '';
+    }
+  });
+  $('hiresRemove').addEventListener('click', async () => {
+    try {
+      await removeHires();
+    } catch (e) {
+      ui.message(e.message, true);
+      return;
+    }
+    showHires(null);
   });
   $('quality').addEventListener('change', () => { settings.quality = $('quality').value; saveSettings(settings); updateResLabel(); });
   $('msaa').addEventListener('change', () => { settings.msaa = $('msaa').checked; saveSettings(settings); });
@@ -741,6 +1080,12 @@ async function main() {
     else { $('importPanel').hidden = true; $('readyPanel').hidden = false; }
   });
   $('play').addEventListener('click', async () => {
+    // phones and tablets play full screen and sideways (the request needs this click)
+    if (isTouchDevice() && document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen({ navigationUI: 'hide' })
+        .then(() => screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape'))
+        .catch(() => {});
+    }
     $('play').disabled = true;
     $('loadPanel').hidden = false;
     $('readyPanel').hidden = true;

@@ -17,6 +17,7 @@
     --bad: #ff5d5d;
   }
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
   html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
     font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
   body { display: flex; flex-direction: column; min-height: 100%; }
@@ -65,6 +66,35 @@
   #fullscreen:hover { opacity: 1; }
   body.playing header, body.playing main, body.playing footer { display: none; }
   body.playing #stage { display: block; }
+  /* touch controls: a stick where the left thumb lands, drag on the right to look, buttons */
+  #touch { position: absolute; inset: 0; z-index: 4; touch-action: none; user-select: none; -webkit-user-select: none;
+    -webkit-touch-callout: none; font: 600 12px/1 system-ui, sans-serif; color: #fff; }
+  #touch.menu { pointer-events: none; }
+  #touch.menu .game { display: none; }
+  #touch:not(.menu) .menuonly { display: none; }
+  #tLook { position: absolute; left: 40%; right: 0; top: 0; bottom: 0; }
+  #tMove { position: absolute; left: 0; width: 40%; top: 30%; bottom: 0; }
+  #tStick { position: absolute; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,.35); background: rgba(255,255,255,.06); display: none; pointer-events: none; }
+  #tKnob { position: absolute; left: 35px; top: 35px; width: 50px; height: 50px; border-radius: 50%; background: rgba(255,255,255,.35); }
+  .tb { position: absolute; display: flex; align-items: center; justify-content: center; border-radius: 50%;
+    background: rgba(20,24,32,.45); border: 2px solid rgba(255,255,255,.4); pointer-events: auto; touch-action: none; }
+  .tb.on { background: rgba(255,122,26,.6); border-color: #ffb347; }
+  .tb.small { width: 56px; height: 44px; border-radius: 12px; font-size: 11px; }
+  #tFire { right: calc(18px + env(safe-area-inset-right)); bottom: 22px; width: 92px; height: 92px; font-size: 15px; }
+  #tMissile { right: calc(122px + env(safe-area-inset-right)); bottom: 18px; width: 66px; height: 66px; }
+  #tBoost { right: calc(28px + env(safe-area-inset-right)); bottom: 126px; width: 66px; height: 66px; }
+  #tUp { left: calc(14px + env(safe-area-inset-left)); top: 34%; }
+  #tDown { left: calc(14px + env(safe-area-inset-left)); top: calc(34% + 56px); }
+  #tMenu { left: calc(14px + env(safe-area-inset-left)); top: 12px; }
+  #tMap { left: calc(76px + env(safe-area-inset-left)); top: 12px; }
+  #tWeapon { right: calc(316px + env(safe-area-inset-right)); top: 12px; }
+  #tSecondary { right: calc(254px + env(safe-area-inset-right)); top: 12px; }
+  #tFlare { right: calc(192px + env(safe-area-inset-right)); top: 12px; }
+  #tBomb { right: calc(130px + env(safe-area-inset-right)); top: 12px; }
+  #tKeys { left: calc(76px + env(safe-area-inset-left)); top: 12px; }
+  #tEnter { left: calc(140px + env(safe-area-inset-left)); top: 12px; }
+  #tText { position: absolute; left: 0; top: 0; width: 1px; height: 1px; opacity: 0; font-size: 16px; border: 0; padding: 0; }
   footer { margin-top: auto; padding: 16px; text-align: center; color: var(--dim); font-size: 12px; }
 </style>
 </head>
@@ -73,7 +103,7 @@
   <a class="back" href="../../">← Games</a>
   <h1>Descent II</h1>
   <p class="tag">Browser Edition · enhanced graphics · just press Play</p>
-  <span class="wip">🚧 Work in progress · desktop with keyboard and mouse</span>
+  <span class="wip">🚧 Work in progress · keyboard and mouse, gamepad or touch screen</span>
 </header>
 
 <main>
@@ -138,6 +168,17 @@
       <div class="bar"><div id="musicBar"></div></div>
       <div class="small" id="musicLabel">Reading…</div>
     </div>
+    <div class="musicrow">
+      <span class="small" id="hiresInfo"></span>
+      <label id="hiresOption" hidden><input type="checkbox" id="hires"> Use them</label>
+      <label class="btn ghost slim" for="hiresFolder">Load D2X-XL folder…</label>
+      <button class="btn ghost slim" id="hiresRemove" hidden>Remove</button>
+      <input type="file" id="hiresFolder" webkitdirectory directory multiple>
+    </div>
+    <div id="hiresBusy" hidden>
+      <div class="bar"><div id="hiresBar"></div></div>
+      <div class="small" id="hiresLabel">Reading…</div>
+    </div>
   </section>
 
   <section class="panel" id="loadPanel" hidden>
@@ -156,18 +197,41 @@
       <div><b>Gamepad</b>: press any button to connect</div>
       <div>Pad: left stick moves, right stick aims</div>
       <div>Pad: triggers fire, bumpers bank, A/B up/down</div>
+      <div><b>Touch</b>: left thumb flies, drag on the right to turn</div>
+      <div>Touch: <b>KEYS</b> opens the phone keyboard for names</div>
     </div>
     <p class="small" style="margin-bottom:0">Saved pilots and games are kept in this browser. Enhancements: native-resolution
       rendering with trilinear filtering and MSAA, high-resolution cutscenes, smooth display-synced frame rate, the original
       CD soundtrack, the game's own MIDI music played through a General MIDI synthesizer, or a music folder of your own
-      (title, briefing, credits and level tracks; a <code>playlist.txt</code> sets the level order).
-      New pilots get mouse and gamepad flight set up; adjust them in <b>Options → Controls</b>.</p>
+      (title, briefing, credits and level tracks; a <code>playlist.txt</code> sets the level order). With a D2X-XL folder:
+      four-times-sharper textures, matched to each level's colors, and detailed 3D models of the robots (moving as the
+      originals do), the ship, missiles and power-ups. New pilots get mouse and gamepad flight set up; adjust them in
+      <b>Options → Controls</b>. On phones and tablets, on-screen controls appear.</p>
   </section>
 </main>
 
 <div id="stage">
   <button class="btn ghost" id="fullscreen" title="Full screen">⛶ Full screen</button>
   <canvas id="canvas" tabindex="0" oncontextmenu="event.preventDefault()"></canvas>
+  <div id="touch" class="menu" hidden>
+    <div id="tLook" class="game"></div>
+    <div id="tMove" class="game"></div>
+    <div id="tStick"><div id="tKnob"></div></div>
+    <div class="tb game" id="tFire" data-bit="1">FIRE</div>
+    <div class="tb game" id="tMissile" data-bit="2">MISSILE</div>
+    <div class="tb game" id="tBoost" data-bit="16">BOOST</div>
+    <div class="tb small game" id="tUp" data-bit="4">▲</div>
+    <div class="tb small game" id="tDown" data-bit="8">▼</div>
+    <div class="tb small game" id="tWeapon" data-bit="128" data-tap>GUN</div>
+    <div class="tb small game" id="tSecondary" data-bit="256" data-tap>MSL</div>
+    <div class="tb small game" id="tFlare" data-bit="32" data-tap>FLARE</div>
+    <div class="tb small game" id="tBomb" data-bit="64" data-tap>BOMB</div>
+    <div class="tb small game" id="tMap" data-bit="512" data-tap>MAP</div>
+    <div class="tb small" id="tMenu">MENU</div>
+    <div class="tb small menuonly" id="tKeys">KEYS</div>
+    <div class="tb small menuonly" id="tEnter">OK</div>
+    <input id="tText" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+  </div>
 </div>
 <div class="message" id="message" hidden></div>
 
@@ -177,6 +241,6 @@
   MIDI music: <a href="https://github.com/spessasus/spessasynth_lib">SpessaSynth</a> with the
   <a href="https://www.schristiancollins.com/generaluser">GeneralUser GS</a> sound bank by S. Christian Collins.
 </footer>
-<script src="d2loader.js?v=20261102c"></script>
+<script src="d2loader.js?v=20261102d"></script>
 </body>
 </html>
