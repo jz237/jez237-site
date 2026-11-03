@@ -2313,10 +2313,10 @@ index 0000000..bc5fa7e
 +}
 diff --git a/d2/arch/web/web.c b/d2/arch/web/web.c
 new file mode 100644
-index 0000000..12e2ee1
+index 0000000..83cbef0
 --- /dev/null
 +++ b/d2/arch/web/web.c
-@@ -0,0 +1,370 @@
+@@ -0,0 +1,449 @@
 +/*
 + * Browser (Emscripten) replacements for desktop-only pieces:
 + * message boxes, GLU mipmapping and GL 1.1 calls WebGL lacks.
@@ -2500,6 +2500,8 @@ index 0000000..12e2ee1
 +#include "bm.h"
 +#include "segment.h"
 +#include "player.h"
++#include "wall.h"
++#include "polyobj.h"
 +
 +/* Puts robot type id dist units ahead of the ship, facing it (replacing the last one put
 + * there): with ai it moves its joints and fires like any robot, holding its place; without,
@@ -2530,6 +2532,83 @@ index 0000000..12e2ee1
 +	last = obj - Objects;
 +	last_sig = obj->signature;
 +	return last;
++}
++
++#define PAST_DOOR_MAX 4
++static int past_doors[PAST_DOOR_MAX], n_past_doors;	// seg * 6 + side of each door a robot was put behind (test)
++
++/* The i-th door d2web_place_robots_past_first_doors used, as seg * 6 + side (for d2web_test_view), or -1. */
++EMSCRIPTEN_KEEPALIVE int d2web_test_past_door(int i)
++{
++	return i >= 0 && i < n_past_doors ? past_doors[i] : -1;
++}
++
++/* One robot of type id just past the door on side door_side of door_seg, facing the door and holding its place. */
++static int place_robot_past_door(int id, int door_seg, int door_side)
++{
++	int beyond = Segments[door_seg].children[door_side], seg;
++	vms_vector door, center, dir, pos, face;
++	fix rad = Polygon_models[Robot_info[id].model_num].rad, reach;
++	object *obj;
++
++	compute_center_point_on_side(&door, &Segments[door_seg], door_side);
++	compute_segment_center(&center, &Segments[beyond]);
++	// clear of the door by its size, further in than the next segment's middle if that is too close
++	reach = vm_vec_normalized_dir(&dir, &center, &door);
++	if (reach < fixmul(rad, F1_0 * 3 / 2))
++		reach = fixmul(rad, F1_0 * 3 / 2);
++	vm_vec_scale_add(&pos, &door, &dir, reach);
++	if ((seg = find_point_seg(&pos, beyond)) < 0) {
++		pos = center;
++		seg = beyond;
++	}
++	if (!(obj = create_morph_robot(&Segments[seg], &pos, id)))
++		return -1;
++	vm_vec_sub(&face, &door, &pos);
++	vm_vector_2_matrix(&obj->orient, &face, NULL, NULL);
++	init_ai_object(obj - Objects, AIB_STILL, -1);
++	return obj - Objects;
++}
++
++int d2web_place_robots_past_first_doors(int id)
++{
++	static short queue[MAX_SEGMENTS], depth[MAX_SEGMENTS];
++	static ubyte seen[MAX_SEGMENTS];
++	int head = 0, tail = 0, found_depth = -1, placed = 0;
++
++	n_past_doors = 0;
++	if (!ConsoleObject || id < 0 || id >= N_robot_types)
++		return 0;
++	// the segments the ship can fly to without opening anything, nearest first; the doors it can open at the
++	// nearest distance (the "first doors": there can be more than one way on) each get a robot
++	memset(seen, 0, sizeof(seen));
++	queue[tail++] = ConsoleObject->segnum;
++	seen[ConsoleObject->segnum] = 1;
++	depth[ConsoleObject->segnum] = 0;
++	while (head < tail) {
++		int s = queue[head++], side;
++		if (found_depth >= 0 && depth[s] > found_depth)
++			break;
++		for (side = 0; side < MAX_SIDES_PER_SEGMENT; side++) {
++			int child = Segments[s].children[side], w = Segments[s].sides[side].wall_num;
++			if (!IS_CHILD(child) || seen[child])
++				continue;
++			if (w < 0) {
++				seen[child] = 1;
++				depth[child] = depth[s] + 1;
++				queue[tail++] = child;
++			} else if (Walls[w].type == WALL_DOOR && Walls[w].keys == KEY_NONE && !(Walls[w].flags & WALL_DOOR_LOCKED) &&
++			           n_past_doors < PAST_DOOR_MAX) {
++				seen[child] = 1;	// one robot per room past the doors
++				found_depth = depth[s];
++				if (place_robot_past_door(id, s, side) >= 0) {
++					past_doors[n_past_doors++] = s * 6 + side;
++					placed++;
++				}
++			}
++		}
++	}
++	return placed;
 +}
 +
 +/* Sets a robot's shields to percent of its full strength (damaged robots smoke). */
@@ -2689,10 +2768,10 @@ index 0000000..12e2ee1
 +}
 diff --git a/d2/arch/web/web.h b/d2/arch/web/web.h
 new file mode 100644
-index 0000000..d2bf7d3
+index 0000000..68e63f4
 --- /dev/null
 +++ b/d2/arch/web/web.h
-@@ -0,0 +1,100 @@
+@@ -0,0 +1,104 @@
 +/* Browser (Emscripten) glue for D2X-Redux. Implemented in library_d2web.js. */
 +#ifndef _D2WEB_H
 +#define _D2WEB_H
@@ -2786,6 +2865,10 @@ index 0000000..d2bf7d3
 +   d2web_cutscene_skipping() is true once the button was pressed, until the outermost one ends. */
 +void d2web_cutscene(int begin);
 +int d2web_cutscene_skipping(void);
++
++/* Puts a robot of type id just past each of the nearest doors the ship can open from where it starts, facing the
++   door and holding its place (Vertigo Level 1 shows off the remodelled Medium Lifter this way). Returns how many. */
++int d2web_place_robots_past_first_doors(int id);
 +
 +#ifdef __cplusplus
 +}
@@ -4307,7 +4390,7 @@ index f15d413..4758a33 100644
  	//if the player is taking damage, give up guided missile control
  	if (Players[Player_num].shields != player_shields)
 diff --git a/d2/main/gameseq.c b/d2/main/gameseq.c
-index 30de489..a781d68 100644
+index 30de489..9d3cd2f 100644
 --- a/d2/main/gameseq.c
 +++ b/d2/main/gameseq.c
 @@ -106,6 +106,9 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
@@ -4342,7 +4425,21 @@ index 30de489..a781d68 100644
  
  	Players[Player_num].starting_level = start_level;		// Mark where they started
  
-@@ -1743,6 +1750,9 @@ void ShowLevelIntro(int level_num)
+@@ -1663,6 +1670,13 @@ void StartNewLevelSub(int level_num, int page_in_textures, int secret_flag)
+ 
+ 	reset_respawnable_bots();
+ 
++#ifdef __EMSCRIPTEN__
++	// Vertigo Level 1 shows off the remodelled Medium Lifter (extra-sharp pack): one waits behind each first door
++	if (!(Game_mode & GM_MULTI) && Newdemo_state != ND_STATE_PLAYBACK && level_num == 1 &&
++	    !d_stricmp(Current_mission_filename, "d2x") && d2web_option(D2WEB_OPTION_ULTRA))
++		d2web_place_robots_past_first_doors(1);
++#endif
++
+ 	set_homing_update_rate(Game_mode & GM_MULTI ? Netgame.HomingUpdateRate : 25);
+ 
+ 	//	Say player can use FLASH cheat to mark path to exit.
+@@ -1743,6 +1757,9 @@ void ShowLevelIntro(int level_num)
  		ubyte save_pal[sizeof(gr_palette)];
  
  		memcpy(save_pal,gr_palette,sizeof(gr_palette));
@@ -4352,7 +4449,7 @@ index 30de489..a781d68 100644
  
  		if (PLAYING_BUILTIN_MISSION) {
  
-@@ -1775,6 +1785,9 @@ void ShowLevelIntro(int level_num)
+@@ -1775,6 +1792,9 @@ void ShowLevelIntro(int level_num)
  		{
  			do_briefing_screens(Briefing_text_filename, level_num);
  		}
@@ -4362,7 +4459,7 @@ index 30de489..a781d68 100644
  
  		memcpy(gr_palette,save_pal,sizeof(gr_palette));
  	}
-@@ -1809,7 +1822,8 @@ void StartNewLevel(int level_num)
+@@ -1809,7 +1829,8 @@ void StartNewLevel(int level_num)
  		maybe_set_first_secret_visit(level_num);
  	}
  
