@@ -135,7 +135,7 @@ function captureError() {
 }
 window.astraFlightFocus = active => {
   flightActive = active;
-  if (!active) releaseFlightMouse();
+  if (!active) { releaseFlightMouse(); window.astraDeck?.show(false); }
   refreshMouseHint();
 };
 document.addEventListener("pointerlockerror", captureError);
@@ -231,7 +231,7 @@ async function launch(quick,demo=false,encounter=false) {
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=volume3");
+    await script("engine.js?v=deck4");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 

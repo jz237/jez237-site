@@ -7,3 +7,8 @@
 
 footer a{color:#edbc86}
 #mouseHint{position:absolute;bottom:12%;left:50%;transform:translateX(-50%);pointer-events:none;padding:.45rem .8rem;background:#10191de8;border:1px solid #687a78;border-radius:3px;color:#f2ead6;text-align:center;font:13px system-ui,sans-serif}
+/* Astra instrument glass */
+#astraDeck{display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(100vw,177.7778vh);height:min(56.25vw,100vh);pointer-events:none;overflow:hidden;font-family:"Segoe UI",Arial,sans-serif;user-select:none}
+#astraDeck .deckRail{fill:url(#deckGlass)}#astraDeck .deckTiny,#astraDeck .deckMicro{fill:#b9e1e5;letter-spacing:2.2px;font-size:16px;font-weight:600}#astraDeck .deckMicro{font-size:13px;letter-spacing:1.6px}
+#astraDeck .deckWeapon{fill:#f0fbff;font-size:26px;font-weight:600;letter-spacing:1px}#astraDeck .deckNum,#astraDeck .deckNumberGreen{fill:#e4fbff;font-family:Consolas,monospace;font-weight:600;font-variant-numeric:tabular-nums}#astraDeck .deckNumberGreen{fill:#a5ec80}
+#astraDeck #deckAlert{fill:#ffc178}body.has-deck #invertFlight,body.has-deck #full{top:6.8%}body.has-deck.deck-captured #invertFlight,body.has-deck.deck-captured #full{visibility:hidden}

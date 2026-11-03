@@ -5,11 +5,49 @@
 <p class="deck">Fly the original Vertigo mines with refitted Descent II ships, Overload materials and fireballs, and Descent II flight controls.</p>
 <div class="controls"><label>CAMPAIGN<select id="campaign"><option value="d2x">The Vertigo Series</option><option value="d2">Counterstrike</option></select></label><label>RENDERER<select id="look"><option value="astra">Astra materials</option><option value="classic">Original materials</option></select></label>
 <label>RESOLUTION<select id="res"><option value="1920">1920 × 1080</option><option value="1280">1280 × 720</option><option value="2560">2560 × 1440</option></select></label></div>
-<div class="setup"><label><input id="invertMouse" type="checkbox"> Invert mouse Y</label><label><input id="wideHud" type="checkbox" checked> Wide flight HUD</label></div><div class="actions"><button id="start" class="launch">Enter mine <span>↗</span></button><button id="menus" class="launch secondary">Campaign menu</button></div><button class="launch replay" id="encounter">◎ &nbsp; Drop into first combat</button><span class="linksep"> / </span><button class="launch replay" id="demo">▷ &nbsp; Watch original flight recording</button><label class="cinema"><input id="intro" type="checkbox"> Play intro before campaign menu</label><p id="status" role="status">Ready to fly · Click Enter mine to capture the mouse</p><button hidden id="retry">Return to terminal</button></section>
+<div class="setup"><label><input id="invertMouse" type="checkbox"> Invert mouse Y</label><label><input id="wideHud" type="checkbox" checked> Astra flight deck</label></div><div class="actions"><button id="start" class="launch">Enter mine <span>↗</span></button><button id="menus" class="launch secondary">Campaign menu</button></div><button class="launch replay" id="encounter">◎ &nbsp; Drop into first combat</button><span class="linksep"> / </span><button class="launch replay" id="demo">▷ &nbsp; Watch original flight recording</button><label class="cinema"><input id="intro" type="checkbox"> Play intro before campaign menu</label><p id="status" role="status">Ready to fly · Click Enter mine to capture the mouse</p><button hidden id="retry">Return to terminal</button></section>
 <aside><div class="art"><span class="tag">PTMC &nbsp; / &nbsp; VEHICLE INSPECTION</span><canvas id="hangar" tabindex="0" aria-label="Drag or use arrow keys to rotate the Pyro-GX"></canvas><div class="modelname">PYRO–GX <small>INTERCEPTOR</small></div></div><div class="caption"><span>FIG. 01</span> &nbsp; <span id="triangles">5,029</span> TRIANGLES &nbsp; / &nbsp; DRAG TO ROTATE</div></aside></div>
 <footer><b>FLIGHT CONTROLS</b><span><kbd>A</kbd> <kbd>Z</kbd> Thrust / reverse</span><span><kbd>↑↓←→</kbd> Turn</span><span><kbd>Q</kbd> <kbd>E</kbd> Bank</span><span><kbd>Ctrl</kbd> Lasers</span><span><kbd>Space</kbd> Missile</span><span><kbd>Esc</kbd> Release mouse / menu</span><a href="/games/">Games</a><a href="source/">Source &amp; build notes</a></footer></main>
-<div id="stage"><canvas id="view" tabindex="0" aria-label="Descent II game"></canvas><span id="mouseHint" role="status" hidden>Click the mine to capture the mouse · Esc releases it</span><button id="invertFlight" type="button" aria-pressed="false" title="Reverse vertical mouse look (Alt+I)">Invert Y · Off</button><button id="full" title="Toggle full screen" aria-label="Toggle full screen">⛶</button></div>
-<script src="skin.js"></script><script src="pyro.js"></script><script src="hangar.js"></script><script src="flight.js?v=volume3"></script><script src="payload/aliases.js"></script><script src="refit-aliases.js?v=2"></script></body></html>
+<div id="stage"><canvas id="view" tabindex="0" aria-label="Descent II game"></canvas><svg id="astraDeck" viewBox="0 0 1672 941" aria-label="Pyro-GX flight instruments" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <image id="deckBody" href="flight-deck.png" width="1672" height="941" preserveAspectRatio="none"/>
+  <linearGradient id="deckSteel" x2=".23" y2="1" gradientUnits="objectBoundingBox"><stop stop-color="#c4deea"/><stop offset=".22" stop-color="#6c8796"/><stop offset=".44" stop-color="#344954"/><stop offset=".62" stop-color="#152329"/><stop offset=".82" stop-color="#697e88"/><stop offset="1" stop-color="#253742"/></linearGradient>
+  <linearGradient id="deckGlass" x2="0" y2="1"><stop stop-color="#091317" stop-opacity=".95"/><stop offset="1" stop-color="#07161c" stop-opacity=".63"/></linearGradient>
+  <linearGradient id="deckCan" x2="0" y2="1"><stop stop-color="#c9edfc"/><stop offset=".2" stop-color="#86a7b5"/><stop offset=".5" stop-color="#1c323d"/><stop offset=".76" stop-color="#567480"/><stop offset="1" stop-color="#23333a"/></linearGradient>
+  <path id="deckPyro" d="M0-24 4-18 7-1 13 7 18 6 20-8 23-7 25 14 19 20 11 17 6 12 4 24 -4 24 -6 12 -11 17 -19 20 -25 14 -23-7 -20-8 -18 6 -13 7 -7-1 -4-18Z"/>
+</defs>
+<svg x="0" y="0" width="1672" height="652" viewBox="0 0 1672 566" preserveAspectRatio="none"><use href="#deckBody"/></svg>
+<svg x="0" y="652" width="1672" height="289" viewBox="0 566 1672 375" preserveAspectRatio="none"><use href="#deckBody"/></svg>
+<g class="deckRail"><path d="M0 0H318L268 48H50L0 28Z M1672 0H1348L1401 48H1620L1672 30Z"/><path d="M666 0H1006L978 30H695Z"/></g>
+<g fill="none" stroke="#70dbe9" stroke-width="2"><path d="M0 29 49 49H267L307 10 M1672 30 1620 49H1400L1359 11 M696 31H978"/><path opacity=".55" d="M710 14h36m176 0h36M759 13h12m129 0h12"/></g>
+<g fill="none" stroke="#9cf2fb" stroke-width="2.5" transform="translate(71 25) scale(.54)"><use href="#deckPyro"/></g>
+<text x="99" y="33" id="deckLives" class="deckNum" font-size="29">× 3</text><text x="192" y="28" class="deckMicro">PYRO–GX</text>
+<text x="1432" y="29" class="deckMicro">SCORE</text><text x="1604" y="33" id="deckScore" text-anchor="end" class="deckNumberGreen" font-size="31">0</text>
+<text x="836" y="21" id="deckCourse" text-anchor="middle" class="deckTiny">000°</text><path fill="#b8fcff" d="m836 27 4 4-4 4-4-4z"/>
+<g id="deckReticle" fill="none" stroke="#7de5d8" stroke-width="1.6" opacity=".64"><path d="M759 444 750 453v34l9 9m154-52 9 9v34l-9 9"/><path d="M723 470h16m194 0h16"/></g>
+<text id="deckAlert" text-anchor="middle" x="836" y="370" fill="#ffc178" class="deckTiny"></text>
+<text id="deckBurn" text-anchor="middle" x="836" y="612" class="deckTiny"></text>
+<g text-anchor="middle"><text x="836" y="700" class="deckMicro">VELOCITY</text><text x="829" y="727" id="deckSpeed" class="deckNum" font-size="28">0</text><text x="868" y="725" class="deckMicro">U/S</text></g>
+<text x="535" y="724" class="deckMicro">GX / 01</text><text x="1118" y="724" id="deckLevel" class="deckMicro">L01</text>
+<g fill="none" stroke-width="4"><path stroke="#1e363e" d="M245 790h355 M1079 790h354"/><path stroke="#58d3e6" d="M245 790h48 M1079 790h48"/></g>
+<text x="244" y="781" class="deckTiny">PRIMARY WEAPON</text><text x="1080" y="781" class="deckTiny">SECONDARY WEAPON</text>
+<g id="deckGun" transform="translate(230 841) scale(.86)" stroke="#83a3b0" stroke-width="1.4" stroke-linejoin="round">
+<path fill="url(#deckSteel)" d="m3 13 11-24 66-13 23 8 17 2-6 24-22 6-13 11-50 1-15-8z"/><path fill="#253740" d="m17 2 21-12 33-6 8 5-4 15-44 11-17-4z"/><path fill="url(#deckCan)" d="m64-8 14-8 76-3 11 5-4 13-79 7-21-4z"/><path fill="#25444d" d="m150-18 11-1 8 5-4 16-11 2-6-4z"/><ellipse cx="162" cy="-7" rx="4.5" ry="8" fill="currentColor"/><path fill="#283744" d="m39 20 8-2 7 7-4 9-21 1-4-6z"/><path fill="url(#deckCan)" d="m24 32 26-4 26 4 7 6-6 4H16l-5-4z"/><g stroke="currentColor" stroke-width="3"><path d="m22 3 7-9m1 10 7-11m2 10 7-11M86-8l56-4"/></g></g>
+<text x="414" y="837" id="deckPrimary" class="deckWeapon">LASER CANNON</text><text x="414" y="870" id="deckPrimaryDetail" class="deckNumberGreen" font-size="23">LEVEL 1</text>
+<text x="1075" y="835" id="deckSecondary" class="deckWeapon">CONCUSSION</text><g id="deckRounds"><text x="1075" y="871" id="deckAmmo" class="deckNumberGreen" font-size="31">000</text><text x="1162" y="869" class="deckMicro">AMMO</text></g>
+<g transform="translate(1400 837) rotate(15)" fill="url(#deckCan)" stroke="#98b3bf" stroke-width="1.6">
+<g id="deckMissile"><path d="M0-50Q10-39 11-22v47l-5 12H-6l-5-12v-47Q-10-39 0-50z"/><path d="m-10 10-12 20v9l13-7m20-22 12 20v9L9 32"/><path d="M-10-21h20m-19 6h18m-19 36h20" stroke="#4fcddd"/><path d="M-6 37h12l-1 6H-5z"/></g>
+<g id="deckMine" style="display:none"><path d="m0-31 23 12 6 24-17 22h-25L-30 5l6-24Z"/><path d="m-21-19-8-13m52 13 8-13m-3 34 13 5m-69-5-13 5M0 26v14" stroke-width="6"/><circle r="8" fill="#ffa04e"/></g></g>
+<g text-anchor="middle"><path fill="none" stroke="#18373e" stroke-width="6" d="M751 874q-22-46 12-81M921 874q22-46-12-81"/>
+<path id="deckEnergyArc" fill="none" stroke="#79eaff" stroke-width="6" pathLength="100" d="M751 874q-22-46 12-81"/>
+<path id="deckShieldArc" fill="none" stroke="#9bdfb0" stroke-width="6" pathLength="100" d="M921 874q22-46-12-81"/>
+<use href="#deckPyro" transform="translate(836 811) scale(.63)" fill="#183d48" stroke="#a4f3ff" stroke-width="2.3"/>
+<text x="797" y="850" class="deckMicro">ENERGY</text><text x="878" y="850" class="deckMicro">SHIELDS</text>
+<text x="795" y="876" id="deckEnergy" class="deckNum" font-size="25">100%</text><text x="878" y="876" id="deckShields" class="deckNum" font-size="25">100%</text>
+<g transform="translate(836 889)"><path id="deckKeyBlue" d="m-14-3 4 3-4 3-4-3z" fill="#59a7ff"/><path id="deckKeyRed" d="m0-3 4 3-4 3-4-3z" fill="#ff6158"/><path id="deckKeyGold" d="m14-3 4 3-4 3-4-3z" fill="#ffd265"/></g></g>
+</svg>
+<span id="mouseHint" role="status" hidden>Click the mine to capture the mouse · Esc releases it</span><button id="invertFlight" type="button" aria-pressed="false" title="Reverse vertical mouse look (Alt+I)">Invert Y · Off</button><button id="full" title="Toggle full screen" aria-label="Toggle full screen">⛶</button></div>
+<script src="skin.js"></script><script src="pyro.js"></script><script src="hangar.js"></script><script src="instruments.js?v=deck4"></script><script src="flight.js?v=deck4"></script><script src="payload/aliases.js"></script><script src="refit-aliases.js?v=2"></script></body></html>
 
 
 
