@@ -599,10 +599,10 @@ index c536c46..58786e5 100644
  		glEnable(GL_SCISSOR_TEST);
 diff --git a/d2/arch/ogl/ogl_post.c b/d2/arch/ogl/ogl_post.c
 new file mode 100644
-index 0000000..78e717e
+index 0000000..ccb976c
 --- /dev/null
 +++ b/d2/arch/ogl/ogl_post.c
-@@ -0,0 +1,736 @@
+@@ -0,0 +1,807 @@
 +/*
 + * Post-processing of the 3D view (browser edition, WebGL 2). The mine is drawn into an
 + * off-screen HDR image (multisampled when the page asks for antialiasing), then ambient
@@ -807,6 +807,11 @@ index 0000000..78e717e
 +static const char *final_fs =
 +	"uniform sampler2D scene;\n"
 +	"uniform sampler2D bloom;\n"
++	"uniform int nblast;\n"			// live blasts (fx.c): view-space centre, shockwave radius
++	"uniform vec4 bpos[8];\n"
++	"uniform vec4 bprm[8];\n"		// age 0..1, size
++	"uniform vec4 fxp;\n"			// heat ripple, light shafts, lens streaks, colour fringe
++	"uniform float ftime;\n"
 +	"uniform sampler2D aotex;\n"
 +	"uniform sampler2D fogtex;\n"
 +	"uniform vec4 look;\n"	// bloom strength, knee, contrast, vignette
@@ -821,7 +826,33 @@ index 0000000..78e717e
 +	"float hash(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }\n"
 +	"float lum(vec3 c) { return dot(c, vec3(0.2126, 0.7152, 0.0722)); }\n"
 +	"void main() {\n"
-+	"	vec3 c = min(texture(scene, v_uv).rgb, vec3(64.0));\n"	// no infinite light
++	"	vec2 uv = v_uv;\n"
++	"	float flash = 0.0;\n"
++	"#ifdef GLOW\n"
++	// each blast's shockwave ring bends the view as it passes, and the hot air inside shimmers
++	"	for (int i = 0; i < 8; i++) {\n"
++	"		if (i >= nblast) break;\n"
++	"		vec3 L = bpos[i].xyz;\n"
++	"		vec2 cu = uv_of(L);\n"
++	"		vec2 ru = abs(vec2(uv_of(L + vec3(bpos[i].w, 0.0, 0.0)).x - cu.x, uv_of(L + vec3(0.0, bpos[i].w, 0.0)).y - cu.y));\n"
++	"		vec2 d = v_uv - cu;\n"
++	"		vec2 dn = d / max(ru, vec2(1e-4));\n"
++	"		float r = length(dn), t = bprm[i].x, fade = (1.0 - t) * (1.0 - t);\n"
++	"		float band = exp(-pow((r - 1.0) / 0.22, 2.0));\n"
++	"		uv += d / max(length(d), 1e-4) * band * fade * ru.x * 0.35 * fxp.x;\n"
++	"		float inside = smoothstep(1.1, 0.2, r) * fade;\n"
++	"		uv += vec2(sin(v_uv.y * 90.0 + ftime * 13.0), cos(v_uv.x * 80.0 - ftime * 11.0)) * inside * ru.x * 0.025 * fxp.x;\n"
++	"		flash += smoothstep(0.3, 0.0, t) * min(bprm[i].y / 6.0, 1.0);\n"
++	"	}\n"
++	"#endif\n"
++	"	vec3 c = min(texture(scene, uv).rgb, vec3(64.0));\n"	// no infinite light
++	"#ifdef GLOW\n"
++	// colour fringe: a faint one toward the edges always, a strong one in a big blast's first flash
++	"	float ca = fxp.w * (0.0012 + flash * 0.008);\n"
++	"	vec2 cd = (uv - 0.5) * ca;\n"
++	"	c.r = min(texture(scene, uv + cd).r, 64.0);\n"
++	"	c.b = min(texture(scene, uv - cd).b, 64.0);\n"
++	"#endif\n"
 +	"#ifdef AO\n"
 +	"	float a = texture(aotex, v_uv).r;\n"
 +	"	c *= mix(a, 1.0, smoothstep(0.7, 1.5, lum(c)));\n"	// lights themselves stay bright
@@ -860,6 +891,27 @@ index 0000000..78e717e
 +	"#endif\n"
 +	"#ifdef GLOW\n"
 +	"	c += texture(bloom, v_uv).rgb * look.x;\n"
++	// light shafts: the bloom smeared out from each blast's centre, rays through the smoke and dust
++	"	for (int i = 0; i < 8; i++) {\n"
++	"		if (i >= nblast) break;\n"
++	"		vec2 cu = uv_of(bpos[i].xyz);\n"
++	"		vec2 dir = (cu - v_uv) / 14.0;\n"
++	"		vec3 acc = vec3(0.0);\n"
++	"		float w = 1.0, j = hash(gl_FragCoord.xy + float(i));\n"
++	"		for (int k = 0; k < 14; k++) {\n"
++	"			acc += texture(bloom, v_uv + dir * (float(k) + j)).rgb * w;\n"
++	"			w *= 0.9;\n"
++	"		}\n"
++	"		float t = bprm[i].x;\n"
++	"		c += acc / 14.0 * (1.0 - t) * min(bprm[i].y / 3.0, 1.5) * fxp.y;\n"
++	"	}\n"
++	// anamorphic lens streaks: bright light smeared sideways, tinted cool
++	"	vec3 st = vec3(0.0);\n"
++	"	for (int k = 1; k <= 8; k++) {\n"
++	"		float o = float(k) * 0.014, wk = 1.0 - float(k) / 9.0;\n"
++	"		st += (texture(bloom, v_uv + vec2(o, 0.0)).rgb + texture(bloom, v_uv - vec2(o, 0.0)).rgb) * wk;\n"
++	"	}\n"
++	"	c += st * vec3(0.5, 0.68, 1.0) * fxp.z * 0.12;\n"
 +	"	float m = max(max(c.r, c.g), c.b);\n"
 +	"	float k = look.y;\n"
 +	"	float t = m <= k ? m : k + (1.0 - k) * (1.0 - exp((k - m) / (1.0 - k)));\n"
@@ -1257,6 +1309,23 @@ index 0000000..78e717e
 +	draw_quad();
 +}
 +
++int fx_blasts(float (*pos)[4], float (*prm)[4], int max);	// main/fx.c
++extern fix64 GameTime64;	// main/game.c
++
++static void blast_uniforms(GLuint p)
++{
++	float pos[8][4], prm[8][4];
++	int n = fx_blasts(pos, prm, 8);
++	glUniform1i(glGetUniformLocation(p, "nblast"), n);
++	if (n) {
++		glUniform4fv(glGetUniformLocation(p, "bpos"), n, pos[0]);
++		glUniform4fv(glGetUniformLocation(p, "bprm"), n, prm[0]);
++	}
++	// heat ripple, light shafts, lens streaks, colour fringe
++	glUniform4f(glGetUniformLocation(p, "fxp"), d2web_tune(40, 1.0f), d2web_tune(41, 0.0f), d2web_tune(42, 0.0f), d2web_tune(43, 0.0f));
++	glUniform1f(glGetUniformLocation(p, "ftime"), f2fl(GameTime64 & 0xffffffff));
++}
++
 +static void haze_uniforms(GLuint p)
 +{
 +	float pos[MAX_HAZE][4], col[MAX_HAZE][3], hp[3], hd[3];
@@ -1304,6 +1373,8 @@ index 0000000..78e717e
 +	glUseProgram(fin);
 +	glUniform4f(glGetUniformLocation(fin, "look"), d2web_tune(9, 0.65f), d2web_tune(10, 0.8f), d2web_tune(11, 0.26f), d2web_tune(12, 0.32f));
 +	set_view(fin);
++	if (P.look & LOOK_GLOW)
++		blast_uniforms(fin);
 +	if (P.look & LOOK_HAZE)
 +		haze_uniforms(fin);
 +	if (fxaa)
@@ -2379,10 +2450,10 @@ index 0000000..bc5fa7e
 +}
 diff --git a/d2/arch/web/web.c b/d2/arch/web/web.c
 new file mode 100644
-index 0000000..83cbef0
+index 0000000..4c0817d
 --- /dev/null
 +++ b/d2/arch/web/web.c
-@@ -0,0 +1,449 @@
+@@ -0,0 +1,475 @@
 +/*
 + * Browser (Emscripten) replacements for desktop-only pieces:
 + * message boxes, GLU mipmapping and GL 1.1 calls WebGL lacks.
@@ -2832,6 +2903,32 @@ index 0000000..83cbef0
 +			n++;
 +	return n;
 +}
++
++/* The modern HUD (Opus, d2loader.js): what the cockpit shows, refreshed each call. [0] game time (s, stops in
++ * menus), shields, energy, primary weapon, laser level, secondary weapon, its ammo, speed (units/s), score, lives,
++ * flags, cockpit mode, vulcan/gauss ammo, afterburner charge (0..1), primary weapons owned, secondary owned. */
++EMSCRIPTEN_KEEPALIVE float *d2web_hud(void)
++{
++	static float h[16];
++	player *pl = &Players[Player_num];
++	h[0] = (float)((double)GameTime64 / 65536.0);
++	h[1] = f2fl(pl->shields);
++	h[2] = f2fl(pl->energy);
++	h[3] = pl->primary_weapon;
++	h[4] = pl->laser_level;
++	h[5] = pl->secondary_weapon;
++	h[6] = pl->secondary_ammo[pl->secondary_weapon];
++	h[7] = ConsoleObject ? f2fl(vm_vec_mag(&ConsoleObject->mtype.phys_info.velocity)) : 0;
++	h[8] = pl->score;
++	h[9] = pl->lives;
++	h[10] = pl->flags;
++	h[11] = PlayerCfg.CurrentCockpitMode;
++	h[12] = pl->primary_ammo[1];
++	h[13] = f2fl(pl->afterburner_charge);
++	h[14] = pl->primary_weapon_flags;
++	h[15] = pl->secondary_weapon_flags;
++	return h;
++}
 diff --git a/d2/arch/web/web.h b/d2/arch/web/web.h
 new file mode 100644
 index 0000000..b2f9617
@@ -3266,7 +3363,7 @@ index fdb2e78..4186519 100644
  			expl_obj = object_create_explosion( weapon->segnum, collision_point, (robot->size/2*3)/4, Robot_info[robot->id].exp1_vclip_num );
  		else if ( Weapon_info[weapon->id].robot_hit_vclip > -1 )
 diff --git a/d2/main/fireball.c b/d2/main/fireball.c
-index fe9b0d1..4cbbd67 100644
+index fe9b0d1..73b73a7 100644
 --- a/d2/main/fireball.c
 +++ b/d2/main/fireball.c
 @@ -31,6 +31,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
@@ -3277,7 +3374,18 @@ index fe9b0d1..4cbbd67 100644
  #include "polyobj.h"
  #include "sounds.h"
  #include "player.h"
-@@ -1355,6 +1356,7 @@ void do_explosion_sequence(object *obj)
+@@ -441,6 +442,10 @@ object *object_create_debris(object *parent, int subobj_num)
+ 
+ void draw_fireball(object *obj)
+ {
++	// Opus: the modern explosions (fx.c) take the place of the flat fireball sprites; the fireball objects
++	// still light the room. The robot-making sparkle stays.
++	if (obj->control_type == CT_EXPLOSION && obj->id != VCLIP_MORPHING_ROBOT && fx_replaces_fireballs())
++		return;
+ 	if ( obj->lifeleft > 0 )
+ 		draw_vclip_object(obj,obj->lifeleft,0, obj->id);
+ 
+@@ -1355,6 +1360,7 @@ void do_explosion_sequence(object *obj)
  			expl_obj = object_create_badass_explosion( del_obj, del_obj->segnum, spawn_pos, fixmul(del_obj->size, EXPLOSION_SCALE), vclip_num, F1_0*Robot_info[del_obj->id].badass, i2f(4)*Robot_info[del_obj->id].badass, i2f(35)*Robot_info[del_obj->id].badass, -1 );
  		else
  			expl_obj = object_create_explosion( del_obj->segnum, spawn_pos, fixmul(del_obj->size, EXPLOSION_SCALE), vclip_num );
@@ -3287,10 +3395,10 @@ index fe9b0d1..4cbbd67 100644
  			//	If dropping a weapon that the player has, drop energy instead, unless it's vulcan, in which case drop vulcan ammo.
 diff --git a/d2/main/fx.c b/d2/main/fx.c
 new file mode 100644
-index 0000000..f3eebb0
+index 0000000..d1da952
 --- /dev/null
 +++ b/d2/main/fx.c
-@@ -0,0 +1,1170 @@
+@@ -0,0 +1,1441 @@
 +/*
 + * Light halos, smoke and sparks (browser edition).
 + *
@@ -3359,6 +3467,11 @@ index 0000000..f3eebb0
 +#endif
 +}
 +
++int fx_replaces_fireballs(void)
++{
++	return boom_enabled();
++}
++
 +static unsigned fx_seed = 0x2545f491;
 +static float frand(void)	// 0..1
 +{
@@ -3393,7 +3506,7 @@ index 0000000..f3eebb0
 +// ---------------------------------------------------------------------------------------
 +// Particles
 +
-+enum { FX_SMOKE, FX_SPARK, FX_GLOW, FX_FIRE, FX_RING, FX_DEBRIS };
++enum { FX_SMOKE, FX_SPARK, FX_GLOW, FX_FIRE, FX_RING, FX_DEBRIS, FX_ARC };
 +
 +typedef struct particle {
 +	float pos[3], vel[3];
@@ -3404,11 +3517,14 @@ index 0000000..f3eebb0
 +	float rgb[3], alpha;
 +	float acc;			// debris: time toward its next smoke puff
 +	unsigned char kind;
++	short seg;			// sparks and debris: the segment they're in (-1: not tracked), to bounce off walls
 +} particle;
 +
 +#define MAX_PARTICLES 2048
 +static particle particles[MAX_PARTICLES];
 +static int n_particles;
++
++static int spawn_seg = -1;	// the segment the effect being made is in (fx_impact, fx_hit, fx_explosion)
 +
 +static particle *spawn(int kind)
 +{
@@ -3416,6 +3532,7 @@ index 0000000..f3eebb0
 +	memset(p, 0, sizeof(*p));
 +	p->kind = kind;
 +	p->alpha = 1;
++	p->seg = kind == FX_SPARK || kind == FX_DEBRIS ? spawn_seg : -1;
 +	return p;
 +}
 +
@@ -3505,19 +3622,22 @@ index 0000000..f3eebb0
 +// Explosions: layered fireballs that cool from white-hot to red, a shockwave, glowing debris
 +// that trails smoke, and scorch marks that stay on the walls a while
 +
++static float fire_tint[3] = { 1, 1, 1 };	// the colour of the flames being made (plasma burns blue)
++
 +static void fire_puffs(const float *p, float s, int n, float life, float delay)
 +{
 +	for (int i = 0; i < n; i++) {
 +		particle *q = spawn(FX_FIRE);
 +		float d[3];
++		memcpy(q->rgb, fire_tint, sizeof(q->rgb));
 +		rand_dir(d);
 +		q->age = -delay * (0.6f + 0.8f * frand());
 +		madd(q->pos, p, d, s * 0.35f * frand());
 +		for (int k = 0; k < 3; k++)
 +			q->vel[k] = d[k] * s * (0.6f + 0.9f * frand());
 +		q->drag = 3.0f;
-+		q->size = s * (0.12f + 0.1f * frand());
-+		q->grow = s * (0.5f + 0.35f * frand());
++		q->size = s * (0.1f + 0.1f * frand());
++		q->grow = s * (0.3f + 0.3f * frand());
 +		q->life = life * (0.65f + 0.5f * frand());
 +		q->angle = frand() * 6.283f;
 +		q->spin = (frand() - 0.5f) * 2.5f;
@@ -3609,32 +3729,208 @@ index 0000000..f3eebb0
 +static void blast(const float *p, float s)
 +{
 +	float flash[3] = { 1.6f, 1.4f, 1.1f }, core[3] = { 1.5f, 1.0f, 0.55f };
-+	int n = (int)(6 + s * 0.5f);
++	int n = (int)(7 + s * 0.5f);
 +	glow(p, s * 1.5f, 0.1f, flash, 0.4f);
 +	glow(p, s * 0.7f, 0.35f, core, 0.35f);
-+	fire_puffs(p, s, n > 14 ? 14 : n, 0.8f + s * 0.025f, 0);
-+	fire_puffs(p, s * 1.25f, n > 14 ? 7 : n / 2, 0.9f + s * 0.03f, 0.12f);	// the billows after
++	fire_puffs(p, s, n > 16 ? 16 : n, 1.1f + s * 0.03f, 0);
++	fire_puffs(p, s * 1.15f, n > 16 ? 8 : n / 2, 1.3f + s * 0.035f, 0.16f);	// the billows after
 +	shockwave(p, s);
 +	n = (int)(5 + s * 0.6f);
 +	debris(p, s, n > 14 ? 14 : n);
 +	n = (int)(8 + s * 1.5f);
 +	embers(p, s, n > 30 ? 30 : n);
 +	if (fx_enabled())
-+		for (int i = 0; i < 5; i++) {
++		for (int i = 0; i < 8; i++) {
 +			float d[3], at[3];
 +			particle *q;
 +			rand_dir(d);
 +			madd(at, p, d, s * 0.3f);
 +			for (int k = 0; k < 3; k++)
 +				d[k] *= s * 0.25f;
-+			smoke(at, d, s * 0.4f, s * 0.3f, 3.5f + frand() * 1.5f, 0.34f, 0.8f, -1);
++			smoke(at, d, s * 0.45f, s * 0.35f, 4.0f + frand() * 1.5f, 0.2f, 0.95f, -1);
 +			q = &particles[n_particles - 1];
-+			q->age = -(0.25f + 0.2f * frand());	// rises out of the fire as it dies down
++			q->age = -(0.1f + 0.15f * frand());	// rolls up through the fire, darkening it
 +		}
++}
++
++// ---------------------------------------------------------------------------------------
++// Many kinds of explosion
++
++enum { BOOM_FIREBALL, BOOM_CHAIN, BOOM_PLASMA, BOOM_SHATTER, BOOM_NOVA, BOOM_SMOKER, N_BOOMS };
++
++// everything spawned since `first` happens `delay` seconds later
++static void later(int first, float delay)
++{
++	for (int i = first; i < n_particles; i++)
++		particles[i].age -= delay;
++}
++
++// electric arcs: jagged bolts that crackle out of the centre (redrawn differently each frame)
++static void arcs(const float *p, float s, int n, const float *rgb, float life)
++{
++	for (int i = 0; i < n; i++) {
++		particle *q = spawn(FX_ARC);
++		float d[3], reach = s * (0.7f + 0.9f * frand());
++		rand_dir(d);
++		memcpy(q->pos, p, sizeof(q->pos));
++		for (int k = 0; k < 3; k++)
++			q->vel[k] = d[k] * reach;
++		q->size = 0.05f + 0.025f * s;
++		q->life = life * (0.4f + 0.8f * frand());
++		q->age = -0.25f * frand();	// they flicker in over the first moments
++		memcpy(q->rgb, rgb, sizeof(q->rgb));
++	}
++}
++
++static void dark_smoke(const float *p, float s, int n, float grey, float delay)
++{
++	if (!fx_enabled())
++		return;
++	for (int i = 0; i < n; i++) {
++		float d[3], at[3];
++		int first = n_particles;
++		rand_dir(d);
++		madd(at, p, d, s * 0.3f);
++		for (int k = 0; k < 3; k++)
++			d[k] *= s * 0.25f;
++		smoke(at, d, s * 0.45f, s * 0.35f, 4.0f + frand() * 2.0f, grey, 0.95f, -1);
++		later(first, delay + 0.15f * frand());
++	}
++}
++
++static void boom(const float *p, float s, int style)
++{
++	float hot[3] = { 1.2f, 0.8f, 0.4f };
++	int n, first;
++#ifdef __EMSCRIPTEN__
++	if (d2web_tune(44, 0) > 0)	// test: Module.d2tune[44] = style + 1 forces a kind
++		style = (int)d2web_tune(44, 0) - 1;
++#endif
++	switch (style) {
++	case BOOM_CHAIN:	// a blast, then smaller ones popping around it
++		blast(p, s * 0.8f);
++		n = 3 + (int)(frand() * 3);
++		for (int i = 0; i < n; i++) {
++			float d[3], at[3];
++			rand_dir(d);
++			madd(at, p, d, s * (0.5f + 0.7f * frand()));
++			first = n_particles;
++			blast(at, s * (0.35f + 0.25f * frand()));
++			later(first, 0.12f + 0.12f * i + 0.08f * frand());
++		}
++		break;
++	case BOOM_PLASMA: {	// blue-white fire, a hard flash, electric arcs, a spray of fast sparks
++		float tint[3] = { 0.45f, 0.8f, 1.5f }, flash[3] = { 0.9f, 1.3f, 2.0f }, arc[3] = { 0.8f, 1.2f, 2.2f };
++		float spark[3] = { 0.7f, 1.1f, 1.6f };
++		memcpy(fire_tint, tint, sizeof(tint));
++		n = (int)(6 + s * 0.4f);
++		fire_puffs(p, s * 0.85f, n > 12 ? 12 : n, 0.7f + s * 0.02f, 0);
++		fire_tint[0] = fire_tint[1] = fire_tint[2] = 1;
++		glow(p, s * 1.8f, 0.12f, flash, 0.55f);
++		glow(p, s * 0.6f, 0.5f, arc, 0.4f);
++		shockwave(p, s);
++		arcs(p, s, 7 + (int)(s * 0.4f), arc, 0.55f);
++		if (fx_enabled())
++			sparks(p, NULL, 40, spark, 44 + s * 3, 0.7f);
++		break;
++	}
++	case BOOM_SHATTER: {	// it bursts apart: a hail of debris and metal sparks, little fire
++		float metal[3] = { 1.3f, 0.95f, 0.6f };
++		n = (int)(4 + s * 0.3f);
++		fire_puffs(p, s * 0.7f, n > 8 ? 8 : n, 0.6f, 0);
++		glow(p, s * 1.2f, 0.1f, hot, 0.4f);
++		n = (int)(18 + s * 1.5f);
++		debris(p, s * 1.3f, n > 36 ? 36 : n);
++		if (fx_enabled())
++			sparks(p, NULL, 70, metal, 30 + s * 2, 1.3f);
++		dark_smoke(p, s * 0.8f, 5, 0.18f, 0.05f);
++		break;
++	}
++	case BOOM_NOVA: {	// a blinding flash and a ring of fire racing out flat, then a second shockwave
++		float flash[3] = { 2.0f, 1.8f, 1.5f }, ax[3], u[3], v[3];
++		glow(p, s * 1.4f, 0.12f, flash, 0.4f);
++		shockwave(p, s * 1.3f);
++		first = n_particles;
++		shockwave(p, s * 0.8f);
++		later(first, 0.15f);
++		rand_dir(ax);
++		u[0] = ax[1], u[1] = -ax[0], u[2] = 0;	// two directions across the ring's axis
++		if (len(u) < 0.1f)
++			u[0] = 0, u[1] = ax[2], u[2] = -ax[1];
++		madd(u, u, u, 1 / len(u) - 1);
++		v[0] = ax[1] * u[2] - ax[2] * u[1], v[1] = ax[2] * u[0] - ax[0] * u[2], v[2] = ax[0] * u[1] - ax[1] * u[0];
++		for (int i = 0; i < 18; i++) {
++			float a = i * 6.283f / 18, d[3];
++			particle *q = spawn(FX_FIRE);
++			for (int k = 0; k < 3; k++)
++				d[k] = u[k] * cosf(a) + v[k] * sinf(a);
++			memcpy(q->pos, p, sizeof(q->pos));
++			memcpy(q->rgb, fire_tint, sizeof(q->rgb));
++			for (int k = 0; k < 3; k++)
++				q->vel[k] = d[k] * s * (3.5f + frand());
++			q->drag = 2.2f;
++			q->size = s * 0.12f;
++			q->grow = s * 0.35f;
++			q->life = 0.9f;
++			q->angle = frand() * 6.283f;
++			q->spin = (frand() - 0.5f) * 2;
++		}
++		fire_puffs(p, s * 0.6f, 6, 0.8f, 0);
++		embers(p, s, 20);
++		break;
++	}
++	case BOOM_SMOKER: {	// fire bursts out one way in a column, under heavy black billows
++		float dir[3];
++		rand_dir(dir);
++		glow(p, s * 1.2f, 0.12f, hot, 0.45f);
++		for (int i = 0; i < 12; i++) {
++			particle *q = spawn(FX_FIRE);
++			float d[3];
++			rand_dir(d);
++			madd(d, dir, d, 0.35f);
++			memcpy(q->pos, p, sizeof(q->pos));
++			memcpy(q->rgb, fire_tint, sizeof(q->rgb));
++			for (int k = 0; k < 3; k++)
++				q->vel[k] = d[k] * s * (1.5f + 2.5f * frand());
++			q->drag = 1.8f;
++			q->size = s * (0.1f + 0.08f * frand());
++			q->grow = s * (0.3f + 0.25f * frand());
++			q->life = 1.0f + 0.6f * frand();
++			q->age = -0.25f * frand();
++			q->angle = frand() * 6.283f;
++			q->spin = (frand() - 0.5f) * 2;
++		}
++		shockwave(p, s * 0.8f);
++		embers(p, s, 24);
++		dark_smoke(p, s * 1.2f, 14, 0.1f, 0.05f);
++		break;
++	}
++	default:
++		blast(p, s);
++	}
++}
++
++// which kind: robots by their size, with some chance, so the same robot doesn't always go up the same way
++static int robot_boom(float s)
++{
++	float r = frand();
++	if (s > 6)
++		return r < 0.35f ? BOOM_CHAIN : r < 0.55f ? BOOM_NOVA : r < 0.75f ? BOOM_FIREBALL : r < 0.9f ? BOOM_SMOKER : BOOM_SHATTER;
++	return r < 0.3f ? BOOM_FIREBALL : r < 0.55f ? BOOM_SHATTER : r < 0.7f ? BOOM_PLASMA : r < 0.85f ? BOOM_SMOKER : BOOM_CHAIN;
++}
++
++// missiles: the big ones set off chain reactions, the rest vary
++static int missile_boom(weapon_info *wi)
++{
++	float s = f2fl(wi->impact_size), r = frand();
++	if (s >= 8)
++		return BOOM_CHAIN;
++	return r < 0.4f ? BOOM_FIREBALL : r < 0.6f ? BOOM_NOVA : r < 0.8f ? BOOM_SMOKER : BOOM_PLASMA;
 +}
 +
 +void fx_impact(object *weapon, int segnum, int sidenum, vms_vector *pos)
 +{
++	spawn_seg = segnum;
 +	weapon_info *wi = &Weapon_info[weapon->id];
 +	float p[3], n[3], rgb[3];
 +	if (boom_enabled()) {
@@ -3644,7 +3940,7 @@ index 0000000..f3eebb0
 +			float s = f2fl(wi->impact_size), at[3];
 +			s = s < 2.5f ? 2.5f : s;
 +			madd(at, p, n, s * 0.3f);
-+			blast(at, s);
++			boom(at, s, missile_boom(wi));
 +			scorch(segnum, sidenum, p, s * 0.9f, 0.85f, 40, 1);
 +		} else if (wi->matter)
 +			scorch(segnum, sidenum, p, 0.4f, 0.7f, 20, 0);
@@ -3680,11 +3976,12 @@ index 0000000..f3eebb0
 +
 +void fx_hit(object *weapon, vms_vector *pos)
 +{
++	spawn_seg = weapon->segnum;
 +	float p[3], rgb[3];
 +	fv(pos, p);
 +	if (boom_enabled() && Weapon_info[weapon->id].damage_radius) {
 +		float s = f2fl(Weapon_info[weapon->id].impact_size);
-+		blast(p, s < 2.5f ? 2.5f : s);
++		boom(p, s < 2.5f ? 2.5f : s, missile_boom(&Weapon_info[weapon->id]));
 +	}
 +	if (!fx_enabled())
 +		return;
@@ -3694,11 +3991,12 @@ index 0000000..f3eebb0
 +
 +void fx_explosion(vms_vector *pos, int segnum, fix size)
 +{
++	spawn_seg = segnum;
 +	float p[3], s = f2fl(size), hot[3] = { 1, 0.7f, 0.35f };
 +	int n = (int)(18 + s * 2.5f);
 +	fv(pos, p);
 +	if (boom_enabled())
-+		blast(p, s);
++		boom(p, s, robot_boom(s));
 +	if (!fx_enabled())
 +		return;
 +	sparks(p, NULL, n > 60 ? 60 : n, hot, 28 + s * 3, 1.1f);
@@ -3825,11 +4123,29 @@ index 0000000..f3eebb0
 +			*p = particles[--n_particles];
 +			continue;
 +		}
-+		drag = expf(-p->drag * dt);
-+		for (int k = 0; k < 3; k++) {
-+			p->vel[k] *= drag;
-+			p->pos[k] += p->vel[k] * dt;
++		if (p->kind == FX_ARC) {	// an electric arc stays where it struck (vel is its reach)
++			i++;
++			continue;
 +		}
++		drag = expf(-p->drag * dt);
++		for (int k = 0; k < 3; k++)
++			p->vel[k] *= drag;
++		if (p->seg >= 0 && p->seg <= Highest_segment_index) {	// ricochet off the walls instead of flying through them
++			vms_vector np;
++			int s;
++			np.x = fl2f(p->pos[0] + p->vel[0] * dt);
++			np.y = fl2f(p->pos[1] + p->vel[1] * dt);
++			np.z = fl2f(p->pos[2] + p->vel[2] * dt);
++			if ((s = find_point_seg(&np, p->seg)) < 0) {
++				float d[3];
++				rand_dir(d);
++				for (int k = 0; k < 3; k++)
++					p->vel[k] = -p->vel[k] * 0.45f + d[k] * len(p->vel) * 0.25f;
++			} else
++				p->seg = s;
++		}
++		for (int k = 0; k < 3; k++)
++			p->pos[k] += p->vel[k] * dt;
 +		p->size += p->grow * dt;
 +		p->angle += p->spin * dt;
 +		i++;
@@ -4088,20 +4404,47 @@ index 0000000..f3eebb0
 +
 +enum { TEX_GLOW, TEX_SMOKE, TEX_FIRE, TEX_RING, TEX_CHUNK, TEX_SCORCH };
 +
++// layered value noise (0..1), for fire and smoke that look like they have depth
++static float lattice(int x, int y, int seed)
++{
++	unsigned h = (unsigned)(x * 374761393 + y * 668265263 + seed * 2147483647u);
++	h = (h ^ (h >> 13)) * 1274126177u;
++	return ((h ^ (h >> 16)) & 0xffff) / 65535.0f;
++}
++static float vnoise2(float x, float y, int seed)
++{
++	int ix = (int)floorf(x), iy = (int)floorf(y);
++	float fx = x - ix, fy = y - iy;
++	fx = fx * fx * (3 - 2 * fx);
++	fy = fy * fy * (3 - 2 * fy);
++	float a = lattice(ix, iy, seed), b = lattice(ix + 1, iy, seed), c = lattice(ix, iy + 1, seed), d = lattice(ix + 1, iy + 1, seed);
++	return (a + (b - a) * fx) * (1 - fy) + (c + (d - c) * fx) * fy;
++}
++static float fbm(float x, float y, int seed)
++{
++	float v = 0, amp = 0.5f, tot = 0;
++	for (int o = 0; o < 5; o++, x *= 2.03f, y *= 2.03f, amp *= 0.5f) {
++		v += vnoise2(x, y, seed + o * 17) * amp;
++		tot += amp;
++	}
++	return v / tot;
++}
++
 +static GLuint make_texture(int kind)
 +{
-+	static unsigned char img[64 * 64 * 4];
++	static unsigned char img[256 * 256 * 4];
++	int S = kind == TEX_FIRE || kind == TEX_SMOKE ? 256 : 64;
 +	GLuint t;
-+	for (int y = 0; y < 64; y++)
-+		for (int x = 0; x < 64; x++) {
-+			float dx = (x + 0.5f) / 32 - 1, dy = (y + 0.5f) / 32 - 1, r = sqrtf(dx * dx + dy * dy), a, shade = 1;
++	for (int y = 0; y < S; y++)
++		for (int x = 0; x < S; x++) {
++			float dx = (x + 0.5f) / (S / 2) - 1, dy = (y + 0.5f) / (S / 2) - 1, r = sqrtf(dx * dx + dy * dy), a, shade = 1;
 +			float th = atan2f(dy, dx);
 +			if (kind == TEX_FIRE) {
-+				// a turbulent ball of flame, densest in the middle
-+				float n = 0.5f + 0.22f * sinf(dx * 9.3f + 0.7f) * sinf(dy * 8.1f + 2.2f)
-+					+ 0.16f * sinf((dx + dy) * 17.9f + 1.1f) * sinf((dx - dy) * 15.3f)
-+					+ 0.1f * sinf(th * 7 + r * 9);
-+				a = smooth(1.0f, 0.1f, r + (n - 0.5f) * 0.5f) * (0.6f + 0.5f * n);
++				// a turbulent ball of flame: ragged licks at the edge, dark wisps of soot inside
++				float n = fbm(dx * 2.6f + 7.1f, dy * 2.6f + 3.3f, 11);
++				float w = fbm(dx * 5.3f + 1.7f, dy * 5.3f + 9.2f, 29);
++				a = smooth(1.0f, 0.12f, r + (n - 0.5f) * 1.1f) * (0.45f + 0.9f * n);
++				shade = 0.45f + 0.75f * smooth(0.25f, 0.75f, w) * (1 - 0.35f * r);
 +			} else if (kind == TEX_RING) {
 +				float q = (r - 0.72f) / 0.13f;
 +				a = expf(-q * q) * smooth(1.0f, 0.9f, r) * (0.8f + 0.2f * sinf(th * 11));
@@ -4115,24 +4458,26 @@ index 0000000..f3eebb0
 +				float n = 0.5f + 0.25f * sinf(th * 9 + 0.4f) * sinf(r * 13) + 0.2f * sinf(th * 23 + 1.7f);
 +				a = smooth(1.0f, 0.25f, r + (n - 0.5f) * 0.35f) * (0.75f + 0.25f * n);
 +			} else if (kind == TEX_SMOKE) {
-+				// a soft puff with some billows
-+				float n = 0.5f + 0.25f * sinf(dx * 7.1f + 1.3f) * sinf(dy * 6.3f + 0.4f)
-+					+ 0.15f * sinf((dx + dy) * 12.7f) * sinf((dx - dy) * 11.3f + 2.1f);
-+				a = smooth(1.0f, 0.25f, r) * (0.55f + 0.6f * n);
++				// a billowing puff, lit from above: rounded lumps, brighter tops, darker undersides
++				float n = fbm(dx * 2.2f + 4.4f, dy * 2.2f + 8.8f, 43);
++				float b = fbm(dx * 4.5f + 2.5f, dy * 4.5f + 6.1f, 61);
++				a = smooth(1.0f, 0.2f, r + (n - 0.5f) * 0.9f) * (0.35f + 0.95f * n);
++				shade = 0.5f + 0.35f * (0.5f - dy * 0.5f) + 0.3f * (b - 0.5f);
 +			} else
 +				a = expf(-r * r * 5.5f) * smooth(1.0f, 0.7f, r);	// a glow that fades to nothing at the edge
 +			a = a < 0 ? 0 : a > 1 ? 1 : a;
 +			shade = shade < 0 ? 0 : shade > 1 ? 1 : shade;
-+			img[(y * 64 + x) * 4] = img[(y * 64 + x) * 4 + 1] = img[(y * 64 + x) * 4 + 2] = (unsigned char)(shade * 255);
-+			img[(y * 64 + x) * 4 + 3] = (unsigned char)(a * 255);
++			img[(y * S + x) * 4] = img[(y * S + x) * 4 + 1] = img[(y * S + x) * 4 + 2] = (unsigned char)(shade * 255);
++			img[(y * S + x) * 4 + 3] = (unsigned char)(a * 255);
 +		}
 +	glGenTextures(1, &t);
 +	glBindTexture(GL_TEXTURE_2D, t);
-+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
++	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, S, S, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
++	glGenerateMipmap(GL_TEXTURE_2D);
++	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 +	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 +	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 +	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 64, 64, 0, GL_RGBA, GL_UNSIGNED_BYTE, img);
 +	return t;
 +}
 +
@@ -4282,6 +4627,26 @@ index 0000000..f3eebb0
 +	n_batches++;
 +}
 +
++int fx_blasts(float (*pos)[4], float (*prm)[4], int max)
++{
++	int n = 0;
++	if (!boom_enabled())
++		return 0;
++	for (int i = 0; i < n_particles && n < max; i++) {
++		particle *p = &particles[i];
++		float v[3];
++		if (p->kind != FX_RING || p->age < 0)
++			continue;
++		to_view(p->pos, v);	// (view_rows are this frame's: fx_render ran before the post pass)
++		if (v[2] > -0.5f)
++			continue;
++		pos[n][0] = v[0], pos[n][1] = v[1], pos[n][2] = v[2], pos[n][3] = p->size;
++		prm[n][0] = p->age / p->life, prm[n][1] = p->grow / 9, prm[n][2] = prm[n][3] = 0;
++		n++;
++	}
++	return n;
++}
++
 +void fx_render(void)
 +{
 +	int n_smoke = 0, scissor, boom = boom_enabled();
@@ -4373,6 +4738,8 @@ index 0000000..f3eebb0
 +		if (p->kind != FX_FIRE || p->age < 0)
 +			continue;
 +		fire_color(p->age / p->life, c);
++		for (int k = 0; k < 3; k++)
++			c[k] *= 0.5f * p->rgb[k];	// overlapping puffs add up: dimmer each, so they keep their shape
 +		billboard(p->pos, p->size, p->angle, c, 1);
 +	}
 +	batch_begin(&ring_tex, 1);
@@ -4415,6 +4782,18 @@ index 0000000..f3eebb0
 +			for (int k = 0; k < 3; k++)
 +				c[k] = p->rgb[k] * f;
 +			billboard(p->pos, p->size * (1 + t), 0, c, 1);
++		} else if (p->kind == FX_ARC) {	// a jagged bolt, a new shape every frame
++			float a[3], b[3], f = (1 - t) * (0.6f + 0.4f * frand());
++			memcpy(a, p->pos, sizeof(a));
++			for (int k = 0; k < 3; k++)
++				c[k] = p->rgb[k] * f;
++			for (int j = 1; j <= 5; j++) {
++				float jit = len(p->vel) * 0.16f * (j < 5);
++				for (int k = 0; k < 3; k++)
++					b[k] = p->pos[k] + p->vel[k] * j / 5 + (cam_right[k] * (frand() - 0.5f) + cam_up[k] * (frand() - 0.5f)) * jit;
++				streak(b, a, p->size, c, 1);
++				memcpy(a, b, sizeof(a));
++			}
 +		} else if (p->kind == FX_DEBRIS && p->age < 1.0f) {	// its hot glow, along its path
 +			float tail[3], h = 1 - p->age;
 +			h *= h;
@@ -4463,10 +4842,10 @@ index 0000000..f3eebb0
 +}
 diff --git a/d2/main/fx.h b/d2/main/fx.h
 new file mode 100644
-index 0000000..a3e0ddd
+index 0000000..db0816b
 --- /dev/null
 +++ b/d2/main/fx.h
-@@ -0,0 +1,18 @@
+@@ -0,0 +1,21 @@
 +/*
 + * Light halos, smoke and sparks (browser edition). Purely visual: nothing here feeds back
 + * into the game.
@@ -4482,7 +4861,10 @@ index 0000000..a3e0ddd
 +void fx_render(void);								// draws the effects into the 3D view being rendered
 +void fx_impact(object *weapon, int segnum, int sidenum, vms_vector *pos);	// a shot hits a wall
 +void fx_hit(object *weapon, vms_vector *pos);		// a shot hits a robot
-+void fx_explosion(vms_vector *pos, int segnum, fix size);	// a robot, player or reactor blows up
++void fx_explosion(vms_vector *pos, int segnum, fix size);
++int fx_replaces_fireballs(void);
++// the live blasts for the post pass: view-space centre and shockwave radius; age 0..1, size, -, -
++int fx_blasts(float (*pos)[4], float (*prm)[4], int max);	// explosions are drawn here instead of as the game's flat fireball sprites	// a robot, player or reactor blows up
 +
 +#endif
 diff --git a/d2/main/game.c b/d2/main/game.c
