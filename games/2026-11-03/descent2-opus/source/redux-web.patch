@@ -599,7 +599,7 @@ index c536c46..58786e5 100644
  		glEnable(GL_SCISSOR_TEST);
 diff --git a/d2/arch/ogl/ogl_post.c b/d2/arch/ogl/ogl_post.c
 new file mode 100644
-index 0000000..7548cfc
+index 0000000..ccb976c
 --- /dev/null
 +++ b/d2/arch/ogl/ogl_post.c
 @@ -0,0 +1,807 @@
@@ -1322,7 +1322,7 @@ index 0000000..7548cfc
 +		glUniform4fv(glGetUniformLocation(p, "bprm"), n, prm[0]);
 +	}
 +	// heat ripple, light shafts, lens streaks, colour fringe
-+	glUniform4f(glGetUniformLocation(p, "fxp"), d2web_tune(40, 4.0f), d2web_tune(41, 4.0f), d2web_tune(42, 2.5f), d2web_tune(43, 2.0f));
++	glUniform4f(glGetUniformLocation(p, "fxp"), d2web_tune(40, 1.0f), d2web_tune(41, 0.0f), d2web_tune(42, 0.0f), d2web_tune(43, 0.0f));
 +	glUniform1f(glGetUniformLocation(p, "ftime"), f2fl(GameTime64 & 0xffffffff));
 +}
 +
@@ -3369,10 +3369,10 @@ index fe9b0d1..73b73a7 100644
  			//	If dropping a weapon that the player has, drop energy instead, unless it's vulcan, in which case drop vulcan ammo.
 diff --git a/d2/main/fx.c b/d2/main/fx.c
 new file mode 100644
-index 0000000..ecbc045
+index 0000000..d1da952
 --- /dev/null
 +++ b/d2/main/fx.c
-@@ -0,0 +1,1247 @@
+@@ -0,0 +1,1441 @@
 +/*
 + * Light halos, smoke and sparks (browser edition).
 + *
@@ -3480,7 +3480,7 @@ index 0000000..ecbc045
 +// ---------------------------------------------------------------------------------------
 +// Particles
 +
-+enum { FX_SMOKE, FX_SPARK, FX_GLOW, FX_FIRE, FX_RING, FX_DEBRIS };
++enum { FX_SMOKE, FX_SPARK, FX_GLOW, FX_FIRE, FX_RING, FX_DEBRIS, FX_ARC };
 +
 +typedef struct particle {
 +	float pos[3], vel[3];
@@ -3596,11 +3596,14 @@ index 0000000..ecbc045
 +// Explosions: layered fireballs that cool from white-hot to red, a shockwave, glowing debris
 +// that trails smoke, and scorch marks that stay on the walls a while
 +
++static float fire_tint[3] = { 1, 1, 1 };	// the colour of the flames being made (plasma burns blue)
++
 +static void fire_puffs(const float *p, float s, int n, float life, float delay)
 +{
 +	for (int i = 0; i < n; i++) {
 +		particle *q = spawn(FX_FIRE);
 +		float d[3];
++		memcpy(q->rgb, fire_tint, sizeof(q->rgb));
 +		rand_dir(d);
 +		q->age = -delay * (0.6f + 0.8f * frand());
 +		madd(q->pos, p, d, s * 0.35f * frand());
@@ -3724,6 +3727,181 @@ index 0000000..ecbc045
 +		}
 +}
 +
++// ---------------------------------------------------------------------------------------
++// Many kinds of explosion
++
++enum { BOOM_FIREBALL, BOOM_CHAIN, BOOM_PLASMA, BOOM_SHATTER, BOOM_NOVA, BOOM_SMOKER, N_BOOMS };
++
++// everything spawned since `first` happens `delay` seconds later
++static void later(int first, float delay)
++{
++	for (int i = first; i < n_particles; i++)
++		particles[i].age -= delay;
++}
++
++// electric arcs: jagged bolts that crackle out of the centre (redrawn differently each frame)
++static void arcs(const float *p, float s, int n, const float *rgb, float life)
++{
++	for (int i = 0; i < n; i++) {
++		particle *q = spawn(FX_ARC);
++		float d[3], reach = s * (0.7f + 0.9f * frand());
++		rand_dir(d);
++		memcpy(q->pos, p, sizeof(q->pos));
++		for (int k = 0; k < 3; k++)
++			q->vel[k] = d[k] * reach;
++		q->size = 0.05f + 0.025f * s;
++		q->life = life * (0.4f + 0.8f * frand());
++		q->age = -0.25f * frand();	// they flicker in over the first moments
++		memcpy(q->rgb, rgb, sizeof(q->rgb));
++	}
++}
++
++static void dark_smoke(const float *p, float s, int n, float grey, float delay)
++{
++	if (!fx_enabled())
++		return;
++	for (int i = 0; i < n; i++) {
++		float d[3], at[3];
++		int first = n_particles;
++		rand_dir(d);
++		madd(at, p, d, s * 0.3f);
++		for (int k = 0; k < 3; k++)
++			d[k] *= s * 0.25f;
++		smoke(at, d, s * 0.45f, s * 0.35f, 4.0f + frand() * 2.0f, grey, 0.95f, -1);
++		later(first, delay + 0.15f * frand());
++	}
++}
++
++static void boom(const float *p, float s, int style)
++{
++	float hot[3] = { 1.2f, 0.8f, 0.4f };
++	int n, first;
++#ifdef __EMSCRIPTEN__
++	if (d2web_tune(44, 0) > 0)	// test: Module.d2tune[44] = style + 1 forces a kind
++		style = (int)d2web_tune(44, 0) - 1;
++#endif
++	switch (style) {
++	case BOOM_CHAIN:	// a blast, then smaller ones popping around it
++		blast(p, s * 0.8f);
++		n = 3 + (int)(frand() * 3);
++		for (int i = 0; i < n; i++) {
++			float d[3], at[3];
++			rand_dir(d);
++			madd(at, p, d, s * (0.5f + 0.7f * frand()));
++			first = n_particles;
++			blast(at, s * (0.35f + 0.25f * frand()));
++			later(first, 0.12f + 0.12f * i + 0.08f * frand());
++		}
++		break;
++	case BOOM_PLASMA: {	// blue-white fire, a hard flash, electric arcs, a spray of fast sparks
++		float tint[3] = { 0.45f, 0.8f, 1.5f }, flash[3] = { 0.9f, 1.3f, 2.0f }, arc[3] = { 0.8f, 1.2f, 2.2f };
++		float spark[3] = { 0.7f, 1.1f, 1.6f };
++		memcpy(fire_tint, tint, sizeof(tint));
++		n = (int)(6 + s * 0.4f);
++		fire_puffs(p, s * 0.85f, n > 12 ? 12 : n, 0.7f + s * 0.02f, 0);
++		fire_tint[0] = fire_tint[1] = fire_tint[2] = 1;
++		glow(p, s * 1.8f, 0.12f, flash, 0.55f);
++		glow(p, s * 0.6f, 0.5f, arc, 0.4f);
++		shockwave(p, s);
++		arcs(p, s, 7 + (int)(s * 0.4f), arc, 0.55f);
++		if (fx_enabled())
++			sparks(p, NULL, 40, spark, 44 + s * 3, 0.7f);
++		break;
++	}
++	case BOOM_SHATTER: {	// it bursts apart: a hail of debris and metal sparks, little fire
++		float metal[3] = { 1.3f, 0.95f, 0.6f };
++		n = (int)(4 + s * 0.3f);
++		fire_puffs(p, s * 0.7f, n > 8 ? 8 : n, 0.6f, 0);
++		glow(p, s * 1.2f, 0.1f, hot, 0.4f);
++		n = (int)(18 + s * 1.5f);
++		debris(p, s * 1.3f, n > 36 ? 36 : n);
++		if (fx_enabled())
++			sparks(p, NULL, 70, metal, 30 + s * 2, 1.3f);
++		dark_smoke(p, s * 0.8f, 5, 0.18f, 0.05f);
++		break;
++	}
++	case BOOM_NOVA: {	// a blinding flash and a ring of fire racing out flat, then a second shockwave
++		float flash[3] = { 2.0f, 1.8f, 1.5f }, ax[3], u[3], v[3];
++		glow(p, s * 1.4f, 0.12f, flash, 0.4f);
++		shockwave(p, s * 1.3f);
++		first = n_particles;
++		shockwave(p, s * 0.8f);
++		later(first, 0.15f);
++		rand_dir(ax);
++		u[0] = ax[1], u[1] = -ax[0], u[2] = 0;	// two directions across the ring's axis
++		if (len(u) < 0.1f)
++			u[0] = 0, u[1] = ax[2], u[2] = -ax[1];
++		madd(u, u, u, 1 / len(u) - 1);
++		v[0] = ax[1] * u[2] - ax[2] * u[1], v[1] = ax[2] * u[0] - ax[0] * u[2], v[2] = ax[0] * u[1] - ax[1] * u[0];
++		for (int i = 0; i < 18; i++) {
++			float a = i * 6.283f / 18, d[3];
++			particle *q = spawn(FX_FIRE);
++			for (int k = 0; k < 3; k++)
++				d[k] = u[k] * cosf(a) + v[k] * sinf(a);
++			memcpy(q->pos, p, sizeof(q->pos));
++			memcpy(q->rgb, fire_tint, sizeof(q->rgb));
++			for (int k = 0; k < 3; k++)
++				q->vel[k] = d[k] * s * (3.5f + frand());
++			q->drag = 2.2f;
++			q->size = s * 0.12f;
++			q->grow = s * 0.35f;
++			q->life = 0.9f;
++			q->angle = frand() * 6.283f;
++			q->spin = (frand() - 0.5f) * 2;
++		}
++		fire_puffs(p, s * 0.6f, 6, 0.8f, 0);
++		embers(p, s, 20);
++		break;
++	}
++	case BOOM_SMOKER: {	// fire bursts out one way in a column, under heavy black billows
++		float dir[3];
++		rand_dir(dir);
++		glow(p, s * 1.2f, 0.12f, hot, 0.45f);
++		for (int i = 0; i < 12; i++) {
++			particle *q = spawn(FX_FIRE);
++			float d[3];
++			rand_dir(d);
++			madd(d, dir, d, 0.35f);
++			memcpy(q->pos, p, sizeof(q->pos));
++			memcpy(q->rgb, fire_tint, sizeof(q->rgb));
++			for (int k = 0; k < 3; k++)
++				q->vel[k] = d[k] * s * (1.5f + 2.5f * frand());
++			q->drag = 1.8f;
++			q->size = s * (0.1f + 0.08f * frand());
++			q->grow = s * (0.3f + 0.25f * frand());
++			q->life = 1.0f + 0.6f * frand();
++			q->age = -0.25f * frand();
++			q->angle = frand() * 6.283f;
++			q->spin = (frand() - 0.5f) * 2;
++		}
++		shockwave(p, s * 0.8f);
++		embers(p, s, 24);
++		dark_smoke(p, s * 1.2f, 14, 0.1f, 0.05f);
++		break;
++	}
++	default:
++		blast(p, s);
++	}
++}
++
++// which kind: robots by their size, with some chance, so the same robot doesn't always go up the same way
++static int robot_boom(float s)
++{
++	float r = frand();
++	if (s > 6)
++		return r < 0.35f ? BOOM_CHAIN : r < 0.55f ? BOOM_NOVA : r < 0.75f ? BOOM_FIREBALL : r < 0.9f ? BOOM_SMOKER : BOOM_SHATTER;
++	return r < 0.3f ? BOOM_FIREBALL : r < 0.55f ? BOOM_SHATTER : r < 0.7f ? BOOM_PLASMA : r < 0.85f ? BOOM_SMOKER : BOOM_CHAIN;
++}
++
++// missiles: the big ones set off chain reactions, the rest vary
++static int missile_boom(weapon_info *wi)
++{
++	float s = f2fl(wi->impact_size), r = frand();
++	if (s >= 8)
++		return BOOM_CHAIN;
++	return r < 0.4f ? BOOM_FIREBALL : r < 0.6f ? BOOM_NOVA : r < 0.8f ? BOOM_SMOKER : BOOM_PLASMA;
++}
++
 +void fx_impact(object *weapon, int segnum, int sidenum, vms_vector *pos)
 +{
 +	spawn_seg = segnum;
@@ -3736,7 +3914,7 @@ index 0000000..ecbc045
 +			float s = f2fl(wi->impact_size), at[3];
 +			s = s < 2.5f ? 2.5f : s;
 +			madd(at, p, n, s * 0.3f);
-+			blast(at, s);
++			boom(at, s, missile_boom(wi));
 +			scorch(segnum, sidenum, p, s * 0.9f, 0.85f, 40, 1);
 +		} else if (wi->matter)
 +			scorch(segnum, sidenum, p, 0.4f, 0.7f, 20, 0);
@@ -3777,7 +3955,7 @@ index 0000000..ecbc045
 +	fv(pos, p);
 +	if (boom_enabled() && Weapon_info[weapon->id].damage_radius) {
 +		float s = f2fl(Weapon_info[weapon->id].impact_size);
-+		blast(p, s < 2.5f ? 2.5f : s);
++		boom(p, s < 2.5f ? 2.5f : s, missile_boom(&Weapon_info[weapon->id]));
 +	}
 +	if (!fx_enabled())
 +		return;
@@ -3792,7 +3970,7 @@ index 0000000..ecbc045
 +	int n = (int)(18 + s * 2.5f);
 +	fv(pos, p);
 +	if (boom_enabled())
-+		blast(p, s);
++		boom(p, s, robot_boom(s));
 +	if (!fx_enabled())
 +		return;
 +	sparks(p, NULL, n > 60 ? 60 : n, hot, 28 + s * 3, 1.1f);
@@ -3917,6 +4095,10 @@ index 0000000..ecbc045
 +		p->age += dt;
 +		if (p->age >= p->life) {
 +			*p = particles[--n_particles];
++			continue;
++		}
++		if (p->kind == FX_ARC) {	// an electric arc stays where it struck (vel is its reach)
++			i++;
 +			continue;
 +		}
 +		drag = expf(-p->drag * dt);
@@ -4531,7 +4713,7 @@ index 0000000..ecbc045
 +			continue;
 +		fire_color(p->age / p->life, c);
 +		for (int k = 0; k < 3; k++)
-+			c[k] *= 0.5f;	// overlapping puffs add up: dimmer each, so they keep their shape
++			c[k] *= 0.5f * p->rgb[k];	// overlapping puffs add up: dimmer each, so they keep their shape
 +		billboard(p->pos, p->size, p->angle, c, 1);
 +	}
 +	batch_begin(&ring_tex, 1);
@@ -4574,6 +4756,18 @@ index 0000000..ecbc045
 +			for (int k = 0; k < 3; k++)
 +				c[k] = p->rgb[k] * f;
 +			billboard(p->pos, p->size * (1 + t), 0, c, 1);
++		} else if (p->kind == FX_ARC) {	// a jagged bolt, a new shape every frame
++			float a[3], b[3], f = (1 - t) * (0.6f + 0.4f * frand());
++			memcpy(a, p->pos, sizeof(a));
++			for (int k = 0; k < 3; k++)
++				c[k] = p->rgb[k] * f;
++			for (int j = 1; j <= 5; j++) {
++				float jit = len(p->vel) * 0.16f * (j < 5);
++				for (int k = 0; k < 3; k++)
++					b[k] = p->pos[k] + p->vel[k] * j / 5 + (cam_right[k] * (frand() - 0.5f) + cam_up[k] * (frand() - 0.5f)) * jit;
++				streak(b, a, p->size, c, 1);
++				memcpy(a, b, sizeof(a));
++			}
 +		} else if (p->kind == FX_DEBRIS && p->age < 1.0f) {	// its hot glow, along its path
 +			float tail[3], h = 1 - p->age;
 +			h *= h;
