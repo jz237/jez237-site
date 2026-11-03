@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-03",
+      "historicDate": "1985-06-03",
+      "displayDate": "Week of June 3-9, 1985",
+      "edition": "Issue 149 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "A robot courts retailers; optical storage courts the home computer.",
+      "leadHeadline": "Nintendo brings a robot to its new Entertainment System",
+      "storyHeadlines": [
+        "Atari packs an encyclopedia onto an optical disc",
+        "ST and Commodore 128 approach stores, but delivery promises still matter",
+        "A poet takes on the text-adventure establishment"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-06-03.jpg",
+      "thumb": "media/thumbs/1985-06-03.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-02",
       "historicDate": "1985-05-27",
       "displayDate": "Week of May 27-June 2, 1985",

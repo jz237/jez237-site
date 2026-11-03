@@ -1,8 +1,390 @@
 {
-  "generatedAt": "2026-11-01",
+  "generatedAt": "2026-11-03T13:01:56.913783+00:00",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-11-03",
+      "historicDate": "1985-06-03",
+      "displayDate": "Week of June 3-9, 1985",
+      "edition": "Issue 149 - Weekly 1985 Computer & Culture Chronicle",
+      "sources": [
+        {
+          "title": "COMPUTE! Report From The Summer Consumer Electronics Show, Tom R. Halfhill (transcription)",
+          "url": "https://www.oocities.org/~irata/ces1.html",
+          "date": "1985-08"
+        },
+        {
+          "title": "Antic: More ST Products Coming, Mike Ciraolo and Jack Powell",
+          "url": "https://www.atarimagazines.com/v4n5/morestproducts.php",
+          "date": "1985-09"
+        },
+        {
+          "title": "COMPUTE!’s Gazette issue 24, June 1985 (full issue OCR)",
+          "url": "https://archive.org/stream/1985-06-computegazette/Compute_Gazette_Issue_24_1985_Jun_djvu.txt",
+          "date": "1985-06"
+        },
+        {
+          "title": "Video Game History Foundation: The NES Launch Collection, Frank Cifaldi",
+          "url": "https://gamehistory.org/nes-launch-collection-1985/",
+          "date": "2017-02-27"
+        },
+        {
+          "title": "Billboard, June 8 1985: Top Rock Tracks (original issue scan)",
+          "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-06-08.pdf",
+          "date": "1985-06-08"
+        },
+        {
+          "title": "Box Office Mojo: domestic weekend June 7–9 1985",
+          "url": "https://www.boxofficemojo.com/weekend/1985W23/",
+          "date": "1985-06-09"
+        },
+        {
+          "title": "LA Times: Brazil Exhumes Body Believed to Be Mengele’s",
+          "url": "https://www.latimes.com/archives/la-xpm-1985-06-07-mn-15967-story.html",
+          "date": "1985-06-07"
+        }
+      ],
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "visualProfile": {
+        "tone": "Summer CES: games return with a robot",
+        "motifs": [
+          "June prototype Nintendo console and robot",
+          "Atari ST and optical disc halftones"
+        ],
+        "layout": "Dense warm newsprint, brick red and royal blue boxes"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Nintendo gaming story dominates with robot and trade-show prototype imagery",
+        "secondaryRail": "Atari CD-ROM, ST buying guide, literary games",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 149 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of June 3-9, 1985",
+        "price": "75 cents"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-06-03.jpg",
+        "alt": "Computer Chronicle newspaper front page for June 3-9, 1985, featuring Nintendo at Summer CES",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Summer CES puts play back on the front page, while computer makers trade demonstrations and delivery promises.",
+      "morningLine": "A robot courts retailers; optical storage courts the home computer.",
+      "lead": {
+        "headline": "Nintendo brings a robot to its new Entertainment System",
+        "dek": "At Summer CES, Nintendo recasts its American proposal as an entertainment system, not a home-computer kit.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          3
+        ],
+        "body": [
+          "CHICAGO — Nintendo is giving its proposed American video-game system a new calling card: a robot. At the June Summer Consumer Electronics Show, the company is presenting the Nintendo Entertainment System with a Robotic Operating Buddy, a conspicuous bid to win attention on a retail floor still wary of video games.",
+          "The change is more than a name. January’s Advanced Video System concept surrounded its console with wireless peripherals, ASCII and musical keyboards, and a tape drive. The June presentation drops the extraneous peripherals and concentrates the pitch on entertainment. A machine that once looked determined to be a computer is now asking to be treated as a toy.",
+          "That distinction matters after the console-market crash. Retailers’ reluctance has made getting a new game system onto American shelves a problem of confidence as well as engineering. Nintendo’s robot offers a different way into that conversation: something a buyer can demonstrate, watch and place in a toy department.",
+          "This remains a trade-show proposal, not an American retail launch. The June hybrid console documented in the Video Game History Foundation collection is not identical to the final retail enclosure. No June retail price is established by that record; for now, the news is Nintendo’s revised approach to the American market, not a machine ready at the neighborhood counter."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Atari packs an encyclopedia onto an optical disc",
+          "body": [
+            "Atari has brought a working optical-disc demonstration to Summer CES. Tom R. Halfhill reports seeing a CD-ROM prototype connected to a 520ST on the show’s second morning. Activenture developed the technology under contract to Atari, putting a striking new storage idea beside the familiar floppy disk.",
+            "Antic describes 500 megabytes of read-only capacity and reports a demonstration that searched a 26-volume encyclopedia by keyword in three seconds. That is a report of the exhibition demonstration, not a promise that every search or application will run at the same speed.",
+            "The calendar is less settled than the demonstration. COMPUTE! describes possible home, school and business availability by early 1986, while Antic reports Christmas ambitions. Neither projection makes the drive a shipping June product. The attraction is clear: a shelf of reference material on one disc; the delivery date remains a promise."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "headline": "ST and Commodore 128 approach stores, but delivery promises still matter",
+          "body": [
+            "Buyers at Summer CES have plenty of new-machine plans to consider, but announcements and store stock are different things. Atari says at show opening that it has delivered 5,000 520STs to Canada and Europe; large-volume American shipments are expected by July 8, according to Halfhill’s report.",
+            "Antic reports a $799 520ST package with a 3.5-inch drive, high-resolution monochrome monitor and external RF modulator. That figure is a package price, not the price of a bare computer. The early machines load GEM and TOS from disk, leaving approximately 256K available, according to the same account.",
+            "Atari also announces 256K 260ST and 260STD models at $399 and $499, the latter with a built-in disk drive, projected for October or November. Commodore says its 128 is weeks from shipping and plans a late-July Amiga press announcement. A prudent shopping list keeps these future dates separate from goods already on sale."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "headline": "A poet takes on the text-adventure establishment",
+          "body": [
+            "Robert Pinsky is an unusual recruit for the adventure-game business. June’s COMPUTE!’s Gazette profiles the Berkeley professor, creative-writing program head and New Republic poetry editor as the author behind Synapse’s Mindwheel. Synapse’s electronic novels seek literary voices beyond the established game-writing circle.",
+            "Mindwheel pairs a hardback book with a disk, and information in the book is part of the experience. Programmers William Mataga and Steve Hales worked with Pinsky; their ambition was not simply to put prose on a screen but to extend what an interactive story could do.",
+            "The same June feature discusses Douglas Adams and Steve Meretzky’s extensive collaboration on Infocom’s The Hitchhiker’s Guide to the Galaxy. These are current games under discussion, not new releases claimed for this week. Together they show adventure software borrowing the author’s name and the bookshop’s presentation as eagerly as the arcade’s reflexes."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "260ST and 260STD",
+          "summary": "Atari proposed 256K machines at $399/$499 for fall; latter includes a disk drive.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "title": "Commodore 128",
+          "summary": "Commodore exhibited a dual disk drive for its 128 at Summer CES; no drive price established here.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "HabaWord",
+          "detail": "Haba ST application announced for September; not yet a shipping June release.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "name": "HabaFiles",
+          "detail": "Haba ST application announced for September; not yet a shipping June release.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "name": "HabaCalc n Graph",
+          "detail": "Haba ST application announced for September; not yet a shipping June release.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "name": "HabaCom",
+          "detail": "Haba ST application announced for September; not yet a shipping June release.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+          "items": [
+            "Mindwheel — Synapse book-and-disk electronic novel profiled in June.",
+            "The Hitchhiker’s Guide to the Galaxy — Adams and Meretzky collaboration discussed in June.",
+            "Questron — SSI C64 advertisement, $39.95; Apple II/Atari $49.95.",
+            "Gemstone Warrior — SSI advertisement, C64/Apple II $34.95.",
+            "ZORK — established text-adventure touchstone discussed in the June Pinsky profile."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "label": "Top 5 Movies — June 7-9 domestic weekend box office",
+          "items": [
+            "1. Rambo: First Blood Part II — $10,228,608",
+            "2. The Goonies — $9,105,913",
+            "3. Fletch — $6,320,411",
+            "4. A View to a Kill — $4,529,804",
+            "5. Perfect — $4,222,810"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Little by Little",
+          "song": "Little by Little",
+          "artist": "Robert Plant",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-06-08",
+          "confidence": "same-week",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "rank": 2,
+          "title": "Tough All Over",
+          "song": "Tough All Over",
+          "artist": "John Cafferty/Beaver Brown Band",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-06-08",
+          "confidence": "same-week",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "rank": 3,
+          "title": "Would I Lie to You?",
+          "song": "Would I Lie to You?",
+          "artist": "Eurythmics",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-06-08",
+          "confidence": "same-week",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "rank": 4,
+          "title": "Cannonball",
+          "song": "Cannonball",
+          "artist": "Supertramp",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-06-08",
+          "confidence": "same-week",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "rank": 5,
+          "title": "Lucky in Love",
+          "song": "Lucky in Love",
+          "artist": "Mick Jagger",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-06-08",
+          "confidence": "same-week",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "520ST package",
+          "price": "$799",
+          "note": "Monitor, 3.5-inch drive and RF modulator; June CES report.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "VICmodem",
+          "price": "Around $30",
+          "note": "Retail range quoted by Paul Goheen in June Gazette.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "item": "HabaDisk 10MB",
+          "price": "$499",
+          "note": "Announced ST peripheral, not immediate availability.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "A smaller computer floor at CES",
+          "summary": "Halfhill notes the lower level formerly occupied by software firms was half filled by videotape exhibitors; distinguish his impression from audited industry sales data.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "Questron on the Commodore 64: $39.95",
+        "summary": "SSI’s June magazine advertisement lists Questron at $39.95 for C64 and $49.95 for Apple II/Atari; Gemstone Warrior lists at $34.95 for C64/Apple II. Advertised list prices, not sales rankings.",
+        "tagline": "Fantasy adventures on the software shelf.",
+        "sourceRefs": [
+          2
+        ]
+      },
+      "market": {
+        "headline": "Trade-show promises meet a cautious retail floor",
+        "summary": "Nintendo uses toy positioning to court reluctant retailers after the console crash. Atari and Commodore present new machines and projected shipments; announcements are not evidence of immediate store availability.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          3,
+          0,
+          1
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Brazil exhumes remains believed to be Mengele’s",
+        "summary": "June 7 LA Times reports Thursday June 6 exhumation in Embu of a man buried as Wolfgang Gerhard. Brazilian police believe the remains may be Josef Mengele’s; international forensic examination is pending and Nazi-hunters express skepticism. Do not claim definitive identification within this week.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          6
+        ]
+      },
+      "bbsNote": {
+        "headline": "Commodore bets on cheap modems and online services",
+        "summary": "June Gazette interview with Paul Goheen (pp. 30–36) makes telecommunications a central home-computer use. Notes below are editorial paraphrases, not actual recovered BBS posts.",
+        "posts": [
+          {
+            "topic": "Hardware prices",
+            "platform": "Commodore VIC/C64",
+            "text": "Goheen quotes VICmodem retail around $30 and 1650 in the high $40s; predicts a later 300/1200-baud 1670 and eventual sub-$100 price, explicitly not its initial price."
+          },
+          {
+            "topic": "Service relationships",
+            "platform": "CompuServe / The Source / Delphi / Playnet / Dow Jones / TeleLearning",
+            "text": "Goheen describes service relationships and subscription packs, with online education a priority. No specific BBS or sysop event verified."
+          },
+          {
+            "topic": "Shopping by modem",
+            "platform": "CompuServe Electronic Mall",
+            "text": "June advertisement promotes 24-hour shopping with Bloomingdale’s, Waldenbooks, American Express and Commodore. Treat convenience claims as advertising."
+          }
+        ],
+        "confidence": "same-month",
+        "sourceRefs": [
+          2
+        ]
+      },
+      "curiosity": {
+        "headline": "Book shopping without leaving the phone line",
+        "summary": "CompuServe pitches an Electronic Mall before the Web.",
+        "detail": "June Gazette advertisement sells 24-hour, seven-day shopping and proposes a 15-minute comparison: order goods and request travel brochures electronically, versus merely rounding up the family and getting into the car. Merchants named include Bloomingdale’s and Waldenbooks. This is an existing service advertised this month, not a June launch.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          2
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "CES reports are same-month evidence; later magazine articles are used only for facts explicitly tied to the June show.",
+          "Nintendo is exhibiting a proposal, not launching at American retail; June enclosure differs from final retail hardware.",
+          "All ST, Commodore and optical-disc delivery dates are projections, not releases.",
+          "Computer-game selections are editorial, not a fabricated sales chart.",
+          "Mengele identification remains unconfirmed within the historical week.",
+          "Modem notes are editorial paraphrases, not recovered BBS posts."
+        ]
+      }
+    },
     {
       "currentDate": "2026-11-02",
       "historicDate": "1985-05-27",

@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 02 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 03 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of June 3-9, 1985 — Nintendo brings a robot to its new Entertainment System</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-06-03</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-06-03</guid>
+      <pubDate>Tue, 03 Nov 2026 12:00:00 GMT</pubDate>
+      <description>At Summer CES, Nintendo recasts its American proposal as an entertainment system, not a home-computer kit. CHICAGO — Nintendo is giving its proposed American video-game system a new calling card: a robot. At the June Summer Consumer Electronics Show, the company is presenting the Nintendo Entertainment System with a Robotic Operating Buddy, a conspicuous bid to win attention on a retail floor still wary of video games. Also this week: Atari packs an encyclopedia onto an optical disc · ST and Commodore 128 approach stores, but delivery promises still matter · A poet takes on the text-adventure establishment.</description>
+    </item>
     <item>
       <title>Week of May 27-June 2, 1985 — Apple merges divisions; Jobs loses Macintosh command</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-05-27</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-01-21</guid>
       <pubDate>Thu, 15 Oct 2026 12:00:00 GMT</pubDate>
       <description>January 23 unveiling pairs a $6,995 printer with a network; March availability is promised. Apple has placed a shared laser printer at the center of its new Macintosh Office strategy. At its January 23 shareholders meeting in Cupertino, the company presented a system intended to make the Macintosh a stronger contender for office work, with AppleTalk linking desks to a common printing resource. Also this week: Atari promises Macintosh-style computing without Macintosh prices · Commodore 128 promises three computers in one · Games invite players to build the tracks, creatures and adventures.</description>
-    </item>
-    <item>
-      <title>Week of January 14-20, 1985 — Nintendo puts games at the heart of its Advanced Video System</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-01-14</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-01-14</guid>
-      <pubDate>Wed, 14 Oct 2026 12:00:00 GMT</pubDate>
-      <description>January’s winter show offers a game machine with a home-computing ambition. Nintendo’s Advanced Video System offers a striking proposal for the living room: a sleek game unit that can be joined by an optional keyboard and tape-drive accessories. Demonstrated at the January 5–8 Winter Consumer Electronics Show in Las Vegas, the design remains one of the month’s notable consumer-computing talking points. Also this week: Atari challenges Macintosh prices with the ST · Commodore 128 offers three paths from one keyboard · Rails West! and Questron take the long route.</description>
     </item>
   </channel>
 </rss>
