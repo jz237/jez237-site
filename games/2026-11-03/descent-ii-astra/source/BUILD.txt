@@ -507,3 +507,12 @@ The R21 cockpit-visible demo AI is preserved byte for byte, including visibility
 sliding and smooth steering. Test browsers disable mouse capture before launch.
 QA exports stay out of shipping engine.js. Phone checks use browser emulation;
 they are not a measurement of performance on a physical phone.
+
+Rock relief lighting compatibility (pyre22a)
+
+The rock mesh receives the same three world-space explosion lights as the
+original walls, with their native colors, room visibility and bounded falloff.
+It also receives the existing weapon light. Paused inspection clears transient
+blast inputs so an earlier combat explosion cannot remain lit in the showroom.
+An isolated renderer fixture checks warm light, blue light and out-of-range
+falloff; the shipping engine contains no fixture controls.
