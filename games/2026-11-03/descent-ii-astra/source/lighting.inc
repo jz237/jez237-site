@@ -1,3 +1,4 @@
+extern int astra_mine_inspecting;
 /* Shade solid mine faces from the closest active flares. Closed portals stop propagation. */
 float astra_blast_positions[3][4],astra_blast_colors[3][4];
 int astra_room_blast_count;
@@ -12,6 +13,8 @@ static void astra_find_blasts(int segnum,const vms_vector *center)
         if(room<0 || (side>=0 && !(WALL_IS_DOORWAY(&Segments[segnum],side)&WID_RENDPAST_FLAG)))continue;
         extern void astra_plume_lights(int,const vms_vector*,float*,float (*)[4],float (*)[4]);
         astra_plume_lights(room,center,rank,astra_blast_positions,astra_blast_colors);
+        extern void astra_debris_lights(int,const vms_vector*,float*,float (*)[4],float (*)[4]);
+        astra_debris_lights(room,center,rank,astra_blast_positions,astra_blast_colors);
     }
     for(int n=0;n<3;n++){if(rank[n]>0)astra_room_blast_count++;else astra_blast_positions[n][3]=0;}
 }
@@ -31,10 +34,11 @@ static void astra_room_lights(int segnum)
     if(!enabled || (lastseg==segnum && lastframe==framecount))return;
     lastseg=segnum;lastframe=framecount;
     float top_fixture=0,top_moving=0;astra_lamp[3]=astra_flash[3]=0;
-    vms_vector center; compute_segment_center(&center,&Segments[segnum]);astra_find_blasts(segnum,&center);
+    vms_vector center; compute_segment_center(&center,&Segments[segnum]);
+    if(astra_mine_inspecting)astra_room_blast_count=0;else astra_find_blasts(segnum,&center);
     for(int k=-1;k<6;k++){
         int room=k<0?segnum:Segments[segnum].children[k];
-        if(room<0)continue;
+        if(room<0 || (k>=0 && !(WALL_IS_DOORWAY(&Segments[segnum],k)&WID_RENDPAST_FLAG)))continue;
         segment *s=&Segments[room];
         for(int i=0;i<6;i++){
             int base=s->sides[i].tmap_num,overlay=s->sides[i].tmap_num2&0x3fff;
@@ -52,7 +56,7 @@ static void astra_room_lights(int segnum)
                 astra_light_position(astra_lamp,&point,fminf(2.4f,.55f+f2fl(power)));
             }
         }
-        for(int j=s->objects;j>=0;j=Objects[j].next){
+        for(int j=astra_mine_inspecting?-1:s->objects;j>=0;j=Objects[j].next){
             object *o=&Objects[j];
             if(o->type!=OBJ_WEAPON)continue;
             float power=o->type==OBJ_FIREBALL?2.0f:1.0f;
