@@ -320,3 +320,31 @@ pickup decisions. The 85 native pickup capacity/drop cases also pass.
 Test-only firing helpers are absent from the shipping engine. Hidden browsers
 disable pointer capture before navigation and close with their local servers.
 These checks are not complete autonomous campaign playthroughs.
+
+Astra plasma, charging lattice and compact debris bursts (pyre17)
+
+Plasma now uses a rounded translucent 3D green core with animated emission,
+a soft halo and a short wake. It has no rectangular beam or white end caps.
+Its core fades near the camera. Other weapon treatments and original laser
+upgrade colors remain unchanged. Projectile motion and damage are still native.
+
+Native fuel-center faces render a transparent animated hexagonal lattice,
+flowing amber/teal pulses, drifting charge motes and intermittent electrical
+arcs. Charging activity brightens the field. This replaces only the original
+fuel-center effect surface, preserving its portals and refill behavior.
+
+Two additional normal-blast variations use a smaller radius: a compact rupture
+and a split directional burst. Their flame cools sooner to reveal solid hull
+fragments. Larger existing blasts and the extended randomized player death
+retain their previous timing and shape. Cosmetic fragments tumble, coast and
+ricochet against actual mine walls, with short sparks, faint reflected light
+and quiet original D2 metallic impact samples. They are bounded visual caches,
+not gameplay objects; they cause no damage and use no simulation random draws.
+
+Validation: native plasma fire, a real fuel room with increasing player energy,
+all three tested blast profiles with recorded native-wall collisions, desktop
+and phone layouts, original laser colors, paired Omega and missile exhaust.
+Natural phone demo combat also passed. The R16 autopilot include is byte-for-byte
+unchanged. The fixture that positions the player and triggers individual blasts
+exists only in a separate QA engine; it is absent from the shipping engine.
+Automated browsers block pointer capture before navigation and close afterward.

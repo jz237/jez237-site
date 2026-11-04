@@ -24,6 +24,8 @@ includes["lists.inc"]="main/astra_lists.inc"
 includes["pause.inc"]="main/astra_pause.inc"
 includes["preview.inc"]="main/astra_preview.inc"
 includes["lens.inc"]="arch/ogl/astra_lens.inc"
+includes["recharge.inc"]="arch/ogl/astra_recharge.inc"
+includes["debris.inc"]="arch/ogl/astra_debris.inc"
 for name,path in includes.items():
     if (repo/"d2"/path).exists():raise SystemExit("Use a fresh checkout. An Astra include already exists.")
 git(repo,"apply",str(src/"engine.patch"))

@@ -171,7 +171,7 @@ index c5cca0b..687d249 100644
 +
 +
 diff --git a/d2/arch/ogl/ogl.c b/d2/arch/ogl/ogl.c
-index c536c46..b342345 100644
+index c536c46..f7f1282 100644
 --- a/d2/arch/ogl/ogl.c
 +++ b/d2/arch/ogl/ogl.c
 @@ -198,6 +198,7 @@ void ogl_init_texture(ogl_texture* t, int w, int h, int flags)
@@ -182,7 +182,7 @@ index c536c46..b342345 100644
  }
  
  void ogl_reset_texture(ogl_texture* t)
-@@ -765,6 +766,17 @@ void draw_tmap_flat(grs_bitmap *bm,int nv,g3s_point **vertlist){
+@@ -765,6 +766,19 @@ void draw_tmap_flat(grs_bitmap *bm,int nv,g3s_point **vertlist){
  extern void (*tmap_drawer_ptr)(grs_bitmap *bm,int nv,g3s_point **vertlist);
  
  
@@ -191,16 +191,18 @@ index c536c46..b342345 100644
 +#include "astra_fleet.inc"
 +#include "astra_pickups.inc"
 +#include "astra_motion.inc"
++#include "astra_recharge.inc"
 +#include "astra_plume.inc"
 +#include "astra_gantry.inc"
 +#include "astra_lens.inc"
 +#include "astra_blast.inc"
++#include "astra_debris.inc"
 +#include "astra_weapons_demo.inc"
 +
  /*
   * Everything texturemapped (walls, robots, ship)
   */ 
-@@ -825,8 +837,9 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
+@@ -825,8 +839,9 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
  	if (tmap_drawer_ptr == draw_tmap) {
  		glTexCoordPointer(2, GL_FLOAT, 0, texcoord_array);  
  	}
@@ -211,7 +213,7 @@ index c536c46..b342345 100644
  	
  	glDisableClientState(GL_VERTEX_ARRAY);
  	glDisableClientState(GL_COLOR_ARRAY);
-@@ -919,8 +932,10 @@ bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_
+@@ -919,8 +934,10 @@ bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_
  #ifndef OGL_MERGE
  	glVertexPointer(3, GL_FLOAT, 0, vertex_array);
  	glColorPointer(4, GL_FLOAT, 0, color_array);
@@ -223,7 +225,7 @@ index c536c46..b342345 100644
  	glDisableClientState(GL_VERTEX_ARRAY);
  	glDisableClientState(GL_COLOR_ARRAY);
  	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-@@ -959,7 +974,9 @@ bool g3_draw_bitmap_full(vms_vector *pos,fix width,fix height,grs_bitmap *bm,
+@@ -959,7 +976,9 @@ bool g3_draw_bitmap_full(vms_vector *pos,fix width,fix height,grs_bitmap *bm,
  	int i;
  	GLfloat vertex_array[12], color_array[16], texcoord_array[8];
  
@@ -234,7 +236,7 @@ index c536c46..b342345 100644
  	v1.z=0;
  	
  	glEnableClientState(GL_VERTEX_ARRAY);
-@@ -1171,7 +1188,7 @@ void ogl_start_frame(void){
+@@ -1171,7 +1190,7 @@ void ogl_start_frame(void){
  #ifdef OGLES
  	perspective(90.0,1.0,0.1,5000.0);   
  #else
@@ -243,7 +245,7 @@ index c536c46..b342345 100644
  #endif
  	glMatrixMode(GL_MODELVIEW);
  	glLoadIdentity();//clear matrix
-@@ -1208,6 +1225,13 @@ void gr_flip(void)
+@@ -1208,6 +1227,13 @@ void gr_flip(void)
  
  	ogl_do_palfx();
  	ogl_swap_buffers_internal();
@@ -257,7 +259,7 @@ index c536c46..b342345 100644
  	glClear(GL_COLOR_BUFFER_BIT);
  }
  
-@@ -1256,7 +1280,7 @@ void ogl_init_pixel_buffers(int w, int h)
+@@ -1256,7 +1282,7 @@ void ogl_init_pixel_buffers(int w, int h)
  
  	if (texbuf)
  		d_free(texbuf);
@@ -266,7 +268,7 @@ index c536c46..b342345 100644
  
  	if ((pixels == NULL) || (texbuf == NULL))
  		Error("Not enough memory for current resolution");
-@@ -1272,7 +1296,7 @@ void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width
+@@ -1272,7 +1298,7 @@ void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width
  {
  	int x,y,c,i;
  
@@ -275,7 +277,7 @@ index c536c46..b342345 100644
  		Error("Texture is too big: %ix%i", width, height);
  
  	if (data_format) { // true color bitmap?
-@@ -1568,7 +1592,7 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
+@@ -1568,7 +1594,7 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
  	glGenTextures (1, &tex->handle);
  #ifndef OGLES
  	//set priority
@@ -284,7 +286,7 @@ index c536c46..b342345 100644
  #endif
  	// Give our data to OpenGL.
  	OGL_BINDTEXTURE(tex->handle);
-@@ -1595,17 +1619,14 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
+@@ -1595,17 +1621,14 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
  #ifndef OGLES // see comment above
  	if (texfilt)
  	{
@@ -305,7 +307,7 @@ index c536c46..b342345 100644
  			tex->tw, tex->th, 0, tex->format, // RGBA textures.
  			GL_UNSIGNED_BYTE, // imageData is a GLubyte pointer.
  			bufP);
-@@ -1644,6 +1665,10 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
+@@ -1644,6 +1667,10 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
  }
  #endif
  
@@ -316,7 +318,7 @@ index c536c46..b342345 100644
  void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  {
  	unsigned char *buf;
-@@ -1668,6 +1693,7 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+@@ -1668,6 +1695,7 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  			con_printf(CON_DEBUG,"%s: %ux%ux%i p=%i(%i) c=%i a=%i chans=%i\n", filename, pdata.width, pdata.height, pdata.depth, pdata.paletted, pdata.num_palette, pdata.color, pdata.alpha, pdata.channels);
  			if (pdata.depth == 8 && pdata.color)
  			{
@@ -324,7 +326,7 @@ index c536c46..b342345 100644
  				if (bm->gltexture == NULL)
  					ogl_init_texture(bm->gltexture = ogl_get_free_texture(), pdata.width, pdata.height, ((pdata.alpha || bm->bm_flags & BM_FLAG_TRANSPARENT) ? OGL_FLAG_ALPHA : 0));
  				unsigned char *data = pdata.data;
-@@ -1688,6 +1714,7 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+@@ -1688,6 +1716,7 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  				if (pdata.palette)
  					free(pdata.palette);
  				bm->gltexture->is_png = 1;
@@ -332,7 +334,7 @@ index c536c46..b342345 100644
  				return;
  			}
  			else
-@@ -1983,3 +2010,8 @@ void ogl_update_window_clip()
+@@ -1983,3 +2012,8 @@ void ogl_update_window_clip()
  		glEnable(GL_SCISSOR_TEST);
  	}
  }
@@ -621,7 +623,7 @@ index fdb2e78..6ee406f 100644
  		return;
  
 diff --git a/d2/main/fireball.c b/d2/main/fireball.c
-index fe9b0d1..4dd1822 100644
+index fe9b0d1..93f7461 100644
 --- a/d2/main/fireball.c
 +++ b/d2/main/fireball.c
 @@ -22,6 +22,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
@@ -632,7 +634,7 @@ index fe9b0d1..4dd1822 100644
  #include "fix.h"
  #include "vecmat.h"
  #include "gr.h"
-@@ -65,6 +66,192 @@ fix	Flash_effect=0;
+@@ -65,6 +66,197 @@ fix	Flash_effect=0;
  
  int	PK1=1, PK2=8;
  
@@ -679,7 +681,8 @@ index fe9b0d1..4dd1822 100644
 +static int pyro_registered[MAX_OBJECTS];static unsigned char pyro_known[MAX_OBJECTS];
 +extern int astra_pyro_ready(void);
 +extern void astra_blast(vms_vector*,fix,float,unsigned,int,int);
-+void astra_clear_plumes(void){memset(pyro_events,0,sizeof(pyro_events));memset(pyro_known,0,sizeof(pyro_known));}
++extern void astra_debris_clear(void);
++void astra_clear_plumes(void){astra_debris_clear();memset(pyro_events,0,sizeof(pyro_events));memset(pyro_known,0,sizeof(pyro_known));}
 +static int pyro_alive(const astra_event *e){return e->length>0 && GameTime64>=e->born && GameTime64-e->born<e->length;}
 +static unsigned death_hash(unsigned x){x^=x>>16;x*=0x7feb352du;x^=x>>15;x*=0x846ca68bu;return x^(x>>16);}
 +static void astra_track_plume(object *o,int tier,fix elapsed)
@@ -707,6 +710,7 @@ index fe9b0d1..4dd1822 100644
 +    }
 +    float jitter=(seed&255)/255.f;
 +    float seconds=tier==2?5.9f+1.1f*jitter:tier==1?2.40f+.23f*jitter:.50f+.32f*jitter;
++    if(tier==1&&((seed>>8)%5)>=3)seconds=2.0f+.25f*jitter;
 +    /* Routine hits on our hull clear promptly, before they hide the next
 +     * attacker. Distant deaths and the player's own breakup keep their scale. */
 +    int closeImpact=tier<2 && !Player_is_dead && ConsoleObject &&
@@ -723,6 +727,7 @@ index fe9b0d1..4dd1822 100644
 +            if(room_for_camera>F1_0 && radius>room_for_camera)radius=room_for_camera;
 +        }
 +    }
++    if(tier==1&&((seed>>8)%5)>=3)radius=fixmul(radius,fl2f(.62f));
 +    if(tier==0)radius=fixmul(radius,fl2f(.79f));
 +    if(closeImpact)radius=fixmul(radius,fl2f(.62f));
 +    pyro_events[slot]=(astra_event){o->pos,radius,GameTime64-elapsed,fl2f(seconds),seed,kind,tier,o->segnum,0,closeImpact};
@@ -749,6 +754,8 @@ index fe9b0d1..4dd1822 100644
 +    for(int i=0;i<n;i++){
 +        astra_event *e=&pyro_events[order[i]];float seconds=f2fl((fix)(GameTime64-e->born));
 +        astra_blast(&e->pos,e->radius,seconds/f2fl(e->length),e->seed,e->kind,e->tier);
++        extern void astra_debris(vms_vector*,fix,float,float,unsigned,int,int,int);
++        astra_debris(&e->pos,e->radius,seconds,f2fl(e->length),e->seed,e->tier,e->room,window_num);
 +        if(!window_num)EM_ASM({if(Module.traceAstraBlast)Module.traceAstraBlast($0,$1>>>0,$2,$3,$4,$5);},e->tier,e->seed,seconds,f2fl(e->length),f2fl(depth[i]),e->kind);
 +    }
 +}
@@ -825,7 +832,7 @@ index fe9b0d1..4dd1822 100644
  object *object_create_explosion_sub(object *objp, short segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, int parent )
  {
  	int objnum;
-@@ -87,6 +274,10 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
+@@ -87,6 +279,10 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
  	//now set explosion-specific data
  
  	obj->lifeleft = Vclip[vclip_type ].play_time;
@@ -836,7 +843,7 @@ index fe9b0d1..4dd1822 100644
  	obj->ctype.expl_info.spawn_time = -1;
  	obj->ctype.expl_info.delete_objnum = -1;
  	obj->ctype.expl_info.delete_time = -1;
-@@ -439,10 +630,13 @@ object *object_create_debris(object *parent, int subobj_num)
+@@ -439,10 +635,13 @@ object *object_create_debris(object *parent, int subobj_num)
  
  }
  
@@ -852,7 +859,7 @@ index fe9b0d1..4dd1822 100644
  
  }
  
-@@ -1620,3 +1814,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
+@@ -1620,3 +1819,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
  			expl_wall_swap(&ew[i], swap);
  }
  
@@ -1740,7 +1747,7 @@ index 650f69e..7271753 100644
  }
 +
 diff --git a/d2/main/render.c b/d2/main/render.c
-index 517bc8a..57eb525 100644
+index 517bc8a..bcf246a 100644
 --- a/d2/main/render.c
 +++ b/d2/main/render.c
 @@ -197,6 +197,7 @@ void flash_frame()
@@ -1759,7 +1766,18 @@ index 517bc8a..57eb525 100644
  
  	for (i=0; i<nv; i++) {
  		uvl_copy[i].u = uvlp[i].u;
-@@ -333,6 +335,14 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+@@ -232,6 +234,10 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+ 		return;
+ 	}
+ 
++    if(astra_drawing_mine && tmap1>=0 && tmap1<NumTextures && TmapInfo[tmap1].eclip_num==ECLIP_NUM_FUELCEN){
++        extern int astra_recharge_face(int,const g3s_point**,const g3s_uvl*,int,int);
++        if(astra_recharge_face(nv,pointlist,uvl_copy,segnum,sidenum))return;
++    }
+ 	if (tmap1 >= NumTextures) {
+ #ifndef RELEASE
+ 		Int3();
+@@ -333,6 +339,14 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
  			g3_draw_tmap(nv,pointlist,uvl_copy,dyn_light,bm);
  
  	gr_settransblend(GR_FADE_OFF, GR_BLEND_NORMAL); // revert any transparency/blending setting back to normal
@@ -1774,7 +1792,7 @@ index 517bc8a..57eb525 100644
  
  #ifndef NDEBUG
  	if (Outline_mode) draw_outline(nv, pointlist);
-@@ -1678,6 +1688,8 @@ void render_frame(fix eye_offset, int window_num)
+@@ -1678,6 +1692,8 @@ void render_frame(fix eye_offset, int window_num)
  	#endif
  
  	render_mine(start_seg_num, eye_offset, window_num);

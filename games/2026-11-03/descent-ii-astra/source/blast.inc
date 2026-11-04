@@ -137,20 +137,21 @@ void astra_blast(vms_vector *where,fix radius,float t,unsigned seed,int kind,int
         float distance=sqrtf(origin[0]*origin[0]+origin[1]*origin[1]+origin[2]*origin[2]);
         visibility=.018f+.982f*pyro_ramp(r*1.5f+3,r*5+12,distance);
     }
+    int shape=(seed>>8)%5,compact=heavy==1&&shape>=3;
     float rise=.035f+.965f*(1-expf(-5.5f*t));
     float size=r*(heavy?1.23f:.91f);
-    float peak=1-pyro_ramp(.38f,.90f,t),fade=1-pyro_ramp(.66f,1,t);
+    float peak=1-pyro_ramp(compact?.22f:.38f,compact?.66f:.90f,t),fade=1-pyro_ramp(.66f,1,t);
     float vent=1-expf(-3.5f*t);
     pyro_part parts[PLUME_PARTS];int count=0;
     float offset[]={0,0,0};
     /* Dense white ignition and a persistent fuel-rich nucleus. */
-    pyro_add(parts+count++,origin,offset,size*rise*(.81f+.20f*t),.065f+peak*1.025f+.19f*expf(-15*t),pyro_random(seed,0,4),fade);
-    int branches=heavy?4+(seed%3):3+(seed%2);
+    pyro_add(parts+count++,origin,offset,size*rise*((compact&&shape==4?.48f:.81f)+.20f*t),.065f+peak*1.025f+.19f*expf(-15*t),pyro_random(seed,0,4),fade);
+    int branches=compact?2:heavy?4+(seed%3):3+(seed%2);
     for(int i=0;i<branches;i++){
-        float dir[3];pyro_dir(seed,i+5,dir);
+        float dir[3];pyro_dir(seed,compact&&shape==4?5:i+5,dir);if(compact&&shape==4&&i)for(int k=0;k<3;k++)dir[k]=-dir[k];
         float strength=i==0?1.52f:.55f+.69f*pyro_random(seed,i,31);
         float drift=pyro_random(seed,i,29)-.5f;
-        int knots=heavy?3:2;
+        int knots=compact?(shape==3?1:2):heavy?3:2;
         for(int j=0;j<knots;j++){
             float u=(j+1.f)/knots;
             float lag=.07f*u;float grow=pyro_ramp(lag,.24f+lag,t);
@@ -166,7 +167,7 @@ void astra_blast(vms_vector *where,fix radius,float t,unsigned seed,int kind,int
     }
     /* Separate carbon-rich mantle. A few pockets flash through the soot;
      * their positions and lifetimes differ from the main flame. */
-    int mantle=heavy?9:4;
+    int mantle=compact?(shape==3?3:5):heavy?9:4;
     for(int i=0;i<mantle;i++){
         float u=pyro_ramp(.035f+.045f*pyro_random(seed,i,37),.32f,t);if(u<.01f)continue;
         float dir[3];pyro_dir(seed,50+i,dir);
@@ -213,9 +214,9 @@ void astra_blast(vms_vector *where,fix radius,float t,unsigned seed,int kind,int
         parts[i].opacity*=visibility;
         parts[i].heat*=.80f+.20f*visibility;
     }
-    EM_ASM(Module.impactVisibility=$0;,visibility);
+    EM_ASM(Module.impactVisibility=$0;Module.blastVariationMask=(Module.blastVariationMask||0)|(1<<$1);,visibility,compact?shape:0);
     pyro_draw_parts(parts,count,t,kind,heavy);
-    pyro_fragments(origin,size,t,seed,heavy,visibility);pyro_ignition(origin,size,t,visibility);
+    if(!compact)pyro_fragments(origin,size,t,seed,heavy,visibility);pyro_ignition(origin,size,t,visibility);
     for(int i=0;i<bursts;i++)pyro_fragments(secondary[i],size*.46f,secondary[i][3],seed+i+97,0,visibility);
     EM_ASM(Module.volumeBlasts=(Module.volumeBlasts||0)+1;Module.blastStyleMask=(Module.blastStyleMask||0)|(1<<$0);,kind);
 }
