@@ -287,3 +287,36 @@ the three range entries on desktop and phone screens. Plasma, dual Omega and
 missile exhaust were also checked. No simulation or weapon stats changed.
 The original-model inspection helper is only in a separate QA engine.
 All browser tests block pointer capture and close their browsers and servers.
+
+Astra Phoenix ricochets and deliberate demo flight (pyre16)
+
+Phoenix uses a compact turbulent comet instead of the large rotating halo
+and long camera-facing ribbon. Each native projectile tracks its current
+straight flight leg by object signature. A ricochet restarts the trail; its
+length is capped at 3.4 units and ray-clipped against the actual mine walls.
+Original projectile speed, bounce behavior, collision and damage are unchanged.
+
+The demo keeps a remembered up direction and smoothly follows the nearest
+mine plane. Segment side numbering does not force abrupt changes of floor.
+Pitch/yaw track target motion with bounded lead inside the enemy silhouette;
+the pilot backs away from charging enemies and holds a firing lane. All of
+this uses native thrust controls. The demo supplies its own bank control,
+so native nearest-wall auto-leveling is suppressed only while it is active.
+Manual flight retains the player's original auto-leveling setting and physics.
+
+Weapon choice considers range, energy and enemy durability. A selected weapon
+is held for at least 14 seconds unless empty or unsuitable at the new range;
+there is no forced arsenal rotation. It also checks native blast radius and
+nearby walls before using a splash-damage primary, choosing a safe alternative
+in tight spaces. Full arsenal is an optional demo loadout.
+The pilot keeps a confirmed kill in view for 1.5 seconds when safe, but resumes
+combat for an immediate close threat or low shields. Pickup capacity checks
+and signature-based rejection cooldowns remain intact.
+
+Validation: native Phoenix volleys and real mine ricochets in a separate QA
+engine, plus timed desktop Vertigo and phone Counterstrike combat runs.
+Tracked aim, roll, target persistence, weapon holds, kill observation and
+pickup decisions. The 85 native pickup capacity/drop cases also pass.
+Test-only firing helpers are absent from the shipping engine. Hidden browsers
+disable pointer capture before navigation and close with their local servers.
+These checks are not complete autonomous campaign playthroughs.

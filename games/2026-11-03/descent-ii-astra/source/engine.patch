@@ -1602,7 +1602,7 @@ index 163e08a..b4b8672 100644
  	lb->item = items;
  	lb->citem = default_item;
 diff --git a/d2/main/object.c b/d2/main/object.c
-index 602b2d5..772eec6 100644
+index 602b2d5..8ffd2d3 100644
 --- a/d2/main/object.c
 +++ b/d2/main/object.c
 @@ -425,6 +425,9 @@ void draw_cloaked_object(object *obj,g3s_lrgb light,fix *glow,fix64 cloak_start_
@@ -1651,6 +1651,19 @@ index 602b2d5..772eec6 100644
  	int i;
  
  	collide_init();
+@@ -2145,7 +2156,11 @@ void object_move_all()
+ 
+ 	obj_delete_all_that_should_be_dead();
+ 
+-	if (PlayerCfg.AutoLeveling)
++	/* The spectator pilot steers its own remembered up direction through
++	 * Controls. Native nearest-wall leveling would fight it after a turn.
++	 * Manual flight keeps the player's original leveling preference. */
++	extern int astra_auto_enabled(void);
++	if (PlayerCfg.AutoLeveling && !astra_auto_enabled())
+ 		ConsoleObject->mtype.phys_info.flags |= PF_LEVELLING;
+ 	else
+ 		ConsoleObject->mtype.phys_info.flags &= ~PF_LEVELLING;
 diff --git a/d2/main/polyobj.c b/d2/main/polyobj.c
 index 823ccc1..d116511 100644
 --- a/d2/main/polyobj.c

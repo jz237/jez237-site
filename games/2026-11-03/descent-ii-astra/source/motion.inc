@@ -1,6 +1,7 @@
 /* Render-only machinery and weapon geometry. Never consumes the simulation RNG. */
 #include "laser.h"
 #include "weapon.h"
+#include "fvi.h"
 typedef struct {float p[3],n[3],color[4];} ax_vertex;
 static ax_vertex ax_vertices[18000];
 static int ax_count,ax_failed,ax_enabled=-1;
@@ -247,6 +248,33 @@ int astra_weapon_missile(object *obj){
     /* Lasers and Fusion also use polygon models in the original HAM data. */
     return obj->type==OBJ_WEAPON&&obj->id<N_weapon_types&&obj->render_type==RT_POLYOBJ&&Weapon_info[obj->id].matter;
 }
+/* Phoenix ricochets reverse velocity instantly. Grow a new visual trail only
+ * along the current straight flight leg, and stop it at the mine wall. */
+typedef struct {int signature;fix64 stamp;vms_vector pos,dir;float length;} af_phoenix_leg;
+static af_phoenix_leg af_phoenix_legs[MAX_OBJECTS];
+static float af_phoenix_tail(object *o,vms_vector *direction,float age,float speed){
+    float length=fminf(3.4f,age*speed);
+    if(o->segnum>=0){
+        int index=o-Objects;if(index>=0&&index<MAX_OBJECTS){
+            af_phoenix_leg *leg=&af_phoenix_legs[index];
+            if(!leg->stamp||leg->signature!=o->signature||GameTime64<leg->stamp){
+                leg->length=fminf(.6f,length);leg->signature=o->signature;leg->stamp=GameTime64;leg->pos=o->pos;leg->dir=*direction;
+            }else if(GameTime64>leg->stamp){
+                if(GameTime64-leg->stamp>F1_0/5||vm_vec_dot(&leg->dir,direction)<fl2f(.96f)){
+                    leg->length=.08f;EM_ASM(Module.phoenixTrailResets=(Module.phoenixTrailResets||0)+1;);
+                }else leg->length=fminf(3.4f,leg->length+f2fl(vm_vec_dist(&leg->pos,&o->pos)));
+                leg->stamp=GameTime64;leg->pos=o->pos;leg->dir=*direction;
+            }
+            length=leg->length;
+        }
+        vms_vector end;vm_vec_scale_add(&end,&o->pos,direction,-fl2f(length));
+        fvi_query query={&o->pos,&end,o->segnum,0,o-Objects,NULL,0};fvi_info hit;
+        if(find_vector_intersection(&query,&hit)!=HIT_NONE){length=fmaxf(0,f2fl(vm_vec_dist(&o->pos,&hit.hit_pnt))-.12f);EM_ASM(Module.phoenixWallClips=(Module.phoenixWallClips||0)+1;);}
+    }
+    EM_ASM(Module.phoenixVisualVersion=16;Module.phoenixTrailLength=$0;,length);
+    return length;
+}
+
 int astra_draw_weapon(object *obj){
     if(!ax_on()||obj->type!=OBJ_WEAPON||obj->id>=N_weapon_types)return 0;
     int id=obj->id,missile=astra_weapon_missile(obj);
@@ -260,6 +288,7 @@ int astra_draw_weapon(object *obj){
     vms_vector velocity=obj->mtype.phys_info.velocity;float speed=f2fl(vm_vec_mag(&velocity));vms_matrix axis=obj->orient;
     if(!missile&&speed>.01f){vm_vec_normalize(&velocity);vm_vector_2_matrix(&axis,&velocity,NULL,NULL);}
     float tail=fminf(age*speed,fminf(9.f,1.5f+speed*.035f));
+    if(id==PHOENIX_ID)tail=af_phoenix_tail(obj,&velocity,age,speed);
     int enemy=obj->ctype.laser_info.parent_type==OBJ_ROBOT;
     float radius=fminf(.65f,fmaxf(.32f,f2fl(Weapon_info[id].blob_size)*.38f));
     g3_start_instance_matrix(&obj->pos,&axis);
@@ -283,6 +312,14 @@ int astra_draw_weapon(object *obj){
         }
         ax_paint(.50f,.78f,1,1);af_particle(0,0,rear-.18f,nozzle*1.3f,.85f,phase);af_flush(clock,0);
         EM_ASM(Module.missileExhaustVersion=14;Module.missileExhaustSamples=24;);
+    }else if(id==PHOENIX_ID){
+        /* Compact turbulent comet, without camera-crossing ribbons or a
+         * rotating halo of separate lights. Ricochet flight remains native. */
+        ax_count=0;ax_weapon_color(id,enemy);float r=fminf(.44f,radius);
+        for(int j=9;j>=1;j--){float t=j/9.f;af_particle(0,0,-tail*t,r*(1.3f-.65f*t),.25f*(1-t),obj->signature+j*.73f);}
+        af_particle(0,0,0,r*1.85f,.48f,obj->signature);
+        af_particle(0,0,-r*.15f,r*.72f,.78f,obj->signature+21);
+        af_flush_tinted(clock,0,1);
     }else{
         int blob=id==PLASMA_ID||id==FUSION_ID||id==PHOENIX_ID||id==PLAYER_SMART_HOMING_ID||id==ROBOT_SMART_HOMING_ID;
         float r=blob?radius*(id==FUSION_ID?1.5f:1):id==VULCAN_ID?.052f:id==GAUSS_ID?.095f:radius*.38f;
@@ -302,6 +339,6 @@ int astra_draw_weapon(object *obj){
         af_flush_tinted(clock,0,laser);
     }
     g3_done_instance();
-    EM_ASM(Module.weaponEffects=(Module.weaponEffects||0)+1;Module.weaponVisualVersion=15;Module.weaponEffectCoverage=Module.weaponEffectCoverage||{};Module.weaponEffectCoverage[$0]=true;Module.weaponEffectKinds=Module.weaponEffectKinds||{};Module.weaponEffectKinds[$0]=$2?'exhaust':'energy';Module[$1?'enemyWeaponEffects':'playerWeaponEffects']=(Module[$1?'enemyWeaponEffects':'playerWeaponEffects']||0)+1;,id,enemy,missile);
+    EM_ASM(Module.weaponEffects=(Module.weaponEffects||0)+1;Module.weaponVisualVersion=16;Module.weaponEffectCoverage=Module.weaponEffectCoverage||{};Module.weaponEffectCoverage[$0]=true;Module.weaponEffectKinds=Module.weaponEffectKinds||{};Module.weaponEffectKinds[$0]=$2?'exhaust':'energy';Module[$1?'enemyWeaponEffects':'playerWeaponEffects']=(Module[$1?'enemyWeaponEffects':'playerWeaponEffects']||0)+1;,id,enemy,missile);
     return !missile;
 }
