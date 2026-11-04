@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-04",
+      "historicDate": "1985-06-10",
+      "displayDate": "Week of June 10-16, 1985",
+      "edition": "Issue 150 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Epyx goes for gold, Amiga approaches the starting line, and the adventure game puts on a hardback cover.",
+      "leadHeadline": "Summer Games II and Winter Games headline the post-CES games slate",
+      "storyHeadlines": [
+        "Amiga preview raises the stakes against Atari and Macintosh",
+        "Amstrad aims its 128K CPC at the American home",
+        "Poet Robert Pinsky takes the text adventure into the electronic novel"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-06-10.jpg",
+      "thumb": "media/thumbs/1985-06-10.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-03",
       "historicDate": "1985-06-03",
       "displayDate": "Week of June 3-9, 1985",
