@@ -18866,5 +18866,92 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-04-factual-infographic-factual-infographic-ocellaris-clownfish",
+    "title": "Factual infographic: Ocellaris clownfish",
+    "tests": "; archive_slot=2026-11-04T12:20; concept=ocellaris-clownfish-anemone-reef-partnership; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Amphiprion ocellaris",
+    "prompt": "Create a fancy, exceptionally detailed PHOTOREALISTIC reef fish educational infographic, an artwork-led flowing aquatic atlas, no boxes or grid. Dominant anatomically accurate Amphiprion ocellaris swimming among host anemone tentacles: orange oval compressed body, three white bars with fine black outlines, central bar bulging forward, rounded tail and black-edged fins. Jewel turquoise reef light, realistic scales and tissue, depth and luminous coral. Prominently title “Ocellaris Clownfish” and directly below “Amphiprion ocellaris”. Weave small realistic close-ups of anemone tentacles and fin details, a delicate Indo-Pacific range vignette, elegant readable labels and curving leader lines into the composition with generous breathing space. Short accurate text: “Habitat: Indo-Pacific coral and rocky reefs”; “Adult length: up to 11 cm (4.3 in)”; “Diet: algae and tiny planktonic animals”; “Behavior: territorial around its anemone; social groups have a dominant female and breeding male”; “Aquarium: captive-bred fish can reduce collection pressure; monitor territorial behavior and choose compatible tankmates.” Distinguish wild biology from aquarium guidance. Reef compatibility depends on tankmates and individual behavior; anemones have their own demanding care needs. No invented specific tank size. Beautiful natural light and fine biological details, clear typography, direct artwork, not photographed poster.",
+    "image": "images/2026-11-04-factual-infographic-factual-infographic-ocellaris-clownfish.jpg",
+    "thumb": "thumbs/2026-11-04-factual-infographic-factual-infographic-ocellaris-clownfish.webp",
+    "color": "#6f7765",
+    "date": "2026-11-04",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "ocellaris-clownfish-anemone-reef-partnership",
+      "imageSha256": "1a4f294b8aa9823a5b910539e74d0ca538241d51041f6f81a975887291e56d74",
+      "imageDHash": "00ea2bd1c6ca6f0c"
+    },
+    "factualInfographic": {
+      "topic": "Ocellaris clownfish (Amphiprion ocellaris) reef biology and aquarium care",
+      "description": "An illustrated guide to ocellaris clownfish biology and aquarium considerations.",
+      "sourceNote": "Sources: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/clown-anemonefish/ ; https://www.aquariumofpacific.org/onlinelearningcenter/species/clown_anemonefish ; https://marinespecies.org/aphia.php?p=taxdetails&id=278400",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-04T17:21:08.607964+00:00",
+        "sources": [
+          {
+            "id": "uf",
+            "publisher": "Florida Museum of Natural History",
+            "title": "Clown Anemonefish",
+            "sourceType": "museum",
+            "url": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/clown-anemonefish/"
+          },
+          {
+            "id": "aop",
+            "publisher": "Aquarium of the Pacific",
+            "title": "Clownfish",
+            "sourceType": "museum",
+            "url": "https://www.aquariumofpacific.org/onlinelearningcenter/species/clown_anemonefish"
+          },
+          {
+            "id": "worms",
+            "publisher": "World Register of Marine Species",
+            "title": "Amphiprion ocellaris",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://marinespecies.org/aphia.php?p=taxdetails&id=278400"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Accepted name Amphiprion ocellaris; synonyms Amphiprion melanurus and Amphiprion bicolor",
+            "sourceIds": [
+              "worms",
+              "uf"
+            ]
+          },
+          {
+            "claim": "Orange fish with three white bars and fine black margins, rounded tail; maximum length 11 cm.",
+            "sourceIds": [
+              "uf"
+            ]
+          },
+          {
+            "claim": "Indo-Pacific shallow coral and rocky reefs; associates with host anemones.",
+            "sourceIds": [
+              "uf",
+              "aop"
+            ]
+          },
+          {
+            "claim": "Feeds on algae and small planktonic animals.",
+            "sourceIds": [
+              "uf",
+              "aop"
+            ]
+          },
+          {
+            "claim": "Territorial around host; dominant female and breeding male; captive breeding can reduce wild collection pressure.",
+            "sourceIds": [
+              "uf",
+              "aop"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
