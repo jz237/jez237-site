@@ -1,11 +1,41 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-11-03",
+  "updated": "2026-11-04",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-11-03",
+  "coverageEnd": "2026-11-04",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "category": "Physics & materials",
+      "evidenceKind": "demo",
+      "modelNote": "Simjecture: DeepSeek Flash ran the plasma investigation; GPT-6.1 Sol directed and reviewed it.",
+      "sources": [
+        "https://arxiv.org/abs/2611.03721",
+        "https://arxiv.org/pdf/2611.03721"
+      ],
+      "status": "Early preprint; human-guided research demonstration, not independently confirmed.",
+      "takeaway": "AI agents spent more than three days choosing and running computer experiments on electrically squeezed hot gas. They found that stronger twisting could trap more energy inside instead of releasing it as X-rays, while changing the surrounding gas could delay the radiation burst. Researchers supplied the question, simulation tools and starting conditions, then redirected the investigation four times. This shows AI helping test and refine physical explanations, not just writing code. The findings remain simulation results—not laboratory confirmation or a complete answer to the original energy puzzle.",
+      "title": "AI tests why hot plasma releases so much X-ray energy — November 1",
+      "id": "d-1567558411850354760-simjecture-tests-plasma-energy",
+      "coveredOn": "2026-11-04",
+      "context": "🔬 **AI Discovery Watch · November 4, 2026**\n\n**AI tests why hot plasma releases so much X-ray energy — November 1**\nAI agents spent more than three days choosing and running computer experiments on electrically squeezed hot gas. They found that stronger twisting could trap more energy inside instead of releasing it as X-rays, while changing the surrounding gas could delay the radiation burst. Researchers supplied the question, simulation tools and starting conditions, then redirected the investigation four times. This shows AI helping test and refine physical explanations, not just writing code. The findings remain simulation results—not laboratory confirmation or a complete answer to the original energy puzzle.\n\n**AI used:** Simjecture: DeepSeek Flash ran the plasma investigation; GPT-6.1 Sol directed and reviewed it.\n**Evidence:** Early preprint; human-guided research demonstration, not independently confirmed.\nOriginal source: <https://arxiv.org/abs/2611.03721>\nSupporting source: <https://arxiv.org/pdf/2611.03721>"
+    },
+    {
+      "category": "Computing & engineering",
+      "evidenceKind": "early",
+      "modelNote": "SpecPilot used Claude Opus 5.5 in Claude Code; the other named models were optimization targets or drafting components.",
+      "sources": [
+        "https://arxiv.org/abs/2611.02501",
+        "https://arxiv.org/html/2611.02501v1"
+      ],
+      "status": "Early algorithm-engineering result; team-tested on selected systems, not independently confirmed.",
+      "takeaway": "AI agents devised a way to pack language-model numbers more tightly without discarding their stored values, alongside new methods for checking several possible next words at once. The team reports more than doubling generation speed over its starting software in selected tests. People supplied the software, hardware and acceptance checks; the agents proposed, tested and combined the changes. This could make existing models run faster without retraining. The preprint is not independently confirmed, results depend on the hardware and workload, and tiny rounding differences can still change nearly tied word choices.",
+      "title": "AI devises new ways to make language models run faster — November 2",
+      "id": "d-1567558899656302767-specpilot-packs-models-and-speeds-generation",
+      "coveredOn": "2026-11-04",
+      "context": "🔬 **AI Discovery Watch · November 4, 2026**\n\n**AI devises new ways to make language models run faster — November 2**\nAI agents devised a way to pack language-model numbers more tightly without discarding their stored values, alongside new methods for checking several possible next words at once. The team reports more than doubling generation speed over its starting software in selected tests. People supplied the software, hardware and acceptance checks; the agents proposed, tested and combined the changes. This could make existing models run faster without retraining. The preprint is not independently confirmed, results depend on the hardware and workload, and tiny rounding differences can still change nearly tied word choices.\n\n**AI used:** SpecPilot used Claude Opus 5.5 in Claude Code; the other named models were optimization targets or drafting components.\n**Evidence:** Early algorithm-engineering result; team-tested on selected systems, not independently confirmed.\nOriginal source: <https://arxiv.org/abs/2611.02501>\nSupporting source: <https://arxiv.org/html/2611.02501v1>"
+    },
     {
       "category": "Research in action",
       "evidenceKind": "demo",
