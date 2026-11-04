@@ -123,8 +123,8 @@
       q('hangarHome').append(q('hangarDock'));window.astraHangar?.render();
     }
   };
-  q('nativeBack').onclick=()=>menu.send(5);
-  q('nativeOpen').onclick=()=>menu.send(2,menu.state.selected);
+  q('nativeBack').onclick=e=>{if(e.detail<=1)menu.send(5);};
+  q('nativeOpen').onclick=e=>{if(e.detail<=1)menu.send(2,menu.state.selected);};
   q('nativeUp').onclick=()=>menu.send(6,menu.state.selected,-1);
   q('nativeDown').onclick=()=>menu.send(6,menu.state.selected,1);
   const oldFocus=window.astraFlightFocus;
@@ -132,6 +132,7 @@
   window.addEventListener('keydown',e=>{
     if(!menu.active)return;
     e.stopImmediatePropagation();
+    if(e.repeat&&['Enter','Escape',' '].includes(e.key)){e.preventDefault();return;}
     if(e.key==='Escape'){e.preventDefault();menu.send(5);return;}
     if(e.key==='Tab')return;
     const input=e.target.tagName==='INPUT';
