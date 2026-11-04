@@ -660,7 +660,7 @@ index fdb2e78..20d3027 100644
  		return;
  
 diff --git a/d2/main/fireball.c b/d2/main/fireball.c
-index fe9b0d1..e64b65e 100644
+index fe9b0d1..3bfd338 100644
 --- a/d2/main/fireball.c
 +++ b/d2/main/fireball.c
 @@ -22,6 +22,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
@@ -671,7 +671,7 @@ index fe9b0d1..e64b65e 100644
  #include "fix.h"
  #include "vecmat.h"
  #include "gr.h"
-@@ -65,6 +66,198 @@ fix	Flash_effect=0;
+@@ -65,6 +66,208 @@ fix	Flash_effect=0;
  
  int	PK1=1, PK2=8;
  
@@ -711,13 +711,15 @@ index fe9b0d1..e64b65e 100644
 +}
 +/* Presentation-only events outlive their original Descent damage objects.
 + * SFX, damage, robot drops, respawn input and the death camera stay in D2. */
++#include "astra_detonations.h"
 +enum { ASTRA_PLUMES=32 };
-+typedef struct {vms_vector pos;fix radius;fix64 born;fix length;unsigned seed;int kind,tier,room,nextSound,closeImpact;} astra_event;
++typedef struct {vms_vector pos;fix radius;fix64 born;fix length;unsigned seed;int kind,tier,room,nextSound,closeImpact,profile;} astra_event;
 +static astra_event pyro_events[ASTRA_PLUMES];
 +static unsigned death_salt,death_serial;
 +static int pyro_registered[MAX_OBJECTS];static unsigned char pyro_known[MAX_OBJECTS];
 +extern int astra_pyro_ready(void);
 +extern void astra_blast(vms_vector*,fix,float,unsigned,int,int);
++extern void astra_pattern_blast(vms_vector*,fix,float,unsigned,int,int);
 +extern void astra_debris_clear(void);
 +void astra_clear_plumes(void){astra_debris_clear();memset(pyro_events,0,sizeof(pyro_events));memset(pyro_known,0,sizeof(pyro_known));}
 +static int pyro_alive(const astra_event *e){return e->length>0 && GameTime64>=e->born && GameTime64-e->born<e->length;}
@@ -747,7 +749,9 @@ index fe9b0d1..e64b65e 100644
 +    }
 +    float jitter=(seed&255)/255.f;
 +    float seconds=tier==2?5.9f+1.1f*jitter:tier==1?2.40f+.23f*jitter:.50f+.32f*jitter;
-+    if(tier==1&&((seed>>8)%5)>=3)seconds=2.0f+.25f*jitter;
++    int profile=astra_choose_pattern(tier,seed);
++    if(profile)seconds=astra_pattern_length(profile,seed);
++    else if(tier==1&&((seed>>8)%5)>=3)seconds=2.0f+.25f*jitter;
 +    /* Routine hits on our hull clear promptly, before they hide the next
 +     * attacker. Distant deaths and the player's own breakup keep their scale. */
 +    int closeImpact=tier<2 && !Player_is_dead && ConsoleObject &&
@@ -764,10 +768,11 @@ index fe9b0d1..e64b65e 100644
 +            if(room_for_camera>F1_0 && radius>room_for_camera)radius=room_for_camera;
 +        }
 +    }
-+    if(tier==1&&((seed>>8)%5)>=3)radius=fixmul(radius,fl2f(.62f));
++    if(profile)radius=fixmul(radius,fl2f(astra_detonations[profile].scale));
++    else if(tier==1&&((seed>>8)%5)>=3)radius=fixmul(radius,fl2f(.62f));
 +    if(tier==0)radius=fixmul(radius,fl2f(.79f));
 +    if(closeImpact)radius=fixmul(radius,fl2f(.62f));
-+    pyro_events[slot]=(astra_event){o->pos,radius,GameTime64-elapsed,fl2f(seconds),seed,kind,tier,o->segnum,0,closeImpact};
++    pyro_events[slot]=(astra_event){o->pos,radius,GameTime64-elapsed,fl2f(seconds),seed,kind,tier,o->segnum,0,closeImpact,profile};
 +}
 +static int astra_owns_plume(object *o)
 +{
@@ -790,7 +795,9 @@ index fe9b0d1..e64b65e 100644
 +    }
 +    for(int i=0;i<n;i++){
 +        astra_event *e=&pyro_events[order[i]];float seconds=f2fl((fix)(GameTime64-e->born));
-+        astra_blast(&e->pos,e->radius,seconds/f2fl(e->length),e->seed,e->kind,e->tier);
++        float progress=seconds/f2fl(e->length);
++        if(e->profile)astra_pattern_blast(&e->pos,e->radius,progress,e->seed,e->profile,e->tier);
++        else astra_blast(&e->pos,e->radius,progress,e->seed,e->kind,e->tier);
 +        extern void astra_debris(vms_vector*,fix,float,float,unsigned,int,int,int);
 +        astra_debris(&e->pos,e->radius,seconds,f2fl(e->length),e->seed,e->tier,e->room,window_num);
 +        if(!window_num)EM_ASM({if(Module.traceAstraBlast)Module.traceAstraBlast($0,$1>>>0,$2,$3,$4,$5);},e->tier,e->seed,seconds,f2fl(e->length),f2fl(depth[i]),e->kind);
@@ -822,13 +829,16 @@ index fe9b0d1..e64b65e 100644
 +        float t=(float)(GameTime64-e->born)/e->length,r=f2fl(e->radius);
 +        float glow=.65f*expf(-t*18)+1.35f*(1-expf(-t*11))*(1-t)*(1-t);
 +        if(e->tier==2)for(int j=0;j<4;j++)glow+=.67f*pyro_chain_heat(t,astra_death_burst_time(e->seed,j));
++        if(e->profile)glow=astra_pattern_light(e->profile,t);
 +        float reach=fminf(85,7+r*5.1f),power=glow*(.70f+fminf(1.8f,r*.125f));
 +        if(e->closeImpact){power*=.38f;reach*=.68f;}
 +        float dist=f2fl(vm_vec_dist_quick(center,&e->pos)),weight=power/(1+dist*dist/(reach*reach));
 +        int k=0;for(int n=1;n<3;n++)if(rank[n]<rank[k])k=n;
 +        if(weight<=rank[k])continue;
 +        rank[k]=weight;pos[k][0]=f2fl(e->pos.x);pos[k][1]=f2fl(e->pos.y);pos[k][2]=f2fl(e->pos.z);pos[k][3]=reach;
-+        const float *original=astra_effect_color(e->kind);float accent=e->tier?.035f:.30f;
++        int palette=e->profile?astra_detonations[e->profile].palette:e->kind;
++        const float *original=astra_effect_color(palette);
++        float accent=e->profile?.84f:(e->tier?.035f:.30f);
 +        const float fire[]={1.f,.28f+.32f*(1-t),.046f+.12f*expf(-t*9)};
 +        for(int a=0;a<3;a++)colors[k][a]=power*(fire[a]*(1-accent)+original[a]*accent);
 +        colors[k][3]=1;
@@ -870,7 +880,7 @@ index fe9b0d1..e64b65e 100644
  object *object_create_explosion_sub(object *objp, short segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, int parent )
  {
  	int objnum;
-@@ -87,6 +280,10 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
+@@ -87,6 +290,10 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
  	//now set explosion-specific data
  
  	obj->lifeleft = Vclip[vclip_type ].play_time;
@@ -881,7 +891,7 @@ index fe9b0d1..e64b65e 100644
  	obj->ctype.expl_info.spawn_time = -1;
  	obj->ctype.expl_info.delete_objnum = -1;
  	obj->ctype.expl_info.delete_time = -1;
-@@ -439,10 +636,13 @@ object *object_create_debris(object *parent, int subobj_num)
+@@ -439,10 +646,13 @@ object *object_create_debris(object *parent, int subobj_num)
  
  }
  
@@ -897,7 +907,7 @@ index fe9b0d1..e64b65e 100644
  
  }
  
-@@ -1620,3 +1820,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
+@@ -1620,3 +1830,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
  			expl_wall_swap(&ew[i], swap);
  }
  

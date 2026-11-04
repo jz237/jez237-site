@@ -220,3 +220,5 @@ void astra_blast(vms_vector *where,fix radius,float t,unsigned seed,int kind,int
     for(int i=0;i<bursts;i++)pyro_fragments(secondary[i],size*.46f,secondary[i][3],seed+i+97,0,visibility);
     EM_ASM(Module.volumeBlasts=(Module.volumeBlasts||0)+1;Module.blastStyleMask=(Module.blastStyleMask||0)|(1<<$0);,kind);
 }
+
+#include "astra_detonation_draw.inc"

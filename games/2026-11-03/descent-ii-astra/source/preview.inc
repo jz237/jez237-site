@@ -4,7 +4,7 @@ int astra_preview_active;
 static unsigned preview_seed,preview_number;
 static double preview_started;
 static float preview_length;
-static int preview_sound;
+static int preview_sound,preview_profile;
 static void preview_snapshot(int entering)
 {
     if(!ConsoleObject)return;
@@ -19,7 +19,10 @@ static void astra_preview_new(void)
     unsigned random=(unsigned)EM_ASM_INT({var a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]|0;});
     unsigned next=death_hash(random^(++preview_number*2654435761u));
     preview_seed=next==preview_seed?next^0x9e3779b9u:next;
-    preview_length=5.9f+1.1f*(preview_seed&255)/255.f;
+    int requested=EM_ASM_INT(return Module.blastInspect|0;);
+    preview_profile=requested>0 && requested<AB_COUNT?requested:AB_LEGACY;
+    preview_length=preview_profile?astra_pattern_length(preview_profile,preview_seed):
+                                   5.9f+1.1f*(preview_seed&255)/255.f;
     preview_started=emscripten_get_now();preview_sound=-1;
     digi_stop_digi_sounds();
 }
@@ -43,7 +46,7 @@ int astra_preview_frame(void)
         return 1;
     }
     if(!astra_preview_active)return 0;
-    float age=(emscripten_get_now()-preview_started)*.001f,seconds=age-.85f;
+    float age=(emscripten_get_now()-preview_started)*.001f,seconds=age-(preview_profile?.20f:.85f);
     gr_set_current_canvas(NULL);gr_clear_canvas(BM_XRGB(1,2,3));
     int mine=EM_ASM_INT(return Number.isInteger(Module.mineInspect)?Module.mineInspect:-1);
     if(mine>=0){
@@ -67,13 +70,27 @@ int astra_preview_frame(void)
         extern int astra_draw_pickup(object*);astra_draw_pickup(&item);
         g3_end_frame();EM_ASM(window.astraCollectibleStatus?.($0);,inspect);return 1;
     }
-    if(seconds<.05f){
+    if(!preview_profile && seconds<.05f){
         vms_angvec angles={-5200,2400,19500+(int)(age*1200)};
         g3s_lrgb light={F1_0,F1_0,F1_0};
         extern int astra_draw_pyro(g3s_lrgb);
         g3_start_instance_angles(&center,&angles);astra_draw_pyro(light);g3_done_instance();
     }
-    if(seconds>=0 && seconds<preview_length){
+    if(preview_profile && seconds>=0 && seconds<preview_length){
+        float base=preview_profile<=AB_CINDERS?10.6f:preview_profile<=AB_IMPLOSION?8.5f:10.5f;
+        center.z=i2f(60);
+        if(preview_profile==AB_BLOOM)center.y=-i2f(7);
+        if(preview_profile==AB_CINDERS||preview_profile==AB_SPALL)center.y=-i2f(3);
+        astra_pattern_blast(&center,fl2f(base*astra_detonations[preview_profile].scale),
+                            seconds/preview_length,preview_seed,preview_profile,preview_profile>AB_CINDERS);
+        if(preview_sound<0){
+            static const int sound[AB_COUNT]={0,SOUND_FORCEFIELD_BOUNCE_WEAPON,SOUND_LASER_HIT_CLUTTER,
+                SOUND_WEAPON_HIT_BLASTABLE,SOUND_ROBOT_HIT,SOUND_MINE_BLEW_UP,SOUND_ROBOT_DESTROYED,
+                SOUND_MINE_BLEW_UP,SOUND_BADASS_EXPLOSION};
+            digi_play_sample(sound[preview_profile],F1_0/2);
+            preview_sound=0;
+        }
+    }else if(!preview_profile && seconds>=0 && seconds<preview_length){
         float t=seconds/preview_length;
         astra_blast(&center,i2f(13),t,preview_seed,preview_seed%8,2);
         static const int sounds[]={SOUND_ROBOT_DESTROYED,SOUND_BADASS_EXPLOSION,SOUND_LASER_HIT_CLUTTER,SOUND_MINE_BLEW_UP};
@@ -85,8 +102,8 @@ int astra_preview_frame(void)
     }
     g3_end_frame();
     extern void astra_lens(int,int,int,int);astra_lens(0,0,SWIDTH,SHEIGHT);
-    EM_ASM({window.astraPreview?.update($0,$1>>>0,$2,$3);
+    EM_ASM({window.astraPreview?.update($0,$1>>>0,$2,$3,$4);
         if(Module.traceAstraPreview)Module.traceAstraPreview($0,$1>>>0,$2,$3);
-    },preview_number,preview_seed,seconds,preview_length);
+    },preview_number,preview_seed,seconds,preview_length,preview_profile);
     return 1;
 }

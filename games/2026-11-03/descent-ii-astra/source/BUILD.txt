@@ -516,3 +516,15 @@ It also receives the existing weapon light. Paused inspection clears transient
 blast inputs so an earlier combat explosion cannot remain lit in the showroom.
 An isolated renderer fixture checks warm light, blue light and out-of-range
 falloff; the shipping engine contains no fixture controls.
+
+Astra combat explosions (pyre23)
+Eight new render-only profiles share the same lifetime, radius and palette
+configuration in combat and in the explosion showroom. Small hits can produce
+Arc Snap, Ceramic Spall or Cinder Fountain. Larger detonations can produce
+Pressure Ring, Magnetic Implosion, Fuel Spiral, Canister Chain or Reactor Bloom.
+Legacy blasts remain in both selection pools. The player ship retains its
+dedicated randomized 5.9–7.0 second breakup. New profiles last 0.38–5.0 seconds
+before the existing close-impact limits. Replay and loop use the paused native
+preview. Changes use a deterministic presentation seed and the original sounds.
+The combat renderer depth-tests fragments, optical gas and streaks against
+the mine. Wall lights inherit each profile's palette and timing.

@@ -195,10 +195,12 @@ window.addEventListener("keydown", e => {
 window.addEventListener("blur", releaseFlightMouse);
 document.addEventListener("visibilitychange", () => { if (document.hidden) releaseFlightMouse(); });
 
+let firstBlastProfile=0;
 window.astraPreview = {
   active:false,
   show(active) {
     this.active=active;
+    $("blastControls").hidden=!(active && Module.mineInspect<0 && Module.weaponInspect<0 && Module.pickupInspect<0);
     document.body.classList.toggle("previewing",active);
     $("previewPanel").hidden=!active;
     setAutoControls(false);
@@ -206,14 +208,23 @@ window.astraPreview = {
     else flightView.focus({preventScroll:true});
     refreshMouseHint();
   },
-  update(number,seed,age,length) {
-    this.state={number,seed,age,length};
+  update(number,seed,age,length,profile=0) {
+    this.state={number,seed,age,length,profile};
+    $("blastControls").hidden=false;
+    $("blastSelect").value=String(profile);
+    $("previewTitle").textContent=profile?"COMBAT EXPLOSIONS":"PYRO–GX / DESTRUCTION PREVIEW";
     $("previewVariation").textContent="VARIATION "+String(number).padStart(2,"0");
     $("previewPhase").textContent=age<0?"PYRO–GX · Stand by":age>=length?"Clear · Try another variation":age<length*.16?"Hull breakup":age<length*.65?"Secondary detonations":"Cooling embers";
+    if(profile){
+      $("previewVariation").textContent=$("blastSelect").selectedOptions[0].textContent;
+      $("previewPhase").textContent=age<0?"Armed":age<length?"Detonating":"Clear";
+      $("previewAgain").textContent="Replay";
+      if($("blastLoop").checked && age>length+.9)Module.pyroPreviewCommand=1;
+    }else $("previewAgain").textContent="Play another variation ↻";
     $("previewTime").textContent=Math.max(0,Math.min(age,length)).toFixed(1)+" / "+length.toFixed(1)+" s";
     $("previewProgress").value=Math.max(0,Math.min(1,age/length));
   },
-  open() { if(flightActive && Module.astra){releaseFlightMouse();Module._astra_reset_flight_input?.();Module.pyroPreviewCommand=1;} },
+  open() { if(flightActive && Module.astra){Module.blastInspect=0;releaseFlightMouse();Module._astra_reset_flight_input?.();Module.pyroPreviewCommand=1;} },
   close() { if(this.active)Module.pyroPreviewCommand=-1; }
 };
 $("previewFlight").onclick=()=>window.astraPreview.open();
@@ -250,7 +261,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
     const quality=Number($("res").value);
     const height=Math.round(quality*9/16);
     window.Module={
-      canvas,quick,demo,encounter,autopilot,mineInspect:mine?0:-1,mineInspectZoom:1,demoArsenal:autopilot&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:mine?Number($("mineLevel").value):autopilot?Number($("demoLevel").value):1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign:$("campaign").value,wideHud:$("wideHud").checked,intro:!quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys",
+      canvas,quick,demo,encounter,autopilot,blastInspect:preview?firstBlastProfile:0,mineInspect:mine?0:-1,mineInspectZoom:1,demoArsenal:autopilot&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:mine?Number($("mineLevel").value):autopilot?Number($("demoLevel").value):1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign:$("campaign").value,wideHud:$("wideHud").checked,intro:!quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys",
         "-gl_gettexlevelparam_ok","0","-gl_intensity4_ok","0","-gl_luminance4_alpha4_ok","0","-gl_rgba2_ok","0"],
       print:console.log,printErr:console.warn,onAbort:astraFail,
       onExit:()=>{window.astraMenus?.hide();window.astraTerminal?.fail();window.astraFlightFocus(false);syncPilot();document.body.classList.remove("flying");$("status").textContent="Flight ended."; $("retry").hidden=false;},
@@ -288,7 +299,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre22a");
+    await script("engine.js?v=pyre23");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 
@@ -320,7 +331,17 @@ window.addEventListener("keydown",e=>{
 },true);
 
 $("start").onclick=()=>launch(true);
-$("previewStart").onclick=()=>{$("look").value="astra";launch(true,false,false,true);};
+function launchBlastPreview(profile){
+  firstBlastProfile=profile;
+  $("look").value="astra";
+  launch(true,false,false,true);
+}
+$("previewStart").onclick=()=>launchBlastPreview(0);
+$("blastStart").onclick=()=>launchBlastPreview(1);
+$("blastSelect").onchange=()=>{
+  Module.blastInspect=Number($("blastSelect").value);
+  Module.pyroPreviewCommand=1;
+};
 $("encounter").onclick=()=>launch(true,false,true);
 $("menus").onclick=()=>launch(false);
 $("demo").onclick=()=>launch(false,true);
