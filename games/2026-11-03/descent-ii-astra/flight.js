@@ -12,6 +12,7 @@ function script(src) {
   });
 }
 function astraFail(message) {
+  window.astraFlightFocus(false);
   document.body.classList.remove("flying");
   $("status").textContent = String(message);
   $("retry").hidden = false;
@@ -109,10 +110,109 @@ function syncPilot() {
   saving=true;
   Module.FS.syncfs(false,err=>{saving=false;if(err)console.warn("Pilot save",err);});
 }
-async function launch(quick,demo=false,encounter=false) {
+// The flight window owns relative input. Menus and the launcher use the desktop cursor.
+const flightView = $("view"), mouseHint = $("mouseHint");
+let flightActive = false, capturePending = false, captureClick = false, hasMouse = false;
+let lastRelease = -Infinity;
+const mouseCaptured = () => document.pointerLockElement === flightView;
+function refreshMouseHint() {
+  mouseHint.hidden = !flightActive || mouseCaptured() || window.astraPreview?.active;
+  $("previewFlight").hidden = !flightActive || !window.Module?.astra || window.astraPreview?.active;
+}
+function releaseFlightMouse() {
+  if (mouseCaptured()) document.exitPointerLock();
+}
+function captureFlightMouse() {
+  if (capturePending || mouseCaptured() || !flightView.requestPointerLock) return;
+  capturePending = true;
+  try {
+    flightView.requestPointerLock()?.catch(captureError);
+  } catch { captureError(); }
+}
+function captureError() {
+  capturePending = false;
+  mouseHint.textContent = "Click the mine to capture the mouse · Esc releases it";
+  refreshMouseHint();
+}
+window.astraFlightFocus = active => {
+  flightActive = active;
+  if (!active) { releaseFlightMouse(); window.astraDeck?.show(false); }
+  refreshMouseHint();
+};
+document.addEventListener("pointerlockerror", captureError);
+document.addEventListener("pointerlockchange", () => {
+  capturePending = false;
+  const locked = mouseCaptured();
+  if (!locked && hasMouse) {
+    lastRelease = performance.now();
+    if (flightActive) window.Module?._astra_reset_flight_input?.();
+  }
+  hasMouse = locked;
+  refreshMouseHint();
+});
+flightView.addEventListener("mousedown", e => {
+  if (window.astraPreview?.active) { e.preventDefault();e.stopImmediatePropagation();return; }
+  if (!flightActive || mouseCaptured() || !flightView.requestPointerLock) return;
+  e.preventDefault(); e.stopImmediatePropagation();
+  if (e.button === 0) {
+    captureClick = true;
+    flightView.focus({preventScroll:true});
+    captureFlightMouse();
+  }
+}, true);
+flightView.addEventListener("mouseup", e => {
+  if (captureClick && e.button === 0) {
+    captureClick = false;
+    e.preventDefault(); e.stopImmediatePropagation();
+  }
+}, true);
+flightView.addEventListener("mousemove", e => {
+  if (flightActive && flightView.requestPointerLock && !mouseCaptured()) e.stopImmediatePropagation();
+}, true);
+window.addEventListener("keydown", e => {
+  if (window.astraPreview?.active) {
+    e.stopImmediatePropagation();
+    if(e.key==="Tab" || (e.target.closest?.("button") && ["Enter"," "].includes(e.key)))return;
+    e.preventDefault();
+    if(e.key==="Escape")window.astraPreview.close();
+    return;
+  }
+  if (e.key === "Escape" && (mouseCaptured() || (flightActive && performance.now()-lastRelease < 120))) {
+    e.preventDefault(); e.stopImmediatePropagation(); releaseFlightMouse();
+  }
+}, true);
+window.addEventListener("blur", releaseFlightMouse);
+document.addEventListener("visibilitychange", () => { if (document.hidden) releaseFlightMouse(); });
+
+window.astraPreview = {
+  active:false,
+  show(active) {
+    this.active=active;
+    document.body.classList.toggle("previewing",active);
+    $("previewPanel").hidden=!active;
+    if(active){releaseFlightMouse();window.astraDeck?.show(false);$("previewAgain").focus();}
+    else flightView.focus({preventScroll:true});
+    refreshMouseHint();
+  },
+  update(number,seed,age,length) {
+    this.state={number,seed,age,length};
+    $("previewVariation").textContent="VARIATION "+String(number).padStart(2,"0");
+    $("previewPhase").textContent=age<0?"PYRO–GX · Stand by":age>=length?"Clear · Try another variation":age<length*.16?"Hull breakup":age<length*.65?"Secondary detonations":"Cooling embers";
+    $("previewTime").textContent=Math.max(0,Math.min(age,length)).toFixed(1)+" / "+length.toFixed(1)+" s";
+    $("previewProgress").value=Math.max(0,Math.min(1,age/length));
+  },
+  open() { if(flightActive && Module.astra){releaseFlightMouse();Module._astra_reset_flight_input?.();Module.pyroPreviewCommand=1;} },
+  close() { if(this.active)Module.pyroPreviewCommand=-1; }
+};
+$("previewFlight").onclick=()=>window.astraPreview.open();
+$("previewAgain").onclick=()=>{Module.pyroPreviewCommand=1;};
+$("previewClose").onclick=()=>window.astraPreview.close();
+
+async function launch(quick,demo=false,encounter=false,preview=false) {
   const buttons=document.querySelectorAll(".launch");
   buttons.forEach(el=>el.disabled=true);
   try {
+    if(quick && !demo && !preview)captureFlightMouse();
     const astra=$("look").value==="astra";
     // Prime the media element in the button gesture before disk I/O.
     const music=player;
@@ -120,17 +220,17 @@ async function launch(quick,demo=false,encounter=false) {
     music.play().then(()=>{if(!astraDisc.track){music.pause();music.currentTime=0;music.volume=0.75;}}).catch(()=>{});
     await readPack("game","Reading game data");
     await readPack("vertigo","Reading original Vertigo mission");
-    if(astra){await readPack("art","Preparing mine materials");await readPack("cockpit","Fitting flight instruments");await readPack("fleet","Fitting Overload robot chassis");await readPack("forge","Preparing foundry lights and fireballs");}
+    if(astra){await script("pyro-field.js?v=5");await readPack("art","Preparing mine materials");await readPack("cockpit","Fitting flight instruments");await readPack("fleet","Fitting Overload robot chassis");await readPack("forge","Preparing foundry lights and fireballs");}
     await readPack("movies","Reading cinematics");
     $("status").textContent="Starting flight computer";
     const canvas=$("view");
     const quality=Number($("res").value);
     const height=Math.round(quality*9/16);
     window.Module={
-      canvas,quick,demo,encounter,campaign:$("campaign").value,wideHud:$("wideHud").checked,intro:!quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot","astra","-window","-nostickykeys",
+      canvas,quick,demo,encounter,pyroPreviewCommand:preview?1:0,campaign:$("campaign").value,wideHud:$("wideHud").checked,intro:!quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot","astra","-window","-nostickykeys",
         "-gl_gettexlevelparam_ok","0","-gl_intensity4_ok","0","-gl_luminance4_alpha4_ok","0","-gl_rgba2_ok","0"],
       print:console.log,printErr:console.warn,onAbort:astraFail,
-      onExit:()=>{syncPilot();document.body.classList.remove("flying");$("status").textContent="Flight ended."; $("retry").hidden=false;},
+      onExit:()=>{window.astraFlightFocus(false);syncPilot();document.body.classList.remove("flying");$("status").textContent="Flight ended."; $("retry").hidden=false;},
       preRun:[()=>{
         const F=Module.FS, save="/home/web_user/.d2-astra";
         F.mkdirTree("/mine/demos");F.mkdirTree("/mine/missions"); F.mkdirTree(save);
@@ -138,6 +238,7 @@ async function launch(quick,demo=false,encounter=false) {
         if(astra){
           const hull=window.astraHullBytes || Uint8Array.from(atob(window.astraHull.data),c=>c.charCodeAt(0));
           F.writeFile("/mine/astra.hull",hull);
+          F.writeFile("/mine/pyro-field.png",Uint8Array.from(atob(window.astraPyroField),c=>c.charCodeAt(0)));delete window.astraPyroField;
           F.writeFile("/mine/pyro-skin.png",Uint8Array.from(atob(window.astraSkin),c=>c.charCodeAt(0)));F.writeFile("/mine/pyro.frag",window.astraHull.fragment);
         }
         if(astra) for(const [alias,src] of Object.entries(window.astraAliases||{}))
@@ -164,7 +265,7 @@ async function launch(quick,demo=false,encounter=false) {
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=fleet2");
+    await script("engine.js?v=pyre6");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 
@@ -196,6 +297,7 @@ window.addEventListener("keydown",e=>{
 },true);
 
 $("start").onclick=()=>launch(true);
+$("previewStart").onclick=()=>{$("look").value="astra";launch(true,false,false,true);};
 $("encounter").onclick=()=>launch(true,false,true);
 $("menus").onclick=()=>launch(false);
 $("demo").onclick=()=>launch(false,true);
