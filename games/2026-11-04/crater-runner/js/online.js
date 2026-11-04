@@ -3,8 +3,8 @@
 // (threats, enemies, bosses, checkpoints, lives, score) and streams snapshots. The guest drives its
 // own rover locally (so jumping never lags), judges its own crashes, and reports its rover and its
 // shots; the host re-creates those shots so kills are decided in one place.
-import { STEP } from './sim.js?v=1';
-import { adoptSegment, groundH } from './sim.js?v=1';
+import { STEP } from './sim.js?v=2';
+import { adoptSegment, groundH } from './sim.js?v=2';
 
 export const PROTOCOL = 1;
 const RELAY = 'wss://steel-duel-online.jez237.workers.dev';

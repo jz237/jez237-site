@@ -2,9 +2,9 @@
 // with the real rules: lives carry over (+1 per sector), salvage is earned from score and spent on
 // upgrades between sectors, a game over ends the run. Reports how far each profile gets.
 //   node scripts/crater-runner/autopilot_check.mjs [runs=20]
-import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-04/crater-runner/js/sim.js?v=1';
-import { Autopilot } from '../../games/2026-11-04/crater-runner/js/ai.js?v=1';
-import { SECTORS, START_LIVES, UPGRADES, UP_COST } from '../../games/2026-11-04/crater-runner/js/config.js?v=1';
+import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-04/crater-runner/js/sim.js?v=2';
+import { Autopilot } from '../../games/2026-11-04/crater-runner/js/ai.js?v=2';
+import { SECTORS, START_LIVES, UPGRADES, UP_COST } from '../../games/2026-11-04/crater-runner/js/config.js?v=2';
 
 const runs = +(process.argv[2] || 20);
 // a sensible shopping order: guns first, then springs and shields

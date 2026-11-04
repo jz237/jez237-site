@@ -216,12 +216,13 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">CRATER<br><span>RUNNER</span></h1>
-      <div class="ver">VERSION <b id="ver">1.0.0</b> · LUNAR SURFACE OPS</div>
+      <div class="ver">VERSION <b id="ver">1.1.0</b> · LUNAR SURFACE OPS</div>
       <div class="btns" id="title-btns">
         <button class="mbtn primary" data-act="campaign">START CAMPAIGN<small>Five sectors, A to Z, a boss at the end of each</small></button>
         <button class="mbtn" data-act="sectors">SECTOR SELECT<small id="sel-sub">Replay any sector you have reached</small></button>
         <button class="mbtn" data-act="longhaul">LONG HAUL<small>Endless drive that slowly gets tougher</small></button>
         <button class="mbtn" data-act="online">ONLINE CO-OP<small>Drive side by side with a friend</small></button>
+        <button class="mbtn" data-act="playthrough">AI PLAYTHROUGH<small>Sit back and watch the autopilot drive all five sectors</small></button>
         <div class="btns two">
           <button class="mbtn" data-act="scores">HIGH SCORES</button>
           <button class="mbtn" data-act="medals">MEDALS <small id="med-sub">0 / 15</small></button>
@@ -333,6 +334,6 @@ addEventListener('error', (e) => window.__crErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__crErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__crErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=1"></script>
+<script type="module" src="js/main.js?v=2"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 // from a hash of seed + sector + segment (course layout, so a retry from a checkpoint meets the same
 // course). Nothing outside step() may change W, so replays and online play stay exact.
 // Units: metres and seconds. +x is the way the rover drives, +y is up, the track runs along z = 0.
-import { F, STEP, SECTORS, rampAt, rampLevel, longHaulLevel, THREATS, BOSSES, SCORE, START_LIVES, LONG_HAUL } from './config.js?v=1';
+import { F, STEP, SECTORS, rampAt, rampLevel, longHaulLevel, THREATS, BOSSES, SCORE, START_LIVES, LONG_HAUL } from './config.js?v=2';
 export { STEP };
 
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);

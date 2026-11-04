@@ -1,13 +1,13 @@
 // Crater Runner — game flow, menus, HUD, commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES } from './config.js?v=1';
-import { makeWorld, step, drainEvents, cpLetter, segCount } from './sim.js?v=1';
-import { Autopilot } from './ai.js?v=1';
-import { Renderer, pickQuality, CALM } from './render.js?v=1';
-import { Audio } from './audio.js?v=1';
-import { Input } from './input.js?v=1';
-import { Scores, NO_POST } from './scores.js?v=1';
-import { Recorder, Replay } from './replay.js?v=1';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=1';
+import { VERSION, SECTORS, STEP, F, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES } from './config.js?v=2';
+import { makeWorld, step, drainEvents, cpLetter, segCount } from './sim.js?v=2';
+import { Autopilot } from './ai.js?v=2';
+import { Renderer, pickQuality, CALM } from './render.js?v=2';
+import { Audio } from './audio.js?v=2';
+import { Input } from './input.js?v=2';
+import { Scores, NO_POST } from './scores.js?v=2';
+import { Recorder, Replay } from './replay.js?v=2';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=2';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -56,7 +56,7 @@ function say(name, o = {}) {
   if (!o.key && t - lastLine < VOICE_GAP) return;
   if (A.say('v_' + name, { priority: !!o.key, delay: o.delay })) { G.says.set(name, t); lastLine = t; (window.__cr.lines ||= []).push([t, name]); }
 }
-function rumble(strong, weak, ms) { if (settings.rumble === 'off' || G.mode === 'demo' || G.mode === 'title') return; I.rumble(strong, weak, ms); }
+function rumble(strong, weak, ms) { if (settings.rumble === 'off' || G.mode === 'demo' || G.mode === 'playthrough' || G.mode === 'title') return; I.rumble(strong, weak, ms); }
 
 // ------------------------------------------------------------------ screens
 const SCREENS = ['title', 'sectors', 'upgrades', 'results', 'scores', 'medals', 'options', 'help', 'online', 'pause'];
@@ -133,12 +133,29 @@ function startCampaign(sector = 0) {
   beginSector(sector);
 }
 function beginSector(s) {
-  const W = makeWorld({ mode: 'campaign', sector: s, seed: newSeed(), up: G.run.up, lives: G.run.lives, score: G.run.score, cp: +params.get('cp') || 0 });
+  const W = makeWorld({ mode: 'campaign', sector: s, seed: newSeed(), up: G.run.up, lives: G.run.lives, score: G.run.score, cp: +params.get('cp') || 0, demo: !!G.run.ai });
   G.run.sector = s; G.run.score0 = G.run.score;
-  G.mode = 'campaign';
+  G.mode = G.run.ai ? 'playthrough' : 'campaign';
   enterPlay(W);
   banner(`SECTOR ${s + 1}`, SECTORS[s].name, 3);
   if (s > 0) say('s' + (s + 1), { key: true, delay: 1 });
+}
+// AI PLAYTHROUGH: the demo autopilot drives the whole campaign, picks its own upgrades between
+// sectors and retries a sector if it ever runs out of rovers. Nothing it does counts for scores or medals.
+const AI_SHOP = ['cannon', 'shield', 'flak', 'springs', 'cannon', 'radar', 'shield', 'cannon', 'flak', 'springs'];
+function startPlaythrough() {
+  G.run = { score: 0, lives: START_LIVES + 2, up: {}, salvage: 0, start: 0, newMedals: [], ai: true, tries: 0 };
+  beginSector(+params.get('sector') || 0);
+  caption('AI PLAYTHROUGH: THE AUTOPILOT DRIVES ALL FIVE SECTORS. PRESS ESC OR PAUSE TO STOP', 6);
+}
+function aiShop() {
+  const got = [];
+  for (const k of AI_SHOP) {
+    const lv = G.run.up[k] || 0;
+    if (lv >= UPGRADES[k].max || G.run.salvage < UP_COST[lv]) continue;
+    G.run.salvage -= UP_COST[lv]; G.run.up[k] = lv + 1; got.push(UPGRADES[k].name);
+  }
+  return got;
 }
 function startLongHaul() {
   G.run = { score: 0, lives: START_LIVES, up: {}, start: 0, newMedals: [] };
@@ -157,7 +174,6 @@ function startDemo() {
   enterPlay(W);
   G.ai = new Autopilot(seed, 'demo');
   G.demoT = 0; G.demoStartT = performance.now();
-  $('demo-badge').classList.remove('hidden');
   banner(`SECTOR ${s + 1}`, SECTORS[s].name, 2.5);
   caption(`DEMO · ${SECTORS[s].name} · UPGRADES FITTED: ${UP_KEYS.filter((k) => up[k]).map((k) => UPGRADES[k].name).join(', ')}`, 5);
 }
@@ -166,8 +182,12 @@ function enterPlay(W) {
   G.W = W; G.state = 'play'; G.acc = 0; G.clip = null; G.pendingClip = null; G.lastLife = false;
   if (!G.ai && G.autopilot && G.mode !== 'online') G.ai = new Autopilot(W.seed, 'demo');
   REC.reset();
+  if (G.mode === 'playthrough') G.ai = new Autopilot(W.seed, 'demo');
   hideScreens();
   setHud(true);
+  const watch = G.mode === 'demo' || G.mode === 'playthrough';
+  $('demo-badge').classList.toggle('hidden', !watch);
+  $('demo-badge').innerHTML = G.mode === 'playthrough' ? '<span>AI PLAYTHROUGH</span> · ESC TO STOP' : '<span>DEMO</span> · PRESS ANY KEY';
   R.setLook(W.k);
   const r = W.rovers[0];
   R.updateCamera(0.016, { x: r.x, y: r.y, vx: r.vx }, { snap: true });
@@ -182,7 +202,7 @@ function enterPlay(W) {
 function setHud(on) {
   $('hud').classList.toggle('hidden', !on);
   const touch = settings.touch === 'on' || (settings.touch === 'auto' && I.isTouch);
-  $('touch').classList.toggle('hidden', !on || !touch || G.mode === 'demo');
+  $('touch').classList.toggle('hidden', !on || !touch || G.mode === 'demo' || G.mode === 'playthrough');
   $('tb-pause').classList.toggle('hidden', !on || G.mode === 'demo');
   if (!on) { $('bossbar').classList.add('hidden'); $('warns').innerHTML = ''; WM.length = 0; }
 }
@@ -308,7 +328,7 @@ const TUT = {
   up: () => `An attacker overhead. The same ${keyName('fire')} also <b>FIRES STRAIGHT UP</b>. Hit it as it passes over you.`,
   speed: () => `Use ${keyName('speed')} to <b>SLOW DOWN</b> or <b>SPEED UP</b>. Faster carries a jump further.`,
 };
-function tutorial(key) { if (G.mode === 'demo' || !TUT[key]) return; const el = $('tut'); el.innerHTML = TUT[key](); el.classList.remove('hidden'); G.tutT = key === 'speed' ? 6 : 5.5; }
+function tutorial(key) { if (G.mode === 'demo' || G.mode === 'playthrough' || !TUT[key]) return; const el = $('tut'); el.innerHTML = TUT[key](); el.classList.remove('hidden'); G.tutT = key === 'speed' ? 6 : 5.5; }
 
 // ------------------------------------------------------------------ events from the simulation
 function handleEvents(list, W, live) {
@@ -427,6 +447,7 @@ function onWorldOver(W) {
   if (G.mode === 'demo') { if (G.demoI % 2 === 0) toTitle(); else startDemo(); return; }
   A.stopLoops();
   if (G.mode === 'online') { results(W, W.result === 'clear' ? 'SECTOR CLEAR' : 'SIGNAL LOST', 'CO-OP DRIVE'); return; }
+  if (G.mode === 'playthrough') { playthroughNext(W); return; }
   if (W.mode === 'longhaul') { A.sting('over'); say('gameover', { key: true, delay: 1 }); results(W, 'END OF THE ROAD', `${Math.round(W.rovers[0].x).toLocaleString()} M · ${cpLetter(W, W.seg)}`); return; }
   const s = W.sector;
   if (W.result === 'clear') {
@@ -453,6 +474,36 @@ function onWorldOver(W) {
   say('gameover', { key: true, delay: 1 });
   results(W, 'GAME OVER', `SECTOR ${s + 1} · ${SECTORS[s].name} · CHECKPOINT ${cpLetter(W, W.seg)}`);
 }
+function playthroughNext(W) {
+  const s = W.sector;
+  if (W.result !== 'clear') {
+    // out of rovers: the AI takes the sector again from the start
+    G.run.tries++;
+    G.run.score = G.run.score0; G.run.lives = START_LIVES + 2;
+    banner('RETRY', `THE AUTOPILOT TRIES ${SECTORS[s].name} AGAIN`, 2.5);
+    setTimeout(() => { if (G.mode === 'playthrough') beginSector(s); }, 1800);
+    return;
+  }
+  G.run.score = W.score; G.run.lives = W.lives + 1;
+  G.run.salvage += Math.floor((W.score - G.run.score0) / 10);
+  G.run.lastTime = W.secT;
+  if (s >= SECTORS.length - 1) {
+    G.run.got = [];
+    results(W, 'AI PLAYTHROUGH COMPLETE', `ALL FIVE SECTORS · ${G.run.tries ? G.run.tries + (G.run.tries > 1 ? ' RETRIES' : ' RETRY') : 'NO RETRIES'}`);
+    return;
+  }
+  const bought = aiShop();
+  G.state = 'upgrade'; setHud(false);
+  $('up-title').textContent = `SECTOR ${s + 1} CLEAR`;
+  $('up-sub').textContent = `${fmtT(W.secT)} · AUTOPILOT BOUGHT: ${bought.length ? bought.join(', ') : 'NOTHING YET (SAVING UP)'}`;
+  $('next-sub').textContent = `Sector ${s + 2} · ${SECTORS[s + 1].name} · starts in a moment`;
+  renderUpgrades();
+  show('upgrades', false);
+  for (const el of document.querySelectorAll('#upgrid .upg')) if (bought.includes(UPGRADES[el.dataset.up].name)) el.classList.add('sel');
+  A.play('upgrade', { gap: 0, vol: 0.7 });
+  clearTimeout(G.ptT);
+  G.ptT = setTimeout(() => { if (G.mode === 'playthrough' && G.state === 'upgrade') beginSector(s + 1); }, 6000);
+}
 function upgrades(W) {
   G.state = 'upgrade'; setHud(false);
   $('up-title').textContent = `SECTOR ${W.sector + 1} CLEAR`;
@@ -472,6 +523,7 @@ function renderUpgrades() {
   }).join('');
 }
 function buy(k) {
+  if (G.mode === 'playthrough') return;
   const U = UPGRADES[k], lv = G.run.up[k] || 0;
   if (lv >= U.max) return;
   const cost = UP_COST[lv];
@@ -498,7 +550,7 @@ function results(W, title, sub) {
   G.board = board;
   G.ini = null;
   $('ini-wrap').classList.add('hidden');
-  if (G.mode !== 'online' && board.qualifies(W.score)) {
+  if (G.mode !== 'online' && G.mode !== 'playthrough' && board.qualifies(W.score)) {
     if (W.score > board.best()) say('newrecord', { key: true, delay: 3.5 });
     const ini = board.initials();
     G.ini = { chars: ini.split(''), i: 0, score: W.score, level: W.mode === 'longhaul' ? Math.round(W.rovers[0].x) : W.sector + 1 };
@@ -597,6 +649,7 @@ function act(a, el) {
   switch (a) {
     case 'campaign': A.play('uiok', { gap: 0 }); startCampaign(0); break;
     case 'longhaul': A.play('uiok', { gap: 0 }); startLongHaul(); break;
+    case 'playthrough': A.play('uiok', { gap: 0 }); startPlaythrough(); break;
     case 'sectors': buildSectors(); show('sectors'); break;
     case 'online': show('online'); netStatus(''); $('room-wrap').classList.add('hidden'); $('net-go').classList.add('hidden'); syncSegs(); break;
     case 'scores': show('scores'); renderScores(G.scoreTab || 'campaign'); break;
@@ -604,12 +657,12 @@ function act(a, el) {
     case 'options': show('options'); syncSegs(); break;
     case 'help': show('help'); break;
     case 'back': A.play('uiback', { gap: 0 }); goBack(); break;
-    case 'next': A.play('uiok', { gap: 0 }); beginSector(G.run.sector + 1); break;
+    case 'next': A.play('uiok', { gap: 0 }); clearTimeout(G.ptT); beginSector(G.run.sector + 1); break;
     case 'replay': playReplay(); break;
     case 'done': finishResults(); break;
     case 'resume': resume(); break;
     case 'pause': pause(); break;
-    case 'quit': toTitle(); break;
+    case 'quit': clearTimeout(G.ptT); toTitle(); break;
     case 'net-quick': NET.quick({ ini: HS.initials() }); break;
     case 'net-host': { const code = randomCode(4); $('room-code').textContent = code; $('room-wrap').classList.remove('hidden'); NET.connect(ROOM + code, 'host', { ini: HS.initials() }); break; }
     case 'net-join': { const code = cleanCode($('join-code').value); if (code.length !== 4) { netStatus('Type the 4-letter room code', 'error'); return; } NET.connect(ROOM + code, 'join', { ini: HS.initials() }); netStatus('Joining…'); break; }
@@ -763,8 +816,8 @@ function playStep(dt) {
   if (G.mode === 'demo') {
     G.demoT += dt;
     if (G.demoT > 95) { W.over = true; }
-    demoCaptions(W, dt);
   }
+  if (G.mode === 'demo' || G.mode === 'playthrough') demoCaptions(W, dt);
   if (W.over && G.state === 'play' || (W.over && G.state === 'paused-online')) { G.state = 'ended'; setTimeout(() => onWorldOver(W), G.mode === 'demo' ? 1500 : 1200); }
 }
 function replayStep(dt) {
@@ -836,7 +889,8 @@ async function boot() {
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
   HS.fresh(); HSL.fresh();
-  if (params.has('test')) { const m = await import('./tests.js?v=1'); m.runTests(window.__cr); }
+  if (params.has('test')) { const m = await import('./tests.js?v=2'); m.runTests(window.__cr); }
+  else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('longhaul')) startLongHaul(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
   if (!G.fixed) requestAnimationFrame(frame);
@@ -844,7 +898,7 @@ async function boot() {
 // test hooks
 Object.assign(window.__cr, {
   tick: (n = 1, dt = 1 / 60) => { for (let i = 0; i < n; i++) tickFrame(dt); },
-  startDemo, startCampaign, startLongHaul, toTitle, playReplay, pause, resume, act, buy, settingsApply: applySettings,
+  startDemo, startCampaign, startLongHaul, startPlaythrough, toTitle, playReplay, pause, resume, act, buy, settingsApply: applySettings,
   get W() { return G.W; }, noPost: NO_POST,
 });
 boot();

@@ -34,7 +34,20 @@ await page.goto(base + '?autoplay&noscores');
 await page.waitForTimeout(12000);
 const play = await page.evaluate(() => ({ mode: window.__cr.G.mode, t: window.__cr.G.W.t, errs: window.__crErrors.length }));
 console.log(`autoplay campaign: mode ${play.mode}, ${play.t.toFixed(1)} s driven`);
+// AI playthrough: from the sector 1 boss (cp=5) it must clear, shop, and roll into sector 2 by itself
+await page.goto(base + '?playthrough&fixed&cp=5&noscores');
+await page.waitForTimeout(1500);
+const pt = await page.evaluate(async () => {
+  const cr = window.__cr;
+  for (let i = 0; i < 60 * 120 && cr.G.state === 'play'; i++) cr.tick(1);
+  await new Promise((r) => setTimeout(r, 1500)); cr.tick(10);
+  const shop = { state: cr.G.state, screen: cr.G.screen, up: { ...cr.G.run.up }, sub: document.getElementById('up-sub').textContent };
+  await new Promise((r) => setTimeout(r, 6500)); cr.tick(10);
+  return { shop, next: { mode: cr.G.mode, state: cr.G.state, sector: cr.G.W.sector } };
+});
+console.log(`AI playthrough: after the S1 boss -> ${pt.shop.screen} (${pt.shop.sub}), then ${pt.next.mode} sector ${pt.next.sector + 1} (${pt.next.state})`);
 await browser.close();
 console.log(errors.length ? `console errors: ${errors.length}\n  ` + errors.slice(0, 8).join('\n  ') : 'console errors: 0');
 console.log(`score POSTs attempted: ${posts}`);
-process.exit(t.pass === t.total && !errors.length && !posts && demo.mode === 'demo' ? 0 : 1);
+const ptOk = pt.shop.screen === 'upgrades' && pt.next.mode === 'playthrough' && pt.next.sector === 1 && pt.next.state === 'play';
+process.exit(t.pass === t.total && !errors.length && !posts && demo.mode === 'demo' && ptOk ? 0 : 1);

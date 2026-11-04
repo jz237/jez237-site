@@ -6,7 +6,7 @@ const SFX = ['engine', 'tyres', 'jump', 'land', 'landsoft', 'bump', 'cannon', 'f
   'tankfire', 'tankmove', 'shellhit', 'bomb', 'bombhit', 'flyer', 'drone', 'alarm', 'warn', 'checkpoint', 'shieldhit', 'shieldup', 'crash', 'bosscharge', 'bossroar', 'bosshit',
   'spawn', 'upgrade', 'medal', 'beep', 'go', 'uimove', 'uiok', 'uiback', 'whoosh', 'rewind', 'debris'];
 const VOICE = ['title', 'begin', 's2', 's3', 's4', 's5', 'longhaul', 'boss', 'bossdown', 'clear', 'lastlife', 'gameover', 'newrecord', 'champion', 'demo', 'replay', 'partner', 'halfway'];
-const V = '?v=1';
+const V = '?v=2';
 
 export class Audio {
   constructor(base) {

@@ -1,6 +1,6 @@
 // Crater Runner — every tunable number lives here. The RAMP table drives difficulty; nothing else
 // in the game hard-codes pace, spacing, crater size, enemy fire or warning time.
-export const VERSION = '1.0.0';
+export const VERSION = '1.1.0';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ the rover
@@ -52,12 +52,12 @@ export const RAMP = [
   { speed: [6.0, 7.0], gap: [3.7, 2.3], pair: [0, 0.22], pairGap: [1.7, 1.6], crater: [2.5, 4.2], land: [0.95, 0.72], grace: [0.18, 0.16],
     warn: [2.4, 2.1], fire: [0.12, 0.3], air: [1, 1.6], combo: [0, 0], segT: [28, 30], shield: [1, 1], bossHP: 14, bossRate: 0.8,
     mix: { crater: 1, boulder: 0.8, air: 0.38 } },
-  { speed: [7.2, 8.2], gap: [2.25, 1.85], pair: [0.24, 0.42], pairGap: [1.55, 1.42], crater: [4.4, 6.0], land: [0.71, 0.62], grace: [0.155, 0.14],
-    warn: [2.05, 1.75], fire: [0.31, 0.4], air: [1.6, 2.0], combo: [0, 0], segT: [30, 31], shield: [1, 1], bossHP: 18, bossRate: 0.75,
-    mix: { crater: 1, boulder: 0.7, mine: 0.55, tank: 0.45, air: 0.42 } },
-  { speed: [8.4, 9.4], gap: [1.85, 1.66], pair: [0.42, 0.58], pairGap: [1.4, 1.26], crater: [6.2, 8.3], land: [0.62, 0.54], grace: [0.135, 0.115],
-    warn: [1.7, 1.4], fire: [0.42, 0.48], air: [2.0, 2.3], combo: [0.15, 0.28], segT: [31, 32], shield: [0, 0], bossHP: 20, bossRate: 0.62,
-    mix: { crater: 1, boulder: 0.6, mine: 0.5, tank: 0.4, wall: 0.22, drone: 0.3, air: 0.45 } },
+  { speed: [7.2, 8.2], gap: [2.0, 1.7], pair: [0.36, 0.52], pairGap: [1.55, 1.42], crater: [4.6, 6.3], land: [0.69, 0.6], grace: [0.155, 0.14],
+    warn: [2.05, 1.75], fire: [0.34, 0.42], air: [1.6, 2.0], combo: [0, 0], segT: [30, 31], shield: [1, 0.4], bossHP: 18, bossRate: 0.75,
+    mix: { crater: 1, boulder: 0.7, mine: 0.75, tank: 0.65, air: 0.42 } },
+  { speed: [8.4, 9.4], gap: [1.68, 1.64], pair: [0.55, 0.6], pairGap: [1.4, 1.26], crater: [7.0, 8.3], land: [0.57, 0.54], grace: [0.135, 0.115],
+    warn: [1.7, 1.4], fire: [0.46, 0.48], air: [2.2, 2.3], combo: [0.15, 0.28], segT: [31, 32], shield: [0, 0], bossHP: 20, bossRate: 0.62,
+    mix: { crater: 1, boulder: 0.6, mine: 0.6, tank: 0.5, wall: 0.25, drone: 0.3, air: 0.45 } },
   { speed: [9.6, 10.6], gap: [1.66, 1.6], pair: [0.58, 0.6], pairGap: [1.24, 1.1], crater: [8.3, 9.3], land: [0.54, 0.52], grace: [0.11, 0.1],
     warn: [1.36, 1.12], fire: [0.48, 0.5], air: [2.3, 2.5], combo: [0.3, 0.4], segT: [32, 33], shield: [0, 0], bossHP: 28, bossRate: 1.0,
     mix: { crater: 1, boulder: 0.55, mine: 0.5, tank: 0.45, wall: 0.34, drone: 0.35, air: 0.5 } },

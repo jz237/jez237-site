@@ -3,12 +3,12 @@
 // rolling terrain with decorative craters; gameplay craters are pressed into it in 3D as they appear.
 // Long low sun shadows, parallax mountain ranges, the Earth in a black sky, starfield, five looks.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=1';
-import { makeTextures } from './textures.js?v=1';
-import * as MD from './models.js?v=1';
-import { FX, CALM } from './fx.js?v=1';
-import { baseH, craterProfile } from './sim.js?v=1';
-import { F, THREATS } from './config.js?v=1';
+import { Post } from './post.js?v=2';
+import { makeTextures } from './textures.js?v=2';
+import * as MD from './models.js?v=2';
+import { FX, CALM } from './fx.js?v=2';
+import { baseH, craterProfile } from './sim.js?v=2';
+import { F, THREATS } from './config.js?v=2';
 
 export { CALM };
 

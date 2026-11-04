@@ -1,10 +1,10 @@
 // Replays are exact: drive each sector with the human-like autopilot while recording, and for every
 // crash and boss kill re-run the clip from its saved snapshot + inputs and compare the world state at
 // that tick, bit for bit.   node scripts/crater-runner/replay_check.mjs [seedsPerSector=6]
-import { makeWorld, step, drainEvents, STEP, cloneWorld } from '../../games/2026-11-04/crater-runner/js/sim.js?v=1';
-import { Autopilot } from '../../games/2026-11-04/crater-runner/js/ai.js?v=1';
-import { TYPICAL_UP } from '../../games/2026-11-04/crater-runner/js/config.js?v=1';
-import { Recorder, Replay } from '../../games/2026-11-04/crater-runner/js/replay.js?v=1';
+import { makeWorld, step, drainEvents, STEP, cloneWorld } from '../../games/2026-11-04/crater-runner/js/sim.js?v=2';
+import { Autopilot } from '../../games/2026-11-04/crater-runner/js/ai.js?v=2';
+import { TYPICAL_UP } from '../../games/2026-11-04/crater-runner/js/config.js?v=2';
+import { Recorder, Replay } from '../../games/2026-11-04/crater-runner/js/replay.js?v=2';
 
 const seeds = +(process.argv[2] || 6);
 const hashW = (W) => JSON.stringify([W.n, W.score, W.lives, W.seg, W.rs, W.rovers, W.craters, W.rocks, W.mines, W.tanks, W.shells, W.flyers, W.bombs, W.drones, W.shots, W.boss]);

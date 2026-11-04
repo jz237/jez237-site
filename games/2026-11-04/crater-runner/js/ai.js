@@ -1,9 +1,9 @@
 // Autopilot: drives a rover the way a person would. It only reacts to a threat once the game has
 // signalled it, after a reaction delay (about 0.35 s for the human-like profile), presses jump with a
 // little random timing and is sometimes late. The same code with a sharp profile drives the demo.
-import { F } from './config.js?v=1';
-import { baseH, groundH, jumpProfile } from './sim.js?v=1';
-import { THREATS } from './config.js?v=1';
+import { F } from './config.js?v=2';
+import { baseH, groundH, jumpProfile } from './sim.js?v=2';
+import { THREATS } from './config.js?v=2';
 
 export const PROFILES = {
   // a first-time player: ~0.35 s reaction, a spread of ~0.09 s on every press, late now and then, sometimes

@@ -3,9 +3,9 @@
 // typically own by then. Reports the clear rate per sector and the death rate per checkpoint segment.
 //   node scripts/crater-runner/ramp_check.mjs [trials=40] [sectors=1,2,3,4,5] [profile=human]
 // Targets: about 95 / 80 / 60 / 40 / 25 % clears, and no checkpoint noticeably harder than the next.
-import { makeWorld, step, drainEvents, STEP, cpLetter } from '../../games/2026-11-04/crater-runner/js/sim.js?v=1';
-import { Autopilot } from '../../games/2026-11-04/crater-runner/js/ai.js?v=1';
-import { SECTORS, TYPICAL_UP, rampAt } from '../../games/2026-11-04/crater-runner/js/config.js?v=1';
+import { makeWorld, step, drainEvents, STEP, cpLetter } from '../../games/2026-11-04/crater-runner/js/sim.js?v=2';
+import { Autopilot } from '../../games/2026-11-04/crater-runner/js/ai.js?v=2';
+import { SECTORS, TYPICAL_UP, rampAt } from '../../games/2026-11-04/crater-runner/js/config.js?v=2';
 
 const trials = +(process.argv[2] || 40);
 const sectors = (process.argv[3] || '1,2,3,4,5').split(',').map((s) => +s - 1);
