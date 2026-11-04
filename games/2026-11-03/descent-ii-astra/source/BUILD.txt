@@ -195,3 +195,17 @@ unchanged position, velocity, mission time, health, lives, energy and ammunition
 Phone checks use browser emulation. These are combat/navigation samples, not
 proof of an autonomous solution to every mine. Test browsers reject pointer
 capture before launch and close afterward.
+
+Astra compact demo controls (pyre12)
+
+The persistent full-width demo bar is replaced by a 44px-high Controls button
+in the bottom-left corner. The menu starts collapsed on phones and desktop.
+Tap to show status, pause/resume, next mine, weapon effects, sound and end demo;
+close with the toggle, close button, Escape or a tap outside. Returning from a
+weapon preview restores the collapsed button. A paused label remains visible.
+The panel respects display safe areas, fits narrow/short screens and retains
+44px touch targets. Enter, Space and Tab work without SDL consuming menu keys.
+The launcher/styles are pyre12; native engine and weapon range remain pyre11.
+Phone touch emulation covers portrait 390x844 and landscape 844x390/640x320;
+desktop checks cover menu actions, focus, preview return and level changes.
+All automated test documents disable pointer capture before loading the game.

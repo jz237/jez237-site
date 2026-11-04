@@ -192,6 +192,7 @@ window.astraPreview = {
     this.active=active;
     document.body.classList.toggle("previewing",active);
     $("previewPanel").hidden=!active;
+    setAutoControls(false);
     if(active){releaseFlightMouse();window.astraDeck?.show(false);$("previewAgain").focus();}
     else flightView.focus({preventScroll:true});
     refreshMouseHint();
@@ -274,7 +275,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         });
       }],
       onRuntimeInitialized:()=>{
-        window.astraTerminal?.loading(false);document.body.classList.add("flying"); document.body.classList.toggle("autopilot",autopilot); $("autoPanel").hidden=!autopilot; canvas.focus();
+        window.astraTerminal?.loading(false);document.body.classList.add("flying"); document.body.classList.toggle("autopilot",autopilot); setAutoControls(false); canvas.focus();
         setInterval(syncPilot,3000);
       }
     };
@@ -330,6 +331,33 @@ $("view").addEventListener("webglcontextlost",e=>{e.preventDefault();syncPilot()
 
 
 
+// Demo controls stay out of the flight view until requested.
+function setAutoControls(open, restoreFocus=false){
+  const visible=!!window.Module?.autopilot && document.body.classList.contains('flying') && !window.astraPreview?.active;
+  $('autoToggle').hidden=!visible;
+  $('autoPanel').hidden=!(open && visible);
+  $('autoToggle').setAttribute('aria-expanded',String(open && visible));
+  if(restoreFocus && visible)$('autoToggle').focus({preventScroll:true});
+}
+$('autoToggle').onclick=()=>setAutoControls($('autoPanel').hidden);
+$('autoHide').onclick=()=>setAutoControls(false,true);
+document.addEventListener('pointerdown',event=>{
+  if(!$('autoPanel').hidden && !event.target.closest('#autoPanel, #autoToggle'))setAutoControls(false);
+},true);
+for(const type of ['keydown','keyup'])window.addEventListener(type,event=>{
+  if(type==='keydown' && event.key==='Escape' && !$('autoPanel').hidden){
+    event.preventDefault();event.stopImmediatePropagation();setAutoControls(false,true);
+    return;
+  }
+  // SDL consumes document keys. Handle these buttons before it sees them.
+  const control=event.target.closest?.('#autoToggle, #autoPanel');
+  if(control || (window.Module?.autopilot && event.key==='Tab'))event.stopImmediatePropagation();
+  if(control && ['Enter',' '].includes(event.key)){
+    event.preventDefault();
+    if(!event.repeat && ((event.key==='Enter' && type==='keydown') || (event.key===' ' && type==='keyup')))event.target.closest('button')?.click();
+  }
+},true);
+
 // Touch-friendly controls for the autonomous pilot and the pickup inspection view.
 const astraTouch=matchMedia('(pointer:coarse)').matches;
 if(astraTouch)$('res').value='960';
@@ -353,6 +381,8 @@ window.astraAutoStatus=(task,rooms,deaths,kills,pickups)=>{
 function pauseDemo(paused){
   Module.autoPaused=paused;$('autoPause').textContent=paused?'Resume':'Pause';
   $('autoPause').setAttribute('aria-pressed',String(paused));
+  $('autoToggleLabel').textContent=paused?'Paused · Controls':'Controls';
+  $('autoToggle').dataset.paused=String(paused);
   if(paused){astraDisc.audio.pause();$('autoTask').textContent='Paused';}
   else {if(astraDisc.track)astraDisc.audio.play().catch(()=>{});watchWake();}
 }
