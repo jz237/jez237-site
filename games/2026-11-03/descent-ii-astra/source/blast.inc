@@ -70,7 +70,7 @@ static void pyro_draw_parts(pyro_part *part,int count,float age,int kind,int hea
     glDisableClientState(GL_NORMAL_ARRAY);glDisableClientState(GL_COLOR_ARRAY);glDisableClientState(GL_TEXTURE_COORD_ARRAY);glDisableClientState(GL_VERTEX_ARRAY);
     glUseProgram(0);glDepthMask(GL_TRUE);if(cull)glEnable(GL_CULL_FACE);gr_settransblend(fade,blend);
 }
-static void pyro_fragments(const float *origin,float size,float t,unsigned seed,int heavy)
+static void pyro_fragments(const float *origin,float size,float t,unsigned seed,int heavy,float visibility)
 {
     float p[18*9*3],c[18*9*4];int n=0,number=heavy?12+(seed%7):5+(seed%6);
     const vms_matrix *m=&Unscaled_matrix;
@@ -91,7 +91,7 @@ static void pyro_fragments(const float *origin,float size,float t,unsigned seed,
             p[n*3]=(origin[0]+dx*dist-dy*side)*sx;p[n*3+1]=(origin[1]+dy*dist+dx*side)*sy;
             p[n*3+2]=-(origin[2]+dz*dist)*sz;
             c[n*4]=1;c[n*4+1]=k==4?.97f:k==3?.83f:.27f;c[n*4+2]=k==4?.66f:k==3?.16f:.025f;
-            c[n*4+3]=k==0?0:alpha;n++;
+            c[n*4+3]=k==0?0:alpha*visibility;n++;
         }
     }
     if(!n)return;
@@ -102,7 +102,7 @@ static void pyro_fragments(const float *origin,float size,float t,unsigned seed,
     if(cull)glEnable(GL_CULL_FACE);gr_settransblend(fade,blend);
 }
 /* Brief lens response to the ignition kernel. The burning gas itself stays in 3D. */
-static void pyro_ignition(const float *origin,float size,float t)
+static void pyro_ignition(const float *origin,float size,float t,float visibility)
 {
     if(t<0 || t>=.14f || origin[2]<=.15f)return;
     float power=(1-t/.14f)*(1-t/.14f),r=size*(.22f+.19f*t/.14f);
@@ -114,7 +114,7 @@ static void pyro_ignition(const float *origin,float size,float t)
             p[3*n]=(origin[0]+cosf(a)*extent)*f2fl(Matrix_scale.x);
             p[3*n+1]=(origin[1]+sinf(a)*extent)*f2fl(Matrix_scale.y);
             p[3*n+2]=-origin[2]*f2fl(Matrix_scale.z);
-            c[4*n]=1;c[4*n+1]=j?.32f:.95f;c[4*n+2]=j?.024f:.62f;c[4*n+3]=j?0:power;n++;
+            c[4*n]=1;c[4*n+1]=j?.32f:.95f;c[4*n+2]=j?.024f:.62f;c[4*n+3]=j?0:power*visibility;n++;
         }
     }
     int f=grd_curcanv->cv_fade_level,b=grd_curcanv->cv_blend_func;
@@ -129,6 +129,14 @@ void astra_blast(vms_vector *where,fix radius,float t,unsigned seed,int kind,int
     g3s_point center;g3_rotate_point(&center,where);
     float r=f2fl(radius);float origin[]={f2fl(center.p3_x)/f2fl(Matrix_scale.x),f2fl(center.p3_y)/f2fl(Matrix_scale.y),f2fl(center.p3_z)/f2fl(Matrix_scale.z)};
     if(t<0 || t>=1 || origin[2]<-4*r || origin[2]>450 || r/fmaxf(1,origin[2])<.002f || !astra_pyro_ready())return;
+    /* A living pilot can look through effects that engulf the camera.
+     * Keep the full cloud when viewed from a distance or in the death camera. */
+    extern int Player_is_dead,astra_preview_active;
+    float visibility=1;
+    if(heavy<2 && !Player_is_dead && !astra_preview_active){
+        float distance=sqrtf(origin[0]*origin[0]+origin[1]*origin[1]+origin[2]*origin[2]);
+        visibility=.018f+.982f*pyro_ramp(r*1.5f+3,r*5+12,distance);
+    }
     float rise=.035f+.965f*(1-expf(-5.5f*t));
     float size=r*(heavy?1.23f:.91f);
     float peak=1-pyro_ramp(.38f,.90f,t),fade=1-pyro_ramp(.66f,1,t);
@@ -201,8 +209,13 @@ void astra_blast(vms_vector *where,fix radius,float t,unsigned seed,int kind,int
             }
         }
     }
+    for(int i=0;i<count;i++){
+        parts[i].opacity*=visibility;
+        parts[i].heat*=.80f+.20f*visibility;
+    }
+    EM_ASM(Module.impactVisibility=$0;,visibility);
     pyro_draw_parts(parts,count,t,kind,heavy);
-    pyro_fragments(origin,size,t,seed,heavy);pyro_ignition(origin,size,t);
-    for(int i=0;i<bursts;i++)pyro_fragments(secondary[i],size*.46f,secondary[i][3],seed+i+97,0);
+    pyro_fragments(origin,size,t,seed,heavy,visibility);pyro_ignition(origin,size,t,visibility);
+    for(int i=0;i<bursts;i++)pyro_fragments(secondary[i],size*.46f,secondary[i][3],seed+i+97,0,visibility);
     EM_ASM(Module.volumeBlasts=(Module.volumeBlasts||0)+1;Module.blastStyleMask=(Module.blastStyleMask||0)|(1<<$0);,kind);
 }

@@ -4,7 +4,6 @@
 .cinema{display:flex;align-items:center;gap:6px;margin-top:8px;font:12px Segoe UI,sans-serif;letter-spacing:0;color:#b2c0b7}.cinema input{accent-color:#e3aa62}
 
 .setup{display:flex;gap:16px;flex-wrap:wrap;margin:0 0 16px}.setup label{display:flex;gap:6px;align-items:center;font:13px Segoe UI,sans-serif;letter-spacing:.01em}.setup input{accent-color:#f8b46a}.linksep{color:#7f958a;padding:0 6px}#invertFlight{position:absolute;right:3.3rem;top:.5rem;padding:6px 10px;background:#172823cd;border:1px solid #52665c;color:#e1eae3;font:12px Consolas,monospace;opacity:.70}#invertFlight[aria-pressed=true]{color:#ffca8a}#invertFlight:hover,#invertFlight:focus{opacity:1}
-
 footer a{color:#edbc86}
 #mouseHint{position:absolute;bottom:12%;left:50%;transform:translateX(-50%);pointer-events:none;padding:.45rem .8rem;background:#10191de8;border:1px solid #687a78;border-radius:3px;color:#f2ead6;text-align:center;font:13px system-ui,sans-serif}
 /* Astra instrument glass */
@@ -12,3 +11,14 @@ footer a{color:#edbc86}
 #astraDeck .deckRail{fill:url(#deckGlass)}#astraDeck .deckTiny,#astraDeck .deckMicro{fill:#b9e1e5;letter-spacing:2.2px;font-size:16px;font-weight:600}#astraDeck .deckMicro{font-size:13px;letter-spacing:1.6px}
 #astraDeck .deckWeapon{fill:#f0fbff;font-size:26px;font-weight:600;letter-spacing:1px}#astraDeck .deckNum,#astraDeck .deckNumberGreen{fill:#e4fbff;font-family:Consolas,monospace;font-weight:600;font-variant-numeric:tabular-nums}#astraDeck .deckNumberGreen{fill:#a5ec80}
 #astraDeck #deckAlert{fill:#ffc178}body.has-deck #invertFlight,body.has-deck #full{top:6.8%}body.has-deck.deck-captured #invertFlight,body.has-deck.deck-captured #full{visibility:hidden}
+
+.preview-start{color:#f2c58f;font-size:14px;padding:16px 0 2px}
+#previewFlight{position:absolute;left:1rem;top:6.8%;padding:8px 12px;background:#14252ee8;border:1px solid #547281;color:#d9edf4;font-size:13px}
+body.deck-captured #previewFlight{visibility:hidden}
+#previewPanel{position:absolute;inset:0;pointer-events:none;font-family:Segoe UI,Arial,sans-serif}
+#previewPanel[hidden]{display:none}.preview-heading{position:absolute;left:5%;top:5%;color:#9db8c5}
+.preview-heading p{font:12px Consolas,monospace;letter-spacing:.18em;margin:0 0 10px}.preview-heading h2{color:#f0dfbf;font-size:clamp(20px,2vw,32px);letter-spacing:.08em;margin:0 0 8px;font-weight:500}.preview-heading>span{font-size:13px}
+.preview-bottom{position:absolute;bottom:5%;left:50%;transform:translateX(-50%);width:min(540px,88%)}.preview-phase{display:flex;justify-content:space-between;color:#b9c7cc;font-size:13px;gap:10px}#previewTime{font-family:Consolas,monospace}
+#previewProgress{appearance:none;width:100%;height:3px;margin:12px 0 20px;border:0;background:#263841}#previewProgress::-webkit-progress-bar{background:#263841}#previewProgress::-webkit-progress-value{background:#e2ae64}.preview-actions{display:flex;gap:12px;justify-content:center;pointer-events:auto}.preview-actions button{padding:12px 18px}.preview-actions small{font-weight:400;color:#abc0c8;margin-left:8px}
+body.previewing #invertFlight,body.previewing #mouseHint{display:none}body.previewing #full{top:.5rem;visibility:visible}
+@media(max-height:550px){.preview-heading{top:3%;left:3%}.preview-heading p{font-size:10px}.preview-heading h2{font-size:18px}.preview-bottom{bottom:3%}#previewProgress{margin:6px 0 9px}.preview-actions button{padding:9px 12px;font-size:13px}}
