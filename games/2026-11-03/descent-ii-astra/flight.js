@@ -234,7 +234,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
     music.play().then(()=>{if(!astraDisc.track){music.pause();music.currentTime=0;music.volume=0.75;}}).catch(()=>{});
     await readPack("game","Reading game data");
     await readPack("vertigo","Reading original Vertigo mission");
-    if(astra){await script("pyro-field.js?v=5");await readPack("art","Preparing mine materials");await readPack("cockpit","Fitting flight instruments");await readPack("fleet","Fitting Overload robot chassis");await readPack("forge","Preparing foundry lights and fireballs");}
+    if(astra){await script("pyro-field.js?v=5");await readPack("art","Preparing mine materials");await readPack("cockpit","Fitting flight instruments");await readPack("fleet","Fitting Overload robot chassis");await readPack("forge","Preparing foundry lights and fireballs");await readPack("surfaces20","Fitting detailed wall surfaces");}
     if(!autopilot)await readPack("movies","Reading cinematics");
     if(astra){
       $("status").textContent="Assembling the collectible collection";
@@ -275,7 +275,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
           const name=save+"/descent.cfg";
           if(F.analyzePath(name).exists) cfg=F.readFile(name,{encoding:"utf8"});
           const settings={ResolutionX:quality,ResolutionY:height,AspectX:9,AspectY:16,WindowMode:1,
-                          TexFilt:2,MovieTexFilt:1,MusicType:2,OrigTrackOrder:1,VSync:1};
+                          TexFilt:astra?3:2,MovieTexFilt:1,MusicType:2,OrigTrackOrder:1,VSync:1};
           if(!cfg) Object.assign(settings,{DigiVolume:8,MusicVolume:6,GammaLevel:3});
           cfg=cfg.split(/\r?\n/).filter(l=>!Object.hasOwn(settings,l.split("=")[0])).join("\n");
           cfg+="\n"+Object.entries(settings).map(([k,v])=>k+"="+v).join("\n")+"\n";
@@ -288,7 +288,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre19");
+    await script("engine.js?v=pyre20");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 

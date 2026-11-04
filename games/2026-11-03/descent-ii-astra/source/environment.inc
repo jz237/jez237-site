@@ -147,6 +147,46 @@ static void ae_machine(int room,int side,int theme,float w,float h){
         ax_paint(theme==3?.8f:.05f,theme==3?.3f:.65f,theme==3?.06f:.7f,.45f);ax_tube(px,yy,.40f,px,yy+.25f,.40f,.045f,.045f,5);}}
     ax_flush(1,1);ae_machines++;
 }
+/* Actual shallow service hatches, beveled shoulders, latches and screw slots.
+ * World dimensions keep them sharp on stretched native mine faces. */
+static void ae_hatch(int room,int side,int theme,float w,float h){
+    if(w<14||h<14||(room*3+side)%3==1)return;
+    float x=w*.17f,y=-h*.14f,W=fminf(3.5f,w*.19f),H=fminf(3.2f,h*.19f),cut=.26f;
+    float px[8]={-W+cut,W-cut,W,W,W-cut,-W+cut,-W,-W};
+    float py[8]={-H,-H,-H+cut,H-cut,H,H,H-cut,-H+cut};
+    ax_count=0;ax_energy=0;float tint=(room%3)*.018f;
+    for(int i=0;i<8;i++){
+        int j=(i+1)%8;float a=px[i],b=py[i],c=px[j],d=py[j],dx=c-a,dy=d-b,len=sqrtf(dx*dx+dy*dy);
+        ax_paint(.08f,.105f,.12f,0);ax_tube(x+a,y+b,.025f,x+c,y+d,.025f,.10f,.10f,5);
+        ax_paint(.23f+tint,.29f+tint,.31f+tint,0);
+        float outer[4][3]={{x+a,y+b,.035f},{x+c,y+d,.035f},{x+c*.96f,y+d*.96f,.18f},{x+a*.96f,y+b*.96f,.18f}};
+        const int order[6]={0,1,2,0,2,3};for(int k=0;k<6;k++){float *v=outer[order[k]];ax_vertex_add(v[0],v[1],v[2],dy/len,-dx/len,.65f);}
+        ax_paint(.13f+tint,.175f+tint,.19f+tint,0);
+        ax_vertex_add(x,y,.18f,0,0,1);ax_vertex_add(x+a*.96f,y+b*.96f,.18f,0,0,1);ax_vertex_add(x+c*.96f,y+d*.96f,.18f,0,0,1);
+    }
+    ax_flush(1,1);
+    for(int sy=-1;sy<=1;sy+=2)for(int sx=-1;sx<=1;sx+=2){
+        float X=x+sx*(W-.24f),Y=y+sy*(H-.24f);
+        ax_paint(.045f,.06f,.07f,0);ax_tube(X,Y,.18f,X,Y,.20f,.11f,.11f,12);
+        ax_paint(.36f,.40f,.41f,0);ax_tube(X,Y,.20f,X,Y,.235f,.066f,.066f,10);
+        ax_paint(.035f,.045f,.05f,0);ax_tube(X-.044f,Y,.238f,X+.044f,Y,.238f,.010f,.010f,4);
+    }
+    /* A grip stands away from the panel; fine louvers recess into its face. */
+    ax_paint(.36f,.43f,.45f,0);
+    for(int k=-1;k<=1;k+=2)ax_tube(x+W*.52f,y+k*.48f,.19f,x+W*.52f,y+k*.48f,.42f,.05f,.05f,8);
+    ax_tube(x+W*.52f,y-.48f,.42f,x+W*.52f,y+.48f,.42f,.065f,.065f,8);
+    for(int k=0;k<6;k++){
+        float Y=y-H*.53f+k*.15f;
+        ax_paint(.025f,.035f,.04f,0);ax_tube(x-W*.65f,Y,.19f,x+W*.18f,Y,.19f,.046f,.046f,5);
+        ax_paint(.29f,.34f,.35f,0);ax_tube(x-W*.65f,Y+.035f,.215f,x+W*.18f,Y+.035f,.215f,.014f,.014f,5);
+    }
+    /* Etched registration marks and a restrained status strip. */
+    for(int k=0;k<10;k++){float X=x-W*.65f+k*.075f;ax_paint(.36f,.43f,.45f,0);ax_tube(X,y+H*.52f,.192f,X,y+H*.52f+(k%3?.13f:.21f),.192f,.009f,.009f,4);}
+    ax_paint(theme==0?.68f:.06f,theme==0?.29f:.48f,theme==0?.045f:.58f,.4f);
+    ax_tube(x-W*.65f,y+H*.31f,.195f,x-W*.18f,y+H*.31f,.195f,.018f,.018f,6);
+    ax_flush(1,1);
+}
+
 void astra_environment_face(int nv,const g3s_point **points,g3s_lrgb *light,int room,int side,int flags){
     if(!ax_on())return;ae_faces++;ae_reset();segment *s=&Segments[room];int wallnum=s->sides[side].wall_num;
     int hidden=wallnum>=0&&Walls[wallnum].type==WALL_DOOR&&Walls[wallnum].clip_num>=0&&(WallAnims[Walls[wallnum].clip_num].flags&WCF_HIDDEN);
@@ -159,6 +199,7 @@ void astra_environment_face(int nv,const g3s_point **points,g3s_lrgb *light,int 
     astra_gantry(nv,points,light,room*7+side,s->sides[side].normals[0].y>F1_0*3/4);
     vms_vector center;vms_matrix basis;float w,h;if(!ae_basis(room,side,&center,&basis,&w,&h))return;
     g3s_point p;g3_rotate_point(&p,&center);if(p.p3_z<F1_0||p.p3_z>i2f(105)||w>100||h>100)return;
+    if(p.p3_z<i2f(60)){g3_start_instance_matrix(&center,&basis);ae_hatch(room,side,theme,w,h);g3_done_instance();}
     if(side%2==0&&(room+side)%3!=1&&p.p3_z<i2f(80)){g3_start_instance_matrix(&center,&basis);ae_machine(room,side,theme,w,h);g3_done_instance();}
 }
 /* Kept on the perimeter, including when the native door is fully open. No mesh

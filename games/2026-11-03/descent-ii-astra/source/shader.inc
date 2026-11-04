@@ -26,13 +26,26 @@ static GLuint astra_compile(GLenum type,const char *code)
 }
 static void astra_init_shader(void)
 {
-    const char *vs="varying mediump vec2 uv;varying mediump vec4 light;varying highp vec3 p;"
+    const char *vs="varying highp vec2 uv;varying mediump vec4 light;varying highp vec3 p;"
         "void main(){gl_Position=ftransform();uv=gl_MultiTexCoord0.xy;light=gl_Color;p=gl_Vertex.xyz;}";
-    const char *fs="precision highp float;varying mediump vec2 uv;varying mediump vec4 light;varying highp vec3 p;"
-        "uniform sampler2D colorMap,detailMap;uniform mat3 basis;uniform vec4 lamp,shot,surface;"
-        "void main(){vec2 coord=uv;if(surface.x>3.5){coord+=sin(uv.yx*19.+surface.z*.8)*.003;}vec4 a=texture2D(colorMap,coord);if(a.a*light.a<.035)discard;"
-        "vec3 sampleN=texture2D(detailMap,coord).rgb;vec2 xy=(sampleN.xy*2.-1.)*.87;"
+    const char *fs="precision highp float;varying highp vec2 uv;varying mediump vec4 light;varying highp vec3 p;"
+        "uniform sampler2D colorMap,detailMap;uniform mat3 basis;uniform vec4 lamp,shot,surface;uniform vec2 density;uniform sampler2D topMap,topDetail;uniform float paired,topTurn;"
+        "float skin(vec2 q){vec2 f=fract(q),e=min(f,1.-f);float d=min(e.x,e.y);float h=smoothstep(.015,.045,d)*.035;"
+        "vec2 b=abs(f-.5)-vec2(.40);float r=length(b);h+=.010*(1.-smoothstep(.020,.032,r))-.009*(1.-smoothstep(.030,.043,r));"
+        "float groove=abs(f.y-.70);float cut=(1.-smoothstep(.005,.013,groove))*smoothstep(.12,.16,f.x)*(1.-smoothstep(.82,.87,f.x));return h-cut*.012;}"
+
+        "void main(){vec2 coord=uv;if(surface.x>3.5){coord+=sin(uv.yx*19.+surface.z*.8)*.003;}vec4 a=texture2D(colorMap,coord);"
+        "vec3 sampleN=texture2D(detailMap,coord).rgb;"
+        "if(paired>.5){vec2 tuv=uv;if(topTurn>.5&&topTurn<1.5)tuv=vec2(1.-uv.y,uv.x);else if(topTurn>1.5&&topTurn<2.5)tuv=1.-uv;else if(topTurn>2.5)tuv=vec2(uv.y,1.-uv.x);"
+        "vec4 top=texture2D(topMap,tuv);if(top.a<.001)discard;float useTop=smoothstep(.004,.08,top.a);a=mix(a,vec4(top.rgb,1.),useTop);"
+        "vec3 tn=texture2D(topDetail,tuv).rgb;vec2 normal=tn.xy*2.-1.;if(topTurn>.5&&topTurn<1.5)normal=vec2(normal.y,-normal.x);else if(topTurn>1.5&&topTurn<2.5)normal=-normal;else if(topTurn>2.5)normal=vec2(-normal.y,normal.x);"
+        "tn.xy=normal*.5+.5;sampleN=mix(sampleN,tn,useTop);}if(a.a*light.a<.035)discard;vec2 xy=(sampleN.xy*2.-1.)*.87;"
         "vec3 eye=normalize(-p);vec3 base=basis[2]*sign(dot(basis[2],eye));"
+        "float hard=step(.5,surface.x)*(1.-step(3.5,surface.x));vec2 cell=coord*density;float close=1.-smoothstep(35.,120.,-p.z);"
+        "float eps=.002;vec2 relief=vec2(skin(cell-vec2(eps,0.))-skin(cell+vec2(eps,0.)),skin(cell-vec2(0.,eps))-skin(cell+vec2(0.,eps)))/(2.*eps);"
+        "xy+=relief*.24*hard*close;xy=clamp(xy,vec2(-.85),vec2(.85));vec2 edges=min(fract(cell),1.-fract(cell));"
+        "float seam=1.-smoothstep(.012,.050,min(edges.x,edges.y));a.rgb*=1.-seam*.32*hard*close;"
+        "float fiber=sin(cell.x*380.+sin(cell.y*21.))*sin(cell.y*290.);a.rgb*=1.+fiber*.015*close*exp(-max(0.,-p.z-8.)*.08);"
         "vec3 n=normalize(basis[0]*xy.x+basis[1]*xy.y+base*sqrt(max(.06,1.-dot(xy,xy))));"
         "vec3 L=lamp.xyz-p;float dist=length(L);L/=max(dist,.001);"
         "float reach=lamp.w/(1.+dist*dist*.0018);"
@@ -63,6 +76,7 @@ static void astra_init_shader(void)
     glUseProgram(astra_program);
     glUniform1i(glGetUniformLocation(astra_program,"colorMap"),0);
     glUniform1i(glGetUniformLocation(astra_program,"detailMap"),1);
+    glUniform1i(glGetUniformLocation(astra_program,"topMap"),2);glUniform1i(glGetUniformLocation(astra_program,"topDetail"),3);
     astra_tangents=glGetUniformLocation(astra_program,"basis");
     astra_fixture=glGetUniformLocation(astra_program,"lamp");astra_moving=glGetUniformLocation(astra_program,"shot");
 }
@@ -81,17 +95,26 @@ static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
         glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,data.width,data.height,0,GL_RGB,GL_UNSIGNED_BYTE,data.data);
-        glGenerateMipmap(GL_TEXTURE_2D);free(data.data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        if(ogl_maxanisotropy>1.0)glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAX_ANISOTROPY_EXT,fminf(8,ogl_maxanisotropy));
+        free(data.data);
     }else glBindTexture(GL_TEXTURE_2D,astra_normals[id]);
-    glActiveTexture(GL_TEXTURE0);glUseProgram(astra_program);
+    glActiveTexture(GL_TEXTURE0);glUseProgram(astra_program);glUniform1f(glGetUniformLocation(astra_program,"paired"),0);
     float a=uv[2]-uv[0],b=uv[3]-uv[1],c=uv[4]-uv[0],d=uv[5]-uv[1],mat[9];
     float flip=(a*d-b*c)<0?-1.f:1.f;
     for(int i=0;i<3;i++){float e=p[3+i]-p[i],g=p[6+i]-p[i];mat[i]=(d*e-b*g)*flip;mat[3+i]=(a*g-c*e)*flip;}
+    float density[2];
+    for(int j=0;j<2;j++)density[j]=fminf(12,fmaxf(.6f,sqrtf(mat[j*3]*mat[j*3]+mat[j*3+1]*mat[j*3+1]+mat[j*3+2]*mat[j*3+2])/fmaxf(.001f,fabsf(a*d-b*c))/8.f));
+    glUniform2fv(glGetUniformLocation(astra_program,"density"),1,density);
     astra_unit(mat);astra_unit(mat+3);
     for(int i=0;i<3;i++)mat[6+i]=mat[(i+1)%3]*mat[3+(i+2)%3]-mat[(i+2)%3]*mat[3+(i+1)%3];
     astra_unit(mat+6);
     glUniformMatrix3fv(astra_tangents,1,GL_FALSE,mat);
-    glUniform4fv(glGetUniformLocation(astra_program,"surface"),1,astra_surface);
+    static int kinds[256],kinds_ready;
+    if(!kinds_ready){EM_ASM({var k=window.astraMaterialTypes||[];for(var i=0;i<256;i++)HEAP32[($0>>2)+i]=k[i]??-1;},kinds);kinds_ready=1;}
+    float surface[4];memcpy(surface,astra_surface,sizeof surface);if(kinds[id]>0)surface[0]=kinds[id];if(id>=181&&id<=183)surface[0]=1;
+    glUniform4fv(glGetUniformLocation(astra_program,"surface"),1,surface);
+    EM_ASM(Module.wallDetailVersion=20;);
     glUniform4fv(astra_fixture,1,astra_lamp);glUniform4fv(astra_moving,1,astra_flash);
     ++astra_shaded;return 1;
 }
@@ -139,4 +162,33 @@ void astra_light_face(int count,const g3s_point **view,const int *ids)
     glDisableClientState(GL_VERTEX_ARRAY);glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glUseProgram(0);glDepthMask(GL_TRUE);gr_settransblend(fade,blend);
     EM_ASM(Module.blastLitFaces=(Module.blastLitFaces||0)+1);
+}
+
+/* Super-transparent overlays must remain separate high-resolution layers. The
+ * stock CPU merger has only a 64x64 indexed-color destination and loses both
+ * replacements. Alpha 0 is the native cut-out, alpha 1/255 reveals the base. */
+int astra_layered_can(grs_bitmap *base,grs_bitmap *top){
+    if(!ogl_allow_png()||!base||!top)return 0;
+    const char *a=piggy_game_bitmap_name(base),*b=piggy_game_bitmap_name(top);
+    if(!a||!b||!astra_material_id(a)||!astra_material_id(b))return 0;
+    if(!astra_program&&!astra_gpu_failed)astra_init_shader();return !astra_gpu_failed;
+}
+static int astra_layered_draw(int nv,const g3s_point **points,const g3s_uvl *uvl,g3s_lrgb *light,grs_bitmap *base,grs_bitmap *top,int turn){
+    if(!(top->bm_flags&BM_FLAG_SUPER_TRANSPARENT)||!astra_layered_can(base,top))return 0;
+    ogl_bindbmtex(base);ogl_texwrap(base->gltexture,GL_REPEAT);ogl_bindbmtex(top);ogl_texwrap(top->gltexture,GL_REPEAT);
+    float p[24],uv[16],color[32];
+    for(int i=0;i<nv;i++){
+        p[3*i]=f2fl(points[i]->p3_x);p[3*i+1]=f2fl(points[i]->p3_y);p[3*i+2]=-f2fl(points[i]->p3_z);
+        uv[2*i]=f2fl(uvl[i].u);uv[2*i+1]=f2fl(uvl[i].v);
+        color[4*i]=fminf(1,f2fl(light[i].r));color[4*i+1]=fminf(1,f2fl(light[i].g));color[4*i+2]=fminf(1,f2fl(light[i].b));color[4*i+3]=1;
+    }
+    if(!astra_material_begin(top->gltexture,p,uv)||!astra_material_begin(base->gltexture,p,uv))return 0;
+    glActiveTexture(GL_TEXTURE2);glBindTexture(GL_TEXTURE_2D,top->gltexture->handle);
+    glActiveTexture(GL_TEXTURE3);glBindTexture(GL_TEXTURE_2D,astra_normals[top->gltexture->material]);
+    glActiveTexture(GL_TEXTURE0);OGL_BINDTEXTURE(base->gltexture->handle);
+    glUniform1f(glGetUniformLocation(astra_program,"paired"),1);glUniform1f(glGetUniformLocation(astra_program,"topTurn"),turn);
+    glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_COLOR_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glVertexPointer(3,GL_FLOAT,0,p);glColorPointer(4,GL_FLOAT,0,color);glTexCoordPointer(2,GL_FLOAT,0,uv);glDrawArrays(GL_TRIANGLE_FAN,0,nv);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);glDisableClientState(GL_COLOR_ARRAY);glDisableClientState(GL_VERTEX_ARRAY);
+    glUseProgram(0);EM_ASM(Module.wallLayersVersion=20;Module.wallLayerFrames=(Module.wallLayerFrames||0)+1;);return 1;
 }

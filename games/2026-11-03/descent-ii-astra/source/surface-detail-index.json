@@ -1,0 +1,217 @@
+{
+  "m000.png": {
+    "source": "cc_wall_01a_basecolor",
+    "size": 1024,
+    "oldSize": 512
+  },
+  "m002.png": {
+    "source": "cc_wall_06a_basecolor",
+    "size": 1024,
+    "oldSize": 512
+  },
+  "m005.png": {
+    "source": "cc_wall_03b_basecolor",
+    "size": 1024,
+    "oldSize": 512
+  },
+  "m007.png": {
+    "source": "cc_wall_03d_basecolor",
+    "size": 1024,
+    "oldSize": 512
+  },
+  "m009.png": {
+    "source": "cc_wall_04a_basecolor",
+    "size": 1024,
+    "oldSize": 512
+  },
+  "m011.png": {
+    "source": "ind_metal_wall_12d_basecolor",
+    "size": 1024,
+    "oldSize": 512
+  },
+  "m016.png": {
+    "source": "om_wall_42a_basecolor",
+    "size": 1024,
+    "oldSize": 512
+  },
+  "m025.png": {
+    "source": "om_wall_31a_basecolor",
+    "size": 1024,
+    "oldSize": 512
+  },
+  "m026.png": {
+    "source": "cc_monitor_01a_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m032.png": {
+    "source": "om_monitors_01a_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m039.png": {
+    "source": "om_wall_07a_basecolor",
+    "size": 1024,
+    "oldSize": 512
+  },
+  "m043.png": {
+    "source": "ind_metal_wall_07a_basecolor",
+    "size": 1024,
+    "oldSize": 512
+  },
+  "m048.png": {
+    "source": "ind_metal_wall_01f_basecolor",
+    "size": 1024,
+    "oldSize": 512
+  },
+  "m055.png": {
+    "source": "om_wall_34a_basecolor",
+    "size": 1024,
+    "oldSize": 512
+  },
+  "m077.png": {
+    "source": "ind_metal_wall_12d_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m078.png": {
+    "source": "ind_metal_wall_10a_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m079.png": {
+    "source": "om_wall_17a_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m080.png": {
+    "source": "om_wall_31a_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m081.png": {
+    "source": "om_wall_09a_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m082.png": {
+    "source": "om_wall_04a_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m083.png": {
+    "source": "ind_metal_wall_03c_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m084.png": {
+    "source": "om_wall_39a_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m085.png": {
+    "source": "om_wall_36a_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m086.png": {
+    "source": "ind_metal_wall_03j_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m087.png": {
+    "source": "om_wall_03b_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m088.png": {
+    "source": "ind_metal_wall_01a_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m089.png": {
+    "source": "om_wall_15b_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m091.png": {
+    "source": "ind_metal_wall_14a_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m092.png": {
+    "source": "om_wall_19a_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m093.png": {
+    "source": "ind_metal_wall_01h_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m094.png": {
+    "source": "ind_metal_wall_01f_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m095.png": {
+    "source": "ind_metal_wall_03h_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m096.png": {
+    "source": "ind_metal_wall_03e_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m097.png": {
+    "source": "ind_metal_wall_01c_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m098.png": {
+    "source": "om_wall_07a_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m099.png": {
+    "source": "ind_metal_wall_16a_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m101.png": {
+    "source": "ind_metal_wall_07a_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m102.png": {
+    "source": "alien_door_01_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m103.png": {
+    "source": "om_wall_42a_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m104.png": {
+    "source": "alien_door_02_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m105.png": {
+    "source": "om_door_01_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m106.png": {
+    "source": "cc_door_01a_basecolor",
+    "size": 512,
+    "oldSize": 256
+  },
+  "m107.png": {
+    "source": "om_door_02_basecolor",
+    "size": 512,
+    "oldSize": 256
+  }
+}

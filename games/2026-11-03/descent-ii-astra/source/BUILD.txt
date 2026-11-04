@@ -413,3 +413,41 @@ and phone-sized layouts; pause/return state checks of Objects, Players, Walls,
 Segments, automap and mission clock; plasma firing range. R18 previously loaded
 all 53 campaign mines. These are not full campaign playthroughs or physical-phone
 performance measurements. Test exports remain in an isolated QA engine only.
+
+Astra detailed wall surfaces and sliding demo (pyre20)
+
+The demo now uses native sideways and vertical thrust for short repositioning
+while retaining its heading. It keeps its nose on combat targets. All movement
+still passes through the original Descent II controls and physics; no player
+pose or velocity is written directly. A spatial recovery watchdog survives
+oscillation across room boundaries and unfinished turns. Repeatedly blocked
+switch approaches and routes are temporarily avoided.
+
+43 material pairs are re-extracted at twice the previous width and height from
+the user's owned Overload assets: 31 256px surfaces become 512px, and 12 common
+512px metal surfaces become 1024px. The trim atlas also becomes 1024px. The new
+surfaces20 pack overrides the corresponding maps after the forge pack. It adds
+about 34 MB of decoded PNG data; mipmapped filtering and up to 8x anisotropic
+normal-map filtering preserve angled detail where supported.
+
+Native low-resolution artwork is blended much more lightly into walls, doors
+and fixtures. Decorative transparent ceiling/misc lights receive clean rounded
+recessed strip silhouettes. Native super-transparent holes retain their masks;
+their two material layers now compose on the GPU instead of being flattened
+into the stock 64px indexed texture. New close-range shader relief and shallow
+modeled service panels add bevels, handles, countersunk screws, vents and labels.
+These are visual details, leaving the original level geometry/collision intact.
+
+Rebuild the material override with Python, UnityPy, NumPy and Pillow:
+  python surface-detail.py <owned-Overload-resources.assets> <standalone-Astra> <web-Astra>
+Both output directories must already contain Astra's existing payload/aliases.js
+and material packs. The script uses the adjacent plates.py/material-index.json.
+It writes base64 parcels for standalone file launching and binary gzip parcels
+for the web. surface-detail-index.json records the source and output dimensions.
+
+Validation includes the native engine build, original-upstream patch checks,
+unchanged protected simulation hashes, four-minute demos in both campaigns
+(14/23 kills and 71/73 rooms), all 53 regular/secret mine loads, native masked
+material rendering, and paused mine-preview/state-restoration checks. Automated browsers disable pointer lock before launch.
+These are runtime coverage checks, not full campaign playthroughs or physical
+phone performance measurements. All QA-only exports stay out of the release.

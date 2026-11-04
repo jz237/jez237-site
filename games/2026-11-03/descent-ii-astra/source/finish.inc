@@ -35,12 +35,29 @@ static void astra_finish(grs_bitmap *bm,const char *name,png_data *img)
     int geology=astra_prefix(name,"rock"), door=astra_prefix(name,"door")||astra_prefix(name,"wall");
     int fixture=astra_prefix(name,"misc")||astra_prefix(name,"blown")||astra_prefix(name,"ctrl");
     int hull=astra_prefix(name,"rbot")||astra_prefix(name,"ship");
-    weight=fixture?.60f:door?.43f:hull?.40f:.14f;
+    /* Native color identity survives; its coarse artwork no longer obscures the modern material. */
+    weight=fixture?.10f:door?.075f:hull?.40f:.025f;
     float tint[3];
     for(int c=0;c<3;c++) tint[c]=.60f+.40f*(avg[c]+17)/(lum+17);
     const char *animation=strchr(name,'#');
     int frame=animation ? atoi(animation+1) : 0;
     float travel=door ? frame*.055f : 0;
+    /* Decorative lamp silhouettes are not holes through the mine. Replace
+     * their pixel stairs with crisp recessed strips; native super-transparent
+     * grates and apertures keep their original masks below. */
+    int modern_light=masked&&!(bm->bm_flags&BM_FLAG_SUPER_TRANSPARENT)&&
+        (astra_prefix(name,"ceil")||astra_prefix(name,"misc")||astra_prefix(name,"blown"));
+    float lampx=.5f,lampy=.5f,lampw=.31f,lamph=.065f;int lamp_vertical=0;
+    if(modern_light){
+        int xmin=w,ymin=h,xmax=-1,ymax=-1;
+        for(int y=0;y<h;y++)for(int x=0;x<w;x++)if(index[y*w+x]<254){if(x<xmin)xmin=x;if(x>xmax)xmax=x;if(y<ymin)ymin=y;if(y>ymax)ymax=y;}
+        if(xmax<0)modern_light=0;
+        else {
+            lampx=(xmin+xmax+1.f)/(2*w);lampy=(ymin+ymax+1.f)/(2*h);float width=(xmax-xmin+1.f)/w,height=(ymax-ymin+1.f)/h;
+            lamp_vertical=height>width*1.3f;
+            lampw=fminf(.36f,(lamp_vertical?height:width)*.43f);lamph=fminf(.075f,(lamp_vertical?width:height)*.20f);
+        }
+    }
     for(int y=0;y<H;y++){
         float fy=((y+.5f)*h/H)-.5f; int yo=(int)floorf(fy); fy-=yo;
         int y0=(yo+h)%h, y1=(y0+1)%h;
@@ -57,12 +74,24 @@ static void astra_finish(grs_bitmap *bm,const char *name,png_data *img)
                 float src=4*((a+(b-a)*fx)*(1-fy)+(d+(e-d)*fx)*fy);
                 float grain=mat[c]*tint[c]*(geology?1.14f:1.03f);
                 float color=(1-weight)*grain+weight*src;
-                if(fixture || hull) color+=fmaxf(0,src-avg[c]-42)*.57f;
+                if(fixture || hull) color+=fmaxf(0,src-avg[c]-42)*(hull?.57f:.14f);
                 dst[c]=(unsigned char)sat_byte(color);
             }
             if(masked) {
                 int t=index[(y*h/H)*w+x*w/W];
-                dst[3]=((t==255&&(bm->bm_flags&BM_FLAG_TRANSPARENT))||(t==254&&(bm->bm_flags&BM_FLAG_SUPER_TRANSPARENT)))?0:255;
+                dst[3]=(t==254&&(bm->bm_flags&BM_FLAG_SUPER_TRANSPARENT))?0:(t==255&&(bm->bm_flags&BM_FLAG_TRANSPARENT))?1:255;
+            }
+            if(modern_light){
+                float X=(x+.5f)/W-lampx,Y=(y+.5f)/H-lampy;if(lamp_vertical){float z=X;X=Y;Y=z;}
+                float r=fminf(.012f,lamph*.25f),qx=fabsf(X)-(lampw-r),qy=fabsf(Y)-(lamph-r);
+                float distance=sqrtf(fmaxf(qx,0)*fmaxf(qx,0)+fmaxf(qy,0)*fmaxf(qy,0))+fminf(fmaxf(qx,qy),0)-r;
+                float alpha=fminf(1,fmaxf(0,.5f-distance*fminf(W,H)));dst[3]=(unsigned char)(alpha*255);
+                float edge=fminf(lampw-fabsf(X),lamph-fabsf(Y));
+                float diffuser=edge>.012f?1:0;
+                float seams=fmodf((X+lampw)*24,1);if(seams<.10f)diffuser*=.16f;
+                float lit=astra_prefix(name,"blown")?.07f:fminf(1,.36f+lum/255*.60f);
+                float bevel=edge>.004f&&edge<.010f?1:0;
+                for(int c=0;c<3;c++)dst[c]=(unsigned char)sat_byte((22+c*4+bevel*29)*(1-diffuser)+(118+c*20)*lit*tint[c]*diffuser);
             }
         }
     }

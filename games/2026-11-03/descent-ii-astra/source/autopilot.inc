@@ -160,24 +160,31 @@ static void aa_plan(void){
     }
     aa_route_mode=aa_mode;aa_next=GameTime64+F1_0/2;
 }
+static int aa_sliding,aa_slide_count;
+static float aa_drive_intent;
+static vms_vector aa_slide_heading;
+static fix64 aa_slide_until;
+static int aa_slide_goal=-2;
 static void aa_move(vms_vector target,float speed){
     object *ship=ConsoleObject;vms_vector delta;vm_vec_sub(&delta,&target,&ship->pos);
     float distance=f2fl(vm_vec_mag(&delta));if(distance>.01f)vm_vec_normalize(&delta);
-    /* Brake and face the waypoint before accelerating. Lateral thrust only
-     * damps drift and makes small portal-centering corrections. */
     float facing=f2fl(vm_vec_dot(&delta,&ship->orient.fvec));
-    float aligned=aa_clamp((facing-.74f)/.245f,0,1);
-    float desired=fminf(speed,sqrtf(90*fmaxf(0,distance-1)))*aligned;
-    float actual_speed=f2fl(vm_vec_mag(&ship->mtype.phys_info.velocity));
-    if(speed>0 && actual_speed>18 && f2fl(vm_vec_dot(&ship->mtype.phys_info.velocity,&ship->orient.fvec))<actual_speed*.65f)desired=0;
+    float aligned=aa_clamp((facing-.35f)/.60f,0,1);
+    float desired=copysignf(fminf(fabsf(speed),sqrtf(65*fmaxf(0,distance-.65f))),speed);
+    if(aa_sliding)desired=aa_clamp(desired,-20,24);
+    else if(speed>0)desired*=aligned;
+    aa_drive_intent=fabsf(desired);
+    /* All three native thrust axes track a world-space velocity. Small offsets
+     * no longer require rotating the cockpit onto the movement direction. */
     vms_vector dirs[3]={ship->orient.rvec,ship->orient.uvec,ship->orient.fvec};
     fix *output[3]={&Controls.sideways_thrust_time,&Controls.vertical_thrust_time,&Controls.forward_thrust_time};
     for(int k=0;k<3;k++){
-        float goal=k==2?desired:f2fl(vm_vec_dot(&delta,&dirs[k]))*desired*.38f;
+        float goal=f2fl(vm_vec_dot(&delta,&dirs[k]))*desired;
+        if(!aa_sliding&&k!=2)goal=aa_clamp(goal,-16,16);
         float velocity=f2fl(vm_vec_dot(&ship->mtype.phys_info.velocity,&dirs[k]));
         float drag=f2fl(ship->mtype.phys_info.drag),mass=f2fl(ship->mtype.phys_info.mass);
         float hold=goal*mass*drag/fmaxf(.01f,(1-drag)*f2fl(Player_ship->max_thrust));
-        *output[k]=fl2f(aa_clamp(hold+(goal-velocity)*.14f,-1,1)*f2fl(FrameTime));
+        *output[k]=fl2f(aa_clamp(hold+(goal-velocity)*.12f,-1,1)*f2fl(FrameTime));
     }
 }
 /* Aim and level through the original rotational thrust controls. Rates are
@@ -325,10 +332,10 @@ void astra_auto_frame(void){
         EM_ASM(window.astraAutoStatus?.("Ship lost - relaunching",$0,$1,$2,$3);,aa_seen,aa_deaths,aa_kills,aa_collects);
         return;
     }
-    if(aa_dead_since){aa_escape_until=0;aa_escape_room=-1;aa_arsenal_signature=-1;aa_combat_target=-1;aa_next=0;aa_pick_object=aa_object=aa_goal=-1;aa_up_ready=0;aa_last_kills=Players[Player_num].num_kills_total;aa_weapon_next=GameTime64+i2f(8);}
+    if(aa_dead_since){aa_sliding=0;aa_slide_until=0;aa_slide_goal=-2;aa_escape_until=0;aa_escape_room=-1;aa_arsenal_signature=-1;aa_combat_target=-1;aa_next=0;aa_pick_object=aa_object=aa_goal=-1;aa_up_ready=0;aa_last_kills=Players[Player_num].num_kills_total;aa_weapon_next=GameTime64+i2f(8);}
     aa_dead_since=0;if(Endlevel_sequence)return;
     if(aa_level!=Current_level_num){
-        aa_escape_until=0;aa_escape_room=-1;memset(aa_blocked,0,sizeof aa_blocked);
+        aa_sliding=0;aa_slide_until=0;aa_slide_goal=-2;aa_escape_until=0;aa_escape_room=-1;memset(aa_blocked,0,sizeof aa_blocked);
         aa_weapon_next=GameTime64+i2f(8);aa_missile_next=0;aa_pending_missile=-1;aa_watch_until=0;aa_up_ready=0;
         aa_last_target=-1;aa_last_kills=Players[Player_num].num_kills_total;aa_weapon_changed=GameTime64;
         aa_arsenal_signature=-1;aa_recent_attacker=aa_combat_target=-1;memset(aa_attack_until,0,sizeof aa_attack_until);
@@ -443,14 +450,29 @@ void astra_auto_frame(void){
     int watching=aa_watch_until>GameTime64&&!Control_center_destroyed;
     if(watching && (Players[Player_num].shields<i2f(25)||(enemy>=0&&aa_threat(enemy)&&aa_len(&Objects[enemy].pos,&ConsoleObject->pos)<38))){aa_watch_until=0;watching=0;}
     if(watching){aim=target=aa_watch_point;speed=0;attacking=0;door=-1;aa_mode=8;aa_stuck_since=GameTime64;vm_vec_zero(&aa_target_velocity);}
-    vms_vector travel_direction;vm_vec_normalized_dir(&travel_direction,&target,&ConsoleObject->pos);
-    int wants_travel=fabsf(speed)>=8&&vm_vec_dot(&travel_direction,&ConsoleObject->orient.fvec)>fl2f(.78f);
-    if(aa_escape_room!=seg){aa_escape_room=seg;aa_recover=0;aa_stuck_since=GameTime64;aa_last=ConsoleObject->pos;}
-    if(aa_len(&aa_last,&ConsoleObject->pos)>4.5f||watching||!wants_travel){aa_last=ConsoleObject->pos;aa_stuck_since=GameTime64;}
+    vms_vector travel_direction;float travel_distance=f2fl(vm_vec_normalized_dir(&travel_direction,&target,&ConsoleObject->pos));
+    float travel_facing=f2fl(vm_vec_dot(&travel_direction,&ConsoleObject->orient.fvec));
+    int short_slide=!attacking&&!watching&&door<0&&!(aa_wall>=0&&seg==aa_goal)&&travel_distance<38&&
+        (travel_facing>.05f||travel_distance<17)&&aa_visible(&target,fixmul(ConsoleObject->size,fl2f(.95f)));
+    if(aa_slide_goal!=aa_goal||!short_slide||GameTime64>aa_slide_until)aa_sliding=0;
+    if(short_slide&&!aa_sliding){
+        aa_slide_heading=ConsoleObject->orient.fvec;aa_slide_until=GameTime64+i2f(4);aa_slide_goal=aa_goal;aa_slide_count++;
+    }
+    aa_sliding=short_slide;
+    if(aa_sliding)vm_vec_scale_add(&aim,&ConsoleObject->pos,&aa_slide_heading,i2f(60));
+    /* Combat keeps its firing lane; positional corrections may use all axes. */
+    int wants_travel=fabsf(speed)>=8;
+    /* A hull can rock across a portal without making any progress. Neither a
+     * room change nor an unfinished turn resets this spatial watchdog. */
+    if(aa_len(&aa_last,&ConsoleObject->pos)>4.5f||watching||!wants_travel){
+        if(aa_escape_room!=seg){aa_escape_room=seg;aa_recover=0;}
+        aa_last=ConsoleObject->pos;aa_stuck_since=GameTime64;
+    }
     if(aa_escape_until>0&&(GameTime64>=aa_escape_until||aa_len(&aa_escape_goal,&ConsoleObject->pos)<1.5f)){aa_escape_until=0;aa_stuck_since=GameTime64;aa_last=ConsoleObject->pos;aa_next=0;}
-    if(!aa_escape_until&&!watching&&wants_travel&&GameTime64-aa_stuck_since>F1_0*5/2){
+    if(!aa_escape_until&&!watching&&wants_travel&&GameTime64-aa_stuck_since>F1_0*(attacking?3:5)){
         if(aa_recover>=2){
             if(aa_object>=0)aa_skip_pickup(aa_object,45);
+            if(aa_wall>=0)aa_wall_seen[aa_wall]=GameTime64+i2f(45);
             int next=aa_goal,limit=0;while(next>=0&&aa_parent[next]>=0&&aa_parent[next]!=seg&&limit++<MAX_SEGMENTS)next=aa_parent[next];
             for(int side=0;side<6;side++)if(Segments[seg].children[side]==next)aa_blocked[seg][side]=GameTime64+i2f(45);
             aa_next=0;
@@ -501,11 +523,12 @@ void astra_auto_frame(void){
         aa_kills=Players[Player_num].num_kills_total;
         vms_vector travel=ConsoleObject->mtype.phys_info.velocity;float velocity=f2fl(vm_vec_mag(&travel));
         aa_facing_velocity=velocity>.05f?f2fl(vm_vec_dot(&travel,&ConsoleObject->orient.fvec))/velocity:1;
-        EM_ASM(Module.autoFlight=({speed:$0,forward:$1,primary:$2,secondary:$3,energy:$4,shields:$5,version:19});,velocity,aa_facing_velocity,Players[Player_num].primary_weapon,Players[Player_num].secondary_weapon,f2fl(Players[Player_num].energy),f2fl(Players[Player_num].shields));
+        EM_ASM(Module.autoFlight=({speed:$0,forward:$1,primary:$2,secondary:$3,energy:$4,shields:$5,version:20});,velocity,aa_facing_velocity,Players[Player_num].primary_weapon,Players[Player_num].secondary_weapon,f2fl(Players[Player_num].energy),f2fl(Players[Player_num].shields));
         EM_ASM({window.astraAutoStatus?.(UTF8ToString($0),$1,$2,$3,$4);Module.autoTelemetry=({segment:$5,goal:$6,object:$7,enemy:$8,mode:$9,x:$10,y:$11,z:$12});},watching?labels[8]:enemy>=0&&aa_threat(enemy)?"Returning fire":labels[aa_mode],aa_seen,aa_deaths,aa_kills,aa_collects,seg,aa_goal,aa_object,enemy,aa_mode,f2fl(ConsoleObject->pos.x),f2fl(ConsoleObject->pos.y),f2fl(ConsoleObject->pos.z));
         EM_ASM(Module.autoCombat=({attacker:$0,target:$1,retaliating:!!$2,retaliations:$3,cruise:52,arsenal:!!Module.demoArsenal});,aa_recent_attacker,enemy,enemy>=0&&aa_threat(enemy),aa_retaliations);
-        EM_ASM(Module.autoPilot=({version:19,aimError:$0,rollError:$1,watching:!!$2,watches:$3,switches:$4,held:$5,targetAge:$6,turnRate:$7});,
+        EM_ASM(Module.autoPilot=({version:20,aimError:$0,rollError:$1,watching:!!$2,watches:$3,switches:$4,held:$5,targetAge:$6,turnRate:$7});,
             aa_aim_error,aa_roll_error,watching,aa_watch_count,aa_switches,(double)(GameTime64-aa_weapon_changed)/F1_0,(double)(GameTime64-aa_target_since)/F1_0,f2fl(vm_vec_mag(&ConsoleObject->mtype.phys_info.rotvel))*360);
+        EM_ASM(Module.autoSlide=({active:!!$0,count:$1,requested:$2,forward:$3});,aa_sliding,aa_slide_count,aa_drive_intent,travel_facing);
         EM_ASM(Module.autoRecovery=({active:!!$0,count:$1,attempts:$2,stalled:$3});,escaping,aa_escape_count,aa_recover,(double)(GameTime64-aa_stuck_since)/F1_0);
         int needed=aa_object>=0&&Objects[aa_object].type==OBJ_POWERUP?(int)aa_pickup_need(&Players[Player_num],&Objects[aa_object],GameTime64):-1;
         EM_ASM(Module.autoPickup=({id:$0,need:$1,rejected:$2,deaths:$3});,needed>=0?Objects[aa_object].id:-1,needed,aa_pick_rejected,aa_deaths);
