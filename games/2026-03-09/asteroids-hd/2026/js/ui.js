@@ -1,6 +1,6 @@
 // DOM: HUD panels, floating pop-ups, banners, power-up toasts and screen switching.
-import { F, POWERUPS } from './config.js?v=5';
-import { bossHP, bossMax, dashLen, odLen, rockMassLeft } from './sim.js?v=5';
+import { F, POWERUPS } from './config.js?v=6';
+import { bossHP, bossMax, dashLen, odLen, rockMassLeft } from './sim.js?v=6';
 
 const $ = (id) => document.getElementById(id);
 const hex = (c) => '#' + c.toString(16).padStart(6, '0');

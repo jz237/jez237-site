@@ -2,9 +2,9 @@
 // without the RAMP; the stand-in should win often in sector 1 and less each sector after.
 // edge = hull the rival loses per hull the stand-in loses (steadier than wins). Also prints the Belt Run
 // wave curve. usage: node ramp_check.mjs [matches per sector] [ramp|base|both] [sectors e.g. 12]
-import { makeWorld, step, drainEvents, STEP, shipOf } from '../../games/2026-03-09/asteroids-hd/2026/js/sim.js?v=5';
-import { AIPilot } from '../../games/2026-03-09/asteroids-hd/2026/js/ai.js?v=5';
-import { PILOTS, LADDER, DIFFICULTY, RAMP, rampAI, beltRocks, beltSpeed } from '../../games/2026-03-09/asteroids-hd/2026/js/config.js?v=5';
+import { makeWorld, step, drainEvents, STEP, shipOf } from '../../games/2026-03-09/asteroids-hd/2026/js/sim.js?v=6';
+import { AIPilot } from '../../games/2026-03-09/asteroids-hd/2026/js/ai.js?v=6';
+import { PILOTS, LADDER, DIFFICULTY, RAMP, rampAI, beltRocks, beltSpeed } from '../../games/2026-03-09/asteroids-hd/2026/js/config.js?v=6';
 
 const N = +process.argv[2] || 12, only = process.argv[3] || 'both', sectors = (process.argv[4] || '1234').split('').map((c) => +c - 1);
 const rows = [];
