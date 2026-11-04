@@ -1,0 +1,396 @@
+{
+  "currentDate": "2026-11-04",
+  "historicDate": "1985-06-10",
+  "displayDate": "Week of June 10-16, 1985",
+  "edition": "Issue 150 - Weekly 1985 Computer & Culture Chronicle",
+  "sources": [
+    {
+      "title": "Popular Computing Weekly Vol.4 No.24, pp.1,4,5,7",
+      "url": "https://www.computinghistory.org.uk/det/28795/Popular-Computing-Weekly-Vol-4-No-24-13-19-June-1985",
+      "date": "1985-06-13"
+    },
+    {
+      "title": "Popular Computing Weekly original scan",
+      "url": "https://www.computinghistory.org.uk/downloads/28795",
+      "date": "1985-06-13"
+    },
+    {
+      "title": "COMPUTE!’s Gazette issue 24, interviews and advertisements",
+      "url": "https://archive.org/stream/1985-06-computegazette/Compute_Gazette_Issue_24_1985_Jun_djvu.txt",
+      "date": "1985-06"
+    },
+    {
+      "title": "Billboard, original issue, Top Rock Tracks",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-06-15.pdf",
+      "date": "1985-06-15"
+    },
+    {
+      "title": "Box Office Mojo weekend chart",
+      "url": "https://www.boxofficemojo.com/weekend/1985W24/",
+      "date": "1985-06-14/1985-06-16"
+    },
+    {
+      "title": "FBI history: Hijacking of TWA Flight 847 (retrospective)",
+      "url": "https://www.fbi.gov/history/cases-and-criminals/hijacking-of-twa-flight-847",
+      "date": "undated retrospective; event 1985-06-14"
+    },
+    {
+      "title": "European Communities accession treaty",
+      "url": "https://eur-lex.europa.eu/eli/treaty/acc_1985/sign/eng",
+      "date": "1985-06-12"
+    }
+  ],
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "visualProfile": {
+    "tone": "Sports software takes the summer stage",
+    "motifs": [
+      "Commodore 64 sports games",
+      "rowing and winter-sports halftones"
+    ],
+    "layout": "Dense warm newsprint with red and blue boxed modules"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Epyx sports previews dominate",
+    "secondaryRail": "Amiga preview, Amstrad plans, electronic novels",
+    "archiveNavigation": "Weekly archive and previous/next controls"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 150 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of June 10-16, 1985",
+    "price": "75 cents"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-06-10.jpg",
+    "alt": "Newspaper-style Computer Chronicle front page for June 10-16, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Trade-show promises fill the summer notebook; preview windows are not arrival dates.",
+  "morningLine": "Epyx goes for gold, Amiga approaches the starting line, and the adventure game puts on a hardback cover.",
+  "lead": {
+    "headline": "Summer Games II and Winter Games headline the post-CES games slate",
+    "dek": "Epyx adds a second summer contest and a winter programme as Lucasfilm adventures line up behind the sports crowd.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      0
+    ],
+    "body": [
+      "The home computer is heading back to the stadium. Reporting from the Chicago Summer Consumer Electronics Show, Popular Computing Weekly’s June 13–19 edition puts Epyx’s Summer Games II and Winter Games at the front of a busy games slate. The show took place June 2–5; the news reaching readers this week is a preview of the months ahead.",
+      "Summer Games II widens the programme to rowing, triple jump, javelin, high jump, fencing, cycling, kayak canoeing and show jumping. Epyx says the original Summer Games has sold more than 200,000 copies in the United States. The follow-up is promised there for summer, not certified as on sale this week.",
+      "Winter Games is pencilled in for autumn. Its proposed events include skiing, ski jump, biathlon, figure skating, freestyle skating and bobsleigh. The change of season gives Epyx a second sporting programme while keeping the emphasis on a varied collection of events.",
+      "The same report adds two Lucasfilm adventures to Epyx’s plans: The Eidolon, with cavern exploration aboard a nineteenth-century machine, and Koronis Rift, concerned with recovering ancient weapons. Activision, meanwhile, has announced a Lucasfilm publishing agreement outside North America, with Ballblazer and Rescue on Fractalus expected in Europe and Australia this summer. These remain announced plans rather than a timetable of verified retail arrivals."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Amiga preview raises the stakes against Atari and Macintosh",
+      "body": [
+        "Commodore’s coming Amiga is becoming the machine to watch. Popular Computing Weekly forecasts an American launch on July 18 and describes a $1,995 package with monitor and disk drive. These are the magazine’s prelaunch expectations, not a completed launch or a settled shop price.",
+        "The report describes a Motorola 68000, 256K of RAM expandable to 512K, a mouse-operated Intuition interface and Amiga-DOS. Its graphics account ranges from 320 by 200 to 640 by 400, with differing colour counts and a palette reaching 4,096 colours. Four sound channels add to the entertainment promise.",
+        "The British timetable looks longer: Commodore UK general manager Nick Bessey expects no British announcement before January. Entertainment, education and home business are all in the pitch, but the immediate story is anticipation, with Atari and Macintosh providing the competitive backdrop."
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "headline": "Amstrad aims its 128K CPC at the American home",
+      "body": [
+        "Amstrad is aiming the CPC 6128 at American homes this autumn. The June 13–19 Popular Computing Weekly reports the preceding CES announcement, quoting $699 with a green monitor and $799 with a colour monitor. The prices belong to an announced package, not a verified sale this week.",
+        "The Z80 machine switches between two 64K memory banks and includes a three-inch disk drive. The report describes software compatibility upward from the CPC 464 and CPC 664, giving the proposed American customer an existing software family rather than an entirely empty shelf.",
+        "Chicago-based Indescomp Inc is the distributor. Established in January by Madrid’s Indescomp SA, it is presented as a separate commercial venture: Amstrad supplies the machines, rather than taking a financial partnership in the project."
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "headline": "Poet Robert Pinsky takes the text adventure into the electronic novel",
+      "body": [
+        "The electronic novel is borrowing more than a name from the book trade. June’s COMPUTE!’s Gazette profiles poet Robert Pinsky and Synapse’s Mindwheel for the Commodore 64, placing literary authorship beside the familiar machinery of the text adventure.",
+        "Synapse has looked beyond conventional game development for writers who can expand the imaginative territory of interactive fiction. The feature also discusses Douglas Adams and The Hitchhiker’s Guide to the Galaxy, and the balance between pictures and the memory left for vocabulary and sophisticated parsing.",
+        "The packaging makes the literary ambition tangible: these electronic novels arrive as hardback books with a disk at the back, and information in the printed volume is needed to play. This is June feature coverage of the form, not evidence that Mindwheel was released during this particular week."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Oric bought from receivership",
+      "summary": "PCW p.4 reports purchase of Oric Products International by French distributor Eureka Informatique and plans to restart Atmos production in Normandy.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Alex Uboldi appointed acting Acorn managing director",
+      "summary": "PCW p.4 names senior Olivetti director Alex Uboldi as acting managing director at Acorn.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "C128 makes British public debut",
+      "summary": "PCW p.5 reports first British public showing at the sixth Commodore Computer Show in London, June 7–9. Do not move that event into June 10–16.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Superscript",
+      "detail": "£69.99; shown at the June 7–9 Commodore show, reported this week.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "name": "Superbase Starter",
+      "detail": "£39.95; Precision’s C64 database offering shown at the preceding Commodore show.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "name": "Supertype",
+      "detail": "£19.95 typing tutor in Precision’s show range.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial preview selections, not sales rankings",
+      "items": [
+        "Summer Games II — Epyx preview; US summer availability promised.",
+        "Winter Games — Epyx preview; autumn forecast.",
+        "Hacker — Activision mystery-adventure preview.",
+        "Déjà Vu — Mindscape Macintosh graphic-adventure preview.",
+        "The Way of the Exploding Fist — C64 version expected the following week at £9.95."
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "label": "Top 5 Movies — June 14-16 domestic weekend box office",
+      "items": [
+        "1. Rambo: First Blood Part II — $9,162,153",
+        "2. The Goonies — $8,377,382",
+        "3. Fletch — $5,171,590",
+        "4. Prizzi’s Honor — $4,234,537",
+        "5. A View to a Kill — $3,437,519"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Tough All Over",
+      "artist": "John Cafferty/Beaver Brown Band",
+      "song": "Tough All Over",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-06-15",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Little by Little",
+      "artist": "Robert Plant",
+      "song": "Little by Little",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-06-15",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Glory Days",
+      "artist": "Bruce Springsteen",
+      "song": "Glory Days",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-06-15",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Cannonball",
+      "artist": "Supertramp",
+      "song": "Cannonball",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-06-15",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "If You Love Somebody Set Them Free",
+      "artist": "Sting",
+      "song": "If You Love Somebody Set Them Free",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-06-15",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        3
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "CPC 6128 with green monitor",
+      "price": "$699",
+      "note": "Announced US bundle; autumn availability intended.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "CPC 6128 with colour monitor",
+      "price": "$799",
+      "note": "Announced US bundle; autumn availability intended.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "VICmodem",
+      "price": "Around $30",
+      "note": "June Gazette interview estimate, not a store offer.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Software auction aids Ethiopian famine appeal",
+      "summary": "PCW p.5 announces an auction at County Hall, London SE1, June 15 at 11am. This verifies the announcement, not its eventual proceeds.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "headline": "Protek calls in receiver",
+      "summary": "PCW p.5 reports receivership at developer of the Protek joystick interface, Spectrum modem and Hunter Killer.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "headline": "Star Trek: The Kobayashi Alternative",
+      "summary": "Simon & Schuster announced a text adventure using Captain Kirk and the Enterprise crew, with US C64 availability forecast for October; PCW p.7.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Precision’s C64 office shelf",
+    "summary": "Superscript £69.99, Superbase Starter £39.95 and Supertype £19.95: prices reported after the June 7–9 Commodore show.",
+    "tagline": "Writing, filing and typing on the home computer.",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "market": {
+    "headline": "The autumn shop window takes shape",
+    "summary": "Epyx games and Amstrad’s American bundles fill the forward order book in the press. Promised availability is not evidence of a product already on the retail shelf.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "worldAnchor": {
+    "headline": "TWA Flight 847 hijacked",
+    "summary": "On June 14 a flight from Athens to Rome was commandeered. Use only events known by June 16, not later hostage releases or retrospective prosecution details.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      5
+    ]
+  },
+  "bbsNote": {
+    "headline": "Commodore courts the household modem user",
+    "summary": "June Gazette’s interview with Commodore’s Goheen puts cheaper telecomputing and service partnerships on the agenda.",
+    "posts": [
+      {
+        "topic": "The 1200-baud prospect",
+        "platform": "Commodore 1670",
+        "text": "Goheen forecasts a Hayes-like smartmodem and an eventual price below $100, not an initial advertised purchase price."
+      },
+      {
+        "topic": "Online connections",
+        "platform": "CompuServe / The Source / Delphi / Playnet",
+        "text": "The interview names service relationships and subscription snap packs; a possible Commodore service is an idea, not a launch."
+      }
+    ],
+    "confidence": "same-month",
+    "sourceRefs": [
+      2
+    ]
+  },
+  "curiosity": {
+    "headline": "The adventure game arrives inside a hardback book",
+    "summary": "Mindwheel blurs the bookshop and software shelf.",
+    "detail": "June Gazette describes Synapse electronic novels as hardback books with a disk at the back, with information in the printed book needed to play. Attribute to the June feature, not a release this week.",
+    "sourceRefs": [
+      2
+    ]
+  },
+  "gadgetWatch": {
+    "headline": "Milton Bradley’s motorized robots await microcomputer interfaces",
+    "summary": "PCW p.4 reports construction sets with educational BBC B experiments in Welsh schools using a control box. Milton Bradley was considering interface licences rather than launching its own interface. Expansion set about £20; largest set £60–£80.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "CES took place June 2–5; PCW reporting is published during this issue week.",
+      "Amiga dates, price and specifications are contemporary prelaunch forecasts.",
+      "Game list is an editorial preview selection, not a sales chart.",
+      "June Gazette material is same-month coverage, not a release-date claim.",
+      "World bulletin stops at the June 14 hijacking; no later outcome is implied.",
+      "Modem notes paraphrase a period interview, not invented BBS posts."
+    ]
+  }
+}
