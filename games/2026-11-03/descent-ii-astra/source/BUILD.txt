@@ -162,3 +162,36 @@ An arsenal QA fixture uses the original cheat to supply weapons only in an
 isolated test save; normal demos receive no weapons, invulnerability or keys.
 Demo tests cover sampled combat/navigation rather than complete campaign solves.
 Automated browsers reject pointer lock before launch and close after testing.
+
+Astra pursuit pilot and weapon range (pyre11)
+
+The autonomous controller now cruises at a requested 52 native distance units
+per second. A ship-radius visibility sweep looks ahead through up to four open
+rooms. Native mass/drag feed-forward holds speed without changing D2 physics;
+the pilot turns more decisively and retains momentum through modest bends.
+Incoming fire no longer holds the throttle in braking. Projectiles approaching
+the player identify their real parent robot, with object-signature checks.
+Actual damage also records the attacker. Recent attackers take priority over
+supply errands and are pursued through the mine graph when out of sight.
+Transparent-wall firing rays and solid ship-clearance rays are separate.
+
+The visible Full arsenal showcase checkbox is on by default for the live demo.
+It grants the watch pilot native weapons/ammunition at each launch/respawn,
+then rotates appropriate weapons during combat. It grants no invulnerability,
+keys or health. Turn it off to use only the normal starting kit and pickups.
+Manual play, saved pilots, weapon timing/damage, sound and movement are unchanged.
+
+Showroom > Demo weapon effects, and Weapon effects during the live demo, open
+a paused presentation range. The 19 entries cover laser levels, every primary
+family and missile/exhaust variants. A selector, Previous/Next and auto-cycle
+controls work on desktop and phones. The range invokes the actual native
+projectile renderer and draws real missile models, without creating gameplay
+objects, spending inventory, advancing the mission or altering its RNG.
+
+Validation covers both campaigns, stock-inventory and showcase demos, attacker
+engagement, speed/facing telemetry, weapon variety and pause/resume. All 19 range
+entries and desktop/phone layouts were exercised. Native pause snapshots verify
+unchanged position, velocity, mission time, health, lives, energy and ammunition.
+Phone checks use browser emulation. These are combat/navigation samples, not
+proof of an autonomous solution to every mine. Test browsers reject pointer
+capture before launch and close afterward.

@@ -47,6 +47,12 @@ int astra_preview_frame(void)
     g3_start_frame();
     vms_vector eye={0,0,0},center={0,0,i2f(72)};
     g3_set_view_matrix(&eye,&vmd_identity_matrix,F1_0);
+    int weapon=EM_ASM_INT(return Number.isInteger(Module.weaponInspect)?Module.weaponInspect:-1);
+    if(weapon>=0&&weapon<19){
+        eye.x=i2f(3);eye.y=F1_0;g3_set_view_matrix(&eye,&vmd_identity_matrix,fl2f(.60f));
+        extern void astra_weapon_showcase(int,float);astra_weapon_showcase(weapon,SDL_GetTicks()*.001f);
+        g3_end_frame();EM_ASM(window.astraWeaponDemo?.update($0);,weapon);return 1;
+    }
     int inspect=EM_ASM_INT(return Number.isInteger(Module.pickupInspect)?Module.pickupInspect:-1);
     if(inspect>=0 && inspect<51){
         object item;memset(&item,0,sizeof item);item.id=inspect;item.segnum=-1;
