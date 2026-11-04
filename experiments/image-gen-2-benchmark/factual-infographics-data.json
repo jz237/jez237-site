@@ -18756,5 +18756,115 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-03-factual-infographic-factual-infographic-the-eastern-dobsonf",
+    "title": "Factual infographic: The Eastern Dobsonfly’s Hellgrammite",
+    "tests": "Species-specific morphology and life cycle sourced; internal respiratory study explicitly generalized.; archive_slot=2026-11-03T20:20; concept=eastern-dobsonfly-hellgrammite-stream-metamorphosis; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: bizarre-insect-life",
+    "prompt": "Create a finished, richly detailed natural-history scientific plate infographic titled “EASTERN DOBSONFLY” with subtitle “Corydalus cornutus · the hellgrammite’s transformation”. One enormous whole-insect macro hero: the accurately proportioned dark flattened aquatic hellgrammite on a submerged stream stone, sharp mandibles, exactly six thoracic legs, segmented abdomen with eight pairs of lateral filaments and pale cottony gill tufts at their bases, and hooked terminal appendages. Render lifelike brown-black cuticle, water caustics, tiny stone texture and naturalistic light. Surround it with 7 substantial supporting studies, each an individually readable scientific-plate panel with varied size and breathing space, connected by elegant fine leaders and water-current motifs, not a sterile dashboard: (1) large close-up of the head and biting mandibles; (2) magnified lateral abdominal filament and cottony gill tuft; (3) prominent labeled generalized insect respiratory cutaway showing gill and branching tracheal tubes, explicitly captioned “Generalized breathing schematic”, with arrows for dissolved oxygen diffusing from water; do not invent species-specific internal organ geometry; (4) macro of paired terminal hooks gripping stone against current; (5) larva beneath a stream rock capturing small aquatic insect prey; (6) concise clearly ordered egg → aquatic larva → land pupa → winged adult sequence, label “complete metamorphosis” and “larval stage: several years”; (7) adult male and female head comparison, male with striking long sickle mandibles and female much shorter, paired with a whole winged adult showing long antennae and veined wings folded along its back. Include a small unobtrusive scale annotation “larva: about 2–3 in” and habitat context “rocky streams · eastern North America”. Distinguish adult and larval stages; realistic anatomy, no extra legs, no made-up organs. Use crisp concise scientifically correct labels only, exquisite shaded ink and luminous naturalistic macro color, layered depth, clean visual hierarchy and legibility; insect biology fills most of canvas. No bibliography, logos, watermark, mockup, frame, room, or unsupported claims.",
+    "image": "images/2026-11-03-factual-infographic-factual-infographic-the-eastern-dobsonf.jpg",
+    "thumb": "thumbs/2026-11-03-factual-infographic-factual-infographic-the-eastern-dobsonf.webp",
+    "color": "#ac9c81",
+    "date": "2026-11-03",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1199x1312",
+    "dedup": {
+      "conceptKey": "eastern-dobsonfly-hellgrammite-stream-metamorphosis",
+      "imageSha256": "3d334e49d93dfffdcb9bf4597f6a113862d267bf4f7d49ba076162eb960e076c",
+      "imageDHash": "9c94f2e892323152"
+    },
+    "factualInfographic": {
+      "topic": "How the eastern dobsonfly Corydalus cornutus develops from an aquatic predatory hellgrammite into a winged adult",
+      "description": "The eastern dobsonfly’s aquatic larval anatomy, predation, respiration and complete metamorphosis.",
+      "sourceNote": "Missouri Department of Conservation, University of Kentucky and North Carolina State University: https://mdc.mo.gov/discover-nature/field-guide/eastern-dobsonfly; https://entomology.mgcafe.uky.edu/node/1659; https://genent.cals.ncsu.edu/bug-bytes/aquatic-respiration/; species morphology, life cycle and generalized insect gill respiration.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-04T01:21:41.513153+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Missouri Department of Conservation",
+            "title": "Eastern Dobsonfly",
+            "sourceType": "government-agency",
+            "url": "https://mdc.mo.gov/discover-nature/field-guide/eastern-dobsonfly"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of Kentucky Entomology",
+            "title": "Dobsonflies & Fishflies",
+            "sourceType": "university",
+            "url": "https://entomology.mgcafe.uky.edu/node/1659"
+          },
+          {
+            "id": "S3",
+            "publisher": "North Carolina State University",
+            "title": "Respiration in Aquatic Insects",
+            "sourceType": "university",
+            "url": "https://genent.cals.ncsu.edu/bug-bytes/aquatic-respiration/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The eastern dobsonfly is Corydalus cornutus, a megalopteran in the family Corydalidae, found in eastern North America.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Its aquatic larva, called a hellgrammite, is flattened, dark and segmented, with three pairs of thoracic legs and sharp mandibles.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The larval abdomen has eight pairs of lateral filaments with cottony gill tufts at their bases, and terminal hooked appendages help resist stream current.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Insect biological gills allow dissolved oxygen to diffuse into the body and are usually outgrowths of the tracheal system; the internal breathing diagram is generalized.",
+            "sourceIds": [
+              "S3",
+              "S1"
+            ]
+          },
+          {
+            "claim": "Aquatic larvae live beneath rocks or logs in streams and prey on aquatic animals.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Complete metamorphosis proceeds from egg to aquatic larva to land pupa to winged adult; larval development takes several years.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Adults have long antennae, two pairs of prominently veined wings held over the body at rest, and three pairs of legs.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Male mandibles are long and sickle-shaped; female mandibles are much shorter.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Adults can exceed 3.5 inches in length and larvae are approximately 2–3 inches long.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
