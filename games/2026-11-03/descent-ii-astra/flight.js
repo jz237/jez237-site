@@ -174,7 +174,11 @@ flightView.addEventListener("mousemove", e => {
 window.addEventListener("keydown", e => {
   if (window.astraPreview?.active) {
     e.stopImmediatePropagation();
-    if(e.key==="Tab" || (e.target.closest?.("button") && ["Enter"," "].includes(e.key)))return;
+    if(e.target.closest?.('select'))return;
+    if(e.key==="Tab")return;
+    if(e.target.closest?.('button') && ['Enter',' '].includes(e.key)){
+      e.preventDefault();if(!e.repeat)e.target.closest('button').click();return;
+    }
     e.preventDefault();
     if(e.key==="Escape")window.astraPreview.close();
     return;
@@ -279,7 +283,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre11");
+    await script("engine.js?v=pyre13");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 

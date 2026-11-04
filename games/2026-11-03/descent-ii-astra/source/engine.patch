@@ -1594,7 +1594,7 @@ index 163e08a..b4b8672 100644
  	lb->item = items;
  	lb->citem = default_item;
 diff --git a/d2/main/object.c b/d2/main/object.c
-index 602b2d5..371992f 100644
+index 602b2d5..4bd310c 100644
 --- a/d2/main/object.c
 +++ b/d2/main/object.c
 @@ -425,6 +425,9 @@ void draw_cloaked_object(object *obj,g3s_lrgb light,fix *glow,fix64 cloak_start_
@@ -1613,19 +1613,20 @@ index 602b2d5..371992f 100644
  
 +	extern int astra_draw_weapon(object*);
 +    extern void astra_draw_mechanisms(object*);
-+    if(obj->type==OBJ_WEAPON && astra_draw_weapon(obj))goto astra_rendered;
++    if(obj->type==OBJ_WEAPON && obj->render_type!=RT_POLYOBJ && astra_draw_weapon(obj))goto astra_rendered;
  	switch (obj->render_type)
  	{
  		case RT_NONE:
-@@ -786,6 +792,7 @@ void render_object(object *obj)
+@@ -786,6 +792,8 @@ void render_object(object *obj)
  				gr_settransblend( 10, GR_BLEND_ADDITIVE_A );
  
  			draw_polygon_object(obj);
++            if(obj->type==OBJ_WEAPON)astra_draw_weapon(obj); // translucent exhaust follows the opaque missile
 +            if(obj->type==OBJ_ROBOT)astra_draw_mechanisms(obj);
  
  			if (obj->type == OBJ_ROBOT) //"warn" robot if being shot at
  				set_robot_location_info(obj);
-@@ -841,6 +848,7 @@ void render_object(object *obj)
+@@ -841,6 +849,7 @@ void render_object(object *obj)
  			Error("Unknown render_type <%d>",obj->render_type);
  	}
  
@@ -1633,7 +1634,7 @@ index 602b2d5..371992f 100644
  	gr_settransblend( GR_FADE_OFF, GR_BLEND_NORMAL ); // revert any transparency/blending setting back to normal
  
  	if ( obj->render_type != RT_NONE && Newdemo_state == ND_STATE_RECORDING )
-@@ -910,6 +918,7 @@ void init_player_object()
+@@ -910,6 +919,7 @@ void init_player_object()
  //sets up the free list & init player & whatever else
  void init_objects()
  {
@@ -1678,7 +1679,7 @@ index 823ccc1..d116511 100644
  }
 +
 diff --git a/d2/main/powerup.c b/d2/main/powerup.c
-index 650f69e..a5b4f8d 100644
+index 650f69e..7271753 100644
 --- a/d2/main/powerup.c
 +++ b/d2/main/powerup.c
 @@ -115,6 +115,8 @@ void draw_blob_outline(void)
@@ -1699,15 +1700,19 @@ index 650f69e..a5b4f8d 100644
  extern void multi_send_got_flag (char);
  
  //	returns true if powerup consumed
-@@ -745,6 +747,7 @@ int do_powerup(object *obj)
+@@ -745,8 +747,11 @@ int do_powerup(object *obj)
  		#endif
  		digi_play_sample( Powerup_info[id].hit_sound, F1_0 );
  		detect_escort_goal_accomplished(obj-Objects);
-+        extern void astra_auto_collected(void);astra_auto_collected();
++
  	}
  
++    extern void astra_auto_pickup_result(object*,int);astra_auto_pickup_result(obj,used||special_used);
++
  	return used;
-@@ -766,3 +769,4 @@ extern int powerup_type_info_read_n(powerup_type_info *pti, int n, PHYSFS_file *
+ 
+ }
+@@ -766,3 +771,4 @@ extern int powerup_type_info_read_n(powerup_type_info *pti, int n, PHYSFS_file *
  	}
  	return i;
  }

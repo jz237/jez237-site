@@ -4,8 +4,13 @@ window.astraWeaponDemo={
   cycling:true,lastSwitch:0,
   select(index){Module.weaponInspect=(index+this.names.length)%this.names.length;this.lastSwitch=performance.now();$('weaponSelect').value=String(Module.weaponInspect);},
   update(index){
-    $('weaponControls').hidden=false;$('previewTitle').textContent='PTMC / LIVE WEAPON RANGE';
-    $('previewVariation').textContent=this.names[index];$('previewPhase').textContent='Enhanced firing effects · Select any weapon';
+    document.body.classList.add('weapon-range');
+    $('weaponControls').hidden=false;$('previewTitle').textContent='COCKPIT FIRING RANGE';
+    $('rangeControls').hidden=!this.controlsOpen;
+    const primaries=[0,0,0,1,6,2,3,4,7,8,9],secondaries=[0,1,3,4,5,6,8,9];
+    window.astraDeck?.show(true);
+    window.astraDeck?.update(0,3,100,100,0,index<11?primaries[index]:0,index<11?0:secondaries[index-11],index===1?4:index===2?6:1,20,100,0,1,100,true,false,0);
+    $('previewVariation').textContent=this.names[index];$('previewPhase').textContent='Cockpit view · Native firing patterns';
     $('previewTime').textContent=(index+1)+' / '+this.names.length;$('previewProgress').hidden=true;
     $('previewPrevious').hidden=false;$('previewAgain').textContent='Next weapon →';
     $('weaponSelect').value=String(index);
@@ -13,10 +18,11 @@ window.astraWeaponDemo={
     if(this.cycling&&performance.now()-this.lastSwitch>5500)this.select(index+1);
   },
   open(){
-    this.lastSwitch=performance.now();this.cycling=true;this.sync();
+    this.lastSwitch=0;this.cycling=true;this.controls(false);this.sync();
     if(window.Module&&flightActive){Module.pickupInspect=-1;this.select(0);releaseFlightMouse();Module.pyroPreviewCommand=1;}
     else {$('look').value='astra';launch(true,false,false,true,false,false,true);}
   },
+  controls(open){this.controlsOpen=open;$('rangeToggle').setAttribute('aria-expanded',String(open));$('rangeControls').hidden=!open;},
   sync(){$('weaponCycle').textContent=this.cycling?'Auto-cycle on':'Auto-cycle off';$('weaponCycle').setAttribute('aria-pressed',String(this.cycling));}
 };
 astraWeaponDemo.names.forEach((name,index)=>{const o=document.createElement('option');o.value=index;o.textContent=name;$('weaponSelect').append(o);});
@@ -30,3 +36,15 @@ const originalExplosionOpen=astraPreview.open.bind(astraPreview);
 astraPreview.open=()=>{Module.weaponInspect=-1;$('weaponControls').hidden=true;originalExplosionOpen();};
 const originalCollectionStart=$('collectiblesStart').onclick;
 $('collectiblesStart').onclick=()=>{$('weaponControls').hidden=true;originalCollectionStart();};
+
+$('rangeToggle').onclick=()=>astraWeaponDemo.controls(!astraWeaponDemo.controlsOpen);
+document.addEventListener('pointerdown',e=>{if(document.body.classList.contains('weapon-range') && !e.target.closest('#rangeControls, #rangeToggle'))astraWeaponDemo.controls(false);},true);
+const rangeShow=astraPreview.show.bind(astraPreview);
+astraPreview.show=active=>{
+  const weapons=active&&Module.weaponInspect>=0;
+  document.body.classList.toggle('weapon-range',weapons);
+  astraWeaponDemo.controlsOpen=false;$('rangeToggle').setAttribute('aria-expanded','false');
+  $('rangeControls').hidden=weapons;
+  rangeShow(active);
+  if(weapons)$('rangeToggle').focus({preventScroll:true});
+};

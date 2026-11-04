@@ -16,6 +16,15 @@ static int aa_level=-999,aa_segment=-1,aa_goal=-1,aa_object=-1,aa_wall=-1,aa_mod
 static int aa_dist[MAX_SEGMENTS],aa_parent[MAX_SEGMENTS],aa_queue[MAX_SEGMENTS],aa_visits[MAX_SEGMENTS];
 static fix64 aa_ignore[MAX_OBJECTS],aa_wall_seen[MAX_WALLS],aa_next,aa_stuck_since,aa_level_since,aa_dead_since,aa_status_next;
 static vms_vector aa_last;
+static int aa_ignore_signature[MAX_OBJECTS],aa_pick_object=-1,aa_pick_signature,aa_pick_rejected;
+static fix64 aa_pick_progress,aa_pick_contact;
+static float aa_pick_distance;
+static void aa_skip_pickup(int i,int seconds){
+    if(i<0||i>Highest_object_index)return;
+    if(aa_ignore_signature[i]==Objects[i].signature&&aa_ignore[i]>GameTime64)return;
+    aa_ignore[i]=GameTime64+i2f(seconds);aa_ignore_signature[i]=Objects[i].signature;
+    aa_next=0;aa_pick_object=-1;aa_pick_rejected++;
+}
 static fix64 aa_weapon_next,aa_weapon_used[10],aa_missile_next,aa_missile_ready;
 static int aa_missile_turn,aa_pending_missile=-1;
 static float aa_facing_velocity;
@@ -75,17 +84,34 @@ static void aa_graph(void){
         }
     }}
 }
-static float aa_need(int id){
-    player *p=&Players[Player_num];
+/* Read-only counterpart of do_powerup's capacity rules, including ammunition
+ * inside Vulcan/Gauss weapons and duplicate equipment's single-player energy. */
+static float aa_pickup_need(const player *p,const object *o,fix64 now){
+    int id=o->id,rack=(p->flags&PLAYER_FLAGS_AMMO_RACK)?2:1;
+    float energy=p->energy<i2f(150)?20:0;
+    if((o->ctype.powerup_info.flags&PF_SPAT_BY_PLAYER) && o->ctype.powerup_info.creation_time>0 && now<o->ctype.powerup_info.creation_time+i2f(2))return 0;
     if(id==POW_ENERGY)return p->energy<i2f(160)?(p->energy<i2f(35)?230:60):0;
     if(id==POW_SHIELD_BOOST)return p->shields<i2f(160)?(p->shields<i2f(60)?280:80):0;
     if(id>=POW_KEY_BLUE&&id<=POW_KEY_GOLD)return p->flags&(2<<(id-POW_KEY_BLUE))?0:210;
-    if(id==POW_LASER)return p->laser_level<3?100:0;
-    if(id==POW_SUPER_LASER)return p->laser_level<5?140:0;
-    if(id==POW_QUAD_FIRE)return p->flags&PLAYER_FLAGS_QUAD_LASERS?0:130;
-    if(id==POW_EXTRA_LIFE)return 100;
-    if(id==POW_VULCAN_AMMO)return p->primary_ammo[VULCAN_INDEX]<VULCAN_AMMO_MAX?55:0;
-    for(int w=1;w<MAX_PRIMARY_WEAPONS;w++)if(Primary_weapon_to_powerup[w]==id)return p->primary_weapon_flags&(1<<w)?(p->energy<i2f(150)?20:0):125;
+    if(id==POW_LASER)return p->laser_level<MAX_LASER_LEVEL?100:energy;
+    if(id==POW_SUPER_LASER)return p->laser_level<MAX_SUPER_LASER_LEVEL?140:energy;
+    if(id==POW_QUAD_FIRE)return p->flags&PLAYER_FLAGS_QUAD_LASERS?energy:130;
+    if(id==POW_EXTRA_LIFE)return p->lives<MAX_LIVES?100:0;
+    if(id==POW_VULCAN_AMMO)return p->primary_ammo[VULCAN_INDEX]<VULCAN_AMMO_MAX*rack?55:0;
+    if(id==POW_VULCAN_WEAPON||id==POW_GAUSS_WEAPON){
+        int w=id==POW_VULCAN_WEAPON?VULCAN_INDEX:GAUSS_INDEX;
+        if(!(p->primary_weapon_flags&(1<<w)))return 125;
+        return o->ctype.powerup_info.count>0 && p->primary_ammo[VULCAN_INDEX]<VULCAN_AMMO_MAX*rack?55:0;
+    }
+    for(int w=1;w<MAX_PRIMARY_WEAPONS;w++)
+        if(w!=SUPER_LASER_INDEX && Primary_weapon_to_powerup[w]==id)return p->primary_weapon_flags&(1<<w)?energy:125;
+    int single=id;
+    switch(id){
+      case POW_MISSILE_4:case POW_HOMING_AMMO_4:case POW_SMISSILE1_4:
+      case POW_GUIDED_MISSILE_4:case POW_MERCURY_MISSILE_4:single=id-1;break;
+    }
+    for(int w=0;w<MAX_SECONDARY_WEAPONS;w++)
+        if(Secondary_weapon_to_powerup[w]==single)return p->secondary_ammo[w]<Secondary_ammo_max[w]*rack?55:0;
     int flag=0;
     switch(id){
       case POW_FULL_MAP:flag=PLAYER_FLAGS_MAP_ALL;break;
@@ -93,20 +119,20 @@ static float aa_need(int id){
       case POW_AMMO_RACK:flag=PLAYER_FLAGS_AMMO_RACK;break;
       case POW_AFTERBURNER:flag=PLAYER_FLAGS_AFTERBURNER;break;
       case POW_HEADLIGHT:flag=PLAYER_FLAGS_HEADLIGHT;break;
-      case POW_CLOAK:flag=PLAYER_FLAGS_CLOAKED;break;
-      case POW_INVULNERABILITY:flag=PLAYER_FLAGS_INVULNERABLE;break;
+      case POW_CLOAK:return p->flags&PLAYER_FLAGS_CLOAKED?0:95;
+      case POW_INVULNERABILITY:return p->flags&PLAYER_FLAGS_INVULNERABLE?0:95;
     }
-    if(flag)return p->flags&flag?0:95;
-    if(id>=POW_FLAG_BLUE)return 0;
-    return 40;
+    if(flag)return p->flags&flag?energy:95;
+    return 0; // Reserved and multiplayer-only objects cannot help this pilot.
 }
+
 static void aa_plan(void){
     aa_graph();float best=-1;aa_goal=-1;aa_object=-1;aa_wall=-1;aa_mode=0;
     for(int i=0;i<=Highest_object_index;i++){
         object *o=&Objects[i];int seg=o->segnum;
-        if(seg<0||seg>Highest_segment_index||aa_dist[seg]<0||o->flags&OF_SHOULD_BE_DEAD||aa_ignore[i]>GameTime64)continue;
+        if(seg<0||seg>Highest_segment_index||aa_dist[seg]<0||o->flags&OF_SHOULD_BE_DEAD||(aa_ignore[i]>GameTime64&&aa_ignore_signature[i]==o->signature))continue;
         float weight=0;
-        if(o->type==OBJ_POWERUP)weight=aa_need(o->id);
+        if(o->type==OBJ_POWERUP)weight=aa_pickup_need(&Players[Player_num],o,GameTime64);
         if(o->type==OBJ_HOSTAGE)weight=65;
         if(o->type==OBJ_ROBOT&&!Robot_info[o->id].companion)weight=aa_threat(i)?650:85;
         if(o->type==OBJ_CNTRLCEN&&!Control_center_destroyed)weight=GameTime64-aa_level_since>i2f(180)?120:45;
@@ -178,7 +204,7 @@ void astra_auto_frame(void){
         EM_ASM(window.astraAutoStatus?.("Ship lost - relaunching",$0,$1,$2,$3);,aa_seen,aa_deaths,aa_kills,aa_collects);
         return;
     }
-    if(aa_dead_since){aa_arsenal_signature=-1;aa_combat_target=-1;aa_next=0;}
+    if(aa_dead_since){aa_arsenal_signature=-1;aa_combat_target=-1;aa_next=0;aa_pick_object=aa_object=aa_goal=-1;}
     aa_dead_since=0;if(Endlevel_sequence)return;
     if(aa_level!=Current_level_num){
         aa_weapon_next=aa_missile_next=0;aa_pending_missile=-1;memset(aa_weapon_used,0,sizeof aa_weapon_used);
@@ -223,9 +249,21 @@ void astra_auto_frame(void){
             target=candidate;from=next;
         }
     }
-    if(aa_object>=0 && seg==aa_goal && aa_mode==1 && aa_len(&target,&ConsoleObject->pos)<f2fl(ConsoleObject->size)*.65f){
-        aa_ignore[aa_object]=GameTime64+i2f(18);aa_next=0;
-    }
+    /* A rejected collision or a stalled approach must not hold the pilot in
+     * an orbit. Object signatures prevent cooldowns leaking to reused slots. */
+    if(aa_object>=0 && aa_mode==1){
+        object *pickup=&Objects[aa_object];float distance=aa_len(&pickup->pos,&ConsoleObject->pos);
+        if(aa_pick_object!=aa_object||aa_pick_signature!=pickup->signature){
+            aa_pick_object=aa_object;aa_pick_signature=pickup->signature;
+            aa_pick_distance=distance;aa_pick_progress=GameTime64;aa_pick_contact=0;
+        }
+        if(distance<aa_pick_distance-1){aa_pick_distance=distance;aa_pick_progress=GameTime64;}
+        if(seg==pickup->segnum && distance<f2fl(ConsoleObject->size+pickup->size)+1){
+            if(!aa_pick_contact)aa_pick_contact=GameTime64;
+        }else aa_pick_contact=0;
+        if(pickup->type!=OBJ_POWERUP || !aa_pickup_need(&Players[Player_num],pickup,GameTime64))aa_next=0;
+        else if(GameTime64-aa_pick_progress>i2f(6)||(aa_pick_contact&&GameTime64-aa_pick_contact>F1_0))aa_skip_pickup(aa_object,30);
+    }else aa_pick_object=-1;
     if(aa_wall>=0 && seg==aa_goal && aa_mode==4 && aa_len(&target,&ConsoleObject->pos)<10){aa_wall_seen[aa_wall]=GameTime64+i2f(35);}
     /* Aim at the closest visible threat; the guide-bot is never a target. */
     int enemy=-1;float threat=0;
@@ -316,7 +354,7 @@ void astra_auto_frame(void){
         vms_vector center;compute_segment_center(&center,&Segments[seg]);aa_aim(center);aa_move(center,14);
         aa_mode=7;
         if(GameTime64-aa_stuck_since>i2f(6)){
-            if(aa_object>=0)aa_ignore[aa_object]=GameTime64+i2f(25);
+            if(aa_object>=0)aa_skip_pickup(aa_object,25);
             aa_next=0;aa_stuck_since=GameTime64;aa_recover++;
         }
     }
@@ -326,10 +364,16 @@ void astra_auto_frame(void){
         aa_kills=Players[Player_num].num_kills_total;
         vms_vector travel=ConsoleObject->mtype.phys_info.velocity;float velocity=f2fl(vm_vec_mag(&travel));
         aa_facing_velocity=velocity>.05f?f2fl(vm_vec_dot(&travel,&ConsoleObject->orient.fvec))/velocity:1;
-        EM_ASM(Module.autoFlight=({speed:$0,forward:$1,primary:$2,secondary:$3,energy:$4,shields:$5,version:11});,velocity,aa_facing_velocity,Players[Player_num].primary_weapon,Players[Player_num].secondary_weapon,f2fl(Players[Player_num].energy),f2fl(Players[Player_num].shields));
+        EM_ASM(Module.autoFlight=({speed:$0,forward:$1,primary:$2,secondary:$3,energy:$4,shields:$5,version:13});,velocity,aa_facing_velocity,Players[Player_num].primary_weapon,Players[Player_num].secondary_weapon,f2fl(Players[Player_num].energy),f2fl(Players[Player_num].shields));
         EM_ASM({window.astraAutoStatus?.(UTF8ToString($0),$1,$2,$3,$4);Module.autoTelemetry=({segment:$5,goal:$6,object:$7,enemy:$8,mode:$9,x:$10,y:$11,z:$12});},enemy>=0&&aa_threat(enemy)?"Returning fire":labels[aa_mode],aa_seen,aa_deaths,aa_kills,aa_collects,seg,aa_goal,aa_object,enemy,aa_mode,f2fl(ConsoleObject->pos.x),f2fl(ConsoleObject->pos.y),f2fl(ConsoleObject->pos.z));
         EM_ASM(Module.autoCombat=({attacker:$0,target:$1,retaliating:!!$2,retaliations:$3,cruise:52,arsenal:!!Module.demoArsenal});,aa_recent_attacker,enemy,enemy>=0&&aa_threat(enemy),aa_retaliations);
+        int needed=aa_object>=0&&Objects[aa_object].type==OBJ_POWERUP?(int)aa_pickup_need(&Players[Player_num],&Objects[aa_object],GameTime64):-1;
+        EM_ASM(Module.autoPickup=({id:$0,need:$1,rejected:$2,deaths:$3});,needed>=0?Objects[aa_object].id:-1,needed,aa_pick_rejected,aa_deaths);
         aa_status_next=GameTime64+F1_0/3;
     }
 }
-void astra_auto_collected(void){if(astra_auto_enabled())aa_collects++;}
+void astra_auto_pickup_result(object *o,int useful){
+    if(!astra_auto_enabled())return;
+    if(useful){aa_collects++;aa_next=0;}
+    else if(o->type==OBJ_POWERUP)aa_skip_pickup(o-Objects,20);
+}

@@ -209,3 +209,36 @@ The launcher/styles are pyre12; native engine and weapon range remain pyre11.
 Phone touch emulation covers portrait 390x844 and landscape 844x390/640x320;
 desktop checks cover menu actions, focus, preview return and level changes.
 All automated test documents disable pointer capture before loading the game.
+
+Astra cockpit firing range and pickup decisions (pyre13)
+
+Energy projectiles now derive their visual orientation from actual velocity.
+Stock D2 does not maintain an orientation matrix for ordinary blob weapons;
+using it made the enhanced shots and their trails point along the wrong axis.
+This is a rendering correction, including for ricochets and enemy shots. Native
+projectile motion, collisions, damage and flight physics are unchanged.
+Luminous cores and soft additive glows replace the metal-looking geometry and
+decorative hoops. Missile exhaust is drawn after the opaque body so the missile
+does not paint over the exhaust that is closer to the viewer.
+
+The weapon range now uses the cockpit view/zoom, the Pyro's actual gun mounts,
+native projectile speeds and weapon fire intervals (Fusion/Omega use readable
+showcase bursts). Paired cannons, alternating Spreadfire fans, rotating Helix
+volleys, centered tracers, lightning and alternating missile tubes are shown
+firing forward. The native weapon samples play. These are presentation shots in
+a separate range; they never enter the mission or spend its ammunition. The
+range controls collapse into a small button, including on phones.
+
+The spectator pilot checks all secondary ammunition capacities, ammo-rack
+capacity, ammunition remaining in dropped Vulcan/Gauss weapons, duplicate
+equipment, laser upgrades, timed effects and lives before planning a pickup.
+Uncollectible/reserved items have no default attraction. Native pickup rejection
+starts a cooldown keyed to the object's signature. A failed approach also times
+out, even when moving in a small orbit. Respawn forces a new plan after the demo
+arsenal is restored; manual pickup behavior stays with the original game.
+
+Validation: 85 capacity/drop cases compiled against native player/object types;
+all 19 range entries, native pause-state snapshots, touch/desktop controls,
+portrait/landscape layout, real combat and a full death/drop/respawn sequence.
+The forced-death helper exists only in a separate local QA engine and is absent
+from this release. Browser tests disable pointer capture and shut down afterward.
