@@ -47,6 +47,13 @@ int astra_preview_frame(void)
     g3_start_frame();
     vms_vector eye={0,0,0},center={0,0,i2f(72)};
     g3_set_view_matrix(&eye,&vmd_identity_matrix,F1_0);
+    int inspect=EM_ASM_INT(return Number.isInteger(Module.pickupInspect)?Module.pickupInspect:-1);
+    if(inspect>=0 && inspect<51){
+        object item;memset(&item,0,sizeof item);item.id=inspect;item.segnum=-1;
+        item.pos.z=i2f(6);item.size=fl2f(2.3f);
+        extern int astra_draw_pickup(object*);astra_draw_pickup(&item);
+        g3_end_frame();EM_ASM(window.astraCollectibleStatus?.($0);,inspect);return 1;
+    }
     if(seconds<.05f){
         vms_angvec angles={-5200,2400,19500+(int)(age*1200)};
         g3s_lrgb light={F1_0,F1_0,F1_0};

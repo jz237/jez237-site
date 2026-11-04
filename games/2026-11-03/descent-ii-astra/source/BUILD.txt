@@ -66,3 +66,45 @@ shipping engine with the Astra deck. All nine original secret mines also
 rendered with the same engine using a temporary test-only mission listing.
 Explosion preview opened and resumed the final mine in each run. These were
 loading/rendering checks, not complete gameplay playthroughs.
+
+Astra collection and autonomous flight (pyre8)
+
+All 45 defined powerup IDs now render as solid 3D models: energy, shields,
+lives, keys, every weapon and missile pack, equipment, mines, hoard orb and
+team flags. Rescuable hostages use a separate 3D rescue pod. Reserved IDs
+also have fallback meshes. Original pickup collisions, amounts, sounds,
+score and inventory behavior are unchanged. Native depth testing and the
+existing Overload metal/normal maps give the meshes volume and surface detail.
+Rebuild the 51-entry mesh parcel (45 powerups, five reserved, one rescue pod):
+
+    python source/collectibles.py collectibles.js
+
+The inspection button uses the real native pickup renderer while the mission
+is paused. It does not spend lives or ammunition.
+
+The optional live demo uses a separate watch pilot and never persists that
+pilot's game progress. A segment-graph planner respects keyed/locked doors,
+seeks useful pickups, rescues hostages, shoots switches and attacks visible
+robots/reactors. Aim, thrust, strafing, braking, projectile evasion and fire
+feed the original control/weapon code. Enemy AI, flight physics and damage
+remain unchanged. Death plays normally, then the demo retries automatically.
+Briefings and score dialogs are bypassed only in autonomous mode. A completed
+campaign loops back to its first mine. Next mine is also available to viewers.
+The planner is heuristic; this is not a claim of a verified autonomous
+playthrough of every puzzle, boss or secret-level route.
+
+Phone viewing has a one-tap Watch live demo button, 960x540 default rendering,
+large pause/resume, next-mine, sound and exit controls, and no pointer lock.
+Backgrounding a phone pauses the demo. Unsupported fullscreen requests are
+ignored safely. The browser still needs WebGL, WebAssembly and gzip streams.
+Phone demos pace presentation to about 30 fps while retaining the completed
+frame; the original manual-flight timing configuration is unchanged.
+
+Validation: all 45 powerups and the rescue pod rendered in the native
+inspection view. Live autonomous combat was exercised in Counterstrike and
+Vertigo, including keys, supplies, hostage rescue, death and automatic retry.
+An exit fixture verified native exit flight and automatic next-level loading;
+it was not an autonomous combat playthrough. Phone portrait/landscape layout,
+pause/resume, next-mine, sound and pointer-free viewing were tested with Chrome
+mobile emulation, not physical phones. The destruction preview still replays
+with different seeds and resumes without spending pilot resources.
