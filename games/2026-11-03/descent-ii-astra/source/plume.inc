@@ -1,12 +1,3 @@
-/* View-facing layers from the full Overload flipbooks, in the native 3D pass. */
-static GLuint plumeMaps[4],plumeProgram;static int plumeFailed;
-static void plume_program(void){
-    const char *vs="varying mediump vec4 tex;varying mediump vec4 tint;void main(){gl_Position=ftransform();tex=gl_MultiTexCoord0;tint=gl_Color;}";
-    const char *fs="precision mediump float;uniform sampler2D atlas;varying mediump vec4 tex;varying mediump vec4 tint;void main(){vec4 a=texture2D(atlas,tex.xy);float edge=1.-smoothstep(.67,1.,max(abs(tex.z),abs(tex.w)));float opacity=a.a*tint.a*edge;if(opacity<.006)discard;vec3 fire=a.rgb*tint.rgb;gl_FragColor=vec4(fire/(1.+.27*fire),opacity);}";
-    GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){plumeFailed=1;return;}
-    plumeProgram=glCreateProgram();glAttachShader(plumeProgram,v);glAttachShader(plumeProgram,f);glLinkProgram(plumeProgram);glDeleteShader(v);glDeleteShader(f);
-    GLint ok;glGetProgramiv(plumeProgram,GL_LINK_STATUS,&ok);if(!ok)plumeFailed=1;
-}
 static int refit_png(const char *name,GLuint *id,int wrap){
     if(*id){glBindTexture(GL_TEXTURE_2D,*id);return 1;}
     png_data im;if(!read_png(name,&im))return 0;
@@ -17,40 +8,77 @@ static int refit_png(const char *name,GLuint *id,int wrap){
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
     glGenerateMipmap(GL_TEXTURE_2D);return 1;
 }
-static void plume_card(int sheet,int cell,float x,float y,float z,float r,float rotation,float cr,float cg,float cb,float alpha){
-    char key[20];snprintf(key,sizeof key,"plume%d.png",sheet);if(!refit_png(key,&plumeMaps[sheet],GL_CLAMP_TO_EDGE))return;
-    float co=cosf(rotation),si=sinf(rotation),sx=f2fl(Matrix_scale.x),sy=f2fl(Matrix_scale.y);
-    const float corners[4][2]={{-1,1},{-1,-1},{1,-1},{1,1}};
-    float p[12],t[16],c[16];cell=cell<0?0:cell>63?63:cell;
-    for(int i=0;i<4;i++){
-        float a=corners[i][0],b=corners[i][1];p[i*3]=x+r*(a*co-b*si)*sx;p[i*3+1]=y+r*(a*si+b*co)*sy;p[i*3+2]=-z;
-        t[i*4]=((cell%8)+.5f+.49f*a)/8.f;t[i*4+1]=((cell/8)+.5f-.49f*b)/8.f;
-        t[i*4+2]=a;t[i*4+3]=b;c[i*4]=cr;c[i*4+1]=cg;c[i*4+2]=cb;c[i*4+3]=alpha;
-    }
-    glVertexPointer(3,GL_FLOAT,0,p);glTexCoordPointer(4,GL_FLOAT,0,t);glColorPointer(4,GL_FLOAT,0,c);glDrawArrays(GL_TRIANGLE_FAN,0,4);
+/* Four optical samples in each depth-tested slab. The baked density, surface
+ * normal and fuel are sampled in mine coordinates, never in screen space. */
+extern vms_matrix Unscaled_matrix;
+static GLuint ashProgram,ashTexture;
+static GLint ashBasis,ashScale,ashTime,ashTint;
+static int ashFailed;
+static unsigned cloud_hash(unsigned a,unsigned b,unsigned c)
+{
+    unsigned h=a*374761393u+b*668265263u+c*2246822519u;
+    h=(h^(h>>13))*1274126177u;return h^(h>>16);
 }
-static void astra_fire_layers(vms_vector *where,fix radius,float age,unsigned seed){
-    if(age<0||age>=1||radius<F1_0/4||plumeFailed)return;
-    g3s_point p;g3_rotate_point(&p,where);
-    float x=f2fl(p.p3_x),y=f2fl(p.p3_y),z=f2fl(p.p3_z),r=f2fl(radius);
-    if(z<.5f||z>350||r/z<.003)return;
-    int oldfade=grd_curcanv->cv_fade_level,oldblend=grd_curcanv->cv_blend_func;
-    GLboolean cull=glIsEnabled(GL_CULL_FACE);glDisable(GL_CULL_FACE);glDepthMask(GL_FALSE);
-    OGL_ENABLE(TEXTURE_2D);glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);glEnableClientState(GL_COLOR_ARRAY);
-    if(!plumeProgram)plume_program();glUseProgram(plumeProgram);
-    float a=(seed%997)*.0063f,g=sin(age*3.1415926f),parity=seed&1?1:-1;
-    gr_settransblend(GR_FADE_OFF,GR_BLEND_NORMAL);
-    if(age>.18f)plume_card(3,4+(int)(age*52),x,y+.24f*r*age,z+.16f*r,r*(1.35f+1.1f*age),a,.27f,.30f,.36f,.47f*g);
-    plume_card(2,3+(int)(age*55),x-.17f*r*parity,y+.25f*r*age,z,r*(1.2f+.63f*age),a*.19f,1,.90f,.73f,.82f);
-    gr_settransblend(GR_FADE_OFF,GR_BLEND_ADDITIVE_A);
-    for(int i=0;i<3;i++){
-        float ang=a+i*2.094f,dist=r*(.14f+.67f*age);
-        int cell=7+(int)(age*(47-i*3))+i*2;
-        plume_card(i%2,cell,x+cosf(ang)*dist,y+sinf(ang)*dist,z-.10f*r,r*(1.06f+.34f*g),ang*.53f,1.13f,.84f,.61f,.69f);
-    }
-    if(age<.26f)plume_card(0,15+(int)(age*35),x,y,z-.14f*r,r*(1.7f-age*1.9f),a,1.45f,1.30f,1.02f,1-age/.26f);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);glDisableClientState(GL_COLOR_ARRAY);glDisableClientState(GL_VERTEX_ARRAY);
-    if(cull)glEnable(GL_CULL_FACE);glUseProgram(0);glDepthMask(GL_TRUE);gr_settransblend(oldfade,oldblend);
-    EM_ASM(Module.layeredBlasts=(Module.layeredBlasts||0)+1);
+static float pyro_random(unsigned seed,int index,int channel)
+{
+    return (cloud_hash(seed,index,channel)>>8)*(1.f/16777216.f);
 }
-
+static float pyro_ramp(float lo,float hi,float x)
+{
+    float t=fminf(1,fmaxf(0,(x-lo)/(hi-lo)));return t*t*(3-2*t);
+}
+int astra_pyro_ready(void)
+{
+    if(ashTexture||ashFailed)return ashTexture!=0;
+    const char *vs=
+      "precision highp float;uniform mat3 basis;uniform vec3 scale;uniform float elapsed;"
+      "varying highp vec3 coord,rayStep,lamp;varying highp vec4 state;"
+      "void main(){gl_Position=ftransform();state=gl_Color;"
+      "float a=state.g*6.283+elapsed*(state.g-.5)*.86,b=state.g*13.47;"
+      "float c=cos(a),s=sin(a),e=cos(b),f=sin(b);"
+      "mat3 turn=mat3(c,s,0.,-s,c,0.,0.,0.,1.)*mat3(e,0.,f,0.,1.,0.,-f,0.,e)*basis;"
+      "coord=turn*gl_MultiTexCoord0.xyz;vec3 p=gl_Vertex.xyz/scale;"
+      "rayStep=turn*vec3(p.xy/max(.10,-p.z),1.)*gl_MultiTexCoord0.w;"
+      "lamp=normalize(turn*gl_Normal+vec3(.00001));}";
+    const char *fs=
+      "precision highp float;uniform sampler2D volume;uniform vec3 tint;"
+      "varying highp vec3 coord,rayStep,lamp;varying highp vec4 state;"
+      "vec2 tile(float z){return vec2(mod(z,8.),floor(z/8.))*112.;}"
+      "vec4 field(vec3 p){vec3 q=clamp(p*.5+.5,0.,1.)*111.;float z=floor(q.z);"
+      "vec2 f=q.xy+.5;vec2 inv=vec2(1./896.,1./1568.);"
+      "return mix(texture2D(volume,(tile(z)+f)*inv),texture2D(volume,(tile(min(111.,z+1.))+f)*inv),fract(q.z));}"
+      "vec3 normalAt(vec2 e){vec2 n=e*2.-1.;vec3 d=vec3(n,1.-abs(n.x)-abs(n.y));"
+      "if(d.z<0.)d.xy=(1.-abs(d.yx))*sign(d.xy);return normalize(d+vec3(.00001));}"
+      "void main(){if(dot(coord,coord)>1.44)discard;vec3 sum=vec3(0.);float trans=1.;"
+      "float optical=state.a*length(rayStep)*2.45;"
+      "for(int i=0;i<4;i++){vec3 p=coord+(float(i)*.25-.375)*rayStep;vec4 v=field(p);"
+      "if(v.r>.015){vec3 n=normalAt(v.gb);float lit=dot(n,lamp);"
+      "float fuel=state.r+(1.12*v.a-.60)+.23*lit-.16*length(p);"
+      "float through=pow(max(0.,dot(normalize(rayStep),lamp)),2.5);"
+      "fuel+=.24*through*smoothstep(.09,.49,state.r)*(1.-smoothstep(.63,.92,state.r));"
+      "vec3 soot=mix(vec3(.035,.035,.040),vec3(.26,.245,.233),clamp(.42+.36*n.y+.19*lit+.25*v.a,0.,1.));"
+      "soot+=vec3(.19,.057,.012)*max(0.,lit)*smoothstep(.06,.54,state.r);"
+      "vec3 red=mix(vec3(.22,.018,.004),vec3(.98,.158,.009),smoothstep(.28,.53,fuel));"
+      "vec3 flame=mix(red,vec3(1.,.62,.042),smoothstep(.48,.68,fuel));"
+      "flame=mix(flame,vec3(1.,.90,.34),smoothstep(.60,.84,fuel));"
+      "flame=mix(flame,vec3(1.,.994,.87),smoothstep(.82,1.00,fuel));"
+      "flame=mix(flame,tint*(.4+.60*smoothstep(.3,.76,fuel)),state.b*(1.-smoothstep(.55,.96,fuel)));"
+      "vec3 rgb=mix(soot,flame,smoothstep(.20,.43,fuel));"
+      "float alpha=1.-exp(-v.r*optical);sum+=trans*alpha*rgb;trans*=1.-alpha;}}"
+      "float a=1.-trans;if(a<.003)discard;gl_FragColor=vec4(sum/a,a);}";
+    GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);
+    if(!v||!f){ashFailed=1;return 0;}
+    ashProgram=glCreateProgram();glAttachShader(ashProgram,v);glAttachShader(ashProgram,f);
+    glLinkProgram(ashProgram);glDeleteShader(v);glDeleteShader(f);
+    GLint ok;glGetProgramiv(ashProgram,GL_LINK_STATUS,&ok);
+    if(!ok){char log[512]={0};glGetProgramInfoLog(ashProgram,sizeof log,NULL,log);fprintf(stderr,"Astra plume link: %s\n",log);ashFailed=1;return 0;}
+    ashBasis=glGetUniformLocation(ashProgram,"basis");ashScale=glGetUniformLocation(ashProgram,"scale");
+    ashTime=glGetUniformLocation(ashProgram,"elapsed");ashTint=glGetUniformLocation(ashProgram,"tint");
+    png_data im={0};if(!read_png("pyro-field.png",&im)){ashFailed=1;return 0;}
+    if(im.width!=896 || im.height!=1568 || im.channels!=4){free(im.data);ashFailed=1;return 0;}
+    glGenTextures(1,&ashTexture);glBindTexture(GL_TEXTURE_2D,ashTexture);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,im.width,im.height,0,GL_RGBA,GL_UNSIGNED_BYTE,im.data);free(im.data);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+    return 1;
+}

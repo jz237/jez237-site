@@ -1,3 +1,20 @@
+/* Shade solid mine faces from the closest active flares. Closed portals stop propagation. */
+float astra_blast_positions[3][4],astra_blast_colors[3][4];
+int astra_room_blast_count;
+extern int astra_effect_type(object*);
+extern const float *astra_effect_color(int);
+static void astra_find_blasts(int segnum,const vms_vector *center)
+{
+    float rank[3]={0};
+    astra_room_blast_count=0;
+    for(int side=-1;side<6;side++){
+        int room=side<0?segnum:Segments[segnum].children[side];
+        if(room<0 || (side>=0 && !(WALL_IS_DOORWAY(&Segments[segnum],side)&WID_RENDPAST_FLAG)))continue;
+        extern void astra_plume_lights(int,const vms_vector*,float*,float (*)[4],float (*)[4]);
+        astra_plume_lights(room,center,rank,astra_blast_positions,astra_blast_colors);
+    }
+    for(int n=0;n<3;n++){if(rank[n]>0)astra_room_blast_count++;else astra_blast_positions[n][3]=0;}
+}
 /* Local fixtures and luminous objects. Only the renderer reads these positions. */
 float astra_lamp[4],astra_flash[4];
 int astra_drawing_mine;
@@ -14,7 +31,7 @@ static void astra_room_lights(int segnum)
     if(!enabled || (lastseg==segnum && lastframe==framecount))return;
     lastseg=segnum;lastframe=framecount;
     float top_fixture=0,top_moving=0;astra_lamp[3]=astra_flash[3]=0;
-    vms_vector center; compute_segment_center(&center,&Segments[segnum]);
+    vms_vector center; compute_segment_center(&center,&Segments[segnum]);astra_find_blasts(segnum,&center);
     for(int k=-1;k<6;k++){
         int room=k<0?segnum:Segments[segnum].children[k];
         if(room<0)continue;
@@ -37,7 +54,7 @@ static void astra_room_lights(int segnum)
         }
         for(int j=s->objects;j>=0;j=Objects[j].next){
             object *o=&Objects[j];
-            if(o->type!=OBJ_FIREBALL && o->type!=OBJ_WEAPON)continue;
+            if(o->type!=OBJ_WEAPON)continue;
             float power=o->type==OBJ_FIREBALL?2.0f:1.0f;
             float strength=power/(2+f2fl(vm_vec_dist_quick(&center,&o->pos)));
             if(strength>top_moving){top_moving=strength;astra_light_position(astra_flash,&o->pos,power);}
