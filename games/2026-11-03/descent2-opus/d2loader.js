@@ -2,7 +2,7 @@
 // them locally. Optional folder imports remain available for custom copies.
 
 // Bump with every engine or loader release so browsers fetch the new files
-const BUILD = 'opus-10';
+const BUILD = 'opus-11';
 const DB_NAME = 'descent2-web';
 const DB_VERSION = 3; // 2 adds the music folder store, 3 the D2X-XL textures and models
 const SAVE_DIR = '/home/web_user/.d2x-opus';	// Descent II Opus: its own pilots and saves (physfsx.c)
@@ -571,6 +571,13 @@ function modernHud(canvas, settings) {
     text(`${Math.round(h[2])}%`, cx, cy - 6 * u, 30 * u, '#e8f6ff', 'center', 700);
     text(`SHIELD ${Math.round(h[1])}`, cx, cy + 28 * u, 13 * u, '#9db8ff', 'center', 600);
     if (h[13] > 0 && h[13] < 1) text(`BOOST ${Math.round(h[13] * 100)}%`, cx, cy + 50 * u, 11 * u, '#ffb060', 'center', 600);
+    // mouse flight needs the mouse captured: say so while flying without it (not on touch screens)
+    if (document.pointerLockElement !== canvas && !isTouchDevice()) {
+      const a = 0.65 + 0.35 * Math.sin(now / 300);
+      g.globalAlpha = a;
+      text('CLICK TO FLY WITH THE MOUSE', X(0.5), Y(0.12), 26 * u, CYAN, 'center', 700);
+      g.globalAlpha = 1;
+    }
   }
   requestAnimationFrame(frame);
 }
@@ -1302,7 +1309,9 @@ async function main() {
 
   // Flight controls want the mouse captured; Esc releases it (browser rule).
   const canvas = $('canvas');
-  canvas.addEventListener('click', () => {
+  // any click on the game area captures the mouse (not just the canvas: overlays like the HUD sit above it)
+  $('stage').addEventListener('click', (e) => {
+    if (e.target.closest && e.target.closest('button, a, label, input, #touch')) return;
     if (document.pointerLockElement !== canvas && canvas.requestPointerLock) canvas.requestPointerLock();
   });
   $('skipCutscene').addEventListener('click', () => {
