@@ -138,56 +138,159 @@ static void ax_weapon_color(int id,int enemy){
       default:if(enemy)ax_paint(1,.22f,.10f,1.5f);else if(id==2||id==30)ax_paint(.14f,.56f,1,1.6f);else if(id==1||id==31)ax_paint(.15f,1,.61f,1.6f);else ax_paint(1,.14f,.08f,1.6f);
     }
 }
+/* View-facing optical samples distributed in three dimensions. The particles
+ * depth-test against the mine, never write depth, and use no simulation RNG. */
+static GLuint af_program;
+static int af_failed;
+static void af_particle(float x,float y,float z,float radius,float alpha,float seed){
+    vms_vector pos={fl2f(x),fl2f(y),fl2f(z)};g3s_point p;g3_rotate_point(&p,&pos);
+    if(p.p3_z<F1_0/5)return;
+    float near=fminf(1,fmaxf(0,(f2fl(p.p3_z)/f2fl(Matrix_scale.z)-.3f)/3.f));
+    float sx=radius*f2fl(Matrix_scale.x),sy=radius*f2fl(Matrix_scale.y);
+    const int order[]={0,1,2,0,2,3};ax_color[3]=alpha*near;
+    for(int j=0;j<6;j++){int k=order[j];float u=k==1||k==2?1:-1,v=k>=2?1:-1;
+        ax_vertex_add(f2fl(p.p3_x)+u*sx,f2fl(p.p3_y)+v*sy,-f2fl(p.p3_z),u,v,seed);}
+}
+static void af_beam(float x,float y,float z,float X,float Y,float Z,float radius,float alpha,float seed){
+    vms_vector a={fl2f(x),fl2f(y),fl2f(z)},b={fl2f(X),fl2f(Y),fl2f(Z)};g3s_point A,B;g3_rotate_point(&A,&a);g3_rotate_point(&B,&b);
+    float scale[3]={f2fl(Matrix_scale.x),f2fl(Matrix_scale.y),f2fl(Matrix_scale.z)};
+    float p[3]={f2fl(A.p3_x)/scale[0],f2fl(A.p3_y)/scale[1],f2fl(A.p3_z)/scale[2]},q[3]={f2fl(B.p3_x)/scale[0],f2fl(B.p3_y)/scale[1],f2fl(B.p3_z)/scale[2]};
+    if(p[2]<.35f&&q[2]<.35f)return;
+    for(int end=0;end<2;end++){float *v=end?q:p,*w=end?p:q;if(v[2]<.35f){float t=(.35f-v[2])/(w[2]-v[2]);for(int k=0;k<3;k++)v[k]+=(w[k]-v[k])*t;}}
+    float d[3]={q[0]-p[0],q[1]-p[1],q[2]-p[2]},u[3]={d[1]*p[2]-d[2]*p[1],d[2]*p[0]-d[0]*p[2],d[0]*p[1]-d[1]*p[0]};
+    float mag=sqrtf(u[0]*u[0]+u[1]*u[1]+u[2]*u[2]);if(mag<.0001f){u[0]=1;u[1]=u[2]=0;mag=1;}
+    for(int k=0;k<3;k++)u[k]*=radius/mag;
+    const int order[]={0,1,2,0,2,3};ax_color[3]=alpha;
+    for(int j=0;j<6;j++){int k=order[j],end=k>=2;float sign=k==1||k==2?1:-1,*v=end?q:p;
+        ax_vertex_add((v[0]+sign*u[0])*scale[0],(v[1]+sign*u[1])*scale[1],-(v[2]+sign*u[2])*scale[2],sign,end,seed);}
+}
+static void af_flush(float clock,int style){
+    if(!ax_count||af_failed)return;
+    if(!af_program){
+        const char *vs="varying highp vec3 uv;varying mediump vec4 tint;void main(){gl_Position=ftransform();uv=gl_Normal;tint=gl_Color;}";
+        const char *fs=
+          "precision highp float;varying highp vec3 uv;varying mediump vec4 tint;uniform float clock,style;"
+          "float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}"
+          "float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1)),f.x),f.y);}"
+          "void main(){if(style>.5&&style<1.5){float edge=exp(-uv.x*uv.x*6.)*(1.-smoothstep(.8,1.,abs(uv.x)));float core=exp(-uv.x*uv.x*60.);float flow=.88+.12*sin(uv.y*38.-clock*36.+uv.z);gl_FragColor=vec4(mix(tint.rgb,vec3(.9,.96,1.),core*.78),tint.a*edge*flow);return;}"
+          "float r=length(uv.xy);if(r>1.)discard;float a=uv.z+clock*.7;mat2 turn=mat2(cos(a),sin(a),-sin(a),cos(a));vec2 p=turn*uv.xy;"
+          "float grain=noise(p*5.+vec2(uv.z,clock*1.4));grain=.68*grain+.32*noise(p*13.-clock*2.);"
+          "float cloud=(1.-smoothstep(.12,1.,r))*(.28+.72*grain);float core=exp(-r*r*24.);"
+          "vec3 c=mix(tint.rgb,vec3(.94,.97,1.),core*.45);float alpha=(cloud*.68+core*.6)*tint.a;"
+          "if(style>1.5){c=tint.rgb*(.55+.6*grain);alpha=cloud*tint.a;}"
+          "if(alpha<.003)discard;gl_FragColor=vec4(c,alpha);}";
+        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){af_failed=1;return;}
+        af_program=glCreateProgram();glAttachShader(af_program,v);glAttachShader(af_program,f);glLinkProgram(af_program);glDeleteShader(v);glDeleteShader(f);
+        GLint ok;glGetProgramiv(af_program,GL_LINK_STATUS,&ok);if(!ok){af_failed=1;fprintf(stderr,"Astra weapon particles failed\n");return;}
+    }
+    int fade=grd_curcanv->cv_fade_level,blend=grd_curcanv->cv_blend_func;
+    GLboolean cull=glIsEnabled(GL_CULL_FACE),depth=glIsEnabled(GL_DEPTH_TEST);glDisable(GL_CULL_FACE);glEnable(GL_DEPTH_TEST);
+    gr_settransblend(GR_FADE_OFF,style==2?GR_BLEND_NORMAL:GR_BLEND_ADDITIVE_A);glDepthMask(GL_FALSE);glUseProgram(af_program);
+    glUniform1f(glGetUniformLocation(af_program,"clock"),clock);
+    glUniform1f(glGetUniformLocation(af_program,"style"),style);
+    glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_NORMAL_ARRAY);glEnableClientState(GL_COLOR_ARRAY);
+    glVertexPointer(3,GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].p);glNormalPointer(GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].n);glColorPointer(4,GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].color);
+    glDrawArrays(GL_TRIANGLES,0,ax_count);glDisableClientState(GL_VERTEX_ARRAY);glDisableClientState(GL_NORMAL_ARRAY);glDisableClientState(GL_COLOR_ARRAY);
+    glUseProgram(0);glDepthMask(GL_TRUE);if(cull)glEnable(GL_CULL_FACE);if(!depth)glDisable(GL_DEPTH_TEST);gr_settransblend(fade,blend);ax_count=0;
+}
+
+/* A visual record of the native Omega hit. Two emitters share that hit: no
+ * second weapon, collision, energy debit, damage calculation or random draw. */
+typedef struct {int parent,signature;fix64 time;vms_vector goal;} af_omega;
+static af_omega af_omegas[16];
+void astra_omega_fired(object *parent,vms_vector *goal){
+    if(!ax_on())return;int num=parent-Objects;if(num<0||num>=MAX_OBJECTS)return;
+    af_omega *e=&af_omegas[num%16];e->parent=num;e->signature=parent->signature;e->goal=*goal;e->time=GameTime64;
+}
+static void af_omega_arc(vms_vector *start,vms_vector *goal,int seed,float clock){
+    vms_vector dir;vm_vec_sub(&dir,goal,start);float length=f2fl(vm_vec_normalize(&dir));if(length<.1f)return;
+    vms_matrix basis;vm_vector_2_matrix(&basis,&dir,NULL,NULL);g3_start_instance_matrix(start,&basis);
+    int steps=(int)fminf(96,fmaxf(8,length/1.2f));float phase=floorf(clock*24)+seed*11.7f;
+    {
+        ax_count=0;ax_paint(.12f,.48f,1,1);
+        float px=0,py=0,pz=0;
+        for(int i=1;i<=steps;i++){
+            float t=(float)i/steps,z=t*length,envelope=sinf(t*3.14159265f);
+            float x=sinf(i*17.17f+phase)*.6f*envelope,y=cosf(i*13.7f+phase*1.9f)*.5f*envelope;
+            af_beam(px,py,pz,x,y,z,.29f,.87f,seed+i);
+            if(i%7==0)af_beam(x,y,z,x+sinf(i+phase)*1.25f,y+cosf(i*2+phase)*1.25f,z-2,.10f,.46f,seed+i);
+            px=x;py=y;pz=z;
+        }
+        af_flush(clock,1);
+    }
+    ax_energy=0;ax_count=0;ax_paint(.10f,.43f,1,1);
+    for(int i=1;i<steps;i++){float t=(float)i/steps;af_particle(sinf(i*17.17f+phase)*.6f*sinf(t*3.14159265f),cosf(i*13.7f+phase*1.9f)*.5f*sinf(t*3.14159265f),t*length,.40f,.26f,seed+i);}
+    af_particle(0,0,.6f,.75f,.6f,seed);af_flush(clock,0);g3_done_instance();
+}
+void astra_render_omega(int window_num){
+    if(!ax_on()||window_num)return;
+    for(int n=0;n<16;n++){
+        af_omega *e=&af_omegas[n];if(!e->time||GameTime64<e->time||GameTime64-e->time>F1_0/10)continue;
+        object *p=&Objects[e->parent];if(p->signature!=e->signature||p->type!=OBJ_PLAYER)continue;
+        vms_matrix transpose;vm_copy_transpose_matrix(&transpose,&p->orient);
+        for(int gun=0;gun<2;gun++){vms_vector muzzle;vm_vec_rotate(&muzzle,&Player_ship->gun_points[gun],&transpose);vm_vec_add2(&muzzle,&p->pos);af_omega_arc(&muzzle,&e->goal,gun+p->signature,SDL_GetTicks()*.001f);}
+        EM_ASM(Module.omegaEmitters=2;Module.omegaVisualEvents=(Module.omegaVisualEvents||0)+1;);
+    }
+}
+
+int astra_weapon_missile(object *obj){
+    /* Lasers and Fusion also use polygon models in the original HAM data. */
+    return obj->type==OBJ_WEAPON&&obj->id<N_weapon_types&&obj->render_type==RT_POLYOBJ&&Weapon_info[obj->id].matter;
+}
 int astra_draw_weapon(object *obj){
     if(!ax_on()||obj->type!=OBJ_WEAPON||obj->id>=N_weapon_types)return 0;
-    int id=obj->id,missile=obj->render_type==RT_POLYOBJ;
+    int id=obj->id,missile=astra_weapon_missile(obj);
     if(id==FLARE_ID||is_proximity_bomb_or_smart_mine(id)||id==PMINE_ID)return 0;
     if(obj->render_type==RT_NONE&&id!=VULCAN_ID&&id!=GAUSS_ID)return 0;
-    g3s_point view;g3_rotate_point(&view,&obj->pos);
-    if(view.p3_z<F1_0/4)return missile?0:1;
-    float age=fmaxf(0,(double)(GameTime64-obj->ctype.laser_info.creation_time)/F1_0);
-    float clock=SDL_GetTicks()*.001f,phase=clock*19+obj->signature;
-    vms_vector velocity=obj->mtype.phys_info.velocity;
-    float speed=f2fl(vm_vec_mag(&velocity));
-    /* D2 only maintains orientation for polygon/homing weapons. Energy blobs,
-     * tracers and ricochets need a render frame derived from actual velocity. */
-    vms_matrix axis=obj->orient;
-    if(!missile && speed>.01f){vm_vec_normalize(&velocity);vm_vector_2_matrix(&axis,&velocity,NULL,NULL);}
-    float tail=fminf(age*speed,fminf(5.f,.5f+speed*.018f));
+    /* Player Omega is drawn once as a continuous paired discharge. */
+    if(id==OMEGA_ID&&obj->ctype.laser_info.parent_type==OBJ_PLAYER)return 1;
+    g3s_point view;g3_rotate_point(&view,&obj->pos);if(view.p3_z<F1_0/4)return missile?0:1;
+    float age=fmaxf(0,(double)(GameTime64-obj->ctype.laser_info.creation_time)/F1_0),clock=SDL_GetTicks()*.001f;
+    vms_vector velocity=obj->mtype.phys_info.velocity;float speed=f2fl(vm_vec_mag(&velocity));vms_matrix axis=obj->orient;
+    if(!missile&&speed>.01f){vm_vec_normalize(&velocity);vm_vector_2_matrix(&axis,&velocity,NULL,NULL);}
+    float tail=fminf(age*speed,fminf(9.f,1.5f+speed*.035f));
     int enemy=obj->ctype.laser_info.parent_type==OBJ_ROBOT;
-    float radius=fminf(.55f,fmaxf(.22f,f2fl(Weapon_info[id].blob_size)*.28f));
-    g3_start_instance_matrix(&obj->pos,&axis);ax_energy=1;
-    for(int pass=0;pass<2;pass++){
-        ax_count=0;ax_weapon_color(id,enemy);
-        float expansion=pass?2.5f:1,alpha=pass?.09f:.82f;
-        if(!pass){for(int k=0;k<3;k++)ax_color[k]=ax_color[k]*.65f+.35f;}
-        if(missile){
-            polymodel *pm=&Polygon_models[obj->rtype.pobj_info.model_num];float rear=f2fl(pm->mins.z);
-            float r=fminf(.32f,fmaxf(.09f,f2fl(obj->size)*.11f))*expansion;
-            ax_paint(pass?.08f:.65f,pass?.35f:.85f,1,1);
-            ax_tube(0,0,rear,0,0,rear-.55f-tail*.5f,r,.008f,12);
-            int first=ax_count;ax_orb(r,1.2f);
-            for(int v=first;v<ax_count;v++)ax_vertices[v].p[2]+=rear-.35f;
-        }else if(id==OMEGA_ID){
-            float p[3]={0,0,.15f};
-            for(int i=1;i<=7;i++){
-                float z=-i*.48f,x=sinf(phase+i*17)*.09f,y=cosf(phase*1.3f+i*21)*.09f;
-                ax_tube(p[0],p[1],p[2],x,y,z,.024f*expansion,.024f*expansion,6);
-                p[0]=x;p[1]=y;p[2]=z;
-            }
-        }else if(id==PLASMA_ID||id==FUSION_ID||id==PHOENIX_ID||id==PLAYER_SMART_HOMING_ID||id==ROBOT_SMART_HOMING_ID){
-            float r=radius*(id==FUSION_ID?1.35f:.85f)*expansion;
-            ax_orb(r,id==FUSION_ID?1.6f:1.15f);
-            ax_tube(0,0,-r*.5f,0,0,-fmaxf(r,tail),r*.45f,0,12);
-        }else{
-            float r=(id==VULCAN_ID?.025f:id==GAUSS_ID?.045f:radius*.26f)*expansion;
-            float length=fmaxf(.3f,tail);
-            ax_tube(0,0,.25f,0,0,-length*.7f,r*.55f,r,12);
-            ax_tube(0,0,-length*.7f,0,0,-length,r,0,12);
+    float radius=fminf(.65f,fmaxf(.32f,f2fl(Weapon_info[id].blob_size)*.38f));
+    g3_start_instance_matrix(&obj->pos,&axis);
+    if(missile){
+        polymodel *pm=&Polygon_models[obj->rtype.pobj_info.model_num];float rear=f2fl(pm->mins.z);
+        /* Collision radius is divided by length/width; use model dimensions. */
+        float nozzle=fminf(.65f,fmaxf(.28f,f2fl(pm->maxs.x-pm->mins.x)*.45f));
+        float length=fminf(age*speed+.6f,8.f+speed*.018f),phase=clock*11+obj->signature;
+        ax_count=0;ax_paint(.25f,.28f,.31f,1);
+        for(int i=17;i>=6;i--){float t=i/17.f;af_particle(sinf(i*2.39f-phase)*t*.4f,cosf(i*1.97f-phase)*t*.4f,rear-t*length*1.35f,nozzle*(1.5f+2.5f*t),.22f*(1-t),i+obj->signature);}
+        af_flush(clock,2);ax_count=0;
+        for(int i=23;i>=0;i--){
+            float t=i/23.f;
+            float z=rear-t*length,spread=t*t*.45f;
+            float x=sinf(i*2.39f-phase)*spread,y=cosf(i*1.97f-phase*1.3f)*spread;
+            float r=nozzle*(.95f+1.8f*t)*(1+.12f*sinf(i*3.1f-phase*2));
+            if(id==SMART_ID)ax_paint(.23f+.4f*(1-t),.85f, .30f+.65f*(1-t),1);
+            else if(id==MERCURY_ID||id==GUIDEDMISS_ID)ax_paint(.20f+.5f*(1-t),.44f+.4f*(1-t),1,1);
+            else ax_paint(1,.22f+.68f*(1-t),.06f+.90f*powf(1-t,3),1);
+            af_particle(x,y,z,r,(.16f+.30f*(1-t))*(1-t*t),obj->signature+i*.73f);
         }
-        ax_flush(1,alpha);
+        ax_paint(.50f,.78f,1,1);af_particle(0,0,rear-.18f,nozzle*1.3f,.85f,phase);af_flush(clock,0);
+        EM_ASM(Module.missileExhaustVersion=14;Module.missileExhaustSamples=24;);
+    }else{
+        int blob=id==PLASMA_ID||id==FUSION_ID||id==PHOENIX_ID||id==PLAYER_SMART_HOMING_ID||id==ROBOT_SMART_HOMING_ID;
+        float r=blob?radius*(id==FUSION_ID?1.5f:1):id==VULCAN_ID?.052f:id==GAUSS_ID?.095f:radius*.38f;
+        ax_count=0;ax_weapon_color(id,enemy);
+        af_beam(0,0,.25f,0,0,-fmaxf(.6f,tail),blob?r*.8f:r*2.8f,.88f,obj->signature);af_flush(clock,1);
+        ax_count=0;ax_weapon_color(id,enemy);
+        af_particle(0,0,0,blob?r*2.4f:r*4,.82f,obj->signature);
+        if(blob){af_particle(0,0,-r*.25f,r,.8f,obj->signature+21);}
+        for(int j=1;j<=7;j++){
+            float t=j/7.f,z=-tail*t,w=blob?r*(1.6f-t*.6f):r*(2.8f-t*1.5f);
+            float spiral=blob?.12f*sinf(t*3.14f):.015f;
+            af_particle(cosf(clock*12+j*2)*spiral,sinf(clock*12+j*2)*spiral,z,w,(1-t)*.24f,obj->signature+j);
+        }
+        if(id==FUSION_ID||id==PHOENIX_ID){
+            for(int j=0;j<5;j++){float a=j*1.2566f+clock*9;af_particle(cosf(a)*r*.8f,sinf(a)*r*.8f,-r*.5f,r*.38f,.7f,obj->signature+j*5);}
+        }
+        af_flush(clock,0);
     }
-    ax_energy=0;g3_done_instance();
-    EM_ASM(Module.weaponEffects=(Module.weaponEffects||0)+1;Module.weaponVisualVersion=13;Module.weaponEffectCoverage=Module.weaponEffectCoverage||{};Module.weaponEffectCoverage[$0]=true;Module[$1?'enemyWeaponEffects':'playerWeaponEffects']=(Module[$1?'enemyWeaponEffects':'playerWeaponEffects']||0)+1;,id,enemy);
+    g3_done_instance();
+    EM_ASM(Module.weaponEffects=(Module.weaponEffects||0)+1;Module.weaponVisualVersion=14;Module.weaponEffectCoverage=Module.weaponEffectCoverage||{};Module.weaponEffectCoverage[$0]=true;Module.weaponEffectKinds=Module.weaponEffectKinds||{};Module.weaponEffectKinds[$0]=$2?'exhaust':'energy';Module[$1?'enemyWeaponEffects':'playerWeaponEffects']=(Module[$1?'enemyWeaponEffects':'playerWeaponEffects']||0)+1;,id,enemy,missile);
     return !missile;
 }

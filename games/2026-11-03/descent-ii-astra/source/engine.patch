@@ -1298,10 +1298,18 @@ index d9aafbc..b022e8a 100644
 +}
 +
 diff --git a/d2/main/laser.c b/d2/main/laser.c
-index 2841dad..267a1e4 100644
+index 2841dad..e3afd94 100644
 --- a/d2/main/laser.c
 +++ b/d2/main/laser.c
-@@ -654,6 +654,7 @@ int Laser_create_new( vms_vector * direction, vms_vector * position, int segnum,
+@@ -484,6 +484,7 @@ void create_omega_blobs(int firing_segnum, vms_vector *firing_pos, vms_vector *g
+ 	if (last_created_objnum != -1) {
+ 		vm_vec_scale(&Objects[last_created_objnum].mtype.phys_info.velocity, Weapon_info[OMEGA_ID].speed[Difficulty_level]/4);
+ 		Objects[last_created_objnum].movement_type = MT_PHYSICS;
++        {extern void astra_omega_fired(object*,vms_vector*);astra_omega_fired(parent_objp,goal_pos);}
+ 	}
+ 
+ 	Doing_lighting_hack_flag = 0;
+@@ -654,6 +655,7 @@ int Laser_create_new( vms_vector * direction, vms_vector * position, int segnum,
  	}
  
  	obj = &Objects[objnum];
@@ -1594,7 +1602,7 @@ index 163e08a..b4b8672 100644
  	lb->item = items;
  	lb->citem = default_item;
 diff --git a/d2/main/object.c b/d2/main/object.c
-index 602b2d5..4bd310c 100644
+index 602b2d5..772eec6 100644
 --- a/d2/main/object.c
 +++ b/d2/main/object.c
 @@ -425,6 +425,9 @@ void draw_cloaked_object(object *obj,g3s_lrgb light,fix *glow,fix64 cloak_start_
@@ -1607,26 +1615,27 @@ index 602b2d5..4bd310c 100644
  	g3s_lrgb light;
  	int	imsave;
  	fix engine_glow_value[2];		//element 0 is for engine glow, 1 for headlight
-@@ -776,6 +779,9 @@ void render_object(object *obj)
+@@ -776,6 +779,10 @@ void render_object(object *obj)
  	mld_save = Max_linear_depth;
  	Max_linear_depth = Max_linear_depth_objects;
  
 +	extern int astra_draw_weapon(object*);
++    extern int astra_weapon_missile(object*);
 +    extern void astra_draw_mechanisms(object*);
-+    if(obj->type==OBJ_WEAPON && obj->render_type!=RT_POLYOBJ && astra_draw_weapon(obj))goto astra_rendered;
++    if(obj->type==OBJ_WEAPON && !astra_weapon_missile(obj) && astra_draw_weapon(obj))goto astra_rendered;
  	switch (obj->render_type)
  	{
  		case RT_NONE:
-@@ -786,6 +792,8 @@ void render_object(object *obj)
+@@ -786,6 +793,8 @@ void render_object(object *obj)
  				gr_settransblend( 10, GR_BLEND_ADDITIVE_A );
  
  			draw_polygon_object(obj);
-+            if(obj->type==OBJ_WEAPON)astra_draw_weapon(obj); // translucent exhaust follows the opaque missile
++            if(astra_weapon_missile(obj))astra_draw_weapon(obj); // translucent exhaust follows the opaque missile
 +            if(obj->type==OBJ_ROBOT)astra_draw_mechanisms(obj);
  
  			if (obj->type == OBJ_ROBOT) //"warn" robot if being shot at
  				set_robot_location_info(obj);
-@@ -841,6 +849,7 @@ void render_object(object *obj)
+@@ -841,6 +850,7 @@ void render_object(object *obj)
  			Error("Unknown render_type <%d>",obj->render_type);
  	}
  
@@ -1634,7 +1643,7 @@ index 602b2d5..4bd310c 100644
  	gr_settransblend( GR_FADE_OFF, GR_BLEND_NORMAL ); // revert any transparency/blending setting back to normal
  
  	if ( obj->render_type != RT_NONE && Newdemo_state == ND_STATE_RECORDING )
-@@ -910,6 +919,7 @@ void init_player_object()
+@@ -910,6 +920,7 @@ void init_player_object()
  //sets up the free list & init player & whatever else
  void init_objects()
  {
@@ -1718,7 +1727,7 @@ index 650f69e..7271753 100644
  }
 +
 diff --git a/d2/main/render.c b/d2/main/render.c
-index 517bc8a..1a71b34 100644
+index 517bc8a..57eb525 100644
 --- a/d2/main/render.c
 +++ b/d2/main/render.c
 @@ -197,6 +197,7 @@ void flash_frame()
@@ -1752,10 +1761,11 @@ index 517bc8a..1a71b34 100644
  
  #ifndef NDEBUG
  	if (Outline_mode) draw_outline(nv, pointlist);
-@@ -1678,6 +1688,7 @@ void render_frame(fix eye_offset, int window_num)
+@@ -1678,6 +1688,8 @@ void render_frame(fix eye_offset, int window_num)
  	#endif
  
  	render_mine(start_seg_num, eye_offset, window_num);
++    {extern void astra_render_omega(int);astra_render_omega(window_num);}
 +    {extern void astra_render_plumes(const short*,int,int);astra_render_plumes(Render_list,N_render_segs,window_num);}
  
  	g3_end_frame();

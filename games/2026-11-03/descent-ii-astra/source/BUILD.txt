@@ -242,3 +242,33 @@ all 19 range entries, native pause-state snapshots, touch/desktop controls,
 portrait/landscape layout, real combat and a full death/drop/respawn sequence.
 The forced-death helper exists only in a separate local QA engine and is absent
 from this release. Browser tests disable pointer capture and shut down afterward.
+
+Astra weapon optics and paired Omega (pyre14)
+
+The original HAM data uses polygon models for lasers and Fusion as well as
+missiles. The renderer now distinguishes physical missile bodies using the
+native matter flag. Energy weapons replace their old solid polygon shapes
+with luminous cores, soft streaks and turbulent colored particles. This also
+applies to enemy fire; motion, collision radii and damage stay native.
+
+Rocket exhaust uses model dimensions instead of the much smaller collision
+radius, with a hot nozzle, 24 animated flame samples and a cooling smoke trail.
+The samples occupy 3D positions and depth-test against the mine. A near-camera
+fade limits particle glare. Plasma, Fusion, Phoenix, lasers and ballistic
+tracers have their own color, width and particle treatments.
+
+Omega records the native hit endpoint and renders branched arcs from both
+Pyro gun mounts toward it. This creates no additional damaging weapon objects,
+uses no simulation RNG and does not change energy use or hit calculations.
+The cockpit range shares the same renderer and both Omega emitters.
+
+Validation: all 19 range entries have the correct energy/exhaust classification;
+two Omega emitters in the range and actual native combat; desktop and phone
+portrait/landscape visuals; exact paused mission state on leaving the range;
+native enemy/player fire and missile exhaust. Tests block desktop pointer
+capture before navigation and close their browsers and local servers.
+
+Omega was exercised through the native firing function in a separate local QA
+engine: each volley consumed exactly one original charge increment. No test
+exports are present in the shipping engine. The natural pilot combat run also
+covered player and enemy fire, missile exhaust, death and cockpit recovery.
