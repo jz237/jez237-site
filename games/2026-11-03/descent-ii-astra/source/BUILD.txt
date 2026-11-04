@@ -41,3 +41,15 @@ The explosion renderer reads its density, surface normals and fuel from a 112 ×
     python source/pyro_field.py pyro-field.js
 
 The plume and blast includes implement optical sampling and particle motion. The engine patch contains their event lifetime, ship destruction timing, light propagation and sound triggers.
+
+The ship explosion preview (preview.inc) uses the game's Pyro mesh, tier-2
+blast renderer, and Descent II samples in a separate inspection camera. It
+pauses the mission clock and input and creates no gameplay objects. Closing
+it resumes the original pilot and camera. Each replay receives a new visual
+seed without advancing the gameplay RNG.
+
+Close hull impacts have shorter visual lifetimes and reduced radius/light
+power. A view-distance fade reduces their optical density and sparks when a
+living pilot is inside the cloud. Ship destruction keeps its full appearance.
+The selected launch cockpit is also saved as the native preferred cockpit,
+so the original respawn path restores the Astra flight deck.
