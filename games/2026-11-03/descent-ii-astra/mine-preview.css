@@ -13,3 +13,5 @@ body.mine-preview #previewPanel,body.mine-preview #astraDeck,body.mine-preview #
 body:not(.flying) #mineFlight,body.previewing #mineFlight,body.autopilot #mineFlight{display:none}
 @media(max-width:600px){.mine-heading{left:12px;top:10px}.mine-heading h2{font-size:15px}#mineToolbar{gap:4px;right:8px}#mineToolbar button{padding:8px 10px}#mineFlight{left:8px;top:102px}}
 @media(max-height:500px){.mine-heading h2{font-size:15px;margin:3px 0}.mine-heading{top:8px}#mineDetails{max-height:calc(100% - 82px)}}
+
+#mineCompare{border-color:#5cdde1;color:#9ff6ec}#mineCompare[aria-pressed="false"]{color:#ecbd83;border-color:#9d825e}#mineDetails>small{font-size:11px;color:#9baeb6;line-height:1.4}

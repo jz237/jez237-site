@@ -25,6 +25,15 @@ static void ae_reset(void){
     }
 }
 /* Identity follows functional rooms, hazards and stable native material groups. */
+int astra_environment_rock(int texture){
+    static unsigned char known[MAX_TEXTURES],rock[MAX_TEXTURES];
+    if(texture<0||texture>=NumTextures)return 0;
+    if(!known[texture]){const char *name=piggy_game_bitmap_name(&GameBitmaps[Textures[texture].index]);int id=name?astra_material_id(name):0;
+        /* rockwall_01c, rockwall_01a, stones and rockwall_04 in the pinned material index.
+         * Polished stone floor plates must not receive fractured rock geometry. */
+        rock[texture]=id==21||id==23||id==37||id==38;known[texture]=1;}
+    return rock[texture];
+}
 static int ae_theme(int room){
     int special=Segment2s[room].special;
     if(special==SEGMENT_IS_FUELCEN||special==SEGMENT_IS_REPAIRCEN)return 2;
@@ -34,15 +43,16 @@ static int ae_theme(int room){
         int t=Segments[room].sides[s].tmap_num;if(t<0||t>=NumTextures)continue;
         if(TmapInfo[t].damage>0||TmapInfo[t].flags&TMI_VOLATILE)return 4;
         if(TmapInfo[t].flags&TMI_WATER)return 2;
-        if(t<64)rock++;else metal++;
+        if(astra_environment_rock(t))rock++;else metal++;
     }
-    return rock>metal?0:1;
+    return rock>metal?0:((room/6)%3==1?2:room%7<3?5:1);
 }
+int astra_environment_theme(int room){return ae_theme(room);}
 void astra_environment_material(int room,int side,int texture){
     ae_reset();int theme=ae_theme(room),kind=1;
     if(texture>=0&&texture<NumTextures){
         if(TmapInfo[texture].damage>0||TmapInfo[texture].flags&(TMI_WATER|TMI_VOLATILE))kind=4;
-        else if(texture<64)kind=0;
+        else if(astra_environment_rock(texture))kind=0;
         else if(theme==2)kind=2;
         else if((texture/7)%4==0)kind=3;
     }
@@ -62,9 +72,12 @@ void astra_environment_hit(int room,int side,const vms_vector *point,float size)
     EM_ASM(Module.environmentScars=(Module.environmentScars||0)+1;);
 }
 static int ae_basis(int,int,vms_vector*,vms_matrix*,float*,float*);
+static int ag_shadow_data(int,int,float*,float*,float*);
+extern int astra_refinement;
 static void ae_wall_finish(int nv,const g3s_point **points,int room,int side,int frame){
     static GLuint program;static int failed;if(failed||nv<3||nv>4)return;
-    float p[12],uv[8],marks[24]={0},mount[4]={0};int count=0;
+    float p[12],uv[8],marks[24]={0},mount[4]={0};int count=0;float shadows[12]={0},axes[12]={0},ups[12]={0};
+    int shadow_count=frame?ag_shadow_data(room,side,shadows,axes,ups):0;
     if(frame&&side%2==0&&(room+side)%3!=1){
         vms_vector c;vms_matrix b;float w,h;if(ae_basis(room,side,&c,&b,&w,&h)){
             vm_vec_scale_add2(&c,&b.rvec,fl2f(-w*.30f));vm_vec_scale_add2(&c,&b.uvec,fl2f(h*.20f));
@@ -79,13 +92,15 @@ static void ae_wall_finish(int nv,const g3s_point **points,int room,int side,int
     if(!frame&&!count)return;
     if(!program){
         const char *vs="varying highp vec3 p;varying mediump vec2 uv;void main(){p=gl_Vertex.xyz;uv=gl_MultiTexCoord0.xy;gl_Position=ftransform();}";
-        const char *fs="precision highp float;varying highp vec3 p;varying mediump vec2 uv;uniform vec4 marks[6],mount;uniform vec3 scale;uniform float frame;"
+        const char *fs="precision highp float;varying highp vec3 p;varying mediump vec2 uv;uniform vec4 marks[6],mount;uniform vec3 scale;uniform float frame,refinement;uniform vec4 shadows[3],axes[3],ups[3];"
           "void main(){vec2 e=min(uv,1.-uv);float ao=exp(-min(e.x,e.y)*90.)*.24*frame;float burn=0.,chips=0.;"
           "for(int i=0;i<6;i++){vec3 d=(p-marks[i].xyz)/scale;float r=length(d)/max(.001,marks[i].w);"
           "float n=sin(d.x*17.+d.y*13.)*sin(d.z*21.+d.x*11.);burn=max(burn,(1.-smoothstep(.15,.98+n*.09,r))*.67*step(.01,marks[i].w));"
           "chips=max(chips,(1.-smoothstep(.016,.05,abs(r-.55-n*.13)))*step(.75,n)*step(.01,marks[i].w));}"
-          "float contact=(1.-smoothstep(max(.001,mount.w*.48),max(.002,mount.w*1.25),length((p-mount.xyz)/scale)))*.19*step(.01,mount.w);"
-          "gl_FragColor=vec4(mix(vec3(.012,.018,.022),vec3(.20,.23,.24),chips),max(max(ao,contact),burn));}";
+          "float contact=(1.-smoothstep(max(.001,mount.w*.48),max(.002,mount.w*1.25),length((p-mount.xyz)/scale)))*mix(.19,.32,refinement)*step(.01,mount.w);"
+          "float shadow=0.;for(int i=0;i<3;i++){vec3 d=(p-shadows[i].xyz)/scale;vec2 q=vec2(dot(d,axes[i].xyz),dot(d,ups[i].xyz))/max(.001,shadows[i].w);"
+          "float hull=length(q/vec2(.34,.86)),wing=length(q/vec2(1.,.25));float edge=min(hull,wing);float pen=axes[i].w;shadow=max(shadow,(1.-smoothstep(.65,1.+pen,edge))*ups[i].w);}"
+          "ao*=mix(1.,1.35,refinement);gl_FragColor=vec4(mix(vec3(.012,.018,.022),vec3(.20,.23,.24),chips),max(max(max(ao,contact),burn),shadow));}";
         GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){failed=1;return;}
         program=glCreateProgram();glAttachShader(program,v);glAttachShader(program,f);glLinkProgram(program);glDeleteShader(v);glDeleteShader(f);
         GLint ok;glGetProgramiv(program,GL_LINK_STATUS,&ok);if(!ok){failed=1;return;}
@@ -94,6 +109,8 @@ static void ae_wall_finish(int nv,const g3s_point **points,int room,int side,int
     glDepthMask(GL_FALSE);glEnable(GL_POLYGON_OFFSET_FILL);glPolygonOffset(-1,-1);glUseProgram(program);
     glUniform4fv(glGetUniformLocation(program,"marks[0]"),6,marks);glUniform1f(glGetUniformLocation(program,"frame"),frame);
     glUniform4fv(glGetUniformLocation(program,"mount"),1,mount);
+    glUniform1f(glGetUniformLocation(program,"refinement"),astra_refinement);
+    glUniform4fv(glGetUniformLocation(program,"shadows[0]"),3,shadows);glUniform4fv(glGetUniformLocation(program,"axes[0]"),3,axes);glUniform4fv(glGetUniformLocation(program,"ups[0]"),3,ups);
     glUniform3f(glGetUniformLocation(program,"scale"),f2fl(Matrix_scale.x),f2fl(Matrix_scale.y),f2fl(Matrix_scale.z));
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);glVertexPointer(3,GL_FLOAT,0,p);glTexCoordPointer(2,GL_FLOAT,0,uv);glDrawArrays(GL_TRIANGLE_FAN,0,nv);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);glDisableClientState(GL_VERTEX_ARRAY);glUseProgram(0);glDisable(GL_POLYGON_OFFSET_FILL);glDepthMask(GL_TRUE);gr_settransblend(fade,blend);
@@ -109,6 +126,7 @@ static int ae_basis(int room,int side,vms_vector *center,vms_matrix *basis,float
     vm_vector_2_matrix(basis,&normal,&up,NULL);
     return *width>6&&*height>6;
 }
+#include "astra_foundry.inc"
 static void ae_panel(float x,float y,float w,float h,float z){
     ax_paint(.055f,.073f,.085f,0);ax_tube(x-w,y-h,z,x+w,y-h,z,.10f,.10f,6);ax_tube(x-w,y+h,z,x+w,y+h,z,.10f,.10f,6);
     ax_tube(x-w,y-h,z,x-w,y+h,z,.10f,.10f,6);ax_tube(x+w,y-h,z,x+w,y+h,z,.10f,.10f,6);
@@ -199,8 +217,9 @@ void astra_environment_face(int nv,const g3s_point **points,g3s_lrgb *light,int 
     astra_gantry(nv,points,light,room*7+side,s->sides[side].normals[0].y>F1_0*3/4);
     vms_vector center;vms_matrix basis;float w,h;if(!ae_basis(room,side,&center,&basis,&w,&h))return;
     g3s_point p;g3_rotate_point(&p,&center);if(p.p3_z<F1_0||p.p3_z>i2f(105)||w>100||h>100)return;
-    if(p.p3_z<i2f(60)){g3_start_instance_matrix(&center,&basis);ae_hatch(room,side,theme,w,h);g3_done_instance();}
-    if(side%2==0&&(room+side)%3!=1&&p.p3_z<i2f(80)){g3_start_instance_matrix(&center,&basis);ae_machine(room,side,theme,w,h);g3_done_instance();}
+    if(solid&&p.p3_z<i2f(70)){g3_start_instance_matrix(&center,&basis);ag_face(room,side,theme,w,h);g3_done_instance();}
+    if(p.p3_z<i2f(60)&&(!astra_refinement||!astra_environment_rock(texture)&&astra_environment_bay(room)!=side)){g3_start_instance_matrix(&center,&basis);ae_hatch(room,side,theme,w,h);g3_done_instance();}
+    if(side%2==0&&(room+side)%3!=1&&p.p3_z<i2f(80)&&(!astra_refinement||!astra_environment_rock(texture))){g3_start_instance_matrix(&center,&basis);ae_machine(room,side,theme,w,h);g3_done_instance();}
 }
 /* Kept on the perimeter, including when the native door is fully open. No mesh
  * ever fills the aperture or reveals hidden doors. Hydraulic travel reads state. */
@@ -272,6 +291,9 @@ void astra_environment_rooms(const short *rooms,int count,int window_num){
     if(!ax_on())return;ae_reset();float t=ae_clock();int budget=0;
     for(int i=0;i<count;i++){int room=rooms[i];if(room<0||room>Highest_segment_index)continue;
         for(int side=0;side<6;side++)ae_door(room,side);
+        if(astra_refinement){int side=astra_environment_bay(room);vms_vector c;vms_matrix b;float w,h;
+            if(side>=0&&ae_basis(room,side,&c,&b,&w,&h)){g3s_point p;g3_rotate_point(&p,&c);if(p.p3_z>F1_0&&p.p3_z<i2f(65)){
+                g3_start_instance_matrix(&c,&b);ag_atmosphere(room,side,ae_theme(room),w,h);g3_done_instance();}}}
         for(int j=0;j<48;j++){ae_scrap *scrap=&ae_scraps[j];float age=(double)(GameTime64-scrap->born)/F1_0;
             if(!scrap->born||scrap->room!=room||age<0||age>45)continue;
             g3s_point view;g3_rotate_point(&view,&scrap->p);if(view.p3_z<F1_0||view.p3_z>i2f(90))continue;
@@ -296,5 +318,6 @@ void astra_environment_rooms(const short *rooms,int count,int window_num){
             ax_paint(.36f,.48f,.50f,0);af_particle(0,0,.5f+j*.65f,.24f+j*.14f,.022f,room+j);}
         ae_haze_flush();g3_done_instance();ae_atmosphere++;
     }
-    if(!window_num)EM_ASM(Module.environmentVersion=18;Module.environmentStats=({faces:$0,machines:$1,doors:$2,reactors:$3,atmosphere:$4});Module.environmentLevel=$5;Module.environmentFrames=(Module.environmentFrames||0)+1;,ae_faces,ae_machines,ae_doors,ae_reactors,ae_atmosphere,Current_level_num);
+    ag_render_exhibit();
+    if(!window_num)EM_ASM(Module.environmentVersion=22;Module.foundryStats=({rockFaces:$6,equipmentBays:$7,shipShadows:$8,atmosphereBays:$9});Module.environmentStats=({faces:$0,machines:$1,doors:$2,reactors:$3,atmosphere:$4});Module.environmentLevel=$5;Module.environmentFrames=(Module.environmentFrames||0)+1;,ae_faces,ae_machines,ae_doors,ae_reactors,ae_atmosphere,Current_level_num,ag_rocks,ag_props,ag_shadows,ag_air);
 }

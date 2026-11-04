@@ -475,3 +475,35 @@ stale observation, enemy routing and hidden-attacker notification. Live demo
 checks in both campaigns verify combat and no hidden-target acquisition/routes.
 Test browsers disable mouse capture before launch. QA-only exports are never
 included in the installed or web engine.
+
+Astra living mine showroom (pyre22)
+
+The Original and Vertigo renderers share richer brushed-metal highlights,
+paint chips, grime and oily reflections; deeper contact shading; soft projected
+hull/wing shadows driven by nearby native ships; shallow fractured rock plates
+with the matching high-resolution rock artwork; distinct cargo racks, coolant
+manifolds and reactor service buses; localized vent steam, dust and light shafts.
+The spatial edge filter runs on the current 3D viewport before the HUD. It has no
+frame history, so it cannot introduce temporal ghosting. Fine procedural grain
+fades with distance; existing trilinear/aniso texture filtering is preserved.
+
+Equipment only attaches to solid, ordinary walls and stays shallow. Nothing
+changes native geometry, portals, collision, secret doors, lighting destruction,
+flight physics, controls, weapons, music or sound. All procedural variation is
+render-local and never consumes the gameplay RNG. Shadows are bounded soft
+silhouette projections, not a full scene shadow-map or ray-tracing system.
+Reflections are material highlights, not reflected scene renders.
+
+The mine showroom offers 15 scene types, choosing real surfaces and functional
+equipment in the selected mine. Unavailable scenes are dimmed. Its seven new
+exhibits cover the new features; the shadow exhibit adds a display-only robot
+that never enters Objects. Pause and the New details comparison switch work
+together without advancing the mission. Door animations still restore their
+native state immediately. The phone controls stay compact until expanded.
+
+Source additions: foundry.inc and antialias.inc. Existing surfaces20 parcels
+remain unchanged. prepare_engine.py copies both includes into the pinned build.
+The R21 cockpit-visible demo AI is preserved byte for byte, including visibility,
+sliding and smooth steering. Test browsers disable mouse capture before launch.
+QA exports stay out of shipping engine.js. Phone checks use browser emulation;
+they are not a measurement of performance on a physical phone.

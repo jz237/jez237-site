@@ -1,6 +1,6 @@
 /* Materials are shared across palette slots. One tangent map per source, on unit 1. */
 extern float astra_lamp[4],astra_flash[4];
-extern int astra_drawing_mine;
+extern int astra_drawing_mine,astra_refinement;
 static float astra_surface[4];
 static GLuint astra_normals[256],astra_program;
 static GLint astra_tangents,astra_fixture,astra_moving;
@@ -29,7 +29,9 @@ static void astra_init_shader(void)
     const char *vs="varying highp vec2 uv;varying mediump vec4 light;varying highp vec3 p;"
         "void main(){gl_Position=ftransform();uv=gl_MultiTexCoord0.xy;light=gl_Color;p=gl_Vertex.xyz;}";
     const char *fs="precision highp float;varying highp vec2 uv;varying mediump vec4 light;varying highp vec3 p;"
-        "uniform sampler2D colorMap,detailMap;uniform mat3 basis;uniform vec4 lamp,shot,surface;uniform vec2 density;uniform sampler2D topMap,topDetail;uniform float paired,topTurn;"
+        "uniform sampler2D colorMap,detailMap;uniform mat3 basis;uniform vec4 lamp,shot,surface;uniform vec2 density;uniform float refinement;uniform sampler2D topMap,topDetail;uniform float paired,topTurn;"
+        "float hash(vec2 q){return fract(sin(dot(q,vec2(127.1,311.7)))*43758.5453);}"
+        "float noise(vec2 q){vec2 i=floor(q),f=fract(q);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+1.),f.x),f.y);}"
         "float skin(vec2 q){vec2 f=fract(q),e=min(f,1.-f);float d=min(e.x,e.y);float h=smoothstep(.015,.045,d)*.035;"
         "vec2 b=abs(f-.5)-vec2(.40);float r=length(b);h+=.010*(1.-smoothstep(.020,.032,r))-.009*(1.-smoothstep(.030,.043,r));"
         "float groove=abs(f.y-.70);float cut=(1.-smoothstep(.005,.013,groove))*smoothstep(.12,.16,f.x)*(1.-smoothstep(.82,.87,f.x));return h-cut*.012;}"
@@ -41,11 +43,11 @@ static void astra_init_shader(void)
         "vec3 tn=texture2D(topDetail,tuv).rgb;vec2 normal=tn.xy*2.-1.;if(topTurn>.5&&topTurn<1.5)normal=vec2(normal.y,-normal.x);else if(topTurn>1.5&&topTurn<2.5)normal=-normal;else if(topTurn>2.5)normal=vec2(-normal.y,normal.x);"
         "tn.xy=normal*.5+.5;sampleN=mix(sampleN,tn,useTop);}if(a.a*light.a<.035)discard;vec2 xy=(sampleN.xy*2.-1.)*.87;"
         "vec3 eye=normalize(-p);vec3 base=basis[2]*sign(dot(basis[2],eye));"
-        "float hard=step(.5,surface.x)*(1.-step(3.5,surface.x));vec2 cell=coord*density;float close=1.-smoothstep(35.,120.,-p.z);"
+        "float hard=step(.5,surface.x)*(1.-step(3.5,surface.x));vec2 cell=coord*density;float detailFade=1.-smoothstep(8.,55.,-p.z);float close=1.-smoothstep(35.,120.,-p.z);"
         "float eps=.002;vec2 relief=vec2(skin(cell-vec2(eps,0.))-skin(cell+vec2(eps,0.)),skin(cell-vec2(0.,eps))-skin(cell+vec2(0.,eps)))/(2.*eps);"
         "xy+=relief*.24*hard*close;xy=clamp(xy,vec2(-.85),vec2(.85));vec2 edges=min(fract(cell),1.-fract(cell));"
         "float seam=1.-smoothstep(.012,.050,min(edges.x,edges.y));a.rgb*=1.-seam*.32*hard*close;"
-        "float fiber=sin(cell.x*380.+sin(cell.y*21.))*sin(cell.y*290.);a.rgb*=1.+fiber*.015*close*exp(-max(0.,-p.z-8.)*.08);"
+        "float fiber=sin(cell.x*170.+sin(cell.y*21.))*sin(cell.y*110.);a.rgb*=1.+fiber*.015*close*exp(-max(0.,-p.z-8.)*.08);"
         "vec3 n=normalize(basis[0]*xy.x+basis[1]*xy.y+base*sqrt(max(.06,1.-dot(xy,xy))));"
         "vec3 L=lamp.xyz-p;float dist=length(L);L/=max(dist,.001);"
         "float reach=lamp.w/(1.+dist*dist*.0018);"
@@ -57,6 +59,10 @@ static void astra_init_shader(void)
         "float patina=sin(coord.x*6.7+surface.w*7.)*sin(coord.y*11.3+surface.w*13.);"
         "float wear=smoothstep(.5,.92,patina)*(.06+.09*rock);a.rgb*=1.+grain*.022+patina*.035-wear;"
         "a.rgb=mix(a.rgb,a.rgb*vec3(.93,1.01,1.025),ceramic*.45);expn=mix(expn,32.,ceramic);"
+        "float grime=noise(cell*2.3+surface.w*17.),fleck=noise(cell*55.);float seamEdge=1.-smoothstep(.018,.10,min(edges.x,edges.y));"
+        "float chip=seamEdge*smoothstep(.55,.73,fleck)*hard*detailFade*refinement;float wet=smoothstep(.64,.86,grime)*oil*refinement;"
+        "a.rgb=mix(a.rgb,vec3(.28,.32,.33),chip*.65);a.rgb*=1.-refinement*(smoothstep(.52,.80,grime)*.16+wet*.16);"
+        "metal=mix(metal,.88,chip);expn=mix(expn,105.,wet*.8);"
         "float cavity=clamp(1.-length(xy)*(.18+.12*rock),.72,1.);"
         "float glint=pow(max(dot(n,normalize(L+eye)),0.),expn)*reach;"
         "vec3 D=shot.xyz-p;float sd=length(D);D/=max(.01,sd);float fire=shot.w/(1.+sd*sd*.009);"
@@ -65,6 +71,13 @@ static void astra_init_shader(void)
         "vec3 lampTint=mix(vec3(1.,.75,.46),vec3(.40,.76,.85),step(1.5,surface.y)*(1.-step(2.5,surface.y)));"
         "col+=lampTint*glint*(.12+.35*metal)*(1.-rock*.8);"
         "col+=vec3(1.,.29,.085)*fire*(a.rgb*.64*max(0.,dot(n,D))+.38*pow(max(dot(n,normalize(D+eye)),0.),25.));"
+        "vec3 H=normalize(beam+eye);float tangent=dot(H,basis[0]),across=dot(H,basis[1]);"
+        "float brushed=exp(-(tangent*tangent*260.+across*across*16.))*max(0.,dot(n,beam));"
+        "col+=refinement*hard*(1.-ceramic)*vec3(.19,.24,.27)*brushed*(.35+.65*metal)*room;"
+        "vec3 reflection=reflect(-eye,n);float strip=pow(max(0.,1.-abs(reflection.y-.56)*2.4),14.);"
+        "col+=refinement*vec3(.16,.29,.34)*strip*(wet*.43+metal*.07)*room;"
+        "float vein=1.-smoothstep(.014,.045,abs(noise(cell*3.5+noise(cell*.8)*2.)-.51));"
+        "col+=rock*refinement*vein*vec3(.038,.052,.048)*close;"
         "float haze=min(.16,1.-exp(-max(0.,-p.z-10.)*.0017));col=mix(col,vec3(.09,.145,.16),haze);"
         "gl_FragColor=vec4(col,a.a*light.a);}";
     GLuint v=astra_compile(GL_VERTEX_SHADER,vs), f=astra_compile(GL_FRAGMENT_SHADER,fs);
@@ -112,9 +125,10 @@ static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
     glUniformMatrix3fv(astra_tangents,1,GL_FALSE,mat);
     static int kinds[256],kinds_ready;
     if(!kinds_ready){EM_ASM({var k=window.astraMaterialTypes||[];for(var i=0;i<256;i++)HEAP32[($0>>2)+i]=k[i]??-1;},kinds);kinds_ready=1;}
-    float surface[4];memcpy(surface,astra_surface,sizeof surface);if(kinds[id]>0)surface[0]=kinds[id];if(id>=181&&id<=183)surface[0]=1;
+    float surface[4];memcpy(surface,astra_surface,sizeof surface);if(kinds[id]==0||kinds[id]==4)surface[0]=kinds[id];else if(kinds[id]>0&&surface[0]==0)surface[0]=1;if(id>=181&&id<=183)surface[0]=1;
     glUniform4fv(glGetUniformLocation(astra_program,"surface"),1,surface);
-    EM_ASM(Module.wallDetailVersion=20;);
+    glUniform1f(glGetUniformLocation(astra_program,"refinement"),astra_refinement);
+    EM_ASM(Module.wallDetailVersion=22;);
     glUniform4fv(astra_fixture,1,astra_lamp);glUniform4fv(astra_moving,1,astra_flash);
     ++astra_shaded;return 1;
 }

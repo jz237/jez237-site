@@ -28,6 +28,8 @@ includes["recharge.inc"]="arch/ogl/astra_recharge.inc"
 includes["debris.inc"]="arch/ogl/astra_debris.inc"
 includes["environment.inc"]="arch/ogl/astra_environment.inc"
 includes["mine_preview.inc"]="main/astra_mine_preview.inc"
+includes["foundry.inc"]="arch/ogl/astra_foundry.inc"
+includes["antialias.inc"]="arch/ogl/astra_antialias.inc"
 for name,path in includes.items():
     if (repo/"d2"/path).exists():raise SystemExit("Use a fresh checkout. An Astra include already exists.")
 git(repo,"apply",str(src/"engine.patch"))
