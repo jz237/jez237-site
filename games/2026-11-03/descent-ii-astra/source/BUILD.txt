@@ -129,3 +129,36 @@ native options and sound sliders, mission lists, flight pause, a valid DGSS
 save and successful restore with the Astra deck, explosion preview/replay,
 and autonomous phone-demo launch. Automated browsers disabled pointer lock
 before loading the game and were closed after each check.
+
+Astra animated systems and forward-flight pilot (pyre10)
+
+All 45 pickups and the rescue pod have varied, faster rotation and a gentle
+bob. Energy equipment carries depth-tested electrical arcs; hardware has
+orbiting status lights. Emissive model surfaces carry a moving energy pulse.
+The showroom uses the same renderer and animates while the mine is paused.
+
+motion.inc renders rounded flowing plasma/fusion, thin laser and cannon
+tracers, helix rings, Omega arcs and missile exhaust with shock diamonds.
+Native weapon IDs choose their visual family for both player and enemy shots.
+Real robot gun anchors carry rotating barrel mechanisms and firing recoil;
+rear cooling louvers move independently. Damaged robots intermittently arc.
+These are presentation-only meshes. The original projectile objects, speeds,
+damage, firing delays, audio, collisions and random-number stream are preserved.
+The effect renderer is disabled in Classic mode and skips cloaked machinery.
+
+The demo brakes before sharp turns and accelerates along its facing, with
+small corrections for portal centering. It prioritizes urgent supplies over
+combat, uses forward attack runs and standoff fire, and seeks clearance from
+very close attackers. Incoming-fire evasion varies forward speed instead of
+holding a lateral strafe. Native impacts and Fusion recoil can still push the
+ship off course; the controller corrects using the original flight physics.
+Primary choice considers range, target shields, energy, ammo and recent use.
+Missile selection waits for native rearming before firing and reserves large
+blast weapons for sufficient range. It only uses weapons actually owned.
+
+Validation includes every active collectible, all nine primary fire families,
+missile exhaust, enemy fire/mechanisms, both campaigns, and phone emulation.
+An arsenal QA fixture uses the original cheat to supply weapons only in an
+isolated test save; normal demos receive no weapons, invulnerability or keys.
+Demo tests cover sampled combat/navigation rather than complete campaign solves.
+Automated browsers reject pointer lock before launch and close after testing.

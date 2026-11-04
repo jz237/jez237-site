@@ -41,7 +41,7 @@ static void ap_init(void){
       "vec3 base=coat.rgb*(.65+dot(tex.rgb,vec3(.299,.587,.114))*.8+grain*.025);vec3 c=base*(.26+diff*1.18+max(dot(N,R),0.)*.31)*lighting;"
       "c+=mix(vec3(.55,.68,.78),base,.48)*spec*.78+vec3(.06,.24,.32)*rim;"
       "vec3 F=flash.xyz-p;float fd=length(F);c+=base*vec3(1.,.42,.13)*flash.w/(1.+fd*fd*.01)*max(0.,dot(N,F/max(.01,fd)));"
-      "c+=coat.rgb*glow*(1.15+.12*sin(clock*2.5+local.z*8.));"
+      "float sweep=pow(.5+.5*sin(local.z*11.-clock*4.8),8.);c+=coat.rgb*glow*(.95+.48*sweep+.14*sin(clock*3.2+local.y*6.));"
       "gl_FragColor=vec4(c/(1.+.22*c),1.);}";
     GLuint v=astra_compile(GL_VERTEX_SHADER,vs),s=astra_compile(GL_FRAGMENT_SHADER,fs);
     if(!v||!s){ap_bad=1;return;}
@@ -58,8 +58,8 @@ int astra_draw_pickup(object *obj){
     int id=obj->type==OBJ_HOSTAGE?50:obj->id;
     vms_vector pos=obj->pos;
     float clock=EM_ASM_INT(return (Module.pickupInspect??-1)>=0)?SDL_GetTicks()*.001f:f2fl((fix)(GameTime64%(F1_0*2000)));
-    pos.y+=fl2f(sinf(clock*1.65f+id)*f2fl(obj->size)*.035f);
-    vms_angvec angle={3500,2200,(int)(clock*2700)+id*2901};
+    pos.y+=fl2f(sinf(clock*1.65f+id+obj->signature*.37f)*f2fl(obj->size)*.085f);
+    vms_angvec angle={2800+(int)(sinf(clock*.8f+id)*1700),1200+(int)(cosf(clock*.65f+id)*1700),(int)(clock*(6900+id%5*600))+id*2901+obj->signature*131};
     g3_start_instance_angles(&pos,&angle);
     g3s_point pt;vms_vector zero={0,0,0};g3_rotate_point(&pt,&zero);
     float axis[9];
@@ -80,6 +80,7 @@ int astra_draw_pickup(object *obj){
     glDrawArrays(GL_TRIANGLES,0,ap_count[id]);
     glDisableClientState(GL_VERTEX_ARRAY);glDisableClientState(GL_COLOR_ARRAY);glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glUseProgram(0);if(cull)glEnable(GL_CULL_FACE);if(!depth)glDisable(GL_DEPTH_TEST);if(blend)glEnable(GL_BLEND);
+    extern void astra_pickup_arcs(int,float,float);astra_pickup_arcs(id,clock,f2fl(obj->size));
     g3_done_instance();
     ap_draws++;EM_ASM(Module.pickupDraws=$0;Module.pickupCoverage[$1]=true;,ap_draws,id);
     return 1;

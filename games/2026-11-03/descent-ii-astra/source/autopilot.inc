@@ -16,6 +16,9 @@ static int aa_level=-999,aa_segment=-1,aa_goal=-1,aa_object=-1,aa_wall=-1,aa_mod
 static int aa_dist[MAX_SEGMENTS],aa_parent[MAX_SEGMENTS],aa_queue[MAX_SEGMENTS],aa_visits[MAX_SEGMENTS];
 static fix64 aa_ignore[MAX_OBJECTS],aa_wall_seen[MAX_WALLS],aa_next,aa_stuck_since,aa_level_since,aa_dead_since,aa_status_next;
 static vms_vector aa_last;
+static fix64 aa_weapon_next,aa_weapon_used[10],aa_missile_next,aa_missile_ready;
+static int aa_missile_turn,aa_pending_missile=-1;
+static float aa_facing_velocity;
 static int aa_recover,aa_seen,aa_deaths,aa_kills,aa_collects;
 static float aa_clamp(float x,float a,float b){return fminf(b,fmaxf(a,x));}
 static float aa_len(vms_vector *a,vms_vector *b){return f2fl(vm_vec_dist_quick(a,b));}
@@ -101,28 +104,43 @@ static void aa_plan(void){
 static void aa_move(vms_vector target,float speed){
     object *ship=ConsoleObject;vms_vector delta;vm_vec_sub(&delta,&target,&ship->pos);
     float distance=f2fl(vm_vec_mag(&delta));if(distance>.01f)vm_vec_normalize(&delta);
-    float desired=fminf(speed,distance*2.4f);
+    /* Brake and face the waypoint before accelerating. Lateral thrust only
+     * damps drift and makes small portal-centering corrections. */
+    float facing=f2fl(vm_vec_dot(&delta,&ship->orient.fvec));
+    float aligned=aa_clamp((facing-.96f)/.037f,0,1);
+    float desired=fminf(speed,distance*1.35f)*aligned;
+    float actual_speed=f2fl(vm_vec_mag(&ship->mtype.phys_info.velocity));
+    if(actual_speed>4 && f2fl(vm_vec_dot(&ship->mtype.phys_info.velocity,&ship->orient.fvec))<actual_speed*.93f)desired=0;
     vms_vector dirs[3]={ship->orient.rvec,ship->orient.uvec,ship->orient.fvec};
     fix *output[3]={&Controls.sideways_thrust_time,&Controls.vertical_thrust_time,&Controls.forward_thrust_time};
     for(int k=0;k<3;k++){
-        float goal=f2fl(vm_vec_dot(&delta,&dirs[k]))*desired;
+        float goal=k==2?desired:f2fl(vm_vec_dot(&delta,&dirs[k]))*desired*.22f;
         float velocity=f2fl(vm_vec_dot(&ship->mtype.phys_info.velocity,&dirs[k]));
-        *output[k]=fl2f(aa_clamp((goal-velocity)*.085f,-1,1)*f2fl(FrameTime));
+        *output[k]=fl2f(aa_clamp((goal-velocity)*.11f,-1,1)*f2fl(FrameTime));
     }
 }
 static float aa_aim(vms_vector target){
     object *ship=ConsoleObject;vms_vector d;vm_vec_sub(&d,&target,&ship->pos);vm_vec_normalize(&d);
     float x=f2fl(vm_vec_dot(&d,&ship->orient.rvec)),y=f2fl(vm_vec_dot(&d,&ship->orient.uvec)),z=f2fl(vm_vec_dot(&d,&ship->orient.fvec));
+    float target_alignment=z;
+    /* Keep looking along existing forward motion while braking into a sharp
+     * turn. Once slow, turn on the spot, then accelerate along the new course. */
+    vms_vector travel=ship->mtype.phys_info.velocity;
+    fix motion=vm_vec_mag(&travel),ahead=vm_vec_dot(&travel,&ship->orient.fvec);
+    if(motion>i2f(4) && (z<.96f||ahead<fixmul(motion,fl2f(.93f))) && ahead>0){
+        vm_vec_normalize(&travel);x=f2fl(vm_vec_dot(&travel,&ship->orient.rvec));y=f2fl(vm_vec_dot(&travel,&ship->orient.uvec));z=f2fl(vm_vec_dot(&travel,&ship->orient.fvec));
+    }
     float yaw=atan2f(x,z),pitch=-atan2f(y,sqrtf(x*x+z*z));
     Controls.heading_time=fl2f(aa_clamp(yaw*.85f-f2fl(ship->mtype.phys_info.rotvel.y)*3.8f,-.70f,.70f)*f2fl(FrameTime));
     Controls.pitch_time=fl2f(aa_clamp(pitch*.85f-f2fl(ship->mtype.phys_info.rotvel.x)*3.8f,-.65f,.65f)*f2fl(FrameTime));
     Controls.bank_time=fl2f(-f2fl(ship->mtype.phys_info.rotvel.z)*2*f2fl(FrameTime));
-    return z;
+    return target_alignment;
 }
 void astra_auto_frame(void){
     if(!astra_auto_enabled()||!ConsoleObject)return;
     memset(&Controls,0,sizeof Controls);
     if(Player_is_dead){
+        aa_pending_missile=-1;aa_weapon_next=aa_missile_next=0;
         if(!aa_dead_since){aa_dead_since=GameTime64;aa_deaths++;}
         if(Player_exploded&&GameTime64-aa_dead_since>i2f(11))Death_sequence_aborted=1;
         EM_ASM(window.astraAutoStatus?.("Ship lost - relaunching",$0,$1,$2,$3);,aa_seen,aa_deaths,aa_kills,aa_collects);
@@ -130,6 +148,7 @@ void astra_auto_frame(void){
     }
     aa_dead_since=0;if(Endlevel_sequence)return;
     if(aa_level!=Current_level_num){
+        aa_weapon_next=aa_missile_next=0;aa_pending_missile=-1;memset(aa_weapon_used,0,sizeof aa_weapon_used);
         aa_level=Current_level_num;aa_level_since=GameTime64;aa_next=aa_status_next=0;aa_segment=-1;aa_seen=0;
         memset(aa_visits,0,sizeof aa_visits);memset(aa_ignore,0,sizeof aa_ignore);memset(aa_wall_seen,0,sizeof aa_wall_seen);
         aa_last=ConsoleObject->pos;aa_stuck_since=GameTime64;
@@ -169,57 +188,82 @@ void astra_auto_frame(void){
         float s=(o->type==OBJ_CNTRLCEN?.65f:1.f)/(d+8);
         if(s>threat){threat=s;enemy=i;}
     }
-    float speed=Control_center_destroyed?43:32;
-    aa_move(target,speed);vms_vector aim=target;
-    if(door>=0){
-        compute_center_point_on_side(&aim,&Segments[Walls[door].segnum],Walls[door].sidenum);
-        aa_mode=6;
-    }
-    if(enemy>=0){
-        object *foe=&Objects[enemy];aim=foe->pos;
+    float speed=Control_center_destroyed?38:29;
+    vms_vector aim=target;int attacking=0;
+    if(door>=0){compute_center_point_on_side(&aim,&Segments[Walls[door].segnum],Walls[door].sidenum);aa_mode=6;}
+    /* Supplies and an open escape route outrank chasing a threat. Attack runs
+     * face the enemy and stop at standoff distance; there is no sideways orbit. */
+    if(enemy>=0 && !Control_center_destroyed && door<0 &&
+       !(aa_mode==1&&(Players[Player_num].shields<i2f(55)||Players[Player_num].energy<i2f(25)))){
+        object *foe=&Objects[enemy];aim=foe->pos;attacking=1;
         float distance=aa_len(&aim,&ConsoleObject->pos);
-        if(foe->movement_type==MT_PHYSICS)vm_vec_scale_add2(&aim,&foe->mtype.phys_info.velocity,fl2f(fminf(.65f,distance/140.f)));
-        if(!Control_center_destroyed && Players[Player_num].shields>i2f(35) && Players[Player_num].energy>i2f(12)){
-            vms_vector away;vm_vec_sub(&away,&ConsoleObject->pos,&foe->pos);vm_vec_normalize(&away);
-            vms_vector move;vm_vec_scale_add(&move,&foe->pos,&away,i2f(40));
-            vm_vec_scale_add2(&move,&ConsoleObject->orient.rvec,fl2f(sinf(f2fl((fix)GameTime64)*1.1f)*12));
-            if(aa_visible(&move,ConsoleObject->size))aa_move(move,26);
-        }
-        aa_mode=3;
-    }
-    float alignment=aa_aim(aim);
-    if(enemy>=0||door>=0||(aa_wall>=0&&seg==aa_goal&&aa_mode==4)){
-        if(alignment>.965f){
-            static const int choice[]={GAUSS_INDEX,PLASMA_INDEX,HELIX_INDEX,SPREADFIRE_INDEX,VULCAN_INDEX,LASER_INDEX};
-            for(int k=0;k<6;k++)if(player_has_weapon(Player_num,choice[k],0)==HAS_ALL){
-                if(Players[Player_num].primary_weapon!=choice[k])select_weapon(choice[k],0,0,1);break;
+        if(foe->movement_type==MT_PHYSICS)vm_vec_scale_add2(&aim,&foe->mtype.phys_info.velocity,fl2f(fminf(.45f,distance/160.f)));
+        target=aim;speed=aa_clamp((distance-34)*.85f,0,25);aa_mode=3;
+        if(distance<19){
+            /* A close attacker calls for a forward escape into open room,
+             * then a new attack run, rather than a prolonged reverse strafe. */
+            vms_vector escape;compute_segment_center(&escape,&Segments[seg]);
+            if(aa_len(&escape,&ConsoleObject->pos)>12 && aa_len(&escape,&foe->pos)>distance+8 && aa_visible(&escape,ConsoleObject->size)){
+                target=aim=escape;speed=23;attacking=0;aa_mode=7;
             }
-            Controls.fire_primary_state=1;
-            if(enemy>=0&&aa_len(&Objects[enemy].pos,&ConsoleObject->pos)>40&&alignment>.985f){
-                const int ammo_order[]={HOMING_INDEX,SMISSILE4_INDEX,CONCUSSION_INDEX,SMISSILE1_INDEX};
-                int missile=-1;for(int m=0;m<4;m++)if(Players[Player_num].secondary_ammo[ammo_order[m]]){missile=ammo_order[m];break;}
-                if(missile>=0){
-                    if(Players[Player_num].secondary_weapon!=missile)select_weapon(missile,1,0,1);
-                    Controls.fire_secondary_state=1;
+        }
+    }
+    aa_move(target,speed);float alignment=aa_aim(aim);
+    if(attacking||door>=0||(aa_wall>=0&&seg==aa_goal&&aa_mode==4)){
+        if(alignment>.970f){
+            float distance=enemy>=0?aa_len(&Objects[enemy].pos,&ConsoleObject->pos):40;
+            if(GameTime64>=aa_weapon_next||player_has_weapon(Player_num,Players[Player_num].primary_weapon,0)!=HAS_ALL){
+                int selected=LASER_INDEX;float best=-1;
+                for(int w=0;w<MAX_PRIMARY_WEAPONS;w++){
+                    if(w==SUPER_LASER_INDEX||player_has_weapon(Player_num,w,0)!=HAS_ALL)continue;
+                    if(w==OMEGA_INDEX&&distance>65)continue;
+                    if(w==FUSION_INDEX&&(distance<28||Players[Player_num].energy<i2f(35)))continue;
+                    float score=1;
+                    if(w==GAUSS_INDEX||w==VULCAN_INDEX)score+=distance>65?.75f:.15f;
+                    if(w==HELIX_INDEX||w==SPREADFIRE_INDEX)score+=distance<55?.65f:.05f;
+                    if(w==PLASMA_INDEX||w==PHOENIX_INDEX)score+=distance<90?.40f:.10f;
+                    if(w==OMEGA_INDEX)score+=distance<48?.6f:0;
+                    if(w==FUSION_INDEX)score+=enemy>=0&&Objects[enemy].shields>i2f(80)?.8f:.1f;
+                    if(Players[Player_num].energy<i2f(30))score+=(w==GAUSS_INDEX||w==VULCAN_INDEX)?.9f:-.2f;
+                    /* Recent use loses priority, allowing each suitable owned
+                     * weapon a turn without switching every simulation frame. */
+                    if(aa_weapon_used[w])score-=1.1f*aa_clamp(1-(double)(GameTime64-aa_weapon_used[w])/(F1_0*32),0,1);
+                    if(score>best){best=score;selected=w;}
                 }
+                if(Players[Player_num].primary_weapon!=selected)select_weapon(selected,0,0,1);
+                aa_weapon_used[selected]=GameTime64;aa_weapon_next=GameTime64+i2f(5);
+            }
+            Controls.fire_primary_state=Players[Player_num].primary_weapon!=FUSION_INDEX || (GameTime64%(F1_0*3/2))<F1_0;
+            if(attacking&&distance>42&&alignment>.988f&&aa_pending_missile<0&&GameTime64>=aa_missile_next){
+                const int order[]={HOMING_INDEX,SMISSILE4_INDEX,CONCUSSION_INDEX,SMISSILE1_INDEX,SMART_INDEX,MEGA_INDEX,SMISSILE5_INDEX};
+                for(int m=0;m<7;m++){
+                    int w=order[(m+aa_missile_turn)%7];
+                    if(!Players[Player_num].secondary_ammo[w]||((w==SMART_INDEX||w==MEGA_INDEX||w==SMISSILE5_INDEX)&&distance<85))continue;
+                    if(Players[Player_num].secondary_weapon!=w)select_weapon(w,1,0,1);
+                    aa_pending_missile=w;aa_missile_ready=GameTime64+F1_0*11/10;aa_missile_turn=(m+aa_missile_turn+1)%7;break;
+                }
+            }
+            int pending_heavy=aa_pending_missile==SMART_INDEX||aa_pending_missile==MEGA_INDEX||aa_pending_missile==SMISSILE5_INDEX;
+            if(aa_pending_missile>=0 && GameTime64>=aa_missile_ready && attacking && distance>(pending_heavy?85:42) && alignment>.988f){
+                if(Players[Player_num].secondary_weapon==aa_pending_missile)Controls.fire_secondary_state=1;
+                aa_pending_missile=-1;aa_missile_next=GameTime64+F1_0*5/2;
             }
         }
     }
     if(Players[Player_num].flags&PLAYER_FLAGS_CONVERTER && Players[Player_num].shields<i2f(80)&&Players[Player_num].energy>i2f(130))Controls.energy_to_shield_state=1;
-    /* A short lateral dodge against incoming robot fire, through normal thrust. */
+    /* Vary forward speed under incoming fire without an off-camera strafe. */
     for(int i=0;i<=Highest_object_index;i++){
         object *shot=&Objects[i];
         if(shot->type!=OBJ_WEAPON || shot->ctype.laser_info.parent_type==OBJ_PLAYER || shot->movement_type!=MT_PHYSICS)continue;
         vms_vector to_ship;vm_vec_sub(&to_ship,&ConsoleObject->pos,&shot->pos);
         if(vm_vec_mag_quick(&to_ship)>i2f(24)||vm_vec_dot(&to_ship,&shot->mtype.phys_info.velocity)<=0)continue;
         fix side=vm_vec_dot(&to_ship,&ConsoleObject->orient.rvec);
-        Controls.sideways_thrust_time=side>=0?FrameTime:-FrameTime;break;
+        if(vm_vec_dot(&ConsoleObject->mtype.phys_info.velocity,&ConsoleObject->orient.fvec)>i2f(6))Controls.forward_thrust_time=-FrameTime/3;break;
     }
     if(aa_len(&aa_last,&ConsoleObject->pos)>3){aa_last=ConsoleObject->pos;aa_stuck_since=GameTime64;aa_recover=0;}
     else if(GameTime64-aa_stuck_since>i2f(4)&&enemy<0){
-        /* Back away and slide toward the segment centre; no relocation. */
-        vms_vector center;compute_segment_center(&center,&Segments[seg]);aa_move(center,18);
-        Controls.forward_thrust_time=-FrameTime/2;Controls.sideways_thrust_time=(aa_recover&1)?FrameTime/2:-FrameTime/2;
+        /* Stop, turn toward clearance, and leave facing the route. */
+        vms_vector center;compute_segment_center(&center,&Segments[seg]);aa_aim(center);aa_move(center,14);
         aa_mode=7;
         if(GameTime64-aa_stuck_since>i2f(6)){
             if(aa_object>=0)aa_ignore[aa_object]=GameTime64+i2f(25);
@@ -230,6 +274,9 @@ void astra_auto_frame(void){
     if(GameTime64>aa_status_next){
         static const char *labels[]={"Exploring the mine","Collecting supplies","Rescuing hostages","Engaging hostile","Activating switch","Escaping to exit","Opening door","Finding clearance"};
         aa_kills=Players[Player_num].num_kills_total;
+        vms_vector travel=ConsoleObject->mtype.phys_info.velocity;float velocity=f2fl(vm_vec_mag(&travel));
+        aa_facing_velocity=velocity>.05f?f2fl(vm_vec_dot(&travel,&ConsoleObject->orient.fvec))/velocity:1;
+        EM_ASM(Module.autoFlight=({speed:$0,forward:$1,primary:$2,secondary:$3,energy:$4,shields:$5,version:10});,velocity,aa_facing_velocity,Players[Player_num].primary_weapon,Players[Player_num].secondary_weapon,f2fl(Players[Player_num].energy),f2fl(Players[Player_num].shields));
         EM_ASM({window.astraAutoStatus?.(UTF8ToString($0),$1,$2,$3,$4);Module.autoTelemetry=({segment:$5,goal:$6,object:$7,enemy:$8,mode:$9,x:$10,y:$11,z:$12});},labels[aa_mode],aa_seen,aa_deaths,aa_kills,aa_collects,seg,aa_goal,aa_object,enemy,aa_mode,f2fl(ConsoleObject->pos.x),f2fl(ConsoleObject->pos.y),f2fl(ConsoleObject->pos.z));
         aa_status_next=GameTime64+F1_0/3;
     }

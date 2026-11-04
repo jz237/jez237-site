@@ -278,7 +278,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre9");
+    await script("engine.js?v=pyre10");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 
@@ -382,7 +382,7 @@ window.astraCollectibleStatus=id=>{
   if(!item)return;
   $('previewTitle').textContent='PTMC / COLLECTIBLE INSPECTION';
   $('previewVariation').textContent=item.name;
-  $('previewPhase').textContent='Solid 3D model · Rotating inspection';
+  $('previewPhase').textContent='Animated 3D model · Electrical detail';
   $('previewTime').textContent=item.triangles.toLocaleString()+' triangles';
   $('previewProgress').hidden=true;
   $('previewAgain').textContent='Next collectible →';
