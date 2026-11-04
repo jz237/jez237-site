@@ -11,7 +11,9 @@ typedef struct {vms_vector p,normal;float size;fix64 born;int room;} ae_scrap;
 static ae_scrap ae_scraps[48];static unsigned ae_scrap_serial;
 static int ae_level=-999,ae_segments=-1;
 static unsigned ae_faces,ae_machines,ae_doors,ae_reactors,ae_atmosphere;
-static float ae_clock(void){return (double)(GameTime64%(F1_0*1800))/F1_0;}
+extern float astra_mine_clock,astra_mine_door;
+extern int astra_mine_wall,astra_mine_wall2;
+static float ae_clock(void){if(astra_mine_clock>=0)return astra_mine_clock;return (double)(GameTime64%(F1_0*1800))/F1_0;}
 void astra_environment_clear(void){memset(ae_marks,0,sizeof ae_marks);memset(ae_scraps,0,sizeof ae_scraps);}
 void astra_environment_scrap(int room,const vms_vector *p,const vms_vector *normal,float size){
     ae_scraps[ae_scrap_serial++%48]=(ae_scrap){*p,*normal,size,GameTime64,room};
@@ -169,6 +171,7 @@ static void ae_door(int room,int side){
     float open=wall->state==WALL_DOOR_WAITING||wall->state==WALL_DOOR_OPEN?1:0;
     for(int i=0;i<Num_open_doors;i++)for(int k=0;k<ActiveDoors[i].n_parts;k++)if(ActiveDoors[i].front_wallnum[k]==id||ActiveDoors[i].back_wallnum[k]==id){
         float t=fminf(1,f2fl(ActiveDoors[i].time)/fmaxf(.01f,f2fl(WallAnims[wall->clip_num].play_time)));open=wall->state==WALL_DOOR_CLOSING?1-t:t;}
+    if(astra_mine_door>=0&&(id==astra_mine_wall||id==astra_mine_wall2))open=astra_mine_door;
     g3_start_instance_matrix(&center,&basis);ax_count=0;ax_energy=0;
     for(int side=-1;side<=1;side+=2){float x=side*w*.475f;
         ax_paint(.10f,.15f,.18f,0);ax_tube(x,-h*.46f,.11f,x,h*.46f,.11f,.19f,.19f,6);

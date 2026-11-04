@@ -40,7 +40,8 @@ int astra_recharge_face(int count,const g3s_point **view,const g3s_uvl *uv,int r
     int fade=grd_curcanv->cv_fade_level,blend=grd_curcanv->cv_blend_func;
     GLboolean cull=glIsEnabled(GL_CULL_FACE);glDisable(GL_CULL_FACE);glDepthMask(GL_FALSE);
     gr_settransblend(GR_FADE_OFF,GR_BLEND_ADDITIVE_A);glUseProgram(program);
-    glUniform1f(glGetUniformLocation(program,"clock"),(double)(GameTime64%(F1_0*2000))/F1_0);
+    extern float astra_mine_clock;
+    glUniform1f(glGetUniformLocation(program,"clock"),astra_mine_clock>=0?astra_mine_clock:(double)(GameTime64%(F1_0*2000))/F1_0);
     glUniform1f(glGetUniformLocation(program,"seed"),room*.13f+side*.71f);
     glUniform1f(glGetUniformLocation(program,"charging"),charging);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);

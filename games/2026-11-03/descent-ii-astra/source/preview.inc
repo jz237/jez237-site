@@ -33,6 +33,7 @@ int astra_preview_frame(void)
             EM_ASM(window.astraPreview?.show(true));
         }
         astra_preview_new();
+        if(EM_ASM_INT(return Module.mineInspect>=0))am_level=-999;
     }
     if(command<0 && astra_preview_active){
         preview_snapshot(0);
@@ -44,6 +45,12 @@ int astra_preview_frame(void)
     if(!astra_preview_active)return 0;
     float age=(emscripten_get_now()-preview_started)*.001f,seconds=age-.85f;
     gr_set_current_canvas(NULL);gr_clear_canvas(BM_XRGB(1,2,3));
+    int mine=EM_ASM_INT(return Number.isInteger(Module.mineInspect)?Module.mineInspect:-1);
+    if(mine>=0){
+        double clock=EM_ASM_DOUBLE(return window.astraMinePreview?.tick()||0);
+        double zoom=EM_ASM_DOUBLE(return Module.mineInspectZoom||1);
+        astra_mine_preview(mine,(float)clock,(float)zoom);return 1;
+    }
     g3_start_frame();
     vms_vector eye={0,0,0},center={0,0,i2f(72)};
     g3_set_view_matrix(&eye,&vmd_identity_matrix,F1_0);

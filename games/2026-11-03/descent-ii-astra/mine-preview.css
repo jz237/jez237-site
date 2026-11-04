@@ -1,0 +1,15 @@
+.mine-choice{display:grid;gap:5px;margin:8px 0 10px;color:#9bb8c2;font:11px system-ui}.mine-choice select{width:100%;min-height:40px}
+#minePanel[hidden],#mineDetails[hidden]{display:none!important}
+#minePanel{position:absolute;inset:0;pointer-events:none;font:13px system-ui;color:#d4eef1}
+.mine-heading{position:absolute;left:18px;top:16px;max-width:70%;text-shadow:0 2px 5px #000}
+.mine-heading small{font:10px Consolas,monospace;letter-spacing:.12em;color:#a5d7e2}.mine-heading h2{font-size:19px;margin:5px 0}
+#mineToolbar{position:absolute;left:max(8px,env(safe-area-inset-left));bottom:max(8px,env(safe-area-inset-bottom));display:flex;gap:5px;pointer-events:auto}
+#mineToolbar button{min-height:44px;min-width:44px;padding:9px 13px;font:12px system-ui;background:#0b1d24df;border:1px solid #47727d;border-radius:5px;color:#d4eef1}
+#mineDetails{position:absolute;left:max(8px,env(safe-area-inset-left));bottom:62px;width:min(340px,calc(100% - 16px));max-height:calc(100% - 110px);overflow:auto;box-sizing:border-box;background:#0b1d24f5;border:1px solid #47727d;border-radius:8px;padding:14px;pointer-events:auto}
+#mineDetails label{display:grid;gap:6px;margin:0 0 12px;font-size:12px;color:#b5d4db}#mineDetails select{width:100%;min-height:44px}#mineDetails input[type=range]{width:100%;accent-color:#70d4e2;min-height:32px}
+#mineDetails .mine-tour{display:flex;align-items:center}#mineDescription{line-height:1.5;font-size:12px;color:#96b6c1;margin:0}
+body.mine-preview #previewPanel,body.mine-preview #astraDeck,body.mine-preview #mouseHint,body.mine-preview #rangeToggle{display:none!important}
+#mineFlight{position:absolute;left:218px;top:55px;padding:10px 14px;font:12px system-ui;background:#102129d9;color:#d9eff0;border:1px solid #426978;border-radius:4px;min-height:40px}
+body:not(.flying) #mineFlight,body.previewing #mineFlight,body.autopilot #mineFlight{display:none}
+@media(max-width:600px){.mine-heading{left:12px;top:10px}.mine-heading h2{font-size:15px}#mineToolbar{gap:4px;right:8px}#mineToolbar button{padding:8px 10px}#mineFlight{left:8px;top:102px}}
+@media(max-height:500px){.mine-heading h2{font-size:15px;margin:3px 0}.mine-heading{top:8px}#mineDetails{max-height:calc(100% - 82px)}}

@@ -66,7 +66,7 @@ static void ax_flush(float scale,float opacity){
     if(!ax_count||ax_failed)return;
     if(!ax_program){
         const char *vs="varying highp vec3 p,n,q;varying mediump vec4 color;uniform mat3 axis;uniform vec3 origin;void main(){q=gl_Vertex.xyz;p=axis*q+origin;n=normalize(axis*(gl_Normal));color=gl_Color;gl_Position=gl_ProjectionMatrix*vec4(p,1.);}";
-        const char *fs="precision highp float;varying highp vec3 p,n,q;varying mediump vec4 color;uniform float opacity,clock,energy;void main(){vec3 N=normalize(n),V=normalize(-p),L=normalize(vec3(-.5,.8,.7));float spec=pow(max(dot(N,normalize(V+L)),0.),48.);float flow=.68+.32*sin(q.x*17.+sin(q.z*13.+clock*7.)+q.y*12.);float emit=color.a*mix(1.,flow,step(1.4,color.a));vec3 c=color.rgb*(.28+1.05*max(dot(N,L),0.)+emit)+vec3(.4,.52,.6)*spec*(1.-min(.8,color.a));if(energy>.5){float rim=pow(max(0.,dot(N,V)),.6);gl_FragColor=vec4(color.rgb*(.24+.50*rim+.30*flow),opacity*rim*.8);}else gl_FragColor=vec4(c/(1.+.27*c),opacity);}";
+        const char *fs="precision highp float;varying highp vec3 p,n,q;varying mediump vec4 color;uniform float opacity,clock,energy;void main(){vec3 N=normalize(n),V=normalize(-p),L=normalize(vec3(-.5,.8,.7));float spec=pow(max(dot(N,normalize(V+L)),0.),48.);float flow=.68+.32*sin(q.x*17.+sin(q.z*13.+clock*7.)+q.y*12.);float emit=color.a*mix(1.,flow,step(1.4,color.a));vec3 c=color.rgb*(.28+1.05*max(dot(N,L),0.)+emit)+vec3(.4,.52,.6)*spec*(1.-min(.8,color.a));if(energy>1.5){float facing=max(0.,dot(N,V));float glow=.18+.65*pow(facing,.8)+.13*max(dot(N,normalize(vec3(-.4,.6,1.))),0.)+.04*flow;gl_FragColor=vec4(color.rgb*glow,opacity);}else if(energy>.5){float rim=pow(max(0.,dot(N,V)),.6);gl_FragColor=vec4(color.rgb*(.24+.50*rim+.30*flow),opacity*rim*.8);}else gl_FragColor=vec4(c/(1.+.27*c),opacity);}";
         GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){ax_failed=1;return;}
         ax_program=glCreateProgram();glAttachShader(ax_program,v);glAttachShader(ax_program,f);glLinkProgram(ax_program);glDeleteShader(v);glDeleteShader(f);
         GLint ok;glGetProgramiv(ax_program,GL_LINK_STATUS,&ok);if(!ok){ax_failed=1;fprintf(stderr,"Astra motion shader failed\n");return;}
@@ -75,7 +75,7 @@ static void ax_flush(float scale,float opacity){
     g3s_point p;vms_vector zero={0};g3_rotate_point(&p,&zero);
     int fade=grd_curcanv->cv_fade_level,blend=grd_curcanv->cv_blend_func;
     GLboolean cull=glIsEnabled(GL_CULL_FACE),depth=glIsEnabled(GL_DEPTH_TEST);glDisable(GL_CULL_FACE);glEnable(GL_DEPTH_TEST);
-    gr_settransblend(GR_FADE_OFF,GR_BLEND_NORMAL);glDepthMask(!ax_energy&&opacity>.99f?GL_TRUE:GL_FALSE);
+    gr_settransblend(GR_FADE_OFF,GR_BLEND_NORMAL);glDepthMask((!ax_energy||ax_energy==2)&&opacity>.99f?GL_TRUE:GL_FALSE);
     glUseProgram(ax_program);glUniform1f(glGetUniformLocation(ax_program,"energy"),ax_energy);glUniformMatrix3fv(glGetUniformLocation(ax_program,"axis"),1,GL_FALSE,axis);
     glUniform3f(glGetUniformLocation(ax_program,"origin"),f2fl(p.p3_x),f2fl(p.p3_y),-f2fl(p.p3_z));glUniform1f(glGetUniformLocation(ax_program,"opacity"),opacity);glUniform1f(glGetUniformLocation(ax_program,"clock"),SDL_GetTicks()*.001f);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_NORMAL_ARRAY);glEnableClientState(GL_COLOR_ARRAY);
@@ -313,17 +313,18 @@ int astra_draw_weapon(object *obj){
         ax_paint(.50f,.78f,1,1);af_particle(0,0,rear-.18f,nozzle*1.3f,.85f,phase);af_flush(clock,0);
         EM_ASM(Module.missileExhaustVersion=14;Module.missileExhaustSamples=24;);
     }else if(id==PLASMA_ID){
-        /* Solid rounded energy, with a short colored wake. The old bright
-         * ribbon had hard end caps which read as white rectangular blocks. */
-        float r=radius*.86f;ax_count=0;ax_energy=1;
-        float near=fminf(1,fmaxf(0,(f2fl(view.p3_z)/f2fl(Matrix_scale.z)-.5f)/5));
-        ax_paint(.045f,.90f,.21f,1.7f);ax_orb(r*.82f,1.32f);ax_flush(1,near);ax_energy=0;
-        ax_count=0;ax_paint(.035f,.85f,.16f,1);
-        af_particle(0,0,0,r*1.9f,.38f,obj->signature);
-        float wake=fminf(tail,2.7f);
-        for(int j=1;j<=8;j++){float u=j/8.f;af_particle(0,0,-wake*u,r*(1.05f-.65f*u),.25f*(1-u),obj->signature+j*.79f);}
-        af_flush_tinted(clock,0,1);
-        EM_ASM(Module.plasmaVisualVersion=17;);
+        /* Every visible plasma component is round geometry. No billboard halo
+         * or ribbon can turn into a flat green shape as the view changes. */
+        float r=radius*.86f,near=fminf(1,fmaxf(0,(f2fl(view.p3_z)/f2fl(Matrix_scale.z)-.35f)/2.5f));
+        ax_count=0;ax_energy=2;ax_paint(.035f,.94f,.19f,1.7f);ax_orb(r*.94f,1.12f);
+        ax_flush(1,near);ax_energy=2;ax_count=0;
+        for(int j=1;j<=4;j++){
+            float u=j/4.f;int start=ax_count;
+            ax_paint(.018f,.34f*(1-u*.7f),.09f,1);ax_orb(r*(.24f-.14f*u),1.1f);
+            for(int v=start;v<ax_count;v++)ax_vertices[v].p[2]-=fminf(tail,1.25f)*u;
+        }
+        ax_flush(1,near);ax_energy=0;
+        EM_ASM(Module.plasmaVisualVersion=19;Module.plasmaGeometryOnly=true;);
     }else if(id==PHOENIX_ID){
         /* Compact turbulent comet, without camera-crossing ribbons or a
          * rotating halo of separate lights. Ricochet flight remains native. */
@@ -351,6 +352,6 @@ int astra_draw_weapon(object *obj){
         af_flush_tinted(clock,0,laser);
     }
     g3_done_instance();
-    EM_ASM(Module.weaponEffects=(Module.weaponEffects||0)+1;Module.weaponVisualVersion=17;Module.weaponEffectCoverage=Module.weaponEffectCoverage||{};Module.weaponEffectCoverage[$0]=true;Module.weaponEffectKinds=Module.weaponEffectKinds||{};Module.weaponEffectKinds[$0]=$2?'exhaust':'energy';Module[$1?'enemyWeaponEffects':'playerWeaponEffects']=(Module[$1?'enemyWeaponEffects':'playerWeaponEffects']||0)+1;,id,enemy,missile);
+    EM_ASM(Module.weaponEffects=(Module.weaponEffects||0)+1;Module.weaponVisualVersion=19;Module.weaponEffectCoverage=Module.weaponEffectCoverage||{};Module.weaponEffectCoverage[$0]=true;Module.weaponEffectKinds=Module.weaponEffectKinds||{};Module.weaponEffectKinds[$0]=$2?'exhaust':'energy';Module[$1?'enemyWeaponEffects':'playerWeaponEffects']=(Module[$1?'enemyWeaponEffects':'playerWeaponEffects']||0)+1;,id,enemy,missile);
     return !missile;
 }

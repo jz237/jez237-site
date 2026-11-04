@@ -174,7 +174,12 @@ flightView.addEventListener("mousemove", e => {
 window.addEventListener("keydown", e => {
   if (window.astraPreview?.active) {
     e.stopImmediatePropagation();
-    if(e.target.closest?.('select'))return;
+    if(e.target.closest?.('select,input')&&e.key!=='Escape')return;
+    if(window.astraMinePreview?.active&&['ArrowLeft','ArrowRight',' '].includes(e.key)){
+      if(e.target.closest?.('button')&&e.key===' '){}else{
+        e.preventDefault();if(!e.repeat){if(e.key===' ')astraMinePreview.pause();else astraMinePreview.next(e.key==='ArrowLeft'?-1:1);}return;
+      }
+    }
     if(e.key==="Tab")return;
     if(e.target.closest?.('button') && ['Enter',' '].includes(e.key)){
       e.preventDefault();if(!e.repeat)e.target.closest('button').click();return;
@@ -215,7 +220,7 @@ $("previewFlight").onclick=()=>window.astraPreview.open();
 $("previewAgain").onclick=()=>{Module.pyroPreviewCommand=1;};
 $("previewClose").onclick=()=>window.astraPreview.close();
 
-async function launch(quick,demo=false,encounter=false,preview=false,autopilot=false,inspect=false,weapons=false) {
+async function launch(quick,demo=false,encounter=false,preview=false,autopilot=false,inspect=false,weapons=false,mine=false) {
   if(launchPending)return;
   launchPending=true;window.astraTerminal?.loading(true);
   const buttons=document.querySelectorAll(".launch");
@@ -245,7 +250,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
     const quality=Number($("res").value);
     const height=Math.round(quality*9/16);
     window.Module={
-      canvas,quick,demo,encounter,autopilot,demoArsenal:autopilot&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:autopilot?Number($("demoLevel").value):1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign:$("campaign").value,wideHud:$("wideHud").checked,intro:!quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys",
+      canvas,quick,demo,encounter,autopilot,mineInspect:mine?0:-1,mineInspectZoom:1,demoArsenal:autopilot&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:mine?Number($("mineLevel").value):autopilot?Number($("demoLevel").value):1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign:$("campaign").value,wideHud:$("wideHud").checked,intro:!quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys",
         "-gl_gettexlevelparam_ok","0","-gl_intensity4_ok","0","-gl_luminance4_alpha4_ok","0","-gl_rgba2_ok","0"],
       print:console.log,printErr:console.warn,onAbort:astraFail,
       onExit:()=>{window.astraMenus?.hide();window.astraTerminal?.fail();window.astraFlightFocus(false);syncPilot();document.body.classList.remove("flying");$("status").textContent="Flight ended."; $("retry").hidden=false;},
@@ -283,7 +288,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre18");
+    await script("engine.js?v=pyre19");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 

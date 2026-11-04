@@ -635,7 +635,7 @@ index fdb2e78..20d3027 100644
  		return;
  
 diff --git a/d2/main/fireball.c b/d2/main/fireball.c
-index fe9b0d1..93f7461 100644
+index fe9b0d1..e64b65e 100644
 --- a/d2/main/fireball.c
 +++ b/d2/main/fireball.c
 @@ -22,6 +22,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
@@ -646,7 +646,7 @@ index fe9b0d1..93f7461 100644
  #include "fix.h"
  #include "vecmat.h"
  #include "gr.h"
-@@ -65,6 +66,197 @@ fix	Flash_effect=0;
+@@ -65,6 +66,198 @@ fix	Flash_effect=0;
  
  int	PK1=1, PK2=8;
  
@@ -810,6 +810,7 @@ index fe9b0d1..93f7461 100644
 +    }
 +}
 +
++#include "astra_mine_preview.inc"
 +#include "astra_preview.inc"
 +
 +static void astra_impact_sound(object *o)
@@ -844,7 +845,7 @@ index fe9b0d1..93f7461 100644
  object *object_create_explosion_sub(object *objp, short segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, int parent )
  {
  	int objnum;
-@@ -87,6 +279,10 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
+@@ -87,6 +280,10 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
  	//now set explosion-specific data
  
  	obj->lifeleft = Vclip[vclip_type ].play_time;
@@ -855,7 +856,7 @@ index fe9b0d1..93f7461 100644
  	obj->ctype.expl_info.spawn_time = -1;
  	obj->ctype.expl_info.delete_objnum = -1;
  	obj->ctype.expl_info.delete_time = -1;
-@@ -439,10 +635,13 @@ object *object_create_debris(object *parent, int subobj_num)
+@@ -439,10 +636,13 @@ object *object_create_debris(object *parent, int subobj_num)
  
  }
  
@@ -871,7 +872,7 @@ index fe9b0d1..93f7461 100644
  
  }
  
-@@ -1620,3 +1819,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
+@@ -1620,3 +1820,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
  			expl_wall_swap(&ew[i], swap);
  }
  
@@ -1224,22 +1225,23 @@ index 64c6202..9dde716 100644
  }
  
 diff --git a/d2/main/inferno.c b/d2/main/inferno.c
-index dc6e44a..41e791e 100644
+index dc6e44a..d9dff6a 100644
 --- a/d2/main/inferno.c
 +++ b/d2/main/inferno.c
-@@ -44,6 +44,11 @@ char copyright[] = "DESCENT II  COPYRIGHT (C) 1994-1996 PARALLAX SOFTWARE CORPOR
+@@ -44,6 +44,12 @@ char copyright[] = "DESCENT II  COPYRIGHT (C) 1994-1996 PARALLAX SOFTWARE CORPOR
  #include "key.h"
  #include "3d.h"
  #include "bm.h"
 +extern int astra_vertigo(void);
 +EM_JS(int,astra_auto_difficulty,(void),{return Module.autopilot?1:(Number.isInteger(Module.difficulty)?Module.difficulty:-1);});
++EM_JS(int,astra_mine_launch,(void),{return Module.mineInspect>=0;});
 +EM_JS(int,astra_auto_first,(void),{return Module.startLevel||1;});
 +extern int astra_intro(void), astra_quick(void), astra_demo(void);
 +#define SHAREPATH "/mine"
  #include "inferno.h"
  #include "dxxerror.h"
  #include "game.h"
-@@ -415,7 +420,7 @@ int main(int argc, char *argv[])
+@@ -415,7 +421,7 @@ int main(int argc, char *argv[])
  	con_printf( CON_DEBUG, "Initializing movie libraries...\n" );
  	init_movies();		//init movie libraries
  
@@ -1248,7 +1250,7 @@ index dc6e44a..41e791e 100644
  
  	set_screen_mode(SCREEN_MENU);
  
-@@ -487,7 +492,28 @@ int main(int argc, char *argv[])
+@@ -487,7 +493,31 @@ int main(int argc, char *argv[])
  #endif
  	{
  		Game_mode = GM_GAME_OVER;
@@ -1272,13 +1274,16 @@ index dc6e44a..41e791e 100644
 +            Difficulty_level = astra_auto_difficulty();
 +            if(Difficulty_level<0)Difficulty_level=PlayerCfg.DefaultDifficulty;
 +            int first=astra_auto_first();
-+            if(first<1||first>Last_level)first=1;
-+            StartNewGame(first);
++            if(first>Last_level || first==0 || (first<0 && (!astra_mine_launch() || first<Last_secret_level)))first=1;
++            /* Inspection may start at a secret mine without the interactive
++             * secret-entry interstitial. The normal campaign entry is intact. */
++            StartNewGame(first<0 && astra_mine_launch()?1:first);
++            if(first<0 && astra_mine_launch())StartNewLevelSub(first,1,0);
 +        }
  	}
  
  	setjmp(LeaveEvents);
-@@ -521,3 +547,6 @@ int main(int argc, char *argv[])
+@@ -521,3 +551,6 @@ int main(int argc, char *argv[])
  
  	return(0);		//presumably successful exit
  }
@@ -1763,10 +1768,18 @@ index 650f69e..7271753 100644
  }
 +
 diff --git a/d2/main/render.c b/d2/main/render.c
-index 517bc8a..2e9868f 100644
+index 517bc8a..f3b3626 100644
 --- a/d2/main/render.c
 +++ b/d2/main/render.c
-@@ -197,6 +197,7 @@ void flash_frame()
+@@ -84,6 +84,7 @@ short Rotated_last[MAX_VERTICES];
+ 
+ // When any render function needs to know what's looking at it, it should 
+ // access Viewer members.
++extern int astra_mine_inspecting;
+ object * Viewer = NULL;
+ 
+ vms_vector Viewer_eye;  //valid during render
+@@ -197,6 +198,7 @@ void flash_frame()
  //	they are used for our hideously hacked in headlight system.
  //	vp is a pointer to vertex ids.
  //	tmap1, tmap2 are texture map ids.  tmap2 is the pasty one.
@@ -1774,7 +1787,7 @@ index 517bc8a..2e9868f 100644
  void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2, uvl *uvlp, int wid_flags)
  {
  	grs_bitmap  *bm;
-@@ -210,6 +211,8 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+@@ -210,6 +212,8 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
  	const g3s_point		*pointlist[8];
  
  	Assert(nv <= 8);
@@ -1783,7 +1796,7 @@ index 517bc8a..2e9868f 100644
  
  	for (i=0; i<nv; i++) {
  		uvl_copy[i].u = uvlp[i].u;
-@@ -232,6 +235,10 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+@@ -232,6 +236,10 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
  		return;
  	}
  
@@ -1794,7 +1807,7 @@ index 517bc8a..2e9868f 100644
  	if (tmap1 >= NumTextures) {
  #ifndef RELEASE
  		Int3();
-@@ -333,6 +340,14 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+@@ -333,6 +341,14 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
  			g3_draw_tmap(nv,pointlist,uvl_copy,dyn_light,bm);
  
  	gr_settransblend(GR_FADE_OFF, GR_BLEND_NORMAL); // revert any transparency/blending setting back to normal
@@ -1809,7 +1822,18 @@ index 517bc8a..2e9868f 100644
  
  #ifndef NDEBUG
  	if (Outline_mode) draw_outline(nv, pointlist);
-@@ -1678,6 +1693,9 @@ void render_frame(fix eye_offset, int window_num)
+@@ -633,6 +649,10 @@ extern ubyte DemoDoingRight,DemoDoingLeft;
+ 
+ void do_render_object(int objnum, int window_num)
+ {
++    if(astra_mine_inspecting){
++        if(Objects[objnum].type==OBJ_CNTRLCEN){extern int astra_environment_reactor(object*);astra_environment_reactor(&Objects[objnum]);}
++        return;
++    }
+ 	#ifdef EDITOR
+ 	int save_3d_outline=0;
+ 	#endif
+@@ -1678,6 +1698,9 @@ void render_frame(fix eye_offset, int window_num)
  	#endif
  
  	render_mine(start_seg_num, eye_offset, window_num);
@@ -1819,6 +1843,22 @@ index 517bc8a..2e9868f 100644
  
  	g3_end_frame();
  
+@@ -2253,3 +2276,15 @@ int find_seg_side_face(short x,short y,int *seg,int *side,int *face,int *poly)
+ }
+ 
+ #endif
++
++/* Detached renderer for the mine tour. The fake robot viewer avoids awarding
++ * automap exploration; positive eye_offset skips gameplay dynamic-light RNG. */
++void astra_inspection_render(const vms_vector *eye,const vms_matrix *orient,int room){
++    object camera;memset(&camera,0,sizeof camera);camera.type=OBJ_ROBOT;camera.pos=*eye;camera.orient=*orient;camera.segnum=room;
++    object *saved=Viewer;vms_vector saved_eye=Viewer_eye;
++    unsigned char rendered[sizeof Window_rendered_data];memcpy(rendered,Window_rendered_data,sizeof rendered);
++    Viewer=&camera;Viewer_eye=*eye;g3_start_frame();g3_set_view_matrix(eye,orient,Render_zoom);
++    render_mine(room,1,0);
++    {extern void astra_environment_rooms(const short*,int,int);astra_environment_rooms(Render_list,N_render_segs,0);}
++    g3_end_frame();Viewer=saved;Viewer_eye=saved_eye;memcpy(Window_rendered_data,rendered,sizeof rendered);
++}
 diff --git a/d2/main/state.c b/d2/main/state.c
 index fde0fd3..50b1cd2 100644
 --- a/d2/main/state.c

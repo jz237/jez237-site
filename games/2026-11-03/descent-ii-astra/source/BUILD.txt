@@ -379,3 +379,37 @@ inside an original fuel center. Camera relocation helpers exist only in a
 separate QA build. Automated browser tests block pointer capture before launch
 and close their browser and local server afterward. Loading every level is not
 a full campaign playthrough or a measurement on a physical phone.
+
+Astra mine tour, stable plasma and gentler demo (pyre19)
+
+Showroom > Preview mine upgrades opens a detached tour of real loaded mine
+geometry. Select any regular or secret mine in Counterstrike or Vertigo. Eight
+scene types cover architecture, fans, hydraulics, terminals, cables, doors,
+reactors and recharge fields; unavailable features are skipped. Compact touch
+controls provide pause/play, previous/next, scene selection, view distance and
+an automatic tour. Flight and demo also offer a tour of the current mine.
+
+The mission remains paused. The camera is separate from the player; doors use
+temporary visual frames restored immediately after drawing. The tour awards no
+exploration credit and skips gameplay objects, AI, damage and dynamic-light RNG.
+Secret preview launches bypass interactive transition/briefing screens only.
+
+Plasma cores and wakes now consist entirely of rounded shaded geometry. Flat
+halos/ribbons have been removed; depth-tested green shading retains the sphere
+shape from different viewing directions. Weapon mechanics are unchanged.
+
+Only the requested demo steering/recovery is changed: turn rates ease through
+acceleration/braking limits, with slower roll correction. A stalled pilot tests
+nearby clearance and uses native translation thrust to back or slide away, even
+during combat. Repeatedly obstructed routes are temporarily avoided. No pose,
+velocity or physics snaps are used. Target commitment, useful-pickup selection,
+weapon holds, kill watching and the native manual controls are preserved.
+
+Validation: native build; pinned-upstream patch applicability; protected physics,
+manual controls, mouse, weapon mechanics, robot AI, pickups, game sequencing and
+doors hashes; four-minute live demo checks in each campaign with combat and
+recovery followed by progress; regular/secret mine previews on desktop
+and phone-sized layouts; pause/return state checks of Objects, Players, Walls,
+Segments, automap and mission clock; plasma firing range. R18 previously loaded
+all 53 campaign mines. These are not full campaign playthroughs or physical-phone
+performance measurements. Test exports remain in an isolated QA engine only.
