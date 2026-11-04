@@ -1776,7 +1776,7 @@ index 650f69e..7271753 100644
  }
 +
 diff --git a/d2/main/render.c b/d2/main/render.c
-index 517bc8a..d970a76 100644
+index 517bc8a..d28d109 100644
 --- a/d2/main/render.c
 +++ b/d2/main/render.c
 @@ -84,6 +84,7 @@ short Rotated_last[MAX_VERTICES];
@@ -1851,9 +1851,20 @@ index 517bc8a..d970a76 100644
  	#ifdef EDITOR
  	int save_3d_outline=0;
  	#endif
-@@ -1678,6 +1699,9 @@ void render_frame(fix eye_offset, int window_num)
+@@ -701,6 +722,8 @@ void do_render_object(int objnum, int window_num)
+ 		//NOTE LINK TO ABOVE
+ 		render_object(obj);
+ 
++    {extern void astra_auto_sight_object(int,int);astra_auto_sight_object(objnum,window_num);}
++
+ 	for (n=obj->attached_obj;n!=-1;n=Objects[n].ctype.expl_info.next_attach) {
+ 
+ 		Assert(Objects[n].type == OBJ_FIREBALL);
+@@ -1677,7 +1700,11 @@ void render_frame(fix eye_offset, int window_num)
+ 		gr_clear_canvas(Clear_window_color);
  	#endif
  
++    {extern void astra_auto_sight_begin(int);astra_auto_sight_begin(window_num);}
  	render_mine(start_seg_num, eye_offset, window_num);
 +    {extern void astra_environment_rooms(const short*,int,int);astra_environment_rooms(Render_list,N_render_segs,window_num);}
 +    {extern void astra_render_omega(int);astra_render_omega(window_num);}
@@ -1861,7 +1872,7 @@ index 517bc8a..d970a76 100644
  
  	g3_end_frame();
  
-@@ -2253,3 +2277,15 @@ int find_seg_side_face(short x,short y,int *seg,int *side,int *face,int *poly)
+@@ -2253,3 +2280,15 @@ int find_seg_side_face(short x,short y,int *seg,int *side,int *face,int *poly)
  }
  
  #endif

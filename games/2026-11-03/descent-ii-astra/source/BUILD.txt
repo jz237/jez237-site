@@ -451,3 +451,27 @@ unchanged protected simulation hashes, four-minute demos in both campaigns
 material rendering, and paused mine-preview/state-restoration checks. Automated browsers disable pointer lock before launch.
 These are runtime coverage checks, not full campaign playthroughs or physical
 phone performance measurements. All QA-only exports stay out of the release.
+
+Astra cockpit-visible demo perception (pyre21)
+
+Enemy acquisition now comes from the main cockpit render. Candidate robots and
+reactors must pass the renderer's actual frustum and native sight-line tests.
+Several points on the body allow partial exposure; opaque walls, closed doors
+and opaque grate pixels block sight. Cloaked and non-rendering enemies, rear
+views, auxiliary cameras and detached tours cannot reveal targets. Signatures,
+level identity and a short freshness limit prevent stale observations.
+
+The route planner also requires visibility for hostile objectives. Losing sight
+invalidates that enemy route, breaks its live tracking and cancels a pending
+missile. Incoming shots and damage cannot reveal a hidden shooter's location.
+Flight controls, movement tuning, strafe positioning, weapon hold timings and
+the previous graphical work are preserved. This is geometry-based perception,
+not GPU pixel readback through smoke, cockpit overlay artwork or bright effects.
+
+Validation: native build, upstream patch applicability and protected simulation
+hashes; isolated native tests for a visible target, behind-camera target, wall,
+closed/open door, cloaking, invisible render mode, extra view, object-slot reuse,
+stale observation, enemy routing and hidden-attacker notification. Live demo
+checks in both campaigns verify combat and no hidden-target acquisition/routes.
+Test browsers disable mouse capture before launch. QA-only exports are never
+included in the installed or web engine.

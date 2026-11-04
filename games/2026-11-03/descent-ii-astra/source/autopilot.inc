@@ -35,10 +35,53 @@ static fix64 aa_attack_until[MAX_OBJECTS];
 static int aa_attack_signature[MAX_OBJECTS],aa_recent_attacker=-1,aa_retaliations,aa_combat_target=-1,aa_combat_signature;
 static int aa_arsenal_signature=-1;
 static int aa_hostile(int i){return i>=0&&i<=Highest_object_index&&Objects[i].type==OBJ_ROBOT&&!(Objects[i].flags&(OF_SHOULD_BE_DEAD|OF_EXPLODING))&&!Robot_info[Objects[i].id].companion;}
+/* Perception comes from the main cockpit render, never the object database.
+ * Frustum tests use the renderer's actual aspect/zoom. Several body samples
+ * allow a partly exposed robot while native ray tests reject walls, closed
+ * doors and opaque parts of grates. Extra views and tours cannot grant sight. */
+static unsigned char aa_sighted[MAX_OBJECTS];
+static int aa_sight_signature[MAX_OBJECTS],aa_sight_active,aa_sight_level,aa_sight_count;
+static fix64 aa_sight_time;
+static vms_vector aa_sight_eye;
+extern vms_vector Viewer_eye;
+static int aa_combat_object(int i){return aa_hostile(i)||(i>=0&&i<=Highest_object_index&&Objects[i].type==OBJ_CNTRLCEN&&!(Objects[i].flags&(OF_SHOULD_BE_DEAD|OF_EXPLODING)));}
+static int aa_can_see(int i){
+    return aa_combat_object(i)&&aa_sight_active&&aa_sight_level==Current_level_num&&
+        GameTime64>=aa_sight_time&&GameTime64-aa_sight_time<=F1_0/4&&
+        aa_sighted[i]&&aa_sight_signature[i]==Objects[i].signature&&
+        !(Objects[i].type==OBJ_ROBOT&&Objects[i].ctype.ai_info.CLOAKED);
+}
+void astra_auto_sight_begin(int window_num){
+    if(window_num)return;
+    memset(aa_sighted,0,sizeof aa_sighted);aa_sight_count=0;
+    aa_sight_active=astra_auto_enabled()&&Viewer==ConsoleObject&&!Rear_view&&!Player_is_dead&&!Endlevel_sequence;
+    aa_sight_level=Current_level_num;aa_sight_time=GameTime64;aa_sight_eye=Viewer_eye;
+}
+void astra_auto_sight_object(int i,int window_num){
+    if(window_num||!aa_sight_active||!aa_combat_object(i))return;
+    object *o=&Objects[i];
+    if(o->render_type==RT_NONE||(o->type==OBJ_ROBOT&&o->ctype.ai_info.CLOAKED))return;
+    if(vm_vec_dist_quick(&o->pos,&aa_sight_eye)>i2f(210))return;
+    for(int sample=0;sample<5;sample++){
+        vms_vector point=o->pos;g3s_point view;
+        if(sample)vm_vec_scale_add2(&point,sample<3?&ConsoleObject->orient.rvec:&ConsoleObject->orient.uvec,fixmul(o->size,fl2f((sample%2?.5f:-.5f))));
+        if(g3_rotate_point(&view,&point))continue;
+        fvi_query q={&aa_sight_eye,&point,ConsoleObject->segnum,0,ConsoleObject-Objects,NULL,FQ_TRANSPOINT};
+        fvi_info hit;
+        /* A robot's collision sphere can protrude through a closed door even
+         * when its visible hull does not. Test the wall to the body point first. */
+        if(find_vector_intersection(&q,&hit)!=HIT_NONE)continue;
+        q.flags|=FQ_CHECK_OBJS|FQ_IGNORE_POWERUPS;int result=find_vector_intersection(&q,&hit);
+        if(result==HIT_NONE||(result==HIT_OBJECT&&hit.hit_object==i)){
+            if(!aa_sighted[i])aa_sight_count++;
+            aa_sighted[i]=1;aa_sight_signature[i]=o->signature;return;
+        }
+    }
+}
 void astra_auto_attacked(object *o){
     if(!astra_auto_enabled()||!o)return;
     if(o->type==OBJ_WEAPON){int parent=o->ctype.laser_info.parent_num;if(!aa_hostile(parent)||Objects[parent].signature!=o->ctype.laser_info.parent_signature)return;o=&Objects[parent];}
-    int i=o-Objects;if(!aa_hostile(i))return;
+    int i=o-Objects;if(!aa_hostile(i)||!aa_can_see(i))return;
     if(aa_attack_signature[i]!=o->signature||aa_attack_until[i]<GameTime64){aa_retaliations++;aa_next=0;}
     aa_recent_attacker=i;aa_attack_signature[i]=o->signature;aa_attack_until[i]=GameTime64+i2f(10);
 }
@@ -137,8 +180,8 @@ static void aa_plan(void){
         float weight=0;
         if(o->type==OBJ_POWERUP)weight=aa_pickup_need(&Players[Player_num],o,GameTime64);
         if(o->type==OBJ_HOSTAGE)weight=65;
-        if(o->type==OBJ_ROBOT&&!Robot_info[o->id].companion)weight=aa_threat(i)?650:85;
-        if(o->type==OBJ_CNTRLCEN&&!Control_center_destroyed)weight=GameTime64-aa_level_since>i2f(180)?120:45;
+        if(o->type==OBJ_ROBOT&&aa_can_see(i))weight=aa_threat(i)?650:85;
+        if(o->type==OBJ_CNTRLCEN&&!Control_center_destroyed&&aa_can_see(i))weight=GameTime64-aa_level_since>i2f(180)?120:45;
         if(Control_center_destroyed)weight=0;
         float score=weight/(1+aa_dist[seg]*1.9f+aa_len(&o->pos,&ConsoleObject->pos)*.012f);
         if(score>best&&weight>0){best=score;aa_goal=seg;aa_object=i;aa_mode=o->type==OBJ_POWERUP?1:o->type==OBJ_HOSTAGE?2:3;}
@@ -355,7 +398,7 @@ void astra_auto_frame(void){
     aa_last_kills=Players[Player_num].num_kills_total;
     int seg=ConsoleObject->segnum;
     if(seg!=aa_segment){if(!aa_visits[seg])aa_seen++;aa_visits[seg]++;aa_segment=seg;aa_next=0;}
-    if(GameTime64>=aa_next||aa_goal<0)aa_plan();
+    if(GameTime64>=aa_next||aa_goal<0||(aa_combat_object(aa_object)&&!aa_can_see(aa_object)))aa_plan();
     aa_mode=aa_route_mode;vm_vec_zero(&aa_target_velocity);
     vms_vector target;compute_segment_center(&target,&Segments[seg]);
     int door=-1;
@@ -411,20 +454,21 @@ void astra_auto_frame(void){
         object *o=&Objects[i];if(o->type!=OBJ_ROBOT&&o->type!=OBJ_CNTRLCEN)continue;
         if(o->flags&(OF_SHOULD_BE_DEAD|OF_EXPLODING))continue;
         if(o->type==OBJ_ROBOT&&Robot_info[o->id].companion)continue;
-        float d=aa_len(&o->pos,&ConsoleObject->pos);if(d>210||!aa_visible(&o->pos,0))continue;
+        float d=aa_len(&o->pos,&ConsoleObject->pos);if(!aa_can_see(i))continue;
         float s=(aa_threat(i)?12.f:o->type==OBJ_CNTRLCEN?.65f:1.f)/(d+24);
         if(i==aa_combat_target&&o->signature==aa_combat_signature)s*=1.5f;
         if(s>threat){threat=s;enemy=i;}
     }
     int locked=aa_combat_target;
     if(aa_hostile(locked) && Objects[locked].signature==aa_combat_signature &&
-       aa_len(&Objects[locked].pos,&ConsoleObject->pos)<210 && aa_visible(&Objects[locked].pos,0)){
+       aa_can_see(locked)){
         int urgent=enemy>=0&&enemy!=locked&&aa_threat(enemy)&&
             aa_len(&Objects[enemy].pos,&ConsoleObject->pos)<22&&aa_len(&Objects[locked].pos,&ConsoleObject->pos)>65;
         if(!urgent)enemy=locked;
     }
     if(enemy!=aa_last_target){aa_target_since=GameTime64;aa_last_target=enemy;}
     aa_combat_target=enemy;if(enemy>=0){aa_combat_signature=Objects[enemy].signature;aa_last_foe=Objects[enemy].pos;}
+    if(aa_pending_missile>=0&&!aa_can_see(aa_pending_target))aa_pending_missile=-1;
     float speed=Control_center_destroyed?58:52;
     vms_vector aim=target;int attacking=0;
     if(door>=0){compute_center_point_on_side(&aim,&Segments[Walls[door].segnum],Walls[door].sidenum);aa_mode=6;}
@@ -523,10 +567,11 @@ void astra_auto_frame(void){
         aa_kills=Players[Player_num].num_kills_total;
         vms_vector travel=ConsoleObject->mtype.phys_info.velocity;float velocity=f2fl(vm_vec_mag(&travel));
         aa_facing_velocity=velocity>.05f?f2fl(vm_vec_dot(&travel,&ConsoleObject->orient.fvec))/velocity:1;
-        EM_ASM(Module.autoFlight=({speed:$0,forward:$1,primary:$2,secondary:$3,energy:$4,shields:$5,version:20});,velocity,aa_facing_velocity,Players[Player_num].primary_weapon,Players[Player_num].secondary_weapon,f2fl(Players[Player_num].energy),f2fl(Players[Player_num].shields));
+        EM_ASM(Module.autoFlight=({speed:$0,forward:$1,primary:$2,secondary:$3,energy:$4,shields:$5,version:21});,velocity,aa_facing_velocity,Players[Player_num].primary_weapon,Players[Player_num].secondary_weapon,f2fl(Players[Player_num].energy),f2fl(Players[Player_num].shields));
         EM_ASM({window.astraAutoStatus?.(UTF8ToString($0),$1,$2,$3,$4);Module.autoTelemetry=({segment:$5,goal:$6,object:$7,enemy:$8,mode:$9,x:$10,y:$11,z:$12});},watching?labels[8]:enemy>=0&&aa_threat(enemy)?"Returning fire":labels[aa_mode],aa_seen,aa_deaths,aa_kills,aa_collects,seg,aa_goal,aa_object,enemy,aa_mode,f2fl(ConsoleObject->pos.x),f2fl(ConsoleObject->pos.y),f2fl(ConsoleObject->pos.z));
         EM_ASM(Module.autoCombat=({attacker:$0,target:$1,retaliating:!!$2,retaliations:$3,cruise:52,arsenal:!!Module.demoArsenal});,aa_recent_attacker,enemy,enemy>=0&&aa_threat(enemy),aa_retaliations);
-        EM_ASM(Module.autoPilot=({version:20,aimError:$0,rollError:$1,watching:!!$2,watches:$3,switches:$4,held:$5,targetAge:$6,turnRate:$7});,
+        EM_ASM(Module.autoSight=({version:21,visible:$0,targetVisible:!!$1,hiddenRoute:!!$2});,aa_sight_count,enemy>=0&&aa_can_see(enemy),aa_combat_object(aa_object)&&!aa_can_see(aa_object));
+        EM_ASM(Module.autoPilot=({version:21,aimError:$0,rollError:$1,watching:!!$2,watches:$3,switches:$4,held:$5,targetAge:$6,turnRate:$7});,
             aa_aim_error,aa_roll_error,watching,aa_watch_count,aa_switches,(double)(GameTime64-aa_weapon_changed)/F1_0,(double)(GameTime64-aa_target_since)/F1_0,f2fl(vm_vec_mag(&ConsoleObject->mtype.phys_info.rotvel))*360);
         EM_ASM(Module.autoSlide=({active:!!$0,count:$1,requested:$2,forward:$3});,aa_sliding,aa_slide_count,aa_drive_intent,travel_facing);
         EM_ASM(Module.autoRecovery=({active:!!$0,count:$1,attempts:$2,stalled:$3});,escaping,aa_escape_count,aa_recover,(double)(GameTime64-aa_stuck_since)/F1_0);
