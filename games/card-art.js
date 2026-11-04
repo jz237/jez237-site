@@ -44,6 +44,7 @@
     'Stellar Drift':['space','#ebaf68','#9ec5eb',2],
     'SUPER STAR TREK':['trek','#e5b875','#8fbdeb',0],
     'Lunar Lander':['lander','#e7ca87','#9fc5de',0],
+    'Crater Runner':['craterrun','#ffb347','#9fd8ff',0],
     'Neon Qix':['qix','#e2a3e9','#7bdade',0],
     'Sky Joust':['joust','#e1b77d','#9ecedc',1],
     'Depth Charge':['submarine','#75c7d0','#e2bc79',0],
@@ -154,6 +155,14 @@
       case 'fluid': return stars+ellipse(48,35,38,27,haze)+group(path('M17 41C-2 1 82-7 83 27S9 67 25 35 79 28 64 46 40 57 36 46','none',a,8,'opacity=".42" stroke-linecap="round"')+path('M15 30C29 2 97 28 65 53S0 44 35 23 81 17 74 33','none',b,5,'opacity=".62" stroke-linecap="round"')+path('M21 39C12 9 72 0 80 26S18 60 29 38 71 31 60 44','none','#e8d5e6',.8),'','ca-current')+repeat(12,i=>blink(circle(16+(i*23)%71,11+(i*13)%48,.65,i%2?a:b),-i*.4));
       case 'cat': return stars+ellipse(50,55,33,8,haze)+path('M29 52Q25 31 31 19L31 8 42 20Q49 17 58 20L70 9 69 31Q75 50 62 56H37Z','#132c3c',a,.7)+path('M64 52Q92 57 82 40','none',a,2)+path('M33 12 36 25M67 13 63 25M43 38 49 43 55 38','none',b,.8)+blink(path('M35 31q5-4 9 0M56 31q5-4 9 0','none','#dcffcb',1.7))+path('M48 38h4l-2 3ZM42 40 20 35M42 43 18 43M58 40 79 35M58 43 83 43',b,b,.6)+repeat(68,i=>{const x=32+(i*17)%36,y=22+(i*11)%31;return blink(circle(x,y,.45,i%3?a:b),-i*.17)});
       case 'trek': return stars+circle(82,44,20,'#253342',b,.5)+path('M67 37q20-8 32 4M65 45q20-7 34 5','none','#8ba1b2',.7,'opacity=".4"')+group(ellipse(0,0,21,6,metal,a,.6)+ellipse(0,-1,15,3,'#587087',a,.5)+circle(0,-2,4,'#d8e6eb')+path('M-3 3 0 18 13 22 17 18 3 11Z',metal)+path('M-10 5-17 17M10 5 23 13','none',metal,3)+rect(-25,14,23,4,metal,2)+rect(15,10,20,4,metal,2)+circle(-23,16,1.3,a)+circle(33,12,1.3,a),'translate(43 26) rotate(-12)','ca-hover')+rect(8,58,26,3,b,1)+rect(37,58,15,3,a,1);
+      case 'craterrun': {
+        const wheel=(x)=>circle(x,0,3.1,'#0b1219','#9aa6ad',.8)+circle(x,0,1.2,'#3a4650');
+        const rover=group(rect(-11,-9,22,5,'#d9dcdf',1.2,'#5d646b')+rect(-4,-13,8,4,'#cfd4d8',1,'#5d646b')+rect(-10,-11,6,2,'#c9932f',.4)+path('M-9-13V-19','none','#aab3b9',.6)+circle(-9,-19.5,1.4,'none','#e6eaed',.5)+path('M2-13 6-19','none','#3a4046',1.2)+rect(10,-8,4,1.4,'#ffe2a6',.5)+wheel(-8)+wheel(0)+wheel(8),'translate(34 52)','ca-hover');
+        const attacker=group(path('M-6 0 4-3 7 0 4 3Z','#4a5058','#9aa2aa',.4)+circle(-5,0,1,'#ff5a3a'),'translate(72 15)','ca-hover');
+        return stars+circle(80,13,7.5,'#1c4f8a','#9fd8ff',.6)+path('M74 10q4-3 9 0q-2 5-7 5z','#5f8a4a','',1,'opacity=".8"')+path('M0 40 14 33 26 38 41 27 55 36 70 29 86 35 100 31V68H0Z','#232629')
+          +path('M0 47 20 43 42 46 63 42 82 45 100 43V68H0Z','#4a4844')+ellipse(62,56,12,3.2,'#1d1c1a','#7a766f')+ellipse(18,61,7,2,'#24221f','#6f6b64')+ellipse(88,51,6,1.6,'#2a2825','#6f6b64')
+          +rover+attacker+path('M38 38v-12','none',b,.9,'opacity=".8"')+path('M47 47h10','none',a,.9)+repeat(5,i=>circle(24-i*3,58+(i%2),1.2+i*.4,'#8f8a82','',1,`opacity="${.4-i*.06}"`));
+      }
       case 'lander': return stars+circle(76,16,9,'#284459',a,.5)+path('M0 52 13 44 27 49 40 45 58 50 72 42 86 47 100 43V68H0Z','#556471')+ellipse(20,57,9,3,'#344656','#86939a')+ellipse(81,60,13,4,'#344656','#89949a')+group(path('M-9-7-5-16H6L10-7 7 2H-6Z',metal,b,.5)+rect(-4,-13,8,6,'#1a3d56',1,'#d3e7ec')+path('M-8 0-17 16h-5M8 0 17 16h5','none',metal,1.8)+rect(-10,0,20,5,b,1)+group(path('M-3 5 0 19 3 5Z','#ffe5a2'),'','ca-thrust'),'translate(48 34)','ca-hover')+path('M64 47V35l9 3-9 3','none',a,.8);
       case 'qix': return floor+rect(12,8,76,49,'#0d1d31',1,'#95a8bb')+path('M13 9H41V28H65V44H87V56H13Z','#294256',a,.6)+repeat(12,i=>path(`M${27+i*2.3} ${14+(i*7)%32} ${68-i*1.4} ${12+(i*11)%36}`,'none',i%2?a:b,.8,'class="ca-motion ca-glimmer"'))+path('M13 41H31V56','none','#e8eedc',1.2)+blink(circle(31,41,1.7,a)+circle(73,8,1.3,b));
       case 'submarine': return path('M0 15Q17 11 35 15T70 15T100 15V68H0Z','#102e3b')+path('M0 15Q17 11 35 15T70 15T100 15','none',a,1)+path('M12 11h29l-6 7H19Z',metal)+rect(24,6,6,7,'#879da5',1)+path('M28 6V2','none',b,.8)+group(ellipse(54,46,23,7,metal)+rect(47,34,9,8,metal,1)+path('M51 34v-7h5M75 45l10-5v12l-10-5','none',a,1.2)+repeat(5,i=>circle(39+i*7,44,1,'#233f4e')),'','ca-swim')+group(circle(32,30,1.5,b)+path('M32 22v5','none',b,.6),'','ca-bubble')+path('M3 64h94','none','#425b63',2);
