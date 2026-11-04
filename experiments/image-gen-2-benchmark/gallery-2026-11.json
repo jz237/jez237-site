@@ -87,6 +87,85 @@
     }
   },
   {
+    "id": "2026-11-04-factual-infographic-factual-infographic-banggai-cardinalfis",
+    "title": "Factual infographic: Banggai cardinalfish",
+    "tests": "; archive_slot=2026-11-04T16:20; concept=banggai-cardinalfish-mouthbrooding-reef-shallows; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Pterapogon kauderni",
+    "prompt": "Create a premium, highly detailed PHOTOREALISTIC educational reef-fish infographic as one flowing artwork, not a grid. Hero: anatomically accurate Banggai cardinalfish, Pterapogon kauderni, silver body, three crisp black bars, white spots, tasselled first dorsal, long second dorsal and anal fins, forked tail, hovering amid lush shallow Indonesian coral and seagrass. Turquoise sunbeams, rich natural reef color, lifelike scales, beautiful lighting and depth. Prominent readable title “Banggai cardinalfish”, scientific name “Pterapogon kauderni” directly underneath. Flowing open callouts and fine leader lines integrate small realistic close-ups of spotted fins and a labeled schematic of a male carrying eggs in his mouth; distinguish schematic from photo. Short clear labels: “Native range: Banggai Archipelago, Indonesia”; “Habitat: shallow reefs and seagrass”; “Adult: up to 8 cm”; “Carnivore: small crustaceans; offer varied meaty foods”; “Male mouthbroods eggs”; “Reef aquarium: peaceful tankmates and hiding places; pairs can defend territory”; “Choose captive-bred where possible”. Allow visual breathing room; no rigid boxes, fabricated details, nonsensical text, poster mockup or decorative changes to fish markings.",
+    "image": "images/2026-11-04-factual-infographic-factual-infographic-banggai-cardinalfis.jpg",
+    "thumb": "thumbs/2026-11-04-factual-infographic-factual-infographic-banggai-cardinalfis.webp",
+    "color": "#5c6f62",
+    "date": "2026-11-04",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "banggai-cardinalfish-mouthbrooding-reef-shallows",
+      "imageSha256": "3e9f22ada06f273fab7c85d1aaa3b1b5aba5eb45f2cb1b8192619e34a723183d",
+      "imageDHash": "22461c1067450767"
+    },
+    "factualInfographic": {
+      "topic": "Banggai cardinalfish (Pterapogon kauderni) reef biology and aquarium care",
+      "description": "Natural history, appearance, mouthbrooding and aquarium care of Banggai cardinalfish.",
+      "sourceNote": "Sources: https://www.lamar.edu/arts-sciences/biology/study-abroad-belize/marine-critters/marine-critters-3/cardinalfish.html https://abwak.org/wp-content/uploads/2020/06/Banggai-Cardinalfish-2008.pdf",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-04T21:21:06.340579+00:00",
+        "sources": [
+          {
+            "id": "lamar",
+            "publisher": "Lamar University",
+            "title": "Cardinalfish",
+            "sourceType": "university",
+            "url": "https://www.lamar.edu/arts-sciences/biology/study-abroad-belize/marine-critters/marine-critters-3/cardinalfish.html"
+          },
+          {
+            "id": "abwak",
+            "publisher": "Association of British and Irish Wild Animal Keepers",
+            "title": "Husbandry guidelines Banggai Cardinalfish",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://abwak.org/wp-content/uploads/2020/06/Banggai-Cardinalfish-2008.pdf"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Silver fish with black bars, white spots, elongated fins and adult length up to 8 cm",
+            "sourceIds": [
+              "lamar"
+            ]
+          },
+          {
+            "claim": "Native Banggai archipelago shallow coral reefs and seagrass",
+            "sourceIds": [
+              "lamar",
+              "abwak"
+            ]
+          },
+          {
+            "claim": "Carnivore eats small crustaceans; varied meaty foods in captivity",
+            "sourceIds": [
+              "lamar",
+              "abwak"
+            ]
+          },
+          {
+            "claim": "Male mouthbroods eggs; pairs may be aggressive towards conspecifics",
+            "sourceIds": [
+              "lamar",
+              "abwak"
+            ]
+          },
+          {
+            "claim": "Mixed reef with non-aggressive small fish and hiding places; prefer captive bred",
+            "sourceIds": [
+              "abwak"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-03-factual-infographic-factual-infographic-the-scorpionfly-s-n",
     "title": "Factual infographic: The Scorpionfly’s Nuptial Gift",
     "tests": "Species identity and gift behavior verified; internal anatomy explicitly generalized.; archive_slot=2026-11-03T12:20; concept=panorpa-scorpionfly-nuptial-food-gift; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: bizarre-insect-life",
