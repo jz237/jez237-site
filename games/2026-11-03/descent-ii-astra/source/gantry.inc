@@ -1,11 +1,11 @@
 /* Chamfered steel jambs, recessed vents and area lamps follow solid mine faces.
    All geometry is visual and stays close to the original collision surface. */
 typedef struct {float p[3],c[4],uv[2];} forge_vertex;
-static forge_vertex gantryVerts[840];static int gantryN;
+static forge_vertex gantryVerts[1800];static int gantryN;
 static float corners3[4][3],faceNrm[3],forgeLight;
 static GLuint gantryTexture,gantryProgram;static int gantryFailed;
 static void forge_vertex_at(float u,float v,float h,float s,float t,float r,float g,float b,float lamp){
-    forge_vertex *o=&gantryVerts[gantryN++];float s0=(1-u)*(1-v),s1=u*(1-v),s2=u*v,s3=(1-u)*v;
+    if(gantryN>=1800)return;forge_vertex *o=&gantryVerts[gantryN++];float s0=(1-u)*(1-v),s1=u*(1-v),s2=u*v,s3=(1-u)*v;
     for(int k=0;k<3;k++)o->p[k]=s0*corners3[0][k]+s1*corners3[1][k]+s2*corners3[2][k]+s3*corners3[3][k]+faceNrm[k]*h;
     o->uv[0]=s;o->uv[1]=t;o->c[0]=r;o->c[1]=g;o->c[2]=b;o->c[3]=lamp;
 }
@@ -16,7 +16,8 @@ static void forge_strip(float a,float b,float c,float d,float h,int tile,int sty
     float color[3]={.49f,.65f,.70f};
     if(style==1){color[0]=.14f;color[1]=.78f;color[2]=1.f;}
     if(style==2){color[0]=1.f;color[1]=.48f;color[2]=.10f;}
-    if(style==3){color[0]=.91f;color[1]=.74f;color[2]=.46f;}
+    if(style==3){color[0]=.51f;color[1]=.43f;color[2]=.30f;}
+    if(style==4){color[0]=.12f;color[1]=.17f;color[2]=.19f;}
     for(int e=0;e<4;e++){
         int j=(e+1)%4;float q=(e==0||e==3)?.72f:.28f;
         for(int i=0;i<6;i++){
@@ -55,10 +56,13 @@ void astra_gantry(int nv,const g3s_point **points,g3s_lrgb *l,int seed,int floor
         forge_strip(.17,.015,.229,.985,.13,0,0,1);forge_strip(.771,.015,.83,.985,.13,0,0,1);
         for(int i=0;i<3;i++){float y=.14f+i*.31f;forge_strip(.194,y,.204,y+.067,.155,1,2,1);forge_strip(.797,y,.807,y+.067,.155,1,2,1);}
     }else{
+        /* Raised double skin leaves a genuinely recessed center panel. */
+        forge_strip(.13,.16,.87,.175,.16,1,4,0);forge_strip(.13,.825,.87,.84,.16,1,4,0);
+        forge_strip(.13,.16,.145,.84,.16,1,4,1);forge_strip(.855,.16,.87,.84,.16,1,4,1);
         float L=.16f+(seed%3)*.045f;forge_strip(L,v+.012,1-L,v+.076,.37,0,0,0);
-        forge_strip(L+.024,v+.027,1-L-.024,v+.047,.40,1,(seed%4==0)?2:1,0);
-        for(int i=0;i<3;i++){
-            float y=.22f+.23f*i;
+        forge_strip(L+.024,v+.027,1-L-.024,v+.047,.40,1,(astra_surface[1]==0||astra_surface[1]>=3)?2:1,0);
+        for(int i=0;i<2;i++){
+            float y=.25f+.40f*i;
             forge_strip(u*.41f,y,u*.65f,y+.077f,.35f,1,1,1);
             forge_strip(1-u*.65f,y,1-u*.41f,y+.077f,.35f,1,1,1);
         }
