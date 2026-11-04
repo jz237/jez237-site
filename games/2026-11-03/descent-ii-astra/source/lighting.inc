@@ -10,28 +10,10 @@ static void astra_find_blasts(int segnum,const vms_vector *center)
     for(int side=-1;side<6;side++){
         int room=side<0?segnum:Segments[segnum].children[side];
         if(room<0 || (side>=0 && !(WALL_IS_DOORWAY(&Segments[segnum],side)&WID_RENDPAST_FLAG)))continue;
-        for(int j=Segments[room].objects;j>=0;j=Objects[j].next){
-            object *o=&Objects[j];if(o->type!=OBJ_FIREBALL || o->lifeleft<=0)continue;
-            int kind=astra_effect_type(o);if(kind<0)continue;
-            float age=1.f-(float)o->lifeleft/Vclip[o->id].play_time;
-            if(age<0 || age>=1)continue;
-            float r=f2fl(o->size),reach=fminf(70,8+r*4.9f);
-            float pulse=(1-age)*(1-age)*(.87f+.13f*cosf(age*(28+2*kind)+o->signature%7));
-            if(kind==4 || kind==6)pulse+=.48f*expf(-80.f*(age-.43f)*(age-.43f));
-            float strength=pulse*(.84f+fminf(1.15f,r*.11f));
-            float dist=f2fl(vm_vec_dist_quick(center,&o->pos));
-            float weight=strength/(1+dist*dist/(reach*reach));
-            int slot=0;for(int n=1;n<3;n++)if(rank[n]<rank[slot])slot=n;
-            if(weight<=rank[slot])continue;
-            if(rank[slot]==0)astra_room_blast_count++;
-            rank[slot]=weight;float *pos=astra_blast_positions[slot],*col=astra_blast_colors[slot];
-            pos[0]=f2fl(o->pos.x);pos[1]=f2fl(o->pos.y);pos[2]=f2fl(o->pos.z);pos[3]=reach;
-            const float *rgb=astra_effect_color(kind);
-            for(int n=0;n<3;n++)col[n]=rgb[n]*strength;
-            col[3]=1;
-        }
+        extern void astra_plume_lights(int,const vms_vector*,float*,float (*)[4],float (*)[4]);
+        astra_plume_lights(room,center,rank,astra_blast_positions,astra_blast_colors);
     }
-    for(int n=0;n<3;n++)if(rank[n]==0)astra_blast_positions[n][3]=0;
+    for(int n=0;n<3;n++){if(rank[n]>0)astra_room_blast_count++;else astra_blast_positions[n][3]=0;}
 }
 /* Local fixtures and luminous objects. Only the renderer reads these positions. */
 float astra_lamp[4],astra_flash[4];

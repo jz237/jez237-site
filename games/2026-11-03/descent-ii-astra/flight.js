@@ -187,7 +187,7 @@ async function launch(quick,demo=false,encounter=false) {
     music.play().then(()=>{if(!astraDisc.track){music.pause();music.currentTime=0;music.volume=0.75;}}).catch(()=>{});
     await readPack("game","Reading game data");
     await readPack("vertigo","Reading original Vertigo mission");
-    if(astra){await readPack("art","Preparing mine materials");await readPack("cockpit","Fitting flight instruments");await readPack("fleet","Fitting Overload robot chassis");await readPack("forge","Preparing foundry lights and fireballs");}
+    if(astra){await script("pyro-field.js?v=5");await readPack("art","Preparing mine materials");await readPack("cockpit","Fitting flight instruments");await readPack("fleet","Fitting Overload robot chassis");await readPack("forge","Preparing foundry lights and fireballs");}
     await readPack("movies","Reading cinematics");
     $("status").textContent="Starting flight computer";
     const canvas=$("view");
@@ -205,6 +205,7 @@ async function launch(quick,demo=false,encounter=false) {
         if(astra){
           const hull=window.astraHullBytes || Uint8Array.from(atob(window.astraHull.data),c=>c.charCodeAt(0));
           F.writeFile("/mine/astra.hull",hull);
+          F.writeFile("/mine/pyro-field.png",Uint8Array.from(atob(window.astraPyroField),c=>c.charCodeAt(0)));delete window.astraPyroField;
           F.writeFile("/mine/pyro-skin.png",Uint8Array.from(atob(window.astraSkin),c=>c.charCodeAt(0)));F.writeFile("/mine/pyro.frag",window.astraHull.fragment);
         }
         if(astra) for(const [alias,src] of Object.entries(window.astraAliases||{}))
@@ -231,7 +232,7 @@ async function launch(quick,demo=false,encounter=false) {
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=deck4");
+    await script("engine.js?v=pyre5");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 
