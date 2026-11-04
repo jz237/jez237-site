@@ -599,7 +599,7 @@ index af0b258..8bd08a5 100644
  
  extern ogl_texture* ogl_get_free_texture();
 diff --git a/d2/main/fireball.c b/d2/main/fireball.c
-index fe9b0d1..5a59d5a 100644
+index fe9b0d1..4dd1822 100644
 --- a/d2/main/fireball.c
 +++ b/d2/main/fireball.c
 @@ -22,6 +22,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
@@ -610,7 +610,211 @@ index fe9b0d1..5a59d5a 100644
  #include "fix.h"
  #include "vecmat.h"
  #include "gr.h"
-@@ -439,10 +440,16 @@ object *object_create_debris(object *parent, int subobj_num)
+@@ -65,6 +66,192 @@ fix	Flash_effect=0;
+ 
+ int	PK1=1, PK2=8;
+ 
++static int astra_fire_clip(int id, const char *name)
++{
++    if(id==VCLIP_SMALL_EXPLOSION || id==VCLIP_VOLATILE_WALL_HIT || (name && !strncmp(name,"exp",3)))return 1;
++    if(id==VCLIP_WATER_HIT || id==VCLIP_AFTERBURNER_BLOB || id==VCLIP_POWERUP_DISAPPEARANCE ||
++       id==VCLIP_PLAYER_APPEARANCE || id==VCLIP_MORPHING_ROBOT)return 0;
++    for(int i=0;i<N_weapon_types;i++)if(id==Weapon_info[i].wall_hit_vclip || id==Weapon_info[i].robot_hit_vclip)return 1;
++    for(int i=0;i<N_robot_types;i++)
++        if(id==Robot_info[i].exp2_vclip_num)return 1;
++    return 0;
++}
++/* Derived only from immutable object data. Visual and audio choices never touch the gameplay RNG. */
++unsigned astra_effect_seed(const object *o)
++{
++    unsigned h=(unsigned)o->signature*747796405u+(unsigned)o->id*2891336453u;
++    h=((h>>((h>>28)+4))^h)*277803737u;
++    return (h>>22)^h;
++}
++int astra_effect_type(object *o)
++{
++    static int enabled=-1;
++    if(enabled<0)enabled=EM_ASM_INT(return !!Module.astra);
++    if(!enabled || o->type!=OBJ_FIREBALL || o->id>=Num_vclips || Vclip[o->id].play_time<=0)return -1;
++    const char *name=piggy_game_bitmap_name(&GameBitmaps[Vclip[o->id].frames[0].index]);
++    if(!astra_fire_clip(o->id,name))return -1;
++    unsigned h=astra_effect_seed(o);
++    static const unsigned char small[]={0,1,2,3,4,5,1,2},heavy[]={3,4,5,6,7,0,6,7};
++    return (o->size>=i2f(6)?heavy:small)[h&7];
++}
++const float *astra_effect_color(int type)
++{
++    static const float rgb[][3]={{1,.42f,.08f},{.18f,.72f,1},{1,.62f,.15f},{1,.20f,.055f},
++        {.58f,.38f,1},{1,.77f,.29f},{1,.32f,.10f},{.26f,.92f,.82f}};
++    return rgb[type];
++}
++/* Presentation-only events outlive their original Descent damage objects.
++ * SFX, damage, robot drops, respawn input and the death camera stay in D2. */
++enum { ASTRA_PLUMES=32 };
++typedef struct {vms_vector pos;fix radius;fix64 born;fix length;unsigned seed;int kind,tier,room,nextSound,closeImpact;} astra_event;
++static astra_event pyro_events[ASTRA_PLUMES];
++static unsigned death_salt,death_serial;
++static int pyro_registered[MAX_OBJECTS];static unsigned char pyro_known[MAX_OBJECTS];
++extern int astra_pyro_ready(void);
++extern void astra_blast(vms_vector*,fix,float,unsigned,int,int);
++void astra_clear_plumes(void){memset(pyro_events,0,sizeof(pyro_events));memset(pyro_known,0,sizeof(pyro_known));}
++static int pyro_alive(const astra_event *e){return e->length>0 && GameTime64>=e->born && GameTime64-e->born<e->length;}
++static unsigned death_hash(unsigned x){x^=x>>16;x*=0x7feb352du;x^=x>>15;x*=0x846ca68bu;return x^(x>>16);}
++static void astra_track_plume(object *o,int tier,fix elapsed)
++{
++    int kind=astra_effect_type(o);if(kind<0)return;
++    int index=(int)(o-Objects);
++    if(pyro_known[index] && pyro_registered[index]==o->signature)return;
++    pyro_known[index]=1;pyro_registered[index]=o->signature;
++    unsigned key=astra_effect_seed(o);int free_slot=-1,victim=-1;
++    for(int i=0;i<ASTRA_PLUMES;i++){
++        astra_event *e=pyro_events+i;
++        /* D2 creates a second damage-free clip at the exact point and tick
++         * of hull breakup. Represent the pair with the dedicated ship event. */
++        if(e->tier==2 && e->born==GameTime64 && tier<2 && e->room==o->segnum &&
++           o->pos.x==e->pos.x && o->pos.y==e->pos.y && o->pos.z==e->pos.z)return;
++        if(!pyro_alive(e)){if(free_slot<0)free_slot=i;continue;}
++        if(e->tier<=tier && (victim<0 || e->tier<pyro_events[victim].tier ||
++            (e->tier==pyro_events[victim].tier && e->born<pyro_events[victim].born)))victim=i;
++    }
++    int slot=free_slot>=0?free_slot:victim;if(slot<0)return;
++    unsigned seed=key;
++    if(tier==2){
++        if(!death_salt)death_salt=(unsigned)EM_ASM_INT({var a=new Uint32Array(1);globalThis.crypto.getRandomValues(a);return a[0]|0;})|1u;
++        seed=death_hash(key^death_salt^(++death_serial*2654435761u));
++    }
++    float jitter=(seed&255)/255.f;
++    float seconds=tier==2?5.9f+1.1f*jitter:tier==1?2.40f+.23f*jitter:.50f+.32f*jitter;
++    /* Routine hits on our hull clear promptly, before they hide the next
++     * attacker. Distant deaths and the player's own breakup keep their scale. */
++    int closeImpact=tier<2 && !Player_is_dead && ConsoleObject &&
++        vm_vec_dist(&ConsoleObject->pos,&o->pos)<ConsoleObject->size*3;
++    if(closeImpact)seconds=tier==1?.46f+.18f*jitter:.20f+.12f*jitter;
++    if(elapsed>=fl2f(seconds))return;
++    fix radius=o->size;
++    if(tier==2){
++        radius=fixmul(radius,fl2f(1.96f+.20f*jitter));
++        if(Viewer && Viewer!=ConsoleObject){
++            /* Frame the complete breakup at ignition even in a tight shaft.
++             * The resulting size is fixed in world space for its whole life. */
++            fix room_for_camera=fixmul(vm_vec_dist(&Viewer->pos,&o->pos),fl2f(.36f));
++            if(room_for_camera>F1_0 && radius>room_for_camera)radius=room_for_camera;
++        }
++    }
++    if(tier==0)radius=fixmul(radius,fl2f(.79f));
++    if(closeImpact)radius=fixmul(radius,fl2f(.62f));
++    pyro_events[slot]=(astra_event){o->pos,radius,GameTime64-elapsed,fl2f(seconds),seed,kind,tier,o->segnum,0,closeImpact};
++}
++static int astra_owns_plume(object *o)
++{
++    if(astra_effect_type(o)<0 || !astra_pyro_ready())return 0;
++    /* Recordings and old saves can contain a fireball that was never spawned
++     * in this session. Reconstruct its age from the original clip. */
++    astra_track_plume(o,o->size>=i2f(5),Vclip[o->id].play_time-o->lifeleft);
++    return 1;
++}
++void astra_render_plumes(const short *rooms,int room_count,int window_num)
++{
++    int order[ASTRA_PLUMES],n=0;fix depth[ASTRA_PLUMES];
++    for(int i=0;i<ASTRA_PLUMES;i++){
++        astra_event *e=pyro_events+i;if(!pyro_alive(e))continue;
++        int room=0;while(room<room_count && rooms[room]!=e->room)room++;
++        if(room==room_count)continue;
++        g3s_point p;g3_rotate_point(&p,&e->pos);int j=n;
++        while(j>0 && depth[j-1]<p.p3_z){order[j]=order[j-1];depth[j]=depth[j-1];j--;}
++        order[j]=i;depth[j]=p.p3_z;n++;
++    }
++    for(int i=0;i<n;i++){
++        astra_event *e=&pyro_events[order[i]];float seconds=f2fl((fix)(GameTime64-e->born));
++        astra_blast(&e->pos,e->radius,seconds/f2fl(e->length),e->seed,e->kind,e->tier);
++        if(!window_num)EM_ASM({if(Module.traceAstraBlast)Module.traceAstraBlast($0,$1>>>0,$2,$3,$4,$5);},e->tier,e->seed,seconds,f2fl(e->length),f2fl(depth[i]),e->kind);
++    }
++}
++float astra_death_burst_time(unsigned seed,int i)
++{return .17f+i*.105f+((death_hash(seed+i*197u)>>16)/65535.f)*.047f;}
++static float pyro_chain_heat(float t,float onset)
++{float u=(t-onset)/.34f;return u<=0||u>=1?0:sinf(u*3.14159265f)*(1-u);}
++void astra_burst_audio(void)
++{
++    static const int accent[]={SOUND_ROBOT_DESTROYED,SOUND_BADASS_EXPLOSION,SOUND_LASER_HIT_CLUTTER,SOUND_MINE_BLEW_UP};
++    for(int i=0;i<ASTRA_PLUMES;i++){
++        astra_event *e=pyro_events+i;if(e->tier!=2 || !pyro_alive(e) || !Viewer)continue;
++        float t=(float)(GameTime64-e->born)/e->length;
++        int last=-1;
++        while(e->nextSound<4 && t>=astra_death_burst_time(e->seed,e->nextSound))last=e->nextSound++;
++        if(last>=0 && t-astra_death_burst_time(e->seed,last)<.11f){
++            unsigned h=death_hash(e->seed+197u*last);int s=accent[(last+(e->seed&3))%4];
++            if(digi_xlat_sound(s)>=0)digi_link_sound_to_pos2(s,e->room,0,&e->pos,0,F1_0/2+(h&8191),i2f(120));
++        }
++    }
++}
++void astra_plume_lights(int room,const vms_vector *center,float rank[3],float pos[3][4],float colors[3][4])
++{
++    for(int i=0;i<ASTRA_PLUMES;i++){
++        const astra_event *e=pyro_events+i;
++        if(e->room!=room || !pyro_alive(e))continue;
++        float t=(float)(GameTime64-e->born)/e->length,r=f2fl(e->radius);
++        float glow=.65f*expf(-t*18)+1.35f*(1-expf(-t*11))*(1-t)*(1-t);
++        if(e->tier==2)for(int j=0;j<4;j++)glow+=.67f*pyro_chain_heat(t,astra_death_burst_time(e->seed,j));
++        float reach=fminf(85,7+r*5.1f),power=glow*(.70f+fminf(1.8f,r*.125f));
++        if(e->closeImpact){power*=.38f;reach*=.68f;}
++        float dist=f2fl(vm_vec_dist_quick(center,&e->pos)),weight=power/(1+dist*dist/(reach*reach));
++        int k=0;for(int n=1;n<3;n++)if(rank[n]<rank[k])k=n;
++        if(weight<=rank[k])continue;
++        rank[k]=weight;pos[k][0]=f2fl(e->pos.x);pos[k][1]=f2fl(e->pos.y);pos[k][2]=f2fl(e->pos.z);pos[k][3]=reach;
++        const float *original=astra_effect_color(e->kind);float accent=e->tier?.035f:.30f;
++        const float fire[]={1.f,.28f+.32f*(1-t),.046f+.12f*expf(-t*9)};
++        for(int a=0;a<3;a++)colors[k][a]=power*(fire[a]*(1-accent)+original[a]*accent);
++        colors[k][3]=1;
++    }
++}
++
++#include "astra_preview.inc"
++
++static void astra_impact_sound(object *o)
++{
++    static fix64 last=-F1_0;int kind=astra_effect_type(o);
++    if(kind<0 || !Viewer || o->size<F1_0/2)return;
++    fix64 now=GameTime64;
++    if(now>=last && now-last<(o->size>i2f(6)?F1_0/32:F1_0/13))return;
++    /* Accent the original shot with a separately positioned Descent II sample. */
++    const int sounds[8][3]={
++        {SOUND_ROBOT_DESTROYED,SOUND_LASER_HIT_CLUTTER,SOUND_WEAPON_HIT_BLASTABLE},
++        {SOUND_FORCEFIELD_BOUNCE_WEAPON,SOUND_ROBOT_HIT,SOUND_WEAPON_HIT_DOOR},
++        {SOUND_WEAPON_HIT_DOOR,SOUND_LASER_HIT_CLUTTER,SOUND_ROBOT_HIT},
++        {SOUND_BADASS_EXPLOSION,SOUND_ROBOT_DESTROYED,SOUND_MINE_BLEW_UP},
++        {SOUND_FORCEFIELD_BOUNCE_WEAPON,SOUND_PLAYER_GOT_HIT,SOUND_ROBOT_HIT},
++        {SOUND_ROBOT_HIT,SOUND_LASER_HIT_CLUTTER,SOUND_BADASS_EXPLOSION},
++        {SOUND_MINE_BLEW_UP,SOUND_ROBOT_DESTROYED,SOUND_BADASS_EXPLOSION},
++        {SOUND_PLAYER_GOT_HIT,SOUND_FORCEFIELD_BOUNCE_WEAPON,SOUND_BADASS_EXPLOSION}};
++    unsigned seed=astra_effect_seed(o);
++    int sample=sounds[kind][(seed>>8)%3];
++    if(digi_xlat_sound(sample)<0)return;
++    int volume,pan;
++    extern void digi_get_sound_loc(vms_matrix*,vms_vector*,int,vms_vector*,int,fix,int*,int*,fix);
++    digi_get_sound_loc(&Viewer->orient,&Viewer->pos,Viewer->segnum,&o->pos,o->segnum,
++        F1_0/3+(seed%8192)+(o->size>i2f(6)?F1_0/5:0),&volume,&pan,i2f(105));
++    if(volume<=0)return;
++    last=now;
++    digi_play_sample_3d(sample,pan,volume,0);
++    EM_ASM(Module.blastSounds=(Module.blastSounds||0)+1;Module.blastSoundMask=(Module.blastSoundMask||0)|(1<<($0%31));,sample);
++}
++
+ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, int parent )
+ {
+ 	int objnum;
+@@ -87,6 +274,10 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
+ 	//now set explosion-specific data
+ 
+ 	obj->lifeleft = Vclip[vclip_type ].play_time;
++    int plume_tier=(objp==ConsoleObject && obj_type==OBJ_PLAYER && Player_is_dead && maxdamage>0)?2:
++        (maxdamage>0 || size>=i2f(5))?1:0;
++    pyro_known[objnum]=0;astra_track_plume(obj,plume_tier,0);
++    astra_impact_sound(obj);
+ 	obj->ctype.expl_info.spawn_time = -1;
+ 	obj->ctype.expl_info.delete_objnum = -1;
+ 	obj->ctype.expl_info.delete_time = -1;
+@@ -439,10 +630,13 @@ object *object_create_debris(object *parent, int subobj_num)
  
  }
  
@@ -620,16 +824,13 @@ index fe9b0d1..5a59d5a 100644
 -	if ( obj->lifeleft > 0 )
 -		draw_vclip_object(obj,obj->lifeleft,0, obj->id);
 +	if (obj->lifeleft > 0) {
-+        extern int astra_blast(vms_vector *,fix,float,unsigned);
-+        const char *clip=obj->id<Num_vclips?piggy_game_bitmap_name(&GameBitmaps[Vclip[obj->id].frames[0].index]):NULL;
-+        if(clip && !strncmp(clip,"exp",3) && Vclip[obj->id].play_time>0 &&
-+            astra_blast(&obj->pos,obj->size,1.f-(float)obj->lifeleft/Vclip[obj->id].play_time,obj->signature))return;
++        if(astra_owns_plume(obj))return;
 +        draw_vclip_object(obj,obj->lifeleft,0,obj->id);
 +    }
  
  }
  
-@@ -1620,3 +1627,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
+@@ -1620,3 +1814,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
  			expl_wall_swap(&ew[i], swap);
  }
  
@@ -637,8 +838,89 @@ index fe9b0d1..5a59d5a 100644
 +
 +
 +
+diff --git a/d2/main/game.c b/d2/main/game.c
+index f15d413..a6f3e2c 100644
+--- a/d2/main/game.c
++++ b/d2/main/game.c
+@@ -1108,6 +1108,16 @@ void game_render_frame();
+ 
+ window *Game_wind = NULL;
+ 
++#ifdef __EMSCRIPTEN__
++EMSCRIPTEN_KEEPALIVE void astra_reset_flight_input(void)
++{
++    game_flush_inputs();
++}
++#endif
++
++extern int astra_preview_active;
++extern int astra_preview_frame(void);
++
+ // Event handler for the game
+ int game_handler(window *wind, d_event *event, void *data)
+ {
+@@ -1118,7 +1128,11 @@ int game_handler(window *wind, d_event *event, void *data)
+ 		case EVENT_WINDOW_ACTIVATED:
+ 			set_screen_mode(SCREEN_GAME);
+ 
+-			event_toggle_focus(1);
++#ifdef __EMSCRIPTEN__
++            EM_ASM({Browser.pointerLock=document.pointerLockElement===Module.canvas;window.astraFlightFocus(!!$0);},
++                   Newdemo_state!=ND_STATE_PLAYBACK);
++#endif
++            event_toggle_focus(1);
+ 			key_toggle_repeat(0);
+ 			game_flush_inputs();
+ 
+@@ -1134,8 +1148,11 @@ int game_handler(window *wind, d_event *event, void *data)
+ 			reset_cockpit();
+ 			break;
+ 
+-		case EVENT_WINDOW_DEACTIVATED:
+-			if (!(((Game_mode & GM_MULTI) && (Newdemo_state != ND_STATE_PLAYBACK)) && (!Endlevel_sequence)) )
++        case EVENT_WINDOW_DEACTIVATED:
++#ifdef __EMSCRIPTEN__
++            EM_ASM(window.astraFlightFocus(false));
++#endif
++            if (!(((Game_mode & GM_MULTI) && (Newdemo_state != ND_STATE_PLAYBACK)) && (!Endlevel_sequence)) )
+ 				stop_time();
+ 
+ 			if (!((Game_mode & GM_MULTI) && (Newdemo_state != ND_STATE_PLAYBACK)))
+@@ -1157,10 +1174,12 @@ int game_handler(window *wind, d_event *event, void *data)
+ 		case EVENT_KEY_COMMAND:
+ 		case EVENT_KEY_RELEASE:
+ 		case EVENT_IDLE:
++			if(astra_preview_active)return 1;
+ 			return ReadControls(event);
+ 
+ 		case EVENT_WINDOW_DRAW:
+ 			calc_frame_time();
++            if(astra_preview_frame())break;
+ 
+ 			if (!time_paused)
+ 			{
+@@ -1202,7 +1221,10 @@ int game_handler(window *wind, d_event *event, void *data)
+ #endif
+ 				show_menus();
+ 			Game_wind = NULL;
+-			event_toggle_focus(0);
++#ifdef __EMSCRIPTEN__
++            EM_ASM(window.astraFlightFocus(false));
++#endif
++            event_toggle_focus(0);
+ 			key_toggle_repeat(1);
+ 			break;
+ 
+@@ -1410,6 +1432,7 @@ void GameProcessFrame(void)
+ 		Players[Player_num].homing_object_dist = -1;		//	Assume not being tracked.  Laser_do_weapon_sequence modifies this.
+ 
+ 		object_move_all();
++        {extern void astra_burst_audio(void);astra_burst_audio();}
+ 		powerup_grab_cheat_all();
+ 
+ 		if (Endlevel_sequence)	//might have been started during move
 diff --git a/d2/main/gamerend.c b/d2/main/gamerend.c
-index da0872e..28dcca5 100644
+index da0872e..3137392 100644
 --- a/d2/main/gamerend.c
 +++ b/d2/main/gamerend.c
 @@ -1,3 +1,4 @@
@@ -672,7 +954,15 @@ index da0872e..28dcca5 100644
  	}
  
  	gr_set_current_canvas(&Screen_3d_window);
-@@ -968,6 +974,17 @@ void update_cockpits()
+@@ -854,6 +860,7 @@ void game_render_frame_mono(int flip)
+ 
+ 	gr_set_current_canvas(&Screen_3d_window);
+ 
++	{extern void astra_deck_update(int);astra_deck_update(!no_draw_hud);}
+ 	if (!no_draw_hud)
+ 		game_draw_hud_stuff();
+ 
+@@ -968,6 +975,17 @@ void update_cockpits()
  
  void game_render_frame()
  {
@@ -690,7 +980,7 @@ index da0872e..28dcca5 100644
  	set_screen_mode( SCREEN_GAME );
  	play_homing_warning();
  	game_render_frame_mono(GameArg.DbgUseDoubleBuffer);
-@@ -995,3 +1012,7 @@ void show_boxed_message(char *msg, int RenderFlag)
+@@ -995,3 +1013,7 @@ void show_boxed_message(char *msg, int RenderFlag)
  	if (!RenderFlag)
  		gr_flip();
  }
@@ -699,7 +989,7 @@ index da0872e..28dcca5 100644
 +
 +
 diff --git a/d2/main/gameseq.c b/d2/main/gameseq.c
-index 30de489..8a36e87 100644
+index 30de489..250f106 100644
 --- a/d2/main/gameseq.c
 +++ b/d2/main/gameseq.c
 @@ -829,6 +829,7 @@ void InitPlayerObject()
@@ -710,7 +1000,7 @@ index 30de489..8a36e87 100644
  void StartNewGame(int start_level)
  {
  	state_quick_item = -1;	// for first blind save, pick slot to save in
-@@ -848,7 +849,15 @@ void StartNewGame(int start_level)
+@@ -848,7 +849,16 @@ void StartNewGame(int start_level)
  	else
  		StartNewLevel(start_level);
  
@@ -719,7 +1009,8 @@ index 30de489..8a36e87 100644
 +    int astra_mode=astra_initial_hud();
 +    if(astra_mode>=0){
 +        extern int astra_invert_mouse(int),astra_saved_flip(void);extern void astra_input_ready(int);
-+        select_cockpit(astra_mode?CM_FULL_SCREEN:CM_FULL_COCKPIT);
++        PlayerCfg.PreferredCockpitMode=astra_mode?CM_FULL_SCREEN:CM_FULL_COCKPIT;
++        select_cockpit(PlayerCfg.PreferredCockpitMode);
 +        astra_input_ready(astra_invert_mouse(astra_saved_flip()));
 +    }
 +    astra_encounter_drop();
@@ -727,7 +1018,7 @@ index 30de489..8a36e87 100644
  
  	game_disable_cheats();
  
-@@ -1809,7 +1818,8 @@ void StartNewLevel(int level_num)
+@@ -1809,7 +1819,8 @@ void StartNewLevel(int level_num)
  		maybe_set_first_secret_visit(level_num);
  	}
  
@@ -737,11 +1028,94 @@ index 30de489..8a36e87 100644
  
  	StartNewLevelSub(level_num, 1, 0 );
  
-@@ -2086,3 +2096,4 @@ void StartLevel(int random_flag)
+@@ -2086,3 +2097,4 @@ void StartLevel(int random_flag)
  	Auto_fire_fusion_cannon_time = 0;
  	Fusion_charge = 0;
  }
 +
+diff --git a/d2/main/gauges.c b/d2/main/gauges.c
+index 3ece085..d2e7b21 100644
+--- a/d2/main/gauges.c
++++ b/d2/main/gauges.c
+@@ -4520,6 +4520,26 @@ void observer_show_bomb_highlights()
+ }
+ 
+ //draw all the things on the HUD
++/* Reuse the pilot's actual inventory and native cockpit mode, including F3 and rear view. */
++static int astra_deck_visible;
++void astra_deck_update(int ordinary_view)
++{
++    player *pilot=&Players[Player_num];
++    int wanted=ordinary_view && !Rear_view && !Player_is_dead && !Endlevel_sequence &&
++        !is_observer() && PlayerCfg.CurrentCockpitMode==CM_FULL_SCREEN && PlayerCfg.HudMode!=3;
++    astra_deck_visible=EM_ASM_INT(return !!(Module.astra && window.astraDeck && window.astraDeck.show(!!$0));,wanted);
++    if(!astra_deck_visible)return;
++    int primary=pilot->primary_weapon,secondary=pilot->secondary_weapon;
++    int ammo=primary==VULCAN_INDEX || primary==GAUSS_INDEX?
++        f2i((unsigned)pilot->primary_ammo[VULCAN_INDEX]*(unsigned)VULCAN_AMMO_SCALE):
++        primary==OMEGA_INDEX?Omega_charge*100/MAX_OMEGA_CHARGE:-1;
++    EM_ASM(window.astraDeck.update($0,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15);,
++        pilot->score,pilot->lives,f2ir(pilot->energy),f2ir(pilot->shields),
++        f2ir(vm_vec_mag(&ConsoleObject->mtype.phys_info.velocity)),primary,secondary,
++        pilot->laser_level+1,pilot->secondary_ammo[secondary],ammo,pilot->flags,Current_level_num,
++        f2ir(pilot->afterburner_charge*100),PlayerCfg.ReticleType!=RET_TYPE_NONE,pilot->homing_object_dist>=0,((int)(atan2f(f2fl(ConsoleObject->orient.fvec.x),f2fl(ConsoleObject->orient.fvec.z))*57.29578f+360.5f))%360);
++}
++
+ void draw_hud()
+ {
+ 	int pnum = get_pnum_for_hud();
+@@ -4616,7 +4636,7 @@ void draw_hud()
+ 
+ 	//	Show score so long as not in rearview
+ 	if ( !Rear_view && PlayerCfg.CurrentCockpitMode!=CM_REAR_VIEW && PlayerCfg.CurrentCockpitMode!=CM_STATUS_BAR) {
+-		hud_show_score();
++		if(!astra_deck_visible)hud_show_score();
+ 		if (score_time)
+ 			hud_show_score_added();
+ 	}
+@@ -4630,15 +4650,15 @@ void draw_hud()
+ 		show_HUD_names();
+ 
+ 		if (PlayerCfg.CurrentCockpitMode==CM_STATUS_BAR || PlayerCfg.CurrentCockpitMode==CM_FULL_SCREEN)
+-			hud_show_homing_warning();
++			if(!astra_deck_visible)hud_show_homing_warning();
+ 
+ 		if (PlayerCfg.CurrentCockpitMode==CM_FULL_SCREEN) {
+-			hud_show_energy();
+-			hud_show_shield();
+-			hud_show_afterburner();
+-			hud_show_weapons();
+-			hud_show_keys();
+-			hud_show_cloak_invuln();
++			if(!astra_deck_visible)hud_show_energy();
++			if(!astra_deck_visible)hud_show_shield();
++			if(!astra_deck_visible)hud_show_afterburner();
++			if(!astra_deck_visible)hud_show_weapons();
++			if(!astra_deck_visible)hud_show_keys();
++			if(!astra_deck_visible)hud_show_cloak_invuln();
+ 
+ 			if (Newdemo_state==ND_STATE_RECORDING)
+ 			{
+@@ -4660,7 +4680,7 @@ void draw_hud()
+ 		HUD_render_message_frame();
+ 
+ 		if (PlayerCfg.CurrentCockpitMode!=CM_STATUS_BAR)
+-			hud_show_lives();
++			if(!astra_deck_visible)hud_show_lives();
+ 		if (Game_mode&GM_MULTI && Show_kill_list)
+ 			hud_show_kill_list();
+ 		if (PlayerCfg.CurrentCockpitMode != CM_LETTERBOX)
+@@ -4858,8 +4878,8 @@ void do_cockpit_window_view(int win,object *viewer,int rear_view_flag,int user,c
+ 
+ 		dx = (win==0)?-(w+(w/10)):(w/10);
+ 
+-		window_x = grd_curscreen->sc_w/2+dx;
+-		window_y = grd_curscreen->sc_h-h-(SHEIGHT/15);
++		window_x = astra_deck_visible?(win?SWIDTH-w-SWIDTH/12:SWIDTH/12):grd_curscreen->sc_w/2+dx;
++		window_y = astra_deck_visible?SHEIGHT/11:grd_curscreen->sc_h-h-SHEIGHT/15;
+ 
+ 		gr_init_sub_canvas(&window_canv,&grd_curscreen->sc_canvas,window_x,window_y,w,h);
+ 	}
 diff --git a/d2/main/inferno.c b/d2/main/inferno.c
 index dc6e44a..2c34fcf 100644
 --- a/d2/main/inferno.c
@@ -1006,7 +1380,7 @@ index 79cf5fb..30d117c 100644
  }
 +
 diff --git a/d2/main/object.c b/d2/main/object.c
-index 602b2d5..00ee6ed 100644
+index 602b2d5..57e157d 100644
 --- a/d2/main/object.c
 +++ b/d2/main/object.c
 @@ -425,6 +425,9 @@ void draw_cloaked_object(object *obj,g3s_lrgb light,fix *glow,fix64 cloak_start_
@@ -1019,6 +1393,14 @@ index 602b2d5..00ee6ed 100644
  	g3s_lrgb light;
  	int	imsave;
  	fix engine_glow_value[2];		//element 0 is for engine glow, 1 for headlight
+@@ -910,6 +913,7 @@ void init_player_object()
+ //sets up the free list & init player & whatever else
+ void init_objects()
+ {
++    extern void astra_clear_plumes(void);astra_clear_plumes();
+ 	int i;
+ 
+ 	collide_init();
 diff --git a/d2/main/polyobj.c b/d2/main/polyobj.c
 index 823ccc1..d116511 100644
 --- a/d2/main/polyobj.c
@@ -1074,7 +1456,7 @@ index 650f69e..d39c443 100644
  }
 +
 diff --git a/d2/main/render.c b/d2/main/render.c
-index 517bc8a..26d1456 100644
+index 517bc8a..1a71b34 100644
 --- a/d2/main/render.c
 +++ b/d2/main/render.c
 @@ -197,6 +197,7 @@ void flash_frame()
@@ -1093,10 +1475,14 @@ index 517bc8a..26d1456 100644
  
  	for (i=0; i<nv; i++) {
  		uvl_copy[i].u = uvlp[i].u;
-@@ -333,6 +335,10 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+@@ -333,6 +335,14 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
  			g3_draw_tmap(nv,pointlist,uvl_copy,dyn_light,bm);
  
  	gr_settransblend(GR_FADE_OFF, GR_BLEND_NORMAL); // revert any transparency/blending setting back to normal
++    if(astra_drawing_mine && !(wid_flags&(WID_CLOAKED_FLAG|WID_RENDPAST_FLAG))){
++        extern void astra_light_face(int,const g3s_point**,const int*);
++        astra_light_face(nv,pointlist,vp);
++    }
 +    if (Segments[segnum].children[sidenum]<0 && Segments[segnum].sides[sidenum].wall_num<0 && !(wid_flags&WID_CLOAKED_FLAG)){
 +        extern void astra_gantry(int,const g3s_point **,g3s_lrgb *,int,int);
 +        astra_gantry(nv,pointlist,dyn_light,segnum*7+sidenum,Segments[segnum].sides[sidenum].normals[0].y>F1_0*3/4);
@@ -1104,6 +1490,14 @@ index 517bc8a..26d1456 100644
  
  #ifndef NDEBUG
  	if (Outline_mode) draw_outline(nv, pointlist);
+@@ -1678,6 +1688,7 @@ void render_frame(fix eye_offset, int window_num)
+ 	#endif
+ 
+ 	render_mine(start_seg_num, eye_offset, window_num);
++    {extern void astra_render_plumes(const short*,int,int);astra_render_plumes(Render_list,N_render_segs,window_num);}
+ 
+ 	g3_end_frame();
+ 
 diff --git a/d2/main/state.c b/d2/main/state.c
 index fde0fd3..50b1cd2 100644
 --- a/d2/main/state.c

@@ -35,3 +35,21 @@ Field Refit 02 also requires the original Vertigo install. Its mission archive a
     python forge.py "<OL>"
 
 fleet.py requires SciPy in addition to the dependencies listed above. The generated fleet_types.inc supplies D2 model bindings. The live D2 polymodel supplies each ship's outer panels and articulated limbs. Overload render batches supply internal mechanisms and materials. The original game handles the robot's position, weapons, collisions and AI. The optional encounter drop places the player near an existing robot; Enter mine uses the mission's original start.
+
+The explosion renderer reads its density, surface normals and fuel from a 112 × 112 × 112 field. Rebuild the browser parcel using NumPy, SciPy and Pillow, from the game directory:
+
+    python source/pyro_field.py pyro-field.js
+
+The plume and blast includes implement optical sampling and particle motion. The engine patch contains their event lifetime, ship destruction timing, light propagation and sound triggers.
+
+The ship explosion preview (preview.inc) uses the game's Pyro mesh, tier-2
+blast renderer, and Descent II samples in a separate inspection camera. It
+pauses the mission clock and input and creates no gameplay objects. Closing
+it resumes the original pilot and camera. Each replay receives a new visual
+seed without advancing the gameplay RNG.
+
+Close hull impacts have shorter visual lifetimes and reduced radius/light
+power. A view-distance fade reduces their optical density and sparks when a
+living pilot is inside the cloud. Ship destruction keeps its full appearance.
+The selected launch cockpit is also saved as the native preferred cockpit,
+so the original respawn path restores the Astra flight deck.

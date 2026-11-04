@@ -15,6 +15,7 @@ includes={"armor.inc":"3d/astra_armor.inc","finish.inc":"arch/ogl/astra_finish.i
           "lighting.inc":"main/astra_light.inc","shader.inc":"arch/ogl/astra_shader.inc",
           "pyro.inc":"arch/ogl/astra_pyro.inc","blast.inc":"arch/ogl/astra_blast.inc"}
 includes.update({'fleet.inc': 'arch/ogl/astra_fleet.inc', 'fleet_types.inc': 'arch/ogl/astra_fleet_types.inc', 'shell.inc': '3d/astra_shell.inc', 'gantry.inc': 'arch/ogl/astra_gantry.inc', 'plume.inc': 'arch/ogl/astra_plume.inc', 'encounter.inc': 'main/astra_encounter.inc'})
+includes["preview.inc"]="main/astra_preview.inc"
 includes["lens.inc"]="arch/ogl/astra_lens.inc"
 for name,path in includes.items():
     if (repo/"d2"/path).exists():raise SystemExit("Use a fresh checkout. An Astra include already exists.")
