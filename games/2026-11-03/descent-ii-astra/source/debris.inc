@@ -64,6 +64,8 @@ void astra_debris(vms_vector *where,fix radius,float seconds,float lifetime,unsi
                 p->room=hit.hit_seg>=0?hit.hit_seg:p->room;p->hitroom=p->room;p->bounces++;
                 fix dot=vm_vec_dot(&p->velocity,&p->normal);vm_vec_scale_add2(&p->velocity,&p->normal,-2*dot);vm_vec_scale(&p->velocity,fl2f(.42f));
                 p->struck=group->born+fl2f(group->age);lastSound=i;
+                astra_environment_hit(hit.hit_side_seg,hit.hit_side,&p->hit,p->size*1.8f);
+                if(p->bounces>=3||vm_vec_mag_quick(&p->velocity)<i2f(2)){p->bounces=3;astra_environment_scrap(p->room,&p->pos,&p->normal,p->size);}
                 EM_ASM(Module.debrisWallHits=(Module.debrisWallHits||0)+1;);
             }else if(result==HIT_NONE){p->pos=next;if(hit.hit_seg>=0)p->room=hit.hit_seg;vm_vec_scale(&p->velocity,fl2f(1-.18f*dt));}
             else p->bounces=3;

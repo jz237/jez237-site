@@ -36,7 +36,7 @@ static void astra_room_lights(int segnum)
     vms_vector center; compute_segment_center(&center,&Segments[segnum]);astra_find_blasts(segnum,&center);
     for(int k=-1;k<6;k++){
         int room=k<0?segnum:Segments[segnum].children[k];
-        if(room<0)continue;
+        if(room<0 || (k>=0 && !(WALL_IS_DOORWAY(&Segments[segnum],k)&WID_RENDPAST_FLAG)))continue;
         segment *s=&Segments[room];
         for(int i=0;i<6;i++){
             int base=s->sides[i].tmap_num,overlay=s->sides[i].tmap_num2&0x3fff;

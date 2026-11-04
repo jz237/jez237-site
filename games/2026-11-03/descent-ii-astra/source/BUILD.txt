@@ -348,3 +348,34 @@ Natural phone demo combat also passed. The R16 autopilot include is byte-for-byt
 unchanged. The fixture that positions the player and triggers individual blasts
 exists only in a separate QA engine; it is absent from the shipping engine.
 Automated browsers block pointer capture before navigation and close afterward.
+
+Astra environment refit for both campaigns (pyre18)
+
+Shared native mine-face rendering applies throughout Counterstrike and Vertigo,
+including their secret mines. Native mine archives, geometry, collision, doors,
+keys, secrets, damage, recharge, music and audio are preserved. Original flight,
+mouse controls and the praised R16 autopilot remain byte-for-byte unchanged.
+
+The eight environment treatments are: layered physical panel surrounds and
+service fittings; soft seam/contact shading and light propagation stopped by
+closed portals; material-dependent roughness, grain, wear and liquid ripples;
+rotating caged fans, hydraulic pistons, terminal readouts, cable faults and flowing
+coolant; mining/maintenance/recharge/reactor/hazard accents chosen from native
+room functions and material groups; restrained local dust, vent wisps and fixture
+shafts; perimeter-only door rails/hydraulics with native key colors, machined
+reactor housings, pulsing cores and rotating rings; persistent scorch/chip marks
+and resting ricochet fragments.
+
+Detail never fills a door aperture. Hidden doors receive no lock or hydraulic
+decoration. Atmosphere is limited to ten visible nearby rooms. Scars have a
+96-entry cache and expire after three minutes; resting scraps have 48 slots and
+fade after 45 seconds. These are presentation caches, not gameplay objects, and
+consume no simulation RNG. There is no full-screen fog or new white flash.
+
+Checks include campaign level loading, live combat with the unchanged pilot,
+desktop and phone layouts, four machinery variants, native door opening and
+reactor rendering, native wall-hit scars and fragments, and energy increasing
+inside an original fuel center. Camera relocation helpers exist only in a
+separate QA build. Automated browser tests block pointer capture before launch
+and close their browser and local server afterward. Loading every level is not
+a full campaign playthrough or a measurement on a physical phone.

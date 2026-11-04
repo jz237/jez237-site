@@ -1,6 +1,7 @@
 /* Materials are shared across palette slots. One tangent map per source, on unit 1. */
 extern float astra_lamp[4],astra_flash[4];
 extern int astra_drawing_mine;
+static float astra_surface[4];
 static GLuint astra_normals[256],astra_program;
 static GLint astra_tangents,astra_fixture,astra_moving;
 static int astra_gpu_failed,astra_shaded;
@@ -28,21 +29,28 @@ static void astra_init_shader(void)
     const char *vs="varying mediump vec2 uv;varying mediump vec4 light;varying highp vec3 p;"
         "void main(){gl_Position=ftransform();uv=gl_MultiTexCoord0.xy;light=gl_Color;p=gl_Vertex.xyz;}";
     const char *fs="precision highp float;varying mediump vec2 uv;varying mediump vec4 light;varying highp vec3 p;"
-        "uniform sampler2D colorMap,detailMap;uniform mat3 basis;uniform vec4 lamp,shot;"
-        "void main(){vec4 a=texture2D(colorMap,uv);if(a.a*light.a<.035)discard;"
-        "vec3 sampleN=texture2D(detailMap,uv).rgb;vec2 xy=(sampleN.xy*2.-1.)*.87;"
+        "uniform sampler2D colorMap,detailMap;uniform mat3 basis;uniform vec4 lamp,shot,surface;"
+        "void main(){vec2 coord=uv;if(surface.x>3.5){coord+=sin(uv.yx*19.+surface.z*.8)*.003;}vec4 a=texture2D(colorMap,coord);if(a.a*light.a<.035)discard;"
+        "vec3 sampleN=texture2D(detailMap,coord).rgb;vec2 xy=(sampleN.xy*2.-1.)*.87;"
         "vec3 eye=normalize(-p);vec3 base=basis[2]*sign(dot(basis[2],eye));"
         "vec3 n=normalize(basis[0]*xy.x+basis[1]*xy.y+base*sqrt(max(.06,1.-dot(xy,xy))));"
         "vec3 L=lamp.xyz-p;float dist=length(L);L/=max(dist,.001);"
         "float reach=lamp.w/(1.+dist*dist*.0018);"
         "vec3 beam=normalize(eye+vec3(-.25,.36,.12));float ndl=max(0.,dot(n,L));"
         "float bevel=dot(n,beam)-dot(base,beam);float room=clamp(dot(light.rgb,vec3(.21,.72,.07)),.0,1.4);"
-        "float metal=1.-sampleN.z;float expn=mix(12.,70.,metal);"
+        "float rock=1.-step(.5,surface.x),ceramic=step(1.5,surface.x)*(1.-step(2.5,surface.x)),oil=step(2.5,surface.x);"
+        "float metal=(1.-sampleN.z)*(1.-rock*.86);float expn=mix(14.,95.,max(metal,oil*.8));"
+        "float grain=sin(coord.x*96.+sin(coord.y*13.))*sin(coord.y*48.);"
+        "float patina=sin(coord.x*6.7+surface.w*7.)*sin(coord.y*11.3+surface.w*13.);"
+        "float wear=smoothstep(.5,.92,patina)*(.06+.09*rock);a.rgb*=1.+grain*.022+patina*.035-wear;"
+        "a.rgb=mix(a.rgb,a.rgb*vec3(.93,1.01,1.025),ceramic*.45);expn=mix(expn,32.,ceramic);"
+        "float cavity=clamp(1.-length(xy)*(.18+.12*rock),.72,1.);"
         "float glint=pow(max(dot(n,normalize(L+eye)),0.),expn)*reach;"
         "vec3 D=shot.xyz-p;float sd=length(D);D/=max(.01,sd);float fire=shot.w/(1.+sd*sd*.009);"
-        "vec3 col=a.rgb*(light.rgb*(.91+.53*bevel)+vec3(.42,.32,.24)*ndl*reach);"
+        "vec3 col=a.rgb*(light.rgb*(.91+.53*bevel)*cavity+vec3(.42,.32,.24)*ndl*reach);"
         "col+=vec3(.84,.91,1.)*pow(max(0.,dot(n,beam)),expn)*(.07+.15*metal)*room;"
-        "col+=vec3(1.,.75,.46)*glint*(.20+.40*metal);"
+        "vec3 lampTint=mix(vec3(1.,.75,.46),vec3(.40,.76,.85),step(1.5,surface.y)*(1.-step(2.5,surface.y)));"
+        "col+=lampTint*glint*(.12+.35*metal)*(1.-rock*.8);"
         "col+=vec3(1.,.29,.085)*fire*(a.rgb*.64*max(0.,dot(n,D))+.38*pow(max(dot(n,normalize(D+eye)),0.),25.));"
         "float haze=min(.16,1.-exp(-max(0.,-p.z-10.)*.0017));col=mix(col,vec3(.09,.145,.16),haze);"
         "gl_FragColor=vec4(col,a.a*light.a);}";
@@ -83,6 +91,7 @@ static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
     for(int i=0;i<3;i++)mat[6+i]=mat[(i+1)%3]*mat[3+(i+2)%3]-mat[(i+2)%3]*mat[3+(i+1)%3];
     astra_unit(mat+6);
     glUniformMatrix3fv(astra_tangents,1,GL_FALSE,mat);
+    glUniform4fv(glGetUniformLocation(astra_program,"surface"),1,astra_surface);
     glUniform4fv(astra_fixture,1,astra_lamp);glUniform4fv(astra_moving,1,astra_flash);
     ++astra_shaded;return 1;
 }
