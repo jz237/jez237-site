@@ -2,12 +2,12 @@
 // bends around gravity, instanced noise-carved rocks, ships with trails, shots, hazards, the Maw, and
 // every explosion. Everything is synced from the simulation each frame; nothing here changes W.
 import * as THREE from '../vendor/three.module.min.js';
-import { F, ARENAS, POWERUPS, KIND_INDEX, ROCK_KINDS } from './config.js?v=5';
-import { fwd, dX, dZ } from './sim.js?v=5';
-import { NOISE } from './shaders.js?v=5';
-import { Post } from './post.js?v=5';
-import { Sparks, Smoke, Shards, patchShardMaterial, Lightning, Rings, Ribbon } from './fx.js?v=5';
-import { rockGeometry, buildShip, buildBoss, buildOrb, buildMine, buildDrone } from './models.js?v=5';
+import { F, ARENAS, POWERUPS, KIND_INDEX, ROCK_KINDS } from './config.js?v=6';
+import { fwd, dX, dZ } from './sim.js?v=6';
+import { NOISE } from './shaders.js?v=6';
+import { Post } from './post.js?v=6';
+import { Sparks, Smoke, Shards, patchShardMaterial, Lightning, Rings, Ribbon } from './fx.js?v=6';
+import { rockGeometry, buildShip, buildBoss, buildOrb, buildMine, buildDrone } from './models.js?v=6';
 
 const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
@@ -353,6 +353,8 @@ class FlatPath {
 }
 
 // ------------------------------------------------------------------ ships
+// drawn size, kept in step with F.shipR (0.76, was 0.95)
+const SHIP_SIZE = 0.8;
 class ShipView {
   constructor(R, ship, color, accent) {
     this.R = R;
@@ -361,6 +363,7 @@ class ShipView {
     this.model = b;
     this.root = new THREE.Group();
     b.group.scale.setScalar(1.35);
+    this.root.scale.setScalar(SHIP_SIZE);
     this.root.add(b.group);
     this.engines = b.engines.map((p) => {
       const s = glowSprite(accent, 3, 0.9);
@@ -384,10 +387,10 @@ class ShipView {
     R.scene.add(this.root);
     // a second copy for drawing across the wrap seam
     this.ghost = b.group.clone();
-    this.ghost.scale.setScalar(1.35);
+    this.ghost.scale.setScalar(1.35 * SHIP_SIZE);
     this.ghost.visible = false;
     R.scene.add(this.ghost);
-    this.trail = new Ribbon(48, 0.28, color, 0xffffff);
+    this.trail = new Ribbon(48, 0.28 * SHIP_SIZE, color, 0xffffff);
     this.trail.mat.uniforms.uOpacity.value = 0.55;
     R.scene.add(this.trail.mesh);
     this.pts = [];

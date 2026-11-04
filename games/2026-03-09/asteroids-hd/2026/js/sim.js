@@ -1,7 +1,7 @@
 // The belt: a deterministic 120 Hz simulation. Everything random comes from the world's own RNG
 // (W.rs), so a cloned world fed the same ship inputs replays a fight exactly (instant replays).
 // Nothing outside step() may change W during a recorded match.
-import { F, ARENAS, POWERUPS, POWERUP_KEYS, PERKS, ROCK_KINDS } from './config.js?v=5';
+import { F, ARENAS, POWERUPS, POWERUP_KEYS, PERKS, ROCK_KINDS } from './config.js?v=6';
 
 export const STEP = 1 / 120;
 const { AW, AH } = F;

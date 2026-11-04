@@ -1,7 +1,7 @@
 // Instant replay. The simulation is deterministic, so the recorder only keeps a cloned world every
 // half second plus every ship's input for each tick; a replay re-runs the last few seconds from the
 // nearest clone and reproduces the knockout exactly, with all of its effects and sounds.
-import { cloneWorld, step, drainEvents, STEP } from './sim.js?v=5';
+import { cloneWorld, step, drainEvents, STEP } from './sim.js?v=6';
 
 export class Recorder {
   constructor() { this.reset(); }

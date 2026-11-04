@@ -1,16 +1,16 @@
 // Asteroids 2026 — game flow, controls, scoring, commentary and the frame loop.
 import * as THREE from '../vendor/three.module.min.js';
-import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS, PERKS, ROSTER, SHADOW, TWISTS, ROCK_KINDS, UPGRADES, UP_KEYS, UP_COST, MEDALS, RAMP, rampAI, beltRocks, beltSpeed } from './config.js?v=5';
-import { makeWorld, step, drainEvents, STEP, shipOf, LIFE_STEP } from './sim.js?v=5';
-import { AIPilot } from './ai.js?v=5';
-import { Renderer, pickQuality, CALM } from './render.js?v=5';
-import { Director } from './director.js?v=5';
-import { Audio } from './audio.js?v=5';
-import { Input } from './input.js?v=5';
-import { UI, $, hex } from './ui.js?v=5';
-import { Scores } from './scores.js?v=5';
-import { Recorder } from './replay.js?v=5';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=5';
+import { F, VERSION, PILOTS, HUMAN, HUMAN2, ARENAS, LADDER, DIFFICULTY, POWERUPS, PERKS, ROSTER, SHADOW, TWISTS, ROCK_KINDS, UPGRADES, UP_KEYS, UP_COST, MEDALS, RAMP, rampAI, beltRocks, beltSpeed } from './config.js?v=6';
+import { makeWorld, step, drainEvents, STEP, shipOf, LIFE_STEP } from './sim.js?v=6';
+import { AIPilot } from './ai.js?v=6';
+import { Renderer, pickQuality, CALM } from './render.js?v=6';
+import { Director } from './director.js?v=6';
+import { Audio } from './audio.js?v=6';
+import { Input } from './input.js?v=6';
+import { UI, $, hex } from './ui.js?v=6';
+import { Scores } from './scores.js?v=6';
+import { Recorder } from './replay.js?v=6';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=6';
 
 // ------------------------------------------------------------------ settings
 const SKEY = 'a26.settings.v1';
