@@ -36,7 +36,7 @@ Field Refit 02 also requires the original Vertigo install. Its mission archive a
 
 fleet.py requires SciPy in addition to the dependencies listed above. The generated fleet_types.inc supplies D2 model bindings. The live D2 polymodel supplies each ship's outer panels and articulated limbs. Overload render batches supply internal mechanisms and materials. The original game handles the robot's position, weapons, collisions and AI. The optional encounter drop places the player near an existing robot; Enter mine uses the mission's original start.
 
-The explosion renderer reads its density, surface normals and fuel from a 112 × 112 × 112 field. Rebuild the browser parcel using NumPy, SciPy and Pillow, from the game directory:
+The explosion renderer reads its density, surface normals and fuel from a 112 Ã— 112 Ã— 112 field. Rebuild the browser parcel using NumPy, SciPy and Pillow, from the game directory:
 
     python source/pyro_field.py pyro-field.js
 
@@ -272,3 +272,18 @@ Omega was exercised through the native firing function in a separate local QA
 engine: each volley consumed exactly one original charge increment. No test
 exports are present in the shipping engine. The natural pilot combat run also
 covered player and enemy fire, missile exhaust, death and cockpit recovery.
+
+Astra original laser colors (pyre15)
+
+Restore the laser colors from the original loaded HAM polygon models:
+L1 red (31,0,0), L2 magenta (28,0,28), L3 pale blue (14,14,31),
+L4 green (0,28,0), L5 yellow (31,24,0), L6 white (27,27,27), in RGB15.
+The three cockpit showcase entries are therefore red, green and white.
+Limit white mixing in laser cores and particles so their hues remain readable.
+Other weapons retain the existing shader settings and visual treatment.
+
+Validated against all six original model color records, then visually checked
+the three range entries on desktop and phone screens. Plasma, dual Omega and
+missile exhaust were also checked. No simulation or weapon stats changed.
+The original-model inspection helper is only in a separate QA engine.
+All browser tests block pointer capture and close their browsers and servers.

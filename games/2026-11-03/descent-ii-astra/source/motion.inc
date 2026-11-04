@@ -129,13 +129,20 @@ void astra_draw_mechanisms(object *obj){
 }
 static void ax_weapon_color(int id,int enemy){
     switch(id){
+      /* Original HAM polygon colors, including every in-game upgrade. */
+      case LASER_ID_L1:ax_paint(1,0,0,1.6f);break;
+      case LASER_ID_L2:ax_paint(28.f/31,0,28.f/31,1.6f);break;
+      case LASER_ID_L3:ax_paint(14.f/31,14.f/31,1,1.6f);break;
+      case LASER_ID_L4:ax_paint(0,28.f/31,0,1.6f);break;
+      case LASER_ID_L5:ax_paint(1,24.f/31,0,1.6f);break;
+      case LASER_ID_L6:ax_paint(27.f/31,27.f/31,27.f/31,1.6f);break;
       case PLASMA_ID:case PLAYER_SMART_HOMING_ID:case ROBOT_SMART_HOMING_ID:ax_paint(.12f,1,.35f,1.7f);break;
       case FUSION_ID:ax_paint(.80f,.16f,1,1.7f);break;
       case SPREADFIRE_ID:case SILENT_SPREADFIRE_ID:case HELIX_ID:ax_paint(1,.38f,.065f,1.65f);break;
       case PHOENIX_ID:ax_paint(1,.13f,.075f,1.7f);break;
       case OMEGA_ID:ax_paint(.20f,.61f,1,1.75f);break;
       case VULCAN_ID:case GAUSS_ID:ax_paint(1,.72f,.25f,1.25f);break;
-      default:if(enemy)ax_paint(1,.22f,.10f,1.5f);else if(id==2||id==30)ax_paint(.14f,.56f,1,1.6f);else if(id==1||id==31)ax_paint(.15f,1,.61f,1.6f);else ax_paint(1,.14f,.08f,1.6f);
+      default:if(enemy)ax_paint(1,.22f,.10f,1.5f);else ax_paint(1,.14f,.08f,1.6f);
     }
 }
 /* View-facing optical samples distributed in three dimensions. The particles
@@ -164,19 +171,19 @@ static void af_beam(float x,float y,float z,float X,float Y,float Z,float radius
     for(int j=0;j<6;j++){int k=order[j],end=k>=2;float sign=k==1||k==2?1:-1,*v=end?q:p;
         ax_vertex_add((v[0]+sign*u[0])*scale[0],(v[1]+sign*u[1])*scale[1],-(v[2]+sign*u[2])*scale[2],sign,end,seed);}
 }
-static void af_flush(float clock,int style){
+static void af_flush_tinted(float clock,int style,int preserve_hue){
     if(!ax_count||af_failed)return;
     if(!af_program){
         const char *vs="varying highp vec3 uv;varying mediump vec4 tint;void main(){gl_Position=ftransform();uv=gl_Normal;tint=gl_Color;}";
         const char *fs=
-          "precision highp float;varying highp vec3 uv;varying mediump vec4 tint;uniform float clock,style;"
+          "precision highp float;varying highp vec3 uv;varying mediump vec4 tint;uniform float clock,style,preserveHue;"
           "float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}"
           "float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1)),f.x),f.y);}"
-          "void main(){if(style>.5&&style<1.5){float edge=exp(-uv.x*uv.x*6.)*(1.-smoothstep(.8,1.,abs(uv.x)));float core=exp(-uv.x*uv.x*60.);float flow=.88+.12*sin(uv.y*38.-clock*36.+uv.z);gl_FragColor=vec4(mix(tint.rgb,vec3(.9,.96,1.),core*.78),tint.a*edge*flow);return;}"
+          "void main(){if(style>.5&&style<1.5){float edge=exp(-uv.x*uv.x*6.)*(1.-smoothstep(.8,1.,abs(uv.x)));float core=exp(-uv.x*uv.x*60.);float flow=.88+.12*sin(uv.y*38.-clock*36.+uv.z);gl_FragColor=vec4(mix(tint.rgb,vec3(.9,.96,1.),core*mix(.78,.16,preserveHue)),tint.a*edge*flow);return;}"
           "float r=length(uv.xy);if(r>1.)discard;float a=uv.z+clock*.7;mat2 turn=mat2(cos(a),sin(a),-sin(a),cos(a));vec2 p=turn*uv.xy;"
           "float grain=noise(p*5.+vec2(uv.z,clock*1.4));grain=.68*grain+.32*noise(p*13.-clock*2.);"
           "float cloud=(1.-smoothstep(.12,1.,r))*(.28+.72*grain);float core=exp(-r*r*24.);"
-          "vec3 c=mix(tint.rgb,vec3(.94,.97,1.),core*.45);float alpha=(cloud*.68+core*.6)*tint.a;"
+          "vec3 c=mix(tint.rgb,vec3(.94,.97,1.),core*mix(.45,.12,preserveHue));float alpha=(cloud*.68+core*.6)*tint.a;"
           "if(style>1.5){c=tint.rgb*(.55+.6*grain);alpha=cloud*tint.a;}"
           "if(alpha<.003)discard;gl_FragColor=vec4(c,alpha);}";
         GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){af_failed=1;return;}
@@ -188,11 +195,14 @@ static void af_flush(float clock,int style){
     gr_settransblend(GR_FADE_OFF,style==2?GR_BLEND_NORMAL:GR_BLEND_ADDITIVE_A);glDepthMask(GL_FALSE);glUseProgram(af_program);
     glUniform1f(glGetUniformLocation(af_program,"clock"),clock);
     glUniform1f(glGetUniformLocation(af_program,"style"),style);
+    glUniform1f(glGetUniformLocation(af_program,"preserveHue"),preserve_hue);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_NORMAL_ARRAY);glEnableClientState(GL_COLOR_ARRAY);
     glVertexPointer(3,GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].p);glNormalPointer(GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].n);glColorPointer(4,GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].color);
     glDrawArrays(GL_TRIANGLES,0,ax_count);glDisableClientState(GL_VERTEX_ARRAY);glDisableClientState(GL_NORMAL_ARRAY);glDisableClientState(GL_COLOR_ARRAY);
     glUseProgram(0);glDepthMask(GL_TRUE);if(cull)glEnable(GL_CULL_FACE);if(!depth)glDisable(GL_DEPTH_TEST);gr_settransblend(fade,blend);ax_count=0;
 }
+
+static void af_flush(float clock,int style){af_flush_tinted(clock,style,0);}
 
 /* A visual record of the native Omega hit. Two emitters share that hit: no
  * second weapon, collision, energy debit, damage calculation or random draw. */
@@ -240,6 +250,7 @@ int astra_weapon_missile(object *obj){
 int astra_draw_weapon(object *obj){
     if(!ax_on()||obj->type!=OBJ_WEAPON||obj->id>=N_weapon_types)return 0;
     int id=obj->id,missile=astra_weapon_missile(obj);
+    int laser=(id>=LASER_ID_L1&&id<=LASER_ID_L4)||id==LASER_ID_L5||id==LASER_ID_L6;
     if(id==FLARE_ID||is_proximity_bomb_or_smart_mine(id)||id==PMINE_ID)return 0;
     if(obj->render_type==RT_NONE&&id!=VULCAN_ID&&id!=GAUSS_ID)return 0;
     /* Player Omega is drawn once as a continuous paired discharge. */
@@ -276,7 +287,7 @@ int astra_draw_weapon(object *obj){
         int blob=id==PLASMA_ID||id==FUSION_ID||id==PHOENIX_ID||id==PLAYER_SMART_HOMING_ID||id==ROBOT_SMART_HOMING_ID;
         float r=blob?radius*(id==FUSION_ID?1.5f:1):id==VULCAN_ID?.052f:id==GAUSS_ID?.095f:radius*.38f;
         ax_count=0;ax_weapon_color(id,enemy);
-        af_beam(0,0,.25f,0,0,-fmaxf(.6f,tail),blob?r*.8f:r*2.8f,.88f,obj->signature);af_flush(clock,1);
+        af_beam(0,0,.25f,0,0,-fmaxf(.6f,tail),blob?r*.8f:r*2.8f,.88f,obj->signature);af_flush_tinted(clock,1,laser);
         ax_count=0;ax_weapon_color(id,enemy);
         af_particle(0,0,0,blob?r*2.4f:r*4,.82f,obj->signature);
         if(blob){af_particle(0,0,-r*.25f,r,.8f,obj->signature+21);}
@@ -288,9 +299,9 @@ int astra_draw_weapon(object *obj){
         if(id==FUSION_ID||id==PHOENIX_ID){
             for(int j=0;j<5;j++){float a=j*1.2566f+clock*9;af_particle(cosf(a)*r*.8f,sinf(a)*r*.8f,-r*.5f,r*.38f,.7f,obj->signature+j*5);}
         }
-        af_flush(clock,0);
+        af_flush_tinted(clock,0,laser);
     }
     g3_done_instance();
-    EM_ASM(Module.weaponEffects=(Module.weaponEffects||0)+1;Module.weaponVisualVersion=14;Module.weaponEffectCoverage=Module.weaponEffectCoverage||{};Module.weaponEffectCoverage[$0]=true;Module.weaponEffectKinds=Module.weaponEffectKinds||{};Module.weaponEffectKinds[$0]=$2?'exhaust':'energy';Module[$1?'enemyWeaponEffects':'playerWeaponEffects']=(Module[$1?'enemyWeaponEffects':'playerWeaponEffects']||0)+1;,id,enemy,missile);
+    EM_ASM(Module.weaponEffects=(Module.weaponEffects||0)+1;Module.weaponVisualVersion=15;Module.weaponEffectCoverage=Module.weaponEffectCoverage||{};Module.weaponEffectCoverage[$0]=true;Module.weaponEffectKinds=Module.weaponEffectKinds||{};Module.weaponEffectKinds[$0]=$2?'exhaust':'energy';Module[$1?'enemyWeaponEffects':'playerWeaponEffects']=(Module[$1?'enemyWeaponEffects':'playerWeaponEffects']||0)+1;,id,enemy,missile);
     return !missile;
 }
