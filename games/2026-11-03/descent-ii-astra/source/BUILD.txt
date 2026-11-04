@@ -53,3 +53,16 @@ power. A view-distance fade reduces their optical density and sparks when a
 living pilot is inside the cloud. Ship destruction keeps its full appearance.
 The selected launch cockpit is also saved as the native preferred cockpit,
 so the original respawn path restores the Astra flight deck.
+
+Campaign coverage: Counterstrike contains 24 regular levels and six secret
+levels; Vertigo contains 20 regular levels and three secret levels. Both use
+the same engine, material packs, ship renderer, lighting, explosion system,
+flight instruments and input code. No improvement is restricted to a level or
+encounter shortcut. Level geometry, campaign progression, music selection,
+AI, damage and flight physics continue to use the original game data/code.
+
+Campaign validation: all 44 regular mines were loaded and rendered in the
+shipping engine with the Astra deck. All nine original secret mines also
+rendered with the same engine using a temporary test-only mission listing.
+Explosion preview opened and resumed the final mine in each run. These were
+loading/rendering checks, not complete gameplay playthroughs.

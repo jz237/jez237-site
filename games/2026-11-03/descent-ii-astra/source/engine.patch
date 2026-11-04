@@ -989,7 +989,7 @@ index da0872e..3137392 100644
 +
 +
 diff --git a/d2/main/gameseq.c b/d2/main/gameseq.c
-index 30de489..250f106 100644
+index 30de489..05297d3 100644
 --- a/d2/main/gameseq.c
 +++ b/d2/main/gameseq.c
 @@ -829,6 +829,7 @@ void InitPlayerObject()
@@ -1000,7 +1000,7 @@ index 30de489..250f106 100644
  void StartNewGame(int start_level)
  {
  	state_quick_item = -1;	// for first blind save, pick slot to save in
-@@ -848,7 +849,16 @@ void StartNewGame(int start_level)
+@@ -848,7 +849,18 @@ void StartNewGame(int start_level)
  	else
  		StartNewLevel(start_level);
  
@@ -1012,13 +1012,15 @@ index 30de489..250f106 100644
 +        PlayerCfg.PreferredCockpitMode=astra_mode?CM_FULL_SCREEN:CM_FULL_COCKPIT;
 +        select_cockpit(PlayerCfg.PreferredCockpitMode);
 +        astra_input_ready(astra_invert_mouse(astra_saved_flip()));
++        /* A later level reloads this pilot file before respawning the ship. */
++        write_player_file();
 +    }
 +    astra_encounter_drop();
 +    Players[Player_num].starting_level = start_level;		// Mark where they started
  
  	game_disable_cheats();
  
-@@ -1809,7 +1819,8 @@ void StartNewLevel(int level_num)
+@@ -1809,7 +1821,8 @@ void StartNewLevel(int level_num)
  		maybe_set_first_secret_visit(level_num);
  	}
  
@@ -1028,7 +1030,7 @@ index 30de489..250f106 100644
  
  	StartNewLevelSub(level_num, 1, 0 );
  
-@@ -2086,3 +2097,4 @@ void StartLevel(int random_flag)
+@@ -2086,3 +2099,4 @@ void StartLevel(int random_flag)
  	Auto_fire_fusion_cannon_time = 0;
  	Fusion_charge = 0;
  }

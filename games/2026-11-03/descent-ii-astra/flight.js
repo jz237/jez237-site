@@ -265,7 +265,7 @@ async function launch(quick,demo=false,encounter=false,preview=false) {
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre6");
+    await script("engine.js?v=pyre7");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 
