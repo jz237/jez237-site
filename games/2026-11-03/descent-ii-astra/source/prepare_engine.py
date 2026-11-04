@@ -17,6 +17,9 @@ includes={"armor.inc":"3d/astra_armor.inc","finish.inc":"arch/ogl/astra_finish.i
 includes.update({'fleet.inc': 'arch/ogl/astra_fleet.inc', 'fleet_types.inc': 'arch/ogl/astra_fleet_types.inc', 'shell.inc': '3d/astra_shell.inc', 'gantry.inc': 'arch/ogl/astra_gantry.inc', 'plume.inc': 'arch/ogl/astra_plume.inc', 'encounter.inc': 'main/astra_encounter.inc'})
 includes["pickups.inc"]="arch/ogl/astra_pickups.inc"
 includes["autopilot.inc"]="main/astra_autopilot.inc"
+includes["menus.inc"]="main/astra_menus.inc"
+includes["lists.inc"]="main/astra_lists.inc"
+includes["pause.inc"]="main/astra_pause.inc"
 includes["preview.inc"]="main/astra_preview.inc"
 includes["lens.inc"]="arch/ogl/astra_lens.inc"
 for name,path in includes.items():

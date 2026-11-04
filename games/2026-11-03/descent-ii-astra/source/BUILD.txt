@@ -108,3 +108,24 @@ it was not an autonomous combat playthrough. Phone portrait/landscape layout,
 pause/resume, next-mine, sound and pointer-free viewing were tested with Chrome
 mobile emulation, not physical phones. The destruction preview still replays
 with different seeds and resumes without spending pilot resources.
+
+Astra flight terminal (pyre9)
+
+The title screen uses the game's Pyro mesh inside a procedural WebGL maintenance
+bay, with drag rotation, zoom, preset views and a rotating display. Missions,
+live demo, showroom, settings and controls have separate responsive panels.
+Campaign cards select on click and launch on double-click; a launch guard
+prevents duplicate engine starts. Title preferences are saved locally.
+
+menus.inc and lists.inc expose the original engine's structured menus and
+listboxes to terminal.js. HTML inputs feed native selection/change callbacks,
+so sound, options, pilot/mission selection and save/load still use D2's own
+behavior and file formats. Menu generation IDs discard stale queued clicks.
+The Flight menu button opens pause.inc for resume, save, load and options.
+Original flight controls, physics and level simulation are unchanged.
+
+Validation covered desktop and phone title layouts, campaign double-click,
+native options and sound sliders, mission lists, flight pause, a valid DGSS
+save and successful restore with the Astra deck, explosion preview/replay,
+and autonomous phone-demo launch. Automated browsers disabled pointer lock
+before loading the game and were closed after each check.

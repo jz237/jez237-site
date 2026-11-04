@@ -1,7 +1,7 @@
 "use strict";
 const $ = id => document.getElementById(id);
 const astraIndex = {};
-let mounted = new Map(), saving = false;
+let mounted = new Map(), saving = false, launchPending = false;
 function script(src) {
   return new Promise((resolve,reject) => {
     const el = document.createElement("script");
@@ -12,6 +12,7 @@ function script(src) {
   });
 }
 function astraFail(message) {
+  window.astraTerminal?.fail();
   window.astraFlightFocus(false);
   document.body.classList.remove("flying");
   $("status").textContent = String(message);
@@ -116,6 +117,7 @@ let flightActive = false, capturePending = false, captureClick = false, hasMouse
 let lastRelease = -Infinity;
 const mouseCaptured = () => document.pointerLockElement === flightView;
 function refreshMouseHint() {
+  $("flightMenu").hidden=!flightActive || !!window.Module?.autopilot || !!window.astraPreview?.active;
   mouseHint.hidden = !!window.Module?.autopilot || !flightActive || mouseCaptured() || window.astraPreview?.active;
   $("previewFlight").hidden = !flightActive || !window.Module?.astra || window.astraPreview?.active;
 }
@@ -209,6 +211,8 @@ $("previewAgain").onclick=()=>{Module.pyroPreviewCommand=1;};
 $("previewClose").onclick=()=>window.astraPreview.close();
 
 async function launch(quick,demo=false,encounter=false,preview=false,autopilot=false,inspect=false) {
+  if(launchPending)return;
+  launchPending=true;window.astraTerminal?.loading(true);
   const buttons=document.querySelectorAll(".launch");
   buttons.forEach(el=>el.disabled=true);
   try {
@@ -236,10 +240,10 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
     const quality=Number($("res").value);
     const height=Math.round(quality*9/16);
     window.Module={
-      canvas,quick,demo,encounter,autopilot,mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:autopilot?Number($("demoLevel").value):1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign:$("campaign").value,wideHud:$("wideHud").checked,intro:!quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys",
+      canvas,quick,demo,encounter,autopilot,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:autopilot?Number($("demoLevel").value):1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign:$("campaign").value,wideHud:$("wideHud").checked,intro:!quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys",
         "-gl_gettexlevelparam_ok","0","-gl_intensity4_ok","0","-gl_luminance4_alpha4_ok","0","-gl_rgba2_ok","0"],
       print:console.log,printErr:console.warn,onAbort:astraFail,
-      onExit:()=>{window.astraFlightFocus(false);syncPilot();document.body.classList.remove("flying");$("status").textContent="Flight ended."; $("retry").hidden=false;},
+      onExit:()=>{window.astraMenus?.hide();window.astraTerminal?.fail();window.astraFlightFocus(false);syncPilot();document.body.classList.remove("flying");$("status").textContent="Flight ended."; $("retry").hidden=false;},
       preRun:[()=>{
         const F=Module.FS, save="/home/web_user/.d2-astra";
         F.mkdirTree("/mine/demos");F.mkdirTree("/mine/missions"); F.mkdirTree(save);
@@ -270,11 +274,11 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         });
       }],
       onRuntimeInitialized:()=>{
-        document.body.classList.add("flying"); document.body.classList.toggle("autopilot",autopilot); $("autoPanel").hidden=!autopilot; canvas.focus();
+        window.astraTerminal?.loading(false);document.body.classList.add("flying"); document.body.classList.toggle("autopilot",autopilot); $("autoPanel").hidden=!autopilot; canvas.focus();
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre8");
+    await script("engine.js?v=pyre9");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 

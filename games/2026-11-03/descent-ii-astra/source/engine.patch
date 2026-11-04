@@ -846,10 +846,10 @@ index fe9b0d1..4dd1822 100644
 +
 +
 diff --git a/d2/main/game.c b/d2/main/game.c
-index f15d413..db4fcd6 100644
+index f15d413..3288684 100644
 --- a/d2/main/game.c
 +++ b/d2/main/game.c
-@@ -1108,6 +1108,18 @@ void game_render_frame();
+@@ -1108,6 +1108,19 @@ void game_render_frame();
  
  window *Game_wind = NULL;
  
@@ -864,11 +864,12 @@ index f15d413..db4fcd6 100644
 +extern int astra_preview_frame(void);
 +
 +#include "astra_autopilot.inc"
++#include "astra_pause.inc"
 +
  // Event handler for the game
  int game_handler(window *wind, d_event *event, void *data)
  {
-@@ -1118,7 +1130,11 @@ int game_handler(window *wind, d_event *event, void *data)
+@@ -1118,7 +1131,11 @@ int game_handler(window *wind, d_event *event, void *data)
  		case EVENT_WINDOW_ACTIVATED:
  			set_screen_mode(SCREEN_GAME);
  
@@ -881,7 +882,7 @@ index f15d413..db4fcd6 100644
  			key_toggle_repeat(0);
  			game_flush_inputs();
  
-@@ -1134,8 +1150,11 @@ int game_handler(window *wind, d_event *event, void *data)
+@@ -1134,8 +1151,11 @@ int game_handler(window *wind, d_event *event, void *data)
  			reset_cockpit();
  			break;
  
@@ -895,7 +896,7 @@ index f15d413..db4fcd6 100644
  				stop_time();
  
  			if (!((Game_mode & GM_MULTI) && (Newdemo_state != ND_STATE_PLAYBACK)))
-@@ -1157,10 +1176,17 @@ int game_handler(window *wind, d_event *event, void *data)
+@@ -1157,10 +1177,18 @@ int game_handler(window *wind, d_event *event, void *data)
  		case EVENT_KEY_COMMAND:
  		case EVENT_KEY_RELEASE:
  		case EVENT_IDLE:
@@ -903,6 +904,7 @@ index f15d413..db4fcd6 100644
  			return ReadControls(event);
  
  		case EVENT_WINDOW_DRAW:
++            if(EM_ASM_INT({var c=Module.menuCommand||0;Module.menuCommand=0;return c;})){astra_pause_open();break;}
 +            if(astra_auto_enabled()){
 +                int next=EM_ASM_INT({var n=Module.autoNext||0;Module.autoNext=0;return n;});
 +                if(next){StartNewGame(next);break;}
@@ -913,7 +915,7 @@ index f15d413..db4fcd6 100644
  
  			if (!time_paused)
  			{
-@@ -1202,7 +1228,10 @@ int game_handler(window *wind, d_event *event, void *data)
+@@ -1202,7 +1230,10 @@ int game_handler(window *wind, d_event *event, void *data)
  #endif
  				show_menus();
  			Game_wind = NULL;
@@ -925,7 +927,7 @@ index f15d413..db4fcd6 100644
  			key_toggle_repeat(1);
  			break;
  
-@@ -1306,6 +1335,7 @@ void game_leave_menus(void)
+@@ -1306,6 +1337,7 @@ void game_leave_menus(void)
  
  void GameProcessFrame(void)
  {
@@ -933,7 +935,7 @@ index f15d413..db4fcd6 100644
  	fix player_shields = Players[Player_num].shields;
  	int player_was_dead = Player_is_dead;
  
-@@ -1410,6 +1440,7 @@ void GameProcessFrame(void)
+@@ -1410,6 +1442,7 @@ void GameProcessFrame(void)
  		Players[Player_num].homing_object_dist = -1;		//	Assume not being tracked.  Laser_do_weapon_sequence modifies this.
  
  		object_move_all();
@@ -1188,7 +1190,7 @@ index 64c6202..9dde716 100644
  }
  
 diff --git a/d2/main/inferno.c b/d2/main/inferno.c
-index dc6e44a..df42060 100644
+index dc6e44a..41e791e 100644
 --- a/d2/main/inferno.c
 +++ b/d2/main/inferno.c
 @@ -44,6 +44,11 @@ char copyright[] = "DESCENT II  COPYRIGHT (C) 1994-1996 PARALLAX SOFTWARE CORPOR
@@ -1196,7 +1198,7 @@ index dc6e44a..df42060 100644
  #include "3d.h"
  #include "bm.h"
 +extern int astra_vertigo(void);
-+EM_JS(int,astra_auto_difficulty,(void),{return Module.autopilot?1:-1;});
++EM_JS(int,astra_auto_difficulty,(void),{return Module.autopilot?1:(Number.isInteger(Module.difficulty)?Module.difficulty:-1);});
 +EM_JS(int,astra_auto_first,(void),{return Module.startLevel||1;});
 +extern int astra_intro(void), astra_quick(void), astra_demo(void);
 +#define SHAREPATH "/mine"
@@ -1455,6 +1457,115 @@ index 79cf5fb..30d117c 100644
  
  }
 +
+diff --git a/d2/main/newmenu.c b/d2/main/newmenu.c
+index 163e08a..b4b8672 100644
+--- a/d2/main/newmenu.c
++++ b/d2/main/newmenu.c
+@@ -71,8 +71,10 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ #define MESSAGEBOX_TEXT_SIZE 2176  // How many characters in messagebox
+ #define MAX_TEXT_WIDTH FSPACX(120) // How many pixels wide a input box can be
+ 
++static unsigned astra_menu_generation;
+ struct newmenu
+ {
++    unsigned astra_token;
+ 	window			*wind;
+ 	int				x,y,w,h;
+ 	short			swidth, sheight; float fntscalex, fntscaley; // with these we check if resolution or fonts have changed so menu structure can be recreated
+@@ -1486,9 +1488,15 @@ int newmenu_draw(window *wind, newmenu *menu)
+ 	return 1;
+ }
+ 
++#include "astra_menus.inc"
++
+ int newmenu_handler(window *wind, d_event *event, newmenu *menu)
+ {
+-	if (event->type == EVENT_WINDOW_CLOSED)
++	if(am_enabled()){
++        if(event->type==EVENT_WINDOW_CLOSE||event->type==EVENT_WINDOW_DEACTIVATED)am_hide(menu->astra_token);
++        if(event->type==EVENT_MOUSE_BUTTON_DOWN||event->type==EVENT_MOUSE_BUTTON_UP||event->type==EVENT_MOUSE_MOVED)return 1;
++    }
++    if (event->type == EVENT_WINDOW_CLOSED)
+ 		return 0;
+ 
+ 	if (menu->subfunction)
+@@ -1540,11 +1548,13 @@ int newmenu_handler(window *wind, d_event *event, newmenu *menu)
+ 		case EVENT_IDLE:
+ 			timer_delay2(50);
+ 
+-			return newmenu_mouse(wind, event, menu, -1);
++			if(am_enabled())return 1;
++            return newmenu_mouse(wind, event, menu, -1);
+ 			break;
+ 
+ 		case EVENT_WINDOW_DRAW:
+-			return newmenu_draw(wind, menu);
++			if(am_enabled())return window_get_front()==wind?astra_menu_frame(menu):1;
++            return newmenu_draw(wind, menu);
+ 			break;
+ 
+ 		case EVENT_WINDOW_CLOSE:
+@@ -1568,7 +1578,8 @@ newmenu *newmenu_do4( char * title, char * subtitle, int nitems, newmenu_item *
+ 	if (!menu)
+ 		return NULL;
+ 
+-	menu->citem = citem;
++	menu->astra_token=++astra_menu_generation;
++    menu->citem = citem;
+ 	menu->scroll_offset = 0;
+ 	menu->last_scroll_check = -1;
+ 	menu->all_text = 0;
+@@ -1695,6 +1706,7 @@ int nm_messagebox( char *title, int nchoices, ... )
+ 
+ struct listbox
+ {
++    unsigned astra_token;
+ 	window *wind;
+ 	char *title;
+ 	int nitems;
+@@ -2094,9 +2106,15 @@ int listbox_draw(window *wind, listbox *lb)
+ 	return 1;
+ }
+ 
++#include "astra_lists.inc"
++
+ int listbox_handler(window *wind, d_event *event, listbox *lb)
+ {
+-	if (event->type == EVENT_WINDOW_CLOSED)
++	if(am_enabled()){
++        if(event->type==EVENT_WINDOW_CLOSE||event->type==EVENT_WINDOW_DEACTIVATED)am_hide(lb->astra_token);
++        if(event->type==EVENT_MOUSE_BUTTON_DOWN||event->type==EVENT_MOUSE_BUTTON_UP||event->type==EVENT_MOUSE_MOVED)return 1;
++    }
++    if (event->type == EVENT_WINDOW_CLOSED)
+ 		return 0;
+ 
+ 	if (lb->listbox_callback)
+@@ -2134,11 +2152,13 @@ int listbox_handler(window *wind, d_event *event, listbox *lb)
+ 		case EVENT_IDLE:
+ 			timer_delay2(50);
+ 
+-			return listbox_mouse(wind, event, lb, -1);
++			if(am_enabled())return 1;
++            return listbox_mouse(wind, event, lb, -1);
+ 			break;
+ 
+ 		case EVENT_WINDOW_DRAW:
+-			return listbox_draw(wind, lb);
++			if(am_enabled())return window_get_front()==wind?astra_list_frame(lb):1;
++            return listbox_draw(wind, lb);
+ 			break;
+ 
+ 		case EVENT_WINDOW_CLOSE:
+@@ -2169,7 +2189,8 @@ listbox *newmenu_listbox1( char * title, int nitems, char * items[], int allow_a
+ 
+ 	newmenu_free_background();
+ 
+-	lb->title = title;
++	lb->astra_token=++astra_menu_generation;
++    lb->title = title;
+ 	lb->nitems = nitems;
+ 	lb->item = items;
+ 	lb->citem = default_item;
 diff --git a/d2/main/object.c b/d2/main/object.c
 index 602b2d5..57e157d 100644
 --- a/d2/main/object.c
