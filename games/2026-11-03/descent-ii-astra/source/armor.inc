@@ -2,9 +2,12 @@
    so every panel follows its original subobject, including firing animations. */
 static int astra_mesh_faces;
 static int astra_plates_enabled=-1;
+extern int astra_shadowing(void);
+extern int astra_shadow_face(int,const g3s_point**);
 static void astra_plate(int n,const g3s_point **outer,g3s_uvl *uv,g3s_lrgb *light,
                         grs_bitmap *bitmap, const vms_vector *normal)
 {
+    if(astra_shadow_face(n,outer))return;
     if(astra_plates_enabled<0) astra_plates_enabled=EM_ASM_INT(return !!Module.astra);
     if(!astra_plates_enabled || n<3 || n>=MAX_POINTS_PER_POLY || outer[0]->p3_z>i2f(160)) {
         g3_draw_tmap(n,outer,uv,light,bitmap); return;
