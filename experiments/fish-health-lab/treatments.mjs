@@ -18,6 +18,7 @@ const GUIDES = {
   buoyancy: { url: ROUTINE_CARE, title: 'Care for an unwell fish', scope: 'both', type: 'care' },
   'gill-parasites': { section: 'v3226711', title: 'Care for gill problems', scope: 'both', type: 'care' },
   growth: { section: 'Skin-Disorders_v3226728', title: 'Care for skin growths', scope: 'both', type: 'care' },
+  lymphocystis: { section: 'v3226746', title: 'Lymphocystis care & treatment', scope: 'both', type: 'care', note: 'There is no specific medicine that cures this virus. Read about supportive care and when to get help.' },
 };
 
 export function treatmentGuideFor(id, water) {

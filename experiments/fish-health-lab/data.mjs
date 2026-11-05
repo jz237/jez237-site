@@ -2,6 +2,7 @@ export const SOURCES = [
   { id: 'parasites', name: 'Merck · Fish diseases: pet owner guide', url: 'https://www.merckvetmanual.com/all-other-pets/fish/disorders-and-diseases-of-fish#v3226749' },
   { id: 'bacteria', name: 'Merck · Skin problems: pet owner guide', url: 'https://www.merckvetmanual.com/all-other-pets/fish/disorders-and-diseases-of-fish#Skin-Disorders_v3226728' },
   { id: 'management', name: 'Merck · Routine health care of fish', url: 'https://www.merckvetmanual.com/all-other-pets/fish/routine-health-care-of-fish' },
+  { id: 'growths', name: 'Merck · Lymphocystis and other viral skin growths', url: 'https://www.merckvetmanual.com/all-other-pets/fish/disorders-and-diseases-of-fish#v3226746' },
 ];
 
 export const SYMPTOMS = [
@@ -29,11 +30,22 @@ export const BEHAVIORS = [
   { id: 'deaths', label: 'Fish have died during this problem' },
 ];
 
+export const GROWTH_CHOICES = [
+  { id: 'cauliflower', title: 'Rough, wart-like clusters', text: 'Firm-looking bumps bunched together like tiny cauliflower—not soft threads.' },
+  { id: 'smooth', title: 'A smooth, rounded lump', text: 'A solid-looking bump under or on the skin, without a rough clustered surface.' },
+  { id: 'inflamed', title: 'A red, inflamed or open lump', text: 'The lump has reddened or broken skin, rather than an intact pale surface.' },
+  { id: 'unclear', title: 'I can’t tell / none of these fit', text: 'Keep the cause open rather than guessing.' },
+];
+
 // Illustrative differential clues, not a validated diagnostic model.
 // Weights rank relevant reading only; they are never shown as probabilities.
 export const CONDITIONS = [
   {
     id: 'water', title: 'Water-quality or oxygen stress', scope: 'both', kind: 'Environment', art: 'breathing',
+    possibleCauses: [
+      { title: 'Low oxygen', text: 'Poor aeration or filter flow can make several fish breathe rapidly.' },
+      { title: 'Ammonia, nitrite or other water stress', text: 'Actual readings and recent tank changes help separate these from infection.' },
+    ],
     summary: 'A tank problem can look like an infection—and can affect several fish at once.',
     weights: { breathing: 3, balance: 2, unclear: 2, appetite: 1, gasping: 4, collapse: 3, deaths: 2 },
     clues: ['Rapid breathing, surface gasping or unusual lethargy.', 'Several fish affected, especially after a filter problem, new setup or recent change.'],
@@ -45,6 +57,7 @@ export const CONDITIONS = [
   },
   {
     id: 'ich-fresh', title: 'Freshwater ich', scientific: 'Ichthyophthirius multifiliis', scope: 'fresh', kind: 'Parasite', art: 'dots',
+    diagnosis: true,
     summary: 'Small, separate white spots on skin or fins. Gill infections may have no visible spots.',
     weights: { dots: 6, rubbing: 2, clamped: 1, breathing: 1, appetite: 1 },
     clues: ['Discrete white grains on the body or fins, rather than fluffy threads.', 'Rubbing, clamped fins, reduced appetite or rapid breathing may accompany the spots.'],
@@ -56,6 +69,7 @@ export const CONDITIONS = [
   },
   {
     id: 'ich-marine', title: 'Marine ich / white spot', scientific: 'Cryptocaryon irritans', scope: 'marine', kind: 'Parasite', art: 'dots',
+    diagnosis: true,
     summary: 'A different parasite from freshwater ich, with a different management plan.',
     weights: { dots: 6, rubbing: 2, breathing: 2, appetite: 1, clamped: 1 },
     clues: ['White spots on skin or fins; respiratory signs may occur without visible spots.', 'More than one exposed fish can be affected.'],
@@ -67,6 +81,7 @@ export const CONDITIONS = [
   },
   {
     id: 'velvet-fresh', title: 'Freshwater velvet', scientific: 'Piscinoodinium species', scope: 'fresh', kind: 'Parasite', art: 'dust',
+    diagnosis: true,
     summary: 'A very fine dusting or gold-brown sheen, sometimes with little visible skin change.',
     weights: { dust: 6, breathing: 3, rubbing: 2, clamped: 1, appetite: 1, gasping: 2 },
     clues: ['Very fine dusting rather than obvious salt-grain dots.', 'Gill irritation, rubbing, clamped fins or fast breathing.'],
@@ -77,6 +92,7 @@ export const CONDITIONS = [
   },
   {
     id: 'velvet-marine', title: 'Marine velvet', scientific: 'Amyloodinium species', scope: 'marine', kind: 'Urgent parasite concern', art: 'dust',
+    diagnosis: true,
     summary: 'Gill disease can be severe and fast-moving—even with few or no visible spots.',
     weights: { dust: 6, breathing: 4, gasping: 4, deaths: 3, appetite: 1, clamped: 1 },
     clues: ['Fine dusting or a dull sheen may occur, but may be absent.', 'Marked breathing difficulty or rapid losses are particularly concerning.'],
@@ -87,6 +103,7 @@ export const CONDITIONS = [
   },
   {
     id: 'water-mold', title: 'Water mold / cottony growth', scientific: 'For example, Saprolegnia species', scope: 'fresh', kind: 'Growth pattern', art: 'fuzz',
+    diagnosis: true,
     summary: 'Cotton-like filaments can colonize damaged skin; the original injury matters too.',
     weights: { fuzz: 6, sores: 2, fins: 1, patch: 1 },
     clues: ['Clearly fuzzy threads or tufts on a damaged area.', 'An underlying wound or tissue injury may be present.'],
@@ -97,6 +114,7 @@ export const CONDITIONS = [
   },
   {
     id: 'columnaris', title: 'Columnaris-type bacterial disease', scientific: 'Flavobacterium-related disease', scope: 'fresh', kind: 'Bacterial possibility', art: 'patch',
+    diagnosis: true,
     summary: 'Skin, mouth, fins or gills may be involved; some forms progress rapidly.',
     weights: { patch: 5, fins: 3, fuzz: 2, breathing: 2, sores: 1, deaths: 1 },
     clues: ['Pale skin or mouth lesions, damaged fins or gill problems.', 'A fuzzy-looking appearance is not proof of a fungal cause.'],
@@ -107,6 +125,10 @@ export const CONDITIONS = [
   },
   {
     id: 'fin-damage', title: 'Fin injury or fin erosion', scope: 'both', kind: 'Symptom pattern', art: 'fins',
+    possibleCauses: [
+      { title: 'Fin injury or nipping', text: 'A sudden clean split after aggression or a snag supports physical damage.' },
+      { title: 'Fin rot / secondary bacterial infection', text: 'Edges that keep shortening, especially with redness, raise concern for infection and water stress.' },
+    ],
     summary: 'Nipping, physical injury, water stress and secondary infection can all damage fins.',
     weights: { fins: 6, sores: 1, clamped: 1 },
     clues: ['Split, shortened or ragged fin edges.', 'The pattern, rate of change and tankmate behavior help distinguish causes.'],
@@ -117,6 +139,10 @@ export const CONDITIONS = [
   },
   {
     id: 'ulcer', title: 'Injury or ulcerative disease', scope: 'both', kind: 'Needs assessment', art: 'sores',
+    possibleCauses: [
+      { title: 'Injury with inflammation', text: 'A collision, scrape or bite can leave a red or open area.' },
+      { title: 'Bacterial skin infection or abscess', text: 'An enlarging sore or inflamed swelling can involve infection; redness does not identify the bacteria.' },
+    ],
     summary: 'Red areas and open sores can involve injury, infection or both.',
     weights: { sores: 6, patch: 1, appetite: 1, deaths: 1 },
     clues: ['Reddening, missing skin or an open wound.', 'Lethargy or appetite loss may suggest a wider problem.'],
@@ -127,6 +153,10 @@ export const CONDITIONS = [
   },
   {
     id: 'dropsy', title: 'Swelling / dropsy-like signs', scope: 'both', kind: 'A sign, not a diagnosis', art: 'swollen',
+    possibleCauses: [
+      { title: 'Fluid buildup from internal illness', text: 'Infection or organ problems can cause swelling and raised scales. Raised scales need prompt help.' },
+      { title: 'Egg development, a mass or another cause of enlargement', text: 'A large belly alone cannot distinguish these; compare shape, timing and the fish’s usual appearance.' },
+    ],
     summary: 'An enlarged body and raised scales describe a problem, not a single disease.',
     weights: { swollen: 5, pinecone: 7, appetite: 1, balance: 1 },
     clues: ['Unusual body enlargement; scales may protrude when viewed from above.', 'Reduced appetite, lethargy or buoyancy changes can accompany swelling.'],
@@ -137,6 +167,10 @@ export const CONDITIONS = [
   },
   {
     id: 'eye-change', title: 'Cloudy or protruding eyes', scope: 'both', kind: 'A sign, not a diagnosis', art: 'eyes',
+    possibleCauses: [
+      { title: 'Eye injury', text: 'A recent collision or a change in just one eye supports injury, but does not prove it.' },
+      { title: 'Infection or environmental irritation', text: 'Both eyes or other signs of illness need a wider check; cloudiness alone cannot choose the cause.' },
+    ],
     summary: 'Injury, environmental problems and internal disease can affect the eyes.',
     weights: { eyes: 6, appetite: 1, sores: 1 },
     clues: ['One or both eyes look cloudy, swollen or displaced.', 'A one-sided injury and a two-sided systemic problem can require different investigation.'],
@@ -147,6 +181,10 @@ export const CONDITIONS = [
   },
   {
     id: 'buoyancy', title: 'Buoyancy or balance problem', scope: 'both', kind: 'A sign, not a diagnosis', art: 'balance',
+    possibleCauses: [
+      { title: 'Swim-bladder dysfunction', text: 'A problem controlling buoyancy can cause floating or sinking, but posture alone does not establish it.' },
+      { title: 'Injury, internal illness or water/oxygen stress', text: 'These can also affect swimming. Several affected fish or sudden collapse need a wider, urgent check.' },
+    ],
     summary: 'Floating, sinking or tilting has many causes—not just “swim bladder disease.”',
     weights: { balance: 6, swollen: 1, appetite: 1, collapse: 2 },
     clues: ['Difficulty maintaining normal position in the water.', 'Onset, body swelling and other fish affected are important clues.'],
@@ -157,6 +195,10 @@ export const CONDITIONS = [
   },
   {
     id: 'gill-parasites', title: 'Other skin or gill parasites', scope: 'both', kind: 'Parasite possibility', art: 'breathing',
+    possibleCauses: [
+      { title: 'Gill flukes or other external parasites', text: 'Persistent rubbing and gill irritation can fit, but do not identify the parasite.' },
+      { title: 'Water-quality or oxygen stress', text: 'These can produce similar breathing and irritation signs without a parasite.' },
+    ],
     summary: 'Gill and skin irritation can occur without the classic white-spot pattern.',
     weights: { breathing: 3, rubbing: 4, clamped: 2, gasping: 1, unclear: 1 },
     clues: ['Rubbing, rapid breathing or excess mucus.', 'No obvious white spots does not rule out a parasite.'],
@@ -166,14 +208,30 @@ export const CONDITIONS = [
     avoid: 'Do not choose a parasite medicine just because the fish is rubbing.', source: ['parasites'],
   },
   {
+    id: 'lymphocystis', title: 'Lymphocystis', scientific: 'Lymphocystivirus infection', scope: 'both', kind: 'Viral possibility', art: 'lumps', diagnosis: true,
+    summary: 'Rough, wart-like cauliflower clusters on skin or fins can fit this viral disease in freshwater or marine fish.',
+    // A generic lump is not enough. Only the growth follow-up can select this.
+    weights: { lumps: 1 },
+    clues: ['Rough nodules bunched into cauliflower-like clusters on the skin or fins.', 'Solid-looking growths, rather than cottony threads or separate fine ich grains.'],
+    distinguish: 'Cysts, tumors and other nodules can resemble it. A smooth lump or red open sore is not enough to call lymphocystis.',
+    next: ['Keep the water stable and reduce aggression, crowding and unnecessary handling.', 'Photograph the growth over time and watch eating and breathing.', 'Read the lymphocystis care guide. There is no specific medicine that cures the virus; many cases settle with supportive care. Get help for growths that obstruct eating or breathing, open sores or worsening illness.'],
+    check: 'Compare the rough clustered surface with a smooth single lump. This is a possible cause from the appearance, not confirmation of the virus.',
+    avoid: 'Do not cut or scrape off the growths, or use ich medicine just because they are pale.', source: ['growths', 'management'],
+  },
+  {
     id: 'growth', title: 'Larger growths or nodules', scope: 'both', kind: 'Needs identification', art: 'lumps',
+    possibleCauses: [
+      { title: 'Lymphocystis', text: 'Rough cauliflower-like clusters can fit this viral disease; a lump alone is not enough.', conditionId: 'lymphocystis' },
+      { title: 'A cyst or tumor', text: 'A smooth, persistent lump can fit either. A tumor is not automatically cancer, and appearance cannot establish the type.' },
+      { title: 'Injury or localized infection', text: 'Redness, broken skin or a rapidly changing swelling raise different concerns from an intact wart-like cluster.' },
+    ],
     summary: 'Irregular lumps are a different pattern from fine, discrete ich-like grains.',
     weights: { lumps: 6, patch: 1 },
     clues: ['One or more raised, irregular growths or larger nodules.', 'Rate of growth, location and the fish’s overall condition matter.'],
     distinguish: 'Viral, bacterial, parasitic, reactive and other growths can resemble one another. Some normal anatomy also looks unusual.',
     next: ['Take clear photos with dates and a consistent angle.', 'Get help if a growth enlarges, opens into a sore or affects eating or breathing.', 'Compare with normal anatomy for that species, without assuming the lump is harmless.'],
     check: 'Compare the size, texture and location over time. A new or changing solid lump is different from small separate ich-like grains.',
-    avoid: 'Do not cut, squeeze, scrape or burn a growth.', source: ['management', 'parasites', 'bacteria'],
+    avoid: 'Do not cut, squeeze, scrape or burn a growth.', source: ['growths', 'management', 'bacteria'],
   },
   {
     id: 'normal', title: 'Normal markings or anatomy', scope: 'both', kind: 'Important look-alike', art: 'plain',

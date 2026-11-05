@@ -50,8 +50,12 @@
             <div id="behavior-grid" class="behavior-grid"></div><div id="inline-urgent" class="notice urgent" hidden role="status"></div>
             <details id="additional-signs" class="additional-signs"><summary>Any other visible changes? <span>Optional</span></summary><p id="additional-status" class="quiet" role="status"></p><div id="additional-grid" class="symptom-grid" aria-label="Choose any additional visible signs"></div></details>
           </section>
+          <section class="question-panel" data-step="growth" hidden aria-labelledby="growth-title">
+            <h1 id="growth-title" class="question-title">What is the lump’s surface like?</h1><p class="question-hint">“Raised lumps” is a sign, not a disease name. One closer look can help separate the possible causes. Observe the fish in the water—don’t touch the growth.</p>
+            <div id="growth-grid" class="water-picker" role="radiogroup" aria-labelledby="growth-title"></div>
+          </section>
           <section class="question-panel" data-step="care" hidden aria-labelledby="care-title">
-            <h1 id="care-title" class="question-title">Care & treatment</h1><p class="question-hint">You have a probable match. These optional checks help you care for the fish and tank.</p>
+            <h1 id="care-title" class="question-title">Care & treatment</h1><p class="question-hint">These optional checks help you care for the fish and tank, whether a likely cause is named or still unclear.</p>
             <div id="care-context" class="care-context"></div>
             <h2>Do you have any water readings?</h2><p class="quiet">These guide the next steps, not the visual match. Add what you know; leave unmeasured values blank.</p>
             <div class="test-grid"><div><label for="ammonia">Total ammonia <small>ppm / mg/L</small></label><input id="ammonia" name="ammonia" type="number" min="0" max="100" step="any" inputmode="decimal" placeholder="Unknown"></div><div><label for="nitrite">Nitrite <small>ppm / mg/L</small></label><input id="nitrite" name="nitrite" type="number" min="0" max="100" step="any" inputmode="decimal" placeholder="Unknown"></div><div><label for="ph">pH</label><input id="ph" name="ph" type="number" min="0" max="14" step="any" inputmode="decimal" placeholder="Unknown"></div><div><label for="temperature">Temperature</label><div class="unit-input"><input id="temperature" name="temperature" type="number" min="0" max="120" step="any" inputmode="decimal" placeholder="Unknown"><select aria-label="Temperature unit" name="tempUnit"><option value="F">°F</option><option value="C">°C</option></select></div></div></div>
@@ -69,7 +73,7 @@
           <div id="flow-actions" class="step-actions"><button type="button" class="button secondary" data-action="back">← Back</button><button type="submit" class="button primary" id="next-button">Continue →</button></div>
         </form>
         <section class="question-panel" data-step="results" hidden aria-labelledby="results-title"><div id="results-content"></div><div class="step-actions"><button class="button secondary" data-action="edit">← Change my answers</button><button class="text-button" data-action="reset">Start over</button></div></section>
-        <section class="question-panel" data-step="care-summary" hidden aria-labelledby="care-summary-title"><div id="care-summary-content"></div><div class="step-actions"><button class="button secondary" data-action="care">← Edit care details</button><button class="text-button" data-action="results">Back to probable diagnosis</button></div></section>
+        <section class="question-panel" data-step="care-summary" hidden aria-labelledby="care-summary-title"><div id="care-summary-content"></div><div class="step-actions"><button class="button secondary" data-action="care">← Edit care details</button><button class="text-button" data-action="results">Back to my results</button></div></section>
       </section>
       <aside class="help-line"><span aria-hidden="true">!</span><p><strong>Gasping, unable to stay upright, or losing fish?</strong><button class="text-button" data-action="emergency">Get help now →</button></p></aside>
     </section>

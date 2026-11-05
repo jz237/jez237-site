@@ -7,6 +7,65 @@ import { signImagesFor } from '../../experiments/fish-health-lab/choice-images.m
 const input = (patterns, extra = {}) => ({ water: 'fresh', primarySign: patterns[0], visualSigns: patterns, signs: patterns, ...extra });
 const ids = result => result.findings.map(c => c.id).sort();
 
+test('a growth category is an unresolved observation with named possible causes, not a probable diagnosis', () => {
+  for (const water of ['fresh','marine']) {
+    const result = assessDiagnosis(input(['lumps'], {water}));
+    assert.deepEqual(result.diagnoses, []);
+    assert.equal(result.unresolvedFindings[0].id, 'growth');
+    assert.match(result.title, /Possible causes/);
+    assert.deepEqual(result.primary.possibleCauses.map(c => c.title), ['Lymphocystis','A cyst or tumor','Injury or localized infection']);
+    const notes = buildCase(input(['lumps'], {water}));
+    assert.match(notes, /No specific disease identified/);
+    assert.match(notes, /unresolved causes \(not diagnoses\): Larger growths/);
+  }
+});
+
+test('only a rough cauliflower-like growth answer promotes lymphocystis, in either environment', () => {
+  for (const water of ['fresh','marine']) {
+    const result = assessDiagnosis(input(['lumps'], {water,growthAppearance:'cauliflower'}));
+    assert.deepEqual(ids(result), ['lymphocystis']);
+    assert.equal(result.title, 'Probable diagnosis');
+    assert.match(result.primary.matched[0], /wart-like clusters/);
+    for (const growthAppearance of ['smooth','inflamed','unclear','', 'invalid']) {
+      assert.ok(!assessDiagnosis(input(['lumps'],{water,growthAppearance})).diagnoses.some(c=>c.id === 'lymphocystis'));
+    }
+    assert.ok(!assessDiagnosis(input(['dots'],{water,growthAppearance:'cauliflower'})).findings.some(c=>c.id === 'lymphocystis'));
+  }
+});
+
+test('smooth and inflamed lumps narrow the possibilities without inventing a specific pathogen or cancer', () => {
+  const smooth = assessDiagnosis(input(['lumps'], {growthAppearance:'smooth'}));
+  assert.equal(smooth.diagnoses.length,0);
+  assert.deepEqual(smooth.primary.possibleCauses.map(c=>c.title), ['A cyst','A tumor or other tissue growth','An old injury or localized swelling']);
+  for (const signs of [['lumps','sores'],['sores','lumps']]) {
+    const result = assessDiagnosis(input(signs, {growthAppearance:'inflamed'}));
+    assert.deepEqual(ids(result), ['ulcer']);
+    assert.deepEqual(new Set(result.primary.fits), new Set(['lumps','sores']));
+    assert.equal(result.diagnoses.length,0);
+    assert.match(result.primary.possibleCauses.map(c=>c.title).join(' '), /abscess/);
+  }
+});
+
+test('growth follow-up preserves concurrent white grains and urgent raised scales without relabeling them', () => {
+  const result = assessDiagnosis(input(['dots','lumps'], {growthAppearance:'cauliflower',signs:['dots','lumps','pinecone']}));
+  assert.deepEqual(result.diagnoses.map(c=>c.id).sort(), ['ich-fresh','lymphocystis']);
+  assert.equal(result.title,'Probable diagnoses');
+  assert.deepEqual(result.unresolvedFindings.map(c=>c.id),['dropsy']);
+  assert.ok(result.urgent.length);
+  const swollen = assessDiagnosis(input(['swollen','dots'], {signs:['swollen','dots','pinecone']}));
+  assert.equal(swollen.primary.id,'ich-fresh');
+  assert.deepEqual(swollen.unresolvedFindings.map(c=>c.id),['dropsy']);
+});
+
+test('all symptom-only result families provide cause-level possibilities and never claim a disease name', () => {
+  for (const sign of ['fins','sores','swollen','eyes','balance','breathing','lumps']) {
+    const result = assessDiagnosis(input([sign]));
+    assert.equal(result.diagnoses.length,0);
+    assert.match(result.title, /Possible causes/);
+    assert.ok(result.unresolvedFindings.every(c => c.possibleCauses?.length >= 2));
+  }
+});
+
 test('white grains and cottony threads retain both plausible problems, not a forced single name', () => {
   const result = assessDiagnosis(input(['dots','fuzz']));
   assert.equal(result.status, 'multiple');

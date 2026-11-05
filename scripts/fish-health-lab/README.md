@@ -40,7 +40,9 @@ and handling for multiple/conflicting signs. Release through the guarded publish
 - Buildless static HTML/CSS/ES modules. No credentials, account, API endpoint,
   dependency installation, paid inference, backend storage or photo upload.
 - Start → freshwater or saltwater / reef → main visible symptom → behavior →
-  probable diagnosis. Behavior also offers optional extra symptom pictures.
+  results. Behavior also offers optional extra symptom pictures. Any selected
+  raised lump (main, closer texture or extra sign) adds a surface-description
+  question before results; it does not automatically become a diagnosis.
   Then, separately: Care & treatment → optional water readings/tank history →
   conditional care steps. Only one question screen is shown.
   Freshwater + white dots adds a texture question; it does not preselect ich.
@@ -59,6 +61,19 @@ and handling for multiple/conflicting signs. Release through the guarded publish
   never an ich look-alike. Appetite/rubbing/clamped fins do not invent unrelated
   diagnoses. Distress stays urgent; positive water readings are a coexisting
   environmental concern, not a replacement for skin signs.
+- A **Probable diagnosis** heading is reserved for named condition matches.
+  Symptom-only families instead show **Possible causes — not narrowed down yet**,
+  with cause-level possibilities and discriminating clues. Swelling, eye changes,
+  damaged fins, swimming trouble, breathing and unidentified lumps are never
+  promoted to disease names in results, care context or exported observations.
+  Mixed results keep named matches separate from additional unresolved signs.
+- Growth follow-up: rough wart-like cauliflower clusters can suggest
+  **lymphocystis** in either environment; smooth lumps leave cyst/tumor/other
+  swelling alternatives open; inflamed or open lumps lead to injury/infection
+  possibilities. “Can't tell” retains named alternatives without choosing a
+  disease. Only an actual lump observation enables this answer; changing water
+  or the main/texture sign clears it, Back preserves it, and notes record it.
+  Generic lump photos are symptom illustrations, not verified lymphocystis cases.
 - Look-alikes remain curated by appearance and water type, separate from additional
   actual findings. A closer texture choice supersedes the coarse first choice
   transparently. Every explicit sign is accounted for or marked unresolved.
@@ -75,9 +90,9 @@ and handling for multiple/conflicting signs. Release through the guarded publish
   Urgent distress remains visible before care. Water checks do not erase a
   concurrent skin pattern or contaminate its look-alikes.
 - The Reference library is a separate, opt-in view. Returning preserves the check.
-  It has 15 entries, 12 appearance filters, water-type/search filters and six
-  gallery slots per entry (90 total). Ich, freshwater velvet and water mold each have six filled views (18 total);
-  72 other slots remain honest placeholders. Selector pictures do not count as confirmed disease
+  It has 16 entries, 12 appearance filters, water-type/search filters and six
+  gallery slots per entry (96 total). Ich, freshwater velvet and water mold each have six filled views (18 total);
+  78 other slots remain honest placeholders. Selector pictures do not count as confirmed disease
   cases or completed condition galleries.
 - All six ich sheets remain accessible in a one-picture-at-a-time gallery:
   whole-fish guide, different fish, close-up, subtle appearance, marked changes,
@@ -131,7 +146,10 @@ white-grain portrait; all six ich views are still available.
 
 `treatments.mjs` maps each disease to a verified section in Merck's pet-owner
 fish guide. Ich: `#v3226751`; velvet: `#v3226757`; cottony water mold:
-`#v3226818`; columnaris: `#v3226736`. Eye, gill and other symptom patterns use
+`#v3226818`; columnaris: `#v3226736`; lymphocystis care: `#v3226746`.
+The lymphocystis section was rechecked directly on November 5; it describes
+cauliflower-like skin/fin growths in both environments. The guide offers
+supportive care, not an antiviral cure. Eye, gill and other symptom patterns use
 appropriate care sections, not a promised single cure; normal markings get no
 medicine link. Fresh/marine scope is checked before rendering each link.
 
@@ -143,10 +161,10 @@ were checked via HTTP and their actual HTML IDs, not guessed from heading text.
 Saved source HTML and anchor inventories:
 `workspace/tmp/fish-health-hobbyist-draft-20261105/`.
 
-15 comparison entries: environmental stress, freshwater ich, marine ich,
+16 comparison entries: environmental stress, freshwater ich, marine ich,
 freshwater velvet, marine velvet, water mold, columnaris-type disease, fin damage,
 ulcerative disease, dropsy-like swelling, eye changes, buoyancy, other gill/skin
-parasites, larger growths and normal anatomy/markings.
+parasites, lymphocystis, unidentified larger growths and normal anatomy/markings.
 
 Sources checked 2026-11-05: Merck Veterinary Manual pet-owner fish diseases and
 routine health care (links in data.mjs and treatments.mjs). Summaries are not
@@ -227,7 +245,7 @@ that every condition has a distinct visible presentation.
 
 Run `node --test scripts/fish-health-lab/logic.test.mjs scripts/fish-health-lab/diagnosis.test.mjs scripts/fish-health-lab/treatments.test.mjs` and syntax checks.
 Run `browser-check.mjs`, `visual-browser-check.mjs` and
-`hobbyist-browser-check.mjs` locally. Publication is authorized; use the guarded full-site publisher.
+`hobbyist-browser-check.mjs` and `growth-browser-check.mjs` locally. Publication is authorized; use the guarded full-site publisher.
 The obsolete disease-first `ich-browser-check.mjs` is retired; its relevant
 branch, image, privacy and mobile coverage is included in the current suites.
 

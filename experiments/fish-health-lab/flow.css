@@ -76,6 +76,15 @@ main { max-width: 1160px; padding: 0 32px; }
 .diagnosis-reason { border-left: 3px solid #a2b59a; padding: 2px 0 2px 14px; margin: 18px 0; }
 .diagnosis-reason > strong { font-size: 13px; font-weight: 500; }
 .diagnosis-reason > p { margin: 5px 0 0; font-size: 13px; }
+.possible-causes { margin: 22px 0; }
+.possible-causes h3 { font-size: 19px; margin-bottom: 8px; }
+.possible-causes ul { list-style: none; padding: 0; }
+.possible-causes li { border-top: 1px solid var(--line); padding: 12px 0; }
+.possible-causes li > strong { font-size: 16px; }
+.possible-causes li > p { margin: 5px 0 0; font-size: 13px; }
+.possible-causes .text-button { text-align: left; font-size: 12px; }
+#growth-grid label { min-width: 0; }
+#growth-grid small { line-height: 1.5; }
 .treatment-link { margin: 18px 0; }
 .treatment-link .button { display: inline-flex; align-items: center; justify-content: center; text-align: center; min-height: 48px; margin-bottom: 7px; }
 .treatment-link > small { display: block; color: var(--muted); font-size: 11px; line-height: 1.5; }
@@ -182,6 +191,7 @@ footer > .text-button { font-size: 12px; }
 
 /* Keep visual matching separate from the optional care assessment. */
 #fish-form.care-mode #flow-actions{position:static;box-shadow:none}
+#fish-form:has([data-step="growth"]:not([hidden])) #flow-actions{position:static;box-shadow:none}
 .flow-topline>.text-button{white-space:nowrap;flex-shrink:0}
 .alternative>img{flex-shrink:0;width:88px;height:88px;object-fit:cover;border-radius:10px;align-self:center}
 .care-next{margin:2rem 0;padding:1.5rem;background:#e7eee6;border:1px solid var(--line);border-radius:16px}

@@ -95,7 +95,7 @@ try {
 
   await page.locator('.nav-tab[data-view="library"]').click();
   assert.equal(await page.locator('#library-water').inputValue(),'marine');
-  assert.equal(await page.locator('#library-grid .condition-card').count(),11);
+  assert.equal(await page.locator('#library-grid .condition-card').count(),12);
   assert.equal(await page.locator('#library-grid [data-condition="ich-fresh"]').count(),0);
   await page.locator('#library-grid .card-image[data-condition="eye-change"]').click();
   await visitorCopy(page);
@@ -141,8 +141,10 @@ try {
   await begin(page,'fresh','dots');
   await page.locator('input[value="pinecone"]').check();
   await page.locator('input[value="appetite"]').check(); await next(page);
-  assert.equal(await page.locator('#results-title').innerText(),'Probable diagnoses');
+  assert.equal(await page.locator('#results-title').innerText(),'Probable diagnosis');
   assert.deepEqual(new Set(await resultIds(page)),new Set(['ich-fresh','dropsy']));
+  assert.equal(await page.locator('[data-result="dropsy"]').getAttribute('data-result-kind'),'unresolved');
+  assert.match(await page.locator('[data-result="dropsy"] .possible-causes').innerText(),/internal illness/);
   assert.equal(await page.locator('#results-content .urgent').isVisible(),true);
   assert.match(await page.locator('.diagnosis-context').innerText(), /more than one problem|share a cause/);
   assert.equal(await page.locator('.alternatives [data-condition="dropsy"], .alternatives [data-condition="buoyancy"], .alternatives [data-condition="eye-change"]').count(),0);

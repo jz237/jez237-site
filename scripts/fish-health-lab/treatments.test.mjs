@@ -26,6 +26,14 @@ test('symptoms get care reading, not a promised cure; normal markings get no med
   assert.equal(treatmentGuideFor('unknown-id', 'fresh'), null);
   for (const c of CONDITIONS) assert.doesNotMatch(JSON.stringify(c), /microscop|wet mount|biopsy|bacterial culture/i);
 });
+test('lymphocystis has a verified condition-specific care section, not a promised antiviral cure', () => {
+  for (const water of ['fresh','marine']) {
+    const guide = treatmentGuideFor('lymphocystis',water);
+    assert.equal(new URL(guide.url).hash,'#v3226746');
+    assert.match(guide.note, /no specific medicine/);
+    assert.equal(guide.type,'care');
+  }
+});
 test('a direct click opens one detached popup to the static destination and preserves the source page', () => {
   let prevented = 0, opened = 0, destination = '';
   const popup = {opener:{},document:{createElement:()=>({click(){destination=this.href;assert.equal(this.rel,'noopener noreferrer');assert.equal(this.target,'_self');}}),head:{append(){}},body:{append(){}}}};

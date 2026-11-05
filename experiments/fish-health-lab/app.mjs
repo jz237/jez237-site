@@ -1,4 +1,4 @@
-import { SYMPTOMS, BEHAVIORS, CONDITIONS, SOURCES } from './data.mjs';
+import { SYMPTOMS, BEHAVIORS, CONDITIONS, SOURCES, GROWTH_CHOICES } from './data.mjs';
 import { assessUrgency, rankConditions, assessDiagnosis, LABELS, buildCase } from './logic.mjs';
 import { slotsFor, leadSlot, patternFor } from './visuals.mjs';
 import { OPENING_IMAGE, signImagesFor, TEXTURE_IMAGES } from './choice-images.mjs';
@@ -32,10 +32,12 @@ function fishArt(type = 'plain', hero = false) {
 
 function readInput() {
   const visualSigns = [detailSign || primarySign, ...additionalSigns].filter(Boolean);
-  return { ...Object.fromEntries(new FormData(form)), initialSign: primarySign, textureSign: detailSign, primarySign: detailSign || primarySign, visualSigns, signs: [...visualSigns, ...$$('input[name="behavior"]:checked').map(el => el.value)], visualReference, comparisons: [...comparisons] };
+  return { ...Object.fromEntries(new FormData(form)), growthAppearance: visualSigns.includes('lumps') ? form.elements.growthAppearance.value : '', initialSign: primarySign, textureSign: detailSign, primarySign: detailSign || primarySign, visualSigns, signs: [...visualSigns, ...$$('input[name="behavior"]:checked').map(el => el.value)], visualReference, comparisons: [...comparisons] };
 }
 function needsTexture() { return form.elements.water.value === 'fresh' && primarySign === 'dots'; }
-function sequence() { return ['water', 'signs', ...(needsTexture() ? ['texture'] : []), 'behavior', 'results']; }
+function needsGrowth() { return readInput().visualSigns.includes('lumps'); }
+function sequence() { return ['water', 'signs', ...(needsTexture() ? ['texture'] : []), 'behavior', ...(needsGrowth() ? ['growth'] : []), 'results']; }
+function clearGrowthChoice() { $$('input[name="growthAppearance"]').forEach(el => { el.checked = false; }); }
 
 function goStep(name, focus = true) {
   step = name;
@@ -48,13 +50,13 @@ function goStep(name, focus = true) {
   form.hidden = ['results', 'care-summary'].includes(name);
   form.classList.toggle('care-mode', name === 'care');
   $('#flow-error').textContent = '';
-  const progress = { water: [1,'Water type'], signs: [2,'What you see'], texture: [2,'Look closer'], behavior: [3,'Behavior'], results: [3,'Probable diagnosis'], care: [3,'Care & treatment'], 'care-summary': [3,'Care steps'] }[name];
+  const progress = { water: [1,'Water type'], signs: [2,'What you see'], texture: [2,'Look closer'], behavior: [3,'Behavior'], growth: [3,'Look closer at the lump'], results: [3,'Results'], care: [3,'Care & treatment'], 'care-summary': [3,'Care steps'] }[name];
   if (progress) {
-    $('#flow-label').textContent = name === 'results' ? 'YOUR PROBABLE DIAGNOSIS' : name.startsWith('care') ? 'AFTER THE VISUAL CHECK · CARE & TREATMENT' : `STEP ${progress[0]} OF 3 · ${progress[1]}`;
+    $('#flow-label').textContent = name === 'results' ? (assessDiagnosis(readInput()).diagnoses.length ? 'YOUR PROBABLE DIAGNOSIS' : 'YOUR RESULTS · POSSIBLE CAUSES') : name.startsWith('care') ? 'AFTER THE VISUAL CHECK · CARE & TREATMENT' : `STEP ${progress[0]} OF 3 · ${progress[1]}`;
     $('#flow-progress').value = progress[0];
   }
   $('#flow-progress').hidden = name.startsWith('care');
-  $('#next-button').textContent = name === 'care' ? 'See care steps →' : name === 'behavior' ? 'See probable diagnosis →' : 'Continue →';
+  $('#next-button').textContent = name === 'care' ? 'See care steps →' : name === 'growth' || name === 'behavior' && !needsGrowth() ? 'See my results →' : 'Continue →';
   $('#salinity-field').hidden = form.elements.water.value === 'fresh';
   if (name === 'texture') {
     const image = slotsFor('ich-fresh').find(s => s.id === 'lookalikes').image;
@@ -72,11 +74,12 @@ function nextStep() {
   if (step === 'water' && !form.elements.water.value) { $('#flow-error').textContent = 'Choose Freshwater or Saltwater / reef.'; return; }
   if (step === 'signs' && !primarySign) { $('#flow-error').textContent = 'Choose the closest picture. “Nothing obvious” is a useful answer.'; return; }
   if (step === 'texture' && !detailSign) { $('#flow-error').textContent = 'Choose the closest texture, or “Not sure.”'; return; }
+  if (step === 'growth' && !form.elements.growthAppearance.value) { $('#flow-error').textContent = 'Choose the closest description, or “I can’t tell.”'; return; }
   if (step === 'care') {
     if (!form.reportValidity()) return;
     renderCareSummary(); return;
   }
-  if (step === 'behavior') { renderResults(); return; }
+  if (step === 'growth' || step === 'behavior' && !needsGrowth()) { renderResults(); return; }
   const route = sequence(), next = route[route.indexOf(step) + 1];
   if (next) goStep(next);
 }
@@ -99,6 +102,7 @@ function switchView(name) {
 
 function selectSign(id, isTexture = false) {
   if (!SYMPTOMS.some(item => item.id === id)) return;
+  clearGrowthChoice();
   if (isTexture) detailSign = id;
   else { primarySign = id; detailSign = ''; visualReference = null; additionalSigns.clear(); }
   additionalSigns.delete(detailSign || primarySign);
@@ -147,10 +151,16 @@ function resultThumbnail(condition, water = imageWater(condition)) {
 function treatmentLink(condition, water = imageWater(condition)) {
   const guide = treatmentGuideFor(condition.id, water);
   if (!guide) return '';
-  return `<div class="treatment-link"><a class="button primary" href="${escape(guide.url)}" data-treatment="${condition.id}" data-water="${escape(water || '')}" target="_blank" rel="noopener noreferrer">${escape(guide.title)} ↗</a><small>${escape(guide.provider)} · opens separately</small>${guide.type === 'care' ? '<p class="quiet">This is a sign with several possible causes, so this link covers care rather than a single cure.</p>' : ''}</div>`;
+  return `<div class="treatment-link"><a class="button primary" href="${escape(guide.url)}" data-treatment="${condition.id}" data-water="${escape(water || '')}" target="_blank" rel="noopener noreferrer">${escape(guide.title)} ↗</a><small>${escape(guide.provider)} · opens separately</small>${guide.note ? `<p class="quiet">${escape(guide.note)}</p>` : guide.type === 'care' ? '<p class="quiet">This is a sign with several possible causes, so this link covers care rather than a single cure.</p>' : ''}</div>`;
+}
+
+function possibleCauses(condition) {
+  if (condition.diagnosis || !condition.possibleCauses?.length) return '';
+  return `<section class="possible-causes"><h3>What could cause this?</h3><p class="quiet">These are possibilities to distinguish, not conditions this guide has diagnosed.</p><ul>${condition.possibleCauses.map(cause => `<li><strong>${escape(cause.title)}</strong><p>${escape(cause.text)}</p>${cause.conditionId ? `<button class="text-button" data-condition="${cause.conditionId}">Read about ${escape(cause.title)} →</button>` : ''}</li>`).join('')}</ul></section>`;
 }
 
 function renderResults() {
+  if (needsGrowth() && !form.elements.growthAppearance.value) { goStep('growth'); return; }
   const input = readInput(), assessment = assessUrgency(input);
   const diagnosis = assessDiagnosis(input), first = diagnosis.primary;
   const urgent = assessment.urgent.length ? `<div class="notice urgent"><h3>Get help for the distress first.</h3><p>${escape(assessment.urgent.join('; '))}. Support aeration, test the water and arrange urgent fish-health help.</p><button class="text-button" data-action="emergency">What to do now →</button></div>` : '';
@@ -160,11 +170,11 @@ function renderResults() {
     const reason = first.id === 'water'
       ? 'Breathing or swimming changes can come from water or oxygen problems. This is the first cause to check, not proof of an infection.'
       : `Your ${scopeName(input.water)?.toLowerCase() || 'aquarium'} choice and “${first.matched.join('” + “')}” fit this pattern. ${first.check}`;
-    focus = `<article class="result-focus" data-result="${first.id}"><div class="result-image"><button data-condition="${first.id}" aria-label="Explore ${escape(first.title)}"><img src="${image.url}" width="${image.width || 1024}" height="${image.height || 1536}" alt="${escape(image.alt)}"><span>${ready ? `Explore ${ready} reference pictures` : 'Explore this pattern'} ↗</span></button><p class="quiet">AI reference illustration, not a patient photo.</p></div><div class="result-copy"><p class="eyebrow">${first.kind.includes('sign') || first.kind === 'Symptom pattern' || first.id === 'water' ? 'LEADING PROBLEM TO CHECK' : 'MOST LIKELY MATCH TO YOUR SIGNS'}</p><h2>${escape(first.title)}</h2><p>${escape(first.summary)}</p><div class="diagnosis-reason"><strong>Why it fits</strong><p>${escape(reason)}</p></div><p class="quiet">A probable match, not a confirmed diagnosis. Similar signs can have other causes.</p>${treatmentLink(first, input.water)}<button class="text-button" data-condition="${first.id}">${ready ? 'Check the reference pictures' : 'Read the visual clues'} →</button></div></article>`;
+    focus = `<article class="result-focus" data-result="${first.id}" data-result-kind="${first.diagnosis ? 'diagnosis' : 'unresolved'}"><div class="result-image"><button data-condition="${first.id}" aria-label="Explore ${escape(first.title)}"><img src="${image.url}" width="${image.width || 1024}" height="${image.height || 1536}" alt="${escape(image.alt)}"><span>${ready ? `Explore ${ready} reference pictures` : 'Explore this pattern'} ↗</span></button><p class="quiet">AI reference illustration of a sign, not a confirmed case.</p></div><div class="result-copy"><p class="eyebrow">${first.diagnosis ? 'MOST LIKELY MATCH TO YOUR SIGNS' : 'OBSERVED SIGN · CAUSE STILL UNCLEAR'}</p><h2>${first.diagnosis ? escape(first.title) : 'Cause not identified yet.'}</h2>${first.diagnosis ? '' : `<p><strong>What you reported:</strong> ${escape(first.matched.join('; '))}.</p>`}<p>${escape(first.summary)}</p>${possibleCauses(first)}<div class="diagnosis-reason"><strong>${first.diagnosis ? 'Why it fits' : 'What would help narrow it down'}</strong><p>${escape(reason)}</p></div><p class="quiet">${first.diagnosis ? 'A probable match, not a confirmed diagnosis. Similar signs can have other causes.' : 'The observation is real, but these answers do not establish which cause is responsible.'}</p>${treatmentLink(first, input.water)}<button class="text-button" data-condition="${first.id}">${ready ? 'Check the reference pictures' : 'Read the visual clues'} →</button></div></article>`;
   }
   const additional = diagnosis.findings.slice(1).map(c => {
     const image = resultThumbnail(c, input.water);
-    return `<article class="additional-finding" data-result="${c.id}"><img src="${image.url}" width="${image.width || 362}" height="${image.height || 362}" alt="${escape(c.image?.alt || image.alt)}"><div><p class="eyebrow">ALSO FITS YOUR SIGNS</p><h2>${escape(c.title)}</h2><p><strong>What fits:</strong> ${escape(c.matched.join('; '))}.</p><p>${escape(c.check)}</p>${treatmentLink(c, input.water)}<button class="text-button" data-condition="${c.id}">Check this possibility →</button></div></article>`;
+    return `<article class="additional-finding" data-result="${c.id}" data-result-kind="${c.diagnosis ? 'diagnosis' : 'unresolved'}"><img src="${image.url}" width="${image.width || 362}" height="${image.height || 362}" alt="${escape(c.image?.alt || image.alt)}"><div><p class="eyebrow">${c.diagnosis ? 'ALSO FITS YOUR SIGNS' : 'ADDITIONAL SIGN · CAUSE STILL UNCLEAR'}</p><h2>${c.diagnosis ? escape(c.title) : 'Another cause to narrow down'}</h2><p><strong>${c.diagnosis ? 'What fits' : 'What you reported'}:</strong> ${escape(c.matched.join('; '))}.</p><p>${escape(c.check)}</p>${possibleCauses(c)}${treatmentLink(c, input.water)}<button class="text-button" data-condition="${c.id}">Read the clues →</button></div></article>`;
   }).join('');
   const context = diagnosis.contextConcerns.map(c => `<section class="notice water-notice" data-context-concern="${c.id}"><h2>Also check: ${escape(c.title)}</h2><p>${escape(c.reason)}</p><p>This can happen alongside the visible problem, not instead of it.</p>${treatmentLink(c, input.water)}</section>`).join('');
   const unresolved = diagnosis.unexplained.length ? `<p class="notice unresolved-signs"><strong>Still unexplained:</strong> ${escape(diagnosis.unexplained.map(id => LABELS[id]).join('; '))}. This guide cannot choose a cause for every appearance. Do not force those signs into the first disease name.</p>` : '';
@@ -173,14 +183,14 @@ function renderResults() {
     const image = resultThumbnail(c, input.water);
     return `<button class="alternative" data-condition="${c.id}"><img src="${image.url}" alt="${escape(image.alt)}" loading="lazy"><span><strong>${escape(c.title)}</strong><small>${escape(c.comparisonReason)}</small></span><b aria-hidden="true">↗</b></button>`;
   }).join('');
-  $('#results-content').innerHTML = `<h1 id="results-title" class="question-title">${diagnosis.status === 'multiple' ? 'Probable diagnoses' : 'Probable diagnosis'}</h1><p class="question-hint">Based on the signs you selected for a ${scopeName(input.water)?.toLowerCase() || 'fish'} aquarium.</p>${urgent}${messages}${focus}${additional}${unresolved}${context}${other ? `<h3 class="subheading">Similar-looking alternatives</h3><p class="quiet">Compare these with the likely matches above. They are not additional diagnoses.</p><div class="alternatives">${other}</div>` : ''}<section class="care-next"><p class="eyebrow">NEXT · SUPPORT YOUR FISH</p><h3>Check the tank before treating.</h3><p>Optional water readings and care steps can help you choose what to do next.${first ? ' Treatment guides above open without filling these in.' : ''}</p><button class="button secondary" data-action="care">Water checks & care steps →</button></section><button class="text-button" data-action="case">Save my observation notes ↗</button>`;
+  $('#results-content').innerHTML = `<h1 id="results-title" class="question-title">${escape(diagnosis.title)}</h1><p class="question-hint">Based on the signs you selected for a ${scopeName(input.water)?.toLowerCase() || 'fish'} aquarium.</p>${urgent}${messages}${focus}${additional}${unresolved}${context}${other ? `<h3 class="subheading">Similar-looking alternatives</h3><p class="quiet">Compare these with the signs above. They are not additional diagnoses.</p><div class="alternatives">${other}</div>` : ''}<section class="care-next"><p class="eyebrow">NEXT · SUPPORT YOUR FISH</p><h3>Check the tank before treating.</h3><p>Optional water readings and care steps can help you choose what to do next.${first ? ' The reading links above open without filling these in.' : ''}</p><button class="button secondary" data-action="care">Water checks & care steps →</button></section><button class="text-button" data-action="case">Save my observation notes ↗</button>`;
   goStep('results');
 }
 
 function openCare() {
   const input = readInput(), diagnosis = assessDiagnosis(input);
   $('#care-context').innerHTML = diagnosis.findings.length
-    ? `<p><strong>${diagnosis.findings.length > 1 ? 'Possible problems' : 'Your probable diagnosis'}:</strong> ${escape(diagnosis.findings.map(c => c.title).join('; '))}. ${diagnosis.findings.length > 1 ? 'These may share a cause; do not combine treatments without checking compatibility.' : 'This is a likely match, not a confirmed cause.'}</p>${diagnosis.findings.map(c => treatmentLink(c, input.water)).join('')}<button type="button" class="text-button" data-action="results">Back to probable diagnosis ←</button>`
+    ? `${diagnosis.diagnoses.length ? `<p><strong>Probable ${diagnosis.diagnoses.length > 1 ? 'diagnoses' : 'diagnosis'}:</strong> ${escape(diagnosis.diagnoses.map(c => c.title).join('; '))}. Not confirmed.</p>` : ''}${diagnosis.unresolvedFindings.length ? `<p><strong>Signs with causes still unclear:</strong> ${escape(diagnosis.unresolvedFindings.map(c => c.matched.join('; ')).join('; '))}. These are observations, not disease names.</p>` : ''}<p>Use the appropriate guide; multiple possibilities are not a reason to combine treatments.</p>${diagnosis.findings.map(c => treatmentLink(c, input.water)).join('')}<button type="button" class="text-button" data-action="results">Back to my results ←</button>`
     : '<p>No clear visual match yet. Start with the environment and the fish’s actual behavior.</p>';
   goStep('care');
 }
@@ -313,6 +323,7 @@ function renderAdditionalChoices() {
 }
 renderChoiceGrids();
 $('#behavior-grid').innerHTML = BEHAVIORS.map(b => `<label class="check-label"><input type="checkbox" name="behavior" value="${b.id}"><span>${escape(b.label)}</span></label>`).join('');
+$('#growth-grid').innerHTML = GROWTH_CHOICES.map(choice => `<label><input type="radio" name="growthAppearance" value="${choice.id}"><span><strong>${escape(choice.title)}</strong><small>${escape(choice.text)}</small></span></label>`).join('');
 $('#source-list').innerHTML = sourceLinks(SOURCES.map(s => s.id));
 $('#library-patterns').innerHTML = SYMPTOMS.map(s => `<button class="pattern-filter" data-library-pattern="${s.id}" aria-pressed="false"><span>${fishArt(s.art)}</span><strong>${escape(s.title)}</strong></button>`).join('');
 
@@ -328,9 +339,11 @@ document.addEventListener('click', async event => {
   const additional = event.target.closest('[data-additional-symptom]');
   if (additional) {
     const id = additional.dataset.additionalSymptom;
+    if (id === 'lumps') clearGrowthChoice();
     if (additionalSigns.has(id)) additionalSigns.delete(id); else additionalSigns.add(id);
     additional.setAttribute('aria-pressed', String(additionalSigns.has(id)));
     $('#additional-status').textContent = additionalSigns.size ? `Also selected: ${[...additionalSigns].map(id => LABELS[id]).join('; ')}. Select a picture again to remove it.` : 'No additional signs selected.';
+    $('#next-button').textContent = needsGrowth() ? 'Continue →' : 'See my results →';
   }
   const condition = event.target.closest('[data-condition]');
   if (condition) openDetail(condition.dataset.condition, condition.dataset.openSlot);
@@ -388,6 +401,7 @@ form.addEventListener('submit', event => { event.preventDefault(); nextStep(); }
 form.addEventListener('change', event => {
   $('#flow-error').textContent = '';
   if (event.target.name === 'water') {
+    clearGrowthChoice();
     detailSign = ''; visualReference = null; additionalSigns.clear();
     if (form.elements.water.value === 'fresh') form.elements.salinity.value = '';
     renderChoiceGrids();

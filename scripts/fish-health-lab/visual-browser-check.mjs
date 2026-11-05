@@ -19,9 +19,9 @@ try{
   await page.locator('input[value="fresh"]').check();
   await page.locator('.nav-tab[data-view="library"]').click();
   assert.equal(await page.locator('#library-view').isVisible(),true);
-  assert.equal(await page.locator('#library-grid .condition-card').count(),13);
+  assert.equal(await page.locator('#library-grid .condition-card').count(),14);
   assert.equal(await page.locator('#library-water').inputValue(),'fresh');
-  assert.match(await page.locator('#library-count').innerText(),/18 illustrations in place · 60 image spaces to fill/);
+  assert.match(await page.locator('#library-count').innerText(),/18 illustrations in place · 66 image spaces to fill/);
   await page.locator('.nav-tab[data-view="guide"]').click();
   assert.equal(await page.locator('[data-step="water"]').isVisible(),true);
   assert.equal(await page.locator('input[name="water"]:checked').inputValue(),'fresh');

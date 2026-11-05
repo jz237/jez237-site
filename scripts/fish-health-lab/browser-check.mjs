@@ -24,7 +24,15 @@ context.on('request', request=>{
 const page=await context.newPage();
 const record=label=>checks.push(label);
 const action=(p,id)=>p.locator('[data-action="'+id+'"]:visible').first();
-const next=async p=>p.locator('#next-button').click();
+// Broad flow cases leave lump morphology unknown; the focused growth suite
+// exercises each closer description, validation and navigation explicitly.
+const next=async p=>{
+  await p.locator('#next-button').click();
+  if (await p.locator('[data-step="growth"]').isVisible()) {
+    await p.locator('input[name="growthAppearance"][value="unclear"]').check();
+    await p.locator('#next-button').click();
+  }
+};
 const at=async(p,name)=>{
   assert.equal(await p.locator('[data-step="'+name+'"]').isVisible(),true);
   assert.equal(await p.locator('.question-panel:visible').count(),1);

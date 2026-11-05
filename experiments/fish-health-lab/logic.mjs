@@ -1,4 +1,4 @@
-import { CONDITIONS, SYMPTOMS, BEHAVIORS } from './data.mjs';
+import { CONDITIONS, SYMPTOMS, BEHAVIORS, GROWTH_CHOICES } from './data.mjs';
 
 export const LABELS = Object.fromEntries([...SYMPTOMS.map(s => [s.id, s.title]), ...BEHAVIORS.map(s => [s.id, s.label])]);
 const numeric = value => value !== '' && value !== null && value !== undefined && Number.isFinite(Number(value)) ? Number(value) : null;
@@ -65,24 +65,43 @@ export function assessDiagnosis(input) {
     .filter(id => id && id !== 'unclear' && SYMPTOMS.some(s => s.id === id));
   const hasPinecone = (input.signs || []).includes('pinecone');
   const features = [...patterns, ...(hasPinecone ? ['pinecone'] : [])];
+  const matchForPattern = pattern => {
+    if (pattern !== 'lumps') return rankVisualConditions({ water: input.water, primarySign: pattern })[0];
+    const id = input.growthAppearance === 'cauliflower' ? 'lymphocystis' : input.growthAppearance === 'inflamed' ? 'ulcer' : 'growth';
+    const condition = CONDITIONS.find(c => c.id === id);
+    const match = { ...condition, weights: { ...condition.weights, lumps: 6 } };
+    if (input.growthAppearance === 'smooth') {
+      match.possibleCauses = [
+        { title: 'A cyst', text: 'A localized cyst can appear as a rounded lump; a smooth surface does not prove it.' },
+        { title: 'A tumor or other tissue growth', text: 'A persistent solid mass can look similar. It may be benign or malignant; the outside appearance cannot tell.' },
+        { title: 'An old injury or localized swelling', text: 'Compare older photos and watch for redness, broken skin or growth over time.' },
+      ];
+      match.summary = 'A smooth lump can be a cyst, tumor or another localized swelling. These answers do not yet distinguish the cause.';
+    }
+    return match;
+  };
   const leaders = new Map();
   for (const pattern of patterns) {
-    const match = rankVisualConditions({ water: input.water, primarySign: pattern })[0];
-    if (match) leaders.set(match.id, match);
+    const match = matchForPattern(pattern);
+    if (match) leaders.set(match.id, { ...match, weights: { ...leaders.get(match.id)?.weights, ...match.weights } });
   }
   if (hasPinecone) leaders.set('dropsy', CONDITIONS.find(c => c.id === 'dropsy'));
-  const primaryId = rankVisualConditions({ water: input.water, primarySign: selected })[0]?.id;
+  const primaryId = matchForPattern(selected)?.id;
   const candidates = [...leaders.values()].map(condition => ({
     ...condition,
     fits: features.filter(id => (condition.weights[id] || 0) >= 3),
   })).filter(c => c.fits.length)
-    .sort((a, b) => b.fits.length - a.fits.length || Number(b.id === primaryId) - Number(a.id === primaryId) || a.id.localeCompare(b.id));
+    .sort((a, b) => b.fits.length - a.fits.length || Number(!!b.diagnosis) - Number(!!a.diagnosis) || Number(b.id === primaryId) - Number(a.id === primaryId) || a.id.localeCompare(b.id));
   const covered = new Set(), findings = [];
   for (const candidate of candidates) {
     if (candidate.fits.every(id => covered.has(id))) continue;
-    findings.push({ ...candidate, matched: candidate.fits.map(id => LABELS[id]) });
+    findings.push({ ...candidate, matched: candidate.fits.map(id => id === 'lumps' && GROWTH_CHOICES.some(c => c.id === input.growthAppearance && c.id !== 'unclear')
+      ? `${LABELS[id]}: ${GROWTH_CHOICES.find(c => c.id === input.growthAppearance).title.toLowerCase()}` : LABELS[id]) });
     candidate.fits.forEach(id => covered.add(id));
   }
+  // Keep the named probable match beside that heading; unresolved observations
+  // stay visible as separate concerns even when they account for more signs.
+  findings.sort((a, b) => Number(!!b.diagnosis) - Number(!!a.diagnosis));
   const unexplained = features.filter(id => !covered.has(id));
   const assessment = assessUrgency(input);
   const contextConcerns = [];
@@ -101,9 +120,13 @@ export function assessDiagnosis(input) {
   if (input.initialSign === 'dots' && input.textureSign && !['dots','unclear'].includes(input.textureSign)) messages.push(`Your closer texture choice was “${LABELS[input.textureSign]},” so it is used instead of the first “White dots” choice.`);
   if (findings.length > 1) messages.push('Different signs may share a cause, or more than one problem may be present. These are possibilities to check—not a reason to combine medicines.');
   if (contextConcerns.length) messages.push('The tank history or readings also raise an environmental concern. That can coexist with a skin problem, rather than replacing it.');
+  const diagnoses = findings.filter(c => c.diagnosis);
+  const unresolvedFindings = findings.filter(c => !c.diagnosis);
+  const title = diagnoses.length > 1 ? 'Probable diagnoses' : diagnoses.length ? 'Probable diagnosis' : findings.length ? 'Possible causes — not narrowed down yet' : 'No clear diagnosis yet';
   return {
     status: !findings.length ? 'insufficient' : findings.length > 1 ? 'multiple' : 'single',
     primary: findings[0] || null, findings, alternatives: [...alternativeMap.values()],
+    diagnoses, unresolvedFindings, title,
     unexplained, contextConcerns, messages, urgent: assessment.urgent,
   };
 }
@@ -123,6 +146,7 @@ const LOOKALIKES = {
   water: [['gill-parasites', 'Gill irritation can also cause rapid breathing. Check the tank and watch for rubbing or excess mucus.'], ['velvet-fresh', 'Freshwater gill disease may have little visible dust; this is a breathing overlap, not a confirmed skin match.'], ['velvet-marine', 'Marine gill disease can progress quickly with little visible dust; breathing trouble needs urgent help.']],
   'gill-parasites': [['water', 'Low oxygen and water-quality problems can cause similar irritation and breathing changes.'], ['velvet-fresh', 'Freshwater velvet may involve the gills without an obvious skin pattern.'], ['velvet-marine', 'Marine velvet can affect the gills with few visible changes.']],
   growth: [['normal', 'Compare the location and shape with normal anatomy for this species.'], ['water-mold', 'Cottony threads project into the water; a solid lump has a different structure.']],
+  lymphocystis: [['growth', 'A cyst, tumor or other solid lump can resemble a wart; compare the surface and changes over time.'], ['water-mold', 'Cottony threads are soft outward filaments, not solid cauliflower-like nodules.']],
   normal: [['growth', 'A genuinely new or enlarging lump needs attention rather than assuming it is normal.']],
 };
 
@@ -160,6 +184,7 @@ export function buildCase(input) {
     `Tank established: ${show(input.tankAge)}`,
     `Onset / recent changes: ${show(input.onset)}`,
     `Visible signs / behavior: ${(input.signs || []).map(id => LABELS[id] || id).join('; ') || 'No signs selected'}`,
+    ...(diagnosis.findings.some(c => c.fits.includes('lumps')) ? [`Growth appearance: ${GROWTH_CHOICES.find(c => c.id === input.growthAppearance)?.title || 'Not recorded'}`] : []),
     `Visible extent (not a severity score): ${show(input.visualExtent)}`,
     `Total ammonia: ${number(input.ammonia)} ppm (mg/L)`,
     `Nitrite: ${number(input.nitrite)} ppm (mg/L)`,
@@ -170,7 +195,9 @@ export function buildCase(input) {
     '',
     `Urgent flags: ${assessment.urgent.join('; ') || 'None selected. This does not rule out serious disease.'}`,
     `Environmental checks: ${assessment.checks.join(' ') || 'Still check actual water quality and oxygen.'}`,
-    `Probable diagnosis / possible problems: ${diagnosis.findings.map(c => c.title).join('; ') || 'Not enough information for a likely cause.'}`,
+    `Probable diagnosis / possible problems: ${diagnosis.diagnoses.map(c => c.title).join('; ') || 'No specific disease identified from these answers.'}`,
+    `Observed patterns with unresolved causes (not diagnoses): ${diagnosis.unresolvedFindings.map(c => c.title).join('; ') || 'None listed.'}`,
+    `Possible causes to distinguish (not established): ${diagnosis.unresolvedFindings.flatMap(c => (c.possibleCauses || []).map(cause => cause.title)).join('; ') || 'None listed.'}`,
     `Other similar-looking possibilities: ${diagnosis.alternatives.map(c => c.title).join('; ') || 'None listed.'}`,
     `Other environmental concerns: ${diagnosis.contextConcerns.map(c => c.reason).join('; ') || 'None flagged by the entered readings/history.'}`,
     `Unresolved signs: ${diagnosis.unexplained.map(id => LABELS[id]).join('; ') || 'None identified by the guide; this does not rule out other causes.'}`,
