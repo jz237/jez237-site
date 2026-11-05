@@ -1,5 +1,77 @@
 [
   {
+    "id": "2026-11-04-factual-infographic-factual-infographic-pacific-blue-tang",
+    "title": "Factual infographic: Pacific blue tang",
+    "tests": "; archive_slot=2026-11-04T20:20; concept=pacific-blue-tang-surgeonfish-coral-refuge; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Paracanthurus hepatus",
+    "prompt": "Create a fancy, exquisitely detailed, colorful PHOTOREALISTIC educational reef-fish infographic, finished artwork not a poster mockup. A dominant anatomically accurate adult Pacific blue tang, Paracanthurus hepatus, swims through luminous Indo-Pacific coral reef water: vivid blue oval body, characteristic dark looping markings, yellow tail and correct fins. Rich turquoise, cobalt, amber reef lighting, precise scales and natural depth. Flowing asymmetrical composition, not a rigid grid; beautiful legible text integrated with organic leader lines and biological close-ups. Prominent title “PACIFIC BLUE TANG” with “Paracanthurus hepatus” directly underneath. Show branching coral refuge, and a scientifically faithful close-up of sharp tail-base spine labeled “Sharp spine: handle with care”. Short readable callouts: “Indo-Pacific coral reefs”; “Adults average 25–31 cm”; “Feeds on algae and zooplankton”; “Shelters among branching corals”; “Aquarium: active swimmer; allow generous space and hiding places”; “May clash with other tangs; monitor compatibility”. Reef compatibility varies by individual; plan stocking carefully. Do not invent tank volume or other numbers. Separate wild behavior from aquarium advice. Maintain breathing room, realistic anatomy, readable explanations and stunning underwater lighting.",
+    "image": "images/2026-11-04-factual-infographic-factual-infographic-pacific-blue-tang.jpg",
+    "thumb": "thumbs/2026-11-04-factual-infographic-factual-infographic-pacific-blue-tang.webp",
+    "color": "#385162",
+    "date": "2026-11-04",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "pacific-blue-tang-surgeonfish-coral-refuge",
+      "imageSha256": "7a1ba029e6551418551f92d4a8d3644a2255fd500f0afe3e4ad722ca64d184fb",
+      "imageDHash": "0684d9d9fc0c0772"
+    },
+    "factualInfographic": {
+      "topic": "Pacific blue tang (Paracanthurus hepatus) reef biology and aquarium care",
+      "description": "Pacific blue tang (Paracanthurus hepatus) reef biology and aquarium care",
+      "sourceNote": "Sources: https://animaldiversity.org/accounts/Paracanthurus_hepatus/ https://web.augsburg.edu/~capman/aquaria/SpeciesInfoFiles/f_pacificbluetang.html",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-05T01:20:00Z",
+        "sources": [
+          {
+            "id": "michigan",
+            "publisher": "University of Michigan Animal Diversity Web",
+            "title": "Paracanthurus hepatus",
+            "sourceType": "university",
+            "url": "https://animaldiversity.org/accounts/Paracanthurus_hepatus/"
+          },
+          {
+            "id": "augsburg",
+            "publisher": "Augsburg University",
+            "title": "Pacific Blue Tang",
+            "sourceType": "university",
+            "url": "https://web.augsburg.edu/~capman/aquaria/SpeciesInfoFiles/f_pacificbluetang.html"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Indo-Pacific tropical coral reefs, often near branching coral and currents.",
+            "sourceIds": [
+              "michigan",
+              "augsburg"
+            ]
+          },
+          {
+            "claim": "Blue oval body, dark markings and yellow tail; adults average 25–31 cm.",
+            "sourceIds": [
+              "michigan"
+            ]
+          },
+          {
+            "claim": "Consumes algae and zooplankton; shelters in coral and may live in groups.",
+            "sourceIds": [
+              "michigan"
+            ]
+          },
+          {
+            "claim": "Sharp tail-base spine can cause painful injury; surgeonfish can clash in aquaria.",
+            "sourceIds": [
+              "michigan",
+              "augsburg"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-04-factual-infographic-factual-infographic-ocellaris-clownfish",
     "title": "Factual infographic: Ocellaris clownfish",
     "tests": "; archive_slot=2026-11-04T12:20; concept=ocellaris-clownfish-anemone-reef-partnership; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Amphiprion ocellaris",
