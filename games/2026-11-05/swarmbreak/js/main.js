@@ -1,13 +1,13 @@
 // Swarmbreak — game flow, menus, HUD, commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS } from './config.js?v=3';
-import { makeWorld, step, drainEvents, waveLabel, isBossWave } from './sim.js?v=3';
-import { Autopilot } from './ai.js?v=3';
-import { Renderer, pickQuality, CALM } from './render.js?v=3';
-import { Audio } from './audio.js?v=3';
-import { Input } from './input.js?v=3';
-import { Scores, NO_POST } from './scores.js?v=3';
-import { Recorder, Replay } from './replay.js?v=3';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=3';
+import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS } from './config.js?v=4';
+import { makeWorld, step, drainEvents, waveLabel, isBossWave } from './sim.js?v=4';
+import { Autopilot } from './ai.js?v=4';
+import { Renderer, pickQuality, CALM } from './render.js?v=4';
+import { Audio } from './audio.js?v=4';
+import { Input } from './input.js?v=4';
+import { Scores, NO_POST } from './scores.js?v=4';
+import { Recorder, Replay } from './replay.js?v=4';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=4';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -929,8 +929,15 @@ function perf(dt) {
   if (T.length < 90) return;
   const s = [...T].sort((a, b) => a - b), p75 = s[Math.floor(s.length * 0.75)];
   T.length = 0;
-  if (p75 > 1 / 50 && R.scale > 0.6) R.setScale(Math.max(0.6, R.scale - 0.1));
-  else if (p75 < 1 / 75 && R.scale < 1) R.setScale(Math.min(1, R.scale + 0.05));
+  // every change rebuilds the render buffers (a hitch of its own), so change rarely: two slow windows in a
+  // row to drop, four fast ones to recover, and never more than once every 8 seconds. Ignore windows
+  // spoiled by a background tab or a single stall.
+  const now = performance.now();
+  G.perfSlow = p75 > 1 / 48 && p75 < 0.25 ? (G.perfSlow || 0) + 1 : 0;
+  G.perfFast = p75 < 1 / 75 ? (G.perfFast || 0) + 1 : 0;
+  if (now - (G.perfT || 0) < 8000) return;
+  if (G.perfSlow >= 2 && R.scale > 0.6) { R.setScale(Math.max(0.6, R.scale - 0.1)); G.perfT = now; G.perfSlow = 0; }
+  else if (G.perfFast >= 4 && R.scale < 1) { R.setScale(Math.min(1, R.scale + 0.1)); G.perfT = now; G.perfFast = 0; }
 }
 
 // ------------------------------------------------------------------ boot
@@ -940,7 +947,7 @@ async function boot() {
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('stand', settings.diff).fresh();
-  if (params.has('test')) { const m = await import('./tests.js?v=3'); m.runTests(window.__sb); }
+  if (params.has('test')) { const m = await import('./tests.js?v=4'); m.runTests(window.__sb); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('stand')) startStand(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }

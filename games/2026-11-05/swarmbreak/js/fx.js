@@ -2,7 +2,7 @@
 // debris that bounces on the real ground, shock rings, scorch marks and a few flash lights.
 // Purely visual (uses Math.random), never touches the simulation.
 import * as THREE from '../vendor/three.module.min.js';
-import { rockGeometry } from './models.js?v=3';
+import { rockGeometry } from './models.js?v=4';
 
 export const CALM = { on: false };
 
@@ -211,8 +211,9 @@ export class FX {
       inst.instanceMatrix.needsUpdate = true;
     }
     for (const L of this.lights) {
-      if (L.t <= 0) { L.l.intensity = 0; L.l.visible = false; continue; }
-      L.t -= dt; L.l.visible = true;
+      // never toggle visibility: the light count must stay fixed or every material recompiles (a long freeze)
+      if (L.t <= 0) { L.l.intensity = 0; continue; }
+      L.t -= dt;
       const f = Math.max(0, L.t / L.max);
       L.l.intensity = L.i0 * f * f;
     }

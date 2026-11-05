@@ -3,8 +3,8 @@
 // (waves, machines, survivors, bosses, lives, score) and streams snapshots. The guest runs its own
 // Warden locally (so moving and aiming never lag), judges the hits it takes, and reports its Warden,
 // its shots and its PULSEs; the host re-creates those shots so kills are decided in one place.
-import { adoptWave, pulse } from './sim.js?v=3';
-import { PW_KEYS } from './config.js?v=3';
+import { adoptWave, pulse } from './sim.js?v=4';
+import { PW_KEYS } from './config.js?v=4';
 const packPw = (pw) => Object.entries(pw || {}).map(([k, t]) => [PW_KEYS.indexOf(k), Math.round(t * 10) / 10]);
 const unpackPw = (a) => { const o = {}; for (const [i, t] of a || []) o[PW_KEYS[i]] = t; return o; };
 

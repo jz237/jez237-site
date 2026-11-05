@@ -4,12 +4,12 @@
 // the simulation; floor decals for every warning (gates, boss tells, aim lines, arcs); HDR post.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=3';
-import * as TX from './textures.js?v=3';
-import * as MD from './models.js?v=3';
-import { FX, CALM } from './fx.js?v=3';
-import { F, GATES, POWERUPS } from './config.js?v=3';
-import { dronePos } from './sim.js?v=3';
+import { Post } from './post.js?v=4';
+import * as TX from './textures.js?v=4';
+import * as MD from './models.js?v=4';
+import { FX, CALM } from './fx.js?v=4';
+import { F, GATES, POWERUPS } from './config.js?v=4';
+import { dronePos } from './sim.js?v=4';
 
 export { CALM };
 const { AW, AH } = F;
@@ -178,6 +178,12 @@ export class Renderer {
     this.hemi = new THREE.HemisphereLight(0xffffff, 0x222222, 0.5);
     this.fill = new THREE.DirectionalLight(0xffffff, 0.4);
     this.scene.add(this.hemi, this.fill);
+    // FIXED light pools. The number of lights in the scene never changes after boot: each sector reuses
+    // these (unused ones go dark), so changing sector or spawning a Warden never triggers a shader rebuild.
+    this.lightPool = [];
+    for (let i = 0; i < 10; i++) { const l = new THREE.PointLight(0xffffff, 0, 20, 1.8); l.position.set(0, -50, 0); this.scene.add(l); this.lightPool.push(l); }
+    this.wardenLights = [];
+    for (let i = 0; i < 2; i++) { const l = new THREE.PointLight(0x9fe8ff, 0, 7, 2); this.scene.add(l); this.wardenLights.push(l); }
   }
   buildSky() {
     this.skyMat = new THREE.ShaderMaterial({ vertexShader: SKY_VERT, fragmentShader: SKY_FRAG, side: THREE.BackSide, depthWrite: false,
@@ -275,10 +281,10 @@ export class Renderer {
   buildProps(i) {
     const P = this.props, q = this.q.props;
     for (const c of [...P.children]) P.remove(c);
-    for (const l of this.lookLights) this.scene.remove(l);
+    for (const l of this.lightPool) { l.intensity = 0; l.position.set(0, -50, 0); }
     this.lookLights = []; this.anim = []; this.rain = null;
     const r = mkr(i * 31 + 7);
-    const light = (color, I, x, y, z, d = 30) => { const l = new THREE.PointLight(color, I, d, 1.8); l.position.set(x, y, z); this.scene.add(l); this.lookLights.push(l); return l; };
+    const light = (color, I, x, y, z, d = 30) => { const l = this.lightPool[this.lookLights.length]; if (!l) return null; l.color.set(color); l.intensity = I; l.distance = d; l.position.set(x, y, z); this.lookLights.push(l); return l; };
     const inst = (geo, mat, list, shadow = true) => {
       const m = new THREE.InstancedMesh(geo, mat, list.length);
       list.forEach((t, k) => { _e.set(t.rx || 0, t.ry || 0, t.rz || 0); _q.setFromEuler(_e); _s.set(t.sx, t.sy, t.sz); _p.set(t.x, t.y, t.z); _m.compose(_p, _q, _s); m.setMatrixAt(k, _m); });
@@ -515,7 +521,7 @@ export class Renderer {
     sh.position.y = 1.0; sh.scale.set(1, 0.95, 1); v.g.add(sh); v.shield = sh;
     const ring = new THREE.Mesh(new THREE.RingGeometry(0.62, 0.72, 40).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: hdr(accent, 2.5), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false }));
     ring.position.y = 0.03; v.g.add(ring); v.ring = ring;
-    v.light = new THREE.PointLight(accent, 5, 7, 2); v.light.position.set(0.6, 1.6, 0); v.g.add(v.light);
+    v.light = this.wardenLights[(p.id - 1) % 2]; v.light.color.set(accent);
     v.flash = 0; v.hurt = 0; v.legA = 0;
     this.scene.add(v.g);
     return v;
@@ -638,6 +644,7 @@ export class Renderer {
     v.g.visible = p.alive;
     if (!p.alive) { v.light.intensity = 0; return; }
     v.g.position.set(p.x, 0, p.z);
+    v.light.position.set(p.x + Math.cos(p.aim) * 0.6, 1.6, p.z + Math.sin(p.aim) * 0.6);
     const sp = Math.hypot(p.vx, p.vz);
     // legs face where you run, the torso where you aim
     if (sp > 0.4) { const want = -Math.atan2(p.vz, p.vx); v.legA += angD(v.legA, want) * Math.min(1, dt * 12); }
@@ -996,9 +1003,22 @@ export class Renderer {
     this.setArc(this.arcs[0], 0, 0, 3, 3, 0.05, 0.3);
     this.fx.explode(0, 1, 0, 1, { metal: true });
     this.fx.flash(0, 1, 0, 1);
-    for (const L of this.fx.lights) L.l.visible = true;
-    this.r.compile(this.scene, this.camera);
-    this.post.render(this.scene, this.camera, { bloom: 0.7, threshold: 1.2, exposure: 1, chroma: 0, time: 0, desat: 0, fade: 1, vignette: 0.4, flash: this.flash, tint: _tint.set(1, 1, 1), shocks: [], lens: [] });
+    // everything else that only appears later: the second Warden, power-up icons, rail / seeker shots, contact shadows
+    const pv2 = MD.warden(0xff5a3a, 0xffd27a); pv2.g.position.set(4, 0, 4); tmp.push(pv2.g); this.scene.add(pv2.g);
+    const icon = new THREE.Sprite(this.iconFor('triple')); icon.position.set(0, 2, 0); tmp.push(icon); this.scene.add(icon);
+    for (const I of [this.railI, this.seekI, this.blobI, this.shotI, this.boltI, this.boltBI, this.haloI]) { I.count = 1; I.setMatrixAt(0, _m.identity()); }
+    // build and compile every sector's floor, environment and scenery now, behind the loading screen, so
+    // nothing compiles a shader in the middle of play (each compile was a visible freeze)
+    const pr = { bloom: 0.7, threshold: 1.2, exposure: 1, chroma: 0, time: 0, desat: 0, fade: 1, vignette: 0.4, flash: this.flash, tint: _tint.set(1, 1, 1), shocks: [], lens: [] };
+    const first = this.lookI;
+    for (let i = LOOKS.length - 1; i >= 0; i--) {
+      this.setLook(i);
+      if (this.rain) for (const R of [this.rain]) R.g.attributes.position.needsUpdate = true;
+      this.r.compile(this.scene, this.camera);
+      this.post.render(this.scene, this.camera, pr);
+    }
+    if (first !== 0) this.setLook(first);
+    for (const I of [this.railI, this.seekI, this.blobI, this.shotI, this.boltI, this.boltBI, this.haloI]) I.count = 0;
     for (const o of tmp) this.scene.remove(o);
     this.scene.remove(pv.g); this.scene.remove(sv.g);
     for (const m of [...this.decalPool, this.laneMesh, this.beam, this.beamGlow, ...this.cols, ...this.aims]) m.visible = false;
