@@ -1,0 +1,225 @@
+{
+  "publication": "Owner-authorized release, 2026-11-05. All twelve marine crops uploaded and byte-verified before source publication.",
+  "requestedImageModel": "openai/gpt-image-2.6-sunburst",
+  "requestedQuality": "medium",
+  "requestedSize": "auto",
+  "backendImageModel": null,
+  "imageModelVerification": "not independently verified",
+  "returnedGenerationQuality": null,
+  "source": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-signs.jpg",
+  "sourceSha256": "8038572534cadbebafb4d45c92a436f05f7622f53d59b33a4ecd9677a54d5e46",
+  "width": 1448,
+  "height": 1086,
+  "grid": {
+    "columns": 4,
+    "rows": 3
+  },
+  "croppedWithoutResizing": true,
+  "crops": [
+    {
+      "id": "dots",
+      "source": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-signs.jpg",
+      "box": [
+        0,
+        0,
+        362,
+        362
+      ],
+      "path": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-dots-20d00e1c423d.jpg",
+      "sha256": "20d00e1c423dd1b59efdf32d419676e6a5430603e57e3ac53f9c19b06d564149",
+      "bytes": 35885,
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/marine-dots-20d00e1c423d.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Blue reef tang with separate small white grains on skin and fins."
+    },
+    {
+      "id": "dust",
+      "source": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-signs.jpg",
+      "box": [
+        362,
+        0,
+        724,
+        362
+      ],
+      "path": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-dust-7851b0af82c3.jpg",
+      "sha256": "7851b0af82c38927a14be9b6aa7e9ab36384a6a76da8cf81fae65c61ecb541f1",
+      "bytes": 48091,
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/marine-dust-7851b0af82c3.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Dark marine fish with fine tan-gold dusty speckling."
+    },
+    {
+      "id": "fuzz",
+      "source": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-signs.jpg",
+      "box": [
+        724,
+        0,
+        1086,
+        362
+      ],
+      "path": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-fuzz-f244f2f971df.jpg",
+      "sha256": "f244f2f971df89b3be1048e6b6e2dea696182b17fb609c481711d63d0369c4bb",
+      "bytes": 43668,
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/marine-fuzz-f244f2f971df.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Marine damselfish with a localized wispy white tuft on a fin edge."
+    },
+    {
+      "id": "patch",
+      "source": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-signs.jpg",
+      "box": [
+        1086,
+        0,
+        1448,
+        362
+      ],
+      "path": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-patch-f5eed0da20fc.jpg",
+      "sha256": "f5eed0da20fc77117d4264604e40187838f08f7603c71120f6ae0c173c172bcd",
+      "bytes": 38087,
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/marine-patch-f5eed0da20fc.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Royal gramma with a localized pale surface patch."
+    },
+    {
+      "id": "fins",
+      "source": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-signs.jpg",
+      "box": [
+        0,
+        362,
+        362,
+        724
+      ],
+      "path": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-fins-47da07dcc136.jpg",
+      "sha256": "47da07dcc1361600a7d244dd9d71c85fc66f9b2cd9febdf46de1753dbe8e1207",
+      "bytes": 39039,
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/marine-fins-47da07dcc136.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Maroon clownfish with a split, ragged tail-fin edge."
+    },
+    {
+      "id": "sores",
+      "source": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-signs.jpg",
+      "box": [
+        362,
+        362,
+        724,
+        724
+      ],
+      "path": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-sores-748a85ccb24a.jpg",
+      "sha256": "748a85ccb24af8cac4e423fc6ac552aceb688965c01ec9c8bdf58bfa45ecbdeb",
+      "bytes": 49485,
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/marine-sores-748a85ccb24a.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Yellow tang with a small reddish skin sore."
+    },
+    {
+      "id": "swollen",
+      "source": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-signs.jpg",
+      "box": [
+        724,
+        362,
+        1086,
+        724
+      ],
+      "path": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-swollen-bec198fd90cc.jpg",
+      "sha256": "bec198fd90cc335279eba4597a7307eb9ee24ece85e719c508734c097576cc39",
+      "bytes": 43337,
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/marine-swollen-bec198fd90cc.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Marine clownfish with a visibly enlarged abdomen."
+    },
+    {
+      "id": "eyes",
+      "source": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-signs.jpg",
+      "box": [
+        1086,
+        362,
+        1448,
+        724
+      ],
+      "path": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-eyes-7a58483b5679.jpg",
+      "sha256": "7a58483b567997c9b4d19f90619b55383a777fcd4ff9e6bac958bf3e4556124a",
+      "bytes": 53526,
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/marine-eyes-7a58483b5679.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Saltwater blenny with a cloudy, protruding eye."
+    },
+    {
+      "id": "lumps",
+      "source": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-signs.jpg",
+      "box": [
+        0,
+        724,
+        362,
+        1086
+      ],
+      "path": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-lumps-5dd04db888f7.jpg",
+      "sha256": "5dd04db888f70d170f486b4e87084ff7c3cd33d0050454875d38274c08e6712f",
+      "bytes": 55818,
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/marine-lumps-5dd04db888f7.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Marine butterflyfish with irregular pale raised growths near a fin base."
+    },
+    {
+      "id": "breathing",
+      "source": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-signs.jpg",
+      "box": [
+        362,
+        724,
+        724,
+        1086
+      ],
+      "path": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-breathing-3c07e0520ae3.jpg",
+      "sha256": "3c07e0520ae3f3c964a9f28fbd4e5ad0a3da2e2f5c0ecea7f664ae6452d3b10f",
+      "bytes": 48815,
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/marine-breathing-3c07e0520ae3.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Marine fish beneath the surface with its mouth open; a still picture cannot show breathing rate."
+    },
+    {
+      "id": "balance",
+      "source": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-signs.jpg",
+      "box": [
+        724,
+        724,
+        1086,
+        1086
+      ],
+      "path": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-balance-cfa4b7961d9e.jpg",
+      "sha256": "cfa4b7961d9ed698af0bb91f59332eb3db5a9b111e3c4f26196e7a8125ec4b68",
+      "bytes": 35508,
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/marine-balance-cfa4b7961d9e.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Marine firefish tilted in the water; a still picture cannot establish a swimming disorder."
+    },
+    {
+      "id": "unclear",
+      "source": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-signs.jpg",
+      "box": [
+        1086,
+        724,
+        1448,
+        1086
+      ],
+      "path": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-draft-20261105/marine-unclear-6605a3f41446.jpg",
+      "sha256": "6605a3f41446186ec7d4a9cdb87d8b1ddeef9ecd4d967a717a9164d387b3ef9c",
+      "bytes": 48832,
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/marine-unclear-6605a3f41446.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Saltwater watchman goby with no obvious external lesion; this is not proof of health."
+    }
+  ],
+  "uploadVerification": "workspace/tmp/fish-health-publish-20261105/marine-upload-verification.json"
+}
