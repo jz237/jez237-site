@@ -28,6 +28,34 @@ const images = {
       provenance: 'AI educational illustration',
       source: 'Previously created for this experiment; not confirmed patient photographs.',
     },
+    closeup: {
+      url: 'https://media.jez237.com/experiments/fish-health-lab/ich-closeup-8b9f20a5.jpg',
+      alt: 'Illustrated close-up clues for ich-like white grains on dark skin, translucent fins and pale skin.',
+      caption: 'Compare separate white grains and their contrast on different skin and fin surfaces.',
+      provenance: 'AI educational illustration',
+      source: 'Created for the ich walkthrough; not a confirmed patient photograph.',
+    },
+    subtle: {
+      url: 'https://media.jez237.com/experiments/fish-health-lab/ich-subtle-68567f0c.jpg',
+      alt: 'Illustrated subtle ich-like appearances with few spots, pale-skin contrast and a gill-region reminder.',
+      caption: 'Few visible spots or difficult-to-see skin changes do not establish mild illness. Gill infection may lack visible skin spots.',
+      provenance: 'AI educational illustration',
+      source: 'Created for the ich walkthrough; not a confirmed patient photograph.',
+    },
+    marked: {
+      url: 'https://media.jez237.com/experiments/fish-health-lab/ich-marked-d250101b.jpg',
+      alt: 'Illustrated examples of conspicuous ich-like spotting on an angelfish, betta and neon tetra.',
+      caption: 'More obvious skin and fin spotting, with differences in contrast across freshwater fish. Not a progression or severity scale.',
+      provenance: 'AI educational illustration',
+      source: 'Created for the ich walkthrough; not a confirmed patient photograph.',
+    },
+    lookalikes: {
+      url: 'https://media.jez237.com/experiments/fish-health-lab/ich-lookalikes-b9f7de50.jpg',
+      alt: 'Illustrated comparison of ich-like grains, fine dust, cottony growth, pale patches, larger growths and normal markings.',
+      caption: 'Compare texture, shape and distribution. Some look-alikes require professional examination and microscopy to distinguish.',
+      provenance: 'AI educational illustration',
+      source: 'Created for the ich walkthrough; not confirmed patient photographs or diagnoses.',
+    },
   },
 };
 

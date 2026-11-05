@@ -42,6 +42,14 @@ export function rankConditions(input) {
     .sort((a, b) => b.score - a.score || a.id.localeCompare(b.id));
 }
 
+export function describeIchPattern(input) {
+  const signs = new Set(input.signs || []);
+  if (input.water !== 'fresh') return { title: 'This is not a freshwater ich assessment.', text: 'Water type changes which parasites and management plans apply. Use the appropriate water-type comparisons below.' };
+  if (signs.has('dots')) return { title: 'Ich is one possibility—not confirmed.', text: 'Separate white grains fit an ich-like pattern, but other growths and parasites can overlap. The number of visible spots cannot tell you how sick the fish is.' };
+  if (['dust','fuzz','patch','lumps'].some(sign => signs.has(sign))) return { title: 'Your selected pattern is less typical of ich.', text: 'Fine dust, cottony threads, flat patches and larger growths raise different questions. Compare the relevant entries below rather than treating every pale change as ich.' };
+  return { title: 'There is no clear visual match yet.', text: 'Unclear or absent skin spots cannot rule out gill disease or an environmental problem. Breathing, behavior and actual water readings become especially important.' };
+}
+
 export function buildCase(input) {
   const show = value => String(value || '').trim() || 'Not recorded';
   const number = value => numeric(value) === null ? 'Not measured / unknown' : String(value);
@@ -59,21 +67,19 @@ export function buildCase(input) {
     `Tank established: ${show(input.tankAge)}`,
     `Onset / recent changes: ${show(input.onset)}`,
     `Visible signs / behavior: ${(input.signs || []).map(id => LABELS[id] || id).join('; ') || 'No signs selected'}`,
+    `Visible extent (not a severity score): ${show(input.visualExtent)}`,
     `Total ammonia: ${number(input.ammonia)} ppm (mg/L)`,
     `Nitrite: ${number(input.nitrite)} ppm (mg/L)`,
     `pH: ${number(input.ph)}`,
     `Temperature: ${number(input.temperature)} ${input.tempUnit === 'C' ? '°C' : '°F'}`,
     `Salinity (marine): ${show(input.salinity)}`,
     `New arrivals / previous treatment / other notes: ${show(input.notes)}`,
-    `Photo: ${input.hasPhoto ? 'A photo is selected locally. It has NOT been analyzed or sent; attach the original separately if you want an AI or professional to see it.' : 'No photo selected.'}`,
     '',
     `Urgent flags: ${assessment.urgent.join('; ') || 'None selected. This does not rule out serious disease.'}`,
     `Environmental checks: ${assessment.checks.join(' ') || 'Still check actual water quality and oxygen.'}`,
     `Guide reading suggestions (NOT established diagnoses): ${candidates.map(c => c.title).join('; ') || 'No clear match.'}`,
     `Visual page used to start this check (NOT evidence of a diagnosis): ${CONDITIONS.find(c => c.id === input.visualReference)?.title || 'None selected.'}`,
-    `Entries manually chosen for comparison (NOT image-analysis results): ${(input.comparisons || []).map(id => CONDITIONS.find(c => c.id === id)?.title).filter(Boolean).join('; ') || 'None selected.'}`,
+    `Entries manually chosen for comparison (user selections, not diagnoses): ${(input.comparisons || []).map(id => CONDITIONS.find(c => c.id === id)?.title).filter(Boolean).join('; ') || 'None selected.'}`,
     '',
-    'FOR AN AI SECOND OPINION:',
-    'Help me organize these observations. If I attach a photo, describe only what is visible and state uncertainty. Do not infer absent signs from a single image. Separate observations from hypotheses. Consider environmental problems and relevant look-alikes before naming a disease. Keep freshwater and marine causes distinct. Ask the most useful missing questions, identify urgent signs, explain which professional tests distinguish the possibilities, and suggest safe immediate checks. Do not provide an unsupported certain diagnosis, made-up confidence percentages, medication doses or a blanket heat/salt treatment. Do not assume you have seen a photo unless one is actually attached.',
   ].join('\n');
 }

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { assessUrgency, rankConditions, buildCase } from '../../experiments/fish-health-lab/logic.mjs';
+import { assessUrgency, rankConditions, buildCase, describeIchPattern } from '../../experiments/fish-health-lab/logic.mjs';
 import { VISUAL_LIBRARY } from '../../experiments/fish-health-lab/visuals.mjs';
 
 const base = { water: 'fresh', signs: [], ammonia: '', nitrite: '', ph: '', temperature: '' };
@@ -43,11 +43,11 @@ test('nitrite guidance does not treat marine toxicity as equivalent to freshwate
 test('no signs does not invent an infectious diagnosis', () => {
   assert.deepEqual(rankConditions(base), []);
 });
-test('case notes distinguish blank from zero, and photos from actual image analysis', () => {
-  const notes = buildCase({ ...base, ammonia: '0', hasPhoto: true, species: '<test>' });
+test('observation notes distinguish blank from zero and contain no AI handoff', () => {
+  const notes = buildCase({ ...base, ammonia: '0', species: '<test>' });
   assert.match(notes, /Total ammonia: 0 ppm/);
   assert.match(notes, /Nitrite: Not measured \/ unknown/);
-  assert.match(notes, /has NOT been analyzed or sent/);
+  assert.doesNotMatch(notes, /FOR AN AI|ChatGPT|attach.*photo/i);
   assert.match(notes, /not a diagnosis/);
   assert.match(notes, /<test>/); // plain-text export, not rendered as HTML
 });
@@ -56,7 +56,7 @@ test('visual reference choices are not diagnostic evidence or extra ranking weig
   assert.deepEqual(rankConditions({ ...observations, visualReference: 'velvet-marine', comparisons: ['ulcer','dropsy'] }), rankConditions(observations));
   const notes = buildCase({ ...observations, visualReference: 'ich-fresh', comparisons: ['ich-fresh','velvet-fresh'] });
   assert.match(notes, /NOT evidence of a diagnosis\): Freshwater ich/);
-  assert.match(notes, /NOT image-analysis results\): Freshwater ich; Freshwater velvet/);
+  assert.match(notes, /user selections, not diagnoses\): Freshwater ich; Freshwater velvet/);
 });
 test('reference assets have explicit provenance; absent assets remain null rather than broken or invented examples', () => {
   for (const slots of Object.values(VISUAL_LIBRARY)) for (const slot of slots) {
@@ -67,4 +67,12 @@ test('reference assets have explicit provenance; absent assets remain null rathe
       assert.match(slot.image.source, /not.*confirmed patient/);
     } else assert.equal(slot.image, null);
   }
+});
+
+test('ich walkthrough follows observed texture rather than forcing an ich conclusion', () => {
+  assert.match(describeIchPattern({ ...base, signs: ['dots'] }).title, /one possibility/);
+  for (const sign of ['dust','fuzz','patch','lumps']) assert.match(describeIchPattern({ ...base, signs: [sign] }).title, /less typical/);
+  assert.match(describeIchPattern(base).title, /no clear visual match/);
+  assert.match(describeIchPattern({ ...base, water: 'marine', signs: ['dots'] }).title, /not a freshwater/);
+  assert.deepEqual(rankConditions({ ...base, signs: ['dots'], visualExtent: 'Many or obvious visible changes' }),rankConditions({ ...base, signs: ['dots'], visualExtent: 'Few or subtle visible changes' }));
 });

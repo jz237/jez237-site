@@ -1,5 +1,5 @@
 import { SYMPTOMS, BEHAVIORS, CONDITIONS, SOURCES, ATLAS_URL } from './data.mjs';
-import { assessUrgency, rankConditions, buildCase } from './logic.mjs';
+import { assessUrgency, rankConditions, buildCase, describeIchPattern } from './logic.mjs';
 import { GUIDE_URL, slotsFor, leadSlot, patternFor } from './visuals.mjs';
 
 const $ = selector => document.querySelector(selector);
@@ -7,8 +7,10 @@ const $$ = selector => [...document.querySelectorAll(selector)];
 const escape = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 const form = $('#fish-form');
 const chosen = new Set();
-let step = 1, photoURL = null, currentCase = '', illustrationId = 0;
-let libraryPattern = '', visualReference = null;
+let step = 1, currentCase = '', illustrationId = 0;
+let libraryPattern = '', visualReference = null, ichWalkthrough = false, visualExtent = '';
+let ichStep = 1;
+const ichAnswers = { water: '', pattern: '', extent: '' };
 const comparisons = new Set();
 
 function fishArt(type = 'plain', hero = false) {
@@ -29,7 +31,7 @@ function fishArt(type = 'plain', hero = false) {
 
 function readInput() {
   const data = Object.fromEntries(new FormData(form));
-  return { ...data, signs: [...chosen, ...$$('input[name="behavior"]:checked').map(input => input.value)], hasPhoto: Boolean(photoURL), visualReference, comparisons: [...comparisons] };
+  return { ...data, signs: [...chosen, ...$$('input[name="behavior"]:checked').map(input => input.value)], ichWalkthrough, visualExtent, visualReference, comparisons: [...comparisons] };
 }
 
 function goStep(number, scroll = true) {
@@ -48,7 +50,7 @@ function goStep(number, scroll = true) {
 }
 
 function switchView(name) {
-  for (const id of ['guide', 'library', 'about']) $(`#${id}-view`).hidden = id !== name;
+  for (const id of ['guide', 'library', 'ich', 'about']) $(`#${id}-view`).hidden = id !== name;
   $$('.nav-tab').forEach(button => {
     button.classList.toggle('active', button.dataset.view === name);
     if (button.dataset.view === name) button.setAttribute('aria-current', 'page'); else button.removeAttribute('aria-current');
@@ -91,7 +93,7 @@ function enlargeImage(entryId, slotId) {
 function updateCompareTray(message = '') {
   $('#comparison-tray').hidden = !comparisons.size;
   $('#comparison-picks').innerHTML = [...comparisons].map(id => `<button data-remove-comparison="${id}" aria-label="Remove ${escape(CONDITIONS.find(c => c.id === id).title)} from comparison">${escape(CONDITIONS.find(c => c.id === id).title)} <span aria-hidden="true">×</span></button>`).join('');
-  $('#comparison-status').textContent = message || (comparisons.size === 1 ? 'Choose one more entry to compare.' : 'Two entries selected. Add your own photo in the comparison.');
+  $('#comparison-status').textContent = message || (comparisons.size === 1 ? 'Choose one more entry to compare.' : 'Two entries selected. Compare the pictures and look-alikes.');
   $('[data-action="compare"]').disabled = comparisons.size !== 2;
   document.body.classList.toggle('has-comparison', comparisons.size > 0);
   $$('[data-compare]').forEach(button => {
@@ -100,19 +102,11 @@ function updateCompareTray(message = '') {
   });
 }
 
-function renderPhotoComparison() {
-  const container = $('#compare-photo');
-  container.replaceChildren(Object.assign(document.createElement(photoURL ? 'img' : 'span'), photoURL
-    ? { src: photoURL, alt: 'Your fish photo, displayed locally and not analyzed.' }
-    : { textContent: 'Your fish photo can go here' }));
-  $('[data-action="remove-compare-photo"]').hidden = !photoURL;
-}
-
 function openComparison() {
   if (comparisons.size !== 2) return;
   const selected = [...comparisons].map(id => CONDITIONS.find(c => c.id === id));
   $('#compare-content').innerHTML = `<div class="side-by-side">${selected.map(c => `<article><span class="scope-pill">${scopeName(c.scope)}</span><h3>${escape(c.title)}</h3>${gallery(c)}<div class="comparison-clues"><h4>Look for</h4>${list(c.clues)}<h4>What could fool you?</h4><p>${escape(c.distinguish)}</p><h4>How to distinguish it</h4><p>${escape(c.confirm)}</p><button class="button secondary" data-use-pattern="${c.id}">Check this visible pattern →</button></div></article>`).join('')}</div>`;
-  renderPhotoComparison(); $('#compare-dialog').showModal();
+  $('#compare-dialog').showModal();
 }
 
 function startFromPattern(id) {
@@ -121,12 +115,49 @@ function startFromPattern(id) {
   const sign = patternFor(id), label = SYMPTOMS.find(s => s.id === sign).title;
   chosen.add(sign);
   if (condition.scope !== 'both') form.elements.water.value = condition.scope;
-  visualReference = condition.id;
+  visualReference = condition.id; ichWalkthrough = false; visualExtent = '';
   $$('.symptom-card').forEach(button => button.setAttribute('aria-pressed', String(chosen.has(button.dataset.symptom))));
   $('#visual-start-note').hidden = false;
   $('#visual-start-note').textContent = `You came from “${condition.title}.” We selected the visible sign “${label},” not a diagnosis. Confirm the water type, change any signs that do not fit, and keep look-alikes in mind.`;
   $$('#detail-dialog[open], #compare-dialog[open]').forEach(dialog => dialog.close());
   switchView('guide'); goStep(1);
+}
+
+function walkthroughImage(slotId) {
+  const condition = CONDITIONS.find(c => c.id === 'ich-fresh'), slot = slotsFor(condition.id).find(s => s.id === slotId);
+  return `<figure class="walk-reference"><button class="walk-image" data-enlarge-entry="ich-fresh" data-enlarge-slot="${slotId}" aria-label="Enlarge ${escape(slot.label)}">${slotArt(condition, slot)}</button><figcaption><strong>${escape(slot.label)}</strong><span>Tap the picture to enlarge ↗</span></figcaption></figure>`;
+}
+
+function renderIchWalkthrough() {
+  const radio = (name, value, label, selected) => `<label class="walk-choice"><input type="radio" name="ich-${name}" value="${value}" ${selected === value ? 'checked' : ''}><span>${label}</span></label>`;
+  $('#ich-walkthrough').innerHTML = `<ol class="walk-progress" aria-label="Illustrated steps"><li ${ichStep === 1 ? 'aria-current="step"' : ''}>1 · Recognize</li><li ${ichStep === 2 ? 'aria-current="step"' : ''}>2 · Compare texture</li><li ${ichStep === 3 ? 'aria-current="step"' : ''}>3 · Notice variation</li><li>4 · Check the tank</li></ol>
+    <section data-ich-step="1" ${ichStep === 1 ? '' : 'hidden'}><div class="section-heading"><div><p class="eyebrow">START WITH THE WHOLE FISH</p><h2>One condition can look different.</h2></div><span class="scope-pill">Freshwater example</span></div><p>Look at the skin and fins, then compare the same pattern across fish colors and shapes. These are illustrations, not confirmed cases.</p><div class="walk-reference-pair">${walkthroughImage('overview')}${walkthroughImage('variations')}</div><fieldset class="walk-answers"><legend>Is your fish in freshwater?</legend><div class="walk-options">${radio('water','fresh','Freshwater',ichAnswers.water)}${radio('water','marine','Saltwater / reef',ichAnswers.water)}${radio('water','unknown','I’m not sure',ichAnswers.water)}</div></fieldset><p id="ich-water-note" class="notice" ${ichAnswers.water && ichAnswers.water !== 'fresh' ? '' : 'hidden'}>${ichAnswers.water === 'marine' ? 'Saltwater ich is a different parasite. Use the general guide with saltwater selected; do not apply this freshwater example as marine advice.' : 'Identify the water type before using the freshwater ich walkthrough. The general guide can keep the water type unknown.'}</p><button class="text-button" data-action="ich-general" ${ichAnswers.water && ichAnswers.water !== 'fresh' ? '' : 'hidden'}>Use the general guide instead →</button><p class="field-error ich-step-error" role="alert"></p><div class="step-actions"><span class="quiet">The pictures are clues, not proof.</span><button class="button primary" data-action="ich-next">Next: compare the texture →</button></div></section>
+    <section data-ich-step="2" ${ichStep === 2 ? '' : 'hidden'}><p class="eyebrow">THE DETAILS THAT CHANGE THE QUESTION</p><h2>Grains, dust, or something else?</h2><p>Enlarge these references. Compare the shape and texture you can actually see on your fish—white color alone is not enough.</p><div class="walk-reference-pair">${walkthroughImage('closeup')}${walkthroughImage('lookalikes')}</div><fieldset class="walk-answers"><legend>Which visible pattern is closest?</legend><div class="walk-options pattern-options">${radio('pattern','dots','Separate salt-like white grains',ichAnswers.pattern)}${radio('pattern','dust','Very fine dust or sheen',ichAnswers.pattern)}${radio('pattern','fuzz','Cottony threads or tufts',ichAnswers.pattern)}${radio('pattern','patch','Flat pale patches',ichAnswers.pattern)}${radio('pattern','lumps','Larger irregular growths',ichAnswers.pattern)}${radio('pattern','unclear','Not clear / perhaps normal markings',ichAnswers.pattern)}</div></fieldset><p class="field-error ich-step-error" role="alert"></p><div class="step-actions"><button class="button secondary" data-action="ich-back">← Back</button><button class="button primary" data-action="ich-next">Next: how visible is it? →</button></div></section>
+    <section data-ich-step="3" ${ichStep === 3 ? '' : 'hidden'}><p class="eyebrow">A RANGE OF APPEARANCES — NOT A TIMELINE</p><h2>Few spots don’t mean little trouble.</h2><p>Light-colored fish can hide a pattern. Gill disease can occur without obvious skin spots. These examples are not a severity scale or stages every fish goes through.</p><div class="walk-reference-pair">${walkthroughImage('subtle')}${walkthroughImage('marked')}</div><fieldset class="walk-answers"><legend>How noticeable are the changes on your fish?</legend><div class="walk-options">${radio('extent','Few or subtle visible changes','Few / subtle changes',ichAnswers.extent)}${radio('extent','Many or obvious visible changes','Many / obvious changes',ichAnswers.extent)}${radio('extent','Unclear or no obvious skin changes','Hard to tell / no obvious skin change',ichAnswers.extent)}</div></fieldset><p class="quiet">This records what you notice. It does not rate how sick the fish is.</p><p class="field-error ich-step-error" role="alert"></p><div class="step-actions"><button class="button secondary" data-action="ich-back">← Back</button><button class="button primary" data-action="ich-tank">Continue: check the tank →</button></div></section>`;
+}
+
+function advanceIch() {
+  const error = $(`[data-ich-step="${ichStep}"] .ich-step-error`);
+  if (ichStep === 1 && ichAnswers.water !== 'fresh') { error.textContent = 'Choose freshwater to use this example, or use the general guide for saltwater or unknown water type.'; return; }
+  if (ichStep === 2 && !ichAnswers.pattern) { error.textContent = 'Choose the closest pattern. “Not clear” is a useful answer.'; return; }
+  ichStep = Math.min(3, ichStep + 1); renderIchWalkthrough(); focusIchStep();
+}
+
+function focusIchStep() {
+  const heading = $(`[data-ich-step="${ichStep}"] h2`);
+  heading.tabIndex = -1; heading.focus({preventScroll:true}); heading.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function finishIchWalkthrough() {
+  if (ichAnswers.water !== 'fresh' || !ichAnswers.pattern) return;
+  if (!ichAnswers.extent) { $('[data-ich-step="3"] .ich-step-error').textContent = 'Choose how visible the changes are. “Hard to tell” is fine.'; return; }
+  reset(true);
+  ichWalkthrough = true; visualReference = 'ich-fresh'; visualExtent = ichAnswers.extent;
+  chosen.add(ichAnswers.pattern); form.elements.water.value = 'fresh';
+  $$('.symptom-card').forEach(button => button.setAttribute('aria-pressed', String(chosen.has(button.dataset.symptom))));
+  $('#visual-start-note').hidden = false;
+  $('#visual-start-note').textContent = `From the illustrated check: ${SYMPTOMS.find(s => s.id === ichAnswers.pattern).title}; ${visualExtent.toLowerCase()}. These are your observations, not an ich diagnosis. Add the tank details below.`;
+  switchView('guide'); goStep(2);
 }
 
 function emergencyContent() {
@@ -136,7 +167,7 @@ function emergencyContent() {
 function openDetail(id, slotId = 'overview') {
   const condition = CONDITIONS.find(c => c.id === id);
   if (!condition) return;
-  $('#detail-content').innerHTML = `<p class="eyebrow">${escape(condition.kind)} · ${scopeName(condition.scope)}</p><h2 id="detail-title">${escape(condition.title)}</h2>${condition.scientific ? `<p class="scientific">${escape(condition.scientific)}</p>` : ''}<p class="lead">${escape(condition.summary)}</p>${gallery(condition, slotId)}<div class="detail-visual-actions"><button class="button primary" data-use-pattern="${condition.id}">Check this visible pattern →</button><button class="compare-toggle" data-compare="${condition.id}" aria-pressed="${comparisons.has(condition.id)}">${comparisons.has(condition.id) ? '✓ Selected' : '+ Compare'}</button></div><p class="quiet">This selects a visible sign, not a disease. The tank questions help you compare other explanations.</p><h3>Clues that can fit</h3>${list(condition.clues)}<h3>What else could look similar?</h3><p>${escape(condition.distinguish)}</p><h3>Useful next checks</h3>${list(condition.next)}<div class="notice"><h4>How it is distinguished</h4><p>${escape(condition.confirm)}</p></div><p class="avoid"><strong>Avoid the shortcut:</strong> ${escape(condition.avoid)}</p><div class="sources"><h4>Read the references</h4>${sourceLinks(condition.source)}</div><p class="quiet">A subtle skin appearance does not mean a mild illness. These image spaces are not clinical stages or a severity score.</p>`;
+  $('#detail-content').innerHTML = `<p class="eyebrow">${escape(condition.kind)} · ${scopeName(condition.scope)}</p><h2 id="detail-title">${escape(condition.title)}</h2>${condition.scientific ? `<p class="scientific">${escape(condition.scientific)}</p>` : ''}<p class="lead">${escape(condition.summary)}</p>${gallery(condition, slotId)}<div class="detail-visual-actions"><button class="button primary" data-use-pattern="${condition.id}">Check this visible pattern →</button><button class="compare-toggle" data-compare="${condition.id}" aria-pressed="${comparisons.has(condition.id)}">${comparisons.has(condition.id) ? '✓ Selected' : '+ Compare'}</button></div><p class="quiet">This selects a visible sign, not a disease. The tank questions help you compare other explanations.</p><h3>Clues that can fit</h3>${list(condition.clues)}<h3>What else could look similar?</h3><p>${escape(condition.distinguish)}</p><h3>Useful next checks</h3>${list(condition.next)}<div class="notice"><h4>How it is distinguished</h4><p>${escape(condition.confirm)}</p></div><p class="avoid"><strong>Avoid the shortcut:</strong> ${escape(condition.avoid)}</p><div class="sources"><h4>Read the references</h4>${sourceLinks(condition.source)}</div><p class="quiet">A subtle skin appearance does not mean a mild illness. These image views are not clinical stages or a severity score.</p>`;
   $('#detail-dialog').showModal();
 }
 
@@ -148,7 +179,9 @@ function renderResults() {
   const checks = assessment.checks.length ? `<div class="notice water-notice"><h3>Put the environment near the top of the list.</h3>${list(assessment.checks)}</div>` : '';
   const unknown = assessment.waterUnknown ? '<p class="water-reminder"><strong>Water tests are missing.</strong> That means unknown—not safe. Check actual readings before choosing a treatment.</p>' : '';
   const scope = input.water === 'unknown' ? '<p class="notice">Water type is unknown, so both freshwater and saltwater entries are shown. Identify the aquarium type before following condition-specific advice.</p>' : '';
-  $('#results-content').innerHTML = `<p class="eyebrow">YOUR OBSERVATIONS → VISUAL COMPARISONS</p><h2 id="results-title">Now compare the pictures.</h2><p class="lead">These entries fit some of your observations. Open the image views, or choose two entries with “+ Compare.” They are reading suggestions, not probabilities or a confirmed diagnosis.</p>${urgent}${checks}${unknown}${scope}<div class="result-label"><span>${ranked.length} patterns worth comparing</span><span>No image analysis performed</span></div><div class="results-grid">${ranked.map(condition => card(condition, true)).join('') || '<div class="notice">There is no clear match yet. Review the signs, check water quality, and seek help if the fish is unwell.</div>'}</div><section class="case-cta"><div><p class="eyebrow">BRING THE WHOLE STORY</p><h3>Get a better second opinion.</h3><p>Build a concise case for an expert or your preferred AI. You control what leaves this page.</p></div><button class="button primary" data-action="case">Prepare my case <span aria-hidden="true">↗</span></button></section><p class="quiet">A photo cannot establish every cause. Skin/gill microscopy, water tests, cultures or other professional tests may be needed. Do not delay care because a pattern looks different.</p>`;
+  const visualSummary = describeIchPattern(input);
+  const outcome = input.ichWalkthrough ? `<section class="ich-outcome"><p class="eyebrow">YOUR ILLUSTRATED ICH CHECK</p><h3>${escape(visualSummary.title)}</h3><p>${escape(visualSummary.text)}</p><div class="outcome-actions"><button class="button secondary" data-enlarge-entry="ich-fresh" data-enlarge-slot="lookalikes">Revisit the pictured look-alikes ↗</button><button class="button secondary" data-enlarge-entry="ich-fresh" data-enlarge-slot="overview">See how ich is confirmed ↗</button></div><p class="quiet">Check water quality and breathing first. A fish-health professional can distinguish look-alikes with appropriate examination and microscopy. Do not blindly mix medicines or raise heat.</p></section>` : '';
+  $('#results-content').innerHTML = `<p class="eyebrow">YOUR OBSERVATIONS → VISUAL COMPARISONS</p><h2 id="results-title">Now compare the pictures.</h2><p class="lead">These entries fit some of your observations. Open the image views, or choose two entries with “+ Compare.” They are reading suggestions, not probabilities or a confirmed diagnosis.</p>${urgent}${checks}${unknown}${scope}${outcome}<div class="result-label"><span>${ranked.length} patterns worth comparing</span><span>Based on the signs you selected</span></div><div class="results-grid">${ranked.map(condition => card(condition, true)).join('') || '<div class="notice">There is no clear match yet. Review the signs, check water quality, and seek help if the fish is unwell.</div>'}</div><section class="case-cta"><div><p class="eyebrow">KEEP THE WHOLE STORY</p><h3>Save your observations.</h3><p>Keep a record for yourself or a fish-health professional. Nothing is submitted from this page.</p></div><button class="button primary" data-action="case">My observation notes <span aria-hidden="true">↗</span></button></section><p class="quiet">A photo cannot establish every cause. Skin/gill microscopy, water tests, cultures or other professional tests may be needed. Do not delay care because a pattern looks different.</p>`;
   goStep(3);
 }
 
@@ -173,23 +206,16 @@ function showCase() {
 }
 
 async function copyCase() {
-  try { await navigator.clipboard.writeText(currentCase); $('#copy-status').textContent = 'Copied. Paste the notes into your AI conversation or share them with a fish-health professional.'; }
+  try { await navigator.clipboard.writeText(currentCase); $('#copy-status').textContent = 'Copied. Keep these observations for yourself or share them with a fish-health professional.'; }
   catch { $('#case-text').select(); $('#copy-status').textContent = 'Automatic copying was unavailable. The notes are selected; use your device’s Copy command.'; }
 }
 
-function removePhoto() {
-  if (photoURL) URL.revokeObjectURL(photoURL);
-  photoURL = null;
-  $('#photo-input').value = '';
-  $('#photo-preview').replaceChildren(Object.assign(document.createElement('span'), { textContent: '＋' }));
-  $('#remove-photo').hidden = true;
-  renderPhotoComparison();
-}
-
-function reset() {
-  form.reset(); chosen.clear(); removePhoto();
+function reset(keepWalkthrough = false) {
+  form.reset(); chosen.clear();
   $$('.symptom-card').forEach(button => button.setAttribute('aria-pressed', 'false'));
-  $('#photo-error').textContent = ''; $('#step-one-error').textContent = '';
+  $('#step-one-error').textContent = '';
+  ichWalkthrough = false; visualExtent = '';
+  if (!keepWalkthrough) { Object.assign(ichAnswers, { water: '', pattern: '', extent: '' }); ichStep = 1; renderIchWalkthrough(); }
   $('#inline-urgent').hidden = true; $('#salinity-field').hidden = true;
   $('#results-content').replaceChildren(); $('#case-text').value = ''; currentCase = '';
   visualReference = null; $('#visual-start-note').hidden = true;
@@ -246,6 +272,10 @@ document.addEventListener('click', async event => {
   const pattern = event.target.closest('[data-use-pattern]');
   if (pattern) startFromPattern(pattern.dataset.usePattern);
   const action = event.target.closest('[data-action]')?.dataset.action;
+  if (action === 'ich-next') advanceIch();
+  if (action === 'ich-back') { ichStep = Math.max(1, ichStep - 1); renderIchWalkthrough(); focusIchStep(); }
+  if (action === 'ich-tank') finishIchWalkthrough();
+  if (action === 'ich-general') { const water = ichAnswers.water; reset(); form.elements.water.value = water || 'unknown'; switchView('guide'); goStep(1); }
   if (action === 'next') {
     if (!form.elements.water.value || !chosen.size) {
       $('#step-one-error').textContent = 'Choose a water type and at least one visible sign. “I’m not sure” and “Nothing obvious” are fine.';
@@ -269,8 +299,6 @@ document.addEventListener('click', async event => {
   if (action === 'atlas') enlargeImage('ich-fresh', 'variations');
   if (action === 'compare') openComparison();
   if (action === 'clear-compare') { comparisons.clear(); updateCompareTray(); }
-  if (action === 'choose-compare-photo') $('#photo-input').click();
-  if (action === 'remove-compare-photo') removePhoto();
   if (action === 'all-patterns') {
     libraryPattern = ''; $('#library-search').value = ''; $('#library-water').value = 'all';
     $$('[data-library-pattern]').forEach(button => button.setAttribute('aria-pressed', 'false'));
@@ -289,36 +317,19 @@ form.addEventListener('change', () => {
   $('#inline-urgent').hidden = !urgent.length;
   $('#inline-urgent').textContent = urgent.length ? `These signs need prompt help: ${urgent.join('; ')}. Use “What to do first” above; don’t wait to finish the guide.` : '';
 });
+$('#ich-walkthrough').addEventListener('change', event => {
+  const key = event.target.name?.replace('ich-', '');
+  if (!Object.hasOwn(ichAnswers, key)) return;
+  ichAnswers[key] = event.target.value;
+  if (key === 'water') {
+    $('#ich-water-note').hidden = ichAnswers.water === 'fresh';
+    $('#ich-water-note').textContent = ichAnswers.water === 'marine' ? 'Saltwater ich is a different parasite. Use the general guide with saltwater selected; do not apply this freshwater example as marine advice.' : 'Identify the water type before using the freshwater ich walkthrough. The general guide can keep water type unknown.';
+    $('[data-action="ich-general"]').hidden = ichAnswers.water === 'fresh';
+  }
+  $$('[data-ich-step] .ich-step-error').forEach(el => { el.textContent = ''; });
+});
 $('#library-search').addEventListener('input', renderLibrary);
 $('#library-water').addEventListener('change', renderLibrary);
-$('#remove-photo').addEventListener('click', removePhoto);
-$('#photo-input').addEventListener('change', event => {
-  const file = event.target.files?.[0];
-  if (!file) return;
-  $('#photo-error').textContent = '';
-  $('#compare-photo-error').textContent = '';
-  if (!file.type.startsWith('image/') || file.size > 20000000) {
-    $('#photo-error').textContent = 'Choose an image under 20 MB. JPEG, PNG or WebP usually works best.';
-    $('#compare-photo-error').textContent = $('#photo-error').textContent;
-    event.target.value = ''; return;
-  }
-  const newURL = URL.createObjectURL(file);
-  const image = new Image();
-  image.alt = 'Your fish photo, displayed locally for reference only; not analyzed.';
-  image.onload = () => {
-    if (photoURL) URL.revokeObjectURL(photoURL);
-    photoURL = newURL;
-    $('#photo-preview').replaceChildren(image);
-    $('#remove-photo').hidden = false;
-    renderPhotoComparison();
-  };
-  image.onerror = () => {
-    URL.revokeObjectURL(newURL);
-    $('#photo-error').textContent = 'This browser could not open that image. Try exporting it as JPEG or PNG.';
-    $('#compare-photo-error').textContent = $('#photo-error').textContent;
-    event.target.value = '';
-  };
-  image.src = newURL;
-});
-window.addEventListener('pagehide', () => { if (photoURL) URL.revokeObjectURL(photoURL); });
 renderLibrary();
+renderIchWalkthrough();
+if (location.hash === '#ich') switchView('ich');
