@@ -1,11 +1,57 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-11-04",
+  "updated": "2026-11-05",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-11-04",
+  "coverageEnd": "2026-11-05",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "category": "Medicine & biology",
+      "evidenceKind": "lab",
+      "modelNote": "Various Claude models; versions not specified. Humans directed the research.",
+      "sources": [
+        "https://www.anthropic.com/research/investigating-vault-particles-with-claude",
+        "https://www.anthropic.com/document/athukoralage-prokaryotic-vault-protein"
+      ],
+      "status": "Early laboratory result—not peer-reviewed or independently confirmed.",
+      "takeaway": "Researchers report that proteins from bacteria and bacteria-infecting viruses can build hollow barrels resembling mysterious structures in human cells. Claude helped map one barrel in 3D and proposed a sample-preparation shortcut that worked in the lab, giving researchers an easier system to investigate. People chose the proteins, ran the physical experiments and guided the analysis, correcting AI mistakes. Announced November 4, this early result used proteins made in laboratory bacteria; whether the barrels form in their natural hosts, and what they do, remain unknown.",
+      "title": "AI helps reveal a mysterious microscopic protein barrel",
+      "id": "d-1567920676407345224-claude-phage-vault-structure",
+      "coveredOn": "2026-11-05",
+      "context": "🔬 **AI Discovery Watch · November 5, 2026**\n\n**AI helps reveal a mysterious microscopic protein barrel**\nResearchers report that proteins from bacteria and bacteria-infecting viruses can build hollow barrels resembling mysterious structures in human cells. Claude helped map one barrel in 3D and proposed a sample-preparation shortcut that worked in the lab, giving researchers an easier system to investigate. People chose the proteins, ran the physical experiments and guided the analysis, correcting AI mistakes. Announced November 4, this early result used proteins made in laboratory bacteria; whether the barrels form in their natural hosts, and what they do, remain unknown.\n\n**AI used:** Various Claude models; versions not specified. Humans directed the research.\n**Evidence:** Early laboratory result—not peer-reviewed or independently confirmed.\nOriginal source: <https://www.anthropic.com/research/investigating-vault-particles-with-claude>\nSupporting source: <https://www.anthropic.com/document/athukoralage-prokaryotic-vault-protein>"
+    },
+    {
+      "category": "Research in action",
+      "evidenceKind": "demo",
+      "modelNote": "AutoDNA: Gemini 2.5 Pro agents; Gemini 2.5 Flash helps retrieve literature.",
+      "sources": [
+        "https://www.nature.com/articles/s41586-026-11228-6",
+        "https://github.com/IPADS-X/AutoDNA",
+        "https://www.nature.com/articles/d41586-026-03552-8"
+      ],
+      "status": "Peer-reviewed capability demonstration; results reported by the authors, not independently replicated here.",
+      "takeaway": "A robot-equipped lab designed and ran DNA experiments, then used the results to decide what to try next. In one test, an extra preparation step made things worse, so the AI backed out and tried other changes, eventually improving DNA production. Researchers built the lab, set its goals and kept supplies and equipment working. Published November 4, AutoDNA demonstrates AI running and refining real experiments on established tasks—not a newly discovered biological law or a proven medical treatment.",
+      "title": "An AI-run biology lab changes experiments when its ideas fail",
+      "id": "d-1567921004901179566-autodna-experimental-feedback-lab",
+      "coveredOn": "2026-11-05",
+      "context": "🔬 **AI Discovery Watch · November 5, 2026**\n\n**An AI-run biology lab changes experiments when its ideas fail**\nA robot-equipped lab designed and ran DNA experiments, then used the results to decide what to try next. In one test, an extra preparation step made things worse, so the AI backed out and tried other changes, eventually improving DNA production. Researchers built the lab, set its goals and kept supplies and equipment working. Published November 4, AutoDNA demonstrates AI running and refining real experiments on established tasks—not a newly discovered biological law or a proven medical treatment.\n\n**AI used:** AutoDNA: Gemini 2.5 Pro agents; Gemini 2.5 Flash helps retrieve literature.\n**Evidence:** Peer-reviewed capability demonstration; results reported by the authors, not independently replicated here.\nOriginal source: <https://www.nature.com/articles/s41586-026-11228-6>\nSupporting source: <https://github.com/IPADS-X/AutoDNA>\nSupporting source: <https://www.nature.com/articles/d41586-026-03552-8>"
+    },
+    {
+      "category": "Physics & materials",
+      "evidenceKind": "demo",
+      "modelNote": "GPT-6.1 Sol and separate instances of the same model; SRIM/TRIM supplies the physics simulations.",
+      "sources": [
+        "https://arxiv.org/abs/2611.03795",
+        "https://arxiv.org/html/2611.03795"
+      ],
+      "status": "Early preprint; simulated designs, not laboratory-validated materials or new physical laws.",
+      "takeaway": "An AI worked backward from a sketch showing where atoms should sit inside a material to propose a recipe for placing them there. It chose particle-beam settings, ran physics simulations and adjusted its plan when the simulated pattern missed the target. Researchers supplied the goals, helped build the simulator interface and approved runs and workflow changes. Released November 2, this is a computer-only research demonstration: the materials have not been made, and the simulation leaves out effects that could change the real result.",
+      "title": "AI turns a hand-drawn pattern into a proposed materials recipe",
+      "id": "d-1567921484700192910-ai-sketch-to-simulated-materials-recipe",
+      "coveredOn": "2026-11-05",
+      "context": "🔬 **AI Discovery Watch · November 5, 2026**\n\n**AI turns a hand-drawn pattern into a proposed materials recipe**\nAn AI worked backward from a sketch showing where atoms should sit inside a material to propose a recipe for placing them there. It chose particle-beam settings, ran physics simulations and adjusted its plan when the simulated pattern missed the target. Researchers supplied the goals, helped build the simulator interface and approved runs and workflow changes. Released November 2, this is a computer-only research demonstration: the materials have not been made, and the simulation leaves out effects that could change the real result.\n\n**AI used:** GPT-6.1 Sol and separate instances of the same model; SRIM/TRIM supplies the physics simulations.\n**Evidence:** Early preprint; simulated designs, not laboratory-validated materials or new physical laws.\nOriginal source: <https://arxiv.org/abs/2611.03795>\nSupporting source: <https://arxiv.org/html/2611.03795>"
+    },
     {
       "category": "Physics & materials",
       "evidenceKind": "demo",
