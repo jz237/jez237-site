@@ -652,7 +652,7 @@ index af0b258..8bd08a5 100644
  
  extern ogl_texture* ogl_get_free_texture();
 diff --git a/d2/main/collide.c b/d2/main/collide.c
-index fdb2e78..581a988 100644
+index fdb2e78..b59ea8c 100644
 --- a/d2/main/collide.c
 +++ b/d2/main/collide.c
 @@ -649,6 +649,10 @@ int check_effect_blowup(segment *seg,int side,vms_vector *pnt, object *blower, i
@@ -661,12 +661,23 @@ index fdb2e78..581a988 100644
  	segment *seg = &Segments[hitseg];
 +    /* Presentation notification only; all native collision logic below is intact. */
 +    {extern void astra_environment_hit(int,int,const vms_vector*,float);
-+     if(weapon->id!=FLARE_ID)astra_environment_hit(hitseg,hitwall,hitpt,Weapon_info[weapon->id].damage_radius?1.8f:.55f);}
++     astra_environment_hit(hitseg,hitwall,hitpt,weapon->id==FLARE_ID?.22f:Weapon_info[weapon->id].damage_radius?1.8f:.65f);}
 +
  	int blew_up;
  	int wall_type;
  	int playernum;
-@@ -1341,6 +1345,7 @@ int apply_damage_to_robot(object *robot, fix damage, int killer_objnum)
+@@ -745,6 +749,10 @@ void collide_weapon_and_wall( object * weapon, fix hitspeed, short hitseg, short
+ 		smega_rock_stuff();
+ 
+ 	wall_type = wall_hit_process( seg, hitwall, weapon->shields, playernum, weapon );
++    if(weapon->id==FLARE_ID&&weapon->ctype.laser_info.parent_type==OBJ_PLAYER&&seg->sides[hitwall].wall_num>=0){
++        int w=seg->sides[hitwall].wall_num;
++        if(Walls[w].type==WALL_DOOR)EM_ASM(Module.flareDoorImpact=({wall:$0,state:$1,hits:(Module.flareDoorImpact?.hits||0)+1});,w,Walls[w].state);
++    }
+ 
+ 	// Wall is volatile if either tmap 1 or 2 is volatile
+ 	if ((TmapInfo[seg->sides[hitwall].tmap_num].flags & TMI_VOLATILE) || (seg->sides[hitwall].tmap_num2 && (TmapInfo[seg->sides[hitwall].tmap_num2&0x3fff].flags & TMI_VOLATILE))) {
+@@ -1341,6 +1349,7 @@ int apply_damage_to_robot(object *robot, fix damage, int killer_objnum)
  //		Boss_been_hit = 1;
  
  	robot->shields -= damage;
@@ -674,7 +685,7 @@ index fdb2e78..581a988 100644
  
  	//	Do unspeakable hacks to make sure player doesn't die after killing boss.  Or before, sort of.
  	if (Robot_info[robot->id].boss_flag)
-@@ -2215,6 +2220,8 @@ extern fix64 Buddy_sorry_time;
+@@ -2215,6 +2224,8 @@ extern fix64 Buddy_sorry_time;
  
  void apply_damage_to_player(object *playerobj, object *killer, fix damage, ubyte possibly_friendly)
  {
@@ -683,7 +694,7 @@ index fdb2e78..581a988 100644
  	if (Player_is_dead)
  		return;
  
-@@ -2238,6 +2245,7 @@ void apply_damage_to_player(object *playerobj, object *killer, fix damage, ubyte
+@@ -2238,6 +2249,7 @@ void apply_damage_to_player(object *playerobj, object *killer, fix damage, ubyte
  
  	if (playerobj->id == Player_num) {		//is this the local player?
  		Players[Player_num].shields -= damage;
@@ -691,7 +702,7 @@ index fdb2e78..581a988 100644
  		PALETTE_FLASH_ADD(f2i(damage)*4,-f2i(damage/2),-f2i(damage/2));	//flash red
  
  		if (Players[Player_num].shields < 0)	{
-@@ -2768,6 +2776,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
+@@ -2768,6 +2780,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
  		return;
  	}
  
@@ -699,7 +710,7 @@ index fdb2e78..581a988 100644
  	collision_type = COLLISION_OF(A->type,B->type);
  
  	switch( collision_type )	{
-@@ -2825,6 +2834,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
+@@ -2825,6 +2838,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
  	default:
  		Int3();	//Error( "Unhandled collision_type in collide.c!\n" );
  	}

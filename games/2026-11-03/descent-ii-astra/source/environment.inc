@@ -63,13 +63,25 @@ void astra_environment_material(int room,int side,int texture){
 void astra_environment_hit(int room,int side,const vms_vector *point,float size){
     if(!ax_on()||room<0||room>Highest_segment_index||side<0||side>5)return;
     ae_reset();segment *s=&Segments[room];int t=s->sides[side].tmap_num;
-    if(s->sides[side].wall_num>=0||s->children[side]>=0||t<0||t>=NumTextures||
-        TmapInfo[t].damage||TmapInfo[t].flags&(TMI_WATER|TMI_FORCE_FIELD|TMI_VOLATILE))return;
-    for(int i=0;i<AE_MARKS;i++)if(ae_marks[i].born&&ae_marks[i].room==room&&ae_marks[i].side==side&&
-        vm_vec_dist_quick(point,&ae_marks[i].p)<F1_0/2){ae_marks[i].born=GameTime64;return;}
-    ae_mark *m=&ae_marks[ae_serial++%AE_MARKS];
-    *m=(ae_mark){*point,room,side,fminf(2.6f,fmaxf(.35f,size)),GameTime64,ae_serial};
-    EM_ASM(Module.environmentScars=(Module.environmentScars||0)+1;);
+    int wallnum=s->sides[side].wall_num;
+    /* Every solid surface can be scarred, including doors, breakable walls,
+     * locked panels and hazardous metal. Liquids/forcefields keep native hit FX. */
+    if(t<0||t>=NumTextures||TmapInfo[t].flags&(TMI_WATER|TMI_FORCE_FIELD|TMI_VOLATILE))return;
+    if(!(WALL_IS_DOORWAY(s,side)&WID_RENDER_FLAG))return;
+    int oldest=-1,count=0;
+    for(int i=0;i<AE_MARKS;i++)if(ae_marks[i].born&&ae_marks[i].room==room&&ae_marks[i].side==side){
+        ae_mark *m=&ae_marks[i];count++;if(oldest<0||m->born<ae_marks[oldest].born)oldest=i;
+        if(vm_vec_dist_quick(point,&m->p)<fl2f(fmaxf(.20f,fminf(.75f,size*.55f)))){
+            m->born=GameTime64;m->size=fminf(3.2f,fmaxf(size,m->size+.08f));
+            EM_ASM(Module.environmentHits=(Module.environmentHits||0)+1;);return;
+        }
+    }
+    /* The shader displays six marks per face. Replace that face's oldest mark
+     * before the global ring wraps, so each new impact is actually visible. */
+    int slot=count>=6?oldest:(int)(ae_serial++%AE_MARKS);ae_mark *m=&ae_marks[slot];
+    *m=(ae_mark){*point,room,side,fminf(3.2f,fmaxf(.20f,size)),GameTime64,ae_serial};
+    EM_ASM(Module.environmentScars=(Module.environmentScars||0)+1;Module.environmentHits=(Module.environmentHits||0)+1;Module.lastWallScar=({room:$0,side:$1,size:$2,door:!!$3});,room,side,m->size,wallnum>=0&&Walls[wallnum].type==WALL_DOOR);
+
 }
 static int ae_basis(int,int,vms_vector*,vms_matrix*,float*,float*);
 static int ag_shadow_data(int,int,float*,float*,float*);
@@ -222,7 +234,14 @@ void astra_environment_face(int nv,const g3s_point **points,g3s_lrgb *light,int 
     if(!ax_on())return;ae_faces++;ae_reset();segment *s=&Segments[room];int wallnum=s->sides[side].wall_num;
     int hidden=wallnum>=0&&Walls[wallnum].type==WALL_DOOR&&Walls[wallnum].clip_num>=0&&(WallAnims[Walls[wallnum].clip_num].flags&WCF_HIDDEN);
     int solid=s->children[side]<0&&wallnum<0;
-    if(!solid&&!hidden)return;
+    if(!solid&&!hidden){
+        if(wallnum>=0&&(flags&WID_RENDER_FLAG)&&!(flags&WID_CLOAKED_FLAG)){
+            wall *wall=&Walls[wallnum];
+            /* An opened aperture must never carry a floating decal. Marks stay
+             * on closed door panels and reappear when those panels close. */
+            if(wall->type!=WALL_DOOR||wall->state==WALL_DOOR_CLOSED)ae_wall_finish(nv,points,room,side,0);
+        }return;
+    }
     int texture=s->sides[side].tmap_num,theme=ae_theme(room),wet=texture>=0&&texture<NumTextures&&(TmapInfo[texture].damage||TmapInfo[texture].flags&(TMI_WATER|TMI_VOLATILE|TMI_FORCE_FIELD));
     if(hidden&&(Walls[wallnum].state!=WALL_DOOR_CLOSED))return;
     ae_wall_finish(nv,points,room,side,!wet&&nv==4);

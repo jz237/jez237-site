@@ -656,3 +656,33 @@ Validation: both campaign damage hooks, native breakup/debris rendering override
 unchanged native health and RNG, reused object signatures, real wall sweeps,
 pool bounds, and unchanged mission state across showroom visits. Muted browser
 tests cover eight previews, rewind/replay, mobile controls and both campaign demos.
+
+
+Level cruising, proactive door flares and wall impacts (pyre32)
+
+The demo levels retained sliding headings against the remembered mine up plane.
+Modest vertical travel uses translational thrust; steep shafts retain pitch.
+Native rotational physics and existing turn acceleration limits remain in use.
+Combat still tracks visible targets, and stationary door/switch aiming no longer
+inherits moving-target feedforward. Manual flight controls are unchanged.
+
+Route lookahead detects reachable closed doors up to 100 mine units away. It
+checks native walls, locks and keys, aims the actual flare barrel, and fires
+only when that barrel's collision ray reaches the selected door. Native flare
+collision opens it. Door shots have their own 1.5-second retry cooldown rather
+than waiting for the 14-second corridor illumination cooldown. Approach speed
+allows the flare and door animation to finish before crossing.
+
+All native projectile/wall collision notifications now include flares. Scorch
+marks work on closed doors, breakable walls, locked panels and hazardous metal.
+Liquids and forcefields retain their own native effects. Moving/open doors do
+not display floating marks. Native destructive-wall damage and door rules are
+unchanged. Nearby hits refresh and enlarge a scar; fresh impacts replace the
+oldest of six marks on the face. The global 96-mark pool remains bounded.
+
+Validation: muted 135-second demos in both campaigns, with actual flare door
+collisions opening gates before arrival; native rotational convergence from
+positive/negative pitch; steep-climb retention and locked-door rejection;
+25 projectile collision paths, fresh-mark replacement, closed-door marks and
+bounded ring reuse. Automated browsers disable pointer capture before launch.
+Test-only exports and fixture engines are not included in this release.
