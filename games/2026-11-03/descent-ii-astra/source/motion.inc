@@ -148,8 +148,6 @@ static void ax_weapon_color(int id,int enemy){
 }
 /* View-facing optical samples distributed in three dimensions. The particles
  * depth-test against the mine, never write depth, and use no simulation RNG. */
-static GLuint af_program;
-static int af_failed;
 static void af_particle(float x,float y,float z,float radius,float alpha,float seed){
     vms_vector pos={fl2f(x),fl2f(y),fl2f(z)};g3s_point p;g3_rotate_point(&p,&pos);
     if(p.p3_z<F1_0/5)return;
@@ -173,8 +171,12 @@ static void af_beam(float x,float y,float z,float X,float Y,float Z,float radius
         ax_vertex_add((v[0]+sign*u[0])*scale[0],(v[1]+sign*u[1])*scale[1],-(v[2]+sign*u[2])*scale[2],sign,end,seed);}
 }
 static void af_flush_tinted(float clock,int style,int preserve_hue){
-    if(!ax_count||af_failed)return;
-    if(!af_program){
+    /* This include and the robot renderer share a translation unit.
+     * Keep particle shader ownership local to the batch that uses it. */
+    static GLuint particle_program = 0;
+    static int particle_failed = 0;
+    if(!ax_count||particle_failed)return;
+    if(!particle_program){
         const char *vs="varying highp vec3 uv;varying mediump vec4 tint;void main(){gl_Position=ftransform();uv=gl_Normal;tint=gl_Color;}";
         const char *fs=
           "precision highp float;varying highp vec3 uv;varying mediump vec4 tint;uniform float clock,style,preserveHue;"
@@ -187,16 +189,16 @@ static void af_flush_tinted(float clock,int style,int preserve_hue){
           "vec3 c=mix(tint.rgb,vec3(.94,.97,1.),core*mix(.45,.12,preserveHue));float alpha=(cloud*.68+core*.6)*tint.a;"
           "if(style>1.5){c=tint.rgb*(.55+.6*grain);alpha=cloud*tint.a;}"
           "if(alpha<.003)discard;gl_FragColor=vec4(c,alpha);}";
-        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){af_failed=1;return;}
-        af_program=glCreateProgram();glAttachShader(af_program,v);glAttachShader(af_program,f);glLinkProgram(af_program);glDeleteShader(v);glDeleteShader(f);
-        GLint ok;glGetProgramiv(af_program,GL_LINK_STATUS,&ok);if(!ok){af_failed=1;fprintf(stderr,"Astra weapon particles failed\n");return;}
+        GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){particle_failed=1;return;}
+        particle_program=glCreateProgram();glAttachShader(particle_program,v);glAttachShader(particle_program,f);glLinkProgram(particle_program);glDeleteShader(v);glDeleteShader(f);
+        GLint ok;glGetProgramiv(particle_program,GL_LINK_STATUS,&ok);if(!ok){particle_failed=1;fprintf(stderr,"Astra weapon particles failed\n");return;}
     }
     int fade=grd_curcanv->cv_fade_level,blend=grd_curcanv->cv_blend_func;
     GLboolean cull=glIsEnabled(GL_CULL_FACE),depth=glIsEnabled(GL_DEPTH_TEST);glDisable(GL_CULL_FACE);glEnable(GL_DEPTH_TEST);
-    gr_settransblend(GR_FADE_OFF,style==2?GR_BLEND_NORMAL:GR_BLEND_ADDITIVE_A);glDepthMask(GL_FALSE);glUseProgram(af_program);
-    glUniform1f(glGetUniformLocation(af_program,"clock"),clock);
-    glUniform1f(glGetUniformLocation(af_program,"style"),style);
-    glUniform1f(glGetUniformLocation(af_program,"preserveHue"),preserve_hue);
+    gr_settransblend(GR_FADE_OFF,style==2?GR_BLEND_NORMAL:GR_BLEND_ADDITIVE_A);glDepthMask(GL_FALSE);glUseProgram(particle_program);
+    glUniform1f(glGetUniformLocation(particle_program,"clock"),clock);
+    glUniform1f(glGetUniformLocation(particle_program,"style"),style);
+    glUniform1f(glGetUniformLocation(particle_program,"preserveHue"),preserve_hue);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_NORMAL_ARRAY);glEnableClientState(GL_COLOR_ARRAY);
     glVertexPointer(3,GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].p);glNormalPointer(GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].n);glColorPointer(4,GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].color);
     glDrawArrays(GL_TRIANGLES,0,ax_count);glDisableClientState(GL_VERTEX_ARRAY);glDisableClientState(GL_NORMAL_ARRAY);glDisableClientState(GL_COLOR_ARRAY);

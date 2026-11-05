@@ -5,8 +5,8 @@
 typedef struct {unsigned mat,joint,count;float *v;} astra_batch;
 typedef struct {int tried,count;astra_batch *group;unsigned char *bytes;} astra_chassis;
 static astra_chassis af_models[32];
-static GLuint af_maps[64][2],af_program;
-static int af_enabled=-1,af_failed,af_draws;
+static GLuint af_maps[64][2],fleet_program;
+static int af_enabled=-1,fleet_failed,af_draws;
 int astra_robot_id=-1;
 static GLint af_basis,af_origin,af_energy,af_flash,af_clock;
 static void af_program_init(void){
@@ -32,13 +32,13 @@ static void af_program_init(void){
         "vec3 emission=mix(vec3(.20,.79,1.),max(base,vec3(.15)),smoothstep(.08,.42,max(base.r,base.g)-base.b));"
         "color+=emission*pow(a.a,.77)*(1.32+.075*sin(clock*3.));gl_FragColor=vec4(color/(1.+.23*color),1.);}";
     GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);
-    if(!v||!f){af_failed=1;return;}
-    af_program=glCreateProgram();glAttachShader(af_program,v);glAttachShader(af_program,f);glLinkProgram(af_program);
-    glDeleteShader(v);glDeleteShader(f);GLint ok;glGetProgramiv(af_program,GL_LINK_STATUS,&ok);
-    if(!ok){char log[512]={0};glGetProgramInfoLog(af_program,sizeof log,NULL,log);fprintf(stderr,"Astra fleet: %s\n",log);af_failed=1;return;}
-    glUseProgram(af_program);glUniform1i(glGetUniformLocation(af_program,"paint"),0);glUniform1i(glGetUniformLocation(af_program,"detail"),1);
-    af_basis=glGetUniformLocation(af_program,"axis");af_origin=glGetUniformLocation(af_program,"origin");
-    af_energy=glGetUniformLocation(af_program,"energy");af_flash=glGetUniformLocation(af_program,"flash");af_clock=glGetUniformLocation(af_program,"clock");
+    if(!v||!f){fleet_failed=1;return;}
+    fleet_program=glCreateProgram();glAttachShader(fleet_program,v);glAttachShader(fleet_program,f);glLinkProgram(fleet_program);
+    glDeleteShader(v);glDeleteShader(f);GLint ok;glGetProgramiv(fleet_program,GL_LINK_STATUS,&ok);
+    if(!ok){char log[512]={0};glGetProgramInfoLog(fleet_program,sizeof log,NULL,log);fprintf(stderr,"Astra fleet: %s\n",log);fleet_failed=1;return;}
+    glUseProgram(fleet_program);glUniform1i(glGetUniformLocation(fleet_program,"paint"),0);glUniform1i(glGetUniformLocation(fleet_program,"detail"),1);
+    af_basis=glGetUniformLocation(fleet_program,"axis");af_origin=glGetUniformLocation(fleet_program,"origin");
+    af_energy=glGetUniformLocation(fleet_program,"energy");af_flash=glGetUniformLocation(fleet_program,"flash");af_clock=glGetUniformLocation(fleet_program,"clock");
     glUseProgram(0);
 }
 static int af_load_mesh(int id){
@@ -87,14 +87,14 @@ static int af_gun_joint(polymodel *pm,robot_info *ri,int side){
 }
 int astra_draw_robot(int model,polymodel *pm,vms_angvec *angles,g3s_lrgb light){
     if(af_enabled<0)af_enabled=EM_ASM_INT(return !!Module.astra);
-    if(!af_enabled||af_failed||astra_robot_id<0||astra_robot_id>=N_robot_types||Robot_info[astra_robot_id].model_num!=model||model<0)return 0;
+    if(!af_enabled||fleet_failed||astra_robot_id<0||astra_robot_id>=N_robot_types||Robot_info[astra_robot_id].model_num!=model||model<0)return 0;
     int id=model<sizeof(astra_fleet_type)?astra_fleet_type[model]:(Robot_info[astra_robot_id].boss_flag?6:(astra_robot_id*7+3)%12);if(!af_load_mesh(id))return 0;
-    if(!af_program)af_program_init();if(af_failed)return 0;
+    if(!fleet_program)af_program_init();if(fleet_failed)return 0;
     vms_vector extent={(pm->maxs.x-pm->mins.x)/2,(pm->maxs.y-pm->mins.y)/2,(pm->maxs.z-pm->mins.z)/2};
     extent.x=extent.x*85/100;extent.y=extent.y*86/100;extent.z=extent.z*91/100;
     vms_vector center={(pm->maxs.x+pm->mins.x)/2,(pm->maxs.y+pm->mins.y)/2,(pm->maxs.z+pm->mins.z)/2};
     GLboolean cull=glIsEnabled(GL_CULL_FACE),depth=glIsEnabled(GL_DEPTH_TEST);
-    glDisable(GL_CULL_FACE);glEnable(GL_DEPTH_TEST);glUseProgram(af_program);
+    glDisable(GL_CULL_FACE);glEnable(GL_DEPTH_TEST);glUseProgram(fleet_program);
     glUniform3f(af_energy,.51f+.62f*fminf(1.4f,f2fl(light.r)),.55f+.62f*fminf(1.4f,f2fl(light.g)),.58f+.62f*fminf(1.4f,f2fl(light.b)));
     glUniform4fv(af_flash,1,astra_flash);glUniform1f(af_clock,SDL_GetTicks()*.001f);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_COLOR_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);
