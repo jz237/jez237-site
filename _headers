@@ -167,3 +167,8 @@
   Cache-Control: no-cache, must-revalidate
 /demos/apx9-bee/css/*
   Cache-Control: no-cache, must-revalidate
+
+# Independent, unlisted fish-health prototype. Not a Hidden Reef application.
+/experiments/fish-health-lab/*
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store
