@@ -861,3 +861,17 @@ streaming and installed file:// editions use the same new material library.
 The showroom includes the new materials in both campaigns, with a paused
 original/remastered comparison. Levels, collision, flight controls, AI, combat,
 weapons, effects, sounds and music are unchanged. QA exports are not shipped.
+
+Smooth animated doors (pyre37)
+
+Native door cutout frames are reconstructed as continuous distance contours.
+Spatial smoothing removes the large 64-pixel stair steps; interpolation between
+adjacent contours follows the fractional native opening/closing timer. A narrow
+shaded edge provides a readable rim. The same treatment is used by the mine
+showroom, including its opening and closing preview, and concealed doors.
+
+Masks use one lazily built padded atlas per visible door clip, freed on level
+changes. They are computed from owned native data and require no new downloads.
+The renderer reads wall state and active-door timing without changing either.
+Collision, triggers, locks, auto-close timing, sounds, flight controls and demo AI
+retain their existing behavior. Original comparison still uses native cutouts.
