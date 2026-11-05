@@ -1,6 +1,7 @@
 // Image inventory, not diagnostic evidence. Empty slots never pretend to be cases.
 // To add an asset, fill a slot below; the library, viewer and comparison use it.
 import { CONDITIONS, SYMPTOMS, ATLAS_URL } from './data.mjs';
+import { CONDITION_IMAGES } from './condition-images.mjs';
 
 export const GUIDE_URL = 'https://media.jez237.com/experiments/fish-health-lab/ich-guide-9c778127.jpg';
 export const SLOT_TYPES = [
@@ -13,6 +14,7 @@ export const SLOT_TYPES = [
 ];
 
 const images = {
+  ...CONDITION_IMAGES,
   'ich-fresh': {
     overview: {
       url: GUIDE_URL,

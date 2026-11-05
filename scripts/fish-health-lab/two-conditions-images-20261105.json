@@ -1,0 +1,300 @@
+{
+  "request": "1568000327632822372",
+  "requestedModel": "openai/gpt-image-2.6-sunburst",
+  "requestedQuality": "medium",
+  "backendModel": "not independently verified",
+  "returnedGenerationQuality": null,
+  "geometry": {
+    "columns": 3,
+    "rows": 2,
+    "slots": [
+      "overview",
+      "variations",
+      "closeup",
+      "subtle",
+      "marked",
+      "lookalikes"
+    ]
+  },
+  "sources": {
+    "velvet": {
+      "sha256": "ccaf4941e547035d4795ec8b7c6889a71e11ab361b8936713a13d0e54639af3a",
+      "bytes": 530462,
+      "width": 1536,
+      "height": 1024
+    },
+    "water-mold": {
+      "sha256": "46b076496e24c4763694228db1895457876ad0ac46accfa26a8d1415fc67fb63",
+      "bytes": 443267,
+      "width": 1536,
+      "height": 1024
+    }
+  },
+  "assets": [
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/conditions/velvet-overview-a8f21d7c418b.jpg",
+      "width": 512,
+      "height": 512,
+      "alt": "AI illustration: Freshwater gourami with a fine gold-brown dusty coating on skin and fins.",
+      "caption": "Fine gold-brown dusting on a freshwater fish. This is a possible appearance, not confirmation of velvet.",
+      "provenance": "AI educational illustration",
+      "source": "velvet",
+      "condition": "velvet-fresh",
+      "slot": "overview",
+      "key": "experiments/fish-health-lab/conditions/velvet-overview-a8f21d7c418b.jpg",
+      "sha256": "a8f21d7c418bb78ca75b23adf7e124cee3203fbf3e600b8958b5a91b424eebe9",
+      "bytes": 72868,
+      "sourceSha256": "ccaf4941e547035d4795ec8b7c6889a71e11ab361b8936713a13d0e54639af3a",
+      "crop": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/conditions/velvet-variations-107529b83e6a.jpg",
+      "width": 512,
+      "height": 512,
+      "alt": "AI illustration: Betta, gourami and molly with fine dusty sheens against different natural colors.",
+      "caption": "Compare a fine dusty sheen against different natural fish colors. A metallic fish is not automatically diseased.",
+      "provenance": "AI educational illustration",
+      "source": "velvet",
+      "condition": "velvet-fresh",
+      "slot": "variations",
+      "key": "experiments/fish-health-lab/conditions/velvet-variations-107529b83e6a.jpg",
+      "sha256": "107529b83e6ae2b408b1ae40a6b11e9e1bc0444156f5079416d2ae7c886d5759",
+      "bytes": 73761,
+      "sourceSha256": "ccaf4941e547035d4795ec8b7c6889a71e11ab361b8936713a13d0e54639af3a",
+      "crop": [
+        512,
+        0,
+        1024,
+        512
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/conditions/velvet-closeup-1e9760f6a55d.jpg",
+      "width": 512,
+      "height": 512,
+      "alt": "AI illustration: Macro view of finely dusty gourami skin and a nearby fin.",
+      "caption": "Look at the very fine dusty texture, rather than counting separate white grains. Microscopy is needed to identify the cause.",
+      "provenance": "AI educational illustration",
+      "source": "velvet",
+      "condition": "velvet-fresh",
+      "slot": "closeup",
+      "key": "experiments/fish-health-lab/conditions/velvet-closeup-1e9760f6a55d.jpg",
+      "sha256": "1e9760f6a55d8a5e58cdcc069f7b238375af9dc47af24d30d360c8169610f95c",
+      "bytes": 110036,
+      "sourceSha256": "ccaf4941e547035d4795ec8b7c6889a71e11ab361b8936713a13d0e54639af3a",
+      "crop": [
+        1024,
+        0,
+        1536,
+        512
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/conditions/velvet-subtle-46e2bba432f5.jpg",
+      "width": 512,
+      "height": 512,
+      "alt": "AI illustration: Betta with a less conspicuous dusty sheen and fins held close to its body.",
+      "caption": "A less conspicuous skin appearance can be easy to miss. Gill disease may occur without an obvious skin coating; subtle does not mean mild.",
+      "provenance": "AI educational illustration",
+      "source": "velvet",
+      "condition": "velvet-fresh",
+      "slot": "subtle",
+      "key": "experiments/fish-health-lab/conditions/velvet-subtle-46e2bba432f5.jpg",
+      "sha256": "46e2bba432f56d26316efd61b59068c42050e17623b9b26c92d8d7da13b91f72",
+      "bytes": 63104,
+      "sourceSha256": "ccaf4941e547035d4795ec8b7c6889a71e11ab361b8936713a13d0e54639af3a",
+      "crop": [
+        0,
+        512,
+        512,
+        1024
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/conditions/velvet-marked-517d1c5ecd6e.jpg",
+      "width": 512,
+      "height": 512,
+      "alt": "AI illustration: Gourami with more conspicuous fine gold-brown dusting.",
+      "caption": "A more visible fine dusting, not a defined disease stage or severity score.",
+      "provenance": "AI educational illustration",
+      "source": "velvet",
+      "condition": "velvet-fresh",
+      "slot": "marked",
+      "key": "experiments/fish-health-lab/conditions/velvet-marked-517d1c5ecd6e.jpg",
+      "sha256": "517d1c5ecd6e6fc4825139253a7c3fc6586c86abb8aa99340f0b79dd966e882f",
+      "bytes": 86308,
+      "sourceSha256": "ccaf4941e547035d4795ec8b7c6889a71e11ab361b8936713a13d0e54639af3a",
+      "crop": [
+        512,
+        512,
+        1024,
+        1024
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/conditions/velvet-lookalikes-c34229351d44.jpg",
+      "width": 512,
+      "height": 512,
+      "alt": "AI illustration: Three close-ups, left to right: fine dust, separate white spots, and iridescent scales.",
+      "caption": "Left: fine gold-brown dusting. Center: coarser, separate white spots. Right: orderly iridescent scales. These are illustrative contrasts, not a diagnostic test.",
+      "provenance": "AI educational illustration",
+      "source": "velvet",
+      "condition": "velvet-fresh",
+      "slot": "lookalikes",
+      "key": "experiments/fish-health-lab/conditions/velvet-lookalikes-c34229351d44.jpg",
+      "sha256": "c34229351d44294d119cfc22ff5e3320afa59e68c77e24cc99616ba356240e15",
+      "bytes": 129997,
+      "sourceSha256": "ccaf4941e547035d4795ec8b7c6889a71e11ab361b8936713a13d0e54639af3a",
+      "crop": [
+        1024,
+        512,
+        1536,
+        1024
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/conditions/water-mold-overview-fb43bd02d65a.jpg",
+      "width": 512,
+      "height": 512,
+      "alt": "AI illustration: Angelfish with a localized tuft of cottony white filaments on the flank.",
+      "caption": "Localized cottony filaments on a freshwater angelfish. Investigate the underlying skin injury as well as the growth.",
+      "provenance": "AI educational illustration",
+      "source": "water-mold",
+      "condition": "water-mold",
+      "slot": "overview",
+      "key": "experiments/fish-health-lab/conditions/water-mold-overview-fb43bd02d65a.jpg",
+      "sha256": "fb43bd02d65a5816d8e4d2f5a8113134f409720759073d9b043b9cb3655fd95e",
+      "bytes": 77771,
+      "sourceSha256": "46b076496e24c4763694228db1895457876ad0ac46accfa26a8d1415fc67fb63",
+      "crop": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/conditions/water-mold-variations-87faa2e3c63e.jpg",
+      "width": 512,
+      "height": 512,
+      "alt": "AI illustration: Angelfish, goldfish and dark molly with localized cottony skin or fin growth.",
+      "caption": "Cottony growth illustrated on different freshwater fish and damaged skin or fin areas.",
+      "provenance": "AI educational illustration",
+      "source": "water-mold",
+      "condition": "water-mold",
+      "slot": "variations",
+      "key": "experiments/fish-health-lab/conditions/water-mold-variations-87faa2e3c63e.jpg",
+      "sha256": "87faa2e3c63e89075929f61a0e0e25ff5b1168511069917f34d045698dd5996a",
+      "bytes": 70223,
+      "sourceSha256": "46b076496e24c4763694228db1895457876ad0ac46accfa26a8d1415fc67fb63",
+      "crop": [
+        512,
+        0,
+        1024,
+        512
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/conditions/water-mold-closeup-3a413e6a2368.jpg",
+      "width": 512,
+      "height": 512,
+      "alt": "AI illustration: Macro view of delicate white filaments projecting from an injured skin area.",
+      "caption": "Thread-like filaments project into the water; this is different from a mainly flat pale patch or a solid nodule.",
+      "provenance": "AI educational illustration",
+      "source": "water-mold",
+      "condition": "water-mold",
+      "slot": "closeup",
+      "key": "experiments/fish-health-lab/conditions/water-mold-closeup-3a413e6a2368.jpg",
+      "sha256": "3a413e6a2368fd58aba220a2ff627b26139c313f6a9cd737a39f01e587c5209a",
+      "bytes": 81832,
+      "sourceSha256": "46b076496e24c4763694228db1895457876ad0ac46accfa26a8d1415fc67fb63",
+      "crop": [
+        1024,
+        0,
+        1536,
+        512
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/conditions/water-mold-subtle-5ff14843d5a1.jpg",
+      "width": 512,
+      "height": 512,
+      "alt": "AI illustration: Dark molly with a small wispy tuft on a damaged tail-fin edge.",
+      "caption": "A small wispy tuft near a damaged fin. A small visible patch does not establish how serious the underlying problem is.",
+      "provenance": "AI educational illustration",
+      "source": "water-mold",
+      "condition": "water-mold",
+      "slot": "subtle",
+      "key": "experiments/fish-health-lab/conditions/water-mold-subtle-5ff14843d5a1.jpg",
+      "sha256": "5ff14843d5a1d1930ad76af2075f5791fe9e8dfc077483b5a7f4bebbc589898f",
+      "bytes": 56251,
+      "sourceSha256": "46b076496e24c4763694228db1895457876ad0ac46accfa26a8d1415fc67fb63",
+      "crop": [
+        0,
+        512,
+        512,
+        1024
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/conditions/water-mold-marked-731b018e5b5f.jpg",
+      "width": 512,
+      "height": 512,
+      "alt": "AI illustration: Goldfish with a localized cottony patch on mildly damaged skin.",
+      "caption": "A more conspicuous localized cottony patch. This is another possible appearance, not a later disease stage.",
+      "provenance": "AI educational illustration",
+      "source": "water-mold",
+      "condition": "water-mold",
+      "slot": "marked",
+      "key": "experiments/fish-health-lab/conditions/water-mold-marked-731b018e5b5f.jpg",
+      "sha256": "731b018e5b5fa80fd33e1ae7bade351fc3be3a8877d81b238b4f6da9827fd4f8",
+      "bytes": 63712,
+      "sourceSha256": "46b076496e24c4763694228db1895457876ad0ac46accfa26a8d1415fc67fb63",
+      "crop": [
+        512,
+        512,
+        1024,
+        1024
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/conditions/water-mold-lookalikes-98ebcf6490f3.jpg",
+      "width": 512,
+      "height": 512,
+      "alt": "AI illustration: Three close-ups, left to right: cottony threads, a flat pale patch, and a solid raised nodule.",
+      "caption": "Left: outward cottony filaments. Center: a flat pale patch. Right: a solid raised nodule. Similar colors can require very different investigation and care.",
+      "provenance": "AI educational illustration",
+      "source": "water-mold",
+      "condition": "water-mold",
+      "slot": "lookalikes",
+      "key": "experiments/fish-health-lab/conditions/water-mold-lookalikes-98ebcf6490f3.jpg",
+      "sha256": "98ebcf6490f32f9eab9e37fc2f28fc4ce3cb89a815dccbde2bf1a0a742262c70",
+      "bytes": 100305,
+      "sourceSha256": "46b076496e24c4763694228db1895457876ad0ac46accfa26a8d1415fc67fb63",
+      "crop": [
+        1024,
+        512,
+        1536,
+        1024
+      ],
+      "resized": false
+    }
+  ],
+  "review": "Checked contact-sheet geometry and captions for crop mapping; no subjective scoring or rerolls."
+}

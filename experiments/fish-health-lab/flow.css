@@ -160,3 +160,14 @@ footer > .text-button { font-size: 12px; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; }
 }
+
+/* Keep visual matching separate from the optional care assessment. */
+#fish-form.care-mode #flow-actions{position:static;box-shadow:none}
+.flow-topline>.text-button{white-space:nowrap;flex-shrink:0}
+.alternative>img{flex-shrink:0;width:88px;height:88px;object-fit:cover;border-radius:10px;align-self:center}
+.care-next{margin:2rem 0;padding:1.5rem;background:#e7eee6;border:1px solid var(--line);border-radius:16px}
+.care-next h3{margin:.35rem 0}.care-next .button{margin-top:.5rem}
+.care-context{padding:1rem 1.25rem;margin-bottom:2rem;background:#e7eee6;border-radius:12px}
+.care-context p{margin:.25rem 0}.care-section{margin:1.8rem 0 2.2rem}
+.care-section>h2{font-size:1.6rem}.care-section .eyebrow{margin-top:1.5rem}
+@media(max-width:600px){.alternative>img{width:68px;height:78px}.care-next{padding:1.1rem}.care-next .button{width:100%}}

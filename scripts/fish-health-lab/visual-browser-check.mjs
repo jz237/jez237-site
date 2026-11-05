@@ -20,7 +20,7 @@ try{
   await page.locator('.nav-tab[data-view="library"]').click();
   assert.equal(await page.locator('#library-view').isVisible(),true);
   assert.equal(await page.locator('#library-grid .condition-card').count(),15);
-  assert.match(await page.locator('#library-count').innerText(),/6 illustrations in place · 84 image spaces to fill/);
+  assert.match(await page.locator('#library-count').innerText(),/18 illustrations in place · 72 image spaces to fill/);
   await page.locator('.nav-tab[data-view="guide"]').click();
   assert.equal(await page.locator('[data-step="water"]').isVisible(),true);
   assert.equal(await page.locator('input[name="water"]:checked').inputValue(),'fresh');
@@ -55,7 +55,7 @@ try{
   await page.locator('[data-action="compare"]').click();
   assert.equal(await page.locator('#compare-dialog .visual-gallery').count(),2);
   assert.equal(await page.locator('#compare-dialog [data-slot]').count(),12);
-  assert.equal(await page.locator('#compare-dialog img').count(),1);
+  assert.equal(await page.locator('#compare-dialog img').count(),2);
   assert.match(await page.locator('#compare-content').innerText(),/What could fool you/);
   assert.equal(await page.locator('input[type="file"],a[href*="chatgpt"]').count(),0);
   await noOverflow(page);

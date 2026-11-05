@@ -9,9 +9,9 @@
   <title>Fish Health Lab · A visual-first experiment</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='14' fill='%231c504a'/%3E%3Cpath d='M9 24Q22 8 35 24Q22 40 9 24L4 17v14z' fill='%23e6edba'/%3E%3Ccircle cx='29' cy='22' r='2' fill='%231c504a'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="/assets/fonts/css/outfit-playfair-display.css">
-  <link rel="stylesheet" href="style.css?v=5">
-  <link rel="stylesheet" href="flow.css?v=5">
-  <script type="module" src="app.mjs?v=5"></script>
+  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="flow.css?v=6">
+  <script type="module" src="app.mjs?v=6"></script>
 </head>
 <body>
   <a href="#main" class="skip">Skip to the guide</a>
@@ -27,7 +27,7 @@
       </section>
       <section id="check" class="guided-check" hidden aria-label="Fish check">
         <div class="flow-topline"><p id="flow-label" class="eyebrow"></p><button class="text-button" data-action="reset">Start over</button></div>
-        <progress id="flow-progress" max="4" value="1" aria-label="Fish check progress"></progress>
+        <progress id="flow-progress" max="3" value="1" aria-label="Visual check progress"></progress>
         <form id="fish-form" novalidate>
           <section class="question-panel" data-step="water" aria-labelledby="water-title">
             <h1 id="water-title" class="question-title">What kind of aquarium?</h1><p class="question-hint">This keeps the comparisons relevant to your fish.</p>
@@ -50,8 +50,10 @@
             <h1 id="behavior-title" class="question-title">Is it acting differently, too?</h1><p class="question-hint">Select any you’ve noticed. If none fit or you’re unsure, continue.</p>
             <div id="behavior-grid" class="behavior-grid"></div><div id="inline-urgent" class="notice urgent" hidden role="status"></div>
           </section>
-          <section class="question-panel" data-step="tank" hidden aria-labelledby="tank-title">
-            <h1 id="tank-title" class="question-title">Do you have any water readings?</h1><p class="question-hint">Add what you know. Leave unmeasured values blank—you can still continue.</p>
+          <section class="question-panel" data-step="care" hidden aria-labelledby="care-title">
+            <h1 id="care-title" class="question-title">Care & treatment</h1><p class="question-hint">You’ve compared the appearance. Now check what could be contributing and what to do next.</p>
+            <div id="care-context" class="care-context"></div>
+            <h2>Do you have any water readings?</h2><p class="quiet">These guide the next steps, not the visual match. Add what you know; leave unmeasured values blank.</p>
             <div class="test-grid"><div><label for="ammonia">Total ammonia <small>ppm / mg/L</small></label><input id="ammonia" name="ammonia" type="number" min="0" max="100" step="any" inputmode="decimal" placeholder="Unknown"></div><div><label for="nitrite">Nitrite <small>ppm / mg/L</small></label><input id="nitrite" name="nitrite" type="number" min="0" max="100" step="any" inputmode="decimal" placeholder="Unknown"></div><div><label for="ph">pH</label><input id="ph" name="ph" type="number" min="0" max="14" step="any" inputmode="decimal" placeholder="Unknown"></div><div><label for="temperature">Temperature</label><div class="unit-input"><input id="temperature" name="temperature" type="number" min="0" max="120" step="any" inputmode="decimal" placeholder="Unknown"><select aria-label="Temperature unit" name="tempUnit"><option value="F">°F</option><option value="C">°C</option></select></div></div></div>
             <div id="salinity-field" hidden><label for="salinity">Salinity <span class="quiet">Include units if known</span></label><input id="salinity" name="salinity" maxlength="60" placeholder="e.g. 35 ppt or specific gravity 1.025"></div>
             <details id="tank-extra" class="tank-extra"><summary>Add fish and tank history <span>Optional</span></summary><div class="extra-fields">
@@ -67,6 +69,7 @@
           <div id="flow-actions" class="step-actions"><button type="button" class="button secondary" data-action="back">← Back</button><button type="submit" class="button primary" id="next-button">Continue →</button></div>
         </form>
         <section class="question-panel" data-step="results" hidden aria-labelledby="results-title"><div id="results-content"></div><div class="step-actions"><button class="button secondary" data-action="edit">← Change my answers</button><button class="text-button" data-action="reset">Start over</button></div></section>
+        <section class="question-panel" data-step="care-summary" hidden aria-labelledby="care-summary-title"><div id="care-summary-content"></div><div class="step-actions"><button class="button secondary" data-action="care">← Edit care details</button><button class="text-button" data-action="results">Back to visual comparisons</button></div></section>
       </section>
       <aside class="help-line"><span aria-hidden="true">!</span><p><strong>Gasping, unable to stay upright, or losing fish?</strong><button class="text-button" data-action="emergency">Get help now →</button></p></aside>
     </section>
@@ -74,10 +77,10 @@
       <div class="library-heading"><div><p class="eyebrow">BROWSE AT YOUR OWN PACE</p><h1 id="library-title">Reference library</h1><p class="lead">Explore a condition or compare two. This is separate from your guided check.</p></div><button class="button secondary" data-view="guide">Back to my check →</button></div>
       <details class="library-filter-drawer"><summary>Filter by appearance</summary><div id="library-patterns" class="pattern-grid" aria-label="Filter by visible sign"></div><button class="text-button" data-action="all-patterns">Clear filters</button></details>
       <div class="library-tools"><label class="sr-only" for="library-search">Search ailments and symptoms</label><input id="library-search" type="search" placeholder="Search a condition or symptom…"><label class="sr-only" for="library-water">Filter by water type</label><select id="library-water"><option value="all">Fresh + salt water</option><option value="fresh">Freshwater only</option><option value="marine">Saltwater only</option></select></div>
-      <p id="library-count" class="quiet" role="status"></p><p class="slot-explanation">This prototype has one completed image collection. Empty frames are places for future pictures, not disease examples.</p>
+      <p id="library-count" class="quiet" role="status"></p><p class="slot-explanation">Three freshwater image collections are ready: ich, velvet and cottony growth. Empty frames are places for future pictures, not disease examples.</p>
       <div id="library-grid" class="library-grid"></div>
     </section>
-    <section id="about-view" class="inner-view" hidden aria-labelledby="about-title"><p class="eyebrow">ABOUT THIS EXPERIMENT</p><h1 id="about-title">Pictures to help you<br><em>ask better questions.</em></h1><p class="lead">Start with what you see, then check the whole tank. Similar appearances can have different causes.</p><p>The guide suggests comparisons, not a confirmed diagnosis or a medication plan. A fish-health professional may need water tests, microscopy or other examinations.</p><p>The opening montage, symptom pictures, texture close-ups and six freshwater ich sheets are AI educational illustrations, not confirmed patient photographs. They show possible appearances, not proof of a disease. The remaining condition-library entries still have image spaces to fill.</p><p>No photo upload, image analysis or external chatbot is part of this guide. You can optionally copy or download your observation notes.</p><h2>References</h2><div id="source-list"></div><p class="quiet">Sources checked November 5, 2026. Not clinically validated; sources do not endorse this prototype. An independent jez237.com experiment, not a Hidden Reef application.</p><button class="button secondary" data-view="guide">Back to my check →</button></section>
+    <section id="about-view" class="inner-view" hidden aria-labelledby="about-title"><p class="eyebrow">ABOUT THIS EXPERIMENT</p><h1 id="about-title">Pictures to help you<br><em>ask better questions.</em></h1><p class="lead">Start with what you see, then check the whole tank. Similar appearances can have different causes.</p><p>The guide separates visual comparisons from care and treatment preparation. It does not confirm a diagnosis or prescribe a medication. A fish-health professional may need water tests, microscopy or other examinations.</p><p>The opening montage, symptom pictures, texture close-ups and the ich, freshwater velvet and cottony-growth galleries are AI educational illustrations, not confirmed patient photographs. They show possible appearances, not proof of a disease. The remaining condition-library entries still have image spaces to fill.</p><p>No photo upload, image analysis or external chatbot is part of this guide. You can optionally copy or download your observation notes.</p><h2>References</h2><div id="source-list"></div><p class="quiet">Sources checked November 5, 2026. Not clinically validated; sources do not endorse this prototype. An independent jez237.com experiment, not a Hidden Reef application.</p><button class="button secondary" data-view="guide">Back to my check →</button></section>
   </main>
   <footer><span>Fish Health Lab · Working prototype</span><button class="text-button" data-view="about">About & sources</button><span>Observe. Compare. Confirm.</span></footer>
   <aside id="comparison-tray" class="comparison-tray" hidden aria-label="Selected visual comparisons"><div><strong>Compare the patterns</strong><div id="comparison-picks"></div><p id="comparison-status" role="status"></p></div><button class="button primary" data-action="compare" disabled>Compare side by side ↗</button><button class="tray-clear" data-action="clear-compare" aria-label="Clear comparisons">×</button></aside>

@@ -188,3 +188,10 @@ export const CONDITIONS = [
 ];
 
 export const ATLAS_URL = 'https://media.jez237.com/experiments/fish-health-lab/ich-comparison-b7e2ede9.jpg';
+
+// Treatment context is conditional, never an automatic prescription from a photo.
+export const TREATMENT_CONTEXT = {
+  'ich-fresh': 'If freshwater ich is confirmed, treatment must account for the parasite’s life cycle and all exposed fish. A suitable product and repeat schedule depend on species, temperature and the setup. Follow the selected product’s full instructions and professional plan; disappearing spots alone do not mean treatment is complete.',
+  'velvet-fresh': 'Confirmed freshwater velvet needs a prompt, freshwater-specific parasite-treatment plan, especially when breathing is affected. Discuss all exposed fish and a suitable treatment setup. Medication choice and monitoring must account for sensitive fish, plants and invertebrates; do not copy a marine copper protocol.',
+  'water-mold': 'For confirmed water mold, address the injury, aggression or environmental problem that allowed the growth, as well as the growth itself. A professional can choose a species-appropriate treatment. Bacterial lesions such as columnaris require a different approach; white color alone is not a reason to choose an antifungal.',
+};

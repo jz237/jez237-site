@@ -91,20 +91,22 @@ try {
   assert.equal(await page.locator('[data-symptom="dots"]').getAttribute('aria-pressed'),'true');
   await page.locator('[data-symptom="fins"]').click(); await next(page); await at(page,'behavior');
   assert.equal(await page.locator('img:visible').count(),0);
-  await next(page); await at(page,'tank'); await next(page); await at(page,'results');
+  await next(page); await at(page,'results');
   assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'fin-damage');
-  assert.equal(await page.locator('img:visible').count(),0);
+  assert.equal(await page.locator('img:visible').evaluateAll(imgs=>imgs.some(img=>/ich-/.test(img.src))),false);
   record('changing the main symptom removes the white-spot branch and its reference pictures');
 
   await begin(page,'fresh','dots');
-  await next(page); await at(page,'tank');
-  await page.locator('#ammonia').fill('-1'); await next(page); await at(page,'tank');
-  await page.locator('#ammonia').fill(''); await next(page); await at(page,'results');
+  await page.locator('input[value="appetite"]').check();
+  await next(page); await at(page,'results');
+  assert.equal(await page.locator('[data-step="care"]').isVisible(),false);
+  assert.doesNotMatch(await page.locator('#results-content').innerText(),/Do you have any water readings|Buoyancy|dropsy|protruding eyes/);
+  assert.deepEqual(await page.locator('.alternatives [data-condition]').evaluateAll(els=>els.map(el=>el.dataset.condition)),['velvet-fresh','growth','normal']);
   assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'ich-fresh');
   assert.match(await page.locator('#results-content').innerText(),/not a diagnosis/i);
-  assert.match(await page.locator('.water-reminder').innerText(),/Unknown does not mean safe/);
+  assert.equal(await page.locator('#results-content .water-reminder').count(),0);
   await page.locator('.result-image img').evaluate(img=>img.decode());
-  assert.equal(await page.locator('img:visible').count(),1);
+  assert.equal(await page.locator('.alternatives img').count(),3);
   await page.screenshot({path:output+'/desktop-result.png',fullPage:true});
   await page.locator('.result-copy [data-condition]').click();
   for(const slot of ['overview','variations','closeup','subtle','marked','lookalikes']) {
@@ -119,25 +121,52 @@ try {
   record('white-grain results reach all six preserved reference sheets one at a time; enlargement returns correctly');
 
   for(const detail of ['dust','fuzz','patch','lumps','unclear']) {
-    await begin(page,'fresh','dots',detail); await next(page); await next(page);
+    await begin(page,'fresh','dots',detail); await next(page);
     await at(page,'results');
-    assert.notEqual(await page.locator('.result-focus').getAttribute('data-result'),'ich-fresh');
-    assert.equal(await page.locator('img:visible').count(),0);
+    const expected={dust:'velvet-fresh',fuzz:'water-mold',patch:'columnaris',lumps:'growth'}[detail];
+    if(expected) assert.equal(await page.locator('.result-focus').getAttribute('data-result'),expected);
+    else assert.equal(await page.locator('.result-focus').count(),0);
   }
-  record('all five non-grain texture answers avoid forcing an ich result or showing ich posters');
+  record('all five non-grain texture answers lead to the correct pattern or no clear match, never a forced ich result');
+
+  for(const [sign,id] of [['dust','velvet-fresh'],['fuzz','water-mold']]) {
+    await begin(page,'fresh',sign); await next(page);
+    await page.locator('.result-copy [data-condition]').click();
+    for(const slot of ['overview','variations','closeup','subtle','marked','lookalikes']) {
+      await page.locator('#detail-content [data-slot="'+slot+'"]').click();
+      await page.locator('#detail-content .gallery-image img').evaluate(img=>img.decode());
+      assert.match(await page.locator('#detail-content .gallery-image img').getAttribute('src'),/conditions\//);
+      await page.locator('#detail-content [data-enlarge-entry]').click();
+      await page.locator('#atlas-full').evaluate(img=>img.decode()); await page.keyboard.press('Escape');
+    }
+    await page.keyboard.press('Escape');
+    await action(page,'care').click(); await at(page,'care'); await next(page); await at(page,'care-summary');
+    assert.equal(await page.locator('[data-care-condition]').getAttribute('data-care-condition'),id);
+    await page.screenshot({path:output+'/'+id+'-care.png',fullPage:true});
+  }
+  record('both new freshwater galleries decode all twelve crops and lead to matching conditional care, not an ich treatment path');
   await begin(page,'fresh','dots');
   await page.locator('input[value="gasping"]').check();
   assert.equal(await page.locator('#inline-urgent').isVisible(),true);
-  await next(page);
+  await next(page); await at(page,'results');
+  assert.ok(await page.locator('#results-content').evaluate(el=>Boolean(el.querySelector('.urgent').compareDocumentPosition(el.querySelector('.result-focus'))&Node.DOCUMENT_POSITION_FOLLOWING)));
+  await action(page,'care').click(); await at(page,'care');
+  await page.locator('#ammonia').fill('-1'); await next(page); await at(page,'care');
+  await page.locator('#ammonia').fill(''); await next(page); await at(page,'care-summary');
+  assert.match(await page.locator('.water-reminder:visible').innerText(),/Unknown does not mean safe/);
+  await action(page,'care').click();
   await page.locator('#ammonia').fill('1');
   await page.locator('#tank-extra summary').click();
   await page.locator('#affected').selectOption('several');
   await page.locator('#species').fill('<img src=x onerror=alert(1)>');
   await page.locator('#notes').fill(sentinel);
-  await next(page); await at(page,'results');
-  assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'water');
-  assert.ok(await page.locator('#results-content').evaluate(el=>Boolean(el.querySelector('.urgent').compareDocumentPosition(el.querySelector('.result-focus'))&Node.DOCUMENT_POSITION_FOLLOWING)));
-  record('water problems and severe distress take priority over an ich-like visual pattern');
+  await next(page); await at(page,'care-summary');
+  assert.match(await page.locator('#care-summary-content .water-notice').innerText(),/Ammonia is detectable/);
+  assert.equal(await page.locator('#care-summary-content .urgent').isVisible(),true);
+  await action(page,'results').click(); await at(page,'results');
+  assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'ich-fresh');
+  assert.deepEqual(await page.locator('.alternatives [data-condition]').evaluateAll(els=>els.map(el=>el.dataset.condition)),['velvet-fresh','growth','normal']);
+  record('water readings follow results; care validates numeric inputs, preserves unknowns and prioritizes distress without changing the visual comparison');
   await action(page,'case').click();
   const notes=await page.locator('#case-text').inputValue();
   assert.match(notes,/<img src=x onerror=alert\(1\)>/);
@@ -154,19 +183,25 @@ try {
   record('notes copy/download safely and Start over clears answers and returns to the neutral welcome');
 
   for(const sign of ['dust','fuzz','patch','sores','swollen','eyes','lumps','breathing','balance','unclear']) {
-    await begin(page,'fresh',sign); await next(page); await next(page); await at(page,'results');
+    await begin(page,'fresh',sign); await next(page); await at(page,'results');
   }
   record('every remaining visible-sign choice has a working path through to comparisons');
-  await begin(page,'unknown','dots'); await next(page); await next(page);
+  await begin(page,'unknown','dots'); await next(page);
   assert.match(await page.locator('#results-content').innerText(),/water type is unknown/);
+  await action(page,'care').click(); await next(page);
+  assert.equal(await page.locator('[data-care-condition]').count(),0);
+  assert.match(await page.locator('#care-summary-content').innerText(),/Identify whether this is freshwater/);
   record('unknown water type remains explicit and does not enter the freshwater-only reference branch');
   await begin(page,'marine','dust');
   await page.locator('input[value="gasping"]').check(); await next(page);
-  assert.equal(await page.locator('#salinity-field').isVisible(),true);
-  await next(page); await at(page,'results');
+  await at(page,'results');
   assert.match(await page.locator('#results-content').innerText(),/Marine velvet/);
   assert.doesNotMatch(await page.locator('#results-content').innerText(),/Freshwater ich|Freshwater velvet/);
   assert.equal(await page.locator('#results-content .urgent').isVisible(),true);
+  await action(page,'care').click();
+  assert.equal(await page.locator('#salinity-field').isVisible(),true);
+  await next(page);
+  assert.doesNotMatch(await page.locator('#care-summary-content').innerText(),/Freshwater ich|Freshwater velvet/);
   record('marine respiratory/dust signs retain urgent guidance without freshwater advice');
 
   const mobile=await context.newPage();
@@ -191,10 +226,19 @@ try {
   await mobile.locator('[data-enlarge-slot="closeup"]').click();
   await mobile.locator('#atlas-full').evaluate(img=>img.decode()); await noOverflow(mobile);
   await mobile.keyboard.press('Escape'); await next(mobile); await next(mobile);
+  await at(mobile,'results'); await noOverflow(mobile);
+  await mobile.screenshot({path:output+'/mobile-result.png',fullPage:true});
+  await action(mobile,'care').click(); await at(mobile,'care');
+  assert.equal(await mobile.locator('#flow-actions').evaluate(el=>getComputedStyle(el).position),'static');
+  await mobile.screenshot({path:output+'/mobile-care.png',fullPage:true});
   await mobile.locator('#tank-extra summary').click();
   await mobile.locator('#species').fill('Molly'); await next(mobile);
   await noOverflow(mobile);
-  await mobile.screenshot({path:output+'/mobile-result.png',fullPage:true});
+  await at(mobile,'care-summary');
+  await mobile.screenshot({path:output+'/mobile-care-summary.png',fullPage:true});
+  await action(mobile,'care').click();
+  assert.equal(await mobile.locator('#species').inputValue(),'Molly');
+  await action(mobile,'back').click(); await at(mobile,'results');
   record('mobile Start is above the fold; the full flow, Back, enlargement and results fit without horizontal scrolling');
 } finally { await browser.close(); }
 assert.deepEqual(errors,[]); assert.deepEqual(submissions,[]);

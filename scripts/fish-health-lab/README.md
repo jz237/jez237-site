@@ -23,12 +23,20 @@ symptom and white-mark choices with realistic fish images. This explicitly
 supersedes the earlier no-images-on-the-opening-screen constraint. Preserve the
 one-question flow; do not restore the ich-only poster wall.
 
+Comparison/care correction: `1568000327632822372`, 2026-11-05. Unrelated conditions
+were being presented as ich look-alikes because nonspecific behaviors added
+ranking weight. Visual matching now uses only the selected appearance, with
+explicit scope-filtered comparisons and reasons. Water readings and history
+belong after visual results in Care & treatment. Complete the next two
+freshwater collections: velvet and cottony growth/water mold.
+
 ## Product contract
 
 - Buildless static HTML/CSS/ES modules. No credentials, account, API endpoint,
   dependency installation, paid inference, backend storage or photo upload.
-- Start → water type → choose the main visible symptom → behavior → optional
-  water readings/tank history → comparisons. Only one question screen is shown.
+- Start → water type → choose the main visible symptom → behavior → comparisons.
+  Then, separately: Care & treatment → optional water readings/tank history →
+  conditional care steps. Only one question screen is shown.
   Freshwater + white dots adds a texture question; it does not preselect ich.
 - The welcome shows one mixed-fish opening illustration. Twelve symptom pictures
   load when the symptom question is reached; six different close-ups load when
@@ -38,12 +46,21 @@ one-question flow; do not restore the ich-only poster wall.
 - One clear Start button; Back preserves choices. Changing water or the primary
   symptom clears the dependent texture answer. Start over clears observations.
   Numeric water readings are validated, and blank remains unknown, not zero.
-- Results show a relevant comparison, look-alikes and next checks, never diagnostic
-  probabilities or prescriptions. Urgent distress and water issues take priority.
+- Results use only the selected visual pattern, not appetite, generic behavior or
+  water-test scores. Look-alikes are curated per condition and water type, with a
+  specific reason; they are not the next three weighted candidates. Unclear
+  appearance does not force a disease. Fast breathing starts with environmental
+  checks and relevant respiratory overlaps, not a skin-disease conclusion.
+- Care is a separate post-result step. It validates optional readings, keeps blank
+  distinct from zero, prioritizes environmental problems and urgent distress,
+  and provides conditional treatment context—not an automatic prescription.
+  Unknown water type cannot unlock freshwater-specific treatment guidance.
+  Urgent distress remains visible before care. Water checks do not erase a
+  concurrent skin pattern or contaminate its look-alikes.
 - The Reference library is a separate, opt-in view. Returning preserves the check.
   It has 15 entries, 12 appearance filters, water-type/search filters and six
-  gallery slots per entry (90 total). Six ich sheets are filled; 84 other slots
-  remain honest placeholders. Selector pictures do not count as confirmed disease
+  gallery slots per entry (90 total). Ich, freshwater velvet and water mold each have six filled views (18 total);
+  72 other slots remain honest placeholders. Selector pictures do not count as confirmed disease
   cases or completed condition galleries.
 - All six ich sheets remain accessible in a one-picture-at-a-time gallery:
   whole-fish guide, different fish, close-up, subtle appearance, marked changes,
@@ -130,7 +147,8 @@ at `workspace/tmp/imagegen/ich-complete-20261105/`.
 
 ## Filling the visual library later
 
-The single image manifest is `experiments/fish-health-lab/visuals.mjs`.
+The unified image inventory is `experiments/fish-health-lab/visuals.mjs`,
+which also imports `condition-images.mjs` for the two newer collections.
 Add an asset to `images[conditionId][slotId]` with public `url`, accurate `alt`,
 `caption`, `provenance`, and `source`. Library cards, detail galleries, enlarged
 viewers and side-by-side comparisons all read that manifest. There is no upload
@@ -153,7 +171,11 @@ Check root and legacy `#ich` openings, one opening-image request only before
 starting, complete decode of all 18 distinct choice pictures in their mapped
 grids, single-question visibility, required choices, every main symptom and
 texture branch, Back/changed answers/reset, marine/unknown scope, distress/water
-priority, numeric validation, notes copy/download and mobile overflow.
+priority, post-result care, numeric validation, notes copy/download and mobile overflow.
+Regression-check white dots + loss of appetite (and all behavior combinations):
+never list buoyancy, dropsy or eye disorders as ich look-alikes. Check dust →
+velvet, fuzz → water mold, all twelve new crops, matching conditional care,
+unknown water type withholding specific treatment and care Back preserving data.
 Check opt-in library/resume, filters, six image slots, galleries and comparisons.
 Inspect screenshots for user-flow/layout usability, not only selector assertions.
 Image artwork remains user-reviewed rather than automatically rerolled.
@@ -179,3 +201,30 @@ artwork scoring or automatic rerolls.
    chatbot handoffs are excluded by the owner's current request.
 4. Keep treatment selection out of scope until species, salinity, tank inhabitants,
    diagnostics and qualified review are handled properly.
+
+## Velvet and cottony-growth images, 2026-11-05
+
+`condition-images.mjs` supplies twelve JPEG crop references. Each retained source
+sheet is 1536×1024 with a 3-column × 2-row layout, sliced without resizing into
+512×512 views: overview, variations, closeup, subtle, marked, lookalikes. The
+contact sheets depict possible appearances and mimics, not clinical stages.
+Velvet comparisons distinguish fine dust, coarse white grains and natural
+iridescence. Cottony-growth comparisons distinguish outward filaments, a flat
+pale patch and a solid raised nodule. Water mold is an oomycete, not a blanket
+label for every pale lesion or true fungus.
+
+Crop geometry, hashes and truthful provenance are recorded in
+`scripts/fish-health-lab/two-conditions-images-20261105.json`. Prompts, stock-OAuth
+receipts, preparation and upload verification are outside Git in
+`workspace/tmp/imagegen/fish-health-two-conditions-20261105/`. Original and crop
+media is retained under
+`/home/jez237/.openclaw/media/tool-image-generation/fish-health-two-conditions-20261105/`.
+All twelve assets are content-hashed R2 objects beneath
+`experiments/fish-health-lab/conditions/`. Requested model: GPT Image 2.6 Sunburst;
+requested generation quality: medium. Backend model and returned generation
+quality were not independently reported. No subjective scoring or rerolls.
+
+Clinical content was checked against the Merck parasitic and bacterial references
+on November 5, 2026. The prototype is still not clinically validated. Water-mold
+and columnaris management are deliberately distinguished. No doses or universal
+heat/salt/antibiotic cure are inferred from the illustrations.

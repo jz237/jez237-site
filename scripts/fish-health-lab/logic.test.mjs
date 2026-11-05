@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { assessUrgency, rankConditions, buildCase, describeIchPattern } from '../../experiments/fish-health-lab/logic.mjs';
+import { assessUrgency, rankConditions, buildCase, describeIchPattern, rankVisualConditions, lookalikesFor } from '../../experiments/fish-health-lab/logic.mjs';
 import { VISUAL_LIBRARY } from '../../experiments/fish-health-lab/visuals.mjs';
 
 const base = { water: 'fresh', signs: [], ammonia: '', nitrite: '', ph: '', temperature: '' };
@@ -75,4 +75,49 @@ test('ich walkthrough follows observed texture rather than forcing an ich conclu
   assert.match(describeIchPattern(base).title, /no clear visual match/);
   assert.match(describeIchPattern({ ...base, water: 'marine', signs: ['dots'] }).title, /not a freshwater/);
   assert.deepEqual(rankConditions({ ...base, signs: ['dots'], visualExtent: 'Many or obvious visible changes' }),rankConditions({ ...base, signs: ['dots'], visualExtent: 'Few or subtle visible changes' }));
+});
+
+
+test('ich visual comparisons never admit unrelated conditions through nonspecific behavior', () => {
+  const behaviors = ['appetite','rubbing','clamped','gasping','pinecone','collapse','deaths'];
+  for (let mask=0;mask<2**behaviors.length;mask++) {
+    const input = {...base, primarySign:'dots', signs:['dots',...behaviors.filter((_,i)=>mask&(1<<i))]};
+    const first = rankVisualConditions(input)[0];
+    assert.equal(first.id,'ich-fresh');
+    const others = lookalikesFor(first.id,input.water);
+    assert.deepEqual(others.map(c=>c.id),['velvet-fresh','growth','normal']);
+    assert.ok(others.every(c=>c.comparisonReason));
+  }
+});
+test('velvet and cottony-growth branches follow texture, not appetite or water scores', () => {
+  for(const [sign,id] of [['dust','velvet-fresh'],['fuzz','water-mold']]) {
+    const input={...base,primarySign:sign,signs:[sign,'appetite','gasping'],ammonia:'2',affected:'several'};
+    assert.equal(rankVisualConditions(input)[0].id,id);
+    assert.ok(assessUrgency(input).checks.length>0);
+    assert.ok(lookalikesFor(id,'fresh').every(c=>c.scope!=='marine'));
+  }
+  assert.deepEqual(lookalikesFor('water-mold','fresh').map(c=>c.id),['columnaris','growth']);
+});
+test('unclear signs do not force a visual diagnosis, and unknown water retains both parasite types', () => {
+  assert.deepEqual(rankVisualConditions({...base,primarySign:'unclear',signs:['unclear','appetite']}),[]);
+  assert.equal(rankVisualConditions({...base,primarySign:'breathing',signs:['breathing']})[0].id,'water');
+  assert.ok(lookalikesFor('ich-fresh','unknown').some(c=>c.id==='ich-marine'));
+  assert.ok(lookalikesFor('ich-marine','marine').every(c=>c.scope!=='fresh'));
+  assert.deepEqual(rankVisualConditions({...base,water:'marine',primarySign:'fuzz',signs:['fuzz']}),[]);
+});
+test('care observations never overwrite the visual match or contaminate exported comparison notes', () => {
+  const input={...base,primarySign:'dots',signs:['dots','appetite'],ammonia:'2',affected:'several'};
+  assert.equal(rankVisualConditions(input)[0].id,'ich-fresh');
+  assert.equal(assessUrgency(input).level,'check-water');
+  const notes=buildCase(input);
+  assert.match(notes,/Ammonia is detectable/);
+  assert.match(notes,/Freshwater ich; Freshwater velvet/);
+  assert.doesNotMatch(notes,/Buoyancy or balance problem|dropsy-like|Cloudy or protruding/);
+});
+test('three freshwater galleries contain all six image views with distinct assets', () => {
+  for(const id of ['ich-fresh','velvet-fresh','water-mold']) {
+    assert.equal(VISUAL_LIBRARY[id].filter(s=>s.image).length,6);
+    assert.equal(new Set(VISUAL_LIBRARY[id].map(s=>s.image.url)).size,6);
+  }
+  assert.equal(Object.values(VISUAL_LIBRARY).flat().filter(s=>s.image).length,18);
 });

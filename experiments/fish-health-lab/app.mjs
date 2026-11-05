@@ -1,5 +1,5 @@
-import { SYMPTOMS, BEHAVIORS, CONDITIONS, SOURCES } from './data.mjs';
-import { assessUrgency, rankConditions, buildCase } from './logic.mjs';
+import { SYMPTOMS, BEHAVIORS, CONDITIONS, SOURCES, TREATMENT_CONTEXT } from './data.mjs';
+import { assessUrgency, rankConditions, rankVisualConditions, lookalikesFor, buildCase } from './logic.mjs';
 import { slotsFor, leadSlot, patternFor } from './visuals.mjs';
 import { OPENING_IMAGE, SIGN_IMAGES, TEXTURE_IMAGES } from './choice-images.mjs';
 
@@ -29,10 +29,10 @@ function fishArt(type = 'plain', hero = false) {
 
 
 function readInput() {
-  return { ...Object.fromEntries(new FormData(form)), signs: [detailSign || primarySign, ...$$('input[name="behavior"]:checked').map(el => el.value)].filter(Boolean), visualReference, comparisons: [...comparisons] };
+  return { ...Object.fromEntries(new FormData(form)), primarySign: detailSign || primarySign, signs: [detailSign || primarySign, ...$$('input[name="behavior"]:checked').map(el => el.value)].filter(Boolean), visualReference, comparisons: [...comparisons] };
 }
 function needsTexture() { return form.elements.water.value === 'fresh' && primarySign === 'dots'; }
-function sequence() { return ['water', 'signs', ...(needsTexture() ? ['texture'] : []), 'behavior', 'tank', 'results']; }
+function sequence() { return ['water', 'signs', ...(needsTexture() ? ['texture'] : []), 'behavior', 'results']; }
 
 function goStep(name, focus = true) {
   step = name;
@@ -42,14 +42,16 @@ function goStep(name, focus = true) {
   // Fetch choice pictures only when their question is reached, not at the front door.
   const activeGrid = name === 'signs' ? '#symptom-grid' : name === 'texture' ? '#texture-grid' : null;
   if (activeGrid) $$(`${activeGrid} img[data-src]`).forEach(img => { img.src = img.dataset.src; img.removeAttribute('data-src'); });
-  form.hidden = name === 'results';
+  form.hidden = ['results', 'care-summary'].includes(name);
+  form.classList.toggle('care-mode', name === 'care');
   $('#flow-error').textContent = '';
-  const progress = { water: [1,'Water type'], signs: [2,'What you see'], texture: [2,'Look closer'], behavior: [3,'Behavior'], tank: [4,'The tank'], results: [4,'Your comparisons'] }[name];
+  const progress = { water: [1,'Water type'], signs: [2,'What you see'], texture: [2,'Look closer'], behavior: [3,'Behavior'], results: [3,'Your comparisons'], care: [3,'Care & treatment'], 'care-summary': [3,'Care steps'] }[name];
   if (progress) {
-    $('#flow-label').textContent = name === 'results' ? 'YOUR OBSERVATIONS → NEXT CHECKS' : `STEP ${progress[0]} OF 4 · ${progress[1]}`;
+    $('#flow-label').textContent = name === 'results' ? 'YOUR VISUAL COMPARISONS' : name.startsWith('care') ? 'AFTER THE VISUAL CHECK · CARE & TREATMENT' : `STEP ${progress[0]} OF 3 · ${progress[1]}`;
     $('#flow-progress').value = progress[0];
   }
-  $('#next-button').textContent = name === 'tank' ? 'See what to compare →' : 'Continue →';
+  $('#flow-progress').hidden = name.startsWith('care');
+  $('#next-button').textContent = name === 'care' ? 'See care steps →' : name === 'behavior' ? 'See what to compare →' : 'Continue →';
   $('#salinity-field').hidden = form.elements.water.value === 'fresh';
   if (name === 'texture') {
     const image = slotsFor('ich-fresh').find(s => s.id === 'lookalikes').image;
@@ -67,10 +69,11 @@ function nextStep() {
   if (step === 'water' && !form.elements.water.value) { $('#flow-error').textContent = 'Choose a water type, or “I’m not sure.”'; return; }
   if (step === 'signs' && !primarySign) { $('#flow-error').textContent = 'Choose the closest picture. “Nothing obvious” is a useful answer.'; return; }
   if (step === 'texture' && !detailSign) { $('#flow-error').textContent = 'Choose the closest texture, or “Not sure.”'; return; }
-  if (step === 'tank') {
+  if (step === 'care') {
     if (!form.reportValidity()) return;
-    renderResults(); return;
+    renderCareSummary(); return;
   }
+  if (step === 'behavior') { renderResults(); return; }
   const route = sequence(), next = route[route.indexOf(step) + 1];
   if (next) goStep(next);
 }
@@ -101,6 +104,7 @@ function reset() {
   form.reset(); primarySign = ''; detailSign = ''; visualReference = null; currentCase = '';
   $$('[data-symptom], [data-texture]').forEach(button => button.setAttribute('aria-pressed','false'));
   comparisons.clear(); $('#results-content').replaceChildren(); $('#case-text').value = '';
+  $('#care-context').replaceChildren(); $('#care-summary-content').replaceChildren();
   $('#inline-urgent').hidden = true; $('#tank-extra').open = false;
   $('#detail-content').replaceChildren(); $('#compare-content').replaceChildren();
   $('#atlas-full').removeAttribute('src');
@@ -119,25 +123,49 @@ function startFromPattern(id) {
   goStep('water');
 }
 
+function resultThumbnail(condition) {
+  return leadSlot(condition.id)?.image || SIGN_IMAGES[condition.art] || SIGN_IMAGES.unclear;
+}
+
 function renderResults() {
   const input = readInput(), assessment = assessUrgency(input);
-  const ranked = rankConditions(input).slice(0, 4);
-  const first = ranked[0];
-  const sign = SYMPTOMS.find(s => s.id === (detailSign || primarySign));
+  const first = rankVisualConditions(input)[0];
+  const sign = SYMPTOMS.find(s => s.id === input.primarySign);
   const urgent = assessment.urgent.length ? `<div class="notice urgent"><h3>Get help for the distress first.</h3><p>${escape(assessment.urgent.join('; '))}. Support aeration, test the water and arrange urgent fish-health help.</p><button class="text-button" data-action="emergency">What to do now →</button></div>` : '';
-  const water = assessment.checks.length ? `<div class="notice water-notice"><h3>Check the environment first.</h3>${list(assessment.checks)}</div>` : '';
-  const unknown = assessment.waterUnknown ? '<p class="water-reminder">Water readings are missing. Unknown does not mean safe—test the water before choosing a treatment.</p>' : '';
-  const scope = input.water === 'unknown' ? '<p class="notice">The water type is unknown. Identify it before using freshwater- or saltwater-specific advice.</p>' : '';
-  let focus = '<p class="notice">No clear visual comparison yet. Check the water and seek fish-health help if the fish is unwell.</p>';
+  const scope = input.water === 'unknown' ? '<p class="notice">The water type is unknown. Both environments may appear below; identify the aquarium type before choosing care.</p>' : '';
+  let focus = '<p class="notice">No clear visual match yet. A still picture cannot identify every problem. The care step helps you check the environment and decide what needs professional examination.</p>';
   if (first) {
-    const image = leadSlot(first.id)?.image;
-    const ready = slotsFor(first.id).filter(s => s.image).length;
-    focus = `<article class="result-focus" data-result="${first.id}"><div class="result-image">${image ? `<button data-condition="${first.id}" aria-label="Explore ${escape(first.title)} reference pictures"><img src="${image.url}" width="1024" height="1536" alt="${escape(image.alt)}"><span>Explore ${ready} reference pictures ↗</span></button>` : `<div class="result-schematic">${fishArt(first.art)}<small>Schematic sign illustration</small></div>`}</div><div class="result-copy"><p class="eyebrow">A COMPARISON — NOT A DIAGNOSIS</p><h2>${escape(first.title)}</h2><p>${escape(first.summary)}</p><p class="quiet">${escape(first.distinguish)}</p><button class="button primary" data-condition="${first.id}">${image ? 'Compare the reference pictures' : 'Read the useful checks'} →</button>${image ? '<p class="quiet">AI educational illustrations, not confirmed patient photos.</p>' : '<p class="quiet">Reference photographs for this entry are still being added.</p>'}</div></article>`;
+    const image = resultThumbnail(first), ready = slotsFor(first.id).filter(s => s.image).length;
+    focus = `<article class="result-focus" data-result="${first.id}"><div class="result-image"><button data-condition="${first.id}" aria-label="Explore ${escape(first.title)}"><img src="${image.url}" width="${image.width || 1024}" height="${image.height || 1536}" alt="${escape(image.alt)}"><span>${ready ? `Explore ${ready} reference pictures` : 'Explore this pattern'} ↗</span></button></div><div class="result-copy"><p class="eyebrow">A COMPARISON — NOT A DIAGNOSIS</p><h2>${escape(first.title)}</h2><p>${escape(first.summary)}</p><p class="quiet">${escape(first.distinguish)}</p><button class="button primary" data-condition="${first.id}">${ready ? 'Compare the reference pictures' : 'Read the useful checks'} →</button><p class="quiet">AI educational illustrations, not confirmed patient photos.</p></div></article>`;
   }
-  const other = ranked.slice(1).map(c => `<button class="alternative" data-condition="${c.id}"><span>${fishArt(c.art)}</span><span><strong>${escape(c.title)}</strong><small>${escape(c.comparisonReason || c.summary)}</small></span><b aria-hidden="true">↗</b></button>`).join('');
-  $('#results-content').innerHTML = `<h1 id="results-title" class="question-title">Here’s what to compare.</h1><p class="question-hint">You chose “${escape(sign?.title || 'Nothing obvious')}.” Similar signs can have different causes.</p>${urgent}${water}${unknown}${scope}${focus}${other ? `<h3 class="subheading">Keep these look-alikes in mind</h3><div class="alternatives">${other}</div>` : ''}<p class="result-next"><strong>Next:</strong> Check water quality and breathing. A fish-health professional can confirm the cause with appropriate examination and testing. Don’t blindly raise heat or mix medicines.</p><button class="button secondary" data-action="case">Save my observation notes ↗</button>`;
+  const other = (first ? lookalikesFor(first.id, input.water) : []).map(c => {
+    const image = SIGN_IMAGES[c.art] || SIGN_IMAGES.unclear;
+    return `<button class="alternative" data-condition="${c.id}"><img src="${image.url}" alt="${escape(image.alt)}" loading="lazy"><span><strong>${escape(c.title)}</strong><small>${escape(c.comparisonReason)}</small></span><b aria-hidden="true">↗</b></button>`;
+  }).join('');
+  const heading = ['breathing','balance'].includes(input.primarySign) ? 'Other causes of similar behavior' : 'Compare these similar-looking patterns';
+  $('#results-content').innerHTML = `<h1 id="results-title" class="question-title">Here’s what to compare.</h1><p class="question-hint">You chose “${escape(sign?.title || 'Nothing obvious')}.” Similar signs can have different causes.</p>${urgent}${scope}${focus}${other ? `<h3 class="subheading">${heading}</h3><div class="alternatives">${other}</div>` : ''}<section class="care-next"><p class="eyebrow">NEXT · CARE & TREATMENT</p><h3>What should I do now?</h3><p>Check water readings, support the fish and see which next checks fit this pattern.</p><button class="button primary" data-action="care">Continue to care & treatment →</button></section><button class="text-button" data-action="case">Save my observation notes ↗</button>`;
   goStep('results');
 }
+
+function openCare() {
+  const input = readInput(), first = rankVisualConditions(input)[0];
+  $('#care-context').innerHTML = first
+    ? `<p><strong>Your visual comparison:</strong> ${escape(first.title)}. This is a possible pattern, not a confirmed cause.</p><button type="button" class="text-button" data-action="results">Review the pictures ←</button>`
+    : '<p>No clear visual match yet. Start with the environment and the fish’s actual behavior.</p>';
+  goStep('care');
+}
+
+function renderCareSummary() {
+  const input = readInput(), assessment = assessUrgency(input), first = rankVisualConditions(input)[0];
+  const scoped = first && (input.water !== 'unknown' || first.scope === 'both');
+  const urgent = assessment.urgent.length ? `<div class="notice urgent"><h2>Get urgent help first.</h2><p>${escape(assessment.urgent.join('; '))}. Support aeration and contact a fish-health professional now.</p><button class="text-button" data-action="emergency">Immediate support steps →</button></div>` : '';
+  const water = assessment.checks.length ? `<div class="notice water-notice"><h3>Address the shared environment.</h3>${list(assessment.checks)}</div>` : '';
+  const unknown = assessment.waterUnknown ? '<p class="water-reminder">Ammonia or nitrite is unmeasured. Unknown does not mean safe—test before choosing a medicine.</p>' : '<p class="quiet">Your readings are recorded. Ammonia and nitrite alone do not assess oxygen or rule out other water problems.</p>';
+  const condition = scoped ? `<section class="care-section" data-care-condition="${first.id}"><p class="eyebrow">2 · CHECK THE POSSIBLE CAUSE</p><h2>${escape(first.title)}</h2><p>${escape(first.confirm)}</p>${list(first.next)}<p class="eyebrow">3 · CHOOSING TREATMENT</p><p>${escape(TREATMENT_CONTEXT[first.id] || 'The treatment depends on the cause, fish species and tank inhabitants. Use the checks above to establish a suitable plan with a fish-health professional; a matching picture alone is not enough.')}</p><p class="avoid"><strong>Avoid the shortcut:</strong> ${escape(first.avoid)}</p><div class="sources">${sourceLinks(first.source)}</div></section>` : `<section class="care-section"><h2>Establish the cause before choosing treatment.</h2><p>${input.water === 'unknown' ? 'Identify whether this is freshwater, marine or another water type first. Do not apply a freshwater parasite treatment to a marine fish.' : 'There is no clear visual comparison. Record the behavior, how quickly it changed and which fish are affected; arrange an examination if the fish remains unwell.'}</p><p>A fish-health professional can use water tests, examination and microscopy to separate overlapping causes.</p></section>`;
+  $('#care-summary-content').innerHTML = `<h1 id="care-summary-title" class="question-title">Your care & treatment next steps.</h1><p class="question-hint">Support the fish now; choose a specific treatment once the cause and species requirements are clear.</p>${urgent}<section class="care-section"><p class="eyebrow">1 · SUPPORT THE FISH & TANK</p>${water}${unknown}${list(CONDITIONS.find(c => c.id === 'water').next)}<p class="quiet">Water problems can coexist with a skin condition. These checks do not change what the marks look like.</p></section>${condition}<button class="button primary" data-action="case">Save my observations & readings ↗</button>`;
+  goStep('care-summary');
+}
+
 function list(items) { return `<ul>${items.map(item => `<li>${escape(item)}</li>`).join('')}</ul>`; }
 function scopeName(scope) { return {fresh:'Freshwater',marine:'Saltwater',both:'Fresh + salt water'}[scope]; }
 function sourceLinks(ids) { return ids.map(id => SOURCES.find(s => s.id === id)).filter(Boolean).map(source => `<a href="${source.url}" target="_blank" rel="noopener noreferrer">${escape(source.name)} ↗</a>`).join(''); }
@@ -196,7 +224,7 @@ function emergencyContent() {
 function openDetail(id, slotId = 'overview') {
   const condition = CONDITIONS.find(c => c.id === id);
   if (!condition) return;
-  $('#detail-content').innerHTML = `<p class="eyebrow">${escape(condition.kind)} · ${scopeName(condition.scope)}</p><h2 id="detail-title">${escape(condition.title)}</h2>${condition.scientific ? `<p class="scientific">${escape(condition.scientific)}</p>` : ''}<p class="lead">${escape(condition.summary)}</p>${slotsFor(id).some(s => s.image) || activeView === 'library' ? gallery(condition, slotId) : '<p class="quiet">Reference images for this entry are still being added.</p>'}<div class="detail-visual-actions"><button class="button primary" data-use-pattern="${condition.id}">Check this visible pattern →</button><button class="compare-toggle" data-compare="${condition.id}" aria-pressed="${comparisons.has(condition.id)}">${comparisons.has(condition.id) ? '✓ Selected' : '+ Compare'}</button></div><p class="quiet">This selects a visible sign, not a disease. The tank questions help you compare other explanations.</p><h3>Clues that can fit</h3>${list(condition.clues)}<h3>What else could look similar?</h3><p>${escape(condition.distinguish)}</p><h3>Useful next checks</h3>${list(condition.next)}<div class="notice"><h4>How it is distinguished</h4><p>${escape(condition.confirm)}</p></div><p class="avoid"><strong>Avoid the shortcut:</strong> ${escape(condition.avoid)}</p><div class="sources"><h4>Read the references</h4>${sourceLinks(condition.source)}</div><p class="quiet">A subtle skin appearance does not mean a mild illness. These image views are not clinical stages or a severity score.</p>`;
+  $('#detail-content').innerHTML = `<p class="eyebrow">${escape(condition.kind)} · ${scopeName(condition.scope)}</p><h2 id="detail-title">${escape(condition.title)}</h2>${condition.scientific ? `<p class="scientific">${escape(condition.scientific)}</p>` : ''}<p class="lead">${escape(condition.summary)}</p>${slotsFor(id).some(s => s.image) || activeView === 'library' ? gallery(condition, slotId) : '<p class="quiet">Reference images for this entry are still being added.</p>'}<div class="detail-visual-actions"><button class="button primary" data-use-pattern="${condition.id}">Check this visible pattern →</button><button class="compare-toggle" data-compare="${condition.id}" aria-pressed="${comparisons.has(condition.id)}">${comparisons.has(condition.id) ? '✓ Selected' : '+ Compare'}</button></div><p class="quiet">This selects a visible sign, not a disease. Care & treatment follows your visual comparison.</p><h3>Clues that can fit</h3>${list(condition.clues)}<h3>What else could look similar?</h3><p>${escape(condition.distinguish)}</p><h3>Useful next checks</h3>${list(condition.next)}<div class="notice"><h4>How it is distinguished</h4><p>${escape(condition.confirm)}</p></div><p class="avoid"><strong>Avoid the shortcut:</strong> ${escape(condition.avoid)}</p><div class="sources"><h4>Read the references</h4>${sourceLinks(condition.source)}</div><p class="quiet">A subtle skin appearance does not mean a mild illness. These image views are not clinical stages or a severity score.</p>`;
   $('#detail-dialog').showModal();
 }
 
@@ -279,7 +307,9 @@ document.addEventListener('click', async event => {
   if (pattern) startFromPattern(pattern.dataset.usePattern);
   const action = event.target.closest('[data-action]')?.dataset.action;
   if (action === 'start') goStep('water');
-  if (action === 'back') { const route = sequence(); goStep(route[route.indexOf(step) - 1] || 'welcome'); }
+  if (action === 'back') { if (step === 'care') renderResults(); else { const route = sequence(); goStep(route[route.indexOf(step) - 1] || 'welcome'); } }
+  if (action === 'care') openCare();
+  if (action === 'results') renderResults();
   if (action === 'edit') goStep('water');
   if (action === 'reset') reset();
   if (action === 'case') showCase();
