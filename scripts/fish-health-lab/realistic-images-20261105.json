@@ -1,0 +1,357 @@
+{
+  "request": "1567971914423603203",
+  "requestedModel": "openai/gpt-image-2.6-sunburst",
+  "requestedQuality": "medium",
+  "backendModel": "not independently verified",
+  "returnedGenerationQuality": null,
+  "artwork": "AI educational illustrations, not confirmed clinical photographs",
+  "geometry": {
+    "symptoms": {
+      "columns": 4,
+      "rows": 3
+    },
+    "textures": {
+      "columns": 3,
+      "rows": 2
+    }
+  },
+  "assets": [
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/opening-14eda904d297.jpg",
+      "width": 1774,
+      "height": 887,
+      "alt": "AI illustration: Separate freshwater and reef-fish portraits showing varied spots, skin changes, fin damage, swelling, eye changes and surface gasping.",
+      "key": "experiments/fish-health-lab/choices/opening-14eda904d297.jpg",
+      "sha256": "14eda904d297d2bc5849630de8cb53977397c573b2bab5a47859314dc1358d8b",
+      "bytes": 476556,
+      "source": "opening",
+      "sourceSha256": "14eda904d297d2bc5849630de8cb53977397c573b2bab5a47859314dc1358d8b",
+      "crop": null,
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/sign-dots-0d6bd48c0867.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Dark fish with separate small white grains on the body and fins.",
+      "key": "experiments/fish-health-lab/choices/sign-dots-0d6bd48c0867.jpg",
+      "sha256": "0d6bd48c08675e48854700385f3ebd25ecb2015a1f259ce2f43e30cc84a93ed2",
+      "bytes": 32166,
+      "source": "symptoms",
+      "sourceSha256": "b26eea8db71c40e0252ac0c106f9cd7a7eefffa3a228cef0cb42ad58d3ef5ec8",
+      "crop": [
+        0,
+        0,
+        362,
+        362
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/sign-dust-348f23cb4397.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Fish with a much finer gold-brown dusty skin sheen.",
+      "key": "experiments/fish-health-lab/choices/sign-dust-348f23cb4397.jpg",
+      "sha256": "348f23cb4397b8f3c2379816c23083dc0c20240587ba9ba3abe8904e5d1ad6bd",
+      "bytes": 49246,
+      "source": "symptoms",
+      "sourceSha256": "b26eea8db71c40e0252ac0c106f9cd7a7eefffa3a228cef0cb42ad58d3ef5ec8",
+      "crop": [
+        362,
+        0,
+        724,
+        362
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/sign-fuzz-be5390e7423c.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Angelfish with a localized tuft of cottony white filaments.",
+      "key": "experiments/fish-health-lab/choices/sign-fuzz-be5390e7423c.jpg",
+      "sha256": "be5390e7423c993457bf9de652b4ab7e198fb337df1e953e84e5b6a959a7644b",
+      "bytes": 44279,
+      "source": "symptoms",
+      "sourceSha256": "b26eea8db71c40e0252ac0c106f9cd7a7eefffa3a228cef0cb42ad58d3ef5ec8",
+      "crop": [
+        724,
+        0,
+        1086,
+        362
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/sign-patch-045165370727.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Dark fish with an irregular pale skin patch.",
+      "key": "experiments/fish-health-lab/choices/sign-patch-045165370727.jpg",
+      "sha256": "04516537072705d79c42e082fc010e9d95342540ef67769db7cb7a54172f1a2a",
+      "bytes": 35417,
+      "source": "symptoms",
+      "sourceSha256": "b26eea8db71c40e0252ac0c106f9cd7a7eefffa3a228cef0cb42ad58d3ef5ec8",
+      "crop": [
+        1086,
+        0,
+        1448,
+        362
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/sign-fins-9f979b883f5b.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Blue betta with ragged and shortened fin edges.",
+      "key": "experiments/fish-health-lab/choices/sign-fins-9f979b883f5b.jpg",
+      "sha256": "9f979b883f5b813696784747741920dc9e451ef133327d6d9b52f388d84deac9",
+      "bytes": 50069,
+      "source": "symptoms",
+      "sourceSha256": "b26eea8db71c40e0252ac0c106f9cd7a7eefffa3a228cef0cb42ad58d3ef5ec8",
+      "crop": [
+        0,
+        362,
+        362,
+        724
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/sign-sores-4f7d1a4978e4.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Silver fish with a localized reddish sore on the flank.",
+      "key": "experiments/fish-health-lab/choices/sign-sores-4f7d1a4978e4.jpg",
+      "sha256": "4f7d1a4978e460fdc5538d427cfecff6655ca7c71d034d369102d67435721919",
+      "bytes": 45614,
+      "source": "symptoms",
+      "sourceSha256": "b26eea8db71c40e0252ac0c106f9cd7a7eefffa3a228cef0cb42ad58d3ef5ec8",
+      "crop": [
+        362,
+        362,
+        724,
+        724
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/sign-swollen-e10c7862150d.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Goldfish with an unusually swollen abdomen.",
+      "key": "experiments/fish-health-lab/choices/sign-swollen-e10c7862150d.jpg",
+      "sha256": "e10c7862150d8af39daeb3f9d306a485fcd9b8b4c425ce28539ea8289bae37c8",
+      "bytes": 46406,
+      "source": "symptoms",
+      "sourceSha256": "b26eea8db71c40e0252ac0c106f9cd7a7eefffa3a228cef0cb42ad58d3ef5ec8",
+      "crop": [
+        724,
+        362,
+        1086,
+        724
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/sign-eyes-b5bacafa632d.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Close view of a cloudy, protruding fish eye.",
+      "key": "experiments/fish-health-lab/choices/sign-eyes-b5bacafa632d.jpg",
+      "sha256": "b5bacafa632dfa7c76fa71b9f44a2ee1350144f396628f5fd48ffc0b5b5ee98d",
+      "bytes": 52658,
+      "source": "symptoms",
+      "sourceSha256": "b26eea8db71c40e0252ac0c106f9cd7a7eefffa3a228cef0cb42ad58d3ef5ec8",
+      "crop": [
+        1086,
+        362,
+        1448,
+        724
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/sign-lumps-632c9ac83a0e.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Angelfish with clustered pale raised lumps near a fin.",
+      "key": "experiments/fish-health-lab/choices/sign-lumps-632c9ac83a0e.jpg",
+      "sha256": "632c9ac83a0e35cfd5fd515e9ef71132e6a8e4432fb4a6ad6c862463a4dd5cf8",
+      "bytes": 45498,
+      "source": "symptoms",
+      "sourceSha256": "b26eea8db71c40e0252ac0c106f9cd7a7eefffa3a228cef0cb42ad58d3ef5ec8",
+      "crop": [
+        0,
+        724,
+        362,
+        1086
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/sign-breathing-c9467c2d9cc8.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Fish at the surface with its mouth open in a gasping posture; a still picture cannot show breathing rate.",
+      "key": "experiments/fish-health-lab/choices/sign-breathing-c9467c2d9cc8.jpg",
+      "sha256": "c9467c2d9cc850d6de68450e3c109e9f92581e10172180e3b84d1064a1027b6a",
+      "bytes": 44370,
+      "source": "symptoms",
+      "sourceSha256": "b26eea8db71c40e0252ac0c106f9cd7a7eefffa3a228cef0cb42ad58d3ef5ec8",
+      "crop": [
+        362,
+        724,
+        724,
+        1086
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/sign-balance-9656f7bb10f7.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Goldfish tilted downward in the water; a still picture cannot establish a swimming disorder.",
+      "key": "experiments/fish-health-lab/choices/sign-balance-9656f7bb10f7.jpg",
+      "sha256": "9656f7bb10f74bcde2d0cbd9db5de1af5439cc1794b68a86e165bac60e5656bf",
+      "bytes": 39143,
+      "source": "symptoms",
+      "sourceSha256": "b26eea8db71c40e0252ac0c106f9cd7a7eefffa3a228cef0cb42ad58d3ef5ec8",
+      "crop": [
+        724,
+        724,
+        1086,
+        1086
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/sign-unclear-c2d718ed82d3.jpg",
+      "width": 362,
+      "height": 362,
+      "alt": "AI illustration: Fish near a plant with no obvious visible lesion; this does not prove it is healthy.",
+      "key": "experiments/fish-health-lab/choices/sign-unclear-c2d718ed82d3.jpg",
+      "sha256": "c2d718ed82d3e4ac941ab206691659f90ec6e8b7da944a39e9cb23dbf610428e",
+      "bytes": 53698,
+      "source": "symptoms",
+      "sourceSha256": "b26eea8db71c40e0252ac0c106f9cd7a7eefffa3a228cef0cb42ad58d3ef5ec8",
+      "crop": [
+        1086,
+        724,
+        1448,
+        1086
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/texture-dots-e759f2939659.jpg",
+      "width": 512,
+      "height": 512,
+      "alt": "AI illustration: Close-up of separate small white grains on dark fish skin and fin.",
+      "key": "experiments/fish-health-lab/choices/texture-dots-e759f2939659.jpg",
+      "sha256": "e759f29396595a674fb687e3110b967816320f669a9c3464fb669eb722dc1f82",
+      "bytes": 60124,
+      "source": "textures",
+      "sourceSha256": "2ac452b2f5ffbfddb6f8edf70a8fc209aaec479e2a1a8dd67b998625ec90112b",
+      "crop": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/texture-dust-43140d5f8471.jpg",
+      "width": 512,
+      "height": 512,
+      "alt": "AI illustration: Close-up of very fine gold-brown dusting across fish skin.",
+      "key": "experiments/fish-health-lab/choices/texture-dust-43140d5f8471.jpg",
+      "sha256": "43140d5f84717d51e573ec8c6fb5119de2ef308133093b06a73d4beaaa3886fd",
+      "bytes": 106752,
+      "source": "textures",
+      "sourceSha256": "2ac452b2f5ffbfddb6f8edf70a8fc209aaec479e2a1a8dd67b998625ec90112b",
+      "crop": [
+        512,
+        0,
+        1024,
+        512
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/texture-fuzz-9cc8cb10e1af.jpg",
+      "width": 512,
+      "height": 512,
+      "alt": "AI illustration: Close-up of white cottony filaments extending from a fish skin lesion.",
+      "key": "experiments/fish-health-lab/choices/texture-fuzz-9cc8cb10e1af.jpg",
+      "sha256": "9cc8cb10e1af777f07ea5719d2b2b29f131a545da5dae78bef9fec11e66d936b",
+      "bytes": 89825,
+      "source": "textures",
+      "sourceSha256": "2ac452b2f5ffbfddb6f8edf70a8fc209aaec479e2a1a8dd67b998625ec90112b",
+      "crop": [
+        1024,
+        0,
+        1536,
+        512
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/texture-patch-f7b4debf61b3.jpg",
+      "width": 512,
+      "height": 512,
+      "alt": "AI illustration: Close-up of an irregular pale patch on fish skin.",
+      "key": "experiments/fish-health-lab/choices/texture-patch-f7b4debf61b3.jpg",
+      "sha256": "f7b4debf61b36016d1d7a7a057824d3fc055f1631c143c2562187451637ed9ae",
+      "bytes": 71518,
+      "source": "textures",
+      "sourceSha256": "2ac452b2f5ffbfddb6f8edf70a8fc209aaec479e2a1a8dd67b998625ec90112b",
+      "crop": [
+        0,
+        512,
+        512,
+        1024
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/texture-lumps-4d155182f337.jpg",
+      "width": 512,
+      "height": 512,
+      "alt": "AI illustration: Close-up of pale raised nodules larger than individual salt-like grains.",
+      "key": "experiments/fish-health-lab/choices/texture-lumps-4d155182f337.jpg",
+      "sha256": "4d155182f3373003623df214148704967328290349d13eda4e579d019e940f4b",
+      "bytes": 107194,
+      "source": "textures",
+      "sourceSha256": "2ac452b2f5ffbfddb6f8edf70a8fc209aaec479e2a1a8dd67b998625ec90112b",
+      "crop": [
+        512,
+        512,
+        1024,
+        1024
+      ],
+      "resized": false
+    },
+    {
+      "url": "https://media.jez237.com/experiments/fish-health-lab/choices/texture-unclear-42c99e569c98.jpg",
+      "width": 512,
+      "height": 512,
+      "alt": "AI illustration: Fish seen through a reflection with indistinct light marks; their texture is uncertain.",
+      "key": "experiments/fish-health-lab/choices/texture-unclear-42c99e569c98.jpg",
+      "sha256": "42c99e569c986dbb61d98677391d8a425737aa8f2088d12601e00ff27eac288f",
+      "bytes": 67625,
+      "source": "textures",
+      "sourceSha256": "2ac452b2f5ffbfddb6f8edf70a8fc209aaec479e2a1a8dd67b998625ec90112b",
+      "crop": [
+        1024,
+        512,
+        1536,
+        1024
+      ],
+      "resized": false
+    }
+  ]
+}
