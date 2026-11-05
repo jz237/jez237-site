@@ -1,170 +1,198 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { assessDiagnosis, assessUrgency, buildCase } from '../../experiments/fish-health-lab/logic.mjs';
-import { SYMPTOMS, BEHAVIORS } from '../../experiments/fish-health-lab/data.mjs';
+import { SYMPTOMS, BEHAVIORS, CONDITIONS, FISH_TYPES, CLOSER_QUESTIONS, GROWTH_CHOICES, URGENCY, closerQuestionFor } from '../../experiments/fish-health-lab/data.mjs';
 import { signImagesFor } from '../../experiments/fish-health-lab/choice-images.mjs';
 
-const input = (patterns, extra = {}) => ({ water: 'fresh', primarySign: patterns[0], visualSigns: patterns, signs: patterns, ...extra });
+const input = (patterns, extra = {}) => ({ water: 'fresh', primarySign: patterns[0], visualSigns: patterns, signs: [...patterns, ...(extra.behaviors || [])], ...extra });
 const ids = result => result.findings.map(c => c.id).sort();
+const lead = (patterns, extra) => assessDiagnosis(input(patterns, extra)).primary?.id;
 
-test('a growth category is an unresolved observation with named possible causes, not a probable diagnosis', () => {
-  for (const water of ['fresh','marine']) {
-    const result = assessDiagnosis(input(['lumps'], {water}));
-    assert.deepEqual(result.diagnoses, []);
-    assert.equal(result.unresolvedFindings[0].id, 'growth');
-    assert.match(result.title, /Possible causes/);
-    assert.deepEqual(result.primary.possibleCauses.map(c => c.title), ['Lymphocystis','A cyst or tumor','Injury or localized infection']);
-    const notes = buildCase(input(['lumps'], {water}));
-    assert.match(notes, /No specific disease identified/);
-    assert.match(notes, /unresolved causes \(not diagnoses\): Larger growths/);
+test('every symptom family leads with a named best guess and a "Most likely" heading', () => {
+  const expected = {
+    fresh: { dots: 'ich-fresh', dust: 'velvet-fresh', fuzz: 'water-mold', patch: 'columnaris', fins: 'fin-rot', sores: 'ulcer', swollen: 'bloat', eyes: 'cloudy-eye', lumps: 'growth', breathing: 'water', balance: 'swim-bladder', unclear: 'water' },
+    marine: { dots: 'ich-marine', dust: 'velvet-marine', fuzz: 'lymphocystis', patch: 'brooklynella', fins: 'fin-rot', sores: 'uronema', swollen: 'bloat', eyes: 'cloudy-eye', lumps: 'growth', breathing: 'water', balance: 'swim-bladder', unclear: 'water' },
+  };
+  for (const water of ['fresh', 'marine']) for (const sign of SYMPTOMS) {
+    const result = assessDiagnosis(input([sign.id], { water }));
+    assert.equal(result.primary?.id, expected[water][sign.id], `${water} ${sign.id}`);
+    assert.equal(result.title, `Most likely: ${result.primary.title}`);
+    assert.ok(URGENCY[result.primary.urgencyLevel], 'urgency badge');
+    assert.ok(result.primary.plan?.steps.length >= 3, 'what to do now');
   }
 });
 
-test('only a rough cauliflower-like growth answer promotes lymphocystis, in either environment', () => {
-  for (const water of ['fresh','marine']) {
-    const result = assessDiagnosis(input(['lumps'], {water,growthAppearance:'cauliflower'}));
-    assert.deepEqual(ids(result), ['lymphocystis']);
-    assert.equal(result.title, 'Probable diagnosis');
-    assert.match(result.primary.matched[0], /wart-like clusters/);
-    for (const growthAppearance of ['smooth','inflamed','unclear','', 'invalid']) {
-      assert.ok(!assessDiagnosis(input(['lumps'],{water,growthAppearance})).diagnoses.some(c=>c.id === 'lymphocystis'));
-    }
-    assert.ok(!assessDiagnosis(input(['dots'],{water,growthAppearance:'cauliflower'})).findings.some(c=>c.id === 'lymphocystis'));
+test('closer-look answers name the specific hobbyist condition', () => {
+  const cases = [
+    ['fresh', 'fins', '', 'fin-rot'], ['fresh', 'eyes', 'bulging', 'popeye'], ['fresh', 'eyes', 'cloudy', 'cloudy-eye'],
+    ['fresh', 'sores', 'open', 'ulcer'], ['fresh', 'sores', 'streaks', 'septicemia'], ['fresh', 'sores', 'scrape', 'injury'],
+    ['fresh', 'patch', 'flat', 'columnaris'], ['fresh', 'patch', 'pits', 'hole-in-head'], ['fresh', 'patch', 'slime', 'flukes'],
+    ['marine', 'dots', 'white', 'ich-marine'], ['marine', 'dots', 'black', 'black-spot'],
+    ['marine', 'patch', 'slime', 'brooklynella'], ['marine', 'patch', 'pits', 'hlle'], ['marine', 'sores', 'open', 'uronema'],
+    ['marine', 'sores', 'scrape', 'injury'], ['marine', 'eyes', 'bulging', 'popeye'],
+  ];
+  for (const [water, sign, closer, id] of cases) assert.equal(lead([sign], { water, closer }), id, `${water} ${sign}:${closer}`);
+});
+
+test('dropsy needs swelling with pinecone scales; swelling alone is bloat with dropsy as "could also be"', () => {
+  const plain = assessDiagnosis(input(['swollen']));
+  assert.equal(plain.primary.id, 'bloat');
+  assert.ok(plain.alternatives.some(c => c.id === 'dropsy'));
+  const pine = assessDiagnosis(input(['swollen'], { behaviors: ['pinecone'] }));
+  assert.deepEqual(ids(pine), ['dropsy']);
+  assert.equal(pine.primary.urgencyLevel, 'today');
+});
+
+test('fast breathing: water/oxygen by default, flukes with flashing, marine velvet with dust', () => {
+  for (const water of ['fresh', 'marine']) {
+    assert.equal(lead(['breathing'], { water }), 'water');
+    assert.equal(lead(['breathing'], { water, behaviors: ['red-gills', 'several'] }), 'water');
+    assert.equal(lead(['breathing'], { water, behaviors: ['rubbing'] }), 'flukes');
+  }
+  const velvet = assessDiagnosis(input(['breathing', 'dust'], { water: 'marine' }));
+  assert.deepEqual(ids(velvet), ['velvet-marine']);
+  assert.equal(velvet.urgent.length, 1);
+  assert.ok(assessDiagnosis(input(['breathing'], { water: 'marine' })).alternatives.some(c => c.id === 'velvet-marine'));
+  assert.equal(lead(['eyes'], { water: 'marine', closer: 'cloudy', behaviors: ['rubbing'] }), 'flukes');
+});
+
+test('fish type re-weights results without adding unrelated conditions', () => {
+  assert.equal(lead(['patch'], { water: 'marine', fishType: 'clownfish' }), 'brooklynella');
+  assert.equal(lead(['patch'], { water: 'marine', fishType: 'tang' }), 'hlle');
+  assert.equal(lead(['dots'], { water: 'marine', fishType: 'tang' }), 'ich-marine');
+  assert.ok(assessDiagnosis(input(['dots'], { water: 'marine', fishType: 'tang' })).alternatives.some(c => c.id === 'black-spot'));
+  assert.equal(lead(['sores'], { water: 'marine', fishType: 'damsel' }), 'uronema');
+  assert.equal(lead(['balance'], { fishType: 'goldfish' }), 'swim-bladder');
+  assert.equal(lead(['dust'], { fishType: 'betta' }), 'velvet-fresh');
+  // Livebearers lift columnaris for a patch; cichlids lift hole-in-the-head into the alternatives.
+  assert.equal(lead(['patch'], { fishType: 'livebearer' }), 'columnaris');
+  assert.ok(assessDiagnosis(input(['patch'], { fishType: 'cichlid' })).alternatives.slice(0, 2).some(c => c.id === 'hole-in-head'));
+  // Boosts never make a condition appear for a sign it doesn't fit.
+  for (const water of ['fresh', 'marine']) for (const fish of FISH_TYPES[water]) for (const sign of SYMPTOMS) {
+    const withFish = assessDiagnosis(input([sign.id], { water, fishType: fish.id }));
+    const without = new Set([...assessDiagnosis(input([sign.id], { water })).findings, ...assessDiagnosis(input([sign.id], { water })).alternatives].map(c => c.id));
+    for (const c of withFish.findings) assert.ok(without.has(c.id), `${fish.id} ${sign.id} invented ${c.id}`);
   }
 });
 
-test('smooth and inflamed lumps narrow the possibilities without inventing a specific pathogen or cancer', () => {
-  const smooth = assessDiagnosis(input(['lumps'], {growthAppearance:'smooth'}));
-  assert.equal(smooth.diagnoses.length,0);
-  assert.deepEqual(smooth.primary.possibleCauses.map(c=>c.title), ['A cyst','A tumor or other tissue growth','An old injury or localized swelling']);
-  for (const signs of [['lumps','sores'],['sores','lumps']]) {
-    const result = assessDiagnosis(input(signs, {growthAppearance:'inflamed'}));
-    assert.deepEqual(ids(result), ['ulcer']);
-    assert.deepEqual(new Set(result.primary.fits), new Set(['lumps','sores']));
-    assert.equal(result.diagnoses.length,0);
-    assert.match(result.primary.possibleCauses.map(c=>c.title).join(' '), /abscess/);
+test('fish-specific tips appear on the matching result', () => {
+  assert.match(assessDiagnosis(input(['dots'], { fishType: 'catfish' })).primary.tip, /scaleless/);
+  assert.match(assessDiagnosis(input(['patch'], { water: 'marine', fishType: 'clownfish', closer: 'slime' })).primary.tip, /clown/i);
+  assert.match(assessDiagnosis(input(['swollen'], { fishType: 'livebearer' })).primary.tip, /pregnant/);
+  assert.equal(assessDiagnosis(input(['dots'])).primary.tip, '');
+});
+
+test('urgency: velvet, Brooklynella, Uronema, water and dropsy act today; ich and fin rot this week; lymphocystis watch', () => {
+  const urgency = Object.fromEntries(CONDITIONS.map(c => [c.id, c.urgency]));
+  for (const id of ['velvet-fresh', 'velvet-marine', 'uronema', 'brooklynella', 'water', 'dropsy']) assert.equal(urgency[id], 'today', id);
+  for (const id of ['ich-fresh', 'ich-marine', 'fin-rot', 'flukes', 'popeye', 'ulcer']) assert.equal(urgency[id], 'week', id);
+  for (const id of ['lymphocystis', 'hlle', 'normal']) assert.equal(urgency[id], 'watch', id);
+  // Any distress or deaths escalates the result to "Act today".
+  for (const b of ['gasping', 'collapse', 'deaths']) {
+    const result = assessDiagnosis(input(['lumps'], { growthAppearance: 'cauliflower', behaviors: [b] }));
+    assert.equal(result.primary.id, 'lymphocystis');
+    assert.equal(result.primary.urgencyLevel, 'today');
+  }
+  assert.equal(assessDiagnosis(input(['lumps'], { growthAppearance: 'cauliflower' })).primary.urgencyLevel, 'watch');
+});
+
+test('growth follow-up: cauliflower → lymphocystis, smooth → cyst/tumor, inflamed → ulcer, unsure → lymphocystis', () => {
+  for (const water of ['fresh', 'marine']) {
+    assert.equal(lead(['lumps'], { water, growthAppearance: 'cauliflower' }), 'lymphocystis');
+    assert.equal(lead(['lumps'], { water, growthAppearance: 'smooth' }), 'growth');
+    assert.equal(lead(['lumps'], { water, growthAppearance: 'inflamed' }), 'ulcer');
+    assert.equal(lead(['lumps'], { water, growthAppearance: 'unclear' }), 'lymphocystis');
+    assert.ok(!assessDiagnosis(input(['dots'], { water, growthAppearance: 'cauliflower' })).findings.some(c => c.id === 'lymphocystis'));
   }
 });
 
-test('growth follow-up preserves concurrent white grains and urgent raised scales without relabeling them', () => {
-  const result = assessDiagnosis(input(['dots','lumps'], {growthAppearance:'cauliflower',signs:['dots','lumps','pinecone']}));
-  assert.deepEqual(result.diagnoses.map(c=>c.id).sort(), ['ich-fresh','lymphocystis']);
-  assert.equal(result.title,'Probable diagnoses');
-  assert.deepEqual(result.unresolvedFindings.map(c=>c.id),['dropsy']);
-  assert.ok(result.urgent.length);
-  const swollen = assessDiagnosis(input(['swollen','dots'], {signs:['swollen','dots','pinecone']}));
-  assert.equal(swollen.primary.id,'ich-fresh');
-  assert.deepEqual(swollen.unresolvedFindings.map(c=>c.id),['dropsy']);
-});
-
-test('all symptom-only result families provide cause-level possibilities and never claim a disease name', () => {
-  for (const sign of ['fins','sores','swollen','eyes','balance','breathing','lumps']) {
-    const result = assessDiagnosis(input([sign]));
-    assert.equal(result.diagnoses.length,0);
-    assert.match(result.title, /Possible causes/);
-    assert.ok(result.unresolvedFindings.every(c => c.possibleCauses?.length >= 2));
-  }
-});
-
-test('white grains and cottony threads retain both plausible problems, not a forced single name', () => {
-  const result = assessDiagnosis(input(['dots','fuzz']));
-  assert.equal(result.status, 'multiple');
-  assert.deepEqual(ids(result), ['ich-fresh','water-mold']);
-  assert.deepEqual(result.unexplained, []);
-  assert.match(result.messages.join(' '), /share a cause|more than one problem/);
-  assert.ok(result.alternatives.every(c => !ids(result).includes(c.id)));
-});
-
-test('conflicting grains/dust and threads/patches are explained without silently dropping an answer', () => {
-  const dust = assessDiagnosis(input(['dots','dust']));
-  assert.deepEqual(ids(dust), ['ich-fresh','velvet-fresh']);
-  assert.match(dust.messages.join(' '), /both separate grains and fine dust/);
-  const patch = assessDiagnosis(input(['fuzz','patch']));
-  assert.deepEqual(ids(patch), ['columnaris','water-mold']);
-  assert.match(patch.messages.join(' '), /both outward threads and flat pale patches/);
-});
-
-test('one cause can connect pale patches and fin loss, independent of the order selected', () => {
-  for (const signs of [['patch','fins'],['fins','patch']]) {
+test('two problems may fit: grains + threads, grains + dust, and a shared cause for patches + fins', () => {
+  const both = assessDiagnosis(input(['dots', 'fuzz']));
+  assert.equal(both.status, 'multiple');
+  assert.deepEqual(ids(both), ['ich-fresh', 'water-mold']);
+  assert.match(both.messages.join(' '), /More than one problem/);
+  assert.ok(both.alternatives.every(c => !ids(both).includes(c.id)));
+  const dust = assessDiagnosis(input(['dots', 'dust']));
+  assert.deepEqual(ids(dust), ['ich-fresh', 'velvet-fresh']);
+  assert.match(dust.messages.join(' '), /grains and fine dust/);
+  for (const signs of [['patch', 'fins'], ['fins', 'patch']]) {
     const result = assessDiagnosis(input(signs));
     assert.equal(result.status, 'single');
     assert.deepEqual(ids(result), ['columnaris']);
-    assert.deepEqual(new Set(result.primary.fits), new Set(signs));
   }
+  const pine = assessDiagnosis(input(['dots'], { behaviors: ['pinecone', 'appetite'] }));
+  assert.deepEqual(ids(pine), ['dropsy', 'ich-fresh']);
+  assert.equal(pine.primary.id, 'ich-fresh');
+  assert.ok(pine.urgent.some(m => /pinecone/.test(m)));
 });
 
-test('raised scales alongside white grains are a second concern, never an ich look-alike', () => {
-  const result = assessDiagnosis(input(['dots'], { signs: ['dots','pinecone','appetite'] }));
-  assert.deepEqual(ids(result), ['dropsy','ich-fresh']);
-  assert.ok(result.urgent.some(message => /pinecone/.test(message)));
-  assert.ok(!result.alternatives.some(c => ['dropsy','buoyancy','eye-change'].includes(c.id)));
-});
-
-test('nonspecific behavior adds urgency but does not invent eye, swelling or swimming diagnoses', () => {
-  const result = assessDiagnosis(input(['dots'], { signs: ['dots','appetite','clamped','rubbing','gasping','collapse','deaths'] }));
+test('nonspecific behavior does not invent eye, swelling or swimming results for white dots', () => {
+  const result = assessDiagnosis(input(['dots'], { behaviors: ['appetite', 'clamped', 'rubbing', 'gasping', 'collapse', 'deaths', 'red-gills', 'several'] }));
   assert.deepEqual(ids(result), ['ich-fresh']);
   assert.equal(result.urgent.length, 3);
+  assert.ok(!result.alternatives.some(c => ['dropsy', 'swim-bladder', 'popeye', 'cloudy-eye', 'bloat'].includes(c.id)));
 });
 
-test('breathing alone is not labeled velvet; visible marine dust plus breathing can fit it', () => {
-  assert.deepEqual(ids(assessDiagnosis(input(['breathing'], {water:'marine'}))), ['water']);
-  const result = assessDiagnosis(input(['breathing','dust'], {water:'marine'}));
-  assert.deepEqual(ids(result), ['velvet-marine']);
-  assert.equal(result.urgent.length, 1);
-});
-
-test('abnormal water readings coexist with a visible problem instead of erasing it', () => {
-  const result = assessDiagnosis(input(['dots'], {ammonia:'1', nitrite:'0', affected:'several'}));
+test('water readings add a water concern alongside the visible problem', () => {
+  const result = assessDiagnosis(input(['dots'], { ammonia: '1', nitrite: '0', affected: 'several' }));
   assert.deepEqual(ids(result), ['ich-fresh']);
   assert.deepEqual(result.contextConcerns.map(c => c.id), ['water']);
   assert.match(result.contextConcerns[0].reason, /Ammonia is detectable/);
-  assert.match(result.messages.join(' '), /coexist with a skin problem/);
 });
 
-test('unsupported marine textures and vague answers remain explicitly unresolved', () => {
-  const result = assessDiagnosis(input(['fuzz'], {water:'marine'}));
-  assert.equal(result.status, 'insufficient');
-  assert.deepEqual(result.findings, []);
-  assert.deepEqual(result.unexplained, ['fuzz']);
-  assert.equal(assessDiagnosis(input(['unclear'], {signs:['unclear','appetite']})).status, 'insufficient');
-  const precise = assessDiagnosis(input(['unclear','eyes']));
-  assert.deepEqual(ids(precise), ['eye-change']);
-  assert.match(precise.messages.join(' '), /extra visible signs/);
-});
-
-test('closer texture choices take precedence transparently, without retaining an invented ich diagnosis', () => {
-  const result = assessDiagnosis(input(['fuzz'], {initialSign:'dots', textureSign:'fuzz'}));
+test('closer texture choice replaces the first white-dots choice transparently', () => {
+  const result = assessDiagnosis(input(['fuzz'], { initialSign: 'dots', textureSign: 'fuzz' }));
   assert.deepEqual(ids(result), ['water-mold']);
-  assert.match(result.messages.join(' '), /used instead of the first/);
+  assert.match(result.messages.join(' '), /instead of “White dots/);
 });
 
-test('every offered single-picture/behavior combination preserves scope, distress and strong additional signs', () => {
+test('every single-picture × behavior × fish × water case names something in scope, keeps distress and dropsy', () => {
   let cases = 0;
-  for (const water of ['fresh','marine']) for (const sign of SYMPTOMS) for (let mask = 0; mask < 2 ** BEHAVIORS.length; mask++) {
-    const behaviors = BEHAVIORS.filter((_, i) => mask & (1 << i)).map(b => b.id);
-    const observation = input([sign.id], {water, signs:[sign.id,...behaviors]});
-    const result = assessDiagnosis(observation);
-    const entries = [...result.findings,...result.alternatives,...result.contextConcerns];
-    assert.ok(entries.every(c => c.scope === 'both' || c.scope === water));
-    assert.equal(new Set(result.findings.map(c => c.id)).size, result.findings.length);
-    assert.deepEqual(result.urgent, assessUrgency(observation).urgent);
-    if (behaviors.includes('pinecone')) assert.ok(result.findings.some(c => c.id === 'dropsy'));
-    if (!behaviors.includes('pinecone') && sign.id !== 'swollen') assert.ok(!result.findings.some(c => c.id === 'dropsy'));
-    cases++;
+  for (const water of ['fresh', 'marine']) for (const fish of [{ id: '' }, ...FISH_TYPES[water]]) for (const sign of SYMPTOMS) {
+    const closers = closerQuestionFor(sign.id, water)?.choices.map(c => c.id) || [''];
+    for (const closer of closers) for (let mask = 0; mask < 2 ** BEHAVIORS.length; mask += fish.id ? 37 : 1) {
+      const behaviors = BEHAVIORS.filter((_, i) => mask & (1 << i)).map(b => b.id);
+      const observation = input([sign.id], { water, fishType: fish.id, closer, behaviors, growthAppearance: sign.id === 'lumps' ? 'unclear' : '' });
+      const result = assessDiagnosis(observation);
+      assert.ok(result.primary, `${water} ${sign.id} ${closer}`);
+      const entries = [...result.findings, ...result.alternatives, ...result.contextConcerns];
+      assert.ok(entries.every(c => c.scope === 'both' || c.scope === water), 'water scope');
+      assert.equal(new Set(result.findings.map(c => c.id)).size, result.findings.length);
+      assert.deepEqual(result.urgent, assessUrgency(observation).urgent);
+      if (behaviors.includes('pinecone')) assert.ok(result.findings.some(c => c.id === 'dropsy'));
+      if (behaviors.some(b => ['gasping', 'collapse', 'deaths'].includes(b))) assert.ok(result.findings.every(c => c.urgencyLevel === 'today'));
+      if (water === 'marine') for (const c of result.findings) if (c.plan?.medicated) assert.equal(c.plan.reefUnsafe, true, `${c.id} needs a reef flag`);
+      assert.ok(result.alternatives.length <= 4);
+      cases++;
+    }
   }
-  assert.equal(cases, 3072);
+  assert.ok(cases > 20000, String(cases));
 });
 
-test('all 110 two-picture cases account for each selected appearance or explicitly leave it unresolved', () => {
+test('all two-picture cases account for each selected sign', () => {
   const signs = SYMPTOMS.filter(s => s.id !== 'unclear').map(s => s.id);
   let cases = 0;
-  for (const water of ['fresh','marine']) for (let i=0;i<signs.length;i++) for(let j=i+1;j<signs.length;j++) {
-    const result = assessDiagnosis(input([signs[i],signs[j]], {water}));
-    for (const sign of [signs[i],signs[j]]) assert.ok(result.unexplained.includes(sign) || result.findings.some(c => c.fits.includes(sign)));
-    assert.ok([...result.findings,...result.alternatives].every(c => c.scope === 'both' || c.scope === water));
+  for (const water of ['fresh', 'marine']) for (let i = 0; i < signs.length; i++) for (let j = i + 1; j < signs.length; j++) {
+    const result = assessDiagnosis(input([signs[i], signs[j]], { water }));
+    for (const sign of [signs[i], signs[j]]) assert.ok(result.unexplained.includes(sign) || result.findings.some(c => c.fits.includes(sign)), `${water} ${sign}`);
+    assert.deepEqual(result.unexplained, []);
+    assert.ok([...result.findings, ...result.alternatives].every(c => c.scope === 'both' || c.scope === water));
     cases++;
   }
   assert.equal(cases, 110);
+});
+
+test('closer questions and fish lists are complete and water-specific', () => {
+  assert.equal(closerQuestionFor('dots', 'fresh'), null);
+  assert.ok(closerQuestionFor('dots', 'marine'));
+  for (const q of Object.values(CLOSER_QUESTIONS)) assert.ok(q.choices.some(c => c.id === 'unclear'));
+  assert.deepEqual(FISH_TYPES.fresh.map(f => f.id), ['betta', 'goldfish', 'community', 'livebearer', 'cichlid', 'catfish']);
+  assert.deepEqual(FISH_TYPES.marine.map(f => f.id), ['clownfish', 'tang', 'angel', 'wrasse', 'damsel']);
+  for (const water of ['fresh', 'marine']) for (const f of FISH_TYPES[water]) for (const id of Object.keys(f.boosts)) {
+    const c = CONDITIONS.find(x => x.id === id);
+    assert.ok(c && (c.scope === 'both' || c.scope === water), `${f.id} boosts ${id}`);
+  }
+  assert.equal(GROWTH_CHOICES.length, 4);
 });
 
 test('marine picture choices use a distinct complete set, never freshwater assets', () => {
@@ -172,14 +200,18 @@ test('marine picture choices use a distinct complete set, never freshwater asset
   assert.equal(Object.keys(marine).length, 12);
   assert.equal(new Set(Object.values(marine).map(i => i.url)).size, 12);
   for (const id of Object.keys(fresh)) assert.notEqual(fresh[id].url, marine[id].url);
-  assert.match(marine.dots.alt, /reef tang/);
-  assert.match(marine.fins.alt, /clownfish/);
 });
 
-test('exported notes retain mixed findings and do not transmit or mistake notes for evidence', () => {
-  const notes = buildCase(input(['dots','fuzz'], {notes:'PRIVATE-NOTE'}));
-  assert.match(notes, /possible problems: Freshwater ich; Water mold/);
+test('saved notes list the best guess, fish type, plan and reef flag, and keep free text local', () => {
+  const notes = buildCase(input(['patch'], { water: 'marine', fishType: 'clownfish', closer: 'slime', notes: 'PRIVATE-NOTE' }));
+  assert.match(notes, /Most likely: Brooklynella \(clownfish disease\) \(Act today\)/);
+  assert.match(notes, /Kind of fish: Clownfish/);
+  assert.match(notes, /NOT REEF-SAFE/);
+  assert.match(notes, /follow the product label/);
   assert.match(notes, /PRIVATE-NOTE/);
-  assert.match(notes, /not a confirmed diagnosis/);
+  assert.match(notes, /not a vet diagnosis/);
   assert.doesNotMatch(notes, /ChatGPT|microscop|wet mount|biopsy/i);
+  const mixed = buildCase(input(['dots', 'fuzz']));
+  assert.match(mixed, /Most likely: Ich/);
+  assert.match(mixed, /Also likely: Fungus/);
 });

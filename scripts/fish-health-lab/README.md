@@ -1,6 +1,7 @@
 # Fish Health Lab — independent experiment
 
 Owner request: Jez, Discord #gpt-chat-1, `1567924888113520831`, 2026-11-05.
+v2 (named conditions, fish type, What to do now, urgency): approved 2026-11-05 18:12 EST — see Product contract.
 Requested an experimental fish-ailment guide on his personal site, entirely
 separate from Hidden Reef. Intended URL:
 `https://jez237.com/experiments/fish-health-lab/`.
@@ -32,86 +33,67 @@ freshwater collections: velvet and cottony growth/water mold.
 
 ## Product contract
 
-**Published, November 5 after owner approval at 17:07:** Jez explicitly lifted the earlier
-publication hold with “oh i mean publish.” The release incorporates the plain `What do you see?` heading, two water choices,
-hobbyist wording, independent treatment pop-ups, clear probable-diagnosis results
-and handling for multiple/conflicting signs. Release through the guarded publisher.
+### v2 direction — owner approval, November 5 2026 18:12 EST
 
-- Buildless static HTML/CSS/ES modules. No credentials, account, API endpoint,
-  dependency installation, paid inference, backend storage or photo upload.
-- Start → freshwater or saltwater / reef → main visible symptom → behavior →
-  results. Behavior also offers optional extra symptom pictures. Any selected
-  raised lump (main, closer texture or extra sign) adds a surface-description
-  question before results; it does not automatically become a diagnosis.
-  Then, separately: Care & treatment → optional water readings/tank history →
-  conditional care steps. Only one question screen is shown.
-  Freshwater + white dots adds a texture question; it does not preselect ich.
-- The welcome shows one mixed-fish opening illustration. Twelve symptom pictures
-  load when the symptom question is reached; six different close-ups load when
-  the freshwater white-mark question is reached. Only the opening image is
-  fetched initially. Existing ich reference sheets still wait for relevant
-  choices or deliberate library browsing. Other symptoms bypass that branch.
-- One clear Start button; Back preserves choices. Changing water or the primary
-  symptom clears the dependent texture answer. Start over clears observations.
-  Numeric water readings are validated, and blank remains unknown, not zero.
-- Results name the leading likely problem, explain the signs that fit, and show
-  additional possibilities when distinct observations cannot be explained by one
-  pattern. Pale patches plus fin damage can share a plausible cause; grains plus
-  cottony threads retain two possibilities. Raised scales are a separate concern,
-  never an ich look-alike. Appetite/rubbing/clamped fins do not invent unrelated
-  diagnoses. Distress stays urgent; positive water readings are a coexisting
-  environmental concern, not a replacement for skin signs.
-- A **Probable diagnosis** heading is reserved for named condition matches.
-  Symptom-only families instead show **Possible causes — not narrowed down yet**,
-  with cause-level possibilities and discriminating clues. Swelling, eye changes,
-  damaged fins, swimming trouble, breathing and unidentified lumps are never
-  promoted to disease names in results, care context or exported observations.
-  Mixed results keep named matches separate from additional unresolved signs.
-- Growth follow-up: rough wart-like cauliflower clusters can suggest
-  **lymphocystis** in either environment; smooth lumps leave cyst/tumor/other
-  swelling alternatives open; inflamed or open lumps lead to injury/infection
-  possibilities. “Can't tell” retains named alternatives without choosing a
-  disease. Only an actual lump observation enables this answer; changing water
-  or the main/texture sign clears it, Back preserves it, and notes record it.
-  Generic lump photos are symptom illustrations, not verified lymphocystis cases.
-- Look-alikes remain curated by appearance and water type, separate from additional
-  actual findings. A closer texture choice supersedes the coarse first choice
-  transparently. Every explicit sign is accounted for or marked unresolved.
-  Unclear appearance and unsupported marine textures do not force a disease.
-  Fast breathing alone does not establish velvet or another pathogen.
-- This is transparent rule-based guidance, not a clinically validated probability
-  model. No percentages, definitive pathogen claims, laboratory procedures or
-  analysis of free-text notes. Multiple matches can share a cause; never imply
-  that their treatment links should be combined.
-- Care is a separate post-result step. It validates optional readings, keeps blank
-  distinct from zero, prioritizes environmental problems and urgent distress,
-  and provides conditional treatment context—not an automatic prescription.
-  Unknown water type cannot unlock freshwater-specific treatment guidance.
-  Urgent distress remains visible before care. Water checks do not erase a
-  concurrent skin pattern or contaminate its look-alikes.
-- The Reference library is a separate, opt-in view. Returning preserves the check.
-  It has 16 entries, 12 appearance filters, water-type/search filters and six
-  gallery slots per entry (96 total). Ich, freshwater velvet and water mold each have six filled views (18 total);
-  78 other slots remain honest placeholders. Selector pictures do not count as confirmed disease
-  cases or completed condition galleries.
-- All six ich sheets remain accessible in a one-picture-at-a-time gallery:
-  whole-fish guide, different fish, close-up, subtle appearance, marked changes,
-  and look-alikes. Appearance is not a disease stage or severity score.
-- Two-entry reference comparison remains available in the library. A deliberate
-  “Check this visible pattern” selection starts the same question flow, with
-  only the visible sign and relevant water type preselected—not a diagnosis.
-  Library selections add no ranking weight.
-- Freshwater and marine causes and pictures remain distinct. The water question
-  has exactly two required choices; internal malformed/unknown-input handling is
-  retained only as a safeguard, not a visitor option. Changing environment clears
-  dependent texture/extra-sign choices, comparisons and stale image containers.
-  Severe gasping, collapse, deaths, pineconing and marine respiratory/dust signs
-  retain priority warnings. No universal treatment/dose/heat/salt advice.
-- No photo picker/preview/upload, image recognition, external chatbot link, AI
-  prompt, browser storage or hidden inference call. Notes can be copied or
-  downloaded for the user or a fish-health professional; no data submission.
-- Unlisted and `noindex`, not password protected. No homepage/nav/sitemap entry.
-  Never integrate/deploy this into Hidden Reef without a separate request.
+Jez: “real photos will not be swapped in. this is an ai guide for a hobbyist.
+stop being so strict.” He approved (“proceed”) items 1–5: named conditions,
+saltwater-specific conditions, an optional fish-type question, an on-page
+“What to do now” card and an urgency badge. This **supersedes** the earlier
+rules that swelling, eyes, fins, breathing, buoyancy and lumps must never be
+named and that treatment specifics stay out. Branch
+`exp/fish-health-v2-20261105` is local only until Jez asks to publish.
+
+- Tone: a confident hobbyist best guess in plain, friendly language, with
+  practical next steps. One short honest line (“a hobby guide, not a vet”) on
+  results and in notes. Do not add more disclaimers or plan for real photos.
+- Buildless static HTML/CSS/ES modules. No credentials, accounts, backend,
+  photo upload, image analysis, chatbot or browser storage.
+- Flow: Start → water (fresh / saltwater-reef) → optional fish type → main
+  picture → [freshwater white dots: texture pictures] → [closer look for marine
+  dots, pale patches, red sores and eyes] → behavior (+ optional extra
+  pictures) → [lump surface if any lump] → results. Optional water readings and
+  tank history come after results (Care & treatment). One question per screen.
+- Fish type: freshwater betta, goldfish, tetra/rasbora, livebearer,
+  cichlid/angelfish/discus, catfish/pleco/cory; saltwater clownfish, tang,
+  angelfish/butterflyfish, wrasse/goby/blenny, damsel/chromis; plus “Not sure /
+  other” (skippable, button reads “Skip →”). Small inline SVG silhouettes, no
+  generated images. Back preserves it; changing water clears it. Boosts only
+  re-weight conditions that already fit the chosen sign (e.g. clownfish →
+  Brooklynella, tang → black spot/HLLE, goldfish → swim bladder, betta →
+  velvet/fin rot, livebearer → columnaris, cichlid → hole-in-the-head) and add
+  fish-specific tips (e.g. scaleless catfish: no salt).
+- Results: heading **“Most likely: X”**, urgency badge (**Act today / Treat
+  this week / Watch it**; any gasping, collapse or deaths escalates to Act
+  today), “Why we think so”, a **What to do now** card (numbered steps, usual
+  treatment type, typical recovery, “Amounts: follow the product label”, Merck
+  “Read more” link), a one-line water nudge, then **Could also be** (≤4).
+  Multiple distinct signs keep the “more than one problem may fit” handling and
+  show “Also likely” cards; shared causes (pale patches + fin loss →
+  columnaris) stay single.
+- Saltwater plans that use copper, formalin, chloroquine, praziquantel or
+  antibiotics show a red **Not reef-safe — treat in a separate tank** flag.
+  Freshwater and marine conditions, pictures and links never mix.
+- Treatment types only, never doses. Recovery times are typical ranges.
+- Named conditions (data.mjs): water (ammonia/nitrite burn or low oxygen), ich,
+  marine ich (Cryptocaryon), velvet, marine velvet (Amyloodinium), fungus/water
+  mold, columnaris, fin rot, bacterial ulcers, hemorrhagic septicemia, dropsy
+  (swelling + pinecone), bloat/constipation, popeye, cloudy eye, swim bladder
+  disorder, skin/gill flukes, lymphocystis, cyst or tumor, injury/fin nipping,
+  Uronema, Brooklynella, black spot (turbellarians), HLLE, hole-in-the-head,
+  plus normal markings as a look-alike. Plans live in treatments.mjs.
+- Closer-look answers become refined keys (`patch:slime`, `dots:black`,
+  `sores:open`, `eyes:bulging`, `lumps:cauliflower`); a refined weight of 0
+  rules a condition out. “Not sure” falls back to the most common cause.
+- On touch screens (`hover: none` + `pointer: coarse`), tapping a symptom or
+  texture picture, a fish chip or a closer-look answer auto-advances.
+- Unlisted and `noindex`. No homepage/nav/sitemap entry. Never integrate into
+  Hidden Reef without a separate request.
+
+### Earlier history (superseded where it conflicts with v2)
+
+Published 2026-11-05 (product commit `03d524e9`, see verification below) with a
+cautious rules model that reserved disease names for ich, velvet, water mold,
+columnaris and lymphocystis and listed “possible causes” for other signs.
 
 ## Content / assets
 
@@ -152,6 +134,14 @@ cauliflower-like skin/fin growths in both environments. The guide offers
 supportive care, not an antiviral cure. Eye, gill and other symptom patterns use
 appropriate care sections, not a promised single cure; normal markings get no
 medicine link. Fresh/marine scope is checked before rendering each link.
+
+v2 adds owner-guide anchors verified against the saved page HTML
+(`workspace/tmp/fish-health-hobbyist-draft-20261105/owner.html`): ammonia
+`#v3226628`, Hexamita `#v3226647`, Brooklynella `#v3226771`, Uronema
+`#v3226774`, Gyrodactylus/flukes `#v3226787`, Aeromonas ulcers/septicemia
+`#v3226807`, nutrition `#Nutritional-Disorders_v3226683`. Black spot and HLLE
+have no owner-guide section and link to the guide page itself. In v2 these are
+labelled “Read more” inside the What-to-do card.
 
 Links are available directly on results and detail pages without entering water
 readings. A direct click opens a detached popup; blocked pop-ups retain a real
@@ -243,51 +233,26 @@ that every condition has a distinct visible presentation.
 
 ## Verification
 
-Run `node --test scripts/fish-health-lab/logic.test.mjs scripts/fish-health-lab/diagnosis.test.mjs scripts/fish-health-lab/treatments.test.mjs` and syntax checks.
-Run `browser-check.mjs`, `visual-browser-check.mjs` and
-`hobbyist-browser-check.mjs` and `growth-browser-check.mjs` locally. Publication is authorized; use the guarded full-site publisher.
-The obsolete disease-first `ich-browser-check.mjs` is retired; its relevant
-branch, image, privacy and mobile coverage is included in the current suites.
+Unit tests: `node --test scripts/fish-health-lab/logic.test.mjs scripts/fish-health-lab/diagnosis.test.mjs scripts/fish-health-lab/treatments.test.mjs`.
+They assert named best guesses for every sign in both waters, closer-look
+mappings, fish-type re-weighting (and that boosts never invent a condition),
+urgency levels and distress escalation, reef-unsafe flags on every medicated
+saltwater plan, no doses, fresh/marine separation across ~25k
+sign × closer × behavior × fish cases, and all 110 two-picture cases.
 
-Check root and legacy `#ich` openings, one opening-image request only before
-starting, complete decode of all 18 distinct choice pictures in their mapped
-grids, single-question visibility, required choices, every main symptom and
-texture branch, Back/changed answers/reset, marine/fresh scope, distress/water
-priority, post-result care, numeric validation, notes copy/download and mobile overflow.
-Regression-check white dots + loss of appetite (and all behavior combinations):
-never list buoyancy, dropsy or eye disorders as ich look-alikes. Check dust →
-velvet, fuzz → water mold, all twelve new crops, matching conditional care,
-two required water choices, correct popup destinations and care Back preserving data.
-Check opt-in library/resume, filters, six image slots, galleries and comparisons.
-Diagnosis regression fixtures cover multiple appearances, conflicting textures,
-coherent shared causes, raised scales with spots, unresolved signs and coexisting
-environmental stress. Invariants cover all 3,072 single-picture/behavior/water
-combinations and 110 two-picture/water cases. This is software logic coverage,
-not clinical validation or a claim to handle every real-world illness.
-Inspect screenshots for user-flow/layout usability, not only selector assertions.
-Image artwork remains user-reviewed rather than automatically rerolled.
-
-Record requests and inspect all of them for transmitted observation text.
-Existing parent-site analytics and Cloudflare checks are recorded separately
-from application submissions; no provider requests or photo controls may exist.
-Stage only intended changes and run the staged secret scanner before committing.
-Review untracked/ignored deployment inputs separately.
-
-Deploy through the existing guarded full-site publisher, never the sparse task
-checkout. Preserve newest origin/main and unrelated work. Verify live static
-bytes, noindex headers, all 19 new assets, all six preserved ich references and
-representative interactions. Inspect layout and crop mapping without subjective
-artwork scoring or automatic rerolls.
+Browser checks (run against a **local** server—the live site injects GA):
+`browser-check.mjs`, `visual-browser-check.mjs`, `hobbyist-browser-check.mjs`,
+`growth-browser-check.mjs`, with `FISH_LAB_URL=http://127.0.0.1:8770/experiments/fish-health-lab/`
+and `PLAYWRIGHT_MODULE=/home/jez237/.npm-global/lib/node_modules/openclaw/node_modules/playwright-core`.
+`phone-screenshots.mjs` saves 390 px screenshots of start, fish type, ich
+(betta), Brooklynella (clownfish), fin rot and swim bladder for layout review.
+Inspect screenshots, not only selector assertions.
 
 ## Next experiments
 
-1. Ask Jez to try the neutral Start flow on mobile and note where he hesitates.
-2. Build a licensed, expert-labelled real case image library; keep AI illustrations
-   visibly distinct from confirmed cases.
-3. Keep the process self-contained and picture-first. Photo-analysis and external
-   chatbot handoffs are excluded by the owner's current request.
-4. Keep treatment doses and automatic medication selection out of scope. Link to
-   independent care/treatment reading for the likely condition instead.
+1. Ask Jez to try the v2 flow on his phone and note where he hesitates.
+2. Fill more gallery slots (marine conditions first) with AI illustrations.
+3. Keep it self-contained and picture-first; no photo analysis or chatbot.
 
 ## Velvet and cottony-growth images, 2026-11-05
 

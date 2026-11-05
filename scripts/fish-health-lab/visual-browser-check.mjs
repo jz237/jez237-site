@@ -19,9 +19,9 @@ try{
   await page.locator('input[value="fresh"]').check();
   await page.locator('.nav-tab[data-view="library"]').click();
   assert.equal(await page.locator('#library-view').isVisible(),true);
-  assert.equal(await page.locator('#library-grid .condition-card').count(),14);
+  assert.equal(await page.locator('#library-grid .condition-card').count(),19);
   assert.equal(await page.locator('#library-water').inputValue(),'fresh');
-  assert.match(await page.locator('#library-count').innerText(),/18 illustrations in place · 66 image spaces to fill/);
+  assert.match(await page.locator('#library-count').innerText(),/18 illustrations in place · 96 image spaces to fill/);
   await page.locator('.nav-tab[data-view="guide"]').click();
   assert.equal(await page.locator('[data-step="water"]').isVisible(),true);
   assert.equal(await page.locator('input[name="water"]:checked').inputValue(),'fresh');
@@ -30,7 +30,7 @@ try{
   await page.locator('.library-filter-drawer summary').click();
   await page.locator('[data-library-pattern="dots"]').click();
   assert.equal(await page.locator('#library-grid .card-image[data-condition="ich-fresh"]').count(),1);
-  assert.equal(await page.locator('#library-grid .card-image[data-condition="fin-damage"]').count(),0);
+  assert.equal(await page.locator('#library-grid .card-image[data-condition="fin-rot"]').count(),0);
   await page.locator('#library-water').selectOption('marine');
   assert.equal(await page.locator('#library-grid .card-image[data-condition="ich-fresh"]').count(),0);
   assert.equal(await page.locator('#library-grid .card-image[data-condition="ich-marine"]').count(),1);
@@ -50,14 +50,14 @@ try{
   record('reference galleries show one sheet at a time and enlargement returns to the gallery');
   await page.locator('#detail-content [data-compare="ich-fresh"]').click(); await page.keyboard.press('Escape');
   await page.locator('#library-grid [data-compare="velvet-fresh"]').click();
-  await page.locator('#library-grid [data-compare="fin-damage"]').click();
+  await page.locator('#library-grid [data-compare="fin-rot"]').click();
   assert.equal(await page.locator('#comparison-picks button').count(),2);
   assert.match(await page.locator('#comparison-status').innerText(),/Two entries/);
   await page.locator('[data-action="compare"]').click();
   assert.equal(await page.locator('#compare-dialog .visual-gallery').count(),2);
   assert.equal(await page.locator('#compare-dialog [data-slot]').count(),12);
   assert.equal(await page.locator('#compare-dialog img').count(),2);
-  assert.match(await page.locator('#compare-content').innerText(),/What could fool you/);
+  assert.match(await page.locator('#compare-content').innerText(),/Easy to confuse with/);
   assert.equal(await page.locator('input[type="file"],a[href*="chatgpt"]').count(),0);
   await noOverflow(page);
   await page.screenshot({path:output+'/desktop-comparison.png'});
@@ -66,7 +66,7 @@ try{
   assert.equal(await page.locator('#compare-dialog').isVisible(),false);
   assert.equal(await page.locator('[data-step="water"]').isVisible(),true);
   assert.equal(await page.locator('input[name="water"]:checked').inputValue(),'fresh');
-  await page.locator('#next-button').click();
+  await page.locator('#next-button').click(); await page.locator('#next-button').click();
   assert.equal(await page.locator('[data-symptom][aria-pressed="true"]').count(),1);
   assert.equal(await page.locator('[data-symptom="dots"]').getAttribute('aria-pressed'),'true');
   await page.locator('#next-button').click();

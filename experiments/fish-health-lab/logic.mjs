@@ -1,7 +1,12 @@
-import { CONDITIONS, SYMPTOMS, BEHAVIORS, GROWTH_CHOICES } from './data.mjs';
+import { CONDITIONS, SYMPTOMS, BEHAVIORS, GROWTH_CHOICES, CLOSER_QUESTIONS, closerQuestionFor, fishTypeFor, URGENCY } from './data.mjs';
+import { carePlanFor } from './treatments.mjs';
 
-export const LABELS = Object.fromEntries([...SYMPTOMS.map(s => [s.id, s.title]), ...BEHAVIORS.map(s => [s.id, s.label])]);
+const closerLabels = Object.entries(CLOSER_QUESTIONS).flatMap(([sign, q]) => q.choices.filter(c => c.id !== 'unclear')
+  .map(c => [`${sign}:${c.id}`, `${SYMPTOMS.find(s => s.id === sign).title}: ${c.title.toLowerCase()}`]));
+const growthLabels = GROWTH_CHOICES.filter(c => c.id !== 'unclear').map(c => [`lumps:${c.id}`, `Raised lumps: ${c.title.toLowerCase()}`]);
+export const LABELS = Object.fromEntries([...SYMPTOMS.map(s => [s.id, s.title]), ...BEHAVIORS.map(s => [s.id, s.label]), ...closerLabels, ...growthLabels, ['lumps:unclear', 'Raised lumps']]);
 const numeric = value => value !== '' && value !== null && value !== undefined && Number.isFinite(Number(value)) ? Number(value) : null;
+const DISTRESS = ['gasping', 'collapse', 'deaths'];
 
 export function assessUrgency(input) {
   const signs = new Set(input.signs || []);
@@ -11,160 +16,204 @@ export function assessUrgency(input) {
   if (signs.has('collapse')) urgent.push('Loss of balance with poor responsiveness');
   if (signs.has('deaths')) urgent.push('Fish deaths during this problem');
   if (signs.has('pinecone')) urgent.push('Raised, pinecone-like scales');
-  if (input.water === 'marine' && (signs.has('breathing') || signs.has('gasping')) && signs.has('dust')) urgent.push('Marine fish with respiratory signs and a fine dusting');
+  if (input.water === 'marine' && (signs.has('breathing') || signs.has('gasping')) && signs.has('dust')) urgent.push('Marine fish with fast breathing and a fine dusting');
   const ammonia = numeric(input.ammonia), nitrite = numeric(input.nitrite);
-  if (ammonia !== null && ammonia > 0) checks.push('Ammonia is detectable. Interpret the reading with pH, temperature and your test method; address water quality now.');
+  if (ammonia !== null && ammonia > 0) checks.push('Ammonia is detectable—do a water change and add a detoxifier now.');
   if (nitrite !== null && nitrite > 0) checks.push(input.water === 'marine'
-    ? 'Nitrite is detectable. Review biological filtration; nitrite toxicity differs between fresh and salt water.'
-    : 'Nitrite is detectable. Freshwater fish may be at risk; investigate water quality promptly.');
-  if (input.tankAge === 'new') checks.push('A new setup may have incomplete biological filtration—even when the water looks clear.');
-  if (input.affected === 'several') checks.push('Several fish are affected. Prioritize the shared environment as well as a possible infectious cause.');
-  if (input.onset === 'after-change') checks.push('Symptoms followed a water, equipment or chemical change. Check that change and the water immediately.');
+    ? 'Nitrite is detectable—your biological filter may be struggling. Do a water change.'
+    : 'Nitrite is detectable—do a water change and consider aquarium salt for salt-tolerant fish to protect the gills.');
+  if (input.tankAge === 'new') checks.push('A new tank may not be cycled yet—test ammonia and nitrite every day.');
+  if (input.affected === 'several' || signs.has('several')) checks.push('Several fish are affected—check the water as well as treating the illness.');
+  if (input.onset === 'after-change') checks.push('This started after a water, equipment or chemical change—check that change and test the water now.');
   return { urgent, checks, level: urgent.length ? 'urgent' : checks.length ? 'check-water' : 'observe', waterUnknown: ammonia === null || nitrite === null };
 }
 
+function weightsFor(condition, water) {
+  return { ...condition.weights, ...(water === 'fresh' ? condition.freshWeights : water === 'marine' ? condition.marineWeights : {}) };
+}
+
+// A refined key ("patch:slime") uses its own weight when the condition lists it
+// (0 rules it out); otherwise it falls back to the base sign.
+export function weightOf(condition, key, water) {
+  const weights = weightsFor(condition, water);
+  if (key in weights) return weights[key];
+  const base = key.split(':')[0];
+  return base !== key ? weights[base] || 0 : 0;
+}
+
+const inScope = (condition, water) => condition.scope === 'both' || water === 'unknown' || condition.scope === water;
+
+// Library filter: every condition that fits a plain sign in this water type.
 export function rankConditions(input) {
-  const signs = new Set(input.signs || []);
-  const assessment = assessUrgency(input);
-  return CONDITIONS.filter(c => c.scope === 'both' || input.water === 'unknown' || c.scope === input.water)
-    .map(condition => {
-      const matched = Object.entries(condition.weights).filter(([id]) => signs.has(id));
-      let score = matched.reduce((sum, [, weight]) => sum + weight, 0);
-      let comparisonReason = '';
-      if (signs.has('dots') && condition.id.startsWith('velvet-') && !score) { score = 1; comparisonReason = 'Compare fine dusting with separate white grains.'; }
-      if (signs.has('dots') && condition.id === 'growth' && !score) { score = 1; comparisonReason = 'Compare irregular larger growths with fine white spots.'; }
-      if (signs.has('fuzz') && condition.id === 'growth' && !score) { score = 1; comparisonReason = 'An unclassified surface growth needs identification; color alone cannot establish its cause.'; }
-      if (condition.id === 'water' && assessment.checks.length) score += 4 + assessment.checks.length;
-      if (condition.id === 'water' && assessment.urgent.length) score += 2;
-      return { ...condition, score, comparisonReason, matched: matched.map(([id]) => LABELS[id] || id), contextMatch: condition.id === 'water' && assessment.checks.length > 0 };
+  const signs = input.signs || [];
+  return CONDITIONS.filter(c => inScope(c, input.water))
+    .map(c => ({ ...c, score: signs.reduce((sum, id) => sum + weightOf(c, id, input.water), 0) }))
+    .filter(c => c.score > 0)
+    .sort((a, b) => b.score - a.score || a.id.localeCompare(b.id));
+}
+
+// Candidates for one visible feature: the sign must fit first; behaviors and the
+// fish type then re-weight those candidates (they never add unrelated ones).
+export function rankForFeature(feature, input) {
+  const behaviors = (input.signs || []).filter(id => BEHAVIORS.some(b => b.id === id));
+  const fish = fishTypeFor(input.water, input.fishType);
+  return CONDITIONS.filter(c => inScope(c, input.water))
+    .map(c => {
+      const base = weightOf(c, feature, input.water);
+      if (base <= 0) return null;
+      const behaviorScore = behaviors.reduce((sum, id) => sum + (weightsFor(c, input.water)[id] || 0), 0);
+      const fishScore = fish?.boosts[c.id] || 0;
+      return { ...c, base, score: base + behaviorScore + fishScore };
     })
-    .filter(c => c.score > 0)
-    .sort((a, b) => b.score - a.score || a.id.localeCompare(b.id));
+    .filter(Boolean)
+    .sort((a, b) => b.score - a.score || b.base - a.base || a.id.localeCompare(b.id));
 }
 
-// Visual comparisons use the observed pattern only. Appetite, distress and tank
-// history belong to urgency/care, not to whether two skin changes look alike.
+// Kept for the library and older callers: ranks by the primary feature.
 export function rankVisualConditions(input) {
-  const pattern = input.primarySign || SYMPTOMS.find(s => (input.signs || []).includes(s.id))?.id;
-  if (!pattern || pattern === 'unclear') return [];
-  const matches = CONDITIONS.filter(c => c.scope === 'both' || input.water === 'unknown' || c.scope === input.water)
-    .map(c => ({ ...c, score: c.weights[pattern] || 0, matched: [LABELS[pattern]] }))
-    .filter(c => c.score > 0)
-    .sort((a, b) => b.score - a.score || a.id.localeCompare(b.id));
-  // Fast breathing alone cannot distinguish a pathogen from oxygen/water stress.
-  if (pattern === 'breathing') matches.sort((a, b) => Number(b.id === 'water') - Number(a.id === 'water'));
-  return matches;
+  const feature = featureKeys(input)[0];
+  return feature ? rankForFeature(feature, input) : [];
 }
 
-// Use each explicit visual sign, not generic appetite/distress points, to form
-// likely matches. Distinct signs can share a cause or represent concurrent issues.
-// These rules do not assign clinical probabilities or interpret free-text notes.
-export function assessDiagnosis(input) {
+export function featureKeys(input) {
   const selected = input.primarySign || SYMPTOMS.find(s => (input.signs || []).includes(s.id))?.id;
-  const patterns = [...new Set([selected, ...(input.visualSigns || [])])]
-    .filter(id => id && id !== 'unclear' && SYMPTOMS.some(s => s.id === id));
-  const hasPinecone = (input.signs || []).includes('pinecone');
-  const features = [...patterns, ...(hasPinecone ? ['pinecone'] : [])];
-  const matchForPattern = pattern => {
-    if (pattern !== 'lumps') return rankVisualConditions({ water: input.water, primarySign: pattern })[0];
-    const id = input.growthAppearance === 'cauliflower' ? 'lymphocystis' : input.growthAppearance === 'inflamed' ? 'ulcer' : 'growth';
-    const condition = CONDITIONS.find(c => c.id === id);
-    const match = { ...condition, weights: { ...condition.weights, lumps: 6 } };
-    if (input.growthAppearance === 'smooth') {
-      match.possibleCauses = [
-        { title: 'A cyst', text: 'A localized cyst can appear as a rounded lump; a smooth surface does not prove it.' },
-        { title: 'A tumor or other tissue growth', text: 'A persistent solid mass can look similar. It may be benign or malignant; the outside appearance cannot tell.' },
-        { title: 'An old injury or localized swelling', text: 'Compare older photos and watch for redness, broken skin or growth over time.' },
-      ];
-      match.summary = 'A smooth lump can be a cyst, tumor or another localized swelling. These answers do not yet distinguish the cause.';
-    }
-    return match;
-  };
-  const leaders = new Map();
-  for (const pattern of patterns) {
-    const match = matchForPattern(pattern);
-    if (match) leaders.set(match.id, { ...match, weights: { ...leaders.get(match.id)?.weights, ...match.weights } });
-  }
-  if (hasPinecone) leaders.set('dropsy', CONDITIONS.find(c => c.id === 'dropsy'));
-  const primaryId = matchForPattern(selected)?.id;
-  const candidates = [...leaders.values()].map(condition => ({
+  const patterns = [...new Set([selected, ...(input.visualSigns || [])])].filter(id => id && SYMPTOMS.some(s => s.id === id));
+  const question = closerQuestionFor(selected, input.water);
+  const closer = question?.choices.some(c => c.id === input.closer && c.id !== 'unclear') ? input.closer : '';
+  const growth = GROWTH_CHOICES.some(c => c.id === input.growthAppearance) ? input.growthAppearance : '';
+  const keys = patterns.map(id => {
+    if (id === selected && closer) return `${id}:${closer}`;
+    if (id === 'lumps' && growth) return `lumps:${growth}`;
+    return id;
+  });
+  // "Nothing obvious" only stands alone; real visible signs take over.
+  const visible = keys.filter(k => k !== 'unclear');
+  return [...(visible.length ? visible : keys), ...((input.signs || []).includes('pinecone') ? ['pinecone'] : [])];
+}
+
+export function urgencyFor(condition, input) {
+  const signs = input.signs || [];
+  return DISTRESS.some(id => signs.includes(id)) ? 'today' : condition.urgency || 'week';
+}
+
+function reasonFor(condition, input, fits) {
+  const fish = fishTypeFor(input.water, input.fishType);
+  const seen = fits.map(id => LABELS[id] || id).join(' + ');
+  const behaviors = (input.signs || []).filter(id => BEHAVIORS.some(b => b.id === id) && (weightsFor(condition, input.water)[id] || 0) > 0).map(id => LABELS[id].toLowerCase());
+  return [
+    `You picked “${seen}”${behaviors.length ? `, plus ${behaviors.join(', ')}` : ''}.`,
+    condition.check,
+    fish?.boosts[condition.id] ? `It’s also common in ${fish.plural}.` : '',
+  ].filter(Boolean).join(' ');
+}
+
+function decorate(condition, input, fits) {
+  const fish = fishTypeFor(input.water, input.fishType);
+  return {
     ...condition,
-    fits: features.filter(id => (condition.weights[id] || 0) >= 3),
-  })).filter(c => c.fits.length)
-    .sort((a, b) => b.fits.length - a.fits.length || Number(!!b.diagnosis) - Number(!!a.diagnosis) || Number(b.id === primaryId) - Number(a.id === primaryId) || a.id.localeCompare(b.id));
+    fits,
+    matched: fits.map(id => LABELS[id] || id),
+    urgencyLevel: urgencyFor(condition, input),
+    reason: reasonFor(condition, input, fits),
+    plan: carePlanFor(condition.id, input.water),
+    tip: fish ? condition.tips?.[fish.id] || '' : '',
+  };
+}
+
+// A confident hobbyist best guess for each visible sign, with "could also be"
+// alternatives. Distinct signs can share one cause or be two problems at once.
+export function assessDiagnosis(input) {
+  const features = featureKeys(input);
+  const ranked = new Map(features.map(f => [f, rankForFeature(f, input)]));
+  const primaryId = ranked.get(features[0])?.[0]?.id;
+  const leaders = new Map();
+  for (const feature of features) {
+    const top = ranked.get(feature)[0];
+    if (top && !leaders.has(top.id)) leaders.set(top.id, top);
+  }
+  // A condition fits a feature it leads, or any other feature it strongly matches.
+  const candidates = [...leaders.values()].map(c => ({ ...c, fits: features.filter(f => ranked.get(f)[0]?.id === c.id || weightOf(c, f, input.water) >= 3) }))
+    .filter(c => c.fits.length)
+    .sort((a, b) => b.fits.length - a.fits.length || Number(b.id === primaryId) - Number(a.id === primaryId) || b.score - a.score || a.id.localeCompare(b.id));
   const covered = new Set(), findings = [];
   for (const candidate of candidates) {
     if (candidate.fits.every(id => covered.has(id))) continue;
-    findings.push({ ...candidate, matched: candidate.fits.map(id => id === 'lumps' && GROWTH_CHOICES.some(c => c.id === input.growthAppearance && c.id !== 'unclear')
-      ? `${LABELS[id]}: ${GROWTH_CHOICES.find(c => c.id === input.growthAppearance).title.toLowerCase()}` : LABELS[id]) });
+    findings.push(decorate(candidate, input, candidate.fits));
     candidate.fits.forEach(id => covered.add(id));
   }
-  // Keep the named probable match beside that heading; unresolved observations
-  // stay visible as separate concerns even when they account for more signs.
-  findings.sort((a, b) => Number(!!b.diagnosis) - Number(!!a.diagnosis));
   const unexplained = features.filter(id => !covered.has(id));
   const assessment = assessUrgency(input);
   const contextConcerns = [];
   if (assessment.checks.length && !findings.some(c => c.id === 'water')) {
     contextConcerns.push({ ...CONDITIONS.find(c => c.id === 'water'), reason: assessment.checks.join(' ') });
   }
-  const findingIds = new Set(findings.map(c => c.id));
-  const alternativeMap = new Map();
-  for (const finding of findings) for (const other of lookalikesFor(finding.id, input.water)) {
-    if (!findingIds.has(other.id) && !alternativeMap.has(other.id)) alternativeMap.set(other.id, other);
-  }
+  const alternatives = couldAlsoBe(findings, ranked, input);
   const messages = [];
-  if (patterns.includes('dots') && patterns.includes('dust')) messages.push('You selected both separate grains and fine dust. Those textures point to different possibilities; compare them closely before choosing a treatment.');
-  if (patterns.includes('fuzz') && patterns.includes('patch')) messages.push('You selected both outward threads and flat pale patches. They can be hard to tell apart; color alone cannot choose between their causes.');
-  if (selected === 'unclear' && patterns.length) messages.push('The extra visible signs give us more to work with than the first “Nothing obvious” choice. The possibilities below use those specific signs.');
-  if (input.initialSign === 'dots' && input.textureSign && !['dots','unclear'].includes(input.textureSign)) messages.push(`Your closer texture choice was “${LABELS[input.textureSign]},” so it is used instead of the first “White dots” choice.`);
-  if (findings.length > 1) messages.push('Different signs may share a cause, or more than one problem may be present. These are possibilities to check—not a reason to combine medicines.');
-  if (contextConcerns.length) messages.push('The tank history or readings also raise an environmental concern. That can coexist with a skin problem, rather than replacing it.');
-  const diagnoses = findings.filter(c => c.diagnosis);
-  const unresolvedFindings = findings.filter(c => !c.diagnosis);
-  const title = diagnoses.length > 1 ? 'Probable diagnoses' : diagnoses.length ? 'Probable diagnosis' : findings.length ? 'Possible causes — not narrowed down yet' : 'No clear diagnosis yet';
+  if (features.includes('dots') && features.includes('dust')) messages.push('You picked both salt-like grains and fine dust. Ich and velvet can look alike—velvet is much finer and gold-tinted.');
+  if (features.includes('fuzz') && features.some(f => f.startsWith('patch'))) messages.push('You picked both fluffy threads and flat pale patches. Fungus and columnaris are often mixed up; flat patches usually mean columnaris.');
+  if (input.initialSign === 'dots' && input.textureSign && !['dots', 'unclear'].includes(input.textureSign)) messages.push(`Your closer look was “${LABELS[input.textureSign]},” so we used that instead of “White dots.”`);
+  if (findings.length > 1) messages.push('More than one problem may be going on. Start with the most urgent one, and check the labels before using two medicines together.');
+  if (contextConcerns.length) messages.push('Your tank history or readings also point to a water problem. Fix that alongside the treatment.');
+  const primary = findings[0] || null;
   return {
     status: !findings.length ? 'insufficient' : findings.length > 1 ? 'multiple' : 'single',
-    primary: findings[0] || null, findings, alternatives: [...alternativeMap.values()],
-    diagnoses, unresolvedFindings, title,
+    primary, findings, diagnoses: findings, alternatives,
+    title: primary ? `Most likely: ${primary.title}` : 'Not enough to go on yet',
+    urgency: findings.reduce((best, c) => URGENCY[c.urgencyLevel].rank > URGENCY[best]?.rank ? c.urgencyLevel : best, findings[0]?.urgencyLevel || ''),
     unexplained, contextConcerns, messages, urgent: assessment.urgent,
   };
 }
 
 const LOOKALIKES = {
-  'ich-fresh': [['velvet-fresh', 'Compare much finer dust with separate white grains.'], ['growth', 'Compare larger, irregular raised growths with small separate grains.'], ['normal', 'Stable markings or breeding tubercles can resemble spots; compare older photos and the species.']],
-  'ich-marine': [['velvet-marine', 'Compare fine dusting with separate spots; either can affect the gills.'], ['growth', 'Larger irregular nodules are a different texture from fine white grains.'], ['normal', 'Compare stable species markings with genuinely new spots.']],
-  'velvet-fresh': [['ich-fresh', 'Ich-like grains are coarser and more separate than the fine dust illustrated here.'], ['normal', 'Natural iridescence follows the scales and lighting; sheen alone does not establish velvet.']],
-  'velvet-marine': [['ich-marine', 'Separate white grains can look similar at a distance; gill signs can overlap.'], ['normal', 'A normal reflective sheen is not proof of a parasite.']],
-  'water-mold': [['columnaris', 'Pale or slimy bacterial lesions can be mistaken for fungus; compare flat patches with outward filaments.'], ['growth', 'A solid raised nodule is different from a tuft of cottony threads.']],
-  columnaris: [['water-mold', 'Look for outward cottony filaments rather than a mainly flat pale lesion.'], ['ulcer', 'Trauma and other infections can cause overlapping skin damage.']],
-  'fin-damage': [['columnaris', 'Progressive fin loss with pale lesions can need bacterial investigation.'], ['ulcer', 'Redness or an open wound may accompany injury or infection.']],
-  ulcer: [['columnaris', 'Some bacterial skin lesions overlap with sores; appearance cannot identify the organism.'], ['water-mold', 'Cottony filaments may grow on an existing injury; investigate the original wound too.']],
-  dropsy: [['normal', 'Normal body shape or egg development can resemble swelling; raised scales and illness need separate attention.']],
-  'eye-change': [['normal', 'Some varieties normally have protruding eyes. Compare with this fish’s healthy appearance.']],
-  buoyancy: [['water', 'Water or oxygen problems can also change posture and swimming.'], ['dropsy', 'Body swelling can accompany buoyancy trouble; check whether swelling is actually present.']],
-  water: [['gill-parasites', 'Gill irritation can also cause rapid breathing. Check the tank and watch for rubbing or excess mucus.'], ['velvet-fresh', 'Freshwater gill disease may have little visible dust; this is a breathing overlap, not a confirmed skin match.'], ['velvet-marine', 'Marine gill disease can progress quickly with little visible dust; breathing trouble needs urgent help.']],
-  'gill-parasites': [['water', 'Low oxygen and water-quality problems can cause similar irritation and breathing changes.'], ['velvet-fresh', 'Freshwater velvet may involve the gills without an obvious skin pattern.'], ['velvet-marine', 'Marine velvet can affect the gills with few visible changes.']],
-  growth: [['normal', 'Compare the location and shape with normal anatomy for this species.'], ['water-mold', 'Cottony threads project into the water; a solid lump has a different structure.']],
-  lymphocystis: [['growth', 'A cyst, tumor or other solid lump can resemble a wart; compare the surface and changes over time.'], ['water-mold', 'Cottony threads are soft outward filaments, not solid cauliflower-like nodules.']],
-  normal: [['growth', 'A genuinely new or enlarging lump needs attention rather than assuming it is normal.']],
+  'ich-fresh': [['velvet-fresh', 'Much finer gold dust rather than separate grains—check with a torch.'], ['normal', 'Natural spots and markings stay the same and don’t spread.']],
+  'ich-marine': [['velvet-marine', 'Finer dust and much faster breathing. More dangerous—treat fast.'], ['black-spot', 'Black pepper specks instead of white grains, mostly on tangs.'], ['normal', 'Natural markings stay the same; ich spots come and go.']],
+  'velvet-fresh': [['ich-fresh', 'Bigger, separate white grains like salt.'], ['normal', 'Natural shimmer follows the scales and lighting.']],
+  'velvet-marine': [['ich-marine', 'Bigger, separate white grains; usually slower.'], ['brooklynella', 'Thick slime and peeling skin, especially on clownfish.'], ['water', 'Low oxygen also causes fast breathing—check aeration.']],
+  'water-mold': [['columnaris', 'Flat pale patches or a white mouth rather than fluffy threads.']],
+  columnaris: [['water-mold', 'Fluffy cotton-wool threads sticking out, not a flat patch.'], ['fin-rot', 'Slower fin loss, usually after dirty water.']],
+  'fin-rot': [['injury', 'A clean split or tear after a fight or snag.'], ['columnaris', 'Fast fin loss with pale patches or a white mouth.']],
+  ulcer: [['septicemia', 'Red streaks in the fins or blotches under the skin.'], ['injury', 'A single scrape after a bump or fight.']],
+  septicemia: [['water', 'Ammonia burn also reddens fins and gills—test the water.'], ['ulcer', 'Open craters with missing scales.']],
+  uronema: [['brooklynella', 'Thick slime and peeling rather than deep red sores.'], ['ulcer', 'Bacterial sores that grow more slowly.']],
+  brooklynella: [['uronema', 'Deep red sores rather than slime and peeling.'], ['velvet-marine', 'A fine dusty sheen with very fast breathing.'], ['flukes', 'Scratching and extra slime without peeling.']],
+  'black-spot': [['ich-marine', 'White grains instead of black specks.'], ['normal', 'Natural dark freckles that never change.']],
+  hlle: [['uronema', 'Fresh, red, growing sores instead of pale pits.'], ['brooklynella', 'Peeling slime rather than pits.']],
+  'hole-in-head': [['columnaris', 'Flat pale patches rather than pits.']],
+  dropsy: [['bloat', 'Swollen belly but the scales lie flat.']],
+  bloat: [['dropsy', 'Scales stick out like a pinecone when seen from above.'], ['swim-bladder', 'Floating or tilting along with the swelling.']],
+  popeye: [['injury', 'Only one eye after a bump—usually heals with clean water.'], ['cloudy-eye', 'A milky film without bulging.']],
+  'cloudy-eye': [['popeye', 'The eye bulges out as well.'], ['injury', 'One eye only, after a bump.']],
+  'swim-bladder': [['water', 'Several fish struggling at once points to the water or oxygen.'], ['bloat', 'A swollen belly with flat scales.']],
+  water: [['flukes', 'Scratching or flashing along with fast gills.']],
+  flukes: [['water', 'Bad water causes similar scratching and fast breathing.']],
+  lymphocystis: [['growth', 'One smooth lump instead of rough clusters.']],
+  growth: [['lymphocystis', 'Rough cauliflower-like clusters.'], ['normal', 'Some species have natural bumps—compare with older photos.']],
+  injury: [['fin-rot', 'Edges that keep shrinking or turn white/red.'], ['ulcer', 'A sore that grows instead of healing.']],
+  normal: [['growth', 'A new or growing lump is not normal.']],
 };
 
-export function lookalikesFor(id, water) {
-  const pairs = [...(LOOKALIKES[id] || [])];
-  if (water === 'unknown' && /^(ich|velvet)-(fresh|marine)$/.test(id)) {
-    pairs.unshift([id.replace(/-(fresh|marine)$/, id.endsWith('-fresh') ? '-marine' : '-fresh'), 'A similar pattern in a different water type. Identify the aquarium type before choosing care.']);
+function couldAlsoBe(findings, ranked, input) {
+  const taken = new Set(findings.map(c => c.id));
+  const out = new Map();
+  const add = (condition, reason) => {
+    if (!condition || taken.has(condition.id) || out.has(condition.id) || !inScope(condition, input.water)) return;
+    out.set(condition.id, { ...condition, comparisonReason: reason || condition.hint });
+  };
+  for (const finding of findings) {
+    const curated = new Map((LOOKALIKES[finding.id] || []).map(([id, reason]) => [id, reason]));
+    const runnersUp = finding.fits.flatMap(feature => (ranked.get(feature) || []).slice(0, 5));
+    // Strong runners-up for the same signs first (they include fish-type weight),
+    // then the curated look-alikes, then weaker runners-up.
+    for (const other of runnersUp.filter(c => c.score >= 3)) add(other, curated.get(other.id));
+    for (const [id, reason] of curated) add(CONDITIONS.find(c => c.id === id), reason);
+    for (const other of runnersUp) add(other, curated.get(other.id));
   }
-  return pairs.map(([candidate, comparisonReason]) => ({ ...CONDITIONS.find(c => c.id === candidate), comparisonReason }))
-    .filter(c => c.id && c.id !== id && (c.scope === 'both' || water === 'unknown' || c.scope === water));
+  return [...out.values()].slice(0, 4);
 }
 
-export function describeIchPattern(input) {
-  const signs = new Set(input.signs || []);
-  if (input.water !== 'fresh') return { title: 'This is not a freshwater ich assessment.', text: 'Water type changes which parasites and management plans apply. Use the appropriate water-type comparisons below.' };
-  if (signs.has('dots')) return { title: 'Ich is one possibility—not confirmed.', text: 'Separate white grains fit an ich-like pattern, but other growths and parasites can overlap. The number of visible spots cannot tell you how sick the fish is.' };
-  if (['dust','fuzz','patch','lumps'].some(sign => signs.has(sign))) return { title: 'Your selected pattern is less typical of ich.', text: 'Fine dust, cottony threads, flat patches and larger growths raise different questions. Compare the relevant entries below rather than treating every pale change as ich.' };
-  return { title: 'There is no clear visual match yet.', text: 'Unclear or absent skin spots cannot rule out gill disease or an environmental problem. Breathing, behavior and actual water readings become especially important.' };
+export function lookalikesFor(id, water) {
+  return (LOOKALIKES[id] || []).map(([candidate, comparisonReason]) => ({ ...CONDITIONS.find(c => c.id === candidate), comparisonReason }))
+    .filter(c => c.id && c.id !== id && inScope(c, water));
 }
 
 export function buildCase(input) {
@@ -173,19 +222,20 @@ export function buildCase(input) {
   const assessment = assessUrgency(input);
   const diagnosis = assessDiagnosis(input);
   const env = { fresh: 'Freshwater', marine: 'Saltwater', unknown: 'Not sure' }[input.water] || 'Not recorded';
+  const fish = fishTypeFor(input.water, input.fishType);
   return [
-    'FISH HEALTH — CASE NOTES',
-    'A probable match from this guide is not a confirmed diagnosis.',
+    'FISH HEALTH — MY NOTES',
+    'Best guess from a hobby guide, not a vet diagnosis.',
     '',
     `Water: ${env}`,
-    `Fish / species: ${show(input.species)}`,
+    `Kind of fish: ${fish?.title || 'Not sure / other'}`,
+    `Fish / species notes: ${show(input.species)}`,
     `How long: ${show(input.duration)}`,
     `Fish affected: ${show(input.affected)}`,
     `Tank established: ${show(input.tankAge)}`,
     `Onset / recent changes: ${show(input.onset)}`,
-    `Visible signs / behavior: ${(input.signs || []).map(id => LABELS[id] || id).join('; ') || 'No signs selected'}`,
-    ...(diagnosis.findings.some(c => c.fits.includes('lumps')) ? [`Growth appearance: ${GROWTH_CHOICES.find(c => c.id === input.growthAppearance)?.title || 'Not recorded'}`] : []),
-    `Visible extent (not a severity score): ${show(input.visualExtent)}`,
+    `What I saw: ${diagnosis.findings.flatMap(c => c.matched).concat(diagnosis.unexplained.map(id => LABELS[id] || id)).join('; ') || 'Nothing obvious'}`,
+    `Behavior: ${(input.signs || []).filter(id => BEHAVIORS.some(b => b.id === id)).map(id => LABELS[id]).join('; ') || 'None selected'}`,
     `Total ammonia: ${number(input.ammonia)} ppm (mg/L)`,
     `Nitrite: ${number(input.nitrite)} ppm (mg/L)`,
     `pH: ${number(input.ph)}`,
@@ -193,16 +243,15 @@ export function buildCase(input) {
     `Salinity (marine): ${show(input.salinity)}`,
     `New arrivals / previous treatment / other notes: ${show(input.notes)}`,
     '',
-    `Urgent flags: ${assessment.urgent.join('; ') || 'None selected. This does not rule out serious disease.'}`,
-    `Environmental checks: ${assessment.checks.join(' ') || 'Still check actual water quality and oxygen.'}`,
-    `Probable diagnosis / possible problems: ${diagnosis.diagnoses.map(c => c.title).join('; ') || 'No specific disease identified from these answers.'}`,
-    `Observed patterns with unresolved causes (not diagnoses): ${diagnosis.unresolvedFindings.map(c => c.title).join('; ') || 'None listed.'}`,
-    `Possible causes to distinguish (not established): ${diagnosis.unresolvedFindings.flatMap(c => (c.possibleCauses || []).map(cause => cause.title)).join('; ') || 'None listed.'}`,
-    `Other similar-looking possibilities: ${diagnosis.alternatives.map(c => c.title).join('; ') || 'None listed.'}`,
-    `Other environmental concerns: ${diagnosis.contextConcerns.map(c => c.reason).join('; ') || 'None flagged by the entered readings/history.'}`,
-    `Unresolved signs: ${diagnosis.unexplained.map(id => LABELS[id]).join('; ') || 'None identified by the guide; this does not rule out other causes.'}`,
-    `Visual page used to start this check (NOT evidence of a diagnosis): ${CONDITIONS.find(c => c.id === input.visualReference)?.title || 'None selected.'}`,
-    `Entries manually chosen for comparison (user selections, not diagnoses): ${(input.comparisons || []).map(id => CONDITIONS.find(c => c.id === id)?.title).filter(Boolean).join('; ') || 'None selected.'}`,
+    `Most likely: ${diagnosis.primary?.title || 'No clear match from these answers'}${diagnosis.primary ? ` (${URGENCY[diagnosis.primary.urgencyLevel].label})` : ''}`,
+    `Also likely: ${diagnosis.findings.slice(1).map(c => `${c.title} (${URGENCY[c.urgencyLevel].label})`).join('; ') || 'None'}`,
+    `Could also be: ${diagnosis.alternatives.map(c => c.title).join('; ') || 'None listed'}`,
+    `Urgent signs: ${assessment.urgent.join('; ') || 'None selected'}`,
+    `Water checks: ${assessment.checks.join(' ') || 'Test ammonia and nitrite if you haven’t lately.'}`,
+    ...diagnosis.findings.flatMap(c => c.plan ? ['', `What to do — ${c.title}:`, ...c.plan.steps.map((s, i) => `${i + 1}. ${s}`), `Usual treatment: ${c.plan.treatment}`, `Typical recovery: ${c.plan.recovery}`, ...(c.plan.reefUnsafe ? ['NOT REEF-SAFE — treat in a separate tank.'] : []), ...(c.plan.medicated ? ['Amounts: follow the product label.'] : [])] : []),
+    '',
+    `Picture page I started from: ${CONDITIONS.find(c => c.id === input.visualReference)?.title || 'None'}`,
+    `Entries I compared: ${(input.comparisons || []).map(id => CONDITIONS.find(c => c.id === id)?.title).filter(Boolean).join('; ') || 'None'}`,
     '',
   ].join('\n');
 }

@@ -26,8 +26,15 @@ const record=label=>checks.push(label);
 const action=(p,id)=>p.locator('[data-action="'+id+'"]:visible').first();
 // Broad flow cases leave lump morphology unknown; the focused growth suite
 // exercises each closer description, validation and navigation explicitly.
+// The optional fish question is skipped and closer looks answered "Not sure";
+// the hobbyist suite covers those questions explicitly.
 const next=async p=>{
   await p.locator('#next-button').click();
+  if (await p.locator('[data-step="fish"]').isVisible()) await p.locator('#next-button').click();
+  if (await p.locator('[data-step="closer"]').isVisible()) {
+    await p.locator('input[name="closer"][value="unclear"]').check();
+    await p.locator('#next-button').click();
+  }
   if (await p.locator('[data-step="growth"]').isVisible()) {
     await p.locator('input[name="growthAppearance"][value="unclear"]').check();
     await p.locator('#next-button').click();
@@ -101,7 +108,7 @@ try {
   await page.locator('[data-symptom="fins"]').click(); await next(page); await at(page,'behavior');
   assert.equal(await page.locator('img:visible').count(),0);
   await next(page); await at(page,'results');
-  assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'fin-damage');
+  assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'fin-rot');
   assert.equal(await page.locator('img:visible').evaluateAll(imgs=>imgs.some(img=>/ich-/.test(img.src))),false);
   record('changing the main symptom removes the white-spot branch and its reference pictures');
 
@@ -109,15 +116,19 @@ try {
   await page.locator('input[value="appetite"]').check();
   await next(page); await at(page,'results');
   assert.equal(await page.locator('[data-step="care"]').isVisible(),false);
-  assert.doesNotMatch(await page.locator('#results-content').innerText(),/Do you have any water readings|Buoyancy|dropsy|protruding eyes/);
-  assert.deepEqual(await page.locator('.alternatives [data-condition]').evaluateAll(els=>els.map(el=>el.dataset.condition)),['velvet-fresh','growth','normal']);
+  assert.doesNotMatch(await page.locator('#results-content').innerText(),/Any water readings\?|Swim bladder|Dropsy|Popeye/);
+  assert.deepEqual(await page.locator('.alternatives [data-condition]').evaluateAll(els=>els.map(el=>el.dataset.condition)),['velvet-fresh','normal']);
   assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'ich-fresh');
-  assert.match(await page.locator('#results-content').innerText(),/not a confirmed diagnosis/i);
+  assert.match(await page.locator('#results-title').innerText(),/Most likely:\s*Ich/i);
+  assert.match(await page.locator('#results-content').innerText(),/hobby guide, not a vet/i);
+  assert.equal(await page.locator('.result-focus .todo-card ol li').count(),5);
+  assert.equal(await page.locator('.result-focus[data-urgency="week"] .urgency-week').count(),1);
+  assert.match(await page.locator('.water-nudge').innerText(),/Tested ammonia & nitrite lately\?/);
   assert.equal(await page.locator('#results-content .water-reminder').count(),0);
-  await page.locator('.result-image img').evaluate(img=>img.decode());
-  assert.equal(await page.locator('.alternatives img').count(),3);
+  await page.locator('.result-focus .result-image img').evaluate(img=>img.decode());
+  assert.equal(await page.locator('.alternatives img').count(),2);
   await page.screenshot({path:output+'/desktop-result.png',fullPage:true});
-  await page.locator('.result-copy [data-condition]').click();
+  await page.locator('.result-focus .result-image').click();
   for(const slot of ['overview','variations','closeup','subtle','marked','lookalikes']) {
     await page.locator('#detail-content [data-slot="'+slot+'"]').click();
     assert.equal(await page.locator('#detail-content .gallery-image img').count(),1);
@@ -132,15 +143,14 @@ try {
   for(const detail of ['dust','fuzz','patch','lumps','unclear']) {
     await begin(page,'fresh','dots',detail); await next(page);
     await at(page,'results');
-    const expected={dust:'velvet-fresh',fuzz:'water-mold',patch:'columnaris',lumps:'growth'}[detail];
-    if(expected) assert.equal(await page.locator('.result-focus').getAttribute('data-result'),expected);
-    else assert.equal(await page.locator('.result-focus').count(),0);
+    const expected={dust:'velvet-fresh',fuzz:'water-mold',patch:'columnaris',lumps:'lymphocystis',unclear:'ich-fresh'}[detail];
+    assert.equal(await page.locator('.result-focus').getAttribute('data-result'),expected);
   }
-  record('all five non-grain texture answers lead to the correct pattern or no clear match, never a forced ich result');
+  record('all five other texture answers lead to their named condition; "Not sure" keeps the white-dots best guess (ich)');
 
   for(const [sign,id] of [['dust','velvet-fresh'],['fuzz','water-mold']]) {
     await begin(page,'fresh',sign); await next(page);
-    await page.locator('.result-copy [data-condition]').click();
+    await page.locator('.result-focus .result-image').click();
     for(const slot of ['overview','variations','closeup','subtle','marked','lookalikes']) {
       await page.locator('#detail-content [data-slot="'+slot+'"]').click();
       await page.locator('#detail-content .gallery-image img').evaluate(img=>img.decode());
@@ -162,7 +172,7 @@ try {
   await action(page,'care').click(); await at(page,'care');
   await page.locator('#ammonia').fill('-1'); await next(page); await at(page,'care');
   await page.locator('#ammonia').fill(''); await next(page); await at(page,'care-summary');
-  assert.match(await page.locator('.water-reminder:visible').innerText(),/Unknown does not mean safe/);
+  assert.match(await page.locator('.water-reminder:visible').innerText(),/Test before you treat/);
   await action(page,'care').click();
   await page.locator('#ammonia').fill('1');
   await page.locator('#tank-extra summary').click();
@@ -174,7 +184,7 @@ try {
   assert.equal(await page.locator('#care-summary-content .urgent').isVisible(),true);
   await action(page,'results').click(); await at(page,'results');
   assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'ich-fresh');
-  assert.deepEqual(await page.locator('.alternatives [data-condition]').evaluateAll(els=>els.map(el=>el.dataset.condition)),['velvet-fresh','growth','normal']);
+  assert.deepEqual(await page.locator('.alternatives [data-condition]').evaluateAll(els=>els.map(el=>el.dataset.condition)),['velvet-fresh','normal']);
   record('water readings follow results; care validates numeric inputs, preserves unknowns and prioritizes distress without changing the visual comparison');
   await action(page,'case').click();
   const notes=await page.locator('#case-text').inputValue();
@@ -193,8 +203,10 @@ try {
 
   for(const sign of ['dust','fuzz','patch','sores','swollen','eyes','lumps','breathing','balance','unclear']) {
     await begin(page,'fresh',sign); await next(page); await at(page,'results');
+    assert.match(await page.locator('#results-title').innerText(),/^Most likely:/i);
+    assert.equal(await page.locator('.result-focus .todo-card').count(),1);
   }
-  record('every remaining visible-sign choice has a working path through to comparisons');
+  record('every remaining visible-sign choice reaches a named best guess with a What-to-do card');
   await reset(page); await action(page,'start').click();
   assert.equal(await page.locator('input[name="water"]').count(),2);
   assert.equal(await page.locator('input[name="water"][value="unknown"]').count(),0);
@@ -203,6 +215,8 @@ try {
   await page.locator('input[value="gasping"]').check(); await next(page);
   await at(page,'results');
   assert.match(await page.locator('#results-content').innerText(),/Marine velvet/);
+  assert.equal(await page.locator('.result-focus .reef-flag').isVisible(),true);
+  assert.equal(await page.locator('.result-focus').getAttribute('data-urgency'),'today');
   assert.doesNotMatch(await page.locator('#results-content').innerText(),/Freshwater ich|Freshwater velvet/);
   assert.equal(await page.locator('#results-content .urgent').isVisible(),true);
   await action(page,'care').click();

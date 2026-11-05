@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow, noarchive">
-  <meta name="description" content="An experimental, visual-first fish health guide. Compare symptoms, check the water, and work through an on-site illustrated check.">
+  <meta name="description" content="A picture-first fish health guide for hobbyists: pick what you see, get a best guess and what to do now.">
   <meta name="theme-color" content="#f4f2e9">
   <title>Fish Health Lab · A visual-first experiment</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='14' fill='%231c504a'/%3E%3Cpath d='M9 24Q22 8 35 24Q22 40 9 24L4 17v14z' fill='%23e6edba'/%3E%3Ccircle cx='29' cy='22' r='2' fill='%231c504a'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="/assets/fonts/css/outfit-playfair-display.css">
-  <link rel="stylesheet" href="style.css?v=6">
-  <link rel="stylesheet" href="flow.css?v=6">
-  <script type="module" src="app.mjs?v=6"></script>
+  <link rel="stylesheet" href="style.css?v=7">
+  <link rel="stylesheet" href="flow.css?v=7">
+  <script type="module" src="app.mjs?v=7"></script>
 </head>
 <body>
   <a href="#main" class="skip">Skip to the guide</a>
@@ -22,12 +22,12 @@
   <main id="main">
     <section id="guide-view">
       <section id="welcome" class="start-panel" aria-labelledby="welcome-title">
-        <div class="start-copy"><p class="eyebrow">YOU DON’T NEED A DISEASE NAME</p><h1 id="welcome-title">What do you see?</h1><p class="lead">Choose the pictures closest to your fish. Answer a few simple questions to see a probable diagnosis and a treatment guide.</p><button class="button primary start-button" data-action="start">Start a fish check <span aria-hidden="true">→</span></button><p class="quiet">Compare pictures. No photo upload needed.</p></div>
-        <figure class="start-art"><div class="opening-label"><span>FRESHWATER & REEF FISH</span><strong>Common fish health problems</strong></div><div id="welcome-fish"></div><figcaption>Spots, skin changes, damaged fins and other warning signs.<small>AI illustrations—not clinical photographs.</small></figcaption></figure>
+        <div class="start-copy"><p class="eyebrow">YOU DON’T NEED A DISEASE NAME</p><h1 id="welcome-title">What do you see?</h1><p class="lead">Pick the pictures closest to your fish. Get a best guess, what else it could be, and what to do now.</p><button class="button primary start-button" data-action="start">Start a fish check <span aria-hidden="true">→</span></button><p class="quiet">About a minute. No photo upload needed.</p></div>
+        <figure class="start-art"><div class="opening-label"><span>FRESHWATER & REEF FISH</span><strong>Common fish health problems</strong></div><div id="welcome-fish"></div><figcaption>Spots, skin changes, damaged fins and other warning signs.<small>AI illustrations.</small></figcaption></figure>
       </section>
       <section id="check" class="guided-check" hidden aria-label="Fish check">
         <div class="flow-topline"><p id="flow-label" class="eyebrow"></p><button class="text-button" data-action="reset">Start over</button></div>
-        <progress id="flow-progress" max="3" value="1" aria-label="Visual check progress"></progress>
+        <progress id="flow-progress" max="4" value="1" aria-label="Visual check progress"></progress>
         <form id="fish-form" novalidate>
           <section class="question-panel" data-step="water" aria-labelledby="water-title">
             <h1 id="water-title" class="question-title">What kind of aquarium?</h1><p class="question-hint">We’ll show fish and likely causes for your water type.</p>
@@ -36,8 +36,12 @@
               <label><input type="radio" name="water" value="marine"><span><strong>Saltwater / reef</strong><small>Marine fish and reef aquariums</small></span></label>
             </fieldset>
           </section>
+          <section class="question-panel" data-step="fish" hidden aria-labelledby="fish-title">
+            <h1 id="fish-title" class="question-title">What kind of fish?</h1><p class="question-hint">Optional—some fish get certain problems more often. Skip if you’re not sure.</p>
+            <fieldset class="fish-picker"><legend class="sr-only">Kind of fish</legend><div id="fish-grid" class="fish-grid"></div></fieldset>
+          </section>
           <section class="question-panel" data-step="signs" hidden aria-labelledby="signs-title">
-            <h1 id="signs-title" class="question-title">What stands out most?</h1><p class="question-hint">Match the sign, not the kind of fish. Choose the picture closest to what you see.</p><p class="image-note">Realistic AI illustrations of signs—not confirmed disease photographs.</p>
+            <h1 id="signs-title" class="question-title">What stands out most?</h1><p class="question-hint">Choose the picture closest to what you see.</p><p class="image-note">AI illustrations.</p>
             <div id="symptom-grid" class="symptom-grid" aria-label="Choose the main visible sign"></div>
           </section>
           <section class="question-panel" data-step="texture" hidden aria-labelledby="texture-title">
@@ -45,23 +49,27 @@
             <div id="texture-grid" class="symptom-grid texture-grid" aria-label="Choose the closest texture"></div>
             <div id="texture-reference" class="optional-reference"></div>
           </section>
+          <section class="question-panel" data-step="closer" hidden aria-labelledby="closer-title">
+            <h1 id="closer-title" class="question-title">Look a little closer</h1><p id="closer-hint" class="question-hint"></p>
+            <div id="closer-grid" class="water-picker closer-picker" role="radiogroup" aria-labelledby="closer-title"></div>
+          </section>
           <section class="question-panel" data-step="behavior" hidden aria-labelledby="behavior-title">
             <h1 id="behavior-title" class="question-title">Is it acting differently, too?</h1><p class="question-hint">Select any you’ve noticed. If none fit or you’re unsure, continue.</p>
             <div id="behavior-grid" class="behavior-grid"></div><div id="inline-urgent" class="notice urgent" hidden role="status"></div>
             <details id="additional-signs" class="additional-signs"><summary>Any other visible changes? <span>Optional</span></summary><p id="additional-status" class="quiet" role="status"></p><div id="additional-grid" class="symptom-grid" aria-label="Choose any additional visible signs"></div></details>
           </section>
           <section class="question-panel" data-step="growth" hidden aria-labelledby="growth-title">
-            <h1 id="growth-title" class="question-title">What is the lump’s surface like?</h1><p class="question-hint">“Raised lumps” is a sign, not a disease name. One closer look can help separate the possible causes. Observe the fish in the water—don’t touch the growth.</p>
+            <h1 id="growth-title" class="question-title">What is the lump’s surface like?</h1><p class="question-hint">The surface tells us a lot about the likely cause. Look from the side—don’t touch it.</p>
             <div id="growth-grid" class="water-picker" role="radiogroup" aria-labelledby="growth-title"></div>
           </section>
           <section class="question-panel" data-step="care" hidden aria-labelledby="care-title">
-            <h1 id="care-title" class="question-title">Care & treatment</h1><p class="question-hint">These optional checks help you care for the fish and tank, whether a likely cause is named or still unclear.</p>
+            <h1 id="care-title" class="question-title">Care & treatment</h1><p class="question-hint">Optional: add what you know for a tailored checklist.</p>
             <div id="care-context" class="care-context"></div>
-            <h2>Do you have any water readings?</h2><p class="quiet">These guide the next steps, not the visual match. Add what you know; leave unmeasured values blank.</p>
+            <h2>Any water readings?</h2><p class="quiet">Leave anything you haven’t measured blank.</p>
             <div class="test-grid"><div><label for="ammonia">Total ammonia <small>ppm / mg/L</small></label><input id="ammonia" name="ammonia" type="number" min="0" max="100" step="any" inputmode="decimal" placeholder="Unknown"></div><div><label for="nitrite">Nitrite <small>ppm / mg/L</small></label><input id="nitrite" name="nitrite" type="number" min="0" max="100" step="any" inputmode="decimal" placeholder="Unknown"></div><div><label for="ph">pH</label><input id="ph" name="ph" type="number" min="0" max="14" step="any" inputmode="decimal" placeholder="Unknown"></div><div><label for="temperature">Temperature</label><div class="unit-input"><input id="temperature" name="temperature" type="number" min="0" max="120" step="any" inputmode="decimal" placeholder="Unknown"><select aria-label="Temperature unit" name="tempUnit"><option value="F">°F</option><option value="C">°C</option></select></div></div></div>
             <div id="salinity-field" hidden><label for="salinity">Salinity <span class="quiet">Include units if known</span></label><input id="salinity" name="salinity" maxlength="60" placeholder="e.g. 35 ppt or specific gravity 1.025"></div>
             <details id="tank-extra" class="tank-extra"><summary>Add fish and tank history <span>Optional</span></summary><div class="extra-fields">
-              <div><label for="species">What kind of fish?</label><input id="species" name="species" maxlength="100" placeholder="e.g. black molly, not sure" autocomplete="off"></div>
+              <div><label for="species">Species or name</label><input id="species" name="species" maxlength="100" placeholder="e.g. black molly" autocomplete="off"></div>
               <div><label for="duration">How long has it looked this way?</label><select id="duration" name="duration"><option value="">Not sure</option><option>Less than a day</option><option>1–3 days</option><option>4–7 days</option><option>More than a week</option></select></div>
               <div><label for="affected">How many fish are affected?</label><select id="affected" name="affected"><option value="unknown">Not sure</option><option value="one">One fish</option><option value="several">Several / most fish</option></select></div>
               <div><label for="tankAge">How established is the aquarium?</label><select id="tankAge" name="tankAge"><option value="unknown">Not sure</option><option value="new">New / recently restarted</option><option value="established">Established and running</option></select></div>
@@ -84,14 +92,14 @@
       <p id="library-count" class="quiet" role="status"></p><p class="slot-explanation">Three freshwater image collections are ready: ich, velvet and cottony growth. Empty frames are places for future pictures, not disease examples.</p>
       <div id="library-grid" class="library-grid"></div>
     </section>
-    <section id="about-view" class="inner-view" hidden aria-labelledby="about-title"><p class="eyebrow">ABOUT THIS EXPERIMENT</p><h1 id="about-title">A clearer next step<br><em>for your fish.</em></h1><p class="lead">Start with what you see. Get a probable match, compare close alternatives and open a treatment guide.</p><p>This picture-led guide suggests a likely problem, not a guaranteed diagnosis. Some signs have several causes. Water checks and support steps come after your result, and independent treatment guides open separately.</p><p>The opening montage, freshwater and reef symptom pictures, texture close-ups and disease galleries are AI educational illustrations, not patient photographs. They show possible appearances, not proof of a disease. Some library entries still have image spaces to fill.</p><p>No photo upload, image analysis or chatbot is part of this guide. You can optionally copy or download your observation notes.</p><h2>References</h2><div id="source-list"></div><p class="quiet">Sources checked November 5, 2026. Not clinically validated; sources do not endorse this prototype. An independent jez237.com experiment, not a Hidden Reef application.</p><button class="button secondary" data-view="guide">Back to my check →</button></section>
+    <section id="about-view" class="inner-view" hidden aria-labelledby="about-title"><p class="eyebrow">ABOUT THIS EXPERIMENT</p><h1 id="about-title">A clearer next step<br><em>for your fish.</em></h1><p class="lead">Start with what you see. Get a best guess, what else it could be, and what to do now.</p><p>A friendly picture guide for hobbyists, built from common aquarium experience and the references below. It gives a confident best guess, not a vet diagnosis.</p><p>All pictures are AI illustrations. Some library entries still have image spaces to fill.</p><p>No photo upload, image analysis or chatbot is part of this guide. You can optionally copy or download your observation notes.</p><h2>References</h2><div id="source-list"></div><p class="quiet">Sources checked November 5, 2026; they don’t endorse this guide. An independent jez237.com experiment, not a Hidden Reef application.</p><button class="button secondary" data-view="guide">Back to my check →</button></section>
   </main>
   <footer><span>Fish Health Lab · Working prototype</span><button class="text-button" data-view="about">About & sources</button><span>Observe. Compare. Care.</span></footer>
   <aside id="comparison-tray" class="comparison-tray" hidden aria-label="Selected visual comparisons"><div><strong>Compare the patterns</strong><div id="comparison-picks"></div><p id="comparison-status" role="status"></p></div><button class="button primary" data-action="compare" disabled>Compare side by side ↗</button><button class="tray-clear" data-action="clear-compare" aria-label="Clear comparisons">×</button></aside>
-  <dialog id="compare-dialog" class="compare-dialog" aria-labelledby="compare-title"><button class="dialog-close" data-action="close-dialog" aria-label="Close comparison">×</button><p class="eyebrow">LOOK AT WHAT FITS — AND WHAT DOESN’T</p><h2 id="compare-title">Compare, don’t assume.</h2><p class="quiet">Similar appearances can have different causes. Empty frames are awaiting images. Compare these references with what you see in your aquarium.</p><div id="compare-content"></div></dialog>
+  <dialog id="compare-dialog" class="compare-dialog" aria-labelledby="compare-title"><button class="dialog-close" data-action="close-dialog" aria-label="Close comparison">×</button><p class="eyebrow">LOOK AT WHAT FITS — AND WHAT DOESN’T</p><h2 id="compare-title">Compare, don’t assume.</h2><p class="quiet">Compare these with what you see in your tank. Empty frames are awaiting pictures.</p><div id="compare-content"></div></dialog>
   <dialog id="detail-dialog" aria-labelledby="detail-title"><button class="dialog-close" data-action="close-dialog" aria-label="Close details">×</button><div id="detail-content"></div></dialog>
-  <dialog id="atlas-dialog" class="atlas-dialog" aria-labelledby="atlas-title"><div class="atlas-toolbar"><div><strong id="atlas-title">Freshwater ich · illustrated comparison</strong><small>AI-generated reference, not diagnostic photography. Pinch or zoom for detail.</small></div><button class="dialog-close" data-action="close-dialog" aria-label="Close illustration">×</button></div><img id="atlas-full" width="1024" height="1536" alt="Educational illustration showing varied ich-like presentations on freshwater fish."></dialog>
-  <dialog id="case-dialog" aria-labelledby="case-title"><button class="dialog-close" data-action="close-dialog" aria-label="Close observation notes">×</button><p class="eyebrow">YOUR OBSERVATIONS, IN ONE PLACE</p><h2 id="case-title">Keep a useful record.</h2><p>Keep what you noticed, the likely match and any readings so you can track changes. Nothing is saved or sent anywhere unless you copy or download it.</p><label for="case-text" class="sr-only">Prepared observation notes</label><textarea id="case-text" rows="14" readonly></textarea><div class="case-actions"><button class="button primary" data-action="copy-case">Copy my observations</button><button class="button secondary" data-action="download-case">Download .txt</button></div><p id="copy-status" class="quiet" role="status"></p></dialog>
+  <dialog id="atlas-dialog" class="atlas-dialog" aria-labelledby="atlas-title"><div class="atlas-toolbar"><div><strong id="atlas-title">Freshwater ich · illustrated comparison</strong><small>AI illustration. Pinch or zoom for detail.</small></div><button class="dialog-close" data-action="close-dialog" aria-label="Close illustration">×</button></div><img id="atlas-full" width="1024" height="1536" alt="Educational illustration showing varied ich-like presentations on freshwater fish."></dialog>
+  <dialog id="case-dialog" aria-labelledby="case-title"><button class="dialog-close" data-action="close-dialog" aria-label="Close observation notes">×</button><p class="eyebrow">YOUR NOTES, IN ONE PLACE</p><h2 id="case-title">Keep a useful record.</h2><p>What you saw, the best guess, the plan and any readings. Nothing is saved or sent anywhere unless you copy or download it.</p><label for="case-text" class="sr-only">Prepared observation notes</label><textarea id="case-text" rows="14" readonly></textarea><div class="case-actions"><button class="button primary" data-action="copy-case">Copy my observations</button><button class="button secondary" data-action="download-case">Download .txt</button></div><p id="copy-status" class="quiet" role="status"></p></dialog>
   <noscript><p class="notice">This guide needs JavaScript. For severe breathing trouble or fish deaths, support aeration, test water quality and seek urgent fish-health help.</p></noscript>
 </body>
 </html>

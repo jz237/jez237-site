@@ -23,8 +23,10 @@ const begin = async (p,water='fresh',sign='lumps',texture=sign) => {
   await p.goto(root,{waitUntil:'networkidle'});
   await action(p,'start').click();
   await p.locator(`input[name="water"][value="${water}"]`).check(); await next(p);
+  await next(p); // optional fish question
   await p.locator(`[data-symptom="${sign}"]`).click(); await next(p);
   if (water==='fresh' && sign==='dots') { await p.locator(`[data-texture="${texture}"]`).click(); await next(p); }
+  if (await p.locator('[data-step="closer"]').isVisible()) { await p.locator('input[name="closer"][value="unclear"]').check(); await next(p); }
   await at(p,'behavior');
 };
 const chooseGrowth = async (p,value) => {
@@ -39,10 +41,9 @@ try {
   await next(page); await at(page,'growth');
   assert.match(await page.locator('#flow-error').innerText(),/closest description/);
   await page.locator('input[name="growthAppearance"][value="cauliflower"]').check(); await next(page);
-  assert.equal(await page.locator('#results-title').innerText(),'Probable diagnosis');
+  assert.match(await page.locator('#results-title').innerText(),/^Most likely:\s*Lymphocystis$/i);
   assert.deepEqual(await resultIds(page),['lymphocystis']);
-  assert.equal(await page.locator('.result-focus').getAttribute('data-result-kind'),'diagnosis');
-  assert.equal(await page.locator('.result-copy h2').innerText(),'Lymphocystis');
+  assert.equal(await page.locator('.result-focus').getAttribute('data-urgency'),'watch');
   assert.match(await page.locator('.diagnosis-reason').innerText(),/wart-like clusters/);
   record('lumps require a closer observation; wart-like clusters can suggest lymphocystis, not a renamed symptom');
 
@@ -53,73 +54,71 @@ try {
   await popup.waitForURL(href); assert.equal(await popup.evaluate(()=>window.opener===null),true); await popup.close();
   assert.equal(page.url(),root);
   assert.equal(treatmentRequests[0].referer,'');
-  assert.match(await page.locator('.result-copy .treatment-link').innerText(),/no specific medicine/);
+  assert.match(await page.locator('.result-focus .todo-card').innerText(),/no medicine/);
   record('lymphocystis opens its exact Merck care section separately, without promising a cure or losing the result');
 
   await action(page,'care').click(); await at(page,'care');
-  assert.match(await page.locator('#care-context').innerText(),/Probable diagnosis: Lymphocystis/);
+  assert.match(await page.locator('#care-context').innerText(),/Most likely: Lymphocystis/i);
   await next(page); assert.equal(await page.locator('[data-care-condition]').getAttribute('data-care-condition'),'lymphocystis');
   await action(page,'results').click(); await action(page,'case').click();
-  assert.match(await page.locator('#case-text').inputValue(),/Growth appearance: Rough, wart-like clusters/);
+  assert.match(await page.locator('#case-text').inputValue(),/Raised lumps: rough, wart-like clusters/);
   await page.keyboard.press('Escape');
   record('named growth result, conditional care and saved observations retain the closer answer');
 
   await begin(page); await chooseGrowth(page,'smooth');
-  assert.match(await page.locator('#results-title').innerText(),/Possible causes/);
-  assert.equal(await page.locator('.result-copy h2').innerText(),'Cause not identified yet.');
-  assert.equal(await page.locator('.result-focus').getAttribute('data-result-kind'),'unresolved');
-  assert.match(await page.locator('.possible-causes').innerText(),/A cyst.*A tumor/s);
-  assert.doesNotMatch(await page.locator('.result-copy').innerText(),/Lymphocystis/);
+  assert.match(await page.locator('#results-title').innerText(),/Most likely:\s*Cyst or tumor/i);
+  assert.deepEqual(await resultIds(page),['growth']);
+  assert.ok(await page.locator('.could-also [data-condition="lymphocystis"]').count());
   await action(page,'care').click();
-  assert.doesNotMatch(await page.locator('#care-context').innerText(),/Probable diagnosis/);
+  assert.match(await page.locator('#care-context').innerText(),/Most likely: Cyst or tumor/i);
   await action(page,'results').click(); await action(page,'case').click();
   const notes = await page.locator('#case-text').inputValue();
-  assert.match(notes,/No specific disease identified/); assert.match(notes,/not established/);
+  assert.match(notes,/Most likely: Cyst or tumor \(Watch it\)/); assert.match(notes,/Could also be: .*Lymphocystis/);
   await page.keyboard.press('Escape');
-  record('a smooth lump lists cyst/tumor alternatives without claiming cancer, lymphocystis or a probable disease');
+  record('a smooth lump is named cyst or tumor (watch it) with lymphocystis as a could-also-be');
 
   await begin(page); await chooseGrowth(page,'inflamed');
   assert.deepEqual(await resultIds(page),['ulcer']);
-  assert.match(await page.locator('#results-title').innerText(),/Possible causes/);
-  assert.match(await page.locator('.possible-causes').innerText(),/Injury.*Bacterial skin infection or abscess/s);
+  assert.match(await page.locator('#results-title').innerText(),/Most likely:\s*Bacterial ulcers/i);
   await begin(page); await chooseGrowth(page,'unclear');
-  assert.deepEqual(await resultIds(page),['growth']);
-  assert.match(await page.locator('.possible-causes').innerText(),/Lymphocystis.*cyst or tumor.*Injury/s);
-  assert.equal(await page.locator('[data-result-kind="diagnosis"]').count(),0);
-  record('inflamed and unclear lumps name different possibilities and keep uncertainty explicit');
+  assert.deepEqual(await resultIds(page),['lymphocystis']);
+  assert.ok(await page.locator('.could-also [data-condition="growth"]').count());
+  record('inflamed lumps lead to bacterial ulcers; an unsure lump goes with the most common cause, lymphocystis');
 
   await begin(page,'fresh','dots','lumps'); await chooseGrowth(page,'cauliflower');
   assert.deepEqual(await resultIds(page),['lymphocystis']);
-  assert.match(await page.locator('.diagnosis-context').innerText(),/closer texture choice/);
+  assert.match(await page.locator('.diagnosis-context').innerText(),/closer look was/);
   record('the white-mark texture branch also reaches the growth question and does not retain a false ich result');
 
   await begin(page,'fresh','dots');
   await page.locator('#additional-signs summary').click(); await page.locator('[data-additional-symptom="lumps"]').click();
   await page.locator('input[name="behavior"][value="pinecone"]').check();
   await chooseGrowth(page,'cauliflower');
-  assert.equal(await page.locator('#results-title').innerText(),'Probable diagnoses');
+  assert.match(await page.locator('#results-title').innerText(),/^Most likely:\s*Ich/i);
   assert.deepEqual(new Set(await resultIds(page)),new Set(['ich-fresh','lymphocystis','dropsy']));
-  assert.equal(await page.locator('[data-result="dropsy"]').getAttribute('data-result-kind'),'unresolved');
+  assert.equal(await page.locator('[data-result="dropsy"]').getAttribute('data-urgency'),'today');
   assert.equal(await page.locator('#results-content .urgent').isVisible(),true);
   record('additional lumps get the same follow-up; ich, lymphocystis and urgent unresolved swelling remain distinct');
 
-  await action(page,'edit').click(); await page.locator('input[value="marine"]').check(); await next(page);
+  await action(page,'edit').click(); await page.locator('input[value="marine"]').check(); await next(page); await next(page);
   await page.locator('[data-symptom="lumps"]').click(); await next(page); await next(page); await at(page,'growth');
   assert.equal(await page.locator('input[name="growthAppearance"]:checked').count(),0);
   await action(page,'back').click(); await at(page,'behavior'); await next(page); await at(page,'growth');
   await page.locator('input[name="growthAppearance"][value="smooth"]').check();
   await action(page,'back').click(); await next(page);
   assert.equal(await page.locator('input[name="growthAppearance"]:checked').inputValue(),'smooth');
-  await next(page); assert.equal(await page.locator('.result-image img').evaluate(img=>img.src.includes('/marine-')),true);
+  await next(page); assert.equal(await page.locator('.result-focus .result-image img').evaluate(img=>img.src.includes('/marine-')),true);
   record('Back preserves a closer answer; changing water clears it and uses marine pictures');
 
   for (const sign of ['fins','sores','swollen','eyes','balance','breathing']) {
     await begin(page,'fresh',sign); await next(page); await at(page,'results');
-    assert.match(await page.locator('#results-title').innerText(),/Possible causes/);
-    assert.ok(await page.locator('.possible-causes li').count()>=2);
-    assert.equal(await page.locator('[data-result-kind="diagnosis"]').count(),0);
+    const expected = {fins:'fin-rot',sores:'ulcer',swollen:'bloat',eyes:'cloudy-eye',balance:'swim-bladder',breathing:'water'}[sign];
+    assert.deepEqual(await resultIds(page),[expected]);
+    assert.match(await page.locator('#results-title').innerText(),/^Most likely:/i);
+    assert.equal(await page.locator('.result-focus .urgency-badge').count(),1);
+    assert.ok(await page.locator('.could-also .alternative').count()>=1);
   }
-  record('other symptom-only families also show possible causes rather than disguising an observation as a diagnosis');
+  record('fins, sores, swelling, eyes, swimming and breathing each lead with a named best guess plus could-also-be');
 
   const mobile = await context.newPage(); await mobile.setViewportSize({width:390,height:844});
   await begin(mobile,'marine'); await next(mobile); await at(mobile,'growth'); await overflow(mobile);

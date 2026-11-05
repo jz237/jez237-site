@@ -1,8 +1,8 @@
-import { SYMPTOMS, BEHAVIORS, CONDITIONS, SOURCES, GROWTH_CHOICES } from './data.mjs';
-import { assessUrgency, rankConditions, assessDiagnosis, LABELS, buildCase } from './logic.mjs';
+import { SYMPTOMS, BEHAVIORS, CONDITIONS, SOURCES, GROWTH_CHOICES, FISH_TYPES, URGENCY, closerQuestionFor, fishTypeFor } from './data.mjs';
+import { assessUrgency, rankConditions, assessDiagnosis, LABELS, buildCase, lookalikesFor } from './logic.mjs';
 import { slotsFor, leadSlot, patternFor } from './visuals.mjs';
 import { OPENING_IMAGE, signImagesFor, TEXTURE_IMAGES } from './choice-images.mjs';
-import { treatmentGuideFor, openTreatmentPopup } from './treatments.mjs';
+import { treatmentGuideFor, openTreatmentPopup, carePlanFor } from './treatments.mjs';
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
@@ -10,6 +10,8 @@ const escape = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;
 const form = $('#fish-form');
 const comparisons = new Set();
 const additionalSigns = new Set();
+// Phones: tapping a picture choice moves straight on. Mouse users keep Continue.
+const touchOnly = matchMedia('(hover: none) and (pointer: coarse)');
 let step = 'welcome', activeView = 'guide', primarySign = '', detailSign = '';
 let currentCase = '', illustrationId = 0, libraryPattern = '', visualReference = null;
 
@@ -29,15 +31,35 @@ function fishArt(type = 'plain', hero = false) {
   return `<svg class="fish-art ${hero ? 'fish-art-hero' : ''}" viewBox="0 0 260 150" aria-hidden="true" focusable="false"><defs><linearGradient id="${uid}-body" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#7eaea6"/><stop offset=".48" stop-color="#b9cec1"/><stop offset="1" stop-color="#dce4cb"/></linearGradient><linearGradient id="${uid}-fin"><stop stop-color="#9aada1" stop-opacity=".35"/><stop offset="1" stop-color="#638b83" stop-opacity=".8"/></linearGradient></defs><g transform="${type === 'balance' ? 'rotate(-24 130 75)' : ''}"><path d="${tail}" fill="url(#${uid}-fin)" stroke="#7a9e92"/><path d="M98 53q22-39 60-19l11 21M104 97q16 26 43 17l8-14" fill="url(#${uid}-fin)" stroke="#7a9e92"/><path d="${body}" fill="url(#${uid}-body)" stroke="#527d72" stroke-width="1.2"/><path d="M82 76q50-22 106-5M92 85q41 12 75 4" fill="none" stroke="#6e9685" opacity=".4"/><path d="M177 55q-11 20 1 39" fill="none" stroke="#577e73" stroke-width="1.7"/><path d="M112 82q21-8 28 9l-20 11z" fill="url(#${uid}-fin)"/><circle cx="191" cy="67" r="${type === 'eyes' ? 9 : 5.5}" fill="${type === 'eyes' ? '#dfdfce' : '#ece9c8'}" stroke="#587d70"/><circle cx="192" cy="67" r="${type === 'eyes' ? 5 : 3}" fill="${type === 'eyes' ? '#98a69a' : '#153f36'}"/><circle cx="193" cy="66" r="1" fill="#fff"/>${changes}</g></svg>`;
 }
 
+// Small hand-drawn silhouettes for the optional fish-type chips (no photos).
+const FISH_ICONS = {
+  betta: '<path d="M29 20C14 2 2 7 3 20C2 33 14 38 29 20Z" fill="#c2414f"/><path d="M27 15C31 3 41 6 43 14Z" fill="#b23a48"/><path d="M27 25C31 38 43 36 43 26Z" fill="#b23a48"/><ellipse cx="39" cy="20" rx="14" ry="6.5" fill="#d9566a"/><circle cx="48" cy="18.5" r="1.7" fill="#2b1418"/>',
+  goldfish: '<path d="M23 20L5 7Q10 20 5 33Z" fill="#f4b768"/><path d="M23 20L3 14L3 26Z" fill="#f0a046"/><path d="M30 10Q36 2 43 10Z" fill="#e07a26"/><ellipse cx="37" cy="21" rx="15" ry="11.5" fill="#e8862e"/><circle cx="46" cy="18" r="2" fill="#3a1c08"/>',
+  tetra: '<path d="M19 20L8 12L11 20L8 28Z" fill="#c9d3d0"/><path d="M16 20Q34 9 55 19Q34 30 16 20Z" fill="#cfdcde"/><path d="M24 17.5Q38 13.5 51 18L51 19.6Q38 16.5 24 19.6Z" fill="#2f9fd8"/><path d="M19 20.5Q27 22 35 21.5Q30 25.5 22 23.5Z" fill="#d6463c"/><circle cx="50" cy="18.6" r="1.6" fill="#1d2a2c"/>',
+  livebearer: '<path d="M25 20L5 6Q1 20 5 34Z" fill="#ef8a3a"/><circle cx="10" cy="15" r="1.6" fill="#3d6fb0"/><circle cx="12" cy="25" r="1.6" fill="#3d6fb0"/><path d="M23 20Q37 12 54 19Q39 27 23 20Z" fill="#aab8b0"/><circle cx="49" cy="18.6" r="1.6" fill="#1d2a2c"/>',
+  cichlid: '<path d="M21 20L10 13L10 27Z" fill="#cfd4c4"/><path d="M29 12L22 0L37 10Z" fill="#cfd4c4"/><path d="M29 28L21 40L37 30Z" fill="#cfd4c4"/><path d="M20 20Q30 5 47 18Q30 35 20 20Z" fill="#e3e5d8"/><path d="M30 10.5L30 29.5M37 11.5L37 27.5" stroke="#3a3a36" stroke-width="2"/><circle cx="43" cy="17" r="1.6" fill="#7a2a22"/>',
+  catfish: '<path d="M15 23L6 15L8 23L6 30Z" fill="#a68f68"/><path d="M30 13L34 4L39 14Z" fill="#8c7652"/><path d="M13 24Q24 10 46 14Q57 18 57 25L13 25Z" fill="#b39c74"/><circle cx="26" cy="19" r="1.2" fill="#6b5a3e"/><circle cx="33" cy="17" r="1.2" fill="#6b5a3e"/><circle cx="38" cy="21" r="1.2" fill="#6b5a3e"/><path d="M56 24l5 3M55 25l3 5" stroke="#6b5a3e" stroke-width="1.2" stroke-linecap="round"/><circle cx="49" cy="18" r="1.7" fill="#1d1a12"/>',
+  clownfish: '<path d="M19 20L8 12Q11 20 8 28Z" fill="#ee7a2b" stroke="#2a1a10" stroke-width=".8"/><ellipse cx="35" cy="20" rx="17" ry="9" fill="#ee7a2b" stroke="#2a1a10" stroke-width=".8"/><path d="M44 11.5Q40.5 20 44 28.5M34 11Q31 20 34 29M23.5 14Q22 20 23.5 26" stroke="#2a1a10" stroke-width="4.6" fill="none"/><path d="M44 11.5Q40.5 20 44 28.5M34 11Q31 20 34 29M23.5 14Q22 20 23.5 26" stroke="#fff" stroke-width="3" fill="none"/><circle cx="48" cy="18" r="1.7" fill="#2a1a10"/>',
+  tang: '<path d="M15 20L6 13L8 20L6 27Z" fill="#f3c734"/><path d="M14 20Q22 4 42 8Q54 14 57 19Q54 24 42 32Q22 36 14 20Z" fill="#f6cf3c"/><path d="M17 21l3.5-1.2" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><circle cx="48" cy="15.5" r="1.7" fill="#2a2208"/>',
+  angel: '<path d="M15 20L7 14L9 20L7 26Z" fill="#f2c234"/><path d="M14 20Q20 4 40 7Q52 12 55 20Q52 28 40 33Q20 36 14 20Z" fill="#f6f1df"/><path d="M14 20Q18 9 27 7.5L27 32.5Q18 31 14 20Z" fill="#f2c234"/><path d="M45 8.5Q42.5 20 45 31.5" stroke="#222" stroke-width="3" fill="none"/><circle cx="48.5" cy="17" r="1.5" fill="#222"/>',
+  wrasse: '<path d="M11 20Q4 13 4 20Q4 27 11 20Z" fill="#7d5bb5"/><path d="M10 20Q30 11 57 18Q32 28 10 20Z" fill="#8a66c2"/><path d="M18 18.5Q34 14 52 17.5M18 21.5Q34 21 50 20" stroke="#f0a33a" stroke-width="1" fill="none"/><circle cx="51" cy="18" r="1.5" fill="#1d1430"/>',
+  damsel: '<path d="M20 20L8 11L12 20L8 29Z" fill="#2f7fd8"/><path d="M24 12Q34 6 43 12Z" fill="#2669b8"/><ellipse cx="34" cy="20" rx="15" ry="9" fill="#3a8be0"/><circle cx="44" cy="18" r="1.7" fill="#0d2440"/>',
+  other: '<path d="M16 20L6 12L8 20L6 28Z" fill="none" stroke="#7d9086" stroke-width="1.6" stroke-dasharray="3 2"/><path d="M15 20Q33 6 55 19Q33 34 15 20Z" fill="none" stroke="#7d9086" stroke-width="1.6" stroke-dasharray="3 2"/><text x="35" y="24.5" font-size="11" text-anchor="middle" fill="#5f746a" font-family="system-ui,sans-serif">?</text>',
+};
+const fishIcon = kind => `<svg class="fish-icon" viewBox="0 0 64 40" aria-hidden="true" focusable="false">${FISH_ICONS[kind] || FISH_ICONS.other}</svg>`;
 
 function readInput() {
-  const visualSigns = [detailSign || primarySign, ...additionalSigns].filter(Boolean);
-  return { ...Object.fromEntries(new FormData(form)), growthAppearance: visualSigns.includes('lumps') ? form.elements.growthAppearance.value : '', initialSign: primarySign, textureSign: detailSign, primarySign: detailSign || primarySign, visualSigns, signs: [...visualSigns, ...$$('input[name="behavior"]:checked').map(el => el.value)], visualReference, comparisons: [...comparisons] };
+  // A "Not sure" texture keeps the original white-dots observation.
+  const mainSign = detailSign && detailSign !== 'unclear' ? detailSign : primarySign;
+  const visualSigns = [mainSign, ...additionalSigns].filter(Boolean);
+  return { ...Object.fromEntries(new FormData(form)), fishType: form.elements.fishType?.value || '', closer: needsCloser() ? form.elements.closer?.value || '' : '', growthAppearance: visualSigns.includes('lumps') ? form.elements.growthAppearance.value : '', initialSign: primarySign, textureSign: detailSign, primarySign: mainSign, visualSigns, signs: [...visualSigns, ...$$('input[name="behavior"]:checked').map(el => el.value)], visualReference, comparisons: [...comparisons] };
 }
 function needsTexture() { return form.elements.water.value === 'fresh' && primarySign === 'dots'; }
+function needsCloser() { return !needsTexture() && Boolean(closerQuestionFor(primarySign, form.elements.water.value)); }
 function needsGrowth() { return readInput().visualSigns.includes('lumps'); }
-function sequence() { return ['water', 'signs', ...(needsTexture() ? ['texture'] : []), 'behavior', ...(needsGrowth() ? ['growth'] : []), 'results']; }
+function sequence() { return ['water', 'fish', 'signs', ...(needsTexture() ? ['texture'] : []), ...(needsCloser() ? ['closer'] : []), 'behavior', ...(needsGrowth() ? ['growth'] : []), 'results']; }
 function clearGrowthChoice() { $$('input[name="growthAppearance"]').forEach(el => { el.checked = false; }); }
+function clearCloserChoice() { $$('input[name="closer"]').forEach(el => { el.checked = false; }); }
 
 function goStep(name, focus = true) {
   step = name;
@@ -47,20 +69,21 @@ function goStep(name, focus = true) {
   // Fetch choice pictures only when their question is reached, not at the front door.
   const activeGrid = name === 'signs' ? '#symptom-grid' : name === 'texture' ? '#texture-grid' : name === 'behavior' && $('#additional-signs').open ? '#additional-grid' : null;
   if (activeGrid) $$(`${activeGrid} img[data-src]`).forEach(img => { img.src = img.dataset.src; img.removeAttribute('data-src'); });
+  if (name === 'fish') renderFishChoices();
+  if (name === 'closer') renderCloserChoices();
   form.hidden = ['results', 'care-summary'].includes(name);
   form.classList.toggle('care-mode', name === 'care');
   $('#flow-error').textContent = '';
-  const progress = { water: [1,'Water type'], signs: [2,'What you see'], texture: [2,'Look closer'], behavior: [3,'Behavior'], growth: [3,'Look closer at the lump'], results: [3,'Results'], care: [3,'Care & treatment'], 'care-summary': [3,'Care steps'] }[name];
-  if (progress) {
-    $('#flow-label').textContent = name === 'results' ? (assessDiagnosis(readInput()).diagnoses.length ? 'YOUR PROBABLE DIAGNOSIS' : 'YOUR RESULTS · POSSIBLE CAUSES') : name.startsWith('care') ? 'AFTER THE VISUAL CHECK · CARE & TREATMENT' : `STEP ${progress[0]} OF 3 · ${progress[1]}`;
-    $('#flow-progress').value = progress[0];
-  }
+  const progress = { water: [1,'Water type'], fish: [2,'Your fish'], signs: [3,'What you see'], texture: [3,'Look closer'], closer: [3,'Look closer'], behavior: [4,'Behavior'], growth: [4,'Look closer at the lump'] }[name];
+  $('#flow-label').textContent = name === 'results' ? 'YOUR RESULT' : name.startsWith('care') ? 'CARE & TREATMENT' : progress ? `STEP ${progress[0]} OF 4 · ${progress[1]}` : '';
+  if (progress) $('#flow-progress').value = progress[0];
+  if (name === 'results') $('#flow-progress').value = 4;
   $('#flow-progress').hidden = name.startsWith('care');
-  $('#next-button').textContent = name === 'care' ? 'See care steps →' : name === 'growth' || name === 'behavior' && !needsGrowth() ? 'See my results →' : 'Continue →';
+  updateNextLabel();
   $('#salinity-field').hidden = form.elements.water.value === 'fresh';
   if (name === 'texture') {
     const image = slotsFor('ich-fresh').find(s => s.id === 'lookalikes').image;
-    $('#texture-reference').innerHTML = `<button class="reference-peek" type="button" data-enlarge-entry="ich-fresh" data-enlarge-slot="lookalikes"><img src="${image.url}" alt="Illustrated comparison of grains, dust, cottony growth, patches and larger growths."><span><strong>Need a closer look?</strong>Open the texture reference ↗</span></button><button type="button" class="text-button" data-enlarge-entry="ich-fresh" data-enlarge-slot="closeup">See individual white grains up close ↗</button><p class="quiet">Illustrated clues—not proof of a disease.</p>`;
+    $('#texture-reference').innerHTML = `<button class="reference-peek" type="button" data-enlarge-entry="ich-fresh" data-enlarge-slot="lookalikes"><img src="${image.url}" alt="Illustrated comparison of grains, dust, cottony growth, patches and larger growths."><span><strong>Need a closer look?</strong>Open the texture reference ↗</span></button><button type="button" class="text-button" data-enlarge-entry="ich-fresh" data-enlarge-slot="closeup">See individual white grains up close ↗</button>`;
   } else $('#texture-reference').replaceChildren();
   updateCompareTray();
   if (focus) {
@@ -70,10 +93,17 @@ function goStep(name, focus = true) {
   }
 }
 
+function updateNextLabel() {
+  $('#next-button').textContent = step === 'care' ? 'See care steps →'
+    : step === 'fish' && !form.elements.fishType.value ? 'Skip →'
+    : step === 'growth' || step === 'behavior' && !needsGrowth() ? 'See my results →' : 'Continue →';
+}
+
 function nextStep() {
   if (step === 'water' && !form.elements.water.value) { $('#flow-error').textContent = 'Choose Freshwater or Saltwater / reef.'; return; }
   if (step === 'signs' && !primarySign) { $('#flow-error').textContent = 'Choose the closest picture. “Nothing obvious” is a useful answer.'; return; }
   if (step === 'texture' && !detailSign) { $('#flow-error').textContent = 'Choose the closest texture, or “Not sure.”'; return; }
+  if (step === 'closer' && !form.elements.closer.value) { $('#flow-error').textContent = 'Choose the closest description, or “Not sure.”'; return; }
   if (step === 'growth' && !form.elements.growthAppearance.value) { $('#flow-error').textContent = 'Choose the closest description, or “I can’t tell.”'; return; }
   if (step === 'care') {
     if (!form.reportValidity()) return;
@@ -82,6 +112,13 @@ function nextStep() {
   if (step === 'growth' || step === 'behavior' && !needsGrowth()) { renderResults(); return; }
   const route = sequence(), next = route[route.indexOf(step) + 1];
   if (next) goStep(next);
+}
+
+// On touch screens a picture/chip tap advances after the tick is visible.
+function autoAdvance() {
+  if (!touchOnly.matches) return;
+  const from = step;
+  setTimeout(() => { if (step === from) nextStep(); }, 280);
 }
 
 function switchView(name) {
@@ -104,7 +141,7 @@ function selectSign(id, isTexture = false) {
   if (!SYMPTOMS.some(item => item.id === id)) return;
   clearGrowthChoice();
   if (isTexture) detailSign = id;
-  else { primarySign = id; detailSign = ''; visualReference = null; additionalSigns.clear(); }
+  else { if (id !== primarySign) clearCloserChoice(); primarySign = id; detailSign = ''; visualReference = null; additionalSigns.clear(); }
   additionalSigns.delete(detailSign || primarySign);
   $$('[data-symptom]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.symptom === primarySign)));
   $$('[data-texture]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.texture === detailSign)));
@@ -114,7 +151,7 @@ function selectSign(id, isTexture = false) {
 
 function reset() {
   form.reset(); primarySign = ''; detailSign = ''; visualReference = null; currentCase = ''; additionalSigns.clear();
-  renderChoiceGrids();
+  renderChoiceGrids(); renderFishChoices(); $('#closer-grid').replaceChildren();
   $('#library-water').value = 'all'; $('#library-grid').replaceChildren();
   comparisons.clear(); $('#results-content').replaceChildren(); $('#case-text').value = '';
   $('#care-context').replaceChildren(); $('#care-summary-content').replaceChildren();
@@ -145,64 +182,69 @@ function imageWater(condition) {
 
 function resultThumbnail(condition, water = imageWater(condition)) {
   const choices = signImagesFor(water);
-  return leadSlot(condition.id)?.image || choices[condition.art] || choices.unclear;
+  return leadSlot(condition.id)?.image || choices[condition.thumb || condition.art] || choices.unclear;
 }
 
-function treatmentLink(condition, water = imageWater(condition)) {
+function readMore(condition, water = imageWater(condition)) {
   const guide = treatmentGuideFor(condition.id, water);
   if (!guide) return '';
-  return `<div class="treatment-link"><a class="button primary" href="${escape(guide.url)}" data-treatment="${condition.id}" data-water="${escape(water || '')}" target="_blank" rel="noopener noreferrer">${escape(guide.title)} ↗</a><small>${escape(guide.provider)} · opens separately</small>${guide.note ? `<p class="quiet">${escape(guide.note)}</p>` : guide.type === 'care' ? '<p class="quiet">This is a sign with several possible causes, so this link covers care rather than a single cure.</p>' : ''}</div>`;
+  return `<p class="treatment-link"><a class="read-more" href="${escape(guide.url)}" data-treatment="${condition.id}" data-water="${escape(water || '')}" target="_blank" rel="noopener noreferrer">Read more: ${escape(guide.title)} ↗</a><small>${escape(guide.provider)}</small></p>`;
 }
 
-function possibleCauses(condition) {
-  if (condition.diagnosis || !condition.possibleCauses?.length) return '';
-  return `<section class="possible-causes"><h3>What could cause this?</h3><p class="quiet">These are possibilities to distinguish, not conditions this guide has diagnosed.</p><ul>${condition.possibleCauses.map(cause => `<li><strong>${escape(cause.title)}</strong><p>${escape(cause.text)}</p>${cause.conditionId ? `<button class="text-button" data-condition="${cause.conditionId}">Read about ${escape(cause.title)} →</button>` : ''}</li>`).join('')}</ul></section>`;
+function badge(level) {
+  return level && URGENCY[level] ? `<span class="urgency-badge urgency-${level}" data-urgency="${level}"><i aria-hidden="true"></i>${escape(URGENCY[level].label)}</span>` : '';
 }
+
+function todoCard(condition, water, tip = '', fish = null) {
+  const plan = condition.plan || carePlanFor(condition.id, water);
+  if (!plan) return '';
+  return `<section class="todo-card" data-todo="${condition.id}"><h3>What to do now</h3>${plan.reefUnsafe ? '<p class="reef-flag" role="note"><strong>Not reef-safe</strong> — treat in a separate tank.</p>' : ''}<ol class="todo-steps">${plan.steps.map(s => `<li>${escape(s)}</li>`).join('')}</ol>${tip && fish ? `<p class="fish-tip"><strong>${escape(fish.title)} tip:</strong> ${escape(tip)}</p>` : ''}<dl class="todo-facts"><div><dt>Usual treatment</dt><dd>${escape(plan.treatment)}</dd></div><div><dt>Typical recovery</dt><dd>${escape(plan.recovery)}</dd></div></dl>${plan.medicated ? '<p class="label-note">Amounts: follow the product label.</p>' : ''}${readMore(condition, water)}</section>`;
+}
+
+function findingCard(c, input, lead) {
+  const image = resultThumbnail(c, input.water), ready = slotsFor(c.id).filter(s => s.image).length;
+  const fish = fishTypeFor(input.water, input.fishType);
+  return `<article class="${lead ? 'result-focus' : 'additional-finding'}" data-result="${c.id}" data-urgency="${c.urgencyLevel}">${lead ? '' : `<p class="eyebrow">ALSO LIKELY</p><h2>${escape(c.title)}</h2>`}<div class="result-head">${badge(c.urgencyLevel)}<p class="result-summary">${escape(c.summary)}</p></div><button type="button" class="result-image" data-condition="${c.id}" aria-label="More about ${escape(c.title)}"><img src="${image.url}" width="${image.width || 362}" height="${image.height || 362}" alt="${escape(image.alt)}"><span>${ready ? `${ready} pictures` : 'More info'} ↗</span></button><div class="diagnosis-reason"><strong>Why we think so</strong><p>${escape(c.reason)}</p></div>${todoCard(c, input.water, c.tip, fish)}</article>`;
+}
+
+const WATER_NUDGE = '<p class="water-nudge"><svg viewBox="0 0 16 20" aria-hidden="true"><path d="M8 1C5 6 2 9.5 2 13a6 6 0 0 0 12 0C14 9.5 11 6 8 1Z" fill="#3c8fb5"/></svg>Tested ammonia &amp; nitrite lately? Bad water causes a lot of these.</p>';
 
 function renderResults() {
   if (needsGrowth() && !form.elements.growthAppearance.value) { goStep('growth'); return; }
   const input = readInput(), assessment = assessUrgency(input);
   const diagnosis = assessDiagnosis(input), first = diagnosis.primary;
-  const urgent = assessment.urgent.length ? `<div class="notice urgent"><h3>Get help for the distress first.</h3><p>${escape(assessment.urgent.join('; '))}. Support aeration, test the water and arrange urgent fish-health help.</p><button class="text-button" data-action="emergency">What to do now →</button></div>` : '';
-  let focus = '<section class="notice no-diagnosis"><h2>Not enough to name a likely cause yet.</h2><p>The signs selected are not specific enough for a probable diagnosis. Try a closer picture match, or check the care steps for breathing, water and behavior concerns.</p><button class="button secondary" data-action="edit">Change my answers →</button></section>';
-  if (first) {
-    const image = resultThumbnail(first, input.water), ready = slotsFor(first.id).filter(s => s.image).length;
-    const reason = first.id === 'water'
-      ? 'Breathing or swimming changes can come from water or oxygen problems. This is the first cause to check, not proof of an infection.'
-      : `Your ${scopeName(input.water)?.toLowerCase() || 'aquarium'} choice and “${first.matched.join('” + “')}” fit this pattern. ${first.check}`;
-    focus = `<article class="result-focus" data-result="${first.id}" data-result-kind="${first.diagnosis ? 'diagnosis' : 'unresolved'}"><div class="result-image"><button data-condition="${first.id}" aria-label="Explore ${escape(first.title)}"><img src="${image.url}" width="${image.width || 1024}" height="${image.height || 1536}" alt="${escape(image.alt)}"><span>${ready ? `Explore ${ready} reference pictures` : 'Explore this pattern'} ↗</span></button><p class="quiet">AI reference illustration of a sign, not a confirmed case.</p></div><div class="result-copy"><p class="eyebrow">${first.diagnosis ? 'MOST LIKELY MATCH TO YOUR SIGNS' : 'OBSERVED SIGN · CAUSE STILL UNCLEAR'}</p><h2>${first.diagnosis ? escape(first.title) : 'Cause not identified yet.'}</h2>${first.diagnosis ? '' : `<p><strong>What you reported:</strong> ${escape(first.matched.join('; '))}.</p>`}<p>${escape(first.summary)}</p>${possibleCauses(first)}<div class="diagnosis-reason"><strong>${first.diagnosis ? 'Why it fits' : 'What would help narrow it down'}</strong><p>${escape(reason)}</p></div><p class="quiet">${first.diagnosis ? 'A probable match, not a confirmed diagnosis. Similar signs can have other causes.' : 'The observation is real, but these answers do not establish which cause is responsible.'}</p>${treatmentLink(first, input.water)}<button class="text-button" data-condition="${first.id}">${ready ? 'Check the reference pictures' : 'Read the visual clues'} →</button></div></article>`;
-  }
-  const additional = diagnosis.findings.slice(1).map(c => {
-    const image = resultThumbnail(c, input.water);
-    return `<article class="additional-finding" data-result="${c.id}" data-result-kind="${c.diagnosis ? 'diagnosis' : 'unresolved'}"><img src="${image.url}" width="${image.width || 362}" height="${image.height || 362}" alt="${escape(c.image?.alt || image.alt)}"><div><p class="eyebrow">${c.diagnosis ? 'ALSO FITS YOUR SIGNS' : 'ADDITIONAL SIGN · CAUSE STILL UNCLEAR'}</p><h2>${c.diagnosis ? escape(c.title) : 'Another cause to narrow down'}</h2><p><strong>${c.diagnosis ? 'What fits' : 'What you reported'}:</strong> ${escape(c.matched.join('; '))}.</p><p>${escape(c.check)}</p>${possibleCauses(c)}${treatmentLink(c, input.water)}<button class="text-button" data-condition="${c.id}">Read the clues →</button></div></article>`;
-  }).join('');
-  const context = diagnosis.contextConcerns.map(c => `<section class="notice water-notice" data-context-concern="${c.id}"><h2>Also check: ${escape(c.title)}</h2><p>${escape(c.reason)}</p><p>This can happen alongside the visible problem, not instead of it.</p>${treatmentLink(c, input.water)}</section>`).join('');
-  const unresolved = diagnosis.unexplained.length ? `<p class="notice unresolved-signs"><strong>Still unexplained:</strong> ${escape(diagnosis.unexplained.map(id => LABELS[id]).join('; '))}. This guide cannot choose a cause for every appearance. Do not force those signs into the first disease name.</p>` : '';
-  const messages = diagnosis.messages.length ? `<div class="notice diagnosis-context"><h2>${diagnosis.status === 'multiple' ? 'More than one problem may fit.' : 'Putting the answers together'}</h2>${diagnosis.messages.map(message => `<p>${escape(message)}</p>`).join('')}</div>` : '';
+  const fish = fishTypeFor(input.water, input.fishType);
+  const urgent = assessment.urgent.length ? `<div class="notice urgent"><h3>Deal with the distress first.</h3><p>${escape(assessment.urgent.join('; '))}. Add aeration, test the water and do a water change now.</p><button class="text-button" data-action="emergency">Emergency steps →</button></div>` : '';
+  const focus = first ? findingCard(first, input, true) : '<section class="notice no-diagnosis"><h2>Not enough to go on yet.</h2><p>Try picking the closest picture again, and test the water—bad water causes a lot of problems.</p><button class="button secondary" data-action="edit">Change my answers →</button></section>';
+  const additional = diagnosis.findings.slice(1).map(c => findingCard(c, input, false)).join('');
+  const context = diagnosis.contextConcerns.map(c => `<section class="notice water-notice" data-context-concern="${c.id}"><h2>Also fix: the water</h2><p>${escape(c.reason)}</p>${readMore(c, input.water)}</section>`).join('');
+  const unresolved = diagnosis.unexplained.length ? `<p class="notice unresolved-signs"><strong>Not covered above:</strong> ${escape(diagnosis.unexplained.map(id => LABELS[id] || id).join('; '))}. Keep an eye on it.</p>` : '';
+  const messages = diagnosis.messages.length ? `<div class="notice diagnosis-context"><h2>${diagnosis.status === 'multiple' ? 'More than one problem may fit.' : 'Putting your answers together'}</h2>${diagnosis.messages.map(message => `<p>${escape(message)}</p>`).join('')}</div>` : '';
   const other = diagnosis.alternatives.map(c => {
     const image = resultThumbnail(c, input.water);
-    return `<button class="alternative" data-condition="${c.id}"><img src="${image.url}" alt="${escape(image.alt)}" loading="lazy"><span><strong>${escape(c.title)}</strong><small>${escape(c.comparisonReason)}</small></span><b aria-hidden="true">↗</b></button>`;
+    return `<button class="alternative" data-condition="${c.id}"><img src="${image.url}" alt="" loading="lazy"><span><strong>${escape(c.title)}</strong><small>${escape(c.comparisonReason)}</small></span>${badge(c.urgency)}</button>`;
   }).join('');
-  $('#results-content').innerHTML = `<h1 id="results-title" class="question-title">${escape(diagnosis.title)}</h1><p class="question-hint">Based on the signs you selected for a ${scopeName(input.water)?.toLowerCase() || 'fish'} aquarium.</p>${urgent}${messages}${focus}${additional}${unresolved}${context}${other ? `<h3 class="subheading">Similar-looking alternatives</h3><p class="quiet">Compare these with the signs above. They are not additional diagnoses.</p><div class="alternatives">${other}</div>` : ''}<section class="care-next"><p class="eyebrow">NEXT · SUPPORT YOUR FISH</p><h3>Check the tank before treating.</h3><p>Optional water readings and care steps can help you choose what to do next.${first ? ' The reading links above open without filling these in.' : ''}</p><button class="button secondary" data-action="care">Water checks & care steps →</button></section><button class="text-button" data-action="case">Save my observation notes ↗</button>`;
+  const where = [ {fresh:'Freshwater',marine:'Saltwater'}[input.water], fish?.title ].filter(Boolean).join(' · ');
+  $('#results-content').innerHTML = `<h1 id="results-title" class="question-title results-title">${first ? `<span>Most likely:</span> ${escape(first.title)}` : escape(diagnosis.title)}</h1><p class="question-hint result-hint">${where ? `${escape(where)} · ` : ''}Our best guess from your answers—a hobby guide, not a vet.</p>${urgent}${messages}${focus}${WATER_NUDGE}${additional}${unresolved}${context}${other ? `<section class="could-also"><h2 class="subheading">Could also be</h2><div class="alternatives">${other}</div></section>` : ''}<section class="care-next"><h3>Got water test results?</h3><p>Add your readings and tank details for a tailored checklist.</p><button class="button secondary" data-action="care">Add readings & tank details →</button></section><button class="text-button" data-action="case">Save my notes ↗</button>`;
   goStep('results');
 }
 
 function openCare() {
   const input = readInput(), diagnosis = assessDiagnosis(input);
   $('#care-context').innerHTML = diagnosis.findings.length
-    ? `${diagnosis.diagnoses.length ? `<p><strong>Probable ${diagnosis.diagnoses.length > 1 ? 'diagnoses' : 'diagnosis'}:</strong> ${escape(diagnosis.diagnoses.map(c => c.title).join('; '))}. Not confirmed.</p>` : ''}${diagnosis.unresolvedFindings.length ? `<p><strong>Signs with causes still unclear:</strong> ${escape(diagnosis.unresolvedFindings.map(c => c.matched.join('; ')).join('; '))}. These are observations, not disease names.</p>` : ''}<p>Use the appropriate guide; multiple possibilities are not a reason to combine treatments.</p>${diagnosis.findings.map(c => treatmentLink(c, input.water)).join('')}<button type="button" class="text-button" data-action="results">Back to my results ←</button>`
-    : '<p>No clear visual match yet. Start with the environment and the fish’s actual behavior.</p>';
+    ? `<p><strong>Most likely:</strong> ${escape(diagnosis.primary.title)} ${badge(diagnosis.primary.urgencyLevel)}</p>${diagnosis.findings.length > 1 ? `<p><strong>Also likely:</strong> ${escape(diagnosis.findings.slice(1).map(c => c.title).join('; '))}</p>` : ''}<button type="button" class="text-button" data-action="results">Back to my results ←</button>`
+    : '<p>No clear match yet. Start with the water and how the fish is acting.</p>';
   goStep('care');
 }
 
 function renderCareSummary() {
   const input = readInput(), assessment = assessUrgency(input), diagnosis = assessDiagnosis(input);
-  const scoped = diagnosis.findings.filter(c => c.scope === 'both' || c.scope === input.water);
-  const urgent = assessment.urgent.length ? `<div class="notice urgent"><h2>Get urgent help first.</h2><p>${escape(assessment.urgent.join('; '))}. Support aeration and contact a fish-health professional now.</p><button class="text-button" data-action="emergency">Immediate support steps →</button></div>` : '';
-  const water = assessment.checks.length ? `<div class="notice water-notice"><h3>Address the shared environment.</h3>${list(assessment.checks)}</div>` : '';
-  const unknown = assessment.waterUnknown ? '<p class="water-reminder">Ammonia or nitrite is unmeasured. Unknown does not mean safe—test before choosing a medicine.</p>' : '<p class="quiet">Your readings are recorded. Ammonia and nitrite alone do not assess oxygen or rule out other water problems.</p>';
-  const condition = scoped.length ? `${diagnosis.findings.length > 1 ? '<p class="notice">More than one possibility needs attention. They may share a cause; the links are not instructions to mix medicines.</p>' : ''}${scoped.map(c => `<section class="care-section" data-care-condition="${c.id}"><p class="eyebrow">CARE FOR THE POSSIBLE PROBLEM</p><h2>${escape(c.title)}</h2><p>${escape(c.check)}</p>${list(c.next)}${treatmentLink(c, input.water) || '<p>A stable normal marking does not need medication. Watch for genuine changes or other signs of illness.</p>'}<p class="avoid"><strong>Avoid the shortcut:</strong> ${escape(c.avoid)}</p></section>`).join('')}` : '<section class="care-section"><h2>No clear cause yet.</h2><p>Record the behavior, how quickly it changed and which fish are affected. Revisit the picture choices or get fish-health advice if the fish remains unwell.</p><p>Do not select a medicine just because a fish looks pale or is rubbing.</p></section>';
-  $('#care-summary-content').innerHTML = `<h1 id="care-summary-title" class="question-title">Your care & treatment next steps.</h1><p class="question-hint">Support the fish now; choose a specific treatment once the cause and species requirements are clear.</p>${urgent}<section class="care-section"><p class="eyebrow">1 · SUPPORT THE FISH & TANK</p>${water}${unknown}${list(CONDITIONS.find(c => c.id === 'water').next)}<p class="quiet">Water problems can coexist with a skin condition. These checks do not change what the marks look like.</p></section>${condition}<button class="button primary" data-action="case">Save my observations & readings ↗</button>`;
+  const fish = fishTypeFor(input.water, input.fishType);
+  const urgent = assessment.urgent.length ? `<div class="notice urgent"><h2>Deal with the distress first.</h2><p>${escape(assessment.urgent.join('; '))}. Add aeration and do a water change now.</p><button class="text-button" data-action="emergency">Emergency steps →</button></div>` : '';
+  const water = assessment.checks.length ? `<div class="notice water-notice"><h3>Fix the water too.</h3>${list(assessment.checks)}</div>` : '';
+  const unknown = assessment.waterUnknown ? '<p class="water-reminder">No ammonia or nitrite reading yet. Test before you treat—bad water causes a lot of these problems.</p>' : '<p class="quiet">Readings saved in your notes.</p>';
+  const condition = diagnosis.findings.length ? diagnosis.findings.map(c => `<section class="care-section" data-care-condition="${c.id}"><p class="eyebrow">${c === diagnosis.primary ? 'MOST LIKELY' : 'ALSO LIKELY'}</p><h2>${escape(c.title)} ${badge(c.urgencyLevel)}</h2>${todoCard(c, input.water, c.tip, fish)}<p class="avoid"><strong>Avoid:</strong> ${escape(c.avoid)}</p></section>`).join('') : '<section class="care-section"><h2>No clear cause yet.</h2><p>Test the water, watch how the fish acts over a day or two, and try the picture check again.</p></section>';
+  $('#care-summary-content').innerHTML = `<h1 id="care-summary-title" class="question-title">Your care plan</h1>${urgent}<section class="care-section"><p class="eyebrow">1 · THE WATER</p>${water}${unknown}${list(carePlanFor('water', input.water).steps)}</section>${condition}<button class="button primary" data-action="case">Save my notes & readings ↗</button>`;
   goStep('care-summary');
 }
 
@@ -217,7 +259,7 @@ function slotArt(condition, slot, compact = false) {
 
 function card(condition, matched = false) {
   const slots = slotsFor(condition.id), lead = leadSlot(condition.id), count = slots.filter(s => s.image).length;
-  return `<article class="condition-card visual-card"><button class="card-image ${lead.image ? 'filled' : ''}" data-condition="${condition.id}" aria-label="Open ${escape(condition.title)} visual page">${slotArt(condition, lead)}<span class="slot-count">${count} / ${slots.length} images</span></button><div class="card-slot-strip">${slots.filter(s => s.id !== lead.id).slice(0, 3).map(slot => `<button class="mini-slot ${slot.image ? 'filled' : ''}" data-condition="${condition.id}" data-open-slot="${slot.id}" aria-label="${escape(condition.title)}: ${escape(slot.label)}${slot.image ? '' : ' — image to add'}">${slotArt(condition, slot, true)}</button>`).join('')}</div><div class="condition-body"><div class="card-meta"><span>${escape(condition.kind)}</span><span>${scopeName(condition.scope)}</span></div><h3>${escape(condition.title)}</h3><p>${escape(condition.summary)}</p>${matched ? `<p class="matches"><strong>${condition.comparisonReason ? 'Why compare:' : 'Relevant clues:'}</strong> ${escape(condition.comparisonReason || condition.matched.join(', ') || 'Tank history / water readings')}</p>` : ''}<div class="card-actions"><button class="text-button" data-condition="${condition.id}">Open visual page ↗</button><button class="compare-toggle" data-compare="${condition.id}" aria-pressed="${comparisons.has(condition.id)}">${comparisons.has(condition.id) ? '✓ Selected' : '+ Compare'}</button></div></div></article>`;
+  return `<article class="condition-card visual-card"><button class="card-image ${lead.image ? 'filled' : ''}" data-condition="${condition.id}" aria-label="Open ${escape(condition.title)} visual page">${slotArt(condition, lead)}<span class="slot-count">${count} / ${slots.length} images</span></button><div class="card-slot-strip">${slots.filter(s => s.id !== lead.id).slice(0, 3).map(slot => `<button class="mini-slot ${slot.image ? 'filled' : ''}" data-condition="${condition.id}" data-open-slot="${slot.id}" aria-label="${escape(condition.title)}: ${escape(slot.label)}${slot.image ? '' : ' — image to add'}">${slotArt(condition, slot, true)}</button>`).join('')}</div><div class="condition-body"><div class="card-meta"><span>${escape(condition.kind)}</span><span>${scopeName(condition.scope)}</span></div><h3>${escape(condition.title)}</h3>${badge(condition.urgency)}<p>${escape(condition.summary)}</p>${matched ? `<p class="matches"><strong>${condition.comparisonReason ? 'Why compare:' : 'Relevant clues:'}</strong> ${escape(condition.comparisonReason || condition.matched.join(', ') || 'Tank history / water readings')}</p>` : ''}<div class="card-actions"><button class="text-button" data-condition="${condition.id}">Open visual page ↗</button><button class="compare-toggle" data-compare="${condition.id}" aria-pressed="${comparisons.has(condition.id)}">${comparisons.has(condition.id) ? '✓ Selected' : '+ Compare'}</button></div></div></article>`;
 }
 
 function galleryDisplay(condition, slot) {
@@ -253,18 +295,20 @@ function updateCompareTray(message = '') {
 function openComparison() {
   if (comparisons.size !== 2) return;
   const selected = [...comparisons].map(id => CONDITIONS.find(c => c.id === id));
-  $('#compare-content').innerHTML = `<div class="side-by-side">${selected.map(c => `<article><span class="scope-pill">${scopeName(c.scope)}</span><h3>${escape(c.title)}</h3>${gallery(c)}<div class="comparison-clues"><h4>Look for</h4>${list(c.clues)}<h4>What could fool you?</h4><p>${escape(c.distinguish)}</p><h4>Compare with your fish</h4><p>${escape(c.check)}</p>${treatmentLink(c)}<button class="button secondary" data-use-pattern="${c.id}">Check this visible pattern →</button></div></article>`).join('')}</div>`;
+  $('#compare-content').innerHTML = `<div class="side-by-side">${selected.map(c => `<article><span class="scope-pill">${scopeName(c.scope)}</span><h3>${escape(c.title)}</h3>${gallery(c)}<div class="comparison-clues"><h4>Look for</h4>${list(c.clues)}<h4>Easy to confuse with</h4><p>${escape(c.distinguish)}</p><h4>Usual treatment</h4><p>${escape(carePlanFor(c.id, imageWater(c))?.treatment || '')}</p>${readMore(c)}<button class="button secondary" data-use-pattern="${c.id}">Check this visible pattern →</button></div></article>`).join('')}</div>`;
   $('#compare-dialog').showModal();
 }
 
 function emergencyContent() {
-  return '<p class="eyebrow">ACT ON DISTRESS, NOT JUST A DISEASE NAME</p><h2 id="detail-title">Breathing and balance come first.</h2><p class="lead">Severe gasping, inability to stay upright, poor responsiveness or fish deaths warrant urgent aquatic-veterinary help.</p><ol class="care-list"><li><strong>Support oxygen.</strong> Check aeration, surface movement and filter operation. Avoid unnecessary handling.</li><li><strong>Test the water now.</strong> Record ammonia, nitrite, pH and temperature; check salinity for marine tanks. Clear water can still be unsafe.</li><li><strong>Address an environmental problem.</strong> If readings or a recent contamination indicate a problem, use appropriately conditioned, temperature- and salinity-matched partial water changes. Avoid abrupt pH or salinity changes.</li><li><strong>Contact a fish-health professional.</strong> Tell them how many fish are affected and how fast this developed. Don’t wait for visible spots.</li></ol><p class="notice">Don’t blindly mix medicines, raise heat, add salt, or move a marine fish into freshwater. Reef invertebrates and different fish species have different tolerances.</p><a class="button secondary" href="https://fishvets.org/" target="_blank" rel="noopener noreferrer">American Association of Fish Veterinarians ↗</a>';
+  return '<p class="eyebrow">EMERGENCY STEPS</p><h2 id="detail-title">Oxygen and clean water first.</h2><p class="lead">Gasping, can’t stay upright, or fish dying? Do these now, then treat the illness.</p><ol class="care-list"><li><strong>Add oxygen.</strong> Air stone, or point the filter outlet at the surface so it ripples.</li><li><strong>Test the water.</strong> Ammonia, nitrite, pH and temperature (and salinity for saltwater). Clear water can still be toxic.</li><li><strong>Do a 30–50% water change</strong> with dechlorinated, temperature-matched (and salinity-matched) water, and add an ammonia/nitrite detoxifier.</li><li><strong>Move sick fish to a hospital tank</strong> if you have one, and feed lightly.</li></ol><p class="notice">If fish keep dying after the water is fixed, an aquatic vet or a good local fish store can help.</p><a class="button secondary" href="https://fishvets.org/" target="_blank" rel="noopener noreferrer">Find a fish vet (AAFV) ↗</a>';
 }
 
 function openDetail(id, slotId = 'overview') {
   const condition = CONDITIONS.find(c => c.id === id);
   if (!condition) return;
-  $('#detail-content').innerHTML = `<p class="eyebrow">${escape(condition.kind)} · ${scopeName(condition.scope)}</p><h2 id="detail-title">${escape(condition.title)}</h2><p class="lead">${escape(condition.summary)}</p>${slotsFor(id).some(s => s.image) || activeView === 'library' ? gallery(condition, slotId) : '<p class="quiet">Reference images for this entry are still being added.</p>'}<div class="detail-visual-actions"><button class="button secondary" data-use-pattern="${condition.id}">Check this visible pattern →</button><button class="compare-toggle" data-compare="${condition.id}" aria-pressed="${comparisons.has(condition.id)}">${comparisons.has(condition.id) ? '✓ Selected' : '+ Compare'}</button></div><h3>Clues that can fit</h3>${list(condition.clues)}<h3>What else could look similar?</h3><p>${escape(condition.distinguish)}</p><h3>Compare with your fish</h3><p>${escape(condition.check)}</p>${treatmentLink(condition)}<p class="avoid"><strong>Avoid the shortcut:</strong> ${escape(condition.avoid)}</p><div class="sources"><h4>Read the references</h4>${sourceLinks(condition.source)}</div><p class="quiet">A subtle appearance does not mean a mild illness. These pictures show possible appearances, not a timeline or severity score.</p>`;
+  const water = imageWater(condition) || 'fresh';
+  const others = lookalikesFor(id, water);
+  $('#detail-content').innerHTML = `<p class="eyebrow">${escape(condition.kind)} · ${scopeName(condition.scope)}</p><h2 id="detail-title">${escape(condition.title)}</h2>${badge(condition.urgency)}<p class="lead">${escape(condition.summary)}</p>${slotsFor(id).some(s => s.image) || activeView === 'library' ? gallery(condition, slotId) : ''}<div class="detail-visual-actions"><button class="button secondary" data-use-pattern="${condition.id}">Check this visible pattern →</button><button class="compare-toggle" data-compare="${condition.id}" aria-pressed="${comparisons.has(condition.id)}">${comparisons.has(condition.id) ? '✓ Selected' : '+ Compare'}</button></div><h3>What to look for</h3>${list(condition.clues)}<h3>Easy to confuse with</h3><p>${escape(condition.distinguish)}</p>${others.length ? `<ul class="detail-lookalikes">${others.map(o => `<li><button class="text-button" data-condition="${o.id}">${escape(o.title)} →</button> ${escape(o.comparisonReason)}</li>`).join('')}</ul>` : ''}${todoCard(condition, water)}<p class="avoid"><strong>Avoid:</strong> ${escape(condition.avoid)}</p><div class="sources"><h4>Read the references</h4>${sourceLinks(condition.source)}</div>`;
   $('#detail-dialog').showModal();
 }
 
@@ -278,8 +322,8 @@ function renderLibrary() {
     .sort((a, b) => slotsFor(b.id).filter(s => s.image).length - slotsFor(a.id).filter(s => s.image).length);
   const allSlots = filtered.flatMap(c => slotsFor(c.id)), ready = allSlots.filter(s => s.image).length;
   $('.slot-explanation').textContent = water === 'marine'
-    ? 'Marine disease galleries are still being filled. Empty frames are places for future pictures, not disease examples.'
-    : 'Three freshwater image collections are ready: ich, velvet and cottony growth. Empty frames are places for future pictures, not disease examples.';
+    ? 'Saltwater picture galleries are still being filled. Empty frames are places for future pictures.'
+    : 'Three freshwater picture collections are ready: ich, velvet and fungus. Empty frames are places for future pictures.';
   $('#library-count').textContent = `${filtered.length} entries · ${ready} illustrations in place · ${allSlots.length - ready} image spaces to fill`;
   $('#library-grid').innerHTML = filtered.map(c => card(c)).join('') || '<p class="notice">No matching entries. Try a symptom such as “breathing,” “white” or “fin.”</p>';
 }
@@ -292,7 +336,7 @@ function showCase() {
 }
 
 async function copyCase() {
-  try { await navigator.clipboard.writeText(currentCase); $('#copy-status').textContent = 'Copied. Keep these observations to track changes or share when asking for help.'; }
+  try { await navigator.clipboard.writeText(currentCase); $('#copy-status').textContent = 'Copied. Keep these notes to track changes or share when asking for help.'; }
   catch { $('#case-text').select(); $('#copy-status').textContent = 'Automatic copying was unavailable. The notes are selected; use your device’s Copy command.'; }
 }
 
@@ -315,6 +359,20 @@ function renderChoiceGrids() {
   }).join('');
   renderAdditionalChoices();
 }
+function renderFishChoices() {
+  const water = form.elements.water.value, checked = $('#fish-grid input:checked'), current = checked ? checked.value : null;
+  const choices = [...(FISH_TYPES[water] || []), { id: '', title: 'Not sure / other', text: 'Skip this question', icon: 'other' }];
+  $('#fish-grid').innerHTML = choices.map(f => `<label class="fish-chip${f.id ? '' : ' fish-chip-other'}"><input type="radio" name="fishType" value="${f.id}"${current !== null && f.id === current ? ' checked' : ''}><span>${fishIcon(f.icon)}<strong>${escape(f.title)}</strong><small>${escape(f.text)}</small></span></label>`).join('');
+  updateNextLabel();
+}
+function renderCloserChoices() {
+  const water = form.elements.water.value, question = closerQuestionFor(primarySign, water);
+  const current = $('#closer-grid input:checked')?.value || '';
+  if (!question) { $('#closer-grid').replaceChildren(); return; }
+  $('#closer-title').textContent = question.title;
+  $('#closer-hint').textContent = question.hint;
+  $('#closer-grid').innerHTML = question.choices.map(c => `<label><input type="radio" name="closer" value="${c.id}"${c.id === current ? ' checked' : ''}><span><strong>${escape(water === 'marine' && c.marineTitle ? c.marineTitle : c.title)}</strong><small>${escape(c.text)}</small></span></label>`).join('');
+}
 function renderAdditionalChoices() {
   const main = detailSign || primarySign;
   $('#additional-grid').innerHTML = SYMPTOMS.filter(s => s.id !== 'unclear' && s.id !== main).map(s => signButton(s, 'data-additional-symptom')).join('');
@@ -322,6 +380,7 @@ function renderAdditionalChoices() {
   if ($('#additional-signs').open && step === 'behavior') $$('#additional-grid img[data-src]').forEach(img => { img.src = img.dataset.src; img.removeAttribute('data-src'); });
 }
 renderChoiceGrids();
+renderFishChoices();
 $('#behavior-grid').innerHTML = BEHAVIORS.map(b => `<label class="check-label"><input type="checkbox" name="behavior" value="${b.id}"><span>${escape(b.label)}</span></label>`).join('');
 $('#growth-grid').innerHTML = GROWTH_CHOICES.map(choice => `<label><input type="radio" name="growthAppearance" value="${choice.id}"><span><strong>${escape(choice.title)}</strong><small>${escape(choice.text)}</small></span></label>`).join('');
 $('#source-list').innerHTML = sourceLinks(SOURCES.map(s => s.id));
@@ -333,9 +392,9 @@ document.addEventListener('click', async event => {
   const view = event.target.closest('[data-view]');
   if (view) switchView(view.dataset.view);
   const symptom = event.target.closest('[data-symptom]');
-  if (symptom) selectSign(symptom.dataset.symptom);
+  if (symptom) { selectSign(symptom.dataset.symptom); autoAdvance(); }
   const texture = event.target.closest('[data-texture]');
-  if (texture) selectSign(texture.dataset.texture, true);
+  if (texture) { selectSign(texture.dataset.texture, true); autoAdvance(); }
   const additional = event.target.closest('[data-additional-symptom]');
   if (additional) {
     const id = additional.dataset.additionalSymptom;
@@ -343,7 +402,7 @@ document.addEventListener('click', async event => {
     if (additionalSigns.has(id)) additionalSigns.delete(id); else additionalSigns.add(id);
     additional.setAttribute('aria-pressed', String(additionalSigns.has(id)));
     $('#additional-status').textContent = additionalSigns.size ? `Also selected: ${[...additionalSigns].map(id => LABELS[id]).join('; ')}. Select a picture again to remove it.` : 'No additional signs selected.';
-    $('#next-button').textContent = needsGrowth() ? 'Continue →' : 'See my results →';
+    updateNextLabel();
   }
   const condition = event.target.closest('[data-condition]');
   if (condition) openDetail(condition.dataset.condition, condition.dataset.openSlot);
@@ -401,10 +460,13 @@ form.addEventListener('submit', event => { event.preventDefault(); nextStep(); }
 form.addEventListener('change', event => {
   $('#flow-error').textContent = '';
   if (event.target.name === 'water') {
-    clearGrowthChoice();
+    clearGrowthChoice(); clearCloserChoice();
     detailSign = ''; visualReference = null; additionalSigns.clear();
     if (form.elements.water.value === 'fresh') form.elements.salinity.value = '';
     renderChoiceGrids();
+    // A fish type belongs to one water type; changing water clears it.
+    $$('input[name="fishType"]').forEach(el => { el.checked = false; });
+    renderFishChoices();
     comparisons.clear(); updateCompareTray();
     $('#results-content').replaceChildren(); $('#care-context').replaceChildren(); $('#care-summary-content').replaceChildren();
     $('#detail-content').replaceChildren(); $('#compare-content').replaceChildren();
@@ -412,9 +474,11 @@ form.addEventListener('change', event => {
     $('#library-water').value = form.elements.water.value;
     $('#library-grid').replaceChildren();
   }
+  if (event.target.name === 'fishType') { updateNextLabel(); autoAdvance(); }
+  if (event.target.name === 'closer') autoAdvance();
   const { urgent } = assessUrgency(readInput());
   $('#inline-urgent').hidden = !urgent.length;
-  $('#inline-urgent').textContent = urgent.length ? `These signs need prompt help: ${urgent.join('; ')}. Support aeration, test the water and seek fish-health help now.` : '';
+  $('#inline-urgent').textContent = urgent.length ? `These signs need fast action: ${urgent.join('; ')}. Add aeration, test the water and do a water change now.` : '';
 });
 $('#library-search').addEventListener('input', renderLibrary);
 $('#library-water').addEventListener('change', renderLibrary);
