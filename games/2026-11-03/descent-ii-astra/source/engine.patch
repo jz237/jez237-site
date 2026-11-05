@@ -929,7 +929,7 @@ index fe9b0d1..3bfd338 100644
 +
 +
 diff --git a/d2/main/game.c b/d2/main/game.c
-index f15d413..3288684 100644
+index f15d413..f92cf5c 100644
 --- a/d2/main/game.c
 +++ b/d2/main/game.c
 @@ -1108,6 +1108,19 @@ void game_render_frame();
@@ -1026,6 +1026,24 @@ index f15d413..3288684 100644
  		powerup_grab_cheat_all();
  
  		if (Endlevel_sequence)	//might have been started during move
+@@ -1731,7 +1764,16 @@ void FireLaser()
+ 
+ 			flash_val = !(Game_mode & GM_MULTI) || !Netgame.ReducedFlash ? Fusion_charge >> 11 :
+ 				PaletteRedAdd < 10 ? 10 - PaletteRedAdd : 0;
+-			if (Fusion_charge < F1_0*2)
++			if (astra_auto_enabled()) {
++				/* A charging gun should leave the route and targets legible.
++				 * Top up only its own tint; combat damage can be brighter. */
++				int target = min(6, 1 + (Fusion_charge >> 14));
++				int overcharged = Fusion_charge >= 2*F1_0;
++				int red = min(flash_val, max(0, target - PaletteRedAdd));
++				int blue = overcharged ? 0 : min(flash_val, max(0, target - PaletteBlueAdd));
++				int green = overcharged ? min(flash_val, max(0, target - PaletteGreenAdd)) : 0;
++				PALETTE_FLASH_ADD(red, green, blue);
++			} else if (Fusion_charge < F1_0*2)
+ 				PALETTE_FLASH_ADD(flash_val, 0, flash_val);
+ 			else
+ 				PALETTE_FLASH_ADD(flash_val, flash_val, 0);
 diff --git a/d2/main/gamerend.c b/d2/main/gamerend.c
 index da0872e..3137392 100644
 --- a/d2/main/gamerend.c
@@ -1390,7 +1408,7 @@ index d9aafbc..b022e8a 100644
 +}
 +
 diff --git a/d2/main/laser.c b/d2/main/laser.c
-index 2841dad..e3afd94 100644
+index 2841dad..43350e7 100644
 --- a/d2/main/laser.c
 +++ b/d2/main/laser.c
 @@ -484,6 +484,7 @@ void create_omega_blobs(int firing_segnum, vms_vector *firing_pos, vms_vector *g
@@ -1409,6 +1427,15 @@ index 2841dad..e3afd94 100644
  
  	//	Do the special Omega Cannon stuff.  Then return on account of everything that follows does
  	//	not apply to the Omega Cannon.
+@@ -777,7 +779,7 @@ int Laser_create_new( vms_vector * direction, vms_vector * position, int segnum,
+ 
+ 	// Create orientation matrix so we can look from this pov
+ 	//	Homing missiles also need an orientation matrix so they know if they can make a turn.
+-	if ((obj->render_type == RT_POLYOBJ) || (Weapon_info[obj->id].homing_flag))
++	if (weapon_type == FLARE_ID || (obj->render_type == RT_POLYOBJ) || (Weapon_info[obj->id].homing_flag))
+ 		vm_vector_2_matrix( &obj->orient,direction, &Objects[parent].orient.uvec ,NULL);
+ 
+ 	if (( &Objects[parent] != Viewer ) && (Objects[parent].type != OBJ_WEAPON) &&
 diff --git a/d2/main/menu.c b/d2/main/menu.c
 index 8301896..2afd444 100644
 --- a/d2/main/menu.c

@@ -16,6 +16,7 @@ static int aa_level=-999,aa_segment=-1,aa_goal=-1,aa_object=-1,aa_wall=-1,aa_mod
 static int aa_dist[MAX_SEGMENTS],aa_parent[MAX_SEGMENTS],aa_queue[MAX_SEGMENTS],aa_visits[MAX_SEGMENTS];
 static fix64 aa_ignore[MAX_OBJECTS],aa_wall_seen[MAX_WALLS],aa_next,aa_stuck_since,aa_level_since,aa_dead_since,aa_status_next;
 static vms_vector aa_last,aa_escape_goal;
+static fix64 aa_flare_next;
 static fix64 aa_escape_until,aa_blocked[MAX_SEGMENTS][6];
 static int aa_escape_count,aa_escape_room=-1;
 static float aa_smooth_rate[3];
@@ -375,6 +376,7 @@ void astra_auto_frame(void){
         EM_ASM(window.astraAutoStatus?.("Ship lost - relaunching",$0,$1,$2,$3);,aa_seen,aa_deaths,aa_kills,aa_collects);
         return;
     }
+    if(aa_dead_since)aa_flare_next=GameTime64+i2f(3);
     if(aa_dead_since){aa_sliding=0;aa_slide_until=0;aa_slide_goal=-2;aa_escape_until=0;aa_escape_room=-1;aa_arsenal_signature=-1;aa_combat_target=-1;aa_next=0;aa_pick_object=aa_object=aa_goal=-1;aa_up_ready=0;aa_last_kills=Players[Player_num].num_kills_total;aa_weapon_next=GameTime64+i2f(8);}
     aa_dead_since=0;if(Endlevel_sequence)return;
     if(aa_level!=Current_level_num){
@@ -382,6 +384,7 @@ void astra_auto_frame(void){
         aa_weapon_next=GameTime64+i2f(8);aa_missile_next=0;aa_pending_missile=-1;aa_watch_until=0;aa_up_ready=0;
         aa_last_target=-1;aa_last_kills=Players[Player_num].num_kills_total;aa_weapon_changed=GameTime64;
         aa_arsenal_signature=-1;aa_recent_attacker=aa_combat_target=-1;memset(aa_attack_until,0,sizeof aa_attack_until);
+        aa_flare_next=GameTime64+i2f(2);
         aa_level=Current_level_num;aa_level_since=GameTime64;aa_next=aa_status_next=0;aa_segment=-1;aa_seen=0;
         memset(aa_visits,0,sizeof aa_visits);memset(aa_ignore,0,sizeof aa_ignore);memset(aa_wall_seen,0,sizeof aa_wall_seen);
         aa_last=ConsoleObject->pos;aa_stuck_since=GameTime64;
@@ -561,6 +564,13 @@ void astra_auto_frame(void){
         }
     }
     if(Players[Player_num].flags&PLAYER_FLAGS_CONVERTER && Players[Player_num].shields<i2f(80)&&Players[Player_num].energy>i2f(130))Controls.energy_to_shield_state=1;
+    /* Illuminate dim passages and closed doors through the same input as a pilot. */
+    if(!attacking && !watching && !escaping && alignment>.92f && !Control_center_destroyed &&
+       Players[Player_num].energy>i2f(25) && GameTime64>=aa_flare_next &&
+       (door>=0 || Segment2s[seg].static_light<F1_0*3/4)){
+        Controls.fire_flare_count=1;
+        aa_flare_next=GameTime64+i2f(14);
+    }
     extern void do_weapon_n_item_stuff(void);do_weapon_n_item_stuff();
     if(GameTime64>aa_status_next){
         static const char *labels[]={"Exploring the mine","Collecting supplies","Rescuing hostages","Engaging hostile","Activating switch","Escaping to exit","Opening door","Finding clearance","Watching destruction"};

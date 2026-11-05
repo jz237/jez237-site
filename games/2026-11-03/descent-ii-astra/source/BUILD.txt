@@ -547,3 +547,8 @@ The loader retains at most one decoded movie and one decompressed movie parcel.
 
 Run source/pack-streaming.py WEB_GAME STANDALONE_GAME to reproduce the lossless
 web batches and both movie indices from the existing web release parcels.
+
+Astra flares and spectator visibility (pyre26)
+The seven current combat previews omit Fuel Spiral. Flares use the real native
+projectile and cast the original flickering light. The pilot can fire one at
+a door or in a dim passage. Demo fusion charging tops up a subtle tint.

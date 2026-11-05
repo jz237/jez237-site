@@ -122,18 +122,6 @@ static void burst_implosion(burst_frame *f)
         burst_trail(f,ring_point(a,after*1.3f,0),ring_point(b,after*1.3f,0),.064f,fade,bp(.87f,.54f,1));
     }
 }
-/* Two spinning fuel vents lay down continuous helical trails, then cool from the base. */
-static void burst_spiral(burst_frame *f)
-{
-    float t=f->t, head=fminf(1.f,t*2.7f), fade=burst_fade(t);
-    for(int arm=0;arm<2;arm++)for(int j=0;j<19;j++){
-        float u=j/18.f*head,a=u*8.6f+arm*3.14159f+t*2.4f;
-        float r=(.16f+1.04f*u)*(.45f+.55f*head);
-        burst_point p=bp(cosf(a)*r,(u-.43f)*2.85f*head,sinf(a)*r);
-        float heat=fmaxf(0,.82f-.72f*t+.30f*u);
-        burst_cloud(f,p,.17f+.19f*(1-u)+.10f*t,heat,fade*(.70f+.25f*u));
-    }
-}
 /* Separate housings burst in sequence along a broken fuel line. */
 static void burst_chain(burst_frame *f)
 {
@@ -200,7 +188,7 @@ void astra_pattern_blast(vms_vector *where,fix radius,float t,unsigned seed,int 
 {
     typedef void (*composer)(burst_frame *);
     static const composer compose[AB_COUNT]={NULL,burst_arc,burst_spall,burst_cinders,burst_ring,
-                                             burst_implosion,burst_spiral,burst_chain,burst_bloom};
+                                             burst_implosion,burst_chain,burst_bloom};
     if(profile<=AB_LEGACY || profile>=AB_COUNT || t<0 || t>=1 || !astra_pyro_ready())return;
     g3s_point view;g3_rotate_point(&view,where);
     float scale=f2fl(radius);

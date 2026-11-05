@@ -342,7 +342,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre25");
+    await script("engine.js?v=pyre26");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 

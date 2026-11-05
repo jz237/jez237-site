@@ -248,7 +248,7 @@ void astra_render_omega(int window_num){
 
 int astra_weapon_missile(object *obj){
     /* Lasers and Fusion also use polygon models in the original HAM data. */
-    return obj->type==OBJ_WEAPON&&obj->id<N_weapon_types&&obj->render_type==RT_POLYOBJ&&Weapon_info[obj->id].matter;
+    return obj->type==OBJ_WEAPON&&obj->id!=FLARE_ID&&obj->id<N_weapon_types&&obj->render_type==RT_POLYOBJ&&Weapon_info[obj->id].matter;
 }
 /* Phoenix ricochets reverse velocity instantly. Grow a new visual trail only
  * along the current straight flight leg, and stop it at the mine wall. */
@@ -277,12 +277,45 @@ static float af_phoenix_tail(object *o,vms_vector *direction,float age,float spe
     return length;
 }
 
+/* Flare cartridge, burning tail and spitting embers share the native projectile.
+ * Put the burning end behind the point so it stays outside the wall on impact. */
+static void af_flare(object *obj, float age, float speed, float clock, float depth)
+{
+    /* Limit the projected size as a charge crosses the cockpit or lands at the nose. */
+    float scale=fminf(1.f,depth/20.f);
+    float burn=fminf(1.f,fmaxf(0.f,f2fl(obj->lifeleft)*1.7f));
+    float phase=age*9.f+(obj->signature & 255);
+    float flicker=.88f+.12f*sinf(phase*1.7f)*cosf(phase*.93f);
+    ax_count=0;ax_energy=0;
+    ax_paint(.28f,.21f,.14f,.16f);
+    ax_tube(0,0,.22f,0,0,-.66f,.14f,.24f,8);
+    ax_paint(.92f,.33f,.035f,1.f);
+    ax_tube(0,0,-.58f,0,0,-.82f,.26f,.25f,8);
+    ax_paint(1.f,.80f*burn,.18f*burn,1.3f*burn);
+    ax_tube(0,0,-.82f,0,0,-1.15f,.245f,.12f,7);
+    ax_flush(scale,1);
+    float heat=burn*flicker;
+    ax_paint(1,.29f,.035f,1);
+    af_particle(0,0,-.96f*scale,1.65f*scale,.56f*heat,phase);
+    ax_paint(1,.80f,.27f,1);
+    af_particle(0,0,-1.12f*scale,.62f*scale,.94f*heat,phase);
+    float trail=fminf(2.7f,age*speed);
+    for(int k=0;k<6;k++){
+        float u=fmodf(age*2.1f+k/6.f,1.f),angle=2.4f*k+(obj->signature & 15);
+        float spread=(speed>1.f?.29f:.75f)*u;
+        ax_paint(1,.58f-.32f*u,.045f,1);
+        af_particle(cosf(angle)*spread*scale,sinf(angle)*spread*scale,(-1.f-u*(.55f+trail))*scale,
+                    (.15f+.11f*(1.f-u))*scale,heat*(1.f-u),angle);
+    }
+    af_flush_tinted(clock,0,1);
+}
+
 int astra_draw_weapon(object *obj){
     if(!ax_on()||obj->type!=OBJ_WEAPON||obj->id>=N_weapon_types)return 0;
     int id=obj->id,missile=astra_weapon_missile(obj);
     int laser=(id>=LASER_ID_L1&&id<=LASER_ID_L4)||id==LASER_ID_L5||id==LASER_ID_L6;
-    if(id==FLARE_ID||is_proximity_bomb_or_smart_mine(id)||id==PMINE_ID)return 0;
-    if(obj->render_type==RT_NONE&&id!=VULCAN_ID&&id!=GAUSS_ID)return 0;
+    if(is_proximity_bomb_or_smart_mine(id)||id==PMINE_ID)return 0;
+    if(obj->render_type==RT_NONE&&id!=FLARE_ID&&id!=VULCAN_ID&&id!=GAUSS_ID)return 0;
     /* Player Omega is drawn once as a continuous paired discharge. */
     if(id==OMEGA_ID&&obj->ctype.laser_info.parent_type==OBJ_PLAYER)return 1;
     g3s_point view;g3_rotate_point(&view,&obj->pos);if(view.p3_z<F1_0/4)return missile?0:1;
@@ -294,7 +327,11 @@ int astra_draw_weapon(object *obj){
     int enemy=obj->ctype.laser_info.parent_type==OBJ_ROBOT;
     float radius=fminf(.65f,fmaxf(.32f,f2fl(Weapon_info[id].blob_size)*.38f));
     g3_start_instance_matrix(&obj->pos,&axis);
-    if(missile){
+    if(id==FLARE_ID){
+        af_flare(obj,age,speed,clock,f2fl(view.p3_z)/f2fl(Matrix_scale.z));
+        EM_ASM({var f=Module.flareView||(Module.flareView={moving:0,stuck:0});
+                f[$0?"moving":"stuck"]++;f.signature=$1;f.enemy=!!$2;},speed>.1f,obj->signature,enemy);
+    }else if(missile){
         polymodel *pm=&Polygon_models[obj->rtype.pobj_info.model_num];float rear=f2fl(pm->mins.z);
         /* Collision radius is divided by length/width; use model dimensions. */
         float nozzle=fminf(.65f,fmaxf(.28f,f2fl(pm->maxs.x-pm->mins.x)*.45f));
