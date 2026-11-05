@@ -61,7 +61,7 @@
       const changed=this.token!==s.token;
       if(changed){this.queue=[];this.rows=[];q('nativeItems').replaceChildren();q('nativeItems').scrollTop=0;}
       this.active=true;this.token=s.token;this.state=s;
-      releaseFlightMouse();q('nativeScreen').hidden=false;document.body.classList.add('native-open');
+      releaseFlightMouse();q('nativeScreen').hidden=false;document.body.classList.add('native-open');window.ensureAstraHangar?.();
       if(q('hangarDock').parentElement!==q('nativeHangar'))q('nativeHangar').append(q('hangarDock'));
       q('nativeTitle').textContent=s.title||s.subtitle||'Campaign menu';
       q('nativeSubtitle').textContent=s.title?s.subtitle:'';q('nativeSubtitle').hidden=!q('nativeSubtitle').textContent;

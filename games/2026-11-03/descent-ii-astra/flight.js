@@ -2,6 +2,31 @@
 const $ = id => document.getElementById(id);
 const astraIndex = {};
 let mounted = new Map(), saving = false, launchPending = false;
+let shipAssets, hangarStarted=false;
+function loadAstraShipAssets(){
+  if(!shipAssets)shipAssets=Promise.all([script("skin.js"),script("pyro.js")]).catch(error=>{
+    shipAssets=null;throw error;
+  });
+  return shipAssets;
+}
+window.ensureAstraHangar=async ()=>{
+  if(hangarStarted)return;
+  hangarStarted=true;
+  try {
+    await loadAstraShipAssets();
+    if(launchPending&&!document.body.classList.contains("native-open")){hangarStarted=false;return;}
+    await script("hangar.js?v=24");
+  } catch(error){hangarStarted=false;console.warn("Hangar preview:",error.message);}
+};
+document.addEventListener("DOMContentLoaded",()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  if(!launchPending)window.ensureAstraHangar();
+})),{once:true});
+function decodeAstraBase64(value) {
+  if (Uint8Array.fromBase64) return Uint8Array.fromBase64(value);
+  const binary=atob(value), bytes=new Uint8Array(binary.length);
+  for (let i=0;i<bytes.length;i++) bytes[i]=binary.charCodeAt(i);
+  return bytes;
+}
 function script(src) {
   return new Promise((resolve,reject) => {
     const el = document.createElement("script");
@@ -241,27 +266,45 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
     const astra=$("look").value==="astra";
     // Prime the media element in the button gesture before disk I/O.
     const music=player;
-    music.src="music/02.flac"; music.volume=0;
-    music.play().then(()=>{if(!astraDisc.track){music.pause();music.currentTime=0;music.volume=0.75;}}).catch(()=>{});
+    // Unlock the existing Red Book audio element with a short silent WAV.
+    const silence="data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQIAAAAAAA==";
+    music.src=silence; music.volume=.75;
+    music.play().then(()=>{if(music.getAttribute("src")===silence){music.pause();music.currentTime=0;}}).catch(()=>{});
+    await script("streaming.js?v=24");
+    const loadMovie=astraMovieLibrary(async file=>{
+      const response=await fetch("payload/"+file);
+      if(!response.ok||!response.body)throw Error("Could not load "+file);
+      return response.body;
+    });
     await readPack("game","Reading game data");
-    await readPack("vertigo","Reading original Vertigo mission");
-    if(astra){await script("pyro-field.js?v=5");await readPack("art","Preparing mine materials");await readPack("cockpit","Fitting flight instruments");await readPack("fleet","Fitting Overload robot chassis");await readPack("forge","Preparing foundry lights and fireballs");await readPack("surfaces20","Fitting detailed wall surfaces");}
-    if(!autopilot)await readPack("movies","Reading cinematics");
+    await readPack("vertigo","Reading the mission");
+    let assetDepot=null;
     if(astra){
-      $("status").textContent="Assembling the collectible collection";
-      await script("collectibles.js?v=8");
-      window.astraCollectiblesCatalog=astraCollectibles.catalog;
-      const zipped=Uint8Array.from(atob(astraCollectibles.gzip),c=>c.charCodeAt(0));
-      const stream=new Blob([zipped]).stream().pipeThrough(new DecompressionStream("gzip"));
-      mounted.set("collectibles.mesh",new Uint8Array(await new Response(stream).arrayBuffer()));
-      delete window.astraCollectibles;
+      await script("payload/stream24/index.js");
+      const catalog=window.astraStreamCatalog;
+      window.astraMaterialTypes=catalog.types;
+      window.astraCollectiblesCatalog=catalog.effects.catalog;
+      assetDepot=astraMaterialLibrary(catalog);
+      async function effect(file, gzip){
+        const response=await fetch("payload/stream24/"+file);
+        if(!response.ok||!response.body)throw Error("Could not load "+file);
+        const stream=gzip?response.body.pipeThrough(new DecompressionStream("gzip")):response.body;
+        return new Uint8Array(await new Response(stream).arrayBuffer());
+      }
+      await readPack("cockpit","Fitting flight instruments");
+      await readPack("fleet","Fitting robot chassis");
+      $("status").textContent="Preparing effects";
+      const [field,mesh]=await Promise.all([effect(catalog.effects.field,false),effect(catalog.effects.mesh,true)]);
+      mounted.set("pyro-field.png",field);
+      mounted.set("collectibles.mesh",mesh);
     }
+    if(astra)await loadAstraShipAssets();
     $("status").textContent="Starting flight computer";
     const canvas=$("view");
     const quality=Number($("res").value);
     const height=Math.round(quality*9/16);
     window.Module={
-      canvas,quick,demo,encounter,autopilot,blastInspect:preview?firstBlastProfile:0,mineInspect:mine?0:-1,mineInspectZoom:1,demoArsenal:autopilot&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:mine?Number($("mineLevel").value):autopilot?Number($("demoLevel").value):1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign:$("campaign").value,wideHud:$("wideHud").checked,intro:!quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys",
+      canvas,quick,demo,encounter,autopilot,assetDepot,loadMovie,fastLaunch:true,blastInspect:preview?firstBlastProfile:0,mineInspect:mine?0:-1,mineInspectZoom:1,demoArsenal:autopilot&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:mine?Number($("mineLevel").value):autopilot?Number($("demoLevel").value):1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign:$("campaign").value,wideHud:$("wideHud").checked,intro:!quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys",
         "-gl_gettexlevelparam_ok","0","-gl_intensity4_ok","0","-gl_luminance4_alpha4_ok","0","-gl_rgba2_ok","0"],
       print:console.log,printErr:console.warn,onAbort:astraFail,
       onExit:()=>{window.astraMenus?.hide();window.astraTerminal?.fail();window.astraFlightFocus(false);syncPilot();document.body.classList.remove("flying");$("status").textContent="Flight ended."; $("retry").hidden=false;},
@@ -270,12 +313,12 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         F.mkdirTree("/mine/demos");F.mkdirTree("/mine/missions"); F.mkdirTree(save);
         for(const [name,bytes] of mounted) F.writeFile("/mine/"+name,bytes,{canOwn:true});
         if(astra){
-          const hull=window.astraHullBytes || Uint8Array.from(atob(window.astraHull.data),c=>c.charCodeAt(0));
+          const hull=window.astraHullBytes || decodeAstraBase64(window.astraHull.data);
           F.writeFile("/mine/astra.hull",hull);
-          F.writeFile("/mine/pyro-field.png",Uint8Array.from(atob(window.astraPyroField),c=>c.charCodeAt(0)));delete window.astraPyroField;
-          F.writeFile("/mine/pyro-skin.png",Uint8Array.from(atob(window.astraSkin),c=>c.charCodeAt(0)));F.writeFile("/mine/pyro.frag",window.astraHull.fragment);
+
+          F.writeFile("/mine/pyro-skin.png",decodeAstraBase64(window.astraSkin));F.writeFile("/mine/pyro.frag",window.astraHull.fragment);
         }
-        if(astra) for(const [alias,src] of Object.entries(window.astraAliases||{}))
+        if(astra && !assetDepot) for(const [alias,src] of Object.entries(window.astraAliases||{}))
           F.createDataFile("/mine",alias+".png",mounted.get(src),true,false,true);
         mounted.clear();
         F.mount(Module.IDBFS,{},save);
@@ -299,7 +342,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre23");
+    await script("engine.js?v=pyre24");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 

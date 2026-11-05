@@ -171,7 +171,7 @@ index c5cca0b..687d249 100644
 +
 +
 diff --git a/d2/arch/ogl/ogl.c b/d2/arch/ogl/ogl.c
-index c536c46..19cd644 100644
+index c536c46..d6187d6 100644
 --- a/d2/arch/ogl/ogl.c
 +++ b/d2/arch/ogl/ogl.c
 @@ -198,6 +198,7 @@ void ogl_init_texture(ogl_texture* t, int w, int h, int flags)
@@ -182,7 +182,19 @@ index c536c46..19cd644 100644
  }
  
  void ogl_reset_texture(ogl_texture* t)
-@@ -765,6 +766,21 @@ void draw_tmap_flat(grs_bitmap *bm,int nv,g3s_point **vertlist){
+@@ -384,7 +385,10 @@ void ogl_cache_level_textures(void)
+ 	if (!ogl_allow_png())
+ 		ogl_smash_png_textures();
+ 
+-	for (i = 0; i < Num_bitmap_files; i++) {
++	/* Enhanced bitmap variants can be megabytes each. The normal bind path
++     * uploads the required variant on first use, including after a GL reset. */
++    bool demand_textures = EM_ASM_INT(return !!(Module.fastLaunch && Module.astra););
++    for (i = 0; !demand_textures && i < Num_bitmap_files; i++) {
+ 		if (!(GameBitmaps[i].bm_flags & BM_FLAG_PAGED_OUT))
+ 			ogl_loadbmtexture(&GameBitmaps[i]);
+ 	}
+@@ -765,6 +769,22 @@ void draw_tmap_flat(grs_bitmap *bm,int nv,g3s_point **vertlist){
  extern void (*tmap_drawer_ptr)(grs_bitmap *bm,int nv,g3s_point **vertlist);
  
  
@@ -200,11 +212,12 @@ index c536c46..19cd644 100644
 +#include "astra_blast.inc"
 +#include "astra_debris.inc"
 +#include "astra_weapons_demo.inc"
++#include "astra_streaming.inc"
 +
  /*
   * Everything texturemapped (walls, robots, ship)
   */ 
-@@ -825,8 +841,9 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
+@@ -825,8 +845,9 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
  	if (tmap_drawer_ptr == draw_tmap) {
  		glTexCoordPointer(2, GL_FLOAT, 0, texcoord_array);  
  	}
@@ -215,7 +228,7 @@ index c536c46..19cd644 100644
  	
  	glDisableClientState(GL_VERTEX_ARRAY);
  	glDisableClientState(GL_COLOR_ARRAY);
-@@ -840,6 +857,7 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
+@@ -840,6 +861,7 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
   */
  bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_lrgb *light_rgb, grs_bitmap *bmbot, grs_bitmap *bmovl, int orient)
  {
@@ -223,7 +236,7 @@ index c536c46..19cd644 100644
  	int c, index2, index3, index4;
  	GLfloat vertex_array[MAX_VERTS * 3], color_array[MAX_VERTS * 4], texcoordovl_array[MAX_VERTS * 2];
  #ifdef OGL_MERGE
-@@ -919,8 +937,10 @@ bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_
+@@ -919,8 +941,10 @@ bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_
  #ifndef OGL_MERGE
  	glVertexPointer(3, GL_FLOAT, 0, vertex_array);
  	glColorPointer(4, GL_FLOAT, 0, color_array);
@@ -235,7 +248,7 @@ index c536c46..19cd644 100644
  	glDisableClientState(GL_VERTEX_ARRAY);
  	glDisableClientState(GL_COLOR_ARRAY);
  	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-@@ -959,7 +979,9 @@ bool g3_draw_bitmap_full(vms_vector *pos,fix width,fix height,grs_bitmap *bm,
+@@ -959,7 +983,9 @@ bool g3_draw_bitmap_full(vms_vector *pos,fix width,fix height,grs_bitmap *bm,
  	int i;
  	GLfloat vertex_array[12], color_array[16], texcoord_array[8];
  
@@ -246,7 +259,7 @@ index c536c46..19cd644 100644
  	v1.z=0;
  	
  	glEnableClientState(GL_VERTEX_ARRAY);
-@@ -1140,6 +1162,7 @@ void ogl_set_blending()
+@@ -1140,6 +1166,7 @@ void ogl_set_blending()
  GLubyte *pixels = NULL;
  
  void ogl_start_frame(void){
@@ -254,7 +267,7 @@ index c536c46..19cd644 100644
  	#ifdef OGL_MERGE
  	GLfloat mat[16];
  	#endif
-@@ -1171,7 +1194,7 @@ void ogl_start_frame(void){
+@@ -1171,7 +1198,7 @@ void ogl_start_frame(void){
  #ifdef OGLES
  	perspective(90.0,1.0,0.1,5000.0);   
  #else
@@ -263,7 +276,7 @@ index c536c46..19cd644 100644
  #endif
  	glMatrixMode(GL_MODELVIEW);
  	glLoadIdentity();//clear matrix
-@@ -1183,6 +1206,7 @@ void ogl_start_frame(void){
+@@ -1183,6 +1210,7 @@ void ogl_start_frame(void){
  }
  
  void ogl_end_frame(void){
@@ -271,7 +284,7 @@ index c536c46..19cd644 100644
  	OGL_VIEWPORT(0,0,grd_curscreen->sc_w,grd_curscreen->sc_h);
  	glMatrixMode(GL_PROJECTION);
  	glLoadIdentity();//clear matrix
-@@ -1208,6 +1232,13 @@ void gr_flip(void)
+@@ -1208,6 +1236,13 @@ void gr_flip(void)
  
  	ogl_do_palfx();
  	ogl_swap_buffers_internal();
@@ -285,7 +298,7 @@ index c536c46..19cd644 100644
  	glClear(GL_COLOR_BUFFER_BIT);
  }
  
-@@ -1256,7 +1287,7 @@ void ogl_init_pixel_buffers(int w, int h)
+@@ -1256,7 +1291,7 @@ void ogl_init_pixel_buffers(int w, int h)
  
  	if (texbuf)
  		d_free(texbuf);
@@ -294,7 +307,7 @@ index c536c46..19cd644 100644
  
  	if ((pixels == NULL) || (texbuf == NULL))
  		Error("Not enough memory for current resolution");
-@@ -1272,7 +1303,7 @@ void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width
+@@ -1272,7 +1307,7 @@ void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width
  {
  	int x,y,c,i;
  
@@ -303,7 +316,7 @@ index c536c46..19cd644 100644
  		Error("Texture is too big: %ix%i", width, height);
  
  	if (data_format) { // true color bitmap?
-@@ -1568,7 +1599,7 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
+@@ -1568,7 +1603,7 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
  	glGenTextures (1, &tex->handle);
  #ifndef OGLES
  	//set priority
@@ -312,7 +325,7 @@ index c536c46..19cd644 100644
  #endif
  	// Give our data to OpenGL.
  	OGL_BINDTEXTURE(tex->handle);
-@@ -1595,17 +1626,14 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
+@@ -1595,17 +1630,14 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
  #ifndef OGLES // see comment above
  	if (texfilt)
  	{
@@ -333,7 +346,7 @@ index c536c46..19cd644 100644
  			tex->tw, tex->th, 0, tex->format, // RGBA textures.
  			GL_UNSIGNED_BYTE, // imageData is a GLubyte pointer.
  			bufP);
-@@ -1644,6 +1672,10 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
+@@ -1644,6 +1676,10 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
  }
  #endif
  
@@ -344,7 +357,7 @@ index c536c46..19cd644 100644
  void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  {
  	unsigned char *buf;
-@@ -1668,6 +1700,7 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+@@ -1668,6 +1704,7 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  			con_printf(CON_DEBUG,"%s: %ux%ux%i p=%i(%i) c=%i a=%i chans=%i\n", filename, pdata.width, pdata.height, pdata.depth, pdata.paletted, pdata.num_palette, pdata.color, pdata.alpha, pdata.channels);
  			if (pdata.depth == 8 && pdata.color)
  			{
@@ -352,7 +365,7 @@ index c536c46..19cd644 100644
  				if (bm->gltexture == NULL)
  					ogl_init_texture(bm->gltexture = ogl_get_free_texture(), pdata.width, pdata.height, ((pdata.alpha || bm->bm_flags & BM_FLAG_TRANSPARENT) ? OGL_FLAG_ALPHA : 0));
  				unsigned char *data = pdata.data;
-@@ -1688,6 +1721,7 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+@@ -1688,6 +1725,7 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  				if (pdata.palette)
  					free(pdata.palette);
  				bm->gltexture->is_png = 1;
@@ -360,7 +373,7 @@ index c536c46..19cd644 100644
  				return;
  			}
  			else
-@@ -1983,3 +2017,8 @@ void ogl_update_window_clip()
+@@ -1983,3 +2021,8 @@ void ogl_update_window_clip()
  		glEnable(GL_SCISSOR_TEST);
  	}
  }
@@ -1083,10 +1096,30 @@ index da0872e..3137392 100644
 +
 +
 diff --git a/d2/main/gameseq.c b/d2/main/gameseq.c
-index 30de489..29e7b5d 100644
+index 30de489..338ca9a 100644
 --- a/d2/main/gameseq.c
 +++ b/d2/main/gameseq.c
-@@ -829,6 +829,7 @@ void InitPlayerObject()
+@@ -768,7 +768,7 @@ void LoadLevel(int level_num,int page_in_textures)
+ 
+ 	show_boxed_message(TXT_LOADING, 0);
+ #ifdef RELEASE
+-	timer_delay(F1_0);
++    if (!EM_ASM_INT(return !!Module.fastLaunch;)) timer_delay(F1_0);
+ #endif
+ 
+ 	load_endlevel_data(level_num);
+@@ -781,6 +781,10 @@ void LoadLevel(int level_num,int page_in_textures)
+ 	load_level_robots(level_num);
+ 
+ 	verify_objects(); // set proper robot properties if customized
++#ifdef OGL
++    extern void astra_prepare_mine_art(void);
++    astra_prepare_mine_art();
++#endif
+ 
+ 	if ( page_in_textures ) {
+ 		piggy_load_level_data();
+@@ -829,6 +833,7 @@ void InitPlayerObject()
  extern void init_seismic_disturbances(void);
  
  //starts a new game on the given level
@@ -1094,7 +1127,7 @@ index 30de489..29e7b5d 100644
  void StartNewGame(int start_level)
  {
  	state_quick_item = -1;	// for first blind save, pick slot to save in
-@@ -848,7 +849,18 @@ void StartNewGame(int start_level)
+@@ -848,7 +853,18 @@ void StartNewGame(int start_level)
  	else
  		StartNewLevel(start_level);
  
@@ -1114,7 +1147,7 @@ index 30de489..29e7b5d 100644
  
  	game_disable_cheats();
  
-@@ -860,6 +872,7 @@ void StartNewGame(int start_level)
+@@ -860,6 +876,7 @@ void StartNewGame(int start_level)
  //	Call with dead_flag = 1 if player died, but deserves some portion of bonus (only skill points), anyway.
  void DoEndLevelScoreGlitz(int network)
  {
@@ -1122,7 +1155,7 @@ index 30de489..29e7b5d 100644
  	int level_points, skill_points, energy_points, shield_points, hostage_points;
  	int	all_hostage_points;
  	int	endgame_points;
-@@ -1022,6 +1035,7 @@ int draw_stars_bg(newmenu *menu, d_event *event, grs_bitmap *background)
+@@ -1022,6 +1039,7 @@ int draw_stars_bg(newmenu *menu, d_event *event, grs_bitmap *background)
  
  void do_screen_message(char *fmt, ...)
  {
@@ -1130,7 +1163,7 @@ index 30de489..29e7b5d 100644
  	va_list arglist;
  	grs_bitmap background;
  	char msg[1024];
-@@ -1295,6 +1309,9 @@ void show_order_form();
+@@ -1295,6 +1313,9 @@ void show_order_form();
  //called when the player has finished the last level
  void DoEndGame(void)
  {
@@ -1140,7 +1173,7 @@ index 30de489..29e7b5d 100644
  	if ((Newdemo_state == ND_STATE_RECORDING) || (Newdemo_state == ND_STATE_PAUSED))
  		newdemo_stop_recording(0);
  
-@@ -1456,6 +1473,7 @@ void DoPlayerDead()
+@@ -1456,6 +1477,7 @@ void DoPlayerDead()
  #endif
  	{				//Note link to above else!
  		Players[Player_num].lives--;
@@ -1148,7 +1181,7 @@ index 30de489..29e7b5d 100644
  		if (Players[Player_num].lives == 0)
  		{
  			DoGameOver();
-@@ -1809,7 +1827,8 @@ void StartNewLevel(int level_num)
+@@ -1809,7 +1831,8 @@ void StartNewLevel(int level_num)
  		maybe_set_first_secret_visit(level_num);
  	}
  
@@ -1158,7 +1191,7 @@ index 30de489..29e7b5d 100644
  
  	StartNewLevelSub(level_num, 1, 0 );
  
-@@ -2086,3 +2105,4 @@ void StartLevel(int random_flag)
+@@ -2086,3 +2109,4 @@ void StartLevel(int random_flag)
  	Auto_fire_fusion_cannon_time = 0;
  	Fusion_charge = 0;
  }
@@ -1430,7 +1463,7 @@ index 8301896..2afd444 100644
  #endif
 +
 diff --git a/d2/main/movie.c b/d2/main/movie.c
-index 33bd8ca..510e4aa 100644
+index 33bd8ca..5a9a4b9 100644
 --- a/d2/main/movie.c
 +++ b/d2/main/movie.c
 @@ -85,7 +85,7 @@ char movielib_files[4][FILENAME_LEN] = {"intro","other","robots"};
@@ -1451,7 +1484,38 @@ index 33bd8ca..510e4aa 100644
      return (numread == count);
  }
  
-@@ -356,7 +356,7 @@ int RunMovie(char *filename, int hires_flag, int must_have,int dx,int dy)
+@@ -120,6 +120,21 @@ unsigned int FileRead(void *handle, void *buf, unsigned int count)
+ 
+ //filename will actually get modified to be either low-res or high-res
+ //returns status.  see values in movie.h
++EM_ASYNC_JS(void, astra_fetch_movie, (const char *name), {
++    try { await Module.loadMovie(UTF8ToString(name)); }
++    catch (error) { console.warn("Unable to load cinematic", error.message); }
++});
++
++static void astra_prepare_movie(const char *name)
++{
++    if (!EM_ASM_INT(return !!Module.loadMovie;) || PHYSFS_exists(name)) return;
++    char upper[FILENAME_LEN];
++    if (strlen(name) >= sizeof(upper)) return;
++    strcpy(upper, name);
++    d_strupr(upper);
++    if (!PHYSFS_exists(upper)) astra_fetch_movie(name);
++}
++
+ int PlayMovie(const char *filename, int must_have)
+ {
+ 	char name[FILENAME_LEN],*p;
+@@ -133,6 +148,8 @@ int PlayMovie(const char *filename, int must_have)
+ 	if ((p=strchr(name,'.')) == NULL)		//add extension, if missing
+ 		strcat(name,".mve");
+ 
++	astra_prepare_movie(name);
++
+ 	// Stop all digital sounds currently playing.
+ 	digi_stop_digi_sounds();
+ 
+@@ -356,7 +373,7 @@ int RunMovie(char *filename, int hires_flag, int must_have,int dx,int dy)
  {
  	window *wind;
  	movie *m;
@@ -1460,7 +1524,7 @@ index 33bd8ca..510e4aa 100644
  	int track = 0;
  	int aborted = 0;
  	int reshow = 0;
-@@ -386,13 +386,13 @@ int RunMovie(char *filename, int hires_flag, int must_have,int dx,int dy)
+@@ -386,13 +403,13 @@ int RunMovie(char *filename, int hires_flag, int must_have,int dx,int dy)
  
  	// Open Movie file.  If it doesn't exist, no movie, just return.
  
@@ -1476,7 +1540,7 @@ index 33bd8ca..510e4aa 100644
  	}
  
  	if (!filehndl)
-@@ -422,7 +422,7 @@ int RunMovie(char *filename, int hires_flag, int must_have,int dx,int dy)
+@@ -422,7 +439,7 @@ int RunMovie(char *filename, int hires_flag, int must_have,int dx,int dy)
  
  	if (MVE_rmPrepMovie((void *)filehndl, dx, dy, track)) {
  		Int3();
@@ -1485,7 +1549,7 @@ index 33bd8ca..510e4aa 100644
  		window_close(wind);
  		if (reshow)
  			show_menus();
-@@ -440,7 +440,7 @@ int RunMovie(char *filename, int hires_flag, int must_have,int dx,int dy)
+@@ -440,7 +457,7 @@ int RunMovie(char *filename, int hires_flag, int must_have,int dx,int dy)
  
      MVE_rmEndMovie();
  
@@ -1494,7 +1558,7 @@ index 33bd8ca..510e4aa 100644
  	if (reshow)
  		show_menus();
  	aborted = m->aborted;
-@@ -469,7 +469,7 @@ int RotateRobot()
+@@ -469,7 +486,7 @@ int RotateRobot()
  
  	if (err == MVE_ERR_EOF)     //end of movie, so reset
  	{
@@ -1503,7 +1567,7 @@ index 33bd8ca..510e4aa 100644
  		if (MVE_rmPrepMovie(RoboFile, SWIDTH/2.3, SHEIGHT/2.3, 0))
  		{
  			Int3();
-@@ -489,7 +489,7 @@ int RotateRobot()
+@@ -489,7 +506,7 @@ int RotateRobot()
  void DeInitRobotMovie(void)
  {
  	MVE_rmEndMovie();
@@ -1512,7 +1576,15 @@ index 33bd8ca..510e4aa 100644
  }
  
  
-@@ -506,13 +506,13 @@ int InitRobotMovie(char *filename)
+@@ -498,6 +515,7 @@ int InitRobotMovie(char *filename)
+ 	if (GameArg.SysNoMovies)
+ 		return 0;
+ 
++	astra_prepare_movie(filename);
+ 	con_printf(CON_DEBUG, "RoboFile=%s\n", filename);
+ 
+ 	MVE_memCallbacks(MPlayAlloc, MPlayFree);
+@@ -506,13 +524,13 @@ int InitRobotMovie(char *filename)
  	MVE_palCallbacks(MovieSetPalette);
  	MVE_sndInit(-1);        //tell movies to play no sound for robots
  
@@ -1528,7 +1600,16 @@ index 33bd8ca..510e4aa 100644
  	}
  
  	if (!RoboFile)
-@@ -746,3 +746,4 @@ void init_extra_robot_movie(char *movielib)
+@@ -714,6 +732,8 @@ void init_movies()
+ 	if (GameArg.SysNoMovies)
+ 		return;
+ 
++	if (EM_ASM_INT(return !!Module.loadMovie;)) return;
++
+ 	for (i=0;i<N_BUILTIN_MOVIE_LIBS;i++) {
+ 		init_movie(movielib_files[i], 1);
+ 	}
+@@ -746,3 +766,4 @@ void init_extra_robot_movie(char *movielib)
  	close_extra_robot_movie();
  	init_movie(movielib, 0);
  }
@@ -1978,10 +2059,10 @@ index 7e15772..74bab59 100644
  }
 +
 diff --git a/d2/misc/pngfile.c b/d2/misc/pngfile.c
-index 9d9dba2..6dd1531 100644
+index 9d9dba2..d58df58 100644
 --- a/d2/misc/pngfile.c
 +++ b/d2/misc/pngfile.c
-@@ -8,121 +8,30 @@
+@@ -8,121 +8,39 @@
  #include "u_mem.h"
  #include "pstypes.h"
  
@@ -1991,7 +2072,11 @@ index 9d9dba2..6dd1531 100644
 -	if (SDL_RWread(rw, data, 1, length) != length)
 -		png_error(png_ptr, "Read Error");
 -}
--
++EM_ASYNC_JS(void, astra_fetch_image, (const char *name), {
++    try { await Module.assetDepot.image(UTF8ToString(name)); }
++    catch (error) { abort(error.message); }
++});
+ 
  int read_png(const char *filename, png_data *pdata)
  {
 -	//ubyte header[8];
@@ -2099,6 +2184,10 @@ index 9d9dba2..6dd1531 100644
 -
 -	return 1;
 +    PHYSFS_File *file=PHYSFS_openRead(filename);
++    if (!file && EM_ASM_INT(return !!Module.assetDepot?.knows(UTF8ToString($0));,filename)) {
++        astra_fetch_image(filename);
++        file=PHYSFS_openRead(filename);
++    }
 +    if (!file) return 0;
 +    PHYSFS_sint64 n=PHYSFS_fileLength(file);
 +    if(n<=0 || n>64*1024*1024) {PHYSFS_close(file);return 0;}
@@ -2124,7 +2213,7 @@ index 9d9dba2..6dd1531 100644
  static void PNGCBAPI png_write_data(png_structp png_ptr, png_bytep data, size_t length)
  {
  	PHYSFS_file *fp = (PHYSFS_File *)png_get_io_ptr(png_ptr);
-@@ -203,3 +112,4 @@ int write_png(const char *file_name, png_data *pdata)
+@@ -203,3 +121,4 @@ int write_png(const char *file_name, png_data *pdata)
  
  	return 1;
  }

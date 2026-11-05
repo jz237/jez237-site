@@ -32,6 +32,7 @@ includes["foundry.inc"]="arch/ogl/astra_foundry.inc"
 includes["antialias.inc"]="arch/ogl/astra_antialias.inc"
 includes["detonations.h"]="main/astra_detonations.h"
 includes["detonation_draw.inc"]="arch/ogl/astra_detonation_draw.inc"
+includes["streaming.inc"]="arch/ogl/astra_streaming.inc"
 for name,path in includes.items():
     if (repo/"d2"/path).exists():raise SystemExit("Use a fresh checkout. An Astra include already exists.")
 git(repo,"apply",str(src/"engine.patch"))

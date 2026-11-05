@@ -528,3 +528,22 @@ before the existing close-impact limits. Replay and loop use the paused native
 preview. Changes use a deterministic presentation seed and the original sounds.
 The combat renderer depth-tests fragments, optical gas and streaks against
 the mine. Wall lights inherit each profile's palette and timing.
+
+Astra faster mine loading (pyre24)
+The HTML title enables its controls before constructing the 3D hangar. On the
+web, image batches in payload/stream24 contain the final pre-existing encoded
+PNG bytes, including the later surface overrides. The selected level requests
+its wall materials, animated families and doors before rendering. Robot paint
+can warm after the first frame. Other native PNG consumers have a demand
+fallback. The normal bind path uploads textures as they become visible.
+Binary effects assets avoid main-thread base64 array expansion on the web.
+The installed file:// edition retains script parcels and uses native typed-array
+base64 decoding or a bounded typed-array loop.
+
+Both editions read only the movie parcels overlapping an explicitly requested
+MVE. The index maps 48 original cinematics to byte ranges. The native player,
+robot briefings and Vertigo's extra archive continue using the original decoder.
+The loader retains at most one decoded movie and one decompressed movie parcel.
+
+Run source/pack-streaming.py WEB_GAME STANDALONE_GAME to reproduce the lossless
+web batches and both movie indices from the existing web release parcels.
