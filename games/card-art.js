@@ -44,6 +44,7 @@
     'Stellar Drift':['space','#ebaf68','#9ec5eb',2],
     'SUPER STAR TREK':['trek','#e5b875','#8fbdeb',0],
     'Lunar Lander':['lander','#e7ca87','#9fc5de',0],
+    'Swarmbreak':['swarm','#ffb347','#7fe0ff',0],
     'Crater Runner':['craterrun','#ffb347','#9fd8ff',0],
     'Neon Qix':['qix','#e2a3e9','#7bdade',0],
     'Sky Joust':['joust','#e1b77d','#9ecedc',1],
@@ -171,6 +172,15 @@
       case 'helicopter': return stars+skyline(59)+group(path('M-21 2-5 0Q0-13 13-8L22 0Q24 9 11 10H-1L-8 5-23 7Z',metal,a,.5)+path('M5-8 12-7 19 0H4Z','#20445c','#b0dae3',.7)+path('M-22 5-28-5-28 8Z',b)+path('M-4 10-7 14H20M14 10v4M0-8v-7','none',metal,1.2)+group(path('M-28-15H32','none','#d1dce0',1.1),'','ca-rotor')+circle(-25,2,2,'none',b,.7),'translate(48 29)','ca-hover')+path('M65 39 82 62H40Z','#f1d99f','','','opacity=".11"')+person(63,56,.43,b)+person(73,58,.35,a);
       case 'slash': return stars+floor+repeat(3,i=>group(crystal(0,0,1,i%2?a:b),`translate(${26+i*25} ${25+(i%2)*14}) rotate(${i*25-20})`,'ca-drift'))+group(path('M15 54Q44 35 83 13','none','#e8faf6',3,'stroke-linecap="round"')+path('M15 55Q43 40 84 14','none',a,6,'opacity=".2"'),'','ca-slash')+repeat(8,i=>blink(path(`M${39+i*4} ${23+(i%3)*7}l${i%2?3:-3} -3`,'none',b,.8),-i*.16));
       case 'gravity': return stars+repeat(6,i=>path(`M${8+i*15} 8Q${15+i*12} 49 ${8+i*15} 60M8 ${9+i*10}Q49 ${5+i*7} 94 ${9+i*10}`,'none',a,.45,'opacity=".35"'))+group(ellipse(50,34,25,14,'none',b)+ellipse(50,34,14,25,'none',a),'','ca-current')+circle(50,34,8,'#142339',a,.8)+circle(48,31,3,haze)+group(circle(26,30,3,metal)+circle(74,39,2,b),'','ca-current')+blink(circle(50,34,3,'#e7dff2'));
+      case 'swarm': {
+        const bot=(x,y,i)=>group(circle(0,0,2.3,'#5a2a22','#c0563a',.5)+circle(1.2,-.2,.7,'#ff4a3a')+path('M-2-2-4-4M2-2 4-4M-2 2-4 4M2 2 4 4','none','#8a94a0',.5),`translate(${x} ${y})`,'ca-hover',`style="--lag:${-i*.3}s"`);
+        const surv=(x,y)=>circle(x,y,3,'none','#7dff9a',.6,'opacity=".7"')+person(x,y+2.2,.32,'#d94a3a')+blink(circle(x,y-5.5,.8,'#9dffb0'));
+        return rect(6,5,88,58,'#1a1f28',1.5,a)+repeat(10,i=>path(`M${10+i*8.4} 6V62`,'none','#2c3442',.4))+repeat(6,i=>path(`M7 ${10+i*9}H93`,'none','#2c3442',.4))
+          +ellipse(88,34,4.5,6,'#ff3a2a','','opacity=".35"')+surv(22,20)+surv(76,54)
+          +repeat(8,i=>bot(18+(i*23)%64,12+(i*17)%44,i))
+          +group(path('M51 35 82 22','none',b,1.1,'opacity=".9" stroke-dasharray="3 3"'),'','ca-glimmer')
+          +group(circle(0,0,5.5,'none',b,.6,'opacity=".7"')+circle(0,0,3.2,'#2f6fd8','#cfe6ff',.6)+path('M1-1 6-3.5','none','#e8f2ff',1.4)+circle(-1,0,1,b),'translate(50 36)','ca-hover');
+      }
       default: return stars+crystal(50,36,2,a);
     }
   }

@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#000000">
+<meta name="description" content="Swarmbreak — an original twin-stick arena shooter in real-time 3D. Run one way and shoot another as machine swarms pour through the gates of five city sectors, bring the survivors home, break five bosses, or hold out in the endless Last Stand. Online co-op, upgrades, medals, instant replays and a smart demo mode.">
+<title>Swarmbreak</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Saira+Condensed:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root { --amber: #ffb347; --ice: #9fd8ff; --ink: #eef2f6; --dim: #8a96a8; --glass: rgba(8, 11, 16, 0.62); --edge: rgba(190, 205, 225, 0.2); --red: #ff5a4a; --green: #8dff8a; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; height: 100%; background: #000; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; overscroll-behavior: none; }
+canvas#gl { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+#ui { position: fixed; inset: 0; font-family: 'Chakra Petch', sans-serif; color: var(--ink); pointer-events: none; }
+#ui button, #ui .clickable, #ui input { pointer-events: auto; }
+.hidden { display: none !important; }
+button { appearance: none; border: 0; background: none; font: inherit; color: inherit; cursor: pointer; }
+
+/* ---------------------------------------------------------------- HUD */
+#hud { position: absolute; left: max(12px, env(safe-area-inset-left)); right: max(12px, env(safe-area-inset-right)); top: max(10px, env(safe-area-inset-top)); display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: start; }
+.panel { padding: 8px 13px 9px; border-radius: 12px; background: linear-gradient(170deg, rgba(26, 32, 42, .6), rgba(6, 8, 12, .66)); border: 1px solid var(--edge); box-shadow: 0 8px 26px rgba(0, 0, 0, .4); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.hl { justify-self: start; min-width: 150px; }
+.hr { justify-self: end; text-align: right; min-width: 150px; }
+.lbl { font-size: 9px; letter-spacing: .22em; color: var(--dim); }
+.big { font-family: 'Saira Condensed', sans-serif; font-weight: 800; font-size: 27px; letter-spacing: .04em; line-height: 1; color: #fff; font-variant-numeric: tabular-nums; }
+#score.bump { color: var(--amber); }
+.row { display: flex; gap: 8px; align-items: center; margin-top: 5px; }
+.hr .row { justify-content: flex-end; }
+.lives { display: flex; gap: 4px; }
+.lives i { width: 13px; height: 15px; border-radius: 6px 6px 3px 3px; background: linear-gradient(180deg, var(--ink) 0 55%, #7fe0ff 55% 68%, var(--ink) 68%); opacity: .9; }
+.shield { display: flex; gap: 3px; }
+.shield i { width: 12px; height: 12px; border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; border: 1.5px solid var(--ice); }
+.shield i.on { background: var(--ice); box-shadow: 0 0 8px var(--ice); }
+.mid { text-align: center; min-width: 260px; }
+#sector-name { font-size: 11px; letter-spacing: .3em; color: var(--amber); white-space: nowrap; }
+#wavestrip { display: flex; gap: 3px; align-items: center; justify-content: center; margin-top: 6px; position: relative; }
+#wavestrip b { width: 26px; height: 20px; border-radius: 5px; display: grid; place-items: center; font-size: 12px; font-weight: 700; background: rgba(255, 255, 255, .06); color: var(--dim); border: 1px solid rgba(255, 255, 255, .08); }
+#wavestrip b.done { background: rgba(255, 179, 71, .2); color: var(--amber); border-color: rgba(255, 179, 71, .45); }
+#wavestrip b.now { color: #fff; border-color: #fff; }
+#wavestrip b.boss { width: 40px; color: var(--red); }
+#timer { font-size: 11px; color: var(--dim); margin-top: 4px; font-variant-numeric: tabular-nums; letter-spacing: .1em; }
+#bossbar { position: absolute; left: 50%; top: calc(max(10px, env(safe-area-inset-top)) + 96px); transform: translateX(-50%); width: min(460px, 70vw); text-align: center; }
+#bossbar .lbl { color: var(--red); letter-spacing: .3em; font-size: 10px; }
+#bossbar .bar { margin-top: 5px; height: 8px; border-radius: 4px; background: rgba(255, 255, 255, .1); overflow: hidden; border: 1px solid rgba(255, 90, 74, .4); }
+#bossbar .bar i { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, #ff3b2f, #ffb347); transition: width .15s; }
+
+#tut { position: absolute; left: 50%; top: calc(max(10px, env(safe-area-inset-top)) + 104px); transform: translateX(-50%); max-width: min(620px, 90vw); text-align: center; padding: 12px 20px; border-radius: 14px; background: rgba(6, 9, 14, .72); border: 1px solid rgba(255, 179, 71, .45); font-size: 15px; line-height: 1.45; letter-spacing: .02em; transition: opacity .4s; }
+#tut b { color: var(--amber); }
+#tut kbd { font-family: inherit; font-size: 12px; padding: 1px 6px; border-radius: 4px; border: 1px solid rgba(255, 255, 255, .35); background: rgba(255, 255, 255, .08); }
+#banner { position: absolute; left: 0; right: 0; top: 40%; text-align: center; transform: translateY(-50%); }
+#banner .b1 { font-family: 'Saira Condensed', sans-serif; font-weight: 800; font-size: clamp(36px, 8vw, 92px); letter-spacing: .08em; color: #fff; text-shadow: 0 4px 24px rgba(0, 0, 0, .7), 0 0 40px rgba(255, 179, 71, .25); }
+#banner .b2 { font-size: clamp(11px, 2vw, 15px); letter-spacing: .45em; color: var(--amber); margin-top: 6px; text-shadow: 0 2px 10px #000; }
+#banner.go { animation: bannerIn .5s cubic-bezier(.2, 1.4, .4, 1); }
+@keyframes bannerIn { from { opacity: 0; transform: translateY(-40%) scale(.9); } }
+#popups { position: absolute; inset: 0; overflow: hidden; }
+.pop { position: absolute; transform: translate(-50%, -50%); font-family: 'Saira Condensed'; font-weight: 800; font-size: 20px; color: var(--amber); text-shadow: 0 2px 8px #000; white-space: nowrap; animation: popup 1.2s ease-out forwards; }
+@keyframes popup { to { transform: translate(-50%, -160%); opacity: 0; } }
+#demo-badge { position: absolute; left: 50%; bottom: max(16px, env(safe-area-inset-bottom)); transform: translateX(-50%); font-size: 11px; letter-spacing: .3em; padding: 8px 16px; border-radius: 10px; background: rgba(0, 0, 0, .55); border: 1px solid rgba(255, 179, 71, .5); color: var(--amber); white-space: nowrap; }
+#demo-badge span { animation: blink 1.2s infinite; }
+#caption { position: absolute; left: max(14px, env(safe-area-inset-left)); bottom: calc(max(16px, env(safe-area-inset-bottom)) + 44px); font-size: 11px; letter-spacing: .12em; color: #d9e2ec; padding: 7px 11px; border-radius: 9px; background: rgba(0, 0, 0, .5); border: 1px solid var(--edge); max-width: 60vw; }
+#letterbox::before, #letterbox::after { content: ''; position: absolute; left: 0; right: 0; height: 9vh; background: #000; }
+#letterbox::before { top: 0; } #letterbox::after { bottom: 0; }
+#letterbox span { position: absolute; left: 50%; top: 2.6vh; transform: translateX(-50%); z-index: 2; font-size: 12px; letter-spacing: .4em; color: var(--amber); animation: blink 1.2s infinite; }
+@keyframes blink { 50% { opacity: .35; } }
+
+/* ---------------------------------------------------------------- menus */
+.screen { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); pointer-events: none; }
+.card { pointer-events: auto; width: min(560px, 94vw); max-height: 92vh; overflow: auto; padding: 22px 24px; border-radius: 18px; background: linear-gradient(170deg, rgba(22, 28, 38, .86), rgba(5, 7, 11, .9)); border: 1px solid var(--edge); box-shadow: 0 20px 60px rgba(0, 0, 0, .6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.card.wide { width: min(860px, 96vw); }
+.card h2 { margin: 0 0 4px; font-family: 'Saira Condensed'; font-weight: 800; font-size: 34px; letter-spacing: .06em; }
+.card h3 { margin: 16px 0 8px; font-size: 11px; letter-spacing: .3em; color: var(--amber); font-weight: 600; }
+.card p, .card li { font-family: system-ui, sans-serif; font-size: 13.5px; line-height: 1.5; color: #c9d3df; }
+.sub { font-size: 11px; letter-spacing: .26em; color: var(--dim); margin: 0 0 16px; }
+.btns { display: grid; gap: 9px; }
+.btns.two { grid-template-columns: 1fr 1fr; }
+.mbtn { display: block; width: 100%; text-align: left; padding: 12px 16px; border-radius: 11px; font-size: 14px; letter-spacing: .16em; font-weight: 600; background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .12); transition: border-color .15s, background .15s; }
+.mbtn small { display: block; margin-top: 3px; font-family: system-ui, sans-serif; letter-spacing: .02em; font-weight: 400; font-size: 12px; color: var(--dim); }
+.mbtn:hover, .mbtn.sel { border-color: var(--amber); background: rgba(255, 179, 71, .1); }
+.mbtn.primary { background: linear-gradient(90deg, rgba(255, 179, 71, .25), rgba(255, 179, 71, .06)); border-color: rgba(255, 179, 71, .6); }
+.mbtn[disabled] { opacity: .4; cursor: default; }
+#title { justify-content: flex-start; padding-left: max(5vw, env(safe-area-inset-left)); }
+#title .card { width: min(430px, 92vw); background: linear-gradient(170deg, rgba(16, 20, 28, .72), rgba(4, 5, 8, .8)); }
+.logo { font-family: 'Saira Condensed'; font-weight: 800; font-size: clamp(46px, 7vw, 66px); line-height: .9; letter-spacing: .05em; margin: 0; color: #fff; text-shadow: 0 4px 30px rgba(0, 0, 0, .6); }
+.logo span { color: var(--amber); }
+.ver { display: inline-block; margin: 8px 0 16px; font-size: 10px; letter-spacing: .3em; color: var(--dim); }
+.ver b { color: var(--ink); font-weight: 600; }
+.foot { margin-top: 14px; font-size: 10px; letter-spacing: .14em; color: var(--dim); display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+table.hs { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+table.hs td { padding: 6px 4px; border-bottom: 1px solid rgba(255, 255, 255, .06); }
+table.hs td:first-child { color: var(--dim); width: 2em; }
+table.hs td:last-child { text-align: right; color: var(--amber); }
+table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media (max-width: 640px) { .cols { grid-template-columns: 1fr; } }
+.secgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.sec { text-align: left; padding: 12px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, .12); background: rgba(255, 255, 255, .04); }
+.sec b { display: block; font-size: 10px; letter-spacing: .24em; color: var(--amber); }
+.sec span { display: block; margin-top: 4px; font-size: 14px; font-weight: 700; letter-spacing: .06em; }
+.sec small { display: block; margin-top: 6px; font-size: 11px; color: var(--dim); font-family: system-ui; }
+.sec .md { margin-top: 6px; letter-spacing: .2em; color: #ffd66b; font-size: 12px; }
+.sec[disabled] { opacity: .35; }
+.sec:hover:not([disabled]), .sec.sel { border-color: var(--amber); }
+.upgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+.upg { display: grid; grid-template-columns: 36px 1fr auto; gap: 4px 10px; align-items: center; text-align: left; padding: 12px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, .12); background: rgba(255, 255, 255, .04); }
+.upg i { grid-row: 1 / 4; font-style: normal; font-size: 24px; text-align: center; color: var(--uc); text-shadow: 0 0 10px var(--uc); }
+.upg b { font-size: 12px; letter-spacing: .14em; }
+.upg .lvl { display: flex; gap: 3px; }
+.upg .lvl em { width: 9px; height: 9px; border-radius: 2px; border: 1px solid var(--uc); }
+.upg .lvl em.on { background: var(--uc); }
+.upg small { grid-column: 2 / 4; font-family: system-ui; font-size: 12px; color: #b8c4d2; }
+.upg .cost { grid-column: 2 / 4; font-size: 12px; color: var(--green); }
+.upg.poor { opacity: .55; } .upg.poor .cost { color: #ff8a80; } .upg.max .cost { color: var(--amber); }
+.upg:hover:not(.max), .upg.sel { border-color: var(--uc); }
+#salvage { display: inline-block; margin-bottom: 12px; padding: 6px 12px; border-radius: 9px; border: 1px solid rgba(141, 255, 138, .5); color: var(--green); font-size: 12px; letter-spacing: .2em; }
+#salvage b { color: #fff; font-size: 16px; }
+.stat { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255, 255, 255, .06); font-size: 14px; }
+.stat span { color: var(--dim); letter-spacing: .1em; font-size: 12px; }
+.medrow { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+.medal { padding: 6px 10px; border-radius: 9px; border: 1px solid rgba(255, 214, 107, .25); color: var(--dim); font-size: 11px; letter-spacing: .12em; }
+.medal.on { color: #ffe08a; border-color: #ffd66b; background: rgba(255, 214, 107, .1); }
+.medal.new { animation: pulse .5s 4 alternate; }
+.ini { display: flex; gap: 10px; justify-content: center; margin: 12px 0; }
+.ini b { width: 54px; height: 64px; display: grid; place-items: center; border-radius: 10px; border: 1px solid rgba(255, 255, 255, .2); font-family: 'Saira Condensed'; font-size: 40px; }
+.ini b.cur { border-color: var(--amber); color: var(--amber); }
+.opt { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(255, 255, 255, .06); font-size: 13px; letter-spacing: .1em; }
+.opt .seg { display: flex; gap: 4px; }
+.opt .seg button { padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, .14); font-size: 11px; letter-spacing: .12em; }
+.opt .seg button.on { border-color: var(--amber); color: var(--amber); background: rgba(255, 179, 71, .1); }
+.opt input[type=range] { width: 150px; accent-color: var(--amber); }
+#room-code { font-family: 'Saira Condensed'; font-size: 48px; letter-spacing: .25em; color: var(--amber); text-align: center; margin: 6px 0; }
+#join-code { width: 100%; padding: 12px; font: 700 26px 'Saira Condensed'; letter-spacing: .4em; text-align: center; text-transform: uppercase; border-radius: 10px; border: 1px solid var(--edge); background: rgba(0, 0, 0, .3); color: #fff; }
+#net-status { min-height: 20px; margin: 10px 0; font-size: 13px; color: var(--ice); letter-spacing: .06em; }
+#net-status.error { color: #ff8a80; }
+#loading { position: fixed; inset: 0; display: grid; place-items: center; background: #000; color: var(--dim); font: 12px 'Chakra Petch', sans-serif; letter-spacing: .4em; z-index: 5; transition: opacity .6s; }
+#testlog { position: fixed; left: 10px; top: 10px; z-index: 9; max-width: 92vw; max-height: 90vh; overflow: auto; padding: 14px 16px; border-radius: 12px; background: rgba(0, 0, 0, .85); border: 1px solid var(--edge); font: 13px/1.6 ui-monospace, monospace; color: #dfe; pointer-events: auto; }
+#testlog .pass { color: #8dff8a; } #testlog .fail { color: #ff8a80; }
+.rotate-hint { display: none; margin-top: 12px; font-size: 11px; letter-spacing: .08em; color: var(--ice); }
+@media (orientation: portrait) and (pointer: coarse) { .rotate-hint { display: block; } }
+@media (max-width: 720px) {
+  .mid { min-width: 0; }
+  #wavestrip b { width: 20px; height: 18px; font-size: 10px; }
+  .hl, .hr { min-width: 0; padding: 6px 9px; }
+  .big { font-size: 21px; }
+}
+@media (max-height: 500px) { #hud .panel { padding: 5px 9px; } .big { font-size: 19px; } #tut { top: 30%; font-size: 13px; } }
+#chain { font-size: 11px; color: var(--green); margin-top: 3px; letter-spacing: .14em; }
+.pulses { display: flex; gap: 3px; margin-left: 2px; }
+.pulses i { width: 11px; height: 11px; transform: rotate(45deg) scale(.85); border: 1.5px solid #d7a6ff; }
+.pulses i.on { background: #d7a6ff; box-shadow: 0 0 8px #b48aff; }
+.pop.big { font-size: 28px; }
+/* touch: two floating sticks + PULSE */
+#touch { position: absolute; inset: 0; }
+.stick { position: absolute; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, .28); background: radial-gradient(circle, rgba(255, 255, 255, .08), rgba(255, 255, 255, .02)); opacity: 0; transition: opacity .15s; pointer-events: none; }
+.stick.on { opacity: 1; }
+.stick i { position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%; background: rgba(255, 255, 255, .3); border: 2px solid rgba(255, 255, 255, .6); }
+#stick-aim i { background: rgba(255, 179, 71, .35); border-color: var(--amber); }
+.zone-hint { position: absolute; bottom: calc(max(14px, env(safe-area-inset-bottom)) + 10px); font-size: 10px; letter-spacing: .26em; color: rgba(255, 255, 255, .35); }
+#zh-move { left: max(22px, env(safe-area-inset-left)); } #zh-aim { right: calc(max(22px, env(safe-area-inset-right)) + 110px); }
+#tb-pulse { position: absolute; right: max(16px, env(safe-area-inset-right)); bottom: calc(max(14px, env(safe-area-inset-bottom)) + 70px); width: 84px; height: 84px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 700; letter-spacing: .14em; color: #fff; pointer-events: auto; touch-action: none;
+  background: radial-gradient(circle at 40% 35%, rgba(215, 166, 255, .35), rgba(120, 80, 200, .12)); border: 2px solid rgba(215, 166, 255, .7); }
+#tb-pulse.on { transform: scale(.94); background: rgba(215, 166, 255, .5); }
+#tb-pulse.empty { opacity: .35; }
+#tb-pause { position: absolute; top: calc(max(10px, env(safe-area-inset-top)) + 78px); right: max(14px, env(safe-area-inset-right)); width: 40px; height: 40px; border-radius: 10px; pointer-events: auto; background: rgba(0, 0, 0, .4); border: 1px solid var(--edge); font-size: 14px; }
+@media (max-width: 560px) { #hud { grid-template-columns: auto 1fr; } .hr { display: none; } .mid { min-width: 0; padding: 6px 8px; } #sector-name { font-size: 9px; letter-spacing: .1em; white-space: normal; } #wavestrip b { width: 17px; height: 16px; font-size: 9px; } #timer, #chain { font-size: 10px; } }
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div id="ui">
+  <div id="hud" class="hidden">
+    <div class="panel hl">
+      <div class="lbl">SCORE</div>
+      <div class="big" id="score">0</div>
+      <div class="row"><div class="lives" id="lives"></div><div class="shield" id="shield"></div><div class="pulses" id="pulses"></div></div>
+    </div>
+    <div class="panel mid">
+      <div id="sector-name">ROOFTOP GARDENS</div>
+      <div id="wavestrip"></div>
+      <div id="timer">WAVE 1 · 0:00.0</div>
+      <div id="chain"></div>
+    </div>
+    <div class="panel hr">
+      <div class="lbl" id="hi-lbl">BEST</div>
+      <div class="big" id="hiscore">0</div>
+    </div>
+  </div>
+  <div id="bossbar" class="hidden"><div class="lbl" id="boss-name">BOSS</div><div class="bar"><i></i></div></div>
+  <div id="popups"></div>
+  <div id="tut" class="hidden"></div>
+  <div id="banner" class="hidden"><div class="b1"></div><div class="b2"></div></div>
+  <div id="caption" class="hidden"></div>
+  <div id="letterbox" class="hidden"><span>INSTANT REPLAY</span></div>
+  <div id="demo-badge" class="hidden"><span>DEMO</span> · PRESS ANY KEY</div>
+  <div id="touch" class="hidden">
+    <div class="zone-hint" id="zh-move">◀ RUN</div><div class="zone-hint" id="zh-aim">AIM + FIRE ▶</div>
+    <div class="stick" id="stick-move"><i></i></div>
+    <div class="stick" id="stick-aim"><i></i></div>
+    <button id="tb-pulse" data-pad="pulse">PULSE</button>
+  </div>
+  <button id="tb-pause" class="hidden clickable" data-act="pause">❚❚</button>
+
+  <!-- title -->
+  <div class="screen hidden" id="title">
+    <div class="card">
+      <h1 class="logo">SWARM<span>BREAK</span></h1>
+      <div class="ver">VERSION <b id="ver">1.0.0</b> · HOLD THE LINE · BRING THEM HOME</div>
+      <div class="btns" id="title-btns">
+        <button class="mbtn primary" data-act="campaign">START CAMPAIGN<small>Five sectors of the city, five waves and a boss in each</small></button>
+        <button class="mbtn" data-act="sectors">SECTOR SELECT<small id="sel-sub">Replay any sector you have reached</small></button>
+        <button class="mbtn" data-act="stand">LAST STAND<small>Endless waves that slowly get tougher</small></button>
+        <button class="mbtn" data-act="online">ONLINE CO-OP<small>Two Wardens, back to back</small></button>
+        <button class="mbtn" data-act="playthrough">AI PLAYTHROUGH<small>Sit back and watch the autopilot play all five sectors</small></button>
+        <div class="btns two">
+          <button class="mbtn" data-act="scores">HIGH SCORES</button>
+          <button class="mbtn" data-act="medals">MEDALS <small id="med-sub">0 / 15</small></button>
+          <button class="mbtn" data-act="options">OPTIONS</button>
+          <button class="mbtn" data-act="help">HOW TO PLAY</button>
+        </div>
+      </div>
+      <div class="rotate-hint">📱 Turn your phone sideways for room for both thumbs</div>
+      <div class="foot"><span id="title-best">BEST 0</span><span>MUSIC, SOUND AND VOICE BY ELEVENLABS</span></div>
+    </div>
+  </div>
+
+  <div class="screen hidden" id="sectors"><div class="card wide">
+    <h2>SECTOR SELECT</h2><div class="sub">START FROM ANY SECTOR YOU HAVE REACHED · TYPICAL UPGRADES FITTED</div>
+    <div class="secgrid" id="secgrid"></div>
+    <div class="btns" style="margin-top:14px"><button class="mbtn" data-act="back">BACK</button></div>
+  </div></div>
+
+  <div class="screen hidden" id="upgrades"><div class="card wide">
+    <h2 id="up-title">SECTOR CLEAR</h2><div class="sub" id="up-sub">SPEND SALVAGE ON YOUR SUIT</div>
+    <div id="salvage">SALVAGE <b id="salv">0</b></div>
+    <div class="upgrid" id="upgrid"></div>
+    <div class="btns two" style="margin-top:14px">
+      <button class="mbtn" data-act="replay">INSTANT REPLAY<small>Watch the boss go down</small></button>
+      <button class="mbtn primary" data-act="next">NEXT SECTOR<small id="next-sub"></small></button>
+    </div>
+  </div></div>
+
+  <div class="screen hidden" id="results"><div class="card">
+    <h2 id="res-title">OVERRUN</h2><div class="sub" id="res-sub"></div>
+    <div id="res-stats"></div>
+    <div class="medrow" id="res-medals"></div>
+    <div id="ini-wrap" class="hidden"><h3>NEW HIGH SCORE · ENTER YOUR INITIALS</h3><div class="ini" id="ini"><b></b><b></b><b></b></div><p style="text-align:center;margin:0">Type letters, or use ↑ ↓ and ENTER (tap a letter on touch)</p></div>
+    <div class="btns two" style="margin-top:14px" id="res-btns">
+      <button class="mbtn" data-act="replay">INSTANT REPLAY<small id="rep-sub">The last hit, exactly as it happened</small></button>
+      <button class="mbtn primary" data-act="done">CONTINUE</button>
+    </div>
+  </div></div>
+
+  <div class="screen hidden" id="scores"><div class="card wide">
+    <h2>HIGH SCORES</h2>
+    <div class="btns two" style="margin:8px 0 6px"><button class="mbtn tab" data-tab="campaign">CAMPAIGN</button><button class="mbtn tab" data-tab="stand">LAST STAND</button></div>
+    <div class="cols"><div><h3>THIS DEVICE</h3><table class="hs" id="hs-local"></table></div><div><h3>WORLD</h3><table class="hs" id="hs-global"></table></div></div>
+    <h3>BEST SECTOR TIMES</h3><div id="besttimes"></div>
+    <div class="btns" style="margin-top:14px"><button class="mbtn" data-act="back">BACK</button></div>
+  </div></div>
+
+  <div class="screen hidden" id="medals"><div class="card wide">
+    <h2>MEDALS</h2><div class="sub" id="med-count"></div>
+    <div id="medlist"></div>
+    <div class="btns" style="margin-top:14px"><button class="mbtn" data-act="back">BACK</button></div>
+  </div></div>
+
+  <div class="screen hidden" id="options"><div class="card">
+    <h2>OPTIONS</h2>
+    <div class="opt">MUSIC<input type="range" min="0" max="100" data-set="music"></div>
+    <div class="opt">SOUND<input type="range" min="0" max="100" data-set="sfx"></div>
+    <div class="opt">VOICE<input type="range" min="0" max="100" data-set="voice"></div>
+    <div class="opt">NARRATION<div class="seg" data-opt="talk"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
+    <div class="opt">FLASHES<div class="seg" data-opt="flash"><button data-v="full">NORMAL</button><button data-v="reduced">REDUCED</button></div></div>
+    <div class="opt">SCREEN SHAKE<div class="seg" data-opt="shake"><button data-v="1">ON</button><button data-v="0.4">LIGHT</button><button data-v="0">OFF</button></div></div>
+    <div class="opt">VIBRATION<div class="seg" data-opt="rumble"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
+    <div class="opt">TOUCH STICKS<div class="seg" data-opt="touch"><button data-v="auto">AUTO</button><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
+    <div class="opt">GRAPHICS<div class="seg" data-opt="quality"><button data-v="auto">AUTO</button><button data-v="high">HIGH</button><button data-v="medium">MED</button><button data-v="low">LOW</button></div></div>
+    <p style="margin:10px 0 0;font-size:12px">Graphics changes apply after a reload.</p>
+    <div class="btns" style="margin-top:14px"><button class="mbtn" data-act="back">BACK</button></div>
+  </div></div>
+
+  <div class="screen hidden" id="help"><div class="card">
+    <h2>HOW TO PLAY</h2>
+    <p>Machines pour into the arena through the gates. <b>Run</b> one way and <b>shoot</b> another, scrap every machine to clear the wave, and bring in the <b>survivors</b> (green beacons): each one you reach in a row is worth more. A <b>PULSE</b> scraps small machines and bolts all around you; you get a few every wave.</p>
+    <h3>KEYBOARD + MOUSE</h3><p>RUN: W A S D · AIM + FIRE: arrow keys, or aim with the mouse and hold the left button · PULSE: Space, Shift or the right mouse button · PAUSE: Esc or P</p>
+    <h3>GAMEPAD</h3><p>RUN: left stick · AIM + FIRE: right stick (RT fires the last way you aimed) · PULSE: A or a bumper · PAUSE: Start</p>
+    <h3>TOUCH</h3><p>Left thumb runs, right thumb aims and fires, the PULSE button sits above your right thumb.</p>
+    <h3>TIPS</h3><p>Nothing arrives without a warning: gates glow red before machines step out, spitters show a pink aim line, pylons crackle before an arc, and every boss attack is marked on the floor first. Haulers crush survivors, so get people out of their way. If you go down you come back on the spot and the nearest machines are thrown clear.</p>
+    <div class="btns" style="margin-top:14px"><button class="mbtn" data-act="back">BACK</button></div>
+  </div></div>
+
+  <div class="screen hidden" id="online"><div class="card">
+    <h2>ONLINE CO-OP</h2><div class="sub">TWO WARDENS · SHARED LIVES · THE HOST PICKS THE ROUTE</div>
+    <div class="opt">ROUTE<div class="seg" data-opt="netRoute"><button data-v="0">S1</button><button data-v="1">S2</button><button data-v="2">S3</button><button data-v="3">S4</button><button data-v="4">S5</button><button data-v="ls">LAST STAND</button></div></div>
+    <div id="net-status"></div>
+    <div id="room-wrap" class="hidden"><div class="lbl" style="text-align:center">ROOM CODE</div><div id="room-code">----</div></div>
+    <div class="btns" id="net-btns">
+      <button class="mbtn primary" data-act="net-quick">QUICK MATCH<small>Pair up with anyone looking</small></button>
+      <button class="mbtn" data-act="net-host">HOST A ROOM<small>Share the code with a friend</small></button>
+      <input id="join-code" maxlength="4" placeholder="CODE" autocomplete="off" spellcheck="false">
+      <button class="mbtn" data-act="net-join">JOIN BY CODE</button>
+      <button class="mbtn hidden" data-act="net-go" id="net-go">START</button>
+      <button class="mbtn" data-act="net-back">BACK</button>
+    </div>
+  </div></div>
+
+  <div class="screen hidden" id="pause"><div class="card">
+    <h2>PAUSED</h2><div class="sub" id="pause-sub"></div>
+    <div class="btns">
+      <button class="mbtn primary" data-act="resume">RESUME</button>
+      <button class="mbtn" data-act="replay" id="pause-replay">INSTANT REPLAY<small>The last hit</small></button>
+      <button class="mbtn" data-act="options">OPTIONS</button>
+      <button class="mbtn" data-act="quit">QUIT TO TITLE</button>
+    </div>
+  </div></div>
+</div>
+<div id="loading">LOADING</div>
+<script>
+// error capture for the self-test page and the console check
+window.__sbErrors = [];
+addEventListener('error', (e) => window.__sbErrors.push(String(e.message || e)));
+addEventListener('unhandledrejection', (e) => window.__sbErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
+(() => { const ce = console.error; console.error = (...a) => { window.__sbErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
+</script>
+<script type="module" src="js/main.js?v=1"></script>
+</body>
+</html>

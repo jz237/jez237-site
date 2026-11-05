@@ -1450,7 +1450,7 @@
       const res = await fetch(onlineHttpBase() + '/rooms', { cache: 'no-store' });
       const data = await res.json();
       // Plasma Pong (PPB-) and Asteroids 2026 (A26-) share this relay; their rooms are not duels
-      const rooms = (Array.isArray(data.rooms) ? data.rooms : []).filter(room => !/^(PPB|A26|CR)-/.test(String(room && room.room || '')));
+      const rooms = (Array.isArray(data.rooms) ? data.rooms : []).filter(room => !/^(PPB|A26|CR|SB)-/.test(String(room && room.room || '')));
       if (!rooms.length) {
         box.innerHTML = '<div class="room-empty">No open rooms right now</div>';
         return;

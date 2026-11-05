@@ -1,0 +1,23 @@
+# Swarmbreak tools
+
+Game: `games/2026-11-05/swarmbreak/` (three.js r181 vendored, plain ES modules, no build).
+Every local import carries the same `?v=N`; bump them all together (plus `js/main.js?v=` in index.html and `V` in js/audio.js).
+
+| Script | What it does |
+| --- | --- |
+| `ramp_check.mjs [trials] [sectors] [profile]` | Human-like autopilot (0.35 s reaction with scatter, sometimes late, aim wobble and a limited turn speed, tracks only the ~8 nearest threats and often misses things behind it) plays each sector from wave 1 with 3 Wardens and the typical upgrades (`TYPICAL_UP`); prints the clear rate, deaths / hits per wave try and what killed it. Run sectors in parallel: `for s in 1 2 3 4 5; do node scripts/swarmbreak/ramp_check.mjs 100 $s & done; wait` |
+| `replay_check.mjs [seeds]` | Records autopilot runs and re-runs every death and boss kill from its saved clip; the world must match bit for bit. |
+| `autopilot_check.mjs [runs]` | Chained campaigns (lives and score carry over, salvage buys upgrades) for the demo and human profiles. |
+| `console_check.mjs [baseUrl]` | Playwright + Edge: the `?test=1` self-test page, the attract demo, an autoplay campaign and the AI playthrough rolling from the S1 boss into S2; fails on console errors or score POSTs. Needs a static server on the repo root. |
+| `gen_audio.py [music\|sfx\|voice\|all] [--only a,b]` | ElevenLabs generation (key read from the Windows user env, never printed). |
+| `process_audio.py <game folder> [names]` | Trim / normalise / encode; loop clips (dart, crawl, brute, arc) get a crossfaded seam. |
+
+Difficulty lives in one table: `RAMP` in `js/config.js` (per sector, `[first wave, last wave]`, interpolated per wave).
+Last Stand walks the same curve via `standLevel()`. Boss armour/attack rate are `bossHP` / `bossRate` in the same rows.
+
+Page hooks: `?autoplay` (demo autopilot plays), `?sector=N`, `?wave=N` (0-4 waves, 5 = boss), `?seed=N`, `?fixed` (no RAF; drive frames with
+`__sb.tick(n)`), `?test=1`, `?demo` (attract demo after 1 s), `?playthrough`, `?stand`, `?relay=ws://127.0.0.1:8787` (local relay), `?netlag=ms`,
+`?room=CODE`, `?noscores`, `?q=high|medium|low`.
+
+Online: rooms `SB-XXXX` / `SB-Q-XXXXX` on the Steel Duel relay (its lobby filter hides `^(PPB|A26|CR|SB)-`). Local test: copy
+`games/2026-06-14/steel-duel/worker` somewhere, `npx wrangler dev --local --port 8787`, open two pages with `?relay=ws://127.0.0.1:8787`.
