@@ -1,0 +1,75 @@
+{
+  "version": 38,
+  "generator": "Built-in GPT Image",
+  "reference": "New Sci-Fi Mine Tunnel Network.png",
+  "families": [
+    {
+      "family": 8,
+      "name": "ribbed-alloy",
+      "master": [
+        1254,
+        1254
+      ],
+      "color": [
+        1024,
+        1024
+      ],
+      "detail": [
+        512,
+        512
+      ],
+      "bytes": 999698
+    },
+    {
+      "family": 9,
+      "name": "ceramic-armor",
+      "master": [
+        1254,
+        1254
+      ],
+      "color": [
+        1024,
+        1024
+      ],
+      "detail": [
+        512,
+        512
+      ],
+      "bytes": 1083014
+    },
+    {
+      "family": 10,
+      "name": "service-manifold",
+      "master": [
+        1254,
+        1254
+      ],
+      "color": [
+        1024,
+        1024
+      ],
+      "detail": [
+        512,
+        512
+      ],
+      "bytes": 1025635
+    },
+    {
+      "family": 11,
+      "name": "ribbed-grille",
+      "master": [
+        1254,
+        1254
+      ],
+      "color": [
+        1024,
+        1024
+      ],
+      "detail": [
+        512,
+        512
+      ],
+      "bytes": 951611
+    }
+  ]
+}
