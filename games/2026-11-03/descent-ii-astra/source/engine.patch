@@ -1,5 +1,5 @@
 diff --git a/d2/3d/interp.c b/d2/3d/interp.c
-index daca4c2..5f24025 100644
+index daca4c2..b958e0f 100644
 --- a/d2/3d/interp.c
 +++ b/d2/3d/interp.c
 @@ -58,10 +58,15 @@ void g3_set_interp_points(g3s_point *pointlist)
@@ -91,9 +91,9 @@ index daca4c2..5f24025 100644
  				g3_start_instance_angles(vp(p+4),a);
  
 -				g3_draw_polygon_model(p+w(p+16),model_bitmaps,anim_angles,model_light,glow_values);
-+				++astra_limb;
++				++astra_limb;vm_vec_add2(&astra_limb_offset,vp(p+4));
 +                g3_draw_polygon_model(p+w(p+16),model_bitmaps,anim_angles,model_light,glow_values);
-+                --astra_limb;
++                --astra_limb;vm_vec_sub2(&astra_limb_offset,vp(p+4));
  
  				g3_done_instance();
  
@@ -708,7 +708,7 @@ index fdb2e78..581a988 100644
  
  #define ENABLE_COLLISION(type1,type2)					\
 diff --git a/d2/main/fireball.c b/d2/main/fireball.c
-index fe9b0d1..62597cf 100644
+index fe9b0d1..1c8c164 100644
 --- a/d2/main/fireball.c
 +++ b/d2/main/fireball.c
 @@ -22,6 +22,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
@@ -965,7 +965,25 @@ index fe9b0d1..62597cf 100644
  
  }
  
-@@ -1620,3 +1831,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
+@@ -1206,6 +1417,8 @@ int get_explosion_vclip(object *obj,int stage)
+ //blow up a polygon model
+ void explode_model(object *obj)
+ {
++    extern int astra_robot_breakup(object*);extern void astra_hide_debris(object*);
++    int astra_pieces=astra_robot_breakup(obj);
+ 	Assert(obj->render_type == RT_POLYOBJ);
+ 
+ 	if (Dying_modelnums[obj->rtype.pobj_info.model_num] != -1)
+@@ -1216,7 +1429,7 @@ void explode_model(object *obj)
+ 
+ 		for (i=1;i<Polygon_models[obj->rtype.pobj_info.model_num].n_models;i++)
+ 			if (!(obj->type == OBJ_ROBOT && obj->id == 44 && i == 5)) 	//energy sucker energy part
+-				object_create_debris(obj,i);
++				{object *piece=object_create_debris(obj,i);if(astra_pieces&&piece)astra_hide_debris(piece);}
+ 
+ 		//make parent object only draw center part
+ 		obj->rtype.pobj_info.subobj_flags=1;
+@@ -1620,3 +1833,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
  			expl_wall_swap(&ew[i], swap);
  }
  
@@ -1911,13 +1929,14 @@ index 163e08a..b4b8672 100644
  	lb->item = items;
  	lb->citem = default_item;
 diff --git a/d2/main/object.c b/d2/main/object.c
-index 602b2d5..06297d1 100644
+index 602b2d5..609bcd0 100644
 --- a/d2/main/object.c
 +++ b/d2/main/object.c
-@@ -425,6 +425,10 @@ void draw_cloaked_object(object *obj,g3s_lrgb light,fix *glow,fix64 cloak_start_
+@@ -425,6 +425,11 @@ void draw_cloaked_object(object *obj,g3s_lrgb light,fix *glow,fix64 cloak_start_
  //draw an object which renders as a polygon model
  void draw_polygon_object(object *obj)
  {
++    extern int astra_fragment_replaced(const object*);if(astra_fragment_replaced(obj))return;
 +	extern int astra_hull,astra_robot_id;
 +    astra_robot_id=(obj->type==OBJ_ROBOT)?obj->id:-1;
 +    extern object *astra_robot_object;astra_robot_object=(obj->type==OBJ_ROBOT)?obj:NULL;
@@ -1925,7 +1944,7 @@ index 602b2d5..06297d1 100644
  	g3s_lrgb light;
  	int	imsave;
  	fix engine_glow_value[2];		//element 0 is for engine glow, 1 for headlight
-@@ -776,6 +780,10 @@ void render_object(object *obj)
+@@ -776,6 +781,10 @@ void render_object(object *obj)
  	mld_save = Max_linear_depth;
  	Max_linear_depth = Max_linear_depth_objects;
  
@@ -1936,7 +1955,7 @@ index 602b2d5..06297d1 100644
  	switch (obj->render_type)
  	{
  		case RT_NONE:
-@@ -785,7 +793,10 @@ void render_object(object *obj)
+@@ -785,7 +794,10 @@ void render_object(object *obj)
  			if ( PlayerCfg.AlphaEffects && obj->type == OBJ_MARKER ) // set nice transparency/blending for certrain objects
  				gr_settransblend( 10, GR_BLEND_ADDITIVE_A );
  
@@ -1948,7 +1967,7 @@ index 602b2d5..06297d1 100644
  
  			if (obj->type == OBJ_ROBOT) //"warn" robot if being shot at
  				set_robot_location_info(obj);
-@@ -841,6 +852,7 @@ void render_object(object *obj)
+@@ -841,6 +853,7 @@ void render_object(object *obj)
  			Error("Unknown render_type <%d>",obj->render_type);
  	}
  
@@ -1956,7 +1975,7 @@ index 602b2d5..06297d1 100644
  	gr_settransblend( GR_FADE_OFF, GR_BLEND_NORMAL ); // revert any transparency/blending setting back to normal
  
  	if ( obj->render_type != RT_NONE && Newdemo_state == ND_STATE_RECORDING )
-@@ -910,6 +922,9 @@ void init_player_object()
+@@ -910,6 +923,9 @@ void init_player_object()
  //sets up the free list & init player & whatever else
  void init_objects()
  {
@@ -1966,7 +1985,7 @@ index 602b2d5..06297d1 100644
  	int i;
  
  	collide_init();
-@@ -2145,7 +2160,11 @@ void object_move_all()
+@@ -2145,7 +2161,11 @@ void object_move_all()
  
  	obj_delete_all_that_should_be_dead();
  
@@ -2021,7 +2040,7 @@ index 0303b58..c137fae 100644
  	ubyte CycleAutoselectOnly;
  	ubyte VulcanAmmoWarnings;
 diff --git a/d2/main/polyobj.c b/d2/main/polyobj.c
-index 823ccc1..d116511 100644
+index 823ccc1..eeac247 100644
 --- a/d2/main/polyobj.c
 +++ b/d2/main/polyobj.c
 @@ -583,7 +583,17 @@ void draw_polygon_model(vms_vector *pos,vms_matrix *orient,vms_angvec *anim_angl
@@ -2031,9 +2050,9 @@ index 823ccc1..d116511 100644
 -	g3_set_interp_points(robot_points);
 +	extern int astra_draw_pyro(g3s_lrgb);
 +    extern int astra_draw_robot(int,polymodel *,vms_angvec *,g3s_lrgb);
-+    extern int astra_shell,astra_limb;extern vms_vector astra_shell_center,astra_shell_extents;
++    extern int astra_shell,astra_limb;extern vms_vector astra_shell_center,astra_shell_extents,astra_limb_offset;
 +    astra_shell=!flags && tmap_drawer_ptr==draw_tmap && astra_draw_robot(model_num,&Polygon_models[model_num],anim_angles,light);
-+    astra_limb=0;
++    astra_limb=0;astra_limb_offset=(vms_vector){0,0,0};
 +    if(astra_shell){
 +        astra_shell_center=(vms_vector){(po->mins.x+po->maxs.x)/2,(po->mins.y+po->maxs.y)/2,(po->mins.z+po->maxs.z)/2};
 +        astra_shell_extents=(vms_vector){(po->maxs.x-po->mins.x)/2,(po->maxs.y-po->mins.y)/2,(po->maxs.z-po->mins.z)/2};

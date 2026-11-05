@@ -628,3 +628,31 @@ same renderer serves both collections; closing stops its render loop. Desktop
 validation rendered all 78 Descent and all 30 Overload entries; mobile checks
 covered portrait/landscape, collection filters and rapid gallery switches.
 Flight, AI, campaign and native engine files remain at the tested pyre29 build.
+
+
+Breakaway components (pyre31)
+
+This replaces the pyre28 soot/darkening and arbitrary panel loss. Both the
+refit shader and original armor keep their normal colors at all health levels.
+Damage crossing 31%, 59% and 82% releases coherent sections of the actual model.
+The chassis is partitioned once when loaded; the same region masks remove the
+matching original outer panels and added machinery. Detached sections retain
+their textures, orientation and articulated pose. No new art download is added.
+
+About two thirds of robot deaths rupture all remaining sections. The hook runs
+at native explode_model time, before the dying-model substitution. Native debris
+objects and RNG calls still execute; only their duplicate drawing is suppressed.
+Damage, weapons, movement, AI, drops, collision bodies and scoring stay native.
+State uses object signatures and resets when the level changes.
+
+A 32-piece pool bounds cost. Fragments tumble around their section centers,
+inherit some parent velocity, sweep against native mine walls in bounded time
+steps, bounce, and emit brief impact sparks. Only visible rooms draw fragments.
+The showroom offers component loss and complete breakup across eight robots,
+with replay, rewind, slow motion and collapsible phone controls. Showroom pieces
+are reconstructed from time, so seeking cannot contaminate live damage state.
+
+Validation: both campaign damage hooks, native breakup/debris rendering override,
+unchanged native health and RNG, reused object signatures, real wall sweeps,
+pool bounds, and unchanged mission state across showroom visits. Muted browser
+tests cover eight previews, rewind/replay, mobile controls and both campaign demos.

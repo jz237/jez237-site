@@ -308,7 +308,7 @@ static void ae_haze_flush(void){
 }
 void astra_environment_rooms(const short *rooms,int count,int window_num){
     if(!ax_on())return;ae_reset();float t=ae_clock();int budget=0;
-    extern void astra_combat_fragments(void);astra_combat_fragments();
+    extern void astra_combat_fragments(const short*,int,int);astra_combat_fragments(rooms,count,window_num);
     for(int i=0;i<count;i++){int room=rooms[i];if(room<0||room>Highest_segment_index)continue;
         for(int side=0;side<6;side++)ae_door(room,side);
         if(astra_refinement){int side=astra_environment_bay(room);vms_vector c;vms_matrix b;float w,h;

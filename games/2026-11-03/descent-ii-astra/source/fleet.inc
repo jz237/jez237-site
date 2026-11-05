@@ -2,7 +2,7 @@
 #include "polyobj.h"
 #include "robot.h"
 #include "astra_fleet_types.inc"
-typedef struct {unsigned mat,joint,count;float *v;} astra_batch;
+typedef struct {unsigned mat,joint,count,part;float *v;} astra_batch;
 typedef struct {int tried,count;astra_batch *group;unsigned char *bytes;} astra_chassis;
 static astra_chassis af_models[32];
 static GLuint af_maps[64][2],fleet_program;
@@ -18,7 +18,7 @@ static void af_program_init(void){
         "vec2 e=gl_MultiTexCoord0.zw*2.-1.;vec3 v=vec3(e,1.-abs(e.x)-abs(e.y));"
         "if(v.z<0.)v.xy=(1.-abs(v.yx))*sign(v.xy+vec2(.000001));t=normalize(rot*v);}";
     const char *fs="precision highp float;varying mediump vec2 uv;varying highp vec3 p,n,t,q;varying mediump float hand;"
-        "uniform sampler2D paint,detail;uniform vec3 energy;uniform vec4 flash;uniform float clock,damage,identity;"
+        "uniform sampler2D paint,detail;uniform vec3 energy;uniform vec4 flash;uniform float clock;"
         "void main(){vec4 a=texture2D(paint,uv),m=texture2D(detail,uv);vec3 N=normalize(n),T=normalize(t-N*dot(t,N));"
         "vec2 xy=(m.xy*2.-1.)*.82;N=normalize(T*xy.x+cross(N,T)*hand*xy.y+N*sqrt(max(.06,1.-dot(xy,xy))));"
         "vec3 V=normalize(-p),K=normalize(vec3(-.63,.80,.82)),R=normalize(vec3(.72,.28,-.68));"
@@ -31,12 +31,7 @@ static void af_program_init(void){
         "vec3 F=flash.xyz-p;float fd=length(F);color+=vec3(1.,.40,.13)*flash.w/(1.+fd*fd*.01)*max(0.,dot(N,F/max(.1,fd)))*base;"
         "vec3 emission=mix(vec3(.20,.79,1.),max(base,vec3(.15)),smoothstep(.08,.42,max(base.r,base.g)-base.b));"
         "color+=emission*pow(a.a,.77)*(1.32+.075*sin(clock*3.));"
-        "float patch=sin(q.x*7.+identity)*sin(q.y*6.-identity*.7)+sin(q.z*8.+q.x*4.)*.4;"
-        "float scar=smoothstep(1.3-damage*2.9,1.65-damage*2.9,patch)*smoothstep(.08,.3,damage);"
-        "float soot=.055+.035*sin(q.x*127.+q.z*53.)*sin(q.y*113.);color=mix(color,vec3(soot)*vec3(.73,.82,1.),scar*.88);"
-        "float seams=pow(max(0.,sin(q.x*30.+sin(q.y*24.)*.5)),24.)*pow(max(0.,sin(q.z*18.)),4.);"
-        "float core=scar*smoothstep(.40,.85,damage)*seams*(.7+.3*sin(clock*11.+q.z*13.));"
-        "color+=vec3(1.7,.32,.035)*core;gl_FragColor=vec4(color/(1.+.23*color),1.);}";
+        "gl_FragColor=vec4(color/(1.+.23*color),1.);}";
     GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);
     if(!v||!f){fleet_failed=1;return;}
     fleet_program=glCreateProgram();glAttachShader(fleet_program,v);glAttachShader(fleet_program,f);glLinkProgram(fleet_program);
@@ -61,10 +56,32 @@ static int af_load_mesh(int id){
         if(at+12>(unsigned)length){ok=0;break;}
         unsigned *h=(unsigned*)(data+at);at+=12;
         if(h[0]>=64||h[1]>2||h[2]>(length-at)/44){ok=0;break;}
-        g[i]=(astra_batch){h[0],h[1],h[2],(float*)(data+at)};at+=h[2]*44;
+        g[i]=(astra_batch){h[0],h[1],h[2],0,(float*)(data+at)};at+=h[2]*44;
     }
     if(!ok||at!=length){free(data);free(g);return 0;}
-    ch->bytes=data;ch->group=g;ch->count=batches;return batches;
+    /* Split once at load time. Draws reuse these exact triangles and maps
+     * for the intact ship, its missing sections and its detached fragments. */
+    astra_batch *split=calloc(batches*AC_PARTS,sizeof(*split));
+    unsigned char *sorted=malloc(length);if(!split||!sorted){free(split);free(sorted);free(data);free(g);return 0;}
+    unsigned used=0,offset=0;
+    for(unsigned b=0;b<batches;b++)for(int part=0;part<AC_PARTS;part++){
+        astra_batch next={g[b].mat,g[b].joint,0,part,(float*)(sorted+offset)};
+        for(unsigned j=0;j+2<g[b].count;j+=3){float *v=g[b].v+j*11;
+            int region=ac_region((v[0]+v[11]+v[22])*.85f/3,(v[1]+v[12]+v[23])*.86f/3,(v[2]+v[13]+v[24])*.91f/3);
+            if(region!=part)continue;memcpy(sorted+offset,v,132);offset+=132;next.count+=3;
+        }
+        if(next.count)split[used++]=next;
+    }
+    free(data);free(g);ch->bytes=sorted;ch->group=split;ch->count=used;return used;
+}
+static int ac_model(const object *robot){
+    int model=Robot_info[robot->id].model_num;
+    return model<(int)sizeof(astra_fleet_type)?astra_fleet_type[model]:(Robot_info[robot->id].boss_flag?6:(robot->id*7+3)%12);
+}
+static unsigned ac_available(const object *robot){
+    int id=ac_model(robot);if(!af_load_mesh(id))return 0;unsigned mask=0;
+    for(int i=0;i<af_models[id].count;i++)mask|=1u<<af_models[id].group[i].part;
+    return mask;
 }
 static int af_bind(unsigned id){
     for(int unit=0;unit<2;unit++){
@@ -104,12 +121,11 @@ int astra_draw_robot(int model,polymodel *pm,vms_angvec *angles,g3s_lrgb light){
     glDisable(GL_CULL_FACE);glEnable(GL_DEPTH_TEST);glUseProgram(fleet_program);
     glUniform3f(af_energy,.51f+.62f*fminf(1.4f,f2fl(light.r)),.55f+.62f*fminf(1.4f,f2fl(light.g)),.58f+.62f*fminf(1.4f,f2fl(light.b)));
     glUniform4fv(af_flash,1,astra_flash);glUniform1f(af_clock,astra_visual_clock());
-    glUniform1f(glGetUniformLocation(fleet_program,"damage"),ac_damage_for(astra_robot_object));
-    glUniform1f(glGetUniformLocation(fleet_program,"identity"),astra_robot_object?(astra_robot_object->signature%137)*.37f:0);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_COLOR_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     }
     for(int b=0;b<af_models[id].count;b++){
         astra_batch *part=&af_models[id].group[b];
+        if(!ac_visible_part(part->part))continue;
         int chain[MAX_SUBMODELS],n=0;
         vms_vector origin=center;
         if(angles&&part->joint){

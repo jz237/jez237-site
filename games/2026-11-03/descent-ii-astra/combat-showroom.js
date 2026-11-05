@@ -1,6 +1,10 @@
 /* Presentation controls never write native pilot, inventory or AI state. */
 (() => {
   const $ = id => document.getElementById(id);
+  const combatToggle=document.createElement('button');combatToggle.id='combatToggle';combatToggle.textContent='Damage controls';combatToggle.setAttribute('aria-controls','rangeControls');
+  $('previewPanel').append(combatToggle);
+  function combatControls(open){combatToggle.setAttribute('aria-expanded',String(open));$('rangeControls').hidden=!open;}
+  combatToggle.onclick=()=>combatControls(combatToggle.getAttribute('aria-expanded')!=='true');
   const shadow = $('shadowQuality');
   try { shadow.value = localStorage.getItem('astra.shadows') ?? (matchMedia('(pointer:coarse)').matches ? '0' : '1'); } catch {}
   shadow.addEventListener('change', () => {
@@ -53,7 +57,7 @@
     blastUpdate(...args);
     $('previewAgain').textContent = 'New variation';
   };
-  const resetCombat = () => { window.astraCombatPending = -1; if (window.Module) Module.combatInspect = -1; };
+  const resetCombat = () => { window.astraCombatPending = -1; if (window.Module) Module.combatInspect = -1;document.body.classList.remove('combat-preview'); };
   const explosionOpen = astraPreview.open.bind(astraPreview);
   astraPreview.open = () => { resetCombat(); explosionOpen(); };
   const weaponsOpen = astraWeaponDemo.open.bind(astraWeaponDemo);
@@ -78,21 +82,24 @@
       } else { $('look').value = 'astra'; launch(true, false, false, true); }
     },
     update(mode, age) {
+      if(!document.body.classList.contains('combat-preview')){document.body.classList.add('combat-preview');combatControls(!matchMedia('(max-height:550px), (max-width:700px)').matches);}
       $('combatControls').hidden = false; $('blastControls').hidden = true;
       $('weaponControls').hidden = true; $('previewPrevious').hidden = true;
       $('previewProgress').hidden = true; $('combatSelect').value = String(mode);
-      $('previewTitle').textContent = mode ? 'PYRO–GX / DIRECTIONAL SHIELDS' : 'ROBOT / COMBAT DAMAGE';
-      $('previewVariation').textContent = mode ? ['Forward', 'Starboard', 'Rear', 'Port', 'Above'][Math.min(4, Math.floor(age / 2))] + ' impact' : ['Armor intact', 'Scorched armor', 'Exposed components', 'Critical damage'][Math.min(3, Math.floor(age / 2.5))];
-      $('previewPhase').textContent = mode ? 'Localized ripple · Direction marker' : 'Same robot · Actual damage materials and mechanisms';
+      $('previewTitle').textContent = mode===1 ? 'PYRO–GX / DIRECTIONAL SHIELDS' : mode===2 ? 'ROBOT / HULL BREAKUP' : 'ROBOT / BREAKAWAY COMPONENTS';
+      $('combatRobotLabel').hidden=mode===1;
+      $('previewVariation').textContent = mode===1 ? ['Forward', 'Starboard', 'Rear', 'Port', 'Above'][Math.min(4, Math.floor(age / 2))] + ' impact' : mode===2 ? age<2?'Intact hull':age<4.4?'Hull rupture':'Tumbling wreckage' : ['Intact hull','Side assembly detached','Lower assembly detached','Weapon housing detached'][Math.min(3,Math.floor(age/2))];
+      $('previewPhase').textContent = mode===1 ? 'Localized ripple · Direction marker' : 'Original surfaces · Missing components · Solid flying pieces';
       $('previewAgain').textContent = 'Replay'; $('previewTime').textContent = '';
-      astraDeck.show(!!mode);
-      if (mode) {
+      astraDeck.show(mode===1);
+      if (mode===1) {
         astraDeck.update(0,3,100,Math.max(5,100-Math.floor(age/2)*18),0,0,0,1,6,100,0,1,100,true,false,0);
         const dirs = [[0,0,1],[1,0,0],[0,0,-1],[-1,0,0],[0,1,0]];
         astraImpact.preview(dirs[Math.min(4, Math.floor(age / 2))], age % 2);
       } else astraImpact.clear();
     }
   };
+  $('combatRobot').onchange=()=>{Module.combatRobot=Number($('combatRobot').value);Module.pyroPreviewCommand=2;};
   $('combatStart').onclick = () => astraCombat.open();
   $('combatSelect').onchange = () => { Module.combatInspect = Number($('combatSelect').value); Module.pyroPreviewCommand = 2; };
   const again = $('previewAgain').onclick;

@@ -13,15 +13,6 @@ static void astra_plate(int n,const g3s_point **outer,g3s_uvl *uv,g3s_lrgb *ligh
         g3_draw_tmap(n,outer,uv,light,bitmap); return;
     }
     astra_mesh_faces++;
-    extern float astra_panel_damage(void);
-    float damage=astra_panel_damage();g3s_lrgb worn[MAX_POINTS_PER_POLY];
-    if(damage>.08f){
-        float patch=.5f+.5f*sinf(f2fl(normal->x)*17+f2fl(normal->y)*11+f2fl(normal->z)*23);
-        float burn=fminf(.80f,fmaxf(0,(damage-.1f)*(.7f+patch)));
-        for(int i=0;i<n;i++){
-            worn[i].r=(fix)(light[i].r*(1-burn));worn[i].g=(fix)(light[i].g*(1-burn*.97f));worn[i].b=(fix)(light[i].b*(1-burn*.91f));
-        }light=worn;
-    }
     vms_vector center={0,0,0}, local_lift, lift;
     g3s_uvl tuv={0,0,0};
     for(int i=0;i<n;i++) {

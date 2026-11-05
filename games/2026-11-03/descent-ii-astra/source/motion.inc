@@ -101,7 +101,9 @@ void astra_draw_mechanisms(object *obj){
     if(index>=0&&index<MAX_OBJECTS&&ax_signature[index]==obj->signature)fired=(double)(GameTime64-ax_fired[index])/F1_0;
     float recoil=fired<.26f?.30f*expf(-fired*15):0,scale=fminf(.85f,fmaxf(.24f,f2fl(obj->size)*.14f));
     for(int g=0;g<ri->n_guns&&g<4;g++){
-        vms_vector muzzle;calc_gun_point(&muzzle,obj,g);g3_start_instance_matrix(&muzzle,&obj->orient);ax_count=0;
+        vms_vector muzzle,delta,local;calc_gun_point(&muzzle,obj,g);vm_vec_sub(&delta,&muzzle,&obj->pos);vm_vec_rotate(&local,&delta,&obj->orient);
+        if(ac_missing(obj)&(1u<<ac_local_part(obj,&local)))continue;
+        g3_start_instance_matrix(&muzzle,&obj->orient);ax_count=0;
         ax_paint(.19f,.25f,.29f,0);ax_tube(0,0,-.75f,0,0,-.07f-recoil,.46f,.36f,16);
         ax_paint(.45f,.55f,.61f,0);ax_ring(0,0,-.32f-recoil,.38f,.06f,0,6.2831853f,0);
         for(int b=0;b<3;b++){float a=phase*(obj->id%2?-1:1)+b*2.0944f,x=cosf(a)*.25f,y=sinf(a)*.25f;
@@ -117,6 +119,7 @@ void astra_draw_mechanisms(object *obj){
     g3_start_instance_matrix(&obj->pos,&obj->orient);ax_count=0;
     for(int side=-1;side<=1;side+=2)for(int k=0;k<3;k++){
         float x=side*ex*.48f,y=top*.92f,z=rear+k*scale*.52f,open=damage>.6f&&side<0?.55f+.04f*sinf(clock*19+k):.15f+.16f*(.5f+.5f*sinf(clock*1.9f+k+side));
+        vms_vector local={fl2f(x),fl2f(y),fl2f(z)};if(ac_missing(obj)&(1u<<ac_local_part(obj,&local)))continue;
         ax_paint(.18f,.25f,.29f,0);ax_tube(x-scale*.65f,y,z,x+scale*.65f,y+scale*open,z+scale*.16f,scale*.12f,scale*.12f,4);
         ax_paint(.06f,.63f,.84f,.65f);ax_tube(x-scale*.48f,y-scale*.02f,z,x+scale*.48f,y-scale*.02f,z,scale*.035f,scale*.035f,5);
     }
