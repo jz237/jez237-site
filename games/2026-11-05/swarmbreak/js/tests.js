@@ -1,9 +1,9 @@
 // ?test=1 self-test page: determinism, exact replays, the difficulty ramp, the gentle start, the autopilot
 // reaching later sectors, the live game loop running without console errors, and no score posts.
-import { makeWorld, step, drainEvents, STEP, cloneWorld } from './sim.js?v=1';
-import { Autopilot } from './ai.js?v=1';
-import { RAMP, SECTORS, WAVES, TYPICAL_UP, rampAt, standLevel } from './config.js?v=1';
-import { Recorder, Replay } from './replay.js?v=1';
+import { makeWorld, step, drainEvents, STEP, cloneWorld } from './sim.js?v=2';
+import { Autopilot } from './ai.js?v=2';
+import { RAMP, SECTORS, WAVES, TYPICAL_UP, rampAt, standLevel } from './config.js?v=2';
+import { Recorder, Replay } from './replay.js?v=2';
 
 export const hashW = (W) => JSON.stringify([W.n, W.score, W.lives, W.wave, W.phase, W.rs, W.players.map((p) => [p.x.toFixed(6), p.z.toFixed(6), p.alive, p.shield]), W.enemies.map((e) => [e.id, e.x.toFixed(4), e.z.toFixed(4), e.hp]), W.bolts.length, W.survivors.length]);
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));

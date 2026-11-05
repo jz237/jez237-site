@@ -4,8 +4,8 @@
 // in, room to fight, the boss at arm's length), and runs the best one while it aims and fires.
 //   profile 'human': ~0.35 s reaction with scatter, sometimes late, aim wobble, the odd bad choice
 //   profile 'demo' : quick, accurate, uses PULSE well: the attract mode and the AI playthrough
-import { F, ENEMY, HOSTILE } from './config.js?v=1';
-import { inHazard } from './sim.js?v=1';
+import { F, ENEMY, HOSTILE } from './config.js?v=2';
+import { inHazard } from './sim.js?v=2';
 
 const PROFILES = {
   human: { track: 8, blind: 0.4, slew: 4.2, react: 0.35, jit: 0.1, late: 0.14, lateT: 0.25, aim: 0.075, drift: 0.05, margin: 1.35, look: 0.8, pulseP: 0.5, crowd: 3, panic: 0.03, fireRange: 15, greed: 1 },

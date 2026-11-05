@@ -1,13 +1,13 @@
 // Swarmbreak — game flow, menus, HUD, commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES } from './config.js?v=1';
-import { makeWorld, step, drainEvents, waveLabel, isBossWave } from './sim.js?v=1';
-import { Autopilot } from './ai.js?v=1';
-import { Renderer, pickQuality, CALM } from './render.js?v=1';
-import { Audio } from './audio.js?v=1';
-import { Input } from './input.js?v=1';
-import { Scores, NO_POST } from './scores.js?v=1';
-import { Recorder, Replay } from './replay.js?v=1';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=1';
+import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES } from './config.js?v=2';
+import { makeWorld, step, drainEvents, waveLabel, isBossWave } from './sim.js?v=2';
+import { Autopilot } from './ai.js?v=2';
+import { Renderer, pickQuality, CALM } from './render.js?v=2';
+import { Audio } from './audio.js?v=2';
+import { Input } from './input.js?v=2';
+import { Scores, NO_POST } from './scores.js?v=2';
+import { Recorder, Replay } from './replay.js?v=2';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=2';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -862,7 +862,7 @@ async function boot() {
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
   HS.fresh(); HSL.fresh();
-  if (params.has('test')) { const m = await import('./tests.js?v=1'); m.runTests(window.__sb); }
+  if (params.has('test')) { const m = await import('./tests.js?v=2'); m.runTests(window.__sb); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('stand')) startStand(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }

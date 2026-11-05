@@ -263,3 +263,49 @@ export function sprites() {
     ring: tex(ring),
   };
 }
+
+// machine surfaces: a tiling normal map of panel seams, rivets, bolt heads and fine scratches (about 1 m per tile)
+export function panelNormal(size = 512) {
+  const S = size, r = rng(77), H = new Float32Array(S * S);
+  const fine = fbm(S, 32, 2, 5);
+  for (let i = 0; i < H.length; i++) H[i] = fine[i] * 0.08;
+  // irregular panel layout: split the tile into rectangles
+  const rects = [[0, 0, S, S]];
+  for (let k = 0; k < 9; k++) {
+    const i = Math.floor(r() * rects.length), [x, y, w, h] = rects[i];
+    if (w < S / 6 && h < S / 6) continue;
+    rects.splice(i, 1);
+    if (w > h) { const c = Math.round(w * (0.3 + r() * 0.4)); rects.push([x, y, c, h], [x + c, y, w - c, h]); }
+    else { const c = Math.round(h * (0.3 + r() * 0.4)); rects.push([x, y, w, c], [x, y + c, w, h - c]); }
+  }
+  const put = (x, y, v) => { x = ((x % S) + S) % S; y = ((y % S) + S) % S; H[y * S + x] = v; };
+  for (const [x, y, w, h] of rects) {
+    // the panel face sits a little proud, with a recessed seam around it
+    const lift = 0.15 + r() * 0.2;
+    for (let yy = y + 3; yy < y + h - 3; yy++) for (let xx = x + 3; xx < x + w - 3; xx++) H[yy * S + xx] += lift;
+    for (let t = 0; t < w; t++) { put(x + t, y, -0.25); put(x + t, y + 1, -0.15); }
+    for (let t = 0; t < h; t++) { put(x, y + t, -0.25); put(x + 1, y + t, -0.15); }
+    // rivets along the edges
+    const step = 14 + Math.floor(r() * 8);
+    const rivet = (cx, cy) => { for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) { const d = Math.hypot(dx, dy); if (d <= 3) put(cx + dx, cy + dy, lift + 0.35 * Math.cos(d / 3 * 1.4)); } };
+    if (r() < 0.7) for (let t = 8; t < w - 8; t += step) { rivet(x + t, y + 7); rivet(x + t, y + h - 8); }
+    if (r() < 0.5) for (let t = 8; t < h - 8; t += step) { rivet(x + 7, y + t); rivet(x + w - 8, y + t); }
+  }
+  // scratches
+  for (let k = 0; k < 60; k++) {
+    let x = r() * S, y = r() * S; const a = r() * Math.PI * 2, l = 10 + r() * 40;
+    for (let t = 0; t < l; t++) { put(Math.round(x), Math.round(y), H[(((Math.round(y) % S) + S) % S) * S + (((Math.round(x) % S) + S) % S)] - 0.05); x += Math.cos(a); y += Math.sin(a); }
+  }
+  const nrm = new Uint8ClampedArray(S * S * 4);
+  for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+    const i = y * S + x;
+    const l = H[y * S + ((x - 1 + S) % S)], rr = H[y * S + ((x + 1) % S)], u = H[((y - 1 + S) % S) * S + x], d = H[((y + 1) % S) * S + x];
+    const nx = (l - rr) * 3, ny = (u - d) * 3, len = Math.hypot(nx, ny, 1);
+    nrm[i * 4] = (nx / len * 0.5 + 0.5) * 255; nrm[i * 4 + 1] = (ny / len * 0.5 + 0.5) * 255; nrm[i * 4 + 2] = (1 / len * 0.5 + 0.5) * 255; nrm[i * 4 + 3] = 255;
+  }
+  const c = document.createElement('canvas'); c.width = c.height = S;
+  c.getContext('2d').putImageData(new ImageData(nrm, S, S), 0, 0);
+  const t = new THREE.CanvasTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 8;
+  return t;
+}

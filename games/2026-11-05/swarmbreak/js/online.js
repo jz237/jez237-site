@@ -3,7 +3,7 @@
 // (waves, machines, survivors, bosses, lives, score) and streams snapshots. The guest runs its own
 // Warden locally (so moving and aiming never lag), judges the hits it takes, and reports its Warden,
 // its shots and its PULSEs; the host re-creates those shots so kills are decided in one place.
-import { adoptWave, pulse } from './sim.js?v=1';
+import { adoptWave, pulse } from './sim.js?v=2';
 
 export const PROTOCOL = 1;
 const RELAY = 'wss://steel-duel-online.jez237.workers.dev';

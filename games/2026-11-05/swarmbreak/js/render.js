@@ -4,11 +4,11 @@
 // the simulation; floor decals for every warning (gates, boss tells, aim lines, arcs); HDR post.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=1';
-import * as TX from './textures.js?v=1';
-import * as MD from './models.js?v=1';
-import { FX, CALM } from './fx.js?v=1';
-import { F, GATES } from './config.js?v=1';
+import { Post } from './post.js?v=2';
+import * as TX from './textures.js?v=2';
+import * as MD from './models.js?v=2';
+import { FX, CALM } from './fx.js?v=2';
+import { F, GATES } from './config.js?v=2';
 
 export { CALM };
 const { AW, AH } = F;
@@ -139,7 +139,7 @@ export class Renderer {
     this.pm = new THREE.PMREMGenerator(r);
     this.envs = [];
     this.floors = {};
-    MD.materials(null, TX.grimeTex(), TX.stripeTex());
+    MD.materials(null, TX.grimeTex(), TX.stripeTex(), TX.panelNormal(q.tex >= 1024 ? 512 : 256));
     this.time = 0; this.trauma = 0;
     this.flash = new THREE.Vector4(1, 1, 1, 0);
     this.shocks = [];
