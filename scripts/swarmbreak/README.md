@@ -26,3 +26,10 @@ Difficulty levels (`DIFFICULTY` in config.js: easy / normal / hard / nightmare) 
 drop below `MIN_WARN`. Each level has its own boards (`swarmbreak[-easy|-hard|-nightmare]`, `swarmbreak-laststand[-...]`) and best times.
 v1.1.0 ramp_check (60 runs): Normal 100/95/93/73/40 %, Hard 100/87/63/23/7 %, Easy 100 % everywhere, Nightmare 100/85/20/0/0 % (40 runs).
 Power-ups: `POWERUPS` + `DROP` in config.js; drops, supply pods, WINGMAN, SEEKERS, RAIL and TIME WARP live in sim.js (search `power-ups`).
+
+v1.2.0: sector hazards (`haz` in RAMP; sim.js `sectorHazards`: metro surge strips, foundry spill pools, vault laser strips, reactor
+lightning rings, none in sector 1, from wave 2, tell >= 0.9 s), kill streak (`STREAK`, `streakMul`; extra lives use `W.lifePts`, points
+without the streak bonus), DAILY CHALLENGE (main.js `dailyCfg`: UTC date -> seed + sector, Hard, board `swarmbreak-daily-YYYYMMDD`),
+SUITS unlocked by medals, clear coat only on the high graphics tier. Ramp (60 runs): Normal 100/100/87/73/52 %, Hard 100/88/72/32/12 %.
+Freeze fix (v1.1.1): the light count never changes after boot (fixed light pools; never toggle a light's visibility) and every sector is
+compiled at load. Check with a real-RAF long-frame logger (headless Edge) before shipping visual changes.

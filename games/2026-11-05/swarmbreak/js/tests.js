@@ -1,9 +1,9 @@
 // ?test=1 self-test page: determinism, exact replays, the difficulty ramp, the gentle start, the autopilot
 // reaching later sectors, the live game loop running without console errors, and no score posts.
-import { makeWorld, step, drainEvents, STEP, cloneWorld } from './sim.js?v=4';
-import { Autopilot } from './ai.js?v=4';
-import { RAMP, SECTORS, WAVES, TYPICAL_UP, rampAt, standLevel, DIFF_KEYS, applyDiff, MIN_WARN } from './config.js?v=4';
-import { Recorder, Replay } from './replay.js?v=4';
+import { makeWorld, step, drainEvents, STEP, cloneWorld } from './sim.js?v=5';
+import { Autopilot } from './ai.js?v=5';
+import { RAMP, SECTORS, WAVES, TYPICAL_UP, rampAt, standLevel, DIFF_KEYS, applyDiff, MIN_WARN } from './config.js?v=5';
+import { Recorder, Replay } from './replay.js?v=5';
 
 export const hashW = (W) => JSON.stringify([W.n, W.score, W.lives, W.wave, W.phase, W.rs, W.players.map((p) => [p.x.toFixed(6), p.z.toFixed(6), p.alive, p.shield]), W.enemies.map((e) => [e.id, e.x.toFixed(4), e.z.toFixed(4), e.hp]), W.bolts.length, W.survivors.length]);
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -89,6 +89,31 @@ export async function runTests(sb) {
       }
     } });
     return { ok: !issues.length, info: issues.length ? issues.slice(0, 3).join(', ') : `${DIFF_KEYS.join(' < ')}, last warning ${applyDiff(rampAt(4, 4), 'nightmare').warn.toFixed(2)} s on Nightmare` };
+  });
+
+  await T('sector hazards: none in sector 1, from wave 2 elsewhere, always warned first', () => {
+    const out = [], issues = [];
+    for (let s = 0; s < 5; s++) {
+      const W = makeWorld({ sector: s, seed: 31 + s, wave: 1, up: TYPICAL_UP[s] });
+      let warned = 0, live = 0, minTell = 9;
+      for (let i = 0; i < 70 / STEP && !W.over; i++) {
+        W.players[0].input = { mx: Math.sin(i / 300), mz: Math.cos(i / 410), ax: 1, az: 0, fire: true, pulse: false };
+        step(W, STEP);
+        for (const h of W.hazards) if (h.style && h.state === 'tell') minTell = Math.min(minTell, h.T);
+        for (const e of drainEvents(W)) { if (e.k === 'hazwarn') warned++; if (e.k === 'hazard' && e.style) live++; }
+        if (W.players[0].alive === false && W.lives === 0) break;
+      }
+      if (s === 0 && warned) issues.push('hazards in sector 1');
+      if (s > 0 && !warned) issues.push(`no hazards in sector ${s + 1}`);
+      if (s > 0 && minTell < 0.9) issues.push(`sector ${s + 1} warns only ${minTell.toFixed(2)} s`);
+      out.push(`S${s + 1}:${warned}`);
+    }
+    return { ok: !issues.length, info: issues.length ? issues.join(', ') : 'hazard warnings in 70 s ' + out.join(' ') };
+  });
+
+  await T('daily challenge: the same seed and sector for everyone on a given day', () => {
+    const a = sb.dailyCfg('2026-11-05'), b = sb.dailyCfg('2026-11-05'), c = sb.dailyCfg('2026-11-06');
+    return { ok: a.seed === b.seed && a.sector === b.sector && a.seed !== c.seed && a.diff === 'hard', info: `2026-11-05 -> sector ${a.sector + 1}, seed ${a.seed}; next day sector ${c.sector + 1}` };
   });
 
   await T('power-ups drop, get picked up and wear off', () => {

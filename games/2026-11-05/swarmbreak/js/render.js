@@ -4,12 +4,12 @@
 // the simulation; floor decals for every warning (gates, boss tells, aim lines, arcs); HDR post.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=4';
-import * as TX from './textures.js?v=4';
-import * as MD from './models.js?v=4';
-import { FX, CALM } from './fx.js?v=4';
-import { F, GATES, POWERUPS } from './config.js?v=4';
-import { dronePos } from './sim.js?v=4';
+import { Post } from './post.js?v=5';
+import * as TX from './textures.js?v=5';
+import * as MD from './models.js?v=5';
+import { FX, CALM } from './fx.js?v=5';
+import { F, GATES, POWERUPS } from './config.js?v=5';
+import { dronePos } from './sim.js?v=5';
 
 export { CALM };
 const { AW, AH } = F;
@@ -140,7 +140,8 @@ export class Renderer {
     this.pm = new THREE.PMREMGenerator(r);
     this.envs = [];
     this.floors = {};
-    MD.materials(null, TX.grimeTex(), TX.stripeTex(), TX.panelNormal(q.tex >= 1024 ? 512 : 256));
+    MD.materials(null, TX.grimeTex(), TX.stripeTex(), TX.panelNormal(q.tex >= 1024 ? 512 : 256), q.name === 'high');
+    this.suit = { color: 0x2f8cff, accent: 0x9fe8ff };
     this.time = 0; this.trauma = 0;
     this.flash = new THREE.Vector4(1, 1, 1, 0);
     this.shocks = [];
@@ -468,6 +469,15 @@ export class Renderer {
       this.decalPool.push(m);
     }
     this.laneMesh = new THREE.Mesh(lane, this.decalMat(1, 0xff3a2a)); this.laneMesh.visible = false; this.laneMesh.renderOrder = 4; this.scene.add(this.laneMesh);
+    // sector hazards: warning lanes on the floor, laser sheets, lightning bolts
+    this.strips = [];
+    for (let k = 0; k < 6; k++) { const m = new THREE.Mesh(lane, this.decalMat(1, 0x6fe8ff)); m.visible = false; m.renderOrder = 4; this.scene.add(m); this.strips.push(m); }
+    const sheet = new THREE.BoxGeometry(1, 1, 1); sheet.translate(0.5, 0.5, 0);
+    this.lasers = [];
+    for (let k = 0; k < 4; k++) { const m = new THREE.Mesh(sheet, new THREE.MeshBasicMaterial({ color: hdr(0xff2a3a, 3), transparent: true, opacity: 0.55, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false })); m.visible = false; this.scene.add(m); this.lasers.push(m); }
+    const bolt = new THREE.CylinderGeometry(0.08, 0.2, 1, 6, 1, true); bolt.translate(0, 0.5, 0);
+    this.bolts3 = [];
+    for (let k = 0; k < 6; k++) { const m = new THREE.Mesh(bolt, new THREE.MeshBasicMaterial({ color: hdr(0xc8d4ff, 8), toneMapped: false })); m.visible = false; this.scene.add(m); this.bolts3.push(m); }
     // portal columns of light
     const cg = new THREE.CylinderGeometry(1, 1, 1, 24, 1, true); cg.translate(0, 0.5, 0);
     this.colMat = new THREE.ShaderMaterial({ transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
@@ -490,7 +500,7 @@ export class Renderer {
   }
   makeArcs() {
     this.arcs = [];
-    for (let k = 0; k < 12; k++) {
+    for (let k = 0; k < 16; k++) {
       const n = 14, pos = new Float32Array(n * 2 * 3), idx = [];
       for (let i = 0; i < n - 1; i++) { const a = i * 2; idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2); }
       const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3).setUsage(THREE.DynamicDrawUsage)); g.setIndex(idx);
@@ -514,7 +524,7 @@ export class Renderer {
 
   // ---------------------------------------------------------------- views
   playerView(p) {
-    const color = p.id === 1 ? 0x2f8cff : 0xff5a3a, accent = p.id === 1 ? 0x9fe8ff : 0xffd27a;
+    const color = p.id === 1 ? this.suit.color : 0xff5a3a, accent = p.id === 1 ? this.suit.accent : 0xffd27a;
     const v = MD.warden(color, accent);
     const sh = new THREE.Mesh(new THREE.SphereGeometry(1.15, 32, 20), new THREE.ShaderMaterial({ vertexShader: SHIELD_VERT, fragmentShader: SHIELD_FRAG, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
       uniforms: { uColor: { value: hdr(accent, 1.4) }, uK: { value: 0 }, uTime: { value: 0 } } }));
@@ -800,10 +810,30 @@ export class Renderer {
     for (const G of this.gates) G.door.material.color.copy(hdr(G.k > 0 ? 0xff3a2a : this.look.accent, G.k > 0 ? 0.6 + G.k * 2.5 * (0.7 + 0.3 * Math.sin(t * 16)) : 0.12));
     // boss tells and live hazards
     this.laneMesh.visible = false; this.beam.visible = false; this.beamGlow.visible = false;
+    let si = 0, li = 0, bi = 0, sa = 12;
     for (const h of W.hazards) {
       const prog = h.state === 'tell' ? clamp(h.t / h.T, 0, 1) : 1;
+      if (h.kind === 'strip') {
+        const m = this.strips[si++]; if (!m) continue;
+        const c = Math.cos(h.a), sn = Math.sin(h.a), col = h.style === 'laser' ? 0xff2a3a : 0x6fe8ff;
+        m.visible = true; m.position.set(h.x - c * h.hl, 0.05, h.z - sn * h.hl); m.rotation.y = -h.a; m.scale.set(h.hl * 2, 1, h.w);
+        const u = m.material.uniforms; u.uProg.value = prog; u.uTime.value = t; u.uLive.value = h.state === 'live' ? 1 : 0; u.uColor.value.set(col); u.uAlpha.value = h.state === 'live' ? 1.6 : 0.7 + prog * 0.6;
+        if (h.state === 'live' && h.style === 'surge') {
+          // a bundle of crackling arcs along the live lane
+          for (let k = 0; k < 2; k++) { const A = this.arcs[sa++]; if (A) { this.setArc(A, h.x - c * h.hl, h.z - sn * h.hl, h.x + c * h.hl, h.z + sn * h.hl, 0.08, 1.1, 0.35 + k * 0.3); A.m.material.opacity = 1; } }
+        }
+        if (h.state === 'live' && h.style === 'laser') {
+          const L = this.lasers[li++];
+          if (L) { L.visible = true; L.position.set(h.x - c * h.hl, 0, h.z - sn * h.hl); L.rotation.y = -h.a; L.scale.set(h.hl * 2, 1.5, 0.06 + Math.random() * 0.03); L.material.opacity = 0.45 + Math.random() * 0.25; }
+        }
+        continue;
+      }
+      if (h.style === 'storm' && h.state === 'live') {
+        const B = this.bolts3[bi++];
+        if (B) { B.visible = true; B.position.set(h.x + (Math.random() - 0.5) * 0.3, 0, h.z + (Math.random() - 0.5) * 0.3); B.scale.set(1 + Math.random(), 32, 1 + Math.random()); B.rotation.set((Math.random() - 0.5) * 0.06, 0, (Math.random() - 0.5) * 0.06); }
+      }
       if (h.kind === 'ring' || h.kind === 'pool') {
-        const m = use(0, h.kind === 'pool' ? 0xff7a1a : 0xff3a2a);
+        const m = use(0, h.kind === 'pool' ? 0xff7a1a : h.style === 'storm' ? 0xa8b8ff : 0xff3a2a);
         if (!m) continue;
         m.position.set(h.x, 0.04, h.z); m.scale.setScalar(h.r);
         const u = m.material.uniforms; u.uProg.value = prog; u.uLive.value = h.state === 'live' ? 1 : 0;
@@ -833,6 +863,10 @@ export class Renderer {
       if (e.type === 'hive' && e.tell > 0) { const m = use(0, 0xc070ff); if (m) { m.position.set(e.x, 0.03, e.z); m.scale.setScalar(1.6); m.material.uniforms.uProg.value = 1 - e.tell / Math.max(0.6, W.R.warn * 0.55); } }
     }
     for (; d < this.decalPool.length; d++) this.decalPool[d].visible = false;
+    for (; si < this.strips.length; si++) this.strips[si].visible = false;
+    for (; li < this.lasers.length; li++) this.lasers[li].visible = false;
+    for (; bi < this.bolts3.length; bi++) this.bolts3[bi].visible = false;
+    for (; sa < 16; sa++) this.arcs[sa].m.visible = false;
     // spitter aim lines
     let a = 0;
     for (const e of W.enemies) {
@@ -853,7 +887,7 @@ export class Renderer {
       if (e.arc === 2) { this.setArc(A, e.x, e.z, o.x, o.z, 0.07, 0.5); A.m.material.opacity = 1; }
       else { if (Math.random() < 0.5) this.setArc(A, e.x, e.z, o.x, o.z, 0.03, 0.25); A.m.material.opacity = 0.3 + Math.random() * 0.3; }
     }
-    for (; r < this.arcs.length; r++) this.arcs[r].m.visible = false;
+    for (; r < 12; r++) this.arcs[r].m.visible = false;
   }
 
   // ---------------------------------------------------------------- camera
@@ -999,7 +1033,7 @@ export class Renderer {
     for (const k of ['foreman', 'tramline', 'crucible', 'archivist', 'overseer']) tmp.push(MD.boss(k).g);
     tmp.forEach((o, i) => { o.position.set(-20 + i * 2.5, 0, 0); this.scene.add(o); });
     const pv = this.playerView({ id: 1 }), sv = this.survivorView({ look: 0 });
-    for (const m of [...this.decalPool.slice(0, 3), this.laneMesh, this.beam, this.beamGlow, ...this.cols.slice(0, 1), ...this.aims.slice(0, 1)]) m.visible = true;
+    for (const m of [...this.decalPool.slice(0, 3), this.laneMesh, this.beam, this.beamGlow, ...this.cols.slice(0, 1), ...this.aims.slice(0, 1), this.strips[0], this.lasers[0], this.bolts3[0]]) m.visible = true;
     this.setArc(this.arcs[0], 0, 0, 3, 3, 0.05, 0.3);
     this.fx.explode(0, 1, 0, 1, { metal: true });
     this.fx.flash(0, 1, 0, 1);
@@ -1021,7 +1055,7 @@ export class Renderer {
     for (const I of [this.railI, this.seekI, this.blobI, this.shotI, this.boltI, this.boltBI, this.haloI]) I.count = 0;
     for (const o of tmp) this.scene.remove(o);
     this.scene.remove(pv.g); this.scene.remove(sv.g);
-    for (const m of [...this.decalPool, this.laneMesh, this.beam, this.beamGlow, ...this.cols, ...this.aims]) m.visible = false;
+    for (const m of [...this.decalPool, this.laneMesh, this.beam, this.beamGlow, ...this.cols, ...this.aims, ...this.strips, ...this.lasers, ...this.bolts3]) m.visible = false;
     this.arcs[0].m.visible = false;
     this.fx.clear();
   }

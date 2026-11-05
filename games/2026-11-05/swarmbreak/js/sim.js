@@ -1,7 +1,7 @@
 // Swarmbreak simulation: fixed 120 Hz steps, all randomness from the world's own seeded generator
 // (W.rs), plain data only, so a world can be cloned and re-run bit for bit (replays, online, tests).
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
-import { F, STEP, GATES, SECTORS, WAVES, rampAt, rampLevel, standLevel, STAND, ENEMY, HOSTILE, BOSSES, BOSS_KEYS, SCORE, START_LIVES, INTRO, introduced, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP } from './config.js?v=4';
+import { F, STEP, GATES, SECTORS, WAVES, rampAt, rampLevel, standLevel, STAND, ENEMY, HOSTILE, BOSSES, BOSS_KEYS, SCORE, START_LIVES, INTRO, introduced, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, STREAK, streakMul } from './config.js?v=5';
 export { STEP };
 
 const { AW, AH } = F;
@@ -33,7 +33,7 @@ export function makeWorld(o = {}) {
   const mode = o.mode || 'campaign';
   const W = {
     n: 0, t: 0, seed, rs: (seed ^ 0x2545F491) | 0, mode, sector: o.sector || 0, k: o.sector || 0, up: { ...(o.up || {}) }, demo: !!o.demo, coop: !!o.coop,
-    diff: DIFFICULTY[o.diff] ? o.diff : 'normal', lives: o.lives ?? START_LIVES + (DIFFICULTY[o.diff] || DIFFICULTY.normal).lives, score: o.score || 0, nextLife: 0, pickups: [], warp: 0, supplyT: 0,
+    diff: DIFFICULTY[o.diff] ? o.diff : 'normal', lives: o.lives ?? START_LIVES + (DIFFICULTY[o.diff] || DIFFICULTY.normal).lives, score: o.score || 0, nextLife: 0, pickups: [], warp: 0, supplyT: 0, streak: { n: 0, t: 0 },
     wave: o.wave || 0, waveN: 0, phase: 'intro', phaseT: 0, waveT: 0, secT: 0, fightT: 0, R: null,
     players: [], enemies: [], shots: [], bolts: [], survivors: [], portals: [], hazards: [], boss: null,
     pwStats: { got: 0 },
@@ -44,7 +44,8 @@ export function makeWorld(o = {}) {
   };
   // the extra-life step scales with the difficulty's score multiplier, so harder levels don't hand out more lives
   const LE = SCORE.lifeEvery * (DIFFICULTY[W.diff] || DIFFICULTY.normal).score;
-  W.nextLife = (Math.floor(W.score / LE) + 1) * LE;
+  W.lifePts = W.score;
+  W.nextLife = (Math.floor(W.lifePts / LE) + 1) * LE;
   const n = o.coop ? 2 : 1;
   for (let i = 0; i < n; i++) W.players.push(makePlayer(i + 1, n === 2 ? (i ? 2 : -2) : 0, 2));
   startWave(W, true);
@@ -77,6 +78,7 @@ function startWave(W, first = false) {
   const R = W.R;
   W.phase = 'intro'; W.phaseT = first ? 2.6 : 2.0; W.waveT = 0; W.chain = 0;
   W.supplyT = rr(W, DROP.supply[0], DROP.supply[1]) + (W.tutorial && W.wave === 0 ? 30 : 0);
+  W.hazT = rr(W, 6, 10);
   W.spawnQ = []; W.portals = []; W.hazards = []; W.bolts = [];
   for (const p of W.players) { p.shield = R.shield + (W.up.armor || 0); p.pulses = R.pulse + (W.up.pulse || 0); }
   // survivors, away from the Warden(s)
@@ -189,12 +191,14 @@ export function step(W, dt = STEP) {
   } else if (W.phase === 'fight') {
     W.waveT += dt; W.fightT += dt;
     spawns(W);
+    sectorHazards(W, dt);
   } else if (W.phase === 'clear') {
     if (W.phaseT <= 0) nextWave(W);
   }
   if (W.mode === 'campaign' && W.phase !== 'clear') W.secT += dt;
   // TIME WARP slows every machine, bolt and boss tell; the Wardens keep full speed
   W.warp = Math.max(0, W.warp - dt);
+  if (W.streak.n && (W.streak.t -= dt) <= 0) endStreak(W, 'time');
   const md = W.warp > 0 ? dt * 0.45 : dt;
   for (const p of W.players) player(W, p, dt);
   for (const e of W.enemies) enemy(W, e, md);
@@ -211,7 +215,7 @@ export function step(W, dt = STEP) {
   if (!guest && W.phase === 'fight' && !W.spawnQ.length && !W.portals.length && !W.boss && !W.enemies.some((e) => HOSTILE.has(e.type))) waveClear(W);
   // extra lives
   if (guest) return;
-  if (W.score >= W.nextLife) { W.lives++; W.nextLife += SCORE.lifeEvery * D_OF(W).score; W.ev.push({ k: 'life' }); }
+  if (W.lifePts >= W.nextLife) { W.lives++; W.nextLife += SCORE.lifeEvery * D_OF(W).score; W.ev.push({ k: 'life' }); }
   // out of Wardens
   if (W.lives <= 0 && !W.players.some((p) => p.alive) && W.players.every((p) => p.deadT > 1.6)) { W.over = true; W.result = 'over'; W.ev.push({ k: 'over' }); }
 }
@@ -352,6 +356,7 @@ export function pulse(W, p, remote = false) {
 function hurt(W, p, cause, x, z) {
   if (!p.alive || p.inv > 0) return;
   if (W.net === 'host' && p.remote) return;   // the guest judges its own hits
+  endStreak(W, 'hit');
   if (p.shield > 0) {
     p.shield--; p.inv = F.hitInv; p.hurtT = 0.5; W.stats.shieldHits++;
     const key = W.mode === 'campaign' ? W.wave : 'S';
@@ -566,7 +571,12 @@ function kill(W, e, pid, by) {
   if (e.dead) return;
   e.hp = 0; e.dead = true;
   const sc = ENEMY[e.type].score;
-  addScore(W, sc); W.stats.kills++;
+  // kill streak: points are multiplied, and every STREAK.step kills the multiplier climbs
+  const st = W.streak, m0 = streakMul(st.n);
+  if (by !== 'scrap') { st.n++; st.t = STREAK.gap; W.stats.bestStreak = Math.max(W.stats.bestStreak || 0, st.n); }
+  const m1 = streakMul(st.n);
+  addScore(W, sc, m0); W.stats.kills++;
+  if (m1 > m0) W.ev.push({ k: 'streak', mul: m1, n: st.n, x: e.x, z: e.z });
   maybeDrop(W, e);
   W.ev.push({ k: 'kill', x: e.x, z: e.z, type: e.type, score: sc, by, pid, id: e.id, a: e.a });
   if (e.type === 'splitter') for (let i = 0; i < 2; i++) { const q = addEnemy(W, 'shard', e.x + (i ? 0.5 : -0.5), e.z); q.born = 0.2; }
@@ -574,10 +584,56 @@ function kill(W, e, pid, by) {
   if (e.link) { const o = W.enemies.find((q) => q.id === e.link); if (o) { o.link = 0; o.arc = 0; } }
 }
 
+function endStreak(W, why) {
+  const st = W.streak;
+  if (st.n >= STREAK.step) W.ev.push({ k: 'streakend', n: st.n, mul: streakMul(st.n), why });
+  st.n = 0; st.t = 0;
+}
+
+// ------------------------------------------------------------------ sector hazards
+// From wave 2 each sector (after the first) has its own environmental hazard, always shown first:
+// metro power surges along a lane, foundry molten spills, vault laser gates, reactor lightning.
+const HAZ_STYLE = [null, 'surge', 'spill', 'laser', 'storm'];
+function sectorHazards(W, dt) {
+  const R = W.R, style = HAZ_STYLE[W.k];
+  if (!style || !(R.haz > 0) || W.boss || (W.mode === 'campaign' && W.wave < 1) || W.net === 'guest') return;
+  W.hazT -= dt;
+  if (W.hazT > 0) return;
+  W.hazT = R.haz * rr(W, 0.8, 1.2);
+  const P = nearestPlayer(W, 0, 0);
+  if (!P) return;
+  const T = Math.max(0.9, R.warn * 1.1);
+  const add = (h) => W.hazards.push({ id: W.nextId++, t: 0, T, state: 'tell', style, ...h });
+  if (style === 'surge') {
+    // the current runs along a whole row or column of tiles, near the Warden
+    const horiz = rand(W) < 0.5, off = rr(W, -2.5, 2.5);
+    add(horiz ? { kind: 'strip', x: 0, z: clamp(P.z + off, -AH + 1.5, AH - 1.5), a: 0, hl: AW, w: 1.0, L: 0.75 } : { kind: 'strip', x: clamp(P.x + off, -AW + 1.5, AW - 1.5), z: 0, a: Math.PI / 2, hl: AH, w: 1.0, L: 0.75 });
+  } else if (style === 'spill') {
+    for (let i = 0; i < 2; i++) {
+      const a = rr(W, 0, TAU), d = rr(W, 2.5, 6);
+      add({ kind: 'pool', x: clamp(P.x + Math.cos(a) * d, -AW + 2, AW - 2), z: clamp(P.z + Math.sin(a) * d, -AH + 2, AH - 2), r: rr(W, 1.7, 2.2), L: 4.5 });
+    }
+  } else if (style === 'laser') {
+    // two parallel gates bracketing the Warden
+    const horiz = rand(W) < 0.5, g = rr(W, 2.2, 3.5);
+    for (const s of [-1, 1]) add(horiz ? { kind: 'strip', x: 0, z: clamp(P.z + s * g, -AH + 1, AH - 1), a: 0, hl: AW, w: 0.4, L: 1.3 } : { kind: 'strip', x: clamp(P.x + s * g, -AW + 1, AW - 1), z: 0, a: Math.PI / 2, hl: AH, w: 0.4, L: 1.3 });
+  } else {
+    // lightning: one strike where the Warden is heading, a few around the arena
+    const n = 3 + Math.floor(rand(W) * 2);
+    for (let i = 0; i < n; i++) {
+      const x = i === 0 ? P.x + P.vx * T * 0.6 : rr(W, -AW + 2, AW - 2), z = i === 0 ? P.z + P.vz * T * 0.6 : rr(W, -AH + 2, AH - 2);
+      add({ kind: 'ring', x: clamp(x, -AW + 1.5, AW - 1.5), z: clamp(z, -AH + 1.5, AH - 1.5), r: 1.5, L: 0.3 });
+    }
+  }
+  W.ev.push({ k: 'hazwarn', style, x: P.x, z: P.z, T });
+  tut(W, 'haz_' + style);
+}
+
 // ------------------------------------------------------------------ difficulty + power-ups
 const D_OF = (W) => DIFFICULTY[W.diff] || DIFFICULTY.normal;
 // every point goes through the difficulty's multiplier
-export function addScore(W, n) { W.score += Math.round(n * D_OF(W).score); }
+// lifePts counts points without the streak bonus: extra lives come from steady play, not from streak multipliers
+export function addScore(W, n, mul = 1) { const b = Math.round(n * D_OF(W).score); W.score += Math.round(n * D_OF(W).score * mul); W.lifePts += b; }
 function dropKind(W) {
   const mix = {};
   for (const k of PW_KEYS) mix[k] = POWERUPS[k].w;
@@ -701,7 +757,7 @@ function bolts(W, dt) {
 function hazards(W, dt) {
   for (const h of W.hazards) {
     h.t += dt;
-    if (h.state === 'tell' && h.t >= h.T) { h.state = 'live'; h.t = 0; W.ev.push({ k: 'hazard', kind: h.kind, x: h.x, z: h.z, r: h.r }); }
+    if (h.state === 'tell' && h.t >= h.T) { h.state = 'live'; h.t = 0; W.ev.push({ k: 'hazard', kind: h.kind, style: h.style, x: h.x, z: h.z, r: h.r, a: h.a, hl: h.hl }); }
     else if (h.state === 'live' && h.t >= h.L) h.state = 'done';
     if (h.kind === 'beam' && h.state === 'live') h.a = h.a0 + h.dir * h.sweep * Math.min(1, h.t / h.L);
     if (h.kind === 'beam' && h.state === 'tell' && W.boss) { h.x = W.boss.x; h.z = W.boss.z; }
@@ -711,6 +767,10 @@ function hazards(W, dt) {
 // is (x, z) inside live hazard h?
 export function inHazard(h, x, z, pad = 0) {
   if (h.kind === 'ring' || h.kind === 'pool') return hyp(x - h.x, z - h.z) < h.r + pad;
+  if (h.kind === 'strip') {
+    const c = Math.cos(h.a), s = Math.sin(h.a), px = x - h.x, pz = z - h.z;
+    return Math.abs(px * c + pz * s) < h.hl && Math.abs(-px * s + pz * c) < h.w + pad;
+  }
   if (h.kind === 'beam') {
     const c = Math.cos(h.a), s = Math.sin(h.a), px = x - h.x, pz = z - h.z, along = px * c + pz * s;
     return along > 0 && along < h.len && Math.abs(-px * s + pz * c) < h.w + pad;
@@ -770,7 +830,7 @@ function contacts(W) {
     if (!p.alive || p.inv > 0) continue;
     for (const b of W.bolts) if (hyp(b.x - p.x, b.z - p.z) < b.r + pr) { b.life = 0; hurt(W, p, 'bolt', b.x - b.vx * 0.05, b.z - b.vz * 0.05); break; }
     if (!p.alive || p.inv > 0) continue;
-    for (const h of W.hazards) if (h.state === 'live' && h.kind !== 'lane' && inHazard(h, p.x, p.z, pr * 0.6)) { hurt(W, p, h.kind, h.x, h.z); break; }
+    for (const h of W.hazards) if (h.state === 'live' && h.kind !== 'lane' && inHazard(h, p.x, p.z, pr * 0.6)) { hurt(W, p, h.style || h.kind, h.x, h.z); break; }
     const B = W.boss;
     if (p.alive && p.inv <= 0 && B && B.state !== 'in' && B.state !== 'dying') {
       if (hyp(B.x - p.x, B.z - p.z) < B.r * 0.88 + pr) hurt(W, p, 'boss', B.x, B.z);

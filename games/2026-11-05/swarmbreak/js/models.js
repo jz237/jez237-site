@@ -10,7 +10,7 @@ import * as THREE from '../vendor/three.module.min.js';
 export const hdr = (hex, k) => new THREE.Color(hex).multiplyScalar(k);
 let M = null;
 // shared materials (call once with the environment map, grime, stripe and panel-normal textures)
-export function materials(env, grime, stripe, panelN) {
+export function materials(env, grime, stripe, panelN, hq = true) {
   const std = (o) => new THREE.MeshStandardMaterial({ envMap: env, envMapIntensity: 1, ...o });
   const nrm = panelN ? { normalMap: panelN, normalScale: new THREE.Vector2(0.7, 0.7) } : {};
   M = {
@@ -29,9 +29,11 @@ export function materials(env, grime, stripe, panelN) {
     stripes: std({ map: stripe, metalness: 0.3, roughness: 0.55 }),
     paint: new Map(), glow: new Map(), cloth: new Map(),
   };
+  M.hq = hq;
   // merged parts share a few class materials and carry their own colour per vertex
   M.cls = {
-    paint: new THREE.MeshPhysicalMaterial({ color: 0xffffff, vertexColors: true, metalness: 0.55, roughness: 0.4, map: grime, envMap: env, clearcoat: 0.55, clearcoatRoughness: 0.28, ...nrm }),
+    paint: hq ? new THREE.MeshPhysicalMaterial({ color: 0xffffff, vertexColors: true, metalness: 0.55, roughness: 0.4, map: grime, envMap: env, clearcoat: 0.55, clearcoatRoughness: 0.28, ...nrm })
+      : std({ color: 0xffffff, vertexColors: true, metalness: 0.55, roughness: 0.34, map: grime, ...nrm }),
     metal: std({ color: 0xffffff, vertexColors: true, metalness: 0.92, roughness: 0.28 }),
     rough: std({ color: 0xffffff, vertexColors: true, metalness: 0, roughness: 0.82 }),
     glow: new THREE.MeshBasicMaterial({ color: 0xffffff, vertexColors: true, toneMapped: false }),
@@ -44,7 +46,7 @@ export function materials(env, grime, stripe, panelN) {
 }
 export function paint(color, rough = 0.38, metal = 0.55) {
   const k = color + ':' + rough + ':' + metal;
-  if (!M.paint.has(k)) { const m = new THREE.MeshPhysicalMaterial({ color, metalness: metal, roughness: rough, map: M.grime, envMap: M.env, envMapIntensity: 1, clearcoat: 0.55, clearcoatRoughness: 0.28, ...M.nrm }); m.userData.cls = 'paint'; M.paint.set(k, m); }
+  if (!M.paint.has(k)) { const m = M.hq ? new THREE.MeshPhysicalMaterial({ color, metalness: metal, roughness: rough, map: M.grime, envMap: M.env, envMapIntensity: 1, clearcoat: 0.55, clearcoatRoughness: 0.28, ...M.nrm }) : new THREE.MeshStandardMaterial({ color, metalness: metal, roughness: rough, map: M.grime, envMap: M.env, envMapIntensity: 1, ...M.nrm }); m.userData.cls = 'paint'; M.paint.set(k, m); }
   return M.paint.get(k);
 }
 export function glow(color, k = 3) {

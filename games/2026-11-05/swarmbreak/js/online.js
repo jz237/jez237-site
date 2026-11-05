@@ -3,8 +3,8 @@
 // (waves, machines, survivors, bosses, lives, score) and streams snapshots. The guest runs its own
 // Warden locally (so moving and aiming never lag), judges the hits it takes, and reports its Warden,
 // its shots and its PULSEs; the host re-creates those shots so kills are decided in one place.
-import { adoptWave, pulse } from './sim.js?v=4';
-import { PW_KEYS } from './config.js?v=4';
+import { adoptWave, pulse } from './sim.js?v=5';
+import { PW_KEYS } from './config.js?v=5';
 const packPw = (pw) => Object.entries(pw || {}).map(([k, t]) => [PW_KEYS.indexOf(k), Math.round(t * 10) / 10]);
 const unpackPw = (a) => { const o = {}; for (const [i, t] of a || []) o[PW_KEYS[i]] = t; return o; };
 
@@ -42,7 +42,7 @@ export function packWorld(W) {
     p1: [r3(h.x), r3(h.z), r2(h.vx), r2(h.vz), r3(h.aim), h.alive ? 1 : 0, r2(h.inv), h.shield, h.pulses, r2(h.walk)],
     p2: g ? [g.alive ? 1 : 0, r2(g.x), r2(g.z), r2(g.inv), g.shield, g.pulses] : null,
     hs: W.shots.filter((s) => s.pid === 1).map((s) => [r2(s.x), r2(s.z), r2(s.vx), r2(s.vz), r2(s.life), s.rail ? 1 : s.seek ? 2 : 0]),
-    pk: W.pickups.map((q) => [q.id, PW_KEYS.indexOf(q.kind), r2(q.x), r2(q.z), r2(q.life), r2(q.t)]), wp: r2(W.warp),
+    sk: [W.streak.n, r2(W.streak.t)], pk: W.pickups.map((q) => [q.id, PW_KEYS.indexOf(q.kind), r2(q.x), r2(q.z), r2(q.life), r2(q.t)]), wp: r2(W.warp),
     pw1: packPw(h.pw), da: r3(h.droneA), pw2: g ? packPw(g.pw) : null,
     sx: [W.stats.kills, W.stats.rescued, W.stats.surv, W.stats.lost, W.stats.deaths],
   };
@@ -63,6 +63,7 @@ export function applyWorld(W, S, lead) {
   W.hazards = S.hz;
   W.pickups = (S.pk || []).map((q) => ({ id: q[0], kind: PW_KEYS[q[1]], x: q[2], z: q[3], life: q[4] - lead, t: q[5] }));
   W.warp = S.wp || 0;
+  if (S.sk) { W.streak.n = S.sk[0]; W.streak.t = S.sk[1]; }
   if (S.b) {
     const B = W.boss && W.boss.key === S.b.key ? W.boss : {};
     Object.assign(B, S.b, { orbs: S.b.orbs.map((o, i) => ({ i, x: o[0], z: o[1], hp: o[2], a: o[3], max: o[4] })), vx: 0, vz: 0, t: B.t || 0 });

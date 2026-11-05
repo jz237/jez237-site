@@ -1,13 +1,13 @@
 // Swarmbreak — game flow, menus, HUD, commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS } from './config.js?v=4';
-import { makeWorld, step, drainEvents, waveLabel, isBossWave } from './sim.js?v=4';
-import { Autopilot } from './ai.js?v=4';
-import { Renderer, pickQuality, CALM } from './render.js?v=4';
-import { Audio } from './audio.js?v=4';
-import { Input } from './input.js?v=4';
-import { Scores, NO_POST } from './scores.js?v=4';
-import { Recorder, Replay } from './replay.js?v=4';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=4';
+import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, STREAK, streakMul, SUITS } from './config.js?v=5';
+import { makeWorld, step, drainEvents, waveLabel, isBossWave } from './sim.js?v=5';
+import { Autopilot } from './ai.js?v=5';
+import { Renderer, pickQuality, CALM } from './render.js?v=5';
+import { Audio } from './audio.js?v=5';
+import { Input } from './input.js?v=5';
+import { Scores, NO_POST } from './scores.js?v=5';
+import { Recorder, Replay } from './replay.js?v=5';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=5';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -15,7 +15,7 @@ const params = new URLSearchParams(location.search);
 // ------------------------------------------------------------------ settings + saved progress
 const SKEY = 'sb.settings.v1';
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const settings = { music: 50, sfx: 90, voice: 100, talk: 'on', flash: reduceMotion ? 'reduced' : 'full', shake: '1', rumble: 'on', touch: 'auto', quality: 'auto', netRoute: '0', diff: 'normal', view: 'close' };
+const settings = { music: 50, sfx: 90, voice: 100, talk: 'on', flash: reduceMotion ? 'reduced' : 'full', shake: '1', rumble: 'on', touch: 'auto', quality: 'auto', netRoute: '0', diff: 'normal', view: 'close', suit: 'cobalt' };
 try { Object.assign(settings, JSON.parse(localStorage.getItem(SKEY) || '{}')); } catch { /* defaults */ }
 const saveSettings = () => { try { localStorage.setItem(SKEY, JSON.stringify(settings)); } catch { /* private mode */ } };
 const load = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v ?? d; } catch { return d; } };
@@ -32,7 +32,16 @@ const A = new Audio('./');
 const I = new Input(R.camera);
 // high-score boards: one per difficulty for the campaign and for Last Stand (Normal keeps the original names)
 const BOARDS = {};
+// DAILY CHALLENGE: the same seeded sector for everyone today (UTC), on Hard, with a board per day
+const today = () => new Date().toISOString().slice(0, 10);
+function dailyCfg(day = today()) {
+  let h = 2166136261;
+  for (const c of 'swarmbreak:' + day) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); }
+  const seed = h >>> 1, sector = seed % 5;
+  return { day, seed, sector, diff: 'hard', up: { ...TYPICAL_UP[sector] } };
+}
 function boardOf(mode, diff = 'normal') {
+  if (mode === 'daily') { const key = 'swarmbreak-daily-' + today().replace(/-/g, ''); return BOARDS[key] || (BOARDS[key] = new Scores(key)); }
   const key = (mode === 'stand' ? 'swarmbreak-laststand' : 'swarmbreak') + (diff === 'normal' ? '' : '-' + diff);
   return BOARDS[key] || (BOARDS[key] = new Scores(key));
 }
@@ -167,6 +176,15 @@ function aiShop() {
   }
   return got;
 }
+function startDaily() {
+  const c = dailyCfg();
+  G.run = { score: 0, lives: START_LIVES, up: c.up, salvage: 0, start: c.sector, newMedals: [], diff: c.diff, daily: c.day };
+  const W = makeWorld({ mode: 'campaign', sector: c.sector, seed: c.seed, up: c.up, lives: START_LIVES, diff: c.diff, noTut: true });
+  G.run.sector = c.sector; G.run.score0 = 0;
+  G.mode = 'daily';
+  enterPlay(W);
+  banner('DAILY CHALLENGE', `${c.day} · SECTOR ${c.sector + 1} · ${SECTORS[c.sector].name} · HARD`, 3.2);
+}
 function startStand() {
   G.run = { score: 0, lives: START_LIVES, up: {}, start: 0, newMedals: [], diff: settings.diff };
   G.mode = 'stand';
@@ -254,6 +272,9 @@ function updateHud(W) {
     }
   }
   setText('chain', W.chain > 1 ? `RESCUE CHAIN ×${W.chain}` : `SURVIVORS ${W.survivors.length}`);
+  const sk = W.streak, sm = streakMul(sk.n);
+  $('streak').classList.toggle('hidden', sk.n < 2);
+  if (sk.n >= 2) { setText('streak-n', `${sk.n} STREAK`); setText('streak-m', `×${sm}`); $('streak').querySelector('i').style.width = Math.max(0, (sk.t / STREAK.gap) * 100).toFixed(0) + '%'; $('streak').classList.toggle('hot', sm >= 2.5); }
   const b = W.boss;
   $('bossbar').classList.toggle('hidden', !b || b.state === 'in');
   if (b) {
@@ -291,6 +312,11 @@ function keyName(what) {
 const TUT = {
   move: () => `Run with ${keyName('move')}. Reach the <b>SURVIVORS</b> (green beacons) to bring them in: each one in a row is worth more. Your shield takes one hit each wave.`,
   aim: () => `Training drones. Aim and fire with ${keyName('aim')}: you can run one way and <b>SHOOT ANOTHER</b>.`,
+  haz_surge: () => `<b>POWER SURGE</b>. When a lane of floor glows blue, step off it: the current runs right along it.`,
+  haz_spill: () => `<b>MOLTEN SPILL</b>. Orange circles on the floor fill with molten metal for a few seconds. Keep out.`,
+  haz_laser: () => `<b>LASER GATES</b>. Two red lanes light up either side of you, then fire. Stand between them or clear both.`,
+  haz_storm: () => `<b>LIGHTNING</b>. Pale circles mark where lightning will strike, and one lands where you are heading.`,
+  streak: () => `Scrap machines quickly to build a <b>STREAK</b>: every 6 in a row adds +0.5 to the points multiplier, up to ×4. Getting hit ends it.`,
   pickup: () => `A <b>SUPPLY POD</b>. Run over power-ups to grab them: triple beams, rail lances, a wingman drone and more. They don't wait long.`,
   pulse: () => `Crowded? ${keyName('pulse')} fires a <b>PULSE</b>: it scraps small machines and bolts around you. A few charges every wave.`,
   spitter: () => `A <b>SPITTER</b>. It shows a pink aim line before it fires: step out of the line.`,
@@ -366,7 +392,7 @@ function handleEvents(list, W, live) {
           if (G.mode === 'demo') R.frameShot([[e.x, e.z], [e.fx ?? e.x, e.fz ?? e.z]], 1.2);
           if (G.mode !== 'online') G.pendingClip = { n: W.n, kind: 'death' };
           if (W.lives === 1 && !G.lastLife) { G.lastLife = true; say('lastlife', { chance: 0.8, delay: 2.4 }); }
-          caption(`HIT BY ${({ bolt: 'A BOLT', arc: 'AN ARC', ring: 'A STOMP', pool: 'MOLTEN METAL', beam: 'THE BEAM', boss: 'THE BOSS', orb: 'A SHIELD ORB' })[e.cause] || 'A ' + String(e.cause).toUpperCase()}`, 2.2);
+          caption(`HIT BY ${({ bolt: 'A BOLT', arc: 'AN ARC', ring: 'A STOMP', pool: 'MOLTEN METAL', beam: 'THE BEAM', boss: 'THE BOSS', orb: 'A SHIELD ORB', surge: 'A POWER SURGE', spill: 'MOLTEN METAL', laser: 'A LASER GATE', storm: 'LIGHTNING' })[e.cause] || 'A ' + String(e.cause).toUpperCase()}`, 2.2);
         }
         break;
       }
@@ -393,6 +419,16 @@ function handleEvents(list, W, live) {
         if (live) { banner(`${e.label} CLEAR`, `+${e.bonus.toLocaleString()}${e.evac ? ` · ${e.evac} SURVIVOR${e.evac > 1 ? 'S' : ''} WALKED OUT` : ''}`, 1.8); }
         break;
       case 'tut': if (live) tutorial(e.key); break;
+      case 'streak': if (live && e.mul === 1.5 && !G.tutStreak) { G.tutStreak = 1; tutorial('streak'); }
+        if (live) { A.play('rescue', { vol: 0.55, rate: 1.2 + e.mul * 0.12, gap: 0 }); if (e.mul >= 2) popup(`×${e.mul} STREAK`, e.x, e.z, '#ffb347', true); if (e.mul >= 3) rumble(0.2, 0.3, 90); }
+        break;
+      case 'streakend': if (live && e.why === 'hit') caption(`STREAK BROKEN · ${e.n} IN A ROW`, 1.6); break;
+      case 'hazwarn': if (live) A.play('hazwarn', { vol: 0.45, gap: 0.5 }); break;
+      case 'hazard':
+        if (e.style === 'surge') { A.play('surge', { x: e.x, y: 0.5, z: e.z, vol: 0.9, gap: 0.1 }); R.flashScreen(0.08, 0x9fe8ff); }
+        else if (e.style === 'laser') A.play('laser', { x: e.x, y: 1, z: e.z, vol: 0.75, gap: 0.1 });
+        else if (e.style === 'storm') { A.play('thunder', { x: e.x, y: 3, z: e.z, vol: 0.9, gap: 0.08 }); R.fx.flash(e.x, 3, e.z, 60, 0xc8d4ff, 0.25); R.fx.sparks(e.x, 0.3, e.z, { n: 18, speed: 7, r: 0.7, g: 0.8, b: 1 }); R.fx.ring(e.x, 0, e.z, 3, 0xa8b8ff); R.addTrauma(0.15 * +settings.shake); R.shock(e.x, e.z, 0.6); }
+        break;
       case 'drop': A.play('drop', { x: e.x, y: 1, z: e.z, vol: 0.6, gap: 0.1 }); R.fx.ring(e.x, 0, e.z, 2, POWERUPS[e.kind].color); R.fx.sparks(e.x, 1, e.z, { n: 10, speed: 3, vy: 2, life: 0.6 }); break;
       case 'pickup': {
         const P = POWERUPS[e.kind];
@@ -450,6 +486,7 @@ function onWorldOver(W) {
   A.stopLoops();
   if (G.mode === 'online') { results(W, W.result === 'clear' ? 'SECTOR CLEAR' : 'OVERRUN', 'CO-OP'); return; }
   if (G.mode === 'playthrough') { playthroughNext(W); return; }
+  if (G.mode === 'daily') { A.sting(W.result === 'clear' ? 'clear' : 'over'); say(W.result === 'clear' ? 'bossdown' : 'gameover', { key: true, delay: 1 }); results(W, W.result === 'clear' ? 'DAILY CLEARED' : 'DAILY OVER', `${G.run.daily} · SECTOR ${W.sector + 1} · ${waveLabel(W)}`); return; }
   if (W.mode === 'stand') { A.sting('over'); say('gameover', { key: true, delay: 1 }); results(W, 'THE LINE BROKE', `${waveLabel(W)} · HELD ${fmtT(W.fightT)}`); return; }
   const s = W.sector;
   if (W.result === 'clear') {
@@ -541,13 +578,14 @@ function results(W, title, sub) {
   const st = [['SCORE', W.score.toLocaleString()]];
   if (W.mode === 'stand') st.push(['WAVES HELD', W.waveN], ['TIME', fmtT(W.fightT)]);
   else st.push(['SECTOR TIME', fmtT(W.secT)]);
+  st.push(['BEST STREAK', `${W.stats.bestStreak || 0} (×${streakMul(W.stats.bestStreak || 0)})`]);
   st.push(['MACHINES SCRAPPED', W.stats.kills], ['SURVIVORS RESCUED', `${W.stats.rescued} / ${W.stats.surv}`], ['WARDENS LOST', W.stats.deaths]);
   $('res-stats').innerHTML = st.map(([a, b]) => `<div class="stat"><span>${a}</span><b>${b}</b></div>`).join('');
   const got = G.run ? G.run.newMedals : [];
   $('res-medals').innerHTML = got.map((id) => { const m = MEDALS.find((q) => q.id === id); return `<span class="medal on new">🏅 ${m.name} · S${m.sector + 1}</span>`; }).join('');
   $('res-btns').querySelector('[data-act="replay"]').classList.toggle('hidden', !G.clip);
   $('rep-sub').textContent = G.clip && G.clip.kind === 'boss' ? 'The boss going down' : 'The last hit, exactly as it happened';
-  const board = boardOf(W.mode, W.diff);
+  const board = boardOf(G.mode === 'daily' ? 'daily' : W.mode, W.diff);
   G.board = board; G.ini = null;
   $('ini-wrap').classList.add('hidden');
   if (G.mode !== 'online' && G.mode !== 'playthrough' && board.qualifies(W.score)) {
@@ -646,12 +684,13 @@ function act(a) {
   switch (a) {
     case 'campaign': A.play('uiok', { gap: 0 }); startCampaign(0); break;
     case 'stand': A.play('uiok', { gap: 0 }); startStand(); break;
+    case 'daily': A.play('uiok', { gap: 0 }); startDaily(); break;
     case 'playthrough': A.play('uiok', { gap: 0 }); startPlaythrough(); break;
     case 'sectors': buildSectors(); show('sectors'); break;
     case 'online': show('online'); netStatus(''); $('room-wrap').classList.add('hidden'); $('net-go').classList.add('hidden'); syncSegs(); break;
     case 'scores': show('scores'); renderScores(G.scoreTab || 'campaign'); break;
     case 'medals': buildMedals(); show('medals'); break;
-    case 'options': show('options'); syncSegs(); break;
+    case 'options': buildSuits(); show('options'); syncSegs(); break;
     case 'help': show('help'); break;
     case 'back': A.play('uiback', { gap: 0 }); goBack(); break;
     case 'next': A.play('uiok', { gap: 0 }); clearTimeout(G.ptT); beginSector(G.run.sector + 1); break;
@@ -684,7 +723,13 @@ for (const inp of document.querySelectorAll('[data-set]')) {
   inp.addEventListener('input', () => { settings[inp.dataset.set] = +inp.value; saveSettings(); applySettings(); });
 }
 function syncSegs() { for (const s of document.querySelectorAll('.seg')) for (const b of s.children) b.classList.toggle('on', String(settings[s.dataset.opt]) === b.dataset.v); }
+// suits unlock with medals
+function suitOf(key) { const s = SUITS.find((q) => q.key === key) || SUITS[0]; return medals.size >= s.medals ? s : SUITS[0]; }
+function buildSuits() {
+  $('suits').innerHTML = SUITS.map((s) => { const open = medals.size >= s.medals; return `<button data-v="${s.key}" ${open ? '' : 'disabled'} style="--sc:#${s.color.toString(16).padStart(6, '0')}">${open ? '' : '🔒'}${s.name}${open ? '' : ' · ' + s.medals}</button>`; }).join('');
+}
 function applySettings() {
+  { const s = suitOf(settings.suit); if (!R.suit || R.suit.color !== s.color) { R.suit = { color: s.color, accent: s.accent }; for (const v of R.views.p.values()) R.scene.remove(v.g); R.views.p.clear(); } }
   R.view = settings.view === 'full' ? 'full' : 'close';
   if ($('diff-desc')) $('diff-desc').textContent = DIFFICULTY[settings.diff].desc;
   if (G.state === 'title') $('title-best').textContent = `BEST ${Math.max(boardOf('campaign', settings.diff).best(), 0).toLocaleString()} · ${DL(settings.diff)}`;
@@ -947,7 +992,7 @@ async function boot() {
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('stand', settings.diff).fresh();
-  if (params.has('test')) { const m = await import('./tests.js?v=4'); m.runTests(window.__sb); }
+  if (params.has('test')) { const m = await import('./tests.js?v=5'); m.runTests(window.__sb); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('stand')) startStand(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
@@ -957,6 +1002,6 @@ async function boot() {
 Object.assign(window.__sb, {
   tick: (n = 1, dt = 1 / 60) => { for (let i = 0; i < n; i++) tickFrame(dt); },
   startDemo, startCampaign, startStand, startPlaythrough, toTitle, playReplay, pause, resume, act, buy, settingsApply: applySettings,
-  get W() { return G.W; }, noPost: NO_POST, isBossWave,
+  get W() { return G.W; }, noPost: NO_POST, isBossWave, startDaily, dailyCfg,
 });
 boot();

@@ -190,6 +190,11 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
 .btns.four .mbtn { text-align: center; padding: 8px 4px; font-size: 11px; letter-spacing: .1em; }
 .pwgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 14px; font-family: system-ui, sans-serif; font-size: 12.5px; color: #c9d3df; }
 .pwgrid b { font-family: 'Chakra Petch'; letter-spacing: .08em; }
+#streak { margin-top: 6px; font-family: 'Saira Condensed'; font-weight: 800; color: var(--amber); display: flex; align-items: baseline; gap: 8px; position: relative; padding-bottom: 4px; }
+#streak b { font-size: 22px; line-height: 1; } #streak span { font-size: 11px; letter-spacing: .2em; color: #ffd9a0; }
+#streak i { position: absolute; left: 0; bottom: 0; height: 2px; background: var(--amber); border-radius: 1px; }
+#streak.hot b { color: #fff; text-shadow: 0 0 12px #ff8a2a; }
+#suits button { color: var(--sc); } #suits button[disabled] { opacity: .45; }
 </style>
 </head>
 <body>
@@ -200,6 +205,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
       <div class="lbl">SCORE</div>
       <div class="big" id="score">0</div>
       <div class="row"><div class="lives" id="lives"></div><div class="shield" id="shield"></div><div class="pulses" id="pulses"></div></div>
+      <div id="streak" class="hidden"><b id="streak-m">×1</b><span id="streak-n">0 STREAK</span><i></i></div>
       <div id="pw"></div>
     </div>
     <div class="panel mid">
@@ -233,13 +239,14 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">SWARM<span>BREAK</span></h1>
-      <div class="ver">VERSION <b id="ver">1.1.1</b> · HOLD THE LINE · BRING THEM HOME</div>
+      <div class="ver">VERSION <b id="ver">1.2.0</b> · HOLD THE LINE · BRING THEM HOME</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
         <button class="mbtn primary" data-act="campaign">START CAMPAIGN<small>Five sectors of the city, five waves and a boss in each</small></button>
         <button class="mbtn" data-act="sectors">SECTOR SELECT<small id="sel-sub">Replay any sector you have reached</small></button>
         <button class="mbtn" data-act="stand">LAST STAND<small>Endless waves that slowly get tougher</small></button>
+        <button class="mbtn" data-act="daily">DAILY CHALLENGE<small>One sector on Hard, the same for everyone today, with its own board</small></button>
         <button class="mbtn" data-act="online">ONLINE CO-OP<small>Two Wardens, back to back</small></button>
         <button class="mbtn" data-act="playthrough">AI PLAYTHROUGH<small>Sit back and watch the autopilot play all five sectors</small></button>
         <div class="btns two">
@@ -283,7 +290,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
 
   <div class="screen hidden" id="scores"><div class="card wide">
     <h2>HIGH SCORES</h2>
-    <div class="btns two" style="margin:8px 0 6px"><button class="mbtn tab" data-tab="campaign">CAMPAIGN</button><button class="mbtn tab" data-tab="stand">LAST STAND</button></div>
+    <div class="btns" style="margin:8px 0 6px;grid-template-columns:1fr 1fr 1fr"><button class="mbtn tab" data-tab="campaign">CAMPAIGN</button><button class="mbtn tab" data-tab="stand">LAST STAND</button><button class="mbtn tab" data-tab="daily">TODAY'S DAILY</button></div>
     <div class="btns four" style="margin:0 0 6px"><button class="mbtn" data-hd="easy">EASY</button><button class="mbtn" data-hd="normal">NORMAL</button><button class="mbtn" data-hd="hard">HARD</button><button class="mbtn" data-hd="nightmare">NIGHTMARE</button></div>
     <div class="cols"><div><h3>THIS DEVICE</h3><table class="hs" id="hs-local"></table></div><div><h3>WORLD</h3><table class="hs" id="hs-global"></table></div></div>
     <h3>BEST SECTOR TIMES</h3><div id="besttimes"></div>
@@ -305,6 +312,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
     <div class="opt">FLASHES<div class="seg" data-opt="flash"><button data-v="full">NORMAL</button><button data-v="reduced">REDUCED</button></div></div>
     <div class="opt">SCREEN SHAKE<div class="seg" data-opt="shake"><button data-v="1">ON</button><button data-v="0.4">LIGHT</button><button data-v="0">OFF</button></div></div>
     <div class="opt">VIBRATION<div class="seg" data-opt="rumble"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
+    <div class="opt">SUIT<div class="seg" data-opt="suit" id="suits"></div></div>
     <div class="opt">CAMERA<div class="seg" data-opt="view"><button data-v="close">CLOSE</button><button data-v="full">WHOLE ARENA</button></div></div>
     <div class="opt">TOUCH STICKS<div class="seg" data-opt="touch"><button data-v="auto">AUTO</button><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
     <div class="opt">GRAPHICS<div class="seg" data-opt="quality"><button data-v="auto">AUTO</button><button data-v="high">HIGH</button><button data-v="medium">MED</button><button data-v="low">LOW</button></div></div>
@@ -321,6 +329,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
       <span><b>⟡ WINGMAN</b> a drone fights beside you</span><span><b>⧗ TIME WARP</b> machines and bolts slow down</span>
       <span><b>⬡ BARRIER</b> +1 shield</span><span><b>✺ PULSE CELL</b> +1 PULSE</span></div>
     <p>Machines sometimes drop a pod when scrapped (big ones more often), and a supply pod lands once every wave. Pods only wait about 13 seconds.</p>
+    <h3>STREAKS, DAILY, SUITS</h3><p>Scrap machines quickly to build a streak: every 6 in a row adds +0.5 to the points multiplier (up to ×4), and a hit ends it. The Daily Challenge is one sector on Hard, the same for everyone today, with its own board. Medals unlock new suit colours in Options.</p>
     <h3>DIFFICULTY</h3><p>Easy, Normal, Hard and Nightmare each have their own high-score tables. Harder levels score more points (×0.6, ×1, ×1.5, ×2.2). Medals count on Normal and harder.</p>
     <h3>KEYBOARD + MOUSE</h3><p>RUN: W A S D · AIM + FIRE: arrow keys, or aim with the mouse and hold the left button · PULSE: Space, Shift or the right mouse button · PAUSE: Esc or P</p>
     <h3>GAMEPAD</h3><p>RUN: left stick · AIM + FIRE: right stick (RT fires the last way you aimed) · PULSE: A or a bumper · PAUSE: Start</p>
@@ -362,6 +371,6 @@ addEventListener('error', (e) => window.__sbErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__sbErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__sbErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=4"></script>
+<script type="module" src="js/main.js?v=5"></script>
 </body>
 </html>

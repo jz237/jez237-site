@@ -107,6 +107,10 @@ SFX = {
     'pwend':     (0.7, 0.6, 'Sci-fi power-up running out, short descending electronic blip'),
     'drop':      (1.2, 0.5, 'Supply pod landing, soft pneumatic thump with a rising hum'),
     'warp':      (1.6, 0.5, 'Time slowing down effect, deep descending whoosh with a stretched reverb tail'),
+    'surge':     (1.0, 0.6, 'High-voltage electrical surge through flood water, sharp crackling zap with a buzzing hiss'),
+    'laser':     (1.2, 0.6, 'Security laser grid switching on, bright humming electronic zap'),
+    'thunder':   (1.8, 0.5, 'Close lightning strike, sharp crack followed by a rolling thunder boom'),
+    'hazwarn':   (0.8, 0.6, 'Industrial hazard warning, short rising two-tone siren chirp'),
 }
 
 VOICE_ID = 'EXAVITQu4vr4xnSDxMaL'  # calm dispatch

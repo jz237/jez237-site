@@ -1,6 +1,6 @@
 // Swarmbreak — every tunable number lives here. The RAMP table drives difficulty; nothing else in the
 // game hard-codes enemy pace, numbers, spacing, fire rate, aim or warning time.
-export const VERSION = '1.1.1';
+export const VERSION = '1.2.0';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ the arena and the Warden
@@ -53,6 +53,7 @@ export const WAVES = 5;   // waves per sector, then the boss
 //   aim      spitter aim error, radians
 //   boltV    bolt speed, m/s
 //   burst    share of the wave that pours in at the start, through several gates at once
+//   haz      seconds between sector hazards (0 = none): metro surges, foundry spills, vault lasers, reactor lightning
 //   rush     how much faster the machines get the longer a wave drags on (reached after 60 s)
 //   wander   how much crawlers wander instead of chasing (early ones mostly wander)
 //   surv     survivors in each wave
@@ -63,22 +64,22 @@ export const WAVES = 5;   // waves per sector, then the boss
 //   mix      which machines can come and how often
 export const RAMP = [
   { spd: [0.52, 0.62], count: [6, 10], gap: [3.4, 2.7], group: [1, 2], warn: [2.4, 2.1], fire: [0.16, 0.22], aim: [0.34, 0.28], boltV: [4.6, 5.0],
-    burst: [0, 0], rush: [0.08, 0.14], wander: [0.75, 0.55], surv: [4, 5], combo: [0, 0], shield: [1, 1], pulse: [2, 2], bossHP: 190, bossRate: 0.42,
+    haz: [0, 0], burst: [0, 0], rush: [0.08, 0.14], wander: [0.75, 0.55], surv: [4, 5], combo: [0, 0], shield: [1, 1], pulse: [2, 2], bossHP: 190, bossRate: 0.42,
     mix: { crawler: 1, spitter: 0.3, brute: 0.14 } },
   { spd: [0.66, 0.84], count: [13, 18], gap: [2.4, 2.0], group: [2, 3], warn: [2.05, 1.75], fire: [0.32, 0.46], aim: [0.25, 0.19], boltV: [5.5, 6.6],
-    burst: [0.15, 0.25], rush: [0.15, 0.22], wander: [0.52, 0.42], surv: [5, 6], combo: [0, 0], shield: [1, 0], pulse: [1, 1], bossHP: 260, bossRate: 0.3,
+    haz: [17, 13], burst: [0.15, 0.25], rush: [0.15, 0.22], wander: [0.52, 0.42], surv: [5, 6], combo: [0, 0], shield: [1, 0], pulse: [1, 1], bossHP: 260, bossRate: 0.3,
     mix: { crawler: 1, spitter: 0.4, brute: 0.2, hive: 0.14, pylon: 0.2 } },
   { spd: [0.88, 1.03], count: [22, 27], gap: [1.75, 1.5], group: [3, 4], warn: [1.7, 1.4], fire: [0.5, 0.56], aim: [0.17, 0.14], boltV: [7.0, 7.7],
-    burst: [0.3, 0.36], rush: [0.3, 0.36], wander: [0.4, 0.32], surv: [6, 6], combo: [0.25, 0.4], shield: [0, 0], pulse: [1, 1], bossHP: 380, bossRate: 0.56,
+    haz: [15, 11], burst: [0.3, 0.36], rush: [0.3, 0.36], wander: [0.4, 0.32], surv: [6, 6], combo: [0.25, 0.4], shield: [0, 0], pulse: [1, 1], bossHP: 380, bossRate: 0.56,
     mix: { crawler: 1, spitter: 0.8, brute: 0.24, hive: 0.2, pylon: 0.24 } },
   { spd: [1.03, 1.12], count: [27, 33], gap: [1.55, 1.3], group: [4, 5], warn: [1.36, 1.1], fire: [0.56, 0.6], aim: [0.14, 0.12], boltV: [7.7, 8.3],
-    burst: [0.36, 0.4], rush: [0.36, 0.4], wander: [0.3, 0.24], surv: [6, 7], combo: [0.4, 0.45], shield: [0, 0], pulse: [1, 1], bossHP: 400, bossRate: 0.25,
+    haz: [13, 10], burst: [0.36, 0.4], rush: [0.36, 0.4], wander: [0.3, 0.24], surv: [6, 7], combo: [0.4, 0.45], shield: [0, 0], pulse: [1, 1], bossHP: 400, bossRate: 0.25,
     mix: { crawler: 1, spitter: 0.65, brute: 0.26, hive: 0.2, pylon: 0.26, splitter: 0.3 } },
   { spd: [1.15, 1.28], count: [36, 42], gap: [1.25, 1.05], group: [5, 6], warn: [1.06, 0.7], fire: [0.62, 0.7], aim: [0.1, 0.07], boltV: [8.4, 9.2],
-    burst: [0.4, 0.45], rush: [0.4, 0.46], wander: [0.22, 0.14], surv: [7, 7], combo: [0.4, 0.48], shield: [0, 0], pulse: [1, 1], bossHP: 600, bossRate: 0.33,
+    haz: [11, 8], burst: [0.4, 0.45], rush: [0.4, 0.46], wander: [0.22, 0.14], surv: [7, 7], combo: [0.4, 0.48], shield: [0, 0], pulse: [1, 1], bossHP: 600, bossRate: 0.33,
     mix: { crawler: 1, spitter: 0.75, brute: 0.3, hive: 0.22, pylon: 0.3, splitter: 0.36 } },
 ];
-const RAMP_KEYS = ['spd', 'count', 'gap', 'group', 'warn', 'fire', 'aim', 'boltV', 'burst', 'rush', 'wander', 'surv', 'combo'];
+const RAMP_KEYS = ['spd', 'count', 'gap', 'group', 'warn', 'fire', 'aim', 'boltV', 'haz', 'burst', 'rush', 'wander', 'surv', 'combo'];
 
 // the difficulty values at wave `w` of sector `s` (both 0-based)
 export function rampAt(s, w) {
@@ -137,6 +138,19 @@ export const BOSS_KEYS = Object.keys(BOSSES);
 // ------------------------------------------------------------------ scoring, lives, upgrades, medals
 export const SCORE = { rescue: 300, rescueMax: 1500, wave: 1000, timeBonus: 30, boss: 5000, sector: 2500, lifeEvery: 60000 };
 export const START_LIVES = 3;
+// kill streak: every STREAK.step kills in a row (no more than STREAK.gap seconds apart, no hits taken)
+// adds +0.5 to the multiplier on kill points, up to STREAK.max
+export const STREAK = { step: 6, gap: 2.6, max: 4 };
+export const streakMul = (n) => Math.min(STREAK.max, 1 + Math.floor(n / STREAK.step) * 0.5);
+// Warden suit colours, unlocked by medals
+export const SUITS = [
+  { key: 'cobalt', name: 'COBALT', color: 0x2f8cff, accent: 0x9fe8ff, medals: 0 },
+  { key: 'crimson', name: 'CRIMSON', color: 0xd83a3a, accent: 0xffd27a, medals: 3 },
+  { key: 'jade', name: 'JADE', color: 0x2fae6a, accent: 0xb8ffd8, medals: 6 },
+  { key: 'gold', name: 'GOLD', color: 0xd8a62f, accent: 0xfff0b8, medals: 9 },
+  { key: 'obsidian', name: 'OBSIDIAN', color: 0x2a2a33, accent: 0xff5ad0, medals: 12 },
+  { key: 'arctic', name: 'ARCTIC', color: 0xe8eef4, accent: 0x7fd8ff, medals: 15 },
+];
 
 // ------------------------------------------------------------------ difficulty levels
 // Each level scales the RAMP (so every level still starts gentle and builds up) and has its own
@@ -156,7 +170,7 @@ export function applyDiff(R, key) {
   const d = DIFFICULTY[key] || DIFFICULTY.normal;
   if (d === DIFFICULTY.normal) return R;
   return { ...R, spd: R.spd * d.spd, fire: R.fire * d.fire, count: Math.max(1, Math.round(R.count * d.count)), aim: R.aim * d.aim, boltV: R.boltV * d.boltV,
-    warn: Math.max(MIN_WARN, R.warn * d.warn), bossHP: Math.round(R.bossHP * d.boss), bossRate: R.bossRate * d.bossRate, shield: R.shield + d.shield };
+    warn: Math.max(MIN_WARN, R.warn * d.warn), haz: R.haz / d.spd, bossHP: Math.round(R.bossHP * d.boss), bossRate: R.bossRate * d.bossRate, shield: R.shield + d.shield };
 }
 
 // ------------------------------------------------------------------ power-ups dropped in the arena

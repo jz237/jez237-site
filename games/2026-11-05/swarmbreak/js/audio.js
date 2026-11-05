@@ -4,9 +4,9 @@
 // the music and only one plays at a time. Music loops with a crossfade.
 const SFX = ['gun', 'hit', 'clang', 'pop', 'boomS', 'boomM', 'boomL', 'scrap', 'debris', 'spitcharge', 'spitfire', 'hivetell', 'hivespawn', 'dart', 'crawl', 'brute', 'arc', 'arcon',
   'portal', 'enter', 'rescue', 'rescue5', 'lost', 'pulse', 'shieldhit', 'death', 'spawn', 'wave', 'waveclear', 'alarm', 'bossroar', 'bosshit', 'stomp', 'bosscharge', 'slam', 'beam',
-  'molten', 'life', 'upgrade', 'medal', 'warn', 'step', 'uimove', 'uiok', 'uiback', 'rewind', 'pickup', 'pwend', 'drop', 'warp'];
+  'molten', 'life', 'upgrade', 'medal', 'warn', 'step', 'uimove', 'uiok', 'uiback', 'rewind', 'pickup', 'pwend', 'drop', 'warp', 'surge', 'laser', 'thunder', 'hazwarn'];
 const VOICE = ['begin', 's2', 's3', 's4', 's5', 'stand', 'boss', 'bossdown', 'clear', 'lastlife', 'gameover', 'newrecord', 'champion', 'replay', 'partner', 'halfway', 'chain'];
-const V = '?v=4';
+const V = '?v=5';
 
 export class Audio {
   constructor(base) {
