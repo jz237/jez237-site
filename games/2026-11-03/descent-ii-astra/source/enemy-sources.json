@@ -1,0 +1,433 @@
+{
+  "source": "Overload_Data/resources.assets",
+  "names": "Assembly-CSharp.dll / EnemyType and EnemyNamesType.Refresh",
+  "dossiers": "desc_robots_EN",
+  "stats": "robot_data; base values before difficulty scaling",
+  "models": {
+    "GruntA": {
+      "triangles": 3690,
+      "materials": [
+        0
+      ],
+      "bounds": [
+        2.447399084179475,
+        1.2569846371978417,
+        1.9164312798816654
+      ],
+      "radius": 1.4111106910811972
+    },
+    "GruntB": {
+      "triangles": 5640,
+      "materials": [
+        1
+      ],
+      "bounds": [
+        2.6622739352207736,
+        1.5165771969638895,
+        1.888805715992374
+      ],
+      "radius": 1.5285734691902984
+    },
+    "RecoilA": {
+      "triangles": 4088,
+      "materials": [
+        2
+      ],
+      "bounds": [
+        2.9350374341011043,
+        1.6153426337987185,
+        1.7751632332801817
+      ],
+      "radius": 1.761524919489954
+    },
+    "RecoilB": {
+      "triangles": 5050,
+      "materials": [
+        3
+      ],
+      "bounds": [
+        3.035051017999648,
+        1.6153426337987185,
+        1.7751632332801817
+      ],
+      "radius": 1.7626565165746513
+    },
+    "ClawbotA": {
+      "triangles": 7305,
+      "materials": [
+        4
+      ],
+      "bounds": [
+        2.3931430312329867,
+        1.813412762327001,
+        1.8831254815858327
+      ],
+      "radius": 1.4742277593163682
+    },
+    "ClawbotB": {
+      "triangles": 7305,
+      "materials": [
+        5
+      ],
+      "bounds": [
+        2.3931430312329867,
+        1.813412762327001,
+        1.8831254815858327
+      ],
+      "radius": 1.4742277593163682
+    },
+    "HulkA": {
+      "triangles": 7622,
+      "materials": [
+        6,
+        7
+      ],
+      "bounds": [
+        3.145425212571692,
+        1.60658377949768,
+        2.6907398425506237
+      ],
+      "radius": 1.7784060829157602
+    },
+    "HulkB": {
+      "triangles": 8702,
+      "materials": [
+        8,
+        9
+      ],
+      "bounds": [
+        3.2391456622502623,
+        1.5033632075598706,
+        2.8512732189633994
+      ],
+      "radius": 1.943774577217186
+    },
+    "DetonatorA": {
+      "triangles": 7794,
+      "materials": [
+        10
+      ],
+      "bounds": [
+        2.397279644022867,
+        1.6973439046783574,
+        2.0341605607734
+      ],
+      "radius": 1.4778782968717963
+    },
+    "DetonatorB": {
+      "triangles": 8224,
+      "materials": [
+        11
+      ],
+      "bounds": [
+        2.737996592039462,
+        2.139459697829987,
+        3.252026882241664
+      ],
+      "radius": 1.7531099283413722
+    },
+    "BladesA": {
+      "triangles": 8826,
+      "materials": [
+        12,
+        13
+      ],
+      "bounds": [
+        2.143557627735663,
+        2.171215909665583,
+        2.203015405490561
+      ],
+      "radius": 1.5899132941807352
+    },
+    "DroneA": {
+      "triangles": 2886,
+      "materials": [
+        14
+      ],
+      "bounds": [
+        2.1932010697974014,
+        1.3883931776371383,
+        2.508278172546312
+      ],
+      "radius": 1.5183546856997256
+    },
+    "DroneB": {
+      "triangles": 4203,
+      "materials": [
+        15
+      ],
+      "bounds": [
+        3.3699780372771277,
+        1.9366862773385545,
+        3.471861378952516
+      ],
+      "radius": 2.141909316298393
+    },
+    "CannonA": {
+      "triangles": 5265,
+      "materials": [
+        16
+      ],
+      "bounds": [
+        2.0513839721680247,
+        2.2305107448382513,
+        2.520281832296538
+      ],
+      "radius": 1.583118428828271
+    },
+    "CannonB": {
+      "triangles": 3593,
+      "materials": [
+        17
+      ],
+      "bounds": [
+        3.2050458996770885,
+        2.416052007568573,
+        2.5412631222897377
+      ],
+      "radius": 1.7394079000683997
+    },
+    "ViperA": {
+      "triangles": 16822,
+      "materials": [
+        18
+      ],
+      "bounds": [
+        5.005105100599338,
+        1.082136530419088,
+        2.3413247392167937
+      ],
+      "radius": 2.6693378033916733
+    },
+    "ViperB": {
+      "triangles": 9146,
+      "materials": [
+        19,
+        20
+      ],
+      "bounds": [
+        4.961216652095226,
+        1.376604828646318,
+        2.3538769563788824
+      ],
+      "radius": 2.662719437565489
+    },
+    "TeleporterA": {
+      "triangles": 10368,
+      "materials": [
+        21,
+        22
+      ],
+      "bounds": [
+        4.765060654655406,
+        2.4966061637859505,
+        1.489826013508041
+      ],
+      "radius": 2.449376268371605
+    },
+    "TeleporterB": {
+      "triangles": 13874,
+      "materials": [
+        22,
+        23
+      ],
+      "bounds": [
+        5.775980087080981,
+        1.6112174917004096,
+        1.6601301613901107
+      ],
+      "radius": 2.953313544458097
+    },
+    "Boss1": {
+      "triangles": 11794,
+      "materials": [
+        24,
+        25
+      ],
+      "bounds": [
+        5.589605169443445,
+        3.2584070227536195,
+        4.009231402523643
+      ],
+      "radius": 3.3890356579554948
+    },
+    "Boss2": {
+      "triangles": 25218,
+      "materials": [
+        26
+      ],
+      "bounds": [
+        5.986704979568084,
+        3.9944863441588123,
+        5.183586547462914
+      ],
+      "radius": 3.057953310230874
+    },
+    "Boss3": {
+      "triangles": 12438,
+      "materials": [
+        27,
+        28,
+        29
+      ],
+      "bounds": [
+        3.53937844999437,
+        2.198148888111737,
+        2.00664551765255
+      ],
+      "radius": 1.8357911410564545
+    },
+    "Boss1B": {
+      "triangles": 6946,
+      "materials": [
+        24,
+        25
+      ],
+      "bounds": [
+        3.8976436759427155,
+        2.624638786284242,
+        2.7621917752197076
+      ],
+      "radius": 2.056447475711704
+    },
+    "Boss2B": {
+      "triangles": 4904,
+      "materials": [
+        30,
+        31,
+        32
+      ],
+      "bounds": [
+        5.2691337164227035,
+        2.9734734351465546,
+        4.959570443257689
+      ],
+      "radius": 3.3218678599248577
+    },
+    "Boss3B": {
+      "triangles": 1120,
+      "materials": [
+        33
+      ],
+      "bounds": [
+        1.7965816320161994,
+        1.5893095840280838,
+        1.6397660598158834
+      ],
+      "radius": 1.1959785830993428
+    },
+    "Guidebot": {
+      "triangles": 2668,
+      "materials": [
+        34
+      ],
+      "bounds": [
+        1.3964578461328214,
+        1.2485151693052317,
+        1.3806633118345575
+      ],
+      "radius": 1.0352961999206076
+    },
+    "pBladesB": {
+      "triangles": 6680,
+      "materials": [
+        12,
+        13
+      ],
+      "bounds": [
+        2.139802887196657,
+        2.1716301187757723,
+        2.2030154137830795
+      ],
+      "radius": 1.5905280597056033
+    },
+    "pMiniSpiderA": {
+      "triangles": 240,
+      "materials": [
+        35,
+        36,
+        37
+      ],
+      "bounds": [
+        0.8260937333106992,
+        0.5336681678891182,
+        0.6059195995330809
+      ],
+      "radius": 0.5338377523846146
+    },
+    "pReactorA": {
+      "emptyPrefab": true
+    },
+    "pSpiderA": {
+      "triangles": 498,
+      "materials": [
+        35,
+        36,
+        37
+      ],
+      "bounds": [
+        2.859493255615234,
+        2.480477023447044,
+        2.583001942027426
+      ],
+      "radius": 1.8584732462718958
+    },
+    "pSpiderB": {
+      "triangles": 498,
+      "materials": [
+        38,
+        39,
+        40
+      ],
+      "bounds": [
+        2.859493255615234,
+        2.480477023447044,
+        2.583001942027426
+      ],
+      "radius": 1.8584732462718958
+    }
+  },
+  "materials": {
+    "mat_grunt_1": 0,
+    "mat_grunt_2": 1,
+    "mat_recoil_1": 2,
+    "mat_recoil_1r": 3,
+    "mat_clawbot_1": 4,
+    "cloak_bot": 5,
+    "mat_hulkA_1": 6,
+    "mat_hulkA_2": 7,
+    "mat_hulkB_1": 8,
+    "mat_hulkB_2": 9,
+    "mat_detonator_master": 10,
+    "mat_detonatorB_master": 11,
+    "mat_blades2": 12,
+    "mat_blades1": 13,
+    "mat_droneA": 14,
+    "mat_droneB_1": 15,
+    "mat_cannon_1": 16,
+    "mat_cannonB_1": 17,
+    "mat_viperA": 18,
+    "mat_alien_viperB": 19,
+    "fin_shader": 20,
+    "mat_alien_teleporterA": 21,
+    "fin_teleporterA": 22,
+    "mat_alien_teleporterB": 23,
+    "mat_Boss1_master": 24,
+    "mat_Boss1_master_b": 25,
+    "mat_Boss2_master_c": 26,
+    "mat_alien_Boss3": 27,
+    "fin_boss3": 28,
+    "thruster_glow1": 29,
+    "XR1B": 30,
+    "XR2": 31,
+    "XR1": 32,
+    "mat_alien_Boss3_boom": 33,
+    "guidebot_shell2": 34,
+    "p_spider_2": 35,
+    "p_spider_1": 36,
+    "p_spider_3": 37,
+    "p_spider_2B": 38,
+    "p_spider_1B": 39,
+    "p_spider_3B": 40
+  }
+}
