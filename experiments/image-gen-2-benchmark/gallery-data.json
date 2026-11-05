@@ -29388,5 +29388,111 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-05-factual-infographic-factual-infographic-urinary-tract-infec",
+    "title": "Factual infographic: Urinary Tract Infection — Bladder and Ascending Infection",
+    "tests": "factual_subtype: medical-health-infographic; archive_slot=2026-11-05T14:20; concept=urinary-tract-bladder-ascending-infection; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished artistic medical infographic, directly on canvas, titled \"URINARY TRACT INFECTION\" with subtitle \"Bladder infection and the ascending route\". Refined luminous anatomical gouache with fine ink contours on a cool ivory ground, deep teal and blue urine pathways, coral inflamed lining, delicate violet shadows. Artwork-led asymmetrical composition, no grid, no boxed cards, no photographed poster, no logos, no bibliography. A large anatomically credible anterior urinary-system cutaway dominates the canvas: two bean-shaped kidneys in the upper rear abdomen, two distinct slender ureters descending to a muscular bladder in the pelvis, and a short urethra exiting below. Label kidneys, ureters, bladder, urethra with precise fine leaders. Soft translucent surrounding torso establishes position without adding unrelated organs. Blue downward arrows labeled \"Urine flow\" trace kidneys to bladder and urethral exit. A separate restrained coral dotted upward path labeled \"Bacteria can ascend\" begins outside the urethra and reaches the bladder, with a faded optional continuation along one ureter toward kidney labeled \"May spread to kidneys\"; do not imply all infections progress. Near the lower left, organically magnify the bladder lining into an elegant curved cutaway with tiny generic bacteria and coral irritated tissue, explicitly labeled \"Schematic enlargement — not to scale\" and \"Bacteria can multiply in the bladder\". Explain \"Usually bacteria from the bowel enter through the urethra\". Texture the bladder muscle and smooth inner surface credibly without invented microscopic structures.\nReadable open callouts woven around the anatomy, not dense prose: \"COMMON SYMPTOMS\" followed by \"Burning when urinating • urgency • frequent urination • lower abdominal discomfort\". Underneath: \"Dark or smelly urine alone does not confirm a UTI.\" A small flowing risk annotation reads \"Risk can rise with catheters, incomplete emptying, pregnancy or menopause.\" A sweeping lower-right clinical-care path uses tiny unboxed urine specimen and prescription illustrations, connected to concise text: \"Assessment: symptoms and history; urine testing when needed\"; \"Treatment: antibiotics are often used — follow your prescription\"; \"Rest and appropriate fluids may ease symptoms; follow any fluid limits\"; \"Cranberry products do not treat an established infection.\" A small prevention annotation: \"Don't hold urine; take time to empty your bladder.\" Integrate a clearly readable warm rust warning ribbon along the bottom, not dominating the artwork: \"URGENT MEDICAL ADVICE: fever or chills, back pain below the ribs, blood in urine, pregnancy, or rapid worsening.\" Beneath in stronger type: \"EMERGENCY HELP: new confusion, marked drowsiness or difficulty speaking.\" Tiny final footer \"General education — not a diagnosis.\" Maintain generous breathing room, rich anatomical shading, elegant typographic hierarchy and legible exact labels; optional risk annotation may be shortened for space, but preserve anatomy, mechanism, clinical care and warnings. No invented numbers, drug doses or species-specific bacterial anatomy.",
+    "image": "images/2026-11-05-factual-infographic-factual-infographic-urinary-tract-infec.jpg",
+    "thumb": "thumbs/2026-11-05-factual-infographic-factual-infographic-urinary-tract-infec.webp",
+    "color": "#ddc6c1",
+    "date": "2026-11-05",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "urinary-tract-bladder-ascending-infection",
+      "imageSha256": "18b9bec64d52c3326cf50f30b776a81046a89f284a03bf7ff80e50bb2067a830",
+      "imageDHash": "b69292c2e60c8ca2"
+    },
+    "factualInfographic": {
+      "topic": "How urinary tract infections reach the bladder, can ascend to the kidneys, and are evaluated and treated",
+      "description": "Source-backed urinary anatomy, bladder infection mechanism, symptoms, risk context, care and urgent warnings.",
+      "sourceNote": "NIDDK and NHS: https://www.niddk.nih.gov/health-information/urologic-diseases/bladder-infection-uti-in-adults ; https://www.nhs.uk/conditions/urinary-tract-infections-utis/ ; https://www.niddk.nih.gov/health-information/urologic-diseases/urinary-tract-how-it-works . Verified anatomy, ascending infection, symptom interpretation, care and urgent clinical context.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-05T19:21:02.804503+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NIDDK",
+            "title": "Bladder Infection (UTI) in Adults",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/urologic-diseases/bladder-infection-uti-in-adults"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Urinary tract infections (UTIs)",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/urinary-tract-infections-utis/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NIDDK",
+            "title": "The Urinary Tract & How It Works",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/urologic-diseases/urinary-tract-how-it-works"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The urinary tract includes two kidneys, two ureters, a bladder and a urethra; kidneys produce urine, ureters carry it to the bladder, the bladder stores it, and the urethra carries it outside.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Bacteria, usually from the bowel, can enter through the urethra and multiply in the bladder; an untreated bladder infection can develop into a kidney infection.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Burning urination, urgency, frequency, lower abdominal discomfort and sometimes blood in urine are symptoms; smell or dark urine alone does not establish UTI.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Catheters, impaired bladder emptying, pregnancy and menopause can increase risk.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Clinical assessment uses symptoms and history and may include urine testing; urine testing is not always needed.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Antibiotics are often used for bacterial bladder infection; take prescribed treatment as directed. Rest and appropriate fluids may help symptoms, but cranberry products do not treat an established infection.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Fever or chills, back pain below the ribs, blood in urine, pregnancy, or rapid worsening warrant urgent medical advice; new confusion, marked drowsiness or difficulty speaking warrant emergency help.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Not holding urine, taking time to empty the bladder and drinking appropriate fluids may help urinary health; follow clinician fluid limits when applicable.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
