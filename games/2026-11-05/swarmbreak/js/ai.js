@@ -4,8 +4,8 @@
 // in, room to fight, the boss at arm's length), and runs the best one while it aims and fires.
 //   profile 'human': ~0.35 s reaction with scatter, sometimes late, aim wobble, the odd bad choice
 //   profile 'demo' : quick, accurate, uses PULSE well: the attract mode and the AI playthrough
-import { F, ENEMY, HOSTILE } from './config.js?v=2';
-import { inHazard } from './sim.js?v=2';
+import { F, ENEMY, HOSTILE } from './config.js?v=3';
+import { inHazard } from './sim.js?v=3';
 
 const PROFILES = {
   human: { track: 8, blind: 0.4, slew: 4.2, react: 0.35, jit: 0.1, late: 0.14, lateT: 0.25, aim: 0.075, drift: 0.05, margin: 1.35, look: 0.8, pulseP: 0.5, crowd: 3, panic: 0.03, fireRange: 15, greed: 1 },
@@ -122,7 +122,9 @@ export class Autopilot {
     for (const e of W.enemies) if (e.type === 'pylon' && e.link && e.id < e.link && e.arc) { const o = W.enemies.find((q) => q.id === e.link); if (o) arcs.push([e.x, e.z, o.x, o.z, e.arc === 2 ? 0 : e.arcT]); }
     // survivors worth fetching
     let surv = null, sd = 1e9;
+    // survivors and power-ups on the floor are both worth fetching (power-ups a little less)
     for (const s of W.survivors) { const d = hyp(s.x - p.x, s.z - p.z); if (d < sd) { sd = d; surv = s; } }
+    for (const q of W.pickups || []) { const d = hyp(q.x - p.x, q.z - p.z) * 1.25; if (d < sd && q.life > d / 5) { sd = d; surv = q; } }
     let near = 1e9, crowd = 0;
     for (const t of th) if (HOSTILE.has(t.kind)) { const d = hyp(t.x - p.x, t.z - p.z) - t.r; near = Math.min(near, d); if (d < 3.4) crowd++; }
 

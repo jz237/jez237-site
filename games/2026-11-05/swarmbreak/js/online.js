@@ -3,7 +3,10 @@
 // (waves, machines, survivors, bosses, lives, score) and streams snapshots. The guest runs its own
 // Warden locally (so moving and aiming never lag), judges the hits it takes, and reports its Warden,
 // its shots and its PULSEs; the host re-creates those shots so kills are decided in one place.
-import { adoptWave, pulse } from './sim.js?v=2';
+import { adoptWave, pulse } from './sim.js?v=3';
+import { PW_KEYS } from './config.js?v=3';
+const packPw = (pw) => Object.entries(pw || {}).map(([k, t]) => [PW_KEYS.indexOf(k), Math.round(t * 10) / 10]);
+const unpackPw = (a) => { const o = {}; for (const [i, t] of a || []) o[PW_KEYS[i]] = t; return o; };
 
 export const PROTOCOL = 1;
 const RELAY = 'wss://steel-duel-online.jez237.workers.dev';
@@ -38,7 +41,9 @@ export function packWorld(W) {
     b: B ? { key: B.key, x: r2(B.x), z: r2(B.z), hp: B.hp, max: B.max, r: B.r, state: B.state, a: r3(B.a), phase: B.phase, hitT: r2(B.hitT), spin: r2(B.spin), st: r2(B.st), orbs: B.orbs.map((o) => [r2(o.x), r2(o.z), o.hp, r3(o.a), o.max]), cur: B.cur ? { kind: B.cur.kind, t: r2(B.cur.t), T: r2(B.cur.T) } : null } : null,
     p1: [r3(h.x), r3(h.z), r2(h.vx), r2(h.vz), r3(h.aim), h.alive ? 1 : 0, r2(h.inv), h.shield, h.pulses, r2(h.walk)],
     p2: g ? [g.alive ? 1 : 0, r2(g.x), r2(g.z), r2(g.inv), g.shield, g.pulses] : null,
-    hs: W.shots.filter((s) => s.pid === 1).map((s) => [r2(s.x), r2(s.z), r2(s.vx), r2(s.vz), r2(s.life)]),
+    hs: W.shots.filter((s) => s.pid === 1).map((s) => [r2(s.x), r2(s.z), r2(s.vx), r2(s.vz), r2(s.life), s.rail ? 1 : s.seek ? 2 : 0]),
+    pk: W.pickups.map((q) => [q.id, PW_KEYS.indexOf(q.kind), r2(q.x), r2(q.z), r2(q.life), r2(q.t)]), wp: r2(W.warp),
+    pw1: packPw(h.pw), da: r3(h.droneA), pw2: g ? packPw(g.pw) : null,
     sx: [W.stats.kills, W.stats.rescued, W.stats.surv, W.stats.lost, W.stats.deaths],
   };
 }
@@ -56,6 +61,8 @@ export function applyWorld(W, S, lead) {
   W.bolts = S.bo.map((q) => ({ id: q[0], x: ext(q[1], q[3]), z: ext(q[2], q[4]), vx: q[3], vz: q[4], r: q[5], big: q[6], life: q[7] - lead }));
   W.portals = S.po.map((q) => ({ id: q[0], x: q[1], z: q[2], t: q[3] + lead, T: q[4], types: q[5].map((i) => TYPES[i]), x2: q[6] ?? undefined, z2: q[7] ?? undefined, inside: !!q[8], g: { types: [] } }));
   W.hazards = S.hz;
+  W.pickups = (S.pk || []).map((q) => ({ id: q[0], kind: PW_KEYS[q[1]], x: q[2], z: q[3], life: q[4] - lead, t: q[5] }));
+  W.warp = S.wp || 0;
   if (S.b) {
     const B = W.boss && W.boss.key === S.b.key ? W.boss : {};
     Object.assign(B, S.b, { orbs: S.b.orbs.map((o, i) => ({ i, x: o[0], z: o[1], hp: o[2], a: o[3], max: o[4] })), vx: 0, vz: 0, t: B.t || 0 });
@@ -64,6 +71,7 @@ export function applyWorld(W, S, lead) {
   const h = W.players[0], q = S.p1;
   h.remote = true;
   h.x = q[0] + q[2] * lead; h.z = q[1] + q[3] * lead; h.vx = q[2]; h.vz = q[3]; h.aim = q[4]; h.alive = !!q[5]; h.inv = q[6]; h.shield = q[7]; h.pulses = q[8]; h.walk = q[9];
+  h.pw = unpackPw(S.pw1); h.droneA = S.da || 0;
   const me = W.players[1], m = S.p2;
   if (me && m) {
     if (m[0] && !me.alive) { // the host brought me back
@@ -71,10 +79,15 @@ export function applyWorld(W, S, lead) {
       W.ev.push({ k: 'spawn', pid: 2, x: me.x, z: me.z });
     }
     me.shield = Math.min(me.shield, m[4]); me.pulses = Math.min(me.pulses, m[5]);
+    // power-ups I picked up are decided by the host; shields and pulses it gave me count too
+    const pw = unpackPw(S.pw2);
+    for (const k in pw) if (!me.pw[k] || pw[k] > me.pw[k] + 0.5) me.pw[k] = pw[k];
+    if (m[4] > me.shield + 0 && S.ph !== 'intro') me.shield = m[4];
+    if (m[5] > me.pulses && S.ph !== 'intro') me.pulses = m[5];
     // a new wave refills both
     if (S.ph === 'intro') { me.shield = m[4]; me.pulses = m[5]; }
   }
-  W.shots = W.shots.filter((s) => s.pid !== 1).concat(S.hs.map((q) => ({ id: 0, pid: 1, x: q[0] + q[2] * lead, z: q[1] + q[3] * lead, vx: q[2], vz: q[3], life: q[4] - lead, ghost: true })));
+  W.shots = W.shots.filter((s) => s.pid !== 1).concat(S.hs.map((q) => ({ id: 0, pid: 1, x: q[0] + q[2] * lead, z: q[1] + q[3] * lead, vx: q[2], vz: q[3], life: q[4] - lead, ghost: true, rail: q[5] === 1 ? 1 : 0, seek: 0 })));
   [W.stats.kills, W.stats.rescued, W.stats.surv, W.stats.lost, W.stats.deaths] = S.sx;
 }
 const R_OF = { dummy: 0.55, crawler: 0.48, brute: 1.0, spitter: 0.6, hive: 1.05, dart: 0.34, pylon: 0.42, splitter: 0.8, shard: 0.42 };

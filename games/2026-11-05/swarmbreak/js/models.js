@@ -31,7 +31,7 @@ export function materials(env, grime, stripe, panelN) {
   };
   // merged parts share a few class materials and carry their own colour per vertex
   M.cls = {
-    paint: std({ color: 0xffffff, vertexColors: true, metalness: 0.6, roughness: 0.38, map: grime, ...nrm }),
+    paint: new THREE.MeshPhysicalMaterial({ color: 0xffffff, vertexColors: true, metalness: 0.55, roughness: 0.4, map: grime, envMap: env, clearcoat: 0.55, clearcoatRoughness: 0.28, ...nrm }),
     metal: std({ color: 0xffffff, vertexColors: true, metalness: 0.92, roughness: 0.28 }),
     rough: std({ color: 0xffffff, vertexColors: true, metalness: 0, roughness: 0.82 }),
     glow: new THREE.MeshBasicMaterial({ color: 0xffffff, vertexColors: true, toneMapped: false }),
@@ -44,7 +44,7 @@ export function materials(env, grime, stripe, panelN) {
 }
 export function paint(color, rough = 0.38, metal = 0.55) {
   const k = color + ':' + rough + ':' + metal;
-  if (!M.paint.has(k)) { const m = new THREE.MeshStandardMaterial({ color, metalness: metal, roughness: rough, map: M.grime, envMap: M.env, envMapIntensity: 1, ...M.nrm }); m.userData.cls = 'paint'; M.paint.set(k, m); }
+  if (!M.paint.has(k)) { const m = new THREE.MeshPhysicalMaterial({ color, metalness: metal, roughness: rough, map: M.grime, envMap: M.env, envMapIntensity: 1, clearcoat: 0.55, clearcoatRoughness: 0.28, ...M.nrm }); m.userData.cls = 'paint'; M.paint.set(k, m); }
   return M.paint.get(k);
 }
 export function glow(color, k = 3) {
@@ -238,6 +238,19 @@ export function warden(color = 0x2f8cff, accent = 0x9fe8ff) {
     K.add(cyl(0.028, 0.028, 0.16, 10), M.dark, 0.2, 0.11, 0, 0, 0, Math.PI / 2, 1, 1, 1, gun);           // scope
     K.add(cyl(0.024, 0.024, 0.01, 10), M.glass, 0.285, 0.11, 0, 0, 0, Math.PI / 2, 1, 1, 1, gun);
     K.mesh(cyl(0.045, 0.045, 0.03, 12), glow(accent, 5), 'muzzle', 0.87, 0.015, 0, 0, 0, Math.PI / 2, gun);
+    for (const s of [-1, 1]) {
+      K.add(rbox(0.05, 0.05, 0.08, 0.015), M.frame, 0.2, 1.7, s * 0.48, 0, 0, 0, 1, 1, 1, upper);
+      K.add(box(0.012, 0.03, 0.06), glow(0xfff0d0, 5), 0.226, 1.7, s * 0.48, 0, 0, 0, 1, 1, 1, upper);          // shoulder lamps
+      K.add(rbox(0.16, 0.2, 0.04, 0.015), body, -0.02, 1.0, s * 0.27, 0, 0, s * 0.05, 1, 1, 1, lower);              // hip flaps
+      K.add(rbox(0.09, 0.12, 0.06, 0.02), cloth(0x2e3326), -0.14, 1.02, s * 0.2, 0, 0, 0, 1, 1, 1, lower);          // pouches
+      K.rod(M.rubber, -0.42, 1.36, s * 0.2, 0.12, 1.33, s * 0.4, 0.016, upper, 6);                                     // power cables
+    }
+    K.add(rbox(0.12, 0.04, 0.1, 0.012), M.frame, 0.36, 1.38, -0.37, 0, 0, 0, 1, 1, 1, upper);
+    K.add(box(0.1, 0.008, 0.07), glow(accent, 2.5), 0.36, 1.405, -0.37, 0, 0, 0, 1, 1, 1, upper);                   // forearm display
+    K.add(cone(0.05, 0.09, 3), glow(accent, 3.5), 0.285, 1.56, 0, 0, Math.PI / 2, -Math.PI / 2, 1, 1, 0.4, upper);   // chest emblem
+    K.add(rbox(0.06, 0.05, 0.12, 0.012), M.chrome, 0.19, 1.1, 0, 0, 0, 0, 1, 1, 1, lower);
+    K.add(box(0.008, 0.02, 0.07), glow(accent, 3), 0.222, 1.1, 0, 0, 0, 0, 1, 1, 1, lower);                          // belt light
+    for (let i = 0; i < 4; i++) K.add(box(0.02, 0.06, 0.4), M.frame, -0.19, 1.24 + i * 0.07, 0, 0, 0, 0, 1, 1, 1, upper);  // backpack fins
     return K.build();
   });
   return { g, lower: by(g, 'lower'), upper: by(g, 'upper'), L: { hip: by(g, 'hipL'), knee: by(g, 'kneeL') }, R: { hip: by(g, 'hipR'), knee: by(g, 'kneeR') }, head: by(g, 'head'), gun: by(g, 'gun'), muzzle: by(g, 'muzzle') };
@@ -260,6 +273,13 @@ export function crawler() {
     K.mesh(sph(0.07, 12, 10), glow(0xff3a2a, 6), 'ceye', 0.47, 0.04, 0, 0, 0, 0, body);
     for (const s of [-1, 1]) K.add(sph(0.04, 8, 6), glow(0xff3a2a, 4), 0.46, 0.08, s * 0.08, 0, 0, 0, 1, 1, 1, body);
     K.add(cyl(0.008, 0.008, 0.25, 4), M.steel, 0.2, 0.3, -0.1, 0.3, 0, -0.3, 1, 1, 1, body);
+    K.add(sph(0.08, 14, 10), M.glass, 0.1, 0.2, 0, 0, 0, 0, 1, 0.6, 1, body);
+    K.add(tor(0.08, 0.012, 16, 6), M.frame, 0.1, 0.2, 0, Math.PI / 2, 0, 0, 1, 1, 1, body);
+    K.add(cyl(0.006, 0.006, 0.22, 4), M.steel, 0.15, 0.28, 0.1, -0.3, 0, -0.3, 1, 1, 1, body);
+    K.add(sph(0.015, 6, 4), glow(0xff3a2a, 5), 0.2, 0.38, 0.13, 0, 0, 0, 1, 1, 1, body);
+    for (let i = 0; i < 10; i++) { const a = (i / 10) * Math.PI * 2; K.add(rbox(0.12, 0.07, 0.04, 0.012), M.dark, Math.cos(a) * 0.43, -0.07, Math.sin(a) * 0.36, 0, -a + Math.PI / 2, 0, 1, 1, 1, body); }
+    K.add(tor(0.22, 0.02, 24, 6), glow(0xff5a2a, 2.2), 0, -0.17, 0, Math.PI / 2, 0, 0, 1.2, 1, 1, body);
+    bolts(K, M.steel, [[-0.2, 0.235, 0.15, 0, 0, 0], [-0.2, 0.235, -0.15, 0, 0, 0], [0.0, 0.225, 0.17, 0, 0, 0], [0.0, 0.225, -0.17, 0, 0, 0]], 0.018, body);
     // four legs: coxa joint, femur rising, tibia down to a claw
     [[0.22, 0.3], [-0.22, 0.3], [0.22, -0.3], [-0.22, -0.3]].forEach(([x, z], i) => {
       const s = Math.sign(z);
@@ -314,6 +334,15 @@ export function brute() {
     for (const s of [-1, 1]) K.add(rbox(0.5, 0.6, 0.05, 0.02), M.dark, 0.18, 0, s * 0.74, 0, 0, 0, 1, 1, 1, scoop);
     K.mesh(box(0.06, 0.08, 0.6), glow(0xff3a2a, 5), 'ceye', 0.86, 0.85, 0, 0, 0, 0, body);
     bolts(K, M.steel, [[0.86, 0.7, 0.3], [0.86, 0.7, -0.3], [0.86, 1.0, 0.3], [0.86, 1.0, -0.3]], 0.025, body);
+    for (const s of [-1, 1]) {
+      K.rod(M.rubber, 0.3, 1.0, s * 0.4, 0.75, 0.75, s * 0.42, 0.022, body, 6);
+      K.rod(M.frame, 0.3, 1.55, s * 0.45, 0.42, 1.62, s * 0.62, 0.012, body, 4);
+      K.add(rbox(0.04, 0.12, 0.08, 0.01), M.chrome, 0.42, 1.62, s * 0.64, 0, 0, 0, 1, 1, 1, body);                    // mirrors
+      K.add(cyl(0.05, 0.05, 0.03, 10), glow(0xff5a1a, 2.5), -0.8, 1.73, s * 0.36, 0, 0, 0, 1, 1, 1, body);            // exhaust heat
+      for (let i = 0; i < 4; i++) K.add(box(0.22, 0.02, 0.03), M.frame, -0.45, 0.7 + i * 0.15, s * 0.56, 0, 0, 0, 1, 1, 1, body);   // ladder
+    }
+    bolts(K, M.steel, Array.from({ length: 8 }, (_, i) => [-0.75 + i * 0.21, 0.98, 0.55, Math.PI / 2, 0, 0]), 0.02, body);
+    bolts(K, M.steel, Array.from({ length: 8 }, (_, i) => [-0.75 + i * 0.21, 0.98, -0.55, Math.PI / 2, 0, 0]), 0.02, body);
     return K.build();
   });
   return { g, body: by(g, 'body'), arm: by(g, 'arm'), scoop: by(g, 'scoop'), lamp: by(g, 'lamp'), eye: by(g, 'eye') };
@@ -347,6 +376,14 @@ export function spitter() {
     K.mesh(sph(0.06, 10, 8), glow(0xff3df0, 6), 'tip', 0.9, 0, 0, 0, 0, 0, head);
     K.mesh(sph(0.045, 10, 8), glow(0xff3a2a, 5), 'sensor', 0.3, 0.14, 0.16, 0, 0, 0, head);
     K.rod(M.steel, -0.2, 0.25, -0.12, -0.25, 0.55, -0.15, 0.008, head);
+    for (const s of [-1, 1]) {
+      K.add(cyl(0.12, 0.12, 0.16, 18), paint(0x55506a, 0.35, 0.7), -0.12, -0.04, s * 0.42, Math.PI / 2, 0, 0, 1, 1, 1, head);
+      for (let i = 0; i < 3; i++) K.add(tor(0.122, 0.01, 18, 4), M.frame, -0.12, -0.04, s * (0.36 + i * 0.06), 0, 0, 0, 1, 1, 1, head);
+      K.rod(M.rubber, -0.06, -0.04, s * 0.34, 0.4, -0.06, s * 0.1, 0.022, head, 6);
+      for (let i = 0; i < 3; i++) K.add(rbox(0.16, 0.06, 0.12, 0.02), shell, 0.12 - i * 0.14, 0.18, s * 0.24, s * 0.35, 0, 0, 1, 1, 1, head);
+    }
+    K.add(cyl(0.16, 0.2, 0.14, 18), M.frame, 0, -0.25, 0, 0, 0, 0, 1, 1, 1, head);
+    K.add(tor(0.18, 0.015, 20, 4), glow(0xff3df0, 2.5), 0, -0.2, 0, Math.PI / 2, 0, 0, 1, 1, 1, head);
     return K.build();
   });
   return { g, head: by(g, 'head'), core: by(g, 'core'), tip: by(g, 'tip'), legs: all(g, 'leg') };
@@ -364,6 +401,13 @@ export function hive() {
     K.mesh(sph(0.2, 14, 10), glow(0xd18aff, 4), 'beacon', 0, 1.04, 0, 0, 0, 0, body);
     for (let i = 0; i < 6; i++) { const a = (i / 6) * Math.PI * 2 + 0.3; K.add(cone(0.05, 0.3, 6), M.steel, Math.cos(a) * 0.55, 0.65, Math.sin(a) * 0.55, Math.sin(a) * 0.7, 0, -Math.cos(a) * 0.7, 1, 1, 1, body); }
     for (let i = 0; i < 3; i++) { const a = (i / 3) * Math.PI * 2; K.rod(M.copper, Math.cos(a) * 0.6, -0.6, Math.sin(a) * 0.6, Math.cos(a + 0.5) * 0.75, 0.3, Math.sin(a + 0.5) * 0.75, 0.025, body, 6); }
+    for (let j = 0; j < 4; j++) for (let i = 0; i < 12; i++) {
+      const el = -0.55 + j * 0.38, a = (i / 12) * Math.PI * 2 + j * 0.26, rr = 0.82 * Math.cos(el * 0.9) + 0.02;
+      const x = Math.cos(a) * rr, z = Math.sin(a) * rr, y = Math.sin(el) * 0.92;
+      const n = new THREE.Vector3(x, y * 0.6, z).normalize(), e = new THREE.Euler().setFromQuaternion(new THREE.Quaternion().setFromUnitVectors(_up, n));
+      K.add(cyl(0.06, 0.07, 0.04, 6), (i + j) % 3 ? rib : M.frame, x, y, z, e.x, e.y, e.z, 1, 1, 1, body);
+      if ((i + j) % 4 === 0) K.add(cyl(0.025, 0.025, 0.05, 6), glow(0xd18aff, 3), x * 1.02, y * 1.02, z * 1.02, e.x, e.y, e.z, 1, 1, 1, body);
+    }
     // claws
     for (let i = 0; i < 4; i++) {
       const a = (i / 4) * Math.PI * 2 + 0.4, c = Math.cos(a), s = Math.sin(a);
@@ -386,6 +430,8 @@ export function dart() {
     K.add(cyl(0.09, 0.07, 0.08, 12), M.frame, -0.32, 0, 0, 0, 0, Math.PI / 2, 1, 1, 1, body);
     K.mesh(sph(0.075, 10, 8), glow(0xc070ff, 6), 'tail', -0.37, 0, 0, 0, 0, 0, body);
     K.mesh(sph(0.03, 8, 6), glow(0xff3a2a, 5), 'nose', 0.38, 0.02, 0, 0, 0, 0, body);
+    for (const s of [-1, 1]) K.add(sph(0.018, 6, 4), glow(s < 0 ? 0xff3a2a : 0x7dff9a, 5), -0.2, 0, s * 0.29, 0, 0, 0, 1, 1, 1, body);
+    K.add(cyl(0.006, 0.006, 0.14, 4), M.steel, 0.05, 0.12, 0, 0, 0, -0.4, 1, 1, 1, body);
     return K.build();
   });
   return { g, body: by(g, 'body'), tail: by(g, 'tail') };
@@ -621,6 +667,56 @@ export function orb() {
     return K.build();
   });
   return { g, core: by(g, 'core') };
+}
+
+// ------------------------------------------------------------------ power-up pods and the wingman drone
+// a hovering supply pod: chrome caps, a glass band with a glowing core in the power-up's colour, a
+// spinning gyro ring and a landing cradle; the renderer spins 'pod' and 'ring' and floats it
+export function pickup(color) {
+  const g = make('pickup' + color, () => {
+    const K = new Kit();
+    const pod = K.group('pod', K.root, 0, 1.05, 0);
+    const capP = [[0, 0.3], [0.18, 0.28], [0.3, 0.2], [0.34, 0.1], [0.34, 0.06]];
+    K.add(lathe('pcap', capP, 28), M.chrome, 0, 0.08, 0, 0, 0, 0, 1, 1, 1, pod);
+    K.add(lathe('pcap', capP, 28), M.chrome, 0, -0.08, 0, Math.PI, 0, 0, 1, 1, 1, pod);
+    K.add(cyl(0.3, 0.3, 0.3, 28, 1), M.glassT, 0, 0, 0, 0, 0, 0, 1, 1, 1, pod);
+    for (let i = 0; i < 6; i++) { const a = (i / 6) * Math.PI * 2; K.rod(M.frame, Math.cos(a) * 0.31, -0.16, Math.sin(a) * 0.31, Math.cos(a) * 0.31, 0.16, Math.sin(a) * 0.31, 0.018, pod, 6); }
+    K.mesh(ico(0.16, 1), glow(color, 5), 'core', 0, 0, 0, 0, 0, 0, pod);
+    K.add(sph(0.05, 10, 8), glow(color, 6), 0, 0.42, 0, 0, 0, 0, 1, 1, 1, pod);
+    K.add(cyl(0.012, 0.012, 0.12, 6), M.steel, 0, 0.36, 0, 0, 0, 0, 1, 1, 1, pod);
+    const ring = K.group('ring', K.root, 0, 1.05, 0);
+    K.add(tor(0.52, 0.03, 40, 8), M.chrome, 0, 0, 0, Math.PI / 2, 0, 0, 1, 1, 1, ring);
+    K.add(tor(0.52, 0.012, 40, 6), glow(color, 3), 0, 0.035, 0, Math.PI / 2, 0, 0, 1, 1, 1, ring);
+    for (let i = 0; i < 3; i++) { const a = (i / 3) * Math.PI * 2; K.add(box(0.1, 0.06, 0.06), M.frame, Math.cos(a) * 0.52, 0, Math.sin(a) * 0.52, 0, -a, 0, 1, 1, 1, ring); }
+    // cradle on the floor
+    K.add(cyl(0.42, 0.5, 0.08, 28), M.dark, 0, 0.04, 0);
+    K.add(tor(0.44, 0.02, 32, 6), glow(color, 2.5), 0, 0.09, 0, Math.PI / 2, 0, 0);
+    for (let i = 0; i < 4; i++) { const a = (i / 4) * Math.PI * 2 + 0.785; K.add(box(0.12, 0.05, 0.05), M.stripes, Math.cos(a) * 0.36, 0.1, Math.sin(a) * 0.36, 0, -a, 0); }
+    return K.build();
+  });
+  return { g, pod: by(g, 'pod'), ring: by(g, 'ring'), core: by(g, 'core') };
+}
+export function wingdrone() {
+  const g = make('wingdrone', () => {
+    const K = new Kit();
+    const body = K.group('dbody', K.root, 0, 1.9, 0);
+    const shell = paint(0x3a4a40, 0.3, 0.7);
+    K.add(lathe('wdrone', [[0, -0.08], [0.12, -0.07], [0.17, -0.02], [0.16, 0.04], [0.09, 0.08], [0, 0.09]], 18), shell, 0, 0, 0, 0, 0, 0, 1, 1, 1, body);
+    K.add(sph(0.05, 10, 8), M.glass, 0.13, -0.02, 0, 0, 0, 0, 1, 1, 1, body);
+    K.add(cyl(0.02, 0.02, 0.22, 8), M.black, 0.1, -0.08, 0, 0, 0, Math.PI / 2, 1, 1, 1, body);
+    for (let i = 0; i < 4; i++) {
+      const a = (i / 4) * Math.PI * 2 + 0.785, c = Math.cos(a), s = Math.sin(a);
+      K.rod(M.frame, c * 0.12, 0, s * 0.12, c * 0.3, 0.02, s * 0.3, 0.015, body, 6);
+      K.add(cyl(0.035, 0.035, 0.04, 10), M.dark, c * 0.3, 0.03, s * 0.3, 0, 0, 0, 1, 1, 1, body);
+      const rot = K.group('rotor' + i, body, c * 0.3, 0.06, s * 0.3);
+      K.add(box(0.26, 0.006, 0.03), M.black, 0, 0, 0, 0, 0, 0, 1, 1, 1, rot);
+      K.add(tor(0.13, 0.008, 20, 4), M.steel, c * 0, 0, 0, Math.PI / 2, 0, 0, 1, 1, 1, rot);
+    }
+    K.add(tor(0.16, 0.012, 24, 6), glow(0x7dff9a, 4), 0, -0.02, 0, Math.PI / 2, 0, 0, 1, 1, 1, body);
+    K.add(sph(0.025, 8, 6), glow(0x7dff9a, 6), 0, -0.09, 0, 0, 0, 0, 1, 1, 1, body);
+    return K.build();
+  });
+  return { g, body: by(g, 'dbody'), rotors: all(g, 'rotor') };
 }
 
 // ------------------------------------------------------------------ scenery bits

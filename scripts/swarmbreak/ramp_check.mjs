@@ -2,19 +2,20 @@
 // aim wobble, the odd bad choice) plays each sector many times from its first wave with 3 Wardens and
 // the upgrades a player would typically own by then. Reports the clear rate per sector, deaths and hits
 // per wave try (the "edge": hits taken per wave, steadier than the clear rate), and what killed it.
-//   node scripts/swarmbreak/ramp_check.mjs [trials=40] [sectors=1,2,3,4,5] [profile=human]
+//   node scripts/swarmbreak/ramp_check.mjs [trials=40] [sectors=1,2,3,4,5] [profile=human] [difficulty=normal]
 // Targets: about 95 / 80 / 60 / 40 / 25 % clears, and no wave noticeably harder than the next.
-import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-05/swarmbreak/js/sim.js?v=2';
-import { Autopilot } from '../../games/2026-11-05/swarmbreak/js/ai.js?v=2';
-import { SECTORS, TYPICAL_UP, WAVES } from '../../games/2026-11-05/swarmbreak/js/config.js?v=2';
+import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-05/swarmbreak/js/sim.js?v=3';
+import { Autopilot } from '../../games/2026-11-05/swarmbreak/js/ai.js?v=3';
+import { SECTORS, TYPICAL_UP, WAVES } from '../../games/2026-11-05/swarmbreak/js/config.js?v=3';
 
 const trials = +(process.argv[2] || 40);
 const sectors = (process.argv[3] || '1,2,3,4,5').split(',').map((s) => +s - 1);
 const profile = process.argv[4] || 'human';
+const diff = process.argv[5] || 'normal';
 const TARGET = [95, 80, 60, 40, 25];
 
 export function runSector(s, seed, prof = profile, opts = {}) {
-  const W = makeWorld({ mode: 'campaign', sector: s, seed, up: TYPICAL_UP[s], ...opts });
+  const W = makeWorld({ mode: 'campaign', sector: s, seed, up: TYPICAL_UP[s], diff, ...opts });
   const ai = new Autopilot(seed * 7919 + 13, prof);
   const causes = {};
   let firstDeathT = null, firstHitT = null;

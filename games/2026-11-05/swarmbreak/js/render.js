@@ -4,11 +4,12 @@
 // the simulation; floor decals for every warning (gates, boss tells, aim lines, arcs); HDR post.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=2';
-import * as TX from './textures.js?v=2';
-import * as MD from './models.js?v=2';
-import { FX, CALM } from './fx.js?v=2';
-import { F, GATES } from './config.js?v=2';
+import { Post } from './post.js?v=3';
+import * as TX from './textures.js?v=3';
+import * as MD from './models.js?v=3';
+import { FX, CALM } from './fx.js?v=3';
+import { F, GATES, POWERUPS } from './config.js?v=3';
+import { dronePos } from './sim.js?v=3';
 
 export { CALM };
 const { AW, AH } = F;
@@ -152,7 +153,9 @@ export class Renderer {
     this.buildSky();
     this.buildArena();
     this.fx = new FX(this.scene, this.T, { dust: q.dust, sparks: q.sparks, debris: q.debris, flashLights: q.flashLights }, () => 0);
-    this.views = { p: new Map(), e: new Map(), s: new Map(), orbs: [] };
+    this.views = { p: new Map(), e: new Map(), s: new Map(), orbs: [], pk: new Map(), dr: new Map() };
+    this.view = 'close';
+    this.follow = new THREE.Vector3();
     this.bossView = null;
     this.makeShots();
     this.makeDecals();
@@ -424,6 +427,27 @@ export class Renderer {
     this.haloI = new THREE.InstancedMesh(hg, this.haloMat, 600); this.haloI.frustumCulled = false; this.haloI.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     this.haloI.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(600 * 3), 3);
     this.scene.add(this.shotI, this.boltI, this.boltBI, this.haloI);
+    // RAIL LANCE shots are long violet lances, SEEKERS orange darts
+    const rg = new THREE.CapsuleGeometry(0.09, 1.5, 3, 6); rg.rotateZ(Math.PI / 2);
+    this.railI = new THREE.InstancedMesh(rg, new THREE.MeshBasicMaterial({ color: hdr(0xd6c2ff, 6), toneMapped: false }), 200);
+    this.seekI = new THREE.InstancedMesh(sg, new THREE.MeshBasicMaterial({ color: hdr(0xff8a3a, 6), toneMapped: false }), 200);
+    for (const m of [this.railI, this.seekI]) { m.frustumCulled = false; m.instanceMatrix.setUsage(THREE.DynamicDrawUsage); this.scene.add(m); }
+    // soft contact shadows under everything that stands on the floor
+    const cg = new THREE.PlaneGeometry(1, 1); cg.rotateX(-Math.PI / 2);
+    this.blobI = new THREE.InstancedMesh(cg, new THREE.MeshBasicMaterial({ map: this.T.glow, color: 0x000000, transparent: true, opacity: 0.6, depthWrite: false }), 220);
+    this.blobI.frustumCulled = false; this.blobI.renderOrder = 1; this.blobI.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    this.scene.add(this.blobI);
+    this.icons = {};
+  }
+  iconFor(kind) {
+    if (this.icons[kind]) return this.icons[kind];
+    const P = POWERUPS[kind], c = document.createElement('canvas'); c.width = c.height = 128;
+    const g = c.getContext('2d'), col = '#' + new THREE.Color(P.color).getHexString();
+    g.fillStyle = 'rgba(0,0,0,0.55)'; g.beginPath(); g.arc(64, 64, 52, 0, 7); g.fill();
+    g.lineWidth = 7; g.strokeStyle = col; g.beginPath(); g.arc(64, 64, 52, 0, 7); g.stroke();
+    g.fillStyle = col; g.font = 'bold 64px system-ui, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(P.glyph, 64, 68);
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
+    return (this.icons[kind] = new THREE.SpriteMaterial({ map: t, color: hdr(0xffffff, 1.6), toneMapped: false, depthWrite: false, transparent: true }));
   }
   decalMat(kind, color) {
     return new THREE.ShaderMaterial({ vertexShader: DECAL_VERT, fragmentShader: DECAL_FRAG, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
@@ -554,9 +578,60 @@ export class Renderer {
     }
     for (const [id, v] of this.views.s) if (!seenS.has(id)) { this.scene.remove(v.g); this.views.s.delete(id); }
     this.beaconMat.uniforms.uTime.value = t; this.beaconMat.uniforms.uProg.value = 0.5 + 0.5 * Math.sin(t * 2);
+    this.syncPickups(W, t);
+    this.syncDrones(W, dt, t);
+    this.syncBlobs(W);
     this.syncBoss(W, dt);
     this.syncShots(W);
     this.syncDecals(W);
+  }
+
+  syncPickups(W, t) {
+    const seen = new Set();
+    for (const q of W.pickups || []) {
+      seen.add(q.id);
+      let v = this.views.pk.get(q.id);
+      if (!v) {
+        v = MD.pickup(POWERUPS[q.kind].color);
+        v.icon = new THREE.Sprite(this.iconFor(q.kind)); v.icon.scale.setScalar(0.75); v.icon.position.y = 2.15; v.g.add(v.icon);
+        this.scene.add(v.g); this.views.pk.set(q.id, v);
+      }
+      v.g.position.set(q.x, 0, q.z);
+      const born = Math.min(1, q.t / 0.35);
+      v.g.scale.setScalar(0.3 + 0.7 * born);
+      v.pod.position.y = 1.05 + Math.sin(t * 2.6 + q.id) * 0.12;
+      v.pod.rotation.y = t * 1.4;
+      v.ring.rotation.set(Math.sin(t * 1.3) * 0.5, t * 2.2, Math.cos(t * 1.1) * 0.4);
+      v.ring.position.y = v.pod.position.y;
+      v.core.scale.setScalar(1 + 0.15 * Math.sin(t * 7));
+      v.icon.position.y = 2.15 + Math.sin(t * 2.6 + q.id) * 0.12;
+      // blink before it times out
+      v.g.visible = q.life > 3 || Math.sin(t * (q.life < 1.2 ? 30 : 16)) > -0.2;
+    }
+    for (const [id, v] of this.views.pk) if (!seen.has(id)) { this.scene.remove(v.g); this.views.pk.delete(id); }
+  }
+  syncDrones(W, dt, t) {
+    for (const p of W.players) {
+      let v = this.views.dr.get(p.id);
+      const on = p.alive && p.pw && p.pw.drone > 0;
+      if (!on) { if (v) v.g.visible = false; continue; }
+      if (!v) { v = MD.wingdrone(); this.scene.add(v.g); this.views.dr.set(p.id, v); }
+      v.g.visible = p.pw.drone > 2 || Math.sin(t * 20) > 0;
+      const [x, z] = dronePos(p);
+      v.g.position.set(x, Math.sin(t * 3) * 0.1, z);
+      v.g.rotation.y = -(p.droneA + Math.PI / 2);
+      v.rotors.forEach((r, i) => { r.rotation.y = t * 40 * (i % 2 ? 1 : -1); });
+    }
+  }
+  syncBlobs(W) {
+    let n = 0;
+    const put = (x, z, r) => { if (n >= 220) return; _m.compose(_p.set(x, 0.025, z), _q.identity(), _s.set(r, 1, r)); this.blobI.setMatrixAt(n++, _m); };
+    for (const p of W.players) if (p.alive) put(p.x, p.z, 1.8);
+    for (const e of W.enemies) if (e.hp > 0 && e.type !== 'dart') put(e.x, e.z, e.r * 2.8);
+    for (const s of W.survivors) put(s.x, s.z, 1.0);
+    for (const q of W.pickups || []) put(q.x, q.z, 1.3);
+    if (W.boss) put(W.boss.x, W.boss.z, W.boss.r * 2.6);
+    this.blobI.count = n; this.blobI.instanceMatrix.needsUpdate = true;
   }
 
   updatePlayer(v, p, dt, W) {
@@ -670,15 +745,18 @@ export class Renderer {
   }
 
   syncShots(W) {
-    let n = 0;
+    let n = 0, nr = 0, ns = 0;
     for (const s of W.shots) {
-      if (n >= 400) break;
       const a = Math.atan2(s.vz, s.vx);
       _q.setFromAxisAngle(UP, -a);
-      _m.compose(_p.set(s.x, 1.3, s.z), _q, _s.set(1, 1, 1));
-      this.shotI.setMatrixAt(n++, _m);
+      _m.compose(_p.set(s.x, s.drone ? 1.8 : 1.3, s.z), _q, _s.set(1, 1, 1));
+      if (s.rail) { if (nr < 200) this.railI.setMatrixAt(nr++, _m); }
+      else if (s.seek) { if (ns < 200) this.seekI.setMatrixAt(ns++, _m); }
+      else if (n < 400) this.shotI.setMatrixAt(n++, _m);
     }
     this.shotI.count = n; this.shotI.instanceMatrix.needsUpdate = true;
+    this.railI.count = nr; this.railI.instanceMatrix.needsUpdate = true;
+    this.seekI.count = ns; this.seekI.instanceMatrix.needsUpdate = true;
     let a = 0, b = 0, h = 0;
     for (const q of W.bolts) {
       const big = !!q.big, I = big ? this.boltBI : this.boltI, k = big ? b++ : a++;
@@ -787,14 +865,14 @@ export class Renderer {
   get portrait() { return this.camera.aspect < 0.85; }
 
   // the camera distance that fits the arena inside the frame (below the HUD)
-  fit(pitch, yaw, fov, top) {
-    const key = [pitch, yaw, fov, top, this.camera.aspect.toFixed(3)].join();
+  fit(pitch, yaw, fov, top, hx = AW + 0.6, hz = AH + 0.6) {
+    const key = [pitch, yaw, fov, top, hx, hz, this.camera.aspect.toFixed(3)].join();
     if (this.fitCache[key]) return this.fitCache[key];
     const cam = new THREE.PerspectiveCamera(fov, this.camera.aspect, 0.1, 2000);
     const dir = new THREE.Vector3(Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch));
     const target = new THREE.Vector3(0, 0, 0.8);
     const pts = [];
-    for (const x of [-AW - 0.6, AW + 0.6]) for (const z of [-AH - 0.6, AH + 0.6]) for (const y of [0, 1.0]) pts.push(new THREE.Vector3(x, y, z));
+    for (const x of [-hx, hx]) for (const z of [-hz, hz]) for (const y of [0, 1.0]) pts.push(new THREE.Vector3(x, y, z));
     let lo = 5, hi = 300;
     for (let i = 0; i < 26; i++) {
       const d = (lo + hi) / 2;
@@ -809,6 +887,12 @@ export class Renderer {
   }
   gameView() {
     const tall = this.portrait;
+    if (this.view === 'close') {
+      // CLOSE: about two thirds of the arena around the Warden, a slightly lower, more cinematic angle
+      const hx = tall ? AW * 0.55 : AW * 0.64, hz = tall ? AH * 0.78 : AH * 0.66;
+      const v = this.fit(tall ? 1.25 : 0.98, tall ? Math.PI / 2 : 0, tall ? 46 : 40, tall ? 0.78 : 0.8, hx, hz);
+      return { ...v, hx, hz };
+    }
     return this.fit(tall ? 1.32 : 1.08, tall ? Math.PI / 2 : 0, tall ? 46 : 38, tall ? 0.78 : 0.8);
   }
   // frame a few points closely (demo slow-mo shots, boss intros)
@@ -830,8 +914,17 @@ export class Renderer {
         : { pos: new THREE.Vector3(cx, span * 1.25, cz + span * 1.0), look: new THREE.Vector3(cx, 0.5, cz), fov: 42, speed: 5 };
     } else {
       const g = this.gameView();
-      if (o.me) { this.lean.x += (o.me.x * 0.05 - this.lean.x) * Math.min(1, dt * 1.5); this.lean.z += (o.me.z * 0.04 - this.lean.z) * Math.min(1, dt * 1.5); }
-      want = { pos: g.pos.clone().add(this.lean), look: g.look.clone().add(this.lean), fov: g.fov, speed: 3 };
+      if (g.hx) {
+        // follow the Warden, but never show much beyond the walls
+        const mx = Math.max(0, AW + 1.5 - g.hx), mz = Math.max(0, AH + 1.5 - g.hz);
+        const tx = o.me ? clamp(o.me.x, -mx, mx) : this.follow.x, tz = o.me ? clamp(o.me.z, -mz, mz) : this.follow.z;
+        this.follow.x += (tx - this.follow.x) * Math.min(1, dt * 2.6); this.follow.z += (tz - this.follow.z) * Math.min(1, dt * 2.6);
+        if (o.snap) this.follow.set(tx, 0, tz);
+        want = { pos: g.pos.clone().add(this.follow), look: g.look.clone().add(this.follow), fov: g.fov, speed: 6 };
+      } else {
+        if (o.me) { this.lean.x += (o.me.x * 0.05 - this.lean.x) * Math.min(1, dt * 1.5); this.lean.z += (o.me.z * 0.04 - this.lean.z) * Math.min(1, dt * 1.5); }
+        want = { pos: g.pos.clone().add(this.lean), look: g.look.clone().add(this.lean), fov: g.fov, speed: 3 };
+      }
     }
     const k = o.snap ? 1 : 1 - Math.exp(-dt * (want.speed || 3));
     this.camPos.lerp(want.pos, k); this.camLook.lerp(want.look, k); this.camFov += (want.fov - this.camFov) * k;
@@ -888,14 +981,14 @@ export class Renderer {
     this.shocks = this.shocks.filter((s) => s.t < s.max);
     const L = this.look;
     this.post.render(this.scene, this.camera, {
-      bloom: L.bloom * (p.bloom ?? 1), threshold: 1.1, exposure: L.exposure * (p.exposure ?? 1), chroma: 0.0016, time: t, desat: p.desat || 0, fade: p.fade || 0, vignette: 0.42,
-      flash: this.flash, tint: _tint.set(...L.grade), shocks, lens: [],
+      bloom: L.bloom * (p.bloom ?? 1), threshold: 1.1, exposure: L.exposure * (p.exposure ?? 1), chroma: 0.0016 + (p.warp ? 0.004 : 0), time: t, desat: (p.desat || 0) + (p.warp ? 0.35 : 0), fade: p.fade || 0, vignette: p.warp ? 0.6 : 0.42,
+      flash: this.flash, tint: p.warp ? _tint.set(L.grade[0] * 0.85, L.grade[1] * 1.02, L.grade[2] * 1.2) : _tint.set(...L.grade), shocks, lens: [],
     });
   }
 
   // draw one of everything once at boot so the first appearance of anything does not stall on a shader compile
   warmUp() {
-    const tmp = [MD.warden().g, MD.crawler().g, MD.brute().g, MD.spitter().g, MD.hive().g, MD.dart().g, MD.pylon().g, MD.splitter().g, MD.splitter(true).g, MD.dummy().g, MD.survivor(0).g, MD.orb().g];
+    const tmp = [MD.pickup(0x8fe4ff).g, MD.wingdrone().g, MD.warden().g, MD.crawler().g, MD.brute().g, MD.spitter().g, MD.hive().g, MD.dart().g, MD.pylon().g, MD.splitter().g, MD.splitter(true).g, MD.dummy().g, MD.survivor(0).g, MD.orb().g];
     for (const k of ['foreman', 'tramline', 'crucible', 'archivist', 'overseer']) tmp.push(MD.boss(k).g);
     tmp.forEach((o, i) => { o.position.set(-20 + i * 2.5, 0, 0); this.scene.add(o); });
     const pv = this.playerView({ id: 1 }), sv = this.survivorView({ look: 0 });

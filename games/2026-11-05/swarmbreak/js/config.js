@@ -1,6 +1,6 @@
 // Swarmbreak — every tunable number lives here. The RAMP table drives difficulty; nothing else in the
 // game hard-codes enemy pace, numbers, spacing, fire rate, aim or warning time.
-export const VERSION = '1.0.1';
+export const VERSION = '1.1.0';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ the arena and the Warden
@@ -137,6 +137,43 @@ export const BOSS_KEYS = Object.keys(BOSSES);
 // ------------------------------------------------------------------ scoring, lives, upgrades, medals
 export const SCORE = { rescue: 300, rescueMax: 1500, wave: 1000, timeBonus: 30, boss: 5000, sector: 2500, lifeEvery: 60000 };
 export const START_LIVES = 3;
+
+// ------------------------------------------------------------------ difficulty levels
+// Each level scales the RAMP (so every level still starts gentle and builds up) and has its own
+// high-score boards. Warnings never drop below MIN_WARN.
+//   spd/fire/count/aim/boltV scale those RAMP values, warn scales every warning time, boss/bossRate scale
+//   boss armour and attack rate, shield adds charges each wave, lives adds Wardens, drops scales power-ups,
+//   score multiplies every point you earn
+export const MIN_WARN = 0.5;
+export const DIFFICULTY = {
+  easy: { label: 'EASY', desc: 'Slower, fewer machines, longer warnings, an extra Warden and shield', spd: 0.84, fire: 0.62, count: 0.8, aim: 1.5, boltV: 0.85, warn: 1.25, boss: 0.75, bossRate: 0.75, shield: 1, lives: 1, drops: 1.4, score: 0.6 },
+  normal: { label: 'NORMAL', desc: 'The intended challenge', spd: 1, fire: 1, count: 1, aim: 1, boltV: 1, warn: 1, boss: 1, bossRate: 1, shield: 0, lives: 0, drops: 1, score: 1 },
+  hard: { label: 'HARD', desc: 'Faster, busier, sharper aim, shorter warnings', spd: 1.12, fire: 1.3, count: 1.15, aim: 0.7, boltV: 1.1, warn: 0.85, boss: 1.25, bossRate: 1.2, shield: 0, lives: 0, drops: 0.85, score: 1.5 },
+  nightmare: { label: 'NIGHTMARE', desc: 'For experts: everything at full tilt, one Warden fewer', spd: 1.25, fire: 1.6, count: 1.3, aim: 0.5, boltV: 1.2, warn: 0.72, boss: 1.5, bossRate: 1.4, shield: 0, lives: -1, drops: 0.7, score: 2.2 },
+};
+export const DIFF_KEYS = Object.keys(DIFFICULTY);
+export function applyDiff(R, key) {
+  const d = DIFFICULTY[key] || DIFFICULTY.normal;
+  if (d === DIFFICULTY.normal) return R;
+  return { ...R, spd: R.spd * d.spd, fire: R.fire * d.fire, count: Math.max(1, Math.round(R.count * d.count)), aim: R.aim * d.aim, boltV: R.boltV * d.boltV,
+    warn: Math.max(MIN_WARN, R.warn * d.warn), bossHP: Math.round(R.bossHP * d.boss), bossRate: R.bossRate * d.bossRate, shield: R.shield + d.shield };
+}
+
+// ------------------------------------------------------------------ power-ups dropped in the arena
+// time = seconds it lasts (0 = instant), w = how often it drops
+export const POWERUPS = {
+  triple: { name: 'TRIPLE BEAM', glyph: '⁂', color: 0x8fe4ff, time: 12, w: 10, desc: 'Three full-power beams' },
+  overclock: { name: 'OVERCLOCK', glyph: '»', color: 0xffd23f, time: 10, w: 10, desc: 'Twice the fire rate' },
+  rail: { name: 'RAIL LANCE', glyph: '⟿', color: 0xd6c2ff, time: 9, w: 7, desc: 'Piercing shots that hit for two' },
+  seeker: { name: 'SEEKERS', glyph: '➶', color: 0xff8a3a, time: 10, w: 7, desc: 'Shots curve onto machines' },
+  drone: { name: 'WINGMAN', glyph: '⟡', color: 0x7dff9a, time: 14, w: 6, desc: 'A drone that fires for you' },
+  warp: { name: 'TIME WARP', glyph: '⧗', color: 0x8affff, time: 6, w: 5, desc: 'Machines and bolts slow right down' },
+  barrier: { name: 'BARRIER', glyph: '⬡', color: 0x6ad8ff, time: 0, w: 7, desc: '+1 shield charge' },
+  cell: { name: 'PULSE CELL', glyph: '✺', color: 0xd7a6ff, time: 0, w: 6, desc: '+1 PULSE charge' },
+};
+export const PW_KEYS = Object.keys(POWERUPS);
+// drops: chance per kill (big machines more), a supply drop once per wave, how long they wait on the floor
+export const DROP = { chance: 0.045, big: 0.3, supply: [9, 16], life: 13, max: 3, r: 1.05 };
 
 export const UPGRADES = {
   rapid: { name: 'RAPID EMITTER', icon: '»', color: '#ffb347', max: 3, desc: 'Your blaster fires faster' },

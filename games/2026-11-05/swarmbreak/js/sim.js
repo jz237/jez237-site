@@ -1,7 +1,7 @@
 // Swarmbreak simulation: fixed 120 Hz steps, all randomness from the world's own seeded generator
 // (W.rs), plain data only, so a world can be cloned and re-run bit for bit (replays, online, tests).
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
-import { F, STEP, GATES, SECTORS, WAVES, rampAt, rampLevel, standLevel, STAND, ENEMY, HOSTILE, BOSSES, BOSS_KEYS, SCORE, START_LIVES, INTRO, introduced } from './config.js?v=2';
+import { F, STEP, GATES, SECTORS, WAVES, rampAt, rampLevel, standLevel, STAND, ENEMY, HOSTILE, BOSSES, BOSS_KEYS, SCORE, START_LIVES, INTRO, introduced, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP } from './config.js?v=3';
 export { STEP };
 
 const { AW, AH } = F;
@@ -33,15 +33,18 @@ export function makeWorld(o = {}) {
   const mode = o.mode || 'campaign';
   const W = {
     n: 0, t: 0, seed, rs: (seed ^ 0x2545F491) | 0, mode, sector: o.sector || 0, k: o.sector || 0, up: { ...(o.up || {}) }, demo: !!o.demo, coop: !!o.coop,
-    lives: o.lives ?? START_LIVES, score: o.score || 0, nextLife: 0,
+    diff: DIFFICULTY[o.diff] ? o.diff : 'normal', lives: o.lives ?? START_LIVES + (DIFFICULTY[o.diff] || DIFFICULTY.normal).lives, score: o.score || 0, nextLife: 0, pickups: [], warp: 0, supplyT: 0,
     wave: o.wave || 0, waveN: 0, phase: 'intro', phaseT: 0, waveT: 0, secT: 0, fightT: 0, R: null,
     players: [], enemies: [], shots: [], bolts: [], survivors: [], portals: [], hazards: [], boss: null,
+    pwStats: { got: 0 },
     spawnQ: [], nextId: 1, chain: 0, ev: [], over: false, result: null, claims: [], net: null, lastDeathN: -1,
     tutorial: mode === 'campaign' && !o.noTut && (o.sector || 0) === 0 && (o.wave || 0) === 0 && !o.demo,
     stats: { kills: 0, rescued: 0, surv: 0, lost: 0, deaths: 0, shots: 0, hits: 0, pulses: 0, shieldHits: 0, waveDeaths: {}, waveTries: {}, waveHits: {}, bossT: 0 },
     tut: {},
   };
-  W.nextLife = (Math.floor(W.score / SCORE.lifeEvery) + 1) * SCORE.lifeEvery;
+  // the extra-life step scales with the difficulty's score multiplier, so harder levels don't hand out more lives
+  const LE = SCORE.lifeEvery * (DIFFICULTY[W.diff] || DIFFICULTY.normal).score;
+  W.nextLife = (Math.floor(W.score / LE) + 1) * LE;
   const n = o.coop ? 2 : 1;
   for (let i = 0; i < n; i++) W.players.push(makePlayer(i + 1, n === 2 ? (i ? 2 : -2) : 0, 2));
   startWave(W, true);
@@ -49,7 +52,7 @@ export function makeWorld(o = {}) {
 }
 function makePlayer(id, x, z) {
   return { id, x, z, vx: 0, vz: 0, aim: -Math.PI / 2, alive: true, inv: 0, shield: 0, pulses: 0, fireT: 0, deadT: 0, walk: 0, shotI: 0,
-    input: { mx: 0, mz: 0, ax: 0, az: 0, fire: false, pulse: false }, pulseHeld: false, remote: false, hurtT: 0 };
+    input: { mx: 0, mz: 0, ax: 0, az: 0, fire: false, pulse: false }, pulseHeld: false, remote: false, hurtT: 0, pw: {}, droneA: 0, droneT: 0 };
 }
 export const cloneWorld = (W) => structuredClone(W);
 export function drainEvents(W) { const e = W.ev; W.ev = []; return e; }
@@ -65,14 +68,15 @@ function nearestPlayer(W, x, z) {
 // ------------------------------------------------------------------ waves
 function startWave(W, first = false) {
   const camp = W.mode === 'campaign';
-  if (camp) W.R = rampAt(W.sector, Math.min(W.wave, WAVES - 1));
+  if (camp) W.R = applyDiff(rampAt(W.sector, Math.min(W.wave, WAVES - 1)), W.diff);
   else {
-    W.R = rampLevel(standLevel(W.fightT));
+    W.R = applyDiff(rampLevel(standLevel(W.fightT)), W.diff);
     W.k = Math.floor(W.waveN / STAND.lookEvery) % 5;
     W.bossWave = W.waveN > 0 && (W.waveN + 1) % STAND.bossEvery === 0;
   }
   const R = W.R;
   W.phase = 'intro'; W.phaseT = first ? 2.6 : 2.0; W.waveT = 0; W.chain = 0;
+  W.supplyT = rr(W, DROP.supply[0], DROP.supply[1]) + (W.tutorial && W.wave === 0 ? 30 : 0);
   W.spawnQ = []; W.portals = []; W.hazards = []; W.bolts = [];
   for (const p of W.players) { p.shield = R.shield + (W.up.armor || 0); p.pulses = R.pulse + (W.up.pulse || 0); }
   // survivors, away from the Warden(s)
@@ -189,13 +193,17 @@ export function step(W, dt = STEP) {
     if (W.phaseT <= 0) nextWave(W);
   }
   if (W.mode === 'campaign' && W.phase !== 'clear') W.secT += dt;
+  // TIME WARP slows every machine, bolt and boss tell; the Wardens keep full speed
+  W.warp = Math.max(0, W.warp - dt);
+  const md = W.warp > 0 ? dt * 0.45 : dt;
   for (const p of W.players) player(W, p, dt);
-  for (const e of W.enemies) enemy(W, e, dt);
+  for (const e of W.enemies) enemy(W, e, md);
   separate(W);
-  if (W.boss) boss(W, W.boss, dt);
+  if (W.boss) boss(W, W.boss, md);
   shots(W, dt);
-  bolts(W, dt);
-  hazards(W, dt);
+  bolts(W, md);
+  hazards(W, md);
+  pickups(W, dt);
   survivors(W, dt);
   contacts(W);
   W.enemies = W.enemies.filter((e) => e.hp > 0 && !e.gone);
@@ -203,7 +211,7 @@ export function step(W, dt = STEP) {
   if (!guest && W.phase === 'fight' && !W.spawnQ.length && !W.portals.length && !W.boss && !W.enemies.some((e) => HOSTILE.has(e.type))) waveClear(W);
   // extra lives
   if (guest) return;
-  if (W.score >= W.nextLife) { W.lives++; W.nextLife += SCORE.lifeEvery; W.ev.push({ k: 'life' }); }
+  if (W.score >= W.nextLife) { W.lives++; W.nextLife += SCORE.lifeEvery * D_OF(W).score; W.ev.push({ k: 'life' }); }
   // out of Wardens
   if (W.lives <= 0 && !W.players.some((p) => p.alive) && W.players.every((p) => p.deadT > 1.6)) { W.over = true; W.result = 'over'; W.ev.push({ k: 'over' }); }
 }
@@ -283,6 +291,8 @@ function player(W, p, dt) {
   p.walk += hyp(p.vx, p.vz) * dt;
   if (hyp(I.ax, I.az) > 0.2) p.aim = Math.atan2(I.az, I.ax);
   else if (m > 0.2 && !I.fire) p.aim = Math.atan2(mz, mx);
+  for (const k in p.pw) { p.pw[k] -= dt; if (p.pw[k] <= 0) { delete p.pw[k]; W.ev.push({ k: 'pwend', pid: p.id, kind: k }); } }
+  if (p.pw.drone) wingman(W, p, dt);
   p.fireT -= dt;
   if (I.fire && p.fireT <= 0) fire(W, p);
   if (I.pulse && !p.pulseHeld) pulse(W, p);
@@ -290,18 +300,22 @@ function player(W, p, dt) {
 }
 export function fireCD(W) { return F.fireCD * [1, 0.82, 0.68, 0.56][W.up.rapid || 0]; }
 function fire(W, p) {
-  p.fireT = fireCD(W);
+  const pw = p.pw;
+  p.fireT = fireCD(W) * (pw.overclock ? 0.5 : 1);
   const lv = W.up.spread || 0;
   const angs = [0];
+  if (pw.triple) angs.push(-0.13, 0.13);
   if (lv >= 1) angs.push(-F.spread, F.spread);
   if (lv >= 2) angs.push(-F.spread * 2, F.spread * 2);
   const c = Math.cos(p.aim), s = Math.sin(p.aim);
   const mx = p.x + c * 0.75, mz = p.z + s * 0.75;
   for (const d of angs) {
     // only the centre shot fires every time; side shots every other shot
-    if (d && p.shotI % 2) continue;
+    const full = pw.triple && Math.abs(d) < 0.15;
+    if (d && !full && p.shotI % 2) continue;
     const a = p.aim + d;
-    W.shots.push({ id: W.nextId++, pid: p.id, x: mx, z: mz, vx: Math.cos(a) * F.shotV, vz: Math.sin(a) * F.shotV, life: F.shotLife * (d ? 0.8 : 1), side: d ? 1 : 0, ghost: W.net === 'guest' && p.remote === false && p.id === 2 });
+    W.shots.push({ id: W.nextId++, pid: p.id, x: mx, z: mz, vx: Math.cos(a) * F.shotV, vz: Math.sin(a) * F.shotV, life: F.shotLife * (d && !full ? 0.8 : 1), side: d && !full ? 1 : 0,
+      rail: pw.rail ? 1 : 0, seek: pw.seeker ? 1 : 0, hits: pw.rail ? [] : null, ghost: W.net === 'guest' && p.remote === false && p.id === 2 });
   }
   p.shotI++;
   W.stats.shots++;
@@ -552,18 +566,104 @@ function kill(W, e, pid, by) {
   if (e.dead) return;
   e.hp = 0; e.dead = true;
   const sc = ENEMY[e.type].score;
-  W.score += sc; W.stats.kills++;
+  addScore(W, sc); W.stats.kills++;
+  maybeDrop(W, e);
   W.ev.push({ k: 'kill', x: e.x, z: e.z, type: e.type, score: sc, by, pid, id: e.id, a: e.a });
   if (e.type === 'splitter') for (let i = 0; i < 2; i++) { const q = addEnemy(W, 'shard', e.x + (i ? 0.5 : -0.5), e.z); q.born = 0.2; }
   if (e.type === 'hive') for (const q of W.enemies) if (q.type === 'dart' && q.hive === e.id) q.life = Math.min(q.life, 2.5);
   if (e.link) { const o = W.enemies.find((q) => q.id === e.link); if (o) { o.link = 0; o.arc = 0; } }
 }
 
+// ------------------------------------------------------------------ difficulty + power-ups
+const D_OF = (W) => DIFFICULTY[W.diff] || DIFFICULTY.normal;
+// every point goes through the difficulty's multiplier
+export function addScore(W, n) { W.score += Math.round(n * D_OF(W).score); }
+function dropKind(W) {
+  const mix = {};
+  for (const k of PW_KEYS) mix[k] = POWERUPS[k].w;
+  return pickW(W, mix);
+}
+export function addPickup(W, x, z, kind) {
+  const q = { id: W.nextId++, kind: kind || dropKind(W), x: clamp(x, -AW + 1.2, AW - 1.2), z: clamp(z, -AH + 1.2, AH - 1.2), life: DROP.life, t: 0 };
+  W.pickups.push(q);
+  W.ev.push({ k: 'drop', x: q.x, z: q.z, kind: q.kind });
+}
+function maybeDrop(W, e) {
+  if (W.net === 'guest' || e.type === 'dummy' || W.pickups.length >= DROP.max) return;
+  const big = e.type === 'brute' || e.type === 'hive' || e.type === 'splitter';
+  if (rand(W) < (big ? DROP.big : DROP.chance) * D_OF(W).drops) addPickup(W, e.x, e.z);
+}
+function pickups(W, dt) {
+  if (W.net === 'guest') { for (const q of W.pickups) q.t += dt; return; }
+  // one supply drop every wave, away from the Wardens
+  if (W.phase === 'fight' && !W.boss) {
+    W.supplyT -= dt;
+    if (W.supplyT <= 0) {
+      W.supplyT = 1e9;
+      if (W.pickups.length < DROP.max) { const q = freeSpot(W, 5, 3); addPickup(W, q[0], q[1]); if (W.tutorial) tut(W, 'pickup'); }
+    }
+  }
+  for (const q of W.pickups) { q.t += dt; q.life -= dt; if (q.life <= 0) { q.taken = true; W.ev.push({ k: 'pickgone', x: q.x, z: q.z }); } }
+  W.pickups = W.pickups.filter((q) => !q.taken);
+}
+function collect(W, q, p) {
+  q.taken = true;
+  const P = POWERUPS[q.kind];
+  W.pwStats.got++;
+  if (q.kind === 'barrier') p.shield = Math.min(p.shield + 1, 5);
+  else if (q.kind === 'cell') p.pulses = Math.min(p.pulses + 1, 5);
+  else if (q.kind === 'warp') W.warp = Math.max(W.warp, P.time);
+  else p.pw[q.kind] = Math.max(p.pw[q.kind] || 0, P.time);
+  if (q.kind === 'drone' && !(p.droneT > 0)) { p.droneA = 0; p.droneT = 0.4; }
+  W.ev.push({ k: 'pickup', pid: p.id, x: q.x, z: q.z, kind: q.kind });
+}
+// the nearest live machine to (x, z) within range
+function nearestEnemy(W, x, z, range) {
+  let best = null, bd = range;
+  for (const e of W.enemies) {
+    if (e.hp <= 0 || e.born > 0.2 || e.type === 'dummy' || e.type === 'pylon') continue;
+    const d = hyp(e.x - x, e.z - z);
+    if (d < bd) { bd = d; best = e; }
+  }
+  return best;
+}
+// SEEKERS: shots bend toward the nearest machine in front of them
+function seek(W, s, dt) {
+  const B = W.boss;
+  let tx = null, tz = null;
+  const e = nearestEnemy(W, s.x, s.z, 9);
+  if (e) { tx = e.x; tz = e.z; } else if (B && B.state !== 'in' && B.state !== 'dying') { tx = B.x; tz = B.z; }
+  if (tx === null) return;
+  const a = Math.atan2(s.vz, s.vx), want = Math.atan2(tz - s.z, tx - s.x), da = angDiff(a, want);
+  if (Math.abs(da) > 1.6) return;
+  const na = a + clamp(da, -7 * dt, 7 * dt), v = hyp(s.vx, s.vz);
+  s.vx = Math.cos(na) * v; s.vz = Math.sin(na) * v;
+}
+// WINGMAN: a drone circles the Warden and fires at the nearest machine
+export const dronePos = (p) => [p.x + Math.cos(p.droneA) * 1.5, p.z + Math.sin(p.droneA) * 1.5];
+function wingman(W, p, dt) {
+  p.droneA += dt * 2.2;
+  p.droneT -= dt;
+  if (p.droneT > 0) return;
+  const [dx, dz] = dronePos(p);
+  const e = nearestEnemy(W, dx, dz, 13);
+  let tx, tz, tvx = 0, tvz = 0;
+  if (e) { tx = e.x; tz = e.z; tvx = e.vx; tvz = e.vz; }
+  else if (W.boss && W.boss.state !== 'in' && W.boss.state !== 'dying' && hyp(W.boss.x - dx, W.boss.z - dz) < 14) { tx = W.boss.x; tz = W.boss.z; }
+  else { p.droneT = 0.1; return; }
+  const tt = hyp(tx - dx, tz - dz) / F.shotV, a = Math.atan2(tz + tvz * tt - dz, tx + tvx * tt - dx);
+  W.shots.push({ id: W.nextId++, pid: p.id, x: dx, z: dz, vx: Math.cos(a) * F.shotV, vz: Math.sin(a) * F.shotV, life: F.shotLife, side: 1, drone: 1, ghost: W.net === 'guest' && p.id === 2 });
+  W.ev.push({ k: 'dfire', pid: p.id, x: dx, z: dz, a });
+  p.droneT = 0.3;
+}
+
+
 // ------------------------------------------------------------------ shots, bolts, hazards
 function shots(W, dt) {
   const B = W.boss;
   for (const s of W.shots) {
     s.life -= dt;
+    if (s.seek) seek(W, s, dt);
     s.x += s.vx * dt; s.z += s.vz * dt;
     if (Math.abs(s.x) > AW || Math.abs(s.z) > AH) { s.life = 0; W.ev.push({ k: 'wallhit', x: clamp(s.x, -AW, AW), z: clamp(s.z, -AH, AH) }); continue; }
     if (s.ghost || s.life <= 0) continue;
@@ -571,7 +671,11 @@ function shots(W, dt) {
       if (e.hp <= 0 || e.born > 0.25) continue;
       const rr2 = e.r + F.shotR;
       const dx = e.x - s.x, dz = e.z - s.z;
-      if (dx * dx + dz * dz < rr2 * rr2) { damage(W, e, 1, s.pid, 'shot', s.x, s.z); s.life = 0; break; }
+      if (dx * dx + dz * dz < rr2 * rr2) {
+        // a rail shot keeps going through everything it hits, for two each
+        if (s.rail) { if (s.hits.includes(e.id)) continue; s.hits.push(e.id); damage(W, e, 2, s.pid, 'shot', s.x, s.z); continue; }
+        damage(W, e, 1, s.pid, 'shot', s.x, s.z); s.life = 0; break;
+      }
     }
     if (s.life <= 0 || !B || B.state === 'in' || B.state === 'dying') continue;
     for (const o of B.orbs) {
@@ -581,7 +685,7 @@ function shots(W, dt) {
     if (s.life > 0 && hyp(B.x - s.x, B.z - s.z) < B.r + F.shotR) {
       s.life = 0;
       if (B.orbs.some((o) => o.hp > 0)) W.ev.push({ k: 'deflect', x: s.x, z: s.z });
-      else hitBoss(W, B, (B.state === 'stun' ? 2 : 1) * (s.side ? 0.5 : 1), s.pid, s.x, s.z);
+      else hitBoss(W, B, (B.state === 'stun' ? 2 : 1) * (s.side ? 0.5 : 1) * (s.rail ? 2 : 1), s.pid, s.x, s.z);
     }
   }
   W.shots = W.shots.filter((s) => s.life > 0);
@@ -645,6 +749,7 @@ function contacts(W) {
     if (!p.alive) continue;
     // guest side: only my own Warden is judged here
     if (W.net === 'guest' && p.remote) continue;
+    if (W.net !== 'guest') for (const q of W.pickups) if (!q.taken && hyp(q.x - p.x, q.z - p.z) < DROP.r + F.r * 0.5) collect(W, q, p);
     if (W.net === 'host' && p.remote) {
       // the host still lets the guest pick up survivors
       for (const s of W.survivors) if (!s.saved && hyp(s.x - p.x, s.z - p.z) < rescueR) rescue(W, s, p);
@@ -691,14 +796,14 @@ function rescue(W, s, p) {
   s.saved = 1;
   W.chain++;
   const bonus = Math.min(SCORE.rescueMax, SCORE.rescue * W.chain);
-  W.score += bonus; W.stats.rescued++;
+  addScore(W, bonus); W.stats.rescued++;
   W.ev.push({ k: 'rescue', x: s.x, z: s.z, bonus, chain: W.chain, pid: p.id });
 }
 
 function waveClear(W) {
   W.phase = 'clear'; W.phaseT = 2.2;
   const bonus = SCORE.wave * (1 + (W.mode === 'campaign' ? W.sector : Math.floor(W.waveN / 5)));
-  W.score += bonus;
+  addScore(W, bonus);
   // leftover pylons and dummies power down; the survivors still out there are walked out
   for (const e of W.enemies) if (e.type === 'pylon' || e.type === 'dummy') { e.gone = true; e.hp = 0; W.ev.push({ k: 'scrap', x: e.x, z: e.z, type: e.type }); }
   W.enemies = W.enemies.filter((e) => !e.gone);
@@ -731,7 +836,7 @@ function addOrbs(W, B, n) {
 }
 function hitOrb(W, B, o, dmg, pid) {
   o.hp -= dmg;
-  if (o.hp <= 0) { W.score += 300; W.ev.push({ k: 'orbdown', x: o.x, z: o.z, left: B.orbs.filter((q) => q.hp > 0).length }); }
+  if (o.hp <= 0) { addScore(W, 300); W.ev.push({ k: 'orbdown', x: o.x, z: o.z, left: B.orbs.filter((q) => q.hp > 0).length }); }
   else W.ev.push({ k: 'bosshit', x: o.x, z: o.z, orb: 1 });
   void pid;
 }
@@ -769,7 +874,7 @@ function boss(W, B, dt) {
   if (B.state === 'dying') {
     if (B.st <= 0) {
       const bonus = SCORE.boss + (W.mode === 'campaign' ? W.sector * 1000 : 0);
-      W.score += bonus;
+      addScore(W, bonus);
       W.ev.push({ k: 'bosskill', x: B.x, z: B.z, key: B.key, bonus });
       W.boss = null;
       W.lastBossN = W.n;
@@ -900,5 +1005,5 @@ function act(W, B, C, ph, dt = 0) {
 export function adoptWave(W, wave, waveN) {
   if (W.wave === wave && W.waveN === waveN) return;
   W.wave = wave; W.waveN = waveN;
-  W.R = W.mode === 'campaign' ? rampAt(W.sector, Math.min(wave, WAVES - 1)) : rampLevel(standLevel(W.fightT));
+  W.R = applyDiff(W.mode === 'campaign' ? rampAt(W.sector, Math.min(wave, WAVES - 1)) : rampLevel(standLevel(W.fightT)), W.diff);
 }

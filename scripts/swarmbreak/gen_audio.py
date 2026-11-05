@@ -103,6 +103,10 @@ SFX = {
     'uiok':      (0.4, 0.6, 'Futuristic UI confirm sound, bright two-note chime'),
     'uiback':    (0.3, 0.6, 'Futuristic UI back sound, soft descending blip'),
     'rewind':    (1.0, 0.5, 'Tape rewind effect, quick reverse warble'),
+    'pickup':    (0.9, 0.6, 'Sci-fi power-up collected, bright rising energy chime with a crisp sparkle'),
+    'pwend':     (0.7, 0.6, 'Sci-fi power-up running out, short descending electronic blip'),
+    'drop':      (1.2, 0.5, 'Supply pod landing, soft pneumatic thump with a rising hum'),
+    'warp':      (1.6, 0.5, 'Time slowing down effect, deep descending whoosh with a stretched reverb tail'),
 }
 
 VOICE_ID = 'EXAVITQu4vr4xnSDxMaL'  # calm dispatch

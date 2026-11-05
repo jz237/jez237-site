@@ -2,7 +2,7 @@
 // debris that bounces on the real ground, shock rings, scorch marks and a few flash lights.
 // Purely visual (uses Math.random), never touches the simulation.
 import * as THREE from '../vendor/three.module.min.js';
-import { rockGeometry } from './models.js?v=2';
+import { rockGeometry } from './models.js?v=3';
 
 export const CALM = { on: false };
 

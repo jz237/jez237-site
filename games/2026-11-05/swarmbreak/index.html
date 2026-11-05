@@ -166,6 +166,30 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
 #tb-pulse.empty { opacity: .35; }
 #tb-pause { position: absolute; top: calc(max(10px, env(safe-area-inset-top)) + 78px); right: max(14px, env(safe-area-inset-right)); width: 40px; height: 40px; border-radius: 10px; pointer-events: auto; background: rgba(0, 0, 0, .4); border: 1px solid var(--edge); font-size: 14px; }
 @media (max-width: 560px) { #hud { grid-template-columns: auto 1fr; } .hr { display: none; } .mid { min-width: 0; padding: 6px 8px; } #sector-name { font-size: 9px; letter-spacing: .1em; white-space: normal; } #wavestrip b { width: 17px; height: 16px; font-size: 9px; } #timer, #chain { font-size: 10px; } }
+/* power-ups on the HUD */
+#pw { display: flex; flex-direction: column; gap: 3px; margin-top: 6px; }
+#pw span { position: relative; display: block; font-size: 10px; letter-spacing: .14em; color: var(--c); padding: 2px 6px 4px; border-radius: 6px; background: rgba(0, 0, 0, .35); border: 1px solid color-mix(in srgb, var(--c) 50%, transparent); white-space: nowrap; }
+#pw span b { margin-right: 6px; font-size: 12px; }
+#pw span i { position: absolute; left: 4px; bottom: 1px; height: 2px; border-radius: 1px; background: var(--c); max-width: calc(100% - 8px); }
+/* screen-edge markers for things out of view */
+#warns { position: absolute; inset: 0; overflow: hidden; }
+.wm { position: absolute; width: 34px; height: 34px; margin: -17px 0 0 -17px; display: grid; place-items: center; border-radius: 50%; --c: #ff5a4a; color: #fff; font-size: 15px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--c) 45%, transparent), transparent 72%); border: 2px solid var(--c); text-shadow: 0 0 6px #000; }
+.wm em { position: absolute; inset: -9px; }
+.wm em::after { content: ''; position: absolute; right: -2px; top: 50%; margin-top: -5px; border: 5px solid transparent; border-left: 7px solid var(--c); }
+.wm.red { --c: #ff5a4a; animation: pulse .4s infinite alternate; } .wm.pink { --c: #ff3df0; } .wm.violet { --c: #c070ff; } .wm.orange { --c: #ffb347; width: 42px; height: 42px; margin: -21px 0 0 -21px; } .wm.green { --c: #7dff9a; }
+.wm.minor { width: 22px; height: 22px; margin: -11px 0 0 -11px; font-size: 10px; opacity: .7; }
+@keyframes pulse { to { transform: scale(1.12); } }
+/* difficulty picker */
+.diffrow { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 6px; font-size: 11px; letter-spacing: .22em; color: var(--dim); }
+.diffrow .seg { display: flex; gap: 4px; }
+.diffrow .seg button { padding: 6px 8px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, .14); font-size: 10px; letter-spacing: .1em; }
+.diffrow .seg button.on { border-color: var(--amber); color: var(--amber); background: rgba(255, 179, 71, .12); }
+#diff-desc { font-family: system-ui, sans-serif; font-size: 11.5px; color: var(--dim); margin: 0 0 12px; min-height: 15px; }
+.btns.four { grid-template-columns: repeat(4, 1fr); }
+.btns.four .mbtn { text-align: center; padding: 8px 4px; font-size: 11px; letter-spacing: .1em; }
+.pwgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 14px; font-family: system-ui, sans-serif; font-size: 12.5px; color: #c9d3df; }
+.pwgrid b { font-family: 'Chakra Petch'; letter-spacing: .08em; }
 </style>
 </head>
 <body>
@@ -176,6 +200,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
       <div class="lbl">SCORE</div>
       <div class="big" id="score">0</div>
       <div class="row"><div class="lives" id="lives"></div><div class="shield" id="shield"></div><div class="pulses" id="pulses"></div></div>
+      <div id="pw"></div>
     </div>
     <div class="panel mid">
       <div id="sector-name">ROOFTOP GARDENS</div>
@@ -189,6 +214,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
     </div>
   </div>
   <div id="bossbar" class="hidden"><div class="lbl" id="boss-name">BOSS</div><div class="bar"><i></i></div></div>
+  <div id="warns"></div>
   <div id="popups"></div>
   <div id="tut" class="hidden"></div>
   <div id="banner" class="hidden"><div class="b1"></div><div class="b2"></div></div>
@@ -207,7 +233,9 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">SWARM<span>BREAK</span></h1>
-      <div class="ver">VERSION <b id="ver">1.0.1</b> · HOLD THE LINE · BRING THEM HOME</div>
+      <div class="ver">VERSION <b id="ver">1.1.0</b> · HOLD THE LINE · BRING THEM HOME</div>
+      <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
+      <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
         <button class="mbtn primary" data-act="campaign">START CAMPAIGN<small>Five sectors of the city, five waves and a boss in each</small></button>
         <button class="mbtn" data-act="sectors">SECTOR SELECT<small id="sel-sub">Replay any sector you have reached</small></button>
@@ -256,6 +284,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   <div class="screen hidden" id="scores"><div class="card wide">
     <h2>HIGH SCORES</h2>
     <div class="btns two" style="margin:8px 0 6px"><button class="mbtn tab" data-tab="campaign">CAMPAIGN</button><button class="mbtn tab" data-tab="stand">LAST STAND</button></div>
+    <div class="btns four" style="margin:0 0 6px"><button class="mbtn" data-hd="easy">EASY</button><button class="mbtn" data-hd="normal">NORMAL</button><button class="mbtn" data-hd="hard">HARD</button><button class="mbtn" data-hd="nightmare">NIGHTMARE</button></div>
     <div class="cols"><div><h3>THIS DEVICE</h3><table class="hs" id="hs-local"></table></div><div><h3>WORLD</h3><table class="hs" id="hs-global"></table></div></div>
     <h3>BEST SECTOR TIMES</h3><div id="besttimes"></div>
     <div class="btns" style="margin-top:14px"><button class="mbtn" data-act="back">BACK</button></div>
@@ -276,6 +305,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
     <div class="opt">FLASHES<div class="seg" data-opt="flash"><button data-v="full">NORMAL</button><button data-v="reduced">REDUCED</button></div></div>
     <div class="opt">SCREEN SHAKE<div class="seg" data-opt="shake"><button data-v="1">ON</button><button data-v="0.4">LIGHT</button><button data-v="0">OFF</button></div></div>
     <div class="opt">VIBRATION<div class="seg" data-opt="rumble"><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
+    <div class="opt">CAMERA<div class="seg" data-opt="view"><button data-v="close">CLOSE</button><button data-v="full">WHOLE ARENA</button></div></div>
     <div class="opt">TOUCH STICKS<div class="seg" data-opt="touch"><button data-v="auto">AUTO</button><button data-v="on">ON</button><button data-v="off">OFF</button></div></div>
     <div class="opt">GRAPHICS<div class="seg" data-opt="quality"><button data-v="auto">AUTO</button><button data-v="high">HIGH</button><button data-v="medium">MED</button><button data-v="low">LOW</button></div></div>
     <p style="margin:10px 0 0;font-size:12px">Graphics changes apply after a reload.</p>
@@ -285,6 +315,13 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   <div class="screen hidden" id="help"><div class="card">
     <h2>HOW TO PLAY</h2>
     <p>Machines pour into the arena through the gates. <b>Run</b> one way and <b>shoot</b> another, scrap every machine to clear the wave, and bring in the <b>survivors</b> (green beacons): each one you reach in a row is worth more. A <b>PULSE</b> scraps small machines and bolts all around you; you get a few every wave.</p>
+    <h3>POWER-UPS</h3><div class="pwgrid">
+      <span><b>⁂ TRIPLE BEAM</b> three full beams</span><span><b>» OVERCLOCK</b> double fire rate</span>
+      <span><b>⟿ RAIL LANCE</b> pierces, hits for two</span><span><b>➶ SEEKERS</b> shots curve onto machines</span>
+      <span><b>⟡ WINGMAN</b> a drone fights beside you</span><span><b>⧗ TIME WARP</b> machines and bolts slow down</span>
+      <span><b>⬡ BARRIER</b> +1 shield</span><span><b>✺ PULSE CELL</b> +1 PULSE</span></div>
+    <p>Machines sometimes drop a pod when scrapped (big ones more often), and a supply pod lands once every wave. Pods only wait about 13 seconds.</p>
+    <h3>DIFFICULTY</h3><p>Easy, Normal, Hard and Nightmare each have their own high-score tables. Harder levels score more points (×0.6, ×1, ×1.5, ×2.2). Medals count on Normal and harder.</p>
     <h3>KEYBOARD + MOUSE</h3><p>RUN: W A S D · AIM + FIRE: arrow keys, or aim with the mouse and hold the left button · PULSE: Space, Shift or the right mouse button · PAUSE: Esc or P</p>
     <h3>GAMEPAD</h3><p>RUN: left stick · AIM + FIRE: right stick (RT fires the last way you aimed) · PULSE: A or a bumper · PAUSE: Start</p>
     <h3>TOUCH</h3><p>Left thumb runs, right thumb aims and fires, the PULSE button sits above your right thumb.</p>
@@ -325,6 +362,6 @@ addEventListener('error', (e) => window.__sbErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__sbErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__sbErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=2"></script>
+<script type="module" src="js/main.js?v=3"></script>
 </body>
 </html>

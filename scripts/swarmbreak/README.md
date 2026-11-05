@@ -5,7 +5,7 @@ Every local import carries the same `?v=N`; bump them all together (plus `js/mai
 
 | Script | What it does |
 | --- | --- |
-| `ramp_check.mjs [trials] [sectors] [profile]` | Human-like autopilot (0.35 s reaction with scatter, sometimes late, aim wobble and a limited turn speed, tracks only the ~8 nearest threats and often misses things behind it) plays each sector from wave 1 with 3 Wardens and the typical upgrades (`TYPICAL_UP`); prints the clear rate, deaths / hits per wave try and what killed it. Run sectors in parallel: `for s in 1 2 3 4 5; do node scripts/swarmbreak/ramp_check.mjs 100 $s & done; wait` |
+| `ramp_check.mjs [trials] [sectors] [profile] [difficulty]` | Human-like autopilot (0.35 s reaction with scatter, sometimes late, aim wobble and a limited turn speed, tracks only the ~8 nearest threats and often misses things behind it) plays each sector from wave 1 with 3 Wardens and the typical upgrades (`TYPICAL_UP`); prints the clear rate, deaths / hits per wave try and what killed it. Run sectors in parallel: `for s in 1 2 3 4 5; do node scripts/swarmbreak/ramp_check.mjs 100 $s & done; wait` |
 | `replay_check.mjs [seeds]` | Records autopilot runs and re-runs every death and boss kill from its saved clip; the world must match bit for bit. |
 | `autopilot_check.mjs [runs]` | Chained campaigns (lives and score carry over, salvage buys upgrades) for the demo and human profiles. |
 | `console_check.mjs [baseUrl]` | Playwright + Edge: the `?test=1` self-test page, the attract demo, an autoplay campaign and the AI playthrough rolling from the S1 boss into S2; fails on console errors or score POSTs. Needs a static server on the repo root. |
@@ -21,3 +21,8 @@ Page hooks: `?autoplay` (demo autopilot plays), `?sector=N`, `?wave=N` (0-4 wave
 
 Online: rooms `SB-XXXX` / `SB-Q-XXXXX` on the Steel Duel relay (its lobby filter hides `^(PPB|A26|CR|SB)-`). Local test: copy
 `games/2026-06-14/steel-duel/worker` somewhere, `npx wrangler dev --local --port 8787`, open two pages with `?relay=ws://127.0.0.1:8787`.
+
+Difficulty levels (`DIFFICULTY` in config.js: easy / normal / hard / nightmare) scale the RAMP through `applyDiff()`; warnings never
+drop below `MIN_WARN`. Each level has its own boards (`swarmbreak[-easy|-hard|-nightmare]`, `swarmbreak-laststand[-...]`) and best times.
+v1.1.0 ramp_check (60 runs): Normal 100/95/93/73/40 %, Hard 100/87/63/23/7 %, Easy 100 % everywhere, Nightmare 100/85/20/0/0 % (40 runs).
+Power-ups: `POWERUPS` + `DROP` in config.js; drops, supply pods, WINGMAN, SEEKERS, RAIL and TIME WARP live in sim.js (search `power-ups`).

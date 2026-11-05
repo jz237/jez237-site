@@ -1,9 +1,9 @@
 // ?test=1 self-test page: determinism, exact replays, the difficulty ramp, the gentle start, the autopilot
 // reaching later sectors, the live game loop running without console errors, and no score posts.
-import { makeWorld, step, drainEvents, STEP, cloneWorld } from './sim.js?v=2';
-import { Autopilot } from './ai.js?v=2';
-import { RAMP, SECTORS, WAVES, TYPICAL_UP, rampAt, standLevel } from './config.js?v=2';
-import { Recorder, Replay } from './replay.js?v=2';
+import { makeWorld, step, drainEvents, STEP, cloneWorld } from './sim.js?v=3';
+import { Autopilot } from './ai.js?v=3';
+import { RAMP, SECTORS, WAVES, TYPICAL_UP, rampAt, standLevel, DIFF_KEYS, applyDiff, MIN_WARN } from './config.js?v=3';
+import { Recorder, Replay } from './replay.js?v=3';
 
 export const hashW = (W) => JSON.stringify([W.n, W.score, W.lives, W.wave, W.phase, W.rs, W.players.map((p) => [p.x.toFixed(6), p.z.toFixed(6), p.alive, p.shield]), W.enemies.map((e) => [e.id, e.x.toFixed(4), e.z.toFixed(4), e.hp]), W.bolts.length, W.survivors.length]);
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -77,6 +77,25 @@ export async function runTests(sb) {
     if (RAMP[0].group[0] !== 1) issues.push('sector 1 does not start one at a time');
     if (standLevel(0) > 0.3 || standLevel(60 * 5) > 2.5) issues.push('last stand ramps too fast');
     return { ok: !issues.length, info: issues.length ? issues.join(', ') : `${pts.length} waves, speed ${pts[0].spd}→${pts[pts.length - 1].spd.toFixed(2)}, warning ${pts[0].warn}→${pts[pts.length - 1].warn.toFixed(2)} s` };
+  });
+
+  await T('difficulty levels: each is harder than the last, warnings never under 0.5 s', () => {
+    const issues = [];
+    SECTORS.forEach((s, i) => { for (let w = 0; w < WAVES; w++) {
+      const R = DIFF_KEYS.map((d) => applyDiff(rampAt(i, w), d));
+      for (let k = 1; k < R.length; k++) {
+        if (R[k].spd < R[k - 1].spd || R[k].fire < R[k - 1].fire || R[k].count < R[k - 1].count || R[k].warn > R[k - 1].warn) issues.push(`${DIFF_KEYS[k]} not harder at S${i + 1}W${w + 1}`);
+        if (R[k].warn < MIN_WARN - 1e-9) issues.push(`${DIFF_KEYS[k]} warns ${R[k].warn.toFixed(2)} s`);
+      }
+    } });
+    return { ok: !issues.length, info: issues.length ? issues.slice(0, 3).join(', ') : `${DIFF_KEYS.join(' < ')}, last warning ${applyDiff(rampAt(4, 4), 'nightmare').warn.toFixed(2)} s on Nightmare` };
+  });
+
+  await T('power-ups drop, get picked up and wear off', () => {
+    const W = makeWorld({ sector: 2, seed: 77, up: TYPICAL_UP[2] });
+    const seen = { drop: 0, pickup: 0, pwend: 0 }, kinds = new Set();
+    drive(W, new Autopilot(5, 'demo'), 240 / STEP, null, (w, ev) => { for (const e of ev) if (seen[e.k] !== undefined) { seen[e.k]++; if (e.k === 'pickup') kinds.add(e.kind); } });
+    return { ok: seen.drop > 2 && seen.pickup > 1 && seen.pwend > 0, info: `${seen.drop} drops, ${seen.pickup} picked up (${[...kinds].join(', ')}), ${seen.pwend} wore off` };
   });
 
   await T('no way to die in sector 1’s first 30 s (even doing nothing)', () => {
