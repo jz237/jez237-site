@@ -70,6 +70,8 @@ export function buildCase(input) {
     `Urgent flags: ${assessment.urgent.join('; ') || 'None selected. This does not rule out serious disease.'}`,
     `Environmental checks: ${assessment.checks.join(' ') || 'Still check actual water quality and oxygen.'}`,
     `Guide reading suggestions (NOT established diagnoses): ${candidates.map(c => c.title).join('; ') || 'No clear match.'}`,
+    `Visual page used to start this check (NOT evidence of a diagnosis): ${CONDITIONS.find(c => c.id === input.visualReference)?.title || 'None selected.'}`,
+    `Entries manually chosen for comparison (NOT image-analysis results): ${(input.comparisons || []).map(id => CONDITIONS.find(c => c.id === id)?.title).filter(Boolean).join('; ') || 'None selected.'}`,
     '',
     'FOR AN AI SECOND OPINION:',
     'Help me organize these observations. If I attach a photo, describe only what is visible and state uncertainty. Do not infer absent signs from a single image. Separate observations from hypotheses. Consider environmental problems and relevant look-alikes before naming a disease. Keep freshwater and marine causes distinct. Ask the most useful missing questions, identify urgent signs, explain which professional tests distinguish the possibilities, and suggest safe immediate checks. Do not provide an unsupported certain diagnosis, made-up confidence percentages, medication doses or a blanket heat/salt treatment. Do not assume you have seen a photo unless one is actually attached.',

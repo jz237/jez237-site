@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { assessUrgency, rankConditions, buildCase } from '../../experiments/fish-health-lab/logic.mjs';
+import { VISUAL_LIBRARY } from '../../experiments/fish-health-lab/visuals.mjs';
 
 const base = { water: 'fresh', signs: [], ammonia: '', nitrite: '', ph: '', temperature: '' };
 test('blank water measurements stay unknown; measured zero is known', () => {
@@ -49,4 +50,21 @@ test('case notes distinguish blank from zero, and photos from actual image analy
   assert.match(notes, /has NOT been analyzed or sent/);
   assert.match(notes, /not a diagnosis/);
   assert.match(notes, /<test>/); // plain-text export, not rendered as HTML
+});
+test('visual reference choices are not diagnostic evidence or extra ranking weight', () => {
+  const observations = { ...base, signs: ['dots'] };
+  assert.deepEqual(rankConditions({ ...observations, visualReference: 'velvet-marine', comparisons: ['ulcer','dropsy'] }), rankConditions(observations));
+  const notes = buildCase({ ...observations, visualReference: 'ich-fresh', comparisons: ['ich-fresh','velvet-fresh'] });
+  assert.match(notes, /NOT evidence of a diagnosis\): Freshwater ich/);
+  assert.match(notes, /NOT image-analysis results\): Freshwater ich; Freshwater velvet/);
+});
+test('reference assets have explicit provenance; absent assets remain null rather than broken or invented examples', () => {
+  for (const slots of Object.values(VISUAL_LIBRARY)) for (const slot of slots) {
+    if (slot.image) {
+      assert.ok(new URL(slot.image.url).protocol === 'https:');
+      assert.ok(slot.image.alt && slot.image.caption && slot.image.provenance && slot.image.source);
+      assert.match(slot.image.provenance, /AI educational illustration/);
+      assert.match(slot.image.source, /not.*confirmed patient/);
+    } else assert.equal(slot.image, null);
+  }
 });
