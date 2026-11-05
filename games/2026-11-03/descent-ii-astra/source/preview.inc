@@ -3,6 +3,8 @@
 int astra_preview_active;
 static unsigned preview_seed,preview_number;
 static double preview_started;
+float astra_preview_clock;
+int astra_preview_silent;
 static float preview_length;
 static int preview_sound,preview_profile;
 static void preview_snapshot(int entering)
@@ -23,7 +25,8 @@ static void astra_preview_new(void)
     preview_profile=requested>0 && requested<AB_COUNT?requested:AB_LEGACY;
     preview_length=preview_profile?astra_pattern_length(preview_profile,preview_seed):
                                    5.9f+1.1f*(preview_seed&255)/255.f;
-    preview_started=emscripten_get_now();preview_sound=-1;
+    preview_started=emscripten_get_now();astra_preview_clock=0;preview_sound=-1;
+    EM_ASM(window.astraPlayback?.reset());
     digi_stop_digi_sounds();
 }
 int astra_preview_frame(void)
@@ -35,18 +38,41 @@ int astra_preview_frame(void)
             astra_preview_active=1;stop_time();game_flush_inputs();
             EM_ASM(window.astraPreview?.show(true));
         }
-        astra_preview_new();
+        if(command==2 && astra_preview_active){
+            astra_preview_clock=0;preview_started=emscripten_get_now();preview_sound=-1;
+            digi_stop_digi_sounds();EM_ASM(window.astraPlayback?.reset());
+        }else astra_preview_new();
         if(EM_ASM_INT(return Module.mineInspect>=0))am_level=-999;
     }
     if(command<0 && astra_preview_active){
         preview_snapshot(0);
         astra_preview_active=0;digi_stop_digi_sounds();game_flush_inputs();
         start_time();reset_cockpit();
+        {extern int PaletteRedAdd,PaletteGreenAdd,PaletteBlueAdd;gr_palette_step_up(PaletteRedAdd,PaletteGreenAdd,PaletteBlueAdd);}
         EM_ASM(window.astraPreview?.show(false));
         return 1;
     }
     if(!astra_preview_active)return 0;
-    float age=(emscripten_get_now()-preview_started)*.001f,seconds=age-(preview_profile?.20f:.85f);
+    /* A hit tint may be active when the pilot opens the showroom. Keep the
+     * paused gameplay palette intact, but inspect materials in neutral light. */
+    gr_palette_step_up(0,0,0);
+    double now=emscripten_get_now();
+    float dt=fminf(.10f,fmaxf(0,(now-preview_started)*.001f));preview_started=now;
+    int weapon=EM_ASM_INT(return Number.isInteger(Module.weaponInspect)?Module.weaponInspect:-1);
+    int combat=EM_ASM_INT(return Number.isInteger(Module.combatInspect)?Module.combatInspect:-1);
+    int timed=weapon>=0||combat>=0;
+    float duration=timed?10:preview_length+(preview_profile?.20f:.85f);
+    int restart=EM_ASM_INT({var r=!!Module.previewRestart;delete Module.previewRestart;return r;});
+    if(restart){astra_preview_clock=0;digi_stop_digi_sounds();EM_ASM(Module.previewPaused=false;window.astraPlayback?.sync());}
+    float seek=EM_ASM_DOUBLE({var s=Module.previewSeek;delete Module.previewSeek;return Number.isFinite(s)?s:-1;});
+    int paused=EM_ASM_INT(return !!Module.previewPaused;);
+    float speed=EM_ASM_DOUBLE(return Module.previewSpeed||1;);
+    astra_preview_silent=paused||seek>=0||speed!=1;
+    if(seek>=0){astra_preview_clock=fminf(duration,fmaxf(0,seek));digi_stop_digi_sounds();
+        EM_ASM(Module.previewPaused=true;window.astraPlayback?.sync());}
+    else if(!paused)astra_preview_clock=fminf(duration+.95f,astra_preview_clock+dt*fminf(2,fmaxf(.1f,speed)));
+    float age=astra_preview_clock,seconds=age-(preview_profile?.20f:.85f);
+    EM_ASM(window.astraPlayback?.update($0,$1,$2,$3);,age,duration,preview_seed,timed);
     gr_set_current_canvas(NULL);gr_clear_canvas(BM_XRGB(1,2,3));
     int mine=EM_ASM_INT(return Number.isInteger(Module.mineInspect)?Module.mineInspect:-1);
     if(mine>=0){
@@ -57,7 +83,10 @@ int astra_preview_frame(void)
     g3_start_frame();
     vms_vector eye={0,0,0},center={0,0,i2f(72)};
     g3_set_view_matrix(&eye,&vmd_identity_matrix,F1_0);
-    int weapon=EM_ASM_INT(return Number.isInteger(Module.weaponInspect)?Module.weaponInspect:-1);
+    if(combat>=0){
+        extern void astra_combat_showcase(int,float);astra_combat_showcase(combat,age);
+        g3_end_frame();EM_ASM(window.astraCombat?.update($0,$1);,combat,age);return 1;
+    }
     if(weapon>=0&&weapon<19){
         extern fix Render_zoom;g3_set_view_matrix(&eye,&vmd_identity_matrix,Render_zoom);
         extern void astra_weapon_showcase(int,float);astra_weapon_showcase(weapon,age);
@@ -83,7 +112,7 @@ int astra_preview_frame(void)
         if(preview_profile==AB_CINDERS||preview_profile==AB_SPALL)center.y=-i2f(3);
         astra_pattern_blast(&center,fl2f(base*astra_detonations[preview_profile].scale),
                             seconds/preview_length,preview_seed,preview_profile,preview_profile>AB_CINDERS);
-        if(preview_sound<0){
+        if(preview_sound<0 && !astra_preview_silent){
             static const int sound[AB_COUNT]={0,SOUND_FORCEFIELD_BOUNCE_WEAPON,SOUND_LASER_HIT_CLUTTER,
                 SOUND_WEAPON_HIT_BLASTABLE,SOUND_ROBOT_HIT,SOUND_MINE_BLEW_UP,
                 SOUND_MINE_BLEW_UP,SOUND_BADASS_EXPLOSION};
@@ -94,10 +123,10 @@ int astra_preview_frame(void)
         float t=seconds/preview_length;
         astra_blast(&center,i2f(13),t,preview_seed,preview_seed%8,2);
         static const int sounds[]={SOUND_ROBOT_DESTROYED,SOUND_BADASS_EXPLOSION,SOUND_LASER_HIT_CLUTTER,SOUND_MINE_BLEW_UP};
-        if(preview_sound<0){digi_play_sample(SOUND_BADASS_EXPLOSION,F1_0*3/4);preview_sound=0;}
+        if(preview_sound<0 && !astra_preview_silent){digi_play_sample(SOUND_BADASS_EXPLOSION,F1_0*3/4);preview_sound=0;}
         int last=-1;
         while(preview_sound<4 && t>=astra_death_burst_time(preview_seed,preview_sound))last=preview_sound++;
-        if(last>=0 && t-astra_death_burst_time(preview_seed,last)<.11f)
+        if(!astra_preview_silent && last>=0 && t-astra_death_burst_time(preview_seed,last)<.11f)
             digi_play_sample(sounds[(last+(preview_seed&3))%4],F1_0/2);
     }
     g3_end_frame();

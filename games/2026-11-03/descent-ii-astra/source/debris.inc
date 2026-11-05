@@ -36,14 +36,14 @@ void astra_debris(vms_vector *where,fix radius,float seconds,float lifetime,unsi
     if(!group){
         int slot=0;for(int i=1;i<AD_GROUPS;i++)if(ad_groups[i].seen<ad_groups[slot].seen)slot=i;
         group=&ad_groups[slot];memset(group,0,sizeof *group);group->seed=seed;group->origin=*where;group->born=GameTime64-fl2f(seconds);
-        group->count=tier==2?12:shape>=3?10:6;
+        group->count=tier==3?3:tier==2?12:shape>=3?10:6;
         vms_vector center,inward;compute_segment_center(&center,&Segments[room]);vm_vec_normalized_dir(&inward,&center,where);
         for(int i=0;i<group->count;i++){
             ad_piece *p=&group->piece[i];float d[3];pyro_dir(seed,i+153,d);
-            float speed=(tier==2?14:11)+pyro_random(seed,i,42)*17;
+            float speed=tier==3?5+pyro_random(seed,i,42)*5:(tier==2?14:11)+pyro_random(seed,i,42)*17;
             vm_vec_scale_add(&p->pos,where,&inward,fl2f(.8f));p->room=room;
             p->velocity=(vms_vector){fl2f(d[0]*speed),fl2f(d[1]*speed),fl2f(d[2]*speed)};
-            p->size=fminf(.68f,fmaxf(.16f,f2fl(radius)*(.033f+.035f*pyro_random(seed,i,49))));
+            p->size=tier==3?.10f+.08f*pyro_random(seed,i,49):fminf(.68f,fmaxf(.16f,f2fl(radius)*(.033f+.035f*pyro_random(seed,i,49))));
             p->spin=(pyro_random(seed,i,55)-.5f)*5;
         }
     }

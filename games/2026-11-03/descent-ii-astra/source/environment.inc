@@ -73,6 +73,7 @@ void astra_environment_hit(int room,int side,const vms_vector *point,float size)
 }
 static int ae_basis(int,int,vms_vector*,vms_matrix*,float*,float*);
 static int ag_shadow_data(int,int,float*,float*,float*);
+static int ss_wall(int,int);
 extern int astra_refinement;
 static void ae_wall_finish(int nv,const g3s_point **points,int room,int side,int frame){
     static GLuint program;static int failed;if(failed||nv<3||nv>4)return;
@@ -90,9 +91,11 @@ static void ae_wall_finish(int nv,const g3s_point **points,int room,int side,int
         g3s_point v;g3_rotate_point(&v,&m->p);marks[count*4]=f2fl(v.p3_x);marks[count*4+1]=f2fl(v.p3_y);marks[count*4+2]=-f2fl(v.p3_z);marks[count*4+3]=m->size*(1-fmaxf(0,age-150)/30);count++;
     }
     if(!frame&&!count)return;
+    int detailed=frame?ss_wall(room,side):0;
     if(!program){
         const char *vs="varying highp vec3 p;varying mediump vec2 uv;void main(){p=gl_Vertex.xyz;uv=gl_MultiTexCoord0.xy;gl_Position=ftransform();}";
         const char *fs="precision highp float;varying highp vec3 p;varying mediump vec2 uv;uniform vec4 marks[6],mount;uniform vec3 scale;uniform float frame,refinement;uniform vec4 shadows[3],axes[3],ups[3];"
+          "uniform sampler2D silhouette;uniform float detailed;uniform vec3 shadowCenter,shadowRight,shadowUp;uniform vec2 shadowSize;uniform float texel;"
           "void main(){vec2 e=min(uv,1.-uv);float ao=exp(-min(e.x,e.y)*90.)*.24*frame;float burn=0.,chips=0.;"
           "for(int i=0;i<6;i++){vec3 d=(p-marks[i].xyz)/scale;float r=length(d)/max(.001,marks[i].w);"
           "float n=sin(d.x*17.+d.y*13.)*sin(d.z*21.+d.x*11.);burn=max(burn,(1.-smoothstep(.15,.98+n*.09,r))*.67*step(.01,marks[i].w));"
@@ -100,6 +103,10 @@ static void ae_wall_finish(int nv,const g3s_point **points,int room,int side,int
           "float contact=(1.-smoothstep(max(.001,mount.w*.48),max(.002,mount.w*1.25),length((p-mount.xyz)/scale)))*mix(.19,.32,refinement)*step(.01,mount.w);"
           "float shadow=0.;for(int i=0;i<3;i++){vec3 d=(p-shadows[i].xyz)/scale;vec2 q=vec2(dot(d,axes[i].xyz),dot(d,ups[i].xyz))/max(.001,shadows[i].w);"
           "float hull=length(q/vec2(.34,.86)),wing=length(q/vec2(1.,.25));float edge=min(hull,wing);float pen=axes[i].w;shadow=max(shadow,(1.-smoothstep(.65,1.+pen,edge))*ups[i].w);}"
+          "if(detailed>.5){vec3 D=p/scale-shadowCenter;vec2 st=vec2(dot(D,shadowRight),dot(D,shadowUp))/shadowSize+.5;"
+          "float mask=0.;for(int x=-1;x<=1;x++)for(int y=-1;y<=1;y++){float weight=(x==0?2.:1.)*(y==0?2.:1.);"
+          "mask+=texture2D(silhouette,st+vec2(float(x),float(y))*texel*1.6).r*weight/16.;}"
+          "float edge=step(0.,st.x)*step(st.x,1.)*step(0.,st.y)*step(st.y,1.);shadow=max(shadow,mask*.42*edge);}"
           "ao*=mix(1.,1.35,refinement);gl_FragColor=vec4(mix(vec3(.012,.018,.022),vec3(.20,.23,.24),chips),max(max(max(ao,contact),burn),shadow));}";
         GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){failed=1;return;}
         program=glCreateProgram();glAttachShader(program,v);glAttachShader(program,f);glLinkProgram(program);glDeleteShader(v);glDeleteShader(f);
@@ -107,6 +114,12 @@ static void ae_wall_finish(int nv,const g3s_point **points,int room,int side,int
     }
     int fade=grd_curcanv->cv_fade_level,blend=grd_curcanv->cv_blend_func;gr_settransblend(GR_FADE_OFF,GR_BLEND_NORMAL);
     glDepthMask(GL_FALSE);glEnable(GL_POLYGON_OFFSET_FILL);glPolygonOffset(-1,-1);glUseProgram(program);
+    glUniform1f(glGetUniformLocation(program,"detailed"),detailed);
+    if(detailed){
+        glActiveTexture(GL_TEXTURE0);glBindTexture(GL_TEXTURE_2D,ss_texture);glUniform1i(glGetUniformLocation(program,"silhouette"),0);
+        glUniform3fv(glGetUniformLocation(program,"shadowCenter"),1,ss_center);glUniform3fv(glGetUniformLocation(program,"shadowRight"),1,ss_right);glUniform3fv(glGetUniformLocation(program,"shadowUp"),1,ss_up);
+        glUniform2f(glGetUniformLocation(program,"shadowSize"),ss_width,ss_height);glUniform1f(glGetUniformLocation(program,"texel"),1.f/ss_size);
+    }
     glUniform4fv(glGetUniformLocation(program,"marks[0]"),6,marks);glUniform1f(glGetUniformLocation(program,"frame"),frame);
     glUniform4fv(glGetUniformLocation(program,"mount"),1,mount);
     glUniform1f(glGetUniformLocation(program,"refinement"),astra_refinement);
@@ -233,6 +246,11 @@ static void ae_door(int room,int side){
         float t=fminf(1,f2fl(ActiveDoors[i].time)/fmaxf(.01f,f2fl(WallAnims[wall->clip_num].play_time)));open=wall->state==WALL_DOOR_CLOSING?1-t:t;}
     if(astra_mine_door>=0&&(id==astra_mine_wall||id==astra_mine_wall2))open=astra_mine_door;
     g3_start_instance_matrix(&center,&basis);ax_count=0;ax_energy=0;
+    if(ss_capture&&open<.99f){
+        float half=w*.5f*(1-open);
+        for(int sign=-1;sign<=1;sign+=2)ag_box(sign*(w*.5f-half*.5f),0,0,half*.5f,h*.5f,.035f);
+        ax_flush(1,1);
+    }
     for(int side=-1;side<=1;side+=2){float x=side*w*.475f;
         ax_paint(.10f,.15f,.18f,0);ax_tube(x,-h*.46f,.11f,x,h*.46f,.11f,.19f,.19f,6);
         ax_paint(.40f,.47f,.49f,0);ax_tube(x-side*.22f,-h*.41f,.22f,x-side*.22f,h*(.05f+.33f*open),.22f,.065f,.065f,9);
@@ -242,6 +260,7 @@ static void ae_door(int room,int side){
             ax_tube(x,y-.25f,.32f,x,y+.25f,.32f,.055f,.055f,6);}}
     ax_flush(1,1);g3_done_instance();ae_doors++;
 }
+#include "astra_shadow_scene.inc"
 int astra_environment_reactor(object *obj){
     if(!ax_on()||obj->flags&OF_EXPLODING)return 0;g3s_point p;g3_rotate_point(&p,&obj->pos);if(p.p3_z<F1_0||p.p3_z>i2f(250))return 0;
     g3_start_instance_matrix(&obj->pos,&obj->orient);float r=f2fl(obj->size)*.78f,t=ae_clock();ax_count=0;ax_energy=0;
@@ -289,6 +308,7 @@ static void ae_haze_flush(void){
 }
 void astra_environment_rooms(const short *rooms,int count,int window_num){
     if(!ax_on())return;ae_reset();float t=ae_clock();int budget=0;
+    extern void astra_combat_fragments(void);astra_combat_fragments();
     for(int i=0;i<count;i++){int room=rooms[i];if(room<0||room>Highest_segment_index)continue;
         for(int side=0;side<6;side++)ae_door(room,side);
         if(astra_refinement){int side=astra_environment_bay(room);vms_vector c;vms_matrix b;float w,h;

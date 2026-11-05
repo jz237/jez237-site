@@ -2,7 +2,7 @@
 window.astraWeaponDemo={
   names:['Laser · level 1','Laser · level 4','Super laser · level 6','Vulcan cannon','Gauss cannon','Spreadfire cannon','Plasma cannon','Fusion cannon','Helix cannon','Phoenix cannon','Omega cannon','Concussion missile','Homing missile','Smart missile','Mega missile','Flash missile','Guided missile','Mercury missile','Earthshaker missile'],
   cycling:true,lastSwitch:0,
-  select(index){Module.weaponInspect=(index+this.names.length)%this.names.length;this.lastSwitch=performance.now();$('weaponSelect').value=String(Module.weaponInspect);},
+  select(index){Module.weaponInspect=(index+this.names.length)%this.names.length;this.lastSwitch=performance.now();Module.previewRestart=true;$('weaponSelect').value=String(Module.weaponInspect);},
   update(index){
     document.body.classList.add('weapon-range');
     $('weaponControls').hidden=false;$('previewTitle').textContent='COCKPIT FIRING RANGE';
@@ -15,7 +15,7 @@ window.astraWeaponDemo={
     $('previewPrevious').hidden=false;$('previewAgain').textContent='Next weapon →';
     $('weaponSelect').value=String(index);
     if(!this.lastSwitch)this.lastSwitch=performance.now();
-    if(this.cycling&&performance.now()-this.lastSwitch>5500)this.select(index+1);
+    if(this.cycling&&!Module.previewPaused&&Module.previewSpeed===1&&window.astraPlayback?.age>5.5)this.select(index+1);
   },
   open(){
     this.lastSwitch=0;this.cycling=true;this.controls(false);this.sync();

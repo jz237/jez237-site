@@ -63,6 +63,11 @@ static void ax_arc(float radius,float phase,float clock,int plane,float thicknes
     }
 }
 static void ax_flush(float scale,float opacity){
+    if(ss_capture){
+        vms_vector sizes={fl2f(scale),fl2f(scale),fl2f(scale)},zero={0};
+        if(!ax_energy&&opacity>.9f)ss_draw(ax_vertices[0].p,sizeof(ax_vertex),ax_count,&sizes,&zero);
+        ax_count=0;return;
+    }
     if(!ax_count||ax_failed)return;
     if(!ax_program){
         const char *vs="varying highp vec3 p,n,q;varying mediump vec4 color;uniform mat3 axis;uniform vec3 origin;void main(){q=gl_Vertex.xyz;p=axis*q+origin;n=normalize(axis*(gl_Normal));color=gl_Color;gl_Position=gl_ProjectionMatrix*vec4(p,1.);}";
@@ -77,7 +82,7 @@ static void ax_flush(float scale,float opacity){
     GLboolean cull=glIsEnabled(GL_CULL_FACE),depth=glIsEnabled(GL_DEPTH_TEST);glDisable(GL_CULL_FACE);glEnable(GL_DEPTH_TEST);
     gr_settransblend(GR_FADE_OFF,GR_BLEND_NORMAL);glDepthMask((!ax_energy||ax_energy==2)&&opacity>.99f?GL_TRUE:GL_FALSE);
     glUseProgram(ax_program);glUniform1f(glGetUniformLocation(ax_program,"energy"),ax_energy);glUniformMatrix3fv(glGetUniformLocation(ax_program,"axis"),1,GL_FALSE,axis);
-    glUniform3f(glGetUniformLocation(ax_program,"origin"),f2fl(p.p3_x),f2fl(p.p3_y),-f2fl(p.p3_z));glUniform1f(glGetUniformLocation(ax_program,"opacity"),opacity);glUniform1f(glGetUniformLocation(ax_program,"clock"),SDL_GetTicks()*.001f);
+    glUniform3f(glGetUniformLocation(ax_program,"origin"),f2fl(p.p3_x),f2fl(p.p3_y),-f2fl(p.p3_z));glUniform1f(glGetUniformLocation(ax_program,"opacity"),opacity);glUniform1f(glGetUniformLocation(ax_program,"clock"),astra_visual_clock());
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_NORMAL_ARRAY);glEnableClientState(GL_COLOR_ARRAY);
     glVertexPointer(3,GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].p);glNormalPointer(GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].n);glColorPointer(4,GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].color);
     glDrawArrays(GL_TRIANGLES,0,ax_count);glDisableClientState(GL_VERTEX_ARRAY);glDisableClientState(GL_NORMAL_ARRAY);glDisableClientState(GL_COLOR_ARRAY);
@@ -100,8 +105,8 @@ void astra_visual_fired(int parent){
 void astra_draw_mechanisms(object *obj){
     if(!ax_on()||obj->type!=OBJ_ROBOT||obj->ctype.ai_info.CLOAKED||obj->flags&OF_EXPLODING)return;
     g3s_point view;g3_rotate_point(&view,&obj->pos);if(view.p3_z<i2f(1)||view.p3_z>i2f(210))return;
-    robot_info *ri=&Robot_info[obj->id];float clock=f2fl((fix)(GameTime64%(F1_0*2000))),phase=clock*(2.1f+obj->id%5*.4f)+obj->signature;
-    int index=obj-Objects;float fired=100;
+    robot_info *ri=&Robot_info[obj->id];float damage=ac_damage_for(obj),clock=astra_preview_active?astra_preview_clock:f2fl((fix)(GameTime64%(F1_0*2000))),phase=clock*(2.1f+obj->id%5*.4f)*(1-damage*.7f)+obj->signature;
+    int index=ac_index(obj);float fired=100;
     if(index>=0&&index<MAX_OBJECTS&&ax_signature[index]==obj->signature)fired=(double)(GameTime64-ax_fired[index])/F1_0;
     float recoil=fired<.26f?.30f*expf(-fired*15):0,scale=fminf(.85f,fmaxf(.24f,f2fl(obj->size)*.14f));
     for(int g=0;g<ri->n_guns&&g<4;g++){
@@ -120,12 +125,12 @@ void astra_draw_mechanisms(object *obj){
     float ex=f2fl(pm->maxs.x-pm->mins.x)*.5f,top=f2fl(pm->maxs.y),rear=f2fl(pm->mins.z)*.68f;
     g3_start_instance_matrix(&obj->pos,&obj->orient);ax_count=0;
     for(int side=-1;side<=1;side+=2)for(int k=0;k<3;k++){
-        float x=side*ex*.48f,y=top*.92f,z=rear+k*scale*.52f,open=.15f+.16f*(.5f+.5f*sinf(clock*1.9f+k+side));
+        float x=side*ex*.48f,y=top*.92f,z=rear+k*scale*.52f,open=damage>.6f&&side<0?.55f+.04f*sinf(clock*19+k):.15f+.16f*(.5f+.5f*sinf(clock*1.9f+k+side));
         ax_paint(.18f,.25f,.29f,0);ax_tube(x-scale*.65f,y,z,x+scale*.65f,y+scale*open,z+scale*.16f,scale*.12f,scale*.12f,4);
         ax_paint(.06f,.63f,.84f,.65f);ax_tube(x-scale*.48f,y-scale*.02f,z,x+scale*.48f,y-scale*.02f,z,scale*.035f,scale*.035f,5);
     }
     ax_flush(1,1);
-    if(obj->shields<ri->strength/3&&((int)(clock*5)+obj->signature)%7<2){ax_count=0;ax_paint(.24f,.64f,1,1.5f);ax_arc(.77f,phase,clock,0,.009f);ax_flush(f2fl(obj->size),1);}
+    if(damage>.55f&&((int)(clock*5)+obj->signature)%7<2){ax_count=0;ax_paint(.24f,.64f,1,1.5f);ax_arc(.77f,phase,clock,0,.009f);ax_flush(f2fl(obj->size),1);}
     g3_done_instance();EM_ASM(Module.mechanismDraws=(Module.mechanismDraws||0)+1;);
 }
 static void ax_weapon_color(int id,int enemy){
@@ -241,7 +246,7 @@ void astra_render_omega(int window_num){
         af_omega *e=&af_omegas[n];if(!e->time||GameTime64<e->time||GameTime64-e->time>F1_0/10)continue;
         object *p=&Objects[e->parent];if(p->signature!=e->signature||p->type!=OBJ_PLAYER)continue;
         vms_matrix transpose;vm_copy_transpose_matrix(&transpose,&p->orient);
-        for(int gun=0;gun<2;gun++){vms_vector muzzle;vm_vec_rotate(&muzzle,&Player_ship->gun_points[gun],&transpose);vm_vec_add2(&muzzle,&p->pos);af_omega_arc(&muzzle,&e->goal,gun+p->signature,SDL_GetTicks()*.001f);}
+        for(int gun=0;gun<2;gun++){vms_vector muzzle;vm_vec_rotate(&muzzle,&Player_ship->gun_points[gun],&transpose);vm_vec_add2(&muzzle,&p->pos);af_omega_arc(&muzzle,&e->goal,gun+p->signature,astra_visual_clock());}
         EM_ASM(Module.omegaEmitters=2;Module.omegaVisualEvents=(Module.omegaVisualEvents||0)+1;);
     }
 }
@@ -319,7 +324,7 @@ int astra_draw_weapon(object *obj){
     /* Player Omega is drawn once as a continuous paired discharge. */
     if(id==OMEGA_ID&&obj->ctype.laser_info.parent_type==OBJ_PLAYER)return 1;
     g3s_point view;g3_rotate_point(&view,&obj->pos);if(view.p3_z<F1_0/4)return missile?0:1;
-    float age=fmaxf(0,(double)(GameTime64-obj->ctype.laser_info.creation_time)/F1_0),clock=SDL_GetTicks()*.001f;
+    float age=fmaxf(0,(double)(GameTime64-obj->ctype.laser_info.creation_time)/F1_0),clock=astra_visual_clock();
     vms_vector velocity=obj->mtype.phys_info.velocity;float speed=f2fl(vm_vec_mag(&velocity));vms_matrix axis=obj->orient;
     if(!missile&&speed>.01f){vm_vec_normalize(&velocity);vm_vector_2_matrix(&axis,&velocity,NULL,NULL);}
     float tail=fminf(age*speed,fminf(9.f,1.5f+speed*.035f));

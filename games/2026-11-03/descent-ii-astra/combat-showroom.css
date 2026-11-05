@@ -1,0 +1,13 @@
+#playbackControls,#combatControls{pointer-events:auto}
+#playbackControls{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:10px 0}
+#playbackControls[hidden],#combatControls[hidden]{display:none}
+#playbackControls button,#playbackControls select,#combatControls select{font:inherit;color:#e2f5f6;background:#142d37;border:1px solid #527480;border-radius:4px;min-height:36px;padding:5px 10px}
+#playbackControls label,#combatControls label{display:flex;align-items:center;gap:8px;font-size:13px;color:#c0d9df}
+#playbackControls .effect-timeline{flex:1 0 100%;gap:14px;font-variant-numeric:tabular-nums}
+#effectScrub{flex:1;min-width:80px;accent-color:#62e0f3;cursor:ew-resize}
+#effectTimestamp{min-width:115px}
+#shieldImpacts{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:9;overflow:hidden}
+.shield-ripple{fill:none;stroke:#60d9ff;stroke-linecap:round}
+.shield-marker{fill:none;stroke:#ffc187;stroke-width:2.2;stroke-linejoin:round}
+.shield-label{fill:#ffc187;font:9px system-ui,sans-serif;text-anchor:middle;letter-spacing:1px}
+@media(max-height:550px){#playbackControls{gap:5px;margin:5px 0}#playbackControls button,#playbackControls select{min-height:30px;padding:3px 8px}#previewPanel .preview-heading{padding-top:8px}#previewPanel .preview-heading h2{font-size:20px}}

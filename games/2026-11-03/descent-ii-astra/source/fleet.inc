@@ -10,15 +10,15 @@ static int af_enabled=-1,fleet_failed,af_draws;
 int astra_robot_id=-1;
 static GLint af_basis,af_origin,af_energy,af_flash,af_clock;
 static void af_program_init(void){
-    const char *vs="varying mediump vec2 uv;varying highp vec3 p,n,t;varying mediump float hand;"
+    const char *vs="varying mediump vec2 uv;varying highp vec3 p,n,t,q;varying mediump float hand;"
         "uniform mat3 axis;uniform vec3 origin;"
-        "void main(){p=axis*gl_Vertex.xyz+origin;gl_Position=gl_ProjectionMatrix*vec4(p,1.);"
+        "void main(){q=gl_Vertex.xyz;p=axis*q+origin;gl_Position=gl_ProjectionMatrix*vec4(p,1.);"
         "mat3 rot=mat3(normalize(axis[0]),normalize(axis[1]),normalize(axis[2]));"
         "n=normalize(rot*(gl_Color.xyz*2.-1.));hand=gl_Color.a*2.-1.;uv=gl_MultiTexCoord0.xy;"
         "vec2 e=gl_MultiTexCoord0.zw*2.-1.;vec3 v=vec3(e,1.-abs(e.x)-abs(e.y));"
         "if(v.z<0.)v.xy=(1.-abs(v.yx))*sign(v.xy+vec2(.000001));t=normalize(rot*v);}";
-    const char *fs="precision highp float;varying mediump vec2 uv;varying highp vec3 p,n,t;varying mediump float hand;"
-        "uniform sampler2D paint,detail;uniform vec3 energy;uniform vec4 flash;uniform float clock;"
+    const char *fs="precision highp float;varying mediump vec2 uv;varying highp vec3 p,n,t,q;varying mediump float hand;"
+        "uniform sampler2D paint,detail;uniform vec3 energy;uniform vec4 flash;uniform float clock,damage,identity;"
         "void main(){vec4 a=texture2D(paint,uv),m=texture2D(detail,uv);vec3 N=normalize(n),T=normalize(t-N*dot(t,N));"
         "vec2 xy=(m.xy*2.-1.)*.82;N=normalize(T*xy.x+cross(N,T)*hand*xy.y+N*sqrt(max(.06,1.-dot(xy,xy))));"
         "vec3 V=normalize(-p),K=normalize(vec3(-.63,.80,.82)),R=normalize(vec3(.72,.28,-.68));"
@@ -30,7 +30,13 @@ static void af_program_init(void){
         "color+=vec3(.09,.38,.46)*rim*(.35+max(dot(N,R),0.));"
         "vec3 F=flash.xyz-p;float fd=length(F);color+=vec3(1.,.40,.13)*flash.w/(1.+fd*fd*.01)*max(0.,dot(N,F/max(.1,fd)))*base;"
         "vec3 emission=mix(vec3(.20,.79,1.),max(base,vec3(.15)),smoothstep(.08,.42,max(base.r,base.g)-base.b));"
-        "color+=emission*pow(a.a,.77)*(1.32+.075*sin(clock*3.));gl_FragColor=vec4(color/(1.+.23*color),1.);}";
+        "color+=emission*pow(a.a,.77)*(1.32+.075*sin(clock*3.));"
+        "float patch=sin(q.x*7.+identity)*sin(q.y*6.-identity*.7)+sin(q.z*8.+q.x*4.)*.4;"
+        "float scar=smoothstep(1.3-damage*2.9,1.65-damage*2.9,patch)*smoothstep(.08,.3,damage);"
+        "float soot=.055+.035*sin(q.x*127.+q.z*53.)*sin(q.y*113.);color=mix(color,vec3(soot)*vec3(.73,.82,1.),scar*.88);"
+        "float seams=pow(max(0.,sin(q.x*30.+sin(q.y*24.)*.5)),24.)*pow(max(0.,sin(q.z*18.)),4.);"
+        "float core=scar*smoothstep(.40,.85,damage)*seams*(.7+.3*sin(clock*11.+q.z*13.));"
+        "color+=vec3(1.7,.32,.035)*core;gl_FragColor=vec4(color/(1.+.23*color),1.);}";
     GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);
     if(!v||!f){fleet_failed=1;return;}
     fleet_program=glCreateProgram();glAttachShader(fleet_program,v);glAttachShader(fleet_program,f);glLinkProgram(fleet_program);
@@ -94,10 +100,14 @@ int astra_draw_robot(int model,polymodel *pm,vms_angvec *angles,g3s_lrgb light){
     extent.x=extent.x*85/100;extent.y=extent.y*86/100;extent.z=extent.z*91/100;
     vms_vector center={(pm->maxs.x+pm->mins.x)/2,(pm->maxs.y+pm->mins.y)/2,(pm->maxs.z+pm->mins.z)/2};
     GLboolean cull=glIsEnabled(GL_CULL_FACE),depth=glIsEnabled(GL_DEPTH_TEST);
+    if(!ss_capture){
     glDisable(GL_CULL_FACE);glEnable(GL_DEPTH_TEST);glUseProgram(fleet_program);
     glUniform3f(af_energy,.51f+.62f*fminf(1.4f,f2fl(light.r)),.55f+.62f*fminf(1.4f,f2fl(light.g)),.58f+.62f*fminf(1.4f,f2fl(light.b)));
-    glUniform4fv(af_flash,1,astra_flash);glUniform1f(af_clock,SDL_GetTicks()*.001f);
+    glUniform4fv(af_flash,1,astra_flash);glUniform1f(af_clock,astra_visual_clock());
+    glUniform1f(glGetUniformLocation(fleet_program,"damage"),ac_damage_for(astra_robot_object));
+    glUniform1f(glGetUniformLocation(fleet_program,"identity"),astra_robot_object?(astra_robot_object->signature%137)*.37f:0);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_COLOR_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    }
     for(int b=0;b<af_models[id].count;b++){
         astra_batch *part=&af_models[id].group[b];
         int chain[MAX_SUBMODELS],n=0;
@@ -107,6 +117,7 @@ int astra_draw_robot(int model,polymodel *pm,vms_angvec *angles,g3s_lrgb light){
             while(j>0&&j<pm->n_models&&n<MAX_SUBMODELS-1){chain[n++]=j;vm_vec_sub2(&origin,&pm->submodel_offsets[j]);j=pm->submodel_parents[j];}
             for(int k=n-1;k>=0;k--){int i=chain[k];g3_start_instance_angles(&pm->submodel_offsets[i],&angles[i]);}
         }
+        if(ss_capture){ss_draw(part->v,44,part->count,&extent,&origin);while(n--)g3_done_instance();continue;}
         g3s_point pt;g3_rotate_point(&pt,&origin);glUniform3f(af_origin,f2fl(pt.p3_x),f2fl(pt.p3_y),-f2fl(pt.p3_z));
         float m[9];for(int k=0;k<3;k++){
             vms_vector delta={0,0,0},rot;if(k==0)delta.x=extent.x;else if(k==1)delta.y=extent.y;else delta.z=extent.z;
@@ -119,6 +130,7 @@ int astra_draw_robot(int model,polymodel *pm,vms_angvec *angles,g3s_lrgb light){
         }
         while(n--)g3_done_instance();
     }
+    if(ss_capture)return 1;
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);glDisableClientState(GL_COLOR_ARRAY);glDisableClientState(GL_VERTEX_ARRAY);
     glUseProgram(0);if(cull)glEnable(GL_CULL_FACE);if(!depth)glDisable(GL_DEPTH_TEST);
     af_draws++;

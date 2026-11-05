@@ -11,6 +11,10 @@ static int astra_keep_panel(unsigned char *p,int count){
     float x=(sum[0]/count-astra_shell_center.x)/fmaxf(1,astra_shell_extents.x);
     float y=(sum[1]/count-astra_shell_center.y)/fmaxf(1,astra_shell_extents.y);
     float z=(sum[2]/count-astra_shell_center.z)/fmaxf(1,astra_shell_extents.z);
+    extern float astra_panel_damage(void);float damage=astra_panel_damage();
+    /* Selected outer plates are lost only after heavy damage. Native hitboxes
+     * remain unchanged; the detailed inner chassis is visible underneath. */
+    if(damage>.6f&&sinf(x*23+y*17+z*31)>.85f-(damage-.6f))return 0;
     return fabsf(x)>.70f || y>.69f || (y<-.64f&&z>.12f) || (z<-.79f&&fabsf(x)>.24f);
 }
 

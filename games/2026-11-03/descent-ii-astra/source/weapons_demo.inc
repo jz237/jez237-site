@@ -11,13 +11,13 @@ static void aw_quad(float x,float y,float z,float X,float Y,float Z,int side){
 }
 void astra_weapon_showcase(int index,float clock){
     if(index<0||index>=19)return;
-    static int selected=-1,sounded=-1;static float began,last_clock;
-    if(selected!=index||clock<last_clock){selected=index;began=clock;sounded=-1;digi_stop_digi_sounds();}
-    last_clock=clock;float elapsed=clock-began;int id=aw_ids[index];weapon_info *wi=&Weapon_info[id];
+    static int selected=-1,sounded=-1;static float last_clock;
+    if(selected!=index||clock<last_clock){selected=index;sounded=-1;digi_stop_digi_sounds();}
+    last_clock=clock;float elapsed=clock;int id=aw_ids[index];weapon_info *wi=&Weapon_info[id];
     float cadence=fmaxf(.06f,f2fl(wi->fire_wait));if(id==FUSION_ID)cadence=1.25f;
     if(id==OMEGA_ID)cadence=.12f;
     int volley=(int)floorf(elapsed/cadence);
-    if(volley!=sounded){if(wi->flash_sound>=0)digi_play_sample(wi->flash_sound,F1_0/3);sounded=volley;}
+    if(volley!=sounded){if(!astra_preview_silent&&wi->flash_sound>=0)digi_play_sample(wi->flash_sound,F1_0/3);sounded=volley;}
     ax_count=0;
     for(int i=0;i<10;i++){
         float z=5+i*16,Z=z+15.6f;

@@ -2,14 +2,26 @@
    so every panel follows its original subobject, including firing animations. */
 static int astra_mesh_faces;
 static int astra_plates_enabled=-1;
+extern int astra_shadowing(void);
+extern int astra_shadow_face(int,const g3s_point**);
 static void astra_plate(int n,const g3s_point **outer,g3s_uvl *uv,g3s_lrgb *light,
                         grs_bitmap *bitmap, const vms_vector *normal)
 {
+    if(astra_shadow_face(n,outer))return;
     if(astra_plates_enabled<0) astra_plates_enabled=EM_ASM_INT(return !!Module.astra);
     if(!astra_plates_enabled || n<3 || n>=MAX_POINTS_PER_POLY || outer[0]->p3_z>i2f(160)) {
         g3_draw_tmap(n,outer,uv,light,bitmap); return;
     }
     astra_mesh_faces++;
+    extern float astra_panel_damage(void);
+    float damage=astra_panel_damage();g3s_lrgb worn[MAX_POINTS_PER_POLY];
+    if(damage>.08f){
+        float patch=.5f+.5f*sinf(f2fl(normal->x)*17+f2fl(normal->y)*11+f2fl(normal->z)*23);
+        float burn=fminf(.80f,fmaxf(0,(damage-.1f)*(.7f+patch)));
+        for(int i=0;i<n;i++){
+            worn[i].r=(fix)(light[i].r*(1-burn));worn[i].g=(fix)(light[i].g*(1-burn*.97f));worn[i].b=(fix)(light[i].b*(1-burn*.91f));
+        }light=worn;
+    }
     vms_vector center={0,0,0}, local_lift, lift;
     g3s_uvl tuv={0,0,0};
     for(int i=0;i<n;i++) {

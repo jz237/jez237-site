@@ -20,6 +20,7 @@ int astra_draw_pyro(g3s_lrgb light)
         if(read_png("pyro-skin.png",&coat)){glGenTextures(1,&skin);glBindTexture(GL_TEXTURE_2D,skin);
           glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,coat.width,coat.height,0,GL_RGB,GL_UNSIGNED_BYTE,coat.data);glGenerateMipmap(GL_TEXTURE_2D);free(coat.data);}
     }
+    if(ss_capture){vms_vector scale={F1_0,F1_0,F1_0},zero={0};ss_draw(src,36,count,&scale,&zero);return 1;}
     for(int i=0;i<count;i++){
         float *a=src+i*9,*b=verts+i*9;
         vms_vector local={(fix)(a[0]*65536),(fix)(a[1]*65536),(fix)(a[2]*65536)};

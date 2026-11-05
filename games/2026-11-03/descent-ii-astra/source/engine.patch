@@ -1,5 +1,5 @@
 diff --git a/d2/3d/interp.c b/d2/3d/interp.c
-index daca4c2..141d715 100644
+index daca4c2..5f24025 100644
 --- a/d2/3d/interp.c
 +++ b/d2/3d/interp.c
 @@ -58,10 +58,15 @@ void g3_set_interp_points(g3s_point *pointlist)
@@ -38,7 +38,7 @@ index daca4c2..141d715 100644
  
  				Assert( nv < MAX_POINTS_PER_POLY );
 -				if (g3_check_normal_facing(vp(p+4),vp(p+16)) > 0) {
-+				if (astra_keep_panel(p,nv) && g3_check_normal_facing(vp(p+4),vp(p+16)) > 0) {
++				if (astra_keep_panel(p,nv) && (astra_shadowing() || g3_check_normal_facing(vp(p+4),vp(p+16)) > 0)) {
  					int i;
  #ifdef FADE_FLATPOLY
  					short c;
@@ -71,7 +71,7 @@ index daca4c2..141d715 100644
  
  				Assert( nv < MAX_POINTS_PER_POLY );
 -				if (g3_check_normal_facing(vp(p+4),vp(p+16)) > 0) {
-+				if (astra_keep_panel(p,nv) && g3_check_normal_facing(vp(p+4),vp(p+16)) > 0) {
++				if (astra_keep_panel(p,nv) && (astra_shadowing() || g3_check_normal_facing(vp(p+4),vp(p+16)) > 0)) {
  					int i;
  					g3s_lrgb light, *lrgb_list;
  
@@ -171,7 +171,7 @@ index c5cca0b..687d249 100644
 +
 +
 diff --git a/d2/arch/ogl/ogl.c b/d2/arch/ogl/ogl.c
-index c536c46..d6187d6 100644
+index c536c46..a983af2 100644
 --- a/d2/arch/ogl/ogl.c
 +++ b/d2/arch/ogl/ogl.c
 @@ -198,6 +198,7 @@ void ogl_init_texture(ogl_texture* t, int w, int h, int flags)
@@ -194,11 +194,13 @@ index c536c46..d6187d6 100644
  		if (!(GameBitmaps[i].bm_flags & BM_FLAG_PAGED_OUT))
  			ogl_loadbmtexture(&GameBitmaps[i]);
  	}
-@@ -765,6 +769,22 @@ void draw_tmap_flat(grs_bitmap *bm,int nv,g3s_point **vertlist){
+@@ -765,6 +769,25 @@ void draw_tmap_flat(grs_bitmap *bm,int nv,g3s_point **vertlist){
  extern void (*tmap_drawer_ptr)(grs_bitmap *bm,int nv,g3s_point **vertlist);
  
  
 +#include "astra_shader.inc"
++#include "astra_combat.inc"
++#include "astra_shadows.inc"
 +#include "astra_pyro.inc"
 +#include "astra_fleet.inc"
 +#include "astra_pickups.inc"
@@ -212,12 +214,13 @@ index c536c46..d6187d6 100644
 +#include "astra_blast.inc"
 +#include "astra_debris.inc"
 +#include "astra_weapons_demo.inc"
++#include "astra_combat_render.inc"
 +#include "astra_streaming.inc"
 +
  /*
   * Everything texturemapped (walls, robots, ship)
   */ 
-@@ -825,8 +845,9 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
+@@ -825,8 +848,9 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
  	if (tmap_drawer_ptr == draw_tmap) {
  		glTexCoordPointer(2, GL_FLOAT, 0, texcoord_array);  
  	}
@@ -228,7 +231,7 @@ index c536c46..d6187d6 100644
  	
  	glDisableClientState(GL_VERTEX_ARRAY);
  	glDisableClientState(GL_COLOR_ARRAY);
-@@ -840,6 +861,7 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
+@@ -840,6 +864,7 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
   */
  bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_lrgb *light_rgb, grs_bitmap *bmbot, grs_bitmap *bmovl, int orient)
  {
@@ -236,7 +239,7 @@ index c536c46..d6187d6 100644
  	int c, index2, index3, index4;
  	GLfloat vertex_array[MAX_VERTS * 3], color_array[MAX_VERTS * 4], texcoordovl_array[MAX_VERTS * 2];
  #ifdef OGL_MERGE
-@@ -919,8 +941,10 @@ bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_
+@@ -919,8 +944,10 @@ bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_
  #ifndef OGL_MERGE
  	glVertexPointer(3, GL_FLOAT, 0, vertex_array);
  	glColorPointer(4, GL_FLOAT, 0, color_array);
@@ -248,7 +251,7 @@ index c536c46..d6187d6 100644
  	glDisableClientState(GL_VERTEX_ARRAY);
  	glDisableClientState(GL_COLOR_ARRAY);
  	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-@@ -959,7 +983,9 @@ bool g3_draw_bitmap_full(vms_vector *pos,fix width,fix height,grs_bitmap *bm,
+@@ -959,7 +986,9 @@ bool g3_draw_bitmap_full(vms_vector *pos,fix width,fix height,grs_bitmap *bm,
  	int i;
  	GLfloat vertex_array[12], color_array[16], texcoord_array[8];
  
@@ -259,7 +262,7 @@ index c536c46..d6187d6 100644
  	v1.z=0;
  	
  	glEnableClientState(GL_VERTEX_ARRAY);
-@@ -1140,6 +1166,7 @@ void ogl_set_blending()
+@@ -1140,6 +1169,7 @@ void ogl_set_blending()
  GLubyte *pixels = NULL;
  
  void ogl_start_frame(void){
@@ -267,7 +270,7 @@ index c536c46..d6187d6 100644
  	#ifdef OGL_MERGE
  	GLfloat mat[16];
  	#endif
-@@ -1171,7 +1198,7 @@ void ogl_start_frame(void){
+@@ -1171,7 +1201,7 @@ void ogl_start_frame(void){
  #ifdef OGLES
  	perspective(90.0,1.0,0.1,5000.0);   
  #else
@@ -276,7 +279,7 @@ index c536c46..d6187d6 100644
  #endif
  	glMatrixMode(GL_MODELVIEW);
  	glLoadIdentity();//clear matrix
-@@ -1183,6 +1210,7 @@ void ogl_start_frame(void){
+@@ -1183,6 +1213,7 @@ void ogl_start_frame(void){
  }
  
  void ogl_end_frame(void){
@@ -284,7 +287,7 @@ index c536c46..d6187d6 100644
  	OGL_VIEWPORT(0,0,grd_curscreen->sc_w,grd_curscreen->sc_h);
  	glMatrixMode(GL_PROJECTION);
  	glLoadIdentity();//clear matrix
-@@ -1208,6 +1236,13 @@ void gr_flip(void)
+@@ -1208,6 +1239,13 @@ void gr_flip(void)
  
  	ogl_do_palfx();
  	ogl_swap_buffers_internal();
@@ -298,7 +301,7 @@ index c536c46..d6187d6 100644
  	glClear(GL_COLOR_BUFFER_BIT);
  }
  
-@@ -1256,7 +1291,7 @@ void ogl_init_pixel_buffers(int w, int h)
+@@ -1256,7 +1294,7 @@ void ogl_init_pixel_buffers(int w, int h)
  
  	if (texbuf)
  		d_free(texbuf);
@@ -307,7 +310,7 @@ index c536c46..d6187d6 100644
  
  	if ((pixels == NULL) || (texbuf == NULL))
  		Error("Not enough memory for current resolution");
-@@ -1272,7 +1307,7 @@ void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width
+@@ -1272,7 +1310,7 @@ void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width
  {
  	int x,y,c,i;
  
@@ -316,7 +319,7 @@ index c536c46..d6187d6 100644
  		Error("Texture is too big: %ix%i", width, height);
  
  	if (data_format) { // true color bitmap?
-@@ -1568,7 +1603,7 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
+@@ -1568,7 +1606,7 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
  	glGenTextures (1, &tex->handle);
  #ifndef OGLES
  	//set priority
@@ -325,7 +328,7 @@ index c536c46..d6187d6 100644
  #endif
  	// Give our data to OpenGL.
  	OGL_BINDTEXTURE(tex->handle);
-@@ -1595,17 +1630,14 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
+@@ -1595,17 +1633,14 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
  #ifndef OGLES // see comment above
  	if (texfilt)
  	{
@@ -346,7 +349,7 @@ index c536c46..d6187d6 100644
  			tex->tw, tex->th, 0, tex->format, // RGBA textures.
  			GL_UNSIGNED_BYTE, // imageData is a GLubyte pointer.
  			bufP);
-@@ -1644,6 +1676,10 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
+@@ -1644,6 +1679,10 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
  }
  #endif
  
@@ -357,7 +360,7 @@ index c536c46..d6187d6 100644
  void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  {
  	unsigned char *buf;
-@@ -1668,6 +1704,7 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+@@ -1668,6 +1707,7 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  			con_printf(CON_DEBUG,"%s: %ux%ux%i p=%i(%i) c=%i a=%i chans=%i\n", filename, pdata.width, pdata.height, pdata.depth, pdata.paletted, pdata.num_palette, pdata.color, pdata.alpha, pdata.channels);
  			if (pdata.depth == 8 && pdata.color)
  			{
@@ -365,7 +368,7 @@ index c536c46..d6187d6 100644
  				if (bm->gltexture == NULL)
  					ogl_init_texture(bm->gltexture = ogl_get_free_texture(), pdata.width, pdata.height, ((pdata.alpha || bm->bm_flags & BM_FLAG_TRANSPARENT) ? OGL_FLAG_ALPHA : 0));
  				unsigned char *data = pdata.data;
-@@ -1688,6 +1725,7 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+@@ -1688,6 +1728,7 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  				if (pdata.palette)
  					free(pdata.palette);
  				bm->gltexture->is_png = 1;
@@ -373,7 +376,7 @@ index c536c46..d6187d6 100644
  				return;
  			}
  			else
-@@ -1983,3 +2021,8 @@ void ogl_update_window_clip()
+@@ -1983,3 +2024,8 @@ void ogl_update_window_clip()
  		glEnable(GL_SCISSOR_TEST);
  	}
  }
@@ -649,7 +652,7 @@ index af0b258..8bd08a5 100644
  
  extern ogl_texture* ogl_get_free_texture();
 diff --git a/d2/main/collide.c b/d2/main/collide.c
-index fdb2e78..20d3027 100644
+index fdb2e78..581a988 100644
 --- a/d2/main/collide.c
 +++ b/d2/main/collide.c
 @@ -649,6 +649,10 @@ int check_effect_blowup(segment *seg,int side,vms_vector *pnt, object *blower, i
@@ -663,7 +666,15 @@ index fdb2e78..20d3027 100644
  	int blew_up;
  	int wall_type;
  	int playernum;
-@@ -2215,6 +2219,8 @@ extern fix64 Buddy_sorry_time;
+@@ -1341,6 +1345,7 @@ int apply_damage_to_robot(object *robot, fix damage, int killer_objnum)
+ //		Boss_been_hit = 1;
+ 
+ 	robot->shields -= damage;
++    {extern void astra_robot_hit(object*,fix);astra_robot_hit(robot,damage);}
+ 
+ 	//	Do unspeakable hacks to make sure player doesn't die after killing boss.  Or before, sort of.
+ 	if (Robot_info[robot->id].boss_flag)
+@@ -2215,6 +2220,8 @@ extern fix64 Buddy_sorry_time;
  
  void apply_damage_to_player(object *playerobj, object *killer, fix damage, ubyte possibly_friendly)
  {
@@ -672,8 +683,32 @@ index fdb2e78..20d3027 100644
  	if (Player_is_dead)
  		return;
  
+@@ -2238,6 +2245,7 @@ void apply_damage_to_player(object *playerobj, object *killer, fix damage, ubyte
+ 
+ 	if (playerobj->id == Player_num) {		//is this the local player?
+ 		Players[Player_num].shields -= damage;
++        {extern void astra_player_hit(object*,object*,fix);astra_player_hit(playerobj,killer,damage);}
+ 		PALETTE_FLASH_ADD(f2i(damage)*4,-f2i(damage/2),-f2i(damage/2));	//flash red
+ 
+ 		if (Players[Player_num].shields < 0)	{
+@@ -2768,6 +2776,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
+ 		return;
+ 	}
+ 
++	extern void astra_contact(const vms_vector*);astra_contact(collision_point);
+ 	collision_type = COLLISION_OF(A->type,B->type);
+ 
+ 	switch( collision_type )	{
+@@ -2825,6 +2834,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
+ 	default:
+ 		Int3();	//Error( "Unhandled collision_type in collide.c!\n" );
+ 	}
++    astra_contact(NULL);
+ }
+ 
+ #define ENABLE_COLLISION(type1,type2)					\
 diff --git a/d2/main/fireball.c b/d2/main/fireball.c
-index fe9b0d1..3bfd338 100644
+index fe9b0d1..62597cf 100644
 --- a/d2/main/fireball.c
 +++ b/d2/main/fireball.c
 @@ -22,6 +22,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
@@ -904,7 +939,17 @@ index fe9b0d1..3bfd338 100644
  	obj->ctype.expl_info.spawn_time = -1;
  	obj->ctype.expl_info.delete_objnum = -1;
  	obj->ctype.expl_info.delete_time = -1;
-@@ -439,10 +646,13 @@ object *object_create_debris(object *parent, int subobj_num)
+@@ -287,7 +494,8 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
+ 									}
+ 
+ 									// Explosions CAN be friendly fire.
+-									apply_damage_to_player(obj0p, killer, damage, 1);
++									{extern void astra_contact(const vms_vector*);astra_contact(&objp->pos);
++                                    apply_damage_to_player(obj0p, killer, damage, 1);astra_contact(NULL);}
+ 								}
+ 							}
+ 								break;
+@@ -439,10 +647,13 @@ object *object_create_debris(object *parent, int subobj_num)
  
  }
  
@@ -920,7 +965,7 @@ index fe9b0d1..3bfd338 100644
  
  }
  
-@@ -1620,3 +1830,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
+@@ -1620,3 +1831,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
  			expl_wall_swap(&ew[i], swap);
  }
  
@@ -1866,20 +1911,21 @@ index 163e08a..b4b8672 100644
  	lb->item = items;
  	lb->citem = default_item;
 diff --git a/d2/main/object.c b/d2/main/object.c
-index 602b2d5..cb589a5 100644
+index 602b2d5..06297d1 100644
 --- a/d2/main/object.c
 +++ b/d2/main/object.c
-@@ -425,6 +425,9 @@ void draw_cloaked_object(object *obj,g3s_lrgb light,fix *glow,fix64 cloak_start_
+@@ -425,6 +425,10 @@ void draw_cloaked_object(object *obj,g3s_lrgb light,fix *glow,fix64 cloak_start_
  //draw an object which renders as a polygon model
  void draw_polygon_object(object *obj)
  {
 +	extern int astra_hull,astra_robot_id;
 +    astra_robot_id=(obj->type==OBJ_ROBOT)?obj->id:-1;
++    extern object *astra_robot_object;astra_robot_object=(obj->type==OBJ_ROBOT)?obj:NULL;
 +	astra_hull=(obj->type==OBJ_PLAYER || obj->type==OBJ_ROBOT || obj->type==OBJ_COOP);
  	g3s_lrgb light;
  	int	imsave;
  	fix engine_glow_value[2];		//element 0 is for engine glow, 1 for headlight
-@@ -776,6 +779,10 @@ void render_object(object *obj)
+@@ -776,6 +780,10 @@ void render_object(object *obj)
  	mld_save = Max_linear_depth;
  	Max_linear_depth = Max_linear_depth_objects;
  
@@ -1890,7 +1936,7 @@ index 602b2d5..cb589a5 100644
  	switch (obj->render_type)
  	{
  		case RT_NONE:
-@@ -785,7 +792,10 @@ void render_object(object *obj)
+@@ -785,7 +793,10 @@ void render_object(object *obj)
  			if ( PlayerCfg.AlphaEffects && obj->type == OBJ_MARKER ) // set nice transparency/blending for certrain objects
  				gr_settransblend( 10, GR_BLEND_ADDITIVE_A );
  
@@ -1902,7 +1948,7 @@ index 602b2d5..cb589a5 100644
  
  			if (obj->type == OBJ_ROBOT) //"warn" robot if being shot at
  				set_robot_location_info(obj);
-@@ -841,6 +851,7 @@ void render_object(object *obj)
+@@ -841,6 +852,7 @@ void render_object(object *obj)
  			Error("Unknown render_type <%d>",obj->render_type);
  	}
  
@@ -1910,16 +1956,17 @@ index 602b2d5..cb589a5 100644
  	gr_settransblend( GR_FADE_OFF, GR_BLEND_NORMAL ); // revert any transparency/blending setting back to normal
  
  	if ( obj->render_type != RT_NONE && Newdemo_state == ND_STATE_RECORDING )
-@@ -910,6 +921,8 @@ void init_player_object()
+@@ -910,6 +922,9 @@ void init_player_object()
  //sets up the free list & init player & whatever else
  void init_objects()
  {
 +    extern void astra_clear_plumes(void);astra_clear_plumes();
-+    {extern void astra_environment_clear(void);astra_environment_clear();}
++    {extern void astra_environment_clear(void);astra_environment_clear();
++     extern void astra_combat_clear(void);astra_combat_clear();}
  	int i;
  
  	collide_init();
-@@ -2145,7 +2158,11 @@ void object_move_all()
+@@ -2145,7 +2160,11 @@ void object_move_all()
  
  	obj_delete_all_that_should_be_dead();
  

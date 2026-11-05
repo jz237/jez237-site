@@ -3,7 +3,7 @@ extern int astra_gallery_scene,astra_gallery_room,astra_gallery_side;
 int astra_refinement=1;
 static int ag_faces,ag_rocks,ag_props,ag_shadows,ag_air;
 static void ae_haze_flush(void);
-static void ag_begin(void){ag_faces=ag_rocks=ag_props=ag_shadows=ag_air=0;}
+static void ag_begin(void){ag_faces=ag_rocks=ag_props=ag_shadows=ag_air=0;ss_passes=ss_draws=0;ss_quality=EM_ASM_INT(return Math.max(0,Math.min(2,Module.shadowQuality||0)));}
 static float ag_noise(float x){float v=sinf(x*127.17f+3.13f)*43758.5453f;return v-floorf(v);}
 /* One equipment bay per room, always on an ordinary solid wall. */
 int astra_environment_bay(int room){
@@ -21,8 +21,8 @@ static int ag_exhibit(object *ship){
     if(!ae_basis(astra_gallery_room,astra_gallery_side,&c,&b,&w,&h))return 0;
     int id=-1;for(int i=0;i<N_robot_types;i++)if(!Robot_info[i].boss_flag&&!Robot_info[i].companion&&Polygon_models[Robot_info[i].model_num].rad<i2f(4)){id=i;break;}
     if(id<0)return 0;
-    memset(ship,0,sizeof *ship);ship->type=OBJ_ROBOT;ship->id=id;ship->segnum=astra_gallery_room;ship->rtype.pobj_info.model_num=Robot_info[id].model_num;
-    ship->size=Polygon_models[Robot_info[id].model_num].rad;ship->pos=c;
+    memset(ship,0,sizeof *ship);ship->type=OBJ_ROBOT;ship->render_type=RT_POLYOBJ;ship->id=id;ship->segnum=astra_gallery_room;ship->rtype.pobj_info.model_num=Robot_info[id].model_num;
+    ship->size=Polygon_models[Robot_info[id].model_num].rad;ship->shields=Robot_info[id].strength;ship->pos=c;
     float t=ae_clock(),r=f2fl(ship->size);
     vm_vec_scale_add2(&ship->pos,&b.rvec,fl2f(sinf(t*.48f)*fminf(w*.15f,3)));
     vm_vec_scale_add2(&ship->pos,&b.uvec,fl2f(cosf(t*.35f)*.65f));
@@ -33,7 +33,7 @@ static int ag_exhibit(object *ship){
 /* Soft hull/wing silhouettes projected toward the wall from the local key light.
  * Native orientation and wall clearance drive their motion and penumbra. */
 static int ag_shadow_data(int room,int face,float *pos,float *axis,float *up){
-    if(!astra_refinement)return 0;vms_vector center;vms_matrix b;float w,h;
+    if(!astra_refinement||ss_quality)return 0;vms_vector center;vms_matrix b;float w,h;
     if(!ae_basis(room,face,&center,&b,&w,&h))return 0;
     object exhibit;int has_exhibit=ag_exhibit(&exhibit),count=0;
     int next=Segments[room].objects;
@@ -190,7 +190,8 @@ static void ag_atmosphere(int room,int face,int theme,float w,float h){
 }
 static void ag_render_exhibit(void){
     object o;if(!ag_exhibit(&o))return;
-    g3_start_instance_matrix(&o.pos,&o.orient);int saved=astra_robot_id;astra_robot_id=o.id;
-    g3s_lrgb light={F1_0,F1_0,F1_0};astra_draw_robot(o.rtype.pobj_info.model_num,&Polygon_models[o.rtype.pobj_info.model_num],NULL,light);
-    astra_robot_id=saved;g3_done_instance();
+    int saved=astra_robot_id;object *saved_object=astra_robot_object;astra_robot_id=o.id;astra_robot_object=&o;
+    extern int astra_hull;int saved_hull=astra_hull;astra_hull=1;
+    g3s_lrgb light={F1_0,F1_0,F1_0};fix glow[2]={F1_0,0};draw_polygon_model(&o.pos,&o.orient,o.rtype.pobj_info.anim_angles,o.rtype.pobj_info.model_num,0,light,glow,NULL);
+    astra_hull=saved_hull;astra_robot_id=saved;astra_robot_object=saved_object;
 }
