@@ -8,46 +8,49 @@ separate from Hidden Reef. Intended URL:
 Visual-library steering: `1567935803869495328`, 2026-11-05. Make it mostly visual,
 reuse the two ich images, and prepare image spaces rather than generate a library.
 
-Complete-example steering: `1567945894068748309`, 2026-11-05. Fill all six
-freshwater ich views and connect the whole process on-site. Do not send users to
-ChatGPT or ask them to submit images for analysis. This supersedes the original
-local-photo preview and external AI handoff. Direct walkthrough:
-`https://jez237.com/experiments/fish-health-lab/#ich`.
+Complete-example steering: `1567945894068748309`, 2026-11-05. Fill the six
+freshwater ich image slots; keep the experience on-site without ChatGPT or photo
+submission.
+
+UX correction: `1567958813586362369`, 2026-11-05. The disease-first opening was
+confusing: ich posters appeared before the user had started. The front door is
+now a neutral Start screen, not the library or a named-disease walkthrough.
+Old `#ich` links intentionally open this same neutral screen.
 
 ## Product contract
 
 - Buildless static HTML/CSS/ES modules. No credentials, account, API endpoint,
   dependency installation, paid inference, backend storage or photo upload.
-- A 3-step visual symptom + water-context guide suggests **reading comparisons**,
-  not diagnoses, confidence percentages or medication prescriptions.
-- The default page is the visual library: 12 appearance filters and 15 starter
-  entries. Every entry has six gallery spaces (90 total): whole-fish guide,
-  different fish, close-up, subtle appearance, marked changes, and look-alikes.
-  Six are filled with ich illustrations; 84 remain honest placeholders.
-- Choose two entries for a side-by-side comparison, including gallery switches,
-  overlapping clues, distinctions and confirmation checks. Empty slots are not
-  photographic examples.
-- The complete ich walkthrough uses three illustrated pairs: whole fish and
-  variations, close-up and look-alikes, subtle and marked changes. Users select
-  what they see, then check tank context and view adaptive next comparisons.
-  It is freshwater-only; marine/unknown choices lead to the general guide.
-  Non-grain patterns do not force an ich conclusion. Visible extent is recorded
-  but never used as a disease-severity or diagnostic scoring input.
-- “Check this visible pattern” selects only one observed sign and, for an
-  environment-specific entry, its water type. It never treats a visual-page
-  choice as a diagnosis or adds diagnostic weight. Case notes explicitly label
-  the origin and comparison choices as user choices, not AI analysis.
-- Freshwater and marine causes remain distinct. Unknown water type is explicit.
-- Severe gasping, collapse, deaths, pineconing and marine respiratory/dust signs
-  get priority warnings. Water testing stays visible even when signs look infectious.
-- Blank tests are unknown, never silently zero. Nitrite cautions distinguish
-  freshwater and marine water. No universal treatment/dose/heat/salt advice.
-- No photo picker, personal-photo preview, photo upload, image recognition,
-  external chatbot link, AI prompt, browser storage or hidden inference call.
-- Case builder provides observation notes only, with explicit copy and local
-  text download for the user or a fish-health professional. No data submission.
-- Unlisted and `noindex`; not password protected. No homepage/nav/sitemap entry.
-  Do not integrate or deploy this into Hidden Reef without a separate request.
+- Start → water type → choose the main visible symptom → behavior → optional
+  water readings/tank history → comparisons. Only one question screen is shown.
+  Freshwater + white dots adds a texture question; it does not preselect ich.
+- No reference images are rendered or fetched on the welcome, water, or initial
+  symptom screens. A relevant texture reference can appear after an explicit
+  freshwater + white-dots choice. Other symptoms bypass that branch.
+- One clear Start button; Back preserves choices. Changing water or the primary
+  symptom clears the dependent texture answer. Start over clears observations.
+  Numeric water readings are validated, and blank remains unknown, not zero.
+- Results show a relevant comparison, look-alikes and next checks, never diagnostic
+  probabilities or prescriptions. Urgent distress and water issues take priority.
+- The Reference library is a separate, opt-in view. Returning preserves the check.
+  It has 15 entries, 12 appearance filters, water-type/search filters and six
+  gallery slots per entry (90 total). Six ich sheets are filled; 84 other slots
+  remain honest placeholders. No additional images generated for this UX change.
+- All six ich sheets remain accessible in a one-picture-at-a-time gallery:
+  whole-fish guide, different fish, close-up, subtle appearance, marked changes,
+  and look-alikes. Appearance is not a disease stage or severity score.
+- Two-entry reference comparison remains available in the library. A deliberate
+  “Check this visible pattern” selection starts the same question flow, with
+  only the visible sign and relevant water type preselected—not a diagnosis.
+  Library selections add no ranking weight.
+- Freshwater and marine causes remain distinct; unknown water stays explicit.
+  Severe gasping, collapse, deaths, pineconing and marine respiratory/dust signs
+  retain priority warnings. No universal treatment/dose/heat/salt advice.
+- No photo picker/preview/upload, image recognition, external chatbot link, AI
+  prompt, browser storage or hidden inference call. Notes can be copied or
+  downloaded for the user or a fish-health professional; no data submission.
+- Unlisted and `noindex`, not password protected. No homepage/nav/sitemap entry.
+  Never integrate/deploy this into Hidden Reef without a separate request.
 
 ## Content / assets
 
@@ -114,27 +117,32 @@ that every condition has a distinct visible presentation.
 
 ## Verification
 
-Run `node --test scripts/fish-health-lab/logic.test.mjs` and JS syntax checks.
-Run `browser-check.mjs`, `visual-browser-check.mjs` and `ich-browser-check.mjs`
-in this directory.
-Use an isolated headless Playwright browser for local and production checks:
-desktop/mobile overflow, water selection, visible-sign toggles, forward/back,
-urgent notices, numeric validation, environment filtering, library search,
-details/atlas dialogs, all six ich images, every walkthrough branch, reset,
-observation copy/export, absent photo inputs and absent chatbot links.
-Record requests during the walkthrough; observations must not be transmitted.
-The parent site's existing analytics and Cloudflare browser-check requests are
-recorded separately from application submissions; observation-leak checks still
-inspect every request, including that platform traffic.
-Staged diff secret scanner required before committing and deploying.
+Run `node --test scripts/fish-health-lab/logic.test.mjs` and syntax checks.
+Run `browser-check.mjs` and `visual-browser-check.mjs` locally and on production.
+The obsolete disease-first `ich-browser-check.mjs` is retired; its relevant
+branch, image, privacy and mobile coverage is included in the current suites.
 
-Deploy via the existing guarded jez237.com release, never from a sparse editing
-checkout. Preserve newest origin/main and other agents' dirty work. Verify live
-asset byte hashes, noindex headers and representative live interactions.
+Check neutral root and legacy `#ich` openings, zero early reference-image
+requests, single-question visibility, required choices, every main symptom and
+texture branch, Back/changed answers/reset, marine/unknown scope, distress/water
+priority, numeric validation, notes copy/download and mobile overflow.
+Check opt-in library/resume, filters, six image slots, galleries and comparisons.
+Inspect screenshots for user-flow/layout usability, not only selector assertions.
+Image artwork remains user-reviewed rather than automatically rerolled.
+
+Record requests and inspect all of them for transmitted observation text.
+Existing parent-site analytics and Cloudflare checks are recorded separately
+from application submissions; no provider requests or photo controls may exist.
+Stage only intended changes and run the staged secret scanner before committing.
+Review untracked/ignored deployment inputs separately.
+
+Deploy through the existing guarded full-site publisher, never the sparse task
+checkout. Preserve newest origin/main and unrelated work. Verify live static
+bytes, noindex headers, all six preserved assets and representative interactions.
 
 ## Next experiments
 
-1. Ask Jez to try the picture-first library on mobile and note where he hesitates.
+1. Ask Jez to try the neutral Start flow on mobile and note where he hesitates.
 2. Build a licensed, expert-labelled real case image library; keep AI illustrations
    visibly distinct from confirmed cases.
 3. Keep the process self-contained and picture-first. Photo-analysis and external

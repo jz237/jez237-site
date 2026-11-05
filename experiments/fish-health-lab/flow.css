@@ -1,0 +1,149 @@
+/* The guided check is the front door. References are progressively disclosed. */
+.masthead { max-width: 1190px; padding: 25px 32px; }
+.masthead nav { gap: 24px; }
+.nav-tab { font-size: 14px; }
+main { max-width: 1160px; padding: 0 32px; }
+.start-panel { min-height: 520px; display: grid; grid-template-columns: 1.3fr 1fr; align-items: center; gap: 40px; padding: 60px 0 35px; }
+.start-copy h1 { font-size: clamp(44px, 5.3vw, 72px); margin-bottom: 24px; }
+.start-copy .lead { max-width: 510px; font-size: 19px; }
+.start-button { margin: 12px 0 16px; min-width: 230px; font-size: 17px; }
+.start-copy > .quiet { font-size: 13px; }
+.start-art { min-width: 0; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, #e1e9d7, #e7ecdf80 65%, transparent 67%); display: grid; align-content: center; justify-items: center; }
+#welcome-fish { width: 100%; }
+#welcome-fish .fish-art { width: 100%; height: auto; max-width: none; }
+.start-art > span { font-size: 12px; letter-spacing: .13em; color: var(--muted); margin-top: -20px; }
+.help-line { display: flex; align-items: center; gap: 15px; border-top: 1px solid var(--line); padding: 20px 0; margin: 10px 0 20px; font-size: 13px; }
+.help-line > span { color: #9b653e; border: 1px solid #c4a686; border-radius: 50%; width: 25px; height: 25px; flex-shrink: 0; display: grid; place-items: center; }
+.help-line p { margin: 0; }
+.help-line strong { font-weight: 400; }
+.help-line button { margin-left: 13px; font-size: 13px; color: #8e5736; padding: 5px 0; }
+.guided-check { max-width: 880px; margin: 40px auto 35px; }
+.flow-topline { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.flow-topline .eyebrow { margin: 0; font-size: 10px; }
+.flow-topline .text-button { font-size: 12px; padding: 5px 0; }
+#flow-progress { display: block; width: 100%; height: 4px; appearance: none; border: 0; background: #dce2d2; border-radius: 2px; margin: 15px 0 38px; }
+#flow-progress::-webkit-progress-bar { background: #dce2d2; border-radius: 2px; }
+#flow-progress::-webkit-progress-value { background: var(--green); border-radius: 2px; }
+#flow-progress::-moz-progress-bar { background: var(--green); border-radius: 2px; }
+.question-title { font-size: clamp(32px, 4vw, 48px); margin-bottom: 16px; }
+.question-hint { font-size: 16px; color: var(--muted); margin-bottom: 28px; max-width: 680px; }
+.question-panel .water-picker { grid-template-columns: 1fr; gap: 12px; max-width: 640px; }
+.question-panel .water-picker span { padding: 20px 20px 20px 52px; }
+.question-panel .water-picker input { left: 19px; top: 24px; }
+.question-panel .water-picker strong { font-size: 18px; }
+.question-panel .water-picker small { font-size: 13px; }
+.question-panel .symptom-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.question-panel .symptom-art { height: 85px; }
+.question-panel .symptom-card strong { font-size: 14px; padding: 9px 12px 0; }
+.question-panel .symptom-card small { padding: 4px 12px 0; }
+.question-panel .texture-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.optional-reference { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 24px; margin-top: 24px; }
+.reference-peek { display: flex; align-items: center; gap: 17px; background: #e8eddf; border: 1px solid var(--line); border-radius: 9px; padding: 10px; text-align: left; }
+.reference-peek img { height: 105px; width: 70px; object-fit: contain; border-radius: 4px; }
+.reference-peek span { max-width: 200px; font-size: 12px; padding-right: 10px; }
+.reference-peek strong { display: block; font-size: 14px; font-weight: 500; margin-bottom: 5px; }
+.optional-reference > .text-button { max-width: 200px; text-align: left; font-size: 12px; }
+.optional-reference > .quiet { flex-basis: 100%; margin: 0; font-size: 11px; }
+.question-panel .behavior-grid { gap: 12px; }
+.question-panel .check-label { min-height: 61px; font-size: 14px; }
+.question-panel .test-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+.tank-extra { margin-top: 28px; border: 1px solid var(--line); border-radius: 9px; padding: 18px 20px; }
+.tank-extra summary { cursor: pointer; font-size: 15px; }
+.tank-extra summary span { float: right; font-size: 12px; color: var(--muted); }
+.extra-fields { margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.extra-fields label { display: block; margin-bottom: 7px; }
+.extra-fields .wide { grid-column: 1 / -1; }
+.result-focus { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1fr); gap: 30px; padding: 24px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); margin-top: 25px; }
+.result-image { min-width: 0; align-self: start; }
+.result-image button { display: block; width: 100%; padding: 0; background: #e5ebe2; border-radius: 7px; overflow: hidden; text-align: left; }
+.result-image img { width: 100%; max-height: 400px; object-fit: contain; }
+.result-image button span { display: block; padding: 12px; font-size: 12px; }
+.result-copy { align-self: center; min-width: 0; }
+.result-copy .eyebrow { font-size: 9px; margin-bottom: 12px; }
+.result-copy h2 { font-size: 34px; }
+.result-copy p { font-size: 15px; }
+.result-copy .quiet { font-size: 12px; }
+.result-copy .button { font-size: 13px; padding: 13px; margin: 8px 0 15px; }
+.result-schematic { padding: 20px 0; border-radius: 7px; background: #e5ebe2; }
+.result-schematic .fish-art { width: 100%; height: auto; }
+.result-schematic small { display: block; text-align: center; font-size: 10px; color: var(--muted); }
+.alternatives { display: grid; gap: 10px; }
+.alternative { display: flex; gap: 15px; align-items: center; padding: 12px 17px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); text-align: left; }
+.alternative > span:first-child { width: 80px; flex-shrink: 0; }
+.alternative .fish-art { width: 100%; height: auto; }
+.alternative > span:nth-child(2) { flex: 1; }
+.alternative strong, .alternative small { display: block; }
+.alternative strong { font-size: 15px; font-weight: 500; margin-bottom: 3px; }
+.alternative small { font-size: 12px; color: var(--muted); }
+.alternative b { font-weight: 400; }
+.result-next { font-size: 14px; margin: 27px 0 22px; }
+.library-heading { display: flex; align-items: center; gap: 24px; justify-content: space-between; }
+.library-heading h1 { font-size: 50px; margin-bottom: 15px; }
+.library-heading > .button { flex-shrink: 0; font-size: 13px; }
+.library-filter-drawer { margin: 20px 0; border-bottom: 1px solid var(--line); padding-bottom: 18px; }
+.library-filter-drawer summary { cursor: pointer; }
+.library-filter-drawer .pattern-grid { margin-top: 15px; }
+.gallery-slots > button { min-height: 55px; }
+.gallery-image { height: 480px; }
+.gallery-slots > button > span:not(.slot-thumb) { font-size: 12px; }
+footer { max-width: 1160px; padding: 23px 32px; font-size: 11px; }
+footer > .text-button { font-size: 12px; }
+@media (max-width: 700px) {
+  .masthead { padding: 20px; gap: 18px; }
+  .masthead nav { gap: 22px; }
+  .nav-tab { font-size: 13px; }
+  main { padding: 0 20px; }
+  .start-panel { display: block; min-height: 0; padding: 44px 0 20px; }
+  .start-copy .eyebrow { font-size: 9px; }
+  .start-copy h1 { font-size: 46px; margin-bottom: 20px; }
+  .start-copy .lead { font-size: 17px; }
+  .start-art { display: none; }
+  .start-button { width: 100%; min-height: 54px; margin-top: 12px; }
+  .start-copy > .quiet { text-align: center; font-size: 12px; }
+  .help-line { padding: 18px 0; gap: 10px; align-items: start; font-size: 12px; }
+  .help-line button { display: block; margin: 4px 0 0; font-size: 12px; }
+  .guided-check { margin-top: 28px; }
+  #flow-progress { margin: 13px 0 27px; }
+  .question-title { font-size: 34px; }
+  .question-hint { font-size: 14px; margin-bottom: 22px; }
+  .question-panel .water-picker strong { font-size: 16px; }
+  .question-panel .water-picker small { font-size: 11px; }
+  .question-panel .symptom-grid, .question-panel .texture-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  .question-panel .symptom-art { height: 72px; }
+  .question-panel .symptom-card strong { font-size: 13px; }
+  .question-panel .symptom-card small { font-size: 10px; }
+  .question-panel .behavior-grid { grid-template-columns: 1fr; gap: 9px; }
+  .question-panel .check-label { min-height: 50px; font-size: 13px; padding: 11px; }
+  .question-panel .test-grid { gap: 18px 12px; }
+  .test-grid label { font-size: 12px; }
+  .test-grid small { display: block; margin-left: 0; }
+  .optional-reference { gap: 14px; }
+  .reference-peek { width: 100%; }
+  .optional-reference > .text-button { max-width: none; }
+  .tank-extra { padding: 15px; }
+  .tank-extra summary { font-size: 13px; }
+  .extra-fields { grid-template-columns: 1fr; }
+  .step-actions { gap: 12px; margin-top: 24px; }
+  .step-actions .button { font-size: 13px; padding: 12px 15px; }
+  #flow-actions { position: sticky; bottom: 0; z-index: 5; background: var(--paper); padding: 14px 0; box-shadow: 0 -8px 16px var(--paper); }
+  .result-focus { grid-template-columns: 1fr; padding: 16px; gap: 22px; }
+  .result-image img { max-height: 365px; }
+  .result-copy h2 { font-size: 30px; }
+  .result-schematic { max-width: 220px; margin: auto; }
+  .alternative { padding: 12px; gap: 9px; }
+  .alternative > span:first-child { width: 55px; }
+  .alternative strong { font-size: 13px; }
+  .alternative small { font-size: 11px; }
+  .library-heading { display: block; }
+  .library-heading h1 { font-size: 38px; }
+  .library-heading .lead { font-size: 15px; }
+  .library-heading > .button { margin: 6px 0 12px; }
+  .gallery-image { height: 370px; }
+  .gallery-slots > button > span:not(.slot-thumb) { font-size: 10px; }
+  footer { padding: 20px; font-size: 10px; gap: 15px; }
+  footer > span:last-child { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; }
+}
