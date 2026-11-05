@@ -321,6 +321,110 @@
     }
   },
   {
+    "id": "2026-11-05-factual-infographic-factual-infographic-achilles-tendinopat",
+    "title": "Factual infographic: Achilles Tendinopathy — The Calf-to-Heel Connection",
+    "tests": "factual_subtype: medical-health-infographic; archive_slot=2026-11-05T17:20; concept=achilles-tendinopathy-calf-heel-load; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, richly informative artistic medical infographic, directly on the canvas, titled \"ACHILLES TENDINOPATHY\" with subtitle \"The calf-to-heel connection under repetitive load\". Use a flowing, asymmetrical anatomical atlas in refined gouache, luminous scientific rendering and delicate technical ink on a cool pale blue ground, warm terracotta muscle, pearly ivory tendon and bone, restrained copper pain accents. No boxes, cards, grids, photographed poster, logos or bibliography. The dominant hero fills most of the composition: an elegant posterior-oblique lower leg and heel anatomical cutaway, calf muscle tapering into the long Achilles tendon inserting onto the posterior calcaneus. Preserve realistic tendon continuity and spatial relationships; no severed tendon in this hero. Layer visible muscle fascicles, tendon fiber striations, subtle surrounding tissue and credible bone texture. Label precisely \"Calf muscles\", \"Achilles tendon\", \"Calcaneus (heel bone)\" with fine open leaders. An understated curved motion arrow at the heel connects to \"Used in walking, running, jumping and rising onto tiptoes\".\nLet the tendon become the compositional spine: two delicately annotated focal regions labeled \"Midportion: above the heel attachment\" and \"Insertional: at the heel attachment\". Nest a large schematic magnification alongside the middle tendon, explicitly labeled \"Schematic tissue detail\": compare slender aligned tendon fibers with an affected thickened region with subtly disrupted fibers, not a complete tear. Caption \"Repetitive stress can lead to fiber damage, thickening and pain\". Avoid depicting this as infection or only an acute inflammatory disease.\nAlong the upper flowing margin weave \"Load can outpace tolerance\" with small restrained movement traces for sudden training increases and an annotation \"Tight calf muscles can add stress\". Across a generous open area beside the hero integrate three concise symptom lines, \"Morning stiffness\", \"Pain with activity\", \"Tenderness or swelling\". On the lower sweep introduce one small dignified fictional person: a stocky middle-aged man with medium-brown skin, close-cropped silver hair, dark teal T-shirt and charcoal shorts sitting with a physiotherapist discussing his ankle; no identity implied from a real case. It is secondary to the anatomy. Above the vignette write \"Assessment: history and examination; imaging when needed\". Guide the eye toward an open care pathway, not numbered boxes: \"Reduce aggravating load\" → \"Supportive footwear\" → \"Individualized physiotherapy and strengthening\". Do not prescribe exercise repetitions, medication doses, step-based heel drops or a universal exercise protocol. Add \"Recovery may take months. Persistent symptoms need assessment.\" Distinct small warm-red urgent callout, integrated at the foot of the illustration: \"Sudden severe pain or a pop? Possible rupture — seek urgent medical assessment.\" Footer \"General education, not a diagnosis. Care should be individualized.\" All information must be legible and short, with typographic hierarchy, substantial breathing room and tactile anatomical richness. No unsupported statistics, promises of cure, invented structures or extra clinical claims.",
+    "image": "images/2026-11-05-factual-infographic-factual-infographic-achilles-tendinopat.jpg",
+    "thumb": "thumbs/2026-11-05-factual-infographic-factual-infographic-achilles-tendinopat.webp",
+    "color": "#c7c5c4",
+    "date": "2026-11-05",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "achilles-tendinopathy-calf-heel-load",
+      "imageSha256": "d0406eff847ebe45b7271b32aa8babb061c4cda68a87022fb0a54ad966073bd0",
+      "imageDHash": "84ccccdecc820e8c"
+    },
+    "factualInfographic": {
+      "topic": "How Achilles tendinopathy affects the calf-to-heel tendon, causes load-related pain, and is evaluated and managed",
+      "description": "Achilles tendon anatomy, midportion and insertional symptoms, evaluation, tailored management and rupture warning signs.",
+      "sourceNote": "AAOS https://www.orthoinfo.org/bodypart/foot-ankle/achilles-tendinitis/ and NHS https://www.nhs.uk/conditions/tendonitis/; verified anatomy, repetitive loading, symptoms, evaluation, conservative care and urgent rupture warning signs.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-05T22:20:55.776965+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "American Academy of Orthopaedic Surgeons",
+            "title": "Achilles Tendinitis",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.orthoinfo.org/bodypart/foot-ankle/achilles-tendinitis/"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Tendonitis",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/tendonitis/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The Achilles tendon connects calf muscles to the heel bone (calcaneus) and is used during walking, running, jumping and standing on tiptoes.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Repetitive stress, a sudden increase in exercise and tight calf muscles can contribute to Achilles tendon problems.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Noninsertional disease affects the middle tendon; insertional disease affects its heel attachment.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Affected tendon fibers can develop tiny tears, degeneration, swelling and thickening; this is not the same as a complete rupture.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Symptoms include morning stiffness, pain along the tendon or heel worsened by activity, and swelling.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Assessment starts with history and examination; imaging may be selected and MRI is not always needed for diagnosis.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Reducing aggravating activity, supportive footwear and physical therapy including supervised strengthening can help; treatment must be tailored to the individual.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Recovery can take months; persistent symptoms should be assessed by a clinician.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Sudden severe pain or a pop at the back of the calf or heel may signal rupture and requires urgent medical assessment.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-04-factual-infographic-factual-infographic-pacific-blue-tang",
     "title": "Factual infographic: Pacific blue tang",
     "tests": "; archive_slot=2026-11-04T20:20; concept=pacific-blue-tang-surgeonfish-coral-refuge; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Paracanthurus hepatus",
