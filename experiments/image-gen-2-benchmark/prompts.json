@@ -29288,5 +29288,105 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-05-factual-infographic-factual-infographic-acute-pancreatitis-",
+    "title": "Factual infographic: Acute Pancreatitis — An Inflamed Pancreas",
+    "tests": "{\"factual_subtype\": \"medical-health-infographic\"}; archive_slot=2026-11-05T11:20; concept=acute-pancreatitis-pancreatic-inflammation-hospital-care; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, richly illustrated medical infographic, directly on the canvas, not a poster mockup. Headline: “ACUTE PANCREATITIS”; subtitle: “When the pancreas becomes inflamed”. Artistic anatomical atlas in fine ink and luminous gouache, cool midnight teal background shading into pale mineral blue around a dominant coral-and-ochre pancreas, ivory labels and restrained amber warning accents. Organic asymmetrical composition, no boxed grid or detached cards. Make the dominant anatomical cutaway occupy most of the visual field: a translucent stomach reveals the lobulated pancreas behind it, nestled beside the C-shaped duodenum; precise delicate leaders label “Stomach”, “Pancreas” and “Duodenum”. Show normal anatomy in quiet blue-grey and focal inflamed pancreatic tissue in warm coral, not gore. A sweeping magnified tissue study connects to the pancreas with a thin curved leader; label “Digestive enzymes can damage pancreatic tissue → inflammation”. Do not invent microscopic molecular structures: use a clearly schematic magnification with subtle granular lobules and soft inflammation glow. Nearby concise caption: “Normally, pancreatic enzymes help digest food in the intestine. The pancreas also makes insulin.”\nAlong the upper-left flowing pathway, a small schematic of the duct opening with a stone obstructing it, caption “Gallstones can block the opening”; accompany with open typography “Common causes: gallstones and heavy alcohol use” and a quieter line “Some medicines and other conditions can also cause it.” No implication that all cases involve stones or alcohol.\nAt the lower left, a small dignified fictional 50-year-old man with medium brown skin, stocky build, short salt-and-pepper hair and a simple sage shirt leans forward with a hand over the upper abdomen; a faint curved arrow wraps from upper abdomen toward back. Label “Sudden, persistent upper abdominal pain”, “May spread to the back”, and “Nausea • vomiting • fever”. This is a generic illustrative person, not a real clinical case. Across the right, integrate an unboxed care pathway with small fine-ink blood sample and CT-ring illustrations: “Assessment: history, examination, blood tests; sometimes CT”. Continue along a curved line into an IV bag and clinician hand motif: “Hospital care: monitoring, IV fluids and pain relief”, “Treat the cause: gallstone treatment or support to stop alcohol”, “Antibiotics only if infection”. Do not show doses or promise a cure.\nA clear amber lower-margin warning integrated into the composition reads “SEEK URGENT CARE: sudden, severe abdominal pain that does not go away.” Beneath, readable emphasis: “Emergency care for severe pain spreading to the back, fast heartbeat or difficulty breathing.” Give this text generous contrast and breathing room. Smaller open notes: “Most people recover; severe cases can cause tissue death or infection and may be life-threatening.” “Help prevent recurrence: avoid or reduce alcohol, stop smoking, follow clinician dietary advice.” Footer: “General education • Not a diagnosis”. Preserve clinical clarity and essential warnings over optional decorative detail. Refined readable typography, anatomically plausible forms, intricate soft tissue shading and delicate directional linework, varied study scales and substantial negative space. No URLs, bibliography, logos, photo frame, invented statistics or decorative pseudo-text.",
+    "image": "images/2026-11-05-factual-infographic-factual-infographic-acute-pancreatitis-.jpg",
+    "thumb": "thumbs/2026-11-05-factual-infographic-factual-infographic-acute-pancreatitis-.webp",
+    "color": "#7c7e73",
+    "date": "2026-11-05",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "acute-pancreatitis-pancreatic-inflammation-hospital-care",
+      "imageSha256": "247f0f31206bd1042ff7a01406137812749b2792602ac70cad0bab59df19b5c6",
+      "imageDHash": "2386181343670307"
+    },
+    "factualInfographic": {
+      "topic": "How acute pancreatitis inflames the pancreas, causes sudden abdominal pain, and requires urgent evaluation and hospital treatment",
+      "description": "Source-backed anatomy, symptoms, causes, urgent warning signs and hospital management of acute pancreatitis.",
+      "sourceNote": "NIDDK: https://www.niddk.nih.gov/health-information/digestive-diseases/pancreatitis/definition-facts ; NHS: https://www.nhs.uk/conditions/acute-pancreatitis/ . Verified pancreatic anatomy, enzyme injury, causes, clinical evaluation, urgent escalation and treatment.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-05T16:21:17.313546+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NIDDK, National Institutes of Health",
+            "title": "Definition & Facts for Pancreatitis",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/pancreatitis/definition-facts"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Acute pancreatitis",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/acute-pancreatitis/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The pancreas lies behind the stomach near the duodenum; it makes insulin and digestive enzymes that normally help digest food in the intestine.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Acute pancreatitis is sudden inflammation of the pancreas; digestive enzymes can damage pancreatic tissue.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Gallstones can block the opening of the pancreas; gallstones and heavy alcohol use are common causes, while some medicines and other conditions can also cause it.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Symptoms include sudden persistent severe upper abdominal pain that may spread to the back, nausea, vomiting and fever.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Sudden severe persistent abdominal pain needs urgent medical evaluation; severe pain spreading to the back, fast heartbeat or difficulty breathing warrants emergency care.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Evaluation uses history, examination, blood tests and sometimes imaging such as CT.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Hospital treatment includes monitoring, IV fluids and pain relief; treating the cause may include gallstone surgery or alcohol cessation support. Antibiotics are for infection, not a routine cure.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Most people recover, but severe illness may cause tissue death or infection and can be life-threatening.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Reducing or avoiding alcohol, stopping smoking and following clinician dietary advice may help prevent recurrence.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
