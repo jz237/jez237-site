@@ -839,3 +839,25 @@ Native levels, portals, collision, light destructibility, controls, demo navigat
 weapons, combat, sounds and music retain their existing implementation. The R34
 invalid-texture rendering fallback fix is retained: inspection never writes that
 fallback into mission data. QA-only instrumentation is excluded from this build.
+
+Generated mine material library (pyre36)
+
+Eight GPT Image masters supply new steel panels, hazard panels, grilles, basalt,
+blast doors, service machinery, lamp diffusers and brushed metal. The masters
+are 1254 square pixels; shipping color maps are 1024 square WebP, with matched
+512 square approximate tangent/roughness/height maps. Artwork is shared across
+native material families. The active palette supplies a modest color tint.
+Native color pixels do not limit the detail of generated surfaces.
+
+The production shader blends opposite natural-material edges and gives metal
+panels a common neutral join after palette tinting. Lamp silhouettes are analytic.
+Native masks preserve real apertures and animated door openings. Signs, arrows,
+animated displays, water, forcefields and special light grids keep their existing
+functional treatment. Original-art comparison retains each campaign bitmap.
+
+Eight script parcels total about 8.1 MB, decoded two at a time and cached. Shared
+GPU material maps avoid one large color/normal allocation per bitmap. Both public
+streaming and installed file:// editions use the same new material library.
+The showroom includes the new materials in both campaigns, with a paused
+original/remastered comparison. Levels, collision, flight controls, AI, combat,
+weapons, effects, sounds and music are unchanged. QA exports are not shipped.

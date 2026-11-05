@@ -104,7 +104,7 @@ static void am_build(void){
         for(int side=0;side<6;side++){
             if(seg->children[side]>=0&&seg->sides[side].wall_num<0)portals++;
             int t=seg->sides[side].tmap_num;
-            if(t>=0&&t<NumTextures&&!astra_environment_rock(t)&&!TmapInfo[t].damage)metal++;
+            if(seg->children[side]<0&&t>=0&&t<NumTextures&&!astra_environment_rock(t)&&!TmapInfo[t].damage)metal++;
         }
         if(portals<2)continue;
         for(int side=0;side<6;side++){
@@ -112,7 +112,7 @@ static void am_build(void){
             vms_vector goal;compute_segment_center(&goal,&Segments[child]);
             if(!am_clear(&eye,room,&goal,F1_0/3))continue;
             float distance=am_distance(&eye,&goal);if(distance<12||distance>90)continue;
-            float score=portals*8+metal*3+fminf(35,distance)*.2f;
+            float score=portals*2+metal*9+fminf(35,distance)*.1f;
             if(score>overview_best){overview_best=score;am_scenes[0]=(am_scene){eye,goal,upright.uvec,room,side,room,1};}
         }
     }

@@ -171,7 +171,7 @@ index c5cca0b..687d249 100644
 +
 +
 diff --git a/d2/arch/ogl/ogl.c b/d2/arch/ogl/ogl.c
-index c536c46..e043d74 100644
+index c536c46..90050fa 100644
 --- a/d2/arch/ogl/ogl.c
 +++ b/d2/arch/ogl/ogl.c
 @@ -198,6 +198,8 @@ void ogl_init_texture(ogl_texture* t, int w, int h, int flags)
@@ -370,11 +370,12 @@ index c536c46..e043d74 100644
  			tex->tw, tex->th, 0, tex->format, // RGBA textures.
  			GL_UNSIGNED_BYTE, // imageData is a GLubyte pointer.
  			bufP);
-@@ -1644,6 +1686,11 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
+@@ -1644,6 +1686,12 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
  }
  #endif
  
 +#include "astra_faithful.inc"
++#include "astra_generated.inc"
 +#include "astra_finish.inc"
 +int astra_draw_count(void){return astra_shaded;}
 +int astra_surface_count(void){return astra_surfaces;}
@@ -382,7 +383,7 @@ index c536c46..e043d74 100644
  void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  {
  	unsigned char *buf;
-@@ -1663,11 +1710,20 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+@@ -1663,11 +1711,20 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  		png_data pdata;
  
  		sprintf(filename, /*"textures/"*/ "%s.png", bitmapname);
@@ -404,16 +405,17 @@ index c536c46..e043d74 100644
  				if (bm->gltexture == NULL)
  					ogl_init_texture(bm->gltexture = ogl_get_free_texture(), pdata.width, pdata.height, ((pdata.alpha || bm->bm_flags & BM_FLAG_TRANSPARENT) ? OGL_FLAG_ALPHA : 0));
  				unsigned char *data = pdata.data;
-@@ -1688,6 +1744,8 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+@@ -1688,6 +1745,9 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  				if (pdata.palette)
  					free(pdata.palette);
  				bm->gltexture->is_png = 1;
 +				bm->gltexture->material=astra_material_id(bitmapname);
 +				bm->gltexture->faithful_detail=af_detail;bm->gltexture->native_color=af_original;bm->gltexture->faithful=af_kind;
++				bm->gltexture->generated_shape=ag_shape;memcpy(bm->gltexture->generated_tint,ag_tint,sizeof ag_tint);memcpy(bm->gltexture->generated_rect,ag_rect,sizeof ag_rect);
  				return;
  			}
  			else
-@@ -1845,6 +1903,8 @@ void ogl_freetexture(ogl_texture *gltexture)
+@@ -1845,6 +1905,8 @@ void ogl_freetexture(ogl_texture *gltexture)
  	if (gltexture->handle>0) {
  		r_texcount--;
  		glmprintf((0,"ogl_freetexture(%p):%i (%i left)\n",gltexture,gltexture->handle,r_texcount));
@@ -422,7 +424,7 @@ index c536c46..e043d74 100644
  		glDeleteTextures( 1, &gltexture->handle );
  //		gltexture->handle=0;
  		ogl_reset_texture(gltexture);
-@@ -1983,3 +2043,8 @@ void ogl_update_window_clip()
+@@ -1983,3 +2045,8 @@ void ogl_update_window_clip()
  		glEnable(GL_SCISSOR_TEST);
  	}
  }
@@ -686,16 +688,17 @@ index 2cfce11..6ee4d39 100644
  	*dy = Mouse.delta_y;
  	*dz = Mouse.delta_z;
 diff --git a/d2/include/ogl_init.h b/d2/include/ogl_init.h
-index af0b258..a428274 100644
+index af0b258..82aa6fb 100644
 --- a/d2/include/ogl_init.h
 +++ b/d2/include/ogl_init.h
-@@ -64,6 +64,9 @@ typedef struct _ogl_texture {
+@@ -64,6 +64,10 @@ typedef struct _ogl_texture {
  	int wrapstate;
  	unsigned long numrend;
  	int is_png;
 +	int material;
 +	GLuint faithful_detail, native_color;
 +	int faithful;
++	float generated_tint[3],generated_rect[4],generated_shape;
  } ogl_texture;
  
  extern ogl_texture* ogl_get_free_texture();

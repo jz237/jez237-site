@@ -2,7 +2,7 @@
 window.astraMinePreview={
   names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion'],
   descriptions:[
-    'Original Descent II surface designs rebuilt with fine materials, recessed edges and lighting. Pause and compare the same view with the original artwork.',
+    'New high-resolution metal, rock, grilles, machinery and lamps throughout both campaigns. Pause and compare the same view with the original artwork.',
     'Spinning fan blades behind a fixed protective grille.',
     'Moving pistons, service pipes, joints and coolant conduits.',
     'Inset displays with changing readouts and scanning lights.',
