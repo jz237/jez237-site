@@ -686,3 +686,44 @@ positive/negative pitch; steep-climb retention and locked-door rejection;
 25 projectile collision paths, fresh-mark replacement, closed-door marks and
 bounded ring reuse. Automated browsers disable pointer capture before launch.
 Test-only exports and fixture engines are not included in this release.
+
+
+Smart Mines, quad showcase and route recovery (pyre33)
+
+Deployed player and robot Smart Mines now have a depth-tested six-part body,
+unfolding arms, an exposed golden core and scanning brackets. Deployment state
+comes from native weapon lifetime and its two-second arming interval. Native
+proximity triggers, creator immunity, child spawning, target selection, homing,
+damage, ammunition and original sounds remain authoritative. Smart Mine child
+globules have gold spherical geometry; Smart Missile children use green spheres.
+The established Plasma Cannon colors and round geometry are preserved.
+
+The cockpit firing showroom adds Smart Mine deployment, arming, detonation and
+six visible homing globules approaching target drones. Smart Missiles also show
+their child burst. These isolated presentation objects never enter the mission.
+Native firing/impact sounds are used during ordinary playback; seeking is silent.
+
+The full-arsenal spectator preset now grants the separate Quad Laser flag along
+with level-six lasers. Its firing range uses native gun points 0 through 3: two
+bolts on each side. Ordinary play keeps the original Quad pickup requirement.
+Native laser firing, shot strength and flight controls have not been modified.
+
+Navigation now records 48 recent rooms, meaningful exploration, useful pickups,
+kills and actual damage dealt. Goal hysteresis avoids switching between equally
+attractive destinations. Repeated circuits without progress temporarily defer
+the stale objective and commit to a reachable destination outside recent rooms.
+If repeated recovery still produces no progress for 150 seconds, the spectator
+announces a three-second transition to the next mine; it does not count the
+unfinished mine as completed. Enemy perception and smooth rotational controls
+are unchanged.
+
+Validation: native four-projectile volleys with two barrels on each side;
+Smart Mine safety before arming and real proximity-triggered detonation; six
+actual homing children from each smart weapon, with acquired native targets;
+route-history rerouting, reachable retained goals, progress reset and announced
+tour fallback. Muted six-minute demos cover both campaigns; showroom snapshots
+cover unfolding, armed state, child bursts and quad firing. Pointer capture is
+disabled before every automated browser launch. Test exports are not shipped.
+
+Original weapon reference: Descent II instruction manual, pages 29 and 31:
+https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/273580/manuals/manual.pdf

@@ -103,7 +103,7 @@ static void aa_demo_arsenal(void){
     p->primary_weapon_flags=0xffff^(1<<SUPER_LASER_INDEX);p->secondary_weapon_flags=0xffff;
     p->primary_ammo[VULCAN_INDEX]=VULCAN_AMMO_MAX;
     for(int i=0;i<MAX_SECONDARY_WEAPONS;i++)p->secondary_ammo[i]=Secondary_ammo_max[i];
-    p->laser_level=MAX_SUPER_LASER_LEVEL;update_laser_weapon_info();
+    p->laser_level=MAX_SUPER_LASER_LEVEL;p->flags|=PLAYER_FLAGS_QUAD_LASERS;update_laser_weapon_info();
     EM_ASM(Module.demoArsenalGranted=true;);
 }
 static int aa_recover,aa_seen,aa_deaths,aa_kills,aa_collects;
@@ -174,7 +174,15 @@ static float aa_pickup_need(const player *p,const object *o,fix64 now){
     return 0; // Reserved and multiplayer-only objects cannot help this pilot.
 }
 
+/* Route progress is separate from movement. Circling or crossing the same
+ * portal cannot indefinitely reset it. Keep a bounded recent-room history. */
+static int aa_recent_rooms[48],aa_recent_count,aa_recent_serial;
+static fix64 aa_route_sample,aa_progress_time,aa_loop_next,aa_detour_until,aa_tour_next;
+static int aa_detour_goal=-1,aa_loop_count,aa_progress_rooms,aa_progress_kills,aa_progress_pickups;
+static int aa_progress_target=-1,aa_progress_signature;static fix aa_progress_health;
+
 static void aa_plan(void){
+    int previous=aa_object,previous_wall=aa_wall;
     aa_graph();float best=-1;aa_goal=-1;aa_object=-1;aa_wall=-1;aa_mode=0;
     for(int i=0;i<=Highest_object_index;i++){
         object *o=&Objects[i];int seg=o->segnum;
@@ -186,6 +194,7 @@ static void aa_plan(void){
         if(o->type==OBJ_CNTRLCEN&&!Control_center_destroyed&&aa_can_see(i))weight=GameTime64-aa_level_since>i2f(180)?120:45;
         if(Control_center_destroyed)weight=0;
         float score=weight/(1+aa_dist[seg]*1.9f+aa_len(&o->pos,&ConsoleObject->pos)*.012f);
+        if(i==previous)score*=1.22f;
         if(score>best&&weight>0){best=score;aa_goal=seg;aa_object=i;aa_mode=o->type==OBJ_POWERUP?1:o->type==OBJ_HOSTAGE?2:3;}
     }
     for(int i=0;i<Num_walls;i++){
@@ -195,6 +204,7 @@ static void aa_plan(void){
         int unlock=t->type==TT_OPEN_DOOR||t->type==TT_UNLOCK_DOOR||t->type==TT_OPEN_WALL||t->type==TT_ILLUSION_OFF;
         if((!exit&&!unlock)||(exit&&!Control_center_destroyed)||(!exit&&aa_wall_seen[i]>GameTime64))continue;
         float score=(exit?20000.f:38.f)/(1+aa_dist[w->segnum]*1.6f);
+        if(i==previous_wall)score*=1.22f;
         if(score>best){best=score;aa_goal=w->segnum;aa_wall=i;aa_object=-1;aa_mode=exit?5:4;}
     }
     if(aa_goal<0){
@@ -203,6 +213,7 @@ static void aa_plan(void){
             if(score>best){best=score;aa_goal=i;aa_object=aa_wall=-1;aa_mode=0;}
         }
     }
+    if(!Control_center_destroyed&&aa_detour_goal>=0&&GameTime64<aa_detour_until&&aa_dist[aa_detour_goal]>=0){aa_goal=aa_detour_goal;aa_object=aa_wall=-1;aa_mode=0;}
     aa_route_mode=aa_mode;aa_next=GameTime64+F1_0/2;
 }
 static int aa_sliding,aa_slide_count;
@@ -394,6 +405,44 @@ static void aa_choose_weapon(float distance,int enemy){
     }else aa_weapon_next=GameTime64+i2f(3);
 }
 
+static void aa_route_reset(void){
+    aa_recent_count=aa_recent_serial=0;aa_route_sample=aa_loop_next=aa_detour_until=aa_tour_next=0;
+    aa_progress_time=GameTime64;aa_detour_goal=-1;aa_loop_count=0;aa_progress_target=-1;
+    aa_progress_rooms=aa_seen;aa_progress_kills=Players[Player_num].num_kills_total;aa_progress_pickups=aa_collects;
+}
+static int aa_recent_has(int room){for(int i=0;i<aa_recent_count;i++)if(aa_recent_rooms[i]==room)return 1;return 0;}
+static void aa_route_watch(void){
+    if(aa_seen!=aa_progress_rooms||Players[Player_num].num_kills_total!=aa_progress_kills||aa_collects!=aa_progress_pickups){
+        aa_progress_time=GameTime64;aa_progress_rooms=aa_seen;aa_progress_kills=Players[Player_num].num_kills_total;aa_progress_pickups=aa_collects;
+    }
+    int enemy=aa_combat_target;
+    if(aa_hostile(enemy)&&aa_can_see(enemy)){
+        if(enemy!=aa_progress_target||Objects[enemy].signature!=aa_progress_signature){aa_progress_target=enemy;aa_progress_signature=Objects[enemy].signature;aa_progress_health=Objects[enemy].shields;}
+        else if(Objects[enemy].shields<aa_progress_health-i2f(4)){aa_progress_time=GameTime64;aa_progress_health=Objects[enemy].shields;}
+    }
+    if(aa_detour_goal==ConsoleObject->segnum||GameTime64>=aa_detour_until)aa_detour_goal=-1;
+    if(GameTime64<aa_route_sample)return;aa_route_sample=GameTime64+F1_0;
+    aa_recent_rooms[aa_recent_serial++%48]=ConsoleObject->segnum;if(aa_recent_count<48)aa_recent_count++;
+    int distinct=0;for(int i=0;i<aa_recent_count;i++){int first=1;for(int j=0;j<i;j++)if(aa_recent_rooms[j]==aa_recent_rooms[i]){first=0;break;}distinct+=first;}
+    float quiet=(double)(GameTime64-aa_progress_time)/F1_0;
+    if(quiet>28&&aa_recent_count>=24&&GameTime64>=aa_loop_next&&(distinct<=7||quiet>70)){
+        if(aa_object>=0&&!aa_combat_object(aa_object)){aa_ignore[aa_object]=GameTime64+i2f(80);aa_ignore_signature[aa_object]=Objects[aa_object].signature;}
+        if(aa_wall>=0)aa_wall_seen[aa_wall]=GameTime64+i2f(90);
+        aa_graph();float best=-1;int destination=-1;
+        for(int room=0;room<=Highest_segment_index;room++)if(aa_dist[room]>1&&room!=ConsoleObject->segnum){
+            float score=(aa_visits[room]?50.f/(1+aa_visits[room]):600.f)/(1+aa_dist[room]*.12f);
+            if(aa_recent_has(room))score*=.025f;
+            if(score>best){best=score;destination=room;}
+        }
+        aa_detour_goal=destination;aa_detour_until=GameTime64+i2f(35);aa_loop_next=GameTime64+i2f(35);aa_loop_count++;
+        aa_next=0;aa_pick_object=-1;aa_sliding=0;aa_slide_goal=-2;
+    }
+    /* A viewing tour must not circle forever when no route produces progress.
+     * Announce the fallback; it does not count as completing the mine. */
+    if(quiet>150&&aa_loop_count>=3&&!Control_center_destroyed&&!aa_tour_next)aa_tour_next=GameTime64+i2f(3);
+    EM_ASM(Module.autoNavigation=({version:33,distinct:$0,quiet:$1,reroutes:$2,detour:$3});,distinct,quiet,aa_loop_count,aa_detour_goal);
+}
+
 void astra_auto_frame(void){
     if(!astra_auto_enabled()||!ConsoleObject)return;
     memset(&Controls,0,sizeof Controls);
@@ -404,7 +453,7 @@ void astra_auto_frame(void){
         EM_ASM(window.astraAutoStatus?.("Ship lost - relaunching",$0,$1,$2,$3);,aa_seen,aa_deaths,aa_kills,aa_collects);
         return;
     }
-    if(aa_dead_since){aa_flare_next=GameTime64+i2f(3);aa_door_flare_next=0;aa_door_flare_wall=-1;}
+    if(aa_dead_since){aa_route_reset();aa_flare_next=GameTime64+i2f(3);aa_door_flare_next=0;aa_door_flare_wall=-1;}
     if(aa_dead_since){aa_sliding=0;aa_slide_until=0;aa_slide_goal=-2;aa_escape_until=0;aa_escape_room=-1;aa_arsenal_signature=-1;aa_combat_target=-1;aa_next=0;aa_pick_object=aa_object=aa_goal=-1;aa_up_ready=0;aa_last_kills=Players[Player_num].num_kills_total;aa_weapon_next=GameTime64+i2f(8);}
     aa_dead_since=0;if(Endlevel_sequence)return;
     if(aa_level!=Current_level_num){
@@ -415,7 +464,7 @@ void astra_auto_frame(void){
         aa_flare_next=GameTime64+i2f(2);aa_door_flare_next=0;aa_door_flare_wall=-1;
         aa_level=Current_level_num;aa_level_since=GameTime64;aa_next=aa_status_next=0;aa_segment=-1;aa_seen=0;
         memset(aa_visits,0,sizeof aa_visits);memset(aa_ignore,0,sizeof aa_ignore);memset(aa_wall_seen,0,sizeof aa_wall_seen);
-        aa_last=ConsoleObject->pos;aa_stuck_since=GameTime64;
+        aa_last=ConsoleObject->pos;aa_stuck_since=GameTime64;aa_route_reset();
     }
     aa_demo_arsenal();aa_sense_fire();
     /* Keep a confirmed destruction in frame before moving to the next target.
@@ -429,6 +478,12 @@ void astra_auto_frame(void){
     aa_last_kills=Players[Player_num].num_kills_total;
     int seg=ConsoleObject->segnum;
     if(seg!=aa_segment){if(!aa_visits[seg])aa_seen++;aa_visits[seg]++;aa_segment=seg;aa_next=0;}
+    aa_route_watch();
+    if(aa_tour_next){
+        EM_ASM(document.getElementById('autoTask').textContent='Route exhausted - touring the next mine';);
+        if(GameTime64>=aa_tour_next){EM_ASM(Module.autoNext=($0%(Module.campaign==='d2'?24:20))+1;Module.autoTourSkip=(Module.autoTourSkip||0)+1;,Current_level_num>0?Current_level_num:0);aa_tour_next=0;}
+        return;
+    }
     if(GameTime64>=aa_next||aa_goal<0||(aa_combat_object(aa_object)&&!aa_can_see(aa_object)))aa_plan();
     aa_mode=aa_route_mode;vm_vec_zero(&aa_target_velocity);
     vms_vector target;compute_segment_center(&target,&Segments[seg]);
@@ -588,7 +643,9 @@ void astra_auto_frame(void){
             if(aa_pending_missile>=0&&(enemy!=aa_pending_target||enemy<0||Objects[enemy].signature!=aa_pending_signature))aa_pending_missile=-1;
             if(attacking&&distance>48&&alignment>.994f&&aa_pending_missile<0&&GameTime64>=aa_missile_next){
                 int tough=Objects[enemy].shields>i2f(140)&&distance>115;
-                int order[]={distance>95?SMISSILE4_INDEX:HOMING_INDEX,HOMING_INDEX,CONCUSSION_INDEX,SMISSILE1_INDEX,MEGA_INDEX,SMART_INDEX,SMISSILE5_INDEX};
+                int cluster=0;for(int i=0;i<=Highest_object_index;i++)if(aa_hostile(i)&&aa_can_see(i)&&aa_len(&Objects[i].pos,&Objects[enemy].pos)<45)cluster++;
+                int smart=distance>80&&cluster>=2;
+                int order[]={smart?SMART_INDEX:distance>95?SMISSILE4_INDEX:HOMING_INDEX,HOMING_INDEX,CONCUSSION_INDEX,SMISSILE1_INDEX,MEGA_INDEX,SMART_INDEX,SMISSILE5_INDEX};
                 for(int m=0;m<7;m++){
                     int w=order[m];if(!Players[Player_num].secondary_ammo[w]||(m>=4&&!tough))continue;
                     if(Players[Player_num].secondary_weapon!=w)select_weapon(w,1,0,1);
@@ -596,7 +653,7 @@ void astra_auto_frame(void){
                 }
             }
             int heavy=aa_pending_missile==SMART_INDEX||aa_pending_missile==MEGA_INDEX||aa_pending_missile==SMISSILE5_INDEX;
-            if(aa_pending_missile>=0&&GameTime64>=aa_missile_ready&&attacking&&enemy==aa_pending_target&&distance>(heavy?115:48)&&alignment>.994f){
+            if(aa_pending_missile>=0&&GameTime64>=aa_missile_ready&&attacking&&enemy==aa_pending_target&&distance>(aa_pending_missile==SMART_INDEX?80:heavy?115:48)&&alignment>.994f){
                 if(Players[Player_num].secondary_weapon==aa_pending_missile)Controls.fire_secondary_state=1;
                 aa_pending_missile=-1;aa_missile_next=GameTime64+i2f(6);
             }

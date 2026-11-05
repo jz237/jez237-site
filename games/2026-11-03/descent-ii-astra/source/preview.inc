@@ -87,7 +87,7 @@ int astra_preview_frame(void)
         extern void astra_combat_showcase(int,float);astra_combat_showcase(combat,age);
         g3_end_frame();EM_ASM(window.astraCombat?.update($0,$1);,combat,age);return 1;
     }
-    if(weapon>=0&&weapon<19){
+    if(weapon>=0&&weapon<20){
         extern fix Render_zoom;g3_set_view_matrix(&eye,&vmd_identity_matrix,Render_zoom);
         extern void astra_weapon_showcase(int,float);astra_weapon_showcase(weapon,age);
         g3_end_frame();EM_ASM(window.astraWeaponDemo?.update($0);,weapon);return 1;

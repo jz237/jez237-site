@@ -137,6 +137,7 @@ static void ax_weapon_color(int id,int enemy){
       case LASER_ID_L5:ax_paint(1,24.f/31,0,1.6f);break;
       case LASER_ID_L6:ax_paint(27.f/31,27.f/31,27.f/31,1.6f);break;
       case PLASMA_ID:case PLAYER_SMART_HOMING_ID:case ROBOT_SMART_HOMING_ID:ax_paint(.12f,1,.35f,1.7f);break;
+      case SMART_MINE_HOMING_ID:case ROBOT_SMART_MINE_HOMING_ID:ax_paint(1,.62f,.035f,1.7f);break;
       case FUSION_ID:ax_paint(.80f,.16f,1,1.7f);break;
       case SPREADFIRE_ID:case SILENT_SPREADFIRE_ID:case HELIX_ID:ax_paint(1,.38f,.065f,1.65f);break;
       case PHOENIX_ID:ax_paint(1,.13f,.075f,1.7f);break;
@@ -313,7 +314,7 @@ void astra_render_omega(int window_num){
 
 int astra_weapon_missile(object *obj){
     /* Lasers and Fusion also use polygon models in the original HAM data. */
-    return obj->type==OBJ_WEAPON&&obj->id!=FLARE_ID&&obj->id<N_weapon_types&&obj->render_type==RT_POLYOBJ&&Weapon_info[obj->id].matter;
+    return obj->type==OBJ_WEAPON&&obj->id!=FLARE_ID&&obj->id!=SUPERPROX_ID&&obj->id!=ROBOT_SUPERPROX_ID&&obj->id<N_weapon_types&&obj->render_type==RT_POLYOBJ&&Weapon_info[obj->id].matter;
 }
 /* Phoenix ricochets reverse velocity instantly. Grow a new visual trail only
  * along the current straight flight leg, and stop it at the mine wall. */
@@ -375,10 +376,43 @@ static void af_flare(object *obj, float age, float speed, float clock, float dep
     af_flush_tinted(clock,0,1);
 }
 
+/* A deployed smart mine unfolds at the native two-second arming threshold.
+ * All parts, scanning brackets and homing globules are depth-tested geometry. */
+static float af_smart_arming(const object *o){
+    float elapsed=f2fl(Weapon_info[o->id].lifetime-o->lifeleft);
+    return fminf(1,fmaxf(0,(elapsed-.35f)/1.65f));
+}
+static void af_smart_mine(object *o,float clock){
+    float armed=af_smart_arming(o),open=armed*armed*(3-2*armed);
+    float radius=fminf(2.3f,fmaxf(.8f,f2fl(o->size))),pulse=.65f+.35f*sinf(clock*5+o->signature);
+    g3_start_instance_matrix(&o->pos,&o->orient);ax_count=0;ax_energy=0;
+    ax_paint(.12f,.16f,.19f,0);ax_orb(.24f,.9f);
+    ax_paint(.39f,.45f,.49f,.04f);ax_ring(0,0,0,.50f,.07f,0,6.2831853f,0);
+    for(int i=0;i<6;i++){
+        float a=i*1.04719755f,c=cosf(a),s=sinf(a),reach=.58f+open*.60f,z=.35f-open*.45f;
+        ax_paint(.19f,.24f,.27f,0);ax_tube(c*.35f,s*.35f,0,c*reach,s*reach,z,.15f,.24f,6);
+        ax_paint(.46f,.51f,.53f,.03f);ax_tube(c*reach,s*reach,z-.22f,c*reach,s*reach,z+.15f,.24f,.15f,5);
+        ax_paint(1,.33f+open*.30f,.045f,.45f+open*.7f);
+        ax_tube(c*(reach-.09f),s*(reach-.09f),z-.18f,c*(reach-.09f),s*(reach-.09f),z+.11f,.055f,.055f,8);
+        /* Independent three-dimensional targeting brackets, not a billboard. */
+        if(open>.8f){float b=a+clock*.22f;
+            ax_paint(1,.58f,.055f,.75f);ax_ring(0,0,.20f,1.40f,.018f,b,.30f,0);
+            ax_tube(c*1.30f,s*1.30f,.2f,c*1.52f,s*1.52f,.2f,.02f,.02f,5);
+        }
+    }
+    ax_flush(radius,1);ax_count=0;ax_energy=2;
+    ax_paint(1,.38f+open*.28f,.025f,1.8f);ax_orb(.29f+open*.09f+pulse*.018f,1);
+    ax_flush(radius,1);ax_energy=0;
+    if(open>.4f){ax_count=0;ax_paint(1,.60f,.07f,1.3f);ax_arc(.63f,clock*.7f,clock,1,.014f);ax_flush(radius,1);}
+    g3_done_instance();
+    EM_ASM(Module.smartMineVisual=({version:33,armed:!!$0,unfold:$1});,armed>=1,open);
+}
+
 int astra_draw_weapon(object *obj){
     if(!ax_on()||obj->type!=OBJ_WEAPON||obj->id>=N_weapon_types)return 0;
     int id=obj->id,missile=astra_weapon_missile(obj);
     int laser=(id>=LASER_ID_L1&&id<=LASER_ID_L4)||id==LASER_ID_L5||id==LASER_ID_L6;
+    if(id==SUPERPROX_ID||id==ROBOT_SUPERPROX_ID){af_smart_mine(obj,astra_visual_clock());return 1;}
     if(is_proximity_bomb_or_smart_mine(id)||id==PMINE_ID)return 0;
     if(obj->render_type==RT_NONE&&id!=FLARE_ID&&id!=VULCAN_ID&&id!=GAUSS_ID)return 0;
     /* Player Omega is drawn once as a continuous paired discharge. */
@@ -416,15 +450,15 @@ int astra_draw_weapon(object *obj){
         }
         ax_paint(.50f,.78f,1,1);af_particle(0,0,rear-.18f,nozzle*1.3f,.85f,phase);af_flush(clock,0);
         EM_ASM(Module.missileExhaustVersion=14;Module.missileExhaustSamples=24;);
-    }else if(id==PLASMA_ID){
+    }else if(id==PLASMA_ID||id==PLAYER_SMART_HOMING_ID||id==ROBOT_SMART_HOMING_ID||id==SMART_MINE_HOMING_ID||id==ROBOT_SMART_MINE_HOMING_ID){
         /* Every visible plasma component is round geometry. No billboard halo
          * or ribbon can turn into a flat green shape as the view changes. */
         float r=radius*.86f,near=fminf(1,fmaxf(0,(f2fl(view.p3_z)/f2fl(Matrix_scale.z)-.35f)/2.5f));
-        ax_count=0;ax_energy=2;ax_paint(.035f,.94f,.19f,1.7f);ax_orb(r*.94f,1.12f);
+        ax_count=0;ax_energy=2;if(id==PLASMA_ID)ax_paint(.035f,.94f,.19f,1.7f);else ax_weapon_color(id,enemy);ax_orb(r*.94f,1.12f);
         ax_flush(1,near);ax_energy=2;ax_count=0;
         for(int j=1;j<=4;j++){
             float u=j/4.f;int start=ax_count;
-            ax_paint(.018f,.34f*(1-u*.7f),.09f,1);ax_orb(r*(.24f-.14f*u),1.1f);
+            if(id==PLASMA_ID)ax_paint(.018f,.34f*(1-u*.7f),.09f,1);else{ax_weapon_color(id,enemy);for(int c=0;c<3;c++)ax_color[c]*=.34f*(1-u*.7f);}ax_orb(r*(.24f-.14f*u),1.1f);
             for(int v=start;v<ax_count;v++)ax_vertices[v].p[2]-=fminf(tail,1.25f)*u;
         }
         ax_flush(1,near);ax_energy=0;
