@@ -59,6 +59,7 @@
     commit(){
       const s=this.pending;if(!s)return;
       const changed=this.token!==s.token;
+      const moved=s.reorder && !changed && this.state.selected!==s.selected;
       if(changed){this.queue=[];this.rows=[];q('nativeItems').replaceChildren();q('nativeItems').scrollTop=0;}
       this.active=true;this.token=s.token;this.state=s;
       releaseFlightMouse();q('nativeScreen').hidden=false;document.body.classList.add('native-open');window.ensureAstraHangar?.();
@@ -68,8 +69,8 @@
       q('nativeContext').textContent=s.kind?'FLIGHT ARCHIVE':'FLIGHT COMPUTER';
       q('nativeBack').hidden=!s.allowBack;q('nativeReorder').hidden=!s.reorder;
       q('nativeOpen').hidden=!s.items.some(x=>[0,1,6].includes(x.type));
-      q('nativeOpen').textContent=s.kind?'Open selection ↗':s.items.some(x=>x.type===6)?'Confirm selection ↗':'Open selection ↗';
-      q('nativeHint').textContent=s.reorder?'Select an item, then use the arrow buttons to reorder.':q('nativeOpen').hidden?'Adjust the controls with your mouse · Back or Esc to return':'Click to select · Double-click or Enter to open';
+      q('nativeOpen').textContent=s.reorder?'Done':s.kind?'Open selection ↗':s.items.some(x=>x.type===6)?'Confirm selection ↗':'Open selection ↗';
+      q('nativeHint').textContent=s.reorder?'Select a weapon or the divider. Use ↑ and ↓ or Shift + an arrow key to move it.':q('nativeOpen').hidden?'Adjust the controls with your mouse · Back or Esc to return':'Click to select · Double-click or Enter to open';
       s.items.forEach((item,i)=>{
         let row=this.rows[i];
         if(!row||row.dataset.type!==String(item.type)){
@@ -88,6 +89,11 @@
         }
       });
       while(this.rows.length>s.items.length)this.rows.pop().remove();
+      if(moved){
+        const selected=this.rows[s.selected];
+        if(q('nativeItems').contains(document.activeElement))selected?.focus({preventScroll:true});
+        selected?.scrollIntoView({block:'nearest'});
+      }
       if(changed){q('nativeItems').tabIndex=-1;q('nativeItems').focus({preventScroll:true});}
     },
     makeRow(item){
@@ -123,7 +129,11 @@
       q('hangarHome').append(q('hangarDock'));window.astraHangar?.render();
     }
   };
-  q('nativeBack').onclick=e=>{if(e.detail<=1)menu.send(5);};
+  let lastBackMenu=0;
+  q('nativeBack').onclick=e=>{
+    if(e.detail>1 && lastBackMenu===menu.token)return;
+    lastBackMenu=menu.token;menu.send(5);
+  };
   q('nativeOpen').onclick=e=>{if(e.detail<=1)menu.send(2,menu.state.selected);};
   q('nativeUp').onclick=()=>menu.send(6,menu.state.selected,-1);
   q('nativeDown').onclick=()=>menu.send(6,menu.state.selected,1);
@@ -138,6 +148,9 @@
     const input=e.target.tagName==='INPUT';
     if(input){if(e.key==='Enter'){e.preventDefault();menu.send(2,menu.state.selected);}return;}
     if(e.target.tagName==='BUTTON'&&['Enter',' '].includes(e.key))return;
+    if(menu.state.reorder && e.shiftKey && ['ArrowUp','ArrowDown'].includes(e.key)){
+      e.preventDefault();menu.send(6,menu.state.selected,e.key==='ArrowUp'?-1:1);return;
+    }
     if(['ArrowUp','ArrowDown','Home','End'].includes(e.key)){
       e.preventDefault();const items=menu.state.items.filter(x=>x.type!==4),index=items.findIndex(x=>x.index===menu.state.selected);
       const n=e.key==='Home'?0:e.key==='End'?items.length-1:(index+(e.key==='ArrowDown'?1:-1)+items.length)%items.length;

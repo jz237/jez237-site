@@ -221,6 +221,7 @@ window.addEventListener("blur", releaseFlightMouse);
 document.addEventListener("visibilitychange", () => { if (document.hidden) releaseFlightMouse(); });
 
 let firstBlastProfile=0;
+let openWeaponPriorities=false;
 window.astraPreview = {
   active:false,
   show(active) {
@@ -304,7 +305,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
     const quality=Number($("res").value);
     const height=Math.round(quality*9/16);
     window.Module={
-      canvas,quick,demo,encounter,autopilot,assetDepot,loadMovie,fastLaunch:true,blastInspect:preview?firstBlastProfile:0,mineInspect:mine?0:-1,mineInspectZoom:1,demoArsenal:autopilot&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:mine?Number($("mineLevel").value):autopilot?Number($("demoLevel").value):1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign:$("campaign").value,wideHud:$("wideHud").checked,intro:!quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys",
+      canvas,quick,demo,encounter,autopilot,openWeaponPriorities,assetDepot,loadMovie,fastLaunch:true,blastInspect:preview?firstBlastProfile:0,mineInspect:mine?0:-1,mineInspectZoom:1,demoArsenal:autopilot&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:mine?Number($("mineLevel").value):autopilot?Number($("demoLevel").value):1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign:$("campaign").value,wideHud:$("wideHud").checked,intro:!openWeaponPriorities && !quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys",
         "-gl_gettexlevelparam_ok","0","-gl_intensity4_ok","0","-gl_luminance4_alpha4_ok","0","-gl_rgba2_ok","0"],
       print:console.log,printErr:console.warn,onAbort:astraFail,
       onExit:()=>{window.astraMenus?.hide();window.astraTerminal?.fail();window.astraFlightFocus(false);syncPilot();document.body.classList.remove("flying");$("status").textContent="Flight ended."; $("retry").hidden=false;},
@@ -342,7 +343,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre26");
+    await script("engine.js?v=pyre27");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 
@@ -386,7 +387,13 @@ $("blastSelect").onchange=()=>{
   Module.pyroPreviewCommand=1;
 };
 $("encounter").onclick=()=>launch(true,false,true);
-$("menus").onclick=()=>launch(false);
+function launchCampaignMenu(priorities) {
+  if(launchPending)return;
+  openWeaponPriorities=priorities;
+  launch(false);
+}
+$("menus").onclick=()=>launchCampaignMenu(false);
+$("weaponPriorities").onclick=()=>launchCampaignMenu(true);
 $("demo").onclick=()=>launch(false,true);
 $("retry").onclick=()=>location.reload();
 $("full").onclick=()=>document.fullscreenElement?document.exitFullscreen():$("stage").requestFullscreen();

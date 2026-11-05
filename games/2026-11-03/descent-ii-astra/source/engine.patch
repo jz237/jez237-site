@@ -929,7 +929,7 @@ index fe9b0d1..3bfd338 100644
 +
 +
 diff --git a/d2/main/game.c b/d2/main/game.c
-index f15d413..f92cf5c 100644
+index f15d413..001167a 100644
 --- a/d2/main/game.c
 +++ b/d2/main/game.c
 @@ -1108,6 +1108,19 @@ void game_render_frame();
@@ -1026,7 +1026,15 @@ index f15d413..f92cf5c 100644
  		powerup_grab_cheat_all();
  
  		if (Endlevel_sequence)	//might have been started during move
-@@ -1731,7 +1764,16 @@ void FireLaser()
+@@ -1713,6 +1746,7 @@ void FireLaser()
+ 	if ((Players[Player_num].primary_weapon == FUSION_INDEX) && (Global_laser_firing_count)) {
+ 		if ((Players[Player_num].energy < F1_0*2) && (Auto_fire_fusion_cannon_time == 0)) {
+ 			Global_laser_firing_count = 0;
++			auto_select_weapon(0);
+ 		} else {
+ 			static fix64 Fusion_next_sound_time = 0;
+ 			int flash_val;
+@@ -1731,7 +1765,16 @@ void FireLaser()
  
  			flash_val = !(Game_mode & GM_MULTI) || !Netgame.ReducedFlash ? Fusion_charge >> 11 :
  				PaletteRedAdd < 10 ? 10 - PaletteRedAdd : 0;
@@ -1311,10 +1319,10 @@ index 64c6202..9dde716 100644
  }
  
 diff --git a/d2/main/inferno.c b/d2/main/inferno.c
-index dc6e44a..d9dff6a 100644
+index dc6e44a..7a2b569 100644
 --- a/d2/main/inferno.c
 +++ b/d2/main/inferno.c
-@@ -44,6 +44,12 @@ char copyright[] = "DESCENT II  COPYRIGHT (C) 1994-1996 PARALLAX SOFTWARE CORPOR
+@@ -44,6 +44,13 @@ char copyright[] = "DESCENT II  COPYRIGHT (C) 1994-1996 PARALLAX SOFTWARE CORPOR
  #include "key.h"
  #include "3d.h"
  #include "bm.h"
@@ -1322,12 +1330,13 @@ index dc6e44a..d9dff6a 100644
 +EM_JS(int,astra_auto_difficulty,(void),{return Module.autopilot?1:(Number.isInteger(Module.difficulty)?Module.difficulty:-1);});
 +EM_JS(int,astra_mine_launch,(void),{return Module.mineInspect>=0;});
 +EM_JS(int,astra_auto_first,(void),{return Module.startLevel||1;});
++EM_JS(int, astra_weapon_setup_requested, (void), { return !!Module.openWeaponPriorities; });
 +extern int astra_intro(void), astra_quick(void), astra_demo(void);
 +#define SHAREPATH "/mine"
  #include "inferno.h"
  #include "dxxerror.h"
  #include "game.h"
-@@ -415,7 +421,7 @@ int main(int argc, char *argv[])
+@@ -415,7 +422,7 @@ int main(int argc, char *argv[])
  	con_printf( CON_DEBUG, "Initializing movie libraries...\n" );
  	init_movies();		//init movie libraries
  
@@ -1336,7 +1345,7 @@ index dc6e44a..d9dff6a 100644
  
  	set_screen_mode(SCREEN_MENU);
  
-@@ -487,7 +493,31 @@ int main(int argc, char *argv[])
+@@ -487,7 +494,32 @@ int main(int argc, char *argv[])
  #endif
  	{
  		Game_mode = GM_GAME_OVER;
@@ -1355,7 +1364,8 @@ index dc6e44a..d9dff6a 100644
 +        
 +        if(astra_wide_hud()) PlayerCfg.CurrentCockpitMode=PlayerCfg.PreferredCockpitMode=CM_FULL_SCREEN;
 +        DoMenu();
-+        if (astra_demo()) newdemo_start_playback("descent2.dem");
++        if (astra_weapon_setup_requested()) do_weapon_priority_menu();
++        else if (astra_demo()) newdemo_start_playback("descent2.dem");
 +        else if (astra_quick() && load_mission_by_name(astra_vertigo()?"d2x":"d2")) {
 +            Difficulty_level = astra_auto_difficulty();
 +            if(Difficulty_level<0)Difficulty_level=PlayerCfg.DefaultDifficulty;
@@ -1369,7 +1379,7 @@ index dc6e44a..d9dff6a 100644
  	}
  
  	setjmp(LeaveEvents);
-@@ -521,3 +551,6 @@ int main(int argc, char *argv[])
+@@ -521,3 +553,6 @@ int main(int argc, char *argv[])
  
  	return(0);		//presumably successful exit
  }
@@ -1437,10 +1447,18 @@ index 2841dad..43350e7 100644
  
  	if (( &Objects[parent] != Viewer ) && (Objects[parent].type != OBJ_WEAPON) &&
 diff --git a/d2/main/menu.c b/d2/main/menu.c
-index 8301896..2afd444 100644
+index 8301896..85607f2 100644
 --- a/d2/main/menu.c
 +++ b/d2/main/menu.c
-@@ -501,7 +501,7 @@ void create_main_menu(newmenu_item *m, int *menu_choice, int *callers_num_option
+@@ -21,6 +21,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
+ #include <string.h>
+ 
+ #include "menu.h"
++#include "weapon.h"
+ #include "inferno.h"
+ #include "game.h"
+ #include "gr.h"
+@@ -501,7 +502,7 @@ void create_main_menu(newmenu_item *m, int *menu_choice, int *callers_num_option
  
  	ADD_ITEM(TXT_LOAD_GAME,MENU_LOAD_GAME,KEY_L);
  #if defined(USE_UDP)
@@ -1449,7 +1467,63 @@ index 8301896..2afd444 100644
  #endif
  
  	ADD_ITEM(TXT_OPTIONS_, MENU_CONFIG, -1 );
-@@ -1091,6 +1091,8 @@ void input_config_sensitivity()
+@@ -853,6 +854,45 @@ void graphics_config();
+ void do_misc_menu();
+ void do_obs_menu();
+ 
++/* These controls edit the same player configuration used by pickups,
++ * ammunition fallback and the original campaign options. */
++static void save_weapon_priorities(void)
++{
++    reset_auto_select();
++    write_player_file();
++    EM_ASM(if (typeof syncPilot == "function") syncPilot(););
++}
++
++static int weapon_priority_handler(newmenu *menu, d_event *event, void *userdata)
++{
++    int row = newmenu_get_citem(menu);
++    if (event->type == EVENT_NEWMENU_CHANGED && row == 0) {
++        PlayerCfg.WeaponAutoselect = !!newmenu_get_items(menu)[0].value;
++        save_weapon_priorities();
++    }
++    if (event->type == EVENT_NEWMENU_SELECTED) {
++        if (row == 1) ReorderPrimary();
++        if (row == 2) ReorderSecondary();
++        if (row == 1 || row == 2) save_weapon_priorities();
++        return 1;
++    }
++    return 0;
++}
++
++void do_weapon_priority_menu(void)
++{
++    static newmenu_item items[3];
++    memset(items, 0, sizeof(items));
++    items[0].type = NM_TYPE_CHECK;
++    items[0].text = "Auto-select weapons";
++    items[0].value = PlayerCfg.WeaponAutoselect;
++    items[1].type = items[2].type = NM_TYPE_MENU;
++    items[1].text = "Primary weapon priority...";
++    items[2].text = "Secondary weapon priority...";
++    newmenu_do3("Weapon auto-select", "Higher-ranked pickups take priority. Move weapons below the divider for manual selection.",
++                SDL_arraysize(items), items, weapon_priority_handler, NULL, 0, NULL);
++}
++
+ int options_menuset(newmenu *menu, d_event *event, void *userdata)
+ {
+ 	switch (event->type)
+@@ -867,8 +907,7 @@ int options_menuset(newmenu *menu, d_event *event, void *userdata)
+ 				case  2: input_config();		break;
+ 				case  4: change_res();			break;
+ 				case  5: graphics_config();		break;
+-				case  7: ReorderPrimary();		break;
+-				case  8: ReorderSecondary();		break;
++				case  7: do_weapon_priority_menu();		break;
+ 				case  9: do_misc_menu();		break;
+ 				case 10: do_obs_menu();         break;
+ 			}
+@@ -1091,6 +1130,8 @@ void input_config_sensitivity()
  	PlayerCfg.MouseImpulse = m[mouseimpulse].value; /* Old School Mouse */ 
  }
  
@@ -1458,7 +1532,7 @@ index 8301896..2afd444 100644
  static int opt_ic_usejoy = 0, opt_ic_usemouse = 0, opt_ic_confkey = 0, opt_ic_confjoy = 0, opt_ic_confmouse = 0, opt_ic_confweap = 0, opt_ic_mouseflightsim = 0, opt_ic_joymousesens = 0, opt_ic_grabinput = 0, opt_ic_mousefsgauge = 0, opt_ic_stickyrear = 0, opt_ic_help0 = 0, opt_ic_help1 = 0, opt_ic_help2 = 0;
  int input_config_menuset(newmenu *menu, d_event *event, void *userdata)
  {
-@@ -1102,7 +1104,8 @@ int input_config_menuset(newmenu *menu, d_event *event, void *userdata)
+@@ -1102,7 +1143,8 @@ int input_config_menuset(newmenu *menu, d_event *event, void *userdata)
  	switch (event->type)
  	{
  		case EVENT_NEWMENU_CHANGED:
@@ -1468,7 +1542,7 @@ index 8301896..2afd444 100644
  				(items[citem].value)?(PlayerCfg.ControlType|=CONTROL_USING_JOYSTICK):(PlayerCfg.ControlType&=~CONTROL_USING_JOYSTICK);
  			if (citem == opt_ic_usemouse)
  				(items[citem].value)?(PlayerCfg.ControlType|=CONTROL_USING_MOUSE):(PlayerCfg.ControlType&=~CONTROL_USING_MOUSE);
-@@ -1150,13 +1153,14 @@ int input_config_menuset(newmenu *menu, d_event *event, void *userdata)
+@@ -1150,13 +1192,14 @@ int input_config_menuset(newmenu *menu, d_event *event, void *userdata)
  
  void input_config()
  {
@@ -1484,11 +1558,34 @@ index 8301896..2afd444 100644
  	m[nitems].type = NM_TYPE_TEXT; m[nitems].text = ""; nitems++;
  	opt_ic_confkey = nitems;
  	m[nitems].type = NM_TYPE_MENU; m[nitems].text = "CUSTOMIZE KEYBOARD"; nitems++;
-@@ -2753,3 +2757,4 @@ void do_sandbox_menu()
+@@ -2530,8 +2573,8 @@ void do_options_menu()
+ 	m[ 4].type = NM_TYPE_MENU;   m[ 4].text="Screen resolution...";
+ 	m[ 5].type = NM_TYPE_MENU;   m[ 5].text="Graphics Options...";
+ 	m[ 6].type = NM_TYPE_TEXT;   m[ 6].text="";
+-	m[ 7].type = NM_TYPE_MENU;   m[ 7].text="Primary autoselect ordering...";
+-	m[ 8].type = NM_TYPE_MENU;   m[ 8].text="Secondary autoselect ordering...";
++	m[ 7].type = NM_TYPE_MENU;   m[ 7].text="Weapon auto-select...";
++	m[ 8].type = NM_TYPE_TEXT;   m[ 8].text="";
+ 	m[ 9].type = NM_TYPE_MENU;   m[ 9].text="Misc Options...";
+ 	m[10].type = NM_TYPE_MENU;   m[10].text="Observer Options...";
+ 
+@@ -2753,3 +2796,4 @@ void do_sandbox_menu()
  	newmenu_do3( NULL, "Coder's sandbox", 2, m, sandbox_menuset, NULL, 0, NULL );
  }
  #endif
 +
+diff --git a/d2/main/menu.h b/d2/main/menu.h
+index 728fff3..9e71bf3 100644
+--- a/d2/main/menu.h
++++ b/d2/main/menu.h
+@@ -29,6 +29,7 @@ extern int RegisterPlayer();
+ // returns number of item chosen
+ extern int DoMenu();
+ extern void do_options_menu();
++extern void do_weapon_priority_menu(void);
+ extern void d2x_options_menu();
+ extern int select_demo(void);
+ 
 diff --git a/d2/main/movie.c b/d2/main/movie.c
 index 33bd8ca..5a9a4b9 100644
 --- a/d2/main/movie.c
@@ -1835,6 +1932,47 @@ index 602b2d5..cb589a5 100644
  		ConsoleObject->mtype.phys_info.flags |= PF_LEVELLING;
  	else
  		ConsoleObject->mtype.phys_info.flags &= ~PF_LEVELLING;
+diff --git a/d2/main/playsave.c b/d2/main/playsave.c
+index 1944a8c..4193e82 100644
+--- a/d2/main/playsave.c
++++ b/d2/main/playsave.c
+@@ -124,6 +124,7 @@ int new_player_config()
+ 	PlayerCfg.MultiMessages = 0;
+ 	PlayerCfg.NoRankings = 0;
+ 	PlayerCfg.AutomapFreeFlight = 0;
++	PlayerCfg.WeaponAutoselect = 1;
+ 	PlayerCfg.NoFireAutoselect = 0;
+ 	PlayerCfg.CycleAutoselectOnly = 0;
+ 	PlayerCfg.AlphaEffects = 0;
+@@ -404,6 +405,8 @@ int read_player_d2x(char *filename)
+ 					PlayerCfg.StickyRearview = atoi(line); /* StickyRearview */ 
+ 				if(!strcmp(word,"SELECTAFTERFIRE"))
+ 					PlayerCfg.SelectAfterFire = atoi(line); /* SelectAfterFire */ 					
++				if(!strcmp(word,"WEAPONAUTOSELECT"))
++					PlayerCfg.WeaponAutoselect = atoi(line) != 0;
+ 				if(!strcmp(word,"NOFIREAUTOSELECT"))
+ 					PlayerCfg.NoFireAutoselect = atoi(line);
+ 				if(!strcmp(word,"CYCLEAUTOSELECTONLY"))
+@@ -698,6 +701,7 @@ int write_player_d2x(char *filename)
+ 		PHYSFSX_printf(fout,"disablecockpit=%i\n",PlayerCfg.DisableCockpit); /* DisableCockpit */ 
+ 		PHYSFSX_printf(fout,"stickyrearview=%i\n",PlayerCfg.StickyRearview); /* StickyRearview */ 
+ 		PHYSFSX_printf(fout,"selectafterfire=%i\n",PlayerCfg.SelectAfterFire); /* SelectAfterFire */ 		
++		PHYSFSX_printf(fout,"weaponautoselect=%i\n",PlayerCfg.WeaponAutoselect);
+ 		PHYSFSX_printf(fout,"nofireautoselect=%i\n",PlayerCfg.NoFireAutoselect);
+ 		PHYSFSX_printf(fout,"cycleautoselectonly=%i\n",PlayerCfg.CycleAutoselectOnly);
+ 		PHYSFSX_printf(fout,"autoselectonlyfirstweaponpickup=%i\n",PlayerCfg.AutoselectOnlyOnce);
+diff --git a/d2/main/playsave.h b/d2/main/playsave.h
+index 0303b58..c137fae 100644
+--- a/d2/main/playsave.h
++++ b/d2/main/playsave.h
+@@ -83,6 +83,7 @@ typedef struct player_config
+ 	ubyte MultiMessages;
+ 	ubyte NoRankings;
+ 	ubyte AutomapFreeFlight;
++	ubyte WeaponAutoselect;
+ 	ubyte NoFireAutoselect;
+ 	ubyte CycleAutoselectOnly;
+ 	ubyte VulcanAmmoWarnings;
 diff --git a/d2/main/polyobj.c b/d2/main/polyobj.c
 index 823ccc1..d116511 100644
 --- a/d2/main/polyobj.c
@@ -2043,6 +2181,262 @@ index fde0fd3..50b1cd2 100644
  	return state_game_id;
  }
 +
+diff --git a/d2/main/weapon.c b/d2/main/weapon.c
+index f3ad3c7..1205e1a 100644
+--- a/d2/main/weapon.c
++++ b/d2/main/weapon.c
+@@ -461,142 +461,45 @@ void do_weapon_select(int weapon_num, int secondary_flag)
+ 	select_weapon(weapon_num, secondary_flag, 1, 1);
+ }
+ 
+-void classic_auto_select_weapon(int weapon_type)
++/* Match the pilot's two native order lists. The divider is moveable and
++ * can be first, in which case every weapon requires manual selection. */
++static int autoselect_can_fire(int weapon, int secondary)
+ {
+-	int	r;
+-	int cutpoint;
+-	int looped=0;
+-
+-	if (weapon_type==0) {
+-		r = player_has_weapon(Player_num, Players[Player_num].primary_weapon, 0);
+-		if (r != HAS_ALL) {
+-			int	cur_weapon;
+-			int	try_again = 1;
+-
+-			cur_weapon = POrderList(Players[Player_num].primary_weapon);
+-			cutpoint = POrderList (255);
+-
+-			while (try_again) {
+-				cur_weapon++;
+-
+-				if (cur_weapon>=cutpoint)
+-				{
+-					if (looped)
+-					{
+-						HUD_init_message_literal(HM_DEFAULT, TXT_NO_PRIMARY);
+-						select_weapon(0, 0, 0, 1);
+-						try_again = 0;
+-						continue;
+-					}
+-					cur_weapon=0;
+-					looped=1;
+-				}
+-
+-
+-				if (cur_weapon==MAX_PRIMARY_WEAPONS)
+-					cur_weapon = 0;
+-
+-				//	Hack alert!  Because the fusion uses 0 energy at the end (it's got the weird chargeup)
+-				//	it looks like it takes 0 to fire, but it doesn't, so never auto-select.
+-				// if (PlayerCfg.PrimaryOrder[cur_weapon] == FUSION_INDEX)
+-				//	continue;
+-
+-				if (PlayerCfg.PrimaryOrder[cur_weapon] == Players[Player_num].primary_weapon) {
+-					HUD_init_message_literal(HM_DEFAULT, TXT_NO_PRIMARY);
+-					select_weapon(0, 0, 0, 1);
+-					try_again = 0;			// Tried all weapons!
+-
+-				} else if (PlayerCfg.PrimaryOrder[cur_weapon]!=255 && player_has_weapon(Player_num, PlayerCfg.PrimaryOrder[cur_weapon], 0) == HAS_ALL) {
+-					select_weapon(PlayerCfg.PrimaryOrder[cur_weapon], 0, 1, 1 );
+-					try_again = 0;
+-				}
+-			}
+-		}
+-
+-	} else {
+-
+-		Assert(weapon_type==1);
+-		r = player_has_weapon(Player_num, Players[Player_num].secondary_weapon, 1);
+-		if (r != HAS_ALL) {
+-			int	cur_weapon;
+-			int	try_again = 1;
+-
+-			cur_weapon = SOrderList(Players[Player_num].secondary_weapon);
+-			cutpoint = SOrderList (255);
+-
+-
+-			while (try_again) {
+-				cur_weapon++;
+-
+-				if (cur_weapon>=cutpoint)
+-				{
+-					if (looped)
+-					{
+-						HUD_init_message_literal(HM_DEFAULT, "No secondary weapons selected!");
+-						try_again = 0;
+-						continue;
+-					}
+-					cur_weapon=0;
+-					looped=1;
+-				}
+-
+-				if (cur_weapon==MAX_SECONDARY_WEAPONS)
+-					cur_weapon = 0;
+-
+-				if (PlayerCfg.SecondaryOrder[cur_weapon] == Players[Player_num].secondary_weapon) {
+-					HUD_init_message_literal(HM_DEFAULT, "No secondary weapons available!");
+-					try_again = 0;				// Tried all weapons!
+-				} else if (player_has_weapon(Player_num, PlayerCfg.SecondaryOrder[cur_weapon], 1) == HAS_ALL) {
+-					select_weapon(PlayerCfg.SecondaryOrder[cur_weapon], 1, 1, 1 );
+-					try_again = 0;
+-				}
+-			}
+-		}
+-
+-
+-	}
+-
++    /* Fusion spends its initial charge in FireLaser, outside the HAM table. */
++    if (!secondary && weapon == FUSION_INDEX && Players[Player_num].energy < i2f(2) && !Fusion_charge)
++        return 0;
++    return player_has_weapon(Player_num, weapon, secondary) == HAS_ALL;
+ }
+ 
+-
+-//	----------------------------------------------------------------------------------------
+-//	Automatically select next best weapon if unable to fire current weapon.
+-// Weapon type: 0==primary, 1==secondary
+-void auto_select_weapon(int weapon_type)
++void auto_select_weapon(int secondary)
+ {
+-	if (PlayerCfg.ClassicAutoselectWeapon) {
+-		classic_auto_select_weapon(weapon_type);
+-		return;
+-	}
+-
+-	// Can you fire your current weapon? 
+-	if(weapon_type == 0 && player_has_weapon(Player_num, Players[Player_num].primary_weapon, 0) == HAS_ALL) { return; }
+-	if(weapon_type == 1 && player_has_weapon(Player_num, Players[Player_num].secondary_weapon, 1) == HAS_ALL) { return; }
+-
+-	// Ok, no.  Let's find you a new one. 
+-	int selected_weapon = 0; 
+-	int max_weapons = weapon_type == 0 ? MAX_PRIMARY_WEAPONS + 1 : MAX_SECONDARY_WEAPONS + 1; 
+-	for(int i = 0; i < max_weapons; i++) {
+-		int next_weapon = weapon_type == 0 ? PlayerCfg.PrimaryOrder[i] : PlayerCfg.SecondaryOrder[i];
+-
+-		if(next_weapon == 255) { continue; } // Breakpoint in list
+-		if(next_weapon == PROXIMITY_INDEX && weapon_type == 1) { continue; } // Don't autoselect proxies.  Ever.
+-		if(player_has_weapon(Player_num, next_weapon, weapon_type) != HAS_ALL) { continue; } // Missing weapon or ammo
+-
+-		select_weapon(next_weapon, weapon_type, 0, 1); 
+-		selected_weapon = 1; 
+-		break; 
+-	}
+-
+-	// Nothing will shoot?  Bummer.
+-	if(! selected_weapon ) {
+-		if(weapon_type == 0) {
+-			select_weapon(0, 0, 0, 1); // Apparently you have to select lasers because if you leave it on vulcan, you can keep shooting!
+-			HUD_init_message_literal(HM_DEFAULT, "No primary weapons available!");
+-		} else {
+-			HUD_init_message_literal(HM_DEFAULT, "No secondary weapons available!");
+-		}
+-	}
++    player *pilot = &Players[Player_num];
++    int active = secondary ? pilot->secondary_weapon : pilot->primary_weapon;
++    if (!PlayerCfg.WeaponAutoselect || autoselect_can_fire(active, secondary))
++        return;
++
++    const ubyte *order = secondary ? PlayerCfg.SecondaryOrder : PlayerCfg.PrimaryOrder;
++    int cutoff = secondary ? SOrderList(255) : POrderList(255);
++    int super_laser = !secondary && pilot->laser_level > MAX_LASER_LEVEL;
++    int current_entry = super_laser && active == LASER_INDEX ? SUPER_LASER_INDEX : active;
++    int start = 0;
++    if (PlayerCfg.ClassicAutoselectWeapon) {
++        int rank = secondary ? SOrderList(current_entry) : POrderList(current_entry);
++        if (rank < cutoff) start = rank + 1;
++    }
++    for (int i = 0; i < cutoff; i++) {
++        int next = order[(start + i) % cutoff];
++        /* Both laser entries fire using the same native gun slot. */
++        if (!secondary && (next == LASER_INDEX || next == SUPER_LASER_INDEX)) {
++            if ((next == SUPER_LASER_INDEX) != super_laser) continue;
++            next = LASER_INDEX;
++        }
++        if (autoselect_can_fire(next, secondary)) {
++            select_weapon(next, secondary, PlayerCfg.ClassicAutoselectWeapon, 1);
++            return;
++        }
++    }
++    HUD_init_message_literal(HM_DEFAULT, secondary ? "No secondary weapons available!" : "No primary weapons available!");
+ }
+ 
+ int delayed_secondary_autoselect_weapon_index = -1;
+@@ -609,9 +512,9 @@ int pick_up_secondary(int weapon_index,int count)
+ 	int max;
+ 	int	num_picked_up;
+ 	int cutpoint;
+-	const int suppress_autoselect = PlayerCfg.AutoselectOnlyOnce &&
++	const int suppress_autoselect = !PlayerCfg.WeaponAutoselect || (PlayerCfg.AutoselectOnlyOnce &&
+ 		SecondaryWeaponPickedUp &&
+-		Players[Player_num].secondary_ammo[Players[Player_num].secondary_weapon];
++		Players[Player_num].secondary_ammo[Players[Player_num].secondary_weapon]);
+ 
+ 	max = Secondary_ammo_max[weapon_index];
+ 
+@@ -746,7 +649,7 @@ void ReorderPrimary ()
+ 			m[i].text=(char *)PRIMARY_WEAPON_NAMES(PlayerCfg.PrimaryOrder[i]);
+ 		m[i].value=PlayerCfg.PrimaryOrder[i];
+ 	}
+-	i = newmenu_doreorder("Reorder Primary","Shift+Up/Down arrow to move item", i, m, NULL, NULL);
++	i = newmenu_doreorder("Reorder Primary","Highest priority first. Weapons below the divider are manual only.", i, m, NULL, NULL);
+ 
+ 	for (i=0;i<MAX_PRIMARY_WEAPONS+1;i++)
+ 		PlayerCfg.PrimaryOrder[i]=m[i].value;
+@@ -766,7 +669,7 @@ void ReorderSecondary ()
+ 			m[i].text=(char *)SECONDARY_WEAPON_NAMES(PlayerCfg.SecondaryOrder[i]);
+ 		m[i].value=PlayerCfg.SecondaryOrder[i];
+ 	}
+-	i = newmenu_doreorder("Reorder Secondary","Shift+Up/Down arrow to move item", i, m, NULL, NULL);
++	i = newmenu_doreorder("Reorder Secondary","Highest priority first. Weapons below the divider are manual only.", i, m, NULL, NULL);
+ 	for (i=0;i<MAX_SECONDARY_WEAPONS+1;i++)
+ 		PlayerCfg.SecondaryOrder[i]=m[i].value;
+ }
+@@ -804,7 +707,7 @@ int pick_up_primary(int weapon_index)
+ 	//ushort old_flags = Players[Player_num].primary_weapon_flags;
+ 	ushort flag = 1<<weapon_index;
+ 	int cutpoint, supposed_weapon=Players[Player_num].primary_weapon;
+-	const int suppress_autoselect = PlayerCfg.AutoselectOnlyOnce && PrimaryWeaponPickedUp;
++	const int suppress_autoselect = !PlayerCfg.WeaponAutoselect || (PlayerCfg.AutoselectOnlyOnce && PrimaryWeaponPickedUp);
+ 
+ 	if (weapon_index!=LASER_INDEX && Players[Player_num].primary_weapon_flags & flag) {		//already have
+ 		HUD_init_message(HM_DEFAULT|HM_REDUNDANT|HM_MAYDUPL, "%s %s!", TXT_ALREADY_HAVE_THE, PRIMARY_WEAPON_NAMES(weapon_index));
+@@ -822,7 +725,7 @@ int pick_up_primary(int weapon_index)
+ 		PrimaryWeaponPickedUp = 1;
+ 
+ 	// Picked up something better than you have
+-	if(!suppress_autoselect && POrderList(weapon_index)<cutpoint && POrderList(weapon_index)<POrderList(Players[Player_num].primary_weapon)) {
++	if(!suppress_autoselect && POrderList(weapon_index)<cutpoint && POrderList(weapon_index)<POrderList(supposed_weapon)) {
+ 
+ 		// Are you firing? 
+ 		if(Controls.fire_primary_state) {
+@@ -861,6 +764,7 @@ int pick_up_primary(int weapon_index)
+ 
+ /* SelectAfterFire */ 
+ void delayed_autoselect() {
++	if (!PlayerCfg.WeaponAutoselect) return;
+ 	if(delayed_primary_autoselect_weapon_index > -1 && ! Controls.fire_primary_state) {
+ 		select_weapon(delayed_primary_autoselect_weapon_index, 0, 0, 1); 
+ 		delayed_primary_autoselect_weapon_index = -1; 
+@@ -880,7 +784,7 @@ int check_to_use_primary(int weapon_index)
+ 
+ 	cutpoint=POrderList (255);
+ 
+-	if (!(old_flags & flag) && POrderList(weapon_index)<cutpoint && POrderList(weapon_index)<POrderList(Players[Player_num].primary_weapon))
++	if (PlayerCfg.WeaponAutoselect && !(old_flags & flag) && POrderList(weapon_index)<cutpoint && POrderList(weapon_index)<POrderList(Players[Player_num].primary_weapon))
+ 	{
+ 		if (weapon_index==SUPER_LASER_INDEX)
+ 			select_weapon(LASER_INDEX,0,0,1);
+@@ -927,7 +831,7 @@ int pick_up_ammo(int class_flag,int weapon_index,int ammo_count)
+ 
+ 	int primary_weapon_index = supposed_weapon;
+ 
+-	if ( Players[Player_num].primary_weapon_flags&(1<<weapon_index)  && old_ammo==0 &&
++	if (PlayerCfg.WeaponAutoselect && (Players[Player_num].primary_weapon_flags&(1<<weapon_index)) && old_ammo==0 &&
+ 		POrderList(weapon_index)<cutpoint && POrderList(weapon_index)<POrderList(primary_weapon_index)) {
+ 
+ 		// Are you firing? 
 diff --git a/d2/misc/args.c b/d2/misc/args.c
 index cb81385..51533d2 100644
 --- a/d2/misc/args.c
