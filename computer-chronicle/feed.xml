@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Wed, 04 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 05 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of June 17-23, 1985 — Elite brings its trading galaxy to the Commodore 64</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-06-17</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-06-17</guid>
+      <pubDate>Thu, 05 Nov 2026 12:00:00 GMT</pubDate>
+      <description>Firebird’s space-trading adventure gains colour on another home micro, with a few changes at the docking bay. The Commodore 64 has a new galaxy to explore. Martin Croft’s review in the June 20–26 Popular Computing Weekly finds Elite available from Firebird, carrying across the space-trading and combat formula that made it a major BBC and Electron success in 1984. The review establishes its arrival by this week’s issue, rather than a precise launch day. Also this week: Sinclair faces a Maxwell rescue and a smaller role for Sir Clive · Atari courts more than 100 British software houses for the ST · Dixons keeps the Plus/4 below £100 despite Commodore’s bundling push.</description>
+    </item>
     <item>
       <title>Week of June 10-16, 1985 — Summer Games II and Winter Games headline the post-CES games slate</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-06-10</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-02-04</guid>
       <pubDate>Sat, 17 Oct 2026 12:00:00 GMT</pubDate>
       <description>February’s COMPUTE! finds the novelist building adventures around believable solutions, not magic words. Michael Crichton has a complaint familiar to anyone stranded at an adventure-game prompt: a sensible solution ought not to fail merely because the player has guessed the wrong words. In February’s COMPUTE!, the novelist discusses Amazon and argues for puzzles that answer to the logic of the situation rather than an arbitrary phrase. Also this week: Wozniak leaves daily Apple duties for a living-room video venture · Online games and conversation challenge the established services · PC-Write turns copying into a sales channel.</description>
-    </item>
-    <item>
-      <title>Week of January 28-February 3, 1985 — Commodore earnings plunge 94%; home-computer boom faces its reckoning</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-01-28</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-01-28</guid>
-      <pubDate>Fri, 16 Oct 2026 12:00:00 GMT</pubDate>
-      <description>Quarterly profit shrinks to $3.2 million as the industry searches for its next reason to buy. Commodore’s latest figures have put a hard number on the cooling home-computer boom. Paul Richter reports in the February 1 Los Angeles Times that quarterly profit fell 94 percent to $3.2 million. Sales for the quarter ended December 31 declined 21 percent from a year earlier, to $338.7 million. Also this week: TurboTape promises disk-like loading from ordinary Commodore cassettes · The C64 becomes a six-track music studio · JTERM’s new version brings 1200-bps access to Atari bulletin-board callers.</description>
     </item>
   </channel>
 </rss>

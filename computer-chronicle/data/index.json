@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-05",
+      "historicDate": "1985-06-17",
+      "displayDate": "Week of June 17-23, 1985",
+      "edition": "Issue 151 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Elite docks on the Commodore 64; Atari courts developers; Dixons holds the Plus/4 below £100.",
+      "leadHeadline": "Elite brings its trading galaxy to the Commodore 64",
+      "storyHeadlines": [
+        "Sinclair faces a Maxwell rescue and a smaller role for Sir Clive",
+        "Atari courts more than 100 British software houses for the ST",
+        "Dixons keeps the Plus/4 below £100 despite Commodore’s bundling push"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-06-17.jpg",
+      "thumb": "media/thumbs/1985-06-17.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-04",
       "historicDate": "1985-06-10",
       "displayDate": "Week of June 10-16, 1985",

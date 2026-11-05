@@ -1,0 +1,400 @@
+{
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 151 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of June 17-23, 1985",
+    "price": "75 cents"
+  },
+  "currentDate": "2026-11-05",
+  "historicDate": "1985-06-17",
+  "displayDate": "Week of June 17-23, 1985",
+  "edition": "Issue 151 - Weekly 1985 Computer & Culture Chronicle",
+  "sources": [
+    {
+      "title": "Popular Computing Weekly Vol.4 No.25, June 20–26, 1985: museum index",
+      "url": "https://www.computinghistory.org.uk/det/28796/Popular-Computing-Weekly-Vol-4-No-25-20-26-June-1985/",
+      "date": "1985-06-20"
+    },
+    {
+      "title": "Popular Computing Weekly Vol.4 No.25: original scan, printed pp.1,4,5,13,14,18",
+      "url": "https://www.computinghistory.org.uk/downloads/28796",
+      "date": "1985-06-20"
+    },
+    {
+      "title": "Popular Computing Weekly Vol.4 No.24",
+      "url": "https://www.computinghistory.org.uk/det/28795/Popular-Computing-Weekly-Vol-4-No-24-13-19-June-1985",
+      "date": "1985-06-13"
+    },
+    {
+      "title": "COMPUTE!’s Gazette issue 24: June 1985 OCR, Goheen interview pp.30–36 and product news p.110",
+      "url": "https://archive.org/stream/1985-06-computegazette/Compute_Gazette_Issue_24_1985_Jun_djvu.txt",
+      "date": "1985-06"
+    },
+    {
+      "title": "Billboard Mainstream Rock archive, June 22, 1985",
+      "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-06-22/",
+      "date": "1985-06-22"
+    },
+    {
+      "title": "The Numbers: domestic weekend June 21–23",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/06/21",
+      "date": "1985-06-21"
+    },
+    {
+      "title": "NASA STS-51G mission record (retrospective official source)",
+      "url": "https://www.nasa.gov/mission/sts-51g/",
+      "date": "1985-06-17"
+    }
+  ],
+  "visualProfile": {
+    "tone": "Elite brings a galaxy to the Commodore 64",
+    "motifs": [
+      "wireframe spacecraft",
+      "Commodore 64 keyboard and disk",
+      "colour instrument panels"
+    ],
+    "layout": "Dense warm newsprint with red and blue boxed modules"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Elite space-trading gaming lead dominates",
+    "secondaryRail": "Sinclair rescue proposal, ST software, Plus/4 prices",
+    "archiveNavigation": "Weekly archive and previous/next controls"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-06-17.jpg",
+    "alt": "Newspaper-style Computer Chronicle front page for June 17–23, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "This week’s British computer press brings a new galaxy to the C64 and a proposed rescue for Sinclair.",
+  "morningLine": "Elite docks on the Commodore 64; Atari courts developers; Dixons holds the Plus/4 below £100.",
+  "lead": {
+    "headline": "Elite brings its trading galaxy to the Commodore 64",
+    "dek": "Firebird’s space-trading adventure gains colour on another home micro, with a few changes at the docking bay.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      0,
+      1
+    ],
+    "body": [
+      "The Commodore 64 has a new galaxy to explore. Martin Croft’s review in the June 20–26 Popular Computing Weekly finds Elite available from Firebird, carrying across the space-trading and combat formula that made it a major BBC and Electron success in 1984. The review establishes its arrival by this week’s issue, rather than a precise launch day.",
+      "The familiar ship and control layout remain, but the view is more colourful. Croft counts four colours in the view screens and eight on the displays. His disk copy loads in a reported 30 seconds—a useful observation from the review machine, rather than a promise for every setup.",
+      "There is a trade-off in the drawing room. The line graphics run somewhat more slowly than on the BBC version, according to the review, and players can remove the lines marking planetary polar caps to improve speed. The wireframe universe remains the central attraction.",
+      "Docking has acquired its own rhythm. The commander accelerates into the approach before the docking computer engages, and can still manoeuvre or fight while the sequence runs. The Blue Danube supplies the accompaniment. The review leaves the price undecided, so the new commander’s official entry ticket is not yet printed here."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Sinclair faces a Maxwell rescue and a smaller role for Sir Clive",
+      "body": [
+        "Sinclair Research is facing a proposed change of control. Reporting an announcement made on Sunday, June 16, Popular Computing Weekly describes a rescue under which a subsidiary of Robert Maxwell’s Pergamon Press–Hollis would take control, Maxwell would become chairman and a new managing director would be appointed.",
+        "The plan calls for Hollis to acquire 75 per cent for a nominal sum and raise £12 million through a three-for-one rights issue at £1 a share. Sir Clive would leave the board while remaining life president and research consultant, and would establish a separate technology-research concern.",
+        "The report places financing needs at £15 million and stock above £30 million after disappointing post-Christmas sales. Sir Clive’s 80 per cent holding would initially fall to about 20 per cent and eventually about 10 per cent in the account’s continuation. These are the terms of an announced proposal, not a completed takeover."
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "headline": "Atari courts more than 100 British software houses for the ST",
+      "body": [
+        "Atari says more than 100 British software houses will develop for the ST and is selling 520 ST machines to developers. Its ambition is an independent library of roughly 100 titles by September’s Personal Computer World Show—a target for the autumn, not a catalogue already in the shops.",
+        "Psion, Precision, Triptych, First Publishing and Hi-Soft confirm work. Psion discusses Chess and possibly Xchange later, while Precision plans Superbase and Superscript for both ST and Amiga. Atari’s Rob Harding describes a roughly even division among business software, utilities and integrated packages, and entertainment.",
+        "The timetable still depends on hardware. First Publishing hopes for October titles but explicitly makes that conditional on machine availability. Firebird, Hewson and Beyond have expressed interest without committing; a lively prospectus is not yet a stocked software shelf."
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "headline": "Dixons keeps the Plus/4 below £100 despite Commodore’s bundling push",
+      "body": [
+        "Dixons is keeping the Commodore Plus/4 below £100. The June 20 weekly reports a £99.90 offer with four C16 games, a price already in force for two weeks. That gives the budget buyer a very different proposition from Commodore’s new office bundle.",
+        "The £449 Plus/4 Business Pack includes a 1541 disk drive, MPS 801 printer and Impex software as well as the computer. Commodore hopes its bundles will discourage price cutting, but acknowledges that Dixons is free to choose its prices. The retailer has not decided whether to stock the Business Pack."
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "CRL video digitizer for C64/C128",
+      "summary": "Austrian Print Technik design converts camera images for saving, printing, enlargement and editing using a light pen or graphics tablet. Report says £149.95 mail-order now; retail launch planned for September’s PCW Show.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Commodore C128 preview",
+      "summary": "Jeff Naylor previews the twin-processor C128 on p.18; do not misreport the review as the machine’s original unveiling.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "First Word, First Base and languages planned for ST",
+      "detail": "First Publishing discusses translations of Data Becker packages, Pascal, ADA, Forth and a relational database. Plans only, not June shipping software.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "name": "Sinclair Logo recognized",
+      "detail": "Sir Clive collects the VNU Educational Award for Sinclair Logo; the QL also receives a home-micro award.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+      "items": [
+        "Elite — C64 version reviewed this week.",
+        "The Way of the Exploding Fist — C64 review; £9.95.",
+        "Runestone — Firebird buys the adventure; new label and price undecided.",
+        "The Hitchhiker’s Guide to the Galaxy — joint W. H. Smith Game of the Year.",
+        "Impossible Mission — joint W. H. Smith Game of the Year."
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "label": "Top 5 Movies — June 21-23 domestic weekend box office",
+      "items": [
+        "1. Cocoon — $7,936,427",
+        "2. Rambo: First Blood Part II — $7,281,106",
+        "3. The Goonies — $6,255,086",
+        "4. Lifeforce — $4,209,136",
+        "5. Fletch — $4,017,555"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        5
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Plus/4 at Dixons",
+      "price": "£99.90",
+      "note": "Includes four C16 games; offer already in force for two weeks.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Plus/4 Business Pack",
+      "price": "£449",
+      "note": "Computer, 1541 drive, MPS 801 printer and Impex software.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "CRL video digitizer",
+      "price": "£149.95",
+      "note": "Reported mail-order price.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "GE 3-8200 300-baud modem",
+      "price": "$119.95",
+      "note": "US list price in June Gazette.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Sixteenth ZX Microfair on June 22",
+      "summary": "New Horticultural Hall, Greycoat Street/Elverton Street, London SW1. Doors 10 a.m.; adults £1.50, children £1.00.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "headline": "Acorn weighs selling subsidiaries",
+      "summary": "Page 4 reports possible sales including Acornsoft, Acorn Video, Torus and 10 Bio, and about 30 further staff cuts after 120 since February. These are considerations/expectations, not completed sales.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Tough All Over",
+      "artist": "John Cafferty & The Beaver Brown Band",
+      "song": "Tough All Over",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-06-22",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "If You Love Somebody Set Them Free",
+      "artist": "Sting",
+      "song": "If You Love Somebody Set Them Free",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-06-22",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Little By Little",
+      "artist": "Robert Plant",
+      "song": "Little By Little",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-06-22",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Cannonball",
+      "artist": "Supertramp",
+      "song": "Cannonball",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-06-22",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Glory Days",
+      "artist": "Bruce Springsteen",
+      "song": "Glory Days",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-06-22",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "A Plus/4 for under £100",
+    "summary": "Dixons offers the Plus/4 with four C16 games for £99.90, as reported in this week’s computer press.",
+    "tagline": "A budget micro faces a bundled business future.",
+    "sourceRefs": [
+      1
+    ]
+  },
+  "market": {
+    "headline": "Rescue plans and retail price pressure",
+    "summary": "Sinclair’s proposed Maxwell rescue and Commodore’s bundle strategy put finance beside the shop window. Neither the rescue proposal nor Atari’s autumn software target is a completed transaction or an available catalogue.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      0,
+      1
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Discovery launches three-satellite mission",
+    "summary": "Discovery launched on June 17 with seven crew, including Sultan Salman Al-Saud and Patrick Baudry. STS-51G carries the MORELOS-A, ARABSAT-A and TELSTAR-3D communications satellites for deployment.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      6
+    ]
+  },
+  "bbsNote": {
+    "headline": "Commodore pushes cheaper modems and wider online services",
+    "posts": [
+      {
+        "topic": "1670 price ambition",
+        "platform": "Commodore / COMPUTE!’s Gazette",
+        "text": "Goheen describes a Hayes-like 1200-baud smartmodem and says Commodore will ultimately break $100, while declining to specify initial pricing."
+      },
+      {
+        "topic": "Online service partnerships",
+        "platform": "CompuServe, Dow Jones, The Source, Delphi, Playnet and TeleLearning",
+        "text": "Goheen names relationships and starter packs involving Compuserve, Dow Jones, The Source, Delphi, Playnet and TeleLearning, and discusses educational databases. A separate Commodore service remains an exploratory possibility."
+      },
+      {
+        "topic": "Portable modem hardware",
+        "platform": "GE Model 3-8200",
+        "text": "GE’s 3-8200 offers acoustic/direct-connect 300-baud operation, optional 9-volt battery power and a $119.95 list price in June’s Gazette."
+      }
+    ],
+    "summary": "In June’s Gazette interview, Commodore software director Paul Goheen places telecomputing at the heart of the company’s plans. A sub-$100 1670 is an eventual ambition, not an established shelf price.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      3
+    ]
+  },
+  "curiosity": {
+    "headline": "A poet’s electronic novel arrives as a hardback with a disk",
+    "summary": "Mindwheel blurs the line between bookshelf and disk library.",
+    "detail": "June’s Gazette explains that Synapse’s electronic novels put a disk in the back of a hardback book; players must learn information from the printed book. Robert Pinsky developed Mindwheel from the wheel concept in his own poetry.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      3
+    ]
+  },
+  "undergroundDesk": {
+    "headline": "Prestel hacking test case adjourned",
+    "dek": "June reporting follows the opening Bow Street hearing; charges remain allegations.",
+    "body": [
+      "Popular Computing Weekly reports that proceedings against Stephen Gold and Robert Schifreen opened at Bow Street on June 12 and were adjourned to July 4. The opening hearing predates this issue week; the account appears in the June 20 weekly.",
+      "The paper reports five additional charges against Gold and four against Schifreen, and links the case to the Forgery and Counterfeiting Act 1981. It presents a test of hacking’s legal status, not a verdict. No crew or board is identified in this report."
+    ],
+    "groups": [],
+    "confidence": "same-week",
+    "sourceRefs": [
+      0,
+      1
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Same-week labels generally date June 20 reporting, not the exact event day.",
+      "Elite official price and exact launch day remain unestablished.",
+      "Sinclair rescue is a proposal, not completed ownership.",
+      "Games are editorial selections, not sales rankings.",
+      "June Gazette items are same-month coverage.",
+      "Movie chart covers June 21–23; music chart is dated June 22.",
+      "Modem Desk paraphrases period reporting, not purported BBS messages."
+    ]
+  }
+}
