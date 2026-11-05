@@ -2,6 +2,8 @@
 extern float astra_lamp[4],astra_flash[4];
 extern int astra_drawing_mine,astra_refinement;
 static float astra_surface[4];
+static int astra_earth_material;
+static GLuint astra_earth_colors[256];
 static GLuint astra_normals[256],astra_program;
 static GLint astra_tangents,astra_fixture,astra_moving;
 static int astra_gpu_failed,astra_shaded;
@@ -100,6 +102,12 @@ static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
     if(!astra_program)astra_init_shader();
     if(astra_gpu_failed)return 0;
     int id=tex->material;
+    int earth=astra_drawing_mine&&astra_refinement?astra_earth_material:0;astra_earth_material=0;
+    if(earth){
+        if(!astra_earth_colors[earth]){char name[24];png_data data;snprintf(name,sizeof name,"m%03d.png",earth-1);
+            if(read_png(name,&data)){glGenTextures(1,&astra_earth_colors[earth]);glBindTexture(GL_TEXTURE_2D,astra_earth_colors[earth]);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);glTexImage2D(GL_TEXTURE_2D,0,data.channels==4?GL_RGBA:GL_RGB,data.width,data.height,0,data.channels==4?GL_RGBA:GL_RGB,GL_UNSIGNED_BYTE,data.data);glGenerateMipmap(GL_TEXTURE_2D);free(data.data);}
+        }if(astra_earth_colors[earth])id=earth;else earth=0;
+    }
     glActiveTexture(GL_TEXTURE1);
     if(!astra_normals[id]){
         char name[20];snprintf(name,sizeof name,"n%03d.png",id-1);png_data data;
@@ -112,7 +120,7 @@ static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
         if(ogl_maxanisotropy>1.0)glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAX_ANISOTROPY_EXT,fminf(8,ogl_maxanisotropy));
         free(data.data);
     }else glBindTexture(GL_TEXTURE_2D,astra_normals[id]);
-    glActiveTexture(GL_TEXTURE0);glUseProgram(astra_program);glUniform1f(glGetUniformLocation(astra_program,"paired"),0);
+    glActiveTexture(GL_TEXTURE0);if(earth)glBindTexture(GL_TEXTURE_2D,astra_earth_colors[earth]);glUseProgram(astra_program);glUniform1f(glGetUniformLocation(astra_program,"paired"),0);
     float a=uv[2]-uv[0],b=uv[3]-uv[1],c=uv[4]-uv[0],d=uv[5]-uv[1],mat[9];
     float flip=(a*d-b*c)<0?-1.f:1.f;
     for(int i=0;i<3;i++){float e=p[3+i]-p[i],g=p[6+i]-p[i];mat[i]=(d*e-b*g)*flip;mat[3+i]=(a*g-c*e)*flip;}
@@ -125,7 +133,7 @@ static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
     glUniformMatrix3fv(astra_tangents,1,GL_FALSE,mat);
     static int kinds[256],kinds_ready;
     if(!kinds_ready){EM_ASM({var k=window.astraMaterialTypes||[];for(var i=0;i<256;i++)HEAP32[($0>>2)+i]=k[i]??-1;},kinds);kinds_ready=1;}
-    float surface[4];memcpy(surface,astra_surface,sizeof surface);if(kinds[id]==0||kinds[id]==4)surface[0]=kinds[id];else if(kinds[id]>0&&surface[0]==0)surface[0]=1;if(id>=181&&id<=183)surface[0]=1;
+    float surface[4];memcpy(surface,astra_surface,sizeof surface);if(kinds[id]==0||kinds[id]==4)surface[0]=kinds[id];else if(kinds[id]>0&&surface[0]==0)surface[0]=1;if(id>=181&&id<=183)surface[0]=1;if(earth)surface[0]=0;
     glUniform4fv(glGetUniformLocation(astra_program,"surface"),1,surface);
     glUniform1f(glGetUniformLocation(astra_program,"refinement"),astra_refinement);
     EM_ASM(Module.wallDetailVersion=22;);

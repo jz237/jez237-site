@@ -2126,7 +2126,7 @@ index 650f69e..7271753 100644
  }
 +
 diff --git a/d2/main/render.c b/d2/main/render.c
-index 517bc8a..d28d109 100644
+index 517bc8a..a5f6ace 100644
 --- a/d2/main/render.c
 +++ b/d2/main/render.c
 @@ -84,6 +84,7 @@ short Rotated_last[MAX_VERTICES];
@@ -2154,7 +2154,7 @@ index 517bc8a..d28d109 100644
  
  	for (i=0; i<nv; i++) {
  		uvl_copy[i].u = uvlp[i].u;
-@@ -232,6 +236,10 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+@@ -232,11 +236,16 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
  		return;
  	}
  
@@ -2165,7 +2165,14 @@ index 517bc8a..d28d109 100644
  	if (tmap1 >= NumTextures) {
  #ifndef RELEASE
  		Int3();
-@@ -249,7 +257,8 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+ #endif
+-		Segments[segnum].sides[sidenum].tmap_num = 0;
++		if (!astra_mine_inspecting) Segments[segnum].sides[sidenum].tmap_num = 0;
++		tmap1 = 0;
+ 	}
+ 
+ #ifdef OGL
+@@ -249,7 +258,8 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
  			PIGGY_PAGE_IN(Textures[tmap1]); // in case textures just got flushed
  		}
  #ifndef OGL_MERGE
@@ -2175,7 +2182,7 @@ index 517bc8a..d28d109 100644
  			bm = texmerge_get_cached_bitmap( tmap1, tmap2 );
  			bm2 = NULL;
  		}
-@@ -333,6 +342,14 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
+@@ -333,6 +343,14 @@ void render_face(int segnum, int sidenum, int nv, int *vp, int tmap1, int tmap2,
  			g3_draw_tmap(nv,pointlist,uvl_copy,dyn_light,bm);
  
  	gr_settransblend(GR_FADE_OFF, GR_BLEND_NORMAL); // revert any transparency/blending setting back to normal
@@ -2190,7 +2197,7 @@ index 517bc8a..d28d109 100644
  
  #ifndef NDEBUG
  	if (Outline_mode) draw_outline(nv, pointlist);
-@@ -633,6 +650,10 @@ extern ubyte DemoDoingRight,DemoDoingLeft;
+@@ -633,6 +651,10 @@ extern ubyte DemoDoingRight,DemoDoingLeft;
  
  void do_render_object(int objnum, int window_num)
  {
@@ -2201,7 +2208,7 @@ index 517bc8a..d28d109 100644
  	#ifdef EDITOR
  	int save_3d_outline=0;
  	#endif
-@@ -701,6 +722,8 @@ void do_render_object(int objnum, int window_num)
+@@ -701,6 +723,8 @@ void do_render_object(int objnum, int window_num)
  		//NOTE LINK TO ABOVE
  		render_object(obj);
  
@@ -2210,7 +2217,7 @@ index 517bc8a..d28d109 100644
  	for (n=obj->attached_obj;n!=-1;n=Objects[n].ctype.expl_info.next_attach) {
  
  		Assert(Objects[n].type == OBJ_FIREBALL);
-@@ -1677,7 +1700,11 @@ void render_frame(fix eye_offset, int window_num)
+@@ -1677,7 +1701,11 @@ void render_frame(fix eye_offset, int window_num)
  		gr_clear_canvas(Clear_window_color);
  	#endif
  
@@ -2222,7 +2229,7 @@ index 517bc8a..d28d109 100644
  
  	g3_end_frame();
  
-@@ -2253,3 +2280,15 @@ int find_seg_side_face(short x,short y,int *seg,int *side,int *face,int *poly)
+@@ -2253,3 +2281,15 @@ int find_seg_side_face(short x,short y,int *seg,int *side,int *face,int *poly)
  }
  
  #endif

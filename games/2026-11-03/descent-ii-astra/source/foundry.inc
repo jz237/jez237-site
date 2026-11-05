@@ -3,14 +3,15 @@ extern int astra_gallery_scene,astra_gallery_room,astra_gallery_side;
 int astra_refinement=1;
 static int ag_faces,ag_rocks,ag_props,ag_shadows,ag_air;
 static void ae_haze_flush(void);
-static void ag_begin(void){ag_faces=ag_rocks=ag_props=ag_shadows=ag_air=0;ss_passes=ss_draws=0;ss_quality=EM_ASM_INT(return Math.max(0,Math.min(2,Module.shadowQuality||0)));}
+static int gm_draws,gm_supports,gm_machines,gm_dust;
+static void ag_begin(void){ag_faces=ag_rocks=ag_props=ag_shadows=ag_air=0;gm_draws=gm_supports=gm_machines=gm_dust=0;ss_passes=ss_draws=0;ss_quality=EM_ASM_INT(return Math.max(0,Math.min(2,Module.shadowQuality||0)));}
 static float ag_noise(float x){float v=sinf(x*127.17f+3.13f)*43758.5453f;return v-floorf(v);}
 /* One equipment bay per room, always on an ordinary solid wall. */
 int astra_environment_bay(int room){
     float best=0;int selected=-1;
     for(int s=0;s<6;s++){
         side *face=&Segments[room].sides[s];int t=face->tmap_num;
-        if(Segments[room].children[s]>=0||face->wall_num>=0||face->type!=SIDE_IS_QUAD||t<0||t>=NumTextures||astra_environment_rock(t)||TmapInfo[t].damage||TmapInfo[t].flags&(TMI_WATER|TMI_VOLATILE|TMI_FORCE_FIELD))continue;
+        if(Segments[room].children[s]>=0||face->wall_num>=0||face->type!=SIDE_IS_QUAD||t<0||t>=NumTextures||(astra_environment_rock(t)||astra_excavation_face(room,s))||TmapInfo[t].damage||TmapInfo[t].flags&(TMI_WATER|TMI_VOLATILE|TMI_FORCE_FIELD))continue;
         vms_vector c;vms_matrix b;float w,h;if(!ae_basis(room,s,&c,&b,&w,&h)||w<16||h<16||w>80||h>80)continue;
         float score=w*h;if(score>best){best=score;selected=s;}
     }return selected;
@@ -67,6 +68,7 @@ static void ag_box(float x,float y,float z,float w,float h,float d){
     const int q[36]={0,2,3,0,3,1,4,5,7,4,7,6,0,4,6,0,6,2,1,3,7,1,7,5,0,1,5,0,5,4,2,6,7,2,7,3};
     for(int i=0;i<36;i+=3)ag_triangle(p[q[i]],p[q[i+1]],p[q[i+2]]);
 }
+#include "astra_mining.inc"
 static void ag_rock_flush(int material,const vms_vector *center,const vms_matrix *basis){
     static GLuint program,maps[256];static int failed;if(failed||material<=0||material>=256){ax_count=0;return;}
     if(!maps[material]){char name[24];snprintf(name,sizeof name,"m%03d.png",material-1);if(!refit_png(name,&maps[material],GL_REPEAT)){ax_count=0;return;}}

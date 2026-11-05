@@ -35,6 +35,8 @@ includes["detonation_draw.inc"]="arch/ogl/astra_detonation_draw.inc"
 includes["streaming.inc"]="arch/ogl/astra_streaming.inc"
 for name in ["combat","combat_render","shadows","shadow_scene"]:
     includes[name+".inc"]="arch/ogl/astra_"+name+".inc"
+includes["mining_regions.inc"]="arch/ogl/astra_mining_regions.inc"
+includes["mining.inc"]="arch/ogl/astra_mining.inc"
 for name,path in includes.items():
     if (repo/"d2"/path).exists():raise SystemExit("Use a fresh checkout. An Astra include already exists.")
 git(repo,"apply",str(src/"engine.patch"))

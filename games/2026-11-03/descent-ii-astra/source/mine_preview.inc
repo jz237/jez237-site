@@ -13,7 +13,9 @@ extern int astra_refinement;
 extern int astra_environment_theme(int),astra_environment_bay(int),astra_environment_rock(int);
 float astra_mine_clock=-1,astra_mine_door=-1;
 typedef struct {vms_vector eye,goal,up;int room,side,subject,valid;} am_scene;
-static am_scene am_scenes[15];static int am_level=-999,am_segments=-1,am_mask;
+enum {AM_SCENES=19};
+extern int astra_excavation_face(int,int),astra_excavation_bay(int);
+static am_scene am_scenes[AM_SCENES];static int am_level=-999,am_segments=-1,am_mask;
 static float am_distance(const vms_vector *a,const vms_vector *b){return f2fl(vm_vec_dist(a,b));}
 static int am_clear(const vms_vector *a,int room,const vms_vector *b,fix radius){
     fvi_query q={a,b,room,radius,-1,NULL,0};fvi_info hit;return find_vector_intersection(&q,&hit)==HIT_NONE;
@@ -54,12 +56,26 @@ static void am_reactor_view(am_scene *scene,object *o,vms_vector eye,float *best
 }
 static void am_build(void){
     memset(am_scenes,0,sizeof am_scenes);am_mask=0;am_level=Current_level_num;am_segments=Highest_segment_index;
+    float mining_score=-1;
     for(int room=0;room<=Highest_segment_index;room++)for(int side=0;side<6;side++){
         segment *s=&Segments[room];int t=s->sides[side].tmap_num;if(t<0||t>=NumTextures)continue;
         int solid=s->children[side]<0&&s->sides[side].wall_num<0;
         if(solid&&!TmapInfo[t].damage&&!(TmapInfo[t].flags&(TMI_WATER|TMI_VOLATILE|TMI_FORCE_FIELD))){
             if(!am_scenes[0].valid)am_face(room,side,0,&am_scenes[0]);
-            int theme=astra_environment_theme(room),bay=astra_environment_bay(room);
+            int theme=astra_environment_theme(room),bay=astra_environment_bay(room),excavation=astra_excavation_face(room,side);
+            if(excavation){
+                am_scene candidate;
+                if(am_face(room,side,0,&candidate)){
+                    int ids[4];get_side_verts(ids,room,side);float w=am_distance(&Vertices[ids[0]],&Vertices[ids[1]]),h=am_distance(&Vertices[ids[0]],&Vertices[ids[3]]);
+                    float score=fminf(w,h)-fabsf(w-h)*.3f;
+                    if(w<=45&&h<=45&&score>mining_score){mining_score=score;am_scenes[15]=candidate;am_scenes[10]=candidate;}
+                    if((excavation==2||!am_scenes[16].valid))am_scenes[16]=candidate;
+                }
+                if(astra_excavation_bay(room)==side){
+                    if(!am_scenes[17].valid&&am_face(room,side,2,&am_scenes[17]))am_scenes[18]=am_scenes[17];
+                }
+                continue;
+            }
             if(s->sides[side].type==SIDE_IS_QUAD){
                 int ids[4];get_side_verts(ids,room,side);float w=am_distance(&Vertices[ids[0]],&Vertices[ids[1]]),h=am_distance(&Vertices[ids[0]],&Vertices[ids[3]]);
                 if(!astra_environment_rock(t)&&side!=bay&&(room*3+side)%3==1&&w>=20&&h>=20&&!am_scenes[8].valid)am_face(room,side,0,&am_scenes[8]);
@@ -93,8 +109,25 @@ static void am_build(void){
             vm_vec_scale_add2(&eye,&o->orient.uvec,fl2f(r*.12f));am_reactor_view(scene,o,eye,&best);
         }
     }
+    /* The overview looks along a real passage, with exposed stone and the
+     * industrial continuation visible together. Close-up scenes remain fixed. */
+    float tunnel_best=-1;
+    for(int r=0;r<=Highest_segment_index;r++){
+        int stone=0;for(int f=0;f<6;f++)stone+=!!astra_excavation_face(r,f);if(stone<2)continue;
+        vms_vector ctr;compute_segment_center(&ctr,&Segments[r]);vms_matrix basis;extract_orient_from_segment(&basis,&Segments[r]);
+        for(int f=0;f<6;f++){int child=Segments[r].children[f];if(child<0||Segments[r].sides[f].wall_num>=0)continue;
+            vms_vector goal,eye,dir;compute_center_point_on_side(&goal,&Segments[r],f);vm_vec_normalized_dir(&dir,&goal,&ctr);
+            vm_vec_scale_add(&eye,&ctr,&dir,-i2f(3));if(find_point_seg(&eye,r)!=r||!am_clear(&ctr,r,&eye,F1_0/3))eye=ctr;
+            if(am_distance(&eye,&goal)<7||!am_clear(&eye,r,&goal,F1_0/3))continue;
+            float score=stone*2+fminf(18,am_distance(&eye,&goal));
+            int other=0;for(int s=0;s<6;s++)other+=!!astra_excavation_face(child,s);if(!other)score+=7;
+            if(score>tunnel_best){tunnel_best=score;am_scenes[15]=(am_scene){eye,goal,basis.uvec,r,f,r,1};}
+        }
+    }
+    if(!am_scenes[15].valid)am_scenes[15]=am_scenes[16];
+    if(!am_scenes[18].valid)am_scenes[18]=am_scenes[15];
     if(!am_scenes[9].valid)am_scenes[9]=am_scenes[0];
-    for(int i=0;i<15;i++)if(am_scenes[i].valid)am_mask|=1<<i;
+    for(int i=0;i<AM_SCENES;i++)if(am_scenes[i].valid)am_mask|=1<<i;
 }
 /* The transient door frame is restored immediately after drawing, including
  * its connected side. No wall_open_door, trigger, sound or ActiveDoors changes. */
@@ -114,11 +147,16 @@ static void am_restore_door(am_door_saved *save){
 }
 void astra_mine_preview(int index,float clock,float zoom){
     if(am_level!=Current_level_num||am_segments!=Highest_segment_index||!am_mask)am_build();
-    if(index<0||index>14||!am_scenes[index].valid){index=0;while(index<15&&!am_scenes[index].valid)index++;}
-    if(index>=15){EM_ASM(window.astraMinePreview?.unavailable());return;}
+    if(index<0||index>=AM_SCENES||!am_scenes[index].valid){index=0;while(index<AM_SCENES&&!am_scenes[index].valid)index++;}
+    if(index>=AM_SCENES){EM_ASM(window.astraMinePreview?.unavailable());return;}
     am_scene *s=&am_scenes[index];vms_vector forward,eye,delta;vms_matrix orient;
     vm_vec_sub(&delta,&s->eye,&s->goal);vm_vec_scale_add(&eye,&s->goal,&delta,fl2f(fminf(1.5f,fmaxf(.65f,zoom))));
     vm_vec_normalized_dir(&forward,&s->goal,&s->eye);vm_vector_2_matrix(&orient,&forward,&s->up,NULL);
+    if(index>=15){
+        float distance=am_distance(&s->eye,&s->goal);
+        vm_vec_scale_add2(&eye,&orient.rvec,fl2f(distance*.27f));
+        vm_vec_scale_add2(&eye,&orient.uvec,fl2f(distance*.10f));
+    }
     vm_vec_scale_add2(&eye,&orient.rvec,fl2f(sinf(clock*.27f)*.65f));vm_vec_scale_add2(&eye,&orient.uvec,fl2f(sinf(clock*.18f)*.23f));
     int room=find_point_seg(&eye,s->room);
     if(room<0||!am_clear(&s->eye,s->room,&eye,F1_0/3)){eye=s->eye;room=s->room;}

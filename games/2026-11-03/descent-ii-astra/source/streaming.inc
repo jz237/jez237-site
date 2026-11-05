@@ -4,7 +4,13 @@
 EM_ASYNC_JS(void, astra_fetch_mine_art, (const char *names, int count, int wall_count), {
     const list = [];
     for (let i = 0; i < count; i++) list.push(UTF8ToString(names + i * 32));
-    try { await Module.assetDepot.level(list.slice(0, wall_count), list.slice(wall_count)); }
+    try {
+        await Module.assetDepot.level(list.slice(0, wall_count), list.slice(wall_count));
+        /* These shared geology pairs can occur independently of native wall
+         * aliases. Load before rendering, so a showroom frame never yields
+         * halfway through a temporary door pose to fetch a missing image. */
+        await Promise.all(["m020.png","m022.png","m037.png"].map(name=>Module.assetDepot.image(name)));
+    }
     catch (error) { abort(error.message); }
 });
 
