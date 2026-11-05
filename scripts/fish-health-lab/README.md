@@ -123,6 +123,9 @@ urgent notices, numeric validation, environment filtering, library search,
 details/atlas dialogs, all six ich images, every walkthrough branch, reset,
 observation copy/export, absent photo inputs and absent chatbot links.
 Record requests during the walkthrough; observations must not be transmitted.
+The parent site's existing analytics and Cloudflare browser-check requests are
+recorded separately from application submissions; observation-leak checks still
+inspect every request, including that platform traffic.
 Staged diff secret scanner required before committing and deploying.
 
 Deploy via the existing guarded jez237.com release, never from a sparse editing

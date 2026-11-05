@@ -8,13 +8,21 @@ const output = process.env.FISH_LAB_QA_DIR || '/home/jez237/.openclaw/workspace/
 await mkdir(output, { recursive: true });
 const browser = await chromium.launch({ headless: true, executablePath: '/usr/bin/google-chrome', args: ['--disable-dev-shm-usage'] });
 const context = await browser.newContext({ viewport: { width: 1365, height: 950 } });
-const checks = [], errors = [], writes = [], outboundObservations = [], aiRequests = [];
+const checks = [], errors = [], writes = [], outboundObservations = [], aiRequests = [], platformRequests = [];
 const sentinel = 'PRIVATE-OBSERVATION-QA-1567945894068748309';
 context.on('request', request => {
   const content = request.url() + (request.postData() || '');
   if (content.includes(sentinel)) outboundObservations.push(request.url());
   if (/chatgpt\.com|api\.openai\.com|api\.anthropic\.com/.test(request.url())) aiRequests.push(request.url());
-  if (!['GET','HEAD','OPTIONS'].includes(request.method()) && !/google-analytics\.com|cloudflareinsights\.com/.test(request.url())) writes.push(request.url());
+  if (!['GET','HEAD','OPTIONS'].includes(request.method())) {
+    const url = new URL(request.url());
+    // The parent site injects analytics and Cloudflare browser checks. Record
+    // these separately; the observation sentinel above is checked for ALL traffic.
+    const analytics = ['www.google-analytics.com','region1.google-analytics.com','analytics.google.com','stats.g.doubleclick.net'].includes(url.hostname) && url.pathname === '/g/collect';
+    const cloudflare = (url.origin === new URL(root).origin || ['cloudflareinsights.com','www.cloudflareinsights.com'].includes(url.hostname))
+      && (url.pathname === '/cdn-cgi/rum' || url.pathname.startsWith('/cdn-cgi/challenge-platform/'));
+    (analytics || cloudflare ? platformRequests : writes).push(url.origin + url.pathname);
+  }
 });
 const page = await context.newPage();
 const watch = target => target.on('pageerror', error => errors.push(error.message));
@@ -151,6 +159,6 @@ assert.deepEqual(errors, []); assert.deepEqual(writes, []);
 assert.deepEqual(outboundObservations, []); assert.deepEqual(aiRequests, []);
 record('no JavaScript errors, application submissions, external AI requests or transmitted observations');
 await browser.close();
-const result = { url: root, checks: checks.length, passed: checks, errors, writes, outboundObservations, aiRequests, screenshots: output };
+const result = { url: root, checks: checks.length, passed: checks, errors, writes, outboundObservations, aiRequests, platformRequests: [...new Set(platformRequests)], screenshots: output };
 await writeFile(output + '/ich-browser-results.json', JSON.stringify(result, null, 2));
 console.log(JSON.stringify(result, null, 2));
