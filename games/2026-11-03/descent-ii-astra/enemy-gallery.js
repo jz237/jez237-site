@@ -1,25 +1,33 @@
-/* Overload bestiary: original proportions, one lazy-loaded model at a time. */
+/* Shared enemy inspection: separate Overload and Descent collections, lazy assets. */
 (() => {
   'use strict';
-  const start=document.getElementById('enemiesStart');if(!start)return;
+  const galleries={
+    overload:{button:'enemiesStart',label:'OVERLOAD BESTIARY',asset:'enemy',version:29,global:'astraEnemyCatalog',source:'Overload records · Armor is the base value before difficulty scaling.'},
+    descent:{button:'descentEnemiesStart',label:'DESCENT ROBOT ARCHIVE',asset:'descent',version:30,global:'astraDescentCatalog',source:'Original robot models with Astra refits. Armor and scores come from the Descent II / Vertigo records used by Astra, including their legacy Descent I roster.'}
+  };
+  if(!document.getElementById(galleries.overload.button))return;
+  let active='overload';const remembered={overload:{index:0,filter:'All'},descent:{index:0,filter:'All'}},catalogRequests={};
   const $=id=>document.getElementById(id),cache=new Map(),pending=new Map();
   let dialog,canvas,gl,program,locations,frame=0,last=0,token=0,index=0,batches=[],textures=[],catalog=[],open=false;
-  let yaw=-.35,pitch=.16,distance=2.8,rotating=!matchMedia('(prefers-reduced-motion: reduce)').matches,drag=null,loadCatalog;
+  let yaw=-.35,pitch=.16,distance=2.8,rotating=!matchMedia('(prefers-reduced-motion: reduce)').matches,drag=null,fullCatalog=[];
   const state={index:0,id:null,ready:false,frames:0,error:null};
   function text(id,value){$(id).textContent=value;}
   function loadScript(url){return new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=url;s.onload=()=>{s.remove();resolve();};s.onerror=()=>{s.remove();reject(Error('Unable to load this exhibit. Check your connection and try again.'));};document.head.append(s);});}
-  window.astraEnemyParcel=(key,data)=>{if(!pending.has(key))return;cache.delete(key);cache.set(key,data);while(cache.size>10)cache.delete(cache.keys().next().value);pending.get(key).resolve(data);pending.delete(key);};
-  function parcel(key){if(cache.has(key)){const value=cache.get(key);cache.delete(key);cache.set(key,value);return Promise.resolve(value);}if(pending.has(key))return pending.get(key).promise;
-    let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});pending.set(key,{promise,resolve,reject});
-    loadScript('enemy-assets/'+key+'.js?v=29').then(()=>{if(pending.has(key)){pending.get(key).reject(Error('Incomplete exhibit data.'));pending.delete(key);}}).catch(e=>{pending.get(key)?.reject(e);pending.delete(key);});return promise;
+  function receive(group,key,data){const tag=group+'|'+key;if(!pending.has(tag))return;cache.delete(tag);cache.set(tag,data);while(cache.size>10)cache.delete(cache.keys().next().value);pending.get(tag).resolve(data);pending.delete(tag);}
+  window.astraEnemyParcel=(key,data)=>receive('overload',key,data);
+  window.astraDescentParcel=(key,data)=>receive('descent',key,data);
+  function parcel(key,group){const tag=group+'|'+key;if(cache.has(tag)){const value=cache.get(tag);cache.delete(tag);cache.set(tag,value);return Promise.resolve(value);}if(pending.has(tag))return pending.get(tag).promise;
+    let resolve,reject;const promise=new Promise((a,b)=>{resolve=a;reject=b;});pending.set(tag,{promise,resolve,reject});const config=galleries[group];
+    loadScript(config.asset+'-assets/'+key+'.js?v='+config.version).then(()=>{if(pending.has(tag)){pending.get(tag).reject(Error('Incomplete exhibit data.'));pending.delete(tag);}}).catch(e=>{pending.get(tag)?.reject(e);pending.delete(tag);});return promise;
   }
   function initUI(){
     dialog=document.createElement('dialog');dialog.id='enemyGallery';dialog.setAttribute('aria-labelledby','enemyTitle');
-    dialog.innerHTML=`<div class="enemy-shell"><header class="enemy-top"><div><span class="enemy-kicker">SHOWROOM / OVERLOAD BESTIARY</span><h2 id="enemyTitle">Robot archive</h2></div><button id="enemyClose">Back to showroom <span aria-hidden="true">×</span></button></header><div class="enemy-body"><section class="enemy-stage" aria-label="Enemy model viewer"><canvas id="enemyCanvas" tabindex="0" aria-label="Drag to rotate the enemy; scroll to zoom; double-click to reset. Arrow keys rotate; plus and minus zoom."></canvas><div class="enemy-stage-label"><span id="enemyCategory"></span><span id="enemyCount"></span></div><p id="enemyStatus" role="status" aria-live="polite"></p><div class="enemy-view-tools"><button id="enemySpin" aria-pressed="true">Pause rotation</button><button id="enemyZoomIn" aria-label="Zoom in">＋</button><button id="enemyZoomOut" aria-label="Zoom out">−</button><button id="enemyReset">Reset view</button></div><span class="enemy-hint">DRAG TO ROTATE · SCROLL TO ZOOM · DOUBLE-CLICK TO RESET</span></section><aside class="enemy-dossier"><button id="enemyInfoToggle" aria-expanded="true" aria-controls="enemyInfo">Dossier <span>⌄</span></button><div id="enemyInfo"><p id="enemyDescription"></p><dl id="enemyFacts"></dl><div id="enemyTraits"></div><small class="enemy-source">Overload records · Armor is the base value before difficulty scaling.</small></div></aside></div><footer class="enemy-navigation"><button id="enemyPrev" aria-label="Previous enemy">← Previous</button><label>SELECT ROBOT<select id="enemySelect"></select></label><button id="enemyNext" aria-label="Next enemy">Next →</button></footer></div>`;
+    dialog.innerHTML=`<div class="enemy-shell"><header class="enemy-top"><div><span id="enemyKicker" class="enemy-kicker"></span><h2 id="enemyTitle">Robot archive</h2></div><button id="enemyClose">Back to showroom <span aria-hidden="true">×</span></button></header><div id="enemyCollectionBar" hidden><label>COLLECTION<select id="enemyCollection"><option>All</option><option>Descent I</option><option>Descent II</option><option>Vertigo</option></select></label><span>ONE ROBOT AT A TIME / ASTRA REFIT</span></div><div class="enemy-body"><section class="enemy-stage" aria-label="Enemy model viewer"><canvas id="enemyCanvas" tabindex="0" aria-label="Drag to rotate the enemy; scroll to zoom; double-click to reset. Arrow keys rotate; plus and minus zoom."></canvas><div class="enemy-stage-label"><span id="enemyCategory"></span><span id="enemyCount"></span></div><p id="enemyStatus" role="status" aria-live="polite"></p><div class="enemy-view-tools"><button id="enemySpin" aria-pressed="true">Pause rotation</button><button id="enemyZoomIn" aria-label="Zoom in">＋</button><button id="enemyZoomOut" aria-label="Zoom out">−</button><button id="enemyReset">Reset view</button></div><span class="enemy-hint">DRAG TO ROTATE · SCROLL TO ZOOM · DOUBLE-CLICK TO RESET</span></section><aside class="enemy-dossier"><button id="enemyInfoToggle" aria-expanded="true" aria-controls="enemyInfo">Dossier <span>⌄</span></button><div id="enemyInfo"><p id="enemyDescription"></p><dl id="enemyFacts"></dl><div id="enemyTraits"></div><small id="enemySource" class="enemy-source"></small></div></aside></div><footer class="enemy-navigation"><button id="enemyPrev" aria-label="Previous enemy">← Previous</button><label>SELECT ROBOT<select id="enemySelect"></select></label><button id="enemyNext" aria-label="Next enemy">Next →</button></footer></div>`;
     document.body.append(dialog);canvas=$('enemyCanvas');
     $('enemyClose').onclick=close;dialog.addEventListener('cancel',e=>{e.preventDefault();close();});
     // Keep showroom keys out of the native flight/terminal handlers.
     dialog.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();close();}e.stopPropagation();});
+    $('enemyCollection').onchange=()=>{remembered[active].filter=$('enemyCollection').value;filterCatalog();select(0);};
     $('enemyPrev').onclick=()=>select(index-1);$('enemyNext').onclick=()=>select(index+1);$('enemySelect').onchange=e=>select(+e.target.value);
     $('enemySpin').onclick=()=>{rotating=!rotating;syncSpin();};$('enemyZoomIn').onclick=()=>zoom(-.35);$('enemyZoomOut').onclick=()=>zoom(.35);$('enemyReset').onclick=reset;
     $('enemyInfoToggle').onclick=()=>{const hidden=!$('enemyInfo').hidden;$('enemyInfo').hidden=hidden;$('enemyInfoToggle').setAttribute('aria-expanded',String(!hidden));};
@@ -55,15 +63,16 @@
   function texture(encoded){return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>{if(!open||!gl||gl.isContextLost()){resolve(null);return;}const t=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,t);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,img);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR_MIPMAP_LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.REPEAT);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.REPEAT);gl.generateMipmap(gl.TEXTURE_2D);resolve(t);};img.onerror=()=>reject(Error('Unable to decode this robot’s materials.'));img.src='data:image/png;base64,'+encoded;});}
   async function mesh(data){const str=atob(data),bytes=new Uint8Array(str.length);for(let i=0;i<str.length;i++)bytes[i]=str.charCodeAt(i);return new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();}
   async function select(next){
-    if(!catalog.length||!open)return;const request=++token;index=((Math.trunc(next)%catalog.length)+catalog.length)%catalog.length;const item=catalog[index];Object.assign(state,{index,id:item.id,ready:false,error:null});dispose();gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);reset();
+    if(!catalog.length||!open)return;const request=++token,group=active;index=((Math.trunc(next)%catalog.length)+catalog.length)%catalog.length;const item=catalog[index];Object.assign(state,{index,id:item.id,group,collection:remembered[group].filter,ready:false,error:null});remembered[group].index=index;dispose();gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);reset();
     text('enemyTitle',item.name);text('enemyCategory',item.category);text('enemyCount',String(index+1).padStart(2,'0')+' / '+catalog.length);$('enemySelect').value=index;
     text('enemyDescription',item.description);const facts=$('enemyFacts');facts.replaceChildren();
-    for(const [key,value] of [['Model',item.model],['Role',item.role],['Armament',item.weapons],['Threat',item.threat],['Base armor',item.armor===null?'Not recorded':item.armor.toLocaleString()]]){const row=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=key;dd.textContent=value;row.append(dt,dd);facts.append(row);}
+    const entries=group==='descent'?[['Collection',item.collection],['Role',item.role],['Armament',item.weapons],['Base armor',item.armor.toLocaleString()],['Score',item.score.toLocaleString()]]:[['Model',item.model],['Role',item.role],['Armament',item.weapons],['Threat',item.threat],['Base armor',item.armor===null?'Not recorded':item.armor.toLocaleString()]];
+    for(const [key,value] of entries){const row=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=key;dd.textContent=value;row.append(dt,dd);facts.append(row);}
     $('enemyTraits').replaceChildren(...item.traits.map(label=>{const span=document.createElement('span');span.textContent=label;return span;}));text('enemyStatus','Loading '+item.name+'…');
     const created=[],nextBatches=[];
     try{
-      const pack=await parcel(item.id);if(request!==token||!open)return;
-      const [bytes,mats]=await Promise.all([mesh(pack.mesh),Promise.all(pack.materials.map(m=>parcel('material-'+m)))]);if(request!==token||!open)return;
+      const pack=await parcel(item.id,group);if(request!==token||!open)return;
+      const [bytes,mats]=await Promise.all([mesh(pack.mesh),Promise.all(pack.materials.map(m=>parcel('material-'+m,group)))]);if(request!==token||!open)return;
       const materialMap=new Map();
       // Upload sequentially so stale requests and errors can release every GPU resource.
       for(let n=0;n<mats.length;n++){const coat=await texture(mats[n].coat);if(coat)created.push(coat);const detail=await texture(mats[n].detail);if(detail)created.push(detail);materialMap.set(pack.materials[n],[coat,detail]);if(request!==token||!open){for(const t of created)gl.deleteTexture(t);return;}}
@@ -82,13 +91,21 @@
     for(const batch of batches){gl.bindBuffer(gl.ARRAY_BUFFER,batch.buffer);for(const [name,size,offset] of [['position',3,0],['normal',3,12],['handedness',1,24],['uv',2,28],['tangent',2,36]]){gl.enableVertexAttribArray(locations[name]);gl.vertexAttribPointer(locations[name],size,gl.FLOAT,false,44,offset);}for(let n=0;n<2;n++){gl.activeTexture(gl.TEXTURE0+n);gl.bindTexture(gl.TEXTURE_2D,batch.maps[n]);}gl.drawArrays(gl.TRIANGLES,0,batch.vertices);}
     state.frames++;
   }
-  async function show(){
-    if(open)return;if(!dialog)initUI();open=true;document.body.classList.add('enemy-gallery-open');dialog.showModal();$('enemyClose').focus();syncSpin();state.ready=false;text('enemyStatus','Opening robot archive…');
-    try{initGL();if(!loadCatalog)loadCatalog=loadScript('enemy-catalog.js?v=29').catch(e=>{loadCatalog=null;throw e;});await loadCatalog;if(!open)return;
-      if(!catalog.length){catalog=window.astraEnemyCatalog;$('enemySelect').replaceChildren(...catalog.map((item,i)=>new Option(item.name+(item.category==='Archive prototype'?' · Archive':''),i)));}
-      await select(index);if(open){last=performance.now();cancelAnimationFrame(frame);frame=requestAnimationFrame(draw);}
-    }catch(e){if(open)error(e);}
+  function filterCatalog(){
+    const filter=remembered[active].filter;catalog=fullCatalog.filter(item=>filter==='All'||item.collection===filter);
+    $('enemySelect').replaceChildren(...catalog.map((item,i)=>new Option(item.name+(item.category==='Archive prototype'?' · Archive':''),i)));
+    $('enemyCollection').value=filter;
   }
-  function close(){if(!open)return;open=false;++token;state.ready=false;cancelAnimationFrame(frame);drag=null;dispose();if(gl&&!gl.isContextLost())gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);dialog.close();document.body.classList.remove('enemy-gallery-open');start.focus();}
-  start.onclick=show;window.astraEnemies={open:show,close,select,state,get count(){return catalog.length;}};
+  async function show(group='overload'){
+    if(open){if(active===group)return;close();}active=group;const config=galleries[group];if(!dialog)initUI();open=true;catalog=[];fullCatalog=[];const opening=++token;
+    document.body.classList.add('enemy-gallery-open');dialog.showModal();$('enemyClose').focus();syncSpin();state.ready=false;state.error=null;state.group=group;
+    text('enemyKicker','SHOWROOM / '+config.label);text('enemyTitle','Robot archive');text('enemyCategory','');text('enemyCount','');text('enemySource',config.source);text('enemyDescription','');$('enemyFacts').replaceChildren();$('enemyTraits').replaceChildren();$('enemySelect').replaceChildren();$('enemyCollectionBar').hidden=group!=='descent';text('enemyStatus','Opening robot archive…');
+    try{initGL();if(!catalogRequests[group])catalogRequests[group]=loadScript(config.asset+'-catalog.js?v='+config.version).catch(e=>{delete catalogRequests[group];throw e;});await catalogRequests[group];if(!open||opening!==token)return;
+      fullCatalog=window[config.global];filterCatalog();await select(remembered[group].index);if(open&&active===group){last=performance.now();cancelAnimationFrame(frame);frame=requestAnimationFrame(draw);}
+    }catch(e){if(open&&active===group)error(e);}
+  }
+  function close(){if(!open)return;open=false;++token;state.ready=false;cancelAnimationFrame(frame);drag=null;dispose();if(gl&&!gl.isContextLost())gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);dialog.close();document.body.classList.remove('enemy-gallery-open');document.getElementById(galleries[active].button).focus();}
+  for(const [group,config] of Object.entries(galleries)){const button=document.getElementById(config.button);if(button)button.onclick=()=>show(group);}
+  window.astraEnemies={open:()=>show('overload'),close,select,state,get count(){return catalog.length;}};
+  window.astraDescentEnemies={open:()=>show('descent'),close,select,state,get count(){return catalog.length;},get total(){return fullCatalog.length;}};
 })();

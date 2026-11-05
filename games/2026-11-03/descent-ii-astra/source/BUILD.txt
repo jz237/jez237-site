@@ -602,3 +602,29 @@ Close pickups show up to nine independently timed discharges; distant pickups
 use fewer paths. Arcs depth-test against the pickup and the mine, do not write
 depth, and never consume simulation randomness or change pickup behavior.
 The same renderer serves both original and Vertigo campaigns.
+
+
+Descent robot archive (gallery revision 30)
+
+A separate showroom collection contains all 78 robot records from the owned
+Descent II HAM and Vertigo expansion: 24 legacy Descent I entries, 42 Descent II
+entries, and 12 Vertigo entries. This includes bosses, cloaked and spawned
+variants, prototypes and the friendly Guide-Bot. Filters separate the games.
+The shared viewer retains independent navigation state for each collection.
+
+    python descent_gallery.py "<installed-Astra-folder>" "<Vertigo-d2x.hog>"         "<dxx-redux-checkout>" "<output-game-folder>"
+
+The exporter retains the original model proportions and neutral joint offsets,
+using the same retained outer panels, bevels and fitted refit chassis as Astra.
+It reads only original game records and Astra's existing fleet/art parcels.
+Armor and scores reflect the Descent II / Vertigo records loaded by Astra;
+briefing armament descriptions are the original estimated equipment dossiers.
+Boss flags identify system order; briefing movie order is not robot ID order.
+descent-enemy-sources.json records coverage and each model/material mapping.
+
+78 lazy mesh parcels share 65 deduplicated materials. No catalog or model is
+downloaded before opening a gallery. It never starts the native engine. The
+same renderer serves both collections; closing stops its render loop. Desktop
+validation rendered all 78 Descent and all 30 Overload entries; mobile checks
+covered portrait/landscape, collection filters and rapid gallery switches.
+Flight, AI, campaign and native engine files remain at the tested pyre29 build.

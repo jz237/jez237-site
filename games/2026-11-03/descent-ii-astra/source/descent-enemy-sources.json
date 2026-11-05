@@ -1,0 +1,1126 @@
+{
+  "sources": [
+    "descent2.ham",
+    "missions/d2x.hog / d2x.ham",
+    "robot.txb",
+    "d2x.txb",
+    "Astra fleet and armor parcels"
+  ],
+  "records": 78,
+  "collections": {
+    "Descent I": 24,
+    "Descent II": 42,
+    "Vertigo": 12
+  },
+  "models": {
+    "robot-00": {
+      "robotId": 0,
+      "nativeModel": 0,
+      "donor": 6,
+      "originalFaces": 114,
+      "triangles": 8207,
+      "materials": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "robot-01": {
+      "robotId": 1,
+      "nativeModel": 2,
+      "donor": 5,
+      "originalFaces": 44,
+      "triangles": 7568,
+      "materials": [
+        2,
+        7,
+        8
+      ]
+    },
+    "robot-02": {
+      "robotId": 2,
+      "nativeModel": 4,
+      "donor": 8,
+      "originalFaces": 101,
+      "triangles": 5360,
+      "materials": [
+        9,
+        10
+      ]
+    },
+    "robot-03": {
+      "robotId": 3,
+      "nativeModel": 6,
+      "donor": 0,
+      "originalFaces": 44,
+      "triangles": 3138,
+      "materials": [
+        2,
+        3,
+        11,
+        12,
+        13
+      ]
+    },
+    "robot-04": {
+      "robotId": 4,
+      "nativeModel": 8,
+      "donor": 0,
+      "originalFaces": 64,
+      "triangles": 3418,
+      "materials": [
+        2,
+        3,
+        13,
+        14,
+        15,
+        16
+      ]
+    },
+    "robot-05": {
+      "robotId": 5,
+      "nativeModel": 10,
+      "donor": 3,
+      "originalFaces": 46,
+      "triangles": 4129,
+      "materials": [
+        14,
+        18,
+        20
+      ]
+    },
+    "robot-06": {
+      "robotId": 6,
+      "nativeModel": 12,
+      "donor": 6,
+      "originalFaces": 114,
+      "triangles": 8207,
+      "materials": [
+        3,
+        4,
+        5,
+        14
+      ]
+    },
+    "robot-07": {
+      "robotId": 7,
+      "nativeModel": 14,
+      "donor": 7,
+      "originalFaces": 33,
+      "triangles": 5485,
+      "materials": [
+        2,
+        21,
+        22,
+        23,
+        24
+      ]
+    },
+    "robot-08": {
+      "robotId": 8,
+      "nativeModel": 15,
+      "donor": 5,
+      "originalFaces": 48,
+      "triangles": 7629,
+      "materials": [
+        2,
+        3,
+        8,
+        9,
+        22,
+        23,
+        25
+      ]
+    },
+    "robot-09": {
+      "robotId": 9,
+      "nativeModel": 17,
+      "donor": 14,
+      "originalFaces": 79,
+      "triangles": 9053,
+      "materials": [
+        1,
+        2,
+        3,
+        26,
+        29,
+        30,
+        31
+      ]
+    },
+    "robot-10": {
+      "robotId": 10,
+      "nativeModel": 19,
+      "donor": 13,
+      "originalFaces": 34,
+      "triangles": 8098,
+      "materials": [
+        2,
+        3,
+        23,
+        32,
+        33,
+        34
+      ]
+    },
+    "robot-11": {
+      "robotId": 11,
+      "nativeModel": 20,
+      "donor": 7,
+      "originalFaces": 55,
+      "triangles": 5648,
+      "materials": [
+        1,
+        2,
+        3,
+        24,
+        33
+      ]
+    },
+    "robot-12": {
+      "robotId": 12,
+      "nativeModel": 21,
+      "donor": 7,
+      "originalFaces": 55,
+      "triangles": 5648,
+      "materials": [
+        2,
+        3,
+        12,
+        24,
+        33
+      ]
+    },
+    "robot-13": {
+      "robotId": 13,
+      "nativeModel": 22,
+      "donor": 13,
+      "originalFaces": 4,
+      "triangles": 7801,
+      "materials": [
+        34,
+        37
+      ]
+    },
+    "robot-14": {
+      "robotId": 14,
+      "nativeModel": 23,
+      "donor": 8,
+      "originalFaces": 22,
+      "triangles": 5106,
+      "materials": [
+        9,
+        10
+      ]
+    },
+    "robot-15": {
+      "robotId": 15,
+      "nativeModel": 25,
+      "donor": 6,
+      "originalFaces": 88,
+      "triangles": 8145,
+      "materials": [
+        4,
+        5,
+        25,
+        38,
+        40
+      ]
+    },
+    "robot-16": {
+      "robotId": 16,
+      "nativeModel": 26,
+      "donor": 6,
+      "originalFaces": 114,
+      "triangles": 8207,
+      "materials": [
+        2,
+        3,
+        4,
+        5,
+        16,
+        21
+      ]
+    },
+    "robot-17": {
+      "robotId": 17,
+      "nativeModel": 28,
+      "donor": 12,
+      "originalFaces": 86,
+      "triangles": 4114,
+      "materials": [
+        1,
+        38,
+        40,
+        44
+      ]
+    },
+    "robot-18": {
+      "robotId": 18,
+      "nativeModel": 29,
+      "donor": 5,
+      "originalFaces": 84,
+      "triangles": 8076,
+      "materials": [
+        8,
+        14
+      ]
+    },
+    "robot-19": {
+      "robotId": 19,
+      "nativeModel": 31,
+      "donor": 3,
+      "originalFaces": 46,
+      "triangles": 4129,
+      "materials": [
+        0,
+        2,
+        18,
+        20
+      ]
+    },
+    "robot-20": {
+      "robotId": 20,
+      "nativeModel": 33,
+      "donor": 6,
+      "originalFaces": 87,
+      "triangles": 8060,
+      "materials": [
+        2,
+        3,
+        4,
+        5,
+        9,
+        23
+      ]
+    },
+    "robot-21": {
+      "robotId": 21,
+      "nativeModel": 35,
+      "donor": 5,
+      "originalFaces": 92,
+      "triangles": 7845,
+      "materials": [
+        8,
+        9,
+        25
+      ]
+    },
+    "robot-22": {
+      "robotId": 22,
+      "nativeModel": 37,
+      "donor": 12,
+      "originalFaces": 108,
+      "triangles": 4367,
+      "materials": [
+        0,
+        2,
+        3,
+        44
+      ]
+    },
+    "robot-23": {
+      "robotId": 23,
+      "nativeModel": 39,
+      "donor": 12,
+      "originalFaces": 117,
+      "triangles": 4354,
+      "materials": [
+        2,
+        3,
+        40,
+        44,
+        47
+      ]
+    },
+    "robot-24": {
+      "robotId": 24,
+      "nativeModel": 40,
+      "donor": 14,
+      "originalFaces": 67,
+      "triangles": 9179,
+      "materials": [
+        1,
+        2,
+        3,
+        23,
+        30,
+        31,
+        32
+      ]
+    },
+    "robot-25": {
+      "robotId": 25,
+      "nativeModel": 41,
+      "donor": 3,
+      "originalFaces": 78,
+      "triangles": 4276,
+      "materials": [
+        2,
+        12,
+        20
+      ]
+    },
+    "robot-26": {
+      "robotId": 26,
+      "nativeModel": 43,
+      "donor": 10,
+      "originalFaces": 80,
+      "triangles": 9330,
+      "materials": [
+        2,
+        3,
+        14,
+        51,
+        52
+      ]
+    },
+    "robot-27": {
+      "robotId": 27,
+      "nativeModel": 44,
+      "donor": 6,
+      "originalFaces": 91,
+      "triangles": 7765,
+      "materials": [
+        2,
+        4,
+        5,
+        29
+      ]
+    },
+    "robot-28": {
+      "robotId": 28,
+      "nativeModel": 45,
+      "donor": 4,
+      "originalFaces": 146,
+      "triangles": 17598,
+      "materials": [
+        0,
+        9,
+        55
+      ]
+    },
+    "robot-29": {
+      "robotId": 29,
+      "nativeModel": 46,
+      "donor": 4,
+      "originalFaces": 105,
+      "triangles": 17295,
+      "materials": [
+        16,
+        25,
+        55
+      ]
+    },
+    "robot-30": {
+      "robotId": 30,
+      "nativeModel": 47,
+      "donor": 3,
+      "originalFaces": 108,
+      "triangles": 4500,
+      "materials": [
+        0,
+        1,
+        2,
+        3,
+        20
+      ]
+    },
+    "robot-31": {
+      "robotId": 31,
+      "nativeModel": 49,
+      "donor": 12,
+      "originalFaces": 75,
+      "triangles": 4052,
+      "materials": [
+        25,
+        44,
+        60,
+        61
+      ]
+    },
+    "robot-32": {
+      "robotId": 32,
+      "nativeModel": 50,
+      "donor": 12,
+      "originalFaces": 86,
+      "triangles": 4114,
+      "materials": [
+        1,
+        38,
+        40,
+        44
+      ]
+    },
+    "robot-33": {
+      "robotId": 33,
+      "nativeModel": 51,
+      "donor": 9,
+      "originalFaces": 53,
+      "triangles": 2759,
+      "materials": [
+        21,
+        62
+      ]
+    },
+    "robot-34": {
+      "robotId": 34,
+      "nativeModel": 52,
+      "donor": 14,
+      "originalFaces": 79,
+      "triangles": 9053,
+      "materials": [
+        0,
+        2,
+        3,
+        29,
+        30,
+        31,
+        63
+      ]
+    },
+    "robot-35": {
+      "robotId": 35,
+      "nativeModel": 54,
+      "donor": 2,
+      "originalFaces": 53,
+      "triangles": 3781,
+      "materials": [
+        29,
+        66
+      ]
+    },
+    "robot-36": {
+      "robotId": 36,
+      "nativeModel": 55,
+      "donor": 0,
+      "originalFaces": 141,
+      "triangles": 3350,
+      "materials": [
+        0,
+        1,
+        13,
+        16,
+        25
+      ]
+    },
+    "robot-37": {
+      "robotId": 37,
+      "nativeModel": 56,
+      "donor": 10,
+      "originalFaces": 49,
+      "triangles": 9106,
+      "materials": [
+        1,
+        16,
+        51,
+        52
+      ]
+    },
+    "robot-38": {
+      "robotId": 38,
+      "nativeModel": 58,
+      "donor": 0,
+      "originalFaces": 51,
+      "triangles": 3263,
+      "materials": [
+        0,
+        2,
+        3,
+        13
+      ]
+    },
+    "robot-39": {
+      "robotId": 39,
+      "nativeModel": 60,
+      "donor": 6,
+      "originalFaces": 94,
+      "triangles": 8071,
+      "materials": [
+        2,
+        3,
+        4,
+        5,
+        16,
+        25
+      ]
+    },
+    "robot-40": {
+      "robotId": 40,
+      "nativeModel": 62,
+      "donor": 5,
+      "originalFaces": 100,
+      "triangles": 7850,
+      "materials": [
+        1,
+        2,
+        8,
+        21,
+        32
+      ]
+    },
+    "robot-41": {
+      "robotId": 41,
+      "nativeModel": 64,
+      "donor": 4,
+      "originalFaces": 35,
+      "triangles": 16898,
+      "materials": [
+        2,
+        3,
+        55
+      ]
+    },
+    "robot-42": {
+      "robotId": 42,
+      "nativeModel": 65,
+      "donor": 11,
+      "originalFaces": 89,
+      "triangles": 10749,
+      "materials": [
+        1,
+        2,
+        29,
+        73,
+        74
+      ]
+    },
+    "robot-43": {
+      "robotId": 43,
+      "nativeModel": 67,
+      "donor": 11,
+      "originalFaces": 98,
+      "triangles": 10816,
+      "materials": [
+        0,
+        2,
+        16,
+        32,
+        73,
+        74
+      ]
+    },
+    "robot-44": {
+      "robotId": 44,
+      "nativeModel": 68,
+      "donor": 11,
+      "originalFaces": 63,
+      "triangles": 10706,
+      "materials": [
+        0,
+        1,
+        73,
+        74,
+        75,
+        76
+      ]
+    },
+    "robot-45": {
+      "robotId": 45,
+      "nativeModel": 69,
+      "donor": 12,
+      "originalFaces": 103,
+      "triangles": 4360,
+      "materials": [
+        9,
+        21,
+        25,
+        26,
+        37,
+        44,
+        78
+      ]
+    },
+    "robot-46": {
+      "robotId": 46,
+      "nativeModel": 70,
+      "donor": 12,
+      "originalFaces": 87,
+      "triangles": 3846,
+      "materials": [
+        0,
+        2,
+        14,
+        23,
+        37,
+        44,
+        60
+      ]
+    },
+    "robot-47": {
+      "robotId": 47,
+      "nativeModel": 71,
+      "donor": 6,
+      "originalFaces": 85,
+      "triangles": 7915,
+      "materials": [
+        2,
+        4,
+        5,
+        80
+      ]
+    },
+    "robot-48": {
+      "robotId": 48,
+      "nativeModel": 72,
+      "donor": 8,
+      "originalFaces": 80,
+      "triangles": 5442,
+      "materials": [
+        2,
+        10
+      ]
+    },
+    "robot-49": {
+      "robotId": 49,
+      "nativeModel": 73,
+      "donor": 12,
+      "originalFaces": 58,
+      "triangles": 3921,
+      "materials": [
+        2,
+        32,
+        44
+      ]
+    },
+    "robot-50": {
+      "robotId": 50,
+      "nativeModel": 74,
+      "donor": 3,
+      "originalFaces": 26,
+      "triangles": 4111,
+      "materials": [
+        2,
+        20
+      ]
+    },
+    "robot-51": {
+      "robotId": 51,
+      "nativeModel": 75,
+      "donor": 14,
+      "originalFaces": 55,
+      "triangles": 9071,
+      "materials": [
+        2,
+        21,
+        30,
+        31,
+        38
+      ]
+    },
+    "robot-52": {
+      "robotId": 52,
+      "nativeModel": 76,
+      "donor": 12,
+      "originalFaces": 191,
+      "triangles": 4557,
+      "materials": [
+        2,
+        3,
+        26,
+        44,
+        81,
+        82,
+        83
+      ]
+    },
+    "robot-53": {
+      "robotId": 53,
+      "nativeModel": 77,
+      "donor": 12,
+      "originalFaces": 75,
+      "triangles": 4052,
+      "materials": [
+        12,
+        44,
+        60,
+        61
+      ]
+    },
+    "robot-54": {
+      "robotId": 54,
+      "nativeModel": 78,
+      "donor": 5,
+      "originalFaces": 100,
+      "triangles": 7850,
+      "materials": [
+        8,
+        14
+      ]
+    },
+    "robot-55": {
+      "robotId": 55,
+      "nativeModel": 80,
+      "donor": 3,
+      "originalFaces": 78,
+      "triangles": 4276,
+      "materials": [
+        14,
+        20
+      ]
+    },
+    "robot-56": {
+      "robotId": 56,
+      "nativeModel": 82,
+      "donor": 2,
+      "originalFaces": 58,
+      "triangles": 4018,
+      "materials": [
+        2,
+        25,
+        66
+      ]
+    },
+    "robot-57": {
+      "robotId": 57,
+      "nativeModel": 83,
+      "donor": 3,
+      "originalFaces": 78,
+      "triangles": 4276,
+      "materials": [
+        2,
+        12,
+        20
+      ]
+    },
+    "robot-58": {
+      "robotId": 58,
+      "nativeModel": 85,
+      "donor": 12,
+      "originalFaces": 58,
+      "triangles": 3921,
+      "materials": [
+        2,
+        32,
+        44
+      ]
+    },
+    "robot-59": {
+      "robotId": 59,
+      "nativeModel": 86,
+      "donor": 14,
+      "originalFaces": 67,
+      "triangles": 9179,
+      "materials": [
+        1,
+        2,
+        3,
+        23,
+        30,
+        31,
+        32
+      ]
+    },
+    "robot-60": {
+      "robotId": 60,
+      "nativeModel": 87,
+      "donor": 8,
+      "originalFaces": 80,
+      "triangles": 5442,
+      "materials": [
+        2,
+        10
+      ]
+    },
+    "robot-61": {
+      "robotId": 61,
+      "nativeModel": 88,
+      "donor": 2,
+      "originalFaces": 36,
+      "triangles": 3690,
+      "materials": [
+        66
+      ]
+    },
+    "robot-62": {
+      "robotId": 62,
+      "nativeModel": 89,
+      "donor": 12,
+      "originalFaces": 152,
+      "triangles": 4321,
+      "materials": [
+        0,
+        1,
+        26,
+        29,
+        44
+      ]
+    },
+    "robot-63": {
+      "robotId": 63,
+      "nativeModel": 90,
+      "donor": 2,
+      "originalFaces": 36,
+      "triangles": 3690,
+      "materials": [
+        66
+      ]
+    },
+    "robot-64": {
+      "robotId": 64,
+      "nativeModel": 91,
+      "donor": 12,
+      "originalFaces": 246,
+      "triangles": 4893,
+      "materials": [
+        23,
+        44,
+        87,
+        88,
+        89,
+        90,
+        91
+      ]
+    },
+    "robot-65": {
+      "robotId": 65,
+      "nativeModel": 92,
+      "donor": 2,
+      "originalFaces": 140,
+      "triangles": 4794,
+      "materials": [
+        0,
+        2,
+        3,
+        7,
+        66,
+        92
+      ]
+    },
+    "robot-66": {
+      "robotId": 66,
+      "nativeModel": 166,
+      "donor": 9,
+      "originalFaces": 79,
+      "triangles": 2950,
+      "materials": [
+        2,
+        25,
+        62
+      ]
+    },
+    "robot-67": {
+      "robotId": 67,
+      "nativeModel": 167,
+      "donor": 4,
+      "originalFaces": 85,
+      "triangles": 17208,
+      "materials": [
+        0,
+        21,
+        55,
+        93
+      ]
+    },
+    "robot-68": {
+      "robotId": 68,
+      "nativeModel": 168,
+      "donor": 11,
+      "originalFaces": 120,
+      "triangles": 10733,
+      "materials": [
+        2,
+        73,
+        74
+      ]
+    },
+    "robot-69": {
+      "robotId": 69,
+      "nativeModel": 169,
+      "donor": 6,
+      "originalFaces": 61,
+      "triangles": 7791,
+      "materials": [
+        0,
+        2,
+        4,
+        5
+      ]
+    },
+    "robot-70": {
+      "robotId": 70,
+      "nativeModel": 170,
+      "donor": 1,
+      "originalFaces": 109,
+      "triangles": 4508,
+      "materials": [
+        0,
+        1,
+        22,
+        94,
+        95,
+        96
+      ]
+    },
+    "robot-71": {
+      "robotId": 71,
+      "nativeModel": 171,
+      "donor": 8,
+      "originalFaces": 65,
+      "triangles": 5426,
+      "materials": [
+        10,
+        16,
+        21,
+        25
+      ]
+    },
+    "robot-72": {
+      "robotId": 72,
+      "nativeModel": 172,
+      "donor": 3,
+      "originalFaces": 77,
+      "triangles": 4485,
+      "materials": [
+        1,
+        2,
+        20,
+        21,
+        25,
+        97,
+        98
+      ]
+    },
+    "robot-73": {
+      "robotId": 73,
+      "nativeModel": 173,
+      "donor": 10,
+      "originalFaces": 50,
+      "triangles": 9026,
+      "materials": [
+        9,
+        16,
+        25,
+        51,
+        52,
+        93
+      ]
+    },
+    "robot-74": {
+      "robotId": 74,
+      "nativeModel": 174,
+      "donor": 5,
+      "originalFaces": 130,
+      "triangles": 7354,
+      "materials": [
+        8,
+        12,
+        16
+      ]
+    },
+    "robot-75": {
+      "robotId": 75,
+      "nativeModel": 175,
+      "donor": 6,
+      "originalFaces": 152,
+      "triangles": 8437,
+      "materials": [
+        4,
+        5,
+        9,
+        29,
+        37,
+        90,
+        100
+      ]
+    },
+    "robot-76": {
+      "robotId": 76,
+      "nativeModel": 176,
+      "donor": 6,
+      "originalFaces": 257,
+      "triangles": 9269,
+      "materials": [
+        4,
+        5,
+        21,
+        37,
+        81,
+        94
+      ]
+    },
+    "robot-77": {
+      "robotId": 77,
+      "nativeModel": 177,
+      "donor": 2,
+      "originalFaces": 111,
+      "triangles": 3988,
+      "materials": [
+        0,
+        29,
+        66,
+        97
+      ]
+    }
+  },
+  "materials": {
+    "0": "1",
+    "1": "2",
+    "2": "3",
+    "3": "flat:0",
+    "4": "fleet:6",
+    "5": "fleet:7",
+    "7": "6",
+    "8": "fleet:5",
+    "9": "7",
+    "10": "fleet:9",
+    "11": "flat:10570",
+    "12": "10",
+    "13": "fleet:0",
+    "14": "12",
+    "15": "flat:31744",
+    "16": "13",
+    "18": "flat:16912",
+    "20": "fleet:3",
+    "21": "19",
+    "22": "18",
+    "23": "1735",
+    "24": "fleet:8",
+    "25": "20",
+    "26": "1842",
+    "29": "23",
+    "30": "fleet:17",
+    "31": "fleet:18",
+    "32": "25",
+    "33": "24",
+    "34": "fleet:16",
+    "37": "1741",
+    "38": "flat:4228",
+    "40": "30",
+    "44": "fleet:15",
+    "47": "1869",
+    "51": "fleet:11",
+    "52": "fleet:12",
+    "55": "fleet:4",
+    "60": "42",
+    "61": "43",
+    "62": "fleet:10",
+    "63": "1930",
+    "66": "fleet:2",
+    "73": "fleet:13",
+    "74": "fleet:14",
+    "75": "2105",
+    "76": "55",
+    "78": "60",
+    "80": "62",
+    "81": "64",
+    "82": "66",
+    "83": "65",
+    "87": "70",
+    "88": "74",
+    "89": "71",
+    "90": "73",
+    "91": "72",
+    "92": "76",
+    "93": "1941",
+    "94": "57",
+    "95": "1576",
+    "96": "fleet:1",
+    "97": "81",
+    "98": "1436",
+    "100": "1442"
+  }
+}
