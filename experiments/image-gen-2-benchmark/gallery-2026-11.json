@@ -1,5 +1,120 @@
 [
   {
+    "id": "2026-11-05-factual-infographic-factual-infographic-multiple-sclerosis-",
+    "title": "Factual infographic: Multiple Sclerosis — Myelin and Signal Disruption",
+    "tests": "{\"factual_subtype\": \"medical-health-infographic\"}; archive_slot=2026-11-05T02:20; concept=multiple-sclerosis-myelin-signal-disruption; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished medical infographic directly on the canvas: title \"MULTIPLE SCLEROSIS\", subtitle \"Myelin and signal disruption\". A richly shaded contemporary anatomical gouache and delicate technical-ink atlas on cool pearl-gray, with indigo nervous tissue accents, luminous cream myelin and restrained coral inflammation. Artwork first, asymmetrical and flowing, not a grid of cards. Dominant sweeping three-quarter anatomical cutaway of a brain continuing into the spinal cord, not the peripheral nerves; several small schematic lesion areas indicated delicately, labeled \"Central nervous system: brain + spinal cord\" and \"Illustrative lesions—not a patient scan\". Tissue folds and cord anatomy have meticulous believable material texture and subtle dimensional lighting. A curved magnification pathway flows from one lesion into two large neighboring nerve-fiber studies: one intact axon wrapped in segmented protective myelin, one with disrupted myelin exposing portions of axon. Label \"Axon\", \"Myelin sheath\", \"Immune-mediated damage\"; a fine signal line remains continuous along the intact fiber and fades or breaks along the damaged fiber, explicitly labeled \"Schematic: disrupted nerve signaling\". Do not depict literal lightning, parasites, infection organisms, or imply every axon is severed. Add \"Myelin damage—and sometimes axon injury—disrupts communication\". Supporting explanatory text organically follows the curved anatomy in generous open spaces, never rigid boxes.\nAt upper right integrate small sensory studies of an eye and a hand, visually connected to concise text \"Symptoms vary: vision changes • numbness or tingling • fatigue • weakness or stiffness • balance problems\". Below the hero, a dignified fictional 34-year-old East Asian woman with short straight black hair, round face, average build and moss-green cardigan sits upright talking to a clinician; an understated small open note \"Symptoms can relapse and remit, or progressively worsen\". No implication that all patients need mobility aids. Adjacent open notes \"Exact cause unclear\" and \"Genes and environment influence risk; smoking and prior Epstein–Barr infection are associated—not certainty\". Avoid a literal causal arrow from a virus to MS.\nAlong a gentle lower arc, readable diagnosis and care lettering: \"Diagnosis: history + neurological examination + MRI; sometimes spinal fluid or other tests\"; \"No single diagnostic test\"; \"No current cure\"; \"Disease-modifying therapies: reduce relapses and slow progression in appropriate patients\"; \"Steroids may speed relapse recovery—not alter the long-term course\"; \"Physiotherapy, tailored activity and symptom care support daily life\"; \"Treatment is individualized with the MS team\". Near the base place a prominent but unboxed coral emergency line: \"Sudden arm weakness, vision loss or balance trouble? Seek emergency help—stroke can look similar.\" Footer \"Symptoms have many causes. General education—not a diagnosis.\" Preserve elegant large type, meaningful readable secondary labels and visual breathing room. Make the myelin comparison the spectacular focus, with intricate layered fatty sheaths and unexaggerated inflammation. No bibliography, URLs, numerical statistics, medication doses, promised cure, logo, frame, photographed poster, or UI. Only show source-supported described anatomy and text; don't invent additional labels.",
+    "image": "images/2026-11-05-factual-infographic-factual-infographic-multiple-sclerosis-.jpg",
+    "thumb": "thumbs/2026-11-05-factual-infographic-factual-infographic-multiple-sclerosis-.webp",
+    "color": "#c2b5b5",
+    "date": "2026-11-05",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "multiple-sclerosis-myelin-signal-disruption",
+      "imageSha256": "62946902ab063044841fad88cdbfb06dbee4dda157139d053e9db10131597ff6",
+      "imageDHash": "08088f6842c7150f"
+    },
+    "factualInfographic": {
+      "topic": "How multiple sclerosis damages central nervous system myelin, disrupts nerve signals, and is evaluated and managed",
+      "description": "Central nervous system demyelination, symptoms, diagnosis, management and stroke-related warning signs.",
+      "sourceNote": "NINDS: https://www.ninds.nih.gov/health-information/disorders/multiple-sclerosis-ms ; NHS: https://www.nhs.uk/conditions/multiple-sclerosis/ — verified anatomy, symptom variability, evaluation, management and emergency context.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-05T10:21:48.481544+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Neurological Disorders and Stroke",
+            "title": "Multiple Sclerosis (MS)",
+            "sourceType": "government-agency",
+            "url": "https://www.ninds.nih.gov/health-information/disorders/multiple-sclerosis-ms"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Multiple sclerosis",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/multiple-sclerosis/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Multiple sclerosis is an immune-mediated disorder affecting the central nervous system: brain and spinal cord; immune attacks damage myelin around axons and may damage axons themselves, disrupting communication.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Myelin is the protective coating around nerve fibers; demyelinated lesions can occur in the brain and spinal cord and can be seen with MRI.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Symptoms vary by person and lesion location: fatigue, visual problems, numbness or tingling, muscle weakness or stiffness, and balance problems can occur.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Some people have relapses and remissions; others experience progressive worsening. The course varies and cannot be predicted from a single illustration.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The exact cause is unclear; genetic susceptibility and environmental factors contribute, and smoking and prior Epstein-Barr virus infection are associated with increased risk, not certainty of disease.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "No single test diagnoses MS: a neurologist combines history and examination with MRI and sometimes spinal fluid or other tests, excluding other causes.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "There is no current cure. Disease-modifying therapies can reduce relapses and slow progression for appropriate patients; treatment depends on disease type and individual needs.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Corticosteroids may speed recovery from a relapse but do not change the long-term course; physiotherapy, tailored exercise, fatigue management and symptom medicines can help.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Sudden arm weakness or numbness, sudden vision loss or sudden balance problems can signal stroke and require emergency medical help; do not assume they are MS.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "MS-like symptoms can have other causes and should be checked by a clinician; general education is not diagnosis.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-04-factual-infographic-factual-infographic-pacific-blue-tang",
     "title": "Factual infographic: Pacific blue tang",
     "tests": "; archive_slot=2026-11-04T20:20; concept=pacific-blue-tang-surgeonfish-coral-refuge; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Paracanthurus hepatus",
