@@ -88,15 +88,6 @@ static void ax_flush(float scale,float opacity){
     glDrawArrays(GL_TRIANGLES,0,ax_count);glDisableClientState(GL_VERTEX_ARRAY);glDisableClientState(GL_NORMAL_ARRAY);glDisableClientState(GL_COLOR_ARRAY);
     glUseProgram(0);glDepthMask(GL_TRUE);if(cull)glEnable(GL_CULL_FACE);if(!depth)glDisable(GL_DEPTH_TEST);gr_settransblend(fade,blend);ax_count=0;
 }
-void astra_pickup_arcs(int id,float clock,float scale){
-    if(!ax_on())return;ax_count=0;
-    int energy=id==1||id==2||id==7||id==23||id==24||id==32||id==34;
-    if(id==1)ax_paint(1,.58f,.055f,1.45f);else if(id==2||id==4)ax_paint(.08f,.52f,1,1.5f);else if(id==5)ax_paint(1,.12f,.09f,1.3f);else if(id==6)ax_paint(1,.75f,.12f,1.3f);else ax_paint(.06f,.88f,.95f,1.35f);
-    if(energy){for(int k=0;k<3;k++)ax_arc(.81f,clock*(k&1?-1.3f:1.6f)+k*2.1f,clock,k,.009f);}
-    else {ax_ring(0,-.72f,0,.68f,.013f,clock*1.9f+id,1.6f,1);ax_ring(0,-.72f,0,.68f,.013f,clock*1.9f+id+3.14f,1.6f,1);
-        if(id!=50&&id%3==0)ax_arc(.83f,-clock*1.25f+id,clock,0,.007f);}
-    ax_flush(scale,1);EM_ASM(Module.pickupAnimationVersion=10;);
-}
 void astra_visual_fired(int parent){
     if(parent<0||parent>=MAX_OBJECTS||!ax_on())return;
     ax_fired[parent]=GameTime64;ax_signature[parent]=Objects[parent].signature;
@@ -211,6 +202,72 @@ static void af_flush_tinted(float clock,int style,int preserve_hue){
 }
 
 static void af_flush(float clock,int style){af_flush_tinted(clock,style,0);}
+
+
+/* Branching corona discharges. Each object has an independent visual seed;
+ * this hash never advances D2's gameplay RNG. Paths persist briefly, then
+ * restrike between new surface anchors instead of orbiting as solid rings. */
+static unsigned int ap_arc_hash(unsigned int x){x^=x>>16;x*=0x7feb352dU;x^=x>>15;x*=0x846ca68bU;return x^(x>>16);}
+static float ap_arc_rand(unsigned int x){return (ap_arc_hash(x)&65535)/65535.f;}
+static void ap_arc_path(float p[17][3],unsigned int seed,float wobble){
+    for(int step=16;step>1;step/=2)for(int i=0;i<16;i+=step){
+        int mid=i+step/2;
+        for(int k=0;k<3;k++)p[mid][k]=(p[i][k]+p[i+step][k])*.5f+(ap_arc_rand(seed+mid*71+k*313)-.5f)*wobble*step/16.f;
+    }
+}
+void astra_pickup_arcs(int id,int signature,float clock,float scale){
+    if(!ax_on()||ss_capture)return;
+    g3s_point view;vms_vector zero={0};g3_rotate_point(&view,&zero);
+    float distance=f2fl(view.p3_z)/f2fl(Matrix_scale.z),relative=distance/fmaxf(.1f,scale);
+    if(distance<.35f||relative>100)return;
+    int energy=id==1||id==2||id==7||id==23||id==24||id==32||id==34;
+    int count=relative<22?(energy?9:7):relative<48?4:2,segments=0,sparks=0;
+    float rgb[3]={.10f,.68f,1.f};
+    if(id==1||id==6){rgb[0]=1;rgb[1]=.62f;rgb[2]=.12f;}
+    else if(id==5){rgb[0]=1;rgb[1]=.19f;rgb[2]=.12f;}
+    else if(id==7||id==34){rgb[0]=.62f;rgb[1]=.32f;rgb[2]=1;}
+    else if(id!=2&&id!=4){rgb[0]=.08f;rgb[1]=.95f;rgb[2]=.78f;}
+    /* Store at most nine discharges for a separate soft endpoint batch. */
+    float ends[9][3],strength[9];int live=0;
+    ax_count=0;
+    for(int n=0;n<count;n++){
+        unsigned int base=ap_arc_hash((unsigned int)signature*733U+id*991U+n*2371U);
+        float cadence=4.5f+ap_arc_rand(base)*3.5f,t=clock*cadence+ap_arc_rand(base+1)*19.f;
+        int tick=(int)floorf(t);float age=t-tick;
+        /* Independent dark intervals avoid synchronized strobing. */
+        if(age>.83f)continue;
+        unsigned int seed=ap_arc_hash(base+(unsigned int)tick*1619U);
+        float pulse=(.48f+.52f*sinf(age*3.785f))*(.82f+.18f*sinf(clock*97+n));
+        float p[17][3],a=ap_arc_rand(seed)*6.2831853f,b=a+.75f+ap_arc_rand(seed+1)*1.7f;
+        float tilt=ap_arc_rand(seed+2)*6.2831853f,r=.86f+ap_arc_rand(seed+3)*.16f;
+        for(int k=0;k<2;k++){
+            float q=k?b:a; p[k*16][0]=cosf(q)*r;p[k*16][1]=sinf(q)*cosf(tilt)*r;p[k*16][2]=sinf(q)*sinf(tilt)*r;
+        }
+        ap_arc_path(p,seed,.68f);
+        /* Bow the discharge away from the shell while retaining its anchors. */
+        for(int j=1;j<16;j++){float bulge=.26f*sinf(j*3.14159265f/16);p[j][0]+=cosf((a+b)*.5f)*bulge;p[j][1]+=sinf((a+b)*.5f)*cosf(tilt)*bulge;p[j][2]+=sinf((a+b)*.5f)*sinf(tilt)*bulge;}
+        for(int j=1;j<=16;j++){
+            float *A=p[j-1],*B=p[j];
+            ax_paint(rgb[0],rgb[1],rgb[2],1);af_beam(A[0]*scale,A[1]*scale,A[2]*scale,B[0]*scale,B[1]*scale,B[2]*scale,scale*.050f,pulse*.40f,n);
+            ax_paint(.64f+rgb[0]*.36f,.64f+rgb[1]*.36f,.64f+rgb[2]*.36f,1);af_beam(A[0]*scale,A[1]*scale,A[2]*scale,B[0]*scale,B[1]*scale,B[2]*scale,scale*.016f,pulse*.95f,n);segments++;
+        }
+        for(int fork=0;fork<(relative<35?2:1);fork++){
+            int start=4+(int)(ap_arc_rand(seed+40+fork)*8);float q[17][3];memcpy(q[0],p[start],sizeof q[0]);
+            for(int k=0;k<3;k++)q[16][k]=q[0][k]+(ap_arc_rand(seed+77+fork*13+k)-.5f)*.70f;
+            ap_arc_path(q,seed+97+fork*101,.28f);
+            ax_paint(rgb[0],rgb[1],rgb[2],1);
+            for(int j=2;j<=16;j+=2){float *A=q[j-2],*B=q[j];af_beam(A[0]*scale,A[1]*scale,A[2]*scale,B[0]*scale,B[1]*scale,B[2]*scale,scale*.020f,pulse*(1-j/22.f)*.85f,n);segments++;}
+        }
+        memcpy(ends[live],p[16],sizeof ends[0]);strength[live++]=pulse;
+    }
+    af_flush(clock,1);ax_count=0;ax_paint(rgb[0],rgb[1],rgb[2],1);
+    for(int n=0;n<live;n++){
+        float *p=ends[n];af_particle(p[0]*scale,p[1]*scale,p[2]*scale,scale*.075f,strength[n]*.48f,n);
+        for(int j=0;j<2;j++){float phase=fmodf(clock*(5+j)+n*.317f,1),v=.05f+phase*.22f;af_particle((p[0]*(1+v))*scale,(p[1]*(1+v)-phase*phase*.08f)*scale,p[2]*(1+v)*scale,scale*.016f,(1-phase)*strength[n]*.74f,n+j);sparks++;}
+    }
+    af_flush(clock,0);
+    EM_ASM(Module.pickupAnimationVersion=29;Module.pickupArcSegments=$0;Module.pickupArcSparks=$1;,segments,sparks);
+}
 
 /* A visual record of the native Omega hit. Two emitters share that hit: no
  * second weapon, collision, energy debit, damage calculation or random draw. */

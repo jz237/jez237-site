@@ -80,7 +80,7 @@ int astra_draw_pickup(object *obj){
     glDrawArrays(GL_TRIANGLES,0,ap_count[id]);
     glDisableClientState(GL_VERTEX_ARRAY);glDisableClientState(GL_COLOR_ARRAY);glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glUseProgram(0);if(cull)glEnable(GL_CULL_FACE);if(!depth)glDisable(GL_DEPTH_TEST);if(blend)glEnable(GL_BLEND);
-    extern void astra_pickup_arcs(int,float,float);astra_pickup_arcs(id,clock,f2fl(obj->size));
+    extern void astra_pickup_arcs(int,int,float,float);astra_pickup_arcs(id,obj->signature,clock,f2fl(obj->size));
     g3_done_instance();
     ap_draws++;EM_ASM(Module.pickupDraws=$0;Module.pickupCoverage[$1]=true;,ap_draws,id);
     return 1;

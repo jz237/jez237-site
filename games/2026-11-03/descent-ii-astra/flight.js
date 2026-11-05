@@ -15,7 +15,7 @@ window.ensureAstraHangar=async ()=>{
   try {
     await loadAstraShipAssets();
     if(launchPending&&!document.body.classList.contains("native-open")){hangarStarted=false;return;}
-    await script("hangar.js?v=24");
+    await script("hangar.js?v=29");
   } catch(error){hangarStarted=false;console.warn("Hangar preview:",error.message);}
 };
 document.addEventListener("DOMContentLoaded",()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{
@@ -343,7 +343,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre28");
+    await script("engine.js?v=pyre29");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 
@@ -492,7 +492,7 @@ window.astraCollectibleStatus=id=>{
   if(!item)return;
   $('previewTitle').textContent='PTMC / COLLECTIBLE INSPECTION';
   $('previewVariation').textContent=item.name;
-  $('previewPhase').textContent='Animated 3D model · Electrical detail';
+  $('previewPhase').textContent='Animated 3D model · Branching electrical discharges';
   $('previewTime').textContent=item.triangles.toLocaleString()+' triangles';
   $('previewProgress').hidden=true;
   $('previewAgain').textContent='Next collectible →';

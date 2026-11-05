@@ -60,6 +60,6 @@
   cv.onkeydown=e=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home'].includes(e.key))return;e.preventDefault();if(e.key==='Home')return api.reset();yaw+=(e.key==='ArrowRight')*.16-(e.key==='ArrowLeft')*.16;pitch=Math.max(-1.2,Math.min(1.35,pitch+(e.key==='ArrowDown')*.1-(e.key==='ArrowUp')*.1));render();};
   const im=new Image();im.onload=()=>{gl.bindTexture(gl.TEXTURE_2D,skin);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,im);gl.generateMipmap(gl.TEXTURE_2D);render();};im.src='data:image/png;base64,'+window.astraSkin;
   new ResizeObserver(()=>render()).observe(cv);new IntersectionObserver(e=>visible=e[0].isIntersecting).observe(cv);
-  function animate(now){requestAnimationFrame(animate);if(now-last<33)return;const elapsed=Math.min(.08,(now-last)*.001);last=now;if(document.hidden||!visible||!document.getElementById("loadingScreen").hidden||(!document.body.classList.contains('native-open')&&document.body.classList.contains('flying')))return;if(spinning)yaw+=elapsed*.2;if(!reduced||spinning)render(now);}
+  function animate(now){requestAnimationFrame(animate);if(now-last<33)return;const elapsed=Math.min(.08,(now-last)*.001);last=now;if(document.hidden||document.body.classList.contains("enemy-gallery-open")||!visible||!document.getElementById("loadingScreen").hidden||(!document.body.classList.contains('native-open')&&document.body.classList.contains('flying')))return;if(spinning)yaw+=elapsed*.2;if(!reduced||spinning)render(now);}
   requestAnimationFrame(animate);render();
 })();

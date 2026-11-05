@@ -577,3 +577,28 @@ Preview clocks drive material animation as well as particles. Scrubbing is
 silent, the mission clock remains stopped, and existing hit tints are restored
 when returning to the mine. Native damage and pause-state tests cover both
 campaigns; phone controls were checked in browser emulation.
+
+
+Enemy archive and branching discharges (pyre29)
+
+The showroom includes 25 original Overload enemy/boss forms, the Hologuide,
+and four labeled archive prototypes. The pReactorA prefab contains no mesh
+and is excluded. Enemy names and order were checked against EnemyType and
+EnemyNamesType.Refresh in the installed Assembly-CSharp.dll. Dossier fields
+come from desc_robots_EN; base armor and behavior flags come from robot_data.
+Missing dossier information is marked as unrecorded rather than invented.
+
+    python enemy_gallery.py "<OL>" "<output-game-folder>"
+
+The extractor retains original proportions and authored 1024px material maps.
+enemy-sources.json records coverage. Each model and its shared materials load
+only when selected; neither the enemy catalog nor its assets block flight.
+The WebGL1 gallery works independently of the native engine, including from
+file URLs. Closing it releases its model buffers/textures and stops rendering.
+
+Pickup corona paths use per-object deterministic visual hashes, midpoint
+displacement, short restrikes, tapered forks, soft cores and discharge sparks.
+Close pickups show up to nine independently timed discharges; distant pickups
+use fewer paths. Arcs depth-test against the pickup and the mine, do not write
+depth, and never consume simulation randomness or change pickup behavior.
+The same renderer serves both original and Vertigo campaigns.
