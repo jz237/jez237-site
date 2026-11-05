@@ -2,17 +2,18 @@
 extern float astra_lamp[4],astra_flash[4];
 extern int astra_drawing_mine,astra_refinement;
 static float astra_surface[4];
-static int astra_earth_material;
-static GLuint astra_earth_colors[256];
+int astra_native_compare;
 static GLuint astra_normals[256],astra_program;
 static GLint astra_tangents,astra_fixture,astra_moving;
 static int astra_gpu_failed,astra_shaded;
+static int af_surface(const char *name);
 static int astra_material_id(const char *name)
 {
-    return EM_ASM_INT({
+    int id=EM_ASM_INT({
         var label=window.astraAliases[UTF8ToString($0)];
         return label && /^m[0-9]+/.test(label) ? 1+parseInt(label.slice(1),10) : 0;
     },name);
+    return id?id:af_surface(name)?7:0;
 }
 static GLuint astra_compile(GLenum type,const char *code)
 {
@@ -31,24 +32,27 @@ static void astra_init_shader(void)
     const char *vs="varying highp vec2 uv;varying mediump vec4 light;varying highp vec3 p;"
         "void main(){gl_Position=ftransform();uv=gl_MultiTexCoord0.xy;light=gl_Color;p=gl_Vertex.xyz;}";
     const char *fs="precision highp float;varying highp vec2 uv;varying mediump vec4 light;varying highp vec3 p;"
-        "uniform sampler2D colorMap,detailMap;uniform mat3 basis;uniform vec4 lamp,shot,surface;uniform vec2 density;uniform float refinement;uniform sampler2D topMap,topDetail;uniform float paired,topTurn;"
+        "uniform sampler2D colorMap,detailMap,nativeMap,nativeTop;uniform float faithful,topFaithful,nativeCompare;uniform mat3 basis;uniform vec4 lamp,shot,surface;uniform vec2 density;uniform float refinement;uniform sampler2D topMap,topDetail;uniform float paired,topTurn;"
         "float hash(vec2 q){return fract(sin(dot(q,vec2(127.1,311.7)))*43758.5453);}"
         "float noise(vec2 q){vec2 i=floor(q),f=fract(q);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+1.),f.x),f.y);}"
         "float skin(vec2 q){vec2 f=fract(q),e=min(f,1.-f);float d=min(e.x,e.y);float h=smoothstep(.015,.045,d)*.035;"
         "vec2 b=abs(f-.5)-vec2(.40);float r=length(b);h+=.010*(1.-smoothstep(.020,.032,r))-.009*(1.-smoothstep(.030,.043,r));"
         "float groove=abs(f.y-.70);float cut=(1.-smoothstep(.005,.013,groove))*smoothstep(.12,.16,f.x)*(1.-smoothstep(.82,.87,f.x));return h-cut*.012;}"
 
-        "void main(){vec2 coord=uv;if(surface.x>3.5){coord+=sin(uv.yx*19.+surface.z*.8)*.003;}vec4 a=texture2D(colorMap,coord);"
+        "void main(){vec2 coord=uv;vec3 eye=normalize(-p);float close=1.-smoothstep(35.,120.,-p.z);"
+        "if(surface.x>3.5){coord+=sin(uv.yx*19.+surface.z*.8)*.003;}"
+        "if(faithful>.5&&nativeCompare<.5&&paired<.5){float h=texture2D(detailMap,uv).a-.42;vec2 e=vec2(dot(eye,basis[0]),dot(eye,basis[1]));coord-=e*h*.018*close;}"
+        "vec4 a=texture2D(colorMap,coord);if(nativeCompare>.5&&faithful>.5)a=texture2D(nativeMap,uv);"
         "vec3 sampleN=texture2D(detailMap,coord).rgb;"
         "if(paired>.5){vec2 tuv=uv;if(topTurn>.5&&topTurn<1.5)tuv=vec2(1.-uv.y,uv.x);else if(topTurn>1.5&&topTurn<2.5)tuv=1.-uv;else if(topTurn>2.5)tuv=vec2(uv.y,1.-uv.x);"
-        "vec4 top=texture2D(topMap,tuv);if(top.a<.001)discard;float useTop=smoothstep(.004,.08,top.a);a=mix(a,vec4(top.rgb,1.),useTop);"
+        "vec4 top=texture2D(topMap,tuv);if(nativeCompare>.5&&topFaithful>.5)top=texture2D(nativeTop,tuv);if(top.a<.001)discard;float useTop=smoothstep(.004,.08,top.a);a=mix(a,vec4(top.rgb,1.),useTop);"
         "vec3 tn=texture2D(topDetail,tuv).rgb;vec2 normal=tn.xy*2.-1.;if(topTurn>.5&&topTurn<1.5)normal=vec2(normal.y,-normal.x);else if(topTurn>1.5&&topTurn<2.5)normal=-normal;else if(topTurn>2.5)normal=vec2(-normal.y,normal.x);"
         "tn.xy=normal*.5+.5;sampleN=mix(sampleN,tn,useTop);}if(a.a*light.a<.035)discard;vec2 xy=(sampleN.xy*2.-1.)*.87;"
-        "vec3 eye=normalize(-p);vec3 base=basis[2]*sign(dot(basis[2],eye));"
-        "float hard=step(.5,surface.x)*(1.-step(3.5,surface.x));vec2 cell=coord*density;float detailFade=1.-smoothstep(8.,55.,-p.z);float close=1.-smoothstep(35.,120.,-p.z);"
+        "if(nativeCompare>.5){gl_FragColor=vec4(a.rgb*light.rgb,a.a*light.a);return;}vec3 base=basis[2]*sign(dot(basis[2],eye));"
+        "float hard=step(.5,surface.x)*(1.-step(3.5,surface.x));vec2 cell=coord*density;float detailFade=1.-smoothstep(8.,55.,-p.z);float layout=1.-step(.5,faithful);"
         "float eps=.002;vec2 relief=vec2(skin(cell-vec2(eps,0.))-skin(cell+vec2(eps,0.)),skin(cell-vec2(0.,eps))-skin(cell+vec2(0.,eps)))/(2.*eps);"
-        "xy+=relief*.24*hard*close;xy=clamp(xy,vec2(-.85),vec2(.85));vec2 edges=min(fract(cell),1.-fract(cell));"
-        "float seam=1.-smoothstep(.012,.050,min(edges.x,edges.y));a.rgb*=1.-seam*.32*hard*close;"
+        "xy+=relief*.24*hard*close*layout;xy=clamp(xy,vec2(-.85),vec2(.85));vec2 edges=min(fract(cell),1.-fract(cell));"
+        "float seam=1.-smoothstep(.012,.050,min(edges.x,edges.y));a.rgb*=1.-seam*.32*hard*close*layout;"
         "float fiber=sin(cell.x*170.+sin(cell.y*21.))*sin(cell.y*110.);a.rgb*=1.+fiber*.015*close*exp(-max(0.,-p.z-8.)*.08);"
         "vec3 n=normalize(basis[0]*xy.x+basis[1]*xy.y+base*sqrt(max(.06,1.-dot(xy,xy))));"
         "vec3 L=lamp.xyz-p;float dist=length(L);L/=max(dist,.001);"
@@ -62,7 +66,7 @@ static void astra_init_shader(void)
         "float wear=smoothstep(.5,.92,patina)*(.06+.09*rock);a.rgb*=1.+grain*.022+patina*.035-wear;"
         "a.rgb=mix(a.rgb,a.rgb*vec3(.93,1.01,1.025),ceramic*.45);expn=mix(expn,32.,ceramic);"
         "float grime=noise(cell*2.3+surface.w*17.),fleck=noise(cell*55.);float seamEdge=1.-smoothstep(.018,.10,min(edges.x,edges.y));"
-        "float chip=seamEdge*smoothstep(.55,.73,fleck)*hard*detailFade*refinement;float wet=smoothstep(.64,.86,grime)*oil*refinement;"
+        "float chip=seamEdge*smoothstep(.55,.73,fleck)*hard*detailFade*refinement*layout;float wet=smoothstep(.64,.86,grime)*oil*refinement;"
         "a.rgb=mix(a.rgb,vec3(.28,.32,.33),chip*.65);a.rgb*=1.-refinement*(smoothstep(.52,.80,grime)*.16+wet*.16);"
         "metal=mix(metal,.88,chip);expn=mix(expn,105.,wet*.8);"
         "float cavity=clamp(1.-length(xy)*(.18+.12*rock),.72,1.);"
@@ -79,8 +83,9 @@ static void astra_init_shader(void)
         "vec3 reflection=reflect(-eye,n);float strip=pow(max(0.,1.-abs(reflection.y-.56)*2.4),14.);"
         "col+=refinement*vec3(.16,.29,.34)*strip*(wet*.43+metal*.07)*room;"
         "float vein=1.-smoothstep(.014,.045,abs(noise(cell*3.5+noise(cell*.8)*2.)-.51));"
-        "col+=rock*refinement*vein*vec3(.038,.052,.048)*close;"
+        "col+=rock*refinement*vein*vec3(.038,.052,.048)*close*layout;"
         "float haze=min(.16,1.-exp(-max(0.,-p.z-10.)*.0017));col=mix(col,vec3(.09,.145,.16),haze);"
+        "if(faithful>2.5&&faithful<3.5){float hi=max(a.r,max(a.g,a.b)),lo=min(a.r,min(a.g,a.b));float emission=smoothstep(.53,.70,hi)*(1.-smoothstep(.15,.32,hi-lo));col=mix(col,a.rgb*1.12,emission*.92);}"
         "gl_FragColor=vec4(col,a.a*light.a);}";
     GLuint v=astra_compile(GL_VERTEX_SHADER,vs), f=astra_compile(GL_FRAGMENT_SHADER,fs);
     if(!v||!f){astra_gpu_failed=1;return;}
@@ -91,6 +96,7 @@ static void astra_init_shader(void)
     glUseProgram(astra_program);
     glUniform1i(glGetUniformLocation(astra_program,"colorMap"),0);
     glUniform1i(glGetUniformLocation(astra_program,"detailMap"),1);
+    glUniform1i(glGetUniformLocation(astra_program,"nativeMap"),4);glUniform1i(glGetUniformLocation(astra_program,"nativeTop"),5);
     glUniform1i(glGetUniformLocation(astra_program,"topMap"),2);glUniform1i(glGetUniformLocation(astra_program,"topDetail"),3);
     astra_tangents=glGetUniformLocation(astra_program,"basis");
     astra_fixture=glGetUniformLocation(astra_program,"lamp");astra_moving=glGetUniformLocation(astra_program,"shot");
@@ -102,14 +108,9 @@ static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
     if(!astra_program)astra_init_shader();
     if(astra_gpu_failed)return 0;
     int id=tex->material;
-    int earth=astra_drawing_mine&&astra_refinement?astra_earth_material:0;astra_earth_material=0;
-    if(earth){
-        if(!astra_earth_colors[earth]){char name[24];png_data data;snprintf(name,sizeof name,"m%03d.png",earth-1);
-            if(read_png(name,&data)){glGenTextures(1,&astra_earth_colors[earth]);glBindTexture(GL_TEXTURE_2D,astra_earth_colors[earth]);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);glTexImage2D(GL_TEXTURE_2D,0,data.channels==4?GL_RGBA:GL_RGB,data.width,data.height,0,data.channels==4?GL_RGBA:GL_RGB,GL_UNSIGNED_BYTE,data.data);glGenerateMipmap(GL_TEXTURE_2D);free(data.data);}
-        }if(astra_earth_colors[earth])id=earth;else earth=0;
-    }
     glActiveTexture(GL_TEXTURE1);
-    if(!astra_normals[id]){
+    if(tex->faithful_detail)glBindTexture(GL_TEXTURE_2D,tex->faithful_detail);
+    else if(!astra_normals[id]){
         char name[20];snprintf(name,sizeof name,"n%03d.png",id-1);png_data data;
         if(!read_png(name,&data)){glActiveTexture(GL_TEXTURE0);glUseProgram(0);return 0;}
         glGenTextures(1,&astra_normals[id]);glBindTexture(GL_TEXTURE_2D,astra_normals[id]);
@@ -120,7 +121,10 @@ static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
         if(ogl_maxanisotropy>1.0)glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAX_ANISOTROPY_EXT,fminf(8,ogl_maxanisotropy));
         free(data.data);
     }else glBindTexture(GL_TEXTURE_2D,astra_normals[id]);
-    glActiveTexture(GL_TEXTURE0);if(earth)glBindTexture(GL_TEXTURE_2D,astra_earth_colors[earth]);glUseProgram(astra_program);glUniform1f(glGetUniformLocation(astra_program,"paired"),0);
+    glActiveTexture(GL_TEXTURE4);glBindTexture(GL_TEXTURE_2D,tex->native_color?tex->native_color:tex->handle);
+    glActiveTexture(GL_TEXTURE5);glBindTexture(GL_TEXTURE_2D,tex->native_color?tex->native_color:tex->handle);
+    glActiveTexture(GL_TEXTURE0);glUseProgram(astra_program);glUniform1f(glGetUniformLocation(astra_program,"paired"),0);
+    glUniform1f(glGetUniformLocation(astra_program,"faithful"),tex->faithful);glUniform1f(glGetUniformLocation(astra_program,"nativeCompare"),astra_native_compare);
     float a=uv[2]-uv[0],b=uv[3]-uv[1],c=uv[4]-uv[0],d=uv[5]-uv[1],mat[9];
     float flip=(a*d-b*c)<0?-1.f:1.f;
     for(int i=0;i<3;i++){float e=p[3+i]-p[i],g=p[6+i]-p[i];mat[i]=(d*e-b*g)*flip;mat[3+i]=(a*g-c*e)*flip;}
@@ -133,10 +137,11 @@ static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
     glUniformMatrix3fv(astra_tangents,1,GL_FALSE,mat);
     static int kinds[256],kinds_ready;
     if(!kinds_ready){EM_ASM({var k=window.astraMaterialTypes||[];for(var i=0;i<256;i++)HEAP32[($0>>2)+i]=k[i]??-1;},kinds);kinds_ready=1;}
-    float surface[4];memcpy(surface,astra_surface,sizeof surface);if(kinds[id]==0||kinds[id]==4)surface[0]=kinds[id];else if(kinds[id]>0&&surface[0]==0)surface[0]=1;if(id>=181&&id<=183)surface[0]=1;if(earth)surface[0]=0;
+    float surface[4];memcpy(surface,astra_surface,sizeof surface);if(kinds[id]==0||kinds[id]==4)surface[0]=kinds[id];else if(kinds[id]>0&&surface[0]==0)surface[0]=1;if(id>=181&&id<=183)surface[0]=1;
+    if(tex->faithful)surface[0]=tex->faithful==1?0:tex->faithful==5?4:1;
     glUniform4fv(glGetUniformLocation(astra_program,"surface"),1,surface);
     glUniform1f(glGetUniformLocation(astra_program,"refinement"),astra_refinement);
-    EM_ASM(Module.wallDetailVersion=22;);
+    EM_ASM(Module.wallDetailVersion=35;);
     glUniform4fv(astra_fixture,1,astra_lamp);glUniform4fv(astra_moving,1,astra_flash);
     ++astra_shaded;return 1;
 }
@@ -206,7 +211,9 @@ static int astra_layered_draw(int nv,const g3s_point **points,const g3s_uvl *uvl
     }
     if(!astra_material_begin(top->gltexture,p,uv)||!astra_material_begin(base->gltexture,p,uv))return 0;
     glActiveTexture(GL_TEXTURE2);glBindTexture(GL_TEXTURE_2D,top->gltexture->handle);
-    glActiveTexture(GL_TEXTURE3);glBindTexture(GL_TEXTURE_2D,astra_normals[top->gltexture->material]);
+    glActiveTexture(GL_TEXTURE3);glBindTexture(GL_TEXTURE_2D,top->gltexture->faithful_detail?top->gltexture->faithful_detail:astra_normals[top->gltexture->material]);
+    glActiveTexture(GL_TEXTURE5);glBindTexture(GL_TEXTURE_2D,top->gltexture->native_color?top->gltexture->native_color:top->gltexture->handle);
+    glUniform1f(glGetUniformLocation(astra_program,"topFaithful"),top->gltexture->faithful);
     glActiveTexture(GL_TEXTURE0);OGL_BINDTEXTURE(base->gltexture->handle);
     glUniform1f(glGetUniformLocation(astra_program,"paired"),1);glUniform1f(glGetUniformLocation(astra_program,"topTurn"),turn);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_COLOR_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);

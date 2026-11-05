@@ -5,6 +5,7 @@ static float sat_byte(float v) { return v<0 ? 0 : v>255 ? 255 : v; }
 static int astra_prefix(const char *s,const char *p) { return strncmp(s,p,strlen(p))==0; }
 static void astra_finish(grs_bitmap *bm,const char *name,png_data *img)
 {
+    if(astra_faithful(bm,name,img)){++astra_surfaces;return;}
     if (astra_prefix(name,"exp")) { ++astra_blasts; return; }
     if (!bm->bm_data || img->channels!=3 || !bm->bm_w || !bm->bm_h) return;
     const int w=bm->bm_w, h=bm->bm_h, W=img->width, H=img->height;

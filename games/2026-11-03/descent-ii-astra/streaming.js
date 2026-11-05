@@ -122,6 +122,7 @@ function astraMaterialLibrary(catalog) {
       const version = ++generation, firstFrame = Module.environmentFrames || 0;
       const wanted = batches(bitmapNames);
       wanted.add(groups.get("forge.png"));
+      for (const name of ["m020.png","m006.png"]) wanted.add(groups.get(name));
       const queue = [...wanted].filter(group => group && !loaded.has(group));
       warmAfterFlight(robotNames, version, firstFrame);
       if (!queue.length) return;

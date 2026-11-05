@@ -728,39 +728,114 @@ disabled before every automated browser launch. Test exports are not shipped.
 Original weapon reference: Descent II instruction manual, pages 29 and 31:
 https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/273580/manuals/manual.pdf
 
+Faithful campaign materials (pyre35)
 
-Excavated mines (pyre34)
+Supersedes the rejected pyre34 excavation treatment. Original Counterstrike and
+Vertigo bitmaps determine surface placement, color, panel patterns, warning marks,
+transparency and every door/animated frame. No metal-to-rock region replacement
+remains. Rock occurs on native rock surfaces, including rock-faced secret doors.
 
-Connected excavation pockets follow the original segment graph, bounded by
-doors and functional rooms. The renderer layers fractured stone, mineral seams,
-drill wear and wet patches onto safe ordinary walls. Rock colors and normal
-maps reuse three existing Overload material pairs; these pairs are primed before
-the first frame. No new art parcel, mission object or collision mesh is added.
+Materials reconstruct the active campaign palette at 256-1024 pixels using
+edge-aware native patterns, fine Overload stone/metal grain, independent normal
+and roughness maps, close-range relief and scratched finishes. Per-bitmap normal
+maps follow that bitmap's design, including layered transparent grilles. Known
+light lenses and four-cell light panels have crisp machined housings and patterned
+diffusers. Nine original safety labels are re-typeset within their native bounds.
+Previously unaliased signs, fans, water and force fields use the same material path.
+The two fine-grain sources reuse existing parcels and are primed before rendering.
+Texture-owned maps are released along with their color textures.
 
-Shallow geological relief tapers to original shared wall boundaries. Bolted
-retaining ribs, mesh, transition trim, pipes, caged warm work lamps and small
-edge chips fit near the original wall surfaces. Ore conveyors move cleats and
-individual stones; extraction manifolds animate gauges; guarded fans rotate.
-Equipment corners are checked against the real segment before placing a bay.
-Sparse work-light dust responds to native Earthshaker tremor magnitude; selected
-extraction bays emit faint vent steam. Native weapon hits remain visible as scars
-on the rock, and nearby blasts and flares illuminate it.
+The mine showroom offers a paused original/remastered comparison at the same
+camera position, a connected-mine overview, all regular and secret mine choices,
+and retained machinery exhibits. Supplemental machinery is shown in the showroom;
+arbitrary bay dressing no longer covers the original wall designs during play.
+The #mines link selects the showroom tab without starting a game or capturing input.
 
-Protected surfaces include doors and secrets, passages, texture overlays,
-animated materials, native light panels, hazards and functional service rooms.
-Shared textures, distance-scaled rock meshes and bounded atmosphere contain cost.
-Both Original and Vertigo regular/secret levels use the same renderer. Controls,
-demo steering, navigation, enemy AI, weapons, damage, sounds and music retain
-their previous implementation.
+Native levels, portals, collision, light destructibility, controls, demo navigation,
+weapons, combat, sounds and music retain their existing implementation. The R34
+invalid-texture rendering fallback fix is retained: inspection never writes that
+fallback into mission data. QA-only instrumentation is excluded from this build.
 
-The mine showroom has 19 scenes, including a passage overview, bolted supports,
-ore machinery and settling dust. It opens on the new excavation view and offers
-pause, zoom, automatic touring and the existing before/after switch on phones
-and desktop. The #mines URL opens the showroom tab without launching the game.
-An invalid original texture index uses a safe rendering fallback; inspection
-does not write that fallback into mission segment data.
+Faithful campaign materials (pyre35)
 
-Validation records accompany this release in the workspace: all 53 regular and
-secret mines, protected face coverage, paused mission-state hashes, muted demos,
-desktop/phone showroom controls, source parity and the pinned upstream patch.
-Test fixtures and their exports are excluded from the game.
+Supersedes the rejected pyre34 excavation treatment. Original Counterstrike and
+Vertigo bitmaps determine surface placement, color, panel patterns, warning marks,
+transparency and every door/animated frame. No metal-to-rock region replacement
+remains. Rock occurs on native rock surfaces, including rock-faced secret doors.
+
+Materials reconstruct the active campaign palette at 256-1024 pixels using
+edge-aware native patterns, fine Overload stone/metal grain, independent normal
+and roughness maps, close-range relief and scratched finishes. Per-bitmap normal
+maps follow that bitmap's design, including layered transparent grilles. Known
+light lenses and four-cell light panels have crisp machined housings and patterned
+diffusers. Nine original safety labels are re-typeset within their native bounds.
+Previously unaliased signs, fans, water and force fields use the same material path.
+The two fine-grain sources reuse existing parcels and are primed before rendering.
+Texture-owned maps are released along with their color textures.
+
+The mine showroom offers a paused original/remastered comparison at the same
+camera position, a connected-mine overview, all regular and secret mine choices,
+and retained machinery exhibits. Supplemental machinery is shown in the showroom;
+arbitrary bay dressing no longer covers the original wall designs during play.
+The #mines link selects the showroom tab without starting a game or capturing input.
+
+Native levels, portals, collision, light destructibility, controls, demo navigation,
+weapons, combat, sounds and music retain their existing implementation. The R34
+invalid-texture rendering fallback fix is retained: inspection never writes that
+fallback into mission data. QA-only instrumentation is excluded from this build.
+
+Faithful campaign materials (pyre35)
+
+Supersedes the rejected pyre34 excavation treatment. Original Counterstrike and
+Vertigo bitmaps determine surface placement, color, panel patterns, warning marks,
+transparency and every door/animated frame. No metal-to-rock region replacement
+remains. Rock occurs on native rock surfaces, including rock-faced secret doors.
+
+Materials reconstruct the active campaign palette at 256-1024 pixels using
+edge-aware native patterns, fine Overload stone/metal grain, independent normal
+and roughness maps, close-range relief and scratched finishes. Per-bitmap normal
+maps follow that bitmap's design, including layered transparent grilles. Known
+light lenses and four-cell light panels have crisp machined housings and patterned
+diffusers. Nine original safety labels are re-typeset within their native bounds.
+Previously unaliased signs, fans, water and force fields use the same material path.
+The two fine-grain sources reuse existing parcels and are primed before rendering.
+Texture-owned maps are released along with their color textures.
+
+The mine showroom offers a paused original/remastered comparison at the same
+camera position, a connected-mine overview, all regular and secret mine choices,
+and retained machinery exhibits. Supplemental machinery is shown in the showroom;
+arbitrary bay dressing no longer covers the original wall designs during play.
+The #mines link selects the showroom tab without starting a game or capturing input.
+
+Native levels, portals, collision, light destructibility, controls, demo navigation,
+weapons, combat, sounds and music retain their existing implementation. The R34
+invalid-texture rendering fallback fix is retained: inspection never writes that
+fallback into mission data. QA-only instrumentation is excluded from this build.
+
+Faithful campaign materials (pyre35)
+
+Supersedes the rejected pyre34 excavation treatment. Original Counterstrike and
+Vertigo bitmaps determine surface placement, color, panel patterns, warning marks,
+transparency and every door/animated frame. No metal-to-rock region replacement
+remains. Rock occurs on native rock surfaces, including rock-faced secret doors.
+
+Materials reconstruct the active campaign palette at 256-1024 pixels using
+edge-aware native patterns, fine Overload stone/metal grain, independent normal
+and roughness maps, close-range relief and scratched finishes. Per-bitmap normal
+maps follow that bitmap's design, including layered transparent grilles. Known
+light lenses and four-cell light panels have crisp machined housings and patterned
+diffusers. Nine original safety labels are re-typeset within their native bounds.
+Previously unaliased signs, fans, water and force fields use the same material path.
+The two fine-grain sources reuse existing parcels and are primed before rendering.
+Texture-owned maps are released along with their color textures.
+
+The mine showroom offers a paused original/remastered comparison at the same
+camera position, a connected-mine overview, all regular and secret mine choices,
+and retained machinery exhibits. Supplemental machinery is shown in the showroom;
+arbitrary bay dressing no longer covers the original wall designs during play.
+The #mines link selects the showroom tab without starting a game or capturing input.
+
+Native levels, portals, collision, light destructibility, controls, demo navigation,
+weapons, combat, sounds and music retain their existing implementation. The R34
+invalid-texture rendering fallback fix is retained: inspection never writes that
+fallback into mission data. QA-only instrumentation is excluded from this build.

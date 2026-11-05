@@ -271,7 +271,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
     const silence="data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQIAAAAAAA==";
     music.src=silence; music.volume=.75;
     music.play().then(()=>{if(music.getAttribute("src")===silence){music.pause();music.currentTime=0;}}).catch(()=>{});
-    await script("streaming.js?v=24");
+    await script("streaming.js?v=35");
     const loadMovie=astraMovieLibrary(async file=>{
       const response=await fetch("payload/"+file);
       if(!response.ok||!response.body)throw Error("Could not load "+file);
@@ -343,7 +343,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre34");
+    await script("engine.js?v=pyre35");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 

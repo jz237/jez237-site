@@ -28,6 +28,7 @@ includes["recharge.inc"]="arch/ogl/astra_recharge.inc"
 includes["debris.inc"]="arch/ogl/astra_debris.inc"
 includes["environment.inc"]="arch/ogl/astra_environment.inc"
 includes["mine_preview.inc"]="main/astra_mine_preview.inc"
+includes["faithful.inc"]="arch/ogl/astra_faithful.inc"
 includes["foundry.inc"]="arch/ogl/astra_foundry.inc"
 includes["antialias.inc"]="arch/ogl/astra_antialias.inc"
 includes["detonations.h"]="main/astra_detonations.h"
@@ -35,8 +36,6 @@ includes["detonation_draw.inc"]="arch/ogl/astra_detonation_draw.inc"
 includes["streaming.inc"]="arch/ogl/astra_streaming.inc"
 for name in ["combat","combat_render","shadows","shadow_scene"]:
     includes[name+".inc"]="arch/ogl/astra_"+name+".inc"
-includes["mining_regions.inc"]="arch/ogl/astra_mining_regions.inc"
-includes["mining.inc"]="arch/ogl/astra_mining.inc"
 for name,path in includes.items():
     if (repo/"d2"/path).exists():raise SystemExit("Use a fresh checkout. An Astra include already exists.")
 git(repo,"apply",str(src/"engine.patch"))

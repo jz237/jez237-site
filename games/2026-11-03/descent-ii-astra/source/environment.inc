@@ -26,15 +26,10 @@ static void ae_reset(void){
 }
 /* Identity follows functional rooms, hazards and stable native material groups. */
 int astra_environment_rock(int texture){
-    static unsigned char known[MAX_TEXTURES],rock[MAX_TEXTURES];
     if(texture<0||texture>=NumTextures)return 0;
-    if(!known[texture]){const char *name=piggy_game_bitmap_name(&GameBitmaps[Textures[texture].index]);int id=name?astra_material_id(name):0;
-        /* rockwall_01c, rockwall_01a, stones and rockwall_04 in the pinned material index.
-         * Polished stone floor plates must not receive fractured rock geometry. */
-        rock[texture]=id==21||id==23||id==37||id==38;known[texture]=1;}
-    return rock[texture];
+    const char *name=piggy_game_bitmap_name(&GameBitmaps[Textures[texture].index]);
+    return name&&!strncmp(name,"rock",4);
 }
-#include "astra_mining_regions.inc"
 static int ae_theme(int room){
     int special=Segment2s[room].special;
     if(special==SEGMENT_IS_FUELCEN||special==SEGMENT_IS_REPAIRCEN)return 2;
@@ -46,20 +41,18 @@ static int ae_theme(int room){
         if(TmapInfo[t].flags&TMI_WATER)return 2;
         if(astra_environment_rock(t))rock++;else metal++;
     }
-    gm_regions();if(gm_zone[room]>=2)return 0;
     return rock>metal?0:((room/6)%3==1?2:room%7<3?5:1);
 }
 int astra_environment_theme(int room){return ae_theme(room);}
 void astra_environment_material(int room,int side,int texture){
     ae_reset();int theme=ae_theme(room),kind=1;
-    astra_earth_material=0;if(astra_refinement&&astra_excavation_face(room,side)){static const int rocks[3]={21,23,38};astra_earth_material=rocks[gm_variant[room]];}
     if(texture>=0&&texture<NumTextures){
         if(TmapInfo[texture].damage>0||TmapInfo[texture].flags&(TMI_WATER|TMI_VOLATILE))kind=4;
         else if(astra_environment_rock(texture))kind=0;
         else if(theme==2)kind=2;
         else if((texture/7)%4==0)kind=3;
     }
-    astra_surface[0]=astra_earth_material?0:kind;astra_surface[1]=theme;astra_surface[2]=ae_clock();
+    astra_surface[0]=kind;astra_surface[1]=theme;astra_surface[2]=ae_clock();
     astra_surface[3]=(texture*17%31)/31.f;
 }
 /* Record actual native wall hits, without changing damage or weapon behavior. */
@@ -234,8 +227,7 @@ static void ae_hatch(int room,int side,int theme,float w,float h){
 }
 
 void astra_environment_face(int nv,const g3s_point **points,g3s_lrgb *light,int room,int side,int flags){
-    astra_earth_material=0;
-    if(!ax_on())return;ae_faces++;ae_reset();segment *s=&Segments[room];int wallnum=s->sides[side].wall_num;
+    if(!ax_on()||astra_native_compare)return;ae_faces++;ae_reset();segment *s=&Segments[room];int wallnum=s->sides[side].wall_num;
     int hidden=wallnum>=0&&Walls[wallnum].type==WALL_DOOR&&Walls[wallnum].clip_num>=0&&(WallAnims[Walls[wallnum].clip_num].flags&WCF_HIDDEN);
     int solid=s->children[side]<0&&wallnum<0;
     if(!solid&&!hidden){
@@ -250,14 +242,14 @@ void astra_environment_face(int nv,const g3s_point **points,g3s_lrgb *light,int 
     if(hidden&&(Walls[wallnum].state!=WALL_DOOR_CLOSED))return;
     ae_wall_finish(nv,points,room,side,!wet&&nv==4);
     if(wet||nv!=4||flags&WID_CLOAKED_FLAG)return;
-    int excavation=astra_refinement&&astra_excavation_face(room,side);
-    if(!excavation)astra_gantry(nv,points,light,room*7+side,s->sides[side].normals[0].y>F1_0*3/4);
+    /* R35: the surface material itself supplies native panels and recesses.
+     * Only showroom exhibits may add detached demonstration machinery. */
+    if(room!=astra_gallery_room||side!=astra_gallery_side)return;
     vms_vector center;vms_matrix basis;float w,h;if(!ae_basis(room,side,&center,&basis,&w,&h))return;
-    g3s_point p;g3_rotate_point(&p,&center);if(p.p3_z<F1_0||p.p3_z>i2f(105)||w>100||h>100)return;
-    if(excavation){g3_start_instance_matrix(&center,&basis);gm_rock(room,side,w,h);if(p.p3_z<i2f(80)){gm_structure(room,side,w,h);if(p.p3_z<i2f(65))gm_equipment(room,side,w,h);}g3_done_instance();return;}
-    if(solid&&p.p3_z<i2f(70)){g3_start_instance_matrix(&center,&basis);ag_face(room,side,theme,w,h);g3_done_instance();}
-    if(p.p3_z<i2f(60)&&(!astra_refinement||!astra_environment_rock(texture)&&astra_environment_bay(room)!=side)){g3_start_instance_matrix(&center,&basis);ae_hatch(room,side,theme,w,h);g3_done_instance();}
-    if(side%2==0&&(room+side)%3!=1&&p.p3_z<i2f(80)&&(!astra_refinement||!astra_environment_rock(texture))){g3_start_instance_matrix(&center,&basis);ae_machine(room,side,theme,w,h);g3_done_instance();}
+    g3_start_instance_matrix(&center,&basis);
+    if((astra_gallery_scene>=1&&astra_gallery_scene<=4)||astra_gallery_scene==14)ae_machine(room,side,theme,w,h);
+    if(astra_gallery_scene==11||astra_gallery_scene==12)ag_equipment(room,theme,w,h);
+    g3_done_instance();
 }
 /* Kept on the perimeter, including when the native door is fully open. No mesh
  * ever fills the aperture or reveals hidden doors. Hydraulic travel reads state. */
@@ -336,8 +328,6 @@ void astra_environment_rooms(const short *rooms,int count,int window_num){
     extern void astra_combat_fragments(const short*,int,int);astra_combat_fragments(rooms,count,window_num);
     for(int i=0;i<count;i++){int room=rooms[i];if(room<0||room>Highest_segment_index)continue;
         for(int side=0;side<6;side++)ae_door(room,side);
-        if(astra_refinement){int side=astra_excavation_bay(room);vms_vector c;vms_matrix b;float w,h;
-            if(side>=0&&ae_basis(room,side,&c,&b,&w,&h)){g3s_point p;g3_rotate_point(&p,&c);if(p.p3_z>F1_0&&p.p3_z<i2f(65)){g3_start_instance_matrix(&c,&b);gm_atmosphere(room,side,w,h);g3_done_instance();}}}
         if(astra_refinement){int side=astra_environment_bay(room);vms_vector c;vms_matrix b;float w,h;
             if(side>=0&&ae_basis(room,side,&c,&b,&w,&h)){g3s_point p;g3_rotate_point(&p,&c);if(p.p3_z>F1_0&&p.p3_z<i2f(65)){
                 g3_start_instance_matrix(&c,&b);ag_atmosphere(room,side,ae_theme(room),w,h);g3_done_instance();}}}
@@ -366,6 +356,5 @@ void astra_environment_rooms(const short *rooms,int count,int window_num){
         ae_haze_flush();g3_done_instance();ae_atmosphere++;
     }
     ag_render_exhibit();
-    if(!window_num)EM_ASM(Module.miningStats=({version:34,rooms:$0,surfaces:$1,transitions:$2,drawn:$3,supports:$4,machines:$5,dust:$6,failed:!!$7});,gm_rooms,gm_surfaces,gm_edges,gm_draws,gm_supports,gm_machines,gm_dust,gm_failed);
-    if(!window_num)EM_ASM(Module.environmentVersion=34;Module.foundryStats=({rockFaces:$6,equipmentBays:$7,shipShadows:$8,atmosphereBays:$9});Module.environmentStats=({faces:$0,machines:$1,doors:$2,reactors:$3,atmosphere:$4});Module.environmentLevel=$5;Module.environmentFrames=(Module.environmentFrames||0)+1;,ae_faces,ae_machines,ae_doors,ae_reactors,ae_atmosphere,Current_level_num,ag_rocks,ag_props,ag_shadows,ag_air);
+    if(!window_num)EM_ASM(Module.environmentVersion=35;Module.foundryStats=({rockFaces:$6,equipmentBays:$7,shipShadows:$8,atmosphereBays:$9});Module.environmentStats=({faces:$0,machines:$1,doors:$2,reactors:$3,atmosphere:$4});Module.environmentLevel=$5;Module.environmentFrames=(Module.environmentFrames||0)+1;,ae_faces,ae_machines,ae_doors,ae_reactors,ae_atmosphere,Current_level_num,ag_rocks,ag_props,ag_shadows,ag_air);
 }

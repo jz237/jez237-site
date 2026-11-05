@@ -1,8 +1,8 @@
 // A paused tour of the loaded campaign's real architecture and machinery.
 window.astraMinePreview={
-  names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion','Excavated rock tunnels','Bolted supports & transitions','Ore extraction machinery','Work lights & settling dust'],
+  names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion'],
   descriptions:[
-    'Layered wall panels, bevels, surface wear and soft contact shading.',
+    'Original Descent II surface designs rebuilt with fine materials, recessed edges and lighting. Pause and compare the same view with the original artwork.',
     'Spinning fan blades behind a fixed protective grille.',
     'Moving pistons, service pipes, joints and coolant conduits.',
     'Inset displays with changing readouts and scanning lights.',
@@ -12,17 +12,13 @@ window.astraMinePreview={
     'Animated charge cells, flowing pulses and electrical arcs in the original recharge field.',
     'A display ship hovers above a real mine wall. Watch its soft shadow change with its position and orientation.',
     'Brushed highlights, chipped coatings, grime and oily patches react differently to light. Pause and compare the new details.',
-    'Shallow fractured plates and irregular mineral seams add depth without changing the original walls or flight paths.',
+    'The original rock colors and formations gain fine mineral grain and relief. Rock stays only on original rock surfaces.',
     'Strapped cargo cassettes, recessed racks, registration plates and amber equipment lights.',
     'Ceramic coolant reservoirs, moving level gauges and linked service pipes give these rooms a distinct purpose.',
     'Localized vent steam, drifting illuminated dust and faint light shafts leave the central flight path clear.',
-    'Fine grilles and rail edges stay smoother as the camera drifts. Switch the new details off to compare edge smoothing.',
-    'Exposed stone, geological bands, fractured relief, drill marks and mineral seams follow the original mine walls.',
-    'Bolted retaining ribs, steel transition strips, protective mesh and service conduits anchor the construction into the rock.',
-    'Moving ore conveyors, extraction manifolds and guarded ventilation rotors bring the excavation bays to life. Equipment varies with the selected mine.',
-    'Caged warm work lights, faint vent steam and sparse dust. A brief dust fall demonstrates the response to Earthshaker tremors.'
+    'Fine grilles and rail edges stay smoother as the camera drifts. Switch the new details off to compare edge smoothing.'
   ],
-  active:false,paused:false,touring:true,clock:0,last:0,mask:524287,fresh:false,
+  active:false,paused:false,touring:true,clock:0,last:0,mask:32767,fresh:false,
   tick(){const now=performance.now();if(this.last&&!this.paused)this.clock+=Math.min(.1,(now-this.last)/1000);this.last=now;return this.clock;},
   select(index){if(!(this.mask&(1<<index)))return;Module.mineInspect=index;this.clock=0;this.last=performance.now();$('mineScene').value=String(index);},
   next(direction){let i=Module.mineInspect;for(let n=0;n<this.names.length;n++){i=(i+direction+this.names.length)%this.names.length;if(this.mask&(1<<i)){this.select(i);break;}}},
@@ -30,14 +26,14 @@ window.astraMinePreview={
   sync(){
     $('minePause').textContent=this.paused?'Play':'Pause';$('minePause').setAttribute('aria-pressed',String(this.paused));
     $('mineTour').checked=this.touring;
-    $('mineCompare').textContent=(window.Module?.mineRefinement===false?'New details: Off':'New details: On');
+    $('mineCompare').textContent=(window.Module?.mineRefinement===false?'Original surfaces':'Remastered surfaces');
     $('mineCompare').setAttribute('aria-pressed',String(window.Module?.mineRefinement!==false));
   },
   details(open){$('mineDetails').hidden=!open;$('mineControls').setAttribute('aria-expanded',String(open));},
   open(){
-    this.paused=false;this.touring=true;this.clock=0;this.last=0;this.mask=524287;this.fresh=true;$('mineZoom').value='1';this.sync();
+    this.paused=false;this.touring=true;this.clock=0;this.last=0;this.mask=32767;this.fresh=true;$('mineZoom').value='1';this.sync();
     if(window.Module&&flightActive&&Module.astra){
-      Module.mineRefinement=true;Module.mineInspect=15;Module.mineInspectZoom=1;Module.pickupInspect=Module.weaponInspect=-1;
+      Module.mineRefinement=true;Module.mineInspect=0;Module.mineInspectZoom=1;Module.pickupInspect=Module.weaponInspect=-1;
       releaseFlightMouse();Module._astra_reset_flight_input?.();Module.pyroPreviewCommand=1;
     }else{$('look').value='astra';launch(true,false,false,true,false,false,false,true);}
   },
@@ -54,7 +50,7 @@ window.astraMinePreview={
     $('mineLocation').textContent=(Module.campaign==='d2'?'Counterstrike':'Vertigo')+' · '+(level<0?'Secret mine '+(-level):'Mine '+level);
     $('mineDescription').textContent=this.descriptions[index];
     this.state={index,mask,level,room,clock,paused:this.paused};
-    if(this.fresh){this.fresh=false;Module.mineRefinement=true;this.select(mask&(1<<15)?15:mask&(1<<8)?8:9);this.sync();return;}
+    if(this.fresh){this.fresh=false;Module.mineRefinement=true;this.select(0);this.sync();return;}
     if(this.touring&&!this.paused&&clock>11)this.next(1);
   },
   unavailable(){$('mineCaption').textContent='No inspection view available in this mine';}
@@ -82,4 +78,5 @@ const previousExplosion=astraPreview.open.bind(astraPreview);
 astraPreview.open=()=>{Module.mineInspect=-1;mine.show(false);previousExplosion();};
 const previousWeapon=astraWeaponDemo.open.bind(astraWeaponDemo);
 astraWeaponDemo.open=()=>{if(window.Module)Module.mineInspect=-1;mine.show(false);previousWeapon();};
-if(location.hash==='#mines')document.querySelector('[data-tab="showroom"]')?.click();
+
+if(location.hash==='#mines')requestAnimationFrame(()=>document.querySelector('[data-tab=showroom]')?.click());
