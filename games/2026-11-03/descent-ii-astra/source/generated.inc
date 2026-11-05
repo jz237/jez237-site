@@ -55,6 +55,12 @@ static int astra_generated(grs_bitmap *bm,const char *name,png_data *img){
         float mean=(avg[0]+avg[1]+avg[2])/3;
         for(int c=0;c<3;c++)ag_tint[c]=fminf(1.55f,fmaxf(.48f,.48f+.52f*avg[c]/fmaxf(.001f,mean)));
     }
+    // R38: deterministic material variation, retaining functional native art.
+    if(!masked&&!door){
+        if(family==0&&(metl||ceil)){if(n%4==1)family=8;else if(n%4==2)family=9;}
+        if(family==5&&n%2==0)family=10;
+        if(family==2&&n%2==1)family=11;
+    }
     // Hidden panels keep the same category and palette, never door hardware.
     if(door&&ag_hidden(di)){family=di==10?0:3;}
     af_original=af_upload(rgba,w,h,4);af_kind=20+family;

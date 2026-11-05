@@ -14,7 +14,7 @@ extern int astra_refinement,astra_native_compare;
 extern int astra_environment_theme(int),astra_environment_bay(int),astra_environment_rock(int);
 float astra_mine_clock=-1,astra_mine_door=-1;
 typedef struct {vms_vector eye,goal,up;int room,side,subject,valid;} am_scene;
-static am_scene am_scenes[15];static int am_level=-999,am_segments=-1,am_mask;
+static am_scene am_scenes[19];static int am_level=-999,am_segments=-1,am_mask;
 static float am_distance(const vms_vector *a,const vms_vector *b){return f2fl(vm_vec_dist(a,b));}
 static int am_clear(const vms_vector *a,int room,const vms_vector *b,fix radius){
     fvi_query q={a,b,room,radius,-1,NULL,0};fvi_info hit;return find_vector_intersection(&q,&hit)==HIT_NONE;
@@ -59,6 +59,9 @@ static void am_build(void){
         segment *s=&Segments[room];int t=s->sides[side].tmap_num;if(t<0||t>=NumTextures)continue;
         int solid=s->children[side]<0&&s->sides[side].wall_num<0;
         if(solid&&!TmapInfo[t].damage&&!(TmapInfo[t].flags&(TMI_WATER|TMI_VOLATILE|TMI_FORCE_FIELD))){
+            extern int astra_fixture_kind(int,int);int fixture=astra_fixture_kind(room,side);
+            int exhibit=fixture==1?15:fixture==3?16:fixture==2?17:fixture==4?18:-1;
+            if(exhibit>=0&&!am_scenes[exhibit].valid)am_face(room,side,3,&am_scenes[exhibit]);
             if(!am_scenes[0].valid)am_face(room,side,0,&am_scenes[0]);
             int theme=astra_environment_theme(room),bay=astra_environment_bay(room);
             if(s->sides[side].type==SIDE_IS_QUAD){
@@ -95,6 +98,10 @@ static void am_build(void){
         }
     }
     if(!am_scenes[9].valid)am_scenes[9]=am_scenes[0];
+    /* Fitting samples remain inspectable even if this mine has no vent/conduit
+     * material. These two exhibits mount on a safe ordinary showroom wall. */
+    for(int i=15;i<=17;i+=2)if(!am_scenes[i].valid){am_scene *base=am_scenes[18].valid?&am_scenes[18]:&am_scenes[9];
+        if(!am_face(base->subject,base->side,3,&am_scenes[i]))am_scenes[i]=*base;}
     /* Begin with real connected architecture, not a camera against one tile. */
     float overview_best=-1;
     for(int room=0;room<=Highest_segment_index;room++){
@@ -116,7 +123,7 @@ static void am_build(void){
             if(score>overview_best){overview_best=score;am_scenes[0]=(am_scene){eye,goal,upright.uvec,room,side,room,1};}
         }
     }
-    for(int i=0;i<15;i++)if(am_scenes[i].valid)am_mask|=1<<i;
+    for(int i=0;i<19;i++)if(am_scenes[i].valid)am_mask|=1<<i;
 }
 /* The transient door frame is restored immediately after drawing, including
  * its connected side. No wall_open_door, trigger, sound or ActiveDoors changes. */
@@ -136,8 +143,8 @@ static void am_restore_door(am_door_saved *save){
 }
 void astra_mine_preview(int index,float clock,float zoom){
     if(am_level!=Current_level_num||am_segments!=Highest_segment_index||!am_mask)am_build();
-    if(index<0||index>14||!am_scenes[index].valid){index=0;while(index<15&&!am_scenes[index].valid)index++;}
-    if(index>=15){EM_ASM(window.astraMinePreview?.unavailable());return;}
+    if(index<0||index>18||!am_scenes[index].valid){index=0;while(index<19&&!am_scenes[index].valid)index++;}
+    if(index>=19){EM_ASM(window.astraMinePreview?.unavailable());return;}
     am_scene *s=&am_scenes[index];vms_vector forward,eye,delta;vms_matrix orient;
     vm_vec_sub(&delta,&s->eye,&s->goal);vm_vec_scale_add(&eye,&s->goal,&delta,fl2f(fminf(1.5f,fmaxf(.65f,zoom))));
     vm_vec_normalized_dir(&forward,&s->goal,&s->eye);vm_vector_2_matrix(&orient,&forward,&s->up,NULL);

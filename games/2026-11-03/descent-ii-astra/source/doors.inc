@@ -5,7 +5,7 @@
 #include "gameseq.h"
 extern int astra_mine_wall,astra_mine_wall2;
 extern float astra_mine_door;
-typedef struct {GLuint handle;int frames,w,h;} ad_atlas;
+typedef struct {GLuint handle;int frames,w,h;unsigned char *pixels;} ad_atlas;
 static ad_atlas ad_atlases[MAX_WALL_ANIMS];
 static int ad_clip=-1,ad_level=-999,ad_segments=-1,ad_base;
 static grs_bitmap *ad_bitmap;
@@ -13,7 +13,7 @@ static float ad_phase;
 static unsigned ad_draws;
 enum {AD_SIZE=64,AD_TILE=68,AD_COLUMNS=8};
 static void ad_clear(void){
-    for(int i=0;i<MAX_WALL_ANIMS;i++)if(ad_atlases[i].handle){glDeleteTextures(1,&ad_atlases[i].handle);memset(&ad_atlases[i],0,sizeof ad_atlases[i]);}
+    for(int i=0;i<MAX_WALL_ANIMS;i++)if(ad_atlases[i].handle){glDeleteTextures(1,&ad_atlases[i].handle);free(ad_atlases[i].pixels);memset(&ad_atlases[i],0,sizeof ad_atlases[i]);}
     ad_clip=-1;
 }
 void astra_door_face(int room,int face){
@@ -94,11 +94,12 @@ static int ad_build(int id){
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
     glPixelStorei(GL_UNPACK_ALIGNMENT,1);glTexImage2D(GL_TEXTURE_2D,0,GL_LUMINANCE,w,h,0,GL_LUMINANCE,GL_UNSIGNED_BYTE,pixels);
-    free(pixels);atlas->w=w;atlas->h=h;atlas->frames=clip->num_frames;
+    atlas->pixels=pixels;atlas->w=w;atlas->h=h;atlas->frames=clip->num_frames;
     glActiveTexture(GL_TEXTURE0);return 1;
 }
 static void ad_bind(GLuint program,int active){
     int ready=active&&ad_clip>=0&&ad_build(ad_clip);glUniform1f(glGetUniformLocation(program,"doorActive"),ready);
+    glUniform1f(glGetUniformLocation(program,"doorMotion"),ready?ad_phase/fmaxf(1,ad_atlases[ad_clip].frames-1):0);
     glActiveTexture(GL_TEXTURE6);
     /* A valid same-type fallback also satisfies WebGL sampler validation on
      * ordinary walls, before the first door atlas has been constructed. */
@@ -109,7 +110,7 @@ static void ad_bind(GLuint program,int active){
         float tile[4]={((f%8)*AD_TILE+2.f)/a->w,((f/8)*AD_TILE+2.f)/a->h,((g%8)*AD_TILE+2.f)/a->w,((g/8)*AD_TILE+2.f)/a->h};
         glUniform4fv(glGetUniformLocation(program,"doorTiles"),1,tile);
         glUniform3f(glGetUniformLocation(program,"doorScale"),AD_SIZE/(float)a->w,AD_SIZE/(float)a->h,ad_phase-f);
-        if((++ad_draws&31)==1)EM_ASM({Module.smoothDoors=({version:37,clip:$0,frame:$1,draws:$2});},ad_clip,ad_phase,ad_draws);
+        if((++ad_draws&31)==1)EM_ASM({Module.smoothDoors=({version:38,clip:$0,frame:$1,draws:$2});},ad_clip,ad_phase,ad_draws);
     }
     glActiveTexture(GL_TEXTURE0);
 }

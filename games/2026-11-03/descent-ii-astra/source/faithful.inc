@@ -19,7 +19,7 @@ static GLuint af_upload(const unsigned char *pixels,int w,int h,int channels){
     glPixelStorei(GL_UNPACK_ALIGNMENT,1);
     glTexImage2D(GL_TEXTURE_2D,0,channels==4?GL_RGBA:GL_RGB,w,h,0,channels==4?GL_RGBA:GL_RGB,GL_UNSIGNED_BYTE,pixels);
     glGenerateMipmap(GL_TEXTURE_2D);
-    if(ogl_maxanisotropy>1)glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAX_ANISOTROPY_EXT,fminf(8,ogl_maxanisotropy));
+    if(ogl_maxanisotropy>1)glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAX_ANISOTROPY_EXT,fminf(16,ogl_maxanisotropy));
     return t;
 }
 static float af_sample(const float *a,int w,int h,float x,float y,int c,int channels){

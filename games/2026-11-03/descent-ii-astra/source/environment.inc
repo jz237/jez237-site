@@ -226,6 +226,8 @@ static void ae_hatch(int room,int side,int theme,float w,float h){
     ax_flush(1,1);
 }
 
+#include "astra_fixtures.inc"
+#include "astra_door_mesh.inc"
 void astra_environment_face(int nv,const g3s_point **points,g3s_lrgb *light,int room,int side,int flags){
     if(!ax_on()||astra_native_compare)return;ae_faces++;ae_reset();segment *s=&Segments[room];int wallnum=s->sides[side].wall_num;
     int hidden=wallnum>=0&&Walls[wallnum].type==WALL_DOOR&&Walls[wallnum].clip_num>=0&&(WallAnims[Walls[wallnum].clip_num].flags&WCF_HIDDEN);
@@ -242,7 +244,8 @@ void astra_environment_face(int nv,const g3s_point **points,g3s_lrgb *light,int 
     if(hidden&&(Walls[wallnum].state!=WALL_DOOR_CLOSED))return;
     ae_wall_finish(nv,points,room,side,!wet&&nv==4);
     if(wet||nv!=4||flags&WID_CLOAKED_FLAG)return;
-    /* R35: the surface material itself supplies native panels and recesses.
+    if(solid)afx_fixture(room,side);
+    /* The surface material supplies native panels and recesses.
      * Only showroom exhibits may add detached demonstration machinery. */
     if(room!=astra_gallery_room||side!=astra_gallery_side)return;
     vms_vector center;vms_matrix basis;float w,h;if(!ae_basis(room,side,&center,&basis,&w,&h))return;
@@ -258,10 +261,14 @@ static void ae_door(int room,int side){
     if(wall->type!=WALL_DOOR||wall->clip_num<0||WallAnims[wall->clip_num].flags&WCF_HIDDEN)return;
     vms_vector center;vms_matrix basis;float w,h;if(!ae_basis(room,side,&center,&basis,&w,&h))return;
     g3s_point p;g3_rotate_point(&p,&center);if(p.p3_z<F1_0||p.p3_z>i2f(115)||w>90||h>90)return;
+    /* The portal has a wall on each side. Only the facing panel owns visible
+     * hardware; drawing both puts the reverse contour across the aperture. */
+    vms_vector facing;g3_rotate_delta_vec(&facing,&basis.fvec);if(vm_vec_dot(&facing,&p.p3_vec)>=0)return;
     float open=wall->state==WALL_DOOR_WAITING||wall->state==WALL_DOOR_OPEN?1:0;
     for(int i=0;i<Num_open_doors;i++)for(int k=0;k<ActiveDoors[i].n_parts;k++)if(ActiveDoors[i].front_wallnum[k]==id||ActiveDoors[i].back_wallnum[k]==id){
         float t=fminf(1,f2fl(ActiveDoors[i].time)/fmaxf(.01f,f2fl(WallAnims[wall->clip_num].play_time)));open=wall->state==WALL_DOOR_CLOSING?1-t:t;}
     if(astra_mine_door>=0&&(id==astra_mine_wall||id==astra_mine_wall2))open=astra_mine_door;
+    afx_door_edges(room,side);
     g3_start_instance_matrix(&center,&basis);ax_count=0;ax_energy=0;
     if(ss_capture&&open<.99f){
         float half=w*.5f*(1-open);
@@ -275,7 +282,18 @@ static void ae_door(int room,int side){
         for(int i=0;i<3;i++){float y=(i-1)*h*.27f;
             if(wall->keys&KEY_BLUE)ax_paint(.08f,.26f,.90f,.45f);else if(wall->keys&KEY_RED)ax_paint(.85f,.055f,.025f,.45f);else if(wall->keys&KEY_GOLD)ax_paint(.85f,.57f,.025f,.45f);else ax_paint(.07f,.50f,.53f,.35f);
             ax_tube(x,y-.25f,.32f,x,y+.25f,.32f,.055f,.055f,6);}}
-    ax_flush(1,1);g3_done_instance();ae_doors++;
+    /* Separate guide rails, travelling carriages and retracting locking pins. */
+    for(int sign=-1;sign<=1;sign+=2){float x=sign*w*.462f,travel=h*(.34f-.65f*open);
+        ax_paint(.045f,.05f,.055f,0);ag_box(x,0,.035f,.20f,h*.44f,.03f);
+        ax_paint(.31f,.33f,.35f,0);ag_box(x,0,.13f,.055f,h*.44f,.08f);
+        ax_paint(.16f,.18f,.20f,0);ag_box(x,travel,.25f,.20f,.30f,.13f);
+        ax_paint(.51f,.53f,.54f,0);ax_tube(x-sign*.16f,travel,.28f,x-sign*.40f,travel,.28f,.09f,.09f,10);
+        float unlock=fminf(1,open*7);
+        for(int j=-1;j<=1;j+=2){float y=j*h*.38f;ax_paint(.28f,.30f,.32f,0);ag_box(x,y,.23f,.22f,.17f,.12f);
+            ax_paint(.51f,.52f,.53f,0);ax_tube(x,y,.24f,x-sign*(.12f+.32f*(1-unlock)),y,.24f,.075f,.075f,10);}
+        ax_paint(.30f,.32f,.34f,0);for(int j=0;j<4;j++){float y=-h*.36f+j*h*.095f;ax_tube(x-sign*.22f,y,.22f,x-sign*.22f,y+.09f,.22f,.19f,.19f,10);}
+    }
+    ax_flush(1,1);g3_done_instance();ae_doors++;afx_door_mechanisms++;
 }
 #include "astra_shadow_scene.inc"
 int astra_environment_reactor(object *obj){
@@ -356,5 +374,6 @@ void astra_environment_rooms(const short *rooms,int count,int window_num){
         ae_haze_flush();g3_done_instance();ae_atmosphere++;
     }
     ag_render_exhibit();
-    if(!window_num)EM_ASM(Module.environmentVersion=35;Module.foundryStats=({rockFaces:$6,equipmentBays:$7,shipShadows:$8,atmosphereBays:$9});Module.environmentStats=({faces:$0,machines:$1,doors:$2,reactors:$3,atmosphere:$4});Module.environmentLevel=$5;Module.environmentFrames=(Module.environmentFrames||0)+1;,ae_faces,ae_machines,ae_doors,ae_reactors,ae_atmosphere,Current_level_num,ag_rocks,ag_props,ag_shadows,ag_air);
+    if(!window_num)EM_ASM(Module.environmentVersion=38;Module.foundryStats=({rockFaces:$6,equipmentBays:$7,shipShadows:$8,atmosphereBays:$9});Module.environmentStats=({faces:$0,machines:$1,doors:$2,reactors:$3,atmosphere:$4});Module.environmentLevel=$5;Module.environmentFrames=(Module.environmentFrames||0)+1;,ae_faces,ae_machines,ae_doors,ae_reactors,ae_atmosphere,Current_level_num,ag_rocks,ag_props,ag_shadows,ag_air);
+    if(!window_num)EM_ASM(Module.fixtureDetails=({version:38,draws:$0,grilles:$1,pipes:$2,lights:$3,panels:$4,doorEdges:$5,mechanisms:$6});,afx_draws,afx_grilles,afx_pipes,afx_lights,afx_panels,afx_door_edges_drawn,afx_door_mechanisms);
 }

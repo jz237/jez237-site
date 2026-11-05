@@ -1,13 +1,13 @@
 // A paused tour of the loaded campaign's real architecture and machinery.
 window.astraMinePreview={
-  names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion'],
+  names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion','Deep ventilation grilles','Light housings & spill','Service conduits','Raised frames & panel variants'],
   descriptions:[
     'New high-resolution metal, rock, grilles, machinery and lamps throughout both campaigns. Pause and compare the same view with the original artwork.',
     'Spinning fan blades behind a fixed protective grille.',
     'Moving pistons, service pipes, joints and coolant conduits.',
     'Inset displays with changing readouts and scanning lights.',
     'Suspended cable bundles and intermittent electrical faults.',
-    'Watch the original door open and close with its new tracks, hydraulics and key colors.',
+    'Watch thick moving panel edges, guide-rail carriages, pistons and retracting locking pins follow the original door cycle.',
     'Machined housings, pulsing energy cores and rotating containment rings.',
     'Animated charge cells, flowing pulses and electrical arcs in the original recharge field.',
     'A display ship hovers above a real mine wall. Watch its soft shadow change with its position and orientation.',
@@ -16,9 +16,13 @@ window.astraMinePreview={
     'Strapped cargo cassettes, recessed racks, registration plates and amber equipment lights.',
     'Ceramic coolant reservoirs, moving level gauges and linked service pipes give these rooms a distinct purpose.',
     'Localized vent steam, drifting illuminated dust and faint light shafts leave the central flight path clear.',
-    'Fine grilles and rail edges stay smoother as the camera drifts. Switch the new details off to compare edge smoothing.'
+    'Mipmap filtering, anisotropic textures and distance-softened highlights keep fine detail stable while the camera drifts.',
+    'Raised steel slats and pipes behind a recessed grille. A showroom sample is mounted here when this mine has no suitable vent.',
+    'Solid protective housings surround the original lamps. Their color spills onto nearby metal inside the room; broken lamps stop contributing.',
+    'Physical service pipes, flange joints and retaining collars. A showroom sample is mounted here when this mine has no conduit wall.',
+    'Raised frame rails and new reinforced, painted-metal and machinery panel families give different walls their own character.'
   ],
-  active:false,paused:false,touring:true,clock:0,last:0,mask:32767,fresh:false,
+  active:false,paused:false,touring:true,clock:0,last:0,mask:524287,fresh:false,
   tick(){const now=performance.now();if(this.last&&!this.paused)this.clock+=Math.min(.1,(now-this.last)/1000);this.last=now;return this.clock;},
   select(index){if(!(this.mask&(1<<index)))return;Module.mineInspect=index;this.clock=0;this.last=performance.now();$('mineScene').value=String(index);},
   next(direction){let i=Module.mineInspect;for(let n=0;n<this.names.length;n++){i=(i+direction+this.names.length)%this.names.length;if(this.mask&(1<<i)){this.select(i);break;}}},
@@ -31,7 +35,7 @@ window.astraMinePreview={
   },
   details(open){$('mineDetails').hidden=!open;$('mineControls').setAttribute('aria-expanded',String(open));},
   open(){
-    this.paused=false;this.touring=true;this.clock=0;this.last=0;this.mask=32767;this.fresh=true;$('mineZoom').value='1';this.sync();
+    this.paused=false;this.touring=true;this.clock=0;this.last=0;this.mask=524287;this.fresh=true;$('mineZoom').value='1';this.sync();
     if(window.Module&&flightActive&&Module.astra){
       Module.mineRefinement=true;Module.mineInspect=0;Module.mineInspectZoom=1;Module.pickupInspect=Module.weaponInspect=-1;
       releaseFlightMouse();Module._astra_reset_flight_input?.();Module.pyroPreviewCommand=1;

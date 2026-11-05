@@ -299,7 +299,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
       mounted.set("pyro-field.png",field);
       mounted.set("collectibles.mesh",mesh);
     }
-    if(astra){await script("generated-materials.js?v=36");assetDepot=astraGeneratedLibrary(assetDepot);}
+    if(astra){await script("generated-materials.js?v=38");assetDepot=astraGeneratedLibrary(assetDepot);}
     if(astra)await loadAstraShipAssets();
     $("status").textContent="Starting flight computer";
     const canvas=$("view");
@@ -344,7 +344,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre37");
+    await script("engine.js?v=pyre38");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 

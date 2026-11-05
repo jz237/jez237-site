@@ -875,3 +875,36 @@ changes. They are computed from owned native data and require no new downloads.
 The renderer reads wall state and active-door timing without changing either.
 Collision, triggers, locks, auto-close timing, sounds, flight controls and demo AI
 retain their existing behavior. Original comparison still uses native cutouts.
+
+Physical mine details and material variety (pyre38)
+
+Both campaigns use shallow, UV-aligned 3D ventilation slats, service pipes,
+flanges, lamp housings and raised panel rails on eligible solid surfaces.
+Fixtures fit inside skewed quads, avoid portals, secrets and functional overlays,
+and use bounded distance/budget limits. Detailed textured backing plates and
+rough metal shading retain depth without placing obstacles in the flight path.
+Four added showroom exhibits include vent/conduit samples when the chosen mine
+has no matching surface. The comparison view restores native surfaces.
+
+Three colored fixture lights per room add bounded diffuse spill and rough
+specular highlights. They read original lamp state, stop when broken and remain
+inside their owning convex segment. Recess shading, up-to-16x anisotropy (limited
+by hardware), mipmaps and distance-filtered normals/highlights improve stability.
+No temporal blur, camera shake or flight changes are introduced.
+
+Four additional GPT Image material families: reinforced alloy panels, chipped
+painted armor, service manifolds and deep slatted grilles. Native 1254-square
+masters are packaged as 1024 color / 512 derived normal-roughness-height maps.
+The new parcels total 4.06 MB and load on demand. Approximate material channels
+are derived from luminance, not physically measured PBR scans. Common shader
+joins retain compatible tile edges; regional palette cues remain native.
+
+Door panels gain physical contour thickness, moving surface markings, travelling
+rail carriages, hydraulic collars and retracting locking pins. Only the facing
+wall draws hardware, preventing the reverse leaf from crossing the aperture.
+Native SDF mask/timing remains authoritative. CPU mask copies are freed with
+the GPU atlas on level changes. Concealed doors do not reveal extra hardware.
+
+No changes to AI, movement, controls, native collision, triggers, locks, sounds,
+music, weapons or level data. Added renderer includes are installed by
+prepare_engine.py; engine.patch remains based on pinned upstream DXX-Redux.
