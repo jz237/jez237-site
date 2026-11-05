@@ -2,6 +2,7 @@
 // To add an asset, fill a slot below; the library, viewer and comparison use it.
 import { CONDITIONS, SYMPTOMS, ATLAS_URL } from './data.mjs';
 import { CONDITION_IMAGES } from './condition-images.mjs';
+import { SIGN_IMAGES } from './choice-images.mjs';
 
 export const GUIDE_URL = 'https://media.jez237.com/experiments/fish-health-lab/ich-guide-9c778127.jpg';
 export const SLOT_TYPES = [
@@ -17,9 +18,9 @@ const images = {
   ...CONDITION_IMAGES,
   'ich-fresh': {
     overview: {
-      url: GUIDE_URL,
-      alt: 'Educational illustrated freshwater ich guide with an angelfish, spot detail, microscopy and look-alikes.',
-      caption: 'Recognition clues, important look-alikes and how freshwater ich is confirmed.',
+      ...SIGN_IMAGES.dots,
+      alt: 'AI illustration: Freshwater fish with separate small white salt-like grains on skin and fins.',
+      caption: 'Look for separate salt-like white grains, rather than fine dust or cottony threads.',
       provenance: 'AI educational illustration',
       source: 'Previously created for this experiment; not a confirmed patient photograph.',
     },
@@ -54,7 +55,7 @@ const images = {
     lookalikes: {
       url: 'https://media.jez237.com/experiments/fish-health-lab/ich-lookalikes-b9f7de50.jpg',
       alt: 'Illustrated comparison of ich-like grains, fine dust, cottony growth, pale patches, larger growths and normal markings.',
-      caption: 'Compare texture, shape and distribution. Some look-alikes require professional examination and microscopy to distinguish.',
+      caption: 'Compare texture, shape and distribution: separate grains, fine dust, outward threads, flat patches and larger lumps are different clues.',
       provenance: 'AI educational illustration',
       source: 'Created for the ich walkthrough; not confirmed patient photographs or diagnoses.',
     },

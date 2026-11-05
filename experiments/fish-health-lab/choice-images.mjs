@@ -1,4 +1,9 @@
 // Original generated sheets are retained outside Git. See scripts/fish-health-lab/realistic-images-20261105.json for crop geometry and provenance.
+import { MARINE_SIGN_IMAGES } from './marine-choice-images.mjs';
+
+export function signImagesFor(water) {
+  return water === 'marine' ? MARINE_SIGN_IMAGES : SIGN_IMAGES;
+}
 export const OPENING_IMAGE = {
   "url": "https://media.jez237.com/experiments/fish-health-lab/choices/opening-14eda904d297.jpg",
   "width": 1774,

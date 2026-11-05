@@ -64,7 +64,8 @@ try {
   record('the previously shared #ich link also opens the neutral Start screen');
 
   await action(page,'start').click(); await at(page,'water');
-  await next(page); assert.match(await page.locator('#flow-error').innerText(),/water type/);
+  await next(page); assert.match(await page.locator('#flow-error').innerText(),/Freshwater or Saltwater/);
+  assert.deepEqual(await page.locator('input[name="water"]').evaluateAll(els=>els.map(el=>el.value)),['fresh','marine']);
   await page.locator('input[value="fresh"]').check(); await next(page); await at(page,'signs');
   assert.equal(await page.locator('#symptom-grid .symptom-card').count(),12);
   assert.equal(await page.locator('#symptom-grid .selection-check').evaluateAll(els=>els.filter(el=>getComputedStyle(el).opacity !== '0').length),0);
@@ -103,7 +104,7 @@ try {
   assert.doesNotMatch(await page.locator('#results-content').innerText(),/Do you have any water readings|Buoyancy|dropsy|protruding eyes/);
   assert.deepEqual(await page.locator('.alternatives [data-condition]').evaluateAll(els=>els.map(el=>el.dataset.condition)),['velvet-fresh','growth','normal']);
   assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'ich-fresh');
-  assert.match(await page.locator('#results-content').innerText(),/not a diagnosis/i);
+  assert.match(await page.locator('#results-content').innerText(),/not a confirmed diagnosis/i);
   assert.equal(await page.locator('#results-content .water-reminder').count(),0);
   await page.locator('.result-image img').evaluate(img=>img.decode());
   assert.equal(await page.locator('.alternatives img').count(),3);
@@ -186,12 +187,10 @@ try {
     await begin(page,'fresh',sign); await next(page); await at(page,'results');
   }
   record('every remaining visible-sign choice has a working path through to comparisons');
-  await begin(page,'unknown','dots'); await next(page);
-  assert.match(await page.locator('#results-content').innerText(),/water type is unknown/);
-  await action(page,'care').click(); await next(page);
-  assert.equal(await page.locator('[data-care-condition]').count(),0);
-  assert.match(await page.locator('#care-summary-content').innerText(),/Identify whether this is freshwater/);
-  record('unknown water type remains explicit and does not enter the freshwater-only reference branch');
+  await reset(page); await action(page,'start').click();
+  assert.equal(await page.locator('input[name="water"]').count(),2);
+  assert.equal(await page.locator('input[name="water"][value="unknown"]').count(),0);
+  record('water type offers only freshwater and saltwater / reef');
   await begin(page,'marine','dust');
   await page.locator('input[value="gasping"]').check(); await next(page);
   await at(page,'results');

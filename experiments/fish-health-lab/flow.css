@@ -73,6 +73,25 @@ main { max-width: 1160px; padding: 0 32px; }
 .result-copy h2 { font-size: 34px; }
 .result-copy p { font-size: 15px; }
 .result-copy .quiet { font-size: 12px; }
+.diagnosis-reason { border-left: 3px solid #a2b59a; padding: 2px 0 2px 14px; margin: 18px 0; }
+.diagnosis-reason > strong { font-size: 13px; font-weight: 500; }
+.diagnosis-reason > p { margin: 5px 0 0; font-size: 13px; }
+.treatment-link { margin: 18px 0; }
+.treatment-link .button { display: inline-flex; align-items: center; justify-content: center; text-align: center; min-height: 48px; margin-bottom: 7px; }
+.treatment-link > small { display: block; color: var(--muted); font-size: 11px; line-height: 1.5; }
+.treatment-link > .quiet { margin: 7px 0 0; }
+.result-copy > .text-button { text-align: left; }
+.additional-signs { margin: 24px 0 0; padding: 18px; border: 1px solid var(--line); border-radius: 10px; }
+.additional-signs > summary { cursor: pointer; font-size: 15px; }
+.additional-signs > summary > span { float: right; color: var(--muted); font-size: 12px; }
+.additional-signs > p { font-size: 13px; margin: 18px 0; }
+.additional-finding { display: grid; grid-template-columns: minmax(110px, .5fr) minmax(0, 1fr); gap: 25px; padding: 24px; margin: 18px 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+.additional-finding > img { width: 100%; height: auto; border-radius: 7px; }
+.additional-finding h2 { font-size: 28px; }
+.additional-finding .eyebrow { font-size: 10px; }
+.additional-finding p { font-size: 14px; }
+.additional-finding .treatment-link .button { font-size: 13px; padding: 13px; }
+@media (max-width: 700px) { .additional-finding { grid-template-columns: 1fr; gap: 18px; padding: 18px; } .additional-finding > img { width: 150px; max-width: 100%; } }
 .result-copy .button { font-size: 13px; padding: 13px; margin: 8px 0 15px; }
 .result-schematic { padding: 20px 0; border-radius: 7px; background: #e5ebe2; }
 .result-schematic .fish-art { width: 100%; height: auto; }

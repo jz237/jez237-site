@@ -48,7 +48,7 @@ test('observation notes distinguish blank from zero and contain no AI handoff', 
   assert.match(notes, /Total ammonia: 0 ppm/);
   assert.match(notes, /Nitrite: Not measured \/ unknown/);
   assert.doesNotMatch(notes, /FOR AN AI|ChatGPT|attach.*photo/i);
-  assert.match(notes, /not a diagnosis/);
+  assert.match(notes, /not a confirmed diagnosis/);
   assert.match(notes, /<test>/); // plain-text export, not rendered as HTML
 });
 test('visual reference choices are not diagnostic evidence or extra ranking weight', () => {
@@ -111,7 +111,8 @@ test('care observations never overwrite the visual match or contaminate exported
   assert.equal(assessUrgency(input).level,'check-water');
   const notes=buildCase(input);
   assert.match(notes,/Ammonia is detectable/);
-  assert.match(notes,/Freshwater ich; Freshwater velvet/);
+  assert.match(notes,/Probable diagnosis \/ possible problems: Freshwater ich/);
+  assert.match(notes,/Other similar-looking possibilities: Freshwater velvet/);
   assert.doesNotMatch(notes,/Buoyancy or balance problem|dropsy-like|Cloudy or protruding/);
 });
 test('three freshwater galleries contain all six image views with distinct assets', () => {

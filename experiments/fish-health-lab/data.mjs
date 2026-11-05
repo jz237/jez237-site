@@ -1,7 +1,7 @@
 export const SOURCES = [
-  { id: 'parasites', name: 'Merck Veterinary Manual · Parasitic diseases of fish', url: 'https://www.merckvetmanual.com/exotic-and-laboratory-animals/aquarium-fish/parasitic-diseases-of-fish' },
-  { id: 'bacteria', name: 'Merck Veterinary Manual · Bacterial diseases of fish', url: 'https://www.merckvetmanual.com/exotic-and-laboratory-animals/aquarium-fish/bacterial-diseases-of-fish' },
-  { id: 'management', name: 'Merck Veterinary Manual · Aquarium fish management & diagnostics', url: 'https://www.merckvetmanual.com/exotic-and-laboratory-animals/aquarium-fish/management-of-aquarium-fish' },
+  { id: 'parasites', name: 'Merck · Fish diseases: pet owner guide', url: 'https://www.merckvetmanual.com/all-other-pets/fish/disorders-and-diseases-of-fish#v3226749' },
+  { id: 'bacteria', name: 'Merck · Skin problems: pet owner guide', url: 'https://www.merckvetmanual.com/all-other-pets/fish/disorders-and-diseases-of-fish#Skin-Disorders_v3226728' },
+  { id: 'management', name: 'Merck · Routine health care of fish', url: 'https://www.merckvetmanual.com/all-other-pets/fish/routine-health-care-of-fish' },
 ];
 
 export const SYMPTOMS = [
@@ -39,7 +39,7 @@ export const CONDITIONS = [
     clues: ['Rapid breathing, surface gasping or unusual lethargy.', 'Several fish affected, especially after a filter problem, new setup or recent change.'],
     distinguish: 'White spots or a localized growth still need their own investigation. Good-looking water is not proof of safe water.',
     next: ['Check filter operation, surface movement and aeration.', 'Measure ammonia, nitrite, pH and temperature; record actual readings, not “fine.” In marine tanks also check salinity.', 'If water quality is abnormal, use appropriately conditioned, temperature- and salinity-matched partial water changes; avoid abrupt pH or salinity shifts.'],
-    confirm: 'Water testing, system history, oxygen assessment and examination of the fish.',
+    check: 'Check whether several fish changed at once, and whether the filter, aeration or tank routine recently changed.',
     avoid: 'Do not add medications before checking the environment. Do not replace all biological filter media at once.',
     source: ['management'],
   },
@@ -48,9 +48,9 @@ export const CONDITIONS = [
     summary: 'Small, separate white spots on skin or fins. Gill infections may have no visible spots.',
     weights: { dots: 6, rubbing: 2, clamped: 1, breathing: 1, appetite: 1 },
     clues: ['Discrete white grains on the body or fins, rather than fluffy threads.', 'Rubbing, clamped fins, reduced appetite or rapid breathing may accompany the spots.'],
-    distinguish: 'Velvet, attached ciliates, normal markings and other white growths can look similar. A photo cannot reliably separate every look-alike.',
-    next: ['Photograph the whole fish and a close-up of the spots without removing it from water.', 'Record new arrivals, dates and which tankmates are affected.', 'Seek fish-health advice promptly; confirm the organism before choosing a species-appropriate treatment plan.'],
-    confirm: 'A fish-health professional examines skin mucus, fin or gill wet mounts under a microscope.',
+    distinguish: 'Velvet is usually a much finer dusting; cottony growth has threads, and larger lumps are a different pattern. Normal markings can also look like spots.',
+    next: ['Compare the dots with the close-up pictures while the fish stays in the water.', 'Record new arrivals, dates and which tankmates are affected.', 'Read the freshwater ich treatment guide and check that any product suits your fish, plants and invertebrates. Get help promptly if breathing is difficult.'],
+    check: 'Look for separate salt-like grains on the skin or fins. Compare with an older photo so normal markings are not mistaken for new spots.',
     avoid: 'Vanishing spots are not proof of a cure. Do not blindly raise temperature or mix treatments.',
     source: ['parasites'], atlas: true,
   },
@@ -60,8 +60,8 @@ export const CONDITIONS = [
     weights: { dots: 6, rubbing: 2, breathing: 2, appetite: 1, clamped: 1 },
     clues: ['White spots on skin or fins; respiratory signs may occur without visible spots.', 'More than one exposed fish can be affected.'],
     distinguish: 'Marine velvet and other skin or gill problems can resemble it. Fine dust versus larger spots is a clue, not a conclusive test.',
-    next: ['Check oxygen, water quality and salinity while arranging professional advice.', 'Record all exposed fish, recent arrivals and any previous treatment.', 'Discuss a separate, appropriately equipped hospital system; the entire exposed system may need management.'],
-    confirm: 'Microscopic examination by a fish-health professional.',
+    next: ['Check aeration, water quality and salinity.', 'Record all exposed fish, recent arrivals and any previous treatment.', 'Read the marine ich guide before treating. Use a suitable hospital setup when needed; exposed tankmates may also need care.'],
+    check: 'Compare the separate white grains with a much finer velvet-like dusting. Also watch the gills and appetite; visible spots may come and go.',
     avoid: 'Do not copy freshwater ich advice. Copper and many fish medicines can harm corals and other invertebrates; do not dose the reef display blindly.',
     source: ['parasites'],
   },
@@ -71,8 +71,8 @@ export const CONDITIONS = [
     weights: { dust: 6, breathing: 3, rubbing: 2, clamped: 1, appetite: 1, gasping: 2 },
     clues: ['Very fine dusting rather than obvious salt-grain dots.', 'Gill irritation, rubbing, clamped fins or fast breathing.'],
     distinguish: 'Natural iridescence can look like a sheen. A subtle or invisible skin pattern does not rule out gill disease.',
-    next: ['Seek prompt fish-health advice, especially if breathing is affected.', 'Check the environment and record whether other fish have signs.', 'Ask about microscopic confirmation before selecting treatment.'],
-    confirm: 'Microscopic examination of skin and gill samples.',
+    next: ['Get prompt help if breathing is affected.', 'Check the environment and record whether other fish have signs.', 'Read the freshwater velvet treatment guide; do not copy a marine treatment plan.'],
+    check: 'Look at the skin from different angles. A fine dusty coating is different from separate ich grains, but normal shiny scales can be misleading.',
     avoid: 'Do not treat a metallic sheen alone as proof of velvet.', source: ['parasites'],
   },
   {
@@ -81,8 +81,8 @@ export const CONDITIONS = [
     weights: { dust: 6, breathing: 4, gasping: 4, deaths: 3, appetite: 1, clamped: 1 },
     clues: ['Fine dusting or a dull sheen may occur, but may be absent.', 'Marked breathing difficulty or rapid losses are particularly concerning.'],
     distinguish: 'Marine ich, other gill parasites and low oxygen overlap. Appearance alone is not enough.',
-    next: ['Arrange urgent aquatic-veterinary or qualified fish-health help if breathing is affected.', 'Support aeration and check water quality immediately.', 'Discuss a suitable hospital setup and management of all exposed fish.'],
-    confirm: 'Skin or gill wet mounts examined by a trained professional.',
+    next: ['Get urgent fish-health help if breathing is affected or fish are dying.', 'Support aeration and check water quality immediately.', 'Read the marine velvet treatment guide and consider all exposed fish, not just the visibly affected one.'],
+    check: 'Watch for a fine dusty or dull coating together with breathing changes. Do not wait for obvious spots if a marine fish is struggling.',
     avoid: 'Do not wait for obvious spots. Do not put copper into a reef display without a qualified plan.', source: ['parasites'],
   },
   {
@@ -90,9 +90,9 @@ export const CONDITIONS = [
     summary: 'Cotton-like filaments can colonize damaged skin; the original injury matters too.',
     weights: { fuzz: 6, sores: 2, fins: 1, patch: 1 },
     clues: ['Clearly fuzzy threads or tufts on a damaged area.', 'An underlying wound or tissue injury may be present.'],
-    distinguish: 'A pale bacterial lesion can be called “fungus” incorrectly. Columnaris and other conditions need different investigation.',
-    next: ['Check for injury, aggression and poor water quality.', 'Take a clear close-up and seek professional advice for spreading growth.', 'Have the surface growth examined rather than choosing medication from color alone.'],
-    confirm: 'Microscopic identification of the growth and examination of the underlying tissue.',
+    distinguish: 'A smooth pale bacterial patch is often called “fungus” incorrectly. Look for actual outward threads rather than white color alone.',
+    next: ['Check for injury, aggression and poor water quality.', 'Keep a dated photo and get help if the growth spreads or the fish stops eating.', 'Read the cottony water-mold treatment guide and address the original injury as well as the growth.'],
+    check: 'Look from the side for a soft tuft of threads projecting into the water. Compare it with a flat patch and a solid raised lump.',
     avoid: 'Do not scrape, pull off or handle the growth yourself.', source: ['parasites', 'bacteria'],
   },
   {
@@ -101,8 +101,8 @@ export const CONDITIONS = [
     weights: { patch: 5, fins: 3, fuzz: 2, breathing: 2, sores: 1, deaths: 1 },
     clues: ['Pale skin or mouth lesions, damaged fins or gill problems.', 'A fuzzy-looking appearance is not proof of a fungal cause.'],
     distinguish: 'Trauma, water molds and other bacterial infections can overlap. A “saddle” or pale patch is not diagnostic on its own.',
-    next: ['Seek prompt assessment for spreading lesions, breathing changes or deaths.', 'Check temperature and water quality without making abrupt changes.', 'Ask about microscopic examination and appropriate bacterial testing.'],
-    confirm: 'Professional wet mounts and bacterial identification; susceptibility testing when indicated.',
+    next: ['Get prompt help for spreading patches, breathing changes or deaths.', 'Check temperature and water quality without making abrupt changes.', 'Read the columnaris treatment guide. A bacterial patch and a cottony water mold need different care.'],
+    check: 'Look for a pale patch around the mouth, back or fins, and note whether it is spreading. A patch alone does not establish the exact cause.',
     avoid: 'Do not automatically raise heat or use leftover antibiotics.', source: ['bacteria'],
   },
   {
@@ -112,7 +112,7 @@ export const CONDITIONS = [
     clues: ['Split, shortened or ragged fin edges.', 'The pattern, rate of change and tankmate behavior help distinguish causes.'],
     distinguish: 'A single clean split after aggression is different from progressive tissue loss, but a photo alone may not explain the cause.',
     next: ['Watch for nipping or equipment injury; check the water.', 'Photograph changes over time rather than relying on memory.', 'Get help for rapidly advancing loss, redness or systemic illness.'],
-    confirm: 'History, examination and testing for infection when needed.',
+    check: 'Compare the fin edges with an older photo. Watch for nipping, a clean split after an injury, or edges that continue to shorten.',
     avoid: 'Do not assume every torn fin requires an antibiotic.', source: ['bacteria', 'management'],
   },
   {
@@ -122,7 +122,7 @@ export const CONDITIONS = [
     clues: ['Reddening, missing skin or an open wound.', 'Lethargy or appetite loss may suggest a wider problem.'],
     distinguish: 'The organism, if any, cannot be identified from redness alone. Parasites and aggression can also damage the skin.',
     next: ['Check water quality and possible sources of trauma.', 'Seek veterinary help for deep, expanding or multiple ulcers.', 'Wear protective gloves when working around diseased fish, especially if you have cuts.'],
-    confirm: 'Examination; bacterial culture and susceptibility testing may be necessary.',
+    check: 'Note where the sore is, whether it is growing and whether tankmates are nipping. Several causes can produce similar red areas.',
     avoid: 'Do not apply human skin products or randomly combine antibiotics.', source: ['bacteria', 'management'],
   },
   {
@@ -132,7 +132,7 @@ export const CONDITIONS = [
     clues: ['Unusual body enlargement; scales may protrude when viewed from above.', 'Reduced appetite, lethargy or buoyancy changes can accompany swelling.'],
     distinguish: 'Eggs, body shape, fluid accumulation and internal disease can look different but overlap. Not every large belly is dropsy.',
     next: ['View from above without handling the fish.', 'Record how quickly swelling developed and whether scales are raised.', 'Seek prompt veterinary assessment, urgently for raised scales with severe illness.'],
-    confirm: 'Clinical examination and, when appropriate, imaging and internal-disease testing.',
+    check: 'Compare the body shape with an older photo and look from above for raised scales. Swelling is a sign with several possible causes, not a single disease.',
     avoid: 'Do not assume constipation or try a universal salt/food cure.', source: ['management', 'bacteria'],
   },
   {
@@ -142,7 +142,7 @@ export const CONDITIONS = [
     clues: ['One or both eyes look cloudy, swollen or displaced.', 'A one-sided injury and a two-sided systemic problem can require different investigation.'],
     distinguish: 'Some breeds normally have protruding eyes. Compare with the fish’s own healthy appearance.',
     next: ['Note whether one or both eyes are affected and check the water.', 'Look for aggression or a recent collision.', 'Get professional advice for increasing swelling, pain-like behavior or other illness.'],
-    confirm: 'Examination of the eye and fish, plus tests guided by the history.',
+    check: 'Compare both eyes and the fish’s usual appearance. Note whether the change followed a collision or is happening with other signs of illness.',
     avoid: 'Do not apply human eye drops or manipulate the eye.', source: ['management', 'bacteria', 'parasites'],
   },
   {
@@ -152,7 +152,7 @@ export const CONDITIONS = [
     clues: ['Difficulty maintaining normal position in the water.', 'Onset, body swelling and other fish affected are important clues.'],
     distinguish: 'Oxygen/water problems, trauma, internal disease and neurologic conditions can all affect swimming.',
     next: ['Check the environment first and reduce unnecessary handling.', 'Record a short video of actual swimming behavior.', 'Inability to remain upright or poor responsiveness needs urgent help.'],
-    confirm: 'Examination, water testing and possibly imaging or other diagnostics.',
+    check: 'Watch the fish swim, not just rest in one pose. Note whether it floats, sinks, rolls or cannot stay upright, and whether other fish are affected.',
     avoid: 'Do not diagnose from posture alone or rely on a universal pea/fasting cure.', source: ['management', 'bacteria'],
   },
   {
@@ -161,9 +161,9 @@ export const CONDITIONS = [
     weights: { breathing: 3, rubbing: 4, clamped: 2, gasping: 1, unclear: 1 },
     clues: ['Rubbing, rapid breathing or excess mucus.', 'No obvious white spots does not rule out a parasite.'],
     distinguish: 'Water-quality problems and several different organisms cause similar signs. The water type changes the possible organisms.',
-    next: ['Check aeration and actual water-test readings.', 'Record recent introductions and which fish are affected.', 'Arrange professional skin/gill assessment if signs persist or breathing is abnormal.'],
-    confirm: 'Microscopic examination of appropriate samples by a trained professional.',
-    avoid: 'Do not attempt a gill biopsy or choose a parasite medicine solely from rubbing.', source: ['parasites'],
+    next: ['Check aeration and actual water-test readings.', 'Record recent introductions and which fish are affected.', 'Get fish-health advice if rubbing persists or breathing changes; the skin may show little or nothing.'],
+    check: 'Watch for repeated rubbing, excess mucus and changing gill movements. These signs can also come from water or oxygen problems.',
+    avoid: 'Do not choose a parasite medicine just because the fish is rubbing.', source: ['parasites'],
   },
   {
     id: 'growth', title: 'Larger growths or nodules', scope: 'both', kind: 'Needs identification', art: 'lumps',
@@ -171,8 +171,8 @@ export const CONDITIONS = [
     weights: { lumps: 6, patch: 1 },
     clues: ['One or more raised, irregular growths or larger nodules.', 'Rate of growth, location and the fish’s overall condition matter.'],
     distinguish: 'Viral, bacterial, parasitic, reactive and other growths can resemble one another. Some normal anatomy also looks unusual.',
-    next: ['Take clear photos with dates and a consistent angle.', 'Seek examination if a growth enlarges, ulcerates or affects eating or breathing.', 'Compare with normal anatomy for that species, without assuming the lump is harmless.'],
-    confirm: 'Professional examination; microscopy, tissue sampling or other testing may be needed.',
+    next: ['Take clear photos with dates and a consistent angle.', 'Get help if a growth enlarges, opens into a sore or affects eating or breathing.', 'Compare with normal anatomy for that species, without assuming the lump is harmless.'],
+    check: 'Compare the size, texture and location over time. A new or changing solid lump is different from small separate ich-like grains.',
     avoid: 'Do not cut, squeeze, scrape or burn a growth.', source: ['management', 'parasites', 'bacteria'],
   },
   {
@@ -182,16 +182,9 @@ export const CONDITIONS = [
     clues: ['The feature was present before, stays stable, and fits normal anatomy or markings for the species or variety.', 'Old photos can help tell a real change from something newly noticed.'],
     distinguish: 'Normal appearance does not explain severe breathing changes, collapse, rapidly spreading lesions or deaths. A sick fish can also have normal markings.',
     next: ['Compare with older photos and reliable examples of the same species or variety.', 'Look for a genuine change in behavior as well as appearance.', 'When in doubt, ask a fish-health professional rather than treating a normal feature.'],
-    confirm: 'Species identification, history and examination; testing if the fish is unwell.',
+    check: 'Compare older photos and reliable examples of the same species or variety. A stable marking does not explain new breathing or swimming trouble.',
     avoid: 'Do not medicate a stable marking alone—or assume that stable markings rule out another illness.', source: ['management'],
   },
 ];
 
 export const ATLAS_URL = 'https://media.jez237.com/experiments/fish-health-lab/ich-comparison-b7e2ede9.jpg';
-
-// Treatment context is conditional, never an automatic prescription from a photo.
-export const TREATMENT_CONTEXT = {
-  'ich-fresh': 'If freshwater ich is confirmed, treatment must account for the parasite’s life cycle and all exposed fish. A suitable product and repeat schedule depend on species, temperature and the setup. Follow the selected product’s full instructions and professional plan; disappearing spots alone do not mean treatment is complete.',
-  'velvet-fresh': 'Confirmed freshwater velvet needs a prompt, freshwater-specific parasite-treatment plan, especially when breathing is affected. Discuss all exposed fish and a suitable treatment setup. Medication choice and monitoring must account for sensitive fish, plants and invertebrates; do not copy a marine copper protocol.',
-  'water-mold': 'For confirmed water mold, address the injury, aggression or environmental problem that allowed the growth, as well as the growth itself. A professional can choose a species-appropriate treatment. Bacterial lesions such as columnaris require a different approach; white color alone is not a reason to choose an antifungal.',
-};

@@ -24,7 +24,7 @@ export const CONDITION_IMAGES = {
       "width": 512,
       "height": 512,
       "alt": "AI illustration: Macro view of finely dusty gourami skin and a nearby fin.",
-      "caption": "Look at the very fine dusty texture, rather than counting separate white grains. Microscopy is needed to identify the cause.",
+      "caption": "Look at the very fine dusty texture, rather than counting separate white grains. Compare it with a normal reflective sheen as well.",
       "provenance": "AI educational illustration",
       "source": "Created for this experiment; not confirmed patient photographs or diagnoses."
     },
