@@ -8,13 +8,19 @@ const output = process.env.FISH_LAB_QA_DIR || '/home/jez237/.openclaw/workspace/
 await mkdir(output, { recursive: true });
 const browser = await chromium.launch({headless:true,executablePath:'/usr/bin/google-chrome',args:['--disable-dev-shm-usage']});
 const context = await browser.newContext({viewport:{width:1365,height:950}});
-const checks = [], errors = [], leaks = [], submissions = [], treatmentRequests = [];
+const checks = [], errors = [], leaks = [], submissions = [], treatmentRequests = [], platformRequests = [];
 const sentinel = 'PRIVATE-HOBBYIST-FISH-NOTE';
 context.on('page', page => page.on('pageerror', error => errors.push(error.message)));
 context.on('request', request => {
   const url = new URL(request.url());
   if ((request.url()+(request.postData()||'')).includes(sentinel)) leaks.push(request.url());
-  if (!['GET','HEAD','OPTIONS'].includes(request.method())) submissions.push(url.origin+url.pathname);
+  if (!['GET','HEAD','OPTIONS'].includes(request.method())) {
+    // Record the parent site's existing analytics/security traffic separately.
+    // The sentinel check above still rejects observation text in any request.
+    const analytics = ['www.google-analytics.com','region1.google-analytics.com','analytics.google.com','stats.g.doubleclick.net'].includes(url.hostname) && url.pathname === '/g/collect';
+    const cloudflare = (url.origin === new URL(root).origin || ['cloudflareinsights.com','www.cloudflareinsights.com'].includes(url.hostname)) && (url.pathname === '/cdn-cgi/rum' || url.pathname.startsWith('/cdn-cgi/challenge-platform/'));
+    (analytics || cloudflare ? platformRequests : submissions).push(url.origin+url.pathname);
+  }
   if (/api\.(openai|anthropic)\.com|chatgpt\.com/.test(url.hostname)) leaks.push(url.hostname);
   if (url.hostname === 'www.merckvetmanual.com') treatmentRequests.push({url:request.url(),referer:request.headers().referer || ''});
 });
@@ -198,6 +204,6 @@ try {
 }
 assert.deepEqual(errors,[]); assert.deepEqual(leaks,[]); assert.deepEqual(submissions,[]);
 record('no browser errors, submitted observations, accounts, photo uploads or external AI requests');
-const result = {url:root,checks:checks.length,passed:checks,errors,leaks,submissions,treatmentRequests,screenshots:output};
+const result = {url:root,checks:checks.length,passed:checks,errors,leaks,submissions,platformRequests:[...new Set(platformRequests)],treatmentRequests,screenshots:output};
 await writeFile(output+'/hobbyist-browser-results.json',JSON.stringify(result,null,2)+'\n');
 console.log(JSON.stringify(result,null,2));

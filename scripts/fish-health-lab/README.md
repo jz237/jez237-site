@@ -32,7 +32,7 @@ freshwater collections: velvet and cottony growth/water mold.
 
 ## Product contract
 
-**Release authorized, November 5 at 17:07:** Jez explicitly lifted the earlier
+**Published, November 5 after owner approval at 17:07:** Jez explicitly lifted the earlier
 publication hold with “oh i mean publish.” The release incorporates the plain `What do you see?` heading, two water choices,
 hobbyist wording, independent treatment pop-ups, clear probable-diagnosis results
 and handling for multiple/conflicting signs. Release through the guarded publisher.
@@ -314,3 +314,20 @@ picture choices were verified through the loopback-only preview's local asset
 mapping. At draft verification, the twelve marine crops had not been uploaded, and no
 commit, push or deployment had been performed. Jez subsequently authorized
 publication; the exact crops are now uploaded and byte-verified before release.
+
+## Approved publication verification — 2026-11-05
+
+Jez lifted the hold with “oh i mean publish” in #gpt-chat-1. Product commit
+`03d524e904e556c4622bdeb79c084f64c25a5291` was published through the guarded
+full-site release: preview `b403b157`, production `7586a8cb`.
+Ten public modules/styles match source byte-for-byte. HTML differs only by the
+known parent-site analytics injection and retains noindex/no-store headers.
+All 49 retained/choice/reference JPEG objects match recorded hashes and decode.
+The 35 unit checks and 33 browser checks passed (68 total), including the live
+freshwater/marine diagnoses, conflicting signs, care navigation and treatment
+popup destinations/referrer handling. Phone layouts were reviewed from the
+live-page screenshots. Browser privacy checks distinguish existing parent-site
+analytics/Cloudflare traffic from app submissions, while still checking every
+request for observation-text leaks and external AI calls. None were detected.
+Receipts: `workspace/tmp/fish-health-publish-20261105/`. This verifies application
+behavior and publication, not clinical accuracy.
