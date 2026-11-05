@@ -14,8 +14,14 @@ submission.
 
 UX correction: `1567958813586362369`, 2026-11-05. The disease-first opening was
 confusing: ich posters appeared before the user had started. The front door is
-now a neutral Start screen, not the library or a named-disease walkthrough.
-Old `#ich` links intentionally open this same neutral screen.
+now a Start screen, not the library or a named-disease walkthrough.
+Old `#ich` links intentionally open this same Start screen.
+
+Realistic-picture steering: `1567971914423603203`, 2026-11-05. Replace the opening
+fish with a mixed freshwater/reef-fish health illustration, and fill the main
+symptom and white-mark choices with realistic fish images. This explicitly
+supersedes the earlier no-images-on-the-opening-screen constraint. Preserve the
+one-question flow; do not restore the ich-only poster wall.
 
 ## Product contract
 
@@ -24,9 +30,11 @@ Old `#ich` links intentionally open this same neutral screen.
 - Start → water type → choose the main visible symptom → behavior → optional
   water readings/tank history → comparisons. Only one question screen is shown.
   Freshwater + white dots adds a texture question; it does not preselect ich.
-- No reference images are rendered or fetched on the welcome, water, or initial
-  symptom screens. A relevant texture reference can appear after an explicit
-  freshwater + white-dots choice. Other symptoms bypass that branch.
+- The welcome shows one mixed-fish opening illustration. Twelve symptom pictures
+  load when the symptom question is reached; six different close-ups load when
+  the freshwater white-mark question is reached. Only the opening image is
+  fetched initially. Existing ich reference sheets still wait for relevant
+  choices or deliberate library browsing. Other symptoms bypass that branch.
 - One clear Start button; Back preserves choices. Changing water or the primary
   symptom clears the dependent texture answer. Start over clears observations.
   Numeric water readings are validated, and blank remains unknown, not zero.
@@ -35,7 +43,8 @@ Old `#ich` links intentionally open this same neutral screen.
 - The Reference library is a separate, opt-in view. Returning preserves the check.
   It has 15 entries, 12 appearance filters, water-type/search filters and six
   gallery slots per entry (90 total). Six ich sheets are filled; 84 other slots
-  remain honest placeholders. No additional images generated for this UX change.
+  remain honest placeholders. Selector pictures do not count as confirmed disease
+  cases or completed condition galleries.
 - All six ich sheets remain accessible in a one-picture-at-a-time gallery:
   whole-fish guide, different fish, close-up, subtle appearance, marked changes,
   and look-alikes. Appearance is not a disease stage or severity score.
@@ -64,7 +73,25 @@ diseases, aquarium management/diagnostics (links in data.mjs). Summaries are not
 clinically validated. Source institutions do not endorse this tool. Real expert-
 identified case photography and professional review are future work.
 
-Symptom illustrations: original code-native schematic SVGs, not patient photos.
+The opening and both question grids use realistic AI educational illustrations,
+not patient photos. Three new generations supply the opening plus two contact
+sheets, cropped without resizing into 12 symptom and 6 texture pictures. Prompted
+row-major layouts: symptoms 4 columns × 3 rows; textures 3 columns × 2 rows.
+Original sheets remain intact outside Git. The `unclear` choices deliberately
+show no obvious lesion / an uncertain view, not an invented disease. Breathing
+rate and abnormal swimming require observation over time, not a still image.
+
+`choice-images.mjs` supplies the 19 public image references and accessible alt
+text. `scripts/fish-health-lab/realistic-images-20261105.json` records source hashes,
+exact crop boxes, actual dimensions, derivative hashes and truthful provenance.
+Source prompts, receipts, original sheets and preparation/upload records are in
+`workspace/tmp/imagegen/fish-health-realistic-20261105/`; managed media is under
+`/home/jez237/.openclaw/media/tool-image-generation/fish-health-realistic-20261105/`.
+All 19 page assets live on R2 under `experiments/fish-health-lab/choices/` using
+content-hashed names. No generated binaries in Git. Request: GPT Image 2.6
+Sunburst, explicit medium quality; backend model not independently verified.
+
+Library filter icons and unfilled comparison schematics remain original SVGs.
 Ich atlas: previously generated at Jez's request, retained JPEG 1024×1536,
 675,031 bytes, SHA256
 `b7e2ede990307970f5e2f324533ca3294df8a11e643762da3609b0e7a9b5aaf0`.
@@ -122,8 +149,9 @@ Run `browser-check.mjs` and `visual-browser-check.mjs` locally and on production
 The obsolete disease-first `ich-browser-check.mjs` is retired; its relevant
 branch, image, privacy and mobile coverage is included in the current suites.
 
-Check neutral root and legacy `#ich` openings, zero early reference-image
-requests, single-question visibility, required choices, every main symptom and
+Check root and legacy `#ich` openings, one opening-image request only before
+starting, complete decode of all 18 distinct choice pictures in their mapped
+grids, single-question visibility, required choices, every main symptom and
 texture branch, Back/changed answers/reset, marine/unknown scope, distress/water
 priority, numeric validation, notes copy/download and mobile overflow.
 Check opt-in library/resume, filters, six image slots, galleries and comparisons.
@@ -138,7 +166,9 @@ Review untracked/ignored deployment inputs separately.
 
 Deploy through the existing guarded full-site publisher, never the sparse task
 checkout. Preserve newest origin/main and unrelated work. Verify live static
-bytes, noindex headers, all six preserved assets and representative interactions.
+bytes, noindex headers, all 19 new assets, all six preserved ich references and
+representative interactions. Inspect layout and crop mapping without subjective
+artwork scoring or automatic rerolls.
 
 ## Next experiments
 

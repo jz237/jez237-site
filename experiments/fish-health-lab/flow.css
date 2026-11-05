@@ -8,10 +8,15 @@ main { max-width: 1160px; padding: 0 32px; }
 .start-copy .lead { max-width: 510px; font-size: 19px; }
 .start-button { margin: 12px 0 16px; min-width: 230px; font-size: 17px; }
 .start-copy > .quiet { font-size: 13px; }
-.start-art { min-width: 0; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, #e1e9d7, #e7ecdf80 65%, transparent 67%); display: grid; align-content: center; justify-items: center; }
+.start-art { min-width: 0; margin: 0; overflow: hidden; border: 1px solid #cfdbcb; border-radius: 16px; background: #183f42; box-shadow: 0 14px 40px #193a3912; }
+.opening-label { padding: 20px 22px 16px; color: #eaf1e8; }
+.opening-label > span { display: block; font-size: 10px; letter-spacing: .15em; color: #bdd4c6; margin-bottom: 7px; }
+.opening-label > strong { font-family: var(--serif); font-weight: 400; font-size: 24px; }
 #welcome-fish { width: 100%; }
-#welcome-fish .fish-art { width: 100%; height: auto; max-width: none; }
-.start-art > span { font-size: 12px; letter-spacing: .13em; color: var(--muted); margin-top: -20px; }
+#welcome-fish img { width: 100%; height: auto; }
+.start-art figcaption { padding: 14px 20px 16px; font-size: 12px; color: #d2e2d8; }
+.start-art figcaption small { display: block; margin-top: 6px; font-size: 10px; color: #b1c9bf; }
+.image-note { font-size: 12px; color: var(--muted); margin-top: -12px; margin-bottom: 20px; }
 .help-line { display: flex; align-items: center; gap: 15px; border-top: 1px solid var(--line); padding: 20px 0; margin: 10px 0 20px; font-size: 13px; }
 .help-line > span { color: #9b653e; border: 1px solid #c4a686; border-radius: 50%; width: 25px; height: 25px; flex-shrink: 0; display: grid; place-items: center; }
 .help-line p { margin: 0; }
@@ -33,7 +38,12 @@ main { max-width: 1160px; padding: 0 32px; }
 .question-panel .water-picker strong { font-size: 18px; }
 .question-panel .water-picker small { font-size: 13px; }
 .question-panel .symptom-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
-.question-panel .symptom-art { height: 85px; }
+.question-panel .symptom-art { height: auto; aspect-ratio: 4 / 3; background: #153e42; position: relative; padding: 0; overflow: hidden; }
+.question-panel .symptom-art img { width: 100%; height: 100%; object-fit: contain; }
+.question-panel .symptom-art .selection-check { z-index: 1; background: var(--green); color: white; border: 1px solid #d4e4cd; opacity: 0; }
+.question-panel .symptom-card[aria-pressed="true"] .selection-check { opacity: 1; }
+.question-panel .symptom-card[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--green); }
+.question-panel .texture-grid .symptom-art { aspect-ratio: 1; }
 .question-panel .symptom-card strong { font-size: 14px; padding: 9px 12px 0; }
 .question-panel .symptom-card small { padding: 4px 12px 0; }
 .question-panel .texture-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -97,7 +107,9 @@ footer > .text-button { font-size: 12px; }
   .start-copy .eyebrow { font-size: 9px; }
   .start-copy h1 { font-size: 46px; margin-bottom: 20px; }
   .start-copy .lead { font-size: 17px; }
-  .start-art { display: none; }
+  .start-art { display: block; margin-top: 25px; }
+  .opening-label { padding: 16px 17px 12px; }
+  .opening-label > strong { font-size: 21px; }
   .start-button { width: 100%; min-height: 54px; margin-top: 12px; }
   .start-copy > .quiet { text-align: center; font-size: 12px; }
   .help-line { padding: 18px 0; gap: 10px; align-items: start; font-size: 12px; }
@@ -109,7 +121,8 @@ footer > .text-button { font-size: 12px; }
   .question-panel .water-picker strong { font-size: 16px; }
   .question-panel .water-picker small { font-size: 11px; }
   .question-panel .symptom-grid, .question-panel .texture-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
-  .question-panel .symptom-art { height: 72px; }
+  .question-panel .symptom-art { height: auto; aspect-ratio: 4 / 3; }
+  .image-note { font-size: 11px; }
   .question-panel .symptom-card strong { font-size: 13px; }
   .question-panel .symptom-card small { font-size: 10px; }
   .question-panel .behavior-grid { grid-template-columns: 1fr; gap: 9px; }

@@ -1,6 +1,7 @@
 import { SYMPTOMS, BEHAVIORS, CONDITIONS, SOURCES } from './data.mjs';
 import { assessUrgency, rankConditions, buildCase } from './logic.mjs';
 import { slotsFor, leadSlot, patternFor } from './visuals.mjs';
+import { OPENING_IMAGE, SIGN_IMAGES, TEXTURE_IMAGES } from './choice-images.mjs';
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
@@ -38,6 +39,9 @@ function goStep(name, focus = true) {
   $('#welcome').hidden = name !== 'welcome';
   $('#check').hidden = name === 'welcome';
   $$('.question-panel').forEach(el => { el.hidden = el.dataset.step !== name; });
+  // Fetch choice pictures only when their question is reached, not at the front door.
+  const activeGrid = name === 'signs' ? '#symptom-grid' : name === 'texture' ? '#texture-grid' : null;
+  if (activeGrid) $$(`${activeGrid} img[data-src]`).forEach(img => { img.src = img.dataset.src; img.removeAttribute('data-src'); });
   form.hidden = name === 'results';
   $('#flow-error').textContent = '';
   const progress = { water: [1,'Water type'], signs: [2,'What you see'], texture: [2,'Look closer'], behavior: [3,'Behavior'], tank: [4,'The tank'], results: [4,'Your comparisons'] }[name];
@@ -222,14 +226,17 @@ async function copyCase() {
 }
 
 
-$('#welcome-fish').innerHTML = fishArt('plain', true);
+$('#welcome-fish').innerHTML = `<img src="${OPENING_IMAGE.url}" width="${OPENING_IMAGE.width}" height="${OPENING_IMAGE.height}" alt="${escape(OPENING_IMAGE.alt)}" fetchpriority="high" decoding="async">`;
 function signButton(symptom, attribute, title = symptom.title) {
-  return `<button type="button" class="symptom-card" ${attribute}="${symptom.id}" aria-pressed="false"><span class="symptom-art">${fishArt(symptom.art)}<span class="selection-check" aria-hidden="true">✓</span></span><strong>${escape(title)}</strong><small>${escape(symptom.text)}</small></button>`;
+  const isTexture = attribute === 'data-texture';
+  const image = (isTexture ? TEXTURE_IMAGES : SIGN_IMAGES)[symptom.id];
+  const hint = isTexture && symptom.id === 'unclear' ? 'I can’t make out the texture' : symptom.text;
+  return `<button type="button" class="symptom-card" ${attribute}="${symptom.id}" aria-pressed="false"><span class="symptom-art"><img data-choice-image="${isTexture ? 'texture' : 'sign'}-${symptom.id}" data-src="${image.url}" width="${image.width}" height="${image.height}" alt="${escape(image.alt)}" decoding="async"><span class="selection-check" aria-hidden="true">✓</span></span><strong>${escape(title)}</strong><small>${escape(hint)}</small></button>`;
 }
 $('#symptom-grid').innerHTML = SYMPTOMS.map(s => signButton(s, 'data-symptom')).join('');
 $('#texture-grid').innerHTML = ['dots','dust','fuzz','patch','lumps','unclear'].map(id => {
   const s = SYMPTOMS.find(s => s.id === id);
-  return signButton(s, 'data-texture', id === 'unclear' ? 'Not sure / normal markings?' : s.title);
+  return signButton(s, 'data-texture', id === 'unclear' ? 'Not sure' : s.title);
 }).join('');
 $('#behavior-grid').innerHTML = BEHAVIORS.map(b => `<label class="check-label"><input type="checkbox" name="behavior" value="${b.id}"><span>${escape(b.label)}</span></label>`).join('');
 $('#source-list').innerHTML = sourceLinks(SOURCES.map(s => s.id));

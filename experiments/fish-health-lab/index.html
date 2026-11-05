@@ -9,9 +9,9 @@
   <title>Fish Health Lab · A visual-first experiment</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='14' fill='%231c504a'/%3E%3Cpath d='M9 24Q22 8 35 24Q22 40 9 24L4 17v14z' fill='%23e6edba'/%3E%3Ccircle cx='29' cy='22' r='2' fill='%231c504a'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="/assets/fonts/css/outfit-playfair-display.css">
-  <link rel="stylesheet" href="style.css?v=4">
-  <link rel="stylesheet" href="flow.css?v=4">
-  <script type="module" src="app.mjs?v=4"></script>
+  <link rel="stylesheet" href="style.css?v=5">
+  <link rel="stylesheet" href="flow.css?v=5">
+  <script type="module" src="app.mjs?v=5"></script>
 </head>
 <body>
   <a href="#main" class="skip">Skip to the guide</a>
@@ -23,7 +23,7 @@
     <section id="guide-view">
       <section id="welcome" class="start-panel" aria-labelledby="welcome-title">
         <div class="start-copy"><p class="eyebrow">YOU DON’T NEED A DISEASE NAME</p><h1 id="welcome-title">Let’s start with<br><em>what you see.</em></h1><p class="lead">Choose the picture that looks closest to your fish. We’ll ask a few simple questions and show you what to compare.</p><button class="button primary start-button" data-action="start">Start a fish check <span aria-hidden="true">→</span></button><p class="quiet">No account. No photo upload.</p></div>
-        <div class="start-art" aria-hidden="true"><div id="welcome-fish"></div><span>Observe · Compare · Check</span></div>
+        <figure class="start-art"><div class="opening-label"><span>FRESHWATER & REEF FISH</span><strong>Common fish health problems</strong></div><div id="welcome-fish"></div><figcaption>Spots, skin changes, damaged fins and other warning signs.<small>AI illustrations—not clinical photographs.</small></figcaption></figure>
       </section>
       <section id="check" class="guided-check" hidden aria-label="Fish check">
         <div class="flow-topline"><p id="flow-label" class="eyebrow"></p><button class="text-button" data-action="reset">Start over</button></div>
@@ -38,11 +38,11 @@
             </fieldset>
           </section>
           <section class="question-panel" data-step="signs" hidden aria-labelledby="signs-title">
-            <h1 id="signs-title" class="question-title">What stands out most?</h1><p class="question-hint">Choose the closest picture. These drawings show signs—not disease diagnoses.</p>
+            <h1 id="signs-title" class="question-title">What stands out most?</h1><p class="question-hint">Match the sign, not the kind of fish. Choose the picture closest to what you see.</p><p class="image-note">Realistic AI illustrations of signs—not confirmed disease photographs.</p>
             <div id="symptom-grid" class="symptom-grid" aria-label="Choose the main visible sign"></div>
           </section>
           <section class="question-panel" data-step="texture" hidden aria-labelledby="texture-title">
-            <h1 id="texture-title" class="question-title">What do the white marks look like?</h1><p class="question-hint">Look at their texture, not just their color. It’s okay to be unsure.</p>
+            <h1 id="texture-title" class="question-title">What do the white marks look like?</h1><p class="question-hint">Look at their texture, not just their color. It’s okay to be unsure.</p><p class="image-note">Illustrated close-ups: compare grains, dust, fuzz, patches and lumps.</p>
             <div id="texture-grid" class="symptom-grid texture-grid" aria-label="Choose the closest texture"></div>
             <div id="texture-reference" class="optional-reference"></div>
           </section>
@@ -77,7 +77,7 @@
       <p id="library-count" class="quiet" role="status"></p><p class="slot-explanation">This prototype has one completed image collection. Empty frames are places for future pictures, not disease examples.</p>
       <div id="library-grid" class="library-grid"></div>
     </section>
-    <section id="about-view" class="inner-view" hidden aria-labelledby="about-title"><p class="eyebrow">ABOUT THIS EXPERIMENT</p><h1 id="about-title">Pictures to help you<br><em>ask better questions.</em></h1><p class="lead">Start with what you see, then check the whole tank. Similar appearances can have different causes.</p><p>The guide suggests comparisons, not a confirmed diagnosis or a medication plan. A fish-health professional may need water tests, microscopy or other examinations.</p><p>The six freshwater ich sheets are AI educational illustrations, not confirmed patient photographs. The remaining library entries still have image spaces to fill.</p><p>No photo upload, image analysis or external chatbot is part of this guide. You can optionally copy or download your observation notes.</p><h2>References</h2><div id="source-list"></div><p class="quiet">Sources checked November 5, 2026. Not clinically validated; sources do not endorse this prototype. An independent jez237.com experiment, not a Hidden Reef application.</p><button class="button secondary" data-view="guide">Back to my check →</button></section>
+    <section id="about-view" class="inner-view" hidden aria-labelledby="about-title"><p class="eyebrow">ABOUT THIS EXPERIMENT</p><h1 id="about-title">Pictures to help you<br><em>ask better questions.</em></h1><p class="lead">Start with what you see, then check the whole tank. Similar appearances can have different causes.</p><p>The guide suggests comparisons, not a confirmed diagnosis or a medication plan. A fish-health professional may need water tests, microscopy or other examinations.</p><p>The opening montage, symptom pictures, texture close-ups and six freshwater ich sheets are AI educational illustrations, not confirmed patient photographs. They show possible appearances, not proof of a disease. The remaining condition-library entries still have image spaces to fill.</p><p>No photo upload, image analysis or external chatbot is part of this guide. You can optionally copy or download your observation notes.</p><h2>References</h2><div id="source-list"></div><p class="quiet">Sources checked November 5, 2026. Not clinically validated; sources do not endorse this prototype. An independent jez237.com experiment, not a Hidden Reef application.</p><button class="button secondary" data-view="guide">Back to my check →</button></section>
   </main>
   <footer><span>Fish Health Lab · Working prototype</span><button class="text-button" data-view="about">About & sources</button><span>Observe. Compare. Confirm.</span></footer>
   <aside id="comparison-tray" class="comparison-tray" hidden aria-label="Selected visual comparisons"><div><strong>Compare the patterns</strong><div id="comparison-picks"></div><p id="comparison-status" role="status"></p></div><button class="button primary" data-action="compare" disabled>Compare side by side ↗</button><button class="tray-clear" data-action="clear-compare" aria-label="Clear comparisons">×</button></aside>
