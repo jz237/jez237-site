@@ -14,7 +14,7 @@ extern int astra_refinement,astra_native_compare;
 extern int astra_environment_theme(int),astra_environment_bay(int),astra_environment_rock(int);
 float astra_mine_clock=-1,astra_mine_door=-1;
 typedef struct {vms_vector eye,goal,up;int room,side,subject,valid;} am_scene;
-static am_scene am_scenes[25];static int am_level=-999,am_segments=-1,am_mask;
+static am_scene am_scenes[27];static int am_level=-999,am_segments=-1,am_mask;
 static float am_distance(const vms_vector *a,const vms_vector *b){return f2fl(vm_vec_dist(a,b));}
 static int am_clear(const vms_vector *a,int room,const vms_vector *b,fix radius){
     fvi_query q={a,b,room,radius,-1,NULL,0};fvi_info hit;return find_vector_intersection(&q,&hit)==HIT_NONE;
@@ -151,7 +151,21 @@ static void am_build(void){
         for(int j=21;j<25;j++)if(am_scenes[j].valid){am_scenes[i]=am_scenes[j];break;}
         if(!am_scenes[i].valid&&am_scenes[16].valid)am_scenes[i]=am_scenes[16];
     }
-    for(int i=0;i<25;i++)if(am_scenes[i].valid)am_mask|=1<<i;
+    am_scenes[25]=am_scenes[15];
+    fix strip_light=-1;
+    for(int i=21;i<25;i++)if(am_scenes[i].valid){
+        am_scene *v=&am_scenes[i];fix light=0;for(int j=0;j<4;j++)light+=Segments[v->subject].sides[v->side].uvls[j].l/4;
+        if(light>strip_light){strip_light=light;am_scenes[26]=*v;}
+    }
+    /* Aim between the channel and panel, keeping the entire light in view. */
+    for(int i=21;i<27;i++)if(i!=25&&am_scenes[i].valid){
+        extern int astra_wall_inspection_anchor(int,int,vms_vector*);am_scene *v=&am_scenes[i];vms_vector lamp,shift,eye,goal;
+        if(astra_wall_inspection_anchor(v->subject,v->side,&lamp)){
+            vm_vec_sub(&shift,&lamp,&v->goal);vm_vec_scale(&shift,fl2f(.50f));vm_vec_add(&eye,&v->eye,&shift);vm_vec_add(&goal,&v->goal,&shift);
+            int room=find_point_seg(&eye,v->room);if(room>=0&&am_clear(&v->eye,v->room,&eye,F1_0/3)&&am_clear(&eye,room,&goal,0)){v->eye=eye;v->goal=goal;v->room=room;}
+        }
+    }
+    for(int i=0;i<27;i++)if(am_scenes[i].valid)am_mask|=1<<i;
 }
 /* The transient door frame is restored immediately after drawing, including
  * its connected side. No wall_open_door, trigger, sound or ActiveDoors changes. */
@@ -171,8 +185,8 @@ static void am_restore_door(am_door_saved *save){
 }
 void astra_mine_preview(int index,float clock,float zoom){
     if(am_level!=Current_level_num||am_segments!=Highest_segment_index||!am_mask)am_build();
-    if(index<0||index>24||!am_scenes[index].valid){index=0;while(index<25&&!am_scenes[index].valid)index++;}
-    if(index>=25){EM_ASM(window.astraMinePreview?.unavailable());return;}
+    if(index<0||index>26||!am_scenes[index].valid){index=0;while(index<27&&!am_scenes[index].valid)index++;}
+    if(index>=27){EM_ASM(window.astraMinePreview?.unavailable());return;}
     am_scene *s=&am_scenes[index];vms_vector forward,eye,delta;vms_matrix orient;
     vm_vec_sub(&delta,&s->eye,&s->goal);vm_vec_scale_add(&eye,&s->goal,&delta,fl2f(fminf(1.5f,fmaxf(.65f,zoom))));
     vm_vec_normalized_dir(&forward,&s->goal,&s->eye);vm_vector_2_matrix(&orient,&forward,&s->up,NULL);

@@ -1009,3 +1009,22 @@ overlays, secret doors and hazards remain authoritative. No collision or AI chan
 The mine showroom now has 25 exhibits, including four lighting palettes. A palette
 absent from a mine is demonstrated on an existing safe service mount while in
 the showroom. Paused inspection restores the original gameplay state.
+
+Architectural lighting, warm ventilation and metal reflections (pyre45)
+
+Long segmented red/blue/cyan/amber channels follow the edges of safe solid mine
+panels. Larger faces can carry a matching second strip. Metal frames, individual
+diffuser cells, fasteners and service plates use the existing material library.
+The three existing room-light slots now support elongated sources: metal highlights
+follow the length of the strip instead of a single point. Fittings and pipes also
+receive nearby fixture colors. No new texture downloads or higher light budgets.
+
+Original ventilation grilles gain warm internal cells and slow turning fan blades
+behind their fixed protective bars. The mild amber pulse has no strobing. Native
+broken lights stop contributing. Decorative mounts reject portals, secret panels,
+functional overlays and hazardous surfaces. Collision and simulation are unchanged.
+
+The mine showroom has 27 exhibits, adding warm ventilation/moving fans and strip
+reflections. Cameras frame the longer channels without hiding them under controls.
+Showroom samples are render-only; both campaigns, flight controls, weapons, audio,
+explosions and demo AI remain unchanged. Existing 22-draw fixture budget is retained.

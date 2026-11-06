@@ -7,17 +7,22 @@ static void afx_finish(int family,float fade){
     static GLuint program;static int failed;if(!ax_count||failed)return;
     if(!program){
         const char *vs="varying highp vec3 p,n;varying highp vec2 uv;varying mediump vec4 tint;uniform mat3 axis;uniform vec3 origin;void main(){p=axis*gl_Vertex.xyz+origin;n=normalize(axis*gl_Normal);uv=gl_MultiTexCoord0.xy;tint=gl_Color;gl_Position=gl_ProjectionMatrix*vec4(p,1.);}";
-        const char *fs="precision highp float;varying highp vec3 p,n;varying highp vec2 uv;varying mediump vec4 tint;uniform sampler2D paint,metal;uniform float opacity,kind;"
+        const char *fs="precision highp float;varying highp vec3 p,n;varying highp vec2 uv;varying mediump vec4 tint;uniform sampler2D paint,metal,lens;uniform float opacity,kind;uniform vec4 lamps[3],colors[3],lightAxes[3];"
           "void main(){vec3 N=normalize(n),V=normalize(-p),L=normalize(vec3(-.45,.7,.6));vec2 q=kind<1.5?vec2(.24,.23)+uv*vec2(.52,.53):uv;vec3 art=texture2D(paint,q).rgb;vec3 grain=texture2D(metal,uv*2.).rgb;"
           "float emit=step(2.5,tint.a),bed=step(1.5,tint.a)*(1.-emit);vec3 c=mix(tint.rgb*(.60+grain*1.4),art*.66,bed);float diffuse=max(0.,dot(N,L)),spec=pow(max(0.,dot(N,normalize(V+L))),28.);"
-          "c=c*(.40+.84*diffuse)+vec3(.35,.32,.27)*spec*.30*(1.-bed*.8);float core=1.-smoothstep(.025,.085,abs(uv.y-.5));c=mix(c,tint.rgb*(1.05+.90*core)*(.85+.15*grain.r)+vec3(.22)*core,emit);gl_FragColor=vec4(c,opacity);}";
+          "c=c*(.40+.84*diffuse)+vec3(.35,.32,.27)*spec*.30*(1.-bed*.8);for(int i=0;i<3;i++){vec3 D=lamps[i].xyz-p;D+=lightAxes[i].xyz*clamp(dot(-D,lightAxes[i].xyz),-lightAxes[i].w,lightAxes[i].w);float len=length(D);D/=max(.01,len);float reach=pow(max(0.,1.-len/max(.01,lamps[i].w)),2.);float gloss=pow(max(0.,dot(N,normalize(V+D))),42.);c+=colors[i].rgb*reach*(tint.rgb*(.14+.46*max(0.,dot(N,D)))+gloss*.36)*(1.-emit);}"
+          "float core=1.-smoothstep(.025,.085,abs(uv.y-.5));float diffuser=texture2D(lens,vec2(fract(uv.x*8.)*.60+.20,clamp((uv.y-.4)*5.,0.,1.)*.60+.20)).r;vec3 emission=tint.rgb*(.80+.8*core)*(.65+.50*diffuser)+vec3(.16)*core;"
+          "if(tint.a>3.5){vec2 q=uv-.5;float radius=length(q),angle=atan(q.y,q.x);float annulus=exp(-pow((radius-.25)*12.,2.));float cells=pow(max(0.,cos(angle*10.)),4.);float heat=annulus*(.15+.85*cells);float detail=texture2D(lens,uv*3.).r;emission=vec3(.045,.021,.012)+tint.rgb*(.10+heat*1.35)*(.65+.55*detail)+vec3(.42,.24,.035)*heat*heat;}"
+          "c=mix(c,emission,emit);gl_FragColor=vec4(c,opacity);}";
         GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){failed=1;return;}program=glCreateProgram();glAttachShader(program,v);glAttachShader(program,f);glLinkProgram(program);glDeleteShader(v);glDeleteShader(f);
         GLint ok;glGetProgramiv(program,GL_LINK_STATUS,&ok);if(!ok){failed=1;return;}
     }
-    ag_load(family);ag_load(7);float axis[9];for(int k=0;k<3;k++){vms_vector a={0},r;if(k==0)a.x=F1_0;else if(k==1)a.y=F1_0;else a.z=F1_0;g3_rotate_delta_vec(&r,&a);axis[3*k]=f2fl(r.x);axis[3*k+1]=f2fl(r.y);axis[3*k+2]=-f2fl(r.z);}
+    ag_load(family);ag_load(7);ag_load(6);float axis[9];for(int k=0;k<3;k++){vms_vector a={0},r;if(k==0)a.x=F1_0;else if(k==1)a.y=F1_0;else a.z=F1_0;g3_rotate_delta_vec(&r,&a);axis[3*k]=f2fl(r.x);axis[3*k+1]=f2fl(r.y);axis[3*k+2]=-f2fl(r.z);}
     vms_vector zero={0};g3s_point origin;g3_rotate_point(&origin,&zero);int oldfade=grd_curcanv->cv_fade_level,blend=grd_curcanv->cv_blend_func;GLboolean cull=glIsEnabled(GL_CULL_FACE);glDisable(GL_CULL_FACE);gr_settransblend(GR_FADE_OFF,GR_BLEND_NORMAL);glDepthMask(fade>.99f?GL_TRUE:GL_FALSE);
     glUseProgram(program);glUniformMatrix3fv(glGetUniformLocation(program,"axis"),1,GL_FALSE,axis);glUniform3f(glGetUniformLocation(program,"origin"),f2fl(origin.p3_x),f2fl(origin.p3_y),-f2fl(origin.p3_z));
-    glUniform1f(glGetUniformLocation(program,"opacity"),fade);glUniform1f(glGetUniformLocation(program,"kind"),family==11?1:2);glUniform1i(glGetUniformLocation(program,"paint"),0);glUniform1i(glGetUniformLocation(program,"metal"),1);
+    glUniform1f(glGetUniformLocation(program,"opacity"),fade);glUniform1f(glGetUniformLocation(program,"kind"),family==11?1:2);glUniform1i(glGetUniformLocation(program,"paint"),0);glUniform1i(glGetUniformLocation(program,"metal"),1);glUniform1i(glGetUniformLocation(program,"lens"),2);
+    glUniform4fv(glGetUniformLocation(program,"lamps[0]"),3,&afx_lamps[0][0]);glUniform4fv(glGetUniformLocation(program,"colors[0]"),3,&afx_colors[0][0]);glUniform4fv(glGetUniformLocation(program,"lightAxes[0]"),3,&afx_axes[0][0]);
+    glActiveTexture(GL_TEXTURE2);glBindTexture(GL_TEXTURE_2D,ag_colors[6]);
     glActiveTexture(GL_TEXTURE1);glBindTexture(GL_TEXTURE_2D,ag_colors[7]);glActiveTexture(GL_TEXTURE0);glBindTexture(GL_TEXTURE_2D,ag_colors[family]);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_NORMAL_ARRAY);glEnableClientState(GL_COLOR_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glVertexPointer(3,GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].p);glNormalPointer(GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].n);glColorPointer(4,GL_FLOAT,sizeof(ax_vertex),ax_vertices[0].color);glTexCoordPointer(2,GL_FLOAT,0,afx_uv);glDrawArrays(GL_TRIANGLES,0,ax_count);
@@ -79,10 +84,15 @@ static void afx_frame_box(float x,float y,float w,float h,float depth){
  * One bounded draw replaces the ordinary fitting on this eligible face. */
 static void aw_lamp(const aw_mount *m,int room,int s,float fade){
     float W=m->width;ax_count=0;ax_energy=0;
-    afx_frame_box(0,0,W,.25f,.16f);
+    afx_frame_box(0,0,W,.30f,.16f);
+    ax_paint(.035f,.04f,.045f,0);ag_box(0,0,.10f,W-.06f,.25f,.025f);
     int lit=!(Light_subtracted[room]&(1<<s));const float *color=aw_palette[m->color];
-    ax_paint(color[0]*(lit?1:.06f),color[1]*(lit?1:.06f),color[2]*(lit?1:.06f),lit?3:0);ag_box(0,0,.16f,W-.09f,.16f,.012f);
-    ax_paint(.12f,.14f,.16f,0);for(int i=-3;i<=3;i++){float x=i*W*.23f;ag_box(x,0,.19f,.025f,.17f,.035f);}
+    int cells=(int)fminf(12,fmaxf(4,W*1.6f));float pitch=(W*2-.20f)/cells;
+    for(int i=0;i<cells;i++){float x=-W+.10f+(i+.5f)*pitch;
+        ax_paint(.14f,.16f,.18f,0);ag_box(x,0,.14f,pitch*.48f,.225f,.035f);
+        ax_paint(color[0]*(lit?1:.06f),color[1]*(lit?1:.06f),color[2]*(lit?1:.06f),lit?3:0);ag_box(x,0,.18f,pitch*.43f,.18f,.012f);
+    }
+    ax_paint(.39f,.42f,.44f,0);for(int sign=-1;sign<=1;sign+=2)ag_box(0,sign*.29f,.19f,W,.018f,.025f);
     ax_paint(.055f,.065f,.075f,0);ag_box(0,-.51f,.07f,.84f,.15f,.035f);
     /* Seven-segment stamped bay number, independent of objectives/key colors. */
     static const unsigned char digits[10]={63,6,91,79,102,109,125,7,127,111};
@@ -108,19 +118,32 @@ static void afx_fixture(int room,int s){
     if(!astra_refinement||astra_native_compare||ss_capture)return;
     if(afx_frame!=framecount){afx_frame=framecount;afx_budget=0;}if(afx_budget>=22)return;
     int kind=astra_fixture_kind(room,s);
-    if(room==astra_gallery_room&&s==astra_gallery_side){if(astra_gallery_scene==15)kind=1;else if(astra_gallery_scene==17)kind=2;}
+    if(room==astra_gallery_room&&s==astra_gallery_side){if(astra_gallery_scene==15||astra_gallery_scene==25)kind=1;else if(astra_gallery_scene==17)kind=2;}
     aw_mount mount;int accent=aw_mount_for(room,s,&mount);
     if(!kind&&!accent)return;
     vms_vector center;compute_center_point_on_side(&center,&Segments[room],s);g3s_point p;g3_rotate_point(&p,&center);float distance=f2fl(p.p3_z);
     if(distance<.6f||distance>82)return;float fade=fminf(1,(82-distance)/12.f);
-    if(accent&&astra_gallery_scene!=15&&astra_gallery_scene!=17){aw_lamp(&mount,room,s,fade);return;}
+    if(accent&&astra_gallery_scene!=15&&astra_gallery_scene!=17&&astra_gallery_scene!=25){
+        aw_lamp(&mount,room,s,fade);if(afx_budget<22&&aw_mount_at(room,s,1,&mount))aw_lamp(&mount,room,s,fade);return;
+    }
     side *face=&Segments[room].sides[s];int turn=kind==3?(face->tmap_num2>>14)&3:0;afx_plane m;if(!afx_plane_for(room,s,turn,&m))return;
-    if(room==astra_gallery_room&&s==astra_gallery_side&&(astra_gallery_scene==15||astra_gallery_scene==17)){
+    if(room==astra_gallery_room&&s==astra_gallery_side&&(astra_gallery_scene==15||astra_gallery_scene==17||astra_gallery_scene==25)){
         m.cx=m.cy=0;for(int j=0;j<4;j++){m.cx+=m.uv[j*2]*.25f;m.cy+=m.uv[j*2+1]*.25f;}
     }
     float w=m.w,h=m.h;ax_count=0;ax_energy=0;
     if(kind==1){
         float W=fminf(w*.255f,5.8f),H=fminf(h*.255f,5.8f);afx_frame_box(0,0,W,H,.33f);
+        if(aw_vent(room,s)){
+            float rad=fminf(W,H)*.78f,time=ae_clock(),warm=aw_warmth(room,s,time);int lit=!(Light_subtracted[room]&(1<<s));
+            ax_paint(warm*(lit?1:.04f),warm*(lit?.25f:.02f),.025f,lit?4:0);
+            for(int j=0;j<24;j++){float a=j*6.2831853f/24,b=(j+1)*6.2831853f/24;
+                ax_vertex_add(0,0,.08f,0,0,1);ax_vertex_add(cosf(a)*rad,sinf(a)*rad,.08f,0,0,1);ax_vertex_add(cosf(b)*rad,sinf(b)*rad,.08f,0,0,1);}
+            ax_paint(.075f,.065f,.055f,0);for(int j=0;j<7;j++){
+                float a=time*.48f+j*6.2831853f/7;float v[4][3]={{cosf(a)*rad*.18f,sinf(a)*rad*.18f,.15f},{cosf(a+.18f)*rad*.88f,sinf(a+.18f)*rad*.88f,.15f},{cosf(a+.58f)*rad*.85f,sinf(a+.58f)*rad*.85f,.15f},{cosf(a+.38f)*rad*.22f,sinf(a+.38f)*rad*.22f,.15f}};
+                ag_triangle(v[0],v[1],v[2]);ag_triangle(v[0],v[2],v[3]);
+                ax_paint(.27f,.23f,.18f,0);ax_tube(v[1][0],v[1][1],.15f,v[2][0],v[2][1],.15f,.018f,.018f,4);ax_paint(.075f,.065f,.055f,0);}
+            ax_paint(.29f,.23f,.18f,0);ax_tube(0,0,.15f,0,0,.23f,rad*.17f,rad*.15f,12);
+        }
         for(int k=-2;k<=2;k++){float x=k*W*.32f;ax_paint(.22f,.23f,.24f,0);ax_tube(x,-H,.16f,x,H,.16f,.13f,.13f,8);for(int j=-1;j<=1;j+=2)ax_tube(x,j*H*.66f-.09f,.16f,x,j*H*.66f+.09f,.16f,.20f,.20f,8);}
         int bars=9;for(int k=0;k<bars;k++){float y=-H+(k+1)*2*H/(bars+1);ax_paint(.35f,.34f,.32f,0);ag_box(0,y,.32f,W,.065f,.10f);ax_paint(.43f,.42f,.40f,0);ag_box(0,y+.055f,.40f,W,.014f,.018f);}
     }else if(kind==2){
