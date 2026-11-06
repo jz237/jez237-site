@@ -1,11 +1,56 @@
 {
   "version": 1,
   "title": "AI Discoveries, Explained",
-  "updated": "2026-11-05",
+  "updated": "2026-11-06",
   "coverageStart": "2026-09-21",
-  "coverageEnd": "2026-11-05",
+  "coverageEnd": "2026-11-06",
   "editorialNote": "Source-linked discoveries, research demonstrations, follow-ups and corrections from AI Discovery Watch. Historical milestones posted before the fresh-news brief are not included. Coverage dates are when a story was shared, not necessarily when its discovery occurred. Evidence labels reflect the linked report at that time; read later updates too.",
   "stories": [
+    {
+      "category": "Research in action",
+      "evidenceKind": "demo",
+      "modelNote": "Claude Sonnet 4.6 in Claude Code; Claude Fable 5 also tested for repeatability.",
+      "sources": [
+        "https://arxiv.org/abs/2611.00620",
+        "https://arxiv.org/html/2611.00620"
+      ],
+      "status": "Early research demonstration on previously studied data; not independently confirmed.",
+      "takeaway": "An AI proposed and tested explanations for how tiny light-emitting defects inside crystals behave. In one dataset, it separated a faint emitter's signal from a brighter neighbor and rejected better-fitting explanations that violated the measuring instrument's limits. Researchers supplied existing experimental data, background instructions and some simulation tools. Submitted October 31, this demonstrates AI making scientific analysis decisions, not discovering a new law or running a physical lab. The study also caught an unsupported AI conclusion; human expert checks remain essential.",
+      "title": "AI tests competing explanations for tiny quantum devices",
+      "id": "d-1568282958140416052-claude-quantum-model-investigator",
+      "coveredOn": "2026-11-06",
+      "context": "🔬 **AI Discovery Watch · November 6, 2026**\n\n**AI tests competing explanations for tiny quantum devices**\nAn AI proposed and tested explanations for how tiny light-emitting defects inside crystals behave. In one dataset, it separated a faint emitter's signal from a brighter neighbor and rejected better-fitting explanations that violated the measuring instrument's limits. Researchers supplied existing experimental data, background instructions and some simulation tools. Submitted October 31, this demonstrates AI making scientific analysis decisions, not discovering a new law or running a physical lab. The study also caught an unsupported AI conclusion; human expert checks remain essential.\n\n**AI used:** Claude Sonnet 4.6 in Claude Code; Claude Fable 5 also tested for repeatability.\n**Evidence:** Early research demonstration on previously studied data; not independently confirmed.\nOriginal source: <https://arxiv.org/abs/2611.00620>\nSupporting source: <https://arxiv.org/html/2611.00620>"
+    },
+    {
+      "category": "Medicine & biology",
+      "evidenceKind": "lab",
+      "modelNote": "PharmAgents2; underlying language model for these lab-linked studies not specified.",
+      "sources": [
+        "https://arxiv.org/abs/2611.07653",
+        "https://arxiv.org/html/2611.07653"
+      ],
+      "status": "Early, author-reported laboratory results; not peer-reviewed or independently confirmed.",
+      "takeaway": "An AI proposed an alternative place to attach a molecule to a bacterial protein and searched for chemicals that might disable it. People chose the protein, built the system's tools and scientific guidance, then bought and tested its 63 nominated candidates. One candidate bound to the protein and reduced its activity in laboratory tests, providing a starting point for further investigation. The November 5 preprint does not establish that it attaches where the AI predicted, works as a medicine or is safe for people.",
+      "title": "AI proposes a new way to block a bacterial protein",
+      "id": "d-1568283215985119435-pharmagents2-bacterial-enzyme-candidate",
+      "coveredOn": "2026-11-06",
+      "context": "🔬 **AI Discovery Watch · November 6, 2026**\n\n**AI proposes a new way to block a bacterial protein**\nAn AI proposed an alternative place to attach a molecule to a bacterial protein and searched for chemicals that might disable it. People chose the protein, built the system's tools and scientific guidance, then bought and tested its 63 nominated candidates. One candidate bound to the protein and reduced its activity in laboratory tests, providing a starting point for further investigation. The November 5 preprint does not establish that it attaches where the AI predicted, works as a medicine or is safe for people.\n\n**AI used:** PharmAgents2; underlying language model for these lab-linked studies not specified.\n**Evidence:** Early, author-reported laboratory results; not peer-reviewed or independently confirmed.\nOriginal source: <https://arxiv.org/abs/2611.07653>\nSupporting source: <https://arxiv.org/html/2611.07653>"
+    },
+    {
+      "category": "Mathematics",
+      "evidenceKind": "proof",
+      "modelNote": "ChatGPT; underlying model and version not disclosed.",
+      "sources": [
+        "https://arxiv.org/abs/2611.05216",
+        "https://arxiv.org/html/2611.05216"
+      ],
+      "status": "Preprint proof claim; overturns a stronger fixed-count rule, not every related conjecture.",
+      "takeaway": "ChatGPT found a way to divide an abstract shape into 489 pieces when a proposed rule said every allowed division should use 490. It is like finding a different tiling that breaks a supposedly fixed tile count. These shapes are used in mathematical descriptions of particle collisions, so the example changes which rules researchers can rely on. People guided follow-up searches and wrote the main mathematical argument. Submitted November 3, the proof is an early research report, not independently confirmed here.",
+      "title": "ChatGPT finds a mathematical tiling with one unexpected missing piece",
+      "id": "d-1568283677434052619-chatgpt-breaks-fixed-tile-count",
+      "coveredOn": "2026-11-06",
+      "context": "🔬 **AI Discovery Watch · November 6, 2026**\n\n**ChatGPT finds a mathematical tiling with one unexpected missing piece**\nChatGPT found a way to divide an abstract shape into 489 pieces when a proposed rule said every allowed division should use 490. It is like finding a different tiling that breaks a supposedly fixed tile count. These shapes are used in mathematical descriptions of particle collisions, so the example changes which rules researchers can rely on. People guided follow-up searches and wrote the main mathematical argument. Submitted November 3, the proof is an early research report, not independently confirmed here.\n\n**AI used:** ChatGPT; underlying model and version not disclosed.\n**Evidence:** Preprint proof claim; overturns a stronger fixed-count rule, not every related conjecture.\nOriginal source: <https://arxiv.org/abs/2611.05216>\nSupporting source: <https://arxiv.org/html/2611.05216>"
+    },
     {
       "category": "Medicine & biology",
       "evidenceKind": "lab",
