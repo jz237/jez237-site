@@ -30020,5 +30020,87 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-06-factual-infographic-factual-infographic-flehmen-the-cat-s-c",
+    "title": "Factual infographic: Flehmen — The Cat’s Chemical-Sampling Pause",
+    "tests": "; archive_slot=2026-11-06T16:20; concept=feline-vomeronasal-flehmen-chemical-sampling; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: extraordinary-senses",
+    "prompt": "Create a finished, richly artistic feline science infographic, portrait-oriented composition, opaque background, direct artwork not a photographed page. Title: \"FLEHMEN\" with subtitle \"The cat’s chemical-sampling pause\". Extraordinary Senses / Cat Atlas in a small elegant eyebrow. Use exquisite colored-pencil and luminous gouache scientific illustration on cool pale celadon, with copper, ink-blue and warm rose anatomical accents. A magnificent silver mackerel tabby dominates the right two-thirds: three-quarter head, whisker follicles and individual hairs rendered with extraordinary delicacy, mouth slightly parted in a natural flehmen posture after investigating a scent-bearing twig. No human smile, disgust expression or anthropomorphic thoughts. Beautiful rim lighting, soft shadows, open negative space, asymmetric organic flow, no boxed cards or panel grid.\nA curved fine copper leader from the muzzle unfolds into a large oblique anatomical cutaway across the lower left, showing the paired vomeronasal organs near the roof of the mouth/base of the nasal septum, with a subtle second lobe indicating the bilateral pair, palate and upper incisors as landmarks. Label \"Paired vomeronasal organs\", \"Nasopalatine canal\", \"Oral cavity\", \"Nasal cavity\". Clearly mark this as \"Simplified anatomical schematic • not to scale\". Trace a restrained fluid-cue route from mouth via canal toward the organ; do not draw airborne perfume entering an external hole or turn it into a taste bud. Place concise open annotation: \"Flehmen helps fluid-borne chemical cues reach the vomeronasal organ.\" A tiny naturalistic preceding sniffing study nested near the twig gives a visual transition to the hero’s parted-mouth pause; caption \"Investigate scent → pause in flehmen\".\nAn organically nested magnified transverse study of the duct at the foot of the cutaway uses a muted rose lumen, medial sensory lining in copper, lateral lining in blue, supportive cartilage outside and fine nerve fibers, avoiding invented structures. Readable labels \"Sensory epithelium (medial)\", \"Respiratory epithelium (lateral)\", \"Duct lumen\", \"Supporting cartilage\"; small glands and vessels present without extra labels. Mark \"Enlarged schematic\". One delicate unboxed nerve trajectory leads to a small accessory olfactory bulb symbol, explicitly schematic rather than anatomically placed in the mouth: \"Sensory neurons → accessory olfactory bulb\". Do not elaborate unverified central brain circuitry.\nAcross the airy upper left, weave two short contrasting lines: \"Main olfaction: inhaled volatile chemicals\" and \"Vomeronasal sampling: fluid-borne chemical cues\". Beneath: \"These systems are not completely separate in function.\" Along the lower edge set a restrained educational footer: \"Chemical cues contribute to social recognition and reproduction. Detailed signal processing in cats is still being studied.\" All text precise, readable and concise; no unsupported numbers, no mind-reading, no pheromone product claims, no disease advice. Retain the dominant beautiful cat illustration, strong typographic hierarchy and breathing room. No icons masquerading as data, decorative molecular formulas, watermark, mockup, rigid grid, or filler text.",
+    "image": "images/2026-11-06-factual-infographic-factual-infographic-flehmen-the-cat-s-c.jpg",
+    "thumb": "thumbs/2026-11-06-factual-infographic-factual-infographic-flehmen-the-cat-s-c.webp",
+    "color": "#c0bfb5",
+    "date": "2026-11-06",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "feline-vomeronasal-flehmen-chemical-sampling",
+      "imageSha256": "35757ba6306377dbd0c4b16c1147e079a933585ee7fd153a0a46ea5824a2d134",
+      "imageDHash": "e19f194de2c2c1f0"
+    },
+    "factualInfographic": {
+      "topic": "How the feline vomeronasal organ samples chemical cues during flehmen",
+      "description": "Flehmen, paired vomeronasal anatomy and fluid-borne chemical sensing, with limits on what is known.",
+      "sourceNote": "Read Journal of Anatomy and Frontiers review: https://pmc.ncbi.nlm.nih.gov/articles/PMC1167581/ ; https://pmc.ncbi.nlm.nih.gov/articles/PMC9334771/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-06T21:21:13.102047+00:00",
+        "sources": [
+          {
+            "id": "anatomy",
+            "publisher": "Journal of Anatomy",
+            "title": "The vomeronasal organ of the cat",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1167581/"
+          },
+          {
+            "id": "review",
+            "publisher": "Frontiers in Veterinary Science",
+            "title": "Dealing With Stress in Cats: What Is New About the Olfactory Strategy?",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9334771/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Cats have a paired vomeronasal organ near the roof of the mouth, connected with oral and nasal cavities via nasopalatine canals.",
+            "sourceIds": [
+              "review"
+            ]
+          },
+          {
+            "claim": "Flehmen follows investigation of scent material and aids access of fluid-borne chemical cues to the vomeronasal organ.",
+            "sourceIds": [
+              "review"
+            ]
+          },
+          {
+            "claim": "The vomeronasal duct has sensory receptor epithelium medially and respiratory epithelium laterally in its middle portion; glands, vessels, nerves and supporting cartilage surround it.",
+            "sourceIds": [
+              "anatomy"
+            ]
+          },
+          {
+            "claim": "Vomeronasal sensory neurons send axons to the accessory olfactory bulb.",
+            "sourceIds": [
+              "review"
+            ]
+          },
+          {
+            "claim": "The main olfactory epithelium detects inhaled volatile chemicals; the accessory system is associated with fluid-borne chemical cues, but their functions are not completely exclusive.",
+            "sourceIds": [
+              "review"
+            ]
+          },
+          {
+            "claim": "Chemical communication participates in social recognition and reproduction; detailed feline central processing remains incompletely understood.",
+            "sourceIds": [
+              "review"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
