@@ -83,13 +83,13 @@ const PLANS = {
     steps: [
       'Dim the tank lights or turn them off for a few days—velvet needs light.',
       `${TEST} Add aeration.`,
-      'Treat the whole tank with a velvet or copper-based medication and raise the temperature a little.',
+      'Treat the whole tank with a velvet medication (copper-based ones only in a hospital tank—copper harms plants, shrimp, snails and sensitive fish) and raise the temperature a little.',
       'Keep treating for about a week after the dust has gone.',
     ],
     // Corys and plecos: copper kills them (matches the medicine check).
     cory: { steps: ['Dim the tank lights or turn them off for a few days—velvet needs light.', `${TEST} Add aeration.`, 'Treat the whole tank with a velvet medication labelled safe for scaleless fish—never copper with corys or plecos.', 'Keep treating for about a week after the dust has gone.'], treatment: 'Darkness + a scaleless-safe velvet medication (no copper)' },
     pleco: { steps: ['Dim the tank lights or turn them off for a few days—velvet needs light.', `${TEST} Add aeration.`, 'Treat the whole tank with a velvet medication labelled safe for scaleless fish—never copper with corys or plecos.', 'Keep treating for about a week after the dust has gone.'], treatment: 'Darkness + a scaleless-safe velvet medication (no copper)' },
-    treatment: 'Darkness + a velvet/copper medication for the whole tank',
+    treatment: 'Darkness + a velvet medication (copper only in a hospital tank)',
     recovery: 'About 1–2 weeks.', medicated: true,
   },
   'velvet-marine': {
@@ -158,8 +158,8 @@ const PLANS = {
     marine: { steps: ['Skip feeding for 1–2 days.', 'Then feed small amounts of thawed, varied foods.', 'Look from above each day—if the scales start to stick out, treat it as dropsy.'] },
     // African cichlids: swelling is often Malawi bloat, which needs treating today.
     african: {
-      steps: ['Act today—in African cichlids this is often Malawi bloat, and it moves fast.', `${HOSPITAL} Stop feeding.`, 'Treat with metronidazole—in food if it still eats, otherwise in the water—following the label.', 'Do a big water change in the main tank, and feed a lower-protein, plant-based diet from now on.'],
-      treatment: 'Metronidazole in a hospital tank, then a plant-based diet', recovery: 'Days to 2 weeks if caught early; it can be fatal once the fish stops eating.', medicated: true,
+      steps: ['Act today—in African cichlids (mbuna, peacocks) this is often Malawi bloat, and it moves fast.', `${HOSPITAL} Stop feeding.`, 'African cichlids: treat with metronidazole—in food if it still eats, otherwise in the water—following the label. Oscars: swelling is more often overeating or a blockage—fast 2–3 days and only use metronidazole if it stops eating or the swelling grows.', 'Do a big water change in the main tank. Mbuna: switch to a lower-protein, plant-based diet. Oscars: keep their usual diet, just smaller meals.'],
+      treatment: 'African cichlids: metronidazole in a hospital tank; oscars: a fast first', recovery: 'Days to 2 weeks if caught early; it can be fatal once the fish stops eating.', medicated: true,
     },
     cory: { steps: ['Skip feeding for 1–2 days.', 'Then feed small amounts of sinking foods and thawed daphnia or bloodworm.', 'Look from above each day—if it becomes swollen tight and stiff all over, treat it as dropsy.'] },
     pleco: { steps: ['Skip feeding for 1–2 days.', 'Then feed blanched vegetables (zucchini, peas) and sinking wafers.', 'Look from above each day—if it becomes swollen tight and stiff all over, treat it as dropsy.'] },

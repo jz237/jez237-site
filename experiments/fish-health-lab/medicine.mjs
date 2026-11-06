@@ -252,13 +252,16 @@ export function checkMedicine({ medicine, water, residents = [], hospital = fals
   if (table.filter) rows.push({ id: 'filter', title: 'Filter bacteria', verdict: table.filter[0], reason: table.filter[1] });
   // In a bare hospital tank only the fish being treated count; a hospital
   // filter that the medicine harms just means more water changes ("care").
+  const apart = water === 'pond' ? 'the tub' : 'the hospital tank';
   const counted = hospital
-    ? rows.filter(r => ['fish', 'scaleless', 'filter'].includes(r.id)).map(r => r.id === 'filter' && VERDICTS[r.verdict].rank > 1 ? { ...r, verdict: 'care' } : r)
+    ? rows.filter(r => ['fish', 'scaleless', 'filter'].includes(r.id)).map(r =>
+        r.id === 'filter' && VERDICTS[r.verdict].rank > 1 ? { ...r, verdict: 'care', reason: `Hurts the filter bacteria in ${apart}—do water changes and watch ammonia.` }
+        : r.verdict === 'hospital' ? { ...r, verdict: 'ok', reason: `Fine in ${apart}—that’s where this one belongs.` } : r)
     : rows;
   let verdict = counted.reduce((a, r) => (VERDICTS[r.verdict].rank > VERDICTS[a].rank ? r.verdict : a), 'ok');
   // Some medicines belong in a hospital tank even when nothing else lives in the display (copper in a reef…).
   if (!hospital && table.display && VERDICTS[table.display].rank > VERDICTS[verdict].rank) verdict = table.display;
-  return { medicine: med, verdict, rows, tip: tipFor(med, water), hospital, water };
+  return { medicine: med, verdict, rows, shown: counted, tip: tipFor(med, water), hospital, water };
 }
 
 // The one-line headline for the overall answer.

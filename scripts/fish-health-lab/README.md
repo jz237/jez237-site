@@ -721,3 +721,9 @@ and conductivity readings flagged; “died after dosing” leads with medicine p
 line next to alarms; salinity alarms say correct slowly; medicine check: “avoid” verdict (salt + scaleless),
 display-level “hospital tank only” for copper/formalin/methylene blue, pond wording in tips; library “all
 waters” shows both plans; readable notes; new-fish onset is a quarantine note.
+
+Astra round 3 (12:17 EST), fixed (`A3-*` in `review.test.mjs`): the columnaris rewrite keeps each
+variant's treatment line (cory/pleco velvet stays copper-free); freshwater velvet uses copper only in a
+hospital tank (matches the medicine check); the African/oscar swelling plan separates mbuna (Malawi bloat,
+metronidazole, plant diet) from oscars (overeating/blockage, fast first, usual diet); salinity units win
+(%, ppt/psu, SG) and negatives are rejected; hospital/tub mode rows describe the hospital tank, not the display.

@@ -223,3 +223,30 @@ test('R4: goldfish ich heat stays inside the goldfish range; 45 °F is fine for 
   assert.equal(assessUrgency({ water: 'fresh', fishType: 'goldfish', temperature: '75', tempUnit: 'F', signs: [] }).checks.length, 0);
   assert.equal(assessUrgency({ water: 'fresh', fishType: 'goldfish', temperature: '45', tempUnit: 'F', signs: [] }).checks.length, 0);
 });
+
+// ── Astra round 3 (12:17 EST). ──
+test('A3-1: the columnaris rewrite keeps the cory/pleco velvet treatment (no copper)', () => {
+  for (const fishType of ['cory', 'pleco']) {
+    const v = assessDiagnosis({ water: 'fresh', fishType, primarySign: 'dust', signs: ['dust', 'patch'], visualSigns: ['dust', 'patch'] }).findings.find(f => f.id === 'velvet-fresh');
+    assert.doesNotMatch([...v.plan.steps, v.plan.treatment].join(' ').replace(/never copper|no copper/g, ''), /copper/i, fishType);
+  }
+});
+test('A3-2: the velvet plan only uses copper in a hospital tank (matches the medicine check)', () => {
+  const v = assessDiagnosis({ water: 'fresh', primarySign: 'dust', signs: ['dust'] }).primary.plan;
+  assert.match(v.steps.join(' '), /copper-based ones only in a hospital tank/); assert.match(v.treatment, /copper only in a hospital tank/);
+  assert.equal(checkMedicine({ medicine: 'copper', water: 'fresh' }).verdict, 'hospital');
+});
+test('A3-3: the African/oscar swelling plan does not put oscars on metronidazole and a plant diet', () => {
+  const p = assessDiagnosis({ water: 'fresh', fishType: 'african', primarySign: 'swollen', signs: ['swollen'], closer: 'flat' }).primary;
+  assert.match(p.plan.steps.join(' '), /Oscars: swelling is more often overeating/); assert.match(p.plan.steps.join(' '), /Oscars: keep their usual diet/);
+  assert.match(p.reason, /In oscars it’s more often overeating/);
+});
+test('A3-4: salinity units win (%, ppt, SG) and negatives are rejected', () => {
+  assert.equal(readSalinity('3.5%').ppt, 35); assert.equal(readSalinity('1 ppt').ppt, 1); assert.equal(readSalinity('-35 ppt').unreadable, true);
+  assert.equal(readSalinity('SG 1.40').unreadable, true); assert.equal(Math.round(readSalinity('SG 1.025').ppt), 33);
+});
+test('A3-5: hospital/tub mode rows describe the hospital tank, not the display', () => {
+  const r = checkMedicine({ medicine: 'antibiotics', water: 'pond', hospital: true });
+  assert.ok(r.shown.every(x => !/whole pond|pond filter/.test(x.reason)));
+  assert.match(headline(r), /separate tub/);
+});

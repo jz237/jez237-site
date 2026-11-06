@@ -21,8 +21,13 @@ export function readSalinity(text) {
   const raw = String(text || '').trim();
   if (!raw) return null;
   if (/\d\s*[mµu]S(\/cm)?\b|siemens|conductiv/i.test(raw)) return { unreadable: true }; // conductivity, not salinity
+  if (/-\s*\d/.test(raw)) return { unreadable: true }; // a negative reading
   const n = parseFloat(raw.replace(',', '.').replace(/^[^0-9.]+/, ''));
   if (!Number.isFinite(n) || n < 0) return { unreadable: true };
+  // Units win when they're given: "%", "ppt"/"psu"/"‰", or "SG".
+  if (/%/.test(raw)) return n <= 7 ? { ppt: n * 10 } : { unreadable: true };
+  if (/ppt|psu|‰|g\/l/i.test(raw)) return n <= 70 ? { ppt: n } : { unreadable: true };
+  if (/\bsg\b|specific gravity/i.test(raw)) return n >= 0.98 && n <= 1.1 ? { ppt: Math.max(0, (n - 1) * 1310) } : { unreadable: true };
   if (n >= 0.98 && n <= 1.1) return { ppt: Math.max(0, (n - 1) * 1310) };
   if (n > 1.1 && n < 3) return { unreadable: true };
   if (n <= 70) return { ppt: n };
@@ -176,7 +181,7 @@ function reasonFor(condition, input, fits) {
     `You picked “${seen}”${behaviors.length ? `, plus ${behaviors.join(', ')}` : ''}.`,
     condition.id === 'bloat' && CATFISH.includes(input.fishType) ? 'A full, soft belly in a cory or pleco is most often bloat or constipation.' : condition.id === 'dropsy' && CATFISH.includes(input.fishType) ? 'A tight, stiff swelling all over is how dropsy shows in corys and plecos—they have no scales to stick out.' : condition.check,
     fish?.boosts[condition.id] ? `It’s also common in ${fish.plural}.` : '',
-    condition.id === 'bloat' && input.fishType === 'african' ? 'In African cichlids, swelling (especially with no appetite or white, stringy poop) is often Malawi bloat, which needs treating today—not just a fast.' : '',
+    condition.id === 'bloat' && input.fishType === 'african' ? 'In African cichlids (mbuna, peacocks), swelling—especially with no appetite or white, stringy poop—is often Malawi bloat, which needs treating today. In oscars it’s more often overeating or a blockage.' : '',
   ].filter(Boolean).join(' ');
 }
 
@@ -425,12 +430,13 @@ function reconcilePlans(findings) {
   for (const c of findings) {
     if (!['ich-fresh', 'velvet-fresh'].includes(c.id) || !c.plan) continue;
     if (/heat|warm/i.test(c.tip || '')) c.tip = '';
+    if (!c.plan.steps.some(step => HEAT_STEP.test(step))) continue; // this variant has no heat step to change
     c.plan = {
       ...c.plan,
       steps: c.plan.steps.map(step => HEAT_STEP.test(step)
         ? (c.id === 'ich-fresh' ? 'Keep the temperature steady—don’t raise it while columnaris is active. Add extra aeration.' : step.replace(/ and raise the temperature a little\.?/i, '. Keep the temperature steady while columnaris is active.'))
         : step),
-      treatment: c.id === 'ich-fresh' ? 'An ich medication (no heat while columnaris is active)' : 'Darkness + a velvet/copper medication (no heat while columnaris is active)',
+      treatment: `${c.plan.treatment.replace(/^Gradual heat \+ /i, '').replace(/^an /, 'An ')} (no heat while columnaris is active)`,
     };
   }
 }

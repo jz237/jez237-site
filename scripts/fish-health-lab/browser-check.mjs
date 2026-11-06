@@ -154,7 +154,7 @@ try {
   assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'velvet-fresh');
   assert.match(await page.locator('#results-title').innerText(),/Most likely:\s*Velvet/i);
   assert.equal(await page.locator('.result-focus[data-urgency="today"] .urgency-today').count(),1);
-  assert.match(await page.locator('.result-focus .todo-card').innerText(),/velvet\/copper/i);
+  assert.match(await page.locator('.result-focus .todo-card').innerText(),/velvet medication \(copper only in a hospital tank\)/i); // copper only in a hospital tank (Nov 6 review)
   assert.deepEqual(await page.locator('.alternatives [data-alternative]').evaluateAll(els=>els.map(el=>el.dataset.alternative)),['ich-fresh']);
   assert.equal(await page.locator('[data-alternative="ich-fresh"] .alt-danger').count(),0);
   assert.match(await page.locator('.result-hint').innerText(),/Your pick from the look-alikes/);
