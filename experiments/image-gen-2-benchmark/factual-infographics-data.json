@@ -19788,5 +19788,88 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-06-factual-infographic-factual-infographic-acetaminophen-is-no",
+    "title": "Factual infographic: Acetaminophen Is Not Cat Medicine",
+    "tests": "; archive_slot=2026-11-06T08:20; concept=cat-acetaminophen-toxicity-red-blood-cell-damage; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: household-hazards",
+    "prompt": "Create a finished, richly artistic feline safety atlas infographic, directly rendered artwork, not a photographed poster. Headline: “ACETAMINOPHEN” with “Never give it to a cat” immediately below. A dominant exquisitely realistic charcoal-gray shorthaired cat sits in three-quarter profile, luminous amber eyes, delicate whiskers and finely resolved blue-gray fur, calm and dignified rather than visibly suffering. Coherent midnight teal, pearl and restrained vermilion palette; luminous gouache and precise anatomical illustration on cool ivory, with generous negative space and refined readable typography. Asymmetric, flowing composition, no boxed grids or detached dashboard cards. Place a small illustrated sealed medicine bottle labeled “Acetaminophen / Tylenol” well away from the cat with a clear red prohibition symbol; never show feeding medicine or an accessible spilled pile. Organically interweave a curved anatomical explanatory path behind the feline silhouette: a carefully drawn liver silhouette with label “Limited liver breakdown — high toxicity risk”, then an enlarged schematic stream of normal red blood cells transitioning to a few darkened damaged cells with label “Red blood cell damage reduces oxygen transport”. Mark anatomical enlargements “schematic”; do not imply drug-filled organs or literal blue blood. A second delicate leader from liver reads “Liver injury can also occur”. These are explanatory studies, not a full surgical cutaway. Across the lower-left open space, an elegant narrow flowing list headed “Possible warning signs” reads “Weakness • rapid or difficult breathing • blue-purple gums • vomiting • swollen face or paws”. A small cold-and-allergy package study, distinct from the medication bottle, carries “Combination cold medicines may contain it too”. Keep details lush, medically restrained and scientifically honest; no numerical doses, no home poisoning treatments, no unsupported molecular pathways, no countdowns or guaranteed symptoms. A prominent lower vermilion text line: “Suspected ingestion? Contact a veterinarian or animal poison control immediately.” Below: “ASPCA Animal Poison Control: (888) 426-4435”. Add small prevention text “Keep all medicines securely out of reach.” Tiny readable source footer: “Sources: FDA; American College of Veterinary Pharmacists”. Keep the feline hero visually dominant, supporting studies connected by fine curved ink leaders; this must be an informative atlas with breathing room, not a sparse warning poster. No other medical advice, brand logos, decorative pseudo-text, or invented facts.",
+    "image": "images/2026-11-06-factual-infographic-factual-infographic-acetaminophen-is-no.jpg",
+    "thumb": "thumbs/2026-11-06-factual-infographic-factual-infographic-acetaminophen-is-no.webp",
+    "color": "#b8ada0",
+    "date": "2026-11-06",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "cat-acetaminophen-toxicity-red-blood-cell-damage",
+      "imageSha256": "27c445d4c0a25a0effa147d3200f4980f8850f34686859894735cf6a209c451c",
+      "imageDHash": "10a68e9a38b0f0ec"
+    },
+    "factualInfographic": {
+      "topic": "Why acetaminophen is dangerous to cats and how to respond to suspected exposure",
+      "description": "Feline acetaminophen toxicity, blood oxygen transport, household exposure prevention and urgent veterinary contact.",
+      "sourceNote": "Read FDA and ACVP: https://www.fda.gov/animal-veterinary/animal-health-literacy/get-facts-about-pain-relievers-pets ; https://vetmeds.org/pet-poison-control-list/acetaminophen/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-06T13:21:14.238490+00:00",
+        "sources": [
+          {
+            "id": "fda",
+            "publisher": "US Food and Drug Administration",
+            "title": "Get the Facts about Pain Relievers for Pets",
+            "sourceType": "government-agency",
+            "url": "https://www.fda.gov/animal-veterinary/animal-health-literacy/get-facts-about-pain-relievers-pets"
+          },
+          {
+            "id": "acvp",
+            "publisher": "American College of Veterinary Pharmacists",
+            "title": "Acetaminophen",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://vetmeds.org/pet-poison-control-list/acetaminophen/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Acetaminophen (Tylenol) must never be given to cats; deficient liver breakdown makes it potentially fatal.",
+            "sourceIds": [
+              "fda",
+              "acvp"
+            ]
+          },
+          {
+            "claim": "Acetaminophen can damage red blood cells and reduce their oxygen-carrying ability, and can damage the liver.",
+            "sourceIds": [
+              "fda"
+            ]
+          },
+          {
+            "claim": "Signs can include weakness, rapid or difficult breathing, blue-purple mucous membranes, vomiting, and facial or paw swelling.",
+            "sourceIds": [
+              "acvp"
+            ]
+          },
+          {
+            "claim": "Acetaminophen may be present in multi-symptom cold and allergy products; keep medicines out of animal reach.",
+            "sourceIds": [
+              "acvp"
+            ]
+          },
+          {
+            "claim": "Suspected ingestion requires immediate veterinary or animal poison-control contact; report accidental ingestion immediately.",
+            "sourceIds": [
+              "acvp"
+            ]
+          },
+          {
+            "claim": "ASPCA Animal Poison Control Center hotline: (888) 426-4435.",
+            "sourceIds": [
+              "acvp"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
