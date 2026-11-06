@@ -62,7 +62,8 @@ export function rankForFeature(feature, input) {
       const base = weightOf(c, feature, input.water);
       if (base <= 0) return null;
       const behaviorScore = behaviors.reduce((sum, id) => sum + (weightsFor(c, input.water)[id] || 0), 0);
-      const fishScore = fish?.boosts[c.id] || 0;
+      // The fish type only re-orders conditions that genuinely fit the sign (base ≥ 2).
+      const fishScore = base >= 2 ? fish?.boosts[c.id] || 0 : 0;
       return { ...c, base, score: base + behaviorScore + fishScore };
     })
     .filter(Boolean)
@@ -87,8 +88,10 @@ export function featureKeys(input) {
     return id;
   });
   // "Nothing obvious" only stands alone; real visible signs take over.
+  // Pinecone scales count as a real visible sign too.
   const visible = keys.filter(k => k !== 'unclear');
-  return [...(visible.length ? visible : keys), ...((input.signs || []).includes('pinecone') ? ['pinecone'] : [])];
+  const pinecone = (input.signs || []).includes('pinecone') ? ['pinecone'] : [];
+  return [...(visible.length || pinecone.length ? visible : keys), ...pinecone];
 }
 
 export function urgencyFor(condition, input) {
@@ -168,9 +171,9 @@ const LOOKALIKES = {
   'ich-fresh': [['velvet-fresh', 'Much finer gold dust rather than separate grains—check with a torch.'], ['normal', 'Natural spots and markings stay the same and don’t spread.']],
   'ich-marine': [['velvet-marine', 'Finer dust and much faster breathing. More dangerous—treat fast.'], ['black-spot', 'Black pepper specks instead of white grains, mostly on tangs.'], ['normal', 'Natural markings stay the same; ich spots come and go.']],
   'velvet-fresh': [['ich-fresh', 'Bigger, separate white grains like salt.'], ['normal', 'Natural shimmer follows the scales and lighting.']],
-  'velvet-marine': [['ich-marine', 'Bigger, separate white grains; usually slower.'], ['brooklynella', 'Thick slime and peeling skin, especially on clownfish.'], ['water', 'Low oxygen also causes fast breathing—check aeration.']],
+  'velvet-marine': [['ich-marine', 'Bigger, separate white grains; usually slower.'], ['brooklynella', 'Thick slime and peeling skin, especially on clownfish.'], ['water', 'Low oxygen also causes fast breathing—check aeration.', ['breathing']]],
   'water-mold': [['columnaris', 'Flat pale patches or a white mouth rather than fluffy threads.']],
-  columnaris: [['water-mold', 'Fluffy cotton-wool threads sticking out, not a flat patch.'], ['fin-rot', 'Slower fin loss, usually after dirty water.']],
+  columnaris: [['water-mold', 'Fluffy cotton-wool threads sticking out, not a flat patch.'], ['fin-rot', 'Slower fin loss, usually after dirty water.', ['fins']]],
   'fin-rot': [['injury', 'A clean split or tear after a fight or snag.'], ['columnaris', 'Fast fin loss with pale patches or a white mouth.']],
   ulcer: [['septicemia', 'Red streaks in the fins or blotches under the skin.'], ['injury', 'A single scrape after a bump or fight.']],
   septicemia: [['water', 'Ammonia burn also reddens fins and gills—test the water.'], ['ulcer', 'Open craters with missing scales.']],
@@ -180,15 +183,15 @@ const LOOKALIKES = {
   hlle: [['uronema', 'Fresh, red, growing sores instead of pale pits.'], ['brooklynella', 'Peeling slime rather than pits.']],
   'hole-in-head': [['columnaris', 'Flat pale patches rather than pits.']],
   dropsy: [['bloat', 'Swollen belly but the scales lie flat.']],
-  bloat: [['dropsy', 'Scales stick out like a pinecone when seen from above.'], ['swim-bladder', 'Floating or tilting along with the swelling.']],
+  bloat: [['dropsy', 'Scales stick out like a pinecone when seen from above.'], ['swim-bladder', 'Floating or tilting along with the swelling.'], ['normal', 'A pregnant livebearer or a fish that just ate looks round but acts normally.']],
   popeye: [['injury', 'Only one eye after a bump—usually heals with clean water.'], ['cloudy-eye', 'A milky film without bulging.']],
   'cloudy-eye': [['popeye', 'The eye bulges out as well.'], ['injury', 'One eye only, after a bump.']],
   'swim-bladder': [['water', 'Several fish struggling at once points to the water or oxygen.'], ['bloat', 'A swollen belly with flat scales.']],
   water: [['flukes', 'Scratching or flashing along with fast gills.']],
-  flukes: [['water', 'Bad water causes similar scratching and fast breathing.']],
+  flukes: [['water', 'Bad water also causes extra slime, scratching and fast breathing—test it.']],
   lymphocystis: [['growth', 'One smooth lump instead of rough clusters.']],
   growth: [['lymphocystis', 'Rough cauliflower-like clusters.'], ['normal', 'Some species have natural bumps—compare with older photos.']],
-  injury: [['fin-rot', 'Edges that keep shrinking or turn white/red.'], ['ulcer', 'A sore that grows instead of healing.']],
+  injury: [['fin-rot', 'Edges that keep shrinking or turn white/red.', ['fins']], ['ulcer', 'A sore that grows instead of healing.']],
   normal: [['growth', 'A new or growing lump is not normal.']],
 };
 
@@ -200,8 +203,12 @@ function couldAlsoBe(findings, ranked, input) {
     out.set(condition.id, { ...condition, comparisonReason: reason || condition.hint });
   };
   for (const finding of findings) {
-    const curated = new Map((LOOKALIKES[finding.id] || []).map(([id, reason]) => [id, reason]));
-    const runnersUp = finding.fits.flatMap(feature => (ranked.get(feature) || []).slice(0, 5));
+    // Curated look-alikes can be limited to the signs they explain (e.g. "fin rot"
+    // only next to columnaris when fins were picked).
+    const bases = new Set(finding.fits.map(f => f.split(':')[0]));
+    const curated = new Map((LOOKALIKES[finding.id] || []).filter(([, , when]) => !when || when.some(b => bases.has(b))).map(([id, reason]) => [id, reason]));
+    // Runners-up must genuinely fit the same sign (weight ≥ 2), not just touch it.
+    const runnersUp = finding.fits.flatMap(feature => (ranked.get(feature) || []).filter(c => c.base >= 2).slice(0, 5));
     // Strong runners-up for the same signs first (they include fish-type weight),
     // then the curated look-alikes, then weaker runners-up.
     for (const other of runnersUp.filter(c => c.score >= 3)) add(other, curated.get(other.id));

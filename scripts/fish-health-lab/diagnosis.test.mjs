@@ -215,3 +215,23 @@ test('saved notes list the best guess, fish type, plan and reef flag, and keep f
   assert.match(mixed, /Most likely: Ich/);
   assert.match(mixed, /Also likely: Fungus/);
 });
+
+test('"could also be" only lists things that fit the same sign or are true look-alikes', () => {
+  const alsoIds = input => assessDiagnosis(input).alternatives.map(c => c.id);
+  const check = (input, mustNot, must = []) => {
+    const ids = alsoIds(input);
+    for (const id of mustNot) assert.ok(!ids.includes(id), `${JSON.stringify(input)} should not list ${id}: ${ids}`);
+    for (const id of must) assert.ok(ids.includes(id), `${JSON.stringify(input)} should list ${id}: ${ids}`);
+  };
+  check({ water: 'fresh', primarySign: 'patch', signs: ['patch'], closer: 'flat' }, ['fin-rot', 'ulcer', 'normal'], ['water-mold']);
+  check({ water: 'fresh', primarySign: 'fins', signs: ['fins'] }, ['water-mold', 'septicemia'], ['injury']);
+  check({ water: 'fresh', primarySign: 'eyes', signs: ['eyes'], closer: 'cloudy' }, ['normal'], ['popeye']);
+  check({ water: 'fresh', primarySign: 'sores', signs: ['sores'], closer: 'streaks' }, ['water-mold']);
+  check({ water: 'fresh', primarySign: 'sores', signs: ['sores'], closer: 'scrape' }, ['fin-rot']);
+  check({ water: 'marine', primarySign: 'dust', signs: ['dust'] }, ['water'], ['ich-marine']);
+  check({ water: 'marine', primarySign: 'patch', signs: ['patch'], closer: 'flat', fishType: 'tang' }, [], []);
+  assert.equal(assessDiagnosis({ water: 'marine', primarySign: 'patch', signs: ['patch'], closer: 'flat', fishType: 'tang' }).primary.id, 'brooklynella', 'a weak fit (HLLE for a flat patch) is not promoted by fish type alone');
+  assert.equal(assessDiagnosis({ water: 'fresh', primarySign: 'unclear', signs: ['unclear', 'pinecone'] }).primary.id, 'dropsy', 'pinecone scales lead even with "nothing obvious"');
+  const both = assessDiagnosis({ water: 'fresh', primarySign: 'balance', signs: ['balance'], visualSigns: ['swollen'] });
+  assert.deepEqual(both.findings.map(c => c.id), ['bloat'], 'a swollen fish that floats is one problem (bloat), not two');
+});
