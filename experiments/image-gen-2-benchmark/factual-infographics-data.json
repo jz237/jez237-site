@@ -19716,5 +19716,77 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-06-factual-infographic-factual-infographic-white-spotting-unpi",
+    "title": "Factual infographic: White Spotting — Unpigmented Patches",
+    "tests": "; archive_slot=2026-11-06T04:20; concept=cat-kit-white-spotting-unpigmented-patches; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: coats-and-genetics",
+    "prompt": "Create a richly detailed, artwork-led feline genetics atlas, directly rendered finished art, not a photographed sheet. Title: WHITE SPOTTING. Subtitle: Where coat pigment is absent. An exquisitely naturalistic black-and-white domestic shorthair cat stretches diagonally through the composition, one forepaw extended toward the viewer, tail gently curving upward. Credible anatomy and glossy black guard hairs contrasting with finely resolved soft white chest and paws. Sea-glass teal background washes, warm ivory negative space, copper technical ink and fine gouache texture. Dominant beautiful cat occupies most of the page; elegant asymmetric open annotations wind around it, never a grid or boxed dashboard.\nAt the white/black fur boundary a delicate curved leader opens into a large simplified skin-and-hair-follicle comparison, explicitly labeled SCHEMATIC. Show a pigmented hair follicle with pigment-producing melanocytes and a neighboring white follicle without those melanocytes. Exact concise labels: Melanocytes: pigment-producing cells. White patches: melanocytes absent. The cellular drawing is schematic, not a biopsy or literal magnification. White hair is not painted white pigment. Connect this organically to a fine DNA ribbon labeled KIT, with a small interrupted intron segment and label Viral DNA insertion in KIT is associated with white spotting. Do not depict infection, contagious virus, illness or a treatment.\nAlong the bottom, two smaller graceful cat silhouette studies with different extents of white, connected by a loose ink arc, caption White spotting varies from small patches to extensive white areas. Clearly state Illustrative patterns — not a genotype scale. These are examples, not stages of development or a guaranteed inheritance chart. A restrained final note reads: White spotting and Dominant White are distinct coat phenotypes associated with different insertions at KIT. No breed labels, percentages, Punnett squares, health or hearing claims, invented allele predictions or extra unsourced facts. Artwork remains dominant but explanatory anatomy and genetics must be substantial and readable. Confident title hierarchy, precise fine leader lines, concise legible text, generous breathing room. No rigid boxes, decorative fake labels, frame, UI, props or watermark.",
+    "image": "images/2026-11-06-factual-infographic-factual-infographic-white-spotting-unpi.jpg",
+    "thumb": "thumbs/2026-11-06-factual-infographic-factual-infographic-white-spotting-unpi.webp",
+    "color": "#b5ad9b",
+    "date": "2026-11-06",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "cat-kit-white-spotting-unpigmented-patches",
+      "imageSha256": "f7ddbdc3137324778fc25f6b1b4184ad4e6cab450171983c02cf1572a9fc893f",
+      "imageDHash": "1a202465c24d870e"
+    },
+    "factualInfographic": {
+      "topic": "How KIT-related white spotting creates unpigmented patches in domestic cat coats",
+      "description": "An artwork-led cat coat atlas explaining melanocyte absence and KIT-associated white spotting, distinct from Dominant White.",
+      "sourceNote": "Read OMIA and David et al. 2014 abstract via Europe PMC. Sources: https://omia.org/OMIA001737/9685/ ; https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:25085922&format=json&resultType=core",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-06T09:21:37.830700+00:00",
+        "sources": [
+          {
+            "id": "s1",
+            "publisher": "University of Sydney — OMIA",
+            "title": "Coat colour, white spotting, KIT-related in Felis catus",
+            "sourceType": "university",
+            "url": "https://omia.org/OMIA001737/9685/"
+          },
+          {
+            "id": "s2",
+            "publisher": "G3: Genes, Genomes, Genetics",
+            "title": "Endogenous retrovirus insertion in the KIT oncogene determines white and white spotting in domestic cats (David et al., 2014), abstract via Europe PMC",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:25085922&format=json&resultType=core"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "White spotting ranges from tiny white patches to extensive white areas; these are illustrative examples, not a genotype scale.",
+            "sourceIds": [
+              "s1"
+            ]
+          },
+          {
+            "claim": "White areas lack skin melanocytes, the pigment-producing cells; this differs from failure of pigment synthesis.",
+            "sourceIds": [
+              "s1"
+            ]
+          },
+          {
+            "claim": "An insertion of a full-length feline endogenous retrovirus in KIT intron 1 is associated with white spotting in cats.",
+            "sourceIds": [
+              "s1",
+              "s2"
+            ]
+          },
+          {
+            "claim": "A distinct shorter viral LTR insertion at KIT is associated with Dominant White; white spotting and Dominant White are distinct phenotypes.",
+            "sourceIds": [
+              "s1",
+              "s2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
