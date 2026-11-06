@@ -711,3 +711,13 @@ unconditional detoxifier advice (ammonia check, water plan, emergency box); `rea
 to the urgent banner; African cichlid swelling gets a Malawi bloat plan (metronidazole, hospital tank);
 corys/plecos see “Swollen tight all over” in the reason, urgent banner and notes. A sweep of every
 two-sign combination added notes for whole-tank + hospital plans and fast-then-feed plans.
+
+Independent reviewer (fresh subagent, 11:50–12:05 EST) found 12 more and then 7 side effects of the fixes;
+all fixed and re-confirmed by its scripts (checks `R3-*`/`R4` in `review.test.mjs`): toxic ammonia/nitrite
+and saltwater temperatures are urgent; cory/pleco velvet/dropsy/bloat plans (no copper, no scales);
+disease pages opened from a result use that result's plan and urgency (fish and reef); heat tips dropped
+under the columnaris conflict; goldfish coldwater range (40–77 °F) and ich heat cap 75 °F; °F/°C slips
+and conductivity readings flagged; “died after dosing” leads with medicine poisoning; no “may be normal”
+line next to alarms; salinity alarms say correct slowly; medicine check: “avoid” verdict (salt + scaleless),
+display-level “hospital tank only” for copper/formalin/methylene blue, pond wording in tips; library “all
+waters” shows both plans; readable notes; new-fish onset is a quarantine note.

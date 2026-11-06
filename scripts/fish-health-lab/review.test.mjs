@@ -144,3 +144,82 @@ test('R2-7: two plans that clash in order or place get a note (whole tank + hosp
   const fast = assessDiagnosis({ water: 'fresh', primarySign: 'patch', closer: 'pits', signs: ['patch', 'swollen'], visualSigns: ['patch', 'swollen'] });
   assert.ok(fast.messages.some(m => /fast first/.test(m)));
 });
+
+// ── Independent reviewer (11:50 EST): 12 more. ──
+import { assessReef as reefAssess } from '../../experiments/fish-health-lab/reef-logic.mjs';
+test('R3-1: toxic ammonia/nitrite and saltwater temperatures escalate', () => {
+  assert.equal(assessUrgency({ water: 'fresh', ammonia: '8', nitrite: '10', signs: [] }).urgent.length, 2);
+  assert.equal(assessUrgency({ water: 'marine', temperature: '60', tempUnit: 'F', signs: [] }).urgent.length, 1);
+  assert.equal(assessUrgency({ water: 'marine', temperature: '90', tempUnit: 'F', signs: [] }).urgent.length, 1);
+});
+test('R3-2/11: corys and plecos never get copper for velvet, and their dropsy/bloat text has no scales', () => {
+  for (const fishType of ['cory', 'pleco']) {
+    const v = assessDiagnosis({ water: 'fresh', fishType, primarySign: 'dust', signs: ['dust'] }).primary.plan;
+    assert.doesNotMatch([...v.steps, v.treatment].join(' ').replace(/never copper|no copper/g, ''), /copper/i);
+    const d = assessDiagnosis({ water: 'fresh', fishType, primarySign: 'swollen', signs: ['swollen', 'pinecone'], closer: 'pinecone' });
+    assert.doesNotMatch([...d.primary.plan.steps, ...d.alternatives.map(a => a.comparisonReason)].join(' '), /scales (stick|lying)/i);
+    assert.deepEqual(assessUrgency({ water: 'fresh', fishType, signs: ['swollen', 'pinecone'], closer: 'pinecone' }).urgent, ['Tight, all-over swelling (possible dropsy)']);
+  }
+});
+test('R3-4/5: heat tips vanish under the columnaris conflict; goldfish get coldwater temperatures', () => {
+  for (const fishType of ['goldfish', 'betta']) {
+    const d = assessDiagnosis({ water: 'fresh', fishType, primarySign: 'dots', signs: ['dots', 'patch'], visualSigns: ['dots', 'patch'] });
+    for (const f of d.findings) assert.doesNotMatch(f.tip || '', /heat|warm/i, `${fishType} ${f.id}`);
+  }
+  assert.equal(assessUrgency({ water: 'fresh', fishType: 'goldfish', temperature: '60', tempUnit: 'F', signs: [] }).checks.length, 0);
+  const cold = assessUrgency({ water: 'fresh', fishType: 'goldfish', temperature: '52', tempUnit: 'F', signs: [] });
+  assert.equal(cold.urgent.length, 0); assert.doesNotMatch(cold.checks.join(' '), /heater|tropical/);
+  assert.match(assessUrgency({ water: 'fresh', temperature: '26', tempUnit: 'F', signs: [] }).checks.join(), /did you mean °C/);
+});
+test('R3-6/7: "died after dosing" leads with copper; no "may be normal" next to alarms', () => {
+  for (const changes of [['new-arrival'], ['swing'], ['new-arrival', 'swing']]) assert.equal(reefAssess({ group: 'invert', kind: '', sign: 'deaths', changes }).primary.id, 'copper');
+  for (const beh of ['deaths', 'gasping', 'several']) assert.equal(assessDiagnosis({ water: 'fresh', primarySign: 'dots', signs: ['dots', beh] }).naturalNote, '', beh);
+  assert.equal(assessDiagnosis({ water: 'fresh', fishType: 'african', primarySign: 'swollen', signs: ['swollen'], closer: 'flat' }).naturalNote, '');
+  assert.doesNotMatch(assessDiagnosis({ water: 'fresh', fishType: 'goldfish', primarySign: 'swollen', signs: ['swollen'], closer: 'flat' }).naturalNote, /livebearer/);
+  for (const ch of ['heat', 'pump']) assert.equal(reefAssess({ group: 'pond', kind: 'koi', sign: 'lethargic', changes: [ch] }).naturalNote, '', ch);
+});
+test('R3-8: a salinity emergency says correct slowly, not a big water change', () => {
+  const u = assessUrgency({ water: 'marine', salinity: '20', signs: [] });
+  assert.match(u.action, /correct the salinity slowly/); assert.doesNotMatch(u.action, /do a water change now/);
+});
+test('R3-9/10: salt is "avoid" for scaleless fish; copper in a reef is hospital-only even with nothing ticked', () => {
+  assert.equal(checkMedicine({ medicine: 'salt', water: 'fresh', residents: ['scaleless'] }).verdict, 'avoid');
+  assert.equal(checkMedicine({ medicine: 'copper', water: 'marine' }).verdict, 'hospital');
+  assert.equal(checkMedicine({ medicine: 'copper', water: 'marine', hospital: true }).verdict, 'ok');
+  assert.doesNotMatch(checkMedicine({ medicine: 'antibiotics', water: 'pond' }).tip, /hospital tank|the display/);
+});
+test('R3-12: conductivity is not salinity; notes print readable answers; new-fish onset counts', () => {
+  assert.equal(readSalinity('53 mS/cm').unreadable, true);
+  const notes = buildCase({ water: 'fresh', primarySign: 'dots', signs: ['dots'], affected: 'unknown', onset: 'after-change', tankAge: 'new' });
+  assert.match(notes, /Fish affected: Not sure/); assert.match(notes, /Onset \/ recent changes: Water change, chemical/); assert.match(notes, /Tank established: New/);
+  // A new fish is a note on the result, not a water problem.
+  assert.ok(assessDiagnosis({ water: 'fresh', primarySign: 'lumps', growthAppearance: 'smooth', signs: ['lumps'], onset: 'new-fish' }).messages.some(m => /new fish or shared equipment/.test(m)));
+  assert.equal(assessUrgency({ water: 'fresh', onset: 'new-fish', signs: [] }).checks.length, 0);
+});
+
+// ── Reviewer re-check (12:05 EST): leftovers and side effects of the fixes. ──
+test('R4: copper is hospital-only in tanks and ponds; avoid stays avoid in a hospital tank', () => {
+  for (const water of ['fresh', 'pond']) assert.equal(checkMedicine({ medicine: 'copper', water }).verdict, 'hospital', water);
+  const h = headline(checkMedicine({ medicine: 'salt', water: 'fresh', residents: ['scaleless'], hospital: true }));
+  assert.match(h, /Not a good choice/); assert.doesNotMatch(h, /OK in/);
+});
+test('R4: catfish wording everywhere; no livebearer line in saltwater; °C/°F slips; salinity text', () => {
+  const flat = assessDiagnosis({ water: 'fresh', fishType: 'cory', primarySign: 'swollen', signs: ['swollen'], closer: 'flat' });
+  assert.doesNotMatch(flat.primary.reason, /scales/);
+  const tight = { water: 'fresh', fishType: 'pleco', primarySign: 'swollen', signs: ['swollen', 'pinecone'], closer: 'pinecone' };
+  assert.doesNotMatch(assessDiagnosis(tight).primary.reason + assessDiagnosis(tight).primary.plan.recovery, /pine ?cone/i);
+  assert.doesNotMatch(buildCase(tight), /Behavior: Scales sticking out/);
+  assert.doesNotMatch(assessDiagnosis({ water: 'marine', primarySign: 'swollen', signs: ['swollen'], closer: 'flat' }).naturalNote, /livebearer/);
+  assert.match(assessUrgency({ water: 'fresh', temperature: '80', tempUnit: 'C', signs: [] }).checks.join(), /did you mean °F/);
+  assert.equal(assessUrgency({ water: 'fresh', temperature: '80', tempUnit: 'C', signs: [] }).urgent.length, 0);
+  assert.equal(readSalinity('1.026 (thus fine)').ppt > 33, true); assert.equal(readSalinity('35 ppt, items checked').ppt, 35);
+  const both = assessUrgency({ water: 'marine', salinity: '20', ammonia: '2', signs: [] });
+  assert.match(both.action, /current salinity/); assert.match(both.action, /1 ppt a day/);
+  assert.doesNotMatch(assessUrgency({ water: 'fresh', fishType: 'goldfish', temperature: '90', tempUnit: 'F', signs: [] }).checks.join(), /\(\d.*\(/);
+});
+test('R4: goldfish ich heat stays inside the goldfish range; 45 °F is fine for goldfish', () => {
+  const plan = assessDiagnosis({ water: 'fresh', fishType: 'goldfish', primarySign: 'dots', signs: ['dots'] }).primary.plan.steps.join(' ');
+  assert.match(plan, /no more than about 75 °F/); assert.doesNotMatch(plan, /80 °F/);
+  assert.equal(assessUrgency({ water: 'fresh', fishType: 'goldfish', temperature: '75', tempUnit: 'F', signs: [] }).checks.length, 0);
+  assert.equal(assessUrgency({ water: 'fresh', fishType: 'goldfish', temperature: '45', tempUnit: 'F', signs: [] }).checks.length, 0);
+});

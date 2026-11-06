@@ -131,3 +131,5 @@
 .more-sheets .strip-item img{width:150px;height:150px}
 .ig-look p{justify-content:flex-start}
 .ig-time-note{display:block;margin-top:8px;font-size:11.5px;color:var(--muted)}
+.med-avoid{color:#fdba74;background:rgba(249,115,22,.16)}
+.plan-water{font-size:16px;margin:16px 0 6px;color:var(--accent)}

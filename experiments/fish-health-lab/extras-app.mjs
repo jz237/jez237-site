@@ -36,7 +36,7 @@ export function createExtras({ $, escape }) {
     const rows = result.rows
       .filter(r => !state.hospital || ['fish', 'scaleless', 'filter'].includes(r.id))
       .map(r => `<li data-med-row="${r.id}">${verdictBadge(r.verdict)}<span><strong>${escape(r.title)}</strong><small>${escape(r.reason)}</small></span></li>`).join('');
-    out.innerHTML = `<article class="med-answer" data-med-answer="${result.verdict}"><p class="eyebrow">YOUR ANSWER</p>${verdictBadge(result.verdict)}<h2>${escape(headline(result))}</h2><ul class="med-rows">${rows}</ul><p class="med-tip"><strong>Tip</strong> ${escape(result.tip)}</p><p class="label-note">Amounts: always follow the product label. Take out carbon while treating.</p>${result.verdict !== 'ok' && !state.hospital ? '<button type="button" class="text-button" data-view="prevent">How to set up a hospital tank →</button>' : ''}</article>`;
+    out.innerHTML = `<article class="med-answer" data-med-answer="${result.verdict}"><p class="eyebrow">YOUR ANSWER</p>${verdictBadge(result.verdict)}<h2>${escape(headline(result))}</h2><ul class="med-rows">${rows}</ul><p class="med-tip"><strong>Tip</strong> ${escape(result.tip)}</p><p class="label-note">Amounts: always follow the product label. Take out carbon while treating.</p>${!['ok', 'avoid'].includes(result.verdict) && !state.hospital && !result.rows.some(r => r.verdict === 'kills' && r.id === 'scaleless') ? '<button type="button" class="text-button" data-view="prevent">How to set up a hospital tank →</button>' : ''}</article>`;
   }
 
   function renderMedicine(presetWater = '') {

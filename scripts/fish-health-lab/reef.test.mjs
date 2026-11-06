@@ -85,7 +85,8 @@ test('reef results "make sense" for common cases', () => {
     ['invert', 'shrimp', 'pale', [], 'invert-water', ['acclimation', 'copper'], []],
     ['invert', 'shrimp', 'pale', ['new-arrival'], 'acclimation', ['invert-water'], []],
     ['invert', '', 'deaths', [], 'copper', ['invert-water', 'acclimation'], []],
-    ['invert', 'crab', 'deaths', ['new-arrival'], 'acclimation', ['copper'], []],
+    // "Died after dosing" names the cause: copper/medicine leads even right after adding (Nov 6 review).
+    ['invert', 'crab', 'deaths', ['new-arrival'], 'copper', ['acclimation'], []],
     ['invert', 'snail', 'not-moving', [], 'flipped', ['starvation'], []],
     ['invert', 'crab', 'not-moving', [], 'invert-water', ['acclimation'], ['flipped']],
     ['invert', 'shrimp', 'bulge', [], 'bopyrid', [], []],

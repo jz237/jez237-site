@@ -13,7 +13,8 @@ export const VERDICTS = {
   ok: { rank: 0, label: 'Fine to use', short: 'Fine' },
   care: { rank: 1, label: 'Use with care', short: 'Care' },
   hospital: { rank: 2, label: 'Hospital tank only', short: 'Hospital tank' },
-  kills: { rank: 3, label: 'Will kill them', short: 'Will kill' },
+  avoid: { rank: 3, label: 'Avoid for these', short: 'Avoid' },
+  kills: { rank: 4, label: 'Will kill them', short: 'Will kill' },
 };
 
 export const MED_WATERS = [
@@ -51,6 +52,7 @@ export const MEDICINES = [
   {
     id: 'copper', title: 'Copper', text: 'Cupramine, Coppersafe, copper ich cures', for: 'Ich, velvet (mainly saltwater)',
     fresh: {
+      display: 'hospital',
       fish: ['care', 'Works, but many freshwater fish are sensitive—use a test kit and the low end of the dose.'],
       scaleless: ['kills', 'Corys, loaches and plecos often die from copper.'],
       shrimp: ['kills', 'Even tiny amounts of copper kill shrimp.'],
@@ -59,6 +61,7 @@ export const MEDICINES = [
       filter: ['ok', 'Doesn’t usually hurt the filter bacteria.'],
     },
     marine: {
+      display: 'hospital',
       fish: ['ok', 'The standard saltwater treatment for ich and velvet—with a copper test kit.'],
       corals: ['kills', 'Copper kills corals and anemones.'],
       inverts: ['kills', 'Copper kills shrimp, crabs and snails.'],
@@ -66,6 +69,7 @@ export const MEDICINES = [
       filter: ['ok', 'Doesn’t usually hurt the filter bacteria.'],
     },
     pond: {
+      display: 'hospital',
       fish: ['care', 'Hard to dose right in a pond; koi tolerate it, but a test kit is a must.'],
       plants: ['care', 'Can harm pond plants.'],
       snails: ['kills', 'Copper kills snails and mussels.'],
@@ -84,6 +88,7 @@ export const MEDICINES = [
       filter: ['care', 'Formalin uses up oxygen—add an air stone while treating.'],
     },
     marine: {
+      display: 'hospital',
       fish: ['ok', 'Used as a dip or in a hospital tank.'],
       corals: ['kills', 'Kills corals—never in a reef.'],
       inverts: ['kills', 'Kills shrimp, crabs and snails.'],
@@ -144,7 +149,7 @@ export const MEDICINES = [
     id: 'salt', title: 'Aquarium salt', text: 'Plain aquarium or pond salt', for: 'Freshwater fungus, mild parasites, nitrite',
     fresh: {
       fish: ['ok', 'Most freshwater fish handle a treatment dose for a short time.'],
-      scaleless: ['care', 'Corys, loaches, plecos and many tetras dislike salt—low dose only.'],
+      scaleless: ['avoid', 'Corys, loaches and plecos are salt-sensitive—use a medicine labelled safe for scaleless fish instead.'],
       shrimp: ['care', 'Shrimp handle very little salt—move them out before a treatment dose.'],
       snails: ['care', 'Snails can be harmed at treatment doses.'],
       plants: ['care', 'Many plants suffer at treatment doses.'],
@@ -161,12 +166,14 @@ export const MEDICINES = [
   {
     id: 'meth-blue', title: 'Methylene blue', text: 'Blue dye treatment', for: 'Fungus on eggs, short baths',
     fresh: {
+      display: 'hospital',
       fish: ['ok', 'Fine for fish.'], scaleless: ['care', 'Check the label for scaleless fish.'],
       shrimp: ['care', 'Can harm shrimp.'], snails: ['care', 'Can harm snails.'],
       plants: ['kills', 'Harms plants and stains everything blue.'],
       filter: ['kills', 'Kills the filter bacteria—use it only in a hospital tank or a short bath.'],
     },
     marine: {
+      display: 'hospital',
       fish: ['ok', 'Used as a short bath.'],
       corals: ['kills', 'Never in a reef.'], inverts: ['kills', 'Never with inverts.'],
       rock: ['kills', 'Kills the life in live rock.'],
@@ -228,6 +235,9 @@ export const MEDICINES = [
   },
 ];
 
+// Pond wording for tips written for tanks.
+const tipFor = (med, water) => water !== 'pond' ? med.tip : med.tip.replace(/a bare tank|a bare hospital tank|a hospital tank/g, 'a separate tub').replace(/the display|the main tank/g, 'the pond');
+
 export const medicineFor = id => MEDICINES.find(m => m.id === id) || null;
 export const residentsFor = water => MED_RESIDENTS[water] || [];
 export const medicinesFor = water => MEDICINES.filter(m => m[water]);
@@ -245,8 +255,10 @@ export function checkMedicine({ medicine, water, residents = [], hospital = fals
   const counted = hospital
     ? rows.filter(r => ['fish', 'scaleless', 'filter'].includes(r.id)).map(r => r.id === 'filter' && VERDICTS[r.verdict].rank > 1 ? { ...r, verdict: 'care' } : r)
     : rows;
-  const verdict = counted.reduce((a, r) => (VERDICTS[r.verdict].rank > VERDICTS[a].rank ? r.verdict : a), 'ok');
-  return { medicine: med, verdict, rows, tip: med.tip, hospital, water };
+  let verdict = counted.reduce((a, r) => (VERDICTS[r.verdict].rank > VERDICTS[a].rank ? r.verdict : a), 'ok');
+  // Some medicines belong in a hospital tank even when nothing else lives in the display (copper in a reef…).
+  if (!hospital && table.display && VERDICTS[table.display].rank > VERDICTS[verdict].rank) verdict = table.display;
+  return { medicine: med, verdict, rows, tip: tipFor(med, water), hospital, water };
 }
 
 // The one-line headline for the overall answer.
@@ -255,12 +267,15 @@ export function headline(result) {
   const { verdict, hospital, rows, water } = result;
   const here = water === 'pond' ? 'the pond' : 'this tank', apart = water === 'pond' ? 'a separate tub' : 'a hospital tank';
   if (hospital) {
+    if (verdict === 'avoid') return `Not a good choice with ${rows.filter(r => r.verdict === 'avoid').map(r => r.title.toLowerCase()).join(' and ')}, even in ${apart}—pick a medicine labelled safe for them.`;
     if (verdict === 'kills') return `Not for these fish, even in ${apart}—pick a gentler medicine.`;
     return verdict === 'ok' ? `Fine to use in ${apart}.` : `OK in ${apart}—use with care.`;
   }
   const killed = rows.filter(r => r.verdict === 'kills' && r.id !== 'filter').map(r => r.title.toLowerCase());
   // A hospital tank doesn't help the fish being treated if the medicine kills them.
   const fishKilled = rows.filter(r => r.verdict === 'kills' && r.id === 'scaleless').map(r => r.title.toLowerCase());
+  const avoided = rows.filter(r => r.verdict === 'avoid').map(r => r.title.toLowerCase());
+  if (verdict === 'avoid') return `Not a good choice with ${avoided.join(' and ')}—pick a medicine labelled safe for them.`;
   if (verdict === 'kills' && fishKilled.length) return `Not for ${fishKilled.join(' and ')} at all—not even in ${apart}. Pick a gentler medicine.`;
   if (verdict === 'kills') return killed.length ? `Not in ${here}—it will kill your ${killed.join(' and ')}. Use ${apart}.` : `Not in ${here}—use ${apart}.`;
   if (verdict === 'hospital') return `Not in ${here}—treat the fish in ${apart}.`;

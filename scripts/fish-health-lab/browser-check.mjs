@@ -229,7 +229,8 @@ try {
   await action(page,'results').click(); await at(page,'results');
   assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'ich-fresh');
   assert.deepEqual(await page.locator('.alternatives [data-alternative]').evaluateAll(els=>els.map(el=>el.dataset.alternative)),['velvet-fresh']);
-  assert.match(await page.locator('.could-also .natural-note').innerText(),/natural markings/);
+  // Gasping was picked: no "may just be natural markings" line next to distress (Nov 6 review).
+  assert.equal(await page.locator('.could-also .natural-note').count(),0);
   record('water readings follow results; care validates numeric inputs, preserves unknowns and prioritizes distress without changing the visual comparison');
   await action(page,'case').click();
   const notes=await page.locator('#case-text').inputValue();

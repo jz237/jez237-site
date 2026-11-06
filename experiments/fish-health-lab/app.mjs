@@ -246,7 +246,7 @@ function renderResults() {
   const input = readInput(), assessment = assessUrgency(input);
   const diagnosis = assessDiagnosis(input), first = diagnosis.primary;
   const fish = fishTypeFor(input.water, input.fishType);
-  const urgent = assessment.urgent.length ? `<div class="notice urgent"><h3>Deal with the distress first.</h3><p>${escape(assessment.urgent.join('; '))}. Add aeration, test the water and do a water change now.</p><button class="text-button" data-action="emergency">Emergency steps →</button></div>` : '';
+  const urgent = assessment.urgent.length ? `<div class="notice urgent"><h3>Deal with the distress first.</h3><p>${escape(assessment.urgent.join('; '))}. ${escape(assessment.action)}</p><button class="text-button" data-action="emergency">Emergency steps →</button></div>` : '';
   const focus = first ? findingCard(first, input, true) : '<section class="notice no-diagnosis"><h2>Not enough to go on yet.</h2><p>Try picking the closest picture again, and test the water—bad water causes a lot of problems.</p><button class="button secondary" data-action="edit">Change my answers →</button></section>';
   const additional = diagnosis.findings.slice(1).map(c => findingCard(c, input, false)).join('');
   const context = diagnosis.contextConcerns.map(c => `<section class="notice water-notice" data-context-concern="${c.id}"><h2>Also fix: the water</h2><p>${escape(c.reason)}</p>${readMore(c, input.water)}</section>`).join('');
@@ -297,7 +297,7 @@ function openCare() {
 function renderCareSummary() {
   const input = readInput(), assessment = assessUrgency(input), diagnosis = assessDiagnosis(input);
   const fish = fishTypeFor(input.water, input.fishType);
-  const urgent = assessment.urgent.length ? `<div class="notice urgent"><h2>Deal with the distress first.</h2><p>${escape(assessment.urgent.join('; '))}. Add aeration and do a water change now.</p><button class="text-button" data-action="emergency">Emergency steps →</button></div>` : '';
+  const urgent = assessment.urgent.length ? `<div class="notice urgent"><h2>Deal with the distress first.</h2><p>${escape(assessment.urgent.join('; '))}. ${escape(assessment.action)}</p><button class="text-button" data-action="emergency">Emergency steps →</button></div>` : '';
   const water = assessment.checks.length ? `<div class="notice water-notice"><h3>Fix the water too.</h3>${list(assessment.checks)}</div>` : '';
   const unknown = assessment.waterUnknown ? '<p class="water-reminder">No ammonia or nitrite reading yet. Test before you treat—bad water causes a lot of these problems.</p>' : '<p class="quiet">Readings saved in your notes.</p>';
   const notes = diagnosis.messages.length ? `<div class="notice diagnosis-context"><h2>Read this first</h2>${diagnosis.messages.map(m => `<p>${escape(m)}</p>`).join('')}</div>` : '';
@@ -396,7 +396,7 @@ function openComparison() {
 }
 
 function emergencyContent() {
-  return '<p class="eyebrow">EMERGENCY STEPS</p><h2 id="detail-title">Oxygen and clean water first.</h2><p class="lead">Gasping, can’t stay upright, or fish dying? Do these now, then treat the illness.</p><ol class="care-list"><li><strong>Add oxygen.</strong> Air stone, or point the filter outlet at the surface so it ripples.</li><li><strong>Test the water.</strong> Ammonia, nitrite, pH and temperature (and salinity for saltwater). Clear water can still be toxic.</li><li><strong>Do a 30–50% water change</strong> with dechlorinated, temperature-matched (and salinity-matched) water. An ammonia/nitrite detoxifier helps too—if you’re already medicating, check both labels say they can be used together.</li><li><strong>Move sick fish to a hospital tank</strong> if you have one, and feed lightly.</li></ol><p class="notice">If fish keep dying after the water is fixed, an aquatic vet or a good local fish store can help.</p><a class="button secondary" href="https://fishvets.org/" target="_blank" rel="noopener noreferrer">Find a fish vet (AAFV) ↗</a>';
+  return '<p class="eyebrow">EMERGENCY STEPS</p><h2 id="detail-title">Oxygen and clean water first.</h2><p class="lead">Gasping, can’t stay upright, or fish dying? Do these now, then treat the illness.</p><ol class="care-list"><li><strong>Add oxygen.</strong> Air stone, or point the filter outlet at the surface so it ripples.</li><li><strong>Test the water.</strong> Ammonia, nitrite, pH and temperature (and salinity for saltwater). Clear water can still be toxic.</li><li><strong>Do a 30–50% water change</strong> with dechlorinated, temperature-matched (and salinity-matched) water. An ammonia/nitrite detoxifier helps too—if you’re already medicating, check both labels say they can be used together. If the salinity itself is off, match the tank’s current salinity and correct it slowly (about 1 ppt a day).</li><li><strong>Move sick fish to a hospital tank</strong> if you have one, and feed lightly.</li></ol><p class="notice">If fish keep dying after the water is fixed, an aquatic vet or a good local fish store can help.</p><a class="button secondary" href="https://fishvets.org/" target="_blank" rel="noopener noreferrer">Find a fish vet (AAFV) ↗</a>';
 }
 
 // Reference detail pictures: the chosen fish's own set first, then the generic
@@ -410,11 +410,17 @@ function fishGallery(condition, water) {
 }
 
 function openDetail(id, slotId = 'overview') {
-  const condition = CONDITIONS.find(c => c.id === id);
-  if (!condition) return;
-  const water = imageWater(condition) || 'fresh';
+  const base = CONDITIONS.find(c => c.id === id);
+  if (!base) return;
+  // Opened from a result: show the same plan, urgency and tip the result showed
+  // (fish type, columnaris conflict, Malawi bloat…), not the general page.
+  const fromResult = activeView === 'guide' && ['results', 'care-summary'].includes(step);
+  const diag = fromResult ? assessDiagnosis(readInput()) : null;
+  const shown = diag && [...diag.findings, ...diag.alternatives].find(c => c.id === id);
+  const condition = shown ? { ...base, urgency: shown.urgencyLevel, plan: shown.plan || carePlanFor(id, readInput().water, readInput().fishType) } : base;
+  const water = imageWater(base) || 'fresh';
   const others = lookalikesFor(id, water);
-  $('#detail-content').innerHTML = `<p class="eyebrow">${escape(condition.kind)} · ${scopeName(condition.scope)}</p><h2 id="detail-title">${escape(condition.title)}</h2>${scienceLine(condition.id)}${badge(condition.urgency)}<p class="lead">${escape(condition.summary)}</p>${fishGallery(condition, water)}${infographic(condition, water)}${fishStrip(condition)}${moreSheets(condition)}<div class="detail-visual-actions"><button class="button secondary" data-use-pattern="${condition.id}">Check this visible pattern →</button><button class="compare-toggle" data-compare="${condition.id}" aria-pressed="${comparisons.has(condition.id)}">${comparisons.has(condition.id) ? '✓ Selected' : '+ Compare'}</button></div><h3>What to look for</h3>${list(condition.clues)}<h3>Easy to confuse with</h3><p>${escape(condition.distinguish)}</p>${others.length ? `<ul class="detail-lookalikes">${others.map(o => `<li><button class="text-button" data-condition="${o.id}">${escape(o.title)} →</button> ${escape(o.comparisonReason)}</li>`).join('')}</ul>` : ''}${todoCard(condition, water)}<p class="avoid"><strong>Avoid:</strong> ${escape(condition.avoid)}</p><div class="sources"><h4>Read the references</h4>${sourceLinks(condition.source)}</div>`;
+  $('#detail-content').innerHTML = `<p class="eyebrow">${escape(condition.kind)} · ${scopeName(condition.scope)}</p><h2 id="detail-title">${escape(condition.title)}</h2>${scienceLine(condition.id)}${badge(condition.urgency)}<p class="lead">${escape(condition.summary)}</p>${fishGallery(base, water)}${infographic(condition, water)}${fishStrip(condition)}${moreSheets(condition)}<div class="detail-visual-actions"><button class="button secondary" data-use-pattern="${condition.id}">Check this visible pattern →</button><button class="compare-toggle" data-compare="${condition.id}" aria-pressed="${comparisons.has(condition.id)}">${comparisons.has(condition.id) ? '✓ Selected' : '+ Compare'}</button></div><h3>What to look for</h3>${list(condition.clues)}<h3>Easy to confuse with</h3><p>${escape(condition.distinguish)}</p>${others.length ? `<ul class="detail-lookalikes">${others.map(o => `<li><button class="text-button" data-condition="${o.id}">${escape(o.title)} →</button> ${escape(o.comparisonReason)}</li>`).join('')}</ul>` : ''}${(!fromResult && activeView === 'library' && base.scope === 'both' && !['fresh', 'marine'].includes($('#library-water').value) ? `<h3 class="plan-water">Freshwater</h3>${todoCard({ ...base, plan: carePlanFor(id, 'fresh') }, 'fresh')}<h3 class="plan-water">Saltwater</h3>${todoCard({ ...base, plan: carePlanFor(id, 'marine') }, 'marine')}` : todoCard(condition, water))}<p class="avoid"><strong>Avoid:</strong> ${escape(condition.avoid)}</p><div class="sources"><h4>Read the references</h4>${sourceLinks(condition.source)}</div>`;
   $('#detail-dialog').showModal();
 }
 
@@ -494,6 +500,11 @@ function renderAdditionalChoices() {
 renderChoiceGrids();
 renderFishChoices();
 $('#behavior-grid').innerHTML = BEHAVIORS.map(b => `<label class="check-label"><input type="checkbox" name="behavior" value="${b.id}"><span>${escape(b.label)}</span></label>`).join('');
+// Corys and plecos have no scales to stick out.
+function relabelBehaviors() {
+  const span = $('#behavior-grid input[value="pinecone"] + span');
+  if (span) span.textContent = ['cory', 'pleco'].includes(form.elements.fishType?.value) ? 'Swollen tight and stiff all over' : BEHAVIORS.find(b => b.id === 'pinecone').label;
+}
 $('#growth-grid').innerHTML = GROWTH_CHOICES.map(choice => `<label><input type="radio" name="growthAppearance" value="${choice.id}"><span><strong>${escape(choice.title)}</strong><small>${escape(choice.text)}</small></span></label>`).join('');
 $('#source-list').innerHTML = sourceLinks(SOURCES.map(s => s.id));
 $('#library-patterns').innerHTML = SYMPTOMS.map(s => `<button class="pattern-filter" data-library-pattern="${s.id}" aria-pressed="false"><span>${fishArt(s.art)}</span><strong>${escape(s.title)}</strong></button>`).join('');
@@ -595,6 +606,7 @@ form.addEventListener('change', event => {
     renderChoiceGrids();
     // A fish type belongs to one water type; changing water clears it.
     $$('input[name="fishType"]').forEach(el => { el.checked = false; });
+    relabelBehaviors();
     renderFishChoices();
     comparisons.clear(); updateCompareTray();
     $('#results-content').replaceChildren(); $('#care-context').replaceChildren(); $('#care-summary-content').replaceChildren();
@@ -604,11 +616,12 @@ form.addEventListener('change', event => {
     $('#library-grid').replaceChildren();
   }
   // Picking a fish swaps the symptom pictures to that fish's own set.
-  if (event.target.name === 'fishType') { renderChoiceGrids(); updateSignsHint(); updateNextLabel(); autoAdvance(); }
+  if (event.target.name === 'fishType') { relabelBehaviors(); renderChoiceGrids(); updateSignsHint(); updateNextLabel(); autoAdvance(); }
   if (event.target.name === 'closer') autoAdvance();
   const { urgent } = assessUrgency(readInput());
   $('#inline-urgent').hidden = !urgent.length;
-  $('#inline-urgent').textContent = urgent.length ? `These signs need fast action: ${urgent.join('; ')}. Add aeration, test the water and do a water change now.` : '';
+  const { action } = assessUrgency(readInput());
+  $('#inline-urgent').textContent = urgent.length ? `These signs need fast action: ${urgent.join('; ')}. ${action}` : '';
 });
 $('#library-search').addEventListener('input', renderLibrary);
 $('#library-water').addEventListener('change', renderLibrary);

@@ -278,7 +278,8 @@ export const REEF_CONDITIONS = [
   {
     id: 'copper', group: 'invert', title: 'Copper or medicine poisoning', kind: 'Poisoning', urgency: 'today',
     summary: 'Copper and most fish medicines kill shrimp, crabs, snails and starfish—even small amounts.',
-    weights: { deaths: 6, spines: 3, 'not-moving': 2, pale: 2, color: 1 },
+    // "Died after dosing" names the cause, so this always leads for that sign.
+    weights: { deaths: 12, spines: 3, 'not-moving': 2, pale: 2, color: 1 },
     changes: { medicine: 6 },
     check: 'Inverts dying soon after a medicine or copper went in is poisoning.',
     clues: ['Deaths within hours or days of dosing.', 'Several kinds of inverts affected at once.'],

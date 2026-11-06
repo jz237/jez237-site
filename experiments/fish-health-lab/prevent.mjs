@@ -50,7 +50,7 @@ export const PREVENT_SECTIONS = [
     lead: 'Clean, stable water prevents most problems in this guide.',
     cards: [
       { image: 'test-kit', title: 'Test the water', text: 'Ammonia, nitrite and nitrate every week, plus pH. Ammonia and nitrite should always read 0.' },
-      { image: 'water-change', title: 'Change some water', text: 'About 20–30% a week in a tank (10–20% in a reef). Treat tap water with a conditioner and match the temperature.' },
+      { image: 'water-change', title: 'Change some water', text: 'About 20–30% a week in a tank (10–20% in a reef). Treat tap water with a conditioner and match the temperature—and in saltwater, the salinity.' },
       { image: 'feed-lightly', title: 'Feed lightly', text: 'Only what they finish in a minute or two. Leftover food turns into ammonia.' },
       { image: 'separate-gear', title: 'Separate nets and buckets', text: 'Keep a set just for the quarantine tank so you don’t carry bugs back.' },
     ],

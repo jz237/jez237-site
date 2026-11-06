@@ -164,10 +164,10 @@ export const CONDITIONS = [
     avoid: 'Spots falling off doesn’t mean it’s over—keep treating. Don’t mix several medicines at once.',
     source: ['parasites'], atlas: true,
     tips: {
-      cory: 'Corys, plecos and other scaleless fish are sensitive: skip salt and use a medicine labelled safe for scaleless fish (often at reduced strength).',
-      pleco: 'Plecos, corys and other scaleless fish are sensitive: skip salt and use a medicine labelled safe for scaleless fish (often at reduced strength).',
+      cory: 'Corys, plecos and other scaleless fish are sensitive: skip salt and use a medicine labelled safe for scaleless fish, at the dose its label gives for them.',
+      pleco: 'Plecos, corys and other scaleless fish are sensitive: skip salt and use a medicine labelled safe for scaleless fish, at the dose its label gives for them.',
       barb: 'Barbs and danios catch ich easily, especially new arrivals—treat the whole tank.',
-      goldfish: 'Goldfish are coldwater fish—raise the heat gently and not as far.',
+      goldfish: 'Goldfish are coldwater fish—raise the heat gently, to no more than about 75 °F (24 °C).',
       betta: 'Bettas handle warmth well; keep the lid on and the water calm.',
     },
   },

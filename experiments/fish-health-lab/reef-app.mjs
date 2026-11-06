@@ -145,8 +145,12 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
   }
 
   function openDetail(id) {
-    const c = reefConditionFor(id);
-    if (!c) return;
+    const base = reefConditionFor(id);
+    if (!base) return;
+    // Opened from a result: same urgency as the result showed (e.g. peeling flesh = act today).
+    const r = state.group && !$('#guide-view').hidden && !$('[data-step="reef-results"]').hidden ? assessReef(input()) : null;
+    const shown = r && [r.primary, ...r.alternatives].find(x => x?.id === id);
+    const c = shown ? { ...base, urgency: shown.urgencyLevel } : base;
     const scope = groupText(c.group).scope;
     $('#detail-content').innerHTML = `<p class="eyebrow">${escape(c.kind)} · ${escape(scope)}</p><h2 id="detail-title">${escape(c.title)}</h2>${scienceLine(c.id)}${badge(c.urgency)}<p class="lead">${escape(c.summary)}</p>${c.group === 'invert' ? warning(INVERT_WARNING) : ''}${infographic(c)}${gallery(c)}<h3>What to look for</h3><ul>${c.clues.map(x => `<li>${escape(x)}</li>`).join('')}</ul><h3>Easy to confuse with</h3><p>${escape(c.distinguish)}</p>${todoCard({ ...c, plan: reefPlanFor(c.id) })}<p class="avoid"><strong>Avoid:</strong> ${escape(c.avoid)}</p>`;
     $('#detail-dialog').showModal();
