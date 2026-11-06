@@ -89,7 +89,7 @@ const _a = new THREE.Vector3(), _b = new THREE.Vector3(), _d = new THREE.Vector3
 // ------------------------------------------------------------------ the kit: collect parts, merge the static ones
 const STATIC_PARTS = new Set(['chestlight', 'reactor', 'reactorcore', 'antennatip', 'visor', 'helmlamp', 'coil', 'sensor', 'beacon', 'nose', 'bull', 'tail', 'head', 'ceye', 'atip']);
 class Kit {
-  constructor() { this.root = new THREE.Group(); this.buckets = new Map(); this.named = []; }
+  constructor() { this.root = new THREE.Group(); this.buckets = new Map(); this.named = []; this.parts = []; }
   group(name, parent = this.root, x = 0, y = 0, z = 0) { const g = new THREE.Group(); g.name = name || ''; g.position.set(x, y, z); parent.add(g); return g; }
   // a static part: merged later with everything else in the same parent and material
   add(g, mat, x = 0, y = 0, z = 0, rx = 0, ry = 0, rz = 0, sx = 1, sy = sx, sz = sx, parent = this.root) {
@@ -99,6 +99,7 @@ class Kit {
     let b = this.buckets.get(key);
     if (!b) { b = { parent, mat: cls ? M.cls[cls] : mat, list: [], colored: !!cls }; this.buckets.set(key, b); }
     b.list.push([g, m, mat.color]);
+    this.parts.push({ g, mat, m, parent });
   }
   // a part between two points (struts, pistons, cables, legs)
   rod(mat, ax, ay, az, bx, by, bz, r, parent = this.root, n = 8) {
@@ -124,6 +125,7 @@ class Kit {
       parent.add(m);
     }
     this.buckets.clear();
+    PARTS.set(this.root, this.parts.map((q) => ({ g: q.g, mat: q.mat, m: q.m, parent: q.parent === this.root ? '' : q.parent.name })));
     return this.root;
   }
 }
@@ -151,9 +153,32 @@ function merge(list, colored) {
 }
 // build each model type once, hand out clones that share geometry and materials
 const PROTO = new Map();
+// every model's original parts (before merging), so it can be broken into its real pieces
+const PARTS = new WeakMap();
 function make(key, build) {
   if (!PROTO.has(key)) PROTO.set(key, build());
-  return PROTO.get(key).clone(true);
+  const p = PROTO.get(key), c = p.clone(true);
+  PARTS.set(c, PARTS.get(p));
+  return c;
+}
+export const partsOf = (g) => PARTS.get(g) || null;
+// a part as a stand-alone mesh that reuses already-compiled shaders: painted, metal and rough parts get a
+// colour attribute and the shared class material; glowing parts keep their own (compiled) glow material
+const PGEO = new Map();
+export function partMesh(q) {
+  const cls = q.mat.userData.cls;
+  if (!cls || cls === 'glow') return new THREE.Mesh(q.g, q.mat);
+  const key = q.g.uuid + ':' + q.mat.color.getHexString();
+  let g = PGEO.get(key);
+  if (!g) {
+    g = q.g.index ? q.g.toNonIndexed() : q.g.clone();
+    const n = g.attributes.position.count, col = new Float32Array(n * 3), C = q.mat.color;
+    for (let i = 0; i < n; i++) { col[i * 3] = C.r; col[i * 3 + 1] = C.g; col[i * 3 + 2] = C.b; }
+    g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    g.computeBoundingSphere();
+    PGEO.set(key, g);
+  }
+  return new THREE.Mesh(g, M.cls[cls]);
 }
 const by = (g, name) => g.getObjectByName(name);
 const all = (g, prefix) => { const out = []; g.traverse((o) => { if (o.name && o.name.startsWith(prefix)) out.push(o); }); out.sort((a, b) => a.name.localeCompare(b.name)); return out; };

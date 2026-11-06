@@ -129,11 +129,12 @@ export class Input {
     if (K.has('ArrowLeft')) kx--; if (K.has('ArrowRight')) kx++; if (K.has('ArrowUp')) ky--; if (K.has('ArrowDown')) ky++;
     for (const k of PULSE) if (K.has(k)) out.pulse = true;
     if (sx || sy) { const l = Math.hypot(sx, sy); [out.mx, out.mz] = this.screenDir(sx / l, sy / l); }
-    if (kx || ky) { const l = Math.hypot(kx, ky); [out.ax, out.az] = this.screenDir(kx / l, ky / l); out.fire = true; }
+    out.src = 'none';
+    if (kx || ky) { const l = Math.hypot(kx, ky); [out.ax, out.az] = this.screenDir(kx / l, ky / l); out.fire = true; out.src = 'key'; }
     else if (this.mouse.on && this.mouse.t > this.kbAimT) {
       // the mouse aims when it was the last thing to move
       const w = this.worldAt(this.mouse.x, this.mouse.y);
-      if (w) { const dx = w.x - px, dz = w.z - pz, l = Math.hypot(dx, dz); if (l > 0.3) { out.ax = dx / l; out.az = dz / l; } }
+      if (w) { const dx = w.x - px, dz = w.z - pz, l = Math.hypot(dx, dz); if (l > 0.3) { out.ax = dx / l; out.az = dz / l; out.src = 'mouse'; } }
       if (this.mouse.l) out.fire = true;
       if (this.mouse.r) out.pulse = true;
     }
@@ -146,15 +147,15 @@ export class Input {
       let dx = 0, dy = 0;
       if (b(12)) dy--; if (b(13)) dy++; if (b(14)) dx--; if (b(15)) dx++;
       if ((dx || dy) && lm <= 0.2) { const l = Math.hypot(dx, dy); [out.mx, out.mz] = this.screenDir(dx / l, dy / l); }
-      if (rm > 0.35) { this.padAim = this.screenDir(rx / rm, ry / rm); [out.ax, out.az] = this.padAim; out.fire = true; }
+      if (rm > 0.35) { this.padAim = this.screenDir(rx / rm, ry / rm); [out.ax, out.az] = this.padAim; out.fire = true; out.src = 'pad'; }
       const rt = g.buttons[7] ? g.buttons[7].value || 0 : 0;
-      if (rt > 0.3) { out.fire = true; if (!(out.ax || out.az) && this.padAim) [out.ax, out.az] = this.padAim; }
+      if (rt > 0.3) { out.fire = true; if (!(out.ax || out.az) && this.padAim) { [out.ax, out.az] = this.padAim; out.src = 'pad'; } }
       if (b(0) || b(4) || b(5) || b(6)) out.pulse = true;
     }
     // touch: left stick runs, right stick aims and fires
     const m = this.sticks.move, a = this.sticks.aim;
     if (m) { const dx = m.x - m.sx, dy = m.y - m.sy, l = Math.hypot(dx, dy); if (l > 6) { const k = Math.min(1, (l - 6) / 46) / l; [out.mx, out.mz] = this.screenDir(dx * k, dy * k); } }
-    if (a) { const dx = a.x - a.sx, dy = a.y - a.sy, l = Math.hypot(dx, dy); if (l > 10) { [out.ax, out.az] = this.screenDir(dx / l, dy / l); out.fire = true; } }
+    if (a) { const dx = a.x - a.sx, dy = a.y - a.sy, l = Math.hypot(dx, dy); if (l > 10) { [out.ax, out.az] = this.screenDir(dx / l, dy / l); out.fire = true; out.src = 'touch'; } }
     if (this.tPulse) out.pulse = true;
     return out;
   }

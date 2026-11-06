@@ -1,7 +1,7 @@
 // Swarmbreak simulation: fixed 120 Hz steps, all randomness from the world's own seeded generator
 // (W.rs), plain data only, so a world can be cloned and re-run bit for bit (replays, online, tests).
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
-import { F, STEP, GATES, SECTORS, WAVES, rampAt, rampLevel, standLevel, STAND, ENEMY, HOSTILE, BOSSES, BOSS_KEYS, SCORE, START_LIVES, INTRO, introduced, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, STREAK, streakMul } from './config.js?v=6';
+import { F, STEP, GATES, SECTORS, WAVES, rampAt, rampLevel, standLevel, STAND, ENEMY, HOSTILE, BOSSES, BOSS_KEYS, SCORE, START_LIVES, INTRO, introduced, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, STREAK, streakMul } from './config.js?v=7';
 export { STEP };
 
 const { AW, AH } = F;
@@ -635,6 +635,14 @@ function damage(W, e, dmg, pid, by, hx, hz) {
     if (P) { const dx = e.x - P.x, dz = e.z - P.z, d = hyp(dx, dz) || 1; e.x = clamp(e.x + (dx / d) * ENEMY.brute.knock, -AW + e.r, AW - e.r); e.z = clamp(e.z + (dz / d) * ENEMY.brute.knock, -AH + e.r, AH - e.r); }
   }
 }
+// a shot shoves small machines back along its path (big ones shrug it off)
+const KNOCK = { crawler: 0.3, shard: 0.3, dart: 0.35, mimic: 0.25, leaper: 0.2, splitter: 0.18, spitter: 0.1 };
+function knock(e, s) {
+  const k = KNOCK[e.type];
+  if (!k || e.lp === 1 || e.lp === 2) return;
+  const v = hyp(s.vx, s.vz) || 1;
+  e.x = clamp(e.x + (s.vx / v) * k, -AW + e.r, AW - e.r); e.z = clamp(e.z + (s.vz / v) * k, -AH + e.r, AH - e.r);
+}
 function kill(W, e, pid, by) {
   if (e.dead) return;
   e.hp = 0; e.dead = true;
@@ -813,7 +821,9 @@ function shots(W, dt) {
         }
         // a rail shot keeps going through everything it hits, for two each
         if (s.rail) { if (s.hits.includes(e.id)) continue; s.hits.push(e.id); damage(W, e, 2, s.pid, 'shot', s.x, s.z); continue; }
-        damage(W, e, 1, s.pid, 'shot', s.x, s.z); s.life = 0; break;
+        damage(W, e, 1, s.pid, 'shot', s.x, s.z); s.life = 0;
+        if (e.hp > 0) knock(e, s);
+        break;
       }
     }
     if (s.life <= 0 || !B || B.state === 'in' || B.state === 'dying') continue;

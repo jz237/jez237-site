@@ -4,12 +4,12 @@
 // the simulation; floor decals for every warning (gates, boss tells, aim lines, arcs); HDR post.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=6';
-import * as TX from './textures.js?v=6';
-import * as MD from './models.js?v=6';
-import { FX, CALM } from './fx.js?v=6';
-import { F, GATES, POWERUPS } from './config.js?v=6';
-import { dronePos } from './sim.js?v=6';
+import { Post } from './post.js?v=7';
+import * as TX from './textures.js?v=7';
+import * as MD from './models.js?v=7';
+import { FX, CALM } from './fx.js?v=7';
+import { F, GATES, POWERUPS } from './config.js?v=7';
+import { dronePos } from './sim.js?v=7';
 
 export { CALM };
 const { AW, AH } = F;
@@ -156,6 +156,7 @@ export class Renderer {
     this.fx = new FX(this.scene, this.T, { dust: q.dust, sparks: q.sparks, debris: q.debris, flashLights: q.flashLights }, () => 0);
     this.views = { p: new Map(), e: new Map(), s: new Map(), orbs: [], pk: new Map(), dr: new Map() };
     this.view = 'close';
+    this.pieces = [];
     this.follow = new THREE.Vector3();
     this.bossView = null;
     this.makeShots();
@@ -542,9 +543,110 @@ export class Renderer {
       : t === 'pylon' ? MD.pylon() : t === 'splitter' ? MD.splitter(false) : t === 'shard' ? MD.splitter(true)
       : t === 'bulwark' ? MD.bulwark() : t === 'leaper' ? MD.leaper() : t === 'mimic' ? (e.hidden ? this.disguise(e) : MD.mimic(e.look || 0)) : MD.dummy();
     v.type = t; v.yaw = -e.a; v.hit = 0; v.hidden = !!e.hidden;
+    this.ownMaterials(v);
     if (!v.hidden || t !== 'mimic') this.scene.add(v.g);
     return v;
   }
+  // each machine gets its own copies of its lit materials (same shaders, so nothing recompiles) so it
+  // can flash white on its own when hit
+  ownMaterials(v) {
+    const map = new Map(); v.flashMats = [];
+    v.g.traverse((m) => {
+      if (!m.isMesh || !m.material || !m.material.isMeshStandardMaterial) return;
+      let c = map.get(m.material);
+      if (!c) { c = m.material.clone(); map.set(m.material, c); v.flashMats.push(c); }
+      m.material = c;
+    });
+    v.flashK = 0;
+  }
+  setFlash(v, k) {
+    if (!v.flashMats || Math.abs(k - (v.flashK || 0)) < 0.01) return;
+    v.flashK = k;
+    for (const m of v.flashMats) m.emissive.setRGB(k * 1.5, k * 1.45, k * 1.35);
+  }
+  // break a model into its real parts: every merged armour piece, joint and lamp flies off, tumbles,
+  // bounces on the floor and shrinks away. clone = leave the original (the Warden respawns)
+  breakApart(v, o = {}) {
+    if (!v || !v.g) return;
+    const g = v.g; g.updateMatrixWorld(true);
+    const parts = MD.partsOf(g);
+    if (parts) { this.breakParts(v, parts, o); return; }
+    const meshes = [];
+    g.traverse((m) => { if (m.isMesh && m.visible !== false && m.geometry && m.geometry.attributes.position.count > 12 && !m.material.transparent) meshes.push(m); });
+    const cx = g.position.x, cz = g.position.z, pw = o.power ?? 1;
+    for (const m of meshes) {
+      if (this.pieces.length >= 260) this.dropPiece(this.pieces.shift());
+      if (!m.geometry.boundingSphere) m.geometry.computeBoundingSphere();
+      const bs = m.geometry.boundingSphere, wc = bs.center.clone().applyMatrix4(m.matrixWorld);
+      m.matrixWorld.decompose(_p, _q, _s);
+      const pivot = new THREE.Group(); pivot.position.copy(wc); pivot.quaternion.copy(_q); pivot.scale.copy(_s);
+      const mesh = o.clone ? new THREE.Mesh(m.geometry, m.material) : m;
+      mesh.position.copy(bs.center).multiplyScalar(-1); mesh.rotation.set(0, 0, 0); mesh.scale.set(1, 1, 1);
+      mesh.castShadow = false;
+      pivot.add(mesh); this.scene.add(pivot);
+      let dx = wc.x - cx, dz = wc.z - cz; const d = Math.hypot(dx, dz) || 1; dx /= d; dz /= d;
+      const sp = (1.5 + Math.random() * 3.2) * pw;
+      const life = 1.4 + Math.random() * 1.3;
+      this.pieces.push({ g: pivot, vx: dx * sp + (o.vx || 0) * 0.25 + (Math.random() - 0.5), vy: (2.4 + Math.random() * 4) * pw, vz: dz * sp + (o.vz || 0) * 0.25 + (Math.random() - 0.5),
+        wx: (Math.random() - 0.5) * 12, wy: (Math.random() - 0.5) * 12, wz: (Math.random() - 0.5) * 12, r: Math.max(0.05, bs.radius * _s.x * 0.5), life, max: life, sc: _s.clone() });
+    }
+    if (!o.clone) this.scene.remove(g);
+  }
+  // the real parts: armour plates, joints, limbs, lamps (the biggest ones, plus a few small bits)
+  breakParts(v, parts, o) {
+    const g = v.g, cx = g.position.x, cz = g.position.z, pw = o.power ?? 1, cap = o.max ?? 22;
+    const list = parts.filter((q) => !q.mat.transparent).map((q) => {
+      if (!q.g.boundingSphere) q.g.computeBoundingSphere();
+      _s.setFromMatrixScale(q.m);
+      return { q, size: q.g.boundingSphere.radius * Math.max(_s.x, _s.y, _s.z) };
+    }).sort((a, b) => b.size - a.size);
+    const pick = list.slice(0, cap - 4).concat(list.slice(cap - 4).filter(() => Math.random() < 0.15).slice(0, 4));
+    const wm = new THREE.Matrix4();
+    for (const { q, size } of pick) {
+      if (size < 0.02) continue;
+      if (this.pieces.length >= 260) this.dropPiece(this.pieces.shift());
+      const parent = q.parent ? g.getObjectByName(q.parent) : g;
+      if (!parent) continue;
+      wm.multiplyMatrices(parent.matrixWorld, q.m);
+      const c = q.g.boundingSphere.center, wc = c.clone().applyMatrix4(wm);
+      wm.decompose(_p, _q, _s);
+      const pivot = new THREE.Group(); pivot.position.copy(wc); pivot.quaternion.copy(_q); pivot.scale.copy(_s);
+      const mesh = MD.partMesh(q);
+      mesh.position.copy(c).multiplyScalar(-1);
+      pivot.add(mesh); this.scene.add(pivot);
+      let dx = wc.x - cx, dz = wc.z - cz; const d = Math.hypot(dx, dz) || 1; dx /= d; dz /= d;
+      const light = Math.max(0.5, Math.min(1.6, 0.35 / Math.max(0.05, size)));
+      const sp = (1.2 + Math.random() * 3) * pw * light;
+      const life = 1.5 + Math.random() * 1.4;
+      this.pieces.push({ g: pivot, vx: dx * sp + (o.vx || 0) * 0.25 + (Math.random() - 0.5), vy: (2 + Math.random() * 4) * pw * Math.min(1.3, light), vz: dz * sp + (o.vz || 0) * 0.25 + (Math.random() - 0.5),
+        wx: (Math.random() - 0.5) * 12 * light, wy: (Math.random() - 0.5) * 12 * light, wz: (Math.random() - 0.5) * 12 * light, r: Math.max(0.04, size * 0.45), life, max: life, sc: _s.clone() });
+    }
+    if (o.clone) g.visible = false; else this.scene.remove(g);
+  }
+  dropPiece(P) { this.scene.remove(P.g); }
+  updatePieces(dt) {
+    if (!this.pieces.length) return;
+    const keep = [];
+    for (const P of this.pieces) {
+      P.life -= dt;
+      if (P.life <= 0) { this.dropPiece(P); continue; }
+      P.vy -= 11 * dt;
+      const g = P.g;
+      g.position.x += P.vx * dt; g.position.y += P.vy * dt; g.position.z += P.vz * dt;
+      if (g.position.y < P.r) {
+        g.position.y = P.r;
+        if (P.vy < -1.5) { P.vy *= -0.32; P.vx *= 0.6; P.vz *= 0.6; P.wx *= 0.5; P.wy *= 0.5; P.wz *= 0.5; } else { P.vy = 0; P.vx *= 0.9; P.vz *= 0.9; P.wx *= 0.9; P.wy *= 0.9; P.wz *= 0.9; }
+      }
+      _e.set(P.wx * dt, P.wy * dt, P.wz * dt); _q.setFromEuler(_e); g.quaternion.multiply(_q);
+      const k = Math.min(1, P.life / 0.5);
+      g.scale.copy(P.sc).multiplyScalar(k);
+      keep.push(P);
+    }
+    this.pieces = keep;
+  }
+  breakEnemy(id, o) { const v = this.views.e.get(id); if (!v) return; this.views.e.delete(id); this.breakApart(v, o); }
+  breakPlayer(pid, o) { const v = this.views.p.get(pid); if (v) this.breakApart(v, { max: 26, ...o, clone: true }); }
+  breakBoss(o) { const v = this.bossView; if (!v) return; this.bossView = null; this.breakApart(v, { power: 1.7, max: 48, ...o }); }
   // a mimic in disguise: a survivor body with the same beacon, whose gem sometimes glints red
   disguise(e) {
     const v = this.survivorView({ look: e.look || 0 });
@@ -692,6 +794,7 @@ export class Renderer {
     const born = e.born > 0 ? 1 - e.born / 0.45 : 1;
     const pop = e.hitT > 0 ? 1.12 : 1;
     v.hit = Math.max(v.hit - dt * 8, e.hitT > 0 ? 1 : 0);
+    this.setFlash(v, v.hit);
     let s = Math.max(0.05, born) * (1 + (pop - 1) * v.hit);
     // face the way it moves (smoothly)
     const sp = Math.hypot(e.vx, e.vz);
@@ -777,6 +880,7 @@ export class Renderer {
     if (!v || v.key !== B.key) {
       if (v) this.scene.remove(v.g);
       v = this.bossView = MD.boss(B.key); v.key = B.key; v.yaw = -B.a; v.hit = 0;
+      this.ownMaterials(v);
       this.scene.add(v.g);
     }
     const t = this.time;
@@ -784,6 +888,7 @@ export class Renderer {
     v.yaw += angD(v.yaw, -B.a) * Math.min(1, dt * 3);
     v.g.rotation.y = v.yaw;
     v.hit = Math.max(v.hit - dt * 8, B.hitT > 0 ? 1 : 0);
+    this.setFlash(v, v.hit * 0.7);
     const tell = B.state === 'tell' ? B.cur.t / B.cur.T : 0;
     const sc = 1 + v.hit * 0.03 + tell * 0.04;
     v.g.scale.setScalar(sc);
@@ -1040,6 +1145,7 @@ export class Renderer {
     this.time += dt;
     const t = this.time;
     this.fx.update(dt);
+    this.updatePieces(dt);
     for (const f of this.anim) f(t);
     for (const m of this.decalPool) if (m.visible) m.material.uniforms.uTime.value = t;
     // ambient particles: embers over the foundry, rain over the reactor

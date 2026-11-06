@@ -1,13 +1,13 @@
 // Swarmbreak — game flow, menus, HUD, commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, STREAK, streakMul, SUITS } from './config.js?v=6';
-import { makeWorld, step, drainEvents, waveLabel, isBossWave } from './sim.js?v=6';
-import { Autopilot } from './ai.js?v=6';
-import { Renderer, pickQuality, CALM } from './render.js?v=6';
-import { Audio } from './audio.js?v=6';
-import { Input } from './input.js?v=6';
-import { Scores, NO_POST } from './scores.js?v=6';
-import { Recorder, Replay } from './replay.js?v=6';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=6';
+import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, STREAK, streakMul, SUITS } from './config.js?v=7';
+import { makeWorld, step, drainEvents, waveLabel, isBossWave, angDiff } from './sim.js?v=7';
+import { Autopilot } from './ai.js?v=7';
+import { Renderer, pickQuality, CALM } from './render.js?v=7';
+import { Audio } from './audio.js?v=7';
+import { Input } from './input.js?v=7';
+import { Scores, NO_POST } from './scores.js?v=7';
+import { Recorder, Replay } from './replay.js?v=7';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=7';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -15,7 +15,7 @@ const params = new URLSearchParams(location.search);
 // ------------------------------------------------------------------ settings + saved progress
 const SKEY = 'sb.settings.v1';
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const settings = { music: 50, sfx: 90, voice: 100, talk: 'on', flash: reduceMotion ? 'reduced' : 'full', shake: '1', rumble: 'on', touch: 'auto', quality: 'auto', netRoute: '0', diff: 'normal', view: 'close', suit: 'cobalt' };
+const settings = { music: 50, sfx: 90, voice: 100, talk: 'on', flash: reduceMotion ? 'reduced' : 'full', shake: '1', rumble: 'on', touch: 'auto', quality: 'auto', netRoute: '0', diff: 'normal', view: 'close', suit: 'cobalt', assist: 'light' };
 try { Object.assign(settings, JSON.parse(localStorage.getItem(SKEY) || '{}')); } catch { /* defaults */ }
 const saveSettings = () => { try { localStorage.setItem(SKEY, JSON.stringify(settings)); } catch { /* private mode */ } };
 const load = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v ?? d; } catch { return d; } };
@@ -348,6 +348,7 @@ function handleEvents(list, W, live) {
       case 'wallhit': if (Math.random() < 0.25) fx.sparks(e.x, 0.8, e.z, { n: 2, speed: 3, life: 0.2 }); break;
       case 'deflect': A.play('clang', { x: e.x, y: 1, z: e.z, vol: 0.35, gap: 0.08, rate: 1.4 }); fx.sparks(e.x, 1.5, e.z, { n: 5, speed: 6, r: 0.6, g: 0.8, b: 1 }); break;
       case 'kill': {
+        R.breakEnemy(e.id, { vx: Math.cos(e.a || 0) * 2, vz: Math.sin(e.a || 0) * 2, power: e.type === 'brute' || e.type === 'bulwark' || e.type === 'hive' ? 1.2 : 1 });
         const s = BOOM[e.type] || 1;
         A.play(s >= 2 ? 'boomM' : s >= 1.2 ? 'boomS' : 'pop', { x: e.x, y: 1, z: e.z, vol: s >= 2 ? 0.9 : 0.6, gap: 0.03 });
         if (s >= 1.2) A.play('debris', { x: e.x, y: 0, z: e.z, vol: 0.3, delay: 0.2, gap: 0.2 });
@@ -386,6 +387,7 @@ function handleEvents(list, W, live) {
         break;
       }
       case 'death': {
+        R.breakPlayer(e.pid, { power: 1.3 });
         A.play('death', { x: e.x, y: 1, z: e.z, vol: 1, gap: 0 });
         fx.explode(e.x, 1, e.z, 2.6, { metal: true, rock: false, color: 0x8fd8ff });
         fx.debris(e.x, 1, e.z, { metal: true, n: 14, speed: 7, size: 0.3, trail: true });
@@ -472,6 +474,7 @@ function handleEvents(list, W, live) {
       case 'bossphase': A.play('bossroar', { vol: 1, gap: 0 }); R.addTrauma(0.3 * +settings.shake); if (live) caption(`${BOSSES[e.key].name} IS ANGRY`, 2.5); break;
       case 'bossdying': A.play('boomL', { x: e.x, y: 2, z: e.z, vol: 1, gap: 0 }); slowmo(0.4, 1.2); R.addTrauma(0.5 * +settings.shake); R.frameShot([[e.x, e.z]], 2.2); if (live) rumble(0.8, 0.8, 700); break;
       case 'bosskill':
+        R.breakBoss();
         A.play('boomL', { x: e.x, y: 2, z: e.z, vol: 1, rate: 0.85, gap: 0 });
         fx.explode(e.x, 2, e.z, 4, { metal: true }); fx.explode(e.x + 1.5, 3, e.z, 3, { metal: true, rock: false }); fx.debris(e.x, 2, e.z, { metal: true, n: 30, speed: 10, size: 0.5, trail: true });
         R.flashScreen(0.4, 0xffd0a0); R.addTrauma(0.8 * +settings.shake); R.shock(e.x, e.z, 2);
@@ -486,6 +489,29 @@ function handleEvents(list, W, live) {
       case 'over': break;
     }
   }
+}
+// AIM ASSIST (sticks and arrow keys, never the mouse): bend the aim toward the best machine inside a
+// narrow cone, with lead. LIGHT pulls most of the way, STRONG locks on.
+function assistAim(W, p, I) {
+  if (!I.fire || I.src === 'mouse' || I.src === 'none' || settings.assist === 'off' || !(I.ax || I.az)) return;
+  const strong = settings.assist === 'strong', cone = strong ? 0.5 : 0.3, pull = strong ? 1 : 0.65;
+  const a0 = Math.atan2(I.az, I.ax);
+  let best = null, bs = 1e9;
+  const consider = (x, z, vx, vz, r) => {
+    const d = Math.hypot(x - p.x, z - p.z);
+    if (d > 16 || d < 0.3) return;
+    const da = Math.abs(angDiff(a0, Math.atan2(z - p.z, x - p.x)));
+    if (da > cone + Math.atan(r / d)) return;
+    const sc = da * 8 + d * 0.12;
+    if (sc < bs) { bs = sc; best = { x, z, vx, vz, d }; }
+  };
+  for (const e of W.enemies) if (e.hp > 0 && !e.hidden && e.lp !== 2 && e.born <= 0.2 && e.type !== 'dummy') consider(e.x, e.z, e.vx, e.vz, e.r);
+  const B = W.boss;
+  if (B && B.state !== 'in' && B.state !== 'dying') { const orbs = B.orbs.filter((o) => o.hp > 0); if (orbs.length) for (const o of orbs) consider(o.x, o.z, 0, 0, 0.6); else consider(B.x, B.z, 0, 0, B.r); }
+  if (!best) return;
+  const tt = best.d / F.shotV, aim = Math.atan2(best.z + best.vz * tt - p.z, best.x + best.vx * tt - p.x);
+  const a = a0 + angDiff(a0, aim) * pull;
+  I.ax = Math.cos(a); I.az = Math.sin(a);
 }
 function slowmo(scale, t) { G.timeScale = scale; G.slowT = t; A.setRate(Math.max(0.6, scale + 0.2)); }
 
@@ -893,7 +919,7 @@ function playStep(dt) {
     const me = myPlayer(W);
     if (me) {
       if (G.ai) me.input = G.ai.control(W, me);
-      else me.input = G.state === 'play' ? I.control(me.x, me.z) : { mx: 0, mz: 0, ax: 0, az: 0, fire: false, pulse: false };
+      else { me.input = G.state === 'play' ? I.control(me.x, me.z) : { mx: 0, mz: 0, ax: 0, az: 0, fire: false, pulse: false }; assistAim(W, me, me.input); }
     }
     if (online && NET.host) NET.hostTick(W);
     if (!online) REC.input(W);
@@ -1002,7 +1028,7 @@ async function boot() {
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('stand', settings.diff).fresh();
-  if (params.has('test')) { const m = await import('./tests.js?v=6'); m.runTests(window.__sb); }
+  if (params.has('test')) { const m = await import('./tests.js?v=7'); m.runTests(window.__sb); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('stand')) startStand(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }

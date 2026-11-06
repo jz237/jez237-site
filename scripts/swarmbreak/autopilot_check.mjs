@@ -1,9 +1,9 @@
 // Chained campaigns: lives and score carry over, salvage buys upgrades in the AI shop order, for the
 // demo and human profiles. Shows how far each gets.
 //   node scripts/swarmbreak/autopilot_check.mjs [runs=6]
-import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-05/swarmbreak/js/sim.js?v=6';
-import { Autopilot } from '../../games/2026-11-05/swarmbreak/js/ai.js?v=6';
-import { SECTORS, START_LIVES, UPGRADES, UP_COST } from '../../games/2026-11-05/swarmbreak/js/config.js?v=6';
+import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-05/swarmbreak/js/sim.js?v=7';
+import { Autopilot } from '../../games/2026-11-05/swarmbreak/js/ai.js?v=7';
+import { SECTORS, START_LIVES, UPGRADES, UP_COST } from '../../games/2026-11-05/swarmbreak/js/config.js?v=7';
 
 const runs = +(process.argv[2] || 6);
 const SHOP = ['rapid', 'armor', 'spread', 'pulse', 'rapid', 'servos', 'spread', 'armor', 'tractor', 'rapid', 'pulse', 'servos'];
