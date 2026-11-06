@@ -9,9 +9,9 @@
   <title>Fish Health Lab · A visual-first experiment</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='14' fill='%231c504a'/%3E%3Cpath d='M9 24Q22 8 35 24Q22 40 9 24L4 17v14z' fill='%23e6edba'/%3E%3Ccircle cx='29' cy='22' r='2' fill='%231c504a'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="/assets/fonts/css/outfit-playfair-display.css">
-  <link rel="stylesheet" href="style.css?v=8">
-  <link rel="stylesheet" href="flow.css?v=8">
-  <script type="module" src="app.mjs?v=8"></script>
+  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="flow.css?v=9">
+  <script type="module" src="app.mjs?v=9"></script>
 </head>
 <body>
   <a href="#main" class="skip">Skip to the guide</a>
@@ -97,6 +97,7 @@
   <footer><span>Fish Health Lab · Working prototype</span><button class="text-button" data-view="about">About & sources</button><span>Observe. Compare. Care.</span></footer>
   <aside id="comparison-tray" class="comparison-tray" hidden aria-label="Selected visual comparisons"><div><strong>Compare the patterns</strong><div id="comparison-picks"></div><p id="comparison-status" role="status"></p></div><button class="button primary" data-action="compare" disabled>Compare side by side ↗</button><button class="tray-clear" data-action="clear-compare" aria-label="Clear comparisons">×</button></aside>
   <dialog id="compare-dialog" class="compare-dialog" aria-labelledby="compare-title"><button class="dialog-close" data-action="close-dialog" aria-label="Close comparison">×</button><p class="eyebrow">LOOK AT WHAT FITS — AND WHAT DOESN’T</p><h2 id="compare-title">Compare, don’t assume.</h2><p class="quiet">Compare these with what you see in your tank. Empty frames are awaiting pictures.</p><div id="compare-content"></div></dialog>
+  <dialog id="quick-compare-dialog" class="quick-compare-dialog" aria-labelledby="quick-compare-title"><button class="dialog-close" data-action="close-dialog" aria-label="Close comparison">×</button><h2 id="quick-compare-title">Which looks more like your fish?</h2><div id="quick-compare-content"></div></dialog>
   <dialog id="detail-dialog" aria-labelledby="detail-title"><button class="dialog-close" data-action="close-dialog" aria-label="Close details">×</button><div id="detail-content"></div></dialog>
   <dialog id="atlas-dialog" class="atlas-dialog" aria-labelledby="atlas-title"><div class="atlas-toolbar"><div><strong id="atlas-title">Freshwater ich · illustrated comparison</strong><small>AI illustration. Pinch or zoom for detail.</small></div><button class="dialog-close" data-action="close-dialog" aria-label="Close illustration">×</button></div><img id="atlas-full" width="1024" height="1536" alt="Educational illustration showing varied ich-like presentations on freshwater fish."></dialog>
   <dialog id="case-dialog" aria-labelledby="case-title"><button class="dialog-close" data-action="close-dialog" aria-label="Close observation notes">×</button><p class="eyebrow">YOUR NOTES, IN ONE PLACE</p><h2 id="case-title">Keep a useful record.</h2><p>What you saw, the best guess, the plan and any readings. Nothing is saved or sent anywhere unless you copy or download it.</p><label for="case-text" class="sr-only">Prepared observation notes</label><textarea id="case-text" rows="14" readonly></textarea><div class="case-actions"><button class="button primary" data-action="copy-case">Copy my observations</button><button class="button secondary" data-action="download-case">Download .txt</button></div><p id="copy-status" class="quiet" role="status"></p></dialog>

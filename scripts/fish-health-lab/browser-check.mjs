@@ -87,13 +87,15 @@ try {
   await page.locator('#symptom-grid img').evaluateAll(imgs=>Promise.all(imgs.map(img=>img.decode())));
   assert.equal(await page.locator('#symptom-grid img[src]').count(),12);
   assert.equal(await page.locator('#texture-grid img[src]').count(),0);
-  assert.ok(assets.every(url=>/choices\/(opening|sign)-/.test(url)));
+  // The fish question (passed on the way) shows the healthy fish-type pictures.
+  assert.ok(assets.every(url=>/choices\/(opening|sign)-|\/fish-types\/fish-/.test(url)));
   await next(page); assert.match(await page.locator('#flow-error').innerText(),/closest picture/);
   await page.screenshot({path:output+'/desktop-symptoms.png',fullPage:true});
   await page.locator('[data-symptom="dots"]').click();
   assert.equal(await page.locator('[data-symptom][aria-pressed="true"]').count(),1);
   assert.equal(await page.locator('#symptom-grid .selection-check').evaluateAll(els=>els.filter(el=>getComputedStyle(el).opacity !== '0').length),1);
-  assert.ok(assets.every(url=>/choices\/(opening|sign)-/.test(url)));
+  // The fish question (passed on the way) shows the healthy fish-type pictures.
+  assert.ok(assets.every(url=>/choices\/(opening|sign)-|\/fish-types\/fish-/.test(url)));
   await next(page); await at(page,'texture');
   await page.locator('#texture-reference img').evaluate(img=>img.decode());
   await page.locator('#texture-grid img').evaluateAll(imgs=>Promise.all(imgs.map(img=>img.decode())));
@@ -117,7 +119,8 @@ try {
   await next(page); await at(page,'results');
   assert.equal(await page.locator('[data-step="care"]').isVisible(),false);
   assert.doesNotMatch(await page.locator('#results-content').innerText(),/Any water readings\?|Swim bladder|Dropsy|Popeye/);
-  assert.deepEqual(await page.locator('.alternatives [data-condition]').evaluateAll(els=>els.map(el=>el.dataset.condition)),['velvet-fresh','normal']);
+  assert.deepEqual(await page.locator('.alternatives [data-alternative]').evaluateAll(els=>els.map(el=>el.dataset.alternative)),['velvet-fresh']);
+  assert.match(await page.locator('.could-also .natural-note').innerText(),/natural markings/);
   assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'ich-fresh');
   assert.match(await page.locator('#results-title').innerText(),/Most likely:\s*Ich/i);
   assert.match(await page.locator('#results-content').innerText(),/hobby guide, not a vet/i);
@@ -126,8 +129,44 @@ try {
   assert.match(await page.locator('.water-nudge').innerText(),/Tested ammonia & nitrite lately\?/);
   assert.equal(await page.locator('#results-content .water-reminder').count(),0);
   await page.locator('.result-focus .result-image img').evaluate(img=>img.decode());
-  assert.equal(await page.locator('.alternatives img').count(),2);
+  assert.equal(await page.locator('.alternatives img').count(),1);
+  assert.equal(await page.locator('.alternatives .urgency-badge').count(),0);
+  const velvetCard=page.locator('[data-alternative="velvet-fresh"]');
+  assert.match(await velvetCard.innerText(),/Shine a flashlight from the side/);
+  assert.match(await velvetCard.locator('.alt-danger').innerText(),/Rule this out first — more dangerous/);
+  assert.equal(await velvetCard.locator('.alt-treatment').count(),0,'only the "different treatment" warning is shown; no "same steps" line (Claw review, Nov 5)');
   await page.screenshot({path:output+'/desktop-result.png',fullPage:true});
+  // Compare: two pictures side by side, one check line, Close returns.
+  await velvetCard.locator('[data-quick-compare]').click();
+  assert.equal(await page.locator('#quick-compare-dialog').isVisible(),true);
+  assert.deepEqual(await page.locator('#quick-compare-content [data-compare-side]').evaluateAll(els=>els.map(el=>el.dataset.compareSide)),['ich-fresh','velvet-fresh']);
+  await page.locator('#quick-compare-content img').evaluateAll(imgs=>Promise.all(imgs.map(img=>img.decode())));
+  assert.equal(await page.locator('#quick-compare-content p').count(),1);
+  assert.match(await page.locator('.quick-compare-check').innerText(),/gold dust = velvet/);
+  await page.locator('#quick-compare-dialog .quick-compare-actions [data-action="close-dialog"]').click();
+  assert.equal(await page.locator('#quick-compare-dialog').isVisible(),false);
+  assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'ich-fresh');
+  // "This looks more like mine": velvet becomes the result; ich moves to could-also.
+  await velvetCard.locator('[data-choose]').click(); await at(page,'results');
+  assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'velvet-fresh');
+  assert.match(await page.locator('#results-title').innerText(),/Most likely:\s*Velvet/i);
+  assert.equal(await page.locator('.result-focus[data-urgency="today"] .urgency-today').count(),1);
+  assert.match(await page.locator('.result-focus .todo-card').innerText(),/velvet\/copper/i);
+  assert.deepEqual(await page.locator('.alternatives [data-alternative]').evaluateAll(els=>els.map(el=>el.dataset.alternative)),['ich-fresh']);
+  assert.equal(await page.locator('[data-alternative="ich-fresh"] .alt-danger').count(),0);
+  assert.match(await page.locator('.result-hint').innerText(),/Your pick from the look-alikes/);
+  // Choosing from the compare view swaps back; Change my answers drops the pick.
+  await page.locator('[data-alternative="ich-fresh"] [data-quick-compare]').click();
+  await page.locator('#quick-compare-content [data-choose="ich-fresh"]').click();
+  assert.equal(await page.locator('#quick-compare-dialog').isVisible(),false);
+  assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'ich-fresh');
+  await page.locator('[data-alternative="velvet-fresh"] [data-choose]').click();
+  assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'velvet-fresh');
+  await action(page,'edit').click(); await at(page,'water');
+  for (let i=0;i<4&&!(await page.locator('[data-step="results"]').isVisible());i++) await next(page);
+  await at(page,'results');
+  assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'ich-fresh');
+  record('could-also: velvet card has a look-for check, a danger line and same-steps note; Compare shows ich vs velvet with one check; tapping swaps the result (and back); changing answers drops the pick');
   await page.locator('.result-focus .result-image').click();
   for(const slot of ['overview','variations','closeup','subtle','marked','lookalikes']) {
     await page.locator('#detail-content [data-slot="'+slot+'"]').click();
@@ -184,7 +223,8 @@ try {
   assert.equal(await page.locator('#care-summary-content .urgent').isVisible(),true);
   await action(page,'results').click(); await at(page,'results');
   assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'ich-fresh');
-  assert.deepEqual(await page.locator('.alternatives [data-condition]').evaluateAll(els=>els.map(el=>el.dataset.condition)),['velvet-fresh','normal']);
+  assert.deepEqual(await page.locator('.alternatives [data-alternative]').evaluateAll(els=>els.map(el=>el.dataset.alternative)),['velvet-fresh']);
+  assert.match(await page.locator('.could-also .natural-note').innerText(),/natural markings/);
   record('water readings follow results; care validates numeric inputs, preserves unknowns and prioritizes distress without changing the visual comparison');
   await action(page,'case').click();
   const notes=await page.locator('#case-text').inputValue();

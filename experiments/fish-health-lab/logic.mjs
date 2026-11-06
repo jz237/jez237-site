@@ -145,12 +145,19 @@ export function assessDiagnosis(input) {
     candidate.fits.forEach(id => covered.add(id));
   }
   const unexplained = features.filter(id => !covered.has(id));
+  let { alternatives, natural } = couldAlsoBe(findings, ranked, input);
+  // Each "This looks more like mine" tap, in order.
+  for (const id of input.chosen || []) {
+    const swap = applyChoice(findings, alternatives, id, input);
+    if (!swap) continue;
+    findings.splice(0, findings.length, ...swap.findings);
+    ({ alternatives, natural } = couldAlsoBe(findings, ranked, input, swap.previous));
+  }
   const assessment = assessUrgency(input);
   const contextConcerns = [];
   if (assessment.checks.length && !findings.some(c => c.id === 'water')) {
     contextConcerns.push({ ...CONDITIONS.find(c => c.id === 'water'), reason: assessment.checks.join(' ') });
   }
-  const alternatives = couldAlsoBe(findings, ranked, input);
   const messages = [];
   if (features.includes('dots') && features.includes('dust')) messages.push('You picked both salt-like grains and fine dust. Ich and velvet can look alike—velvet is much finer and gold-tinted.');
   if (features.includes('fuzz') && features.some(f => f.startsWith('patch'))) messages.push('You picked both fluffy threads and flat pale patches. Fungus and columnaris are often mixed up; flat patches usually mean columnaris.');
@@ -160,48 +167,118 @@ export function assessDiagnosis(input) {
   const primary = findings[0] || null;
   return {
     status: !findings.length ? 'insufficient' : findings.length > 1 ? 'multiple' : 'single',
-    primary, findings, diagnoses: findings, alternatives,
+    primary, findings, diagnoses: findings, alternatives, naturalNote: natural,
+    chosen: Boolean(primary?.chosen),
     title: primary ? `Most likely: ${primary.title}` : 'Not enough to go on yet',
     urgency: findings.reduce((best, c) => URGENCY[c.urgencyLevel].rank > URGENCY[best]?.rank ? c.urgencyLevel : best, findings[0]?.urgencyLevel || ''),
     unexplained, contextConcerns, messages, urgent: assessment.urgent,
   };
 }
 
+// "Could also be" checks: each reason is something the keeper can do or look
+// for (verb or "Look for" first, about 12 words at most).
 const LOOKALIKES = {
-  'ich-fresh': [['velvet-fresh', 'Much finer gold dust rather than separate grains—check with a torch.'], ['normal', 'Natural spots and markings stay the same and don’t spread.']],
-  'ich-marine': [['velvet-marine', 'Finer dust and much faster breathing. More dangerous—treat fast.'], ['black-spot', 'Black pepper specks instead of white grains, mostly on tangs.'], ['normal', 'Natural markings stay the same; ich spots come and go.']],
-  'velvet-fresh': [['ich-fresh', 'Bigger, separate white grains like salt.'], ['normal', 'Natural shimmer follows the scales and lighting.']],
-  'velvet-marine': [['ich-marine', 'Bigger, separate white grains; usually slower.'], ['brooklynella', 'Thick slime and peeling skin, especially on clownfish.'], ['water', 'Low oxygen also causes fast breathing—check aeration.', ['breathing']]],
-  'water-mold': [['columnaris', 'Flat pale patches or a white mouth rather than fluffy threads.']],
-  columnaris: [['water-mold', 'Fluffy cotton-wool threads sticking out, not a flat patch.'], ['fin-rot', 'Slower fin loss, usually after dirty water.', ['fins']]],
-  'fin-rot': [['injury', 'A clean split or tear after a fight or snag.'], ['columnaris', 'Fast fin loss with pale patches or a white mouth.']],
-  ulcer: [['septicemia', 'Red streaks in the fins or blotches under the skin.'], ['injury', 'A single scrape after a bump or fight.']],
-  septicemia: [['water', 'Ammonia burn also reddens fins and gills—test the water.'], ['ulcer', 'Open craters with missing scales.']],
-  uronema: [['brooklynella', 'Thick slime and peeling rather than deep red sores.'], ['ulcer', 'Bacterial sores that grow more slowly.']],
-  brooklynella: [['uronema', 'Deep red sores rather than slime and peeling.'], ['velvet-marine', 'A fine dusty sheen with very fast breathing.'], ['flukes', 'Scratching and extra slime without peeling.']],
-  'black-spot': [['ich-marine', 'White grains instead of black specks.'], ['normal', 'Natural dark freckles that never change.']],
-  hlle: [['uronema', 'Fresh, red, growing sores instead of pale pits.'], ['brooklynella', 'Peeling slime rather than pits.']],
-  'hole-in-head': [['columnaris', 'Flat pale patches rather than pits.']],
-  dropsy: [['bloat', 'Swollen belly but the scales lie flat.']],
-  bloat: [['dropsy', 'Scales stick out like a pinecone when seen from above.'], ['swim-bladder', 'Floating or tilting along with the swelling.'], ['normal', 'A pregnant livebearer or a fish that just ate looks round but acts normally.']],
-  popeye: [['injury', 'Only one eye after a bump—usually heals with clean water.'], ['cloudy-eye', 'A milky film without bulging.']],
-  'cloudy-eye': [['popeye', 'The eye bulges out as well.'], ['injury', 'One eye only, after a bump.']],
-  'swim-bladder': [['water', 'Several fish struggling at once points to the water or oxygen.'], ['bloat', 'A swollen belly with flat scales.']],
-  water: [['flukes', 'Scratching or flashing along with fast gills.']],
-  flukes: [['water', 'Bad water also causes extra slime, scratching and fast breathing—test it.']],
-  lymphocystis: [['growth', 'One smooth lump instead of rough clusters.']],
-  growth: [['lymphocystis', 'Rough cauliflower-like clusters.'], ['normal', 'Some species have natural bumps—compare with older photos.']],
-  injury: [['fin-rot', 'Edges that keep shrinking or turn white/red.', ['fins']], ['ulcer', 'A sore that grows instead of healing.']],
-  normal: [['growth', 'A new or growing lump is not normal.']],
+  'ich-fresh': [['velvet-fresh', 'Shine a flashlight from the side: fine gold dust = velvet.'], ['normal', 'Check old photos: natural spots never change or spread.']],
+  'ich-marine': [['velvet-marine', 'Look for fine dust and very fast breathing = velvet.'], ['black-spot', 'Look for black pepper specks instead of white grains.'], ['normal', 'Watch for a few days: ich spots come and go.']],
+  'velvet-fresh': [['ich-fresh', 'Look for bigger, separate white grains, like salt = ich.'], ['normal', 'Change the light angle: natural shimmer moves with the scales.']],
+  'velvet-marine': [['ich-marine', 'Look for bigger, separate white grains = marine ich.'], ['brooklynella', 'Look for thick slime and peeling skin = Brooklynella.'], ['water', 'Test the water and check aeration: low oxygen causes fast breathing.', ['breathing']]],
+  'water-mold': [['columnaris', 'Look for flat pale patches or a white mouth = columnaris.']],
+  columnaris: [['water-mold', 'Look for fluffy cotton-wool threads sticking out = fungus.'], ['fin-rot', 'Look for slow fin loss after dirty water = fin rot.', ['fins']]],
+  'fin-rot': [['injury', 'Look for one clean split or tear = injury.'], ['columnaris', 'Look for fast fin loss with pale patches = columnaris.']],
+  ulcer: [['septicemia', 'Look for red streaks in the fins or under the skin.'], ['injury', 'Look for a single scrape after a bump or fight.']],
+  septicemia: [['water', 'Test ammonia: water burns also redden fins and gills.'], ['ulcer', 'Look for open craters with missing scales = ulcer.']],
+  uronema: [['brooklynella', 'Look for thick slime and peeling, not deep red sores.'], ['ulcer', 'Watch for a day: ulcers grow more slowly.']],
+  brooklynella: [['uronema', 'Look for deep red sores instead of slime = Uronema.'], ['velvet-marine', 'Shine a flashlight from the side: fine dust = velvet.'], ['flukes', 'Look for scratching and extra slime without peeling = flukes.']],
+  'black-spot': [['ich-marine', 'Look for white grains instead of black specks = ich.'], ['normal', 'Check old photos: natural freckles never change.']],
+  hlle: [['uronema', 'Look for fresh, red, growing sores instead of pale pits.'], ['brooklynella', 'Look for peeling slime instead of pits.']],
+  'hole-in-head': [['columnaris', 'Look for flat pale patches instead of pits.']],
+  dropsy: [['bloat', 'Look from above: scales lying flat = bloat.']],
+  bloat: [['dropsy', 'Look from above: scales sticking out like a pinecone = dropsy.'], ['swim-bladder', 'Watch it swim: floating or tilting = swim bladder.'], ['normal', 'Watch it: a full or pregnant fish acts normally.']],
+  popeye: [['injury', 'Check both eyes: only one, after a bump = injury.'], ['cloudy-eye', 'Look for a milky film without bulging.']],
+  'cloudy-eye': [['popeye', 'Look from above: a bulging eye = popeye.'], ['injury', 'Check both eyes: only one, after a bump = injury.']],
+  'swim-bladder': [['water', 'Check tankmates: several struggling points to the water.'], ['bloat', 'Look for a swollen belly with flat scales = bloat.']],
+  water: [['flukes', 'Look for scratching or flashing against things = flukes.']],
+  flukes: [['water', 'Test the water: bad water causes the same scratching.']],
+  lymphocystis: [['growth', 'Look for one smooth lump instead of rough clusters.']],
+  growth: [['lymphocystis', 'Look for rough, cauliflower-like clusters = lymphocystis.'], ['normal', 'Check old photos: some fish have natural bumps.']],
+  injury: [['fin-rot', 'Watch the edges: still shrinking or white = fin rot.', ['fins']], ['ulcer', 'Watch the sore: growing instead of healing = ulcer.']],
+  normal: [['growth', 'Look for a new or growing lump—that is not normal.']],
 };
 
-function couldAlsoBe(findings, ranked, input) {
+// The check to show when a condition comes up without a curated pair.
+export const LOOK_FOR = {
+  water: 'Test ammonia and nitrite, and look for red gills.',
+  'ich-fresh': 'Look for separate white grains, like salt.',
+  'ich-marine': 'Look for separate white grains, like salt.',
+  'velvet-fresh': 'Shine a flashlight from the side: look for gold dust.',
+  'velvet-marine': 'Look for fine dust plus very fast breathing.',
+  'water-mold': 'Look for fluffy cotton-wool threads sticking out.',
+  columnaris: 'Look for flat pale patches or a white mouth.',
+  'fin-rot': 'Look for ragged fins with white or red edges.',
+  ulcer: 'Look for open red craters with missing scales.',
+  septicemia: 'Look for red streaks in the fins or under the skin.',
+  dropsy: 'Look from above: scales sticking out like a pinecone.',
+  bloat: 'Look for a swollen belly with flat scales.',
+  popeye: 'Look from above: is the eye bulging out?',
+  'cloudy-eye': 'Look for a milky film over the eye.',
+  'swim-bladder': 'Watch it swim: floating, sinking or tilting?',
+  flukes: 'Look for scratching, flashing and extra slime.',
+  lymphocystis: 'Look for rough, cauliflower-like white clusters.',
+  growth: 'Look for one smooth, rounded lump.',
+  injury: 'Look for one clean scrape or split after a bump.',
+  uronema: 'Look for deep red sores that keep growing.',
+  brooklynella: 'Look for thick slime and peeling skin.',
+  'black-spot': 'Look for black pepper specks, mostly on tangs.',
+  hlle: 'Look for pale pits on the head or side line.',
+  'hole-in-head': 'Look for small pits or holes on the head.',
+  normal: 'Check old photos: natural markings never change.',
+};
+
+// What the first treatment is, per condition. Two conditions with the same
+// family share their first steps; different families need a check before dosing.
+export const TREATMENT_FAMILY = {
+  water: 'water-quality', 'fin-rot': 'water-quality', popeye: 'water-quality', 'cloudy-eye': 'water-quality',
+  'ich-fresh': 'antiparasitic', 'velvet-fresh': 'antiparasitic',
+  'ich-marine': 'copper', 'velvet-marine': 'copper',
+  'water-mold': 'antifungal',
+  columnaris: 'antibacterial', ulcer: 'antibacterial', septicemia: 'antibacterial', dropsy: 'antibacterial',
+  flukes: 'dewormer', 'black-spot': 'dewormer',
+  uronema: 'formalin', brooklynella: 'formalin',
+  'hole-in-head': 'metronidazole',
+  bloat: 'diet', 'swim-bladder': 'diet',
+  lymphocystis: 'supportive', growth: 'supportive', hlle: 'supportive', injury: 'supportive',
+  normal: 'none',
+};
+
+export const ALTERNATIVE_TEXT = {
+  danger: 'Rule this out first — more dangerous',
+  same: 'Same first steps',
+  different: 'Different treatment — check before dosing',
+  natural: 'Or it may just be natural markings — if it’s looked like this since you got it.',
+  naturalBelly: 'Or it may just be a full belly or a pregnant livebearer — if it’s acting normally.',
+};
+
+export function treatmentNote(a, b) {
+  const fa = TREATMENT_FAMILY[a], fb = TREATMENT_FAMILY[b];
+  if (!fa || !fb || fa === 'none' || fb === 'none') return '';
+  return fa === fb ? 'same' : 'different';
+}
+
+const MAX_ALTERNATIVES = 3;
+
+// Ranked look-alikes for the findings. 'normal' never becomes a card; when it
+// would have been listed, the result carries one plain "natural markings" line.
+function couldAlsoBe(findings, ranked, input, pinned = null) {
   const taken = new Set(findings.map(c => c.id));
   const out = new Map();
-  const add = (condition, reason) => {
+  let natural = '';
+  const add = (condition, reason, from) => {
     if (!condition || taken.has(condition.id) || out.has(condition.id) || !inScope(condition, input.water)) return;
-    out.set(condition.id, { ...condition, comparisonReason: reason || condition.hint });
+    if (condition.id === 'normal') { natural ||= from === 'bloat' ? ALTERNATIVE_TEXT.naturalBelly : ALTERNATIVE_TEXT.natural; return; }
+    out.set(condition.id, { ...condition, from, comparisonReason: reason || LOOK_FOR[condition.id] || condition.hint });
   };
+  // The guess the user just swapped away from stays first in the list.
+  if (pinned) add(pinned, LOOKALIKES[findings[0].id]?.find(([id]) => id === pinned.id)?.[1], findings[0].id);
   for (const finding of findings) {
     // Curated look-alikes can be limited to the signs they explain (e.g. "fin rot"
     // only next to columnaris when fins were picked).
@@ -211,11 +288,33 @@ function couldAlsoBe(findings, ranked, input) {
     const runnersUp = finding.fits.flatMap(feature => (ranked.get(feature) || []).filter(c => c.base >= 2).slice(0, 5));
     // Strong runners-up for the same signs first (they include fish-type weight),
     // then the curated look-alikes, then weaker runners-up.
-    for (const other of runnersUp.filter(c => c.score >= 3)) add(other, curated.get(other.id));
-    for (const [id, reason] of curated) add(CONDITIONS.find(c => c.id === id), reason);
-    for (const other of runnersUp) add(other, curated.get(other.id));
+    for (const other of runnersUp.filter(c => c.score >= 3)) add(other, curated.get(other.id), finding.id);
+    for (const [id, reason] of curated) add(CONDITIONS.find(c => c.id === id), reason, finding.id);
+    for (const other of runnersUp) add(other, curated.get(other.id), finding.id);
   }
-  return [...out.values()].slice(0, 4);
+  const top = findings[0];
+  const alternatives = [...out.values()].slice(0, MAX_ALTERNATIVES).map(c => {
+    const urgencyLevel = urgencyFor(c, input);
+    return {
+      ...c, urgencyLevel,
+      moreUrgent: Boolean(top && URGENCY[urgencyLevel].rank > URGENCY[top.urgencyLevel].rank),
+      treatmentNote: treatmentNote(c.id, c.from),
+    };
+  });
+  return { alternatives, natural };
+}
+
+// "This looks more like mine": the chosen look-alike takes the place of the
+// finding it was listed for and becomes the top result; the old guess is pinned
+// first in the new "could also be" list.
+function applyChoice(findings, alternatives, id, input) {
+  const pick = alternatives.find(c => c.id === id);
+  if (!pick) return null;
+  const index = Math.max(0, findings.findIndex(c => c.id === pick.from));
+  const previous = findings[index];
+  const condition = CONDITIONS.find(c => c.id === id);
+  const chosen = { ...decorate(condition, input, previous.fits), chosen: true, reason: `You said this looks more like your fish. ${condition.check}` };
+  return { findings: [chosen, ...findings.filter((_, i) => i !== index)], previous };
 }
 
 export function lookalikesFor(id, water) {
@@ -250,7 +349,7 @@ export function buildCase(input) {
     `Salinity (marine): ${show(input.salinity)}`,
     `New arrivals / previous treatment / other notes: ${show(input.notes)}`,
     '',
-    `Most likely: ${diagnosis.primary?.title || 'No clear match from these answers'}${diagnosis.primary ? ` (${URGENCY[diagnosis.primary.urgencyLevel].label})` : ''}`,
+    `Most likely: ${diagnosis.primary?.title || 'No clear match from these answers'}${diagnosis.primary ? ` (${URGENCY[diagnosis.primary.urgencyLevel].label})` : ''}${diagnosis.chosen ? ' — I picked this from the look-alikes' : ''}`,
     `Also likely: ${diagnosis.findings.slice(1).map(c => `${c.title} (${URGENCY[c.urgencyLevel].label})`).join('; ') || 'None'}`,
     `Could also be: ${diagnosis.alternatives.map(c => c.title).join('; ') || 'None listed'}`,
     `Urgent signs: ${assessment.urgent.join('; ') || 'None selected'}`,

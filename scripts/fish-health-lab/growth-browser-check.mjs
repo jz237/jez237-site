@@ -68,7 +68,7 @@ try {
   await begin(page); await chooseGrowth(page,'smooth');
   assert.match(await page.locator('#results-title').innerText(),/Most likely:\s*Cyst or tumor/i);
   assert.deepEqual(await resultIds(page),['growth']);
-  assert.ok(await page.locator('.could-also [data-condition="lymphocystis"]').count());
+  assert.ok(await page.locator('.could-also [data-alternative="lymphocystis"]').count());
   await action(page,'care').click();
   assert.match(await page.locator('#care-context').innerText(),/Most likely: Cyst or tumor/i);
   await action(page,'results').click(); await action(page,'case').click();
@@ -82,7 +82,7 @@ try {
   assert.match(await page.locator('#results-title').innerText(),/Most likely:\s*Bacterial ulcers/i);
   await begin(page); await chooseGrowth(page,'unclear');
   assert.deepEqual(await resultIds(page),['lymphocystis']);
-  assert.ok(await page.locator('.could-also [data-condition="growth"]').count());
+  assert.ok(await page.locator('.could-also [data-alternative="growth"]').count());
   record('inflamed lumps lead to bacterial ulcers; an unsure lump goes with the most common cause, lymphocystis');
 
   await begin(page,'fresh','dots','lumps'); await chooseGrowth(page,'cauliflower');

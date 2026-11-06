@@ -296,3 +296,42 @@ footer > .text-button { font-size: 12px; }
   .todo-steps .step-pic{width:54px;height:54px}
   .todo-steps li+li{margin-top:9px}
 }
+
+/* v3 "Could also be": card tap = "this looks more like mine", small Compare link,
+   at most two small lines (the check, then danger/treatment). */
+.could-also .subheading{margin-bottom:4px}
+.could-also-hint{font-size:14px;color:var(--muted);margin:0 0 12px}
+.alternative{display:block;position:relative;padding:0;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.alternative .alt-pick{display:flex;gap:14px;align-items:center;width:100%;padding:12px 14px;text-align:left;background:none;border:0;border-radius:12px;color:inherit;font:inherit;cursor:pointer}
+.alternative .alt-pick:hover{background:#f1f4ec}
+.alternative .alt-pick:focus-visible{outline:3px solid #b07a31;outline-offset:2px}
+.alt-pick>img{flex-shrink:0;width:76px;height:76px;object-fit:cover;border-radius:10px;background:#dfe7e1}
+.alt-text{flex:1;min-width:0}
+.alternative .alt-text strong{display:block;font-size:16px;font-weight:500;line-height:1.3;margin:0 64px 3px 0}
+.alternative .alt-text small{display:block;font-size:13.5px;line-height:1.4;color:var(--muted)}
+.alternative .alt-text .alt-note{margin-top:3px;font-size:13px}
+.alt-note>b,.alt-note>span{display:block}
+.alt-danger{color:#a12d16;font-weight:600}
+.alt-treatment{color:var(--green)}
+.alt-compare{position:absolute;top:9px;right:10px;padding:4px 6px;font-size:13px;font-weight:500;color:var(--green);background:none;border:0;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.natural-note{font-size:14px;color:var(--muted);margin:12px 2px 0}
+.quick-compare-dialog{width:min(640px,calc(100% - 24px))}
+.quick-compare-dialog h2{font-size:26px;margin-bottom:14px}
+.quick-compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
+.quick-compare figure{margin:0}
+.quick-compare img{width:100%;height:auto;aspect-ratio:1;object-fit:cover;border-radius:10px;background:#dfe7e1}
+.quick-compare figcaption{font-size:15px;font-weight:500;color:var(--ink);margin-top:6px;line-height:1.3}
+dialog .quick-compare-check{font-size:16px;color:var(--ink);background:#eef3ea;border-radius:10px;padding:10px 12px;margin:14px 0}
+.quick-compare-actions{display:flex;flex-wrap:wrap;gap:10px}
+@media(max-width:600px){
+  .alternative .alt-pick{gap:11px;padding:10px 11px}
+  .alt-pick>img{width:64px;height:64px}
+  .alternative .alt-text strong{font-size:15px}
+  .alternative .alt-text small{font-size:13px}
+  .alternative .alt-text .alt-note{font-size:12.5px}
+  .quick-compare-dialog h2{font-size:22px}
+  .quick-compare{gap:9px}
+  .quick-compare figcaption{font-size:14px}
+  dialog .quick-compare-check{font-size:15px}
+  .quick-compare-actions .button{flex:1 1 100%}
+}

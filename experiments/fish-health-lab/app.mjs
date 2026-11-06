@@ -1,5 +1,5 @@
 import { SYMPTOMS, BEHAVIORS, CONDITIONS, SOURCES, GROWTH_CHOICES, FISH_TYPES, URGENCY, closerQuestionFor, fishTypeFor } from './data.mjs';
-import { assessUrgency, rankConditions, assessDiagnosis, LABELS, buildCase, lookalikesFor } from './logic.mjs';
+import { assessUrgency, rankConditions, assessDiagnosis, LABELS, buildCase, lookalikesFor, ALTERNATIVE_TEXT } from './logic.mjs';
 import { slotsFor, leadSlot, patternFor } from './visuals.mjs';
 import { OPENING_IMAGE, signImagesFor, TEXTURE_IMAGES } from './choice-images.mjs';
 import { treatmentGuideFor, openTreatmentPopup, carePlanFor } from './treatments.mjs';
@@ -15,6 +15,8 @@ const additionalSigns = new Set();
 const touchOnly = matchMedia('(hover: none) and (pointer: coarse)');
 let step = 'welcome', activeView = 'guide', primarySign = '', detailSign = '';
 let currentCase = '', illustrationId = 0, libraryPattern = '', visualReference = null;
+// "This looks more like mine" taps on the results page, in order.
+let chosenPath = [];
 
 function fishArt(type = 'plain', hero = false) {
   const uid = `fish-${++illustrationId}`;
@@ -45,7 +47,7 @@ function readInput() {
   // A "Not sure" texture keeps the original white-dots observation.
   const mainSign = detailSign && detailSign !== 'unclear' ? detailSign : primarySign;
   const visualSigns = [mainSign, ...additionalSigns].filter(Boolean);
-  return { ...Object.fromEntries(new FormData(form)), fishType: form.elements.fishType?.value || '', closer: needsCloser() ? form.elements.closer?.value || '' : '', growthAppearance: visualSigns.includes('lumps') ? form.elements.growthAppearance.value : '', initialSign: primarySign, textureSign: detailSign, primarySign: mainSign, visualSigns, signs: [...visualSigns, ...$$('input[name="behavior"]:checked').map(el => el.value)], visualReference, comparisons: [...comparisons] };
+  return { ...Object.fromEntries(new FormData(form)), fishType: form.elements.fishType?.value || '', closer: needsCloser() ? form.elements.closer?.value || '' : '', growthAppearance: visualSigns.includes('lumps') ? form.elements.growthAppearance.value : '', initialSign: primarySign, textureSign: detailSign, primarySign: mainSign, visualSigns, signs: [...visualSigns, ...$$('input[name="behavior"]:checked').map(el => el.value)], visualReference, comparisons: [...comparisons], chosen: [...chosenPath] };
 }
 function needsTexture() { return form.elements.water.value === 'fresh' && primarySign === 'dots'; }
 function needsCloser() { return !needsTexture() && Boolean(closerQuestionFor(primarySign, form.elements.water.value)); }
@@ -56,6 +58,8 @@ function clearCloserChoice() { $$('input[name="closer"]').forEach(el => { el.che
 
 function goStep(name, focus = true) {
   step = name;
+  // Going back to the questions drops any "looks more like mine" choice.
+  if (!['results', 'care', 'care-summary'].includes(name)) chosenPath = [];
   $('#welcome').hidden = name !== 'welcome';
   $('#check').hidden = name === 'welcome';
   $$('.question-panel').forEach(el => { el.hidden = el.dataset.step !== name; });
@@ -151,7 +155,7 @@ function reset() {
   $('#care-context').replaceChildren(); $('#care-summary-content').replaceChildren();
   $('#inline-urgent').hidden = true; $('#tank-extra').open = false;
   $('#additional-signs').open = false;
-  $('#detail-content').replaceChildren(); $('#compare-content').replaceChildren();
+  $('#detail-content').replaceChildren(); $('#compare-content').replaceChildren(); $('#quick-compare-content').replaceChildren();
   $('#atlas-full').removeAttribute('src');
   $$('dialog[open]').forEach(dialog => dialog.close());
   goStep('welcome'); switchView('guide');
@@ -221,13 +225,38 @@ function renderResults() {
   const context = diagnosis.contextConcerns.map(c => `<section class="notice water-notice" data-context-concern="${c.id}"><h2>Also fix: the water</h2><p>${escape(c.reason)}</p>${readMore(c, input.water)}</section>`).join('');
   const unresolved = diagnosis.unexplained.length ? `<p class="notice unresolved-signs"><strong>Not covered above:</strong> ${escape(diagnosis.unexplained.map(id => LABELS[id] || id).join('; '))}. Keep an eye on it.</p>` : '';
   const messages = diagnosis.messages.length ? `<div class="notice diagnosis-context"><h2>${diagnosis.status === 'multiple' ? 'More than one problem may fit.' : 'Putting your answers together'}</h2>${diagnosis.messages.map(message => `<p>${escape(message)}</p>`).join('')}</div>` : '';
-  const other = diagnosis.alternatives.map(c => {
-    const image = resultThumbnail(c, input.water);
-    return `<button class="alternative" data-condition="${c.id}"><img src="${image.url}" alt="" loading="lazy" data-image-set="${setAttr(input.fishType, input.water, c.id)}"><span><strong>${escape(c.title)}</strong><small>${escape(c.comparisonReason)}</small></span>${badge(c.urgency)}</button>`;
-  }).join('');
+  const other = diagnosis.alternatives.map(c => alternativeCard(c, input)).join('');
+  const natural = diagnosis.naturalNote ? `<p class="natural-note">${escape(diagnosis.naturalNote)}</p>` : '';
+  const couldAlso = other || natural ? `<section class="could-also"><h2 class="subheading">Could also be</h2>${other ? `<p class="could-also-hint">Tap the one that looks more like your fish.</p><div class="alternatives">${other}</div>` : ''}${natural}</section>` : '';
   const where = [ {fresh:'Freshwater',marine:'Saltwater'}[input.water], fish?.title ].filter(Boolean).join(' · ');
-  $('#results-content').innerHTML = `<h1 id="results-title" class="question-title results-title">${first ? `<span>Most likely:</span> ${escape(first.title)}` : escape(diagnosis.title)}</h1><p class="question-hint result-hint">${where ? `${escape(where)} · ` : ''}Our best guess from your answers—a hobby guide, not a vet.</p>${urgent}${messages}${focus}${WATER_NUDGE}${additional}${unresolved}${context}${other ? `<section class="could-also"><h2 class="subheading">Could also be</h2><div class="alternatives">${other}</div></section>` : ''}<section class="care-next"><h3>Got water test results?</h3><p>Add your readings and tank details for a tailored checklist.</p><button class="button secondary" data-action="care">Add readings & tank details →</button></section><button class="text-button" data-action="case">Save my notes ↗</button>`;
+  $('#results-content').innerHTML = `<h1 id="results-title" class="question-title results-title">${first ? `<span>Most likely:</span> ${escape(first.title)}` : escape(diagnosis.title)}</h1><p class="question-hint result-hint">${where ? `${escape(where)} · ` : ''}${diagnosis.chosen ? 'Your pick from the look-alikes' : 'Our best guess from your answers'}—a hobby guide, not a vet.</p>${urgent}${messages}${focus}${WATER_NUDGE}${additional}${unresolved}${context}${couldAlso}<section class="care-next"><h3>Got water test results?</h3><p>Add your readings and tank details for a tailored checklist.</p><button class="button secondary" data-action="care">Add readings & tank details →</button></section><button class="text-button" data-action="case">Save my notes ↗</button>`;
   goStep('results');
+}
+
+// A look-alike card: tap = "This looks more like mine"; Compare opens the
+// side-by-side. At most two small lines: the check, then danger/treatment.
+function alternativeCard(c, input) {
+  const image = resultThumbnail(c, input.water);
+  const notes = [c.moreUrgent ? `<b class="alt-danger">${escape(ALTERNATIVE_TEXT.danger)}</b>` : '', c.treatmentNote === 'different' ? `<span class="alt-treatment">${escape(ALTERNATIVE_TEXT.different)}</span>` : ''].filter(Boolean);
+  return `<div class="alternative" data-alternative="${c.id}" data-more-urgent="${c.moreUrgent}" data-treatment-note="${c.treatmentNote}"><button type="button" class="alt-pick" data-choose="${c.id}" aria-label="This looks more like mine: ${escape(c.title)}"><img src="${image.url}" alt="" loading="lazy" data-image-set="${setAttr(input.fishType, input.water, c.id)}"><span class="alt-text"><strong>${escape(c.title)}</strong><small class="alt-check">${escape(c.comparisonReason)}</small>${notes.length ? `<small class="alt-note">${notes.join('')}</small>` : ''}</span></button><button type="button" class="alt-compare" data-quick-compare="${c.id}">Compare</button></div>`;
+}
+
+// Side by side: your result and one look-alike, plus the one thing to check.
+function openQuickCompare(id) {
+  const input = readInput(), diagnosis = assessDiagnosis(input), first = diagnosis.primary;
+  const other = diagnosis.alternatives.find(c => c.id === id);
+  if (!first || !other) return;
+  const pic = c => { const image = resultThumbnail(c, input.water); return `<figure data-compare-side="${c.id}"><img src="${image.url}" width="${image.width || 362}" height="${image.height || 362}" alt="${escape(image.alt || '')}" data-image-set="${setAttr(input.fishType, input.water, c.id)}"><figcaption>${escape(c.title)}</figcaption></figure>`; };
+  $('#quick-compare-content').innerHTML = `<div class="quick-compare">${pic(first)}${pic(other)}</div><p class="quick-compare-check">${escape(other.comparisonReason)}</p><div class="quick-compare-actions"><button type="button" class="button primary" data-choose="${other.id}">Mine looks more like ${escape(shortName(other.title))}</button><button type="button" class="button secondary" data-action="close-dialog">Close</button></div>`;
+  $('#quick-compare-dialog').showModal();
+}
+const shortName = title => title.replace(/\s*\(.*\)$/, '');
+
+function chooseAlternative(id) {
+  const original = assessDiagnosis({ ...readInput(), chosen: [] }).primary?.id;
+  chosenPath = id === original ? [] : [...chosenPath, id];
+  $('#quick-compare-dialog').close();
+  renderResults();
 }
 
 function openCare() {
@@ -422,6 +451,10 @@ document.addEventListener('click', async event => {
     $('#additional-status').textContent = additionalSigns.size ? `Also selected: ${[...additionalSigns].map(id => LABELS[id]).join('; ')}. Select a picture again to remove it.` : 'No additional signs selected.';
     updateNextLabel();
   }
+  const choose = event.target.closest('[data-choose]');
+  if (choose) chooseAlternative(choose.dataset.choose);
+  const quickCompare = event.target.closest('[data-quick-compare]');
+  if (quickCompare) openQuickCompare(quickCompare.dataset.quickCompare);
   const condition = event.target.closest('[data-condition]');
   if (condition) openDetail(condition.dataset.condition, condition.dataset.openSlot);
   const filter = event.target.closest('[data-library-pattern]');

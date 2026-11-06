@@ -161,7 +161,7 @@ try {
   assert.match(await page.locator('[data-result="dropsy"] .todo-card').innerText(),/hard to cure/);
   assert.equal(await page.locator('#results-content .urgent').isVisible(),true);
   assert.match(await page.locator('.diagnosis-context').innerText(), /more than one problem/i);
-  assert.equal(await page.locator('.alternatives [data-condition="dropsy"], .alternatives [data-condition="swim-bladder"], .alternatives [data-condition="popeye"], .alternatives [data-condition="cloudy-eye"]').count(),0);
+  assert.equal(await page.locator('.alternatives [data-alternative="dropsy"], .alternatives [data-alternative="swim-bladder"], .alternatives [data-alternative="popeye"], .alternatives [data-alternative="cloudy-eye"]').count(),0);
   record('white grains plus raised scales produce two explained concerns, not unrelated ich look-alikes');
 
   await begin(page,'fresh','dots'); await addSign(page,'fuzz');

@@ -350,3 +350,18 @@ no set yet. Jez: one 12-cell sheet per set, not one sheet per picture.
   fetches and hashes every public URL; local copies are hashed when present) and
   `betta-browser-check.mjs` (local preview or live via `FISH_LAB_URL`).
   `betta-pilot-screenshots.mjs` saves 390 px review shots.
+
+## "Could also be" v3 — owner approval, November 5 2026 19:27 EST
+
+Jez approved seven changes (“make sure you don't overcomplicate and cause confusion”):
+tap a look-alike card = “This looks more like mine” (it becomes Most likely with its
+own plan; the old guess moves first into Could also be; tapping it swaps back;
+changing answers drops the pick); a small Compare link (two pictures, fish-specific
+when available, one check line); every look-alike reason is a short check (`LOOKALIKES`,
+fallback `LOOK_FOR` in logic.mjs); a red “Rule this out first — more dangerous” line
+only when strictly more urgent; “Same first steps” / “Different treatment — check
+before dosing” from the explicit `TREATMENT_FAMILY` map; 'normal' is never a card
+(one plain line under the section instead; swollen-belly results get a full-belly /
+pregnant-livebearer wording); at most 3 cards, ranking otherwise unchanged.
+Tests: diagnosis.test.mjs (cap, normal, danger, treatment families, swap for every
+listed look-alike) and browser-check.mjs (compare + swap through the real UI).
