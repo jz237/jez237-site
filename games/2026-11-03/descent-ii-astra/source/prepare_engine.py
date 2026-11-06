@@ -15,8 +15,37 @@ includes={"armor.inc":"3d/astra_armor.inc","finish.inc":"arch/ogl/astra_finish.i
           "lighting.inc":"main/astra_light.inc","shader.inc":"arch/ogl/astra_shader.inc",
           "pyro.inc":"arch/ogl/astra_pyro.inc","blast.inc":"arch/ogl/astra_blast.inc"}
 includes.update({'fleet.inc': 'arch/ogl/astra_fleet.inc', 'fleet_types.inc': 'arch/ogl/astra_fleet_types.inc', 'shell.inc': '3d/astra_shell.inc', 'gantry.inc': 'arch/ogl/astra_gantry.inc', 'plume.inc': 'arch/ogl/astra_plume.inc', 'encounter.inc': 'main/astra_encounter.inc'})
+includes["weapons_demo.inc"]="arch/ogl/astra_weapons_demo.inc"
+includes["motion.inc"]="arch/ogl/astra_motion.inc"
+includes["pickups.inc"]="arch/ogl/astra_pickups.inc"
+includes["autopilot.inc"]="main/astra_autopilot.inc"
+includes["menus.inc"]="main/astra_menus.inc"
+includes["lists.inc"]="main/astra_lists.inc"
+includes["pause.inc"]="main/astra_pause.inc"
 includes["preview.inc"]="main/astra_preview.inc"
 includes["lens.inc"]="arch/ogl/astra_lens.inc"
+includes["recharge.inc"]="arch/ogl/astra_recharge.inc"
+includes["debris.inc"]="arch/ogl/astra_debris.inc"
+includes["environment.inc"]="arch/ogl/astra_environment.inc"
+includes["mine_preview.inc"]="main/astra_mine_preview.inc"
+includes["fixture_lights.inc"]="arch/ogl/astra_fixture_lights.inc"
+includes["fixtures.inc"]="arch/ogl/astra_fixtures.inc"
+includes["door_mesh.inc"]="arch/ogl/astra_door_mesh.inc"
+includes["liquids.inc"]="arch/ogl/astra_liquids.inc"
+includes["doors.inc"]="arch/ogl/astra_doors.inc"
+includes["generated.inc"]="arch/ogl/astra_generated.inc"
+includes["faithful.inc"]="arch/ogl/astra_faithful.inc"
+includes["foundry.inc"]="arch/ogl/astra_foundry.inc"
+includes["antialias.inc"]="arch/ogl/astra_antialias.inc"
+includes["detonations.h"]="main/astra_detonations.h"
+includes["detonation_draw.inc"]="arch/ogl/astra_detonation_draw.inc"
+includes["streaming.inc"]="arch/ogl/astra_streaming.inc"
+includes["glstate.inc"]="arch/ogl/astra_glstate.inc"
+includes["death_chain.inc"]="main/astra_death_chain.inc"
+includes["death_mix.inc"]="arch/sdl/astra_death_mix.inc"
+includes["wall_styles.inc"]="arch/ogl/astra_wall_styles.inc"
+for name in ["combat","combat_render","shadows","shadow_scene"]:
+    includes[name+".inc"]="arch/ogl/astra_"+name+".inc"
 for name,path in includes.items():
     if (repo/"d2"/path).exists():raise SystemExit("Use a fresh checkout. An Astra include already exists.")
 git(repo,"apply",str(src/"engine.patch"))
