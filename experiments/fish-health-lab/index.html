@@ -9,9 +9,9 @@
   <title>Fish Health Lab · A visual-first experiment</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='14' fill='%231c504a'/%3E%3Cpath d='M9 24Q22 8 35 24Q22 40 9 24L4 17v14z' fill='%23e6edba'/%3E%3Ccircle cx='29' cy='22' r='2' fill='%231c504a'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="/assets/fonts/css/outfit-playfair-display.css">
-  <link rel="stylesheet" href="style.css?v=7">
-  <link rel="stylesheet" href="flow.css?v=7">
-  <script type="module" src="app.mjs?v=7"></script>
+  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="flow.css?v=8">
+  <script type="module" src="app.mjs?v=8"></script>
 </head>
 <body>
   <a href="#main" class="skip">Skip to the guide</a>
@@ -37,11 +37,11 @@
             </fieldset>
           </section>
           <section class="question-panel" data-step="fish" hidden aria-labelledby="fish-title">
-            <h1 id="fish-title" class="question-title">What kind of fish?</h1><p class="question-hint">Optional—some fish get certain problems more often. Skip if you’re not sure.</p>
+            <h1 id="fish-title" class="question-title">What kind of fish?</h1><p class="question-hint">Optional. Pick yours and the pictures will show your kind of fish.</p>
             <fieldset class="fish-picker"><legend class="sr-only">Kind of fish</legend><div id="fish-grid" class="fish-grid"></div></fieldset>
           </section>
           <section class="question-panel" data-step="signs" hidden aria-labelledby="signs-title">
-            <h1 id="signs-title" class="question-title">What stands out most?</h1><p class="question-hint">Choose the picture closest to what you see.</p><p class="image-note">AI illustrations.</p>
+            <h1 id="signs-title" class="question-title">What stands out most?</h1><p class="question-hint">Choose the picture closest to what you see.</p><p id="signs-note" class="image-note">AI illustrations.</p>
             <div id="symptom-grid" class="symptom-grid" aria-label="Choose the main visible sign"></div>
           </section>
           <section class="question-panel" data-step="texture" hidden aria-labelledby="texture-title">

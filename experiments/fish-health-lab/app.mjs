@@ -3,6 +3,7 @@ import { assessUrgency, rankConditions, assessDiagnosis, LABELS, buildCase, look
 import { slotsFor, leadSlot, patternFor } from './visuals.mjs';
 import { OPENING_IMAGE, signImagesFor, TEXTURE_IMAGES } from './choice-images.mjs';
 import { treatmentGuideFor, openTreatmentPopup, carePlanFor } from './treatments.mjs';
+import { imagesFor, imageFor, fishSetFor, FISH_TYPE_IMAGES, stepImageFor, splitStep } from './fish-images.mjs';
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
@@ -31,22 +32,14 @@ function fishArt(type = 'plain', hero = false) {
   return `<svg class="fish-art ${hero ? 'fish-art-hero' : ''}" viewBox="0 0 260 150" aria-hidden="true" focusable="false"><defs><linearGradient id="${uid}-body" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#7eaea6"/><stop offset=".48" stop-color="#b9cec1"/><stop offset="1" stop-color="#dce4cb"/></linearGradient><linearGradient id="${uid}-fin"><stop stop-color="#9aada1" stop-opacity=".35"/><stop offset="1" stop-color="#638b83" stop-opacity=".8"/></linearGradient></defs><g transform="${type === 'balance' ? 'rotate(-24 130 75)' : ''}"><path d="${tail}" fill="url(#${uid}-fin)" stroke="#7a9e92"/><path d="M98 53q22-39 60-19l11 21M104 97q16 26 43 17l8-14" fill="url(#${uid}-fin)" stroke="#7a9e92"/><path d="${body}" fill="url(#${uid}-body)" stroke="#527d72" stroke-width="1.2"/><path d="M82 76q50-22 106-5M92 85q41 12 75 4" fill="none" stroke="#6e9685" opacity=".4"/><path d="M177 55q-11 20 1 39" fill="none" stroke="#577e73" stroke-width="1.7"/><path d="M112 82q21-8 28 9l-20 11z" fill="url(#${uid}-fin)"/><circle cx="191" cy="67" r="${type === 'eyes' ? 9 : 5.5}" fill="${type === 'eyes' ? '#dfdfce' : '#ece9c8'}" stroke="#587d70"/><circle cx="192" cy="67" r="${type === 'eyes' ? 5 : 3}" fill="${type === 'eyes' ? '#98a69a' : '#153f36'}"/><circle cx="193" cy="66" r="1" fill="#fff"/>${changes}</g></svg>`;
 }
 
-// Small hand-drawn silhouettes for the optional fish-type chips (no photos).
-const FISH_ICONS = {
-  betta: '<path d="M29 20C14 2 2 7 3 20C2 33 14 38 29 20Z" fill="#c2414f"/><path d="M27 15C31 3 41 6 43 14Z" fill="#b23a48"/><path d="M27 25C31 38 43 36 43 26Z" fill="#b23a48"/><ellipse cx="39" cy="20" rx="14" ry="6.5" fill="#d9566a"/><circle cx="48" cy="18.5" r="1.7" fill="#2b1418"/>',
-  goldfish: '<path d="M23 20L5 7Q10 20 5 33Z" fill="#f4b768"/><path d="M23 20L3 14L3 26Z" fill="#f0a046"/><path d="M30 10Q36 2 43 10Z" fill="#e07a26"/><ellipse cx="37" cy="21" rx="15" ry="11.5" fill="#e8862e"/><circle cx="46" cy="18" r="2" fill="#3a1c08"/>',
-  tetra: '<path d="M19 20L8 12L11 20L8 28Z" fill="#c9d3d0"/><path d="M16 20Q34 9 55 19Q34 30 16 20Z" fill="#cfdcde"/><path d="M24 17.5Q38 13.5 51 18L51 19.6Q38 16.5 24 19.6Z" fill="#2f9fd8"/><path d="M19 20.5Q27 22 35 21.5Q30 25.5 22 23.5Z" fill="#d6463c"/><circle cx="50" cy="18.6" r="1.6" fill="#1d2a2c"/>',
-  livebearer: '<path d="M25 20L5 6Q1 20 5 34Z" fill="#ef8a3a"/><circle cx="10" cy="15" r="1.6" fill="#3d6fb0"/><circle cx="12" cy="25" r="1.6" fill="#3d6fb0"/><path d="M23 20Q37 12 54 19Q39 27 23 20Z" fill="#aab8b0"/><circle cx="49" cy="18.6" r="1.6" fill="#1d2a2c"/>',
-  cichlid: '<path d="M21 20L10 13L10 27Z" fill="#cfd4c4"/><path d="M29 12L22 0L37 10Z" fill="#cfd4c4"/><path d="M29 28L21 40L37 30Z" fill="#cfd4c4"/><path d="M20 20Q30 5 47 18Q30 35 20 20Z" fill="#e3e5d8"/><path d="M30 10.5L30 29.5M37 11.5L37 27.5" stroke="#3a3a36" stroke-width="2"/><circle cx="43" cy="17" r="1.6" fill="#7a2a22"/>',
-  catfish: '<path d="M15 23L6 15L8 23L6 30Z" fill="#a68f68"/><path d="M30 13L34 4L39 14Z" fill="#8c7652"/><path d="M13 24Q24 10 46 14Q57 18 57 25L13 25Z" fill="#b39c74"/><circle cx="26" cy="19" r="1.2" fill="#6b5a3e"/><circle cx="33" cy="17" r="1.2" fill="#6b5a3e"/><circle cx="38" cy="21" r="1.2" fill="#6b5a3e"/><path d="M56 24l5 3M55 25l3 5" stroke="#6b5a3e" stroke-width="1.2" stroke-linecap="round"/><circle cx="49" cy="18" r="1.7" fill="#1d1a12"/>',
-  clownfish: '<path d="M19 20L8 12Q11 20 8 28Z" fill="#ee7a2b" stroke="#2a1a10" stroke-width=".8"/><ellipse cx="35" cy="20" rx="17" ry="9" fill="#ee7a2b" stroke="#2a1a10" stroke-width=".8"/><path d="M44 11.5Q40.5 20 44 28.5M34 11Q31 20 34 29M23.5 14Q22 20 23.5 26" stroke="#2a1a10" stroke-width="4.6" fill="none"/><path d="M44 11.5Q40.5 20 44 28.5M34 11Q31 20 34 29M23.5 14Q22 20 23.5 26" stroke="#fff" stroke-width="3" fill="none"/><circle cx="48" cy="18" r="1.7" fill="#2a1a10"/>',
-  tang: '<path d="M15 20L6 13L8 20L6 27Z" fill="#f3c734"/><path d="M14 20Q22 4 42 8Q54 14 57 19Q54 24 42 32Q22 36 14 20Z" fill="#f6cf3c"/><path d="M17 21l3.5-1.2" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/><circle cx="48" cy="15.5" r="1.7" fill="#2a2208"/>',
-  angel: '<path d="M15 20L7 14L9 20L7 26Z" fill="#f2c234"/><path d="M14 20Q20 4 40 7Q52 12 55 20Q52 28 40 33Q20 36 14 20Z" fill="#f6f1df"/><path d="M14 20Q18 9 27 7.5L27 32.5Q18 31 14 20Z" fill="#f2c234"/><path d="M45 8.5Q42.5 20 45 31.5" stroke="#222" stroke-width="3" fill="none"/><circle cx="48.5" cy="17" r="1.5" fill="#222"/>',
-  wrasse: '<path d="M11 20Q4 13 4 20Q4 27 11 20Z" fill="#7d5bb5"/><path d="M10 20Q30 11 57 18Q32 28 10 20Z" fill="#8a66c2"/><path d="M18 18.5Q34 14 52 17.5M18 21.5Q34 21 50 20" stroke="#f0a33a" stroke-width="1" fill="none"/><circle cx="51" cy="18" r="1.5" fill="#1d1430"/>',
-  damsel: '<path d="M20 20L8 11L12 20L8 29Z" fill="#2f7fd8"/><path d="M24 12Q34 6 43 12Z" fill="#2669b8"/><ellipse cx="34" cy="20" rx="15" ry="9" fill="#3a8be0"/><circle cx="44" cy="18" r="1.7" fill="#0d2440"/>',
-  other: '<path d="M16 20L6 12L8 20L6 28Z" fill="none" stroke="#7d9086" stroke-width="1.6" stroke-dasharray="3 2"/><path d="M15 20Q33 6 55 19Q33 34 15 20Z" fill="none" stroke="#7d9086" stroke-width="1.6" stroke-dasharray="3 2"/><text x="35" y="24.5" font-size="11" text-anchor="middle" fill="#5f746a" font-family="system-ui,sans-serif">?</text>',
+// Fish-type chips use AI pictures of healthy fish (see fish-images.mjs).
+const fishPicture = id => {
+  const image = FISH_TYPE_IMAGES[id || 'other'];
+  return image ? `<img class="fish-photo" data-src="${image.url}" width="${image.width}" height="${image.height}" alt="" loading="lazy" decoding="async">` : '';
 };
-const fishIcon = kind => `<svg class="fish-icon" viewBox="0 0 64 40" aria-hidden="true" focusable="false">${FISH_ICONS[kind] || FISH_ICONS.other}</svg>`;
+// The chosen fish type (guided check only; the library stays generic).
+const currentFish = () => activeView === 'guide' ? form.elements.fishType?.value || '' : '';
+const setAttr = (fishType, water, key) => imagesFor(fishType, key, water).fishSpecific ? fishType : 'generic';
 
 function readInput() {
   // A "Not sure" texture keeps the original white-dots observation.
@@ -67,9 +60,10 @@ function goStep(name, focus = true) {
   $('#check').hidden = name === 'welcome';
   $$('.question-panel').forEach(el => { el.hidden = el.dataset.step !== name; });
   // Fetch choice pictures only when their question is reached, not at the front door.
-  const activeGrid = name === 'signs' ? '#symptom-grid' : name === 'texture' ? '#texture-grid' : name === 'behavior' && $('#additional-signs').open ? '#additional-grid' : null;
-  if (activeGrid) $$(`${activeGrid} img[data-src]`).forEach(img => { img.src = img.dataset.src; img.removeAttribute('data-src'); });
   if (name === 'fish') renderFishChoices();
+  const activeGrid = name === 'signs' ? '#symptom-grid' : name === 'texture' ? '#texture-grid' : name === 'fish' ? '#fish-grid' : name === 'behavior' && $('#additional-signs').open ? '#additional-grid' : null;
+  if (activeGrid) $$(`${activeGrid} img[data-src]`).forEach(img => { img.src = img.dataset.src; img.removeAttribute('data-src'); });
+  if (name === 'signs') updateSignsHint();
   if (name === 'closer') renderCloserChoices();
   form.hidden = ['results', 'care-summary'].includes(name);
   form.classList.toggle('care-mode', name === 'care');
@@ -181,8 +175,7 @@ function imageWater(condition) {
 }
 
 function resultThumbnail(condition, water = imageWater(condition)) {
-  const choices = signImagesFor(water);
-  return leadSlot(condition.id)?.image || choices[condition.thumb || condition.art] || choices.unclear;
+  return imageFor(currentFish(), condition.id, water);
 }
 
 function readMore(condition, water = imageWater(condition)) {
@@ -195,16 +188,24 @@ function badge(level) {
   return level && URGENCY[level] ? `<span class="urgency-badge urgency-${level}" data-urgency="${level}"><i aria-hidden="true"></i>${escape(URGENCY[level].label)}</span>` : '';
 }
 
+function stepItem(step) {
+  const { id, image } = stepImageFor(step), { lead, more } = splitStep(step);
+  const pic = image ? `<img class="step-pic" data-step-image="${id}" src="${image.url}" width="${image.width}" height="${image.height}" alt="" decoding="async">`
+    : `<span class="step-pic step-pic-urgent" data-step-image="${id}" aria-hidden="true">!</span>`;
+  return `<li>${pic}<span><strong>${escape(lead)}</strong>${more ? `<small>${escape(more)}</small>` : ''}</span></li>`;
+}
+
 function todoCard(condition, water, tip = '', fish = null) {
   const plan = condition.plan || carePlanFor(condition.id, water);
   if (!plan) return '';
-  return `<section class="todo-card" data-todo="${condition.id}"><h3>What to do now</h3>${plan.reefUnsafe ? '<p class="reef-flag" role="note"><strong>Not reef-safe</strong> — treat in a separate tank.</p>' : ''}<ol class="todo-steps">${plan.steps.map(s => `<li>${escape(s)}</li>`).join('')}</ol>${tip && fish ? `<p class="fish-tip"><strong>${escape(fish.title)} tip:</strong> ${escape(tip)}</p>` : ''}<dl class="todo-facts"><div><dt>Usual treatment</dt><dd>${escape(plan.treatment)}</dd></div><div><dt>Typical recovery</dt><dd>${escape(plan.recovery)}</dd></div></dl>${plan.medicated ? '<p class="label-note">Amounts: follow the product label.</p>' : ''}${readMore(condition, water)}</section>`;
+  return `<section class="todo-card" data-todo="${condition.id}"><h3>What to do now</h3>${plan.reefUnsafe ? '<p class="reef-flag" role="note"><strong>Not reef-safe</strong> — treat in a separate tank.</p>' : ''}<ol class="todo-steps">${plan.steps.map(stepItem).join('')}</ol>${tip && fish ? `<p class="fish-tip"><strong>${escape(fish.title)} tip:</strong> ${escape(tip)}</p>` : ''}<dl class="todo-facts"><div><dt>Usual treatment</dt><dd>${escape(plan.treatment)}</dd></div><div><dt>Typical recovery</dt><dd>${escape(plan.recovery)}</dd></div></dl>${plan.medicated ? '<p class="label-note">Amounts: follow the product label.</p>' : ''}${readMore(condition, water)}</section>`;
 }
 
 function findingCard(c, input, lead) {
-  const image = resultThumbnail(c, input.water), ready = slotsFor(c.id).filter(s => s.image).length;
+  const image = resultThumbnail(c, input.water), own = imagesFor(input.fishType, c.id, input.water);
+  const ready = (own.fishSpecific ? own.images.length : 0) + slotsFor(c.id).filter(s => s.image).length;
   const fish = fishTypeFor(input.water, input.fishType);
-  return `<article class="${lead ? 'result-focus' : 'additional-finding'}" data-result="${c.id}" data-urgency="${c.urgencyLevel}">${lead ? '' : `<p class="eyebrow">ALSO LIKELY</p><h2>${escape(c.title)}</h2>`}<div class="result-head">${badge(c.urgencyLevel)}<p class="result-summary">${escape(c.summary)}</p></div><button type="button" class="result-image" data-condition="${c.id}" aria-label="More about ${escape(c.title)}"><img src="${image.url}" width="${image.width || 362}" height="${image.height || 362}" alt="${escape(image.alt)}"><span>${ready ? `${ready} pictures` : 'More info'} ↗</span></button><div class="diagnosis-reason"><strong>Why we think so</strong><p>${escape(c.reason)}</p></div>${todoCard(c, input.water, c.tip, fish)}</article>`;
+  return `<article class="${lead ? 'result-focus' : 'additional-finding'}" data-result="${c.id}" data-urgency="${c.urgencyLevel}">${lead ? '' : `<p class="eyebrow">ALSO LIKELY</p><h2>${escape(c.title)}</h2>`}<div class="result-head">${badge(c.urgencyLevel)}<p class="result-summary">${escape(c.summary)}</p></div><button type="button" class="result-image" data-condition="${c.id}" aria-label="More about ${escape(c.title)}"><img src="${image.url}" width="${image.width || 362}" height="${image.height || 362}" alt="${escape(image.alt)}" data-image-set="${setAttr(input.fishType, input.water, c.id)}"><span>${ready ? `${ready} picture${ready === 1 ? '' : 's'}` : 'More info'} ↗</span></button><div class="diagnosis-reason"><strong>Why we think so</strong><p>${escape(c.reason)}</p></div>${todoCard(c, input.water, c.tip, fish)}</article>`;
 }
 
 const WATER_NUDGE = '<p class="water-nudge"><svg viewBox="0 0 16 20" aria-hidden="true"><path d="M8 1C5 6 2 9.5 2 13a6 6 0 0 0 12 0C14 9.5 11 6 8 1Z" fill="#3c8fb5"/></svg>Tested ammonia &amp; nitrite lately? Bad water causes a lot of these.</p>';
@@ -222,7 +223,7 @@ function renderResults() {
   const messages = diagnosis.messages.length ? `<div class="notice diagnosis-context"><h2>${diagnosis.status === 'multiple' ? 'More than one problem may fit.' : 'Putting your answers together'}</h2>${diagnosis.messages.map(message => `<p>${escape(message)}</p>`).join('')}</div>` : '';
   const other = diagnosis.alternatives.map(c => {
     const image = resultThumbnail(c, input.water);
-    return `<button class="alternative" data-condition="${c.id}"><img src="${image.url}" alt="" loading="lazy"><span><strong>${escape(c.title)}</strong><small>${escape(c.comparisonReason)}</small></span>${badge(c.urgency)}</button>`;
+    return `<button class="alternative" data-condition="${c.id}"><img src="${image.url}" alt="" loading="lazy" data-image-set="${setAttr(input.fishType, input.water, c.id)}"><span><strong>${escape(c.title)}</strong><small>${escape(c.comparisonReason)}</small></span>${badge(c.urgency)}</button>`;
   }).join('');
   const where = [ {fresh:'Freshwater',marine:'Saltwater'}[input.water], fish?.title ].filter(Boolean).join(' · ');
   $('#results-content').innerHTML = `<h1 id="results-title" class="question-title results-title">${first ? `<span>Most likely:</span> ${escape(first.title)}` : escape(diagnosis.title)}</h1><p class="question-hint result-hint">${where ? `${escape(where)} · ` : ''}Our best guess from your answers—a hobby guide, not a vet.</p>${urgent}${messages}${focus}${WATER_NUDGE}${additional}${unresolved}${context}${other ? `<section class="could-also"><h2 class="subheading">Could also be</h2><div class="alternatives">${other}</div></section>` : ''}<section class="care-next"><h3>Got water test results?</h3><p>Add your readings and tank details for a tailored checklist.</p><button class="button secondary" data-action="care">Add readings & tank details →</button></section><button class="text-button" data-action="case">Save my notes ↗</button>`;
@@ -303,12 +304,23 @@ function emergencyContent() {
   return '<p class="eyebrow">EMERGENCY STEPS</p><h2 id="detail-title">Oxygen and clean water first.</h2><p class="lead">Gasping, can’t stay upright, or fish dying? Do these now, then treat the illness.</p><ol class="care-list"><li><strong>Add oxygen.</strong> Air stone, or point the filter outlet at the surface so it ripples.</li><li><strong>Test the water.</strong> Ammonia, nitrite, pH and temperature (and salinity for saltwater). Clear water can still be toxic.</li><li><strong>Do a 30–50% water change</strong> with dechlorinated, temperature-matched (and salinity-matched) water, and add an ammonia/nitrite detoxifier.</li><li><strong>Move sick fish to a hospital tank</strong> if you have one, and feed lightly.</li></ol><p class="notice">If fish keep dying after the water is fixed, an aquatic vet or a good local fish store can help.</p><a class="button secondary" href="https://fishvets.org/" target="_blank" rel="noopener noreferrer">Find a fish vet (AAFV) ↗</a>';
 }
 
+// Reference detail pictures: the chosen fish's own set first, then the generic
+// gallery (folded away when the fish has its own pictures).
+function fishGallery(condition, water) {
+  const fishType = currentFish(), own = imagesFor(fishType, condition.id, water);
+  const generic = slotsFor(condition.id).some(s => s.image) || activeView === 'library' ? gallery(condition) : '';
+  if (!own.fishSpecific) return generic;
+  const fish = fishTypeFor(water, fishType);
+  const pics = own.images.map(image => `<figure><img src="${image.url}" width="${image.width}" height="${image.height}" alt="${escape(image.alt)}" data-image-set="${fishType}"><figcaption>${escape(image.caption || '')}</figcaption></figure>`).join('');
+  return `<section class="fish-gallery" data-fish-gallery="${fishType}" aria-label="${escape(fish?.title || '')} pictures"><div class="fish-gallery-row">${pics}</div><small class="image-origin-note">AI illustrations of a ${escape((fish?.title || 'fish').toLowerCase())}.</small></section>${generic ? `<details class="more-pictures"><summary>More pictures (other fish)</summary>${generic}</details>` : ''}`;
+}
+
 function openDetail(id, slotId = 'overview') {
   const condition = CONDITIONS.find(c => c.id === id);
   if (!condition) return;
   const water = imageWater(condition) || 'fresh';
   const others = lookalikesFor(id, water);
-  $('#detail-content').innerHTML = `<p class="eyebrow">${escape(condition.kind)} · ${scopeName(condition.scope)}</p><h2 id="detail-title">${escape(condition.title)}</h2>${badge(condition.urgency)}<p class="lead">${escape(condition.summary)}</p>${slotsFor(id).some(s => s.image) || activeView === 'library' ? gallery(condition, slotId) : ''}<div class="detail-visual-actions"><button class="button secondary" data-use-pattern="${condition.id}">Check this visible pattern →</button><button class="compare-toggle" data-compare="${condition.id}" aria-pressed="${comparisons.has(condition.id)}">${comparisons.has(condition.id) ? '✓ Selected' : '+ Compare'}</button></div><h3>What to look for</h3>${list(condition.clues)}<h3>Easy to confuse with</h3><p>${escape(condition.distinguish)}</p>${others.length ? `<ul class="detail-lookalikes">${others.map(o => `<li><button class="text-button" data-condition="${o.id}">${escape(o.title)} →</button> ${escape(o.comparisonReason)}</li>`).join('')}</ul>` : ''}${todoCard(condition, water)}<p class="avoid"><strong>Avoid:</strong> ${escape(condition.avoid)}</p><div class="sources"><h4>Read the references</h4>${sourceLinks(condition.source)}</div>`;
+  $('#detail-content').innerHTML = `<p class="eyebrow">${escape(condition.kind)} · ${scopeName(condition.scope)}</p><h2 id="detail-title">${escape(condition.title)}</h2>${badge(condition.urgency)}<p class="lead">${escape(condition.summary)}</p>${fishGallery(condition, water)}<div class="detail-visual-actions"><button class="button secondary" data-use-pattern="${condition.id}">Check this visible pattern →</button><button class="compare-toggle" data-compare="${condition.id}" aria-pressed="${comparisons.has(condition.id)}">${comparisons.has(condition.id) ? '✓ Selected' : '+ Compare'}</button></div><h3>What to look for</h3>${list(condition.clues)}<h3>Easy to confuse with</h3><p>${escape(condition.distinguish)}</p>${others.length ? `<ul class="detail-lookalikes">${others.map(o => `<li><button class="text-button" data-condition="${o.id}">${escape(o.title)} →</button> ${escape(o.comparisonReason)}</li>`).join('')}</ul>` : ''}${todoCard(condition, water)}<p class="avoid"><strong>Avoid:</strong> ${escape(condition.avoid)}</p><div class="sources"><h4>Read the references</h4>${sourceLinks(condition.source)}</div>`;
   $('#detail-dialog').showModal();
 }
 
@@ -345,10 +357,12 @@ $('#welcome-fish').innerHTML = `<img src="${OPENING_IMAGE.url}" width="${OPENING
 function signButton(symptom, attribute, title = symptom.title) {
   const isTexture = attribute === 'data-texture';
   const isAdditional = attribute === 'data-additional-symptom';
-  const image = (isTexture ? TEXTURE_IMAGES : signImagesFor(form.elements.water.value))[symptom.id];
+  const water = form.elements.water.value, fishType = form.elements.fishType?.value || '';
+  const image = isTexture ? TEXTURE_IMAGES[symptom.id] : imageFor(fishType, symptom.id, water) || signImagesFor(water)[symptom.id];
+  const set = isTexture ? 'generic' : setAttr(fishType, water, symptom.id);
   const hint = isTexture && symptom.id === 'unclear' ? 'I can’t make out the texture' : symptom.text;
   const selected = isAdditional ? additionalSigns.has(symptom.id) : symptom.id === (isTexture ? detailSign : primarySign);
-  return `<button type="button" class="symptom-card" ${attribute}="${symptom.id}" aria-pressed="${String(selected)}"><span class="symptom-art"><img data-choice-image="${isTexture ? 'texture' : isAdditional ? 'additional' : 'sign'}-${symptom.id}" data-src="${image.url}" width="${image.width}" height="${image.height}" alt="${escape(image.alt)}" decoding="async"><span class="selection-check" aria-hidden="true">✓</span></span><strong>${escape(title)}</strong><small>${escape(hint)}</small></button>`;
+  return `<button type="button" class="symptom-card" ${attribute}="${symptom.id}" aria-pressed="${String(selected)}"><span class="symptom-art"><img data-choice-image="${isTexture ? 'texture' : isAdditional ? 'additional' : 'sign'}-${symptom.id}" data-src="${image.url}" width="${image.width}" height="${image.height}" alt="${escape(image.alt)}" data-image-set="${set}" decoding="async"><span class="selection-check" aria-hidden="true">✓</span></span><strong>${escape(title)}</strong><small>${escape(hint)}</small></button>`;
 }
 function renderChoiceGrids() {
   $('#symptom-grid').innerHTML = SYMPTOMS.map(s => signButton(s, 'data-symptom')).join('');
@@ -359,10 +373,14 @@ function renderChoiceGrids() {
   }).join('');
   renderAdditionalChoices();
 }
+function updateSignsHint() {
+  const fish = fishTypeFor(form.elements.water.value, form.elements.fishType?.value);
+  $('#signs-note').textContent = fish && fishSetFor(fish.id, form.elements.water.value) ? `AI pictures of ${fish.plural}.` : 'AI illustrations.';
+}
 function renderFishChoices() {
   const water = form.elements.water.value, checked = $('#fish-grid input:checked'), current = checked ? checked.value : null;
-  const choices = [...(FISH_TYPES[water] || []), { id: '', title: 'Not sure / other', text: 'Skip this question', icon: 'other' }];
-  $('#fish-grid').innerHTML = choices.map(f => `<label class="fish-chip${f.id ? '' : ' fish-chip-other'}"><input type="radio" name="fishType" value="${f.id}"${current !== null && f.id === current ? ' checked' : ''}><span>${fishIcon(f.icon)}<strong>${escape(f.title)}</strong><small>${escape(f.text)}</small></span></label>`).join('');
+  const choices = [...(FISH_TYPES[water] || []), { id: '', title: 'Not sure / other', text: 'Skip this question' }];
+  $('#fish-grid').innerHTML = choices.map(f => `<label class="fish-chip${f.id ? '' : ' fish-chip-other'}"><input type="radio" name="fishType" value="${f.id}"${current !== null && f.id === current ? ' checked' : ''}><span>${fishPicture(f.id)}<strong>${escape(f.title)}</strong><small>${escape(f.text)}</small></span></label>`).join('');
   updateNextLabel();
 }
 function renderCloserChoices() {
@@ -474,7 +492,8 @@ form.addEventListener('change', event => {
     $('#library-water').value = form.elements.water.value;
     $('#library-grid').replaceChildren();
   }
-  if (event.target.name === 'fishType') { updateNextLabel(); autoAdvance(); }
+  // Picking a fish swaps the symptom pictures to that fish's own set.
+  if (event.target.name === 'fishType') { renderChoiceGrids(); updateSignsHint(); updateNextLabel(); autoAdvance(); }
   if (event.target.name === 'closer') autoAdvance();
   const { urgent } = assessUrgency(readInput());
   $('#inline-urgent').hidden = !urgent.length;

@@ -56,7 +56,8 @@ const addSign = async (p,id) => {
 };
 const noFreshImages = async p => {
   const urls = await p.locator('img:visible').evaluateAll(imgs => imgs.map(img => img.src));
-  assert.ok(urls.every(url => /\/marine-|\/__draft-images__\/marine-/.test(url)), urls.join('\n'));
+  // Treatment-step pictures are shared by every fish and water type.
+  assert.ok(urls.every(url => /\/marine-|\/__draft-images__\/marine-|\/steps\/step-/.test(url)), urls.join('\n'));
 };
 const popupClick = async (p, selector) => {
   const link = p.locator(selector).first(), href = await link.getAttribute('href');
@@ -110,7 +111,7 @@ try {
   assert.equal(await page.locator('#library-grid [data-condition="ich-fresh"]').count(),0);
   await page.locator('#library-grid .card-image[data-condition="popeye"]').click();
   await visitorCopy(page);
-  assert.equal(await page.locator('#detail-content img').count(),0);
+  assert.equal(await page.locator('#detail-content img:not(.step-pic)').count(),0); // shared step pictures only
   await page.keyboard.press('Escape');
   record('optional library inherits the chosen marine environment and does not leak freshwater disease galleries');
 

@@ -1,0 +1,1077 @@
+{
+  "request": "Jez, #hidden-reef-2, 2026-11-05: betta pilot picture set for Fish Health Lab v2 private preview; one 12-cell sheet per set (Jez: \"1 sheet of bettas and not 12 sheets\").",
+  "publication": "Published 2026-11-05 to https://jez237.com/experiments/fish-health-lab/ (owner-authorized, #hidden-reef-2). All 48 crops uploaded to R2 bucket jez237-site-media at r2Key (image/jpeg, public, max-age=31536000, immutable) and byte-verified at plannedUrl; receipt workspace/tmp/fish-health-betta-publish-20261105/upload-verification.json. The local-images/ copies stay untracked.",
+  "requestedModel": "openai/gpt-image-2.6-sunburst",
+  "requestedQuality": "medium",
+  "requestedSize": "auto",
+  "aspectRatio": "4:3",
+  "reportedProviderModel": "openai/gpt-image-2.6-sunburst",
+  "backendModel": "not independently verified (stock OAuth provider reported gpt-image-2.6-sunburst; stderr shows codex-responses transport with responsesModel gpt-6-astra)",
+  "returnedGenerationQuality": null,
+  "geometry": {
+    "columns": 4,
+    "rows": 3,
+    "cell": [
+      362,
+      362
+    ],
+    "resized": false
+  },
+  "prompts": {
+    "betta-signs": "Use case: AI-illustrated visual guide that helps a beginner fishkeeper recognise what is wrong with their fish. Photorealistic educational aquarium illustration, NOT cartoons, icons, vector drawings, watercolor, plastic 3D renders or poster typography. Realistic underwater macro-photography aesthetic: anatomically believable fish, natural scales, translucent fins, restrained aquarium light, softly blurred dark teal planted-aquarium background. The key feature in each cell must be OBVIOUS to a novice at thumbnail size, while staying believable (no horror, no gore, no giant parasites). Absolutely no text, letters, numbers, labels, logos, watermarks, arrows or symbols anywhere in the image.\nSTRICT CONTACT SHEET for cropping into twelve separate pictures: exactly FOUR equal-width columns and THREE equal-height rows, twelve equal square cells covering the complete image edge to edge. No gutters, no borders, no outer margin. Every cell is its own separate scene with its own background. Nothing crosses a cell boundary; keep the whole subject inside the central 85 percent of its cell. Never put a cell's feature into another cell. Follow the exact row-major order below.\nEvery fish in this sheet is a BETTA (Siamese fighting fish, Betta splendens): exactly one betta per cell, never a different species, never two fish. Unless a close-up of the head is requested, show the whole betta in side view with its flowing fins. Vary the betta colors across cells as listed. Each betta is underwater in a home aquarium.\nRow 1 column 1: dark navy-blue veiltail betta covered with many separate small WHITE salt-grain dots on body and fins (ich), each dot a distinct grain like sprinkled table salt.\nRow 1 column 2: dark red betta with a very fine GOLD-RUST powdery dust over its back and fins (velvet), much finer than salt grains, like gold powder seen in side light; fins slightly clamped.\nRow 1 column 3: turquoise-green betta with one localized fluffy WHITE COTTON-WOOL tuft of fine threads sticking out from a small wound on its flank (fungus / water mold).\nRow 1 column 4: dark purple-black betta with a flat irregular PALE GREY-WHITE patch across its back just in front of the dorsal fin, like a saddle (columnaris); flat, no fluffy threads.\nRow 2 column 1: royal-blue halfmoon betta with RAGGED, SHORTENED, ROTTING fin edges, uneven melted-looking tail edges with dark red-black margins (fin rot).\nRow 2 column 2: pale pink-white (platinum) betta with one round OPEN RED SORE on its flank where scales are missing, a small red crater (bacterial ulcer).\nRow 2 column 3: red-and-blue betta with a round SWOLLEN BELLY, scales still lying flat and smooth (bloat).\nRow 2 column 4: close side view of a yellow-orange betta head with one eye clearly BULGING OUT like a marble, slightly cloudy (popeye / eye problem).\nRow 3 column 1: blue-and-white marble (koi) betta with rough white-pink CAULIFLOWER-LIKE wart clusters on the edge of its tail fin (raised lumps).\nRow 3 column 2: blue betta at the very top of the water, mouth breaking the surface GASPING for air, gill covers flared, a few bubbles; the water surface line visible across the top of the cell.\nRow 3 column 3: orange-red betta FLOATING SIDEWAYS near the surface, body tilted over on its side, unable to stay level (swim bladder). Water surface visible.\nRow 3 column 4: dull, faded dark-blue betta resting listlessly near the gravel bottom with FINS CLAMPED tightly against its body, no spots or wounds; looks fine but clearly not active.",
+    "betta-extras": "Use case: AI-illustrated visual guide that helps a beginner fishkeeper recognise what is wrong with their fish. Photorealistic educational aquarium illustration, NOT cartoons, icons, vector drawings, watercolor, plastic 3D renders or poster typography. Realistic underwater macro-photography aesthetic: anatomically believable fish, natural scales, translucent fins, restrained aquarium light, softly blurred dark teal planted-aquarium background. The key feature in each cell must be OBVIOUS to a novice at thumbnail size, while staying believable (no horror, no gore, no giant parasites). Absolutely no text, letters, numbers, labels, logos, watermarks, arrows or symbols anywhere in the image.\nSTRICT CONTACT SHEET for cropping into twelve separate pictures: exactly FOUR equal-width columns and THREE equal-height rows, twelve equal square cells covering the complete image edge to edge. No gutters, no borders, no outer margin. Every cell is its own separate scene with its own background. Nothing crosses a cell boundary; keep the whole subject inside the central 85 percent of its cell. Never put a cell's feature into another cell. Follow the exact row-major order below.\nEvery fish in this sheet is a BETTA (Siamese fighting fish, Betta splendens): exactly one betta per cell, never a different species, never two fish. Unless a close-up of the head is requested, show the whole betta in side view with its flowing fins. Vary the betta colors across cells as listed. Each betta is underwater in a home aquarium.\nRow 1 column 1: white-and-pale-blue betta with bright BLOODY RED STREAKS running through the fins and tail and faint red blotches under the skin (septicemia).\nRow 1 column 2: dull green-blue betta, very swollen, viewed slightly from above so the scales visibly STICK OUT LIKE A PINECONE all over the body (dropsy).\nRow 1 column 3: close side view of a red betta head with a MILKY WHITE-GREY CLOUDY FILM over the eye; eye not bulging (cloudy eye).\nRow 1 column 4: dark red betta with one SMOOTH ROUNDED LUMP bulging under the skin on its side, smooth surface, no fuzz (cyst or tumor).\nRow 2 column 1: light blue betta RUBBING its side against a smooth aquarium rock (flashing), skin slightly hazy (skin flukes).\nRow 2 column 2: close side view of a dark betta head with several small PALE PITS / HOLES in the skin of its forehead and face (hole-in-the-head).\nRow 2 column 3: lavender betta with one CLEAN SPLIT TEAR in its tail fin, a neat straight rip, next to a sharp plastic plant; edges otherwise healthy (injury).\nRow 2 column 4: a HEALTHY vibrant red-and-blue halfmoon betta with full fins spread, bright color, clean skin, alert (normal healthy betta).\nRow 3 column 1: close side view of a red betta head with the gill cover flared open showing BRIGHT RED, INFLAMED GILLS (ammonia burn).\nRow 3 column 2: copper betta with a fuzzy WHITE-GREY COATING on its lips and mouth, like cotton on the mouth (columnaris, cotton-mouth).\nRow 3 column 3: blue-white betta STUCK ON THE BOTTOM, tilted head-down at an awkward angle, unable to lift off the gravel (sinking).\nRow 3 column 4: dark red betta whose skin has a thick CLOUDY GREY-WHITE SLIME COAT with patches peeling like thin tissue on the flank (excess slime).",
+    "steps": "Use case: AI-illustrated visual guide that helps a beginner fishkeeper recognise what is wrong with their fish. Photorealistic educational aquarium illustration, NOT cartoons, icons, vector drawings, watercolor, plastic 3D renders or poster typography. Realistic underwater macro-photography aesthetic: anatomically believable fish, natural scales, translucent fins, restrained aquarium light, softly blurred dark teal planted-aquarium background. The key feature in each cell must be OBVIOUS to a novice at thumbnail size, while staying believable (no horror, no gore, no giant parasites). Absolutely no text, letters, numbers, labels, logos, watermarks, arrows or symbols anywhere in the image.\nSTRICT CONTACT SHEET for cropping into twelve separate pictures: exactly FOUR equal-width columns and THREE equal-height rows, twelve equal square cells covering the complete image edge to edge. No gutters, no borders, no outer margin. Every cell is its own separate scene with its own background. Nothing crosses a cell boundary; keep the whole subject inside the central 85 percent of its cell. Never put a cell's feature into another cell. Follow the exact row-major order below.\nThese are TREATMENT STEP pictures for a home aquarium guide, shared by all kinds of fish. Use generic small tropical fish (for example an orange platy or neon tetras) when a fish appears. Equipment must be plain and unbranded: every bottle, box, kit or bag has a BLANK label with no writing at all. Human hands may appear (no faces). Clean, calm, well-lit home aquarium scenes; each cell one single clear action with an uncluttered background.\nRow 1 column 1: a hand guiding a small fish in a soft green aquarium NET into a SMALL BARE HOSPITAL TANK that holds only a heater and an air stone.\nRow 1 column 2: an aquarium WATER TEST KIT: a rack of small glass test tubes filled with differently colored liquid (yellow, green, blue, purple) beside a small blank dropper bottle.\nRow 1 column 3: a PARTIAL WATER CHANGE: a siphon hose running from an aquarium down into a plain bucket, water flowing.\nRow 1 column 4: a hand squeezing drops from a blank-labeled WATER CONDITIONER bottle into a bucket of fresh tap water.\nRow 2 column 1: a blank-labeled MEDICINE BOTTLE with a dropper standing beside a small aquarium, a few drops of colored medicine diffusing in the tank water.\nRow 2 column 2: a submersible AQUARIUM HEATER and a glass THERMOMETER (no numbers visible) inside an aquarium, warm glow, a fish swimming calmly.\nRow 2 column 3: a spoon of coarse white AQUARIUM SALT crystals being stirred into a cup of tank water to dissolve, beside the aquarium.\nRow 2 column 4: an AIR STONE on the aquarium floor releasing a strong column of fine bubbles up to a rippling surface.\nRow 3 column 1: tweezers holding a small piece of thawed, skinned green PEA in the water in front of a fish (feeding a pea).\nRow 3 column 2: a GRAVEL VACUUM tube pushed into the gravel lifting out debris and uneaten food pellets.\nRow 3 column 3: a clear TANK DIVIDER panel separating two fish in one aquarium: a tiger barb (fin-nipper) on one side, a long-finned fish safely on the other.\nRow 3 column 4: WATCH AND WAIT: one calm, healthy fish swimming normally in a clean, clear, softly lit planted aquarium; peaceful, nothing wrong.",
+    "fish-types": "Use case: AI-illustrated visual guide that helps a beginner fishkeeper recognise what is wrong with their fish. Photorealistic educational aquarium illustration, NOT cartoons, icons, vector drawings, watercolor, plastic 3D renders or poster typography. Realistic underwater macro-photography aesthetic: anatomically believable fish, natural scales, translucent fins, restrained aquarium light, softly blurred dark teal planted-aquarium background. The key feature in each cell must be OBVIOUS to a novice at thumbnail size, while staying believable (no horror, no gore, no giant parasites). Absolutely no text, letters, numbers, labels, logos, watermarks, arrows or symbols anywhere in the image.\nSTRICT CONTACT SHEET for cropping into twelve separate pictures: exactly FOUR equal-width columns and THREE equal-height rows, twelve equal square cells covering the complete image edge to edge. No gutters, no borders, no outer margin. Every cell is its own separate scene with its own background. Nothing crosses a cell boundary; keep the whole subject inside the central 85 percent of its cell. Never put a cell's feature into another cell. Follow the exact row-major order below.\nThese are FISH-TYPE pictures: HEALTHY, typical, attractive fish, clearly recognisable to a beginner at thumbnail size, whole fish in side view. No disease signs at all. Row 1 and the first two cells of row 2 are FRESHWATER planted aquariums; the rest are SALTWATER reef aquariums with live rock and coral softly blurred behind, except the last cell.\nRow 1 column 1: one healthy red-and-blue halfmoon BETTA (Siamese fighting fish) with fins spread.\nRow 1 column 2: one healthy orange fancy GOLDFISH (oranda or fantail) with flowing double tail.\nRow 1 column 3: three healthy NEON TETRAS (blue and red stripe) swimming close together, all fully in frame.\nRow 1 column 4: one healthy colorful male GUPPY with a big fan tail.\nRow 2 column 1: one healthy silver-and-black striped freshwater ANGELFISH (cichlid) with tall fins.\nRow 2 column 2: one healthy bronze CORY CATFISH on sand with a small bristlenose PLECO on driftwood behind it.\nRow 2 column 3: one healthy orange-and-white ocellaris CLOWNFISH beside an anemone (saltwater).\nRow 2 column 4: one healthy bright yellow TANG (surgeonfish), whole body (saltwater).\nRow 3 column 1: one healthy flame ANGELFISH, a marine angelfish, red-orange with dark bars (saltwater).\nRow 3 column 2: one healthy small six-line WRASSE, slender, purple-blue with orange stripes, next to rock (saltwater).\nRow 3 column 3: one healthy blue-green CHROMIS damselfish (saltwater).\nRow 3 column 4: NOT SURE / OTHER: a simple neutral aquarium scene with a loose group of several small fish shown only as soft, out-of-focus dark silhouettes against bright blurred water, no species identifiable."
+  },
+  "sources": {
+    "betta-signs": {
+      "sha256": "4a00002f034e14b0f0bbdfe8cf73f394be3d9d4781712d95f35e7ac514227323",
+      "bytes": 535122,
+      "width": 1448,
+      "height": 1086,
+      "reportedProviderModel": "openai/gpt-image-2.6-sunburst",
+      "revisedPrompt": true
+    },
+    "betta-extras": {
+      "sha256": "fed709068debbd26fb463b6729a9889b64d8993a9e1f727b89dc4193a12736c8",
+      "bytes": 558824,
+      "width": 1448,
+      "height": 1086,
+      "reportedProviderModel": "openai/gpt-image-2.6-sunburst",
+      "revisedPrompt": true
+    },
+    "steps": {
+      "sha256": "a54431b9c947ce552d6d4b14814d0d284fe40f23296269f7c80a543463074920",
+      "bytes": 544486,
+      "width": 1448,
+      "height": 1086,
+      "reportedProviderModel": "openai/gpt-image-2.6-sunburst",
+      "revisedPrompt": true
+    },
+    "fish-types": {
+      "sha256": "9b3cf466b6bb525b556553c89c30d25aef5778d5018156753f10db05b63e9193",
+      "bytes": 575711,
+      "width": 1448,
+      "height": 1086,
+      "reportedProviderModel": "openai/gpt-image-2.6-sunburst",
+      "revisedPrompt": true
+    }
+  },
+  "originals": {
+    "betta-signs": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-betta-pilot-20261105/betta-signs.jpg",
+    "betta-extras": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-betta-pilot-20261105/betta-extras.jpg",
+    "steps": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-betta-pilot-20261105/steps.jpg",
+    "fish-types": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-betta-pilot-20261105/fish-types.jpg"
+  },
+  "assets": [
+    {
+      "id": "betta-dots",
+      "sheet": "betta-signs",
+      "path": "local-images/betta/betta-dots-a59a30c58dfd.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-dots-a59a30c58dfd.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-dots-a59a30c58dfd.jpg",
+      "uploaded": true,
+      "sha256": "a59a30c58dfd1fa9365c17e0fe0d1dfd2c66de445d535f08fee2c92bfcbeab1a",
+      "bytes": 43625,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        0,
+        362,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Navy betta covered in separate white salt-grain dots.",
+      "caption": "White dots like grains of salt."
+    },
+    {
+      "id": "betta-dust",
+      "sheet": "betta-signs",
+      "path": "local-images/betta/betta-dust-42e50b61bb89.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-dust-42e50b61bb89.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-dust-42e50b61bb89.jpg",
+      "uploaded": true,
+      "sha256": "42e50b61bb8998479c1e0744e2f294a0887f4180f81cc5a5be1faed5d7f832b0",
+      "bytes": 39074,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        362,
+        0,
+        724,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Red betta with a fine gold-rust dusting over its back and fins.",
+      "caption": "Fine gold or rust dust—shine a torch from the side."
+    },
+    {
+      "id": "betta-fuzz",
+      "sheet": "betta-signs",
+      "path": "local-images/betta/betta-fuzz-a5a40f1c14db.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-fuzz-a5a40f1c14db.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-fuzz-a5a40f1c14db.jpg",
+      "uploaded": true,
+      "sha256": "a5a40f1c14db2e9498227ca6ba2b4c7bbc15bc7d6d6df1df69865dac8cbcc039",
+      "bytes": 42413,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        0,
+        1086,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Turquoise betta with a fluffy white cotton tuft on its side.",
+      "caption": "A fluffy cotton-wool tuft."
+    },
+    {
+      "id": "betta-patch",
+      "sheet": "betta-signs",
+      "path": "local-images/betta/betta-patch-0f38dccd6790.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-patch-0f38dccd6790.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-patch-0f38dccd6790.jpg",
+      "uploaded": true,
+      "sha256": "0f38dccd67904986cd0030a5975273931699a037de92938c39f83166d8e1949f",
+      "bytes": 33611,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        1086,
+        0,
+        1448,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Dark purple betta with a flat pale saddle patch in front of the dorsal fin.",
+      "caption": "A flat pale patch, often a “saddle” on the back."
+    },
+    {
+      "id": "betta-fins",
+      "sheet": "betta-signs",
+      "path": "local-images/betta/betta-fins-f87c22c12b05.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-fins-f87c22c12b05.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-fins-f87c22c12b05.jpg",
+      "uploaded": true,
+      "sha256": "f87c22c12b0598748f8eb0996dcc65e1d670ee58e815e6e5817eca4a8955d1a8",
+      "bytes": 43576,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        362,
+        362,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: Blue halfmoon betta with ragged, rotting fin edges.",
+      "caption": "Ragged, shrinking fin edges."
+    },
+    {
+      "id": "betta-sores",
+      "sheet": "betta-signs",
+      "path": "local-images/betta/betta-sores-176b78483520.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-sores-176b78483520.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-sores-176b78483520.jpg",
+      "uploaded": true,
+      "sha256": "176b78483520aac33405cd0627011e322048557a43333a5af2397ced6f4885a9",
+      "bytes": 46106,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        362,
+        362,
+        724,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: Pale betta with an open red sore on its side.",
+      "caption": "An open red sore where scales are missing."
+    },
+    {
+      "id": "betta-swollen",
+      "sheet": "betta-signs",
+      "path": "local-images/betta/betta-swollen-c34f5f77d9f9.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-swollen-c34f5f77d9f9.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-swollen-c34f5f77d9f9.jpg",
+      "uploaded": true,
+      "sha256": "c34f5f77d9f95a9e735a6ba4473196dd8feeaf92ed8d788be260e5101284604d",
+      "bytes": 44408,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        362,
+        1086,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: Red and blue betta with a round swollen belly, scales lying flat.",
+      "caption": "Swollen belly, scales still flat."
+    },
+    {
+      "id": "betta-eyes",
+      "sheet": "betta-signs",
+      "path": "local-images/betta/betta-eyes-2c310739e3b7.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-eyes-2c310739e3b7.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-eyes-2c310739e3b7.jpg",
+      "uploaded": true,
+      "sha256": "2c310739e3b751bb1414481a17cbc10cee046426248cf349afd1be70cfa7bf05",
+      "bytes": 40020,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        1086,
+        362,
+        1448,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: Close view of a yellow betta with one bulging, slightly cloudy eye.",
+      "caption": "An eye bulging out."
+    },
+    {
+      "id": "betta-lumps",
+      "sheet": "betta-signs",
+      "path": "local-images/betta/betta-lumps-d7dbb348df48.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-lumps-d7dbb348df48.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-lumps-d7dbb348df48.jpg",
+      "uploaded": true,
+      "sha256": "d7dbb348df485bcf62add9e3a8c165952b5c9cd6e31b6c3d798efecfbb87710f",
+      "bytes": 45308,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        724,
+        362,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Marble betta with white-pink cauliflower-like lumps on its tail.",
+      "caption": "Rough cauliflower-like lumps on the fins."
+    },
+    {
+      "id": "betta-breathing",
+      "sheet": "betta-signs",
+      "path": "local-images/betta/betta-breathing-290c415709fb.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-breathing-290c415709fb.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-breathing-290c415709fb.jpg",
+      "uploaded": true,
+      "sha256": "290c415709fb85f70ca0ea50303482fff24a9fdeb35f46c9432079d33b5790b2",
+      "bytes": 43871,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        362,
+        724,
+        724,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Blue betta gasping at the water surface.",
+      "caption": "Gasping at the surface."
+    },
+    {
+      "id": "betta-balance",
+      "sheet": "betta-signs",
+      "path": "local-images/betta/betta-balance-51b87e98448e.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-balance-51b87e98448e.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-balance-51b87e98448e.jpg",
+      "uploaded": true,
+      "sha256": "51b87e98448e37b66f2d3f8e2b18ce53a939dc115942160025d578351e6615b7",
+      "bytes": 41141,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        724,
+        1086,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Orange betta floating tilted on its side near the surface.",
+      "caption": "Floating tilted on its side."
+    },
+    {
+      "id": "betta-unclear",
+      "sheet": "betta-signs",
+      "path": "local-images/betta/betta-unclear-b14ab8ea8941.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-unclear-b14ab8ea8941.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-unclear-b14ab8ea8941.jpg",
+      "uploaded": true,
+      "sha256": "b14ab8ea8941128521c54f60d1dcd1c78988f44ac0c1aa125f7577c9573c9a8d",
+      "bytes": 44215,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        1086,
+        724,
+        1448,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Dull blue betta resting on the gravel with clamped fins and no marks.",
+      "caption": "Looks fine but listless, fins clamped."
+    },
+    {
+      "id": "betta-septicemia",
+      "sheet": "betta-extras",
+      "path": "local-images/betta/betta-septicemia-c0dd04115599.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-septicemia-c0dd04115599.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-septicemia-c0dd04115599.jpg",
+      "uploaded": true,
+      "sha256": "c0dd04115599c620f8d75a34b4e45ca1768b8886c62eae16672bd2c42792952d",
+      "bytes": 44904,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        0,
+        362,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: White betta with bloody red streaks through its fins.",
+      "caption": "Bloody red streaks in the fins."
+    },
+    {
+      "id": "betta-dropsy",
+      "sheet": "betta-extras",
+      "path": "local-images/betta/betta-dropsy-5fa436a6c4e2.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-dropsy-5fa436a6c4e2.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-dropsy-5fa436a6c4e2.jpg",
+      "uploaded": true,
+      "sha256": "5fa436a6c4e2adb01ab2e3d471f7a798c14750dea47fe4dc3650ea09e254358e",
+      "bytes": 43915,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        362,
+        0,
+        724,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Swollen green-blue betta with scales sticking out like a pinecone.",
+      "caption": "Scales sticking out like a pinecone."
+    },
+    {
+      "id": "betta-cloudy-eye",
+      "sheet": "betta-extras",
+      "path": "local-images/betta/betta-cloudy-eye-3d12b5ef4b32.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-cloudy-eye-3d12b5ef4b32.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-cloudy-eye-3d12b5ef4b32.jpg",
+      "uploaded": true,
+      "sha256": "3d12b5ef4b3244c6a6eaebcdb6e0950e48a1abfa7cd0d1b0bbe460289d5d3e00",
+      "bytes": 35451,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        0,
+        1086,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Close view of a red betta with a milky film over its eye.",
+      "caption": "A milky film over the eye."
+    },
+    {
+      "id": "betta-growth",
+      "sheet": "betta-extras",
+      "path": "local-images/betta/betta-growth-96d68daf4b6c.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-growth-96d68daf4b6c.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-growth-96d68daf4b6c.jpg",
+      "uploaded": true,
+      "sha256": "96d68daf4b6c9805a2be0e2055310da28ec7c1f1b3f377237e41e7587fd3e077",
+      "bytes": 36586,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        1086,
+        0,
+        1448,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Red betta with one smooth round lump on its side.",
+      "caption": "One smooth, rounded lump."
+    },
+    {
+      "id": "betta-flukes",
+      "sheet": "betta-extras",
+      "path": "local-images/betta/betta-flukes-6816ce6d6991.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-flukes-6816ce6d6991.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-flukes-6816ce6d6991.jpg",
+      "uploaded": true,
+      "sha256": "6816ce6d69910c08170e73d887ff0cf2bd6607b3ffb86cd7709decc6768da7dc",
+      "bytes": 47903,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        362,
+        362,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: Pale blue betta rubbing its side against a rock.",
+      "caption": "Rubbing or flashing against rocks."
+    },
+    {
+      "id": "betta-hole-in-head",
+      "sheet": "betta-extras",
+      "path": "local-images/betta/betta-hole-in-head-247e599ec809.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-hole-in-head-247e599ec809.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-hole-in-head-247e599ec809.jpg",
+      "uploaded": true,
+      "sha256": "247e599ec8093ac22ce1b258c5fdfe608d33b966ba557f063c8d9fe3337775dc",
+      "bytes": 38186,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        362,
+        362,
+        724,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: Close view of a dark betta with small pale pits on its head.",
+      "caption": "Small pits on the head."
+    },
+    {
+      "id": "betta-injury",
+      "sheet": "betta-extras",
+      "path": "local-images/betta/betta-injury-75049830bae9.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-injury-75049830bae9.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-injury-75049830bae9.jpg",
+      "uploaded": true,
+      "sha256": "75049830bae90755f504d46c9e81c32e6c0e800bdb3566db96d47963dda8c31a",
+      "bytes": 53164,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        362,
+        1086,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: Lavender betta with a clean split in its tail next to a plastic plant.",
+      "caption": "A clean tear, often from a sharp plant."
+    },
+    {
+      "id": "betta-normal",
+      "sheet": "betta-extras",
+      "path": "local-images/betta/betta-normal-2fe71f2173df.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-normal-2fe71f2173df.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-normal-2fe71f2173df.jpg",
+      "uploaded": true,
+      "sha256": "2fe71f2173dfe062c06b94d0751d7c1b7f9f982c6ebfdd91b29f19c242db1ae2",
+      "bytes": 51348,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        1086,
+        362,
+        1448,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: Healthy red and blue halfmoon betta with full fins.",
+      "caption": "A healthy betta for comparison."
+    },
+    {
+      "id": "betta-red-gills",
+      "sheet": "betta-extras",
+      "path": "local-images/betta/betta-red-gills-328c2e6c422e.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-red-gills-328c2e6c422e.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-red-gills-328c2e6c422e.jpg",
+      "uploaded": true,
+      "sha256": "328c2e6c422e3476c23f4339cbedeb748d750f294ae7f16d50e4f78ec6ed4548",
+      "bytes": 41503,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        724,
+        362,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Close view of a red betta with its gill cover open showing bright red gills.",
+      "caption": "Bright red, sore-looking gills."
+    },
+    {
+      "id": "betta-cotton-mouth",
+      "sheet": "betta-extras",
+      "path": "local-images/betta/betta-cotton-mouth-b47cfa82d86a.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-cotton-mouth-b47cfa82d86a.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-cotton-mouth-b47cfa82d86a.jpg",
+      "uploaded": true,
+      "sha256": "b47cfa82d86ae272faec5a8421468f455236efa21ac6a23762a72508ab18ffa8",
+      "bytes": 40721,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        362,
+        724,
+        724,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Copper betta with a white fuzzy coating on its mouth.",
+      "caption": "A white, fuzzy-looking mouth."
+    },
+    {
+      "id": "betta-sinking",
+      "sheet": "betta-extras",
+      "path": "local-images/betta/betta-sinking-d80e4f06c94d.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-sinking-d80e4f06c94d.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-sinking-d80e4f06c94d.jpg",
+      "uploaded": true,
+      "sha256": "d80e4f06c94d0b86aedb1ec0acb9bcd47a9a328dc97e072f817be58c494f260b",
+      "bytes": 50582,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        724,
+        1086,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Blue-white betta stuck head-down on the gravel.",
+      "caption": "Stuck on the bottom, can’t lift off."
+    },
+    {
+      "id": "betta-slime",
+      "sheet": "betta-extras",
+      "path": "local-images/betta/betta-slime-1ef90d03ea3c.jpg",
+      "r2Key": "experiments/fish-health-lab/betta/betta-slime-1ef90d03ea3c.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/betta/betta-slime-1ef90d03ea3c.jpg",
+      "uploaded": true,
+      "sha256": "1ef90d03ea3cc22860025b8d9dfe4d2af6a7bf908760430c0d23103eff0b1da2",
+      "bytes": 42831,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        1086,
+        724,
+        1448,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Red betta with a cloudy, peeling slime coat on its side.",
+      "caption": "Thick cloudy slime or peeling skin."
+    },
+    {
+      "id": "step-hospital",
+      "sheet": "steps",
+      "path": "local-images/steps/step-hospital-615c327b757d.jpg",
+      "r2Key": "experiments/fish-health-lab/steps/step-hospital-615c327b757d.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/steps/step-hospital-615c327b757d.jpg",
+      "uploaded": true,
+      "sha256": "615c327b757dccde1419ffec7aa4052056712ab633e5f8306d716dee99779d5e",
+      "bytes": 42401,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        0,
+        362,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: A small fish being netted into a bare hospital tank with a heater and air stone.",
+      "caption": "Hospital tank"
+    },
+    {
+      "id": "step-test",
+      "sheet": "steps",
+      "path": "local-images/steps/step-test-0e19f2c622a5.jpg",
+      "r2Key": "experiments/fish-health-lab/steps/step-test-0e19f2c622a5.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/steps/step-test-0e19f2c622a5.jpg",
+      "uploaded": true,
+      "sha256": "0e19f2c622a517628b0f8d4856247be21ae5d13048d50b4cc2e4a94bf8e9221d",
+      "bytes": 42078,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        362,
+        0,
+        724,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Water test tubes in a rack beside a dropper bottle.",
+      "caption": "Test the water"
+    },
+    {
+      "id": "step-water-change",
+      "sheet": "steps",
+      "path": "local-images/steps/step-water-change-34654feae60b.jpg",
+      "r2Key": "experiments/fish-health-lab/steps/step-water-change-34654feae60b.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/steps/step-water-change-34654feae60b.jpg",
+      "uploaded": true,
+      "sha256": "34654feae60bdfdf324d0793cebbf956a0b07a0f2bee74ad4ffaa3c1320eb6f9",
+      "bytes": 49652,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        0,
+        1086,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: A siphon hose draining aquarium water into a bucket.",
+      "caption": "Water change"
+    },
+    {
+      "id": "step-conditioner",
+      "sheet": "steps",
+      "path": "local-images/steps/step-conditioner-69aee6309ab2.jpg",
+      "r2Key": "experiments/fish-health-lab/steps/step-conditioner-69aee6309ab2.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/steps/step-conditioner-69aee6309ab2.jpg",
+      "uploaded": true,
+      "sha256": "69aee6309ab2a164e7108c5a8d602fe245f8370e6d18921794ac200a98dbdc81",
+      "bytes": 30543,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        1086,
+        0,
+        1448,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Water conditioner drops going into a bucket of tap water.",
+      "caption": "Water conditioner"
+    },
+    {
+      "id": "step-medicine",
+      "sheet": "steps",
+      "path": "local-images/steps/step-medicine-269966f30c3f.jpg",
+      "r2Key": "experiments/fish-health-lab/steps/step-medicine-269966f30c3f.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/steps/step-medicine-269966f30c3f.jpg",
+      "uploaded": true,
+      "sha256": "269966f30c3f5b74400952e9d1c579996bd9e93a2e545b3679e335686c0a4d3e",
+      "bytes": 40853,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        362,
+        362,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: A plain medicine bottle and dropper beside a small tank.",
+      "caption": "Medicine"
+    },
+    {
+      "id": "step-heat",
+      "sheet": "steps",
+      "path": "local-images/steps/step-heat-4508bd18275a.jpg",
+      "r2Key": "experiments/fish-health-lab/steps/step-heat-4508bd18275a.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/steps/step-heat-4508bd18275a.jpg",
+      "uploaded": true,
+      "sha256": "4508bd18275a0bea6a7dabfa579042f84f06d4de2f864604dac449bc256628c4",
+      "bytes": 36051,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        362,
+        362,
+        724,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: An aquarium heater and thermometer in a tank.",
+      "caption": "Heater & thermometer"
+    },
+    {
+      "id": "step-salt",
+      "sheet": "steps",
+      "path": "local-images/steps/step-salt-58fadcdf1767.jpg",
+      "r2Key": "experiments/fish-health-lab/steps/step-salt-58fadcdf1767.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/steps/step-salt-58fadcdf1767.jpg",
+      "uploaded": true,
+      "sha256": "58fadcdf1767edbd6e0c0046596325045bfbadace69200b41cf7c6f99627ff89",
+      "bytes": 46819,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        362,
+        1086,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: A spoon of aquarium salt being dissolved in a cup of water.",
+      "caption": "Aquarium salt"
+    },
+    {
+      "id": "step-aeration",
+      "sheet": "steps",
+      "path": "local-images/steps/step-aeration-0053a742c03d.jpg",
+      "r2Key": "experiments/fish-health-lab/steps/step-aeration-0053a742c03d.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/steps/step-aeration-0053a742c03d.jpg",
+      "uploaded": true,
+      "sha256": "0053a742c03dbfd9418ff8af0c07f56e8bf9c717fc66d4f35c99358ea69cb0c6",
+      "bytes": 60010,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        1086,
+        362,
+        1448,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: An air stone sending up a column of bubbles.",
+      "caption": "Extra air"
+    },
+    {
+      "id": "step-pea",
+      "sheet": "steps",
+      "path": "local-images/steps/step-pea-c91f8e0c1fda.jpg",
+      "r2Key": "experiments/fish-health-lab/steps/step-pea-c91f8e0c1fda.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/steps/step-pea-c91f8e0c1fda.jpg",
+      "uploaded": true,
+      "sha256": "c91f8e0c1fda10ea52adc8485c36420e91025456b3e29c752c79bc9f04b41f68",
+      "bytes": 31438,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        724,
+        362,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Tweezers offering a piece of pea to a fish.",
+      "caption": "Fast, then a pea"
+    },
+    {
+      "id": "step-gravel",
+      "sheet": "steps",
+      "path": "local-images/steps/step-gravel-90f8033a9c02.jpg",
+      "r2Key": "experiments/fish-health-lab/steps/step-gravel-90f8033a9c02.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/steps/step-gravel-90f8033a9c02.jpg",
+      "uploaded": true,
+      "sha256": "90f8033a9c020e67b58e560a9cb2dfac7a9a596f2e4f560d913c08fd2a2ad62f",
+      "bytes": 51074,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        362,
+        724,
+        724,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: A gravel vacuum lifting debris from the gravel.",
+      "caption": "Clean the gravel"
+    },
+    {
+      "id": "step-divider",
+      "sheet": "steps",
+      "path": "local-images/steps/step-divider-bbc0a17eb23f.jpg",
+      "r2Key": "experiments/fish-health-lab/steps/step-divider-bbc0a17eb23f.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/steps/step-divider-bbc0a17eb23f.jpg",
+      "uploaded": true,
+      "sha256": "bbc0a17eb23fe2f23a28f3c8e1c046d3711ba20edcabeb3b166b607c416e8777",
+      "bytes": 50849,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        724,
+        1086,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: A clear divider separating a tiger barb from a betta.",
+      "caption": "Separate a bully"
+    },
+    {
+      "id": "step-watch",
+      "sheet": "steps",
+      "path": "local-images/steps/step-watch-9015eaa0c909.jpg",
+      "r2Key": "experiments/fish-health-lab/steps/step-watch-9015eaa0c909.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/steps/step-watch-9015eaa0c909.jpg",
+      "uploaded": true,
+      "sha256": "9015eaa0c90953de2c2aff75c25caa346ae0a39f6f2c477fb3301a7380351df6",
+      "bytes": 38761,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        1086,
+        724,
+        1448,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: A calm healthy fish in a clean planted tank.",
+      "caption": "Watch and wait"
+    },
+    {
+      "id": "fish-betta",
+      "sheet": "fish-types",
+      "path": "local-images/fish-types/fish-betta-0915d6e16e2a.jpg",
+      "r2Key": "experiments/fish-health-lab/fish-types/fish-betta-0915d6e16e2a.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fish-types/fish-betta-0915d6e16e2a.jpg",
+      "uploaded": true,
+      "sha256": "0915d6e16e2a20571e52caf3965e67d7512fe775c25adaa28620d22a8769d22b",
+      "bytes": 45295,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        0,
+        362,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Healthy red and blue betta.",
+      "caption": "Betta"
+    },
+    {
+      "id": "fish-goldfish",
+      "sheet": "fish-types",
+      "path": "local-images/fish-types/fish-goldfish-467c2e9833c9.jpg",
+      "r2Key": "experiments/fish-health-lab/fish-types/fish-goldfish-467c2e9833c9.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fish-types/fish-goldfish-467c2e9833c9.jpg",
+      "uploaded": true,
+      "sha256": "467c2e9833c95bc09d5bfcc4e480366365514d982f6533e2f2432d4747655622",
+      "bytes": 43472,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        362,
+        0,
+        724,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Healthy orange fancy goldfish.",
+      "caption": "Goldfish"
+    },
+    {
+      "id": "fish-community",
+      "sheet": "fish-types",
+      "path": "local-images/fish-types/fish-community-4e3b8346f84b.jpg",
+      "r2Key": "experiments/fish-health-lab/fish-types/fish-community-4e3b8346f84b.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fish-types/fish-community-4e3b8346f84b.jpg",
+      "uploaded": true,
+      "sha256": "4e3b8346f84b39f0dd2191628ddbe32fe915a490a477a514f53e18e8f9fedd48",
+      "bytes": 36777,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        0,
+        1086,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Three neon tetras.",
+      "caption": "Tetra / rasbora"
+    },
+    {
+      "id": "fish-livebearer",
+      "sheet": "fish-types",
+      "path": "local-images/fish-types/fish-livebearer-2f2dd258c7ef.jpg",
+      "r2Key": "experiments/fish-health-lab/fish-types/fish-livebearer-2f2dd258c7ef.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fish-types/fish-livebearer-2f2dd258c7ef.jpg",
+      "uploaded": true,
+      "sha256": "2f2dd258c7efff174c7e06a7b0c841b88a4c04c78b7737cf41735c4ea8d5ad43",
+      "bytes": 47485,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        1086,
+        0,
+        1448,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Colorful male guppy.",
+      "caption": "Livebearer"
+    },
+    {
+      "id": "fish-cichlid",
+      "sheet": "fish-types",
+      "path": "local-images/fish-types/fish-cichlid-45dd2c204f96.jpg",
+      "r2Key": "experiments/fish-health-lab/fish-types/fish-cichlid-45dd2c204f96.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fish-types/fish-cichlid-45dd2c204f96.jpg",
+      "uploaded": true,
+      "sha256": "45dd2c204f96e3d66ad3b79ed1b2f65cbbe1659e8d0dace27b81133a37ce8762",
+      "bytes": 45559,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        362,
+        362,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: Freshwater angelfish.",
+      "caption": "Cichlid / angelfish"
+    },
+    {
+      "id": "fish-catfish",
+      "sheet": "fish-types",
+      "path": "local-images/fish-types/fish-catfish-80379bfcd41e.jpg",
+      "r2Key": "experiments/fish-health-lab/fish-types/fish-catfish-80379bfcd41e.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fish-types/fish-catfish-80379bfcd41e.jpg",
+      "uploaded": true,
+      "sha256": "80379bfcd41e41dd69081e7a2e4d0df29a86107a7cf86ebea597ecf855c81ab3",
+      "bytes": 57810,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        362,
+        362,
+        724,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: Cory catfish on sand with a pleco on driftwood.",
+      "caption": "Catfish / pleco / cory"
+    },
+    {
+      "id": "fish-clownfish",
+      "sheet": "fish-types",
+      "path": "local-images/fish-types/fish-clownfish-8d1b882e0836.jpg",
+      "r2Key": "experiments/fish-health-lab/fish-types/fish-clownfish-8d1b882e0836.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fish-types/fish-clownfish-8d1b882e0836.jpg",
+      "uploaded": true,
+      "sha256": "8d1b882e08367ba6d4d0edce5e5e84ac13fd9438d9db6643d2b815478d040f5c",
+      "bytes": 55112,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        362,
+        1086,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: Ocellaris clownfish by an anemone.",
+      "caption": "Clownfish"
+    },
+    {
+      "id": "fish-tang",
+      "sheet": "fish-types",
+      "path": "local-images/fish-types/fish-tang-1aa02f674fd6.jpg",
+      "r2Key": "experiments/fish-health-lab/fish-types/fish-tang-1aa02f674fd6.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fish-types/fish-tang-1aa02f674fd6.jpg",
+      "uploaded": true,
+      "sha256": "1aa02f674fd62349b59b1dc76f176c4acce81460bb8baa041dcc680cc196d909",
+      "bytes": 45609,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        1086,
+        362,
+        1448,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: Yellow tang.",
+      "caption": "Tang"
+    },
+    {
+      "id": "fish-angel",
+      "sheet": "fish-types",
+      "path": "local-images/fish-types/fish-angel-47d9b558ea7e.jpg",
+      "r2Key": "experiments/fish-health-lab/fish-types/fish-angel-47d9b558ea7e.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fish-types/fish-angel-47d9b558ea7e.jpg",
+      "uploaded": true,
+      "sha256": "47d9b558ea7ed133ef8fd3e4791b6baba59888d63a6f2d477236bba876a90e0a",
+      "bytes": 51790,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        724,
+        362,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Flame angelfish.",
+      "caption": "Marine angelfish"
+    },
+    {
+      "id": "fish-wrasse",
+      "sheet": "fish-types",
+      "path": "local-images/fish-types/fish-wrasse-f8b38dd8e0f5.jpg",
+      "r2Key": "experiments/fish-health-lab/fish-types/fish-wrasse-f8b38dd8e0f5.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fish-types/fish-wrasse-f8b38dd8e0f5.jpg",
+      "uploaded": true,
+      "sha256": "f8b38dd8e0f54968663da42b4cb0b30934128beb145637d88ac59a9579d55acb",
+      "bytes": 52395,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        362,
+        724,
+        724,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Six-line wrasse by rock.",
+      "caption": "Wrasse / goby / blenny"
+    },
+    {
+      "id": "fish-damsel",
+      "sheet": "fish-types",
+      "path": "local-images/fish-types/fish-damsel-bcfbb9c2e278.jpg",
+      "r2Key": "experiments/fish-health-lab/fish-types/fish-damsel-bcfbb9c2e278.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fish-types/fish-damsel-bcfbb9c2e278.jpg",
+      "uploaded": true,
+      "sha256": "bcfbb9c2e2788954dd11c24999a0e1c144326288f7256cf3886eb780342ac172",
+      "bytes": 39741,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        724,
+        1086,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Blue-green chromis.",
+      "caption": "Damsel / chromis"
+    },
+    {
+      "id": "fish-other",
+      "sheet": "fish-types",
+      "path": "local-images/fish-types/fish-other-c0afbd4f6a90.jpg",
+      "r2Key": "experiments/fish-health-lab/fish-types/fish-other-c0afbd4f6a90.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fish-types/fish-other-c0afbd4f6a90.jpg",
+      "uploaded": true,
+      "sha256": "c0afbd4f6a90b3f6c3f3cbeab3591935228b1949afbe85e4c61a9e0393be927e",
+      "bytes": 22543,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        1086,
+        724,
+        1448,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Blurred silhouettes of small fish.",
+      "caption": "Not sure / other"
+    }
+  ],
+  "review": "Each sheet and crop opened and checked for right fish / right sign / no text; no cells needed regeneration."
+}

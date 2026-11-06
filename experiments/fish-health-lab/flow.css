@@ -200,15 +200,12 @@ footer > .text-button { font-size: 12px; }
 .fish-chip{position:relative;cursor:pointer;min-width:0}
 .fish-chip input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
 .fish-chip>span{display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;height:100%;padding:12px 8px 13px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
-.fish-chip .fish-icon{width:64px;height:40px;margin-bottom:6px}
+.fish-chip .fish-photo{width:100%;height:auto;aspect-ratio:1;object-fit:cover;border-radius:8px;margin-bottom:7px;background:#dfe7e1}
+.fish-chip>span{padding:8px 8px 11px}
 .fish-chip strong{font-size:14px;font-weight:500;line-height:1.25}
 .fish-chip small{font-size:11px;color:var(--muted);line-height:1.35}
 .fish-chip input:checked+span{border-color:var(--green);box-shadow:0 0 0 2px var(--green);background:#eaf0de}
 .fish-chip input:focus-visible+span{outline:3px solid #b07a31;outline-offset:3px}
-.fish-chip-other{grid-column:1/-1}
-.fish-chip-other>span{flex-direction:row;justify-content:center;gap:10px;padding:8px 12px}
-.fish-chip-other .fish-icon{width:44px;height:28px;margin:0}
-.fish-chip-other small{display:none}
 .closer-picker label{min-width:0}
 .results-title{margin-bottom:8px}
 .results-title>span{display:block;font-family:var(--sans);font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);font-weight:500;margin-bottom:6px}
@@ -255,8 +252,9 @@ footer > .text-button { font-size: 12px; }
 .condition-body>.urgency-badge{align-self:flex-start;margin-bottom:10px;font-size:11px}
 .care-section>h2 .urgency-badge{font-family:var(--sans);letter-spacing:0;font-size:12px;margin-left:6px}
 @media(max-width:700px){
-  .fish-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-  .fish-chip>span{padding:10px 6px 11px}
+  .fish-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+  .fish-chip>span{padding:6px 5px 9px}
+  .fish-chip .fish-photo{margin-bottom:5px}
   .fish-chip strong{font-size:13px}
   .fish-chip small{font-size:10px}
   .results-title{font-size:32px}
@@ -274,4 +272,27 @@ footer > .text-button { font-size: 12px; }
   .todo-facts{grid-template-columns:1fr;gap:8px}
   .water-nudge{font-size:13px}
   .alternative>.urgency-badge{display:none}
+}
+
+/* Betta pilot: step pictures and per-fish galleries. */
+.todo-steps{list-style:none;padding-left:0;counter-reset:todo}
+.todo-steps li{display:flex;gap:12px;align-items:center;counter-increment:todo;padding-left:0}
+.todo-steps .step-pic{width:64px;height:64px;flex-shrink:0;object-fit:cover;border-radius:9px;background:#dfe7e1}
+.todo-steps li>span{min-width:0}
+.step-pic-urgent{display:grid;place-items:center;background:#f9dcd2!important;color:#9a2f17;font-size:28px;font-weight:700;border:1px solid #e7a48e}
+.todo-steps li>span>strong{display:block;font-weight:500}
+.todo-steps li>span>strong::before{content:counter(todo) ". ";color:var(--green);font-weight:600}
+.todo-steps li>span>small{display:block;font-size:12.5px;line-height:1.4;color:var(--muted);margin-top:2px}
+.fish-gallery{margin:18px 0}
+.fish-gallery-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.fish-gallery figure{margin:0}
+.fish-gallery img{width:100%;height:auto;aspect-ratio:1;object-fit:cover;border-radius:10px;background:#dfe7e1}
+.fish-gallery figcaption{font-size:12px;color:var(--muted);margin-top:4px}
+.image-origin-note{display:block;font-size:11px;color:var(--muted);margin-top:6px}
+.more-pictures{margin:8px 0 16px}
+.more-pictures>summary{cursor:pointer;font-size:14px;color:var(--green)}
+@media(max-width:700px){
+  .todo-steps li{gap:10px}
+  .todo-steps .step-pic{width:54px;height:54px}
+  .todo-steps li+li{margin-top:9px}
 }

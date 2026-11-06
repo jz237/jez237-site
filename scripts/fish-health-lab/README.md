@@ -314,3 +314,39 @@ analytics/Cloudflare traffic from app submissions, while still checking every
 request for observation-text leaks and external AI calls. None were detected.
 Receipts: `workspace/tmp/fish-health-publish-20261105/`. This verifies application
 behavior and publication, not clinical accuracy.
+
+## Betta pilot picture set, 2026-11-05 (published)
+
+Jez (#hidden-reef-2): a visual guide a novice can follow; picking a fish type
+should show that fish in every picture, with generic fallbacks where a fish has
+no set yet. Jez: one 12-cell sheet per set, not one sheet per picture.
+
+- Four stock-OAuth generations, requested `openai/gpt-image-2.6-sunburst`,
+  medium quality, size auto, 4:3. Each returned 1448×1086 and was cut without
+  resizing into twelve 362×362 cells (4 columns × 3 rows): betta signs, betta
+  extras, treatment steps, fish types — 48 crops.
+- Crops are R2-only (never Git binaries); the private-preview copies stay
+  **untracked** under `experiments/fish-health-lab/local-images/` (repo `info/exclude`).
+  Receipt: `betta-pilot-images-20261105.json` (prompts, sheet hashes, crop boxes,
+  crop hashes, planned R2 keys). Prompts/provider receipts and the prepare script:
+  `workspace/tmp/imagegen/fish-health-betta-pilot-20261105/`; originals under
+  `/home/jez237/.openclaw/media/tool-image-generation/fish-health-betta-pilot-20261105/`.
+- `fish-images-data.mjs` (generated) holds each crop's content-hashed R2 key
+  (`experiments/fish-health-lab/{betta,steps,fish-types}/<id>-<sha12>.jpg`).
+  **Published 2026-11-05:** all 48 uploaded to `jez237-site-media/<key>`
+  (`image/jpeg`, `public, max-age=31536000, immutable`) and byte-verified at
+  `https://media.jez237.com/<key>`; `IMAGE_SOURCE = 'media'`. Upload receipt:
+  `workspace/tmp/fish-health-betta-publish-20261105/upload-verification.json`.
+  `IMAGE_SOURCE = 'local'` maps the same names onto the untracked preview copies.
+- `fish-images.mjs`: `imagesFor(fishType, signOrCondition, water)` returns the
+  fish's own pictures or the existing generic one; `stepImageFor(step)` picks a
+  step picture by keyword (first sentence first; "Act now/today/fast" gets a red
+  marker); fish-type chips use the 12 healthy-fish pictures.
+- Betta: all 12 symptom pictures and all 19 freshwater results have betta
+  pictures (hero, could-also thumbnails, detail gallery; generic gallery folds
+  under “More pictures (other fish)”).
+- Checks: `fish-images.test.mjs` (mapping complete, fallback, keys match the
+  receipt, media mode never references `local-images/`; `FHL_VERIFY_MEDIA=1` also
+  fetches and hashes every public URL; local copies are hashed when present) and
+  `betta-browser-check.mjs` (local preview or live via `FISH_LAB_URL`).
+  `betta-pilot-screenshots.mjs` saves 390 px review shots.
