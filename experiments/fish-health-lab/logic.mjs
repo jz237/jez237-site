@@ -8,6 +8,14 @@ export const LABELS = Object.fromEntries([...SYMPTOMS.map(s => [s.id, s.title]),
 const numeric = value => value !== '' && value !== null && value !== undefined && Number.isFinite(Number(value)) ? Number(value) : null;
 const DISTRESS = ['gasping', 'collapse', 'deaths'];
 
+// "35 ppt", "35", "1.025" or "SG 1.025" → ppt (null if it can't be read).
+export function salinityPpt(text) {
+  const n = parseFloat(String(text || '').replace(',', '.').replace(/[^0-9.]+/, ''));
+  if (!Number.isFinite(n) || n <= 0) return null;
+  if (n > 0.99 && n < 1.05) return (n - 1) * 1310; // specific gravity at about 25 °C
+  return n <= 80 ? n : null;
+}
+
 export function assessUrgency(input) {
   const signs = new Set(input.signs || []);
   const urgent = [];
@@ -22,6 +30,19 @@ export function assessUrgency(input) {
   if (nitrite !== null && nitrite > 0) checks.push(input.water === 'marine'
     ? 'Nitrite is detectable—your biological filter may be struggling. Do a water change.'
     : 'Nitrite is detectable—do a water change and consider aquarium salt for salt-tolerant fish to protect the gills.');
+  const ph = numeric(input.ph);
+  if (ph !== null && ph > 0) {
+    const [low, high] = input.water === 'marine' ? [7.8, 8.6] : [6, 8.5];
+    if (ph < low || ph > high) checks.push(`pH ${ph} is outside the usual ${low}–${high} for ${input.water === 'marine' ? 'saltwater' : 'most freshwater fish'}—correct it slowly over a few days, not all at once.`);
+  }
+  const temp = numeric(input.temperature);
+  if (temp !== null && temp > 0) {
+    const f = input.tempUnit === 'C' ? temp * 9 / 5 + 32 : temp;
+    const [low, high] = input.water === 'marine' ? [72, 84] : [64, 86];
+    if (f < low || f > high) checks.push(`${temp} °${input.tempUnit === 'C' ? 'C' : 'F'} is ${f < low ? 'colder' : 'warmer'} than most ${input.water === 'marine' ? 'reef' : 'tropical'} fish handle—check the heater and change it slowly.`);
+  }
+  const salinity = salinityPpt(input.salinity);
+  if (input.water === 'marine' && salinity !== null && (salinity < 30 || salinity > 37)) checks.push(`Salinity looks ${salinity < 30 ? 'low' : 'high'} (about ${Math.round(salinity)} ppt; reef tanks usually run 33–35 ppt / 1.024–1.026). Correct it slowly—no more than about 1 ppt a day.`);
   if (input.tankAge === 'new') checks.push('A new tank may not be cycled yet—test ammonia and nitrite every day.');
   if (input.affected === 'several' || signs.has('several')) checks.push('Several fish are affected—check the water as well as treating the illness.');
   if (input.onset === 'after-change') checks.push('This started after a water, equipment or chemical change—check that change and test the water now.');
@@ -96,7 +117,10 @@ export function featureKeys(input) {
 
 export function urgencyFor(condition, input) {
   const signs = input.signs || [];
-  return DISTRESS.some(id => signs.includes(id)) ? 'today' : condition.urgency || 'week';
+  if (DISTRESS.some(id => signs.includes(id))) return 'today';
+  // African cichlids: swelling (and especially swelling + not eating) can be Malawi bloat—act quickly.
+  if (condition.id === 'bloat' && input.fishType === 'african') return 'today';
+  return condition.urgency || 'week';
 }
 
 function reasonFor(condition, input, fits) {
@@ -144,6 +168,11 @@ export function assessDiagnosis(input) {
     findings.push(decorate(candidate, input, candidate.fits));
     candidate.fits.forEach(id => covered.add(id));
   }
+  // When two problems both fit, the more urgent one leads (a stable sort keeps the rest in order).
+  findings.sort((a, b) => URGENCY[b.urgencyLevel].rank - URGENCY[a.urgencyLevel].rank);
+  // Columnaris spreads fastest and its plan conflicts with the heat step for ich/velvet: it leads.
+  const col = findings.findIndex(c => c.id === 'columnaris');
+  if (col > 0 && findings.some(c => ['ich-fresh', 'velvet-fresh'].includes(c.id))) findings.unshift(...findings.splice(col, 1));
   const unexplained = features.filter(id => !covered.has(id));
   let { alternatives, natural } = couldAlsoBe(findings, ranked, input);
   // Each "This looks more like mine" tap, in order.
@@ -163,6 +192,8 @@ export function assessDiagnosis(input) {
   if (features.includes('fuzz') && features.some(f => f.startsWith('patch'))) messages.push('You picked both fluffy threads and flat pale patches. Fungus and columnaris are often mixed up; flat patches usually mean columnaris.');
   if (input.initialSign === 'dots' && input.textureSign && !['dots', 'unclear'].includes(input.textureSign)) messages.push(`Your closer look was “${LABELS[input.textureSign]},” so we used that instead of “White dots.”`);
   if (findings.length > 1) messages.push('More than one problem may be going on. Start with the most urgent one, and check the labels before using two medicines together.');
+  // Ich/velvet plans raise the temperature; columnaris needs it lower.
+  if (findings.some(c => c.id === 'columnaris') && findings.some(c => ['ich-fresh', 'velvet-fresh'].includes(c.id))) messages.push('Don’t raise the temperature while columnaris is active—warm water speeds it up. Treat the columnaris first, keep the temperature steady, and use a medicine for the spots without the heat step.');
   if (contextConcerns.length) messages.push('Your tank history or readings also point to a water problem. Fix that alongside the treatment.');
   const primary = findings[0] || null;
   return {

@@ -35,15 +35,19 @@ export function rankReef({ group, kind = '', sign, changes = [] }) {
       return { ...c, base, score: base + kindScore + changeScore };
     })
     .filter(Boolean)
-    .sort((a, b) => b.score - a.score || b.base - a.base || a.id.localeCompare(b.id));
+    .sort((a, b) => b.score - a.score || b.base - a.base || a.id.localeCompare(b.id))
+    // A "normal" answer never leads when a picked change points at a real problem
+    // (e.g. winter rest + pump stopped): it drops behind the first real answer.
+    .sort((a, b) => Number(alarmed(a, picked)) - Number(alarmed(b, picked)));
 }
+const alarmed = (c, picked) => Boolean(c.natural) && picked.some(id => !c.changes?.[id]);
 
 function decorate(condition, input, extra = {}) {
   const sign = reefSignFor(input.group, input.sign);
   const changes = (REEF_CHANGES[input.group] || []).filter(c => input.changes?.includes(c.id) && condition.changes?.[c.id]).map(c => c.title.toLowerCase());
   return {
     ...condition,
-    urgencyLevel: condition.urgency,
+    urgencyLevel: URGENCY[sign?.urgency]?.rank > URGENCY[condition.urgency].rank ? sign.urgency : condition.urgency,
     reason: extra.reason || [`You picked “${sign?.title || input.sign}”${changes.length ? `, plus ${changes.join(', ')}` : ''}.`, condition.check].join(' '),
     plan: reefPlanFor(condition.id),
     ...extra,

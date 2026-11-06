@@ -18,7 +18,7 @@ export const PREVENT_SECTIONS = [
     lead: 'Most sick tanks start with one new fish. A few weeks in a separate tank catches it before it spreads.',
     cards: [
       { image: 'qt-tank', title: 'Set up a simple quarantine tank', text: 'A small bare tank, a sponge filter, a heater and a pipe to hide in. Keep the sponge in your main filter for a few weeks first so it’s ready.' },
-      { image: 'float-bag', title: 'Float the bag', text: 'Float the sealed bag for 15–20 minutes so the temperature evens out.' },
+      { image: 'float-bag', title: 'Float the bag', text: 'Float the sealed bag for 15–20 minutes so the temperature evens out. Saltwater: floating doesn’t match salinity—check the bag water, and if it’s more than a little different from your tank, drip-acclimate first (see below).' },
       { image: 'net-transfer', title: 'Net it in, leave the store water', text: 'Net the fish into the tank and throw the store water away—it can carry ich and other bugs.' },
       { image: 'watch-qt', title: 'Watch for 2–4 weeks', text: 'Look every day for spots, rubbing, clamped fins or not eating. If it’s still well after 2–4 weeks (4 for saltwater), it can go in.' },
     ],
@@ -35,7 +35,7 @@ export const PREVENT_SECTIONS = [
     lead: 'Pests like flatworms, red bugs and nudibranchs ride in on new corals.',
     cards: [
       { image: 'inspect-coral', title: 'Look it over first', text: 'Check the coral and the underside of the plug with a flashlight for bugs, worms and egg clusters.' },
-      { image: 'coral-dip', title: 'Dip it in a container', text: 'Use a coral dip in a separate container, blow it over with a baster, then rinse in tank water. Never pour the dip into the tank.' },
+      { image: 'coral-dip', title: 'Dip it in a container', text: 'Use a coral dip in a separate container, blow it over with a baster, then rinse in tank water. Never pour the dip into the tank. Wear gloves and eye protection with zoas and palys (palytoxin).' },
     ],
   },
   {

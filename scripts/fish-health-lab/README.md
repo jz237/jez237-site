@@ -686,3 +686,19 @@ sign × each “anything changed” chip; the medicine matrix). Fixed:
   stung” use library close-ups.
 - Medicine check wording says “the pond” / “a separate tub” for ponds.
 Unchanged by design: the fish “normal” and coral “normal” entries only appear as the plain “may be normal” line.
+
+## Second-model review fixes, 2026-11-06 11:15
+
+Astra (gpt-6-astra) reviewed the whole section at Jez's request (11:07, report only) and found problems the
+first logic check missed; Jez 11:15: “fix all those things if those problems are real”. Fixed (checks in
+`review.test.mjs`): columnaris leads over ich/velvet and the raise-the-heat conflict is called out; the
+detoxifier step applies only when ammonia/nitrite shows and warns about mixing with medicine; no blanket
+half-dose advice; pH, temperature and salinity readings now produce warnings; coral “Flesh peeling off” and
+“Brown jelly” answers always act today; a “normal” answer never leads when a picked change points at a
+real problem (winter rest + pump stopped); copper + corys/plecos says “not even in a hospital tank”;
+methylene blue only in a hospital tank in the fungus plan; marine dropsy/popeye summaries drop Epsom salt;
+African cichlid swelling acts today; corys/plecos get no-scales wording for the swelling question; saltwater
+acclimation mentions salinity; zoa handling mentions palytoxin gloves/eye protection; ich starts today;
+Uronema plan no longer suggests lowering salinity; broad bacterial scientific names say “often”; the
+library timeline reads “How it can change” (Early/Common/Advanced, not every fish goes through every stage);
+the shrimp/crab/snail section says it is for saltwater tanks.

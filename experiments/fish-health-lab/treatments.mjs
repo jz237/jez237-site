@@ -50,9 +50,9 @@ const PLANS = {
       'Test ammonia, nitrite and pH now.',
       'Do a 30–50% water change with dechlorinated, temperature-matched water (saltwater: salinity-matched). Repeat daily until ammonia and nitrite read zero.',
       'Add aeration—an air stone or point the filter outlet at the surface.',
-      'Add a water conditioner/detoxifier that binds ammonia and nitrite, and feed lightly for a few days.',
+      'If ammonia or nitrite reads above zero, add a detoxifier that binds them (also medicating? check the medicine label says the two can be used together), and feed lightly for a few days.',
     ],
-    treatment: 'Water changes, more oxygen and an ammonia/nitrite detoxifier',
+    treatment: 'Water changes, more oxygen, and a detoxifier if ammonia or nitrite shows',
     recovery: 'Breathing often improves within hours; burned gills heal in 1–2 weeks.',
   },
   'ich-fresh': {
@@ -100,7 +100,7 @@ const PLANS = {
     steps: [
       'Look for the cause—fungus grows on injuries, dead tissue and leftover food.',
       `${TEST} Remove uneaten food.`,
-      'Treat with an antifungal (for example methylene blue or a fungus remedy). Aquarium salt helps salt-tolerant fish.',
+      'Treat with a fungus remedy (antifungal). Methylene blue only in a hospital tank or as a short bath—it harms the filter and plants. Aquarium salt helps salt-tolerant fish.',
       'Move a badly affected fish to a hospital tank if it is spreading.',
     ],
     treatment: 'An antifungal medication (plus salt for salt-tolerant fish)',
@@ -141,7 +141,7 @@ const PLANS = {
   },
   dropsy: {
     steps: [HOSPITAL, 'Test the main tank water and do a water change.', 'Treat with an antibacterial medication or medicated food; Epsom salt in the hospital tank can help reduce swelling.', 'Be prepared: dropsy is often hard to cure once the scales stick out.'],
-    marine: { steps: [MARINE_HOSPITAL, 'Test the display water and do a water change.', 'Treat in the hospital tank with an antibacterial medication or medicated food.', 'Be prepared: dropsy is often hard to cure once the scales stick out.'], reefUnsafe: true },
+    marine: { steps: [MARINE_HOSPITAL, 'Test the display water and do a water change.', 'Treat in the hospital tank with an antibacterial medication or medicated food.', 'Be prepared: dropsy is often hard to cure once the scales stick out.'], treatment: 'Isolate + antibacterial food or medication', reefUnsafe: true },
     treatment: 'Isolate + antibacterial food or medication (Epsom salt for swelling)',
     recovery: 'Days to weeks; many fish don’t recover once pineconing is advanced.', medicated: true,
   },
@@ -153,7 +153,7 @@ const PLANS = {
   },
   popeye: {
     steps: [TEST, 'If only one eye bulges, it is probably an injury—clean water and time usually fix it.', `If both eyes bulge or it gets worse: ${HOSPITAL.toLowerCase()} Add Epsom salt and treat with an antibacterial medication.`],
-    marine: { steps: ['Test the water and do a water change.', 'One eye: probably an injury—clean water and time usually fix it.', 'Both eyes or getting worse: treat in a hospital tank with an antibacterial medication.'], reefUnsafe: true },
+    marine: { steps: ['Test the water and do a water change.', 'One eye: probably an injury—clean water and time usually fix it.', 'Both eyes or getting worse: treat in a hospital tank with an antibacterial medication.'], treatment: 'Clean water; antibacterial in a hospital tank if both eyes', reefUnsafe: true },
     treatment: 'Clean water; Epsom salt + antibacterial if both eyes',
     recovery: '2–4 weeks; the swelling goes down slowly.', medicated: true,
   },
@@ -191,9 +191,9 @@ const PLANS = {
     recovery: '1–2 weeks for scrapes; fins regrow over several weeks.',
   },
   uronema: {
-    steps: ['Act fast—Uronema eats into the muscle and spreads quickly.', MARINE_HOSPITAL, 'Treat with a formalin bath or a medication labelled for Uronema/marine ciliates; many keepers also lower the salinity in the hospital tank.', 'Keep the hospital water very clean and watch tankmates.'],
+    steps: ['Act fast—Uronema eats into the muscle and spreads quickly.', MARINE_HOSPITAL, 'Treat with a formalin bath or a medication labelled for Uronema/marine ciliates. Don’t lower the salinity—Uronema copes with low salinity.', 'Keep the hospital water very clean and watch tankmates.'],
     treatment: 'Formalin or a ciliate medication in a hospital tank',
-    recovery: '1–3 weeks if caught early.', medicated: true, reefUnsafe: true,
+    recovery: 'It can kill within days; caught early, 1–3 weeks.', medicated: true, reefUnsafe: true,
   },
   brooklynella: {
     steps: ['Act today—it can kill within days.', MARINE_HOSPITAL, 'Give a formalin bath, then keep treating in the hospital tank.', 'Keep it there for about 2 weeks after it looks better, and check every other clownfish.'],

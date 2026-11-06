@@ -77,9 +77,9 @@ export const MEDICINES = [
     id: 'ich-meds', title: 'Ich medicine (malachite green / formalin)', text: 'Ich-X, Rid-Ich, Kordon, white spot cures', for: 'Ich, velvet, skin parasites',
     fresh: {
       fish: ['ok', 'Fine for most fish at the label dose.'],
-      scaleless: ['care', 'Use half the dose for corys, loaches and plecos.'],
-      shrimp: ['care', 'Many keepers lose shrimp—move them out, or use a half dose and watch closely.'],
-      snails: ['care', 'Snails can be harmed—move them out if you can.'],
+      scaleless: ['care', 'Check the label: some ich medicines say to use less for corys, loaches and plecos, others (such as Ich-X) are made for the normal dose. Don’t guess a half dose.'],
+      shrimp: ['care', 'Many keepers lose shrimp with ich medicines—move them to another tank while you treat.'],
+      snails: ['care', 'Snails can be harmed—move them to another tank while you treat.'],
       plants: ['ok', 'Plants are usually fine.'],
       filter: ['care', 'Formalin uses up oxygen—add an air stone while treating.'],
     },
@@ -145,7 +145,7 @@ export const MEDICINES = [
     fresh: {
       fish: ['ok', 'Most freshwater fish handle a treatment dose for a short time.'],
       scaleless: ['care', 'Corys, loaches, plecos and many tetras dislike salt—low dose only.'],
-      shrimp: ['care', 'Low doses are OK; treatment doses can kill shrimp.'],
+      shrimp: ['care', 'Shrimp handle very little salt—move them out before a treatment dose.'],
       snails: ['care', 'Snails can be harmed at treatment doses.'],
       plants: ['care', 'Many plants suffer at treatment doses.'],
       filter: ['ok', 'Fine at normal doses.'],
@@ -161,7 +161,7 @@ export const MEDICINES = [
   {
     id: 'meth-blue', title: 'Methylene blue', text: 'Blue dye treatment', for: 'Fungus on eggs, short baths',
     fresh: {
-      fish: ['ok', 'Fine for fish.'], scaleless: ['care', 'Use a lower dose.'],
+      fish: ['ok', 'Fine for fish.'], scaleless: ['care', 'Check the label for scaleless fish.'],
       shrimp: ['care', 'Can harm shrimp.'], snails: ['care', 'Can harm snails.'],
       plants: ['kills', 'Harms plants and stains everything blue.'],
       filter: ['kills', 'Kills the filter bacteria—use it only in a hospital tank or a short bath.'],
@@ -259,6 +259,9 @@ export function headline(result) {
     return verdict === 'ok' ? `Fine to use in ${apart}.` : `OK in ${apart}—use with care.`;
   }
   const killed = rows.filter(r => r.verdict === 'kills' && r.id !== 'filter').map(r => r.title.toLowerCase());
+  // A hospital tank doesn't help the fish being treated if the medicine kills them.
+  const fishKilled = rows.filter(r => r.verdict === 'kills' && r.id === 'scaleless').map(r => r.title.toLowerCase());
+  if (verdict === 'kills' && fishKilled.length) return `Not for ${fishKilled.join(' and ')} at all—not even in ${apart}. Pick a gentler medicine.`;
   if (verdict === 'kills') return killed.length ? `Not in ${here}—it will kill your ${killed.join(' and ')}. Use ${apart}.` : `Not in ${here}—use ${apart}.`;
   if (verdict === 'hospital') return `Not in ${here}—treat the fish in ${apart}.`;
   if (verdict === 'care') return 'You can use it here, with care.';

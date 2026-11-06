@@ -37,9 +37,10 @@ export const REEF_KINDS = {
 export const REEF_SIGNS = {
   coral: [
     { id: 'bleach', title: 'Turning white', text: 'Color gone, flesh still there' },
-    { id: 'peeling', title: 'Flesh peeling off', text: 'White skeleton showing', kinds: ['sps', 'lps'] },
+    // urgency: the floor for any answer to this sign (active flesh loss can't wait, whatever the cause).
+    { id: 'peeling', title: 'Flesh peeling off', text: 'White skeleton showing', kinds: ['sps', 'lps'], urgency: 'today' },
     { id: 'creeping', title: 'White creeping up from the base', text: 'Slowly, over days or weeks', kinds: ['sps'] },
-    { id: 'brown-jelly', title: 'Brown jelly', text: 'Brown slime on the flesh', kinds: ['lps', 'sps'] },
+    { id: 'brown-jelly', title: 'Brown jelly', text: 'Brown slime on the flesh', kinds: ['lps', 'sps'], urgency: 'today' },
     { id: 'closed', title: 'Won’t open', text: 'Stays shut or shrunk back', kinds: ['soft', 'lps', 'sps'] },
     { id: 'browning', title: 'Turning brown', text: 'Dull, losing its color' },
     { id: 'pastel', title: 'Pale and pastel', text: 'Washed out, very clean tank' },

@@ -126,7 +126,8 @@ try {
   assert.match(await page.locator('#results-title').innerText(),/Most likely:\s*Ich/i);
   assert.match(await page.locator('#results-content').innerText(),/hobby guide, not a vet/i);
   assert.equal(await page.locator('.result-focus .todo-card ol li').count(),5);
-  assert.equal(await page.locator('.result-focus[data-urgency="week"] .urgency-week').count(),1);
+  // Ich starts today (Nov 6 2026 review).
+  assert.equal(await page.locator('.result-focus[data-urgency="today"] .urgency-today').count(),1);
   assert.match(await page.locator('.water-nudge').innerText(),/Tested ammonia & nitrite lately\?/);
   assert.equal(await page.locator('#results-content .water-reminder').count(),0);
   await page.locator('.result-focus .result-image img').evaluate(img=>img.decode());
@@ -134,7 +135,8 @@ try {
   assert.equal(await page.locator('.alternatives .urgency-badge').count(),0);
   const velvetCard=page.locator('[data-alternative="velvet-fresh"]');
   assert.match(await velvetCard.innerText(),/Shine a flashlight from the side/);
-  assert.match(await velvetCard.locator('.alt-danger').innerText(),/Rule this out first — more dangerous/);
+  // Velvet and ich are both "Act today" now, so velvet is no longer flagged as more dangerous.
+  assert.equal(await velvetCard.locator('.alt-danger').count(),0);
   assert.equal(await velvetCard.locator('.alt-treatment').count(),0,'only the "different treatment" warning is shown; no "same steps" line (Claw review, Nov 5)');
   await page.screenshot({path:output+'/desktop-result.png',fullPage:true});
   // Compare: two pictures side by side, one check line, Close returns.
@@ -167,7 +169,7 @@ try {
   for (let i=0;i<4&&!(await page.locator('[data-step="results"]').isVisible());i++) await next(page);
   await at(page,'results');
   assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'ich-fresh');
-  record('could-also: velvet card has a look-for check, a danger line and same-steps note; Compare shows ich vs velvet with one check; tapping swaps the result (and back); changing answers drops the pick');
+  record('could-also: velvet card has a look-for check and same-steps note (no danger line: both act today); Compare shows ich vs velvet with one check; tapping swaps the result (and back); changing answers drops the pick');
   await page.locator('.result-focus .result-image').click();
   // Library visual guide (Nov 6 2026): four numbered close-ups + the two remaining full sheets, each enlargeable.
   assert.equal(await page.locator('#detail-content .ig-closeups .ig-zoom').count(),4);

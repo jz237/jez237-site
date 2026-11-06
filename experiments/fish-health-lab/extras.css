@@ -130,3 +130,4 @@
 .more-sheets .strip-item{flex-basis:150px}
 .more-sheets .strip-item img{width:150px;height:150px}
 .ig-look p{justify-content:flex-start}
+.ig-time-note{display:block;margin-top:8px;font-size:11.5px;color:var(--muted)}

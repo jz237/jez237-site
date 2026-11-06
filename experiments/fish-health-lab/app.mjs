@@ -330,7 +330,7 @@ function infographic(condition, water) {
   const look = lookalikesFor(condition.id, water)[0], lookImage = look && leadImageFor(look.id);
   const closeups = close.length ? `<ol class="ig-closeups">${close.map((im, i) => `<li><button type="button" class="ig-zoom" ${zoomAttrs(im.url, `${condition.title} · ${im.caption || ''}`, im.alt)} aria-label="Enlarge: ${escape(im.caption || '')}">${pic(im)}<b aria-hidden="true">${i + 1}</b></button><span><b>${i + 1}</b> ${escape(im.caption || '')}</span></li>`).join('')}</ol>` : '';
   const where = info ? `<div class="ig-where"><h4>Where it shows</h4>${fishMap(info.zones)}<p>${info.zones.map(z => `<span class="ig-zone">${escape(ZONES[z])}</span>`).join('')}</p></div>` : '';
-  const time = info ? `<div class="ig-time"><h4>How it changes</h4><ol class="ig-timeline">${['Early', 'Typical', 'Late'].map((label, i) => `<li><strong>${label}</strong><span>${escape(info.time[i])}</span></li>`).join('')}</ol></div>` : '';
+  const time = info ? `<div class="ig-time"><h4>How it can change</h4><ol class="ig-timeline">${['Early', 'Common', 'Advanced'].map((label, i) => `<li><strong>${label}</strong><span>${escape(info.time[i])}</span></li>`).join('')}</ol><small class="ig-time-note">Not every fish goes through every stage.</small></div>` : '';
   const notThis = look ? `<div class="ig-notthis"><h4>Not this?</h4><div>${lookImage ? `<button type="button" class="ig-zoom" ${zoomAttrs(lookImage.url, look.title, lookImage.alt)} aria-label="Enlarge ${escape(look.title)}">${pic(lookImage)}</button>` : ''}<p><strong>${escape(look.title)}</strong>${escape(look.comparisonReason)}<button class="text-button" data-condition="${look.id}">Open ${escape(look.title)} →</button></p></div></div>` : '';
   return `<section class="infographic" data-infographic="${condition.id}" aria-label="${escape(condition.title)} visual guide"><p class="ig-eyebrow">VISUAL GUIDE</p>${closeups}${where || time ? `<div class="ig-row">${where}${time}</div>` : ''}${notThis}<small class="image-origin-note">AI illustrations.</small></section>`;
 }
@@ -479,9 +479,10 @@ function renderCloserChoices() {
   const water = form.elements.water.value, question = closerQuestionFor(primarySign, water);
   const current = $('#closer-grid input:checked')?.value || '';
   if (!question) { $('#closer-grid').replaceChildren(); return; }
-  $('#closer-title').textContent = question.title;
+  const catfish = ['cory', 'pleco'].includes(form.elements.fishType?.value) && question.catfishTitle;
+  $('#closer-title').textContent = catfish ? question.catfishTitle : question.title;
   $('#closer-hint').textContent = question.hint;
-  $('#closer-grid').innerHTML = question.choices.map(c => `<label><input type="radio" name="closer" value="${c.id}"${c.id === current ? ' checked' : ''}><span><strong>${escape(water === 'marine' && c.marineTitle ? c.marineTitle : c.title)}</strong><small>${escape(c.text)}</small></span></label>`).join('');
+  $('#closer-grid').innerHTML = question.choices.map(c => `<label><input type="radio" name="closer" value="${c.id}"${c.id === current ? ' checked' : ''}><span><strong>${escape(catfish && c.catfishTitle ? c.catfishTitle : water === 'marine' && c.marineTitle ? c.marineTitle : c.title)}</strong><small>${escape(catfish && c.catfishText ? c.catfishText : c.text)}</small></span></label>`).join('');
 }
 function renderAdditionalChoices() {
   const main = detailSign || primarySign;

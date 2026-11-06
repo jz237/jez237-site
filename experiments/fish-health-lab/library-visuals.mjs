@@ -29,7 +29,7 @@ export const LIB_INFO = {
   dropsy: { zones: ['belly', 'body', 'eyes'], time: ['Belly swelling', 'Scales start to lift', 'Pine-cone scales all over'] },
   bloat: { zones: ['belly'], time: ['Round belly after eating', 'Stringy or no poop', 'Floating or tilting'] },
   popeye: { zones: ['eyes'], time: ['Eye looks a bit larger', 'Eye bulging out', 'Cloudy, bloody or both eyes'] },
-  'cloudy-eye': { zones: ['eyes'], time: ['A slight grey haze', 'Milky film over the eye', 'Both eyes white'] },
+  'cloudy-eye': { zones: ['eyes'], time: ['A slight grey haze', 'Milky film over the eye', 'Can spread to both eyes'] },
   'swim-bladder': { zones: ['belly', 'body'], time: ['Slight tilt after meals', 'Floating or head-down', 'Stuck at the top or bottom'] },
   flukes: { zones: ['gills', 'body'], time: ['Occasional rubbing', 'Flashing, fast breathing', 'Grey slime, red gills'] },
   lymphocystis: { zones: ['fins', 'mouth', 'body'], time: ['A few small pearls', 'Cauliflower clusters', 'Large clumps (fall off later)'] },

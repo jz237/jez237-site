@@ -58,7 +58,7 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
   function renderKinds() {
     const kinds = REEF_KINDS[state.group] || [];
     $('#reef-kind-title').textContent = groupText(state.group).ask;
-    $('#reef-kind-hint').textContent = 'Optional. Pick the closest, or Not sure.';
+    $('#reef-kind-hint').textContent = state.group === 'invert' ? 'For saltwater (reef) tanks. Optional—pick the closest, or Not sure.' : 'Optional. Pick the closest, or Not sure.';
     const tiles = [...kinds, { id: '', title: 'Not sure', text: 'Show every sign' }];
     $('#reef-kind-grid').innerHTML = tiles.map(k => `<button type="button" class="reef-tile" data-reef-kind="${k.id}" aria-pressed="${String(state.kindPicked && k.id === state.kind)}">${picture(reefImageFor(state.group, k.id, '', 'kinds'), k.id ? groupIcon(state.group, k.id) : 'unsure', { label: '', cls: 'reef-ph-tile' })}<strong>${escape(k.title)}</strong><small>${escape(k.text)}</small></button>`).join('');
   }
@@ -137,7 +137,7 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
     const where = !info ? '' : info.zones
       ? `<div class="ig-where"><h4>Where it shows</h4>${fishMap(info.zones)}<p>${info.zones.map(z => `<span class="ig-zone">${escape(ZONES[z])}</span>`).join('')}</p></div>`
       : `<div class="ig-where ig-look"><h4>Where to look</h4><p>${info.look.map(l => `<span class="ig-zone">${escape(l)}</span>`).join('')}</p></div>`;
-    const time = info ? `<div class="ig-time"><h4>How it changes</h4><ol class="ig-timeline">${['Early', 'Typical', 'Late'].map((label, i) => `<li><strong>${label}</strong><span>${escape(info.time[i])}</span></li>`).join('')}</ol></div>` : '';
+    const time = info ? `<div class="ig-time"><h4>How it can change</h4><ol class="ig-timeline">${['Early', 'Common', 'Advanced'].map((label, i) => `<li><strong>${label}</strong><span>${escape(info.time[i])}</span></li>`).join('')}</ol><small class="ig-time-note">Not every fish goes through every stage.</small></div>` : '';
     const [lookId, lookReason] = (REEF_LOOKALIKES[c.id] || []).find(([id]) => id) || [];
     const look = lookId && reefConditionFor(lookId), lookImage = look && reefImageFor(look.group, look.id);
     const notThis = look ? `<div class="ig-notthis"><h4>Not this?</h4><div>${lookImage ? `<button type="button" class="ig-zoom" ${zoomAttrs(lookImage.url, look.title, lookImage.alt)} aria-label="Enlarge ${escape(look.title)}">${img(lookImage)}</button>` : ''}<p><strong>${escape(look.title)}</strong>${escape(lookReason)}<button type="button" class="text-button" data-reef-condition="${look.id}">Open ${escape(shortName(look.title))} →</button></p></div></div>` : '';

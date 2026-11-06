@@ -70,9 +70,11 @@ export const CLOSER_QUESTIONS = {
   },
   swollen: {
     title: 'Look from above: what are the scales doing?', hint: 'Dropsy is serious, so check this one.',
+    // Corys and plecos have armour plates, not scales: dropsy shows as a tight, stiff swelling.
+    catfishTitle: 'Look from above: how does the swelling look?',
     choices: [
-      { id: 'flat', title: 'Lying flat and smooth', text: 'Just a round, full belly' },
-      { id: 'pinecone', title: 'Sticking out like a pine cone', text: 'Scales raised all over the body' },
+      { id: 'flat', title: 'Lying flat and smooth', catfishTitle: 'Just a full, soft belly', text: 'Just a round, full belly', catfishText: 'Looks like it ate well' },
+      { id: 'pinecone', title: 'Sticking out like a pine cone', catfishTitle: 'Swollen tight all over', text: 'Scales raised all over the body', catfishText: 'Body stiff and bloated, skin stretched shiny' },
       { id: 'unclear', title: 'Not sure', text: 'Go with the most common cause' },
     ],
   },
@@ -152,7 +154,7 @@ export const CONDITIONS = [
     tips: { goldfish: 'Goldfish are messy and need big, regular water changes—overstocking is a common cause.', molly: 'Mollies “shimmy” (wobble in place with clamped fins) when the water is dirty or too soft—test and change water.' },
   },
   {
-    id: 'ich-fresh', title: 'Ich (white spot disease)', scientific: 'Ichthyophthirius multifiliis', scope: 'fresh', kind: 'Parasite', art: 'dots', urgency: 'week',
+    id: 'ich-fresh', title: 'Ich (white spot disease)', scientific: 'Ichthyophthirius multifiliis', scope: 'fresh', kind: 'Parasite', art: 'dots', urgency: 'today',
     summary: 'A very common parasite. It looks like the fish has been sprinkled with salt.',
     hint: 'Separate white grains, like salt, on the body and fins.',
     weights: { dots: 6, 'dots:white': 7, rubbing: 2, clamped: 1, several: 2, breathing: 1, appetite: 1 },
@@ -170,7 +172,7 @@ export const CONDITIONS = [
     },
   },
   {
-    id: 'ich-marine', title: 'Marine ich (Cryptocaryon)', scientific: 'Cryptocaryon irritans', scope: 'marine', kind: 'Parasite', art: 'dots', urgency: 'week',
+    id: 'ich-marine', title: 'Marine ich (Cryptocaryon)', scientific: 'Cryptocaryon irritans', scope: 'marine', kind: 'Parasite', art: 'dots', urgency: 'today',
     summary: 'The saltwater version of white spot. A different parasite from freshwater ich, and it lives in the whole display tank.',
     hint: 'White salt-like grains on a saltwater fish.',
     weights: { dots: 6, 'dots:white': 7, 'dots:black': 1, rubbing: 2, breathing: 3, several: 2, appetite: 1, clamped: 1 },
