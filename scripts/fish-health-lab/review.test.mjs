@@ -250,3 +250,14 @@ test('A3-5: hospital/tub mode rows describe the hospital tank, not the display',
   assert.ok(r.shown.every(x => !/whole pond|pond filter/.test(x.reason)));
   assert.match(headline(r), /separate tub/);
 });
+
+// ── Astra round 4 (12:40 EST). ──
+test('A4-1: salinity in ppm, mg/L or with a typographic minus is rejected, not read as normal', () => {
+  for (const s of ['35 ppm', '35 mg/L', '−35 ppt', '–35 ppt']) assert.equal(readSalinity(s).unreadable, true, s);
+  assert.equal(readSalinity('35 ppt').ppt, 35); assert.equal(readSalinity('1.026 (thus fine)').ppt > 33, true);
+});
+test('A4-2: metronidazole only with Malawi bloat signs; oscars get a fast and outside help, not a drug', () => {
+  const steps = assessDiagnosis({ water: 'fresh', fishType: 'african', primarySign: 'swollen', signs: ['swollen'], closer: 'flat' }).primary.plan.steps.join(' ');
+  assert.match(steps, /off its food or has white, stringy poop[^.]*metronidazole/);
+  assert.doesNotMatch(steps.split('Oscars:')[1], /metronidazole/);
+});

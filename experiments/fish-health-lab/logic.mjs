@@ -21,7 +21,8 @@ export function readSalinity(text) {
   const raw = String(text || '').trim();
   if (!raw) return null;
   if (/\d\s*[mµu]S(\/cm)?\b|siemens|conductiv/i.test(raw)) return { unreadable: true }; // conductivity, not salinity
-  if (/-\s*\d/.test(raw)) return { unreadable: true }; // a negative reading
+  if (/[-−–]\s*\d/.test(raw)) return { unreadable: true }; // a negative reading (any minus sign)
+  if (/\bppm\b|mg\s*\/\s*l|\bmg\b|ppb/i.test(raw)) return { unreadable: true }; // not salinity units
   const n = parseFloat(raw.replace(',', '.').replace(/^[^0-9.]+/, ''));
   if (!Number.isFinite(n) || n < 0) return { unreadable: true };
   // Units win when they're given: "%", "ppt"/"psu"/"‰", or "SG".

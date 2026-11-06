@@ -727,3 +727,5 @@ variant's treatment line (cory/pleco velvet stays copper-free); freshwater velve
 hospital tank (matches the medicine check); the African/oscar swelling plan separates mbuna (Malawi bloat,
 metronidazole, plant diet) from oscars (overeating/blockage, fast first, usual diet); salinity units win
 (%, ppt/psu, SG) and negatives are rejected; hospital/tub mode rows describe the hospital tank, not the display.
+
+Astra round 4 (12:40 EST), fixed (`A4-*`): salinity in ppm/mg/L or with a typographic minus is rejected; metronidazole only with Malawi bloat signs (off food, stringy white poop), otherwise a fast first; oscars get a fast and outside help, not a drug.
