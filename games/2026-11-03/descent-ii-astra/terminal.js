@@ -27,7 +27,7 @@
   all('[data-go]').forEach(b=>b.onclick=()=>{tab(b.dataset.go);q('terminal').scrollIntoView({block:'start'});});
   function syncCampaign(){
     all('[data-campaign]').forEach(b=>{const active=b.dataset.campaign===q('campaign').value;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',active);});
-    all('.selected-campaign').forEach(el=>el.textContent=q('campaign').value==='d2'?'COUNTERSTRIKE':'VERTIGO');
+    all('.selected-campaign').forEach(el=>el.textContent=q('campaign').value==='overload'?'OVERLOAD':q('campaign').value==='d2'?'COUNTERSTRIKE':'VERTIGO');
   }
   all('[data-campaign]').forEach(b=>{
     b.onclick=()=>{if(launchPending)return;q('campaign').value=b.dataset.campaign;q('campaign').dispatchEvent(new Event('change'));};

@@ -180,7 +180,7 @@ index c5cca0b..2ce97ee 100644
 +
 +
 diff --git a/d2/arch/ogl/ogl.c b/d2/arch/ogl/ogl.c
-index c536c46..f8e1b4d 100644
+index c536c46..5b29db1 100644
 --- a/d2/arch/ogl/ogl.c
 +++ b/d2/arch/ogl/ogl.c
 @@ -56,6 +56,7 @@
@@ -232,7 +232,7 @@ index c536c46..f8e1b4d 100644
  		if (!(GameBitmaps[i].bm_flags & BM_FLAG_PAGED_OUT))
  			ogl_loadbmtexture(&GameBitmaps[i]);
  	}
-@@ -765,6 +777,29 @@ void draw_tmap_flat(grs_bitmap *bm,int nv,g3s_point **vertlist){
+@@ -765,6 +777,31 @@ void draw_tmap_flat(grs_bitmap *bm,int nv,g3s_point **vertlist){
  extern void (*tmap_drawer_ptr)(grs_bitmap *bm,int nv,g3s_point **vertlist);
  
  
@@ -245,6 +245,8 @@ index c536c46..f8e1b4d 100644
 +#include "astra_shadows.inc"
 +#include "astra_pyro.inc"
 +#include "astra_fleet.inc"
++#include "overload_world.inc"
++#include "overload_actors.inc"
 +#include "astra_pickups.inc"
 +#include "astra_motion.inc"
 +#include "astra_recharge.inc"
@@ -262,7 +264,7 @@ index c536c46..f8e1b4d 100644
  /*
   * Everything texturemapped (walls, robots, ship)
   */ 
-@@ -825,8 +860,9 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
+@@ -825,8 +862,9 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
  	if (tmap_drawer_ptr == draw_tmap) {
  		glTexCoordPointer(2, GL_FLOAT, 0, texcoord_array);  
  	}
@@ -273,7 +275,7 @@ index c536c46..f8e1b4d 100644
  	
  	glDisableClientState(GL_VERTEX_ARRAY);
  	glDisableClientState(GL_COLOR_ARRAY);
-@@ -840,6 +876,7 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
+@@ -840,6 +878,7 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
   */
  bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_lrgb *light_rgb, grs_bitmap *bmbot, grs_bitmap *bmovl, int orient)
  {
@@ -281,7 +283,7 @@ index c536c46..f8e1b4d 100644
  	int c, index2, index3, index4;
  	GLfloat vertex_array[MAX_VERTS * 3], color_array[MAX_VERTS * 4], texcoordovl_array[MAX_VERTS * 2];
  #ifdef OGL_MERGE
-@@ -919,8 +956,10 @@ bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_
+@@ -919,8 +958,10 @@ bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_
  #ifndef OGL_MERGE
  	glVertexPointer(3, GL_FLOAT, 0, vertex_array);
  	glColorPointer(4, GL_FLOAT, 0, color_array);
@@ -293,7 +295,7 @@ index c536c46..f8e1b4d 100644
  	glDisableClientState(GL_VERTEX_ARRAY);
  	glDisableClientState(GL_COLOR_ARRAY);
  	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-@@ -959,7 +998,9 @@ bool g3_draw_bitmap_full(vms_vector *pos,fix width,fix height,grs_bitmap *bm,
+@@ -959,7 +1000,9 @@ bool g3_draw_bitmap_full(vms_vector *pos,fix width,fix height,grs_bitmap *bm,
  	int i;
  	GLfloat vertex_array[12], color_array[16], texcoord_array[8];
  
@@ -304,7 +306,7 @@ index c536c46..f8e1b4d 100644
  	v1.z=0;
  	
  	glEnableClientState(GL_VERTEX_ARRAY);
-@@ -1140,6 +1181,7 @@ void ogl_set_blending()
+@@ -1140,6 +1183,7 @@ void ogl_set_blending()
  GLubyte *pixels = NULL;
  
  void ogl_start_frame(void){
@@ -312,7 +314,7 @@ index c536c46..f8e1b4d 100644
  	#ifdef OGL_MERGE
  	GLfloat mat[16];
  	#endif
-@@ -1171,7 +1213,7 @@ void ogl_start_frame(void){
+@@ -1171,7 +1215,7 @@ void ogl_start_frame(void){
  #ifdef OGLES
  	perspective(90.0,1.0,0.1,5000.0);   
  #else
@@ -321,7 +323,7 @@ index c536c46..f8e1b4d 100644
  #endif
  	glMatrixMode(GL_MODELVIEW);
  	glLoadIdentity();//clear matrix
-@@ -1183,6 +1225,7 @@ void ogl_start_frame(void){
+@@ -1183,6 +1227,7 @@ void ogl_start_frame(void){
  }
  
  void ogl_end_frame(void){
@@ -329,7 +331,7 @@ index c536c46..f8e1b4d 100644
  	OGL_VIEWPORT(0,0,grd_curscreen->sc_w,grd_curscreen->sc_h);
  	glMatrixMode(GL_PROJECTION);
  	glLoadIdentity();//clear matrix
-@@ -1208,6 +1251,13 @@ void gr_flip(void)
+@@ -1208,6 +1253,13 @@ void gr_flip(void)
  
  	ogl_do_palfx();
  	ogl_swap_buffers_internal();
@@ -343,7 +345,7 @@ index c536c46..f8e1b4d 100644
  	glClear(GL_COLOR_BUFFER_BIT);
  }
  
-@@ -1256,7 +1306,7 @@ void ogl_init_pixel_buffers(int w, int h)
+@@ -1256,7 +1308,7 @@ void ogl_init_pixel_buffers(int w, int h)
  
  	if (texbuf)
  		d_free(texbuf);
@@ -352,7 +354,7 @@ index c536c46..f8e1b4d 100644
  
  	if ((pixels == NULL) || (texbuf == NULL))
  		Error("Not enough memory for current resolution");
-@@ -1272,7 +1322,7 @@ void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width
+@@ -1272,7 +1324,7 @@ void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width
  {
  	int x,y,c,i;
  
@@ -361,7 +363,7 @@ index c536c46..f8e1b4d 100644
  		Error("Texture is too big: %ix%i", width, height);
  
  	if (data_format) { // true color bitmap?
-@@ -1568,7 +1618,7 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
+@@ -1568,7 +1620,7 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
  	glGenTextures (1, &tex->handle);
  #ifndef OGLES
  	//set priority
@@ -370,7 +372,7 @@ index c536c46..f8e1b4d 100644
  #endif
  	// Give our data to OpenGL.
  	OGL_BINDTEXTURE(tex->handle);
-@@ -1595,17 +1645,14 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
+@@ -1595,17 +1647,14 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
  #ifndef OGLES // see comment above
  	if (texfilt)
  	{
@@ -391,7 +393,7 @@ index c536c46..f8e1b4d 100644
  			tex->tw, tex->th, 0, tex->format, // RGBA textures.
  			GL_UNSIGNED_BYTE, // imageData is a GLubyte pointer.
  			bufP);
-@@ -1644,6 +1691,12 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
+@@ -1644,6 +1693,12 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
  }
  #endif
  
@@ -404,7 +406,7 @@ index c536c46..f8e1b4d 100644
  void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  {
  	unsigned char *buf;
-@@ -1663,11 +1716,20 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+@@ -1663,11 +1718,20 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  		png_data pdata;
  
  		sprintf(filename, /*"textures/"*/ "%s.png", bitmapname);
@@ -426,7 +428,7 @@ index c536c46..f8e1b4d 100644
  				if (bm->gltexture == NULL)
  					ogl_init_texture(bm->gltexture = ogl_get_free_texture(), pdata.width, pdata.height, ((pdata.alpha || bm->bm_flags & BM_FLAG_TRANSPARENT) ? OGL_FLAG_ALPHA : 0));
  				unsigned char *data = pdata.data;
-@@ -1688,6 +1750,9 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+@@ -1688,6 +1752,9 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  				if (pdata.palette)
  					free(pdata.palette);
  				bm->gltexture->is_png = 1;
@@ -436,7 +438,7 @@ index c536c46..f8e1b4d 100644
  				return;
  			}
  			else
-@@ -1845,6 +1910,8 @@ void ogl_freetexture(ogl_texture *gltexture)
+@@ -1845,6 +1912,8 @@ void ogl_freetexture(ogl_texture *gltexture)
  	if (gltexture->handle>0) {
  		r_texcount--;
  		glmprintf((0,"ogl_freetexture(%p):%i (%i left)\n",gltexture,gltexture->handle,r_texcount));
@@ -745,7 +747,7 @@ index af0b258..82aa6fb 100644
  
  extern ogl_texture* ogl_get_free_texture();
 diff --git a/d2/main/collide.c b/d2/main/collide.c
-index fdb2e78..96324ff 100644
+index fdb2e78..4a3b6b9 100644
 --- a/d2/main/collide.c
 +++ b/d2/main/collide.c
 @@ -649,6 +649,10 @@ int check_effect_blowup(segment *seg,int side,vms_vector *pnt, object *blower, i
@@ -778,7 +780,31 @@ index fdb2e78..96324ff 100644
  		create_awareness_event(playerobj, PA_PLAYER_COLLISION);			// object robot can attract attention to player
  		do_ai_robot_hit_attack(robot, playerobj, collision_point);
  		do_ai_robot_hit(robot, PA_WEAPON_ROBOT_COLLISION);
-@@ -1341,6 +1350,7 @@ int apply_damage_to_robot(object *robot, fix damage, int killer_objnum)
+@@ -1048,6 +1057,7 @@ void net_destroy_controlcen(object *controlcen)
+ //	-----------------------------------------------------------------------------
+ void apply_damage_to_controlcen(object *controlcen, fix damage, short who)
+ {
++    {extern int astra_ov_invulnerable(object*);if(astra_ov_invulnerable(controlcen))return;}
+ 	int	whotype;
+ 
+ 	//	Only allow a player to damage the control center.
+@@ -1190,6 +1200,7 @@ void maybe_kill_weapon(object *weapon, object *other_obj)
+ 
+ void collide_weapon_and_controlcen( object * weapon, object *controlcen, vms_vector *collision_point  )
+ {
++    {extern int astra_ov_impact(object*,object*);if(astra_ov_impact(weapon,controlcen))return;}
+ 
+ 	if (weapon->id == OMEGA_ID)
+ 		if (!ok_to_do_omega_damage(weapon)) // see comment in laser.c
+@@ -1239,6 +1250,7 @@ void collide_weapon_and_controlcen( object * weapon, object *controlcen, vms_vec
+ }
+ 
+ void collide_weapon_and_clutter( object * weapon, object *clutter, vms_vector *collision_point  )	{
++    {extern int astra_ov_impact(object*,object*);if(astra_ov_impact(weapon,clutter))return;}
+ 	short exp_vclip = VCLIP_SMALL_EXPLOSION;
+ 
+ 	if ( clutter->shields >= 0 )
+@@ -1341,6 +1353,7 @@ int apply_damage_to_robot(object *robot, fix damage, int killer_objnum)
  //		Boss_been_hit = 1;
  
  	robot->shields -= damage;
@@ -786,7 +812,7 @@ index fdb2e78..96324ff 100644
  
  	//	Do unspeakable hacks to make sure player doesn't die after killing boss.  Or before, sort of.
  	if (Robot_info[robot->id].boss_flag)
-@@ -2215,6 +2225,8 @@ extern fix64 Buddy_sorry_time;
+@@ -2215,6 +2228,8 @@ extern fix64 Buddy_sorry_time;
  
  void apply_damage_to_player(object *playerobj, object *killer, fix damage, ubyte possibly_friendly)
  {
@@ -795,7 +821,7 @@ index fdb2e78..96324ff 100644
  	if (Player_is_dead)
  		return;
  
-@@ -2238,6 +2250,7 @@ void apply_damage_to_player(object *playerobj, object *killer, fix damage, ubyte
+@@ -2238,6 +2253,7 @@ void apply_damage_to_player(object *playerobj, object *killer, fix damage, ubyte
  
  	if (playerobj->id == Player_num) {		//is this the local player?
  		Players[Player_num].shields -= damage;
@@ -803,7 +829,7 @@ index fdb2e78..96324ff 100644
  		PALETTE_FLASH_ADD(f2i(damage)*4,-f2i(damage/2),-f2i(damage/2));	//flash red
  
  		if (Players[Player_num].shields < 0)	{
-@@ -2403,6 +2416,7 @@ void collide_player_and_weapon( object * playerobj, object * weapon, vms_vector
+@@ -2403,6 +2419,7 @@ void collide_player_and_weapon( object * playerobj, object * weapon, vms_vector
  
  	maybe_kill_weapon(weapon,playerobj);
  
@@ -811,7 +837,7 @@ index fdb2e78..96324ff 100644
  	bump_two_objects(playerobj, weapon, 0);	//no damage from bump
  
  	if ( !Weapon_info[weapon->id].damage_radius ) {
-@@ -2768,6 +2782,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
+@@ -2768,6 +2785,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
  		return;
  	}
  
@@ -819,7 +845,7 @@ index fdb2e78..96324ff 100644
  	collision_type = COLLISION_OF(A->type,B->type);
  
  	switch( collision_type )	{
-@@ -2825,6 +2840,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
+@@ -2825,6 +2843,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
  	default:
  		Int3();	//Error( "Unhandled collision_type in collide.c!\n" );
  	}
@@ -1105,8 +1131,27 @@ index fe9b0d1..41bd6d9 100644
 +
 +
 +
+diff --git a/d2/main/fvi.c b/d2/main/fvi.c
+index 535d1ae..221fafc 100644
+--- a/d2/main/fvi.c
++++ b/d2/main/fvi.c
+@@ -771,7 +771,7 @@ if (hit_seg!=-1 && fq->flags&FQ_GET_SEGLIST)
+ //	if(hit_seg != -1 && get_seg_masks(&hit_data->hit_pnt, hit_data->hit_seg, 0, __FILE__, __LINE__).centermask != 0)
+ //		Int3();
+ 
+-	return hit_type;
++	{extern int astra_ov_field_intersection(fvi_query*,fvi_info*,int);return astra_ov_field_intersection(fq,hit_data,hit_type);}
+ 
+ }
+ 
+@@ -1313,3 +1313,5 @@ int object_intersects_wall_d(object *objp,int *hseg,int *hside,int *hface)
+ 
+ 	return sphere_intersects_wall(&objp->pos,objp->segnum,objp->size,hseg,hside,hface);
+ }
++
++#include "overload_fields.inc"
 diff --git a/d2/main/game.c b/d2/main/game.c
-index f15d413..001167a 100644
+index f15d413..5d33402 100644
 --- a/d2/main/game.c
 +++ b/d2/main/game.c
 @@ -1108,6 +1108,19 @@ void game_render_frame();
@@ -1195,15 +1240,17 @@ index f15d413..001167a 100644
  	fix player_shields = Players[Player_num].shields;
  	int player_was_dead = Player_is_dead;
  
-@@ -1410,6 +1442,7 @@ void GameProcessFrame(void)
+@@ -1409,7 +1441,9 @@ void GameProcessFrame(void)
+ 
  		Players[Player_num].homing_object_dist = -1;		//	Assume not being tracked.  Laser_do_weapon_sequence modifies this.
  
++		{extern void astra_ov_tick(void);astra_ov_tick();}
  		object_move_all();
 +        {extern void astra_burst_audio(void);astra_burst_audio();}
  		powerup_grab_cheat_all();
  
  		if (Endlevel_sequence)	//might have been started during move
-@@ -1713,6 +1746,7 @@ void FireLaser()
+@@ -1713,6 +1747,7 @@ void FireLaser()
  	if ((Players[Player_num].primary_weapon == FUSION_INDEX) && (Global_laser_firing_count)) {
  		if ((Players[Player_num].energy < F1_0*2) && (Auto_fire_fusion_cannon_time == 0)) {
  			Global_laser_firing_count = 0;
@@ -1211,7 +1258,7 @@ index f15d413..001167a 100644
  		} else {
  			static fix64 Fusion_next_sound_time = 0;
  			int flash_val;
-@@ -1731,7 +1765,16 @@ void FireLaser()
+@@ -1731,7 +1766,16 @@ void FireLaser()
  
  			flash_val = !(Game_mode & GM_MULTI) || !Netgame.ReducedFlash ? Fusion_charge >> 11 :
  				PaletteRedAdd < 10 ? 10 - PaletteRedAdd : 0;
@@ -1299,10 +1346,18 @@ index da0872e..3137392 100644
 +
 +
 diff --git a/d2/main/gameseq.c b/d2/main/gameseq.c
-index 30de489..2bc3989 100644
+index 30de489..84b985f 100644
 --- a/d2/main/gameseq.c
 +++ b/d2/main/gameseq.c
-@@ -768,7 +768,7 @@ void LoadLevel(int level_num,int page_in_textures)
+@@ -757,6 +757,7 @@ void LoadLevel(int level_num,int page_in_textures)
+ 	gr_set_current_canvas(NULL);
+ 	gr_clear_canvas(BM_XRGB(0, 0, 0));		//so palette switching is less obvious
+ 
++	{extern void astra_ov_prepare(const char*);astra_ov_prepare(level_name);}
+ 	load_ret = load_level(level_name);		//actually load the data from disk!
+ 
+ 	if (load_ret)
+@@ -768,7 +769,7 @@ void LoadLevel(int level_num,int page_in_textures)
  
  	show_boxed_message(TXT_LOADING, 0);
  #ifdef RELEASE
@@ -1311,7 +1366,7 @@ index 30de489..2bc3989 100644
  #endif
  
  	load_endlevel_data(level_num);
-@@ -781,6 +781,10 @@ void LoadLevel(int level_num,int page_in_textures)
+@@ -781,6 +782,10 @@ void LoadLevel(int level_num,int page_in_textures)
  	load_level_robots(level_num);
  
  	verify_objects(); // set proper robot properties if customized
@@ -1322,7 +1377,7 @@ index 30de489..2bc3989 100644
  
  	if ( page_in_textures ) {
  		piggy_load_level_data();
-@@ -829,6 +833,7 @@ void InitPlayerObject()
+@@ -829,6 +834,7 @@ void InitPlayerObject()
  extern void init_seismic_disturbances(void);
  
  //starts a new game on the given level
@@ -1330,7 +1385,7 @@ index 30de489..2bc3989 100644
  void StartNewGame(int start_level)
  {
  	state_quick_item = -1;	// for first blind save, pick slot to save in
-@@ -848,7 +853,18 @@ void StartNewGame(int start_level)
+@@ -848,7 +854,18 @@ void StartNewGame(int start_level)
  	else
  		StartNewLevel(start_level);
  
@@ -1350,7 +1405,7 @@ index 30de489..2bc3989 100644
  
  	game_disable_cheats();
  
-@@ -860,6 +876,7 @@ void StartNewGame(int start_level)
+@@ -860,6 +877,7 @@ void StartNewGame(int start_level)
  //	Call with dead_flag = 1 if player died, but deserves some portion of bonus (only skill points), anyway.
  void DoEndLevelScoreGlitz(int network)
  {
@@ -1358,7 +1413,7 @@ index 30de489..2bc3989 100644
  	int level_points, skill_points, energy_points, shield_points, hostage_points;
  	int	all_hostage_points;
  	int	endgame_points;
-@@ -1022,6 +1039,7 @@ int draw_stars_bg(newmenu *menu, d_event *event, grs_bitmap *background)
+@@ -1022,6 +1040,7 @@ int draw_stars_bg(newmenu *menu, d_event *event, grs_bitmap *background)
  
  void do_screen_message(char *fmt, ...)
  {
@@ -1366,7 +1421,7 @@ index 30de489..2bc3989 100644
  	va_list arglist;
  	grs_bitmap background;
  	char msg[1024];
-@@ -1256,6 +1274,11 @@ void EnterSecretLevel(void)
+@@ -1256,6 +1275,11 @@ void EnterSecretLevel(void)
  //called when the player has finished a level
  void PlayerFinishedLevel(int secret_flag)
  {
@@ -1378,7 +1433,7 @@ index 30de489..2bc3989 100644
  	Assert(!secret_flag);
  
  	if (Game_wind)
-@@ -1295,6 +1318,9 @@ void show_order_form();
+@@ -1295,6 +1319,9 @@ void show_order_form();
  //called when the player has finished the last level
  void DoEndGame(void)
  {
@@ -1388,7 +1443,7 @@ index 30de489..2bc3989 100644
  	if ((Newdemo_state == ND_STATE_RECORDING) || (Newdemo_state == ND_STATE_PAUSED))
  		newdemo_stop_recording(0);
  
-@@ -1456,6 +1482,7 @@ void DoPlayerDead()
+@@ -1456,6 +1483,7 @@ void DoPlayerDead()
  #endif
  	{				//Note link to above else!
  		Players[Player_num].lives--;
@@ -1396,7 +1451,7 @@ index 30de489..2bc3989 100644
  		if (Players[Player_num].lives == 0)
  		{
  			DoGameOver();
-@@ -1809,7 +1836,8 @@ void StartNewLevel(int level_num)
+@@ -1809,7 +1837,8 @@ void StartNewLevel(int level_num)
  		maybe_set_first_secret_visit(level_num);
  	}
  
@@ -1406,7 +1461,7 @@ index 30de489..2bc3989 100644
  
  	StartNewLevelSub(level_num, 1, 0 );
  
-@@ -2086,3 +2114,4 @@ void StartLevel(int random_flag)
+@@ -2086,3 +2115,4 @@ void StartLevel(int random_flag)
  	Auto_fire_fusion_cannon_time = 0;
  	Fusion_charge = 0;
  }
@@ -1508,14 +1563,15 @@ index 64c6202..9dde716 100644
  }
  
 diff --git a/d2/main/inferno.c b/d2/main/inferno.c
-index dc6e44a..7a2b569 100644
+index dc6e44a..9af7e46 100644
 --- a/d2/main/inferno.c
 +++ b/d2/main/inferno.c
-@@ -44,6 +44,13 @@ char copyright[] = "DESCENT II  COPYRIGHT (C) 1994-1996 PARALLAX SOFTWARE CORPOR
+@@ -44,6 +44,14 @@ char copyright[] = "DESCENT II  COPYRIGHT (C) 1994-1996 PARALLAX SOFTWARE CORPOR
  #include "key.h"
  #include "3d.h"
  #include "bm.h"
 +extern int astra_vertigo(void);
++EM_JS(int,astra_ov_selected,(void),{return Module.campaign==="overload";});
 +EM_JS(int,astra_auto_difficulty,(void),{return Module.autopilot?1:(Number.isInteger(Module.difficulty)?Module.difficulty:-1);});
 +EM_JS(int,astra_mine_launch,(void),{return Module.mineInspect>=0;});
 +EM_JS(int,astra_auto_first,(void),{return Module.startLevel||1;});
@@ -1525,7 +1581,7 @@ index dc6e44a..7a2b569 100644
  #include "inferno.h"
  #include "dxxerror.h"
  #include "game.h"
-@@ -415,7 +422,7 @@ int main(int argc, char *argv[])
+@@ -415,7 +423,7 @@ int main(int argc, char *argv[])
  	con_printf( CON_DEBUG, "Initializing movie libraries...\n" );
  	init_movies();		//init movie libraries
  
@@ -1534,7 +1590,7 @@ index dc6e44a..7a2b569 100644
  
  	set_screen_mode(SCREEN_MENU);
  
-@@ -487,7 +494,32 @@ int main(int argc, char *argv[])
+@@ -487,7 +495,32 @@ int main(int argc, char *argv[])
  #endif
  	{
  		Game_mode = GM_GAME_OVER;
@@ -1555,7 +1611,7 @@ index dc6e44a..7a2b569 100644
 +        DoMenu();
 +        if (astra_weapon_setup_requested()) do_weapon_priority_menu();
 +        else if (astra_demo()) newdemo_start_playback("descent2.dem");
-+        else if (astra_quick() && load_mission_by_name(astra_vertigo()?"d2x":"d2")) {
++        else if (astra_quick() && load_mission_by_name(astra_ov_selected()?"overload":(astra_vertigo()?"d2x":"d2"))) {
 +            Difficulty_level = astra_auto_difficulty();
 +            if(Difficulty_level<0)Difficulty_level=PlayerCfg.DefaultDifficulty;
 +            int first=astra_auto_first();
@@ -1568,7 +1624,7 @@ index dc6e44a..7a2b569 100644
  	}
  
  	setjmp(LeaveEvents);
-@@ -521,3 +553,6 @@ int main(int argc, char *argv[])
+@@ -521,3 +554,6 @@ int main(int argc, char *argv[])
  
  	return(0);		//presumably successful exit
  }
@@ -2055,13 +2111,14 @@ index 163e08a..b4b8672 100644
  	lb->item = items;
  	lb->citem = default_item;
 diff --git a/d2/main/object.c b/d2/main/object.c
-index 602b2d5..609bcd0 100644
+index 602b2d5..46a2c6e 100644
 --- a/d2/main/object.c
 +++ b/d2/main/object.c
-@@ -425,6 +425,11 @@ void draw_cloaked_object(object *obj,g3s_lrgb light,fix *glow,fix64 cloak_start_
+@@ -425,6 +425,12 @@ void draw_cloaked_object(object *obj,g3s_lrgb light,fix *glow,fix64 cloak_start_
  //draw an object which renders as a polygon model
  void draw_polygon_object(object *obj)
  {
++    extern int astra_overload_robot(object*);if(astra_overload_robot(obj))return;
 +    extern int astra_fragment_replaced(const object*);if(astra_fragment_replaced(obj))return;
 +	extern int astra_hull,astra_robot_id;
 +    astra_robot_id=(obj->type==OBJ_ROBOT)?obj->id:-1;
@@ -2070,7 +2127,7 @@ index 602b2d5..609bcd0 100644
  	g3s_lrgb light;
  	int	imsave;
  	fix engine_glow_value[2];		//element 0 is for engine glow, 1 for headlight
-@@ -776,6 +781,10 @@ void render_object(object *obj)
+@@ -776,6 +782,10 @@ void render_object(object *obj)
  	mld_save = Max_linear_depth;
  	Max_linear_depth = Max_linear_depth_objects;
  
@@ -2081,7 +2138,7 @@ index 602b2d5..609bcd0 100644
  	switch (obj->render_type)
  	{
  		case RT_NONE:
-@@ -785,7 +794,10 @@ void render_object(object *obj)
+@@ -785,7 +795,10 @@ void render_object(object *obj)
  			if ( PlayerCfg.AlphaEffects && obj->type == OBJ_MARKER ) // set nice transparency/blending for certrain objects
  				gr_settransblend( 10, GR_BLEND_ADDITIVE_A );
  
@@ -2093,7 +2150,7 @@ index 602b2d5..609bcd0 100644
  
  			if (obj->type == OBJ_ROBOT) //"warn" robot if being shot at
  				set_robot_location_info(obj);
-@@ -841,6 +853,7 @@ void render_object(object *obj)
+@@ -841,6 +854,7 @@ void render_object(object *obj)
  			Error("Unknown render_type <%d>",obj->render_type);
  	}
  
@@ -2101,7 +2158,7 @@ index 602b2d5..609bcd0 100644
  	gr_settransblend( GR_FADE_OFF, GR_BLEND_NORMAL ); // revert any transparency/blending setting back to normal
  
  	if ( obj->render_type != RT_NONE && Newdemo_state == ND_STATE_RECORDING )
-@@ -910,6 +923,9 @@ void init_player_object()
+@@ -910,6 +924,9 @@ void init_player_object()
  //sets up the free list & init player & whatever else
  void init_objects()
  {
@@ -2111,7 +2168,7 @@ index 602b2d5..609bcd0 100644
  	int i;
  
  	collide_init();
-@@ -2145,7 +2161,11 @@ void object_move_all()
+@@ -2145,7 +2162,11 @@ void object_move_all()
  
  	obj_delete_all_that_should_be_dead();
  
@@ -2124,6 +2181,12 @@ index 602b2d5..609bcd0 100644
  		ConsoleObject->mtype.phys_info.flags |= PF_LEVELLING;
  	else
  		ConsoleObject->mtype.phys_info.flags &= ~PF_LEVELLING;
+@@ -2630,3 +2651,5 @@ void set_homing_update_rate(int update_rate) {
+ 
+ 	con_printf(CON_DEBUG, "Homing update rate: %d\n", update_rate);
+ }
++
++#include "overload_bridge.inc"
 diff --git a/d2/main/playsave.c b/d2/main/playsave.c
 index 1944a8c..4193e82 100644
 --- a/d2/main/playsave.c
@@ -2241,7 +2304,7 @@ index 650f69e..7271753 100644
  }
 +
 diff --git a/d2/main/render.c b/d2/main/render.c
-index 517bc8a..e02fe4f 100644
+index 517bc8a..7b3dd43 100644
 --- a/d2/main/render.c
 +++ b/d2/main/render.c
 @@ -84,6 +84,7 @@ short Rotated_last[MAX_VERTICES];
@@ -2324,7 +2387,15 @@ index 517bc8a..e02fe4f 100644
  
  #ifndef NDEBUG
  	if (Outline_mode) draw_outline(nv, pointlist);
-@@ -633,6 +654,10 @@ extern ubyte DemoDoingRight,DemoDoingLeft;
+@@ -409,6 +430,7 @@ extern fix	Obj_light_xlate[16];
+ //	Check for normal facing.  If so, render faces on side dictated by sidep->type.
+ void render_side(segment *segp, int sidenum)
+ {
++    extern int astra_overload_side(int);if(astra_overload_side(segp-Segments))return;
+ 	int		vertnum_list[4];
+ 	side		*sidep = &segp->sides[sidenum];
+ 	vms_vector	tvec;
+@@ -633,6 +655,10 @@ extern ubyte DemoDoingRight,DemoDoingLeft;
  
  void do_render_object(int objnum, int window_num)
  {
@@ -2335,7 +2406,7 @@ index 517bc8a..e02fe4f 100644
  	#ifdef EDITOR
  	int save_3d_outline=0;
  	#endif
-@@ -701,6 +726,8 @@ void do_render_object(int objnum, int window_num)
+@@ -701,6 +727,8 @@ void do_render_object(int objnum, int window_num)
  		//NOTE LINK TO ABOVE
  		render_object(obj);
  
@@ -2344,7 +2415,7 @@ index 517bc8a..e02fe4f 100644
  	for (n=obj->attached_obj;n!=-1;n=Objects[n].ctype.expl_info.next_attach) {
  
  		Assert(Objects[n].type == OBJ_FIREBALL);
-@@ -1677,7 +1704,11 @@ void render_frame(fix eye_offset, int window_num)
+@@ -1677,7 +1705,11 @@ void render_frame(fix eye_offset, int window_num)
  		gr_clear_canvas(Clear_window_color);
  	#endif
  
@@ -2356,7 +2427,15 @@ index 517bc8a..e02fe4f 100644
  
  	g3_end_frame();
  
-@@ -2253,3 +2284,15 @@ int find_seg_side_face(short x,short y,int *seg,int *side,int *face,int *poly)
+@@ -1901,6 +1933,7 @@ done_list:
+ //renders onto current canvas
+ void render_mine(int start_seg_num,fix eye_offset, int window_num)
+ {
++    extern void astra_overload_view(void);astra_overload_view();
+ #ifndef NDEBUG
+ 	int		i;
+ #endif
+@@ -2253,3 +2286,15 @@ int find_seg_side_face(short x,short y,int *seg,int *side,int *face,int *poly)
  }
  
  #endif
@@ -2373,7 +2452,7 @@ index 517bc8a..e02fe4f 100644
 +    g3_end_frame();Viewer=saved;Viewer_eye=saved_eye;memcpy(Window_rendered_data,rendered,sizeof rendered);
 +}
 diff --git a/d2/main/state.c b/d2/main/state.c
-index fde0fd3..50b1cd2 100644
+index fde0fd3..9b9397b 100644
 --- a/d2/main/state.c
 +++ b/d2/main/state.c
 @@ -905,8 +905,8 @@ int state_save_all_sub(char *filename, char *desc)
@@ -2387,7 +2466,23 @@ index fde0fd3..50b1cd2 100644
  #endif
  		glReadPixels(0, SHEIGHT - THUMBNAIL_H, THUMBNAIL_W, THUMBNAIL_H, GL_RGBA, GL_UNSIGNED_BYTE, buf);
  		k = THUMBNAIL_H;
-@@ -1793,3 +1793,4 @@ int state_get_game_id(char *filename)
+@@ -1129,6 +1129,7 @@ int state_save_all_sub(char *filename, char *desc)
+ 	
+ 	start_time();
+ 
++	{extern void astra_ov_save(const char*);astra_ov_save(filename);}
+ 	return 1;
+ }
+ 
+@@ -1743,6 +1744,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
+ 			window_set_visible(Game_wind, 1);
+ 	reset_time();
+ 
++	{extern void astra_ov_restore(const char*);astra_ov_restore(filename);}
+ 	return 1;
+ }
+ 
+@@ -1793,3 +1795,4 @@ int state_get_game_id(char *filename)
  
  	return state_game_id;
  }

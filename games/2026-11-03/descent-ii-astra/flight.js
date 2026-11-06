@@ -264,7 +264,9 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
   buttons.forEach(el=>el.disabled=true);
   try {
     if(quick && !demo && !preview && !autopilot)captureFlightMouse();
-    const astra=$("look").value==="astra";
+    const selectedCampaign=$("campaign").value;
+    const campaign=selectedCampaign==='overload'&&(preview||inspect||weapons||mine)?'d2x':selectedCampaign;
+    const astra=campaign==='overload'||$("look").value==="astra";
     // Prime the media element in the button gesture before disk I/O.
     const music=player;
     // Unlock the existing Red Book audio element with a short silent WAV.
@@ -301,12 +303,13 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
     }
     if(astra){await script("generated-materials.js?v=44");assetDepot=astraGeneratedLibrary(assetDepot);}
     if(astra)await loadAstraShipAssets();
+    if(campaign==="overload"){await script("mission-controller.js?v=46");await script("overload-loader.js?v=46");await astraOverload.install(mounted);}
     $("status").textContent="Starting flight computer";
     const canvas=$("view");
     const quality=Number($("res").value);
     const height=Math.round(quality*9/16);
     window.Module={
-      canvas,quick,demo,encounter,autopilot,openWeaponPriorities,shadowQuality:Number($("shadowQuality").value),combatInspect:window.astraCombatPending??-1,assetDepot,loadMovie,fastLaunch:true,blastInspect:preview?firstBlastProfile:0,mineInspect:mine?0:-1,mineInspectZoom:1,demoArsenal:autopilot&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:mine?Number($("mineLevel").value):autopilot?Number($("demoLevel").value):1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign:$("campaign").value,wideHud:$("wideHud").checked,intro:!openWeaponPriorities && !quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys",
+      canvas,quick,demo,encounter,autopilot,openWeaponPriorities,shadowQuality:Number($("shadowQuality").value),combatInspect:window.astraCombatPending??-1,assetDepot,loadMovie,fastLaunch:true,blastInspect:preview?firstBlastProfile:0,mineInspect:mine?0:-1,mineInspectZoom:1,demoArsenal:autopilot&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:mine?Number($("mineLevel").value):autopilot?Number($("demoLevel").value):1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign,wideHud:$("wideHud").checked,intro:!openWeaponPriorities && !quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys",
         "-gl_gettexlevelparam_ok","0","-gl_intensity4_ok","0","-gl_luminance4_alpha4_ok","0","-gl_rgba2_ok","0"],
       print:console.log,printErr:console.warn,onAbort:astraFail,
       onExit:()=>{window.astraMenus?.hide();window.astraTerminal?.fail();window.astraFlightFocus(false);syncPilot();document.body.classList.remove("flying");$("status").textContent="Flight ended."; $("retry").hidden=false;},
@@ -344,7 +347,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre45");
+    await script("engine.js?v=pyre46");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 
@@ -446,7 +449,7 @@ $('full').hidden=!$('stage').requestFullscreen;
 $('full').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen?.();else await $('stage').requestFullscreen?.();}catch{}};
 const demoLevel=$('demoLevel');
 function populateDemoLevels(){
-  const count=$('campaign').value==='d2'?24:20;
+  const count=$('campaign').value==='overload'?16:$('campaign').value==='d2'?24:20;
   demoLevel.replaceChildren(...Array.from({length:count},(_,i)=>new Option('Level '+(i+1),i+1)));
 }
 $('campaign').addEventListener('change',populateDemoLevels);populateDemoLevels();
@@ -456,7 +459,7 @@ window.astraAutoStatus=(task,rooms,deaths,kills,pickups)=>{
   if(!Module.autopilot)return;
   $('autoTask').textContent=Module.autoPaused?'Paused':task;
   const level=Module.flightState?.level||Module.startLevel;
-  $('autoStats').textContent=`${Module.campaign==='d2'?'Counterstrike':'Vertigo'} · L${level} · ${kills} kills · ${pickups} pickups · ${rooms} rooms${Module.demoArsenal?' · Full arsenal':''}`;
+  $('autoStats').textContent=`${Module.campaign==='overload'?'Overload':Module.campaign==='d2'?'Counterstrike':'Vertigo'} · L${level} · ${kills} kills · ${pickups} pickups · ${rooms} rooms${Module.demoArsenal?' · Full arsenal':''}`;
   Module.autoStats={task,rooms,deaths,kills,pickups};
 };
 function pauseDemo(paused){
@@ -471,7 +474,7 @@ $('watch').onclick=()=>{$('look').value='astra';$('wideHud').checked=true;watchW
 $('autoPause').onclick=()=>pauseDemo(!Module.autoPaused);
 $('autoStop').onclick=()=>{wakeLock?.release();astraDisc.stop();location.reload();};
 $('autoNext').onclick=()=>{
-  pauseDemo(false);Module.autoNext=(Module.flightState?.level||Module.startLevel)%(Module.campaign==='d2'?24:20)+1;
+  pauseDemo(false);Module.autoNext=(Module.flightState?.level||Module.startLevel)%(Module.campaign==='overload'?16:Module.campaign==='d2'?24:20)+1;
   $('autoTask').textContent='Loading next mine';
 };
 window.astraAutoFinished=()=>{Module.autoNext=1;$('autoTask').textContent='Campaign complete · Starting a new tour';};

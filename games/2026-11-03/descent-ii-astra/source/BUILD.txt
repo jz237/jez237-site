@@ -1028,3 +1028,29 @@ The mine showroom has 27 exhibits, adding warm ventilation/moving fans and strip
 reflections. Cameras frame the longer channels without hiding them under controls.
 Showroom samples are render-only; both campaigns, flight controls, weapons, audio,
 explosions and demo AI remain unchanged. Existing 22-draw fixture budget is retained.
+
+Overload campaign adaptation (pyre46)
+
+Third campaign: Cronus Frontier, 16 main stages and six three-minute secret
+arenas. Uses the owned installation's authored segment topology, detailed
+scenery, materials, animated door tracks, robot meshes and placed entities.
+Per-mine compressed scenery loads only when selected; robot parcels are kept
+across mine transitions. No other campaign downloads the new scenery.
+
+Descent II flight, collision, inventory, weapons, sound and music remain the
+engine foundation. Overload robot health, weapon roles, muzzle positions and
+stationary/melee/detonator roles are adapted to native D2 AI. This is not a
+Unity engine port: Unity postprocessing, original voice performances and exact
+multi-phase boss AI are not reproduced. Original and Vertigo remain available.
+
+The event adapter handles security tiers, linked destruction/pickup actions,
+robot reveals, timed switches, alien core charging, warps, forcefields, shield
+generators, factories, lockdowns, reactor/boss escape and secret return. Save
+files have an .ov companion in the same persistent pilot directory. Secret
+arenas use the original locations with D2 supplies and adapted robot waves.
+Existing D2 showroom exhibits continue to use their D2/Vertigo scenes.
+
+Validation: 22-map browser load sweep; save/load and secret return; real box
+forcefield hit/pass tests; intermediate animated-door progress; mission link
+and timer tests; muted combat runs. These checks are not a complete manual
+playthrough of every main-stage route. QA exports are absent in shipping WASM.
