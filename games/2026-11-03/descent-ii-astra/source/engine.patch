@@ -182,7 +182,7 @@ index c5cca0b..fc9a574 100644
 +
 +
 diff --git a/d2/arch/ogl/ogl.c b/d2/arch/ogl/ogl.c
-index c536c46..5b29db1 100644
+index c536c46..be3fe58 100644
 --- a/d2/arch/ogl/ogl.c
 +++ b/d2/arch/ogl/ogl.c
 @@ -56,6 +56,7 @@
@@ -234,7 +234,7 @@ index c536c46..5b29db1 100644
  		if (!(GameBitmaps[i].bm_flags & BM_FLAG_PAGED_OUT))
  			ogl_loadbmtexture(&GameBitmaps[i]);
  	}
-@@ -765,6 +777,31 @@ void draw_tmap_flat(grs_bitmap *bm,int nv,g3s_point **vertlist){
+@@ -765,6 +777,32 @@ void draw_tmap_flat(grs_bitmap *bm,int nv,g3s_point **vertlist){
  extern void (*tmap_drawer_ptr)(grs_bitmap *bm,int nv,g3s_point **vertlist);
  
  
@@ -243,6 +243,7 @@ index c536c46..5b29db1 100644
 +#include "astra_doors.inc"
 +#include "astra_shader.inc"
 +#include "astra_liquids.inc"
++#include "astra_room_reflections.inc"
 +#include "astra_combat.inc"
 +#include "astra_shadows.inc"
 +#include "astra_pyro.inc"
@@ -266,7 +267,7 @@ index c536c46..5b29db1 100644
  /*
   * Everything texturemapped (walls, robots, ship)
   */ 
-@@ -825,8 +862,9 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
+@@ -825,8 +863,9 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
  	if (tmap_drawer_ptr == draw_tmap) {
  		glTexCoordPointer(2, GL_FLOAT, 0, texcoord_array);  
  	}
@@ -277,7 +278,7 @@ index c536c46..5b29db1 100644
  	
  	glDisableClientState(GL_VERTEX_ARRAY);
  	glDisableClientState(GL_COLOR_ARRAY);
-@@ -840,6 +878,7 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
+@@ -840,6 +879,7 @@ bool g3_draw_tmap(int nv,const g3s_point **pointlist,g3s_uvl *uvl_list,g3s_lrgb
   */
  bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_lrgb *light_rgb, grs_bitmap *bmbot, grs_bitmap *bmovl, int orient)
  {
@@ -285,7 +286,7 @@ index c536c46..5b29db1 100644
  	int c, index2, index3, index4;
  	GLfloat vertex_array[MAX_VERTS * 3], color_array[MAX_VERTS * 4], texcoordovl_array[MAX_VERTS * 2];
  #ifdef OGL_MERGE
-@@ -919,8 +958,10 @@ bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_
+@@ -919,8 +959,10 @@ bool g3_draw_tmap_2(int nv, const g3s_point **pointlist, g3s_uvl *uvl_list, g3s_
  #ifndef OGL_MERGE
  	glVertexPointer(3, GL_FLOAT, 0, vertex_array);
  	glColorPointer(4, GL_FLOAT, 0, color_array);
@@ -297,7 +298,7 @@ index c536c46..5b29db1 100644
  	glDisableClientState(GL_VERTEX_ARRAY);
  	glDisableClientState(GL_COLOR_ARRAY);
  	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-@@ -959,7 +1000,9 @@ bool g3_draw_bitmap_full(vms_vector *pos,fix width,fix height,grs_bitmap *bm,
+@@ -959,7 +1001,9 @@ bool g3_draw_bitmap_full(vms_vector *pos,fix width,fix height,grs_bitmap *bm,
  	int i;
  	GLfloat vertex_array[12], color_array[16], texcoord_array[8];
  
@@ -308,7 +309,7 @@ index c536c46..5b29db1 100644
  	v1.z=0;
  	
  	glEnableClientState(GL_VERTEX_ARRAY);
-@@ -1140,6 +1183,7 @@ void ogl_set_blending()
+@@ -1140,6 +1184,7 @@ void ogl_set_blending()
  GLubyte *pixels = NULL;
  
  void ogl_start_frame(void){
@@ -316,7 +317,7 @@ index c536c46..5b29db1 100644
  	#ifdef OGL_MERGE
  	GLfloat mat[16];
  	#endif
-@@ -1171,7 +1215,7 @@ void ogl_start_frame(void){
+@@ -1171,7 +1216,7 @@ void ogl_start_frame(void){
  #ifdef OGLES
  	perspective(90.0,1.0,0.1,5000.0);   
  #else
@@ -325,7 +326,7 @@ index c536c46..5b29db1 100644
  #endif
  	glMatrixMode(GL_MODELVIEW);
  	glLoadIdentity();//clear matrix
-@@ -1183,6 +1227,7 @@ void ogl_start_frame(void){
+@@ -1183,6 +1228,7 @@ void ogl_start_frame(void){
  }
  
  void ogl_end_frame(void){
@@ -333,7 +334,7 @@ index c536c46..5b29db1 100644
  	OGL_VIEWPORT(0,0,grd_curscreen->sc_w,grd_curscreen->sc_h);
  	glMatrixMode(GL_PROJECTION);
  	glLoadIdentity();//clear matrix
-@@ -1208,6 +1253,13 @@ void gr_flip(void)
+@@ -1208,6 +1254,13 @@ void gr_flip(void)
  
  	ogl_do_palfx();
  	ogl_swap_buffers_internal();
@@ -347,7 +348,7 @@ index c536c46..5b29db1 100644
  	glClear(GL_COLOR_BUFFER_BIT);
  }
  
-@@ -1256,7 +1308,7 @@ void ogl_init_pixel_buffers(int w, int h)
+@@ -1256,7 +1309,7 @@ void ogl_init_pixel_buffers(int w, int h)
  
  	if (texbuf)
  		d_free(texbuf);
@@ -356,7 +357,7 @@ index c536c46..5b29db1 100644
  
  	if ((pixels == NULL) || (texbuf == NULL))
  		Error("Not enough memory for current resolution");
-@@ -1272,7 +1324,7 @@ void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width
+@@ -1272,7 +1325,7 @@ void ogl_filltexbuf(unsigned char *data, GLubyte *texp, int truewidth, int width
  {
  	int x,y,c,i;
  
@@ -365,7 +366,7 @@ index c536c46..5b29db1 100644
  		Error("Texture is too big: %ix%i", width, height);
  
  	if (data_format) { // true color bitmap?
-@@ -1568,7 +1620,7 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
+@@ -1568,7 +1621,7 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
  	glGenTextures (1, &tex->handle);
  #ifndef OGLES
  	//set priority
@@ -374,7 +375,7 @@ index c536c46..5b29db1 100644
  #endif
  	// Give our data to OpenGL.
  	OGL_BINDTEXTURE(tex->handle);
-@@ -1595,17 +1647,14 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
+@@ -1595,17 +1648,14 @@ int ogl_loadtexture (unsigned char *data, int dxo, int dyo, ogl_texture *tex, in
  #ifndef OGLES // see comment above
  	if (texfilt)
  	{
@@ -395,7 +396,7 @@ index c536c46..5b29db1 100644
  			tex->tw, tex->th, 0, tex->format, // RGBA textures.
  			GL_UNSIGNED_BYTE, // imageData is a GLubyte pointer.
  			bufP);
-@@ -1644,6 +1693,12 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
+@@ -1644,6 +1694,12 @@ void ogl_loadpngmask(png_data *pdata, grs_bitmap *bm, int texfilt)
  }
  #endif
  
@@ -408,7 +409,7 @@ index c536c46..5b29db1 100644
  void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  {
  	unsigned char *buf;
-@@ -1663,11 +1718,20 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+@@ -1663,11 +1719,20 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  		png_data pdata;
  
  		sprintf(filename, /*"textures/"*/ "%s.png", bitmapname);
@@ -430,7 +431,7 @@ index c536c46..5b29db1 100644
  				if (bm->gltexture == NULL)
  					ogl_init_texture(bm->gltexture = ogl_get_free_texture(), pdata.width, pdata.height, ((pdata.alpha || bm->bm_flags & BM_FLAG_TRANSPARENT) ? OGL_FLAG_ALPHA : 0));
  				unsigned char *data = pdata.data;
-@@ -1688,6 +1752,9 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
+@@ -1688,6 +1753,9 @@ void ogl_loadbmtexture_f(grs_bitmap *bm, int texfilt, const char *bitmapname)
  				if (pdata.palette)
  					free(pdata.palette);
  				bm->gltexture->is_png = 1;
@@ -440,7 +441,7 @@ index c536c46..5b29db1 100644
  				return;
  			}
  			else
-@@ -1845,6 +1912,8 @@ void ogl_freetexture(ogl_texture *gltexture)
+@@ -1845,6 +1913,8 @@ void ogl_freetexture(ogl_texture *gltexture)
  	if (gltexture->handle>0) {
  		r_texcount--;
  		glmprintf((0,"ogl_freetexture(%p):%i (%i left)\n",gltexture,gltexture->handle,r_texcount));
@@ -1674,7 +1675,7 @@ index dc6e44a..9af7e46 100644
 +
 +
 diff --git a/d2/main/kconfig.c b/d2/main/kconfig.c
-index d9aafbc..b022e8a 100644
+index d9aafbc..fcc5213 100644
 --- a/d2/main/kconfig.c
 +++ b/d2/main/kconfig.c
 @@ -913,6 +913,7 @@ int kconfig_handler(window *wind, d_event *event, kc_menu *menu)
@@ -1685,7 +1686,16 @@ index d9aafbc..b022e8a 100644
  			
  			for (i=0; i<NUM_D2X_CONTROLS; i++)
  				PlayerCfg.KeySettingsD2X[i] = kc_d2x[i].value;
-@@ -1582,6 +1583,8 @@ void kconfig_read_controls(d_event *event, int automap_flag)
+@@ -1259,6 +1260,8 @@ fix Last_angles_b = 0;
+ fix Last_angles_h = 0;
+ ubyte Last_angles_read = 0;
+ 
++ #include "astra_controllers.inc"
++
+ void kconfig_read_controls(d_event *event, int automap_flag)
+ {
+ 	// Don't read from the controls if we are locked into observing a specific player.
+@@ -1582,6 +1585,8 @@ void kconfig_read_controls(d_event *event, int automap_flag)
  	}
  	else Controls.heading_time = 0;
  
@@ -1694,7 +1704,16 @@ index d9aafbc..b022e8a 100644
  	//----------- Read sideways_thrust_time -----------------
  	if ( Controls.slide_on_state )
  	{
-@@ -1918,3 +1921,9 @@ char GetKeyValue (char key)
+@@ -1764,6 +1769,8 @@ void kconfig_read_controls(d_event *event, int automap_flag)
+     Controls.bank_time_overrun = 0;
+     Controls.forward_thrust_time_overrun = 0;
+ 
++    astra_controller_controls(automap_flag);
++
+     //----------- Clamp values between -FrameTime and FrameTime
+     if (Controls.pitch_time > FrameTime/2 ) {
+         if (overruns & 1 || (!Controls.slide_on_state && Controls.mouse_axis[kc_mouse[13].value])) {
+@@ -1918,3 +1925,9 @@ char GetKeyValue (char key)
  {
  	return (kc_keyboard[(int)key].value);
  }
@@ -2354,7 +2373,7 @@ index 650f69e..7271753 100644
  }
 +
 diff --git a/d2/main/render.c b/d2/main/render.c
-index 517bc8a..7b3dd43 100644
+index 517bc8a..8bb565a 100644
 --- a/d2/main/render.c
 +++ b/d2/main/render.c
 @@ -84,6 +84,7 @@ short Rotated_last[MAX_VERTICES];
@@ -2378,7 +2397,7 @@ index 517bc8a..7b3dd43 100644
  
  	Assert(nv <= 8);
 +	astra_room_lights(segnum);
-+    {extern void astra_door_face(int,int);astra_door_face(segnum,sidenum);extern void astra_fixture_lights(int);astra_fixture_lights(segnum);}
++    {extern void astra_door_face(int,int);astra_door_face(segnum,sidenum);extern void astra_fixture_lights(int);astra_fixture_lights(segnum);extern void astra_room_materials(int);astra_room_materials(segnum);}
 +    {extern void astra_environment_material(int,int,int);astra_environment_material(segnum,sidenum,tmap1);}
  
  	for (i=0; i<nv; i++) {

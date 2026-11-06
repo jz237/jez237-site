@@ -1,8 +1,12 @@
+#define AR_ROOM_GLSL "uniform sampler2D roomAtlas;uniform float roomReflection;uniform vec4 reflectPlanes[6],reflectOrigins[6],reflectU[6],reflectV[6];" \
+        "vec3 roomRay(vec3 direction,float rough){float nearest=10000.;vec2 address=vec2(0.);float valid=0.;for(int i=0;i<6;i++){vec4 plane=reflectPlanes[i];float den=dot(plane.xyz,direction);if(abs(den)<.0001||reflectOrigins[i].w<.5)continue;float t=-(dot(plane.xyz,p)+plane.w)/den;if(t<.18||t>nearest)continue;vec3 d=p+direction*t-reflectOrigins[i].xyz;vec2 q=vec2(dot(d,reflectU[i].xyz),dot(d,reflectV[i].xyz));if(q.x<0.||q.y<0.||q.x>1.||q.y>1.)continue;nearest=t;address=(vec2(mod(float(i),4.),floor(float(i)/4.))+clamp(q,vec2(.06),vec2(.94)))/vec2(4.,2.);valid=1.;}vec2 blur=vec2(.005,.01)*rough;return valid*(texture2D(roomAtlas,address).rgb*.5+texture2D(roomAtlas,address+blur).rgb*.25+texture2D(roomAtlas,address-blur).rgb*.25);}"
 /* Materials are shared across palette slots. One tangent map per source, on unit 1. */
 extern float astra_lamp[4],astra_flash[4];
 extern int astra_drawing_mine,astra_refinement;
 static float astra_surface[4];
-int astra_native_compare;
+int astra_native_compare,astra_detail_upgrade=1;
+static void ar_bind(int room);
+static void ar_bind_to(GLuint program,int room);
 static GLuint astra_normals[256],astra_program;
 static GLint astra_tangents,astra_fixture,astra_moving;
 static int astra_gpu_failed,astra_shaded;
@@ -44,7 +48,8 @@ static void astra_init_shader(void)
     const char *vs="varying highp vec2 uv;varying mediump vec4 light;varying highp vec3 p;"
         "void main(){gl_Position=ftransform();uv=gl_MultiTexCoord0.xy;light=gl_Color;p=gl_Vertex.xyz;}";
     const char *fs="precision highp float;varying highp vec2 uv;varying mediump vec4 light;varying highp vec3 p;"
-        "uniform sampler2D colorMap,detailMap,nativeMap,nativeTop,doorMap;uniform float doorActive,doorLayer;uniform vec4 doorTiles;uniform vec3 doorScale;uniform vec3 generatedTint,topGeneratedTint;uniform float generatedShape,topGeneratedShape;uniform vec4 generatedRect,topGeneratedRect;uniform float faithful,topFaithful,nativeCompare;uniform mat3 basis;uniform vec4 lamp,shot,surface;uniform vec4 fixturePos[3],fixtureColor[3],fixtureAxis[3];uniform float doorMotion;uniform vec2 density;uniform float refinement;uniform sampler2D topMap,topDetail;uniform float paired,topTurn;"
+        "uniform sampler2D colorMap,detailMap,nativeMap,nativeTop,doorMap;uniform float doorActive,doorLayer;uniform vec4 doorTiles;uniform vec3 doorScale;uniform vec3 generatedTint,topGeneratedTint;uniform float generatedShape,topGeneratedShape;uniform vec4 generatedRect,topGeneratedRect;uniform float faithful,topFaithful,nativeCompare;uniform mat3 basis;uniform vec4 lamp,shot,surface;uniform vec4 fixturePos[3],fixtureColor[3],fixtureAxis[3];uniform float doorMotion;uniform vec2 density;uniform float refinement,detailUpgrade;uniform sampler2D topMap,topDetail;uniform float paired,topTurn;"
+        AR_ROOM_GLSL
         "float hash(vec2 q){return fract(sin(dot(q,vec2(127.1,311.7)))*43758.5453);}"
         "float noise(vec2 q){vec2 i=floor(q),f=fract(q);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+1.),f.x),f.y);}"
         "float skin(vec2 q){vec2 f=fract(q),e=min(f,1.-f);float d=min(e.x,e.y);float h=smoothstep(.015,.045,d)*.035;"
@@ -63,7 +68,7 @@ static void astra_init_shader(void)
         "vec2 leafUV(vec2 q){vec2 d=fract(q)-.5;return q-sign(d)*doorMotion*.24;}"
         "void main(){vec2 coord=uv;vec3 eye=normalize(-p);float close=1.-smoothstep(35.,120.,-p.z);"
         "if(surface.x>3.5){coord+=sin(uv.yx*19.+surface.z*.8)*.003;}"
-        "if(faithful>.5&&nativeCompare<.5&&paired<.5){float h=texture2D(detailMap,guv(uv,faithful,generatedRect)).a-.42;vec2 e=vec2(dot(eye,basis[0]),dot(eye,basis[1]));coord-=e*h*.018*close;}"
+        "if(faithful>.5&&nativeCompare<.5&&paired<.5){float h=texture2D(detailMap,guv(uv,faithful,generatedRect)).a-.42;vec2 e=vec2(dot(eye,basis[0]),dot(eye,basis[1]));coord-=e*h*mix(.018,.032,detailUpgrade)*close;}"
         "vec2 gc=guv(coord,faithful,generatedRect);if(doorActive>.5&&doorLayer<1.5&&faithful==24.)gc=leafUV(gc);vec4 a=texture2D(colorMap,gc);if(faithful>19.5){a=gs(colorMap,gc,faithful,0.);a.rgb=gt(a.rgb,gc,faithful,generatedTint);a.a=generatedShape>.5?gm(guv(uv,faithful,generatedRect),generatedShape):texture2D(nativeMap,uv).a;}if(doorActive>.5&&doorLayer<1.5&&nativeCompare<.5)a.a=doorAlpha(uv);if(nativeCompare>.5&&faithful>.5)a=texture2D(nativeMap,uv);"
         "vec3 sampleN=faithful>19.5?gs(detailMap,gc,faithful,1.).rgb:texture2D(detailMap,coord).rgb;"
         "if(paired>.5){vec2 tuv=uv;if(topTurn>.5&&topTurn<1.5)tuv=vec2(1.-uv.y,uv.x);else if(topTurn>1.5&&topTurn<2.5)tuv=1.-uv;else if(topTurn>2.5)tuv=vec2(uv.y,1.-uv.x);"
@@ -91,6 +96,7 @@ static void astra_init_shader(void)
         "float chip=seamEdge*smoothstep(.55,.73,fleck)*hard*detailFade*refinement*layout;float wet=smoothstep(.64,.86,grime)*oil*refinement;"
         "a.rgb=mix(a.rgb,vec3(.28,.32,.33),chip*.65);a.rgb*=1.-refinement*(smoothstep(.52,.80,grime)*.16+wet*.16);"
         "metal=mix(metal,.88,chip);expn=mix(expn,105.,wet*.8);expn=mix(min(expn,22.),expn,detailFade);"
+        "float finish=noise(coord*1.7+surface.w*11.);float coating=smoothstep(.32,.67,finish)*hard;float rust=smoothstep(.72,.91,finish)*hard*detailUpgrade;metal*=1.-coating*.35*detailUpgrade;expn=mix(expn,mix(12.,68.,coating),detailUpgrade*.28);a.rgb=mix(a.rgb,a.rgb*vec3(1.09,.91,.80),rust*.45);a.rgb*=1.+(finish-.5)*.11*detailUpgrade;"
         "float cavity=clamp(1.-length(xy)*(.18+.12*rock),.72,1.);cavity*=mix(.78,1.,smoothstep(.24,.66,sampleN.z));"
         "float glint=pow(max(dot(n,normalize(L+eye)),0.),expn)*reach;"
         "vec3 D=shot.xyz-p;float sd=length(D);D/=max(.01,sd);float fire=shot.w/(1.+sd*sd*.009);"
@@ -104,7 +110,8 @@ static void astra_init_shader(void)
         "float brushed=exp(-(tangent*tangent*260.+across*across*16.))*max(0.,dot(n,beam));"
         "col+=refinement*hard*(1.-ceramic)*vec3(.19,.24,.27)*brushed*(.35+.65*metal)*room;"
         "vec3 reflection=reflect(-eye,n);float strip=pow(max(0.,1.-abs(reflection.y-.56)*2.4),14.);"
-        "col+=refinement*vec3(.16,.29,.34)*strip*(wet*.43+metal*.07)*room;"
+        "col+=refinement*(1.-detailUpgrade)*vec3(.16,.29,.34)*strip*(wet*.43+metal*.07)*room;"
+        "if(roomReflection>.5){float fresnel=.06+.35*pow(1.-max(0.,dot(n,eye)),4.);col+=roomRay(reflection,1.-metal)*fresnel*(.22+.65*metal)*(1.-rock*.86);}"
         "float vein=1.-smoothstep(.014,.045,abs(noise(cell*3.5+noise(cell*.8)*2.)-.51));"
         "col+=rock*refinement*vein*vec3(.038,.052,.048)*close*layout;"
         "float haze=min(.16,1.-exp(-max(0.,-p.z-10.)*.0017));col=mix(col,vec3(.09,.145,.16),haze);"
@@ -170,7 +177,8 @@ static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
     if(tex->faithful)surface[0]=(tex->faithful==1||tex->faithful==23)?0:tex->faithful==5?4:1;
     glUniform4fv(glGetUniformLocation(astra_program,"surface"),1,surface);
     glUniform1f(glGetUniformLocation(astra_program,"refinement"),astra_refinement);
-    EM_ASM(Module.wallDetailVersion=38;);
+    static GLint upgrade=-2;if(upgrade==-2)upgrade=glGetUniformLocation(astra_program,"detailUpgrade");glUniform1f(upgrade,astra_detail_upgrade);ar_bind(aw_room);
+    EM_ASM(Module.wallDetailVersion=50;);
     glUniform4fv(glGetUniformLocation(astra_program,"fixtureAxis[0]"),3,&afx_axes[0][0]);
     glUniform4fv(glGetUniformLocation(astra_program,"fixturePos[0]"),3,&afx_lamps[0][0]);glUniform4fv(glGetUniformLocation(astra_program,"fixtureColor[0]"),3,&afx_colors[0][0]);
     glUniform4fv(astra_fixture,1,astra_lamp);glUniform4fv(astra_moving,1,astra_flash);

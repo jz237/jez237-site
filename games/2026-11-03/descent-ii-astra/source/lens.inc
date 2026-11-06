@@ -1,7 +1,7 @@
 /* Apply the optical response only to the mine camera, before cockpit and HUD.
    The high pass and separable blur run at one-quarter resolution. */
 static GLuint lensScene,lensSmall[2],lensFbo[2],lensPrograms[3];static int lensW,lensH,lensFailed,lensOn=-1;
-static GLint lensStep[2],lensGlow;
+static GLint lensStep[2],lensGlow,lensHeat,lensClock;
 static int lensCopyChecked,lensCopyX,lensCopyY,lensCopyFb;
 static GLuint lens_program(const char *frag){
     const char *vert="varying mediump vec2 uv;void main(){gl_Position=vec4(gl_Vertex.xy,0.,1.);uv=gl_Vertex.xy*.5+.5;}";
@@ -27,13 +27,13 @@ void astra_lens(int x,int y,int w,int h){
         lensPrograms[1]=lens_program("precision mediump float;varying mediump vec2 uv;uniform sampler2D src;uniform vec2 stepUV;"
             "void main(){vec3 c=texture2D(src,uv).rgb*.227; c+=(texture2D(src,uv+stepUV*1.385).rgb+texture2D(src,uv-stepUV*1.385).rgb)*.316;"
             "c+=(texture2D(src,uv+stepUV*3.231).rgb+texture2D(src,uv-stepUV*3.231).rgb)*.0705;gl_FragColor=vec4(c,1.);}");
-        lensPrograms[2]=lens_program("precision mediump float;varying mediump vec2 uv;uniform sampler2D src,glow;"
-            "void main(){vec3 a=texture2D(src,uv).rgb,b=texture2D(glow,uv).rgb;vec3 c=a*(.89+.12*a)+b*.57;"
+        lensPrograms[2]=lens_program("precision mediump float;varying mediump vec2 uv;uniform sampler2D src,glow;uniform vec4 heat[4];uniform float clock;"
+            "void main(){float warp=0.;for(int i=0;i<4;i++){vec2 q=(uv-heat[i].xy)/max(vec2(.0001),heat[i].zw);warp+=max(0.,1.-dot(q,q))*step(.001,heat[i].z);}vec2 shift=vec2(sin(uv.y*180.-clock*3.2),cos(uv.x*140.+clock*2.7))*.00065*min(1.,warp);vec3 a=texture2D(src,uv+shift).rgb,b=texture2D(glow,uv).rgb;vec3 c=a*(.89+.12*a)+b*.57;"
             "c=mix(c,vec3(.014,.030,.040),.09*(1.-max(a.r,max(a.g,a.b))));"
             "c=c/(1.+.18*max(c-.70,vec3(0.))); vec2 e=uv*2.-1.;c*=1.-.052*dot(e,e);gl_FragColor=vec4(c,1.);}");
         if(!lensPrograms[0]||!lensPrograms[1]||!lensPrograms[2]){lensFailed=1;return;}
         for(int i=0;i<2;i++)lensStep[i]=glGetUniformLocation(lensPrograms[i],"stepUV");
-        lensGlow=glGetUniformLocation(lensPrograms[2],"glow");
+        lensGlow=glGetUniformLocation(lensPrograms[2],"glow");lensHeat=glGetUniformLocation(lensPrograms[2],"heat[0]");lensClock=glGetUniformLocation(lensPrograms[2],"clock");
         glGenFramebuffers(2,lensFbo);
     }
     GLint vp[4],fb;glGetIntegerv(GL_VIEWPORT,vp);glGetIntegerv(GL_FRAMEBUFFER_BINDING,&fb);
@@ -67,7 +67,7 @@ void astra_lens(int x,int y,int w,int h){
     }
     glBindFramebuffer(GL_FRAMEBUFFER,fb);glViewport(x,y,w,h);glUseProgram(lensPrograms[2]);glBindTexture(GL_TEXTURE_2D,lensScene);
     glActiveTexture(GL_TEXTURE1);glBindTexture(GL_TEXTURE_2D,lensSmall[0]);glUniform1i(lensGlow,1);
-    glActiveTexture(GL_TEXTURE0);glDrawArrays(GL_TRIANGLE_STRIP,0,4);
+    glActiveTexture(GL_TEXTURE0);float heat[4][4]={{0}};if(ah_frame==framecount&&astra_detail_upgrade&&!astra_native_compare)memcpy(heat,ah_regions,ah_count*sizeof heat[0]);glUniform4fv(lensHeat,4,&heat[0][0]);glUniform1f(lensClock,al_clock());glDrawArrays(GL_TRIANGLE_STRIP,0,4);
     restore_lens:
     glBindFramebuffer(GL_FRAMEBUFFER,fb);glDisableClientState(GL_VERTEX_ARRAY);glUseProgram(0);glViewport(vp[0],vp[1],vp[2],vp[3]);glDepthMask(GL_TRUE);
     if(blend)glEnable(GL_BLEND);if(depth)glEnable(GL_DEPTH_TEST);if(cull)glEnable(GL_CULL_FACE);if(sc)glEnable(GL_SCISSOR_TEST);

@@ -1,6 +1,6 @@
 // A paused tour of the loaded campaign's real architecture and machinery.
 window.astraMinePreview={
-  names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion','Deep ventilation grilles','Light housings & spill','Service conduits','Raised frames & panel variants','Water surfaces','Molten lava','Red service lighting','Blue service lighting','Cyan service lighting','Amber service lighting','Warm ventilation & moving fans','Strip-light reflections'],
+  names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion','Deep ventilation grilles','Light housings & spill','Service conduits','Raised frames & panel variants','Water surfaces','Molten lava','Red service lighting','Blue service lighting','Cyan service lighting','Amber service lighting','Warm ventilation & moving fans','Strip-light reflections','Beveled panel construction','Rock relief & material finish','Fixture light shafts','Room-aware metal reflections'],
   descriptions:[
     'New high-resolution metal, rock, grilles, machinery and lamps throughout both campaigns. Pause and compare the same view with the original artwork.',
     'Spinning fan blades behind a fixed protective grille.',
@@ -25,22 +25,26 @@ window.astraMinePreview={
     'Slow moving basalt crust, hot fissures, pressure blisters and pulsing amber light on nearby walls.',
     ...['Red','Blue','Cyan','Amber'].map(color=>color+' inset diffusers, protective metal ribs and stamped service plates. Colored light falls onto the varied wall panels in this mine room. If the mine lacks this palette, a sample is mounted on an existing safe service wall.'),
     'Slow turning fans behind protective grilles, with warm amber backlighting and a gentle machinery pulse.',
-    'Long segmented light channels and colored highlights moving across nearby metal as the inspection camera drifts.'
+    'Long segmented light channels and colored highlights moving across nearby metal as the inspection camera drifts.',
+    'Shallow modeled shoulders and recessed joints follow the existing walls. Compare against the previous Astra treatment at the same viewpoint.',
+    'Uneven stone geometry, mineral normals and varying surface finish retain the original rock placement and high-resolution artwork.',
+    'Local beams follow the real colored fixtures. Dust drifts through the light; the volume stays inside its mine room.',
+    'Soft reflections sample the six surfaces and lamps in this room. These are cached room reflections, not mirrors of moving ships.'
   ],
-  active:false,paused:false,touring:true,clock:0,last:0,mask:134217727,fresh:false,
+  active:false,paused:false,touring:true,clock:0,last:0,mask:2147483647,fresh:false,
   tick(){const now=performance.now();if(this.last&&!this.paused)this.clock+=Math.min(.1,(now-this.last)/1000);this.last=now;return this.clock;},
-  select(index){if(!(this.mask&(1<<index)))return;Module.mineInspect=index;this.clock=0;this.last=performance.now();$('mineScene').value=String(index);},
+  select(index){if(!(this.mask&(1<<index)))return;Module.mineInspect=index;this.clock=0;this.last=performance.now();$('mineScene').value=String(index);this.sync();},
   next(direction){let i=Module.mineInspect;for(let n=0;n<this.names.length;n++){i=(i+direction+this.names.length)%this.names.length;if(this.mask&(1<<i)){this.select(i);break;}}},
   pause(){this.paused=!this.paused;this.last=performance.now();this.sync();},
   sync(){
     $('minePause').textContent=this.paused?'Play':'Pause';$('minePause').setAttribute('aria-pressed',String(this.paused));
     $('mineTour').checked=this.touring;
-    $('mineCompare').textContent=(window.Module?.mineRefinement===false?'Original surfaces':'Remastered surfaces');
+    $('mineCompare').textContent=(window.Module?.mineInspect>=27?(Module.mineRefinement===false?'Previous Astra':'New details'):(window.Module?.mineRefinement===false?'Original surfaces':'Remastered surfaces'));
     $('mineCompare').setAttribute('aria-pressed',String(window.Module?.mineRefinement!==false));
   },
   details(open){$('mineDetails').hidden=!open;$('mineControls').setAttribute('aria-expanded',String(open));},
   open(){
-    this.paused=false;this.touring=true;this.clock=0;this.last=0;this.mask=134217727;this.fresh=true;$('mineZoom').value='1';this.sync();
+    this.paused=false;this.touring=true;this.clock=0;this.last=0;this.mask=2147483647;this.fresh=true;$('mineZoom').value='1';this.sync();
     if(window.Module&&flightActive&&Module.astra){
       Module.mineRefinement=true;Module.mineInspect=0;Module.mineInspectZoom=1;Module.pickupInspect=Module.weaponInspect=-1;
       releaseFlightMouse();Module._astra_reset_flight_input?.();Module.pyroPreviewCommand=1;

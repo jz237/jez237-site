@@ -1,3 +1,10 @@
+extern int framecount;
+static int ah_frame=-1,ah_count;static float ah_regions[4][4];
+static void ah_lava(int count,const g3s_point **view){
+    if(ah_frame!=framecount){ah_frame=framecount;ah_count=0;}if(!astra_detail_upgrade||ah_count>=4)return;
+    float low[2]={1,1},high[2]={0,0};for(int i=0;i<count;i++){g3s_point p=*view[i];if(p.p3_z<i2f(2)||p.p3_z>i2f(80))return;g3_project_point(&p);float x=f2fl(p.p3_sx)/grd_curcanv->cv_bitmap.bm_w,y=1-f2fl(p.p3_sy)/grd_curcanv->cv_bitmap.bm_h;low[0]=fminf(low[0],x);low[1]=fminf(low[1],y);high[0]=fmaxf(high[0],x);high[1]=fmaxf(high[1],y);}
+    float *r=ah_regions[ah_count++];r[0]=(low[0]+high[0])*.5f;r[1]=(low[1]+high[1])*.5f;r[2]=fminf(.2f,(high[0]-low[0])*.18f);r[3]=fminf(.16f,(high[1]-low[1])*.18f);
+}
 static const char *astra_liquid_fragment=
 "precision highp float;\n"
 "varying highp vec3 world,pos;\n"
@@ -210,7 +217,7 @@ static void al_reflection_room(int room){
 int astra_liquid_face(int count,const g3s_point **view,const int *ids,const g3s_uvl *uv,g3s_lrgb *light,int room,int sidenum){
     static GLuint program;static int failed,draws[2];
     if(astra_native_compare||failed||count<3||count>8)return 0;
-    side *face=&Segments[room].sides[sidenum];int kind=astra_liquid_kind(face->tmap_num);if(!kind)return 0;
+    side *face=&Segments[room].sides[sidenum];int kind=astra_liquid_kind(face->tmap_num);if(!kind)return 0;if(kind==2)ah_lava(count,view);
     if(face->wall_num>=0&&Walls[face->wall_num].type==WALL_DOOR)return 0;
     if(!program){
         const char *vs="varying highp vec3 world,pos;varying highp vec2 uv;varying mediump vec4 light;void main(){gl_Position=ftransform();pos=gl_Vertex.xyz;world=gl_MultiTexCoord0.xyz;uv=gl_Normal.xy;light=gl_Color;}";

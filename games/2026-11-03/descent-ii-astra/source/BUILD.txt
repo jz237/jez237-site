@@ -1133,3 +1133,42 @@ The R48 compact objective tracker and optional full-state checkpoints already
 support Original, Vertigo and Overload. Original and Vertigo death/reload restore
 and the 26px mobile tracker are verified again with this engine. Test controls
 are built separately and are absent from the shipping engine.
+
+Controllers and room detail (pyre50)
+
+Settings > Joysticks & controllers, also available in the mouse-accessible
+flight pause menu. Browser Gamepad API polling supports hot plugging, per-device
+profiles, independent axis and button bindings, twist/roll, thrust sliders,
+centered axes, POV hats, neutral and range calibration, inversion, dead zone,
+sensitivity and response curve. Standard gamepads and generic flight sticks have
+separate editable presets. USB or OS-recognized adapters are required; an old
+game-port SideWinder requires compatible hardware/driver support. No force
+feedback is claimed. Press a device button while the page is focused to expose it
+to the browser. Reconnect and refocus require neutral controls and released
+buttons. The six normalized axes contribute to native Controls before its usual
+clamping, preserving Descent physics. Keyboard/mouse bits are preserved. The
+legacy SDL joystick path is disabled to prevent double input. Demo, preview,
+death, automap and menus do not accept flight joystick input. Physical device
+verification awaits the user's hardware; tests simulate browser Gamepad state.
+
+Original and Vertigo: shallow beveled panel shoulders, recessed joints and
+uneven stone use existing high-resolution surface maps and UVs. GPU vertex buffers
+are uploaded once and reused (96-entry bounded cache; at most ten near faces).
+Portals, secrets, overlays, hazards and collision geometry remain authoritative.
+The original depth surface preserves projected weapon damage and ship shadows.
+Material finish adds broad coating variation and distinct roughness response.
+
+Room reflections trace six actual mine planes against a cached 256x128 atlas
+of existing wall maps and lamps. Twelve slots (1.5 MiB), at most one refresh per
+frame, no whole-scene re-render, no extra texture downloads. These soft surface
+reflections exclude moving ships. Native blast lighting remains dynamic; cockpit
+trim picks up nearby fixture colors and explosion light. Existing opaque detail,
+asset resolution, campaign routes, combat and demo steering are unchanged.
+
+Room-clipped fixture shafts contain drifting dust, supplementing the existing
+vent steam. Lava shimmer uses the existing lens composite with tightly bounded
+low-amplitude distortion; it adds no framebuffer copy or postprocessing pass.
+Four showroom exhibits compare Previous Astra / New details at the same view:
+Beveled panel construction, Rock relief & material finish, Fixture light shafts,
+and Room-aware metal reflections. Older exhibits retain original-art comparison.
+No simulated controllers or diagnostic exports are included in the shipping engine.

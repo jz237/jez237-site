@@ -228,6 +228,7 @@ static void ae_hatch(int room,int side,int theme,float w,float h){
 
 #include "astra_fixtures.inc"
 #include "astra_door_mesh.inc"
+#include "astra_detail_upgrade.inc"
 void astra_environment_face(int nv,const g3s_point **points,g3s_lrgb *light,int room,int side,int flags){
     if(!ax_on()||astra_native_compare)return;ae_faces++;ae_reset();segment *s=&Segments[room];int wallnum=s->sides[side].wall_num;
     int hidden=wallnum>=0&&Walls[wallnum].type==WALL_DOOR&&Walls[wallnum].clip_num>=0&&(WallAnims[Walls[wallnum].clip_num].flags&WCF_HIDDEN);
@@ -242,6 +243,7 @@ void astra_environment_face(int nv,const g3s_point **points,g3s_lrgb *light,int 
     }
     int texture=s->sides[side].tmap_num,theme=ae_theme(room),wet=texture>=0&&texture<NumTextures&&(TmapInfo[texture].damage||TmapInfo[texture].flags&(TMI_WATER|TMI_VOLATILE|TMI_FORCE_FIELD));
     if(hidden&&(Walls[wallnum].state!=WALL_DOOR_CLOSED))return;
+    if(solid&&!wet&&nv==4)nd_surface(room,side);
     ae_wall_finish(nv,points,room,side,!wet&&nv==4);
     if(wet||nv!=4||flags&WID_CLOAKED_FLAG)return;
     if(solid)afx_fixture(room,side);
@@ -346,6 +348,7 @@ void astra_environment_rooms(const short *rooms,int count,int window_num){
     extern void astra_combat_fragments(const short*,int,int);astra_combat_fragments(rooms,count,window_num);
     for(int i=0;i<count;i++){int room=rooms[i];if(room<0||room>Highest_segment_index)continue;
         for(int side=0;side<6;side++)ae_door(room,side);
+        nd_atmosphere(room);
         if(astra_refinement){int side=astra_environment_bay(room);vms_vector c;vms_matrix b;float w,h;
             if(side>=0&&ae_basis(room,side,&c,&b,&w,&h)){g3s_point p;g3_rotate_point(&p,&c);if(p.p3_z>F1_0&&p.p3_z<i2f(65)){
                 g3_start_instance_matrix(&c,&b);ag_atmosphere(room,side,ae_theme(room),w,h);g3_done_instance();}}}
@@ -373,7 +376,14 @@ void astra_environment_rooms(const short *rooms,int count,int window_num){
             ax_paint(.36f,.48f,.50f,0);af_particle(0,0,.5f+j*.65f,.24f+j*.14f,.022f,room+j);}
         ae_haze_flush();g3_done_instance();ae_atmosphere++;
     }
+    if(!window_num&&framecount%6==0&&Viewer&&astra_mine_clock<0){
+        astra_fixture_lights(Viewer->segnum);float colors[2][3]={{0}};
+        for(int j=0;j<3;j++){float x=afx_lamps[j][0],z=afx_lamps[j][2],dist=sqrtf(x*x+afx_lamps[j][1]*afx_lamps[j][1]+z*z);float reach=fmaxf(0,1-dist/fmaxf(1,afx_lamps[j][3]));for(int k=0;k<3;k++)for(int side=0;side<2;side++)colors[side][k]+=afx_colors[j][k]*reach*(side==(x>0)?1:.23f);}
+        for(int k=0;k<3;k++)for(int side=0;side<2;side++)colors[side][k]+=astra_flash[3]*(k==0?.28f:k==1?.075f:.02f);
+        EM_ASM(window.astraDeck?.reflect([$0,$1,$2],[$3,$4,$5]);,colors[0][0],colors[0][1],colors[0][2],colors[1][0],colors[1][1],colors[1][2]);
+    }
     ag_render_exhibit();
+    if(!window_num)EM_ASM(Module.detailUpgrade=({version:50,meshes:$0,shafts:$1,meshUploads:$2,meshCapacity:96});,nd_draws,nd_shafts,nd_uploads);
     if(!window_num)EM_ASM(Module.environmentVersion=38;Module.foundryStats=({rockFaces:$6,equipmentBays:$7,shipShadows:$8,atmosphereBays:$9});Module.environmentStats=({faces:$0,machines:$1,doors:$2,reactors:$3,atmosphere:$4});Module.environmentLevel=$5;Module.environmentFrames=(Module.environmentFrames||0)+1;,ae_faces,ae_machines,ae_doors,ae_reactors,ae_atmosphere,Current_level_num,ag_rocks,ag_props,ag_shadows,ag_air);
     if(!window_num)EM_ASM(Module.fixtureDetails=({version:38,draws:$0,grilles:$1,pipes:$2,lights:$3,panels:$4,doorEdges:$5,mechanisms:$6});,afx_draws,afx_grilles,afx_pipes,afx_lights,afx_panels,afx_door_edges_drawn,afx_door_mechanisms);
 }

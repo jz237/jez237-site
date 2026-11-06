@@ -13,6 +13,14 @@
   const cap = n=>Math.max(0,Math.min(100,n));
   let visible=false,lastKey="";
   window.astraDeck = {
+    reflect(left,right) {
+      if(!visible)return;
+      for(const [id,c] of [['deckReflectLeft',left],['deckReflectRight',right]]){
+        const color=c.map(v=>Math.round(Math.max(0,Math.min(1,v))*255));
+        const node=document.getElementById(id);node?.setAttribute('stroke','rgb('+color.join(',')+')');
+        node?.setAttribute('opacity',String(Math.min(.48,Math.max(...c)*.42)));
+      }
+    },
     show(wanted) {
       const active=Boolean(wanted && flightActive && frame.complete && frame.naturalWidth);
       if(visible!==active){visible=active;svg.style.display=active?"block":"none";document.body.classList.toggle("has-deck",active);}
