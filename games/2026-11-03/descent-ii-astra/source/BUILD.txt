@@ -938,3 +938,11 @@ No changes to manual flight controls, physics, weapons, damage, collision,
 levels, triggers, keys, sounds, music or rendering. The existing optional full
 demo arsenal remains user-selectable. Test-only scenario exports are excluded
 from the shipping engine. engine.patch is based on pinned upstream DXX-Redux.
+
+Mission route preservation (pyre40)
+
+Autonomous travel excludes optional secret-level warps while playing a regular
+mine, and excludes exit triggers until the reactor is cleared. The same guard
+applies to prerequisite planning, swept-hull shortcuts, dodges and recovery.
+Secret mines still use their native return exits after the objective is cleared.
+Manual controls, native triggers, weapon rays and campaign data are unchanged.

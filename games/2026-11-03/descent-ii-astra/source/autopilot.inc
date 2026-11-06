@@ -112,12 +112,27 @@ static void aa_demo_arsenal(void){
 static int aa_recover,aa_seen,aa_deaths,aa_kills,aa_collects;
 static float aa_clamp(float x,float a,float b){return fminf(b,fmaxf(a,x));}
 static float aa_len(vms_vector *a,vms_vector *b){return f2fl(vm_vec_dist_quick(a,b));}
+/* Mission travel must not accidentally leave through a secret warp or an
+ * exit before its reactor is cleared. Manual controls retain native triggers. */
+static int aa_forbidden_portal(int seg,int side){
+    int wi=Segments[seg].sides[side].wall_num;if(wi<0)return 0;
+    int trigger= Walls[wi].trigger;if(trigger<0||trigger>=Num_triggers)return 0;
+    int type=Triggers[trigger].type;
+    if(type==TT_SECRET_EXIT)return Current_level_num>0||!Control_center_destroyed;
+    return type==TT_EXIT&&!Control_center_destroyed;
+}
 static int aa_visible(vms_vector *p,fix radius){
-    fvi_query q={&ConsoleObject->pos,p,ConsoleObject->segnum,radius,ConsoleObject-Objects,NULL,radius?0:FQ_TRANSPOINT};
-    fvi_info hit;return find_vector_intersection(&q,&hit)==HIT_NONE;
+    fvi_query q={&ConsoleObject->pos,p,ConsoleObject->segnum,radius,ConsoleObject-Objects,NULL,radius?FQ_GET_SEGLIST:FQ_TRANSPOINT};
+    fvi_info hit;if(find_vector_intersection(&q,&hit)!=HIT_NONE)return 0;
+    if(radius)for(int i=1;i<hit.n_segs;i++){
+        int from=hit.seglist[i-1],to=hit.seglist[i];
+        for(int side=0;side<6;side++)if(Segments[from].children[side]==to&&aa_forbidden_portal(from,side))return 0;
+    }
+    return 1;
 }
 static int aa_pass(int seg,int side){
-    segment *s=&Segments[seg];if(s->children[side]<0||aa_blocked[seg][side]>GameTime64)return 0;
+    segment *s=&Segments[seg];if(aa_forbidden_portal(seg,side))return 0;
+    if(s->children[side]<0||aa_blocked[seg][side]>GameTime64)return 0;
     if(WALL_IS_DOORWAY(s,side)&WID_FLY_FLAG)return 1;
     int w=s->sides[side].wall_num;if(w<0)return 1;
     wall *d=&Walls[w];
@@ -213,7 +228,7 @@ static int aa_gate_to(int destination){
         int room=-1;for(int i=0;i<=Highest_segment_index;i++)if(!done[i]&&(room<0||cost[i]<cost[room]))room=i;
         if(room<0||cost[room]>=1000000)break;done[room]=1;
         for(int side=0;side<6;side++){
-            int child=Segments[room].children[side];if(child<0)continue;
+            int child=Segments[room].children[side];if(child<0||aa_forbidden_portal(room,side))continue;
             int w=Segments[room].sides[side].wall_num,extra=aa_pass(room,side)?1:50;
             if(extra>1&&(w<0||(Walls[w].type!=WALL_DOOR&&door_is_wall_switched(w)<0)))continue;
             if(cost[child]>cost[room]+extra){cost[child]=cost[room]+extra;parent[child]=room;}
@@ -666,7 +681,7 @@ static void aa_route_watch(void){
         if(aa_phase==0)aa_mission_set(destination,-1,-1,0);aa_loop_next=GameTime64+i2f(35);aa_loop_count++;
         aa_next=0;aa_pick_object=-1;aa_sliding=0;aa_slide_goal=-2;
     }
-    EM_ASM(Module.autoNavigation=({version:39,distinct:$0,quiet:$1,reroutes:$2,detour:$3});,distinct,quiet,aa_loop_count,aa_detour_goal);
+    EM_ASM(Module.autoNavigation=({version:40,distinct:$0,quiet:$1,reroutes:$2,detour:$3});,distinct,quiet,aa_loop_count,aa_detour_goal);
 }
 
 void astra_auto_frame(void){
@@ -992,7 +1007,7 @@ void astra_auto_frame(void){
     if(GameTime64>aa_status_next){
         static const char *labels[]={"Exploring the mine","Collecting supplies","Rescuing hostages","Engaging hostile","Activating switch","Escaping to exit","Opening door","Finding clearance","Watching destruction","Recharging energy","Navigating to reactor","Tracking reactor guardian"};
         aa_kills=Players[Player_num].num_kills_total;
-        EM_ASM(Module.autoMission=({version:39,phase:$0,room:$1,wall:$2,changes:$3,age:$4,blockedShots:$5,clearShots:$6,reposition:$7,reactorDestroyed:!!$8,routeDistance:$9});,
+        EM_ASM(Module.autoMission=({version:40,phase:$0,room:$1,wall:$2,changes:$3,age:$4,blockedShots:$5,clearShots:$6,reposition:$7,reactorDestroyed:!!$8,routeDistance:$9});,
             aa_phase,aa_mission,aa_mission_wall,aa_goal_changes,(double)(GameTime64-aa_mission_since)/F1_0,aa_blocked_shots,aa_clear_shots,aa_reposition,Control_center_destroyed,aa_goal>=0?aa_dist[aa_goal]:-1);
         vms_vector travel=ConsoleObject->mtype.phys_info.velocity;float velocity=f2fl(vm_vec_mag(&travel));
         aa_facing_velocity=velocity>.05f?f2fl(vm_vec_dot(&travel,&ConsoleObject->orient.fvec))/velocity:1;

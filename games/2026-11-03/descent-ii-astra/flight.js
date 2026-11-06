@@ -344,7 +344,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre39");
+    await script("engine.js?v=pyre40");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 
