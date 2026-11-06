@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-06",
+      "historicDate": "1985-06-24",
+      "displayDate": "Week of June 24-30, 1985",
+      "edition": "Issue 152 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Apple counts the cost; poets find a place on disk.",
+      "leadHeadline": "Apple cuts one-fifth of workforce as first quarterly loss looms",
+      "storyHeadlines": [
+        "Electronic novels recruit poets as well as science-fiction stars",
+        "Commodore 128 promises three computing worlds in one box",
+        "Commodore LCD portable slips beyond September"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-06-24.jpg",
+      "thumb": "media/thumbs/1985-06-24.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-05",
       "historicDate": "1985-06-17",
       "displayDate": "Week of June 17-23, 1985",

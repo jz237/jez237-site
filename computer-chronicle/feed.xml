@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 05 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 06 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of June 24-30, 1985 — Apple cuts one-fifth of workforce as first quarterly loss looms</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-06-24</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-06-24</guid>
+      <pubDate>Fri, 06 Nov 2026 12:00:00 GMT</pubDate>
+      <description>Three plants face closure as the personal-computer maker lowers its break-even point. Apple Computer is cutting 1,200 jobs and closing three of its six production plants, according to the June 24 Computerworld. The recently announced restructuring removes roughly one-fifth of the workforce as the company prepares for what it expects will be its first quarterly loss in eight years. Also this week: Electronic novels recruit poets as well as science-fiction stars · Commodore 128 promises three computing worlds in one box · Commodore LCD portable slips beyond September.</description>
+    </item>
     <item>
       <title>Week of June 17-23, 1985 — Elite brings its trading galaxy to the Commodore 64</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-06-17</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-02-11</guid>
       <pubDate>Sun, 18 Oct 2026 12:00:00 GMT</pubDate>
       <description>In a February interview, the author behind Amazon explains why story should guide the player. Michael Crichton wants the computer adventure to tell a story, not merely conceal a solution. Interviewed by Betsy Staples in February’s Creative Computing, the novelist and filmmaker describes Amazon, his Trillium Software adventure made with programmer Stephen Warady, as a sequence of dramatic episodes. Also this week: A $239 color printer meets the real-paper test · The Commodore 64 becomes a music room for non-musicians · IBM announces its 3090 mainframe family.</description>
-    </item>
-    <item>
-      <title>Week of February 4-10, 1985 — Michael Crichton wants adventure games to make sense</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-02-04</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-02-04</guid>
-      <pubDate>Sat, 17 Oct 2026 12:00:00 GMT</pubDate>
-      <description>February’s COMPUTE! finds the novelist building adventures around believable solutions, not magic words. Michael Crichton has a complaint familiar to anyone stranded at an adventure-game prompt: a sensible solution ought not to fail merely because the player has guessed the wrong words. In February’s COMPUTE!, the novelist discusses Amazon and argues for puzzles that answer to the logic of the situation rather than an arbitrary phrase. Also this week: Wozniak leaves daily Apple duties for a living-room video venture · Online games and conversation challenge the established services · PC-Write turns copying into a sales channel.</description>
     </item>
   </channel>
 </rss>

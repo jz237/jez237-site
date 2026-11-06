@@ -4,6 +4,403 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-11-06",
+      "historicDate": "1985-06-24",
+      "displayDate": "Week of June 24-30, 1985",
+      "edition": "Issue 152 - Weekly 1985 Computer & Culture Chronicle",
+      "sources": [
+        {
+          "title": "Computerworld, Vol. XIX No. 25; pp. 26 and 77",
+          "url": "https://archive.org/stream/computerworld1925unse/computerworld1925unse_djvu.txt",
+          "date": "1985-06-24"
+        },
+        {
+          "title": "COMPUTE!'s Gazette, issue 24; LCD update, Commodore interview and electronic-novel feature",
+          "url": "https://archive.org/stream/1985-06-computegazette/Compute_Gazette_Issue_24_1985_Jun_djvu.txt",
+          "date": "1985-06"
+        },
+        {
+          "title": "COMPUTE!, issue 61; Commodore 128 hands-on, SpeedScript and Okidata advertisement",
+          "url": "https://archive.org/stream/1985-06-compute-magazine/Compute_Issue_061_1985_Jun_djvu.txt",
+          "date": "1985-06"
+        },
+        {
+          "title": "Billboard Mainstream Rock Airplay archive; full HTML chart rows inspected, not generic page extraction",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-06-29/",
+          "date": "1985-06-29"
+        },
+        {
+          "title": "Box Office Mojo domestic weekend 26",
+          "url": "https://www.boxofficemojo.com/weekend/1985W26/",
+          "date": "1985-06-28/1985-06-30"
+        },
+        {
+          "title": "HISTORY retrospective: TWA Flight 847 (June 30 release verified in body)",
+          "url": "https://www.history.com/this-day-in-history/june-14/twa-flight-847-is-hijacked-by-terrorists",
+          "date": "2009-11-13; updated 2025-05-27"
+        }
+      ],
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 152 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of June 24-30, 1985",
+        "price": "75 cents"
+      },
+      "visualProfile": {
+        "tone": "Apple retrenches while electronic novels flourish",
+        "motifs": [
+          "Macintosh and Apple II",
+          "hardback book and game disk",
+          "Commodore keyboard"
+        ],
+        "layout": "Dense warm newsprint, red and blue boxed modules"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Apple restructuring is the strongest historical lead",
+        "secondaryRail": "Electronic novels, Commodore 128 and LCD portable",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-06-24.jpg",
+        "alt": "Computer Chronicle newspaper-style front page for June 24-30, 1985",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "A week of retrenchment at Apple and literary ambition on the home computer.",
+      "morningLine": "Apple counts the cost; poets find a place on disk.",
+      "lead": {
+        "headline": "Apple cuts one-fifth of workforce as first quarterly loss looms",
+        "dek": "Three plants face closure as the personal-computer maker lowers its break-even point.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0
+        ],
+        "body": [
+          "Apple Computer is cutting 1,200 jobs and closing three of its six production plants, according to the June 24 Computerworld. The recently announced restructuring removes roughly one-fifth of the workforce as the company prepares for what it expects will be its first quarterly loss in eight years.",
+          "The closures cover Carrollton, Texas; Garden Grove, California; and Millstreet, Ireland, over the coming three months. Manufacturing accounts for 60 percent of the layoffs. Research and development is spared, although sales, marketing, finance and administration also face reductions.",
+          "President John Sculley says the measures should significantly reduce the company’s break-even point. Restructuring charges are expected to push the quarter ending June 30 into the red; an analyst estimate of a $15 million after-tax loss remains a forecast, not a published final result.",
+          "The cuts follow a reorganization combining Apple II and Macintosh production divisions and removing chairman Steven P. Jobs from operational control. Jobs has not resigned from Apple. With approximately 4,600 employees expected to remain, the company is seeking a leaner manufacturing and marketing structure without abandoning research."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Electronic novels recruit poets as well as science-fiction stars",
+          "body": [
+            "A poet and a science-fiction humorist are helping turn the adventure game into an electronic novel. June’s COMPUTE!'s Gazette profiles Robert Pinsky’s work with Synapse on Mindwheel alongside Douglas Adams and Steve Meretzky’s collaboration on The Hitchhiker’s Guide to the Galaxy. These are accounts of development and design, not announcements of releases this week.",
+            "Synapse sought writers who did not already know adventure-game conventions. Pinsky, head of Berkeley’s creative-writing program and poetry editor of The New Republic, worked with programmers credited in the magazine as William Mataga and Steve Hales. Mindwheel comes in a hardback book with a disk, and the printed material supplies information needed during play.",
+            "The attraction is language rather than another screen full of pictures. Synapse calls its system BTZ, Better Than ZORK, and pursues more vocabulary and richer parsing. That is a design ambition and a tradeoff against memory-hungry graphics, not proof that every text adventure outclasses every illustrated game.",
+            "Adams describes planning in Boston, electronic-mail exchanges from England, a London work session and more testing in Boston. The months-long partnership makes the modem as much a writer’s tool as a hobbyist’s accessory."
+          ],
+          "sourceRefs": [
+            1
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Commodore 128 promises three computing worlds in one box",
+          "body": [
+            "The Commodore 128 promises continuity as well as expansion. Tom R. Halfhill’s June COMPUTE! hands-on report describes a machine that can run existing C64 software, enter a native 128K environment with BASIC 7.0, or use a Z80-based CP/M mode aimed at business applications.",
+            "Native and CP/M modes offer 80-column text. RGB output and the faster 1571 disk drive give the buyer more to consider than memory alone, while compatibility with C64 peripherals protects part of an existing investment.",
+            "The report follows a mid-March visit and expected June store availability with intended retail below $300. Those are advance expectations, not a verified June 24 launch or a confirmed dealer transaction. Buyers should distinguish the promise of three computing worlds from the software and equipment actually on a dealer’s shelf."
+          ],
+          "sourceRefs": [
+            2
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Commodore LCD portable slips beyond September",
+          "body": [
+            "Commodore’s LCD portable is running later than expected. The June Gazette reports that the prototype shown at January’s Consumer Electronics Show is now expected sometime after September, rather than midsummer. Marketing vice president Frank Leonardi denies that the project has been shelved.",
+            "The proposed five-and-a-half-pound machine combines an 80-by-16-character display, 32K RAM and 96K ROM with eight built-in applications: word processor, file manager, spreadsheet, address book, scheduler, calculator, memo pad and terminal emulator.",
+            "A built-in 300-baud modem and support for Commodore serial peripherals, including 1541 and 1571 drives, make it more than a pocket notebook. The reported $600 price and timetable remain plans for a prototype, not evidence of a shipping product."
+          ],
+          "sourceRefs": [
+            1
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Commodore 128",
+          "summary": "128K native mode, C64 compatibility, CP/M and 80-column text; advance hands-on coverage.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "Commodore LCD prototype",
+          "summary": "Delayed portable, proposed $600, 80x16 LCD and built-in applications; not a shipping recommendation.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "title": "Okimate 10 and 20",
+          "summary": "Okidata June COMPUTE! advertisement: Okimate 10 for Atari/Commodore, nine-element head and over 36 colors; Okimate 20 advertised with 24-element head and over 100 colors. Interface/Plug N Print packages may cost extra.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Apple SpeedScript 3.0",
+          "detail": "June COMPUTE! contents list a machine-language word processor and ready-to-run/type-in program. Treat as magazine publication, not commercial boxed release.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "Accessible C64 telecommunications",
+          "detail": "Gazette reader-service column describes Smart 64 Terminal from Microtechnic Solutions used with Genesis COMVoice speech synthesis for blind users.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Computer Games — four verified editorial selections, not sales rankings",
+          "items": [
+            "Mindwheel — Synapse electronic novel profiled in June.",
+            "The Hitchhiker’s Guide to the Galaxy — Infocom collaboration profiled in June.",
+            "Questron — SSI C64 edition advertised at $39.95.",
+            "Gemstone Warrior — SSI Apple II/C64 editions advertised at $34.95."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "label": "Top 5 Movies — June 28-30 domestic weekend",
+          "items": [
+            "1. Pale Rider",
+            "2. Cocoon",
+            "3. Rambo: First Blood Part II",
+            "4. St. Elmo's Fire",
+            "5. The Goonies"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Questron, Commodore 64",
+          "price": "$39.95",
+          "note": "June SSI advertisement; direct orders add $2 shipping and handling.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Gemstone Warrior, Apple II / C64",
+          "price": "$34.95",
+          "note": "June SSI advertisement.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "Commodore 128 advance estimate",
+          "price": "Under $300 expected",
+          "note": "Advance report, not confirmed street price.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "item": "VICmodem",
+          "price": "About $30",
+          "note": "Interview retail band, not a universal dealer quote.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "R&D spared at Apple",
+          "summary": "June 24 Computerworld distinguishes protected research work from cuts across manufacturing, sales, marketing, finance and administration.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Mail crosses the Atlantic to build a game",
+          "summary": "Adams says he and Meretzky exchanged ideas and text by electronic mail between in-person work sessions.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "chart": "Billboard Top Rock Tracks (modern archive label: Mainstream Rock Airplay)",
+          "chartDate": "1985-06-29",
+          "rank": 1,
+          "title": "If You Love Somebody Set Them Free",
+          "artist": "Sting",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            3
+          ],
+          "song": "If You Love Somebody Set Them Free"
+        },
+        {
+          "chart": "Billboard Top Rock Tracks (modern archive label: Mainstream Rock Airplay)",
+          "chartDate": "1985-06-29",
+          "rank": 2,
+          "title": "Little By Little",
+          "artist": "Robert Plant",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            3
+          ],
+          "song": "Little By Little"
+        },
+        {
+          "chart": "Billboard Top Rock Tracks (modern archive label: Mainstream Rock Airplay)",
+          "chartDate": "1985-06-29",
+          "rank": 3,
+          "title": "Tough All Over",
+          "artist": "John Cafferty & The Beaver Brown Band",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            3
+          ],
+          "song": "Tough All Over"
+        },
+        {
+          "chart": "Billboard Top Rock Tracks (modern archive label: Mainstream Rock Airplay)",
+          "chartDate": "1985-06-29",
+          "rank": 4,
+          "title": "Sentimental Street",
+          "artist": "Night Ranger",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            3
+          ],
+          "song": "Sentimental Street"
+        },
+        {
+          "chart": "Billboard Top Rock Tracks (modern archive label: Mainstream Rock Airplay)",
+          "chartDate": "1985-06-29",
+          "rank": 5,
+          "title": "Cannonball",
+          "artist": "Supertramp",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            3
+          ],
+          "song": "Cannonball"
+        }
+      ],
+      "periodAd": {
+        "headline": "Adventure by the disk",
+        "summary": "SSI advertises Questron for C64 at $39.95 and Gemstone Warrior for Apple II and C64 at $34.95. Direct orders add $2 shipping and handling.",
+        "tagline": "June catalogue prices, not new-release dates.",
+        "sourceRefs": [
+          1
+        ]
+      },
+      "market": {
+        "headline": "Lower break-even points, lower entry prices",
+        "summary": "Apple’s restructuring puts manufacturing costs in focus. Commodore’s advance under-$300 C128 estimate and interview reports of inexpensive modems point toward price-sensitive home buyers; neither forecasts nor eventual targets are confirmed retail offers.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "worldAnchor": {
+        "headline": "TWA hostages freed June 30",
+        "summary": "Remaining hostages from the June 14 hijacking were released June 30 after negotiations; Navy diver Robert Stethem had been killed earlier in the ordeal. Use only developments through June 30; omit later arrests and trials from period copy.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          5
+        ]
+      },
+      "bbsNote": {
+        "headline": "Commodore bets on cheaper modems and everyday online use",
+        "summary": "June Gazette interview connects hardware price reductions to online services and education. Claims about future products remain forecasts.",
+        "posts": [
+          {
+            "topic": "Hardware watch",
+            "platform": "Commodore modem users",
+            "text": "Reported retail bands are about $30 for VICmodem and high $40s for the 1650. Goheen forecasts a later 300/1200-baud 1670 and an eventual sub-$100 target, not an immediate confirmed price."
+          },
+          {
+            "topic": "Service desk",
+            "platform": "CompuServe / Dow Jones / The Source / Delphi / Playnet / TeleLearning",
+            "text": "Goheen lists service relationships and snap packs and discusses aligning specialized learning databases with major services. This is interview reporting, not an announcement that all services have merged."
+          },
+          {
+            "topic": "Accessibility",
+            "platform": "CompuServe",
+            "text": "Gazette highlights its Handicapped User's Database, containing organization contacts, commercial-product information and user articles. Smart 64 Terminal plus COMVoice is cited for blind access."
+          }
+        ],
+        "sourceRefs": [
+          1
+        ]
+      },
+      "curiosity": {
+        "headline": "A computer game arrives dressed as a hardback book",
+        "summary": "Synapse sells an electronic novel whose physical book is part of play.",
+        "detail": "June Gazette describes Mindwheel as a hardback book with a disk in the back; players need information from the book. Poet Robert Pinsky collaborated with programmers rather than merely licensing his name. Do not call this packaging newly invented or released during June 24–30.",
+        "sourceRefs": [
+          1
+        ]
+      },
+      "undergroundDesk": {
+        "headline": "Computer-trespass sentence tests new federal law",
+        "dek": "Probation, a fine and equipment forfeiture follow unauthorized Forest Service access.",
+        "body": [
+          "Computerworld’s June 24 report describes the June 14 sentencing of Philip Gonzalez Fadriquela, 26, of Los Angeles, after a May guilty plea to unauthorized access to Forest Service computers in Colorado. The sentence includes three years probation, a $3,000 fine, 200 hours of community service, equipment forfeiture and an explanatory statement to the agency.",
+          "Prosecutor Cathy Goodwin presents the case as evidence that convictions can be obtained under the 1984 Computer Fraud and Abuse Act. Defense lawyer Robert Booms challenges the law’s breadth and says his client did not use stored information. The report mentions hacker bulletin boards but names no board, crew or handle."
+        ],
+        "groups": [],
+        "sourceRefs": [
+          0
+        ],
+        "confidence": "same-week"
+      },
+      "accuracyLedger": {
+        "items": [
+          "Week ends June 30; June 28–30 movie receipts are end-of-week context, not information available at the opening of June 24.",
+          "Same-month features are explicitly background, not invented day-specific launches. Quotes normalized only for OCR spacing and line breaks.",
+          "No milestone: the Apple story is follow-up reporting on previously announced restructuring, not a newly dated era-defining launch. No gadget field: no verified breaking noncomputer consumer-electronics story established.",
+          "Billboard rankings were read from full HTML chart rows; Tunecaster is a different chart and must not be substituted. Modern Billboard measurement boilerplate is not evidence of 1985 methodology.",
+          "Discarded September Antic retrospective for current-week claims, and avoided unverified final C128 pricing and prototype CPU claims.",
+          "Four distinct game titles verified; no fifth game or sales ranking invented.",
+          "Apple loss and Commodore prices/timetables are forecasts."
+        ]
+      }
+    },
+    {
       "sectionChrome": {
         "primary": "brick red",
         "secondary": "royal blue",
