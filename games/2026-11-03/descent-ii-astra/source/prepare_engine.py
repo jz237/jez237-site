@@ -43,6 +43,7 @@ includes["streaming.inc"]="arch/ogl/astra_streaming.inc"
 includes["glstate.inc"]="arch/ogl/astra_glstate.inc"
 includes["death_chain.inc"]="main/astra_death_chain.inc"
 includes["death_mix.inc"]="arch/sdl/astra_death_mix.inc"
+includes["wall_styles.inc"]="arch/ogl/astra_wall_styles.inc"
 for name in ["combat","combat_render","shadows","shadow_scene"]:
     includes[name+".inc"]="arch/ogl/astra_"+name+".inc"
 for name,path in includes.items():

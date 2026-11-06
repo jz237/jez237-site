@@ -9,8 +9,8 @@ static void afx_finish(int family,float fade){
         const char *vs="varying highp vec3 p,n;varying highp vec2 uv;varying mediump vec4 tint;uniform mat3 axis;uniform vec3 origin;void main(){p=axis*gl_Vertex.xyz+origin;n=normalize(axis*gl_Normal);uv=gl_MultiTexCoord0.xy;tint=gl_Color;gl_Position=gl_ProjectionMatrix*vec4(p,1.);}";
         const char *fs="precision highp float;varying highp vec3 p,n;varying highp vec2 uv;varying mediump vec4 tint;uniform sampler2D paint,metal;uniform float opacity,kind;"
           "void main(){vec3 N=normalize(n),V=normalize(-p),L=normalize(vec3(-.45,.7,.6));vec2 q=kind<1.5?vec2(.24,.23)+uv*vec2(.52,.53):uv;vec3 art=texture2D(paint,q).rgb;vec3 grain=texture2D(metal,uv*2.).rgb;"
-          "float bed=step(1.5,tint.a);vec3 c=mix(tint.rgb*(.60+grain*1.4),art*.66,bed);float diffuse=max(0.,dot(N,L)),spec=pow(max(0.,dot(N,normalize(V+L))),28.);"
-          "c=c*(.40+.84*diffuse)+vec3(.35,.32,.27)*spec*.30*(1.-bed*.8);gl_FragColor=vec4(c,opacity);}";
+          "float emit=step(2.5,tint.a),bed=step(1.5,tint.a)*(1.-emit);vec3 c=mix(tint.rgb*(.60+grain*1.4),art*.66,bed);float diffuse=max(0.,dot(N,L)),spec=pow(max(0.,dot(N,normalize(V+L))),28.);"
+          "c=c*(.40+.84*diffuse)+vec3(.35,.32,.27)*spec*.30*(1.-bed*.8);float core=1.-smoothstep(.025,.085,abs(uv.y-.5));c=mix(c,tint.rgb*(1.05+.90*core)*(.85+.15*grain.r)+vec3(.22)*core,emit);gl_FragColor=vec4(c,opacity);}";
         GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);if(!v||!f){failed=1;return;}program=glCreateProgram();glAttachShader(program,v);glAttachShader(program,f);glLinkProgram(program);glDeleteShader(v);glDeleteShader(f);
         GLint ok;glGetProgramiv(program,GL_LINK_STATUS,&ok);if(!ok){failed=1;return;}
     }
@@ -75,14 +75,45 @@ static void afx_frame_box(float x,float y,float w,float h,float depth){
     ag_box(x,y-h,depth*.5f,w,.085f,depth*.5f);ag_box(x,y+h,depth*.5f,w,.085f,depth*.5f);
     for(int a=-1;a<=1;a+=2)for(int b=-1;b<=1;b+=2){ax_paint(.38f,.39f,.40f,0);ax_tube(x+a*w,y+b*h,depth,x+a*w,y+b*h,depth+.025f,.052f,.052f,8);}
 }
+/* Physical diffuser, guarding ribs and a small non-directional service ID.
+ * One bounded draw replaces the ordinary fitting on this eligible face. */
+static void aw_lamp(const aw_mount *m,int room,int s,float fade){
+    float W=m->width;ax_count=0;ax_energy=0;
+    afx_frame_box(0,0,W,.25f,.16f);
+    int lit=!(Light_subtracted[room]&(1<<s));const float *color=aw_palette[m->color];
+    ax_paint(color[0]*(lit?1:.06f),color[1]*(lit?1:.06f),color[2]*(lit?1:.06f),lit?3:0);ag_box(0,0,.16f,W-.09f,.16f,.012f);
+    ax_paint(.12f,.14f,.16f,0);for(int i=-3;i<=3;i++){float x=i*W*.23f;ag_box(x,0,.19f,.025f,.17f,.035f);}
+    ax_paint(.055f,.065f,.075f,0);ag_box(0,-.51f,.07f,.84f,.15f,.035f);
+    /* Seven-segment stamped bay number, independent of objectives/key colors. */
+    static const unsigned char digits[10]={63,6,91,79,102,109,125,7,127,111};
+    int number=(room*6+s)%1000;ax_paint(.64f,.68f,.67f,0);
+    for(int d=0;d<3;d++){unsigned bits=digits[d==0?number/100:d==1?number/10%10:number%10];float x=(d-1)*.25f,y=-.51f;
+        if(bits&1)ag_box(x,y+.095f,.11f,.061f,.012f,.003f);if(bits&8)ag_box(x,y-.095f,.11f,.061f,.012f,.003f);if(bits&64)ag_box(x,y,.11f,.061f,.012f,.003f);
+        if(bits&2)ag_box(x+.064f,y+.049f,.11f,.012f,.036f,.003f);if(bits&4)ag_box(x+.064f,y-.049f,.11f,.012f,.036f,.003f);
+        if(bits&16)ag_box(x-.064f,y-.049f,.11f,.012f,.036f,.003f);if(bits&32)ag_box(x-.064f,y+.049f,.11f,.012f,.036f,.003f);
+    }
+    for(int i=0;i<ax_count;i++){
+        ax_vertex *a=&ax_vertices[i];float x=a->p[0],y=a->p[1],z=a->p[2],nx=a->n[0],ny=a->n[1],nz=a->n[2];
+        afx_uv[2*i]=x/(2*W)+.5f;afx_uv[2*i+1]=y*.5f+.5f;
+        a->p[0]=f2fl(m->p.x)+f2fl(m->r.x)*x+f2fl(m->u.x)*y+f2fl(m->n.x)*z;
+        a->p[1]=f2fl(m->p.y)+f2fl(m->r.y)*x+f2fl(m->u.y)*y+f2fl(m->n.y)*z;
+        a->p[2]=f2fl(m->p.z)+f2fl(m->r.z)*x+f2fl(m->u.z)*y+f2fl(m->n.z)*z;
+        a->n[0]=f2fl(m->r.x)*nx+f2fl(m->u.x)*ny+f2fl(m->n.x)*nz;
+        a->n[1]=f2fl(m->r.y)*nx+f2fl(m->u.y)*ny+f2fl(m->n.y)*nz;
+        a->n[2]=f2fl(m->r.z)*nx+f2fl(m->u.z)*ny+f2fl(m->n.z)*nz;
+    }
+    afx_finish(7,fade);afx_budget++;afx_draws++;afx_lights++;
+}
 static void afx_fixture(int room,int s){
     if(!astra_refinement||astra_native_compare||ss_capture)return;
     if(afx_frame!=framecount){afx_frame=framecount;afx_budget=0;}if(afx_budget>=22)return;
     int kind=astra_fixture_kind(room,s);
     if(room==astra_gallery_room&&s==astra_gallery_side){if(astra_gallery_scene==15)kind=1;else if(astra_gallery_scene==17)kind=2;}
-    if(!kind)return;
+    aw_mount mount;int accent=aw_mount_for(room,s,&mount);
+    if(!kind&&!accent)return;
     vms_vector center;compute_center_point_on_side(&center,&Segments[room],s);g3s_point p;g3_rotate_point(&p,&center);float distance=f2fl(p.p3_z);
     if(distance<.6f||distance>82)return;float fade=fminf(1,(82-distance)/12.f);
+    if(accent&&astra_gallery_scene!=15&&astra_gallery_scene!=17){aw_lamp(&mount,room,s,fade);return;}
     side *face=&Segments[room].sides[s];int turn=kind==3?(face->tmap_num2>>14)&3:0;afx_plane m;if(!afx_plane_for(room,s,turn,&m))return;
     if(room==astra_gallery_room&&s==astra_gallery_side&&(astra_gallery_scene==15||astra_gallery_scene==17)){
         m.cx=m.cy=0;for(int j=0;j<4;j++){m.cx+=m.uv[j*2]*.25f;m.cy+=m.uv[j*2+1]*.25f;}

@@ -6,10 +6,10 @@ int astra_native_compare;
 static GLuint astra_normals[256],astra_program;
 static GLint astra_tangents,astra_fixture,astra_moving;
 static int astra_gpu_failed,astra_shaded;
-static GLuint ag_colors[12],ag_details[12];
+static GLuint ag_colors[16],ag_details[16];
 static GLuint af_upload(const unsigned char *,int,int,int);
 static void ag_load(int id){
-    if(id<0||id>=12||ag_colors[id])return;
+    if(id<0||id>=16||ag_colors[id])return;
     char filename[24];png_data data;glActiveTexture(GL_TEXTURE0);
     snprintf(filename,sizeof filename,"g%02d.png",id);
     if(read_png(filename,&data)){ag_colors[id]=af_upload(data.data,data.width,data.height,data.channels);free(data.data);}
@@ -99,7 +99,7 @@ static void astra_init_shader(void)
         "vec3 lampTint=mix(vec3(1.,.75,.46),vec3(.40,.76,.85),step(1.5,surface.y)*(1.-step(2.5,surface.y)));"
         "col+=lampTint*glint*(.12+.35*metal)*(1.-rock*.8);"
         "col+=vec3(1.,.29,.085)*fire*(a.rgb*.64*max(0.,dot(n,D))+.38*pow(max(dot(n,normalize(D+eye)),0.),25.));"
-        "for(int i=0;i<3;i++){vec3 F=fixturePos[i].xyz-p;float fd=length(F);F/=max(.01,fd);float fall=pow(max(0.,1.-fd/max(.01,fixturePos[i].w)),2.);vec3 fc=fixtureColor[i].rgb*fall;float diffuse=max(0.,dot(n,F));float spec=pow(max(0.,dot(n,normalize(F+eye))),expn);col+=fc*(a.rgb*(.12+.70*diffuse)*cavity+spec*(.08+.23*metal));}"
+        "for(int i=0;i<3;i++){vec3 F=fixturePos[i].xyz-p;float fd=length(F);F/=max(.01,fd);float fall=pow(max(0.,1.-fd/max(.01,fixturePos[i].w)),2.);vec3 fc=fixtureColor[i].rgb*fall;float diffuse=max(0.,dot(n,F));float spec=pow(max(0.,dot(n,normalize(F+eye))),expn);col+=fc*(a.rgb*(.12+.20*fixtureColor[i].w+.70*diffuse)*cavity+spec*(.08+.23*metal));}"
         "vec3 H=normalize(beam+eye);float tangent=dot(H,basis[0]),across=dot(H,basis[1]);"
         "float brushed=exp(-(tangent*tangent*260.+across*across*16.))*max(0.,dot(n,beam));"
         "col+=refinement*hard*(1.-ceramic)*vec3(.19,.24,.27)*brushed*(.35+.65*metal)*room;"
@@ -150,7 +150,8 @@ static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
     glActiveTexture(GL_TEXTURE4);glBindTexture(GL_TEXTURE_2D,tex->native_color?tex->native_color:tex->handle);
     glActiveTexture(GL_TEXTURE5);glBindTexture(GL_TEXTURE_2D,tex->native_color?tex->native_color:tex->handle);
     glActiveTexture(GL_TEXTURE0);glBindTexture(GL_TEXTURE_2D,ag_color(tex));glUseProgram(astra_program);
-    glUniform1f(glGetUniformLocation(astra_program,"generatedShape"),tex->generated_shape);glUniform3fv(glGetUniformLocation(astra_program,"generatedTint"),1,tex->generated_tint);glUniform4fv(glGetUniformLocation(astra_program,"generatedRect"),1,tex->generated_rect);glUniform1f(glGetUniformLocation(astra_program,"paired"),0);
+    float lens_tint[3];aw_lens_tint(tex,aw_room,lens_tint);
+    glUniform1f(glGetUniformLocation(astra_program,"generatedShape"),tex->generated_shape);glUniform3fv(glGetUniformLocation(astra_program,"generatedTint"),1,lens_tint);glUniform4fv(glGetUniformLocation(astra_program,"generatedRect"),1,tex->generated_rect);glUniform1f(glGetUniformLocation(astra_program,"paired"),0);
     ad_bind(astra_program,astra_drawing_mine&&ad_matches(tex));glUniform1f(glGetUniformLocation(astra_program,"doorLayer"),1);
     glUniform1f(glGetUniformLocation(astra_program,"faithful"),tex->faithful);glUniform1f(glGetUniformLocation(astra_program,"nativeCompare"),astra_native_compare);
     float a=uv[2]-uv[0],b=uv[3]-uv[1],c=uv[4]-uv[0],d=uv[5]-uv[1],mat[9];
@@ -243,7 +244,8 @@ static int astra_layered_draw(int nv,const g3s_point **points,const g3s_uvl *uvl
     glActiveTexture(GL_TEXTURE3);glBindTexture(GL_TEXTURE_2D,ag_detail(top->gltexture));
     glActiveTexture(GL_TEXTURE5);glBindTexture(GL_TEXTURE_2D,top->gltexture->native_color?top->gltexture->native_color:top->gltexture->handle);
     glUniform1f(glGetUniformLocation(astra_program,"topFaithful"),top->gltexture->faithful);
-    glUniform1f(glGetUniformLocation(astra_program,"topGeneratedShape"),top->gltexture->generated_shape);glUniform3fv(glGetUniformLocation(astra_program,"topGeneratedTint"),1,top->gltexture->generated_tint);glUniform4fv(glGetUniformLocation(astra_program,"topGeneratedRect"),1,top->gltexture->generated_rect);
+    float top_lens_tint[3];aw_lens_tint(top->gltexture,aw_room,top_lens_tint);
+    glUniform1f(glGetUniformLocation(astra_program,"topGeneratedShape"),top->gltexture->generated_shape);glUniform3fv(glGetUniformLocation(astra_program,"topGeneratedTint"),1,top_lens_tint);glUniform4fv(glGetUniformLocation(astra_program,"topGeneratedRect"),1,top->gltexture->generated_rect);
     glActiveTexture(GL_TEXTURE0);OGL_BINDTEXTURE(ag_color(base->gltexture));
     ad_bind(astra_program,astra_drawing_mine&&ad_clip>=0);glUniform1f(glGetUniformLocation(astra_program,"doorLayer"),ad_base?1:2);
     glUniform1f(glGetUniformLocation(astra_program,"paired"),1);glUniform1f(glGetUniformLocation(astra_program,"topTurn"),turn);

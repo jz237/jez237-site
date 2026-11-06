@@ -987,3 +987,25 @@ Bloom uses two permanently attached ping-pong framebuffers, validated on resize.
 The same shaders, textures, samples, resolution, light and effect counts remain.
 Reference showroom screenshots are pixel-identical before and after the change.
 No changes to flight controls, demo AI, native damage, campaign data or weapons.
+
+Varied wall materials and colored service lighting (pyre44)
+
+Four additional GPT Image material families: navy bulkheads, diagonal ventilation,
+ceramic service panels and copper radiator/manifold walls. A generated 1254-square
+master supplies four 627-square quadrants, packaged into 1024 color / 512 matched
+detail maps using the existing seam treatment, mipmaps and anisotropic filtering.
+Luminance-derived normal/roughness/height maps are visual approximations, not
+measured PBR. The four families stream on demand; the initial eight-map preload
+is unchanged. The extra download is about 4.2 MB if all four families are needed.
+
+Shallow red, blue, cyan and amber diffusers have metal guards and stamped service
+numbers. Geometry and light share one safe face mount. Nearby colored light is
+limited to the owning convex segment, with the existing three-light shader budget.
+Selected neutral work lamps also gain sector color filters, bringing colored
+light into rock corridors. Existing colored lamps retain their native colors;
+white work-light rooms remain interspersed. Native broken lights, functional
+overlays, secret doors and hazards remain authoritative. No collision or AI changes.
+
+The mine showroom now has 25 exhibits, including four lighting palettes. A palette
+absent from a mine is demonstrated on an existing safe service mount while in
+the showroom. Paused inspection restores the original gameplay state.

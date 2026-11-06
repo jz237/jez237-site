@@ -1,6 +1,6 @@
 // A paused tour of the loaded campaign's real architecture and machinery.
 window.astraMinePreview={
-  names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion','Deep ventilation grilles','Light housings & spill','Service conduits','Raised frames & panel variants','Water surfaces','Molten lava'],
+  names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion','Deep ventilation grilles','Light housings & spill','Service conduits','Raised frames & panel variants','Water surfaces','Molten lava','Red service lighting','Blue service lighting','Cyan service lighting','Amber service lighting'],
   descriptions:[
     'New high-resolution metal, rock, grilles, machinery and lamps throughout both campaigns. Pause and compare the same view with the original artwork.',
     'Spinning fan blades behind a fixed protective grille.',
@@ -22,9 +22,10 @@ window.astraMinePreview={
     'Physical service pipes, flange joints and retaining collars. A showroom sample is mounted here when this mine has no conduit wall.',
     'Raised frame rails and new reinforced, painted-metal and machinery panel families give different walls their own character.',
     'Layered ripples, reflections of this room, depth coloring and broken shoreline foam. The water continues across adjoining surfaces.',
-    'Slow moving basalt crust, hot fissures, pressure blisters and pulsing amber light on nearby walls.'
+    'Slow moving basalt crust, hot fissures, pressure blisters and pulsing amber light on nearby walls.',
+    ...['Red','Blue','Cyan','Amber'].map(color=>color+' inset diffusers, protective metal ribs and stamped service plates. Colored light falls onto the varied wall panels in this mine room. If the mine lacks this palette, a sample is mounted on an existing safe service wall.')
   ],
-  active:false,paused:false,touring:true,clock:0,last:0,mask:2097151,fresh:false,
+  active:false,paused:false,touring:true,clock:0,last:0,mask:33554431,fresh:false,
   tick(){const now=performance.now();if(this.last&&!this.paused)this.clock+=Math.min(.1,(now-this.last)/1000);this.last=now;return this.clock;},
   select(index){if(!(this.mask&(1<<index)))return;Module.mineInspect=index;this.clock=0;this.last=performance.now();$('mineScene').value=String(index);},
   next(direction){let i=Module.mineInspect;for(let n=0;n<this.names.length;n++){i=(i+direction+this.names.length)%this.names.length;if(this.mask&(1<<i)){this.select(i);break;}}},
@@ -37,7 +38,7 @@ window.astraMinePreview={
   },
   details(open){$('mineDetails').hidden=!open;$('mineControls').setAttribute('aria-expanded',String(open));},
   open(){
-    this.paused=false;this.touring=true;this.clock=0;this.last=0;this.mask=2097151;this.fresh=true;$('mineZoom').value='1';this.sync();
+    this.paused=false;this.touring=true;this.clock=0;this.last=0;this.mask=33554431;this.fresh=true;$('mineZoom').value='1';this.sync();
     if(window.Module&&flightActive&&Module.astra){
       Module.mineRefinement=true;Module.mineInspect=0;Module.mineInspectZoom=1;Module.pickupInspect=Module.weaponInspect=-1;
       releaseFlightMouse();Module._astra_reset_flight_input?.();Module.pyroPreviewCommand=1;
