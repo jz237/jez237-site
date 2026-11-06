@@ -1,5 +1,5 @@
 // Reef section (corals, anemones, shrimp/crabs/snails): logic, care plans and
-// the picture manifest (shrimp/crab/snail pictures; corals still placeholders). Run: node --test scripts/fish-health-lab/reef.test.mjs
+// the picture manifest (coral/anemone and shrimp/crab/snail pictures). Run: node --test scripts/fish-health-lab/reef.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
@@ -8,13 +8,15 @@ import { fileURLToPath } from 'node:url';
 import { assessReef, rankReef, reefSignsFor, reefTreatmentNote, MAX_REEF_ALTERNATIVES } from '../../experiments/fish-health-lab/reef-logic.mjs';
 import { REEF_GROUPS, REEF_KINDS, REEF_SIGNS, REEF_CHANGES, REEF_CONDITIONS, REEF_LOOKALIKES, REEF_TREATMENT_FAMILY } from '../../experiments/fish-health-lab/reef-data.mjs';
 import { reefPlanFor, REEF_PLAN_IDS, INVERT_WARNING, STEP_TAGS } from '../../experiments/fish-health-lab/reef-care.mjs';
-import { REEF_IMAGES, REEF_SLOTS, INVERT_SET, reefImagesFor, reefImageFor, reefSlotsFor } from '../../experiments/fish-health-lab/reef-images.mjs';
+import { REEF_IMAGES, REEF_SLOTS, INVERT_SET, CORAL_SET, reefImagesFor, reefImageFor, reefSlotsFor } from '../../experiments/fish-health-lab/reef-images.mjs';
 import { CROPS as INVERT_CROPS, IMAGE_SOURCE as INVERT_IMAGE_SOURCE } from '../../experiments/fish-health-lab/reef-images-inverts-data.mjs';
+import { CROPS as CORAL_CROPS, IMAGE_SOURCE as CORAL_IMAGE_SOURCE } from '../../experiments/fish-health-lab/reef-images-corals-data.mjs';
 import { URGENCY, CONDITIONS } from '../../experiments/fish-health-lab/data.mjs';
 
 const GROUPS = ['coral', 'invert'];
 const app = fileURLToPath(new URL('../../experiments/fish-health-lab/', import.meta.url));
 const invertReceipt = JSON.parse(readFileSync(new URL('./invert-images-20261106.json', import.meta.url)));
+const coralReceipt = JSON.parse(readFileSync(new URL('./coral-images-20261106.json', import.meta.url)));
 const kindsOf = group => ['', ...REEF_KINDS[group].map(k => k.id)];
 // Every tile a visitor can actually reach: group × kind (incl. Not sure) × shown sign.
 const reachable = () => GROUPS.flatMap(group => kindsOf(group).flatMap(kind => reefSignsFor(group, kind).map(s => ({ group, kind, sign: s.id }))));
@@ -223,25 +225,17 @@ test('reef data stays separate from the fish conditions', () => {
   assert.ok(invert >= 8 && invert <= 10, `${invert} invert conditions`);
 });
 
-test('coral and anemone pictures are still placeholders; the manifest stays pluggable', () => {
-  for (const section of ['kinds', 'signs', 'conditions']) assert.deepEqual(REEF_IMAGES.coral[section], {}, `coral.${section} should be empty until coral pictures are approved`);
-  for (const { group, kind, sign } of reachable().filter(c => c.group === 'coral')) {
-    assert.equal(reefImagesFor('coral', sign, kind, 'signs').placeholder, true, `${kind}/${sign}`);
-    for (const c of [assessReef({ group, kind, sign }).primary, ...assessReef({ group, kind, sign }).alternatives]) assert.equal(reefImagesFor('coral', c.id, kind).placeholder, true, c.id);
-  }
-  for (const k of REEF_KINDS.coral) assert.equal(reefImagesFor('coral', k.id, '', 'kinds').placeholder, true, k.id);
-  assert.deepEqual(reefImagesFor('coral', 'rtn'), { images: [], placeholder: true });
-  assert.ok(reefSlotsFor('coral', 'rtn').every(s => s.image === null));
-  // Adding entries later fills results and kind-specific overrides win.
+test('the manifest stays pluggable: kind-specific entries win, unknown keys fall back to a placeholder', () => {
+  assert.deepEqual(reefImagesFor('coral', 'no-such-condition'), { images: [], placeholder: true });
+  assert.ok(reefSlotsFor('coral', 'no-such-condition').every(s => s.image === null));
   const fake = { url: 'https://example.invalid/rtn.jpg', alt: 'test' };
-  REEF_IMAGES.coral.conditions.rtn = [fake];
-  REEF_IMAGES.coral.signs['sps:peeling'] = fake;
+  const before = REEF_IMAGES.coral.signs['anemone:peeling'];
+  REEF_IMAGES.coral.signs['anemone:peeling'] = fake;
   try {
-    assert.equal(reefImagesFor('coral', 'rtn').images[0], fake);
-    assert.equal(reefImagesFor('coral', 'peeling', 'sps', 'signs').images[0], fake);
-    assert.equal(reefImagesFor('coral', 'peeling', 'lps', 'signs').placeholder, true);
-    assert.equal(reefSlotsFor('coral', 'rtn')[0].image, fake);
-  } finally { delete REEF_IMAGES.coral.conditions.rtn; delete REEF_IMAGES.coral.signs['sps:peeling']; }
+    assert.equal(reefImagesFor('coral', 'peeling', 'anemone', 'signs').images[0], fake);
+    assert.equal(reefImagesFor('coral', 'peeling', 'lps', 'signs').images[0].id, 'sign-lps-peeling');
+    assert.equal(reefImagesFor('coral', 'peeling', 'soft', 'signs').images[0].id, 'sign-peeling');
+  } finally { if (before === undefined) delete REEF_IMAGES.coral.signs['anemone:peeling']; }
 });
 
 // ── Shrimp, crab and snail pictures (Jez, Nov 6 2026) ──────────────────────
@@ -333,5 +327,114 @@ test('invert crops: every crop is used, keys and hashes match the receipt, uploa
   assert.ok(reefImageFor('invert', 'molt-stuck', '', 'signs').url.startsWith(uploaded ? 'https://media.jez237.com/experiments/fish-health-lab/inverts/' : 'local-images/inverts/'));
   if (existsSync(`${app}local-images/inverts`)) {
     for (const a of invertReceipt.assets) assert.equal(createHash('sha256').update(readFileSync(`${app}${a.path}`)).digest('hex'), a.sha256, a.id);
+  }
+});
+
+// ── Coral and anemone pictures (Jez, Nov 6 2026 05:11 EST) ─────────────────
+const coralCases = () => reachable().filter(c => c.group === 'coral');
+const coralChanges = [[], ...REEF_CHANGES.coral.map(x => [x.id]), REEF_CHANGES.coral.map(x => x.id)];
+// Every result + could-also a visitor can reach for a coral case, incl. after "This looks more like mine".
+const coralShown = c => coralChanges.flatMap(changes => {
+  const r = assessReef({ ...c, changes });
+  return [r, ...r.alternatives.map(a => assessReef({ ...c, changes, chosen: [a.id] }))].map(x => ({ changes, r: x }));
+});
+
+test('coral pictures: every kind tile, every sign tile a visitor can reach, every coral result', () => {
+  for (const k of REEF_KINDS.coral) assert.ok(reefImagesFor('coral', k.id, '', 'kinds').images.length === 1, `kind ${k.id}`);
+  for (const s of REEF_SIGNS.coral) assert.ok(REEF_IMAGES.coral.signs[s.id], `sign ${s.id} needs a plain picture`);
+  for (const { kind, sign } of coralCases()) assert.equal(reefImagesFor('coral', sign, kind, 'signs').placeholder, false, `${kind || 'not sure'}/${sign}`);
+  for (const c of REEF_CONDITIONS.filter(c => c.group === 'coral')) {
+    const { images } = reefImagesFor('coral', c.id);
+    assert.ok(images.length >= 1 && images.length <= REEF_SLOTS.length, `${c.id}: ${images.length} pictures`);
+    assert.ok(reefSlotsFor('coral', c.id)[0].image, `${c.id} library card`);
+  }
+  for (const c of coralCases()) for (const { r } of coralShown(c))
+    for (const x of [r.primary, ...r.alternatives]) assert.equal(reefImagesFor('coral', x.id, c.kind).placeholder, false, `${JSON.stringify(c)} → ${x.id}`);
+});
+
+test('coral kind-specific pictures point at real kinds, signs and conditions that kind can reach', () => {
+  const kinds = REEF_KINDS.coral.map(k => k.id);
+  for (const [section, ids] of [['signs', REEF_SIGNS.coral.map(s => s.id)], ['conditions', REEF_CONDITIONS.filter(c => c.group === 'coral').map(c => c.id)]]) {
+    for (const key of Object.keys(CORAL_SET[section])) {
+      const [kind, id] = key.includes(':') ? key.split(':') : ['', key];
+      assert.ok(ids.includes(id), `${section} ${key}: unknown ${id}`);
+      if (!kind) continue;
+      assert.ok(kinds.includes(kind), `${section} ${key}: unknown kind`);
+      if (section === 'signs') assert.ok(reefSignsFor('coral', kind).some(s => s.id === id), `${key}: ${kind} never sees that sign`);
+      else assert.ok(coralCases().filter(c => c.kind === kind).some(c => coralShown(c).some(({ r }) => [r.primary, ...r.alternatives].some(x => x.id === id))), `${key}: never shown for ${kind}`);
+    }
+  }
+  assert.deepEqual(Object.keys(CORAL_SET.kinds), kinds);
+});
+
+test('coral pictures show the right coral for the chosen kind where it matters', () => {
+  const sign = (kind, id) => reefImagesFor('coral', id, kind, 'signs').images[0].id;
+  const hero = (kind, id) => reefImagesFor('coral', id, kind).images[0].id;
+  assert.equal(sign('sps', 'peeling'), 'sign-peeling');
+  assert.equal(sign('lps', 'peeling'), 'sign-lps-peeling');
+  assert.equal(sign('soft', 'closed'), 'sign-closed');
+  assert.equal(sign('lps', 'closed'), 'sign-lps-closed');
+  assert.equal(sign('sps', 'closed'), 'sign-sps-closed');
+  assert.equal(sign('anemone', 'bleach'), 'sign-anemone-bleach');
+  assert.equal(sign('soft', 'bleach'), 'sign-soft-bleach');
+  assert.equal(sign('soft', 'slugs'), 'sign-soft-slugs');
+  assert.equal(sign('sps', 'slugs'), 'sign-slugs');
+  assert.equal(sign('sps', 'bites'), 'sign-sps-bites');
+  assert.equal(sign('', 'bleach'), 'sign-bleach');
+  assert.equal(hero('sps', 'rtn'), 'cond-rtn');
+  assert.equal(hero('anemone', 'bleaching'), 'sign-anemone-bleach');
+  assert.equal(hero('sps', 'bleaching'), 'cond-bleaching');
+  assert.equal(hero('sps', 'brown-jelly'), 'sign-sps-brown-jelly');
+  assert.equal(hero('lps', 'brown-jelly'), 'cond-brown-jelly');
+  assert.equal(hero('anemone', 'anemone-stress'), 'cond-anemone-stress');
+  assert.equal(hero('soft', 'zoa-pests'), 'cond-zoa-pests');
+});
+
+test('a result and its could-also cards never show the same coral picture (compare stays useful)', () => {
+  for (const c of coralCases()) for (const { changes, r } of coralShown(c)) {
+    const ids = [r.primary, ...r.alternatives].map(x => reefImagesFor('coral', x.id, c.kind).images[0].id);
+    assert.equal(new Set(ids).size, ids.length, `${JSON.stringify({ ...c, changes })}: ${ids}`);
+  }
+});
+
+test('no "Picture coming soon" left in the reef path: every tile, result, could-also and library card has a picture', () => {
+  for (const group of GROUPS) {
+    for (const k of REEF_KINDS[group]) assert.equal(reefImagesFor(group, k.id, '', 'kinds').placeholder, false, `${group} kind ${k.id}`);
+    for (const c of REEF_CONDITIONS.filter(c => c.group === group)) assert.ok(reefSlotsFor(group, c.id).filter(s => s.image).length >= 1, `${c.id} library`);
+  }
+  for (const c of reachable()) {
+    assert.equal(reefImagesFor(c.group, c.sign, c.kind, 'signs').placeholder, false, JSON.stringify(c));
+    const r = assessReef(c);
+    for (const x of [r.primary, ...r.alternatives]) assert.equal(reefImagesFor(c.group, x.id, c.kind).placeholder, false, `${JSON.stringify(c)} → ${x.id}`);
+  }
+});
+
+test('coral crops: every crop is used, keys and hashes match the receipt, upload state matches IMAGE_SOURCE', () => {
+  const used = new Set([...Object.values(CORAL_SET.kinds), ...Object.values(CORAL_SET.signs), ...Object.values(CORAL_SET.conditions).flat()]);
+  assert.deepEqual([...used].sort(), Object.keys(CORAL_CROPS).sort(), 'every crop is used and every used id exists');
+  assert.equal(coralReceipt.requestedModel, 'openai/gpt-image-2.6-sunburst');
+  assert.equal(coralReceipt.requestedQuality, 'medium');
+  assert.deepEqual(coralReceipt.reportedProviderModel, ['openai/gpt-image-2.6-sunburst']);
+  assert.deepEqual(coralReceipt.assets.map(a => a.id).sort(), Object.keys(CORAL_CROPS).sort());
+  assert.equal(new Set(coralReceipt.assets.map(a => a.sha256)).size, coralReceipt.assets.length, 'no duplicate crops');
+  const invertHashes = new Set(invertReceipt.assets.map(a => a.sha256));
+  for (const a of coralReceipt.assets) {
+    const crop = CORAL_CROPS[a.id];
+    assert.ok(!invertHashes.has(a.sha256), `${a.id} duplicates an invert crop`);
+    assert.equal(crop.key, a.r2Key, a.id);
+    assert.match(a.r2Key, new RegExp(`^experiments/fish-health-lab/corals/${a.id}-${a.sha256.slice(0, 12)}\\.jpg$`), a.id);
+    assert.equal(a.plannedUrl, `https://media.jez237.com/${a.r2Key}`);
+    assert.equal(a.path, `local-images/corals/${a.r2Key.split('/').pop()}`);
+    assert.deepEqual([a.width, a.height, crop.width, crop.height], [362, 362, 362, 362], a.id);
+    assert.equal(a.resized, false);
+    assert.equal(a.uploaded, CORAL_IMAGE_SOURCE === 'media', `${a.id}: uploaded flag must match IMAGE_SOURCE`);
+    assert.ok(crop.alt.startsWith('AI illustration: ') && crop.caption, a.id);
+    assert.ok(coralReceipt.sources[a.sheet], `${a.id}: sheet ${a.sheet} recorded`);
+  }
+  const uploaded = coralReceipt.assets.every(a => a.uploaded);
+  assert.equal(CORAL_IMAGE_SOURCE, uploaded ? 'media' : 'local');
+  assert.ok(reefImageFor('coral', 'peeling', 'sps', 'signs').url.startsWith(uploaded ? 'https://media.jez237.com/experiments/fish-health-lab/corals/' : 'local-images/corals/'));
+  if (existsSync(`${app}local-images/corals`)) {
+    for (const a of coralReceipt.assets) assert.equal(createHash('sha256').update(readFileSync(`${app}${a.path}`)).digest('hex'), a.sha256, a.id);
   }
 });

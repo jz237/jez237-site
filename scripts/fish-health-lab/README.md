@@ -513,8 +513,8 @@ pictures are still not made.
   warning. Care plans start with the tests; dips are tagged “Separate dip — never in the
   display”; no plan doses copper or fish medicine. Library: “Reef & inverts” filter.
 - Files: `reef-data.mjs` (kinds, signs, chips, 17 coral + 9 invert conditions, look-alikes),
-  `reef-logic.mjs`, `reef-care.mjs`, `reef-images.mjs` (picture manifest; coral part still empty — fill it like
-  the fish sets; every spot shows “Picture coming soon” until then), `reef-app.mjs`, `reef.css`.
+  `reef-logic.mjs`, `reef-care.mjs`, `reef-images.mjs` (picture manifest: `CORAL_SET` and `INVERT_SET`;
+  a spot with no entry falls back to a calm “Picture coming soon” frame, none left), `reef-app.mjs`, `reef.css`.
   app.mjs/index.html only gain small hooks.
 - Checks: `reef.test.mjs` and `reef-browser-check.mjs` (`FISH_LAB_SHOTS=<dir>` saves 390 px shots).
 
@@ -558,3 +558,49 @@ animal.” Corals and anemones stay “Picture coming soon”.
   keys/hashes, corals still placeholders, copper warning on every invert result) and
   `reef-browser-check.mjs` (invert kind and sign grids, failed molt → compare → normal molt,
   isopod/copper/crab/snail results, library cards and galleries).
+
+## Coral and anemone pictures, 2026-11-06 (published)
+
+Jez, 2026-11-06 05:11 EST: “Proceed, don't go overboard on the realistic tank pics by doing
+things like looking through algae on the glass or seeing half a fish hiding behind something
+etc.” — balanced with the invert request (the problem as it typically looks in a home tank,
+not one perfect mark on a healthy animal).
+
+- Style: natural, clear photos of the coral in an ordinary home reef tank (rock, sand, normal
+  reef LED light), clean glass, the coral large and fully in view, the problem shown the way
+  it really looks: bare white skeleton spreading up an acropora with a sharp tissue line (RTN),
+  a brown slime mass on a hammer/torch (brown jelly), a whole colony white with the flesh on
+  (bleaching), closed zoas with white pustules (zoa pox), tan flatworms and half-moon bites (AEFW),
+  red specks on a faded acropora (red bugs), slugs and egg spirals on a montipora plate, a rock
+  of aiptasia, a deflated or wandering bubble-tip anemone.
+- 48 crops of 362×362, cut from four 4×3 sheets without resizing (kind tiles + signs; remaining
+  signs + kind-specific signs; two sheets of the 17 result heroes + more kind-specific signs) plus
+  one repair sheet (`choices.json` picks the retakes). Stock OAuth, requested
+  `openai/gpt-image-2.6-sunburst` medium, size auto, 4:3; every sheet reported that model
+  (backend not independently verified).
+- Mapping: `CORAL_SET` in `reef-images.mjs`. Plain sign tiles use the most typical coral
+  (acropora for bleaching/peeling/pests, hammer coral for brown jelly, toadstool leather for
+  “won't open”); kind keys swap in the right animal where it matters (`lps:peeling` brain coral,
+  `lps:closed`/`sps:closed`, `soft:/lps:/anemone:bleach`, `soft:slugs` zoa nudibranchs,
+  `sps:/soft:/anemone:bites`, `lps:/anemone:browning`, `anemone:unclear`) and kind heroes
+  (`anemone:bleaching`, `sps:brown-jelly`, `soft:nipped`, …). Kind tiles, sign tiles, result hero,
+  could-also cards, compare and library/detail galleries all show pictures; no “Picture coming
+  soon” is left anywhere in the reef path.
+- Data: `reef-images-corals-data.mjs` (generated, `IMAGE_SOURCE = 'media'`), receipt
+  `coral-images-20261106.json` (prompts, sheet hashes, crop boxes, choices, review/weak cells,
+  R2 keys `experiments/fish-health-lab/corals/<id>-<sha12>.jpg`, `uploaded: true`). Local preview
+  copies: untracked `experiments/fish-health-lab/local-images/corals/`. Scripts:
+  `workspace/tmp/imagegen/fish-health-corals-20261106/`; originals:
+  `/home/jez237/.openclaw/media/tool-image-generation/fish-health-corals-20261106/`.
+- Published 2026-11-06 (Jez's request, Claw approved): all 48 crops uploaded and
+  byte-verified (`workspace/tmp/fish-health-corals-publish-20261106/upload-verification.json`),
+  receipt `uploaded: true`, `IMAGE_SOURCE = 'media'`.
+- Publish procedure (no code change): upload every receipt asset to
+  `jez237-site-media/<r2Key>` (`image/jpeg`, `public, max-age=31536000, immutable`), byte-verify
+  `plannedUrl`, mark the assets `uploaded: true`, then set `IMAGE_SOURCE = 'media'` in
+  reef-images-corals-data.mjs (reef.test.mjs then expects media URLs).
+- Checks: `reef.test.mjs` (every coral kind/sign/result a visitor can reach has a picture, incl.
+  after a swap; kind keys are reachable; a result and its could-also cards never share a picture;
+  no placeholder left in the reef path; every crop used; receipt keys/hashes) and
+  `reef-browser-check.mjs` (coral kind grid, sign grids for Not sure/soft/LPS/SPS/anemone, RTN →
+  compare STN → detail, anemone, brown jelly, bleaching, pests, zoa pox and library cards).

@@ -8,7 +8,7 @@ import { reefImageFor, reefSlotsFor } from './reef-images.mjs';
 
 export const REEF_STEPS = ['reef-kind', 'reef-signs', 'reef-changes', 'reef-results'];
 
-// Small drawn icons (stroke only) for tiles and "Picture coming soon" frames.
+// Small drawn icons (stroke only) for tiles, the "Not sure" tile and empty frames.
 const PATHS = {
   fish: '<path d="M7 24c7-9 19-11 29 0-10 11-22 9-29 0Z"/><path d="M7 24 2 18v12Z"/><circle cx="31" cy="22" r="1.3" fill="currentColor" stroke="none"/><path d="M19 17c2 4 2 10 0 14"/>',
   coral: '<path d="M24 42V27m0 5-8-8v-8m8 10 7-8v-7m-7 20 9-5 4-5M14 42h20"/><circle cx="16" cy="14" r="2"/><circle cx="31" cy="10" r="2"/><circle cx="37" cy="22" r="2"/>',
@@ -37,7 +37,8 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
   const input = () => ({ group: state.group, kind: state.kind, sign: state.sign, changes: [...state.changes], chosen: [...state.chosen] });
   const groupInfo = () => REEF_GROUPS.find(g => g.id === state.group);
 
-  // A picture (shrimp, crabs, snails) or a calm "Picture coming soon" frame (corals).
+  // A picture, or a calm "Picture coming soon" frame for a spot with no picture yet
+  // (none left in the reef path; the frame stays as a safe fallback).
   function picture(image, icon, { label = 'Picture coming soon', cls = '' } = {}) {
     if (image) return `<img src="${escape(image.url)}" width="${image.width || 362}" height="${image.height || 362}" alt="${escape(image.alt || '')}" data-reef-image="${escape(image.id || '')}" loading="lazy" decoding="async">`;
     return `<span class="reef-ph ${cls}" data-placeholder="${icon}">${reefIcon(icon)}<small>${escape(label)}</small></span>`;
@@ -125,8 +126,8 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
   function renderLibrary(query = '') {
     const q = query.trim().toLowerCase();
     const entries = REEF_CONDITIONS.filter(c => [c.title, c.kind, c.summary, ...c.clues].join(' ').toLowerCase().includes(q));
-    $('.slot-explanation').textContent = 'Shrimp, crab and snail pictures are AI illustrations. Coral and anemone pictures are coming soon—empty frames are places for future pictures.';
-    $('#library-count').textContent = `${entries.length} reef & invert entries · coral pictures coming soon`;
+    $('.slot-explanation').textContent = 'Coral, anemone, shrimp, crab and snail pictures are AI illustrations, drawn the way the problem usually looks in a home tank.';
+    $('#library-count').textContent = `${entries.length} reef & invert entries`;
     $('#library-grid').innerHTML = entries.map(c => { const slots = reefSlotsFor(c.group, c.id), n = slots.filter(s => s.image).length; return `<article class="condition-card visual-card reef-card" data-reef-entry="${c.id}"><button type="button" class="card-image${n ? ' filled' : ''}" data-reef-condition="${c.id}" aria-label="Open ${escape(c.title)}">${picture(reefImageFor(c.group, c.id), groupIcon(c.group))}<span class="slot-count">${n} / ${slots.length} pictures</span></button><div class="condition-body"><div class="card-meta"><span>${escape(c.kind)}</span><span>${c.group === 'invert' ? 'Shrimp, crab, snail' : 'Coral & anemone'}</span></div><h3>${escape(c.title)}</h3>${badge(c.urgency)}<p>${escape(c.summary)}</p><div class="card-actions"><button type="button" class="text-button" data-reef-condition="${c.id}">Open page ↗</button></div></div></article>`; }).join('') || '<p class="notice">No matching reef entries. Try “white”, “molt” or “pest”.</p>';
   }
 

@@ -1,7 +1,8 @@
 // Reef section browser check: What needs help → coral / anemone / shrimp flows,
 // the fish flow through the new Fish tile, the reef library filter and 390 px
-// layout. Shrimp/crab/snail spots show pictures (reef-images-inverts-data.mjs);
-// coral and anemone spots still show "Picture coming soon". Run against a LOCAL server (the live site injects analytics):
+// layout. Coral/anemone (reef-images-corals-data.mjs) and shrimp/crab/snail
+// (reef-images-inverts-data.mjs) spots all show pictures; no "Picture coming soon"
+// is left anywhere in the reef path. Run against a LOCAL server (the live site injects analytics):
 //   FISH_LAB_URL=http://127.0.0.1:8771/experiments/fish-health-lab/ \
 //   PLAYWRIGHT_MODULE=.../playwright-core/index.js node scripts/fish-health-lab/reef-browser-check.mjs
 // FISH_LAB_SHOTS=<dir> saves the 390 px review screenshots.
@@ -33,8 +34,10 @@ const at = async (p, name) => {
 const noOverflow = async p => assert.equal(await p.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, 'horizontal overflow');
 const shot = async (p, name) => { if (shots) await p.screenshot({ path: `${shots}/${name}.png`, fullPage: true }); };
 const home = async p => { await p.goto(root, { waitUntil: 'networkidle' }); await at(p, 'welcome'); };
-// Coral spots are still placeholders; invert spots are pictures.
-const reefImages = p => p.locator('#check img:visible, #detail-dialog[open] img, #quick-compare-dialog[open] img').count();
+const noComingSoon = async (p, where) => {
+  const text = await p.evaluate(() => [document.querySelector('#check'), document.querySelector('#detail-dialog[open]'), document.querySelector('#quick-compare-dialog[open]'), document.querySelector('#library-view')].filter(Boolean).map(el => el.innerText).join(' '));
+  assert.doesNotMatch(text, /Picture coming soon/i, `${where}: "Picture coming soon" still shown`);
+};
 // Load every picture under `sel` (they are lazy) and return [crop id, natural width].
 const loaded = (p, sel) => p.locator(sel).evaluateAll(async els => {
   for (const el of els) { el.loading = 'eager'; try { await el.decode(); } catch {} }
@@ -77,14 +80,21 @@ try {
     assert.match(await p.locator('#flow-label').innerText(), /STEP 1 OF 3/);
     assert.equal(await p.locator('#next-button').innerText(), 'Skip →');
     assert.deepEqual(await p.locator('[data-reef-kind]').evaluateAll(els => els.map(el => el.dataset.reefKind)), ['soft', 'lps', 'sps', 'anemone', '']);
+    assert.deepEqual(await allLoaded(p, '#reef-kind-grid img', 4), ['kind-soft', 'kind-lps', 'kind-sps', 'kind-anemone']);
+    assert.equal(await p.locator('#reef-kind-grid [data-reef-kind=""] .reef-ph').count(), 1, 'Not sure keeps its icon');
+    await noComingSoon(p, 'coral kind');
     await noOverflow(p); await shot(p, '2-coral-kind');
     await p.locator('[data-reef-kind="sps"]').click();
     assert.equal(await p.locator('[data-reef-kind="sps"]').getAttribute('aria-pressed'), 'true');
     await next(p); await at(p, 'reef-signs');
     const spsSigns = await p.locator('[data-reef-sign]').evaluateAll(els => els.map(el => el.dataset.reefSign));
     assert.ok(spsSigns.includes('peeling') && spsSigns.includes('red-bugs') && !spsSigns.includes('zoa-melt') && !spsSigns.includes('anemone'), spsSigns.join());
-    assert.equal(await p.locator('#reef-sign-grid .reef-ph').count(), spsSigns.length, 'every sign tile has a placeholder');
-    assert.match(await p.locator('#reef-sign-grid').innerText(), /Picture coming soon/);
+    assert.equal(await p.locator('#reef-sign-grid .reef-ph').count(), 0, 'no placeholders on coral sign tiles');
+    const spsPics = await allLoaded(p, '#reef-sign-grid img', spsSigns.length);
+    assert.equal(new Set(spsPics).size, spsSigns.length, 'every SPS sign tile its own picture');
+    for (const [sign, id] of Object.entries({ peeling: 'sign-peeling', closed: 'sign-sps-closed', 'brown-jelly': 'sign-sps-brown-jelly', bites: 'sign-sps-bites', 'red-bugs': 'sign-red-bugs', slugs: 'sign-slugs' }))
+      assert.equal(await p.locator(`[data-reef-sign="${sign}"] img`).getAttribute('data-reef-image'), id, `sps/${sign}`);
+    await noComingSoon(p, 'SPS signs');
     await next(p); assert.match(await p.locator('#flow-error').innerText(), /closest picture/);
     await noOverflow(p); await shot(p, '3-coral-signs');
     await p.locator('[data-reef-sign="peeling"]').click(); await next(p); await at(p, 'reef-changes');
@@ -99,13 +109,18 @@ try {
     assert.equal(await p.locator('.invert-warning').count(), 0);
     const alts = await p.locator('[data-reef-alternative]').evaluateAll(els => els.map(el => el.dataset.reefAlternative));
     assert.ok(alts.length >= 1 && alts.length <= 3 && alts.includes('stn'), alts.join());
-    assert.equal(await reefImages(p), 0, 'reef results use placeholders, not pictures');
+    assert.equal(await hero(p), 'cond-rtn');
+    const rtnAlts = await allLoaded(p, '[data-reef-alternative] .alt-pick img', alts.length);
+    assert.equal(new Set(['cond-rtn', ...rtnAlts]).size, alts.length + 1, `hero and could-also differ: ${rtnAlts}`);
+    assert.equal(await p.locator('#reef-results-content .reef-ph').count(), 0);
+    await noComingSoon(p, 'RTN result');
     await noOverflow(p); await shot(p, '4-coral-result-sps-rtn');
     await p.locator('[data-reef-compare="stn"]').click();
     assert.equal(await p.locator('#quick-compare-dialog').isVisible(), true);
     assert.equal(await p.locator('#quick-compare-title').innerText(), 'Which looks more like yours?');
-    assert.equal(await p.locator('#quick-compare-content .reef-ph').count(), 2);
-    await noOverflow(p);
+    assert.deepEqual(await allLoaded(p, '#quick-compare-content img', 2), ['cond-rtn', 'cond-stn']);
+    assert.equal(await p.locator('#quick-compare-content .reef-ph').count(), 0);
+    await noOverflow(p); await shot(p, '4b-coral-compare');
     await p.locator('#quick-compare-content [data-reef-choose="stn"]').click();
     assert.match(await title(p), /Most likely:\s*STN/i);
     assert.match(await p.locator('.result-hint').last().innerText(), /Your pick from the look-alikes/);
@@ -117,19 +132,69 @@ try {
 
     await p.locator('.reef-result [data-reef-condition]').first().click();
     assert.equal(await p.locator('#detail-dialog').isVisible(), true);
-    assert.equal(await p.locator('#detail-content .reef-gallery .reef-ph').count(), 3);
+    assert.deepEqual(await allLoaded(p, '#detail-content .reef-gallery img'), ['cond-rtn', 'sign-peeling']);
+    assert.equal(await p.locator('#detail-content .reef-gallery .reef-ph').count(), 0);
+    await noComingSoon(p, 'RTN detail');
     await noOverflow(p);
     await p.keyboard.press('Escape');
     await p.locator('[data-action="reef-edit"]').click(); await at(p, 'reef-kind');
     assert.equal(await p.locator('[data-reef-kind="sps"]').getAttribute('aria-pressed'), 'true');
     await p.locator('[data-action="back"]').click(); await at(p, 'welcome');
-    record('reef detail shows 3 placeholder slots; Change my answers and Back walk back to the front door');
+    record('coral kind tiles (4 pictures + Not sure icon), SPS sign tiles all pictures (kind-specific peeling/closed/brown jelly/bites), RTN hero + could-also + compare (RTN vs STN) + detail gallery pictures; Change my answers and Back walk back to the front door');
+
+    // 2b. Coral sign grids per kind: every tile a picture, kind-specific tiles where the coral matters.
+    for (const [kind, expect] of [['', { bleach: 'sign-bleach', closed: 'sign-closed', anemone: 'sign-anemone' }], ['soft', { bleach: 'sign-soft-bleach', closed: 'sign-closed', slugs: 'sign-soft-slugs', bites: 'sign-soft-bites', 'zoa-melt': 'sign-zoa-melt' }], ['lps', { bleach: 'sign-lps-bleach', peeling: 'sign-lps-peeling', closed: 'sign-lps-closed', 'brown-jelly': 'sign-brown-jelly', browning: 'sign-lps-browning' }], ['anemone', { bleach: 'sign-anemone-bleach', anemone: 'sign-anemone', bites: 'sign-anemone-bites', browning: 'sign-anemone-browning', unclear: 'sign-anemone-unclear' }]]) {
+      await home(p);
+      await p.locator('[data-reef-start="coral"]').click(); await at(p, 'reef-kind');
+      if (kind) await p.locator(`[data-reef-kind="${kind}"]`).click();
+      await next(p); await at(p, 'reef-signs');
+      const n = await p.locator('#reef-sign-grid [data-reef-sign]').count();
+      const ids = await allLoaded(p, '#reef-sign-grid img', n);
+      assert.equal(await p.locator('#reef-sign-grid .reef-ph').count(), 0, `${kind || 'not sure'}: no placeholders`);
+      for (const [sign, id] of Object.entries(expect)) assert.equal(await p.locator(`[data-reef-sign="${sign}"] img`).getAttribute('data-reef-image'), id, `${kind || 'not sure'}/${sign}`);
+      assert.equal(new Set(ids).size, n, `${kind || 'not sure'}: every tile its own picture`);
+      await noComingSoon(p, `${kind || 'not sure'} signs`);
+      if (kind === 'anemone') await shot(p, '3b-anemone-signs');
+    }
+    record('coral sign grids for Not sure (13), soft, LPS and anemone: every tile a picture, kind-specific tiles (bleached leather/torch/anemone, LPS peeling/closed/browning, zoa slugs/bites, torn/brown anemone)');
 
     // 3. Anemone → shrinking → anemone stress.
     await reefFlow(p, 'coral', 'anemone', 'anemone');
     assert.match(await title(p), /Anemone stress/);
+    assert.equal(await hero(p), 'cond-anemone-stress');
+    const anemoneAlts = await allLoaded(p, '[data-reef-alternative] .alt-pick img', await p.locator('[data-reef-alternative]').count());
+    assert.ok(anemoneAlts.includes('sign-anemone-bleach'), `anemone could-also shows the bleached anemone: ${anemoneAlts}`);
+    assert.equal(await p.locator('#reef-results-content .reef-ph').count(), 0);
     await noOverflow(p); await shot(p, '5-anemone-result');
-    record('coral → anemone → shrinking/wandering → anemone stress');
+    record('coral → anemone → shrinking/wandering → anemone stress with its picture; could-also bleaching shows the bleached anemone');
+
+    // 3b. More coral results: each hero is the right picture, could-also pictures load, no placeholders.
+    for (const [kind, sign, changes, re, id, name] of [
+      ['lps', 'brown-jelly', [], /Brown jelly/, 'cond-brown-jelly', '5b-coral-result-brown-jelly'],
+      ['sps', 'brown-jelly', [], /Brown jelly/, 'sign-sps-brown-jelly', ''],
+      ['anemone', 'bleach', [], /Bleaching/, 'sign-anemone-bleach', ''],
+      ['sps', 'bleach', ['temp'], /Bleaching/, 'cond-bleaching', ''],
+      ['sps', 'red-bugs', [], /Red bugs/, 'cond-red-bugs', ''],
+      ['sps', 'flatworms', [], /AEFW|flatworms/i, 'cond-aefw', ''],
+      ['sps', 'slugs', [], /Montipora/, 'cond-monti-nudi', ''],
+      ['soft', 'zoa-melt', [], /Zoa pox/, 'cond-zoa-pests', '5c-coral-result-zoa'],
+      ['soft', 'closed', [], /alkalinity/i, 'cond-alk-swing', ''],
+      ['lps', 'bites', [], /Nipped/, 'cond-nipped', ''],
+      ['soft', 'bites', [], /Nipped/, 'sign-soft-bites', ''],
+      ['', 'browning', [], /nitrate or phosphate/i, 'cond-high-nutrients', ''],
+      ['', 'aiptasia', [], /Aiptasia/, 'cond-aiptasia', ''],
+    ]) {
+      await reefFlow(p, 'coral', kind, sign, changes);
+      assert.match(await title(p), re, `${kind}/${sign}`);
+      assert.equal(await hero(p), id, `${kind}/${sign}`);
+      assert.equal(await p.locator('.invert-warning').count(), 0);
+      assert.equal(await p.locator('#reef-results-content .reef-ph').count(), 0, `${kind}/${sign}: no placeholders`);
+      const n = await p.locator('[data-reef-alternative]').count();
+      const altIds = n ? await allLoaded(p, '[data-reef-alternative] .alt-pick img', n) : [];
+      assert.equal(new Set([id, ...altIds]).size, n + 1, `${kind}/${sign}: hero and could-also differ`);
+      await noOverflow(p); if (name) await shot(p, name);
+    }
+    record('brown jelly (LPS + SPS), bleaching (anemone + SPS), red bugs, AEFW, montipora nudibranchs, zoa pox, alk swing, nipped (LPS + zoas), high nutrients and aiptasia results show their own pictures and distinct could-also pictures');
 
     // 4. Shrimp/crab/snail: picture tiles (kinds, signs), then shrimp → stuck molt → failed molt.
     await home(p);
@@ -200,7 +265,7 @@ try {
     // 5. Not sure + changes re-weight: new coral + white → light shock.
     await reefFlow(p, 'coral', null, 'bleach', ['new-coral']);
     assert.match(await title(p), /light shock/i);
-    assert.equal(await reefImages(p), 0, 'coral results still use placeholders');
+    assert.equal(await hero(p), 'cond-light-shock');
     await reefFlow(p, 'invert', 'snail', 'not-moving');
     assert.match(await title(p), /Snail stuck upside down/);
     assert.equal(await hero(p), 'cond-flipped');
@@ -234,23 +299,30 @@ try {
     const n = await p.locator('#library-grid [data-reef-entry]').count();
     assert.ok(n >= 22, `${n} reef entries`);
     assert.match(await p.locator('#library-count').innerText(), /reef & invert entries/);
-    const invertEntries = await p.locator('#library-grid [data-reef-entry]').evaluateAll(els => els.filter(el => el.querySelector('img')).map(el => el.dataset.reefEntry));
-    assert.deepEqual(invertEntries.sort(), ['acclimation', 'bopyrid', 'copper', 'failed-molt', 'flipped', 'invert-injury', 'invert-water', 'normal-molt', 'starvation']);
-    await allLoaded(p, '#library-grid img', 9);
-    assert.equal(await p.locator('#library-grid [data-reef-entry] .reef-ph').count(), n - 9, 'coral cards keep placeholders');
+    const withPics = await p.locator('#library-grid [data-reef-entry]').evaluateAll(els => els.filter(el => el.querySelector('img')).length);
+    assert.equal(withPics, n, 'every reef card has a picture');
+    await allLoaded(p, '#library-grid img', n);
+    assert.equal(await p.locator('#library-grid [data-reef-entry] .reef-ph').count(), 0, 'no placeholder cards left');
+    await noComingSoon(p, 'reef library');
     assert.match(await p.locator('[data-reef-entry="failed-molt"] .slot-count').innerText(), /^3 \/ 3 pictures/);
-    assert.match(await p.locator('[data-reef-entry="rtn"] .slot-count').innerText(), /^0 \/ 3 pictures/);
+    assert.match(await p.locator('[data-reef-entry="rtn"] .slot-count').innerText(), /^2 \/ 3 pictures/);
+    assert.match(await p.locator('[data-reef-entry="bleaching"] .slot-count').innerText(), /^3 \/ 3 pictures/);
     await p.locator('#library-search').fill('molt');
     assert.ok(await p.locator('#library-grid [data-reef-entry="failed-molt"]').count() === 1);
     await p.locator('#library-grid .card-image[data-reef-condition="failed-molt"]').click();
     assert.match(await p.locator('#detail-content').innerText(), /Copper and most fish medicines kill/);
     assert.deepEqual(await allLoaded(p, '#detail-content .reef-gallery img'), ['cond-failed-molt', 'cond-crab-failed-molt', 'sign-molt-stuck']);
     await p.keyboard.press('Escape');
+    await p.locator('#library-search').fill('bleach');
+    await p.locator('#library-grid .card-image[data-reef-condition="bleaching"]').click();
+    assert.deepEqual(await allLoaded(p, '#detail-content .reef-gallery img'), ['cond-bleaching', 'sign-lps-bleach', 'sign-anemone-bleach']);
+    await noComingSoon(p, 'bleaching detail');
+    await p.keyboard.press('Escape');
     await p.locator('#library-search').fill('');
     await p.locator('#library-water').selectOption('fresh');
     assert.equal(await p.locator('#library-grid [data-reef-entry]').count(), 0);
     assert.ok(await p.locator('#library-grid .condition-card').count() > 10);
-    record('old #ich/#library links still work; the library has a Reef & inverts filter: 9 invert cards with pictures (detail gallery filled), coral cards with placeholders');
+    record('old #ich/#library links still work; the library has a Reef & inverts filter: every coral and invert card has a picture (detail galleries filled), no placeholders');
 
     // From a reef result, "See all reef entries" opens the reef filter.
     await reefFlow(p, 'coral', 'soft', 'zoa-melt');

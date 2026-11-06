@@ -1,7 +1,9 @@
 // Reef picture manifest. Shrimp/crab/snail pictures (Jez, Nov 6 2026 01:08 EST:
 // "Do shrimp crab or snail now ... as they would typically look in a typical
-// aquarium") come from reef-images-inverts-data.mjs; corals and anemones are
-// still empty, so every coral picture spot shows "Picture coming soon".
+// aquarium") come from reef-images-inverts-data.mjs; coral and anemone pictures
+// (Jez, Nov 6 2026 05:11 EST: "Proceed, don't go overboard on the realistic tank
+// pics ...") come from reef-images-corals-data.mjs. Each set has its own
+// IMAGE_SOURCE, so one can be published while the other is still a local preview.
 //
 //   REEF_IMAGES[group].signs[signId]          → the sign tile (one image)
 //   REEF_IMAGES[group].signs[`${kind}:${signId}`] → a kind-specific sign tile
@@ -12,17 +14,21 @@
 // Each image: { id, url, width, height, alt, caption }. Never commit image binaries.
 import { MEDIA_BASE } from './fish-images-data.mjs';
 import { CROPS as INVERT_CROPS, IMAGE_SOURCE as INVERT_IMAGE_SOURCE } from './reef-images-inverts-data.mjs';
+import { CROPS as CORAL_CROPS, IMAGE_SOURCE as CORAL_IMAGE_SOURCE } from './reef-images-corals-data.mjs';
 
 // 'media' = content-hashed R2 keys on media.jez237.com; 'local' = the untracked
-// preview copies (experiments/fish-health-lab/inverts/x.jpg → local-images/inverts/x.jpg).
+// preview copies (experiments/fish-health-lab/corals/x.jpg → local-images/corals/x.jpg).
 const KEY_PREFIX = 'experiments/fish-health-lab/';
-export const invertUrlFor = entry => INVERT_IMAGE_SOURCE === 'media' ? MEDIA_BASE + entry.key : `local-images/${entry.key.slice(KEY_PREFIX.length)}`;
-const pic = id => {
-  const entry = INVERT_CROPS[id];
-  if (!entry) throw new Error(`reef-images: no invert crop ${id}`);
-  return { id, ...entry, url: invertUrlFor(entry) };
+const urlFor = (entry, source) => source === 'media' ? MEDIA_BASE + entry.key : `local-images/${entry.key.slice(KEY_PREFIX.length)}`;
+export const invertUrlFor = entry => urlFor(entry, INVERT_IMAGE_SOURCE);
+export const coralUrlFor = entry => urlFor(entry, CORAL_IMAGE_SOURCE);
+const picker = (crops, url, name) => id => {
+  const entry = crops[id];
+  if (!entry) throw new Error(`reef-images: no ${name} crop ${id}`);
+  return { id, ...entry, url: url(entry) };
 };
-const pics = (...ids) => ids.map(pic);
+const invertPic = picker(INVERT_CROPS, invertUrlFor, 'invert');
+const coralPic = picker(CORAL_CROPS, coralUrlFor, 'coral');
 
 // Which crop goes where. Kind-specific keys (`crab:…`) win over the plain key.
 export const INVERT_SET = {
@@ -67,15 +73,64 @@ export const INVERT_SET = {
   },
 };
 
+// Corals: plain sign tiles use the most typical coral for that problem (acropora
+// for bleaching/peeling/pests, a hammer coral for brown jelly, a toadstool leather
+// for "won't open"); kind keys swap in the right coral where the animal matters.
+export const CORAL_SET = {
+  kinds: { soft: 'kind-soft', lps: 'kind-lps', sps: 'kind-sps', anemone: 'kind-anemone' },
+  signs: {
+    bleach: 'sign-bleach', peeling: 'sign-peeling', 'brown-jelly': 'sign-brown-jelly', closed: 'sign-closed',
+    browning: 'sign-browning', 'red-bugs': 'sign-red-bugs', flatworms: 'sign-flatworms', slugs: 'sign-slugs',
+    bites: 'sign-bites', 'zoa-melt': 'sign-zoa-melt', anemone: 'sign-anemone', aiptasia: 'sign-aiptasia',
+    unclear: 'sign-unclear',
+    'soft:bleach': 'sign-soft-bleach', 'lps:bleach': 'sign-lps-bleach', 'anemone:bleach': 'sign-anemone-bleach',
+    'lps:peeling': 'sign-lps-peeling',
+    'sps:brown-jelly': 'sign-sps-brown-jelly',
+    'lps:closed': 'sign-lps-closed', 'sps:closed': 'sign-sps-closed',
+    'lps:browning': 'sign-lps-browning', 'anemone:browning': 'sign-anemone-browning',
+    'soft:slugs': 'sign-soft-slugs',
+    'sps:bites': 'sign-sps-bites', 'soft:bites': 'sign-soft-bites', 'anemone:bites': 'sign-anemone-bites',
+    'anemone:unclear': 'sign-anemone-unclear',
+  },
+  conditions: {
+    bleaching: ['cond-bleaching', 'sign-lps-bleach', 'sign-anemone-bleach'],
+    'alk-swing': ['cond-alk-swing', 'sign-lps-closed', 'sign-lps-peeling'],
+    'high-nutrients': ['cond-high-nutrients', 'sign-browning', 'sign-lps-browning'],
+    'low-nutrients': ['cond-low-nutrients'],
+    rtn: ['cond-rtn', 'sign-peeling'],
+    stn: ['cond-stn'],
+    'brown-jelly': ['cond-brown-jelly', 'sign-brown-jelly', 'sign-sps-brown-jelly'],
+    'light-shock': ['cond-light-shock'],
+    'flow-placement': ['cond-flow-placement'],
+    'red-bugs': ['cond-red-bugs', 'sign-red-bugs'],
+    aefw: ['cond-aefw', 'sign-flatworms', 'sign-sps-bites'],
+    'monti-nudi': ['cond-monti-nudi', 'sign-slugs'],
+    'zoa-pests': ['cond-zoa-pests', 'sign-zoa-melt', 'sign-soft-slugs'],
+    aiptasia: ['cond-aiptasia', 'sign-aiptasia'],
+    'anemone-stress': ['cond-anemone-stress', 'sign-anemone', 'sign-anemone-unclear'],
+    nipped: ['cond-nipped', 'sign-bites', 'sign-soft-bites'],
+    'coral-normal': ['cond-coral-normal', 'sign-closed'],
+    'soft:bleaching': ['sign-soft-bleach', 'cond-bleaching'],
+    'lps:bleaching': ['sign-lps-bleach', 'cond-bleaching'],
+    'anemone:bleaching': ['sign-anemone-bleach', 'cond-bleaching'],
+    'sps:brown-jelly': ['sign-sps-brown-jelly', 'cond-brown-jelly'],
+    'lps:high-nutrients': ['sign-lps-browning', 'cond-high-nutrients'],
+    'anemone:high-nutrients': ['sign-anemone-browning', 'cond-high-nutrients'],
+    'soft:nipped': ['sign-soft-bites', 'cond-nipped'],
+    'anemone:nipped': ['sign-anemone-bites', 'cond-nipped'],
+  },
+};
+
 const mapValues = (obj, fn) => Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, fn(v)]));
+const build = (set, pic) => ({
+  kinds: mapValues(set.kinds, pic),
+  signs: mapValues(set.signs, pic),
+  conditions: mapValues(set.conditions, ids => ids.map(pic)),
+});
 
 export const REEF_IMAGES = {
-  coral: { kinds: {}, signs: {}, conditions: {} },
-  invert: {
-    kinds: mapValues(INVERT_SET.kinds, pic),
-    signs: mapValues(INVERT_SET.signs, pic),
-    conditions: mapValues(INVERT_SET.conditions, ids => pics(...ids)),
-  },
+  coral: build(CORAL_SET, coralPic),
+  invert: build(INVERT_SET, invertPic),
 };
 
 // Library/detail slots per reef entry. Filled from conditions[id] in order; a
