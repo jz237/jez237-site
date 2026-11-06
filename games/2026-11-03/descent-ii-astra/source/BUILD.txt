@@ -908,3 +908,33 @@ the GPU atlas on level changes. Concealed doors do not reveal extra hardware.
 No changes to AI, movement, controls, native collision, triggers, locks, sounds,
 music, weapons or level data. Added renderer includes are installed by
 prepare_engine.py; engine.patch remains based on pinned upstream DXX-Redux.
+
+Mission-driven spectator pilot (pyre39)
+
+The live demo retains a persistent mission through fights and short local
+supply stops. It seeks keys and usable linked switches, navigates to the
+reactor, then crosses the real native exit trigger. A separate potential-gate
+route identifies prerequisites without permitting flight through locked doors.
+Unshootable/used overlays are excluded; shootable switches use their original
+texture mask to select an actual panel point. Fly-through triggers are crossed.
+Optional supplies cannot continuously replace the mission. Key approaches only
+time out locally, not while travelling a winding route. Low energy can prompt
+a visit to the native recharge room. There is no automatic lost-route level skip.
+
+Enemy acquisition still requires recent main-cockpit rendered visibility and
+native line-of-sight. Every primary barrel and missile launch lane is checked
+against actual geometry. Offset-barrel aiming avoids straddling small targets.
+Partial visibility does not authorize firing into an occluding corner. Blocked
+lanes prompt translation toward clearance; an unproductive engagement is briefly
+deferred so the pilot can resume its route. Swept-hull portal approaches avoid
+cutting across ledges. Original smooth rotational control and upright reference
+are retained. Telemetry distinguishes native completion from manual Next mine.
+
+Visible reactor guardians are handled using their native weapon immunities.
+Rear-armored guardians prompt a flanking approach. Last-seen rooms are remembered
+briefly; hidden/cloaked enemies do not supply live locations or firing permission.
+
+No changes to manual flight controls, physics, weapons, damage, collision,
+levels, triggers, keys, sounds, music or rendering. The existing optional full
+demo arsenal remains user-selectable. Test-only scenario exports are excluded
+from the shipping engine. engine.patch is based on pinned upstream DXX-Redux.

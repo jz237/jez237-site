@@ -5,6 +5,8 @@
 #include "powerup.h"
 #include "robot.h"
 #include "fuelcen.h"
+#include "rle.h"
+extern int door_is_wall_switched(int wall_num);
 int astra_auto_enabled(void){return EM_ASM_INT(return !!Module.autopilot);}
 void astra_auto_pause_frame(void){
     static int paused;
@@ -13,6 +15,7 @@ void astra_auto_pause_frame(void){
     if(!want&&paused){start_time();paused=0;}
 }
 static int aa_level=-999,aa_segment=-1,aa_goal=-1,aa_object=-1,aa_wall=-1,aa_mode,aa_route_mode;
+static int aa_graph_generation;
 static int aa_dist[MAX_SEGMENTS],aa_parent[MAX_SEGMENTS],aa_queue[MAX_SEGMENTS],aa_visits[MAX_SEGMENTS];
 static fix64 aa_ignore[MAX_OBJECTS],aa_wall_seen[MAX_WALLS],aa_next,aa_stuck_since,aa_level_since,aa_dead_since,aa_status_next;
 static vms_vector aa_last,aa_escape_goal;
@@ -123,6 +126,7 @@ static int aa_pass(int seg,int side){
     return d->keys==KEY_NONE || !d->keys || (Players[Player_num].flags&d->keys)==d->keys;
 }
 static void aa_graph(void){
+    aa_graph_generation++;
     for(int i=0;i<=Highest_segment_index;i++){aa_dist[i]=-1;aa_parent[i]=-1;}
     int start=ConsoleObject->segnum,a=0,b=0;aa_dist[start]=0;aa_queue[b++]=start;
     while(a<b){int seg=aa_queue[a++];for(int side=0;side<6;side++){
@@ -181,39 +185,219 @@ static fix64 aa_route_sample,aa_progress_time,aa_loop_next,aa_detour_until,aa_to
 static int aa_detour_goal=-1,aa_loop_count,aa_progress_rooms,aa_progress_kills,aa_progress_pickups;
 static int aa_progress_target=-1,aa_progress_signature;static fix aa_progress_health;
 
-static void aa_plan(void){
-    int previous=aa_object,previous_wall=aa_wall;
-    aa_graph();float best=-1;aa_goal=-1;aa_object=-1;aa_wall=-1;aa_mode=0;
-    for(int i=0;i<=Highest_object_index;i++){
-        object *o=&Objects[i];int seg=o->segnum;
-        if(seg<0||seg>Highest_segment_index||aa_dist[seg]<0||o->flags&OF_SHOULD_BE_DEAD||(aa_ignore[i]>GameTime64&&aa_ignore_signature[i]==o->signature))continue;
-        float weight=0;
-        if(o->type==OBJ_POWERUP)weight=aa_pickup_need(&Players[Player_num],o,GameTime64);
-        if(o->type==OBJ_HOSTAGE)weight=65;
-        if(o->type==OBJ_ROBOT&&aa_can_see(i))weight=aa_threat(i)?650:85;
-        if(o->type==OBJ_CNTRLCEN&&!Control_center_destroyed&&aa_can_see(i))weight=GameTime64-aa_level_since>i2f(180)?120:45;
-        if(Control_center_destroyed)weight=0;
-        float score=weight/(1+aa_dist[seg]*1.9f+aa_len(&o->pos,&ConsoleObject->pos)*.012f);
-        if(i==previous)score*=1.22f;
-        if(score>best&&weight>0){best=score;aa_goal=seg;aa_object=i;aa_mode=o->type==OBJ_POWERUP?1:o->type==OBJ_HOSTAGE?2:3;}
-    }
-    for(int i=0;i<Num_walls;i++){
-        wall *w=&Walls[i];if(w->trigger<0||w->trigger>=Num_triggers||aa_dist[w->segnum]<0)continue;
-        trigger *t=&Triggers[w->trigger];if(t->flags&TF_DISABLED)continue;
-        int exit=t->type==TT_EXIT || (Current_level_num<0 && t->type==TT_SECRET_EXIT);
-        int unlock=t->type==TT_OPEN_DOOR||t->type==TT_UNLOCK_DOOR||t->type==TT_OPEN_WALL||t->type==TT_ILLUSION_OFF;
-        if((!exit&&!unlock)||(exit&&!Control_center_destroyed)||(!exit&&aa_wall_seen[i]>GameTime64))continue;
-        float score=(exit?20000.f:38.f)/(1+aa_dist[w->segnum]*1.6f);
-        if(i==previous_wall)score*=1.22f;
-        if(score>best){best=score;aa_goal=w->segnum;aa_wall=i;aa_object=-1;aa_mode=exit?5:4;}
-    }
-    if(aa_goal<0){
-        for(int i=0;i<=Highest_segment_index;i++)if(aa_dist[i]>=0&&i!=ConsoleObject->segnum){
-            float score=28.f/((1+aa_dist[i])*(1+aa_visits[i]*4));
-            if(score>best){best=score;aa_goal=i;aa_object=aa_wall=-1;aa_mode=0;}
+/* A mission survives combat and supply stops. Only native keys, switches,
+ * reactor destruction and the real exit advance it; stalled tours never skip. */
+static int aa_mission=-1,aa_mission_object=-1,aa_mission_signature,aa_mission_wall=-1,aa_phase;
+static fix64 aa_supply_next,aa_supply_until,aa_mission_since;
+static int aa_goal_changes,aa_blocked_shots,aa_clear_shots,aa_reposition,aa_lane_reason;
+static fix64 aa_lane_since,aa_damage_since,aa_boss_seen;static fix aa_enemy_health;static int aa_boss_room=-1;
+static fix64 aa_combat_defer[MAX_OBJECTS];
+static int aa_combat_defer_signature[MAX_OBJECTS];
+static fix aa_engage_elapsed[MAX_OBJECTS],aa_engage_health[MAX_OBJECTS];
+static int aa_engage_signature[MAX_OBJECTS];
+static int aa_switch_shootable(int number){
+    wall *w=&Walls[number];int tm=Segments[w->segnum].sides[w->sidenum].tmap_num2&0x3fff;
+    if(!tm)return 0;int ec=TmapInfo[tm].eclip_num;
+    return ec>=0?(Effects[ec].dest_bm_num>=0&&!(Effects[ec].flags&EF_ONE_SHOT)):TmapInfo[tm].destroyed>=0;
+}
+/* Route through potential gates only to identify the next prerequisite.
+ * The flight graph itself still forbids locked and solid walls. */
+static int aa_gate_to(int destination){
+    static int generation=-1,cost[MAX_SEGMENTS],parent[MAX_SEGMENTS];static unsigned char done[MAX_SEGMENTS];
+    int start=ConsoleObject->segnum;
+    if(generation!=aa_graph_generation){
+    generation=aa_graph_generation;memset(done,0,sizeof done);
+    for(int i=0;i<=Highest_segment_index;i++){cost[i]=1000000;parent[i]=-1;}
+    cost[start]=0;
+    for(int step=0;step<=Highest_segment_index;step++){
+        int room=-1;for(int i=0;i<=Highest_segment_index;i++)if(!done[i]&&(room<0||cost[i]<cost[room]))room=i;
+        if(room<0||cost[room]>=1000000)break;done[room]=1;
+        for(int side=0;side<6;side++){
+            int child=Segments[room].children[side];if(child<0)continue;
+            int w=Segments[room].sides[side].wall_num,extra=aa_pass(room,side)?1:50;
+            if(extra>1&&(w<0||(Walls[w].type!=WALL_DOOR&&door_is_wall_switched(w)<0)))continue;
+            if(cost[child]>cost[room]+extra){cost[child]=cost[room]+extra;parent[child]=room;}
         }
     }
-    if(!Control_center_destroyed&&aa_detour_goal>=0&&GameTime64<aa_detour_until&&aa_dist[aa_detour_goal]>=0){aa_goal=aa_detour_goal;aa_object=aa_wall=-1;aa_mode=0;}
+    }
+    int gate=-1,n=0;while(destination>=0&&destination!=start&&parent[destination]>=0&&n++<MAX_SEGMENTS){
+        int from=parent[destination];for(int side=0;side<6;side++)if(Segments[from].children[side]==destination&&!aa_pass(from,side))gate=Segments[from].sides[side].wall_num;
+        destination=from;
+    }
+    return gate;
+}
+static int aa_required_gate(void){
+    for(int i=0;i<=Highest_object_index;i++)if(Objects[i].type==OBJ_CNTRLCEN&&!(Objects[i].flags&(OF_EXPLODING|OF_SHOULD_BE_DEAD)))return aa_gate_to(Objects[i].segnum);
+    return -1;
+}
+static int aa_trigger_links_gate(int number,int gate){
+    if(gate<0)return 1;trigger *t=&Triggers[Walls[number].trigger];wall *g=&Walls[gate];
+    int other=Segments[g->segnum].children[g->sidenum];
+    for(int i=0;i<t->num_links;i++)if((t->seg[i]==g->segnum&&t->side[i]==g->sidenum)||
+        (other>=0&&t->seg[i]==other&&Segments[other].children[t->side[i]]==g->segnum))return 1;
+    return 0;
+}
+static int aa_trigger_needed(int number){
+    wall *w=&Walls[number];if(w->trigger<0||w->trigger>=Num_triggers)return 0;
+    trigger *t=&Triggers[w->trigger];if(t->flags&TF_DISABLED)return 0;
+    if(!(WALL_IS_DOORWAY(&Segments[w->segnum],w->sidenum)&WID_FLY_FLAG)&&!aa_switch_shootable(number))return 0;
+    if(t->type!=TT_OPEN_DOOR&&t->type!=TT_UNLOCK_DOOR&&t->type!=TT_OPEN_WALL&&t->type!=TT_ILLUSION_OFF)return 0;
+    for(int n=0;n<t->num_links;n++){
+        int seg=t->seg[n],side=t->side[n];if(seg<0||seg>Highest_segment_index||side<0||side>5)continue;
+        int wi=Segments[seg].sides[side].wall_num;if(wi<0)continue;wall *link=&Walls[wi];
+        if(t->type==TT_UNLOCK_DOOR){if((link->flags&WALL_DOOR_LOCKED)||(link->keys!=KEY_NONE&&link->keys))return 1;}
+        else if(!(WALL_IS_DOORWAY(&Segments[seg],side)&WID_FLY_FLAG)&&!aa_pass(seg,side))return 1;
+    }
+    return 0;
+}
+static void aa_switch_point(int number,vms_vector *point){
+    wall *w=&Walls[number];segment *seg=&Segments[w->segnum];int side=w->sidenum;
+    compute_center_point_on_side(point,seg,side);if(!aa_switch_shootable(number))return;
+    int texture=seg->sides[side].tmap_num2,tm=texture&0x3fff;
+    PIGGY_PAGE_IN(Textures[tm]);grs_bitmap *bm=&GameBitmaps[Textures[tm].index];
+    if(bm->bm_flags&BM_FLAG_RLE)bm=rle_expand_texture(bm);
+    if(!bm->bm_data)return;
+    int verts[4];get_side_verts(verts,w->segnum,side);float best=1e20f;
+    for(int j=0;j<9;j++)for(int i=0;i<9;i++){
+        float x=(i+1)/10.f,y=(j+1)/10.f;vms_vector sample={0};
+        vm_vec_scale_add2(&sample,&Vertices[verts[0]],fl2f((1-x)*(1-y)));vm_vec_scale_add2(&sample,&Vertices[verts[1]],fl2f(x*(1-y)));
+        vm_vec_scale_add2(&sample,&Vertices[verts[2]],fl2f(x*y));vm_vec_scale_add2(&sample,&Vertices[verts[3]],fl2f((1-x)*y));
+        fix u,v;find_hitpoint_uv(&u,&v,NULL,&sample,seg,side,0);
+        int px=((unsigned)f2i(u*bm->bm_w))%bm->bm_w,py=((unsigned)f2i(v*bm->bm_h))%bm->bm_h,t;
+        switch(texture&0xc000){case 0x4000:t=py;py=px;px=bm->bm_w-t-1;break;case 0x8000:py=bm->bm_h-py-1;px=bm->bm_w-px-1;break;case 0xc000:t=px;px=py;py=bm->bm_h-t-1;break;}
+        if(bm->bm_data[py*bm->bm_w+px]==TRANSPARENCY_COLOR)continue;
+        float score=(x-.5f)*(x-.5f)+(y-.5f)*(y-.5f);if(score<best){best=score;*point=sample;}
+    }
+}
+static int aa_object_available(int i){
+    return i>=0&&i<=Highest_object_index&&Objects[i].type!=OBJ_NONE&&!(Objects[i].flags&(OF_SHOULD_BE_DEAD|OF_EXPLODING))&&
+        !(aa_ignore[i]>GameTime64&&aa_ignore_signature[i]==Objects[i].signature);
+}
+typedef struct aa_objective {int room,object,wall,phase,cost;} aa_objective;
+static unsigned char aa_dependency_visiting[MAX_WALLS];static int aa_dependency_budget;
+static int aa_resolve_room(int room,int object,int wallno,int phase,int depth,aa_objective *out);
+static int aa_resolve_gate(int gate,int depth,aa_objective *out){
+    if(gate<0||gate>=Num_walls||depth>12||aa_dependency_visiting[gate]||--aa_dependency_budget<0)return 0;
+    aa_dependency_visiting[gate]=1;wall *w=&Walls[gate];int found=0;aa_objective best={.cost=1000000},candidate;
+    int missing=w->keys&~Players[Player_num].flags&14;
+    if(missing)for(int i=0;i<=Highest_object_index;i++){
+        object *o=&Objects[i];if(!aa_object_available(i)||o->type!=OBJ_POWERUP||o->id<POW_KEY_BLUE||o->id>POW_KEY_GOLD||!(missing&(2<<(o->id-POW_KEY_BLUE))))continue;
+        if(aa_resolve_room(o->segnum,i,-1,1,depth+1,&candidate)&&candidate.cost<best.cost){best=candidate;found=1;}
+    }
+    for(int i=0;i<Num_walls;i++){
+        wall *source=&Walls[i];if(source->trigger<0||source->trigger>=Num_triggers||aa_wall_seen[i]>GameTime64)continue;
+        trigger *t=&Triggers[source->trigger];if(t->flags&TF_DISABLED)continue;
+        if(t->type!=TT_OPEN_DOOR&&t->type!=TT_UNLOCK_DOOR&&t->type!=TT_OPEN_WALL&&t->type!=TT_ILLUSION_OFF)continue;
+        if(!aa_trigger_links_gate(i,gate))continue;
+        if(aa_trigger_needed(i)){
+            if(aa_resolve_room(source->segnum,-1,i,4,depth+1,&candidate)&&candidate.cost<best.cost){best=candidate;found=1;}
+        }else if(!(WALL_IS_DOORWAY(&Segments[source->segnum],source->sidenum)&WID_FLY_FLAG)&&!aa_switch_shootable(i)){
+            /* Some triggers live on a sealed passage. Open that passage first,
+             * instead of firing at its inert face or abandoning the puzzle. */
+            if(aa_resolve_gate(i,depth+1,&candidate)&&candidate.cost<best.cost){best=candidate;found=1;}
+        }
+    }
+    aa_dependency_visiting[gate]=0;if(found)*out=best;return found;
+}
+static int aa_resolve_room(int room,int object,int wallno,int phase,int depth,aa_objective *out){
+    if(room<0||room>Highest_segment_index||depth>12)return 0;
+    if(aa_dist[room]>=0){*out=(aa_objective){room,object,wallno,phase,aa_dist[room]+depth*3};return 1;}
+    return aa_resolve_gate(aa_gate_to(room),depth+1,out);
+}
+static void aa_mission_set(int room,int object,int wall,int phase){
+    if(room!=aa_mission||object!=aa_mission_object||wall!=aa_mission_wall||phase!=aa_phase){aa_goal_changes++;aa_mission_since=GameTime64;}
+    aa_mission=room;aa_mission_object=object;aa_mission_wall=wall;aa_phase=phase;
+    if(object>=0)aa_mission_signature=Objects[object].signature;
+}
+static void aa_plan(void){
+    aa_graph();player *p=&Players[Player_num];int current=ConsoleObject->segnum;
+    int valid=aa_mission>=0&&aa_dist[aa_mission]>=0;
+    if(aa_mission_object>=0)valid=valid&&aa_object_available(aa_mission_object)&&Objects[aa_mission_object].signature==aa_mission_signature;
+    if(aa_phase==1&&valid)valid=aa_pickup_need(p,&Objects[aa_mission_object],GameTime64)>0;
+    if(aa_phase==4&&valid)valid=aa_trigger_needed(aa_mission_wall)&&aa_wall_seen[aa_mission_wall]<=GameTime64;
+    if(aa_phase==0&&current==aa_mission){vms_vector c;compute_segment_center(&c,&Segments[current]);if(aa_len(&c,&ConsoleObject->pos)<9)valid=0;}
+    if(aa_phase==6&&p->energy>=i2f(95))valid=0;
+    if(aa_phase==11&&(GameTime64-aa_boss_seen>i2f(8)||aa_boss_room<0))valid=0;
+    if(aa_phase==5&&!Control_center_destroyed)valid=0;
+    if(Control_center_destroyed&&aa_phase!=5)valid=0;
+    int reactor=-1;
+    if(!Control_center_destroyed)for(int i=0;i<=Highest_object_index;i++)if(aa_object_available(i)&&Objects[i].type==OBJ_CNTRLCEN&&aa_dist[Objects[i].segnum]>=0){
+        if(reactor<0||aa_dist[Objects[i].segnum]<aa_dist[Objects[reactor].segnum])reactor=i;
+    }
+    /* Reachable reactor takes precedence over further exploration. Emergency
+     * energy recovery is retained until recharged, rather than oscillating. */
+    if(reactor>=0&&aa_phase!=3&&aa_phase!=6)valid=0;
+    if(reactor<0&&aa_boss_room>=0&&GameTime64-aa_boss_seen<i2f(8)&&aa_phase==0)valid=0;
+    if(!valid){
+        int goal=-1,obj=-1,wallno=-1,phase=0;float best=1e20f;int gate=Control_center_destroyed?-1:aa_required_gate();
+        if(Control_center_destroyed){
+            for(int i=0;i<Num_walls;i++){
+                wall *w=&Walls[i];if(w->trigger<0||w->trigger>=Num_triggers||aa_dist[w->segnum]<0)continue;
+                trigger *t=&Triggers[w->trigger];if(t->flags&TF_DISABLED)continue;
+                if(t->type!=TT_EXIT&&!(Current_level_num<0&&t->type==TT_SECRET_EXIT))continue;
+                float cost=aa_dist[w->segnum];if(cost<best){best=cost;goal=w->segnum;wallno=i;phase=5;}
+            }
+        }else if(reactor>=0){goal=Objects[reactor].segnum;obj=reactor;phase=3;}
+        if(goal<0&&!Control_center_destroyed){
+            aa_objective step,chosen={.cost=1000000};aa_dependency_budget=64;memset(aa_dependency_visiting,0,sizeof aa_dependency_visiting);
+            /* Resolve reactor -> required key -> its gate -> its switch as a
+             * chain. Unrelated optional switches are not equivalent progress. */
+            for(int i=0;i<=Highest_object_index;i++)if(aa_object_available(i)&&Objects[i].type==OBJ_CNTRLCEN){
+                if(aa_resolve_room(Objects[i].segnum,i,-1,3,0,&step)&&step.cost<chosen.cost)chosen=step;
+            }
+            if(chosen.cost==1000000)for(int i=0;i<=Highest_object_index;i++){
+                object *o=&Objects[i];if(!aa_object_available(i)||o->type!=OBJ_POWERUP||o->id<POW_KEY_BLUE||o->id>POW_KEY_GOLD||!aa_pickup_need(p,o,GameTime64))continue;
+                if(aa_resolve_room(o->segnum,i,-1,1,0,&step)&&step.cost<chosen.cost)chosen=step;
+            }
+            if(chosen.cost<1000000){goal=chosen.room;obj=chosen.object;wallno=chosen.wall;phase=chosen.phase;}
+        }
+        if(goal<0&&!Control_center_destroyed){
+            /* Keys and useful switch links unlock new portions of the mine.
+             * Enemy locations are never consulted by this route planner. */
+            for(int i=0;i<=Highest_object_index;i++){
+                object *o=&Objects[i];if(!aa_object_available(i)||o->type!=OBJ_POWERUP||o->id<POW_KEY_BLUE||o->id>POW_KEY_GOLD||!aa_pickup_need(p,o,GameTime64)||aa_dist[o->segnum]<0)continue;
+                float cost=aa_dist[o->segnum]+aa_len(&o->pos,&ConsoleObject->pos)*.01f;
+                if(gate>=0&&(Walls[gate].keys&(2<<(o->id-POW_KEY_BLUE))))cost-=1000;
+                if(cost<best){best=cost;goal=o->segnum;obj=i;phase=1;}
+            }
+            for(int i=0;i<Num_walls;i++)if(aa_dist[Walls[i].segnum]>=0&&aa_wall_seen[i]<=GameTime64&&aa_trigger_needed(i)){
+                float cost=aa_dist[Walls[i].segnum]+2;
+                if(!aa_trigger_links_gate(i,gate))cost+=100;
+                if(cost<best){best=cost;goal=Walls[i].segnum;obj=-1;wallno=i;phase=4;}
+            }
+        }
+        if(goal<0&&!Control_center_destroyed&&aa_boss_room>=0&&GameTime64-aa_boss_seen<i2f(8)&&aa_dist[aa_boss_room]>=0){goal=aa_boss_room;phase=11;}
+        if(goal<0){
+            best=-1;
+            for(int i=0;i<=Highest_segment_index;i++)if(aa_dist[i]>=0&&i!=current){
+                float score=(aa_visits[i]?1.f/(1+aa_visits[i]):100.f)/(1+aa_dist[i]*.15f);
+                if(score>best){best=score;goal=i;obj=wallno=-1;phase=0;}
+            }
+        }
+        aa_mission_set(goal,obj,wallno,phase);
+    }
+    if(!Control_center_destroyed&&p->energy<i2f(18)&&aa_phase!=6){
+        int fuel=-1;for(int i=0;i<=Highest_segment_index;i++)if(aa_dist[i]>=0&&Segment2s[i].special==SEGMENT_IS_FUELCEN&&(fuel<0||aa_dist[i]<aa_dist[fuel]))fuel=i;
+        if(fuel>=0)aa_mission_set(fuel,-1,-1,6);
+    }
+    int previous=aa_object;aa_goal=aa_mission;aa_object=aa_phase==1?aa_mission_object:-1;aa_wall=aa_mission_wall;
+    aa_mode=aa_phase==6?9:aa_phase==3?10:aa_phase;
+    /* Optional supplies are short, local stops; they cannot replace the
+     * mission repeatedly or lure the pilot back to a full death-drop pile. */
+    if(!Control_center_destroyed&&aa_phase!=6){
+        int supply=-1;float best=0;
+        if(GameTime64<aa_supply_until&&aa_object_available(previous)&&Objects[previous].type==OBJ_POWERUP&&aa_pickup_need(p,&Objects[previous],GameTime64)>0&&aa_dist[Objects[previous].segnum]>=0)supply=previous;
+        else if(GameTime64>=aa_supply_next){
+            for(int i=0;i<=Highest_object_index;i++){
+                object *o=&Objects[i];if(!aa_object_available(i)||o->type!=OBJ_POWERUP||aa_dist[o->segnum]<0||aa_dist[o->segnum]>1)continue;
+                float need=aa_pickup_need(p,o,GameTime64),distance=aa_len(&o->pos,&ConsoleObject->pos);
+                if(need<=0||distance>65)continue;
+                float score=need/(1+distance*.06f);if(score>best){best=score;supply=i;}
+            }
+            if(supply>=0){aa_supply_until=GameTime64+i2f(8);aa_supply_next=GameTime64+i2f(16);}
+        }
+        if(supply>=0){aa_goal=Objects[supply].segnum;aa_object=supply;aa_wall=-1;aa_mode=1;}
+    }
     aa_route_mode=aa_mode;aa_next=GameTime64+F1_0/2;
 }
 static int aa_sliding,aa_slide_count;
@@ -373,8 +557,44 @@ static int aa_primary_safe(int w,float distance){
     vms_vector ahead;vm_vec_scale_add(&ahead,&ConsoleObject->pos,&ConsoleObject->orient.fvec,fl2f(clearance));
     return aa_visible(&ahead,fixmul(ConsoleObject->size,fl2f(.7f)));
 }
+/* Test the native barrels and their actual forward trajectory, not the
+ * camera-to-target visibility ray. A visible wing behind a corner isn't a
+ * clear firing lane. Switch/door shots must hit the intended wall side. */
+static int aa_shot_lane(int enemy,int wallno,vms_vector *aim,int missile){
+    object *ship=ConsoleObject;int guns[4],count=0,weapon=Players[Player_num].primary_weapon;
+    if(missile){int g=Secondary_weapon_to_gun_num[Players[Player_num].secondary_weapon];guns[count++]=g;if(g==4)guns[count++]=5;}
+    else if(weapon==VULCAN_INDEX||weapon==GAUSS_INDEX||weapon==SPREADFIRE_INDEX||weapon==HELIX_INDEX)guns[count++]=6;
+    else if(weapon==OMEGA_INDEX)guns[count++]=1;
+    else {guns[count++]=0;guns[count++]=1;if(weapon==LASER_INDEX&&(Players[Player_num].flags&PLAYER_FLAGS_QUAD_LASERS)){guns[count++]=2;guns[count++]=3;}}
+    vms_matrix inverse;vm_copy_transpose_matrix(&inverse,&ship->orient);int hits=0;
+    for(int n=0;n<count;n++){
+        vms_vector offset,start,end,delta;vm_vec_rotate(&offset,&Player_ship->gun_points[guns[n]],&inverse);vm_vec_add(&start,&ship->pos,&offset);
+        fvi_info hit;fvi_query q={&ship->pos,&start,ship->segnum,F1_0/8,ship-Objects,NULL,0};
+        if(find_vector_intersection(&q,&hit)!=HIT_NONE){aa_lane_reason=1;goto blocked;}
+        int room=find_point_seg(&start,ship->segnum);if(room<0){aa_lane_reason=2;goto blocked;}
+        vm_vec_sub(&delta,aim,&start);float along=f2fl(vm_vec_dot(&delta,&ship->orient.fvec));if(along<=0){aa_lane_reason=3;goto blocked;}
+        float radius=enemy>=0?f2fl(Objects[enemy].size):0;
+        vm_vec_scale_add(&end,&start,&ship->orient.fvec,fl2f(enemy>=0?fmaxf(0,along-radius*.65f):along+8));
+        q.p0=&start;q.p1=&end;q.startseg=room;q.flags=enemy>=0?FQ_TRANSPOINT:0;
+        int result=find_vector_intersection(&q,&hit);
+        if(enemy>=0){
+            if(!aa_can_see(enemy)||!aa_visible(aim,0)||result!=HIT_NONE){aa_lane_reason=4;goto blocked;}
+            vm_vec_scale_add2(&delta,&ship->orient.fvec,-fl2f(along));
+            if(f2fl(vm_vec_mag(&delta))<radius*.85f+(missile?3:1.1f))hits++;
+        }else if(wallno>=0&&result==HIT_WALL&&hit.hit_side_seg==Walls[wallno].segnum&&hit.hit_side==Walls[wallno].sidenum)hits++;
+    }
+    if(hits){aa_lane_reason=0;aa_clear_shots++;return 1;}
+    aa_lane_reason=5;
+blocked:aa_blocked_shots++;return 0;
+}
+static int aa_weapon_effective(int info,int enemy){
+    if(!aa_hostile(enemy))return 1;
+    int boss=Robot_info[Objects[enemy].id].boss_flag-BOSS_D2;
+    if(boss<0||boss>=NUM_D2_BOSSES||Boss_invulnerable_spot[boss])return 1;
+    return !(Weapon_info[info].matter?Boss_invulnerable_matter[boss]:Boss_invulnerable_energy[boss]);
+}
 static float aa_weapon_score(int w,float distance,int enemy){
-    if(w==SUPER_LASER_INDEX||player_has_weapon(Player_num,w,0)!=HAS_ALL||!aa_primary_safe(w,distance))return -100;
+    if((enemy<0&&(w==OMEGA_INDEX||w==FUSION_INDEX))||w==SUPER_LASER_INDEX||player_has_weapon(Player_num,w,0)!=HAS_ALL||!aa_primary_safe(w,distance)||!aa_weapon_effective(Primary_weapon_to_weapon_info[w],enemy))return -100;
     float shields=enemy>=0?f2fl(Objects[enemy].shields):0,score=1;
     switch(w){
       case LASER_INDEX:score=Players[Player_num].laser_level>=MAX_LASER_LEVEL?2.35f:1.8f;break;
@@ -388,14 +608,21 @@ static float aa_weapon_score(int w,float distance,int enemy){
       case OMEGA_INDEX:score=distance<48?3.2f:1.5f;if(distance>65)score=-10;break;
     }
     if(Players[Player_num].energy<i2f(35))score+=(w==VULCAN_INDEX||w==GAUSS_INDEX)?1.5f:-1.2f;
+    if(aa_hostile(enemy)){
+        int boss=Robot_info[Objects[enemy].id].boss_flag-BOSS_D2;
+        if(boss>=0&&boss<NUM_D2_BOSSES){
+            int matter=Weapon_info[Primary_weapon_to_weapon_info[w]].matter;
+            if(matter?Boss_spews_bots_matter[boss]:Boss_spews_bots_energy[boss])score-=1.3f;
+        }
+    }
     return score;
 }
 static void aa_choose_weapon(float distance,int enemy){
     player *p=&Players[Player_num];int current=p->primary_weapon;
     int unavailable=player_has_weapon(Player_num,current,0)!=HAS_ALL;
     int unsafe=!aa_primary_safe(current,distance);
-    if(enemy<0&&!unavailable&&!unsafe)return; /* Keep a safe gun for doors/switches. */
-    int unsuitable=unsafe||(current==OMEGA_INDEX&&distance>75)||(current==FUSION_INDEX&&distance<24);
+    if(enemy<0&&!unavailable&&!unsafe&&current!=OMEGA_INDEX&&current!=FUSION_INDEX)return; /* Keep a safe gun for doors/switches. */
+    int unsuitable=unsafe||(enemy<0&&(current==OMEGA_INDEX||current==FUSION_INDEX))||!aa_weapon_effective(Primary_weapon_to_weapon_info[current],enemy)||(current==OMEGA_INDEX&&distance>75)||(current==FUSION_INDEX&&distance<24);
     if(!unavailable&&!unsuitable&&GameTime64<aa_weapon_next)return;
     float present=aa_weapon_score(current,distance,enemy),best=present;int selected=current;
     for(int w=0;w<MAX_PRIMARY_WEAPONS;w++){float score=aa_weapon_score(w,distance,enemy);if(score>best){best=score;selected=w;}}
@@ -406,6 +633,7 @@ static void aa_choose_weapon(float distance,int enemy){
 }
 
 static void aa_route_reset(void){
+    aa_mission=-1;aa_mission_object=aa_mission_wall=-1;aa_boss_room=-1;aa_boss_seen=0;aa_supply_next=aa_supply_until=0;
     aa_recent_count=aa_recent_serial=0;aa_route_sample=aa_loop_next=aa_detour_until=aa_tour_next=0;
     aa_progress_time=GameTime64;aa_detour_goal=-1;aa_loop_count=0;aa_progress_target=-1;
     aa_progress_rooms=aa_seen;aa_progress_kills=Players[Player_num].num_kills_total;aa_progress_pickups=aa_collects;
@@ -434,13 +662,11 @@ static void aa_route_watch(void){
             if(aa_recent_has(room))score*=.025f;
             if(score>best){best=score;destination=room;}
         }
-        aa_detour_goal=destination;aa_detour_until=GameTime64+i2f(35);aa_loop_next=GameTime64+i2f(35);aa_loop_count++;
+        aa_detour_goal=destination;aa_detour_until=GameTime64+i2f(35);
+        if(aa_phase==0)aa_mission_set(destination,-1,-1,0);aa_loop_next=GameTime64+i2f(35);aa_loop_count++;
         aa_next=0;aa_pick_object=-1;aa_sliding=0;aa_slide_goal=-2;
     }
-    /* A viewing tour must not circle forever when no route produces progress.
-     * Announce the fallback; it does not count as completing the mine. */
-    if(quiet>150&&aa_loop_count>=3&&!Control_center_destroyed&&!aa_tour_next)aa_tour_next=GameTime64+i2f(3);
-    EM_ASM(Module.autoNavigation=({version:33,distinct:$0,quiet:$1,reroutes:$2,detour:$3});,distinct,quiet,aa_loop_count,aa_detour_goal);
+    EM_ASM(Module.autoNavigation=({version:39,distinct:$0,quiet:$1,reroutes:$2,detour:$3});,distinct,quiet,aa_loop_count,aa_detour_goal);
 }
 
 void astra_auto_frame(void){
@@ -461,6 +687,7 @@ void astra_auto_frame(void){
         aa_weapon_next=GameTime64+i2f(8);aa_missile_next=0;aa_pending_missile=-1;aa_watch_until=0;aa_up_ready=0;
         aa_last_target=-1;aa_last_kills=Players[Player_num].num_kills_total;aa_weapon_changed=GameTime64;
         aa_arsenal_signature=-1;aa_recent_attacker=aa_combat_target=-1;memset(aa_attack_until,0,sizeof aa_attack_until);
+        memset(aa_combat_defer,0,sizeof aa_combat_defer);memset(aa_engage_signature,255,sizeof aa_engage_signature);memset(aa_engage_elapsed,0,sizeof aa_engage_elapsed);
         aa_flare_next=GameTime64+i2f(2);aa_door_flare_next=0;aa_door_flare_wall=-1;
         aa_level=Current_level_num;aa_level_since=GameTime64;aa_next=aa_status_next=0;aa_segment=-1;aa_seen=0;
         memset(aa_visits,0,sizeof aa_visits);memset(aa_ignore,0,sizeof aa_ignore);memset(aa_wall_seen,0,sizeof aa_wall_seen);
@@ -479,19 +706,18 @@ void astra_auto_frame(void){
     int seg=ConsoleObject->segnum;
     if(seg!=aa_segment){if(!aa_visits[seg])aa_seen++;aa_visits[seg]++;aa_segment=seg;aa_next=0;}
     aa_route_watch();
-    if(aa_tour_next){
-        EM_ASM(document.getElementById('autoTask').textContent='Route exhausted - touring the next mine';);
-        if(GameTime64>=aa_tour_next){EM_ASM(Module.autoNext=($0%(Module.campaign==='d2'?24:20))+1;Module.autoTourSkip=(Module.autoTourSkip||0)+1;,Current_level_num>0?Current_level_num:0);aa_tour_next=0;}
-        return;
-    }
-    if(GameTime64>=aa_next||aa_goal<0||(aa_combat_object(aa_object)&&!aa_can_see(aa_object)))aa_plan();
+    if(GameTime64>=aa_next||aa_goal<0)aa_plan();
     aa_mode=aa_route_mode;vm_vec_zero(&aa_target_velocity);
     vms_vector target;compute_segment_center(&target,&Segments[seg]);
     int door=-1;
     if(aa_goal>=0){
         if(seg==aa_goal){
             if(aa_object>=0 && Objects[aa_object].type!=OBJ_NONE)target=Objects[aa_object].pos;
-            if(aa_wall>=0)compute_center_point_on_side(&target,&Segments[seg],Walls[aa_wall].sidenum);
+            if(aa_wall>=0){
+                int side=Walls[aa_wall].sidenum;aa_switch_point(aa_wall,&target);
+                if(WALL_IS_DOORWAY(&Segments[seg],side)&WID_FLY_FLAG)
+                    vm_vec_scale_add2(&target,&Segments[seg].sides[side].normals[0],-ConsoleObject->size-i2f(8));
+            }
         }else{
             int next=aa_goal,limit=0;
             while(aa_parent[next]>=0&&aa_parent[next]!=seg&&limit++<MAX_SEGMENTS)next=aa_parent[next];
@@ -499,7 +725,15 @@ void astra_auto_frame(void){
                 compute_center_point_on_side(&target,&Segments[seg],s);
                 vms_vector beyond,dir;compute_segment_center(&beyond,&Segments[next]);vm_vec_sub(&dir,&beyond,&target);vm_vec_normalize(&dir);
                 if(!(WALL_IS_DOORWAY(&Segments[seg],s)&WID_FLY_FLAG))door=Segments[seg].sides[s].wall_num;
-                vm_vec_scale_add2(&target,&dir,door>=0?-ConsoleObject->size:i2f(7));
+                vm_vec_scale_add2(&target,&dir,door>=0?-ConsoleObject->size-i2f(2):ConsoleObject->size+i2f(2));
+                /* First center the hull on the approach side if a ledge clips
+                 * the swept crossing. Never drive blindly through a corner. */
+                if(door<0&&!aa_visible(&target,ConsoleObject->size)){
+                    vms_vector approach;compute_center_point_on_side(&approach,&Segments[seg],s);
+                    vm_vec_scale_add2(&approach,&Segments[seg].sides[s].normals[0],ConsoleObject->size+i2f(3));
+                    if(aa_visible(&approach,ConsoleObject->size))target=approach;
+                    else compute_segment_center(&target,&Segments[seg]);
+                }
                 break;
             }
         }
@@ -531,39 +765,66 @@ void astra_auto_frame(void){
             aa_pick_distance=distance;aa_pick_progress=GameTime64;aa_pick_contact=0;
         }
         if(distance<aa_pick_distance-1){aa_pick_distance=distance;aa_pick_progress=GameTime64;}
+        /* A key behind several bends is approached through portals, not along
+         * its straight-line distance. Only time out the final local approach. */
+        if(seg!=pickup->segnum){aa_pick_progress=GameTime64;aa_pick_distance=distance;}
         if(seg==pickup->segnum && distance<f2fl(ConsoleObject->size+pickup->size)+1){
             if(!aa_pick_contact)aa_pick_contact=GameTime64;
         }else aa_pick_contact=0;
         if(pickup->type!=OBJ_POWERUP || !aa_pickup_need(&Players[Player_num],pickup,GameTime64))aa_next=0;
         else if(GameTime64-aa_pick_progress>i2f(6)||(aa_pick_contact&&GameTime64-aa_pick_contact>F1_0))aa_skip_pickup(aa_object,30);
     }else aa_pick_object=-1;
-    if(aa_wall>=0 && seg==aa_goal && aa_mode==4 && aa_len(&target,&ConsoleObject->pos)<10){aa_wall_seen[aa_wall]=GameTime64+i2f(35);}
+
     /* Aim at the closest visible threat; the guide-bot is never a target. */
     int enemy=-1;float threat=0;
     for(int i=0;i<=Highest_object_index;i++){
         object *o=&Objects[i];if(o->type!=OBJ_ROBOT&&o->type!=OBJ_CNTRLCEN)continue;
         if(o->flags&(OF_SHOULD_BE_DEAD|OF_EXPLODING))continue;
         if(o->type==OBJ_ROBOT&&Robot_info[o->id].companion)continue;
-        float d=aa_len(&o->pos,&ConsoleObject->pos);if(!aa_can_see(i))continue;
-        float s=(aa_threat(i)?12.f:o->type==OBJ_CNTRLCEN?.65f:1.f)/(d+24);
+        float d=aa_len(&o->pos,&ConsoleObject->pos);if(!aa_can_see(i)||!aa_visible(&o->pos,0)||(aa_combat_defer[i]>GameTime64&&aa_combat_defer_signature[i]==o->signature))continue;
+        float s=(aa_threat(i)?12.f:o->type==OBJ_CNTRLCEN?2.f:1.f)/(d+24);
         if(i==aa_combat_target&&o->signature==aa_combat_signature)s*=1.5f;
         if(s>threat){threat=s;enemy=i;}
     }
     int locked=aa_combat_target;
     if(aa_hostile(locked) && Objects[locked].signature==aa_combat_signature &&
-       aa_can_see(locked)){
+       aa_can_see(locked)&&aa_visible(&Objects[locked].pos,0)&&aa_combat_defer[locked]<=GameTime64){
         int urgent=enemy>=0&&enemy!=locked&&aa_threat(enemy)&&
             aa_len(&Objects[enemy].pos,&ConsoleObject->pos)<22&&aa_len(&Objects[locked].pos,&ConsoleObject->pos)>65;
         if(!urgent)enemy=locked;
     }
-    if(enemy!=aa_last_target){aa_target_since=GameTime64;aa_last_target=enemy;}
+    if(enemy!=aa_last_target){aa_target_since=GameTime64;aa_last_target=enemy;aa_lane_since=0;aa_damage_since=GameTime64;aa_enemy_health=enemy>=0?Objects[enemy].shields:0;}
     aa_combat_target=enemy;if(enemy>=0){aa_combat_signature=Objects[enemy].signature;aa_last_foe=Objects[enemy].pos;}
     if(aa_pending_missile>=0&&!aa_can_see(aa_pending_target))aa_pending_missile=-1;
     float speed=Control_center_destroyed?58:52;
-    vms_vector aim=target;int attacking=0;
+    vms_vector aim=target;int attacking=0,flanking=0,searching=0;
+    if(aa_wall>=0&&seg==aa_goal&&aa_switch_shootable(aa_wall))speed=aa_len(&target,&ConsoleObject->pos)>24?20:0;
+    if(aa_phase==6&&seg==aa_goal&&aa_len(&target,&ConsoleObject->pos)<8)speed=0;
+    if((aa_phase==3||aa_phase==11)&&seg==aa_mission&&enemy<0&&aa_object<0&&aa_len(&target,&ConsoleObject->pos)<10){
+        vms_vector up=aa_up_ready?aa_up:ConsoleObject->orient.uvec,look=ConsoleObject->orient.fvec;
+        vm_vec_scale_add2(&look,&up,-vm_vec_dot(&look,&up));
+        if(vm_vec_normalize(&look)<F1_0/10)vm_vec_cross(&look,&ConsoleObject->orient.rvec,&up);
+        vm_vec_scale_add2(&look,&ConsoleObject->orient.rvec,fl2f(.24f));
+        vm_vec_scale_add2(&look,&up,fl2f(sinf((double)(GameTime64-aa_mission_since)/F1_0*.30f)*.52f));
+        vm_vec_scale_add(&aim,&ConsoleObject->pos,&look,i2f(50));speed=0;searching=1;
+    }
     if(door>=0){compute_center_point_on_side(&aim,&Segments[Walls[door].segnum],Walls[door].sidenum);aa_mode=6;}
     if(enemy>=0 && !Control_center_destroyed){
         object *foe=&Objects[enemy];aim=foe->pos;attacking=1;door=-1;flare_door=-1;
+        if(foe->type==OBJ_ROBOT&&Robot_info[foe->id].boss_flag){aa_boss_seen=GameTime64;aa_boss_room=foe->segnum;}
+        /* Preserve ineffective-engagement time across brief occlusion and
+         * target swaps; flickering visibility cannot reset it indefinitely. */
+        if(aa_engage_signature[enemy]!=foe->signature||foe->shields<aa_engage_health[enemy]-F1_0/4){
+            aa_engage_signature[enemy]=foe->signature;aa_engage_health[enemy]=foe->shields;aa_engage_elapsed[enemy]=0;
+        }
+        aa_engage_elapsed[enemy]+=FrameTime;
+        if(aa_engage_elapsed[enemy]>i2f(10)){
+            aa_combat_defer[enemy]=GameTime64+i2f(10);aa_combat_defer_signature[enemy]=foe->signature;aa_engage_elapsed[enemy]=0;
+        }
+        if(foe->shields<aa_enemy_health){aa_enemy_health=foe->shields;aa_damage_since=GameTime64;}
+        if(GameTime64-aa_damage_since>i2f(14)){
+            aa_combat_defer[enemy]=GameTime64+i2f(10);aa_combat_defer_signature[enemy]=foe->signature;
+        }
         float distance=aa_len(&aim,&ConsoleObject->pos);
         int wi=Primary_weapon_to_weapon_info[Players[Player_num].primary_weapon];
         float projectile_speed=fmaxf(55,f2fl(Weapon_info[wi].speed[Difficulty_level]));
@@ -577,7 +838,35 @@ void astra_auto_frame(void){
         vms_vector line;vm_vec_normalized_dir_quick(&line,&foe->pos,&ConsoleObject->pos);
         float closing=foe->movement_type==MT_PHYSICS?fmaxf(0,-f2fl(vm_vec_dot(&foe->mtype.phys_info.velocity,&line))):0;
         float preferred=55+fminf(18,closing*.30f),gap=distance-preferred;
+        vms_vector route_target=target;
         target=aim;speed=fabsf(gap)<7?0:aa_clamp(gap*1.3f,-24,36);aa_mode=3;
+        if(!aa_visible(&aim,0)){
+            /* Partial visibility does not authorize firing into the corner.
+             * Translate along the clear route while keeping the foe in view. */
+            target=route_target;speed=aa_visible(&target,ConsoleObject->size)?18:0;aa_reposition++;
+            if(GameTime64-aa_target_since>i2f(6)){
+                aa_combat_defer[enemy]=GameTime64+i2f(4);aa_combat_defer_signature[enemy]=foe->signature;
+            }
+        }else if(speed>0){
+            vms_vector advance;vm_vec_scale_add(&advance,&ConsoleObject->pos,&line,i2f(12));
+            if(!aa_visible(&advance,ConsoleObject->size)){target=route_target;speed=aa_visible(&target,ConsoleObject->size)?16:0;}
+        }
+        /* Observe the visible guardian's orientation and strafe toward its
+         * vulnerable rear. Never use its live location after sight is lost. */
+        int boss=foe->type==OBJ_ROBOT?Robot_info[foe->id].boss_flag-BOSS_D2:-1;
+        if(boss>=0&&boss<NUM_D2_BOSSES&&Boss_invulnerable_spot[boss]){
+            vms_vector toward;vm_vec_normalized_dir(&toward,&ConsoleObject->pos,&foe->pos);
+            extern int Boss_invulnerable_dot;
+            if(vm_vec_dot(&toward,&foe->orient.fvec)>Boss_invulnerable_dot-F1_0/8){
+                flanking=1;
+                vms_vector rear;vm_vec_scale_add(&rear,&foe->pos,&foe->orient.fvec,-i2f(55));
+                if(aa_visible(&rear,ConsoleObject->size)){target=rear;speed=24;}
+                else for(int sign=-1;sign<=1;sign+=2){
+                    vms_vector flank;vm_vec_scale_add(&flank,&ConsoleObject->pos,&ConsoleObject->orient.rvec,i2f(sign*18));
+                    if(aa_visible(&flank,ConsoleObject->size)){target=flank;speed=24;break;}
+                }
+            }
+        }
         if(foe->movement_type==MT_PHYSICS)aa_target_velocity=foe->mtype.phys_info.velocity;
         if(speed<0){vms_vector back;vm_vec_scale_add(&back,&ConsoleObject->pos,&ConsoleObject->orient.fvec,-i2f(16));if(!aa_visible(&back,ConsoleObject->size))speed=0;}
     }
@@ -593,7 +882,7 @@ void astra_auto_frame(void){
     }
     vms_vector travel_direction;float travel_distance=f2fl(vm_vec_normalized_dir(&travel_direction,&target,&ConsoleObject->pos));
     float travel_facing=f2fl(vm_vec_dot(&travel_direction,&ConsoleObject->orient.fvec));
-    int short_slide=!attacking&&!watching&&door<0&&flare_door<0&&!(aa_wall>=0&&seg==aa_goal)&&travel_distance<38&&
+    int short_slide=!searching&&!attacking&&!watching&&door<0&&flare_door<0&&!(aa_wall>=0&&seg==aa_goal)&&travel_distance<38&&
         (travel_facing>.05f||travel_distance<17)&&aa_visible(&target,fixmul(ConsoleObject->size,fl2f(.95f)));
     if(aa_slide_goal!=aa_goal||!short_slide||GameTime64>aa_slide_until)aa_sliding=0;
     if(short_slide&&!aa_sliding){
@@ -621,9 +910,22 @@ void astra_auto_frame(void){
         aa_escape_pick(target);aa_stuck_since=GameTime64;
     }
     int escaping=aa_escape_until>GameTime64;
-    if(escaping){aa_escape_move();aa_mode=7;}else aa_move(target,speed);
-    float alignment=aa_aim(aim,attacking||watching?1:door>=0||flare_door>=0||(aa_wall>=0&&seg==aa_goal)?2:0);
-    if(!escaping&&attacking&&alignment>.97f&&enemy>=0&&aa_threat(enemy)&&fabsf(speed)<30){
+    if(escaping){aa_escape_move();aa_mode=7;}else {
+        int sliding=aa_sliding;if(attacking)aa_sliding=1;
+        aa_move(target,speed);aa_sliding=sliding;
+    }
+    vms_vector shot_target=aim;
+    if(attacking||(!watching&&aa_wall>=0&&seg==aa_goal&&!(WALL_IS_DOORWAY(&Segments[seg],Walls[aa_wall].sidenum)&WID_FLY_FLAG))){
+        /* Native projectiles leave parallel, offset barrels. Centering the
+         * reticle on a small robot can send both streams past its hull. */
+        int w=Players[Player_num].primary_weapon;
+        int gun=(w==VULCAN_INDEX||w==GAUSS_INDEX||w==SPREADFIRE_INDEX||w==HELIX_INDEX)?6:w==OMEGA_INDEX?1:0;
+        if(aa_pending_missile>=0)gun=Secondary_weapon_to_gun_num[aa_pending_missile];
+        vms_matrix inverse;vms_vector muzzle;vm_copy_transpose_matrix(&inverse,&ConsoleObject->orient);
+        vm_vec_rotate(&muzzle,&Player_ship->gun_points[gun],&inverse);vm_vec_sub2(&aim,&muzzle);
+    }
+    float alignment=aa_aim(aim,attacking||watching?1:searching||door>=0||flare_door>=0||(aa_wall>=0&&seg==aa_goal)?2:0);
+    if(!escaping&&!flanking&&attacking&&alignment>.97f&&enemy>=0&&aa_threat(enemy)&&fabsf(speed)<30){
         /* A small, deliberate lateral dodge keeps the nose on the opponent.
          * Reverse only for clearance, not according to a periodic sine wave. */
         vms_vector sidepoint;vm_vec_scale_add(&sidepoint,&ConsoleObject->pos,&ConsoleObject->orient.rvec,fl2f(aa_dodge_side*12));
@@ -635,11 +937,11 @@ void astra_auto_frame(void){
             Controls.sideways_thrust_time=fl2f(aa_clamp(hold+(desired-velocity)*.14f,-1,1)*f2fl(FrameTime));
         }
     }
-    if(!watching&&(attacking||(door>=0&&Walls[door].type==WALL_BLASTABLE)||(aa_wall>=0&&seg==aa_goal&&aa_mode==4))){
+    if(!watching&&!escaping&&(attacking||(door>=0&&Walls[door].type==WALL_BLASTABLE)||(aa_wall>=0&&seg==aa_goal&&(aa_mode==4||aa_mode==5)&&!(WALL_IS_DOORWAY(&Segments[seg],Walls[aa_wall].sidenum)&WID_FLY_FLAG)))){
         if(alignment>.985f){
             float distance=enemy>=0?aa_len(&Objects[enemy].pos,&ConsoleObject->pos):aa_len(&aim,&ConsoleObject->pos);
             aa_choose_weapon(distance,enemy);
-            Controls.fire_primary_state=aa_primary_safe(Players[Player_num].primary_weapon,distance)&&(Players[Player_num].primary_weapon!=FUSION_INDEX || (GameTime64%(F1_0*3/2))<F1_0);
+            Controls.fire_primary_state=aa_shot_lane(enemy,door>=0?door:aa_wall,&shot_target,0)&&aa_primary_safe(Players[Player_num].primary_weapon,distance)&&aa_weapon_effective(Primary_weapon_to_weapon_info[Players[Player_num].primary_weapon],enemy)&&(Players[Player_num].primary_weapon!=FUSION_INDEX || (GameTime64%(F1_0*3/2))<F1_0);
             if(aa_pending_missile>=0&&(enemy!=aa_pending_target||enemy<0||Objects[enemy].signature!=aa_pending_signature))aa_pending_missile=-1;
             if(attacking&&distance>48&&alignment>.994f&&aa_pending_missile<0&&GameTime64>=aa_missile_next){
                 int tough=Objects[enemy].shields>i2f(140)&&distance>115;
@@ -647,15 +949,30 @@ void astra_auto_frame(void){
                 int smart=distance>80&&cluster>=2;
                 int order[]={smart?SMART_INDEX:distance>95?SMISSILE4_INDEX:HOMING_INDEX,HOMING_INDEX,CONCUSSION_INDEX,SMISSILE1_INDEX,MEGA_INDEX,SMART_INDEX,SMISSILE5_INDEX};
                 for(int m=0;m<7;m++){
-                    int w=order[m];if(!Players[Player_num].secondary_ammo[w]||(m>=4&&!tough))continue;
+                    int w=order[m];if(!Players[Player_num].secondary_ammo[w]||(m>=4&&!tough)||!aa_weapon_effective(Secondary_weapon_to_weapon_info[w],enemy))continue;
                     if(Players[Player_num].secondary_weapon!=w)select_weapon(w,1,0,1);
                     aa_pending_missile=w;aa_pending_target=enemy;aa_pending_signature=Objects[enemy].signature;aa_missile_ready=GameTime64+F1_0*11/10;break;
                 }
             }
             int heavy=aa_pending_missile==SMART_INDEX||aa_pending_missile==MEGA_INDEX||aa_pending_missile==SMISSILE5_INDEX;
             if(aa_pending_missile>=0&&GameTime64>=aa_missile_ready&&attacking&&enemy==aa_pending_target&&distance>(aa_pending_missile==SMART_INDEX?80:heavy?115:48)&&alignment>.994f){
-                if(Players[Player_num].secondary_weapon==aa_pending_missile)Controls.fire_secondary_state=1;
+                if(Players[Player_num].secondary_weapon==aa_pending_missile&&aa_shot_lane(enemy,-1,&shot_target,1))Controls.fire_secondary_state=1;
                 aa_pending_missile=-1;aa_missile_next=GameTime64+i2f(6);
+            }
+        }
+    }
+    if(attacking&&!watching&&!escaping&&alignment>.985f){
+        if(Controls.fire_primary_state||Controls.fire_secondary_state)aa_lane_since=0;
+        else if(!aa_lane_since)aa_lane_since=GameTime64;
+        else if(GameTime64-aa_lane_since>F1_0){
+            /* A clear camera ray may still leave a wing barrel behind a pillar.
+             * Ease toward the room's safe interior before reconsidering combat. */
+            vms_vector center;compute_segment_center(&center,&Segments[seg]);
+            if(aa_len(&center,&ConsoleObject->pos)>3&&aa_visible(&center,ConsoleObject->size)){
+                int sliding=aa_sliding;aa_sliding=1;aa_move(center,14);aa_sliding=sliding;aa_reposition++;
+            }
+            if(GameTime64-aa_lane_since>i2f(5)){
+                aa_combat_defer[enemy]=GameTime64+i2f(5);aa_combat_defer_signature[enemy]=Objects[enemy].signature;
             }
         }
     }
@@ -673,8 +990,10 @@ void astra_auto_frame(void){
     }
     extern void do_weapon_n_item_stuff(void);do_weapon_n_item_stuff();
     if(GameTime64>aa_status_next){
-        static const char *labels[]={"Exploring the mine","Collecting supplies","Rescuing hostages","Engaging hostile","Activating switch","Escaping to exit","Opening door","Finding clearance","Watching destruction"};
+        static const char *labels[]={"Exploring the mine","Collecting supplies","Rescuing hostages","Engaging hostile","Activating switch","Escaping to exit","Opening door","Finding clearance","Watching destruction","Recharging energy","Navigating to reactor","Tracking reactor guardian"};
         aa_kills=Players[Player_num].num_kills_total;
+        EM_ASM(Module.autoMission=({version:39,phase:$0,room:$1,wall:$2,changes:$3,age:$4,blockedShots:$5,clearShots:$6,reposition:$7,reactorDestroyed:!!$8,routeDistance:$9});,
+            aa_phase,aa_mission,aa_mission_wall,aa_goal_changes,(double)(GameTime64-aa_mission_since)/F1_0,aa_blocked_shots,aa_clear_shots,aa_reposition,Control_center_destroyed,aa_goal>=0?aa_dist[aa_goal]:-1);
         vms_vector travel=ConsoleObject->mtype.phys_info.velocity;float velocity=f2fl(vm_vec_mag(&travel));
         aa_facing_velocity=velocity>.05f?f2fl(vm_vec_dot(&travel,&ConsoleObject->orient.fvec))/velocity:1;
         EM_ASM(Module.autoFlight=({speed:$0,forward:$1,primary:$2,secondary:$3,energy:$4,shields:$5,version:21});,velocity,aa_facing_velocity,Players[Player_num].primary_weapon,Players[Player_num].secondary_weapon,f2fl(Players[Player_num].energy),f2fl(Players[Player_num].shields));
@@ -685,6 +1004,7 @@ void astra_auto_frame(void){
             aa_aim_error,aa_roll_error,watching,aa_watch_count,aa_switches,(double)(GameTime64-aa_weapon_changed)/F1_0,(double)(GameTime64-aa_target_since)/F1_0,f2fl(vm_vec_mag(&ConsoleObject->mtype.phys_info.rotvel))*360);
         EM_ASM(Module.autoLevel=({version:32,pitch:$0,cruising:!!$1,door:$2});,aa_cruise_pitch,!attacking&&!watching&&door<0&&flare_door<0,flare_door);
         EM_ASM(Module.autoSlide=({active:!!$0,count:$1,requested:$2,forward:$3});,aa_sliding,aa_slide_count,aa_drive_intent,travel_facing);
+        EM_ASM(Module.autoLane=({reason:$0,blockedFor:$1});,aa_lane_reason,aa_lane_since?(double)(GameTime64-aa_lane_since)/F1_0:0);
         EM_ASM(Module.autoRecovery=({active:!!$0,count:$1,attempts:$2,stalled:$3});,escaping,aa_escape_count,aa_recover,(double)(GameTime64-aa_stuck_since)/F1_0);
         int needed=aa_object>=0&&Objects[aa_object].type==OBJ_POWERUP?(int)aa_pickup_need(&Players[Player_num],&Objects[aa_object],GameTime64):-1;
         EM_ASM(Module.autoPickup=({id:$0,need:$1,rejected:$2,deaths:$3});,needed>=0?Objects[aa_object].id:-1,needed,aa_pick_rejected,aa_deaths);
