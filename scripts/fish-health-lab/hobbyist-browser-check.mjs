@@ -152,7 +152,7 @@ try {
     assert.equal(new URL(await page.locator(`#results-content a[data-treatment="${id}"]`).getAttribute('href')).hash,hash);
     await visitorCopy(page);
     await page.locator('.result-focus .result-image').click(); await visitorCopy(page);
-    assert.equal(await page.locator('#detail-content .ig-closeups img, #detail-content .more-sheets img').count(), 6);
+    assert.equal(await page.locator('#detail-content .ig-closeups img, #detail-content .more-sheets img').count(), 10);
     await visitorCopy(page);
     await page.keyboard.press('Escape');
   }

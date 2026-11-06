@@ -171,7 +171,7 @@ try {
   await page.locator('.result-focus .result-image').click();
   // Library visual guide (Nov 6 2026): four numbered close-ups + the two remaining full sheets, each enlargeable.
   assert.equal(await page.locator('#detail-content .ig-closeups .ig-zoom').count(),4);
-  assert.equal(await page.locator('#detail-content .more-sheets [data-sheet]').count(),2);
+  assert.equal(await page.locator('#detail-content .more-sheets [data-sheet]').count(),6);
   for (const zoom of await page.locator('#detail-content .ig-closeups .ig-zoom, #detail-content .more-sheets [data-sheet]').all()) {
     await zoom.click();
     await page.locator('#atlas-full').evaluate(img=>img.decode()); await page.keyboard.press('Escape');
@@ -191,7 +191,10 @@ try {
   for(const [sign,id] of [['dust','velvet-fresh'],['fuzz','water-mold']]) {
     await begin(page,'fresh',sign); await next(page);
     await page.locator('.result-focus .result-image').click();
-    const sheets = page.locator('#detail-content .ig-closeups img, #detail-content .more-sheets img');
+    // Photo close-ups like every other page; the original sheets follow as "Reference sheets".
+    assert.equal(await page.locator('#detail-content .ig-closeups img').count(),4);
+    for (const img of await page.locator('#detail-content .ig-closeups img').all()) { await img.evaluate(i=>i.decode()); assert.match(await img.getAttribute('src'),/library\/lib-/); }
+    const sheets = page.locator('#detail-content .more-sheets img');
     assert.equal(await sheets.count(),6);
     for (const img of await sheets.all()) { await img.evaluate(i=>i.decode()); assert.match(await img.getAttribute('src'),/conditions\//); }
     for (const zoom of await page.locator('#detail-content .ig-closeups .ig-zoom, #detail-content .more-sheets [data-sheet]').all()) {

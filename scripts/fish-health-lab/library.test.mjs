@@ -32,8 +32,8 @@ test('the fish-type strip shows each kind of fish once, in the fish-step order, 
 
 test('library close-ups match the receipt: content-hashed, unresized, published state', () => {
   assert.equal(receipt.requestedModel, 'openai/gpt-image-2.6-sunburst');
-  assert.equal(receipt.assets.length, 84);
-  assert.equal(Object.keys(CROPS).length, 84);
+  assert.equal(receipt.assets.length, 96); // 84 + ich, velvet and cottony growth in the same photo style
+  assert.equal(Object.keys(CROPS).length, 96);
   for (const a of receipt.assets) {
     assert.equal(CROPS[a.id].key, a.r2Key);
     assert.ok(a.r2Key.endsWith(`-${a.sha256.slice(0, 12)}.jpg`));

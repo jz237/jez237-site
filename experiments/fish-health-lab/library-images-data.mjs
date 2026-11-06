@@ -591,5 +591,89 @@ export const CROPS = {
     "height": 362,
     "alt": "AI illustration: Discus with small pits along its lateral line.",
     "caption": "Pits along the side"
+  },
+  "lib-ich-fresh-1": {
+    "key": "experiments/fish-health-lab/library/lib-ich-fresh-1-edb33211bbdd.jpg",
+    "width": 362,
+    "height": 362,
+    "alt": "AI illustration: Betta fins covered in small white salt-grain dots.",
+    "caption": "Salt-grain dots on the fins"
+  },
+  "lib-ich-fresh-2": {
+    "key": "experiments/fish-health-lab/library/lib-ich-fresh-2-272f4308672b.jpg",
+    "width": 362,
+    "height": 362,
+    "alt": "AI illustration: Goldfish body sprinkled with white salt-grain dots.",
+    "caption": "Separate grains on the body"
+  },
+  "lib-ich-fresh-3": {
+    "key": "experiments/fish-health-lab/library/lib-ich-fresh-3-9f0f51baa616.jpg",
+    "width": 362,
+    "height": 362,
+    "alt": "AI illustration: Neon tetra with just a few white dots on its fins.",
+    "caption": "Early: a few grains"
+  },
+  "lib-ich-fresh-4": {
+    "key": "experiments/fish-health-lab/library/lib-ich-fresh-4-3273b2400602.jpg",
+    "width": 362,
+    "height": 362,
+    "alt": "AI illustration: Angelfish covered in white dots, fins clamped.",
+    "caption": "Covered, fins clamped"
+  },
+  "lib-velvet-fresh-1": {
+    "key": "experiments/fish-health-lab/library/lib-velvet-fresh-1-bce945afaf5e.jpg",
+    "width": 362,
+    "height": 362,
+    "alt": "AI illustration: Betta with fine gold dust shimmering on its skin.",
+    "caption": "Gold dust under side light"
+  },
+  "lib-velvet-fresh-2": {
+    "key": "experiments/fish-health-lab/library/lib-velvet-fresh-2-7c4d049202f3.jpg",
+    "width": 362,
+    "height": 362,
+    "alt": "AI illustration: Macro of very fine gold dust on fish skin.",
+    "caption": "Close-up: finer than salt"
+  },
+  "lib-velvet-fresh-3": {
+    "key": "experiments/fish-health-lab/library/lib-velvet-fresh-3-014c24103f72.jpg",
+    "width": 362,
+    "height": 362,
+    "alt": "AI illustration: Gourami with clamped fins and a faint gold sheen.",
+    "caption": "Clamped fins, faint sheen"
+  },
+  "lib-velvet-fresh-4": {
+    "key": "experiments/fish-health-lab/library/lib-velvet-fresh-4-b88aa0df3926.jpg",
+    "width": 362,
+    "height": 362,
+    "alt": "AI illustration: Danio breathing fast with gold dust on its head.",
+    "caption": "Fast breathing"
+  },
+  "lib-water-mold-1": {
+    "key": "experiments/fish-health-lab/library/lib-water-mold-1-d1e64ef7ccbe.jpg",
+    "width": 362,
+    "height": 362,
+    "alt": "AI illustration: Goldfish with a fluffy cotton tuft on a wound.",
+    "caption": "Cotton tuft on a wound"
+  },
+  "lib-water-mold-2": {
+    "key": "experiments/fish-health-lab/library/lib-water-mold-2-98551035b660.jpg",
+    "width": 362,
+    "height": 362,
+    "alt": "AI illustration: Macro of fine white fungal threads in the water.",
+    "caption": "Close-up: threads in the water"
+  },
+  "lib-water-mold-3": {
+    "key": "experiments/fish-health-lab/library/lib-water-mold-3-6cc60acfbe86.jpg",
+    "width": 362,
+    "height": 362,
+    "alt": "AI illustration: Betta with grey fluffy fungus on a fin edge.",
+    "caption": "On damaged fins"
+  },
+  "lib-water-mold-4": {
+    "key": "experiments/fish-health-lab/library/lib-water-mold-4-aea268890b11.jpg",
+    "width": 362,
+    "height": 362,
+    "alt": "AI illustration: Molly with a large grey-white fluffy patch.",
+    "caption": "Late: large grey patches"
   }
 };
