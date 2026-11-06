@@ -45,17 +45,17 @@ static int ss_start(const vms_vector *center,const vms_matrix *basis,float width
     glGetIntegerv(GL_VIEWPORT,ss_old_vp);glGetIntegerv(GL_FRAMEBUFFER_BINDING,&ss_old_fb);
     glActiveTexture(GL_TEXTURE0);glGetIntegerv(GL_TEXTURE_BINDING_2D,&ss_old_texture);
     ss_old_blend=glIsEnabled(GL_BLEND);ss_old_depth=glIsEnabled(GL_DEPTH_TEST);ss_old_cull=glIsEnabled(GL_CULL_FACE);ss_old_scissor=glIsEnabled(GL_SCISSOR_TEST);
-    glGetBooleanv(GL_DEPTH_WRITEMASK,&ss_old_write);glGetFloatv(GL_COLOR_CLEAR_VALUE,ss_old_clear);
+    ss_old_write=astra_depth_write;memcpy(ss_old_clear,astra_clear_value,sizeof ss_old_clear);
     glDisable(GL_BLEND);glDisable(GL_DEPTH_TEST);glDisable(GL_CULL_FACE);glDisable(GL_SCISSOR_TEST);glDepthMask(GL_FALSE);
-    glBindTexture(GL_TEXTURE_2D,ss_texture);int size=ss_quality==2?1024:512;
+    glBindTexture(GL_TEXTURE_2D,ss_texture);int size=ss_quality==2?1024:512,resized=ss_size!=size;
     if(ss_size!=size){
         ss_size=size;glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,size,size,0,GL_RGBA,GL_UNSIGNED_BYTE,NULL);
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
     }
-    glBindFramebuffer(GL_FRAMEBUFFER,ss_fbo);glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,ss_texture,0);
+    glBindFramebuffer(GL_FRAMEBUFFER,ss_fbo);if(resized)glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,ss_texture,0);
     ss_capture=1;
-    if(glCheckFramebufferStatus(GL_FRAMEBUFFER)!=GL_FRAMEBUFFER_COMPLETE){ss_failed=1;return 0;}
+    if(resized&&glCheckFramebufferStatus(GL_FRAMEBUFFER)!=GL_FRAMEBUFFER_COMPLETE){ss_failed=1;return 0;}
     glViewport(0,0,size,size);glClearColor(0,0,0,0);glClear(GL_COLOR_BUFFER_BIT);
     ss_vec(ss_center,center,1);ss_vec(ss_light,lamp,1);ss_vec(ss_right,&basis->rvec,0);ss_vec(ss_up,&basis->uvec,0);ss_vec(ss_normal,&basis->fvec,0);
     ss_width=width;ss_height=height;

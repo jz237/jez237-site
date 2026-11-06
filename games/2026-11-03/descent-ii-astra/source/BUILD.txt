@@ -969,3 +969,21 @@ blisters and animated orange fixture light confined to its native mine segment.
 Both use existing geometry, masks, depth tests and native hazard rules. The mine
 showroom gains water and lava exhibits in levels containing those surfaces.
 No new texture downloads. Manual controls and demo AI are unchanged from R41.
+
+Player destruction audio and renderer stalls (pyre43)
+
+Twelve seeded, staggered hull-failure beats accompany the existing player breakup.
+Pitch layers and a short filtered echo tail are derived from loaded Descent II
+samples, cached in bounded buffers, and played through the original SDL mixer.
+The sequence lasts approximately eight to ten seconds including the tail. The
+same seed and beat clock drive live destruction and the showroom. Native SFX
+volume, pause, stop and demo mute remain authoritative; music is unchanged.
+Seeking backwards/replaying restores the sound sequence; scrubbing is silent.
+
+Shadow passes retain all geometry, map resolutions and draw budgets. The renderer
+mirrors depth-write/clear-color state at every native writer instead of repeatedly
+querying the driver. Shadow render targets are validated when created/resized.
+Bloom uses two permanently attached ping-pong framebuffers, validated on resize.
+The same shaders, textures, samples, resolution, light and effect counts remain.
+Reference showroom screenshots are pixel-identical before and after the change.
+No changes to flight controls, demo AI, native damage, campaign data or weapons.

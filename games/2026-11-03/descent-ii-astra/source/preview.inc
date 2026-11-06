@@ -63,12 +63,16 @@ int astra_preview_frame(void)
     int timed=weapon>=0||combat>=0;
     float duration=timed?10:preview_length+(preview_profile?.20f:.85f);
     int restart=EM_ASM_INT({var r=!!Module.previewRestart;delete Module.previewRestart;return r;});
-    if(restart){astra_preview_clock=0;digi_stop_digi_sounds();EM_ASM(Module.previewPaused=false;window.astraPlayback?.sync());}
+    if(restart){preview_sound=-1;astra_preview_clock=0;digi_stop_digi_sounds();EM_ASM(Module.previewPaused=false;window.astraPlayback?.sync());}
     float seek=EM_ASM_DOUBLE({var s=Module.previewSeek;delete Module.previewSeek;return Number.isFinite(s)?s:-1;});
     int paused=EM_ASM_INT(return !!Module.previewPaused;);
     float speed=EM_ASM_DOUBLE(return Module.previewSpeed||1;);
-    astra_preview_silent=paused||seek>=0||speed!=1;
-    if(seek>=0){astra_preview_clock=fminf(duration,fmaxf(0,seek));digi_stop_digi_sounds();
+    {static int was_silent;
+        int silent=paused||seek>=0||speed!=1;
+        if(silent&&!was_silent&&astra_preview_clock<duration-.02f)digi_stop_digi_sounds();
+        astra_preview_silent=silent;was_silent=silent;
+    }
+    if(seek>=0){preview_sound=0;astra_preview_clock=fminf(duration,fmaxf(0,seek));digi_stop_digi_sounds();
         EM_ASM(Module.previewPaused=true;window.astraPlayback?.sync());}
     else if(!paused)astra_preview_clock=fminf(duration+.95f,astra_preview_clock+dt*fminf(2,fmaxf(.1f,speed)));
     float age=astra_preview_clock,seconds=age-(preview_profile?.20f:.85f);
@@ -125,12 +129,8 @@ int astra_preview_frame(void)
     }else if(!preview_profile && seconds>=0 && seconds<preview_length){
         float t=seconds/preview_length;
         astra_blast(&center,i2f(13),t,preview_seed,preview_seed%8,2);
-        static const int sounds[]={SOUND_ROBOT_DESTROYED,SOUND_BADASS_EXPLOSION,SOUND_LASER_HIT_CLUTTER,SOUND_MINE_BLEW_UP};
-        if(preview_sound<0 && !astra_preview_silent){digi_play_sample(SOUND_BADASS_EXPLOSION,F1_0*3/4);preview_sound=0;}
-        int last=-1;
-        while(preview_sound<4 && t>=astra_death_burst_time(preview_seed,preview_sound))last=preview_sound++;
-        if(!astra_preview_silent && last>=0 && t-astra_death_burst_time(preview_seed,last)<.11f)
-            digi_play_sample(sounds[(last+(preview_seed&3))%4],F1_0/2);
+        if(preview_sound<0)preview_sound=0;
+        astra_death_chain(preview_seed,t,&preview_sound,astra_preview_silent,-1,NULL);
     }
     g3_end_frame();
     extern void astra_lens(int,int,int,int);astra_lens(0,0,SWIDTH,SHEIGHT);

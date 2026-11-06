@@ -40,6 +40,9 @@ includes["antialias.inc"]="arch/ogl/astra_antialias.inc"
 includes["detonations.h"]="main/astra_detonations.h"
 includes["detonation_draw.inc"]="arch/ogl/astra_detonation_draw.inc"
 includes["streaming.inc"]="arch/ogl/astra_streaming.inc"
+includes["glstate.inc"]="arch/ogl/astra_glstate.inc"
+includes["death_chain.inc"]="main/astra_death_chain.inc"
+includes["death_mix.inc"]="arch/sdl/astra_death_mix.inc"
 for name in ["combat","combat_render","shadows","shadow_scene"]:
     includes[name+".inc"]="arch/ogl/astra_"+name+".inc"
 for name,path in includes.items():

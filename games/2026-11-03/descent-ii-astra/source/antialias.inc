@@ -19,7 +19,7 @@ static void astra_smooth_edges(void){
     }
     GLint viewport[4],active,bound,previous;GLboolean mask;
     glGetIntegerv(GL_VIEWPORT,viewport);int w=viewport[2],h=viewport[3];if(w<2||h<2)return;
-    glGetIntegerv(GL_ACTIVE_TEXTURE,&active);glActiveTexture(GL_TEXTURE0);glGetIntegerv(GL_TEXTURE_BINDING_2D,&bound);glGetIntegerv(GL_CURRENT_PROGRAM,&previous);glGetBooleanv(GL_DEPTH_WRITEMASK,&mask);
+    glGetIntegerv(GL_ACTIVE_TEXTURE,&active);glActiveTexture(GL_TEXTURE0);glGetIntegerv(GL_TEXTURE_BINDING_2D,&bound);glGetIntegerv(GL_CURRENT_PROGRAM,&previous);mask=astra_depth_write;
     if(!texture)glGenTextures(1,&texture);glBindTexture(GL_TEXTURE_2D,texture);
     if(w!=width||h!=height){
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
