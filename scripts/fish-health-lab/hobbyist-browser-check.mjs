@@ -59,16 +59,21 @@ const noFreshImages = async p => {
   // Treatment-step pictures are shared by every fish and water type.
   assert.ok(urls.every(url => /\/marine-|\/__draft-images__\/marine-|\/steps\/step-|\/fixes\/fish-step-/.test(url)), urls.join('\n'));
 };
+// "Read more" opens the source in the in-page reader pop-up (Nov 6 2026), not a new window.
 const popupClick = async (p, selector) => {
   const link = p.locator(selector).first(), href = await link.getAttribute('href');
-  const pending = p.waitForEvent('popup');
   await link.click();
-  const popup = await pending;
-  await popup.waitForURL(href);
-  await popup.waitForLoadState('domcontentloaded');
-  assert.equal(await popup.evaluate(() => window.opener === null),true);
+  await p.locator('#reader-dialog[open]').waitFor();
+  assert.equal(await p.locator('#reader-frame').getAttribute('src'), href);
+  assert.equal(await p.locator('#reader-frame').getAttribute('referrerpolicy'), 'no-referrer');
+  assert.match(await p.locator('#reader-frame').getAttribute('sandbox'), /allow-scripts/);
+  assert.doesNotMatch(await p.locator('#reader-frame').getAttribute('sandbox'), /allow-top-navigation/);
+  await p.waitForFunction(() => document.querySelector('#reader-status').hidden, null, { timeout: 30000 });
+  assert.equal(await p.locator('#reader-open').getAttribute('href'), href);
   assert.equal(p.url(), root);
-  await popup.close();
+  await p.locator('.reader-close').click();
+  assert.equal(await p.locator('#reader-dialog').evaluate(d => d.open), false);
+  await p.waitForFunction(() => document.querySelector('#reader-frame').getAttribute('src') === 'about:blank');
 };
 
 try {
@@ -111,7 +116,9 @@ try {
   assert.equal(await page.locator('#library-grid [data-condition="ich-fresh"]').count(),0);
   await page.locator('#library-grid .card-image[data-condition="popeye"]').click();
   await visitorCopy(page);
-  assert.equal(await page.locator('#detail-content img:not(.step-pic)').count(),0); // shared step pictures only
+  // Marine library: the fish strip shows saltwater fish only (Nov 6 2026 visual guide).
+  assert.ok(await page.locator('#detail-content .strip-item[data-strip-fish]').count() >= 5);
+  for (const fish of await page.locator('#detail-content .strip-item[data-strip-fish]').evaluateAll(els => els.map(e => e.dataset.stripFish))) assert.ok(['clownfish','tang','angel','wrasse','goby','damsel','dottyback'].includes(fish), fish);
   await page.keyboard.press('Escape');
   record('optional library inherits the chosen marine environment and does not leak freshwater disease galleries');
 
@@ -145,9 +152,8 @@ try {
     assert.equal(new URL(await page.locator(`#results-content a[data-treatment="${id}"]`).getAttribute('href')).hash,hash);
     await visitorCopy(page);
     await page.locator('.result-focus .result-image').click(); await visitorCopy(page);
-    for (const slot of ['overview','variations','closeup','subtle','marked','lookalikes']) {
-      await page.locator(`#detail-content [data-slot="${slot}"]`).click(); await visitorCopy(page);
-    }
+    assert.equal(await page.locator('#detail-content .ig-closeups img, #detail-content .more-sheets img').count(), 10);
+    await visitorCopy(page);
     await page.keyboard.press('Escape');
   }
   record('all three illustrated freshwater diseases offer condition-specific owner treatment links without mandatory water readings or laboratory instructions');
