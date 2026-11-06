@@ -702,3 +702,12 @@ acclimation mentions salinity; zoa handling mentions palytoxin gloves/eye protec
 Uronema plan no longer suggests lowering salinity; broad bacterial scientific names say “often”; the
 library timeline reads “How it can change” (Early/Common/Advanced, not every fish goes through every stage);
 the shrimp/crab/snail section says it is for saltwater tanks.
+
+Second Astra pass (11:35 EST) found the first fixes incomplete across views; fixed (checks `R2-*` in
+`review.test.mjs`): ich/velvet plans are rewritten (no heat step) whenever columnaris also shows, so the
+results card, care page and saved notes agree, and the care page and notes carry the guide's notes; no
+unconditional detoxifier advice (ammonia check, water plan, emergency box); `readSalinity` handles SG
+1.000–1.100 and ppt 0–70 and flags anything else as unreadable; extreme pH/temperature/salinity also go
+to the urgent banner; African cichlid swelling gets a Malawi bloat plan (metronidazole, hospital tank);
+corys/plecos see “Swollen tight all over” in the reason, urgent banner and notes. A sweep of every
+two-sign combination added notes for whole-tank + hospital plans and fast-then-feed plans.

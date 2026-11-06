@@ -148,6 +148,11 @@ const PLANS = {
   bloat: {
     steps: ['Skip feeding for 1–2 days.', 'Then feed small amounts of a skinned, cooked pea (plant-eaters) or thawed foods like daphnia.', 'Soak dry food before feeding from now on.', 'Look from above each day—if the scales start to stick out, treat it as dropsy.'],
     marine: { steps: ['Skip feeding for 1–2 days.', 'Then feed small amounts of thawed, varied foods.', 'Look from above each day—if the scales start to stick out, treat it as dropsy.'] },
+    // African cichlids: swelling is often Malawi bloat, which needs treating today.
+    african: {
+      steps: ['Act today—in African cichlids this is often Malawi bloat, and it moves fast.', `${HOSPITAL} Stop feeding.`, 'Treat with metronidazole—in food if it still eats, otherwise in the water—following the label.', 'Do a big water change in the main tank, and feed a lower-protein, plant-based diet from now on.'],
+      treatment: 'Metronidazole in a hospital tank, then a plant-based diet', recovery: 'Days to 2 weeks if caught early; it can be fatal once the fish stops eating.', medicated: true,
+    },
     treatment: 'A short fast, then fibre-rich or thawed foods',
     recovery: 'Usually a few days.',
   },
@@ -222,10 +227,10 @@ const PLANS = {
   },
 };
 
-export function carePlanFor(id, water) {
+export function carePlanFor(id, water, fishType = '') {
   const plan = PLANS[id];
   if (!plan) return null;
-  const variant = water === 'marine' && plan.marine ? plan.marine : {};
+  const variant = water === 'fresh' && fishType && plan[fishType] ? plan[fishType] : water === 'marine' && plan.marine ? plan.marine : {};
   return {
     steps: variant.steps || plan.steps,
     treatment: variant.treatment || plan.treatment,

@@ -71,3 +71,76 @@ test('ich now starts today; Uronema plan no longer suggests lowering salinity', 
   assert.equal(assessDiagnosis({ water: 'fresh', primarySign: 'dots', signs: ['dots'] }).primary.urgencyLevel, 'today');
   assert.match(carePlanFor('uronema', 'marine').steps.join(' '), /Don’t lower the salinity/);
 });
+
+// ── Second Astra review (11:35 EST): incomplete fixes. These check every view, not one message. ──
+import { buildCase, readSalinity } from '../../experiments/fish-health-lab/logic.mjs';
+import { readFileSync } from 'node:fs';
+const appSource = readFileSync(new URL('../../experiments/fish-health-lab/app.mjs', import.meta.url), 'utf8');
+
+test('R2-1: with columnaris, no ich/velvet plan says to raise the temperature — on the results, care page or notes', () => {
+  for (const spots of ['dots', 'dust']) {
+    const input = { water: 'fresh', primarySign: spots, signs: [spots, 'patch'], visualSigns: [spots, 'patch'] };
+    const d = assessDiagnosis(input);
+    for (const f of d.findings) assert.doesNotMatch([...f.plan.steps, f.plan.treatment].join(' '), /raise the temperature(?! while)|gradual heat/i, `${spots} ${f.id}`);
+    const notes = buildCase(input);
+    assert.doesNotMatch(notes.replace(/don’t raise (it|the temperature) while columnaris is active/gi, ''), /raise the temperature|gradual heat/i);
+    assert.match(notes, /Notes from the guide:[\s\S]*Don’t raise the temperature while columnaris/);
+  }
+  // Without columnaris the heat step is still there.
+  assert.match(assessDiagnosis({ water: 'fresh', primarySign: 'dots', signs: ['dots'] }).primary.plan.steps.join(' '), /Raise the temperature slowly/);
+  assert.match(appSource, /Your care plan<\/h1>\$\{urgent\}\$\{notes\}/, 'the care page shows the guide notes');
+});
+
+test('R2-2: no unconditional detoxifier advice anywhere', () => {
+  const checks = assessUrgency({ water: 'marine', ammonia: '0.5', signs: [] }).checks.join(' ');
+  assert.match(checks, /check both labels/);
+  assert.match(appSource, /detoxifier helps too—if you’re already medicating, check both labels/);
+  assert.doesNotMatch(appSource, /and add an ammonia\/nitrite detoxifier\./);
+});
+
+test('R2-3: salinity reader handles SG and ppt, and flags what it can’t read', () => {
+  const ppt = s => Math.round(readSalinity(s).ppt);
+  assert.equal(ppt('1.025'), 33); assert.equal(ppt('SG 1.026'), 34); assert.equal(ppt('35 ppt'), 35);
+  assert.ok(ppt('SG 1.060') > 70); assert.ok(ppt('1.050') > 60);
+  assert.equal(readSalinity('90 ppt').unreadable, true); assert.equal(readSalinity('abc').unreadable, true); assert.equal(readSalinity(''), null);
+  for (const s of ['SG 1.060', '1.050']) assert.match(assessUrgency({ water: 'marine', salinity: s, signs: [] }).urgent.join(), /dangerously high/, s);
+  assert.match(assessUrgency({ water: 'marine', salinity: '0 ppt', signs: [] }).urgent.join(), /dangerously low/);
+  assert.match(assessUrgency({ water: 'marine', salinity: '90 ppt', signs: [] }).checks.join(), /doesn’t look right/);
+});
+
+test('R2-4: extreme readings escalate to urgent; modest ones stay a check', () => {
+  const extreme = assessUrgency({ water: 'marine', ph: '4', temperature: '105', tempUnit: 'F', signs: [] });
+  assert.equal(extreme.urgent.length, 2); assert.match(extreme.checks.join(' '), /partial water change now/);
+  const modest = assessUrgency({ water: 'fresh', ph: '8.8', temperature: '88', tempUnit: 'F', signs: [] });
+  assert.equal(modest.urgent.length, 0); assert.equal(modest.checks.length, 2);
+  assert.equal(assessUrgency({ water: 'fresh', temperature: '35', tempUnit: 'C', signs: [] }).urgent.length, 1);
+});
+
+test('R2-5: African cichlid swelling gets the Malawi bloat plan, not a constipation fast', () => {
+  const d = assessDiagnosis({ water: 'fresh', fishType: 'african', primarySign: 'swollen', signs: ['swollen', 'appetite'], closer: 'flat' });
+  assert.equal(d.primary.urgencyLevel, 'today');
+  assert.match(d.primary.plan.steps.join(' '), /Malawi bloat[\s\S]*metronidazole/);
+  assert.doesNotMatch(d.primary.plan.steps.join(' '), /Skip feeding for 1–2 days/);
+  assert.match(d.primary.reason, /Malawi bloat/);
+  assert.match(buildCase({ water: 'fresh', fishType: 'african', primarySign: 'swollen', signs: ['swollen'], closer: 'flat' }), /metronidazole/);
+  // Other fish keep the ordinary bloat plan.
+  assert.match(assessDiagnosis({ water: 'fresh', fishType: 'goldfish', primarySign: 'swollen', signs: ['swollen'], closer: 'flat' }).primary.plan.steps[0], /Skip feeding/);
+});
+
+test('R2-6: corys and plecos: the answer, reason, urgent banner and notes use the no-scales wording', () => {
+  for (const fishType of ['cory', 'pleco']) {
+    const input = { water: 'fresh', fishType, primarySign: 'swollen', signs: ['swollen'], closer: 'pinecone' };
+    const d = assessDiagnosis(input);
+    assert.equal(d.primary.id, 'dropsy');
+    assert.doesNotMatch(d.primary.reason + d.primary.matched.join(' '), /pine ?cone|scales (stick|sticking|raised)/i, fishType);
+    assert.deepEqual(assessUrgency(input).urgent, ['Tight, all-over swelling (possible dropsy)']);
+    assert.match(buildCase(input), /What I saw: Swollen tight all over/);
+  }
+});
+
+test('R2-7: two plans that clash in order or place get a note (whole tank + hospital, fast + feed)', () => {
+  const both = assessDiagnosis({ water: 'fresh', primarySign: 'dots', signs: ['dots', 'sores'], visualSigns: ['dots', 'sores'] });
+  assert.ok(both.messages.some(m => /treat it there for both problems/.test(m)));
+  const fast = assessDiagnosis({ water: 'fresh', primarySign: 'patch', closer: 'pits', signs: ['patch', 'swollen'], visualSigns: ['patch', 'swollen'] });
+  assert.ok(fast.messages.some(m => /fast first/.test(m)));
+});
