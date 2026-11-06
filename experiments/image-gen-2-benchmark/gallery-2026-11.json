@@ -1,5 +1,109 @@
 [
   {
+    "id": "2026-11-05-factual-infographic-factual-infographic-vitiligo-loss-of-pi",
+    "title": "Factual infographic: Vitiligo — Loss of Pigment-Producing Cells",
+    "tests": "factual_subtype: medical-health-infographic; archive_slot=2026-11-05T23:20; concept=vitiligo-melanocyte-loss-skin-depigmentation; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished artwork-led medical infographic titled “VITILIGO” with subtitle “When pigment-producing cells are lost”. Elegant anatomical gouache and meticulous technical ink, warm cream canvas, deep plum lettering, copper-brown skin tones and pale lavender cellular details. Direct artwork, not a photographed poster, no grid, boxes, frames or logos. The dominant hero is a graceful realistically rendered pair of medium-dark brown hands and forearms, relaxed and dignified, with irregular sharply depigmented milky-white patches on the backs of hands and around fingers. Preserve realistic skin pores, knuckle creases, subtle veins and nails; white patches remain intact skin, not wounds, peeling or scars. No identity inference or disease caricature. A sweeping magnification opens organically into an exquisitely detailed schematic skin cross-section: an intact epidermis above the dermis, branched melanocytes along the epidermal base. Compare normal pigment production with an adjacent depigmented area containing fewer functioning melanocytes. Label “Epidermis”, “Melanocyte: pigment-producing cell”, “Melanin: skin pigment”, “Loss of working melanocytes → less pigment”. Use fine open leader lines, not detached cards. A subtle immune-cell schematic pointing toward a melanocyte is labeled “Common non-segmental vitiligo: immune attack on melanocytes”. Do not invent microscopic pathologies or show infectious organisms.\nAround the hands and cellular arc integrate readable concise explanations: “White patches often appear on both sides, including hands and face.” “Hair in affected areas may turn white.” “Extent and progression vary.” “Not an infection. Not contagious.” A brief quiet annotation: “Family history and other autoimmune conditions may be associated.” No invented prevalence or prediction of individual progression. Arrange a lower flowing care pathway with small refined sunshade, skin-exam and cream-tube studies, no brands: “Protect from sunburn: high-SPF sunscreen and sun protection.” “Assessment: skin examination; a Wood lamp may help. Thyroid testing in selected cases.” “Clinician-supervised topical treatment may help restore pigment; results vary.” “Camouflage is optional. Emotional support matters.” Do not imply that changing skin color is required, that treatment always works, or promise a cure. A calm safety footnote, no fabricated emergency: “Have new pale patches assessed — do not self-diagnose.” Final small line “General education, not a diagnosis.” Use asymmetric composition, exceptionally refined tactile tissue and skin textures, varied study scales and generous breathing room; hero hands and beautiful cellular anatomy dominate. No bibliography, URLs, doses, unsupported treatments or extra disease claims.",
+    "image": "images/2026-11-05-factual-infographic-factual-infographic-vitiligo-loss-of-pi.jpg",
+    "thumb": "thumbs/2026-11-05-factual-infographic-factual-infographic-vitiligo-loss-of-pi.webp",
+    "color": "#d8b5a7",
+    "date": "2026-11-05",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "vitiligo-melanocyte-loss-skin-depigmentation",
+      "imageSha256": "41f85ba7f222dda114007de1370d7351ad29fb8dd320d0d33fbc10e1046fc655",
+      "imageDHash": "1e84e48199e0a5ac"
+    },
+    "factualInfographic": {
+      "topic": "Vitiligo melanocyte loss and management",
+      "description": "Vitiligo pigment-cell anatomy, immune involvement, skin changes and management",
+      "sourceNote": "NIAMS https://www.niams.nih.gov/health-topics/vitiligo ; NHS https://www.nhs.uk/conditions/vitiligo/ — verified pigment-cell loss, skin changes, evaluation and supportive care. Treatment response varies.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-06T04:22:15.334415+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NIAMS",
+            "title": "Vitiligo",
+            "sourceType": "government-agency",
+            "url": "https://www.niams.nih.gov/health-topics/vitiligo"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Vitiligo",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/vitiligo/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Vitiligo is a chronic condition with pigment loss caused by loss of working melanocytes, the cells that make melanin.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "In common non-segmental vitiligo the immune system attacks melanocytes; white patches often appear on both sides, including hands and face.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Hair in affected areas can turn white; extent and progression vary.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Vitiligo is not an infection and is not contagious.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Family history and other autoimmune conditions can be associated with vitiligo.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Diagnosis uses skin examination; a Wood lamp can help distinguish pigment loss, and selected patients may need thyroid testing.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Affected skin is vulnerable to sunburn; high-SPF sunscreen and sun protection are important.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Treatment can include clinician-supervised topical medicines; camouflage is optional. Response varies and no cure is guaranteed. Support for emotional impact can help.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "New pale patches should be assessed rather than self-diagnosed.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-05-factual-infographic-factual-infographic-urinary-tract-infec",
     "title": "Factual infographic: Urinary Tract Infection — Bladder and Ascending Infection",
     "tests": "factual_subtype: medical-health-infographic; archive_slot=2026-11-05T14:20; concept=urinary-tract-bladder-ascending-infection; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
