@@ -148,3 +148,5 @@ html.reader-open{overflow:hidden}
   .reader-bar{padding:8px 8px 8px 14px;padding-top:max(8px,env(safe-area-inset-top))}
   .reader-open{font-size:12px;padding:7px 8px}
 }
+
+[tabindex="-1"]:focus{outline:none}
