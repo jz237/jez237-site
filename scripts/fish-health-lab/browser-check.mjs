@@ -126,7 +126,8 @@ try {
   assert.match(await page.locator('#results-title').innerText(),/Most likely:\s*Ich/i);
   assert.match(await page.locator('#results-content').innerText(),/hobby guide, not a vet/i);
   assert.equal(await page.locator('.result-focus .todo-card ol li').count(),5);
-  assert.equal(await page.locator('.result-focus[data-urgency="week"] .urgency-week').count(),1);
+  // Ich starts today (Nov 6 2026 review).
+  assert.equal(await page.locator('.result-focus[data-urgency="today"] .urgency-today').count(),1);
   assert.match(await page.locator('.water-nudge').innerText(),/Tested ammonia & nitrite lately\?/);
   assert.equal(await page.locator('#results-content .water-reminder').count(),0);
   await page.locator('.result-focus .result-image img').evaluate(img=>img.decode());
@@ -134,7 +135,8 @@ try {
   assert.equal(await page.locator('.alternatives .urgency-badge').count(),0);
   const velvetCard=page.locator('[data-alternative="velvet-fresh"]');
   assert.match(await velvetCard.innerText(),/Shine a flashlight from the side/);
-  assert.match(await velvetCard.locator('.alt-danger').innerText(),/Rule this out first — more dangerous/);
+  // Velvet and ich are both "Act today" now, so velvet is no longer flagged as more dangerous.
+  assert.equal(await velvetCard.locator('.alt-danger').count(),0);
   assert.equal(await velvetCard.locator('.alt-treatment').count(),0,'only the "different treatment" warning is shown; no "same steps" line (Claw review, Nov 5)');
   await page.screenshot({path:output+'/desktop-result.png',fullPage:true});
   // Compare: two pictures side by side, one check line, Close returns.
@@ -152,7 +154,7 @@ try {
   assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'velvet-fresh');
   assert.match(await page.locator('#results-title').innerText(),/Most likely:\s*Velvet/i);
   assert.equal(await page.locator('.result-focus[data-urgency="today"] .urgency-today').count(),1);
-  assert.match(await page.locator('.result-focus .todo-card').innerText(),/velvet\/copper/i);
+  assert.match(await page.locator('.result-focus .todo-card').innerText(),/velvet medication \(copper only in a hospital tank\)/i); // copper only in a hospital tank (Nov 6 review)
   assert.deepEqual(await page.locator('.alternatives [data-alternative]').evaluateAll(els=>els.map(el=>el.dataset.alternative)),['ich-fresh']);
   assert.equal(await page.locator('[data-alternative="ich-fresh"] .alt-danger').count(),0);
   assert.match(await page.locator('.result-hint').innerText(),/Your pick from the look-alikes/);
@@ -167,18 +169,18 @@ try {
   for (let i=0;i<4&&!(await page.locator('[data-step="results"]').isVisible());i++) await next(page);
   await at(page,'results');
   assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'ich-fresh');
-  record('could-also: velvet card has a look-for check, a danger line and same-steps note; Compare shows ich vs velvet with one check; tapping swaps the result (and back); changing answers drops the pick');
+  record('could-also: velvet card has a look-for check and same-steps note (no danger line: both act today); Compare shows ich vs velvet with one check; tapping swaps the result (and back); changing answers drops the pick');
   await page.locator('.result-focus .result-image').click();
-  for(const slot of ['overview','variations','closeup','subtle','marked','lookalikes']) {
-    await page.locator('#detail-content [data-slot="'+slot+'"]').click();
-    assert.equal(await page.locator('#detail-content .gallery-image img').count(),1);
-    await page.locator('#detail-content .gallery-image img').evaluate(img=>img.decode());
+  // Library visual guide (Nov 6 2026): four numbered close-ups + the two remaining full sheets, each enlargeable.
+  assert.equal(await page.locator('#detail-content .ig-closeups .ig-zoom').count(),4);
+  assert.equal(await page.locator('#detail-content .more-sheets [data-sheet]').count(),6);
+  for (const zoom of await page.locator('#detail-content .ig-closeups .ig-zoom, #detail-content .more-sheets [data-sheet]').all()) {
+    await zoom.click();
+    await page.locator('#atlas-full').evaluate(img=>img.decode()); await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#detail-dialog').isVisible(),true);
   }
-  await page.locator('#detail-content [data-enlarge-entry]').click();
-  await page.locator('#atlas-full').evaluate(img=>img.decode()); await page.keyboard.press('Escape');
-  assert.equal(await page.locator('#detail-dialog').isVisible(),true);
   await page.keyboard.press('Escape');
-  record('white-grain results reach all six preserved reference sheets one at a time; enlargement returns correctly');
+  record('white-grain results reach all six preserved reference sheets (four close-ups + two full sheets); enlargement returns correctly');
 
   for(const detail of ['dust','fuzz','patch','lumps','unclear']) {
     await begin(page,'fresh','dots',detail); await next(page);
@@ -191,12 +193,14 @@ try {
   for(const [sign,id] of [['dust','velvet-fresh'],['fuzz','water-mold']]) {
     await begin(page,'fresh',sign); await next(page);
     await page.locator('.result-focus .result-image').click();
-    for(const slot of ['overview','variations','closeup','subtle','marked','lookalikes']) {
-      await page.locator('#detail-content [data-slot="'+slot+'"]').click();
-      await page.locator('#detail-content .gallery-image img').evaluate(img=>img.decode());
-      assert.match(await page.locator('#detail-content .gallery-image img').getAttribute('src'),/conditions\//);
-      await page.locator('#detail-content [data-enlarge-entry]').click();
-      await page.locator('#atlas-full').evaluate(img=>img.decode()); await page.keyboard.press('Escape');
+    // Photo close-ups like every other page; the original sheets follow as "Reference sheets".
+    assert.equal(await page.locator('#detail-content .ig-closeups img').count(),4);
+    for (const img of await page.locator('#detail-content .ig-closeups img').all()) { await img.evaluate(i=>i.decode()); assert.match(await img.getAttribute('src'),/library\/lib-/); }
+    const sheets = page.locator('#detail-content .more-sheets img');
+    assert.equal(await sheets.count(),6);
+    for (const img of await sheets.all()) { await img.evaluate(i=>i.decode()); assert.match(await img.getAttribute('src'),/conditions\//); }
+    for (const zoom of await page.locator('#detail-content .ig-closeups .ig-zoom, #detail-content .more-sheets [data-sheet]').all()) {
+      await zoom.click(); await page.locator('#atlas-full').evaluate(img=>img.decode()); await page.keyboard.press('Escape');
     }
     await page.keyboard.press('Escape');
     await action(page,'care').click(); await at(page,'care'); await next(page); await at(page,'care-summary');
@@ -225,7 +229,8 @@ try {
   await action(page,'results').click(); await at(page,'results');
   assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'ich-fresh');
   assert.deepEqual(await page.locator('.alternatives [data-alternative]').evaluateAll(els=>els.map(el=>el.dataset.alternative)),['velvet-fresh']);
-  assert.match(await page.locator('.could-also .natural-note').innerText(),/natural markings/);
+  // Gasping was picked: no "may just be natural markings" line next to distress (Nov 6 review).
+  assert.equal(await page.locator('.could-also .natural-note').count(),0);
   record('water readings follow results; care validates numeric inputs, preserves unknowns and prioritizes distress without changing the visual comparison');
   await action(page,'case').click();
   const notes=await page.locator('#case-text').inputValue();
