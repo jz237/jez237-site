@@ -638,3 +638,12 @@ see if you can get the layout colors and design to be more like the attached pic
   (`workspace/tmp/fish-health-v3-publish-20261106/upload-verification.json`); IMAGE_SOURCE `media`.
 - Checks: `pond.test.mjs`, `medicine.test.mjs`, updated `fish-images.test.mjs`/`reef.test.mjs`, and the
   existing browser checks (reef check expects the Pond tile; front-door asset count ignores the background).
+
+## Scientific names and homepage card, 2026-11-06
+
+Jez, 09:07 EST: “Put a link to it from my homepage on jez237. Also in the diagnosis in very tiny print
+put the scientific name of the diagnosis.” `science.mjs` maps each diagnosis to its scientific/clinical
+name (*asterisks* = italic taxon; normal/placement results have none); `scienceLine()` prints it in
+small print under the result title and the reference page title (`.sci-name` in theme.css). Check:
+`science.test.mjs`. Homepage: a “Fish Health Lab” hub card after The Hidden Reef
+(`assets/home-cards/fish-health-lab-thumb-20261106.webp`, cropped from the published opening picture).

@@ -5,6 +5,7 @@ import { REEF_GROUPS, REEF_KINDS, REEF_CHANGES, REEF_CONDITIONS } from './reef-d
 import { STEP_TAGS, INVERT_WARNING, reefPlanFor } from './reef-care.mjs';
 import { assessReef, reefSignsFor, reefKindFor, reefConditionFor, ALTERNATIVE_TEXT } from './reef-logic.mjs';
 import { reefImageFor, reefSlotsFor } from './reef-images.mjs';
+import { scienceLine } from './science.mjs';
 
 export const REEF_STEPS = ['reef-kind', 'reef-signs', 'reef-changes', 'reef-results'];
 
@@ -97,7 +98,7 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
     const cards = result.alternatives.map(alternativeCard).join('');
     const natural = result.naturalNote ? `<p class="natural-note">${escape(result.naturalNote)}</p>` : '';
     const couldAlso = cards || natural ? `<section class="could-also"><h2 class="subheading">Could also be</h2>${cards ? `<p class="could-also-hint">Tap the one that looks more like yours.</p><div class="alternatives">${cards}</div>` : ''}${natural}</section>` : '';
-    $('#reef-results-content').innerHTML = `<h1 id="reef-results-title" class="question-title results-title">${first ? `<span>Most likely:</span> ${escape(first.title)}` : escape(result.title)}</h1><p class="question-hint result-hint">${where ? `${escape(where)} · ` : ''}${result.chosen ? 'Your pick from the look-alikes' : 'Our best guess from your answers'}—a hobby guide, not a vet.</p>${warning(result.warning)}${focus}${couldAlso}<button type="button" class="text-button" data-action="reef-library">${escape(groupText(state.group).all)}</button>`;
+    $('#reef-results-content').innerHTML = `<h1 id="reef-results-title" class="question-title results-title">${first ? `<span>Most likely:</span> ${escape(first.title)}` : escape(result.title)}</h1>${first ? scienceLine(first.id) : ''}<p class="question-hint result-hint">${where ? `${escape(where)} · ` : ''}${result.chosen ? 'Your pick from the look-alikes' : 'Our best guess from your answers'}—a hobby guide, not a vet.</p>${warning(result.warning)}${focus}${couldAlso}<button type="button" class="text-button" data-action="reef-library">${escape(groupText(state.group).all)}</button>`;
     goStep('reef-results');
   }
 
@@ -128,7 +129,7 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
     const c = reefConditionFor(id);
     if (!c) return;
     const scope = groupText(c.group).scope;
-    $('#detail-content').innerHTML = `<p class="eyebrow">${escape(c.kind)} · ${escape(scope)}</p><h2 id="detail-title">${escape(c.title)}</h2>${badge(c.urgency)}<p class="lead">${escape(c.summary)}</p>${c.group === 'invert' ? warning(INVERT_WARNING) : ''}${gallery(c)}<h3>What to look for</h3><ul>${c.clues.map(x => `<li>${escape(x)}</li>`).join('')}</ul><h3>Easy to confuse with</h3><p>${escape(c.distinguish)}</p>${todoCard({ ...c, plan: reefPlanFor(c.id) })}<p class="avoid"><strong>Avoid:</strong> ${escape(c.avoid)}</p>`;
+    $('#detail-content').innerHTML = `<p class="eyebrow">${escape(c.kind)} · ${escape(scope)}</p><h2 id="detail-title">${escape(c.title)}</h2>${scienceLine(c.id)}${badge(c.urgency)}<p class="lead">${escape(c.summary)}</p>${c.group === 'invert' ? warning(INVERT_WARNING) : ''}${gallery(c)}<h3>What to look for</h3><ul>${c.clues.map(x => `<li>${escape(x)}</li>`).join('')}</ul><h3>Easy to confuse with</h3><p>${escape(c.distinguish)}</p>${todoCard({ ...c, plan: reefPlanFor(c.id) })}<p class="avoid"><strong>Avoid:</strong> ${escape(c.avoid)}</p>`;
     $('#detail-dialog').showModal();
   }
 

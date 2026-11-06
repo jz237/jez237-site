@@ -6,6 +6,7 @@ import { treatmentGuideFor, openTreatmentPopup, carePlanFor } from './treatments
 import { imagesFor, imageFor, fishSetFor, FISH_TYPE_IMAGES, stepImageFor, splitStep } from './fish-images.mjs';
 import { createReef } from './reef-app.mjs';
 import { createExtras } from './extras-app.mjs';
+import { scienceLine } from './science.mjs';
 import { UI_IMAGES, IMAGE_SOURCE as UI_IMAGE_SOURCE } from './ui-images-data.mjs';
 import { MEDIA_BASE } from './fish-images-data.mjs';
 
@@ -251,7 +252,7 @@ function renderResults() {
   const natural = diagnosis.naturalNote ? `<p class="natural-note">${escape(diagnosis.naturalNote)}</p>` : '';
   const couldAlso = other || natural ? `<section class="could-also"><h2 class="subheading">Could also be</h2>${other ? `<p class="could-also-hint">Tap the one that looks more like your fish.</p><div class="alternatives">${other}</div>` : ''}${natural}</section>` : '';
   const where = [ {fresh:'Freshwater',marine:'Saltwater'}[input.water], fish?.title ].filter(Boolean).join(' · ');
-  $('#results-content').innerHTML = `<h1 id="results-title" class="question-title results-title">${first ? `<span>Most likely:</span> ${escape(first.title)}` : escape(diagnosis.title)}</h1><p class="question-hint result-hint">${where ? `${escape(where)} · ` : ''}${diagnosis.chosen ? 'Your pick from the look-alikes' : 'Our best guess from your answers'}—a hobby guide, not a vet.</p>${urgent}${messages}${focus}${WATER_NUDGE}${additional}${unresolved}${context}${couldAlso}<section class="care-next"><h3>Got water test results?</h3><p>Add your readings and tank details for a tailored checklist.</p><button class="button secondary" data-action="care">Add readings & tank details →</button></section><button class="text-button" data-action="case">Save my notes ↗</button>`;
+  $('#results-content').innerHTML = `<h1 id="results-title" class="question-title results-title">${first ? `<span>Most likely:</span> ${escape(first.title)}` : escape(diagnosis.title)}</h1>${first ? scienceLine(first.id) : ''}<p class="question-hint result-hint">${where ? `${escape(where)} · ` : ''}${diagnosis.chosen ? 'Your pick from the look-alikes' : 'Our best guess from your answers'}—a hobby guide, not a vet.</p>${urgent}${messages}${focus}${WATER_NUDGE}${additional}${unresolved}${context}${couldAlso}<section class="care-next"><h3>Got water test results?</h3><p>Add your readings and tank details for a tailored checklist.</p><button class="button secondary" data-action="care">Add readings & tank details →</button></section><button class="text-button" data-action="case">Save my notes ↗</button>`;
   goStep('results');
 }
 
@@ -371,7 +372,7 @@ function openDetail(id, slotId = 'overview') {
   if (!condition) return;
   const water = imageWater(condition) || 'fresh';
   const others = lookalikesFor(id, water);
-  $('#detail-content').innerHTML = `<p class="eyebrow">${escape(condition.kind)} · ${scopeName(condition.scope)}</p><h2 id="detail-title">${escape(condition.title)}</h2>${badge(condition.urgency)}<p class="lead">${escape(condition.summary)}</p>${fishGallery(condition, water)}<div class="detail-visual-actions"><button class="button secondary" data-use-pattern="${condition.id}">Check this visible pattern →</button><button class="compare-toggle" data-compare="${condition.id}" aria-pressed="${comparisons.has(condition.id)}">${comparisons.has(condition.id) ? '✓ Selected' : '+ Compare'}</button></div><h3>What to look for</h3>${list(condition.clues)}<h3>Easy to confuse with</h3><p>${escape(condition.distinguish)}</p>${others.length ? `<ul class="detail-lookalikes">${others.map(o => `<li><button class="text-button" data-condition="${o.id}">${escape(o.title)} →</button> ${escape(o.comparisonReason)}</li>`).join('')}</ul>` : ''}${todoCard(condition, water)}<p class="avoid"><strong>Avoid:</strong> ${escape(condition.avoid)}</p><div class="sources"><h4>Read the references</h4>${sourceLinks(condition.source)}</div>`;
+  $('#detail-content').innerHTML = `<p class="eyebrow">${escape(condition.kind)} · ${scopeName(condition.scope)}</p><h2 id="detail-title">${escape(condition.title)}</h2>${scienceLine(condition.id)}${badge(condition.urgency)}<p class="lead">${escape(condition.summary)}</p>${fishGallery(condition, water)}<div class="detail-visual-actions"><button class="button secondary" data-use-pattern="${condition.id}">Check this visible pattern →</button><button class="compare-toggle" data-compare="${condition.id}" aria-pressed="${comparisons.has(condition.id)}">${comparisons.has(condition.id) ? '✓ Selected' : '+ Compare'}</button></div><h3>What to look for</h3>${list(condition.clues)}<h3>Easy to confuse with</h3><p>${escape(condition.distinguish)}</p>${others.length ? `<ul class="detail-lookalikes">${others.map(o => `<li><button class="text-button" data-condition="${o.id}">${escape(o.title)} →</button> ${escape(o.comparisonReason)}</li>`).join('')}</ul>` : ''}${todoCard(condition, water)}<p class="avoid"><strong>Avoid:</strong> ${escape(condition.avoid)}</p><div class="sources"><h4>Read the references</h4>${sourceLinks(condition.source)}</div>`;
   $('#detail-dialog').showModal();
 }
 
