@@ -15,6 +15,7 @@ import { CROPS as BETTA_CROPS, IMAGE_SOURCE, MEDIA_BASE } from './fish-images-da
 import { CROPS as FRESH_CROPS, IMAGE_SOURCE as FRESH_IMAGE_SOURCE } from './fish-images-fresh-data.mjs';
 import { CROPS as SPLIT_CROPS, IMAGE_SOURCE as SPLIT_IMAGE_SOURCE } from './fish-images-split-data.mjs';
 import { CROPS as MARINE_CROPS, IMAGE_SOURCE as MARINE_IMAGE_SOURCE } from './fish-images-marine-data.mjs';
+import { CROPS as FIX_CROPS, IMAGE_SOURCE as FIX_IMAGE_SOURCE } from './fish-images-fixes-data.mjs';
 
 // Each data file has its own IMAGE_SOURCE, so one batch can be published
 // (uploaded to R2) while another is still previewed locally. 'media' uses the
@@ -23,7 +24,12 @@ import { CROPS as MARINE_CROPS, IMAGE_SOURCE as MARINE_IMAGE_SOURCE } from './fi
 // local-images/<subdir>/<file>). An entry without a source uses IMAGE_SOURCE.
 const KEY_PREFIX = 'experiments/fish-health-lab/';
 const withSource = (crops, source) => Object.fromEntries(Object.entries(crops).map(([id, entry]) => [id, { ...entry, source }]));
-export const ALL_CROPS = { ...withSource(BETTA_CROPS, IMAGE_SOURCE), ...withSource(FRESH_CROPS, FRESH_IMAGE_SOURCE), ...withSource(SPLIT_CROPS, SPLIT_IMAGE_SOURCE), ...withSource(MARINE_CROPS, MARINE_IMAGE_SOURCE) };
+const PUBLISHED_CROPS = { ...withSource(BETTA_CROPS, IMAGE_SOURCE), ...withSource(FRESH_CROPS, FRESH_IMAGE_SOURCE), ...withSource(SPLIT_CROPS, SPLIT_IMAGE_SOURCE), ...withSource(MARINE_CROPS, MARINE_IMAGE_SOURCE) };
+// Clean-up retakes (Nov 6 2026, fish-images-fixes-data.mjs) replace a crop under the same id;
+// a retake without its own caption keeps the old one.
+const FISH_FIXES = Object.fromEntries(Object.entries(FIX_CROPS).filter(([id, e]) => e.set === 'fish' && PUBLISHED_CROPS[id])
+  .map(([id, e]) => [id, { ...PUBLISHED_CROPS[id], ...e, source: FIX_IMAGE_SOURCE }]));
+export const ALL_CROPS = { ...PUBLISHED_CROPS, ...FISH_FIXES };
 export const localPathFor = entry => `local-images/${entry.key.slice(KEY_PREFIX.length)}`;
 export const urlFor = entry => (entry.source || IMAGE_SOURCE) === 'media' ? MEDIA_BASE + entry.key : localPathFor(entry);
 const crop = id => ALL_CROPS[id] && { ...ALL_CROPS[id], url: urlFor(ALL_CROPS[id]) };

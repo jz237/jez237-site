@@ -604,3 +604,37 @@ not one perfect mark on a healthy animal).
   no placeholder left in the reef path; every crop used; receipt keys/hashes) and
   `reef-browser-check.mjs` (coral kind grid, sign grids for Not sure/soft/LPS/SPS/anemone, RTN →
   compare STN → detail, anemone, brown jelly, bleaching, pests, zoa pox and library cards).
+
+## v3: medicine check, prevention page, pond fish, clean-up pass, dark reef theme, 2026-11-06
+
+Jez, 2026-11-06 07:32 EST: “Do option 1 and 4, add the pond section, and do the clean up pass. Then
+see if you can get the layout colors and design to be more like the attached picture.” Branch
+`exp/fish-health-v3-20261106`.
+
+- **Medicine check** (`medicine.mjs`, `extras-app.mjs`, view `#medicine`): where you're treating
+  (freshwater / saltwater-reef / pond) → medicine type (copper, ich meds, praziquantel, antibiotics,
+  salt, methylene blue, metronidazole, fenbendazole, “reef-safe” herbal) → what else lives there, plus
+  a hospital-tank toggle. Answer per resident and overall: Fine / Use with care / Hospital tank only /
+  Will kill them. No doses (always the label). Results pages link to it.
+- **Stop it before it starts** (`prevent.mjs`, view `#prevent`): quarantine, acclimation, drip for
+  shrimp/snails, coral inspection and dips, pond tub quarantine, weekly habits; 12 pictures
+  (`prevent-images-data.mjs`, receipt `prevent-images-20261106.json`).
+- **Pond fish** (`pond-data.mjs`): a fourth “What needs help?” tile on the reef machinery (group
+  `pond`): koi / pond goldfish / other pond fish, 15 signs, 7 “anything changed?” chips, 16 conditions
+  (anchor worm, lice, ulcers, bacterial, flukes, white spot, low oxygen, poor water, top-up/rain swing,
+  fungus, dropsy, carp pox, KHV, predators, swim bladder, normal winter rest) with plans tagged “Pond
+  product — dose by pond volume”. Library filter “Pond fish”. 36 pictures (`POND_SET` in
+  reef-images.mjs, `reef-images-pond-data.mjs`, receipt `pond-images-20261106.json`).
+- **Clean-up pass** (`fish-images-fixes-data.mjs`, receipt `fixes-images-20261106.json`): 22 retakes
+  replace published crops under the same id (fish → fish-images.mjs, invert/pond → reef-images.mjs);
+  fish-neutral step-pea/step-watch, distinct guppy popeye vs cloudy eye, clearer velvet/sores/flukes,
+  pleco/goby bellies, molly on its side, shrimp legs, emerald crab claw, and non-gory pond KHV pictures.
+- **Theme** (`theme.css` last, plus colour-remapped style/flow/reef.css via
+  `workspace/tmp/imagegen/fish-health-v3-theme/darken.py`): dark navy water with an AI reef along the
+  bottom (`ui-images-data.mjs`, set as `--reef-bg` by app.mjs), glass panels, cyan pill tabs,
+  hamburger menu (medicine, prevention, about), Outfit headings.
+- All 71 new assets requested `openai/gpt-image-2.6-sunburst` medium (backend not independently
+  verified), cropped without resizing, uploaded to R2 and byte-verified
+  (`workspace/tmp/fish-health-v3-publish-20261106/upload-verification.json`); IMAGE_SOURCE `media`.
+- Checks: `pond.test.mjs`, `medicine.test.mjs`, updated `fish-images.test.mjs`/`reef.test.mjs`, and the
+  existing browser checks (reef check expects the Pond tile; front-door asset count ignores the background).

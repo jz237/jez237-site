@@ -8,6 +8,7 @@ import { reefPlanFor, INVERT_WARNING } from './reef-care.mjs';
 export const MAX_REEF_ALTERNATIVES = 3;
 const NATURAL = {
   coral: 'Or it may be normal—corals close at night and for a day or two after a move.',
+  pond: 'Or it may be normal—pond fish slow right down and rest on the bottom when the water is cold.',
 };
 
 export const reefKindFor = (group, id) => (REEF_KINDS[group] || []).find(k => k.id === id) || null;
@@ -80,7 +81,7 @@ function couldAlsoBe(top, ranked, input, pinned = null) {
   return { alternatives, natural };
 }
 
-// input: { group: 'coral' | 'invert', kind, sign, changes: [], chosen: [] }
+// input: { group: 'coral' | 'invert' | 'pond', kind, sign, changes: [], chosen: [] }
 export function assessReef(input) {
   const ranked = rankReef(input);
   let primary = ranked[0] ? decorate(ranked[0], input) : null;

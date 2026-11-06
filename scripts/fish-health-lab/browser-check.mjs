@@ -13,7 +13,8 @@ const sentinel='PRIVATE-FISH-OBSERVATION-1567971914423603203';
 context.on('page', page => page.on('pageerror', e=>errors.push(e.message)));
 context.on('request', request=>{
   const url=new URL(request.url()), content=request.url()+(request.postData()||'');
-  if (url.hostname==='media.jez237.com') assets.push(request.url());
+  // The page background (theme.css, Nov 6 2026) is decoration, not a guide picture.
+  if (url.hostname==='media.jez237.com' && !url.pathname.includes('/ui/bg-reef-')) assets.push(request.url());
   if (content.includes(sentinel)) leaks.push(url.origin+url.pathname);
   if (/chatgpt\.com|api\.openai\.com|api\.anthropic\.com/.test(url.hostname)) aiRequests.push(url.hostname);
   if (['GET','HEAD','OPTIONS'].includes(request.method())) return;

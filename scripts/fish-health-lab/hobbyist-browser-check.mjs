@@ -57,7 +57,7 @@ const addSign = async (p,id) => {
 const noFreshImages = async p => {
   const urls = await p.locator('img:visible').evaluateAll(imgs => imgs.map(img => img.src));
   // Treatment-step pictures are shared by every fish and water type.
-  assert.ok(urls.every(url => /\/marine-|\/__draft-images__\/marine-|\/steps\/step-/.test(url)), urls.join('\n'));
+  assert.ok(urls.every(url => /\/marine-|\/__draft-images__\/marine-|\/steps\/step-|\/fixes\/fish-step-/.test(url)), urls.join('\n'));
 };
 const popupClick = async (p, selector) => {
   const link = p.locator(selector).first(), href = await link.getAttribute('href');

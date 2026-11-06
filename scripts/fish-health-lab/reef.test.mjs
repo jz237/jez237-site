@@ -14,6 +14,8 @@ import { CROPS as CORAL_CROPS, IMAGE_SOURCE as CORAL_IMAGE_SOURCE } from '../../
 import { URGENCY, CONDITIONS } from '../../experiments/fish-health-lab/data.mjs';
 
 const GROUPS = ['coral', 'invert'];
+// The pond section (Nov 6 2026) shares the reef machinery; reef-only rules skip it.
+const ALL_GROUPS = [...GROUPS, 'pond'];
 const app = fileURLToPath(new URL('../../experiments/fish-health-lab/', import.meta.url));
 const invertReceipt = JSON.parse(readFileSync(new URL('./invert-images-20261106.json', import.meta.url)));
 const coralReceipt = JSON.parse(readFileSync(new URL('./coral-images-20261106.json', import.meta.url)));
@@ -25,7 +27,7 @@ const also = (group, kind, sign, changes = []) => assessReef({ group, kind, sign
 const byId = id => REEF_CONDITIONS.find(c => c.id === id);
 
 test('"What needs help?" has Fish, Coral or anemone, and Shrimp, crab or snail', () => {
-  assert.deepEqual(REEF_GROUPS.map(g => g.id), ['fish', 'coral', 'invert']);
+  assert.deepEqual(REEF_GROUPS.map(g => g.id), ['fish', 'coral', 'invert', 'pond']);
   assert.deepEqual(REEF_KINDS.coral.map(k => k.id), ['soft', 'lps', 'sps', 'anemone']);
   assert.deepEqual(REEF_KINDS.invert.map(k => k.id), ['shrimp', 'crab', 'snail', 'other']);
 });
@@ -141,7 +143,7 @@ test('reef care plans never put copper or fish medicine in the display', () => {
   const meds = /copper|formalin|chloroquine|praziquantel|antibiotic|metronidazole|malachite|methylene|medicin|medicat|ich (cure|treatment)/i;
   const safeContext = /never|don[’']t|do not|stop|remov|test for|copper-free/i;
   assert.deepEqual([...REEF_PLAN_IDS].sort(), REEF_CONDITIONS.map(c => c.id).sort());
-  for (const id of REEF_PLAN_IDS) {
+  for (const id of REEF_PLAN_IDS.filter(id => byId(id).group !== 'pond')) {
     const plan = reefPlanFor(id);
     for (const step of plan.steps) {
       if (meds.test(step.text)) assert.match(step.text, safeContext, `${id}: "${step.text}" suggests a medicine in the display`);
@@ -159,7 +161,7 @@ test('reef care plans never put copper or fish medicine in the display', () => {
 });
 
 test('reef care plans lead with the tests (alk, Ca, Mg, nitrate, phosphate, temp, salinity)', () => {
-  for (const c of REEF_CONDITIONS) {
+  for (const c of REEF_CONDITIONS.filter(c => c.group !== 'pond')) {
     const first = reefPlanFor(c.id).steps[0].text;
     if (c.group === 'coral') for (const word of ['alkalinity', 'calcium', 'magnesium', 'nitrate', 'phosphate', 'temperature', 'salinity']) assert.match(first, new RegExp(word, 'i'), `${c.id} test step misses ${word}`);
     else for (const word of ['salinity', 'temperature', 'ammonia']) assert.match(first, new RegExp(word, 'i'), `${c.id} test step misses ${word}`);

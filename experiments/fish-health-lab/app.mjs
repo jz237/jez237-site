@@ -5,6 +5,9 @@ import { OPENING_IMAGE, signImagesFor, TEXTURE_IMAGES } from './choice-images.mj
 import { treatmentGuideFor, openTreatmentPopup, carePlanFor } from './treatments.mjs';
 import { imagesFor, imageFor, fishSetFor, FISH_TYPE_IMAGES, stepImageFor, splitStep } from './fish-images.mjs';
 import { createReef } from './reef-app.mjs';
+import { createExtras } from './extras-app.mjs';
+import { UI_IMAGES, IMAGE_SOURCE as UI_IMAGE_SOURCE } from './ui-images-data.mjs';
+import { MEDIA_BASE } from './fish-images-data.mjs';
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
@@ -20,6 +23,11 @@ let currentCase = '', illustrationId = 0, libraryPattern = '', visualReference =
 let chosenPath = [];
 // Coral/anemone and shrimp/crab/snail questions (reef-app.mjs) share this step machine.
 const reef = createReef({ $, $$, escape, goStep, badge, autoAdvance, switchView });
+// The medicine check and the prevention page (extras-app.mjs).
+const extras = createExtras({ $, escape });
+const HASH_VIEWS = ['library', 'medicine', 'prevent'];
+// The reef page background (theme.css reads --reef-bg).
+{ const bg = UI_IMAGES['bg-reef']; document.documentElement.style.setProperty('--reef-bg', `url("${UI_IMAGE_SOURCE === 'media' ? MEDIA_BASE + bg.key : `local-images/${bg.key.slice('experiments/fish-health-lab/'.length)}`}")`); }
 
 function fishArt(type = 'plain', hero = false) {
   const uid = `fish-${++illustrationId}`;
@@ -129,15 +137,19 @@ function autoAdvance() {
 
 function switchView(name) {
   activeView = name;
-  for (const id of ['guide','library','about']) $(`#${id}-view`).hidden = id !== name;
+  for (const id of ['guide','library','about','medicine','prevent']) $(`#${id}-view`).hidden = id !== name;
+  toggleMenu(false);
   $$('.nav-tab').forEach(button => {
     button.classList.toggle('active', button.dataset.view === name);
     if (button.dataset.view === name) button.setAttribute('aria-current','page'); else button.removeAttribute('aria-current');
   });
-  history.replaceState(null, '', location.pathname + location.search + (name === 'library' ? '#library' : ''));
+  history.replaceState(null, '', location.pathname + location.search + (HASH_VIEWS.includes(name) ? `#${name}` : ''));
+  // The medicine check starts on the water type of the check in progress.
+  if (name === 'medicine') extras.renderMedicine(form.elements.water.value || ({ pond: 'pond', coral: 'marine', invert: 'marine' })[reef.group()] || '');
+  if (name === 'prevent') extras.renderPrevent();
   if (name === 'library') {
     if (form.elements.water.value) $('#library-water').value = form.elements.water.value;
-    else if (reef.active()) $('#library-water').value = 'reef';
+    else if (reef.active()) $('#library-water').value = reef.group() === 'pond' ? 'pond' : 'reef';
     renderLibrary();
   }
   updateCompareTray();
@@ -366,7 +378,7 @@ function openDetail(id, slotId = 'overview') {
 function renderLibrary() {
   const query = $('#library-search').value.trim().toLowerCase();
   const water = $('#library-water').value;
-  if (water === 'reef') { reef.renderLibrary(query); return; }
+  if (water === 'reef' || water === 'pond') { reef.renderLibrary(query, water); return; }
   const patternMatches = libraryPattern ? new Set(rankConditions({ water: water === 'all' ? 'unknown' : water, signs: [libraryPattern] }).map(c => c.id)) : null;
   const filtered = CONDITIONS.filter(c => (water === 'all' || c.scope === 'both' || c.scope === water)
     && (!patternMatches || patternMatches.has(c.id))
@@ -444,8 +456,17 @@ $('#growth-grid').innerHTML = GROWTH_CHOICES.map(choice => `<label><input type="
 $('#source-list').innerHTML = sourceLinks(SOURCES.map(s => s.id));
 $('#library-patterns').innerHTML = SYMPTOMS.map(s => `<button class="pattern-filter" data-library-pattern="${s.id}" aria-pressed="false"><span>${fishArt(s.art)}</span><strong>${escape(s.title)}</strong></button>`).join('');
 
+function toggleMenu(open) {
+  const button = $('.menu-button'), menu = $('#site-menu');
+  const next = open ?? menu.hidden;
+  menu.hidden = !next; button.setAttribute('aria-expanded', String(next));
+}
+
 document.addEventListener('click', async event => {
+  if (event.target.closest('[data-action="menu"]')) { toggleMenu(); return; }
+  if (!$('#site-menu').hidden && !event.target.closest('#site-menu')) toggleMenu(false);
   if (reef.handleClick(event)) return;
+  if (extras.handleClick(event)) return;
   const treatment = event.target.closest('a[data-treatment]');
   if (treatment) openTreatmentPopup(event, treatment);
   const view = event.target.closest('[data-view]');
@@ -551,5 +572,6 @@ $('#additional-signs').addEventListener('toggle', () => {
 });
 goStep('welcome', false);
 // Old #ich links also start neutrally; only deliberate library links bypass Start.
-if (location.hash === '#library') switchView('library');
+document.addEventListener('keydown', event => { if (event.key === 'Escape' && !$('#site-menu').hidden) { toggleMenu(false); $('.menu-button').focus(); } });
+if (HASH_VIEWS.includes(location.hash.slice(1))) switchView(location.hash.slice(1));
 else if (location.hash) history.replaceState(null, '', location.pathname + location.search);

@@ -15,6 +15,8 @@
 import { MEDIA_BASE } from './fish-images-data.mjs';
 import { CROPS as INVERT_CROPS, IMAGE_SOURCE as INVERT_IMAGE_SOURCE } from './reef-images-inverts-data.mjs';
 import { CROPS as CORAL_CROPS, IMAGE_SOURCE as CORAL_IMAGE_SOURCE } from './reef-images-corals-data.mjs';
+import { CROPS as POND_CROPS, IMAGE_SOURCE as POND_IMAGE_SOURCE } from './reef-images-pond-data.mjs';
+import { CROPS as FIX_CROPS, IMAGE_SOURCE as FIX_IMAGE_SOURCE } from './fish-images-fixes-data.mjs';
 
 // 'media' = content-hashed R2 keys on media.jez237.com; 'local' = the untracked
 // preview copies (experiments/fish-health-lab/corals/x.jpg → local-images/corals/x.jpg).
@@ -22,12 +24,19 @@ const KEY_PREFIX = 'experiments/fish-health-lab/';
 const urlFor = (entry, source) => source === 'media' ? MEDIA_BASE + entry.key : `local-images/${entry.key.slice(KEY_PREFIX.length)}`;
 export const invertUrlFor = entry => urlFor(entry, INVERT_IMAGE_SOURCE);
 export const coralUrlFor = entry => urlFor(entry, CORAL_IMAGE_SOURCE);
+export const pondUrlFor = entry => urlFor(entry, POND_IMAGE_SOURCE);
+// Clean-up retakes (Nov 6 2026) replace a published invert crop under the same id.
+const fixUrlFor = entry => urlFor(entry, FIX_IMAGE_SOURCE);
+const fixesFor = set => Object.fromEntries(Object.entries(FIX_CROPS).filter(([, e]) => e.set === set).map(([id, e]) => [id, { ...e, fixed: true }]));
 const picker = (crops, url, name) => id => {
   const entry = crops[id];
   if (!entry) throw new Error(`reef-images: no ${name} crop ${id}`);
   return { id, ...entry, url: url(entry) };
 };
-const invertPic = picker(INVERT_CROPS, invertUrlFor, 'invert');
+const merged = (crops, fixes) => ({ ...crops, ...Object.fromEntries(Object.entries(fixes).filter(([id]) => crops[id]).map(([id, e]) => [id, { ...crops[id], ...e }])) });
+const invertFixes = fixesFor('invert'), pondFixes = fixesFor('pond');
+const invertPic = picker(merged(INVERT_CROPS, invertFixes), entry => entry.fixed ? fixUrlFor(entry) : invertUrlFor(entry), 'invert');
+const pondPic = picker(merged(POND_CROPS, pondFixes), entry => entry.fixed ? fixUrlFor(entry) : pondUrlFor(entry), 'pond');
 const coralPic = picker(CORAL_CROPS, coralUrlFor, 'coral');
 
 // Which crop goes where. Kind-specific keys (`crab:…`) win over the plain key.
@@ -121,6 +130,43 @@ export const CORAL_SET = {
   },
 };
 
+// Pond fish (Jez, Nov 6 2026 07:32 EST: "add the pond section"): koi are the
+// default fish on sign tiles; goldfish keys swap in a goldfish where it matters.
+export const POND_SET = {
+  kinds: { koi: 'kind-koi', goldfish: 'kind-goldfish', other: 'kind-other' },
+  signs: {
+    worm: 'sign-worm', lice: 'sign-lice', ulcer: 'sign-ulcer', 'red-streaks': 'sign-red-streaks',
+    'white-spots': 'sign-white-spots', cotton: 'sign-cotton', wax: 'sign-wax', 'scales-up': 'sign-scales-up',
+    flashing: 'sign-flashing', gasping: 'sign-gasping', 'sunken-eyes': 'sign-sunken-eyes', floating: 'sign-floating',
+    lethargic: 'sign-lethargic', missing: 'sign-missing', unclear: 'sign-unclear',
+    'goldfish:ulcer': 'sign-goldfish-ulcer', 'goldfish:white-spots': 'sign-goldfish-white-spots',
+    'goldfish:worm': 'cond-anchor-worm', 'goldfish:cotton': 'sign-cotton', 'goldfish:red-streaks': 'sign-red-streaks',
+  },
+  conditions: {
+    'anchor-worm': ['cond-anchor-worm', 'sign-worm'],
+    'fish-lice': ['cond-fish-lice', 'sign-lice'],
+    'pond-ulcer': ['cond-ulcer', 'sign-ulcer', 'sign-goldfish-ulcer'],
+    'pond-bacterial': ['cond-bacterial', 'sign-red-streaks'],
+    'pond-flukes': ['cond-skin-flukes', 'sign-flashing'],
+    'pond-ich': ['cond-pond-ich', 'sign-white-spots', 'sign-goldfish-white-spots'],
+    'pond-low-oxygen': ['cond-low-oxygen', 'sign-gasping'],
+    'pond-poor-water': ['cond-poor-water', 'sign-unclear'],
+    'pond-water-swing': ['cond-water-swing'],
+    'pond-fungus': ['cond-fungus', 'sign-cotton'],
+    'pond-dropsy': ['cond-dropsy', 'sign-scales-up'],
+    'carp-pox': ['cond-carp-pox', 'sign-wax'],
+    khv: ['cond-khv', 'sign-sunken-eyes'],
+    predator: ['cond-predator', 'sign-missing'],
+    'pond-swim-bladder': ['cond-swim-bladder', 'sign-floating'],
+    'winter-rest': ['cond-winter-torpor', 'sign-lethargic'],
+    'goldfish:pond-ulcer': ['sign-goldfish-ulcer', 'cond-ulcer'],
+    'goldfish:pond-ich': ['cond-pond-ich', 'sign-goldfish-white-spots'],
+    'goldfish:anchor-worm': ['cond-anchor-worm'],
+    'koi:anchor-worm': ['sign-worm', 'cond-anchor-worm'],
+    'koi:pond-ich': ['sign-white-spots', 'cond-pond-ich'],
+  },
+};
+
 const mapValues = (obj, fn) => Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, fn(v)]));
 const build = (set, pic) => ({
   kinds: mapValues(set.kinds, pic),
@@ -131,6 +177,7 @@ const build = (set, pic) => ({
 export const REEF_IMAGES = {
   coral: build(CORAL_SET, coralPic),
   invert: build(INVERT_SET, invertPic),
+  pond: build(POND_SET, pondPic),
 };
 
 // Library/detail slots per reef entry. Filled from conditions[id] in order; a

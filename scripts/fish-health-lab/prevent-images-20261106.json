@@ -1,0 +1,321 @@
+{
+  "request": "Jez, 2026-11-06 07:32 EST: \"Do option 1 and 4 ... Then see if you can get the layout colors and design to be more like the attached picture\" — pictures for the quarantine & prevention page and a dark reef page background.",
+  "requestedModel": "openai/gpt-image-2.6-sunburst",
+  "requestedQuality": "medium",
+  "requestedSize": "auto",
+  "aspectRatio": {
+    "prevent": "4:3",
+    "bg-reef": "3:2"
+  },
+  "reportedProviderModel": [
+    "openai/gpt-image-2.6-sunburst"
+  ],
+  "backendModel": "not independently verified (stock OAuth provider reported gpt-image-2.6-sunburst)",
+  "prompts": {
+    "prevent": "Use case: AI-illustrated hobby guide that shows a beginner aquarium and pond keeper how to quarantine, acclimate and prevent disease.\nLOOK: every cell is a natural, clear, believable everyday photo of one hobby task at home: real aquariums, buckets, nets and equipment, soft indoor light (or daylight for the pond cell). The task is the clear subject, large and fully in view, easy to understand at thumbnail size. Hands may appear when the cell names them (adult hands only, no faces, no full people). Tidy but not studio-perfect. Photographic and believable. Not cartoons, icons, illustrations, diagrams, 3D renders or typography. Absolutely no text, letters, numbers, labels, logos, brand names, watermarks, arrows or symbols anywhere in the image, including on bottles and equipment.\nSTRICT CONTACT SHEET for cropping into twelve separate pictures: exactly FOUR equal-width columns and THREE equal-height rows, twelve equal square cells covering the complete image edge to edge. No gutters, no borders, no outer margin. Every cell is its own separate photo with its own background. Nothing crosses a cell boundary; keep the main subject inside the central 85 percent of its cell. Follow the exact row-major order below.\nRow 1 column 1: A SIMPLE QUARANTINE TANK: a small bare glass aquarium with no gravel, a round sponge filter bubbling in one corner, a heater on the back glass, a short piece of grey plastic pipe as a hiding place, and one new small fish swimming calmly.\nRow 1 column 2: FLOATING THE BAG: a clear sealed fish-store bag with a small fish inside floating at the top of an aquarium so the water temperature evens out, the aquarium lid open.\nRow 1 column 3: NET THE FISH, LEAVE THE BAG WATER: hands holding an opened fish bag over a bucket, a small green aquarium net lifting the fish out of the bag toward the aquarium, the store water staying in the bag.\nRow 1 column 4: DRIP-ACCLIMATING SHRIMP: a small clean bucket on the floor below an aquarium holding a few shrimp in a little water, a thin clear airline tube running down from the aquarium with a loose knot in it, water dripping slowly into the bucket.\nRow 2 column 1: DIPPING A NEW CORAL: a coral frag on a small plug sitting in a clear plastic container of slightly tinted dip water, a turkey baster blowing water over it, a second container of plain rinse water beside it, on a towel next to a reef tank.\nRow 2 column 2: CHECKING A NEW CORAL: hands holding a small acropora frag up close under a bright flashlight, looking over its branches and the underside of the plug for pests and eggs.\nRow 2 column 3: POND QUARANTINE: a large round blue plastic tub beside a garden pond with a new koi swimming in it, an air pump hose bubbling in the tub, a net laid over the top to stop it jumping.\nRow 2 column 4: TESTING THE WATER: a liquid aquarium test kit set out beside an aquarium: three small glass test tubes of tested water in different colours in a holder, a plain colour card, all labels blank.\nRow 3 column 1: FEEDING LIGHTLY: a small pinch of fish flakes on the water surface of a planted aquarium, several small fish eating all of it, nothing left sinking to the bottom.\nRow 3 column 2: A WATER CHANGE: a gravel siphon in a planted aquarium pulling dirty water and debris out of the gravel through a hose into a bucket on the floor.\nRow 3 column 3: SEPARATE GEAR: two matching sets of a fish net and a small bucket, one set blue and one set green, kept apart on a shelf below two aquariums, one tank smaller (the quarantine tank).\nRow 3 column 4: WATCHING IN QUARANTINE: a calm, healthy new fish in a small bare quarantine tank, eating a pellet, clear water, a sponge filter in the corner; everything looks fine.",
+    "bg-reef": "Wide, dark, atmospheric UNDERWATER CORAL REEF background for a website: deep navy-blue water fading to near-black at the top, soft light rays and gentle caustic shimmer from above, and along the whole BOTTOM EDGE a lush, colourful coral reef: purple and pink soft corals, branching acropora, orange and green brain corals, sea fans, and a few anemones, with a handful of small ordinary reef fish (a yellow tang, a couple of chromis) near the reef. The upper two thirds is calm open blue water with nothing in it, so text can sit on top. Photographic, rich colour, slightly dreamy depth, a little bokeh. Natural, not cartoon, no well-known film characters. Absolutely no text, letters, logos or watermarks."
+  },
+  "sources": {
+    "prevent": {
+      "sha256": "d9373b8fbeed616e72f909ebea1b65666ac5249bb5be6e4ad136e21a5d19f351",
+      "bytes": 605828,
+      "width": 1448,
+      "height": 1086,
+      "reportedProviderModel": "openai/gpt-image-2.6-sunburst"
+    },
+    "bg-reef": {
+      "sha256": "0dacaf87a55636bf98d8d99ba0c28f860db6a02c1729a5f4480a965d24b30a86",
+      "bytes": 406047,
+      "width": 1672,
+      "height": 941,
+      "reportedProviderModel": "openai/gpt-image-2.6-sunburst"
+    }
+  },
+  "originals": {
+    "prevent": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-prevent-20261106/prevent.jpg",
+    "bg-reef": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-prevent-20261106/bg-reef.jpg"
+  },
+  "assets": [
+    {
+      "id": "qt-tank",
+      "sheet": "prevent",
+      "cell": 0,
+      "path": "local-images/prevent/qt-tank-8b83f91b868d.jpg",
+      "r2Key": "experiments/fish-health-lab/prevent/qt-tank-8b83f91b868d.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/prevent/qt-tank-8b83f91b868d.jpg",
+      "uploaded": true,
+      "sha256": "8b83f91b868de2a4ca3f56b1999ca6ea013dc355c1baa8e219a3e00b6ea838e7",
+      "bytes": 31951,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        0,
+        362,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: A small bare quarantine tank with a sponge filter, heater, a pipe to hide in and one new fish.",
+      "caption": "A simple quarantine tank"
+    },
+    {
+      "id": "float-bag",
+      "sheet": "prevent",
+      "cell": 1,
+      "path": "local-images/prevent/float-bag-13e6e544ae5f.jpg",
+      "r2Key": "experiments/fish-health-lab/prevent/float-bag-13e6e544ae5f.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/prevent/float-bag-13e6e544ae5f.jpg",
+      "uploaded": true,
+      "sha256": "13e6e544ae5f54568e17750ac2a2b33c470d25701a6047f5c709288b19f859aa",
+      "bytes": 51999,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        362,
+        0,
+        724,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: A sealed fish bag floating in an aquarium.",
+      "caption": "Float the bag to match temperature"
+    },
+    {
+      "id": "net-transfer",
+      "sheet": "prevent",
+      "cell": 2,
+      "path": "local-images/prevent/net-transfer-f30c912bc203.jpg",
+      "r2Key": "experiments/fish-health-lab/prevent/net-transfer-f30c912bc203.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/prevent/net-transfer-f30c912bc203.jpg",
+      "uploaded": true,
+      "sha256": "f30c912bc2035e9c2c62f90409f5361e5da12b51a1b893ad233c219780a61774",
+      "bytes": 42206,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        0,
+        1086,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Hands netting a fish out of its bag, leaving the store water behind.",
+      "caption": "Net it in, leave the store water"
+    },
+    {
+      "id": "drip",
+      "sheet": "prevent",
+      "cell": 3,
+      "path": "local-images/prevent/drip-5993b9e8dec0.jpg",
+      "r2Key": "experiments/fish-health-lab/prevent/drip-5993b9e8dec0.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/prevent/drip-5993b9e8dec0.jpg",
+      "uploaded": true,
+      "sha256": "5993b9e8dec02e22e85fb01210e6eb61e94f643032748a71a253d2700b9a170b",
+      "bytes": 42304,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        1086,
+        0,
+        1448,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Shrimp in a bucket being drip-acclimated with airline tubing from the tank.",
+      "caption": "Drip shrimp and snails in slowly"
+    },
+    {
+      "id": "coral-dip",
+      "sheet": "prevent",
+      "cell": 4,
+      "path": "local-images/prevent/coral-dip-c84d33ae18ce.jpg",
+      "r2Key": "experiments/fish-health-lab/prevent/coral-dip-c84d33ae18ce.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/prevent/coral-dip-c84d33ae18ce.jpg",
+      "uploaded": true,
+      "sha256": "c84d33ae18cedc7577de946cc4271bf82d1c04e97cdf227d8bed2e9b6b22a033",
+      "bytes": 50680,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        362,
+        362,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: A new coral frag in a container of dip water with a turkey baster.",
+      "caption": "Dip new corals before they go in"
+    },
+    {
+      "id": "inspect-coral",
+      "sheet": "prevent",
+      "cell": 5,
+      "path": "local-images/prevent/inspect-coral-e1f2b515db88.jpg",
+      "r2Key": "experiments/fish-health-lab/prevent/inspect-coral-e1f2b515db88.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/prevent/inspect-coral-e1f2b515db88.jpg",
+      "uploaded": true,
+      "sha256": "e1f2b515db88236e4ca5aacb1fecf0203c568f5fb53387a16afbc1b0eb4c9ce4",
+      "bytes": 39968,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        362,
+        362,
+        724,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: Hands checking a coral frag under a flashlight for pests.",
+      "caption": "Check new corals for pests and eggs"
+    },
+    {
+      "id": "pond-qt",
+      "sheet": "prevent",
+      "cell": 6,
+      "path": "local-images/prevent/pond-qt-7e4a44cf71ed.jpg",
+      "r2Key": "experiments/fish-health-lab/prevent/pond-qt-7e4a44cf71ed.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/prevent/pond-qt-7e4a44cf71ed.jpg",
+      "uploaded": true,
+      "sha256": "7e4a44cf71eddd4c0075fe3c42965343c68569b8cb9b41d49bd481e264542c02",
+      "bytes": 65703,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        362,
+        1086,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: A new koi in a blue quarantine tub with an air hose beside a garden pond.",
+      "caption": "Quarantine new pond fish in a tub"
+    },
+    {
+      "id": "test-kit",
+      "sheet": "prevent",
+      "cell": 7,
+      "path": "local-images/prevent/test-kit-48f76d1b67d3.jpg",
+      "r2Key": "experiments/fish-health-lab/prevent/test-kit-48f76d1b67d3.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/prevent/test-kit-48f76d1b67d3.jpg",
+      "uploaded": true,
+      "sha256": "48f76d1b67d36707e63feb2146d7a254891dfad4f031e0929c0c64d82030b40f",
+      "bytes": 46277,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        1086,
+        362,
+        1448,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: Three test tubes of tested aquarium water beside a tank.",
+      "caption": "Test the water every week"
+    },
+    {
+      "id": "feed-lightly",
+      "sheet": "prevent",
+      "cell": 8,
+      "path": "local-images/prevent/feed-lightly-dd95e7e2f92c.jpg",
+      "r2Key": "experiments/fish-health-lab/prevent/feed-lightly-dd95e7e2f92c.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/prevent/feed-lightly-dd95e7e2f92c.jpg",
+      "uploaded": true,
+      "sha256": "dd95e7e2f92ca3c70e5a83f4e5e5b70af9bd05c54b25df76afedfbd80a7a22d2",
+      "bytes": 38868,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        724,
+        362,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Small fish eating a small pinch of flakes at the surface.",
+      "caption": "Feed what they eat in a minute or two"
+    },
+    {
+      "id": "water-change",
+      "sheet": "prevent",
+      "cell": 9,
+      "path": "local-images/prevent/water-change-04c3d08f2b88.jpg",
+      "r2Key": "experiments/fish-health-lab/prevent/water-change-04c3d08f2b88.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/prevent/water-change-04c3d08f2b88.jpg",
+      "uploaded": true,
+      "sha256": "04c3d08f2b8833e213b73d878ba8a51bc452e49805587e0aed94f3cb686fa07e",
+      "bytes": 54112,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        362,
+        724,
+        724,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: A gravel siphon cleaning an aquarium into a bucket.",
+      "caption": "Regular water changes"
+    },
+    {
+      "id": "separate-gear",
+      "sheet": "prevent",
+      "cell": 10,
+      "path": "local-images/prevent/separate-gear-ca9d4821d453.jpg",
+      "r2Key": "experiments/fish-health-lab/prevent/separate-gear-ca9d4821d453.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/prevent/separate-gear-ca9d4821d453.jpg",
+      "uploaded": true,
+      "sha256": "ca9d4821d453c0a1e1a2118ba9148a47a447f3906034fdaa30246074ae9d3eb4",
+      "bytes": 45494,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        724,
+        1086,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Two separate sets of nets and buckets, blue and green, for two tanks.",
+      "caption": "Separate nets and buckets"
+    },
+    {
+      "id": "watch-qt",
+      "sheet": "prevent",
+      "cell": 11,
+      "path": "local-images/prevent/watch-qt-189249f47f5e.jpg",
+      "r2Key": "experiments/fish-health-lab/prevent/watch-qt-189249f47f5e.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/prevent/watch-qt-189249f47f5e.jpg",
+      "uploaded": true,
+      "sha256": "189249f47f5ea4bad382b4440b4462cad58287872ce32514e7ae9be9905b0c52",
+      "bytes": 38396,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        1086,
+        724,
+        1448,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: A healthy new fish eating in a bare quarantine tank.",
+      "caption": "Watch for 2–4 weeks before adding"
+    },
+    {
+      "id": "bg-reef",
+      "sheet": "bg-reef",
+      "cell": null,
+      "path": "local-images/ui/bg-reef-6be34a4c6924.jpg",
+      "r2Key": "experiments/fish-health-lab/ui/bg-reef-6be34a4c6924.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/ui/bg-reef-6be34a4c6924.jpg",
+      "uploaded": true,
+      "sha256": "6be34a4c692406fd5cecad43dfdec64675edc60321495f0018eaf0b553def3dd",
+      "bytes": 170745,
+      "width": 1672,
+      "height": 941,
+      "crop": null,
+      "resized": false,
+      "note": "page background; re-saved as JPEG quality 80, same pixel size"
+    }
+  ],
+  "publication": "Uploaded to R2 and byte-verified 2026-11-06 (tmp/fish-health-v3-publish-20261106/upload-verification.json); IMAGE_SOURCE \"media\"."
+}

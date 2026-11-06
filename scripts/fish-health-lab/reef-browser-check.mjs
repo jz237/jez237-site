@@ -67,7 +67,7 @@ try {
     await home(p);
     assert.equal(await p.locator('#welcome').isVisible(), true);
     assert.match(await p.locator('#needs-help-title').innerText(), /what needs help\?/i);
-    assert.deepEqual(await p.locator('.needs-help .help-tile strong').allInnerTexts(), ['Fish', 'Coral or anemone', 'Shrimp, crab or snail']);
+    assert.deepEqual(await p.locator('.needs-help .help-tile strong').allInnerTexts(), ['Fish', 'Coral or anemone', 'Shrimp, crab or snail', 'Pond fish']);
     assert.equal(await p.locator('.needs-help [data-action="start"]').count(), 1);
     const tiles = await p.locator('.needs-help .help-tile').evaluateAll(els => els.map(el => el.getBoundingClientRect().bottom));
     assert.ok(tiles.every(b => b < 844), `tiles above the fold: ${tiles}`);
