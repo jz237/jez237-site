@@ -38,3 +38,5 @@ v1.3.0: new machines (config ENEMY bulwark / leaper / mimic, INTRO, RAMP mix + `
 `case 'bulwark'|'leaper'|'mimic'`, `reveal()`; shields soak `shield + 2*sector` hits and only cover +-arc radians in front; leapers
 mark `lx/lz` before jumping and can't be hit in the air; disguised mimics (`e.hidden`) don't block wave clear and slip away at the end).
 Ramp (60 runs): Normal 100/95/90/77/38 %, Hard 100/87/65/25/10 %.
+
+- `node scripts/swarmbreak/crowd_check.mjs [trials] [difficulty]`: how crowded the arena gets - average and peak machines alive per wave, per sector (human-like autopilot).

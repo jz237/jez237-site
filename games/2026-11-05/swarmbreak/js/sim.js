@@ -1,7 +1,7 @@
 // Swarmbreak simulation: fixed 120 Hz steps, all randomness from the world's own seeded generator
 // (W.rs), plain data only, so a world can be cloned and re-run bit for bit (replays, online, tests).
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
-import { F, STEP, GATES, SECTORS, WAVES, rampAt, rampLevel, standLevel, STAND, ENEMY, HOSTILE, BOSSES, BOSS_KEYS, SCORE, START_LIVES, INTRO, introduced, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, STREAK, streakMul } from './config.js?v=9';
+import { F, STEP, GATES, SECTORS, WAVES, rampAt, rampLevel, standLevel, STAND, ENEMY, HOSTILE, BOSSES, BOSS_KEYS, SCORE, START_LIVES, INTRO, introduced, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, STREAK, streakMul } from './config.js?v=10';
 export { STEP };
 
 const { AW, AH } = F;
@@ -112,6 +112,7 @@ function freeSpot(W, far, wall = 2) {
     let d = 99;
     for (const p of W.players) d = Math.min(d, hyp(p.x - x, p.z - z));
     for (const s of W.survivors) d = Math.min(d, hyp(s.x - x, s.z - z) + 3);
+    for (const P of W.portals) if (P.inside) d = Math.min(d, hyp(P.x - x, P.z - z) + 3);
     if (d >= far) return [x, z];
     if (d > bd) { bd = d; best = [x, z]; }
   }
@@ -170,6 +171,17 @@ function planWave(W) {
     for (const h of hv) Q.push({ t: t + 0.3, types: [h], inside: true });
     t += R.gap * rr(W, 0.8, 1.25) * (1 + 0.22 * (size - 1));
     left -= size;
+  }
+  // the horde: weak crawlers in numbers. part of it already stands in the arena when the wave opens
+  // (well away from the Wardens), the rest pours in through the gates in packs while the wave goes on
+  const H = Math.round(R.horde || 0);
+  if (H > 0) {
+    const t0 = tw ? 19 : R.warn + 0.5, tEnd = Math.max(t0 + 10, t);
+    let k = Math.round(H * 0.55), i = 0;
+    while (k > 0) { const sz = Math.min(k, 4 + Math.floor(rand(W) * 3)); Q.push({ t: t0 + i * 0.3, types: Array(sz).fill('crawler'), inside: true }); k -= sz; i++; }
+    let rest = H - Math.round(H * 0.55);
+    const packs = Math.ceil(rest / Math.max(1, Math.round(R.pack)));
+    for (let j = 0; j < packs; j++) { const sz = Math.ceil(rest / (packs - j)); Q.push({ t: t0 + 5 + ((tEnd - t0 - 5) * (j + 0.5)) / packs, types: Array(sz).fill('crawler') }); rest -= sz; }
   }
   // pylons are wired at the start of the wave
   if (R.mix.pylon && (!camp || introduced('pylon', s, w))) {
@@ -257,7 +269,9 @@ function spawns(W) {
       if (g.arc) { a.link = b.id; b.link = a.id; a.arcT = b.arcT = rr(W, 0, 1.5); }
     } else {
       g.types.forEach((ty, i) => {
-        const a = (i / g.types.length) * TAU + 0.6, d = i ? (ty === 'dummy' ? 2.8 : 1.1) : 0;
+        // big packs spread out in a sunflower so they arrive as a crowd
+        const big = g.types.length > 3;
+        const a = big ? i * 2.39996 + 0.6 : (i / g.types.length) * TAU + 0.6, d = big ? 0.9 * Math.sqrt(i) : i ? (ty === 'dummy' ? 2.8 : 1.1) : 0;
         const ex = clamp(P.x + Math.cos(a) * d, -AW + 1, AW - 1), ez = clamp(P.z + Math.sin(a) * d, -AH + 1, AH - 1);
         addEnemy(W, ty, ex, ez);
       });
@@ -731,7 +745,8 @@ export function addPickup(W, x, z, kind) {
 function maybeDrop(W, e) {
   if (W.net === 'guest' || e.type === 'dummy' || W.pickups.length >= DROP.max) return;
   const big = e.type === 'brute' || e.type === 'hive' || e.type === 'splitter' || e.type === 'bulwark';
-  if (rand(W) < (big ? DROP.big : DROP.chance) * D_OF(W).drops) addPickup(W, e.x, e.z);
+  // crawlers come in hordes, so each one is a much smaller chance
+  if (rand(W) < (big ? DROP.big : DROP.chance * (e.type === 'crawler' ? 0.3 : 1)) * D_OF(W).drops) addPickup(W, e.x, e.z);
 }
 function pickups(W, dt) {
   if (W.net === 'guest') { for (const q of W.pickups) q.t += dt; return; }

@@ -1,7 +1,7 @@
 // Instant replay. The simulation is deterministic, so the recorder keeps a cloned world every half
 // second plus every Warden's input for each tick; a replay re-runs the moments before the last death
 // (or boss kill) from the nearest clone and reproduces it exactly, effects and sounds included.
-import { cloneWorld, step, drainEvents, STEP } from './sim.js?v=9';
+import { cloneWorld, step, drainEvents, STEP } from './sim.js?v=10';
 
 const r4 = (v) => Math.round(v * 10000) / 10000;
 export class Recorder {

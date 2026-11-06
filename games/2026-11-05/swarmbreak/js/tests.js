@@ -1,9 +1,9 @@
 // ?test=1 self-test page: determinism, exact replays, the difficulty ramp, the gentle start, the autopilot
 // reaching later sectors, the live game loop running without console errors, and no score posts.
-import { makeWorld, step, drainEvents, STEP, cloneWorld } from './sim.js?v=9';
-import { Autopilot } from './ai.js?v=9';
-import { RAMP, SECTORS, WAVES, TYPICAL_UP, rampAt, standLevel, DIFF_KEYS, applyDiff, MIN_WARN } from './config.js?v=9';
-import { Recorder, Replay } from './replay.js?v=9';
+import { makeWorld, step, drainEvents, STEP, cloneWorld } from './sim.js?v=10';
+import { Autopilot } from './ai.js?v=10';
+import { RAMP, SECTORS, WAVES, TYPICAL_UP, rampAt, standLevel, DIFF_KEYS, applyDiff, MIN_WARN } from './config.js?v=10';
+import { Recorder, Replay } from './replay.js?v=10';
 
 export const hashW = (W) => JSON.stringify([W.n, W.score, W.lives, W.wave, W.phase, W.rs, W.players.map((p) => [p.x.toFixed(6), p.z.toFixed(6), p.alive, p.shield]), W.enemies.map((e) => [e.id, e.x.toFixed(4), e.z.toFixed(4), e.hp]), W.bolts.length, W.survivors.length]);
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -66,7 +66,7 @@ export async function runTests(sb) {
     const issues = [];
     for (let i = 1; i < pts.length; i++) {
       const a = pts[i - 1], b = pts[i];
-      for (const k of ['spd', 'fire', 'boltV', 'count']) if (b[k] < a[k] - 1e-9) issues.push(`${k} drops at ${i}`);
+      for (const k of ['spd', 'fire', 'boltV', 'count', 'horde']) if (b[k] < a[k] - 1e-9) issues.push(`${k} drops at ${i}`);
       if (b.warn > a.warn + 1e-9) issues.push(`warning grows at ${i}`);
       if (b.spd - a.spd > 0.07) issues.push(`speed spike at ${i}`);
       if (a.warn - b.warn > 0.12) issues.push(`warning spike at ${i}`);

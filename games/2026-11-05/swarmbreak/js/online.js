@@ -3,8 +3,8 @@
 // (waves, machines, survivors, bosses, lives, score) and streams snapshots. The guest runs its own
 // Warden locally (so moving and aiming never lag), judges the hits it takes, and reports its Warden,
 // its shots and its PULSEs; the host re-creates those shots so kills are decided in one place.
-import { adoptWave, pulse } from './sim.js?v=9';
-import { PW_KEYS } from './config.js?v=9';
+import { adoptWave, pulse } from './sim.js?v=10';
+import { PW_KEYS } from './config.js?v=10';
 const packPw = (pw) => Object.entries(pw || {}).map(([k, t]) => [PW_KEYS.indexOf(k), Math.round(t * 10) / 10]);
 const unpackPw = (a) => { const o = {}; for (const [i, t] of a || []) o[PW_KEYS[i]] = t; return o; };
 
@@ -33,7 +33,8 @@ export function packWorld(W) {
   const h = W.players[0], g = W.players[1], B = W.boss;
   return {
     wt: r3(W.t), ph: W.phase, pt: r2(W.phaseT), wv: W.wave, wn: W.waveN, wT: r2(W.waveT), ft: r2(W.fightT), lv: W.lives, sc: W.score, ch: W.chain, k: W.k, ov: W.over ? 1 : 0, rs: W.result, st: r2(W.secT),
-    en: W.enemies.filter((e) => e.hp > 0).map((e) => [e.id, TYPES.indexOf(e.type), r2(e.x), r2(e.z), r2(e.vx), r2(e.vz), e.hp, r2(e.born), r2(e.a), r2(e.aimT), r3(e.aimA), r2(e.aimLock || 0), e.arc, e.link, r2(e.tell || 0), r2(e.hitT), e.max, r3(e.face || 0), e.hidden ? 1 : 0, e.lp || 0, r2(e.lpT || 0), r2(e.lx || 0), r2(e.lz || 0), e.look || 0, r2(e.glT || 0), r2(e.ox || 0), r2(e.oz || 0), r2(e.lpT0 || 0), r2(e.sh || 0), e.shMax || 0]),
+    // crawlers come in hordes, so they travel short: just what the guest needs to draw them
+    en: W.enemies.filter((e) => e.hp > 0).map((e) => e.type === 'crawler' ? [e.id, TYPES.indexOf(e.type), r2(e.x), r2(e.z), r2(e.vx), r2(e.vz), e.hp, r2(e.born), r2(e.a), r2(e.hitT)] : [e.id, TYPES.indexOf(e.type), r2(e.x), r2(e.z), r2(e.vx), r2(e.vz), e.hp, r2(e.born), r2(e.a), r2(e.aimT), r3(e.aimA), r2(e.aimLock || 0), e.arc, e.link, r2(e.tell || 0), r2(e.hitT), e.max, r3(e.face || 0), e.hidden ? 1 : 0, e.lp || 0, r2(e.lpT || 0), r2(e.lx || 0), r2(e.lz || 0), e.look || 0, r2(e.glT || 0), r2(e.ox || 0), r2(e.oz || 0), r2(e.lpT0 || 0), r2(e.sh || 0), e.shMax || 0]),
     su: W.survivors.map((s) => [s.id, r2(s.x), r2(s.z), r2(s.vx), r2(s.vz), s.look]),
     bo: W.bolts.map((b) => [b.id, r2(b.x), r2(b.z), r2(b.vx), r2(b.vz), b.r, b.big ? 1 : 0, r2(b.life)]),
     po: W.portals.map((P) => [P.id, r2(P.x), r2(P.z), r2(P.t), r2(P.T), P.types.map((t) => TYPES.indexOf(t)), P.x2 ?? null, P.z2 ?? null, P.inside ? 1 : 0]),
@@ -55,6 +56,7 @@ export function applyWorld(W, S, lead) {
   const old = new Map(W.enemies.map((e) => [e.id, e]));
   W.enemies = S.en.map((q) => {
     const e = old.get(q[0]) || {};
+    if (q.length === 10) return Object.assign(e, { id: q[0], type: TYPES[q[1]], x: ext(q[2], q[4]), z: ext(q[3], q[5]), vx: q[4], vz: q[5], hp: q[6], born: q[7], a: q[8], hitT: q[9], aimT: 0, hidden: 0, lp: 0, r: R_OF[TYPES[q[1]]], t: e.t || 0, st: 1, life: 9, remote: true });
     return Object.assign(e, { id: q[0], type: TYPES[q[1]], x: ext(q[2], q[4]), z: ext(q[3], q[5]), vx: q[4], vz: q[5], hp: q[6], born: q[7], a: q[8], aimT: q[9], aimA: q[10], aimLock: q[11], arc: q[12], link: q[13], tell: q[14], hitT: q[15], max: q[16], face: q[17], hidden: q[18], lp: q[19], lpT: q[20], lx: q[21], lz: q[22], look: q[23], glT: q[24], ox: q[25], oz: q[26], lpT0: q[27], sh: q[28], shMax: q[29], r: R_OF[TYPES[q[1]]], t: e.t || 0, st: 1, life: 9, remote: true });
   });
   W.survivors = S.su.map((q) => ({ id: q[0], x: ext(q[1], q[3]), z: ext(q[2], q[4]), vx: q[3], vz: q[4], look: q[5], a: Math.atan2(q[4], q[3]), t: 1 }));

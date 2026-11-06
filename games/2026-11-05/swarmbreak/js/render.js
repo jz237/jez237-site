@@ -4,12 +4,64 @@
 // the simulation; floor decals for every warning (gates, boss tells, aim lines, arcs); HDR post.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=9';
-import * as TX from './textures.js?v=9';
-import * as MD from './models.js?v=9';
-import { FX, CALM } from './fx.js?v=9';
-import { F, GATES, POWERUPS } from './config.js?v=9';
-import { dronePos } from './sim.js?v=9';
+import { Post } from './post.js?v=10';
+import * as TX from './textures.js?v=10';
+import * as MD from './models.js?v=10';
+import { FX, CALM } from './fx.js?v=10';
+import { F, GATES, POWERUPS } from './config.js?v=10';
+import { dronePos } from './sim.js?v=10';
+
+// crawlers come in hordes, so they are all drawn together: one instanced mesh per part of the model,
+// about twenty draw calls however many there are (a full model per crawler cost ~15 draw calls each).
+// Materials are copies of the model's (same shader source, so the compiled programs are shared).
+const _cm = new THREE.Matrix4(), _cr = new THREE.Matrix4(), _cj = new THREE.Matrix4(), _ce = new THREE.Euler(), _cq = new THREE.Quaternion(), _cv = new THREE.Vector3(), _cs = new THREE.Vector3(), _cu = new THREE.Vector3(0, 1, 0);
+class Crowd {
+  constructor(scene, max) {
+    const P = MD.crawler();
+    this.max = max; this.n = 0; this.parts = [];
+    P.g.updateMatrixWorld(true);
+    this.hips = P.legs.map((L) => L.hip.position.clone());
+    this.bodyY = P.body.position.y;
+    const under = (o, j) => { for (let q = o; q; q = q.parent) if (q === j) return true; return false; };
+    const mats = new Map();
+    P.g.traverse((m) => {
+      if (!m.isMesh) return;
+      let j = -1, jo = P.g;
+      if (under(m, P.body)) { j = 'b'; jo = P.body; }
+      else P.legs.forEach((L, i) => { if (under(m, L.hip)) { j = i; jo = L.hip; } });
+      const local = new THREE.Matrix4().copy(jo.matrixWorld).invert().multiply(m.matrixWorld);
+      let mat = mats.get(m.material);
+      if (!mat) { mat = m.material.clone(); mats.set(m.material, mat); }
+      const I = new THREE.InstancedMesh(m.geometry, mat, max);
+      I.castShadow = m.castShadow; I.receiveShadow = m.receiveShadow; I.frustumCulled = false; I.count = 0;
+      I.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+      scene.add(I);
+      this.parts.push({ I, j, local });
+    });
+    this.legM = [0, 1, 2, 3].map(() => new THREE.Matrix4());
+    this.bodyM = new THREE.Matrix4();
+  }
+  get meshes() { return this.parts.map((p) => p.I); }
+  begin() { this.n = 0; }
+  // legs: [rx0, ry0, rx1, ry1, ...]
+  add(x, z, yaw, s, bob, legs) {
+    if (this.n >= this.max) return;
+    _cr.compose(_cv.set(x, 0, z), _cq.setFromAxisAngle(_cu, yaw), _cs.set(s, s, s));
+    this.bodyM.multiplyMatrices(_cr, _cj.makeTranslation(0, this.bodyY + bob, 0));
+    for (let i = 0; i < 4; i++) {
+      const h = this.hips[i];
+      _cj.makeRotationFromEuler(_ce.set(legs[i * 2], legs[i * 2 + 1], 0)).setPosition(h.x, h.y, h.z);
+      this.legM[i].multiplyMatrices(_cr, _cj);
+    }
+    for (const p of this.parts) {
+      const J = p.j === 'b' ? this.bodyM : p.j === -1 ? _cr : this.legM[p.j];
+      p.I.setMatrixAt(this.n, _cm.multiplyMatrices(J, p.local));
+    }
+    this.n++;
+  }
+  end() { for (const p of this.parts) { p.I.count = this.n; p.I.instanceMatrix.needsUpdate = true; } }
+  warm(on) { for (const p of this.parts) { p.I.count = on ? 1 : 0; if (on) p.I.setMatrixAt(0, _cm.identity()); p.I.instanceMatrix.needsUpdate = true; } }
+}
 
 export { CALM };
 const { AW, AH } = F;
@@ -445,6 +497,7 @@ export class Renderer {
     this.blobI = new THREE.InstancedMesh(cg, new THREE.MeshBasicMaterial({ map: this.T.glow, color: 0x000000, transparent: true, opacity: 0.6, depthWrite: false }), 220);
     this.blobI.frustumCulled = false; this.blobI.renderOrder = 1; this.blobI.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     this.scene.add(this.blobI);
+    this.crowd = new Crowd(this.scene, 220);
     this.icons = {};
   }
   iconFor(kind) {
@@ -539,6 +592,7 @@ export class Renderer {
   }
   enemyView(e) {
     const t = e.type;
+    if (t === 'crawler') return { type: t, crowd: true, yaw: -e.a, hit: 0, x: e.x, z: e.z, legs: new Float32Array(8) };
     const v = t === 'crawler' ? MD.crawler() : t === 'brute' ? MD.brute() : t === 'spitter' ? MD.spitter() : t === 'hive' ? MD.hive() : t === 'dart' ? MD.dart()
       : t === 'pylon' ? MD.pylon() : t === 'splitter' ? MD.splitter(false) : t === 'shard' ? MD.splitter(true)
       : t === 'bulwark' ? MD.bulwark() : t === 'leaper' ? MD.leaper() : t === 'mimic' ? (e.hidden ? this.disguise(e) : MD.mimic(e.look || 0)) : MD.dummy();
@@ -644,7 +698,12 @@ export class Renderer {
     }
     this.pieces = keep;
   }
-  breakEnemy(id, o) { const v = this.views.e.get(id); if (!v) return; this.views.e.delete(id); this.breakApart(v, o); }
+  breakEnemy(id, o) {
+    let v = this.views.e.get(id); if (!v) return; this.views.e.delete(id);
+    // a crowd crawler has no model of its own: build one in its pose just to break it
+    if (v.crowd) { const m = MD.crawler(); m.g.position.set(v.x, 0, v.z); m.g.rotation.y = v.yaw; v = m; o = { max: 10, ...o }; }
+    this.breakApart(v, o);
+  }
   breakPlayer(pid, o) { const v = this.views.p.get(pid); if (v) this.breakApart(v, { max: 26, ...o, clone: true }); }
   breakBoss(o) { const v = this.bossView; if (!v) return; this.bossView = null; this.breakApart(v, { power: 1.7, max: 48, ...o }); }
   // a mimic in disguise: a survivor body with the same beacon, whose gem sometimes glints red
@@ -677,15 +736,17 @@ export class Renderer {
     for (const [id, v] of this.views.p) if (!seenP.has(id)) { this.scene.remove(v.g); this.views.p.delete(id); }
     // machines
     const seen = new Set();
+    this.crowd.begin();
     for (const e of W.enemies) {
       if (e.hp <= 0) continue;
       seen.add(e.id);
       let v = this.views.e.get(e.id);
       if (v && v.type === 'mimic' && v.hidden !== !!e.hidden) { this.scene.remove(v.g); v = null; }
       if (!v) { v = this.enemyView(e); this.views.e.set(e.id, v); }
-      this.updateEnemy(v, e, dt, W);
+      if (v.crowd) this.updateCrowd(v, e, dt); else this.updateEnemy(v, e, dt, W);
     }
-    for (const [id, v] of this.views.e) if (!seen.has(id)) { this.scene.remove(v.g); this.views.e.delete(id); }
+    this.crowd.end();
+    for (const [id, v] of this.views.e) if (!seen.has(id)) { if (v.g) this.scene.remove(v.g); this.views.e.delete(id); }
     // survivors
     const seenS = new Set();
     for (const s of W.survivors) {
@@ -788,6 +849,17 @@ export class Renderer {
     void W;
   }
 
+  updateCrowd(v, e, dt) {
+    const t = this.time;
+    const born = e.born > 0 ? 1 - e.born / 0.45 : 1;
+    v.hit = Math.max(v.hit - dt * 8, e.hitT > 0 ? 1 : 0);
+    const sp = Math.hypot(e.vx, e.vz);
+    if (sp > 0.2) v.yaw += angD(v.yaw, -Math.atan2(e.vz, e.vx)) * Math.min(1, dt * 8);
+    v.x = e.x; v.z = e.z;
+    const ph = t * 14 * Math.min(1.5, sp / 1.5 + 0.3) + e.id;
+    for (let i = 0; i < 4; i++) { v.legs[i * 2] = Math.sin(ph + i * Math.PI * 0.5 + (i % 2) * Math.PI) * 0.35; v.legs[i * 2 + 1] = Math.cos(ph + i * 1.7) * 0.3; }
+    this.crowd.add(e.x, e.z, v.yaw, Math.max(0.05, born) * (1 + 0.12 * v.hit), Math.abs(Math.sin(ph * 2)) * 0.04, v.legs);
+  }
   updateEnemy(v, e, dt, W) {
     const t = this.time;
     v.g.position.set(e.x, 0, e.z);
@@ -1196,6 +1268,7 @@ export class Renderer {
     const pv2 = MD.warden(0xff5a3a, 0xffd27a); pv2.g.position.set(4, 0, 4); tmp.push(pv2.g); this.scene.add(pv2.g);
     const icon = new THREE.Sprite(this.iconFor('triple')); icon.position.set(0, 2, 0); tmp.push(icon); this.scene.add(icon);
     for (const I of [this.railI, this.seekI, this.blobI, this.shotI, this.boltI, this.boltBI, this.haloI]) { I.count = 1; I.setMatrixAt(0, _m.identity()); }
+    this.crowd.warm(true);
     // build and compile every sector's floor, environment and scenery now, behind the loading screen, so
     // nothing compiles a shader in the middle of play (each compile was a visible freeze)
     const pr = { bloom: 0.7, threshold: 1.2, exposure: 1, chroma: 0, time: 0, desat: 0, fade: 1, vignette: 0.4, flash: this.flash, tint: _tint.set(1, 1, 1), shocks: [], lens: [] };
@@ -1208,6 +1281,7 @@ export class Renderer {
     }
     if (first !== 0) this.setLook(first);
     for (const I of [this.railI, this.seekI, this.blobI, this.shotI, this.boltI, this.boltBI, this.haloI]) I.count = 0;
+    this.crowd.warm(false);
     for (const o of tmp) this.scene.remove(o);
     this.scene.remove(pv.g); this.scene.remove(sv.g);
     for (const m of [...this.decalPool, this.laneMesh, this.beam, this.beamGlow, ...this.cols, ...this.aims, ...this.strips, ...this.lasers, ...this.bolts3]) m.visible = false;
