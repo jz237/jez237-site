@@ -1,13 +1,13 @@
 // Swarmbreak — game flow, menus, HUD, commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, STREAK, streakMul, SUITS } from './config.js?v=7';
-import { makeWorld, step, drainEvents, waveLabel, isBossWave, angDiff } from './sim.js?v=7';
-import { Autopilot } from './ai.js?v=7';
-import { Renderer, pickQuality, CALM } from './render.js?v=7';
-import { Audio } from './audio.js?v=7';
-import { Input } from './input.js?v=7';
-import { Scores, NO_POST } from './scores.js?v=7';
-import { Recorder, Replay } from './replay.js?v=7';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=7';
+import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, STREAK, streakMul, SUITS } from './config.js?v=8';
+import { makeWorld, step, drainEvents, waveLabel, isBossWave, angDiff } from './sim.js?v=8';
+import { Autopilot } from './ai.js?v=8';
+import { Renderer, pickQuality, CALM } from './render.js?v=8';
+import { Audio } from './audio.js?v=8';
+import { Input } from './input.js?v=8';
+import { Scores, NO_POST } from './scores.js?v=8';
+import { Recorder, Replay } from './replay.js?v=8';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=8';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -402,14 +402,15 @@ function handleEvents(list, W, live) {
         break;
       }
       case 'spawn': A.play('spawn', { x: e.x, y: 1, z: e.z, vol: 0.8 }); fx.ring(e.x, 0, e.z, F.clearR, 0x9fd8ff); R.shock(e.x, e.z, 0.8); fx.sparks(e.x, 1, e.z, { n: 20, speed: 5, r: 0.6, g: 0.9, b: 1 }); break;
-      case 'portal': A.play('portal', { x: e.x, y: 1, z: e.z, vol: e.type === 'dummy' ? 0.4 : 0.55, gap: 0.15 }); if (live && G.mode !== 'demo' && W.R.warn > 1.5 && e.type !== 'dummy') A.play('warn', { vol: 0.22, gap: 0.8 }); break;
+      // (no extra warning chirp: the glowing gate and its hum are the warning)
+      case 'portal': A.play('portal', { x: e.x, y: 1, z: e.z, vol: e.type === 'dummy' ? 0.4 : 0.55, gap: 0.15 }); break;
       case 'enter': A.play('enter', { x: e.x, y: 1, z: e.z, vol: 0.6, gap: 0.08 }); fx.ring(e.x, 0, e.z, 2.2, 0xff6a4a); fx.sparks(e.x, 1, e.z, { n: 10, speed: 4, r: 1, g: 0.4, b: 0.3 }); break;
       case 'aim': A.play('spitcharge', { x: e.x, y: 1, z: e.z, vol: 0.4, gap: 0.12 }); break;
       case 'bolt': A.play('spitfire', { x: e.x, y: 1, z: e.z, vol: 0.5, gap: 0.05 }); break;
       case 'hivetell': A.play('hivetell', { x: e.x, y: 1, z: e.z, vol: 0.45, gap: 0.5 }); break;
       case 'dart': A.play('hivespawn', { x: e.x, y: 1, z: e.z, vol: 0.4, gap: 0.2 }); break;
       case 'dartpop': fx.sparks(e.x, 0.9, e.z, { n: 6, speed: 3, r: 0.8, g: 0.5, b: 1 }); break;
-      case 'arctell': A.play('warn', { x: e.x, y: 1, z: e.z, vol: 0.15, gap: 0.6, rate: 1.4 }); break;
+      case 'arctell': break;
       case 'arcon': A.play('arcon', { x: e.x, y: 1.5, z: e.z, vol: 0.6, gap: 0.2 }); break;
       case 'wave':
         if (live) {
@@ -431,7 +432,7 @@ function handleEvents(list, W, live) {
       case 'leapland': A.play('stomp', { x: e.x, y: 0, z: e.z, vol: 0.55, rate: 1.5, gap: 0.08 }); R.fx.ring(e.x, 0, e.z, e.r * 1.6, 0xffa020); R.fx.dust(e.x, 0.1, e.z, { n: 12, s0: 0.6, s1: 2, life: 1.6, spread: 1.2, jit: 2.5, a: 0.4 }); R.shock(e.x, e.z, 0.5); R.addTrauma(0.12 * +settings.shake); break;
       case 'reveal': A.play('reveal', { x: e.x, y: 1.2, z: e.z, vol: 0.9, gap: 0 }); R.fx.sparks(e.x, 1.2, e.z, { n: 16, speed: 5, r: 1, g: 0.3, b: 0.2 }); R.fx.debris(e.x, 1, e.z, { n: 6, speed: 4, size: 0.12 }); if (live) popup('MIMIC!', e.x, e.z, '#ff5a4a', true); break;
       case 'streak': if (live && e.mul === 1.5 && !G.tutStreak) { G.tutStreak = 1; tutorial('streak'); }
-        if (live) { A.play('rescue', { vol: 0.55, rate: 1.2 + e.mul * 0.12, gap: 0 }); if (e.mul >= 2) popup(`×${e.mul} STREAK`, e.x, e.z, '#ffb347', true); if (e.mul >= 3) rumble(0.2, 0.3, 90); }
+        if (live) { A.play('upgrade', { vol: 0.5, rate: 0.8 + e.mul * 0.04, gap: 0 }); if (e.mul >= 2) popup(`×${e.mul} STREAK`, e.x, e.z, '#ffb347', true); if (e.mul >= 3) rumble(0.2, 0.3, 90); }
         break;
       case 'streakend': if (live && e.why === 'hit') caption(`STREAK BROKEN · ${e.n} IN A ROW`, 1.6); break;
       case 'hazwarn': if (live) A.play('hazwarn', { vol: 0.45, gap: 0.5 }); break;
@@ -1028,7 +1029,7 @@ async function boot() {
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('stand', settings.diff).fresh();
-  if (params.has('test')) { const m = await import('./tests.js?v=7'); m.runTests(window.__sb); }
+  if (params.has('test')) { const m = await import('./tests.js?v=8'); m.runTests(window.__sb); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('stand')) startStand(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }

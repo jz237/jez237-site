@@ -4,9 +4,9 @@
 // per wave try (the "edge": hits taken per wave, steadier than the clear rate), and what killed it.
 //   node scripts/swarmbreak/ramp_check.mjs [trials=40] [sectors=1,2,3,4,5] [profile=human] [difficulty=normal]
 // Targets: about 95 / 80 / 60 / 40 / 25 % clears, and no wave noticeably harder than the next.
-import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-05/swarmbreak/js/sim.js?v=7';
-import { Autopilot } from '../../games/2026-11-05/swarmbreak/js/ai.js?v=7';
-import { SECTORS, TYPICAL_UP, WAVES } from '../../games/2026-11-05/swarmbreak/js/config.js?v=7';
+import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-05/swarmbreak/js/sim.js?v=8';
+import { Autopilot } from '../../games/2026-11-05/swarmbreak/js/ai.js?v=8';
+import { SECTORS, TYPICAL_UP, WAVES } from '../../games/2026-11-05/swarmbreak/js/config.js?v=8';
 
 const trials = +(process.argv[2] || 40);
 const sectors = (process.argv[3] || '1,2,3,4,5').split(',').map((s) => +s - 1);
