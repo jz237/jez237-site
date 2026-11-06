@@ -1,14 +1,20 @@
 // Reef section (corals, anemones, shrimp/crabs/snails): logic, care plans and
-// the empty picture manifest. Run: node --test scripts/fish-health-lab/reef.test.mjs
+// the picture manifest (shrimp/crab/snail pictures; corals still placeholders). Run: node --test scripts/fish-health-lab/reef.test.mjs
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { existsSync, readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
 import { assessReef, rankReef, reefSignsFor, reefTreatmentNote, MAX_REEF_ALTERNATIVES } from '../../experiments/fish-health-lab/reef-logic.mjs';
 import { REEF_GROUPS, REEF_KINDS, REEF_SIGNS, REEF_CHANGES, REEF_CONDITIONS, REEF_LOOKALIKES, REEF_TREATMENT_FAMILY } from '../../experiments/fish-health-lab/reef-data.mjs';
 import { reefPlanFor, REEF_PLAN_IDS, INVERT_WARNING, STEP_TAGS } from '../../experiments/fish-health-lab/reef-care.mjs';
-import { REEF_IMAGES, reefImagesFor, reefSlotsFor } from '../../experiments/fish-health-lab/reef-images.mjs';
+import { REEF_IMAGES, REEF_SLOTS, INVERT_SET, reefImagesFor, reefImageFor, reefSlotsFor } from '../../experiments/fish-health-lab/reef-images.mjs';
+import { CROPS as INVERT_CROPS, IMAGE_SOURCE as INVERT_IMAGE_SOURCE } from '../../experiments/fish-health-lab/reef-images-inverts-data.mjs';
 import { URGENCY, CONDITIONS } from '../../experiments/fish-health-lab/data.mjs';
 
 const GROUPS = ['coral', 'invert'];
+const app = fileURLToPath(new URL('../../experiments/fish-health-lab/', import.meta.url));
+const invertReceipt = JSON.parse(readFileSync(new URL('./invert-images-20261106.json', import.meta.url)));
 const kindsOf = group => ['', ...REEF_KINDS[group].map(k => k.id)];
 // Every tile a visitor can actually reach: group × kind (incl. Not sure) × shown sign.
 const reachable = () => GROUPS.flatMap(group => kindsOf(group).flatMap(kind => reefSignsFor(group, kind).map(s => ({ group, kind, sign: s.id }))));
@@ -217,8 +223,13 @@ test('reef data stays separate from the fish conditions', () => {
   assert.ok(invert >= 8 && invert <= 10, `${invert} invert conditions`);
 });
 
-test('the reef picture manifest is empty for now and pluggable', () => {
-  for (const group of GROUPS) for (const section of ['kinds', 'signs', 'conditions']) assert.deepEqual(REEF_IMAGES[group][section], {}, `${group}.${section} should be empty until pictures are approved`);
+test('coral and anemone pictures are still placeholders; the manifest stays pluggable', () => {
+  for (const section of ['kinds', 'signs', 'conditions']) assert.deepEqual(REEF_IMAGES.coral[section], {}, `coral.${section} should be empty until coral pictures are approved`);
+  for (const { group, kind, sign } of reachable().filter(c => c.group === 'coral')) {
+    assert.equal(reefImagesFor('coral', sign, kind, 'signs').placeholder, true, `${kind}/${sign}`);
+    for (const c of [assessReef({ group, kind, sign }).primary, ...assessReef({ group, kind, sign }).alternatives]) assert.equal(reefImagesFor('coral', c.id, kind).placeholder, true, c.id);
+  }
+  for (const k of REEF_KINDS.coral) assert.equal(reefImagesFor('coral', k.id, '', 'kinds').placeholder, true, k.id);
   assert.deepEqual(reefImagesFor('coral', 'rtn'), { images: [], placeholder: true });
   assert.ok(reefSlotsFor('coral', 'rtn').every(s => s.image === null));
   // Adding entries later fills results and kind-specific overrides win.
@@ -231,4 +242,96 @@ test('the reef picture manifest is empty for now and pluggable', () => {
     assert.equal(reefImagesFor('coral', 'peeling', 'lps', 'signs').placeholder, true);
     assert.equal(reefSlotsFor('coral', 'rtn')[0].image, fake);
   } finally { delete REEF_IMAGES.coral.conditions.rtn; delete REEF_IMAGES.coral.signs['sps:peeling']; }
+});
+
+// ── Shrimp, crab and snail pictures (Jez, Nov 6 2026) ──────────────────────
+const invertCases = () => reachable().filter(c => c.group === 'invert');
+
+test('invert pictures: every kind tile, every sign tile a visitor can reach, every invert result', () => {
+  for (const k of REEF_KINDS.invert) assert.ok(reefImagesFor('invert', k.id, '', 'kinds').images.length === 1, `kind ${k.id}`);
+  for (const s of REEF_SIGNS.invert) assert.ok(REEF_IMAGES.invert.signs[s.id], `sign ${s.id} needs a plain picture`);
+  for (const { kind, sign } of invertCases()) assert.equal(reefImagesFor('invert', sign, kind, 'signs').placeholder, false, `${kind || 'not sure'}/${sign}`);
+  for (const c of REEF_CONDITIONS.filter(c => c.group === 'invert')) {
+    const { images } = reefImagesFor('invert', c.id);
+    assert.ok(images.length >= 1 && images.length <= REEF_SLOTS.length, `${c.id}: ${images.length} pictures`);
+    assert.ok(reefSlotsFor('invert', c.id)[0].image, `${c.id} library card`);
+  }
+  // Every result, could-also card and compare side a visitor can reach has a picture.
+  for (const c of invertCases()) {
+    for (const changes of [[], REEF_CHANGES.invert.map(x => x.id)]) {
+      const r = assessReef({ ...c, changes });
+      for (const x of [r.primary, ...r.alternatives]) assert.equal(reefImagesFor('invert', x.id, c.kind).placeholder, false, `${JSON.stringify(c)} → ${x.id}`);
+    }
+  }
+});
+
+test('invert kind-specific pictures point at real kinds, signs and conditions that kind can reach', () => {
+  const kinds = REEF_KINDS.invert.map(k => k.id);
+  for (const [section, ids] of [['signs', REEF_SIGNS.invert.map(s => s.id)], ['conditions', REEF_CONDITIONS.filter(c => c.group === 'invert').map(c => c.id)]]) {
+    for (const key of Object.keys(INVERT_SET[section])) {
+      const [kind, id] = key.includes(':') ? key.split(':') : ['', key];
+      assert.ok(ids.includes(id), `${section} ${key}: unknown ${id}`);
+      if (!kind) continue;
+      assert.ok(kinds.includes(kind), `${section} ${key}: unknown kind`);
+      if (section === 'signs') assert.ok(reefSignsFor('invert', kind).some(s => s.id === id), `${key}: ${kind} never sees that sign`);
+      else assert.ok(invertCases().filter(c => c.kind === kind).some(c => { const r = assessReef(c); return [r.primary, ...r.alternatives].some(x => x.id === id); }), `${key}: never shown for ${kind}`);
+    }
+  }
+  assert.ok(Object.keys(INVERT_SET.kinds).every(k => kinds.includes(k)));
+});
+
+test('invert pictures show the right animal for the chosen kind where it matters', () => {
+  const sign = (kind, id) => reefImagesFor('invert', id, kind, 'signs').images[0].id;
+  const hero = (kind, id) => reefImagesFor('invert', id, kind).images[0].id;
+  assert.equal(sign('crab', 'molt-stuck'), 'sign-crab-molt-stuck');
+  assert.equal(sign('shrimp', 'molt-stuck'), 'sign-molt-stuck');
+  assert.equal(sign('crab', 'not-moving'), 'sign-crab-not-moving');
+  assert.equal(sign('snail', 'not-moving'), 'sign-not-moving');
+  assert.equal(sign('shrimp', 'legs'), 'sign-shrimp-legs');
+  assert.equal(sign('', 'legs'), 'sign-legs');
+  assert.equal(hero('crab', 'failed-molt'), 'cond-crab-failed-molt');
+  assert.equal(hero('crab', 'normal-molt'), 'cond-crab-normal-molt');
+  assert.equal(hero('shrimp', 'normal-molt'), 'cond-normal-molt');
+  assert.equal(hero('', 'bopyrid'), 'cond-bopyrid');
+  assert.equal(hero('snail', 'flipped'), 'cond-flipped');
+  assert.equal(hero('snail', 'starvation'), 'cond-snail-starvation');
+});
+
+test('a result and its could-also cards never show the same invert picture (compare stays useful)', () => {
+  for (const c of invertCases()) {
+    for (const changes of [[], ...REEF_CHANGES.invert.map(x => [x.id])]) {
+      const r = assessReef({ ...c, changes });
+      const ids = [r.primary, ...r.alternatives].map(x => reefImagesFor('invert', x.id, c.kind).images[0].id);
+      assert.equal(new Set(ids).size, ids.length, `${JSON.stringify({ ...c, changes })}: ${ids}`);
+    }
+  }
+});
+
+test('invert crops: every crop is used, keys and hashes match the receipt, upload state matches IMAGE_SOURCE', () => {
+  const used = new Set([...Object.values(INVERT_SET.kinds), ...Object.values(INVERT_SET.signs), ...Object.values(INVERT_SET.conditions).flat()]);
+  assert.deepEqual([...used].sort(), Object.keys(INVERT_CROPS).sort(), 'every crop is used and every used id exists');
+  assert.equal(invertReceipt.requestedModel, 'openai/gpt-image-2.6-sunburst');
+  assert.equal(invertReceipt.requestedQuality, 'medium');
+  assert.deepEqual(invertReceipt.reportedProviderModel, ['openai/gpt-image-2.6-sunburst']);
+  assert.deepEqual(invertReceipt.assets.map(a => a.id).sort(), Object.keys(INVERT_CROPS).sort());
+  assert.equal(new Set(invertReceipt.assets.map(a => a.sha256)).size, invertReceipt.assets.length, 'no duplicate crops');
+  for (const a of invertReceipt.assets) {
+    const crop = INVERT_CROPS[a.id];
+    assert.equal(crop.key, a.r2Key, a.id);
+    assert.match(a.r2Key, new RegExp(`^experiments/fish-health-lab/inverts/${a.id}-${a.sha256.slice(0, 12)}\\.jpg$`), a.id);
+    assert.equal(a.plannedUrl, `https://media.jez237.com/${a.r2Key}`);
+    assert.equal(a.path, `local-images/inverts/${a.r2Key.split('/').pop()}`);
+    assert.deepEqual([a.width, a.height, crop.width, crop.height], [362, 362, 362, 362], a.id);
+    assert.equal(a.resized, false);
+    assert.equal(a.uploaded, INVERT_IMAGE_SOURCE === 'media', `${a.id}: uploaded flag must match IMAGE_SOURCE`);
+    assert.ok(crop.alt.startsWith('AI illustration: ') && crop.caption, a.id);
+    assert.ok(invertReceipt.sources[a.sheet], `${a.id}: sheet ${a.sheet} recorded`);
+  }
+  // Published: every asset is uploaded, so the app serves media.jez237.com (local only for an unpublished preview).
+  const uploaded = invertReceipt.assets.every(a => a.uploaded);
+  assert.equal(INVERT_IMAGE_SOURCE, uploaded ? 'media' : 'local');
+  assert.ok(reefImageFor('invert', 'molt-stuck', '', 'signs').url.startsWith(uploaded ? 'https://media.jez237.com/experiments/fish-health-lab/inverts/' : 'local-images/inverts/'));
+  if (existsSync(`${app}local-images/inverts`)) {
+    for (const a of invertReceipt.assets) assert.equal(createHash('sha256').update(readFileSync(`${app}${a.path}`)).digest('hex'), a.sha256, a.id);
+  }
 });

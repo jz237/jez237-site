@@ -1,6 +1,7 @@
 // Reef section browser check: What needs help → coral / anemone / shrimp flows,
 // the fish flow through the new Fish tile, the reef library filter and 390 px
-// layout. Run against a LOCAL server (the live site injects analytics):
+// layout. Shrimp/crab/snail spots show pictures (reef-images-inverts-data.mjs);
+// coral and anemone spots still show "Picture coming soon". Run against a LOCAL server (the live site injects analytics):
 //   FISH_LAB_URL=http://127.0.0.1:8771/experiments/fish-health-lab/ \
 //   PLAYWRIGHT_MODULE=.../playwright-core/index.js node scripts/fish-health-lab/reef-browser-check.mjs
 // FISH_LAB_SHOTS=<dir> saves the 390 px review screenshots.
@@ -32,8 +33,20 @@ const at = async (p, name) => {
 const noOverflow = async p => assert.equal(await p.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, 'horizontal overflow');
 const shot = async (p, name) => { if (shots) await p.screenshot({ path: `${shots}/${name}.png`, fullPage: true }); };
 const home = async p => { await p.goto(root, { waitUntil: 'networkidle' }); await at(p, 'welcome'); };
-// No pictures in the reef section yet: every picture spot is a placeholder.
+// Coral spots are still placeholders; invert spots are pictures.
 const reefImages = p => p.locator('#check img:visible, #detail-dialog[open] img, #quick-compare-dialog[open] img').count();
+// Load every picture under `sel` (they are lazy) and return [crop id, natural width].
+const loaded = (p, sel) => p.locator(sel).evaluateAll(async els => {
+  for (const el of els) { el.loading = 'eager'; try { await el.decode(); } catch {} }
+  return els.map(el => [el.dataset.reefImage, el.naturalWidth]);
+});
+const allLoaded = async (p, sel, n) => {
+  const got = await loaded(p, sel);
+  if (n !== undefined) assert.equal(got.length, n, `${sel}: ${got.length} pictures`);
+  assert.ok(got.length > 0 && got.every(([id, w]) => id && w === 362), `${sel}: ${JSON.stringify(got)}`);
+  return got.map(([id]) => id);
+};
+const hero = async p => (await allLoaded(p, '.reef-result .result-image img', 1))[0];
 const reefFlow = async (p, group, kind, sign, changes = []) => {
   await home(p);
   await p.locator(`[data-reef-start="${group}"]`).click(); await at(p, 'reef-kind');
@@ -118,22 +131,79 @@ try {
     await noOverflow(p); await shot(p, '5-anemone-result');
     record('coral → anemone → shrinking/wandering → anemone stress');
 
-    // 4. Shrimp → stuck molt → failed molt, with the copper warning.
+    // 4. Shrimp/crab/snail: picture tiles (kinds, signs), then shrimp → stuck molt → failed molt.
+    await home(p);
+    await p.locator('[data-reef-start="invert"]').click(); await at(p, 'reef-kind');
+    assert.deepEqual(await allLoaded(p, '#reef-kind-grid img', 4), ['kind-shrimp', 'kind-crab', 'kind-snail', 'kind-other']);
+    assert.equal(await p.locator('#reef-kind-grid [data-reef-kind=""] .reef-ph').count(), 1, 'Not sure keeps its icon');
+    await noOverflow(p); await shot(p, '6a-invert-kind');
+    await next(p); await at(p, 'reef-signs');
+    const allSigns = await allLoaded(p, '#reef-sign-grid img', 10);
+    assert.equal(await p.locator('#reef-sign-grid .reef-ph').count(), 0, 'no placeholders on invert sign tiles');
+    assert.equal(new Set(allSigns).size, 10);
+    await noOverflow(p); await shot(p, '6b-invert-signs-not-sure');
+    for (const [kind, expect] of [['shrimp', { 'molt-stuck': 'sign-molt-stuck', legs: 'sign-shrimp-legs', bulge: 'sign-bulge' }], ['crab', { 'molt-stuck': 'sign-crab-molt-stuck', 'empty-shell': 'sign-crab-empty-shell', 'not-moving': 'sign-crab-not-moving' }], ['snail', { 'not-moving': 'sign-not-moving', unclear: 'sign-snail-unclear' }], ['other', { spines: 'sign-spines', 'not-moving': 'sign-other-not-moving' }]]) {
+      await p.locator('[data-action="back"]').click(); await at(p, 'reef-kind');
+      await p.locator(`[data-reef-kind="${kind}"]`).click(); await next(p); await at(p, 'reef-signs');
+      const n = await p.locator('#reef-sign-grid [data-reef-sign]').count();
+      const ids = await allLoaded(p, '#reef-sign-grid img', n);
+      for (const [sign, id] of Object.entries(expect)) assert.equal(await p.locator(`[data-reef-sign="${sign}"] img`).getAttribute('data-reef-image'), id, `${kind}/${sign}`);
+      assert.equal(new Set(ids).size, n, `${kind}: every tile its own picture`);
+    }
+    record('invert kind tiles (4 pictures + Not sure icon) and sign tiles: 10/10 pictures for Not sure, kind-specific tiles for shrimp, crab, snail and other');
+
     await reefFlow(p, 'invert', 'shrimp', 'molt-stuck', ['swing']);
     assert.match(await title(p), /Failed molt/);
     assert.equal(await p.locator('.invert-warning').isVisible(), true);
     assert.match(await p.locator('.invert-warning').innerText(), /Copper and most fish medicines kill shrimp, crabs and snails/);
     assert.match(await p.locator('.reef-result .diagnosis-reason').innerText(), /salinity or temp swing/i);
     assert.match(await p.locator('.reef-todo li').first().innerText(), /^Test salinity, temperature, ammonia/);
-    assert.equal(await reefImages(p), 0);
+    assert.equal(await hero(p), 'cond-failed-molt');
+    const altPics = await allLoaded(p, '[data-reef-alternative] .alt-pick img', await p.locator('[data-reef-alternative]').count());
+    assert.ok(altPics.includes('cond-normal-molt'), altPics.join());
+    assert.equal(await p.locator('#reef-results-content .reef-ph').count(), 0);
     await noOverflow(p); await shot(p, '6-invert-result-failed-molt');
-    record('shrimp → stuck in its molt (+ salinity swing) → failed molt, with the copper warning');
+    await p.locator('[data-reef-compare="normal-molt"]').click();
+    assert.deepEqual(await allLoaded(p, '#quick-compare-content img', 2), ['cond-failed-molt', 'cond-normal-molt']);
+    await noOverflow(p); await shot(p, '6c-invert-compare');
+    await p.locator('#quick-compare-content [data-reef-choose="normal-molt"]').click();
+    assert.match(await title(p), /Normal molt/);
+    assert.equal(await hero(p), 'cond-normal-molt');
+    assert.equal(await p.locator('.invert-warning').isVisible(), true);
+    await p.locator('.reef-result [data-reef-condition]').first().click();
+    assert.deepEqual(await allLoaded(p, '#detail-content .reef-gallery img'), ['cond-normal-molt', 'cond-crab-normal-molt', 'sign-empty-shell']);
+    assert.match(await p.locator('#detail-content').innerText(), /Copper and most fish medicines kill/);
+    await noOverflow(p); await p.keyboard.press('Escape');
+    record('shrimp → stuck in its molt (+ salinity swing) → failed molt with its picture, could-also pictures, compare (2 pictures), swap to normal molt, detail gallery; copper warning throughout');
+
+    // 4b. More invert results: each hero is the right picture and the copper warning stays.
+    for (const [kind, sign, changes, re, id, name] of [
+      ['shrimp', 'bulge', [], /Bopyrid isopod/, 'cond-bopyrid', '7-invert-result-isopod'],
+      ['shrimp', 'empty-shell', [], /Normal molt/, 'cond-normal-molt', '8-invert-result-normal-molt'],
+      ['crab', 'molt-stuck', [], /Failed molt/, 'cond-crab-failed-molt', '9-invert-result-crab-molt'],
+      ['', 'deaths', ['medicine'], /Copper or medicine poisoning/, 'cond-copper', '10-invert-result-copper'],
+      ['crab', 'legs', [], /Fighting or injury/, 'cond-invert-injury', ''],
+      ['shrimp', 'pale', ['new-arrival'], /Acclimation shock/, 'cond-acclimation', ''],
+      ['snail', 'unclear', [], /Not enough food/, 'cond-snail-starvation', ''],
+    ]) {
+      await reefFlow(p, 'invert', kind, sign, changes);
+      assert.match(await title(p), re, `${kind}/${sign}`);
+      assert.equal(await hero(p), id, `${kind}/${sign}`);
+      assert.equal(await p.locator('.invert-warning').isVisible(), true, `${kind}/${sign} copper warning`);
+      assert.equal(await p.locator('#reef-results-content .reef-ph').count(), 0, `${kind}/${sign}: no placeholders`);
+      const n = await p.locator('[data-reef-alternative]').count();
+      if (n) await allLoaded(p, '[data-reef-alternative] .alt-pick img', n);
+      await noOverflow(p); if (name) await shot(p, name);
+    }
+    record('bopyrid, normal molt, crab failed molt, copper, hermit fighting, acclimation and snail starvation results show their own pictures and the copper warning');
 
     // 5. Not sure + changes re-weight: new coral + white → light shock.
     await reefFlow(p, 'coral', null, 'bleach', ['new-coral']);
     assert.match(await title(p), /light shock/i);
+    assert.equal(await reefImages(p), 0, 'coral results still use placeholders');
     await reefFlow(p, 'invert', 'snail', 'not-moving');
     assert.match(await title(p), /Snail stuck upside down/);
+    assert.equal(await hero(p), 'cond-flipped');
     assert.equal(await p.locator('.invert-warning').isVisible(), true);
     record('Not sure kind and recent-change chips re-weight (new coral + white = light shock); snail not moving = flip it');
 
@@ -164,17 +234,23 @@ try {
     const n = await p.locator('#library-grid [data-reef-entry]').count();
     assert.ok(n >= 22, `${n} reef entries`);
     assert.match(await p.locator('#library-count').innerText(), /reef & invert entries/);
-    assert.equal(await p.locator('#library-grid img').count(), 0);
+    const invertEntries = await p.locator('#library-grid [data-reef-entry]').evaluateAll(els => els.filter(el => el.querySelector('img')).map(el => el.dataset.reefEntry));
+    assert.deepEqual(invertEntries.sort(), ['acclimation', 'bopyrid', 'copper', 'failed-molt', 'flipped', 'invert-injury', 'invert-water', 'normal-molt', 'starvation']);
+    await allLoaded(p, '#library-grid img', 9);
+    assert.equal(await p.locator('#library-grid [data-reef-entry] .reef-ph').count(), n - 9, 'coral cards keep placeholders');
+    assert.match(await p.locator('[data-reef-entry="failed-molt"] .slot-count').innerText(), /^3 \/ 3 pictures/);
+    assert.match(await p.locator('[data-reef-entry="rtn"] .slot-count').innerText(), /^0 \/ 3 pictures/);
     await p.locator('#library-search').fill('molt');
     assert.ok(await p.locator('#library-grid [data-reef-entry="failed-molt"]').count() === 1);
     await p.locator('#library-grid .card-image[data-reef-condition="failed-molt"]').click();
     assert.match(await p.locator('#detail-content').innerText(), /Copper and most fish medicines kill/);
+    assert.deepEqual(await allLoaded(p, '#detail-content .reef-gallery img'), ['cond-failed-molt', 'cond-crab-failed-molt', 'sign-molt-stuck']);
     await p.keyboard.press('Escape');
     await p.locator('#library-search').fill('');
     await p.locator('#library-water').selectOption('fresh');
     assert.equal(await p.locator('#library-grid [data-reef-entry]').count(), 0);
     assert.ok(await p.locator('#library-grid .condition-card').count() > 10);
-    record('old #ich/#library links still work; the library has a Reef & inverts filter with placeholder cards and details');
+    record('old #ich/#library links still work; the library has a Reef & inverts filter: 9 invert cards with pictures (detail gallery filled), coral cards with placeholders');
 
     // From a reef result, "See all reef entries" opens the reef filter.
     await reefFlow(p, 'coral', 'soft', 'zoa-melt');

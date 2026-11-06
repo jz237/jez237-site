@@ -37,9 +37,9 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
   const input = () => ({ group: state.group, kind: state.kind, sign: state.sign, changes: [...state.changes], chosen: [...state.chosen] });
   const groupInfo = () => REEF_GROUPS.find(g => g.id === state.group);
 
-  // A picture or, for now, a calm "Picture coming soon" frame.
+  // A picture (shrimp, crabs, snails) or a calm "Picture coming soon" frame (corals).
   function picture(image, icon, { label = 'Picture coming soon', cls = '' } = {}) {
-    if (image) return `<img src="${escape(image.url)}" width="${image.width || 362}" height="${image.height || 362}" alt="${escape(image.alt || '')}" loading="lazy" decoding="async">`;
+    if (image) return `<img src="${escape(image.url)}" width="${image.width || 362}" height="${image.height || 362}" alt="${escape(image.alt || '')}" data-reef-image="${escape(image.id || '')}" loading="lazy" decoding="async">`;
     return `<span class="reef-ph ${cls}" data-placeholder="${icon}">${reefIcon(icon)}<small>${escape(label)}</small></span>`;
   }
 
@@ -108,7 +108,10 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
   }
 
   function gallery(c) {
-    return `<div class="reef-gallery" data-reef-gallery="${c.id}">${reefSlotsFor(c.group, c.id).map(slot => `<figure data-reef-slot="${slot.id}">${picture(slot.image, groupIcon(c.group))}<figcaption>${escape(slot.label)}</figcaption></figure>`).join('')}</div>`;
+    const slots = reefSlotsFor(c.group, c.id), filled = slots.filter(s => s.image);
+    const shown = filled.length ? filled : slots;
+    const note = filled.length ? '<small class="image-origin-note">AI illustrations, drawn the way it usually looks in a home tank.</small>' : '';
+    return `<div class="reef-gallery" data-reef-gallery="${c.id}">${shown.map(slot => `<figure data-reef-slot="${slot.id}">${picture(slot.image, groupIcon(c.group))}<figcaption>${escape(slot.image?.caption || slot.label)}</figcaption></figure>`).join('')}</div>${note}`;
   }
 
   function openDetail(id) {
@@ -122,9 +125,9 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
   function renderLibrary(query = '') {
     const q = query.trim().toLowerCase();
     const entries = REEF_CONDITIONS.filter(c => [c.title, c.kind, c.summary, ...c.clues].join(' ').toLowerCase().includes(q));
-    $('.slot-explanation').textContent = 'Reef pictures are coming soon. Empty frames are places for future pictures.';
-    $('#library-count').textContent = `${entries.length} reef & invert entries · pictures coming soon`;
-    $('#library-grid').innerHTML = entries.map(c => `<article class="condition-card visual-card reef-card" data-reef-entry="${c.id}"><button type="button" class="card-image" data-reef-condition="${c.id}" aria-label="Open ${escape(c.title)}">${picture(reefImageFor(c.group, c.id), groupIcon(c.group))}<span class="slot-count">0 / ${reefSlotsFor(c.group, c.id).length} pictures</span></button><div class="condition-body"><div class="card-meta"><span>${escape(c.kind)}</span><span>${c.group === 'invert' ? 'Shrimp, crab, snail' : 'Coral & anemone'}</span></div><h3>${escape(c.title)}</h3>${badge(c.urgency)}<p>${escape(c.summary)}</p><div class="card-actions"><button type="button" class="text-button" data-reef-condition="${c.id}">Open page ↗</button></div></div></article>`).join('') || '<p class="notice">No matching reef entries. Try “white”, “molt” or “pest”.</p>';
+    $('.slot-explanation').textContent = 'Shrimp, crab and snail pictures are AI illustrations. Coral and anemone pictures are coming soon—empty frames are places for future pictures.';
+    $('#library-count').textContent = `${entries.length} reef & invert entries · coral pictures coming soon`;
+    $('#library-grid').innerHTML = entries.map(c => { const slots = reefSlotsFor(c.group, c.id), n = slots.filter(s => s.image).length; return `<article class="condition-card visual-card reef-card" data-reef-entry="${c.id}"><button type="button" class="card-image${n ? ' filled' : ''}" data-reef-condition="${c.id}" aria-label="Open ${escape(c.title)}">${picture(reefImageFor(c.group, c.id), groupIcon(c.group))}<span class="slot-count">${n} / ${slots.length} pictures</span></button><div class="condition-body"><div class="card-meta"><span>${escape(c.kind)}</span><span>${c.group === 'invert' ? 'Shrimp, crab, snail' : 'Coral & anemone'}</span></div><h3>${escape(c.title)}</h3>${badge(c.urgency)}<p>${escape(c.summary)}</p><div class="card-actions"><button type="button" class="text-button" data-reef-condition="${c.id}">Open page ↗</button></div></div></article>`; }).join('') || '<p class="notice">No matching reef entries. Try “white”, “molt” or “pest”.</p>';
   }
 
   function start(group) {

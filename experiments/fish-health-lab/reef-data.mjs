@@ -1,6 +1,6 @@
 // Reef section: corals, anemones and invertebrates (Jez, Nov 5 2026 21:48 EST).
-// A hobbyist best guess, kept simple. Pictures are not made yet: every picture
-// spot shows a "Picture coming soon" tile (see reef-images.mjs).
+// A hobbyist best guess, kept simple. Shrimp/crab/snail spots show pictures;
+// coral and anemone spots still show "Picture coming soon" (see reef-images.mjs).
 //
 // Weights work like the fish guide: the picked sign must fit a condition
 // (weight > 0). The kind of coral/invert re-weights only conditions that

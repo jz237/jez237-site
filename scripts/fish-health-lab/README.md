@@ -513,7 +513,48 @@ pictures are still not made.
   warning. Care plans start with the tests; dips are tagged “Separate dip — never in the
   display”; no plan doses copper or fish medicine. Library: “Reef & inverts” filter.
 - Files: `reef-data.mjs` (kinds, signs, chips, 17 coral + 9 invert conditions, look-alikes),
-  `reef-logic.mjs`, `reef-care.mjs`, `reef-images.mjs` (empty picture manifest — fill it like
+  `reef-logic.mjs`, `reef-care.mjs`, `reef-images.mjs` (picture manifest; coral part still empty — fill it like
   the fish sets; every spot shows “Picture coming soon” until then), `reef-app.mjs`, `reef.css`.
   app.mjs/index.html only gain small hooks.
 - Checks: `reef.test.mjs` and `reef-browser-check.mjs` (`FISH_LAB_SHOTS=<dir>` saves 390 px shots).
+
+## Shrimp, crab and snail pictures, 2026-11-06 (published)
+
+Jez, 2026-11-06 01:08 EST: “Do shrimp crab or snail now, try to have the pictures appear as
+they would typically look in a typical aquarium as opposed to 1 perfect mark on a healthy
+animal.” Corals and anemones stay “Picture coming soon”.
+
+- Style: ordinary phone snapshots through the glass of a home reef tank (animal off-centre,
+  partly behind rock, detritus on the sand, film algae, blue-white light), showing the whole
+  situation: a shrimp lying on the sand half out of its old skin, upturned snails and dead
+  shrimp after copper, snails crowding the waterline in hazy water, an empty molt next to the
+  healthy shrimp, hermits pulling each other out of shells.
+- 43 crops of 362×362, cut from four 4×3 sheets without resizing: invert signs, invert
+  results, kind tiles + kind-specific sign tiles, and one repair/extra sheet (four retakes
+  plus snail/crab/starfish/urchin cells). Stock OAuth, requested
+  `openai/gpt-image-2.6-sunburst` medium, size auto, 4:3; every sheet reported that model
+  (backend not independently verified).
+- Mapping: `INVERT_SET` in `reef-images.mjs` — the 4 kind tiles; every sign tile, with
+  kind-specific tiles (e.g. `crab:molt-stuck`, `shrimp:legs`, `other:not-moving`); every invert
+  result `[hero, ...more]` (the plain list fills the library/detail gallery, up to 3), with
+  kind-specific heroes (e.g. `crab:failed-molt`, `snail:starvation`, `other:copper`). Sign tiles,
+  result hero, could-also cards, compare and library all show them; a filled gallery slot uses
+  the picture's caption. The front-door “What needs help?” tiles keep their line icons.
+- Data: `reef-images-inverts-data.mjs` (generated, `IMAGE_SOURCE = 'media'`), receipt
+  `invert-images-20261106.json` (prompts, sheet hashes, crop boxes, choices, review/weak cells,
+  R2 keys `experiments/fish-health-lab/inverts/<id>-<sha12>.jpg`, `uploaded: true`). Local
+  preview copies: untracked `experiments/fish-health-lab/local-images/inverts/`. Scripts:
+  `workspace/tmp/imagegen/fish-health-inverts-20261106/`; originals:
+  `/home/jez237/.openclaw/media/tool-image-generation/fish-health-inverts-20261106/`.
+- Published 2026-11-06 (Jez's request, Claw approved): all 43 crops uploaded and
+  byte-verified (`workspace/tmp/fish-health-inverts-publish-20261106/upload-verification.json`),
+  receipt `uploaded: true`, `IMAGE_SOURCE = 'media'`.
+- Publish procedure (no code change): upload every receipt asset to
+  `jez237-site-media/<r2Key>` (`image/jpeg`, `public, max-age=31536000, immutable`), byte-verify
+  `plannedUrl`, mark the assets `uploaded: true`, then set `IMAGE_SOURCE = 'media'` in
+  reef-images-inverts-data.mjs (reef.test.mjs then expects media URLs once every asset is uploaded).
+- Checks: `reef.test.mjs` (every kind/sign/result a visitor can reach has a picture, kind keys are
+  reachable, a result and its could-also cards never share a picture, every crop used, receipt
+  keys/hashes, corals still placeholders, copper warning on every invert result) and
+  `reef-browser-check.mjs` (invert kind and sign grids, failed molt → compare → normal molt,
+  isopod/copper/crab/snail results, library cards and galleries).
