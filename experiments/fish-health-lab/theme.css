@@ -1,0 +1,126 @@
+/* Dark reef-glass theme (Jez, Nov 6 2026 07:32 EST: "see if you can get the layout colors and
+   design to be more like the attached picture"): deep navy water, a reef along the bottom,
+   frosted glass panels, cyan accents, white sans headings. Loads last; style/flow/reef.css
+   were colour-remapped to match (tmp/imagegen/fish-health-v3-theme/darken.py). */
+:root{
+  --paper:#051427;--surface:rgba(12,38,64,.72);--surface-solid:#0b2440;--ink:#e8f3fa;--green:#2fd6e6;--accent:#2fd6e6;--accent-2:#5eead4;
+  --soft:rgba(22,62,94,.6);--lime:#7fe8f2;--line:rgba(120,214,240,.2);--line-strong:rgba(120,214,240,.42);--muted:#a3bccd;
+  --orange:#ff9e72;--warn:rgba(110,52,24,.5);--glass:rgba(10,34,58,.66);--glass-hi:rgba(18,52,84,.72);
+  --glow:0 0 0 1px rgba(47,214,230,.55),0 0 18px rgba(47,214,230,.28);
+  --serif:Outfit,system-ui,sans-serif;color-scheme:dark;
+}
+html{background:#051427}
+body{background:transparent;color:var(--ink)}
+.page-backdrop{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(180deg,#041022 0%,rgba(5,22,43,.9) 35%,rgba(5,22,43,.35) 70%,rgba(4,16,32,.15) 100%),var(--reef-bg,none) center bottom/cover no-repeat,#061a30}
+@media (max-width:720px){.page-backdrop{background:linear-gradient(180deg,#041022 0%,rgba(5,22,43,.92) 45%,rgba(5,22,43,.3) 78%,rgba(4,16,32,.1) 100%),var(--reef-bg,none) 45% bottom/auto 46vh no-repeat,#061a30}}
+h1,h2{font-family:Outfit,system-ui,sans-serif;font-weight:600;letter-spacing:-.025em;color:#f4fbff}
+h1{font-size:clamp(34px,4.6vw,60px)}h2{font-size:clamp(24px,2.4vw,34px)}
+h1 em,h2 em,em{color:var(--accent);font-style:normal}
+a{color:var(--accent)}
+::selection{background:rgba(47,214,230,.35)}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.eyebrow{color:var(--accent);font-weight:600}
+.lead,.question-hint{color:var(--muted)}
+.quiet{color:var(--muted)}
+
+/* Header: logo disc, title + subtitle, tabs as pills, hamburger menu. */
+.masthead{position:relative;display:grid;grid-template-columns:1fr auto;grid-template-areas:"brand menu" "tabs tabs";row-gap:14px;border-bottom:0;padding:22px 32px 6px;max-width:1220px}
+.brand{grid-area:brand;font-weight:600;font-size:24px;color:#f4fbff}
+.brand b{font-weight:600;color:#f4fbff}
+.brand small{color:var(--muted);letter-spacing:.02em;text-transform:none;font-size:13px;font-weight:400;margin-top:2px}
+.brand-mark{background:radial-gradient(circle at 35% 30%,#16496f,#08223b 70%);box-shadow:inset 0 0 0 2px rgba(47,214,230,.75),0 0 16px rgba(47,214,230,.35)}
+.brand-mark svg path{fill:#57d9ff}.brand-mark svg circle{fill:#062038}
+.menu-button{grid-area:menu;align-self:center;display:grid;gap:5px;place-content:center;width:44px;height:44px;border-radius:10px;background:transparent;border:1px solid transparent}
+.menu-button span{display:block;width:24px;height:2.5px;border-radius:2px;background:var(--accent)}
+.menu-button:hover,.menu-button[aria-expanded="true"]{border-color:var(--line-strong);background:rgba(47,214,230,.08)}
+.main-tabs{grid-area:tabs;display:flex;gap:10px;padding:6px;border-radius:14px;background:rgba(6,24,44,.55);border:1px solid var(--line);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);max-width:520px}
+.nav-tab{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;border-radius:10px;border:1px solid transparent;color:var(--muted);font-size:14px;font-weight:500}
+.nav-tab svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8}
+.nav-tab:hover{color:var(--ink)}
+.nav-tab.active{color:#eafcff;background:linear-gradient(180deg,rgba(47,214,230,.22),rgba(47,214,230,.08));border-color:rgba(47,214,230,.6);box-shadow:0 0 14px rgba(47,214,230,.22)}
+.site-menu{position:absolute;right:28px;top:72px;z-index:30;display:grid;min-width:240px;padding:8px;border-radius:14px;background:rgba(8,30,52,.96);border:1px solid var(--line-strong);box-shadow:0 18px 40px rgba(0,0,0,.45)}
+.site-menu[hidden]{display:none}
+.site-menu button{text-align:left;padding:12px 14px;border-radius:9px;background:none;color:var(--ink);font-size:15px}
+.site-menu button:hover{background:rgba(47,214,230,.12);color:#fff}
+
+/* Glass panels. */
+.start-panel,.guided-check,.inner-view>*:not(h1):not(.eyebrow):not(.lead),.help-line{color:var(--ink)}
+.start-panel{background:var(--glass);border:1px solid var(--line);border-radius:22px;padding:34px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.guided-check{background:var(--glass);border:1px solid var(--line);border-radius:22px;padding:24px 26px;margin-top:18px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.inner-view{padding-top:34px}
+.library-heading,.library-tools,.condition-card,.visual-card{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.condition-card,.symptom-card,.reef-tile,.help-tile,.fish-grid label>span,.water-picker label>span{background:var(--glass-hi);border-color:var(--line)}
+.symptom-card:hover,.reef-tile:hover,.help-tile:hover{border-color:var(--line-strong);background:rgba(24,62,98,.8)}
+.symptom-card[aria-pressed="true"],.reef-tile[aria-pressed="true"]{border-color:var(--accent);box-shadow:var(--glow);background:rgba(20,64,96,.85)}
+.water-picker input:checked+span,.fish-grid input:checked+span{border-color:var(--accent);box-shadow:var(--glow)}
+.symptom-card strong,.reef-tile strong,.help-tile strong{color:#f4fbff}
+.symptom-card small,.reef-tile small,.help-tile small{color:var(--muted)}
+.symptom-art,.question-panel .symptom-art.reef-art{background:rgba(4,18,34,.6)}
+.selection-check{background:rgba(4,18,34,.75)}
+[aria-pressed="true"] .selection-check{background:var(--accent);color:#03202c;border-color:var(--accent)}
+.help-tile[data-action="start"]{background:linear-gradient(180deg,rgba(47,214,230,.28),rgba(47,214,230,.1));border-color:rgba(47,214,230,.65);color:#eafcff;box-shadow:0 0 18px rgba(47,214,230,.2)}
+.help-tile[data-action="start"] small{color:#bff3f8}
+.help-tile[data-action="start"] .help-icon,.help-icon{color:var(--accent)}
+.needs-help-label{color:var(--accent)}
+.needs-help{grid-template-columns:repeat(4,minmax(0,1fr));max-width:720px}
+@media (max-width:720px){.needs-help{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Progress: "STEP 1 OF 3 · ..." with a thin cyan bar. */
+#flow-label{color:var(--accent);letter-spacing:.12em}
+progress{accent-color:var(--accent)}
+#flow-progress{appearance:none;-webkit-appearance:none;height:6px;border:0;border-radius:6px;background:rgba(120,214,240,.15);overflow:hidden}
+#flow-progress::-webkit-progress-bar{background:rgba(120,214,240,.15);border-radius:6px}
+#flow-progress::-webkit-progress-value{background:linear-gradient(90deg,#2fd6e6,#5eead4);border-radius:6px;box-shadow:0 0 10px rgba(47,214,230,.6)}
+#flow-progress::-moz-progress-bar{background:linear-gradient(90deg,#2fd6e6,#5eead4);border-radius:6px}
+.question-title{color:#f4fbff}
+.question-title span,.results-title span{color:var(--accent)}
+
+/* Buttons: dark fill, cyan edge glow; secondary = quiet outline. */
+.button{border-radius:12px;font-weight:600}
+.primary,.button.primary{background:linear-gradient(180deg,rgba(47,214,230,.3),rgba(47,214,230,.12));color:#eafcff;border:1px solid rgba(47,214,230,.75);box-shadow:0 0 16px rgba(47,214,230,.25)}
+.primary:hover,.button.primary:hover{background:linear-gradient(180deg,rgba(47,214,230,.42),rgba(47,214,230,.18))}
+.secondary,.button.secondary{background:rgba(8,28,48,.55);color:var(--ink);border:1px solid var(--line-strong)}
+.secondary:hover{background:rgba(20,52,82,.7)}
+.text-button{color:var(--accent)}
+.step-actions{border-top-color:var(--line)}
+input,select,textarea{background:rgba(4,18,34,.7);color:var(--ink);border-color:var(--line-strong)}
+input::placeholder,textarea::placeholder{color:#7f9aae}
+
+/* Results: "YOUR RESULT" pill, badges, What to do now box. */
+.result-focus,.todo-card,.diagnosis-reason,.alternative,.notice,.care-section{border-color:var(--line)}
+.result-focus{background:rgba(10,36,60,.6);border-radius:16px}
+.todo-card{background:linear-gradient(180deg,rgba(47,214,230,.1),rgba(10,36,60,.6));border:1px solid rgba(47,214,230,.4);border-radius:16px}
+.todo-card h3::before{content:"✓";display:inline-grid;place-items:center;width:24px;height:24px;margin-right:10px;border-radius:50%;background:#22c55e;color:#04220f;font-size:14px;font-weight:700;vertical-align:2px}
+.urgency-badge{border:1px solid currentColor}
+.urgency-today{background:rgba(220,60,40,.22);color:#ffb4a2}
+.urgency-week{background:rgba(234,140,40,.2);color:#ffd08a}
+.urgency-watch{background:rgba(250,210,60,.16);color:#fde68a}
+.alternative{background:rgba(12,40,66,.66)}
+.notice{background:rgba(12,40,66,.7)}
+.notice.urgent{background:rgba(120,30,20,.45);border-color:rgba(255,140,110,.55)}
+.help-line{background:rgba(10,34,58,.66);border:1px solid var(--line);border-radius:14px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.reef-flag{background:rgba(120,40,20,.42);border-color:rgba(255,150,110,.5);color:#ffd5c4}
+dialog{background:#0a2440;color:var(--ink);border:1px solid var(--line-strong);box-shadow:0 30px 80px rgba(0,0,0,.6)}
+dialog::backdrop{background:rgba(2,10,20,.7)}
+.comparison-tray{background:rgba(8,30,52,.96);border:1px solid var(--line-strong)}
+footer{border-top-color:var(--line);color:var(--muted);background:rgba(4,16,30,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+img{border-radius:inherit}
+
+@media (max-width:720px){
+  .masthead{padding:14px 14px 4px;row-gap:12px}
+  .brand{font-size:21px}
+  .main-tabs{max-width:none}
+  .nav-tab{font-size:13px;padding:9px 8px}
+  .site-menu{right:12px;top:62px}
+  .start-panel{padding:20px 16px;border-radius:18px}
+  .guided-check{padding:16px 14px;border-radius:18px;margin-left:-6px;margin-right:-6px}
+}
+
+/* Front-door picture card and choice focus rings. */
+.start-art{background:rgba(10,34,58,.72);border-color:var(--line)}
+.opening-label>span{color:var(--accent)}.opening-label>strong{font-family:Outfit,system-ui,sans-serif;font-weight:600;color:#f4fbff}
+.start-art figcaption{color:var(--muted)}.start-art figcaption small{color:#7f9aae}
+.water-picker label:focus-within,.walk-choice:focus-within{outline:2px solid var(--accent);outline-offset:3px}
+.water-picker input:checked+span,.check-label:has(:checked),.walk-choice:has(:checked),.fish-chip input:checked+span{background:rgba(20,64,96,.88);border-color:var(--accent);box-shadow:var(--glow)}
+@media (max-width:720px){#flow-actions{background:rgba(7,26,46,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 -10px 18px rgba(7,26,46,.75);margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px;border-top:1px solid var(--line)}}
