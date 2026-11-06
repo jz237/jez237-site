@@ -158,8 +158,14 @@ const PLANS = {
     marine: { steps: ['Skip feeding for 1–2 days.', 'Then feed small amounts of thawed, varied foods.', 'Look from above each day—if the scales start to stick out, treat it as dropsy.'] },
     // African cichlids: swelling is often Malawi bloat, which needs treating today.
     african: {
-      steps: ['Act today—in African cichlids (mbuna, peacocks) this is often Malawi bloat, and it moves fast.', `${HOSPITAL} Stop feeding.`, 'African cichlids: if it’s off its food or has white, stringy poop (the classic Malawi bloat signs), treat with metronidazole—in food if it still eats, otherwise in the water—following the label. If it’s still eating normally, fast it 2–3 days first and watch. Oscars: swelling is more often overeating or a blockage—fast 2–3 days; if it stops eating or keeps swelling, ask a fish vet or an experienced fish store what to treat with.', 'Do a big water change in the main tank. Mbuna: switch to a lower-protein, plant-based diet. Oscars: keep their usual diet, just smaller meals.'],
-      treatment: 'African cichlids with Malawi bloat signs: metronidazole in a hospital tank; otherwise (and oscars) a fast first', recovery: 'Days to 2 weeks if caught early; it can be fatal once the fish stops eating.', medicated: true,
+      // One sequence, no either/or branches that can both apply (Astra round 5).
+      steps: [
+        'Act today—in African cichlids (mbuna, peacocks) swelling can be Malawi bloat, which moves fast.',
+        `${HOSPITAL} Stop feeding, and test the main tank water.`,
+        'Watch it closely for 1–2 days. If it gets worse—swelling more, stops eating, white stringy poop, fast breathing—get help from a fish vet or an experienced fish store (Malawi bloat is usually treated with metronidazole).',
+        'Afterwards, feed smaller meals. Mbuna: a lower-protein, plant-based diet. Oscars: swelling is more often overeating or a blockage—keep their usual diet, just less of it.',
+      ],
+      treatment: 'Hospital tank, a fast and close watching; get help if it gets worse', recovery: 'Days to 2 weeks if caught early; it can be fatal once the fish stops eating.',
     },
     cory: { steps: ['Skip feeding for 1–2 days.', 'Then feed small amounts of sinking foods and thawed daphnia or bloodworm.', 'Look from above each day—if it becomes swollen tight and stiff all over, treat it as dropsy.'] },
     pleco: { steps: ['Skip feeding for 1–2 days.', 'Then feed blanched vegetables (zucchini, peas) and sinking wafers.', 'Look from above each day—if it becomes swollen tight and stiff all over, treat it as dropsy.'] },

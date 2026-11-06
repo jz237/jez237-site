@@ -729,3 +729,5 @@ metronidazole, plant diet) from oscars (overeating/blockage, fast first, usual d
 (%, ppt/psu, SG) and negatives are rejected; hospital/tub mode rows describe the hospital tank, not the display.
 
 Astra round 4 (12:40 EST), fixed (`A4-*`): salinity in ppm/mg/L or with a typographic minus is rejected; metronidazole only with Malawi bloat signs (off food, stringy white poop), otherwise a fast first; oscars get a fast and outside help, not a drug.
+
+Astra round 5 (12:48 EST), fixed (`A4-2/A5`): the African/oscar swelling plan is one sequence (hospital tank, fast, watch 1–2 days, get help from a fish vet or experienced store if it gets worse; metronidazole mentioned only as the usual Malawi bloat treatment).

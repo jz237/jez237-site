@@ -238,7 +238,7 @@ test('A3-2: the velvet plan only uses copper in a hospital tank (matches the med
 });
 test('A3-3: the African/oscar swelling plan does not put oscars on metronidazole and a plant diet', () => {
   const p = assessDiagnosis({ water: 'fresh', fishType: 'african', primarySign: 'swollen', signs: ['swollen'], closer: 'flat' }).primary;
-  assert.match(p.plan.steps.join(' '), /Oscars: swelling is more often overeating/); assert.match(p.plan.steps.join(' '), /Oscars: keep their usual diet/);
+  assert.match(p.plan.steps.join(' '), /Oscars: swelling is more often overeating[^.]*keep their usual diet/);
   assert.match(p.reason, /In oscars it’s more often overeating/);
 });
 test('A3-4: salinity units win (%, ppt, SG) and negatives are rejected', () => {
@@ -256,8 +256,9 @@ test('A4-1: salinity in ppm, mg/L or with a typographic minus is rejected, not r
   for (const s of ['35 ppm', '35 mg/L', '−35 ppt', '–35 ppt']) assert.equal(readSalinity(s).unreadable, true, s);
   assert.equal(readSalinity('35 ppt').ppt, 35); assert.equal(readSalinity('1.026 (thus fine)').ppt > 33, true);
 });
-test('A4-2: metronidazole only with Malawi bloat signs; oscars get a fast and outside help, not a drug', () => {
+test('A4-2/A5: the African/oscar swelling plan is one sequence: watch, then get help if it gets worse', () => {
   const steps = assessDiagnosis({ water: 'fresh', fishType: 'african', primarySign: 'swollen', signs: ['swollen'], closer: 'flat' }).primary.plan.steps.join(' ');
-  assert.match(steps, /off its food or has white, stringy poop[^.]*metronidazole/);
-  assert.doesNotMatch(steps.split('Oscars:')[1], /metronidazole/);
+  assert.match(steps, /If it gets worse[^.]*get help from a fish vet/);
+  assert.doesNotMatch(steps, /treat with metronidazole/i);
+  assert.doesNotMatch(steps, /If it’s still eating normally/);
 });
