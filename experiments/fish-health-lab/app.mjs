@@ -7,6 +7,7 @@ import { imagesFor, imageFor, fishSetFor, FISH_TYPE_IMAGES, stepImageFor, splitS
 import { createReef } from './reef-app.mjs';
 import { createExtras } from './extras-app.mjs';
 import { scienceLine } from './science.mjs';
+import { createReader } from './reader.mjs';
 import { UI_IMAGES, IMAGE_SOURCE as UI_IMAGE_SOURCE } from './ui-images-data.mjs';
 import { MEDIA_BASE } from './fish-images-data.mjs';
 
@@ -27,6 +28,8 @@ const reef = createReef({ $, $$, escape, goStep, badge, autoAdvance, switchView 
 // The medicine check and the prevention page (extras-app.mjs).
 const extras = createExtras({ $, escape });
 const HASH_VIEWS = ['library', 'medicine', 'prevent'];
+// Merck "Read more" pages open in an in-page pop-up (reader.mjs).
+const reader = createReader({ $ });
 // The reef page background (theme.css reads --reef-bg).
 { const bg = UI_IMAGES['bg-reef']; document.documentElement.style.setProperty('--reef-bg', `url("${UI_IMAGE_SOURCE === 'media' ? MEDIA_BASE + bg.key : `local-images/${bg.key.slice('experiments/fish-health-lab/'.length)}`}")`); }
 
@@ -208,7 +211,7 @@ function resultThumbnail(condition, water = imageWater(condition)) {
 function readMore(condition, water = imageWater(condition)) {
   const guide = treatmentGuideFor(condition.id, water);
   if (!guide) return '';
-  return `<p class="treatment-link"><a class="read-more" href="${escape(guide.url)}" data-treatment="${condition.id}" data-water="${escape(water || '')}" target="_blank" rel="noopener noreferrer">Read more: ${escape(guide.title)} ↗</a><small>${escape(guide.provider)}</small></p>`;
+  return `<p class="treatment-link"><a class="read-more" href="${escape(guide.url)}" data-treatment="${condition.id}" data-water="${escape(water || '')}" data-reader-source="${escape(guide.provider || '')}" target="_blank" rel="noopener noreferrer">Read more: ${escape(guide.title)} ↗</a><small>${escape(guide.provider)}</small></p>`;
 }
 
 function badge(level) {
@@ -303,7 +306,7 @@ function renderCareSummary() {
 
 function list(items) { return `<ul>${items.map(item => `<li>${escape(item)}</li>`).join('')}</ul>`; }
 function scopeName(scope) { return {fresh:'Freshwater',marine:'Saltwater',both:'Fresh + salt water'}[scope]; }
-function sourceLinks(ids) { return ids.map(id => SOURCES.find(s => s.id === id)).filter(Boolean).map(source => `<a href="${source.url}" target="_blank" rel="noopener noreferrer">${escape(source.name)} ↗</a>`).join(''); }
+function sourceLinks(ids) { return ids.map(id => SOURCES.find(s => s.id === id)).filter(Boolean).map(source => `<a href="${source.url}" data-reader target="_blank" rel="noopener noreferrer">${escape(source.name)} ↗</a>`).join(''); }
 
 function slotArt(condition, slot, compact = false) {
   if (slot.image) return `<img src="${escape(slot.image.url)}" alt="${escape(slot.image.alt)}" loading="lazy"><span class="image-origin">AI illustration</span>`;
@@ -468,8 +471,9 @@ document.addEventListener('click', async event => {
   if (!$('#site-menu').hidden && !event.target.closest('#site-menu')) toggleMenu(false);
   if (reef.handleClick(event)) return;
   if (extras.handleClick(event)) return;
-  const treatment = event.target.closest('a[data-treatment]');
-  if (treatment) openTreatmentPopup(event, treatment);
+  const readerLink = event.target.closest('a[data-treatment], a[data-reader]');
+  if (readerLink && reader.open(event, readerLink)) return;
+  if (readerLink?.dataset.treatment) openTreatmentPopup(event, readerLink);
   const view = event.target.closest('[data-view]');
   if (view) switchView(view.dataset.view);
   const symptom = event.target.closest('[data-symptom]');

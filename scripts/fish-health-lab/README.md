@@ -647,3 +647,12 @@ name (*asterisks* = italic taxon; normal/placement results have none); `scienceL
 small print under the result title and the reference page title (`.sci-name` in theme.css). Check:
 `science.test.mjs`. Homepage: a “Fish Health Lab” hub card after The Hidden Reef
 (`assets/home-cards/fish-health-lab-thumb-20261106.webp`, cropped from the published opening picture).
+
+## In-page reader for “Read more”, 2026-11-06
+
+Jez, 09:17 EST: “On the sections where it says read more and links off to sites like merck manual, have
+the sites come up in a pop-up similar to the way the shop online works.” `reader.mjs` opens Read more
+and About-page source links in `#reader-dialog`: a sandboxed iframe (no top navigation, no referrer)
+with the title, source, “Open in new tab ↗” and ×. Merck sends no frame-blocking headers (checked
+2026-11-06). Modifier/middle clicks keep the browser's new tab; `openTreatmentPopup` stays as the
+fallback when `<dialog>` is unsupported. hobbyist/growth browser checks now expect the reader.

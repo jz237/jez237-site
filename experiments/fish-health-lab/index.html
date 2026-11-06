@@ -13,8 +13,8 @@
   <link rel="stylesheet" href="flow.css?v=9">
   <link rel="stylesheet" href="reef.css?v=3">
   <link rel="stylesheet" href="extras.css?v=1">
-  <link rel="stylesheet" href="theme.css?v=2">
-  <script type="module" src="app.mjs?v=11"></script>
+  <link rel="stylesheet" href="theme.css?v=3">
+  <script type="module" src="app.mjs?v=12"></script>
 </head>
 <body>
   <a href="#main" class="skip">Skip to the guide</a>
@@ -138,6 +138,7 @@
   <dialog id="detail-dialog" aria-labelledby="detail-title"><button class="dialog-close" data-action="close-dialog" aria-label="Close details">×</button><div id="detail-content"></div></dialog>
   <dialog id="atlas-dialog" class="atlas-dialog" aria-labelledby="atlas-title"><div class="atlas-toolbar"><div><strong id="atlas-title">Freshwater ich · illustrated comparison</strong><small>AI illustration. Pinch or zoom for detail.</small></div><button class="dialog-close" data-action="close-dialog" aria-label="Close illustration">×</button></div><img id="atlas-full" width="1024" height="1536" alt="Educational illustration showing varied ich-like presentations on freshwater fish."></dialog>
   <dialog id="case-dialog" aria-labelledby="case-title"><button class="dialog-close" data-action="close-dialog" aria-label="Close observation notes">×</button><p class="eyebrow">YOUR NOTES, IN ONE PLACE</p><h2 id="case-title">Keep a useful record.</h2><p>What you saw, the best guess, the plan and any readings. Nothing is saved or sent anywhere unless you copy or download it.</p><label for="case-text" class="sr-only">Prepared observation notes</label><textarea id="case-text" rows="14" readonly></textarea><div class="case-actions"><button class="button primary" data-action="copy-case">Copy my observations</button><button class="button secondary" data-action="download-case">Download .txt</button></div><p id="copy-status" class="quiet" role="status"></p></dialog>
+  <dialog id="reader-dialog" class="reader-dialog" aria-labelledby="reader-title"><div class="reader-bar"><div class="reader-name"><strong id="reader-title"></strong><small id="reader-source"></small></div><a id="reader-open" class="reader-open" href="#" target="_blank" rel="noopener noreferrer">Open in new tab ↗</a><button class="reader-close" data-action="close-dialog" aria-label="Close">×</button></div><p id="reader-status" class="reader-status" role="status">Loading…</p><iframe id="reader-frame" title="Reference page" src="about:blank" referrerpolicy="no-referrer"></iframe></dialog>
   <noscript><p class="notice">This guide needs JavaScript. For severe breathing trouble or fish deaths, support aeration, test water quality and seek urgent fish-health help.</p></noscript>
 </body>
 </html>

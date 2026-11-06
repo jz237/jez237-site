@@ -130,3 +130,21 @@ img{border-radius:inherit}
 .sci-name i{font-style:italic;color:#a9c4d6}
 .results-title+.sci-name{margin-top:-4px}
 #detail-title+.sci-name{margin:-6px 0 12px}
+
+/* In-page reader pop-up for "Read more" sources (reader.mjs). */
+html.reader-open{overflow:hidden}
+.reader-dialog{width:min(1080px,calc(100vw - 32px));height:min(88vh,980px);max-width:none;max-height:none;padding:0;border-radius:18px;overflow:hidden;display:none;flex-direction:column;background:#0a2440;border:1px solid var(--line-strong)}
+.reader-dialog[open]{display:flex}
+.reader-bar{display:flex;align-items:center;gap:12px;padding:10px 12px 10px 18px;border-bottom:1px solid var(--line);background:rgba(8,30,52,.98)}
+.reader-name{flex:1;min-width:0;display:flex;flex-direction:column}
+.reader-name strong{font-size:16px;font-weight:600;color:#f4fbff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.reader-name small{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.reader-open{flex-shrink:0;font-size:13px;color:var(--accent);text-decoration:none;padding:8px 10px;border:1px solid var(--line-strong);border-radius:10px}
+.reader-close{flex-shrink:0;width:40px;height:40px;border-radius:50%;background:rgba(47,214,230,.12);color:#eafcff;font-size:26px;line-height:1;border:1px solid var(--line-strong)}
+.reader-status{margin:0;padding:10px 18px;font-size:13px;color:var(--muted)}
+.reader-dialog iframe{flex:1;width:100%;border:0;background:#fff}
+@media (max-width:720px){
+  .reader-dialog{width:100vw;height:100dvh;max-height:100dvh;border-radius:0;border:0;margin:0}
+  .reader-bar{padding:8px 8px 8px 14px;padding-top:max(8px,env(safe-area-inset-top))}
+  .reader-open{font-size:12px;padding:7px 8px}
+}

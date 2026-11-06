@@ -50,8 +50,10 @@ try {
   const link = page.locator('#results-content [data-treatment="lymphocystis"]');
   const href = await link.getAttribute('href');
   assert.equal(new URL(href).hash,'#v3226746');
-  const pending = page.waitForEvent('popup'); await link.click(); const popup = await pending;
-  await popup.waitForURL(href); assert.equal(await popup.evaluate(()=>window.opener===null),true); await popup.close();
+  await link.click(); await page.locator('#reader-dialog[open]').waitFor();
+  assert.equal(await page.locator('#reader-frame').getAttribute('src'), href);
+  await page.waitForFunction(() => document.querySelector('#reader-status').hidden, null, { timeout: 30000 });
+  await page.locator('.reader-close').click();
   assert.equal(page.url(),root);
   assert.equal(treatmentRequests[0].referer,'');
   assert.match(await page.locator('.result-focus .todo-card').innerText(),/no medicine/);
