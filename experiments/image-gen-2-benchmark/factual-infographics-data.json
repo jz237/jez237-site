@@ -18756,5 +18756,1037 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-03-factual-infographic-factual-infographic-the-eastern-dobsonf",
+    "title": "Factual infographic: The Eastern Dobsonfly’s Hellgrammite",
+    "tests": "Species-specific morphology and life cycle sourced; internal respiratory study explicitly generalized.; archive_slot=2026-11-03T20:20; concept=eastern-dobsonfly-hellgrammite-stream-metamorphosis; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: bizarre-insect-life",
+    "prompt": "Create a finished, richly detailed natural-history scientific plate infographic titled “EASTERN DOBSONFLY” with subtitle “Corydalus cornutus · the hellgrammite’s transformation”. One enormous whole-insect macro hero: the accurately proportioned dark flattened aquatic hellgrammite on a submerged stream stone, sharp mandibles, exactly six thoracic legs, segmented abdomen with eight pairs of lateral filaments and pale cottony gill tufts at their bases, and hooked terminal appendages. Render lifelike brown-black cuticle, water caustics, tiny stone texture and naturalistic light. Surround it with 7 substantial supporting studies, each an individually readable scientific-plate panel with varied size and breathing space, connected by elegant fine leaders and water-current motifs, not a sterile dashboard: (1) large close-up of the head and biting mandibles; (2) magnified lateral abdominal filament and cottony gill tuft; (3) prominent labeled generalized insect respiratory cutaway showing gill and branching tracheal tubes, explicitly captioned “Generalized breathing schematic”, with arrows for dissolved oxygen diffusing from water; do not invent species-specific internal organ geometry; (4) macro of paired terminal hooks gripping stone against current; (5) larva beneath a stream rock capturing small aquatic insect prey; (6) concise clearly ordered egg → aquatic larva → land pupa → winged adult sequence, label “complete metamorphosis” and “larval stage: several years”; (7) adult male and female head comparison, male with striking long sickle mandibles and female much shorter, paired with a whole winged adult showing long antennae and veined wings folded along its back. Include a small unobtrusive scale annotation “larva: about 2–3 in” and habitat context “rocky streams · eastern North America”. Distinguish adult and larval stages; realistic anatomy, no extra legs, no made-up organs. Use crisp concise scientifically correct labels only, exquisite shaded ink and luminous naturalistic macro color, layered depth, clean visual hierarchy and legibility; insect biology fills most of canvas. No bibliography, logos, watermark, mockup, frame, room, or unsupported claims.",
+    "image": "images/2026-11-03-factual-infographic-factual-infographic-the-eastern-dobsonf.jpg",
+    "thumb": "thumbs/2026-11-03-factual-infographic-factual-infographic-the-eastern-dobsonf.webp",
+    "color": "#ac9c81",
+    "date": "2026-11-03",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1199x1312",
+    "dedup": {
+      "conceptKey": "eastern-dobsonfly-hellgrammite-stream-metamorphosis",
+      "imageSha256": "3d334e49d93dfffdcb9bf4597f6a113862d267bf4f7d49ba076162eb960e076c",
+      "imageDHash": "9c94f2e892323152"
+    },
+    "factualInfographic": {
+      "topic": "How the eastern dobsonfly Corydalus cornutus develops from an aquatic predatory hellgrammite into a winged adult",
+      "description": "The eastern dobsonfly’s aquatic larval anatomy, predation, respiration and complete metamorphosis.",
+      "sourceNote": "Missouri Department of Conservation, University of Kentucky and North Carolina State University: https://mdc.mo.gov/discover-nature/field-guide/eastern-dobsonfly; https://entomology.mgcafe.uky.edu/node/1659; https://genent.cals.ncsu.edu/bug-bytes/aquatic-respiration/; species morphology, life cycle and generalized insect gill respiration.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-04T01:21:41.513153+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Missouri Department of Conservation",
+            "title": "Eastern Dobsonfly",
+            "sourceType": "government-agency",
+            "url": "https://mdc.mo.gov/discover-nature/field-guide/eastern-dobsonfly"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of Kentucky Entomology",
+            "title": "Dobsonflies & Fishflies",
+            "sourceType": "university",
+            "url": "https://entomology.mgcafe.uky.edu/node/1659"
+          },
+          {
+            "id": "S3",
+            "publisher": "North Carolina State University",
+            "title": "Respiration in Aquatic Insects",
+            "sourceType": "university",
+            "url": "https://genent.cals.ncsu.edu/bug-bytes/aquatic-respiration/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The eastern dobsonfly is Corydalus cornutus, a megalopteran in the family Corydalidae, found in eastern North America.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Its aquatic larva, called a hellgrammite, is flattened, dark and segmented, with three pairs of thoracic legs and sharp mandibles.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The larval abdomen has eight pairs of lateral filaments with cottony gill tufts at their bases, and terminal hooked appendages help resist stream current.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Insect biological gills allow dissolved oxygen to diffuse into the body and are usually outgrowths of the tracheal system; the internal breathing diagram is generalized.",
+            "sourceIds": [
+              "S3",
+              "S1"
+            ]
+          },
+          {
+            "claim": "Aquatic larvae live beneath rocks or logs in streams and prey on aquatic animals.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Complete metamorphosis proceeds from egg to aquatic larva to land pupa to winged adult; larval development takes several years.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Adults have long antennae, two pairs of prominently veined wings held over the body at rest, and three pairs of legs.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Male mandibles are long and sickle-shaped; female mandibles are much shorter.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Adults can exceed 3.5 inches in length and larvae are approximately 2–3 inches long.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-04-factual-infographic-factual-infographic-ocellaris-clownfish",
+    "title": "Factual infographic: Ocellaris clownfish",
+    "tests": "; archive_slot=2026-11-04T12:20; concept=ocellaris-clownfish-anemone-reef-partnership; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Amphiprion ocellaris",
+    "prompt": "Create a fancy, exceptionally detailed PHOTOREALISTIC reef fish educational infographic, an artwork-led flowing aquatic atlas, no boxes or grid. Dominant anatomically accurate Amphiprion ocellaris swimming among host anemone tentacles: orange oval compressed body, three white bars with fine black outlines, central bar bulging forward, rounded tail and black-edged fins. Jewel turquoise reef light, realistic scales and tissue, depth and luminous coral. Prominently title “Ocellaris Clownfish” and directly below “Amphiprion ocellaris”. Weave small realistic close-ups of anemone tentacles and fin details, a delicate Indo-Pacific range vignette, elegant readable labels and curving leader lines into the composition with generous breathing space. Short accurate text: “Habitat: Indo-Pacific coral and rocky reefs”; “Adult length: up to 11 cm (4.3 in)”; “Diet: algae and tiny planktonic animals”; “Behavior: territorial around its anemone; social groups have a dominant female and breeding male”; “Aquarium: captive-bred fish can reduce collection pressure; monitor territorial behavior and choose compatible tankmates.” Distinguish wild biology from aquarium guidance. Reef compatibility depends on tankmates and individual behavior; anemones have their own demanding care needs. No invented specific tank size. Beautiful natural light and fine biological details, clear typography, direct artwork, not photographed poster.",
+    "image": "images/2026-11-04-factual-infographic-factual-infographic-ocellaris-clownfish.jpg",
+    "thumb": "thumbs/2026-11-04-factual-infographic-factual-infographic-ocellaris-clownfish.webp",
+    "color": "#6f7765",
+    "date": "2026-11-04",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "ocellaris-clownfish-anemone-reef-partnership",
+      "imageSha256": "1a4f294b8aa9823a5b910539e74d0ca538241d51041f6f81a975887291e56d74",
+      "imageDHash": "00ea2bd1c6ca6f0c"
+    },
+    "factualInfographic": {
+      "topic": "Ocellaris clownfish (Amphiprion ocellaris) reef biology and aquarium care",
+      "description": "An illustrated guide to ocellaris clownfish biology and aquarium considerations.",
+      "sourceNote": "Sources: https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/clown-anemonefish/ ; https://www.aquariumofpacific.org/onlinelearningcenter/species/clown_anemonefish ; https://marinespecies.org/aphia.php?p=taxdetails&id=278400",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-04T17:21:08.607964+00:00",
+        "sources": [
+          {
+            "id": "uf",
+            "publisher": "Florida Museum of Natural History",
+            "title": "Clown Anemonefish",
+            "sourceType": "museum",
+            "url": "https://www.floridamuseum.ufl.edu/discover-fish/species-profiles/clown-anemonefish/"
+          },
+          {
+            "id": "aop",
+            "publisher": "Aquarium of the Pacific",
+            "title": "Clownfish",
+            "sourceType": "museum",
+            "url": "https://www.aquariumofpacific.org/onlinelearningcenter/species/clown_anemonefish"
+          },
+          {
+            "id": "worms",
+            "publisher": "World Register of Marine Species",
+            "title": "Amphiprion ocellaris",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://marinespecies.org/aphia.php?p=taxdetails&id=278400"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Accepted name Amphiprion ocellaris; synonyms Amphiprion melanurus and Amphiprion bicolor",
+            "sourceIds": [
+              "worms",
+              "uf"
+            ]
+          },
+          {
+            "claim": "Orange fish with three white bars and fine black margins, rounded tail; maximum length 11 cm.",
+            "sourceIds": [
+              "uf"
+            ]
+          },
+          {
+            "claim": "Indo-Pacific shallow coral and rocky reefs; associates with host anemones.",
+            "sourceIds": [
+              "uf",
+              "aop"
+            ]
+          },
+          {
+            "claim": "Feeds on algae and small planktonic animals.",
+            "sourceIds": [
+              "uf",
+              "aop"
+            ]
+          },
+          {
+            "claim": "Territorial around host; dominant female and breeding male; captive breeding can reduce wild collection pressure.",
+            "sourceIds": [
+              "uf",
+              "aop"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-04-factual-infographic-factual-infographic-banggai-cardinalfis",
+    "title": "Factual infographic: Banggai cardinalfish",
+    "tests": "; archive_slot=2026-11-04T16:20; concept=banggai-cardinalfish-mouthbrooding-reef-shallows; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Pterapogon kauderni",
+    "prompt": "Create a premium, highly detailed PHOTOREALISTIC educational reef-fish infographic as one flowing artwork, not a grid. Hero: anatomically accurate Banggai cardinalfish, Pterapogon kauderni, silver body, three crisp black bars, white spots, tasselled first dorsal, long second dorsal and anal fins, forked tail, hovering amid lush shallow Indonesian coral and seagrass. Turquoise sunbeams, rich natural reef color, lifelike scales, beautiful lighting and depth. Prominent readable title “Banggai cardinalfish”, scientific name “Pterapogon kauderni” directly underneath. Flowing open callouts and fine leader lines integrate small realistic close-ups of spotted fins and a labeled schematic of a male carrying eggs in his mouth; distinguish schematic from photo. Short clear labels: “Native range: Banggai Archipelago, Indonesia”; “Habitat: shallow reefs and seagrass”; “Adult: up to 8 cm”; “Carnivore: small crustaceans; offer varied meaty foods”; “Male mouthbroods eggs”; “Reef aquarium: peaceful tankmates and hiding places; pairs can defend territory”; “Choose captive-bred where possible”. Allow visual breathing room; no rigid boxes, fabricated details, nonsensical text, poster mockup or decorative changes to fish markings.",
+    "image": "images/2026-11-04-factual-infographic-factual-infographic-banggai-cardinalfis.jpg",
+    "thumb": "thumbs/2026-11-04-factual-infographic-factual-infographic-banggai-cardinalfis.webp",
+    "color": "#5c6f62",
+    "date": "2026-11-04",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "banggai-cardinalfish-mouthbrooding-reef-shallows",
+      "imageSha256": "3e9f22ada06f273fab7c85d1aaa3b1b5aba5eb45f2cb1b8192619e34a723183d",
+      "imageDHash": "22461c1067450767"
+    },
+    "factualInfographic": {
+      "topic": "Banggai cardinalfish (Pterapogon kauderni) reef biology and aquarium care",
+      "description": "Natural history, appearance, mouthbrooding and aquarium care of Banggai cardinalfish.",
+      "sourceNote": "Sources: https://www.lamar.edu/arts-sciences/biology/study-abroad-belize/marine-critters/marine-critters-3/cardinalfish.html https://abwak.org/wp-content/uploads/2020/06/Banggai-Cardinalfish-2008.pdf",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-04T21:21:06.340579+00:00",
+        "sources": [
+          {
+            "id": "lamar",
+            "publisher": "Lamar University",
+            "title": "Cardinalfish",
+            "sourceType": "university",
+            "url": "https://www.lamar.edu/arts-sciences/biology/study-abroad-belize/marine-critters/marine-critters-3/cardinalfish.html"
+          },
+          {
+            "id": "abwak",
+            "publisher": "Association of British and Irish Wild Animal Keepers",
+            "title": "Husbandry guidelines Banggai Cardinalfish",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://abwak.org/wp-content/uploads/2020/06/Banggai-Cardinalfish-2008.pdf"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Silver fish with black bars, white spots, elongated fins and adult length up to 8 cm",
+            "sourceIds": [
+              "lamar"
+            ]
+          },
+          {
+            "claim": "Native Banggai archipelago shallow coral reefs and seagrass",
+            "sourceIds": [
+              "lamar",
+              "abwak"
+            ]
+          },
+          {
+            "claim": "Carnivore eats small crustaceans; varied meaty foods in captivity",
+            "sourceIds": [
+              "lamar",
+              "abwak"
+            ]
+          },
+          {
+            "claim": "Male mouthbroods eggs; pairs may be aggressive towards conspecifics",
+            "sourceIds": [
+              "lamar",
+              "abwak"
+            ]
+          },
+          {
+            "claim": "Mixed reef with non-aggressive small fish and hiding places; prefer captive bred",
+            "sourceIds": [
+              "abwak"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-04-factual-infographic-factual-infographic-pacific-blue-tang",
+    "title": "Factual infographic: Pacific blue tang",
+    "tests": "; archive_slot=2026-11-04T20:20; concept=pacific-blue-tang-surgeonfish-coral-refuge; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: reef-fish-infographic; fish_scientific_name: Paracanthurus hepatus",
+    "prompt": "Create a fancy, exquisitely detailed, colorful PHOTOREALISTIC educational reef-fish infographic, finished artwork not a poster mockup. A dominant anatomically accurate adult Pacific blue tang, Paracanthurus hepatus, swims through luminous Indo-Pacific coral reef water: vivid blue oval body, characteristic dark looping markings, yellow tail and correct fins. Rich turquoise, cobalt, amber reef lighting, precise scales and natural depth. Flowing asymmetrical composition, not a rigid grid; beautiful legible text integrated with organic leader lines and biological close-ups. Prominent title “PACIFIC BLUE TANG” with “Paracanthurus hepatus” directly underneath. Show branching coral refuge, and a scientifically faithful close-up of sharp tail-base spine labeled “Sharp spine: handle with care”. Short readable callouts: “Indo-Pacific coral reefs”; “Adults average 25–31 cm”; “Feeds on algae and zooplankton”; “Shelters among branching corals”; “Aquarium: active swimmer; allow generous space and hiding places”; “May clash with other tangs; monitor compatibility”. Reef compatibility varies by individual; plan stocking carefully. Do not invent tank volume or other numbers. Separate wild behavior from aquarium advice. Maintain breathing room, realistic anatomy, readable explanations and stunning underwater lighting.",
+    "image": "images/2026-11-04-factual-infographic-factual-infographic-pacific-blue-tang.jpg",
+    "thumb": "thumbs/2026-11-04-factual-infographic-factual-infographic-pacific-blue-tang.webp",
+    "color": "#385162",
+    "date": "2026-11-04",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1086x1448",
+    "dedup": {
+      "conceptKey": "pacific-blue-tang-surgeonfish-coral-refuge",
+      "imageSha256": "7a1ba029e6551418551f92d4a8d3644a2255fd500f0afe3e4ad722ca64d184fb",
+      "imageDHash": "0684d9d9fc0c0772"
+    },
+    "factualInfographic": {
+      "topic": "Pacific blue tang (Paracanthurus hepatus) reef biology and aquarium care",
+      "description": "Pacific blue tang (Paracanthurus hepatus) reef biology and aquarium care",
+      "sourceNote": "Sources: https://animaldiversity.org/accounts/Paracanthurus_hepatus/ https://web.augsburg.edu/~capman/aquaria/SpeciesInfoFiles/f_pacificbluetang.html",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-05T01:20:00Z",
+        "sources": [
+          {
+            "id": "michigan",
+            "publisher": "University of Michigan Animal Diversity Web",
+            "title": "Paracanthurus hepatus",
+            "sourceType": "university",
+            "url": "https://animaldiversity.org/accounts/Paracanthurus_hepatus/"
+          },
+          {
+            "id": "augsburg",
+            "publisher": "Augsburg University",
+            "title": "Pacific Blue Tang",
+            "sourceType": "university",
+            "url": "https://web.augsburg.edu/~capman/aquaria/SpeciesInfoFiles/f_pacificbluetang.html"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Indo-Pacific tropical coral reefs, often near branching coral and currents.",
+            "sourceIds": [
+              "michigan",
+              "augsburg"
+            ]
+          },
+          {
+            "claim": "Blue oval body, dark markings and yellow tail; adults average 25–31 cm.",
+            "sourceIds": [
+              "michigan"
+            ]
+          },
+          {
+            "claim": "Consumes algae and zooplankton; shelters in coral and may live in groups.",
+            "sourceIds": [
+              "michigan"
+            ]
+          },
+          {
+            "claim": "Sharp tail-base spine can cause painful injury; surgeonfish can clash in aquaria.",
+            "sourceIds": [
+              "michigan",
+              "augsburg"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-05-factual-infographic-factual-infographic-multiple-sclerosis-",
+    "title": "Factual infographic: Multiple Sclerosis — Myelin and Signal Disruption",
+    "tests": "{\"factual_subtype\": \"medical-health-infographic\"}; archive_slot=2026-11-05T02:20; concept=multiple-sclerosis-myelin-signal-disruption; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished medical infographic directly on the canvas: title \"MULTIPLE SCLEROSIS\", subtitle \"Myelin and signal disruption\". A richly shaded contemporary anatomical gouache and delicate technical-ink atlas on cool pearl-gray, with indigo nervous tissue accents, luminous cream myelin and restrained coral inflammation. Artwork first, asymmetrical and flowing, not a grid of cards. Dominant sweeping three-quarter anatomical cutaway of a brain continuing into the spinal cord, not the peripheral nerves; several small schematic lesion areas indicated delicately, labeled \"Central nervous system: brain + spinal cord\" and \"Illustrative lesions—not a patient scan\". Tissue folds and cord anatomy have meticulous believable material texture and subtle dimensional lighting. A curved magnification pathway flows from one lesion into two large neighboring nerve-fiber studies: one intact axon wrapped in segmented protective myelin, one with disrupted myelin exposing portions of axon. Label \"Axon\", \"Myelin sheath\", \"Immune-mediated damage\"; a fine signal line remains continuous along the intact fiber and fades or breaks along the damaged fiber, explicitly labeled \"Schematic: disrupted nerve signaling\". Do not depict literal lightning, parasites, infection organisms, or imply every axon is severed. Add \"Myelin damage—and sometimes axon injury—disrupts communication\". Supporting explanatory text organically follows the curved anatomy in generous open spaces, never rigid boxes.\nAt upper right integrate small sensory studies of an eye and a hand, visually connected to concise text \"Symptoms vary: vision changes • numbness or tingling • fatigue • weakness or stiffness • balance problems\". Below the hero, a dignified fictional 34-year-old East Asian woman with short straight black hair, round face, average build and moss-green cardigan sits upright talking to a clinician; an understated small open note \"Symptoms can relapse and remit, or progressively worsen\". No implication that all patients need mobility aids. Adjacent open notes \"Exact cause unclear\" and \"Genes and environment influence risk; smoking and prior Epstein–Barr infection are associated—not certainty\". Avoid a literal causal arrow from a virus to MS.\nAlong a gentle lower arc, readable diagnosis and care lettering: \"Diagnosis: history + neurological examination + MRI; sometimes spinal fluid or other tests\"; \"No single diagnostic test\"; \"No current cure\"; \"Disease-modifying therapies: reduce relapses and slow progression in appropriate patients\"; \"Steroids may speed relapse recovery—not alter the long-term course\"; \"Physiotherapy, tailored activity and symptom care support daily life\"; \"Treatment is individualized with the MS team\". Near the base place a prominent but unboxed coral emergency line: \"Sudden arm weakness, vision loss or balance trouble? Seek emergency help—stroke can look similar.\" Footer \"Symptoms have many causes. General education—not a diagnosis.\" Preserve elegant large type, meaningful readable secondary labels and visual breathing room. Make the myelin comparison the spectacular focus, with intricate layered fatty sheaths and unexaggerated inflammation. No bibliography, URLs, numerical statistics, medication doses, promised cure, logo, frame, photographed poster, or UI. Only show source-supported described anatomy and text; don't invent additional labels.",
+    "image": "images/2026-11-05-factual-infographic-factual-infographic-multiple-sclerosis-.jpg",
+    "thumb": "thumbs/2026-11-05-factual-infographic-factual-infographic-multiple-sclerosis-.webp",
+    "color": "#c2b5b5",
+    "date": "2026-11-05",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "multiple-sclerosis-myelin-signal-disruption",
+      "imageSha256": "62946902ab063044841fad88cdbfb06dbee4dda157139d053e9db10131597ff6",
+      "imageDHash": "08088f6842c7150f"
+    },
+    "factualInfographic": {
+      "topic": "How multiple sclerosis damages central nervous system myelin, disrupts nerve signals, and is evaluated and managed",
+      "description": "Central nervous system demyelination, symptoms, diagnosis, management and stroke-related warning signs.",
+      "sourceNote": "NINDS: https://www.ninds.nih.gov/health-information/disorders/multiple-sclerosis-ms ; NHS: https://www.nhs.uk/conditions/multiple-sclerosis/ — verified anatomy, symptom variability, evaluation, management and emergency context.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-05T10:21:48.481544+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Neurological Disorders and Stroke",
+            "title": "Multiple Sclerosis (MS)",
+            "sourceType": "government-agency",
+            "url": "https://www.ninds.nih.gov/health-information/disorders/multiple-sclerosis-ms"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Multiple sclerosis",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/multiple-sclerosis/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Multiple sclerosis is an immune-mediated disorder affecting the central nervous system: brain and spinal cord; immune attacks damage myelin around axons and may damage axons themselves, disrupting communication.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Myelin is the protective coating around nerve fibers; demyelinated lesions can occur in the brain and spinal cord and can be seen with MRI.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Symptoms vary by person and lesion location: fatigue, visual problems, numbness or tingling, muscle weakness or stiffness, and balance problems can occur.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Some people have relapses and remissions; others experience progressive worsening. The course varies and cannot be predicted from a single illustration.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The exact cause is unclear; genetic susceptibility and environmental factors contribute, and smoking and prior Epstein-Barr virus infection are associated with increased risk, not certainty of disease.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "No single test diagnoses MS: a neurologist combines history and examination with MRI and sometimes spinal fluid or other tests, excluding other causes.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "There is no current cure. Disease-modifying therapies can reduce relapses and slow progression for appropriate patients; treatment depends on disease type and individual needs.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Corticosteroids may speed recovery from a relapse but do not change the long-term course; physiotherapy, tailored exercise, fatigue management and symptom medicines can help.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Sudden arm weakness or numbness, sudden vision loss or sudden balance problems can signal stroke and require emergency medical help; do not assume they are MS.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "MS-like symptoms can have other causes and should be checked by a clinician; general education is not diagnosis.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-05-factual-infographic-factual-infographic-acute-pancreatitis-",
+    "title": "Factual infographic: Acute Pancreatitis — An Inflamed Pancreas",
+    "tests": "{\"factual_subtype\": \"medical-health-infographic\"}; archive_slot=2026-11-05T11:20; concept=acute-pancreatitis-pancreatic-inflammation-hospital-care; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, richly illustrated medical infographic, directly on the canvas, not a poster mockup. Headline: “ACUTE PANCREATITIS”; subtitle: “When the pancreas becomes inflamed”. Artistic anatomical atlas in fine ink and luminous gouache, cool midnight teal background shading into pale mineral blue around a dominant coral-and-ochre pancreas, ivory labels and restrained amber warning accents. Organic asymmetrical composition, no boxed grid or detached cards. Make the dominant anatomical cutaway occupy most of the visual field: a translucent stomach reveals the lobulated pancreas behind it, nestled beside the C-shaped duodenum; precise delicate leaders label “Stomach”, “Pancreas” and “Duodenum”. Show normal anatomy in quiet blue-grey and focal inflamed pancreatic tissue in warm coral, not gore. A sweeping magnified tissue study connects to the pancreas with a thin curved leader; label “Digestive enzymes can damage pancreatic tissue → inflammation”. Do not invent microscopic molecular structures: use a clearly schematic magnification with subtle granular lobules and soft inflammation glow. Nearby concise caption: “Normally, pancreatic enzymes help digest food in the intestine. The pancreas also makes insulin.”\nAlong the upper-left flowing pathway, a small schematic of the duct opening with a stone obstructing it, caption “Gallstones can block the opening”; accompany with open typography “Common causes: gallstones and heavy alcohol use” and a quieter line “Some medicines and other conditions can also cause it.” No implication that all cases involve stones or alcohol.\nAt the lower left, a small dignified fictional 50-year-old man with medium brown skin, stocky build, short salt-and-pepper hair and a simple sage shirt leans forward with a hand over the upper abdomen; a faint curved arrow wraps from upper abdomen toward back. Label “Sudden, persistent upper abdominal pain”, “May spread to the back”, and “Nausea • vomiting • fever”. This is a generic illustrative person, not a real clinical case. Across the right, integrate an unboxed care pathway with small fine-ink blood sample and CT-ring illustrations: “Assessment: history, examination, blood tests; sometimes CT”. Continue along a curved line into an IV bag and clinician hand motif: “Hospital care: monitoring, IV fluids and pain relief”, “Treat the cause: gallstone treatment or support to stop alcohol”, “Antibiotics only if infection”. Do not show doses or promise a cure.\nA clear amber lower-margin warning integrated into the composition reads “SEEK URGENT CARE: sudden, severe abdominal pain that does not go away.” Beneath, readable emphasis: “Emergency care for severe pain spreading to the back, fast heartbeat or difficulty breathing.” Give this text generous contrast and breathing room. Smaller open notes: “Most people recover; severe cases can cause tissue death or infection and may be life-threatening.” “Help prevent recurrence: avoid or reduce alcohol, stop smoking, follow clinician dietary advice.” Footer: “General education • Not a diagnosis”. Preserve clinical clarity and essential warnings over optional decorative detail. Refined readable typography, anatomically plausible forms, intricate soft tissue shading and delicate directional linework, varied study scales and substantial negative space. No URLs, bibliography, logos, photo frame, invented statistics or decorative pseudo-text.",
+    "image": "images/2026-11-05-factual-infographic-factual-infographic-acute-pancreatitis-.jpg",
+    "thumb": "thumbs/2026-11-05-factual-infographic-factual-infographic-acute-pancreatitis-.webp",
+    "color": "#7c7e73",
+    "date": "2026-11-05",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "acute-pancreatitis-pancreatic-inflammation-hospital-care",
+      "imageSha256": "247f0f31206bd1042ff7a01406137812749b2792602ac70cad0bab59df19b5c6",
+      "imageDHash": "2386181343670307"
+    },
+    "factualInfographic": {
+      "topic": "How acute pancreatitis inflames the pancreas, causes sudden abdominal pain, and requires urgent evaluation and hospital treatment",
+      "description": "Source-backed anatomy, symptoms, causes, urgent warning signs and hospital management of acute pancreatitis.",
+      "sourceNote": "NIDDK: https://www.niddk.nih.gov/health-information/digestive-diseases/pancreatitis/definition-facts ; NHS: https://www.nhs.uk/conditions/acute-pancreatitis/ . Verified pancreatic anatomy, enzyme injury, causes, clinical evaluation, urgent escalation and treatment.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-05T16:21:17.313546+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NIDDK, National Institutes of Health",
+            "title": "Definition & Facts for Pancreatitis",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/pancreatitis/definition-facts"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Acute pancreatitis",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/acute-pancreatitis/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The pancreas lies behind the stomach near the duodenum; it makes insulin and digestive enzymes that normally help digest food in the intestine.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Acute pancreatitis is sudden inflammation of the pancreas; digestive enzymes can damage pancreatic tissue.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Gallstones can block the opening of the pancreas; gallstones and heavy alcohol use are common causes, while some medicines and other conditions can also cause it.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Symptoms include sudden persistent severe upper abdominal pain that may spread to the back, nausea, vomiting and fever.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Sudden severe persistent abdominal pain needs urgent medical evaluation; severe pain spreading to the back, fast heartbeat or difficulty breathing warrants emergency care.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Evaluation uses history, examination, blood tests and sometimes imaging such as CT.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Hospital treatment includes monitoring, IV fluids and pain relief; treating the cause may include gallstone surgery or alcohol cessation support. Antibiotics are for infection, not a routine cure.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Most people recover, but severe illness may cause tissue death or infection and can be life-threatening.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Reducing or avoiding alcohol, stopping smoking and following clinician dietary advice may help prevent recurrence.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-05-factual-infographic-factual-infographic-urinary-tract-infec",
+    "title": "Factual infographic: Urinary Tract Infection — Bladder and Ascending Infection",
+    "tests": "factual_subtype: medical-health-infographic; archive_slot=2026-11-05T14:20; concept=urinary-tract-bladder-ascending-infection; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished artistic medical infographic, directly on canvas, titled \"URINARY TRACT INFECTION\" with subtitle \"Bladder infection and the ascending route\". Refined luminous anatomical gouache with fine ink contours on a cool ivory ground, deep teal and blue urine pathways, coral inflamed lining, delicate violet shadows. Artwork-led asymmetrical composition, no grid, no boxed cards, no photographed poster, no logos, no bibliography. A large anatomically credible anterior urinary-system cutaway dominates the canvas: two bean-shaped kidneys in the upper rear abdomen, two distinct slender ureters descending to a muscular bladder in the pelvis, and a short urethra exiting below. Label kidneys, ureters, bladder, urethra with precise fine leaders. Soft translucent surrounding torso establishes position without adding unrelated organs. Blue downward arrows labeled \"Urine flow\" trace kidneys to bladder and urethral exit. A separate restrained coral dotted upward path labeled \"Bacteria can ascend\" begins outside the urethra and reaches the bladder, with a faded optional continuation along one ureter toward kidney labeled \"May spread to kidneys\"; do not imply all infections progress. Near the lower left, organically magnify the bladder lining into an elegant curved cutaway with tiny generic bacteria and coral irritated tissue, explicitly labeled \"Schematic enlargement — not to scale\" and \"Bacteria can multiply in the bladder\". Explain \"Usually bacteria from the bowel enter through the urethra\". Texture the bladder muscle and smooth inner surface credibly without invented microscopic structures.\nReadable open callouts woven around the anatomy, not dense prose: \"COMMON SYMPTOMS\" followed by \"Burning when urinating • urgency • frequent urination • lower abdominal discomfort\". Underneath: \"Dark or smelly urine alone does not confirm a UTI.\" A small flowing risk annotation reads \"Risk can rise with catheters, incomplete emptying, pregnancy or menopause.\" A sweeping lower-right clinical-care path uses tiny unboxed urine specimen and prescription illustrations, connected to concise text: \"Assessment: symptoms and history; urine testing when needed\"; \"Treatment: antibiotics are often used — follow your prescription\"; \"Rest and appropriate fluids may ease symptoms; follow any fluid limits\"; \"Cranberry products do not treat an established infection.\" A small prevention annotation: \"Don't hold urine; take time to empty your bladder.\" Integrate a clearly readable warm rust warning ribbon along the bottom, not dominating the artwork: \"URGENT MEDICAL ADVICE: fever or chills, back pain below the ribs, blood in urine, pregnancy, or rapid worsening.\" Beneath in stronger type: \"EMERGENCY HELP: new confusion, marked drowsiness or difficulty speaking.\" Tiny final footer \"General education — not a diagnosis.\" Maintain generous breathing room, rich anatomical shading, elegant typographic hierarchy and legible exact labels; optional risk annotation may be shortened for space, but preserve anatomy, mechanism, clinical care and warnings. No invented numbers, drug doses or species-specific bacterial anatomy.",
+    "image": "images/2026-11-05-factual-infographic-factual-infographic-urinary-tract-infec.jpg",
+    "thumb": "thumbs/2026-11-05-factual-infographic-factual-infographic-urinary-tract-infec.webp",
+    "color": "#ddc6c1",
+    "date": "2026-11-05",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "urinary-tract-bladder-ascending-infection",
+      "imageSha256": "18b9bec64d52c3326cf50f30b776a81046a89f284a03bf7ff80e50bb2067a830",
+      "imageDHash": "b69292c2e60c8ca2"
+    },
+    "factualInfographic": {
+      "topic": "How urinary tract infections reach the bladder, can ascend to the kidneys, and are evaluated and treated",
+      "description": "Source-backed urinary anatomy, bladder infection mechanism, symptoms, risk context, care and urgent warnings.",
+      "sourceNote": "NIDDK and NHS: https://www.niddk.nih.gov/health-information/urologic-diseases/bladder-infection-uti-in-adults ; https://www.nhs.uk/conditions/urinary-tract-infections-utis/ ; https://www.niddk.nih.gov/health-information/urologic-diseases/urinary-tract-how-it-works . Verified anatomy, ascending infection, symptom interpretation, care and urgent clinical context.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-05T19:21:02.804503+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NIDDK",
+            "title": "Bladder Infection (UTI) in Adults",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/urologic-diseases/bladder-infection-uti-in-adults"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Urinary tract infections (UTIs)",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/urinary-tract-infections-utis/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NIDDK",
+            "title": "The Urinary Tract & How It Works",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/urologic-diseases/urinary-tract-how-it-works"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The urinary tract includes two kidneys, two ureters, a bladder and a urethra; kidneys produce urine, ureters carry it to the bladder, the bladder stores it, and the urethra carries it outside.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Bacteria, usually from the bowel, can enter through the urethra and multiply in the bladder; an untreated bladder infection can develop into a kidney infection.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Burning urination, urgency, frequency, lower abdominal discomfort and sometimes blood in urine are symptoms; smell or dark urine alone does not establish UTI.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Catheters, impaired bladder emptying, pregnancy and menopause can increase risk.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Clinical assessment uses symptoms and history and may include urine testing; urine testing is not always needed.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Antibiotics are often used for bacterial bladder infection; take prescribed treatment as directed. Rest and appropriate fluids may help symptoms, but cranberry products do not treat an established infection.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Fever or chills, back pain below the ribs, blood in urine, pregnancy, or rapid worsening warrant urgent medical advice; new confusion, marked drowsiness or difficulty speaking warrant emergency help.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Not holding urine, taking time to empty the bladder and drinking appropriate fluids may help urinary health; follow clinician fluid limits when applicable.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-05-factual-infographic-factual-infographic-achilles-tendinopat",
+    "title": "Factual infographic: Achilles Tendinopathy — The Calf-to-Heel Connection",
+    "tests": "factual_subtype: medical-health-infographic; archive_slot=2026-11-05T17:20; concept=achilles-tendinopathy-calf-heel-load; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, richly informative artistic medical infographic, directly on the canvas, titled \"ACHILLES TENDINOPATHY\" with subtitle \"The calf-to-heel connection under repetitive load\". Use a flowing, asymmetrical anatomical atlas in refined gouache, luminous scientific rendering and delicate technical ink on a cool pale blue ground, warm terracotta muscle, pearly ivory tendon and bone, restrained copper pain accents. No boxes, cards, grids, photographed poster, logos or bibliography. The dominant hero fills most of the composition: an elegant posterior-oblique lower leg and heel anatomical cutaway, calf muscle tapering into the long Achilles tendon inserting onto the posterior calcaneus. Preserve realistic tendon continuity and spatial relationships; no severed tendon in this hero. Layer visible muscle fascicles, tendon fiber striations, subtle surrounding tissue and credible bone texture. Label precisely \"Calf muscles\", \"Achilles tendon\", \"Calcaneus (heel bone)\" with fine open leaders. An understated curved motion arrow at the heel connects to \"Used in walking, running, jumping and rising onto tiptoes\".\nLet the tendon become the compositional spine: two delicately annotated focal regions labeled \"Midportion: above the heel attachment\" and \"Insertional: at the heel attachment\". Nest a large schematic magnification alongside the middle tendon, explicitly labeled \"Schematic tissue detail\": compare slender aligned tendon fibers with an affected thickened region with subtly disrupted fibers, not a complete tear. Caption \"Repetitive stress can lead to fiber damage, thickening and pain\". Avoid depicting this as infection or only an acute inflammatory disease.\nAlong the upper flowing margin weave \"Load can outpace tolerance\" with small restrained movement traces for sudden training increases and an annotation \"Tight calf muscles can add stress\". Across a generous open area beside the hero integrate three concise symptom lines, \"Morning stiffness\", \"Pain with activity\", \"Tenderness or swelling\". On the lower sweep introduce one small dignified fictional person: a stocky middle-aged man with medium-brown skin, close-cropped silver hair, dark teal T-shirt and charcoal shorts sitting with a physiotherapist discussing his ankle; no identity implied from a real case. It is secondary to the anatomy. Above the vignette write \"Assessment: history and examination; imaging when needed\". Guide the eye toward an open care pathway, not numbered boxes: \"Reduce aggravating load\" → \"Supportive footwear\" → \"Individualized physiotherapy and strengthening\". Do not prescribe exercise repetitions, medication doses, step-based heel drops or a universal exercise protocol. Add \"Recovery may take months. Persistent symptoms need assessment.\" Distinct small warm-red urgent callout, integrated at the foot of the illustration: \"Sudden severe pain or a pop? Possible rupture — seek urgent medical assessment.\" Footer \"General education, not a diagnosis. Care should be individualized.\" All information must be legible and short, with typographic hierarchy, substantial breathing room and tactile anatomical richness. No unsupported statistics, promises of cure, invented structures or extra clinical claims.",
+    "image": "images/2026-11-05-factual-infographic-factual-infographic-achilles-tendinopat.jpg",
+    "thumb": "thumbs/2026-11-05-factual-infographic-factual-infographic-achilles-tendinopat.webp",
+    "color": "#c7c5c4",
+    "date": "2026-11-05",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "achilles-tendinopathy-calf-heel-load",
+      "imageSha256": "d0406eff847ebe45b7271b32aa8babb061c4cda68a87022fb0a54ad966073bd0",
+      "imageDHash": "84ccccdecc820e8c"
+    },
+    "factualInfographic": {
+      "topic": "How Achilles tendinopathy affects the calf-to-heel tendon, causes load-related pain, and is evaluated and managed",
+      "description": "Achilles tendon anatomy, midportion and insertional symptoms, evaluation, tailored management and rupture warning signs.",
+      "sourceNote": "AAOS https://www.orthoinfo.org/bodypart/foot-ankle/achilles-tendinitis/ and NHS https://www.nhs.uk/conditions/tendonitis/; verified anatomy, repetitive loading, symptoms, evaluation, conservative care and urgent rupture warning signs.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-05T22:20:55.776965+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "American Academy of Orthopaedic Surgeons",
+            "title": "Achilles Tendinitis",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.orthoinfo.org/bodypart/foot-ankle/achilles-tendinitis/"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Tendonitis",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/tendonitis/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The Achilles tendon connects calf muscles to the heel bone (calcaneus) and is used during walking, running, jumping and standing on tiptoes.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Repetitive stress, a sudden increase in exercise and tight calf muscles can contribute to Achilles tendon problems.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Noninsertional disease affects the middle tendon; insertional disease affects its heel attachment.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Affected tendon fibers can develop tiny tears, degeneration, swelling and thickening; this is not the same as a complete rupture.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Symptoms include morning stiffness, pain along the tendon or heel worsened by activity, and swelling.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Assessment starts with history and examination; imaging may be selected and MRI is not always needed for diagnosis.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Reducing aggravating activity, supportive footwear and physical therapy including supervised strengthening can help; treatment must be tailored to the individual.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Recovery can take months; persistent symptoms should be assessed by a clinician.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Sudden severe pain or a pop at the back of the calf or heel may signal rupture and requires urgent medical assessment.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-05-factual-infographic-factual-infographic-vitiligo-loss-of-pi",
+    "title": "Factual infographic: Vitiligo — Loss of Pigment-Producing Cells",
+    "tests": "factual_subtype: medical-health-infographic; archive_slot=2026-11-05T23:20; concept=vitiligo-melanocyte-loss-skin-depigmentation; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished artwork-led medical infographic titled “VITILIGO” with subtitle “When pigment-producing cells are lost”. Elegant anatomical gouache and meticulous technical ink, warm cream canvas, deep plum lettering, copper-brown skin tones and pale lavender cellular details. Direct artwork, not a photographed poster, no grid, boxes, frames or logos. The dominant hero is a graceful realistically rendered pair of medium-dark brown hands and forearms, relaxed and dignified, with irregular sharply depigmented milky-white patches on the backs of hands and around fingers. Preserve realistic skin pores, knuckle creases, subtle veins and nails; white patches remain intact skin, not wounds, peeling or scars. No identity inference or disease caricature. A sweeping magnification opens organically into an exquisitely detailed schematic skin cross-section: an intact epidermis above the dermis, branched melanocytes along the epidermal base. Compare normal pigment production with an adjacent depigmented area containing fewer functioning melanocytes. Label “Epidermis”, “Melanocyte: pigment-producing cell”, “Melanin: skin pigment”, “Loss of working melanocytes → less pigment”. Use fine open leader lines, not detached cards. A subtle immune-cell schematic pointing toward a melanocyte is labeled “Common non-segmental vitiligo: immune attack on melanocytes”. Do not invent microscopic pathologies or show infectious organisms.\nAround the hands and cellular arc integrate readable concise explanations: “White patches often appear on both sides, including hands and face.” “Hair in affected areas may turn white.” “Extent and progression vary.” “Not an infection. Not contagious.” A brief quiet annotation: “Family history and other autoimmune conditions may be associated.” No invented prevalence or prediction of individual progression. Arrange a lower flowing care pathway with small refined sunshade, skin-exam and cream-tube studies, no brands: “Protect from sunburn: high-SPF sunscreen and sun protection.” “Assessment: skin examination; a Wood lamp may help. Thyroid testing in selected cases.” “Clinician-supervised topical treatment may help restore pigment; results vary.” “Camouflage is optional. Emotional support matters.” Do not imply that changing skin color is required, that treatment always works, or promise a cure. A calm safety footnote, no fabricated emergency: “Have new pale patches assessed — do not self-diagnose.” Final small line “General education, not a diagnosis.” Use asymmetric composition, exceptionally refined tactile tissue and skin textures, varied study scales and generous breathing room; hero hands and beautiful cellular anatomy dominate. No bibliography, URLs, doses, unsupported treatments or extra disease claims.",
+    "image": "images/2026-11-05-factual-infographic-factual-infographic-vitiligo-loss-of-pi.jpg",
+    "thumb": "thumbs/2026-11-05-factual-infographic-factual-infographic-vitiligo-loss-of-pi.webp",
+    "color": "#d8b5a7",
+    "date": "2026-11-05",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "vitiligo-melanocyte-loss-skin-depigmentation",
+      "imageSha256": "41f85ba7f222dda114007de1370d7351ad29fb8dd320d0d33fbc10e1046fc655",
+      "imageDHash": "1e84e48199e0a5ac"
+    },
+    "factualInfographic": {
+      "topic": "Vitiligo melanocyte loss and management",
+      "description": "Vitiligo pigment-cell anatomy, immune involvement, skin changes and management",
+      "sourceNote": "NIAMS https://www.niams.nih.gov/health-topics/vitiligo ; NHS https://www.nhs.uk/conditions/vitiligo/ — verified pigment-cell loss, skin changes, evaluation and supportive care. Treatment response varies.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-06T04:22:15.334415+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NIAMS",
+            "title": "Vitiligo",
+            "sourceType": "government-agency",
+            "url": "https://www.niams.nih.gov/health-topics/vitiligo"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Vitiligo",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/vitiligo/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Vitiligo is a chronic condition with pigment loss caused by loss of working melanocytes, the cells that make melanin.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "In common non-segmental vitiligo the immune system attacks melanocytes; white patches often appear on both sides, including hands and face.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Hair in affected areas can turn white; extent and progression vary.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Vitiligo is not an infection and is not contagious.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Family history and other autoimmune conditions can be associated with vitiligo.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Diagnosis uses skin examination; a Wood lamp can help distinguish pigment loss, and selected patients may need thyroid testing.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Affected skin is vulnerable to sunburn; high-SPF sunscreen and sun protection are important.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Treatment can include clinician-supervised topical medicines; camouflage is optional. Response varies and no cure is guaranteed. Support for emotional impact can help.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "New pale patches should be assessed rather than self-diagnosed.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-06-factual-infographic-factual-infographic-reading-the-cat-foo",
+    "title": "Factual infographic: Reading the Cat Food Adequacy Statement",
+    "tests": "; archive_slot=2026-11-06T00:20; concept=cat-food-nutritional-adequacy-label-reading; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: food-and-hydration",
+    "prompt": "Create a richly detailed artistic feline educational atlas, finished image directly, not a photographed sheet or package mockup. Title: \"READ THE ADEQUACY STATEMENT\"; subtitle \"A cat-food label clue that matters\". Dominant lifelike silver mackerel tabby seated in three-quarter view, luxurious individually shaded fur, amber-green eyes, natural anatomy and calm expression. Hand-painted gouache and extremely fine ink on warm ivory with deep teal, muted copper and luminous cream. The cat occupies most of the lower-left composition; a broad unfurling paper label ribbon arcs around its shoulder and across the upper-right, with organic open annotations and generous negative space. Tiny illustrated food morsels lead the eye toward the ribbon, not a feeding-quantity diagram. No rigid panels, no repeated cards, no grid, no brand endorsements. Render a beautiful flowing illustrated explanation, not a sparse title poster.\nMake the central ribbon text large and readable: \"Nutritional adequacy statement\" followed by \"Look for: complete and balanced\" and \"Check the intended life stage\". A small note beside it: \"Intended as a sole diet\". Branch two elegant fine leader lines from that statement to compact open text: \"Meets an AAFCO nutrient profile\" and \"OR feeding trials using AAFCO procedures\". Do not imply AAFCO approves brands or certifies foods. The diagram explains two substantiation routes, not two required tests.\nIntegrate a smaller separate curl of ribbon bearing \"Ingredients: listed by decreasing weight\" and underneath \"Not the adequacy statement\". Integrate a small tasteful treat silhouette beside \"Treats and snacks: typically not a complete diet\". Beneath the cat, a light organically curved trail of small labeled nutrient motifs reads \"Protein • fats • vitamins • minerals • amino acids\"; these are decorative symbolic motifs, not fabricated molecular structures. Small note \"More supplements is not automatically better\". Footer \"General education • Ask your veterinarian about your cat’s needs\". Sources in tiny but legible footer: \"Cornell Feline Health Center • U.S. FDA\". All food-label elements are explanatory schematic fragments, not fake legal packaging or exact regulatory sample wording. No disease anatomy, no life-stage portraits, no individualized amounts or prescriptions. Keep the title, core ribbon, cat and source-supported distinctions paramount; optional decorative morsels may be reduced for breathing room. Elegant expressive typesetting, precise leaders, realistic feline paws and whiskers, warm rim light, sophisticated tactile paint detail.",
+    "image": "images/2026-11-06-factual-infographic-factual-infographic-reading-the-cat-foo.jpg",
+    "thumb": "thumbs/2026-11-06-factual-infographic-factual-infographic-reading-the-cat-foo.webp",
+    "color": "#c8b89c",
+    "date": "2026-11-06",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1052x1494",
+    "dedup": {
+      "conceptKey": "cat-food-nutritional-adequacy-label-reading",
+      "imageSha256": "2b93ac199f6b7d132e4073c6bebe529bb94932485524cecdda57c02c38b151f8",
+      "imageDHash": "3997464246e2b1b4"
+    },
+    "factualInfographic": {
+      "topic": "Reading the nutritional adequacy statement on cat food labels",
+      "description": "An artwork-led guide to nutritional adequacy statements, substantiation routes and the distinction from ingredients and treats.",
+      "sourceNote": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat ; https://www.fda.gov/animal-veterinary/animal-health-literacy/complete-and-balanced-pet-food",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-06T05:21:00.813047+00:00",
+        "sources": [
+          {
+            "id": "cornell",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Feeding Your Cat",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat"
+          },
+          {
+            "id": "fda",
+            "publisher": "U.S. Food and Drug Administration",
+            "title": "Complete and Balanced Pet Food",
+            "sourceType": "government-agency",
+            "url": "https://www.fda.gov/animal-veterinary/animal-health-literacy/complete-and-balanced-pet-food"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The nutritional adequacy statement identifies whether food is complete and balanced and the intended life stage.",
+            "sourceIds": [
+              "cornell",
+              "fda"
+            ]
+          },
+          {
+            "claim": "Complete and balanced food is intended as a sole diet; treats, snacks and supplements typically are not.",
+            "sourceIds": [
+              "fda"
+            ]
+          },
+          {
+            "claim": "A complete and balanced claim requires meeting an AAFCO nutrient profile or passing a feeding trial using AAFCO procedures.",
+            "sourceIds": [
+              "fda"
+            ]
+          },
+          {
+            "claim": "Ingredient lists are ordered by decreasing weight and are not the nutritional adequacy statement.",
+            "sourceIds": [
+              "cornell"
+            ]
+          },
+          {
+            "claim": "Cats need protein, fats, vitamins, minerals, fatty acids and amino acids; more supplementation is not automatically better.",
+            "sourceIds": [
+              "cornell"
+            ]
+          },
+          {
+            "claim": "Choose food appropriate to the cat with veterinary guidance; this chart is general education, not an individual diet plan.",
+            "sourceIds": [
+              "cornell"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-11-06-factual-infographic-factual-infographic-white-spotting-unpi",
+    "title": "Factual infographic: White Spotting — Unpigmented Patches",
+    "tests": "; archive_slot=2026-11-06T04:20; concept=cat-kit-white-spotting-unpigmented-patches; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: coats-and-genetics",
+    "prompt": "Create a richly detailed, artwork-led feline genetics atlas, directly rendered finished art, not a photographed sheet. Title: WHITE SPOTTING. Subtitle: Where coat pigment is absent. An exquisitely naturalistic black-and-white domestic shorthair cat stretches diagonally through the composition, one forepaw extended toward the viewer, tail gently curving upward. Credible anatomy and glossy black guard hairs contrasting with finely resolved soft white chest and paws. Sea-glass teal background washes, warm ivory negative space, copper technical ink and fine gouache texture. Dominant beautiful cat occupies most of the page; elegant asymmetric open annotations wind around it, never a grid or boxed dashboard.\nAt the white/black fur boundary a delicate curved leader opens into a large simplified skin-and-hair-follicle comparison, explicitly labeled SCHEMATIC. Show a pigmented hair follicle with pigment-producing melanocytes and a neighboring white follicle without those melanocytes. Exact concise labels: Melanocytes: pigment-producing cells. White patches: melanocytes absent. The cellular drawing is schematic, not a biopsy or literal magnification. White hair is not painted white pigment. Connect this organically to a fine DNA ribbon labeled KIT, with a small interrupted intron segment and label Viral DNA insertion in KIT is associated with white spotting. Do not depict infection, contagious virus, illness or a treatment.\nAlong the bottom, two smaller graceful cat silhouette studies with different extents of white, connected by a loose ink arc, caption White spotting varies from small patches to extensive white areas. Clearly state Illustrative patterns — not a genotype scale. These are examples, not stages of development or a guaranteed inheritance chart. A restrained final note reads: White spotting and Dominant White are distinct coat phenotypes associated with different insertions at KIT. No breed labels, percentages, Punnett squares, health or hearing claims, invented allele predictions or extra unsourced facts. Artwork remains dominant but explanatory anatomy and genetics must be substantial and readable. Confident title hierarchy, precise fine leader lines, concise legible text, generous breathing room. No rigid boxes, decorative fake labels, frame, UI, props or watermark.",
+    "image": "images/2026-11-06-factual-infographic-factual-infographic-white-spotting-unpi.jpg",
+    "thumb": "thumbs/2026-11-06-factual-infographic-factual-infographic-white-spotting-unpi.webp",
+    "color": "#b5ad9b",
+    "date": "2026-11-06",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "cat-kit-white-spotting-unpigmented-patches",
+      "imageSha256": "f7ddbdc3137324778fc25f6b1b4184ad4e6cab450171983c02cf1572a9fc893f",
+      "imageDHash": "1a202465c24d870e"
+    },
+    "factualInfographic": {
+      "topic": "How KIT-related white spotting creates unpigmented patches in domestic cat coats",
+      "description": "An artwork-led cat coat atlas explaining melanocyte absence and KIT-associated white spotting, distinct from Dominant White.",
+      "sourceNote": "Read OMIA and David et al. 2014 abstract via Europe PMC. Sources: https://omia.org/OMIA001737/9685/ ; https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:25085922&format=json&resultType=core",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-06T09:21:37.830700+00:00",
+        "sources": [
+          {
+            "id": "s1",
+            "publisher": "University of Sydney — OMIA",
+            "title": "Coat colour, white spotting, KIT-related in Felis catus",
+            "sourceType": "university",
+            "url": "https://omia.org/OMIA001737/9685/"
+          },
+          {
+            "id": "s2",
+            "publisher": "G3: Genes, Genomes, Genetics",
+            "title": "Endogenous retrovirus insertion in the KIT oncogene determines white and white spotting in domestic cats (David et al., 2014), abstract via Europe PMC",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:25085922&format=json&resultType=core"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "White spotting ranges from tiny white patches to extensive white areas; these are illustrative examples, not a genotype scale.",
+            "sourceIds": [
+              "s1"
+            ]
+          },
+          {
+            "claim": "White areas lack skin melanocytes, the pigment-producing cells; this differs from failure of pigment synthesis.",
+            "sourceIds": [
+              "s1"
+            ]
+          },
+          {
+            "claim": "An insertion of a full-length feline endogenous retrovirus in KIT intron 1 is associated with white spotting in cats.",
+            "sourceIds": [
+              "s1",
+              "s2"
+            ]
+          },
+          {
+            "claim": "A distinct shorter viral LTR insertion at KIT is associated with Dominant White; white spotting and Dominant White are distinct phenotypes.",
+            "sourceIds": [
+              "s1",
+              "s2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
