@@ -121,6 +121,7 @@ const PLANS = {
   },
   'zoa-pests': {
     steps: [TEST_CORAL,
+      s('Wear gloves and eye protection when you handle zoas—some carry palytoxin, a strong toxin. Never boil or scrub zoa rock.'),
       s('Look closely at night with a flashlight for tiny spiders or slugs.'),
       s('Dip the colony and blow it off with a turkey baster. Pest dip for spiders or slugs; iodine-type dip for white pox bumps. Repeat weekly.', 'dip'),
       s('Remove fully melted polyps so they don’t spread it.')],

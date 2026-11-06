@@ -97,10 +97,11 @@ test('fish-specific tips appear on the matching result', () => {
   assert.equal(assessDiagnosis(input(['dots'])).primary.tip, '');
 });
 
-test('urgency: velvet, Brooklynella, Uronema, water and dropsy act today; ich and fin rot this week; lymphocystis watch', () => {
+test('urgency: ich, velvet, Brooklynella, Uronema, water and dropsy act today; fin rot this week; lymphocystis watch', () => {
   const urgency = Object.fromEntries(CONDITIONS.map(c => [c.id, c.urgency]));
-  for (const id of ['velvet-fresh', 'velvet-marine', 'uronema', 'brooklynella', 'water', 'dropsy']) assert.equal(urgency[id], 'today', id);
-  for (const id of ['ich-fresh', 'ich-marine', 'fin-rot', 'flukes', 'popeye', 'ulcer']) assert.equal(urgency[id], 'week', id);
+  // Ich: start treatment right away (Nov 6 2026 review; Merck: treat promptly).
+  for (const id of ['ich-fresh', 'ich-marine', 'velvet-fresh', 'velvet-marine', 'uronema', 'brooklynella', 'water', 'dropsy']) assert.equal(urgency[id], 'today', id);
+  for (const id of ['fin-rot', 'flukes', 'popeye', 'ulcer']) assert.equal(urgency[id], 'week', id);
   for (const id of ['lymphocystis', 'hlle', 'normal']) assert.equal(urgency[id], 'watch', id);
   // Any distress or deaths escalates the result to "Act today".
   for (const b of ['gasping', 'collapse', 'deaths']) {
@@ -286,7 +287,7 @@ test('every could-also reason is a short check the keeper can do', () => {
 
 test('danger flag only when the look-alike is strictly more urgent than the top result', () => {
   const flags = result => Object.fromEntries(result.alternatives.map(c => [c.id, c.moreUrgent]));
-  assert.deepEqual(flags(assessDiagnosis(input(['dots']))), { 'velvet-fresh': true }); // today vs week
+  assert.deepEqual(flags(assessDiagnosis(input(['dots']))), { 'velvet-fresh': false }); // both today now
   assert.deepEqual(flags(assessDiagnosis(input(['dust']))), { 'ich-fresh': false }); // week vs today
   assert.equal(flags(assessDiagnosis(input(['fuzz']))).columnaris, true);
   assert.equal(flags(assessDiagnosis(input(['sores'], { closer: 'open' }))).septicemia, true);
