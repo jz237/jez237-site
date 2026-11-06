@@ -8,6 +8,7 @@ import { createReef } from './reef-app.mjs';
 import { createExtras } from './extras-app.mjs';
 import { scienceLine } from './science.mjs';
 import { createReader } from './reader.mjs';
+import { shopLinkFor, shopLinkHtml } from './shop-links.mjs';
 import { LIB_INFO, ZONES, fishMap, closeupsFor, fishStripFor, leadImageFor, libraryPictureCount } from './library-visuals.mjs';
 import { UI_IMAGES, IMAGE_SOURCE as UI_IMAGE_SOURCE } from './ui-images-data.mjs';
 import { MEDIA_BASE } from './fish-images-data.mjs';
@@ -223,7 +224,7 @@ function stepItem(step) {
   const { id, image } = stepImageFor(step), { lead, more } = splitStep(step);
   const pic = image ? `<img class="step-pic" data-step-image="${id}" src="${image.url}" width="${image.width}" height="${image.height}" alt="" decoding="async">`
     : `<span class="step-pic step-pic-urgent" data-step-image="${id}" aria-hidden="true">!</span>`;
-  return `<li>${pic}<span><strong>${escape(lead)}</strong>${more ? `<small>${escape(more)}</small>` : ''}</span></li>`;
+  return `<li>${pic}<span><strong>${escape(lead)}</strong>${more ? `<small>${escape(more)}</small>` : ''}${shopLinkHtml(shopLinkFor(step, id, form.elements.water.value), escape)}</span></li>`;
 }
 
 function todoCard(condition, water, tip = '', fish = null) {

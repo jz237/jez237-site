@@ -7,6 +7,7 @@ import { STEP_TAGS, INVERT_WARNING, reefPlanFor } from './reef-care.mjs';
 import { assessReef, reefSignsFor, reefKindFor, reefConditionFor, ALTERNATIVE_TEXT } from './reef-logic.mjs';
 import { reefImageFor, reefSlotsFor } from './reef-images.mjs';
 import { scienceLine } from './science.mjs';
+import { shopLinkFor, shopLinkHtml } from './shop-links.mjs';
 
 export const REEF_STEPS = ['reef-kind', 'reef-signs', 'reef-changes', 'reef-results'];
 
@@ -74,7 +75,8 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
   function stepItem(step) {
     const [lead, ...rest] = step.text.split(/(?<=[.!?])\s/);
     const tag = step.tag ? `<em class="step-tag step-tag-${step.tag}">${escape(STEP_TAGS[step.tag])}</em>` : '';
-    return `<li${step.tag ? ` data-step-tag="${step.tag}"` : ''}><span><strong>${escape(lead)}</strong>${rest.length ? `<small>${escape(rest.join(' '))}</small>` : ''}${tag}</span></li>`;
+    const water = state.group === 'pond' ? 'pond' : 'marine';
+    return `<li${step.tag ? ` data-step-tag="${step.tag}"` : ''}><span><strong>${escape(lead)}</strong>${rest.length ? `<small>${escape(rest.join(' '))}</small>` : ''}${tag}${shopLinkHtml(shopLinkFor(step.text, '', water), escape)}</span></li>`;
   }
 
   function todoCard(c) {

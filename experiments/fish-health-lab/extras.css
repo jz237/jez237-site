@@ -133,3 +133,7 @@
 .ig-time-note{display:block;margin-top:8px;font-size:11.5px;color:var(--muted)}
 .med-avoid{color:#fdba74;background:rgba(249,115,22,.16)}
 .plan-water{font-size:16px;margin:16px 0 6px;color:var(--accent)}
+/* Host shop links (shop-links.mjs; none on jez237.com). */
+.shop-link{display:inline-block;margin-top:5px;font-size:12.5px;color:var(--accent);text-decoration:none;border-bottom:1px dotted rgba(47,214,230,.5)}
+.shop-link:hover{border-bottom-style:solid}
+.med-shop{margin:8px 0 0}
