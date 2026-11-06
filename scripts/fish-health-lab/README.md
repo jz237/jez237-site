@@ -667,4 +667,4 @@ disease four numbered close-ups (84 new crops, `library-images-data.mjs`, receip
 `library-images-20261106.json`; ich/velvet/cottony growth reuse their detail pictures), a “Where it
 shows” fish map, Early/Typical/Late, the top look-alike with its picture, and “On different fish” (the
 fish-type sets). Library cards lead with a picture. Tap any picture to enlarge. Check: `library.test.mjs`.
-Coral, invert and pond library pages are next.
+Coral, invert and pond pages got the same guide the same day (156 close-ups, `library-reef-images-data.mjs`, receipt `library-reef-images-20261106.json`; `REEF_LIB_INFO` gives “Where to look” chips for corals/inverts and the fish map for pond).

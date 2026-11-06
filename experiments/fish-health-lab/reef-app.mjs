@@ -1,7 +1,8 @@
 // Reef section UI: "What needs help?" → coral/anemone or shrimp/crab/snail
 // questions → the same result layout as the fish check. app.mjs hands over its
 // step machine (goStep etc.); everything reef-specific lives here.
-import { REEF_GROUPS, REEF_KINDS, REEF_CHANGES, REEF_CONDITIONS } from './reef-data.mjs';
+import { REEF_GROUPS, REEF_KINDS, REEF_CHANGES, REEF_CONDITIONS, REEF_LOOKALIKES } from './reef-data.mjs';
+import { REEF_LIB_INFO, ZONES, fishMap, closeupsFor } from './library-visuals.mjs';
 import { STEP_TAGS, INVERT_WARNING, reefPlanFor } from './reef-care.mjs';
 import { assessReef, reefSignsFor, reefKindFor, reefConditionFor, ALTERNATIVE_TEXT } from './reef-logic.mjs';
 import { reefImageFor, reefSlotsFor } from './reef-images.mjs';
@@ -125,11 +126,29 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
     return `<div class="reef-gallery" data-reef-gallery="${c.id}">${shown.map(slot => `<figure data-reef-slot="${slot.id}">${picture(slot.image, groupIcon(c.group))}<figcaption>${escape(slot.image?.caption || slot.label)}</figcaption></figure>`).join('')}</div>${note}`;
   }
 
+  // Visual guide (Nov 6 2026), same layout as the fish pages: four numbered close-ups,
+  // where to look (pond: the fish map), how it changes, and the main look-alike.
+  const zoomAttrs = (src, title, alt) => `data-zoom-src="${escape(src)}" data-zoom-title="${escape(title)}" data-zoom-alt="${escape(alt || '')}"`;
+  const img = im => `<img src="${escape(im.url)}" width="${im.width || 362}" height="${im.height || 362}" alt="${escape(im.alt || '')}" loading="lazy" decoding="async">`;
+  function infographic(c) {
+    const info = REEF_LIB_INFO[c.id], close = closeupsFor(c.id);
+    if (!info && !close.length) return '';
+    const closeups = close.length ? `<ol class="ig-closeups">${close.map((im, i) => `<li><button type="button" class="ig-zoom" ${zoomAttrs(im.url, `${c.title} · ${im.caption || ''}`, im.alt)} aria-label="Enlarge: ${escape(im.caption || '')}">${img(im)}<b aria-hidden="true">${i + 1}</b></button><span>${escape(im.caption || '')}</span></li>`).join('')}</ol>` : '';
+    const where = !info ? '' : info.zones
+      ? `<div class="ig-where"><h4>Where it shows</h4>${fishMap(info.zones)}<p>${info.zones.map(z => `<span class="ig-zone">${escape(ZONES[z])}</span>`).join('')}</p></div>`
+      : `<div class="ig-where ig-look"><h4>Where to look</h4><p>${info.look.map(l => `<span class="ig-zone">${escape(l)}</span>`).join('')}</p></div>`;
+    const time = info ? `<div class="ig-time"><h4>How it changes</h4><ol class="ig-timeline">${['Early', 'Typical', 'Late'].map((label, i) => `<li><strong>${label}</strong><span>${escape(info.time[i])}</span></li>`).join('')}</ol></div>` : '';
+    const [lookId, lookReason] = (REEF_LOOKALIKES[c.id] || []).find(([id]) => id) || [];
+    const look = lookId && reefConditionFor(lookId), lookImage = look && reefImageFor(look.group, look.id);
+    const notThis = look ? `<div class="ig-notthis"><h4>Not this?</h4><div>${lookImage ? `<button type="button" class="ig-zoom" ${zoomAttrs(lookImage.url, look.title, lookImage.alt)} aria-label="Enlarge ${escape(look.title)}">${img(lookImage)}</button>` : ''}<p><strong>${escape(look.title)}</strong>${escape(lookReason)}<button type="button" class="text-button" data-reef-condition="${look.id}">Open ${escape(shortName(look.title))} →</button></p></div></div>` : '';
+    return `<section class="infographic" data-infographic="${c.id}" aria-label="${escape(c.title)} visual guide"><p class="ig-eyebrow">VISUAL GUIDE</p>${closeups}${where || time ? `<div class="ig-row">${where}${time}</div>` : ''}${notThis}<small class="image-origin-note">AI illustrations.</small></section>`;
+  }
+
   function openDetail(id) {
     const c = reefConditionFor(id);
     if (!c) return;
     const scope = groupText(c.group).scope;
-    $('#detail-content').innerHTML = `<p class="eyebrow">${escape(c.kind)} · ${escape(scope)}</p><h2 id="detail-title">${escape(c.title)}</h2>${scienceLine(c.id)}${badge(c.urgency)}<p class="lead">${escape(c.summary)}</p>${c.group === 'invert' ? warning(INVERT_WARNING) : ''}${gallery(c)}<h3>What to look for</h3><ul>${c.clues.map(x => `<li>${escape(x)}</li>`).join('')}</ul><h3>Easy to confuse with</h3><p>${escape(c.distinguish)}</p>${todoCard({ ...c, plan: reefPlanFor(c.id) })}<p class="avoid"><strong>Avoid:</strong> ${escape(c.avoid)}</p>`;
+    $('#detail-content').innerHTML = `<p class="eyebrow">${escape(c.kind)} · ${escape(scope)}</p><h2 id="detail-title">${escape(c.title)}</h2>${scienceLine(c.id)}${badge(c.urgency)}<p class="lead">${escape(c.summary)}</p>${c.group === 'invert' ? warning(INVERT_WARNING) : ''}${infographic(c)}${gallery(c)}<h3>What to look for</h3><ul>${c.clues.map(x => `<li>${escape(x)}</li>`).join('')}</ul><h3>Easy to confuse with</h3><p>${escape(c.distinguish)}</p>${todoCard({ ...c, plan: reefPlanFor(c.id) })}<p class="avoid"><strong>Avoid:</strong> ${escape(c.avoid)}</p>`;
     $('#detail-dialog').showModal();
   }
 

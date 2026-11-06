@@ -41,3 +41,21 @@ test('library close-ups match the receipt: content-hashed, unresized, published 
     assert.equal(a.uploaded, IMAGE_SOURCE === 'media');
   }
 });
+
+test('coral, invert and pond pages have the visual guide too (except normal entries)', async () => {
+  const { REEF_CONDITIONS } = await import('../../experiments/fish-health-lab/reef-data.mjs');
+  const { REEF_LIB_INFO } = await import('../../experiments/fish-health-lab/library-visuals.mjs');
+  const { CROPS: REEF_CROPS, IMAGE_SOURCE: REEF_SOURCE } = await import('../../experiments/fish-health-lab/library-reef-images-data.mjs');
+  const reefReceipt = JSON.parse(readFileSync(new URL('./library-reef-images-20261106.json', import.meta.url)));
+  const NONE = ['coral-normal', 'normal-molt', 'winter-rest'];
+  for (const c of REEF_CONDITIONS) {
+    if (NONE.includes(c.id)) { assert.equal(closeupsFor(c.id).length, 0, c.id); continue; }
+    assert.equal(closeupsFor(c.id).length, 4, c.id);
+    const info = REEF_LIB_INFO[c.id];
+    assert.ok(info && info.time.length === 3, c.id);
+    if (c.group === 'pond') assert.ok(info.zones.every(z => ZONES[z]), c.id); else assert.ok(info.look.length, c.id);
+  }
+  assert.equal(reefReceipt.assets.length, 156);
+  assert.equal(Object.keys(REEF_CROPS).length, 156);
+  for (const a of reefReceipt.assets) { assert.equal(REEF_CROPS[a.id].key, a.r2Key); assert.equal(a.uploaded, REEF_SOURCE === 'media'); assert.equal(a.resized, false); }
+});

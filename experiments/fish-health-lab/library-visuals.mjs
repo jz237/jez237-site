@@ -12,6 +12,7 @@ import { FISH_SETS, ALL_CROPS, urlFor } from './fish-images.mjs';
 import { slotsFor } from './visuals.mjs';
 import { MEDIA_BASE } from './fish-images-data.mjs';
 import { CROPS as LIB_CROPS, IMAGE_SOURCE as LIB_IMAGE_SOURCE } from './library-images-data.mjs';
+import { CROPS as LIB_REEF_CROPS, IMAGE_SOURCE as LIB_REEF_IMAGE_SOURCE } from './library-reef-images-data.mjs';
 
 // Where on the fish it shows (keys of ZONES) and how it usually changes.
 export const LIB_INFO = {
@@ -66,8 +67,8 @@ export function fishMap(zones = []) {
 
 const KEY_PREFIX = 'experiments/fish-health-lab/';
 const libPic = id => {
-  const e = LIB_CROPS[id];
-  return e && { id, ...e, url: LIB_IMAGE_SOURCE === 'media' ? MEDIA_BASE + e.key : `local-images/${e.key.slice(KEY_PREFIX.length)}` };
+  const [e, source] = LIB_CROPS[id] ? [LIB_CROPS[id], LIB_IMAGE_SOURCE] : [LIB_REEF_CROPS[id], LIB_REEF_IMAGE_SOURCE];
+  return e && { id, ...e, url: source === 'media' ? MEDIA_BASE + e.key : `local-images/${e.key.slice(KEY_PREFIX.length)}` };
 };
 
 // Four close-ups: the new library sheet, or (ich, velvet, cottony growth) their existing detail pictures.
@@ -104,3 +105,47 @@ export function leadImageFor(id) {
 }
 
 export const libraryPictureCount = id => fishStripFor(id).length + closeupsFor(id).length;
+
+// Coral, shrimp/crab/snail and pond pages (same visual guide). Coral and invert pages
+// list where to look instead of a fish map; pond pages use the fish map.
+export const REEF_LIB_INFO = {
+  bleaching: { look: ['Whole colony', 'Branch tips', 'Polyps still out'], time: ['Pale, pastel colour', 'Bone-white, flesh still on', 'Flesh starts to die if heat stays'] },
+  'alk-swing': { look: ['Branch tips', 'Polyps', 'Several corals at once'], time: ['Polyps pulled in', 'Burnt tips', 'Flesh loss'] },
+  'high-nutrients': { look: ['Colour', 'Rock and sand'], time: ['Colours dull', 'Brown corals, more algae', 'Algae smothering corals'] },
+  'low-nutrients': { look: ['Colour', 'Growth'], time: ['Pastel colour', 'Pale, slow growth', 'Tissue thins, tips burn'] },
+  rtn: { look: ['Branches', 'Flesh edge'], time: ['A white patch appears', 'Flesh slides off in hours', 'Whole colony white in a day or two'] },
+  stn: { look: ['Base of the colony', 'Flesh edge'], time: ['A thin white band at the base', 'Creeps up a little each day', 'Algae grows on the bare skeleton'] },
+  'brown-jelly': { look: ['Flesh', 'Neighbouring heads'], time: ['A brown slimy patch', 'Flesh dissolving under jelly', 'Spreads head to head'] },
+  'light-shock': { look: ['Top of the coral', 'Shaded underside'], time: ['Polyps pulled in', 'Pale on top', 'White on top, underside fine'] },
+  'flow-placement': { look: ['The side facing the pump', 'Neighbours', 'Shaded spots'], time: ['Stays shut', 'Brown or bent over', 'Flesh dies where stung or blasted'] },
+  'red-bugs': { look: ['Branches (use a flashlight)'], time: ['Polyps stay in', 'Colour fades', 'Slow flesh loss'] },
+  aefw: { look: ['Branches', 'Bare skeleton (eggs)'], time: ['Hard to see, slight fading', 'Half-moon bites', 'Flesh loss from the base'] },
+  'monti-nudi': { look: ['Under the plate edges'], time: ['A few slugs', 'Egg spirals under the plates', 'Bare patches spreading'] },
+  'zoa-pests': { look: ['Polyps', 'At night with a flashlight'], time: ['Polyps stay shut', 'White bumps or melting', 'Colony shrinks'] },
+  aiptasia: { look: ['Rock', 'Near corals'], time: ['One or two small anemones', 'More every week', 'Corals nearby close up'] },
+  'anemone-stress': { look: ['Foot and position', 'Mouth', 'Tentacles'], time: ['Wanders or hides', 'Shrinks, mouth gaping', 'Spits food, may bleach'] },
+  nipped: { look: ['Edges', 'Missing polyps'], time: ['A few chewed polyps', 'Ragged edges', 'Patches gone'] },
+  'failed-molt': { look: ['Behind the head', 'Tail'], time: ['Slow, hiding before a molt', 'Stuck half out', 'Dies if it can’t get free'] },
+  copper: { look: ['Snails', 'Shrimp', 'Urchins and starfish'], time: ['Inverts slow down', 'Snails upturned, shrimp pale', 'Deaths within days'] },
+  acclimation: { look: ['New arrivals', 'Starfish arms'], time: ['Still and pale', 'Shut in shell or curled', 'Deaths within a day or two'] },
+  'invert-water': { look: ['Body colour', 'Waterline', 'Glass'], time: ['Milky shrimp, slow snails', 'Snails climb out', 'Several deaths'] },
+  starvation: { look: ['Glass and rock (food left?)', 'Colour'], time: ['Slower, paler', 'Snails wander bare glass', 'Losses over weeks'] },
+  bopyrid: { look: ['Side of the head'], time: ['A small bump', 'An obvious one-sided bulge', 'Usually stays like that'] },
+  'invert-injury': { look: ['Legs and claws', 'Shells'], time: ['A missing leg', 'Fights, hermits out of shells', 'Regrows over 2–3 molts'] },
+  flipped: { look: ['Sand'], time: ['On its back', 'Can’t turn over', 'Starves or gets eaten'] },
+  'anchor-worm': { zones: ['body', 'fins'], time: ['A red spot', 'A thread sticking out', 'Several worms, sores'] },
+  'fish-lice': { zones: ['body', 'fins'], time: ['Flashing, jumping', 'Discs on the skin, red marks', 'Sores, weak fish'] },
+  'pond-ulcer': { zones: ['body'], time: ['A raised red lump', 'An open crater', 'Deep ulcer, several fish'] },
+  'pond-bacterial': { zones: ['fins', 'belly', 'body'], time: ['Clamped fins', 'Red streaks and blotches', 'Listless, bleeding'] },
+  'pond-flukes': { zones: ['gills', 'body'], time: ['Occasional rubbing', 'Darting, slimy skin', 'Gasping, pale gills'] },
+  'pond-ich': { zones: ['fins', 'body', 'gills'], time: ['A few dots', 'Dots all over', 'Rubbing, gasping'] },
+  'pond-low-oxygen': { zones: ['mouth', 'gills'], time: ['Fish near the surface', 'Gulping air at dawn', 'Deaths overnight'] },
+  'pond-poor-water': { zones: ['fins', 'gills'], time: ['Listless fish', 'Clamped, red fins', 'Gasping, deaths'] },
+  'pond-water-swing': { zones: ['gills'], time: ['Darting right after', 'Gasping, hanging still', 'Usually recovers in a day'] },
+  'pond-fungus': { zones: ['body', 'fins'], time: ['A small tuft on a wound', 'Fluffy patches', 'Spreads over the body'] },
+  'pond-dropsy': { zones: ['belly', 'body', 'eyes'], time: ['Swollen belly', 'Scales lift', 'Pine-cone all over'] },
+  'carp-pox': { zones: ['body', 'fins'], time: ['Small waxy spots in cold water', 'Larger patches', 'Fades as it warms'] },
+  khv: { zones: ['eyes', 'gills', 'body'], time: ['Listless, off food', 'Sunken eyes, rough skin', 'Fish dying within days'] },
+  predator: { zones: ['body'], time: ['Fish hiding', 'Stab and scratch marks', 'Fish missing'] },
+  'pond-swim-bladder': { zones: ['belly'], time: ['Tilting after food', 'Floating or head-down', 'Stuck top or bottom'] },
+};
