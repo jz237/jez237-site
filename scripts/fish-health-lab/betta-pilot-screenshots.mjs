@@ -32,7 +32,7 @@ try {
   await next(); await shot('2-betta-symptoms');
   await result('betta', 'fins'); await shot('3-betta-fin-rot');
   await result('betta', 'dust'); await shot('4-betta-velvet');
-  await result('goldfish', 'fins'); await shot('5-goldfish-fin-rot-generic');
+  await result('goldfish', 'fins'); await shot('5-goldfish-fin-rot');
 } finally { await browser.close(); }
 if (errors.length) { console.error(errors); process.exit(1); }
 console.log(`Saved screenshots to ${output}`);

@@ -17,6 +17,7 @@ context.on('request', r => { if (r.url().includes('/local-images/')) localReques
 context.on('response', r => { if ((r.url().includes('/local-images/') || r.url().startsWith('https://media.jez237.com/')) && r.status() >= 400) broken.push(`${r.status()} ${r.url()}`); });
 context.on('requestfailed', r => { if (r.url().startsWith('https://media.jez237.com/')) broken.push(`failed ${r.url()}`); });
 const { IMAGE_SOURCE } = await import('../../experiments/fish-health-lab/fish-images-data.mjs');
+const { IMAGE_SOURCE: FRESH_IMAGE_SOURCE } = await import('../../experiments/fish-health-lab/fish-images-fresh-data.mjs');
 const page = await context.newPage();
 const next = () => page.locator('#next-button').click();
 const loaded = async selector => {
@@ -81,13 +82,14 @@ try {
   }
   checks.push('betta results (fin rot, velvet, ich, bloat, cloudy eye, hole-in-head): betta hero, betta could-also thumbnails, betta detail gallery, a step picture on every step');
 
-  // Goldfish has no set yet: generic pictures, still step pictures.
-  await toResult('fresh', 'goldfish', 'balance');
+  // A result a fish has no picture for (goldfish hole-in-the-head): generic picture, still step pictures.
+  await toResult('fresh', 'goldfish', 'patch', { closer: 'pits' });
+  assert.equal(await page.locator('.result-focus').getAttribute('data-result'), 'hole-in-head');
   assert.equal(await page.locator('.result-focus .result-image img').getAttribute('data-image-set'), 'generic');
   assert.match(await page.locator('.result-focus .result-image img').getAttribute('src'), /^https:\/\/media\.jez237\.com\//);
   assert.equal(await page.locator('#detail-dialog [data-fish-gallery]').count(), 0);
   assert.ok(await page.locator('.result-focus .todo-steps .step-pic').count() >= 3);
-  checks.push('goldfish result falls back to the generic picture and still shows step pictures');
+  checks.push('goldfish hole-in-the-head (no goldfish picture) falls back to the generic picture and still shows step pictures');
 
   // Changing the fish back to "Not sure" restores generic symptom pictures.
   await toSigns('fresh', 'betta');
@@ -100,5 +102,7 @@ try {
   await browser.close();
 }
 assert.deepEqual(errors, []); assert.deepEqual(broken, []);
-if (IMAGE_SOURCE === 'media') assert.deepEqual(localRequests, [], 'media mode must not request local-images/');
-console.log(JSON.stringify({ url: root, imageSource: IMAGE_SOURCE, checks: checks.length, passed: checks, mediaRequests: mediaRequests.size, localRequests: localRequests.length }, null, 2));
+// Media mode: only a freshwater group still on its local preview source may request local-images/.
+const localGroups = FRESH_IMAGE_SOURCE === 'local' ? ['goldfish', 'community', 'livebearer', 'cichlid', 'catfish'] : [];
+if (IMAGE_SOURCE === 'media') assert.deepEqual(localRequests.filter(url => !localGroups.some(g => url.includes(`/local-images/${g}/`))), [], 'media mode must not request betta/step/fish-type pictures from local-images/');
+console.log(JSON.stringify({ url: root, imageSource: IMAGE_SOURCE, freshImageSource: FRESH_IMAGE_SOURCE, checks: checks.length, passed: checks, mediaRequests: mediaRequests.size, localRequests: localRequests.length }, null, 2));

@@ -351,6 +351,50 @@ no set yet. Jez: one 12-cell sheet per set, not one sheet per picture.
   `betta-browser-check.mjs` (local preview or live via `FISH_LAB_URL`).
   `betta-pilot-screenshots.mjs` saves 390 px review shots.
 
+## Freshwater picture sets, 2026-11-05 (published)
+
+Jez, 2026-11-05 19:55 EST: "ok proceed with the rest of the freshwater section".
+Same pattern as the betta pilot: goldfish, community (tetra/rasbora), livebearer,
+cichlid and catfish each get sheet A (the 12 symptom choices) and sheet B (extra
+result pictures), one 4×3 sheet each, 120 crops of 362×362, not resized.
+
+- Twelve stock-OAuth generations, requested `openai/gpt-image-2.6-sunburst`, medium,
+  size auto, 4:3; each reported `openai/gpt-image-2.6-sunburst` and returned 1448×1086
+  (backend not independently verified; stderr shows the codex-responses transport with
+  responsesModel gpt-6-astra). Ten group sheets and two repair sheets: in every sheet B
+  the "injury" tail came out intact, and on the molly and ram the velvet dust was too
+  faint. `fresh-fixes` fixed the dust; `fresh-injury` redrew the injury as a notch
+  missing from the tail. Seven cells were swapped in from those two sheets.
+- Per-fish swaps (`freshSet()` in `fish-images.mjs`): goldfish swim bladder leads with
+  upside down, plus head-down and stuck on the bottom; tetras get a second ich picture
+  (a school with dots); livebearers' patch is the columnaris saddleback, and bloat
+  also shows a pregnant female; cichlids have the oscar hole-in-the-head; catfish
+  dropsy is a bloated belly (no scales to pinecone), fin rot adds worn barbels, and
+  "on its side" replaces "sinking". Goldfish, tetras, livebearers and catfish have no
+  hole-in-the-head picture by design, so that result falls back to the generic one.
+- Data: `fish-images-fresh-data.mjs` (generated; its own `IMAGE_SOURCE = 'local'`) and
+  receipt `freshwater-images-20261105.json` (prompts, sheet hashes, crop boxes,
+  repairs, weak cells, crop hashes, planned R2 keys
+  `experiments/fish-health-lab/<group>/<id>-<sha12>.jpg`, `uploaded: false`). Local
+  copies: untracked `experiments/fish-health-lab/local-images/<group>/`. Generation and
+  prepare scripts: `workspace/tmp/imagegen/fish-health-fresh-20261105/`; originals:
+  `/home/jez237/.openclaw/media/tool-image-generation/fish-health-fresh-20261105/`.
+- Published 2026-11-05 (Jez's request, Claw approved): all 120 crops uploaded and
+  byte-verified (`workspace/tmp/fish-health-fresh-publish-20261105/upload-verification.json`),
+  receipt `uploaded: true`, `IMAGE_SOURCE = 'media'`.
+- **Publish procedure (no code change):** upload each receipt asset `path` to
+  `jez237-site-media/<r2Key>` (`image/jpeg`, `public, max-age=31536000, immutable`),
+  byte-verify `plannedUrl`, set every asset to `uploaded: true`, then set `IMAGE_SOURCE`
+  in `fish-images-fresh-data.mjs` to `'media'`. `fish-images.test.mjs` checks that the
+  uploaded flags match `IMAGE_SOURCE`, and `FHL_VERIFY_MEDIA=1` then hashes the
+  public URLs. The betta, step and fish-type pictures keep their own (media) source.
+- Checks: `fish-images.test.mjs` (every group covers all 12 signs and every freshwater
+  result or a deliberate generic fallback; every crop is used; receipt keys and hashes;
+  per-file sources) and `freshwater-browser-check.mjs` (per fish: a 12/12 symptom grid,
+  then one result showing the hero, could-also cards, compare, the gallery and step
+  pictures; plus the catfish hole-in-the-head fallback; `FISH_LAB_SHOTS=<jpg>` saves a
+  390 px strip).
+
 ## "Could also be" v3 — owner approval, November 5 2026 19:27 EST
 
 Jez approved seven changes (“make sure you don't overcomplicate and cause confusion”):

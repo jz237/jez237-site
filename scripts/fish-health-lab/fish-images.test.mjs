@@ -1,4 +1,4 @@
-// Per-fish picture sets (betta pilot), step pictures and fish-type pictures.
+// Per-fish picture sets (betta + the five other freshwater groups), step pictures and fish-type pictures.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
@@ -9,11 +9,63 @@ import { signImagesFor } from '../../experiments/fish-health-lab/choice-images.m
 import { leadSlot } from '../../experiments/fish-health-lab/visuals.mjs';
 import { PLAN_IDS, carePlanFor } from '../../experiments/fish-health-lab/treatments.mjs';
 import { CROPS, IMAGE_SOURCE, MEDIA_BASE } from '../../experiments/fish-health-lab/fish-images-data.mjs';
-import { FISH_SETS, imagesFor, imageFor, FISH_TYPE_IMAGES, STEP_IMAGES, stepImageFor, splitStep, urlFor, localPathFor } from '../../experiments/fish-health-lab/fish-images.mjs';
+import { CROPS as FRESH_CROPS, IMAGE_SOURCE as FRESH_IMAGE_SOURCE } from '../../experiments/fish-health-lab/fish-images-fresh-data.mjs';
+import { FISH_SETS, ALL_CROPS, imagesFor, imageFor, FISH_TYPE_IMAGES, STEP_IMAGES, stepImageFor, splitStep, urlFor, localPathFor } from '../../experiments/fish-health-lab/fish-images.mjs';
 
 const app = fileURLToPath(new URL('../../experiments/fish-health-lab/', import.meta.url));
 const receipt = JSON.parse(readFileSync(new URL('./betta-pilot-images-20261105.json', import.meta.url)));
+const freshReceipt = JSON.parse(readFileSync(new URL('./freshwater-images-20261105.json', import.meta.url)));
 const freshConditions = CONDITIONS.filter(c => c.scope !== 'marine');
+const GROUPS = ['goldfish', 'community', 'livebearer', 'cichlid', 'catfish'];
+// Results a group deliberately has no picture for (they use the generic picture).
+const NO_PICTURE = { goldfish: ['hole-in-head'], community: ['hole-in-head'], livebearer: ['hole-in-head'], cichlid: [], catfish: ['hole-in-head'] };
+const genericFor = id => leadSlot(id)?.image || signImagesFor('fresh')[CONDITIONS.find(c => c.id === id).thumb || CONDITIONS.find(c => c.id === id).art] || signImagesFor('fresh').unclear;
+
+test('every freshwater fish type has its own set', () => {
+  assert.deepEqual(Object.keys(FISH_SETS).sort(), FISH_TYPES.fresh.map(f => f.id).sort());
+  for (const set of Object.values(FISH_SETS)) assert.equal(set.water, 'fresh');
+});
+
+for (const group of GROUPS) {
+  test(`${group} set: all 12 symptom pictures and every freshwater result show a ${group}`, () => {
+    const set = FISH_SETS[group];
+    assert.equal(Object.keys(set.signs).length, 12);
+    for (const sign of SYMPTOMS) {
+      const got = imagesFor(group, sign.id, 'fresh');
+      assert.ok(got.fishSpecific, `${group} sign ${sign.id}`);
+      assert.equal(got.images.length, 1);
+      assert.equal(got.images[0].key, `experiments/fish-health-lab/${group}/${set.signs[sign.id]}-${got.images[0].key.slice(-16, -4)}.jpg`);
+    }
+    for (const condition of freshConditions) {
+      const got = imagesFor(group, condition.id, 'fresh');
+      if (NO_PICTURE[group].includes(condition.id)) {
+        assert.equal(got.fishSpecific, false, `${group} ${condition.id} should fall back`);
+        assert.equal(got.images[0].url, genericFor(condition.id).url);
+        continue;
+      }
+      assert.ok(got.fishSpecific && got.images.length, `${group} condition ${condition.id}`);
+      assert.equal(got.images.length, set.conditions[condition.id].length, `${group} ${condition.id}: every mapped crop exists`);
+      for (const image of got.images) assert.ok(image.key.startsWith(`experiments/fish-health-lab/${group}/${group}-`), image.key);
+    }
+    // Every crop of the group is used somewhere; nothing maps to a marine-only condition.
+    const used = new Set([...Object.values(set.signs), ...Object.values(set.conditions).flat()]);
+    assert.deepEqual([...used].sort(), Object.keys(FRESH_CROPS).filter(id => id.startsWith(`${group}-`)).sort());
+    assert.equal(used.size, 24);
+    for (const id of Object.keys(set.conditions)) assert.notEqual(CONDITIONS.find(c => c.id === id)?.scope, 'marine', id);
+    // Freshwater only: marine lookups stay generic.
+    assert.equal(imagesFor(group, 'dots', 'marine').fishSpecific, false);
+  });
+}
+
+test('per-group swaps: goldfish swim bladder leads upside down, cichlid hole-in-head, catfish barbels and bloated belly', () => {
+  assert.deepEqual(FISH_SETS.goldfish.conditions['swim-bladder'], ['goldfish-balance', 'goldfish-headstand', 'goldfish-sinking']);
+  assert.match(imageFor('goldfish', 'balance').alt, /upside down/);
+  assert.match(imageFor('cichlid', 'hole-in-head').alt, /oscar with pale pits/);
+  assert.deepEqual(FISH_SETS.catfish.conditions['fin-rot'], ['catfish-fins', 'catfish-barbels']);
+  assert.match(imageFor('catfish', 'dropsy').caption, /no scales/);
+  assert.deepEqual(FISH_SETS.livebearer.conditions.bloat, ['livebearer-swollen', 'livebearer-pregnant']);
+  assert.deepEqual(FISH_SETS.community.conditions['ich-fresh'], ['community-dots', 'community-school-dots']);
+});
 
 test('betta set covers every symptom picture and every freshwater result', () => {
   const betta = FISH_SETS.betta;
@@ -32,7 +84,7 @@ test('betta set covers every symptom picture and every freshwater result', () =>
 });
 
 test('fish types without a set, no fish, or the wrong water fall back to generic pictures', () => {
-  for (const fishType of ['goldfish', 'community', '', 'not-a-fish']) {
+  for (const fishType of ['', 'not-a-fish', 'clownfish']) {
     for (const condition of freshConditions) {
       const got = imagesFor(fishType, condition.id, 'fresh');
       assert.equal(got.fishSpecific, false);
@@ -88,22 +140,59 @@ test('every crop matches the receipt: content-hashed R2 key, size, unresized', (
   }
 });
 
+test('freshwater crops match their receipt: 120 content-hashed R2 keys, unresized, upload state matches IMAGE_SOURCE', () => {
+  assert.equal(freshReceipt.assets.length, 120);
+  assert.equal(Object.keys(FRESH_CROPS).length, 120);
+  assert.equal(freshReceipt.requestedModel, 'openai/gpt-image-2.6-sunburst');
+  assert.equal(freshReceipt.requestedQuality, 'medium');
+  assert.equal(Object.keys(freshReceipt.sources).length, 12); // ten group sheets + two repair sheets
+  for (const source of Object.values(freshReceipt.sources)) assert.equal(source.reportedProviderModel, 'openai/gpt-image-2.6-sunburst');
+  assert.equal(new Set(freshReceipt.assets.map(a => a.sha256)).size, 120);
+  for (const asset of freshReceipt.assets) {
+    const entry = FRESH_CROPS[asset.id];
+    assert.ok(entry, asset.id);
+    assert.ok(GROUPS.includes(asset.group) && asset.id.startsWith(`${asset.group}-`), asset.id);
+    assert.equal(entry.key, asset.r2Key, asset.id);
+    assert.equal(entry.key, `experiments/fish-health-lab/${asset.group}/${asset.id}-${asset.sha256.slice(0, 12)}.jpg`);
+    assert.equal(MEDIA_BASE + entry.key, asset.plannedUrl, asset.id);
+    // Publishing = upload every asset, mark it uploaded, flip IMAGE_SOURCE to 'media'.
+    assert.equal(asset.uploaded, FRESH_IMAGE_SOURCE === 'media', `${asset.id} uploaded flag vs IMAGE_SOURCE`);
+    assert.equal(asset.resized, false);
+    assert.equal(entry.width, asset.width); assert.equal(entry.height, asset.height);
+    assert.equal(entry.alt, asset.alt); assert.match(entry.alt, /^AI illustration: /);
+    assert.equal(localPathFor(entry), asset.path, asset.id);
+    assert.equal(urlFor(ALL_CROPS[asset.id]), FRESH_IMAGE_SOURCE === 'media' ? asset.plannedUrl : asset.path);
+  }
+  // The shared picture ids never collide between the two data files.
+  for (const id of Object.keys(FRESH_CROPS)) assert.equal(CROPS[id], undefined, id);
+});
+
+test('each data file uses its own IMAGE_SOURCE: betta stays on media while freshwater can preview locally', () => {
+  for (const [id, entry] of Object.entries(CROPS)) assert.equal(urlFor(ALL_CROPS[id]), IMAGE_SOURCE === 'media' ? MEDIA_BASE + entry.key : localPathFor(entry));
+  const goldfish = imageFor('goldfish', 'dots', 'fresh').url;
+  assert.equal(goldfish.startsWith(MEDIA_BASE), FRESH_IMAGE_SOURCE === 'media');
+  assert.equal(goldfish.startsWith('local-images/goldfish/'), FRESH_IMAGE_SOURCE === 'local');
+  assert.ok(imageFor('betta', 'dots', 'fresh').url.startsWith(IMAGE_SOURCE === 'media' ? MEDIA_BASE : 'local-images/'));
+});
+
 test('media mode: every picture the app can show comes from media.jez237.com, never local-images/', { skip: IMAGE_SOURCE !== 'media' && 'IMAGE_SOURCE is local (private preview)' }, () => {
+  const published = ['betta', '', ...(FRESH_IMAGE_SOURCE === 'media' ? GROUPS : [])];
   const urls = [
     ...Object.values(FISH_TYPE_IMAGES), ...Object.values(STEP_IMAGES),
-    ...['betta', 'goldfish', ''].flatMap(fish => [...SYMPTOMS, ...freshConditions].flatMap(item => imagesFor(fish, item.id, 'fresh').images)),
+    ...published.flatMap(fish => [...SYMPTOMS, ...freshConditions].flatMap(item => imagesFor(fish, item.id, 'fresh').images)),
   ].map(image => image.url);
-  assert.ok(urls.length > 100);
+  assert.ok(urls.length > 80, String(urls.length));
   for (const url of urls) {
     assert.ok(url.startsWith(MEDIA_BASE), url);
     assert.doesNotMatch(url, /local-images/);
   }
-  for (const entry of Object.values(CROPS)) assert.equal(entry.local, undefined, 'published data carries no local paths');
+  for (const entry of [...Object.values(CROPS), ...Object.values(FRESH_CROPS)]) assert.equal(entry.local, undefined, 'data carries no local paths');
 });
 
-// Optional network proof: FHL_VERIFY_MEDIA=1 fetches every public URL and checks its sha256 against the receipt.
+// Optional network proof: FHL_VERIFY_MEDIA=1 fetches every public URL and checks its sha256 against the receipt
+// (freshwater assets only once they are marked uploaded).
 test('public media URLs serve the receipt bytes', { skip: !process.env.FHL_VERIFY_MEDIA && 'set FHL_VERIFY_MEDIA=1 to fetch' }, async () => {
-  for (const asset of receipt.assets) {
+  for (const asset of [...receipt.assets, ...freshReceipt.assets.filter(a => a.uploaded)]) {
     const response = await fetch(asset.plannedUrl);
     assert.equal(response.status, 200, asset.plannedUrl);
     assert.equal(response.headers.get('content-type'), 'image/jpeg');
@@ -114,7 +203,7 @@ test('public media URLs serve the receipt bytes', { skip: !process.env.FHL_VERIF
 
 // Private preview checkouts keep the untracked copies; check they still match the receipt.
 test('untracked preview copies match the receipt hashes', { skip: !existsSync(`${app}local-images`) && 'local-images/ is not present in this checkout' }, () => {
-  for (const asset of receipt.assets) {
+  for (const asset of [...receipt.assets, ...freshReceipt.assets]) {
     const sha = createHash('sha256').update(readFileSync(`${app}${asset.path}`)).digest('hex');
     assert.equal(sha, asset.sha256, asset.id);
   }
