@@ -1,0 +1,36 @@
+Astra performance audit - 2026-11-06 / R47
+
+Scope: obvious overhead and reliability; no visual quality reduction.
+Test machine: RTX 5090; dedicated headless Chrome, 960 x 540 game canvas.
+Sound muted; mouse capture disabled only in test documents.
+
+Same paused Ymir camera, sampled over approximately five seconds:
+  Before: 686,818,392 buffer bytes across 810 engine frames (847,924/frame).
+  After:  138,552,728 buffer bytes across 1040 engine frames (133,224/frame).
+  84.3% less buffer-upload traffic per rendered frame in this scene.
+  Draw counts per frame stayed approximately 62, with unchanged meshes/maps.
+  This is not an 84% FPS improvement or a claim about every machine or scene.
+
+60-second combat CPU profiles before the final blend-state correction:
+  Overload error polling: 6108 ms before, 5 ms after.
+  Vertigo error polling: 3601 ms before, 0 ms after.
+  Sampling includes instrumentation and varying combat, not a benchmark score.
+
+Repeated 1/2/6/13/16 mine transitions returned WebGL error 0 throughout.
+  WASM backing memory stayed 201,326,592 bytes. JS used heap was roughly
+  19-27 MB during the two repeated sweeps; GPU buffers were deleted per mine.
+  Short tests do not prove the absence of every possible long-session leak.
+
+Loader tests compared current-map PNG bytes to their source hashes, verified
+scenery size and ordered decompression, pruned unused maps, and retained shared
+ones. A 1/2/1/secret-17/1 sequence avoided 276,850,080 bytes of repeated map reads.
+That is requested payload avoided, not guaranteed internet savings: browser
+caches can already serve some repeated requests. Original art is unchanged.
+
+All 16 generated material families decoded to the same 12,250,561 bytes.
+Missing material callbacks reject and allow retry rather than hanging.
+Actual combat ran in Original, Vertigo and Overload without JS exceptions.
+Cockpit changes and repeat mine loads passed GPU error checks.
+
+First-download assets remain large. Localhost load times are not presented as
+internet speeds. Textures, effects, weapon behavior and AI were not reduced.

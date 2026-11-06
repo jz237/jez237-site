@@ -2,8 +2,13 @@
  * Script parcels also work in the installed file:// edition. */
 window.astraGeneratedLibrary = function(nativeDepot) {
   const waiting=new Map(),pending=new Map(),ready=new Set();
-  const decode=text=>Uint8Array.from(atob(text),c=>c.charCodeAt(0));
-  window.astraGeneratedParcel=(id,data)=>waiting.get(id)?.(data);
+  const decode=text=>{
+    if(Uint8Array.fromBase64)return Uint8Array.fromBase64(text);
+    const binary=atob(text),bytes=new Uint8Array(binary.length);
+    for(let i=0;i<bytes.length;i++)bytes[i]=binary.charCodeAt(i);
+    return bytes;
+  };
+  window.astraGeneratedParcel=(id,data)=>{const accept=waiting.get(id);if(accept){waiting.delete(id);accept(data);}};
   const parse=name=>/^g(0[0-9]|1[0-5])(-n)?\.png$/.exec(name);
   async function family(id) {
     if(ready.has(id))return;
@@ -13,7 +18,7 @@ window.astraGeneratedLibrary = function(nativeDepot) {
         const el=document.createElement('script');waiting.set(id,resolve);
         el.src=`payload/material${id<8?36:id<12?38:44}/g${String(id).padStart(2,'0')}.js`;
         el.onerror=()=>{waiting.delete(id);el.remove();reject(Error('Could not load mine material '+id));};
-        el.onload=()=>{waiting.delete(id);el.remove();};document.head.append(el);
+        el.onload=()=>{el.remove();if(waiting.has(id)){waiting.delete(id);reject(Error('Incomplete mine material '+id));}};document.head.append(el);
       });
       const pixels=await createImageBitmap(new Blob([decode(parcel.color)],{type:'image/webp'}));
       const canvas=document.createElement('canvas');canvas.width=pixels.width;canvas.height=pixels.height;

@@ -301,9 +301,9 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
       mounted.set("pyro-field.png",field);
       mounted.set("collectibles.mesh",mesh);
     }
-    if(astra){await script("generated-materials.js?v=44");assetDepot=astraGeneratedLibrary(assetDepot);}
+    if(astra){await script("generated-materials.js?v=47");assetDepot=astraGeneratedLibrary(assetDepot);}
     if(astra)await loadAstraShipAssets();
-    if(campaign==="overload"){await script("mission-controller.js?v=46");await script("overload-loader.js?v=46");await astraOverload.install(mounted);}
+    if(campaign==="overload"){await script("mission-controller.js?v=46");await script("overload-loader.js?v=47");await astraOverload.install(mounted);}
     $("status").textContent="Starting flight computer";
     const canvas=$("view");
     const quality=Number($("res").value);
@@ -347,7 +347,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre46");
+    await script("engine.js?v=pyre47");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 

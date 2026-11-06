@@ -4,7 +4,7 @@
   const read=async name=>{const r=await fetch(base+name);if(!r.ok)throw Error('Overload asset unavailable: '+name);return new Uint8Array(await r.arrayBuffer());};
   const json=async name=>JSON.parse(new TextDecoder().decode(await read(name)));
   const pool=async (list,fn)=>{let at=0;await Promise.all(Array.from({length:4},async()=>{while(at<list.length)await fn(list[at++]);}));};
-  let manifest,actors,combat,story,files=[],actorFiles=new Set();
+  let manifest,actors,combat,story,files=new Set(),actorFiles=new Set();
   window.astraOverload={
     async install(mounted){
       [manifest,actors,combat,story]=await Promise.all([json('manifest.json'),json('actors/manifest.json'),json('robot-combat.json'),json('story.json')]);
@@ -14,24 +14,28 @@
     },
     async prepare(name){
       const m=Module;this.controller=null;this.restoreState=null;
-      for(const file of files)try{m.FS.unlink('/mine/'+file);}catch{}
-      files=[];
+      const discard=file=>{try{m.FS.unlink('/mine/'+file);}catch{}files.delete(file);};
+      discard('overload.mesh');
       m.overload=/^ol\d{2}\.rl2$/i.test(name);
-      if(!m.overload)return;
+      if(!m.overload){for(const file of files)discard(file);return;}
       const id=name.slice(0,-4),entry=[...manifest.levels,...manifest.secrets].find(l=>l.file.toLowerCase()===name.toLowerCase());
       if(!entry)throw Error('Unknown Overload mine '+name);
       const status=document.getElementById('status');status.textContent='Loading Overload · '+entry.name;
       window.astraTerminal?.loading(true);
       try{
         const [meta,render]=await Promise.all([json(id+'.json'),json(id+'.render.json')]);
-        const put=(n,bytes)=>{m.FS.writeFile('/mine/'+n,bytes,{canOwn:true});files.push(n);};
-        const chunks=[];
-        for(const shard of render.shards)chunks.push(await read(shard));
+        const wanted=new Set(render.materials.flatMap(i=>['om'+i+'.png','on'+i+'.png']));
+        // Retain only maps shared by the next mine. Memory remains bounded by
+        // that mine, and returning from a secret need not re-fetch shared art.
+        for(const file of files)if(!wanted.has(file))discard(file);
+        const put=(n,bytes)=>{m.FS.writeFile('/mine/'+n,bytes,{canOwn:true});files.add(n);};
+        const chunks=new Array(render.shards.length);
+        await pool(render.shards.map((name,i)=>({name,i})),async shard=>{chunks[shard.i]=await read(shard.name);});
         const stream=new Blob(chunks).stream().pipeThrough(new DecompressionStream('gzip'));
         const mesh=new Uint8Array(await new Response(stream).arrayBuffer());
         if(mesh.length!==render.uncompressed)throw Error('Overload scenery length check failed');
         put('overload.mesh',mesh);
-        await pool(render.materials.flatMap(i=>['om'+i+'.png','on'+i+'.png']),async n=>put(n,await read('art/'+n)));
+        await pool([...wanted].filter(n=>!files.has(n)),async n=>put(n,await read('art/'+n)));
         const types=new Set(meta.secret?[0,1,2,3,4,6,8,10,11,13,15,17]:meta.records.filter(r=>r.class==='Robot'&&r.object!=null).map(r=>r.data.robot_type));
         for(const r of meta.records.filter(r=>r.class==='RobotMatcen'))for(const type of [r.data.m_spawnable_robot_1,r.data.m_spawnable_robot_2])if(actors.models[type])types.add(type);
         const needed=new Set();for(const type of types){const model=actors.models[type];if(!model)throw Error('Missing Overload robot '+type);needed.add(model.mesh);for(const mat of model.materials){needed.add('oem'+mat+'.png');needed.add('oen'+mat+'.png');}}

@@ -1,6 +1,8 @@
 /* Apply the optical response only to the mine camera, before cockpit and HUD.
    The high pass and separable blur run at one-quarter resolution. */
 static GLuint lensScene,lensSmall[2],lensFbo[2],lensPrograms[3];static int lensW,lensH,lensFailed,lensOn=-1;
+static GLint lensStep[2],lensGlow;
+static int lensCopyChecked,lensCopyX,lensCopyY,lensCopyFb;
 static GLuint lens_program(const char *frag){
     const char *vert="varying mediump vec2 uv;void main(){gl_Position=vec4(gl_Vertex.xy,0.,1.);uv=gl_Vertex.xy*.5+.5;}";
     GLuint v=astra_compile(GL_VERTEX_SHADER,vert),f=astra_compile(GL_FRAGMENT_SHADER,frag);
@@ -30,6 +32,8 @@ void astra_lens(int x,int y,int w,int h){
             "c=mix(c,vec3(.014,.030,.040),.09*(1.-max(a.r,max(a.g,a.b))));"
             "c=c/(1.+.18*max(c-.70,vec3(0.))); vec2 e=uv*2.-1.;c*=1.-.052*dot(e,e);gl_FragColor=vec4(c,1.);}");
         if(!lensPrograms[0]||!lensPrograms[1]||!lensPrograms[2]){lensFailed=1;return;}
+        for(int i=0;i<2;i++)lensStep[i]=glGetUniformLocation(lensPrograms[i],"stepUV");
+        lensGlow=glGetUniformLocation(lensPrograms[2],"glow");
         glGenFramebuffers(2,lensFbo);
     }
     GLint vp[4],fb;glGetIntegerv(GL_VIEWPORT,vp);glGetIntegerv(GL_FRAMEBUFFER_BINDING,&fb);
@@ -37,6 +41,7 @@ void astra_lens(int x,int y,int w,int h){
     glDisable(GL_SCISSOR_TEST);glDisable(GL_BLEND);glDisable(GL_DEPTH_TEST);glDisable(GL_CULL_FACE);glDepthMask(GL_FALSE);
     glActiveTexture(GL_TEXTURE0);
     if(lensW!=w||lensH!=h){
+        lensCopyChecked=0;
         lens_texture(&lensScene,w,h);lens_texture(lensSmall,sw,sh);lens_texture(lensSmall+1,sw,sh);lensW=w;lensH=h;
         for(int i=0;i<2;i++){
             glBindFramebuffer(GL_FRAMEBUFFER,lensFbo[i]);glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,lensSmall[i],0);
@@ -44,9 +49,12 @@ void astra_lens(int x,int y,int w,int h){
         }
         glBindFramebuffer(GL_FRAMEBUFFER,fb);
     }
-    for(int i=0;i<4 && glGetError()!=GL_NO_ERROR;i++){}
+    /* Validate a new copy configuration once. Repeating synchronous error
+     * queries after every identical copy stalls the CPU behind the GPU. */
+    int checkCopy=!lensCopyChecked||lensCopyX!=x||lensCopyY!=y||lensCopyFb!=fb;
+    if(checkCopy)for(int i=0;i<4 && glGetError()!=GL_NO_ERROR;i++){}
     glBindTexture(GL_TEXTURE_2D,lensScene);glCopyTexSubImage2D(GL_TEXTURE_2D,0,0,0,x,y,w,h);
-    if(glGetError()!=GL_NO_ERROR){lensFailed=1;goto restore_lens;}
+    if(checkCopy){if(glGetError()!=GL_NO_ERROR){lensFailed=1;goto restore_lens;}lensCopyChecked=1;lensCopyX=x;lensCopyY=y;lensCopyFb=fb;}
     glBindFramebuffer(GL_FRAMEBUFFER,lensFbo[0]);glViewport(0,0,sw,sh);
     static const float quad[]={-1,-1,1,-1,-1,1,1,1};
     glEnableClientState(GL_VERTEX_ARRAY);glVertexPointer(2,GL_FLOAT,0,quad);
@@ -54,11 +62,11 @@ void astra_lens(int x,int y,int w,int h){
         glBindFramebuffer(GL_FRAMEBUFFER,lensFbo[pass&1]);
         GLuint pg=lensPrograms[pass?1:0];glUseProgram(pg);
         glBindTexture(GL_TEXTURE_2D,pass?lensSmall[(pass+1)&1]:lensScene);
-        glUniform2f(glGetUniformLocation(pg,"stepUV"),pass==0?1.f/w:(pass==1?1.72f/sw:0.f),pass==0?1.f/h:(pass==2?1.72f/sh:0.f));
+        glUniform2f(lensStep[pass?1:0],pass==0?1.f/w:(pass==1?1.72f/sw:0.f),pass==0?1.f/h:(pass==2?1.72f/sh:0.f));
         glDrawArrays(GL_TRIANGLE_STRIP,0,4);
     }
     glBindFramebuffer(GL_FRAMEBUFFER,fb);glViewport(x,y,w,h);glUseProgram(lensPrograms[2]);glBindTexture(GL_TEXTURE_2D,lensScene);
-    glActiveTexture(GL_TEXTURE1);glBindTexture(GL_TEXTURE_2D,lensSmall[0]);glUniform1i(glGetUniformLocation(lensPrograms[2],"glow"),1);
+    glActiveTexture(GL_TEXTURE1);glBindTexture(GL_TEXTURE_2D,lensSmall[0]);glUniform1i(lensGlow,1);
     glActiveTexture(GL_TEXTURE0);glDrawArrays(GL_TRIANGLE_STRIP,0,4);
     restore_lens:
     glBindFramebuffer(GL_FRAMEBUFFER,fb);glDisableClientState(GL_VERTEX_ARRAY);glUseProgram(0);glViewport(vp[0],vp[1],vp[2],vp[3]);glDepthMask(GL_TRUE);

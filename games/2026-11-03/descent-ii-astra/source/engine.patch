@@ -111,19 +111,21 @@ index 1812c5d..cac69b8 100644
  #include "fix.h"
  #include "event.h"
 diff --git a/d2/arch/ogl/gr.c b/d2/arch/ogl/gr.c
-index c5cca0b..2ce97ee 100644
+index c5cca0b..fc9a574 100644
 --- a/d2/arch/ogl/gr.c
 +++ b/d2/arch/ogl/gr.c
-@@ -54,6 +54,8 @@
+@@ -54,6 +54,10 @@
  #include "game.h"
  #include "pngfile.h"
  #include "oglprog.h"
 +extern void astra_clear_color(GLclampf,GLclampf,GLclampf,GLclampf);
 +#define glClearColor astra_clear_color
++extern void astra_blend_func(GLenum,GLenum);
++#define glBlendFunc astra_blend_func
  
  #if defined(__APPLE__) && defined(__MACH__)
  #include <OpenGL/glu.h>
-@@ -316,11 +318,7 @@ int ogl_init_window(int x, int y)
+@@ -316,11 +320,7 @@ int ogl_init_window(int x, int y)
  		ogl_smash_texture_list_internal();//if we are or were fullscreen, changing vid mode will invalidate current textures
  
  	SDL_WM_SetCaption(DESCENT_VERSION, "Descent II");
@@ -136,7 +138,7 @@ index c5cca0b..2ce97ee 100644
  
  	use_x=x;
  	use_y=y;
-@@ -522,7 +520,7 @@ static void ogl_init_state(void)
+@@ -522,7 +522,7 @@ static void ogl_init_state(void)
  void gr_set_draw_buffer(int buf)
  {
  #ifndef OGLES
@@ -145,7 +147,7 @@ index c5cca0b..2ce97ee 100644
  #endif
  }
  
-@@ -727,7 +725,7 @@ void gr_set_attributes(void)
+@@ -727,7 +727,7 @@ void gr_set_attributes(void)
  	SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE,0);
  	SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE,0);
  	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER,1);
@@ -154,7 +156,7 @@ index c5cca0b..2ce97ee 100644
  	if (GameCfg.Multisample)
  	{
  		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-@@ -874,8 +872,8 @@ unsigned char ogl_ugpixel( grs_bitmap * bitmap, int x, int y )
+@@ -874,8 +874,8 @@ unsigned char ogl_ugpixel( grs_bitmap * bitmap, int x, int y )
  	ubyte buf[4];
  
  #ifndef OGLES
@@ -165,7 +167,7 @@ index c5cca0b..2ce97ee 100644
  #endif
  
  	glReadPixels(bitmap->bm_x + x, SHEIGHT - bitmap->bm_y - y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, buf);
-@@ -1167,10 +1165,12 @@ void save_screen_shot(int automap_flag)
+@@ -1167,10 +1167,12 @@ void save_screen_shot(int automap_flag)
  		HUD_init_message(HM_DEFAULT, "%s '%s'", TXT_DUMPING_SCREEN, savename + strlen(SCRNS_DIR));
  
  #ifndef OGLES

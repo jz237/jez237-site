@@ -1,15 +1,16 @@
 /* Overload campaign renderer. Authored meshes share the native camera/depth buffer. */
-typedef struct {int chunk,owner,material,count;float *vertices;unsigned short *indices;int hidden,entity,wall,frames;float *poses;int transparent;} ov_batch;
+typedef struct {int chunk,owner,material,count;float *vertices;unsigned short *indices;int hidden,entity,wall,frames;float *poses;int transparent,next,vertex_count;GLuint buffers[2];} ov_batch;
 static ov_batch *ov_batches;
 static unsigned char *ov_mesh_bytes;
-static int ov_batch_count,ov_chunk_for_room[MAX_SEGMENTS],ov_loaded;
+static int ov_batch_count,ov_allocated_count,ov_chunk_for_room[MAX_SEGMENTS],ov_loaded;
 static unsigned ov_chunk_frame[512];
 static GLuint ov_material[512][2];
 static unsigned ov_frame;
+static int ov_chunk_first[512];
 EMSCRIPTEN_KEEPALIVE void astra_ov_owner(int owner,int hidden){EM_ASM(if(!Module.overloadHidden)Module.overloadHidden=new Set();if($1)Module.overloadHidden.add($0);else Module.overloadHidden.delete($0);,owner,hidden);for(int i=0;i<ov_batch_count;i++)if(ov_batches[i].owner==owner||ov_batches[i].entity==owner)ov_batches[i].hidden=hidden;}
 void astra_ov_world_reset(void){
-    for(int i=0;i<ov_batch_count;i++)free(ov_batches[i].poses);
-    free(ov_batches);free(ov_mesh_bytes);ov_batches=NULL;ov_mesh_bytes=NULL;ov_batch_count=ov_loaded=0;
+    for(int i=0;i<ov_allocated_count;i++){free(ov_batches[i].poses);glDeleteBuffers(2,ov_batches[i].buffers);}
+    free(ov_batches);free(ov_mesh_bytes);ov_batches=NULL;ov_mesh_bytes=NULL;ov_allocated_count=ov_batch_count=ov_loaded=0;
     memset(ov_chunk_frame,0,sizeof ov_chunk_frame);
     for(int i=0;i<512;i++)for(int k=0;k<2;k++)if(ov_material[i][k]){glDeleteTextures(1,&ov_material[i][k]);ov_material[i][k]=0;}
 }
@@ -39,6 +40,7 @@ static int ov_load(void){
     if(memcmp(ov_mesh_bytes,"OVM2",4))return 0;
     unsigned count=*(unsigned*)(ov_mesh_bytes+4),offset=8;if(count>16000)return 0;
     ov_batches=calloc(count,sizeof(*ov_batches));if(!ov_batches)return 0;
+    int tail[512];for(int i=0;i<512;i++)ov_chunk_first[i]=tail[i]=-1;
     for(unsigned b=0;b<count;b++){
         if(offset+20>(unsigned)size)return 0;int *h=(int*)(ov_mesh_bytes+offset);offset+=20;
         if(h[0]<0||h[0]>=512||h[2]<0||h[2]>=512||h[3]<0||h[4]<0||(unsigned)h[3]>(size-offset)/44)return 0;
@@ -47,7 +49,11 @@ static int ov_load(void){
         unsigned *source=(unsigned*)(ov_mesh_bytes+offset);unsigned short *shorts=(unsigned short*)source;
         for(int i=0;i<h[4];i++){if(source[i]>=(unsigned)h[3])return 0;shorts[i]=(unsigned short)source[i];}
         ov_batches[b].indices=shorts;offset+=h[4]*4;
-        ov_batch *p=&ov_batches[b];int frames=EM_ASM_INT(return Module.overloadMotions?.[$0]?.frames||0;,p->owner);
+        ov_batch *p=&ov_batches[b];p->next=-1;p->vertex_count=h[3];
+        if(tail[p->chunk]<0)ov_chunk_first[p->chunk]=b;else ov_batches[tail[p->chunk]].next=b;tail[p->chunk]=b;
+        /* Count initialized entries as we go so a rejected file also frees poses. */
+        ov_allocated_count=b+1;
+        int frames=EM_ASM_INT(return Module.overloadMotions?.[$0]?.frames||0;,p->owner);
         if(frames>0&&frames<=120){
             p->poses=malloc(frames*12*sizeof(float));if(!p->poses)return 0;p->frames=frames;
             EM_ASM(HEAPF32.set(Module.overloadMotions[$0].matrices,$1>>2);,p->owner,p->poses);
@@ -68,8 +74,8 @@ int astra_overload_side(int room){
     if(chunk<0||chunk>=512)return 1;
     if(ov_chunk_frame[chunk]==frame)return 1;ov_chunk_frame[chunk]=frame;
     if(!fleet_program)af_program_init();if(fleet_failed)return 0;
-    GLboolean cull=glIsEnabled(GL_CULL_FACE),depth=glIsEnabled(GL_DEPTH_TEST),blend=glIsEnabled(GL_BLEND),depthmask;GLint blend_source,blend_dest;float blend_color[4];
-    glGetBooleanv(GL_DEPTH_WRITEMASK,&depthmask);glGetIntegerv(GL_BLEND_SRC,&blend_source);glGetIntegerv(GL_BLEND_DST,&blend_dest);glGetFloatv(GL_BLEND_COLOR,blend_color);
+    GLboolean cull=glIsEnabled(GL_CULL_FACE),depth=glIsEnabled(GL_DEPTH_TEST),blend=glIsEnabled(GL_BLEND),depthmask=astra_depth_write;
+    GLenum blend_source=astra_blend_source,blend_dest=astra_blend_dest;float blend_color[4];memcpy(blend_color,astra_blend_value,sizeof blend_color);
     glDisable(GL_CULL_FACE);glEnable(GL_DEPTH_TEST);glUseProgram(fleet_program);
     glUniform3f(af_energy,.65,.65,.65);glUniform4fv(af_flash,1,astra_flash);glUniform1f(af_clock,astra_visual_clock());
     vms_vector origin={0,0,0};g3s_point pt;g3_rotate_point(&pt,&origin);glUniform3f(af_origin,f2fl(pt.p3_x),f2fl(pt.p3_y),-f2fl(pt.p3_z));
@@ -77,8 +83,15 @@ int astra_overload_side(int room){
     glUniformMatrix3fv(af_basis,1,GL_FALSE,basis);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_COLOR_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     int draws=0;
-    for(int b=0;b<ov_batch_count;b++){
-        ov_batch *p=&ov_batches[b];if(p->chunk!=chunk||p->hidden||!ov_bind(p->material))continue;
+    for(int b=ov_chunk_first[chunk];b>=0;b=ov_batches[b].next){
+        ov_batch *p=&ov_batches[b];if(p->hidden||!ov_bind(p->material))continue;
+        /* The authored geometry never changes. Door motion is a shader transform.
+         * Keep identical vertex/index bytes on the GPU until this mine unloads. */
+        if(!p->buffers[0]){
+            glGenBuffers(2,p->buffers);
+            glBindBuffer(GL_ARRAY_BUFFER,p->buffers[0]);glBufferData(GL_ARRAY_BUFFER,p->vertex_count*44,p->vertices,GL_STATIC_DRAW);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,p->buffers[1]);glBufferData(GL_ELEMENT_ARRAY_BUFFER,p->count*2,p->indices,GL_STATIC_DRAW);
+        }else{glBindBuffer(GL_ARRAY_BUFFER,p->buffers[0]);glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,p->buffers[1]);}
         if(p->transparent){glEnable(GL_BLEND);glBlendColor(0,0,0,.20);glBlendFunc(GL_CONSTANT_ALPHA,GL_ONE_MINUS_CONSTANT_ALPHA);glDepthMask(GL_FALSE);}else{glDisable(GL_BLEND);glDepthMask(GL_TRUE);}
         float transform[12]={1,0,0,0,0,1,0,0,0,0,1,0};
         if(p->poses&&p->wall>=0){
@@ -87,8 +100,9 @@ int astra_overload_side(int room){
         }
         vms_vector offset={fl2f(transform[3]),fl2f(transform[7]),fl2f(transform[11])};g3_rotate_point(&pt,&offset);glUniform3f(af_origin,f2fl(pt.p3_x),f2fl(pt.p3_y),-f2fl(pt.p3_z));
         float posebasis[9];for(int column=0;column<3;column++)for(int row=0;row<3;row++)posebasis[column*3+row]=basis[row]*transform[column]+basis[3+row]*transform[4+column]+basis[6+row]*transform[8+column];glUniformMatrix3fv(af_basis,1,GL_FALSE,posebasis);
-        glVertexPointer(3,GL_FLOAT,44,p->vertices);glColorPointer(4,GL_FLOAT,44,p->vertices+3);glTexCoordPointer(4,GL_FLOAT,44,p->vertices+7);glDrawElements(GL_TRIANGLES,p->count,GL_UNSIGNED_SHORT,p->indices);draws++;
+        glVertexPointer(3,GL_FLOAT,44,(void*)0);glColorPointer(4,GL_FLOAT,44,(void*)12);glTexCoordPointer(4,GL_FLOAT,44,(void*)28);glDrawElements(GL_TRIANGLES,p->count,GL_UNSIGNED_SHORT,(void*)0);draws++;
     }
+    glBindBuffer(GL_ARRAY_BUFFER,0);glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);glDisableClientState(GL_COLOR_ARRAY);glDisableClientState(GL_VERTEX_ARRAY);glUseProgram(0);
     if(cull)glEnable(GL_CULL_FACE);if(!depth)glDisable(GL_DEPTH_TEST);
     glDepthMask(depthmask);glBlendColor(blend_color[0],blend_color[1],blend_color[2],blend_color[3]);glBlendFunc(blend_source,blend_dest);if(blend)glEnable(GL_BLEND);else glDisable(GL_BLEND);

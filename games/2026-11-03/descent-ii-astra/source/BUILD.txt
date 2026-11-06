@@ -1054,3 +1054,23 @@ Validation: 22-map browser load sweep; save/load and secret return; real box
 forcefield hit/pass tests; intermediate animated-door progress; mission link
 and timer tests; muted combat runs. These checks are not a complete manual
 playthrough of every main-stage route. QA exports are absent in shipping WASM.
+
+Performance cleanup (pyre47)
+
+No texture, mesh, resolution, lighting, explosion or gameplay reductions.
+Overload scenery uses persistent GPU vertex/index buffers with identical bytes,
+released on every mine change. Per-chunk linked lists preserve draw order while
+avoiding full-level batch scans. Blend state is mirrored through both native
+writers, fixing unsupported legacy blend queries in WebGL and avoiding readbacks.
+Bloom keeps identical shaders and pass sizes; copy validation runs when its
+rectangle, framebuffer or allocation changes. Uniform locations are cached.
+
+The Overload loader preserves only material files shared with the next mine,
+prunes other scenery, and fetches compressed shards with bounded concurrency
+while retaining their byte order. Generated material parcels use native base64
+decoding or a byte loop, and reject incomplete scripts instead of waiting forever.
+
+Muted browser checks covered combat in all three campaigns, a fixed-camera
+comparison, repeated mine transitions and cockpit viewport changes. See
+PERFORMANCE-R47.txt for measurements and their limits. Descent II weapons and
+flight controls remain authoritative for the third campaign.
