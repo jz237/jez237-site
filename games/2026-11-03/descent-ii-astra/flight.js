@@ -132,7 +132,7 @@ async function readPack(group,label) {
   if(cursor!==entries.length) throw Error("Incomplete "+group+" parcel");
 }
 function syncPilot() {
-  if(!window.Module?.FS || !Module.saveReady || saving || Module.autopilot) return;
+  if(!window.Module?.FS || !Module.saveReady || saving || Module.checkpointBusy || Module.autopilot) return;
   saving=true;
   Module.FS.syncfs(false,err=>{saving=false;if(err)console.warn("Pilot save",err);});
 }
@@ -303,12 +303,13 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
     }
     if(astra){await script("generated-materials.js?v=47");assetDepot=astraGeneratedLibrary(assetDepot);}
     if(astra)await loadAstraShipAssets();
-    if(campaign==="overload"){await script("mission-controller.js?v=46");await script("overload-loader.js?v=47");await astraOverload.install(mounted);}
+    if(campaign==="overload"){await script("mission-controller.js?v=46");await script("overload-loader.js?v=48");await astraOverload.install(mounted);}
     $("status").textContent="Starting flight computer";
     const canvas=$("view");
     const quality=Number($("res").value);
     const height=Math.round(quality*9/16);
     window.Module={
+      resumeCheckpoint:!!window.astraResumeCheckpoint,checkpoints:document.getElementById("checkpoints").checked,
       canvas,quick,demo,encounter,autopilot,openWeaponPriorities,shadowQuality:Number($("shadowQuality").value),combatInspect:window.astraCombatPending??-1,assetDepot,loadMovie,fastLaunch:true,blastInspect:preview?firstBlastProfile:0,mineInspect:mine?0:-1,mineInspectZoom:1,demoArsenal:autopilot&&$("demoArsenal").checked,weaponInspect:weapons?0:-1,difficulty:Number($("difficulty").value),mobileDemo:autopilot&&astraTouch,autoPaused:false,startLevel:mine?Number($("mineLevel").value):autopilot?Number($("demoLevel").value):1,pickupInspect:inspect?0:-1,pyroPreviewCommand:preview?1:0,campaign,wideHud:$("wideHud").checked,intro:!openWeaponPriorities && !quick && !demo && $("intro").checked,astra, arguments:["-hogdir","/mine","-pilot",autopilot?"watch":"astra","-window","-nostickykeys",
         "-gl_gettexlevelparam_ok","0","-gl_intensity4_ok","0","-gl_luminance4_alpha4_ok","0","-gl_rgba2_ok","0"],
       print:console.log,printErr:console.warn,onAbort:astraFail,
@@ -329,7 +330,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         F.mount(Module.IDBFS,{},save);
         Module.addRunDependency("pilot");
         F.syncfs(true,err=>{
-          Module.saveReady=!err;
+          Module.saveReady=!err;window.astraProgress?.mounted();
           let cfg="";
           const name=save+"/descent.cfg";
           if(F.analyzePath(name).exists) cfg=F.readFile(name,{encoding:"utf8"});
@@ -347,7 +348,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre47");
+    await script("engine.js?v=pyre48");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 

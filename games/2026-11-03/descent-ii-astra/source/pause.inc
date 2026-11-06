@@ -10,16 +10,17 @@ static int astra_pause_handler(newmenu *menu,d_event *event,void *data)
     if(choice==2){if(state_restore_all(1,0,NULL)&&window_exists(wind))window_close(wind);return 1;}
     if(choice==3){do_options_menu();return 1;}
     if(choice==4){do_weapon_priority_menu();return 1;}
-    if(choice==5&&nm_messagebox("End flight?",2,"End flight","Keep flying","Return to the campaign menu?\nUnsaved flight progress will be lost.")==0){
+    if(choice==5){extern int astra_checkpoint_available(void);if(astra_checkpoint_available()){if(nm_messagebox("Restore checkpoint?",2,"Restore","Keep flying","Replace this flight with the last checkpoint?")==0){EM_ASM(Module.checkpointCommand=1);window_close(wind);}}else nm_messagebox("Checkpoint",1,"Back","No checkpoint is available for this campaign.");return 1;}
+    if(choice==6&&nm_messagebox("End flight?",2,"End flight","Keep flying","Return to the campaign menu?\nUnsaved flight progress will be lost.")==0){
         window_close(wind);if(Game_wind)window_close(Game_wind);return 1;
     }
     return 1;
 }
 static void astra_pause_open(void)
 {
-    static newmenu_item items[6];
-    static char *labels[]={"Resume flight","Save game...","Load game...","Options...","Weapon auto-select...","End flight..."};
-    memset(items,0,sizeof items);for(int i=0;i<6;i++){items[i].type=NM_TYPE_MENU;items[i].text=labels[i];}
+    static newmenu_item items[7];
+    static char *labels[]={"Resume flight","Save game...","Load game...","Options...","Weapon auto-select...","Restore checkpoint...","End flight..."};
+    memset(items,0,sizeof items);for(int i=0;i<7;i++){items[i].type=NM_TYPE_MENU;items[i].text=labels[i];}
     game_flush_inputs();
-    newmenu_do3("Flight paused","Your ship is standing by.",6,items,astra_pause_handler,NULL,0,NULL);
+    newmenu_do3("Flight paused","Your ship is standing by.",7,items,astra_pause_handler,NULL,0,NULL);
 }

@@ -36,7 +36,7 @@ Field Refit 02 also requires the original Vertigo install. Its mission archive a
 
 fleet.py requires SciPy in addition to the dependencies listed above. The generated fleet_types.inc supplies D2 model bindings. The live D2 polymodel supplies each ship's outer panels and articulated limbs. Overload render batches supply internal mechanisms and materials. The original game handles the robot's position, weapons, collisions and AI. The optional encounter drop places the player near an existing robot; Enter mine uses the mission's original start.
 
-The explosion renderer reads its density, surface normals and fuel from a 112 Ã— 112 Ã— 112 field. Rebuild the browser parcel using NumPy, SciPy and Pillow, from the game directory:
+The explosion renderer reads its density, surface normals and fuel from a 112 Ãƒâ€” 112 Ãƒâ€” 112 field. Rebuild the browser parcel using NumPy, SciPy and Pillow, from the game directory:
 
     python source/pyro_field.py pyro-field.js
 
@@ -523,7 +523,7 @@ configuration in combat and in the explosion showroom. Small hits can produce
 Arc Snap, Ceramic Spall or Cinder Fountain. Larger detonations can produce
 Pressure Ring, Magnetic Implosion, Fuel Spiral, Canister Chain or Reactor Bloom.
 Legacy blasts remain in both selection pools. The player ship retains its
-dedicated randomized 5.9–7.0 second breakup. New profiles last 0.38–5.0 seconds
+dedicated randomized 5.9â€“7.0 second breakup. New profiles last 0.38â€“5.0 seconds
 before the existing close-impact limits. Replay and loop use the paused native
 preview. Changes use a deterministic presentation seed and the original sounds.
 The combat renderer depth-tests fragments, optical gas and streaks against
@@ -1074,3 +1074,40 @@ Muted browser checks covered combat in all three campaigns, a fixed-camera
 comparison, repeated mine transitions and cockpit viewport changes. See
 PERFORMANCE-R47.txt for measurements and their limits. Descent II weapons and
 flight controls remain authoritative for the third campaign.
+
+Campaign command update (pyre48)
+
+Overload-only tactics add charged attacks, recoil bursts, lateral attack movement,
+wall-tested teleport steps and three distinct boss volley patterns. Boss phases
+follow remaining health. Visible emission/rim charge warns before ranged attacks.
+The original and Vertigo AI and all player weapons/flight physics are unchanged.
+
+All 22 Overload maps now carry their authored local lights. Four lamps per mesh
+batch are chosen at load, with distance and spotlight falloff in the normal-mapped
+material shader. Original fan transform clips are sampled independently of their
+stationary housings. One nearby moving assembly casts a real mesh silhouette into
+the existing 512/1024 RGBA shadow target, bounded to its visible chunk. Basic shadow
+quality skips this pass. The export also fixes inactive automap helper children
+incorrectly hiding active machinery. Existing texture resolutions are retained.
+Immutable geometry remains in GPU buffers, including the fan shadow pass.
+Overload enemy batches now also upload once, with those GPU buffers released
+on mine changes; their mesh and material bytes remain unchanged.
+
+The compact expandable objective tracker shows the current mission, clearance/keys
+and reactor state. Overload scripted objective text is retained in save companions.
+Automatic checkpoints are optional in Settings, separate from all manual save
+slots, and stored in two rotating generations per campaign. They save actual native
+world and pilot state at safe frame boundaries, after entry or clearance progress
+and periodically between fights. Saves are excluded during demos, showroom views,
+secret levels, death, reactor countdown, nearby threats and storage sync work.
+Native state, Overload script/visibility state and visited-secret companions share
+the checkpoint generation. Continue appears only after a successful storage sync;
+startup verifies both generations and falls back to the newest valid one. Restore
+is available in the flight menu and expandable tracker, including after death.
+
+Checks: all three campaign inventory/death/restart restore paths; compact 26px
+mobile tracker; all 22 scripted mission save/progression tests; all three boss
+normal/damaged attack phases; visible fan animation and moving shadow rendering;
+loader byte/hash checks and bounded material reuse; repeated map/cockpit changes
+with WebGL error 0. Test-only controls are absent from the shipping engine.
+Tests use a dedicated muted browser with pointer capture blocked.

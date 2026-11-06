@@ -11,6 +11,7 @@ EM_ASYNC_JS(void,ov_prepare_js,(const char *name),{
     if(window.astraOverload){try{await window.astraOverload.prepare(UTF8ToString(name));}catch(e){abort(e.message);}}
 });
 void astra_ov_prepare(const char *name){
+    extern void astra_ov_tactics_reset(void);astra_ov_tactics_reset();
     extern void astra_ov_world_reset(void);astra_ov_world_reset();
     if(ov_configured){memcpy(Robot_info,ov_original_robots,sizeof ov_original_robots);ov_configured=0;}
     memset(ov_hidden,0,sizeof ov_hidden);memset(ov_props,0,sizeof ov_props);memset(ov_shield,0,sizeof ov_shield);memset(ov_barriers,0,sizeof ov_barriers);

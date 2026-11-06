@@ -1,5 +1,7 @@
 /* Overload campaign renderer. Authored meshes share the native camera/depth buffer. */
-typedef struct {int chunk,owner,material,count;float *vertices;unsigned short *indices;int hidden,entity,wall,frames;float *poses;int transparent,next,vertex_count;GLuint buffers[2];} ov_batch;
+typedef struct {int chunk,owner,material,count;float *vertices;unsigned short *indices;int hidden,entity,wall,frames;float *poses;int transparent,next,vertex_count;GLuint buffers[2];int loop,lights[4];float duration,speed,phase,center[3],radius;} ov_batch;
+typedef struct {float position[3],radius,color[3],cone,direction[3];int chunk,owner;} ov_light;
+static ov_light ov_lights[2048];static int ov_light_count;
 static ov_batch *ov_batches;
 static unsigned char *ov_mesh_bytes;
 static int ov_batch_count,ov_allocated_count,ov_chunk_for_room[MAX_SEGMENTS],ov_loaded;
@@ -9,6 +11,7 @@ static unsigned ov_frame;
 static int ov_chunk_first[512];
 EMSCRIPTEN_KEEPALIVE void astra_ov_owner(int owner,int hidden){EM_ASM(if(!Module.overloadHidden)Module.overloadHidden=new Set();if($1)Module.overloadHidden.add($0);else Module.overloadHidden.delete($0);,owner,hidden);for(int i=0;i<ov_batch_count;i++)if(ov_batches[i].owner==owner||ov_batches[i].entity==owner)ov_batches[i].hidden=hidden;}
 void astra_ov_world_reset(void){
+    extern void astra_ov_actor_gpu_reset(void);astra_ov_actor_gpu_reset();
     for(int i=0;i<ov_allocated_count;i++){free(ov_batches[i].poses);glDeleteBuffers(2,ov_batches[i].buffers);}
     free(ov_batches);free(ov_mesh_bytes);ov_batches=NULL;ov_mesh_bytes=NULL;ov_allocated_count=ov_batch_count=ov_loaded=0;
     memset(ov_chunk_frame,0,sizeof ov_chunk_frame);
@@ -40,6 +43,8 @@ static int ov_load(void){
     if(memcmp(ov_mesh_bytes,"OVM2",4))return 0;
     unsigned count=*(unsigned*)(ov_mesh_bytes+4),offset=8;if(count>16000)return 0;
     ov_batches=calloc(count,sizeof(*ov_batches));if(!ov_batches)return 0;
+    ov_light_count=EM_ASM_INT(return Math.min(2048,Module.overloadLights?.length||0));
+    for(int i=0;i<ov_light_count;i++){ov_light *l=&ov_lights[i];EM_ASM(HEAPF32.set([...Module.overloadLights[$0].position,Module.overloadLights[$0].radius,...Module.overloadLights[$0].color,Module.overloadLights[$0].cone,...Module.overloadLights[$0].direction],$1>>2);,i,l);l->chunk=EM_ASM_INT(return Module.overloadLights[$0].chunk;,i);l->owner=EM_ASM_INT(return Module.overloadLights[$0].owner;,i);}
     int tail[512];for(int i=0;i<512;i++)ov_chunk_first[i]=tail[i]=-1;
     for(unsigned b=0;b<count;b++){
         if(offset+20>(unsigned)size)return 0;int *h=(int*)(ov_mesh_bytes+offset);offset+=20;
@@ -50,6 +55,10 @@ static int ov_load(void){
         for(int i=0;i<h[4];i++){if(source[i]>=(unsigned)h[3])return 0;shorts[i]=(unsigned short)source[i];}
         ov_batches[b].indices=shorts;offset+=h[4]*4;
         ov_batch *p=&ov_batches[b];p->next=-1;p->vertex_count=h[3];
+        float lo[3]={1e20,1e20,1e20},hi[3]={-1e20,-1e20,-1e20};
+        for(int v=0;v<p->vertex_count;v++)for(int k=0;k<3;k++){lo[k]=fminf(lo[k],p->vertices[v*11+k]);hi[k]=fmaxf(hi[k],p->vertices[v*11+k]);}
+        p->radius=0;for(int k=0;k<3;k++){p->center[k]=(lo[k]+hi[k])*.5f;p->radius+=(hi[k]-lo[k])*(hi[k]-lo[k])*.25f;}p->radius=sqrtf(p->radius);
+        for(int k=0;k<4;k++){float best=-1;p->lights[k]=-1;for(int l=0;l<ov_light_count;l++){ov_light *light=&ov_lights[l];if(light->chunk!=p->chunk)continue;int duplicate=0;for(int j=0;j<k;j++)if(p->lights[j]==l)duplicate=1;if(duplicate)continue;float d=0;for(int a=0;a<3;a++)d+=(p->center[a]-light->position[a])*(p->center[a]-light->position[a]);d=sqrtf(d);if(d>light->radius+p->radius)continue;float score=(light->color[0]+light->color[1]+light->color[2])/(1+d*d/(light->radius*light->radius));if(score>best){best=score;p->lights[k]=l;}}}
         if(tail[p->chunk]<0)ov_chunk_first[p->chunk]=b;else ov_batches[tail[p->chunk]].next=b;tail[p->chunk]=b;
         /* Count initialized entries as we go so a rejected file also frees poses. */
         ov_allocated_count=b+1;
@@ -58,6 +67,8 @@ static int ov_load(void){
             p->poses=malloc(frames*12*sizeof(float));if(!p->poses)return 0;p->frames=frames;
             EM_ASM(HEAPF32.set(Module.overloadMotions[$0].matrices,$1>>2);,p->owner,p->poses);
             p->entity=EM_ASM_INT(return Module.overloadMotions[$0].owner;,p->owner);
+            p->loop=EM_ASM_INT(return !!Module.overloadMotions[$0].loop;,p->owner);
+            p->duration=EM_ASM_DOUBLE(return Module.overloadMotions[$0].duration||1;,p->owner);p->speed=EM_ASM_DOUBLE(return Module.overloadMotions[$0].speed??1;,p->owner);p->phase=EM_ASM_DOUBLE(return Module.overloadMotions[$0].phase||0;,p->owner);
             p->wall=EM_ASM_INT(return Module.overloadMotions[$0].wall??-1;,p->owner);
         }
         p->transparent=EM_ASM_INT(return Module.overloadTransparent?.includes($0)||false;,p->owner);
@@ -68,16 +79,19 @@ static int ov_load(void){
     EM_ASM(for(let i=0;i<Module.overloadChunks.length;i++)HEAP32[($0>>2)+i]=Module.overloadChunks[i];Module.overloadGroups=$1;,ov_chunk_for_room,count);
     return count;
 }
+#include "overload_lighting.inc"
 int astra_overload_side(int room){
     if(!ov_load())return 0;
     int chunk=ov_chunk_for_room[room];unsigned frame=ov_frame;
     if(chunk<0||chunk>=512)return 1;
     if(ov_chunk_frame[chunk]==frame)return 1;ov_chunk_frame[chunk]=frame;
     if(!fleet_program)af_program_init();if(fleet_failed)return 0;
+    ov_shadow_frame(chunk);
     GLboolean cull=glIsEnabled(GL_CULL_FACE),depth=glIsEnabled(GL_DEPTH_TEST),blend=glIsEnabled(GL_BLEND),depthmask=astra_depth_write;
     GLenum blend_source=astra_blend_source,blend_dest=astra_blend_dest;float blend_color[4];memcpy(blend_color,astra_blend_value,sizeof blend_color);
     glDisable(GL_CULL_FACE);glEnable(GL_DEPTH_TEST);glUseProgram(fleet_program);
-    glUniform3f(af_energy,.65,.65,.65);glUniform4fv(af_flash,1,astra_flash);glUniform1f(af_clock,astra_visual_clock());
+    ov_shadow_bind();
+    glUniform3f(af_energy,.58,.58,.58);glUniform4fv(af_flash,1,astra_flash);glUniform1f(af_clock,astra_visual_clock());
     vms_vector origin={0,0,0};g3s_point pt;g3_rotate_point(&pt,&origin);glUniform3f(af_origin,f2fl(pt.p3_x),f2fl(pt.p3_y),-f2fl(pt.p3_z));
     float basis[9];for(int k=0;k<3;k++){vms_vector axis={0,0,0},rot;if(k==0)axis.x=F1_0;else if(k==1)axis.y=F1_0;else axis.z=F1_0;g3_rotate_delta_vec(&rot,&axis);basis[k*3]=f2fl(rot.x);basis[k*3+1]=f2fl(rot.y);basis[k*3+2]=-f2fl(rot.z);}
     glUniformMatrix3fv(af_basis,1,GL_FALSE,basis);
@@ -93,17 +107,13 @@ int astra_overload_side(int room){
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,p->buffers[1]);glBufferData(GL_ELEMENT_ARRAY_BUFFER,p->count*2,p->indices,GL_STATIC_DRAW);
         }else{glBindBuffer(GL_ARRAY_BUFFER,p->buffers[0]);glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,p->buffers[1]);}
         if(p->transparent){glEnable(GL_BLEND);glBlendColor(0,0,0,.20);glBlendFunc(GL_CONSTANT_ALPHA,GL_ONE_MINUS_CONSTANT_ALPHA);glDepthMask(GL_FALSE);}else{glDisable(GL_BLEND);glDepthMask(GL_TRUE);}
-        float transform[12]={1,0,0,0,0,1,0,0,0,0,1,0};
-        if(p->poses&&p->wall>=0){
-            extern float astra_ov_door_fraction(int);float frame=astra_ov_door_fraction(p->wall)*(p->frames-1);int low=(int)frame,high=low+1<p->frames?low+1:low;float t=frame-low;
-            for(int i=0;i<12;i++)transform[i]=p->poses[low*12+i]*(1-t)+p->poses[high*12+i]*t;
-        }
+        float transform[12];ov_transform(p,transform);ov_apply_lights(p,basis);
         vms_vector offset={fl2f(transform[3]),fl2f(transform[7]),fl2f(transform[11])};g3_rotate_point(&pt,&offset);glUniform3f(af_origin,f2fl(pt.p3_x),f2fl(pt.p3_y),-f2fl(pt.p3_z));
         float posebasis[9];for(int column=0;column<3;column++)for(int row=0;row<3;row++)posebasis[column*3+row]=basis[row]*transform[column]+basis[3+row]*transform[4+column]+basis[6+row]*transform[8+column];glUniformMatrix3fv(af_basis,1,GL_FALSE,posebasis);
         glVertexPointer(3,GL_FLOAT,44,(void*)0);glColorPointer(4,GL_FLOAT,44,(void*)12);glTexCoordPointer(4,GL_FLOAT,44,(void*)28);glDrawElements(GL_TRIANGLES,p->count,GL_UNSIGNED_SHORT,(void*)0);draws++;
     }
     glBindBuffer(GL_ARRAY_BUFFER,0);glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);glDisableClientState(GL_COLOR_ARRAY);glDisableClientState(GL_VERTEX_ARRAY);glUseProgram(0);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);glDisableClientState(GL_COLOR_ARRAY);glDisableClientState(GL_VERTEX_ARRAY);glUniform1f(af_light_on,0);glUniform1f(af_shadow_on,0);glUseProgram(0);
     if(cull)glEnable(GL_CULL_FACE);if(!depth)glDisable(GL_DEPTH_TEST);
     glDepthMask(depthmask);glBlendColor(blend_color[0],blend_color[1],blend_color[2],blend_color[3]);glBlendFunc(blend_source,blend_dest);if(blend)glEnable(GL_BLEND);else glDisable(GL_BLEND);
     EM_ASM(Module.overloadDraws=(Module.overloadDraws||0)+$0;,draws);return 1;

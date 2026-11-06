@@ -46,11 +46,14 @@ includes["death_mix.inc"]="arch/sdl/astra_death_mix.inc"
 includes["wall_styles.inc"]="arch/ogl/astra_wall_styles.inc"
 for name in ["combat","combat_render","shadows","shadow_scene"]:
     includes[name+".inc"]="arch/ogl/astra_"+name+".inc"
+includes["overload_lighting.inc"]="arch/ogl/overload_lighting.inc"
 includes["overload_world.inc"]="arch/ogl/overload_world.inc"
 includes["overload_actors.inc"]="arch/ogl/overload_actors.inc"
 includes["overload_bridge.inc"]="main/overload_bridge.inc"
 includes["overload_fields.inc"]="main/overload_fields.inc"
 includes["overload_save.inc"]="main/overload_save.inc"
+includes["progress.inc"]="main/astra_progress.inc"
+includes["tactics.inc"]="main/astra_tactics.inc"
 for name,path in includes.items():
     if (repo/"d2"/path).exists():raise SystemExit("Use a fresh checkout. An Astra include already exists.")
 git(repo,"apply",str(src/"engine.patch"))

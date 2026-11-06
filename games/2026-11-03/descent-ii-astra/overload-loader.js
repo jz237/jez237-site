@@ -1,7 +1,7 @@
 /* Per-mine loading: the other campaigns never download Overload scenery. */
 (function(){
   const base='campaign/';
-  const read=async name=>{const r=await fetch(base+name);if(!r.ok)throw Error('Overload asset unavailable: '+name);return new Uint8Array(await r.arrayBuffer());};
+  const read=async name=>{const revision=/\.render\.json$|\.mesh\d+\.bin$/.test(name)?'?v=48':'';const r=await fetch(base+name+revision);if(!r.ok)throw Error('Overload asset unavailable: '+name);return new Uint8Array(await r.arrayBuffer());};
   const json=async name=>JSON.parse(new TextDecoder().decode(await read(name)));
   const pool=async (list,fn)=>{let at=0;await Promise.all(Array.from({length:4},async()=>{while(at<list.length)await fn(list[at++]);}));};
   let manifest,actors,combat,story,files=new Set(),actorFiles=new Set();
@@ -44,7 +44,7 @@
           if(n.endsWith('.bin')){bytes=new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());alias=n.slice(0,-4);}
           m.FS.writeFile('/mine/'+alias,bytes,{canOwn:true});actorFiles.add(n);
         });
-        this.meta=meta;m.overloadChunks=meta.chunks;m.overloadRadii=actors.radii;m.overloadMotions=render.motions||{};
+        this.meta=meta;m.overloadChunks=meta.chunks;m.overloadRadii=actors.radii;m.overloadMotions=render.motions||{};m.overloadLights=render.lights||[];
         m.overloadTransparent=render.transparent||[];m.overloadHidden=new Set(render.hidden||[]);
         for(const motion of Object.values(m.overloadMotions))motion.wall=meta.doors.find(d=>d.go===motion.owner)?.walls[0]??-1;
         m.overloadPending=true;
@@ -122,9 +122,10 @@
       }
       const custom=meta.records.find(r=>r.class==='LevelCustomInfo')?.data;
       this.objective=meta.secret?'Survive the three-minute robot arena, then return to your mission':custom?.m_objective===1?'Destroy '+custom.m_custom_count+' robots, then return to the surface':custom?.m_objective===3?'Charge the alien cores with weapon fire to activate the warp portal':custom?.m_objective===2?'Secure the crash site and locate the escape route':meta.records.some(r=>r.class==='Reactor')?'Find the security keys, destroy the reactor and escape':'Defeat the command robot and escape';
+      if(saved?.objective)this.objective=saved.objective;
       this.notice(meta.name+' · '+this.objective);
     },
-    save(){return {mission:this.controller.serialize(),visualHidden:[...Module.overloadHidden]};},
+    save(){return {objective:this.objective,mission:this.controller.serialize(),visualHidden:[...Module.overloadHidden]};},
     notice(text){
       if(!text)return;Module.overloadNotice={text,until:performance.now()+5000};
       let box=document.getElementById('overloadNotice');

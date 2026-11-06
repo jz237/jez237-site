@@ -8,7 +8,8 @@ static astra_chassis af_models[32];
 static GLuint af_maps[64][2],fleet_program;
 static int af_enabled=-1,fleet_failed,af_draws;
 int astra_robot_id=-1;
-static GLint af_basis,af_origin,af_energy,af_flash,af_clock;
+static GLint af_light_on,af_lpos,af_lcolor,af_ldir,af_shadow_on,af_shadow_center,af_shadow_lamp,af_shadow_right,af_shadow_up,af_shadow_normal,af_shadow_size,af_shadow_depth;
+static GLint af_basis,af_origin,af_energy,af_flash,af_clock,af_charge;
 static void af_program_init(void){
     const char *vs="varying mediump vec2 uv;varying highp vec3 p,n,t,q;varying mediump float hand;"
         "uniform mat3 axis;uniform vec3 origin;"
@@ -18,7 +19,9 @@ static void af_program_init(void){
         "vec2 e=gl_MultiTexCoord0.zw*2.-1.;vec3 v=vec3(e,1.-abs(e.x)-abs(e.y));"
         "if(v.z<0.)v.xy=(1.-abs(v.yx))*sign(v.xy+vec2(.000001));t=normalize(rot*v);}";
     const char *fs="precision highp float;varying mediump vec2 uv;varying highp vec3 p,n,t,q;varying mediump float hand;"
-        "uniform sampler2D paint,detail;uniform vec3 energy;uniform vec4 flash;uniform float clock;"
+        "uniform sampler2D paint,detail;uniform vec3 energy;uniform vec4 flash;uniform float clock,charge;"
+        "uniform float lightOn,shadowOn,shadowDepth;uniform vec4 lamps[4],lampColor[4],lampDir[4];"
+        "uniform sampler2D machineryShadow;uniform vec3 shadowCenter,shadowLamp,shadowRight,shadowUp,shadowNormal;uniform vec2 shadowSize;"
         "void main(){vec4 a=texture2D(paint,uv),m=texture2D(detail,uv);vec3 N=normalize(n),T=normalize(t-N*dot(t,N));"
         "vec2 xy=(m.xy*2.-1.)*.82;N=normalize(T*xy.x+cross(N,T)*hand*xy.y+N*sqrt(max(.06,1.-dot(xy,xy))));"
         "vec3 V=normalize(-p),K=normalize(vec3(-.63,.80,.82)),R=normalize(vec3(.72,.28,-.68));"
@@ -31,6 +34,14 @@ static void af_program_init(void){
         "vec3 F=flash.xyz-p;float fd=length(F);color+=vec3(1.,.40,.13)*flash.w/(1.+fd*fd*.01)*max(0.,dot(N,F/max(.1,fd)))*base;"
         "vec3 emission=mix(vec3(.20,.79,1.),max(base,vec3(.15)),smoothstep(.08,.42,max(base.r,base.g)-base.b));"
         "color+=emission*pow(a.a,.77)*(1.32+.075*sin(clock*3.));"
+        "if(lightOn>.5){vec3 local=vec3(0.);for(int i=0;i<4;i++){vec3 d=lamps[i].xyz-p;float dist=length(d),radius=max(1.,lamps[i].w);vec3 L=d/max(.01,dist);"
+        "float fall=pow(max(0.,1.-dist/radius),2.);float cone=lampColor[i].w<0.?1.:smoothstep(lampColor[i].w,min(.999,lampColor[i].w+.09),dot(-L,lampDir[i].xyz));"
+        "float diffuse=max(0.,dot(N,L));float spec=pow(max(0.,dot(N,normalize(L+V))),mix(80.,8.,rough));local+=lampColor[i].rgb*fall*cone*(base*(.14+diffuse*1.8)+spec*mix(vec3(.18),base,metal)*.7);}"
+        "float shade=1.;if(shadowOn>.5){vec3 D=p-shadowLamp;float denom=dot(D,shadowNormal);float z=dot(p-shadowCenter,shadowNormal);"
+        "if(denom<-.001&&z<shadowDepth){vec3 H=shadowLamp+D*(dot(shadowCenter-shadowLamp,shadowNormal)/denom)-shadowCenter;vec2 st=vec2(dot(H,shadowRight),dot(H,shadowUp))/shadowSize+.5;"
+        "if(st.x>0.&&st.x<1.&&st.y>0.&&st.y<1.){float mask=texture2D(machineryShadow,st).r;shade=1.-.75*mask;}}}"
+        "color+=local*shade;color*=.90+.10*shade;}"
+        "color+=vec3(1.,.26,.035)*charge*(pow(a.a,.5)*1.3+rim*.45);"
         "gl_FragColor=vec4(color/(1.+.23*color),1.);}";
     GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);
     if(!v||!f){fleet_failed=1;return;}
@@ -40,6 +51,9 @@ static void af_program_init(void){
     glUseProgram(fleet_program);glUniform1i(glGetUniformLocation(fleet_program,"paint"),0);glUniform1i(glGetUniformLocation(fleet_program,"detail"),1);
     af_basis=glGetUniformLocation(fleet_program,"axis");af_origin=glGetUniformLocation(fleet_program,"origin");
     af_energy=glGetUniformLocation(fleet_program,"energy");af_flash=glGetUniformLocation(fleet_program,"flash");af_clock=glGetUniformLocation(fleet_program,"clock");
+    af_light_on=glGetUniformLocation(fleet_program,"lightOn");af_lpos=glGetUniformLocation(fleet_program,"lamps[0]");af_lcolor=glGetUniformLocation(fleet_program,"lampColor[0]");af_ldir=glGetUniformLocation(fleet_program,"lampDir[0]");
+    af_shadow_on=glGetUniformLocation(fleet_program,"shadowOn");af_shadow_center=glGetUniformLocation(fleet_program,"shadowCenter");af_shadow_lamp=glGetUniformLocation(fleet_program,"shadowLamp");af_shadow_right=glGetUniformLocation(fleet_program,"shadowRight");af_shadow_up=glGetUniformLocation(fleet_program,"shadowUp");af_shadow_normal=glGetUniformLocation(fleet_program,"shadowNormal");af_shadow_size=glGetUniformLocation(fleet_program,"shadowSize");af_shadow_depth=glGetUniformLocation(fleet_program,"shadowDepth");glUniform1i(glGetUniformLocation(fleet_program,"machineryShadow"),2);
+    af_charge=glGetUniformLocation(fleet_program,"charge");
     glUseProgram(0);
 }
 static int af_load_mesh(int id){

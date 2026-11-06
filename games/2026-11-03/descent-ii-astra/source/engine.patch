@@ -748,6 +748,28 @@ index af0b258..82aa6fb 100644
  } ogl_texture;
  
  extern ogl_texture* ogl_get_free_texture();
+diff --git a/d2/main/ai2.c b/d2/main/ai2.c
+index b32d6e4..d5c952d 100644
+--- a/d2/main/ai2.c
++++ b/d2/main/ai2.c
+@@ -886,6 +886,8 @@ int lead_player(object *objp, vms_vector *fire_point, vms_vector *believed_playe
+ //	Note: Parameter vec_to_player is only passed now because guns which aren't on the forward vector from the
+ //	center of the robot will not fire right at the player.  We need to aim the guns at the player.  Barring that, we cheat.
+ //	When this routine is complete, the parameter vec_to_player should not be necessary.
++ #include "astra_tactics.inc"
++
+ void ai_fire_laser_at_player(object *obj, vms_vector *fire_point, int gun_num, vms_vector *believed_player_pos)
+ {
+ 	int			objnum = obj-Objects;
+@@ -974,6 +976,8 @@ void ai_fire_laser_at_player(object *obj, vms_vector *fire_point, int gun_num, v
+ 		}
+ 	}
+ 
++    if(astra_ov_fire(obj,fire_point,gun_num))return;
++
+ 	//	Set position to fire at based on difficulty level and robot's aiming ability
+ 	aim = FIRE_K*F1_0 - (FIRE_K-1)*(robptr->aim << 8);	//	F1_0 in bitmaps.tbl = same as used to be.  Worst is 50% more error.
+ 
 diff --git a/d2/main/collide.c b/d2/main/collide.c
 index fdb2e78..4a3b6b9 100644
 --- a/d2/main/collide.c
@@ -856,7 +878,7 @@ index fdb2e78..4a3b6b9 100644
  
  #define ENABLE_COLLISION(type1,type2)					\
 diff --git a/d2/main/fireball.c b/d2/main/fireball.c
-index fe9b0d1..41bd6d9 100644
+index fe9b0d1..d68f931 100644
 --- a/d2/main/fireball.c
 +++ b/d2/main/fireball.c
 @@ -22,6 +22,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
@@ -1107,16 +1129,18 @@ index fe9b0d1..41bd6d9 100644
  
  }
  
-@@ -1206,6 +1411,8 @@ int get_explosion_vclip(object *obj,int stage)
+@@ -1206,6 +1411,10 @@ int get_explosion_vclip(object *obj,int stage)
  //blow up a polygon model
  void explode_model(object *obj)
  {
++    /* Overload scenery has a native collision proxy, not a D2 robot skeleton. */
++    extern int astra_ov_hide_proxy(object*);if(astra_ov_hide_proxy(obj))return;
 +    extern int astra_robot_breakup(object*);extern void astra_hide_debris(object*);
 +    int astra_pieces=astra_robot_breakup(obj);
  	Assert(obj->render_type == RT_POLYOBJ);
  
  	if (Dying_modelnums[obj->rtype.pobj_info.model_num] != -1)
-@@ -1216,7 +1423,7 @@ void explode_model(object *obj)
+@@ -1216,7 +1425,7 @@ void explode_model(object *obj)
  
  		for (i=1;i<Polygon_models[obj->rtype.pobj_info.model_num].n_models;i++)
  			if (!(obj->type == OBJ_ROBOT && obj->id == 44 && i == 5)) 	//energy sucker energy part
@@ -1125,7 +1149,7 @@ index fe9b0d1..41bd6d9 100644
  
  		//make parent object only draw center part
  		obj->rtype.pobj_info.subobj_flags=1;
-@@ -1620,3 +1827,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
+@@ -1620,3 +1829,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
  			expl_wall_swap(&ew[i], swap);
  }
  
@@ -1153,7 +1177,7 @@ index 535d1ae..221fafc 100644
 +
 +#include "overload_fields.inc"
 diff --git a/d2/main/game.c b/d2/main/game.c
-index f15d413..5d33402 100644
+index f15d413..158f8bc 100644
 --- a/d2/main/game.c
 +++ b/d2/main/game.c
 @@ -1108,6 +1108,19 @@ void game_render_frame();
@@ -1203,7 +1227,7 @@ index f15d413..5d33402 100644
  				stop_time();
  
  			if (!((Game_mode & GM_MULTI) && (Newdemo_state != ND_STATE_PLAYBACK)))
-@@ -1157,10 +1177,18 @@ int game_handler(window *wind, d_event *event, void *data)
+@@ -1157,15 +1177,25 @@ int game_handler(window *wind, d_event *event, void *data)
  		case EVENT_KEY_COMMAND:
  		case EVENT_KEY_RELEASE:
  		case EVENT_IDLE:
@@ -1211,6 +1235,7 @@ index f15d413..5d33402 100644
  			return ReadControls(event);
  
  		case EVENT_WINDOW_DRAW:
++            {extern int astra_progress_command(void);if(astra_progress_command())break;}
 +            if(EM_ASM_INT({var c=Module.menuCommand||0;Module.menuCommand=0;return c;})){astra_pause_open();break;}
 +            if(astra_auto_enabled()){
 +                int next=EM_ASM_INT({var n=Module.autoNext||0;Module.autoNext=0;return n;});
@@ -1222,7 +1247,13 @@ index f15d413..5d33402 100644
  
  			if (!time_paused)
  			{
-@@ -1202,7 +1230,10 @@ int game_handler(window *wind, d_event *event, void *data)
+ 				calc_game_time();
+ 				GameProcessFrame();
++                {extern void astra_progress_tick(void);astra_progress_tick();}
+ 			}
+ 
+ 			if (!Automap_active)		// efficiency hack
+@@ -1202,7 +1232,10 @@ int game_handler(window *wind, d_event *event, void *data)
  #endif
  				show_menus();
  			Game_wind = NULL;
@@ -1234,7 +1265,7 @@ index f15d413..5d33402 100644
  			key_toggle_repeat(1);
  			break;
  
-@@ -1306,6 +1337,7 @@ void game_leave_menus(void)
+@@ -1306,6 +1339,7 @@ void game_leave_menus(void)
  
  void GameProcessFrame(void)
  {
@@ -1242,7 +1273,7 @@ index f15d413..5d33402 100644
  	fix player_shields = Players[Player_num].shields;
  	int player_was_dead = Player_is_dead;
  
-@@ -1409,7 +1441,9 @@ void GameProcessFrame(void)
+@@ -1409,7 +1443,9 @@ void GameProcessFrame(void)
  
  		Players[Player_num].homing_object_dist = -1;		//	Assume not being tracked.  Laser_do_weapon_sequence modifies this.
  
@@ -1252,7 +1283,7 @@ index f15d413..5d33402 100644
  		powerup_grab_cheat_all();
  
  		if (Endlevel_sequence)	//might have been started during move
-@@ -1713,6 +1747,7 @@ void FireLaser()
+@@ -1713,6 +1749,7 @@ void FireLaser()
  	if ((Players[Player_num].primary_weapon == FUSION_INDEX) && (Global_laser_firing_count)) {
  		if ((Players[Player_num].energy < F1_0*2) && (Auto_fire_fusion_cannon_time == 0)) {
  			Global_laser_firing_count = 0;
@@ -1260,7 +1291,7 @@ index f15d413..5d33402 100644
  		} else {
  			static fix64 Fusion_next_sound_time = 0;
  			int flash_val;
-@@ -1731,7 +1766,16 @@ void FireLaser()
+@@ -1731,7 +1768,16 @@ void FireLaser()
  
  			flash_val = !(Game_mode & GM_MULTI) || !Netgame.ReducedFlash ? Fusion_charge >> 11 :
  				PaletteRedAdd < 10 ? 10 - PaletteRedAdd : 0;
@@ -2113,7 +2144,7 @@ index 163e08a..b4b8672 100644
  	lb->item = items;
  	lb->citem = default_item;
 diff --git a/d2/main/object.c b/d2/main/object.c
-index 602b2d5..46a2c6e 100644
+index 602b2d5..1c1f5ee 100644
 --- a/d2/main/object.c
 +++ b/d2/main/object.c
 @@ -425,6 +425,12 @@ void draw_cloaked_object(object *obj,g3s_lrgb light,fix *glow,fix64 cloak_start_
@@ -2170,7 +2201,15 @@ index 602b2d5..46a2c6e 100644
  	int i;
  
  	collide_init();
-@@ -2145,7 +2162,11 @@ void object_move_all()
+@@ -1962,6 +1979,7 @@ void object_move_one( object * obj )
+ 			//NOTE LINK TO CT_MORPH ABOVE!!!
+ 			if (Game_suspended & SUSP_ROBOTS) return;
+ 			do_ai_frame(obj);
++            {extern void astra_ov_tactics_frame(object*);astra_ov_tactics_frame(obj);}
+ 			break;
+ 
+ 		case CT_WEAPON:		Laser_do_weapon_sequence(obj, doHomerFrame, idealHomerFrameTime, homerFrameCount); break; // CED
+@@ -2145,7 +2163,11 @@ void object_move_all()
  
  	obj_delete_all_that_should_be_dead();
  
@@ -2183,7 +2222,7 @@ index 602b2d5..46a2c6e 100644
  		ConsoleObject->mtype.phys_info.flags |= PF_LEVELLING;
  	else
  		ConsoleObject->mtype.phys_info.flags &= ~PF_LEVELLING;
-@@ -2630,3 +2651,5 @@ void set_homing_update_rate(int update_rate) {
+@@ -2630,3 +2652,5 @@ void set_homing_update_rate(int update_rate) {
  
  	con_printf(CON_DEBUG, "Homing update rate: %d\n", update_rate);
  }
@@ -2454,7 +2493,7 @@ index 517bc8a..7b3dd43 100644
 +    g3_end_frame();Viewer=saved;Viewer_eye=saved_eye;memcpy(Window_rendered_data,rendered,sizeof rendered);
 +}
 diff --git a/d2/main/state.c b/d2/main/state.c
-index fde0fd3..9b9397b 100644
+index fde0fd3..9c7fc53 100644
 --- a/d2/main/state.c
 +++ b/d2/main/state.c
 @@ -905,8 +905,8 @@ int state_save_all_sub(char *filename, char *desc)
@@ -2476,7 +2515,7 @@ index fde0fd3..9b9397b 100644
  	return 1;
  }
  
-@@ -1743,6 +1744,7 @@ int state_restore_all_sub(char *filename, int secret_restore)
+@@ -1743,9 +1744,12 @@ int state_restore_all_sub(char *filename, int secret_restore)
  			window_set_visible(Game_wind, 1);
  	reset_time();
  
@@ -2484,7 +2523,12 @@ index fde0fd3..9b9397b 100644
  	return 1;
  }
  
-@@ -1793,3 +1795,4 @@ int state_get_game_id(char *filename)
++ #include "astra_progress.inc"
++
+ int state_get_game_id(char *filename)
+ {
+ 	int version;
+@@ -1793,3 +1797,4 @@ int state_get_game_id(char *filename)
  
  	return state_game_id;
  }
