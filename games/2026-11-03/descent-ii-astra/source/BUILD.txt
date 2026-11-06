@@ -36,7 +36,7 @@ Field Refit 02 also requires the original Vertigo install. Its mission archive a
 
 fleet.py requires SciPy in addition to the dependencies listed above. The generated fleet_types.inc supplies D2 model bindings. The live D2 polymodel supplies each ship's outer panels and articulated limbs. Overload render batches supply internal mechanisms and materials. The original game handles the robot's position, weapons, collisions and AI. The optional encounter drop places the player near an existing robot; Enter mine uses the mission's original start.
 
-The explosion renderer reads its density, surface normals and fuel from a 112 × 112 × 112 field. Rebuild the browser parcel using NumPy, SciPy and Pillow, from the game directory:
+The explosion renderer reads its density, surface normals and fuel from a 112 Ã— 112 Ã— 112 field. Rebuild the browser parcel using NumPy, SciPy and Pillow, from the game directory:
 
     python source/pyro_field.py pyro-field.js
 
@@ -45,11 +45,986 @@ The plume and blast includes implement optical sampling and particle motion. The
 The ship explosion preview (preview.inc) uses the game's Pyro mesh, tier-2
 blast renderer, and Descent II samples in a separate inspection camera. It
 pauses the mission clock and input and creates no gameplay objects. Closing
-it resumes the original pilot and camera. Each replay receives a new visual
-seed without advancing the gameplay RNG.
+it resumes the original pilot and camera. New variation chooses a new visual seed without advancing the gameplay RNG.
+Replay same keeps that seed for frame-by-frame comparison.
 
 Close hull impacts have shorter visual lifetimes and reduced radius/light
 power. A view-distance fade reduces their optical density and sparks when a
 living pilot is inside the cloud. Ship destruction keeps its full appearance.
 The selected launch cockpit is also saved as the native preferred cockpit,
 so the original respawn path restores the Astra flight deck.
+
+Campaign coverage: Counterstrike contains 24 regular levels and six secret
+levels; Vertigo contains 20 regular levels and three secret levels. Both use
+the same engine, material packs, ship renderer, lighting, explosion system,
+flight instruments and input code. No improvement is restricted to a level or
+encounter shortcut. Level geometry, campaign progression, music selection,
+AI, damage and flight physics continue to use the original game data/code.
+
+Campaign validation: all 44 regular mines were loaded and rendered in the
+shipping engine with the Astra deck. All nine original secret mines also
+rendered with the same engine using a temporary test-only mission listing.
+Explosion preview opened and resumed the final mine in each run. These were
+loading/rendering checks, not complete gameplay playthroughs.
+
+Astra collection and autonomous flight (pyre8)
+
+All 45 defined powerup IDs now render as solid 3D models: energy, shields,
+lives, keys, every weapon and missile pack, equipment, mines, hoard orb and
+team flags. Rescuable hostages use a separate 3D rescue pod. Reserved IDs
+also have fallback meshes. Original pickup collisions, amounts, sounds,
+score and inventory behavior are unchanged. Native depth testing and the
+existing Overload metal/normal maps give the meshes volume and surface detail.
+Rebuild the 51-entry mesh parcel (45 powerups, five reserved, one rescue pod):
+
+    python source/collectibles.py collectibles.js
+
+The inspection button uses the real native pickup renderer while the mission
+is paused. It does not spend lives or ammunition.
+
+The optional live demo uses a separate watch pilot and never persists that
+pilot's game progress. A segment-graph planner respects keyed/locked doors,
+seeks useful pickups, rescues hostages, shoots switches and attacks visible
+robots/reactors. Aim, thrust, strafing, braking, projectile evasion and fire
+feed the original control/weapon code. Enemy AI, flight physics and damage
+remain unchanged. Death plays normally, then the demo retries automatically.
+Briefings and score dialogs are bypassed only in autonomous mode. A completed
+campaign loops back to its first mine. Next mine is also available to viewers.
+The planner is heuristic; this is not a claim of a verified autonomous
+playthrough of every puzzle, boss or secret-level route.
+
+Phone viewing has a one-tap Watch live demo button, 960x540 default rendering,
+large pause/resume, next-mine, sound and exit controls, and no pointer lock.
+Backgrounding a phone pauses the demo. Unsupported fullscreen requests are
+ignored safely. The browser still needs WebGL, WebAssembly and gzip streams.
+Phone demos pace presentation to about 30 fps while retaining the completed
+frame; the original manual-flight timing configuration is unchanged.
+
+Validation: all 45 powerups and the rescue pod rendered in the native
+inspection view. Live autonomous combat was exercised in Counterstrike and
+Vertigo, including keys, supplies, hostage rescue, death and automatic retry.
+An exit fixture verified native exit flight and automatic next-level loading;
+it was not an autonomous combat playthrough. Phone portrait/landscape layout,
+pause/resume, next-mine, sound and pointer-free viewing were tested with Chrome
+mobile emulation, not physical phones. The destruction preview still replays
+with different seeds and resumes without spending pilot resources.
+
+Astra flight terminal (pyre9)
+
+The title screen uses the game's Pyro mesh inside a procedural WebGL maintenance
+bay, with drag rotation, zoom, preset views and a rotating display. Missions,
+live demo, showroom, settings and controls have separate responsive panels.
+Campaign cards select on click and launch on double-click; a launch guard
+prevents duplicate engine starts. Title preferences are saved locally.
+
+menus.inc and lists.inc expose the original engine's structured menus and
+listboxes to terminal.js. HTML inputs feed native selection/change callbacks,
+so sound, options, pilot/mission selection and save/load still use D2's own
+behavior and file formats. Menu generation IDs discard stale queued clicks.
+The Flight menu button opens pause.inc for resume, save, load and options.
+Original flight controls, physics and level simulation are unchanged.
+
+Validation covered desktop and phone title layouts, campaign double-click,
+native options and sound sliders, mission lists, flight pause, a valid DGSS
+save and successful restore with the Astra deck, explosion preview/replay,
+and autonomous phone-demo launch. Automated browsers disabled pointer lock
+before loading the game and were closed after each check.
+
+Astra animated systems and forward-flight pilot (pyre10)
+
+All 45 pickups and the rescue pod have varied, faster rotation and a gentle
+bob. Energy equipment carries depth-tested electrical arcs; hardware has
+orbiting status lights. Emissive model surfaces carry a moving energy pulse.
+The showroom uses the same renderer and animates while the mine is paused.
+
+motion.inc renders rounded flowing plasma/fusion, thin laser and cannon
+tracers, helix rings, Omega arcs and missile exhaust with shock diamonds.
+Native weapon IDs choose their visual family for both player and enemy shots.
+Real robot gun anchors carry rotating barrel mechanisms and firing recoil;
+rear cooling louvers move independently. Damaged robots intermittently arc.
+These are presentation-only meshes. The original projectile objects, speeds,
+damage, firing delays, audio, collisions and random-number stream are preserved.
+The effect renderer is disabled in Classic mode and skips cloaked machinery.
+
+The demo brakes before sharp turns and accelerates along its facing, with
+small corrections for portal centering. It prioritizes urgent supplies over
+combat, uses forward attack runs and standoff fire, and seeks clearance from
+very close attackers. Incoming-fire evasion varies forward speed instead of
+holding a lateral strafe. Native impacts and Fusion recoil can still push the
+ship off course; the controller corrects using the original flight physics.
+Primary choice considers range, target shields, energy, ammo and recent use.
+Missile selection waits for native rearming before firing and reserves large
+blast weapons for sufficient range. It only uses weapons actually owned.
+
+Validation includes every active collectible, all nine primary fire families,
+missile exhaust, enemy fire/mechanisms, both campaigns, and phone emulation.
+An arsenal QA fixture uses the original cheat to supply weapons only in an
+isolated test save; normal demos receive no weapons, invulnerability or keys.
+Demo tests cover sampled combat/navigation rather than complete campaign solves.
+Automated browsers reject pointer lock before launch and close after testing.
+
+Astra pursuit pilot and weapon range (pyre11)
+
+The autonomous controller now cruises at a requested 52 native distance units
+per second. A ship-radius visibility sweep looks ahead through up to four open
+rooms. Native mass/drag feed-forward holds speed without changing D2 physics;
+the pilot turns more decisively and retains momentum through modest bends.
+Incoming fire no longer holds the throttle in braking. Projectiles approaching
+the player identify their real parent robot, with object-signature checks.
+Actual damage also records the attacker. Recent attackers take priority over
+supply errands and are pursued through the mine graph when out of sight.
+Transparent-wall firing rays and solid ship-clearance rays are separate.
+
+The visible Full arsenal showcase checkbox is on by default for the live demo.
+It grants the watch pilot native weapons/ammunition at each launch/respawn,
+then rotates appropriate weapons during combat. It grants no invulnerability,
+keys or health. Turn it off to use only the normal starting kit and pickups.
+Manual play, saved pilots, weapon timing/damage, sound and movement are unchanged.
+
+Showroom > Demo weapon effects, and Weapon effects during the live demo, open
+a paused presentation range. The 19 entries cover laser levels, every primary
+family and missile/exhaust variants. A selector, Previous/Next and auto-cycle
+controls work on desktop and phones. The range invokes the actual native
+projectile renderer and draws real missile models, without creating gameplay
+objects, spending inventory, advancing the mission or altering its RNG.
+
+Validation covers both campaigns, stock-inventory and showcase demos, attacker
+engagement, speed/facing telemetry, weapon variety and pause/resume. All 19 range
+entries and desktop/phone layouts were exercised. Native pause snapshots verify
+unchanged position, velocity, mission time, health, lives, energy and ammunition.
+Phone checks use browser emulation. These are combat/navigation samples, not
+proof of an autonomous solution to every mine. Test browsers reject pointer
+capture before launch and close afterward.
+
+Astra compact demo controls (pyre12)
+
+The persistent full-width demo bar is replaced by a 44px-high Controls button
+in the bottom-left corner. The menu starts collapsed on phones and desktop.
+Tap to show status, pause/resume, next mine, weapon effects, sound and end demo;
+close with the toggle, close button, Escape or a tap outside. Returning from a
+weapon preview restores the collapsed button. A paused label remains visible.
+The panel respects display safe areas, fits narrow/short screens and retains
+44px touch targets. Enter, Space and Tab work without SDL consuming menu keys.
+The launcher/styles are pyre12; native engine and weapon range remain pyre11.
+Phone touch emulation covers portrait 390x844 and landscape 844x390/640x320;
+desktop checks cover menu actions, focus, preview return and level changes.
+All automated test documents disable pointer capture before loading the game.
+
+Astra cockpit firing range and pickup decisions (pyre13)
+
+Energy projectiles now derive their visual orientation from actual velocity.
+Stock D2 does not maintain an orientation matrix for ordinary blob weapons;
+using it made the enhanced shots and their trails point along the wrong axis.
+This is a rendering correction, including for ricochets and enemy shots. Native
+projectile motion, collisions, damage and flight physics are unchanged.
+Luminous cores and soft additive glows replace the metal-looking geometry and
+decorative hoops. Missile exhaust is drawn after the opaque body so the missile
+does not paint over the exhaust that is closer to the viewer.
+
+The weapon range now uses the cockpit view/zoom, the Pyro's actual gun mounts,
+native projectile speeds and weapon fire intervals (Fusion/Omega use readable
+showcase bursts). Paired cannons, alternating Spreadfire fans, rotating Helix
+volleys, centered tracers, lightning and alternating missile tubes are shown
+firing forward. The native weapon samples play. These are presentation shots in
+a separate range; they never enter the mission or spend its ammunition. The
+range controls collapse into a small button, including on phones.
+
+The spectator pilot checks all secondary ammunition capacities, ammo-rack
+capacity, ammunition remaining in dropped Vulcan/Gauss weapons, duplicate
+equipment, laser upgrades, timed effects and lives before planning a pickup.
+Uncollectible/reserved items have no default attraction. Native pickup rejection
+starts a cooldown keyed to the object's signature. A failed approach also times
+out, even when moving in a small orbit. Respawn forces a new plan after the demo
+arsenal is restored; manual pickup behavior stays with the original game.
+
+Validation: 85 capacity/drop cases compiled against native player/object types;
+all 19 range entries, native pause-state snapshots, touch/desktop controls,
+portrait/landscape layout, real combat and a full death/drop/respawn sequence.
+The forced-death helper exists only in a separate local QA engine and is absent
+from this release. Browser tests disable pointer capture and shut down afterward.
+
+Astra weapon optics and paired Omega (pyre14)
+
+The original HAM data uses polygon models for lasers and Fusion as well as
+missiles. The renderer now distinguishes physical missile bodies using the
+native matter flag. Energy weapons replace their old solid polygon shapes
+with luminous cores, soft streaks and turbulent colored particles. This also
+applies to enemy fire; motion, collision radii and damage stay native.
+
+Rocket exhaust uses model dimensions instead of the much smaller collision
+radius, with a hot nozzle, 24 animated flame samples and a cooling smoke trail.
+The samples occupy 3D positions and depth-test against the mine. A near-camera
+fade limits particle glare. Plasma, Fusion, Phoenix, lasers and ballistic
+tracers have their own color, width and particle treatments.
+
+Omega records the native hit endpoint and renders branched arcs from both
+Pyro gun mounts toward it. This creates no additional damaging weapon objects,
+uses no simulation RNG and does not change energy use or hit calculations.
+The cockpit range shares the same renderer and both Omega emitters.
+
+Validation: all 19 range entries have the correct energy/exhaust classification;
+two Omega emitters in the range and actual native combat; desktop and phone
+portrait/landscape visuals; exact paused mission state on leaving the range;
+native enemy/player fire and missile exhaust. Tests block desktop pointer
+capture before navigation and close their browsers and local servers.
+
+Omega was exercised through the native firing function in a separate local QA
+engine: each volley consumed exactly one original charge increment. No test
+exports are present in the shipping engine. The natural pilot combat run also
+covered player and enemy fire, missile exhaust, death and cockpit recovery.
+
+Astra original laser colors (pyre15)
+
+Restore the laser colors from the original loaded HAM polygon models:
+L1 red (31,0,0), L2 magenta (28,0,28), L3 pale blue (14,14,31),
+L4 green (0,28,0), L5 yellow (31,24,0), L6 white (27,27,27), in RGB15.
+The three cockpit showcase entries are therefore red, green and white.
+Limit white mixing in laser cores and particles so their hues remain readable.
+Other weapons retain the existing shader settings and visual treatment.
+
+Validated against all six original model color records, then visually checked
+the three range entries on desktop and phone screens. Plasma, dual Omega and
+missile exhaust were also checked. No simulation or weapon stats changed.
+The original-model inspection helper is only in a separate QA engine.
+All browser tests block pointer capture and close their browsers and servers.
+
+Astra Phoenix ricochets and deliberate demo flight (pyre16)
+
+Phoenix uses a compact turbulent comet instead of the large rotating halo
+and long camera-facing ribbon. Each native projectile tracks its current
+straight flight leg by object signature. A ricochet restarts the trail; its
+length is capped at 3.4 units and ray-clipped against the actual mine walls.
+Original projectile speed, bounce behavior, collision and damage are unchanged.
+
+The demo keeps a remembered up direction and smoothly follows the nearest
+mine plane. Segment side numbering does not force abrupt changes of floor.
+Pitch/yaw track target motion with bounded lead inside the enemy silhouette;
+the pilot backs away from charging enemies and holds a firing lane. All of
+this uses native thrust controls. The demo supplies its own bank control,
+so native nearest-wall auto-leveling is suppressed only while it is active.
+Manual flight retains the player's original auto-leveling setting and physics.
+
+Weapon choice considers range, energy and enemy durability. A selected weapon
+is held for at least 14 seconds unless empty or unsuitable at the new range;
+there is no forced arsenal rotation. It also checks native blast radius and
+nearby walls before using a splash-damage primary, choosing a safe alternative
+in tight spaces. Full arsenal is an optional demo loadout.
+The pilot keeps a confirmed kill in view for 1.5 seconds when safe, but resumes
+combat for an immediate close threat or low shields. Pickup capacity checks
+and signature-based rejection cooldowns remain intact.
+
+Validation: native Phoenix volleys and real mine ricochets in a separate QA
+engine, plus timed desktop Vertigo and phone Counterstrike combat runs.
+Tracked aim, roll, target persistence, weapon holds, kill observation and
+pickup decisions. The 85 native pickup capacity/drop cases also pass.
+Test-only firing helpers are absent from the shipping engine. Hidden browsers
+disable pointer capture before navigation and close with their local servers.
+These checks are not complete autonomous campaign playthroughs.
+
+Astra plasma, charging lattice and compact debris bursts (pyre17)
+
+Plasma now uses a rounded translucent 3D green core with animated emission,
+a soft halo and a short wake. It has no rectangular beam or white end caps.
+Its core fades near the camera. Other weapon treatments and original laser
+upgrade colors remain unchanged. Projectile motion and damage are still native.
+
+Native fuel-center faces render a transparent animated hexagonal lattice,
+flowing amber/teal pulses, drifting charge motes and intermittent electrical
+arcs. Charging activity brightens the field. This replaces only the original
+fuel-center effect surface, preserving its portals and refill behavior.
+
+Two additional normal-blast variations use a smaller radius: a compact rupture
+and a split directional burst. Their flame cools sooner to reveal solid hull
+fragments. Larger existing blasts and the extended randomized player death
+retain their previous timing and shape. Cosmetic fragments tumble, coast and
+ricochet against actual mine walls, with short sparks, faint reflected light
+and quiet original D2 metallic impact samples. They are bounded visual caches,
+not gameplay objects; they cause no damage and use no simulation random draws.
+
+Validation: native plasma fire, a real fuel room with increasing player energy,
+all three tested blast profiles with recorded native-wall collisions, desktop
+and phone layouts, original laser colors, paired Omega and missile exhaust.
+Natural phone demo combat also passed. The R16 autopilot include is byte-for-byte
+unchanged. The fixture that positions the player and triggers individual blasts
+exists only in a separate QA engine; it is absent from the shipping engine.
+Automated browsers block pointer capture before navigation and close afterward.
+
+Astra environment refit for both campaigns (pyre18)
+
+Shared native mine-face rendering applies throughout Counterstrike and Vertigo,
+including their secret mines. Native mine archives, geometry, collision, doors,
+keys, secrets, damage, recharge, music and audio are preserved. Original flight,
+mouse controls and the praised R16 autopilot remain byte-for-byte unchanged.
+
+The eight environment treatments are: layered physical panel surrounds and
+service fittings; soft seam/contact shading and light propagation stopped by
+closed portals; material-dependent roughness, grain, wear and liquid ripples;
+rotating caged fans, hydraulic pistons, terminal readouts, cable faults and flowing
+coolant; mining/maintenance/recharge/reactor/hazard accents chosen from native
+room functions and material groups; restrained local dust, vent wisps and fixture
+shafts; perimeter-only door rails/hydraulics with native key colors, machined
+reactor housings, pulsing cores and rotating rings; persistent scorch/chip marks
+and resting ricochet fragments.
+
+Detail never fills a door aperture. Hidden doors receive no lock or hydraulic
+decoration. Atmosphere is limited to ten visible nearby rooms. Scars have a
+96-entry cache and expire after three minutes; resting scraps have 48 slots and
+fade after 45 seconds. These are presentation caches, not gameplay objects, and
+consume no simulation RNG. There is no full-screen fog or new white flash.
+
+Checks include campaign level loading, live combat with the unchanged pilot,
+desktop and phone layouts, four machinery variants, native door opening and
+reactor rendering, native wall-hit scars and fragments, and energy increasing
+inside an original fuel center. Camera relocation helpers exist only in a
+separate QA build. Automated browser tests block pointer capture before launch
+and close their browser and local server afterward. Loading every level is not
+a full campaign playthrough or a measurement on a physical phone.
+
+Astra mine tour, stable plasma and gentler demo (pyre19)
+
+Showroom > Preview mine upgrades opens a detached tour of real loaded mine
+geometry. Select any regular or secret mine in Counterstrike or Vertigo. Eight
+scene types cover architecture, fans, hydraulics, terminals, cables, doors,
+reactors and recharge fields; unavailable features are skipped. Compact touch
+controls provide pause/play, previous/next, scene selection, view distance and
+an automatic tour. Flight and demo also offer a tour of the current mine.
+
+The mission remains paused. The camera is separate from the player; doors use
+temporary visual frames restored immediately after drawing. The tour awards no
+exploration credit and skips gameplay objects, AI, damage and dynamic-light RNG.
+Secret preview launches bypass interactive transition/briefing screens only.
+
+Plasma cores and wakes now consist entirely of rounded shaded geometry. Flat
+halos/ribbons have been removed; depth-tested green shading retains the sphere
+shape from different viewing directions. Weapon mechanics are unchanged.
+
+Only the requested demo steering/recovery is changed: turn rates ease through
+acceleration/braking limits, with slower roll correction. A stalled pilot tests
+nearby clearance and uses native translation thrust to back or slide away, even
+during combat. Repeatedly obstructed routes are temporarily avoided. No pose,
+velocity or physics snaps are used. Target commitment, useful-pickup selection,
+weapon holds, kill watching and the native manual controls are preserved.
+
+Validation: native build; pinned-upstream patch applicability; protected physics,
+manual controls, mouse, weapon mechanics, robot AI, pickups, game sequencing and
+doors hashes; four-minute live demo checks in each campaign with combat and
+recovery followed by progress; regular/secret mine previews on desktop
+and phone-sized layouts; pause/return state checks of Objects, Players, Walls,
+Segments, automap and mission clock; plasma firing range. R18 previously loaded
+all 53 campaign mines. These are not full campaign playthroughs or physical-phone
+performance measurements. Test exports remain in an isolated QA engine only.
+
+Astra detailed wall surfaces and sliding demo (pyre20)
+
+The demo now uses native sideways and vertical thrust for short repositioning
+while retaining its heading. It keeps its nose on combat targets. All movement
+still passes through the original Descent II controls and physics; no player
+pose or velocity is written directly. A spatial recovery watchdog survives
+oscillation across room boundaries and unfinished turns. Repeatedly blocked
+switch approaches and routes are temporarily avoided.
+
+43 material pairs are re-extracted at twice the previous width and height from
+the user's owned Overload assets: 31 256px surfaces become 512px, and 12 common
+512px metal surfaces become 1024px. The trim atlas also becomes 1024px. The new
+surfaces20 pack overrides the corresponding maps after the forge pack. It adds
+about 34 MB of decoded PNG data; mipmapped filtering and up to 8x anisotropic
+normal-map filtering preserve angled detail where supported.
+
+Native low-resolution artwork is blended much more lightly into walls, doors
+and fixtures. Decorative transparent ceiling/misc lights receive clean rounded
+recessed strip silhouettes. Native super-transparent holes retain their masks;
+their two material layers now compose on the GPU instead of being flattened
+into the stock 64px indexed texture. New close-range shader relief and shallow
+modeled service panels add bevels, handles, countersunk screws, vents and labels.
+These are visual details, leaving the original level geometry/collision intact.
+
+Rebuild the material override with Python, UnityPy, NumPy and Pillow:
+  python surface-detail.py <owned-Overload-resources.assets> <standalone-Astra> <web-Astra>
+Both output directories must already contain Astra's existing payload/aliases.js
+and material packs. The script uses the adjacent plates.py/material-index.json.
+It writes base64 parcels for standalone file launching and binary gzip parcels
+for the web. surface-detail-index.json records the source and output dimensions.
+
+Validation includes the native engine build, original-upstream patch checks,
+unchanged protected simulation hashes, four-minute demos in both campaigns
+(14/23 kills and 71/73 rooms), all 53 regular/secret mine loads, native masked
+material rendering, and paused mine-preview/state-restoration checks. Automated browsers disable pointer lock before launch.
+These are runtime coverage checks, not full campaign playthroughs or physical
+phone performance measurements. All QA-only exports stay out of the release.
+
+Astra cockpit-visible demo perception (pyre21)
+
+Enemy acquisition now comes from the main cockpit render. Candidate robots and
+reactors must pass the renderer's actual frustum and native sight-line tests.
+Several points on the body allow partial exposure; opaque walls, closed doors
+and opaque grate pixels block sight. Cloaked and non-rendering enemies, rear
+views, auxiliary cameras and detached tours cannot reveal targets. Signatures,
+level identity and a short freshness limit prevent stale observations.
+
+The route planner also requires visibility for hostile objectives. Losing sight
+invalidates that enemy route, breaks its live tracking and cancels a pending
+missile. Incoming shots and damage cannot reveal a hidden shooter's location.
+Flight controls, movement tuning, strafe positioning, weapon hold timings and
+the previous graphical work are preserved. This is geometry-based perception,
+not GPU pixel readback through smoke, cockpit overlay artwork or bright effects.
+
+Validation: native build, upstream patch applicability and protected simulation
+hashes; isolated native tests for a visible target, behind-camera target, wall,
+closed/open door, cloaking, invisible render mode, extra view, object-slot reuse,
+stale observation, enemy routing and hidden-attacker notification. Live demo
+checks in both campaigns verify combat and no hidden-target acquisition/routes.
+Test browsers disable mouse capture before launch. QA-only exports are never
+included in the installed or web engine.
+
+Astra living mine showroom (pyre22)
+
+The Original and Vertigo renderers share richer brushed-metal highlights,
+paint chips, grime and oily reflections; deeper contact shading; soft projected
+hull/wing shadows driven by nearby native ships; shallow fractured rock plates
+with the matching high-resolution rock artwork; distinct cargo racks, coolant
+manifolds and reactor service buses; localized vent steam, dust and light shafts.
+The spatial edge filter runs on the current 3D viewport before the HUD. It has no
+frame history, so it cannot introduce temporal ghosting. Fine procedural grain
+fades with distance; existing trilinear/aniso texture filtering is preserved.
+
+Equipment only attaches to solid, ordinary walls and stays shallow. Nothing
+changes native geometry, portals, collision, secret doors, lighting destruction,
+flight physics, controls, weapons, music or sound. All procedural variation is
+render-local and never consumes the gameplay RNG. Shadows are bounded soft
+silhouette projections, not a full scene shadow-map or ray-tracing system.
+Reflections are material highlights, not reflected scene renders.
+
+The mine showroom offers 15 scene types, choosing real surfaces and functional
+equipment in the selected mine. Unavailable scenes are dimmed. Its seven new
+exhibits cover the new features; the shadow exhibit adds a display-only robot
+that never enters Objects. Pause and the New details comparison switch work
+together without advancing the mission. Door animations still restore their
+native state immediately. The phone controls stay compact until expanded.
+
+Source additions: foundry.inc and antialias.inc. Existing surfaces20 parcels
+remain unchanged. prepare_engine.py copies both includes into the pinned build.
+The R21 cockpit-visible demo AI is preserved byte for byte, including visibility,
+sliding and smooth steering. Test browsers disable mouse capture before launch.
+QA exports stay out of shipping engine.js. Phone checks use browser emulation;
+they are not a measurement of performance on a physical phone.
+
+Rock relief lighting compatibility (pyre22a)
+
+The rock mesh receives the same three world-space explosion lights as the
+original walls, with their native colors, room visibility and bounded falloff.
+It also receives the existing weapon light. Paused inspection clears transient
+blast inputs so an earlier combat explosion cannot remain lit in the showroom.
+An isolated renderer fixture checks warm light, blue light and out-of-range
+falloff; the shipping engine contains no fixture controls.
+
+Astra combat explosions (pyre23)
+Eight new render-only profiles share the same lifetime, radius and palette
+configuration in combat and in the explosion showroom. Small hits can produce
+Arc Snap, Ceramic Spall or Cinder Fountain. Larger detonations can produce
+Pressure Ring, Magnetic Implosion, Fuel Spiral, Canister Chain or Reactor Bloom.
+Legacy blasts remain in both selection pools. The player ship retains its
+dedicated randomized 5.9–7.0 second breakup. New profiles last 0.38–5.0 seconds
+before the existing close-impact limits. Replay and loop use the paused native
+preview. Changes use a deterministic presentation seed and the original sounds.
+The combat renderer depth-tests fragments, optical gas and streaks against
+the mine. Wall lights inherit each profile's palette and timing.
+
+Astra faster mine loading (pyre24)
+The HTML title enables its controls before constructing the 3D hangar. On the
+web, image batches in payload/stream24 contain the final pre-existing encoded
+PNG bytes, including the later surface overrides. The selected level requests
+its wall materials, animated families and doors before rendering. Robot paint
+can warm after the first frame. Other native PNG consumers have a demand
+fallback. The normal bind path uploads textures as they become visible.
+Binary effects assets avoid main-thread base64 array expansion on the web.
+The installed file:// edition retains script parcels and uses native typed-array
+base64 decoding or a bounded typed-array loop.
+
+Both editions read only the movie parcels overlapping an explicitly requested
+MVE. The index maps 48 original cinematics to byte ranges. The native player,
+robot briefings and Vertigo's extra archive continue using the original decoder.
+The loader retains at most one decoded movie and one decompressed movie parcel.
+
+Run source/pack-streaming.py WEB_GAME STANDALONE_GAME to reproduce the lossless
+web batches and both movie indices from the existing web release parcels.
+
+Astra flares and spectator visibility (pyre26)
+The seven current combat previews omit Fuel Spiral. Flares use the real native
+projectile and cast the original flickering light. The pilot can fire one at
+a door or in a dim passage. Demo fusion charging tops up a subtle tint.
+
+
+Combat inspection and shadows (pyre28)
+
+Robot armor darkens in stages with actual native health. Damage exposes glowing
+seams, jams selected cooling louvers and sheds small collision-aware fragments.
+Object signatures isolate damage histories across respawns and level changes.
+Directional shield ripples and cockpit arrows use accepted damage and actual
+collision points or explosion epicenters; invulnerability produces no false hit.
+These presentation hooks do not change weapon damage, physics or demo decisions.
+
+Optional Detailed (512) and Ultra (1024) receiver-plane shadow masks project
+ship and machinery triangles from a same-room gantry fixture. Native door travel
+drives a two-leaf shadow blocker and the shared hydraulic geometry. These are
+bounded local wall shadows, not full-scene ray tracing. Basic remains available
+for slower hardware and is the default on touch devices. Shadow quality is in
+Settings and in the mine showroom's Controls. No new art parcels are required.
+
+The effects showroom has quarter/half/normal/double speed, pause, a scrubbable
+timeline, Replay same, and New variation. Weapon effects remain in cockpit view.
+The damage/shield exhibit uses a detached robot and cosmetic shield events.
+Preview clocks drive material animation as well as particles. Scrubbing is
+silent, the mission clock remains stopped, and existing hit tints are restored
+when returning to the mine. Native damage and pause-state tests cover both
+campaigns; phone controls were checked in browser emulation.
+
+
+Enemy archive and branching discharges (pyre29)
+
+The showroom includes 25 original Overload enemy/boss forms, the Hologuide,
+and four labeled archive prototypes. The pReactorA prefab contains no mesh
+and is excluded. Enemy names and order were checked against EnemyType and
+EnemyNamesType.Refresh in the installed Assembly-CSharp.dll. Dossier fields
+come from desc_robots_EN; base armor and behavior flags come from robot_data.
+Missing dossier information is marked as unrecorded rather than invented.
+
+    python enemy_gallery.py "<OL>" "<output-game-folder>"
+
+The extractor retains original proportions and authored 1024px material maps.
+enemy-sources.json records coverage. Each model and its shared materials load
+only when selected; neither the enemy catalog nor its assets block flight.
+The WebGL1 gallery works independently of the native engine, including from
+file URLs. Closing it releases its model buffers/textures and stops rendering.
+
+Pickup corona paths use per-object deterministic visual hashes, midpoint
+displacement, short restrikes, tapered forks, soft cores and discharge sparks.
+Close pickups show up to nine independently timed discharges; distant pickups
+use fewer paths. Arcs depth-test against the pickup and the mine, do not write
+depth, and never consume simulation randomness or change pickup behavior.
+The same renderer serves both original and Vertigo campaigns.
+
+
+Descent robot archive (gallery revision 30)
+
+A separate showroom collection contains all 78 robot records from the owned
+Descent II HAM and Vertigo expansion: 24 legacy Descent I entries, 42 Descent II
+entries, and 12 Vertigo entries. This includes bosses, cloaked and spawned
+variants, prototypes and the friendly Guide-Bot. Filters separate the games.
+The shared viewer retains independent navigation state for each collection.
+
+    python descent_gallery.py "<installed-Astra-folder>" "<Vertigo-d2x.hog>"         "<dxx-redux-checkout>" "<output-game-folder>"
+
+The exporter retains the original model proportions and neutral joint offsets,
+using the same retained outer panels, bevels and fitted refit chassis as Astra.
+It reads only original game records and Astra's existing fleet/art parcels.
+Armor and scores reflect the Descent II / Vertigo records loaded by Astra;
+briefing armament descriptions are the original estimated equipment dossiers.
+Boss flags identify system order; briefing movie order is not robot ID order.
+descent-enemy-sources.json records coverage and each model/material mapping.
+
+78 lazy mesh parcels share 65 deduplicated materials. No catalog or model is
+downloaded before opening a gallery. It never starts the native engine. The
+same renderer serves both collections; closing stops its render loop. Desktop
+validation rendered all 78 Descent and all 30 Overload entries; mobile checks
+covered portrait/landscape, collection filters and rapid gallery switches.
+Flight, AI, campaign and native engine files remain at the tested pyre29 build.
+
+
+Breakaway components (pyre31)
+
+This replaces the pyre28 soot/darkening and arbitrary panel loss. Both the
+refit shader and original armor keep their normal colors at all health levels.
+Damage crossing 31%, 59% and 82% releases coherent sections of the actual model.
+The chassis is partitioned once when loaded; the same region masks remove the
+matching original outer panels and added machinery. Detached sections retain
+their textures, orientation and articulated pose. No new art download is added.
+
+About two thirds of robot deaths rupture all remaining sections. The hook runs
+at native explode_model time, before the dying-model substitution. Native debris
+objects and RNG calls still execute; only their duplicate drawing is suppressed.
+Damage, weapons, movement, AI, drops, collision bodies and scoring stay native.
+State uses object signatures and resets when the level changes.
+
+A 32-piece pool bounds cost. Fragments tumble around their section centers,
+inherit some parent velocity, sweep against native mine walls in bounded time
+steps, bounce, and emit brief impact sparks. Only visible rooms draw fragments.
+The showroom offers component loss and complete breakup across eight robots,
+with replay, rewind, slow motion and collapsible phone controls. Showroom pieces
+are reconstructed from time, so seeking cannot contaminate live damage state.
+
+Validation: both campaign damage hooks, native breakup/debris rendering override,
+unchanged native health and RNG, reused object signatures, real wall sweeps,
+pool bounds, and unchanged mission state across showroom visits. Muted browser
+tests cover eight previews, rewind/replay, mobile controls and both campaign demos.
+
+
+Level cruising, proactive door flares and wall impacts (pyre32)
+
+The demo levels retained sliding headings against the remembered mine up plane.
+Modest vertical travel uses translational thrust; steep shafts retain pitch.
+Native rotational physics and existing turn acceleration limits remain in use.
+Combat still tracks visible targets, and stationary door/switch aiming no longer
+inherits moving-target feedforward. Manual flight controls are unchanged.
+
+Route lookahead detects reachable closed doors up to 100 mine units away. It
+checks native walls, locks and keys, aims the actual flare barrel, and fires
+only when that barrel's collision ray reaches the selected door. Native flare
+collision opens it. Door shots have their own 1.5-second retry cooldown rather
+than waiting for the 14-second corridor illumination cooldown. Approach speed
+allows the flare and door animation to finish before crossing.
+
+All native projectile/wall collision notifications now include flares. Scorch
+marks work on closed doors, breakable walls, locked panels and hazardous metal.
+Liquids and forcefields retain their own native effects. Moving/open doors do
+not display floating marks. Native destructive-wall damage and door rules are
+unchanged. Nearby hits refresh and enlarge a scar; fresh impacts replace the
+oldest of six marks on the face. The global 96-mark pool remains bounded.
+
+Validation: muted 135-second demos in both campaigns, with actual flare door
+collisions opening gates before arrival; native rotational convergence from
+positive/negative pitch; steep-climb retention and locked-door rejection;
+25 projectile collision paths, fresh-mark replacement, closed-door marks and
+bounded ring reuse. Automated browsers disable pointer capture before launch.
+Test-only exports and fixture engines are not included in this release.
+
+
+Smart Mines, quad showcase and route recovery (pyre33)
+
+Deployed player and robot Smart Mines now have a depth-tested six-part body,
+unfolding arms, an exposed golden core and scanning brackets. Deployment state
+comes from native weapon lifetime and its two-second arming interval. Native
+proximity triggers, creator immunity, child spawning, target selection, homing,
+damage, ammunition and original sounds remain authoritative. Smart Mine child
+globules have gold spherical geometry; Smart Missile children use green spheres.
+The established Plasma Cannon colors and round geometry are preserved.
+
+The cockpit firing showroom adds Smart Mine deployment, arming, detonation and
+six visible homing globules approaching target drones. Smart Missiles also show
+their child burst. These isolated presentation objects never enter the mission.
+Native firing/impact sounds are used during ordinary playback; seeking is silent.
+
+The full-arsenal spectator preset now grants the separate Quad Laser flag along
+with level-six lasers. Its firing range uses native gun points 0 through 3: two
+bolts on each side. Ordinary play keeps the original Quad pickup requirement.
+Native laser firing, shot strength and flight controls have not been modified.
+
+Navigation now records 48 recent rooms, meaningful exploration, useful pickups,
+kills and actual damage dealt. Goal hysteresis avoids switching between equally
+attractive destinations. Repeated circuits without progress temporarily defer
+the stale objective and commit to a reachable destination outside recent rooms.
+If repeated recovery still produces no progress for 150 seconds, the spectator
+announces a three-second transition to the next mine; it does not count the
+unfinished mine as completed. Enemy perception and smooth rotational controls
+are unchanged.
+
+Validation: native four-projectile volleys with two barrels on each side;
+Smart Mine safety before arming and real proximity-triggered detonation; six
+actual homing children from each smart weapon, with acquired native targets;
+route-history rerouting, reachable retained goals, progress reset and announced
+tour fallback. Muted six-minute demos cover both campaigns; showroom snapshots
+cover unfolding, armed state, child bursts and quad firing. Pointer capture is
+disabled before every automated browser launch. Test exports are not shipped.
+
+Original weapon reference: Descent II instruction manual, pages 29 and 31:
+https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/273580/manuals/manual.pdf
+
+Faithful campaign materials (pyre35)
+
+Supersedes the rejected pyre34 excavation treatment. Original Counterstrike and
+Vertigo bitmaps determine surface placement, color, panel patterns, warning marks,
+transparency and every door/animated frame. No metal-to-rock region replacement
+remains. Rock occurs on native rock surfaces, including rock-faced secret doors.
+
+Materials reconstruct the active campaign palette at 256-1024 pixels using
+edge-aware native patterns, fine Overload stone/metal grain, independent normal
+and roughness maps, close-range relief and scratched finishes. Per-bitmap normal
+maps follow that bitmap's design, including layered transparent grilles. Known
+light lenses and four-cell light panels have crisp machined housings and patterned
+diffusers. Nine original safety labels are re-typeset within their native bounds.
+Previously unaliased signs, fans, water and force fields use the same material path.
+The two fine-grain sources reuse existing parcels and are primed before rendering.
+Texture-owned maps are released along with their color textures.
+
+The mine showroom offers a paused original/remastered comparison at the same
+camera position, a connected-mine overview, all regular and secret mine choices,
+and retained machinery exhibits. Supplemental machinery is shown in the showroom;
+arbitrary bay dressing no longer covers the original wall designs during play.
+The #mines link selects the showroom tab without starting a game or capturing input.
+
+Native levels, portals, collision, light destructibility, controls, demo navigation,
+weapons, combat, sounds and music retain their existing implementation. The R34
+invalid-texture rendering fallback fix is retained: inspection never writes that
+fallback into mission data. QA-only instrumentation is excluded from this build.
+
+Faithful campaign materials (pyre35)
+
+Supersedes the rejected pyre34 excavation treatment. Original Counterstrike and
+Vertigo bitmaps determine surface placement, color, panel patterns, warning marks,
+transparency and every door/animated frame. No metal-to-rock region replacement
+remains. Rock occurs on native rock surfaces, including rock-faced secret doors.
+
+Materials reconstruct the active campaign palette at 256-1024 pixels using
+edge-aware native patterns, fine Overload stone/metal grain, independent normal
+and roughness maps, close-range relief and scratched finishes. Per-bitmap normal
+maps follow that bitmap's design, including layered transparent grilles. Known
+light lenses and four-cell light panels have crisp machined housings and patterned
+diffusers. Nine original safety labels are re-typeset within their native bounds.
+Previously unaliased signs, fans, water and force fields use the same material path.
+The two fine-grain sources reuse existing parcels and are primed before rendering.
+Texture-owned maps are released along with their color textures.
+
+The mine showroom offers a paused original/remastered comparison at the same
+camera position, a connected-mine overview, all regular and secret mine choices,
+and retained machinery exhibits. Supplemental machinery is shown in the showroom;
+arbitrary bay dressing no longer covers the original wall designs during play.
+The #mines link selects the showroom tab without starting a game or capturing input.
+
+Native levels, portals, collision, light destructibility, controls, demo navigation,
+weapons, combat, sounds and music retain their existing implementation. The R34
+invalid-texture rendering fallback fix is retained: inspection never writes that
+fallback into mission data. QA-only instrumentation is excluded from this build.
+
+Faithful campaign materials (pyre35)
+
+Supersedes the rejected pyre34 excavation treatment. Original Counterstrike and
+Vertigo bitmaps determine surface placement, color, panel patterns, warning marks,
+transparency and every door/animated frame. No metal-to-rock region replacement
+remains. Rock occurs on native rock surfaces, including rock-faced secret doors.
+
+Materials reconstruct the active campaign palette at 256-1024 pixels using
+edge-aware native patterns, fine Overload stone/metal grain, independent normal
+and roughness maps, close-range relief and scratched finishes. Per-bitmap normal
+maps follow that bitmap's design, including layered transparent grilles. Known
+light lenses and four-cell light panels have crisp machined housings and patterned
+diffusers. Nine original safety labels are re-typeset within their native bounds.
+Previously unaliased signs, fans, water and force fields use the same material path.
+The two fine-grain sources reuse existing parcels and are primed before rendering.
+Texture-owned maps are released along with their color textures.
+
+The mine showroom offers a paused original/remastered comparison at the same
+camera position, a connected-mine overview, all regular and secret mine choices,
+and retained machinery exhibits. Supplemental machinery is shown in the showroom;
+arbitrary bay dressing no longer covers the original wall designs during play.
+The #mines link selects the showroom tab without starting a game or capturing input.
+
+Native levels, portals, collision, light destructibility, controls, demo navigation,
+weapons, combat, sounds and music retain their existing implementation. The R34
+invalid-texture rendering fallback fix is retained: inspection never writes that
+fallback into mission data. QA-only instrumentation is excluded from this build.
+
+Faithful campaign materials (pyre35)
+
+Supersedes the rejected pyre34 excavation treatment. Original Counterstrike and
+Vertigo bitmaps determine surface placement, color, panel patterns, warning marks,
+transparency and every door/animated frame. No metal-to-rock region replacement
+remains. Rock occurs on native rock surfaces, including rock-faced secret doors.
+
+Materials reconstruct the active campaign palette at 256-1024 pixels using
+edge-aware native patterns, fine Overload stone/metal grain, independent normal
+and roughness maps, close-range relief and scratched finishes. Per-bitmap normal
+maps follow that bitmap's design, including layered transparent grilles. Known
+light lenses and four-cell light panels have crisp machined housings and patterned
+diffusers. Nine original safety labels are re-typeset within their native bounds.
+Previously unaliased signs, fans, water and force fields use the same material path.
+The two fine-grain sources reuse existing parcels and are primed before rendering.
+Texture-owned maps are released along with their color textures.
+
+The mine showroom offers a paused original/remastered comparison at the same
+camera position, a connected-mine overview, all regular and secret mine choices,
+and retained machinery exhibits. Supplemental machinery is shown in the showroom;
+arbitrary bay dressing no longer covers the original wall designs during play.
+The #mines link selects the showroom tab without starting a game or capturing input.
+
+Native levels, portals, collision, light destructibility, controls, demo navigation,
+weapons, combat, sounds and music retain their existing implementation. The R34
+invalid-texture rendering fallback fix is retained: inspection never writes that
+fallback into mission data. QA-only instrumentation is excluded from this build.
+
+Generated mine material library (pyre36)
+
+Eight GPT Image masters supply new steel panels, hazard panels, grilles, basalt,
+blast doors, service machinery, lamp diffusers and brushed metal. The masters
+are 1254 square pixels; shipping color maps are 1024 square WebP, with matched
+512 square approximate tangent/roughness/height maps. Artwork is shared across
+native material families. The active palette supplies a modest color tint.
+Native color pixels do not limit the detail of generated surfaces.
+
+The production shader blends opposite natural-material edges and gives metal
+panels a common neutral join after palette tinting. Lamp silhouettes are analytic.
+Native masks preserve real apertures and animated door openings. Signs, arrows,
+animated displays, water, forcefields and special light grids keep their existing
+functional treatment. Original-art comparison retains each campaign bitmap.
+
+Eight script parcels total about 8.1 MB, decoded two at a time and cached. Shared
+GPU material maps avoid one large color/normal allocation per bitmap. Both public
+streaming and installed file:// editions use the same new material library.
+The showroom includes the new materials in both campaigns, with a paused
+original/remastered comparison. Levels, collision, flight controls, AI, combat,
+weapons, effects, sounds and music are unchanged. QA exports are not shipped.
+
+Smooth animated doors (pyre37)
+
+Native door cutout frames are reconstructed as continuous distance contours.
+Spatial smoothing removes the large 64-pixel stair steps; interpolation between
+adjacent contours follows the fractional native opening/closing timer. A narrow
+shaded edge provides a readable rim. The same treatment is used by the mine
+showroom, including its opening and closing preview, and concealed doors.
+
+Masks use one lazily built padded atlas per visible door clip, freed on level
+changes. They are computed from owned native data and require no new downloads.
+The renderer reads wall state and active-door timing without changing either.
+Collision, triggers, locks, auto-close timing, sounds, flight controls and demo AI
+retain their existing behavior. Original comparison still uses native cutouts.
+
+Physical mine details and material variety (pyre38)
+
+Both campaigns use shallow, UV-aligned 3D ventilation slats, service pipes,
+flanges, lamp housings and raised panel rails on eligible solid surfaces.
+Fixtures fit inside skewed quads, avoid portals, secrets and functional overlays,
+and use bounded distance/budget limits. Detailed textured backing plates and
+rough metal shading retain depth without placing obstacles in the flight path.
+Four added showroom exhibits include vent/conduit samples when the chosen mine
+has no matching surface. The comparison view restores native surfaces.
+
+Three colored fixture lights per room add bounded diffuse spill and rough
+specular highlights. They read original lamp state, stop when broken and remain
+inside their owning convex segment. Recess shading, up-to-16x anisotropy (limited
+by hardware), mipmaps and distance-filtered normals/highlights improve stability.
+No temporal blur, camera shake or flight changes are introduced.
+
+Four additional GPT Image material families: reinforced alloy panels, chipped
+painted armor, service manifolds and deep slatted grilles. Native 1254-square
+masters are packaged as 1024 color / 512 derived normal-roughness-height maps.
+The new parcels total 4.06 MB and load on demand. Approximate material channels
+are derived from luminance, not physically measured PBR scans. Common shader
+joins retain compatible tile edges; regional palette cues remain native.
+
+Door panels gain physical contour thickness, moving surface markings, travelling
+rail carriages, hydraulic collars and retracting locking pins. Only the facing
+wall draws hardware, preventing the reverse leaf from crossing the aperture.
+Native SDF mask/timing remains authoritative. CPU mask copies are freed with
+the GPU atlas on level changes. Concealed doors do not reveal extra hardware.
+
+No changes to AI, movement, controls, native collision, triggers, locks, sounds,
+music, weapons or level data. Added renderer includes are installed by
+prepare_engine.py; engine.patch remains based on pinned upstream DXX-Redux.
+
+Mission-driven spectator pilot (pyre39)
+
+The live demo retains a persistent mission through fights and short local
+supply stops. It seeks keys and usable linked switches, navigates to the
+reactor, then crosses the real native exit trigger. A separate potential-gate
+route identifies prerequisites without permitting flight through locked doors.
+Unshootable/used overlays are excluded; shootable switches use their original
+texture mask to select an actual panel point. Fly-through triggers are crossed.
+Optional supplies cannot continuously replace the mission. Key approaches only
+time out locally, not while travelling a winding route. Low energy can prompt
+a visit to the native recharge room. There is no automatic lost-route level skip.
+
+Enemy acquisition still requires recent main-cockpit rendered visibility and
+native line-of-sight. Every primary barrel and missile launch lane is checked
+against actual geometry. Offset-barrel aiming avoids straddling small targets.
+Partial visibility does not authorize firing into an occluding corner. Blocked
+lanes prompt translation toward clearance; an unproductive engagement is briefly
+deferred so the pilot can resume its route. Swept-hull portal approaches avoid
+cutting across ledges. Original smooth rotational control and upright reference
+are retained. Telemetry distinguishes native completion from manual Next mine.
+
+Visible reactor guardians are handled using their native weapon immunities.
+Rear-armored guardians prompt a flanking approach. Last-seen rooms are remembered
+briefly; hidden/cloaked enemies do not supply live locations or firing permission.
+
+No changes to manual flight controls, physics, weapons, damage, collision,
+levels, triggers, keys, sounds, music or rendering. The existing optional full
+demo arsenal remains user-selectable. Test-only scenario exports are excluded
+from the shipping engine. engine.patch is based on pinned upstream DXX-Redux.
+
+Mission route preservation (pyre40)
+
+Autonomous travel excludes optional secret-level warps while playing a regular
+mine, and excludes exit triggers until the reactor is cleared. The same guard
+applies to prerequisite planning, swept-hull shortcuts, dodges and recovery.
+Secret mines still use their native return exits after the objective is cleared.
+Manual controls, native triggers, weapon rays and campaign data are unchanged.
+
+Contact awareness and ten new detonations (pyre41)
+
+Actual robot contact and incoming projectile impacts provide a frozen bearing
+for a bounded, smooth defensive turn and collision-checked separation. Unseen
+robots cannot be tracked or fired at. Passive sensing still requires sight.
+Ten additional detailed compositions join the live impact/destruction pools.
+The showroom numbers all eighteen entries, including player destruction, with
+deterministic replay, scrubbing and randomized variations. New lifetimes range
+from 0.42 to 5.05 seconds; the player breakup remains the longest. Existing
+near-camera attenuation, occluded mine illumination and native sound remain.
+Manual movement, native weapon damage and campaign geometry are unchanged.
+
+Water and molten lava (pyre42)
+
+Water uses continuous world-space waves, analytic ripple normals, angle-dependent
+reflections sampled from the actual room walls, shallow/deep coloring and foam
+only at boundaries. Shared coplanar liquid edges do not acquire artificial seams.
+Lava has slowly moving basalt plates, irregular incandescent fissures, pressure
+blisters and animated orange fixture light confined to its native mine segment.
+Both use existing geometry, masks, depth tests and native hazard rules. The mine
+showroom gains water and lava exhibits in levels containing those surfaces.
+No new texture downloads. Manual controls and demo AI are unchanged from R41.
+
+Player destruction audio and renderer stalls (pyre43)
+
+Twelve seeded, staggered hull-failure beats accompany the existing player breakup.
+Pitch layers and a short filtered echo tail are derived from loaded Descent II
+samples, cached in bounded buffers, and played through the original SDL mixer.
+The sequence lasts approximately eight to ten seconds including the tail. The
+same seed and beat clock drive live destruction and the showroom. Native SFX
+volume, pause, stop and demo mute remain authoritative; music is unchanged.
+Seeking backwards/replaying restores the sound sequence; scrubbing is silent.
+
+Shadow passes retain all geometry, map resolutions and draw budgets. The renderer
+mirrors depth-write/clear-color state at every native writer instead of repeatedly
+querying the driver. Shadow render targets are validated when created/resized.
+Bloom uses two permanently attached ping-pong framebuffers, validated on resize.
+The same shaders, textures, samples, resolution, light and effect counts remain.
+Reference showroom screenshots are pixel-identical before and after the change.
+No changes to flight controls, demo AI, native damage, campaign data or weapons.
+
+Varied wall materials and colored service lighting (pyre44)
+
+Four additional GPT Image material families: navy bulkheads, diagonal ventilation,
+ceramic service panels and copper radiator/manifold walls. A generated 1254-square
+master supplies four 627-square quadrants, packaged into 1024 color / 512 matched
+detail maps using the existing seam treatment, mipmaps and anisotropic filtering.
+Luminance-derived normal/roughness/height maps are visual approximations, not
+measured PBR. The four families stream on demand; the initial eight-map preload
+is unchanged. The extra download is about 4.2 MB if all four families are needed.
+
+Shallow red, blue, cyan and amber diffusers have metal guards and stamped service
+numbers. Geometry and light share one safe face mount. Nearby colored light is
+limited to the owning convex segment, with the existing three-light shader budget.
+Selected neutral work lamps also gain sector color filters, bringing colored
+light into rock corridors. Existing colored lamps retain their native colors;
+white work-light rooms remain interspersed. Native broken lights, functional
+overlays, secret doors and hazards remain authoritative. No collision or AI changes.
+
+The mine showroom now has 25 exhibits, including four lighting palettes. A palette
+absent from a mine is demonstrated on an existing safe service mount while in
+the showroom. Paused inspection restores the original gameplay state.
+
+Architectural lighting, warm ventilation and metal reflections (pyre45)
+
+Long segmented red/blue/cyan/amber channels follow the edges of safe solid mine
+panels. Larger faces can carry a matching second strip. Metal frames, individual
+diffuser cells, fasteners and service plates use the existing material library.
+The three existing room-light slots now support elongated sources: metal highlights
+follow the length of the strip instead of a single point. Fittings and pipes also
+receive nearby fixture colors. No new texture downloads or higher light budgets.
+
+Original ventilation grilles gain warm internal cells and slow turning fan blades
+behind their fixed protective bars. The mild amber pulse has no strobing. Native
+broken lights stop contributing. Decorative mounts reject portals, secret panels,
+functional overlays and hazardous surfaces. Collision and simulation are unchanged.
+
+The mine showroom has 27 exhibits, adding warm ventilation/moving fans and strip
+reflections. Cameras frame the longer channels without hiding them under controls.
+Showroom samples are render-only; both campaigns, flight controls, weapons, audio,
+explosions and demo AI remain unchanged. Existing 22-draw fixture budget is retained.
