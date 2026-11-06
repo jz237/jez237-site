@@ -412,7 +412,8 @@ test('no "Picture coming soon" left in the reef path: every tile, result, could-
 });
 
 test('coral crops: every crop is used, keys and hashes match the receipt, upload state matches IMAGE_SOURCE', () => {
-  const used = new Set([...Object.values(CORAL_SET.kinds), ...Object.values(CORAL_SET.signs), ...Object.values(CORAL_SET.conditions).flat()]);
+  // Three sign tiles added in the Nov 6 logic check use library close-ups (lib-*), not coral crops.
+  const used = new Set([...Object.values(CORAL_SET.kinds), ...Object.values(CORAL_SET.signs), ...Object.values(CORAL_SET.conditions).flat()].filter(id => !id.startsWith('lib-')));
   assert.deepEqual([...used].sort(), Object.keys(CORAL_CROPS).sort(), 'every crop is used and every used id exists');
   assert.equal(coralReceipt.requestedModel, 'openai/gpt-image-2.6-sunburst');
   assert.equal(coralReceipt.requestedQuality, 'medium');

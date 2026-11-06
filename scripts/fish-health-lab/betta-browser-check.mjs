@@ -67,7 +67,7 @@ try {
   checks.push('betta symptom grid: 12/12 betta pictures, all load');
 
   // Betta results: hero, could-also thumbnails, detail gallery, step pictures.
-  for (const [sign, opts, expected] of [['fins', {}, 'fin-rot'], ['dust', {}, 'velvet-fresh'], ['dots', { texture: 'dots' }, 'ich-fresh'], ['swollen', {}, 'bloat'], ['eyes', { closer: 'cloudy' }, 'cloudy-eye'], ['patch', { closer: 'pits' }, 'hole-in-head']]) {
+  for (const [sign, opts, expected] of [['fins', {}, 'fin-rot'], ['dust', {}, 'velvet-fresh'], ['dots', { texture: 'dots' }, 'ich-fresh'], ['swollen', { closer: 'flat' }, 'bloat'], ['eyes', { closer: 'cloudy' }, 'cloudy-eye'], ['patch', { closer: 'pits' }, 'hole-in-head']]) {
     await toResult('fresh', 'betta', sign, opts);
     assert.equal(await page.locator('.result-focus').getAttribute('data-result'), expected);
     assert.equal(await page.locator('.result-focus .result-image img').getAttribute('data-image-set'), 'betta');

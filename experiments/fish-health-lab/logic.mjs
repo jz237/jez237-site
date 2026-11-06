@@ -15,7 +15,7 @@ export function assessUrgency(input) {
   if (signs.has('gasping')) urgent.push('Severe or continuous gasping');
   if (signs.has('collapse')) urgent.push('Loss of balance with poor responsiveness');
   if (signs.has('deaths')) urgent.push('Fish deaths during this problem');
-  if (signs.has('pinecone')) urgent.push('Raised, pinecone-like scales');
+  if (signs.has('pinecone') || (signs.has('swollen') && input.closer === 'pinecone')) urgent.push('Raised, pinecone-like scales');
   if (input.water === 'marine' && (signs.has('breathing') || signs.has('gasping')) && signs.has('dust')) urgent.push('Marine fish with fast breathing and a fine dusting');
   const ammonia = numeric(input.ammonia), nitrite = numeric(input.nitrite);
   if (ammonia !== null && ammonia > 0) checks.push('Ammonia is detectable—do a water change and add a detoxifier now.');

@@ -68,6 +68,14 @@ export const CLOSER_QUESTIONS = {
       { id: 'unclear', title: 'Not sure', text: 'Go with the most common cause' },
     ],
   },
+  swollen: {
+    title: 'Look from above: what are the scales doing?', hint: 'Dropsy is serious, so check this one.',
+    choices: [
+      { id: 'flat', title: 'Lying flat and smooth', text: 'Just a round, full belly' },
+      { id: 'pinecone', title: 'Sticking out like a pine cone', text: 'Scales raised all over the body' },
+      { id: 'unclear', title: 'Not sure', text: 'Go with the most common cause' },
+    ],
+  },
   eyes: {
     title: 'What is happening to the eye?', hint: 'Compare both eyes.',
     choices: [
@@ -257,7 +265,7 @@ export const CONDITIONS = [
     id: 'dropsy', title: 'Dropsy', scope: 'both', kind: 'Internal infection', art: 'swollen', urgency: 'today',
     summary: 'Fluid builds up inside the fish, so it swells and the scales stick out like a pinecone. A sign of a serious internal problem.',
     hint: 'Swollen body with scales sticking out like a pinecone.',
-    weights: { swollen: 3, pinecone: 9, appetite: 1, balance: 1 },
+    weights: { swollen: 3, 'swollen:pinecone': 9, 'swollen:flat': 1, pinecone: 9, appetite: 1, balance: 1 },
     clues: ['A swollen body; seen from above, the scales stick out like a pinecone.', 'Often lethargic, not eating, sometimes bulging eyes.'],
     distinguish: 'A swollen belly without pineconing is more often bloat, constipation or eggs.',
     check: 'Pinecone scales on a swollen fish are the classic sign of dropsy.',
@@ -268,7 +276,7 @@ export const CONDITIONS = [
     id: 'bloat', title: 'Bloat or constipation', scope: 'both', kind: 'Digestion', art: 'swollen', urgency: 'week',
     summary: 'A swollen belly from overfeeding, dry food or a blocked gut—usually fixable with a short fast.',
     hint: 'Swollen belly but scales lie flat.',
-    weights: { swollen: 6, appetite: 1, balance: 3 },
+    weights: { swollen: 6, 'swollen:pinecone': 1, appetite: 1, balance: 3 },
     clues: ['A round, swollen belly with scales lying flat.', 'Stringy poop or no poop, sometimes floating or tilting.'],
     distinguish: 'If the scales start to stick out like a pinecone, it’s dropsy. Females may just be full of eggs.',
     check: 'A swollen belly with flat scales is most often bloat or constipation.',

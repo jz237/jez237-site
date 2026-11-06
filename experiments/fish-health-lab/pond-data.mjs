@@ -113,7 +113,7 @@ export const POND_CONDITIONS = [
   {
     id: 'pond-poor-water', group: 'pond', title: 'Poor water (ammonia or nitrite)', kind: 'Water', urgency: 'today',
     summary: 'In spring the fish wake up before the filter does, and in summer an overstocked or overfed pond builds up ammonia. Fish hang listless with clamped, sometimes reddened fins.',
-    weights: { unclear: 4, gasping: 3, 'red-streaks': 3, lethargic: 2, flashing: 1 },
+    weights: { unclear: 4, gasping: 3, 'red-streaks': 3, lethargic: 3, flashing: 1 },
     changes: { spring: 3, pump: 3, 'new-fish': 1 },
     check: 'Several fish hanging listless, clamped or red-finned usually points to the water—test ammonia and nitrite first.',
     clues: ['Several fish off at once.', 'Spring start-up, a filter that was cleaned or stopped, lots of fish or heavy feeding.'],
@@ -193,8 +193,9 @@ export const POND_CONDITIONS = [
   {
     id: 'winter-rest', group: 'pond', title: 'Normal winter rest', kind: 'Normal', urgency: 'watch', natural: true,
     summary: 'Below about 50 °F (10 °C) pond fish slow right down, sit on the bottom and stop eating. That’s normal.',
-    weights: { lethargic: 4, unclear: 2 },
-    changes: { cold: 4 },
+    // Only the main answer when the cold chip is picked (a fish on the bottom in summer is not normal).
+    weights: { lethargic: 2, unclear: 1 },
+    changes: { cold: 5 },
     check: 'Fish resting on the bottom in cold water is normal winter behaviour.',
     clues: ['Water under about 50 °F (10 °C).', 'All the fish together, looking healthy, just slow.'],
     distinguish: 'One fish alone with clamped fins or red marks, or any fish in warm water, is not normal.',

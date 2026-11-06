@@ -670,3 +670,19 @@ fish-type sets). Library cards lead with a picture. Tap any picture to enlarge. 
 Coral, invert and pond pages got the same guide the same day (156 close-ups, `library-reef-images-data.mjs`, receipt `library-reef-images-20261106.json`; `REEF_LIB_INFO` gives “Where to look” chips for corals/inverts and the fish map for pond).
 
 Ich, velvet and cottony growth first reused the painted prototype sheets as their close-ups, which looked different from every other page (Jez, 10:23 EST: “The ich reference looks different than the rest”). They now have photo close-ups like the rest (sheet `library-classic`, 12 more crops, 96 in total); the original six sheets each follow as “Reference sheets”.
+
+## Logic check, 2026-11-06
+
+Jez, 10:37 EST: “Scan the whole sick fish sections for logic problems just to be safe.” Every answer path
+was run (fish: water × fish type × sign × closer × lump surface × each behaviour; reef/pond: group × kind ×
+sign × each “anything changed” chip; the medicine matrix). Fixed:
+- Swollen fish now get a “Look from above: what are the scales doing?” question (flat → bloat, pine cone →
+  dropsy, urgent). Before, dropsy was only reachable through the “pinecone” behaviour checkbox.
+- Pond “Sitting on the bottom” no longer says “Normal winter rest” unless “Cold snap or winter” is picked
+  (otherwise poor water leads, winter rest stays a plain line).
+- Shrimp/crab/snail “Not moving” with no animal picked no longer jumps to the snail-only “stuck upside down”.
+- Three coral answers had no sign of their own and could never be the main answer (slow tissue loss,
+  starved, wrong spot); new tiles “White creeping up from the base” (SPS), “Pale and pastel”, “Bent over or
+  stung” use library close-ups.
+- Medicine check wording says “the pond” / “a separate tub” for ponds.
+Unchanged by design: the fish “normal” and coral “normal” entries only appear as the plain “may be normal” line.

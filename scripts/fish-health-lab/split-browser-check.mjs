@@ -62,10 +62,10 @@ const setFor = (fish, id) => FISH_SETS[fish].conditions[id] ? fish : 'generic';
 // One result per new freshwater group, each showing a picture specific to the split.
 const WALKS = [
   ['angelfish', 'patch', { closer: 'pits' }, 'hole-in-head', ['angelfish-hole-in-head'], 'angelfish/discus hole-in-the-head (discus)'],
-  ['african', 'swollen', {}, 'bloat', ['cichlid-swollen', 'african-malawi-bloat'], 'African/oscar bloat + Malawi bloat'],
+  ['african', 'swollen', { closer: 'flat' }, 'bloat', ['cichlid-swollen', 'african-malawi-bloat'], 'African/oscar bloat + Malawi bloat'],
   ['cory', 'sores', { closer: 'open' }, 'ulcer', ['catfish-sores', 'cory-red-belly'], 'cory ulcer + red sore belly'],
-  ['pleco', 'swollen', {}, 'bloat', ['pleco-swollen', 'pleco-sunken-belly'], 'pleco bloat + sunken belly'],
-  ['guppy', 'swollen', {}, 'bloat', ['guppy-swollen', 'livebearer-pregnant'], 'guppy bloat + pregnant female'],
+  ['pleco', 'swollen', { closer: 'flat' }, 'bloat', ['pleco-swollen', 'pleco-sunken-belly'], 'pleco bloat + sunken belly'],
+  ['guppy', 'swollen', { closer: 'flat' }, 'bloat', ['guppy-swollen', 'livebearer-pregnant'], 'guppy bloat + pregnant female'],
   ['molly', 'unclear', {}, 'water', ['livebearer-breathing', 'livebearer-red-gills', 'molly-unclear'], 'molly/platy water problem + shimmies'],
   ['gourami', 'sores', { closer: 'open' }, 'ulcer', ['gourami-sores', 'gourami-dgd'], 'gourami ulcer + dwarf gourami disease'],
   ['barb', 'dots', { texture: 'dots' }, 'ich-fresh', ['barb-dots', 'barb-school-dots'], 'barb/danio ich (one fish + a school)'],

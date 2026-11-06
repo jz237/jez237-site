@@ -252,14 +252,15 @@ export function checkMedicine({ medicine, water, residents = [], hospital = fals
 // The one-line headline for the overall answer.
 export function headline(result) {
   if (!result) return '';
-  const { verdict, hospital, rows } = result;
+  const { verdict, hospital, rows, water } = result;
+  const here = water === 'pond' ? 'the pond' : 'this tank', apart = water === 'pond' ? 'a separate tub' : 'a hospital tank';
   if (hospital) {
-    if (verdict === 'kills') return 'Not for these fish, even in a hospital tank—pick a gentler medicine.';
-    return verdict === 'ok' ? 'Fine to use in a hospital tank.' : 'OK in a hospital tank—use with care.';
+    if (verdict === 'kills') return `Not for these fish, even in ${apart}—pick a gentler medicine.`;
+    return verdict === 'ok' ? `Fine to use in ${apart}.` : `OK in ${apart}—use with care.`;
   }
   const killed = rows.filter(r => r.verdict === 'kills' && r.id !== 'filter').map(r => r.title.toLowerCase());
-  if (verdict === 'kills') return killed.length ? `Not in this tank—it will kill your ${killed.join(' and ')}. Use a hospital tank.` : 'Not in this tank—use a hospital tank.';
-  if (verdict === 'hospital') return 'Not in this tank—treat the fish in a separate hospital tank.';
+  if (verdict === 'kills') return killed.length ? `Not in ${here}—it will kill your ${killed.join(' and ')}. Use ${apart}.` : `Not in ${here}—use ${apart}.`;
+  if (verdict === 'hospital') return `Not in ${here}—treat the fish in ${apart}.`;
   if (verdict === 'care') return 'You can use it here, with care.';
-  return 'Fine to use in this tank.';
+  return `Fine to use in ${here}.`;
 }

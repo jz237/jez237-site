@@ -16,6 +16,7 @@ import { MEDIA_BASE } from './fish-images-data.mjs';
 import { CROPS as INVERT_CROPS, IMAGE_SOURCE as INVERT_IMAGE_SOURCE } from './reef-images-inverts-data.mjs';
 import { CROPS as CORAL_CROPS, IMAGE_SOURCE as CORAL_IMAGE_SOURCE } from './reef-images-corals-data.mjs';
 import { CROPS as POND_CROPS, IMAGE_SOURCE as POND_IMAGE_SOURCE } from './reef-images-pond-data.mjs';
+import { CROPS as LIB_REEF_CROPS, IMAGE_SOURCE as LIB_REEF_IMAGE_SOURCE } from './library-reef-images-data.mjs';
 import { CROPS as FIX_CROPS, IMAGE_SOURCE as FIX_IMAGE_SOURCE } from './fish-images-fixes-data.mjs';
 
 // 'media' = content-hashed R2 keys on media.jez237.com; 'local' = the untracked
@@ -25,6 +26,7 @@ const urlFor = (entry, source) => source === 'media' ? MEDIA_BASE + entry.key : 
 export const invertUrlFor = entry => urlFor(entry, INVERT_IMAGE_SOURCE);
 export const coralUrlFor = entry => urlFor(entry, CORAL_IMAGE_SOURCE);
 export const pondUrlFor = entry => urlFor(entry, POND_IMAGE_SOURCE);
+const libReefUrlFor = entry => urlFor(entry, LIB_REEF_IMAGE_SOURCE);
 // Clean-up retakes (Nov 6 2026) replace a published invert crop under the same id.
 const fixUrlFor = entry => urlFor(entry, FIX_IMAGE_SOURCE);
 const fixesFor = set => Object.fromEntries(Object.entries(FIX_CROPS).filter(([, e]) => e.set === set).map(([id, e]) => [id, { ...e, fixed: true }]));
@@ -37,7 +39,8 @@ const merged = (crops, fixes) => ({ ...crops, ...Object.fromEntries(Object.entri
 const invertFixes = fixesFor('invert'), pondFixes = fixesFor('pond');
 const invertPic = picker(merged(INVERT_CROPS, invertFixes), entry => entry.fixed ? fixUrlFor(entry) : invertUrlFor(entry), 'invert');
 const pondPic = picker(merged(POND_CROPS, pondFixes), entry => entry.fixed ? fixUrlFor(entry) : pondUrlFor(entry), 'pond');
-const coralPic = picker(CORAL_CROPS, coralUrlFor, 'coral');
+// New coral sign tiles (Nov 6 2026 logic check) use library close-ups: slow tissue loss, starved, wrong spot.
+const coralPic = picker({ ...CORAL_CROPS, ...Object.fromEntries(Object.entries(LIB_REEF_CROPS).map(([id, e]) => [id, { ...e, lib: true }])) }, entry => entry.lib ? libReefUrlFor(entry) : coralUrlFor(entry), 'coral');
 
 // Which crop goes where. Kind-specific keys (`crab:…`) win over the plain key.
 export const INVERT_SET = {
@@ -100,6 +103,7 @@ export const CORAL_SET = {
     'soft:slugs': 'sign-soft-slugs',
     'sps:bites': 'sign-sps-bites', 'soft:bites': 'sign-soft-bites', 'anemone:bites': 'sign-anemone-bites',
     'anemone:unclear': 'sign-anemone-unclear',
+    creeping: 'lib-stn-1', pastel: 'lib-low-nutrients-1', blasted: 'lib-flow-placement-1',
   },
   conditions: {
     bleaching: ['cond-bleaching', 'sign-lps-bleach', 'sign-anemone-bleach'],
