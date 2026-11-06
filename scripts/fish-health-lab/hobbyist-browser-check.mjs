@@ -83,7 +83,7 @@ try {
   record('plain opening heading, hobbyist language and exactly two required water choices');
 
   await page.locator('input[value="marine"]').check(); await next(page);
-  assert.deepEqual(await page.locator('input[name="fishType"]').evaluateAll(els=>els.map(el=>el.value)),['clownfish','tang','angel','wrasse','damsel','']);
+  assert.deepEqual(await page.locator('input[name="fishType"]').evaluateAll(els=>els.map(el=>el.value)),['clownfish','tang','angel','wrasse','goby','damsel','dottyback','']);
   assert.equal(await page.locator('#next-button').innerText(),'Skip →');
   await next(page);
   await page.locator('#symptom-grid img').evaluateAll(imgs=>Promise.all(imgs.map(img=>img.decode())));
@@ -203,7 +203,7 @@ try {
   // Approved named conditions and fish-type re-weighting through the real UI.
   for (const [water,sign,fish,closer,id,reef] of [
     ['fresh','fins','betta','unclear','fin-rot',false], ['fresh','balance','goldfish','unclear','swim-bladder',false],
-    ['fresh','eyes','','bulging','popeye',false], ['fresh','patch','cichlid','pits','hole-in-head',false],
+    ['fresh','eyes','','bulging','popeye',false], ['fresh','patch','angelfish','pits','hole-in-head',false],
     ['marine','patch','clownfish','slime','brooklynella',true], ['marine','patch','clownfish','unclear','brooklynella',true],
     ['marine','dots','tang','black','black-spot',true], ['marine','patch','tang','pits','hlle',false],
     ['marine','sores','damsel','open','uronema',true], ['fresh','sores','','streaks','septicemia',false],
@@ -223,7 +223,7 @@ try {
   assert.equal(await page.locator('input[name="fishType"]:checked').inputValue(),'clownfish');
   await action(page,'back').click(); await page.locator('input[name="water"][value="fresh"]').check(); await next(page);
   assert.equal(await page.locator('input[name="fishType"]:checked').count(),0);
-  assert.deepEqual(await page.locator('input[name="fishType"]').evaluateAll(els=>els.map(el=>el.value)),['betta','goldfish','community','livebearer','cichlid','catfish','']);
+  assert.deepEqual(await page.locator('input[name="fishType"]').evaluateAll(els=>els.map(el=>el.value)),['betta','goldfish','guppy','molly','community','barb','gourami','angelfish','african','cory','pleco','']);
   record('Back preserves the fish type; changing water clears it and swaps the fish list');
 
   const mobile = await context.newPage();

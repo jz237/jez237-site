@@ -341,7 +341,7 @@ function fishGallery(condition, water) {
   if (!own.fishSpecific) return generic;
   const fish = fishTypeFor(water, fishType);
   const pics = own.images.map(image => `<figure><img src="${image.url}" width="${image.width}" height="${image.height}" alt="${escape(image.alt)}" data-image-set="${fishType}"><figcaption>${escape(image.caption || '')}</figcaption></figure>`).join('');
-  return `<section class="fish-gallery" data-fish-gallery="${fishType}" aria-label="${escape(fish?.title || '')} pictures"><div class="fish-gallery-row">${pics}</div><small class="image-origin-note">AI illustrations of a ${escape((fish?.title || 'fish').toLowerCase())}.</small></section>${generic ? `<details class="more-pictures"><summary>More pictures (other fish)</summary>${generic}</details>` : ''}`;
+  return `<section class="fish-gallery" data-fish-gallery="${fishType}" aria-label="${escape(fish?.title || '')} pictures"><div class="fish-gallery-row">${pics}</div><small class="image-origin-note">AI illustrations of ${escape(fish?.plural || 'fish')}.</small></section>${generic ? `<details class="more-pictures"><summary>More pictures (other fish)</summary>${generic}</details>` : ''}`;
 }
 
 function openDetail(id, slotId = 'overview') {

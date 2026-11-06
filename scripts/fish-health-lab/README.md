@@ -53,9 +53,10 @@ named and that treatment specifics stay out. Branch
   dots, pale patches, red sores and eyes] → behavior (+ optional extra
   pictures) → [lump surface if any lump] → results. Optional water readings and
   tank history come after results (Care & treatment). One question per screen.
-- Fish type: freshwater betta, goldfish, tetra/rasbora, livebearer,
-  cichlid/angelfish/discus, catfish/pleco/cory; saltwater clownfish, tang,
-  angelfish/butterflyfish, wrasse/goby/blenny, damsel/chromis; plus “Not sure /
+- Fish type (split further 2026-11-05, see “Fish-type split” below): freshwater
+  betta, goldfish, guppy, molly/platy, tetra/rasbora, barb/danio, gourami,
+  angelfish/discus, African cichlid/oscar, cory, pleco; saltwater clownfish, tang,
+  angelfish/butterflyfish, wrasse, goby/blenny, damsel/chromis, dottyback/basslet; plus “Not sure /
   other” (skippable, button reads “Skip →”). Small inline SVG silhouettes, no
   generated images. Back preserves it; changing water clears it. Boosts only
   re-weight conditions that already fit the chosen sign (e.g. clownfish →
@@ -409,3 +410,47 @@ before dosing” from the explicit `TREATMENT_FAMILY` map; 'normal' is never a c
 pregnant-livebearer wording); at most 3 cards, ranking otherwise unchanged.
 Tests: diagnosis.test.mjs (cap, normal, danger, treatment families, swap for every
 listed look-alike) and browser-check.mjs (compare + swap through the real UI).
+
+## Fish-type split, 2026-11-05 (published)
+
+Jez, 2026-11-05 20:33 EST: “yes i do. and split up the salt water that way as well
+although dont do those pics yet”. The “What kind of fish?” step now has 11 freshwater
+types (3 per row on a phone, 4 rows with Not sure) and 7 saltwater types.
+
+- Splits: livebearer → guppy + molly/platy; cichlid → angelfish/discus + African
+  cichlid/oscar; catfish → cory + pleco; new gourami and barb/danio. Saltwater:
+  wrasse/goby/blenny → wrasse + goby/blenny; new dottyback/basslet. Old ids keep
+  working (`LEGACY_FISH_IDS` in data.mjs: livebearer → guppy, cichlid → angelfish,
+  catfish → cory) for `fishTypeFor`, `fishSetFor` and `imagesFor`. Tips and boosts are
+  keyed by the new ids (Malawi bloat for Africans, dwarf gourami disease, cory red
+  belly/barbels, pleco diet, molly shimmies, guppy Camallanus note, barb fin-nipping).
+- Pictures: every published livebearer/cichlid/catfish cell that shows the right fish
+  is re-used through `freshSet(..., { reuse })` in fish-images.mjs (receipt
+  `reusedPublished`); the four German blue ram cells fit neither cichlid group and stay
+  published but unused. New cells fill the gaps: gourami and barb/danio full A+B sets,
+  pleco mostly new, angelfish/discus, African/oscar, guppy, cory and molly gap cells,
+  plus Malawi bloat, cory red belly, pleco sunken belly, molly pregnant/shimmies,
+  gourami disease and a barb/danio school with ich. Three injury cells were cropped
+  from the unused cells of the already-generated `fresh-injury` repair sheet.
+  Saltwater has selector tiles only (goby/blenny and dottyback/basslet are new); its
+  results use the generic marine pictures.
+- 134 new 362×362 crops (126 set cells + 8 fish-type tiles), not resized, in
+  `fish-images-split-data.mjs` (`IMAGE_SOURCE = 'local'`, untracked
+  `local-images/<group>/`), receipt `split-images-20261105.json` (prompts, sheet
+  hashes, choices/repairs, review, `uploaded: false`). Sheets: 11 group/tile sheets
+  plus two repair sheets, requested `openai/gpt-image-2.6-sunburst` medium, all
+  reported that model (backend not independently verified). Scripts and originals:
+  `workspace/tmp/imagegen/fish-health-split-20261105/`,
+  `/home/jez237/.openclaw/media/tool-image-generation/fish-health-split-20261105/`.
+- Published 2026-11-05 (Jez's request, Claw approved): all 134 new crops uploaded and
+  byte-verified (`workspace/tmp/fish-health-split-publish-20261105/upload-verification.json`),
+  receipt `uploaded: true`, `IMAGE_SOURCE = 'media'`. Saltwater fish-type pictures are
+  still not generated (Jez: "dont do those pics yet").
+- Publish procedure (no code change): upload every receipt asset to
+  `jez237-site-media/<r2Key>`, byte-verify, mark the assets `uploaded: true`, then set
+  `IMAGE_SOURCE = 'media'` in fish-images-split-data.mjs.
+- Checks: fish-images.test.mjs (every split group complete, new-or-re-used crops,
+  old ids, receipt hashes, every fish type has a tile) and `split-browser-check.mjs`
+  (both fish-type grids at 390 px, one result per new freshwater group through hero,
+  could-also, compare and gallery, pleco HITH fallback, saltwater generic fallback;
+  `FISH_LAB_SHOTS=<dir>` saves fish-type-grid.png and results.jpg).

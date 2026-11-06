@@ -90,22 +90,35 @@ export const FISH_TYPES = {
   fresh: [
     { id: 'betta', plural: 'bettas', title: 'Betta', text: 'Siamese fighting fish', icon: 'betta', boosts: { 'velvet-fresh': 2, 'fin-rot': 2, dropsy: 1, bloat: 1 } },
     { id: 'goldfish', plural: 'goldfish', title: 'Goldfish', text: 'Fancy, common or koi', icon: 'goldfish', boosts: { 'swim-bladder': 3, bloat: 2, flukes: 2, ulcer: 2 } },
+    { id: 'guppy', plural: 'guppies', title: 'Guppy', text: 'Fancy & endler', icon: 'livebearer', boosts: { columnaris: 3, 'fin-rot': 2 } },
+    { id: 'molly', plural: 'mollies and platies', title: 'Molly / platy', text: 'Incl. swordtails', icon: 'livebearer', boosts: { columnaris: 3, bloat: 1 } },
     { id: 'community', plural: 'tetras and rasboras', title: 'Tetra / rasbora', text: 'Small community fish', icon: 'tetra', boosts: { 'ich-fresh': 1, columnaris: 1 } },
-    { id: 'livebearer', plural: 'livebearers', title: 'Guppy / molly / platy', text: 'Livebearers', icon: 'livebearer', boosts: { columnaris: 3 } },
-    { id: 'cichlid', plural: 'cichlids', title: 'Cichlid / angelfish / discus', text: 'Including oscars & Africans', icon: 'cichlid', boosts: { 'hole-in-head': 3, bloat: 1, flukes: 1 } },
-    { id: 'catfish', plural: 'catfish', title: 'Catfish / pleco / cory', text: 'Bottom dwellers', icon: 'catfish', boosts: {} },
+    { id: 'barb', plural: 'barbs and danios', title: 'Barb / danio', text: 'Tiger barb & zebras', icon: 'tetra', boosts: { 'ich-fresh': 2, injury: 2 } },
+    { id: 'gourami', plural: 'gouramis', title: 'Gourami', text: 'Dwarf, honey, pearl', icon: 'betta', boosts: { ulcer: 2, bloat: 2 } },
+    { id: 'angelfish', plural: 'angelfish and discus', title: 'Angelfish / discus', text: 'Tall, flat cichlids', icon: 'cichlid', boosts: { 'hole-in-head': 3, flukes: 2 } },
+    { id: 'african', plural: 'African cichlids and oscars', title: 'African / oscar', text: 'Chunky cichlids', icon: 'cichlid', boosts: { bloat: 3, 'hole-in-head': 2 } },
+    { id: 'cory', plural: 'corys', title: 'Cory', text: 'Corydoras catfish', icon: 'catfish', boosts: { ulcer: 2, injury: 1 } },
+    { id: 'pleco', plural: 'plecos', title: 'Pleco', text: 'Bristlenose & co.', icon: 'catfish', boosts: { bloat: 1, popeye: 2 } },
   ],
   marine: [
-    { id: 'clownfish', plural: 'clownfish', title: 'Clownfish', text: 'Ocellaris, percula, maroon', icon: 'clownfish', boosts: { brooklynella: 4, uronema: 1 } },
-    { id: 'tang', plural: 'tangs', title: 'Tang / surgeonfish', text: 'Yellow, blue, powder blue…', icon: 'tang', boosts: { 'black-spot': 3, hlle: 3, 'ich-marine': 1 } },
-    { id: 'angel', plural: 'angelfish and butterflyfish', title: 'Angelfish / butterflyfish', text: 'Dwarf & large angels', icon: 'angel', boosts: { hlle: 2, lymphocystis: 2 } },
-    { id: 'wrasse', plural: 'wrasses, gobies and blennies', title: 'Wrasse / goby / blenny', text: 'Small reef fish', icon: 'wrasse', boosts: { flukes: 2 } },
+    { id: 'clownfish', plural: 'clownfish', title: 'Clownfish', text: 'Ocellaris & maroon', icon: 'clownfish', boosts: { brooklynella: 4, uronema: 1 } },
+    { id: 'tang', plural: 'tangs', title: 'Tang', text: 'Surgeonfish', icon: 'tang', boosts: { 'black-spot': 3, hlle: 3, 'ich-marine': 1 } },
+    { id: 'angel', plural: 'angelfish and butterflyfish', title: 'Angel / butterfly', text: 'Dwarf & large angels', icon: 'angel', boosts: { hlle: 2, lymphocystis: 2 } },
+    { id: 'wrasse', plural: 'wrasses', title: 'Wrasse', text: 'Six-line, fairy, cleaner', icon: 'wrasse', boosts: { flukes: 2 } },
+    { id: 'goby', plural: 'gobies and blennies', title: 'Goby / blenny', text: 'Small bottom perchers', icon: 'wrasse', boosts: { flukes: 1 } },
     { id: 'damsel', plural: 'damsels and chromis', title: 'Damsel / chromis', text: 'Hardy schooling fish', icon: 'damsel', boosts: { uronema: 3, 'velvet-marine': 1 } },
+    { id: 'dottyback', plural: 'dottybacks and basslets', title: 'Dottyback / basslet', text: 'Royal gramma & co.', icon: 'wrasse', boosts: { 'ich-marine': 1 } },
   ],
 };
 
+// Fish types that were split up (Nov 5 2026). An old id from a link or older code
+// opens the first new sub-group, so nothing that used it breaks.
+export const LEGACY_FISH_IDS = { fresh: { livebearer: 'guppy', cichlid: 'angelfish', catfish: 'cory' }, marine: {} };
+export const currentFishId = (water, id) => LEGACY_FISH_IDS[water]?.[id] || id;
+
 export function fishTypeFor(water, id) {
-  return (FISH_TYPES[water] || []).find(f => f.id === id) || null;
+  const current = currentFishId(water, id);
+  return (FISH_TYPES[water] || []).find(f => f.id === current) || null;
 }
 
 export const URGENCY = {
@@ -128,7 +141,7 @@ export const CONDITIONS = [
     check: 'Fast breathing is most often a water or oxygen problem, especially with red gills or more than one fish affected.',
     avoid: 'Don’t add medicine until you’ve tested the water. Don’t replace all your filter media at once.',
     source: ['management'],
-    tips: { goldfish: 'Goldfish are messy and need big, regular water changes—overstocking is a common cause.' },
+    tips: { goldfish: 'Goldfish are messy and need big, regular water changes—overstocking is a common cause.', molly: 'Mollies “shimmy” (wobble in place with clamped fins) when the water is dirty or too soft—test and change water.' },
   },
   {
     id: 'ich-fresh', title: 'Ich (white spot disease)', scientific: 'Ichthyophthirius multifiliis', scope: 'fresh', kind: 'Parasite', art: 'dots', urgency: 'week',
@@ -141,7 +154,9 @@ export const CONDITIONS = [
     avoid: 'Spots falling off doesn’t mean it’s over—keep treating. Don’t mix several medicines at once.',
     source: ['parasites'], atlas: true,
     tips: {
-      catfish: 'Corys, plecos and other scaleless fish are sensitive: skip salt and use a medicine labelled safe for scaleless fish (often at reduced strength).',
+      cory: 'Corys, plecos and other scaleless fish are sensitive: skip salt and use a medicine labelled safe for scaleless fish (often at reduced strength).',
+      pleco: 'Plecos, corys and other scaleless fish are sensitive: skip salt and use a medicine labelled safe for scaleless fish (often at reduced strength).',
+      barb: 'Barbs and danios catch ich easily, especially new arrivals—treat the whole tank.',
       goldfish: 'Goldfish are coldwater fish—raise the heat gently and not as far.',
       betta: 'Bettas handle warmth well; keep the lid on and the water calm.',
     },
@@ -199,7 +214,7 @@ export const CONDITIONS = [
     distinguish: 'True fungus has fluffy outward threads. Fin rot is usually slower and follows dirty water.',
     check: 'Flat pale patches—especially a saddle on the back or a white mouth—are classic columnaris.',
     avoid: 'Don’t raise the heat—columnaris loves warm water.', source: ['bacteria'],
-    tips: { livebearer: 'Mollies, guppies and platies are very prone to columnaris.' },
+    tips: { guppy: 'Guppies, mollies and platies are very prone to columnaris.', molly: 'Mollies, platies and guppies are very prone to columnaris.' },
   },
   {
     id: 'fin-rot', title: 'Fin rot', scope: 'both', kind: 'Bacteria', art: 'fins', urgency: 'week',
@@ -210,7 +225,7 @@ export const CONDITIONS = [
     distinguish: 'A clean split after a fight is fin nipping or injury. Fast fin loss with pale patches suggests columnaris.',
     check: 'Ragged, shrinking fins are the classic sign of fin rot.',
     avoid: 'Don’t trim fins or use human products.', source: ['bacteria', 'management'],
-    tips: { betta: 'Long-finned bettas: also check decorations for sharp edges, and watch for tail-biting.' },
+    tips: { betta: 'Long-finned bettas: also check decorations for sharp edges, and watch for tail-biting.', guppy: 'Guppies’ big tails rot easily—clean water matters most.' },
   },
   {
     id: 'ulcer', title: 'Bacterial ulcers', scope: 'both', kind: 'Bacteria', art: 'sores', urgency: 'week',
@@ -222,7 +237,11 @@ export const CONDITIONS = [
     distinguish: 'Red streaks in the fins point to septicemia. A single scrape after a fight is an injury.',
     check: 'Open red sores are most often bacterial ulcers.',
     avoid: 'Don’t use human skin creams or random leftover antibiotics.', source: ['bacteria', 'management'],
-    tips: { goldfish: 'Goldfish and koi are prone to ulcers (Aeromonas)—check the water first.' },
+    tips: {
+      goldfish: 'Goldfish and koi are prone to ulcers (Aeromonas)—check the water first.',
+      gourami: 'Dwarf gouramis with sores, faded colour and swelling may have dwarf gourami disease (a virus)—keep them apart from other gouramis.',
+      cory: 'Corys get red, sore bellies from dirty or sharp gravel—vacuum the substrate and use smooth sand.',
+    },
   },
   {
     id: 'septicemia', title: 'Hemorrhagic septicemia (red streaks)', scope: 'both', kind: 'Bacteria', art: 'sores', urgency: 'today',
@@ -255,8 +274,11 @@ export const CONDITIONS = [
     check: 'A swollen belly with flat scales is most often bloat or constipation.',
     avoid: 'Don’t keep feeding dry flakes while it’s swollen.', source: ['management'],
     tips: {
-      livebearer: 'A swollen female livebearer may simply be pregnant—look for a dark “gravid spot” near the vent.',
-      cichlid: 'African cichlids: swelling plus no appetite can be “Malawi bloat”—act quickly.',
+      guppy: 'A swollen female may simply be pregnant—look for a dark “gravid spot” near the vent. Thin red threads poking out of the vent are Camallanus worms and need a dewormer.',
+      molly: 'A swollen female molly or platy may simply be pregnant—look for a dark “gravid spot” near the vent.',
+      african: 'African cichlids: swelling plus no appetite and white, stringy poop can be “Malawi bloat”—act quickly.',
+      gourami: 'In dwarf gouramis, swelling plus faded colour and sores can be dwarf gourami disease.',
+      pleco: 'Plecos need sinking wafers and veg; too much protein bloats them, too little food leaves a sunken belly.',
       goldfish: 'Fancy goldfish: soak dry food before feeding.',
     },
   },
@@ -269,6 +291,7 @@ export const CONDITIONS = [
     distinguish: 'Some goldfish (telescope eyes) naturally have bulging eyes. Only cloudy, not bulging, is cloudy eye.',
     check: 'A bulging eye is classic popeye.',
     avoid: 'Don’t use human eye drops or touch the eye.', source: ['management', 'bacteria'],
+    tips: { pleco: 'Plecos often get popeye from a knock or poor water—check for sharp decor and test the water.' },
   },
   {
     id: 'cloudy-eye', title: 'Cloudy eye', scope: 'both', kind: 'Eye', art: 'eyes', urgency: 'week',
@@ -302,7 +325,7 @@ export const CONDITIONS = [
     distinguish: 'Bad water causes similar scratching and breathing. Test first.',
     check: 'Scratching plus fast gills or extra slime is classic flukes.',
     avoid: 'Don’t pick a medicine just because a fish scratched once.', source: ['parasites'],
-    tips: { goldfish: 'Goldfish and koi often carry flukes—worth treating new arrivals.', wrasse: 'Wrasses are fluke-prone; treat in a hospital tank.' },
+    tips: { goldfish: 'Goldfish and koi often carry flukes—worth treating new arrivals.', angelfish: 'Angelfish and discus often carry gill flukes—fast breathing with one gill held shut is a clue.', wrasse: 'Wrasses are fluke-prone; treat in a hospital tank.', goby: 'Gobies and blennies can carry flukes—treat in a hospital tank.' },
   },
   {
     id: 'lymphocystis', title: 'Lymphocystis', scientific: 'Lymphocystivirus', scope: 'both', kind: 'Virus', art: 'lumps', urgency: 'watch',
@@ -335,7 +358,11 @@ export const CONDITIONS = [
     distinguish: 'If it keeps spreading, turns red or white at the edges, or grows fuzz, it’s become infected.',
     check: 'A single scrape or a clean tear after a bump or fight is usually just an injury.',
     avoid: 'Don’t medicate a clean injury straight away—keep the water clean and watch.', source: ['management'],
-    tips: { betta: 'Bettas often tear fins on sharp plastic plants—swap to silk or live plants.' },
+    tips: {
+      betta: 'Bettas often tear fins on sharp plastic plants—swap to silk or live plants.',
+      barb: 'Tiger barbs nip fins—keep them in groups of 6+ and away from long-finned fish.',
+      cory: 'Sharp gravel wears down cory whiskers—smooth sand is kinder.',
+    },
   },
   {
     id: 'uronema', title: 'Uronema', scientific: 'Uronema marinum', scope: 'marine', kind: 'Parasite', art: 'sores', urgency: 'today',
@@ -390,7 +417,7 @@ export const CONDITIONS = [
     distinguish: 'Flat pale patches are more like columnaris.',
     check: 'Pits or holes on the head of a freshwater fish are classic hole-in-the-head.',
     avoid: 'Don’t ignore it—the pits can get deeper.', source: ['parasites'],
-    tips: { cichlid: 'Oscars, discus and other cichlids get HITH most often.' },
+    tips: { angelfish: 'Discus and angelfish get HITH—clean water and a varied diet help.', african: 'Oscars get HITH most often—big water changes and a varied diet help.' },
   },
   {
     id: 'normal', title: 'Normal markings or anatomy', scope: 'both', kind: 'Look-alike', art: 'plain', urgency: 'watch',
@@ -401,7 +428,7 @@ export const CONDITIONS = [
     distinguish: 'Normal markings don’t explain fast breathing, scratching or spreading changes.',
     check: 'If it hasn’t changed and the fish acts normally, it may just be how the fish looks.',
     avoid: 'Don’t medicate a stable marking on its own.', source: ['management'],
-    tips: { livebearer: 'Female guppies, mollies and platies swell up when pregnant—that’s normal.', goldfish: 'Male goldfish get small white breeding stars on the gill covers in spring—normal.' },
+    tips: { guppy: 'Female guppies, mollies and platies swell up when pregnant—that’s normal.', molly: 'Female mollies and platies swell up when pregnant—that’s normal.', goldfish: 'Male goldfish get small white breeding stars on the gill covers in spring—normal.' },
   },
 ];
 

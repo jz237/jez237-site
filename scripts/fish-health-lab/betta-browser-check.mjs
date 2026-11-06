@@ -18,6 +18,7 @@ context.on('response', r => { if ((r.url().includes('/local-images/') || r.url()
 context.on('requestfailed', r => { if (r.url().startsWith('https://media.jez237.com/')) broken.push(`failed ${r.url()}`); });
 const { IMAGE_SOURCE } = await import('../../experiments/fish-health-lab/fish-images-data.mjs');
 const { IMAGE_SOURCE: FRESH_IMAGE_SOURCE } = await import('../../experiments/fish-health-lab/fish-images-fresh-data.mjs');
+const { IMAGE_SOURCE: SPLIT_IMAGE_SOURCE } = await import('../../experiments/fish-health-lab/fish-images-split-data.mjs');
 const page = await context.newPage();
 const next = () => page.locator('#next-button').click();
 const loaded = async selector => {
@@ -48,14 +49,14 @@ const toResult = async (water, fish, sign, { texture, closer } = {}) => {
 };
 try {
   // Fish-type step: a picture for every choice, both waters.
-  for (const [water, count] of [['fresh', 7], ['marine', 6]]) {
+  for (const [water, count] of [['fresh', 12], ['marine', 8]]) {
     await page.goto(root, { waitUntil: 'networkidle' });
     await page.locator('[data-action="start"]:visible').click();
     await page.locator(`input[name="water"][value="${water}"]`).check(); await next();
     assert.equal(await page.locator('.fish-chip img.fish-photo').count(), count);
     await loaded('.fish-chip img.fish-photo');
   }
-  checks.push('fish-type step shows a photo for every fish (fresh 7, marine 6)');
+  checks.push('fish-type step shows a photo for every fish (fresh 12, marine 8, including Not sure)');
 
   // Betta: the whole symptom grid is betta pictures.
   await toSigns('fresh', 'betta');
@@ -103,6 +104,8 @@ try {
 }
 assert.deepEqual(errors, []); assert.deepEqual(broken, []);
 // Media mode: only a freshwater group still on its local preview source may request local-images/.
-const localGroups = FRESH_IMAGE_SOURCE === 'local' ? ['goldfish', 'community', 'livebearer', 'cichlid', 'catfish'] : [];
-if (IMAGE_SOURCE === 'media') assert.deepEqual(localRequests.filter(url => !localGroups.some(g => url.includes(`/local-images/${g}/`))), [], 'media mode must not request betta/step/fish-type pictures from local-images/');
+const localGroups = [...(FRESH_IMAGE_SOURCE === 'local' ? ['goldfish', 'community', 'livebearer', 'cichlid', 'catfish'] : []),
+  // The fish-type split's new crops and tiles preview locally until published.
+  ...(SPLIT_IMAGE_SOURCE === 'local' ? ['angelfish', 'african', 'cory', 'pleco', 'guppy', 'molly', 'gourami', 'barb', 'fish-types/fish-african', 'fish-types/fish-cory', 'fish-types/fish-pleco', 'fish-types/fish-molly', 'fish-types/fish-gourami', 'fish-types/fish-barb', 'fish-types/fish-goby', 'fish-types/fish-dottyback'] : [])];
+if (IMAGE_SOURCE === 'media') assert.deepEqual(localRequests.filter(url => !localGroups.some(g => url.includes(`/local-images/${g}${g.includes('/') ? '-' : '/'}`))), [], 'media mode must not request betta/step/fish-type pictures from local-images/');
 console.log(JSON.stringify({ url: root, imageSource: IMAGE_SOURCE, freshImageSource: FRESH_IMAGE_SOURCE, checks: checks.length, passed: checks, mediaRequests: mediaRequests.size, localRequests: localRequests.length }, null, 2));

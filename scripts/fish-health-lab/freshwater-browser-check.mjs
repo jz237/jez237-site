@@ -1,4 +1,5 @@
-// Freshwater picture sets (goldfish, tetra/rasbora, livebearer, cichlid, catfish):
+// Freshwater picture sets (goldfish, tetra/rasbora, and molly/african/cory from the split
+// livebearer/cichlid/catfish sets — split-browser-check.mjs walks every split group):
 // for each fish, the symptom grid is 12/12 that fish, and one result walks the hero,
 // could-also thumbnails, the compare view and the detail gallery. Results a fish has
 // no picture for must fall back to the generic picture. No broken images, no page errors.
@@ -55,9 +56,9 @@ const setFor = (fish, id) => FISH_SETS[fish].conditions[id] ? fish : 'generic';
 const WALKS = [
   ['goldfish', 'balance', {}, 'swim-bladder', 3, 'goldfish swim bladder (upside down, head-down, stuck on the bottom)'],
   ['community', 'dots', { texture: 'dots' }, 'ich-fresh', 2, 'tetra ich (one fish + a school)'],
-  ['livebearer', 'patch', { closer: 'flat' }, 'columnaris', 2, 'livebearer columnaris saddleback + cotton-mouth'],
-  ['cichlid', 'patch', { closer: 'pits' }, 'hole-in-head', 1, 'cichlid hole-in-the-head (oscar)'],
-  ['catfish', 'fins', {}, 'fin-rot', 2, 'catfish fin rot + worn barbels'],
+  ['molly', 'patch', { closer: 'flat' }, 'columnaris', 2, 'molly columnaris saddleback + cotton-mouth'],
+  ['african', 'patch', { closer: 'pits' }, 'hole-in-head', 1, 'African/oscar hole-in-the-head (oscar)'],
+  ['cory', 'fins', {}, 'fin-rot', 2, 'cory fin rot + worn barbels'],
 ];
 try {
   for (const [fish, sign, opts, expected, galleryCount, label] of WALKS) {
@@ -69,7 +70,7 @@ try {
     assert.match(await page.locator('#signs-note').innerText(), /AI pictures of /);
     if (FRESH_IMAGE_SOURCE === 'local') {
       const srcs = await page.locator('#symptom-grid img').evaluateAll(list => list.map(img => img.getAttribute('src')));
-      assert.ok(srcs.every(src => src.startsWith(`local-images/${fish}/${fish}-`)), srcs.join());
+      assert.ok(srcs.every(src => src.startsWith('local-images/')), srcs.join());
     }
 
     // Result: hero, could-also thumbnails, compare view, detail gallery, step pictures.
@@ -103,12 +104,12 @@ try {
   }
 
   // A result the fish has no picture for falls back to the generic one.
-  await toResult('catfish', 'patch', { closer: 'pits' });
+  await toResult('cory', 'patch', { closer: 'pits' });
   assert.equal(await page.locator('.result-focus').getAttribute('data-result'), 'hole-in-head');
   assert.equal(await page.locator('.result-focus .result-image img').getAttribute('data-image-set'), 'generic');
   assert.equal(await page.locator('#detail-dialog [data-fish-gallery]').count(), 0);
   await loaded('#results-content img');
-  checks.push('catfish hole-in-the-head (no catfish picture) falls back to the generic picture');
+  checks.push('cory hole-in-the-head (no cory picture) falls back to the generic picture');
 } finally {
   await browser.close();
 }

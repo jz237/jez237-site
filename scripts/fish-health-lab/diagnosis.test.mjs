@@ -67,6 +67,9 @@ test('fish type re-weights results without adding unrelated conditions', () => {
   // Livebearers lift columnaris for a patch; cichlids lift hole-in-the-head into the alternatives.
   assert.equal(lead(['patch'], { fishType: 'livebearer' }), 'columnaris');
   assert.ok(assessDiagnosis(input(['patch'], { fishType: 'cichlid' })).alternatives.slice(0, 2).some(c => c.id === 'hole-in-head'));
+  assert.ok(assessDiagnosis(input(['patch'], { fishType: 'angelfish' })).alternatives.slice(0, 2).some(c => c.id === 'hole-in-head'));
+  assert.equal(lead(['patch'], { fishType: 'molly' }), 'columnaris');
+  assert.equal(lead(['swollen'], { fishType: 'african' }), 'bloat');
   // Boosts never make a condition appear for a sign it doesn't fit.
   for (const water of ['fresh', 'marine']) for (const fish of FISH_TYPES[water]) for (const sign of SYMPTOMS) {
     const withFish = assessDiagnosis(input([sign.id], { water, fishType: fish.id }));
@@ -80,6 +83,17 @@ test('fish-specific tips appear on the matching result', () => {
   assert.match(assessDiagnosis(input(['dots'], { fishType: 'catfish' })).primary.tip, /scaleless/);
   assert.match(assessDiagnosis(input(['patch'], { water: 'marine', fishType: 'clownfish', closer: 'slime' })).primary.tip, /clown/i);
   assert.match(assessDiagnosis(input(['swollen'], { fishType: 'livebearer' })).primary.tip, /pregnant/);
+  // Split groups get their own tips (old ids land on the first sub-group's tips above).
+  assert.match(assessDiagnosis(input(['swollen'], { fishType: 'african' })).primary.tip, /Malawi bloat/);
+  assert.match(assessDiagnosis(input(['swollen'], { fishType: 'molly' })).primary.tip, /pregnant/);
+  assert.match(assessDiagnosis(input(['swollen'], { fishType: 'guppy' })).primary.tip, /Camallanus/);
+  assert.match(assessDiagnosis(input(['sores'], { fishType: 'gourami', closer: 'open' })).primary.tip, /dwarf gourami disease/);
+  assert.match(assessDiagnosis(input(['dots'], { fishType: 'pleco' })).primary.tip, /scaleless/);
+  assert.match(assessDiagnosis(input(['dots'], { fishType: 'barb' })).primary.tip, /whole tank/);
+  assert.equal(assessDiagnosis(input(['swollen'], { fishType: 'angelfish' })).primary.tip, '');
+  // Every tip names a current fish type.
+  const ids = new Set([...FISH_TYPES.fresh, ...FISH_TYPES.marine].map(f => f.id));
+  for (const c of CONDITIONS) for (const id of Object.keys(c.tips || {})) assert.ok(ids.has(id), `${c.id} tip for ${id}`);
   assert.equal(assessDiagnosis(input(['dots'])).primary.tip, '');
 });
 
@@ -188,8 +202,13 @@ test('closer questions and fish lists are complete and water-specific', () => {
   assert.equal(closerQuestionFor('dots', 'fresh'), null);
   assert.ok(closerQuestionFor('dots', 'marine'));
   for (const q of Object.values(CLOSER_QUESTIONS)) assert.ok(q.choices.some(c => c.id === 'unclear'));
-  assert.deepEqual(FISH_TYPES.fresh.map(f => f.id), ['betta', 'goldfish', 'community', 'livebearer', 'cichlid', 'catfish']);
-  assert.deepEqual(FISH_TYPES.marine.map(f => f.id), ['clownfish', 'tang', 'angel', 'wrasse', 'damsel']);
+  assert.deepEqual(FISH_TYPES.fresh.map(f => f.id), ['betta', 'goldfish', 'guppy', 'molly', 'community', 'barb', 'gourami', 'angelfish', 'african', 'cory', 'pleco']);
+  assert.deepEqual(FISH_TYPES.marine.map(f => f.id), ['clownfish', 'tang', 'angel', 'wrasse', 'goby', 'damsel', 'dottyback']);
+  // Short names so three tiles fit across a phone screen.
+  for (const water of ['fresh', 'marine']) for (const f of FISH_TYPES[water]) {
+    assert.ok(f.title.length <= 19, f.title);
+    assert.ok(f.text.length <= 24, f.text);
+  }
   for (const water of ['fresh', 'marine']) for (const f of FISH_TYPES[water]) for (const id of Object.keys(f.boosts)) {
     const c = CONDITIONS.find(x => x.id === id);
     assert.ok(c && (c.scope === 'both' || c.scope === water), `${f.id} boosts ${id}`);
