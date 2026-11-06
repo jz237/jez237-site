@@ -4,7 +4,8 @@
 // (betta, steps, fish types), freshwater-images-20261105.json (goldfish,
 // community, livebearer, cichlid, catfish) and split-images-20261105.json (the
 // fish-type split: angelfish/discus, African/oscar, cory, pleco, guppy,
-// molly/platy, gourami, barb/danio and the new fish-type tiles).
+// molly/platy, gourami, barb/danio and the new fish-type tiles) and
+// marine-fish-images-20261105.json (the seven saltwater fish types).
 // A fish type without its own set, or a set without a picture for a result,
 // falls back to the generic pictures.
 import { CONDITIONS, currentFishId } from './data.mjs';
@@ -13,6 +14,7 @@ import { leadSlot } from './visuals.mjs';
 import { CROPS as BETTA_CROPS, IMAGE_SOURCE, MEDIA_BASE } from './fish-images-data.mjs';
 import { CROPS as FRESH_CROPS, IMAGE_SOURCE as FRESH_IMAGE_SOURCE } from './fish-images-fresh-data.mjs';
 import { CROPS as SPLIT_CROPS, IMAGE_SOURCE as SPLIT_IMAGE_SOURCE } from './fish-images-split-data.mjs';
+import { CROPS as MARINE_CROPS, IMAGE_SOURCE as MARINE_IMAGE_SOURCE } from './fish-images-marine-data.mjs';
 
 // Each data file has its own IMAGE_SOURCE, so one batch can be published
 // (uploaded to R2) while another is still previewed locally. 'media' uses the
@@ -21,7 +23,7 @@ import { CROPS as SPLIT_CROPS, IMAGE_SOURCE as SPLIT_IMAGE_SOURCE } from './fish
 // local-images/<subdir>/<file>). An entry without a source uses IMAGE_SOURCE.
 const KEY_PREFIX = 'experiments/fish-health-lab/';
 const withSource = (crops, source) => Object.fromEntries(Object.entries(crops).map(([id, entry]) => [id, { ...entry, source }]));
-export const ALL_CROPS = { ...withSource(BETTA_CROPS, IMAGE_SOURCE), ...withSource(FRESH_CROPS, FRESH_IMAGE_SOURCE), ...withSource(SPLIT_CROPS, SPLIT_IMAGE_SOURCE) };
+export const ALL_CROPS = { ...withSource(BETTA_CROPS, IMAGE_SOURCE), ...withSource(FRESH_CROPS, FRESH_IMAGE_SOURCE), ...withSource(SPLIT_CROPS, SPLIT_IMAGE_SOURCE), ...withSource(MARINE_CROPS, MARINE_IMAGE_SOURCE) };
 export const localPathFor = entry => `local-images/${entry.key.slice(KEY_PREFIX.length)}`;
 export const urlFor = entry => (entry.source || IMAGE_SOURCE) === 'media' ? MEDIA_BASE + entry.key : localPathFor(entry);
 const crop = id => ALL_CROPS[id] && { ...ALL_CROPS[id], url: urlFor(ALL_CROPS[id]) };
@@ -62,6 +64,36 @@ const freshSet = (prefix, { extra = {}, skip = [], reuse = {} } = {}) => {
       .map(([id, cells]) => [id, cells.map(cropId)])),
   };
 };
+// Saltwater sets (Nov 5 2026): sheet A is the 12 symptom choices, sheet B the marine
+// results, plus one smooth growth per fish. Every marine result has a picture of the
+// chosen kind of fish; the matching symptom picture follows as a second view.
+const MARINE_CONDITIONS = {
+  water: ['breathing'],
+  'ich-marine': ['ich', 'dots'],
+  'velvet-marine': ['velvet', 'dust'],
+  brooklynella: ['brooklynella', 'patch'],
+  uronema: ['uronema'],
+  'black-spot': ['black-spot'],
+  hlle: ['hlle'],
+  flukes: ['flukes'],
+  'fin-rot': ['fins'],
+  ulcer: ['sores'],
+  septicemia: ['septicemia'],
+  dropsy: ['swollen'],
+  bloat: ['swollen'],
+  popeye: ['popeye'],
+  'cloudy-eye': ['eyes'],
+  'swim-bladder': ['balance'],
+  lymphocystis: ['lymphocystis', 'lumps'],
+  growth: ['growth'],
+  injury: ['injury'],
+  normal: ['normal'],
+};
+const marineSet = prefix => ({
+  water: 'marine',
+  signs: Object.fromEntries(SIGN_IDS.map(id => [id, `${prefix}-${id}`])),
+  conditions: Object.fromEntries(Object.entries(MARINE_CONDITIONS).map(([id, cells]) => [id, cells.map(cell => `${prefix}-${cell}`)])),
+});
 const from = (old, cells) => Object.fromEntries(cells.map(cell => [cell, `${old}-${cell}`]));
 
 // Which crop shows each sign and each condition, per fish type. The first
@@ -110,6 +142,10 @@ export const FISH_SETS = {
     extra: { 'swim-bladder': ['balance', 'on-side'], bloat: ['swollen', 'sunken-belly'] }, skip: ['hole-in-head'],
     reuse: from('catfish', ['dots', 'fins', 'eyes', 'lumps', 'breathing', 'cloudy-eye', 'slime']),
   }),
+  // Saltwater: clownfish (Brooklynella), tangs (black spot, HLLE), angels and
+  // butterflyfish (HLLE, lymphocystis), wrasses and gobies/blennies (jumping injuries;
+  // gobies rest on the sand normally), damsels/chromis (velvet, Uronema), dottybacks/basslets.
+  ...Object.fromEntries(['clownfish', 'tang', 'angel', 'wrasse', 'goby', 'damsel', 'dottyback'].map(id => [id, marineSet(id)])),
   betta: {
     water: 'fresh',
     signs: {

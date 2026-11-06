@@ -454,3 +454,66 @@ types (3 per row on a phone, 4 rows with Not sure) and 7 saltwater types.
   (both fish-type grids at 390 px, one result per new freshwater group through hero,
   could-also, compare and gallery, pleco HITH fallback, saltwater generic fallback;
   `FISH_LAB_SHOTS=<dir>` saves fish-type-grid.png and results.jpg).
+
+## Saltwater fish pictures, 2026-11-05 (published)
+
+Jez, 2026-11-05 21:48 EST: “...proceed and do all of the fish section pictures. Hold
+off of the reef invertebrates etc pictures for now”. Each of the seven saltwater fish
+types now has its own picture set; reef invertebrate pictures were not made.
+
+- Sets: clownfish, tang, angel/butterfly, wrasse, goby/blenny, damsel/chromis,
+  dottyback/basslet (`FISH_SETS` in fish-images.mjs, `marineSet()` +
+  `MARINE_CONDITIONS`). Each has the 12 symptom choices (sheet A), 12 marine results
+  (sheet B: ich close-up, velvet, Brooklynella, Uronema, flukes, black spot, HLLE,
+  lymphocystis, popeye, septicemia, injury, normal) and one smooth growth — every
+  saltwater result (all 20 marine/shared conditions) shows the chosen kind of fish.
+  Marine results lead with their own picture and add the matching symptom picture
+  (ich + dots, velvet + dust, Brooklynella + pale patch, lymphocystis + lumps);
+  dropsy and bloat share the swollen picture, cloudy eye uses the (cloudy) eye picture.
+  Freshwater lookups for these fish, and saltwater with no fish chosen, stay generic.
+- Key pictures on the fish they are known for: Brooklynella on an ocellaris clownfish,
+  black spot on a yellow tang, HLLE on a hippo tang and an emperor angel,
+  lymphocystis on a copperband butterflyfish, velvet/Uronema on damsels/chromis;
+  gobies rest on the sand in their normal picture, wrasse/goby injuries are jump
+  scrapes.
+- 175 362×362 crops (7 × 25), not resized, in `fish-images-marine-data.mjs`
+  (`IMAGE_SOURCE = 'media'`; preview copies stay untracked in `local-images/<group>/`),
+  receipt `marine-fish-images-20261105.json` (prompts, sheet hashes, choices, review,
+  `uploaded: true`). 14 group sheets + 1 mixed repair sheet (seven growths + four
+  retakes), requested `openai/gpt-image-2.6-sunburst` medium, all reported that model
+  (backend not independently verified). Scripts and originals:
+  `workspace/tmp/imagegen/fish-health-marine-20261105/`,
+  `/home/jez237/.openclaw/media/tool-image-generation/fish-health-marine-20261105/`.
+- Published 2026-11-05 together with the reef section (Jez's request, Claw approved):
+  all 175 crops uploaded and byte-verified
+  (`workspace/tmp/fish-health-marine-reef-publish-20261105/upload-verification.json`),
+  receipt `uploaded: true`, `IMAGE_SOURCE = 'media'`.
+- Publish procedure (no code change): upload every receipt asset to
+  `jez237-site-media/<r2Key>`, byte-verify, mark the assets `uploaded: true`, then set
+  `IMAGE_SOURCE = 'media'` in fish-images-marine-data.mjs.
+- Checks: fish-images.test.mjs (every saltwater group complete and every crop used,
+  result-first mapping, generic fallback, receipt hashes/keys) and
+  `marine-browser-check.mjs` (per group a 12/12 symptom grid and one result through
+  hero, could-also, compare and gallery; `FISH_LAB_SHOTS=<dir>` saves results.jpg).
+  `split-browser-check.mjs` now expects the saltwater groups' own pictures.
+
+## Reef section (corals, anemones, inverts), 2026-11-05 (published, no pictures yet)
+
+Jez, 2026-11-05 21:48 EST: “Add the pages and structure for the reef section ... Hold off
+of the reef invertebrates etc pictures for now.” Branch `exp/fish-health-reef-20261105`;
+published 2026-11-05 together with the saltwater fish pictures (Claw approved). Reef
+pictures are still not made.
+
+- Front door now asks **What needs help?**: Fish (the existing `data-action="start"`, flow
+  unchanged), Coral or anemone, Shrimp/crab/snail. Old `#ich` / `#library` links unchanged.
+- Reef flow (3 steps, `reef-kind` → `reef-signs` → `reef-changes` → `reef-results`): kind
+  (optional), main sign (tiles filtered by kind), optional “Anything changed recently?” chips,
+  then the fish result layout (Most likely, urgency, Why, What to do now, ≤3 Could also be with
+  tap-to-swap and Compare, “normal” as a plain line). Invert results always show the copper
+  warning. Care plans start with the tests; dips are tagged “Separate dip — never in the
+  display”; no plan doses copper or fish medicine. Library: “Reef & inverts” filter.
+- Files: `reef-data.mjs` (kinds, signs, chips, 17 coral + 9 invert conditions, look-alikes),
+  `reef-logic.mjs`, `reef-care.mjs`, `reef-images.mjs` (empty picture manifest — fill it like
+  the fish sets; every spot shows “Picture coming soon” until then), `reef-app.mjs`, `reef.css`.
+  app.mjs/index.html only gain small hooks.
+- Checks: `reef.test.mjs` and `reef-browser-check.mjs` (`FISH_LAB_SHOTS=<dir>` saves 390 px shots).

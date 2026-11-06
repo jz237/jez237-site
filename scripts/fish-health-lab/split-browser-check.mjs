@@ -1,7 +1,7 @@
 // Fish-type split (Nov 5 2026): the freshwater and saltwater fish-type grids, then for
 // each new freshwater group a 12/12 symptom grid of that fish and one result walking the
-// hero, could-also cards, compare view and detail gallery. Saltwater fish types have
-// tiles only, so a saltwater result must use the generic marine pictures.
+// hero, could-also cards, compare view and detail gallery. Saltwater fish types now have
+// their own sets (checked in full by marine-browser-check.mjs); here a spot check.
 // New crops are served from local-images/<group>/ while fish-images-split-data.mjs is
 // 'local'; re-used cells come from media.jez237.com. No broken images, no page errors.
 // FISH_LAB_URL picks the target (default: the local preview).
@@ -15,6 +15,7 @@ const require = createRequire(import.meta.url);
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright-core');
 const root = process.env.FISH_LAB_URL || 'http://127.0.0.1:8770/experiments/fish-health-lab/';
 const { IMAGE_SOURCE: SPLIT_IMAGE_SOURCE, CROPS: SPLIT_CROPS } = await import('../../experiments/fish-health-lab/fish-images-split-data.mjs');
+const { IMAGE_SOURCE: MARINE_IMAGE_SOURCE, CROPS: MARINE_CROPS } = await import('../../experiments/fish-health-lab/fish-images-marine-data.mjs');
 const { FISH_SETS, ALL_CROPS, urlFor } = await import('../../experiments/fish-health-lab/fish-images.mjs');
 const { FISH_TYPES, closerQuestionFor } = await import('../../experiments/fish-health-lab/data.mjs');
 const browser = await chromium.launch({ headless: true, executablePath: '/usr/bin/google-chrome', args: ['--disable-dev-shm-usage'] });
@@ -138,24 +139,26 @@ try {
   await loaded('#results-content img');
   checks.push('pleco hole-in-the-head (no pleco picture) falls back to the generic picture');
 
-  // Saltwater: new fish types have tiles only; symptoms and results stay generic.
+  // Saltwater: the new fish types show their own sets; no fish chosen stays generic.
   for (const fish of ['goby', 'dottyback', 'wrasse']) {
     await toSigns('marine', fish);
     const sets = await page.locator('#symptom-grid img').evaluateAll(list => list.map(img => img.dataset.imageSet));
-    assert.ok(sets.length && sets.every(s => s === 'generic'), `${fish}: ${sets.join()}`);
-    assert.equal(await page.locator('#signs-note').innerText(), 'AI illustrations.');
+    assert.ok(sets.length === 12 && sets.every(s => s === fish), `${fish}: ${sets.join()}`);
+    assert.match(await page.locator('#signs-note').innerText(), /AI pictures of /);
   }
   await toResult('marine', 'goby', 'breathing');
-  assert.equal(await page.locator('.result-focus .result-image img').getAttribute('data-image-set'), 'generic');
-  assert.equal(await page.locator('[data-fish-gallery]').count(), 0);
+  assert.equal(await page.locator('.result-focus .result-image img').getAttribute('data-image-set'), 'goby');
   await loaded('#results-content img');
-  checks.push('saltwater goby/dottyback/wrasse: generic marine symptom pictures; a goby result uses the generic marine picture');
+  await toSigns('marine', '');
+  const generic = await page.locator('#symptom-grid img').evaluateAll(list => list.map(img => img.dataset.imageSet));
+  assert.ok(generic.length && generic.every(s => s === 'generic'), generic.join());
+  checks.push('saltwater goby/dottyback/wrasse: their own symptom pictures and a goby result picture; Not sure stays generic');
 } finally {
   await browser.close();
 }
 assert.deepEqual(errors, []); assert.deepEqual(broken, []);
-// Only the unpublished split crops may come from local-images/.
-const allowedLocal = SPLIT_IMAGE_SOURCE === 'local' ? Object.values(SPLIT_CROPS).map(e => `/local-images/${e.key.slice('experiments/fish-health-lab/'.length)}`) : [];
+// Only unpublished crops (split or saltwater) may come from local-images/.
+const allowedLocal = [...(SPLIT_IMAGE_SOURCE === 'local' ? Object.values(SPLIT_CROPS) : []), ...(MARINE_IMAGE_SOURCE === 'local' ? Object.values(MARINE_CROPS) : [])].map(e => `/local-images/${e.key.slice('experiments/fish-health-lab/'.length)}`);
 for (const url of localRequests) assert.ok(allowedLocal.some(p => url.endsWith(p)), `unexpected local request ${url}`);
 
 if (process.env.FISH_LAB_SHOTS) {

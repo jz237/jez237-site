@@ -4,6 +4,7 @@ import { slotsFor, leadSlot, patternFor } from './visuals.mjs';
 import { OPENING_IMAGE, signImagesFor, TEXTURE_IMAGES } from './choice-images.mjs';
 import { treatmentGuideFor, openTreatmentPopup, carePlanFor } from './treatments.mjs';
 import { imagesFor, imageFor, fishSetFor, FISH_TYPE_IMAGES, stepImageFor, splitStep } from './fish-images.mjs';
+import { createReef } from './reef-app.mjs';
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
@@ -17,6 +18,8 @@ let step = 'welcome', activeView = 'guide', primarySign = '', detailSign = '';
 let currentCase = '', illustrationId = 0, libraryPattern = '', visualReference = null;
 // "This looks more like mine" taps on the results page, in order.
 let chosenPath = [];
+// Coral/anemone and shrimp/crab/snail questions (reef-app.mjs) share this step machine.
+const reef = createReef({ $, $$, escape, goStep, badge, autoAdvance, switchView });
 
 function fishArt(type = 'plain', hero = false) {
   const uid = `fish-${++illustrationId}`;
@@ -69,13 +72,16 @@ function goStep(name, focus = true) {
   if (activeGrid) $$(`${activeGrid} img[data-src]`).forEach(img => { img.src = img.dataset.src; img.removeAttribute('data-src'); });
   if (name === 'signs') updateSignsHint();
   if (name === 'closer') renderCloserChoices();
-  form.hidden = ['results', 'care-summary'].includes(name);
+  if (reef.owns(name)) reef.onStep(name);
+  form.hidden = ['results', 'care-summary', 'reef-results'].includes(name);
   form.classList.toggle('care-mode', name === 'care');
   $('#flow-error').textContent = '';
-  const progress = { water: [1,'Water type'], fish: [2,'Your fish'], signs: [3,'What you see'], texture: [3,'Look closer'], closer: [3,'Look closer'], behavior: [4,'Behavior'], growth: [4,'Look closer at the lump'] }[name];
-  $('#flow-label').textContent = name === 'results' ? 'YOUR RESULT' : name.startsWith('care') ? 'CARE & TREATMENT' : progress ? `STEP ${progress[0]} OF 4 · ${progress[1]}` : '';
+  const progress = reef.progressFor(name) || { water: [1,'Water type'], fish: [2,'Your fish'], signs: [3,'What you see'], texture: [3,'Look closer'], closer: [3,'Look closer'], behavior: [4,'Behavior'], growth: [4,'Look closer at the lump'] }[name];
+  const steps = reef.owns(name) ? 3 : 4;
+  $('#flow-progress').max = steps;
+  $('#flow-label').textContent = name === 'results' || name === 'reef-results' ? 'YOUR RESULT' : name.startsWith('care') ? 'CARE & TREATMENT' : progress ? `STEP ${progress[0]} OF ${steps} · ${progress[1]}` : '';
   if (progress) $('#flow-progress').value = progress[0];
-  if (name === 'results') $('#flow-progress').value = 4;
+  if (name === 'results' || name === 'reef-results') $('#flow-progress').value = steps;
   $('#flow-progress').hidden = name.startsWith('care');
   updateNextLabel();
   $('#salinity-field').hidden = form.elements.water.value === 'fresh';
@@ -92,12 +98,14 @@ function goStep(name, focus = true) {
 }
 
 function updateNextLabel() {
+  if (reef.owns(step)) { $('#next-button').textContent = reef.nextLabel(step); return; }
   $('#next-button').textContent = step === 'care' ? 'See care steps →'
     : step === 'fish' && !form.elements.fishType.value ? 'Skip →'
     : step === 'growth' || step === 'behavior' && !needsGrowth() ? 'See my results →' : 'Continue →';
 }
 
 function nextStep() {
+  if (reef.owns(step)) { reef.next(step); return; }
   if (step === 'water' && !form.elements.water.value) { $('#flow-error').textContent = 'Choose Freshwater or Saltwater / reef.'; return; }
   if (step === 'signs' && !primarySign) { $('#flow-error').textContent = 'Choose the closest picture. “Nothing obvious” is a useful answer.'; return; }
   if (step === 'texture' && !detailSign) { $('#flow-error').textContent = 'Choose the closest texture, or “Not sure.”'; return; }
@@ -129,6 +137,7 @@ function switchView(name) {
   history.replaceState(null, '', location.pathname + location.search + (name === 'library' ? '#library' : ''));
   if (name === 'library') {
     if (form.elements.water.value) $('#library-water').value = form.elements.water.value;
+    else if (reef.active()) $('#library-water').value = 'reef';
     renderLibrary();
   }
   updateCompareTray();
@@ -148,6 +157,7 @@ function selectSign(id, isTexture = false) {
 }
 
 function reset() {
+  reef.reset();
   form.reset(); primarySign = ''; detailSign = ''; visualReference = null; currentCase = ''; additionalSigns.clear();
   renderChoiceGrids(); renderFishChoices(); $('#closer-grid').replaceChildren();
   $('#library-water').value = 'all'; $('#library-grid').replaceChildren();
@@ -356,6 +366,7 @@ function openDetail(id, slotId = 'overview') {
 function renderLibrary() {
   const query = $('#library-search').value.trim().toLowerCase();
   const water = $('#library-water').value;
+  if (water === 'reef') { reef.renderLibrary(query); return; }
   const patternMatches = libraryPattern ? new Set(rankConditions({ water: water === 'all' ? 'unknown' : water, signs: [libraryPattern] }).map(c => c.id)) : null;
   const filtered = CONDITIONS.filter(c => (water === 'all' || c.scope === 'both' || c.scope === water)
     && (!patternMatches || patternMatches.has(c.id))
@@ -434,6 +445,7 @@ $('#source-list').innerHTML = sourceLinks(SOURCES.map(s => s.id));
 $('#library-patterns').innerHTML = SYMPTOMS.map(s => `<button class="pattern-filter" data-library-pattern="${s.id}" aria-pressed="false"><span>${fishArt(s.art)}</span><strong>${escape(s.title)}</strong></button>`).join('');
 
 document.addEventListener('click', async event => {
+  if (reef.handleClick(event)) return;
   const treatment = event.target.closest('a[data-treatment]');
   if (treatment) openTreatmentPopup(event, treatment);
   const view = event.target.closest('[data-view]');
@@ -485,7 +497,7 @@ document.addEventListener('click', async event => {
   if (pattern) startFromPattern(pattern.dataset.usePattern);
   const action = event.target.closest('[data-action]')?.dataset.action;
   if (action === 'start') goStep('water');
-  if (action === 'back') { if (step === 'care') renderResults(); else { const route = sequence(); goStep(route[route.indexOf(step) - 1] || 'welcome'); } }
+  if (action === 'back') { if (reef.owns(step)) goStep(reef.previous(step)); else if (step === 'care') renderResults(); else { const route = sequence(); goStep(route[route.indexOf(step) - 1] || 'welcome'); } }
   if (action === 'care') openCare();
   if (action === 'results') renderResults();
   if (action === 'edit') goStep('water');

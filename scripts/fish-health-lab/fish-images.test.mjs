@@ -1,4 +1,4 @@
-// Per-fish picture sets (betta, goldfish, tetra/rasbora and the split groups), step pictures and fish-type pictures.
+// Per-fish picture sets (betta, goldfish, tetra/rasbora, the split groups and the saltwater groups), step pictures and fish-type pictures.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
@@ -11,13 +11,17 @@ import { PLAN_IDS, carePlanFor } from '../../experiments/fish-health-lab/treatme
 import { CROPS, IMAGE_SOURCE, MEDIA_BASE } from '../../experiments/fish-health-lab/fish-images-data.mjs';
 import { CROPS as FRESH_CROPS, IMAGE_SOURCE as FRESH_IMAGE_SOURCE } from '../../experiments/fish-health-lab/fish-images-fresh-data.mjs';
 import { CROPS as SPLIT_CROPS, IMAGE_SOURCE as SPLIT_IMAGE_SOURCE } from '../../experiments/fish-health-lab/fish-images-split-data.mjs';
+import { CROPS as MARINE_CROPS, IMAGE_SOURCE as MARINE_IMAGE_SOURCE } from '../../experiments/fish-health-lab/fish-images-marine-data.mjs';
 import { FISH_SETS, ALL_CROPS, imagesFor, imageFor, fishSetFor, FISH_TYPE_IMAGES, STEP_IMAGES, stepImageFor, splitStep, urlFor, localPathFor } from '../../experiments/fish-health-lab/fish-images.mjs';
 
 const app = fileURLToPath(new URL('../../experiments/fish-health-lab/', import.meta.url));
 const receipt = JSON.parse(readFileSync(new URL('./betta-pilot-images-20261105.json', import.meta.url)));
 const freshReceipt = JSON.parse(readFileSync(new URL('./freshwater-images-20261105.json', import.meta.url)));
 const splitReceipt = JSON.parse(readFileSync(new URL('./split-images-20261105.json', import.meta.url)));
+const marineReceipt = JSON.parse(readFileSync(new URL('./marine-fish-images-20261105.json', import.meta.url)));
 const freshConditions = CONDITIONS.filter(c => c.scope !== 'marine');
+const marineConditions = CONDITIONS.filter(c => c.scope !== 'fresh');
+const MARINE = FISH_TYPES.marine.map(f => f.id);
 // The five groups of freshwater-images-20261105.json (livebearer, cichlid and catfish were split later).
 const GROUPS = ['goldfish', 'community', 'livebearer', 'cichlid', 'catfish'];
 // The split groups and the old, wider set each one re-uses published cells from.
@@ -28,9 +32,59 @@ const NO_PICTURE = { goldfish: ['hole-in-head'], community: ['hole-in-head'], gu
 const UNUSED_PUBLISHED = ['cichlid-balance', 'cichlid-dust', 'cichlid-red-gills', 'cichlid-sinking'];
 const genericFor = id => leadSlot(id)?.image || signImagesFor('fresh')[CONDITIONS.find(c => c.id === id).thumb || CONDITIONS.find(c => c.id === id).art] || signImagesFor('fresh').unclear;
 
-test('every freshwater fish type has its own set', () => {
-  assert.deepEqual(Object.keys(FISH_SETS).sort(), FISH_TYPES.fresh.map(f => f.id).sort());
-  for (const set of Object.values(FISH_SETS)) assert.equal(set.water, 'fresh');
+test('every fish type, freshwater and saltwater, has its own set for its water', () => {
+  assert.deepEqual(Object.keys(FISH_SETS).sort(), [...FISH_TYPES.fresh, ...FISH_TYPES.marine].map(f => f.id).sort());
+  for (const fish of FISH_TYPES.fresh) assert.equal(FISH_SETS[fish.id].water, 'fresh', fish.id);
+  for (const fish of FISH_TYPES.marine) assert.equal(FISH_SETS[fish.id].water, 'marine', fish.id);
+});
+
+for (const group of MARINE) {
+  test(`${group} set (saltwater): all 12 symptom pictures and every saltwater result show this fish`, () => {
+    const set = FISH_SETS[group];
+    assert.equal(set.water, 'marine');
+    assert.equal(fishSetFor(group, 'marine'), set);
+    assert.equal(Object.keys(set.signs).length, 12);
+    for (const sign of SYMPTOMS) {
+      const got = imagesFor(group, sign.id, 'marine');
+      assert.ok(got.fishSpecific, `${group} sign ${sign.id}`);
+      assert.equal(got.images.length, 1);
+      assert.equal(got.images[0].key, MARINE_CROPS[`${group}-${sign.id}`].key);
+    }
+    // Every saltwater result (marine-only and shared) has this fish's own picture(s).
+    assert.deepEqual(Object.keys(set.conditions).sort(), marineConditions.map(c => c.id).sort());
+    for (const condition of marineConditions) {
+      const got = imagesFor(group, condition.id, 'marine');
+      assert.ok(got.fishSpecific && got.images.length, `${group} condition ${condition.id}`);
+      assert.equal(got.images.length, set.conditions[condition.id].length, `${group} ${condition.id}: every mapped crop exists`);
+      for (const image of got.images) assert.ok(image.key.startsWith(`experiments/fish-health-lab/${group}/${group}-`), image.key);
+    }
+    // Every crop of the group is used: 12 symptom choices, 12 results, 1 smooth growth.
+    const used = new Set([...Object.values(set.signs), ...Object.values(set.conditions).flat()]);
+    assert.deepEqual([...used].sort(), Object.keys(MARINE_CROPS).filter(id => id.startsWith(`${group}-`)).sort());
+    assert.equal(used.size, 25);
+    // Saltwater only: freshwater lookups stay generic.
+    assert.equal(imagesFor(group, 'dots', 'fresh').fishSpecific, false);
+    assert.equal(fishSetFor(group, 'fresh'), null);
+  });
+}
+
+test('saltwater swaps: each result shows its own result picture first, the matching symptom picture second', () => {
+  for (const group of MARINE) {
+    const c = FISH_SETS[group].conditions;
+    assert.deepEqual(c['ich-marine'], [`${group}-ich`, `${group}-dots`]);
+    assert.deepEqual(c['velvet-marine'], [`${group}-velvet`, `${group}-dust`]);
+    assert.deepEqual(c.brooklynella, [`${group}-brooklynella`, `${group}-patch`]);
+    assert.deepEqual(c.lymphocystis, [`${group}-lymphocystis`, `${group}-lumps`]);
+    for (const id of ['uronema', 'black-spot', 'hlle', 'flukes', 'popeye', 'septicemia', 'injury', 'normal', 'growth']) assert.deepEqual(c[id], [`${group}-${id}`]);
+  }
+  // The key problems are drawn on the fish they're known for.
+  assert.match(imageFor('clownfish', 'brooklynella', 'marine').alt, /clownfish .*slime.*peeling/i);
+  assert.match(imageFor('tang', 'black-spot', 'marine').alt, /yellow tang .*black/i);
+  assert.match(imageFor('tang', 'hlle', 'marine').alt, /tang .*pits/i);
+  assert.match(imageFor('angel', 'hlle', 'marine').alt, /angelfish .*pits/i);
+  assert.match(imageFor('goby', 'normal', 'marine').caption, /resting on the sand/i);
+  assert.match(imageFor('wrasse', 'injury', 'marine').caption, /jump/i);
+  for (const group of MARINE) assert.match(imageFor(group, 'velvet-marine', 'marine').alt, /gold dust/i, group);
 });
 
 for (const group of ['goldfish', 'community']) {
@@ -168,7 +222,16 @@ test('fish types without a set, no fish, or the wrong water fall back to generic
   }
   // A betta set is freshwater only; marine lookups stay generic.
   assert.equal(imagesFor('betta', 'dots', 'marine').fishSpecific, false);
-  assert.equal(imageFor('clownfish', 'brooklynella', 'marine').url.startsWith('https://media.jez237.com/'), true);
+  // No fish (or an unknown one) in saltwater: the generic marine pictures.
+  for (const fishType of ['', 'not-a-fish', 'betta']) {
+    for (const condition of marineConditions) {
+      const got = imagesFor(fishType, condition.id, 'marine');
+      assert.equal(got.fishSpecific, false, `${fishType} ${condition.id}`);
+      const generic = leadSlot(condition.id)?.image || signImagesFor('marine')[condition.thumb || condition.art] || signImagesFor('marine').unclear;
+      assert.equal(got.images[0].url, generic.url, `${fishType} ${condition.id}`);
+    }
+    for (const sign of SYMPTOMS) assert.equal(imageFor(fishType, sign.id, 'marine').url, signImagesFor('marine')[sign.id].url);
+  }
 });
 
 test('fish-type step has a picture for every fish and for Not sure', () => {
@@ -182,10 +245,10 @@ test('fish-type step has a picture for every fish and for Not sure', () => {
   assert.equal(FISH_TYPE_IMAGES.guppy.key, CROPS['fish-livebearer'].key);
   assert.equal(FISH_TYPE_IMAGES.angelfish.key, CROPS['fish-cichlid'].key);
   for (const id of ['molly', 'barb', 'gourami', 'african', 'cory', 'pleco', 'goby', 'dottyback']) assert.equal(FISH_TYPE_IMAGES[id].key, SPLIT_CROPS[`fish-${id}`].key, id);
-  // Saltwater gets selector tiles only: no saltwater fish has a disease picture set yet.
+  // Saltwater fish types now have picture sets too (fish-images-marine-data.mjs).
   for (const fish of FISH_TYPES.marine) {
-    assert.equal(fishSetFor(fish.id, 'marine'), null, fish.id);
-    assert.equal(imagesFor(fish.id, 'dots', 'marine').fishSpecific, false, fish.id);
+    assert.equal(fishSetFor(fish.id, 'marine')?.water, 'marine', fish.id);
+    assert.equal(imagesFor(fish.id, 'dots', 'marine').fishSpecific, true, fish.id);
   }
 });
 
@@ -281,6 +344,37 @@ test('split crops match their receipt: content-hashed R2 keys, unresized, upload
     ['fish-african', 'fish-barb', 'fish-cory', 'fish-dottyback', 'fish-goby', 'fish-gourami', 'fish-molly', 'fish-pleco']);
 });
 
+test('saltwater crops match their receipt: 175 content-hashed R2 keys, unresized, upload state matches IMAGE_SOURCE', () => {
+  const n = marineReceipt.assets.length;
+  assert.equal(n, 175); // 7 groups x (12 symptom choices + 12 results + 1 growth)
+  assert.equal(Object.keys(MARINE_CROPS).length, n);
+  assert.equal(marineReceipt.requestedModel, 'openai/gpt-image-2.6-sunburst');
+  assert.equal(marineReceipt.requestedQuality, 'medium');
+  assert.deepEqual(marineReceipt.reportedProviderModel, ['openai/gpt-image-2.6-sunburst']);
+  for (const source of Object.values(marineReceipt.sources)) assert.equal(source.reportedProviderModel, 'openai/gpt-image-2.6-sunburst');
+  assert.equal(new Set(marineReceipt.assets.map(a => a.sha256)).size, n);
+  for (const asset of marineReceipt.assets) {
+    const entry = MARINE_CROPS[asset.id];
+    assert.ok(entry, asset.id);
+    assert.ok(MARINE.includes(asset.group) && asset.id.startsWith(`${asset.group}-`), asset.id);
+    assert.equal(entry.key, `experiments/fish-health-lab/${asset.group}/${asset.id}-${asset.sha256.slice(0, 12)}.jpg`);
+    assert.equal(entry.key, asset.r2Key);
+    assert.equal(MEDIA_BASE + entry.key, asset.plannedUrl);
+    assert.equal(asset.uploaded, MARINE_IMAGE_SOURCE === 'media', `${asset.id} uploaded flag vs IMAGE_SOURCE`);
+    assert.equal(asset.resized, false);
+    assert.equal(entry.width, asset.width); assert.equal(entry.height, asset.height);
+    assert.equal(entry.alt, asset.alt); assert.match(entry.alt, /^AI illustration: /);
+    assert.equal(entry.caption, asset.caption); assert.ok(entry.caption);
+    assert.equal(localPathFor(entry), asset.path, asset.id);
+    assert.equal(urlFor(ALL_CROPS[asset.id]), MARINE_IMAGE_SOURCE === 'media' ? asset.plannedUrl : asset.path);
+    assert.equal(CROPS[asset.id] ?? FRESH_CROPS[asset.id] ?? SPLIT_CROPS[asset.id], undefined, `${asset.id} collides with another id`);
+    assert.ok(marineReceipt.sources[asset.sheet], `${asset.id}: sheet ${asset.sheet} recorded`);
+  }
+  // The new keys never collide with a published key (freshwater angelfish vs saltwater angel).
+  const published = new Set([...Object.values(CROPS), ...Object.values(FRESH_CROPS), ...Object.values(SPLIT_CROPS)].map(e => e.key));
+  for (const entry of Object.values(MARINE_CROPS)) assert.ok(!published.has(entry.key), entry.key);
+});
+
 test('each data file uses its own IMAGE_SOURCE: betta stays on media while freshwater can preview locally', () => {
   for (const [id, entry] of Object.entries(CROPS)) assert.equal(urlFor(ALL_CROPS[id]), IMAGE_SOURCE === 'media' ? MEDIA_BASE + entry.key : localPathFor(entry));
   const goldfish = imageFor('goldfish', 'dots', 'fresh').url;
@@ -296,19 +390,21 @@ test('media mode: every picture the app can show comes from media.jez237.com, ne
     ...Object.entries(FISH_TYPE_IMAGES).filter(([id]) => SPLIT_IMAGE_SOURCE === 'media' || !SPLIT_CROPS[`fish-${id}`]).map(([, image]) => image),
     ...Object.values(STEP_IMAGES),
     ...published.flatMap(fish => [...SYMPTOMS, ...freshConditions].flatMap(item => imagesFor(fish, item.id, 'fresh').images)),
+    // Saltwater: the generic marine pictures, plus the saltwater sets once that batch is published.
+    ...['', ...(MARINE_IMAGE_SOURCE === 'media' ? MARINE : [])].flatMap(fish => [...SYMPTOMS, ...marineConditions].flatMap(item => imagesFor(fish, item.id, 'marine').images)),
   ].map(image => image.url);
   assert.ok(urls.length > 80, String(urls.length));
   for (const url of urls) {
     assert.ok(url.startsWith(MEDIA_BASE), url);
     assert.doesNotMatch(url, /local-images/);
   }
-  for (const entry of [...Object.values(CROPS), ...Object.values(FRESH_CROPS), ...Object.values(SPLIT_CROPS)]) assert.equal(entry.local, undefined, 'data carries no local paths');
+  for (const entry of [...Object.values(CROPS), ...Object.values(FRESH_CROPS), ...Object.values(SPLIT_CROPS), ...Object.values(MARINE_CROPS)]) assert.equal(entry.local, undefined, 'data carries no local paths');
 });
 
 // Optional network proof: FHL_VERIFY_MEDIA=1 fetches every public URL and checks its sha256 against the receipt
 // (freshwater assets only once they are marked uploaded).
 test('public media URLs serve the receipt bytes', { skip: !process.env.FHL_VERIFY_MEDIA && 'set FHL_VERIFY_MEDIA=1 to fetch' }, async () => {
-  for (const asset of [...receipt.assets, ...freshReceipt.assets.filter(a => a.uploaded), ...splitReceipt.assets.filter(a => a.uploaded)]) {
+  for (const asset of [...receipt.assets, ...freshReceipt.assets.filter(a => a.uploaded), ...splitReceipt.assets.filter(a => a.uploaded), ...marineReceipt.assets.filter(a => a.uploaded)]) {
     const response = await fetch(asset.plannedUrl);
     assert.equal(response.status, 200, asset.plannedUrl);
     assert.equal(response.headers.get('content-type'), 'image/jpeg');
@@ -319,7 +415,7 @@ test('public media URLs serve the receipt bytes', { skip: !process.env.FHL_VERIF
 
 // Private preview checkouts keep the untracked copies; check they still match the receipt.
 test('untracked preview copies match the receipt hashes', { skip: !existsSync(`${app}local-images`) && 'local-images/ is not present in this checkout' }, () => {
-  for (const asset of [...receipt.assets, ...freshReceipt.assets, ...splitReceipt.assets]) {
+  for (const asset of [...receipt.assets, ...freshReceipt.assets, ...splitReceipt.assets, ...marineReceipt.assets]) {
     const sha = createHash('sha256').update(readFileSync(`${app}${asset.path}`)).digest('hex');
     assert.equal(sha, asset.sha256, asset.id);
   }

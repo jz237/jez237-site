@@ -1,0 +1,104 @@
+// Reef best guess: the same shape as the fish guide (Most likely, up to three
+// "Could also be" cards, a plain "normal" line, tap-to-swap), kept simpler.
+import { URGENCY } from './data.mjs';
+import { ALTERNATIVE_TEXT } from './logic.mjs';
+import { REEF_KINDS, REEF_SIGNS, REEF_CHANGES, REEF_CONDITIONS, REEF_LOOKALIKES, REEF_LOOK_FOR, REEF_TREATMENT_FAMILY } from './reef-data.mjs';
+import { reefPlanFor, INVERT_WARNING } from './reef-care.mjs';
+
+export const MAX_REEF_ALTERNATIVES = 3;
+const NATURAL = {
+  coral: 'Or it may be normal—corals close at night and for a day or two after a move.',
+};
+
+export const reefKindFor = (group, id) => (REEF_KINDS[group] || []).find(k => k.id === id) || null;
+export const reefSignFor = (group, id) => (REEF_SIGNS[group] || []).find(s => s.id === id) || null;
+export const reefConditionFor = id => REEF_CONDITIONS.find(c => c.id === id) || null;
+
+// Sign tiles for a kind ("Not sure" shows every sign of the group).
+export function reefSignsFor(group, kind = '') {
+  return (REEF_SIGNS[group] || []).filter(s => !kind || !s.kinds || s.kinds.includes(kind));
+}
+
+const inScope = (condition, group, kind) => condition.group === group && (!kind || !condition.kinds || condition.kinds.includes(kind));
+
+// Every condition that fits the sign, best first. Kind and recent changes only
+// re-weight conditions that already fit; they never add one.
+export function rankReef({ group, kind = '', sign, changes = [] }) {
+  const picked = (REEF_CHANGES[group] || []).filter(c => changes.includes(c.id)).map(c => c.id);
+  return REEF_CONDITIONS.filter(c => inScope(c, group, kind))
+    .map(c => {
+      const base = c.weights[sign] || 0;
+      if (base <= 0) return null;
+      const kindScore = base >= 2 ? c.kindBoost?.[kind] || 0 : 0;
+      const changeScore = picked.reduce((sum, id) => sum + (c.changes?.[id] || 0), 0);
+      return { ...c, base, score: base + kindScore + changeScore };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.score - a.score || b.base - a.base || a.id.localeCompare(b.id));
+}
+
+function decorate(condition, input, extra = {}) {
+  const sign = reefSignFor(input.group, input.sign);
+  const changes = (REEF_CHANGES[input.group] || []).filter(c => input.changes?.includes(c.id) && condition.changes?.[c.id]).map(c => c.title.toLowerCase());
+  return {
+    ...condition,
+    urgencyLevel: condition.urgency,
+    reason: extra.reason || [`You picked “${sign?.title || input.sign}”${changes.length ? `, plus ${changes.join(', ')}` : ''}.`, condition.check].join(' '),
+    plan: reefPlanFor(condition.id),
+    ...extra,
+  };
+}
+
+export function reefTreatmentNote(a, b) {
+  const fa = REEF_TREATMENT_FAMILY[a], fb = REEF_TREATMENT_FAMILY[b];
+  if (!fa || !fb || fa === 'none' || fb === 'none') return '';
+  return fa === fb ? 'same' : 'different';
+}
+
+function couldAlsoBe(top, ranked, input, pinned = null) {
+  const out = new Map();
+  let natural = '';
+  // Kind-specific pairs only show when that kind was picked.
+  const curated = (REEF_LOOKALIKES[top.id] || []).filter(([, , kinds]) => !kinds || kinds.includes(input.kind));
+  const reasons = new Map(curated.map(([id, reason]) => [id, reason]));
+  const add = (condition, reason) => {
+    if (!condition || condition.id === top.id || out.has(condition.id) || !inScope(condition, input.group, input.kind)) return;
+    if (condition.natural) { natural ||= NATURAL[input.group] || ''; return; }
+    out.set(condition.id, { ...condition, comparisonReason: reason || REEF_LOOK_FOR[condition.id] });
+  };
+  if (pinned) add(pinned, reasons.get(pinned.id));
+  const runnersUp = ranked.filter(c => c.base >= 2);
+  // Strong runners-up first, then the curated look-alikes, then weaker runners-up.
+  for (const other of runnersUp.filter(c => c.score >= 3)) add(other, reasons.get(other.id));
+  for (const [id, reason, , note] of curated) { if (id) add(reefConditionFor(id), reason); else natural ||= note; }
+  for (const other of runnersUp) add(other, reasons.get(other.id));
+  const alternatives = [...out.values()].slice(0, MAX_REEF_ALTERNATIVES).map(c => ({
+    ...c, urgencyLevel: c.urgency,
+    moreUrgent: URGENCY[c.urgency].rank > URGENCY[top.urgencyLevel].rank,
+    treatmentNote: reefTreatmentNote(c.id, top.id),
+  }));
+  return { alternatives, natural };
+}
+
+// input: { group: 'coral' | 'invert', kind, sign, changes: [], chosen: [] }
+export function assessReef(input) {
+  const ranked = rankReef(input);
+  let primary = ranked[0] ? decorate(ranked[0], input) : null;
+  let { alternatives, natural } = primary ? couldAlsoBe(primary, ranked, input) : { alternatives: [], natural: '' };
+  // Each "This looks more like mine" tap, in order.
+  for (const id of input.chosen || []) {
+    const pick = alternatives.find(c => c.id === id);
+    if (!pick) continue;
+    const previous = primary;
+    primary = decorate(reefConditionFor(id), input, { chosen: true, reason: `You said this looks more like yours. ${pick.check}` });
+    ({ alternatives, natural } = couldAlsoBe(primary, ranked, input, previous));
+  }
+  return {
+    primary, alternatives, naturalNote: natural,
+    chosen: Boolean(primary?.chosen),
+    title: primary ? `Most likely: ${primary.title}` : 'Not enough to go on yet',
+    warning: input.group === 'invert' ? INVERT_WARNING : '',
+  };
+}
+
+export { ALTERNATIVE_TEXT };
