@@ -115,7 +115,10 @@ int astra_preview_frame(void)
         if(preview_sound<0 && !astra_preview_silent){
             static const int sound[AB_COUNT]={0,SOUND_FORCEFIELD_BOUNCE_WEAPON,SOUND_LASER_HIT_CLUTTER,
                 SOUND_WEAPON_HIT_BLASTABLE,SOUND_ROBOT_HIT,SOUND_MINE_BLEW_UP,
-                SOUND_MINE_BLEW_UP,SOUND_BADASS_EXPLOSION};
+                SOUND_MINE_BLEW_UP,SOUND_BADASS_EXPLOSION,
+                SOUND_LASER_HIT_CLUTTER,SOUND_FORCEFIELD_BOUNCE_WEAPON,SOUND_ROBOT_DESTROYED,
+                SOUND_MINE_BLEW_UP,SOUND_WEAPON_HIT_BLASTABLE,SOUND_FORCEFIELD_BOUNCE_WEAPON,
+                SOUND_ROBOT_HIT,SOUND_BADASS_EXPLOSION,SOUND_WEAPON_HIT_BLASTABLE,SOUND_BADASS_EXPLOSION};
             digi_play_sample(sound[preview_profile],F1_0/2);
             preview_sound=0;
         }

@@ -38,6 +38,11 @@ static int aa_pending_missile=-1,aa_pending_target=-1,aa_pending_signature;
 static float aa_facing_velocity;
 static fix64 aa_attack_until[MAX_OBJECTS];
 static int aa_attack_signature[MAX_OBJECTS],aa_recent_attacker=-1,aa_retaliations,aa_combat_target=-1,aa_combat_signature;
+/* Actual contact supplies a frozen bearing, never a hidden robot position.
+ * Passive projectile sensing below continues to require cockpit visibility. */
+static vms_vector aa_contact_point,aa_contact_direction;
+static fix64 aa_contact_until,aa_contact_next,aa_contact_started;
+static int aa_contact_ram,aa_contact_count,aa_contact_acquired;
 static int aa_arsenal_signature=-1;
 static int aa_hostile(int i){return i>=0&&i<=Highest_object_index&&Objects[i].type==OBJ_ROBOT&&!(Objects[i].flags&(OF_SHOULD_BE_DEAD|OF_EXPLODING))&&!Robot_info[Objects[i].id].companion;}
 /* Perception comes from the main cockpit render, never the object database.
@@ -89,6 +94,31 @@ void astra_auto_attacked(object *o){
     int i=o-Objects;if(!aa_hostile(i)||!aa_can_see(i))return;
     if(aa_attack_signature[i]!=o->signature||aa_attack_until[i]<GameTime64){aa_retaliations++;aa_next=0;}
     aa_recent_attacker=i;aa_attack_signature[i]=o->signature;aa_attack_until[i]=GameTime64+i2f(10);
+}
+void astra_auto_contact(object *source,int ram){
+    if(!astra_auto_enabled()||!ConsoleObject||Player_is_dead||!source)return;
+    int attacker=source-Objects;vms_vector direction;
+    if(ram){
+        if(!aa_hostile(attacker))return;
+        vm_vec_sub(&direction,&source->pos,&ConsoleObject->pos);
+    }else{
+        if(source->type!=OBJ_WEAPON||source->ctype.laser_info.parent_type!=OBJ_ROBOT||source->movement_type!=MT_PHYSICS)return;
+        /* The incoming trajectory is physically sensed even if its owner has
+         * moved behind cover. Do not read that owner's current coordinates. */
+        attacker=source->ctype.laser_info.parent_num;
+        if(!aa_hostile(attacker)||Objects[attacker].signature!=source->ctype.laser_info.parent_signature)return;
+        vm_vec_copy_scale(&direction,&source->mtype.phys_info.velocity,-F1_0);
+    }
+    astra_auto_attacked(source);
+    if(aa_can_see(attacker)||vm_vec_normalize(&direction)<F1_0/10)return;
+    /* Stable bearings under repeated ramming prevent jitter and alternating
+     * turns. A fresh impact can interrupt a search after its bounded window. */
+    if(GameTime64<aa_contact_next)return;
+    if(aa_contact_until>GameTime64&&GameTime64-aa_contact_started<i2f(4))return;
+    aa_contact_direction=direction;
+    vm_vec_scale_add(&aa_contact_point,&ConsoleObject->pos,&direction,i2f(ram?32:65));
+    aa_contact_ram=ram;aa_contact_started=GameTime64;aa_contact_until=GameTime64+i2f(5);
+    aa_contact_next=GameTime64+F1_0;aa_contact_count++;
 }
 static int aa_threat(int i){return aa_hostile(i)&&aa_attack_signature[i]==Objects[i].signature&&aa_attack_until[i]>GameTime64;}
 static void aa_sense_fire(void){
@@ -681,14 +711,14 @@ static void aa_route_watch(void){
         if(aa_phase==0)aa_mission_set(destination,-1,-1,0);aa_loop_next=GameTime64+i2f(35);aa_loop_count++;
         aa_next=0;aa_pick_object=-1;aa_sliding=0;aa_slide_goal=-2;
     }
-    EM_ASM(Module.autoNavigation=({version:40,distinct:$0,quiet:$1,reroutes:$2,detour:$3});,distinct,quiet,aa_loop_count,aa_detour_goal);
+    EM_ASM(Module.autoNavigation=({version:41,distinct:$0,quiet:$1,reroutes:$2,detour:$3});,distinct,quiet,aa_loop_count,aa_detour_goal);
 }
 
 void astra_auto_frame(void){
     if(!astra_auto_enabled()||!ConsoleObject)return;
     memset(&Controls,0,sizeof Controls);
     if(Player_is_dead){
-        aa_pending_missile=-1;aa_weapon_next=aa_missile_next=0;aa_watch_until=0;aa_up_ready=0;
+        aa_contact_until=aa_contact_next=0;aa_pending_missile=-1;aa_weapon_next=aa_missile_next=0;aa_watch_until=0;aa_up_ready=0;
         if(!aa_dead_since){aa_dead_since=GameTime64;aa_deaths++;}
         if(Player_exploded&&GameTime64-aa_dead_since>i2f(11))Death_sequence_aborted=1;
         EM_ASM(window.astraAutoStatus?.("Ship lost - relaunching",$0,$1,$2,$3);,aa_seen,aa_deaths,aa_kills,aa_collects);
@@ -704,7 +734,7 @@ void astra_auto_frame(void){
         aa_arsenal_signature=-1;aa_recent_attacker=aa_combat_target=-1;memset(aa_attack_until,0,sizeof aa_attack_until);
         memset(aa_combat_defer,0,sizeof aa_combat_defer);memset(aa_engage_signature,255,sizeof aa_engage_signature);memset(aa_engage_elapsed,0,sizeof aa_engage_elapsed);
         aa_flare_next=GameTime64+i2f(2);aa_door_flare_next=0;aa_door_flare_wall=-1;
-        aa_level=Current_level_num;aa_level_since=GameTime64;aa_next=aa_status_next=0;aa_segment=-1;aa_seen=0;
+        aa_contact_until=aa_contact_next=0;aa_level=Current_level_num;aa_level_since=GameTime64;aa_next=aa_status_next=0;aa_segment=-1;aa_seen=0;
         memset(aa_visits,0,sizeof aa_visits);memset(aa_ignore,0,sizeof aa_ignore);memset(aa_wall_seen,0,sizeof aa_wall_seen);
         aa_last=ConsoleObject->pos;aa_stuck_since=GameTime64;aa_route_reset();
     }
@@ -791,6 +821,17 @@ void astra_auto_frame(void){
     }else aa_pick_object=-1;
 
     /* Aim at the closest visible threat; the guide-bot is never a target. */
+    int contact=aa_contact_until>GameTime64;
+    /* Only now, after the renderer confirms sight, associate a bearing with
+     * a robot and allow ordinary retaliation and native barrel checks. */
+    if(contact)for(int i=0;i<=Highest_object_index;i++)if(aa_hostile(i)&&aa_can_see(i)&&aa_visible(&Objects[i].pos,0)){
+        vms_vector bearing;float distance=f2fl(vm_vec_normalized_dir(&bearing,&Objects[i].pos,&ConsoleObject->pos));
+        if(distance<115&&vm_vec_dot(&bearing,&aa_contact_direction)>F1_0/3){
+            astra_auto_attacked(&Objects[i]);aa_combat_defer[i]=0;
+            aa_combat_target=-1;aa_contact_until=0;aa_contact_next=GameTime64+i2f(2);
+            aa_contact_acquired++;contact=0;break;
+        }
+    }
     int enemy=-1;float threat=0;
     for(int i=0;i<=Highest_object_index;i++){
         object *o=&Objects[i];if(o->type!=OBJ_ROBOT&&o->type!=OBJ_CNTRLCEN)continue;
@@ -885,6 +926,17 @@ void astra_auto_frame(void){
         if(foe->movement_type==MT_PHYSICS)aa_target_velocity=foe->mtype.phys_info.velocity;
         if(speed<0){vms_vector back;vm_vec_scale_add(&back,&ConsoleObject->pos,&ConsoleObject->orient.fvec,-i2f(16));if(!aa_visible(&back,ConsoleObject->size))speed=0;}
     }
+    int investigating=contact&&!Control_center_destroyed&&(aa_contact_ram||enemy<0||!aa_threat(enemy)||aa_len(&Objects[enemy].pos,&ConsoleObject->pos)>40);
+    if(investigating){
+        aa_watch_until=0;aim=aa_contact_point;attacking=0;searching=1;flanking=0;
+        door=flare_door=-1;aa_pending_missile=-1;aa_mode=12;
+        /* Slide away from a physical ram while turning smoothly. Keep the
+         * frozen bearing rather than chasing any unseen live object. */
+        vms_vector away;vm_vec_scale_add(&away,&ConsoleObject->pos,&aa_contact_direction,-i2f(14));
+        if(aa_visible(&away,ConsoleObject->size)){target=away;speed=aa_contact_ram?18:10;}
+        else {compute_segment_center(&target,&Segments[seg]);speed=aa_visible(&target,ConsoleObject->size)?10:0;}
+        if(GameTime64-aa_contact_started>i2f(3)&&vm_vec_dot(&ConsoleObject->orient.fvec,&aa_contact_direction)>fl2f(.92f))aa_contact_until=0;
+    }
     int watching=aa_watch_until>GameTime64&&!Control_center_destroyed;
     if(watching && (Players[Player_num].shields<i2f(25)||(enemy>=0&&aa_threat(enemy)&&aa_len(&Objects[enemy].pos,&ConsoleObject->pos)<38))){aa_watch_until=0;watching=0;}
     if(watching){aim=target=aa_watch_point;speed=0;attacking=0;door=-1;flare_door=-1;aa_mode=8;aa_stuck_since=GameTime64;vm_vec_zero(&aa_target_velocity);}
@@ -926,7 +978,7 @@ void astra_auto_frame(void){
     }
     int escaping=aa_escape_until>GameTime64;
     if(escaping){aa_escape_move();aa_mode=7;}else {
-        int sliding=aa_sliding;if(attacking)aa_sliding=1;
+        int sliding=aa_sliding;if(attacking||investigating)aa_sliding=1;
         aa_move(target,speed);aa_sliding=sliding;
     }
     vms_vector shot_target=aim;
@@ -952,7 +1004,7 @@ void astra_auto_frame(void){
             Controls.sideways_thrust_time=fl2f(aa_clamp(hold+(desired-velocity)*.14f,-1,1)*f2fl(FrameTime));
         }
     }
-    if(!watching&&!escaping&&(attacking||(door>=0&&Walls[door].type==WALL_BLASTABLE)||(aa_wall>=0&&seg==aa_goal&&(aa_mode==4||aa_mode==5)&&!(WALL_IS_DOORWAY(&Segments[seg],Walls[aa_wall].sidenum)&WID_FLY_FLAG)))){
+    if(!investigating&&!watching&&!escaping&&(attacking||(door>=0&&Walls[door].type==WALL_BLASTABLE)||(aa_wall>=0&&seg==aa_goal&&(aa_mode==4||aa_mode==5)&&!(WALL_IS_DOORWAY(&Segments[seg],Walls[aa_wall].sidenum)&WID_FLY_FLAG)))){
         if(alignment>.985f){
             float distance=enemy>=0?aa_len(&Objects[enemy].pos,&ConsoleObject->pos):aa_len(&aim,&ConsoleObject->pos);
             aa_choose_weapon(distance,enemy);
@@ -1005,14 +1057,15 @@ void astra_auto_frame(void){
     }
     extern void do_weapon_n_item_stuff(void);do_weapon_n_item_stuff();
     if(GameTime64>aa_status_next){
-        static const char *labels[]={"Exploring the mine","Collecting supplies","Rescuing hostages","Engaging hostile","Activating switch","Escaping to exit","Opening door","Finding clearance","Watching destruction","Recharging energy","Navigating to reactor","Tracking reactor guardian"};
+        static const char *labels[]={"Exploring the mine","Collecting supplies","Rescuing hostages","Engaging hostile","Activating switch","Escaping to exit","Opening door","Finding clearance","Watching destruction","Recharging energy","Navigating to reactor","Tracking reactor guardian","Checking incoming attack"};
         aa_kills=Players[Player_num].num_kills_total;
-        EM_ASM(Module.autoMission=({version:40,phase:$0,room:$1,wall:$2,changes:$3,age:$4,blockedShots:$5,clearShots:$6,reposition:$7,reactorDestroyed:!!$8,routeDistance:$9});,
+        EM_ASM(Module.autoMission=({version:41,phase:$0,room:$1,wall:$2,changes:$3,age:$4,blockedShots:$5,clearShots:$6,reposition:$7,reactorDestroyed:!!$8,routeDistance:$9});,
             aa_phase,aa_mission,aa_mission_wall,aa_goal_changes,(double)(GameTime64-aa_mission_since)/F1_0,aa_blocked_shots,aa_clear_shots,aa_reposition,Control_center_destroyed,aa_goal>=0?aa_dist[aa_goal]:-1);
         vms_vector travel=ConsoleObject->mtype.phys_info.velocity;float velocity=f2fl(vm_vec_mag(&travel));
         aa_facing_velocity=velocity>.05f?f2fl(vm_vec_dot(&travel,&ConsoleObject->orient.fvec))/velocity:1;
         EM_ASM(Module.autoFlight=({speed:$0,forward:$1,primary:$2,secondary:$3,energy:$4,shields:$5,version:21});,velocity,aa_facing_velocity,Players[Player_num].primary_weapon,Players[Player_num].secondary_weapon,f2fl(Players[Player_num].energy),f2fl(Players[Player_num].shields));
-        EM_ASM({window.astraAutoStatus?.(UTF8ToString($0),$1,$2,$3,$4);Module.autoTelemetry=({segment:$5,goal:$6,object:$7,enemy:$8,mode:$9,x:$10,y:$11,z:$12});},watching?labels[8]:enemy>=0&&aa_threat(enemy)?"Returning fire":labels[aa_mode],aa_seen,aa_deaths,aa_kills,aa_collects,seg,aa_goal,aa_object,enemy,aa_mode,f2fl(ConsoleObject->pos.x),f2fl(ConsoleObject->pos.y),f2fl(ConsoleObject->pos.z));
+        EM_ASM({window.astraAutoStatus?.(UTF8ToString($0),$1,$2,$3,$4);Module.autoTelemetry=({segment:$5,goal:$6,object:$7,enemy:$8,mode:$9,x:$10,y:$11,z:$12});},watching?labels[8]:investigating?labels[12]:enemy>=0&&aa_threat(enemy)?"Returning fire":labels[aa_mode],aa_seen,aa_deaths,aa_kills,aa_collects,seg,aa_goal,aa_object,enemy,aa_mode,f2fl(ConsoleObject->pos.x),f2fl(ConsoleObject->pos.y),f2fl(ConsoleObject->pos.z));
+        EM_ASM(Module.autoContact=({version:41,investigating:!!$0,ram:!!$1,contacts:$2,acquired:$3,remaining:$4});,investigating,aa_contact_ram,aa_contact_count,aa_contact_acquired,fmaxf(0,(double)(aa_contact_until-GameTime64)/F1_0));
         EM_ASM(Module.autoCombat=({attacker:$0,target:$1,retaliating:!!$2,retaliations:$3,cruise:52,arsenal:!!Module.demoArsenal});,aa_recent_attacker,enemy,enemy>=0&&aa_threat(enemy),aa_retaliations);
         EM_ASM(Module.autoSight=({version:21,visible:$0,targetVisible:!!$1,hiddenRoute:!!$2});,aa_sight_count,enemy>=0&&aa_can_see(enemy),aa_combat_object(aa_object)&&!aa_can_see(aa_object));
         EM_ASM(Module.autoPilot=({version:21,aimError:$0,rollError:$1,watching:!!$2,watches:$3,switches:$4,held:$5,targetAge:$6,turnRate:$7});,

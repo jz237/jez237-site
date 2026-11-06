@@ -160,6 +160,127 @@ static void burst_bloom(burst_frame *f)
     }
 }
 
+/* Ten additional compositions. Bounded geometry uses the same detailed gas
+ * material, depth testing and close-impact attenuation as existing effects. */
+static void burst_needles(burst_frame *f)
+{
+    float t=f->t,fade=1-pyro_ramp(.32f,1,t);
+    for(int i=0;i<42;i++){
+        float a=br(f,i,2)*6.283f,r=(.5f+br(f,i,3)*1.8f)*sqrtf(t);
+        burst_point p=bp(cosf(a)*r,sinf(a)*r*.65f,(br(f,i,5)-.5f)*r);
+        burst_trail(f,bp(p.x*.70f,p.y*.70f,p.z*.70f),p,.024f+.025f*br(f,i,8),fade,bp(1,.65f,.18f));
+        if(i<9)burst_shard(f,p,.035f+br(f,i,10)*.06f,t*(7+i),expf(-8*t));
+    }
+    burst_cloud(f,bp(0,0,0),.12f+.32f*t,.95f*expf(-6*t),fade*.72f);
+}
+static void burst_crackle(burst_frame *f)
+{
+    for(int i=0;i<9;i++){
+        float age=(f->t-br(f,i,1)*.62f)/.33f;if(age<0||age>=1)continue;
+        float d[3];pyro_dir(f->seed,i,d);burst_point p=bp(d[0]*.8f,d[1]*.8f,d[2]*.8f);
+        float fade=burst_fade(age);
+        burst_cloud(f,p,.12f+.24f*age,.95f*(1-age),fade);
+        for(int j=0;j<5;j++){
+            float a=j*1.2566f+br(f,i,7),r=.16f+.65f*age;
+            burst_point q=bp(p.x+cosf(a)*r,p.y+sinf(a)*r,p.z+(br(f,i*5+j,4)-.5f)*r);
+            burst_point bend=bp((p.x+q.x)*.5f+.14f,(p.y+q.y)*.5f-.13f,(p.z+q.z)*.5f);
+            burst_trail(f,p,bend,.035f,fade,bp(.65f,.27f,1));burst_trail(f,bend,q,.022f,fade,bp(.35f,.68f,1));
+        }
+    }
+}
+static void burst_petals(burst_frame *f)
+{
+    float t=f->t,grow=1-expf(-6*t),fade=burst_fade(t);
+    for(int i=0;i<6;i++)for(int j=0;j<6;j++){
+        float a=i*1.0472f+br(f,i,8)*.24f,u=j/5.f,r=grow*(.25f+1.55f*u);
+        burst_point p=bp(cosf(a)*r,sinf(a)*r,(u-.45f)*sinf(t*4)*.75f);
+        burst_cloud(f,p,(.15f+.22f*sinf(u*3.14f))*(.3f+grow),(.95f-.30f*u)*(1-pyro_ramp(.1f,.78f,t)),.85f*fade);
+    }
+    burst_cloud(f,bp(0,0,0),.20f+.35f*grow,.95f*(1-t),fade);
+}
+static void burst_twinjet(burst_frame *f)
+{
+    float t=f->t,fade=burst_fade(t),grow=1-expf(-4*t);
+    for(int sign=-1;sign<=1;sign+=2)for(int j=0;j<18;j++){
+        float u=j/17.f,spread=.10f+.34f*u;
+        burst_point p=bp(sign*grow*(.12f+u*2.25f),(br(f,j,3)-.5f)*spread,(br(f,j,4)-.5f)*spread*2);
+        burst_cloud(f,p,(.12f+.24f*u)*(.35f+grow),(.98f-.30f*u)*(1-pyro_ramp(.18f,.9f,t)),fade*(.95f-.25f*u));
+        if(j%3==0)burst_trail(f,bp(p.x*.7f,p.y,p.z),p,.04f,fade,bp(1,.37f,.08f));
+    }
+    for(int j=0;j<8;j++){float d[3];pyro_dir(f->seed,j,d);burst_shard(f,bp(d[0]*grow,d[1]*grow,d[2]*grow),.12f,t*6+j,.3f*(1-t));}
+}
+static void burst_shell(burst_frame *f)
+{
+    float t=f->t,r=.12f+1.7f*(1-expf(-4*t)),fade=burst_fade(t);
+    for(int i=0;i<38;i++){
+        float d[3];pyro_dir(f->seed,i,d);
+        burst_point p=bp(d[0]*r,d[1]*r,d[2]*r);
+        burst_cloud(f,p,.16f+.22f*t,.83f*(1-pyro_ramp(.1f,.72f,t)),.8f*fade);
+        if(i<14)burst_shard(f,bp(p.x*1.1f,p.y*1.1f,p.z*1.1f),.10f+.09f*br(f,i,5),i+t*4,.7f*expf(-4*t));
+    }
+}
+static void burst_cryo(burst_frame *f)
+{
+    float t=f->t,r=1-expf(-7*t),fade=burst_fade(t);
+    for(int i=0;i<20;i++){
+        float d[3];pyro_dir(f->seed,i,d);float speed=.8f+br(f,i,3);
+        burst_point p=bp(d[0]*r*speed,d[1]*r*speed-.3f*t*t,d[2]*r*speed);
+        burst_shard(f,p,.08f+.12f*br(f,i,4),i+t*5,.10f);
+        burst_trail(f,bp(p.x*.6f,p.y*.6f,p.z*.6f),p,.05f,fade*.70f,bp(.18f,.87f,1));
+        burst_cloud(f,bp(p.x*.6f,p.y*.6f,p.z*.6f),.12f+.35f*t,.20f*expf(-7*t),.65f*fade);
+    }
+    burst_cloud(f,bp(0,0,0),.12f+.58f*r,.7f*expf(-9*t),fade);
+}
+static void burst_cross(burst_frame *f)
+{
+    float t=f->t,r=1-expf(-5*t),fade=burst_fade(t);
+    for(int arm=0;arm<4;arm++)for(int j=0;j<9;j++){
+        float a=arm*1.5708f+.3f,u=j/8.f,reach=r*u*2.2f;
+        burst_point p=bp(cosf(a)*reach,sinf(a)*reach,(br(f,arm*9+j,5)-.5f)*.50f*r);
+        burst_cloud(f,p,(.30f-.18f*u)*(.25f+r),(.95f-.2f*u)*(1-pyro_ramp(.12f,.82f,t)),fade);
+        if(j==8)burst_trail(f,bp(p.x*.75f,p.y*.75f,p.z),p,.12f,fade,bp(1,.18f,.035f));
+    }
+}
+static void burst_aftershock(burst_frame *f)
+{
+    for(int wave=0;wave<3;wave++){
+        float age=(f->t-wave*.22f)/.56f;if(age<0||age>=1)continue;
+        float r=(.13f+2.1f*(1-expf(-4*age)))*(1-.17f*wave),fade=burst_fade(age);
+        for(int i=0;i<30;i++){
+            float a=i*6.283185f/30,b=(i+1)*6.283185f/30;
+            burst_point p=ring_point(a,r,0),q=ring_point(b,r,0);
+            burst_trail(f,p,q,.065f+.08f*(1-age),fade*.8f,bp(1,.52f-.12f*wave,.12f));
+            if(i%3==0)burst_cloud(f,p,.13f+.22f*age,.8f*(1-age),fade*.85f);
+        }
+        burst_cloud(f,bp(0,0,0),.16f+.42f*age,.95f*(1-age),fade);
+    }
+}
+static void burst_splinters(burst_frame *f)
+{
+    float t=f->t,fade=burst_fade(t);
+    for(int i=0;i<20;i++){
+        float d[3];pyro_dir(f->seed,i,d);float r=(1-expf(-3*t))*(1.1f+br(f,i,2)*1.3f);
+        burst_point p=bp(d[0]*r,d[1]*r-.45f*t*t,d[2]*r);
+        burst_shard(f,p,.13f+.15f*br(f,i,3),br(f,i,5)*6+t*(4+i%5),.8f*expf(-5*t));
+        for(int j=1;j<=2;j++)burst_cloud(f,bp(p.x*(1-j*.14f),p.y*(1-j*.14f),p.z*(1-j*.14f)),.09f+.09f*j+.10f*t,(.83f-j*.2f)*expf(-3*t),fade*.75f);
+        burst_trail(f,bp(p.x*.8f,p.y*.8f,p.z*.8f),p,.036f,fade,bp(1,.42f,.06f));
+    }
+}
+static void burst_thunderhead(burst_frame *f)
+{
+    float t=f->t;
+    for(int lobe=0;lobe<3;lobe++){
+        float age=(t-lobe*.095f)/(.98f-lobe*.095f);if(age<0||age>=1)continue;
+        float grow=1-expf(-6*age),rise=(.6f+br(f,lobe,2))*age,fade=burst_fade(age);
+        burst_point c=bp((lobe-1)*.78f*grow,rise-.20f,(br(f,lobe,3)-.5f)*grow);
+        for(int j=0;j<16;j++){
+            float d[3];pyro_dir(f->seed,lobe*16+j,d);float r=(.35f+.55f*br(f,j,4))*grow;
+            burst_cloud(f,bp(c.x+d[0]*r,c.y+d[1]*r,c.z+d[2]*r),(.28f+.28f*br(f,j,8))*(.35f+grow),(.9f-.16f*lobe)*(1-pyro_ramp(.18f,.83f,age)),fade*.90f);
+        }
+        for(int j=0;j<5;j++){float a=br(f,j+lobe*5,5)*6.283f,r=age*2.1f;burst_point p=bp(cosf(a)*r,r*.7f-1.2f*age*age,sinf(a)*r);burst_trail(f,bp(p.x*.85f,p.y*.85f,p.z*.85f),p,.043f,fade,bp(1,.40f,.07f));}
+    }
+}
+
 static void draw_burst_plates(const burst_frame *f,float scale,float visibility)
 {
     static const int faces[][3]={{0,2,1},{0,1,3},{0,3,2},{1,2,3}};
@@ -188,7 +309,7 @@ void astra_pattern_blast(vms_vector *where,fix radius,float t,unsigned seed,int 
 {
     typedef void (*composer)(burst_frame *);
     static const composer compose[AB_COUNT]={NULL,burst_arc,burst_spall,burst_cinders,burst_ring,
-                                             burst_implosion,burst_chain,burst_bloom};
+                                             burst_implosion,burst_chain,burst_bloom,burst_needles,burst_crackle,burst_petals,burst_twinjet,burst_shell,burst_cryo,burst_cross,burst_aftershock,burst_splinters,burst_thunderhead};
     if(profile<=AB_LEGACY || profile>=AB_COUNT || t<0 || t>=1 || !astra_pyro_ready())return;
     g3s_point view;g3_rotate_point(&view,where);
     float scale=f2fl(radius);

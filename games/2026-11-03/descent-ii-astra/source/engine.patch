@@ -696,7 +696,7 @@ index af0b258..82aa6fb 100644
  
  extern ogl_texture* ogl_get_free_texture();
 diff --git a/d2/main/collide.c b/d2/main/collide.c
-index fdb2e78..b59ea8c 100644
+index fdb2e78..96324ff 100644
 --- a/d2/main/collide.c
 +++ b/d2/main/collide.c
 @@ -649,6 +649,10 @@ int check_effect_blowup(segment *seg,int side,vms_vector *pnt, object *blower, i
@@ -721,7 +721,15 @@ index fdb2e78..b59ea8c 100644
  
  	// Wall is volatile if either tmap 1 or 2 is volatile
  	if ((TmapInfo[seg->sides[hitwall].tmap_num].flags & TMI_VOLATILE) || (seg->sides[hitwall].tmap_num2 && (TmapInfo[seg->sides[hitwall].tmap_num2&0x3fff].flags & TMI_VOLATILE))) {
-@@ -1341,6 +1349,7 @@ int apply_damage_to_robot(object *robot, fix damage, int killer_objnum)
+@@ -996,6 +1004,7 @@ void collide_robot_and_player( object * robot, object * playerobj, vms_vector *c
+ 				Last_thief_hit_time = GameTime64;
+ 		}
+ 
++		{extern void astra_auto_contact(object*,int);if(playerobj==ConsoleObject)astra_auto_contact(robot,1);}
+ 		create_awareness_event(playerobj, PA_PLAYER_COLLISION);			// object robot can attract attention to player
+ 		do_ai_robot_hit_attack(robot, playerobj, collision_point);
+ 		do_ai_robot_hit(robot, PA_WEAPON_ROBOT_COLLISION);
+@@ -1341,6 +1350,7 @@ int apply_damage_to_robot(object *robot, fix damage, int killer_objnum)
  //		Boss_been_hit = 1;
  
  	robot->shields -= damage;
@@ -729,7 +737,7 @@ index fdb2e78..b59ea8c 100644
  
  	//	Do unspeakable hacks to make sure player doesn't die after killing boss.  Or before, sort of.
  	if (Robot_info[robot->id].boss_flag)
-@@ -2215,6 +2224,8 @@ extern fix64 Buddy_sorry_time;
+@@ -2215,6 +2225,8 @@ extern fix64 Buddy_sorry_time;
  
  void apply_damage_to_player(object *playerobj, object *killer, fix damage, ubyte possibly_friendly)
  {
@@ -738,7 +746,7 @@ index fdb2e78..b59ea8c 100644
  	if (Player_is_dead)
  		return;
  
-@@ -2238,6 +2249,7 @@ void apply_damage_to_player(object *playerobj, object *killer, fix damage, ubyte
+@@ -2238,6 +2250,7 @@ void apply_damage_to_player(object *playerobj, object *killer, fix damage, ubyte
  
  	if (playerobj->id == Player_num) {		//is this the local player?
  		Players[Player_num].shields -= damage;
@@ -746,7 +754,15 @@ index fdb2e78..b59ea8c 100644
  		PALETTE_FLASH_ADD(f2i(damage)*4,-f2i(damage/2),-f2i(damage/2));	//flash red
  
  		if (Players[Player_num].shields < 0)	{
-@@ -2768,6 +2780,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
+@@ -2403,6 +2416,7 @@ void collide_player_and_weapon( object * playerobj, object * weapon, vms_vector
+ 
+ 	maybe_kill_weapon(weapon,playerobj);
+ 
++	{extern void astra_auto_contact(object*,int);if(playerobj==ConsoleObject&&damage>0&&!(weapon->flags&OF_HARMLESS))astra_auto_contact(weapon,0);}
+ 	bump_two_objects(playerobj, weapon, 0);	//no damage from bump
+ 
+ 	if ( !Weapon_info[weapon->id].damage_radius ) {
+@@ -2768,6 +2782,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
  		return;
  	}
  
@@ -754,7 +770,7 @@ index fdb2e78..b59ea8c 100644
  	collision_type = COLLISION_OF(A->type,B->type);
  
  	switch( collision_type )	{
-@@ -2825,6 +2838,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
+@@ -2825,6 +2840,7 @@ void collide_two_objects( object * A, object * B, vms_vector *collision_point )
  	default:
  		Int3();	//Error( "Unhandled collision_type in collide.c!\n" );
  	}

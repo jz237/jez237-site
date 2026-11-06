@@ -946,3 +946,15 @@ mine, and excludes exit triggers until the reactor is cleared. The same guard
 applies to prerequisite planning, swept-hull shortcuts, dodges and recovery.
 Secret mines still use their native return exits after the objective is cleared.
 Manual controls, native triggers, weapon rays and campaign data are unchanged.
+
+Contact awareness and ten new detonations (pyre41)
+
+Actual robot contact and incoming projectile impacts provide a frozen bearing
+for a bounded, smooth defensive turn and collision-checked separation. Unseen
+robots cannot be tracked or fired at. Passive sensing still requires sight.
+Ten additional detailed compositions join the live impact/destruction pools.
+The showroom numbers all eighteen entries, including player destruction, with
+deterministic replay, scrubbing and randomized variations. New lifetimes range
+from 0.42 to 5.05 seconds; the player breakup remains the longest. Existing
+near-camera attenuation, occluded mine illumination and native sound remain.
+Manual movement, native weapon damage and campaign geometry are unchanged.

@@ -5,6 +5,13 @@
   $('previewPanel').append(combatToggle);
   function combatControls(open){combatToggle.setAttribute('aria-expanded',String(open));$('rangeControls').hidden=!open;}
   combatToggle.onclick=()=>combatControls(combatToggle.getAttribute('aria-expanded')!=='true');
+  const blastBar=document.createElement('div');blastBar.id='blastQuick';
+  blastBar.innerHTML='<button id="blastMenu" aria-expanded="false" aria-controls="rangeControls">Effects &amp; playback</button><button id="blastPrevious" aria-label="Previous explosion">‹</button><button id="blastReplay">Replay</button><button id="blastNext" aria-label="Next explosion">›</button><button id="blastBack">Back</button>';
+  $('previewPanel').append(blastBar);
+  $('blastMenu').onclick=()=>{const open=$('rangeControls').hidden;$('rangeControls').hidden=!open;$('blastMenu').setAttribute('aria-expanded',String(open));};
+  function stepBlast(delta){const choices=$('blastSelect'),count=choices.options.length;choices.value=String((Number(choices.value)+delta+count)%count);choices.dispatchEvent(new Event('change'));}
+  $('blastPrevious').onclick=()=>stepBlast(-1);$('blastNext').onclick=()=>stepBlast(1);
+  $('blastReplay').onclick=()=>{Module.pyroPreviewCommand=2;};$('blastBack').onclick=()=>astraPreview.close();
   const shadow = $('shadowQuality');
   try { shadow.value = localStorage.getItem('astra.shadows') ?? (matchMedia('(pointer:coarse)').matches ? '0' : '1'); } catch {}
   shadow.addEventListener('change', () => {
@@ -54,10 +61,13 @@
   $('effectNew').onclick = () => { Module.pyroPreviewCommand = 1; };
   const blastUpdate = astraPreview.update.bind(astraPreview);
   astraPreview.update = (...args) => {
+    if(!document.body.classList.contains('blast-preview')){
+      document.body.classList.add('blast-preview');$('rangeControls').hidden=true;$('blastMenu').setAttribute('aria-expanded','false');
+    }
     blastUpdate(...args);
     $('previewAgain').textContent = 'New variation';
   };
-  const resetCombat = () => { window.astraCombatPending = -1; if (window.Module) Module.combatInspect = -1;document.body.classList.remove('combat-preview'); };
+  const resetCombat = () => { window.astraCombatPending = -1; if (window.Module) Module.combatInspect = -1;document.body.classList.remove('combat-preview','blast-preview'); };
   const explosionOpen = astraPreview.open.bind(astraPreview);
   astraPreview.open = () => { resetCombat(); explosionOpen(); };
   const weaponsOpen = astraWeaponDemo.open.bind(astraWeaponDemo);
