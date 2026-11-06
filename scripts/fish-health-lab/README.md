@@ -638,3 +638,96 @@ see if you can get the layout colors and design to be more like the attached pic
   (`workspace/tmp/fish-health-v3-publish-20261106/upload-verification.json`); IMAGE_SOURCE `media`.
 - Checks: `pond.test.mjs`, `medicine.test.mjs`, updated `fish-images.test.mjs`/`reef.test.mjs`, and the
   existing browser checks (reef check expects the Pond tile; front-door asset count ignores the background).
+
+## Scientific names and homepage card, 2026-11-06
+
+Jez, 09:07 EST: “Put a link to it from my homepage on jez237. Also in the diagnosis in very tiny print
+put the scientific name of the diagnosis.” `science.mjs` maps each diagnosis to its scientific/clinical
+name (*asterisks* = italic taxon; normal/placement results have none); `scienceLine()` prints it in
+small print under the result title and the reference page title (`.sci-name` in theme.css). Check:
+`science.test.mjs`. Homepage: a “Fish Health Lab” hub card after The Hidden Reef
+(`assets/home-cards/fish-health-lab-thumb-20261106.webp`, cropped from the published opening picture).
+
+## In-page reader for “Read more”, 2026-11-06
+
+Jez, 09:17 EST: “On the sections where it says read more and links off to sites like merck manual, have
+the sites come up in a pop-up similar to the way the shop online works.” `reader.mjs` opens Read more
+and About-page source links in `#reader-dialog`: a sandboxed iframe (no top navigation, no referrer)
+with the title, source, “Open in new tab ↗” and ×. Merck sends no frame-blocking headers (checked
+2026-11-06). Modifier/middle clicks keep the browser's new tab; `openTreatmentPopup` stays as the
+fallback when `<dialog>` is unsupported. hobbyist/growth browser checks now expect the reader.
+
+## Library visual guide (fish), 2026-11-06
+
+Jez, 09:30 EST: the reference library was missing pictures (it still used the first prototype's six
+fixed frames, filled only for ich, velvet and cottony growth); 09:36 “I'd like to see more detailed visual
+information such as infographic and close-ups images of the disease” → 09:38 “Yes proceed with your
+recommendation” (on-page infographic with real text; AI pictures only). `library-visuals.mjs`: per
+disease four numbered close-ups (84 new crops, `library-images-data.mjs`, receipt
+`library-images-20261106.json`; ich/velvet/cottony growth reuse their detail pictures), a “Where it
+shows” fish map, Early/Typical/Late, the top look-alike with its picture, and “On different fish” (the
+fish-type sets). Library cards lead with a picture. Tap any picture to enlarge. Check: `library.test.mjs`.
+Coral, invert and pond pages got the same guide the same day (156 close-ups, `library-reef-images-data.mjs`, receipt `library-reef-images-20261106.json`; `REEF_LIB_INFO` gives “Where to look” chips for corals/inverts and the fish map for pond).
+
+Ich, velvet and cottony growth first reused the painted prototype sheets as their close-ups, which looked different from every other page (Jez, 10:23 EST: “The ich reference looks different than the rest”). They now have photo close-ups like the rest (sheet `library-classic`, 12 more crops, 96 in total); the original six sheets each follow as “Reference sheets”.
+
+## Logic check, 2026-11-06
+
+Jez, 10:37 EST: “Scan the whole sick fish sections for logic problems just to be safe.” Every answer path
+was run (fish: water × fish type × sign × closer × lump surface × each behaviour; reef/pond: group × kind ×
+sign × each “anything changed” chip; the medicine matrix). Fixed:
+- Swollen fish now get a “Look from above: what are the scales doing?” question (flat → bloat, pine cone →
+  dropsy, urgent). Before, dropsy was only reachable through the “pinecone” behaviour checkbox.
+- Pond “Sitting on the bottom” no longer says “Normal winter rest” unless “Cold snap or winter” is picked
+  (otherwise poor water leads, winter rest stays a plain line).
+- Shrimp/crab/snail “Not moving” with no animal picked no longer jumps to the snail-only “stuck upside down”.
+- Three coral answers had no sign of their own and could never be the main answer (slow tissue loss,
+  starved, wrong spot); new tiles “White creeping up from the base” (SPS), “Pale and pastel”, “Bent over or
+  stung” use library close-ups.
+- Medicine check wording says “the pond” / “a separate tub” for ponds.
+Unchanged by design: the fish “normal” and coral “normal” entries only appear as the plain “may be normal” line.
+
+## Second-model review fixes, 2026-11-06 11:15
+
+Astra (gpt-6-astra) reviewed the whole section at Jez's request (11:07, report only) and found problems the
+first logic check missed; Jez 11:15: “fix all those things if those problems are real”. Fixed (checks in
+`review.test.mjs`): columnaris leads over ich/velvet and the raise-the-heat conflict is called out; the
+detoxifier step applies only when ammonia/nitrite shows and warns about mixing with medicine; no blanket
+half-dose advice; pH, temperature and salinity readings now produce warnings; coral “Flesh peeling off” and
+“Brown jelly” answers always act today; a “normal” answer never leads when a picked change points at a
+real problem (winter rest + pump stopped); copper + corys/plecos says “not even in a hospital tank”;
+methylene blue only in a hospital tank in the fungus plan; marine dropsy/popeye summaries drop Epsom salt;
+African cichlid swelling acts today; corys/plecos get no-scales wording for the swelling question; saltwater
+acclimation mentions salinity; zoa handling mentions palytoxin gloves/eye protection; ich starts today;
+Uronema plan no longer suggests lowering salinity; broad bacterial scientific names say “often”; the
+library timeline reads “How it can change” (Early/Common/Advanced, not every fish goes through every stage);
+the shrimp/crab/snail section says it is for saltwater tanks.
+
+Second Astra pass (11:35 EST) found the first fixes incomplete across views; fixed (checks `R2-*` in
+`review.test.mjs`): ich/velvet plans are rewritten (no heat step) whenever columnaris also shows, so the
+results card, care page and saved notes agree, and the care page and notes carry the guide's notes; no
+unconditional detoxifier advice (ammonia check, water plan, emergency box); `readSalinity` handles SG
+1.000–1.100 and ppt 0–70 and flags anything else as unreadable; extreme pH/temperature/salinity also go
+to the urgent banner; African cichlid swelling gets a Malawi bloat plan (metronidazole, hospital tank);
+corys/plecos see “Swollen tight all over” in the reason, urgent banner and notes. A sweep of every
+two-sign combination added notes for whole-tank + hospital plans and fast-then-feed plans.
+
+Independent reviewer (fresh subagent, 11:50–12:05 EST) found 12 more and then 7 side effects of the fixes;
+all fixed and re-confirmed by its scripts (checks `R3-*`/`R4` in `review.test.mjs`): toxic ammonia/nitrite
+and saltwater temperatures are urgent; cory/pleco velvet/dropsy/bloat plans (no copper, no scales);
+disease pages opened from a result use that result's plan and urgency (fish and reef); heat tips dropped
+under the columnaris conflict; goldfish coldwater range (40–77 °F) and ich heat cap 75 °F; °F/°C slips
+and conductivity readings flagged; “died after dosing” leads with medicine poisoning; no “may be normal”
+line next to alarms; salinity alarms say correct slowly; medicine check: “avoid” verdict (salt + scaleless),
+display-level “hospital tank only” for copper/formalin/methylene blue, pond wording in tips; library “all
+waters” shows both plans; readable notes; new-fish onset is a quarantine note.
+
+Astra round 3 (12:17 EST), fixed (`A3-*` in `review.test.mjs`): the columnaris rewrite keeps each
+variant's treatment line (cory/pleco velvet stays copper-free); freshwater velvet uses copper only in a
+hospital tank (matches the medicine check); the African/oscar swelling plan separates mbuna (Malawi bloat,
+metronidazole, plant diet) from oscars (overeating/blockage, fast first, usual diet); salinity units win
+(%, ppt/psu, SG) and negatives are rejected; hospital/tub mode rows describe the hospital tank, not the display.
+
+Astra round 4 (12:40 EST), fixed (`A4-*`): salinity in ppm/mg/L or with a typographic minus is rejected; metronidazole only with Malawi bloat signs (off food, stringy white poop), otherwise a fast first; oscars get a fast and outside help, not a drug.
+
+Astra round 5 (12:48 EST), fixed (`A4-2/A5`): the African/oscar swelling plan is one sequence (hospital tank, fast, watch 1–2 days, get help from a fish vet or experienced store if it gets worse; metronidazole mentioned only as the usual Malawi bloat treatment).
