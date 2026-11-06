@@ -169,16 +169,16 @@ try {
   assert.equal(await page.locator('.result-focus').getAttribute('data-result'),'ich-fresh');
   record('could-also: velvet card has a look-for check, a danger line and same-steps note; Compare shows ich vs velvet with one check; tapping swaps the result (and back); changing answers drops the pick');
   await page.locator('.result-focus .result-image').click();
-  for(const slot of ['overview','variations','closeup','subtle','marked','lookalikes']) {
-    await page.locator('#detail-content [data-slot="'+slot+'"]').click();
-    assert.equal(await page.locator('#detail-content .gallery-image img').count(),1);
-    await page.locator('#detail-content .gallery-image img').evaluate(img=>img.decode());
+  // Library visual guide (Nov 6 2026): four numbered close-ups + the two remaining full sheets, each enlargeable.
+  assert.equal(await page.locator('#detail-content .ig-closeups .ig-zoom').count(),4);
+  assert.equal(await page.locator('#detail-content .more-sheets [data-sheet]').count(),2);
+  for (const zoom of await page.locator('#detail-content .ig-closeups .ig-zoom, #detail-content .more-sheets [data-sheet]').all()) {
+    await zoom.click();
+    await page.locator('#atlas-full').evaluate(img=>img.decode()); await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#detail-dialog').isVisible(),true);
   }
-  await page.locator('#detail-content [data-enlarge-entry]').click();
-  await page.locator('#atlas-full').evaluate(img=>img.decode()); await page.keyboard.press('Escape');
-  assert.equal(await page.locator('#detail-dialog').isVisible(),true);
   await page.keyboard.press('Escape');
-  record('white-grain results reach all six preserved reference sheets one at a time; enlargement returns correctly');
+  record('white-grain results reach all six preserved reference sheets (four close-ups + two full sheets); enlargement returns correctly');
 
   for(const detail of ['dust','fuzz','patch','lumps','unclear']) {
     await begin(page,'fresh','dots',detail); await next(page);
@@ -191,12 +191,11 @@ try {
   for(const [sign,id] of [['dust','velvet-fresh'],['fuzz','water-mold']]) {
     await begin(page,'fresh',sign); await next(page);
     await page.locator('.result-focus .result-image').click();
-    for(const slot of ['overview','variations','closeup','subtle','marked','lookalikes']) {
-      await page.locator('#detail-content [data-slot="'+slot+'"]').click();
-      await page.locator('#detail-content .gallery-image img').evaluate(img=>img.decode());
-      assert.match(await page.locator('#detail-content .gallery-image img').getAttribute('src'),/conditions\//);
-      await page.locator('#detail-content [data-enlarge-entry]').click();
-      await page.locator('#atlas-full').evaluate(img=>img.decode()); await page.keyboard.press('Escape');
+    const sheets = page.locator('#detail-content .ig-closeups img, #detail-content .more-sheets img');
+    assert.equal(await sheets.count(),6);
+    for (const img of await sheets.all()) { await img.evaluate(i=>i.decode()); assert.match(await img.getAttribute('src'),/conditions\//); }
+    for (const zoom of await page.locator('#detail-content .ig-closeups .ig-zoom, #detail-content .more-sheets [data-sheet]').all()) {
+      await zoom.click(); await page.locator('#atlas-full').evaluate(img=>img.decode()); await page.keyboard.press('Escape');
     }
     await page.keyboard.press('Escape');
     await action(page,'care').click(); await at(page,'care'); await next(page); await at(page,'care-summary');

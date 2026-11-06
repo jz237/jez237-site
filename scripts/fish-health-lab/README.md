@@ -656,3 +656,15 @@ and About-page source links in `#reader-dialog`: a sandboxed iframe (no top navi
 with the title, source, “Open in new tab ↗” and ×. Merck sends no frame-blocking headers (checked
 2026-11-06). Modifier/middle clicks keep the browser's new tab; `openTreatmentPopup` stays as the
 fallback when `<dialog>` is unsupported. hobbyist/growth browser checks now expect the reader.
+
+## Library visual guide (fish), 2026-11-06
+
+Jez, 09:30 EST: the reference library was missing pictures (it still used the first prototype's six
+fixed frames, filled only for ich, velvet and cottony growth); 09:36 “I'd like to see more detailed visual
+information such as infographic and close-ups images of the disease” → 09:38 “Yes proceed with your
+recommendation” (on-page infographic with real text; AI pictures only). `library-visuals.mjs`: per
+disease four numbered close-ups (84 new crops, `library-images-data.mjs`, receipt
+`library-images-20261106.json`; ich/velvet/cottony growth reuse their detail pictures), a “Where it
+shows” fish map, Early/Typical/Late, the top look-alike with its picture, and “On different fish” (the
+fish-type sets). Library cards lead with a picture. Tap any picture to enlarge. Check: `library.test.mjs`.
+Coral, invert and pond library pages are next.

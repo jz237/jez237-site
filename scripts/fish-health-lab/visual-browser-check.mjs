@@ -21,7 +21,8 @@ try{
   assert.equal(await page.locator('#library-view').isVisible(),true);
   assert.equal(await page.locator('#library-grid .condition-card').count(),19);
   assert.equal(await page.locator('#library-water').inputValue(),'fresh');
-  assert.match(await page.locator('#library-count').innerText(),/18 illustrations in place · 96 image spaces to fill/);
+  assert.match(await page.locator('#library-count').innerText(),/^19 entries · \d{3} pictures$/);
+  assert.equal(await page.locator('#library-grid .card-image img').count(),19);
   await page.locator('.nav-tab[data-view="guide"]').click();
   assert.equal(await page.locator('[data-step="water"]').isVisible(),true);
   assert.equal(await page.locator('input[name="water"]:checked').inputValue(),'fresh');
@@ -40,11 +41,10 @@ try{
   await page.locator('[data-action="all-patterns"]').click();
   record('appearance, water-type and text filters work without changing check answers');
   await page.locator('#library-grid .card-image[data-condition="ich-fresh"]').click();
-  assert.equal(await page.locator('#detail-content [data-slot]').count(),6);
-  assert.equal(await page.locator('#detail-content .visual-gallery img').count(),1);
-  await page.locator('#detail-content [data-slot="subtle"]').click();
-  await page.locator('#detail-content .gallery-image img').evaluate(img=>img.decode());
-  await page.locator('#detail-content [data-enlarge-entry]').click();
+  assert.equal(await page.locator('#detail-content .ig-closeups img').count(),4);
+  assert.ok(await page.locator('#detail-content .fish-strip .strip-item').count() >= 10);
+  await page.locator('#detail-content .ig-closeups img').nth(1).evaluate(img=>img.decode());
+  await page.locator('#detail-content .ig-closeups .ig-zoom').nth(1).click();
   await page.locator('#atlas-full').evaluate(img=>img.decode()); await page.keyboard.press('Escape');
   assert.equal(await page.locator('#detail-dialog').isVisible(),true);
   record('reference galleries show one sheet at a time and enlargement returns to the gallery');
@@ -54,9 +54,8 @@ try{
   assert.equal(await page.locator('#comparison-picks button').count(),2);
   assert.match(await page.locator('#comparison-status').innerText(),/Two entries/);
   await page.locator('[data-action="compare"]').click();
-  assert.equal(await page.locator('#compare-dialog .visual-gallery').count(),2);
-  assert.equal(await page.locator('#compare-dialog [data-slot]').count(),12);
-  assert.equal(await page.locator('#compare-dialog img').count(),2);
+  assert.equal(await page.locator('#compare-dialog .compare-visual').count(),2);
+  assert.equal(await page.locator('#compare-dialog .compare-closeups img').count(),8);
   assert.match(await page.locator('#compare-content').innerText(),/Easy to confuse with/);
   assert.equal(await page.locator('input[type="file"],a[href*="chatgpt"]').count(),0);
   await noOverflow(page);
@@ -81,17 +80,19 @@ try{
   await mobile.locator('#library-grid [data-compare="ich-marine"]').click();
   await mobile.locator('[data-action="compare"]').click();
   assert.equal(await mobile.locator('#compare-dialog').evaluate(el=>el.scrollWidth>el.clientWidth),false);
-  await mobile.locator('#compare-dialog [data-gallery="ich-fresh"] [data-slot="closeup"]').click();
-  await mobile.locator('#compare-dialog [data-gallery="ich-fresh"] .gallery-image img').evaluate(img=>img.decode());
+  await mobile.locator('#compare-dialog .compare-closeups img').first().evaluate(img=>img.decode());
   await mobile.screenshot({path:output+'/mobile-comparison.png'});
   await mobile.keyboard.press('Escape');
   await mobile.locator('[data-action="clear-compare"]').click();
   await mobile.locator('#library-grid .card-image[data-condition="ich-marine"]').click();
-  assert.equal(await mobile.locator('#detail-content [data-slot]').count(),6);
-  assert.equal(await mobile.locator('#detail-content .gallery-image img').count(),0);
+  // Every disease now has its visual guide (Nov 6 2026): four close-ups, fish map, timeline, fish strip.
+  assert.equal(await mobile.locator('#detail-content .ig-closeups img').count(),4);
+  assert.equal(await mobile.locator('#detail-content .fish-map').count(),1);
+  assert.equal(await mobile.locator('#detail-content .ig-timeline li').count(),3);
+  assert.equal(await mobile.locator('#detail-content [data-slot]').count(),0);
   await noOverflow(mobile);
-  await mobile.screenshot({path:output+'/mobile-empty-gallery.png'});
-  record('mobile comparisons fit; unfinished disease galleries keep all six honest picture spaces');
+  await mobile.screenshot({path:output+'/mobile-visual-guide.png'});
+  record('mobile comparisons fit; every disease page has its visual guide (no empty picture spaces)');
 }finally{await browser.close();}
 assert.deepEqual(errors,[]);
 const result={url:root,checks:checks.length,passed:checks,errors,screenshots:output};

@@ -8,6 +8,7 @@ import { createReef } from './reef-app.mjs';
 import { createExtras } from './extras-app.mjs';
 import { scienceLine } from './science.mjs';
 import { createReader } from './reader.mjs';
+import { LIB_INFO, ZONES, fishMap, closeupsFor, fishStripFor, leadImageFor, libraryPictureCount } from './library-visuals.mjs';
 import { UI_IMAGES, IMAGE_SOURCE as UI_IMAGE_SOURCE } from './ui-images-data.mjs';
 import { MEDIA_BASE } from './fish-images-data.mjs';
 
@@ -313,9 +314,42 @@ function slotArt(condition, slot, compact = false) {
   return `<span class="slot-placeholder"><span class="frame-symbol" aria-hidden="true">▧</span><strong>${escape(slot.label)}</strong>${compact ? '' : `<small>${escape(condition.title)}</small><span class="awaiting">IMAGE TO ADD</span>`}</span>`;
 }
 
+// Library card: the disease's lead picture, three close-ups and a picture count (library-visuals.mjs).
+const pic = (image, cls = '') => image ? `<img${cls ? ` class="${cls}"` : ''} src="${escape(image.url)}" width="${image.width || 362}" height="${image.height || 362}" alt="${escape(image.alt || '')}" loading="lazy" decoding="async">` : '';
 function card(condition, matched = false) {
-  const slots = slotsFor(condition.id), lead = leadSlot(condition.id), count = slots.filter(s => s.image).length;
-  return `<article class="condition-card visual-card"><button class="card-image ${lead.image ? 'filled' : ''}" data-condition="${condition.id}" aria-label="Open ${escape(condition.title)} visual page">${slotArt(condition, lead)}<span class="slot-count">${count} / ${slots.length} images</span></button><div class="card-slot-strip">${slots.filter(s => s.id !== lead.id).slice(0, 3).map(slot => `<button class="mini-slot ${slot.image ? 'filled' : ''}" data-condition="${condition.id}" data-open-slot="${slot.id}" aria-label="${escape(condition.title)}: ${escape(slot.label)}${slot.image ? '' : ' — image to add'}">${slotArt(condition, slot, true)}</button>`).join('')}</div><div class="condition-body"><div class="card-meta"><span>${escape(condition.kind)}</span><span>${scopeName(condition.scope)}</span></div><h3>${escape(condition.title)}</h3>${badge(condition.urgency)}<p>${escape(condition.summary)}</p>${matched ? `<p class="matches"><strong>${condition.comparisonReason ? 'Why compare:' : 'Relevant clues:'}</strong> ${escape(condition.comparisonReason || condition.matched.join(', ') || 'Tank history / water readings')}</p>` : ''}<div class="card-actions"><button class="text-button" data-condition="${condition.id}">Open visual page ↗</button><button class="compare-toggle" data-compare="${condition.id}" aria-pressed="${comparisons.has(condition.id)}">${comparisons.has(condition.id) ? '✓ Selected' : '+ Compare'}</button></div></div></article>`;
+  const lead = leadImageFor(condition.id), close = closeupsFor(condition.id).slice(0, 3), count = libraryPictureCount(condition.id);
+  return `<article class="condition-card visual-card"><button class="card-image ${lead ? 'filled' : ''}" data-condition="${condition.id}" aria-label="Open ${escape(condition.title)} visual page">${pic(lead)}<span class="slot-count">${count} pictures</span></button>${close.length ? `<div class="card-slot-strip">${close.map(im => `<button class="mini-slot filled" data-condition="${condition.id}" aria-label="${escape(condition.title)}: ${escape(im.caption || '')}">${pic(im)}</button>`).join('')}</div>` : ''}<div class="condition-body"><div class="card-meta"><span>${escape(condition.kind)}</span><span>${scopeName(condition.scope)}</span></div><h3>${escape(condition.title)}</h3>${scienceLine(condition.id)}${badge(condition.urgency)}<p>${escape(condition.summary)}</p>${matched ? `<p class="matches"><strong>${condition.comparisonReason ? 'Why compare:' : 'Relevant clues:'}</strong> ${escape(condition.comparisonReason || condition.matched.join(', ') || 'Tank history / water readings')}</p>` : ''}<div class="card-actions"><button class="text-button" data-condition="${condition.id}">Open visual page ↗</button><button class="compare-toggle" data-compare="${condition.id}" aria-pressed="${comparisons.has(condition.id)}">${comparisons.has(condition.id) ? '✓ Selected' : '+ Compare'}</button></div></div></article>`;
+}
+
+// The visual guide on a disease page: four numbered close-ups, where it shows on the
+// fish, how it changes, and the most common look-alike (Nov 6 2026).
+const zoomAttrs = (src, title, alt) => `data-zoom-src="${escape(src)}" data-zoom-title="${escape(title)}" data-zoom-alt="${escape(alt || '')}"`;
+function infographic(condition, water) {
+  const info = LIB_INFO[condition.id], close = closeupsFor(condition.id);
+  if (!info && !close.length) return '';
+  const look = lookalikesFor(condition.id, water)[0], lookImage = look && leadImageFor(look.id);
+  const closeups = close.length ? `<ol class="ig-closeups">${close.map((im, i) => `<li><button type="button" class="ig-zoom" ${zoomAttrs(im.url, `${condition.title} · ${im.caption || ''}`, im.alt)} aria-label="Enlarge: ${escape(im.caption || '')}">${pic(im)}<b aria-hidden="true">${i + 1}</b></button><span><b>${i + 1}</b> ${escape(im.caption || '')}</span></li>`).join('')}</ol>` : '';
+  const where = info ? `<div class="ig-where"><h4>Where it shows</h4>${fishMap(info.zones)}<p>${info.zones.map(z => `<span class="ig-zone">${escape(ZONES[z])}</span>`).join('')}</p></div>` : '';
+  const time = info ? `<div class="ig-time"><h4>How it changes</h4><ol class="ig-timeline">${['Early', 'Typical', 'Late'].map((label, i) => `<li><strong>${label}</strong><span>${escape(info.time[i])}</span></li>`).join('')}</ol></div>` : '';
+  const notThis = look ? `<div class="ig-notthis"><h4>Not this?</h4><div>${lookImage ? `<button type="button" class="ig-zoom" ${zoomAttrs(lookImage.url, look.title, lookImage.alt)} aria-label="Enlarge ${escape(look.title)}">${pic(lookImage)}</button>` : ''}<p><strong>${escape(look.title)}</strong>${escape(look.comparisonReason)}<button class="text-button" data-condition="${look.id}">Open ${escape(look.title)} →</button></p></div></div>` : '';
+  return `<section class="infographic" data-infographic="${condition.id}" aria-label="${escape(condition.title)} visual guide"><p class="ig-eyebrow">VISUAL GUIDE</p>${closeups}${where || time ? `<div class="ig-row">${where}${time}</div>` : ''}${notThis}<small class="image-origin-note">AI illustrations.</small></section>`;
+}
+
+// The first prototype's full reference sheets (ich, velvet, cottony growth) that the
+// four close-ups don't already show.
+function moreSheets(condition) {
+  const used = new Set(closeupsFor(condition.id).map(im => im.url));
+  const sheets = slotsFor(condition.id).filter(s => s.image && !used.has(s.image.url));
+  return sheets.length ? `<section class="more-sheets"><h3>Reference sheets</h3><div class="fish-strip-row">${sheets.map(s => `<button type="button" class="strip-item" data-sheet="${s.id}" ${zoomAttrs(s.image.url, `${condition.title} · ${s.label}`, s.image.alt)}>${pic(s.image)}<span>${escape(s.label)}</span></button>`).join('')}</div></section>` : '';
+}
+
+// The same disease on every kind of fish that has its own picture (in the library,
+// only the water type being browsed).
+function fishStrip(condition) {
+  const browsing = activeView === 'library' ? $('#library-water').value : 'all';
+  const strip = fishStripFor(condition.id).filter(s => !['fresh', 'marine'].includes(browsing) || s.water === browsing);
+  if (!strip.length) return '';
+  return `<section class="fish-strip" data-fish-strip="${condition.id}"><h3>${condition.id === 'normal' ? 'Healthy fish of each kind' : 'On different fish'} <small>${strip.length}</small></h3><div class="fish-strip-row">${strip.map(s => `<button type="button" class="strip-item" data-strip-fish="${s.fish}" ${zoomAttrs(s.url, `${condition.title} · ${s.title}`, s.alt)}>${pic(s)}<span>${escape(s.title)}</span></button>`).join('')}</div></section>`;
 }
 
 function galleryDisplay(condition, slot) {
@@ -348,10 +382,15 @@ function updateCompareTray(message = '') {
   });
 }
 
+function compareVisual(c) {
+  const lead = leadImageFor(c.id), close = closeupsFor(c.id).slice(0, 4);
+  return `<div class="compare-visual">${lead ? `<button type="button" class="ig-zoom compare-lead" ${zoomAttrs(lead.url, c.title, lead.alt)}>${pic(lead)}</button>` : ''}${close.length ? `<div class="compare-closeups">${close.map(im => `<button type="button" class="ig-zoom" ${zoomAttrs(im.url, `${c.title} · ${im.caption || ''}`, im.alt)}>${pic(im)}</button>`).join('')}</div>` : ''}</div>`;
+}
+
 function openComparison() {
   if (comparisons.size !== 2) return;
   const selected = [...comparisons].map(id => CONDITIONS.find(c => c.id === id));
-  $('#compare-content').innerHTML = `<div class="side-by-side">${selected.map(c => `<article><span class="scope-pill">${scopeName(c.scope)}</span><h3>${escape(c.title)}</h3>${gallery(c)}<div class="comparison-clues"><h4>Look for</h4>${list(c.clues)}<h4>Easy to confuse with</h4><p>${escape(c.distinguish)}</p><h4>Usual treatment</h4><p>${escape(carePlanFor(c.id, imageWater(c))?.treatment || '')}</p>${readMore(c)}<button class="button secondary" data-use-pattern="${c.id}">Check this visible pattern →</button></div></article>`).join('')}</div>`;
+  $('#compare-content').innerHTML = `<div class="side-by-side">${selected.map(c => `<article><span class="scope-pill">${scopeName(c.scope)}</span><h3>${escape(c.title)}</h3>${compareVisual(c)}<div class="comparison-clues"><h4>Look for</h4>${list(c.clues)}<h4>Easy to confuse with</h4><p>${escape(c.distinguish)}</p><h4>Usual treatment</h4><p>${escape(carePlanFor(c.id, imageWater(c))?.treatment || '')}</p>${readMore(c)}<button class="button secondary" data-use-pattern="${c.id}">Check this visible pattern →</button></div></article>`).join('')}</div>`;
   $('#compare-dialog').showModal();
 }
 
@@ -363,11 +402,10 @@ function emergencyContent() {
 // gallery (folded away when the fish has its own pictures).
 function fishGallery(condition, water) {
   const fishType = currentFish(), own = imagesFor(fishType, condition.id, water);
-  const generic = slotsFor(condition.id).some(s => s.image) || activeView === 'library' ? gallery(condition) : '';
-  if (!own.fishSpecific) return generic;
+  if (!own.fishSpecific) return '';
   const fish = fishTypeFor(water, fishType);
   const pics = own.images.map(image => `<figure><img src="${image.url}" width="${image.width}" height="${image.height}" alt="${escape(image.alt)}" data-image-set="${fishType}"><figcaption>${escape(image.caption || '')}</figcaption></figure>`).join('');
-  return `<section class="fish-gallery" data-fish-gallery="${fishType}" aria-label="${escape(fish?.title || '')} pictures"><div class="fish-gallery-row">${pics}</div><small class="image-origin-note">AI illustrations of ${escape(fish?.plural || 'fish')}.</small></section>${generic ? `<details class="more-pictures"><summary>More pictures (other fish)</summary>${generic}</details>` : ''}`;
+  return `<section class="fish-gallery" data-fish-gallery="${fishType}" aria-label="${escape(fish?.title || '')} pictures"><div class="fish-gallery-row">${pics}</div><small class="image-origin-note">AI illustrations of ${escape(fish?.plural || 'fish')}.</small></section>`;
 }
 
 function openDetail(id, slotId = 'overview') {
@@ -375,7 +413,7 @@ function openDetail(id, slotId = 'overview') {
   if (!condition) return;
   const water = imageWater(condition) || 'fresh';
   const others = lookalikesFor(id, water);
-  $('#detail-content').innerHTML = `<p class="eyebrow">${escape(condition.kind)} · ${scopeName(condition.scope)}</p><h2 id="detail-title">${escape(condition.title)}</h2>${scienceLine(condition.id)}${badge(condition.urgency)}<p class="lead">${escape(condition.summary)}</p>${fishGallery(condition, water)}<div class="detail-visual-actions"><button class="button secondary" data-use-pattern="${condition.id}">Check this visible pattern →</button><button class="compare-toggle" data-compare="${condition.id}" aria-pressed="${comparisons.has(condition.id)}">${comparisons.has(condition.id) ? '✓ Selected' : '+ Compare'}</button></div><h3>What to look for</h3>${list(condition.clues)}<h3>Easy to confuse with</h3><p>${escape(condition.distinguish)}</p>${others.length ? `<ul class="detail-lookalikes">${others.map(o => `<li><button class="text-button" data-condition="${o.id}">${escape(o.title)} →</button> ${escape(o.comparisonReason)}</li>`).join('')}</ul>` : ''}${todoCard(condition, water)}<p class="avoid"><strong>Avoid:</strong> ${escape(condition.avoid)}</p><div class="sources"><h4>Read the references</h4>${sourceLinks(condition.source)}</div>`;
+  $('#detail-content').innerHTML = `<p class="eyebrow">${escape(condition.kind)} · ${scopeName(condition.scope)}</p><h2 id="detail-title">${escape(condition.title)}</h2>${scienceLine(condition.id)}${badge(condition.urgency)}<p class="lead">${escape(condition.summary)}</p>${fishGallery(condition, water)}${infographic(condition, water)}${fishStrip(condition)}${moreSheets(condition)}<div class="detail-visual-actions"><button class="button secondary" data-use-pattern="${condition.id}">Check this visible pattern →</button><button class="compare-toggle" data-compare="${condition.id}" aria-pressed="${comparisons.has(condition.id)}">${comparisons.has(condition.id) ? '✓ Selected' : '+ Compare'}</button></div><h3>What to look for</h3>${list(condition.clues)}<h3>Easy to confuse with</h3><p>${escape(condition.distinguish)}</p>${others.length ? `<ul class="detail-lookalikes">${others.map(o => `<li><button class="text-button" data-condition="${o.id}">${escape(o.title)} →</button> ${escape(o.comparisonReason)}</li>`).join('')}</ul>` : ''}${todoCard(condition, water)}<p class="avoid"><strong>Avoid:</strong> ${escape(condition.avoid)}</p><div class="sources"><h4>Read the references</h4>${sourceLinks(condition.source)}</div>`;
   $('#detail-dialog').showModal();
 }
 
@@ -387,12 +425,10 @@ function renderLibrary() {
   const filtered = CONDITIONS.filter(c => (water === 'all' || c.scope === 'both' || c.scope === water)
     && (!patternMatches || patternMatches.has(c.id))
     && [c.title,c.scientific,c.kind,c.summary,...c.clues].filter(Boolean).join(' ').toLowerCase().includes(query))
-    .sort((a, b) => slotsFor(b.id).filter(s => s.image).length - slotsFor(a.id).filter(s => s.image).length);
-  const allSlots = filtered.flatMap(c => slotsFor(c.id)), ready = allSlots.filter(s => s.image).length;
-  $('.slot-explanation').textContent = water === 'marine'
-    ? 'Saltwater picture galleries are still being filled. Empty frames are places for future pictures.'
-    : 'Three freshwater picture collections are ready: ich, velvet and fungus. Empty frames are places for future pictures.';
-  $('#library-count').textContent = `${filtered.length} entries · ${ready} illustrations in place · ${allSlots.length - ready} image spaces to fill`;
+    .sort((a, b) => (a.id === 'normal') - (b.id === 'normal'));
+  const pictures = filtered.reduce((n, c) => n + libraryPictureCount(c.id), 0);
+  $('.slot-explanation').textContent = 'Open any entry for its visual guide: numbered close-ups, where it shows, how it changes, a look-alike, and the same problem on each kind of fish. All pictures are AI illustrations.';
+  $('#library-count').textContent = `${filtered.length} entries · ${pictures} pictures`;
   $('#library-grid').innerHTML = filtered.map(c => card(c)).join('') || '<p class="notice">No matching entries. Try a symptom such as “breathing,” “white” or “fin.”</p>';
 }
 
@@ -507,6 +543,8 @@ document.addEventListener('click', async event => {
     root.querySelector('.gallery-display').innerHTML = galleryDisplay(entry, slotsFor(entry.id).find(s => s.id === slotButton.dataset.slot));
     root.querySelectorAll('[data-slot]').forEach(button => button.setAttribute('aria-pressed', String(button === slotButton)));
   }
+  const zoom = event.target.closest('[data-zoom-src]');
+  if (zoom) { $('#atlas-title').textContent = zoom.dataset.zoomTitle; $('#atlas-full').src = zoom.dataset.zoomSrc; $('#atlas-full').alt = zoom.dataset.zoomAlt; $('#atlas-full').removeAttribute('width'); $('#atlas-full').removeAttribute('height'); $('#atlas-dialog').showModal(); return; }
   const enlarge = event.target.closest('[data-enlarge-entry]');
   if (enlarge) enlargeImage(enlarge.dataset.enlargeEntry, enlarge.dataset.enlargeSlot);
   const compare = event.target.closest('[data-compare]');
