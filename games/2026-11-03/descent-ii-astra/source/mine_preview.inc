@@ -14,7 +14,7 @@ extern int astra_refinement,astra_native_compare;
 extern int astra_environment_theme(int),astra_environment_bay(int),astra_environment_rock(int);
 float astra_mine_clock=-1,astra_mine_door=-1;
 typedef struct {vms_vector eye,goal,up;int room,side,subject,valid;} am_scene;
-static am_scene am_scenes[19];static int am_level=-999,am_segments=-1,am_mask;
+static am_scene am_scenes[21];static int am_level=-999,am_segments=-1,am_mask;
 static float am_distance(const vms_vector *a,const vms_vector *b){return f2fl(vm_vec_dist(a,b));}
 static int am_clear(const vms_vector *a,int room,const vms_vector *b,fix radius){
     fvi_query q={a,b,room,radius,-1,NULL,0};fvi_info hit;return find_vector_intersection(&q,&hit)==HIT_NONE;
@@ -53,11 +53,31 @@ static void am_reactor_view(am_scene *scene,object *o,vms_vector eye,float *best
     }
     if(score<*best){*best=score;*scene=(am_scene){eye,o->pos,o->orient.uvec,room,-1,(int)(o-Objects),1};}
 }
+static void am_liquid_view(int room,int side,am_scene *scene){
+    if(!am_face(room,side,0,scene))return;
+    vms_vector n,eye;vm_vec_normalized_dir(&n,&scene->eye,&scene->goal);
+    float span=fminf(19,am_distance(&scene->eye,&scene->goal));
+    for(int attempt=0;attempt<3;attempt++)for(int sign=-1;sign<=1;sign+=2){
+        float depth=attempt==0?.35f:attempt==1?.30f:.25f,offset=attempt==0?.60f:attempt==1?.30f:.15f;
+        vm_vec_scale_add(&eye,&scene->goal,&n,fl2f(span*depth));vm_vec_scale_add2(&eye,&scene->up,fl2f(sign*span*offset));
+        int r=find_point_seg(&eye,room);if(r>=0&&am_clear(&scene->goal,room,&eye,F1_0/3)){scene->eye=eye;scene->room=r;return;}
+    }
+}
 static void am_build(void){
-    memset(am_scenes,0,sizeof am_scenes);am_mask=0;am_level=Current_level_num;am_segments=Highest_segment_index;
+    memset(am_scenes,0,sizeof am_scenes);am_mask=0;am_level=Current_level_num;am_segments=Highest_segment_index;float liquid_score[2]={-1,-1};
     for(int room=0;room<=Highest_segment_index;room++)for(int side=0;side<6;side++){
         segment *s=&Segments[room];int t=s->sides[side].tmap_num;if(t<0||t>=NumTextures)continue;
         int solid=s->children[side]<0&&s->sides[side].wall_num<0;
+        extern int astra_liquid_kind(int);int liquid=astra_liquid_kind(t);
+        if(liquid&&solid){
+            am_scene candidate={0};am_liquid_view(room,side,&candidate);
+            if(candidate.valid){
+                vms_matrix orient;extract_orient_from_segment(&orient,s);float score=12*fmaxf(0,f2fl(vm_vec_dot(&s->sides[side].normals[0],&orient.uvec)));
+                for(int j=0;j<6;j++){int t2=s->sides[j].tmap_num;if(s->children[j]<0&&!astra_liquid_kind(t2))score+=3;if(t2>=0&&t2<NumTextures)score+=f2fl(TmapInfo[t2].lighting);}
+                score+=am_distance(&candidate.eye,&candidate.goal)*.1f;
+                if(score>liquid_score[liquid-1]){liquid_score[liquid-1]=score;am_scenes[18+liquid]=candidate;}
+            }
+        }
         if(solid&&!TmapInfo[t].damage&&!(TmapInfo[t].flags&(TMI_WATER|TMI_VOLATILE|TMI_FORCE_FIELD))){
             extern int astra_fixture_kind(int,int);int fixture=astra_fixture_kind(room,side);
             int exhibit=fixture==1?15:fixture==3?16:fixture==2?17:fixture==4?18:-1;
@@ -123,7 +143,7 @@ static void am_build(void){
             if(score>overview_best){overview_best=score;am_scenes[0]=(am_scene){eye,goal,upright.uvec,room,side,room,1};}
         }
     }
-    for(int i=0;i<19;i++)if(am_scenes[i].valid)am_mask|=1<<i;
+    for(int i=0;i<21;i++)if(am_scenes[i].valid)am_mask|=1<<i;
 }
 /* The transient door frame is restored immediately after drawing, including
  * its connected side. No wall_open_door, trigger, sound or ActiveDoors changes. */
@@ -143,8 +163,8 @@ static void am_restore_door(am_door_saved *save){
 }
 void astra_mine_preview(int index,float clock,float zoom){
     if(am_level!=Current_level_num||am_segments!=Highest_segment_index||!am_mask)am_build();
-    if(index<0||index>18||!am_scenes[index].valid){index=0;while(index<19&&!am_scenes[index].valid)index++;}
-    if(index>=19){EM_ASM(window.astraMinePreview?.unavailable());return;}
+    if(index<0||index>20||!am_scenes[index].valid){index=0;while(index<21&&!am_scenes[index].valid)index++;}
+    if(index>=21){EM_ASM(window.astraMinePreview?.unavailable());return;}
     am_scene *s=&am_scenes[index];vms_vector forward,eye,delta;vms_matrix orient;
     vm_vec_sub(&delta,&s->eye,&s->goal);vm_vec_scale_add(&eye,&s->goal,&delta,fl2f(fminf(1.5f,fmaxf(.65f,zoom))));
     vm_vec_normalized_dir(&forward,&s->goal,&s->eye);vm_vector_2_matrix(&orient,&forward,&s->up,NULL);

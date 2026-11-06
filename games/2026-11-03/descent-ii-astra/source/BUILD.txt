@@ -958,3 +958,14 @@ deterministic replay, scrubbing and randomized variations. New lifetimes range
 from 0.42 to 5.05 seconds; the player breakup remains the longest. Existing
 near-camera attenuation, occluded mine illumination and native sound remain.
 Manual movement, native weapon damage and campaign geometry are unchanged.
+
+Water and molten lava (pyre42)
+
+Water uses continuous world-space waves, analytic ripple normals, angle-dependent
+reflections sampled from the actual room walls, shallow/deep coloring and foam
+only at boundaries. Shared coplanar liquid edges do not acquire artificial seams.
+Lava has slowly moving basalt plates, irregular incandescent fissures, pressure
+blisters and animated orange fixture light confined to its native mine segment.
+Both use existing geometry, masks, depth tests and native hazard rules. The mine
+showroom gains water and lava exhibits in levels containing those surfaces.
+No new texture downloads. Manual controls and demo AI are unchanged from R41.
