@@ -21,11 +21,20 @@ const PATHS = {
   crab: '<ellipse cx="24" cy="29" rx="10" ry="7"/><path d="M15 26c-4-2-7-6-6-11 3 0 6 2 7 5m17 6c4-2 7-6 6-11-3 0-6 2-7 5M15 31l-6 3m7 1-5 5m22-9 6 3m-7 1 5 5M21 22v-4m6 4v-4"/>',
   snail: '<circle cx="27" cy="24" r="10"/><path d="M27 24a3 3 0 1 1 3 3 6 6 0 1 1-6-7"/><path d="M6 36h31c3 0 5-2 5-5M9 36c-1-3 0-6 3-7l-3-6m5 6-1-6"/>',
   other: '<path d="m24 6 5 12 13 1-10 8 4 13-12-7-12 7 4-13-10-8 13-1Z"/>',
+  pond: '<path d="M4 36c6-3 12-3 20 0s14 3 20 0"/><path d="M11 23c5-7 15-8 22 0-7 8-17 7-22 0Z"/><path d="M11 23 6 19v8Z"/><circle cx="28" cy="22" r="1.2" fill="currentColor" stroke="none"/><path d="M8 42c5-2 10-2 16 0s11 2 16 0"/>',
+  koi: '<path d="M6 24c8-10 22-12 34 0-12 12-26 10-34 0Z"/><path d="M6 24 1 17v14Z"/><circle cx="34" cy="22" r="1.3" fill="currentColor" stroke="none"/><path d="M40 26c2 1 4 3 5 5"/><path d="M16 18c3 2 5 4 6 7m4-9c2 3 3 6 2 9"/>',
+  goldfish: '<path d="M12 24c6-9 18-10 26 0-8 10-20 9-26 0Z"/><path d="M12 24 3 14c2 5 2 9 0 10 2 1 2 5 0 10Z"/><circle cx="32" cy="22" r="1.3" fill="currentColor" stroke="none"/><path d="M22 16c1-3 4-5 7-5"/>',
   unsure: '<circle cx="24" cy="24" r="16"/><path d="M19 19a5 5 0 1 1 7 5c-2 1-2 2-2 4"/><circle cx="24" cy="33" r="1.3" fill="currentColor" stroke="none"/>',
 };
 export const reefIcon = (name, cls = 'reef-icon') => `<svg class="${cls}" viewBox="0 0 48 48" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${PATHS[name] || PATHS.unsure}</svg>`;
 
-const groupIcon = (group, kind) => kind && PATHS[kind] ? kind : group === 'invert' ? 'invert' : 'coral';
+const groupIcon = (group, kind) => group === 'pond' ? (kind === 'koi' || kind === 'goldfish' ? kind : 'pond') : kind && PATHS[kind] ? kind : group === 'invert' ? 'invert' : 'coral';
+const GROUP_TEXT = {
+  coral: { ask: 'What kind of coral?', step: 'Kind of coral', scope: 'Coral or anemone', meta: 'Coral & anemone', all: 'See all coral entries ↗' },
+  invert: { ask: 'What kind of animal?', step: 'Kind of animal', scope: 'Shrimp, crab or snail', meta: 'Shrimp, crab, snail', all: 'See all shrimp, crab & snail entries ↗' },
+  pond: { ask: 'What kind of pond fish?', step: 'Kind of pond fish', scope: 'Pond fish', meta: 'Pond fish', all: 'See all pond entries ↗' },
+};
+const groupText = group => GROUP_TEXT[group] || GROUP_TEXT.coral;
 const shortName = title => title.replace(/\s*\(.*\)$/, '');
 
 export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchView }) {
@@ -46,7 +55,7 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
 
   function renderKinds() {
     const kinds = REEF_KINDS[state.group] || [];
-    $('#reef-kind-title').textContent = state.group === 'invert' ? 'What kind of animal?' : 'What kind of coral?';
+    $('#reef-kind-title').textContent = groupText(state.group).ask;
     $('#reef-kind-hint').textContent = 'Optional. Pick the closest, or Not sure.';
     const tiles = [...kinds, { id: '', title: 'Not sure', text: 'Show every sign' }];
     $('#reef-kind-grid').innerHTML = tiles.map(k => `<button type="button" class="reef-tile" data-reef-kind="${k.id}" aria-pressed="${String(state.kindPicked && k.id === state.kind)}">${picture(reefImageFor(state.group, k.id, '', 'kinds'), k.id ? groupIcon(state.group, k.id) : 'unsure', { label: '', cls: 'reef-ph-tile' })}<strong>${escape(k.title)}</strong><small>${escape(k.text)}</small></button>`).join('');
@@ -88,7 +97,7 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
     const cards = result.alternatives.map(alternativeCard).join('');
     const natural = result.naturalNote ? `<p class="natural-note">${escape(result.naturalNote)}</p>` : '';
     const couldAlso = cards || natural ? `<section class="could-also"><h2 class="subheading">Could also be</h2>${cards ? `<p class="could-also-hint">Tap the one that looks more like yours.</p><div class="alternatives">${cards}</div>` : ''}${natural}</section>` : '';
-    $('#reef-results-content').innerHTML = `<h1 id="reef-results-title" class="question-title results-title">${first ? `<span>Most likely:</span> ${escape(first.title)}` : escape(result.title)}</h1><p class="question-hint result-hint">${where ? `${escape(where)} · ` : ''}${result.chosen ? 'Your pick from the look-alikes' : 'Our best guess from your answers'}—a hobby guide, not a vet.</p>${warning(result.warning)}${focus}${couldAlso}<button type="button" class="text-button" data-action="reef-library">See all reef entries ↗</button>`;
+    $('#reef-results-content').innerHTML = `<h1 id="reef-results-title" class="question-title results-title">${first ? `<span>Most likely:</span> ${escape(first.title)}` : escape(result.title)}</h1><p class="question-hint result-hint">${where ? `${escape(where)} · ` : ''}${result.chosen ? 'Your pick from the look-alikes' : 'Our best guess from your answers'}—a hobby guide, not a vet.</p>${warning(result.warning)}${focus}${couldAlso}<button type="button" class="text-button" data-action="reef-library">${escape(groupText(state.group).all)}</button>`;
     goStep('reef-results');
   }
 
@@ -111,24 +120,26 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
   function gallery(c) {
     const slots = reefSlotsFor(c.group, c.id), filled = slots.filter(s => s.image);
     const shown = filled.length ? filled : slots;
-    const note = filled.length ? '<small class="image-origin-note">AI illustrations, drawn the way it usually looks in a home tank.</small>' : '';
+    const note = filled.length ? `<small class="image-origin-note">AI illustrations, drawn the way it usually looks in a home ${c.group === 'pond' ? 'pond' : 'tank'}.</small>` : '';
     return `<div class="reef-gallery" data-reef-gallery="${c.id}">${shown.map(slot => `<figure data-reef-slot="${slot.id}">${picture(slot.image, groupIcon(c.group))}<figcaption>${escape(slot.image?.caption || slot.label)}</figcaption></figure>`).join('')}</div>${note}`;
   }
 
   function openDetail(id) {
     const c = reefConditionFor(id);
     if (!c) return;
-    const scope = c.group === 'invert' ? 'Shrimp, crab or snail' : 'Coral or anemone';
+    const scope = groupText(c.group).scope;
     $('#detail-content').innerHTML = `<p class="eyebrow">${escape(c.kind)} · ${escape(scope)}</p><h2 id="detail-title">${escape(c.title)}</h2>${badge(c.urgency)}<p class="lead">${escape(c.summary)}</p>${c.group === 'invert' ? warning(INVERT_WARNING) : ''}${gallery(c)}<h3>What to look for</h3><ul>${c.clues.map(x => `<li>${escape(x)}</li>`).join('')}</ul><h3>Easy to confuse with</h3><p>${escape(c.distinguish)}</p>${todoCard({ ...c, plan: reefPlanFor(c.id) })}<p class="avoid"><strong>Avoid:</strong> ${escape(c.avoid)}</p>`;
     $('#detail-dialog').showModal();
   }
 
-  function renderLibrary(query = '') {
+  // groups: which sections to list ('reef' = corals + inverts, 'pond' = pond fish).
+  function renderLibrary(query = '', which = 'reef') {
     const q = query.trim().toLowerCase();
-    const entries = REEF_CONDITIONS.filter(c => [c.title, c.kind, c.summary, ...c.clues].join(' ').toLowerCase().includes(q));
-    $('.slot-explanation').textContent = 'Coral, anemone, shrimp, crab and snail pictures are AI illustrations, drawn the way the problem usually looks in a home tank.';
-    $('#library-count').textContent = `${entries.length} reef & invert entries`;
-    $('#library-grid').innerHTML = entries.map(c => { const slots = reefSlotsFor(c.group, c.id), n = slots.filter(s => s.image).length; return `<article class="condition-card visual-card reef-card" data-reef-entry="${c.id}"><button type="button" class="card-image${n ? ' filled' : ''}" data-reef-condition="${c.id}" aria-label="Open ${escape(c.title)}">${picture(reefImageFor(c.group, c.id), groupIcon(c.group))}<span class="slot-count">${n} / ${slots.length} pictures</span></button><div class="condition-body"><div class="card-meta"><span>${escape(c.kind)}</span><span>${c.group === 'invert' ? 'Shrimp, crab, snail' : 'Coral & anemone'}</span></div><h3>${escape(c.title)}</h3>${badge(c.urgency)}<p>${escape(c.summary)}</p><div class="card-actions"><button type="button" class="text-button" data-reef-condition="${c.id}">Open page ↗</button></div></div></article>`; }).join('') || '<p class="notice">No matching reef entries. Try “white”, “molt” or “pest”.</p>';
+    const groups = which === 'pond' ? ['pond'] : ['coral', 'invert'];
+    const entries = REEF_CONDITIONS.filter(c => groups.includes(c.group) && [c.title, c.kind, c.summary, ...c.clues].join(' ').toLowerCase().includes(q));
+    $('.slot-explanation').textContent = which === 'pond' ? 'Pond pictures are AI illustrations, drawn the way the problem usually looks in a garden pond or an inspection bowl.' : 'Coral, anemone, shrimp, crab and snail pictures are AI illustrations, drawn the way the problem usually looks in a home tank.';
+    $('#library-count').textContent = `${entries.length} ${which === 'pond' ? 'pond fish' : 'reef & invert'} entries`;
+    $('#library-grid').innerHTML = entries.map(c => { const slots = reefSlotsFor(c.group, c.id), n = slots.filter(s => s.image).length; return `<article class="condition-card visual-card reef-card" data-reef-entry="${c.id}"><button type="button" class="card-image${n ? ' filled' : ''}" data-reef-condition="${c.id}" aria-label="Open ${escape(c.title)}">${picture(reefImageFor(c.group, c.id), groupIcon(c.group))}<span class="slot-count">${n} / ${slots.length} pictures</span></button><div class="condition-body"><div class="card-meta"><span>${escape(c.kind)}</span><span>${escape(groupText(c.group).meta)}</span></div><h3>${escape(c.title)}</h3>${badge(c.urgency)}<p>${escape(c.summary)}</p><div class="card-actions"><button type="button" class="text-button" data-reef-condition="${c.id}">Open page ↗</button></div></div></article>`; }).join('') || `<p class="notice">No matching entries. Try ${which === 'pond' ? '“worm”, “ulcer” or “white”' : '“white”, “molt” or “pest”'}.</p>`;
   }
 
   function start(group) {
@@ -149,12 +160,13 @@ export function createReef({ $, $$, escape, goStep, badge, autoAdvance, switchVi
   return {
     owns,
     active: () => Boolean(state.group),
+    group: () => state.group,
     reset,
     start,
     renderLibrary,
     progressFor(name) {
       if (!owns(name) || name === 'reef-results') return null;
-      return { 'reef-kind': [1, state.group === 'invert' ? 'Kind of animal' : 'Kind of coral'], 'reef-signs': [2, 'What you see'], 'reef-changes': [3, 'Recent changes'] }[name];
+      return { 'reef-kind': [1, groupText(state.group).step], 'reef-signs': [2, 'What you see'], 'reef-changes': [3, 'Recent changes'] }[name];
     },
     // Called by goStep for every reef step: draw that step's choices.
     onStep(name) {

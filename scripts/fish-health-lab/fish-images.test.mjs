@@ -12,6 +12,7 @@ import { CROPS, IMAGE_SOURCE, MEDIA_BASE } from '../../experiments/fish-health-l
 import { CROPS as FRESH_CROPS, IMAGE_SOURCE as FRESH_IMAGE_SOURCE } from '../../experiments/fish-health-lab/fish-images-fresh-data.mjs';
 import { CROPS as SPLIT_CROPS, IMAGE_SOURCE as SPLIT_IMAGE_SOURCE } from '../../experiments/fish-health-lab/fish-images-split-data.mjs';
 import { CROPS as MARINE_CROPS, IMAGE_SOURCE as MARINE_IMAGE_SOURCE } from '../../experiments/fish-health-lab/fish-images-marine-data.mjs';
+import { CROPS as FIX_CROPS, IMAGE_SOURCE as FIX_IMAGE_SOURCE } from '../../experiments/fish-health-lab/fish-images-fixes-data.mjs';
 import { FISH_SETS, ALL_CROPS, imagesFor, imageFor, fishSetFor, FISH_TYPE_IMAGES, STEP_IMAGES, stepImageFor, splitStep, urlFor, localPathFor } from '../../experiments/fish-health-lab/fish-images.mjs';
 
 const app = fileURLToPath(new URL('../../experiments/fish-health-lab/', import.meta.url));
@@ -19,6 +20,12 @@ const receipt = JSON.parse(readFileSync(new URL('./betta-pilot-images-20261105.j
 const freshReceipt = JSON.parse(readFileSync(new URL('./freshwater-images-20261105.json', import.meta.url)));
 const splitReceipt = JSON.parse(readFileSync(new URL('./split-images-20261105.json', import.meta.url)));
 const marineReceipt = JSON.parse(readFileSync(new URL('./marine-fish-images-20261105.json', import.meta.url)));
+const fixesReceipt = JSON.parse(readFileSync(new URL('./fixes-images-20261106.json', import.meta.url)));
+// A clean-up retake (Nov 6 2026) replaces a crop under the same id.
+const FISH_FIX = id => FIX_CROPS[id]?.set === 'fish' ? FIX_CROPS[id] : null;
+const expectedKey = (crops, id) => (FISH_FIX(id) || crops[id]).key;
+const fixUrl = id => FIX_IMAGE_SOURCE === 'media' ? MEDIA_BASE + FISH_FIX(id).key : localPathFor(FISH_FIX(id));
+const groupKey = (key, group) => key.startsWith(`experiments/fish-health-lab/${group}/${group}-`) || key.startsWith(`experiments/fish-health-lab/fixes/fish-${group}-`);
 const freshConditions = CONDITIONS.filter(c => c.scope !== 'marine');
 const marineConditions = CONDITIONS.filter(c => c.scope !== 'fresh');
 const MARINE = FISH_TYPES.marine.map(f => f.id);
@@ -48,7 +55,7 @@ for (const group of MARINE) {
       const got = imagesFor(group, sign.id, 'marine');
       assert.ok(got.fishSpecific, `${group} sign ${sign.id}`);
       assert.equal(got.images.length, 1);
-      assert.equal(got.images[0].key, MARINE_CROPS[`${group}-${sign.id}`].key);
+      assert.equal(got.images[0].key, expectedKey(MARINE_CROPS, `${group}-${sign.id}`));
     }
     // Every saltwater result (marine-only and shared) has this fish's own picture(s).
     assert.deepEqual(Object.keys(set.conditions).sort(), marineConditions.map(c => c.id).sort());
@@ -56,7 +63,7 @@ for (const group of MARINE) {
       const got = imagesFor(group, condition.id, 'marine');
       assert.ok(got.fishSpecific && got.images.length, `${group} condition ${condition.id}`);
       assert.equal(got.images.length, set.conditions[condition.id].length, `${group} ${condition.id}: every mapped crop exists`);
-      for (const image of got.images) assert.ok(image.key.startsWith(`experiments/fish-health-lab/${group}/${group}-`), image.key);
+      for (const image of got.images) assert.ok(groupKey(image.key, group), image.key);
     }
     // Every crop of the group is used: 12 symptom choices, 12 results, 1 smooth growth.
     const used = new Set([...Object.values(set.signs), ...Object.values(set.conditions).flat()]);
@@ -95,7 +102,8 @@ for (const group of ['goldfish', 'community']) {
       const got = imagesFor(group, sign.id, 'fresh');
       assert.ok(got.fishSpecific, `${group} sign ${sign.id}`);
       assert.equal(got.images.length, 1);
-      assert.equal(got.images[0].key, `experiments/fish-health-lab/${group}/${set.signs[sign.id]}-${got.images[0].key.slice(-16, -4)}.jpg`);
+      assert.equal(got.images[0].key, expectedKey(FRESH_CROPS, set.signs[sign.id]));
+      assert.ok(groupKey(got.images[0].key, group), got.images[0].key);
     }
     for (const condition of freshConditions) {
       const got = imagesFor(group, condition.id, 'fresh');
@@ -106,7 +114,7 @@ for (const group of ['goldfish', 'community']) {
       }
       assert.ok(got.fishSpecific && got.images.length, `${group} condition ${condition.id}`);
       assert.equal(got.images.length, set.conditions[condition.id].length, `${group} ${condition.id}: every mapped crop exists`);
-      for (const image of got.images) assert.ok(image.key.startsWith(`experiments/fish-health-lab/${group}/${group}-`), image.key);
+      for (const image of got.images) assert.ok(groupKey(image.key, group), image.key);
     }
     // Every crop of the group is used somewhere; nothing maps to a marine-only condition.
     const used = new Set([...Object.values(set.signs), ...Object.values(set.conditions).flat()]);
@@ -309,7 +317,7 @@ test('freshwater crops match their receipt: 120 content-hashed R2 keys, unresize
     assert.equal(entry.width, asset.width); assert.equal(entry.height, asset.height);
     assert.equal(entry.alt, asset.alt); assert.match(entry.alt, /^AI illustration: /);
     assert.equal(localPathFor(entry), asset.path, asset.id);
-    assert.equal(urlFor(ALL_CROPS[asset.id]), FRESH_IMAGE_SOURCE === 'media' ? asset.plannedUrl : asset.path);
+    assert.equal(urlFor(ALL_CROPS[asset.id]), FISH_FIX(asset.id) ? fixUrl(asset.id) : FRESH_IMAGE_SOURCE === 'media' ? asset.plannedUrl : asset.path);
   }
   // The shared picture ids never collide between the two data files.
   for (const id of Object.keys(FRESH_CROPS)) assert.equal(CROPS[id], undefined, id);
@@ -336,7 +344,7 @@ test('split crops match their receipt: content-hashed R2 keys, unresized, upload
     assert.equal(entry.alt, asset.alt); assert.match(entry.alt, /^AI illustration: /);
     assert.equal(entry.caption, asset.caption);
     assert.equal(localPathFor(entry), asset.path, asset.id);
-    assert.equal(urlFor(ALL_CROPS[asset.id]), SPLIT_IMAGE_SOURCE === 'media' ? asset.plannedUrl : asset.path);
+    assert.equal(urlFor(ALL_CROPS[asset.id]), FISH_FIX(asset.id) ? fixUrl(asset.id) : SPLIT_IMAGE_SOURCE === 'media' ? asset.plannedUrl : asset.path);
     assert.equal(CROPS[asset.id] ?? FRESH_CROPS[asset.id], undefined, `${asset.id} collides with a published id`);
   }
   // Saltwater: only the two new selector tiles, no disease pictures.
@@ -366,7 +374,7 @@ test('saltwater crops match their receipt: 175 content-hashed R2 keys, unresized
     assert.equal(entry.alt, asset.alt); assert.match(entry.alt, /^AI illustration: /);
     assert.equal(entry.caption, asset.caption); assert.ok(entry.caption);
     assert.equal(localPathFor(entry), asset.path, asset.id);
-    assert.equal(urlFor(ALL_CROPS[asset.id]), MARINE_IMAGE_SOURCE === 'media' ? asset.plannedUrl : asset.path);
+    assert.equal(urlFor(ALL_CROPS[asset.id]), FISH_FIX(asset.id) ? fixUrl(asset.id) : MARINE_IMAGE_SOURCE === 'media' ? asset.plannedUrl : asset.path);
     assert.equal(CROPS[asset.id] ?? FRESH_CROPS[asset.id] ?? SPLIT_CROPS[asset.id], undefined, `${asset.id} collides with another id`);
     assert.ok(marineReceipt.sources[asset.sheet], `${asset.id}: sheet ${asset.sheet} recorded`);
   }
@@ -376,14 +384,14 @@ test('saltwater crops match their receipt: 175 content-hashed R2 keys, unresized
 });
 
 test('each data file uses its own IMAGE_SOURCE: betta stays on media while freshwater can preview locally', () => {
-  for (const [id, entry] of Object.entries(CROPS)) assert.equal(urlFor(ALL_CROPS[id]), IMAGE_SOURCE === 'media' ? MEDIA_BASE + entry.key : localPathFor(entry));
+  for (const [id, entry] of Object.entries(CROPS)) assert.equal(urlFor(ALL_CROPS[id]), FISH_FIX(id) ? fixUrl(id) : IMAGE_SOURCE === 'media' ? MEDIA_BASE + entry.key : localPathFor(entry));
   const goldfish = imageFor('goldfish', 'dots', 'fresh').url;
   assert.equal(goldfish.startsWith(MEDIA_BASE), FRESH_IMAGE_SOURCE === 'media');
   assert.equal(goldfish.startsWith('local-images/goldfish/'), FRESH_IMAGE_SOURCE === 'local');
   assert.ok(imageFor('betta', 'dots', 'fresh').url.startsWith(IMAGE_SOURCE === 'media' ? MEDIA_BASE : 'local-images/'));
 });
 
-test('media mode: every picture the app can show comes from media.jez237.com, never local-images/', { skip: IMAGE_SOURCE !== 'media' && 'IMAGE_SOURCE is local (private preview)' }, () => {
+test('media mode: every picture the app can show comes from media.jez237.com, never local-images/', { skip: (IMAGE_SOURCE !== 'media' || FIX_IMAGE_SOURCE !== 'media') && 'IMAGE_SOURCE is local (private preview)' }, () => {
   const published = ['betta', '', ...(FRESH_IMAGE_SOURCE === 'media' ? ['goldfish', 'community'] : []), ...(SPLIT_IMAGE_SOURCE === 'media' && FRESH_IMAGE_SOURCE === 'media' ? Object.keys(SPLIT) : [])];
   const urls = [
     // New fish-type tiles stay local until the split batch is published.
@@ -419,4 +427,30 @@ test('untracked preview copies match the receipt hashes', { skip: !existsSync(`$
     const sha = createHash('sha256').update(readFileSync(`${app}${asset.path}`)).digest('hex');
     assert.equal(sha, asset.sha256, asset.id);
   }
+});
+
+test('clean-up retakes: each replaces a published crop under the same id, content-hashed and unresized', () => {
+  assert.equal(fixesReceipt.requestedModel, 'openai/gpt-image-2.6-sunburst');
+  assert.equal(fixesReceipt.requestedQuality, 'medium');
+  assert.equal(fixesReceipt.assets.length, Object.keys(FIX_CROPS).length);
+  for (const asset of fixesReceipt.assets) {
+    const entry = FIX_CROPS[asset.id];
+    assert.ok(entry, asset.id);
+    assert.equal(entry.key, asset.r2Key);
+    assert.ok(entry.key.endsWith(`-${asset.sha256.slice(0, 12)}.jpg`), asset.id);
+    assert.equal(asset.resized, false); assert.equal(entry.width, 362); assert.equal(entry.height, 362);
+    assert.equal(asset.uploaded, FIX_IMAGE_SOURCE === 'media', `${asset.id} upload state matches IMAGE_SOURCE`);
+    if (FIX_IMAGE_SOURCE === 'local') assert.ok(existsSync(app + asset.path), asset.path);
+  }
+  const fish = Object.entries(FIX_CROPS).filter(([, e]) => e.set === 'fish');
+  assert.ok(fish.length >= 14);
+  for (const [id, entry] of fish) {
+    assert.ok(CROPS[id] || FRESH_CROPS[id] || SPLIT_CROPS[id] || MARINE_CROPS[id], `${id} replaces a published crop`);
+    assert.equal(ALL_CROPS[id].key, entry.key, `${id} is used`);
+    assert.ok(ALL_CROPS[id].caption || ALL_CROPS[id].alt, id);
+  }
+  // The shared feeding/watch steps no longer show one particular fish, and the two guppy eye pictures differ.
+  for (const id of ['step-pea', 'step-watch', 'guppy-eyes', 'guppy-cloudy-eye']) assert.ok(FISH_FIX(id), id);
+  assert.equal(STEP_IMAGES.pea.key, FIX_CROPS['step-pea'].key);
+  assert.doesNotMatch(FIX_CROPS['step-pea'].alt + FIX_CROPS['step-watch'].alt, /platy|molly|guppy|betta|goldfish/i);
 });

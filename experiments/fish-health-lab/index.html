@@ -4,27 +4,32 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow, noarchive">
-  <meta name="description" content="A picture-first fish health guide for hobbyists: pick what you see, get a best guess and what to do now.">
-  <meta name="theme-color" content="#f4f2e9">
+  <meta name="description" content="A picture-first health guide for aquarium, reef and pond keepers: pick what you see, get a best guess and what to do now.">
+  <meta name="theme-color" content="#06162b">
   <title>Fish Health Lab · A visual-first experiment</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='14' fill='%231c504a'/%3E%3Cpath d='M9 24Q22 8 35 24Q22 40 9 24L4 17v14z' fill='%23e6edba'/%3E%3Ccircle cx='29' cy='22' r='2' fill='%231c504a'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="/assets/fonts/css/outfit-playfair-display.css">
   <link rel="stylesheet" href="style.css?v=9">
   <link rel="stylesheet" href="flow.css?v=9">
-  <link rel="stylesheet" href="reef.css?v=2">
-  <script type="module" src="app.mjs?v=9"></script>
+  <link rel="stylesheet" href="reef.css?v=3">
+  <link rel="stylesheet" href="extras.css?v=1">
+  <link rel="stylesheet" href="theme.css?v=1">
+  <script type="module" src="app.mjs?v=10"></script>
 </head>
 <body>
   <a href="#main" class="skip">Skip to the guide</a>
+  <div class="page-backdrop" aria-hidden="true"></div>
   <header class="masthead">
-    <a class="brand" href="./" aria-label="Fish Health Lab home"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M9 24Q22 8 35 24Q22 40 9 24L4 17v14z"/><circle cx="29" cy="22" r="1.8"/></svg></span><span>Fish Health <b>Lab</b><small>A VISUAL-FIRST EXPERIMENT</small></span></a>
-    <nav aria-label="Main"><button class="nav-tab active" data-view="guide" aria-current="page">Check my fish</button><button class="nav-tab" data-view="library">Reference library</button></nav>
+    <a class="brand" href="./" aria-label="Fish Health Lab home"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M9 24Q22 8 35 24Q22 40 9 24L4 17v14z"/><circle cx="29" cy="22" r="1.8"/></svg></span><span>Fish Health <b>Lab</b><small>Aquarium, reef &amp; pond guide</small></span></a>
+    <button type="button" class="menu-button" data-action="menu" aria-expanded="false" aria-controls="site-menu" aria-label="Menu"><span></span><span></span><span></span></button>
+    <nav class="main-tabs" aria-label="Main"><button class="nav-tab active" data-view="guide" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3 4 6 7.5 6 11a6 6 0 0 1-12 0c0-3.5 3-7 6-11Z"/></svg>Check my tank</button><button class="nav-tab" data-view="library"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h6a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H4Zm16 0h-6a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h6Z"/></svg>Reference library</button></nav>
+    <nav id="site-menu" class="site-menu" hidden aria-label="More"><button data-view="guide">Check my tank</button><button data-view="library">Reference library</button><button data-view="medicine">Is this medicine safe?</button><button data-view="prevent">Stop it before it starts</button><button data-view="about">About &amp; sources</button></nav>
   </header>
   <main id="main">
     <section id="guide-view">
       <section id="welcome" class="start-panel" aria-labelledby="welcome-title">
-        <div class="start-copy"><p class="eyebrow">YOU DON’T NEED A DISEASE NAME</p><h1 id="welcome-title">What do you see?</h1><p class="lead">Pick the pictures closest to what you see. Get a best guess, what else it could be, and what to do now.</p><p id="needs-help-title" class="needs-help-label">What needs help?</p><div class="needs-help" role="group" aria-labelledby="needs-help-title"><button type="button" class="help-tile" data-action="start"><span data-help-icon="fish"></span><strong>Fish</strong><small>Spots, fins, breathing</small></button><button type="button" class="help-tile" data-reef-start="coral"><span data-help-icon="coral"></span><strong>Coral or anemone</strong><small>Soft, LPS, SPS</small></button><button type="button" class="help-tile" data-reef-start="invert"><span data-help-icon="invert"></span><strong>Shrimp, crab or snail</strong><small>Clean-up crew</small></button></div><p class="quiet">About a minute. No photo upload needed.</p></div>
-        <figure class="start-art"><div class="opening-label"><span>FRESHWATER & REEF FISH</span><strong>Common fish health problems</strong></div><div id="welcome-fish"></div><figcaption>Spots, skin changes, damaged fins and other warning signs.<small>AI illustrations.</small></figcaption></figure>
+        <div class="start-copy"><p class="eyebrow">YOU DON’T NEED A DISEASE NAME</p><h1 id="welcome-title">What do you see?</h1><p class="lead">Pick the pictures closest to what you see. Get a best guess, what else it could be, and what to do now.</p><p id="needs-help-title" class="needs-help-label">What needs help?</p><div class="needs-help" role="group" aria-labelledby="needs-help-title"><button type="button" class="help-tile" data-action="start"><span data-help-icon="fish"></span><strong>Fish</strong><small>Spots, fins, breathing</small></button><button type="button" class="help-tile" data-reef-start="coral"><span data-help-icon="coral"></span><strong>Coral or anemone</strong><small>Soft, LPS, SPS</small></button><button type="button" class="help-tile" data-reef-start="invert"><span data-help-icon="invert"></span><strong>Shrimp, crab or snail</strong><small>Clean-up crew</small></button><button type="button" class="help-tile" data-reef-start="pond"><span data-help-icon="pond"></span><strong>Pond fish</strong><small>Koi, goldfish, orfe</small></button></div><p class="quiet">About a minute. No photo upload needed.</p><div class="tool-links"><button type="button" class="tool-link" data-view="medicine"><span aria-hidden="true">💊</span><strong>Is this medicine safe for my tank?</strong><small>Check before you dose</small></button><button type="button" class="tool-link" data-view="prevent"><span aria-hidden="true">🛡️</span><strong>Stop it before it starts</strong><small>Quarantine &amp; prevention</small></button></div></div>
+        <figure class="start-art"><div class="opening-label"><span>FRESHWATER, REEF &amp; POND</span><strong>Common fish health problems</strong></div><div id="welcome-fish"></div><figcaption>Spots, skin changes, damaged fins and other warning signs.<small>AI illustrations.</small></figcaption></figure>
       </section>
       <section id="check" class="guided-check" hidden aria-label="Fish check">
         <div class="flow-topline"><p id="flow-label" class="eyebrow"></p><button class="text-button" data-action="reset">Start over</button></div>
@@ -93,8 +98,8 @@
           <p class="field-error" id="flow-error" role="alert"></p>
           <div id="flow-actions" class="step-actions"><button type="button" class="button secondary" data-action="back">← Back</button><button type="submit" class="button primary" id="next-button">Continue →</button></div>
         </form>
-        <section class="question-panel" data-step="results" hidden aria-labelledby="results-title"><div id="results-content"></div><div class="step-actions"><button class="button secondary" data-action="edit">← Change my answers</button><button class="text-button" data-action="reset">Start over</button></div></section>
-        <section class="question-panel" data-step="reef-results" hidden aria-labelledby="reef-results-title"><div id="reef-results-content"></div><div class="step-actions"><button class="button secondary" data-action="reef-edit">← Change my answers</button><button class="text-button" data-action="reset">Start over</button></div></section>
+        <section class="question-panel" data-step="results" hidden aria-labelledby="results-title"><div id="results-content"></div><div class="result-tools"><button type="button" class="tool-link small" data-view="medicine"><span aria-hidden="true">💊</span><strong>Is a medicine safe for my tank?</strong></button><button type="button" class="tool-link small" data-view="prevent"><span aria-hidden="true">🛡️</span><strong>Stop it happening again</strong></button></div><div class="step-actions"><button class="button secondary" data-action="edit">← Change my answers</button><button class="text-button" data-action="reset">Start over</button></div></section>
+        <section class="question-panel" data-step="reef-results" hidden aria-labelledby="reef-results-title"><div id="reef-results-content"></div><div class="result-tools"><button type="button" class="tool-link small" data-view="medicine"><span aria-hidden="true">💊</span><strong>Is a medicine safe for my tank?</strong></button><button type="button" class="tool-link small" data-view="prevent"><span aria-hidden="true">🛡️</span><strong>Stop it happening again</strong></button></div><div class="step-actions"><button class="button secondary" data-action="reef-edit">← Change my answers</button><button class="text-button" data-action="reset">Start over</button></div></section>
         <section class="question-panel" data-step="care-summary" hidden aria-labelledby="care-summary-title"><div id="care-summary-content"></div><div class="step-actions"><button class="button secondary" data-action="care">← Edit care details</button><button class="text-button" data-action="results">Back to my results</button></div></section>
       </section>
       <aside class="help-line"><span aria-hidden="true">!</span><p><strong>Gasping, unable to stay upright, or losing fish?</strong><button class="text-button" data-action="emergency">Get help now →</button></p></aside>
@@ -102,13 +107,31 @@
     <section id="library-view" class="inner-view visual-library" hidden aria-labelledby="library-title">
       <div class="library-heading"><div><p class="eyebrow">BROWSE AT YOUR OWN PACE</p><h1 id="library-title">Reference library</h1><p class="lead">Explore a condition or compare two. This is separate from your guided check.</p></div><button class="button secondary" data-view="guide">Back to my check →</button></div>
       <details class="library-filter-drawer"><summary>Filter by appearance</summary><div id="library-patterns" class="pattern-grid" aria-label="Filter by visible sign"></div><button class="text-button" data-action="all-patterns">Clear filters</button></details>
-      <div class="library-tools"><label class="sr-only" for="library-search">Search ailments and symptoms</label><input id="library-search" type="search" placeholder="Search a condition or symptom…"><label class="sr-only" for="library-water">Filter by water type</label><select id="library-water"><option value="all">Fresh + salt water</option><option value="fresh">Freshwater only</option><option value="marine">Saltwater only</option><option value="reef">Reef &amp; inverts</option></select></div>
+      <div class="library-tools"><label class="sr-only" for="library-search">Search ailments and symptoms</label><input id="library-search" type="search" placeholder="Search a condition or symptom…"><label class="sr-only" for="library-water">Filter by water type</label><select id="library-water"><option value="all">Fresh + salt water</option><option value="fresh">Freshwater only</option><option value="marine">Saltwater only</option><option value="reef">Reef &amp; inverts</option><option value="pond">Pond fish</option></select></div>
       <p id="library-count" class="quiet" role="status"></p><p class="slot-explanation">Three freshwater image collections are ready: ich, velvet and cottony growth. Empty frames are places for future pictures, not disease examples.</p>
       <div id="library-grid" class="library-grid"></div>
     </section>
+    <section id="medicine-view" class="inner-view medicine-view" hidden aria-labelledby="medicine-title">
+      <p class="eyebrow">CHECK BEFORE YOU DOSE</p><h1 id="medicine-title">Can I use this medicine in my tank?</h1>
+      <p class="lead">More fish, shrimp and corals are lost to the wrong medicine than to the illness. Pick yours for a plain answer.</p>
+      <div class="med-steps">
+        <section class="med-step"><h2><b>1</b> Where are you treating?</h2><div id="med-water" class="med-chips" role="group" aria-label="Where are you treating?"></div></section>
+        <section class="med-step"><h2><b>2</b> Which medicine?</h2><div id="med-list" class="med-list" role="group" aria-label="Which medicine?"></div></section>
+        <section id="med-residents-block" class="med-step" hidden><h2><b>3</b> What else lives there?</h2><p class="quiet">Tap any that apply. Fish and the filter are always checked.</p><div id="med-residents" class="med-chips" role="group" aria-label="What else lives there?"></div><button type="button" id="med-hospital" class="med-toggle" aria-pressed="false"><i aria-hidden="true"></i><span>I’m treating in a separate hospital tank</span></button></section>
+      </div>
+      <div id="med-result" class="med-result" role="status" aria-live="polite"></div>
+      <p class="quiet">A hobby rule of thumb, not a vet or the label—when in doubt, use a hospital tank.</p>
+      <button class="button secondary" data-view="guide">Back to my check →</button>
+    </section>
+    <section id="prevent-view" class="inner-view prevent-view" hidden aria-labelledby="prevent-title">
+      <p class="eyebrow">QUARANTINE &amp; PREVENTION</p><h1 id="prevent-title">Stop it before it starts</h1>
+      <p class="lead">Almost every problem in this guide arrives with a new fish, coral or plant, or grows out of old water. A few simple habits stop most of it.</p>
+      <div id="prevent-sections"></div>
+      <button class="button secondary" data-view="guide">Back to my check →</button>
+    </section>
     <section id="about-view" class="inner-view" hidden aria-labelledby="about-title"><p class="eyebrow">ABOUT THIS EXPERIMENT</p><h1 id="about-title">A clearer next step<br><em>for your fish.</em></h1><p class="lead">Start with what you see. Get a best guess, what else it could be, and what to do now.</p><p>A friendly picture guide for hobbyists, built from common aquarium experience and the references below. It gives a confident best guess, not a vet diagnosis.</p><p>All pictures are AI illustrations. Some library entries still have image spaces to fill.</p><p>No photo upload, image analysis or chatbot is part of this guide. You can optionally copy or download your observation notes.</p><h2>References</h2><div id="source-list"></div><p class="quiet">Sources checked November 5, 2026; they don’t endorse this guide. An independent jez237.com experiment, not a Hidden Reef application.</p><button class="button secondary" data-view="guide">Back to my check →</button></section>
   </main>
-  <footer><span>Fish Health Lab · Working prototype</span><button class="text-button" data-view="about">About & sources</button><span>Observe. Compare. Care.</span></footer>
+  <footer><span>Fish Health Lab · Working prototype</span><span class="footer-links"><button class="text-button" data-view="medicine">Medicine check</button><button class="text-button" data-view="prevent">Prevention</button><button class="text-button" data-view="about">About &amp; sources</button></span><span>Observe. Compare. Care.</span></footer>
   <aside id="comparison-tray" class="comparison-tray" hidden aria-label="Selected visual comparisons"><div><strong>Compare the patterns</strong><div id="comparison-picks"></div><p id="comparison-status" role="status"></p></div><button class="button primary" data-action="compare" disabled>Compare side by side ↗</button><button class="tray-clear" data-action="clear-compare" aria-label="Clear comparisons">×</button></aside>
   <dialog id="compare-dialog" class="compare-dialog" aria-labelledby="compare-title"><button class="dialog-close" data-action="close-dialog" aria-label="Close comparison">×</button><p class="eyebrow">LOOK AT WHAT FITS — AND WHAT DOESN’T</p><h2 id="compare-title">Compare, don’t assume.</h2><p class="quiet">Compare these with what you see in your tank. Empty frames are awaiting pictures.</p><div id="compare-content"></div></dialog>
   <dialog id="quick-compare-dialog" class="quick-compare-dialog" aria-labelledby="quick-compare-title"><button class="dialog-close" data-action="close-dialog" aria-label="Close comparison">×</button><h2 id="quick-compare-title">Which looks more like your fish?</h2><div id="quick-compare-content"></div></dialog>

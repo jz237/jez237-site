@@ -2,10 +2,10 @@
 .needs-help-label{font-size:13px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin:22px 0 10px}
 .needs-help{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;max-width:540px;margin-bottom:14px}
 .help-tile{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px;min-width:0;padding:14px 8px 13px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font:inherit;cursor:pointer;transition:border-color .15s,background .15s,transform .15s}
-.help-tile:hover{border-color:#91a17e;background:#f3f6ea;transform:translateY(-1px)}
-.help-tile:focus-visible{outline:3px solid #b07a31;outline-offset:2px}
-.help-tile[data-action="start"]{background:var(--green);border-color:var(--green);color:#fff}
-.help-tile[data-action="start"]:hover{background:#21503f}
+.help-tile:hover{border-color:rgba(120,214,240,0.38);background:rgba(14,32,48,0.86);transform:translateY(-1px)}
+.help-tile:focus-visible{outline:3px solid #ecc48d;outline-offset:2px}
+.help-tile[data-action="start"]{background:var(--green);border-color:var(--green);color:#ffffff}
+.help-tile[data-action="start"]:hover{background:#112c3b}
 .help-tile[data-action="start"] small{color:#d6e6d8}
 .help-icon{width:44px;height:44px;color:var(--green);margin-bottom:4px}
 .help-tile[data-action="start"] .help-icon{color:#e6edba}
@@ -13,9 +13,9 @@
 .help-tile small{font-size:11.5px;color:var(--muted);line-height:1.3}
 
 /* Calm "Picture coming soon" frame, in the library's empty-frame style. */
-.reef-ph{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:100%;height:100%;min-height:0;padding:10px;border:1px dashed #b8c6af;border-radius:9px;background:repeating-linear-gradient(135deg,#e9ede266,#e9ede266 8px,#eef0e755 8px,#eef0e755 16px);color:#8b9e7d;text-align:center}
+.reef-ph{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:100%;height:100%;min-height:0;padding:10px;border:1px dashed rgba(120,214,240,0.29);border-radius:9px;background:repeating-linear-gradient(135deg,rgba(15,36,52,0.40),rgba(15,36,52,0.40) 8px,rgba(15,34,50,0.33) 8px,rgba(15,34,50,0.33) 16px);color:#c2d1dc;text-align:center}
 .reef-ph .reef-icon{width:38%;max-width:64px;height:auto;aspect-ratio:1}
-.reef-ph small{font-size:11px;color:#7d8d74;line-height:1.3}
+.reef-ph small{font-size:11px;color:#c5d3de;line-height:1.3}
 .question-panel .symptom-art.reef-art{background:transparent;padding:6px 6px 0;aspect-ratio:16/9}
 .reef-art .reef-ph{flex-direction:row;gap:8px}
 .reef-art .reef-ph .reef-icon{width:30px;max-width:30%}
@@ -24,10 +24,10 @@
 /* Kind tiles */
 .reef-kind-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;max-width:820px}
 .reef-tile{display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;min-width:0;padding:8px 8px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);font:inherit;cursor:pointer}
-.reef-tile:hover{border-color:#91a17e;background:#f9fbf1}
-.reef-tile[aria-pressed="true"]{border-color:var(--green);box-shadow:0 0 0 2px var(--green);background:#eaf0de}
-.reef-tile:focus-visible{outline:3px solid #b07a31;outline-offset:3px}
-.reef-tile .reef-ph{aspect-ratio:1;height:auto;margin-bottom:7px;border-style:solid;border-color:#d9e2d3;background:#e8eee3;color:var(--green)}
+.reef-tile:hover{border-color:rgba(120,214,240,0.38);background:rgba(13,30,44,0.86)}
+.reef-tile[aria-pressed="true"]{border-color:var(--green);box-shadow:0 0 0 2px var(--green);background:rgba(15,36,53,0.86)}
+.reef-tile:focus-visible{outline:3px solid #ecc48d;outline-offset:3px}
+.reef-tile .reef-ph{aspect-ratio:1;height:auto;margin-bottom:7px;border-style:solid;border-color:rgba(120,214,240,0.23);background:rgba(15,35,52,0.86);color:var(--green)}
 .reef-tile .reef-ph .reef-icon{width:52%;max-width:72px}
 .reef-tile>img{width:100%;height:auto;aspect-ratio:1;object-fit:cover;border-radius:8px;margin-bottom:7px}
 .reef-tile strong{font-size:14px;font-weight:500;line-height:1.25}
@@ -36,10 +36,10 @@
 /* Recent-change chips */
 .reef-chips{display:flex;flex-wrap:wrap;gap:10px;max-width:680px}
 .reef-chip{padding:11px 16px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink);font:inherit;font-size:15px;cursor:pointer}
-.reef-chip:hover{border-color:#91a17e}
-.reef-chip[aria-pressed="true"]{border-color:var(--green);background:#eaf0de;box-shadow:0 0 0 1px var(--green)}
+.reef-chip:hover{border-color:rgba(120,214,240,0.38)}
+.reef-chip[aria-pressed="true"]{border-color:var(--green);background:rgba(15,36,53,0.86);box-shadow:0 0 0 1px var(--green)}
 .reef-chip[aria-pressed="true"]::before{content:"✓ ";color:var(--green);font-weight:600}
-.reef-chip:focus-visible{outline:3px solid #b07a31;outline-offset:2px}
+.reef-chip:focus-visible{outline:3px solid #ecc48d;outline-offset:2px}
 
 /* Results */
 .reef-result .result-image .reef-ph{aspect-ratio:1;height:auto;border-radius:9px 9px 0 0}
@@ -47,8 +47,8 @@
 .invert-warning strong{margin-right:4px}
 .reef-steps li>span{display:block}
 .step-tag{display:inline-block;margin-top:4px;padding:2px 8px;border-radius:999px;font-size:11.5px;font-style:normal;font-weight:500;line-height:1.5}
-.step-tag-safe{background:#e1ecdc;color:#2f6040;border:1px solid #b7ceb0}
-.step-tag-dip{background:#fbe7dc;color:#8a3416;border:1px solid #e7b39b}
+.step-tag-safe{background:rgba(16,37,54,0.86);color:#8be4e4;border:1px solid rgba(120,214,240,0.29)}
+.step-tag-dip{background:#3b2316;color:#f7a183;border:1px solid #ad5329}
 .alt-pick>.reef-ph{flex-shrink:0;width:76px;height:76px;padding:4px;border-radius:10px}
 .alt-pick>.reef-ph .reef-icon{width:56%}
 .quick-compare .reef-ph{aspect-ratio:1;height:auto}
@@ -59,8 +59,8 @@
 .reef-card .card-image .reef-ph{border:0;background:none}
 
 /* Shrimp/crab/snail pictures (square 362 px crops) */
-.question-panel .symptom-art.reef-art:has(>img){padding:0;aspect-ratio:4/3;background:#153e42}
-.reef-gallery img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;border-radius:9px;background:#dfe7e1}
+.question-panel .symptom-art.reef-art:has(>img){padding:0;aspect-ratio:4/3;background:#102938}
+.reef-gallery img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;border-radius:9px;background:rgba(16,37,55,0.86)}
 .reef-card .card-image>img{object-fit:cover}
 
 @media(max-width:700px){

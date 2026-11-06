@@ -4,9 +4,12 @@
 //   'dip'  → pest/coral dips: in a separate container, never in the display.
 // No plan ever doses copper or fish medicine in the display.
 
+import { POND_PLANS } from './pond-data.mjs';
+
 export const STEP_TAGS = {
   safe: 'Reef-safe',
   dip: 'Separate dip — never in the display',
+  pond: 'Pond product — dose by pond volume',
 };
 
 export const INVERT_WARNING = 'Copper and most fish medicines kill shrimp, crabs and snails. Never dose them in a tank with inverts.';
@@ -237,9 +240,9 @@ const PLANS = {
 };
 
 export function reefPlanFor(id) {
-  const plan = PLANS[id];
+  const plan = PLANS[id] || POND_PLANS[id];
   if (!plan) return null;
   return { ...plan, steps: plan.steps.map(step => ({ ...step })), dip: plan.steps.some(step => step.tag === 'dip') };
 }
 
-export const REEF_PLAN_IDS = Object.keys(PLANS);
+export const REEF_PLAN_IDS = [...Object.keys(PLANS), ...Object.keys(POND_PLANS)];

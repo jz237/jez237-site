@@ -1,0 +1,685 @@
+{
+  "request": "Jez, 2026-11-06 07:32 EST: \"Do option 1 and 4, add the pond section, and do the clean up pass.\" — retakes of the pictures flagged weak in earlier reviews, fish-neutral feeding/watch step pictures, distinct guppy eye pictures.",
+  "requestedModel": "openai/gpt-image-2.6-sunburst",
+  "requestedQuality": "medium",
+  "requestedSize": "auto",
+  "aspectRatio": "4:3",
+  "reportedProviderModel": [
+    "openai/gpt-image-2.6-sunburst"
+  ],
+  "backendModel": "not independently verified (stock OAuth provider reported gpt-image-2.6-sunburst)",
+  "geometry": {
+    "columns": 4,
+    "rows": 3,
+    "resized": false
+  },
+  "prompts": {
+    "fix-fresh": "Use case: AI-illustrated visual guide that helps a beginner fishkeeper recognise what is wrong with their fish. Photorealistic educational aquarium photography, NOT cartoons, icons, vector drawings, watercolor, plastic 3D renders or poster typography. Realistic underwater macro-photography aesthetic: anatomically believable fish, natural scales, translucent fins, restrained aquarium light, softly blurred home-aquarium background. Each cell names its fish and its scene. The fish is sharp, in focus, level and natural (not twisted at odd angles), large in its cell and fully in view. The key feature in each cell must be OBVIOUS to a novice at thumbnail size, while staying believable (no horror, no gore, no giant parasites). Absolutely no text, letters, numbers, labels, logos, watermarks, arrows or symbols anywhere in the image.\nSTRICT CONTACT SHEET for cropping into twelve separate pictures: exactly FOUR equal-width columns and THREE equal-height rows, twelve equal square cells covering the complete image edge to edge. No gutters, no borders, no outer margin. Every cell is its own separate scene with its own background. Nothing crosses a cell boundary; keep the whole subject inside the central 85 percent of its cell. Never put a cell's feature into another cell. Follow the exact row-major order below.\nRow 1 column 1: a red-and-white FANTAIL GOLDFISH in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, its WHITE areas evenly coated with a clearly visible fine GOLD-YELLOW velvety DUST over the whole back, sides and fins, standing out clearly against the body, like the fish was lightly dusted with gold powder, catching the side light; far finer than salt grains, no separate white spots; fins clamped (velvet).\nRow 1 column 2: a NEON TETRA in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, the whole small fish in side view filling the cell, one eye clearly BULGING OUT like a marble, slightly cloudy (popeye).\nRow 1 column 3: a NEON TETRA in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, body level and in sharp focus, swimming fast sideways and RUBBING its flank against a smooth round rock, skin slightly hazy, a faint swirl of sand (flashing).\nRow 1 column 4: a bronze CORY catfish on sand in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, side view, its TAIL FIN clearly DAMAGED: a big ragged NOTCH bitten out of the top half of the tail so the background shows through the gap; body healthy (fin injury).\nRow 2 column 1: a panda CORY catfish in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, LYING FLAT ON ITS SIDE on the sand, one side of its body facing up, fins limp, unable to stay upright (balance problem).\nRow 2 column 2: a bristlenose PLECO in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, sharp and in focus, rubbing the side of its head and body against a smooth piece of driftwood, its skin slightly hazy and greyish, fins flared (flashing).\nRow 2 column 3: a common PLECO in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, side view resting on sand, its belly clearly and smoothly SWOLLEN, round and tight like an over-full belly, the swelling part of its own body (dropsy; catfish have no scales to pinecone).\nRow 2 column 4: a black MOLLY in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, FLOATING ON ITS SIDE right at the water surface, one flank facing up, fins splayed, unable to stay upright; the water surface line across the top (swim bladder).\nRow 3 column 1: a plain dark navy-blue African mbuna CICHLID with no yellow anywhere, near rocks in a freshwater home aquarium, softly blurred dark teal-green plants behind, evenly coated with a clearly visible fine GOLD-YELLOW velvety DUST over the whole back, sides and fins, standing out clearly against the body, like the fish was lightly dusted with gold powder, catching the side light; far finer than salt grains, no separate white spots; fins clamped (velvet).\nRow 3 column 2: a female GUPPY (plain grey body, small tail) in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, the WHOLE FISH in side view, normal shape, its eye normal size and NOT bulging, but the eye covered by an obvious MILKY WHITE-GREY FILM like frosted glass, so the dark pupil barely shows (cloudy eye).\nRow 3 column 3: a male GUPPY with a colourful tail in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, seen from ABOVE and slightly in front, so both eyes show: the LEFT EYE bulges far OUT SIDEWAYS from the head like a glass marble on a swollen socket, clearly sticking out past the outline of the head, the other eye normal (popeye).\nRow 3 column 4: TREATMENT STEP, no fish in the picture: a single cooked, shelled green PEA held in the tips of long aquarium tweezers just under the water surface of a planted home aquarium, a small white saucer of shelled peas on the cabinet beside the tank.",
+    "fix-mixed": "Use case: AI-illustrated visual guide that helps a beginner fishkeeper recognise what is wrong with their fish. Photorealistic educational aquarium photography, NOT cartoons, icons, vector drawings, watercolor, plastic 3D renders or poster typography. Realistic underwater macro-photography aesthetic: anatomically believable fish, natural scales, translucent fins, restrained aquarium light, softly blurred home-aquarium background. Each cell names its fish and its scene. The fish is sharp, in focus, level and natural (not twisted at odd angles), large in its cell and fully in view. The key feature in each cell must be OBVIOUS to a novice at thumbnail size, while staying believable (no horror, no gore, no giant parasites). Absolutely no text, letters, numbers, labels, logos, watermarks, arrows or symbols anywhere in the image.\nSTRICT CONTACT SHEET for cropping into twelve separate pictures: exactly FOUR equal-width columns and THREE equal-height rows, twelve equal square cells covering the complete image edge to edge. No gutters, no borders, no outer margin. Every cell is its own separate scene with its own background. Nothing crosses a cell boundary; keep the whole subject inside the central 85 percent of its cell. Never put a cell's feature into another cell. Follow the exact row-major order below.\nRow 1 column 1: TREATMENT STEP, fish-neutral: a calm, clean, healthy planted home aquarium on a wooden cabinet in a living room in soft evening light, seen from a few steps back, the fish in it small and not identifiable, a closed notebook and a pen lying on the cabinet.\nRow 1 column 2: a blue-green CHROMIS in an ordinary home reef aquarium (live rock with pink coralline, white sand, blue-white reef light, clean glass), the animal large and fully in view, side view, with one clear round OPEN RED SORE about a third the size of its eye on its flank, a red crater with a pale rim, easy to see.\nRow 1 column 3: an ORCHID DOTTYBACK (purple) in an ordinary home reef aquarium (live rock with pink coralline, white sand, blue-white reef light, clean glass), the animal large and fully in view, side view, with one clear round OPEN RED SORE on its flank, a red crater with a pale rim, easy to see against the purple.\nRow 1 column 4: an ORCHID DOTTYBACK (purple) in an ordinary home reef aquarium (live rock with pink coralline, white sand, blue-white reef light, clean glass), the animal large and fully in view, body level and in focus, scraping its flank along the live rock, BOTH EYES CLOUDY and milky-white, skin slightly hazy (marine flukes).\nRow 2 column 1: a YELLOW WATCHMAN GOBY resting on the sand in an ordinary home reef aquarium (live rock with pink coralline, white sand, blue-white reef light, clean glass), the animal large and fully in view, side view, its belly clearly swollen and rounded but natural-looking, smoothly part of its body (swollen belly).\nRow 2 column 2: a SKUNK CLEANER SHRIMP in an ordinary home reef aquarium (live rock with pink coralline, white sand, blue-white reef light, clean glass), the animal large and fully in view, side view on the rock, clearly MISSING several walking legs on the near side, short stumps where they were, one long antenna broken short; the other cleaner shrimp beside it has all its legs.\nRow 2 column 3: an EMERALD CRAB on the rock in an ordinary home reef aquarium (live rock with pink coralline, white sand, blue-white reef light, clean glass), the animal large and fully in view, seen from the front, clearly MISSING ONE CLAW: one big claw on the left, only a short stump on the right where the other claw was.\nRow 2 column 4: a red-legged HERMIT CRAB in an ordinary home reef aquarium (live rock with pink coralline, white sand, blue-white reef light, clean glass), the animal large and fully in view, large in the frame on the sand, half out of its shell and limp, legs curled, after being added too fast; an empty acclimation cup on the sand nearby.\nRow 3 column 1: TREATMENT STEP, no fish in the picture: close view of a single cooked, shelled green PEA, skin removed, squashed slightly, sitting on the tips of aquarium feeding tweezers above the water of a planted aquarium.\nRow 3 column 2: a male GUPPY with a blue-and-orange tail in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, seen head-on from the front: one eye bulges out far to the side like a marble, the other eye normal, the difference obvious (popeye).\nRow 3 column 3: a female GUPPY (plain grey body) in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, whole fish in side view, eye normal size, covered by a MILKY WHITE film like frosted glass (cloudy eye).\nRow 3 column 4: a bristlenose PLECO in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, three-quarter view on sand, its belly swollen out round and tight on both sides, clearly part of its body (dropsy).",
+    "fix-repair": "Use case: AI-illustrated visual guide that helps a beginner fishkeeper recognise what is wrong with their fish. Photorealistic educational aquarium photography, NOT cartoons, icons, vector drawings, watercolor, plastic 3D renders or poster typography. Realistic underwater macro-photography aesthetic: anatomically believable fish, natural scales, translucent fins, restrained aquarium light, softly blurred home-aquarium background. Each cell names its fish and its scene. The fish is sharp, in focus, level and natural (not twisted at odd angles), large in its cell and fully in view. The key feature in each cell must be OBVIOUS to a novice at thumbnail size, while staying believable (no horror, no gore, no giant parasites). Absolutely no text, letters, numbers, labels, logos, watermarks, arrows or symbols anywhere in the image.\nSTRICT CONTACT SHEET for cropping into twelve separate pictures: exactly FOUR equal-width columns and THREE equal-height rows, twelve equal square cells covering the complete image edge to edge. No gutters, no borders, no outer margin. Every cell is its own separate scene with its own background. Nothing crosses a cell boundary; keep the whole subject inside the central 85 percent of its cell. Never put a cell's feature into another cell. Follow the exact row-major order below.\nRow 1 column 1: a common PLECO lying on sand in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, side view: its WHOLE BODY looks puffed up and thick, the belly smoothly rounded and tight like an over-inflated fish, the skin stretched shiny; the swelling is its own body, NOT a separate ball or bubble (dropsy).\nRow 1 column 2: a bristlenose PLECO seen from ABOVE on sand in a planted freshwater home aquarium, softly blurred dark teal-green plants behind: its body bulges out wide on both sides at the middle, round and tight, like a fish that swallowed a marble whole — the bulge smoothly part of its body (dropsy).\nRow 1 column 3: a YELLOW WATCHMAN GOBY resting on the sand in an ordinary home reef aquarium (live rock with pink coralline, white sand, blue-white reef light, clean glass), the animal large and fully in view, side view: its belly is noticeably fuller and rounder than normal, a gentle smooth swelling of its own yellow body, still natural-looking (swollen belly).\nRow 1 column 4: a YELLOW WATCHMAN GOBY perched on a rock in an ordinary home reef aquarium (live rock with pink coralline, white sand, blue-white reef light, clean glass), the animal large and fully in view, three-quarter view: its belly is swollen and rounded, yellow skin stretched over it, part of its body (swollen belly).\nRow 2 column 1: a black MOLLY in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, lying FLAT ON ITS SIDE at the water surface like a floating leaf, its whole flank facing up toward the camera, belly to one side, one fin sticking out of the water; the water surface line clearly visible (swim bladder).\nRow 2 column 2: a gold MOLLY in a planted freshwater home aquarium, softly blurred dark teal-green plants behind, turned UPSIDE DOWN near the surface, belly up, struggling to right itself; the water surface line visible (swim bladder).\nRow 2 column 3: ONE SKUNK CLEANER SHRIMP on the rock in an ordinary home reef aquarium (live rock with pink coralline, white sand, blue-white reef light, clean glass), the animal large and fully in view, side view filling the cell: on the near side it has only TWO walking legs left where there should be five, with clear short stubs where the others broke off, and one of its big white antennae snapped short.\nRow 2 column 4: ONE PEPPERMINT SHRIMP on the sand in an ordinary home reef aquarium (live rock with pink coralline, white sand, blue-white reef light, clean glass), the animal large and fully in view, side view filling the cell: one of its claws is missing and several legs are gone on the near side, leaving short stumps; the leg gap is obvious.\nRow 3 column 1: a SANKE koi in a shallow round pale-blue plastic inspection bowl of pond water, seen from above at an angle, daylight: its eyes clearly SUNKEN deep into the head, its skin rough and dull with pale sandpaper-like patches, gill covers CLOSED but the gill edge just visible looking pale; the fish is limp. Not gory, no open wounds.\nRow 3 column 2: close view of the head of a KOHAKU koi in a shallow round pale-blue plastic inspection bowl of pond water, seen from above at an angle, daylight: the eye clearly SUNKEN into its socket, the gill cover CLOSED with a pale, white-blotched edge showing just under it, the skin around the head dull and rough. Not gory, no open wounds.\nRow 3 column 3: two KOI in a shallow round pale-blue plastic inspection bowl of pond water, seen from above at an angle, daylight, both limp and lying still, with SUNKEN EYES and rough, dull sandpaper-like pale patches on their skin, gill covers closed with pale edges; clearly very sick but not gory, no open wounds.\nRow 3 column 4: a garden pond seen from above where several KOI lie listless near the edge, two of them lying on their sides, their skin dull and rough with pale patches; the other koi hanging still. Not gory."
+  },
+  "sources": {
+    "fix-fresh": {
+      "sha256": "53252cfeed91b2ea2367ea2c2ac96e460ecf239252ff1dda1fecb3bc343e3123",
+      "bytes": 552981,
+      "width": 1448,
+      "height": 1086,
+      "reportedProviderModel": "openai/gpt-image-2.6-sunburst"
+    },
+    "fix-mixed": {
+      "sha256": "64bf88b0afc75da7879d4bda8c87c32ad859237a5f2ac2b9141cb874b1da3095",
+      "bytes": 633588,
+      "width": 1448,
+      "height": 1086,
+      "reportedProviderModel": "openai/gpt-image-2.6-sunburst"
+    },
+    "fix-repair": {
+      "sha256": "7c44532a9755e3b9acdb37c79b94f9f00c1282527baf1c2689d093867f8b8942",
+      "bytes": 598595,
+      "width": 1448,
+      "height": 1086,
+      "reportedProviderModel": "openai/gpt-image-2.6-sunburst"
+    }
+  },
+  "originals": {
+    "fix-fresh": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-fixes-20261106/fix-fresh.jpg",
+    "fix-mixed": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-fixes-20261106/fix-mixed.jpg",
+    "fix-repair": "/home/jez237/.openclaw/media/tool-image-generation/fish-health-fixes-20261106/fix-repair.jpg"
+  },
+  "choices": {
+    "goldfish-dust": [
+      "fix-fresh",
+      0
+    ],
+    "community-eyes": [
+      "fix-fresh",
+      1
+    ],
+    "community-flukes": [
+      "fix-fresh",
+      2
+    ],
+    "catfish-injury": [
+      "fix-fresh",
+      3
+    ],
+    "catfish-on-side": [
+      "fix-fresh",
+      4
+    ],
+    "pleco-flukes": [
+      "fix-fresh",
+      5
+    ],
+    "african-dust": [
+      "fix-fresh",
+      8
+    ],
+    "guppy-cloudy-eye": [
+      "fix-fresh",
+      9
+    ],
+    "guppy-eyes": [
+      "fix-fresh",
+      10
+    ],
+    "step-pea": [
+      "fix-fresh",
+      11
+    ],
+    "step-watch": [
+      "fix-mixed",
+      0
+    ],
+    "damsel-sores": [
+      "fix-mixed",
+      1
+    ],
+    "dottyback-sores": [
+      "fix-mixed",
+      2
+    ],
+    "dottyback-flukes": [
+      "fix-mixed",
+      3
+    ],
+    "sign-crab-legs": [
+      "fix-mixed",
+      6
+    ],
+    "cond-crab-acclimation": [
+      "fix-mixed",
+      7
+    ],
+    "pleco-dropsy": [
+      "fix-repair",
+      0
+    ],
+    "goby-swollen": [
+      "fix-repair",
+      3
+    ],
+    "molly-balance": [
+      "fix-repair",
+      4
+    ],
+    "sign-shrimp-legs": [
+      "fix-repair",
+      6
+    ],
+    "pond:sign-sunken-eyes": [
+      "fix-repair",
+      9
+    ],
+    "pond:cond-khv": [
+      "fix-repair",
+      10
+    ]
+  },
+  "assets": [
+    {
+      "id": "goldfish-dust",
+      "set": "fish",
+      "replaces": "goldfish-dust",
+      "sheet": "fix-fresh",
+      "cell": 0,
+      "path": "local-images/fixes/fish-goldfish-dust-235f7995a7ed.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/fish-goldfish-dust-235f7995a7ed.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/fish-goldfish-dust-235f7995a7ed.jpg",
+      "uploaded": true,
+      "sha256": "235f7995a7ed5ac2d4a4a1bf6f031404481fb99d409c0db3995e0d09552eb5c6",
+      "bytes": 37030,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        0,
+        362,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Red-and-white goldfish with a fine gold dusting over its white areas and fins.",
+      "caption": null
+    },
+    {
+      "id": "community-eyes",
+      "set": "fish",
+      "replaces": "community-eyes",
+      "sheet": "fix-fresh",
+      "cell": 1,
+      "path": "local-images/fixes/fish-community-eyes-8fc876fc3a5f.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/fish-community-eyes-8fc876fc3a5f.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/fish-community-eyes-8fc876fc3a5f.jpg",
+      "uploaded": true,
+      "sha256": "8fc876fc3a5fda1f7ad5f31eb49258695e5c63e1c2460f12842bfd66ac4da97f",
+      "bytes": 32288,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        362,
+        0,
+        724,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Neon tetra with one eye bulging out.",
+      "caption": null
+    },
+    {
+      "id": "community-flukes",
+      "set": "fish",
+      "replaces": "community-flukes",
+      "sheet": "fix-fresh",
+      "cell": 2,
+      "path": "local-images/fixes/fish-community-flukes-fc623fbbc05f.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/fish-community-flukes-fc623fbbc05f.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/fish-community-flukes-fc623fbbc05f.jpg",
+      "uploaded": true,
+      "sha256": "fc623fbbc05feca6ae4f9ffd1913791b98b8777e2e89a5722ae5c61982b78403",
+      "bytes": 43755,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        0,
+        1086,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Neon tetra rubbing its side against a rock.",
+      "caption": null
+    },
+    {
+      "id": "catfish-injury",
+      "set": "fish",
+      "replaces": "catfish-injury",
+      "sheet": "fix-fresh",
+      "cell": 3,
+      "path": "local-images/fixes/fish-catfish-injury-d0ed6774874c.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/fish-catfish-injury-d0ed6774874c.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/fish-catfish-injury-d0ed6774874c.jpg",
+      "uploaded": true,
+      "sha256": "d0ed6774874c6c12bbb84abe3f64f3e38c61faefb18a54fc91d48bead876e9db",
+      "bytes": 48440,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        1086,
+        0,
+        1448,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Bronze cory catfish with a big notch bitten out of its tail fin.",
+      "caption": null
+    },
+    {
+      "id": "catfish-on-side",
+      "set": "fish",
+      "replaces": "catfish-on-side",
+      "sheet": "fix-fresh",
+      "cell": 4,
+      "path": "local-images/fixes/fish-catfish-on-side-75bce040a358.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/fish-catfish-on-side-75bce040a358.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/fish-catfish-on-side-75bce040a358.jpg",
+      "uploaded": true,
+      "sha256": "75bce040a3581b403bc88db40f91bb745a9a5760134058b67ce5a6da4dbc4ecd",
+      "bytes": 44703,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        362,
+        362,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: Panda cory catfish lying on its side on the sand.",
+      "caption": null
+    },
+    {
+      "id": "pleco-flukes",
+      "set": "fish",
+      "replaces": "pleco-flukes",
+      "sheet": "fix-fresh",
+      "cell": 5,
+      "path": "local-images/fixes/fish-pleco-flukes-473c8e6e32ad.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/fish-pleco-flukes-473c8e6e32ad.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/fish-pleco-flukes-473c8e6e32ad.jpg",
+      "uploaded": true,
+      "sha256": "473c8e6e32adfbc6610c253baba81d4a702cfdba084916f266ea30a95d88d210",
+      "bytes": 55248,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        362,
+        362,
+        724,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: Bristlenose pleco rubbing its side against driftwood.",
+      "caption": null
+    },
+    {
+      "id": "african-dust",
+      "set": "fish",
+      "replaces": "african-dust",
+      "sheet": "fix-fresh",
+      "cell": 8,
+      "path": "local-images/fixes/fish-african-dust-32b21e6f5555.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/fish-african-dust-32b21e6f5555.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/fish-african-dust-32b21e6f5555.jpg",
+      "uploaded": true,
+      "sha256": "32b21e6f555561867e3a61da93965db6cb9a78de304e6b67ecff7ec0d535ea61",
+      "bytes": 54022,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        724,
+        362,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Dark blue African cichlid with a fine gold dusting over its body and fins.",
+      "caption": null
+    },
+    {
+      "id": "guppy-cloudy-eye",
+      "set": "fish",
+      "replaces": "guppy-cloudy-eye",
+      "sheet": "fix-fresh",
+      "cell": 9,
+      "path": "local-images/fixes/fish-guppy-cloudy-eye-accfb8482555.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/fish-guppy-cloudy-eye-accfb8482555.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/fish-guppy-cloudy-eye-accfb8482555.jpg",
+      "uploaded": true,
+      "sha256": "accfb8482555671af32818bafeafa3ddf6f5136e956df4f58f4ce786d1cc7d98",
+      "bytes": 34824,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        362,
+        724,
+        724,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Female guppy whose eye is covered by a milky white film.",
+      "caption": "A milky film over the eye."
+    },
+    {
+      "id": "guppy-eyes",
+      "set": "fish",
+      "replaces": "guppy-eyes",
+      "sheet": "fix-fresh",
+      "cell": 10,
+      "path": "local-images/fixes/fish-guppy-eyes-59cb8c657473.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/fish-guppy-eyes-59cb8c657473.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/fish-guppy-eyes-59cb8c657473.jpg",
+      "uploaded": true,
+      "sha256": "59cb8c65747397bf593822d1a5b552edf2aef1c5e9dac98717ca58eae998a407",
+      "bytes": 35784,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        724,
+        1086,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Male guppy seen from above with one eye bulging out sideways.",
+      "caption": "An eye bulging out."
+    },
+    {
+      "id": "step-pea",
+      "set": "fish",
+      "replaces": "step-pea",
+      "sheet": "fix-fresh",
+      "cell": 11,
+      "path": "local-images/fixes/fish-step-pea-d7297cba271f.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/fish-step-pea-d7297cba271f.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/fish-step-pea-d7297cba271f.jpg",
+      "uploaded": true,
+      "sha256": "d7297cba271feee2a47e09e1d27377d0275c0878be24f5eb0b3912a33794f728",
+      "bytes": 46025,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        1086,
+        724,
+        1448,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Tweezers holding a shelled pea at the water surface, a saucer of peas beside the tank.",
+      "caption": "Fast, then a pea"
+    },
+    {
+      "id": "step-watch",
+      "set": "fish",
+      "replaces": "step-watch",
+      "sheet": "fix-mixed",
+      "cell": 0,
+      "path": "local-images/fixes/fish-step-watch-3756a9a13d32.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/fish-step-watch-3756a9a13d32.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/fish-step-watch-3756a9a13d32.jpg",
+      "uploaded": true,
+      "sha256": "3756a9a13d32742bf4c635a355421683264b48c0f075d44b806c06f932a20a4c",
+      "bytes": 50189,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        0,
+        362,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: A calm, clean planted aquarium in a living room with a notebook beside it.",
+      "caption": "Watch and wait"
+    },
+    {
+      "id": "damsel-sores",
+      "set": "fish",
+      "replaces": "damsel-sores",
+      "sheet": "fix-mixed",
+      "cell": 1,
+      "path": "local-images/fixes/fish-damsel-sores-f9fe885f0295.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/fish-damsel-sores-f9fe885f0295.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/fish-damsel-sores-f9fe885f0295.jpg",
+      "uploaded": true,
+      "sha256": "f9fe885f0295ac8b448b10ca77447befdf7223a2a9704e4dc5f3551dde644ec4",
+      "bytes": 52305,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        362,
+        0,
+        724,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Blue-green chromis with an open red sore on its side.",
+      "caption": null
+    },
+    {
+      "id": "dottyback-sores",
+      "set": "fish",
+      "replaces": "dottyback-sores",
+      "sheet": "fix-mixed",
+      "cell": 2,
+      "path": "local-images/fixes/fish-dottyback-sores-c96f601ed01b.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/fish-dottyback-sores-c96f601ed01b.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/fish-dottyback-sores-c96f601ed01b.jpg",
+      "uploaded": true,
+      "sha256": "c96f601ed01b1c3f13400135c56a9177aed72362e6ea426175ae7a7e52e28346",
+      "bytes": 46832,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        0,
+        1086,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Orchid dottyback with an open red sore on its side.",
+      "caption": null
+    },
+    {
+      "id": "dottyback-flukes",
+      "set": "fish",
+      "replaces": "dottyback-flukes",
+      "sheet": "fix-mixed",
+      "cell": 3,
+      "path": "local-images/fixes/fish-dottyback-flukes-f7200f62fffa.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/fish-dottyback-flukes-f7200f62fffa.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/fish-dottyback-flukes-f7200f62fffa.jpg",
+      "uploaded": true,
+      "sha256": "f7200f62fffaf46b457d78658b6490948d95aff55c7eca269be16ec7797603aa",
+      "bytes": 53851,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        1086,
+        0,
+        1448,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Orchid dottyback with cloudy eyes scraping its side along the rock.",
+      "caption": null
+    },
+    {
+      "id": "sign-crab-legs",
+      "set": "invert",
+      "replaces": "sign-crab-legs",
+      "sheet": "fix-mixed",
+      "cell": 6,
+      "path": "local-images/fixes/invert-sign-crab-legs-59214dc8945e.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/invert-sign-crab-legs-59214dc8945e.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/invert-sign-crab-legs-59214dc8945e.jpg",
+      "uploaded": true,
+      "sha256": "59214dc8945e8e40b4bb57f283b2844188a7cff18fbe95e14d26246177c93971",
+      "bytes": 62522,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        362,
+        1086,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: An emerald crab with one claw missing, a stump where it was.",
+      "caption": "Missing legs or a claw."
+    },
+    {
+      "id": "cond-crab-acclimation",
+      "set": "invert",
+      "replaces": "cond-crab-acclimation",
+      "sheet": "fix-mixed",
+      "cell": 7,
+      "path": "local-images/fixes/invert-cond-crab-acclimation-58a4a0fc6786.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/invert-cond-crab-acclimation-58a4a0fc6786.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/invert-cond-crab-acclimation-58a4a0fc6786.jpg",
+      "uploaded": true,
+      "sha256": "58a4a0fc6786f82c7c1c6c432ae303eca496df1d350b1c11ce0ed92f3c24d9ba",
+      "bytes": 57062,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        1086,
+        362,
+        1448,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: A hermit crab hanging limp half out of its shell on the sand.",
+      "caption": "Limp or dying after being added."
+    },
+    {
+      "id": "pleco-dropsy",
+      "set": "fish",
+      "replaces": "pleco-dropsy",
+      "sheet": "fix-repair",
+      "cell": 0,
+      "path": "local-images/fixes/fish-pleco-dropsy-c577cb2b234c.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/fish-pleco-dropsy-c577cb2b234c.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/fish-pleco-dropsy-c577cb2b234c.jpg",
+      "uploaded": true,
+      "sha256": "c577cb2b234cf8b724b798af311f0f38194e7f2c00774adc657af14ef7bfc090",
+      "bytes": 45622,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        0,
+        362,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Common pleco with a puffed-up, tight, swollen belly.",
+      "caption": "A hugely bloated, tight belly (catfish have no scales to pinecone)."
+    },
+    {
+      "id": "goby-swollen",
+      "set": "fish",
+      "replaces": "goby-swollen",
+      "sheet": "fix-repair",
+      "cell": 3,
+      "path": "local-images/fixes/fish-goby-swollen-b99955b66876.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/fish-goby-swollen-b99955b66876.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/fish-goby-swollen-b99955b66876.jpg",
+      "uploaded": true,
+      "sha256": "b99955b6687687bc50aad362e5770969e289270ba8ae229e8f549ced8ad42e4e",
+      "bytes": 52402,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        1086,
+        0,
+        1448,
+        362
+      ],
+      "resized": false,
+      "alt": "AI illustration: Yellow watchman goby with a rounded, swollen belly.",
+      "caption": null
+    },
+    {
+      "id": "molly-balance",
+      "set": "fish",
+      "replaces": "molly-balance",
+      "sheet": "fix-repair",
+      "cell": 4,
+      "path": "local-images/fixes/fish-molly-balance-fd86d8007b74.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/fish-molly-balance-fd86d8007b74.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/fish-molly-balance-fd86d8007b74.jpg",
+      "uploaded": true,
+      "sha256": "fd86d8007b7421b9de857b09552e48f8c469265c97daa552fc65a6e8fe4b919c",
+      "bytes": 35579,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        0,
+        362,
+        362,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: Black molly floating flat on its side at the surface.",
+      "caption": null
+    },
+    {
+      "id": "sign-shrimp-legs",
+      "set": "invert",
+      "replaces": "sign-shrimp-legs",
+      "sheet": "fix-repair",
+      "cell": 6,
+      "path": "local-images/fixes/invert-sign-shrimp-legs-c23494143737.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/invert-sign-shrimp-legs-c23494143737.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/invert-sign-shrimp-legs-c23494143737.jpg",
+      "uploaded": true,
+      "sha256": "c23494143737a66134e359562cf63b2edeee12fda35eebc0f9a5f0aef4fff752",
+      "bytes": 53450,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        362,
+        1086,
+        724
+      ],
+      "resized": false,
+      "alt": "AI illustration: A cleaner shrimp with most of its walking legs missing, stubs showing.",
+      "caption": "Missing legs or a claw."
+    },
+    {
+      "id": "sign-sunken-eyes",
+      "set": "pond",
+      "replaces": "sign-sunken-eyes",
+      "sheet": "fix-repair",
+      "cell": 9,
+      "path": "local-images/fixes/pond-sign-sunken-eyes-dbc4486a1ffe.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/pond-sign-sunken-eyes-dbc4486a1ffe.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/pond-sign-sunken-eyes-dbc4486a1ffe.jpg",
+      "uploaded": true,
+      "sha256": "dbc4486a1ffe734af3536416e93dd451b23c39c103df15e23198bab29efc8b6f",
+      "bytes": 40291,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        362,
+        724,
+        724,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Close view of a koi head with a sunken eye and pale gill edge.",
+      "caption": "Sunken eyes, pale gills."
+    },
+    {
+      "id": "cond-khv",
+      "set": "pond",
+      "replaces": "cond-khv",
+      "sheet": "fix-repair",
+      "cell": 10,
+      "path": "local-images/fixes/pond-cond-khv-542ea497fd7e.jpg",
+      "r2Key": "experiments/fish-health-lab/fixes/pond-cond-khv-542ea497fd7e.jpg",
+      "plannedUrl": "https://media.jez237.com/experiments/fish-health-lab/fixes/pond-cond-khv-542ea497fd7e.jpg",
+      "uploaded": true,
+      "sha256": "542ea497fd7eeb6ce5e13d71af9bc4d0c3d70874e15e97f73d91179a9530d575",
+      "bytes": 39548,
+      "width": 362,
+      "height": 362,
+      "crop": [
+        724,
+        724,
+        1086,
+        1086
+      ],
+      "resized": false,
+      "alt": "AI illustration: Two limp koi with sunken eyes and rough pale skin.",
+      "caption": "Sunken eyes, rotting gills, rough skin."
+    }
+  ],
+  "review": {
+    "method": "Every cell of fix-fresh, fix-mixed and fix-repair opened at full sheet size and compared with the published crop it would replace (or the pond first take); a retake is used only when it is clearly better.",
+    "used": "22 crops: 10 freshwater (gold dust now obvious on a red-and-white goldfish, neon popeye/flukes framed cleanly, cory tail notch and cory on its side clear, sharp pleco rubbing driftwood, gold dust on a dark African, guppy cloudy eye now a whole female guppy with a frosted eye vs guppy popeye seen head-on with the eye sticking out), fish-neutral step-pea (tweezers + saucer of peas, no fish) and step-watch (calm tank in a living room, notebook), 3 marine (clear red sores on chromis and orchid dottyback, dottyback flukes level and in focus), emerald crab missing a claw, hermit after acclimation, plus from fix-repair: pleco dropsy (side view, belly part of the body), watchman goby swollen (natural), black molly flat on its side at the surface, cleaner shrimp with leg stubs, and two pond KHV pictures that replace the first takes (closed gill covers, no gaping wound).",
+    "notUsed": {
+      "fix-fresh pleco-dropsy / fix-mixed goby-swollen": "belly drawn as a separate grey/yellow ball.",
+      "fix-fresh molly-balance": "molly upright at the surface, not on its side.",
+      "fix-mixed sign-shrimp-legs": "two whole shrimp, missing legs not visible.",
+      "fix-mixed ALT cells": "first takes were better or equal.",
+      "fix-repair spares": "second takes of each (cells 1, 2, 5, 7, 8, 11) were fine but not needed."
+    },
+    "pondFirstTakesReplaced": {
+      "sign-sunken-eyes": "torn-open gill cover read as a gaping wound",
+      "cond-khv": "same gaping gill flap"
+    }
+  },
+  "publication": "Uploaded to R2 and byte-verified 2026-11-06 (tmp/fish-health-v3-publish-20261106/upload-verification.json); IMAGE_SOURCE \"media\"."
+}

@@ -8,10 +8,13 @@
 // re-weight only conditions that already fit. `kinds` limits a condition to
 // those kinds when a kind was picked ("Not sure" keeps everything).
 
+import { POND_KINDS, POND_SIGNS, POND_CHANGES, POND_CONDITIONS, POND_LOOKALIKES, POND_TREATMENT_FAMILY } from './pond-data.mjs';
+
 export const REEF_GROUPS = [
   { id: 'fish', title: 'Fish', text: 'Spots, fins, breathing' },
   { id: 'coral', title: 'Coral or anemone', text: 'Soft, LPS, SPS, anemones' },
   { id: 'invert', title: 'Shrimp, crab or snail', text: 'Cleanup crew & co.' },
+  { id: 'pond', title: 'Pond fish', text: 'Koi, goldfish, orfe' },
 ];
 
 export const REEF_KINDS = {
@@ -27,6 +30,7 @@ export const REEF_KINDS = {
     { id: 'snail', title: 'Snail', text: 'Turbo, trochus, nassarius', plural: 'snails' },
     { id: 'other', title: 'Other inverts', text: 'Urchins, starfish', plural: 'urchins and starfish' },
   ],
+  pond: POND_KINDS,
 };
 
 // Main signs. `kinds` = which kinds see the tile (none = every kind).
@@ -58,6 +62,7 @@ export const REEF_SIGNS = {
     { id: 'spines', title: 'Losing spines or arms', text: 'Bald urchin, melting starfish', kinds: ['other'] },
     { id: 'unclear', title: 'Just seems off', text: 'Hiding, slow or not eating' },
   ],
+  pond: POND_SIGNS,
 };
 
 // Optional "Anything changed recently?" chips.
@@ -77,6 +82,7 @@ export const REEF_CHANGES = {
     { id: 'water-change', title: 'Big or missed water change' },
     { id: 'new-fish', title: 'New fish' },
   ],
+  pond: POND_CHANGES,
 };
 
 export const REEF_CONDITIONS = [
@@ -342,6 +348,9 @@ export const REEF_CONDITIONS = [
     distinguish: 'If it doesn’t move after a day, or smells bad, it has died.',
     avoid: 'Don’t leave it—hermits and fish will pick at it.',
   },
+
+  // ── Pond fish (pond-data.mjs) ─────────────────────────────────────
+  ...POND_CONDITIONS,
 ];
 
 // "Could also be" pairs: [id, short check, (optional) only for these kinds].
@@ -373,6 +382,7 @@ export const REEF_LOOKALIKES = {
   'normal-molt': [['failed-molt', 'Look: still stuck halfway out = failed molt.']],
   'invert-injury': [['invert-water', 'Test the water: several weak at once?']],
   flipped: [['starvation', 'Look: little algae left = not enough food.'], ['invert-water', 'Smell it and test the water if several die.']],
+  ...POND_LOOKALIKES,
 };
 
 // The fallback check when a condition shows up without a curated pair.
@@ -388,4 +398,5 @@ export const REEF_TREATMENT_FAMILY = {
   'coral-normal': 'none',
   'failed-molt': 'stability', acclimation: 'stability', 'invert-water': 'water', copper: 'remove-meds',
   starvation: 'food', bopyrid: 'watch', 'normal-molt': 'none', 'invert-injury': 'separate', flipped: 'flip',
+  ...POND_TREATMENT_FAMILY,
 };
