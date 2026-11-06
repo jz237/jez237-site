@@ -1,21 +1,16 @@
 /* Only same-room light paths are used: native walls/closed doors cannot leak
  * another room's light into these shadows. Both campaigns use the same pass. */
 static int ss_fixture(int room,int receiver,const vms_vector *center,const vms_matrix *basis,vms_vector *lamp){
-    float best=-1;
-    for(int side=0;side<6;side++){
-        if(side==receiver||Segments[room].children[side]>=0||Segments[room].sides[side].wall_num>=0)continue;
-        int texture=Segments[room].sides[side].tmap_num;
-        if(texture<0||texture>=NumTextures||TmapInfo[texture].damage||TmapInfo[texture].flags&(TMI_WATER|TMI_VOLATILE|TMI_FORCE_FIELD))continue;
-        int ids[4];get_side_verts(ids,room,side);
-        float width=f2fl(vm_vec_dist(&Vertices[ids[0]],&Vertices[ids[1]])),height=f2fl(vm_vec_dist(&Vertices[ids[0]],&Vertices[ids[3]]));
-        if(width<6||height<6||width>100||height>100)continue;
-        // This is the center of the actual gantry area-lamp strip (v + .037).
-        float v=fminf(.13f,1.05f/height)+.037f;
-        vms_vector p={0};for(int i=0;i<4;i++)vm_vec_scale_add2(&p,&Vertices[ids[i]],fl2f(.5f*(i<2?1-v:v)));
-        vms_vector inside;compute_segment_center(&inside,&Segments[room]);vm_vec_sub2(&inside,&p);vm_vec_normalize(&inside);vm_vec_scale_add2(&p,&inside,fl2f(.45f));
-        vms_vector d;vm_vec_sub(&d,&p,center);float elevation=f2fl(vm_vec_dot(&d,&basis->fvec));
-        float score=elevation/(1+f2fl(vm_vec_dist_quick(&p,center))*.02f);
-        if(elevation>2&&score>best){best=score;*lamp=p;}
+    /* Use the very same active fixture positions as the surface shader. This
+     * also removes a broken lamp from the shadow pass on the next frame. */
+    astra_fixture_lights(room);float best=0;
+    for(int i=0;i<3;i++){
+        if(afx_light_world[i][3]<=0)continue;
+        vms_vector p={fl2f(afx_light_world[i][0]),fl2f(afx_light_world[i][1]),fl2f(afx_light_world[i][2])},d;
+        vm_vec_sub(&d,&p,center);float elevation=f2fl(vm_vec_dot(&d,&basis->fvec)),distance=f2fl(vm_vec_mag(&d));
+        float brightness=fmaxf(afx_colors[i][0],fmaxf(afx_colors[i][1],afx_colors[i][2]));
+        float score=brightness*elevation/(1+distance*distance*.02f);
+        if(elevation>2&&distance<afx_light_world[i][3]&&score>best){best=score;*lamp=p;}
     }return best>0;
 }
 static int ss_wall(int room,int face){

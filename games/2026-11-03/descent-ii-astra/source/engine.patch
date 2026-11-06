@@ -749,7 +749,7 @@ index af0b258..82aa6fb 100644
  
  extern ogl_texture* ogl_get_free_texture();
 diff --git a/d2/main/ai2.c b/d2/main/ai2.c
-index b32d6e4..d5c952d 100644
+index b32d6e4..1ce099a 100644
 --- a/d2/main/ai2.c
 +++ b/d2/main/ai2.c
 @@ -886,6 +886,8 @@ int lead_player(object *objp, vms_vector *fire_point, vms_vector *believed_playe
@@ -761,14 +761,23 @@ index b32d6e4..d5c952d 100644
  void ai_fire_laser_at_player(object *obj, vms_vector *fire_point, int gun_num, vms_vector *believed_player_pos)
  {
  	int			objnum = obj-Objects;
-@@ -974,6 +976,8 @@ void ai_fire_laser_at_player(object *obj, vms_vector *fire_point, int gun_num, v
+@@ -974,6 +976,9 @@ void ai_fire_laser_at_player(object *obj, vms_vector *fire_point, int gun_num, v
  		}
  	}
  
 +    if(astra_ov_fire(obj,fire_point,gun_num))return;
++    if(astra_d2_charge(obj,fire_point))return;
 +
  	//	Set position to fire at based on difficulty level and robot's aiming ability
  	aim = FIRE_K*F1_0 - (FIRE_K-1)*(robptr->aim << 8);	//	F1_0 in bitmaps.tbl = same as used to be.  Worst is 50% more error.
+ 
+@@ -1026,6 +1031,7 @@ player_led: ;
+ 	create_awareness_event(obj, PA_NEARBY_ROBOT_FIRED);
+ 
+ 	set_next_fire_time(obj, ailp, robptr, gun_num);
++    astra_d2_fired(obj,gun_num);
+ 
+ }
  
 diff --git a/d2/main/collide.c b/d2/main/collide.c
 index fdb2e78..4a3b6b9 100644

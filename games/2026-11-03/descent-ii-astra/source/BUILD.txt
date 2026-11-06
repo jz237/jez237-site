@@ -1111,3 +1111,25 @@ normal/damaged attack phases; visible fan animation and moving shadow rendering;
 loader byte/hash checks and bounded material reuse; repeated map/cockpit changes
 with WebGL error 0. Test-only controls are absent from the shipping engine.
 Tests use a dedicated muted browser with pointer capture blocked.
+
+Original / Vertigo campaign extension (pyre49)
+
+Native D2 and Vertigo robots now show an emissive charge warning before their
+native volleys. Heavy homing/explosive weapons have a longer warning. Each robot
+retains its own guns, aim, burst spacing and projectile identity. Bosses change
+attack cadence at two thirds and one third health, with a longer recovery after
+every third advanced volley. Native boss teleportation, cloak, invulnerability
+and robot spawning are preserved. Companions, thieves, melee robots and
+multiplayer bypass these changes. Player weapons, flight and demo steering are
+unchanged. Wall checks gate enhanced attacks; cloak never reveals a target.
+
+Native robot materials now receive the actual colored fixtures of their room,
+including broken-light state, projected in the correct object frame. Existing
+moving machinery and ship shadows use the same actual fixture positions as the
+wall shader. Light is confined to the owning convex room. Fixed-size uniforms
+reuse the existing fleet shader; there are no new texture or geometry downloads.
+
+The R48 compact objective tracker and optional full-state checkpoints already
+support Original, Vertigo and Overload. Original and Vertigo death/reload restore
+and the 26px mobile tracker are verified again with this engine. Test controls
+are built separately and are absent from the shipping engine.

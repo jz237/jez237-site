@@ -1,6 +1,17 @@
 /* R38: nearby fixture light is confined to the owning convex mine segment.
  * Broken lights stop contributing immediately. No simulation or RNG writes. */
 static float afx_lamps[3][4],afx_colors[3][4],afx_light_world[3][4],afx_axes[3][4];
+/* Object draws use a local g3 instance. Transform world fixture positions into
+ * that instance before projecting; otherwise light would rotate with the robot. */
+static object *afx_instance;
+static void afx_point(g3s_point *out,const vms_vector *world){
+    if(!afx_instance){g3_rotate_point(out,world);return;}
+    vms_vector d,local;vm_vec_sub(&d,world,&afx_instance->pos);vm_vec_rotate(&local,&d,&afx_instance->orient);g3_rotate_point(out,&local);
+}
+static void afx_axis(vms_vector *out,const vms_vector *world){
+    if(!afx_instance){g3_rotate_delta_vec(out,world);return;}
+    vms_vector local;vm_vec_rotate(&local,world,&afx_instance->orient);g3_rotate_delta_vec(out,&local);
+}
 extern int astra_liquid_kind(int);
 extern float astra_mine_clock;
 void astra_fixture_lights(int room){
@@ -24,9 +35,9 @@ void astra_fixture_lights(int room){
         float d=f2fl(vm_vec_dist_quick(&point,&center)),score=power/(4+d);int slot=0;
         for(int i=1;i<3;i++)if(rank[i]<rank[slot])slot=i;if(score<=rank[slot])continue;rank[slot]=score;
         vms_vector normal=face->normals[0],into;vm_vec_sub(&into,&center,&point);if(vm_vec_dot(&normal,&into)<0)vm_vec_negate(&normal);
-        vm_vec_scale_add2(&point,&normal,F1_0/2);g3s_point p;g3_rotate_point(&p,&point);
+        vm_vec_scale_add2(&point,&normal,F1_0/2);g3s_point p;afx_point(&p,&point);
         afx_lamps[slot][0]=f2fl(p.p3_x);afx_lamps[slot][1]=f2fl(p.p3_y);afx_lamps[slot][2]=-f2fl(p.p3_z);
-        if(accent){vms_vector axis;g3_rotate_delta_vec(&axis,&mount.r);float scale=fmaxf(.001f,f2fl(vm_vec_mag(&axis)));afx_axes[slot][0]=f2fl(axis.x)/scale;afx_axes[slot][1]=f2fl(axis.y)/scale;afx_axes[slot][2]=-f2fl(axis.z)/scale;afx_axes[slot][3]=mount.width*scale;}
+        if(accent){vms_vector axis;afx_axis(&axis,&mount.r);float scale=fmaxf(.001f,f2fl(vm_vec_mag(&axis)));afx_axes[slot][0]=f2fl(axis.x)/scale;afx_axes[slot][1]=f2fl(axis.y)/scale;afx_axes[slot][2]=-f2fl(axis.z)/scale;afx_axes[slot][3]=mount.width*scale;}
         else memset(afx_axes[slot],0,sizeof afx_axes[slot]);
         afx_lamps[slot][3]=fminf(lava?55:38,14+power*(lava?24:12));
         afx_light_world[slot][0]=f2fl(point.x);afx_light_world[slot][1]=f2fl(point.y);afx_light_world[slot][2]=f2fl(point.z);afx_light_world[slot][3]=afx_lamps[slot][3];

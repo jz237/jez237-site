@@ -122,6 +122,16 @@ static int af_gun_joint(polymodel *pm,robot_info *ri,int side){
     }
     return selected;
 }
+static void af_d2_lighting(object *o){
+    glUniform1f(af_shadow_on,0);glUniform1f(af_charge,0);glUniform1f(af_light_on,0);
+    if(!o||o->type!=OBJ_ROBOT||o->segnum<0||o->segnum>Highest_segment_index)return;
+    extern int astra_ov_enabled(void);if(astra_ov_enabled())return;
+    float lamps[4][4]={{0}},colors[4][4]={{0}},directions[4][4]={{0}};
+    int previous_room=aw_room;afx_instance=o;astra_fixture_lights(o->segnum);afx_instance=NULL;aw_room=previous_room;
+    for(int i=0;i<3;i++){memcpy(lamps[i],afx_lamps[i],sizeof lamps[i]);memcpy(colors[i],afx_colors[i],sizeof colors[i]);colors[i][3]=-1;}
+    glUniform4fv(af_lpos,4,&lamps[0][0]);glUniform4fv(af_lcolor,4,&colors[0][0]);glUniform4fv(af_ldir,4,&directions[0][0]);glUniform1f(af_light_on,1);
+    extern float astra_d2_telegraph(object*);glUniform1f(af_charge,astra_d2_telegraph(o));
+}
 int astra_draw_robot(int model,polymodel *pm,vms_angvec *angles,g3s_lrgb light){
     if(af_enabled<0)af_enabled=EM_ASM_INT(return !!Module.astra);
     if(!af_enabled||fleet_failed||astra_robot_id<0||astra_robot_id>=N_robot_types||Robot_info[astra_robot_id].model_num!=model||model<0)return 0;
@@ -133,6 +143,7 @@ int astra_draw_robot(int model,polymodel *pm,vms_angvec *angles,g3s_lrgb light){
     GLboolean cull=glIsEnabled(GL_CULL_FACE),depth=glIsEnabled(GL_DEPTH_TEST);
     if(!ss_capture){
     glDisable(GL_CULL_FACE);glEnable(GL_DEPTH_TEST);glUseProgram(fleet_program);
+    af_d2_lighting(astra_robot_object);
     glUniform3f(af_energy,.51f+.62f*fminf(1.4f,f2fl(light.r)),.55f+.62f*fminf(1.4f,f2fl(light.g)),.58f+.62f*fminf(1.4f,f2fl(light.b)));
     glUniform4fv(af_flash,1,astra_flash);glUniform1f(af_clock,astra_visual_clock());
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_COLOR_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -162,6 +173,7 @@ int astra_draw_robot(int model,polymodel *pm,vms_angvec *angles,g3s_lrgb light){
     }
     if(ss_capture)return 1;
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);glDisableClientState(GL_COLOR_ARRAY);glDisableClientState(GL_VERTEX_ARRAY);
+    glUniform1f(af_charge,0);glUniform1f(af_light_on,0);glUniform1f(af_shadow_on,0);
     glUseProgram(0);if(cull)glEnable(GL_CULL_FACE);if(!depth)glDisable(GL_DEPTH_TEST);
     af_draws++;
     EM_ASM(Module.fleetDraws=$0;Module.lastChassis=$1;,af_draws,id);
