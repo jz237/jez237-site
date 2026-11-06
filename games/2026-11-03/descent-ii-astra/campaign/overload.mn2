@@ -1,0 +1,26 @@
+name = Overload: Cronus Frontier
+type = normal
+num_levels = 16
+ol01.rl2
+ol02.rl2
+ol03.rl2
+ol04.rl2
+ol05.rl2
+ol06.rl2
+ol07.rl2
+ol08.rl2
+ol09.rl2
+ol10.rl2
+ol11.rl2
+ol12.rl2
+ol13.rl2
+ol14.rl2
+ol15.rl2
+ol16.rl2
+num_secrets = 6
+ol17.rl2,2
+ol18.rl2,4
+ol19.rl2,7
+ol20.rl2,9
+ol21.rl2,11
+ol22.rl2,14
