@@ -634,3 +634,15 @@ goStep('welcome', false);
 document.addEventListener('keydown', event => { if (event.key === 'Escape' && !$('#site-menu').hidden) { toggleMenu(false); $('.menu-button').focus(); } });
 if (HASH_VIEWS.includes(location.hash.slice(1))) switchView(location.hash.slice(1));
 else if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+// Deep links from a host site's help pages (Hidden Reef Help Center, Nov 6 2026):
+// ?start=fish|coral|invert|pond opens that check directly. The parameter is dropped once used,
+// so Start over and reloads return to the normal welcome screen.
+{
+  const params = new URLSearchParams(location.search), start = params.get('start');
+  if (start) {
+    params.delete('start');
+    history.replaceState(null, '', location.pathname + (params.size ? `?${params}` : '') + location.hash);
+    const tile = start === 'fish' ? $('.help-tile[data-action="start"]') : document.querySelector(`.help-tile[data-reef-start="${CSS.escape(start)}"]`);
+    if (tile && !location.hash) tile.click();
+  }
+}
