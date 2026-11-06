@@ -29940,5 +29940,85 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-06-factual-infographic-factual-infographic-the-feline-shoulder",
+    "title": "Factual infographic: The Feline Shoulder — Muscle Layers Around the Scapula",
+    "tests": "; archive_slot=2026-11-06T12:20; concept=feline-shoulder-scapula-muscle-layers; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: inside-the-cat",
+    "prompt": "Create a richly detailed, artwork-led feline anatomical atlas, rendered directly as the finished artwork. Title: \"THE FELINE SHOULDER\". Subtitle: \"Muscle layers around the scapula\". Small category label \"INSIDE THE CAT\". A graceful short-haired smoke-gray domestic cat in left-facing walking profile dominates an asymmetrical vertical composition, with luminous realistic fur and a clean educational anatomical window over the shoulder. Refined gouache and colored-pencil medical illustration on cool ivory with midnight-blue typography, muted coral muscle fibers and softly luminous bone. No gore, no photographed page, no border, no boxed grid. Preserve believable feline anatomy, correct forelimb orientation, scapular spine and thorax proportions.\nThe visual journey travels from the furred hero to an enlarged shoulder muscle study below and a small deeper-layer study flowing along the right margin. Clearly mark separate studies \"Superficial layer\" and \"Deeper layer (overlying muscles removed)\". Do not pretend that all layers are visible simultaneously. Draw precise tendon margins and parallel muscle fibers, delicate curved leader lines, breathing room and a confident hierarchy of readable labels. Use anatomical regions and a few restrained transparent overlays, not a dashboard of fact cards.\nLabel trapezius and latissimus dorsi in the superficial study. In the deeper study label rhomboideus at the dorsal scapular border, and fan-shaped serratus ventralis against the lateral rib cage beneath the shoulder. Show the scapula and ribs in pale bone as landmarks. A small open ventral-chest study may label \"Pectoral muscles\" and indicate superficial and deep layers without crowding. A small accurate locator at the front of the shoulder labels \"Small clavicle\" within the brachiocephalicus, not as a human-like long collarbone.\nIntegrate these concise explanations with the relevant structures: \"Trapezius reaches the scapular spine.\" \"Rhomboideus lies beneath trapezius.\" \"Serratus ventralis: deep, fan-shaped muscle with neck and thoracic parts.\" \"Latissimus dorsi covers part of the thoracic wall.\" \"Pectoral muscles lie on the ventral chest.\" Keep labels on actual anatomy, distinguish the rhomboideus insertion on the dorsal border from trapezius insertion on the spine. No numerical performance claims, squeezing-through-gaps myth, disease advice, human anatomy or invented structures. Preserve the deep serratus study and the overlying-layer comparison; omit the optional pectoral miniature if space is tight. Small footer \"Schematic anatomy • Sources: University of Minnesota; University of Washington\". Make the cat beautiful and dominant while retaining substantial, readable anatomical explanation.",
+    "image": "images/2026-11-06-factual-infographic-factual-infographic-the-feline-shoulder.jpg",
+    "thumb": "thumbs/2026-11-06-factual-infographic-factual-infographic-the-feline-shoulder.webp",
+    "color": "#d3c1b7",
+    "date": "2026-11-06",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "feline-shoulder-scapula-muscle-layers",
+      "imageSha256": "c7b8a791d031e6c363e339f98b58e8bee403700b9d1dc4cdc672484e7be65c0d",
+      "imageDHash": "b9d8dacce4c48ebc"
+    },
+    "factualInfographic": {
+      "topic": "Feline shoulder muscle layers around the scapula",
+      "description": "A focused atlas of superficial and deep shoulder muscle relationships in the domestic cat.",
+      "sourceNote": "Read university dissection guides: https://open.lib.umn.edu/dogcatanatomylabguide/chapter/part-2-extrinsic-muscles-and-associated-structures/ ; https://courses.washington.edu/chordate/453photos/muscle_photos/cat_muscle_photos.htm",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-06T17:22:12.232577+00:00",
+        "sources": [
+          {
+            "id": "UMN",
+            "publisher": "University of Minnesota",
+            "title": "Extrinsic Muscles and Associated Structures",
+            "sourceType": "university",
+            "url": "https://open.lib.umn.edu/dogcatanatomylabguide/chapter/part-2-extrinsic-muscles-and-associated-structures/"
+          },
+          {
+            "id": "UW",
+            "publisher": "University of Washington",
+            "title": "Biology 453 Cat Skeletal Muscle Photos",
+            "sourceType": "university",
+            "url": "https://courses.washington.edu/chordate/453photos/muscle_photos/cat_muscle_photos.htm"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The trapezius extends from dorsal midline to the scapular spine; rhomboideus lies deep to it and attaches to the dorsal scapular border.",
+            "sourceIds": [
+              "UMN",
+              "UW"
+            ]
+          },
+          {
+            "claim": "Serratus ventralis is a deep fan-shaped muscle on the lateral trunk, with neck and thoracic parts.",
+            "sourceIds": [
+              "UMN",
+              "UW"
+            ]
+          },
+          {
+            "claim": "Latissimus dorsi covers part of the thoracic wall, superficial to deeper shoulder structures.",
+            "sourceIds": [
+              "UMN",
+              "UW"
+            ]
+          },
+          {
+            "claim": "The cat has a small clavicle in the brachiocephalicus at the shoulder.",
+            "sourceIds": [
+              "UMN"
+            ]
+          },
+          {
+            "claim": "Pectoral muscles occupy the ventral chest; superficial and deep layers are present.",
+            "sourceIds": [
+              "UMN",
+              "UW"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
