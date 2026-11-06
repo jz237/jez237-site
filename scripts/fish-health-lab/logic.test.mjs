@@ -81,7 +81,7 @@ test('white-dot look-alikes never pull in unrelated conditions through behavior'
 test('care readings never overwrite the visual match', () => {
   const input = { ...base, primarySign: 'dots', visualSigns: ['dots'], signs: ['dots', 'appetite'], ammonia: '2', affected: 'several' };
   assert.equal(rankVisualConditions(input)[0].id, 'ich-fresh');
-  assert.equal(assessUrgency(input).level, 'check-water');
+  assert.equal(assessUrgency(input).level, 'urgent'); // 2 ppm ammonia is toxic (Nov 6 review)
   const notes = buildCase(input);
   assert.match(notes, /Ammonia is detectable/);
   assert.match(notes, /Most likely: Ich \(white spot disease\)/);
