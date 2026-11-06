@@ -1,9 +1,9 @@
 // ?test=1 self-test page: determinism, exact replays, the difficulty ramp, the gentle start, the autopilot
 // reaching later sectors, the live game loop running without console errors, and no score posts.
-import { makeWorld, step, drainEvents, STEP, cloneWorld } from './sim.js?v=5';
-import { Autopilot } from './ai.js?v=5';
-import { RAMP, SECTORS, WAVES, TYPICAL_UP, rampAt, standLevel, DIFF_KEYS, applyDiff, MIN_WARN } from './config.js?v=5';
-import { Recorder, Replay } from './replay.js?v=5';
+import { makeWorld, step, drainEvents, STEP, cloneWorld } from './sim.js?v=6';
+import { Autopilot } from './ai.js?v=6';
+import { RAMP, SECTORS, WAVES, TYPICAL_UP, rampAt, standLevel, DIFF_KEYS, applyDiff, MIN_WARN } from './config.js?v=6';
+import { Recorder, Replay } from './replay.js?v=6';
 
 export const hashW = (W) => JSON.stringify([W.n, W.score, W.lives, W.wave, W.phase, W.rs, W.players.map((p) => [p.x.toFixed(6), p.z.toFixed(6), p.alive, p.shield]), W.enemies.map((e) => [e.id, e.x.toFixed(4), e.z.toFixed(4), e.hp]), W.bolts.length, W.survivors.length]);
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -94,7 +94,7 @@ export async function runTests(sb) {
   await T('sector hazards: none in sector 1, from wave 2 elsewhere, always warned first', () => {
     const out = [], issues = [];
     for (let s = 0; s < 5; s++) {
-      const W = makeWorld({ sector: s, seed: 31 + s, wave: 1, up: TYPICAL_UP[s] });
+      const W = makeWorld({ sector: s, seed: 31 + s, wave: 1, up: TYPICAL_UP[s], lives: 99 });
       let warned = 0, live = 0, minTell = 9;
       for (let i = 0; i < 70 / STEP && !W.over; i++) {
         W.players[0].input = { mx: Math.sin(i / 300), mz: Math.cos(i / 410), ax: 1, az: 0, fire: true, pulse: false };
@@ -114,6 +114,25 @@ export async function runTests(sb) {
   await T('daily challenge: the same seed and sector for everyone on a given day', () => {
     const a = sb.dailyCfg('2026-11-05'), b = sb.dailyCfg('2026-11-05'), c = sb.dailyCfg('2026-11-06');
     return { ok: a.seed === b.seed && a.sector === b.sector && a.seed !== c.seed && a.diff === 'hard', info: `2026-11-05 -> sector ${a.sector + 1}, seed ${a.seed}; next day sector ${c.sector + 1}` };
+  });
+
+  await T('new machines: leapers land where marked, bulwark shields break, mimics reveal', () => {
+    const seen = { leaptell: 0, leapland: 0, block: 0, shieldbreak: 0, reveal: 0 }, kills = {};
+    let landedOff = 0;
+    for (const [s, w] of [[2, 0], [2, 2], [3, 1]]) {
+      const W = makeWorld({ sector: s, seed: 11 + s * 3 + w, wave: w, up: TYPICAL_UP[s] });
+      const marks = new Map();
+      drive(W, new Autopilot(4, 'human'), 90 / STEP, null, (w2, ev) => {
+        for (const e of ev) {
+          if (seen[e.k] !== undefined) seen[e.k]++;
+          if (e.k === 'leaptell') marks.set(e.id, [e.tx, e.tz]);
+          if (e.k === 'leapland') { const m = marks.get(e.id); if (!m || Math.hypot(m[0] - e.x, m[1] - e.z) > 0.05) landedOff++; }
+          if (e.k === 'kill' && ['bulwark', 'leaper', 'mimic'].includes(e.type)) kills[e.type] = (kills[e.type] || 0) + 1;
+        }
+      });
+    }
+    const ok = seen.leapland > 0 && !landedOff && seen.shieldbreak + (kills.bulwark || 0) > 0 && seen.reveal > 0;
+    return { ok, info: `${seen.leapland} leaps (${landedOff} off their mark), ${seen.block} shots blocked, ${seen.shieldbreak} shields broken, ${seen.reveal} mimics revealed, kills ${JSON.stringify(kills)}` };
   });
 
   await T('power-ups drop, get picked up and wear off', () => {

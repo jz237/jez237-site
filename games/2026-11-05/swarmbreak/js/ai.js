@@ -4,8 +4,8 @@
 // in, room to fight, the boss at arm's length), and runs the best one while it aims and fires.
 //   profile 'human': ~0.35 s reaction with scatter, sometimes late, aim wobble, the odd bad choice
 //   profile 'demo' : quick, accurate, uses PULSE well: the attract mode and the AI playthrough
-import { F, ENEMY, HOSTILE } from './config.js?v=5';
-import { inHazard } from './sim.js?v=5';
+import { F, ENEMY, HOSTILE } from './config.js?v=6';
+import { inHazard } from './sim.js?v=6';
 
 const PROFILES = {
   human: { track: 8, blind: 0.4, slew: 4.2, react: 0.35, jit: 0.1, late: 0.14, lateT: 0.25, aim: 0.075, drift: 0.05, margin: 1.35, look: 0.8, pulseP: 0.5, crowd: 3, panic: 0.03, fireRange: 15, greed: 1 },
@@ -88,7 +88,7 @@ export class Autopilot {
       return Math.abs(da) > 1.75 && r() < blind;
     };
     for (const e of W.enemies) {
-      if (e.hp <= 0 || e.type === 'dummy') continue;
+      if (e.hp <= 0 || e.type === 'dummy' || e.hidden || e.lp === 2) continue;
       if (e.t < lag * 0.6 && e.born <= 0) continue;
       const rad = e.r + (e.born > 0 ? 0 : 0);
       if (missed(e.x, e.z)) continue;
@@ -124,6 +124,7 @@ export class Autopilot {
     let surv = null, sd = 1e9;
     // survivors and power-ups on the floor are both worth fetching (power-ups a little less)
     for (const s of W.survivors) { const d = hyp(s.x - p.x, s.z - p.z); if (d < sd) { sd = d; surv = s; } }
+    if (this.profile === 'human') for (const e of W.enemies) if (e.hidden) { const d = hyp(e.x - p.x, e.z - p.z); if (d < sd) { sd = d; surv = e; } }
     for (const q of W.pickups || []) { const d = hyp(q.x - p.x, q.z - p.z) * 1.25; if (d < sd && q.life > d / 5) { sd = d; surv = q; } }
     let near = 1e9, crowd = 0;
     for (const t of th) if (HOSTILE.has(t.kind)) { const d = hyp(t.x - p.x, t.z - p.z) - t.r; near = Math.min(near, d); if (d < 3.4) crowd++; }
@@ -158,6 +159,14 @@ export class Autopilot {
           if (tau + 0.2 < wait) continue;
           const d = segDist(px, pz, ax, az, bx, bz);
           if (d < 1.2) c += (1.2 - d) * 30 * wt;
+        }
+        // a leaper's marked landing spot
+        for (const e of W.enemies) {
+          if (e.type !== 'leaper' || !(e.lp === 1 || e.lp === 2)) continue;
+          const liveAt = e.lp === 1 ? e.lpT + 0.6 : e.lpT;
+          if (tau + 0.25 < liveAt || tau > liveAt + 0.3) continue;
+          const q = hyp(px - e.lx, pz - e.lz);
+          if (q < 1.35 + 0.9) c += (2.25 - q) * 18 * wt;
         }
         for (const h of W.hazards) {
           const visible = h.t >= (this.profile === 'human' ? Math.min(P.react, h.T * 0.5) : 0) || h.state === 'live';
@@ -234,9 +243,9 @@ export class Autopilot {
     }
     let best = null, bs = -1e9;
     for (const e of W.enemies) {
-      if (e.hp <= 0 || e.born > 0.2) continue;
+      if (e.hp <= 0 || e.born > 0.2 || e.hidden || e.lp === 2) continue;
       const d = hyp(e.x - p.x, e.z - p.z);
-      let w = { crawler: 1, dart: 1.4, shard: 1.2, spitter: 1.5, splitter: 1.1, hive: 1.2, brute: 0.55, pylon: 0.25, dummy: 1 }[e.type] || 1;
+      let w = { crawler: 1, dart: 1.4, shard: 1.2, spitter: 1.5, splitter: 1.1, hive: 1.2, brute: 0.55, pylon: 0.25, dummy: 1, bulwark: 0.9, leaper: 1.3, mimic: 1.6 }[e.type] || 1;
       if (e.type === 'brute' && (d < 5 || W.survivors.some((s) => hyp(s.x - e.x, s.z - e.z) < 4))) w = 1.4;
       if (e.type === 'spitter' && e.aimT > 0) w *= 1.4;
       const sc = w * 10 / (d + 2) - (this.target && this.target.id === e.id ? -0.4 : 0);

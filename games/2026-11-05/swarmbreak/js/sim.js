@@ -1,7 +1,7 @@
 // Swarmbreak simulation: fixed 120 Hz steps, all randomness from the world's own seeded generator
 // (W.rs), plain data only, so a world can be cloned and re-run bit for bit (replays, online, tests).
 // Nothing in here touches the DOM, WebGL or audio; it only pushes events into W.ev.
-import { F, STEP, GATES, SECTORS, WAVES, rampAt, rampLevel, standLevel, STAND, ENEMY, HOSTILE, BOSSES, BOSS_KEYS, SCORE, START_LIVES, INTRO, introduced, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, STREAK, streakMul } from './config.js?v=5';
+import { F, STEP, GATES, SECTORS, WAVES, rampAt, rampLevel, standLevel, STAND, ENEMY, HOSTILE, BOSSES, BOSS_KEYS, SCORE, START_LIVES, INTRO, introduced, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, STREAK, streakMul } from './config.js?v=6';
 export { STEP };
 
 const { AW, AH } = F;
@@ -89,6 +89,13 @@ function startWave(W, first = false) {
     W.survivors.push({ id: W.nextId++, x: q[0], z: q[1], vx: 0, vz: 0, a: rr(W, 0, TAU), t: rr(W, 0, 2), look: (rand(W) * 6) | 0 });
   }
   W.stats.surv += nS;
+  // MIMICS: machines dressed as survivors, mixed in with the real ones
+  const nM = !isBossWave(W) && (W.mode !== 'campaign' || introduced('mimic', W.sector, Math.min(W.wave, WAVES - 1))) ? Math.round(R.mimic || 0) : 0;
+  for (let i = 0; i < nM; i++) {
+    const q = freeSpot(W, 7, 2.2), m = addEnemy(W, 'mimic', q[0], q[1]);
+    m.hidden = 1; m.born = 0; m.look = (rand(W) * 6) | 0; m.gl = rr(W, 1.5, 4); m.glT = 0; m.a = rr(W, 0, TAU);
+    if (W.mode === 'campaign' && INTRO.mimic[0] === W.sector && INTRO.mimic[1] === W.wave) W.mimicTut = 1;
+  }
   if (isBossWave(W)) { W.phaseT = 2.8; W.ev.push({ k: 'bosswarn', key: bossKey(W) }); }
   else planWave(W);
   W.ev.push({ k: 'wave', wave: W.wave, n: W.waveN, label: waveLabel(W), boss: isBossWave(W) });
@@ -212,7 +219,7 @@ export function step(W, dt = STEP) {
   contacts(W);
   W.enemies = W.enemies.filter((e) => e.hp > 0 && !e.gone);
   // wave over?
-  if (!guest && W.phase === 'fight' && !W.spawnQ.length && !W.portals.length && !W.boss && !W.enemies.some((e) => HOSTILE.has(e.type))) waveClear(W);
+  if (!guest && W.phase === 'fight' && !W.spawnQ.length && !W.portals.length && !W.boss && !W.enemies.some((e) => HOSTILE.has(e.type) && !e.hidden)) waveClear(W);
   // extra lives
   if (guest) return;
   if (W.lifePts >= W.nextLife) { W.lives++; W.nextLife += SCORE.lifeEvery * D_OF(W).score; W.ev.push({ k: 'life' }); }
@@ -268,6 +275,7 @@ export function addEnemy(W, type, x, z) {
   const e = { id: W.nextId++, type, x, z, vx: 0, vz: 0, hp: Math.round(E.hp * hpK), max: 0, r: E.r, t: 0, st: rr(W, 0, 0.6), a: rr(W, 0, TAU), born: 0.45,
     fireT: rr(W, 0.8, 1.6) / Math.max(0.05, W.R.fire), aimT: 0, aimA: 0, aimX: 0, aimZ: 0, hitT: 0, link: 0, arcT: 0, arc: 0, spawnT: rr(W, 1.5, 3), life: E.life || 0, wob: rand(W) * TAU };
   e.max = e.hp;
+  if (type === 'bulwark') { e.sh = E.shield + 2 * W.sector; e.shMax = e.sh; }
   W.enemies.push(e);
   return e;
 }
@@ -522,6 +530,65 @@ function enemy(W, e, dt) {
       }
       break;
     }
+    case 'bulwark': {
+      // turns its shield toward the Warden, slowly, and plods in
+      if (e.face === undefined) e.face = Math.atan2(dz, dx);
+      if (P) e.face += clamp(angDiff(e.face, Math.atan2(dz, dx)), -E.turn * spd * dt, E.turn * spd * dt);
+      const v = E.v * spd * (d < 2.5 ? 0.4 : 1);
+      e.a = e.face; e.vx = Math.cos(e.face) * v; e.vz = Math.sin(e.face) * v;
+      if (!P) { e.vx = e.vz = 0; }
+      break;
+    }
+    case 'leaper': {
+      // 0 stalk, 1 crouch (landing spot marked), 2 in the air, 3 recovering
+      e.lp = e.lp || 0;
+      if (e.lp === 0) {
+        const a = Math.atan2(dz, dx) + Math.sin(e.t * 1.7 + e.wob) * 0.6, v = E.v * spd * (d < 5 ? 0.5 : 1);
+        e.a = a; e.vx = Math.cos(a) * v; e.vz = Math.sin(a) * v;
+        if (P && d < E.range && e.st <= 0) {
+          e.lp = 1; e.lpT = Math.max(0.65, R.warn * 0.85); e.lpT0 = e.lpT;
+          const lead = (e.lpT + E.air) * 0.45;
+          e.lx = clamp(P.x + P.vx * lead, -AW + 1, AW - 1); e.lz = clamp(P.z + P.vz * lead, -AH + 1, AH - 1);
+          e.a = Math.atan2(e.lz - e.z, e.lx - e.x);
+          W.ev.push({ k: 'leaptell', id: e.id, x: e.x, z: e.z, tx: e.lx, tz: e.lz, T: e.lpT });
+        }
+      } else if (e.lp === 1) {
+        e.vx = e.vz = 0; e.lpT -= dt;
+        if (e.lpT <= 0) { e.lp = 2; e.lpT = E.air; e.ox = e.x; e.oz = e.z; W.ev.push({ k: 'leap', id: e.id, x: e.x, z: e.z }); }
+      } else if (e.lp === 2) {
+        e.lpT -= dt;
+        const f = clamp(1 - e.lpT / E.air, 0, 1);
+        e.vx = (e.lx - e.ox) / E.air; e.vz = (e.lz - e.oz) / E.air;
+        e.x = e.ox + (e.lx - e.ox) * f; e.z = e.oz + (e.lz - e.oz) * f;
+        if (e.lpT <= 0) {
+          e.lp = 3; e.lpT = E.rest; e.vx = e.vz = 0;
+          W.ev.push({ k: 'leapland', id: e.id, x: e.x, z: e.z, r: E.splash });
+          for (const p of W.players) if (p.alive && !(W.net === 'host' && p.remote) && hyp(p.x - e.x, p.z - e.z) < E.splash + F.r * 0.5) hurt(W, p, 'leaper', e.x, e.z);
+        }
+        return;
+      } else {
+        e.vx = e.vz = 0; e.lpT -= dt;
+        if (e.lpT <= 0) { e.lp = 0; e.st = rr(W, 2.2, 3.6) / spd; }
+      }
+      break;
+    }
+    case 'mimic': {
+      if (e.hidden) {
+        // shuffles about like a survivor; now and then its beacon glints red
+        e.gl -= dt; e.glT = Math.max(0, e.glT - dt);
+        if (e.gl <= 0) { e.gl = rr(W, 3, 5); e.glT = 0.35; }
+        if (e.st <= 0) { e.st = rr(W, 1.2, 3); e.a += rr(W, -1.4, 1.4); e.idle = rand(W) < 0.3 ? 1 : 0; }
+        const v = e.idle ? 0 : 0.85;
+        e.vx = Math.cos(e.a) * v; e.vz = Math.sin(e.a) * v;
+        if (Math.abs(e.x) > AW - 1) e.a = Math.PI - e.a;
+        if (Math.abs(e.z) > AH - 1) e.a = -e.a;
+        break;
+      }
+      const a = Math.atan2(dz, dx) + Math.sin(e.t * 3 + e.wob) * 0.25, v = E.v * spd;
+      e.a = a; e.vx = Math.cos(a) * v; e.vz = Math.sin(a) * v;
+      if (!P) { e.vx *= 0.3; e.vz *= 0.3; }
+      break;
+    }
     case 'splitter': case 'shard': {
       const v = E.v * spd;
       const a = Math.atan2(dz, dx) + Math.sin(e.t * 2 + e.wob) * 0.35;
@@ -557,6 +624,7 @@ function separate(W) {
 }
 function damage(W, e, dmg, pid, by, hx, hz) {
   if (e.hp <= 0 || e.born > 0.25) return;
+  if (e.hidden) reveal(W, e);
   e.hp -= dmg; e.hitT = 0.12;
   W.stats.hits++;
   if (e.hp <= 0) { kill(W, e, pid, by); return; }
@@ -588,6 +656,14 @@ function endStreak(W, why) {
   const st = W.streak;
   if (st.n >= STREAK.step) W.ev.push({ k: 'streakend', n: st.n, mul: streakMul(st.n), why });
   st.n = 0; st.t = 0;
+}
+
+// a mimic drops its disguise: a short shriek, then it hunts (it can't hurt anyone for half a second)
+function reveal(W, e) {
+  if (!e.hidden) return;
+  e.hidden = 0; e.born = 0.5; e.st = 0;
+  W.ev.push({ k: 'reveal', id: e.id, x: e.x, z: e.z });
+  if (W.mimicTut) tut(W, 'mimic');
 }
 
 // ------------------------------------------------------------------ sector hazards
@@ -646,7 +722,7 @@ export function addPickup(W, x, z, kind) {
 }
 function maybeDrop(W, e) {
   if (W.net === 'guest' || e.type === 'dummy' || W.pickups.length >= DROP.max) return;
-  const big = e.type === 'brute' || e.type === 'hive' || e.type === 'splitter';
+  const big = e.type === 'brute' || e.type === 'hive' || e.type === 'splitter' || e.type === 'bulwark';
   if (rand(W) < (big ? DROP.big : DROP.chance) * D_OF(W).drops) addPickup(W, e.x, e.z);
 }
 function pickups(W, dt) {
@@ -724,10 +800,17 @@ function shots(W, dt) {
     if (Math.abs(s.x) > AW || Math.abs(s.z) > AH) { s.life = 0; W.ev.push({ k: 'wallhit', x: clamp(s.x, -AW, AW), z: clamp(s.z, -AH, AH) }); continue; }
     if (s.ghost || s.life <= 0) continue;
     for (const e of W.enemies) {
-      if (e.hp <= 0 || e.born > 0.25) continue;
+      if (e.hp <= 0 || e.born > 0.25 || e.lp === 2) continue;
       const rr2 = e.r + F.shotR;
       const dx = e.x - s.x, dz = e.z - s.z;
       if (dx * dx + dz * dz < rr2 * rr2) {
+        if (e.type === 'bulwark' && e.sh > 0 && !s.rail && Math.abs(angDiff(e.face, Math.atan2(s.z - e.z, s.x - e.x))) < ENEMY.bulwark.arc) {
+          // the shield soaks the shot and cracks; enough hits break it
+          s.life = 0; e.sh -= s.side ? 0.5 : 1;
+          W.ev.push({ k: 'block', x: s.x, z: s.z, id: e.id, left: e.sh });
+          if (e.sh <= 0) W.ev.push({ k: 'shieldbreak', x: e.x, z: e.z, id: e.id });
+          break;
+        }
         // a rail shot keeps going through everything it hits, for two each
         if (s.rail) { if (s.hits.includes(e.id)) continue; s.hits.push(e.id); damage(W, e, 2, s.pid, 'shot', s.x, s.z); continue; }
         damage(W, e, 1, s.pid, 'shot', s.x, s.z); s.life = 0; break;
@@ -783,7 +866,7 @@ function survivors(W, dt) {
     s.t -= dt;
     let fx = 0, fz = 0;
     for (const e of W.enemies) {
-      if (!HOSTILE.has(e.type)) continue;
+      if (!HOSTILE.has(e.type) || e.hidden) continue;
       const dx = s.x - e.x, dz = s.z - e.z, d = hyp(dx, dz);
       if (d < 3.2 && d > 0.01) { fx += (dx / d) * (3.2 - d); fz += (dz / d) * (3.2 - d); }
     }
@@ -819,7 +902,8 @@ function contacts(W) {
     if (p.inv > 0) continue;
     const pr = F.r * 0.8;
     for (const e of W.enemies) {
-      if (e.hp <= 0 || e.born > 0 || e.type === 'dummy') continue;
+      if (e.hp <= 0 || e.born > 0 || e.type === 'dummy' || e.lp === 2) continue;
+      if (e.hidden) { if (hyp(e.x - p.x, e.z - p.z) < ENEMY.mimic.sense) reveal(W, e); continue; }
       const rr2 = e.r + pr;
       if (Math.abs(e.x - p.x) < rr2 && Math.abs(e.z - p.z) < rr2 && hyp(e.x - p.x, e.z - p.z) < rr2) { hurt(W, p, e.type, e.x, e.z); break; }
       if (e.type === 'pylon' && e.arc === 2 && e.link && e.id < e.link) {
@@ -865,7 +949,7 @@ function waveClear(W) {
   const bonus = SCORE.wave * (1 + (W.mode === 'campaign' ? W.sector : Math.floor(W.waveN / 5)));
   addScore(W, bonus);
   // leftover pylons and dummies power down; the survivors still out there are walked out
-  for (const e of W.enemies) if (e.type === 'pylon' || e.type === 'dummy') { e.gone = true; e.hp = 0; W.ev.push({ k: 'scrap', x: e.x, z: e.z, type: e.type }); }
+  for (const e of W.enemies) if (e.type === 'pylon' || e.type === 'dummy' || e.hidden) { e.gone = true; e.hp = 0; W.ev.push({ k: 'scrap', x: e.x, z: e.z, type: e.type }); }
   W.enemies = W.enemies.filter((e) => !e.gone);
   const left = W.survivors.length;
   W.survivors = [];

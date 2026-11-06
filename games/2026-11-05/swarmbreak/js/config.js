@@ -1,6 +1,6 @@
 // Swarmbreak — every tunable number lives here. The RAMP table drives difficulty; nothing else in the
 // game hard-codes enemy pace, numbers, spacing, fire rate, aim or warning time.
-export const VERSION = '1.2.0';
+export const VERSION = '1.3.0';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ the arena and the Warden
@@ -54,6 +54,7 @@ export const WAVES = 5;   // waves per sector, then the boss
 //   boltV    bolt speed, m/s
 //   burst    share of the wave that pours in at the start, through several gates at once
 //   haz      seconds between sector hazards (0 = none): metro surges, foundry spills, vault lasers, reactor lightning
+//   mimic    machines disguised as survivors in each wave (once mimics are introduced)
 //   rush     how much faster the machines get the longer a wave drags on (reached after 60 s)
 //   wander   how much crawlers wander instead of chasing (early ones mostly wander)
 //   surv     survivors in each wave
@@ -64,22 +65,22 @@ export const WAVES = 5;   // waves per sector, then the boss
 //   mix      which machines can come and how often
 export const RAMP = [
   { spd: [0.52, 0.62], count: [6, 10], gap: [3.4, 2.7], group: [1, 2], warn: [2.4, 2.1], fire: [0.16, 0.22], aim: [0.34, 0.28], boltV: [4.6, 5.0],
-    haz: [0, 0], burst: [0, 0], rush: [0.08, 0.14], wander: [0.75, 0.55], surv: [4, 5], combo: [0, 0], shield: [1, 1], pulse: [2, 2], bossHP: 190, bossRate: 0.42,
+    mimic: [0, 0], haz: [0, 0], burst: [0, 0], rush: [0.08, 0.14], wander: [0.75, 0.55], surv: [4, 5], combo: [0, 0], shield: [1, 1], pulse: [2, 2], bossHP: 190, bossRate: 0.42,
     mix: { crawler: 1, spitter: 0.3, brute: 0.14 } },
   { spd: [0.66, 0.84], count: [13, 18], gap: [2.4, 2.0], group: [2, 3], warn: [2.05, 1.75], fire: [0.32, 0.46], aim: [0.25, 0.19], boltV: [5.5, 6.6],
-    haz: [17, 13], burst: [0.15, 0.25], rush: [0.15, 0.22], wander: [0.52, 0.42], surv: [5, 6], combo: [0, 0], shield: [1, 0], pulse: [1, 1], bossHP: 260, bossRate: 0.3,
-    mix: { crawler: 1, spitter: 0.4, brute: 0.2, hive: 0.14, pylon: 0.2 } },
+    mimic: [0, 0], haz: [17, 13], burst: [0.15, 0.25], rush: [0.15, 0.22], wander: [0.52, 0.42], surv: [5, 6], combo: [0, 0], shield: [1, 0], pulse: [1, 1], bossHP: 260, bossRate: 0.3,
+    mix: { crawler: 1, spitter: 0.4, brute: 0.2, hive: 0.14, pylon: 0.2, leaper: 0.16 } },
   { spd: [0.88, 1.03], count: [22, 27], gap: [1.75, 1.5], group: [3, 4], warn: [1.7, 1.4], fire: [0.5, 0.56], aim: [0.17, 0.14], boltV: [7.0, 7.7],
-    haz: [15, 11], burst: [0.3, 0.36], rush: [0.3, 0.36], wander: [0.4, 0.32], surv: [6, 6], combo: [0.25, 0.4], shield: [0, 0], pulse: [1, 1], bossHP: 380, bossRate: 0.56,
-    mix: { crawler: 1, spitter: 0.8, brute: 0.24, hive: 0.2, pylon: 0.24 } },
+    mimic: [0, 1], haz: [15, 11], burst: [0.3, 0.36], rush: [0.3, 0.36], wander: [0.4, 0.32], surv: [6, 6], combo: [0.25, 0.4], shield: [0, 0], pulse: [1, 1], bossHP: 380, bossRate: 0.56,
+    mix: { crawler: 1, spitter: 0.8, brute: 0.24, hive: 0.2, pylon: 0.24, leaper: 0.22, bulwark: 0.2 } },
   { spd: [1.03, 1.12], count: [27, 33], gap: [1.55, 1.3], group: [4, 5], warn: [1.36, 1.1], fire: [0.56, 0.6], aim: [0.14, 0.12], boltV: [7.7, 8.3],
-    haz: [13, 10], burst: [0.36, 0.4], rush: [0.36, 0.4], wander: [0.3, 0.24], surv: [6, 7], combo: [0.4, 0.45], shield: [0, 0], pulse: [1, 1], bossHP: 400, bossRate: 0.25,
-    mix: { crawler: 1, spitter: 0.65, brute: 0.26, hive: 0.2, pylon: 0.26, splitter: 0.3 } },
+    mimic: [1, 1], haz: [13, 10], burst: [0.36, 0.4], rush: [0.36, 0.4], wander: [0.3, 0.24], surv: [6, 7], combo: [0.4, 0.45], shield: [0, 0], pulse: [1, 1], bossHP: 400, bossRate: 0.25,
+    mix: { crawler: 1, spitter: 0.65, brute: 0.26, hive: 0.2, pylon: 0.26, splitter: 0.3, leaper: 0.26, bulwark: 0.24 } },
   { spd: [1.15, 1.28], count: [36, 42], gap: [1.25, 1.05], group: [5, 6], warn: [1.06, 0.7], fire: [0.62, 0.7], aim: [0.1, 0.07], boltV: [8.4, 9.2],
-    haz: [11, 8], burst: [0.4, 0.45], rush: [0.4, 0.46], wander: [0.22, 0.14], surv: [7, 7], combo: [0.4, 0.48], shield: [0, 0], pulse: [1, 1], bossHP: 600, bossRate: 0.33,
-    mix: { crawler: 1, spitter: 0.75, brute: 0.3, hive: 0.22, pylon: 0.3, splitter: 0.36 } },
+    mimic: [1, 1], haz: [11, 8], burst: [0.4, 0.45], rush: [0.4, 0.46], wander: [0.22, 0.14], surv: [7, 7], combo: [0.4, 0.48], shield: [0, 0], pulse: [1, 1], bossHP: 600, bossRate: 0.33,
+    mix: { crawler: 1, spitter: 0.75, brute: 0.3, hive: 0.22, pylon: 0.3, splitter: 0.36, leaper: 0.22, bulwark: 0.2 } },
 ];
-const RAMP_KEYS = ['spd', 'count', 'gap', 'group', 'warn', 'fire', 'aim', 'boltV', 'haz', 'burst', 'rush', 'wander', 'surv', 'combo'];
+const RAMP_KEYS = ['spd', 'count', 'gap', 'group', 'warn', 'fire', 'aim', 'boltV', 'mimic', 'haz', 'burst', 'rush', 'wander', 'surv', 'combo'];
 
 // the difficulty values at wave `w` of sector `s` (both 0-based)
 export function rampAt(s, w) {
@@ -92,7 +93,7 @@ export function rampAt(s, w) {
   return out;
 }
 // when each machine first appears in the campaign: [sector, wave] (a short tutorial line introduces it)
-export const INTRO = { crawler: [0, 0], spitter: [0, 2], brute: [0, 3], hive: [1, 0], pylon: [1, 2], splitter: [3, 0] };
+export const INTRO = { crawler: [0, 0], spitter: [0, 2], brute: [0, 3], hive: [1, 0], pylon: [1, 2], leaper: [1, 3], bulwark: [2, 0], mimic: [2, 2], splitter: [3, 0] };
 export const introduced = (type, s, w) => { const q = INTRO[type]; return !q || s > q[0] || (s === q[0] && w >= q[1]); };
 
 // Last Stand: level 0 = sector 1's first wave, 5 = sector 5's last, reached after ~16 minutes
@@ -122,8 +123,14 @@ export const ENEMY = {
   pylon: { r: 0.42, hp: 1, v: 0, score: 25, arc: 7.5, on: 2.2, off: 2.6 },
   splitter: { r: 0.8, hp: 2, v: 2.7, score: 150 },
   shard: { r: 0.42, hp: 1, v: 3.9, score: 50 },
+  // BULWARK: a riot shield blocks every shot from the front (arc = half-width in radians); it turns slowly
+  bulwark: { r: 0.85, hp: 6, v: 1.9, score: 350, arc: 1.1, turn: 0.6, shield: 12 },   // shield = hits it soaks before breaking (+2 per sector)
+  // LEAPER: crouches (marking where it will land), jumps, and hits everything in the splash circle
+  leaper: { r: 0.55, hp: 2, v: 2.4, score: 300, range: 9, air: 0.6, splash: 1.35, rest: 1.1 },
+  // MIMIC: looks like a survivor until a Warden comes within sense metres (or shoots it)
+  mimic: { r: 0.5, hp: 2, v: 4.0, score: 400, sense: 2.4 },
 };
-export const HOSTILE = new Set(['crawler', 'brute', 'spitter', 'hive', 'dart', 'splitter', 'shard']);   // a wave ends when these are gone
+export const HOSTILE = new Set(['crawler', 'brute', 'spitter', 'hive', 'dart', 'splitter', 'shard', 'bulwark', 'leaper', 'mimic']);   // a wave ends when these are gone (mimics only once revealed)
 
 // bosses: one per sector. attacks run in turn; phase 2 (below half armour) adds the `p2` list
 export const BOSSES = {
@@ -162,7 +169,7 @@ export const MIN_WARN = 0.5;
 export const DIFFICULTY = {
   easy: { label: 'EASY', desc: 'Slower, fewer machines, longer warnings, an extra Warden and shield', spd: 0.84, fire: 0.62, count: 0.8, aim: 1.5, boltV: 0.85, warn: 1.25, boss: 0.75, bossRate: 0.75, shield: 1, lives: 1, drops: 1.4, score: 0.6 },
   normal: { label: 'NORMAL', desc: 'The intended challenge', spd: 1, fire: 1, count: 1, aim: 1, boltV: 1, warn: 1, boss: 1, bossRate: 1, shield: 0, lives: 0, drops: 1, score: 1 },
-  hard: { label: 'HARD', desc: 'Faster, busier, sharper aim, shorter warnings', spd: 1.12, fire: 1.3, count: 1.15, aim: 0.7, boltV: 1.1, warn: 0.85, boss: 1.25, bossRate: 1.2, shield: 0, lives: 0, drops: 0.85, score: 1.5 },
+  hard: { label: 'HARD', desc: 'Faster, busier, sharper aim, shorter warnings', spd: 1.12, fire: 1.25, count: 1.1, aim: 0.7, boltV: 1.1, warn: 0.85, boss: 1.15, bossRate: 1.1, shield: 0, lives: 0, drops: 0.85, score: 1.5 },
   nightmare: { label: 'NIGHTMARE', desc: 'For experts: everything at full tilt, one Warden fewer', spd: 1.25, fire: 1.6, count: 1.3, aim: 0.5, boltV: 1.2, warn: 0.72, boss: 1.5, bossRate: 1.4, shield: 0, lives: -1, drops: 0.7, score: 2.2 },
 };
 export const DIFF_KEYS = Object.keys(DIFFICULTY);

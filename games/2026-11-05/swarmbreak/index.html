@@ -239,7 +239,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">SWARM<span>BREAK</span></h1>
-      <div class="ver">VERSION <b id="ver">1.2.0</b> · HOLD THE LINE · BRING THEM HOME</div>
+      <div class="ver">VERSION <b id="ver">1.3.0</b> · HOLD THE LINE · BRING THEM HOME</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -329,6 +329,7 @@ table.hs tr.me td { color: #fff; background: rgba(255, 179, 71, .1); }
       <span><b>⟡ WINGMAN</b> a drone fights beside you</span><span><b>⧗ TIME WARP</b> machines and bolts slow down</span>
       <span><b>⬡ BARRIER</b> +1 shield</span><span><b>✺ PULSE CELL</b> +1 PULSE</span></div>
     <p>Machines sometimes drop a pod when scrapped (big ones more often), and a supply pod lands once every wave. Pods only wait about 13 seconds.</p>
+    <h3>LATER MACHINES</h3><p><b>Leapers</b> mark their landing spot in orange before they jump. <b>Bulwarks</b> block shots from the front: flank them, PULSE them, or break the shield. <b>Mimics</b> hide among the survivors; a beacon that glints red is not a person.</p>
     <h3>STREAKS, DAILY, SUITS</h3><p>Scrap machines quickly to build a streak: every 6 in a row adds +0.5 to the points multiplier (up to ×4), and a hit ends it. The Daily Challenge is one sector on Hard, the same for everyone today, with its own board. Medals unlock new suit colours in Options.</p>
     <h3>DIFFICULTY</h3><p>Easy, Normal, Hard and Nightmare each have their own high-score tables. Harder levels score more points (×0.6, ×1, ×1.5, ×2.2). Medals count on Normal and harder.</p>
     <h3>KEYBOARD + MOUSE</h3><p>RUN: W A S D · AIM + FIRE: arrow keys, or aim with the mouse and hold the left button · PULSE: Space, Shift or the right mouse button · PAUSE: Esc or P</p>
@@ -371,6 +372,6 @@ addEventListener('error', (e) => window.__sbErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__sbErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__sbErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=5"></script>
+<script type="module" src="js/main.js?v=6"></script>
 </body>
 </html>

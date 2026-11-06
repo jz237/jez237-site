@@ -33,3 +33,8 @@ without the streak bonus), DAILY CHALLENGE (main.js `dailyCfg`: UTC date -> seed
 SUITS unlocked by medals, clear coat only on the high graphics tier. Ramp (60 runs): Normal 100/100/87/73/52 %, Hard 100/88/72/32/12 %.
 Freeze fix (v1.1.1): the light count never changes after boot (fixed light pools; never toggle a light's visibility) and every sector is
 compiled at load. Check with a real-RAF long-frame logger (headless Edge) before shipping visual changes.
+
+v1.3.0: new machines (config ENEMY bulwark / leaper / mimic, INTRO, RAMP mix + `mimic` count; sim.js behaviours under
+`case 'bulwark'|'leaper'|'mimic'`, `reveal()`; shields soak `shield + 2*sector` hits and only cover +-arc radians in front; leapers
+mark `lx/lz` before jumping and can't be hit in the air; disguised mimics (`e.hidden`) don't block wave clear and slip away at the end).
+Ramp (60 runs): Normal 100/95/90/77/38 %, Hard 100/87/65/25/10 %.

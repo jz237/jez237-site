@@ -4,12 +4,12 @@
 // the simulation; floor decals for every warning (gates, boss tells, aim lines, arcs); HDR post.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=5';
-import * as TX from './textures.js?v=5';
-import * as MD from './models.js?v=5';
-import { FX, CALM } from './fx.js?v=5';
-import { F, GATES, POWERUPS } from './config.js?v=5';
-import { dronePos } from './sim.js?v=5';
+import { Post } from './post.js?v=6';
+import * as TX from './textures.js?v=6';
+import * as MD from './models.js?v=6';
+import { FX, CALM } from './fx.js?v=6';
+import { F, GATES, POWERUPS } from './config.js?v=6';
+import { dronePos } from './sim.js?v=6';
 
 export { CALM };
 const { AW, AH } = F;
@@ -539,9 +539,16 @@ export class Renderer {
   enemyView(e) {
     const t = e.type;
     const v = t === 'crawler' ? MD.crawler() : t === 'brute' ? MD.brute() : t === 'spitter' ? MD.spitter() : t === 'hive' ? MD.hive() : t === 'dart' ? MD.dart()
-      : t === 'pylon' ? MD.pylon() : t === 'splitter' ? MD.splitter(false) : t === 'shard' ? MD.splitter(true) : MD.dummy();
-    v.type = t; v.yaw = -e.a; v.hit = 0;
-    this.scene.add(v.g);
+      : t === 'pylon' ? MD.pylon() : t === 'splitter' ? MD.splitter(false) : t === 'shard' ? MD.splitter(true)
+      : t === 'bulwark' ? MD.bulwark() : t === 'leaper' ? MD.leaper() : t === 'mimic' ? (e.hidden ? this.disguise(e) : MD.mimic(e.look || 0)) : MD.dummy();
+    v.type = t; v.yaw = -e.a; v.hit = 0; v.hidden = !!e.hidden;
+    if (!v.hidden || t !== 'mimic') this.scene.add(v.g);
+    return v;
+  }
+  // a mimic in disguise: a survivor body with the same beacon, whose gem sometimes glints red
+  disguise(e) {
+    const v = this.survivorView({ look: e.look || 0 });
+    v.gemMat = v.gem.material;
     return v;
   }
   survivorView(s) {
@@ -572,6 +579,7 @@ export class Renderer {
       if (e.hp <= 0) continue;
       seen.add(e.id);
       let v = this.views.e.get(e.id);
+      if (v && v.type === 'mimic' && v.hidden !== !!e.hidden) { this.scene.remove(v.g); v = null; }
       if (!v) { v = this.enemyView(e); this.views.e.set(e.id, v); }
       this.updateEnemy(v, e, dt, W);
     }
@@ -716,6 +724,40 @@ export class Renderer {
         break;
       }
       case 'dart': v.body.rotation.x = Math.sin(t * 9 + e.id) * 0.35; v.body.position.y = 0.9 + Math.sin(t * 7 + e.id) * 0.08; break;
+      case 'bulwark': {
+        v.yaw = -(e.face ?? e.a); v.g.rotation.y = v.yaw;
+        const k = e.shMax ? Math.max(0, e.sh) / e.shMax : 0;
+        v.shield.visible = k > 0;
+        v.shield.scale.set(1, 0.85 + 0.15 * k, 1);
+        v.shieldGlow.material = MD.glow(k > 0.4 ? 0x6fe8ff : 0xff5a3a, 1 + 3 * k + (e.hitT > 0 ? 3 : 0));
+        v.body.position.y = Math.abs(Math.sin(t * 5 + e.id)) * 0.03 * Math.min(1, sp);
+        break;
+      }
+      case 'leaper': {
+        const crouch = e.lp === 1 ? 1 - e.lpT / (e.lpT0 || 1) : e.lp === 3 ? e.lpT / 1.1 : 0;
+        v.body.position.y = 0.62 - crouch * 0.28;
+        v.hindL.rotation.z = v.hindR.rotation.z = crouch * 0.5;
+        if (e.lp === 2) { const f = Math.min(1, Math.max(0, 1 - e.lpT / 0.6)); v.g.position.y = Math.sin(f * Math.PI) * 2.6; v.body.rotation.z = (0.5 - f) * 0.8; v.hindL.rotation.z = v.hindR.rotation.z = -0.6; }
+        else { v.body.rotation.z = 0; v.body.position.x = Math.sin(t * 9 + e.id) * 0.02 * Math.min(1, sp); }
+        if (e.lp === 1 || e.lp === 2) { v.yaw = -Math.atan2(e.lz - e.z, e.lx - e.x); v.g.rotation.y = v.yaw; }
+        break;
+      }
+      case 'mimic': {
+        if (e.hidden) {
+          // walk exactly like a survivor; the beacon gem glints red now and then
+          const ph = t * (4 + sp * 3) + e.id;
+          v.legs[0].rotation.z = Math.sin(ph) * 0.5 * Math.min(1, sp); v.legs[1].rotation.z = -Math.sin(ph) * 0.5 * Math.min(1, sp);
+          v.arms[0].rotation.x = sp < 0.2 ? 2.6 + Math.sin(t * 6 + e.id) * 0.4 : -0.2;
+          v.gem.position.y = 2.15 + Math.sin(t * 3 + e.id) * 0.12; v.gem.rotation.y = t * 2;
+          v.gem.material = e.glT > 0 ? MD.glow(0xff2a2a, 6) : v.gemMat;
+          if (v.g.parent !== this.scene) this.scene.add(v.g);
+          v.g.scale.setScalar(1);
+          return;
+        }
+        v.body.position.y = Math.abs(Math.sin(t * 12 + e.id)) * 0.06;
+        v.body.rotation.x = Math.sin(t * 6 + e.id) * 0.08;
+        break;
+      }
       case 'pylon': v.top.scale.setScalar(1 + (e.arc === 1 ? 0.4 + Math.random() * 0.3 : e.arc === 2 ? 0.5 : 0.1 * Math.sin(t * 5))); break;
       case 'splitter': case 'shard': v.body.rotation.y = t * 3; v.body.rotation.x = t * 1.7; v.core.scale.setScalar(1 + 0.15 * Math.sin(t * 8 + e.id)); break;
       default: if (v.disc) v.disc.rotation.y = Math.sin(t + e.id) * 0.4;
@@ -857,6 +899,13 @@ export class Renderer {
           this.beamGlow.visible = true; this.beamGlow.position.set(h.x, 0.06, h.z); this.beamGlow.rotation.y = -h.a; this.beamGlow.scale.set(laneLen(h.x, h.z, h.a), 1, h.w * 4);
         }
       }
+    }
+    // a leaper's landing spot, filling up until it lands
+    for (const e of W.enemies) {
+      if (e.type !== 'leaper' || !(e.lp === 1 || e.lp === 2)) continue;
+      const m = use(0, 0xffa020); if (!m) continue;
+      const total = (e.lpT0 || 1) + 0.6, done = e.lp === 1 ? (e.lpT0 || 1) - e.lpT : (e.lpT0 || 1) + 0.6 - e.lpT;
+      m.position.set(e.lx, 0.04, e.lz); m.scale.setScalar(1.35); m.material.uniforms.uProg.value = Math.min(1, done / total);
     }
     // the hive's next dart, pylons arming
     for (const e of W.enemies) {
@@ -1029,7 +1078,7 @@ export class Renderer {
 
   // draw one of everything once at boot so the first appearance of anything does not stall on a shader compile
   warmUp() {
-    const tmp = [MD.pickup(0x8fe4ff).g, MD.wingdrone().g, MD.warden().g, MD.crawler().g, MD.brute().g, MD.spitter().g, MD.hive().g, MD.dart().g, MD.pylon().g, MD.splitter().g, MD.splitter(true).g, MD.dummy().g, MD.survivor(0).g, MD.orb().g];
+    const tmp = [MD.bulwark().g, MD.leaper().g, MD.mimic(0).g, MD.pickup(0x8fe4ff).g, MD.wingdrone().g, MD.warden().g, MD.crawler().g, MD.brute().g, MD.spitter().g, MD.hive().g, MD.dart().g, MD.pylon().g, MD.splitter().g, MD.splitter(true).g, MD.dummy().g, MD.survivor(0).g, MD.orb().g];
     for (const k of ['foreman', 'tramline', 'crucible', 'archivist', 'overseer']) tmp.push(MD.boss(k).g);
     tmp.forEach((o, i) => { o.position.set(-20 + i * 2.5, 0, 0); this.scene.add(o); });
     const pv = this.playerView({ id: 1 }), sv = this.survivorView({ look: 0 });

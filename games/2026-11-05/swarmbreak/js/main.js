@@ -1,13 +1,13 @@
 // Swarmbreak — game flow, menus, HUD, commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, STREAK, streakMul, SUITS } from './config.js?v=5';
-import { makeWorld, step, drainEvents, waveLabel, isBossWave } from './sim.js?v=5';
-import { Autopilot } from './ai.js?v=5';
-import { Renderer, pickQuality, CALM } from './render.js?v=5';
-import { Audio } from './audio.js?v=5';
-import { Input } from './input.js?v=5';
-import { Scores, NO_POST } from './scores.js?v=5';
-import { Recorder, Replay } from './replay.js?v=5';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=5';
+import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, STREAK, streakMul, SUITS } from './config.js?v=6';
+import { makeWorld, step, drainEvents, waveLabel, isBossWave } from './sim.js?v=6';
+import { Autopilot } from './ai.js?v=6';
+import { Renderer, pickQuality, CALM } from './render.js?v=6';
+import { Audio } from './audio.js?v=6';
+import { Input } from './input.js?v=6';
+import { Scores, NO_POST } from './scores.js?v=6';
+import { Recorder, Replay } from './replay.js?v=6';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=6';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -271,7 +271,7 @@ function updateHud(W) {
       if (kids[i].className !== want) kids[i].className = want;
     }
   }
-  setText('chain', W.chain > 1 ? `RESCUE CHAIN ×${W.chain}` : `SURVIVORS ${W.survivors.length}`);
+  setText('chain', W.chain > 1 ? `RESCUE CHAIN ×${W.chain}` : `SURVIVORS ${W.survivors.length + W.enemies.filter((e) => e.hidden).length}`);
   const sk = W.streak, sm = streakMul(sk.n);
   $('streak').classList.toggle('hidden', sk.n < 2);
   if (sk.n >= 2) { setText('streak-n', `${sk.n} STREAK`); setText('streak-m', `×${sm}`); $('streak').querySelector('i').style.width = Math.max(0, (sk.t / STREAK.gap) * 100).toFixed(0) + '%'; $('streak').classList.toggle('hot', sm >= 2.5); }
@@ -312,6 +312,9 @@ function keyName(what) {
 const TUT = {
   move: () => `Run with ${keyName('move')}. Reach the <b>SURVIVORS</b> (green beacons) to bring them in: each one in a row is worth more. Your shield takes one hit each wave.`,
   aim: () => `Training drones. Aim and fire with ${keyName('aim')}: you can run one way and <b>SHOOT ANOTHER</b>.`,
+  leaper: () => `A <b>LEAPER</b>. When it crouches, an orange circle shows where it will land. Be somewhere else.`,
+  bulwark: () => `A <b>BULWARK</b>. Its shield stops shots from the front: get round its side, use a PULSE or a rail lance, or keep firing until the shield breaks.`,
+  mimic: () => `A <b>MIMIC</b>. Some "survivors" are machines in disguise: watch for a beacon that glints red.`,
   haz_surge: () => `<b>POWER SURGE</b>. When a lane of floor glows blue, step off it: the current runs right along it.`,
   haz_spill: () => `<b>MOLTEN SPILL</b>. Orange circles on the floor fill with molten metal for a few seconds. Keep out.`,
   haz_laser: () => `<b>LASER GATES</b>. Two red lanes light up either side of you, then fire. Stand between them or clear both.`,
@@ -328,7 +331,7 @@ const TUT = {
 function tutorial(key) { if (G.mode === 'demo' || G.mode === 'playthrough' || !TUT[key]) return; const el = $('tut'); el.innerHTML = TUT[key](); el.classList.remove('hidden'); G.tutT = 6.5; }
 
 // ------------------------------------------------------------------ events from the simulation
-const BOOM = { crawler: 1, dart: 0.6, shard: 0.7, spitter: 1.4, splitter: 1.2, brute: 2.2, hive: 2.0, pylon: 1.0, dummy: 0.8 };
+const BOOM = { bulwark: 2.2, leaper: 1.3, mimic: 1.3, crawler: 1, dart: 0.6, shard: 0.7, spitter: 1.4, splitter: 1.2, brute: 2.2, hive: 2.0, pylon: 1.0, dummy: 0.8 };
 function handleEvents(list, W, live) {
   const me = myPlayer(W);
   const mine = (e) => me && e.pid === me.id;
@@ -419,6 +422,12 @@ function handleEvents(list, W, live) {
         if (live) { banner(`${e.label} CLEAR`, `+${e.bonus.toLocaleString()}${e.evac ? ` · ${e.evac} SURVIVOR${e.evac > 1 ? 'S' : ''} WALKED OUT` : ''}`, 1.8); }
         break;
       case 'tut': if (live) tutorial(e.key); break;
+      case 'block': A.play('block', { x: e.x, y: 1, z: e.z, vol: 0.45, gap: 0.06 }); R.fx.sparks(e.x, 1.1, e.z, { n: 5, speed: 6, r: 0.6, g: 0.9, b: 1, life: 0.25 }); break;
+      case 'shieldbreak': A.play('boomS', { x: e.x, y: 1, z: e.z, vol: 0.8, gap: 0 }); R.fx.debris(e.x, 1, e.z, { metal: true, n: 12, speed: 6, size: 0.3 }); R.fx.sparks(e.x, 1, e.z, { n: 20, speed: 7, r: 0.6, g: 0.9, b: 1 }); if (live) popup('SHIELD BROKEN', e.x, e.z, '#9fe8ff'); break;
+      case 'leaptell': A.play('spitcharge', { x: e.x, y: 0.6, z: e.z, vol: 0.45, rate: 0.6, gap: 0.2 }); break;
+      case 'leap': A.play('leap', { x: e.x, y: 1, z: e.z, vol: 0.7, gap: 0.08 }); R.fx.dust(e.x, 0.1, e.z, { n: 6, s0: 0.4, s1: 1.4, life: 1.2, a: 0.35 }); break;
+      case 'leapland': A.play('stomp', { x: e.x, y: 0, z: e.z, vol: 0.55, rate: 1.5, gap: 0.08 }); R.fx.ring(e.x, 0, e.z, e.r * 1.6, 0xffa020); R.fx.dust(e.x, 0.1, e.z, { n: 12, s0: 0.6, s1: 2, life: 1.6, spread: 1.2, jit: 2.5, a: 0.4 }); R.shock(e.x, e.z, 0.5); R.addTrauma(0.12 * +settings.shake); break;
+      case 'reveal': A.play('reveal', { x: e.x, y: 1.2, z: e.z, vol: 0.9, gap: 0 }); R.fx.sparks(e.x, 1.2, e.z, { n: 16, speed: 5, r: 1, g: 0.3, b: 0.2 }); R.fx.debris(e.x, 1, e.z, { n: 6, speed: 4, size: 0.12 }); if (live) popup('MIMIC!', e.x, e.z, '#ff5a4a', true); break;
       case 'streak': if (live && e.mul === 1.5 && !G.tutStreak) { G.tutStreak = 1; tutorial('streak'); }
         if (live) { A.play('rescue', { vol: 0.55, rate: 1.2 + e.mul * 0.12, gap: 0 }); if (e.mul >= 2) popup(`×${e.mul} STREAK`, e.x, e.z, '#ffb347', true); if (e.mul >= 3) rumble(0.2, 0.3, 90); }
         break;
@@ -817,6 +826,7 @@ function updateWarnings(W) {
     if (W.boss && W.boss.state !== 'dying') list.push({ x: W.boss.x, z: W.boss.z, c: 'orange', icon: '☠', f: 1 });
     for (const q of W.pickups || []) list.push({ x: q.x, z: q.z, c: 'pw', col: '#' + POWERUPS[q.kind].color.toString(16).padStart(6, '0'), icon: POWERUPS[q.kind].glyph, f: q.life / 13 });
     for (const s of W.survivors) list.push({ x: s.x, z: s.z, c: 'green', icon: '✚', f: 1, minor: 1 });
+    for (const e of W.enemies) if (e.hidden) list.push({ x: e.x, z: e.z, c: 'green', icon: '✚', f: 1, minor: 1 });   // mimics look the same off screen too
   }
   let n = 0;
   const vw = innerWidth, vh = innerHeight, top = 110, pad = 30;
@@ -992,7 +1002,7 @@ async function boot() {
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
   boardOf('campaign', settings.diff).fresh(); boardOf('stand', settings.diff).fresh();
-  if (params.has('test')) { const m = await import('./tests.js?v=5'); m.runTests(window.__sb); }
+  if (params.has('test')) { const m = await import('./tests.js?v=6'); m.runTests(window.__sb); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('stand')) startStand(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }

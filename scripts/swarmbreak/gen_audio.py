@@ -111,6 +111,9 @@ SFX = {
     'laser':     (1.2, 0.6, 'Security laser grid switching on, bright humming electronic zap'),
     'thunder':   (1.8, 0.5, 'Close lightning strike, sharp crack followed by a rolling thunder boom'),
     'hazwarn':   (0.8, 0.6, 'Industrial hazard warning, short rising two-tone siren chirp'),
+    'leap':      (0.9, 0.6, 'Robotic creature springing into the air, hydraulic hiss and a sharp mechanical whoosh'),
+    'reveal':    (1.2, 0.6, 'Disguised robot revealing itself, tearing fabric and a distorted mechanical shriek'),
+    'block':     (0.5, 0.6, 'Energy bolt glancing off a heavy riot shield, bright metallic ping with a scrape'),
 }
 
 VOICE_ID = 'EXAVITQu4vr4xnSDxMaL'  # calm dispatch

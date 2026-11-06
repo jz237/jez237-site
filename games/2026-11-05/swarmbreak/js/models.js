@@ -671,6 +671,94 @@ export function orb() {
   return { g, core: by(g, 'core') };
 }
 
+// ------------------------------------------------------------------ v1.3 machines
+// BULWARK: a squat two-legged guard behind a curved riot shield (the 'shield' part fades as it cracks)
+export function bulwark() {
+  const g = make('bulwark', () => {
+    const K = new Kit();
+    const armor = paint(0x5a6270, 0.36, 0.7), trim = paint(0xc8a030, 0.4, 0.5);
+    const body = K.group('body');
+    for (const s of [-1, 1]) {
+      K.add(rbox(0.36, 0.5, 0.3, 0.06), M.dark, -0.05, 0.3, s * 0.36, 0, 0, 0, 1, 1, 1, body);
+      K.add(rbox(0.44, 0.12, 0.34, 0.04), M.black, 0.04, 0.06, s * 0.36, 0, 0, 0, 1, 1, 1, body);
+      K.rod(M.chrome, -0.12, 0.55, s * 0.3, -0.12, 0.18, s * 0.36, 0.03, body, 8);
+      K.add(sph(0.12, 12, 8), M.frame, -0.05, 0.62, s * 0.34, 0, 0, 0, 1, 1, 1, body);
+    }
+    K.add(rbox(0.7, 0.7, 0.9, 0.12), armor, -0.1, 1.0, 0, 0, 0, 0, 1, 1, 1, body);
+    K.add(rbox(0.72, 0.12, 0.92, 0.03), M.stripes, -0.1, 0.66, 0, 0, 0, 0, 1, 1, 1, body);
+    K.add(rbox(0.4, 0.3, 0.6, 0.08), M.dark, -0.42, 1.12, 0, 0, 0, 0, 1, 1, 1, body);
+    for (let i = 0; i < 4; i++) K.add(box(0.04, 0.2, 0.5), M.frame, -0.64, 1.05 + (i % 2) * 0.05, -0.18 + i * 0.12, 0, 0, 0, 1, 1, 1, body);
+    // helmet head with a visor slit
+    K.add(rbox(0.36, 0.28, 0.4, 0.1), armor, 0.02, 1.48, 0, 0, 0, 0, 1, 1, 1, body);
+    K.add(box(0.03, 0.05, 0.28), glow(0xff3a2a, 5), 0.2, 1.5, 0, 0, 0, 0, 1, 1, 1, body);
+    K.add(rbox(0.1, 0.06, 0.42, 0.02), trim, 0.06, 1.63, 0, 0, 0, 0, 1, 1, 1, body);
+    // shield arm
+    K.rod(M.frame, 0.1, 1.15, 0.38, 0.55, 1.0, 0.2, 0.05, body, 8);
+    K.add(sph(0.08, 10, 8), M.frame, 0.1, 1.15, 0.38, 0, 0, 0, 1, 1, 1, body);
+    const shield = K.group('shield', body, 0, 0, 0);
+    const arc = geo('bshield', () => { const c = new THREE.CylinderGeometry(1.05, 1.05, 1.5, 28, 1, true, Math.PI / 2 - 1.05, 2.1); return c; });
+    K.add(arc, paint(0x3d4450, 0.3, 0.85), 0, 0.95, 0, 0, 0, 0, 1, 1, 1, shield);
+    K.add(geo('bshield2', () => new THREE.CylinderGeometry(1.1, 1.1, 1.5, 28, 1, true, Math.PI / 2 - 1.05, 2.1)), M.frame, 0, 0.95, 0, 0, 0, 0, 1, 1, 1, shield);
+    for (const y of [0.22, 1.68]) K.add(geo('brim', () => new THREE.TorusGeometry(1.075, 0.03, 6, 28, 2.1)), trim, 0, y, 0, Math.PI / 2, 0, -1.05, 1, 1, 1, shield);
+    for (let i = 0; i < 5; i++) { const a = -0.8 + i * 0.4; K.add(box(0.03, 1.3, 0.05), M.dark, Math.cos(a) * 1.11, 0.95, Math.sin(a) * 1.11, 0, -a, 0, 1, 1, 1, shield); }
+    K.add(box(0.05, 0.12, 0.9), M.glassT, 1.1, 1.25, 0, 0, 0, 0, 1, 1, 1, shield);                    // view slot
+    K.mesh(geo('bglowedge', () => new THREE.TorusGeometry(1.08, 0.015, 4, 28, 2.1)), glow(0x6fe8ff, 3), 'shieldglow', 0, 0.95, 0, Math.PI / 2, 0, -1.05, shield);
+    return K.build();
+  });
+  return { g, body: by(g, 'body'), shield: by(g, 'shield'), shieldGlow: by(g, 'shieldglow') };
+}
+// LEAPER: a mantis-like jumper with big folded hind legs (the 'hindL'/'hindR' groups fold when it crouches)
+export function leaper() {
+  const g = make('leaper', () => {
+    const K = new Kit();
+    const shell = paint(0x6a4a1c, 0.36, 0.6), plate = paint(0xb87a22, 0.34, 0.6);
+    const body = K.group('body', K.root, 0, 0.62, 0);
+    K.add(lathe('leapb', [[0, -0.18], [0.16, -0.16], [0.24, -0.06], [0.24, 0.06], [0.16, 0.15], [0, 0.17]], 16), shell, -0.05, 0, 0, 0, 0, Math.PI / 2, 1.3, 1, 1, body);
+    for (let i = 0; i < 4; i++) K.add(rbox(0.12, 0.05, 0.3 - i * 0.04, 0.02), plate, -0.25 + i * 0.12, 0.15 + i * 0.01, 0, 0, 0, -0.15, 1, 1, 1, body);
+    K.add(rbox(0.2, 0.16, 0.2, 0.05), M.dark, 0.32, 0.08, 0, 0, 0, -0.2, 1, 1, 1, body);
+    for (const s of [-1, 1]) { K.add(sph(0.04, 8, 6), glow(0xffa020, 6), 0.42, 0.12, s * 0.06, 0, 0, 0, 1, 1, 1, body); K.add(cone(0.025, 0.14, 5), M.steel, 0.44, 0.0, s * 0.05, 0, 0, -Math.PI / 2 - 0.5, 1, 1, 1, body); }
+    K.add(cyl(0.006, 0.006, 0.3, 4), M.steel, 0.35, 0.28, 0.05, 0.3, 0, -0.6, 1, 1, 1, body);
+    // front legs
+    for (const s of [-1, 1]) { K.rod(M.dark, 0.2, -0.05, s * 0.12, 0.35, -0.35, s * 0.2, 0.025, body, 6); K.rod(M.steel, 0.35, -0.35, s * 0.2, 0.42, -0.6, s * 0.22, 0.02, body, 6); }
+    // hind legs: thigh up and back, shin down to a long foot
+    for (const s of [-1, 1]) {
+      const hip = K.group('hind' + (s < 0 ? 'L' : 'R'), body, -0.2, 0.0, s * 0.2);
+      K.add(sph(0.07, 10, 8), M.frame, 0, 0, 0, 0, 0, 0, 1, 1, 1, hip);
+      K.rod(shell, 0, 0, 0, -0.1, 0.35, s * 0.08, 0.06, hip, 8);
+      K.add(sph(0.05, 8, 6), M.frame, -0.1, 0.35, s * 0.08, 0, 0, 0, 1, 1, 1, hip);
+      K.rod(M.steel, -0.1, 0.35, s * 0.08, -0.35, -0.55, s * 0.1, 0.03, hip, 6);
+      K.rod(M.chrome, -0.02, 0.12, s * 0.06, -0.22, -0.05, s * 0.09, 0.012, hip, 4);
+      K.add(rbox(0.3, 0.04, 0.08, 0.015), M.black, -0.24, -0.6, s * 0.1, 0, 0, 0, 1, 1, 1, hip);
+    }
+    return K.build();
+  });
+  return { g, body: by(g, 'body'), hindL: by(g, 'hindL'), hindR: by(g, 'hindR') };
+}
+// MIMIC (revealed): a hunched metal skeleton bursting out of a survivor's torn jacket, long clawed arms
+export function mimic(look = 0) {
+  const g = make('mimic' + (look % 6), () => {
+    const K = new Kit();
+    const bone = paint(0x8a8f98, 0.3, 0.9), jacket = cloth([0xd94a3a, 0x3a7bd9, 0xe0b23c, 0x4aa86a, 0x8a5ad0, 0xe07a2c][look % 6], 0.85);
+    const body = K.group('body');
+    for (const s of [-1, 1]) { K.rod(M.dark, 0, 0.8, s * 0.12, 0.05, 0.4, s * 0.16, 0.05, body, 8); K.rod(bone, 0.05, 0.4, s * 0.16, -0.05, 0.03, s * 0.18, 0.04, body, 8); K.add(rbox(0.22, 0.05, 0.1, 0.02), M.black, 0.03, 0.03, s * 0.18, 0, 0, 0, 1, 1, 1, body); }
+    for (let i = 0; i < 6; i++) K.add(rbox(0.12, 0.07, 0.16, 0.025), bone, 0.04 + i * 0.03, 0.85 + i * 0.1, 0, 0, 0, -0.3, 1, 1, 1, body);   // spine, hunched forward
+    for (let i = 0; i < 4; i++) for (const s of [-1, 1]) K.add(tor(0.14, 0.012, 10, 4, ), bone, 0.12, 1.0 + i * 0.09, s * 0.05, 0, Math.PI / 2, 0, 0.6, 1, 1, body);   // ribs
+    K.add(rbox(0.3, 0.36, 0.42, 0.08), jacket, 0.02, 1.12, 0, 0, 0, -0.3, 1, 1, 1, body);
+    K.add(rbox(0.06, 0.4, 0.44, 0.02), M.black, 0.18, 1.12, 0, 0, 0, -0.3, 1, 1, 1, body);                 // torn open
+    K.add(sph(0.13, 14, 10), bone, 0.32, 1.48, 0, 0, 0, 0, 1.1, 0.9, 0.95, body);
+    for (let i = 0; i < 4; i++) K.add(sph(0.025, 6, 4), glow(0xff2a2a, 7), 0.43, 1.5 + (i % 2) * 0.05, -0.04 + Math.floor(i / 2) * 0.08, 0, 0, 0, 1, 1, 1, body);
+    K.add(cone(0.06, 0.14, 6), M.steel, 0.44, 1.38, 0, 0, 0, -Math.PI / 2, 1, 1, 1, body);
+    for (const s of [-1, 1]) {
+      K.add(sph(0.06, 8, 6), M.frame, 0.1, 1.32, s * 0.24, 0, 0, 0, 1, 1, 1, body);
+      K.rod(bone, 0.1, 1.32, s * 0.24, 0.35, 0.95, s * 0.32, 0.035, body, 6);
+      K.rod(bone, 0.35, 0.95, s * 0.32, 0.6, 0.55, s * 0.3, 0.03, body, 6);
+      for (let f = 0; f < 3; f++) K.add(cone(0.02, 0.18, 5), M.chrome, 0.68, 0.5, s * 0.3 + (f - 1) * 0.04, 0, 0, -Math.PI / 2 - 0.6, 1, 1, 1, body);
+    }
+    return K.build();
+  });
+  return { g, body: by(g, 'body') };
+}
+
 // ------------------------------------------------------------------ power-up pods and the wingman drone
 // a hovering supply pod: chrome caps, a glass band with a glowing core in the power-up's colour, a
 // spinning gyro ring and a landing cradle; the renderer spins 'pod' and 'ring' and floats it
