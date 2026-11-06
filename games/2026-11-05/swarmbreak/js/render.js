@@ -4,12 +4,12 @@
 // the simulation; floor decals for every warning (gates, boss tells, aim lines, arcs); HDR post.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=8';
-import * as TX from './textures.js?v=8';
-import * as MD from './models.js?v=8';
-import { FX, CALM } from './fx.js?v=8';
-import { F, GATES, POWERUPS } from './config.js?v=8';
-import { dronePos } from './sim.js?v=8';
+import { Post } from './post.js?v=9';
+import * as TX from './textures.js?v=9';
+import * as MD from './models.js?v=9';
+import { FX, CALM } from './fx.js?v=9';
+import { F, GATES, POWERUPS } from './config.js?v=9';
+import { dronePos } from './sim.js?v=9';
 
 export { CALM };
 const { AW, AH } = F;
