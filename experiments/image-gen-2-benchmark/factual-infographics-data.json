@@ -19633,5 +19633,88 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-06-factual-infographic-factual-infographic-reading-the-cat-foo",
+    "title": "Factual infographic: Reading the Cat Food Adequacy Statement",
+    "tests": "; archive_slot=2026-11-06T00:20; concept=cat-food-nutritional-adequacy-label-reading; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: food-and-hydration",
+    "prompt": "Create a richly detailed artistic feline educational atlas, finished image directly, not a photographed sheet or package mockup. Title: \"READ THE ADEQUACY STATEMENT\"; subtitle \"A cat-food label clue that matters\". Dominant lifelike silver mackerel tabby seated in three-quarter view, luxurious individually shaded fur, amber-green eyes, natural anatomy and calm expression. Hand-painted gouache and extremely fine ink on warm ivory with deep teal, muted copper and luminous cream. The cat occupies most of the lower-left composition; a broad unfurling paper label ribbon arcs around its shoulder and across the upper-right, with organic open annotations and generous negative space. Tiny illustrated food morsels lead the eye toward the ribbon, not a feeding-quantity diagram. No rigid panels, no repeated cards, no grid, no brand endorsements. Render a beautiful flowing illustrated explanation, not a sparse title poster.\nMake the central ribbon text large and readable: \"Nutritional adequacy statement\" followed by \"Look for: complete and balanced\" and \"Check the intended life stage\". A small note beside it: \"Intended as a sole diet\". Branch two elegant fine leader lines from that statement to compact open text: \"Meets an AAFCO nutrient profile\" and \"OR feeding trials using AAFCO procedures\". Do not imply AAFCO approves brands or certifies foods. The diagram explains two substantiation routes, not two required tests.\nIntegrate a smaller separate curl of ribbon bearing \"Ingredients: listed by decreasing weight\" and underneath \"Not the adequacy statement\". Integrate a small tasteful treat silhouette beside \"Treats and snacks: typically not a complete diet\". Beneath the cat, a light organically curved trail of small labeled nutrient motifs reads \"Protein • fats • vitamins • minerals • amino acids\"; these are decorative symbolic motifs, not fabricated molecular structures. Small note \"More supplements is not automatically better\". Footer \"General education • Ask your veterinarian about your cat’s needs\". Sources in tiny but legible footer: \"Cornell Feline Health Center • U.S. FDA\". All food-label elements are explanatory schematic fragments, not fake legal packaging or exact regulatory sample wording. No disease anatomy, no life-stage portraits, no individualized amounts or prescriptions. Keep the title, core ribbon, cat and source-supported distinctions paramount; optional decorative morsels may be reduced for breathing room. Elegant expressive typesetting, precise leaders, realistic feline paws and whiskers, warm rim light, sophisticated tactile paint detail.",
+    "image": "images/2026-11-06-factual-infographic-factual-infographic-reading-the-cat-foo.jpg",
+    "thumb": "thumbs/2026-11-06-factual-infographic-factual-infographic-reading-the-cat-foo.webp",
+    "color": "#c8b89c",
+    "date": "2026-11-06",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1052x1494",
+    "dedup": {
+      "conceptKey": "cat-food-nutritional-adequacy-label-reading",
+      "imageSha256": "2b93ac199f6b7d132e4073c6bebe529bb94932485524cecdda57c02c38b151f8",
+      "imageDHash": "3997464246e2b1b4"
+    },
+    "factualInfographic": {
+      "topic": "Reading the nutritional adequacy statement on cat food labels",
+      "description": "An artwork-led guide to nutritional adequacy statements, substantiation routes and the distinction from ingredients and treats.",
+      "sourceNote": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat ; https://www.fda.gov/animal-veterinary/animal-health-literacy/complete-and-balanced-pet-food",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-06T05:21:00.813047+00:00",
+        "sources": [
+          {
+            "id": "cornell",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Feeding Your Cat",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat"
+          },
+          {
+            "id": "fda",
+            "publisher": "U.S. Food and Drug Administration",
+            "title": "Complete and Balanced Pet Food",
+            "sourceType": "government-agency",
+            "url": "https://www.fda.gov/animal-veterinary/animal-health-literacy/complete-and-balanced-pet-food"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The nutritional adequacy statement identifies whether food is complete and balanced and the intended life stage.",
+            "sourceIds": [
+              "cornell",
+              "fda"
+            ]
+          },
+          {
+            "claim": "Complete and balanced food is intended as a sole diet; treats, snacks and supplements typically are not.",
+            "sourceIds": [
+              "fda"
+            ]
+          },
+          {
+            "claim": "A complete and balanced claim requires meeting an AAFCO nutrient profile or passing a feeding trial using AAFCO procedures.",
+            "sourceIds": [
+              "fda"
+            ]
+          },
+          {
+            "claim": "Ingredient lists are ordered by decreasing weight and are not the nutritional adequacy statement.",
+            "sourceIds": [
+              "cornell"
+            ]
+          },
+          {
+            "claim": "Cats need protein, fats, vitamins, minerals, fatty acids and amino acids; more supplementation is not automatically better.",
+            "sourceIds": [
+              "cornell"
+            ]
+          },
+          {
+            "claim": "Choose food appropriate to the cat with veterinary guidance; this chart is general education, not an individual diet plan.",
+            "sourceIds": [
+              "cornell"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
