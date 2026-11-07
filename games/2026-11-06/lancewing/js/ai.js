@@ -6,8 +6,8 @@
 //   profile 'human': ~0.35 s reaction with scatter, sometimes late, a thumb that can only swing the stick
 //                    so fast, the odd missed beat, sees only nearby threats
 //   profile 'demo' : quick and sharp: the attract mode and the AI playthrough
-import { F, ENEMY, HUNTER, DROP, BOSSES } from './config.js?v=8';
-import { dX, inHazard, lanceBonus, bossBodies, weakPos, ledgeUnder } from './sim.js?v=8';
+import { F, ENEMY, HUNTER, DROP, BOSSES, rockDrop } from './config.js?v=9';
+import { dX, inHazard, lanceBonus, bossBodies, weakPos, ledgeUnder, inRock } from './sim.js?v=9';
 
 const PROFILES = {
   human: { react: 0.35, jit: 0.1, late: 0.15, lateT: 0.25, track: 20, maxTrack: 4, steer: 5.5, miss: 0.07, margin: 0.55, fear: 1, greed: 1, beatCD: 0.14, slop: 0.35, panic: 0.06, view: 0.12, rescue: 0.25, rescueMiss: 0.3, rescueLate: 0.4, rescuePlan: 0.06 },
@@ -108,7 +108,7 @@ export class Autopilot {
       for (const L of W.ledges) {
         if (L.st === 2 || Math.abs(dX(L.x, p.x)) > L.w + 1 || Math.abs(dX(L.x, vic.x)) > L.w + 1) continue;
         const lo = Math.min(p.y, vic.y), hi = Math.max(p.y, vic.y);
-        if (L.y - F.ledgeT > lo + 1 && L.y < hi + 0.5) { const e = dX(L.x, p.x); return { x: L.x + Math.sign(e || 1) * (L.w + 2.2), y: vic.y + 1.5, w: 1, why: 'round a ledge', id: vic.id }; }
+        if (L.y - F.ledgeT - rockDrop(L.w, dX(L.x, p.x)) > lo + 1 && L.y < hi + 0.5) { const e = dX(L.x, p.x); return { x: L.x + Math.sign(e || 1) * (L.w + 2.2), y: vic.y + 1.5, w: 1, why: 'round a ledge', id: vic.id }; }
       }
       const over = vic.type === 'shieldbearer' && vic.face === Math.sign(dX(vic.x, p.x) || 1) ? 1.4 : 0.95;
       return { x: vic.x + lead, y: ad < 3.5 && p.y > vic.y + 0.7 ? vic.y + over * 0.7 : vic.y + over + 0.6, w: 1, why: 'duel ' + vic.type, id: vic.id };
@@ -166,10 +166,12 @@ export class Autopilot {
         vx += mx * PP.acc * dt; vx -= vx * F.airDrag * dt; vx = clamp(vx, -PP.max, PP.max);
         vy -= F.g * dt; if (vy < -F.fall) vy = -F.fall;
       }
-      const oy = y;
+      const oy = y, ox = x;
       x += vx * dt; y += vy * dt;
       if (!on && vy <= 0) for (const L of W.ledges) { if (L.st === 2 || Math.abs(dX(L.x, x)) > L.w + 0.3) continue; if (oy >= L.y - 0.06 && y < L.y) { y = L.y; vy = 0; on = L; break; } }
       if (on) { y = on.y; vy = 0; }
+      // slabs and the rock under them are solid: a future that flies into one stops there
+      else if (inRock(W, x, y)) { x = ox; y = oy; vx *= -0.3; vy = Math.min(vy, 0) * 0.5; s -= 25 * (1 - t * 0.35); }
       if (y + F.hh > F.H) { y = F.H - F.hh; if (vy > 0) vy *= -0.25; }
       const wt = 1 - t * 0.35;   // nearer moments count more
       // the sea

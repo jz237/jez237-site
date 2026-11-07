@@ -187,7 +187,8 @@ try {
     ok(await waitFor(tp, () => /ACE/.test(document.getElementById('tb-rows').textContent) && document.getElementById('tb-src').textContent === 'WORLD', 10000), 'title: the world board shows (lancewing-2026, sample rows answered by the check)');
     await tp.waitForTimeout(1500);
     await tp.screenshot({ path: `${shots}/tune_title.png` });
-    ok(await ev(tp, () => /VERSION\s*1\.0\.0/.test(document.getElementById('title').textContent)), 'title: shows the version (VERSION 1.0.0)');
+    const ver = await ev(tp, () => window.__lw.VERSION);
+    ok(await ev(tp, (v) => (document.getElementById('title').textContent || '').replace(/\s+/g, ' ').includes('VERSION ' + v), ver), `title: shows the version (VERSION ${ver})`);
     await tp.ctx.close();
   }
 

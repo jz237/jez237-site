@@ -4,12 +4,12 @@
 // spire and its lightning, telegraph ribbons for every hazard and boss attack, HDR post with bloom.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=8';
-import * as TX from './textures.js?v=8';
-import * as MD from './models.js?v=8';
-import { FX, CALM } from './fx.js?v=8';
-import { F, POWERUPS, BOSSES, HUNTER, LAYOUT } from './config.js?v=8';
-import { weakPos } from './sim.js?v=8';
+import { Post } from './post.js?v=9';
+import * as TX from './textures.js?v=9';
+import * as MD from './models.js?v=9';
+import { FX, CALM } from './fx.js?v=9';
+import { F, POWERUPS, BOSSES, HUNTER, LAYOUT, rockHang, rockDrop } from './config.js?v=9';
+import { weakPos } from './sim.js?v=9';
 
 export { CALM };
 const RR = F.R, H = F.H;
@@ -467,12 +467,13 @@ export class Renderer {
         put(MD.GEO.tor(0.4, 0.04, 16, 6), gold, x, y + 1.2, dr - 0.1, 0, Math.PI / 2, 0);
       }
     }
-    // things hanging under the ledge
+    // things hanging under the ledge: from the back half of the rock (the riders fly through the middle) and short
     for (let i = 0; i < Math.round(2 * P); i++) {
-      const x = x0 + (rnd() - 0.5) * w * 1.2, dr = (rnd() - 0.5) * 2.5;
-      if (key === 'caverns') put(MD.GEO.cyl(0.18, 0.0, 1.2 + rnd(), 6), MD.glow(0x60e8ff, 2.5), x, y - 2.2 - rnd() * 1.5, dr);
-      else if (key === 'glacier') put(MD.GEO.cyl(0.22, 0.0, 1.5 + rnd() * 1.5, 6), ice, x, y - 2.0 - rnd(), dr);
-      else if (key === 'foundry') { for (let k = 0; k < 6; k++) put(MD.GEO.tor(0.14, 0.04, 8, 6), iron, x, y - 1.3 - k * 0.24, dr, 0, k % 2 ? 0 : Math.PI / 2, 0); }
+      const x = x0 + (rnd() - 0.5) * w * 1.2, dr = -1.25 - rnd() * 0.6, v = dr / 2.3;
+      const under = y - F.ledgeT - rockDrop(w, x - x0) * Math.pow(1 - v * v, 0.9) * 0.93 + 0.15;
+      if (key === 'caverns') { const l = 0.6 + rnd() * 0.5; put(MD.GEO.cyl(0.16, 0.0, l, 6), MD.glow(0x60e8ff, 2.5), x, under - l / 2, dr); }
+      else if (key === 'glacier') { const l = 0.7 + rnd() * 0.6; put(MD.GEO.cyl(0.2, 0.0, l, 6), ice, x, under - l / 2, dr); }
+      else if (key === 'foundry') { for (let k = 0; k < 4; k++) put(MD.GEO.tor(0.14, 0.04, 8, 6), iron, x, under - 0.1 - k * 0.24, dr, 0, k % 2 ? 0 : Math.PI / 2, 0); }
     }
   }
   buildScenery(i) {
@@ -736,12 +737,23 @@ export class Renderer {
       if (this.bossV) this.scene.remove(this.bossV.outer);
       const v = MD.boss(B.key), outer = new THREE.Group(); outer.matrixAutoUpdate = false; outer.add(v.g); this.scene.add(outer);
       v.g.scale.setScalar({ sovereign: 1.4, wyvern: 1.18, gale: 1.05 }[B.key] || 1);
-      this.bossV = { v, outer, key: B.key, turn: B.face };
+      // the Forge Colossus wades in the sea just inside the ring, behind the ledges' rock (it is far too tall to pass
+      // between them); the Leviathan's coils dip behind any rock they would cut through
+      this.bossV = { v, outer, key: B.key, turn: B.face, lane: B.key === 'colossus' ? COLOSSUS_LANE : 0, segLane: null, segPrev: null };
       if (B.key === 'leviathan') { outer.matrix.identity(); outer.matrixWorldNeedsUpdate = true; for (const s of v.segs) s.matrixAutoUpdate = false; }
     }
     const V = this.bossV, v = V.v;
     const hit = B.hitT > 0 ? 1 + B.hitT * 0.15 : 1;
     if (B.key === 'leviathan') {
+      if (!V.segLane) { V.segLane = B.seg.map(() => 0); V.segPrev = B.seg.map((s) => [s.x, s.y]); }
+      const k = Math.min(1, dt * 7);
+      B.seg.forEach((s, i) => {
+        // where this coil will be in a moment: behind the ring while it would be in a ledge's rock
+        const pv = V.segPrev[i], vx = dt > 0 ? (((s.x - pv[0] + F.C * 1.5) % F.C) - F.C / 2) / dt : 0, vy = dt > 0 ? (s.y - pv[1]) / dt : 0;
+        pv[0] = s.x; pv[1] = s.y;
+        const inR = s.y > -2.5 && (inRockR(W, s.x, s.y, 1.6) || inRockR(W, s.x + clamp(vx, -30, 30) * 0.25, s.y + clamp(vy, -30, 30) * 0.25, 1.6));
+        V.segLane[i] += ((inR ? -LEV_LANE : 0) - V.segLane[i]) * k;
+      });
       B.seg.forEach((s, i) => {
         const m = v.segs[i]; if (!m) return;
         const prev = B.seg[Math.max(0, i - 1)], next = B.seg[Math.min(B.seg.length - 1, i + 1)];
@@ -751,7 +763,7 @@ export class Renderer {
         tangent(s.x, _v).multiplyScalar(dx / l).addScaledVector(UP, dy / l).normalize();
         radial(s.x, _v2);
         _v3.crossVectors(_v2, _v).normalize();
-        _m.makeBasis(_v, _v3, _v2); toWorld(s.x, s.y, _v3); _m.setPosition(_v3);
+        _m.makeBasis(_v, _v3, _v2); toWorld(s.x, s.y, _v3, V.segLane[i]); _m.setPosition(_v3);
         m.matrix.copy(_m); m.matrixWorldNeedsUpdate = true;
         m.visible = s.y > -3.5;
       });
@@ -760,7 +772,7 @@ export class Renderer {
     }
     const mirror = B.key !== 'colossus';
     V.turn += clamp((mirror ? B.face : 1) - V.turn, -dt * 4, dt * 4);
-    this.place(V.outer, B.x, B.y, Math.abs(V.turn) < 0.1 ? Math.sign(V.turn || 1) * 0.1 : V.turn);
+    this.place(V.outer, B.x, B.y, Math.abs(V.turn) < 0.1 ? Math.sign(V.turn || 1) * 0.1 : V.turn, V.lane);
     v.g.rotation.set(0, B.key === 'colossus' ? 0 : -0.2, B.key === 'colossus' ? 0 : clamp(B.vy * 0.04, -0.3, 0.3), 'YXZ');
     if (B.st === 'down') { v.g.rotation.z += B.t * 0.1; }
     const flap = B.key === 'colossus' ? 0 : Math.sin(t * (B.key === 'gale' ? 2.2 : 3)) * (B.key === 'sovereign' ? 0.25 : 0.4);
@@ -890,13 +902,14 @@ export class Renderer {
       case 'arc': this.lightning([[e.x, e.y], [e.x + e.dx, e.y + e.dy]], 0xd8e8ff, 0.6, 0.3); P(e.x + e.dx, e.y + e.dy); fx.sparks(_v.x, _v.y, _v.z, { n: 12, speed: 6, r: 0.8, g: 0.9, b: 1 }); break;
       case 'slam': P(e.x, e.y + 0.2); fx.debris(_v.x, _v.y, _v.z, { n: 14, speed: 7, size: 0.3 }); fx.sparks(_v.x, _v.y, _v.z, { n: 30, speed: 9 }); fx.dust(_v.x, _v.y, _v.z, { n: 12, s0: 1, s1: 3.5, life: 2.4, spread: e.w * 2 }); this.trauma = Math.min(1, this.trauma + 0.5); this.shock(e.x, e.y, 1); break;
       case 'gust': this.shock(e.x, e.y, 1.4); this.ring3(e.x, e.y, 6, 0xd8e8ff); break;
-      case 'bosshit': P(e.x, e.y); fx.sparks(_v.x, _v.y, _v.z, { n: 36, speed: 10, r: 1, g: 0.8, b: 0.5 }); fx.flash(_v.x, _v.y, _v.z, 40, 0xffd0a0, 0.25); this.shock(e.x, e.y, 0.9); this.trauma = Math.min(1, this.trauma + 0.35); break;
+      case 'bosshit': P(e.x, e.y, 0.3 + this.bossLaneAt(W.boss, null, e.x)); fx.sparks(_v.x, _v.y, _v.z, { n: 36, speed: 10, r: 1, g: 0.8, b: 0.5 }); fx.flash(_v.x, _v.y, _v.z, 40, 0xffd0a0, 0.25); this.shock(e.x, e.y, 0.9); this.trauma = Math.min(1, this.trauma + 0.35); break;
       case 'wpdown': P(e.x, e.y); fx.explode(_v.x, _v.y, _v.z, 2, { metal: true }); this.trauma = Math.min(1, this.trauma + 0.6); this.flashScreen(0.25, 0xffe0c0); break;
       case 'bossdown': this.bossFinale(e, W); break;
       case 'hunterdown': P(e.x, e.y + 0.8); fx.explode(_v.x, _v.y, _v.z, 2, { metal: true, color: 0xff6a40 }); this.trauma = Math.min(1, this.trauma + 0.5); break;
       case 'crumble': P(e.x, e.y - 0.5); fx.debris(_v.x, _v.y, _v.z, { n: 20, speed: 4, size: 0.4, sp: 3 }); fx.dust(_v.x, _v.y, _v.z, { n: 14, s0: 1.2, s1: 4, life: 3, spread: 5 }); break;
       case 'shatter': P(e.x, e.y); if (e.kind === 'blob') fx.fire(_v.x, _v.y, _v.z, { n: 8, s: 0.8 }); else fx.sparks(_v.x, _v.y, _v.z, { n: 14, speed: 6, r: e.kind === 'orb' ? 0.7 : 0.8, g: e.kind === 'orb' ? 0.4 : 0.95, b: 1 }); if (e.sea) fx.splash(_v.x, 0, _v.z, 0.6); break;
       case 'orbpop': P(e.x, e.y); fx.sparks(_v.x, _v.y, _v.z, { n: 20, speed: 7, r: 0.8, g: 0.5, b: 1 }); break;
+      case 'bonk': if (e.rock) { P(e.x, e.y); fx.dust(_v.x, _v.y, _v.z, { n: 3, s0: 0.35, s1: 1.2, life: 0.9, vy: -0.6, up: 0.3, jit: 1.6, a: 0.45, grav: 1.2 }); } break;
       case 'land': if (e.v > 7) { P(e.x, e.y + 0.1); fx.dust(_v.x, _v.y, _v.z, { n: 4, s0: 0.5, s1: 1.8, life: 1.4, vy: 0.4, up: 0.5, jit: 2, a: 0.4 }); } break;
       case 'skid': P(e.x, e.y + 0.1); fx.sparks(_v.x, _v.y, _v.z, { n: 6, speed: 3, down: true }); fx.dust(_v.x, _v.y, _v.z, { n: 2, s0: 0.4, s1: 1.4, life: 1, a: 0.35 }); break;
       case 'coresink': P(e.x, 0, 0); fx.splash(_v.x, 0, _v.z, 0.5); break;
@@ -910,14 +923,14 @@ export class Renderer {
   // boss kill finale: a long white-gold flash, accent shockwaves and a chain of big blasts timed on the WORLD clock
   // (W.t), so pause, slow-mo and hit-stop hold them (they used real-time setTimeout before). No new lights: fx.flash uses the pool.
   bossFinale(e, W) {
-    const B = W.boss, fx = this.fx, x = B ? B.x : e.x, y = B ? Math.max(B.y, 1) : (e.y || 8), acc = this.look.accent;
-    toWorld(x, y, _v); fx.explode(_v.x, _v.y, _v.z, 3.4, { metal: true }); fx.flash(_v.x, _v.y, _v.z, 90, 0xfff0d0, 0.6);
+    const B = W.boss, fx = this.fx, x = B ? B.x : e.x, y = B ? Math.max(B.y, 1) : (e.y || 8), acc = this.look.accent, dr = this.bossLaneAt(B, null, x);
+    toWorld(x, y, _v, dr); fx.explode(_v.x, _v.y, _v.z, 3.4, { metal: true }); fx.flash(_v.x, _v.y, _v.z, 90, 0xfff0d0, 0.6);
     fx.sparks(_v.x, _v.y, _v.z, { n: 60, speed: 14, r: 1, g: 0.85, b: 0.55 });
     this.shock(x, y, 1.8); this.ring3(x, Math.max(0.3, y - 1), 7, acc); this.trauma = Math.min(1, this.trauma + 0.7);
     this.flashScreen(0.85, 0xfff4e0, 0.75);
     this.booms = (this.booms || []).filter((b) => b.W === W);
     const t0 = W.t;
-    for (let i = 0; i < 6; i++) this.booms.push({ W, at: t0 + 0.18 + i * 0.24, x: x + (Math.random() - 0.5) * 7, y: y + (Math.random() - 0.3) * 4, s: 2.4 + i * 0.25, last: i === 5 });
+    for (let i = 0; i < 6; i++) this.booms.push({ W, at: t0 + 0.18 + i * 0.24, x: x + (Math.random() - 0.5) * 7, y: y + (Math.random() - 0.3) * 4, s: 2.4 + i * 0.25, last: i === 5, dr });
   }
   syncBooms(W) {
     if (!this.booms || !this.booms.length) return;
@@ -925,7 +938,7 @@ export class Renderer {
     this.booms = this.booms.filter((b) => {
       if (b.W !== W) return false;   // another world is drawn now (a new scene, an instant replay): drop them
       if (W.t < b.at) return true;
-      toWorld(b.x, b.y, _v); fx.explode(_v.x, _v.y, _v.z, b.s, { metal: true }); fx.flash(_v.x, _v.y, _v.z, 50, this.look.accent, 0.35);
+      toWorld(b.x, b.y, _v, b.dr || 0); fx.explode(_v.x, _v.y, _v.z, b.s, { metal: true }); fx.flash(_v.x, _v.y, _v.z, 50, this.look.accent, 0.35);
       this.trauma = Math.min(1, this.trauma + 0.45); this.shock(b.x, b.y, b.last ? 1.6 : 0.8);
       if (b.last) { this.ring3(b.x, Math.max(0.3, b.y - 1), 9, this.look.accent); this.flashScreen(0.6, this.look.accent, 1.2); }
       return false;
@@ -962,13 +975,24 @@ export class Renderer {
       const [x, y] = weakPos(B, q);
       if (y < -0.4) continue;
       const m = this.wpMarks[n++], pu = 0.5 + 0.5 * Math.sin(t * 6 + q.i);
-      toWorld(x, y, m.position, 1.4);
+      toWorld(x, y, m.position, 1.4 + this.bossLaneAt(B, q.seg));
       m.quaternion.copy(this.camera.quaternion);
       m.scale.setScalar(clamp(q.r || 0.8, 0.55, 1.1) * (1.05 + pu * 0.3));
       m.material.color.set(this.look.accent).multiplyScalar(0.3 + pu * 0.6);
       m.visible = true;
     }
     if (this.wpMarks) for (let i = n; i < this.wpMarks.length; i++) this.wpMarks[i].visible = false;
+  }
+  // how far behind the ring the boss (or the Leviathan coil nearest x, or segment seg) is drawn
+  bossLaneAt(B, seg, x) {
+    const V = this.bossV;
+    if (!B || !V || V.key !== B.key) return 0;
+    if (!V.segLane) return V.lane || 0;
+    if (seg !== null && seg !== undefined) return V.segLane[seg] || 0;
+    if (x === undefined) return 0;
+    let bi = 0, bd = 1e9;
+    B.seg.forEach((s, i) => { const d = Math.abs(((s.x - x + F.C * 1.5) % F.C) - F.C / 2); if (d < bd) { bd = d; bi = i; } });
+    return V.segLane[bi] || 0;
   }
   ring3(x, y, r, color) { toWorld(x, y, _v, 0.8); this.fx.ring(_v.x, _v.y, _v.z, r, color); }
 
@@ -1111,13 +1135,27 @@ export class Renderer {
   }
 }
 const P0 = { x: 0, y: 0, z: 0 };
+const COLOSSUS_LANE = -5.6, LEV_LANE = 4.4;
+// is the circle (x, y, r) in any standing ledge's slab or rock?
+function inRockR(W, x, y, r) {
+  for (const L of W.ledges) {
+    if (L.st === 2) continue;
+    const d = ((x - L.x + F.C * 1.5) % F.C) - F.C / 2, a = Math.abs(d);
+    if (a > L.w + r || y - r > L.y + 0.3 || y + r < L.y - F.ledgeT - rockDrop(L.w, 0)) continue;
+    const c = Math.max(0, a - r * 0.7);
+    if (c < L.w && y + r * 0.7 > L.y - F.ledgeT - rockDrop(L.w, c)) return true;
+  }
+  return false;
+}
 
-// a ledge: a box bent round the ring, top flat, the underside hanging in a jagged rock point
+// a ledge: a box bent round the ring, top flat, the underside hanging in a rock point. The point is solid in the
+// sim (config.js rockDrop): across the riders' plane it follows that curve to within a few per cent, rough only in
+// its surface, and thins away toward the front and back faces
 function ledgeGeometry(x0, y0, w, seed) {
   const D = 2.3, T = F.ledgeT;
   const g = new THREE.BoxGeometry(2 * w, 1, 2 * D, Math.max(8, Math.round(w * 4)), 6, 8);
   const p = g.attributes.position, n = g.attributes.normal, uv = g.attributes.uv;
-  const hang = 3.2 + w * 0.45;
+  const hang = rockHang(w);
   for (let i = 0; i < p.count; i++) {
     let x = p.getX(i), z = p.getZ(i);
     const y = p.getY(i), ny = n.getY(i), nx = n.getX(i);
@@ -1125,11 +1163,11 @@ function ledgeGeometry(x0, y0, w, seed) {
     let yy;
     if (y > 0.499) { yy = (Math.abs(u) > 0.92 || Math.abs(v) > 0.9 ? -0.06 * vnoise(x * 3 + seed, 0, z * 3) : 0); }
     else {
-      const prof = Math.pow(Math.max(0, 1 - u * u), 1.1) * Math.pow(Math.max(0, 1 - v * v), 0.9);
+      const prof = Math.max(0, 1 - u * u) * Math.pow(Math.max(0, 1 - v * v), 0.9);
       const nz = vnoise(x * 0.7 + seed, z * 0.7, seed * 0.3);
-      const bottom = -T - hang * prof * (0.65 + 0.7 * nz);
+      const bottom = -T - hang * prof * (0.93 + 0.12 * nz);
       yy = bottom + (0 - bottom) * Math.pow(t, 0.9);
-      const j = (1 - t) * 0.45 + 0.08;
+      const j = (1 - t) * 0.16 + 0.06;
       x += (vnoise(x * 1.3, y * 3 + seed, z * 1.3) - 0.5) * j * 2;
       z += (vnoise(z * 1.3 + seed, y * 3, x * 1.3) - 0.5) * j * 2;
     }

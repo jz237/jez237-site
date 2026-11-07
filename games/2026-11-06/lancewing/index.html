@@ -317,7 +317,7 @@ body.lw-paused #tut, body.lw-paused #warns, body.lw-paused #duels, body.lw-pause
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">LANCE<span>WING</span></h1>
-      <div class="ver"><b>2026</b> · VERSION <b id="ver">1.2.0</b> · THE HIGHER LANCE WINS</div>
+      <div class="ver"><b>2026</b> · VERSION <b id="ver">1.3.0</b> · THE HIGHER LANCE WINS</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -461,6 +461,6 @@ addEventListener('error', (e) => window.__lwErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__lwErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__lwErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=8"></script>
+<script type="module" src="js/main.js?v=9"></script>
 </body>
 </html>

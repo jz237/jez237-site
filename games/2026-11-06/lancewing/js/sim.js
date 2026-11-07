@@ -3,7 +3,7 @@
 // bit for bit (replays, online, tests). Nothing in here touches the DOM, WebGL or audio; it only pushes
 // events into W.ev. The arena is a 2D slice: x = metres round the ring (wraps at F.C), y = height.
 import { F, STEP, SECTORS, WAVES, LAYOUT, rampAt, rampLevel, endlessLevel, ENDLESS, ENEMY, TIER_UP, HUNTER, BOSSES, BOSS_KEYS, SCORE, START_LIVES, INTRO,
-  introduced, WAVE_KIND, TEAM_WAVE, SPECIAL, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP } from './config.js?v=8';
+  introduced, WAVE_KIND, TEAM_WAVE, SPECIAL, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, rockHang, rockDrop } from './config.js?v=9';
 export { STEP };
 
 const { C, H } = F;
@@ -342,7 +342,81 @@ function collideLedges(W, b, ox, oy) {
       b.x = wrap(L.x + s * (L.w + F.hw + 0.01));
       if (Math.sign(b.vx) === -s) b.vx = -b.vx * 0.45;
     }
+    // the rock point under the slab
+    if (b.on !== L.id) rockPush(W, L, b, F.hw, F.hh, true);
   }
+}
+// ------------------------------------------------------------------ the rock under each ledge is solid
+// Push a body out of the rock under ledge L. The body is a box hw either side of b.x, from its feet at b.y up to
+// b.y + hh. The rock is convex, so the box meets it first with the top corner nearest the ledge's middle (or its
+// top edge, when the point is over the box): the body moves out along the rock's face and loses its speed into
+// the rock with a little bounce, so it slides off the slopes and bonks off the point. Returns how far it moved.
+function rockPush(W, L, b, hw, hh, ev = false) {
+  const bot = L.y - F.ledgeT;
+  if (L.st === 2 || b.y >= bot) return 0;
+  const h = rockHang(L.w), top = b.y + hh;
+  if (top <= bot - h) return 0;
+  const dx = dX(L.x, b.x), adx = Math.abs(dx), s = dx < 0 ? -1 : 1;
+  let nx, ny, pen;
+  if (adx <= hw) {
+    // the point is over the box: down, or out sideways when that is shorter (it came in from the side)
+    const down = top - (bot - h), side = L.w * Math.sqrt(Math.min(1, down / h)) + hw - adx;
+    if (side < down) { nx = s; ny = 0; pen = side; } else { nx = 0; ny = -1; pen = down; }
+  } else {
+    const c = dx - s * hw;
+    if (c * s >= L.w) return 0;
+    const d = top - (bot - rockDrop(L.w, c));
+    if (d <= 0) return 0;
+    const sl = (2 * h * c) / (L.w * L.w), k = 1 / Math.sqrt(1 + sl * sl);
+    nx = sl * k; ny = -k; pen = d * k;
+  }
+  pen += 0.002;
+  b.x = wrap(b.x + nx * pen); b.y += ny * pen;
+  const vn = b.vx * nx + b.vy * ny;
+  if (vn < 0) {
+    b.vx -= 1.3 * vn * nx; b.vy -= 1.3 * vn * ny;
+    if (ev && vn < -2.5) W.ev.push({ k: 'bonk', id: b.id, pl: b.input ? 1 : 0, x: b.x, y: b.y + hh, rock: 1 });
+  }
+  return pen;
+}
+// the ledge whose slab or rock a body's box (feet at y) is inside, or null (the autopilot's look-ahead, summons)
+export function inRock(W, x, y, hw = F.hw, hh = F.hh) {
+  for (const L of W.ledges) {
+    if (L.st === 2) continue;
+    const adx = Math.abs(dX(L.x, x)), bot = L.y - F.ledgeT;
+    if (adx >= L.w + hw || y >= L.y - 0.05 || y + hh <= bot - rockHang(L.w)) continue;
+    if (y + hh > bot || y + hh > bot - rockDrop(L.w, adx <= hw ? 0 : adx - hw)) return L;
+  }
+  return null;
+}
+// the nearest height to y (feet) where a body hh tall at x is clear of every slab and rock
+function clearY(W, x, y, hw = F.hw, hh = F.hh) {
+  for (let i = 0; i < 4; i++) {
+    const L = inRock(W, x, y, hw, hh);
+    if (!L) return y;
+    const under = L.y - F.ledgeT - rockDrop(L.w, Math.max(0, Math.abs(dX(L.x, x)) - hw)) - hh - 0.1;
+    y = under > 1.5 && y - under < L.y + 0.1 - y ? under : L.y + 0.1;
+  }
+  return y;
+}
+// keep a body that never stands on ledges (a core in flight, the Stormhunter) out of every slab and rock: out of a
+// slab the shortest way, out of a rock along its face. Returns the ledge it was lifted onto the top of, if any.
+function solidPush(W, b, hw, hh) {
+  let onto = null;
+  for (const L of W.ledges) {
+    if (L.st === 2) continue;
+    const dx = dX(L.x, b.x), adx = Math.abs(dx), bot = L.y - F.ledgeT;
+    if (adx >= L.w + hw) continue;
+    if (b.y < L.y && b.y + hh > bot) {
+      // in the slab: over the top, out past the end, or down clear of the rock under it, whichever is nearest
+      const under = bot - rockDrop(L.w, adx <= hw ? 0 : adx - hw);
+      const up = L.y - b.y, down = b.y + hh - under, side = L.w + hw - adx, m = Math.min(up, down, side);
+      if (m === up) { b.y = L.y; if (b.vy < 0) b.vy = 0; onto = L; }
+      else if (m === down) { b.y = under - hh - 0.002; if (b.vy > 0) b.vy = -b.vy * 0.3; }
+      else { const s = dx < 0 ? -1 : 1; b.x = wrap(L.x + s * (L.w + hw + 0.002)); if (b.vx * s < 0) b.vx = -b.vx * 0.45; }
+    } else rockPush(W, L, b, hw, hh);
+  }
+  return onto;
 }
 function playerP(W, p) {
   const w = W.up.wing || 0, sp = p.pw.speed ? 1.2 : 1;
@@ -463,6 +537,15 @@ function think(W, r) {
     }
   }
   B.gy = clamp(B.gy, 3, H - 2.6);
+  // a ledge overhead (its slab or the rock under it) with the goal up past it: out past the end on this side
+  // first (heading for the far end would press it up into the rock all the way)
+  if (r.on < 0 && B.gy > r.y + 0.5) for (const L of W.ledges) {
+    if (L.st === 2 || L.y < r.y + 0.5) continue;
+    const e = dX(L.x, r.x), bot = L.y - F.ledgeT;
+    if (Math.abs(e) > L.w + F.hw + 0.4 || B.gy < bot - 0.5 || bot - rockHang(L.w) > r.y + F.hh + 3.5) continue;
+    B.gx = wrap(L.x + Math.sign(e || r.face) * (L.w + 1.9));
+    break;
+  }
   const dd = dX(r.x, B.gx);
   B.mx = Math.abs(dd) < 0.6 ? 0 : clamp(dd / 3.5, -1, 1) * (0.72 + 0.28 * R.aggr);
   // never camp on a ledge: a rider whose goal lies below walks off the nearer edge
@@ -537,7 +620,7 @@ function cores(W, dt) {
       c.fT += dt;
       if (c.fT >= 1.1) {
         c.gone = true;
-        const r = addRider(W, c.next, c.x, c.y, c.next === c.from);
+        const r = addRider(W, c.next, c.x, c.on >= 0 ? c.y : clearY(W, c.x, c.y), c.next === c.from);
         r.vy = 4; r.hitT = 0.45;
         W.ev.push({ k: 'reform', id: r.id, x: r.x, y: r.y, type: r.type, elite: r.elite });
       }
@@ -562,6 +645,11 @@ function cores(W, dt) {
           if (c.vy < -3.2) { c.vy = -c.vy * 0.36; c.vx *= 0.7; W.ev.push({ k: 'corebounce', x: c.x, y: c.y }); }
           else { c.vy = 0; c.on = L.id; c.st = 'rest'; }
         }
+      }
+      if (c.on < 0) {
+        const q = { x: c.x, y: c.y - 0.4, vx: c.vx, vy: c.vy }, L = solidPush(W, q, 0.4, 0.8);
+        c.x = q.x; c.y = q.y + 0.4; c.vx = q.vx; c.vy = q.vy;
+        if (L) { c.y = L.y + 0.45; c.vy = 0; c.on = L.id; c.st = 'rest'; }
       }
       if (c.y > H - 0.5) { c.y = H - 0.5; c.vy = -Math.abs(c.vy) * 0.3; }
       if (c.y < F.sea) { c.gone = true; W.ev.push({ k: 'coresink', x: c.x, rush: c.rush }); continue; }
@@ -614,8 +702,8 @@ function collectPickup(W, q, p) {
 // ------------------------------------------------------------------ hazards: sea spouts, spire lightning, arcs, crumbling ledges, boss tells
 function spoutTop(W, x) {
   let top = 15;
-  for (const L of W.ledges) if (L.st !== 2 && Math.abs(dX(L.x, x)) < L.w + 0.6) top = Math.min(top, L.y - F.ledgeT);
-  return Math.max(2.5, top);
+  for (const L of W.ledges) { const a = Math.abs(dX(L.x, x)); if (L.st !== 2 && a < L.w + 0.6) top = Math.min(top, L.y - F.ledgeT - rockDrop(L.w, Math.max(0, a - 0.65))); }
+  return Math.max(1.2, top);
 }
 export function addSpout(W, x, T) {
   const h = { id: W.nextId++, k: 'spout', x: wrap(x), w: 1.3, top: spoutTop(W, x), t: 0, T: T ?? W.R.warn * 1.3, A: 1.7 };
@@ -747,6 +835,7 @@ function shots(W, dt) {
 }
 
 // ------------------------------------------------------------------ the Stormhunter
+const HW_H = 0.9, HH_H = 1.3;   // the Stormhunter's box for the ledges and their rock
 function summonHunter(W) {
   const T = anyPlayer(W), side = rand(W) < 0.5 ? -1 : 1;
   W.hunter = { id: W.nextId++, x: wrap(T.x + side * 38), y: rr(W, 13, 20), vx: -side * HUNTER.v * 0.6, vy: 0, face: -side, st: 'warn', t: 0 };
@@ -755,12 +844,26 @@ function summonHunter(W) {
 }
 function hunter(W, h, dt) {
   h.t += dt;
-  if (h.st === 'leave') { h.vy += 8 * dt; h.x = wrap(h.x + h.vx * dt); h.y += h.vy * dt; if (h.y > H + 10) W.hunter = null; return; }
+  if (h.st === 'leave') { h.vy += 8 * dt; h.x = wrap(h.x + h.vx * dt); h.y += h.vy * dt; solidPush(W, h, HW_H, HH_H); if (h.y > H + 10) W.hunter = null; return; }
   if (h.st === 'warn' && h.t >= HUNTER.warn) { h.st = 'hunt'; W.ev.push({ k: 'hunter', x: h.x, y: h.y }); }
   const T = nearestPlayer(W, h.x, h.y);
   const V = HUNTER.v * Math.max(0.85, W.R.spd);
   if (T) {
-    const dx = dX(h.x, T.x), dy = T.y + 1.2 - (h.y + 0.6), l = Math.hypot(dx, dy) || 1;
+    let dx = dX(h.x, T.x), dy = T.y + 1.2 - (h.y + 0.6);
+    // a ledge in the way: fly for the end of it that makes the shorter trip
+    for (let i = 1; i <= 6; i++) {
+      const L = inRock(W, wrap(h.x + dx * i / 6), h.y + dy * i / 6, HW_H, HH_H);
+      if (!L || L.id === h.on) continue;
+      const ex = dX(h.x, L.x), wy = L.y - 0.6 - (h.y + 0.6);
+      let best = 1e9;
+      for (const s of [-1, 1]) {
+        const wx = ex + s * (L.w + HW_H + 1.2), d = Math.hypot(wx, wy) + Math.hypot(dx - wx, dy - wy);
+        if (d < best) { best = d; dx = wx; dy = wy; }
+      }
+      dx += Math.sign(dx) * 0.5;
+      break;
+    }
+    const l = Math.hypot(dx, dy) || 1;
     const k = Math.min(1, HUNTER.turn * dt);
     h.vx += (dx / l * V - h.vx) * k; h.vy += (dy / l * V * 0.7 - h.vy) * k;
   }
@@ -768,6 +871,7 @@ function hunter(W, h, dt) {
   if (sp > V) { h.vx *= V / sp; h.vy *= V / sp; }
   if (h.y < 3 && h.vy < 0) h.vy += 20 * dt;
   h.x = wrap(h.x + h.vx * dt); h.y = clamp(h.y + h.vy * dt, 2.2, H - 1.5);
+  h.on = (solidPush(W, h, HW_H, HH_H) || { id: -1 }).id;
   if (Math.abs(h.vx) > 0.4) h.face = Math.sign(h.vx);
 }
 function hunterContact(W, p, h) {
@@ -959,7 +1063,12 @@ function boss(W, B, dt) {
     else {
       if (rand(W) < dt * 0.12) B.side = -B.side;
       const gx = wrap(T.x + B.side * 10), [a0, a1] = D.alt;
-      const gy = (a0 + a1) / 2 + (a1 - a0) / 2 * Math.sin(B.t * 0.45);
+      let gy = (a0 + a1) / 2 + (a1 - a0) / 2 * Math.sin(B.t * 0.45);
+      // it flies in the open air between the ledges where it can: a few times a second it picks the height in its
+      // band that keeps its body clearest of slabs and rock, here and where it is heading, nearest the sweep
+      B.clrT = (B.clrT || 0) - dt;
+      if (B.clrT <= 0) { B.clrT = 0.25; B.clrY = bossClearY(W, B, gx, gy, a0, a1); }
+      if (B.clrY !== undefined) gy = B.clrY;
       const v = D.v * (0.85 + 0.15 * rate) * (B.phase > 1 ? 1.15 : 1) * (busy ? 0.35 : 1);
       B.vx += (clamp(dX(B.x, gx) * 0.7, -v, v) - B.vx) * Math.min(1, dt * 1.4);
       B.vy += (clamp((gy - B.y) * 0.8, -v * 0.6, v * 0.6) - B.vy) * Math.min(1, dt * 1.4);
@@ -1015,6 +1124,31 @@ function levSegs(B, dt, T) {
   B.vx += (clamp(dX(B.x, T.x) * 0.6, -v, v) - B.vx) * Math.min(1, dt * 1.2);
   B.x = wrap(B.x + B.vx * dt); B.y = -6;
   B.seg.forEach((s, i) => { s.x = wrap(B.x - Math.sign(B.vx || 1) * i * 1.7); s.y = -6; });
+}
+// how much of a flying boss's body (its ellipses, a little fattened, sampled round the edge and through the middle)
+// would be inside a slab or rock with the boss at (x, y)
+function bossInRock(W, B, x, y) {
+  let n = 0;
+  for (const [dx, dy, rx, ry] of BOSSES[B.key].body) {
+    const cx = x + dx * B.face, cy = y + dy;
+    for (let k = 0; k < 10; k++) {
+      const a = k * 0.6283, px = k < 8 ? cx + Math.cos(a * 1.25) * (rx + 0.5) : cx + (k === 8 ? -0.5 : 0.5) * rx, py = k < 8 ? cy + Math.sin(a * 1.25) * (ry + 0.5) : cy;
+      for (const L of W.ledges) {
+        if (L.st === 2) continue;
+        const d = dX(L.x, px);
+        if (Math.abs(d) < L.w + 0.3 && py < L.y + 0.6 && py > L.y - F.ledgeT - rockDrop(L.w, d) - 0.3) { n++; break; }
+      }
+    }
+  }
+  return n;
+}
+function bossClearY(W, B, gx, gy, a0, a1) {
+  let best = gy, bs = 1e9;
+  for (let y = a0; y <= a1 + 1e-6; y += 0.75) {
+    const s = bossInRock(W, B, B.x, y) * 6 + bossInRock(W, B, gx, y) * 3 + Math.abs(y - gy) * 0.6 + Math.abs(y - B.y) * 0.25;
+    if (s < bs) { bs = s; best = y; }
+  }
+  return best;
 }
 function diveMove(W, B, dt) {
   const c = B.cur, sp = 16 * Math.min(1.3, W.R.bossRate + 0.15);
@@ -1107,8 +1241,9 @@ function fireAttack(W, B, T) {
       // summonN riders at once (the Leviathan calls a pair), reaver share per boss
       const D = BOSSES[B.key], nS = (D.summonN || 1) + (D.summonN > 1 ? (DIFFICULTY[W.diff] || {}).summonAdd || 0 : 0);   // hard: a pack of 3
       for (let k = 0; k < nS; k++) {
+        const px = wrap(B.x + (k === 0 ? 0 : k % 2 ? 4 : -4));
         const type = s >= 3 && rand(W) < (D.reavers ?? 0.4) ? 'reaver' : s >= 1 ? 'lancer' : 'skirmisher';
-        W.portals.push({ id: W.nextId++, x: wrap(B.x + (k === 0 ? 0 : k % 2 ? 4 : -4)), y: clamp(B.y + 2 + k, 3, H - 3), ledge: -1, t: 0, T: 0.3, type, elite: false, role: 0, partner: 0 });
+        W.portals.push({ id: W.nextId++, x: px, y: clearY(W, px, clamp(B.y + 2 + k, 3, H - 3)), ledge: -1, t: 0, T: 0.3, type, elite: false, role: 0, partner: 0 });
       }
       W.ev.push({ k: 'summon', x: B.x, y: B.y });
       break;

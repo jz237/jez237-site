@@ -1,6 +1,6 @@
 // Lancewing 2026 - every tunable number lives here. The RAMP table drives difficulty; nothing else in
 // the game hard-codes rider pace, numbers, spacing, skill, hazard rate or warning time.
-export const VERSION = '1.2.0';
+export const VERSION = '1.3.0';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ the arena and the flight model
@@ -27,10 +27,16 @@ export const F = {
   reach: 1.95,           // duel contact distance (centre to centre)
   bounce: 7.2,           // clang knockback
   inv: 2.6, hitInv: 1.4, respawn: 1.6, clearR: 11,
-  ledgeT: 1.1,           // ledge slab thickness (the jagged rock below is scenery)
+  ledgeT: 1.1,           // ledge slab thickness
+  rockA: 1.3, rockB: 0.35,   // the rock point under a ledge hangs rockA + rockB x its half width below the slab (solid)
   coreR: 1.35,           // reach for collecting an ember core
 };
 F.R = F.C / (2 * Math.PI);
+// The rock under a ledge is solid: a parabola from the slab's lower corners down to rockHang(w) under its middle.
+// The sim collides riders, cores and the Stormhunter with it and the renderer builds the rock from the same curve.
+export const rockHang = (w) => F.rockA + F.rockB * w;
+// how far below the slab the rock reaches at dx metres from the ledge's middle
+export const rockDrop = (w, dx) => { const u = dx / w; return u <= -1 || u >= 1 ? 0 : rockHang(w) * (1 - u * u); };
 
 // ------------------------------------------------------------------ sectors and their looks
 export const SECTORS = [
@@ -85,6 +91,8 @@ export const LAYOUT = [
 // Tuned (stage 4) with scripts/lancewing/ramp_check.mjs: the human-like autopilot clears each sector from its first wave
 // with 4 lives and TYPICAL_UP about 87 / 62 / 47 / 35 / 19 % on NORMAL (target 85 / 65 / 45 / 30 / 18) and every
 // value only ever rises (or, for warn / gap / react / coreT, falls) from one wave to the next across the whole campaign.
+// 1.3 (solid rock under the ledges): S3 boss armour 2.8 -> 2.4 (no hiding inside the rock from molten blobs any more)
+// and S5 boss cadence 1.25 -> 1.6 (the Sovereign now flies in the open between the ledges, so it is easier to reach).
 //   mix     which riders can come and how often
 export const RAMP = [
   { spd: [0.84, 0.86], count: [7, 8], active: [3, 3], gap: [1.8, 1.6], warn: [1.2, 1.1], react: [0.45, 0.45], skill: [0.37, 0.4], aggr: [0.6, 0.64], coreT: [9, 8.2],
@@ -94,13 +102,13 @@ export const RAMP = [
     spout: [13, 11], spoutW: 0, bolt: [0, 0], boltW: 9, cast: [1, 1], hunt: [66, 59], drop: 1.1, armor: [1, 1], surv: [34, 34], survCap: 0, bossHP: 1, bossRate: 1.1,
     mix: { skirmisher: 0.8, lancer: 0.85, reaver: 0.25, shieldbearer: 0.2 } },
   { spd: [0.92, 0.98], count: [8, 9], active: [3.4, 3.8], gap: [1.5, 1.42], warn: [0.94, 0.86], react: [0.42, 0.38], skill: [0.42, 0.48], aggr: [0.66, 0.7], coreT: [7.6, 7],
-    spout: [11.5, 10], spoutW: 0, bolt: [16, 13], boltW: 1, cast: [1, 1], hunt: [59, 53], drop: 1, armor: [0, 0], surv: [34, 34], survCap: 0, bossHP: 2.8, bossRate: 1.5,
+    spout: [11.5, 10], spoutW: 0, bolt: [16, 13], boltW: 1, cast: [1, 1], hunt: [59, 53], drop: 1, armor: [0, 0], surv: [34, 34], survCap: 0, bossHP: 2.4, bossRate: 1.5,
     mix: { skirmisher: 0.5, lancer: 1, reaver: 0.5, shieldbearer: 0.35, twinblade: 0.25 } },
   { spd: [0.98, 1.03], count: [9, 10], active: [4, 4.4], gap: [1.42, 1.35], warn: [0.82, 0.74], react: [0.38, 0.34], skill: [0.54, 0.58], aggr: [0.72, 0.78], coreT: [7, 6.5],
     spout: [10, 9], spoutW: 0, bolt: [13, 11], boltW: 0, cast: [1, 1.08], hunt: [53, 48], drop: 0.95, armor: [0, 0], surv: [27, 27], survCap: 0, bossHP: 1, bossRate: 2.3,
     mix: { skirmisher: 0.3, lancer: 1, reaver: 0.6, shieldbearer: 0.45, twinblade: 0.4, stormcaller: 0.3 } },
   { spd: [1.03, 1.05], count: [10, 10], active: [4.6, 4.6], gap: [1.35, 1.25], warn: [0.7, 0.6], react: [0.34, 0.31], skill: [0.58, 0.6], aggr: [0.78, 0.82], coreT: [6.5, 5.8],
-    spout: [9, 8], spoutW: 0, bolt: [11, 9], boltW: 0, cast: [1.08, 1.18], hunt: [48, 42], drop: 0.9, armor: [0, 0], surv: [28, 28], survCap: -1, bossHP: 1, bossRate: 1.25,
+    spout: [9, 8], spoutW: 0, bolt: [11, 9], boltW: 0, cast: [1.08, 1.18], hunt: [48, 42], drop: 0.9, armor: [0, 0], surv: [28, 28], survCap: -1, bossHP: 1, bossRate: 1.6,
     mix: { skirmisher: 0.3, lancer: 1, reaver: 0.55, shieldbearer: 0.5, twinblade: 0.4, stormcaller: 0.4 } },
 ];
 const RAMP_KEYS = ['spd', 'count', 'active', 'gap', 'warn', 'react', 'skill', 'aggr', 'coreT', 'spout', 'bolt', 'cast', 'hunt', 'armor', 'surv'];
