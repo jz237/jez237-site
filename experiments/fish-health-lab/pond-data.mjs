@@ -123,7 +123,7 @@ export const POND_CONDITIONS = [
     changes: { spring: 3, pump: 3, 'new-fish': 1 },
     check: 'Several fish hanging listless, clamped or red-finned usually points to the water—test ammonia and nitrite first.',
     // Wording when a different sign led here (Nov 6 2026 combination sweep).
-    checks: { "lethargic": "Fish sitting on the bottom or hanging listless usually points to the water—test ammonia and nitrite first.", "unclear": "Pond fish that just seem off most often point to the water—test ammonia and nitrite first." },
+    checks: { "red-streaks": "Red streaks in the fins often start with poor water burning the fish—test ammonia and nitrite first.", "lethargic": "Fish sitting on the bottom or hanging listless usually points to the water—test ammonia and nitrite first.", "unclear": "Pond fish that just seem off most often point to the water—test ammonia and nitrite first." },
     // Signs its own picture already shows; any other sign leads with that sign's picture.
     shows: ["lethargic"],
     clues: ['Several fish off at once.', 'Spring start-up, a filter that was cleaned or stopped, lots of fish or heavy feeding.'],

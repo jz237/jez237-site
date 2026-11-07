@@ -109,7 +109,8 @@ try {
   await page.locator('input[name="growthAppearance"][value="smooth"]').check();
   await action(page,'back').click(); await next(page);
   assert.equal(await page.locator('input[name="growthAppearance"]:checked').inputValue(),'smooth');
-  await next(page); assert.equal(await page.locator('.result-focus .result-image img').evaluate(img=>img.src.includes('/marine-')),true);
+  // A saltwater picture after switching water (results may now borrow a saltwater fish's own picture; Nov 6 combination sweep).
+  await next(page); { const pic = await page.locator('.result-focus .result-image img').evaluate(img=>[img.src,img.alt]); const id = await page.locator('.result-focus').getAttribute('data-result'); assert.ok(/marine-|clownfish|tang|wrasse|goby|damsel|dottyback|[\/-]angel[\/-]/.test(pic[0]), `${id}: ${pic}`); }
   record('Back preserves a closer answer; changing water clears it and uses marine pictures');
 
   for (const sign of ['fins','sores','swollen','eyes','balance','breathing']) {

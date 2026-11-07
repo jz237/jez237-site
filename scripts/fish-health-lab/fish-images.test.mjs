@@ -25,7 +25,8 @@ const fixesReceipt = JSON.parse(readFileSync(new URL('./fixes-images-20261106.js
 const FISH_FIX = id => FIX_CROPS[id]?.set === 'fish' ? FIX_CROPS[id] : null;
 const expectedKey = (crops, id) => (FISH_FIX(id) || crops[id]).key;
 const fixUrl = id => FIX_IMAGE_SOURCE === 'media' ? MEDIA_BASE + FISH_FIX(id).key : localPathFor(FISH_FIX(id));
-const groupKey = (key, group) => key.startsWith(`experiments/fish-health-lab/${group}/${group}-`) || key.startsWith(`experiments/fish-health-lab/fixes/fish-${group}-`);
+// Saltwater dropsy with raised scales was added per fish on Nov 6 2026 (dropsy-images-20261106.json).
+const groupKey = (key, group) => key.startsWith(`experiments/fish-health-lab/${group}/${group}-`) || key.startsWith(`experiments/fish-health-lab/fixes/fish-${group}-`) || key.startsWith(`experiments/fish-health-lab/dropsy/fish-${group}-`);
 const freshConditions = CONDITIONS.filter(c => c.scope !== 'marine');
 const marineConditions = CONDITIONS.filter(c => c.scope !== 'fresh');
 const MARINE = FISH_TYPES.marine.map(f => f.id);
@@ -67,8 +68,9 @@ for (const group of MARINE) {
     }
     // Every crop of the group is used: 12 symptom choices, 12 results, 1 smooth growth.
     const used = new Set([...Object.values(set.signs), ...Object.values(set.conditions).flat()]);
-    assert.deepEqual([...used].sort(), Object.keys(MARINE_CROPS).filter(id => id.startsWith(`${group}-`)).sort());
-    assert.equal(used.size, 25);
+    assert.deepEqual([...used].filter(id => id !== `${group}-dropsy`).sort(), Object.keys(MARINE_CROPS).filter(id => id.startsWith(`${group}-`)).sort());
+    assert.ok(used.has(`${group}-dropsy`));
+    assert.equal(used.size, 26);
     // Saltwater only: freshwater lookups stay generic.
     assert.equal(imagesFor(group, 'dots', 'fresh').fishSpecific, false);
     assert.equal(fishSetFor(group, 'fresh'), null);

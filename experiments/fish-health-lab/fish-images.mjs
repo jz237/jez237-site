@@ -16,6 +16,7 @@ import { CROPS as FRESH_CROPS, IMAGE_SOURCE as FRESH_IMAGE_SOURCE } from './fish
 import { CROPS as SPLIT_CROPS, IMAGE_SOURCE as SPLIT_IMAGE_SOURCE } from './fish-images-split-data.mjs';
 import { CROPS as MARINE_CROPS, IMAGE_SOURCE as MARINE_IMAGE_SOURCE } from './fish-images-marine-data.mjs';
 import { CROPS as FIX_CROPS, IMAGE_SOURCE as FIX_IMAGE_SOURCE } from './fish-images-fixes-data.mjs';
+import { CROPS as DROPSY_CROPS, IMAGE_SOURCE as DROPSY_IMAGE_SOURCE } from './fish-images-dropsy-data.mjs';
 
 // Each data file has its own IMAGE_SOURCE, so one batch can be published
 // (uploaded to R2) while another is still previewed locally. 'media' uses the
@@ -29,7 +30,8 @@ const PUBLISHED_CROPS = { ...withSource(BETTA_CROPS, IMAGE_SOURCE), ...withSourc
 // a retake without its own caption keeps the old one.
 const FISH_FIXES = Object.fromEntries(Object.entries(FIX_CROPS).filter(([id, e]) => e.set === 'fish' && PUBLISHED_CROPS[id])
   .map(([id, e]) => [id, { ...PUBLISHED_CROPS[id], ...e, source: FIX_IMAGE_SOURCE }]));
-export const ALL_CROPS = { ...PUBLISHED_CROPS, ...FISH_FIXES };
+// Saltwater dropsy with raised scales (Nov 6 2026 combination sweep): new crops, not replacements.
+export const ALL_CROPS = { ...PUBLISHED_CROPS, ...FISH_FIXES, ...withSource(DROPSY_CROPS, DROPSY_IMAGE_SOURCE) };
 export const localPathFor = entry => `local-images/${entry.key.slice(KEY_PREFIX.length)}`;
 export const urlFor = entry => (entry.source || IMAGE_SOURCE) === 'media' ? MEDIA_BASE + entry.key : localPathFor(entry);
 const crop = id => ALL_CROPS[id] && { ...ALL_CROPS[id], url: urlFor(ALL_CROPS[id]) };
@@ -85,7 +87,7 @@ const MARINE_CONDITIONS = {
   'fin-rot': ['fins'],
   ulcer: ['sores'],
   septicemia: ['septicemia'],
-  dropsy: ['swollen'],
+  dropsy: ['dropsy', 'swollen'],
   bloat: ['swollen'],
   popeye: ['popeye'],
   'cloudy-eye': ['eyes'],
@@ -195,41 +197,43 @@ const genericCondition = (id, water) => {
   return leadSlot(id)?.image || choices[condition.thumb || condition.art] || choices.unclear;
 };
 
-// What a picture shows, read from its id. A result leads with the picture of the answer that
-// led to it (Jez, Nov 6 2026 19:21: "check all the combinations so that this type of mismatch
-// does not occur"): "Nothing obvious" must not show a gasping fish just because the water is
-// the best guess.
-const DEPICTS = [
-  [/-breathing$/, ['breathing', 'gasping']],
-  [/-red-gills$/, ['red-gills']],
-  [/-(dots|school-dots|ich)$/, ['dots', 'dots:white', 'dots:unclear']],
-  [/-black-spot$/, ['dots:black']],
-  [/-(dust|velvet)$/, ['dust']],
-  [/-fuzz$/, ['fuzz']],
-  [/-cotton-mouth$/, ['fuzz', 'patch', 'patch:flat']],
-  [/-patch$/, ['patch', 'patch:flat', 'patch:unclear']],
-  [/-(slime|brooklynella)$/, ['patch:slime', 'patch']],
-  [/-(hole-in-head|hlle)$/, ['patch:pits', 'patch']],
-  [/-(fins|barbels)$/, ['fins']],
-  [/-(sores|dgd|red-belly)$/, ['sores', 'sores:open', 'sores:unclear', 'lumps:inflamed']],
-  [/-uronema$/, ['sores', 'sores:open', 'sores:streaks']],
-  [/-septicemia$/, ['sores:streaks', 'sores']],
-  [/-injury$/, ['sores:scrape', 'fins']],
-  [/-(swollen|pregnant|malawi-bloat|sunken-belly)$/, ['swollen', 'swollen:flat', 'swollen:unclear']],
-  [/-dropsy$/, ['swollen:pinecone', 'pinecone', 'swollen', 'swollen:unclear']],
-  [/-(eyes|popeye)$/, ['eyes', 'eyes:bulging', 'eyes:unclear']],
-  [/-cloudy-eye$/, ['eyes:cloudy', 'eyes']],
-  [/-(balance|headstand|sinking|on-side)$/, ['balance']],
-  [/-flukes$/, ['rubbing', 'eyes:cloudy']],
-  [/-(lumps|lymphocystis)$/, ['lumps:cauliflower', 'lumps', 'lumps:unclear', 'fuzz']],
-  [/-growth$/, ['lumps:smooth']],
-  [/-(unclear|normal)$/, ['unclear']],
-];
-const depicts = (id, feature) => DEPICTS.some(([re, keys]) => re.test(id) && keys.includes(feature));
+// What a picture shows, read from its written description (alt text). A result leads with
+// the picture of the answer that led to it (Jez, Nov 6 2026 19:21: "check all the combinations
+// so that this type of mismatch does not occur"). File names are not reliable for this: a
+// saltwater "-eyes" crop is a cloudy eye, a freshwater one a bulging eye (Astra, 19:50).
+const WHITE = [/white|grain|salt/i, /black|dust/i];
+export const FEATURE_PICTURES = {
+  breathing: [/gasp|breath|mouth open|gills? (held )?(open|flared)/i], gasping: [/gasp|breath|surface/i],
+  'red-gills': [/red(,? inflamed)? gills|gills?[^.]*red/i],
+  dots: WHITE, 'dots:white': WHITE, 'dots:unclear': WHITE, 'dots:black': [/black|pepper/i],
+  dust: [/dust|speckl/i], fuzz: [/cotton|fluffy|tuft|fuzz|filament|cauliflower|growths/i],
+  patch: [/patch|saddle|pale|pit|slime/i], 'patch:flat': [/patch|saddle/i], 'patch:unclear': [/patch|saddle|pale/i],
+  'patch:slime': [/slime|peel|haze/i], 'patch:pits': [/\bpits?\b/i],
+  fins: [/fin|tail|barbel/i],
+  sores: [/sore|ulcer|wound|crater/i], 'sores:open': [/sore|ulcer|crater/i], 'sores:unclear': [/sore|ulcer|wound|red/i],
+  'sores:streaks': [/streak|blotch/i], 'sores:scrape': [/scrape|cut|wound|split|torn|notch|chunk|sore/i],
+  swollen: [/swollen|belly|abdomen|bloat/i], 'swollen:flat': [/swollen|belly|abdomen/i, /pinecone|pine cone/i], 'swollen:unclear': [/swollen|belly|abdomen|bloat/i],
+  // Corys and plecos have no scales to raise: their dropsy picture is a tight, bloated belly.
+  'swollen:pinecone': [/pinecone|pine cone|\btight\b/i], pinecone: [/pinecone|pine cone|\btight\b/i],
+  eyes: [/eye/i], 'eyes:unclear': [/eye/i], 'eyes:cloudy': [/milky|cloudy/i, /bulg|protrud/i], 'eyes:bulging': [/bulg|protrud/i],
+  balance: [/tilt|float|sink|upside|on its side|head-?down|headstand|lying/i],
+  lumps: [/lump|growth|cauliflower|cluster/i], 'lumps:unclear': [/lump|growth|cauliflower|cluster/i],
+  'lumps:cauliflower': [/cauliflower|cluster|growths/i], 'lumps:smooth': [/lump/i, /cauliflower|cluster/i], 'lumps:inflamed': [/red|sore|inflam/i],
+  unclear: [/no marks|no obvious|clamped|hiding|resting|lesion|wobbl/i],
+  rubbing: [/rub|scratch|scrap|flash/i],
+};
+export const pictureShows = (image, feature) => {
+  const rule = FEATURE_PICTURES[feature];
+  return Boolean(rule && image?.alt && rule[0].test(image.alt) && !(rule[1] && rule[1].test(image.alt)));
+};
+const ruleFor = feature => FEATURE_PICTURES[feature] ? feature : FEATURE_PICTURES[feature.split(':')[0]] ? feature.split(':')[0] : null;
 // Results whose generic picture is only a plain sign borrow a fish that shows the disease itself.
 const GENERIC_SET = {
   'black-spot': 'tang', hlle: 'tang', 'hole-in-head': 'angelfish', brooklynella: 'clownfish', uronema: 'damsel',
   septicemia: { fresh: 'guppy', marine: 'clownfish' }, growth: { fresh: 'betta', marine: 'clownfish' }, flukes: { fresh: 'community', marine: 'clownfish' },
+  // The generic eye picture is cloudy *and* bulging; the guide asks which one it is (Astra, Nov 6 19:50).
+  'cloudy-eye': { fresh: 'betta', marine: 'clownfish' }, popeye: { fresh: 'guppy', marine: 'clownfish' },
+  dropsy: { fresh: 'betta', marine: 'clownfish' },
 };
 
 // Pictures for a sign ("dots") or a condition ("ich-fresh") for this fish type.
@@ -242,29 +246,32 @@ export function imagesFor(fishType, key, water = 'fresh', features = null) {
   const condition = CONDITIONS.find(c => c.id === key);
   let ids = set ? (set.conditions[key] || (set.signs[key] ? [set.signs[key]] : [])) : [];
   const fishSpecific = ids.length > 0;
+  let borrowed = null;
   if (!ids.length && condition && features?.length && GENERIC_SET[key]) { // results only; the library keeps its generic pictures
     const pick = GENERIC_SET[key], other = FISH_SETS[typeof pick === 'string' ? pick : pick[water]];
-    if (other && other.water === water) ids = other.conditions[key] || [];
+    if (other && other.water === water) { ids = other.conditions[key] || []; borrowed = other; }
   }
   let images = ids.map(crop).filter(Boolean);
   if (!images.length) {
     const generic = condition ? genericCondition(key, water) : signImagesFor(water)[key];
     images = generic ? [generic] : [];
-    ids = images.length ? [`generic-${condition ? condition.thumb || condition.art : key}`] : [];
   }
   if (condition && features?.length && images.length) {
-    for (const feature of features) {
-      const at = ids.findIndex(id => depicts(id, feature));
+    const ruled = features.map(ruleFor).filter(Boolean);
+    for (const feature of ruled) {
+      const at = images.findIndex(image => pictureShows(image, feature));
       if (at >= 0) return { images: [images[at], ...images.filter((_, i) => i !== at)], fishSpecific };
     }
-    // A closer-look answer ("patch:slime") may be pictured under another result in this fish's set.
-    const pool = set ? [...new Set([...Object.values(set.conditions).flat(), ...Object.values(set.signs)])] : [];
-    const closer = features[0].includes(':') ? pool.find(id => depicts(id, features[0])) : null;
-    if (closer && crop(closer)) return { images: [crop(closer), ...images], fishSpecific };
-    const base = features[0].split(':')[0];
-    const own = set?.signs[base] ? crop(set.signs[base]) : null;
-    const answer = own || signImagesFor(water)[base];
-    if (answer) return { images: [answer, ...images], fishSpecific };
+    if (ruled.length) {
+      // Nothing in this result's pictures shows the answer: another picture of this fish that does,
+      // else this fish's picture for the sign itself, else the generic sign picture.
+      const first = ruled[0], base = first.split(':')[0];
+      const from = set || borrowed;
+      const pool = from ? [...new Set([...Object.values(from.conditions).flat(), ...Object.values(from.signs)])].map(crop).filter(Boolean) : [];
+      const answer = pool.find(image => pictureShows(image, first))
+        || [set?.signs[base] ? crop(set.signs[base]) : null, signImagesFor(water)[base]].find(image => image && (!FEATURE_PICTURES[first] || pictureShows(image, first) || first === base));
+      if (answer) return { images: [answer, ...images], fishSpecific };
+    }
   }
   return { images, fishSpecific };
 }

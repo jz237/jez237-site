@@ -181,6 +181,8 @@ export const CONDITIONS = [
     clues: ['White spots on the skin or fins; spots may come and go.', 'Scratching on rocks, fast breathing and several exposed fish.'],
     distinguish: 'Marine velvet is a finer dust and moves faster. Tiny black specks on a tang point to black spot disease instead.',
     check: 'Separate white grains on a saltwater fish are the classic sign of marine ich.',
+    // Wording when a different answer led here (Nov 6 2026 combination sweep).
+    checks: { "breathing+rubbing": "Fast breathing with scratching, especially on a tang, is often marine ich starting on the gills—look for white grains on the fins and body.", "breathing": "Fast breathing on a saltwater fish—especially a tang—can be marine ich starting on the gills; look for white grains on the fins and body." },
     avoid: 'Don’t copy freshwater ich advice. Never dose copper in a reef or a tank with invertebrates.',
     source: ['parasites'],
     tips: { tang: 'Tangs are ich magnets—treat every fish that shared the tank, not just the spotty one.' },
@@ -194,7 +196,7 @@ export const CONDITIONS = [
     distinguish: 'Ich grains are bigger and more separate. Natural shimmer follows the scales and lighting.',
     check: 'A fine gold-brown dust, especially with clamped fins or fast breathing, is classic velvet.',
     // Wording when the result came from a different answer (Nov 6 2026 combination sweep).
-    checks: { "breathing": "Fast breathing with clamped fins is a classic early velvet sign—the gold dust itself is easy to miss, so shine a flashlight from the side." },
+    checks: { "breathing": "Fast breathing with clamped fins is a classic early velvet sign—shine a flashlight from the side to look for a fine gold dust, which is easy to miss." },
     avoid: 'Don’t wait for it to “clear up”—velvet gets worse quickly.', source: ['parasites'],
     tips: { betta: 'Bettas get velvet a lot. Shine a torch from the side to see the gold dust.' },
   },

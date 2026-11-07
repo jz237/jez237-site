@@ -178,11 +178,12 @@ export function urgencyFor(condition, input) {
 // then its base sign) with its own wording, else the condition's usual sentence.
 export function checkFor(condition, fits, signs = []) {
   const own = condition.checks || {};
+  // Only the answer that led here (the first match) picks the wording: a later extra sign
+  // must not swap the classic sentence for a reason the person didn't give.
+  const f = fits[0] || '', base = f.split(':')[0];
   // An answer plus a behavior ("unclear+rubbing") wins over the answer alone.
-  for (const f of fits) for (const b of signs) if (own[`${f}+${b}`]) return own[`${f}+${b}`];
-  for (const f of fits) if (own[f]) return own[f];
-  for (const f of fits) if (own[f.split(':')[0]]) return own[f.split(':')[0]];
-  return condition.check;
+  for (const b of signs) if (own[`${f}+${b}`] || own[`${base}+${b}`]) return own[`${f}+${b}`] || own[`${base}+${b}`];
+  return own[f] || own[base] || condition.check;
 }
 
 function reasonFor(condition, input, fits) {
@@ -200,17 +201,21 @@ function reasonFor(condition, input, fits) {
 // "Nothing obvious" leads to the water as the first check. Its usual wording is about fast breathing
 // and red gills, which the person did not report (Jez, Nov 6 19:13 screenshot), so say why instead.
 // Gasping or red gills keep the usual breathing wording, which then fits.
-const GILL_SIGNS = ['red-gills', 'gasping'], MANY_SIGNS = ['several', 'deaths', 'collapse'];
+const GILL_SIGNS = ['red-gills', 'gasping'];
 function quietWater(condition, input, fits) {
   const signs = input.signs || [];
   if (condition.id !== 'water' || !fits.length || fits.some(f => f.split(':')[0] !== 'unclear') || GILL_SIGNS.some(id => signs.includes(id))) return null;
   const behaviors = signs.filter(id => BEHAVIORS.some(b => b.id === id) && id !== 'unclear').map(id => labelFor(id, input).toLowerCase());
-  const many = MANY_SIGNS.some(id => signs.includes(id));
+  // Only the answers say how many fish: "several" or deaths, never "can't stay upright" (Astra, Nov 6 19:50).
+  const one = input.affected === 'one';
+  const bad = 'bad water—ammonia, nitrite, low oxygen or a temperature swing—';
+  const why = signs.includes('deaths') ? `When fish are dying with nothing to see on them, ${bad}is by far the most likely cause. Test it now.`
+    : signs.includes('several') || (input.affected === 'several' && !one) ? `When several fish go downhill at once with nothing to see on them, ${bad}is by far the most likely cause. Test it now.`
+    : signs.includes('collapse') ? `A fish that can’t stay upright or barely responds, with nothing to see on it, is most often reacting to ${bad.replace(/—$/, '')}. Test it now.`
+    : `With nothing to see on the fish, ${bad}is the most likely cause, and it often shows as ${behaviors.length ? 'this kind of change' : 'hiding or not eating'} before anything else. A quick test rules it in or out before you think about disease.`;
   return {
     summary: 'When a fish is off but nothing shows on it, the water is the most common cause—and the quickest thing to check.',
-    reason: `You picked “Nothing obvious”${behaviors.length ? `, plus ${behaviors.join(', ')}` : ''}. ${many
-      ? 'When several fish go downhill at once with nothing to see on them, bad water—ammonia, nitrite, low oxygen or a temperature swing—is by far the most likely cause. Test it now.'
-      : `With nothing to see on the fish, bad water—ammonia, nitrite, low oxygen or a temperature swing—is the most likely cause, and it often shows as ${behaviors.length ? 'this kind of change' : 'hiding or not eating'} before anything else. A quick test rules it in or out before you think about disease.`}`,
+    reason: `You picked “Nothing obvious”${behaviors.length ? `, plus ${behaviors.join(', ')}` : ''}. ${why}`,
   };
 }
 
