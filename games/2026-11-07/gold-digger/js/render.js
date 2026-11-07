@@ -55,6 +55,17 @@ const tmpV = new THREE.Vector3(), tmpV2 = new THREE.Vector3(), tmpC = new THREE.
 const BEAM_DOWN = new THREE.Vector3(0, -1, 0);
 const BEAM_VERT = `varying float vT; varying vec3 vN; varying vec3 vV; varying vec3 vW; varying vec2 vL;
 void main(){ vT = uv.y; vL = position.xy; vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; vec4 mv = viewMatrix * w; vV = -mv.xyz; vN = normalize(normalMatrix * normal); gl_Position = projectionMatrix * mv; }`;
+const SHAFT_VERT = `varying vec2 vUv; varying vec3 vW; void main(){ vUv = uv; vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }`;
+const SHAFT_FRAG = `uniform float uT; uniform float uI; varying vec2 vUv; varying vec3 vW;
+float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float n(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f); return mix(mix(h(i), h(i+vec2(1,0)), f.x), mix(h(i+vec2(0,1)), h(i+vec2(1,1)), f.x), f.y); }
+void main(){
+  float x = abs(vUv.x - 0.5) * 2.0;
+  float side = pow(max(0.0, 1.0 - x * x), 3.0);
+  float up = smoothstep(0.0, 0.06, vUv.y) * pow(max(0.0, 1.0 - vUv.y), 1.3);
+  float dust = 0.65 + 0.45 * n(vec2(vW.x * 3.0, vW.y * 1.4 - uT * 0.35)) + 0.2 * n(vec2(vW.x * 9.0, vW.y * 4.0 - uT * 0.8));
+  gl_FragColor = vec4(1.0, 0.8, 0.48, uI * side * up * dust);
+}`;
 const BEAM_FRAG = `uniform vec3 uCol; uniform float uI; uniform float uT; varying float vT; varying vec3 vN; varying vec3 vV; varying vec3 vW; varying vec2 vL;
 float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 float n(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f); return mix(mix(h(i), h(i+vec2(1,0)), f.x), mix(h(i+vec2(0,1)), h(i+vec2(1,1)), f.x), f.y); }
@@ -779,12 +790,20 @@ export class Renderer {
       }
       if (f.got && f.kind !== 'relic') continue;
       const v = view('f' + f.id, () => {
-        if (f.kind === 'relic') { const g = new THREE.Group(); const ped = obj(make('pedestal')); const rel = obj(make('relic', f.fid)); rel.position.y = 1.02; g.add(ped, rel); return { m: g, rel }; }
+        if (f.kind === 'relic') {
+          const g = new THREE.Group(); const ped = obj(make('pedestal')); const rel = obj(make('relic', f.fid)); rel.position.y = 1.02; g.add(ped, rel);
+          // a soft shaft of light falls on a relic nobody has taken yet
+          let hh = 1; while (hh < 6 && !this.solidAt(f.x, f.y + hh + 0.5)) hh++;
+          const shaft = new THREE.Mesh(new THREE.PlaneGeometry(1.5, hh + 0.4), new THREE.ShaderMaterial({ vertexShader: SHAFT_VERT, fragmentShader: SHAFT_FRAG, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, uniforms: { uT: { value: 0 }, uI: { value: 0 } } }));
+          shaft.position.set(0, (hh + 0.4) / 2 + 0.05, -0.4); shaft.renderOrder = 3; g.add(shaft);
+          return { m: g, rel, shaft };
+        }
         if (f.kind === 'map') return { m: this.scroll() };
         return { m: make('note') };
       });
       if (f.kind === 'map') { v.root.position.set(f.x, f.y + 0.32 + Math.sin(t * 2.2) * 0.07, 0.15); v.root.rotation.y = t * 0.9; if (Math.random() < dt * 2.5) this.fx.glint(f.x, f.y + 0.4, 0.5, 0.5, [1, 0.85, 0.55]); continue; }
       v.root.position.set(f.x, f.y, f.kind === 'relic' ? -0.3 : 0.15);
+      if (v.shaft) { const u = v.shaft.material.uniforms; u.uT.value = t; u.uI.value += ((f.got ? 0 : 0.32) - u.uI.value) * Math.min(1, dt * 2); v.shaft.visible = u.uI.value > 0.003; }
       if (v.rel) { v.rel.visible = !f.got; v.rel.rotation.y = t * 0.6; v.rel.position.y = 1.05 + Math.sin(t * 1.6) * 0.05; if (!f.got && Math.random() < dt * 4) this.fx.glint(f.x + (Math.random() - 0.5) * 0.5, f.y + 1.1 + Math.random() * 0.5, 0.2, 0.6, [1, 0.9, 0.7]); }
     }
     // creatures
