@@ -1269,3 +1269,10 @@ R56 — rendering, startup and multiplayer efficiency
 - Flush native multiplayer packets every 20 ms with a rolling 50-binary-message/second cap, leaving relay capacity for control traffic. Same protocol, room service, packet order and reconnect behavior.
 - Restore the recharge grid's inherited color-array state correctly, eliminating invalid attribute bindings without changing its shader or appearance.
 - No texture/model reductions, effect removals, flight/demo changes, new external dependencies or additional asset parcels. See PERFORMANCE-R56.txt for measured results and limits.
+
+R57 — continuous tunnel lighting and surface transitions
+- Detailed wall geometry now receives the tunnel's interpolated per-corner dynamic lighting, including passing weapon lights, instead of a fixed brightness floor.
+- Wall detail uses real distance, gradual fades and a stable ten-surface selection with hysteresis. Render order and camera rotation no longer toggle whole wall layers at the old 48-unit cutoff. Outgoing surfaces fade before their slots are reused.
+- Room reflections fade in and across their distance range. The twelve-entry cache no longer cycles out nearby rooms still being rendered when more rooms are visible.
+- Existing texture resolution, geometry detail, flight controls, demo AI, audio, multiplayer and quality defaults are preserved. WebGL 1 compatible; no new extension or asset parcel required.
+- Verified on a 90-second Vertigo AI demo under sixfold CPU throttling, nine showroom scenes, software WebGL and Original campaign startup/play. The user's exact old Chrome/GPU configuration was not available for testing.

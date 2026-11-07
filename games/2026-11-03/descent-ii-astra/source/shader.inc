@@ -111,7 +111,7 @@ static void astra_init_shader(void)
         "col+=refinement*hard*(1.-ceramic)*vec3(.19,.24,.27)*brushed*(.35+.65*metal)*room;"
         "vec3 reflection=reflect(-eye,n);float strip=pow(max(0.,1.-abs(reflection.y-.56)*2.4),14.);"
         "col+=refinement*(1.-detailUpgrade)*vec3(.16,.29,.34)*strip*(wet*.43+metal*.07)*room;"
-        "if(roomReflection>.5){float fresnel=.06+.35*pow(1.-max(0.,dot(n,eye)),4.);col+=roomRay(reflection,1.-metal)*fresnel*(.22+.65*metal)*(1.-rock*.86);}"
+        "if(roomReflection>0.){float fresnel=.06+.35*pow(1.-max(0.,dot(n,eye)),4.);col+=roomReflection*roomRay(reflection,1.-metal)*fresnel*(.22+.65*metal)*(1.-rock*.86);}"
         "float vein=1.-smoothstep(.014,.045,abs(noise(cell*3.5+noise(cell*.8)*2.)-.51));"
         "col+=rock*refinement*vein*vec3(.038,.052,.048)*close*layout;"
         "float haze=min(.16,1.-exp(-max(0.,-p.z-10.)*.0017));col=mix(col,vec3(.09,.145,.16),haze);"

@@ -1,21 +1,43 @@
 /* Bounded room-surface probes. Render the six existing wall maps into one tiny
  * cached atlas; reflection rays intersect the real planes, not a canned image.
  * No scene re-render, downloads, depth extension or floating-point target. */
-typedef struct {GLuint texture;int room,level,signature;unsigned used;double updated;float valid[6];} ar_probe;
+typedef struct {GLuint texture;int room,level,signature,seen;unsigned used;double updated;float valid[6];} ar_probe;
 static ar_probe ar_probes[12];static GLuint ar_fbo,ar_program;static int ar_failed,ar_frame=-1,ar_budget,ar_refreshes;
-static unsigned ar_tick;
+static unsigned ar_tick;static double ar_now;
+static float ar_distance(int room){
+    static int last_room=-1,last_level=-999,last_frame=-1;static vms_vector eye;static float distance;
+    if(last_room!=room||last_level!=Current_level_num||last_frame!=framecount||memcmp(&eye,&View_position,sizeof eye)){
+        vms_vector center;compute_segment_center(&center,&Segments[room]);distance=f2fl(vm_vec_dist(&center,&View_position));
+        last_room=room;last_level=Current_level_num;last_frame=framecount;eye=View_position;
+    }
+    return distance;
+}
+static float ar_smooth(float x){x=fmaxf(0,fminf(1,x));return x*x*(3-2*x);}
+static float ar_gain(ar_probe *p,int room){return (1-ar_smooth((ar_distance(room)-60)/25))*ar_smooth((ar_now-p->updated)/320.);}
+static void ar_frame_begin(void){if(ar_frame!=framecount){ar_frame=framecount;ar_budget=0;ar_now=emscripten_get_now();}}
 static GLint ar_uv0,ar_duv,ar_rect,ar_tint,ar_glow,ar_lines,ar_line_colors;
 static int ar_signature(int room){unsigned hash=2166136261u;for(int s=0;s<6;s++){side *f=&Segments[room].sides[s];hash=(hash^(unsigned)(f->tmap_num+f->tmap_num2*997+WALL_IS_DOORWAY(&Segments[room],s)*193))*16777619u;}return (int)(hash^Light_subtracted[room]);}
 static ar_probe *ar_find(int room){for(int i=0;i<12;i++)if(ar_probes[i].texture&&ar_probes[i].room==room&&ar_probes[i].level==Current_level_num)return &ar_probes[i];return NULL;}
 void astra_room_materials(int room){
     static int enabled=-1;if(enabled<0)enabled=EM_ASM_INT(return !!Module.astra);if(!enabled)return;
     extern int astra_ov_enabled(void);if(!astra_detail_upgrade||astra_native_compare||ar_failed||astra_ov_enabled()||room<0||room>Highest_segment_index)return;
-    vms_vector center;compute_segment_center(&center,&Segments[room]);if(vm_vec_dist_quick(&center,&View_position)>i2f(85))return;
-    if(ar_frame!=framecount){ar_frame=framecount;ar_budget=0;}
+    ar_frame_begin();if(ar_distance(room)>=85)return;
     ar_probe *probe=ar_find(room);int signature=ar_signature(room);
-    if(probe){probe->used=++ar_tick;if(probe->signature==signature)return;}
-    if(ar_budget)return;ar_budget++;
-    if(!probe){probe=&ar_probes[0];for(int i=1;i<12;i++)if(!ar_probes[i].texture||ar_probes[i].used<probe->used)probe=&ar_probes[i];}
+    if(probe){probe->used=++ar_tick;probe->seen=framecount;if(probe->signature==signature)return;}
+    if(ar_budget)return;
+    int fresh=!probe;
+    if(!probe){
+        for(int i=0;i<12;i++){
+            ar_probe *p=&ar_probes[i];
+            if(!p->texture||p->level!=Current_level_num){probe=p;break;}
+            /* Never cycle out a nearby room still being rendered. Its surface
+             * reflection remains stable even when more than 12 rooms are visible. */
+            if(framecount-p->seen<=2&&ar_distance(p->room)<85)continue;
+            if(!probe||p->used<probe->used)probe=p;
+        }
+        if(!probe)return;
+    }
+    ar_budget++;
     if(!ar_program){
         const char *vs="varying highp vec2 uv;void main(){uv=gl_Vertex.xy*.5+.5;gl_Position=vec4(gl_Vertex.xy,0.,1.);}";
         const char *fs="precision highp float;varying highp vec2 uv;uniform sampler2D image;uniform vec4 uv0,duv,rect,tint;uniform float glow;uniform vec4 lines[2];uniform vec3 lineColors[2];void main(){vec2 q=uv0.xy+uv.x*uv0.zw+uv.y*duv.xy;if(rect.z>0.)q=(fract(q)-rect.xy)/rect.zw;vec4 a=texture2D(image,q);vec3 c=a.rgb*tint.rgb;float hot=smoothstep(.65,.9,max(a.r,max(a.g,a.b)));c+=a.rgb*hot*glow;for(int i=0;i<2;i++){vec2 d=lines[i].zw-lines[i].xy;float t=clamp(dot(uv-lines[i].xy,d)/max(.00001,dot(d,d)),0.,1.);float r=length(uv-lines[i].xy-d*t);c+=lineColors[i]*(1.-smoothstep(.006,.025,r));}gl_FragColor=vec4(c,a.a);}";
@@ -46,8 +68,8 @@ void astra_room_materials(int room){
         glUniform4fv(ar_lines,2,&lines[0][0]);glUniform3fv(ar_line_colors,2,&colors[0][0]);glDrawArrays(GL_TRIANGLE_FAN,0,4);
     }
     glDisableClientState(GL_VERTEX_ARRAY);glUseProgram(0);glBindFramebuffer(GL_FRAMEBUFFER,framebuffer);glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);glDepthMask(write);if(depth)glEnable(GL_DEPTH_TEST);if(blend)glEnable(GL_BLEND);if(cull)glEnable(GL_CULL_FACE);if(scissor)glEnable(GL_SCISSOR_TEST);glActiveTexture(GL_TEXTURE0);
-    probe->room=room;probe->level=Current_level_num;probe->signature=signature;probe->used=++ar_tick;ar_refreshes++;
-    EM_ASM(Module.roomReflections=({version:50,updates:$0,capacity:12,atlasWidth:256,atlasHeight:128});,ar_refreshes);
+    if(fresh)probe->updated=ar_now;probe->seen=framecount;probe->room=room;probe->level=Current_level_num;probe->signature=signature;probe->used=++ar_tick;ar_refreshes++;
+    EM_ASM(Module.roomReflections=({version:57,updates:$0,capacity:12,atlasWidth:256,atlasHeight:128});,ar_refreshes);
 }
 static void ar_bind_to(GLuint program,int room){
     typedef struct{GLuint program;GLint on,planes,origins,du,dv,texture;int room,frame;} bindings;
@@ -56,7 +78,7 @@ static void ar_bind_to(GLuint program,int room){
     GLint on=b->on,planes=b->planes,origins=b->origins,du=b->du,dv=b->dv,texture=b->texture;
     if(on==-2){on=glGetUniformLocation(program,"roomReflection");planes=glGetUniformLocation(program,"reflectPlanes[0]");origins=glGetUniformLocation(program,"reflectOrigins[0]");du=glGetUniformLocation(program,"reflectU[0]");dv=glGetUniformLocation(program,"reflectV[0]");texture=glGetUniformLocation(program,"roomAtlas");}
     b->on=on;b->planes=planes;b->origins=origins;b->du=du;b->dv=dv;b->texture=texture;
-    ar_probe *probe=ar_find(room);glUniform1f(on,astra_detail_upgrade&&astra_drawing_mine&&probe&&!ar_failed?1:0);if(!astra_detail_upgrade||!astra_drawing_mine||!probe||ar_failed)return;
+    ar_frame_begin();ar_probe *probe=ar_find(room);float gain=astra_detail_upgrade&&astra_drawing_mine&&probe&&!ar_failed?ar_gain(probe,room):0;glUniform1f(on,gain);if(gain<=0)return;probe->seen=framecount;
     if(b->room==room&&b->frame==framecount){glActiveTexture(GL_TEXTURE7);glBindTexture(GL_TEXTURE_2D,probe->texture);glActiveTexture(GL_TEXTURE0);return;}b->room=room;b->frame=framecount;
     float plane[6][4]={{0}},origin[6][4]={{0}},u[6][4]={{0}},v[6][4]={{0}};
     for(int s=0;s<6;s++)if(probe->valid[s]){
