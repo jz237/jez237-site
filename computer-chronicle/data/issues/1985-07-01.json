@@ -1,0 +1,392 @@
+{
+  "currentDate": "2026-11-07",
+  "historicDate": "1985-07-01",
+  "displayDate": "Week of July 1-7, 1985",
+  "edition": "Issue 153 - Weekly 1985 Computer & Culture Chronicle",
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 153 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of July 1-7, 1985",
+    "price": "75 cents"
+  },
+  "visualProfile": {
+    "tone": "Arcade adventure in the home-computer caverns",
+    "motifs": [
+      "crossbow warrior and gemstone fragments",
+      "Commodore 64 and Apple II",
+      "Atari ST monochrome monitor"
+    ],
+    "layout": "Dense warm newsprint, red and blue boxed modules"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Gaming lead: Gemstone Warrior takes the biggest headline and halftone illustration",
+    "secondaryRail": "Atari ST, HomePak and online services",
+    "archiveNavigation": "Weekly archive and previous/next controls"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-07-01.jpg",
+    "alt": "Computer Chronicle newspaper-style front page for July 1-7, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "July reviews put adventure, affordable applications and the online meter on the home-computer desk.",
+  "morningLine": "SSI trades the battlefield for the cavern; Atari readies a summer challenger.",
+  "lead": {
+    "headline": "SSI ventures into arcade adventure with Gemstone Warrior",
+    "dek": "A war-game specialist sends Apple and Commodore players underground.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      0
+    ],
+    "body": [
+      "Strategic Simulations Inc., best known for detailed war games, is trying a different sort of battle. James V. Trunzo’s July COMPUTE! review finds Gemstone Warrior an arcade-oriented adventure in which fast decisions and quick reflexes matter more than the patient calculations of a historical simulation. This is a current review, not a claim that the game first appeared this week.",
+      "The assignment is to recover five fragments of a stolen magical gemstone from 90 underground caverns. A crossbow-armed warrior confronts monsters and gathers magical objects along the way. Knowing when to use those devices is as important as keeping the weapon pointed in the right direction.",
+      "The review covers Commodore 64 with a disk drive and the Apple II series with at least 48K and a disk drive. A joystick is optional, but recommended. Several difficulty levels let players adjust the challenge, while a pause feature offers relief from the action.",
+      "A successful expedition can run as long as two hours, making the ability to save a game in progress more than a convenience. Trunzo calls SSI’s first true arcade entry impressive: an invitation for home-computer adventurers to explore a publisher normally associated with a very different battlefield."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Atari prepares the ST for summer buyers",
+      "body": [
+        "Atari’s 520ST is approaching its summer test with buyers. In his July COMPUTE! column, Tom R. Halfhill describes hands-on time with the machine and a development-lab tour led by Sam and Leonard Tramiel. The earlier April availability promise has slipped; U.S. quantity availability is now expected in summer, with Europe receiving earlier shipments.",
+        "The production model has 512K RAM, but its initial operating system, GEM and programming language load from disk rather than ROM. Halfhill reports about 240K free after loading. The planned $799 package includes system disks, a microfloppy drive and a high-resolution monochrome monitor refreshing at 70 Hz; that is a reported package plan, not a verified dealer offer this week.",
+        "Atari also promises a sub-$500 10MB hard disk by fall and a sub-$500 CD-ROM peripheral by year end. Those remain promises. Across the Atlantic, the July 4 Popular Computing Weekly reports a revived proposal for a 256K 260ST with a built-in drive, while the Amiga’s U.S. unveiling is still ahead on July 23."
+      ],
+      "sourceRefs": [
+        0,
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "HomePak bundles writing, filing and telecommunications for $49.95",
+      "body": [
+        "Batteries Included is making an inexpensive bid for the everyday home-computer desk. Sheldon Leemon’s July COMPUTE! review examines Russ Wetmore’s HomePak: HomeText for writing, HomeFind for filing and HomeTerm for telecommunications, at $49.95 for the reviewed Atari and Commodore package.",
+        "The package requires an Atari 400/800, XL or XE with at least 48K and disk drive, or a Commodore 64 with disk drive. A printer and modem are recommended. None of its three programs is copy-protected. IBM PC, Enhanced Model PCjr and Macintosh versions are described as forthcoming; the future Macintosh package is listed at $69.95.",
+        "HomeTerm supplies XMODEM transfers, an online-time counter, macros and an outgoing edit window that keeps half-written replies separate from incoming conference text. Memory is a constraint: Atari HomeText and HomeTerm buffers hold about 7K, roughly three double-spaced pages, with somewhat larger buffers on Commodore. The first Commodore HomeTerm cannot dial the 1650 modem; the review describes a free disk-return update for original owners."
+      ],
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "The online information boom comes with a running meter",
+      "body": [
+        "The modem can lead to a local hobbyist board or a professional information service, but the bill changes dramatically with the destination. July COMPUTE! distinguishes BBSs, commercial information services and specialist databases. A BBS often costs only the telephone call, although some boards charge membership fees to support operation and manage demand.",
+        "CompuServe, The Source, Dow Jones News/Retrieval, Delphi and American People/Link offer a growing menu of quotations, reference material, conferences and newspaper archives. The article gives commercial-service costs ranging broadly from $5 to $100 or more per hour, with specialist databases reaching $300 to $400. These are category ranges, not a quoted rate for any one named service.",
+        "Arlan R. Levitan’s Telecomputing Today column offers a practical countermeasure: write mail before connecting. Fifteen minutes spent typing online can cost a couple of dollars, and even a free board may entail a long-distance call. Local user groups can help newcomers learn the territory before the meter starts."
+      ],
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "520ST",
+      "summary": "512K production-model report, initial disk-loaded system software, planned $799 monochrome package; see story.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "260ST proposal revived",
+      "summary": "July 4 PCW headline describes a 256K ST with built-in disk drive. Manufacturing proposal, not proof of shipment.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "HomePak",
+      "detail": "Batteries Included, $49.95 for non-Mac versions; forthcoming Mac $69.95. See story.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "name": "Fast Filer",
+      "detail": "Richard Mansfield and Patrick Parrish's multi-computer type-in filing program appears in COMPUTE! July, p. 44 onward.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "name": "Apple SpeedScript 3.0 ProDOS Converter",
+      "detail": "July COMPUTE! index lists a converter for the magazine's word processor; period utility coverage, not a commercial launch.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+      "items": [
+        "Spelunker — $29.95 in Steve Hudson's July review, p. 52. Brøderbund; reviewed for Commodore 64 and Atari with disk drive and joystick. Six increasingly challenging levels, scrolling caverns, batteries, flares and dynamite; a current review, not a newly verified release.",
+        "Gemstone Warrior — SSI arcade-adventure review, pp. 55–56; see lead. Price omitted because OCR is unclear.",
+        "Run For It — Karen McCullough reviews Weekly Reader Family Software's robot maze game, p. 52 onward. Apple II or Atari with 48K and disk; 72 rooms in 18 levels. Robot Orbit gathers energy and avoids hostile devices.",
+        "The Goonies heads for UK shops — PCW July 4, p. 1 says US Gold plans to import Datasoft's film-based computer game in September. UK film release is described as Christmas; retain regional distinction and future tense.",
+        "A View to a Kill — Domark advertisement in PCW July 4, p. 8 claims availability on Spectrum 48K, Commodore 64 and Enterprise; Amstrad and MSX are future versions. p. 12 profiles developer Tigress. Advertisement claims, not independently verified stock."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        0,
+        2
+      ]
+    },
+    {
+      "label": "Top 5 Movies — July 5-7 domestic weekend",
+      "items": [
+        "1. Back to the Future",
+        "2. Pale Rider",
+        "3. Rambo: First Blood Part II",
+        "4. Cocoon",
+        "5. The Emerald Forest"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Spelunker review price",
+      "price": "$29.95",
+      "note": "$29.95; COMPUTE! July p. 52; review/list context, not a retailer discount.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "HomePak review price",
+      "price": "$49.95",
+      "note": "$49.95 non-Mac package; forthcoming Mac version $69.95; pp. 54–55.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Omnibot 2000",
+      "price": "$500.00",
+      "note": "Fred D’Ignazio's toy robot column, p. 83, captions Tomy's remote-controlled robot at about $500; approximate retail price.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Acorn rescue talks deepen",
+      "summary": "PCW July 4, p. 4 reports urgent talks with the BBC, manufacturers, Close Brothers and Olivetti toward a second rescue package that year. No completed rescue asserted.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "headline": "Sinclair takeover uncertainty",
+      "summary": "PCW July 4, p. 1 discusses Robert Maxwell's proposed takeover of Sinclair Research and clarification of Sir Clive's R&D role. Proposal only, not a consummated takeover.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "headline": "Amiga announcement ahead",
+      "summary": "Popular Computing Weekly reports the U.S. Amiga unveiling is scheduled for July 23, moved from July 18.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "If You Love Somebody Set Them Free",
+      "artist": "Sting",
+      "chart": "Billboard Top Rock Tracks (archive labels Mainstream Rock Airplay)",
+      "chartDate": "1985-07-06",
+      "confidence": "exact-date",
+      "song": "If You Love Somebody Set Them Free",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Little By Little",
+      "artist": "Robert Plant",
+      "chart": "Billboard Top Rock Tracks (archive labels Mainstream Rock Airplay)",
+      "chartDate": "1985-07-06",
+      "confidence": "exact-date",
+      "song": "Little By Little",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Sentimental Street",
+      "artist": "Night Ranger",
+      "chart": "Billboard Top Rock Tracks (archive labels Mainstream Rock Airplay)",
+      "chartDate": "1985-07-06",
+      "confidence": "exact-date",
+      "song": "Sentimental Street",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "The Power Of Love",
+      "artist": "Huey Lewis & The News",
+      "chart": "Billboard Top Rock Tracks (archive labels Mainstream Rock Airplay)",
+      "chartDate": "1985-07-06",
+      "confidence": "exact-date",
+      "song": "The Power Of Love",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Cannonball",
+      "artist": "Supertramp",
+      "chart": "Billboard Top Rock Tracks (archive labels Mainstream Rock Airplay)",
+      "chartDate": "1985-07-06",
+      "confidence": "exact-date",
+      "song": "Cannonball",
+      "sourceRefs": [
+        3
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Bond on the home screen",
+    "summary": "Domark’s July 4 Popular Computing Weekly advertisement claims A View to a Kill availability for Spectrum 48K, Commodore 64 and Enterprise, with Amstrad and MSX versions to follow. These are advertisement claims, not an independently checked stock report.",
+    "tagline": "The licensed adventure visits the keyboard.",
+    "sourceRefs": [
+      2
+    ]
+  },
+  "market": {
+    "headline": "Summer competition meets the household budget",
+    "summary": "Atari’s planned $799 ST package and HomePak’s $49.95 review price illustrate competing bids for the home-computer budget. British reports of Acorn rescue talks and uncertainty over a proposed Sinclair takeover show the pressure on the other side of the counter.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      0,
+      2
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Freed TWA hostages reach West Germany",
+    "summary": "The July 1 Guardian reports that all 39 remaining hostages left Damascus for Frankfurt after their June 30 release. President Reagan welcomed their freedom while noting that seven other kidnapped Americans remained in Lebanon.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      5
+    ]
+  },
+  "bbsNote": {
+    "headline": "Write first, connect later",
+    "summary": "Online time and long-distance calls make preparation worthwhile; HomeTerm brings a timer and an outgoing edit window to the home desk.",
+    "posts": [
+      {
+        "topic": "Mail before the meter starts",
+        "platform": "Commercial services and BBSs",
+        "text": "Levitan recommends composing mail offline to reduce connect-time and long-distance charges."
+      },
+      {
+        "topic": "Conference software",
+        "platform": "HomeTerm on Atari and Commodore",
+        "text": "The July review describes an outgoing edit window, online timer and XMODEM transfers."
+      },
+      {
+        "topic": "Expansion plans",
+        "platform": "Compunet",
+        "text": "Popular Computing Weekly reports plans to expand through the remainder of 1985 after early teething troubles."
+      }
+    ],
+    "sourceRefs": [
+      0,
+      2
+    ]
+  },
+  "curiosity": {
+    "headline": "A robot sings to the wastebasket",
+    "summary": "Fred D’Ignazio finds personality more compelling than household utility.",
+    "detail": "In July COMPUTE!, the columnist describes HEROjr reciting nonsense rhymes, mistaking pets for humans, ordering hamburgers from a bathroom sink and singing Old MacDonald Has a Robot to a wastepaper basket. These are his playful descriptions of robot behavior. The same page captions Tomy’s remote-controlled Omnibot 2000 at about $500.",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "gadgetWatch": {
+    "headline": "Amstrad twin-cassette recorder draws legal dispute",
+    "summary": "The July 4 Popular Computing Weekly reports a legal dispute over Amstrad’s dual-cassette tape-copying machine.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      2
+    ]
+  },
+  "sources": [
+    {
+      "title": "COMPUTE! issue 62, July 1985: complete issue OCR",
+      "url": "https://archive.org/download/1985-07-compute-magazine/Compute_Issue_062_1985_Jul_djvu.txt",
+      "date": "1985-07"
+    },
+    {
+      "title": "COMPUTE! July 1985 article index",
+      "url": "https://www.atarimagazines.com/compute/index/index.php?issue=issue62",
+      "date": "1985-07"
+    },
+    {
+      "title": "Popular Computing Weekly vol. 4 no. 27, museum contents and scan links",
+      "url": "https://www.computinghistory.org.uk/det/28798/Popular-Computing-Weekly-Vol-4-No-27-4-10-July-1985/",
+      "date": "1985-07-04"
+    },
+    {
+      "title": "Billboard Mainstream Rock Airplay, historical chart",
+      "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-07-06/",
+      "date": "1985-07-06"
+    },
+    {
+      "title": "Domestic weekend box office July 5–7",
+      "url": "https://www.boxofficemojo.com/weekend/1985W27/",
+      "date": "1985-07-07"
+    },
+    {
+      "title": "Hostages are freed — Ian Black and Michael White, The Guardian",
+      "url": "https://www.theguardian.com/world/1985/jul/01/syria.ianblack",
+      "date": "1985-07-01"
+    }
+  ],
+  "accuracyLedger": {
+    "items": [
+      "Month-dated reviews are not exact-week releases. No milestone: the July 23 Amiga unveiling is outside this issue week.",
+      "PCW evidence is the museum's dated contents transcription and synopsis, not a full independently read scan; keep those items to documented details.",
+      "No verified named piracy crew, warez board or phreaking event established for this week/month; undergroundCandidates intentionally omitted. HomePak's absence of copy protection is a review fact, not evidence of piracy.",
+      "Quoted text is limited to a short reviewer assessment. OCR-uncertain prices are omitted. No actual historical BBS posts collected.",
+      "Movie rankings cover the closing July 5-7 weekend. Game selections are editorial, not a sales chart.",
+      "Hardware proposals and forthcoming products remain future tense. No unverified game price transcribed."
+    ]
+  }
+}
