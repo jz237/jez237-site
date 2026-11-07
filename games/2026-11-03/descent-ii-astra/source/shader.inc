@@ -1,3 +1,4 @@
+#include "astra_strata.inc"
 #define AR_ROOM_GLSL "uniform sampler2D roomAtlas;uniform float roomReflection;uniform vec4 reflectPlanes[6],reflectOrigins[6],reflectU[6],reflectV[6];" \
         "vec3 roomRay(vec3 direction,float rough){float nearest=10000.;vec2 address=vec2(0.);float valid=0.;for(int i=0;i<6;i++){vec4 plane=reflectPlanes[i];float den=dot(plane.xyz,direction);if(abs(den)<.0001||reflectOrigins[i].w<.5)continue;float t=-(dot(plane.xyz,p)+plane.w)/den;if(t<.18||t>nearest)continue;vec3 d=p+direction*t-reflectOrigins[i].xyz;vec2 q=vec2(dot(d,reflectU[i].xyz),dot(d,reflectV[i].xyz));if(q.x<0.||q.y<0.||q.x>1.||q.y>1.)continue;nearest=t;address=(vec2(mod(float(i),4.),floor(float(i)/4.))+clamp(q,vec2(.06),vec2(.94)))/vec2(4.,2.);valid=1.;}vec2 blur=vec2(.005,.01)*rough;return valid*(texture2D(roomAtlas,address).rgb*.5+texture2D(roomAtlas,address+blur).rgb*.25+texture2D(roomAtlas,address-blur).rgb*.25);}"
 /* Materials are shared across palette slots. One tangent map per source, on unit 1. */
@@ -48,8 +49,8 @@ static void astra_init_shader(void)
     const char *vs="varying highp vec2 uv;varying mediump vec4 light;varying highp vec3 p;"
         "void main(){gl_Position=ftransform();uv=gl_MultiTexCoord0.xy;light=gl_Color;p=gl_Vertex.xyz;}";
     const char *fs="precision highp float;varying highp vec2 uv;varying mediump vec4 light;varying highp vec3 p;"
-        "uniform sampler2D colorMap,detailMap,nativeMap,nativeTop,doorMap;uniform float doorActive,doorLayer;uniform vec4 doorTiles;uniform vec3 doorScale;uniform vec3 generatedTint,topGeneratedTint;uniform float generatedShape,topGeneratedShape;uniform vec4 generatedRect,topGeneratedRect;uniform float faithful,topFaithful,nativeCompare;uniform mat3 basis;uniform vec4 lamp,shot,surface;uniform vec4 fixturePos[3],fixtureColor[3],fixtureAxis[3];uniform float doorMotion;uniform vec2 density;uniform float refinement,detailUpgrade;uniform sampler2D topMap,topDetail;uniform float paired,topTurn;"
-        AR_ROOM_GLSL
+        "uniform sampler2D colorMap,detailMap,nativeMap,nativeTop,doorMap;uniform float doorActive,doorLayer;uniform vec4 doorTiles;uniform vec3 doorScale;uniform vec3 generatedTint,topGeneratedTint;uniform float generatedShape,topGeneratedShape;uniform vec4 generatedRect,topGeneratedRect;uniform mat3 geologyWorld;uniform vec3 geologyEye;uniform float geologyOn;uniform float faithful,topFaithful,nativeCompare;uniform mat3 basis;uniform vec4 lamp,shot,surface;uniform vec4 fixturePos[4],fixtureColor[4],fixtureAxis[4];uniform float doorMotion;uniform vec2 density;uniform float refinement,detailUpgrade;uniform sampler2D topMap,topDetail;uniform float paired,topTurn;"
+        AR_ROOM_GLSL AS_STRATA_GLSL
         "float hash(vec2 q){return fract(sin(dot(q,vec2(127.1,311.7)))*43758.5453);}"
         "float noise(vec2 q){vec2 i=floor(q),f=fract(q);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+1.),f.x),f.y);}"
         "float skin(vec2 q){vec2 f=fract(q),e=min(f,1.-f);float d=min(e.x,e.y);float h=smoothstep(.015,.045,d)*.035;"
@@ -71,6 +72,7 @@ static void astra_init_shader(void)
         "if(faithful>.5&&nativeCompare<.5&&paired<.5){float h=texture2D(detailMap,guv(uv,faithful,generatedRect)).a-.42;vec2 e=vec2(dot(eye,basis[0]),dot(eye,basis[1]));coord-=e*h*mix(.018,.032,detailUpgrade)*close;}"
         "vec2 gc=guv(coord,faithful,generatedRect);if(doorActive>.5&&doorLayer<1.5&&faithful==24.)gc=leafUV(gc);vec4 a=texture2D(colorMap,gc);if(faithful>19.5){a=gs(colorMap,gc,faithful,0.);a.rgb=gt(a.rgb,gc,faithful,generatedTint);a.a=generatedShape>.5?gm(guv(uv,faithful,generatedRect),generatedShape):texture2D(nativeMap,uv).a;}if(doorActive>.5&&doorLayer<1.5&&nativeCompare<.5)a.a=doorAlpha(uv);if(nativeCompare>.5&&faithful>.5)a=texture2D(nativeMap,uv);"
         "vec3 sampleN=faithful>19.5?gs(detailMap,gc,faithful,1.).rgb:texture2D(detailMap,coord).rgb;"
+        "vec3 rockWorld=geologyWorld*p+geologyEye,rockNormal=normalize(geologyWorld*basis[2]);if(geologyOn>.5&&detailUpgrade>.5&&nativeCompare<.5){a.rgb=strataSample(colorMap,rockWorld,rockNormal)*strataTint(rockWorld);sampleN=strataSample(detailMap,rockWorld,rockNormal);}"
         "if(paired>.5){vec2 tuv=uv;if(topTurn>.5&&topTurn<1.5)tuv=vec2(1.-uv.y,uv.x);else if(topTurn>1.5&&topTurn<2.5)tuv=1.-uv;else if(topTurn>2.5)tuv=vec2(uv.y,1.-uv.x);"
         "vec2 tc=guv(tuv,topFaithful,topGeneratedRect);if(doorActive>.5&&doorLayer>1.5&&topFaithful==24.)tc=leafUV(tc);vec4 top=texture2D(topMap,tc);if(topFaithful>19.5){top=gs(topMap,tc,topFaithful,0.);top.rgb=gt(top.rgb,tc,topFaithful,topGeneratedTint);top.a=topGeneratedShape>.5?gm(tc,topGeneratedShape):texture2D(nativeTop,tuv).a;}if(doorActive>.5&&doorLayer>1.5&&nativeCompare<.5)top.a=doorAlpha(tuv);if(nativeCompare>.5&&topFaithful>.5)top=texture2D(nativeTop,tuv);if(top.a<.001)discard;float useTop=smoothstep(.004,.08,top.a);a=mix(a,vec4(top.rgb,1.),useTop);"
         "vec3 tn=topFaithful>19.5?gs(topDetail,tc,topFaithful,1.).rgb:texture2D(topDetail,tuv).rgb;vec2 normal=tn.xy*2.-1.;if(topTurn>.5&&topTurn<1.5)normal=vec2(normal.y,-normal.x);else if(topTurn>1.5&&topTurn<2.5)normal=-normal;else if(topTurn>2.5)normal=vec2(-normal.y,normal.x);"
@@ -82,6 +84,7 @@ static void astra_init_shader(void)
         "float seam=1.-smoothstep(.012,.050,min(edges.x,edges.y));a.rgb*=1.-seam*.32*hard*close*layout;"
         "float fiber=sin(cell.x*170.+sin(cell.y*21.))*sin(cell.y*110.);a.rgb*=1.+fiber*.015*close*exp(-max(0.,-p.z-8.)*.08);"
         "vec3 n=normalize(basis[0]*xy.x+basis[1]*xy.y+base*sqrt(max(.06,1.-dot(xy,xy))));"
+        "if(geologyOn>.5&&detailUpgrade>.5&&nativeCompare<.5&&paired<.5){vec3 N=strataNormal(detailMap,rockWorld,rockNormal);n=normalize(vec3(dot(geologyWorld[0],N),dot(geologyWorld[1],N),dot(geologyWorld[2],N)));}"
         "vec3 L=lamp.xyz-p;float dist=length(L);L/=max(dist,.001);"
         "float reach=lamp.w/(1.+dist*dist*.0018);"
         "vec3 beam=normalize(eye+vec3(-.25,.36,.12));float ndl=max(0.,dot(n,L));"
@@ -105,7 +108,7 @@ static void astra_init_shader(void)
         "vec3 lampTint=mix(vec3(1.,.75,.46),vec3(.40,.76,.85),step(1.5,surface.y)*(1.-step(2.5,surface.y)));"
         "col+=lampTint*glint*(.12+.35*metal)*(1.-rock*.8);"
         "col+=vec3(1.,.29,.085)*fire*(a.rgb*.64*max(0.,dot(n,D))+.38*pow(max(dot(n,normalize(D+eye)),0.),25.));"
-        "for(int i=0;i<3;i++){vec3 F=fixturePos[i].xyz-p;F+=fixtureAxis[i].xyz*clamp(dot(-F,fixtureAxis[i].xyz),-fixtureAxis[i].w,fixtureAxis[i].w);float fd=length(F);F/=max(.01,fd);float fall=pow(max(0.,1.-fd/max(.01,fixturePos[i].w)),2.);vec3 fc=fixtureColor[i].rgb*fall;float diffuse=max(0.,dot(n,F));float spec=pow(max(0.,dot(n,normalize(F+eye))),expn);col+=fc*(a.rgb*(.12+.20*fixtureColor[i].w+.70*diffuse)*cavity+spec*(.08+.23*metal));}"
+        "for(int i=0;i<4;i++){vec3 F=fixturePos[i].xyz-p;F+=fixtureAxis[i].xyz*clamp(dot(-F,fixtureAxis[i].xyz),-fixtureAxis[i].w,fixtureAxis[i].w);float fd=length(F);F/=max(.01,fd);float fall=pow(max(0.,1.-fd/max(.01,fixturePos[i].w)),2.);vec3 fc=fixtureColor[i].rgb*fall;float diffuse=max(0.,dot(n,F));float spec=pow(max(0.,dot(n,normalize(F+eye))),expn);col+=fc*(a.rgb*(.12+.20*fixtureColor[i].w+.70*diffuse)*cavity+spec*(.08+.23*metal));}"
         "vec3 H=normalize(beam+eye);float tangent=dot(H,basis[0]),across=dot(H,basis[1]);"
         "float brushed=exp(-(tangent*tangent*260.+across*across*16.))*max(0.,dot(n,beam));"
         "col+=refinement*hard*(1.-ceramic)*vec3(.19,.24,.27)*brushed*(.35+.65*metal)*room;"
@@ -175,12 +178,20 @@ static int astra_material_begin(ogl_texture *tex,const float *p,const float *uv)
     if(!kinds_ready){EM_ASM({var k=window.astraMaterialTypes||[];for(var i=0;i<256;i++)HEAP32[($0>>2)+i]=k[i]??-1;},kinds);kinds_ready=1;}
     float surface[4];memcpy(surface,astra_surface,sizeof surface);if(kinds[id]==0||kinds[id]==4)surface[0]=kinds[id];else if(kinds[id]>0&&surface[0]==0)surface[0]=1;if(id>=181&&id<=183)surface[0]=1;
     if(tex->faithful)surface[0]=(tex->faithful==1||tex->faithful==23)?0:tex->faithful==5?4:1;
+    static GLint geologyMatrix=-2,geologyEye,geologyOn;
+    if(geologyMatrix==-2){geologyMatrix=glGetUniformLocation(astra_program,"geologyWorld");geologyEye=glGetUniformLocation(astra_program,"geologyEye");geologyOn=glGetUniformLocation(astra_program,"geologyOn");}
+    int geological=astra_drawing_mine&&tex->faithful==23;glUniform1f(geologyOn,geological);
+    if(geological){
+        float worldMatrix[9];const vms_matrix *view=&Unscaled_matrix;float scales[3]={f2fl(Matrix_scale.x),f2fl(Matrix_scale.y),-f2fl(Matrix_scale.z)};const vms_vector *directions[3]={&view->rvec,&view->uvec,&view->fvec};
+        for(int k=0;k<3;k++){worldMatrix[k*3]=f2fl(directions[k]->x)/scales[k];worldMatrix[k*3+1]=f2fl(directions[k]->y)/scales[k];worldMatrix[k*3+2]=f2fl(directions[k]->z)/scales[k];}
+        glUniformMatrix3fv(geologyMatrix,1,GL_FALSE,worldMatrix);glUniform3f(geologyEye,f2fl(View_position.x),f2fl(View_position.y),f2fl(View_position.z));
+    }
     glUniform4fv(glGetUniformLocation(astra_program,"surface"),1,surface);
     glUniform1f(glGetUniformLocation(astra_program,"refinement"),astra_refinement);
     static GLint upgrade=-2;if(upgrade==-2)upgrade=glGetUniformLocation(astra_program,"detailUpgrade");glUniform1f(upgrade,astra_detail_upgrade);ar_bind(aw_room);
     EM_ASM(Module.wallDetailVersion=50;);
-    glUniform4fv(glGetUniformLocation(astra_program,"fixtureAxis[0]"),3,&afx_axes[0][0]);
-    glUniform4fv(glGetUniformLocation(astra_program,"fixturePos[0]"),3,&afx_lamps[0][0]);glUniform4fv(glGetUniformLocation(astra_program,"fixtureColor[0]"),3,&afx_colors[0][0]);
+    glUniform4fv(glGetUniformLocation(astra_program,"fixtureAxis[0]"),4,&afx_axes[0][0]);
+    glUniform4fv(glGetUniformLocation(astra_program,"fixturePos[0]"),4,&afx_lamps[0][0]);glUniform4fv(glGetUniformLocation(astra_program,"fixtureColor[0]"),4,&afx_colors[0][0]);
     glUniform4fv(astra_fixture,1,astra_lamp);glUniform4fv(astra_moving,1,astra_flash);
     ++astra_shaded;return 1;
 }

@@ -1,6 +1,6 @@
 // A paused tour of the loaded campaign's real architecture and machinery.
 window.astraMinePreview={
-  names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion','Deep ventilation grilles','Light housings & spill','Service conduits','Raised frames & panel variants','Water, wet banks & cascades','Molten lava','Red service lighting','Blue service lighting','Cyan service lighting','Amber service lighting','Warm ventilation & moving fans','Strip-light reflections','Industrial wall construction','Sculpted rock & rounded joins','Fixture light shafts','Room-aware metal reflections'],
+  names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion','Deep ventilation grilles','Light housings & spill','Service conduits','Raised frames & panel variants','Water, wet banks & cascades','Molten lava','Red service lighting','Blue service lighting','Cyan service lighting','Amber service lighting','Warm ventilation & moving fans','Strip-light reflections','Industrial wall construction','Sculpted rock & rounded joins','Fixture light shafts','Room-aware metal reflections','Natural tunnel contours','Continuous mineral surfaces','Lighting by room purpose','Working mine installations','Distinctive chambers','Environmental reactions'],
   descriptions:[
     'New high-resolution metal, rock, grilles, machinery and lamps throughout both campaigns. Pause and compare the same view with the original artwork.',
     'Spinning fan blades behind a fixed protective grille.',
@@ -29,22 +29,31 @@ window.astraMinePreview={
     'Beveled steel ribs, layered plates, recessed joints and colored lenses. Actual chamfer normals catch moving light. Use Compare to inspect the underlying surfaces.',
     'Sculpted rock now follows folded and sloped walls, with connected contours, rounded lighting transitions, layered fractures and damp edges. The original layout and flight clearance are preserved.',
     'Local beams follow the real colored fixtures. Dust drifts through the light; the volume stays inside its mine room.',
-    'Soft reflections sample the six surfaces and lamps in this room. These are cached room reflections, not mirrors of moving ships.'
+    'Soft reflections sample the six surfaces and lamps in this room. These are cached room reflections, not mirrors of moving ships.',
+    'Broader rock bulges, broken ledges and rounded joins follow the original passages. Compare the added contours with the base geometry.',
+    'Rock grain is projected in world space across sloped faces. Broad mineral bands reduce repeated tiles, stretching and abrupt texture directions.',
+    'Cool service lighting accompanies water and pumping equipment; amber light marks industrial work areas, with red around volcanic hazards and reactors. Original colored lights remain recognizable.',
+    'These wall-mounted fans, coolant pumps, gauges, hydraulic rods and cables also appear in the playable mines. Moving parts are fitted to solid walls away from doors and openings.',
+    'Inspect the water, volcanic and industrial spaces available in this mine. Their materials, lighting and equipment follow the existing level layout.',
+    'Replay water splashes, metal sparks, rock dust or molten droplets on real mine surfaces. These visual reactions also respond to weapon impacts; nearby explosions shake loose small rock clouds.'
   ],
-  active:false,paused:false,touring:true,clock:0,last:0,mask:2147483647,fresh:false,
+  active:false,paused:false,touring:true,clock:0,last:0,mask:2147483647,high:31,fresh:false,
+  has(index){return index<32?!!(this.mask&(1<<index)):!!(this.high&(1<<(index-32)));},
   tick(){const now=performance.now();if(this.last&&!this.paused)this.clock+=Math.min(.1,(now-this.last)/1000);this.last=now;return this.clock;},
-  select(index){if(!(this.mask&(1<<index)))return;Module.mineInspect=index;this.clock=0;this.last=performance.now();$('mineScene').value=String(index);this.sync();},
-  next(direction){let i=Module.mineInspect;for(let n=0;n<this.names.length;n++){i=(i+direction+this.names.length)%this.names.length;if(this.mask&(1<<i)){this.select(i);break;}}},
+  select(index){if(!this.has(index))return;Module.mineInspect=index;this.clock=0;Module.mineReactionCommand=(Module.mineReactionCommand||0)+1;this.last=performance.now();$('mineScene').value=String(index);this.sync();},
+  next(direction){let i=Module.mineInspect;for(let n=0;n<this.names.length;n++){i=(i+direction+this.names.length)%this.names.length;if(this.has(i)){this.select(i);break;}}},
   pause(){this.paused=!this.paused;this.last=performance.now();this.sync();},
   sync(){
     $('minePause').textContent=this.paused?'Play':'Pause';$('minePause').setAttribute('aria-pressed',String(this.paused));
     $('mineTour').checked=this.touring;
+    $('mineReactionControls').hidden=window.Module?.mineInspect!==36;
+    $('mineChamberControls').hidden=window.Module?.mineInspect!==35;
     $('mineCompare').textContent=(window.Module?.mineInspect>=27?(Module.mineRefinement===false?'Base surfaces':'New details'):(window.Module?.mineRefinement===false?'Original surfaces':'Remastered surfaces'));
     $('mineCompare').setAttribute('aria-pressed',String(window.Module?.mineRefinement!==false));
   },
   details(open){$('mineDetails').hidden=!open;$('mineControls').setAttribute('aria-expanded',String(open));},
   open(){
-    this.paused=false;this.touring=true;this.clock=0;this.last=0;this.mask=2147483647;this.fresh=true;$('mineZoom').value='1';this.sync();
+    this.paused=false;this.touring=true;this.clock=0;this.last=0;this.mask=2147483647;this.high=31;this.fresh=true;$('mineZoom').value='1';this.sync();
     if(window.Module&&flightActive&&Module.astra){
       Module.mineRefinement=true;Module.mineInspect=0;Module.mineInspectZoom=1;Module.pickupInspect=Module.weaponInspect=-1;
       releaseFlightMouse();Module._astra_reset_flight_input?.();Module.pyroPreviewCommand=1;
@@ -54,19 +63,22 @@ window.astraMinePreview={
     this.active=active;document.body.classList.toggle('mine-preview',active);$('minePanel').hidden=!active;this.details(false);
     if(active){this.last=0;window.astraDeck?.show(false);$('minePause').focus({preventScroll:true});}
   },
-  update(index,mask,level,room,clock){
-    this.mask=mask;
-    if(!(mask&(1<<Module.mineInspect)))Module.mineInspect=index;
-    const uiKey=[index,mask,level,Module.campaign].join('|');
+  update(index,mask,high,level,room,clock){
+    this.mask=mask;this.high=high;
+    if(!this.has(Module.mineInspect))Module.mineInspect=index;
+    const uiKey=[index,mask,high,level,Module.campaign].join('|');
     if(this.uiKey!==uiKey){
-    [...$('mineScene').options].forEach((o,i)=>o.disabled=!(mask&(1<<i)));
+    [...$('mineScene').options].forEach((o,i)=>o.disabled=!this.has(i));
     $('mineScene').value=String(index);
     $('mineCaption').textContent=this.names[index];
     $('mineLocation').textContent=(Module.campaign==='d2'?'Counterstrike':'Vertigo')+' · '+(level<0?'Secret mine '+(-level):'Mine '+level);
     $('mineDescription').textContent=this.descriptions[index];
-      this.uiKey=uiKey;
+      [...$('mineChamber').options].forEach((o,i)=>o.disabled=!this.has([19,20,0][i]));
+      [...$('mineReactionKind').options].forEach((o,i)=>o.disabled=!this.has([19,9,32,20][i]));
+      for(const [id,key] of [['mineChamber','mineChamber'],['mineReactionKind','mineReactionKind']]){const el=$(id);if(el.selectedOptions[0]?.disabled){el.value=[...el.options].find(o=>!o.disabled)?.value||'0';Module[key]=Number(el.value);}}
+      this.sync();this.uiKey=uiKey;
     }
-    this.state={index,mask,level,room,clock,paused:this.paused};
+    this.state={index,mask,high,level,room,clock,paused:this.paused};
     if(this.fresh){this.fresh=false;Module.mineRefinement=true;this.select(0);this.sync();return;}
     if(this.touring&&!this.paused&&clock>11)this.next(1);
   },
@@ -89,6 +101,9 @@ $('mineTour').onchange=()=>{mine.touring=$('mineTour').checked;mine.clock=0;};
 $('mineZoom').oninput=()=>{Module.mineInspectZoom=Number($('mineZoom').value);};
 $('mineCompare').onclick=()=>{Module.mineRefinement=Module.mineRefinement===false;mine.sync();};
 $('mineControls').onclick=()=>mine.details($('mineDetails').hidden);
+$('mineChamber').onchange=()=>{Module.mineChamber=Number($('mineChamber').value);mine.clock=0;};
+$('mineReactionKind').onchange=()=>{Module.mineReactionKind=Number($('mineReactionKind').value);$('mineReaction').click();};
+$('mineReaction').onclick=()=>{Module.mineReactionCommand=(Module.mineReactionCommand||0)+1;mine.touring=false;mine.paused=false;mine.clock=0;mine.last=performance.now();mine.sync();};
 const previousShow=astraPreview.show.bind(astraPreview);
 astraPreview.show=active=>{previousShow(active);mine.show(active&&Module.mineInspect>=0);if(!active)Module.mineInspect=-1;};
 const previousExplosion=astraPreview.open.bind(astraPreview);

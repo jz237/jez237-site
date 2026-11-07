@@ -66,6 +66,8 @@ includes["detail_upgrade.inc"]="arch/ogl/astra_detail_upgrade.inc"
 includes["controllers.inc"]="main/astra_controllers.inc"
 includes["network.inc"]="main/astra_network.inc"
 includes["squadron.inc"]="main/astra_squadron.inc"
+includes['strata.inc'] = 'arch/ogl/astra_strata.inc'
+includes['mine_life.inc'] = 'arch/ogl/astra_mine_life.inc'
 includes['geology.inc'] = 'arch/ogl/astra_geology.inc'
 includes['shore_geometry.inc'] = 'arch/ogl/astra_shore_geometry.inc'
 for name,path in includes.items():

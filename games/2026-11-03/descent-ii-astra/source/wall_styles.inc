@@ -6,6 +6,15 @@ extern int astra_gallery_scene,astra_gallery_room,astra_gallery_side;
 typedef struct {vms_vector p,r,u,n;float width;int color;} aw_mount;
 static const float aw_palette[4][3]={{1,.075f,.035f},{.07f,.27f,1},{.035f,.86f,1},{1,.44f,.055f}};
 static int aw_room=-1;
+/* 0 rock / 1 industrial / 2 water / 3 volcanic / 4 reactor. */
+int astra_room_identity(int room){
+    if(room<0||room>Highest_segment_index)return 1;int rock=0,water=0,lava=0;
+    if(Segment2s[room].special==SEGMENT_IS_CONTROLCEN||Segment2s[room].special==SEGMENT_IS_ROBOTMAKER)return 4;
+    for(int s=0;s<6;s++){int t=Segments[room].sides[s].tmap_num;if(t<0||t>=NumTextures)continue;int f=TmapInfo[t].flags;if(f&TMI_VOLATILE||TmapInfo[t].damage)lava++;if(f&TMI_WATER)water++;const char *n=piggy_game_bitmap_name(&GameBitmaps[Textures[t].index]);if(n&&!strncmp(n,"rock",4))rock++;}
+    if(lava)return 3;if(water)return 2;return rock>=3?0:1;
+}
+static int aw_zone_color(int room){int zone=astra_room_identity(room);return zone==2?1:zone==3||zone==4?0:zone==0?2:3;}
+
 /* Filter selected neutral service lamps; retain all originally colored lenses.
  * White work-light rooms remain between colored sectors, including rock mines. */
 static int aw_lens_tint(const ogl_texture *tex,int room,float tint[3]){
@@ -15,7 +24,7 @@ static int aw_lens_tint(const ogl_texture *tex,int room,float tint[3]){
     if(room%3==0)return 0;
     float hi=fmaxf(tint[0],fmaxf(tint[1],tint[2])),lo=fminf(tint[0],fminf(tint[1],tint[2]));
     if(lo<hi*.72f)return 0;
-    for(int c=0;c<3;c++)tint[c]=.12f+.88f*aw_palette[(room/7)%4][c];return 1;
+    for(int c=0;c<3;c++)tint[c]=.12f+.88f*aw_palette[aw_zone_color(room)][c];return 1;
 }
 static int aw_mount_at(int room,int s,int slot,aw_mount *m){
     if(room<0||room>Highest_segment_index||s<0||s>5)return 0;
@@ -35,7 +44,7 @@ static int aw_mount_at(int room,int s,int slot,aw_mount *m){
     if(slot&&(w<16||h<16||(room+s)%3==0))return 0;
     m->p=Vertices[ids[0]];vm_vec_scale_add2(&m->p,&a,F1_0/2);vm_vec_scale_add2(&m->p,&b,fl2f(slot?.89f:.11f));
     vm_vec_sub(&into,&center,&m->p);if(vm_vec_dot(&m->n,&into)<0)vm_vec_negate(&m->n);
-    vm_vec_cross(&m->u,&m->n,&m->r);vm_vec_normalize(&m->u);m->width=fminf(8.f,w*.37f);m->color=(room/7)%4;
+    vm_vec_cross(&m->u,&m->n,&m->r);vm_vec_normalize(&m->u);m->width=fminf(8.f,w*.37f);m->color=aw_zone_color(room);
     /* Reject skewed/sliver faces whose rectangle would extend past an edge. */
     for(int x=-1;x<=1;x+=2)for(int y=-1;y<=1;y+=2){
         vms_vector q=m->p;vm_vec_scale_add2(&q,&m->r,fl2f(x*(m->width+.25f)));vm_vec_scale_add2(&q,&m->u,fl2f(y*.75f));

@@ -71,11 +71,13 @@ static void ng_position(ng_shape *g,float u,float v,float *p,float *finish){
             if(ng_border&&ng_border[g->ids[i]]){float delta[3];for(int k=0;k<3;k++)delta[k]=p[k]-g->p[i][k];join=fminf(join,nd_smooth(sqrtf(al_dot(delta,delta))/1.25f));}
             if(g->wet[i])wet=fmaxf(wet,(1-nd_smooth(edge[i]/2.4f))*(.72f+.28f*ng_noise(p[0]*2,p[1]*2,p[2]*2)));
         }
-        float field=ng_noise(p[0],p[1],p[2]);float strata=.5f+.5f*sinf(p[1]*1.8f+p[0]*.24f+p[2]*.19f+field*2.8f);
+        float field=ng_noise(p[0]*.62f,p[1]*.62f,p[2]*.62f);float strata=.5f+.5f*sinf(p[1]*1.8f+p[0]*.24f+p[2]*.19f+field*2.8f);
         /* One amplitude at shared borders prevents cracks between unequal faces. */
         float edgeDistance=fminf(fminf(edge[0],edge[1]),fminf(edge[2],edge[3]));float amp=.62f+(g->amplitude-.62f)*nd_smooth(edgeDistance/1.4f);
         for(int e=0;e<4;e++)if(edge[e]<.0001f&&g->shared[e]){guard=1;for(int i=0;i<4;i++)if(ng_border&&ng_border[g->ids[i]]){float delta[3];for(int k=0;k<3;k++)delta[k]=p[k]-g->p[i][k];guard=fminf(guard,nd_smooth(sqrtf(al_dot(delta,delta))/1.25f));}join=1;}
-        rise=.008f+guard*join*amp*(.30f+field*.66f+strata*.25f);ao=.76f+.24f*nd_smooth(field*1.2f+strata*.18f);
+        float rounded=0;for(int e=0;e<4;e++)if(g->shared[e])rounded=fmaxf(rounded,(1-nd_smooth(edge[e]/2.8f))*.64f);
+        float ledge=nd_smooth((strata-.38f)/.34f)*.22f*nd_smooth(edgeDistance/1.4f);
+        rise=.008f+guard*join*(amp*(.30f+field*.66f+strata*.25f)+rounded+ledge);ao=.76f+.24f*nd_smooth(field*1.2f+strata*.18f);
     }else{float edgeDistance=fminf(fminf(edge[0],edge[1]),fminf(edge[2],edge[3])),joint=fabsf(u-.5f)*g->width;rise=.008f+.21f*nd_smooth(fminf(edgeDistance,joint)/.45f);ao=.72f+.28f*nd_smooth(fminf(edgeDistance,joint)/.6f);}
     for(int k=0;k<3;k++)p[k]+=direction[k]*rise;
     if(finish){finish[0]=ao;finish[1]=wet;finish[2]=0;finish[3]=1;}

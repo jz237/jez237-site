@@ -56,9 +56,10 @@ void astra_environment_material(int room,int side,int texture){
     astra_surface[3]=(texture*17%31)/31.f;
 }
 /* Record actual native wall hits, without changing damage or weapon behavior. */
+extern void astra_environment_response(int,int,const vms_vector*,float);
 void astra_environment_hit(int room,int side,const vms_vector *point,float size){
     if(!ax_on()||room<0||room>Highest_segment_index||side<0||side>5)return;
-    ae_reset();segment *s=&Segments[room];int t=s->sides[side].tmap_num;
+    ae_reset();astra_environment_response(room,side,point,size);segment *s=&Segments[room];int t=s->sides[side].tmap_num;
     int wallnum=s->sides[side].wall_num;
     /* Every solid surface can be scarred, including doors, breakable walls,
      * locked panels and hazardous metal. Liquids/forcefields keep native hit FX. */
@@ -231,6 +232,7 @@ static void ae_hatch(int room,int side,int theme,float w,float h){
 #include "astra_detail_upgrade.inc"
 #include "astra_industrial.inc"
 #include "astra_shore_geometry.inc"
+#include "astra_mine_life.inc"
 void astra_environment_face(int nv,const g3s_point **points,const int *vp,g3s_lrgb *light,int room,int side,int flags){
     if(!ax_on()||astra_native_compare)return;ae_faces++;ae_reset();segment *s=&Segments[room];int wallnum=s->sides[side].wall_num;
     int hidden=wallnum>=0&&Walls[wallnum].type==WALL_DOOR&&Walls[wallnum].clip_num>=0&&(WallAnims[Walls[wallnum].clip_num].flags&WCF_HIDDEN);
@@ -361,7 +363,7 @@ void astra_environment_rooms(const short *rooms,int count,int window_num){
     extern void astra_combat_fragments(const short*,int,int);astra_combat_fragments(rooms,count,window_num);
     for(int i=0;i<count;i++){int room=rooms[i];if(room<0||room>Highest_segment_index)continue;
         for(int side=0;side<6;side++)ae_door(room,side);
-        nd_atmosphere(room);nb_room(room);
+        nd_atmosphere(room);nb_room(room);ml_room(room);
         if(astra_refinement){int side=astra_environment_bay(room);vms_vector c;vms_matrix b;float w,h;
             if(side>=0&&ae_basis(room,side,&c,&b,&w,&h)){g3s_point p;g3_rotate_point(&p,&c);if(p.p3_z>F1_0&&p.p3_z<i2f(65)){
                 g3_start_instance_matrix(&c,&b);ag_atmosphere(room,side,ae_theme(room),w,h);g3_done_instance();}}}
@@ -396,6 +398,7 @@ void astra_environment_rooms(const short *rooms,int count,int window_num){
         EM_ASM(window.astraDeck?.reflect([$0,$1,$2],[$3,$4,$5]);,colors[0][0],colors[0][1],colors[0][2],colors[1][0],colors[1][1],colors[1][2]);
     }
     ag_render_exhibit();
+    if(!window_num)EM_ASM(Module.mineLife=({version:64,installations:$0,uploads:$1,hits:$2,dust:$3,drips:$4});,ml_draws,ml_uploads,ml_hits,ml_dust,ml_drips);
     if(!window_num)EM_ASM({const w=Module.industrialWalls||(Module.industrialWalls={version:61});w.uploads=$0;w.draws=$1;},ai_uploads,ai_draws);
     if(!window_num)EM_ASM(Module.detailUpgrade=({version:63,meshes:$0,shafts:$1,meshUploads:$2,meshCapacity:128});,nd_draws,nd_shafts,nd_uploads);
     if(!window_num)EM_ASM(Module.environmentVersion=38;Module.foundryStats=({rockFaces:$6,equipmentBays:$7,shipShadows:$8,atmosphereBays:$9});Module.environmentStats=({faces:$0,machines:$1,doors:$2,reactors:$3,atmosphere:$4});Module.environmentLevel=$5;Module.environmentFrames=(Module.environmentFrames||0)+1;,ae_faces,ae_machines,ae_doors,ae_reactors,ae_atmosphere,Current_level_num,ag_rocks,ag_props,ag_shadows,ag_air);

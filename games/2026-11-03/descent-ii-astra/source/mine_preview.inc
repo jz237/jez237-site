@@ -1,5 +1,6 @@
 /* Paused, detached inspection of the actual loaded mine. No player movement,
  * exploration credit, AI updates or gameplay door operations occur here. */
+#include <stdint.h>
 #include "wall.h"
 #include "gameseg.h"
 #include "render.h"
@@ -14,7 +15,9 @@ extern int astra_refinement,astra_native_compare,astra_detail_upgrade;
 extern int astra_environment_theme(int),astra_environment_bay(int),astra_environment_rock(int);
 float astra_mine_clock=-1,astra_mine_door=-1;
 typedef struct {vms_vector eye,goal,up;int room,side,subject,valid;} am_scene;
-static am_scene am_scenes[31];static int am_level=-999,am_segments=-1,am_mask;
+static am_scene am_scenes[37];static int am_level=-999,am_segments=-1;static uint64_t am_mask;
+extern int astra_life_anchor(int,vms_vector*,int*);
+extern void astra_life_preview(int,int,int);
 static float am_distance(const vms_vector *a,const vms_vector *b){return f2fl(vm_vec_dist(a,b));}
 static int am_clear(const vms_vector *a,int room,const vms_vector *b,fix radius){
     fvi_query q={a,b,room,radius,-1,NULL,0};fvi_info hit;return find_vector_intersection(&q,&hit)==HIT_NONE;
@@ -84,6 +87,7 @@ static void am_build(void){
             int construction=detail==2||(surface_name&&(!strncmp(surface_name,"metl",4)||!strncmp(surface_name,"wall",4)));
             if(detail==1&&construction&&!am_scenes[27].valid)am_face(room,side,0,&am_scenes[27]);
             if(detail==2){
+                if(!am_scenes[32].valid)am_face(room,side,0,&am_scenes[32]);
                 am_scene candidate={0};if(am_face(room,side,0,&candidate)){
                     float score=0;for(int j=0;j<6;j++)if(astra_environment_rock(s->sides[j].tmap_num)&&s->children[j]<0){score+=3;if(s->sides[j].type!=SIDE_IS_QUAD)score+=2;}
                     vms_vector ctr,view;compute_segment_center(&ctr,s);float distance=am_distance(&ctr,&candidate.goal);
@@ -93,7 +97,8 @@ static void am_build(void){
                      * silhouette, rather than filling the screen with one wall. */
                     for(int j=0;j<6;j++)if(s->children[j]>=0&&s->sides[j].wall_num<0){
                         vms_vector portal;compute_center_point_on_side(&portal,s,j);float span=am_distance(&ctr,&portal);
-                        if(span>7&&span<35&&am_clear(&ctr,room,&portal,F1_0/3)){
+                        vm_vec_normalized_dir(&view,&portal,&ctr);
+                        if(span>7&&span<35&&fabsf(f2fl(vm_vec_dot(&view,&orient.uvec)))<.6f&&am_clear(&ctr,room,&portal,F1_0/3)){
                             candidate.eye=ctr;candidate.room=room;candidate.goal=portal;score+=6;
                             int next=s->children[j];for(int k=0;k<6;k++)if(astra_environment_rock(Segments[next].sides[k].tmap_num))score+=.7f;break;
                         }
@@ -190,7 +195,19 @@ static void am_build(void){
     if(!am_scenes[27].valid)am_scenes[27]=am_scenes[9];if(!am_scenes[28].valid)am_scenes[28]=am_scenes[10].valid?am_scenes[10]:am_scenes[9];
     am_scenes[29]=am_scenes[26].valid?am_scenes[26]:am_scenes[16];am_scenes[30]=am_scenes[27];
     for(int i=27;i<31;i++)if(am_scenes[i].valid){am_scene *v=&am_scenes[i];vms_vector f,r,eye;vm_vec_normalized_dir(&f,&v->goal,&v->eye);vm_vec_cross(&r,&f,&v->up);vm_vec_normalize_quick(&r);vm_vec_scale_add(&eye,&v->eye,&r,i2f(i==30?6:3));int room=find_point_seg(&eye,v->room);if(room>=0&&am_clear(&v->eye,v->room,&eye,F1_0/3)&&am_clear(&eye,room,&v->goal,0)){v->eye=eye;v->room=room;}}
-    for(int i=0;i<31;i++)if(am_scenes[i].valid)am_mask|=1<<i;
+    am_scenes[31]=am_scenes[28];if(!am_scenes[32].valid)am_scenes[32]=am_scenes[10];
+    am_scenes[33]=am_scenes[26];
+    for(int r=0;r<=Highest_segment_index&&!am_scenes[34].valid;r++){
+        vms_vector goal,eye,n,center,into;int side;
+        if(!astra_life_anchor(r,&goal,&side))continue;
+        n=Segments[r].sides[side].normals[0];compute_segment_center(&center,&Segments[r]);vm_vec_sub(&into,&center,&goal);if(vm_vec_dot(&n,&into)<0)vm_vec_negate(&n);
+        vm_vec_scale_add(&eye,&goal,&n,fl2f(9.5f));int room=find_point_seg(&eye,r);
+        am_scene face={0};if(room<0||!am_clear(&eye,room,&goal,F1_0/3)||!am_face(r,side,0,&face))continue;
+        am_scenes[34]=(am_scene){eye,goal,face.up,room,side,r,1};
+    }
+    am_scenes[35]=am_scenes[19].valid?am_scenes[19]:am_scenes[20].valid?am_scenes[20]:am_scenes[0];
+    am_scenes[36]=am_scenes[19].valid?am_scenes[19]:am_scenes[9];
+    for(int i=0;i<37;i++)if(am_scenes[i].valid)am_mask|=UINT64_C(1)<<i;
 }
 /* The transient door frame is restored immediately after drawing, including
  * its connected side. No wall_open_door, trigger, sound or ActiveDoors changes. */
@@ -210,9 +227,19 @@ static void am_restore_door(am_door_saved *save){
 }
 void astra_mine_preview(int index,float clock,float zoom){
     if(am_level!=Current_level_num||am_segments!=Highest_segment_index||!am_mask)am_build();
-    if(index<0||index>30||!am_scenes[index].valid){index=0;while(index<31&&!am_scenes[index].valid)index++;}
-    if(index>=31){EM_ASM(window.astraMinePreview?.unavailable());return;}
-    am_scene *s=&am_scenes[index];vms_vector forward,eye,delta;vms_matrix orient;
+    if(index<0||index>36||!am_scenes[index].valid){index=0;while(index<37&&!am_scenes[index].valid)index++;}
+    if(index>=37){EM_ASM(window.astraMinePreview?.unavailable());return;}
+    am_scene *s=&am_scenes[index];
+    if(index==35){int pick=EM_ASM_INT(return Module.mineChamber|0);int choices[]={19,20,0};if(pick>=0&&pick<3&&am_scenes[choices[pick]].valid)s=&am_scenes[choices[pick]];}
+    if(index==36){int pick=EM_ASM_INT(return Module.mineReactionKind|0);int choices[]={19,9,32,20};if(pick>=0&&pick<4&&am_scenes[choices[pick]].valid)s=&am_scenes[choices[pick]];}
+    am_scene chamber;
+    if(index==35&&(s==&am_scenes[19]||s==&am_scenes[20])){
+        chamber=*s;vms_vector n=Segments[s->subject].sides[s->side].normals[0],into,center;compute_segment_center(&center,&Segments[s->subject]);vm_vec_sub(&into,&center,&s->goal);if(vm_vec_dot(&n,&into)<0)vm_vec_negate(&n);
+        vm_vec_scale_add2(&chamber.eye,&n,i2f(3));vm_vec_scale_add2(&chamber.goal,&n,i2f(3));
+        vms_matrix up;extract_orient_from_segment(&up,&Segments[s->subject]);chamber.up=up.uvec;
+        int r=find_point_seg(&chamber.eye,s->room);if(r>=0&&am_clear(&chamber.eye,r,&chamber.goal,F1_0/3)){chamber.room=r;s=&chamber;}
+    }
+    vms_vector forward,eye,delta;vms_matrix orient;
     vm_vec_sub(&delta,&s->eye,&s->goal);vm_vec_scale_add(&eye,&s->goal,&delta,fl2f(fminf(1.5f,fmaxf(.65f,zoom))));
     vm_vec_normalized_dir(&forward,&s->goal,&s->eye);vm_vector_2_matrix(&orient,&forward,&s->up,NULL);
     vm_vec_scale_add2(&eye,&orient.rvec,fl2f(sinf(clock*.27f)*.65f));vm_vec_scale_add2(&eye,&orient.uvec,fl2f(sinf(clock*.18f)*.23f));
@@ -223,6 +250,7 @@ void astra_mine_preview(int index,float clock,float zoom){
     astra_mine_inspecting=1;astra_mine_clock=clock;
     astra_gallery_scene=index;astra_gallery_room=s->subject;astra_gallery_side=s->side;
     astra_detail_upgrade=!EM_ASM_INT(return Module.mineRefinement===false);astra_native_compare=index<27&&!astra_detail_upgrade;astra_refinement=!astra_native_compare;astra_mine_wall=astra_mine_wall2=-1;astra_mine_door=-1;
+    if(index==36){int command=EM_ASM_INT(return Module.mineReactionCommand|0);astra_life_preview(s->subject,s->side,command+((int)(clock/3.2f))*100000);}
     if(index==5){
         int id=s->subject;wall *w=&Walls[id];int child=Segments[w->segnum].children[w->sidenum],other=-1;
         if(child>=0){int connected=find_connect_side(&Segments[w->segnum],&Segments[child]);if(connected>=0)other=Segments[child].sides[connected].wall_num;}
@@ -234,5 +262,5 @@ void astra_mine_preview(int index,float clock,float zoom){
     am_restore_door(&doors[1]);am_restore_door(&doors[0]);
     astra_gallery_scene=astra_gallery_room=astra_gallery_side=-1;astra_refinement=1;astra_native_compare=0;astra_detail_upgrade=1;
     astra_mine_inspecting=0;astra_mine_clock=astra_mine_door=-1;astra_mine_wall=astra_mine_wall2=-1;
-    EM_ASM(window.astraMinePreview?.update($0,$1,$2,$3,$4);,index,am_mask,Current_level_num,room,clock);
+    EM_ASM(window.astraMinePreview?.update($0,$1,$2,$3,$4,$5);,index,(unsigned)am_mask,(unsigned)(am_mask>>32),Current_level_num,room,clock);
 }
