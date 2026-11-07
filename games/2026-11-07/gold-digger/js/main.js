@@ -1,15 +1,15 @@
 // Gold Digger: the game shell. Fixed-step simulation (sim.js) + renderer (render.js), level flow, the general store,
 // the journal of discoveries, tips, cinematics, the attract demo, the AI playthrough, scores and menus.
-import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA, REWARDS, MAX_PERKS } from './config.js?v=12';
-import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=12';
-import { hash, findName } from './levelgen.js?v=12';
-import { Autopilot } from './ai.js?v=12';
-import { Renderer, pickQuality, LOOKS } from './render.js?v=12';
-import { CALM } from './fx.js?v=12';
-import { Audio } from './audio.js?v=12';
-import { Input } from './input.js?v=12';
-import { Scores, NO_POST } from './scores.js?v=12';
-import { Recorder, Replay } from './replay.js?v=12';
+import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA, REWARDS, MAX_PERKS } from './config.js?v=13';
+import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=13';
+import { hash, findName } from './levelgen.js?v=13';
+import { Autopilot } from './ai.js?v=13';
+import { Renderer, pickQuality, LOOKS } from './render.js?v=13';
+import { CALM } from './fx.js?v=13';
+import { Audio } from './audio.js?v=13';
+import { Input } from './input.js?v=13';
+import { Scores, NO_POST } from './scores.js?v=13';
+import { Recorder, Replay } from './replay.js?v=13';
 
 const Q = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
@@ -506,8 +506,15 @@ function onFind(e) {
   G.findT = e.kind === 'note' ? 7 : 4.5;
   A.play(e.kind === 'note' ? 'journal' : e.kind === 'fossil' ? 'fossil' : 'relic', { vol: 0.9 });
   if (e.kind !== 'note') A.overlay('discover', 0.85);
-  if (e.kind === 'relic') { if (!run.auto || run.mode === 'playthrough') say('v_relic', 1.2); R.cinematic(e.x, e.y + 1.2, 8.5, 3.2); slowmo(0.45, 1.4); }
-  if (e.kind === 'wonder') { if (!run.auto || run.mode === 'playthrough') say('v_wonder', 0.8); const room = W.finds.find((x) => x.kind === 'wonder'); R.cinematic((room && room.room ? room.room[0] + 8 : e.x), e.y + 4, 24, 5); slowmo(0.6, 2.5); }
+  // the prospector remarks on a relic or a wonder once per run at most, and only on one you have never found
+  // (wonders sit near the start of most levels, so an every-time line repeated at the top of every level)
+  const talk = (isNew || run.mode === 'playthrough') && (!run.auto || run.mode === 'playthrough');
+  if (e.kind === 'relic') { if (talk && !run.saidRelic) { run.saidRelic = true; say('v_relic', 1.2); } R.cinematic(e.x, e.y + 1.2, 8.5, 3.2); slowmo(0.45, 1.4); }
+  if (e.kind === 'wonder') {
+    if (talk && !run.saidWonder) { run.saidWonder = true; say('v_wonder', 0.8); }
+    // the camera tour of the room is for a wonder you are seeing for the first time
+    if (isNew || run.mode === 'playthrough') { const room = W.finds.find((x) => x.kind === 'wonder'); R.cinematic((room && room.room ? room.room[0] + 8 : e.x), e.y + 4, 24, 5); slowmo(0.6, 2.5); }
+  }
   if (e.kind === 'fossil' || e.kind === 'cache') { R.cinematic(e.x, e.y + 0.8, 9, 2.5); }
 }
 function slowmo(s, dur) { G.slow = s; G.slowT = dur; if (A.ctx) A.setRate(Math.max(0.6, s)); }
@@ -826,7 +833,7 @@ async function boot() {
   toTitle();
   checkUnlocks(true); applyLoadout();
   $('loading').style.opacity = 0; setTimeout(() => $('loading').remove(), 700);
-  if (Q.has('test')) { const T2 = await import('./tests.js?v=12'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
+  if (Q.has('test')) { const T2 = await import('./tests.js?v=13'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
   if (Q.has('autoplay')) startCampaign(+(Q.get('depth') || 0), { mode: 'autoplay', auto: 'demo', level: +(Q.get('level') || 0) });
   if (Q.has('playthrough')) startCampaign(+(Q.get('depth') || 0), { mode: 'playthrough', auto: 'demo', level: +(Q.get('level') || 0) });
   requestAnimationFrame(raf);

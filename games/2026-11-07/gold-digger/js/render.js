@@ -4,14 +4,14 @@
 // re-aimed every frame at the nearest flares, fires, lanterns, crystals and lava): their number never changes,
 // so no material ever recompiles mid-game.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=12';
-import { Cave, rockMaterial } from './cavemesh.js?v=12';
-import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=12';
-import { FX, CALM } from './fx.js?v=12';
-import { Post } from './post.js?v=12';
-import * as MD from './models.js?v=12';
-import { buildDecor, bake } from './decor.js?v=12';
-import { Digger, loadDiggerAsset } from './digger.js?v=12';
+import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=13';
+import { Cave, rockMaterial } from './cavemesh.js?v=13';
+import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=13';
+import { FX, CALM } from './fx.js?v=13';
+import { Post } from './post.js?v=13';
+import * as MD from './models.js?v=13';
+import { buildDecor, bake } from './decor.js?v=13';
+import { Digger, loadDiggerAsset } from './digger.js?v=13';
 
 export function pickQuality(name) {
   const mobile = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
@@ -180,7 +180,7 @@ export class Renderer {
 
   // the realistic digger (a skinned, motion-captured body); the old built digger stands in if it fails to load
   async loadDigger() {
-    try { this.digGltf = await loadDiggerAsset('assets/digger.glb?v=12'); } catch (e) { console.warn('digger asset', e); }
+    try { this.digGltf = await loadDiggerAsset('assets/digger.glb?v=13'); } catch (e) { console.warn('digger asset', e); }
   }
   makePlayer() {
     if (this.digGltf) {

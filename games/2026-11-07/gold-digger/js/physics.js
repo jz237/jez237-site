@@ -1,7 +1,7 @@
 // Tile physics for the digger: one function moves a body through the tile map for one fixed step. The
 // simulation uses it for the player and the navigation builder (nav.js) uses the very same function to
 // probe every jump and drop, so the autopilot's map of "where can I get to from here" is exact.
-import { T, SOLID, CLIMB, PHYS } from './config.js?v=12';
+import { T, SOLID, CLIMB, PHYS } from './config.js?v=13';
 
 export const EPS = 1e-4;
 export function tileAt(M, x, y) {
