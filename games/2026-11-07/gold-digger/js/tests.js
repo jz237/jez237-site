@@ -1,11 +1,11 @@
 // ?test=1 self-test: determinism, exact replays, level generation, the difficulty ramp, every boss can be hurt,
 // every biome renders without errors and without new shader programs after warm-up.
-import { RAMP, DEPTHS, LEVELS, rampAt, STEP, BIOMES, REWARDS } from './config.js?v=9';
-import { makeWorld, step, drainEvents, cloneWorld } from './sim.js?v=9';
-import { Autopilot } from './ai.js?v=9';
-import { Recorder, Replay } from './replay.js?v=9';
-import { buildNav, validateLevel } from './nav.js?v=9';
-import { bossHit } from './boss.js?v=9';
+import { RAMP, DEPTHS, LEVELS, rampAt, STEP, BIOMES, REWARDS } from './config.js?v=10';
+import { makeWorld, step, drainEvents, cloneWorld } from './sim.js?v=10';
+import { Autopilot } from './ai.js?v=10';
+import { Recorder, Replay } from './replay.js?v=10';
+import { buildNav, validateLevel } from './nav.js?v=10';
+import { bossHit } from './boss.js?v=10';
 
 const hashW = (W) => { const P = W.players[0]; let h = 0; const s = `${P.x.toFixed(5)}|${P.y.toFixed(5)}|${P.hp}|${P.oil.toFixed(3)}|${W.score}|${W.n}|${W.bats.map((b) => b.x.toFixed(3) + b.st).join()}|${W.loot.filter((l) => l.got).length}|${W.M.tiles.reduce((a, t, i) => (a + t * (i % 97)) | 0, 0)}`; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return h; };
 

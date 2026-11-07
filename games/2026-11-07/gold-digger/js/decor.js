@@ -3,7 +3,7 @@
 // Things that glow register light "emitters" the renderer's light pool can aim at.
 // The wonders (one per level in the campaign) are big set pieces in a room whose back wall is pushed far back.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID } from './config.js?v=9';
+import { T, SOLID } from './config.js?v=10';
 
 function rng(seed) { let s = seed >>> 0 || 1; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 
@@ -217,7 +217,7 @@ export function buildDecor(M, look, W, K) {
     for (const [x, y] of spots) for (const [z, a, w] of [[-1.1, 0.24, 8], [-2.4, 0.18, 10]]) {
       const m = new THREE.Mesh(new THREE.PlaneGeometry(w, 1.5), new THREE.ShaderMaterial({ vertexShader: WF_VERT, fragmentShader: MIST_FRAG, transparent: true, depthWrite: false,
         uniforms: { uT: { value: 0 }, uCol: { value: col }, uA: { value: a } } }));
-      m.position.set(x + 0.5, y + 0.55, z); m.renderOrder = 2; group.add(m); mists.push(m);
+      m.position.set(x + 0.5, y + 0.55, z); m.renderOrder = 2; m.frustumCulled = false; group.add(m); mists.push(m);
     }
   }
   // ---- glowworm threads (grotto, endless)

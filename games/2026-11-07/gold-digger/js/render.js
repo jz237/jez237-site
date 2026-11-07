@@ -4,13 +4,13 @@
 // re-aimed every frame at the nearest flares, fires, lanterns, crystals and lava): their number never changes,
 // so no material ever recompiles mid-game.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=9';
-import { Cave, rockMaterial } from './cavemesh.js?v=9';
-import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=9';
-import { FX, CALM } from './fx.js?v=9';
-import { Post } from './post.js?v=9';
-import * as MD from './models.js?v=9';
-import { buildDecor, bake } from './decor.js?v=9';
+import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=10';
+import { Cave, rockMaterial } from './cavemesh.js?v=10';
+import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=10';
+import { FX, CALM } from './fx.js?v=10';
+import { Post } from './post.js?v=10';
+import * as MD from './models.js?v=10';
+import { buildDecor, bake } from './decor.js?v=10';
 
 export function pickQuality(name) {
   const mobile = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
@@ -795,7 +795,7 @@ export class Renderer {
           // a soft shaft of light falls on a relic nobody has taken yet
           let hh = 1; while (hh < 6 && !this.solidAt(f.x, f.y + hh + 0.5)) hh++;
           const shaft = new THREE.Mesh(new THREE.PlaneGeometry(1.5, hh + 0.4), new THREE.ShaderMaterial({ vertexShader: SHAFT_VERT, fragmentShader: SHAFT_FRAG, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, uniforms: { uT: { value: 0 }, uI: { value: 0 } } }));
-          shaft.position.set(0, (hh + 0.4) / 2 + 0.05, -0.4); shaft.renderOrder = 3; g.add(shaft);
+          shaft.position.set(0, (hh + 0.4) / 2 + 0.05, -0.4); shaft.renderOrder = 3; shaft.frustumCulled = false; g.add(shaft);   // always drawn, so its shader compiles when the level loads, not mid-run
           return { m: g, rel, shaft };
         }
         if (f.kind === 'map') return { m: this.scroll() };
