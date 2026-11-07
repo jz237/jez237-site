@@ -2,6 +2,24 @@
   "album": "Cat Corner",
   "photos": [
     {
+      "src": "images/two-black-cats-rug-stare-2026-11-06.jpg",
+      "alt": "Two black cats lying side by side on a gray rug, both looking up at the camera with golden eyes, a white toy mouse beside them",
+      "caption": "Matching set, matching stare: the toy mouse has been spared for now",
+      "date": "2026-11-06"
+    },
+    {
+      "src": "images/two-black-cats-rug-nap-2026-11-06.jpg",
+      "alt": "Two black cats napping stretched out side by side on a gray rug, faces tucked down",
+      "caption": "Same rug, same cats, both now fully offline",
+      "date": "2026-11-06"
+    },
+    {
+      "src": "images/black-cat-belly-up-feather-2026-11-03.jpg",
+      "alt": "Black cat lying belly-up on a gray rug with paws curled, eyes half-closed, a white feather toy beside it",
+      "caption": "Belly up, eyes at half-mast: the feather has been dealt with",
+      "date": "2026-11-03"
+    },
+    {
       "src": "images/luca-lap-long-arm-2026-08-29.jpg",
       "alt": "Luca, a black cat, sitting on Jez's lap with one front leg stretched toward the camera",
       "caption": "Luca: lap secured, personal space revoked",
