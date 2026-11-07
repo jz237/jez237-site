@@ -6,7 +6,7 @@
 // weights (gold vein, wetness, glow, rubble/cracks) that the triplanar rock shader uses.
 // Breaking a tile re-meshes only the chunks around it (a few ms).
 import * as THREE from '../vendor/three.module.min.js';
-import { T } from './config.js?v=7';
+import { T } from './config.js?v=8';
 
 export const S = 0.5;                  // sample spacing (m)
 export const Z0 = -15, Z1 = 5;         // depth range (camera side is +z)
@@ -310,7 +310,7 @@ export function rockMaterial(tex, look) {
   const U = {
     tAlb: { value: tex.alb }, tNrm: { value: tex.nrm }, uScale: { value: 0.32 }, uBump: { value: 1.25 }, uTime: { value: 0 },
     uGold: { value: new THREE.Color(1.0, 0.68, 0.22) }, uGlow: { value: new THREE.Color().fromArray(look.glow || [1, 0.4, 0.1]) },
-    uMoss: { value: new THREE.Color().fromArray(look.mossCol || [0.1, 0.3, 0.2]) }, uRubble: { value: new THREE.Color().fromArray(look.rubble || [0.5, 0.45, 0.4]) },
+    uMoss: { value: new THREE.Color().fromArray(look.mossCol || [0.1, 0.3, 0.2]) }, uRubble: { value: new THREE.Color().fromArray(look.rubble || [0.5, 0.45, 0.4]) }, uCaus: { value: new THREE.Color(0, 0, 0) },
   };
   mat.userData.U = U;
   mat.onBeforeCompile = (sh) => {
@@ -321,7 +321,18 @@ export function rockMaterial(tex, look) {
     sh.fragmentShader = sh.fragmentShader
       .replace('#include <common>', `#include <common>
 uniform sampler2D tAlb; uniform sampler2D tNrm; uniform float uScale; uniform float uBump; uniform float uTime;
-uniform vec3 uGold; uniform vec3 uGlow; uniform vec3 uMoss; uniform vec3 uRubble;
+uniform vec3 uGold; uniform vec3 uGlow; uniform vec3 uMoss; uniform vec3 uRubble; uniform vec3 uCaus;
+// light thrown off moving water: thin bright ripple lines
+float caustic(vec2 p, float t) {
+  vec2 i = p; float c = 1.0;
+  for (int n = 0; n < 3; n++) {
+    float tt = t * (1.0 - (3.5 / float(n + 1)));
+    i = p + vec2(cos(tt - i.x) + sin(tt + i.y), sin(tt - i.y) + cos(tt + i.x));
+    c += 1.0 / max(0.001, length(vec2(p.x / (sin(i.x + tt) / 0.005), p.y / (cos(i.y + tt) / 0.005))));
+  }
+  c /= 3.0; c = 1.17 - pow(c, 1.4);
+  return clamp(pow(abs(c), 8.0), 0.0, 1.0);
+}
 varying vec4 vMat; varying float vCode; varying vec3 vWPos; varying vec3 vWNrm;
 float h13(vec3 p){ p = fract(p * .1031); p += dot(p, p.zyx + 31.32); return fract((p.x + p.y) * p.z); }
 vec3 gTW; vec4 gAlb; vec3 gNW;`)
@@ -378,10 +389,17 @@ roughnessFactor = mix(roughnessFactor, 0.16, vMat.y);`)
     totalEmissiveRadiance += uGlow * gl * pat * 2.2;
   }
   float code = vCode;
+  // wet rock near water catches rippling light
+  float wt = vMat.y;
+  if (wt > 0.05 && uCaus.r + uCaus.g + uCaus.b > 0.001) {
+    float ca = caustic(vWPos.xy * 0.9 - 250.0 + vWPos.z * 0.3, uTime * 0.55);
+    float patchy = smoothstep(0.25, 0.95, (0.5 + 0.5 * sin(vWPos.x * 0.23 + 1.3 + sin(vWPos.y * 0.11)) * sin(vWPos.y * 0.29 + uTime * 0.07)) * (0.6 + 0.4 * gAlb.g));
+    totalEmissiveRadiance += uCaus * ca * smoothstep(0.05, 0.6, wt) * patchy * smoothstep(0.4, -0.6, vWPos.z);
+  }
   // a boulder that needs dynamite shows hot little cracks; loose rubble catches the light a touch
   if (code > 1.5) { float cr = smoothstep(0.86, 0.97, 1.0 - abs(sin(vWPos.x * 3.1 + vWPos.y * 2.3 + gAlb.r * 9.0))); totalEmissiveRadiance += vec3(1.0, 0.3, 0.05) * cr * smoothstep(1.5, 1.9, code) * (0.6 + 0.4 * sin(uTime * 2.4)) * 0.38; }
 }`);
   };
-  mat.customProgramCacheKey = () => 'gd-rock-2';
+  mat.customProgramCacheKey = () => 'gd-rock-3';
   return mat;
 }

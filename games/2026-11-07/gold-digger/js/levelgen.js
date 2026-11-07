@@ -5,7 +5,7 @@
 // (mirrored at random), then hazards, creatures and loot are scattered by the RAMP numbers for this level.
 // Everything is deterministic from (seed, depth, level). Boss lairs are separate hand-shaped arenas.
 // Tile rows here are world rows: y = 0 is the bottom of the map. Templates are written top-down.
-import { T, RAMP, LEVELS, RELICS, FOSSILS, WONDERS, NOTES, GEMS, LOOT, STRATA } from './config.js?v=7';
+import { T, RAMP, LEVELS, RELICS, FOSSILS, WONDERS, NOTES, GEMS, LOOT, STRATA } from './config.js?v=8';
 
 export const RW = 16, RH = 12, BORDER = 2;
 

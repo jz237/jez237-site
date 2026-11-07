@@ -3,7 +3,7 @@
 // Things that glow register light "emitters" the renderer's light pool can aim at.
 // The wonders (one per level in the campaign) are big set pieces in a room whose back wall is pushed far back.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID } from './config.js?v=7';
+import { T, SOLID } from './config.js?v=8';
 
 function rng(seed) { let s = seed >>> 0 || 1; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 
@@ -56,13 +56,31 @@ export function bake(roots, opts = {}) {
 const WF_FRAG = `uniform float uT; uniform vec3 uCol; uniform float uLava; varying vec2 vUv; varying vec3 vW;
 float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 float n(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f); return mix(mix(h(i), h(i+vec2(1,0)), f.x), mix(h(i+vec2(0,1)), h(i+vec2(1,1)), f.x), f.y); }
+float fbm(vec2 p){ float s = 0.0, a = 0.5; for (int i = 0; i < 4; i++) { s += a * n(p); p = p * 2.03 + vec2(1.7, 9.2); a *= 0.5; } return s; }
 void main(){
-  vec2 p = vec2(vUv.x * 6.0, vUv.y * 3.0 + uT * (uLava > 0.5 ? 0.35 : 1.6));
-  float s = n(p * vec2(1.0, 4.0)) * 0.6 + n(p * vec2(2.3, 9.0)) * 0.4;
-  float edge = smoothstep(0.0, 0.18, vUv.x) * smoothstep(1.0, 0.82, vUv.x);
-  float a = edge * (0.35 + s * 0.65) * smoothstep(0.0, 0.08, vUv.y);
-  vec3 c = uLava > 0.5 ? mix(vec3(3.2, 0.7, 0.1), vec3(0.3, 0.05, 0.02), smoothstep(0.5, 0.75, s)) : uCol * (0.6 + s * 0.8);
-  gl_FragColor = vec4(c, uLava > 0.5 ? edge : a * 0.75);
+  bool lava = uLava > 0.5;
+  float sp = lava ? 0.45 : 2.2;
+  // the edges wobble as the sheet swings
+  float wob = (n(vec2(vW.y * 1.1 - uT * sp * 0.8, 3.7)) - 0.5) * 0.22;
+  float x = vUv.x + wob;
+  float edge = smoothstep(0.0, 0.22, x) * smoothstep(1.0, 0.78, x);
+  // long falling streaks (world space, so every fall has the same grain) and fine fast threads
+  float st = fbm(vec2(vW.x * 6.0, vW.y * 0.45 + uT * sp));
+  float th = n(vec2(vW.x * 26.0, vW.y * 1.2 + uT * sp * 1.7));
+  float s = st * 0.8 + th * 0.35;
+  float foot = smoothstep(0.24, 0.0, vUv.y), lip = smoothstep(0.9, 1.0, vUv.y);
+  if (lava) {
+    float crust = smoothstep(0.46, 0.62, fbm(vec2(vW.x * 3.0, vW.y * 0.35 + uT * sp * 0.6)));
+    float core = 1.0 - abs(vUv.x - 0.5) * 2.0;
+    vec3 hot = mix(vec3(2.0, 0.42, 0.06), vec3(2.8, 1.3, 0.3), smoothstep(0.55, 1.0, core) * (1.0 - crust) * (0.6 + 0.4 * st));
+    vec3 c = mix(hot, vec3(0.22, 0.04, 0.02), crust * 0.85) + vec3(2.5, 0.6, 0.1) * foot;
+    gl_FragColor = vec4(c, edge * smoothstep(0.0, 0.04, vUv.y));
+  } else {
+    float foam = foot * (0.6 + 0.6 * n(vec2(vW.x * 9.0, vW.y * 4.0 + uT * 3.0)));
+    vec3 c = uCol * (0.4 + s * 1.0) + vec3(0.75, 0.85, 0.9) * (foam * 1.3 + lip * 0.35 + pow(th, 6.0) * 0.6);
+    float a = edge * (0.25 + s * 0.7 + foam * 0.6) * smoothstep(0.0, 0.05, vUv.y);
+    gl_FragColor = vec4(c, a * 0.8);
+  }
 }`;
 const WF_VERT = `varying vec2 vUv; varying vec3 vW; void main(){ vUv = uv; vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }`;
 const GW_VERT = `attribute float aPh; uniform float uT; uniform float uScale; varying float vA;
@@ -166,7 +184,10 @@ export function buildDecor(M, look, W, K) {
       const m = new THREE.Mesh(new THREE.PlaneGeometry(lava ? 1.6 : 1.4, h), new THREE.ShaderMaterial({ vertexShader: WF_VERT, fragmentShader: WF_FRAG, transparent: true, depthWrite: false, blending: lava ? THREE.NormalBlending : THREE.AdditiveBlending,
         uniforms: { uT: { value: 0 }, uCol: { value: new THREE.Color(0.35, 0.55, 0.6) }, uLava: { value: lava ? 1 : 0 } } }));
       m.position.set(x + 0.5, y + h / 2 - 0.2, -2.6); group.add(m);
-      falls.push({ m, x: x + 0.5, y, lava });
+      // a pool of spray (or a glow of heat) where it lands
+      const pool = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 1.6), new THREE.MeshBasicMaterial({ map: tex.glow, color: lava ? new THREE.Color(1.6, 0.45, 0.08) : new THREE.Color(0.5, 0.65, 0.72), transparent: true, opacity: lava ? 0.55 : 0.32, blending: THREE.AdditiveBlending, depthWrite: false }));
+      pool.position.set(x + 0.5, y + 0.15, -2.45); group.add(pool);
+      falls.push({ m, x: x + 0.5, y, lava, pool });
       emitters.push({ x: x + 0.5, y: y + 1.5, z: -2, col: lava ? [1, 0.36, 0.08] : accent, int: lava ? 10 : 1.5, range: lava ? 12 : 6, pri: lava ? 3 : 1, flick: lava ? 1 : 0 });
     }
   }
@@ -206,7 +227,7 @@ export function buildDecor(M, look, W, K) {
   // drips: ceiling points that drip now and then
   const drips = ceils.slice(0, 30).filter(() => R() < 0.6).map(([x, y]) => ({ x: x + R(), y: y + 0.95, t: R() * 4 }));
   const update = (t, dt, P, fx) => {
-    for (const f of falls) { f.m.material.uniforms.uT.value = t; if (Math.abs(f.x - P.x) < 18 && Math.random() < dt * (f.lava ? 6 : 10)) { if (f.lava) fx.fire(f.x + (Math.random() - 0.5), f.y + 0.3, -2.2, { n: 1, s: 0.9, life: 0.8 }); else fx.dust(f.x + (Math.random() - 0.5), f.y + 0.3, -2.2, { n: 1, s0: 0.5, s1: 2.2, life: 2, vy: 0.6, a: 0.25, col: [0.8, 0.9, 0.95] }); } }
+    for (const f of falls) { f.m.material.uniforms.uT.value = t; f.pool.scale.set(1 + Math.sin(t * 3.1 + f.x) * 0.06, 1 + Math.sin(t * 4.3 + f.x) * 0.12, 1); if (Math.abs(f.x - P.x) < 18 && Math.random() < dt * (f.lava ? 6 : 10)) { if (f.lava) fx.fire(f.x + (Math.random() - 0.5), f.y + 0.3, -2.2, { n: 1, s: 0.9, life: 0.8 }); else fx.dust(f.x + (Math.random() - 0.5), f.y + 0.3, -2.2, { n: 1, s0: 0.5, s1: 2.2, life: 2, vy: 0.6, a: 0.25, col: [0.8, 0.9, 0.95] }); } }
     if (worms) worms.material.uniforms.uT.value = t;
     for (const d of drips) {
       d.t -= dt;

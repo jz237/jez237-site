@@ -4,13 +4,13 @@
 // re-aimed every frame at the nearest flares, fires, lanterns, crystals and lava): their number never changes,
 // so no material ever recompiles mid-game.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=7';
-import { Cave, rockMaterial } from './cavemesh.js?v=7';
-import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=7';
-import { FX, CALM } from './fx.js?v=7';
-import { Post } from './post.js?v=7';
-import * as MD from './models.js?v=7';
-import { buildDecor, bake } from './decor.js?v=7';
+import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=8';
+import { Cave, rockMaterial } from './cavemesh.js?v=8';
+import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=8';
+import { FX, CALM } from './fx.js?v=8';
+import { Post } from './post.js?v=8';
+import * as MD from './models.js?v=8';
+import { buildDecor, bake } from './decor.js?v=8';
 
 export function pickQuality(name) {
   const mobile = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
@@ -52,6 +52,21 @@ function strataLook(i, n) {
 }
 
 const tmpV = new THREE.Vector3(), tmpV2 = new THREE.Vector3(), tmpC = new THREE.Color();
+const BEAM_DOWN = new THREE.Vector3(0, -1, 0);
+const BEAM_VERT = `varying float vT; varying vec3 vN; varying vec3 vV; varying vec3 vW; varying vec2 vL;
+void main(){ vT = uv.y; vL = position.xy; vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; vec4 mv = viewMatrix * w; vV = -mv.xyz; vN = normalize(normalMatrix * normal); gl_Position = projectionMatrix * mv; }`;
+const BEAM_FRAG = `uniform vec3 uCol; uniform float uI; uniform float uT; varying float vT; varying vec3 vN; varying vec3 vV; varying vec3 vW; varying vec2 vL;
+float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float n(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f); return mix(mix(h(i), h(i+vec2(1,0)), f.x), mix(h(i+vec2(0,1)), h(i+vec2(1,1)), f.x), f.y); }
+void main(){
+  float along = clamp(1.0 - vT, 0.0, 1.0);
+  float across = clamp(vL.x / max(0.0001, -vL.y), -1.0, 1.0);
+  float soft = pow(1.0 - across * across, 2.5);
+  float rest = 1.0 - along;
+  float fade = smoothstep(0.0, 0.3, along) * rest * rest;
+  float dust = 0.6 + 0.55 * n(vW.xy * 2.2 + vec2(uT * 0.21, uT * 0.13)) + 0.25 * n(vW.xy * 7.0 - vec2(uT * 0.4, -uT * 0.25));
+  gl_FragColor = vec4(uCol, uI * soft * fade * dust);
+}`;
 const lerp = (a, b, t) => a + (b - a) * t;
 const obj = (x) => (x && x.group) ? x.group : x;
 const has = (n) => typeof MD[n] === 'function';
@@ -105,6 +120,12 @@ export class Renderer {
     this.lamp = new THREE.SpotLight(0xffd6a0, 100, 30, 0.72, 0.6, 1.15);
     this.lamp.castShadow = true; this.lamp.shadow.mapSize.set(q.shadow, q.shadow); this.lamp.shadow.bias = -0.0004; this.lamp.shadow.normalBias = 0.03; this.lamp.shadow.camera.near = 0.2; this.lamp.shadow.camera.far = 34;
     this.scene.add(this.lamp, this.lamp.target);
+    {
+      const g = new THREE.ConeGeometry(1, 1, 28, 1, true); g.translate(0, -0.5, 0);
+      this.beam = new THREE.Mesh(g, new THREE.ShaderMaterial({ vertexShader: BEAM_VERT, fragmentShader: BEAM_FRAG, transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending,
+        uniforms: { uCol: { value: new THREE.Color(1, 0.85, 0.62) }, uI: { value: 0 }, uT: { value: 0 } } }));
+      this.beam.frustumCulled = false; this.beam.renderOrder = 4; this.beamI = 0; this.scene.add(this.beam);
+    }
     this.fill = new THREE.PointLight(0xffc890, 14, 16, 1.4); this.scene.add(this.fill);
     this.pool = [];
     for (let i = 0; i < q.lights; i++) { const l = new THREE.PointLight(0xffa060, 0, 14, 2.0); this.scene.add(l); this.pool.push({ l, key: null, target: 0 }); }
@@ -151,6 +172,7 @@ export class Renderer {
     const look = this.look = strataLook(M.biome, W.endless ? Math.floor(W.endlessN / 5) : 0);
     Object.assign(this.rockMat.userData.U.uGlow.value, new THREE.Color().fromArray(look.glow));
     this.rockMat.userData.U.uMoss.value.fromArray(look.mossCol || [0.1, 0.3, 0.2]);
+    this.rockMat.userData.U.uCaus.value.setRGB(...(M.biome === 3 ? [0.13, 0.26, 0.3] : M.biome === 1 ? [0.08, 0.22, 0.2] : M.biome === 4 ? [0, 0, 0] : [0.05, 0.05, 0.04]));
     this.scene.fog.color.fromArray(look.fog); this.scene.fog.density = look.fogD;
     this.hemi.color.fromArray(look.hemiS); this.hemi.groundColor.fromArray(look.hemiG);
     this.lamp.color.set(this.lampCol || look.lamp);
@@ -436,6 +458,7 @@ export class Renderer {
   museumFrame(dt, sel) {
     const Mu = this.museum; if (!Mu) return;
     this.time += dt; Mu.t += dt;
+    if (this.beam) this.beam.visible = false;
     const A = Mu.alcoves[sel] || Mu.alcoves[0], t = this.time;
     // the camera drifts to the chosen alcove; the digger walks over to look
     Mu.camX += (A.x - Mu.camX) * (1 - Math.exp(-dt * 3));
@@ -683,6 +706,18 @@ export class Renderer {
     // KEEN EYE: walls hiding a secret room glint gold when you are near
     if (this.loadout && this.loadout.keen && W.M.seals) for (const s of W.M.seals) if (Math.abs(s.x - P.x) < 12 && Math.abs(s.y - P.y) < 8 && Math.random() < dt * 3 && SOLID[W.M.tiles[Math.floor(s.y) * W.M.w + Math.floor(s.x)]]) this.fx.glint(s.x + (Math.random() - 0.5) * 0.8, s.y + (Math.random() - 0.5) * 2.5, 0.8, 0.7, [1, 0.8, 0.35]);
     this.fill.intensity = (oil <= 0 ? 3 : 14 + lampLvl * 3) * flick;
+    // the beam: a faint cone of lit dust ahead of the lamp, stopped where the rock is
+    if (this.beam) {
+      const bd = tmpV2.copy(this.lamp.target.position).sub(lp).normalize();
+      let len = 0.3; while (len < 9 && !this.solidAt(lp.x + bd.x * len, lp.y + bd.y * len)) len += 0.2;
+      const want = climb || P.dead || W.isBoss && W.boss && W.boss.dead ? 0 : 0.26 * k * (1 + lampLvl * 0.15) * (CALM.on ? 0.6 : 1);
+      this.beamI += (want - this.beamI) * Math.min(1, dt * 6);
+      this.beamLen = this.beamLen ? this.beamLen + (len - this.beamLen) * Math.min(1, dt * 14) : len;
+      const L = Math.max(0.5, this.beamLen) + 0.35, r = L * (0.3 + lampLvl * 0.03);
+      this.beam.visible = this.beamI > 0.002;
+      this.beam.position.copy(lp); this.beam.quaternion.setFromUnitVectors(BEAM_DOWN, bd); this.beam.scale.set(r, L, Math.min(0.6, r * 0.25));
+      const u = this.beam.material.uniforms; u.uI.value = this.beamI; u.uT.value = this.time; u.uCol.value.copy(this.lamp.color);
+    }
     if (R.lampLens && R.lampLens.material && R.lampLens.material.emissive) R.lampLens.material.emissiveIntensity = 4 * k;
   }
 
@@ -782,7 +817,11 @@ export class Renderer {
       const v = view('y' + g.id, () => { const grp = new THREE.Group(); const vent = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.45, 0.25, 10, 1, true), new THREE.MeshStandardMaterial({ color: 0x3a3330, roughness: 0.6, side: THREE.DoubleSide })); vent.position.y = 0.1; grp.add(vent); return { m: grp }; });
       v.root.position.set(g.x, g.y, 0.1);
       if (g.st === 'warn' && Math.random() < dt * 14) this.fx.dust(g.x, g.y + 0.2, 0.2, { n: 1, s0: 0.2, s1: 0.7, life: 1, vy: 1.5, jit: 0.3, a: 0.4, col: [0.85, 0.88, 0.9] });
-      if (g.st === 'erupt' && !CALM.on) { for (let i = 0; i < 3; i++) this.fx.dust(g.x, g.y + 0.2, 0.2, { n: 1, s0: 0.35, s1: 1.8, life: 1.1, vy: 9 + Math.random() * 4, jit: 0.7, a: 0.5, col: [0.92, 0.95, 1.0], grav: 4, drag: 0.6 }); }
+      if (g.st === 'erupt' && !CALM.on) {
+        // a hot fast core, slow billows that spread and linger above it, and spray at the vent
+        for (let i = 0; i < 3; i++) this.fx.dust(g.x + (Math.random() - 0.5) * 0.15, g.y + 0.2, 0.2, { n: 1, s0: 0.18, s1: 1.1, life: 0.85, vy: 12 + Math.random() * 4, jit: 0.25, a: 0.3, col: [0.95, 0.97, 1.0], grav: 2, drag: 0.35 });
+        if (Math.random() < dt * 16) this.fx.dust(g.x + (Math.random() - 0.5) * 0.6, g.y + 4 + Math.random() * 3, 0.0, { n: 1, s0: 0.8, s1: 2.8, life: 2.6, vy: 1.1, jit: 1.1, a: 0.13, col: [0.86, 0.89, 0.93], grav: -0.15, drag: 0.9 });
+      } else if (Math.random() < dt * 1.2) this.fx.dust(g.x, g.y + 0.25, 0.15, { n: 1, s0: 0.15, s1: 0.8, life: 2.2, vy: 0.5, jit: 0.15, a: 0.16, col: [0.85, 0.88, 0.9] });
     }
     for (const b of W.bombs) {
       if (b.dead) continue;
