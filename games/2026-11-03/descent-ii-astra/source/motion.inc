@@ -376,44 +376,26 @@ static void af_flare(object *obj, float age, float speed, float clock, float dep
     af_flush_tinted(clock,0,1);
 }
 
-/* A deployed smart mine unfolds at the native two-second arming threshold.
- * All parts, scanning brackets and homing globules are depth-tested geometry. */
+/* Original D2 clustered mine silhouette. The game retains ownership of
+ * arming, collisions and homing children; only the display is replaced. */
+extern int astra_draw_classic_mine(object*,int);
 static float af_smart_arming(const object *o){
     float elapsed=f2fl(Weapon_info[o->id].lifetime-o->lifeleft);
     return fminf(1,fmaxf(0,(elapsed-.35f)/1.65f));
 }
-static void af_smart_mine(object *o,float clock){
-    float armed=af_smart_arming(o),open=armed*armed*(3-2*armed);
-    float radius=fminf(2.3f,fmaxf(.8f,f2fl(o->size))),pulse=.65f+.35f*sinf(clock*5+o->signature);
-    g3_start_instance_matrix(&o->pos,&o->orient);ax_count=0;ax_energy=0;
-    ax_paint(.12f,.16f,.19f,0);ax_orb(.24f,.9f);
-    ax_paint(.39f,.45f,.49f,.04f);ax_ring(0,0,0,.50f,.07f,0,6.2831853f,0);
-    for(int i=0;i<6;i++){
-        float a=i*1.04719755f,c=cosf(a),s=sinf(a),reach=.58f+open*.60f,z=.35f-open*.45f;
-        ax_paint(.19f,.24f,.27f,0);ax_tube(c*.35f,s*.35f,0,c*reach,s*reach,z,.15f,.24f,6);
-        ax_paint(.46f,.51f,.53f,.03f);ax_tube(c*reach,s*reach,z-.22f,c*reach,s*reach,z+.15f,.24f,.15f,5);
-        ax_paint(1,.33f+open*.30f,.045f,.45f+open*.7f);
-        ax_tube(c*(reach-.09f),s*(reach-.09f),z-.18f,c*(reach-.09f),s*(reach-.09f),z+.11f,.055f,.055f,8);
-        /* Independent three-dimensional targeting brackets, not a billboard. */
-        if(open>.8f){float b=a+clock*.22f;
-            ax_paint(1,.58f,.055f,.75f);ax_ring(0,0,.20f,1.40f,.018f,b,.30f,0);
-            ax_tube(c*1.30f,s*1.30f,.2f,c*1.52f,s*1.52f,.2f,.02f,.02f,5);
-        }
-    }
-    ax_flush(radius,1);ax_count=0;ax_energy=2;
-    ax_paint(1,.38f+open*.28f,.025f,1.8f);ax_orb(.29f+open*.09f+pulse*.018f,1);
-    ax_flush(radius,1);ax_energy=0;
-    if(open>.4f){ax_count=0;ax_paint(1,.60f,.07f,1.3f);ax_arc(.63f,clock*.7f,clock,1,.014f);ax_flush(radius,1);}
-    g3_done_instance();
-    EM_ASM(Module.smartMineVisual=({version:33,armed:!!$0,unfold:$1});,armed>=1,open);
+static int af_smart_mine(object *o,float clock){
+    int drawn=astra_draw_classic_mine(o,1);
+    EM_ASM(Module.smartMineVisual=({version:62,armed:!!$0,classic:true});,af_smart_arming(o)>=1);
+    return drawn;
 }
 
 int astra_draw_weapon(object *obj){
     if(!ax_on()||obj->type!=OBJ_WEAPON||obj->id>=N_weapon_types)return 0;
     int id=obj->id,missile=astra_weapon_missile(obj);
     int laser=(id>=LASER_ID_L1&&id<=LASER_ID_L4)||id==LASER_ID_L5||id==LASER_ID_L6;
-    if(id==SUPERPROX_ID||id==ROBOT_SUPERPROX_ID){af_smart_mine(obj,astra_visual_clock());return 1;}
-    if(is_proximity_bomb_or_smart_mine(id)||id==PMINE_ID)return 0;
+    if(id==SUPERPROX_ID||id==ROBOT_SUPERPROX_ID)return af_smart_mine(obj,astra_visual_clock());
+    if(id==PROXIMITY_ID)return astra_draw_classic_mine(obj,0);
+    if(id==PMINE_ID)return 0;
     if(obj->render_type==RT_NONE&&id!=FLARE_ID&&id!=VULCAN_ID&&id!=GAUSS_ID)return 0;
     /* Player Omega is drawn once as a continuous paired discharge. */
     if(id==OMEGA_ID&&obj->ctype.laser_info.parent_type==OBJ_PLAYER)return 1;

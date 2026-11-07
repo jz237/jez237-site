@@ -169,6 +169,36 @@ def equipment(m,id):
    for y in (-.27,.27):m.sphere(.035,EDGE,center=(x,y,.245))
   if id==34:
    m.torus(.18,.04,GOLD,1.1,center=(-.20,0,.30));m.torus(.18,.04,CYAN,1.1,center=(.20,0,.30))
+def d2_mine(m,smart,caged):
+ # Reconstruct the six red/amber lobes from D2 pbomb/spbomb sprites.
+ # Pickups use the original silver cubic carrier; deployed mines have
+ # eight diagonal contact spikes. Shared proportions and finishes.
+ shell=(.74,.30,.025) if smart else (.65,.012,.009)
+ silver=(.69,.71,.70)
+ m.sphere(.32,(.18,.12,.045) if smart else (.12,.013,.01))
+ for axis in range(3):
+  for sign in (-1,1):
+   p=[0,0,0];p[axis]=sign*.34
+   m.sphere(.40,shell,.035,center=p)
+ if caged:
+  for axis in range(3):
+   for u in (-1,1):
+    for v in (-1,1):
+     center=[0,0,0];size=[.075,.075,.075]
+     center[(axis+1)%3]=u*.55;center[(axis+2)%3]=v*.55;size[axis]=1.175
+     m.box(center,size,silver)
+ else:
+  for x in (-1,1):
+   for y in (-1,1):
+    for z in (-1,1):
+     direction=norm((x,y,z));t=norm(cross(direction,(0,1,0)));u=cross(direction,t)
+     base=[d*.54 for d in direction];tip=[d*.98 for d in direction]
+     for i in range(12):
+      a=i*2*P/12;b=(i+1)*2*P/12
+      p=[base[k]+.085*(t[k]*C(a)+u[k]*S(a)) for k in range(3)]
+      q=[base[k]+.085*(t[k]*C(b)+u[k]*S(b)) for k in range(3)]
+      m.tri(p,q,tip,silver,rough=.22)
+
 def make(id):
  m=Mesh()
  if id==50:
@@ -213,11 +243,7 @@ def make(id):
   count={3:1,12:4,13:6,14:3,15:2,16:2,28:6,29:5,30:2,31:3,32:1}[id]
   col={3:RED,12:RED,13:GOLD,14:VIOLET,15:GREEN,16:VIOLET,28:GOLD,29:BLUE,30:RED,31:CYAN,32:CYAN}[id]
   cannon(m,col,count,id)
- elif id in (17,42):
-  m.sphere(.38,DARK);col=RED if id==17 else GREEN
-  for axis in range(3):m.torus(.42,.065,ALLOY,axis=axis);m.torus(.43,.018,col,.8,axis=axis)
-  for p in ((.64,0,0),(-.64,0,0),(0,.64,0),(0,-.64,0),(0,0,.64),(0,0,-.64)):
-   m.beam((0,0,0),p,.04,EDGE);m.sphere(.08,col,1.2,center=p)
+ elif id in (17,42):d2_mine(m,id==42,True)
  elif id==22:
   for x in (-.4,0,.4):
    for y in (-.2,.2):m.lathe([(-.5,.1),(-.4,.14),(.3,.14),(.55,0)],GOLD,center=(x,y,0),segments=20)
@@ -239,7 +265,9 @@ def main(out):
  for id in range(51):
   mesh=make(id);b=mesh.finish();parts.append(b)
   catalog.append({'id':id,'name':NAMES.get(id,'Reserved pickup '+str(id)),'active':id in NAMES,'triangles':len(mesh.v)//33})
- binary=b'APU8'+struct.pack('<I',51)+b''.join(parts)
+ for smart in (False,True):
+  mesh=Mesh();d2_mine(mesh,smart,False);parts.append(mesh.finish())
+ binary=b'APU9'+struct.pack('<I',53)+b''.join(parts)
  packed=base64.b64encode(gzip.compress(binary,compresslevel=9,mtime=0)).decode()
  out.write_text('window.astraCollectibles='+json.dumps({'catalog':catalog,'gzip':packed},separators=(',',':'))+';\n',encoding='utf8')
  (OUT/'collectibles-catalog.json').write_text(json.dumps(catalog,indent=2),encoding='utf8')

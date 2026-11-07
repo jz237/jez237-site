@@ -1,0 +1,308 @@
+[
+  {
+    "id": 0,
+    "name": "Extra life",
+    "active": true,
+    "triangles": 2416
+  },
+  {
+    "id": 1,
+    "name": "Energy",
+    "active": true,
+    "triangles": 12448
+  },
+  {
+    "id": 2,
+    "name": "Shields",
+    "active": true,
+    "triangles": 12640
+  },
+  {
+    "id": 3,
+    "name": "Laser upgrade",
+    "active": true,
+    "triangles": 3336
+  },
+  {
+    "id": 4,
+    "name": "Blue key",
+    "active": true,
+    "triangles": 1456
+  },
+  {
+    "id": 5,
+    "name": "Red key",
+    "active": true,
+    "triangles": 1500
+  },
+  {
+    "id": 6,
+    "name": "Gold key",
+    "active": true,
+    "triangles": 1544
+  },
+  {
+    "id": 7,
+    "name": "Hoard orb",
+    "active": true,
+    "triangles": 12448
+  },
+  {
+    "id": 8,
+    "name": "Reserved pickup 8",
+    "active": false,
+    "triangles": 3708
+  },
+  {
+    "id": 9,
+    "name": "Reserved pickup 9",
+    "active": false,
+    "triangles": 3708
+  },
+  {
+    "id": 10,
+    "name": "Concussion missile",
+    "active": true,
+    "triangles": 2160
+  },
+  {
+    "id": 11,
+    "name": "Concussion four-pack",
+    "active": true,
+    "triangles": 8728
+  },
+  {
+    "id": 12,
+    "name": "Quad lasers",
+    "active": true,
+    "triangles": 9096
+  },
+  {
+    "id": 13,
+    "name": "Vulcan cannon",
+    "active": true,
+    "triangles": 12936
+  },
+  {
+    "id": 14,
+    "name": "Spreadfire cannon",
+    "active": true,
+    "triangles": 7176
+  },
+  {
+    "id": 15,
+    "name": "Plasma cannon",
+    "active": true,
+    "triangles": 5304
+  },
+  {
+    "id": 16,
+    "name": "Fusion cannon",
+    "active": true,
+    "triangles": 5304
+  },
+  {
+    "id": 17,
+    "name": "Proximity mines",
+    "active": true,
+    "triangles": 6016
+  },
+  {
+    "id": 18,
+    "name": "Homing missile",
+    "active": true,
+    "triangles": 2944
+  },
+  {
+    "id": 19,
+    "name": "Homing four-pack",
+    "active": true,
+    "triangles": 11864
+  },
+  {
+    "id": 20,
+    "name": "Smart missile",
+    "active": true,
+    "triangles": 3696
+  },
+  {
+    "id": 21,
+    "name": "Mega missile",
+    "active": true,
+    "triangles": 3696
+  },
+  {
+    "id": 22,
+    "name": "Vulcan ammunition",
+    "active": true,
+    "triangles": 808
+  },
+  {
+    "id": 23,
+    "name": "Cloaking device",
+    "active": true,
+    "triangles": 14368
+  },
+  {
+    "id": 24,
+    "name": "Turbo",
+    "active": true,
+    "triangles": 7032
+  },
+  {
+    "id": 25,
+    "name": "Invulnerability",
+    "active": true,
+    "triangles": 14368
+  },
+  {
+    "id": 26,
+    "name": "Reserved pickup 26",
+    "active": false,
+    "triangles": 3708
+  },
+  {
+    "id": 27,
+    "name": "Megawow",
+    "active": true,
+    "triangles": 14368
+  },
+  {
+    "id": 28,
+    "name": "Gauss cannon",
+    "active": true,
+    "triangles": 12936
+  },
+  {
+    "id": 29,
+    "name": "Helix cannon",
+    "active": true,
+    "triangles": 11064
+  },
+  {
+    "id": 30,
+    "name": "Phoenix cannon",
+    "active": true,
+    "triangles": 5256
+  },
+  {
+    "id": 31,
+    "name": "Omega cannon",
+    "active": true,
+    "triangles": 7224
+  },
+  {
+    "id": 32,
+    "name": "Super laser",
+    "active": true,
+    "triangles": 3384
+  },
+  {
+    "id": 33,
+    "name": "Full map",
+    "active": true,
+    "triangles": 3708
+  },
+  {
+    "id": 34,
+    "name": "Energy converter",
+    "active": true,
+    "triangles": 4988
+  },
+  {
+    "id": 35,
+    "name": "Ammunition rack",
+    "active": true,
+    "triangles": 896
+  },
+  {
+    "id": 36,
+    "name": "Afterburner",
+    "active": true,
+    "triangles": 7032
+  },
+  {
+    "id": 37,
+    "name": "Headlight",
+    "active": true,
+    "triangles": 3024
+  },
+  {
+    "id": 38,
+    "name": "Flash missile",
+    "active": true,
+    "triangles": 2944
+  },
+  {
+    "id": 39,
+    "name": "Flash four-pack",
+    "active": true,
+    "triangles": 11864
+  },
+  {
+    "id": 40,
+    "name": "Guided missile",
+    "active": true,
+    "triangles": 2944
+  },
+  {
+    "id": 41,
+    "name": "Guided four-pack",
+    "active": true,
+    "triangles": 11864
+  },
+  {
+    "id": 42,
+    "name": "Smart mines",
+    "active": true,
+    "triangles": 6016
+  },
+  {
+    "id": 43,
+    "name": "Mercury missile",
+    "active": true,
+    "triangles": 2160
+  },
+  {
+    "id": 44,
+    "name": "Mercury four-pack",
+    "active": true,
+    "triangles": 8728
+  },
+  {
+    "id": 45,
+    "name": "Earthshaker missile",
+    "active": true,
+    "triangles": 3696
+  },
+  {
+    "id": 46,
+    "name": "Blue flag",
+    "active": true,
+    "triangles": 2112
+  },
+  {
+    "id": 47,
+    "name": "Red flag",
+    "active": true,
+    "triangles": 2112
+  },
+  {
+    "id": 48,
+    "name": "Reserved pickup 48",
+    "active": false,
+    "triangles": 3708
+  },
+  {
+    "id": 49,
+    "name": "Reserved pickup 49",
+    "active": false,
+    "triangles": 3708
+  },
+  {
+    "id": 50,
+    "name": "Hostage rescue pod",
+    "active": true,
+    "triangles": 1500
+  }
+]

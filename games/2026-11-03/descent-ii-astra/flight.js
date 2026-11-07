@@ -117,17 +117,25 @@ async function readPack(group,label) {
     requests.delete(i);
     if (!response.ok || !response.body) throw Error("Could not read "+files[i]);
     const stream=response.body.pipeThrough(new DecompressionStream("gzip"));
-    const decoded=new Uint8Array(await new Response(stream).arrayBuffer());
-    let offset=0;
-    while(offset<decoded.length) {
-      const take=Math.min(target.length-at,decoded.length-offset);
-      target.set(decoded.subarray(offset,offset+take),at);
-      at+=take;offset+=take;
-      if(at===target.length) {
-        mounted.set(entries[cursor][0],target);
-        cursor++; at=0; target=cursor<entries.length?new Uint8Array(entries[cursor][1]):null;
+    // Copy decompressed chunks directly into their final file buffers. Avoid
+    // allocating a second whole decoded parcel and then copying it at once.
+    const reader=stream.getReader();
+    try {
+      for(;;){
+        const {value:decoded,done}=await reader.read();if(done)break;
+        let offset=0;
+        while(offset<decoded.length) {
+          if(!target)throw Error("Oversized "+group+" parcel");
+          const take=Math.min(target.length-at,decoded.length-offset);
+          target.set(decoded.subarray(offset,offset+take),at);
+          at+=take;offset+=take;
+          if(at===target.length) {
+            mounted.set(entries[cursor][0],target);
+            cursor++; at=0; target=cursor<entries.length?new Uint8Array(entries[cursor][1]):null;
+          }
+        }
       }
-    }
+    } finally {reader.releaseLock();}
   }
   if(cursor!==entries.length) throw Error("Incomplete "+group+" parcel");
 }
@@ -228,7 +236,7 @@ function preloadFlightEngine() {
   if(location.protocol!=="http:"&&location.protocol!=="https:")return;
   if(document.getElementById("astraEnginePreload"))return;
   const link=document.createElement("link");link.id="astraEnginePreload";
-  link.rel="preload";link.as="script";link.href="engine.js?v=pyre61";
+  link.rel="preload";link.as="script";link.href="engine.js?v=pyre62";
   document.head.append(link);
 }
 let firstBlastProfile=0;
@@ -295,7 +303,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
     await readPack("vertigo","Reading the mission");
     let assetDepot=null;
     if(astra){
-      await script("payload/stream24/index.js");
+      await script("payload/stream24/index.js?v=62");
       const catalog=window.astraStreamCatalog;
       window.astraMaterialTypes=catalog.types;
       window.astraCollectiblesCatalog=catalog.effects.catalog;
@@ -363,7 +371,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre61");
+    await script("engine.js?v=pyre62");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 
@@ -514,7 +522,7 @@ window.astraCollectibleStatus=id=>{
   if(!item)return;
   $('previewTitle').textContent='PTMC / COLLECTIBLE INSPECTION';
   $('previewVariation').textContent=item.name;
-  $('previewPhase').textContent='Animated 3D model · Branching electrical discharges';
+  $('previewPhase').textContent=id===17||id===42?'Classic Descent II shape · Rotating 3D model':'Animated 3D model · Branching electrical discharges';
   $('previewTime').textContent=item.triangles.toLocaleString()+' triangles';
   $('previewProgress').hidden=true;
   $('previewAgain').textContent='Next collectible →';

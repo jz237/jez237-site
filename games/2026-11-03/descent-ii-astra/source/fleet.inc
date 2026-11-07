@@ -3,13 +3,13 @@
 #include "robot.h"
 #include "astra_fleet_types.inc"
 typedef struct {unsigned mat,joint,count,part;float *v;} astra_batch;
-typedef struct {int tried,count;astra_batch *group;unsigned char *bytes;} astra_chassis;
+typedef struct {int tried,count;astra_batch *group;unsigned char *bytes;unsigned size;GLuint buffer;} astra_chassis;
 static astra_chassis af_models[32];
 static GLuint af_maps[64][2],fleet_program;
-static int af_enabled=-1,fleet_failed,af_draws;
+static int af_enabled=-1,fleet_failed,af_draws,af_uploads;
 int astra_robot_id=-1;
 static GLint af_light_on,af_lpos,af_lcolor,af_ldir,af_shadow_on,af_shadow_center,af_shadow_lamp,af_shadow_right,af_shadow_up,af_shadow_normal,af_shadow_size,af_shadow_depth;
-static GLint af_basis,af_origin,af_energy,af_flash,af_clock,af_charge;
+static GLint af_basis,af_origin,af_energy,af_flash,af_clock,af_charge,af_wreck_heat,af_wreck_part;
 static void af_program_init(void){
     const char *vs="varying mediump vec2 uv;varying highp vec3 p,n,t,q;varying mediump float hand;"
         "uniform mat3 axis;uniform vec3 origin;"
@@ -55,6 +55,7 @@ static void af_program_init(void){
     af_light_on=glGetUniformLocation(fleet_program,"lightOn");af_lpos=glGetUniformLocation(fleet_program,"lamps[0]");af_lcolor=glGetUniformLocation(fleet_program,"lampColor[0]");af_ldir=glGetUniformLocation(fleet_program,"lampDir[0]");
     af_shadow_on=glGetUniformLocation(fleet_program,"shadowOn");af_shadow_center=glGetUniformLocation(fleet_program,"shadowCenter");af_shadow_lamp=glGetUniformLocation(fleet_program,"shadowLamp");af_shadow_right=glGetUniformLocation(fleet_program,"shadowRight");af_shadow_up=glGetUniformLocation(fleet_program,"shadowUp");af_shadow_normal=glGetUniformLocation(fleet_program,"shadowNormal");af_shadow_size=glGetUniformLocation(fleet_program,"shadowSize");af_shadow_depth=glGetUniformLocation(fleet_program,"shadowDepth");glUniform1i(glGetUniformLocation(fleet_program,"machineryShadow"),2);
     af_charge=glGetUniformLocation(fleet_program,"charge");
+    af_wreck_heat=glGetUniformLocation(fleet_program,"wreckHeat");af_wreck_part=glGetUniformLocation(fleet_program,"wreckPart");
     glUseProgram(0);
 }
 static int af_load_mesh(int id){
@@ -87,7 +88,7 @@ static int af_load_mesh(int id){
         }
         if(next.count)split[used++]=next;
     }
-    free(data);free(g);ch->bytes=sorted;ch->group=split;ch->count=used;return used;
+    free(data);free(g);ch->bytes=sorted;ch->group=split;ch->count=used;ch->size=offset;return used;
 }
 static int ac_model(const object *robot){
     int model=Robot_info[robot->id].model_num;
@@ -145,10 +146,18 @@ int astra_draw_robot(int model,polymodel *pm,vms_angvec *angles,g3s_lrgb light){
     if(!ss_capture){
     glDisable(GL_CULL_FACE);glEnable(GL_DEPTH_TEST);glUseProgram(fleet_program);
     af_d2_lighting(astra_robot_object);
-    glUniform1f(glGetUniformLocation(fleet_program,"wreckHeat"),ac_wreck_heat);glUniform1f(glGetUniformLocation(fleet_program,"wreckPart"),ac_wreck_part);
+    glUniform1f(af_wreck_heat,ac_wreck_heat);glUniform1f(af_wreck_part,ac_wreck_part);
     glUniform3f(af_energy,.51f+.62f*fminf(1.4f,f2fl(light.r)),.55f+.62f*fminf(1.4f,f2fl(light.g)),.58f+.62f*fminf(1.4f,f2fl(light.b)));
     glUniform4fv(af_flash,1,astra_flash);glUniform1f(af_clock,astra_visual_clock());
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_COLOR_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    }
+    astra_chassis *ch=&af_models[id];
+    if(!ss_capture){
+        if(!ch->buffer){
+            glGenBuffers(1,&ch->buffer);glBindBuffer(GL_ARRAY_BUFFER,ch->buffer);
+            glBufferData(GL_ARRAY_BUFFER,ch->size,ch->bytes,GL_STATIC_DRAW);
+            af_uploads++;EM_ASM(Module.fleetMeshUploads=$0;,af_uploads);
+        }else glBindBuffer(GL_ARRAY_BUFFER,ch->buffer);
     }
     for(int b=0;b<af_models[id].count;b++){
         astra_batch *part=&af_models[id].group[b];
@@ -168,7 +177,8 @@ int astra_draw_robot(int model,polymodel *pm,vms_angvec *angles,g3s_lrgb light){
         }
         glUniformMatrix3fv(af_basis,1,GL_FALSE,m);
         if(af_bind(part->mat)){
-            glVertexPointer(3,GL_FLOAT,44,part->v);glColorPointer(4,GL_FLOAT,44,part->v+3);glTexCoordPointer(4,GL_FLOAT,44,part->v+7);
+            size_t offset=(unsigned char*)part->v-ch->bytes;
+            glVertexPointer(3,GL_FLOAT,44,(void*)offset);glColorPointer(4,GL_FLOAT,44,(void*)(offset+12));glTexCoordPointer(4,GL_FLOAT,44,(void*)(offset+28));
             glDrawArrays(GL_TRIANGLES,0,part->count);
         }
         while(n--)g3_done_instance();
@@ -176,7 +186,7 @@ int astra_draw_robot(int model,polymodel *pm,vms_angvec *angles,g3s_lrgb light){
     if(ss_capture)return 1;
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);glDisableClientState(GL_COLOR_ARRAY);glDisableClientState(GL_VERTEX_ARRAY);
     glUniform1f(af_charge,0);glUniform1f(af_light_on,0);glUniform1f(af_shadow_on,0);
-    glUseProgram(0);if(cull)glEnable(GL_CULL_FACE);if(!depth)glDisable(GL_DEPTH_TEST);
+    glBindBuffer(GL_ARRAY_BUFFER,0);glUseProgram(0);if(cull)glEnable(GL_CULL_FACE);if(!depth)glDisable(GL_DEPTH_TEST);
     af_draws++;
     EM_ASM(Module.fleetDraws=$0;Module.lastChassis=$1;,af_draws,id);
     return 1;

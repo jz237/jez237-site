@@ -1302,3 +1302,10 @@ R61 — industrial mine walls and directional destruction
 - Fire and smoke use cached, conservative tunnel envelopes based on closed wall planes and open portals. This is a visual corridor approximation, not a fluid or damage simulation.
 - Blast lighting uses surface orientation, view angle and material response: sharper on metal, softer on rock. Existing detail resolution, flight, AI, health and weapon balance remain unchanged.
 - Industrial construction is visible in the existing mine showroom comparison. Uses existing texture assets, cached vertex buffers and bounded fragment/envelope pools.
+
+R62 — classic mine shapes and smoother asset rendering/loading
+- Reconstructed the original pbomb/spbomb red and amber-gold clustered silhouettes in solid 3D. Pickups have silver cubic carriers; deployed mines have eight diagonal silver spikes. Player and robot smart mines share the new mesh. Native arming, damage, collision, size and homing behavior stay unchanged.
+- Added proximity mines to the cockpit firing range beside smart mines. Mine pickups retain rotation without the unrelated green electrical treatment.
+- Immutable collectible and robot geometry is uploaded once per model to cached GPU buffers and reused, including articulated parts and detached wreckage. Robot cut-edge shader uniforms are cached. Geometry, texture resolution, lighting and animation detail are preserved.
+- Gzip game parcels now stream directly into final file buffers, removing the whole-parcel decoded temporary array and its large synchronous copy. Three-parcel prefetch remains bounded.
+- The APU9 mesh parcel contains the original 51 pickup slots plus two deployed mine meshes. All 49 unrelated pickup meshes are byte-identical. Content-addressed parcel and versioned catalog prevent stale mesh/runtime mismatches.
