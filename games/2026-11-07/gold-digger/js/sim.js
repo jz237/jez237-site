@@ -474,7 +474,7 @@ function updateBats(W, dt, P) {
     } else if (b.st === 'circle') {
       b.x = b.cx + Math.sin(b.t * 2.3) * 1.6; b.y = b.cy + Math.sin(b.t * 4.6) * 0.5;
       b.vx = Math.cos(b.t * 2.3) * 3.6; b.face = Math.sign(b.vx) || 1;
-      if (b.t > 2.4) { if (d2 < 64 && !P.dead) { b.st = 'wake'; b.t = R.batWarn * 0.45; } else { b.st = 'return'; b.t = 0; } }
+      if (b.t > 0.9 + R.batWarn * 0.75) { if (d2 < 64 && !P.dead) { b.st = 'wake'; b.t = R.batWarn * 0.45; } else { b.st = 'return'; b.t = 0; } }
     } else if (b.st === 'flee') {
       const ax = b.x - b.fx, ay = b.y - b.fy, l = Math.hypot(ax, ay) || 1;
       b.vx = ax / l * 4.5; b.vy = ay / l * 2 + 1; b.x += b.vx * dt; b.y += b.vy * dt; b.face = Math.sign(b.vx) || 1;
@@ -690,9 +690,9 @@ function updatePickups(W, dt, P) {
   }
   for (const c of W.camps) {
     if (D2(c.x, c.y + 0.4, px, py) < 1.6) {
-      if (!c.lit) { c.lit = true; ev(W, 'camp', { x: c.x, y: c.y }); }
+      // lighting a camp rests you once (full hearts and lamp); after that it is a save point
+      if (!c.lit) { c.lit = true; ev(W, 'camp', { x: c.x, y: c.y }); if (P.hp < P.maxHp || P.oil < P.oilMax) { P.hp = P.maxHp; P.oil = P.oilMax; ev(W, 'rest', { x: c.x, y: c.y }); } }
       if (W.cp.x !== c.x || W.cp.y !== c.y) { W.cp = { x: c.x, y: c.y }; }
-      if (P.hp < P.maxHp || P.oil < P.oilMax) { P.hp = P.maxHp; P.oil = P.oilMax; ev(W, 'rest', { x: c.x, y: c.y }); }
     }
   }
 }

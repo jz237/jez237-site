@@ -116,16 +116,17 @@ export class Autopilot {
       else if (l.k === 'flare') v = P.flares < P.flareMax ? (P.flares < 2 ? 5 : 1.5) : 0;
       if (v > 0) add('loot', l, l.x, l.y, v, 'l' + l.id);
     }
-    if (!exitOnly) for (const f of W.finds) if (!f.got) add(f.kind, f, f.x, f.y, demo ? 40 : 7, 'f' + f.id);
+    if (!exitOnly) for (const f of W.finds) if (!f.got) add(f.kind, f, f.x, f.y, demo ? 40 : 22, 'f' + f.id);
     if (!exitOnly) for (const k of W.keys) if (!k.got) add('key', k, k.x, k.y, demo ? 20 : 4, 'k' + k.id);
     for (const c of W.camps) if (!c.lit) add('camp', c, c.x, c.y, 10, 'c' + c.id);
     if (P.dyn < 1) for (const k of W.kegs) add('keg', k, k.x, k.y, 4, 'g' + k.id);
     // the exit (always a candidate, worth more as the level drags on)
-    if (M.exit) for (const ex of [M.exit.x - 0.5, M.exit.x + 0.5]) add('exit', null, ex, M.exit.y, (demo ? 2 + W.t / 40 : 6 + W.t / 25) + (W.t > 300 ? 200 : 0), 'exit');
+    if (M.exit) for (const ex of [M.exit.x - 0.5, M.exit.x + 0.5]) add('exit', null, ex, M.exit.y, (demo ? 2 + W.t / 40 : 2 + W.t / 35) + (W.t > 300 ? 200 : 0), 'exit');
     // score: value per second of travel; humans dislike long detours
     let best = null, bs = -1e9;
     for (const c of cands) {
-      const s = c.value - c.cost * (this.human ? 1.6 : 0.55) - (c.kind === 'exit' && (this.human ? 0 : 0));
+      // people explore: they go after finds and loot a good way off the path (the demo even more so)
+      const s = c.value - c.cost * (this.human ? 0.85 : 0.55);
       if (s > bs) { bs = s; best = c; }
     }
     if (best && (!this.goal || this.goal.key !== best.key)) this.goalT = this.t;
@@ -237,7 +238,8 @@ export class Autopilot {
           if (!X.started) { if (X.t > 1.5) { this.fail(e); } return; }
         } else {
           const dx = scx - P.x;
-          if (Math.abs(dx) > 0.05 || Math.abs(P.vx) > 0.3 || !P.ground) {
+          if (X.slop === undefined) X.slop = this.human && this.r() < 0.065 ? 0.22 + this.r() * 0.2 : 0.05;
+          if (Math.abs(dx) > X.slop || Math.abs(P.vx) > (X.slop > 0.1 ? 2 : 0.3) || !P.ground) {
             out.mx = Math.abs(dx) > 0.05 ? Math.max(-1, Math.min(1, dx * 6)) * (Math.abs(dx) < 0.25 ? 0.35 : 1) : 0;
             if (X.t > 2.2) { this.fail(e); }
             return;
@@ -303,6 +305,13 @@ export class Autopilot {
       if ((b.st === 'swoop' || b.st === 'circle' || (b.st === 'wake' && this.sees(b.t))) && dd < 2.4 * 2.4) {
         const dir = Math.sign(b.x - px) || P.face;
         if (P.face !== dir) { out.mx = dir * 0.4; return true; }
+        // a person swings once as it comes in, a little early or late, then has to wait for the pick to come round
+        if (this.human) {
+          if (this.t < (this.swingWait || 0)) return true;
+          if (this.swingAt === undefined || this.swingFor !== b.id) { this.swingFor = b.id; this.swingAt = 1.1 + (this.r() - 0.5) * 1.3; }
+          if (Math.sqrt(dd) > this.swingAt) return true;
+          this.swingWait = this.t + 0.65; this.swingAt = undefined; this.swingFor = null;
+        }
         out.pick = true; out.my = b.y > py + 2 ? 1 : 0; return true;
       }
     }

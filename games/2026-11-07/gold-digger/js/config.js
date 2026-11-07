@@ -46,30 +46,30 @@ export const TOOLS = {
 export const RAMP = {
   //                 D1 Copper    D2 Glowroot   D3 Geode      D4 Drowned    D5 Ember
   rooms:      [[3, 2, 4, 2], [4, 2, 4, 3], [4, 3, 4, 3], [4, 3, 5, 3], [5, 3, 5, 3]],  // [w0,h0,w1,h1] rooms per level
-  bats:       [[0.0, 0.25], [0.35, 0.55], [0.55, 0.7], [0.7, 0.85], [0.9, 1.15]],     // bats per room
-  batSpeed:   [[2.6, 3.0], [3.1, 3.5], [3.6, 4.0], [4.1, 4.5], [4.6, 5.0]],
+  bats:       [[0.0, 0.25], [0.55, 0.85], [0.85, 1.0], [1.0, 1.08], [1.08, 1.15]],     // bats per room
+  batSpeed:   [[2.6, 3.0], [3.1, 3.5], [3.6, 4.0], [4.0, 4.3], [4.35, 4.6]],
   batWarn:    [[2.0, 1.8], [1.7, 1.5], [1.4, 1.2], [1.1, 0.95], [0.9, 0.7]],         // wing-unfold before a swoop
-  crawlers:   [[0.15, 0.35], [0.35, 0.5], [0.5, 0.65], [0.65, 0.75], [0.8, 1.0]],
+  crawlers:   [[0.15, 0.35], [0.45, 0.6], [0.75, 0.9], [0.9, 1.0], [1.0, 1.1]],
   crawlSpeed: [[0.9, 1.1], [1.1, 1.3], [1.3, 1.5], [1.5, 1.7], [1.7, 1.9]],
-  stalac:     [[0.15, 0.3], [0.3, 0.45], [0.45, 0.6], [0.6, 0.7], [0.7, 0.8]],     // falling stalactites per room
+  stalac:     [[0.15, 0.3], [0.4, 0.55], [0.6, 0.75], [0.75, 0.85], [0.85, 0.95]],     // falling stalactites per room
   stalWarn:   [[2.0, 1.8], [1.7, 1.5], [1.4, 1.2], [1.1, 0.95], [0.9, 0.7]],
-  geysers:    [[0.0, 0.1], [0.15, 0.25], [0.25, 0.35], [0.35, 0.45], [0.45, 0.6]],
+  geysers:    [[0.0, 0.1], [0.2, 0.3], [0.3, 0.4], [0.4, 0.45], [0.45, 0.55]],
   geyWarn:    [[2.2, 2.0], [1.9, 1.7], [1.6, 1.4], [1.3, 1.1], [1.0, 0.75]],
   geyPeriod:  [[7.0, 6.5], [6.4, 6.0], [5.8, 5.4], [5.2, 4.8], [4.6, 4.2]],
-  shadeEvery: [[0, 0], [95, 80], [75, 62], [58, 48], [46, 36]],                       // seconds between shades (0 = none)
+  shadeEvery: [[0, 0], [80, 66], [64, 54], [46, 38], [36, 30]],                       // seconds between shades (0 = none)
   shadeSpeed: [[0, 0], [0.9, 1.0], [1.05, 1.15], [1.2, 1.3], [1.35, 1.5]],
   shadeWarn:  [[2.2, 2.2], [2.0, 1.8], [1.7, 1.5], [1.4, 1.2], [1.1, 0.8]],
-  eels:       [[0, 0], [0, 0], [0, 0.1], [0.45, 0.6], [0.2, 0.3]],                   // per water room
+  eels:       [[0, 0], [0, 0], [0, 0.1], [0.3, 0.45], [0.2, 0.3]],                   // per water room
   eelWarn:    [[2, 2], [2, 2], [1.5, 1.4], [1.3, 1.1], [1.0, 0.8]],
   spikes:     [[0.0, 0.1], [0.15, 0.25], [0.25, 0.35], [0.35, 0.45], [0.45, 0.55]],
   crumble:    [[0.0, 0.15], [0.2, 0.3], [0.3, 0.4], [0.4, 0.5], [0.5, 0.6]],
   crumbleT:   [[1.3, 1.2], [1.1, 1.0], [0.95, 0.85], [0.8, 0.7], [0.65, 0.55]],      // standing time before it falls
-  oilDrain:   [[0.3, 0.36], [0.4, 0.46], [0.5, 0.56], [0.6, 0.66], [0.7, 0.78]],    // per second
+  oilDrain:   [[0.3, 0.36], [0.46, 0.52], [0.56, 0.62], [0.64, 0.7], [0.72, 0.8]],    // per second
   oilCans:    [[1.0, 0.9], [0.85, 0.75], [0.7, 0.65], [0.6, 0.55], [0.5, 0.45]],     // per path room
   lava:       [[0, 0], [0, 0], [0, 0.05], [0, 0.05], [0.35, 0.5]],
-  hurtMul:    [[1, 1], [1, 1], [1, 1], [1, 1.25], [1.55, 1.8]],                      // stalactite/geyser/boss damage scale
-  bossHP:     [[16, 16], [22, 22], [32, 32], [36, 36], [56, 56]],
-  bossRate:   [[0.75, 0.75], [0.85, 0.85], [0.95, 0.95], [1.05, 1.05], [1.25, 1.25]], // attack tempo
+  hurtMul:    [[1, 1], [1, 1], [1, 1], [1, 1.2], [1.3, 1.45]],                      // stalactite/geyser/boss damage scale
+  bossHP:     [[16, 16], [22, 22], [38, 38], [44, 44], [46, 46]],
+  bossRate:   [[0.75, 0.75], [0.95, 0.95], [1.05, 1.05], [1.12, 1.12], [1.2, 1.2]], // attack tempo
   bossWarn:   [[2.0, 2.0], [1.6, 1.6], [1.3, 1.3], [1.0, 1.0], [0.75, 0.75]],
   helmet:     [[1, 1], [1, 0], [0, 0], [0, 0], [0, 0]],                               // free helmet (absorbs one hit) per level
 };
@@ -135,7 +135,7 @@ export const STRATA = ['DEEP', 'HOLLOW', 'SUNKEN', 'GILDED', 'WHISPERING', 'SHAT
 // boss stats: hp multiplier on RAMP.bossHP, the arena kind and the attack list (each attack: [kind, weight, minPhase])
 export const BOSSES = {
   rockjaw:   { hp: 1.0, arena: 'pit', attacks: [['erupt', 3, 0], ['lunge', 2, 0], ['rain', 2, 1]], stun: 2.6 },
-  gloomwing: { hp: 1.5, arena: 'roost', attacks: [['swoop', 3, 0], ['summon', 1, 0], ['shriek', 2, 1]], stun: 2.4 },
+  gloomwing: { hp: 1.8, arena: 'roost', attacks: [['swoop', 3, 0], ['summon', 1, 0], ['shriek', 2, 1]], stun: 2.4 },
   warden:    { hp: 1.0, arena: 'hall', attacks: [['beam', 3, 0], ['slam', 2, 0], ['shards', 2, 1]], stun: 2.6 },
   wyrm:      { hp: 1.0, arena: 'pool', attacks: [['lunge', 3, 0], ['spit', 2, 0], ['surge', 1, 1]], stun: 2.6 },
   heart:     { hp: 1.0, arena: 'forge', attacks: [['slam', 3, 0], ['rain', 2, 0], ['wave', 2, 1]], stun: 2.4 },

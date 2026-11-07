@@ -236,11 +236,11 @@ function warden(W, B, P, dt, api, A, rate, warn) {
       if (a === 'beam') {
         B.st = 'beam'; B.high = api.rnd(W) < 0.4;
         const x0 = B.face > 0 ? B.x + 1 : A.x0, x1 = B.face > 0 ? A.x1 : B.x - 1;
-        zone(W, { shape: 'rect', x0, x1, y0: B.high ? fy + 1.85 : fy - 0.2, y1: B.high ? fy + 3.0 : fy + 0.95, warn, dur: 0.5, dmg: 1, cause: 'the Prism Warden', look: 'beam' });
+        zone(W, { shape: 'rect', x0, x1, y0: B.high ? fy + 1.85 : fy - 0.2, y1: B.high ? fy + 3.0 : fy + 0.95, warn, dur: 0.5, dmg: B.phase >= 1 ? 2 : 1, cause: 'the Prism Warden', look: 'beam' });
         api.ev(W, 'beamcharge', { x: B.x, y: fy + 2.4 });
       } else if (a === 'slam') {
         B.st = 'slam'; B.sx = Math.max(A.x0 + 2, Math.min(A.x1 - 2, B.x + B.face * 2.6));
-        zone(W, { shape: 'circle', x: B.sx, y: fy + 0.6, r: 2.0, warn, dur: 0.3, dmg: 1, cause: 'the Prism Warden', look: 'impact' });
+        zone(W, { shape: 'circle', x: B.sx, y: fy + 0.6, r: 2.0, warn, dur: 0.3, dmg: B.phase >= 1 ? 2 : 1, cause: 'the Prism Warden', look: 'impact' });
       } else {
         B.st = 'shards'; api.ev(W, 'bossroar', { x: B.x, y: fy + 3 });
         for (let i = 0; i < 4 + B.phase; i++) zone(W, { shape: 'circle', x: A.x0 + 2 + api.rnd(W) * (A.x1 - A.x0 - 4), y: fy + 0.8, r: 1.1, warn: warn + i * 0.16, dur: 0.25, dmg: 1, cause: 'a falling crystal', look: 'shard' });
@@ -277,7 +277,7 @@ function wyrm(W, B, P, dt, api, A, rate, warn) {
         B.st = 'lunge';
         B.tx = P.x; B.ty = P.inWater ? 4 : P.y + 0.8;
         B.sx = Math.max(pool.x0 + 1, Math.min(pool.x1 - 1, P.x + (P.x < (pool.x0 + pool.x1) / 2 ? 4 : -4)));
-        zone(W, { shape: 'circle', x: B.tx, y: B.ty, r: 1.6, warn: warn + 0.55, dur: 0.3, dmg: 1, cause: 'Tidewyrm', look: 'impact' });
+        zone(W, { shape: 'circle', x: B.tx, y: B.ty, r: 1.6, warn: warn + 0.55, dur: 0.3, dmg: B.phase >= 1 ? 2 : 1, cause: 'Tidewyrm', look: 'impact' });
         api.ev(W, 'ripple', { x: B.sx, y: pool.top, big: true });
       } else if (a === 'spit') {
         B.st = 'spit'; B.sx = (pool.x0 + pool.x1) / 2 + (api.rnd(W) - 0.5) * 8;

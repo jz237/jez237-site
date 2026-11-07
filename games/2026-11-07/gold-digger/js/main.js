@@ -467,7 +467,7 @@ function tips(W) {
   || tip('vein', `Gold glints in the rock: chip it out with the <b>PICK</b>.`, near(T.VEIN, 2))
   || tip('bat', `Bats! Swing the <b>PICK</b>, or throw a <b>FLARE</b> <kbd>${k.flare}</kbd> — they hate the light.`, W.bats.some((b) => b.st !== 'hang' && b.st !== 'dead' && Math.hypot(b.x - P.x, b.y - P.y) < 7))
   || tip('water', `Water breaks a fall. Swim up with <kbd>${k.up}</kbd> and jump out at the edge.`, near(T.WATER, 2))
-  || tip('camp', `A <b>campfire</b>: walk up to it to rest, refill your lamp and save your place.`, W.camps.some((c) => Math.hypot(c.x - P.x, c.y - P.y) < 5))
+  || tip('camp', `A <b>campfire</b>: light it to rest once (hearts and lamp refilled) and save your place.`, W.camps.some((c) => Math.hypot(c.x - P.x, c.y - P.y) < 5))
   || tip('oil', `Your lamp is burning low. Pick up <b>oil cans</b> to keep the dark away.`, P.oil < P.oilMax * 0.4)
   || tip('shade', `A <b>pale shade</b> comes for the dark. A <b>FLARE</b> melts it away.`, W.shades.some((s) => !s.dead))
   || tip('fossil', `Something is set in the rock here... dig it out with the <b>PICK</b>.`, W.finds.some((f) => f.kind === 'fossil' && !f.got && Math.hypot(f.x - P.x, f.y - P.y) < 4))
