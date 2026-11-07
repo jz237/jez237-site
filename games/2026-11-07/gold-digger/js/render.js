@@ -4,13 +4,13 @@
 // re-aimed every frame at the nearest flares, fires, lanterns, crystals and lava): their number never changes,
 // so no material ever recompiles mid-game.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=5';
-import { Cave, rockMaterial } from './cavemesh.js?v=5';
-import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=5';
-import { FX, CALM } from './fx.js?v=5';
-import { Post } from './post.js?v=5';
-import * as MD from './models.js?v=5';
-import { buildDecor, bake } from './decor.js?v=5';
+import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=6';
+import { Cave, rockMaterial } from './cavemesh.js?v=6';
+import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=6';
+import { FX, CALM } from './fx.js?v=6';
+import { Post } from './post.js?v=6';
+import * as MD from './models.js?v=6';
+import { buildDecor, bake } from './decor.js?v=6';
 
 export function pickQuality(name) {
   const mobile = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
@@ -413,7 +413,7 @@ export class Renderer {
     }
     G.add(bake(statics));
     this.museum = { alcoves, t: 0, camX: 0 };
-    const pl = this.player; pl.root.position.set(0, 0, 0.8); pl.root.rotation.set(0, Math.PI / 2, 0); pl.root.visible = true;
+    const pl = this.player; pl.root.position.set(-3.35, 0, 0.6); pl.root.rotation.set(0, Math.PI / 2, 0); pl.root.visible = true;
     this.cam.x = 0; this.cam.y = 2; this.cam.d = 8;
   }
   museumFrame(dt, sel) {
@@ -424,7 +424,7 @@ export class Renderer {
     Mu.camX += (A.x - Mu.camX) * (1 - Math.exp(-dt * 3));
     const cam = this.camera;
     cam.position.set(Mu.camX + Math.sin(t * 0.25) * 0.4, 2.0, 6.0); cam.lookAt(Mu.camX, 0.15, -2.4);
-    const pl = this.player, px = pl.root.position.x, want = A.x + 1.2;
+    const pl = this.player, px = pl.root.position.x, want = A.x - 3.35;   // by the timber post, out of the way of the plinths
     const walking = Math.abs(want - px) > 0.05;
     pl.root.position.x += Math.max(-dt * 3.5, Math.min(dt * 3.5, want - px));
     pl.root.rotation.y += ((walking ? (want > px ? 0 : Math.PI) : Math.PI / 2) - pl.root.rotation.y) * Math.min(1, dt * 8);
