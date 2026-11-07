@@ -1,6 +1,6 @@
 // Rimstorm 2026 — every tunable number lives here. The RAMP table drives difficulty; nothing else in the
 // game hard-codes enemy pace, numbers, spacing, fire rate or warning time.
-export const VERSION = '1.0.0';
+export const VERSION = '1.3.0';
 export const STEP = 1 / 120;
 const TAU = Math.PI * 2;
 

@@ -231,6 +231,64 @@ body:has(#options:not(.hidden)) #tut, body:has(#options:not(.hidden)) #caption {
 #bossbar .bar { position: relative; }
 #bossbar .bar i { position: relative; z-index: 1; }
 #bossbar .bar .trail { position: absolute; left: 0; top: 0; height: 100%; width: 100%; background: linear-gradient(90deg, #fff1d6, #ffd9a8); opacity: .85; transition: width .55s cubic-bezier(.5, 0, .9, .6) .38s; }
+/* ---------------------------------------------------------------- r3 UI: par clock, service record, suits, shop fit, landscape boss plate */
+#timer .par { color: var(--dim); }
+#timer.over .clk, #timer.over .par { color: var(--amber); }
+#title-btns .mbtn.span { grid-column: 1 / -1; }
+#record .card { padding-bottom: 16px; }
+.rgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 10px 14px; }
+.rsec { min-width: 0; padding: 6px 10px 8px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, .08); background: rgba(255, 255, 255, .025); outline: none; }
+.rsec.sel { border-color: var(--volt); }
+.rsec h3 { margin: 4px 0 4px; }
+.rs { display: flex; justify-content: space-between; gap: 10px; padding: 2px 0; font-size: 12.5px; border-bottom: 1px solid rgba(255, 255, 255, .05); font-variant-numeric: tabular-nums; }
+.rs span { color: var(--dim); letter-spacing: .08em; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.rs b { font-weight: 600; white-space: nowrap; }
+.rs.tot b { color: var(--volt); }
+.rs em.st { font-style: normal; color: rgba(255, 255, 255, .2); } .rs em.st.on { color: #ffd66b; text-shadow: 0 0 6px rgba(255, 214, 107, .5); }
+table.rbest { width: 100%; border-collapse: collapse; font-size: 11.5px; font-variant-numeric: tabular-nums; table-layout: fixed; }
+table.rbest th { font-weight: 600; font-size: 9px; letter-spacing: .1em; color: var(--dim); text-align: right; padding: 2px 0; }
+table.rbest td { text-align: right; padding: 3px 0; border-bottom: 1px solid rgba(255, 255, 255, .05); overflow: hidden; text-overflow: ellipsis; }
+table.rbest th:first-child, table.rbest td:first-child { text-align: left; color: var(--dim); font-size: 10px; letter-spacing: .08em; width: 27%; }
+.rnote { margin: 6px 0 0; font-family: system-ui, sans-serif; font-size: 11px; color: var(--dim); }
+.opt.suitrow { flex-direction: column; align-items: stretch; gap: 6px; }
+.opt .seg.suits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+.opt .seg.suits button { display: flex; align-items: center; gap: 6px; padding: 6px 7px; font-size: 10.5px; letter-spacing: .08em; white-space: nowrap; overflow: hidden; }
+.opt .seg.suits button i { flex: none; width: 15px; height: 15px; border-radius: 4px; background: linear-gradient(135deg, var(--a) 0 58%, var(--b) 58% 76%, var(--a) 76%); box-shadow: 0 0 0 1px rgba(255, 255, 255, .25); }
+.opt .seg.suits button[disabled] { opacity: .45; cursor: default; }
+.opt .seg.suits button[disabled] i { filter: grayscale(.8) brightness(.6); }
+#suit-note { margin: 0; font-family: system-ui, sans-serif; font-size: 11px; letter-spacing: .02em; color: var(--dim); }
+.rankwhy { margin: -2px 0 6px; font-size: 10.5px; letter-spacing: .1em; color: #b8c4d2; }
+.rankwhy b { font-weight: 600; color: #fff; }
+.rankwhy .ok { color: var(--green); } .rankwhy .no { color: #ff8a80; }
+/* the shop on a phone: one tight row per upgrade so END RUN HERE is on screen without scrolling */
+@media (max-width: 560px), (max-height: 500px) {
+  #upgrades .card { padding: 14px 16px 12px; }
+  #upgrades h2 { font-size: 27px; }
+  #up-title .rank { margin-left: 6px; padding: 1px 8px; }
+  #upgrades .sub { margin-bottom: 6px; letter-spacing: .12em; line-height: 1.45; }
+  #salvage { margin-bottom: 7px; padding: 4px 10px; }
+  .upgrid { gap: 6px; }
+  .upg { grid-template-columns: 26px 1fr auto auto; gap: 1px 8px; padding: 7px 10px; }
+  .upg i { grid-row: 1 / 3; font-size: 19px; }
+  .upg b { font-size: 11.5px; letter-spacing: .1em; }
+  .upg .cost { grid-column: 3; grid-row: 1; font-size: 11px; white-space: nowrap; }
+  .upg .lvl { grid-column: 4; grid-row: 1; }
+  .upg small { grid-column: 2 / 5; font-size: 11.5px; line-height: 1.3; }
+  #upgrades .btns { gap: 6px; }
+  #upgrades .btns[style] { margin-top: 8px !important; }
+  #upgrades .mbtn { padding: 7px 12px; }
+  #upgrades .mbtn small { font-size: 11px; margin-top: 1px; }
+}
+@media (max-height: 500px) {
+  #upgrades .mbtn small { display: none; }
+  .upgrid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+}
+/* landscape phones: the boss plate moves into the HUD's centre panel (in place of the sector name), so the top of the room stays clear */
+.mid #bossbar { position: static; transform: none; width: auto; margin-top: 4px; }
+.mid #bossbar .lbl { position: static; transform: none; width: max-content; display: block; margin: 0 auto; padding: 0; background: none; font-size: 10px; letter-spacing: .2em; }
+.mid #bossbar .bar { margin-top: 3px; height: 5px; }
+.mid:has(#bossbar:not(.hidden)) #sector-name, .mid:has(#bossbar:not(.hidden)) #roomstat { display: none; }
+.mid:has(#bossbar:not(.hidden)) #timer { margin-top: 0; }
 </style>
 </head>
 <body>
@@ -274,7 +332,7 @@ body:has(#options:not(.hidden)) #tut, body:has(#options:not(.hidden)) #caption {
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">VOLT<span>MAZE</span> <em>2026</em></h1>
-      <div class="ver">VERSION <b id="ver">1.0.0</b> · GET IN · KEEP MOVING · GET OUT</div>
+      <div class="ver">VERSION <b id="ver">1.3.0</b> · GET IN · KEEP MOVING · GET OUT</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -288,6 +346,7 @@ body:has(#options:not(.hidden)) #tut, body:has(#options:not(.hidden)) #caption {
           <button class="mbtn" data-act="medals">MEDALS <small id="med-sub">0 / 15</small></button>
           <button class="mbtn" data-act="options">OPTIONS</button>
           <button class="mbtn" data-act="help">HOW TO PLAY</button>
+          <button class="mbtn span" data-act="record">SERVICE RECORD <small id="rec-sub">Lifetime stats on this device</small></button>
         </div>
       </div>
       <div class="rotate-hint">Turn your phone sideways for room for both thumbs</div>
@@ -308,7 +367,7 @@ body:has(#options:not(.hidden)) #tut, body:has(#options:not(.hidden)) #caption {
   </div></div>
 
   <div class="screen hidden" id="upgrades"><div class="card wide">
-    <h2 id="up-title">SECTOR CLEAR</h2><div class="sub" id="up-sub">SPEND SALVAGE ON YOUR SUIT</div>
+    <h2 id="up-title">SECTOR CLEAR</h2><div class="rankwhy hidden" id="up-why"></div><div class="sub" id="up-sub">SPEND SALVAGE ON YOUR SUIT</div>
     <div id="salvage">SALVAGE <b id="salv">0</b></div>
     <div class="upgrid" id="upgrid"></div>
     <div class="btns two" style="margin-top:14px">
@@ -344,8 +403,16 @@ body:has(#options:not(.hidden)) #tut, body:has(#options:not(.hidden)) #caption {
     <div class="btns" style="margin-top:14px"><button class="mbtn" data-act="back">BACK</button></div>
   </div></div>
 
+  <div class="screen hidden" id="record"><div class="card wide">
+    <h2>SERVICE RECORD</h2><div class="sub" id="rec-head">THIS DEVICE · YOUR OWN RUNS</div>
+    <div class="rgrid" id="rec-grid"></div>
+    <p class="rnote">Campaign, endless and co-op (as host) count. The attract demo, the AI playthrough, autoplay, joining someone else's co-op room and the self-test never do.</p>
+    <div class="btns" style="margin-top:12px"><button class="mbtn" data-act="back">BACK</button></div>
+  </div></div>
+
   <div class="screen hidden" id="options"><div class="card">
     <h2>OPTIONS</h2>
+    <div class="opt suitrow">SUIT<div class="seg suits" data-opt="suit" id="suit-seg"></div><p id="suit-note"></p></div>
     <div class="opt">MUSIC<input type="range" min="0" max="100" data-set="music"></div>
     <div class="opt">SOUND<input type="range" min="0" max="100" data-set="sfx"></div>
     <div class="opt">VOICE<input type="range" min="0" max="100" data-set="voice"></div>
@@ -411,6 +478,6 @@ addEventListener('error', (e) => window.__vmErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__vmErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__vmErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=7"></script>
+<script type="module" src="js/main.js?v=8"></script>
 </body>
 </html>

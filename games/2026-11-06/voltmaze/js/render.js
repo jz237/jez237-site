@@ -6,12 +6,12 @@
 // Fixed light pools (only intensities change) and a warm-up that compiles everything at load.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=7';
-import * as TX from './textures.js?v=7';
-import * as MD from './models.js?v=7';
-import { FX, CALM } from './fx.js?v=7';
-import { F, ROOM, ENEMY, BOSSES, POWERUPS, ATTACK, PW_KEYS, SEEKER, BURST_A } from './config.js?v=7';
-import { WK, inZone, beamLen } from './sim.js?v=7';
+import { Post } from './post.js?v=8';
+import * as TX from './textures.js?v=8';
+import * as MD from './models.js?v=8';
+import { FX, CALM } from './fx.js?v=8';
+import { F, ROOM, ENEMY, BOSSES, POWERUPS, ATTACK, PW_KEYS, SEEKER, BURST_A } from './config.js?v=8';
+import { WK, inZone, beamLen } from './sim.js?v=8';
 
 export { CALM };
 const { RW, RH, wallT: WT, door: DOOR } = ROOM;
@@ -512,7 +512,7 @@ export class Renderer {
     }
     for (let i = this.glowLights.length; i < 5; i++) this.pool[i].intensity = 0;
     this.fx.clear();
-    for (const v of this.views.e.values()) this.scene.remove(v.g);
+    for (const v of this.views.e.values()) { this.scene.remove(v.g); MD.release(v.g); }
     this.views.e.clear();
     for (const v of this.views.pk.values()) this.scene.remove(v.g);
     this.views.pk.clear();
@@ -803,7 +803,7 @@ export class Renderer {
       seenP.add(p.id);
       this.updatePlayer(v, p, dt, W, i);
     });
-    for (const [id, v] of this.views.p) if (!seenP.has(id)) { this.scene.remove(v.g); this.views.p.delete(id); }
+    for (const [id, v] of this.views.p) if (!seenP.has(id)) { this.scene.remove(v.g); MD.release(v.g); this.views.p.delete(id); }
     for (let i = W.players.length; i < 2; i++) { this.spots[i].intensity = 0; this.cones[i].visible = false; }
     // a dark flashlight (single player's spare, a downed suit) skips its shadow pass; no recompile, the map stays
     for (const s of this.spots) if (s.castShadow) s.shadow.autoUpdate = s.intensity > 0 || !s.shadow.map;
@@ -814,7 +814,7 @@ export class Renderer {
       seen.add(e.id);
       this.updateRobot(this.robotView(e), e, dt, W);
     }
-    for (const [id, v] of this.views.e) if (!seen.has(id)) { this.scene.remove(v.g); this.views.e.delete(id); }
+    for (const [id, v] of this.views.e) if (!seen.has(id)) { this.scene.remove(v.g); MD.release(v.g); this.views.e.delete(id); }
     let nr = 0;
     for (const e of W.robots) {
       if (e.hp <= 0 || nr >= 40) continue;
@@ -1155,7 +1155,7 @@ export class Renderer {
     const v = this.views.e.get(id);
     if (!v) return;
     const parts = MD.partsOf(v.g);
-    this.scene.remove(v.g); this.views.e.delete(id);
+    this.scene.remove(v.g); MD.release(v.g); this.views.e.delete(id);
     if (!parts) return;
     v.g.updateMatrixWorld(true);
     const list = parts.filter((p, i) => i % 3 === 0).slice(0, 14);
@@ -1473,11 +1473,37 @@ export class Renderer {
     }
     if (first !== 0) this.setLook(first);
     for (const I of [this.shotI, this.boltI, this.haloI, this.mineI, this.mineLampI, this.ringI]) I.count = 0;
-    for (const o of tmp) this.scene.remove(o);
+    for (const o of tmp) { this.scene.remove(o); MD.release(o); }
     for (const m of [...this.decalPool, ...this.aims, this.beam, this.beamCore, ...this.cones, ...this.domes.map((d) => d.m), ...this.strikes.map((q) => q.m)]) m.visible = false;
     for (const A of this.arcs) A.m.visible = false;
     this.fx.clear();
     this.roomKey = null;
+  }
+  // r3: a suit colourway for one player's infiltrator (SUITS in config.js). Only the hero's existing materials
+  // change: its painted parts get a copy of their own material with the colour tinted, its accent lights (visor,
+  // power cell, muzzle, status strips; not the white flashlight) a copy with the accent swapped. A copy has the
+  // same type and parameters as its original, so it reuses the compiled shader program: no compile, no new mesh.
+  setSuit(pid, suit, base) {
+    const v = this.views.p.get(pid);
+    if (!v || v.suitKey === suit.key) return false;
+    v.suitKey = suit.key;
+    const plain = suit.key === base.key, orig = v.suitOrig || (v.suitOrig = new Map()), mats = v.suitMats || (v.suitMats = new Map());
+    const a0 = new THREE.Color(base.accent), a1 = new THREE.Color(suit.accent);
+    const ratio = [a1.r / Math.max(0.02, a0.r), a1.g / Math.max(0.02, a0.g), a1.b / Math.max(0.02, a0.b)].map((k) => clamp(k, 0.05, 6));
+    v.g.traverse((o) => {
+      if (!o.isMesh || !o.material || o.name === 'lamp') return;
+      const m0 = orig.get(o) || o.material;
+      const glowy = m0.isMeshBasicMaterial, painted = !glowy && (m0.userData.cls === 'paint' || (m0.vertexColors && m0.metalness > 0.3 && m0.metalness < 0.8));
+      if (!glowy && !painted) return;
+      orig.set(o, m0);
+      if (plain) { o.material = m0; return; }
+      let m = mats.get(m0);
+      if (!m) { m = m0.clone(); mats.set(m0, m); }
+      const k = glowy ? ratio : suit.tint;
+      m.color.copy(m0.color); m.color.r *= k[0]; m.color.g *= k[1]; m.color.b *= k[2];
+      o.material = m;
+    });
+    return true;
   }
 }
 const P0 = { x: 0, y: 0, z: 0 };

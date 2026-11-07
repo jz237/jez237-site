@@ -19,7 +19,7 @@ if (!chromium) { console.error('playwright not found'); process.exit(2); }
 const base = process.argv[2] || 'http://127.0.0.1:8773/games/2026-11-06/voltmaze/';
 const shots = process.argv[3] || 'D:/Projects/.tmp/arcade-trio-work/voltmaze/shots';
 const quick = process.argv[4] === 'quick';
-const V = '?v=7';
+const V = '?v=8';
 fs.mkdirSync(shots, { recursive: true });
 
 // the shared lock: only one headless Edge at a time across the agents

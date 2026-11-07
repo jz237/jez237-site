@@ -1,14 +1,14 @@
 // Voltmaze 2026 — game flow, menus, HUD, minimap, the facility AI's (rare) voice, the demo director
 // and the frame loop.
-import { VERSION, SECTORS, STEP, F, ROOM, RAMP, UPGRADES, UP_KEYS, UP_COST, SALVAGE, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY, empMax, SEEKER } from './config.js?v=7';
-import { makeWorld, step, drainEvents, roomLabel, routeSide, angDiff, SIDES, DELTA, wallDist, cloneWorld } from './sim.js?v=7';
-import { Autopilot } from './ai.js?v=7';
-import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=7';
-import { Audio } from './audio.js?v=7';
-import { Input } from './input.js?v=7';
-import { Scores, NO_POST } from './scores.js?v=7';
-import { Recorder, Replay } from './replay.js?v=7';
-import { Online, ROOM as NET_ROOM, randomCode, cleanCode } from './online.js?v=7';
+import { VERSION, SECTORS, STEP, F, ROOM, RAMP, UPGRADES, UP_KEYS, UP_COST, SALVAGE, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY, empMax, SEEKER, SUITS } from './config.js?v=8';
+import { makeWorld, step, drainEvents, roomLabel, routeSide, angDiff, SIDES, DELTA, wallDist, cloneWorld } from './sim.js?v=8';
+import { Autopilot } from './ai.js?v=8';
+import { Renderer, pickQuality, CALM, LOOKS } from './render.js?v=8';
+import { Audio } from './audio.js?v=8';
+import { Input } from './input.js?v=8';
+import { Scores, NO_POST } from './scores.js?v=8';
+import { Recorder, Replay } from './replay.js?v=8';
+import { Online, ROOM as NET_ROOM, randomCode, cleanCode } from './online.js?v=8';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -17,7 +17,7 @@ const { cols: GC, rows: GR } = ROOM;
 // ------------------------------------------------------------------ settings + saved progress
 const SKEY = 'vm.settings.v1';
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const settings = { music: 50, sfx: 90, voice: 100, talk: 'on', flash: reduceMotion ? 'reduced' : 'full', shake: '1', rumble: 'on', touch: 'auto', quality: 'auto', netRoute: '0', diff: 'normal', assist: 'light', cam: 'auto' };
+const settings = { music: 50, sfx: 90, voice: 100, talk: 'on', flash: reduceMotion ? 'reduced' : 'full', shake: '1', rumble: 'on', touch: 'auto', quality: 'auto', netRoute: '0', diff: 'normal', assist: 'light', cam: 'auto', suit: 'slate' };
 try { Object.assign(settings, JSON.parse(localStorage.getItem(SKEY) || '{}')); } catch { /* defaults */ }
 if (!DIFFICULTY[settings.diff]) settings.diff = 'normal';
 const saveSettings = () => { try { localStorage.setItem(SKEY, JSON.stringify(settings)); } catch { /* private mode */ } };
@@ -69,8 +69,71 @@ function say(name, o = {}) {
 }
 function rumble(strong, weak, ms) { if (settings.rumble === 'off' || G.mode === 'demo' || G.mode === 'playthrough' || G.mode === 'title') return; I.rumble(strong, weak, ms); }
 
+// ------------------------------------------------------------------ r3: service record (lifetime stats on this device)
+// Your own runs only: campaign, endless and co-op as the host. The attract demo, ?autoplay, the AI PLAYTHROUGH, a
+// co-op guest and the ?test page never count. Read from the sim's events (presentation only, never fed back).
+const RKEY = 'vm.record.v1';
+const SR = { time: 0, runs: {}, kills: {}, bosses: {}, rooms: 0, sectors: 0, floors: 0, deaths: {}, best: {}, emps: 0, dashes: 0, pickups: 0 };
+(() => { const s = load(RKEY, null); if (s && typeof s === 'object') for (const k in SR) if (s[k] !== null && typeof s[k] === typeof SR[k]) SR[k] = s[k]; })();
+let srDirty = false, srSavedT = 0;
+const srCounts = () => !params.has('test') && !G.autopilot && (((G.mode === 'campaign' || G.mode === 'endless') && !!G.run && !G.run.ai && !(G.W && G.W.demo)) || (G.mode === 'online' && !!NET.host));
+function srAdd(o, k, n = 1) { if (o === SR) SR[k] += n; else o[k] = (o[k] || 0) + n; srDirty = true; }
+function srSave(force) { if (!srDirty || (!force && performance.now() - srSavedT < 5000)) return; srDirty = false; srSavedT = performance.now(); store(RKEY, SR); }
+function srEvents(list, W) {
+  const me = (myPlayer(W) || {}).id;
+  for (const e of list) {
+    if (e.k === 'kill') { if (e.by !== 'expire' && ENEMY[e.type]) srAdd(SR.kills, e.type); }
+    else if (e.k === 'bossdown') srAdd(SR.bosses, e.key);
+    else if (e.k === 'roomclear') srAdd(SR, 'rooms');
+    else if (e.k === 'liftup') srAdd(SR, W.mode === 'endless' ? 'floors' : 'sectors');
+    else if (e.pid !== undefined && e.pid === me) {
+      if (e.k === 'death') srAdd(SR.deaths, e.cause || 'wall');
+      else if (e.k === 'emp') srAdd(SR, 'emps'); else if (e.k === 'dash') srAdd(SR, 'dashes'); else if (e.k === 'pickup') srAdd(SR, 'pickups');
+    }
+  }
+}
+// best score per mode (campaign / endless / co-op) and difficulty, at the end of every counted world
+function srBest(W) { const k = (G.mode === 'online' ? 'coop' : W.mode) + ':' + (W.diff || 'normal'); if (W.score > (SR.best[k] || 0)) { SR.best[k] = W.score; srDirty = true; } srSave(true); }
+const fmtH = (t) => { const h = Math.floor(t / 3600), m = Math.floor(t / 60) % 60, s = Math.floor(t % 60); return h ? `${h}h ${String(m).padStart(2, '0')}m` : `${m}m ${String(s).padStart(2, '0')}s`; };
+const sumOf = (o) => Object.values(o).reduce((a, b) => a + (+b || 0), 0);
+function buildRecord() {
+  srSave(true);
+  const n = (v) => (v || 0).toLocaleString();
+  const row = (a, b, tot) => `<div class="rs${tot ? ' tot' : ''}"><span>${a}</span><b>${b}</b></div>`;
+  const sec = (h, body) => `<div class="rsec" tabindex="-1"><h3>${h}</h3>${body}</div>`;
+  const deaths = Object.entries(SR.deaths).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
+  const modes = [['campaign', 'CAMPAIGN'], ['endless', 'ENDLESS'], ['coop', 'CO-OP']];
+  const bestT = `<table class="rbest"><tr><th></th>${modes.map(([, l]) => `<th>${l}</th>`).join('')}</tr>${DIFF_KEYS.map((d) => `<tr><td>${DL(d)}</td>${modes.map(([m]) => `<td>${SR.best[m + ':' + d] ? n(SR.best[m + ':' + d]) : '—'}</td>`).join('')}</tr>`).join('')}</table>`;
+  const open = SUITS.filter(suitOpen).length, next = SUITS.find((S) => !suitOpen(S));
+  $('rec-grid').innerHTML = [
+    sec('ON DUTY', row('TOTAL PLAY TIME', fmtH(SR.time), 1) + row('CAMPAIGN RUNS', n(SR.runs.campaign)) + row('ENDLESS RUNS', n(SR.runs.endless)) + row('CO-OP RUNS HOSTED', n(SR.runs.coop)) + row('ROOMS CLEARED', n(SR.rooms)) + row('SECTORS CLEARED', n(SR.sectors)) + row('ENDLESS FLOORS', n(SR.floors)) + row('EMPS · DASHES · PICKUPS', `${n(SR.emps)} · ${n(SR.dashes)} · ${n(SR.pickups)}`)),
+    sec('ROBOTS DESTROYED', row('ALL CLASSES', n(sumOf(SR.kills)), 1) + Object.keys(ENEMY).map((k) => row(ENEMY[k].name, n(SR.kills[k]))).join('')),
+    sec('BOSSES FELLED', row('ALL BOSSES', n(sumOf(SR.bosses)), 1) + Object.keys(BOSSES).map((k) => row(BOSSES[k].name, n(SR.bosses[k]))).join('')),
+    sec('LIVES LOST', row('ALL CAUSES', n(sumOf(SR.deaths)), 1) + (deaths.length ? deaths.map(([c, v]) => row(CAUSE[c] || String(c).toUpperCase(), n(v))).join('') : row('NONE YET', '—'))),
+    sec('BEST SCORES', bestT),
+    sec('MEDALS', row('EARNED', `${medals.size} / ${MEDALS.length}`, 1) + SECTORS.map((s, i) => row(`S${i + 1} · ${s.name}`, MEDALS.filter((q) => q.sector === i).map((q) => `<em class="st${medals.has(q.id) ? ' on' : ''}" title="${q.name}">★</em>`).join(''))).join('') + row('SUITS UNLOCKED', `${open} / ${SUITS.length}`) + (next ? row(`NEXT: ${next.name}`, `${next.medals} MEDALS`) : '')),
+  ].join('');
+}
+function showRecord() {
+  buildRecord(); show('record');
+  setSel($('rec-grid').querySelector('.rsec'));
+  $('record').querySelector('.card').scrollTop = 0;
+}
+
+// ------------------------------------------------------------------ r3: suit colourways (SUITS in config.js), unlocked by medals
+const suitOpen = (S) => medals.size >= S.medals;
+function suitNow() { const S = SUITS.find((q) => q.key === settings.suit); return S && suitOpen(S) ? S : SUITS[0]; }
+const hexOf = (c) => '#' + c.toString(16).padStart(6, '0');
+// a locked suit's button is disabled: no click, and keyboard / pad navigation skips it
+function buildSuits() {
+  $('suit-seg').innerHTML = SUITS.map((S) => `<button data-v="${S.key}" style="--a:${hexOf(S.color)};--b:${hexOf(S.accent)}"${suitOpen(S) ? '' : ' disabled'} aria-label="${S.name}${suitOpen(S) ? '' : ' (locked: ' + S.medals + ' medals)'}"><i></i>${S.name}</button>`).join('');
+  const locked = SUITS.filter((S) => !suitOpen(S));
+  $('suit-note').textContent = locked.length ? `${medals.size} ${medals.size === 1 ? 'MEDAL' : 'MEDALS'} EARNED · ${locked.map((S) => `${S.name} AT ${S.medals}`).join(' · ')}` : 'EVERY SUIT UNLOCKED';
+  syncSegs();
+}
+
 // ------------------------------------------------------------------ screens
-const SCREENS = ['title', 'sectors', 'upgrades', 'results', 'scores', 'medals', 'options', 'help', 'online', 'pause'];
+const SCREENS = ['title', 'sectors', 'upgrades', 'results', 'scores', 'medals', 'options', 'help', 'online', 'pause', 'record'];
 function show(id, push = true) {
   if (push && G.screen && G.screen !== id) G.back.push(G.screen);
   for (const s of SCREENS) $(s).classList.toggle('hidden', s !== id);
@@ -86,7 +149,7 @@ let selEl = null;
 function setSel(el) { if (selEl) selEl.classList.remove('sel'); selEl = el; if (el) { el.classList.add('sel'); try { if (I.lastKind !== 'touch') el.scrollIntoView({ block: 'nearest' }); } catch (e) { /* keyboard/pad focus below the fold on short phones */ } } }
 function navigate(dir) {
   if (!G.screen) return;
-  const items = [...$(G.screen).querySelectorAll('.mbtn:not(.hidden):not([disabled]), .sec:not([disabled]), .upg, .seg button, [data-tab], [data-hd], [data-tt], [data-td]')].filter((e) => e.offsetParent);
+  const items = [...$(G.screen).querySelectorAll('.mbtn:not(.hidden):not([disabled]), .sec:not([disabled]), .upg, .seg button:not([disabled]), .rsec, [data-tab], [data-hd], [data-tt], [data-td]')].filter((e) => e.offsetParent);
   if (!items.length) return;
   let i = items.indexOf(selEl);
   if (i < 0) i = 0; else {
@@ -120,6 +183,7 @@ function toTitle() {
   $('diff-desc').textContent = DIFFICULTY[settings.diff].desc;
   syncSegs();
   $('med-sub').textContent = `${medals.size} / ${MEDALS.length}`;
+  srSave(true); $('rec-sub').textContent = `${fmtH(SR.time)} on duty · ${sumOf(SR.kills).toLocaleString()} robots destroyed`;
   $('sel-sub').textContent = reach > 0 ? `Sectors 1 to ${reach + 1} open` : 'Clear sector 1 to open more';
   $('demo-badge').classList.add('hidden');
   setHud(false);
@@ -146,6 +210,7 @@ function startCampaign(sector = 0) {
   G.run = { score: 0, lives: START_LIVES + DIFFICULTY[settings.diff].lives, up: sector ? { ...TYPICAL_UP[sector] } : {}, salvage: sector ? 400 * sector : 0, start: sector, newMedals: [], diff: settings.diff };
   say('begin', { key: true, delay: 0.8 });
   beginSector(sector);
+  if (G.srOn) srAdd(SR.runs, 'campaign');
 }
 function beginSector(s) {
   const W = makeWorld({ mode: 'campaign', sector: s, seed: newSeed(), up: G.run.up, lives: G.run.lives, score: G.run.score, room: +params.get('room') || 0, boss: params.has('boss'), demo: !!G.run.ai, diff: G.run.diff || 'normal', noGrace: s > 0 || !!G.run.ai });
@@ -177,6 +242,7 @@ function startEndless() {
   G.run = { score: 0, lives: START_LIVES + DIFFICULTY[settings.diff].lives, up: {}, start: 0, newMedals: [], diff: settings.diff };
   G.mode = 'endless';
   enterPlay(makeWorld({ mode: 'endless', seed: newSeed(), diff: settings.diff }));
+  if (G.srOn) srAdd(SR.runs, 'endless');
   banner('ENDLESS FACILITY', 'FLOOR 1 · HOW DEEP CAN YOU GET', 3);
   say('begin', { key: true, delay: 0.8 });
 }
@@ -209,6 +275,7 @@ function enterPlay(W) {
   A.playMusic(W.room.boss ? 'boss' : SECTORS[W.k].music);
   A.loop('servo', 'servo', 0.4); A.loop('seeker', 'seeker', 0.6); A.loop('hum', 'hum', 0.25);
   G.idleT = 0; G.hudCache = {};
+  G.srOn = srCounts();   // r3: does this world count for the service record
 }
 
 // ------------------------------------------------------------------ HUD
@@ -222,6 +289,7 @@ function setHud(on) {
   if (!on) $('bossbar').classList.add('hidden');
 }
 const fmtT = (t) => `${Math.floor(t / 60)}:${(t % 60).toFixed(1).padStart(4, '0')}`;
+const fmtM = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
 function setText(id, v) { if (G.hudCache[id] !== v) { G.hudCache[id] = v; $(id).textContent = v; } }
 function setHTML(id, v) { if (G.hudCache[id] !== v) { G.hudCache[id] = v; $(id).innerHTML = v; } }
 const myPlayer = (W) => (G.mode === 'online' && !NET.host ? W.players[1] : W.players[0]);
@@ -229,11 +297,21 @@ const myPlayer = (W) => (G.mode === 'online' && !NET.host ? W.players[1] : W.pla
 function fitBossLabel() {
   const el = $('boss-name');
   el.style.fontSize = ''; el.style.letterSpacing = '';
-  const max = Math.min(innerWidth - 20, 640);
+  const max = el.closest('.mid') ? Math.max(200, Math.min(420, innerWidth - 470)) : Math.min(innerWidth - 20, 640);
   let fs = parseFloat(getComputedStyle(el).fontSize) || 11, ls = 0.3;
   for (let i = 0; i < 12 && el.offsetWidth > max; i++) { ls = Math.max(0.06, ls - 0.06); if (ls <= 0.06) fs = Math.max(7, fs - 0.5); el.style.letterSpacing = ls + 'em'; el.style.fontSize = fs + 'px'; }
 }
 addEventListener('resize', () => { if (G.hudCache && G.hudCache['boss-name']) fitBossLabel(); });
+// r3: on a landscape phone the boss plate sits in the HUD's centre panel (index.html), so the top of the room stays clear
+const bossMQ = matchMedia('(max-height: 500px)');
+function placeBossbar() {
+  const bb = $('bossbar'), mid = document.querySelector('#hud .mid'), inHud = bossMQ.matches;
+  if ((bb.parentElement === mid) === inHud) return;
+  if (inHud) mid.appendChild(bb); else $('popups').before(bb);
+  if (G.hudCache && G.hudCache['boss-name']) fitBossLabel();
+}
+placeBossbar();
+addEventListener('resize', placeBossbar);
 // score popups belong to one room of one world: drop them when either changes
 function clearPopups() { const box = $('popups'); if (box) box.replaceChildren(); }
 function updateHud(W) {
@@ -261,7 +339,11 @@ function updateHud(W) {
   setHTML('pw', act.map(([k, t]) => { const P = POWERUPS[k]; return `<span style="--c:#${P.color.toString(16).padStart(6, '0')}"><b>${P.glyph}</b>${P.name}<i style="width:${Math.min(100, (t / P.time) * 100).toFixed(0)}%"></i></span>`; }).join(''));
   const dl = W.diff !== 'normal' ? ' · ' + DL(W.diff) : '';
   setText('sector-name', W.mode === 'endless' ? `ENDLESS · FLOOR ${W.floor + 1} · ${SECTORS[W.k].name}${dl}` : `SECTOR ${W.sector + 1} · ${SECTORS[W.sector].name}${dl}`);
-  setText('timer', `${roomLabel(W)} · ${fmtT(W.secT)}`);
+  // r3: the sector par next to the sector clock (campaign), both amber once you are past it
+  const par = W.mode === 'campaign' ? parTime(W.sector) : 0, over = par > 0 && W.secT > par;
+  if (par) setHTML('timer', `${roomLabel(W)} · <span class="clk">${fmtT(W.secT)}</span> <span class="par">/ PAR ${fmtM(par)}</span>`);
+  else setText('timer', `${roomLabel(W)} · ${fmtT(W.secT)}`);
+  if (G.hudCache.parOver !== over) { G.hudCache.parOver = over; $('timer').classList.toggle('over', over); }
   // the Seeker's clock
   const room = W.room, delay = W.R.seek + 4 * (W.up.jammer || 0);
   const f = room.boss ? 0 : Math.min(1, room.t / delay);
@@ -558,6 +640,7 @@ function onWorldOver(W) {
   if (G.mode === 'demo') { if (G.demoI % 2 === 0) toTitle(); else startDemo(); return; }
   A.stopLoops();
   runTally(W);
+  if (G.srOn) srBest(W);
   if (G.mode === 'online') { results(W, W.result === 'clear' ? 'SECTOR CLEAR' : 'CONTAINED', 'CO-OP'); return; }
   if (G.mode === 'playthrough') { playthroughNext(W); return; }
   if (W.mode === 'endless') { A.sting('over'); say('gameover', { key: true, delay: 1 }); results(W, 'CONTAINED', `ENDLESS FACILITY · FLOOR ${W.floor + 1} · ${W.depth} ROOMS`); return; }
@@ -612,6 +695,7 @@ function playthroughNext(W) {
   G.run.picks = bought.by;
   G.state = 'upgrade'; setHud(false);
   $('up-title').textContent = `SECTOR ${s + 1} CLEAR`;
+  $('up-why').classList.add('hidden');
   $('up-sub').textContent = `${fmtT(W.secT)} · AUTOPILOT BOUGHT: ${bought.length ? bought.join(', ') : 'NOTHING YET (SAVING UP)'}`;
   $('up-replay').classList.toggle('hidden', !G.clip);
   $('next-sub').textContent = `Sector ${s + 2} · ${SECTORS[s + 1].name} · starts in a moment`;
@@ -626,6 +710,7 @@ function upgrades(W) {
   G.state = 'upgrade'; setHud(false);
   G.run.picks = null;
   $('up-title').innerHTML = `SECTOR ${W.sector + 1} CLEAR <span class="rank r${G.run.rank}" title="${rankWhy(W)}">RANK ${G.run.rank}</span>`;
+  $('up-why').innerHTML = rankLine(W); $('up-why').classList.remove('hidden');
   const nb = G.run.newBest || {}, rec = [nb.time && 'BEST TIME', nb.score && 'BEST SECTOR SCORE'].filter(Boolean).join(' + ');
   $('up-sub').textContent = `${fmtT(G.run.lastTime)} · ${G.run.secScore.toLocaleString()} PTS${rec ? ' · NEW ' + rec : ''} · ${G.run.got.length ? 'MEDAL: ' + G.run.got.map((id) => MEDALS.find((m) => m.id === id).name).join(', ') : 'SPEND SALVAGE ON YOUR SUIT'}`;
   $('up-replay').classList.toggle('hidden', !G.clip);
@@ -662,6 +747,12 @@ function sectorRank(W) {
   const d = W.stats.deaths, t = W.secT, par = parTime(W.sector);
   const p = (d === 0 ? 2 : d <= 1 ? 1 : 0) + (t <= par ? 2 : t <= par * 1.3 ? 1 : 0) + (W.stats.skipped === 0 ? 1 : 0);
   return p >= 5 ? 'S' : p >= 3 ? 'A' : p >= 1 ? 'B' : 'C';
+}
+// r3: the same three counts, each marked by what it earned (green: full marks, white: some, red: none)
+function rankLine(W) {
+  const d = W.stats.deaths, t = W.secT, par = parTime(W.sector), sk = W.stats.skipped;
+  const m = (pts, txt) => `<span class="${pts === 2 ? 'ok' : pts === 1 ? '' : 'no'}">${txt}</span>`;
+  return `${m(d === 0 ? 2 : d <= 1 ? 1 : 0, `${d} ${d === 1 ? 'LIFE' : 'LIVES'} LOST`)} · ${m(t <= par ? 2 : t <= par * 1.3 ? 1 : 0, `${fmtT(t)} / PAR ${fmtM(par)}`)} · ${m(sk === 0 ? 2 : 0, `${sk} ${sk === 1 ? 'ROOM' : 'ROOMS'} SKIPPED`)}`;
 }
 function rankWhy(W) { return `${W.stats.deaths} lives lost · ${fmtT(W.secT)} (par ${fmtT(parTime(W.sector))}) · ${W.stats.skipped} rooms skipped`; }
 // run totals: every campaign / AI playthrough sector builds a fresh world, so the run's stats add up here (once per world)
@@ -791,6 +882,7 @@ function startOnline(cfg) {
   const W = makeWorld({ mode: cfg.gm === 'endless' ? 'endless' : 'campaign', sector: cfg.sector || 0, seed: cfg.seed, up: cfg.up || {}, coop: true, lives: (cfg.lives | 0) || START_LIVES + 1 + (DIFFICULTY[cfg.diff] || DIFFICULTY.normal).lives, noTut: true, noGrace: true, diff: cfg.diff, room: cfg.room | 0, boss: !!cfg.boss });
   NET.bind(W);
   enterPlay(W);
+  if (G.srOn) srAdd(SR.runs, 'coop');
   G.ai = G.autopilot ? new Autopilot(cfg.seed + (NET.host ? 0 : 1), 'demo') : null;
   banner('CO-OP', cfg.gm === 'endless' ? 'ENDLESS FACILITY' : SECTORS[cfg.sector || 0].name, 3);
   if (document.hidden && !G.fixed) bgTicks(true);
@@ -808,8 +900,9 @@ function act(a) {
     case 'online': show('online'); netStatus(''); $('room-wrap').classList.add('hidden'); $('net-go').classList.add('hidden'); syncSegs(); break;
     case 'scores': show('scores'); renderScores(G.scoreTab || 'campaign'); break;
     case 'medals': buildMedals(); show('medals'); break;
-    case 'options': show('options'); syncSegs(); break;
+    case 'options': buildSuits(); show('options'); syncSegs(); break;
     case 'help': show('help'); break;
+    case 'record': showRecord(); break;
     case 'back': A.play('uiback', { gap: 0 }); goBack(); break;
     case 'next': A.play('uiok', { gap: 0 }); clearTimeout(G.ptT); beginSector(G.run.sector + 1); break;
     // stop at the shop: a campaign banks its score (results + initials), the AI PLAYTHROUGH just leaves
@@ -828,7 +921,7 @@ function act(a) {
 }
 document.addEventListener('click', (e) => {
   const t = e.target.closest('[data-act], [data-up], [data-sector], [data-tab], [data-hd], [data-tt], [data-td], .seg button');
-  if (!t) return;
+  if (!t || t.matches('.seg button[disabled]')) return;
   A.unlock();
   if (t.dataset.act) act(t.dataset.act);
   else if (t.dataset.up) buy(t.dataset.up);
@@ -851,6 +944,7 @@ for (const inp of document.querySelectorAll('[data-set]')) {
   inp.value = settings[inp.dataset.set];
   inp.addEventListener('input', () => { settings[inp.dataset.set] = +inp.value; saveSettings(); applySettings(); });
 }
+buildSuits();
 function syncSegs() { for (const s of document.querySelectorAll('.seg')) for (const b of s.children) b.classList.toggle('on', String(settings[s.dataset.opt]) === b.dataset.v); }
 function applySettings() {
   if ($('diff-desc')) $('diff-desc').textContent = DIFFICULTY[settings.diff].desc;
@@ -929,8 +1023,10 @@ I.on('key', (k, e) => {
   else if (k === 'Backspace' && G.screen !== 'title' && !KEEP(G.screen)) act('back');
 });
 document.addEventListener('pointerdown', () => A.unlock(), { capture: true });
+addEventListener('pagehide', () => srSave(true));
 document.addEventListener('visibilitychange', () => {
   if (document.hidden && G.state === 'play') pause();
+  if (document.hidden) srSave(true);
   bgTicks(document.hidden && G.mode === 'online' && !G.fixed);
   // nothing to hear from a tab nobody is looking at (the co-op facility keeps running in it)
   if (A.master && A.ctx) A.master.gain.setTargetAtTime(document.hidden ? 0 : A.vol.master, A.ctx.currentTime, 0.05);
@@ -945,7 +1041,7 @@ document.addEventListener('visibilitychange', () => {
 let bgWorker = null;
 function bgTicks(on) {
   if (on && !bgWorker) {
-    try { bgWorker = new Worker(new URL('./tick.js?v=7', import.meta.url)); bgWorker.onmessage = bgTick; } catch (e) { bgWorker = null; console.warn('background tick', e); return; }
+    try { bgWorker = new Worker(new URL('./tick.js?v=8', import.meta.url)); bgWorker.onmessage = bgTick; } catch (e) { bgWorker = null; console.warn('background tick', e); return; }
   }
   if (bgWorker) bgWorker.postMessage(on ? 25 : 0);
 }
@@ -988,8 +1084,10 @@ function tickFrame(dt) {
   if (!cur) return;
   if (cur.k !== R.lookI) R.setLook(cur.k);
   R.sync(cur, dt);
+  // r3: your suit colourway on your infiltrator (online co-op keeps the fixed host / guest colours on both pages)
+  if (R.setSuit) R.setSuit(1, G.mode === 'online' ? SUITS[0] : suitNow(), SUITS[0]);
   const me = myPlayer(cur);
-  const menu = G.state === 'title' || ['sectors', 'online', 'scores', 'medals', 'options', 'help'].includes(G.screen) && G.mode === 'title';
+  const menu = G.state === 'title' || ['sectors', 'online', 'scores', 'medals', 'options', 'help', 'record'].includes(G.screen) && G.mode === 'title';
   R.updateCamera(dt, { me: me && me.alive ? me : null, cine: menu, shake: +settings.shake, W: cur, auto: settings.cam !== 'room' && G.state !== 'replay' });
   A.setListener(R.camera);
   if (G.state === 'play' || G.state === 'paused-online' || G.state === 'replay') loops(cur, dt);
@@ -999,10 +1097,12 @@ function tickFrame(dt) {
   if (G.bannerT > 0) { G.bannerT -= dt; if (G.bannerT <= 0) $('banner').classList.add('hidden'); }
   if (G.tutT > 0 && G.state !== 'paused') { G.tutT -= dt; if (G.tutT <= 0) $('tut').classList.add('hidden'); }
   if (G.capT > 0 && G.state !== 'paused') { G.capT -= dt; if (G.capT <= 0) $('caption').classList.add('hidden'); }
+  srSave();
 }
 function playStep(dt) {
   const W = G.W;
   G.acc += dt * G.timeScale;
+  if (G.srOn && G.state === 'play') { SR.time += dt; srDirty = true; }
   let n = 0;
   const online = G.mode === 'online', guest = online && !NET.host;
   const live = !G.hiddenRun;
@@ -1021,6 +1121,7 @@ function playStep(dt) {
     if (guest) ev = ev.filter((e) => (e.pid === 2 && ['fire', 'shield', 'death', 'emp', 'plate', 'dash', 'brush'].includes(e.k)) || e.k === 'roomenter');
     if (online && NET.host) NET.hostEvents(ev);
     handleEvents(ev, W, live);
+    if (G.srOn) srEvents(ev, W);
     G.acc -= STEP; n++;
     if (W.over) break;
   }
@@ -1149,7 +1250,7 @@ async function boot() {
   $('loading').style.opacity = '0';
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
-  if (params.has('test')) { const m = await import('./tests.js?v=7'); m.runTests(window.__vm); }
+  if (params.has('test')) { const m = await import('./tests.js?v=8'); m.runTests(window.__vm); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room') && !params.has('sector') && isNaN(+params.get('room'))) { act('online'); $('join-code').value = cleanCode(params.get('room')); }
@@ -1160,7 +1261,7 @@ async function boot() {
 Object.assign(window.__vm, {
   tick: (n = 1, dt = 1 / 60) => { for (let i = 0; i < n; i++) tickFrame(dt); },
   startDemo, startCampaign, startEndless, startPlaythrough, toTitle, playReplay, pause, resume, act, buy, settingsApply: applySettings,
-  noPost: NO_POST, boardKey, LOOKS, DIFF_KEYS,
+  noPost: NO_POST, boardKey, LOOKS, DIFF_KEYS, record: SR, SUITS, suitNow,
 });
 Object.defineProperty(window.__vm, 'W', { get: () => G.W, configurable: true });
 boot();

@@ -3,11 +3,11 @@
 // re-runs exactly from its instant-replay clip. Also runs the self-test page's sim checks (RAMP
 // monotonic, difficulty levels, room reachability, every boss beatable).
 //   node scripts/voltmaze/determinism_check.mjs [seeds=4]
-import { makeWorld, step, drainEvents, STEP, cloneWorld } from '../../games/2026-11-06/voltmaze/js/sim.js?v=7';
-import { Autopilot } from '../../games/2026-11-06/voltmaze/js/ai.js?v=7';
-import { TYPICAL_UP } from '../../games/2026-11-06/voltmaze/js/config.js?v=7';
-import { Recorder, Replay } from '../../games/2026-11-06/voltmaze/js/replay.js?v=7';
-import { hashW, simChecks } from '../../games/2026-11-06/voltmaze/js/tests.js?v=7';
+import { makeWorld, step, drainEvents, STEP, cloneWorld } from '../../games/2026-11-06/voltmaze/js/sim.js?v=8';
+import { Autopilot } from '../../games/2026-11-06/voltmaze/js/ai.js?v=8';
+import { TYPICAL_UP } from '../../games/2026-11-06/voltmaze/js/config.js?v=8';
+import { Recorder, Replay } from '../../games/2026-11-06/voltmaze/js/replay.js?v=8';
+import { hashW, simChecks } from '../../games/2026-11-06/voltmaze/js/tests.js?v=8';
 
 const seeds = +(process.argv[2] || 4);
 let fails = 0;

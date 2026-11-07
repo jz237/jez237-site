@@ -14,7 +14,7 @@ if (!chromium) { console.error('playwright not found'); process.exit(2); }
 const prefix = process.argv[2] || 'final';
 const base = process.argv[3] || 'http://127.0.0.1:8773/games/2026-11-06/voltmaze/';
 const shots = process.argv[4] || 'D:/Projects/.tmp/arcade-trio-work/voltmaze/shots';
-const V = '?v=7';
+const V = '?v=8';
 fs.mkdirSync(shots, { recursive: true });
 
 const LOCK = 'D:/Projects/.tmp/arcade-trio-edge.lock';

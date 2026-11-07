@@ -88,17 +88,25 @@ const _a = new THREE.Vector3(), _b = new THREE.Vector3(), _d = new THREE.Vector3
 
 // ------------------------------------------------------------------ the kit: collect parts, merge the static ones
 const STATIC_PARTS = new Set(['static']);
+// skinned kits (the robots, the infiltrator): the static parts of the whole model go into ONE mesh per material
+// (and shadow flag), each vertex rigidly bound to its joint group (one bone per joint, weight 1), so a robot costs
+// a handful of draw calls instead of one per joint per material. The joint groups, named meshes (eyes, lamps,
+// muzzles, visors, fields...) are the ones the unskinned build makes; the merged meshes use twins of the shared
+// class materials (same settings, name and userData, see SKM below).
+let skinNext = false;
+const _I4 = new THREE.Matrix4();
 class Kit {
-  constructor() { this.root = new THREE.Group(); this.buckets = new Map(); this.named = []; this.parts = []; }
+  constructor() { this.root = new THREE.Group(); this.buckets = new Map(); this.named = []; this.parts = []; this.skin = skinNext; }
   group(name, parent = this.root, x = 0, y = 0, z = 0) { const g = new THREE.Group(); g.name = name || ''; g.position.set(x, y, z); parent.add(g); return g; }
   // a static part: merged later with everything else in the same parent and material
   add(g, mat, x = 0, y = 0, z = 0, rx = 0, ry = 0, rz = 0, sx = 1, sy = sx, sz = sx, parent = this.root) {
     const m = new THREE.Matrix4().compose(new THREE.Vector3(x, y, z), new THREE.Quaternion().setFromEuler(new THREE.Euler(rx, ry, rz)), new THREE.Vector3(sx, sy, sz));
     const cls = mat.userData.cls;
-    const key = parent.uuid + '|' + (cls || mat.uuid);
+    const noSh = !!(this.noShadow && parent.name.startsWith(this.noShadow));
+    const key = (this.skin ? (noSh ? 'n' : 's') : parent.uuid) + '|' + (cls || mat.uuid);
     let b = this.buckets.get(key);
-    if (!b) { b = { parent, mat: cls ? M.cls[cls] : mat, list: [], colored: !!cls }; this.buckets.set(key, b); }
-    b.list.push([g, m, mat.color]);
+    if (!b) { b = { parent, mat: cls ? M.cls[cls] : mat, list: [], colored: !!cls, noSh }; this.buckets.set(key, b); }
+    b.list.push([g, m, mat.color, parent]);
     this.parts.push({ g, mat, m, parent });
   }
   // a part between two points (struts, pistons, cables, legs)
@@ -118,6 +126,7 @@ class Kit {
     parent.add(m); return m;
   }
   build() {
+    if (this.skin) return this.buildSkinned();
     for (const { parent, mat, list, colored } of this.buckets.values()) {
       const g = merge(list, colored);
       const m = new THREE.Mesh(g, mat);
@@ -128,10 +137,73 @@ class Kit {
     PARTS.set(this.root, this.parts.map((q) => ({ g: q.g, mat: q.mat, m: q.m, parent: q.parent === this.root ? '' : q.parent.name })));
     return this.root;
   }
+  buildSkinned() {
+    this.root.updateMatrixWorld(true);
+    const bones = [], idx = new Map();
+    for (const b of this.buckets.values()) for (const e of b.list) if (!idx.has(e[3])) { idx.set(e[3], bones.length); bones.push(e[3]); }
+    const skel = new THREE.Skeleton(bones, bones.map((o) => o.matrixWorld.clone().invert()));
+    for (const { mat, list, colored, noSh } of this.buckets.values()) {
+      // every part in model space (its joint's rest pose); merge() makes every part non-indexed, so a part's
+      // vertex count in the merged buffer is its index count (the bug that once bound vertices to nothing)
+      const g = merge(list.map(([q, m, c, p]) => [q, new THREE.Matrix4().multiplyMatrices(p.matrixWorld, m), c]), colored);
+      const n = g.attributes.position.count, si = new Uint16Array(n * 4), sw = new Float32Array(n * 4);
+      let o = 0;
+      for (const [q, , , p] of list) {
+        const c = vcount(q), b = idx.get(p);
+        for (let k = 0; k < c; k++) { si[(o + k) * 4] = b; sw[(o + k) * 4] = 1; }
+        o += c;
+      }
+      if (o !== n) throw new Error(`skinned merge: ${o} skinned vertices, ${n} merged`);
+      g.setAttribute('skinIndex', new THREE.BufferAttribute(si, 4));
+      g.setAttribute('skinWeight', new THREE.BufferAttribute(sw, 4));
+      if (!SKM.has(mat)) SKM.set(mat, mat.clone());
+      const m = new THREE.SkinnedMesh(g, SKM.get(mat));
+      m.castShadow = !mat.isMeshBasicMaterial && !noSh; m.receiveShadow = true; m.customDepthMaterial = skinDepth();
+      m.boundingSphere = g.boundingSphere.clone(); m.boundingSphere.radius += 0.4;   // rest pose + room for the joints to swing
+      this.root.add(m);
+      m.bind(skel, _I4);
+    }
+    this.buckets.clear();
+    PARTS.set(this.root, this.parts.map((q) => ({ g: q.g, mat: q.mat, m: q.m, parent: q.parent === this.root ? '' : q.parent.name })));
+    return this.root;
+  }
 }
+// skinned meshes draw their shadows with their own depth material, so the shared one never flips between its
+// skinned and unskinned programs (both are compiled in the warm-up; this only saves the switching)
+let SKIN_DEPTH = null;
+// skinned meshes use twins of the shared class materials (same settings, name and userData): three rebuilds a
+// material's program state every time the next object's skinning differs from the last one drawn with it, and
+// the bosses, pods, pieces and Seeker keep the originals. Twins share the compiled programs (same cache key).
+const SKM = new Map();
+export const skinTwin = (mat) => SKM.get(mat) || mat;
+const skinDepth = () => SKIN_DEPTH || (SKIN_DEPTH = new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking }));
+// a clone of a skinned model gets its own skeleton made of its own joints (same traversal order)
+function rebind(proto, c) {
+  const a = [], b = [];
+  proto.traverse((o) => a.push(o));
+  if (!a.some((o) => o.isSkinnedMesh)) return;
+  c.traverse((o) => b.push(o));
+  const at = new Map(a.map((o, i) => [o, i])), made = new Map();
+  for (let i = 0; i < a.length; i++) {
+    if (!a[i].isSkinnedMesh) continue;
+    const S = a[i].skeleton;
+    let s2 = made.get(S);
+    if (!s2) { s2 = new THREE.Skeleton(S.bones.map((o) => b[at.get(o)]), S.boneInverses); made.set(S, s2); }
+    b[i].bind(s2, _I4); b[i].customDepthMaterial = a[i].customDepthMaterial;
+  }
+}
+// a model taken out of the scene for good: free its skeletons' bone textures (geometry and materials are shared)
+export function release(g) {
+  if (g) g.traverse((o) => { if (o.isSkinnedMesh && o.skeleton && !PROTO_SKEL.has(o.skeleton)) o.skeleton.dispose(); });
+}
+const vcount = (g) => (g.index ? g.index.count : g.attributes.position.count);
 function merge(list, colored) {
   let n = 0;
-  const parts = list.map(([g, m]) => { const q = (g.index ? g.toNonIndexed() : g.clone()); q.applyMatrix4(m); n += q.attributes.position.count; return q; });
+  const parts = list.map(([g, m]) => {
+    const q = (g.index ? g.toNonIndexed() : g.clone());
+    if (!q.attributes.normal) q.computeVertexNormals();
+    q.applyMatrix4(m); n += q.attributes.position.count; return q;
+  });
   const pos = new Float32Array(n * 3), nor = new Float32Array(n * 3), uv = new Float32Array(n * 2), col = colored ? new Float32Array(n * 3) : null;
   let o = 0;
   for (let pi = 0; pi < parts.length; pi++) {
@@ -143,6 +215,15 @@ function merge(list, colored) {
     o += c;
     q.dispose();
   }
+  // no NaN may reach the shaders (a NaN normal lights a part as a white bloom blob): report it and fix it up
+  let bad = 0;
+  for (let i = 0; i < pos.length; i++) if (!Number.isFinite(pos[i])) { pos[i] = 0; bad++; }
+  for (let i = 0; i < nor.length; i += 3) {
+    const l = Math.hypot(nor[i], nor[i + 1], nor[i + 2]);
+    if (!(l > 1e-6) || !Number.isFinite(l)) { nor[i] = 0; nor[i + 1] = 1; nor[i + 2] = 0; bad++; }
+  }
+  for (let i = 0; i < uv.length; i++) if (!Number.isFinite(uv[i])) { uv[i] = 0; bad++; }
+  if (bad) console.warn('models: merge fixed', bad, 'bad values');
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   g.setAttribute('normal', new THREE.BufferAttribute(nor, 3));
@@ -155,9 +236,17 @@ function merge(list, colored) {
 const PROTO = new Map();
 // every model's original parts (before merging), so it can be broken into its real pieces
 const PARTS = new WeakMap();
+// the robots and the infiltrator are skinned (one mesh per material); bosses, pods and the lift are not
+const SKINNED = /^(inf|sentry$|patroller$|marksman$|aegis$|mortar$|ripper$|twin$|drone$)/;
+const PROTO_SKEL = new WeakSet();
 function make(key, build) {
-  if (!PROTO.has(key)) PROTO.set(key, build());
+  if (!PROTO.has(key)) {
+    skinNext = SKINNED.test(key);
+    try { PROTO.set(key, build()); } finally { skinNext = false; }
+    PROTO.get(key).traverse((o) => { if (o.isSkinnedMesh) PROTO_SKEL.add(o.skeleton); });
+  }
   const p = PROTO.get(key), c = p.clone(true);
+  rebind(p, c);
   PARTS.set(c, PARTS.get(p));
   return c;
 }

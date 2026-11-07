@@ -9,7 +9,7 @@ const SFX = ['flap', 'clang', 'block', 'unhorse', 'boomS', 'boomM', 'boomL', 'de
   'uimove', 'uiok', 'uiback', 'rewind', 'wind', 'surf', 'rush'];
 const VOICE = ['begin', 's2', 's3', 's4', 's5', 'boss', 'bossdown', 'clear', 'lastlife', 'gameover', 'newrecord', 'champion'];
 export const MUSIC = new Set(['title', 's1', 's2', 's3', 's4', 's5', 'boss', 'clear', 'over']);
-const V = '?v=7';
+const V = '?v=8';
 
 export class Audio {
   constructor(base) {

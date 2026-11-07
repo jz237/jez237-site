@@ -5,11 +5,11 @@
 // molten core, ice moon, black hole with lensing), every enemy, boss and effect from the simulation, and
 // HDR post. Nothing here changes the world. The light count never changes after boot.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=7';
-import * as TX from './textures.js?v=7';
-import * as MD from './models.js?v=7';
-import { FX, CALM } from './fx.js?v=7';
-import { SHAPES, BOSSES, POWERUPS, F, BOSS_KEYS } from './config.js?v=7';
+import { Post } from './post.js?v=8';
+import * as TX from './textures.js?v=8';
+import * as MD from './models.js?v=8';
+import { FX, CALM } from './fx.js?v=8';
+import { SHAPES, BOSSES, POWERUPS, F, BOSS_KEYS } from './config.js?v=8';
 
 export { CALM };
 export const TUBE = { R: 10, DEPTH: 64, FAR: 0.58 };
@@ -663,7 +663,9 @@ export class Renderer {
     return P;
   }
   playerView(p) {
-    const color = p.id === 1 ? this.suit.color : 0xff5a3a, accent = p.id === 1 ? this.suit.accent : 0xffd27a;
+    // the local player wears this device's paint; the co-op partner stays red-orange (localPid: 1, or 2 on a co-op guest)
+    const mine = p.id === (this.localPid || 1);
+    const color = mine ? this.suit.color : 0xff5a3a, accent = mine ? this.suit.accent : 0xffd27a;
     const v = MD.rimrunner(color, accent);
     const sh = new THREE.Mesh(new THREE.SphereGeometry(2.2, 32, 20), new THREE.ShaderMaterial({ vertexShader: SHIELD_VERT, fragmentShader: SHIELD_FRAG, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
       uniforms: { uColor: { value: hdr(accent, 1.4) }, uK: { value: 0 }, uTime: { value: 0 } } }));
@@ -995,7 +997,7 @@ export class Renderer {
   syncStrips(W) {
     const me = W.players[0];
     const L = this.look;
-    for (const p of W.players) if (p.alive && W.phase !== 'intro') this.strip(p.lane, Math.max(0, p.d), Math.min(1, p.d + 0.9), p.id === 1 ? L.rail : 0xff9a5a, 0, 0, W.phase === 'dive' ? 0.5 : 0.9);
+    for (const p of W.players) if (p.alive && W.phase !== 'intro') this.strip(p.lane, Math.max(0, p.d), Math.min(1, p.d + 0.9), p.id === (this.localPid || 1) ? L.rail : 0xff9a5a, 0, 0, W.phase === 'dive' ? 0.5 : 0.9);
     for (const z of W.zaps) {
       const col = z.kind === 'shock' || z.kind === 'sweep' ? 0x9fe8ff : z.kind === 'flare' ? 0xff7a2a : z.kind === 'beam' ? 0xff5ad0 : z.kind === 'pull' ? 0xb08aff : 0xff5a3a;
       if (z.t < 0) this.strip(z.lane, 0, 1, col, 1, 1 + z.t / z.T, 0.9);

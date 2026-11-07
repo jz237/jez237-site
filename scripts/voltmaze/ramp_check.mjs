@@ -15,9 +15,9 @@
 //      VM_JSON=path (write the numbers) · VM_TARGET=85,65,45,30,18 (the clear-rate targets to compare to)
 import { Worker, isMainThread, parentPort, workerData } from 'node:worker_threads';
 import { writeFileSync } from 'node:fs';
-import * as C from '../../games/2026-11-06/voltmaze/js/config.js?v=7';
-import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-06/voltmaze/js/sim.js?v=7';
-import { Autopilot } from '../../games/2026-11-06/voltmaze/js/ai.js?v=7';
+import * as C from '../../games/2026-11-06/voltmaze/js/config.js?v=8';
+import { makeWorld, step, drainEvents, STEP } from '../../games/2026-11-06/voltmaze/js/sim.js?v=8';
+import { Autopilot } from '../../games/2026-11-06/voltmaze/js/ai.js?v=8';
 
 const { TYPICAL_UP, SECTORS, RAMP } = C;
 export const TARGETS = {

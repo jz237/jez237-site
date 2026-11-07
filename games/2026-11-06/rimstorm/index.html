@@ -228,6 +228,9 @@ table.hs tr.me td { color: #fff; background: rgba(111, 216, 255, .1); }
 .tboard .tabs button.on { border-color: var(--amber); color: var(--amber); background: rgba(111, 216, 255, .12); }
 .tboard table.hs { font-size: 13px; }
 .tboard table.hs td { padding: 4px; }
+/* r3: the small title buttons (HIGH SCORES, MEDALS, SERVICE RECORD, OPTIONS, HOW TO PLAY) in three columns (five on a phone held sideways) */
+#title-btns .btns.two { grid-template-columns: repeat(3, 1fr); }
+#title-btns .btns.two .mbtn { text-align: center; padding-left: 6px; padding-right: 6px; font-size: 12.5px; letter-spacing: .1em; }
 /* phone landscape (short screens): the menu in two columns, the world board in its own card on the right */
 @media (max-height: 520px) and (orientation: landscape) {
   #title { padding-left: max(12px, env(safe-area-inset-left)); }
@@ -242,7 +245,7 @@ table.hs tr.me td { color: #fff; background: rgba(111, 216, 255, .1); }
   #title-btns .mbtn { padding: 6px 10px; font-size: 11.5px; letter-spacing: .1em; }
   #title-btns .mbtn small { font-size: 9.5px; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   #title-btns .mbtn.primary { grid-column: 1 / -1; }
-  #title-btns .btns.two { grid-column: 1 / -1; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+  #title-btns .btns.two { grid-column: 1 / -1; grid-template-columns: repeat(5, 1fr); gap: 5px; }
   #title-btns .btns.two .mbtn { text-align: center; padding: 6px 4px; font-size: 10px; }
   #title .foot { margin-top: 6px; font-size: 9px; }
   #title .tbcard { width: min(330px, 36vw); max-height: 92vh; margin-right: max(10px, env(safe-area-inset-right)); padding: 10px 12px; }
@@ -324,6 +327,164 @@ body:has(#medtrack:not(:empty)) #bossbar { margin-top: 8px; }
 @keyframes bbHitI { 0% { filter: brightness(2.4); } 100% { filter: none; } }
 @media (max-width: 560px) { #banner.bk .b2 { font-size: clamp(26px, 9vw, 44px); } #banner.bi .b2 { letter-spacing: .14em; } }
 @media (max-height: 520px) and (orientation: landscape) { #banner.bk .b1, #banner.bi .b1 { font-size: clamp(26px, 5vw, 48px); } #banner.bk .b2 { font-size: clamp(24px, 5vw, 40px); margin-top: 6px; } }
+/* ---------------------------------------------------------------- r3: phone layouts, SERVICE RECORD */
+.medal small { font-size: 10px; }
+.tboard .lbl { font-size: 10px; }
+.opt .seg { flex-wrap: wrap; justify-content: flex-end; }
+#medlist h3 { margin: 10px 0 4px; }
+/* HUD medal chips: 10 px everywhere, tight letter spacing so three chips still fit the narrow portrait panel */
+#medtrack b { font-size: 10px; letter-spacing: .04em; }
+@media (max-width: 560px) { #medtrack { gap: 3px; flex-wrap: wrap; } #medtrack b { font-size: 10px; padding: 1px 3px; letter-spacing: 0; } }
+/* results: on a wide but short screen (desktop 720p, a phone held sideways) the run on the left, initials + buttons on the right */
+#res-side { min-width: 0; }
+@media (orientation: landscape) and (max-height: 800px) and (min-width: 700px) {
+  #results .card { width: min(880px, 96vw); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 22px; align-items: start; }
+  #results .card > * { grid-column: 1; }
+  #results .card > #res-side { grid-column: 2; grid-row: 1 / span 5; align-self: center; }
+  #res-stats { display: grid; grid-template-columns: 1fr 1fr; column-gap: 16px; }
+  #res-side #ini-wrap h3 { margin-top: 0; }
+}
+/* phone portrait: every card may use the whole screen height; tighter cards */
+@media (max-width: 560px) and (orientation: portrait) {
+  .card { max-height: 100%; padding: 16px 14px; }
+  .card h2 { font-size: 28px; }
+  .opt { padding: 6px 0; }
+  .upg { padding: 9px 10px; }
+  .sec { padding: 9px 10px; }
+  #results .sub { margin-bottom: 8px; }
+  #res-hero { margin: 8px 0 4px; padding: 6px 10px 8px; }
+  #res-stats .stat { padding: 4px 0; }
+  #ini-wrap h3 { margin: 10px 0 4px; }
+  #ini-wrap .ini { margin: 6px 0; }
+  #ini-wrap .ini b { width: 46px; height: 54px; font-size: 34px; }
+  #ini-wrap p { font-size: 12px; line-height: 1.4; }
+  #res-btns { margin-top: 10px !important; }
+  /* title: START CAMPAIGN and DAILY across, the other modes in two columns, the world board under them */
+  #title { padding-left: max(12px, env(safe-area-inset-left)); padding-right: max(12px, env(safe-area-inset-right)); justify-content: center; }
+  #title .card { width: min(430px, 100%); max-height: 100%; padding: 14px 14px 10px; }
+  #title .logo { font-size: 40px; }
+  #title .logo small { display: inline-block; margin: 0 0 0 10px; font-size: .5em; letter-spacing: .4em; }
+  #title .ver { margin: 4px 0 8px; }
+  #title .diffrow { font-size: 10px; letter-spacing: .14em; }
+  #title .diffrow .seg button { padding: 5px 6px; letter-spacing: .06em; }
+  #title #diff-desc { margin: 0 0 8px; }
+  #title-btns { grid-template-columns: 1fr 1fr; gap: 6px; }
+  #title-btns > .mbtn { padding: 8px 10px; font-size: 12.5px; letter-spacing: .08em; }
+  #title-btns > .mbtn small { font-size: 10.5px; margin-top: 2px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  #title-btns .mbtn.primary, #title-btns [data-act="daily"], #title-btns .btns.two { grid-column: 1 / -1; }
+  #title-btns .btns.two { gap: 6px; }
+  #title-btns .btns.two .mbtn { padding: 8px 4px; font-size: 11px; letter-spacing: .06em; }
+  #title .tboard { margin-top: 8px; padding: 8px 10px; }
+  #title .tboard .tabs { margin: 4px 0; gap: 3px; }
+  #title .tboard .tabs button { padding: 4px 6px; }
+  #title .tboard table.hs td { padding: 3px 4px; }
+  #title .foot { margin-top: 8px; }
+}
+@media (max-width: 560px) and (orientation: portrait) and (max-height: 860px) { #title .tboard table.hs tr:nth-child(n+4) { display: none; } }
+/* short desktop screens: options fit 720p */
+@media (max-height: 800px) and (min-width: 1000px) { .opt { padding: 5px 0; } }
+/* phone landscape: every card compact, options in two columns, online buttons in two columns */
+@media (max-height: 520px) and (orientation: landscape) {
+  .card { max-height: 100%; padding: 12px 18px; }
+  .card h2 { font-size: 26px; }
+  .card h3 { margin: 10px 0 5px; }
+  .sub { margin-bottom: 8px; }
+  .btns { gap: 6px; }
+  .mbtn { padding: 8px 14px; }
+  .mbtn small { font-size: 11px; margin-top: 1px; }
+  #options .card { width: min(860px, 96vw); display: grid; grid-template-columns: 1fr 1fr; grid-auto-flow: row dense; column-gap: 24px; align-content: start; }
+  #options .card > h2, #options .card > .btns { grid-column: 1 / -1; }
+  #options .card > p { grid-column: 1; margin-top: 4px !important; }
+  #options #suit-name { grid-column: 2; margin: 2px 0 0; }
+  #options .opt { padding: 4px 0; }
+  .opt .seg button { padding: 5px 9px; }
+  #online .card { width: min(720px, 96vw); }
+  #net-btns { grid-template-columns: 1fr 1fr; }
+  #room-code { font-size: 34px; margin: 0; }
+  #net-status { margin: 6px 0; }
+  #join-code { padding: 7px; font-size: 22px; }
+  #salvage { margin-bottom: 6px; padding: 4px 10px; }
+  .upgrid { gap: 6px; }
+  .upg { padding: 6px 10px; gap: 2px 8px; }
+  .upg small { font-size: 11px; line-height: 1.3; }
+  #upgrades .btns[style] { margin-top: 8px !important; }
+  #upgrades .mbtn small { display: none; }
+  .secgrid { gap: 6px; }
+  .sec { padding: 8px 10px; }
+  .sec small { margin-top: 3px; }
+  /* results: compact numbers, smaller initials */
+  #results .card { padding: 10px 16px; }
+  #results h2 { font-size: 24px; }
+  #results .sub { margin: 0 0 4px; font-size: 10px; letter-spacing: .16em; }
+  #res-stats .stat { padding: 3px 0; font-size: 12.5px; }
+  #res-stats .stat span { font-size: 10.5px; letter-spacing: .06em; }
+  #res-medals { margin-top: 6px; }
+  #res-medals .medal { padding: 4px 8px; font-size: 10px; }
+  #ini-wrap .ini { margin: 4px 0; }
+  #ini-wrap .ini b { width: 44px; height: 50px; font-size: 32px; }
+  #ini-wrap p { font-size: 11.5px; line-height: 1.35; }
+  #res-btns { margin-top: 8px !important; }
+}
+/* a lone button in a two-column row (INSTANT REPLAY hidden) takes the whole row */
+.btns.two > .mbtn.hidden + .mbtn { grid-column: 1 / -1; }
+@media (max-width: 560px) and (orientation: portrait) {
+  .sub { letter-spacing: .16em; margin-bottom: 10px; }
+  #res-hero b { font-size: 38px; }
+  #res-stats .stat { padding: 3px 0; }
+  #res-medals .medal { padding: 4px 8px; }
+  #ini-wrap h3 { margin: 8px 0 2px; }
+  #ini-wrap .ini b { height: 50px; font-size: 32px; }
+  #ini-wrap p { font-size: 11.5px; line-height: 1.35; }
+  #salvage { margin-bottom: 8px; }
+  .upgrid { gap: 6px; }
+  .upg { padding: 7px 10px; gap: 2px 8px; }
+  .upg small { font-size: 11.5px; line-height: 1.3; }
+}
+@media (max-height: 520px) and (orientation: landscape) {
+  /* shop: END RUN beside INSTANT REPLAY / NEXT SECTOR */
+  #upgrades .card { display: grid; grid-template-columns: 2fr 1fr; column-gap: 6px; align-items: start; }
+  #upgrades .card > :not(.btns) { grid-column: 1 / -1; }
+  #upgrades .card > .btns { margin-top: 8px !important; }
+  .sec .md { margin-top: 3px; }
+  #scores .btns { margin: 4px 0 !important; }
+  #scores .mbtn { padding-top: 6px; padding-bottom: 6px; }
+  table.hs td { padding: 3px 4px; }
+  #besttimes { display: grid; grid-template-columns: 1fr 1fr; column-gap: 18px; }
+  #besttimes .stat { padding: 3px 0; }
+}
+/* SERVICE RECORD */
+#record .card { width: min(900px, 96vw); }
+.rtiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 6px; }
+.rtiles div { padding: 6px 9px 7px; border-radius: 10px; background: rgba(255, 255, 255, .04); border: 1px solid rgba(255, 255, 255, .08); }
+.rtiles span { display: block; font-size: 10px; letter-spacing: .16em; color: var(--dim); }
+.rtiles b { display: block; font-family: 'Saira Condensed'; font-weight: 800; font-size: 22px; line-height: 1.1; color: #fff; font-variant-numeric: tabular-nums; }
+.rcols { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0 22px; }
+.rcols h3 { margin: 12px 0 4px; }
+.rrow { display: flex; justify-content: space-between; gap: 10px; padding: 3px 0; border-bottom: 1px solid rgba(255, 255, 255, .06); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.rrow span { color: var(--dim); font-size: 11px; letter-spacing: .08em; }
+.rrow.none span { font-family: system-ui, sans-serif; letter-spacing: 0; }
+table.rbest { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
+table.rbest th { font-weight: 600; font-size: 10px; letter-spacing: .08em; color: var(--dim); text-align: right; padding: 3px 2px; }
+table.rbest th:first-child, table.rbest td:first-child { text-align: left; }
+table.rbest td { text-align: right; padding: 3px 2px; border-bottom: 1px solid rgba(255, 255, 255, .06); }
+table.rbest td:first-child { color: var(--dim); font-size: 11px; letter-spacing: .08em; }
+@media (max-width: 560px) and (orientation: portrait) {
+  .rtiles { grid-template-columns: repeat(3, 1fr); } .rtiles div { padding: 4px 7px 5px; } .rtiles span { letter-spacing: .04em; } .rtiles b { font-size: 18px; }
+  .rcols { grid-template-columns: 1fr; } .rcols h3 { margin-top: 10px; } .rrow { padding: 2px 0; }
+  .rcols > div:first-child { display: grid; grid-template-columns: 1fr 1fr; column-gap: 14px; } .rcols > div:first-child h3 { grid-column: 1 / -1; }
+}
+@media (max-height: 520px) and (orientation: landscape) { .rtiles { grid-template-columns: repeat(4, 1fr); } .rtiles b { font-size: 19px; } .rcols h3 { margin-top: 8px; } }
+/* phone landscape title: nothing under 10 px */
+@media (max-height: 520px) and (orientation: landscape) {
+  #title .ver, #title .diffrow, #title .diffrow .seg button, #title-btns .mbtn small, #title .tbcard .tboard .tabs button { font-size: 10px; }
+  #title .ver { letter-spacing: .14em; margin: 2px 0 4px; }
+  #title .diffrow .seg button { padding: 3px 6px; }
+  #title .foot { font-size: 10px; }
+  /* the one-line descriptions are cut with an ellipsis, so they must never widen their column */
+  #title-btns { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  #title-btns .btns.two { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+#hud .lbl { font-size: 10px; }
 </style>
 </head>
 <body>
@@ -368,7 +529,7 @@ body:has(#medtrack:not(:empty)) #bossbar { margin-top: 8px; }
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">RIM<span>STORM</span><small>2026</small></h1>
-      <div class="ver">VERSION <b id="ver">1.0.0</b> · HOLD THE RIM · DIVE THE STORM</div>
+      <div class="ver">VERSION <b id="ver">1.3.0</b> · HOLD THE RIM · DIVE THE STORM</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -381,6 +542,7 @@ body:has(#medtrack:not(:empty)) #bossbar { margin-top: 8px; }
         <div class="btns two">
           <button class="mbtn" data-act="scores">HIGH SCORES</button>
           <button class="mbtn" data-act="medals">MEDALS <small id="med-sub">0 / 15</small></button>
+          <button class="mbtn" data-act="record">SERVICE RECORD</button>
           <button class="mbtn" data-act="options">OPTIONS</button>
           <button class="mbtn" data-act="help">HOW TO PLAY</button>
         </div>
@@ -426,6 +588,7 @@ body:has(#medtrack:not(:empty)) #bossbar { margin-top: 8px; }
     <div id="res-hero"></div>
     <div id="res-stats"></div>
     <div class="medrow" id="res-medals"></div>
+    <div id="res-side">
     <div id="ini-wrap" class="hidden"><h3>NEW HIGH SCORE · ENTER YOUR INITIALS</h3><div class="ini" id="ini"><b></b><b></b><b></b></div><p style="text-align:center;margin:0">Type letters, or use ↑ ↓ and ENTER (tap a letter on touch). Your score goes on the world board.</p></div>
     <div class="btns" style="margin-top:14px" id="res-btns">
       <button class="mbtn hidden" data-act="continue" id="res-cont">CONTINUE FROM THE CHECKPOINT<small id="cont-sub"></small></button>
@@ -434,6 +597,7 @@ body:has(#medtrack:not(:empty)) #bossbar { margin-top: 8px; }
         <button class="mbtn" data-act="replay">INSTANT REPLAY<small id="rep-sub">The last hit, exactly as it happened</small></button>
         <button class="mbtn primary" data-act="done">FINISH<small>Save the score and go back to the title</small></button>
       </div>
+    </div>
     </div>
   </div></div>
 
@@ -450,6 +614,13 @@ body:has(#medtrack:not(:empty)) #bossbar { margin-top: 8px; }
     <h2>MEDALS</h2><div class="sub" id="med-count"></div>
     <div id="medlist"></div>
     <div class="btns" style="margin-top:14px"><button class="mbtn" data-act="back">BACK</button></div>
+  </div></div>
+
+  <!-- SERVICE RECORD: lifetime numbers on this device (rs.record.v1); demo, autopilot, tests and a co-op guest never count -->
+  <div class="screen hidden" id="record"><div class="card wide">
+    <h2>SERVICE RECORD</h2><div class="sub" id="rec-sub">LIFETIME · THIS DEVICE</div>
+    <div id="reclist"></div>
+    <div class="btns" style="margin-top:12px"><button class="mbtn" data-act="back">BACK</button></div>
   </div></div>
 
   <div class="screen hidden" id="options"><div class="card">
@@ -520,6 +691,6 @@ addEventListener('error', (e) => window.__rsErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__rsErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__rsErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=7"></script>
+<script type="module" src="js/main.js?v=8"></script>
 </body>
 </html>

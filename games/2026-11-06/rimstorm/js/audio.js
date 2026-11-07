@@ -13,7 +13,7 @@ for (const n of ['title', 's1', 's2', 's3', 's4', 's5', 'boss', 'clear', 'over']
 const SFX = Object.keys(FILE).filter((k) => !k.includes(':'));
 // rare flight-control voice lines (one voice for the whole game), only at key moments through main.js say()
 export const VOICE = ['begin', 's2', 's3', 's4', 's5', 'boss', 'bossdown', 'lastlife', 'gameover', 'newrecord', 'champion', 'endless'];
-const V = '?v=7';
+const V = '?v=8';
 
 export class Audio {
   constructor(base) {

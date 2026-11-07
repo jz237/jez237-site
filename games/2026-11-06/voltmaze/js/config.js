@@ -1,6 +1,6 @@
 // Voltmaze 2026 — every tunable number lives here. The RAMP table drives difficulty; nothing else in the
 // game hard-codes robot pace, numbers, fire rate, aim, bolt speed, Seeker timing or warning time.
-export const VERSION = '1.0.0';
+export const VERSION = '1.3.0';
 export const STEP = 1 / 120;
 
 // ------------------------------------------------------------------ the facility and the infiltrator
@@ -166,7 +166,18 @@ export const SCORE = { clearPer: 30, boss: 5000, sector: 2500, lifeEvery: 15000,
 // salvage for the shop = points scored in the sector / SALVAGE (a typical NORMAL run then owns about TYPICAL_UP)
 export const SALVAGE = 25;
 export const START_LIVES = 3;
-export const SUITS = [{ key: 'slate', name: 'SLATE', color: 0x3d4a5c, accent: 0x6fe3ff }];
+// suit colourways for your infiltrator (presentation only: the sim never reads them), unlocked by medals earned;
+// SLATE is always open. `tint` multiplies the suit's painted parts (linear RGB, so the armour plates take the
+// colour), `accent` relights the visor, power cell, muzzle and status strips, `color` is the swatch in OPTIONS.
+// No red or amber: that is the co-op partner's suit.
+export const SUITS = [
+  { key: 'slate', name: 'SLATE', color: 0x3d4a5c, accent: 0x6fe3ff, tint: [1, 1, 1], medals: 0 },
+  { key: 'graphite', name: 'GRAPHITE', color: 0x55595f, accent: 0xc8f4ff, tint: [0.36, 0.37, 0.4], medals: 2 },
+  { key: 'verdant', name: 'VERDANT', color: 0x8fd0a0, accent: 0x7dffa0, tint: [0.5, 1, 0.6], medals: 4 },
+  { key: 'cobalt', name: 'COBALT', color: 0x6f9ee8, accent: 0x8fb4ff, tint: [0.42, 0.62, 1.25], medals: 6 },
+  { key: 'violet', name: 'VIOLET', color: 0xb98ae0, accent: 0xd890ff, tint: [0.85, 0.48, 1.15], medals: 9 },
+  { key: 'gilded', name: 'GILDED', color: 0xe0c070, accent: 0xffe89a, tint: [1.12, 0.86, 0.38], medals: 12 },
+];
 
 // ------------------------------------------------------------------ difficulty levels
 // Each level scales the RAMP, so every level still builds up room by room, and has its own boards.

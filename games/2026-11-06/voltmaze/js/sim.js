@@ -3,7 +3,7 @@
 // data only, so a world can be cloned and re-run bit for bit (replays, online, tests). Nothing in here
 // touches the DOM, WebGL or audio; it only pushes events into W.ev.
 import { F, STEP, ROOM, REINF, BURST_A, SECTORS, RAMP, rampAt, rampLevel, endlessLevel, ENDLESS, ENEMY, SEEKER, BOSSES, BOSS_KEYS, ATTACK, SCORE, START_LIVES, INTRO, introduced,
-  DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, fireCDOf, empMax, empStart, UPGRADES } from './config.js?v=7';
+  DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, fireCDOf, empMax, empStart, UPGRADES } from './config.js?v=8';
 export { STEP };
 
 const { RW, RH, wallT: WT, inT: IT, door: DOOR, cols: GC, rows: GR, entryIn } = ROOM;

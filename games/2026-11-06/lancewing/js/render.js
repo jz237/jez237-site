@@ -4,12 +4,12 @@
 // spire and its lightning, telegraph ribbons for every hazard and boss attack, HDR post with bloom.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=7';
-import * as TX from './textures.js?v=7';
-import * as MD from './models.js?v=7';
-import { FX, CALM } from './fx.js?v=7';
-import { F, POWERUPS, BOSSES, HUNTER, LAYOUT } from './config.js?v=7';
-import { weakPos } from './sim.js?v=7';
+import { Post } from './post.js?v=8';
+import * as TX from './textures.js?v=8';
+import * as MD from './models.js?v=8';
+import { FX, CALM } from './fx.js?v=8';
+import { F, POWERUPS, BOSSES, HUNTER, LAYOUT } from './config.js?v=8';
+import { weakPos } from './sim.js?v=8';
 
 export { CALM };
 const RR = F.R, H = F.H;

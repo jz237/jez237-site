@@ -1,13 +1,13 @@
 // Rimstorm 2026 — game flow, menus, HUD, commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, WEBS, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, AIM_MEDAL, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY, AI_SHOP, SALVAGE_MEDAL, salvageFor } from './config.js?v=7';
-import { makeWorld, step, drainEvents, webLabel, isBossWeb, bossKey, cloneWorld } from './sim.js?v=7';
-import { Autopilot } from './ai.js?v=7';
-import { Renderer, pickQuality, CALM } from './render.js?v=7';
-import { Audio } from './audio.js?v=7';
-import { Input } from './input.js?v=7';
-import { Scores, NO_POST } from './scores.js?v=7';
-import { Recorder, Replay, worldSig } from './replay.js?v=7';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=7';
+import { VERSION, SECTORS, STEP, F, WEBS, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, AIM_MEDAL, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY, AI_SHOP, SALVAGE_MEDAL, salvageFor } from './config.js?v=8';
+import { makeWorld, step, drainEvents, webLabel, isBossWeb, bossKey, cloneWorld } from './sim.js?v=8';
+import { Autopilot } from './ai.js?v=8';
+import { Renderer, pickQuality, CALM } from './render.js?v=8';
+import { Audio } from './audio.js?v=8';
+import { Input } from './input.js?v=8';
+import { Scores, NO_POST } from './scores.js?v=8';
+import { Recorder, Replay, worldSig } from './replay.js?v=8';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=8';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -81,7 +81,9 @@ function say(name, o = {}) {
 function rumble(strong, weak, ms) { if (settings.rumble === 'off' || G.mode === 'demo' || G.mode === 'playthrough' || G.mode === 'title') return; I.rumble(strong, weak, ms); }
 
 // ------------------------------------------------------------------ screens
-const SCREENS = ['title', 'sectors', 'upgrades', 'endrun', 'results', 'scores', 'medals', 'options', 'help', 'online', 'pause'];
+const SCREENS = ['title', 'sectors', 'upgrades', 'endrun', 'results', 'scores', 'medals', 'options', 'help', 'online', 'pause', 'record'];
+// screens that are mostly reading (a long card): they open at the top, and ↑ / ↓ with nothing further that way scroll the card
+const READING = ['help', 'medals', 'record'];
 function show(id, push = true) {
   if (push && G.screen && G.screen !== id) G.back.push(G.screen);
   for (const s of SCREENS) $(s).classList.toggle('hidden', s !== id);
@@ -91,6 +93,7 @@ function show(id, push = true) {
   // the first VISIBLE button in document order (a hidden CONTINUE on a cleared run's results must never take a pad's A press);
   // the shop starts on its first upgrade, never on NEXT SECTOR (a mashed A must not skip the shop); results / END RUN pick explicitly or first
   if (id) { const first = [...$(id).querySelectorAll('.mbtn, .sec:not([disabled]), .upg')].find((e) => e.offsetParent && !e.disabled); setSel(first || null); }
+  if (READING.includes(id)) { const c = $(id).querySelector('.card'); if (c) c.scrollTop = 0; }
 }
 function hideScreens() { for (const s of SCREENS) $(s).classList.add('hidden'); G.screen = null; G.back = []; }
 function goBack() {
@@ -101,7 +104,8 @@ let selEl = null;
 function setSel(el) { if (selEl) selEl.classList.remove('sel'); selEl = el; if (el) { el.classList.add('sel'); try { if (I.lastKind !== 'touch') el.scrollIntoView({ block: 'nearest' }); } catch (e) { /* keyboard/pad focus below the fold on short phones */ } } }
 function navigate(dir) {
   if (!G.screen) return;
-  const items = [...$(G.screen).querySelectorAll('.mbtn:not(.hidden):not([disabled]), .sec:not([disabled]), .upg, .seg button, [data-tab], [data-hd]')].filter((e) => e.offsetParent);
+  // locked paint swatches (disabled) are never highlighted
+  const items = [...$(G.screen).querySelectorAll('.mbtn:not(.hidden):not([disabled]), .sec:not([disabled]), .upg, .seg button:not([disabled]), [data-tab], [data-hd]')].filter((e) => e.offsetParent);
   if (!items.length) return;
   let i = items.indexOf(selEl);
   if (i < 0) i = 0; else {
@@ -116,6 +120,11 @@ function navigate(dir) {
       if (d < bestD) { bestD = d; bestI = j; }
     });
     if (bestI >= 0) i = bestI;
+    else if (dir === 'ArrowDown' || dir === 'ArrowUp') {
+      // nothing further that way: a long card (help, medals, service record) scrolls instead, so a pad can read it all
+      const c = $(G.screen).querySelector('.card');
+      if (c && c.scrollHeight > c.clientHeight + 1) { c.scrollBy({ top: (dir === 'ArrowDown' ? 1 : -1) * Math.round(c.clientHeight * 0.6) }); A.play('uimove', { gap: 0, vol: 0.3 }); return; }
+    }
   }
   setSel(items[i]);
   items[i].scrollIntoView({ block: 'nearest' });
@@ -126,6 +135,7 @@ function navigate(dir) {
 function toTitle() {
   // leaving the results some other way than FINISH / CONTINUE still keeps a qualifying score
   if (G.ini && G.screen === 'results') postScore();
+  svcFlush();
   NET.close(); stopPlay();
   clearTimeout(G.ptT);
   G.state = 'title'; G.mode = 'title'; G.idleT = 0;
@@ -235,6 +245,7 @@ function startDemo() {
 }
 function enterPlay(W) {
   stopPlay();
+  setLocalPid(G.mode === 'online' && !NET.host ? 2 : 1);
   G.W = W; G.state = 'play'; G.acc = 0; G.clip = null; G.pendingClip = null; G.lastLife = false; G.hintT = 0;
   if (!G.ai && G.autopilot && G.mode !== 'online') G.ai = new Autopilot(W.seed, 'demo');
   if (G.mode === 'playthrough') G.ai = new Autopilot(W.seed, 'demo');
@@ -616,6 +627,7 @@ function buy(k) {
   if (sel) setSel(document.querySelector(`[data-up="${sel}"]`));
 }
 function results(W, title, sub, banked = false) {
+  svcRunEnd(W);
   G.state = 'results'; setHud(false);
   $('res-title').textContent = title; $('res-sub').textContent = sub + ' · ' + DL(W.diff);
   const st = [['SCORE', W.score.toLocaleString()]];
@@ -740,6 +752,7 @@ function pause() {
   if (G.state !== 'play' || G.mode === 'demo') return;
   if (G.mode === 'playthrough') { toTitle(); return; }
   I.releaseLock();
+  svcFlush();
   if (G.mode === 'online') { show('pause'); $('pause-sub').textContent = 'ONLINE · THE WEB KEEPS GOING'; G.state = 'paused-online'; return; }
   G.state = 'paused';
   A.muffle(true);
@@ -827,6 +840,7 @@ function act(a) {
     case 'online': show('online'); netStatus(''); $('room-wrap').classList.add('hidden'); $('net-go').classList.add('hidden'); syncSegs(); break;
     case 'scores': show('scores'); renderScores(G.scoreTab || 'campaign'); break;
     case 'medals': buildMedals(); show('medals'); break;
+    case 'record': svcFlush(); buildRecord(); show('record'); break;
     case 'options': show('options'); syncSegs(); break;
     case 'help': show('help'); break;
     case 'back': if (G.screen === 'endrun') { endRunNo(); break; } A.play('uiback', { gap: 0 }); goBack(); break;
@@ -893,8 +907,11 @@ function applySuit() {
   const s = suitOf(settings.suit);
   if (R.suit && R.suit.color === s.color && R.suit.accent === s.accent) return;
   R.suit = s;
-  if (R.views && R.views.p) { for (const v of R.views.p.values()) R.root.remove(v.g); R.views.p.clear(); }
+  dropPlayerViews();
 }
+function dropPlayerViews() { if (R.views && R.views.p) { for (const v of R.views.p.values()) R.root.remove(v.g); R.views.p.clear(); } }
+// whose Rimrunner wears this device's paint: player 1, or player 2 on a co-op guest (the partner keeps the red-orange scheme)
+function setLocalPid(id) { if ((R.localPid || 1) !== id) { R.localPid = id; dropPlayerViews(); } }
 function syncSegs() { for (const s of document.querySelectorAll('.seg')) for (const b of s.children) b.classList.toggle('on', String(settings[s.dataset.opt]) === b.dataset.v); }
 function applySettings() {
   if ($('diff-desc')) $('diff-desc').textContent = DIFFICULTY[settings.diff].desc;
@@ -920,6 +937,59 @@ function buildMedals() {
   $('med-count').textContent = `${medals.size} OF ${MEDALS.length} EARNED`;
   $('medlist').innerHTML = SECTORS.map((s, i) => `<h3>SECTOR ${i + 1} · ${s.name}</h3><div class="medrow">${MEDALS.filter((m) => m.sector === i).map((m) => `<span class="medal ${medals.has(m.id) ? 'on' : ''}" title="${m.desc}">${medals.has(m.id) ? '🏅' : '○'} ${m.name} <small style="opacity:.7">· ${m.desc}</small></span>`).join('')}</div>`).join('');
 }
+// ------------------------------------------------------------------ SERVICE RECORD (lifetime numbers on this device)
+// rs.record.v1. Only a player's own runs count: campaign, sector select, endless, daily and a co-op HOST (only the host's
+// own kills, purges and losses). The attract demo, ?autoplay, the AI PLAYTHROUGH, instant replays, a co-op guest and
+// test pages (?test, ?fixed, ?autoplay, ?demo, ?playthrough, a WebDriver browser) never count. Reads the sim's events
+// after step(); it never changes the world.
+const SVC_KEY = 'rs.record.v1';
+const SVC_OFF = params.has('test') || params.has('fixed') || params.has('autoplay') || params.has('demo') || params.has('playthrough') || !!navigator.webdriver;
+const svcBlank = () => ({ v: 1, time: 0, kills: {}, bosses: {}, webs: 0, sectors: 0, deaths: {}, purges: 0, best: {} });
+const SVC = { d: Object.assign(svcBlank(), load(SVC_KEY, {})), dirty: false, savedAt: 0, force: false };
+for (const k of ['kills', 'bosses', 'deaths', 'best']) if (!SVC.d[k] || typeof SVC.d[k] !== 'object') SVC.d[k] = {};
+function svcOn() {
+  if (SVC_OFF && !SVC.force) return false;
+  if (G.ai || G.replay || G.state === 'replay') return false;
+  return G.mode === 'campaign' || G.mode === 'endless' || G.mode === 'daily' || (G.mode === 'online' && NET.host);
+}
+function svcEvents(ev, W) {
+  const d = SVC.d, me = myPlayer(W), id = me ? me.id : 1;
+  for (const e of ev) {
+    if (e.k === 'kill' && e.pid === id) d.kills[e.type] = (d.kills[e.type] || 0) + 1;
+    else if (e.k === 'death' && e.pid === id) d.deaths[e.cause] = (d.deaths[e.cause] || 0) + 1;
+    else if (e.k === 'purge' && e.pid === id) d.purges++;
+    else if (e.k === 'bosskill') d.bosses[e.key] = (d.bosses[e.key] || 0) + 1;
+    else if (e.k === 'webclear') d.webs++;
+  }
+  if (ev.length) SVC.dirty = true;
+}
+// the end of a run (the results screen): the best score per mode and difficulty
+function svcRunEnd(W) {
+  if (!svcOn()) return;
+  const k = (G.mode === 'daily' ? 'daily' : G.mode === 'online' ? 'coop' : W.mode) + ':' + (W.diff || 'normal');
+  if (W.score > (SVC.d.best[k] || 0)) { SVC.d.best[k] = W.score; SVC.dirty = true; }
+  svcFlush();
+}
+function svcFlush() { if (SVC.dirty) { SVC.dirty = false; SVC.savedAt = SVC.d.time; store(SVC_KEY, SVC.d); } }
+addEventListener('pagehide', svcFlush);
+const fmtH = (t) => { t = Math.floor(t); const h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), s = t % 60; return h ? `${h}h ${String(m).padStart(2, '0')}m` : `${m}m ${String(s).padStart(2, '0')}s`; };
+const ENEMY_NAME = { splitter: 'SPLITTERS', hopper: 'HOPPERS', spinewright: 'SPINEWRIGHTS', mite: 'ARC MITES', lancer: 'LANCERS', shocker: 'SHOCKERS', mirror: 'MIRRORS' };
+function buildRecord() {
+  const d = SVC.d, sum = (o) => Object.values(o).reduce((a, b) => a + b, 0), n = (v) => (v || 0).toLocaleString();
+  const row = (a, b) => `<div class="rrow"><span>${a}</span><b>${b}</b></div>`;
+  const tiles = [['PLAY TIME', fmtH(d.time)], ['ENEMIES', n(sum(d.kills))], ['BOSSES', n(sum(d.bosses))], ['WEBS CLEARED', n(d.webs)], ['SECTORS CLEARED', n(d.sectors)], ['PURGES USED', n(d.purges)], ['RIMRUNNERS LOST', n(sum(d.deaths))], ['MEDALS', `${medals.size} / ${MEDALS.length}`]];
+  const kills = Object.keys(ENEMY_NAME).map((k) => row(ENEMY_NAME[k], n(d.kills[k])));
+  const bosses = Object.keys(BOSSES).map((k) => row(BOSSES[k].name, n(d.bosses[k])));
+  const causes = Object.entries(d.deaths).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]).map(([k, v]) => row(CAUSE[k] || k.toUpperCase(), n(v)));
+  const modes = [['campaign', 'CAMPAIGN'], ['endless', 'ENDLESS'], ['daily', 'DAILY'], ['coop', 'CO-OP']];
+  const best = `<table class="rbest"><tr><th></th>${DIFF_KEYS.map((k) => `<th>${DL(k)}</th>`).join('')}</tr>` + modes.map(([m, label]) => `<tr><td>${label}</td>${DIFF_KEYS.map((k) => `<td>${d.best[m + ':' + k] ? d.best[m + ':' + k].toLocaleString() : '—'}</td>`).join('')}</tr>`).join('') + '</table>';
+  $('reclist').innerHTML = `<div class="rtiles">${tiles.map(([a, b]) => `<div><span>${a}</span><b>${b}</b></div>`).join('')}</div>`
+    + `<div class="rcols"><div><h3>ENEMIES DESTROYED</h3>${kills.join('')}</div><div><h3>BOSSES DESTROYED</h3>${bosses.join('')}</div>`
+    + `<div><h3>RIMRUNNERS LOST TO</h3>${causes.length ? causes.join('') : '<div class="rrow none"><span>Nothing yet: a clean record</span><b></b></div>'}</div><div><h3>BEST SCORES</h3>${best}</div></div>`;
+}
+SVC.on = svcOn;
+window.__rs.svc = SVC;
+
 async function renderScores(tab, diff = G.scoreDiff || settings.diff) {
   G.scoreTab = tab; G.scoreDiff = diff;
   for (const b of document.querySelectorAll('[data-tab]')) b.classList.toggle('primary', b.dataset.tab === tab);
@@ -968,6 +1038,7 @@ I.on('key', (k, e) => {
 document.addEventListener('pointerdown', () => A.unlock(), { capture: true });
 document.addEventListener('visibilitychange', () => {
   if (document.hidden && G.state === 'play') pause();
+  if (document.hidden) svcFlush();
   bgTicks(document.hidden && G.mode === 'online' && !G.fixed);
   // nothing to hear from a tab nobody is looking at (the co-op web keeps going in it)
   if (A.master && A.ctx) A.master.gain.setTargetAtTime(document.hidden ? 0 : A.vol.master, A.ctx.currentTime, 0.05);
@@ -982,7 +1053,7 @@ document.addEventListener('visibilitychange', () => {
 let bgWorker = null;
 function bgTicks(on) {
   if (on && !bgWorker) {
-    try { bgWorker = new Worker(new URL('./tick.js?v=7', import.meta.url)); bgWorker.onmessage = bgTick; } catch (e) { bgWorker = null; console.warn('background tick', e); return; }
+    try { bgWorker = new Worker(new URL('./tick.js?v=8', import.meta.url)); bgWorker.onmessage = bgTick; } catch (e) { bgWorker = null; console.warn('background tick', e); return; }
   }
   if (bgWorker) bgWorker.postMessage(on ? 25 : 0); // 40 ticks a second: a snapshot every second tick = 20 a second
 }
@@ -1041,7 +1112,7 @@ function tickFrame(dt) {
   if (cur.k !== R.lookI) R.setLook(cur.k);
   R.sync(cur, dt);
   const me = myPlayer(cur);
-  const menu = G.state === 'title' || (['sectors', 'online', 'scores', 'medals', 'options', 'help'].includes(G.screen) && G.mode === 'title');
+  const menu = G.state === 'title' || (['sectors', 'online', 'scores', 'medals', 'options', 'help', 'record'].includes(G.screen) && G.mode === 'title');
   R.updateCamera(dt, { W: cur, me: me && (me.alive || me.drag) ? me : null, cine: menu, shake: +settings.shake });
   A.setListener(R.camera);
   if (G.state === 'play' || G.state === 'paused-online' || G.state === 'replay') loops(cur, dt);
@@ -1056,6 +1127,8 @@ function playStep(dt) {
   let n = 0;
   const online = G.mode === 'online', guest = online && !NET.host;
   const live = !G.hiddenRun;
+  const svc = svcOn(), wasOver = W.over;
+  if (svc) SVC.d.time += dt;
   if (guest) handleEvents(NET.guestSync(W), W, live);
   while (G.acc >= STEP && n < 12) {
     if (!online) REC.tick(W);
@@ -1068,6 +1141,7 @@ function playStep(dt) {
     if (!online) REC.input(W);
     step(W, STEP);
     let ev = drainEvents(W);
+    if (svc) svcEvents(ev, W);
     if (guest) ev = ev.filter((e) => e.pid === 2 && e.k === 'fire');
     if (online && NET.host) NET.hostEvents(ev);
     handleEvents(ev, W, live);
@@ -1075,6 +1149,10 @@ function playStep(dt) {
     if (W.over) break;
   }
   if (n >= 12) G.acc = 0;
+  if (svc) {
+    if (W.over && !wasOver && W.result === 'clear' && W.mode === 'campaign') { SVC.d.sectors++; SVC.dirty = true; }
+    if (SVC.d.time - SVC.savedAt > 15) { SVC.dirty = true; svcFlush(); }
+  }
   if (online) {
     if (NET.host) NET.hostFrame(W, dt); else NET.guestFrame(W, dt);
     // a host whose tab went to the background stops its web: say so instead of freezing silently
@@ -1173,7 +1251,7 @@ async function boot() {
   $('loading').style.opacity = '0'; $('loading').classList.add('gone'); // fading out: taps go through at once
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
-  if (params.has('test')) { const m = await import('./tests.js?v=7'); m.runTests(window.__rs); }
+  if (params.has('test')) { const m = await import('./tests.js?v=8'); m.runTests(window.__rs); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }

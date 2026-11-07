@@ -19,14 +19,14 @@ await page.route('**/game-scores.jez237.workers.dev/**', (r) => r.fulfill({ stat
 await page.goto(base + '?fixed&noscores');
 await page.waitForFunction(() => window.__rs && window.__rs.G.state === 'title', null, { timeout: 120000 });
 const r = await page.evaluate(async () => {
-  const { FILE, VOICE } = await import('./js/audio.js?v=7');
+  const { FILE, VOICE } = await import('./js/audio.js?v=8');
   const A = window.__rs.A;
   A.unlock();
   await A.loading;
   const sfx = Object.keys(FILE).filter((k) => !k.includes(':'));
   const missing = sfx.filter((n) => !A.buf.has(n)).concat(VOICE.filter((n) => !A.buf.has('v_' + n)).map((n) => 'v_' + n));
   const music = {};
-  for (const k of Object.keys(FILE).filter((k) => k.startsWith('music:'))) { const b = await A.load('music_' + k.slice(6), A.base + FILE[k] + '?v=7'); music[k.slice(6)] = b ? +b.duration.toFixed(1) : 0; }
+  for (const k of Object.keys(FILE).filter((k) => k.startsWith('music:'))) { const b = await A.load('music_' + k.slice(6), A.base + FILE[k] + '?v=8'); music[k.slice(6)] = b ? +b.duration.toFixed(1) : 0; }
   // exercise the spatial path, a loop and the narration gate
   const h = A.play('boomM', { x: 3, y: 1, z: -20 });
   A.loop('crackle', 'crackle', 0.4); A.setLoop('crackle', 0, 0, -10, 0.5, 1);
