@@ -325,6 +325,7 @@ void astra_pattern_blast(vms_vector *where,fix radius,float t,unsigned seed,int 
     vms_angvec angles={fl2f((br(&f,0,86)-.5f)*.085f),fl2f((br(&f,1,86)-.5f)*.12f),fl2f((br(&f,2,86)-.5f)*.22f)};
     vms_matrix frame;vm_angles_2_matrix(&frame,&angles);
     if(f.plate_count){g3_start_instance_matrix(where,&frame);draw_burst_plates(&f,scale,visibility);g3_done_instance();}
+    ap_begin(where,seed);
     pyro_part gas[PLUME_PARTS];
     for(int i=0;i<f.gas_count;i++){
         burst_gas *g=&f.gas[i];

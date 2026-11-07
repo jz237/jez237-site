@@ -8,7 +8,7 @@ extern float astra_preview_clock;
 static float astra_visual_clock(void){return astra_preview_active?astra_preview_clock:SDL_GetTicks()*.001f;}
 object *astra_robot_object;
 static float ac_preview_damage=-1;
-typedef struct {int signature;fix maximum;float damage;fix64 hit;unsigned missing;int exploded;} ac_damage;
+typedef struct {int signature;fix maximum;float damage;fix64 hit;unsigned missing;int exploded;vms_vector impulse;int struck_part;} ac_damage;
 static ac_damage ac_robots[MAX_OBJECTS];
 enum { AC_PARTS=7, AC_FRAGMENTS=32 };
 typedef struct {object robot;vms_vector pivot,pos,velocity,hit,normal;fix64 born,struck;float age,life,spin;unsigned seed;int part,room,bounces,chain,impact;float impact_age;} ac_fragment;
@@ -17,6 +17,9 @@ static int ac_hidden_debris[MAX_OBJECTS],ac_hidden_known[MAX_OBJECTS];
 static int ac_fragment_mask=-1,ac_preview_mask=-1;
 static unsigned ac_available(const object *robot);
 static void ac_launch(const object *robot,int part,int explosion);
+static float ac_wreck_heat;static int ac_wreck_part;
+static const object *ac_contact_a,*ac_contact_b;
+void astra_contact_pair(const object *a,const object *b){ac_contact_a=a;ac_contact_b=b;}
 static const vms_vector *ac_contact;
 void astra_contact(const vms_vector *point){ac_contact=point;}
 static unsigned ac_hash(unsigned x){x^=x>>16;x*=0x7feb352du;x^=x>>15;x*=0x846ca68bu;return x^(x>>16);}
@@ -63,18 +66,28 @@ int astra_fragment_replaced(const object *obj){
     return obj->type==OBJ_ROBOT&&ac_robots[index].signature==obj->signature&&ac_robots[index].exploded;
 }
 void astra_robot_hit(object *robot,fix damage){
-    if(damage<=0||robot->shields<0||!EM_ASM_INT(return !!Module.astra))return;
+    if(damage<=0||!EM_ASM_INT(return !!Module.astra))return;
     int index=ac_index(robot);if(index<0)return;ac_damage *state=&ac_robots[index];
     if(state->signature!=robot->signature||state->maximum<=0){
         memset(state,0,sizeof *state);state->signature=robot->signature;
         state->maximum=Robot_info[robot->id].strength>robot->shields+damage?Robot_info[robot->id].strength:robot->shields+damage;
     }
+    const object *source=ac_contact_a==robot?ac_contact_b:ac_contact_b==robot?ac_contact_a:NULL;
+    if(source){
+        vms_vector direction,local,offset;
+        if(source->movement_type==MT_PHYSICS)direction=source->mtype.phys_info.velocity;
+        else vm_vec_sub(&direction,&robot->pos,&source->pos);
+        if(vm_vec_normalize(&direction)>F1_0/100)state->impulse=direction;
+        if(ac_contact){vm_vec_sub(&offset,ac_contact,&robot->pos);vm_vec_rotate(&local,&offset,&robot->orient);state->struck_part=ac_local_part(robot,&local);}
+        state->hit=GameTime64;
+    }
+    if(robot->shields<0)return; /* Lethal hits still retain their impact direction. */
     float value=ac_damage_for(robot);int before=state->damage>=.82f?3:state->damage>=.59f?2:state->damage>=.31f?1:0;
     int after=value>=.82f?3:value>=.59f?2:value>=.31f?1:0;
     state->damage=value;state->hit=GameTime64;
     unsigned available=ac_available(robot)&~1u;
     for(int stage=before;stage<after;stage++){
-        int start=stage==0?1+(ac_hash(robot->signature)%2):1+ac_hash(robot->signature+stage*719u)%6;
+        int start=state->struck_part>0?state->struck_part:stage==0?1+(ac_hash(robot->signature)%2):1+ac_hash(robot->signature+stage*719u)%6;
         for(int j=0;j<6;j++){int part=1+(start-1+j)%6;if((available&~state->missing)&(1u<<part)){
             ac_launch(robot,part,0);state->missing|=1u<<part;break;
         }}

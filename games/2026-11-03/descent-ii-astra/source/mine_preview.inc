@@ -80,7 +80,9 @@ static void am_build(void){
         }
         if(solid&&!TmapInfo[t].damage&&!(TmapInfo[t].flags&(TMI_WATER|TMI_VOLATILE|TMI_FORCE_FIELD))){
             extern int astra_detail_surface_kind(int,int);int detail=astra_detail_surface_kind(room,side);
-            if(detail&&!am_scenes[detail==1?27:28].valid)am_face(room,side,0,&am_scenes[detail==1?27:28]);
+            const char *surface_name=piggy_game_bitmap_name(&GameBitmaps[Textures[t].index]);
+            int construction=detail==2||(surface_name&&(!strncmp(surface_name,"metl",4)||!strncmp(surface_name,"wall",4)));
+            if(detail&&construction&&!am_scenes[detail==1?27:28].valid)am_face(room,side,0,&am_scenes[detail==1?27:28]);
             extern int astra_fixture_kind(int,int);int fixture=astra_fixture_kind(room,side);
             extern int astra_wall_style(int,int);int accent=astra_wall_style(room,side);
             if(accent&&!am_scenes[20+accent].valid)am_face(room,side,0,&am_scenes[20+accent]);

@@ -36,10 +36,18 @@ void astra_chain_showcase(int profile,float seconds,float length,unsigned seed){
         radius=fminf(8,f2fl(robot.size)*.8f)*astra_detonations[profile].scale;
         unsigned available=ac_available(&robot);int aim_part=available&(1u<<1)?1:2;
         ac_fragment guide;ac_init_fragment(&guide,&robot,aim_part,1);
+        /* Use the outward piece with the most runway. A hit-aligned impulse
+         * can nearly cancel the old, fixed left-wing trajectory. */
+        float runway=-1;vms_vector intercept_point={0};
+        for(int candidate=0;candidate<AC_PARTS;candidate++)if(available&(1u<<candidate)){
+            ac_fragment trial;ac_init_fragment(&trial,&robot,candidate,1);float duration=1.25f;
+            for(int k=0;k<3;k++){float p=f2fl((&trial.pos.x)[k]),v=f2fl((&trial.velocity.x)[k]),lo=k==0?-15:k==1?-5:16,hi=k==0?15:k==1?5:72;if(fabsf(v)>.01f){float time=(v>0?hi-p:lo-p)/v;if(time>0)duration=fminf(duration,time);}}
+            vms_vector point;vm_vec_scale_add(&point,&trial.pos,&trial.velocity,fl2f(fmaxf(.01f,duration)));float distance=f2fl(vm_vec_dist(&point,&center));
+            if(distance>runway){runway=distance;guide=trial;intercept_point=point;}
+        }
         target=robot;target.id=0;target.signature=robot.signature^0x40000000;target.rtype.pobj_info.model_num=Robot_info[0].model_num;
         target.size=Polygon_models[Robot_info[0].model_num].rad;
-        vm_vec_scale_add(&target.pos,&guide.pos,&guide.velocity,fl2f(1.0f));
-        target.pos.x=fl2f(fmaxf(-14,fminf(14,f2fl(target.pos.x))));target.pos.y=fl2f(fmaxf(-5,fminf(5,f2fl(target.pos.y))));
+        target.pos=intercept_point;
         ac_render_robot(&target,-1);ac_preview_target=&target;
         float latest_hit=-1;vms_vector soundpoint={0};
         for(int part=0;part<AC_PARTS;part++)if(available&(1u<<part)){

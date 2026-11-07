@@ -6,7 +6,7 @@ static vms_vector ac_world(const vms_vector *local,const vms_matrix *basis){
 static void ac_init_fragment(ac_fragment *piece,const object *robot,int part,int explosion){
     memset(piece,0,sizeof *piece);piece->robot=*robot;piece->part=part;piece->room=robot->segnum;
     piece->seed=ac_hash(robot->signature*1237u+part*919u);piece->born=GameTime64;
-    piece->life=explosion?6.8f+(piece->seed%11)*.09f:4.8f;
+    piece->life=explosion?8.2f+(piece->seed%11)*.09f:6.4f;
     piece->chain=explosion&&astra_chain_breakup(AB_FUSE_RUN+(ac_hash(robot->signature*31u+robot->id)%10));
     piece->spin=(piece->seed&1?1:-1)*(.55f+(piece->seed%17)*.045f);
     polymodel *pm=&Polygon_models[Robot_info[robot->id].model_num];
@@ -23,6 +23,10 @@ static void ac_init_fragment(ac_fragment *piece,const object *robot,int part,int
     if(vm_vec_normalize(&direction)<F1_0/100)direction=(vms_vector){F1_0/4,F1_0/2,-F1_0};
     direction=ac_world(&direction,&robot->orient);vm_vec_normalize(&direction);
     vm_vec_copy_scale(&piece->velocity,&direction,fl2f((explosion?10:5)+(piece->seed%19)*.27f));
+    int index=ac_index(robot);vms_vector impulse={0};
+    if(index>=0&&ac_robots[index].signature==robot->signature&&GameTime64-ac_robots[index].hit<2*F1_0)impulse=ac_robots[index].impulse;
+    else if(index<0){impulse=robot->orient.rvec;vm_vec_scale(&impulse,fl2f((robot->signature&1)?1:-1));}
+    vm_vec_scale_add2(&piece->velocity,&impulse,fl2f(explosion?12:8));
     vm_vec_scale_add2(&piece->velocity,&robot->mtype.phys_info.velocity,fl2f(.55f));
     if(piece->room>=0){int found=find_point_seg(&piece->pos,piece->room);if(found>=0)piece->room=found;else {piece->pos=robot->pos;piece->room=robot->segnum;}}
 }
@@ -72,13 +76,15 @@ static void ac_draw_fragment(ac_fragment *piece,float age){
             astra_pattern_blast(&piece->hit,fl2f(radius),t,piece->seed,AB_SPALL,0);
             EM_ASM(Module.fragmentSecondaryDraws=(Module.fragmentSecondaryDraws||0)+1;);
         }
-        return;
+        if(piece->impact==2)return;
     }
-    object robot=piece->robot;float turn=fminf(age,2.5f)*piece->spin/(1+piece->bounces*.35f);
+    object robot=piece->robot;float spin_age=piece->impact?piece->impact_age:age;
+    float turn=fminf(spin_age,2.5f)*piece->spin/(1+piece->bounces*.35f);
     vms_angvec angle={(fixang)(turn*3500),(fixang)(turn*4700),(fixang)(turn*6100)};vms_matrix spin;vm_angles_2_matrix(&spin,&angle);
     vm_matrix_x_matrix(&robot.orient,&piece->robot.orient,&spin);
     vms_vector offset=ac_world(&piece->pivot,&robot.orient);vm_vec_sub(&robot.pos,&piece->pos,&offset);
-    ac_render_robot(&robot,1u<<piece->part);
+    ac_wreck_heat=powf(fmaxf(0,1-age/piece->life),2.2f);ac_wreck_part=piece->part;
+    ac_render_robot(&robot,1u<<piece->part);ac_wreck_heat=0;
     if(piece->struck){ad_piece spark={0};spark.hit=piece->hit;spark.normal=piece->normal;spark.struck=piece->struck;ad_sparks(&spark,age,piece->seed);}
 }
 void astra_combat_fragments(const short *rooms,int count,int window_num){

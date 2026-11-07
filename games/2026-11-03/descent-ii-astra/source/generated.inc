@@ -64,6 +64,8 @@ static int astra_generated(grs_bitmap *bm,const char *name,png_data *img){
         if(family==2)family=n%3==0?13:n%2==1?11:2;
         if(family>=12)for(int c=0;c<3;c++)ag_tint[c]=.75f+.25f*ag_tint[c];
     }
+    if(family!=3&&family!=1&&family!=6&&family!=4)
+        for(int c=0;c<3;c++)ag_tint[c]=.88f+.12f*ag_tint[c];
     // Hidden panels keep the same category and palette, never door hardware.
     if(door&&ag_hidden(di)){family=di==10?0:3;}
     af_original=af_upload(rgba,w,h,4);af_kind=20+family;

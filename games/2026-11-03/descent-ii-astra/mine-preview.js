@@ -1,6 +1,6 @@
 // A paused tour of the loaded campaign's real architecture and machinery.
 window.astraMinePreview={
-  names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion','Deep ventilation grilles','Light housings & spill','Service conduits','Raised frames & panel variants','Water surfaces','Molten lava','Red service lighting','Blue service lighting','Cyan service lighting','Amber service lighting','Warm ventilation & moving fans','Strip-light reflections','Beveled panel construction','Rock relief & material finish','Fixture light shafts','Room-aware metal reflections'],
+  names:['Architecture & materials','Rotating fans','Hydraulic machinery','Live terminals','Cables & electrical faults','Doors & locking systems','Reactor assembly','Recharge lattice','Moving ship shadows','Brushed metal & surface wear','Fractured rock & minerals','Storage bay','Cooling chamber','Steam, dust & light','Clean edges in motion','Deep ventilation grilles','Light housings & spill','Service conduits','Raised frames & panel variants','Water surfaces','Molten lava','Red service lighting','Blue service lighting','Cyan service lighting','Amber service lighting','Warm ventilation & moving fans','Strip-light reflections','Industrial wall construction','Rock relief & material finish','Fixture light shafts','Room-aware metal reflections'],
   descriptions:[
     'New high-resolution metal, rock, grilles, machinery and lamps throughout both campaigns. Pause and compare the same view with the original artwork.',
     'Spinning fan blades behind a fixed protective grille.',
@@ -26,7 +26,7 @@ window.astraMinePreview={
     ...['Red','Blue','Cyan','Amber'].map(color=>color+' inset diffusers, protective metal ribs and stamped service plates. Colored light falls onto the varied wall panels in this mine room. If the mine lacks this palette, a sample is mounted on an existing safe service wall.'),
     'Slow turning fans behind protective grilles, with warm amber backlighting and a gentle machinery pulse.',
     'Long segmented light channels and colored highlights moving across nearby metal as the inspection camera drifts.',
-    'Shallow modeled shoulders and recessed joints follow the existing walls. Compare against the previous Astra treatment at the same viewpoint.',
+    'Four structural layouts add steel ribs, split plates, service grilles and colored lens segments over the mine walls. Compare against the previous Astra treatment at the same viewpoint.',
     'Uneven stone geometry, mineral normals and varying surface finish retain the original rock placement and high-resolution artwork.',
     'Local beams follow the real colored fixtures. Dust drifts through the light; the volume stays inside its mine room.',
     'Soft reflections sample the six surfaces and lamps in this room. These are cached room reflections, not mirrors of moving ships.'

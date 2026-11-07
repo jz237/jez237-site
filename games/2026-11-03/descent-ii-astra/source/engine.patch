@@ -796,7 +796,7 @@ index 522a2b7..482b177 100644
  	//	Hook in the rumble sound effect here.
  
 diff --git a/d2/main/collide.c b/d2/main/collide.c
-index fdb2e78..55652ae 100644
+index fdb2e78..1069433 100644
 --- a/d2/main/collide.c
 +++ b/d2/main/collide.c
 @@ -649,6 +649,10 @@ int check_effect_blowup(segment *seg,int side,vms_vector *pnt, object *blower, i
@@ -900,7 +900,7 @@ index fdb2e78..55652ae 100644
  		return;
  	}
  
-+	extern void astra_contact(const vms_vector*);astra_contact(collision_point);
++	extern void astra_contact(const vms_vector*);extern void astra_contact_pair(const object*,const object*);astra_contact(collision_point);astra_contact_pair(A,B);
  	collision_type = COLLISION_OF(A->type,B->type);
  
  	switch( collision_type )	{
@@ -908,7 +908,7 @@ index fdb2e78..55652ae 100644
  	default:
  		Int3();	//Error( "Unhandled collision_type in collide.c!\n" );
  	}
-+    astra_contact(NULL);
++    astra_contact(NULL);astra_contact_pair(NULL,NULL);
  }
  
  #define ENABLE_COLLISION(type1,type2)					\

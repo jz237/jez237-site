@@ -13,8 +13,10 @@ static void pyro_dir(unsigned seed,int i,float *dir)
     float h=2*pyro_random(seed,i,19)-1,a=6.2831853f*pyro_random(seed,i,21);
     float w=sqrtf(fmaxf(0,1-h*h));dir[0]=cosf(a)*w;dir[1]=h;dir[2]=sinf(a)*w;
 }
-static void pyro_add(pyro_part *p,const float *origin,const float *offset,float radius,float heat,float spin,float opacity)
+#include "astra_confinement.inc"
+static void pyro_add(pyro_part *p,const float *origin,const float *raw_offset,float radius,float heat,float spin,float opacity)
 {
+    float offset[3];memcpy(offset,raw_offset,sizeof offset);ap_shape(offset,&radius);
     const vms_matrix *m=&Unscaled_matrix;
     float dx=pyro_dot(offset,&m->rvec),dy=pyro_dot(offset,&m->uvec),dz=pyro_dot(offset,&m->fvec);
     p->x=origin[0]+dx;p->y=origin[1]+dy;p->z=origin[2]+dz;p->r=radius;p->heat=heat;p->spin=spin;p->opacity=opacity;
@@ -139,6 +141,7 @@ void astra_blast(vms_vector *where,fix radius,float t,unsigned seed,int kind,int
         float glare=EM_ASM_DOUBLE(return Math.max(0,Math.min(1,Module.comfort?.glare??1)));
         visibility*=glare+(1-glare)*pyro_ramp(r*3+8,r*8+20,distance);
     }
+    ap_begin(where,seed);
     int shape=(seed>>8)%5,compact=heavy==1&&shape>=3;
     float rise=.035f+.965f*(1-expf(-5.5f*t));
     float size=r*(heavy?1.23f:.91f);

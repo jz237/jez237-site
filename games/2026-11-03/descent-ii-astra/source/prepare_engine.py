@@ -11,7 +11,9 @@ for checkout,commit in [(repo,"9fd90f03513663ce1372c8cfa723b7a73c4219fa"),
     if git(checkout,"rev-parse","HEAD",capture_output=True,text=True).stdout.strip()!=commit:
         raise SystemExit("Unexpected upstream revision in "+str(checkout))
 git(repo,"apply","--check",str(src/"engine.patch"))
-includes={"armor.inc":"3d/astra_armor.inc","finish.inc":"arch/ogl/astra_finish.inc",
+includes={
+    'industrial.inc':'arch/ogl/astra_industrial.inc',
+    'confinement.inc':'arch/ogl/astra_confinement.inc',"armor.inc":"3d/astra_armor.inc","finish.inc":"arch/ogl/astra_finish.inc",
           "lighting.inc":"main/astra_light.inc","shader.inc":"arch/ogl/astra_shader.inc",
           "pyro.inc":"arch/ogl/astra_pyro.inc","blast.inc":"arch/ogl/astra_blast.inc"}
 includes.update({'fleet.inc': 'arch/ogl/astra_fleet.inc', 'fleet_types.inc': 'arch/ogl/astra_fleet_types.inc', 'shell.inc': '3d/astra_shell.inc', 'gantry.inc': 'arch/ogl/astra_gantry.inc', 'plume.inc': 'arch/ogl/astra_plume.inc', 'encounter.inc': 'main/astra_encounter.inc'})

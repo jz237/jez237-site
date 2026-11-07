@@ -208,10 +208,10 @@ void astra_light_face(int count,const g3s_point **view,const int *ids)
     if(!near)return;
     if(!program){
         const char *vs="varying highp vec3 world;void main(){world=gl_MultiTexCoord0.xyz;gl_Position=ftransform();}";
-        const char *fs="precision highp float;varying highp vec3 world;uniform vec4 bulbs[3],colors[3];"
+        const char *fs="precision highp float;varying highp vec3 world;uniform vec4 bulbs[3],colors[3];uniform vec3 normal,eye;uniform float rock;"
           "void main(){vec3 light=vec3(0.);for(int i=0;i<3;i++){float r=bulbs[i].w;"
           "float t=clamp(1.-distance(world,bulbs[i].xyz)/max(.001,r),0.,1.);"
-          "light+=colors[i].rgb*t*t*(.58+.42*t);}gl_FragColor=vec4(light,1.);}";
+          "vec3 L=normalize(bulbs[i].xyz-world+vec3(.0001)),V=normalize(eye-world);float diffuse=max(0.,dot(normal,L));float spec=pow(max(0.,dot(normal,normalize(L+V))),mix(48.,9.,rock));light+=colors[i].rgb*t*t*(.16+.70*diffuse+spec*mix(.9,.045,rock));}gl_FragColor=vec4(light,1.);}";
         GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);
         if(!v||!f){failed=1;return;}
         program=glCreateProgram();glAttachShader(program,v);glAttachShader(program,f);glLinkProgram(program);
@@ -222,6 +222,9 @@ void astra_light_face(int count,const g3s_point **view,const int *ids)
     gr_settransblend(GR_FADE_OFF,GR_BLEND_ADDITIVE_A);glDepthMask(GL_FALSE);
     /* Reflect more light from bright metal while retaining a little scatter in dark areas. */
     glBlendFunc(GL_DST_COLOR,GL_ONE);glUseProgram(program);
+    float A[3],B[3],normal[3];for(int k=0;k<3;k++){A[k]=world[3+k]-world[k];B[k]=world[6+k]-world[k];}for(int k=0;k<3;k++)normal[k]=A[(k+1)%3]*B[(k+2)%3]-A[(k+2)%3]*B[(k+1)%3];astra_unit(normal);
+    float eye[3]={f2fl(View_position.x),f2fl(View_position.y),f2fl(View_position.z)},facing=0;for(int k=0;k<3;k++)facing+=normal[k]*(eye[k]-world[k]);if(facing<0)for(int k=0;k<3;k++)normal[k]*=-1;
+    glUniform3fv(glGetUniformLocation(program,"normal"),1,normal);glUniform3fv(glGetUniformLocation(program,"eye"),1,eye);glUniform1f(glGetUniformLocation(program,"rock"),astra_surface[0]<.5f?1:0);
     glUniform4fv(bulbs,3,&astra_blast_positions[0][0]);glUniform4fv(colors,3,&astra_blast_colors[0][0]);
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glVertexPointer(3,GL_FLOAT,0,p);glTexCoordPointer(3,GL_FLOAT,0,world);glDrawArrays(GL_TRIANGLE_FAN,0,count);

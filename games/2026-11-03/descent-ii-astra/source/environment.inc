@@ -229,6 +229,7 @@ static void ae_hatch(int room,int side,int theme,float w,float h){
 #include "astra_fixtures.inc"
 #include "astra_door_mesh.inc"
 #include "astra_detail_upgrade.inc"
+#include "astra_industrial.inc"
 void astra_environment_face(int nv,const g3s_point **points,g3s_lrgb *light,int room,int side,int flags){
     if(!ax_on()||astra_native_compare)return;ae_faces++;ae_reset();segment *s=&Segments[room];int wallnum=s->sides[side].wall_num;
     int hidden=wallnum>=0&&Walls[wallnum].type==WALL_DOOR&&Walls[wallnum].clip_num>=0&&(WallAnims[Walls[wallnum].clip_num].flags&WCF_HIDDEN);
@@ -245,6 +246,7 @@ void astra_environment_face(int nv,const g3s_point **points,g3s_lrgb *light,int 
     if(hidden&&(Walls[wallnum].state!=WALL_DOOR_CLOSED))return;
     if(solid&&!wet&&nv==4)nd_surface(room,side,light);
     ae_wall_finish(nv,points,room,side,!wet&&nv==4);
+    if((solid||hidden)&&!wet&&!(flags&WID_CLOAKED_FLAG))ai_wall(room,side,light);
     if(wet||nv!=4||flags&WID_CLOAKED_FLAG)return;
     if(solid)afx_fixture(room,side);
     /* The surface material supplies native panels and recesses.
@@ -383,6 +385,7 @@ void astra_environment_rooms(const short *rooms,int count,int window_num){
         EM_ASM(window.astraDeck?.reflect([$0,$1,$2],[$3,$4,$5]);,colors[0][0],colors[0][1],colors[0][2],colors[1][0],colors[1][1],colors[1][2]);
     }
     ag_render_exhibit();
+    if(!window_num)EM_ASM({const w=Module.industrialWalls||(Module.industrialWalls={version:61});w.uploads=$0;w.draws=$1;},ai_uploads,ai_draws);
     if(!window_num)EM_ASM(Module.detailUpgrade=({version:57,meshes:$0,shafts:$1,meshUploads:$2,meshCapacity:96});,nd_draws,nd_shafts,nd_uploads);
     if(!window_num)EM_ASM(Module.environmentVersion=38;Module.foundryStats=({rockFaces:$6,equipmentBays:$7,shipShadows:$8,atmosphereBays:$9});Module.environmentStats=({faces:$0,machines:$1,doors:$2,reactors:$3,atmosphere:$4});Module.environmentLevel=$5;Module.environmentFrames=(Module.environmentFrames||0)+1;,ae_faces,ae_machines,ae_doors,ae_reactors,ae_atmosphere,Current_level_num,ag_rocks,ag_props,ag_shadows,ag_air);
     if(!window_num)EM_ASM(Module.fixtureDetails=({version:38,draws:$0,grilles:$1,pipes:$2,lights:$3,panels:$4,doorEdges:$5,mechanisms:$6});,afx_draws,afx_grilles,afx_pipes,afx_lights,afx_panels,afx_door_edges_drawn,afx_door_mechanisms);

@@ -19,7 +19,7 @@ static void af_program_init(void){
         "vec2 e=gl_MultiTexCoord0.zw*2.-1.;vec3 v=vec3(e,1.-abs(e.x)-abs(e.y));"
         "if(v.z<0.)v.xy=(1.-abs(v.yx))*sign(v.xy+vec2(.000001));t=normalize(rot*v);}";
     const char *fs="precision highp float;varying mediump vec2 uv;varying highp vec3 p,n,t,q;varying mediump float hand;"
-        "uniform sampler2D paint,detail;uniform vec3 energy;uniform vec4 flash;uniform float clock,charge;"
+        "uniform sampler2D paint,detail;uniform vec3 energy;uniform vec4 flash;uniform float clock,charge,wreckHeat,wreckPart;"
         "uniform float lightOn,shadowOn,shadowDepth;uniform vec4 lamps[4],lampColor[4],lampDir[4];"
         "uniform sampler2D machineryShadow;uniform vec3 shadowCenter,shadowLamp,shadowRight,shadowUp,shadowNormal;uniform vec2 shadowSize;"
         "void main(){vec4 a=texture2D(paint,uv),m=texture2D(detail,uv);vec3 N=normalize(n),T=normalize(t-N*dot(t,N));"
@@ -42,6 +42,7 @@ static void af_program_init(void){
         "if(st.x>0.&&st.x<1.&&st.y>0.&&st.y<1.){float mask=texture2D(machineryShadow,st).r;shade=1.-.75*mask;}}}"
         "color+=local*shade;color*=.90+.10*shade;}"
         "color+=vec3(1.,.26,.035)*charge*(pow(a.a,.5)*1.3+rim*.45);"
+        "if(wreckHeat>0.){vec3 Q=q*vec3(.85,.86,.91);float edge=abs(Q.x+.43);if(wreckPart>1.5)edge=abs(Q.x-.43);if(wreckPart>2.5)edge=abs(Q.y+.43);if(wreckPart>3.5)edge=abs(Q.y-.48);if(wreckPart>4.5)edge=abs(Q.z+.52);if(wreckPart>5.5)edge=abs(Q.z-.59);if(wreckPart<.5)edge=min(min(abs(abs(Q.x)-.43),abs(Q.y+.43)),abs(Q.z-.59));float jagged=.018*sin(q.x*31.+q.y*27.+q.z*43.);float cut=exp(-abs(edge+jagged)*30.);vec3 hot=mix(vec3(1.,.045,.003),vec3(1.8,.65,.08),wreckHeat);color+=hot*cut*wreckHeat*3.2;}"
         "gl_FragColor=vec4(color/(1.+.23*color),1.);}";
     GLuint v=astra_compile(GL_VERTEX_SHADER,vs),f=astra_compile(GL_FRAGMENT_SHADER,fs);
     if(!v||!f){fleet_failed=1;return;}
@@ -144,6 +145,7 @@ int astra_draw_robot(int model,polymodel *pm,vms_angvec *angles,g3s_lrgb light){
     if(!ss_capture){
     glDisable(GL_CULL_FACE);glEnable(GL_DEPTH_TEST);glUseProgram(fleet_program);
     af_d2_lighting(astra_robot_object);
+    glUniform1f(glGetUniformLocation(fleet_program,"wreckHeat"),ac_wreck_heat);glUniform1f(glGetUniformLocation(fleet_program,"wreckPart"),ac_wreck_part);
     glUniform3f(af_energy,.51f+.62f*fminf(1.4f,f2fl(light.r)),.55f+.62f*fminf(1.4f,f2fl(light.g)),.58f+.62f*fminf(1.4f,f2fl(light.b)));
     glUniform4fv(af_flash,1,astra_flash);glUniform1f(af_clock,astra_visual_clock());
     glEnableClientState(GL_VERTEX_ARRAY);glEnableClientState(GL_COLOR_ARRAY);glEnableClientState(GL_TEXTURE_COORD_ARRAY);

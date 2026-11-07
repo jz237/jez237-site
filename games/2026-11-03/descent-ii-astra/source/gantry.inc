@@ -1,12 +1,13 @@
 /* Chamfered steel jambs, recessed vents and area lamps follow solid mine faces.
    All geometry is visual and stays close to the original collision surface. */
-typedef struct {float p[3],c[4],uv[2];} forge_vertex;
+typedef struct {float p[3],c[4],uv[2],face[3];} forge_vertex;
 static forge_vertex gantryVerts[1800];static int gantryN;
 static float corners3[4][3],faceNrm[3],forgeLight;
 static GLuint gantryTexture,gantryProgram;static int gantryFailed;
 static void forge_vertex_at(float u,float v,float h,float s,float t,float r,float g,float b,float lamp){
     if(gantryN>=1800)return;forge_vertex *o=&gantryVerts[gantryN++];float s0=(1-u)*(1-v),s1=u*(1-v),s2=u*v,s3=(1-u)*v;
     for(int k=0;k<3;k++)o->p[k]=s0*corners3[0][k]+s1*corners3[1][k]+s2*corners3[2][k]+s3*corners3[3][k]+faceNrm[k]*h;
+    o->face[0]=u;o->face[1]=v;o->face[2]=h;
     o->uv[0]=s;o->uv[1]=t;o->c[0]=r;o->c[1]=g;o->c[2]=b;o->c[3]=lamp;
 }
 static void forge_strip(float a,float b,float c,float d,float h,int tile,int style,int upright){
