@@ -125,6 +125,9 @@ export class Renderer {
       this.beam = new THREE.Mesh(g, new THREE.ShaderMaterial({ vertexShader: BEAM_VERT, fragmentShader: BEAM_FRAG, transparent: true, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending,
         uniforms: { uCol: { value: new THREE.Color(1, 0.85, 0.62) }, uI: { value: 0 }, uT: { value: 0 } } }));
       this.beam.frustumCulled = false; this.beam.renderOrder = 4; this.beamI = 0; this.scene.add(this.beam);
+      // a soft contact shadow under the digger's boots
+      this.blob = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: this.tex.glow, color: 0x000000, transparent: true, opacity: 0, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }));
+      this.blob.rotation.x = -Math.PI / 2; this.blob.renderOrder = 1; this.blob.visible = false; this.scene.add(this.blob);
     }
     this.fill = new THREE.PointLight(0xffc890, 14, 16, 1.4); this.scene.add(this.fill);
     this.pool = [];
@@ -460,6 +463,7 @@ export class Renderer {
     const Mu = this.museum; if (!Mu) return;
     this.time += dt; Mu.t += dt;
     if (this.beam) this.beam.visible = false;
+    if (this.blob) this.blob.visible = false;
     const A = Mu.alcoves[sel] || Mu.alcoves[0], t = this.time;
     // the camera drifts to the chosen alcove; the digger walks over to look
     Mu.camX += (A.x - Mu.camX) * (1 - Math.exp(-dt * 3));
@@ -712,6 +716,14 @@ export class Renderer {
     if (P.ground && !climb && !P.inWater && !P.dead && Math.abs(P.vx) > 2.4) {
       this.stepAcc = (this.stepAcc || 0) + Math.abs(P.vx) * dt;
       if (this.stepAcc > 1.05) { this.stepAcc = 0; this.fx.dust(P.x - P.face * 0.15, P.y + 0.06, 0.15, { n: 1, s0: 0.12, s1: 0.65, life: 0.8, jit: 0.5, vy: 0.35, up: 0.15, a: 0.2 }); }
+    }
+    // contact shadow: on the floor under the boots, fading as the digger rises above it
+    if (this.blob) {
+      let d = 0, fy = P.y;
+      if (!P.ground) { while (d < 4 && !this.solidAt(P.x, P.y - d - 0.01)) d += 0.2; fy = Math.floor(P.y - d - 0.01) + 1; d = P.y - fy; }
+      const op = climb || P.dead || P.inWater || d >= 3.5 ? 0 : 0.85 * (1 - d / 3.5);
+      this.blob.visible = op > 0.01; this.blob.material.opacity = op;
+      const sc = 1 + d * 0.18; this.blob.position.set(P.x, fy + 0.12, 0.1); this.blob.scale.set(1.5 * sc, 1.7 * sc, 1);
     }
     // the beam: a faint cone of lit dust ahead of the lamp, stopped where the rock is
     if (this.beam) {
