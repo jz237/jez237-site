@@ -88,8 +88,9 @@ float n(vec2 p){ vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f); return mi
 float fbm(vec2 p){ float s = 0.0, a = 0.5; for (int i = 0; i < 4; i++) { s += a * n(p); p = p * 2.03 + vec2(1.7, 9.2); a *= 0.5; } return s; }
 void main(){
   float f = fbm(vec2(vW.x * 0.45 + uT * 0.07, vW.y * 1.1 - uT * 0.025 + vW.z));
-  float band = smoothstep(0.0, 0.3, vUv.y) * smoothstep(1.0, 0.2, vUv.y);
-  float side = smoothstep(0.0, 0.25, vUv.x) * smoothstep(1.0, 0.75, vUv.x);
+  float band = smoothstep(0.0, 0.35, vUv.y) * smoothstep(1.0, 0.25, vUv.y);
+  float side = smoothstep(0.0, 0.4, vUv.x) * smoothstep(1.0, 0.6, vUv.x);
+  band *= 0.75 + 0.25 * n(vec2(vW.x * 0.8 - uT * 0.1, 7.0));
   gl_FragColor = vec4(uCol, smoothstep(0.3, 0.75, f) * band * side * uA);
 }`;
 const WF_VERT = `varying vec2 vUv; varying vec3 vW; void main(){ vUv = uv; vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz; gl_Position = projectionMatrix * viewMatrix * w; }`;
@@ -213,7 +214,7 @@ export function buildDecor(M, look, W, K) {
       spots.push([x, y]);
     }
     const col = biome === 3 ? new THREE.Color(0.5, 0.66, 0.7) : new THREE.Color(0.45, 0.7, 0.62);
-    for (const [x, y] of spots) for (const [z, a, w] of [[-1.1, 0.34, 8], [-2.4, 0.26, 10]]) {
+    for (const [x, y] of spots) for (const [z, a, w] of [[-1.1, 0.24, 8], [-2.4, 0.18, 10]]) {
       const m = new THREE.Mesh(new THREE.PlaneGeometry(w, 1.5), new THREE.ShaderMaterial({ vertexShader: WF_VERT, fragmentShader: MIST_FRAG, transparent: true, depthWrite: false,
         uniforms: { uT: { value: 0 }, uCol: { value: col }, uA: { value: a } } }));
       m.position.set(x + 0.5, y + 0.55, z); m.renderOrder = 2; group.add(m); mists.push(m);
