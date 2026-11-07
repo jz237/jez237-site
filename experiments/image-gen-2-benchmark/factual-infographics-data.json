@@ -20033,5 +20033,92 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-11-06-factual-infographic-factual-infographic-the-defensive-crouc",
+    "title": "Factual infographic: The Defensive Crouch in Context",
+    "tests": "; archive_slot=2026-11-06T20:20; concept=feline-defensive-crouch-contextual-signal-cluster; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: body-language",
+    "prompt": "Create a richly detailed, artwork-led feline behavioral atlas, finished illustration directly, not a photographed print. Title: “The Defensive Crouch”. Subtitle: “Read the whole cat — and the situation”. A magnificent silver mackerel tabby with green-gold irises dominates an asymmetrical composition on a misty blue-gray ground: three-quarter low eye-level view, body crouched close to the ground, head tucked slightly, ears flattened sideways/back, tail curved tightly around the body, wide eyes with dilated pupils, realistic paws and exquisitely individual fur. Express tension without demonizing the animal. Fine gouache and colored-pencil realism, soft directional daylight, restrained copper and deep indigo annotation ink, delicate flowing leader lines. Let the cat occupy more than half the composition with substantial breathing room. No rigid grid, boxed cards, ornamental fake scripts, charts with invented measurements, or anthropomorphic thoughts.\nIntegrate clear open labels exactly where appropriate: “Low crouch”, “Head tucked”, “Tail held close”, “Ears sideways or back”, “Wide eyes; pupils may dilate”. Around the hero use an organic visual journey: a generous close study of the same cat’s head to show ear angle and pupils; a small flowing silhouette showing the tail tucked beside the hindquarters; a faint background doorway with an unobstructed retreat route, not a threatening hand. A short separate open note says “Hissing or raised fur may also occur — not every sign appears.” Do not falsely show every sign as obligatory. Another readable note beneath the head study: “Read posture, face, ears and tail together. Consider what happened just before.” A strong but concise ribbon of free typography at the lower edge reads “Give space. Do not touch, restrain or punish a defensively aggressive cat.” Adjacent smaller text: “Fear can escalate when escape is blocked.” Retain essential context as a quiet footnote: “A pose is not a diagnosis. Pain or illness can change behavior; seek veterinary advice for new or persistent changes.” This is a focused defensive-posture plate, not a general body-language overview, disease chart, or husbandry guide. Every text element should be legible with elegant typographic hierarchy; omit decorative extras to preserve clarity. Small source credit: “Sources: Cornell Feline Health Center; ASPCA”. No invented emotion guarantees or certainty that one pose always means fear.",
+    "image": "images/2026-11-06-factual-infographic-factual-infographic-the-defensive-crouc.jpg",
+    "thumb": "thumbs/2026-11-06-factual-infographic-factual-infographic-the-defensive-crouc.webp",
+    "color": "#adadaf",
+    "date": "2026-11-06",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1168x1346",
+    "dedup": {
+      "conceptKey": "feline-defensive-crouch-contextual-signal-cluster",
+      "imageSha256": "c6ff8feb0947d22fc3ad5c074bac5a60c7fb2531c9cc60008d89bb3756cdf1dc",
+      "imageDHash": "960e66d0a4e89928"
+    },
+    "factualInfographic": {
+      "topic": "Interpreting the feline defensive crouch as a cluster of contextual signals",
+      "description": "Focused atlas of defensive feline postural signals and contextual interpretation.",
+      "sourceNote": "Read Cornell and ASPCA guidance: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-aggression ; https://www.aspca.org/pet-care/cat-care/common-cat-behavior-issues/aggression-cats",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-07T01:20:50.950927+00:00",
+        "sources": [
+          {
+            "id": "cornell",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Feline Behavior Problems: Aggression",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-aggression"
+          },
+          {
+            "id": "aspca",
+            "publisher": "ASPCA",
+            "title": "Aggression in Cats",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.aspca.org/pet-care/cat-care/common-cat-behavior-issues/aggression-cats"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "A defensive cat may crouch low with its head tucked and tail curved around or tucked under its body.",
+            "sourceIds": [
+              "cornell",
+              "aspca"
+            ]
+          },
+          {
+            "claim": "Flattened sideways or backward ears and wide eyes with dilated pupils can accompany defensive postures.",
+            "sourceIds": [
+              "cornell",
+              "aspca"
+            ]
+          },
+          {
+            "claim": "Hissing and raised fur may accompany fear-related defensive behavior; not every sign must be present.",
+            "sourceIds": [
+              "cornell",
+              "aspca"
+            ]
+          },
+          {
+            "claim": "Read body posture, face, ears and tail together and consider preceding events; a pose alone does not establish its cause.",
+            "sourceIds": [
+              "aspca",
+              "cornell"
+            ]
+          },
+          {
+            "claim": "Fear-related aggression can escalate if a cat cannot escape; do not touch, restrain or punish a cat displaying defensive aggression; give space until calm.",
+            "sourceIds": [
+              "aspca"
+            ]
+          },
+          {
+            "claim": "Pain or medical problems may contribute to aggression; new or persistent changes warrant veterinary assessment.",
+            "sourceIds": [
+              "cornell",
+              "aspca"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
