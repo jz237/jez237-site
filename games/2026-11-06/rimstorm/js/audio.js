@@ -6,14 +6,15 @@
 // one score per sector, a boss track and two stings. A name with no file is simply silent.
 const SFX_NAMES = ['fire', 'hit', 'clank', 'boltpop', 'boomS', 'boomM', 'boomL', 'debris', 'charge', 'bolt', 'emerge', 'split', 'crackle', 'zap',
   'purge', 'plate', 'death', 'spawn', 'web', 'webclear', 'alarm', 'bossin', 'bosshit', 'lunge', 'phase', 'grab', 'beam', 'flare', 'life', 'upgrade',
-  'medal', 'uimove', 'uiok', 'uiback', 'rewind', 'pickup', 'pwend', 'pod', 'dive', 'sweep', 'tell', 'hop', 'reflect', 'dodge', 'chip', 'rim', 'crush', 'pull'];
+  'medal', 'uimove', 'uiok', 'uiback', 'rewind', 'pickup', 'pwend', 'pod', 'dive', 'sweep', 'tell', 'hop', 'reflect', 'dodge', 'chip', 'rim', 'crush', 'pull',
+  'boltrim', 'bossspawn', 'droidend', 'droidfire', 'droidzap', 'eyeshut', 'headhit', 'headmove', 'podlost', 'sectorclear', 'wreck'];
 export const FILE = {};
 for (const n of SFX_NAMES) FILE[n] = 'audio/' + n + '.mp3';
 for (const n of ['title', 's1', 's2', 's3', 's4', 's5', 'boss', 'clear', 'over']) FILE['music:' + n] = 'music/' + n + '.mp3';
 const SFX = Object.keys(FILE).filter((k) => !k.includes(':'));
 // rare flight-control voice lines (one voice for the whole game), only at key moments through main.js say()
 export const VOICE = ['begin', 's2', 's3', 's4', 's5', 'boss', 'bossdown', 'lastlife', 'gameover', 'newrecord', 'champion', 'endless'];
-const V = '?v=8';
+const V = '?v=9';
 
 export class Audio {
   constructor(base) {
@@ -87,6 +88,16 @@ export class Audio {
   }
 
   // o: { x, y, z } position, vol, rate, vary, gap, loop, bus
+  // a short warning tone made on the spot (the threat warning): a soft square-ish blip through a low-pass, rising with
+  // the danger
+  pulse(vol = 0.2, pitch = 1) {
+    if (!this.ctx) return;
+    const c = this.ctx, t = c.currentTime, o = c.createOscillator(), f = c.createBiquadFilter(), g = c.createGain();
+    o.type = 'triangle'; o.frequency.setValueAtTime(220 * pitch, t); o.frequency.exponentialRampToValueAtTime(330 * pitch, t + 0.09);
+    f.type = 'lowpass'; f.frequency.value = 1400;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
+    o.connect(f).connect(g).connect(this.sfxBus); o.start(t); o.stop(t + 0.2);
+  }
   play(name, o = {}) {
     if (!this.ctx) return null;
     const b = this.buf.get(name);

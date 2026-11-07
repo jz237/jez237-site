@@ -4,10 +4,10 @@
 // worldSig) must equal the live world at the key tick and again at the end of the clip. Covers every
 // sector, the boss webs, both autopilot profiles, all difficulty levels and ENDLESS DESCENT.
 //   node scripts/rimstorm/replay_check.mjs [seeds=10]
-import { makeWorld, step, drainEvents, STEP, cloneWorld } from '../../games/2026-11-06/rimstorm/js/sim.js?v=8';
-import { Autopilot } from '../../games/2026-11-06/rimstorm/js/ai.js?v=8';
-import { TYPICAL_UP, WEBS, DIFF_KEYS } from '../../games/2026-11-06/rimstorm/js/config.js?v=8';
-import { Recorder, Replay, worldSig } from '../../games/2026-11-06/rimstorm/js/replay.js?v=8';
+import { makeWorld, step, drainEvents, STEP, cloneWorld } from '../../games/2026-11-06/rimstorm/js/sim.js?v=9';
+import { Autopilot } from '../../games/2026-11-06/rimstorm/js/ai.js?v=9';
+import { TYPICAL_UP, WEBS, DIFF_KEYS } from '../../games/2026-11-06/rimstorm/js/config.js?v=9';
+import { Recorder, Replay, worldSig } from '../../games/2026-11-06/rimstorm/js/replay.js?v=9';
 
 const seeds = +(process.argv[2] || 10);
 let ok = 0, bad = 0, total = 0, deaths = 0, kills = 0;

@@ -1,7 +1,7 @@
 // Instant replay. The simulation is deterministic, so the recorder keeps a cloned world every half
 // second plus every Rimrunner's input for each tick; a replay re-runs the moments before the last death
 // (or boss kill) from the nearest clone and reproduces it exactly, effects and sounds included.
-import { cloneWorld, step, drainEvents, STEP } from './sim.js?v=8';
+import { cloneWorld, step, drainEvents, STEP } from './sim.js?v=9';
 
 const r4 = (v) => Math.round((+v || 0) * 10000) / 10000;
 // the whole world as one string (inputs and the pending event list left out): equal strings = the same
@@ -50,6 +50,7 @@ export class Replay {
     while (this.acc >= STEP && !this.done && n < 16) {
       const W = this.W, rec = this.inputs.get(W.n);
       if (rec) for (const q of rec) { const p = W.players.find((x) => x.id === q[0]); if (p) p.input = { mx: q[1], dx: q[2], fire: !!q[3], purge: !!q[4], hop: !!q[5] }; }
+      if (this.preStep) this.preStep(W);   // main.js: remember positions for drawing between steps
       step(W, STEP);
       if (onStep) onStep(W);
       for (const e of drainEvents(W)) out.push(e);

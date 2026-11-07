@@ -1,13 +1,13 @@
 // Rimstorm 2026 — game flow, menus, HUD, commentary, demo director and the frame loop.
-import { VERSION, SECTORS, STEP, F, WEBS, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, AIM_MEDAL, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY, AI_SHOP, SALVAGE_MEDAL, salvageFor } from './config.js?v=8';
-import { makeWorld, step, drainEvents, webLabel, isBossWeb, bossKey, cloneWorld } from './sim.js?v=8';
-import { Autopilot } from './ai.js?v=8';
-import { Renderer, pickQuality, CALM } from './render.js?v=8';
-import { Audio } from './audio.js?v=8';
-import { Input } from './input.js?v=8';
-import { Scores, NO_POST } from './scores.js?v=8';
-import { Recorder, Replay, worldSig } from './replay.js?v=8';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=8';
+import { VERSION, SECTORS, STEP, F, WEBS, UPGRADES, UP_KEYS, UP_COST, MEDALS, parTime, AIM_MEDAL, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY, AI_SHOP, SALVAGE_MEDAL, salvageFor } from './config.js?v=9';
+import { makeWorld, step, drainEvents, webLabel, isBossWeb, bossKey, cloneWorld } from './sim.js?v=9';
+import { Autopilot } from './ai.js?v=9';
+import { Renderer, pickQuality, CALM } from './render.js?v=9';
+import { Audio } from './audio.js?v=9';
+import { Input } from './input.js?v=9';
+import { Scores, NO_POST } from './scores.js?v=9';
+import { Recorder, Replay, worldSig } from './replay.js?v=9';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=9';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -404,7 +404,19 @@ function tutorial(key, t = 6.5) {
     if (tipsSeen.has(key) || (W && (W.diff === 'hard' || W.diff === 'nightmare'))) return;
     tipsSeen.add(key); store('rs.tips.v1', [...tipsSeen]);
   }
-  const el = $('tut'); el.innerHTML = TUT[key](); el.classList.remove('hidden'); G.tutT = t;
+  const el = $('tut'); el.innerHTML = TUT[key](); el.classList.remove('hidden', 'dim'); G.tutT = t;
+}
+// the tip goes see-through while anything that matters (an enemy, a bolt, the boss) is behind it
+function dimTut(W) {
+  const el = $('tut');
+  if (!W || el.classList.contains('hidden')) return;
+  const r = el.getBoundingClientRect(), cam = R.camera;
+  const under = (lane, d) => { const v = R.worldAt(lane, d, 0.6).project(cam); if (v.z > 1) return false; const x = (v.x + 1) / 2 * innerWidth, y = (1 - v.y) / 2 * innerHeight; return x > r.left - 30 && x < r.right + 30 && y > r.top - 30 && y < r.bottom + 30; };
+  let dim = false;
+  for (const e of W.enemies) if (!dim && e.hp > 0 && under(e.lane, e.d)) dim = true;
+  for (const b of W.bolts) if (!dim && under(b.lane, b.d)) dim = true;
+  if (!dim && W.boss) for (let l = 0; l < W.nl && !dim; l += 2) if (under(l, W.boss.d)) dim = true;
+  el.classList.toggle('dim', dim);
 }
 
 // ------------------------------------------------------------------ events from the simulation
@@ -422,10 +434,22 @@ function handleEvents(list, W, live) {
         break;
       }
       case 'hit': A.play('hit', { ...at(e.lane, e.d), vol: 0.5, gap: 0.03 }); break;
+      // 1.4: the events that used to be silent
+      case 'boltrim': A.play('boltrim', { ...at(e.lane, 0.02), vol: 0.45, gap: 0.05, vary: 0.15 }); break;
+      case 'droidfire': A.play('droidfire', { ...at(e.lane, 0.02), vol: 0.18, gap: 0.06, vary: 0.15 }); break;
+      case 'droidzap': A.play('droidzap', { ...at(e.lane, 0.02), vol: 0.55, gap: 0.05 }); break;
+      case 'droidend': A.play('droidend', { ...at(e.lane, 0.02), vol: 0.45, gap: 0.2 }); break;
+      case 'podlost': A.play('podlost', { ...at(e.lane, 0.05), vol: 0.4, gap: 0.2 }); break;
+      case 'bossspawn': A.play('bossspawn', { ...(W.boss ? at(W.boss.lane || 0, W.boss.d) : {}), vol: 0.75, gap: 0.3 }); break;
+      case 'eyeshut': A.play('eyeshut', { ...at(e.lane, W.boss ? W.boss.d : 0.6), vol: 0.6, gap: 0.2 }); break;
+      case 'headhit': A.play('headhit', { ...at(e.lane, e.d ?? (W.boss ? W.boss.d : 0.6)), vol: 0.75, gap: 0.04 }); break;
+      case 'headmove': A.play('headmove', { ...at(e.lane, W.boss ? W.boss.d : 0.6), vol: 0.45, gap: 0.25, vary: 0.12 }); break;
+      case 'sectorclear': A.play('sectorclear', { vol: 0.85, gap: 1 }); break;
       case 'kill': {
         const big = e.type === 'lancer' || e.type === 'shocker' || e.type === 'spinewright' || e.type === 'mirror';
         A.play(big ? 'boomM' : 'boomS', { ...at(e.lane, e.d), vol: big ? 0.85 : 0.6, gap: 0.03 });
         if (big) A.play('debris', { ...at(e.lane, e.d), vol: 0.3, delay: 0.2, gap: 0.2 });
+        A.play('wreck', { ...at(e.lane, Math.min(1, e.d + 0.15)), vol: big ? 0.4 : 0.22, delay: 0.25, gap: 0.12, vary: 0.2 });
         if (live && G.mode !== 'demo' && (e.rim || (big && e.d < 0.45))) popup(`+${e.pts}`, e.lane, e.d, e.rim ? '#ffd27a' : null);
         if (live && mine(e) && e.rim) rumble(0.25, 0.3, 90);
         break;
@@ -1053,7 +1077,7 @@ document.addEventListener('visibilitychange', () => {
 let bgWorker = null;
 function bgTicks(on) {
   if (on && !bgWorker) {
-    try { bgWorker = new Worker(new URL('./tick.js?v=8', import.meta.url)); bgWorker.onmessage = bgTick; } catch (e) { bgWorker = null; console.warn('background tick', e); return; }
+    try { bgWorker = new Worker(new URL('./tick.js?v=9', import.meta.url)); bgWorker.onmessage = bgTick; } catch (e) { bgWorker = null; console.warn('background tick', e); return; }
   }
   if (bgWorker) bgWorker.postMessage(on ? 25 : 0); // 40 ticks a second: a snapshot every second tick = 20 a second
 }
@@ -1110,6 +1134,49 @@ function tickFrame(dt) {
   const cur = G.state === 'replay' && G.replay ? G.replay.W : G.W;
   if (!cur) return;
   if (cur.k !== R.lookI) R.setLook(cur.k);
+  lerpIn(cur, G.mode === 'online' ? 1 : G.state === 'replay' && G.replay ? G.replay.acc / STEP : G.acc / STEP);
+  try { drawFrame(cur, dt); } finally { lerpOut(); }
+  if (G.bannerT > 0) { G.bannerT -= dt; if (G.bannerT <= 0) $('banner').classList.add('hidden'); }
+  if (G.tutT > 0) { G.tutT -= dt; if (G.tutT <= 0) $('tut').classList.add('hidden'); }
+  if (G.capT > 0) { G.capT -= dt; if (G.capT <= 0) $('caption').classList.add('hidden'); }
+}
+// smooth motion: the sim steps at 120 Hz while the screen draws at its own rate (60, 90, 120, 144 Hz...), so a drawn
+// frame would show 0, 1 or 2 steps' movement in turn - a judder, and things that seem to stop for a frame. Each frame
+// is drawn part-way between the last two steps instead: lane, rim position, depth and the web's spin only, put back
+// straight after drawing (the sim never sees them, replays stay exact)
+const PREV = new WeakMap(), LERPED = [], LK = ['pos', 'lane', 'd', 'drag'];
+function lerpLists(W) { return [W.players, W.enemies, W.shots, W.bolts, W.pods, W.droids]; }
+function snapPrev(W) {
+  const put = (b) => { let o = PREV.get(b); if (!o) PREV.set(b, o = {}); for (const k of LK) o[k] = b[k]; };
+  for (const L of lerpLists(W)) if (L) for (const b of L) put(b);
+  if (W.boss) put(W.boss);
+  let o = PREV.get(W); if (!o) PREV.set(W, o = {}); o.rot = W.rot; o.nl = W.nl;
+}
+function lerpIn(W, a) {
+  LERPED.length = 0;
+  if (!(a >= 0 && a < 1)) return;
+  const n = W.nl, closed = W.closed;
+  const mix = (b) => {
+    const o = PREV.get(b); if (!o) return;
+    for (const k of LK) {
+      const v = b[k], v0 = o[k];
+      if (typeof v !== 'number' || typeof v0 !== 'number') continue;
+      let dv = v - v0;
+      if ((k === 'pos' || k === 'lane') && closed) dv = ((dv + n * 1.5) % n) - n / 2;
+      if (Math.abs(dv) > (k === 'd' || k === 'drag' ? 0.25 : 1.5)) continue;   // a jump (respawn, new web): no sliding across
+      LERPED.push(b, k, v);
+      let x = v0 + dv * a;
+      if ((k === 'pos' || k === 'lane') && closed) x = ((x % n) + n) % n;
+      b[k] = x;
+    }
+  };
+  for (const L of lerpLists(W)) if (L) for (const b of L) mix(b);
+  if (W.boss) mix(W.boss);
+  const o = PREV.get(W);
+  if (o && o.nl === n && typeof o.rot === 'number' && Math.abs(W.rot - o.rot) < 0.5) { LERPED.push(W, 'rot', W.rot); W.rot = o.rot + (W.rot - o.rot) * a; }
+}
+function lerpOut() { for (let i = 0; i < LERPED.length; i += 3) LERPED[i][LERPED[i + 1]] = LERPED[i + 2]; LERPED.length = 0; }
+function drawFrame(cur, dt) {
   R.sync(cur, dt);
   const me = myPlayer(cur);
   const menu = G.state === 'title' || (['sectors', 'online', 'scores', 'medals', 'options', 'help', 'record'].includes(G.screen) && G.mode === 'title');
@@ -1117,9 +1184,51 @@ function tickFrame(dt) {
   A.setListener(R.camera);
   if (G.state === 'play' || G.state === 'paused-online' || G.state === 'replay') loops(cur, dt);
   R.render(dt, { dive: cur.phase === 'dive' && !menu, diveK: cur.phase === 'dive' && !menu ? Math.max(0, cur.diveT / cur.diveDur - 0.75) * 2 : 0 });
-  if (G.bannerT > 0) { G.bannerT -= dt; if (G.bannerT <= 0) $('banner').classList.add('hidden'); }
-  if (G.tutT > 0) { G.tutT -= dt; if (G.tutT <= 0) $('tut').classList.add('hidden'); }
-  if (G.capT > 0) { G.capT -= dt; if (G.capT <= 0) $('caption').classList.add('hidden'); }
+  if (G.tutT > 0 && G.state === 'play') dimTut(cur);
+  threatWarn(cur, dt, menu);
+}
+// the threat warning: a rider crawling along the rim toward you, a climber about to reach the rim in or next to your
+// lane, or a bolt about to reach the rim in your lane. The closer it is, the stronger: a red glow on the side of the
+// screen it comes from, a pulsing marker on it, and a warning blip that quickens (the lane tells stay as they were)
+const THR = { d: 0, side: 0, beat: 0, glow: 0, shown: [-1, -1], mk: -1 };
+function threatWarn(W, dt, menu) {
+  let best = 0, bl = 0, bd = 0;
+  const me = myPlayer(W);
+  if (!menu && (G.state === 'play' || G.state === 'replay') && me && me.alive && W.phase === 'fight') {
+    const n = W.nl, ld = (a, b) => { let d = b - a; if (W.closed) d = ((d + n * 1.5) % n) - n / 2; return d; };
+    for (const e of W.enemies) {
+      if (e.hp <= 0 || e.gone) continue;
+      const dl = Math.abs(ld(me.pos, e.lane));
+      let k = 0;
+      if (e.rim) k = e.grabT > 0 || e.pounce ? 1 : Math.max(0, 1 - (dl - 0.5) / 3);
+      else if (e.d < 0.3 && dl < 1.6) k = (1 - e.d / 0.3) * (dl < 0.5 ? 1 : 0.6);
+      if (k > best) { best = k; bl = e.lane; bd = e.d; }
+    }
+    for (const b of W.bolts) {
+      const dl = Math.abs(ld(me.pos, b.lane));
+      if (dl < 0.6 && b.d < 0.35) { const k = 1 - b.d / 0.35; if (k > best) { best = k; bl = b.lane; bd = b.d; } }
+    }
+  }
+  THR.d += (best - THR.d) * Math.min(1, dt * (best > THR.d ? 14 : 5));
+  // which side of the screen: the threat's place on screen against the Rimrunner's
+  if (best > 0.05) {
+    const cam = R.camera, a = R.worldAt(bl, bd, 0.6).project(cam), ax = a.x, ay = a.y, az = a.z;
+    const pz = R.worldAt(me.pos, me.d, 0.6).project(cam);
+    THR.side = ax < pz.x - 0.02 ? -1 : ax > pz.x + 0.02 ? 1 : 0;
+    THR.mx = (ax + 1) / 2 * innerWidth; THR.my = (1 - ay) / 2 * innerHeight; THR.mz = az;
+  }
+  if (THR.d > 0.45 && G.state === 'play') {
+    THR.beat -= dt;
+    if (THR.beat <= 0) { A.pulse(0.08 + THR.d * 0.14, 0.9 + THR.d * 0.5); THR.beat = 0.5 - THR.d * 0.3; THR.glow = 1; }
+  } else THR.beat = 0;
+  THR.glow = Math.max(0, THR.glow - dt * 5);
+  const k = Math.min(1, THR.d * (0.75 + THR.glow * 0.25)) * (CALM.on ? 0.55 : 1);
+  const oL = Math.round((THR.side <= 0 ? k : k * 0.25) * 50) / 50, oR = Math.round((THR.side >= 0 ? k : k * 0.25) * 50) / 50;
+  if (oL !== THR.shown[0]) { THR.shown[0] = oL; $('threatL').style.opacity = oL; }
+  if (oR !== THR.shown[1]) { THR.shown[1] = oR; $('threatR').style.opacity = oR; }
+  const mk = $('threatmk'), mo = THR.d > 0.3 && THR.mz <= 1 ? Math.min(1, THR.d * 1.3) : 0;
+  if (mo > 0) mk.style.transform = `translate(${THR.mx.toFixed(1)}px, ${THR.my.toFixed(1)}px) translate(-50%, -130%) scale(${(1 + THR.glow * 0.2).toFixed(3)})`;
+  if (Math.abs(mo - THR.mk) > 0.02) { THR.mk = mo; mk.style.opacity = mo; }
 }
 function playStep(dt) {
   const W = G.W;
@@ -1139,6 +1248,7 @@ function playStep(dt) {
     }
     if (online && NET.host) NET.hostTick(W);
     if (!online) REC.input(W);
+    snapPrev(W);
     step(W, STEP);
     let ev = drainEvents(W);
     if (svc) svcEvents(ev, W);
@@ -1170,6 +1280,7 @@ function replayStep(dt) {
   const Rp = G.replay;
   const near = Math.abs(Rp.toKey) < 0.7;
   A.setRate(near ? 0.7 : 1);
+  Rp.preStep = snapPrev;
   const ev = Rp.advance(dt * (near ? 0.35 : 1), (W) => { if (W.n === G.clip.keyN && G.clip.sig) G.replayExact = worldSig(W) === G.clip.sig; });
   handleEvents(ev, Rp.W, false);
   if (Rp.done) endReplay();
@@ -1179,7 +1290,7 @@ function scenicStep(dt) {
   if (!W) return;
   G.acc += dt;
   let n = 0;
-  while (G.acc >= STEP && n < 8) { step(W, STEP); drainEvents(W); G.acc -= STEP; n++; }
+  while (G.acc >= STEP && n < 8) { snapPrev(W); step(W, STEP); drainEvents(W); G.acc -= STEP; n++; }
   if (W.phase !== 'fight' && W.phase !== 'intro' || W.over) scenic(R.lookI);
   if (G.state === 'title' && G.screen === 'title') {
     G.idleT += dt;
@@ -1251,7 +1362,7 @@ async function boot() {
   $('loading').style.opacity = '0'; $('loading').classList.add('gone'); // fading out: taps go through at once
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
-  if (params.has('test')) { const m = await import('./tests.js?v=8'); m.runTests(window.__rs); }
+  if (params.has('test')) { const m = await import('./tests.js?v=9'); m.runTests(window.__rs); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (G.autopilot) { A.unlock(); if (params.has('endless')) startEndless(); else startCampaign(+params.get('sector') || 0); }
   else if (params.has('room')) { act('online'); $('join-code').value = cleanCode(params.get('room')); }

@@ -5,11 +5,11 @@
 // molten core, ice moon, black hole with lensing), every enemy, boss and effect from the simulation, and
 // HDR post. Nothing here changes the world. The light count never changes after boot.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=8';
-import * as TX from './textures.js?v=8';
-import * as MD from './models.js?v=8';
-import { FX, CALM } from './fx.js?v=8';
-import { SHAPES, BOSSES, POWERUPS, F, BOSS_KEYS } from './config.js?v=8';
+import { Post } from './post.js?v=9';
+import * as TX from './textures.js?v=9';
+import * as MD from './models.js?v=9';
+import { FX, CALM } from './fx.js?v=9';
+import { SHAPES, BOSSES, POWERUPS, F, BOSS_KEYS } from './config.js?v=9';
 
 export { CALM };
 export const TUBE = { R: 10, DEPTH: 64, FAR: 0.58 };
@@ -697,12 +697,22 @@ export class Renderer {
     // a punch left over from the killing blow must not carry into the next boss
     if (this.punchV !== V) { this.punchV = V; this.bossPunch = 0; }
     const p = this.bossPunch || 0;
-    if (p <= 0) return;
     this.bossPunch = Math.max(0, p - dt * 7);
     const k = p * p;
-    this.setFlash(V.core, Math.max(V.core.flashK || 0, k * (CALM.on ? 0.25 : 0.55)));
-    V.core.g.position.z -= k * 1.6;
-    V.core.g.scale.multiplyScalar(1 + k * 0.06);
+    if (k > 0) this.setFlash(V.core, Math.max(V.core.flashK || 0, k * (CALM.on ? 0.25 : 0.55)));
+    // 1.4: the flinch is a damped spring: knocked back down the tube, tilted away from the side that was hit and
+    // squashed, then it overshoots a little and settles (bossKick adds the impulses)
+    const S = this.bk || (this.bk = { z: 0, vz: 0, rx: 0, vrx: 0, ry: 0, vry: 0, s: 0, vs: 0 }), h = Math.min(dt, 1 / 30);
+    for (const [a, va, kk, c] of [['z', 'vz', 150, 13], ['rx', 'vrx', 170, 12], ['ry', 'vry', 170, 12], ['s', 'vs', 260, 16]]) { S[va] += (-S[a] * kk - S[va] * c) * h; S[a] += S[va] * h; }
+    V.core.g.position.z -= S.z * 1.8;
+    V.core.g.rotation.x = S.rx; V.core.g.rotation.y = S.ry;
+    V.core.g.scale.multiplyScalar(1 + S.s * 0.08);
+  }
+  bossKick(lane, d, k) {
+    const S = this.bk || (this.bk = { z: 0, vz: 0, rx: 0, vrx: 0, ry: 0, vry: 0, s: 0, vs: 0 });
+    const P = this.lanePt(lane, Math.min(1, d || 0.6), _lp1), r = Math.hypot(P.x, P.y) || 1;
+    S.vz += 6 * k; S.vs += 7 * k;
+    S.vrx += (-P.y / r) * 2.6 * k; S.vry += (P.x / r) * 2.6 * k;
   }
   setFlash(v, k) {
     if (!v.flashMats || Math.abs(k - (v.flashK || 0)) < 0.01) return;
@@ -956,8 +966,11 @@ export class Renderer {
       if (!hv.g.visible) return;
       const lunge = h.lunge > 0 ? Math.max(0, 1 - h.lunge / 0.9) : 0;
       this.place(hv.g, h.lane, Math.max(0.02, h.d - lunge * h.d), 0.6 + Math.sin(t * 2 + i) * 0.3, true, Math.sin(t * 1.5 + i) * 0.15, 0);
-      hv.g.scale.multiplyScalar(1.8);
-      if (hv.jaw) hv.jaw.rotation.x = -(0.2 + Math.sin(t * 4 + i) * 0.15 + lunge * 0.6);
+      hv.kick = Math.max(0, (hv.kick || 0) - dt * 5);
+      const hk = hv.kick * hv.kick;
+      hv.g.scale.multiplyScalar(1.8 * (1 - hk * 0.1));
+      if (hk > 0) hv.g.rotateX(-hk * 0.6);   // snapped back by the hit
+      if (hv.jaw) hv.jaw.rotation.x = -(0.2 + Math.sin(t * 4 + i) * 0.15 + lunge * 0.6 + hk * 0.5);
       this.setFlash(hv, Math.min(0.4, Math.max(0, h.hitT) * 4));
     });
     // the prism queen's eye glows in its lane
@@ -1054,7 +1067,10 @@ export class Renderer {
       P.life -= dt;
       if (P.life <= 0) { this.scene.remove(P.g); continue; }
       const g = P.g;
-      P.vx *= 1 - dt * 0.4; P.vy *= 1 - dt * 0.4; P.vz -= 3 * dt;
+      // 1.4: wreckage falls away down the tube (its pull is along the tube, away from the rim), held in toward the
+      // lanes and slowing its spin as it goes, instead of floating off sideways
+      P.vx *= 1 - dt * 1.6; P.vy *= 1 - dt * 1.6; P.vz -= 11 * dt;
+      P.wx *= 1 - dt * 0.6; P.wy *= 1 - dt * 0.6; P.wz *= 1 - dt * 0.6;
       g.position.x += P.vx * dt; g.position.y += P.vy * dt; g.position.z += P.vz * dt;
       _e.set(P.wx * dt, P.wy * dt, P.wz * dt); _q.setFromEuler(_e); g.quaternion.multiply(_q);
       g.scale.copy(P.sc).multiplyScalar(Math.min(1, P.life / 0.5));
@@ -1083,6 +1099,7 @@ export class Renderer {
     this.fx.flash(w.x, w.y, w.z, 22, 0xffd0a0, 0.18);
     this.fx.pop(w.x, w.y, w.z, w.distanceTo(this.camera.position) * 0.7, 0xffc080);
     this.bossPunch = 1; this.bossHits = (this.bossHits || 0) + 1;
+    this.bossKick(e.lane, e.d, e.purge ? 1.6 : 1);
     this.trauma = Math.min(1, this.trauma + 0.08);
   }
   onEvent(e, W) {
@@ -1123,6 +1140,8 @@ export class Renderer {
       }
       case 'zap': this.sparksAt(e.lane, 0.05, { n: 14, speed: 6, r: 0.6, g: 0.9, b: 1 }); break;
       case 'bosshit': this.bossHitFx(e); break;
+      case 'phase': if (W.boss) this.bossKick(0, W.boss.d, 2.2); break;
+      case 'headhit': if (this.bossV && W.boss && W.boss.heads) W.boss.heads.forEach((h, i) => { const hv = this.bossV.heads[i]; if (hv && h.hp > 0 && Math.round(h.lane) === Math.round(e.lane)) hv.kick = 1; }); this.bossKick(e.lane, e.d, 0.5); break;
       case 'clank': case 'refract': this.sparksAt(e.lane, e.d, { n: 5, speed: 5, r: 0.7, g: 0.8, b: 1 }); break;
       case 'seg': this.burst(e.lane, e.d, 1.2, { color: 0x9fe8ff }); break;
       case 'headdown': this.burst(e.lane, e.d, 1.8, { color: 0x7dffd8 }); break;

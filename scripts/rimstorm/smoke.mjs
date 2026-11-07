@@ -3,9 +3,9 @@
 // Then a chained campaign, sector 1 to the sector 5 boss, with lives and score carried over (a sector is
 // retried if the autopilot runs out of Rimrunners, like the AI PLAYTHROUGH does).
 //   node scripts/rimstorm/smoke.mjs [profile=demo] [difficulty=normal]
-import { makeWorld, step, drainEvents, STEP, cloneWorld } from '../../games/2026-11-06/rimstorm/js/sim.js?v=8';
-import { Autopilot } from '../../games/2026-11-06/rimstorm/js/ai.js?v=8';
-import { SECTORS, TYPICAL_UP, WEBS, START_LIVES } from '../../games/2026-11-06/rimstorm/js/config.js?v=8';
+import { makeWorld, step, drainEvents, STEP, cloneWorld } from '../../games/2026-11-06/rimstorm/js/sim.js?v=9';
+import { Autopilot } from '../../games/2026-11-06/rimstorm/js/ai.js?v=9';
+import { SECTORS, TYPICAL_UP, WEBS, START_LIVES } from '../../games/2026-11-06/rimstorm/js/config.js?v=9';
 
 const profile = process.argv[2] || 'demo';
 const diff = process.argv[3] || 'normal';

@@ -137,6 +137,18 @@ SFX = {
     'rim':      (0.5, 0.6, 'Machine clamping onto a metal rim, heavy low metallic clamp and scrape'),
     'crush':    (1.6, 0.5, 'Giant crushing impact of colliding metal masses, massive crunch with a shockwave rumble'),
     'pull':     (2.2, 0.5, 'Gravity pull of a black hole, deep descending warping drone with a stretched rumble'),
+    # 1.4: the events that had no sound
+    'boltrim':  (0.6, 0.6, 'Energy bolt striking a metal rim and fizzling out, sharp sizzling snap with a short metallic ring, no beep'),
+    'bossspawn':(1.1, 0.55, 'Huge machine ejecting a swarm of small drones, hydraulic hiss and a rapid series of heavy metallic launch thunks'),
+    'droidend': (0.8, 0.6, 'Small helper drone powering down, descending servo whine ending in a soft mechanical click, no beep'),
+    'droidfire':(0.4, 0.6, 'Tiny light plasma shot from a small hovering drone, soft quick thump with a faint airy hiss, no beep, no tone'),
+    'droidzap': (0.5, 0.6, 'Short electric arc zapping a small machine, crisp crackling snap'),
+    'eyeshut':  (0.8, 0.6, 'Giant mechanical eye shutter slamming closed, heavy metal iris clack with a hydraulic hiss'),
+    'headhit':  (0.7, 0.6, 'Heavy armoured mechanical serpent head struck by energy fire, deep metallic clang with a crunch'),
+    'headmove': (0.9, 0.55, 'Huge mechanical serpent head sliding sideways along a metal rail, grinding scrape with a hydraulic whoosh'),
+    'podlost':  (0.8, 0.55, 'Glowing power-up capsule drifting away out of reach, soft descending whoosh with a dim glassy fade'),
+    'sectorclear': (2.5, 0.5, 'Triumphant deep energy surge as a huge machine powers down, rising shimmering whoosh into a resonant low boom, no music, no voice'),
+    'wreck':    (1.0, 0.55, 'Small wrecked metal drone tumbling down a long metal tube, clattering bounces fading into the distance'),
 }
 
 VOICE_ID = 'Xb7hH8MSUJpSbSDYk0k2'  # one consistent flight-control voice for the whole game

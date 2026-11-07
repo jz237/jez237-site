@@ -10,7 +10,7 @@ const require = createRequire(import.meta.url);
 const { chromium } = require('D:/Projects/.tmp/model-s-tools/node_modules/playwright');
 const base = process.argv[2] || 'http://127.0.0.1:8772/games/2026-11-06/rimstorm/';
 const OUT = (process.argv[3] || 'D:/Projects/.tmp/arcade-trio-work/rimstorm/shots') + '/';
-const V = '?v=8';
+const V = '?v=9';
 const browser = await chromium.launch({ channel: 'msedge', headless: true, args: ['--use-angle=d3d11', '--ignore-gpu-blocklist'] });
 const errors = [], posts = [], other = [];
 let fails = 0;

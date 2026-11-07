@@ -1,7 +1,7 @@
 # Rimstorm 2026 tools
 
 Game: `games/2026-11-06/rimstorm/` (three.js r181 vendored in `vendor/`, plain ES modules, no build step).
-Every local import carries the same `?v=N`; bump them all together (plus `js/main.js?v=` in index.html and `V` in js/audio.js).
+Every local import carries the same `?v=N`; bump them all together (plus `js/main.js?v=` in index.html and `V` in js/audio.js). Now `?v=9`, version 1.4.0. Since 1.4: frames are drawn between sim steps (main.js `snapPrev` before every step incl. scenic and Replay `preStep`, `lerpIn`/`lerpOut` around `drawFrame`: pos / lane / d / drag of players, enemies, shots, bolts, pods, droids, boss, and W.rot; lanes wrap on closed webs; at 144 Hz enemy motion unevenness 0.50 -> 0.07); the tip is a side card left of the web in landscape that dims over enemies / bolts / the boss (`dimTut`); a threat warning (`threatWarn`: rim riders closing in, climbers about to reach the rim by you, bolts in your lane -> side glow `#threatL/R`, marker `#threatmk`, `A.pulse` blip); the boss flinches on a damped spring (render `bossKick`, heads recoil on `headhit`, big kick on `phase`), wreckage falls away down the tube; 11 new SFX for the events that were silent (boltrim, bossspawn, droidend, droidfire, droidzap, eyeshut, headhit, headmove, podlost, sectorclear) and `wreck`.
 
 | Script | What it does |
 | --- | --- |

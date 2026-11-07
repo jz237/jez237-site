@@ -485,6 +485,19 @@ table.rbest td:first-child { color: var(--dim); font-size: 11px; letter-spacing:
   #title-btns .btns.two { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 }
 #hud .lbl { font-size: 10px; }
+/* 1.4: in landscape the tip is a small card in the strip left of the web (out of the lanes and the tube's centre);
+   it goes see-through while an enemy, a bolt or the boss is behind it */
+#tut { transition: opacity .25s; }
+#tut.dim { opacity: .28; }
+@media (orientation: landscape) and (min-height: 521px) {
+  #tut { left: max(16px, env(safe-area-inset-left)); top: 34%; transform: none; width: auto; max-width: max(190px, min(320px, calc(50vw - 300px))); font-size: 13px; line-height: 1.4; padding: 9px 13px; text-align: left; }
+}
+#tut::before { content: 'TIP'; display: block; font-size: 10px; font-weight: 700; letter-spacing: .3em; color: var(--amber); margin-bottom: 2px; }
+#threatL, #threatR { position: absolute; top: 0; bottom: 0; width: 18vw; pointer-events: none; opacity: 0; }
+#threatL { left: 0; background: linear-gradient(to right, rgba(230, 30, 30, .55), rgba(230, 30, 30, 0)); box-shadow: inset 4px 0 0 rgba(255, 96, 72, .9); }
+#threatR { right: 0; background: linear-gradient(to left, rgba(230, 30, 30, .55), rgba(230, 30, 30, 0)); box-shadow: inset -4px 0 0 rgba(255, 96, 72, .9); }
+#threatmk { position: absolute; left: 0; top: 0; pointer-events: none; opacity: 0; width: 26px; height: 26px; line-height: 26px; text-align: center; border-radius: 50%; background: rgba(170, 14, 14, .82); border: 2px solid rgba(255, 130, 110, .95); color: #fff; font-size: 14px; font-weight: 800; }
+body.rs-hold #threatL, body.rs-hold #threatR, body.rs-hold #threatmk { visibility: hidden; }
 </style>
 </head>
 <body>
@@ -512,6 +525,7 @@ table.rbest td:first-child { color: var(--dim); font-size: 11px; letter-spacing:
   <div id="bossbar" class="hidden"><div class="lbl" id="boss-name">BOSS</div><div class="bar"><i></i></div></div>
   <div id="warns"></div>
   <div id="popups"></div>
+  <div id="threatL"></div><div id="threatR"></div><div id="threatmk">!</div>
   <div id="tut" class="hidden"></div>
   <div id="banner" class="hidden"><div class="b1"></div><div class="b2"></div></div>
   <div id="caption" class="hidden"></div>
@@ -529,7 +543,7 @@ table.rbest td:first-child { color: var(--dim); font-size: 11px; letter-spacing:
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">RIM<span>STORM</span><small>2026</small></h1>
-      <div class="ver">VERSION <b id="ver">1.3.0</b> · HOLD THE RIM · DIVE THE STORM</div>
+      <div class="ver">VERSION <b id="ver">1.4.0</b> · HOLD THE RIM · DIVE THE STORM</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -691,6 +705,6 @@ addEventListener('error', (e) => window.__rsErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__rsErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__rsErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=8"></script>
+<script type="module" src="js/main.js?v=9"></script>
 </body>
 </html>

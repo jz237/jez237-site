@@ -17,7 +17,7 @@ OUT = sys.argv[1]
 ONLY = set(sys.argv[2].split(',')) if len(sys.argv) > 2 else None
 LOOPS = {'crackle'}
 # played many times a minute: keep them dull (no bright tonal one-shots)
-SOFT = {'pod': 6000, 'fire': 5200, 'hit': 6000, 'uimove': 3000, 'tell': 4000, 'rim': 5000, 'chip': 7000, 'boltpop': 6000, 'clank': 7000, 'bosshit': 7000, 'reflect': 7000}
+SOFT = {'droidfire': 5000, 'droidzap': 7000, 'boltrim': 6000, 'wreck': 7000, 'pod': 6000, 'fire': 5200, 'hit': 6000, 'uimove': 3000, 'tell': 4000, 'rim': 5000, 'chip': 7000, 'boltpop': 6000, 'clank': 7000, 'bosshit': 7000, 'reflect': 7000}
 GAIN = {'fire': -4.0, 'hit': -3.0, 'uimove': -6.0, 'tell': -3.0}
 
 

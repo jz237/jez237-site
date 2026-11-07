@@ -2,10 +2,10 @@
 // Normal, warnings shrinking to ~0.6 s, never below MIN_WARN on any level), sim invariants while the
 // autopilot plays, every boss beatable, the live game loop running without console errors, and no score
 // posts. Results land in window.__rsTests for the console check.
-import { makeWorld, step, drainEvents, STEP, cloneWorld } from './sim.js?v=8';
-import { Autopilot } from './ai.js?v=8';
-import { RAMP, SECTORS, WEBS, TYPICAL_UP, rampAt, endlessLevel, DIFF_KEYS, applyDiff, MIN_WARN, BOSSES } from './config.js?v=8';
-import { Recorder, Replay } from './replay.js?v=8';
+import { makeWorld, step, drainEvents, STEP, cloneWorld } from './sim.js?v=9';
+import { Autopilot } from './ai.js?v=9';
+import { RAMP, SECTORS, WEBS, TYPICAL_UP, rampAt, endlessLevel, DIFF_KEYS, applyDiff, MIN_WARN, BOSSES } from './config.js?v=9';
+import { Recorder, Replay } from './replay.js?v=9';
 
 export const hashW = (W) => JSON.stringify([W.n, W.score, W.lives, W.web, W.webN, W.phase, W.rs, W.players.map((p) => [p.pos.toFixed(6), p.d.toFixed(6), p.alive, p.plate, p.purges]), W.enemies.map((e) => [e.id, e.type, e.lane.toFixed(4), e.d.toFixed(4), e.hp]), W.bolts.length, W.zaps.length, W.spine.map((x) => x.toFixed(3)).join(','), W.boss ? [W.boss.hp, W.boss.d.toFixed(4)] : 0]);
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
