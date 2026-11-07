@@ -228,7 +228,7 @@ function preloadFlightEngine() {
   if(location.protocol!=="http:"&&location.protocol!=="https:")return;
   if(document.getElementById("astraEnginePreload"))return;
   const link=document.createElement("link");link.id="astraEnginePreload";
-  link.rel="preload";link.as="script";link.href="engine.js?v=pyre58";
+  link.rel="preload";link.as="script";link.href="engine.js?v=pyre59";
   document.head.append(link);
 }
 let firstBlastProfile=0;
@@ -249,12 +249,13 @@ window.astraPreview = {
     this.state={number,seed,age,length,profile};
     $("blastControls").hidden=false;
     $("blastSelect").value=String(profile);
-    $("previewTitle").textContent=profile?"COMBAT EXPLOSIONS":"PYRO–GX / DESTRUCTION PREVIEW";
+    $("previewTitle").textContent=profile>=18?"CHAIN EXPLOSIONS / "+String(profile-17).padStart(2,"0"):profile?"COMBAT EXPLOSIONS":"PYRO–GX / DESTRUCTION PREVIEW";
     $("previewVariation").textContent="VARIATION "+String(number).padStart(2,"0");
     $("previewPhase").textContent=age<0?"PYRO–GX · Stand by":age>=length?"Clear · Try another variation":age<length*.16?"Hull breakup":age<length*.65?"Secondary detonations":"Cooling embers";
     if(profile){
       $("previewVariation").textContent=$("blastSelect").selectedOptions[0].textContent;
       $("previewPhase").textContent=age<0?"Armed":age<length?"Detonating":"Clear";
+      if(profile>=18){const c=Module.chainPreview;$("previewPhase").textContent=age<0?"Intact hull · Stand by":age>=length?"Clear":c?.breakup?`Hull fragments · ${c.wallHits} wall impacts · ${c.shipHits} ship impacts`:"Sequential detonations";}
       $("previewAgain").textContent="Replay";
       if($("blastLoop").checked && !Module.previewPaused && age>length+.9)Module.pyroPreviewCommand=2;
     }else $("previewAgain").textContent="Play another variation ↻";
@@ -362,7 +363,7 @@ async function launch(quick,demo=false,encounter=false,preview=false,autopilot=f
         setInterval(syncPilot,3000);
       }
     };
-    await script("engine.js?v=pyre58");
+    await script("engine.js?v=pyre59");
   } catch(e) {console.error(e);astraFail(e.message);}
 }
 
@@ -402,6 +403,7 @@ function launchBlastPreview(profile){
 }
 $("previewStart").onclick=()=>launchBlastPreview(0);
 $("blastStart").onclick=()=>launchBlastPreview(1);
+$("chainStart").onclick=()=>launchBlastPreview(18);
 $("blastSelect").onchange=()=>{
   Module.blastInspect=Number($("blastSelect").value);
   Module.pyroPreviewCommand=1;

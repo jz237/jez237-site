@@ -7,6 +7,7 @@ static void ac_init_fragment(ac_fragment *piece,const object *robot,int part,int
     memset(piece,0,sizeof *piece);piece->robot=*robot;piece->part=part;piece->room=robot->segnum;
     piece->seed=ac_hash(robot->signature*1237u+part*919u);piece->born=GameTime64;
     piece->life=explosion?6.8f+(piece->seed%11)*.09f:4.8f;
+    piece->chain=explosion&&astra_chain_breakup(AB_FUSE_RUN+(ac_hash(robot->signature*31u+robot->id)%10));
     piece->spin=(piece->seed&1?1:-1)*(.55f+(piece->seed%17)*.045f);
     polymodel *pm=&Polygon_models[Robot_info[robot->id].model_num];
     vms_vector center={(pm->maxs.x+pm->mins.x)/2,(pm->maxs.y+pm->mins.y)/2,(pm->maxs.z+pm->mins.z)/2};
@@ -29,19 +30,20 @@ static void ac_launch(const object *robot,int part,int explosion){
     ac_fragment *piece=&ac_fragments[ac_serial++%AC_FRAGMENTS];ac_init_fragment(piece,robot,part,explosion);
     EM_ASM(Module.componentSheds=(Module.componentSheds||0)+1;);
 }
+#include "astra_fragment_contacts.inc"
+
 static void ac_advance(ac_fragment *piece,float age,int preview){
     int steps=0;while(piece->age+.0001f<age&&steps++<220){
-        float dt=fminf(.035f,age-piece->age);piece->age+=dt;if(piece->bounces>=4)continue;
+        float dt=fminf(.035f,age-piece->age);piece->age+=dt;if(piece->impact){piece->age=age;break;}if(piece->bounces>=4)continue;
         vms_vector next;vm_vec_scale_add(&next,&piece->pos,&piece->velocity,fl2f(dt));
         if(preview){
-            fix *p=&next.x,*v=&piece->velocity.x;const fix bounds[3][2]={{-16*F1_0,16*F1_0},{-8*F1_0,8*F1_0},{6*F1_0,70*F1_0}};
-            for(int k=0;k<3;k++)if(p[k]<bounds[k][0]||p[k]>bounds[k][1]){p[k]=p[k]<bounds[k][0]?bounds[k][0]:bounds[k][1];v[k]=-fixmul(v[k],fl2f(.48f));piece->bounces++;}
-            piece->pos=next;continue;
+            ac_preview_contact(piece,&next);continue;
         }
         if(piece->room<0||piece->room>Highest_segment_index){piece->bounces=4;continue;}
         float radius=fminf(.6f,fmaxf(.12f,f2fl(piece->robot.size)*.08f));
-        fvi_query query={&piece->pos,&next,piece->room,fl2f(radius),-1,NULL,0};fvi_info hit;
+        fvi_query query={&piece->pos,&next,piece->room,fl2f(radius),-1,NULL,piece->chain?FQ_GET_SEGLIST:0};fvi_info hit;
         int result=find_vector_intersection(&query,&hit);
+        if(piece->chain&&ac_ship_contact(piece,&next,&hit,result,radius))continue;
         if(result==HIT_WALL){
             piece->normal=hit.hit_wallnorm;if(vm_vec_normalize(&piece->normal)<F1_0/100){piece->bounces=4;continue;}
             piece->hit=hit.hit_pnt;vm_vec_scale_add(&piece->pos,&hit.hit_pnt,&piece->normal,fl2f(radius+.03f));
@@ -49,6 +51,7 @@ static void ac_advance(ac_fragment *piece,float age,int preview){
             fix dot=vm_vec_dot(&piece->velocity,&piece->normal);vm_vec_scale_add2(&piece->velocity,&piece->normal,-2*dot);vm_vec_scale(&piece->velocity,fl2f(.45f));
             piece->struck=piece->born+fl2f(piece->age);
             astra_environment_hit(hit.hit_side_seg,hit.hit_side,&piece->hit,radius*1.5f);
+            if(piece->chain){piece->impact=1;piece->impact_age=piece->age;vm_vec_zero(&piece->velocity);}
             EM_ASM(Module.componentWallHits=(Module.componentWallHits||0)+1;);
         }else if(result==HIT_NONE){piece->pos=next;if(hit.hit_seg>=0)piece->room=hit.hit_seg;vm_vec_scale(&piece->velocity,fl2f(1-dt*.13f));}
         else piece->bounces=4;
@@ -63,6 +66,14 @@ static void ac_render_robot(object *robot,int mask){
     astra_hull=hull;ac_fragment_mask=oldmask;astra_robot_object=saved;astra_robot_id=saved_id;
 }
 static void ac_draw_fragment(ac_fragment *piece,float age){
+    if(piece->impact){
+        float t=(age-piece->impact_age)/.82f;
+        if(t>=0&&t<1){float radius=fminf(3.2f,fmaxf(1.15f,f2fl(piece->robot.size)*.34f));
+            astra_pattern_blast(&piece->hit,fl2f(radius),t,piece->seed,AB_SPALL,0);
+            EM_ASM(Module.fragmentSecondaryDraws=(Module.fragmentSecondaryDraws||0)+1;);
+        }
+        return;
+    }
     object robot=piece->robot;float turn=fminf(age,2.5f)*piece->spin/(1+piece->bounces*.35f);
     vms_angvec angle={(fixang)(turn*3500),(fixang)(turn*4700),(fixang)(turn*6100)};vms_matrix spin;vm_angles_2_matrix(&spin,&angle);
     vm_matrix_x_matrix(&robot.orient,&piece->robot.orient,&spin);
@@ -79,7 +90,7 @@ void astra_combat_fragments(const short *rooms,int count,int window_num){
         g3s_point view;g3_rotate_point(&view,&piece->pos);if(view.p3_z<F1_0/2||view.p3_z>i2f(160))continue;
         ac_draw_fragment(piece,age);rendered++;
         if(!window_num&&piece->struck&&GameTime64-piece->struck<F1_0/12){
-            static fix64 last;if(GameTime64-last>F1_0/6){last=GameTime64;digi_link_sound_to_pos2(SOUND_LASER_HIT_CLUTTER,piece->room,0,&piece->hit,0,F1_0/16,i2f(65));}
+            static fix64 last;if(GameTime64-last>F1_0/6){last=GameTime64;digi_link_sound_to_pos2(piece->impact?SOUND_ROBOT_DESTROYED:SOUND_LASER_HIT_CLUTTER,piece->room,0,&piece->hit,0,piece->impact?F1_0/5:F1_0/16,i2f(75));}
         }
     }
     EM_ASM(Module.componentFragments=$0;,rendered);
@@ -111,3 +122,5 @@ void astra_combat_showcase(int mode,float clock){
     EM_ASM(Module.combatPreview=({version:31,damage:$0,robot:$1,missing:$2,pieces:$3,mode:$4});,ac_preview_damage,id,missing,pieces,mode);
     ac_preview_damage=-1;ac_preview_mask=-1;
 }
+
+#include "astra_chain_showcase.inc"

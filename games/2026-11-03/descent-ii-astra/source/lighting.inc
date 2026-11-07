@@ -15,6 +15,8 @@ static void astra_find_blasts(int segnum,const vms_vector *center)
         astra_plume_lights(room,center,rank,astra_blast_positions,astra_blast_colors);
         extern void astra_debris_lights(int,const vms_vector*,float*,float (*)[4],float (*)[4]);
         astra_debris_lights(room,center,rank,astra_blast_positions,astra_blast_colors);
+        extern void astra_component_lights(int,const vms_vector*,float*,float (*)[4],float (*)[4]);
+        astra_component_lights(room,center,rank,astra_blast_positions,astra_blast_colors);
     }
     for(int n=0;n<3;n++){if(rank[n]>0)astra_room_blast_count++;else astra_blast_positions[n][3]=0;}
 }

@@ -281,6 +281,8 @@ static void burst_thunderhead(burst_frame *f)
     }
 }
 
+#include "astra_chain_explosions.inc"
+
 static void draw_burst_plates(const burst_frame *f,float scale,float visibility)
 {
     static const int faces[][3]={{0,2,1},{0,1,3},{0,3,2},{1,2,3}};
@@ -309,7 +311,7 @@ void astra_pattern_blast(vms_vector *where,fix radius,float t,unsigned seed,int 
 {
     typedef void (*composer)(burst_frame *);
     static const composer compose[AB_COUNT]={NULL,burst_arc,burst_spall,burst_cinders,burst_ring,
-                                             burst_implosion,burst_chain,burst_bloom,burst_needles,burst_crackle,burst_petals,burst_twinjet,burst_shell,burst_cryo,burst_cross,burst_aftershock,burst_splinters,burst_thunderhead};
+                                             burst_implosion,burst_chain,burst_bloom,burst_needles,burst_crackle,burst_petals,burst_twinjet,burst_shell,burst_cryo,burst_cross,burst_aftershock,burst_splinters,burst_thunderhead,burst_fuse_run,burst_split_relay,burst_capacitor_ladder,burst_tank_cascade,burst_armor_cookoff,burst_pod_runaway,burst_shrapnel_relay,burst_halo_collapse,burst_reactor_domino,burst_last_light};
     if(profile<=AB_LEGACY || profile>=AB_COUNT || t<0 || t>=1 || !astra_pyro_ready())return;
     g3s_point view;g3_rotate_point(&view,where);
     float scale=f2fl(radius);

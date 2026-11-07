@@ -1283,3 +1283,10 @@ R58 — attentive and evasive demo pilot
 - Reacts faster to visible threats through bounded native rotational thrust, gives close attackers priority, and interrupts destruction watching for immediate danger. Stable weapon choices and manual flight controls are preserved.
 - Uses brief native afterburner bursts in clear, aligned travel corridors, with cooldown, charge and stopping-clearance checks. The selected showcase arsenal includes an afterburner; ordinary campaign demos still require the pickup.
 - No texture, lighting, audio, multiplayer, level geometry or asset parcel changes.
+
+R59 — ten chain explosions and volatile hull fragments
+- Adds ten distinct timed compositions: Fuse Run, Split-Core Relay, Capacitor Ladder, Fuel-Tank Cascade, Armor-Rack Cookoff, Engine-Pod Runaway, Shrapnel Relay, Halo Collapse, Reactor Domino, and Last-Light Breakup. Varied sizes and 1.35–5.70 second lengths retain the longer 5.9–7 second player destruction.
+- A separate Showroom card numbers the new collection 1–10. Four inspection-bay previews show actual enhanced robot hull sections separating and producing smaller secondary blasts at wall/ship contacts. Replay, new variation, slow motion and deterministic timeline seeking are supported.
+- Live explosive deaths can shed volatile components. Swept native wall queries and room-limited ship contacts stop each fragment at its first impact. The secondary effect has local flash lighting and a spatial D2 sound accent. These cosmetic effects do not apply additional gameplay damage.
+- Uses existing volumetric textures, native D2 audio samples and bounded fragment/effect buffers. No new downloadable asset parcels, recursive debris, gameplay RNG draws or changes to flight controls/demo AI.
+- Validation: all ten showcase effects, replay/seek/variation/group navigation; 47 native collision/profile checks; muted campaign demos with live wall and ship contacts; mobile preview. QA-only exports excluded from the shipping engine.

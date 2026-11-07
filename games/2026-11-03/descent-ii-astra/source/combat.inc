@@ -1,6 +1,7 @@
 /* Cosmetic damage follows native object signatures. No simulation RNG or
  * gameplay objects are allocated, and native health/physics remain untouched. */
 #include "polyobj.h"
+#include "astra_detonations.h"
 #include "robot.h"
 extern int astra_preview_active,astra_preview_silent;
 extern float astra_preview_clock;
@@ -10,7 +11,7 @@ static float ac_preview_damage=-1;
 typedef struct {int signature;fix maximum;float damage;fix64 hit;unsigned missing;int exploded;} ac_damage;
 static ac_damage ac_robots[MAX_OBJECTS];
 enum { AC_PARTS=7, AC_FRAGMENTS=32 };
-typedef struct {object robot;vms_vector pivot,pos,velocity,hit,normal;fix64 born,struck;float age,life,spin;unsigned seed;int part,room,bounces;} ac_fragment;
+typedef struct {object robot;vms_vector pivot,pos,velocity,hit,normal;fix64 born,struck;float age,life,spin;unsigned seed;int part,room,bounces,chain,impact;float impact_age;} ac_fragment;
 static ac_fragment ac_fragments[AC_FRAGMENTS];static unsigned ac_serial;
 static int ac_hidden_debris[MAX_OBJECTS],ac_hidden_known[MAX_OBJECTS];
 static int ac_fragment_mask=-1,ac_preview_mask=-1;

@@ -913,7 +913,7 @@ index fdb2e78..55652ae 100644
  
  #define ENABLE_COLLISION(type1,type2)					\
 diff --git a/d2/main/fireball.c b/d2/main/fireball.c
-index fe9b0d1..d68f931 100644
+index fe9b0d1..3faea50 100644
 --- a/d2/main/fireball.c
 +++ b/d2/main/fireball.c
 @@ -22,6 +22,7 @@ COPYRIGHT 1993-1999 PARALLAX SOFTWARE CORPORATION.  ALL RIGHTS RESERVED.
@@ -924,7 +924,7 @@ index fe9b0d1..d68f931 100644
  #include "fix.h"
  #include "vecmat.h"
  #include "gr.h"
-@@ -65,6 +66,202 @@ fix	Flash_effect=0;
+@@ -65,6 +66,204 @@ fix	Flash_effect=0;
  
  int	PK1=1, PK2=8;
  
@@ -1061,11 +1061,13 @@ index fe9b0d1..d68f931 100644
 +static float pyro_chain_heat(float t,float onset)
 +{float u=(t-onset)/.34f;return u<=0||u>=1?0:sinf(u*3.14159265f)*(1-u);}
 +#include "astra_death_chain.inc"
++#include "astra_chain_audio.inc"
 +void astra_burst_audio(void)
 +{
 +    for(int i=0;i<ASTRA_PLUMES;i++){
-+        astra_event *e=pyro_events+i;if(e->tier!=2||!pyro_alive(e)||!Viewer)continue;
-+        astra_death_chain(e->seed,(float)(GameTime64-e->born)/e->length,&e->nextSound,0,e->room,&e->pos);
++        astra_event *e=pyro_events+i;if((e->tier!=2&&!astra_is_chain(e->profile))||!pyro_alive(e)||!Viewer)continue;
++        if(astra_is_chain(e->profile))astra_pattern_audio(e->profile,e->seed,(float)(GameTime64-e->born)/e->length,&e->nextSound,0,e->room,&e->pos);
++        else astra_death_chain(e->seed,(float)(GameTime64-e->born)/e->length,&e->nextSound,0,e->room,&e->pos);
 +    }
 +}
 +void astra_plume_lights(int room,const vms_vector *center,float rank[3],float pos[3][4],float colors[3][4])
@@ -1127,7 +1129,7 @@ index fe9b0d1..d68f931 100644
  object *object_create_explosion_sub(object *objp, short segnum, vms_vector * position, fix size, int vclip_type, fix maxdamage, fix maxdistance, fix maxforce, int parent )
  {
  	int objnum;
-@@ -87,6 +284,10 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
+@@ -87,6 +286,10 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
  	//now set explosion-specific data
  
  	obj->lifeleft = Vclip[vclip_type ].play_time;
@@ -1138,7 +1140,7 @@ index fe9b0d1..d68f931 100644
  	obj->ctype.expl_info.spawn_time = -1;
  	obj->ctype.expl_info.delete_objnum = -1;
  	obj->ctype.expl_info.delete_time = -1;
-@@ -287,7 +488,8 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
+@@ -287,7 +490,8 @@ object *object_create_explosion_sub(object *objp, short segnum, vms_vector * pos
  									}
  
  									// Explosions CAN be friendly fire.
@@ -1148,7 +1150,7 @@ index fe9b0d1..d68f931 100644
  								}
  							}
  								break;
-@@ -439,10 +641,13 @@ object *object_create_debris(object *parent, int subobj_num)
+@@ -439,10 +643,13 @@ object *object_create_debris(object *parent, int subobj_num)
  
  }
  
@@ -1164,7 +1166,7 @@ index fe9b0d1..d68f931 100644
  
  }
  
-@@ -1206,6 +1411,10 @@ int get_explosion_vclip(object *obj,int stage)
+@@ -1206,6 +1413,10 @@ int get_explosion_vclip(object *obj,int stage)
  //blow up a polygon model
  void explode_model(object *obj)
  {
@@ -1175,7 +1177,7 @@ index fe9b0d1..d68f931 100644
  	Assert(obj->render_type == RT_POLYOBJ);
  
  	if (Dying_modelnums[obj->rtype.pobj_info.model_num] != -1)
-@@ -1216,7 +1425,7 @@ void explode_model(object *obj)
+@@ -1216,7 +1427,7 @@ void explode_model(object *obj)
  
  		for (i=1;i<Polygon_models[obj->rtype.pobj_info.model_num].n_models;i++)
  			if (!(obj->type == OBJ_ROBOT && obj->id == 44 && i == 5)) 	//energy sucker energy part
@@ -1184,7 +1186,7 @@ index fe9b0d1..d68f931 100644
  
  		//make parent object only draw center part
  		obj->rtype.pobj_info.subobj_flags=1;
-@@ -1620,3 +1829,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
+@@ -1620,3 +1831,7 @@ void expl_wall_read_n_swap(expl_wall *ew, int n, int swap, PHYSFS_file *fp)
  			expl_wall_swap(&ew[i], swap);
  }
  

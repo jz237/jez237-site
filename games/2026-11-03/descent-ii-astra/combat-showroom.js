@@ -9,7 +9,7 @@
   blastBar.innerHTML='<button id="blastMenu" aria-expanded="false" aria-controls="rangeControls">Effects &amp; playback</button><button id="blastPrevious" aria-label="Previous explosion">‹</button><button id="blastReplay">Replay</button><button id="blastNext" aria-label="Next explosion">›</button><button id="blastBack">Back</button>';
   $('previewPanel').append(blastBar);
   $('blastMenu').onclick=()=>{const open=$('rangeControls').hidden;$('rangeControls').hidden=!open;$('blastMenu').setAttribute('aria-expanded',String(open));};
-  function stepBlast(delta){const choices=$('blastSelect'),count=choices.options.length;choices.value=String((Number(choices.value)+delta+count)%count);choices.dispatchEvent(new Event('change'));}
+  function stepBlast(delta){const choices=$('blastSelect'),chain=Number(choices.value)>=18,values=[...choices.options].map(o=>Number(o.value)).filter(v=>(v>=18)===chain),at=values.indexOf(Number(choices.value));choices.value=String(values[(at+delta+values.length)%values.length]);choices.dispatchEvent(new Event('change'));}
   $('blastPrevious').onclick=()=>stepBlast(-1);$('blastNext').onclick=()=>stepBlast(1);
   $('blastReplay').onclick=()=>{Module.pyroPreviewCommand=2;};$('blastBack').onclick=()=>astraPreview.close();
   const shadow = $('shadowQuality');
@@ -72,7 +72,7 @@
   astraPreview.open = () => { resetCombat(); explosionOpen(); };
   const weaponsOpen = astraWeaponDemo.open.bind(astraWeaponDemo);
   astraWeaponDemo.open = () => { resetCombat(); weaponsOpen(); };
-  for (const id of ['previewStart', 'blastStart', 'collectiblesStart', 'weaponsStart', 'mineStart', 'autoMine', 'mineFlight']) {
+  for (const id of ['previewStart', 'blastStart', 'chainStart', 'collectiblesStart', 'weaponsStart', 'mineStart', 'autoMine', 'mineFlight']) {
     $(id)?.addEventListener('click', resetCombat, true);
   }
   const show = astraPreview.show.bind(astraPreview);

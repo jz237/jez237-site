@@ -61,7 +61,8 @@ int astra_preview_frame(void)
     int weapon=EM_ASM_INT(return Number.isInteger(Module.weaponInspect)?Module.weaponInspect:-1);
     int combat=EM_ASM_INT(return Number.isInteger(Module.combatInspect)?Module.combatInspect:-1);
     int timed=weapon>=0||combat>=0;
-    float duration=timed?10:preview_length+(preview_profile?.20f:.85f);
+    float delay=astra_chain_breakup(preview_profile)?.95f:preview_profile?.20f:.85f;
+    float duration=timed?10:preview_length+delay;
     int restart=EM_ASM_INT({var r=!!Module.previewRestart;delete Module.previewRestart;return r;});
     if(restart){preview_sound=-1;astra_preview_clock=0;digi_stop_digi_sounds();EM_ASM(Module.previewPaused=false;window.astraPlayback?.sync());}
     float seek=EM_ASM_DOUBLE({var s=Module.previewSeek;delete Module.previewSeek;return Number.isFinite(s)?s:-1;});
@@ -75,7 +76,7 @@ int astra_preview_frame(void)
     if(seek>=0){preview_sound=0;astra_preview_clock=fminf(duration,fmaxf(0,seek));digi_stop_digi_sounds();
         EM_ASM(Module.previewPaused=true;window.astraPlayback?.sync());}
     else if(!paused)astra_preview_clock=fminf(duration+.95f,astra_preview_clock+dt*fminf(2,fmaxf(.1f,speed)));
-    float age=astra_preview_clock,seconds=age-(preview_profile?.20f:.85f);
+    float age=astra_preview_clock,seconds=age-delay;
     EM_ASM(window.astraPlayback?.update($0,$1,$2,$3);,age,duration,preview_seed,timed);
     gr_set_current_canvas(NULL);gr_clear_canvas(BM_XRGB(1,2,3));
     int mine=EM_ASM_INT(return Number.isInteger(Module.mineInspect)?Module.mineInspect:-1);
@@ -109,7 +110,14 @@ int astra_preview_frame(void)
         extern int astra_draw_pyro(g3s_lrgb);
         g3_start_instance_angles(&center,&angles);astra_draw_pyro(light);g3_done_instance();
     }
-    if(preview_profile && seconds>=0 && seconds<preview_length){
+    if(astra_is_chain(preview_profile)){
+        vms_vector bay_eye={0,0,18*F1_0};g3_set_view_matrix(&bay_eye,&vmd_identity_matrix,fl2f(.68f));
+        extern void astra_chain_showcase(int,float,float,unsigned);
+        astra_chain_showcase(preview_profile,seconds,preview_length,preview_seed);
+        if(seconds>=0){if(preview_sound<0)preview_sound=0;
+            astra_pattern_audio(preview_profile,preview_seed,seconds/preview_length,&preview_sound,astra_preview_silent,-1,NULL);
+        }
+    }else if(preview_profile && seconds>=0 && seconds<preview_length){
         float base=preview_profile<=AB_CINDERS?10.6f:preview_profile<=AB_IMPLOSION?8.5f:10.5f;
         center.z=i2f(60);
         if(preview_profile==AB_BLOOM)center.y=-i2f(7);
