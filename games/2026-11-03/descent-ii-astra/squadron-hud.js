@@ -26,10 +26,13 @@
     const canvas=q('view'),rect=canvas.getBoundingClientRect(),now=performance.now(),alive=new Set();
     for(const p of m.netPilots){
       const info=s.roster[p.id];if(!info||info.skill===-2||p.id===s.self)continue;alive.add(p.id);
-      let row=rows.get(p.id);if(!row){row=document.createElement('div');row.className='squadHUDRow';rows.set(p.id,row);q('squadHUDRows').append(row);}
+      let row=rows.get(p.id);if(!row){row=document.createElement('div');row.className='squadHUDRow';row.innerHTML='<span class="squad-name"></span><span class="squad-range"></span><span class="squad-shield" aria-hidden="true"><i></i></span><span class="squad-state"></span>';rows.set(p.id,row);q('squadHUDRows').append(row);}
       const asking=help.get(p.id)>now;
       row.classList.toggle('needs-help',asking||p.shields<30);
-      row.textContent=`${asking?'! ':''}${info.name}${info.skill>=0?' · AI':''}  ${p.connected===1?`${Math.max(0,Math.round(p.shields))}% · ${Math.round(p.distance)} u`:'Reconnecting'}`;
+      row.querySelector('.squad-name').textContent=`${asking?'! ':''}${info.name}${info.skill>=0?' · AI':''}`;
+      row.querySelector('.squad-range').textContent=p.connected===1?`${Math.round(p.distance)} u`:'';
+      row.querySelector('.squad-state').textContent=p.connected===1?`${Math.max(0,Math.round(p.shields))}% shields${asking?' · Assistance requested':''}`:'Reconnecting';
+      row.style.setProperty('--shield',Math.max(0,Math.min(100,p.shields))+'%');
       let tag=tags.get(p.id);if(!tag){tag=document.createElement('span');tags.set(p.id,tag);markers.append(tag);}
       const x=rect.left+p.screen[0]*rect.width/canvas.width,y=rect.top+p.screen[1]*rect.height/canvas.height;
       tag.hidden=!p.visible||p.connected!==1||x<rect.left+30||x>rect.right-30||y<rect.top+25||y>rect.bottom-25;

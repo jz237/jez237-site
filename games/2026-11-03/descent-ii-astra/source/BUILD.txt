@@ -1254,3 +1254,10 @@ R54 — flight continuity, wingmen and comfort
 - R54 public rooms have a separate protocol directory; previous room clients retain their existing protocol. Relay remains on Workers Free with the existing namespaces.
 
 R54a — reconnect restores the local ship’s physics, input and model modes after receiving the host’s disconnected-ship snapshot.
+
+R55 — interface polish
+- Unified title, campaign cards, settings, showroom, dialogs and native menu presentation with consistent spacing, contrast, focus states and touch targets.
+- Settings group display, flight preferences, controls/comfort and performance. Showroom exhibits form a responsive grid.
+- Collapsible flight controls replace the scattered utility buttons. Squad rows show shield meters and separate pilot, distance and assistance information.
+- Responsive portrait/landscape layouts, named dialogs, reduced-motion support and automatic section scroll reset.
+- Existing renderer, models, textures, native engine, flight controls, demo AI, multiplayer relay and saved-flight formats are unchanged. No extra asset parcels or quality reductions.

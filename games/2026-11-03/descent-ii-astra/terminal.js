@@ -17,6 +17,7 @@
     all('[data-tab]').forEach(b=>{const active=b.dataset.tab===name;b.setAttribute('aria-selected',active);b.tabIndex=active?0:-1;});
     all('.terminal-panel').forEach(p=>p.hidden=p.id!=='panel-'+name);
     q('terminal').dataset.tab=name;
+    window.scrollTo({top:0,behavior:'instant'});
   }
   all('[data-tab]').forEach((b,i)=>{
     b.parentElement.setAttribute('role','tablist');b.setAttribute('role','tab');b.id='tab-'+b.dataset.tab;b.setAttribute('aria-controls','panel-'+b.dataset.tab);

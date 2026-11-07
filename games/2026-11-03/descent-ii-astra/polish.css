@@ -1,0 +1,120 @@
+/* Shared finishing layer. No canvas filters, quality changes or flight effects. */
+:root{--surface:#101e28;--surface-raised:#172a35;--border:#344b59;--text:#e8f1f3;--quiet:#a0b5bf;--accent:#9be4e9;--gold:#efc58b;color-scheme:dark}
+body{color:var(--text);font-family:'Segoe UI',system-ui,sans-serif}
+button,input,select{font-family:inherit}button:disabled{cursor:default;opacity:.45}
+button:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #c2f4f4;outline-offset:3px}
+button{touch-action:manipulation}select,input[type=text],input[type=number]{border-radius:7px!important}
+select{color-scheme:dark}select option{background:#142630;color:#e8f1f3}
+*{scrollbar-width:thin;scrollbar-color:#536e7c #0d1c25}
+#terminal{max-width:1560px;padding:0 clamp(18px,3.4vw,56px);background:radial-gradient(ellipse at 75% 25%,#294b5d20,transparent 65%)}
+.terminal-header{height:78px;gap:24px;border-color:#344b5970}
+.terminal-header nav{gap:8px}.terminal-header nav button{padding:27px 15px;font-size:13px;letter-spacing:.01em;color:#a0b5bf}
+.terminal-header nav button[aria-selected=true]{color:#e5f9fa;border-color:var(--accent)}
+.icon-button{border-color:var(--border);border-radius:8px;background:#14242e}
+.terminal-body{grid-template-columns:400px minmax(0,1fr);gap:40px;min-height:0;padding:34px 0}
+.title-lockup{margin-bottom:24px}.title-lockup h1{font-size:86px;margin-top:18px;letter-spacing:-.045em;line-height:.9;color:#f0f3ee}
+.title-lockup h1 span{font-size:10px;letter-spacing:.35em;color:#9cb3bf;margin:14px 0 0 4px}
+.eyebrow{font-size:10px;letter-spacing:.12em;color:#9db4bf}.section-line{font-size:10px;color:#b4c7d0;letter-spacing:.08em;border-color:#3a535d90}
+.section-line span:last-child{color:#91aab6}.terminal-panel h2{font-size:32px;font-weight:600;letter-spacing:-.025em;margin:8px 0 14px}
+.panel-description{color:#a8bdc6;font-size:14px;line-height:1.65;max-width:55ch}
+.campaigns{gap:9px}.campaign-card{min-height:80px;padding:12px 16px;gap:14px;border-radius:9px;border-color:#3a515f;background:linear-gradient(110deg,#1a2b35,#101e28)}
+.campaign-card:hover{background:#213743;border-color:#748f9b}.campaign-card.selected{border-color:#82bac4;box-shadow:inset 3px 0 #b5edf0;background:linear-gradient(110deg,#28414b,#152933)}
+.campaign-emblem{width:45px;height:49px;font-size:27px}.campaign-copy{gap:4px}.campaign-copy small{font-size:9px;letter-spacing:.1em;color:#9ab3c0}
+.campaign-copy strong{font-size:16px;letter-spacing:.055em}.campaign-copy>span{font-size:11px;color:#a8bdc7;line-height:1.4}.campaign-check{font-size:15px}
+.interaction-note{font-size:11px;color:#9eb4c0;line-height:1.6;margin:12px 0 16px}
+.primary-action{border-radius:9px;background:linear-gradient(110deg,#f4d4a1,#e7b779);color:#202a2e;font-size:21px;padding:15px 19px;min-height:70px;box-shadow:0 5px 18px #0003}
+.primary-action small{font-size:9px;letter-spacing:.1em;color:#65533e}.primary-action:hover{background:linear-gradient(110deg,#ffe4bd,#f1c38c);box-shadow:0 7px 24px #0004}
+.secondary-action{border-radius:8px;background:#132631;border-color:#375463;color:#d1e3e9;font-size:13px;min-height:47px;padding:12px 15px;line-height:1.4}
+.secondary-action:hover{background:#203a47;border-color:#7395a3}.secondary-action>span{color:#9eb5c0}
+.mission-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.mission-actions .secondary-action{margin:0;min-height:52px;justify-content:space-between}
+.mission-actions button>span{display:none}.mission-actions button b{margin-left:auto}.resume-action{border-color:#57898a;background:#163435;font-size:12px}
+#resumeLastFlight:disabled,#continueFlight:disabled{display:none!important}
+.hangar-home{align-self:start;position:sticky;top:24px;height:clamp(470px,calc(100svh - 148px),790px)}
+.ship-stage{inset:0;border-radius:12px;clip-path:none;background:#101c25;border:1px solid #3c566666;box-shadow:0 24px 60px #0003}
+.ship-stage:before{border:0;background:linear-gradient(180deg,#10232e4d,transparent 25%,transparent 60%,#091822bd)}.ship-stage:after{inset:15px;border-color:#718f9e25}
+.bay-label{left:26px;right:26px;top:24px;font-size:10px;letter-spacing:.1em;color:#a2bbc6}.bay-label b{font-size:22px;color:#8ca8b7}
+.ship-caption{left:26px;right:26px;bottom:114px}.ship-caption h2{font-size:35px;letter-spacing:.09em}.ship-caption small{font-size:9px;color:#a2b7c2}.ship-caption p{font-size:12px;color:#acbec8}
+.ship-tools{left:26px;right:24px;bottom:48px;gap:6px}.ship-tools button{border-radius:6px;font-size:11px;min-height:36px;border-color:#4b6675;background:#102732cc;color:#c5dce5;padding:8px 12px}
+.ship-tools button:hover,.ship-tools button[aria-pressed=true]{background:#284956;border-color:#91c4cb}.ship-gesture{left:26px;bottom:23px;font-size:8px;color:#8faab8;letter-spacing:.04em}
+.terminal-footer{font-size:9px;letter-spacing:.04em;min-height:52px;color:#91a8b5;border-color:#344b5970}.terminal-footer a{color:#afc5cd}
+#terminal:not([data-tab=missions]) .title-lockup{display:none}
+#terminal:is([data-tab=settings],[data-tab=showroom],[data-tab=controls]) .terminal-body{grid-template-columns:minmax(0,1fr) minmax(300px,.64fr)}
+#terminal:is([data-tab=settings],[data-tab=showroom],[data-tab=controls]) .hangar-home{height:clamp(470px,calc(100svh - 150px),710px)}
+.settings-sections{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:22px 0}
+.settings-section{padding:20px;border:1px solid #354f5d;border-radius:10px;background:linear-gradient(145deg,#162832,#0f1f29);min-width:0}
+.settings-section h3{font-size:15px;font-weight:600;letter-spacing:.01em;margin:0 0 18px;color:#e0eef2}
+.settings-section .settings-grid{display:block}.field-label{font:11px/1.45 'Segoe UI',sans-serif;letter-spacing:.04em;color:#adc2cd;margin-bottom:14px}
+.field-label select{font-size:13px;border-color:#3e5d6e;background:#0f202c;min-height:44px}.settings-section .field-label:last-child{margin-bottom:0}
+.settings-section .switch-row{padding:15px 0;border-color:#3d536155}.settings-section .switch-row:first-of-type{border-top:0;padding-top:0}
+.switch-row b{font-size:13px;font-weight:550;color:#dce9ed}.switch-row small{font-size:11px;line-height:1.5;color:#9fb6c2}
+.switch-row input{width:38px;height:22px}.switch-row input:after{height:14px;width:14px}.switch-row input:checked:after{transform:translateX(16px)}
+.settings-section .secondary-action{margin-top:8px;font-size:12px;min-height:47px}.settings-section .interaction-note{margin-bottom:0;color:#a8bcc6}
+#performanceStart{border-color:#678f99;background:#23404b;font-weight:600}#performancePrevious:disabled{display:none}
+.showroom-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}.mine-choice{max-width:420px;font-size:11px;color:#b1c5ce}.mine-choice select{background:#132630;border:1px solid #456170;color:#deebef;min-height:44px}
+#terminal #panel-showroom .showroom-action{min-height:148px;padding:17px;margin:0;border-radius:10px;border-color:#3d5866;gap:12px;align-items:flex-start;background:linear-gradient(130deg,#1b303c,#10202b)}
+.showroom-action .feature-symbol{font-size:25px;line-height:1.3;flex:none}.showroom-action>span:nth-child(2){min-width:0}.showroom-action strong{font-size:15px;line-height:1.4;margin:8px 0}.showroom-action small{font-size:9px;line-height:1.5;letter-spacing:.04em;color:#a1bdc9}.showroom-action em{font-size:11px;line-height:1.55;color:#a4bbc7}.showroom-action>b{align-self:center}
+.showroom-action:hover{transform:translateY(-2px)!important;border-color:#85b6c4!important;box-shadow:0 8px 20px #0003}
+.key-list>div{font-size:13px;padding:14px 0;gap:14px}.key-list dt{color:#b4c8d1}.key-list kbd{font-size:11px;border-radius:5px;padding:5px 7px;line-height:2}
+/* A common visual language for every setup, return, comfort and archive dialog. */
+:is(#returnDialog,#controllerDialog,#squadronDialog,.astra-tool-dialog){box-sizing:border-box;border:1px solid #5b7888;border-radius:14px;background:linear-gradient(145deg,#182b37,#0d1c27);color:var(--text);box-shadow:0 24px 90px #000a;max-width:calc(100vw - 32px);max-height:calc(100dvh - 40px);scrollbar-gutter:stable;font:14px/1.55 'Segoe UI',system-ui,sans-serif}
+:is(#returnDialog,#controllerDialog,#squadronDialog,.astra-tool-dialog)::backdrop{background:#030a12d9;backdrop-filter:none}
+:is(#returnDialog,#controllerDialog,#squadronDialog,.astra-tool-dialog) h2{font-size:24px;font-weight:600;letter-spacing:-.02em;line-height:1.25}
+:is(#returnDialog,#controllerDialog,#squadronDialog,.astra-tool-dialog) button{border:1px solid #536f7f;border-radius:7px;background:#203a49;color:#e0eef2;font:13px 'Segoe UI',sans-serif;min-height:44px;padding:10px 15px;cursor:pointer}
+:is(#returnDialog,#controllerDialog,#squadronDialog,.astra-tool-dialog) button:hover:not(:disabled){background:#2d4d5e;border-color:#a0cbd4}
+:is(#returnDialog,#controllerDialog,#squadronDialog,.astra-tool-dialog) p{color:#b2c7d2;line-height:1.65}
+:is(#returnDialog,#controllerDialog,#squadronDialog,.astra-tool-dialog) header{align-items:center;gap:18px;letter-spacing:normal;border-bottom:1px solid #55708066;padding-bottom:18px;margin-bottom:16px}
+#controllerDialog header{background:#142733}#controllerDialog h2{margin:7px 0 0}.controller-shell{padding:26px}.controller-note{color:#a8c0cb}
+.controller-device select,#squadronDialog select,#squadronDialog input{background:#10222e;border:1px solid #496776;color:#e0edf2;min-height:44px}
+.controller-tuning label{padding:12px;border-radius:8px;background:#10232d}.controller-axis{border-color:#3c566466}
+.astra-tool-dialog{padding:26px}.astra-tool-dialog label{margin:18px 0;padding:17px;border:1px solid #395361;border-radius:9px;background:#10232e}.astra-tool-dialog label span{font-size:14px;font-weight:550}.astra-tool-dialog output{color:#b4e8eb;font-variant-numeric:tabular-nums;margin-left:12px}.astra-tool-dialog small{color:#abc0ca;line-height:1.55}
+#comfortReset{margin-top:5px}#wingmanOrders{gap:10px;margin:20px 0}#wingmanOrders button{margin:0;text-align:left;min-height:72px}#wingmanOrders small{margin-top:6px;color:#9abac9}
+#wingmanStatus{min-height:24px}#performanceResults p{padding:9px 0;margin:0;border-color:#39536180;font-size:13px}#performanceResults b{font-variant-numeric:tabular-nums;white-space:nowrap}
+#returnDialog>div{gap:8px}#returnSave{background:#e8c38b;color:#17232b;border-color:#f0d2a6;font-weight:600}#returnConfirm{background:#203a49!important}#returnStatus:empty{display:none}
+#squadronDialog{padding:26px;width:min(740px,94vw)}#squadronDialog .squad-grid{gap:14px;margin:22px 0}#squadronDialog label{font-size:12px;color:#b7ced8}.squad-hint{font-size:12px;color:#aec5ce}
+#squadConnect{padding:18px;border:1px solid #3c5969;border-radius:10px;background:#0f222e}#squadLaunch{background:#e5c38f!important;color:#172831!important;font-weight:600}#squadOnline{background:#254a57!important}
+#squadStatus{font-size:13px;color:#badfe5;border-top:1px solid #45637166;margin-top:18px;padding-top:18px}#squadRoster li{padding:5px 0}
+/* Native menus keep the engine's selection model and keyboard behavior. */
+.native-screen{padding:5vh 5vw;gap:4vw;background:radial-gradient(ellipse at 15% 35%,#1d3b4b,#09141f 75%)}
+.native-panel{border-radius:12px;border-color:#4b6879;background:linear-gradient(135deg,#192e3b,#10212d);padding:26px;max-height:90dvh;box-shadow:0 25px 70px #0005}
+.native-panel h2{font-size:30px;font-weight:600}.native-panel .section-line{color:#a5c0cf}.native-panel .interaction-note{color:#9ab6c6;font-size:11px}
+.native-row{border-radius:7px;border-color:#385767;background:#152d3b;font-size:14px;min-height:46px;padding:12px 14px;margin:6px 0}
+.native-row.selected{box-shadow:inset 3px 0 #b9edf0;border-color:#91bac8;background:#2b4856}.native-row .row-number{color:#91b1c3;font-size:10px}.native-row input[type=range]{accent-color:#a4e4e8}
+.native-actions{gap:8px;border-color:#486472;padding-top:16px;flex-shrink:0}.native-actions button{border-radius:7px;min-height:42px;padding:10px 13px;font-size:12px}.native-actions #nativeOpen{background:#ebc58e;color:#182a33}
+.native-aside .ship-stage{box-shadow:none}.native-text{color:#aec7d4}
+/* Calm, compact overlays; the actual game canvas remains untouched. */
+#flightDock{display:none;position:absolute;z-index:24;right:max(12px,env(safe-area-inset-right));top:62px;width:166px;color:#d8ebef;font:12px 'Segoe UI',sans-serif}
+body.flying:not(.autopilot):not(.previewing):not(.native-open):not(.deck-captured):not(.squadron) #flightDock{display:block}
+#flightDock>summary{list-style:none;cursor:pointer;min-height:40px;padding:10px 13px;display:flex;align-items:center;justify-content:space-between;background:#102733e8;border:1px solid #5b7f8f;border-radius:8px}
+#flightDock>summary::-webkit-details-marker{display:none}#flightDock>summary:after{content:'⌄';color:#a1dbe5;font-size:17px}#flightDock[open]>summary:after{transform:rotate(180deg)}
+.flight-drawer{margin-top:7px;padding:7px;display:grid;gap:6px;border:1px solid #526f7e;border-radius:10px;background:#0e222ef5;box-shadow:0 12px 25px #0005}
+#flightDock .flight-drawer button{position:static!important;inset:auto!important;width:100%;font:12px 'Segoe UI',sans-serif;border:1px solid #3d5e70;border-radius:6px;min-height:40px;padding:9px;background:#1a3544;color:#d6eaf0;text-align:left}
+#flightDock .flight-drawer button:hover{background:#2b4c5d;border-color:#94beca}
+#mouseHint{bottom:auto!important;top:57px;padding:7px 12px;border:1px solid #58798877;border-radius:20px;background:#081b25c9;font-size:11px;color:#d0e4ec;max-width:calc(100vw - 220px);text-align:center}
+#objectiveTracker{top:64px!important;left:12px;border-color:#5b809166;border-radius:8px;background:#0a202cce;font-size:12px;max-width:245px}
+#objectiveTracker summary{min-height:34px;padding:6px 11px}#objectiveDetails{font-size:12px;color:#bbd2dc}#restoreCheckpoint{border-radius:6px}
+#squadHUD{border-radius:9px;background:#09202bd9;border-color:#63889670;padding:8px 10px;max-width:230px;bottom:29%;font-size:11px}
+#squadHUD summary{min-height:28px;color:#d5eaf0;font-weight:600}.squadHUDRow{white-space:normal;padding:8px 0;border-top:1px solid #44637155;display:grid;grid-template-columns:1fr auto;gap:4px 10px}
+.squad-name{font-weight:600;color:#e0eff2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.squad-range{color:#9fbdca;font-variant-numeric:tabular-nums}.squad-shield{height:3px;background:#35515f;border-radius:2px;overflow:hidden;grid-column:1/-1}.squad-shield>i{display:block;height:100%;width:var(--shield,100%);background:#8ed7d1;transition:width .2s}.squadHUDRow.needs-help .squad-shield>i{background:#efb77a}
+.squad-state{grid-column:1/-1;font-size:10px;color:#a4c2ce}.squadHUDControls{gap:6px;margin-top:8px}.squadHUDControls button{border-radius:5px;min-height:34px;padding:6px 10px}
+#squadBar{font-size:11px;border-radius:7px;padding:5px 8px;border-color:#6a95a466;max-width:60vw;background:#0c2330cf}#squadBar button{border-radius:5px;min-height:34px;padding:6px 10px}
+#friendlyMarkers>span{font-size:10px;color:#c2f2eb;background:#061d2738;border-bottom-color:#8ed8db88;border-radius:3px}
+#autoToggle,#autoPanel,#mineDetails,#mineToolbar button,#previewHome,#rangeToggle{border-radius:8px;border-color:#597c8d;background:#102632e8;color:#d9ecf2}
+#autoPanel{padding:16px}#autoTask{font-size:14px}#autoStats{color:#aac4cf}.auto-actions{gap:8px}.auto-actions button{border-radius:6px;border-color:#496d7e;background:#203d4b}
+#previewHome{min-height:38px;top:62px;font-size:12px}#mineToolbar{gap:7px}#mineToolbar button{font-size:12px}#mineDetails{padding:18px}#mineDescription{color:#b0c9d3}
+.preview-actions button,#weaponControls select,#weaponControls button,#blastControls select,#playbackControls button,#combatControls select{border-radius:7px!important;border-color:#527686!important;font-family:'Segoe UI',sans-serif}
+.preview-heading h2{font-weight:600;letter-spacing:-.02em}.preview-heading p{color:#b5ccd6}.preview-phase{color:#c6dbe4}
+#enemyGallery{border-color:#577888;background:#0e202b}.enemy-top{background:linear-gradient(110deg,#213b49,#10222f);border-color:#3a5665}.enemy-top h2{font-weight:600;letter-spacing:-.01em}.enemy-kicker{color:#a5c3cf}.enemy-navigation{background:#142b38}.enemy-dossier{background:linear-gradient(150deg,#172f3d,#0c1d29)}#enemyDescription{color:#c1d3dc}#enemyFacts dt{color:#96b7c7}.enemy-source{color:#a1bbc7}.enemy-hint{color:#a1bfce}
+.loading-screen{background:#06121bf5;backdrop-filter:none}.loading-card{border:1px solid #456574;border-radius:14px;background:linear-gradient(140deg,#19313f,#0c1d2a);padding:34px;box-shadow:0 25px 80px #0006}.loading-card h2{font-size:29px;font-weight:600}.loading-track{height:3px;border-radius:2px}.loading-card #status{color:#c0d6e1}.loading-card #retry{border-radius:7px}
+@media(max-width:1150px){.terminal-body{grid-template-columns:360px 1fr;gap:26px}.settings-sections{grid-template-columns:1fr}.settings-section .settings-grid{display:grid}.settings-section .full-field{grid-column:auto}.showroom-grid{grid-template-columns:1fr}#terminal #panel-showroom .showroom-action{min-height:104px}.ship-caption h2{font-size:28px}.ship-tools{flex-wrap:wrap;bottom:38px}.ship-caption{bottom:140px}.ship-gesture{font-size:7px}}
+@media(max-width:850px){#terminal:is([data-tab=settings],[data-tab=showroom],[data-tab=controls]) .terminal-body{grid-template-columns:1fr}#terminal:not([data-tab=missions]):not([data-tab=spectate]) .hangar-home{display:none}.settings-sections,.showroom-grid{grid-template-columns:1fr 1fr}.terminal-header nav button{padding-inline:11px}}
+@media(max-width:760px){#terminal{padding:0 18px}.terminal-header{height:auto;min-height:76px;gap:10px;padding-top:12px}.terminal-header nav{gap:2px}.terminal-header nav button{font-size:11px;padding:15px 8px}.terminal-body{display:flex;padding-top:24px;gap:22px}.title-lockup{margin-bottom:22px}.title-lockup h1{font-size:64px;margin-top:16px}.title-lockup h1 span{font-size:9px}.campaign-card{min-height:84px;padding:12px 14px;gap:13px}.campaign-copy strong{font-size:16px}.campaign-copy small{font-size:9px}.campaign-copy>span{font-size:11px}.campaign-emblem{width:43px}.primary-action{min-height:70px}.hangar-home{position:relative;top:0;height:300px;width:100%}.ship-caption{bottom:94px}.ship-caption h2{font-size:24px}.ship-tools{bottom:35px}.ship-gesture{bottom:14px}.bay-label{top:20px}.terminal-footer{flex-wrap:wrap;font-size:9px;padding-block:15px;gap:10px}.settings-sections,.showroom-grid{grid-template-columns:1fr}.settings-section{padding:18px}.settings-section .settings-grid{display:grid;grid-template-columns:1fr 1fr}.terminal-panel h2{font-size:28px}#terminal #panel-showroom .showroom-action{min-height:114px}.key-list{margin-top:20px}.key-list>div{font-size:12px}.key-list dd{flex:none}.native-screen{padding:12px}.native-panel{height:calc(100dvh - 24px);max-height:calc(100dvh - 24px);padding:20px 16px}.native-panel h2{font-size:26px}.native-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.native-actions #nativeOpen{margin:0;grid-column:1/-1}.native-actions button{font-size:12px}.native-panel .interaction-note{font-size:10px}.native-row{padding:11px;min-height:46px}.native-row input[type=range]{max-width:36%}
+  :is(#returnDialog,#controllerDialog,#squadronDialog,.astra-tool-dialog){max-width:calc(100vw - 24px);max-height:calc(100dvh - 28px);border-radius:12px;padding:20px}.controller-shell{padding:0}:is(#returnDialog,#controllerDialog,#squadronDialog,.astra-tool-dialog) h2{font-size:22px}.astra-tool-dialog label{padding:14px}.astra-tool-dialog label span{font-size:13px}#wingmanOrders{gap:8px}#returnDialog>div{display:grid;grid-template-columns:1fr 1fr}#returnSave{grid-column:1/-1;grid-row:1}#squadConnect{padding:12px;gap:9px}#squadronDialog .squad-grid{gap:12px}.squad-invite{flex-wrap:wrap}.squad-invite button{flex:1}
+  #flightDock{right:8px;top:52px;width:150px}#mouseHint{top:auto;bottom:8px!important;max-width:calc(100vw - 32px);font-size:10px;white-space:normal}#objectiveTracker{top:52px!important;left:8px;max-width:190px;font-size:11px}#objectiveTracker summary{min-height:34px}#squadBar{max-width:calc(100vw - 24px);top:42px}#squadBar span{max-width:45vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#squadHUD{left:8px;padding:5px 8px;font-size:10px;max-width:200px}#previewHome{right:8px;top:52px;font-size:11px;padding:7px 10px}.loading-card{padding:26px}.loading-card h2{font-size:26px}
+}
+@media(max-height:540px) and (orientation:landscape){.terminal-header{height:62px;min-height:62px;padding-top:0;flex-wrap:nowrap}.terminal-header nav{order:0;flex-basis:auto;justify-content:center}.terminal-header nav button{padding:21px 9px}.terminal-body{padding-block:20px}.title-lockup h1{font-size:58px}.hangar-home{position:sticky;top:16px;height:330px}.native-screen{display:block;padding:10px}.native-aside{display:none}.native-panel{width:min(760px,100%);margin:auto;height:calc(100dvh - 20px);max-height:calc(100dvh - 20px);padding:16px 22px}.native-panel h2{font-size:23px;margin-bottom:8px}.native-panel .section-line{margin-bottom:8px}.native-actions{display:flex;padding-top:9px;margin-top:8px;flex-wrap:nowrap}.native-actions #nativeOpen{margin-left:auto}.native-panel .interaction-note{margin-top:7px}.native-row{min-height:41px;padding:9px 12px}.native-items{flex:1}.astra-tool-dialog header{padding-bottom:10px}.astra-tool-dialog label{padding:12px}.astra-tool-dialog input[type=range]{margin:8px 0}#squadBar{top:5px}#objectiveTracker{top:48px!important}#flightDock{top:46px}.loading-card{padding:22px}.loading-card h2{margin:12px 0 20px}.enemy-top h2{font-size:23px}}
+.mission-actions button{display:flex;align-items:center;gap:12px;text-align:left}.mission-actions button b{flex-shrink:0}
+.native-items:focus-visible{outline:1px solid #7aabb9;outline-offset:3px;border-radius:5px}
+.native-actions #nativeComfort{width:auto;margin:0;font-weight:500;flex:none}
+@media(max-width:760px){.native-actions #nativeOpen{grid-column:auto}.native-actions #nativeComfort{width:100%}}
+@media(max-height:540px) and (orientation:landscape){.native-actions #nativeComfort{width:auto}.hangar-home .ship-caption{bottom:106px}.hangar-home .ship-caption small,.hangar-home .ship-caption p{display:none}.hangar-home .ship-caption h2{font-size:22px}.hangar-home .ship-tools{gap:4px;bottom:30px}.hangar-home .ship-tools button{padding:7px 9px;font-size:10px}.hangar-home .ship-gesture{font-size:6px;bottom:13px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}.showroom-action:hover{transform:none!important}}
