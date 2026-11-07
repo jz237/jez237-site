@@ -247,7 +247,7 @@ export function buildDecor(M, look, W, K) {
     }
   }
   // ---- the dead of the night shift, everywhere: bones, skulls, dropped helmets, candles, blood, crosses, hooks
-  {
+  if (!/nodress/.test(location.search)) {
     const has = K.has || (() => true);
     const put = (name, n, gap, pred, fn) => { if (!has(name)) return; for (const [x, y] of take(Math.round(n * dens), gap, pred)) fn(x, y); };
     const back = () => -0.5 - R() * 2.2;

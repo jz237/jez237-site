@@ -122,6 +122,14 @@ export class Scares {
       const f = this.make(n); if (!f) continue; f.o.position.set(this.W.players[0].x, this.W.players[0].y + 1, 0); f.o.scale.setScalar(0.001); g.add(f.o);
     }
     for (const m of this.miners) { m.dig.root.visible = true; m.dig.root.position.set(this.W.players[0].x, -50, 0); }
+    // the decals (writing, hands, photographs), a photo frame and a spider's thread use their own materials
+    {
+      const P = this.W.players[0], tex = writingTex('NOT YET', 'blood');
+      const dm = new THREE.MeshStandardMaterial({ map: tex, emissiveMap: tex, emissive: new THREE.Color(0.5, 0.3, 0.3), transparent: true, opacity: 0.01, roughness: 0.3, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4, alphaTest: 0.01 });
+      const fm = new THREE.MeshStandardMaterial({ color: 0x1a120c, roughness: 0.8 });
+      const lm = new THREE.MeshBasicMaterial({ color: 0x9a9a90, transparent: true, opacity: 0.5 });
+      for (const m of [dm, fm, lm]) { const q = new THREE.Mesh(new THREE.PlaneGeometry(0.01, 0.01), m); q.position.set(P.x, P.y + 1, 0); g.add(q); }
+    }
     this.group.add(g);
     try { R.r.compile(R.scene, R.camera); } catch (e) { /* older three */ }
     this.group.remove(g);

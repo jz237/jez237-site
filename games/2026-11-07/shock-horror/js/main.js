@@ -152,7 +152,7 @@ function loadLevel() {
   G.W = W; G.state = 'play'; G.paused = false; G.acc = 0; G.levelT = 0; G.slow = 1; G.slowT = 0; G.replay = null; G.clip = null;
   rec.reset();
   R.load(W);
-  S.load(W, { seen: new Set(journal.fear), mild: settings.scares === 'mild', calm: CALM.on, demoQuiet: G.mode === 'demo' || run.mode === 'demo' });
+  S.load(W, { seen: new Set(journal.fear), mild: settings.scares === 'mild', calm: CALM.on, demoQuiet: G.mode === 'demo' || run.mode === 'demo', off: Q.has('noscares') });
   run.scaresAtLevel = S.count;
   G.ap = run.auto ? new Autopilot(run.auto, levelSeed(run) & 0xffff) : null;
   $('tut').classList.add('hidden'); $('find').classList.add('hidden'); $('caption').classList.add('hidden'); G.findT = 0; I.taps.clear();
