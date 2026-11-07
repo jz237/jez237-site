@@ -6,7 +6,7 @@
 // weights (gold vein, wetness, glow, rubble/cracks) that the triplanar rock shader uses.
 // Breaking a tile re-meshes only the chunks around it (a few ms).
 import * as THREE from '../vendor/three.module.min.js';
-import { T } from './config.js?v=14';
+import { T } from './config.js?v=15';
 
 export const S = 0.5;                  // sample spacing (m)
 export const Z0 = -15, Z1 = 5;         // depth range (camera side is +z)
@@ -357,6 +357,22 @@ float caustic(vec2 p, float t) {
 }
 varying vec4 vMat; varying float vCode; varying vec3 vWPos; varying vec3 vWNrm;
 float h13(vec3 p){ p = fract(p * .1031); p += dot(p, p.zyx + 31.32); return fract((p.x + p.y) * p.z); }
+// jittered round stones in a plane: x = distance / radius (< 1 inside), y = the stone's random id, zw = direction from its centre
+vec4 stoneCells(vec2 p) {
+  vec2 c = floor(p), f = fract(p);
+  float best = 9.0, id = 0.0; vec2 dir = vec2(0.0);
+  for (int j = -1; j <= 1; j++) for (int i = -1; i <= 1; i++) {
+    vec2 g = vec2(float(i), float(j));
+    float h = h13(vec3(c + g, 7.0));
+    vec2 o = vec2(h, h13(vec3(c + g, 13.0))) * 0.7 + 0.15;
+    float hr = h13(vec3(c + g, 21.0));
+    float r = hr < 0.4 ? 0.001 : 0.1 + 0.42 * (hr - 0.4) / 0.6;   // many cells hold no stone at all
+    vec2 dv = (f - g - o) / r * vec2(1.0, 1.0 + 0.5 * h);
+    float d = length(dv);
+    if (d < best) { best = d; id = h; dir = dv; }
+  }
+  return vec4(best, id, dir);
+}
 vec3 gTW; vec4 gAlb; vec3 gNW;`)
       .replace('#include <color_fragment>', `#include <color_fragment>
 {
@@ -368,8 +384,13 @@ vec3 gTW; vec4 gAlb; vec3 gNW;`)
   vec4 bZ = texture2D(tAlb, uvZ * 0.27 + 0.31);
   gAlb = aX * w.x + aY * w.y + aZ * w.z;
   gAlb.rgb *= mix(0.85, 1.15, bZ.g);
+  // a finer grain on top, so the rock stays crisp close up
+  float fa = texture2D(tAlb, uvX * 2.9 + 0.13).r * w.x + texture2D(tAlb, uvY * 2.9 + 0.29).r * w.y + texture2D(tAlb, uvZ * 2.9 + 0.53).r * w.z;
+  gAlb.rgb *= mix(0.84, 1.16, fa);
   vec3 tX = texture2D(tNrm, uvX).xyz * 2.0 - 1.0, tY = texture2D(tNrm, uvY).xyz * 2.0 - 1.0, tZ = texture2D(tNrm, uvZ).xyz * 2.0 - 1.0;
   tX.xy *= uBump; tY.xy *= uBump; tZ.xy *= uBump;
+  vec3 fX = texture2D(tNrm, uvX * 3.3 + 0.21).xyz * 2.0 - 1.0, fY = texture2D(tNrm, uvY * 3.3 + 0.47).xyz * 2.0 - 1.0, fZ = texture2D(tNrm, uvZ * 3.3 + 0.73).xyz * 2.0 - 1.0;
+  tX.xy += fX.xy * uBump * 0.6; tY.xy += fY.xy * uBump * 0.6; tZ.xy += fZ.xy * uBump * 0.6;
   // whiteout blend into world space
   tX = vec3(tX.xy + N.zy, abs(tX.z) * N.x);
   tY = vec3(tY.xy + N.xz, abs(tY.z) * N.y);
@@ -385,6 +406,31 @@ vec3 gTW; vec4 gAlb; vec3 gNW;`)
   // sediment: soft horizontal bands that wander a little, lighter and darker layers of stone
   float sb = sin(vWPos.y * 1.6 + gAlb.r * 2.2 + sin(vWPos.x * 0.13 + vWPos.z * 0.2) * 1.8) * 0.6 + sin(vWPos.y * 4.3 + gAlb.g * 3.0 + sin(vWPos.x * 0.31) * 1.2) * 0.4;
   c *= 1.0 + sb * 0.14 * uStrata * (1.0 - moss);
+  // the cut face of the mountain shows stones bedded in its layers; floors are gravelly; walls carry fine cracks
+  float frF = smoothstep(0.35, 0.7, N.z) * smoothstep(1.0, 1.6, vWPos.z);
+  float flF = smoothstep(0.6, 0.9, N.y) * (1.0 - frF) * (1.0 - moss * 0.7);
+  if (frF > 0.01) {
+    vec4 st = stoneCells(vWPos.xy * 1.7 + vec2(0.0, sin(vWPos.x * 0.37) * 0.6));
+    vec4 s2 = stoneCells(vWPos.xy * 4.3 + 17.0);
+    if (s2.x < st.x * 1.6 && st.x > 1.0) st = s2;
+    float inside = smoothstep(1.0, 0.82, st.x), rim = smoothstep(0.72, 0.98, st.x) * smoothstep(1.2, 1.0, st.x);
+    c = mix(c, c * (0.75 + st.y * 0.6), inside * frF);
+    c *= 1.0 - rim * 0.4 * frF;
+    c *= 1.0 + sb * 0.2 * frF;
+    gNW = normalize(gNW + vec3(st.z, st.w, 0.0) * inside * 0.9 * frF);
+  }
+  if (flF > 0.01) {
+    vec4 st = stoneCells(vWPos.xz * 3.6);
+    float inside = smoothstep(1.0, 0.8, st.x), rim = smoothstep(0.72, 0.98, st.x) * smoothstep(1.2, 1.0, st.x);
+    c = mix(c, c * (0.78 + st.y * 0.55), inside * flF * 0.85);
+    c *= 1.0 - rim * 0.38 * flF;
+    gNW = normalize(gNW + vec3(st.z, 0.0, st.w) * inside * 0.7 * flF);
+  }
+  {
+    float sideW = (1.0 - smoothstep(0.5, 0.85, abs(N.y))) * (1.0 - frF);
+    float ck = texture2D(tAlb, vec2(vWPos.x * 0.21 + vWPos.z * 0.17, vWPos.y * 0.19) + 0.61).b;
+    c *= 1.0 - smoothstep(0.03, 0.0, abs(ck - 0.5)) * sideW * 0.5;
+  }
   // mineral stains washed down the walls (rust, verdigris, salt, sulfur): long vertical streaks
   if (uStainA > 0.0) {
     float side = 1.0 - smoothstep(0.3, 0.8, abs(N.y));
@@ -461,6 +507,6 @@ roughnessFactor = mix(roughnessFactor, 0.16, vMat.y) * uRoughK;`)
   if (code > 1.5) { float cr = smoothstep(0.86, 0.97, 1.0 - abs(sin(vWPos.x * 3.1 + vWPos.y * 2.3 + gAlb.r * 9.0))); totalEmissiveRadiance += vec3(1.0, 0.3, 0.05) * cr * smoothstep(1.5, 1.9, code) * (0.6 + 0.4 * sin(uTime * 2.4)) * 0.38; }
 }`);
   };
-  mat.customProgramCacheKey = () => 'gd-rock-7';
+  mat.customProgramCacheKey = () => 'gd-rock-9';
   return mat;
 }

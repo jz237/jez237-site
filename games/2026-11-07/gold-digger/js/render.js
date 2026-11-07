@@ -4,14 +4,15 @@
 // re-aimed every frame at the nearest flares, fires, lanterns, crystals and lava): their number never changes,
 // so no material ever recompiles mid-game.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES, variantOf } from './config.js?v=14';
-import { Cave, rockMaterial } from './cavemesh.js?v=14';
-import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=14';
-import { FX, CALM } from './fx.js?v=14';
-import { Post } from './post.js?v=14';
-import * as MD from './models.js?v=14';
-import { buildDecor, bake } from './decor.js?v=14';
-import { Digger, loadDiggerAsset } from './digger.js?v=14';
+import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES, variantOf } from './config.js?v=15';
+import { Cave, rockMaterial } from './cavemesh.js?v=15';
+import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=15';
+import { FX, CALM } from './fx.js?v=15';
+import { Post } from './post.js?v=15';
+import * as MD from './models.js?v=15';
+import { buildDecor, bake } from './decor.js?v=15';
+import { Digger, loadDiggerAsset } from './digger.js?v=15';
+import { buildDetail } from './detail.js?v=15';
 
 export function pickQuality(name) {
   const mobile = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
@@ -233,7 +234,7 @@ export class Renderer {
 
   // the realistic digger (a skinned, motion-captured body); the old built digger stands in if it fails to load
   async loadDigger() {
-    try { this.digGltf = await loadDiggerAsset('assets/digger.glb?v=14'); } catch (e) { console.warn('digger asset', e); }
+    try { this.digGltf = await loadDiggerAsset('assets/digger.glb?v=15'); } catch (e) { console.warn('digger asset', e); }
   }
   makePlayer() {
     if (this.digGltf) {
@@ -282,6 +283,9 @@ export class Renderer {
     this.level.add(D.group);
     this.emitters.push(...D.emitters);
     this.decor = D;
+    // the small stuff: pebbles, rubble, boulders, ledges, drips, clutter and hanging growth (detail.js)
+    this.detail = buildDetail(M, look, W, { make, obj, q: this.q, cave: this.cave, rockMat: this.rockMat });
+    this.level.add(this.detail.group);
     // the digger
     if (!this.player) this.makePlayer();
     if (this.loadout) this.setLoadout(this.loadout);

@@ -1446,6 +1446,187 @@ export function vent() {
   });
 }
 
+// ================================================================== SMALL CLUTTER (detail.js scatters these by the dozen)
+export function crate(seed = 0) {
+  return make('crate' + seed, () => {
+    const K = new Kit(), R = K.root, s = 0.42 + (seed % 3) * 0.08, wood = [0x7a5634, 0x6a4a2c, 0x856040][seed % 3];
+    K.add(rbox(s, s, s, 0.015), 'rough', wood, [0, s / 2, 0], null, 1, R, { grime: 0.5, freq: 8 });
+    for (const z of [s / 2 + 0.006, -s / 2 - 0.006]) for (const y of [0.12, 0.5, 0.88]) K.add(box(s * 0.98, 0.05, 0.012), 'rough', 0x5a3e24, [0, s * y, z], null, 1, R, { grime: 0.4 });
+    for (const x of [s / 2 + 0.006, -s / 2 - 0.006]) K.add(box(0.012, s * 0.98, s * 0.98), 'rough', 0x5f4228, [x, s / 2, 0], null, 1, R, { grime: 0.45 });
+    K.add(box(0.012, s * 1.25, 0.06), 'rough', 0x5a3e24, [0, s / 2, s / 2 + 0.012], [0, 0, Math.atan2(s, s)], 1, R, { grime: 0.4 });
+    for (const x of [-1, 1]) for (const y of [0, 1]) K.add(box(0.05, 0.05, 0.016), 'metal', 0x3a3632, [x * (s / 2 - 0.02), 0.02 + y * (s - 0.04), s / 2 + 0.012], null, 1, R);
+    return K.build();
+  });
+}
+export function barrel(rusty = 0) {
+  return make('barrel' + rusty, () => {
+    const K = new Kit(), R = K.root;
+    const prof = []; for (let i = 0; i <= 10; i++) { const t = i / 10; prof.push([0.25 + Math.sin(t * Math.PI) * 0.045, t * 0.8]); }
+    prof.unshift([0, 0]); prof.push([0, 0.8]);
+    K.add(lathe('barrel', prof, 20), 'rough', rusty ? 0x6e3a1e : 0x6a4a2c, null, null, 1, R, { grime: 0.6, freq: rusty ? 4 : 9 });
+    for (const y of [0.1, 0.32, 0.48, 0.7]) K.add(tor(0.255 + Math.sin(y / 0.8 * Math.PI) * 0.045, 0.012, 24, 4), rusty ? 'rough' : 'metal', rusty ? 0x4a2412 : 0x3a3632, [0, y, 0], [Math.PI / 2, 0, 0], 1, R);
+    return K.build();
+  });
+}
+export function sack(seed = 0) {
+  return make('sack' + seed, () => {
+    const K = new Kit(), R = K.root;
+    K.add(lump('sack' + seed, 0.24, 2, 0.12, 2, seed, 1, 1.25, 0.85), 'rough', [0x8a7a58, 0x7a6a4a][seed % 2], [0, 0.25, 0], [0, seed, 0.1], 1, R, { grime: 0.45, freq: 6 });
+    K.add(cyl(0.05, 0.08, 0.12, 10), 'rough', 0x7a6a4a, [0.02, 0.55, 0], [0, 0, 0.15], 1, R);
+    K.add(tor(0.055, 0.012, 12, 4), 'rough', 0xa48c5c, [0.02, 0.52, 0], [Math.PI / 2, 0, 0], 1, R);
+    return K.build();
+  });
+}
+export function planks() {
+  return make('planks', () => {
+    const K = new Kit(), R = K.root, r = rng(77);
+    for (let k = 0; k < 6; k++) K.add(rbox(1.6, 0.05, 0.2, 0.01), 'rough', [0x7a5634, 0x6a4a2c, 0x5e4228][k % 3], [(r() - 0.5) * 0.3, 0.03 + k * 0.05, (r() - 0.5) * 0.25], [0, (r() - 0.5) * 0.25, 0], 1, R, { grime: 0.5, freq: 7 });
+    return K.build();
+  });
+}
+export function bucket() {
+  return make('bucket', () => {
+    const K = new Kit(), R = K.root;
+    K.add(lathe('bucket', [[0, 0], [0.13, 0], [0.16, 0.3], [0.155, 0.3], [0.125, 0.012], [0, 0.012]], 18), 'metal', 0x5a524a, null, null, 1, R, { grime: 0.6 });
+    K.add(tor(0.16, 0.008, 18, 4, Math.PI), 'metal', 0x3a3632, [0, 0.3, 0], null, 1, R);
+    return K.build();
+  });
+}
+export function shovel() {
+  return make('shovel', () => {
+    const K = new Kit(), R = K.root;
+    K.add(cyl(0.018, 0.02, 1.1, 8), 'rough', 0x7a5634, [0, 0.75, 0], null, 1, R, { grime: 0.4 });
+    K.add(tor(0.05, 0.012, 12, 4, Math.PI), 'rough', 0x6a4a2c, [0, 1.3, 0], null, 1, R);
+    K.add(plate('spade', [[-0.11, 0], [0.11, 0], [0.12, 0.18], [0.03, 0.24], [-0.03, 0.24], [-0.12, 0.18]], 0.012), 'metal', 0x4a4440, [0, 0.0, 0], null, 1, R, { grime: 0.5 });
+    return K.build();
+  });
+}
+export function ropeCoil() {
+  return make('ropecoil', () => {
+    const K = new Kit(), R = K.root;
+    for (let k = 0; k < 4; k++) K.add(tor(0.2 - k * 0.01, 0.025, 22, 6), 'rough', 0xa48c5c, [k * 0.01, 0.03 + k * 0.045, 0], [Math.PI / 2, 0, 0], 1, R, { grime: 0.35, freq: 14 });
+    return K.build();
+  });
+}
+// a heap of broken ore (rock lumps with a few gold or coloured nuggets in it)
+export function oreHeap(hex = 0xe6b24c) {
+  return make('ore' + hex, () => {
+    const K = new Kit(), R = K.root, r = rng(hex & 0xfff);
+    for (let k = 0; k < 9; k++) { const a = r() * 6.28, d = r() * 0.3, s = 0.06 + r() * 0.08; K.add(lump('orel' + (k % 3), 1, 1, 0.3, 3, k % 3), 'rough', 0x5a5048, [Math.cos(a) * d, s * 0.7 + (0.3 - d) * 0.35, Math.sin(a) * d], [r(), r(), r()], s, R, { grime: 0.4 }); }
+    for (let k = 0; k < 5; k++) { const a = r() * 6.28, d = r() * 0.22; K.add(lump('oren', 1, 1, 0.35, 4, 9), 'polish', hex, [Math.cos(a) * d, 0.12 + (0.22 - d) * 0.5, Math.sin(a) * d], null, 0.035 + r() * 0.02, R, { grime: 0.2 }); }
+    return K.build();
+  });
+}
+export function gear() {
+  return make('gear', () => {
+    const K = new Kit(), R = K.root;
+    K.add(tor(0.26, 0.04, 28, 6), 'rough', 0x6e3a1e, null, null, 1, R, { grime: 0.6 });
+    for (let k = 0; k < 16; k++) { const a = k / 16 * Math.PI * 2; K.add(box(0.07, 0.07, 0.07), 'rough', 0x5a2e18, [Math.cos(a) * 0.32, Math.sin(a) * 0.32, 0], [0, 0, a], 1, R, { grime: 0.5 }); }
+    for (let k = 0; k < 4; k++) K.add(box(0.5, 0.04, 0.04), 'rough', 0x5a2e18, null, [0, 0, k * Math.PI / 4], 1, R);
+    K.add(cyl(0.06, 0.06, 0.1, 10), 'rough', 0x3a2418, null, [Math.PI / 2, 0, 0], 1, R);
+    return K.build();
+  });
+}
+export function bones(seed = 0) {
+  return make('bones' + seed, () => {
+    const K = new Kit(), R = K.root, r = rng(seed * 13 + 2);
+    for (let k = 0; k < 5; k++) {
+      const L = 0.18 + r() * 0.25, a = r() * 6.28, x = (r() - 0.5) * 0.5, z = (r() - 0.5) * 0.3;
+      K.add(cyl(0.016, 0.016, L, 6), 'rough', 0xcfc1a0, [x, 0.018, z], [Math.PI / 2, a, 0], 1, R, { grime: 0.5 });
+      for (const s of [-1, 1]) K.add(sph(0.028, 8, 6), 'rough', 0xd6c8a8, [x + Math.sin(a) * L / 2 * s, 0.022, z + Math.cos(a) * L / 2 * s], null, [1, 0.8, 1.2], R, { grime: 0.5 });
+    }
+    return K.build();
+  });
+}
+export function urn(seed = 0) {
+  return make('urn' + seed, () => {
+    const K = new Kit(), R = K.root;
+    K.add(lathe('urn', [[0, 0], [0.1, 0], [0.16, 0.1], [0.2, 0.28], [0.16, 0.48], [0.07, 0.56], [0.07, 0.62], [0.1, 0.65], [0.08, 0.66]], 18), 'rough', [0x8a5a3a, 0x6e7a5e, 0x9a8a6a][seed % 3], null, null, 1, R, { grime: 0.6, freq: 6 });
+    for (const s of [-1, 1]) K.add(tor(0.06, 0.012, 10, 4, Math.PI), 'rough', 0x7a5236, [s * 0.13, 0.5, 0], [0, 0, s * 0.5 - Math.PI / 2], 1, R);
+    return K.build();
+  });
+}
+export function block(seed = 0) {
+  return make('block' + seed, () => {
+    const K = new Kit(), R = K.root, r = rng(seed * 5 + 3);
+    const w = 0.5 + r() * 0.4, h = 0.3 + r() * 0.25, d = 0.4 + r() * 0.3;
+    K.add(roughen('blk' + seed, rbox(w, h, d, 0.04), 0.025, 3, seed), 'rough', [0x8a8475, 0xa69b86, 0x7a7466][seed % 3], [0, h / 2, 0], null, 1, R, { grime: 0.6, freq: 3 });
+    return K.build();
+  });
+}
+// a fallen column drum, fluted
+export function drum() {
+  return make('drum', () => {
+    const K = new Kit(), R = K.root;
+    const g = geo('drumg', () => { const c = new THREE.CylinderGeometry(0.38, 0.4, 0.6, 32, 2); const p = c.attributes.position; for (let i = 0; i < p.count; i++) { const x = p.getX(i), z = p.getZ(i), a = Math.atan2(z, x), k = 1 - 0.05 * Math.max(0, Math.cos(a * 16)); p.setX(i, x * k); p.setZ(i, z * k); } c.computeVertexNormals(); return c; });
+    K.add(roughen('drumr', g, 0.015, 3, 2), 'rough', 0x8a8475, [0, 0.39, 0], [0, 0, Math.PI / 2], 1, R, { grime: 0.6, freq: 2.5 });
+    return K.build();
+  });
+}
+export function shells(seed = 0) {
+  return make('shells' + seed, () => {
+    const K = new Kit(), R = K.root, r = rng(seed * 3 + 1);
+    for (let k = 0; k < 6; k++) {
+      const x = (r() - 0.5) * 0.5, z = (r() - 0.5) * 0.3, a = r() * 6.28;
+      if (k % 2) K.add(hemi(0.05 + r() * 0.03, 12, 5), 'gloss', [0xe8d8c8, 0xd8b8a0, 0xc8d0d8][k % 3], [x, 0.0, z], [0, a, 0], [1, 0.45, 0.85], R, { grime: 0.3 });
+      else K.add(lathe('snail', [[0, 0.12], [0.02, 0.1], [0.04, 0.07], [0.055, 0.035], [0.045, 0.0], [0, 0]], 12), 'gloss', [0xe0c8a8, 0xc8a080][k % 2 ? 1 : 0], [x, 0.0, z], [Math.PI / 2 * 0.9, a, 0], 1, R, { grime: 0.3 });
+    }
+    return K.build();
+  });
+}
+// a sea anemone that glows: a stalk and a crown of fine tentacles
+export function anemone(hex = 0x40f0d0) {
+  return make('anem' + hex, () => {
+    const K = new Kit(), R = K.root;
+    K.add(cyl(0.05, 0.07, 0.14, 12), 'gloss', 0x4a3a48, [0, 0.07, 0], null, 1, R, { grime: 0.3 });
+    for (let k = 0; k < 14; k++) { const a = k / 14 * Math.PI * 2, l = 0.12 + (k % 3) * 0.03; K.add(cyl(0.006, 0.01, l, 4), 'glow', hdr(hex, 1.6), [Math.cos(a) * 0.04 + Math.cos(a) * l * 0.3, 0.14 + l * 0.42, Math.sin(a) * 0.04 + Math.sin(a) * l * 0.3], [Math.sin(a) * 0.7, 0, -Math.cos(a) * 0.7], 1, R); }
+    return K.build();
+  });
+}
+// a fern-like tuft of curling fronds
+export function fern(hex = 0x3a5a2a) {
+  return make('fern' + hex, () => {
+    const K = new Kit(), R = K.root;
+    const leaf = plate('frond', [[0, 0], [0.05, 0.12], [0.06, 0.3], [0.035, 0.46], [0, 0.55], [-0.035, 0.46], [-0.06, 0.3], [-0.05, 0.12]], 0.003);
+    for (let k = 0; k < 9; k++) { const a = k / 9 * Math.PI * 2 + (k % 2) * 0.3, tilt = 0.5 + (k % 3) * 0.25; K.add(leaf, 'skin', new THREE.Color(hex).multiplyScalar(0.8 + (k % 3) * 0.15), [0, 0.01, 0], [tilt * Math.cos(a), a, tilt * Math.sin(a)], 0.8 + (k % 4) * 0.12, R, { grime: 0.25 }); }
+    return K.build();
+  });
+}
+// a cluster of tiny glowing mushrooms
+export function minicaps(hex = 0x40fff0, cap = 0x3a6f78) {
+  return make('minic' + hex + ',' + cap, () => {
+    const K = new Kit(), R = K.root, r = rng(hex & 0xffff);
+    for (let k = 0; k < 8; k++) {
+      const x = (r() - 0.5) * 0.3, z = (r() - 0.5) * 0.2, h = 0.04 + r() * 0.1, cr = 0.02 + r() * 0.025;
+      K.add(cyl(cr * 0.2, cr * 0.25, h, 6), 'gloss', 0xc8d0cc, [x, h / 2, z], null, 1, R, { grime: 0.15 });
+      K.add(hemi(cr, 10, 4), 'gloss', cap, [x, h, z], null, [1, 0.6, 1], R, { grime: 0.2 });
+      K.add(cyl(cr * 0.9, cr * 0.3, 0.004, 10), 'glow', hdr(hex, 3), [x, h - 0.002, z], null, 1, R);
+    }
+    return K.build();
+  });
+}
+// a smouldering lump of ember coal
+export function coal(seed = 0) {
+  return make('coal' + seed, () => {
+    const K = new Kit(), R = K.root;
+    K.add(lump('coal' + seed, 0.18, 1, 0.35, 3, seed, 1.2, 0.7, 1), 'rough', 0x1e1816, [0, 0.1, 0], null, 1, R, { grime: 0.3 });
+    for (let k = 0; k < 5; k++) { const a = k * 1.3 + seed; K.add(box(0.012, 0.012, 0.12), 'glow', hdr(0xff5a18, 2.2 + (k % 2)), [Math.cos(a) * 0.15, 0.08 + (k % 3) * 0.03, Math.sin(a) * 0.12], [0, a, 0.3], 1, R); }
+    return K.build();
+  });
+}
+
+// hanging strands (moss, rootlets, weed) from a list of roof points [[x, y, z, len], ...] in world space; uncached
+export function strands(list, hex, tipHex = 0, seed = 1) {
+  const K = new Kit(), R = K.root, r = rng(seed);
+  K.shadow = false;
+  for (const [x, y, z, len] of list) {
+    const pts = [], sw = (r() - 0.5) * 0.35;
+    for (let k = 0; k <= 5; k++) pts.push(new THREE.Vector3(x + Math.sin(k * 1.1 + x) * 0.05 + sw * k / 5, y - len * k / 5, z + Math.cos(k * 0.9 + y) * 0.04));
+    K.add(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 8, 0.01 + r() * 0.012, 4), 'rough', new THREE.Color(hex).multiplyScalar(0.75 + r() * 0.5), null, null, 1, R, { grime: 0.2 });
+    if (tipHex && r() < 0.45) K.add(sph(0.02, 6, 4), 'glow', hdr(tipHex, 2.2), [pts[5].x, pts[5].y, pts[5].z], null, 1, R);
+  }
+  return K.build();
+}
 // ================================================================== BOSSES
 // cover an ellipsoid with rock plates (flattened lumps facing outward) leaving thin gaps; skip(d) leaves holes
 function plated(K, parent, c, rad, n, seed, cols, size, o = {}) {
