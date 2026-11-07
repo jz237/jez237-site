@@ -4,12 +4,12 @@
 // spire and its lightning, telegraph ribbons for every hazard and boss attack, HDR post with bloom.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=12';
-import * as TX from './textures.js?v=12';
-import * as MD from './models.js?v=12';
-import { FX, CALM } from './fx.js?v=12';
-import { F, POWERUPS, BOSSES, HUNTER, LAYOUT, rockHang, rockDrop } from './config.js?v=12';
-import { weakPos, ledgeUnder } from './sim.js?v=12';
+import { Post } from './post.js?v=13';
+import * as TX from './textures.js?v=13';
+import * as MD from './models.js?v=13';
+import { FX, CALM } from './fx.js?v=13';
+import { F, POWERUPS, BOSSES, HUNTER, LAYOUT, rockHang, rockDrop } from './config.js?v=13';
+import { weakPos, ledgeUnder } from './sim.js?v=13';
 
 export { CALM };
 const RR = F.R, H = F.H;
@@ -721,6 +721,14 @@ export class Renderer {
       if (!V) { V = this.riderView('player', false, p.id); this.views.p.set(p.id, V); }
       V.outer.visible = p.alive && !(p.inv > 0 && Math.floor(p.inv * 10) % 2 === 0 && p.inv < F.inv - 0.2);
       if (p.alive) this.animRider(V, p, dt, t);
+      const sp = p.alive && p.on < 0 ? Math.hypot(p.vx, p.vy) : 0;
+      if (sp > 11 && V.v.tipR && !CALM.on) {
+        const n = (sp - 11) * dt * 9;
+        for (const [tip, s] of [[V.v.tipR, 1], [V.v.tipL, -1]]) if (Math.random() < n) {
+          tip.localToWorld(_v.set(-0.15, 0, s * 0.55));   // near the wingtip
+          this.fx.fireP.add({ x: _v.x, y: _v.y, z: _v.z, vx: 0, vy: 0, vz: 0, s0: 0.11, s1: 0.02, max: 0.32, a: 0.55, r: 0.85, g: 0.92, b: 1, drag: 3, grav: 0, fade: 0.4 });
+        }
+      }
       this.hitFlash(V, p.alive ? p.hitT : 0, dt, 0.13);   // players: not on their own win (0.12) - only real knocks
       const LL = this.lanceLights[p.id - 1];
       if (LL) { if (p.alive) { toWorld(p.x + p.face * 2.1, p.y + F.lanceH, LL.position, 0.6); LL.intensity = 6 + Math.sin(t * 9) * 1.5; LL.color.set(this.suit[p.id - 1].accent); } else LL.intensity = 0; }
@@ -748,6 +756,7 @@ export class Renderer {
       this.place(G.outer, G.x, G.y, G.face);
       G.v.g.rotation.set(G.rx, -0.3, G.rz, 'YXZ');
       for (const K of PS) { this.fallBody(W, K, dt, G); this.place(K.outer, K.x, K.y, G.face); K.joint.rotation.set(K.rx, K.ry || 0, K.rz); }
+      if (G.split) this.limpGhost(G, PS.find((K) => K.kind === 'knight'), dt);
       for (const B of [G, ...PS]) if (B.y < 0.2 && !B.splashed) { B.splashed = true; toWorld(B.x, 0, _v); this.fx.splash(_v.x, 0, _v.z, B === G ? 1.2 : B.kind === 'knight' ? 0.7 : 0.35); }
       const a = 1 - clamp((G.t - G.fadeAt) / G.fadeD, 0, 1);
       if (a < 1) this.fadeGhost(G, a);
@@ -774,6 +783,30 @@ export class Renderer {
     CL.position.set(0, 49.5, 0); CL.intensity = 40 + charge * 400; CL.distance = 60; CL.color.set(this.look.spire);
   }
   sfx() { /* main.js points this at the game's 3D audio: (name, x, y, opts) */ }
+  // a dead skyray is limp: falling, the air lifts its wings and they flutter, its neck and tail trail; on a ledge they
+  // splay out flat and its head and jaw sag. The thrown knight flails his arms until he lands, then lies slack
+  limpGhost(G, K, dt) {
+    const v = G.v, k = 1 - Math.exp(-dt * 7), air = !G.L, t = G.t * 13;
+    const ez = (o, x, y, z) => { if (!o) return; o.rotation.x += (x - o.rotation.x) * k; o.rotation.y += (y - o.rotation.y) * k; o.rotation.z += (z - o.rotation.z) * k; };
+    if (v.wingR) {
+      const a1 = air ? 0.7 + Math.sin(t) * 0.18 : -0.1, a2 = air ? 0.35 + Math.sin(t - 0.8) * 0.25 : -0.22, a3 = air ? 0.3 + Math.sin(t - 1.6) * 0.35 : -0.18;
+      ez(v.wingR, -a1, air ? -0.2 : 0, 0); ez(v.wingL, a1, air ? 0.2 : 0, 0);
+      ez(v.midR, -a2, 0, 0); ez(v.midL, a2, 0, 0);
+      ez(v.tipR, -a3, 0, 0); ez(v.tipL, a3, 0, 0);
+    }
+    if (v.neck) { ez(v.neck, 0, Math.sin(t * 0.4) * 0.15 * (air ? 1 : 0), air ? 0.25 : -0.35); ez(v.head, 0, 0, air ? 0.25 : -0.25); ez(v.jaw, 0, 0, -0.35); }
+    if (v.frillR) { ez(v.frillR, -0.05, 0, 0); ez(v.frillL, 0.05, 0, 0); }
+    if (v.tail) { ez(v.tail, 0, air ? Math.sin(t * 0.7) * 0.3 : 0.1, air ? 0.2 : 0.05); ez(v.tail2, 0, air ? Math.sin(t * 0.7 - 1) * 0.4 : 0.15, 0); ez(v.tail3, 0, air ? Math.sin(t * 0.7 - 2) * 0.5 : 0.2, 0); }
+    if (v.legR) for (const [L, S, Ft] of [[v.legR, v.shinR, v.footR], [v.legL, v.shinL, v.footL]]) { ez(L, 0, 0, air ? 0.2 : 0.35); ez(S, 0, 0, air ? 0.3 : -0.3); ez(Ft, 0, 0, 0.2); }
+    if (!K) return;
+    const ka = !K.L, s = t * 1.2;
+    ez(v.torso, 0, 0, ka ? Math.sin(s * 0.7) * 0.3 : 0.1);
+    ez(v.helm, 0, ka ? Math.sin(s * 0.9) * 0.5 : 0.3, ka ? 0.2 : -0.3);
+    ez(v.armR, ka ? Math.sin(s) * 1.1 : 0.2, 0, ka ? 1 + Math.sin(s * 1.3) * 0.7 : 0.4);
+    ez(v.foreR, 0, 0, ka ? 0.6 + Math.sin(s * 1.7) * 0.5 : 0.3);
+    ez(v.armL, ka ? Math.sin(s + 2) * 1.1 : -0.2, 0, ka ? 1 + Math.sin(s * 1.1 + 1) * 0.7 : 0.3);
+    if (v.cape) { ez(v.cape, 0, 0, ka ? -1.9 + Math.sin(s * 2) * 0.2 : -0.5); ez(v.cape2, 0, 0, ka ? Math.sin(s * 2.4) * 0.3 : 0); }
+  }
   // the jouster breaks apart: the knight is thrown clear of the saddle and loses his lance and shield. Each of those
   // joints moves to a frame of its own (the skinned meshes follow their joints wherever they are), starting where it
   // was, so each piece can fly, land and settle apart from the skyray

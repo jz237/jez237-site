@@ -9,7 +9,7 @@ const SFX = ['flap', 'clang', 'block', 'unhorse', 'boomS', 'boomM', 'boomL', 'de
   'uimove', 'uiok', 'uiback', 'rewind', 'wind', 'surf', 'rush'];
 const VOICE = ['begin', 's2', 's3', 's4', 's5', 'boss', 'bossdown', 'clear', 'lastlife', 'gameover', 'newrecord', 'champion'];
 export const MUSIC = new Set(['title', 's1', 's2', 's3', 's4', 's5', 'boss', 'clear', 'over']);
-const V = '?v=12';
+const V = '?v=13';
 
 export class Audio {
   constructor(base) {
@@ -88,9 +88,9 @@ export class Audio {
     const b = this.buf.get(name);
     if (!b) return null;
     const now = this.ctx.currentTime;
-    const gap = o.gap ?? 0.03, last = this.lastPlay.get(name) || 0;
+    const key = o.key || name, gap = o.gap ?? 0.03, last = this.lastPlay.get(key) || 0;   // key: a separate gap (riders' flaps vs yours)
     if (now - last < gap) return null;
-    this.lastPlay.set(name, now);
+    this.lastPlay.set(key, now);
     const src = this.ctx.createBufferSource();
     src.buffer = b;
     src.playbackRate.value = (o.rate ?? 1) * (1 + (Math.random() - 0.5) * (o.vary ?? 0.08)) * (o.noSlow ? 1 : this.rate);

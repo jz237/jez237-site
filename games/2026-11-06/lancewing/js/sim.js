@@ -3,7 +3,7 @@
 // bit for bit (replays, online, tests). Nothing in here touches the DOM, WebGL or audio; it only pushes
 // events into W.ev. The arena is a 2D slice: x = metres round the ring (wraps at F.C), y = height.
 import { F, STEP, SECTORS, WAVES, LAYOUT, rampAt, rampLevel, endlessLevel, ENDLESS, ENEMY, TIER_UP, HUNTER, BOSSES, BOSS_KEYS, SCORE, START_LIVES, INTRO,
-  introduced, WAVE_KIND, TEAM_WAVE, SPECIAL, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, rockHang, rockDrop } from './config.js?v=12';
+  introduced, WAVE_KIND, TEAM_WAVE, SPECIAL, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, rockHang, rockDrop } from './config.js?v=13';
 export { STEP };
 
 const { C, H } = F;
