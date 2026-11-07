@@ -35,16 +35,20 @@ export function rankReef({ group, kind = '', sign, changes = [] }) {
       return { ...c, base, score: base + kindScore + changeScore };
     })
     .filter(Boolean)
-    .sort((a, b) => b.score - a.score || b.base - a.base || a.id.localeCompare(b.id));
+    .sort((a, b) => b.score - a.score || b.base - a.base || a.id.localeCompare(b.id))
+    // A "normal" answer never leads when a picked change points at a real problem
+    // (e.g. winter rest + pump stopped): it drops behind the first real answer.
+    .sort((a, b) => Number(alarmed(a, picked)) - Number(alarmed(b, picked)));
 }
+const alarmed = (c, picked) => Boolean(c.natural) && picked.some(id => !c.changes?.[id]);
 
 function decorate(condition, input, extra = {}) {
   const sign = reefSignFor(input.group, input.sign);
   const changes = (REEF_CHANGES[input.group] || []).filter(c => input.changes?.includes(c.id) && condition.changes?.[c.id]).map(c => c.title.toLowerCase());
   return {
     ...condition,
-    urgencyLevel: condition.urgency,
-    reason: extra.reason || [`You picked “${sign?.title || input.sign}”${changes.length ? `, plus ${changes.join(', ')}` : ''}.`, condition.check].join(' '),
+    urgencyLevel: URGENCY[sign?.urgency]?.rank > URGENCY[condition.urgency].rank ? sign.urgency : condition.urgency,
+    reason: extra.reason || [`You picked “${sign?.title || input.sign}”${changes.length ? `, plus ${changes.join(', ')}` : ''}.`, condition.checks?.[input.sign] || condition.check].join(' '),
     plan: reefPlanFor(condition.id),
     ...extra,
   };
@@ -56,6 +60,18 @@ export function reefTreatmentNote(a, b) {
   return fa === fb ? 'same' : 'different';
 }
 
+// "Why it could be this" on a look-alike (Jez, Nov 6 2026 19:05): which answers it also fits.
+function reefAlsoReason(condition, top, input) {
+  const sign = reefSignFor(input.group, input.sign);
+  const changes = (REEF_CHANGES[input.group] || []).filter(c => input.changes?.includes(c.id) && condition.changes?.[c.id]).map(c => c.title.toLowerCase());
+  const like = top.title.replace(/\s*\(.*\)$/, '').toLowerCase();
+  const fits = sign && (condition.weights?.[input.sign] || 0) > 0
+    ? `“${sign.title}” fits this too${changes.length ? `, and so does ${changes.join(', ')}` : ''}.`
+    : `It can look a lot like ${like}${changes.length ? `, and ${changes.join(', ')} fits it too` : ''}.`;
+  const what = (condition.summary || '').match(/^[^.!?]*[.!?]/)?.[0] || '';
+  return [fits, what].filter(Boolean).join(' ');
+}
+
 function couldAlsoBe(top, ranked, input, pinned = null) {
   const out = new Map();
   let natural = '';
@@ -64,17 +80,19 @@ function couldAlsoBe(top, ranked, input, pinned = null) {
   const reasons = new Map(curated.map(([id, reason]) => [id, reason]));
   const add = (condition, reason) => {
     if (!condition || condition.id === top.id || out.has(condition.id) || !inScope(condition, input.group, input.kind)) return;
-    if (condition.natural) { natural ||= NATURAL[input.group] || ''; return; }
+    if (condition.natural) { if (!alarmed(condition, input.changes || [])) natural ||= NATURAL[input.group] || ''; return; }
     out.set(condition.id, { ...condition, comparisonReason: reason || REEF_LOOK_FOR[condition.id] });
   };
   if (pinned) add(pinned, reasons.get(pinned.id));
   const runnersUp = ranked.filter(c => c.base >= 2);
   // Strong runners-up first, then the curated look-alikes, then weaker runners-up.
   for (const other of runnersUp.filter(c => c.score >= 3)) add(other, reasons.get(other.id));
-  for (const [id, reason, , note] of curated) { if (id) add(reefConditionFor(id), reason); else natural ||= note; }
+  // A curated "it may be normal" line also stays away from alarm changes (any change the normal answer doesn't explain).
+  const calm = !(input.changes || []).length || (input.group === 'pond' && (input.changes || []).every(id => id === 'cold'));
+  for (const [id, reason, , note] of curated) { if (id) add(reefConditionFor(id), reason); else if (calm) natural ||= note; }
   for (const other of runnersUp) add(other, reasons.get(other.id));
   const alternatives = [...out.values()].slice(0, MAX_REEF_ALTERNATIVES).map(c => ({
-    ...c, urgencyLevel: c.urgency,
+    ...c, urgencyLevel: c.urgency, whyAlso: reefAlsoReason(c, top, input),
     moreUrgent: URGENCY[c.urgency].rank > URGENCY[top.urgencyLevel].rank,
     treatmentNote: reefTreatmentNote(c.id, top.id),
   }));
