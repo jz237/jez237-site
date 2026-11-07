@@ -1,5 +1,7 @@
 # Voltmaze 2026 tools
 
+Berserk 1.4.0 (`?v=10`, load): index.html modulepreloads every module (keep the list in step); `await R.warmUp()` compiles every look with compileAsync (KHR_parallel_shader_compile) while the first look's floor textures and lighting map stand in for the others (`floorDefer` / `envDefer`, same programs); the other floors (+ `initTexture` upload) and lighting maps come from `R.prepareAll()` in idle time after the title (a `?fixed` / `?test` page awaits it before its title); medium (phones) bakes floors at 512. Live phone profile 6.4-7.2 s with one 4.7-5.5 s block -> ~4-5.5 s, longest block ~1 s.
+
 Game: `games/2026-11-06/voltmaze/` (three.js r181 vendored in `vendor/`, plain ES modules, no build).
 Every local import carries the same `?v=N`; bump them all together (plus `js/main.js?v=` in index.html and `V` in js/audio.js). Current: `?v=6`.
 

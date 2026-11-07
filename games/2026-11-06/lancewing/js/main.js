@@ -1,14 +1,14 @@
 // Lancewing 2026 - game flow: title (version, difficulty, global boards), campaign, endless, local and online
 // co-op, upgrades, results with initials, instant replay, pause, options, attract demo and AI playthrough.
-import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, SALVAGE_DIV, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY } from './config.js?v=15';
-import { makeWorld, step, drainEvents, waveLabel, isBossWave, dX, applyClaim, cloneWorld, ledgeUnder } from './sim.js?v=15';
-import { Autopilot } from './ai.js?v=15';
-import { Renderer, pickQuality, CALM } from './render.js?v=15';
-import { Audio } from './audio.js?v=15';
-import { Input } from './input.js?v=15';
-import { Scores, NO_POST, posted } from './scores.js?v=15';
-import { Recorder, Replay } from './replay.js?v=15';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=15';
+import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, SALVAGE_DIV, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY } from './config.js?v=16';
+import { makeWorld, step, drainEvents, waveLabel, isBossWave, dX, applyClaim, cloneWorld, ledgeUnder } from './sim.js?v=16';
+import { Autopilot } from './ai.js?v=16';
+import { Renderer, pickQuality, CALM } from './render.js?v=16';
+import { Audio } from './audio.js?v=16';
+import { Input } from './input.js?v=16';
+import { Scores, NO_POST, posted } from './scores.js?v=16';
+import { Recorder, Replay } from './replay.js?v=16';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=16';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -1198,12 +1198,16 @@ I.stickUI = (s) => {
 
 // ------------------------------------------------------------------ boot
 async function boot() {
-  try { R.warmUp(); } catch (e) { console.warn('warm-up', e); }
+  try { await R.warmUp(); } catch (e) { console.warn('warm-up', e); }
+  // the other sectors are prepared after the title is up; a test page has it all before its title (the checks count
+  // shader programs from there)
+  if (G.fixed || params.has('test')) { try { await R.prepareAll(false); } catch (e) { console.warn('prepare', e); } }
+  else R.prepareAll(true).catch((e) => console.warn('prepare', e));
   applySettings();
   $('loading').style.opacity = '0';
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
-  if (params.has('test')) { const m = await import('./tests.js?v=15'); m.runTests(window.__lw); }
+  if (params.has('test')) { const m = await import('./tests.js?v=16'); m.runTests(window.__lw); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('endless') && G.autopilot) { A.unlock(); startEndless(); }
   else if (G.autopilot) { A.unlock(); startCampaign(+params.get('sector') || 0); }

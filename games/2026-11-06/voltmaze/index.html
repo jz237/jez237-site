@@ -7,6 +7,24 @@
 <meta name="description" content="Berserk 2026 — an original room-by-room maze shooter in real-time 3D. Slip a light-armoured infiltrator through a facility of electrified rooms, outgun and outwit its security robots, lure them into the walls, and keep moving before the Seeker finds you. Five sectors, five bosses, an endless mode, online co-op and world high scores.">
 <title>Berserk 2026</title>
 <link rel="icon" href="data:,">
+<!-- every module up front: the browser fetches them all at once instead of finding each import in turn -->
+<link rel="modulepreload" href="js/main.js?v=10">
+<link rel="modulepreload" href="js/config.js?v=10">
+<link rel="modulepreload" href="js/sim.js?v=10">
+<link rel="modulepreload" href="js/ai.js?v=10">
+<link rel="modulepreload" href="js/render.js?v=10">
+<link rel="modulepreload" href="js/audio.js?v=10">
+<link rel="modulepreload" href="js/input.js?v=10">
+<link rel="modulepreload" href="js/scores.js?v=10">
+<link rel="modulepreload" href="js/replay.js?v=10">
+<link rel="modulepreload" href="js/online.js?v=10">
+<link rel="modulepreload" href="js/post.js?v=10">
+<link rel="modulepreload" href="js/shaders.js?v=10">
+<link rel="modulepreload" href="js/textures.js?v=10">
+<link rel="modulepreload" href="js/models.js?v=10">
+<link rel="modulepreload" href="js/fx.js?v=10">
+<link rel="modulepreload" href="vendor/three.module.min.js">
+<link rel="modulepreload" href="vendor/three.core.min.js">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Saira+Condensed:wght@600;800&display=swap" rel="stylesheet">
@@ -332,7 +350,7 @@ table.rbest th:first-child, table.rbest td:first-child { text-align: left; color
   <div class="screen hidden" id="title">
     <div class="card">
       <h1 class="logo">BER<span>SERK</span> <em>2026</em></h1>
-      <div class="ver">VERSION <b id="ver">1.3.1</b> · GET IN · KEEP MOVING · GET OUT</div>
+      <div class="ver">VERSION <b id="ver">1.4.0</b> · GET IN · KEEP MOVING · GET OUT</div>
       <div class="diffrow">DIFFICULTY<div class="seg" data-opt="diff"><button data-v="easy">EASY</button><button data-v="normal">NORMAL</button><button data-v="hard">HARD</button><button data-v="nightmare">NIGHTMARE</button></div></div>
       <div id="diff-desc"></div>
       <div class="btns" id="title-btns">
@@ -478,6 +496,6 @@ addEventListener('error', (e) => window.__vmErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__vmErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__vmErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=9"></script>
+<script type="module" src="js/main.js?v=10"></script>
 </body>
 </html>

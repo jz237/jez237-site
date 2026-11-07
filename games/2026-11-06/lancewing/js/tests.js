@@ -2,11 +2,11 @@
 // warnings 1.2 s -> 0.6 s, never under MIN_WARN), difficulty scaling, the autopilot getting through a boss,
 // the live game loop running without console errors, no score posts, one board per mode + difficulty, 15 medals,
 // a boss-kill replay and an online snapshot round trip.
-import { makeWorld, step, drainEvents, STEP, cloneWorld } from './sim.js?v=15';
-import { Autopilot } from './ai.js?v=15';
-import { F, SECTORS, WAVES, TYPICAL_UP, rampAt, DIFF_KEYS, applyDiff, MIN_WARN, endlessLevel, rampLevel, MEDALS } from './config.js?v=15';
-import { packWorld, applyWorld } from './online.js?v=15';
-import { Recorder, Replay } from './replay.js?v=15';
+import { makeWorld, step, drainEvents, STEP, cloneWorld } from './sim.js?v=16';
+import { Autopilot } from './ai.js?v=16';
+import { F, SECTORS, WAVES, TYPICAL_UP, rampAt, DIFF_KEYS, applyDiff, MIN_WARN, endlessLevel, rampLevel, MEDALS } from './config.js?v=16';
+import { packWorld, applyWorld } from './online.js?v=16';
+import { Recorder, Replay } from './replay.js?v=16';
 
 export const hashW = (W) => JSON.stringify([W.n, W.score, W.lives, W.wave, W.phase, W.rs, W.players.map((p) => [p.x.toFixed(6), p.y.toFixed(6), p.alive, p.armor]), W.riders.map((r) => [r.id, r.x.toFixed(4), r.y.toFixed(4)]), W.cores.length, W.haz.length, W.boss && W.boss.hp]);
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));

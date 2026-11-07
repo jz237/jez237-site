@@ -1,10 +1,10 @@
 // ?test=1 self-test page: sim invariants, determinism, exact replays, clone safety, the RAMP rising
 // step by step, the difficulty levels, every room reachable, the autopilot getting through a sector and
 // a boss, the live game loop running without console errors, and no score posts from test runs.
-import { makeWorld, step, drainEvents, STEP, cloneWorld, genWalls, wallNear, routeSide, gridDist, SIDES, entryPoint } from './sim.js?v=9';
-import { Autopilot } from './ai.js?v=9';
-import { RAMP, SECTORS, TYPICAL_UP, rampAt, rampLevel, endlessLevel, DIFF_KEYS, applyDiff, MIN_WARN, ROOM, F, BOSSES } from './config.js?v=9';
-import { Recorder, Replay } from './replay.js?v=9';
+import { makeWorld, step, drainEvents, STEP, cloneWorld, genWalls, wallNear, routeSide, gridDist, SIDES, entryPoint } from './sim.js?v=10';
+import { Autopilot } from './ai.js?v=10';
+import { RAMP, SECTORS, TYPICAL_UP, rampAt, rampLevel, endlessLevel, DIFF_KEYS, applyDiff, MIN_WARN, ROOM, F, BOSSES } from './config.js?v=10';
+import { Recorder, Replay } from './replay.js?v=10';
 
 const r6 = (v) => Math.round(v * 1e6) / 1e6;
 export const hashW = (W) => JSON.stringify([W.n, W.score, W.lives, W.roomN, W.depth, W.phase, W.rs, W.room && W.room.key, W.players.map((p) => [r6(p.x), r6(p.z), p.alive, p.shield, p.emp]),

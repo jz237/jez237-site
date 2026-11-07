@@ -6,12 +6,12 @@
 // Fixed light pools (only intensities change) and a warm-up that compiles everything at load.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=9';
-import * as TX from './textures.js?v=9';
-import * as MD from './models.js?v=9';
-import { FX, CALM } from './fx.js?v=9';
-import { F, ROOM, ENEMY, BOSSES, POWERUPS, ATTACK, PW_KEYS, SEEKER, BURST_A } from './config.js?v=9';
-import { WK, inZone, beamLen } from './sim.js?v=9';
+import { Post } from './post.js?v=10';
+import * as TX from './textures.js?v=10';
+import * as MD from './models.js?v=10';
+import { FX, CALM } from './fx.js?v=10';
+import { F, ROOM, ENEMY, BOSSES, POWERUPS, ATTACK, PW_KEYS, SEEKER, BURST_A } from './config.js?v=10';
+import { WK, inZone, beamLen } from './sim.js?v=10';
 
 export { CALM };
 const { RW, RH, wallT: WT, door: DOOR } = ROOM;
@@ -22,11 +22,13 @@ const UP = new THREE.Vector3(0, 1, 0);
 function angD(a, b) { let d = (b - a) % (Math.PI * 2); if (d > Math.PI) d -= Math.PI * 2; if (d < -Math.PI) d += Math.PI * 2; return d; }
 function mkr(seed) { let s = seed | 0; return () => { s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), s | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 
+// 1.4: medium (phones) bakes its procedural floors at 512 (a quarter of the work at boot; they look the same on a
+// phone screen)
 export function pickQuality(name) {
   const mobile = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
   const tiers = {
     high: { name: 'high', dpr: Math.min(devicePixelRatio || 1, 2), shadow: 2048, spotShadow: 1024, msaa: true, bloomLevels: 5, tex: 1024, dust: 1800, sparks: 1600, debris: 200, flashLights: 3, props: 1 },
-    medium: { name: 'medium', dpr: Math.min(devicePixelRatio || 1, 1.6), shadow: 1024, spotShadow: 512, msaa: true, bloomLevels: 4, tex: 1024, dust: 1100, sparks: 1000, debris: 120, flashLights: 2, props: 0.8 },
+    medium: { name: 'medium', dpr: Math.min(devicePixelRatio || 1, 1.6), shadow: 1024, spotShadow: 512, msaa: true, bloomLevels: 4, tex: 512, dust: 1100, sparks: 1000, debris: 120, flashLights: 2, props: 0.8 },
     low: { name: 'low', dpr: 1, shadow: 1024, spotShadow: 0, msaa: false, bloomLevels: 3, tex: 512, dust: 600, sparks: 500, debris: 60, flashLights: 2, props: 0.55 },
   };
   return tiers[name] || (mobile ? tiers.medium : tiers.high);
@@ -257,7 +259,7 @@ export class Renderer {
     this.anim = [];
     this.resize();
     addEventListener('resize', () => this.resize());
-    this.setLook(0);
+    this.envDefer = true; this.setLook(0);   // its lighting map comes in the warm-up (envForAsync)
   }
 
   // ---------------------------------------------------------------- lights (a fixed set: only intensities change)
@@ -285,8 +287,32 @@ export class Renderer {
     this.pool = [];
     for (let i = 0; i < 8; i++) { const l = new THREE.PointLight(0xffffff, 0, 9, 1.8); l.position.set(0, -20, 0); this.scene.add(l); this.pool.push(l); }
   }
-  envFor(i) {
+  envFor(i, s = this.envScene(i)) {
     if (this.envs[i]) return this.envs[i];
+    this.envs[i] = this.pm.fromScene(s, 0.02).texture;
+    return this.envs[i];
+  }
+  async envForAsync(i) {
+    if (this.envs[i]) return this.envs[i];
+    const s = this.envScene(i);
+    try { await this.r.compileAsync(s, this.camera); } catch { /* compiled in fromScene instead */ }
+    return this.envFor(i, s);
+  }
+  // 1.4: the other sectors' floors (procedural textures) and lighting maps are made after the title is up, in idle
+  // time (a test page waits for them before its title); the warm-up compiles every look with the first look's
+  // floor and map standing in (same shader programs)
+  prepLook(i) {
+    const L = LOOKS[i];
+    if (!this.floors[L.floor]) { const fs = this.floors[L.floor] = TX.floorSet(L.floor, this.q.tex); for (const t of [fs.map, fs.normalMap, fs.roughnessMap]) if (t) this.r.initTexture(t); }
+    if (!this.envs[i]) this.envFor(i);
+  }
+  get prepared() { return LOOKS.every((L, k) => this.envs[k] && this.floors[L.floor]); }
+  async prepareAll(idle = true) {
+    const wait = () => new Promise((r) => (idle && window.requestIdleCallback ? requestIdleCallback(r, { timeout: 2500 }) : setTimeout(r, idle ? 300 : 0)));
+    if (idle) await new Promise((r) => setTimeout(r, 600));
+    for (let i = 0; i < LOOKS.length; i++) { if (this.envs[i] && this.floors[LOOKS[i].floor]) continue; await wait(); this.prepLook(i); }
+  }
+  envScene(i) {
     const L = LOOKS[i], s = new THREE.Scene();
     s.add(new THREE.Mesh(new THREE.SphereGeometry(10, 32, 16), new THREE.ShaderMaterial({ side: THREE.BackSide, uniforms: { a: { value: new THREE.Color(L.env[0]) }, b: { value: new THREE.Color(L.env[1]) }, c: { value: new THREE.Color(L.env[2]) } },
       vertexShader: 'varying vec3 vP; void main(){ vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
@@ -297,7 +323,7 @@ export class Renderer {
       m.position.set(-5 + (k % 3) * 5, 8, k < 3 ? -2.5 : 2.5); m.rotation.x = Math.PI / 2; s.add(m);
     }
     const f = new THREE.Mesh(new THREE.PlaneGeometry(20, 1), new THREE.MeshBasicMaterial({ color: hdr(L.field, 3), side: THREE.DoubleSide })); f.position.set(0, 1, -9); s.add(f);
-    this.envs[i] = this.pm.fromScene(s, 0.02).texture;
+    return s;
     return this.envs[i];
   }
 
@@ -522,13 +548,13 @@ export class Renderer {
   setLook(i) {
     if (i === this.lookI) return;
     this.lookI = i; const L = this.look = LOOKS[i];
-    const env = this.envFor(i);
+    const env = this.envDefer ? this.envs[i] || this.envAny || null : this.envFor(i);
     this.scene.environment = env;
     // scene.environment ignores a material's envMapIntensity: the whole look's image lighting is scaled here
     this.scene.environmentIntensity = L.envI ?? 0.8;
     this.floorMat.envMap = env;
-    if (!this.floors[L.floor]) this.floors[L.floor] = TX.floorSet(L.floor, this.q.tex);
-    const fs = this.floors[L.floor];
+    if (!this.floors[L.floor] && !(this.floorDefer && this.floorAny)) this.floors[L.floor] = TX.floorSet(L.floor, this.q.tex);
+    const fs = this.floors[L.floor] || this.floorAny;
     Object.assign(this.floorMat, { map: fs.map, normalMap: fs.normalMap, roughnessMap: fs.roughnessMap, metalness: L.metal, roughness: L.rough, envMapIntensity: L.envK ?? 1.2 });
     this.floorMat.color.set(L.tint);
     Object.assign(this.outerMat, { map: fs.map, normalMap: fs.normalMap, roughnessMap: fs.roughnessMap });
@@ -1447,7 +1473,7 @@ export class Renderer {
   }
 
   // draw one of everything once at boot so the first appearance of anything does not stall on a shader compile
-  warmUp() {
+  async warmUp() {
     const tmp = [MD.infiltrator().g, MD.infiltrator(0x6a3d3d, 0xffb347).g, MD.seeker().g, MD.hydraHead().g, MD.overPlate().g, MD.liftPad().g];
     for (const k in MD.ROBOT_MODELS) tmp.push(MD.ROBOT_MODELS[k]().g);
     for (const k of Object.keys(BOSSES)) tmp.push(MD.boss(k).g);
@@ -1465,13 +1491,20 @@ export class Renderer {
     // every sector's floor, environment and scenery, compiled now behind the loading screen
     const pr = { bloom: 0.7, threshold: 1.2, exposure: 1, chroma: 0, time: 0, desat: 0, fade: 1, vignette: 0.4, flash: this.flash, tint: _tint.set(1, 1, 1), shocks: [], lens: [] };
     const first = this.lookI;
-    for (let i = LOOKS.length - 1; i >= 0; i--) {
-      this.setLook(i);
-      this.buildRoom({ room: fake, robots: [], players: [] });
-      this.r.compile(this.scene, this.camera);
-      this.post.render(this.scene, this.camera, pr);
-    }
-    if (first !== 0) this.setLook(first);
+    // 1.4: the programs compile in parallel (compileAsync, KHR_parallel_shader_compile) while the page stays
+    // responsive; one drawn frame per look then fills in what compile cannot reach (shadow passes, post passes)
+    this.envAny = await this.envForAsync(first); this.floorAny = this.floors[LOOKS[first].floor];
+    this.envDefer = true; this.floorDefer = true;
+    this.lookI = -1; this.setLook(first);
+    try {
+      for (let i = LOOKS.length - 1; i >= 0; i--) {
+        this.setLook(i);
+        this.buildRoom({ room: fake, robots: [], players: [] });
+        try { await this.r.compileAsync(this.scene, this.camera); } catch { this.r.compile(this.scene, this.camera); }
+        this.post.render(this.scene, this.camera, pr);
+      }
+    } finally { this.envDefer = false; this.floorDefer = false; }
+    this.lookI = -1; this.setLook(first);
     for (const I of [this.shotI, this.boltI, this.haloI, this.mineI, this.mineLampI, this.ringI]) I.count = 0;
     for (const o of tmp) { this.scene.remove(o); MD.release(o); }
     for (const m of [...this.decalPool, ...this.aims, this.beam, this.beamCore, ...this.cones, ...this.domes.map((d) => d.m), ...this.strikes.map((q) => q.m)]) m.visible = false;

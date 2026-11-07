@@ -4,12 +4,12 @@
 // spire and its lightning, telegraph ribbons for every hazard and boss attack, HDR post with bloom.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=15';
-import * as TX from './textures.js?v=15';
-import * as MD from './models.js?v=15';
-import { FX, CALM } from './fx.js?v=15';
-import { F, POWERUPS, BOSSES, HUNTER, LAYOUT, SECTORS, rockHang, rockDrop } from './config.js?v=15';
-import { weakPos, ledgeUnder } from './sim.js?v=15';
+import { Post } from './post.js?v=16';
+import * as TX from './textures.js?v=16';
+import * as MD from './models.js?v=16';
+import { FX, CALM } from './fx.js?v=16';
+import { F, POWERUPS, BOSSES, HUNTER, LAYOUT, SECTORS, rockHang, rockDrop } from './config.js?v=16';
+import { weakPos, ledgeUnder } from './sim.js?v=16';
 
 export { CALM };
 const RR = F.R, H = F.H;
@@ -36,11 +36,13 @@ function vnoise(x, y, z) {
   return L(L(L(c(0, 0, 0), c(1, 0, 0), u), L(c(0, 1, 0), c(1, 1, 0), u), v), L(L(c(0, 0, 1), c(1, 0, 1), u), L(c(0, 1, 1), c(1, 1, 1), u), v), w);
 }
 
+// 1.9: medium (phones) bakes its procedural textures at 512 (a quarter of the work at boot; the ledges look the same
+// on a phone screen)
 export function pickQuality(name) {
   const mobile = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
   const tiers = {
     high: { name: 'high', dpr: Math.min(devicePixelRatio || 1, 2), shadow: 2048, msaa: true, bloomLevels: 5, tex: 1024, dust: 2000, sparks: 1500, debris: 200, flashLights: 4, props: 1, waves: 1 },
-    medium: { name: 'medium', dpr: Math.min(devicePixelRatio || 1, 1.6), shadow: 2048, msaa: true, bloomLevels: 4, tex: 1024, dust: 1300, sparks: 1000, debris: 130, flashLights: 3, props: 0.8, waves: 1 },
+    medium: { name: 'medium', dpr: Math.min(devicePixelRatio || 1, 1.6), shadow: 2048, msaa: true, bloomLevels: 4, tex: 512, dust: 1300, sparks: 1000, debris: 130, flashLights: 3, props: 0.8, waves: 1 },
     low: { name: 'low', dpr: 1, shadow: 1024, msaa: false, bloomLevels: 3, tex: 512, dust: 700, sparks: 500, debris: 70, flashLights: 2, props: 0.5, waves: 0 },
   };
   return tiers[name] || (mobile ? tiers.medium : tiers.high);
@@ -310,7 +312,7 @@ export class Renderer {
     this.hunterV = null; this.bossV = null; this.bossKey = null;
     this.resize();
     addEventListener('resize', () => this.resize());
-    this.setLook(0);
+    this.envDefer = true; this.setLook(0);   // its lighting map comes in the warm-up (envForAsync)
   }
 
   // ---------------------------------------------------------------- lights, sky, sea, environment
@@ -356,8 +358,19 @@ export class Renderer {
     near.rotation.x = -Math.PI / 2; near.position.y = -0.1; near.frustumCulled = false;
     this.scene.add(near);
   }
-  envFor(i) {
+  envFor(i, s = this.envScene(i)) {
     if (this.envs[i]) return this.envs[i];
+    this.envs[i] = this.pm.fromScene(s, 0.03).texture;
+    return this.envs[i];
+  }
+  // the first look's map in the warm-up: its little scene's programs compile in the background first
+  async envForAsync(i) {
+    if (this.envs[i]) return this.envs[i];
+    const s = this.envScene(i);
+    try { await this.r.compileAsync(s, this.camera); } catch { /* compiled in fromScene instead */ }
+    return this.envFor(i, s);
+  }
+  envScene(i) {
     const L = LOOKS[i], s = new THREE.Scene();
     s.add(new THREE.Mesh(new THREE.SphereGeometry(10, 32, 16), new THREE.ShaderMaterial({ side: THREE.BackSide, uniforms: { a: { value: new THREE.Color(L.env[0]) }, b: { value: new THREE.Color(L.env[1]) }, c: { value: new THREE.Color(L.env[2]) } },
       vertexShader: 'varying vec3 vP; void main(){ vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }',
@@ -366,8 +379,28 @@ export class Renderer {
       const m = new THREE.Mesh(new THREE.PlaneGeometry(3, 1), new THREE.MeshBasicMaterial({ color: hdr(L.env[0], 4), side: THREE.DoubleSide }));
       const a = (k / 5) * Math.PI * 2; m.position.set(Math.cos(a) * 8, 4 + (k % 2) * 2, Math.sin(a) * 8); m.lookAt(0, 0, 0); s.add(m);
     }
-    this.envs[i] = this.pm.fromScene(s, 0.03).texture;
-    return this.envs[i];
+    return s;
+  }
+  // 1.9: the other sectors' ledges, scenery and lighting maps are prepared after the title is up (in idle time; a
+  // test page waits for all of it before its title). Each set is compiled in the background (shown for the compile
+  // call only: compile walks visible things), then hidden until its sector comes
+  async compileHidden(g) {
+    const vis = g.visible; g.visible = true;
+    const p = this.r.compileAsync(g, this.camera, this.scene);
+    g.visible = vis;
+    try { await p; } catch { /* compiled when first drawn */ }
+  }
+  async prepLook(i) {
+    if (!this.ledgeSets[i]) { const S = this.buildLedgeSet(i); S.visible = this.lookI === i; this.ledgeSets[i] = S; await this.compileHidden(S); }
+    if (!this.scenery) this.scenery = [];
+    if (!this.scenery[i]) { const S = this.buildScenery(i); S.visible = this.lookI === i; this.scenery[i] = S; await this.compileHidden(S); }
+    if (!this.envs[i]) this.envFor(i);
+  }
+  get prepared() { return LOOKS.every((L, k) => this.envs[k] && this.ledgeSets[k] && this.scenery && this.scenery[k]); }
+  async prepareAll(idle = true) {
+    const wait = () => new Promise((r) => (idle && window.requestIdleCallback ? requestIdleCallback(r, { timeout: 2500 }) : setTimeout(r, idle ? 300 : 0)));
+    if (idle) await new Promise((r) => setTimeout(r, 600));
+    for (let i = 0; i < LOOKS.length; i++) { if (this.ledgeSets[i] && this.scenery && this.scenery[i] && this.envs[i]) continue; await wait(); await this.prepLook(i); }
   }
   heightAt(x, z) {
     const r = Math.hypot(x, z);
@@ -384,8 +417,7 @@ export class Renderer {
     if (i === this.lookI) return;
     this.lookI = i;
     const L = this.look = LOOKS[i];
-    const env = this.envFor(i);
-    this.scene.environment = env;
+    this.scene.environment = this.envDefer ? this.envs[i] || this.envAny || null : this.envFor(i);
     const u = this.skyMat.uniforms;
     u.uTop.value.set(L.sky[0]); u.uMid.value.set(L.sky[1]); u.uLow.value.set(L.sky[2]); u.uSun.value.set(L.sun); u.uSunDir.value.set(...L.sunDir).normalize();
     u.uCloudA.value.set(L.cloud[0]); u.uCloudB.value.set(L.cloud[1]); u.uDisc.value = L.sunDisc; u.uAurora.value = L.aurora ? 1 : 0; u.uStars.value = L.stars ? 1 : 0;
@@ -1410,7 +1442,7 @@ export class Renderer {
   }
 
   // draw one of everything once at boot so nothing compiles a shader in the middle of play
-  warmUp() {
+  async warmUp() {
     const tmp = [];
     const addTmp = (g, x) => { toWorld(x, 10, g.position); this.scene.add(g); tmp.push(g); };
     // the jousters are skinned: they stand close together inside the sun's shadow camera (aimed at them first), so
@@ -1433,13 +1465,14 @@ export class Renderer {
     this.fx.splash(_v.x, 0, _v.z, 1);
     this.fx.flash(_v.x, 8, _v.z, 1);
     const pr = { bloom: 0.7, threshold: 1.2, exposure: 1, chroma: 0, time: 0, desat: 0, fade: 1, vignette: 0.4, flash: this.flash, tint: _tint.set(1, 1, 1), shocks: [], lens: [] };
+    // 1.9: only the current sector's set is here (the rest: prepareAll); the programs compile in parallel
+    // (compileAsync, KHR_parallel_shader_compile) while the page stays responsive, then one drawn frame per look
+    // fills in what compile cannot reach (the shadow pass, the post passes)
     const first = this.lookI;
-    for (let i = LOOKS.length - 1; i >= 0; i--) {
-      this.setLook(i);
-      this.r.compile(this.scene, this.camera);
-      this.post.render(this.scene, this.camera, pr);
-    }
-    if (first !== 0) this.setLook(first);
+    this.envAny = await this.envForAsync(first); this.scene.environment = this.envAny;
+    try { await this.r.compileAsync(this.scene, this.camera); } catch { this.r.compile(this.scene, this.camera); }
+    this.envDefer = false;
+    this.post.render(this.scene, this.camera, pr);
     for (const k in this.shotI) this.shotI[k].count = 0;
     for (const r of this.ribbons) r.hide();
     for (const c of [...this.cols, ...this.spouts, ...this.rings]) c.visible = false;
