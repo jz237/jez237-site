@@ -262,3 +262,17 @@ test('A4-2/A5: the African/oscar swelling plan is one sequence: watch, then get 
   assert.doesNotMatch(steps, /treat with metronidazole/i);
   assert.doesNotMatch(steps, /If it’s still eating normally/);
 });
+
+// Jez, Nov 6 19:05: each "Could also be" card explains why it could be that, like "Why we think so".
+test('J1: every look-alike carries a why-it-could-be-this line built from the answers', () => {
+  const d = assessDiagnosis({ water: 'fresh', primarySign: 'dots', signs: ['dots', 'rubbing'], fishType: 'betta' });
+  const velvet = d.alternatives.find(a => a.id === 'velvet-fresh');
+  assert.ok(velvet, 'velvet listed next to ich');
+  assert.match(velvet.whyAlso, /look a lot like ich/);
+  assert.match(velvet.whyAlso, /rubbing/);
+  assert.match(velvet.whyAlso, /bettas/);
+  for (const input of [{ water: 'fresh', primarySign: 'fins', signs: ['fins'] }, { water: 'marine', primarySign: 'dots', signs: ['dots'] }, { water: 'fresh', primarySign: 'swollen', signs: ['swollen'], fishType: 'goldfish' }])
+    for (const a of assessDiagnosis(input).alternatives) assert.ok(a.whyAlso && a.whyAlso.length > 20, `${a.id}: ${a.whyAlso}`);
+  const fins = assessDiagnosis({ water: 'fresh', primarySign: 'fins', signs: ['fins'] }).alternatives.find(a => a.id === 'columnaris');
+  assert.match(fins.whyAlso, /“Damaged fins” fits this too/);
+});

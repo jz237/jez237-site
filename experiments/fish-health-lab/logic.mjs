@@ -360,6 +360,20 @@ const MAX_ALTERNATIVES = 3;
 const ALARMS = ['deaths', 'gasping', 'collapse', 'several'];
 const LIVEBEARERS = ['guppy', 'molly', ''];
 
+// "Why it could be this" for a look-alike (Jez, Nov 6 2026: "brief explanations of why it could
+// also be that. Same as the why we think so"): which of your answers it also fits.
+function alsoReason(condition, finding, input) {
+  const signs = (finding?.fits || []).filter(f => weightOf(condition, f, input.water) > 0).map(f => labelFor(f, input));
+  const behaviors = (input.signs || []).filter(id => BEHAVIORS.some(b => b.id === id) && weightOf(condition, id, input.water) > 0).map(id => labelFor(id, input).toLowerCase());
+  const fish = fishTypeFor(input.water, input.fishType);
+  const like = finding ? finding.title.replace(/\s*\(.*\)$/, '').toLowerCase() : '';
+  const fits = signs.length ? `“${signs.join(' + ')}” fits this too${behaviors.length ? `, and so does ${behaviors.join(', ')}` : ''}.`
+    : like ? `It can look a lot like ${like}${behaviors.length ? `, and ${behaviors.join(', ')} fits it too` : ''}.`
+    : behaviors.length ? `${behaviors.join(', ').replace(/^./, c => c.toUpperCase())} fits this too.` : '';
+  const what = (condition.summary || '').match(/^[^.!?]*[.!?]/)?.[0] || '';
+  return [fits, what, fish?.boosts[condition.id] ? `It’s also common in ${fish.plural}.` : ''].filter(Boolean).join(' ');
+}
+
 // Ranked look-alikes for the findings. 'normal' never becomes a card; when it
 // would have been listed, the result carries one plain "natural markings" line.
 function couldAlsoBe(findings, ranked, input, pinned = null) {
@@ -397,6 +411,7 @@ function couldAlsoBe(findings, ranked, input, pinned = null) {
     const urgencyLevel = urgencyFor(c, input);
     return {
       ...c, urgencyLevel,
+      whyAlso: alsoReason(c, findings.find(f => f.id === c.from), input),
       moreUrgent: Boolean(top && URGENCY[urgencyLevel].rank > URGENCY[top.urgencyLevel].rank),
       treatmentNote: treatmentNote(c.id, c.from),
     };
