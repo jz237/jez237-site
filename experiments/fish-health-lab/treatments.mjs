@@ -40,7 +40,7 @@ export function treatmentGuideFor(id, water) {
 // "What to do now" plans. Treatment types, never doses: amounts always come from
 // the product label. Saltwater plans that use copper, formalin, chloroquine,
 // praziquantel or antibiotics are flagged not reef-safe (treat in a separate tank).
-const HOSPITAL = 'Move the fish to a hospital (quarantine) tank with a heater and air stone.';
+const HOSPITAL = 'Move the fish to a hospital (quarantine) tank with a heater and air stone—bare bottom, one hiding spot and, ideally, a sponge filter that has been running in your main tank.';
 const MARINE_HOSPITAL = 'Move the fish to a bare hospital tank—never medicate a reef display.';
 const TEST = 'Test ammonia and nitrite, then do a 25–30% water change.';
 

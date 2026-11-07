@@ -306,7 +306,7 @@ export const REEF_CONDITIONS = [
     shows: ["deaths"],
     // Wording when a different sign led here (Nov 6 2026 combination sweep).
     checks: { "color": "Inverts that fade, go pale, stop moving or drop spines soon after a medicine or copper went in are being poisoned—most fish medicines are toxic to them.", "pale": "Inverts that fade, go pale, stop moving or drop spines soon after a medicine or copper went in are being poisoned—most fish medicines are toxic to them.", "not-moving": "Inverts that fade, go pale, stop moving or drop spines soon after a medicine or copper went in are being poisoned—most fish medicines are toxic to them.", "spines": "Inverts that fade, go pale, stop moving or drop spines soon after a medicine or copper went in are being poisoned—most fish medicines are toxic to them." },
-    clues: ['Deaths within hours or days of dosing.', 'Several kinds of inverts affected at once.'],
+    clues: ['Deaths within hours or days of dosing, new decor or cleaning near the tank (sprays, soap, plant treatments).', 'Several kinds of inverts affected at once.'],
     distinguish: 'Deaths after adding new animals point to acclimation shock. Many deaths with gasping fish point to oxygen.',
     avoid: 'Never dose copper or fish medicine in a tank with inverts.',
   },

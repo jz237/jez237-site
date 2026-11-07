@@ -91,8 +91,8 @@ export const POND_CONDITIONS = [
     // Signs its own picture already shows; any other sign leads with that sign's picture.
     shows: [],
     clues: ['Flashing and scraping on stones, sudden darting or jumping.', 'Dull, grey, extra-slimy skin; fins clamped.'],
-    distinguish: 'If you can see bugs on the skin, it’s lice. White dots are white spot.',
-    avoid: 'Don’t guess the dose—know your pond volume before adding any treatment.',
+    distinguish: 'If you can see bugs on the skin, it’s lice. White dots are white spot. Flukes are too small to see and rubbing alone doesn’t prove them—ammonia and pH swings cause it too, so test first.',
+    avoid: 'Don’t guess the dose—know your pond volume before adding any treatment. Extra air helps but won’t clear gill parasites.',
   },
   {
     id: 'pond-ich', group: 'pond', title: 'White spot (ich)', kind: 'Parasite', urgency: 'week',
@@ -113,7 +113,7 @@ export const POND_CONDITIONS = [
     // Wording when a different sign led here (Nov 6 2026 combination sweep).
     checks: { "lethargic": "In hot weather, fish that hang still or sit low are often short of oxygen—warm water holds less.", "unclear": "In hot weather, fish that just seem off are often short of oxygen—warm water holds less." },
     clues: ['Many fish at the surface at once, often early morning.', 'Hot, still weather, green water, or the pump or waterfall off.'],
-    distinguish: 'One fish gasping while the others are fine points to gills—flukes or poor water.',
+    distinguish: 'One fish gasping while the others are fine points to gills—flukes or poor water. Oxygen is lowest just before sunrise, so a pond can test fine in the afternoon and still run short at dawn.',
     avoid: 'Don’t wait for morning—add air now.',
   },
   {
@@ -127,7 +127,7 @@ export const POND_CONDITIONS = [
     // Signs its own picture already shows; any other sign leads with that sign's picture.
     shows: ["lethargic"],
     clues: ['Several fish off at once.', 'Spring start-up, a filter that was cleaned or stopped, lots of fish or heavy feeding.'],
-    distinguish: 'Trouble right after a big top-up or storm points to a water swing. Gasping on hot nights is oxygen.',
+    distinguish: 'Trouble right after a big top-up or storm points to a water swing. Gasping on hot nights is oxygen. When bad water is the cause, many fish show the same signs at once; parasites usually start in the weaker fish and spread.',
     avoid: 'Don’t clean the filter media under the tap—rinse it in pond water so the good bacteria survive.',
   },
   {
@@ -140,7 +140,7 @@ export const POND_CONDITIONS = [
     shows: ["flashing", "gasping"],
     clues: ['Started within hours of topping up with the hose, or after heavy rain.', 'Fish darting, gasping or hanging still.'],
     distinguish: 'Slow trouble over days points to poor water. Gasping on hot nights is oxygen.',
-    avoid: 'Don’t top up more than about 10% at a time without a dechlorinator.',
+    avoid: 'Don’t top up more than about 10% at a time without a dechlorinator. After heavy rain, test pH and KH (buffer) as well.',
   },
   {
     id: 'pond-fungus', group: 'pond', title: 'Fungus (cotton-wool)', kind: 'Fungus', urgency: 'week',
