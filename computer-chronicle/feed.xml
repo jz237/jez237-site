@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 06 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 07 Nov 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of July 1-7, 1985 — SSI ventures into arcade adventure with Gemstone Warrior</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-07-01</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-07-01</guid>
+      <pubDate>Sat, 07 Nov 2026 12:00:00 GMT</pubDate>
+      <description>A war-game specialist sends Apple and Commodore players underground. Strategic Simulations Inc., best known for detailed war games, is trying a different sort of battle. James V. Trunzo’s July COMPUTE! review finds Gemstone Warrior an arcade-oriented adventure in which fast decisions and quick reflexes matter more than the patient calculations of a historical simulation. This is a current review, not a claim that the game first appeared this week. Also this week: Atari prepares the ST for summer buyers · HomePak bundles writing, filing and telecommunications for $49.95 · The online information boom comes with a running meter.</description>
+    </item>
     <item>
       <title>Week of June 24-30, 1985 — Apple cuts one-fifth of workforce as first quarterly loss looms</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-06-24</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-02-18</guid>
       <pubDate>Mon, 19 Oct 2026 12:00:00 GMT</pubDate>
       <description>February reporting opens the workshop behind Sierra’s ambitious adventure. A kingdom of 80 scenes comes at a very real price. Donald B. Trivette’s February COMPUTE! account puts the cost of Sierra’s King’s Quest above $700,000, with Roberta Williams and six programmers and artists working for 18 months. IBM supplied a prototype PCjr and asked for a game that could show its color graphics before the machine was announced. Also this week: Michael Crichton takes storytelling from the cinema to Amazon · PC-EYE brings video capture and pixel retouching to the IBM PC · PC-Write asks users to share the software—and pays registered referrers.</description>
-    </item>
-    <item>
-      <title>Week of February 11-17, 1985 — Michael Crichton trades the movie screen for the adventure game</title>
-      <link>https://jez237.com/computer-chronicle/?date=1985-02-11</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-02-11</guid>
-      <pubDate>Sun, 18 Oct 2026 12:00:00 GMT</pubDate>
-      <description>In a February interview, the author behind Amazon explains why story should guide the player. Michael Crichton wants the computer adventure to tell a story, not merely conceal a solution. Interviewed by Betsy Staples in February’s Creative Computing, the novelist and filmmaker describes Amazon, his Trillium Software adventure made with programmer Stephen Warady, as a sequence of dramatic episodes. Also this week: A $239 color printer meets the real-paper test · The Commodore 64 becomes a music room for non-musicians · IBM announces its 3090 mainframe family.</description>
     </item>
   </channel>
 </rss>

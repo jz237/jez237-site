@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-11-07",
+      "historicDate": "1985-07-01",
+      "displayDate": "Week of July 1-7, 1985",
+      "edition": "Issue 153 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "SSI trades the battlefield for the cavern; Atari readies a summer challenger.",
+      "leadHeadline": "SSI ventures into arcade adventure with Gemstone Warrior",
+      "storyHeadlines": [
+        "Atari prepares the ST for summer buyers",
+        "HomePak bundles writing, filing and telecommunications for $49.95",
+        "The online information boom comes with a running meter"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-07-01.jpg",
+      "thumb": "media/thumbs/1985-07-01.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-11-06",
       "historicDate": "1985-06-24",
       "displayDate": "Week of June 24-30, 1985",
