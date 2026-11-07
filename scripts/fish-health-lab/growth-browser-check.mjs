@@ -50,8 +50,10 @@ try {
   const link = page.locator('#results-content [data-treatment="lymphocystis"]');
   const href = await link.getAttribute('href');
   assert.equal(new URL(href).hash,'#v3226746');
-  const pending = page.waitForEvent('popup'); await link.click(); const popup = await pending;
-  await popup.waitForURL(href); assert.equal(await popup.evaluate(()=>window.opener===null),true); await popup.close();
+  await link.click(); await page.locator('#reader-dialog[open]').waitFor();
+  assert.equal(await page.locator('#reader-frame').getAttribute('src'), href);
+  await page.waitForFunction(() => document.querySelector('#reader-status').hidden, null, { timeout: 30000 });
+  await page.locator('.reader-close').click();
   assert.equal(page.url(),root);
   assert.equal(treatmentRequests[0].referer,'');
   assert.match(await page.locator('.result-focus .todo-card').innerText(),/no medicine/);
@@ -107,7 +109,8 @@ try {
   await page.locator('input[name="growthAppearance"][value="smooth"]').check();
   await action(page,'back').click(); await next(page);
   assert.equal(await page.locator('input[name="growthAppearance"]:checked').inputValue(),'smooth');
-  await next(page); assert.equal(await page.locator('.result-focus .result-image img').evaluate(img=>img.src.includes('/marine-')),true);
+  // A saltwater picture after switching water (results may now borrow a saltwater fish's own picture; Nov 6 combination sweep).
+  await next(page); { const pic = await page.locator('.result-focus .result-image img').evaluate(img=>[img.src,img.alt]); const id = await page.locator('.result-focus').getAttribute('data-result'); assert.ok(/marine-|clownfish|tang|wrasse|goby|damsel|dottyback|[\/-]angel[\/-]/.test(pic[0]), `${id}: ${pic}`); }
   record('Back preserves a closer answer; changing water clears it and uses marine pictures');
 
   for (const sign of ['fins','sores','swollen','eyes','balance','breathing']) {

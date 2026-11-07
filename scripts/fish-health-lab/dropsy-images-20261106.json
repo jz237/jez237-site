@@ -1,0 +1,145 @@
+{
+ "request": "Jez, 2026-11-06 19:21 EST: \"check all the combinations so that this type of mismatch does not occur on any of them and swap in better pics for any that does\" — saltwater dropsy had no pinecone-scale picture.",
+ "requestedModel": "openai/gpt-image-2.6-sunburst",
+ "requestedQuality": "medium",
+ "requestedSize": "auto",
+ "aspectRatio": "2:1",
+ "reportedProviderModel": "openai/gpt-image-2.6-sunburst",
+ "backendModel": "not independently verified (provider reported gpt-image-2.6-sunburst)",
+ "sheet": {
+  "sha256": "da686981163035163e66cb2e9f014dc1ad98cdc8ddda049e75c1acc251009bd5",
+  "width": 1774,
+  "height": 887,
+  "columns": 4,
+  "rows": 2
+ },
+ "prompt": "Use case: AI-illustrated visual guide that helps a beginner fishkeeper recognise what is wrong with their fish. Photorealistic educational aquarium photography, NOT cartoons, icons, vector drawings, watercolor, plastic 3D renders or poster typography. Realistic underwater macro-photography aesthetic: anatomically believable fish, natural scales, translucent fins, restrained aquarium light, softly blurred home-aquarium background. Each cell names its fish and its scene. The fish is sharp, in focus, level and natural (not twisted at odd angles), large in its cell and fully in view. The key feature in each cell must be OBVIOUS to a novice at thumbnail size, while staying believable (no horror, no gore, no giant parasites). Absolutely no text, letters, numbers, labels, logos, watermarks, arrows or symbols anywhere in the image.\nSTRICT CONTACT SHEET for cropping into eight separate pictures: exactly FOUR equal-width columns and TWO equal-height rows, eight equal square cells covering the complete image edge to edge. No gutters, no borders, no outer margin. Every cell is its own separate scene with its own background. Nothing crosses a cell boundary; keep the whole subject inside the central 85 percent of its cell. Never put a cell's feature into another cell. Follow the exact row-major order below.\nRow 1 column 1: an OCELLARIS CLOWNFISH in a reef aquarium, softly blurred live rock and blue-white reef light behind, its whole body clearly SWOLLEN and puffed up with the SCALES RAISED and standing out from the body like an open PINE CONE (dropsy), clearly visible along the flanks; the fish otherwise natural and recognisable, fins slightly clamped.\nRow 1 column 2: a YELLOW TANG in a reef aquarium, softly blurred live rock and blue-white reef light behind, its whole body clearly SWOLLEN and puffed up with the SCALES RAISED and standing out from the body like an open PINE CONE (dropsy), clearly visible along the flanks; the fish otherwise natural and recognisable, fins slightly clamped.\nRow 1 column 3: a FLAME ANGELFISH in a reef aquarium, softly blurred live rock and blue-white reef light behind, its whole body clearly SWOLLEN and puffed up with the SCALES RAISED and standing out from the body like an open PINE CONE (dropsy), clearly visible along the flanks; the fish otherwise natural and recognisable, fins slightly clamped.\nRow 1 column 4: a SIX-LINE WRASSE in a reef aquarium, softly blurred live rock and blue-white reef light behind, its whole body clearly SWOLLEN and puffed up with the SCALES RAISED and standing out from the body like an open PINE CONE (dropsy), clearly visible along the flanks; the fish otherwise natural and recognisable, fins slightly clamped.\nRow 2 column 1: a YELLOW WATCHMAN GOBY resting on sand in a reef aquarium, softly blurred live rock and blue-white reef light behind, its whole body clearly SWOLLEN and puffed up with the SCALES RAISED and standing out from the body like an open PINE CONE (dropsy), clearly visible along the flanks; the fish otherwise natural and recognisable, fins slightly clamped.\nRow 2 column 2: a YELLOWTAIL DAMSELFISH in a reef aquarium, softly blurred live rock and blue-white reef light behind, its whole body clearly SWOLLEN and puffed up with the SCALES RAISED and standing out from the body like an open PINE CONE (dropsy), clearly visible along the flanks; the fish otherwise natural and recognisable, fins slightly clamped.\nRow 2 column 3: a ROYAL GRAMMA in a reef aquarium, softly blurred live rock and blue-white reef light behind, its whole body clearly SWOLLEN and puffed up with the SCALES RAISED and standing out from the body like an open PINE CONE (dropsy), clearly visible along the flanks; the fish otherwise natural and recognisable, fins slightly clamped.\nRow 2 column 4: an OCELLARIS CLOWNFISH seen from slightly above in a reef aquarium, softly blurred live rock and blue-white reef light behind, its whole body clearly SWOLLEN and puffed up with the SCALES RAISED and standing out from the body like an open PINE CONE (dropsy), clearly visible along the flanks; the fish otherwise natural and recognisable, fins slightly clamped.",
+ "assets": [
+  {
+   "id": "clownfish-dropsy",
+   "cell": 0,
+   "crop": [
+    0,
+    0,
+    444,
+    444
+   ],
+   "resized": false,
+   "sha256": "9ba77f28a8287ca19627e94328ba15a55b922d2a853c722fbf28557d8945b786",
+   "bytes": 53355,
+   "width": 444,
+   "height": 444,
+   "r2Key": "experiments/fish-health-lab/dropsy/fish-clownfish-dropsy-9ba77f28a828.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/dropsy/fish-clownfish-dropsy-9ba77f28a828.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "tang-dropsy",
+   "cell": 1,
+   "crop": [
+    444,
+    0,
+    887,
+    444
+   ],
+   "resized": false,
+   "sha256": "065f32ee9d4d287a23a7f9d5412c4f6f5eb2b25138968ddd2b2de8783eaa5d23",
+   "bytes": 62641,
+   "width": 443,
+   "height": 444,
+   "r2Key": "experiments/fish-health-lab/dropsy/fish-tang-dropsy-065f32ee9d4d.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/dropsy/fish-tang-dropsy-065f32ee9d4d.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "angel-dropsy",
+   "cell": 2,
+   "crop": [
+    887,
+    0,
+    1330,
+    444
+   ],
+   "resized": false,
+   "sha256": "af577f8ee6638e84dd7b5e2581762aaf91ec43789584120e09629457930d4309",
+   "bytes": 62027,
+   "width": 443,
+   "height": 444,
+   "r2Key": "experiments/fish-health-lab/dropsy/fish-angel-dropsy-af577f8ee663.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/dropsy/fish-angel-dropsy-af577f8ee663.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "wrasse-dropsy",
+   "cell": 3,
+   "crop": [
+    1330,
+    0,
+    1774,
+    444
+   ],
+   "resized": false,
+   "sha256": "c595936f1b49091c101b065f1ad9672dbdfce28c6a26831bb0c41c14c3860dec",
+   "bytes": 62577,
+   "width": 444,
+   "height": 444,
+   "r2Key": "experiments/fish-health-lab/dropsy/fish-wrasse-dropsy-c595936f1b49.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/dropsy/fish-wrasse-dropsy-c595936f1b49.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "goby-dropsy",
+   "cell": 4,
+   "crop": [
+    0,
+    444,
+    444,
+    887
+   ],
+   "resized": false,
+   "sha256": "3d13b85bff7065a2f16473c1461a410a469ea50f002482d78e3f425c9fe927d7",
+   "bytes": 63928,
+   "width": 444,
+   "height": 443,
+   "r2Key": "experiments/fish-health-lab/dropsy/fish-goby-dropsy-3d13b85bff70.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/dropsy/fish-goby-dropsy-3d13b85bff70.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "damsel-dropsy",
+   "cell": 5,
+   "crop": [
+    444,
+    444,
+    887,
+    887
+   ],
+   "resized": false,
+   "sha256": "fcb742a0c03dd9c9aab6be5d2adc1559f0892dc9090481acfd5dc20be4763a93",
+   "bytes": 63896,
+   "width": 443,
+   "height": 443,
+   "r2Key": "experiments/fish-health-lab/dropsy/fish-damsel-dropsy-fcb742a0c03d.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/dropsy/fish-damsel-dropsy-fcb742a0c03d.jpg",
+   "uploaded": true
+  },
+  {
+   "id": "dottyback-dropsy",
+   "cell": 6,
+   "crop": [
+    887,
+    444,
+    1330,
+    887
+   ],
+   "resized": false,
+   "sha256": "c2875a97a61ecae51de637687be4f53da9d13e447a655eab79214614ffd9fb92",
+   "bytes": 56572,
+   "width": 443,
+   "height": 443,
+   "r2Key": "experiments/fish-health-lab/dropsy/fish-dottyback-dropsy-c2875a97a61e.jpg",
+   "url": "https://media.jez237.com/experiments/fish-health-lab/dropsy/fish-dottyback-dropsy-c2875a97a61e.jpg",
+   "uploaded": true
+  }
+ ]
+}

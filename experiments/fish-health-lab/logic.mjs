@@ -7,6 +7,35 @@ const growthLabels = GROWTH_CHOICES.filter(c => c.id !== 'unclear').map(c => [`l
 export const LABELS = Object.fromEntries([...SYMPTOMS.map(s => [s.id, s.title]), ...BEHAVIORS.map(s => [s.id, s.label]), ...closerLabels, ...growthLabels, ['lumps:unclear', 'Raised lumps']]);
 const numeric = value => value !== '' && value !== null && value !== undefined && Number.isFinite(Number(value)) ? Number(value) : null;
 const DISTRESS = ['gasping', 'collapse', 'deaths'];
+// Corys and plecos have armour plates, not scales; their swelling answers read differently.
+const CATFISH = ['cory', 'pleco'];
+const CATFISH_LABELS = { 'swollen:pinecone': 'Swollen tight all over', 'swollen:flat': 'Just a full, soft belly', pinecone: 'Swollen tight and stiff all over' };
+// Look-alike checks that talk about scales, for corys and plecos.
+const CATFISH_REASONS = { dropsy: 'Look from above: swollen tight and stiff all over = dropsy.', bloat: 'Look from above: just a full, soft belly = bloat.' };
+const labelFor = (id, input) => (CATFISH.includes(input.fishType) && CATFISH_LABELS[id]) || LABELS[id] || id;
+
+// Salinity as typed: "35 ppt", "35", "1.025" or "SG 1.025".
+// → { ppt } when it can be read, { unreadable: true } when it can't, null when blank.
+// Specific gravity 1.000–1.100 converts at about 25 °C; ppt is taken from 0–70.
+export function readSalinity(text) {
+  const raw = String(text || '').trim();
+  if (!raw) return null;
+  if (/\d\s*[mµu]S(\/cm)?\b|siemens|conductiv/i.test(raw)) return { unreadable: true }; // conductivity, not salinity
+  if (/[-−–]\s*\d/.test(raw)) return { unreadable: true }; // a negative reading (any minus sign)
+  if (/\bppm\b|mg\s*\/\s*l|\bmg\b|ppb/i.test(raw)) return { unreadable: true }; // not salinity units
+  const n = parseFloat(raw.replace(',', '.').replace(/^[^0-9.]+/, ''));
+  if (!Number.isFinite(n) || n < 0) return { unreadable: true };
+  // Units win when they're given: "%", "ppt"/"psu"/"‰", or "SG".
+  if (/%/.test(raw)) return n <= 7 ? { ppt: n * 10 } : { unreadable: true };
+  if (/ppt|psu|‰|g\/l/i.test(raw)) return n <= 70 ? { ppt: n } : { unreadable: true };
+  if (/\bsg\b|specific gravity/i.test(raw)) return n >= 0.98 && n <= 1.1 ? { ppt: Math.max(0, (n - 1) * 1310) } : { unreadable: true };
+  if (n >= 0.98 && n <= 1.1) return { ppt: Math.max(0, (n - 1) * 1310) };
+  if (n > 1.1 && n < 3) return { unreadable: true };
+  if (n <= 70) return { ppt: n };
+  return { unreadable: true };
+}
+export const salinityPpt = text => readSalinity(text)?.ppt ?? null;
+const UNSAFE_DETOX = 'do a water change now. A detoxifier that binds ammonia and nitrite helps too (if you’re also medicating, check both labels say they can be used together).';
 
 export function assessUrgency(input) {
   const signs = new Set(input.signs || []);
@@ -15,17 +44,60 @@ export function assessUrgency(input) {
   if (signs.has('gasping')) urgent.push('Severe or continuous gasping');
   if (signs.has('collapse')) urgent.push('Loss of balance with poor responsiveness');
   if (signs.has('deaths')) urgent.push('Fish deaths during this problem');
-  if (signs.has('pinecone')) urgent.push('Raised, pinecone-like scales');
+  if (signs.has('pinecone') || (signs.has('swollen') && input.closer === 'pinecone')) urgent.push(CATFISH.includes(input.fishType) ? 'Tight, all-over swelling (possible dropsy)' : 'Raised, pinecone-like scales');
   if (input.water === 'marine' && (signs.has('breathing') || signs.has('gasping')) && signs.has('dust')) urgent.push('Marine fish with fast breathing and a fine dusting');
   const ammonia = numeric(input.ammonia), nitrite = numeric(input.nitrite);
-  if (ammonia !== null && ammonia > 0) checks.push('Ammonia is detectable—do a water change and add a detoxifier now.');
+  if (ammonia !== null && ammonia > 0) checks.push(`Ammonia is detectable—${UNSAFE_DETOX}`);
+  if (ammonia !== null && ammonia >= 1) urgent.push(`Ammonia ${ammonia} ppm is toxic`);
+  if (numeric(input.nitrite) !== null && numeric(input.nitrite) >= 1) urgent.push(`Nitrite ${numeric(input.nitrite)} ppm is toxic`);
   if (nitrite !== null && nitrite > 0) checks.push(input.water === 'marine'
     ? 'Nitrite is detectable—your biological filter may be struggling. Do a water change.'
     : 'Nitrite is detectable—do a water change and consider aquarium salt for salt-tolerant fish to protect the gills.');
+  // Readings: outside the usual range → a water check; far outside → urgent as well.
+  const marine = input.water === 'marine';
+  const ph = numeric(input.ph);
+  if (ph !== null && ph > 0) {
+    const [low, high] = marine ? [7.8, 8.6] : [6, 8.5], [danger, dangerHigh] = marine ? [7.4, 9] : [5.5, 9.5];
+    if (ph < danger || ph > dangerHigh) {
+      urgent.push(`pH ${ph} is dangerously ${ph < danger ? 'low' : 'high'}`);
+      checks.push(`pH ${ph} is far outside the usual ${low}–${high}. Do a partial water change now with temperature-matched water, then bring the rest back slowly over a few days.`);
+    } else if (ph < low || ph > high) checks.push(`pH ${ph} is outside the usual ${low}–${high} for ${marine ? 'saltwater' : 'most freshwater fish'}—correct it slowly over a few days, not all at once.`);
+  }
+  const temp = numeric(input.temperature);
+  if (temp !== null && temp > 0) {
+    const unit = input.tempUnit === 'C' ? 'C' : 'F', f = unit === 'C' ? temp * 9 / 5 + 32 : temp;
+    // [usual low, usual high, danger low, danger high] in °F, and what "back to normal" means.
+    const coldwater = !marine && input.fishType === 'goldfish';
+    const unknownFresh = !marine && !input.fishType;
+    // Goldfish are coldwater fish: fine from the 40s (ponds in winter) to the mid-70s.
+    const range = marine ? { usual: [72, 84], danger: [65, 89], target: '76–79 °F / 25–26 °C', who: 'reef fish' }
+      : coldwater ? { usual: [40, 77], danger: [34, 88], target: '60–75 °F / 16–24 °C', who: 'goldfish' }
+      : { usual: [64, 86], danger: [unknownFresh ? 34 : 55, 92], target: '75–80 °F / 24–27 °C', who: 'tropical fish' };
+    if (unit === 'F' && temp >= 15 && temp <= 35) checks.push(`${temp} °F would be near freezing—did you mean °C? Switch the unit next to the reading.`);
+    else if (unit === 'C' && temp > 45) checks.push(`${temp} °C would be far too hot for any fish—did you mean °F? Switch the unit next to the reading.`);
+    else if (f <= range.danger[0] || f >= range.danger[1]) {
+      urgent.push(`${temp} °${unit} is dangerously ${f <= range.danger[0] ? 'cold' : 'hot'} for ${range.who}`);
+      checks.push(`${temp} °${unit} is far outside what ${range.who} handle. Add aeration and bring it back toward ${range.target} by a few degrees an hour${coldwater ? '' : '—check the heater'}.`);
+    } else if (f < range.usual[0] || f > range.usual[1]) {
+      checks.push(`${temp} °${unit} is ${f < range.usual[0] ? 'colder' : 'warmer'} than most ${range.who} like (${range.target})${coldwater ? '' : '—check the heater'}; change it slowly.${unknownFresh && f < range.usual[0] ? (f < 50 ? ' If these are tropical fish, act now—it’s far too cold. Goldfish and pond fish can cope with this.' : ' (Fine for goldfish and other coldwater fish.)') : ''}`);
+    }
+  }
+  const salinity = readSalinity(input.salinity);
+  if (marine && salinity?.unreadable) checks.push(`The salinity reading “${String(input.salinity).trim()}” doesn’t look right—enter it as ppt (e.g. 35) or specific gravity (e.g. 1.025), and re-check your refractometer or hydrometer.`);
+  else if (marine && salinity) {
+    const ppt = salinity.ppt;
+    if (ppt < 25 || ppt > 42) urgent.push(`Salinity about ${Math.round(ppt)} ppt is dangerously ${ppt < 25 ? 'low' : 'high'}`);
+    if (ppt < 30 || ppt > 37) checks.push(`Salinity looks ${ppt < 30 ? 'low' : 'high'} (about ${Math.round(ppt)} ppt; reef tanks usually run 33–35 ppt / 1.024–1.026). Correct it slowly—no more than about 1 ppt a day.`);
+  }
   if (input.tankAge === 'new') checks.push('A new tank may not be cycled yet—test ammonia and nitrite every day.');
   if (input.affected === 'several' || signs.has('several')) checks.push('Several fish are affected—check the water as well as treating the illness.');
   if (input.onset === 'after-change') checks.push('This started after a water, equipment or chemical change—check that change and test the water now.');
-  return { urgent, checks, level: urgent.length ? 'urgent' : checks.length ? 'check-water' : 'observe', waterUnknown: ammonia === null || nitrite === null };
+  // What the urgent banner tells you to do. A salinity problem is fixed slowly, not with a big change.
+  const salinityAlarm = urgent.some(u => /^Salinity/.test(u)), onlySalinity = salinityAlarm && urgent.every(u => /^Salinity/.test(u));
+  const action = onlySalinity ? 'Add aeration and correct the salinity slowly—about 1 ppt a day, not with one big water change.'
+    : salinityAlarm ? 'Add aeration and do a water change now with water at the tank’s current salinity; then correct the salinity itself slowly (about 1 ppt a day).'
+    : 'Add aeration, test the water and do a water change now.';
+  return { urgent, checks, action, level: urgent.length ? 'urgent' : checks.length ? 'check-water' : 'observe', waterUnknown: ammonia === null || nitrite === null };
 }
 
 function weightsFor(condition, water) {
@@ -96,29 +168,68 @@ export function featureKeys(input) {
 
 export function urgencyFor(condition, input) {
   const signs = input.signs || [];
-  return DISTRESS.some(id => signs.includes(id)) ? 'today' : condition.urgency || 'week';
+  if (DISTRESS.some(id => signs.includes(id))) return 'today';
+  // African cichlids: swelling (and especially swelling + not eating) can be Malawi bloat—act quickly.
+  if (condition.id === 'bloat' && input.fishType === 'african') return 'today';
+  return condition.urgency || 'week';
+}
+
+// The "why" sentence follows the answer that led here: the first matching answer (exact,
+// then its base sign) with its own wording, else the condition's usual sentence.
+export function checkFor(condition, fits, signs = []) {
+  const own = condition.checks || {};
+  // Only the answer that led here (the first match) picks the wording: a later extra sign
+  // must not swap the classic sentence for a reason the person didn't give.
+  const f = fits[0] || '', base = f.split(':')[0];
+  // An answer plus a behavior ("unclear+rubbing") wins over the answer alone.
+  for (const b of signs) if (own[`${f}+${b}`] || own[`${base}+${b}`]) return own[`${f}+${b}`] || own[`${base}+${b}`];
+  return own[f] || own[base] || condition.check;
 }
 
 function reasonFor(condition, input, fits) {
   const fish = fishTypeFor(input.water, input.fishType);
-  const seen = fits.map(id => LABELS[id] || id).join(' + ');
-  const behaviors = (input.signs || []).filter(id => BEHAVIORS.some(b => b.id === id) && (weightsFor(condition, input.water)[id] || 0) > 0).map(id => LABELS[id].toLowerCase());
+  const seen = fits.map(id => labelFor(id, input)).join(' + ');
+  const behaviors = (input.signs || []).filter(id => BEHAVIORS.some(b => b.id === id) && (weightsFor(condition, input.water)[id] || 0) > 0).map(id => labelFor(id, input).toLowerCase());
   return [
     `You picked “${seen}”${behaviors.length ? `, plus ${behaviors.join(', ')}` : ''}.`,
-    condition.check,
+    condition.id === 'bloat' && CATFISH.includes(input.fishType) ? 'A full, soft belly in a cory or pleco is most often bloat or constipation.' : condition.id === 'dropsy' && CATFISH.includes(input.fishType) ? 'A tight, stiff swelling all over is how dropsy shows in corys and plecos—they have no scales to stick out.' : checkFor(condition, fits, input.signs || []),
     fish?.boosts[condition.id] ? `It’s also common in ${fish.plural}.` : '',
+    condition.id === 'bloat' && input.fishType === 'african' ? 'In African cichlids (mbuna, peacocks), swelling—especially with no appetite or white, stringy poop—is often Malawi bloat, which needs treating today. In oscars it’s more often overeating or a blockage.' : '',
   ].filter(Boolean).join(' ');
+}
+
+// "Nothing obvious" leads to the water as the first check. Its usual wording is about fast breathing
+// and red gills, which the person did not report (Jez, Nov 6 19:13 screenshot), so say why instead.
+// Gasping or red gills keep the usual breathing wording, which then fits.
+const GILL_SIGNS = ['red-gills', 'gasping'];
+function quietWater(condition, input, fits) {
+  const signs = input.signs || [];
+  if (condition.id !== 'water' || !fits.length || fits.some(f => f.split(':')[0] !== 'unclear') || GILL_SIGNS.some(id => signs.includes(id))) return null;
+  const behaviors = signs.filter(id => BEHAVIORS.some(b => b.id === id) && id !== 'unclear').map(id => labelFor(id, input).toLowerCase());
+  // Only the answers say how many fish: "several" or deaths, never "can't stay upright" (Astra, Nov 6 19:50).
+  const one = input.affected === 'one';
+  const bad = 'bad water—ammonia, nitrite, low oxygen or a temperature swing—';
+  const why = signs.includes('deaths') ? `When fish are dying with nothing to see on them, ${bad}is by far the most likely cause. Test it now.`
+    : signs.includes('several') || (input.affected === 'several' && !one) ? `When several fish go downhill at once with nothing to see on them, ${bad}is by far the most likely cause. Test it now.`
+    : signs.includes('collapse') ? `A fish that can’t stay upright or barely responds, with nothing to see on it, is most often reacting to ${bad.replace(/—$/, '')}. Test it now.`
+    : `With nothing to see on the fish, ${bad}is the most likely cause, and it often shows as ${behaviors.length ? 'this kind of change' : 'hiding or not eating'} before anything else. A quick test rules it in or out before you think about disease.`;
+  return {
+    summary: 'When a fish is off but nothing shows on it, the water is the most common cause—and the quickest thing to check.',
+    reason: `You picked “Nothing obvious”${behaviors.length ? `, plus ${behaviors.join(', ')}` : ''}. ${why}`,
+  };
 }
 
 function decorate(condition, input, fits) {
   const fish = fishTypeFor(input.water, input.fishType);
+  const quiet = quietWater(condition, input, fits);
   return {
     ...condition,
+    ...(quiet ? { summary: quiet.summary } : {}),
     fits,
-    matched: fits.map(id => LABELS[id] || id),
+    matched: fits.map(id => labelFor(id, input)),
     urgencyLevel: urgencyFor(condition, input),
-    reason: reasonFor(condition, input, fits),
-    plan: carePlanFor(condition.id, input.water),
+    reason: quiet?.reason || reasonFor(condition, input, fits),
+    plan: carePlanFor(condition.id, input.water, input.fishType),
     tip: fish ? condition.tips?.[fish.id] || '' : '',
   };
 }
@@ -144,6 +255,11 @@ export function assessDiagnosis(input) {
     findings.push(decorate(candidate, input, candidate.fits));
     candidate.fits.forEach(id => covered.add(id));
   }
+  // When two problems both fit, the more urgent one leads (a stable sort keeps the rest in order).
+  findings.sort((a, b) => URGENCY[b.urgencyLevel].rank - URGENCY[a.urgencyLevel].rank);
+  // Columnaris spreads fastest and its plan conflicts with the heat step for ich/velvet: it leads.
+  const col = findings.findIndex(c => c.id === 'columnaris');
+  if (col > 0 && findings.some(c => ['ich-fresh', 'velvet-fresh'].includes(c.id))) findings.unshift(...findings.splice(col, 1));
   const unexplained = features.filter(id => !covered.has(id));
   let { alternatives, natural } = couldAlsoBe(findings, ranked, input);
   // Each "This looks more like mine" tap, in order.
@@ -153,6 +269,7 @@ export function assessDiagnosis(input) {
     findings.splice(0, findings.length, ...swap.findings);
     ({ alternatives, natural } = couldAlsoBe(findings, ranked, input, swap.previous));
   }
+  reconcilePlans(findings);
   const assessment = assessUrgency(input);
   const contextConcerns = [];
   if (assessment.checks.length && !findings.some(c => c.id === 'water')) {
@@ -163,6 +280,15 @@ export function assessDiagnosis(input) {
   if (features.includes('fuzz') && features.some(f => f.startsWith('patch'))) messages.push('You picked both fluffy threads and flat pale patches. Fungus and columnaris are often mixed up; flat patches usually mean columnaris.');
   if (input.initialSign === 'dots' && input.textureSign && !['dots', 'unclear'].includes(input.textureSign)) messages.push(`Your closer look was “${LABELS[input.textureSign]},” so we used that instead of “White dots.”`);
   if (findings.length > 1) messages.push('More than one problem may be going on. Start with the most urgent one, and check the labels before using two medicines together.');
+  // Ich/velvet plans raise the temperature; columnaris needs it lower.
+  if (findings.some(c => c.id === 'columnaris') && findings.some(c => ['ich-fresh', 'velvet-fresh'].includes(c.id))) messages.push(HEAT_CONFLICT);
+  // Two plans that need to be done in order, or in two places.
+  const planText = c => c.plan ? [...c.plan.steps, c.plan.treatment].join(' ') : '';
+  if (findings.some(c => /treat the whole tank/i.test(planText(c))) && findings.some(c => /\bmove (the|a badly affected|all|every) fish to a (bare )?hospital/i.test(planText(c))))
+    messages.push('One plan treats the whole tank and another moves the fish to a hospital tank. If you move it, treat it there for both problems—the fish left in the main tank still need the whole-tank treatment.');
+  if (findings.some(c => /skip feeding|stop feeding/i.test(planText(c))) && findings.some(c => /feed (a good|a varied|plenty)/i.test(planText(c)) && !/skip feeding|stop feeding/i.test(planText(c))))
+    messages.push('Do the 1–2 day fast first, then start the better diet.');
+  if (input.onset === 'new-fish') messages.push('This started after a new fish or shared equipment—new arrivals often bring ich, velvet and flukes with them. Quarantine new fish from now on.');
   if (contextConcerns.length) messages.push('Your tank history or readings also point to a water problem. Fix that alongside the treatment.');
   const primary = findings[0] || null;
   return {
@@ -256,6 +382,7 @@ export const ALTERNATIVE_TEXT = {
   different: 'Different treatment — check before dosing',
   natural: 'Or it may just be natural markings — if it’s looked like this since you got it.',
   naturalBelly: 'Or it may just be a full belly or a pregnant livebearer — if it’s acting normally.',
+  naturalFull: 'Or it may just be a full belly — if it’s acting normally.',
 };
 
 export function treatmentNote(a, b) {
@@ -265,6 +392,22 @@ export function treatmentNote(a, b) {
 }
 
 const MAX_ALTERNATIVES = 3;
+const ALARMS = ['deaths', 'gasping', 'collapse', 'several'];
+const LIVEBEARERS = ['guppy', 'molly', ''];
+
+// "Why it could be this" for a look-alike (Jez, Nov 6 2026: "brief explanations of why it could
+// also be that. Same as the why we think so"): which of your answers it also fits.
+function alsoReason(condition, finding, input) {
+  const signs = (finding?.fits || []).filter(f => weightOf(condition, f, input.water) > 0).map(f => labelFor(f, input));
+  const behaviors = (input.signs || []).filter(id => BEHAVIORS.some(b => b.id === id) && weightOf(condition, id, input.water) > 0).map(id => labelFor(id, input).toLowerCase());
+  const fish = fishTypeFor(input.water, input.fishType);
+  const like = finding ? finding.title.replace(/\s*\(.*\)$/, '').toLowerCase() : '';
+  const fits = signs.length ? `“${signs.join(' + ')}” fits this too${behaviors.length ? `, and so does ${behaviors.join(', ')}` : ''}.`
+    : like ? `It can look a lot like ${like}${behaviors.length ? `, and ${behaviors.join(', ')} fits it too` : ''}.`
+    : behaviors.length ? `${behaviors.join(', ').replace(/^./, c => c.toUpperCase())} fits this too.` : '';
+  const what = (condition.summary || '').match(/^[^.!?]*[.!?]/)?.[0] || '';
+  return [fits, what, fish?.boosts[condition.id] ? `It’s also common in ${fish.plural}.` : ''].filter(Boolean).join(' ');
+}
 
 // Ranked look-alikes for the findings. 'normal' never becomes a card; when it
 // would have been listed, the result carries one plain "natural markings" line.
@@ -274,8 +417,14 @@ function couldAlsoBe(findings, ranked, input, pinned = null) {
   let natural = '';
   const add = (condition, reason, from) => {
     if (!condition || taken.has(condition.id) || out.has(condition.id) || !inScope(condition, input.water)) return;
-    if (condition.id === 'normal') { natural ||= from === 'bloat' ? ALTERNATIVE_TEXT.naturalBelly : ALTERNATIVE_TEXT.natural; return; }
-    out.set(condition.id, { ...condition, from, comparisonReason: reason || LOOK_FOR[condition.id] || condition.hint });
+    if (condition.id === 'normal') {
+      // No "it may be normal" line next to deaths, gasping, collapse or several sick fish, or possible Malawi bloat.
+      if (ALARMS.some(id => (input.signs || []).includes(id)) || findings.some(f => f.id === 'bloat' && input.fishType === 'african')) return;
+      natural ||= from === 'bloat' ? (input.water === 'fresh' && (!input.fishType || LIVEBEARERS.includes(input.fishType)) ? ALTERNATIVE_TEXT.naturalBelly : ALTERNATIVE_TEXT.naturalFull) : ALTERNATIVE_TEXT.natural;
+      return;
+    }
+    const catfishReason = CATFISH.includes(input.fishType) && /scales/i.test(reason || LOOK_FOR[condition.id] || '') ? CATFISH_REASONS[condition.id] : '';
+    out.set(condition.id, { ...condition, from, comparisonReason: catfishReason || reason || LOOK_FOR[condition.id] || condition.hint });
   };
   // The guess the user just swapped away from stays first in the list.
   if (pinned) add(pinned, LOOKALIKES[findings[0].id]?.find(([id]) => id === pinned.id)?.[1], findings[0].id);
@@ -297,6 +446,7 @@ function couldAlsoBe(findings, ranked, input, pinned = null) {
     const urgencyLevel = urgencyFor(c, input);
     return {
       ...c, urgencyLevel,
+      whyAlso: alsoReason(c, findings.find(f => f.id === c.from), input),
       moreUrgent: Boolean(top && URGENCY[urgencyLevel].rank > URGENCY[top.urgencyLevel].rank),
       treatmentNote: treatmentNote(c.id, c.from),
     };
@@ -322,6 +472,26 @@ export function lookalikesFor(id, water) {
     .filter(c => c.id && c.id !== id && inScope(c, water));
 }
 
+// Ich and velvet plans raise the temperature; columnaris needs it lower. When both
+// show, the heat steps are replaced everywhere the plan appears (results, care page, notes).
+const HEAT_STEP = /raise the temperature/i;
+export const HEAT_CONFLICT = 'Don’t raise the temperature while columnaris is active—warm water speeds it up. Treat the columnaris first, keep the temperature steady, and use a medicine for the spots without the heat step.';
+function reconcilePlans(findings) {
+  if (!(findings.some(c => c.id === 'columnaris') && findings.some(c => ['ich-fresh', 'velvet-fresh'].includes(c.id)))) return;
+  for (const c of findings) {
+    if (!['ich-fresh', 'velvet-fresh'].includes(c.id) || !c.plan) continue;
+    if (/heat|warm/i.test(c.tip || '')) c.tip = '';
+    if (!c.plan.steps.some(step => HEAT_STEP.test(step))) continue; // this variant has no heat step to change
+    c.plan = {
+      ...c.plan,
+      steps: c.plan.steps.map(step => HEAT_STEP.test(step)
+        ? (c.id === 'ich-fresh' ? 'Keep the temperature steady—don’t raise it while columnaris is active. Add extra aeration.' : step.replace(/ and raise the temperature a little\.?/i, '. Keep the temperature steady while columnaris is active.'))
+        : step),
+      treatment: `${c.plan.treatment.replace(/^Gradual heat \+ /i, '').replace(/^an /, 'An ')} (no heat while columnaris is active)`,
+    };
+  }
+}
+
 export function buildCase(input) {
   const show = value => String(value || '').trim() || 'Not recorded';
   const number = value => numeric(value) === null ? 'Not measured / unknown' : String(value);
@@ -337,11 +507,11 @@ export function buildCase(input) {
     `Kind of fish: ${fish?.title || 'Not sure / other'}`,
     `Fish / species notes: ${show(input.species)}`,
     `How long: ${show(input.duration)}`,
-    `Fish affected: ${show(input.affected)}`,
-    `Tank established: ${show(input.tankAge)}`,
-    `Onset / recent changes: ${show(input.onset)}`,
+    `Fish affected: ${({ unknown: 'Not sure', one: 'One fish', several: 'Several / most fish' })[input.affected] || show(input.affected)}`,
+    `Tank established: ${({ unknown: 'Not sure', new: 'New / recently restarted', established: 'Established and running' })[input.tankAge] || show(input.tankAge)}`,
+    `Onset / recent changes: ${({ unknown: 'Not sure / nothing obvious', 'new-fish': 'New fish or shared equipment', 'after-change': 'Water change, chemical, filter or power issue', gradual: 'Slow change, no clear event' })[input.onset] || show(input.onset)}`,
     `What I saw: ${diagnosis.findings.flatMap(c => c.matched).concat(diagnosis.unexplained.map(id => LABELS[id] || id)).join('; ') || 'Nothing obvious'}`,
-    `Behavior: ${(input.signs || []).filter(id => BEHAVIORS.some(b => b.id === id)).map(id => LABELS[id]).join('; ') || 'None selected'}`,
+    `Behavior: ${(input.signs || []).filter(id => BEHAVIORS.some(b => b.id === id)).map(id => labelFor(id, input)).join('; ') || 'None selected'}`,
     `Total ammonia: ${number(input.ammonia)} ppm (mg/L)`,
     `Nitrite: ${number(input.nitrite)} ppm (mg/L)`,
     `pH: ${number(input.ph)}`,
@@ -354,6 +524,7 @@ export function buildCase(input) {
     `Could also be: ${diagnosis.alternatives.map(c => c.title).join('; ') || 'None listed'}`,
     `Urgent signs: ${assessment.urgent.join('; ') || 'None selected'}`,
     `Water checks: ${assessment.checks.join(' ') || 'Test ammonia and nitrite if you haven’t lately.'}`,
+    ...(diagnosis.messages.length ? ['', 'Notes from the guide:', ...diagnosis.messages.map(m => `- ${m}`)] : []),
     ...diagnosis.findings.flatMap(c => c.plan ? ['', `What to do — ${c.title}:`, ...c.plan.steps.map((s, i) => `${i + 1}. ${s}`), `Usual treatment: ${c.plan.treatment}`, `Typical recovery: ${c.plan.recovery}`, ...(c.plan.reefUnsafe ? ['NOT REEF-SAFE — treat in a separate tank.'] : []), ...(c.plan.medicated ? ['Amounts: follow the product label.'] : [])] : []),
     '',
     `Picture page I started from: ${CONDITIONS.find(c => c.id === input.visualReference)?.title || 'None'}`,
