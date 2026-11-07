@@ -1,5 +1,114 @@
 [
   {
+    "id": "2026-11-07-factual-infographic-factual-infographic-autophobia-intense-",
+    "title": "Factual infographic: Autophobia — Intense Fear of Being Alone",
+    "tests": "factual_subtype: phobia-infographic; phobia: Autophobia; title lines checked before render; no subjective review; archive_slot=2026-11-07T00:08; concept=autophobia-solitude-daylit-apartment; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished artwork-led factual phobia infographic directly on the canvas, with portrait-oriented compositional intent and an opaque background. The exact two requested title lines at top are:\nAUTOPHOBIA\nIntense fear of being alone\nSet AUTOPHOBIA in prominent bold editorial lettering; the plain-English definition is directly underneath, smaller but very readable. Do not use Specific Phobia as the headline. Subordinate terminology: \"Also called monophobia • a descriptive phobia name\".\n\nBuild one flowing, asymmetrical cinematic gouache-and-fine-ink composition around a sunlit apartment living room. No rigid boxed grid, detached cards, photographed poster, UI, frame or mockup. Hero character: A broad-shouldered Black man in his early sixties, close silver curls, round face, short salt-and-pepper beard, ochre cardigan and charcoal trousers, seated three-quarter view with hands resting tensely on his knees.. He is alone on a textured moss-green sofa, tense but dignified, in a visibly ordinary daytime home. Show woven upholstery, the cardigan's knit, a houseplant with translucent leaves, warm floor reflections, ceramic mug and a softly lit window; no threatening intruder, monsters, dark corridor or catastrophe. An empty chair and an unoccupied doorway suggest solitude, not objective danger. A fine curved amber line travels from the quiet room through a small thought vignette of the same man imagining a companion leaving, then across open body-alarm annotations and an avoidance pathway, finally to a warm small consultation scene. Those spatial transitions are explanatory metaphors, not mandatory stages or an asserted neural circuit.\n\nPlace concise readable source-backed text organically in negative space with delicate leader lines, not a wall of prose. Near the empty chair: \"Trigger: being alone — or anticipating it\". Near the thought vignette: \"Anticipatory anxiety: fear before the situation\". At his chest and hand, use non-anatomical fine radiating marks with labels \"Palpitations\" and \"Trembling\"; nearby \"Dizziness can occur. Symptoms vary.\" Do not draw an ECG, brain scan, statistics or diagnostic thresholds. Let the amber line branch toward a small scene of the same man lingering near other people: \"Avoidance can narrow daily life\". This is a general phobia mechanism, not an accusation or universal symptom. Add a short balanced distinction in an open wash near the window: \"Feeling unsafe is not proof of immediate danger. Genuine hazards still matter.\" Beneath that: \"Not the same as loneliness: fear of solitude differs from dissatisfaction with social connection.\"\n\nLower artwork integrates a small supportive clinical conversation with the same man and a clinician, no change of protagonist. Label \"Help: cognitive behavioural therapy (CBT)\" and \"Gradual exposure is individually planned — seek professional guidance, never forced isolation.\" Do not depict a do-it-yourself exposure schedule, prescribe medication or imply a guaranteed cure. Small footer: \"Seek help when fear disrupts daily life. Education, not diagnosis.\" All clinical labels are general educational context, not a diagnosis of this fictional person. Maintain rich tactile detail, refined typography, warm ivory, moss, amber and slate palette; let artwork dominate with purposeful breathing room. No bibliography, URLs, watermarks or invented technical claims. Omit decorative extras if they compete with the core explanation. Render exactly one complete infographic.",
+    "image": "images/2026-11-07-factual-infographic-factual-infographic-autophobia-intense-.jpg",
+    "thumb": "thumbs/2026-11-07-factual-infographic-factual-infographic-autophobia-intense-.webp",
+    "color": "#baa07c",
+    "date": "2026-11-07",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.6-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "autophobia-solitude-daylit-apartment",
+      "imageSha256": "d42b49cee274dcdb4362b16dc9858b04eece809309c08150006c442b59dcda05",
+      "imageDHash": "3e63e3f2898cb808"
+    },
+    "factualInfographic": {
+      "topic": "Autophobia: intense fear of being alone, anticipatory anxiety, body alarm, avoidance, and evidence-based help",
+      "description": "Artwork-led educational chart about fear of solitude, distinct from loneliness, with general phobia symptoms and clinical help.",
+      "sourceNote": "Cleveland Clinic; NHS; NHS inform. Verified terminology, definition, triggers, symptoms, avoidance and treatment context. https://my.clevelandclinic.org/health/diseases/22578-autophobia-monophobia-fear-of-being-alone https://www.nhs.uk/mental-health/conditions/phobias/ https://www.nhsinform.scot/illnesses-and-conditions/mental-health/phobias/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-07T05:09:39.108408+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Cleveland Clinic",
+            "title": "Autophobia (Fear of Being Alone): Causes & Treatment",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://my.clevelandclinic.org/health/diseases/22578-autophobia-monophobia-fear-of-being-alone"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS inform",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhsinform.scot/illnesses-and-conditions/mental-health/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Autophobia is an extreme fear of being alone; monophobia is another name.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Fear can occur when alone, when anticipating being alone, or when worrying that people will leave.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Autophobia differs from loneliness: loneliness concerns the quantity or quality of connections; autophobia involves anxiety about being alone.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A phobic fear can occur without an immediate threat; being alone is not in itself proof of danger. This does not negate genuine hazards.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobia symptoms can include palpitations, trembling, dizziness and severe worry; symptoms vary between people.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Thinking about a feared situation can trigger anxiety or panic; avoidance can organise and limit daily life.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "CBT is an evidence-based talking treatment used for phobias; gradual exposure is used in treatment and should be planned individually, with professional help where needed.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Seek clinical support if fear interferes with daily life; educational illustrations are not a diagnosis.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Autophobia is described as a specific phobic disorder by Cleveland Clinic; the descriptive name is not itself a separate diagnostic code.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-11-06-factual-infographic-factual-infographic-white-spotting-unpi",
     "title": "Factual infographic: White Spotting — Unpigmented Patches",
     "tests": "; archive_slot=2026-11-06T04:20; concept=cat-kit-white-spotting-unpigmented-patches; image_provenance={\"requested_model\": \"openai/gpt-image-2.6-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested openai/gpt-image-2.6-sunburst; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: coats-and-genetics",
