@@ -1,0 +1,65 @@
+Astra R56 performance audit — 2026-11-07
+
+Scope: remove measured repeated work without reducing fidelity or changing gameplay.
+Tests ran in isolated headless Chrome on this machine's RTX 5090, muted, with
+pointer capture blocked before navigation. Results do not represent GTX 1080,
+mobile hardware, or internet round-trip latency. Those devices were not available.
+
+Rendering:
+- CPU sampling found repeated _glGetUniformLocation calls and associated UTF-8
+  conversion/name parsing consuming about 1.66 seconds in a 30-second demo sample.
+- Cache stores successful (program, name) queries, keyed by string contents,
+  capped at 2,048 entries with at most 16 probes; invalid, missing or long names
+  use the original API. Relinking/deleting any program clears the cache.
+- Semantic tests cover 10,000 repeated lookups, separate programs, mutable stack
+  names, missing/invalid names, long names, saturation, relink and deletion.
+- Deterministic comparison: paused Vertigo exhibit 27, clock 2, 1920 resolution,
+  same geometry (10 meshes, 4 shafts, 16 uploads, 5 fixture draws per render pass),
+  4x browser CPU throttling, about 12.2 seconds each. Browser TaskDuration changed
+  from 8.998 to 7.214 seconds while native render passes rose from 959 to 1,125.
+  Approximate task time/pass: 9.38 to 6.41 ms. These are browser-task/render-pass
+  measurements, not a promise of a particular gameplay FPS gain.
+- Identical showroom label rewrites previously caused 813 layout recalculations
+  in that interval; the optimized run had zero. Same-camera images were inspected.
+- Active 30-second Vertigo demo samples: cockpit DOM writes 4,957 to 1,981.
+  The AI paths differ, so this comparison is indicative, not deterministic.
+  Both stayed near the display's 60 Hz ceiling (p95 interval 16.8 ms).
+- Nine available showroom scenes passed with no WebGL errors after fixing the
+  recharge shader's inherited unused color array; the baseline had INVALID_VALUE
+  in two scenes. Direct instrumented WebGL testing confirms the fix.
+
+Startup:
+- Engine script fetch begins alongside asset loading, rather than after it.
+- Native and generated material sets load concurrently. Generated image decodes
+  remain limited to two at a time; the flight view waits for both sets to finish.
+- Cold local-server test, 20 Mbps and 60 ms simulated latency: 47.13 to 46.29 s.
+  Local assets in this test were uncompressed; CDN delivery differs. One run per
+  version supports only a modest observed improvement, not a guaranteed load time.
+- Asset bytes, texture resolutions, model detail and existing lazy parcels are
+  unchanged. Large first-time downloads still dominate on slower connections.
+
+Multiplayer:
+- Flush interval 40 to 20 ms; binary sends capped at 50/sec within the existing
+  80-message/sec relay limit. The remaining budget covers control traffic.
+- Deterministic actual-client-code queue simulation: 354 ordered packets across
+  three destinations; average waiting 19.415 to 9.415 ms, p95 38 to 19 ms,
+  maximum 39 to 19 ms. All packets remained in order, with no loss.
+- This measures local queue delay only; internet ping is unchanged.
+- Actual isolated relay tests passed for two human clients plus two AI, host
+  departure, sole-host reconnect, late join, restored flight controls, save/return,
+  and four human clients firing for 20 seconds with a nonhost reconnect.
+- The deployed relay, protocol v54, durable storage and service plan are unchanged.
+
+Validation:
+- Incremental native build and Node syntax checks; standalone loader differences
+  preserved. Native patch still matches the pinned upstream reconstruction.
+- Live demo checks cover Original, Vertigo and Overload. Nine detailed showroom
+  effects checked. Public release hashes and a muted live launch checked separately.
+- No settings, flight controls, AI logic, shaders, textures, models or audio changed
+  except the recharge client-array state correction described above.
+
+API references:
+https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/getUniformLocation
+https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/linkProgram
+
+Detailed local evidence: work/astra-refit/r56/*.json, *.cpuprofile and screenshots.
