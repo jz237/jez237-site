@@ -1252,3 +1252,5 @@ R54 — flight continuity, wingmen and comfort
 - Optional nearby explosion glare, Earthshaker/reactor screen shake and demo turn smoothing sliders preserve previous defaults. Manual flight gains and texture quality remain unchanged.
 - A 45-second live demo performance check measures loading, frame pacing and stutters, then offers suggestions without changing graphics settings.
 - R54 public rooms have a separate protocol directory; previous room clients retain their existing protocol. Relay remains on Workers Free with the existing namespaces.
+
+R54a — reconnect restores the local ship’s physics, input and model modes after receiving the host’s disconnected-ship snapshot.

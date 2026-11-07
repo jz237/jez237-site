@@ -178,6 +178,10 @@ int astra_net_reconnect(void){
     if(result==0&&alive){
         int obj=Players[an_self].objnum;Players[an_self]=kept;Players[an_self].objnum=obj;Players[an_self].connected=CONNECT_PLAYING;
         ConsoleObject=&Objects[obj];Viewer=ConsoleObject;ConsoleObject->type=OBJ_PLAYER;ConsoleObject->id=an_self;
+        /* The host snapshots a disconnected pilot as a non-rendered ghost.
+           Restore the local ship's simulation and model modes as well as pose. */
+        ConsoleObject->control_type=pose.control_type;ConsoleObject->movement_type=pose.movement_type;
+        ConsoleObject->render_type=pose.render_type;ConsoleObject->rtype=pose.rtype;ConsoleObject->flags=pose.flags;
         ConsoleObject->pos=pose.pos;ConsoleObject->orient=pose.orient;ConsoleObject->shields=kept.shields;
         ConsoleObject->mtype.phys_info=pose.mtype.phys_info;obj_relink(obj,pose.segnum);
         EM_ASM(Module.netReconnecting=false;Module.netDisconnected=false;window.astraNet.rejoined());
