@@ -716,7 +716,7 @@ export class Renderer {
     const lampLvl = P.up.lamp || 0;
     const flick = oil < 0.2 ? (0.75 + 0.25 * Math.sin(this.time * 23) * Math.sin(this.time * 7.3)) : 1;
     const k = (oil <= 0 ? 0.16 : (0.45 + Math.min(1, oil * 2.2) * 0.55)) * flick;
-    this.lamp.intensity = (100 + lampLvl * 22) * k;
+    this.lamp.intensity = (100 + lampLvl * 22) * k * (climb ? 0.4 : 1);   // on a ladder it is inches from the rungs
     this.lamp.distance = 30 + lampLvl * 5;
     this.lamp.angle = 0.72 + lampLvl * 0.06;
     this.fill.position.set(P.x + P.face * 0.6, P.y + 1.3, 1.2);
@@ -749,7 +749,7 @@ export class Renderer {
       this.beam.position.copy(lp); this.beam.quaternion.setFromUnitVectors(BEAM_DOWN, bd); this.beam.scale.set(r, L, Math.min(0.6, r * 0.25));
       const u = this.beam.material.uniforms; u.uI.value = this.beamI; u.uT.value = this.time; u.uCol.value.copy(this.lamp.color);
     }
-    if (R.lampLens && R.lampLens.material && R.lampLens.material.emissive) R.lampLens.material.emissiveIntensity = 4 * k;
+    if (R.lampLens && R.lampLens.material && R.lampLens.material.emissive) R.lampLens.material.emissiveIntensity = 4 * k * (climb ? 0.3 : 1);   // facing the ladder: the lens is turned away from us
   }
 
   syncEntities(W, dt) {
