@@ -1,14 +1,14 @@
 // Lancewing 2026 - game flow: title (version, difficulty, global boards), campaign, endless, local and online
 // co-op, upgrades, results with initials, instant replay, pause, options, attract demo and AI playthrough.
-import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, SALVAGE_DIV, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY } from './config.js?v=14';
-import { makeWorld, step, drainEvents, waveLabel, isBossWave, dX, applyClaim, cloneWorld, ledgeUnder } from './sim.js?v=14';
-import { Autopilot } from './ai.js?v=14';
-import { Renderer, pickQuality, CALM } from './render.js?v=14';
-import { Audio } from './audio.js?v=14';
-import { Input } from './input.js?v=14';
-import { Scores, NO_POST, posted } from './scores.js?v=14';
-import { Recorder, Replay } from './replay.js?v=14';
-import { Online, ROOM, randomCode, cleanCode } from './online.js?v=14';
+import { VERSION, SECTORS, STEP, F, WAVES, UPGRADES, UP_KEYS, UP_COST, SALVAGE_DIV, MEDALS, parTime, TYPICAL_UP, START_LIVES, BOSSES, DIFFICULTY, DIFF_KEYS, POWERUPS, ENEMY } from './config.js?v=15';
+import { makeWorld, step, drainEvents, waveLabel, isBossWave, dX, applyClaim, cloneWorld, ledgeUnder } from './sim.js?v=15';
+import { Autopilot } from './ai.js?v=15';
+import { Renderer, pickQuality, CALM } from './render.js?v=15';
+import { Audio } from './audio.js?v=15';
+import { Input } from './input.js?v=15';
+import { Scores, NO_POST, posted } from './scores.js?v=15';
+import { Recorder, Replay } from './replay.js?v=15';
+import { Online, ROOM, randomCode, cleanCode } from './online.js?v=15';
 
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -368,10 +368,10 @@ function handleEvents(list, W, live) {
       case 'corebounce': A.play('land', { ...pos, vol: 0.18, rate: 1.7, gap: 0.12 }); break;
       case 'coresink': A.play('splash', { ...pos, vol: 0.3, rate: 1.5, gap: 0.2 }); break;
       case 'hatch': A.play('hatch', { ...pos, vol: 0.7 }); break;
-      case 'reform': A.play('form', { ...pos, vol: 0.6 }); break;
-      case 'form': A.play('form', { ...pos, vol: 0.4, gap: 0.25 }); break;
+      case 'reform': A.play('form', { ...pos, vol: 0.6 }); A.play('arrive', { ...pos, vol: 0.6, delay: 0.1, gap: 0.12 }); A.play('screech', { ...pos, vol: 0.5, delay: 0.2, gap: 1.2, rate: 0.9 }); break;
+      case 'form': A.play('arrive', { ...pos, vol: 0.75, gap: 0.12 }); A.play('form', { ...pos, vol: 0.3, gap: 0.25 }); if (e.elite || Math.random() < 0.35) A.play('screech', { ...pos, vol: 0.45, delay: 0.15, gap: 1.2, vary: 0.2 }); break;
       case 'summon': A.play('form', { ...pos, vol: 0.6, rate: 0.8 }); break;
-      case 'portal': break;
+      case 'portal': A.play('portal', { ...toPos(e.x, (e.y || 0) + 1.5), vol: 0.7, gap: 0.2 }); break;
       case 'splash': A.play('splash', { ...pos, vol: e.big ? 1 : 0.55, rate: e.big ? 1 : 1.2, gap: 0.1 }); break;
       case 'drown': A.play('splash', { ...pos, vol: 0.45, rate: 1.15, gap: 0.15 }); break;
       case 'flee': A.play('gust', { ...pos, vol: 0.25, rate: 1.5, gap: 0.3 }); break;
@@ -381,9 +381,10 @@ function handleEvents(list, W, live) {
       case 'bolt': A.play('thunder', { ...pos, vol: 1 }); break;
       case 'arcwarn': A.play('boltwarn', { ...pos, vol: 0.35, gap: 0.3, rate: 1.5 }); break;
       case 'arc': A.play('arcon', { ...pos, vol: 0.75, gap: 0.08 }); break;
-      case 'crack': A.play('crack', { ...pos, vol: 0.7, gap: 0.15 }); break;
-      case 'crumble': A.play('crumble', { ...pos, vol: 0.85 }); break;
-      case 'rebuild': break;
+      case 'crack': A.play('crack', { ...pos, vol: e.ram ? 0.9 : 0.7, gap: 0.15 }); break;
+      case 'corefade': A.play('corefade', { ...pos, vol: 0.45, gap: 0.2 }); break;
+      case 'crumble': if (e.ram) { A.play('ram', { ...pos, vol: 1, gap: 0.2 }); rumble(0.5, 0.4, 220); } A.play('crumble', { ...pos, vol: 0.85 }); break;
+      case 'rebuild': if (e.ram && pos) A.play('regrow', { ...pos, vol: 0.6, gap: 0.3 }); break;
       case 'drop': A.play('drop', { ...pos, vol: 0.6 }); break;
       case 'pickup': A.play('pickup', { ...pos, vol: 0.9 }); caption(`${POWERUPS[e.kind].name} · ${POWERUPS[e.kind].desc}`, 2.8); if (e.kind === 'slow') A.play('slowmo', { vol: 0.7 }); break;
       case 'pwend': A.play('pwend', { vol: 0.5 }); break;
@@ -1202,7 +1203,7 @@ async function boot() {
   $('loading').style.opacity = '0';
   setTimeout(() => $('loading').remove(), 700);
   toTitle();
-  if (params.has('test')) { const m = await import('./tests.js?v=14'); m.runTests(window.__lw); }
+  if (params.has('test')) { const m = await import('./tests.js?v=15'); m.runTests(window.__lw); }
   else if (params.has('playthrough')) { A.unlock(); startPlaythrough(); }
   else if (params.has('endless') && G.autopilot) { A.unlock(); startEndless(); }
   else if (G.autopilot) { A.unlock(); startCampaign(+params.get('sector') || 0); }

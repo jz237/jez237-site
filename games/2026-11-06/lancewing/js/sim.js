@@ -3,7 +3,7 @@
 // bit for bit (replays, online, tests). Nothing in here touches the DOM, WebGL or audio; it only pushes
 // events into W.ev. The arena is a 2D slice: x = metres round the ring (wraps at F.C), y = height.
 import { F, STEP, SECTORS, WAVES, LAYOUT, rampAt, rampLevel, endlessLevel, ENDLESS, ENEMY, TIER_UP, HUNTER, BOSSES, BOSS_KEYS, SCORE, START_LIVES, INTRO,
-  introduced, WAVE_KIND, TEAM_WAVE, SPECIAL, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, rockHang, rockDrop } from './config.js?v=14';
+  introduced, WAVE_KIND, TEAM_WAVE, SPECIAL, DIFFICULTY, applyDiff, POWERUPS, PW_KEYS, DROP, rockHang, rockDrop } from './config.js?v=15';
 export { STEP };
 
 const { C, H } = F;
@@ -121,7 +121,7 @@ function startWave(W, first = false) {
     }
   }
   W.kind = waveKind(W);
-  for (const L of W.ledges) if (L.st) { L.st = 0; L.t = 0; W.ev.push({ k: 'rebuild', id: L.id }); }
+  for (const L of W.ledges) { if (L.st) { L.st = 0; L.t = 0; W.ev.push({ k: 'rebuild', id: L.id }); } L.ram = 0; L.gone = 0; }
   const R = W.R;
   W.crumbled = 0; W.haz = []; W.shots = [];
   W.phase = 'intro'; W.phaseT = first ? (W.tutorial ? 3.4 : 2.6) : W.kind === 'boss' ? 2.6 : 2.2; W.waveT = 0; W.hunted = false; W.waveDeaths = 0;
@@ -774,9 +774,26 @@ function hazards(W, dt) {
       L.st = 2;
       for (const b of [...W.players, ...W.riders]) if (b.on === L.id) b.on = -1;
       for (const c of W.cores) if (c.on === L.id) { c.on = -1; c.st = 'fall'; }
-      W.ev.push({ k: 'crumble', id: L.id, x: L.x, y: L.y });
+      W.ev.push({ k: 'crumble', id: L.id, x: L.x, y: L.y, ram: L.ram ? 1 : 0 });
     }
   }
+  // a ledge a boss smashed grows back after a while, once nothing is in the space it fills
+  for (const L of W.ledges) {
+    if (L.st !== 2 || !L.ram) continue;
+    L.gone = (L.gone || 0) + dt;
+    if (L.gone < 6.5 || ledgeOccupied(W, L)) continue;
+    L.st = 0; L.t = 0; L.ram = 0; L.gone = 0;
+    W.ev.push({ k: 'rebuild', id: L.id, x: L.x, y: L.y, ram: 1 });
+  }
+}
+function ledgeOccupied(W, L) {
+  const bot = L.y - F.ledgeT - rockDrop(L.w, 0) - 2.4;
+  for (const b of [...W.players, ...W.riders, ...W.cores]) {
+    if (b.alive === false || b.gone) continue;
+    if (Math.abs(dX(L.x, b.x)) < L.w + 1.2 && b.y > bot && b.y < L.y + 0.4) return true;
+  }
+  const B = W.boss;
+  return !!(B && B.st !== 'down' && isFlyer(B.key) && bossHitsLedge(B, L, B.x, B.y, 1.5));
 }
 function fireHazard(W, h) {
   switch (h.k) {
@@ -1056,6 +1073,7 @@ function boss(W, B, dt) {
     if (B.stT <= 0) { B.st = 'fight'; B.moved = false; B.cool = 0.8; }
     return;
   }
+  if (isFlyer(B.key)) bossRam(W, B);
   // movement
   const busy = B.cur && B.cur.t < B.cur.T + (B.cur.A || 0);
   if (isFlyer(B.key)) {
@@ -1141,6 +1159,29 @@ function bossInRock(W, B, x, y) {
     }
   }
   return n;
+}
+// a flying boss cannot pass through a ledge. It still steers round them where it can (bossClearY); a ledge it is about
+// to hit cracks (a short warning, at least 0.3 s) and shatters as the hull reaches it, and grows back later (hazards)
+function bossHitsLedge(B, L, x, y, pad = 0) {
+  for (const [dx, dy, rx, ry] of BOSSES[B.key].body) {
+    const cx = x + dx * B.face, cy = y + dy;
+    for (let k = 0; k < 15; k++) {
+      const a = k * 0.5236, px = k < 12 ? cx + Math.cos(a) * (rx + pad) : cx + (k - 13) * rx * 0.5, py = k < 12 ? cy + Math.sin(a) * (ry + pad) : cy;
+      const d = dX(L.x, px);
+      if (Math.abs(d) < L.w + pad && py < L.y + 0.1 + pad && py > L.y - F.ledgeT - rockDrop(L.w, d) - pad) return true;
+    }
+  }
+  return false;
+}
+function bossRam(W, B) {
+  for (const L of W.ledges) {
+    if (L.st !== 0 || Math.abs(dX(L.x, B.x)) > L.w + 16) continue;
+    let tt = -1;
+    for (const s of [0, 0.15, 0.3, 0.45, 0.6]) if (bossHitsLedge(B, L, wrap(B.x + (B.vx || 0) * s), B.y + (B.vy || 0) * s)) { tt = s; break; }
+    if (tt < 0) continue;
+    L.st = 1; L.t = 0; L.T = tt === 0 ? 0.05 : Math.max(0.3, tt); L.ram = 1;   // already touching: it shatters at once
+    W.ev.push({ k: 'crack', id: L.id, x: L.x, y: L.y, T: L.T, ram: 1 });
+  }
 }
 function bossClearY(W, B, gx, gy, a0, a1) {
   let best = gy, bs = 1e9;

@@ -4,12 +4,12 @@
 // spire and its lightning, telegraph ribbons for every hazard and boss attack, HDR post with bloom.
 // Nothing here changes the world.
 import * as THREE from '../vendor/three.module.min.js';
-import { Post } from './post.js?v=14';
-import * as TX from './textures.js?v=14';
-import * as MD from './models.js?v=14';
-import { FX, CALM } from './fx.js?v=14';
-import { F, POWERUPS, BOSSES, HUNTER, LAYOUT, rockHang, rockDrop } from './config.js?v=14';
-import { weakPos, ledgeUnder } from './sim.js?v=14';
+import { Post } from './post.js?v=15';
+import * as TX from './textures.js?v=15';
+import * as MD from './models.js?v=15';
+import { FX, CALM } from './fx.js?v=15';
+import { F, POWERUPS, BOSSES, HUNTER, LAYOUT, SECTORS, rockHang, rockDrop } from './config.js?v=15';
+import { weakPos, ledgeUnder } from './sim.js?v=15';
 
 export { CALM };
 const RR = F.R, H = F.H;
@@ -403,6 +403,7 @@ export class Renderer {
     if (!this.ledgeSets[i]) this.ledgeSets[i] = this.buildLedgeSet(i);
     this.ledgeSets[i].visible = true;
     this.ledges = this.ledgeSets[i];
+    this.ledgeRams = !!(this.ledgeRamsBy && this.ledgeRamsBy[i]);
     const rk = this.rockSets[i], sm = this.spireMat;
     if (sm.map !== rk.map) { const first = !sm.map; sm.map = rk.map; sm.normalMap = rk.normalMap; sm.roughnessMap = rk.roughnessMap; if (first) sm.needsUpdate = true; }
     sm.color.set(L.key === 'glacier' ? 0xc8d8e8 : L.key === 'ruins' ? 0xc0a898 : 0xa8a0a0);
@@ -436,11 +437,18 @@ export class Renderer {
       lg.userData = { id: k, y0: 0 };
       grp.add(lg);
     });
-    // ledges that can never crumble never move: merge all of them into one mesh per material (draw calls)
-    const stat = new THREE.Group();
-    for (const lg of [...grp.children]) if (!LAYOUT[i][lg.userData.id][3].includes('c')) { for (const m of [...lg.children]) stat.add(m); grp.remove(lg); }
+    // ledges that can never crumble never move: merge all of them into one mesh per material (draw calls). Where the
+    // boss flies it smashes any ledge in its way, so there those ledges are also kept one by one (sharing the merged
+    // geometry's sources), shown only during the boss fight in place of the merged set
+    const stat = new THREE.Group(), rams = ['gale', 'wyvern', 'sovereign'].includes(SECTORS[i] && SECTORS[i].boss);
+    for (const lg of [...grp.children]) {
+      if (LAYOUT[i][lg.userData.id][3].includes('c')) continue;
+      if (rams) { for (const m of lg.children) stat.add(m.clone()); lg.userData.bossOnly = true; lg.visible = false; }
+      else { for (const m of [...lg.children]) stat.add(m); grp.remove(lg); }
+    }
     mergeByMaterial(stat);
     stat.userData = { static: true };
+    this.ledgeRamsBy = this.ledgeRamsBy || {}; this.ledgeRamsBy[i] = rams;
     grp.add(stat);
     this.scene.add(grp);
     return grp;
@@ -720,10 +728,17 @@ export class Renderer {
     const t = this.time;
     // ledges: cracking, falling, rebuilt
     if (this.ledges) for (const lg of this.ledges.children) {
-      if (lg.userData.static) continue;
+      const bossSet = W.kind === 'boss';
+      if (lg.userData.static) { lg.visible = !(bossSet && this.ledgeRams); continue; }
+      if (lg.userData.bossOnly && !bossSet) { lg.visible = false; continue; }
       const L = W.ledges[lg.userData.id];
       if (!L) { lg.visible = false; continue; }
-      if (L.st === 0) { lg.visible = true; lg.position.set(0, 0, 0); lg.userData.fall = 0; }
+      if (L.st === 0) {
+        lg.visible = true; lg.userData.fall = 0;
+        const gr = lg.userData.grow;
+        if (gr !== undefined && gr < 1) { lg.userData.grow = Math.min(1, gr + dt * 1.6); const e = 1 - lg.userData.grow; lg.position.set(0, -e * e * 7, 0); }
+        else lg.position.set(0, 0, 0);
+      }
       else if (L.st === 1) { lg.visible = true; const s = 0.04 + (L.t / L.T) * 0.12; lg.position.set((Math.random() - 0.5) * s, (Math.random() - 0.5) * s, (Math.random() - 0.5) * s); }
       else { lg.userData.fall = (lg.userData.fall || 0) + dt; lg.position.y = -lg.userData.fall * lg.userData.fall * 9; lg.visible = lg.userData.fall < 1.8; }
     }
@@ -896,9 +911,9 @@ export class Renderer {
     toWorld(B.x, L.y + 0.1, _v);
     const kind = B.kind || 'mount', hard = Math.min(1, -B.vy / 12);
     this.fx.dust(_v.x, _v.y, _v.z, { n: kind === 'mount' ? 10 : kind === 'knight' ? 6 : 3, s0: 0.3, s1: kind === 'mount' ? 1.1 : 0.7, life: 0.7, vy: 1.2, up: 1, jit: 0.8, a: 0.5, k: 1.4, grav: 2 });
-    if (kind === 'mount') this.sfx('land', B.x, L.y, { vol: 0.3 + hard * 0.45, rate: 0.72, gap: 0.08 });
-    else if (kind === 'knight') { this.sfx('land', B.x, L.y, { vol: 0.2 + hard * 0.25, rate: 0.95, gap: 0.08 }); this.sfx('block', B.x, L.y, { vol: 0.16 + hard * 0.2, rate: 0.62, gap: 0.08, delay: 0.02 }); }
-    else this.sfx('clang', B.x, L.y, { vol: 0.08 + hard * 0.2, rate: kind === 'lance' ? 1.5 : 1.25, gap: 0.05, vary: 0.25 });
+    if (kind === 'mount') this.sfx('thud', B.x, L.y, { vol: 0.35 + hard * 0.45, rate: 0.85, gap: 0.08, key: 'thudM' });
+    else if (kind === 'knight') this.sfx('thud', B.x, L.y, { vol: 0.25 + hard * 0.3, rate: 1.15, gap: 0.08, key: 'thudK' });
+    else this.sfx('clatter', B.x, L.y, { vol: 0.15 + hard * 0.3, rate: kind === 'lance' ? 1.15 : 0.9, gap: 0.05, vary: 0.2, key: 'clat' + kind });
     const bounces = kind === 'lance' || kind === 'shield' ? 2 : 1;
     if (B.vy < -3 && (B.bounced || 0) < bounces) {
       B.bounced = (B.bounced || 0) + 1; B.vy = -B.vy * (kind === 'mount' || kind === 'knight' ? 0.28 : 0.35); B.vx *= 0.6; B.wx *= 0.5; B.wz *= 0.5;
@@ -1176,10 +1191,11 @@ export class Renderer {
       case 'bosshit': this.bossKick(W, e, 1); P(e.x, e.y, 0.3 + this.bossLaneAt(W.boss, null, e.x)); fx.sparks(_v.x, _v.y, _v.z, { n: 36, speed: 10, r: 1, g: 0.8, b: 0.5 }); fx.flash(_v.x, _v.y, _v.z, 40, 0xffd0a0, 0.25); this.shock(e.x, e.y, 0.9); this.trauma = Math.min(1, this.trauma + 0.35); break;
       case 'wpdown': P(e.x, e.y); fx.explode(_v.x, _v.y, _v.z, 2, { metal: true }); this.trauma = Math.min(1, this.trauma + 0.6); this.flashScreen(0.25, 0xffe0c0); break;
       case 'bossdown': this.bossFinale(e, W); break;
+      case 'rebuild': if (e.ram && this.ledges) { const lg = this.ledges.children.find((o) => o.userData.id === e.id); if (lg) lg.userData.grow = 0; P(e.x, e.y); fx.dust(_v.x, _v.y - 0.5, _v.z, { n: 14, s0: 0.6, s1: 2.2, life: 1.4, vy: 0.6, up: 1, jit: 2.5, a: 0.45 }); } break;
       case 'wpdown': this.bossKick(W, e, 2.2); break;
       case 'bossphase': this.bossKick(W, { x: W.boss ? W.boss.x : 0, y: W.boss ? W.boss.y + 2 : 0 }, 1.6); break;
       case 'hunterdown': P(e.x, e.y + 0.8); fx.explode(_v.x, _v.y, _v.z, 2, { metal: true, color: 0xff6a40 }); this.trauma = Math.min(1, this.trauma + 0.5); break;
-      case 'crumble': P(e.x, e.y - 0.5); fx.debris(_v.x, _v.y, _v.z, { n: 20, speed: 4, size: 0.4, sp: 3 }); fx.dust(_v.x, _v.y, _v.z, { n: 14, s0: 1.2, s1: 4, life: 3, spread: 5 }); break;
+      case 'crumble': if (e.ram) { P(e.x, e.y - 0.3); fx.debris(_v.x, _v.y, _v.z, { n: 16, speed: 9, size: 0.5, sp: 3 }); this.shock(e.x, e.y, 0.8); this.trauma = Math.min(1, this.trauma + 0.35); } P(e.x, e.y - 0.5); fx.debris(_v.x, _v.y, _v.z, { n: 20, speed: 4, size: 0.4, sp: 3 }); fx.dust(_v.x, _v.y, _v.z, { n: 14, s0: 1.2, s1: 4, life: 3, spread: 5 }); break;
       case 'shatter': P(e.x, e.y); if (e.kind === 'blob') fx.fire(_v.x, _v.y, _v.z, { n: 8, s: 0.8 }); else fx.sparks(_v.x, _v.y, _v.z, { n: 14, speed: 6, r: e.kind === 'orb' ? 0.7 : 0.8, g: e.kind === 'orb' ? 0.4 : 0.95, b: 1 }); if (e.sea) fx.splash(_v.x, 0, _v.z, 0.6); break;
       case 'orbpop': P(e.x, e.y); fx.sparks(_v.x, _v.y, _v.z, { n: 20, speed: 7, r: 0.8, g: 0.5, b: 1 }); break;
       case 'bonk': if (e.rock) { P(e.x, e.y); fx.dust(_v.x, _v.y, _v.z, { n: 3, s0: 0.35, s1: 1.2, life: 0.9, vy: -0.6, up: 0.3, jit: 1.6, a: 0.45, grav: 1.2 }); } break;

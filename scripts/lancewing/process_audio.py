@@ -15,7 +15,8 @@ LOOPS = {'wind', 'surf', 'rush', 'hunterloop'}
 # frequent sounds: cut the sub-bass phones cannot play (so the audible body comes up after peak normalising) and keep them dark
 SOFT = {'flap': 'highpass=f=110,lowpass=f=5200', 'land': 'highpass=f=90,lowpass=f=6000', 'collect': 'highpass=f=120,lowpass=f=7000',
         'skid': 'lowpass=f=7000', 'chain': 'highpass=f=100', 'core': 'highpass=f=100', 'pickup': 'highpass=f=100', 'spawn': 'highpass=f=90',
-        'shieldhit': 'highpass=f=90', 'form': 'highpass=f=90', 'drop': 'highpass=f=90', 'hatch': 'highpass=f=70'}
+        'shieldhit': 'highpass=f=90', 'form': 'highpass=f=90', 'drop': 'highpass=f=90', 'hatch': 'highpass=f=70',
+        'thud': 'highpass=f=80,lowpass=f=7000', 'arrive': 'highpass=f=90', 'portal': 'highpass=f=80', 'clatter': 'highpass=f=150'}
 ONLY = set(sys.argv[2].split(',')) if len(sys.argv) > 2 else None
 
 

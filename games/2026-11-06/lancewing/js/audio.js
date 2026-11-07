@@ -6,10 +6,10 @@
 const SFX = ['flap', 'clang', 'block', 'unhorse', 'boomS', 'boomM', 'boomL', 'debris', 'death', 'splash', 'spoutwarn', 'spout', 'boltwarn', 'thunder', 'arcon',
   'crack', 'crumble', 'core', 'collect', 'chain', 'hatch', 'form', 'land', 'skid', 'drop', 'pickup', 'pwend', 'shieldhit', 'slowmo', 'spawn', 'life', 'alarm',
   'hunter', 'hunterloop', 'bossroar', 'bosshit', 'shatter', 'slam', 'beam', 'blast', 'molten', 'gust', 'breach', 'wave', 'waveclear', 'upgrade', 'medal',
-  'uimove', 'uiok', 'uiback', 'rewind', 'wind', 'surf', 'rush'];
+  'uimove', 'uiok', 'uiback', 'rewind', 'wind', 'surf', 'rush', 'portal', 'arrive', 'screech', 'ram', 'regrow', 'thud', 'clatter', 'corefade'];
 const VOICE = ['begin', 's2', 's3', 's4', 's5', 'boss', 'bossdown', 'clear', 'lastlife', 'gameover', 'newrecord', 'champion'];
 export const MUSIC = new Set(['title', 's1', 's2', 's3', 's4', 's5', 'boss', 'clear', 'over']);
-const V = '?v=14';
+const V = '?v=15';
 
 export class Audio {
   constructor(base) {
