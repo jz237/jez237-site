@@ -1276,3 +1276,10 @@ R57 — continuous tunnel lighting and surface transitions
 - Room reflections fade in and across their distance range. The twelve-entry cache no longer cycles out nearby rooms still being rendered when more rooms are visible.
 - Existing texture resolution, geometry detail, flight controls, demo AI, audio, multiplayer and quality defaults are preserved. WebGL 1 compatible; no new extension or asset parcel required.
 - Verified on a 90-second Vertigo AI demo under sixfold CPU throttling, nine showroom scenes, software WebGL and Original campaign startup/play. The user's exact old Chrome/GPU configuration was not available for testing.
+
+R58 — attentive and evasive demo pilot
+- Watches reachable open passages while making small sliding corrections instead of holding a view into a nearby wall. Stable interest points and bounded sensing preserve smooth camera motion.
+- Predicts closest approach of cockpit-visible enemy projectiles relative to the ship's velocity and chooses collision-checked lateral/vertical evasive thrust. Hidden shots and unseen shooters do not grant enemy knowledge.
+- Reacts faster to visible threats through bounded native rotational thrust, gives close attackers priority, and interrupts destruction watching for immediate danger. Stable weapon choices and manual flight controls are preserved.
+- Uses brief native afterburner bursts in clear, aligned travel corridors, with cooldown, charge and stopping-clearance checks. The selected showcase arsenal includes an afterburner; ordinary campaign demos still require the pickup.
+- No texture, lighting, audio, multiplayer, level geometry or asset parcel changes.

@@ -44,6 +44,15 @@ static vms_vector aa_contact_point,aa_contact_direction;
 static fix64 aa_contact_until,aa_contact_next,aa_contact_started;
 static int aa_contact_ram,aa_contact_count,aa_contact_acquired;
 static int aa_arsenal_signature=-1;
+static fix64 aa_sense_next,aa_evade_until,aa_evade_next,aa_boost_until,aa_boost_next,aa_gaze_until,aa_gaze_next;
+static vms_vector aa_incoming_miss,aa_incoming_velocity,aa_evade_direction,aa_gaze_point;
+static float aa_incoming_time=2,aa_gaze_clearance,aa_reaction,aa_boost_seconds,aa_evade_seconds;
+static int aa_incoming=-1,aa_dodges,aa_bursts,aa_gaze_changes,aa_gaze_room=-1,aa_evading;
+static int aa_enemy_shot(int i){
+    if(i<0||i>Highest_object_index)return 0;object *o=&Objects[i];
+    return o->type==OBJ_WEAPON&&o->movement_type==MT_PHYSICS&&
+        o->ctype.laser_info.parent_type==OBJ_ROBOT&&!(o->flags&OF_SHOULD_BE_DEAD);
+}
 static int aa_hostile(int i){return i>=0&&i<=Highest_object_index&&Objects[i].type==OBJ_ROBOT&&!(Objects[i].flags&(OF_SHOULD_BE_DEAD|OF_EXPLODING))&&!Robot_info[Objects[i].id].companion;}
 /* Perception comes from the main cockpit render, never the object database.
  * Frustum tests use the renderer's actual aspect/zoom. Several body samples
@@ -55,12 +64,13 @@ static fix64 aa_sight_time;
 static vms_vector aa_sight_eye;
 extern vms_vector Viewer_eye;
 static int aa_combat_object(int i){return aa_hostile(i)||(i>=0&&i<=Highest_object_index&&Objects[i].type==OBJ_CNTRLCEN&&!(Objects[i].flags&(OF_SHOULD_BE_DEAD|OF_EXPLODING)));}
-static int aa_can_see(int i){
-    return aa_combat_object(i)&&aa_sight_active&&aa_sight_level==Current_level_num&&
+static int aa_perceived(int i){
+    return i>=0&&i<=Highest_object_index&&aa_sight_active&&aa_sight_level==Current_level_num&&
         GameTime64>=aa_sight_time&&GameTime64-aa_sight_time<=F1_0/4&&
         aa_sighted[i]&&aa_sight_signature[i]==Objects[i].signature&&
         !(Objects[i].type==OBJ_ROBOT&&Objects[i].ctype.ai_info.CLOAKED);
 }
+static int aa_can_see(int i){return aa_combat_object(i)&&aa_perceived(i);}
 void astra_auto_sight_begin(int window_num){
     if(window_num)return;
     memset(aa_sighted,0,sizeof aa_sighted);aa_sight_count=0;
@@ -68,11 +78,11 @@ void astra_auto_sight_begin(int window_num){
     aa_sight_level=Current_level_num;aa_sight_time=GameTime64;aa_sight_eye=Viewer_eye;
 }
 void astra_auto_sight_object(int i,int window_num){
-    if(window_num||!aa_sight_active||!aa_combat_object(i))return;
+    if(window_num||!aa_sight_active||(!aa_combat_object(i)&&!aa_enemy_shot(i)))return;
     object *o=&Objects[i];
     if(o->render_type==RT_NONE||(o->type==OBJ_ROBOT&&o->ctype.ai_info.CLOAKED))return;
     if(vm_vec_dist_quick(&o->pos,&aa_sight_eye)>i2f(210))return;
-    for(int sample=0;sample<5;sample++){
+    for(int sample=0;sample<(aa_enemy_shot(i)?1:5);sample++){
         vms_vector point=o->pos;g3s_point view;
         if(sample)vm_vec_scale_add2(&point,sample<3?&ConsoleObject->orient.rvec:&ConsoleObject->orient.uvec,fixmul(o->size,fl2f((sample%2?.5f:-.5f))));
         if(g3_rotate_point(&view,&point))continue;
@@ -83,7 +93,7 @@ void astra_auto_sight_object(int i,int window_num){
         if(find_vector_intersection(&q,&hit)!=HIT_NONE)continue;
         q.flags|=FQ_CHECK_OBJS|FQ_IGNORE_POWERUPS;int result=find_vector_intersection(&q,&hit);
         if(result==HIT_NONE||(result==HIT_OBJECT&&hit.hit_object==i)){
-            if(!aa_sighted[i])aa_sight_count++;
+            if(!aa_sighted[i]&&aa_combat_object(i))aa_sight_count++;
             aa_sighted[i]=1;aa_sight_signature[i]=o->signature;return;
         }
     }
@@ -121,13 +131,32 @@ void astra_auto_contact(object *source,int ram){
     aa_contact_next=GameTime64+F1_0;aa_contact_count++;
 }
 static int aa_threat(int i){return aa_hostile(i)&&aa_attack_signature[i]==Objects[i].signature&&aa_attack_until[i]>GameTime64;}
+/* Closest approach in the moving pilot's frame. Reject shots travelling away
+ * or safely past us; world-space projectile speed alone is insufficient. */
+static int aa_collision_course(vms_vector offset,vms_vector velocity,float radius,float *time,vms_vector *miss){
+    float x=f2fl(offset.x),y=f2fl(offset.y),z=f2fl(offset.z);
+    float vx=f2fl(velocity.x),vy=f2fl(velocity.y),vz=f2fl(velocity.z),vv=vx*vx+vy*vy+vz*vz;
+    if(vv<1)return 0;
+    float t=-(x*vx+y*vy+z*vz)/vv;
+    if(t<0||t>1.25f)return 0;
+    x+=vx*t;y+=vy*t;z+=vz*t;
+    if(x*x+y*y+z*z>radius*radius)return 0;
+    *time=t;miss->x=fl2f(x);miss->y=fl2f(y);miss->z=fl2f(z);return 1;
+}
 static void aa_sense_fire(void){
+    /* Bounded sensing: render visibility is refreshed independently. No
+     * hidden shooter locations or unrendered projectiles grant knowledge. */
+    if(GameTime64<aa_sense_next)return;
+    aa_sense_next=GameTime64+F1_0/16;aa_incoming=-1;aa_incoming_time=2;
     for(int i=0;i<=Highest_object_index;i++){
-        object *shot=&Objects[i];if(shot->type!=OBJ_WEAPON||shot->ctype.laser_info.parent_type!=OBJ_ROBOT||shot->movement_type!=MT_PHYSICS)continue;
-        vms_vector toward,travel=shot->mtype.phys_info.velocity;vm_vec_sub(&toward,&ConsoleObject->pos,&shot->pos);
-        float range=f2fl(vm_vec_mag(&toward));if(range>180||range<.1f||vm_vec_mag(&travel)<F1_0)continue;
-        vm_vec_normalize(&travel);float closing=f2fl(vm_vec_dot(&toward,&travel));
-        if(closing>0 && range*range-closing*closing<18*18)astra_auto_attacked(shot);
+        if(!aa_enemy_shot(i)||!aa_perceived(i))continue;object *shot=&Objects[i];
+        vms_vector offset,relative,miss;float t;
+        vm_vec_sub(&offset,&shot->pos,&ConsoleObject->pos);
+        vm_vec_sub(&relative,&shot->mtype.phys_info.velocity,&ConsoleObject->mtype.phys_info.velocity);
+        if(vm_vec_mag(&offset)>i2f(180))continue;
+        if(!aa_collision_course(offset,relative,f2fl(ConsoleObject->size+shot->size)+3,&t,&miss))continue;
+        astra_auto_attacked(shot);
+        if(t<aa_incoming_time){aa_incoming=i;aa_incoming_time=t;aa_incoming_miss=miss;aa_incoming_velocity=relative;}
     }
 }
 static void aa_demo_arsenal(void){
@@ -136,7 +165,11 @@ static void aa_demo_arsenal(void){
     p->primary_weapon_flags=0xffff^(1<<SUPER_LASER_INDEX);p->secondary_weapon_flags=0xffff;
     p->primary_ammo[VULCAN_INDEX]=VULCAN_AMMO_MAX;
     for(int i=0;i<MAX_SECONDARY_WEAPONS;i++)p->secondary_ammo[i]=Secondary_ammo_max[i];
-    p->laser_level=MAX_SUPER_LASER_LEVEL;p->flags|=PLAYER_FLAGS_QUAD_LASERS;update_laser_weapon_info();
+    p->laser_level=MAX_SUPER_LASER_LEVEL;p->flags|=PLAYER_FLAGS_QUAD_LASERS;
+    /* The explicitly selected showcase arsenal includes propulsion. Ordinary
+     * campaign demos still need to collect their own afterburner. */
+    if(!(p->flags&PLAYER_FLAGS_AFTERBURNER)){p->flags|=PLAYER_FLAGS_AFTERBURNER;p->afterburner_charge=F1_0;}
+    update_laser_weapon_info();
     EM_ASM(Module.demoArsenalGranted=true;);
 }
 static int aa_recover,aa_seen,aa_deaths,aa_kills,aa_collects;
@@ -480,7 +513,7 @@ static fix64 aa_watch_until,aa_target_since,aa_weapon_changed,aa_dodge_next;
 static float aa_roll_error,aa_aim_error,aa_turn_side=1,aa_dodge_side=1;
 static float aa_rotation_control(float error,float rate,float limit,float feedforward,int axis){
     float smooth=EM_ASM_DOUBLE(return Math.max(0,Math.min(1,Module.comfort?.smooth||0)));
-    float acceleration=(axis==2?.11f:.27f)*(1-.55f*smooth),dt=aa_clamp(f2fl(FrameTime),0,.1f);limit*=1-.25f*smooth;
+    float acceleration=(axis==2?.11f:.27f+.13f*aa_reaction)*(1-.55f*smooth),dt=aa_clamp(f2fl(FrameTime),0,.1f);limit*=1-.25f*smooth;
     float brake=sqrtf(2*acceleration*fabsf(error)/6.2831853f);
     float wanted=copysignf(fminf(fabsf(error)*3.1f/6.2831853f,brake),error)+feedforward/6.2831853f;
     wanted=aa_clamp(wanted,-limit,limit);
@@ -529,13 +562,14 @@ static float aa_aim(vms_vector target,int focus){
     float alignment=z;aa_aim_error=acosf(aa_clamp(z,-1,1))*57.29578f;
     if(!focus){
         vms_vector travel=ship->mtype.phys_info.velocity;fix motion=vm_vec_mag(&travel),ahead=vm_vec_dot(&travel,&ship->orient.fvec);
-        if(motion>i2f(28)&&z<.45f&&ahead>fixmul(motion,fl2f(.75f))){
+        vms_vector aheadpoint;vm_vec_scale_add(&aheadpoint,&ship->pos,&ship->orient.fvec,i2f(35));
+        if(motion>i2f(28)&&z<.45f&&ahead>fixmul(motion,fl2f(.75f))&&aa_visible(&aheadpoint,ship->size)){
             vm_vec_normalize(&travel);aa_cruise_direction(&travel);x=f2fl(vm_vec_dot(&travel,&ship->orient.rvec));y=f2fl(vm_vec_dot(&travel,&ship->orient.uvec));z=f2fl(vm_vec_dot(&travel,&ship->orient.fvec));
         }
     }
     float yaw=atan2f(x,z),pitch=-atan2f(y,sqrtf(x*x+z*z));
     if(fabsf(yaw)>2.9f)yaw=fabsf(yaw)*aa_turn_side;else if(fabsf(yaw)>.08f)aa_turn_side=yaw>0?1:-1;
-    float dt=f2fl(FrameTime),limit=focus?.22f:.17f,feed_yaw=0,feed_pitch=0;
+    float dt=f2fl(FrameTime),limit=focus?.22f+.04f*aa_reaction:.17f,feed_yaw=0,feed_pitch=0;
     if(focus==1&&distance>4){
         vms_vector relative;vm_vec_sub(&relative,&aa_target_velocity,&ship->mtype.phys_info.velocity);
         float weight=aa_clamp(z,0,1);weight=weight*weight/distance;
@@ -550,6 +584,116 @@ static float aa_aim(vms_vector target,int focus){
     aa_roll_error=roll*57.29578f;
     Controls.bank_time=fl2f(aa_rotation_control(roll,f2fl(ship->mtype.phys_info.rotvel.z),.060f,0,2)*dt);
     return alignment;
+}
+/* Survey openings independently of short position corrections. A stable
+ * world-space interest point prevents staring at a wall for a four-second
+ * slide, without adding a continual camera sweep or x-ray target search. */
+static float aa_view_depth(vms_vector direction){
+    if(vm_vec_normalize(&direction)<F1_0/100)return 0;
+    vms_vector end;vm_vec_scale_add(&end,&ConsoleObject->pos,&direction,i2f(100));
+    fvi_query q={&ConsoleObject->pos,&end,ConsoleObject->segnum,0,ConsoleObject-Objects,NULL,FQ_TRANSPOINT};fvi_info hit;
+    return find_vector_intersection(&q,&hit)==HIT_NONE?100:aa_len(&hit.hit_pnt,&ConsoleObject->pos);
+}
+static vms_vector aa_survey(vms_vector route,int searching){
+    object *ship=ConsoleObject;int seg=ship->segnum;vms_vector held;
+    if(aa_gaze_room==seg&&GameTime64<aa_gaze_next)return aa_gaze_point;
+    aa_gaze_next=GameTime64+F1_0/8;
+    aa_gaze_clearance=aa_view_depth(ship->orient.fvec);
+    float held_distance=f2fl(vm_vec_normalized_dir(&held,&aa_gaze_point,&ship->pos));
+    if(aa_gaze_room==seg&&GameTime64<aa_gaze_until&&held_distance>6&&
+        aa_view_depth(held)>18&&aa_visible(&aa_gaze_point,0))return aa_gaze_point;
+    vms_vector best=route;float score=-1000;
+    int next=aa_goal,guard=0;
+    while(next>=0&&aa_parent[next]>=0&&aa_parent[next]!=seg&&guard++<MAX_SEGMENTS)next=aa_parent[next];
+    for(int n=-2;n<6;n++){
+        vms_vector point,direction;
+        if(n==-2)point=route;
+        else if(n==-1)vm_vec_scale_add(&point,&ship->pos,&ship->orient.fvec,i2f(65));
+        else{
+            int child=Segments[seg].children[n];
+            if(child<0||!(WALL_IS_DOORWAY(&Segments[seg],n)&WID_FLY_FLAG)||aa_forbidden_portal(seg,n))continue;
+            compute_center_point_on_side(&point,&Segments[seg],n);
+            vm_vec_scale_add2(&point,&Segments[seg].sides[n].normals[0],-i2f(7));
+        }
+        float distance=f2fl(vm_vec_normalized_dir(&direction,&point,&ship->pos));
+        if(distance<12||!aa_visible(&point,0))continue;
+        float depth=aa_view_depth(direction),forward=f2fl(vm_vec_dot(&direction,&ship->orient.fvec));
+        float vertical=fabsf(f2fl(vm_vec_dot(&direction,aa_up_ready?&aa_up:&ship->orient.uvec)));
+        float value=fminf(depth,80)*.45f+forward*14-vertical*13;
+        if(n>=0){int child=Segments[seg].children[n];value+=18+(child==next?22:0)+(aa_visits[child]?0:5);}
+        else if(n==-2)value+=searching?-12:12;
+        if(depth<18)value-=35;
+        if(value>score){score=value;best=point;}
+    }
+    /* Enclosed rooms still need a deliberate survey, including their upper
+     * recesses. Choose clearance instead of rotating blindly into a wall. */
+    if(searching&&score<25){
+        for(int side=0;side<6;side++){
+            vms_vector point,direction;compute_center_point_on_side(&point,&Segments[seg],side);
+            vm_vec_normalized_dir(&direction,&point,&ship->pos);
+            float value=aa_view_depth(direction)*.5f+f2fl(vm_vec_dot(&direction,&ship->orient.fvec))*8;
+            if(aa_gaze_room==seg&&vm_vec_dot(&direction,&held)>fl2f(.9f))value-=35;
+            if(value>score){score=value;best=point;}
+        }
+    }
+    if(aa_gaze_room!=seg||aa_len(&best,&aa_gaze_point)>6)aa_gaze_changes++;
+    aa_gaze_point=best;aa_gaze_room=seg;aa_gaze_until=GameTime64+F1_0*5/4;
+    return best;
+}
+static int aa_dodge_fire(int allowed){
+    aa_evading=0;
+    if(!allowed){aa_evade_until=0;return 0;}
+    object *ship=ConsoleObject;
+    if(aa_incoming>=0&&GameTime64>=aa_evade_next&&GameTime64>=aa_evade_until){
+        float best=-1;vms_vector chosen,trajectory=aa_incoming_velocity;vm_vec_normalize(&trajectory);
+        for(int side=-1;side<=1;side++)for(int up=-1;up<=1;up++){
+            if(!side&&!up)continue;
+            vms_vector dir,point;vm_vec_copy_scale(&dir,&ship->orient.rvec,i2f(side));
+            vm_vec_scale_add2(&dir,&ship->orient.uvec,i2f(up));vm_vec_normalize(&dir);
+            /* Include existing forward drift when checking where the hull
+             * will be during the dodge, not just an empty side ray. */
+            vm_vec_scale_add(&point,&ship->pos,&dir,i2f(11));
+            vm_vec_scale_add2(&point,&ship->mtype.phys_info.velocity,fl2f(.22f));
+            if(!aa_visible(&point,ship->size))continue;
+            vms_vector miss=aa_incoming_miss,perp=dir;
+            vm_vec_scale_add2(&perp,&trajectory,-vm_vec_dot(&dir,&trajectory));
+            vm_vec_scale_add2(&miss,&perp,-fl2f(7));
+            float score=f2fl(vm_vec_mag(&miss))+(up==0?1.3f:0)+f2fl(vm_vec_dot(&dir,&aa_evade_direction));
+            if(score>best){best=score;chosen=dir;}
+        }
+        if(best>=0){aa_evade_direction=chosen;aa_evade_until=GameTime64+fl2f(.55f);aa_dodges++;}
+        aa_evade_next=GameTime64+F1_0/5;
+    }
+    if(GameTime64>=aa_evade_until)return 0;
+    vms_vector point;vm_vec_scale_add(&point,&ship->pos,&aa_evade_direction,i2f(9));
+    vm_vec_scale_add2(&point,&ship->mtype.phys_info.velocity,fl2f(.18f));
+    if(!aa_visible(&point,ship->size)){aa_evade_until=0;return 0;}
+    vms_vector axes[2]={ship->orient.rvec,ship->orient.uvec};
+    fix *out[2]={&Controls.sideways_thrust_time,&Controls.vertical_thrust_time};
+    for(int k=0;k<2;k++){
+        float desired=f2fl(vm_vec_dot(&aa_evade_direction,&axes[k]))*26;
+        float velocity=f2fl(vm_vec_dot(&ship->mtype.phys_info.velocity,&axes[k]));
+        float drag=f2fl(ship->mtype.phys_info.drag),mass=f2fl(ship->mtype.phys_info.mass);
+        float hold=desired*mass*drag/fmaxf(.01f,(1-drag)*f2fl(Player_ship->max_thrust));
+        *out[k]=fl2f(aa_clamp(hold+(desired-velocity)*.16f,-1,1)*f2fl(FrameTime));
+    }
+    aa_evading=1;aa_evade_seconds+=f2fl(FrameTime);return 1;
+}
+static void aa_afterburner(vms_vector target,int allowed){
+    object *ship=ConsoleObject;player *p=&Players[Player_num];vms_vector direction,clear;
+    float distance=f2fl(vm_vec_normalized_dir(&direction,&target,&ship->pos));
+    float speed=f2fl(vm_vec_dot(&ship->mtype.phys_info.velocity,&ship->orient.fvec));
+    float look=fmaxf(55,25+fmaxf(0,speed)*.5f+speed*speed/100);
+    vm_vec_scale_add(&clear,&ship->pos,&ship->orient.fvec,fl2f(look));
+    int safe=allowed&&!aa_evading&&aa_incoming<0&&(p->flags&PLAYER_FLAGS_AFTERBURNER)&&
+        p->afterburner_charge>F1_0/6&&speed>8&&distance>32&&
+        vm_vec_dot(&direction,&ship->orient.fvec)>fl2f(.975f)&&
+        (GameTime64<aa_boost_until||Controls.forward_thrust_time>0)&&aa_visible(&clear,ship->size);
+    if(!safe){aa_boost_until=0;return;}
+    if(GameTime64>=aa_boost_next&&GameTime64>=aa_boost_until&&distance>44&&p->afterburner_charge>F1_0/2){
+        aa_boost_until=GameTime64+fl2f(.45f);aa_boost_next=GameTime64+i2f(6);aa_bursts++;
+    }
+    if(GameTime64<aa_boost_until){Controls.afterburner_state=1;aa_boost_seconds+=f2fl(FrameTime);}
 }
 /* Only fire at a native, reachable door. Keys and locks still belong to D2.
  * The second ray starts at the real flare barrel and follows its firing axis. */
@@ -719,6 +863,7 @@ void astra_auto_frame(void){
     if(!astra_auto_enabled()||!ConsoleObject)return;
     memset(&Controls,0,sizeof Controls);
     if(Player_is_dead){
+        aa_sense_next=aa_evade_next=aa_gaze_next=aa_evade_until=aa_boost_until=aa_gaze_until=0;aa_incoming=-1;aa_gaze_room=-1;aa_reaction=0;
         aa_contact_until=aa_contact_next=0;aa_pending_missile=-1;aa_weapon_next=aa_missile_next=0;aa_watch_until=0;aa_up_ready=0;
         if(!aa_dead_since){aa_dead_since=GameTime64;aa_deaths++;}
         if(Player_exploded&&GameTime64-aa_dead_since>i2f(11))Death_sequence_aborted=1;
@@ -729,6 +874,7 @@ void astra_auto_frame(void){
     if(aa_dead_since){aa_sliding=0;aa_slide_until=0;aa_slide_goal=-2;aa_escape_until=0;aa_escape_room=-1;aa_arsenal_signature=-1;aa_combat_target=-1;aa_next=0;aa_pick_object=aa_object=aa_goal=-1;aa_up_ready=0;aa_last_kills=Players[Player_num].num_kills_total;aa_weapon_next=GameTime64+i2f(8);}
     aa_dead_since=0;if(Endlevel_sequence)return;
     if(aa_level!=Current_level_num){
+        aa_sense_next=aa_evade_next=aa_gaze_next=aa_evade_until=aa_boost_until=aa_boost_next=aa_gaze_until=0;aa_incoming=-1;aa_gaze_room=-1;
         aa_sliding=0;aa_slide_until=0;aa_slide_goal=-2;aa_escape_until=0;aa_escape_room=-1;memset(aa_blocked,0,sizeof aa_blocked);
         aa_weapon_next=GameTime64+i2f(8);aa_missile_next=0;aa_pending_missile=-1;aa_watch_until=0;aa_up_ready=0;
         aa_last_target=-1;aa_last_kills=Players[Player_num].num_kills_total;aa_weapon_changed=GameTime64;
@@ -847,7 +993,8 @@ void astra_auto_frame(void){
     if(aa_hostile(locked) && Objects[locked].signature==aa_combat_signature &&
        aa_can_see(locked)&&aa_visible(&Objects[locked].pos,0)&&aa_combat_defer[locked]<=GameTime64){
         int urgent=enemy>=0&&enemy!=locked&&aa_threat(enemy)&&
-            aa_len(&Objects[enemy].pos,&ConsoleObject->pos)<22&&aa_len(&Objects[locked].pos,&ConsoleObject->pos)>65;
+            aa_len(&Objects[enemy].pos,&ConsoleObject->pos)<48&&
+            (aa_len(&Objects[locked].pos,&ConsoleObject->pos)>65||!aa_threat(locked))&&GameTime64-aa_target_since>F1_0/2;
         if(!urgent)enemy=locked;
     }
     if(enemy!=aa_last_target){aa_target_since=GameTime64;aa_last_target=enemy;aa_lane_since=0;aa_damage_since=GameTime64;aa_enemy_health=enemy>=0?Objects[enemy].shields:0;}
@@ -939,7 +1086,7 @@ void astra_auto_frame(void){
         if(GameTime64-aa_contact_started>i2f(3)&&vm_vec_dot(&ConsoleObject->orient.fvec,&aa_contact_direction)>fl2f(.92f))aa_contact_until=0;
     }
     int watching=aa_watch_until>GameTime64&&!Control_center_destroyed;
-    if(watching && (Players[Player_num].shields<i2f(25)||(enemy>=0&&aa_threat(enemy)&&aa_len(&Objects[enemy].pos,&ConsoleObject->pos)<38))){aa_watch_until=0;watching=0;}
+    if(watching && (aa_incoming>=0||Players[Player_num].shields<i2f(25)||(enemy>=0&&aa_threat(enemy)&&aa_len(&Objects[enemy].pos,&ConsoleObject->pos)<65))){aa_watch_until=0;watching=0;}
     if(watching){aim=target=aa_watch_point;speed=0;attacking=0;door=-1;flare_door=-1;aa_mode=8;aa_stuck_since=GameTime64;vm_vec_zero(&aa_target_velocity);}
     if(flare_door>=0){
         wall *gate=&Walls[flare_door];compute_center_point_on_side(&aim,&Segments[gate->segnum],gate->sidenum);
@@ -951,13 +1098,13 @@ void astra_auto_frame(void){
     vms_vector travel_direction;float travel_distance=f2fl(vm_vec_normalized_dir(&travel_direction,&target,&ConsoleObject->pos));
     float travel_facing=f2fl(vm_vec_dot(&travel_direction,&ConsoleObject->orient.fvec));
     int short_slide=!searching&&!attacking&&!watching&&door<0&&flare_door<0&&!(aa_wall>=0&&seg==aa_goal)&&travel_distance<38&&
-        (travel_facing>.05f||travel_distance<17)&&aa_visible(&target,fixmul(ConsoleObject->size,fl2f(.95f)));
+        (travel_facing>.05f||travel_distance<17||(aa_object>=0&&seg==aa_goal))&&aa_visible(&target,fixmul(ConsoleObject->size,fl2f(.95f)));
     if(aa_slide_goal!=aa_goal||!short_slide||GameTime64>aa_slide_until)aa_sliding=0;
     if(short_slide&&!aa_sliding){
         aa_slide_heading=ConsoleObject->orient.fvec;aa_slide_until=GameTime64+i2f(4);aa_slide_goal=aa_goal;aa_slide_count++;
     }
     aa_sliding=short_slide;
-    if(aa_sliding)vm_vec_scale_add(&aim,&ConsoleObject->pos,&aa_slide_heading,i2f(60));
+    if(aa_sliding)aim=aa_survey(target,0);
     /* Combat keeps its firing lane; positional corrections may use all axes. */
     int wants_travel=fabsf(speed)>=8;
     /* A hull can rock across a portal without making any progress. Neither a
@@ -992,8 +1139,9 @@ void astra_auto_frame(void){
         vms_matrix inverse;vms_vector muzzle;vm_copy_transpose_matrix(&inverse,&ConsoleObject->orient);
         vm_vec_rotate(&muzzle,&Player_ship->gun_points[gun],&inverse);vm_vec_sub2(&aim,&muzzle);
     }
+    aa_reaction=attacking||investigating?1:0;
     float alignment=aa_aim(aim,attacking||watching?1:searching||door>=0||flare_door>=0||(aa_wall>=0&&seg==aa_goal)?2:0);
-    if(!escaping&&!flanking&&attacking&&alignment>.97f&&enemy>=0&&aa_threat(enemy)&&fabsf(speed)<30){
+    if(aa_incoming<0&&GameTime64>=aa_evade_until&&!escaping&&!flanking&&attacking&&alignment>.97f&&enemy>=0&&aa_threat(enemy)&&fabsf(speed)<30){
         /* A small, deliberate lateral dodge keeps the nose on the opponent.
          * Reverse only for clearance, not according to a periodic sine wave. */
         vms_vector sidepoint;vm_vec_scale_add(&sidepoint,&ConsoleObject->pos,&ConsoleObject->orient.rvec,fl2f(aa_dodge_side*12));
@@ -1044,6 +1192,10 @@ void astra_auto_frame(void){
             }
         }
     }
+    /* Imminent projectile evasion takes precedence over lane repositioning.
+     * It changes thrust only: the pilot continues looking at the opponent. */
+    aa_dodge_fire(!escaping&&!watching);
+    aa_afterburner(target,!escaping&&!watching&&!attacking&&!investigating&&!searching&&door<0&&flare_door<0&&!aa_sliding&&speed>30);
     if(Players[Player_num].flags&PLAYER_FLAGS_CONVERTER && Players[Player_num].shields<i2f(80)&&Players[Player_num].energy>i2f(130))Controls.energy_to_shield_state=1;
     /* Door preparation has its own short retry timer. Ambient lighting cannot
      * consume it, and an opening door is never pelted with unnecessary flares. */
@@ -1077,6 +1229,8 @@ void astra_auto_frame(void){
         EM_ASM(Module.autoRecovery=({active:!!$0,count:$1,attempts:$2,stalled:$3});,escaping,aa_escape_count,aa_recover,(double)(GameTime64-aa_stuck_since)/F1_0);
         int needed=aa_object>=0&&Objects[aa_object].type==OBJ_POWERUP?(int)aa_pickup_need(&Players[Player_num],&Objects[aa_object],GameTime64):-1;
         EM_ASM(Module.autoPickup=({id:$0,need:$1,rejected:$2,deaths:$3});,needed>=0?Objects[aa_object].id:-1,needed,aa_pick_rejected,aa_deaths);
+        EM_ASM(Module.autoTactics=({version:58,incoming:$0,impactIn:$1,dodging:!!$2,dodges:$3,boosting:!!$4,bursts:$5,gazeChanges:$6,viewDepth:$7,reacting:!!$8,charge:$9,boostSeconds:$10,evadeSeconds:$11});,
+            aa_incoming,aa_incoming_time,aa_evading,aa_dodges,Controls.afterburner_state,aa_bursts,aa_gaze_changes,aa_view_depth(ConsoleObject->orient.fvec),aa_reaction,f2fl(Players[Player_num].afterburner_charge),aa_boost_seconds,aa_evade_seconds);
         aa_status_next=GameTime64+F1_0/3;
     }
 }
