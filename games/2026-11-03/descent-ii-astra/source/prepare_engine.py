@@ -57,6 +57,8 @@ includes["tactics.inc"]="main/astra_tactics.inc"
 includes["room_reflections.inc"]="arch/ogl/astra_room_reflections.inc"
 includes["detail_upgrade.inc"]="arch/ogl/astra_detail_upgrade.inc"
 includes["controllers.inc"]="main/astra_controllers.inc"
+includes["network.inc"]="main/astra_network.inc"
+includes["squadron.inc"]="main/astra_squadron.inc"
 for name,path in includes.items():
     if (repo/"d2"/path).exists():raise SystemExit("Use a fresh checkout. An Astra include already exists.")
 git(repo,"apply",str(src/"engine.patch"))

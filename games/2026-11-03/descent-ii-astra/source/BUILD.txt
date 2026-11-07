@@ -1172,3 +1172,40 @@ Four showroom exhibits compare Previous Astra / New details at the same view:
 Beveled panel construction, Rock relief & material finish, Fixture light shafts,
 and Room-aware metal reflections. Older exhibits retain original-art comparison.
 No simulated controllers or diagnostic exports are included in the shipping engine.
+
+Squadron multiplayer (pyre51)
+
+The title screen's Multiplayer & AI squadron opens private invite-code rooms.
+Original Descent II and Vertigo support cooperative campaign play and deathmatch,
+with four total pilot slots: any mix of human players and zero to three AI pilots.
+Play with AI starts locally without a network service. Five independently chosen
+AI levels run from Novice through Rookie, Hotshot and Ace to Expert. Reaction,
+aim, flight speed and weapon tactics vary; AI ships use native physics, inventory,
+collision, damage, pickups, death and respawn, with no extra engine instances.
+Co-op wingmen follow human leaders and engage visible robots; deathmatch pilots
+patrol and engage visible ships. Independent path searches respect walls, doors
+and keys. Unusable pickups and stalled routes are temporarily excluded.
+
+The browser bridge carries D2's native multiplayer packets through a bounded
+WebSocket relay. Rooms are limited to four humans plus AI filling unused slots,
+never more than four pilots. Join before the host launches. In-progress joining
+and host migration are not included: the host leaving ends the room. Rooms
+expire after two hours. Mine checksums and load barriers prevent mismatched
+levels. Native weapon damage, robot synchronization, doors, pickups and scores
+remain authoritative to the original multiplayer implementation. This is casual
+invite-based multiplayer, not a server-side anti-cheat implementation.
+
+The independent astra-squadron Worker uses SQLite Durable Objects, hibernating
+WebSockets, bounded packets/queues and per-connection rate limits. Deployment
+checks the existing account is on Workers Free; no subscription or paid plan is
+enabled. Free limits fail closed if exhausted. Source/config are in multiplayer/.
+The Pages middleware under functions/games/2026-11-03/descent-ii-astra/ adds only
+the explicit relay WebSocket origin to Astra's HTML CSP. Other site policies and
+routes are unchanged. The mandatory website publisher rebuilds the Functions
+bundle. The current Overload adaptation remains a single-player campaign.
+
+Multiplayer pauses neither the room nor other pilots. Its flight menu shows the
+roster and leave action. Campaign checkpoints/previews are excluded during a
+match. Joystick bindings and native keyboard/mouse physics remain unchanged.
+The normal single-player launcher does not contact the relay. No new texture,
+ship or sound parcels are added. QA-only test exports are not shipped.

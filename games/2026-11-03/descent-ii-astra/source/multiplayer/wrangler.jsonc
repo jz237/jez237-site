@@ -1,0 +1,11 @@
+{
+  "name": "astra-squadron",
+  "main": "relay.js",
+  "compatibility_date": "2026-11-06",
+  "account_id": "ac73a259dff5a3cbeccbb78824ac0db6",
+  "workers_dev": true,
+  "durable_objects": {"bindings": [{"name": "ROOMS", "class_name": "SquadronRoom"}]},
+  "migrations": [{"tag": "v1", "new_sqlite_classes": ["SquadronRoom"]}],
+  "observability": {"enabled": true, "head_sampling_rate": 0.01, "traces": {"enabled": true, "head_sampling_rate": 0.01}},
+  "limits": {"cpu_ms": 10}
+}

@@ -19,6 +19,7 @@ static int astra_pause_handler(newmenu *menu,d_event *event,void *data)
 }
 static void astra_pause_open(void)
 {
+    if(EM_ASM_INT(return !!Module.netSession)){game_flush_inputs();EM_ASM(window.astraNet.menu());return;}
     static newmenu_item items[8];
     static char *labels[]={"Resume flight","Save game...","Load game...","Options...","Weapon auto-select...","Restore checkpoint...","Joysticks & controllers...","End flight..."};
     memset(items,0,sizeof items);for(int i=0;i<8;i++){items[i].type=NM_TYPE_MENU;items[i].text=labels[i];}

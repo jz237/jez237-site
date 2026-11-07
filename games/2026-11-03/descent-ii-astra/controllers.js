@@ -16,7 +16,7 @@
     const key=C.key(found);if(key!==currentKey||sessionDevice!==found.index||!pad){currentKey=key;profile=C.sanitize(found,saved.profiles[key]);sessionDevice=found.index;reset();}
     pad=found;return pads;
   }
-  function active(){const m=window.Module;return !!m&&typeof flightActive!=='undefined'&&flightActive&&!m.autopilot&&!m.demo&&!window.astraPreview?.active&&!document.hidden&&document.hasFocus()&&!document.body.classList.contains('native-open')&&!dialog?.open&&!calibrating;}
+  function active(){const m=window.Module;return !!m&&typeof flightActive!=='undefined'&&flightActive&&!m.autopilot&&!m.demo&&!window.astraPreview?.active&&!document.hidden&&document.hasFocus()&&!document.body.classList.contains('native-open')&&!window.astraNet?.menuOpen&&!dialog?.open&&!calibrating;}
   function sample(){
     discover();const out=empty();if(!active()||!pad||!profile?.enabled){reset();return out;}
     const state=C.read(pad,profile);
