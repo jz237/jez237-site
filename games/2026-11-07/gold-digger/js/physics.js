@@ -1,7 +1,7 @@
 // Tile physics for the digger: one function moves a body through the tile map for one fixed step. The
 // simulation uses it for the player and the navigation builder (nav.js) uses the very same function to
 // probe every jump and drop, so the autopilot's map of "where can I get to from here" is exact.
-import { T, SOLID, CLIMB, PHYS } from './config.js?v=2';
+import { T, SOLID, CLIMB, PHYS } from './config.js?v=3';
 
 export const EPS = 1e-4;
 export function tileAt(M, x, y) {
@@ -87,6 +87,11 @@ export function stepBody(M, B, inp, dt, plats, bootFall = 0) {
       if (B.vy > 0 && hitSolid(M, B.x - hw, ny, B.x + hw, ny + P.h)) ny = B.y;   // ceiling
       // climbing down onto the floor
       if (B.vy < 0 && (hitSolid(M, B.x - hw, ny, B.x + hw, ny + 0.01))) { ny = Math.ceil(ny); B.state = 'walk'; B.ground = true; B.vy = 0; }
+      // ...or onto a lift platform
+      if (B.vy < 0 && B.state === 'climb' && plats) for (let i = 0; i < plats.length; i++) {
+        const p = plats[i];
+        if (B.x + hw > p.x0 && B.x - hw < p.x1 && B.y >= p.y - 0.02 && ny <= p.y + 0.02) { ny = p.y; B.state = 'walk'; B.ground = true; B.vy = 0; B.onLift = i; break; }
+      }
       // off the bottom of a rope in mid-air: let go
       if (B.state === 'climb' && B.vy < 0 && !climbT(M, ccx, Math.floor(ny + 0.6)) && !climbT(M, ccx, Math.floor(ny + 0.1))) { B.state = 'walk'; B.peakY = ny; }
       B.y = ny;

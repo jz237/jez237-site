@@ -3,7 +3,7 @@
 // Things that glow register light "emitters" the renderer's light pool can aim at.
 // The wonders (one per level in the campaign) are big set pieces in a room whose back wall is pushed far back.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID } from './config.js?v=2';
+import { T, SOLID } from './config.js?v=3';
 
 function rng(seed) { let s = seed >>> 0 || 1; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
 
@@ -80,7 +80,7 @@ export function buildDecor(M, look, W, K) {
   const emitters = [];
   const anim = [];
   const dens = q.decor;
-  const place = (o, x, y, z, s = 1, ry = 0) => { const g = obj(o); g.position.set(x, y, z); g.scale.setScalar(s); g.rotation.y = ry; statics.push(g); return g; };
+  const place = (o, x, y, z, s = 1, ry = 0) => { const g = obj(o); g.position.set(x, y, z); g.scale.multiplyScalar(s); g.rotation.y = ry; statics.push(g); return g; };
   const biome = M.biome;
   // candidate spots
   const floors = [], ceils = [];
@@ -230,7 +230,7 @@ function buildWonder(w, M, look, K, statics, group, emitters, R) {
   const id = w.id >= 100 ? (w.id * 7) % 10 : w.id;
   const [rx0, ry0] = w.room || [Math.floor(w.x) - 5, Math.floor(w.y) - 3];
   const cx = rx0 + 8, fy = ry0 + 3, z0 = -5;
-  const add = (o, x, y, z, s = 1, ry = 0, rz = 0) => { const g = obj(o); g.position.set(x, y, z); g.scale.setScalar(s); g.rotation.set(0, ry, rz); statics.push(g); return g; };
+  const add = (o, x, y, z, s = 1, ry = 0, rz = 0) => { const g = obj(o); g.position.set(x, y, z); g.scale.multiplyScalar(s); g.rotation.set(0, ry, rz); statics.push(g); return g; };
   let anim = null;
   if (id === 0 || id === 1) {
     // a great shaft of daylight / the ore cathedral
@@ -241,16 +241,20 @@ function buildWonder(w, M, look, K, statics, group, emitters, R) {
     if (id === 1) for (let i = 0; i < 6; i++) { const ln = add(make('lantern'), rx0 + 2 + i * 2.4, fy + 6.5, -3.0); emitters.push({ x: ln.position.x, y: ln.position.y, z: -2.6, col: [1, 0.62, 0.3], int: 5, range: 8, pri: 4, flick: 1 }); }
     anim = (t, dt, P, fx) => { if (Math.random() < dt * 20) fx.dust(cx + (Math.random() - 0.5) * 3, fy + Math.random() * 9, -2.5 + Math.random(), { n: 1, s0: 0.04, s1: 0.07, life: 5, vy: -0.05, jit: 0.1, a: 0.8, k: 2.2, grav: 0, drag: 0.1 }); };
   } else if (id === 2) {
-    for (let i = 0; i < 7; i++) { const s = 2.5 + R() * 3.5; add(make('mushroom', s), rx0 + 1 + i * 2.2 + R(), fy - 0.2, z0 + R() * 2, 1, R() * 6); emitters.push({ x: rx0 + 1 + i * 2.2, y: fy + s * 0.8, z: z0 + 1, col: look.accent, int: 5, range: 9, pri: 4 }); }
+    for (let i = 0; i < 7; i++) { const s = 2.2 + R() * 2.6; add(make('mushroom', s), rx0 + 1 + i * 2.2 + R(), fy - 0.2, -4.5 - R() * 3, 1, R() * 6); if (i % 2 === 0) emitters.push({ x: rx0 + 1 + i * 2.2, y: fy + s * 0.8, z: -3.5, col: look.accent, int: 6, range: 10, pri: 4 }); }
   } else if (id === 3) {
     emitters.push({ x: cx, y: fy + 6, z: -2, col: [0.3, 0.9, 1], int: 6, range: 14, pri: 4 });
   } else if (id === 4 || id === 5) {
-    const cols = [0xb07aff, 0xe8dcff, 0xff8ad8];
-    for (let i = 0; i < 12; i++) {
-      const a = i / 12 * Math.PI, s = 2 + R() * 3;
-      add(make('crystal', s, cols[i % 3]), cx + Math.cos(a) * 7, fy + Math.sin(a) * 4 - 0.4, z0 - Math.sin(a) * 2, 1, R() * 6, (Math.PI / 2 - a) * 0.6);
+    const cols = [0xb07aff, 0xe8dcff, 0xff8ad8, 0x9fd8ff];
+    // a ring of giant crystals round the hollow behind the room: the floor ones stand up, the wall ones lean in
+    for (let i = 0; i < 14; i++) {
+      const a = i / 13 * Math.PI, s = 1.6 + R() * 2.2;
+      const x = cx + Math.cos(a) * 6.8, y = fy - 0.3 + Math.sin(a) * 6.2, z = -6.5 - Math.sin(a) * 2.5 + R() * 0.6;
+      add(make('crystal', s, cols[i % cols.length]), x, y, z, 1, R() * 6, (Math.PI / 2 - a) * 0.9);
     }
-    emitters.push({ x: cx, y: fy + 3, z: -2.5, col: [0.75, 0.5, 1], int: 14, range: 14, pri: 5 });
+    for (let i = 0; i < 6; i++) add(make('crystal', 0.8 + R() * 1.2, cols[i % cols.length]), cx + (R() - 0.5) * 10, fy - 0.2, -3.5 - R() * 2.5, 1, R() * 6);
+    emitters.push({ x: cx, y: fy + 3, z: -4.5, col: [0.75, 0.5, 1], int: 16, range: 16, pri: 5 });
+    emitters.push({ x: cx - 5, y: fy + 1, z: -4, col: [0.6, 0.8, 1], int: 6, range: 9, pri: 4 });
   } else if (id === 6) {
     add(make('statue'), cx - 4.5, fy - 0.2, z0, 2.2, 0.5); add(make('statue'), cx + 4.5, fy - 0.2, z0, 2.2, -0.5);
     for (let i = -1; i <= 1; i += 2) add(make('pillarRuin'), cx + i * 2, fy - 0.2, z0 - 1, 1.8);

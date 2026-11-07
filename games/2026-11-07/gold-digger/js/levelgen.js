@@ -5,7 +5,7 @@
 // (mirrored at random), then hazards, creatures and loot are scattered by the RAMP numbers for this level.
 // Everything is deterministic from (seed, depth, level). Boss lairs are separate hand-shaped arenas.
 // Tile rows here are world rows: y = 0 is the bottom of the map. Templates are written top-down.
-import { T, RAMP, LEVELS, RELICS, FOSSILS, WONDERS, NOTES, GEMS, LOOT, STRATA } from './config.js?v=2';
+import { T, RAMP, LEVELS, RELICS, FOSSILS, WONDERS, NOTES, GEMS, LOOT, STRATA } from './config.js?v=3';
 
 export const RW = 16, RH = 12, BORDER = 2;
 
@@ -577,7 +577,7 @@ function tryGenerate(o) {
     }
     for (let n = roll(ramp.spikes); n > 0; n--) {
       const sp = findFloor(M, R, c, 5, true);
-      if (sp && safe(sp[0], sp[1]) && getT(M, sp[0], sp[1]) === T.AIR) setT(M, sp[0], sp[1], T.SPIKES);
+      if (sp && safe(sp[0], sp[1]) && getT(M, sp[0], sp[1]) === T.AIR && [1, 2, 3].every((k) => getT(M, sp[0], sp[1] + k) === T.AIR && getT(M, sp[0] - 1, sp[1] + k) === T.AIR && getT(M, sp[0] + 1, sp[1] + k) === T.AIR)) setT(M, sp[0], sp[1], T.SPIKES);
     }
     // eels in the deeper pools
     if (ramp.eels > 0) {

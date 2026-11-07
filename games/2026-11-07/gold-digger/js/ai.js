@@ -4,9 +4,9 @@
 //   'demo':  sharp and curious: hunts every relic, fossil, wonder and secret, then takes the lift down.
 // It plans over the navigation graph (nav.js), whose jumps were probed with the real physics, and replans
 // whenever the tiles change (rock broken, gates opened) or it ends up somewhere it did not expect.
-import { T, PHYS, TOOLS, STEP, SOLID } from './config.js?v=2';
-import { tileAt, solidT, fallHurt } from './physics.js?v=2';
-import { buildNav, search, pathTo, nodeAt, probeInput, K_STAND, K_CLIMB, K_SWIM } from './nav.js?v=2';
+import { T, PHYS, TOOLS, STEP, SOLID } from './config.js?v=3';
+import { tileAt, solidT, fallHurt } from './physics.js?v=3';
+import { buildNav, search, pathTo, nodeAt, probeInput, K_STAND, K_CLIMB, K_SWIM } from './nav.js?v=3';
 
 const D2 = (ax, ay, bx, by) => (ax - bx) * (ax - bx) + (ay - by) * (ay - by);
 function rngFrom(seed) { let s = seed >>> 0 || 7; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -26,7 +26,7 @@ export class Autopilot {
 
   ensureNav(W) {
     const key = (W.tilesDirty || 0) + ':' + W.M.w + 'x' + W.M.h + ':' + W.level + ':' + W.depth + ':' + W.endlessN + ':' + W.seed;
-    if (this.navKey !== key || !this.nav) { this.nav = buildNav(W.M); this.navKey = key; this.plan = []; this.exec = null; }
+    if (this.navKey !== key || !this.nav) { if (!this.navKey || this.navKey.split(':').slice(1).join(':') !== key.split(':').slice(1).join(':')) this.bad = new Map(); this.nav = buildNav(W.M); this.navKey = key; this.plan = []; this.exec = null; }
     return this.nav;
   }
 
@@ -45,12 +45,19 @@ export class Autopilot {
     const d = this.danger(W, P, nav, out);
     if (d) return this.finish(out, P);
 
+    // trapped with nowhere to go: back to the last camp
+    if (!this.goal && !this.plan.length) { this.noGoalT = (this.noGoalT || 0) + STEP; if (this.noGoalT > 3) { this.noGoalT = 0; out.camp = true; return this.finish(out, P); } } else this.noGoalT = 0;
     // 2. pick a goal (every so often, or when the plan ran out)
     this.replanT -= STEP;
     if (!this.plan.length || this.replanT <= 0 || !this.goal || this.goalGone(W)) {
       if (!this.exec || this.exec.done || this.exec.kind !== 'probe' || !this.exec.started) this.choose(W, P, nav);
     }
     this.follow(W, P, nav, out);
+    // looping between goals without getting anywhere new: drop the side quests and head for the lift for a while
+    const reg = Math.floor(P.x / 4) + ',' + Math.floor(P.y / 4) + ':' + W.level + ':' + W.depth;
+    if (!this.regions || this.regionLvl !== W.seed) { this.regions = new Set(); this.regionLvl = W.seed; this.newRegT = this.t; }
+    if (!this.regions.has(reg)) { this.regions.add(reg); this.newRegT = this.t; }
+    if (this.t - this.newRegT > 45) { this.exitOnlyUntil = this.t + 90; this.newRegT = this.t; this.goal = null; this.plan = []; this.exec = null; }
     // stuck detection: no progress for 3 s -> forget this goal for a while
     const pos = Math.floor(P.x) + ',' + Math.floor(P.y);
     if (pos === this.lastPos) this.stuckT += STEP; else { this.stuckT = 0; this.lastPos = pos; }
@@ -80,7 +87,9 @@ export class Autopilot {
     const from = nodeAt(nav, M, P.x, P.y);
     if (from < 0) { this.plan = []; return; }
     const boots = P.up.boots || 0;
-    const res = search(nav, from, { cost: (e) => {
+    const bad = this.bad || (this.bad = new Map());
+    const res = search(nav, from, { cost: (e, i) => {
+      if ((bad.get(i + ':' + e.to) || 0) >= 2) return Infinity;   // a move that has failed twice here: find another way
       if (e.act === 'dig') { if (e.need === 'dyn' && P.dyn <= 0) return Infinity; if (e.need === 'key' && !P.keys.length) return Infinity; }
       if (e.fall) { const h = fallHurt(e.fall, boots); if (h >= 99) return Infinity; if (h > 0) return e.cost + (h >= P.hp ? 1e4 : 40); }
       if (e.spikes) return e.cost + 12;
@@ -96,7 +105,8 @@ export class Autopilot {
     };
     const demo = !this.human;
     const oilLow = P.oil < P.oilMax * (demo ? 0.4 : 0.32);
-    for (const l of W.loot) {
+    const exitOnly = this.t < (this.exitOnlyUntil || 0);
+    if (!exitOnly) for (const l of W.loot) {
       if (l.got || l.fly) continue;
       let v = 0;
       if (l.k === 'gold') v = 3; else if (l.k === 'gem') v = 6; else if (l.k === 'chest') v = 12;
@@ -106,8 +116,8 @@ export class Autopilot {
       else if (l.k === 'flare') v = P.flares < P.flareMax ? (P.flares < 2 ? 5 : 1.5) : 0;
       if (v > 0) add('loot', l, l.x, l.y, v, 'l' + l.id);
     }
-    for (const f of W.finds) if (!f.got) add(f.kind, f, f.x, f.y, demo ? 40 : 7, 'f' + f.id);
-    for (const k of W.keys) if (!k.got) add('key', k, k.x, k.y, demo ? 20 : 4, 'k' + k.id);
+    if (!exitOnly) for (const f of W.finds) if (!f.got) add(f.kind, f, f.x, f.y, demo ? 40 : 7, 'f' + f.id);
+    if (!exitOnly) for (const k of W.keys) if (!k.got) add('key', k, k.x, k.y, demo ? 20 : 4, 'k' + k.id);
     for (const c of W.camps) if (!c.lit) add('camp', c, c.x, c.y, 10, 'c' + c.id);
     if (P.dyn < 1) for (const k of W.kegs) add('keg', k, k.x, k.y, 4, 'g' + k.id);
     // the exit (always a candidate, worth more as the level drags on)
@@ -139,6 +149,7 @@ export class Autopilot {
         if (Math.abs(dx) < 1.3 && P.ground) { if (Math.sign(dx) !== P.face && Math.abs(dx) > 0.3) out.mx = Math.sign(dx) * 0.3; else out.pick = true; }
       } else if (g && g.kind === 'exit') {
         out.mx = Math.max(-1, Math.min(1, (M.exit.x - P.x) * 2));
+        if (P.state === 'climb') { out.my = -1; out.mx = 0; }
       }
       return;
     }
@@ -153,7 +164,7 @@ export class Autopilot {
     if (e.act === 'walk' || e.act === 'stepoff') {
       out.mx = Math.sign(centerX - P.x) || e.dir;
       if (Math.abs(centerX - P.x) < 0.45 && Math.floor(P.x) === tx) arrive();
-      if (X.t > 2.5) { this.plan = []; this.exec = null; }
+      if (X.t > 2.5) { this.fail(e); }
       // a crawler in the way: swing at it
       this.swatAhead(W, P, out);
       return;
@@ -164,7 +175,7 @@ export class Autopilot {
       else out.my = e.dir;
       if (Math.floor(P.x) === tx && Math.abs(P.y - ty) < 0.12) arrive();
       else if (P.state !== 'climb' && P.ground && Math.round(P.y) === ty && Math.floor(P.x) === tx) arrive();
-      if (X.t > 2.5) { this.plan = []; this.exec = null; }
+      if (X.t > 2.5) { this.fail(e); }
       return;
     }
     if (e.act === 'swim' || e.act === 'grab') {
@@ -173,13 +184,13 @@ export class Autopilot {
       if (e.act === 'grab') out.my = 1;
       if (Math.floor(P.x) === tx && Math.abs(Math.floor(P.y + 0.6) - ty) <= 0) arrive();
       if (P.state === 'climb' && e.act === 'grab') arrive();
-      if (X.t > 3) { this.plan = []; this.exec = null; }
+      if (X.t > 3) { this.fail(e); }
       return;
     }
     if (e.act === 'hop') {
       out.mx = e.dir || Math.sign(centerX - P.x); out.jump = X.t % 0.3 < 0.15; out.my = 1;
-      if (P.ground && !P.inWater) arrive();
-      if (X.t > 3) { this.plan = []; this.exec = null; }
+      if ((P.ground && !P.inWater) || (e.grab && P.state === 'climb')) arrive();
+      if (X.t > 3) { this.fail(e); }
       return;
     }
     if (e.act === 'dig') {
@@ -189,13 +200,16 @@ export class Autopilot {
       const still = e.cells.filter(([cx, cy]) => SOLID[tileAt(M, cx, cy)]);
       if (!still.length) { e.act = 'walk'; this.exec = null; return; }
       const near = still.reduce((a, c) => (Math.abs(c[0] + 0.5 - P.x) < Math.abs(a[0] + 0.5 - P.x) ? c : a));
-      if (e.need === 'key') { out.mx = e.dir; if (X.t > 3) { this.plan = []; this.exec = null; } return; }
+      if (e.need === 'key') { out.mx = e.dir; if (X.t > 3) { this.fail(e); } return; }
       if (e.need === 'dyn' && tileAt(M, near[0], near[1]) === T.HARD) {
+        // one stick at a time: wait for the last one to go off
+        if (this.t - this.lastDyn < TOOLS.dynFuse + 1.2) return;
         if (!X.thrown) {
+          // walk right up to the boulder and set the stick down against it
+          if (Math.abs(near[0] + 0.5 - P.x) > 0.95) { out.mx = e.dir * (Math.abs(near[0] + 0.5 - P.x) > 1.4 ? 1 : 0.4); return; }
           if (P.face !== e.dir) { out.mx = e.dir * 0.3; return; }
-          if (Math.abs(near[0] + 0.5 - P.x) > 1.6) { out.mx = e.dir; return; }
           if (P.dyn <= 0) { this.plan = []; return; }
-          out.dyn = true; X.thrown = this.t; X.home = P.x - e.dir * 5;
+          out.dyn = true; out.my = -1; X.thrown = this.t; this.lastDyn = this.t;
           return;
         }
         // the fuse logic in danger() walks us clear; once it has gone off, plan again
@@ -207,7 +221,7 @@ export class Autopilot {
       if (P.face !== e.dir) { out.mx = e.dir * 0.3; return; }
       out.pick = true;
       if (near[1] >= Math.floor(P.y + 1.4)) out.my = 1;
-      if (X.t > 10) { this.plan = []; this.exec = null; }
+      if (X.t > 10) { const k = (e.from ?? -1) + ':' + e.to; (this.bad ||= new Map()).set(k, ((this.bad.get(k)) || 0) + 1); this.plan = []; this.exec = null; }
       return;
     }
     if (e.act === 'probe') {
@@ -220,12 +234,12 @@ export class Autopilot {
         if (e.pk === 'cj') {
           if (P.state !== 'climb') { out.my = 1; out.mx = Math.max(-1, Math.min(1, (scx - P.x) * 4)); }
           X.started = P.state === 'climb'; X.x0 = scx;
-          if (!X.started) { if (X.t > 1.5) { this.plan = []; this.exec = null; } return; }
+          if (!X.started) { if (X.t > 1.5) { this.fail(e); } return; }
         } else {
           const dx = scx - P.x;
           if (Math.abs(dx) > 0.05 || Math.abs(P.vx) > 0.3 || !P.ground) {
             out.mx = Math.abs(dx) > 0.05 ? Math.max(-1, Math.min(1, dx * 6)) * (Math.abs(dx) < 0.25 ? 0.35 : 1) : 0;
-            if (X.t > 2.2) { this.plan = []; this.exec = null; }
+            if (X.t > 2.2) { this.fail(e); }
             return;
           }
           X.started = true; X.x0 = scx;
@@ -244,13 +258,16 @@ export class Autopilot {
       if (!settled) X.left = true;
       if (tt > 0.1 && settled && (X.left || Math.abs(P.vx) < 0.5)) {
         const now = nodeAt(nav, M, P.x, P.y);
-        if (now === e.to) arrive(); else { this.plan = []; this.exec = null; }
+        if (now === e.to) arrive();
+        else if (nav.kind[e.to] === K_SWIM && P.inWater) { this.plan = []; this.exec = null; }   // any splash-down in that water will do
+        else { const k = (e.from ?? -1) + ':' + e.to; (this.bad ||= new Map()).set(k, ((this.bad.get(k)) || 0) + 1); this.plan = []; this.exec = null; }
       }
-      if (tt > 3.5) { this.plan = []; this.exec = null; }
+      if (tt > 3.5) { this.fail(e); }
       return;
     }
     this.plan = []; this.exec = null;
   }
+  fail(e) { const k = (e.from ?? -1) + ':' + e.to; (this.bad ||= new Map()).set(k, (this.bad.get(k) || 0) + 1); this.plan = []; this.exec = null; }
   swatAhead(W, P, out) {
     for (const c of W.crawlers) {
       if (c.dead) continue;

@@ -375,6 +375,7 @@ body.paused #gl { filter: brightness(.45) saturate(.6); }
       <button class="mbtn primary" data-act="resume">RESUME</button>
       <button class="mbtn" data-act="map">MAP</button>
       <button class="mbtn" data-act="journal">JOURNAL</button>
+      <button class="mbtn" data-act="camp" id="pause-camp">BACK TO CAMP<small>Stuck? Walk back to your last campfire (or the lift)</small></button>
       <button class="mbtn" data-act="replay" id="pause-replay">INSTANT REPLAY</button>
       <button class="mbtn" data-act="options">OPTIONS</button>
       <button class="mbtn" data-act="quit">QUIT TO TITLE</button>
@@ -390,6 +391,6 @@ addEventListener('error', (e) => window.__gdErrors.push(String(e.message || e)))
 addEventListener('unhandledrejection', (e) => window.__gdErrors.push('rejection: ' + String(e.reason && e.reason.message || e.reason)));
 (() => { const ce = console.error; console.error = (...a) => { window.__gdErrors.push(a.map(String).join(' ')); ce.apply(console, a); }; })();
 </script>
-<script type="module" src="js/main.js?v=2"></script>
+<script type="module" src="js/main.js?v=3"></script>
 </body>
 </html>

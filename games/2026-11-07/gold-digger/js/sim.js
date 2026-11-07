@@ -2,11 +2,11 @@
 // checks reproduce a run exactly. No rendering, no Math.random: every random number comes from W.rs.
 // Events for sound, effects and the HUD go into W.ev and are drained by the game each frame.
 import { T, SOLID, PHYS, TOOLS, STEP, PICK_HP, BLASTABLE, LOOT, GEMS, START, LIFE_EVERY, LEVELS, DEPTHS, BIOMES, BOSSES,
-  rampAt, endlessRamp, applyDiff, DIFFICULTY } from './config.js?v=2';
-import { tileAt, solidT, makeBody, stepBody, fallHurt, boxOverlapsTile, EPS } from './physics.js?v=2';
-import { generate, bossArena, hash, findName } from './levelgen.js?v=2';
-import { validateLevel } from './nav.js?v=2';
-import { updateBoss, makeBoss, bossHit } from './boss.js?v=2';
+  rampAt, endlessRamp, applyDiff, DIFFICULTY } from './config.js?v=3';
+import { tileAt, solidT, makeBody, stepBody, fallHurt, boxOverlapsTile, EPS } from './physics.js?v=3';
+import { generate, bossArena, hash, findName } from './levelgen.js?v=3';
+import { validateLevel } from './nav.js?v=3';
+import { updateBoss, makeBoss, bossHit } from './boss.js?v=3';
 
 export { STEP };
 export const rnd = (W) => { W.rs = (W.rs + 0x6D2B79F5) >>> 0; let t = W.rs; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
@@ -184,6 +184,8 @@ export function step(W, dt = STEP) {
       P.pickT -= dt;
       if (!P.pickHit && P.pickT <= PHYS.pickT - PHYS.pickHitT) { P.pickHit = true; pickStrike(W, P); }
     }
+    // back to the last camp (pause menu, or the autopilot when it is trapped): a recorded input, so replays agree
+    if (edge('camp') && !W.boss) { Object.assign(P, makeBody(W.cp.x, W.cp.y + 0.05), { inv: 1.5, pickT: 0, throwT: 0 }); ev(W, 'tocamp', { x: P.x, y: P.y }); P.prev = { ...I }; return; }
     // dynamite and flares
     P.throwT = Math.max(0, P.throwT - dt);
     if (edge('dyn') && P.dyn > 0 && P.throwT <= 0) {
@@ -388,7 +390,7 @@ function ballistic(W, o, dt, bounce = 0.35) {
   const M = W.M;
   o.vy -= PHYS.grav * dt;
   let nx = o.x + o.vx * dt;
-  if (solidT(M, Math.floor(nx), Math.floor(o.y))) { o.vx = -o.vx * bounce; nx = o.x; }
+  if (solidT(M, Math.floor(nx), Math.floor(o.y))) { o.vx = -o.vx * bounce * 0.45; nx = o.x; }
   o.x = nx;
   let ny = o.y + o.vy * dt;
   if (solidT(M, Math.floor(o.x), Math.floor(ny)) || (o.vy < 0 && (tileAt(M, Math.floor(o.x), Math.floor(ny)) === T.PLANK || tileAt(M, Math.floor(o.x), Math.floor(ny)) === T.LADDER) && Math.floor(ny) < Math.floor(o.y))) {

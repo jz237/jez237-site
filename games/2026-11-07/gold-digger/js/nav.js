@@ -4,8 +4,8 @@
 // physics (physics.js stepBody) from the node's centre, so the graph says exactly where a jump lands and how
 // far it falls. Walls of rubble, boulders and locked gates give "dig" edges the planner can open with the
 // pick, dynamite or a key.
-import { T, SOLID, PHYS, STEP, PICK_HP } from './config.js?v=2';
-import { tileAt, standable, solidT, climbT, makeBody, stepBody, fallHurt } from './physics.js?v=2';
+import { T, SOLID, PHYS, STEP, PICK_HP } from './config.js?v=3';
+import { tileAt, standable, solidT, climbT, makeBody, stepBody, fallHurt } from './physics.js?v=3';
 
 export const K_STAND = 1, K_CLIMB = 2, K_SWIM = 3;
 const BREAK = new Set([T.SOFT, T.HARD, T.DOOR, T.CRUMBLE, T.VEIN, T.GEMV, T.FOSSIL]);
@@ -20,7 +20,7 @@ export function nodeKind(M, x, y) {
 }
 
 // probe actions: [name, mx, kind]  kind: 'jump' (jump at once), 'run' (walk, jump at the cell edge), 'off' (walk off), 'up', 'cj' (jump off a ladder)
-const PROBES = [['jl', -1, 'jump'], ['jr', 1, 'jump'], ['rl', -1, 'run'], ['rr', 1, 'run'], ['ol', -1, 'off'], ['or', 1, 'off'], ['ju', 0, 'up'], ['hl', -1, 'hop'], ['hr', 1, 'hop'], ['ul', -1, 'upside'], ['ur', 1, 'upside']];
+const PROBES = [['jl', -1, 'jump'], ['jr', 1, 'jump'], ['rl', -1, 'run'], ['rr', 1, 'run'], ['ol', -1, 'off'], ['or', 1, 'off'], ['ju', 0, 'up'], ['hl', -1, 'hop'], ['hr', 1, 'hop'], ['ul', -1, 'upside'], ['ur', 1, 'upside'], ['ll', -1, 'low'], ['lr', 1, 'low']];
 const CPROBES = [['cl', -1, 'cj'], ['cr', 1, 'cj']];
 export const probeInput = (kind, mx, t, B, x0) => {
   // the input the probe (and the executor) holds at time t after the start
@@ -30,6 +30,7 @@ export const probeInput = (kind, mx, t, B, x0) => {
   if (kind === 'run') { const past = mx > 0 ? B.x > x0 + 0.42 : B.x < x0 - 0.42; if (past && B.runT === undefined) B.runT = t; return { mx, my: 0, jump: B.runT !== undefined && t - B.runT < 0.45 }; }
   if (kind === 'off') return { mx: t < 0.5 ? mx * 0.5 : 0, my: 0, jump: false };
   if (kind === 'upside') return { mx: t > 0.22 ? mx : 0, my: 0, jump: t < 0.45 };
+  if (kind === 'low') return { mx, my: 0, jump: t < 0.07 };   // a flat hop under a low ceiling
   if (kind === 'cj') return { mx, my: 0, jump: t < 0.3 };
   return { mx: 0, my: 0, jump: false };
 };
@@ -99,7 +100,7 @@ function buildNavInner(M) {
       for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const j = id(x + dx, y + dy); if (j >= 0 && (kind[j] === K_SWIM || kind[j] === K_CLIMB)) add(i, j, 1 / PHYS.swimRun, kind[j] === K_CLIMB ? 'grab' : 'swim', { dx, dy }); }
       // surface: hop out onto a floor beside, or stand up where it is shallow
       if (tileAt(M, x, y + 1) !== T.WATER) {
-        for (const d of [-1, 0, 1]) for (const dy of [1, 2]) { const j = id(x + d, y + dy); if (j >= 0 && kind[j] === K_STAND) add(i, j, 0.8, 'hop', { dir: d }); }
+        for (const d of [-1, 0, 1]) for (const dy of [1, 2]) { const j = id(x + d, y + dy); if (j >= 0 && (kind[j] === K_STAND || (kind[j] === K_CLIMB && d !== 0))) add(i, j, 0.8, 'hop', { dir: d, grab: kind[j] === K_CLIMB }); }
       }
     }
   }
@@ -225,6 +226,17 @@ export function validateLevel(M) {
   for (const f of M.finds) {
     if (f.kind === 'fossil') { if (!near(rk, f.x, f.y)) return false; }
     else if (!ok(rk, f.x, f.y)) return false;
+  }
+  // traps: every place you can reach (non-lethal falls allowed) must still lead to the exit
+  if (M.exit) {
+    const rev = new Array(nav.W * nav.H);
+    for (let i = 0; i < nav.edges.length; i++) { const es = nav.edges[i]; if (!es) continue; for (const e of es) { if (e.fall && fallHurt(e.fall) >= 99) continue; (rev[e.to] ||= []).push(i); } }
+    const ex = [nodeAt(nav, M, M.exit.x - 0.5, M.exit.y), nodeAt(nav, M, M.exit.x + 0.5, M.exit.y)].filter((i) => i >= 0);
+    const back = new Uint8Array(nav.W * nav.H), q = [...ex];
+    for (const i of ex) back[i] = 1;
+    while (q.length) { const i = q.pop(); for (const j of rev[i] || []) if (!back[j]) { back[j] = 1; q.push(j); } }
+    const fwd = search(nav, from, { cost: (e) => (e.fall && fallHurt(e.fall) >= 99) ? Infinity : e.cost });
+    for (let i = 0; i < fwd.dist.length; i++) if (fwd.dist[i] < Infinity && !back[i] && nav.kind[i] !== K_SWIM) return false;
   }
   M.navCache = null;
   return true;

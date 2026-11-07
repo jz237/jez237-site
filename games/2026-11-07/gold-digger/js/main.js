@@ -1,15 +1,15 @@
 // Gold Digger: the game shell. Fixed-step simulation (sim.js) + renderer (render.js), level flow, the general store,
 // the journal of discoveries, tips, cinematics, the attract demo, the AI playthrough, scores and menus.
-import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA } from './config.js?v=2';
-import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=2';
-import { hash, findName } from './levelgen.js?v=2';
-import { Autopilot } from './ai.js?v=2';
-import { Renderer, pickQuality, LOOKS } from './render.js?v=2';
-import { CALM } from './fx.js?v=2';
-import { Audio } from './audio.js?v=2';
-import { Input } from './input.js?v=2';
-import { Scores, NO_POST } from './scores.js?v=2';
-import { Recorder, Replay } from './replay.js?v=2';
+import { VERSION, STEP, T, BIOMES, LEVELS, DEPTHS, UPGRADES, TYPICAL_UP, DIFFICULTY, MEDALS, RELICS, FOSSILS, WONDERS, NOTES, CREATURES, RANKS, START, STRATA } from './config.js?v=3';
+import { makeWorld, step, drainEvents, cloneWorld, carryOut } from './sim.js?v=3';
+import { hash, findName } from './levelgen.js?v=3';
+import { Autopilot } from './ai.js?v=3';
+import { Renderer, pickQuality, LOOKS } from './render.js?v=3';
+import { CALM } from './fx.js?v=3';
+import { Audio } from './audio.js?v=3';
+import { Input } from './input.js?v=3';
+import { Scores, NO_POST } from './scores.js?v=3';
+import { Recorder, Replay } from './replay.js?v=3';
 
 const Q = new URLSearchParams(location.search);
 const $ = (id) => document.getElementById(id);
@@ -396,6 +396,7 @@ function onEvent(e) {
   if (e.k === 'bossdie') G.clip = rec.clip(e.n, 3.6, 2.4);
   if (e.k === 'secret') { journal.secret++; saveJournal(); popBanner('SECRET ROOM', 'THE WALL GIVES WAY'); if (journal.secret >= 10) award('secrets10'); }
   if (e.k === 'camp') caption('CAMP LIT · YOUR PLACE IS SAVED');
+  if (e.k === 'tocamp') { caption('BACK TO CAMP'); R.cam.cine = null; }
   if (e.k === 'key') caption('A KEY · IT OPENS A LOCKED GATE IN THIS LEVEL');
   if (e.k === 'door') caption('THE GATE SWINGS OPEN');
   if (e.k === 'find') onFind(e);
@@ -575,6 +576,7 @@ function tick(dt) {
     while (G.acc >= STEP && n < 12) {
       const P = W.players[0];
       if (G.ap) P.input = G.ap.control(W); else P.input = I.control();
+      if (G.campPress > 0) { P.input.camp = G.campPress === 2; G.campPress--; }
       rec.tick(W); rec.input(W);
       step(W, STEP);
       for (const e of drainEvents(W)) onEvent(e);
@@ -656,10 +658,11 @@ function act(a, el) {
     case 'resume': resume(); break;
     case 'map': if (G.W && !G.W.isBoss) { if (G.state === 'play') pause(); show('map', true); } break;
     case 'quit': toTitle(); break;
+    case 'camp': resume(); G.campPress = 2; break;
     case 'reload': location.reload(); break;
   }
 }
-function pause() { if (G.state !== 'play' || G.mode === 'demo') return; G.state = 'paused'; G.paused = true; $('pause-sub').textContent = $('depth-name').textContent + ' · ' + $('level-name').textContent; $('pause-replay').classList.toggle('hidden', !G.clip); A.muffle(true); show('pause'); }
+function pause() { if (G.state !== 'play' || G.mode === 'demo') return; G.state = 'paused'; G.paused = true; $('pause-sub').textContent = $('depth-name').textContent + ' · ' + $('level-name').textContent; $('pause-replay').classList.toggle('hidden', !G.clip); $('pause-camp').classList.toggle('hidden', !!G.W.boss); A.muffle(true); show('pause'); }
 function resume() { if (G.state !== 'paused') return; G.state = 'play'; G.paused = false; I.taps.clear(); A.muffle(false); for (const s of SCREENS) $(s).classList.add('hidden'); G.screen = null; document.body.classList.remove('paused'); }
 document.addEventListener('click', (e) => {
   const b = e.target.closest('[data-act]'); if (b) { act(b.dataset.act, b); return; }
@@ -703,7 +706,7 @@ async function boot() {
   applySettings();
   toTitle();
   $('loading').style.opacity = 0; setTimeout(() => $('loading').remove(), 700);
-  if (Q.has('test')) { const T2 = await import('./tests.js?v=2'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
+  if (Q.has('test')) { const T2 = await import('./tests.js?v=3'); T2.run({ G, R, startCampaign, startEndless, toTitle, tick, makeWorld, step }); return; }
   if (Q.has('autoplay')) startCampaign(+(Q.get('depth') || 0), { mode: 'autoplay', auto: 'demo', level: +(Q.get('level') || 0) });
   if (Q.has('playthrough')) startCampaign(+(Q.get('depth') || 0), { mode: 'playthrough', auto: 'demo', level: +(Q.get('level') || 0) });
   requestAnimationFrame(raf);

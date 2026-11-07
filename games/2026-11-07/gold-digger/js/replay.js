@@ -1,7 +1,7 @@
 // Instant replay. The simulation is deterministic, so the recorder keeps a cloned world every half
 // second plus the digger's input for each tick; a replay re-runs the moments before the last death
 // (or boss kill) from the nearest clone and reproduces it exactly, effects and sounds included.
-import { cloneWorld, step, drainEvents, STEP } from './sim.js?v=2';
+import { cloneWorld, step, drainEvents, STEP } from './sim.js?v=3';
 
 const r3 = (v) => Math.round(v * 1000) / 1000;
 export class Recorder {
@@ -21,8 +21,8 @@ export class Recorder {
     this.inputs.set(W.n, W.players.map((p) => {
       const I = p.input;
       I.mx = r3(I.mx || 0); I.my = r3(I.my || 0);
-      const b = (I.jump ? 1 : 0) | (I.pick ? 2 : 0) | (I.dyn ? 4 : 0) | (I.flare ? 8 : 0);
-      I.jump = !!(b & 1); I.pick = !!(b & 2); I.dyn = !!(b & 4); I.flare = !!(b & 8);
+      const b = (I.jump ? 1 : 0) | (I.pick ? 2 : 0) | (I.dyn ? 4 : 0) | (I.flare ? 8 : 0) | (I.camp ? 16 : 0);
+      I.jump = !!(b & 1); I.pick = !!(b & 2); I.dyn = !!(b & 4); I.flare = !!(b & 8); I.camp = !!(b & 16);
       return [p.id, I.mx, I.my, b];
     }));
   }
@@ -47,7 +47,7 @@ export class Replay {
     let n = 0;
     while (this.acc >= STEP && !this.done && n < 16) {
       const W = this.W, rec = this.inputs.get(W.n);
-      if (rec) for (const q of rec) { const p = W.players.find((x) => x.id === q[0]); if (p) p.input = { mx: q[1], my: q[2], jump: !!(q[3] & 1), pick: !!(q[3] & 2), dyn: !!(q[3] & 4), flare: !!(q[3] & 8) }; }
+      if (rec) for (const q of rec) { const p = W.players.find((x) => x.id === q[0]); if (p) p.input = { mx: q[1], my: q[2], jump: !!(q[3] & 1), pick: !!(q[3] & 2), dyn: !!(q[3] & 4), flare: !!(q[3] & 8), camp: !!(q[3] & 16) }; }
       step(W, STEP);
       for (const e of drainEvents(W)) out.push(e);
       this.acc -= STEP; n++;

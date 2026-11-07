@@ -4,13 +4,13 @@
 // re-aimed every frame at the nearest flares, fires, lanterns, crystals and lava): their number never changes,
 // so no material ever recompiles mid-game.
 import * as THREE from '../vendor/three.module.min.js';
-import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=2';
-import { Cave, rockMaterial } from './cavemesh.js?v=2';
-import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=2';
-import { FX, CALM } from './fx.js?v=2';
-import { Post } from './post.js?v=2';
-import * as MD from './models.js?v=2';
-import { buildDecor } from './decor.js?v=2';
+import { T, SOLID, PHYS, TOOLS, GEMS, BIOMES } from './config.js?v=3';
+import { Cave, rockMaterial } from './cavemesh.js?v=3';
+import { rockTextures, spriteTextures, waterTextures } from './textures.js?v=3';
+import { FX, CALM } from './fx.js?v=3';
+import { Post } from './post.js?v=3';
+import * as MD from './models.js?v=3';
+import { buildDecor } from './decor.js?v=3';
 
 export function pickQuality(name) {
   const mobile = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad/i.test(navigator.userAgent);
@@ -261,7 +261,16 @@ export class Renderer {
     // the body of the water seen through its camera-side face: clear at the top, deep and dark below
     const vol = new THREE.ShaderMaterial({ transparent: true, depthWrite: false, side: THREE.DoubleSide, vertexShader: ZVERT,
       uniforms: { uCol: { value: new THREE.Color().fromArray(look.accent).multiplyScalar(0.12) } },
-      fragmentShader: `uniform vec3 uCol; varying vec2 vUv; void main(){ float d = 1.0 - vUv.y; gl_FragColor = vec4(mix(uCol * 1.6, uCol * 0.25, d), 0.18 + d * 0.38); }` });
+      fragmentShader: `uniform vec3 uCol; uniform float uT; varying vec2 vUv; varying vec3 vW;
+        void main(){
+          float d = 1.0 - vUv.y;
+          float side = smoothstep(0.0, 0.12, vUv.x) * smoothstep(1.0, 0.88, vUv.x);
+          float rip = 0.5 + 0.5 * sin(vW.x * 2.3 + uT * 1.7 + sin(vW.y * 3.1 - uT) * 1.5);
+          float band = smoothstep(0.75, 1.0, vUv.y) * (0.35 + 0.65 * rip);
+          vec3 c = mix(uCol * 2.2, uCol * 0.18, d) + uCol * band * 3.0;
+          gl_FragColor = vec4(c, (0.1 + d * 0.32 + band * 0.12) * side);
+        }` });
+    vol.uniforms.uT = { value: 0 }; this.waterVol = vol;
     const lavaMat = this.lavaMat = new THREE.ShaderMaterial({ uniforms: { uT: { value: 0 } }, vertexShader: ZVERT,
       fragmentShader: `uniform float uT; varying vec2 vUv; varying vec3 vW;
         float h(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
@@ -423,6 +432,7 @@ export class Renderer {
     const t = this.time, P = W.players[0], M = W.M;
     this.rockMat.userData.U.uTime.value = t;
     if (this.lavaMat) this.lavaMat.uniforms.uT.value = t;
+    if (this.waterVol) this.waterVol.uniforms.uT.value = t;
     this.tex.water.nrm.offset.set(t * 0.02, t * 0.013);
     // the digger
     this.animPlayer(W, P, dt);
@@ -650,6 +660,23 @@ export class Renderer {
     const hitk = this.flashBoss = Math.max(0, (this.flashBoss || 0) - dt);
     for (const mt of V.mats) { if (!mt.userData.e0) mt.userData.e0 = mt.emissive.clone(); mt.emissive.copy(mt.userData.e0).lerp(tmpC.setRGB(1, 0.9, 0.8), hitk * 3); }
     const deadF = B.dead ? Math.min(1, B.deathT / 3) : 0;
+    // a dying guardian goes off in stages: bursts of fire, rock and dust round it, then one last flash
+    if (B.dead) {
+      V.dieT = (V.dieT || 0) - dt;
+      if (B.deathT < 3.6 && V.dieT <= 0) {
+        V.dieT = 0.22 + Math.random() * 0.2;
+        const ox = (Math.random() - 0.5) * 5, oy = Math.random() * 3;
+        this.fx.explode(B.weak.x + ox, B.weak.y + oy - 1, 0.4, 0.55 + Math.random() * 0.5, { color: V.kind === 'gloomwing' || V.kind === 'wyrm' ? 0x9fd8ff : 0xffa060 });
+        this.shake(0.25);
+      }
+      if (B.deathT > 3.6 && !V.finalFx) { V.finalFx = true; this.flash(B.weak.x, B.weak.y + 1, 2, 70, 0xfff0d0, 1.4, 34); this.shock(B.weak.x, B.weak.y, 1.2); this.fx.debris(B.weak.x, B.weak.y, 0.4, { n: 30, speed: 9, size: 0.3 }); this.fx.dust(B.weak.x, B.weak.y - 1, 0.4, { n: 24, s0: 1.5, s1: 5, life: 6, jit: 5, a: 0.5 }); }
+    }
+    // Rockjaw tunnelling under the floor throws up a line of dust and grit where it is
+    if (V.kind === 'rockjaw' && B.hidden && !B.dead && Math.random() < dt * 22) {
+      const fy = A.floorY;
+      this.fx.dust(B.x + (Math.random() - 0.5) * 1.5, fy + 0.05, 0.4, { n: 1, s0: 0.4, s1: 1.4, life: 1.2, vy: 1.2, jit: 0.8, a: 0.45 });
+      if (Math.random() < 0.3) this.fx.debris(B.x, fy + 0.1, 0.4, { n: 1, speed: 2.5, size: 0.1, dir: Math.PI / 2, cone: 1.2 });
+    }
     if (V.kind === 'rockjaw' || V.kind === 'wyrm') {
       // the head leads, the segments follow its recorded path
       const head = m.head || V.root;
@@ -669,9 +696,11 @@ export class Renderer {
             const f = (i + 1) / (n + 1), px = lerp(B.x, (B.sx ?? B.x) + (B.x > 22 ? -3 : 3), f), py = lerp(B.y, 1.5, f) + Math.sin(f * Math.PI) * 2.2;
             p = { x: px, y: py };
           }
-          s.position.set(p.x, p.y - deadF * 4, (V.kind === 'wyrm' ? -0.6 : -0.2) - i * 0.05);
+          const df = B.dead ? Math.max(0, Math.min(1, (B.deathT - i * 0.12) / 2.2)) : 0;
+          s.position.set(p.x + df * Math.sin(i * 1.7) * 1.2, p.y - df * df * 5.5, (V.kind === 'wyrm' ? -0.6 : -0.2) - i * 0.05);
           const q = tr[Math.max(0, tr.length - 2 - (i + 1) * 3)] || p;
-          s.rotation.z = Math.atan2(p.y - q.y, p.x - q.x);
+          s.rotation.z = Math.atan2(p.y - q.y, p.x - q.x) + df * (i % 2 ? 1.4 : -1.2);
+          s.rotation.x = df * (i % 3) * 0.6;
           s.visible = V.kind === 'wyrm' ? !(B.hidden && B.st !== 'spit') : (p.y > A.floorY - 1.2 && !(B.hidden && i < 3));
         });
       }
@@ -700,9 +729,10 @@ export class Renderer {
       }
     } else if (V.kind === 'heart') {
       V.root.position.set(B.x, B.y - 6 - deadF * 5, -7);
-      if (m.core && m.core.material) m.core.material.emissiveIntensity = 4 + Math.sin(t * 3) * 1.5 + (B.phase * 1.5);
+      if (m.core && m.core.material) m.core.material.emissiveIntensity = (4 + Math.sin(t * 3) * 1.5 + (B.phase * 1.5)) * (1 + deadF * 3);
+      V.root.rotation.z = deadF * 0.25 * Math.sin(t * 7);
       if (B.fists && m.fistL) {
-        for (const [i, F] of B.fists.entries()) { const f = i ? m.fistR : m.fistL; f.position.set(F.x, F.y - deadF * 6, -0.8); f.rotation.z = F.st === 'raise' ? 0.4 : 0; }
+        for (const [i, F] of B.fists.entries()) { const f = i ? m.fistR : m.fistL; f.position.set(F.x, F.y - deadF * deadF * 7, -0.8); f.rotation.z = (F.st === 'raise' ? 0.4 : 0) + deadF * (i ? 1.1 : -1.1); }
       }
       if (!CALM.on && Math.random() < dt * 6) this.fx.fire(B.x + (Math.random() - 0.5) * 10, A.floorY - 0.2, -3, { n: 1, s: 1.2, life: 1, vy: 2 });
     }
